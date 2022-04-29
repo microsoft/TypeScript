@@ -1,0 +1,99 @@
+=== tests/cases/conformance/internalModules/codeGeneration/importStatementsInterfaces.ts ===
+module A {
+>A : Symbol(A, Decl(importStatementsInterfaces.ts, 0, 0))
+
+    export interface Point {
+>Point : Symbol(Point, Decl(importStatementsInterfaces.ts, 0, 10))
+
+        x: number;
+>x : Symbol(Point.x, Decl(importStatementsInterfaces.ts, 1, 28))
+
+        y: number;
+>y : Symbol(Point.y, Decl(importStatementsInterfaces.ts, 2, 18))
+    }
+
+    export module inA {
+>inA : Symbol(inA, Decl(importStatementsInterfaces.ts, 4, 5))
+
+        export interface Point3D extends Point {
+>Point3D : Symbol(Point3D, Decl(importStatementsInterfaces.ts, 6, 23))
+>Point : Symbol(Point, Decl(importStatementsInterfaces.ts, 0, 10))
+
+            z: number;
+>z : Symbol(Point3D.z, Decl(importStatementsInterfaces.ts, 7, 48))
+        }
+    }
+}
+
+// no code gen expected
+module B {
+>B : Symbol(B, Decl(importStatementsInterfaces.ts, 11, 1))
+
+    import a = A;
+>a : Symbol(a, Decl(importStatementsInterfaces.ts, 14, 10))
+>A : Symbol(a, Decl(importStatementsInterfaces.ts, 0, 0))
+}
+
+// no code gen expected
+module C {
+>C : Symbol(C, Decl(importStatementsInterfaces.ts, 16, 1))
+
+    import a = A;
+>a : Symbol(a, Decl(importStatementsInterfaces.ts, 19, 10))
+>A : Symbol(a, Decl(importStatementsInterfaces.ts, 0, 0))
+
+    import b = a.inA;
+>b : Symbol(b, Decl(importStatementsInterfaces.ts, 20, 17))
+>a : Symbol(a, Decl(importStatementsInterfaces.ts, 19, 10))
+>inA : Symbol(a.inA, Decl(importStatementsInterfaces.ts, 4, 5))
+
+    var m: typeof a;
+>m : Symbol(m, Decl(importStatementsInterfaces.ts, 22, 7))
+
+    var p: b.Point3D;
+>p : Symbol(p, Decl(importStatementsInterfaces.ts, 23, 7), Decl(importStatementsInterfaces.ts, 24, 7))
+>b : Symbol(b, Decl(importStatementsInterfaces.ts, 20, 17))
+>Point3D : Symbol(b.Point3D, Decl(importStatementsInterfaces.ts, 6, 23))
+
+    var p = {x:0, y:0, z: 0 };
+>p : Symbol(p, Decl(importStatementsInterfaces.ts, 23, 7), Decl(importStatementsInterfaces.ts, 24, 7))
+>x : Symbol(x, Decl(importStatementsInterfaces.ts, 24, 13))
+>y : Symbol(y, Decl(importStatementsInterfaces.ts, 24, 17))
+>z : Symbol(z, Decl(importStatementsInterfaces.ts, 24, 22))
+}
+
+// no code gen expected
+module D {
+>D : Symbol(D, Decl(importStatementsInterfaces.ts, 25, 1))
+
+    import a = A;
+>a : Symbol(a, Decl(importStatementsInterfaces.ts, 28, 10))
+>A : Symbol(a, Decl(importStatementsInterfaces.ts, 0, 0))
+
+    var p : a.Point;
+>p : Symbol(p, Decl(importStatementsInterfaces.ts, 31, 7))
+>a : Symbol(a, Decl(importStatementsInterfaces.ts, 28, 10))
+>Point : Symbol(a.Point, Decl(importStatementsInterfaces.ts, 0, 10))
+}
+
+// no code gen expected
+module E {
+>E : Symbol(E, Decl(importStatementsInterfaces.ts, 32, 1))
+
+    import a = A.inA;
+>a : Symbol(a, Decl(importStatementsInterfaces.ts, 35, 10))
+>A : Symbol(A, Decl(importStatementsInterfaces.ts, 0, 0))
+>inA : Symbol(a, Decl(importStatementsInterfaces.ts, 4, 5))
+
+    export function xDist(x: a.Point3D) {
+>xDist : Symbol(xDist, Decl(importStatementsInterfaces.ts, 36, 21))
+>x : Symbol(x, Decl(importStatementsInterfaces.ts, 37, 26))
+>a : Symbol(a, Decl(importStatementsInterfaces.ts, 35, 10))
+>Point3D : Symbol(a.Point3D, Decl(importStatementsInterfaces.ts, 6, 23))
+
+        return 0 - x.x;
+>x.x : Symbol(A.Point.x, Decl(importStatementsInterfaces.ts, 1, 28))
+>x : Symbol(x, Decl(importStatementsInterfaces.ts, 37, 26))
+>x : Symbol(A.Point.x, Decl(importStatementsInterfaces.ts, 1, 28))
+    }
+}

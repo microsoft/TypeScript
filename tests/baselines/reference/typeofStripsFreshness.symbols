@@ -1,0 +1,52 @@
+=== tests/cases/compiler/typeofStripsFreshness.ts ===
+interface Collection<T> {
+>Collection : Symbol(Collection, Decl(typeofStripsFreshness.ts, 0, 0), Decl(typeofStripsFreshness.ts, 6, 13))
+>T : Symbol(T, Decl(typeofStripsFreshness.ts, 0, 21))
+
+    elems: T[];
+>elems : Symbol(Collection.elems, Decl(typeofStripsFreshness.ts, 0, 25))
+>T : Symbol(T, Decl(typeofStripsFreshness.ts, 0, 21))
+}
+interface CollectionStatic {
+>CollectionStatic : Symbol(CollectionStatic, Decl(typeofStripsFreshness.ts, 2, 1))
+
+    new <T>(): Collection<T>;
+>T : Symbol(T, Decl(typeofStripsFreshness.ts, 4, 9))
+>Collection : Symbol(Collection, Decl(typeofStripsFreshness.ts, 0, 0), Decl(typeofStripsFreshness.ts, 6, 13))
+>T : Symbol(T, Decl(typeofStripsFreshness.ts, 4, 9))
+}
+declare const Collection: CollectionStatic;
+>Collection : Symbol(Collection, Decl(typeofStripsFreshness.ts, 0, 0), Decl(typeofStripsFreshness.ts, 6, 13))
+>CollectionStatic : Symbol(CollectionStatic, Decl(typeofStripsFreshness.ts, 2, 1))
+
+const ALL = "all";
+>ALL : Symbol(ALL, Decl(typeofStripsFreshness.ts, 8, 5))
+
+type All = typeof ALL;
+>All : Symbol(All, Decl(typeofStripsFreshness.ts, 8, 18))
+>ALL : Symbol(ALL, Decl(typeofStripsFreshness.ts, 8, 5))
+
+const result: Collection<All> = new Collection();
+>result : Symbol(result, Decl(typeofStripsFreshness.ts, 11, 5))
+>Collection : Symbol(Collection, Decl(typeofStripsFreshness.ts, 0, 0), Decl(typeofStripsFreshness.ts, 6, 13))
+>All : Symbol(All, Decl(typeofStripsFreshness.ts, 8, 18))
+>Collection : Symbol(Collection, Decl(typeofStripsFreshness.ts, 0, 0), Decl(typeofStripsFreshness.ts, 6, 13))
+
+const ANOTHER = "another";
+>ANOTHER : Symbol(ANOTHER, Decl(typeofStripsFreshness.ts, 13, 5))
+
+type Another = typeof ANOTHER;
+>Another : Symbol(Another, Decl(typeofStripsFreshness.ts, 13, 26))
+>ANOTHER : Symbol(ANOTHER, Decl(typeofStripsFreshness.ts, 13, 5))
+
+type Both = Another | All;
+>Both : Symbol(Both, Decl(typeofStripsFreshness.ts, 14, 30))
+>Another : Symbol(Another, Decl(typeofStripsFreshness.ts, 13, 26))
+>All : Symbol(All, Decl(typeofStripsFreshness.ts, 8, 18))
+
+const result2: Collection<Both> = new Collection();
+>result2 : Symbol(result2, Decl(typeofStripsFreshness.ts, 18, 5))
+>Collection : Symbol(Collection, Decl(typeofStripsFreshness.ts, 0, 0), Decl(typeofStripsFreshness.ts, 6, 13))
+>Both : Symbol(Both, Decl(typeofStripsFreshness.ts, 14, 30))
+>Collection : Symbol(Collection, Decl(typeofStripsFreshness.ts, 0, 0), Decl(typeofStripsFreshness.ts, 6, 13))
+

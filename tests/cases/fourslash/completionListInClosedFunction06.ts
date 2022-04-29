@@ -1,0 +1,12 @@
+﻿/// <reference path="fourslash.ts" />
+
+////interface MyType {
+////}
+////
+////function foo(x: string, y: number, z: boolean) {
+////    function bar(a: number, b: string = "hello", c: typeof x = "hello") {
+////        var v = (x: /*1*/);
+////    }
+////}
+
+verify.completions({ marker: "1", includes: "MyType", excludes: "x" });

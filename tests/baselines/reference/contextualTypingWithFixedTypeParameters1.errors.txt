@@ -1,0 +1,15 @@
+tests/cases/compiler/contextualTypingWithFixedTypeParameters1.ts(2,22): error TS2339: Property 'foo' does not exist on type 'string'.
+tests/cases/compiler/contextualTypingWithFixedTypeParameters1.ts(3,32): error TS2339: Property 'foo' does not exist on type '""'.
+tests/cases/compiler/contextualTypingWithFixedTypeParameters1.ts(3,38): error TS2345: Argument of type '1' is not assignable to parameter of type '""'.
+
+
+==== tests/cases/compiler/contextualTypingWithFixedTypeParameters1.ts (3 errors) ====
+    var f10: <T>(x: T, b: () => (a: T) => void, y: T) => T;
+    f10('', () => a => a.foo, ''); // a is ""
+                         ~~~
+!!! error TS2339: Property 'foo' does not exist on type 'string'.
+    var r9 = f10('', () => (a => a.foo), 1); // error
+                                   ~~~
+!!! error TS2339: Property 'foo' does not exist on type '""'.
+                                         ~
+!!! error TS2345: Argument of type '1' is not assignable to parameter of type '""'.

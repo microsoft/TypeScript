@@ -1,0 +1,40 @@
+=== tests/cases/compiler/declInput4.ts ===
+module M {
+>M : typeof M
+
+    class C { }
+>C : C
+
+    export class E {}
+>E : E
+
+    export interface I1 {}
+    interface I2 {}
+    export class D {
+>D : D
+
+        public m1: number;
+>m1 : number
+
+        public m2: string;
+>m2 : string
+
+        public m23: E;
+>m23 : E
+
+        public m24: I1;
+>m24 : I1
+
+        public m232(): E { return null;}
+>m232 : () => E
+>null : null
+
+        public m242(): I1 { return null; }
+>m242 : () => I1
+>null : null
+
+        public m26(i:I1) {}
+>m26 : (i: I1) => void
+>i : I1
+    }
+}

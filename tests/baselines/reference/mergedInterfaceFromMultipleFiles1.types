@@ -1,0 +1,51 @@
+=== tests/cases/compiler/mergedInterfaceFromMultipleFiles1_1.ts ===
+/// <reference path='mergedInterfaceFromMultipleFiles1_0.ts'/>
+
+interface D { bar(): number; }
+>bar : () => number
+
+interface C extends D {
+	b(): Date;
+>b : () => Date
+}
+
+var c:C;
+>c : C
+
+var a: string = c.foo();
+>a : string
+>c.foo() : string
+>c.foo : () => string
+>c : C
+>foo : () => string
+
+var b: number = c.bar();
+>b : number
+>c.bar() : number
+>c.bar : () => number
+>c : C
+>bar : () => number
+
+var d: number = c.a();
+>d : number
+>c.a() : number
+>c.a : () => number
+>c : C
+>a : () => number
+
+var e: Date = c.b();
+>e : Date
+>c.b() : Date
+>c.b : () => Date
+>c : C
+>b : () => Date
+
+=== tests/cases/compiler/mergedInterfaceFromMultipleFiles1_0.ts ===
+interface I { foo(): string; }
+>foo : () => string
+
+interface C extends I {
+	a(): number;
+>a : () => number
+}
+

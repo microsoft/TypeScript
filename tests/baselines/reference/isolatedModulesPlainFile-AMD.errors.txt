@@ -1,0 +1,9 @@
+tests/cases/compiler/isolatedModulesPlainFile-AMD.ts(1,1): error TS1208: 'isolatedModulesPlainFile-AMD.ts' cannot be compiled under '--isolatedModules' because it is considered a global script file. Add an import, export, or an empty 'export {}' statement to make it a module.
+
+
+==== tests/cases/compiler/isolatedModulesPlainFile-AMD.ts (1 errors) ====
+    declare function run(a: number): void;
+    ~~~~~~~
+!!! error TS1208: 'isolatedModulesPlainFile-AMD.ts' cannot be compiled under '--isolatedModules' because it is considered a global script file. Add an import, export, or an empty 'export {}' statement to make it a module.
+    run(1);
+    

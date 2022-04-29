@@ -1,0 +1,278 @@
+=== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts ===
+var unionNumberString: number | string;
+>unionNumberString : string | number
+
+class C { }
+>C : C
+
+class D extends C { foo1() { } }
+>D : D
+>C : C
+>foo1 : () => void
+
+class E extends C { foo2() { } }
+>E : E
+>C : C
+>foo2 : () => void
+
+var unionDE: D | E;
+>unionDE : D | E
+
+var num: number;
+>num : number
+
+var str: string;
+>str : string
+
+var c: C;
+>c : C
+
+var d: D;
+>d : D
+
+var e: E;
+>e : E
+
+// A union type U is assignable to a type T if each type in U is assignable to T
+c = d;
+>c = d : D
+>c : C
+>d : D
+
+c = e;
+>c = e : E
+>c : C
+>e : E
+
+c = unionDE; // ok
+>c = unionDE : D | E
+>c : C
+>unionDE : D | E
+
+d = d;
+>d = d : D
+>d : D
+>d : D
+
+d = e;
+>d = e : E
+>d : D
+>e : E
+
+d = unionDE; // error e is not assignable to d
+>d = unionDE : D | E
+>d : D
+>unionDE : D | E
+
+e = d;
+>e = d : D
+>e : E
+>d : D
+
+e = e;
+>e = e : E
+>e : E
+>e : E
+
+e = unionDE; // error d is not assignable to e
+>e = unionDE : D | E
+>e : E
+>unionDE : D | E
+
+num = num;
+>num = num : number
+>num : number
+>num : number
+
+num = str;
+>num = str : string
+>num : number
+>str : string
+
+num = unionNumberString; // error string is not assignable to number
+>num = unionNumberString : string | number
+>num : number
+>unionNumberString : string | number
+
+str = num;
+>str = num : number
+>str : string
+>num : number
+
+str = str;
+>str = str : string
+>str : string
+>str : string
+
+str = unionNumberString; // error since number is not assignable to string
+>str = unionNumberString : string | number
+>str : string
+>unionNumberString : string | number
+
+// A type T is assignable to a union type U if T is assignable to any type in U
+d = c;
+>d = c : C
+>d : D
+>c : C
+
+e = c;
+>e = c : C
+>e : E
+>c : C
+
+unionDE = c; // error since C is not assinable to either D or E
+>unionDE = c : C
+>unionDE : D | E
+>c : C
+
+d = d;
+>d = d : D
+>d : D
+>d : D
+
+e = d;
+>e = d : D
+>e : E
+>d : D
+
+unionDE = d; // ok
+>unionDE = d : D
+>unionDE : D | E
+>d : D
+
+d = e;
+>d = e : E
+>d : D
+>e : E
+
+e = e;
+>e = e : E
+>e : E
+>e : E
+
+unionDE = e; // ok
+>unionDE = e : E
+>unionDE : D | E
+>e : E
+
+num = num;
+>num = num : number
+>num : number
+>num : number
+
+str = num;
+>str = num : number
+>str : string
+>num : number
+
+unionNumberString = num; // ok 
+>unionNumberString = num : number
+>unionNumberString : string | number
+>num : number
+
+num = str;
+>num = str : string
+>num : number
+>str : string
+
+str = str;
+>str = str : string
+>str : string
+>str : string
+
+unionNumberString = str; // ok
+>unionNumberString = str : string
+>unionNumberString : string | number
+>str : string
+
+// Any
+var anyVar: any;
+>anyVar : any
+
+anyVar = unionDE;
+>anyVar = unionDE : E
+>anyVar : any
+>unionDE : E
+
+anyVar = unionNumberString;
+>anyVar = unionNumberString : string
+>anyVar : any
+>unionNumberString : string
+
+unionDE = anyVar;
+>unionDE = anyVar : any
+>unionDE : D | E
+>anyVar : any
+
+unionNumberString = anyVar;
+>unionNumberString = anyVar : any
+>unionNumberString : string | number
+>anyVar : any
+
+// null
+unionDE = null;
+>unionDE = null : null
+>unionDE : D | E
+>null : null
+
+unionNumberString = null;
+>unionNumberString = null : null
+>unionNumberString : string | number
+>null : null
+
+// undefined
+unionDE = undefined;
+>unionDE = undefined : undefined
+>unionDE : D | E
+>undefined : undefined
+
+unionNumberString = undefined;
+>unionNumberString = undefined : undefined
+>unionNumberString : string | number
+>undefined : undefined
+
+// type parameters
+function foo<T, U>(t: T, u: U) {
+>foo : <T, U>(t: T, u: U) => void
+>t : T
+>u : U
+
+    t = u; // error
+>t = u : U
+>t : T
+>u : U
+
+    u = t; // error
+>u = t : T
+>u : U
+>t : T
+
+    var x : T | U;
+>x : T | U
+
+    x = t; // ok
+>x = t : T
+>x : T | U
+>t : T
+
+    x = u; // ok
+>x = u : U
+>x : T | U
+>u : U
+
+    x = undefined;
+>x = undefined : undefined
+>x : T | U
+>undefined : undefined
+
+    t = x; // error U not assignable to T
+>t = x : T | U
+>t : T
+>x : T | U
+
+    u = x; // error T not assignable to U
+>u = x : T | U
+>u : U
+>x : T | U
+}
+

@@ -1,0 +1,32 @@
+=== tests/cases/compiler/exportAssignClassAndModule_1.ts ===
+///<reference path='exportAssignClassAndModule_0.ts'/>
+import Foo = require('./exportAssignClassAndModule_0');
+>Foo : typeof Foo
+
+var z: Foo.Bar;
+>z : Foo.Bar
+>Foo : any
+
+var zz: Foo;
+>zz : Foo
+
+zz.x;
+>zz.x : Foo.Bar
+>zz : Foo
+>x : Foo.Bar
+
+=== tests/cases/compiler/exportAssignClassAndModule_0.ts ===
+class Foo {
+>Foo : Foo
+
+    x: Foo.Bar;
+>x : Foo.Bar
+>Foo : any
+}
+module Foo {
+    export interface Bar {
+    }
+}
+export = Foo;
+>Foo : Foo
+

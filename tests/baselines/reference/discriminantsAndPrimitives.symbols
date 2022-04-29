@@ -1,0 +1,193 @@
+=== tests/cases/compiler/discriminantsAndPrimitives.ts ===
+// Repro from #10257 plus other tests
+
+interface Foo {
+>Foo : Symbol(Foo, Decl(discriminantsAndPrimitives.ts, 0, 0))
+
+    kind: "foo";
+>kind : Symbol(Foo.kind, Decl(discriminantsAndPrimitives.ts, 2, 15))
+
+    name: string;
+>name : Symbol(Foo.name, Decl(discriminantsAndPrimitives.ts, 3, 16))
+}
+
+interface Bar {
+>Bar : Symbol(Bar, Decl(discriminantsAndPrimitives.ts, 5, 1))
+
+    kind: "bar";
+>kind : Symbol(Bar.kind, Decl(discriminantsAndPrimitives.ts, 7, 15))
+
+    length: string;
+>length : Symbol(Bar.length, Decl(discriminantsAndPrimitives.ts, 8, 16))
+}
+
+function f1(x: Foo | Bar | string) {
+>f1 : Symbol(f1, Decl(discriminantsAndPrimitives.ts, 10, 1))
+>x : Symbol(x, Decl(discriminantsAndPrimitives.ts, 12, 12))
+>Foo : Symbol(Foo, Decl(discriminantsAndPrimitives.ts, 0, 0))
+>Bar : Symbol(Bar, Decl(discriminantsAndPrimitives.ts, 5, 1))
+
+    if (typeof x !== 'string') {
+>x : Symbol(x, Decl(discriminantsAndPrimitives.ts, 12, 12))
+
+        switch(x.kind) {
+>x.kind : Symbol(kind, Decl(discriminantsAndPrimitives.ts, 2, 15), Decl(discriminantsAndPrimitives.ts, 7, 15))
+>x : Symbol(x, Decl(discriminantsAndPrimitives.ts, 12, 12))
+>kind : Symbol(kind, Decl(discriminantsAndPrimitives.ts, 2, 15), Decl(discriminantsAndPrimitives.ts, 7, 15))
+
+            case 'foo':
+                x.name;
+>x.name : Symbol(Foo.name, Decl(discriminantsAndPrimitives.ts, 3, 16))
+>x : Symbol(x, Decl(discriminantsAndPrimitives.ts, 12, 12))
+>name : Symbol(Foo.name, Decl(discriminantsAndPrimitives.ts, 3, 16))
+        }
+    }
+}
+
+function f2(x: Foo | Bar | string | undefined) {
+>f2 : Symbol(f2, Decl(discriminantsAndPrimitives.ts, 19, 1))
+>x : Symbol(x, Decl(discriminantsAndPrimitives.ts, 21, 12))
+>Foo : Symbol(Foo, Decl(discriminantsAndPrimitives.ts, 0, 0))
+>Bar : Symbol(Bar, Decl(discriminantsAndPrimitives.ts, 5, 1))
+
+    if (typeof x === "object") {
+>x : Symbol(x, Decl(discriminantsAndPrimitives.ts, 21, 12))
+
+        switch(x.kind) {
+>x.kind : Symbol(kind, Decl(discriminantsAndPrimitives.ts, 2, 15), Decl(discriminantsAndPrimitives.ts, 7, 15))
+>x : Symbol(x, Decl(discriminantsAndPrimitives.ts, 21, 12))
+>kind : Symbol(kind, Decl(discriminantsAndPrimitives.ts, 2, 15), Decl(discriminantsAndPrimitives.ts, 7, 15))
+
+            case 'foo':
+                x.name;
+>x.name : Symbol(Foo.name, Decl(discriminantsAndPrimitives.ts, 3, 16))
+>x : Symbol(x, Decl(discriminantsAndPrimitives.ts, 21, 12))
+>name : Symbol(Foo.name, Decl(discriminantsAndPrimitives.ts, 3, 16))
+        }
+    }
+}
+
+function f3(x: Foo | Bar | string | null) {
+>f3 : Symbol(f3, Decl(discriminantsAndPrimitives.ts, 28, 1))
+>x : Symbol(x, Decl(discriminantsAndPrimitives.ts, 30, 12))
+>Foo : Symbol(Foo, Decl(discriminantsAndPrimitives.ts, 0, 0))
+>Bar : Symbol(Bar, Decl(discriminantsAndPrimitives.ts, 5, 1))
+
+    if (x && typeof x !== "string") {
+>x : Symbol(x, Decl(discriminantsAndPrimitives.ts, 30, 12))
+>x : Symbol(x, Decl(discriminantsAndPrimitives.ts, 30, 12))
+
+        switch(x.kind) {
+>x.kind : Symbol(kind, Decl(discriminantsAndPrimitives.ts, 2, 15), Decl(discriminantsAndPrimitives.ts, 7, 15))
+>x : Symbol(x, Decl(discriminantsAndPrimitives.ts, 30, 12))
+>kind : Symbol(kind, Decl(discriminantsAndPrimitives.ts, 2, 15), Decl(discriminantsAndPrimitives.ts, 7, 15))
+
+            case 'foo':
+                x.name;
+>x.name : Symbol(Foo.name, Decl(discriminantsAndPrimitives.ts, 3, 16))
+>x : Symbol(x, Decl(discriminantsAndPrimitives.ts, 30, 12))
+>name : Symbol(Foo.name, Decl(discriminantsAndPrimitives.ts, 3, 16))
+        }
+    }
+}
+
+function f4(x: Foo | Bar | string | number | null) {
+>f4 : Symbol(f4, Decl(discriminantsAndPrimitives.ts, 37, 1))
+>x : Symbol(x, Decl(discriminantsAndPrimitives.ts, 39, 12))
+>Foo : Symbol(Foo, Decl(discriminantsAndPrimitives.ts, 0, 0))
+>Bar : Symbol(Bar, Decl(discriminantsAndPrimitives.ts, 5, 1))
+
+    if (x && typeof x === "object") {
+>x : Symbol(x, Decl(discriminantsAndPrimitives.ts, 39, 12))
+>x : Symbol(x, Decl(discriminantsAndPrimitives.ts, 39, 12))
+
+        switch(x.kind) {
+>x.kind : Symbol(kind, Decl(discriminantsAndPrimitives.ts, 2, 15), Decl(discriminantsAndPrimitives.ts, 7, 15))
+>x : Symbol(x, Decl(discriminantsAndPrimitives.ts, 39, 12))
+>kind : Symbol(kind, Decl(discriminantsAndPrimitives.ts, 2, 15), Decl(discriminantsAndPrimitives.ts, 7, 15))
+
+            case 'foo':
+                x.name;
+>x.name : Symbol(Foo.name, Decl(discriminantsAndPrimitives.ts, 3, 16))
+>x : Symbol(x, Decl(discriminantsAndPrimitives.ts, 39, 12))
+>name : Symbol(Foo.name, Decl(discriminantsAndPrimitives.ts, 3, 16))
+        }
+    }
+}
+
+// Repro from #31319
+
+const enum EnumTypeNode {
+>EnumTypeNode : Symbol(EnumTypeNode, Decl(discriminantsAndPrimitives.ts, 46, 1))
+
+    Pattern = "Pattern",
+>Pattern : Symbol(EnumTypeNode.Pattern, Decl(discriminantsAndPrimitives.ts, 50, 25))
+
+    Disjunction = "Disjunction",
+>Disjunction : Symbol(EnumTypeNode.Disjunction, Decl(discriminantsAndPrimitives.ts, 51, 24))
+}
+
+type NodeA = Disjunction | Pattern;
+>NodeA : Symbol(NodeA, Decl(discriminantsAndPrimitives.ts, 53, 1))
+>Disjunction : Symbol(Disjunction, Decl(discriminantsAndPrimitives.ts, 59, 1))
+>Pattern : Symbol(Pattern, Decl(discriminantsAndPrimitives.ts, 64, 1))
+
+interface NodeBase {
+>NodeBase : Symbol(NodeBase, Decl(discriminantsAndPrimitives.ts, 55, 35))
+
+    type: NodeA["type"]
+>type : Symbol(NodeBase.type, Decl(discriminantsAndPrimitives.ts, 57, 20))
+>NodeA : Symbol(NodeA, Decl(discriminantsAndPrimitives.ts, 53, 1))
+}
+
+interface Disjunction extends NodeBase {
+>Disjunction : Symbol(Disjunction, Decl(discriminantsAndPrimitives.ts, 59, 1))
+>NodeBase : Symbol(NodeBase, Decl(discriminantsAndPrimitives.ts, 55, 35))
+
+    type: EnumTypeNode.Disjunction
+>type : Symbol(Disjunction.type, Decl(discriminantsAndPrimitives.ts, 61, 40))
+>EnumTypeNode : Symbol(EnumTypeNode, Decl(discriminantsAndPrimitives.ts, 46, 1))
+>Disjunction : Symbol(EnumTypeNode.Disjunction, Decl(discriminantsAndPrimitives.ts, 51, 24))
+
+    alternatives: string[]
+>alternatives : Symbol(Disjunction.alternatives, Decl(discriminantsAndPrimitives.ts, 62, 34))
+}
+
+interface Pattern extends NodeBase {
+>Pattern : Symbol(Pattern, Decl(discriminantsAndPrimitives.ts, 64, 1))
+>NodeBase : Symbol(NodeBase, Decl(discriminantsAndPrimitives.ts, 55, 35))
+
+    type: EnumTypeNode.Pattern
+>type : Symbol(Pattern.type, Decl(discriminantsAndPrimitives.ts, 66, 36))
+>EnumTypeNode : Symbol(EnumTypeNode, Decl(discriminantsAndPrimitives.ts, 46, 1))
+>Pattern : Symbol(EnumTypeNode.Pattern, Decl(discriminantsAndPrimitives.ts, 50, 25))
+
+    elements: string[]
+>elements : Symbol(Pattern.elements, Decl(discriminantsAndPrimitives.ts, 67, 30))
+}
+
+let n!: NodeA
+>n : Symbol(n, Decl(discriminantsAndPrimitives.ts, 71, 3))
+>NodeA : Symbol(NodeA, Decl(discriminantsAndPrimitives.ts, 53, 1))
+
+if (n.type === "Disjunction") {
+>n.type : Symbol(type, Decl(discriminantsAndPrimitives.ts, 61, 40), Decl(discriminantsAndPrimitives.ts, 66, 36))
+>n : Symbol(n, Decl(discriminantsAndPrimitives.ts, 71, 3))
+>type : Symbol(type, Decl(discriminantsAndPrimitives.ts, 61, 40), Decl(discriminantsAndPrimitives.ts, 66, 36))
+
+    n.alternatives.slice()
+>n.alternatives.slice : Symbol(Array.slice, Decl(lib.es5.d.ts, --, --))
+>n.alternatives : Symbol(Disjunction.alternatives, Decl(discriminantsAndPrimitives.ts, 62, 34))
+>n : Symbol(n, Decl(discriminantsAndPrimitives.ts, 71, 3))
+>alternatives : Symbol(Disjunction.alternatives, Decl(discriminantsAndPrimitives.ts, 62, 34))
+>slice : Symbol(Array.slice, Decl(lib.es5.d.ts, --, --))
+}
+else {
+    n.elements.slice() // n should be narrowed to Pattern
+>n.elements.slice : Symbol(Array.slice, Decl(lib.es5.d.ts, --, --))
+>n.elements : Symbol(Pattern.elements, Decl(discriminantsAndPrimitives.ts, 67, 30))
+>n : Symbol(n, Decl(discriminantsAndPrimitives.ts, 71, 3))
+>elements : Symbol(Pattern.elements, Decl(discriminantsAndPrimitives.ts, 67, 30))
+>slice : Symbol(Array.slice, Decl(lib.es5.d.ts, --, --))
+}
+

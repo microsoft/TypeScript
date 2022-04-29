@@ -1,0 +1,61 @@
+=== tests/cases/compiler/implicitAnyAmbients.ts ===
+declare module m {
+>m : typeof m
+
+    var x; // error
+>x : any
+
+    var y: any;
+>y : any
+
+    function f(x); // error 
+>f : (x: any) => any
+>x : any
+
+    function f2(x: any); // error
+>f2 : (x: any) => any
+>x : any
+
+    function f3(x: any): any;
+>f3 : (x: any) => any
+>x : any
+
+    interface I {
+        foo(); // error
+>foo : () => any
+
+        foo2(x: any); // error
+>foo2 : (x: any) => any
+>x : any
+
+        foo3(x: any): any;
+>foo3 : (x: any) => any
+>x : any
+    }
+
+    class C {
+>C : C
+
+        foo(); // error
+>foo : () => any
+
+        foo2(x: any); // error
+>foo2 : (x: any) => any
+>x : any
+
+        foo3(x: any): any;
+>foo3 : (x: any) => any
+>x : any
+    }
+
+    module n {
+>n : typeof n
+
+        var y; // error
+>y : any
+    }
+
+    import m2 = n;
+>m2 : typeof n
+>n : typeof n
+}

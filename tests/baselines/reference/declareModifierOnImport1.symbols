@@ -1,0 +1,4 @@
+=== tests/cases/compiler/declareModifierOnImport1.ts ===
+declare import a = b;
+>a : Symbol(a, Decl(declareModifierOnImport1.ts, 0, 0))
+

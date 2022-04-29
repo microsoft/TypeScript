@@ -1,0 +1,20 @@
+=== tests/cases/conformance/decorators/class/method/decoratorOnClassMethod6.ts ===
+declare function dec(): <T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T>;
+>dec : Symbol(dec, Decl(decoratorOnClassMethod6.ts, 0, 0))
+>T : Symbol(T, Decl(decoratorOnClassMethod6.ts, 0, 25))
+>target : Symbol(target, Decl(decoratorOnClassMethod6.ts, 0, 28))
+>propertyKey : Symbol(propertyKey, Decl(decoratorOnClassMethod6.ts, 0, 40))
+>descriptor : Symbol(descriptor, Decl(decoratorOnClassMethod6.ts, 0, 61))
+>TypedPropertyDescriptor : Symbol(TypedPropertyDescriptor, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(decoratorOnClassMethod6.ts, 0, 25))
+>TypedPropertyDescriptor : Symbol(TypedPropertyDescriptor, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(decoratorOnClassMethod6.ts, 0, 25))
+
+class C {
+>C : Symbol(C, Decl(decoratorOnClassMethod6.ts, 0, 132))
+
+    @dec ["method"]() {}
+>dec : Symbol(dec, Decl(decoratorOnClassMethod6.ts, 0, 0))
+>["method"] : Symbol(C["method"], Decl(decoratorOnClassMethod6.ts, 2, 9))
+>"method" : Symbol(C["method"], Decl(decoratorOnClassMethod6.ts, 2, 9))
+}

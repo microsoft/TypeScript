@@ -1,0 +1,67 @@
+=== tests/cases/conformance/jsx/react.d.ts ===
+declare module JSX {
+	interface Element { }
+	interface IntrinsicElements {
+        div: any;
+>div : any
+	}
+    interface ElementAttributesProperty { prop: any }
+>prop : any
+}
+
+=== tests/cases/conformance/jsx/file.tsx ===
+interface IProps {
+  primaryText: string,
+>primaryText : string
+
+  [propName: string]: string | number
+>propName : string
+}
+
+function VerticalNavMenuItem(prop: IProps) {
+>VerticalNavMenuItem : (prop: IProps) => JSX.Element
+>prop : IProps
+
+  return <div>props.primaryText</div>
+><div>props.primaryText</div> : JSX.Element
+>div : any
+>div : any
+}
+
+function VerticalNav() {
+>VerticalNav : () => JSX.Element
+
+  return (
+>(    <div>      <VerticalNavMenuItem primaryText={2} />  // error      <VerticalNavMenuItem justRandomProp={2} primaryText={"hello"} />  // ok      <VerticalNavMenuItem justRandomProp1={true} primaryText={"hello"} />  // error    </div>  ) : JSX.Element
+
+    <div>
+><div>      <VerticalNavMenuItem primaryText={2} />  // error      <VerticalNavMenuItem justRandomProp={2} primaryText={"hello"} />  // ok      <VerticalNavMenuItem justRandomProp1={true} primaryText={"hello"} />  // error    </div> : JSX.Element
+>div : any
+
+      <VerticalNavMenuItem primaryText={2} />  // error
+><VerticalNavMenuItem primaryText={2} /> : JSX.Element
+>VerticalNavMenuItem : (prop: IProps) => JSX.Element
+>primaryText : number
+>2 : 2
+
+      <VerticalNavMenuItem justRandomProp={2} primaryText={"hello"} />  // ok
+><VerticalNavMenuItem justRandomProp={2} primaryText={"hello"} /> : JSX.Element
+>VerticalNavMenuItem : (prop: IProps) => JSX.Element
+>justRandomProp : number
+>2 : 2
+>primaryText : string
+>"hello" : "hello"
+
+      <VerticalNavMenuItem justRandomProp1={true} primaryText={"hello"} />  // error
+><VerticalNavMenuItem justRandomProp1={true} primaryText={"hello"} /> : JSX.Element
+>VerticalNavMenuItem : (prop: IProps) => JSX.Element
+>justRandomProp1 : boolean
+>true : true
+>primaryText : string
+>"hello" : "hello"
+
+    </div>
+>div : any
+
+  )
+} 

@@ -1,0 +1,17 @@
+tests/cases/compiler/inheritanceStaticFuncOverridingAccessorOfFuncType.ts(2,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+
+
+==== tests/cases/compiler/inheritanceStaticFuncOverridingAccessorOfFuncType.ts (1 errors) ====
+    class a {
+        static get x(): () => string {
+                   ~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+            return null;
+        }
+    }
+    
+    class b extends a {
+        static x() {
+            return "20";
+        }
+    }

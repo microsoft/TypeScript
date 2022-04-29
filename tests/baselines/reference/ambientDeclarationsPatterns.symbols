@@ -1,0 +1,59 @@
+=== tests/cases/conformance/ambient/user.ts ===
+///<reference path="declarations.d.ts" />
+import {foo, baz} from "foobarbaz";
+>foo : Symbol(foo, Decl(user.ts, 1, 8))
+>baz : Symbol(baz, Decl(user.ts, 1, 12))
+
+foo(baz);
+>foo : Symbol(foo, Decl(user.ts, 1, 8))
+>baz : Symbol(baz, Decl(user.ts, 1, 12))
+
+import {foos} from "foosball";
+>foos : Symbol(foos, Decl(user.ts, 4, 8))
+
+foo(foos);
+>foo : Symbol(foo, Decl(user.ts, 1, 8))
+>foos : Symbol(foos, Decl(user.ts, 4, 8))
+
+// Works with relative file name
+import fileText from "./file!text";
+>fileText : Symbol(fileText, Decl(user.ts, 8, 6))
+
+foo(fileText);
+>foo : Symbol(foo, Decl(user.ts, 1, 8))
+>fileText : Symbol(fileText, Decl(user.ts, 8, 6))
+
+=== tests/cases/conformance/ambient/declarations.d.ts ===
+declare module "foo*baz" {
+>"foo*baz" : Symbol("foo*baz", Decl(declarations.d.ts, 0, 0), Decl(declarations.d.ts, 2, 1))
+
+    export function foo(s: string): void;
+>foo : Symbol(foo, Decl(declarations.d.ts, 0, 26))
+>s : Symbol(s, Decl(declarations.d.ts, 1, 24))
+}
+// Augmentations still work
+declare module "foo*baz" {
+>"foo*baz" : Symbol("foo*baz", Decl(declarations.d.ts, 0, 0), Decl(declarations.d.ts, 2, 1))
+
+    export const baz: string;
+>baz : Symbol(baz, Decl(declarations.d.ts, 5, 16))
+}
+
+// Longest prefix wins
+declare module "foos*" {
+>"foos*" : Symbol("foos*", Decl(declarations.d.ts, 6, 1))
+
+    export const foos: string;
+>foos : Symbol(foos, Decl(declarations.d.ts, 10, 16))
+}
+
+declare module "*!text" {
+>"*!text" : Symbol("*!text", Decl(declarations.d.ts, 11, 1))
+
+    const x: string;
+>x : Symbol(x, Decl(declarations.d.ts, 14, 9))
+
+    export default x;
+>x : Symbol(x, Decl(declarations.d.ts, 14, 9))
+}
+

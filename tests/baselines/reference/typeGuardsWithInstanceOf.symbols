@@ -1,0 +1,85 @@
+=== tests/cases/conformance/expressions/typeGuards/typeGuardsWithInstanceOf.ts ===
+interface I { global: string; }
+>I : Symbol(I, Decl(typeGuardsWithInstanceOf.ts, 0, 0))
+>global : Symbol(I.global, Decl(typeGuardsWithInstanceOf.ts, 0, 13))
+
+var result!: I;
+>result : Symbol(result, Decl(typeGuardsWithInstanceOf.ts, 1, 3))
+>I : Symbol(I, Decl(typeGuardsWithInstanceOf.ts, 0, 0))
+
+var result2!: I;
+>result2 : Symbol(result2, Decl(typeGuardsWithInstanceOf.ts, 2, 3))
+>I : Symbol(I, Decl(typeGuardsWithInstanceOf.ts, 0, 0))
+
+if (!(result instanceof RegExp)) {
+>result : Symbol(result, Decl(typeGuardsWithInstanceOf.ts, 1, 3))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    result = result2;
+>result : Symbol(result, Decl(typeGuardsWithInstanceOf.ts, 1, 3))
+>result2 : Symbol(result2, Decl(typeGuardsWithInstanceOf.ts, 2, 3))
+
+} else if (!result.global) {
+>result : Symbol(result, Decl(typeGuardsWithInstanceOf.ts, 1, 3))
+}
+
+// Repro from #31155
+
+interface OnChanges {
+>OnChanges : Symbol(OnChanges, Decl(typeGuardsWithInstanceOf.ts, 7, 1))
+
+    onChanges(changes: Record<string, unknown>): void
+>onChanges : Symbol(OnChanges.onChanges, Decl(typeGuardsWithInstanceOf.ts, 11, 21))
+>changes : Symbol(changes, Decl(typeGuardsWithInstanceOf.ts, 12, 14))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+}
+interface Validator {
+>Validator : Symbol(Validator, Decl(typeGuardsWithInstanceOf.ts, 13, 1))
+
+    validate(): null | Record<string, unknown>;
+>validate : Symbol(Validator.validate, Decl(typeGuardsWithInstanceOf.ts, 14, 21))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+}
+
+class C {
+>C : Symbol(C, Decl(typeGuardsWithInstanceOf.ts, 16, 1))
+
+    validate() {
+>validate : Symbol(C.validate, Decl(typeGuardsWithInstanceOf.ts, 18, 9))
+
+        return {}
+    }
+}
+
+function foo() {
+>foo : Symbol(foo, Decl(typeGuardsWithInstanceOf.ts, 22, 1))
+
+    let v: Validator & Partial<OnChanges> = null as any;
+>v : Symbol(v, Decl(typeGuardsWithInstanceOf.ts, 25, 7))
+>Validator : Symbol(Validator, Decl(typeGuardsWithInstanceOf.ts, 13, 1))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>OnChanges : Symbol(OnChanges, Decl(typeGuardsWithInstanceOf.ts, 7, 1))
+
+    if (v instanceof C) {
+>v : Symbol(v, Decl(typeGuardsWithInstanceOf.ts, 25, 7))
+>C : Symbol(C, Decl(typeGuardsWithInstanceOf.ts, 16, 1))
+
+        v // Validator & Partial<OnChanges> & C
+>v : Symbol(v, Decl(typeGuardsWithInstanceOf.ts, 25, 7))
+    }
+    v // Validator & Partial<OnChanges> via subtype reduction
+>v : Symbol(v, Decl(typeGuardsWithInstanceOf.ts, 25, 7))
+
+    // In 4.1, we introduced a change which _fixed_ a bug with CFA
+    // correctly setting this to be the right object. With 4.2,
+    // we reverted that fix in #42231 which brought behavior back to
+    // before 4.1.
+    if (v.onChanges) {
+>v : Symbol(v, Decl(typeGuardsWithInstanceOf.ts, 25, 7))
+
+        v.onChanges({});
+>v : Symbol(v, Decl(typeGuardsWithInstanceOf.ts, 25, 7))
+    }
+}
+
+

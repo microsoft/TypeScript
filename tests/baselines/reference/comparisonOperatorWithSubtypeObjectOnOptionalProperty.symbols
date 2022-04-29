@@ -1,0 +1,114 @@
+=== tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithSubtypeObjectOnOptionalProperty.ts ===
+interface I {
+>I : Symbol(I, Decl(comparisonOperatorWithSubtypeObjectOnOptionalProperty.ts, 0, 0))
+
+    a: string;
+>a : Symbol(I.a, Decl(comparisonOperatorWithSubtypeObjectOnOptionalProperty.ts, 0, 13))
+
+    b?: number;
+>b : Symbol(I.b, Decl(comparisonOperatorWithSubtypeObjectOnOptionalProperty.ts, 1, 14))
+}
+
+interface J {
+>J : Symbol(J, Decl(comparisonOperatorWithSubtypeObjectOnOptionalProperty.ts, 3, 1))
+
+    a: string;
+>a : Symbol(J.a, Decl(comparisonOperatorWithSubtypeObjectOnOptionalProperty.ts, 5, 13))
+}
+
+var a: I;
+>a : Symbol(a, Decl(comparisonOperatorWithSubtypeObjectOnOptionalProperty.ts, 9, 3))
+>I : Symbol(I, Decl(comparisonOperatorWithSubtypeObjectOnOptionalProperty.ts, 0, 0))
+
+var b: J;
+>b : Symbol(b, Decl(comparisonOperatorWithSubtypeObjectOnOptionalProperty.ts, 10, 3))
+>J : Symbol(J, Decl(comparisonOperatorWithSubtypeObjectOnOptionalProperty.ts, 3, 1))
+
+// operator <
+var ra1 = a < b;
+>ra1 : Symbol(ra1, Decl(comparisonOperatorWithSubtypeObjectOnOptionalProperty.ts, 13, 3))
+>a : Symbol(a, Decl(comparisonOperatorWithSubtypeObjectOnOptionalProperty.ts, 9, 3))
+>b : Symbol(b, Decl(comparisonOperatorWithSubtypeObjectOnOptionalProperty.ts, 10, 3))
+
+var ra2 = b < a;
+>ra2 : Symbol(ra2, Decl(comparisonOperatorWithSubtypeObjectOnOptionalProperty.ts, 14, 3))
+>b : Symbol(b, Decl(comparisonOperatorWithSubtypeObjectOnOptionalProperty.ts, 10, 3))
+>a : Symbol(a, Decl(comparisonOperatorWithSubtypeObjectOnOptionalProperty.ts, 9, 3))
+
+// operator >
+var rb1 = a > b;
+>rb1 : Symbol(rb1, Decl(comparisonOperatorWithSubtypeObjectOnOptionalProperty.ts, 17, 3))
+>a : Symbol(a, Decl(comparisonOperatorWithSubtypeObjectOnOptionalProperty.ts, 9, 3))
+>b : Symbol(b, Decl(comparisonOperatorWithSubtypeObjectOnOptionalProperty.ts, 10, 3))
+
+var rb2 = b > a;
+>rb2 : Symbol(rb2, Decl(comparisonOperatorWithSubtypeObjectOnOptionalProperty.ts, 18, 3))
+>b : Symbol(b, Decl(comparisonOperatorWithSubtypeObjectOnOptionalProperty.ts, 10, 3))
+>a : Symbol(a, Decl(comparisonOperatorWithSubtypeObjectOnOptionalProperty.ts, 9, 3))
+
+// operator <=
+var rc1 = a <= b;
+>rc1 : Symbol(rc1, Decl(comparisonOperatorWithSubtypeObjectOnOptionalProperty.ts, 21, 3))
+>a : Symbol(a, Decl(comparisonOperatorWithSubtypeObjectOnOptionalProperty.ts, 9, 3))
+>b : Symbol(b, Decl(comparisonOperatorWithSubtypeObjectOnOptionalProperty.ts, 10, 3))
+
+var rc2 = b <= a;
+>rc2 : Symbol(rc2, Decl(comparisonOperatorWithSubtypeObjectOnOptionalProperty.ts, 22, 3))
+>b : Symbol(b, Decl(comparisonOperatorWithSubtypeObjectOnOptionalProperty.ts, 10, 3))
+>a : Symbol(a, Decl(comparisonOperatorWithSubtypeObjectOnOptionalProperty.ts, 9, 3))
+
+// operator >=
+var rd1 = a >= b;
+>rd1 : Symbol(rd1, Decl(comparisonOperatorWithSubtypeObjectOnOptionalProperty.ts, 25, 3))
+>a : Symbol(a, Decl(comparisonOperatorWithSubtypeObjectOnOptionalProperty.ts, 9, 3))
+>b : Symbol(b, Decl(comparisonOperatorWithSubtypeObjectOnOptionalProperty.ts, 10, 3))
+
+var rd2 = b >= a;
+>rd2 : Symbol(rd2, Decl(comparisonOperatorWithSubtypeObjectOnOptionalProperty.ts, 26, 3))
+>b : Symbol(b, Decl(comparisonOperatorWithSubtypeObjectOnOptionalProperty.ts, 10, 3))
+>a : Symbol(a, Decl(comparisonOperatorWithSubtypeObjectOnOptionalProperty.ts, 9, 3))
+
+// operator ==
+var re1 = a == b;
+>re1 : Symbol(re1, Decl(comparisonOperatorWithSubtypeObjectOnOptionalProperty.ts, 29, 3))
+>a : Symbol(a, Decl(comparisonOperatorWithSubtypeObjectOnOptionalProperty.ts, 9, 3))
+>b : Symbol(b, Decl(comparisonOperatorWithSubtypeObjectOnOptionalProperty.ts, 10, 3))
+
+var re2 = b == a;
+>re2 : Symbol(re2, Decl(comparisonOperatorWithSubtypeObjectOnOptionalProperty.ts, 30, 3))
+>b : Symbol(b, Decl(comparisonOperatorWithSubtypeObjectOnOptionalProperty.ts, 10, 3))
+>a : Symbol(a, Decl(comparisonOperatorWithSubtypeObjectOnOptionalProperty.ts, 9, 3))
+
+// operator !=
+var rf1 = a != b;
+>rf1 : Symbol(rf1, Decl(comparisonOperatorWithSubtypeObjectOnOptionalProperty.ts, 33, 3))
+>a : Symbol(a, Decl(comparisonOperatorWithSubtypeObjectOnOptionalProperty.ts, 9, 3))
+>b : Symbol(b, Decl(comparisonOperatorWithSubtypeObjectOnOptionalProperty.ts, 10, 3))
+
+var rf2 = b != a;
+>rf2 : Symbol(rf2, Decl(comparisonOperatorWithSubtypeObjectOnOptionalProperty.ts, 34, 3))
+>b : Symbol(b, Decl(comparisonOperatorWithSubtypeObjectOnOptionalProperty.ts, 10, 3))
+>a : Symbol(a, Decl(comparisonOperatorWithSubtypeObjectOnOptionalProperty.ts, 9, 3))
+
+// operator ===
+var rg1 = a === b;
+>rg1 : Symbol(rg1, Decl(comparisonOperatorWithSubtypeObjectOnOptionalProperty.ts, 37, 3))
+>a : Symbol(a, Decl(comparisonOperatorWithSubtypeObjectOnOptionalProperty.ts, 9, 3))
+>b : Symbol(b, Decl(comparisonOperatorWithSubtypeObjectOnOptionalProperty.ts, 10, 3))
+
+var rg2 = b === a;
+>rg2 : Symbol(rg2, Decl(comparisonOperatorWithSubtypeObjectOnOptionalProperty.ts, 38, 3))
+>b : Symbol(b, Decl(comparisonOperatorWithSubtypeObjectOnOptionalProperty.ts, 10, 3))
+>a : Symbol(a, Decl(comparisonOperatorWithSubtypeObjectOnOptionalProperty.ts, 9, 3))
+
+// operator !==
+var rh1 = a !== b;
+>rh1 : Symbol(rh1, Decl(comparisonOperatorWithSubtypeObjectOnOptionalProperty.ts, 41, 3))
+>a : Symbol(a, Decl(comparisonOperatorWithSubtypeObjectOnOptionalProperty.ts, 9, 3))
+>b : Symbol(b, Decl(comparisonOperatorWithSubtypeObjectOnOptionalProperty.ts, 10, 3))
+
+var rh2 = b !== a;
+>rh2 : Symbol(rh2, Decl(comparisonOperatorWithSubtypeObjectOnOptionalProperty.ts, 42, 3))
+>b : Symbol(b, Decl(comparisonOperatorWithSubtypeObjectOnOptionalProperty.ts, 10, 3))
+>a : Symbol(a, Decl(comparisonOperatorWithSubtypeObjectOnOptionalProperty.ts, 9, 3))
+

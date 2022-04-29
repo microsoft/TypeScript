@@ -1,0 +1,49 @@
+=== tests/cases/conformance/types/thisType/fluentClasses.ts ===
+class A {
+>A : A
+
+    foo() {
+>foo : () => this
+
+        return this;
+>this : this
+    }
+}
+class B extends A {
+>B : B
+>A : A
+
+    bar() {
+>bar : () => this
+
+        return this;
+>this : this
+    }
+}
+class C extends B {
+>C : C
+>B : B
+
+    baz() {
+>baz : () => this
+
+        return this;
+>this : this
+    }
+}
+var c: C;
+>c : C
+
+var z = c.foo().bar().baz();  // Fluent pattern
+>z : C
+>c.foo().bar().baz() : C
+>c.foo().bar().baz : () => C
+>c.foo().bar() : C
+>c.foo().bar : () => C
+>c.foo() : C
+>c.foo : () => C
+>c : C
+>foo : () => C
+>bar : () => C
+>baz : () => C
+

@@ -1,0 +1,87 @@
+
+1  >declare var console: {
+
+    ~~~~~~~~~~~~~~~~~~~~~~~                       => Pos: (0 to 22)  SpanInfo: undefined
+--------------------------------
+2  >    log(msg: string): void;
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~                  => Pos: (23 to 50)  SpanInfo: undefined
+--------------------------------
+3  >}
+
+    ~~                                            => Pos: (51 to 52)  SpanInfo: undefined
+--------------------------------
+4  >type Robot = [number, string, string];
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~       => Pos: (53 to 91)  SpanInfo: undefined
+--------------------------------
+5  >var robotA: Robot = [1, "mower", "mowing"];
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  => Pos: (92 to 135)  SpanInfo: {"start":92,"length":42}
+    >var robotA: Robot = [1, "mower", "mowing"]
+    >:=> (line 5, col 0) to (line 5, col 42)
+--------------------------------
+6  >var robotB: Robot = [2, "trimmer", "trimming"];
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (136 to 183)  SpanInfo: {"start":136,"length":46}
+    >var robotB: Robot = [2, "trimmer", "trimming"]
+    >:=> (line 6, col 0) to (line 6, col 46)
+--------------------------------
+7  >let [, nameA] = robotA;
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~                      => Pos: (184 to 207)  SpanInfo: {"start":191,"length":5}
+    >nameA
+    >:=> (line 7, col 7) to (line 7, col 12)
+--------------------------------
+8  >let [numberB] = robotB;
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~                      => Pos: (208 to 231)  SpanInfo: {"start":213,"length":7}
+    >numberB
+    >:=> (line 8, col 5) to (line 8, col 12)
+--------------------------------
+9  >let [numberA2, nameA2, skillA2] = robotA;
+
+    ~~~~~~~~~~~~~~                                => Pos: (232 to 245)  SpanInfo: {"start":237,"length":8}
+    >numberA2
+    >:=> (line 9, col 5) to (line 9, col 13)
+9  >let [numberA2, nameA2, skillA2] = robotA;
+
+                  ~~~~~~~~                        => Pos: (246 to 253)  SpanInfo: {"start":247,"length":6}
+    >nameA2
+    >:=> (line 9, col 15) to (line 9, col 21)
+9  >let [numberA2, nameA2, skillA2] = robotA;
+
+                          ~~~~~~~~~~~~~~~~~~~~    => Pos: (254 to 273)  SpanInfo: {"start":255,"length":7}
+    >skillA2
+    >:=> (line 9, col 23) to (line 9, col 30)
+--------------------------------
+10 >let [numberC2] = [3, "edging", "Trimming edges"];
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (274 to 323)  SpanInfo: {"start":279,"length":8}
+    >numberC2
+    >:=> (line 10, col 5) to (line 10, col 13)
+--------------------------------
+11 >let [numberC, nameC, skillC] = [3, "edging", "Trimming edges"];
+
+    ~~~~~~~~~~~~~                                 => Pos: (324 to 336)  SpanInfo: {"start":329,"length":7}
+    >numberC
+    >:=> (line 11, col 5) to (line 11, col 12)
+11 >let [numberC, nameC, skillC] = [3, "edging", "Trimming edges"];
+
+                 ~~~~~~~                          => Pos: (337 to 343)  SpanInfo: {"start":338,"length":5}
+    >nameC
+    >:=> (line 11, col 14) to (line 11, col 19)
+11 >let [numberC, nameC, skillC] = [3, "edging", "Trimming edges"];
+
+                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (344 to 387)  SpanInfo: {"start":345,"length":6}
+    >skillC
+    >:=> (line 11, col 21) to (line 11, col 27)
+--------------------------------
+12 >let [numberA3, ...robotAInfo] = robotA;
+    ~~~~~~~~~~~~~~                                => Pos: (388 to 401)  SpanInfo: {"start":393,"length":8}
+    >numberA3
+    >:=> (line 12, col 5) to (line 12, col 13)
+12 >let [numberA3, ...robotAInfo] = robotA;
+                  ~~~~~~~~~~~~~~~~~~~~~~~~~       => Pos: (402 to 426)  SpanInfo: {"start":403,"length":13}
+    >...robotAInfo
+    >:=> (line 12, col 15) to (line 12, col 28)

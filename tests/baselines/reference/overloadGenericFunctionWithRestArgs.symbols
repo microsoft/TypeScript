@@ -1,0 +1,38 @@
+=== tests/cases/compiler/overloadGenericFunctionWithRestArgs.ts ===
+class B<V>{
+>B : Symbol(B, Decl(overloadGenericFunctionWithRestArgs.ts, 0, 0))
+>V : Symbol(V, Decl(overloadGenericFunctionWithRestArgs.ts, 0, 8))
+
+    private id: V;
+>id : Symbol(B.id, Decl(overloadGenericFunctionWithRestArgs.ts, 0, 11))
+>V : Symbol(V, Decl(overloadGenericFunctionWithRestArgs.ts, 0, 8))
+}
+class A<U>{
+>A : Symbol(A, Decl(overloadGenericFunctionWithRestArgs.ts, 2, 1))
+>U : Symbol(U, Decl(overloadGenericFunctionWithRestArgs.ts, 3, 8))
+
+    GetEnumerator: () => B<U>;
+>GetEnumerator : Symbol(A.GetEnumerator, Decl(overloadGenericFunctionWithRestArgs.ts, 3, 11))
+>B : Symbol(B, Decl(overloadGenericFunctionWithRestArgs.ts, 0, 0))
+>U : Symbol(U, Decl(overloadGenericFunctionWithRestArgs.ts, 3, 8))
+}
+function Choice<T>(...v_args: T[]): A<T>;
+>Choice : Symbol(Choice, Decl(overloadGenericFunctionWithRestArgs.ts, 5, 1), Decl(overloadGenericFunctionWithRestArgs.ts, 6, 41))
+>T : Symbol(T, Decl(overloadGenericFunctionWithRestArgs.ts, 6, 16))
+>v_args : Symbol(v_args, Decl(overloadGenericFunctionWithRestArgs.ts, 6, 19))
+>T : Symbol(T, Decl(overloadGenericFunctionWithRestArgs.ts, 6, 16))
+>A : Symbol(A, Decl(overloadGenericFunctionWithRestArgs.ts, 2, 1))
+>T : Symbol(T, Decl(overloadGenericFunctionWithRestArgs.ts, 6, 16))
+
+function Choice<T>(...v_args: T[]): A<T> {
+>Choice : Symbol(Choice, Decl(overloadGenericFunctionWithRestArgs.ts, 5, 1), Decl(overloadGenericFunctionWithRestArgs.ts, 6, 41))
+>T : Symbol(T, Decl(overloadGenericFunctionWithRestArgs.ts, 7, 16))
+>v_args : Symbol(v_args, Decl(overloadGenericFunctionWithRestArgs.ts, 7, 19))
+>T : Symbol(T, Decl(overloadGenericFunctionWithRestArgs.ts, 7, 16))
+>A : Symbol(A, Decl(overloadGenericFunctionWithRestArgs.ts, 2, 1))
+>T : Symbol(T, Decl(overloadGenericFunctionWithRestArgs.ts, 7, 16))
+
+    return new A<T>();
+>A : Symbol(A, Decl(overloadGenericFunctionWithRestArgs.ts, 2, 1))
+>T : Symbol(T, Decl(overloadGenericFunctionWithRestArgs.ts, 7, 16))
+}

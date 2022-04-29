@@ -1,0 +1,75 @@
+=== tests/cases/conformance/classes/constructorDeclarations/automaticConstructors/derivedClassWithoutExplicitConstructor.ts ===
+class Base {
+>Base : Symbol(Base, Decl(derivedClassWithoutExplicitConstructor.ts, 0, 0))
+
+    a = 1;
+>a : Symbol(Base.a, Decl(derivedClassWithoutExplicitConstructor.ts, 0, 12))
+
+    constructor(x: number) { this.a = x; }
+>x : Symbol(x, Decl(derivedClassWithoutExplicitConstructor.ts, 2, 16))
+>this.a : Symbol(Base.a, Decl(derivedClassWithoutExplicitConstructor.ts, 0, 12))
+>this : Symbol(Base, Decl(derivedClassWithoutExplicitConstructor.ts, 0, 0))
+>a : Symbol(Base.a, Decl(derivedClassWithoutExplicitConstructor.ts, 0, 12))
+>x : Symbol(x, Decl(derivedClassWithoutExplicitConstructor.ts, 2, 16))
+}
+
+class Derived extends Base {
+>Derived : Symbol(Derived, Decl(derivedClassWithoutExplicitConstructor.ts, 3, 1))
+>Base : Symbol(Base, Decl(derivedClassWithoutExplicitConstructor.ts, 0, 0))
+
+    x = 1
+>x : Symbol(Derived.x, Decl(derivedClassWithoutExplicitConstructor.ts, 5, 28))
+
+    y = 'hello';
+>y : Symbol(Derived.y, Decl(derivedClassWithoutExplicitConstructor.ts, 6, 9))
+}
+
+var r = new Derived(); // error
+>r : Symbol(r, Decl(derivedClassWithoutExplicitConstructor.ts, 10, 3))
+>Derived : Symbol(Derived, Decl(derivedClassWithoutExplicitConstructor.ts, 3, 1))
+
+var r2 = new Derived(1); 
+>r2 : Symbol(r2, Decl(derivedClassWithoutExplicitConstructor.ts, 11, 3))
+>Derived : Symbol(Derived, Decl(derivedClassWithoutExplicitConstructor.ts, 3, 1))
+
+class Base2<T> {
+>Base2 : Symbol(Base2, Decl(derivedClassWithoutExplicitConstructor.ts, 11, 24))
+>T : Symbol(T, Decl(derivedClassWithoutExplicitConstructor.ts, 13, 12))
+
+    a: T;
+>a : Symbol(Base2.a, Decl(derivedClassWithoutExplicitConstructor.ts, 13, 16))
+>T : Symbol(T, Decl(derivedClassWithoutExplicitConstructor.ts, 13, 12))
+
+    constructor(x: T) { this.a = x; }
+>x : Symbol(x, Decl(derivedClassWithoutExplicitConstructor.ts, 15, 16))
+>T : Symbol(T, Decl(derivedClassWithoutExplicitConstructor.ts, 13, 12))
+>this.a : Symbol(Base2.a, Decl(derivedClassWithoutExplicitConstructor.ts, 13, 16))
+>this : Symbol(Base2, Decl(derivedClassWithoutExplicitConstructor.ts, 11, 24))
+>a : Symbol(Base2.a, Decl(derivedClassWithoutExplicitConstructor.ts, 13, 16))
+>x : Symbol(x, Decl(derivedClassWithoutExplicitConstructor.ts, 15, 16))
+}
+
+class D<T extends Date> extends Base2<T> {
+>D : Symbol(D, Decl(derivedClassWithoutExplicitConstructor.ts, 16, 1))
+>T : Symbol(T, Decl(derivedClassWithoutExplicitConstructor.ts, 18, 8))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>Base2 : Symbol(Base2, Decl(derivedClassWithoutExplicitConstructor.ts, 11, 24))
+>T : Symbol(T, Decl(derivedClassWithoutExplicitConstructor.ts, 18, 8))
+
+    x = 2
+>x : Symbol(D.x, Decl(derivedClassWithoutExplicitConstructor.ts, 18, 42))
+
+    y: T = null;
+>y : Symbol(D.y, Decl(derivedClassWithoutExplicitConstructor.ts, 19, 9))
+>T : Symbol(T, Decl(derivedClassWithoutExplicitConstructor.ts, 18, 8))
+}
+
+var d = new D(); // error
+>d : Symbol(d, Decl(derivedClassWithoutExplicitConstructor.ts, 23, 3))
+>D : Symbol(D, Decl(derivedClassWithoutExplicitConstructor.ts, 16, 1))
+
+var d2 = new D(new Date()); // ok
+>d2 : Symbol(d2, Decl(derivedClassWithoutExplicitConstructor.ts, 24, 3))
+>D : Symbol(D, Decl(derivedClassWithoutExplicitConstructor.ts, 16, 1))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+

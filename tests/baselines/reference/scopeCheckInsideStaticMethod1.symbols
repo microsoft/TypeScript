@@ -1,0 +1,26 @@
+=== tests/cases/compiler/scopeCheckInsideStaticMethod1.ts ===
+class C {
+>C : Symbol(C, Decl(scopeCheckInsideStaticMethod1.ts, 0, 0))
+
+   private v;
+>v : Symbol(C.v, Decl(scopeCheckInsideStaticMethod1.ts, 0, 9))
+
+   public p;
+>p : Symbol(C.p, Decl(scopeCheckInsideStaticMethod1.ts, 1, 13))
+
+   static s;
+>s : Symbol(C.s, Decl(scopeCheckInsideStaticMethod1.ts, 2, 12))
+
+   static b() {
+>b : Symbol(C.b, Decl(scopeCheckInsideStaticMethod1.ts, 3, 12))
+
+      v = 1; // ERR
+      C.s = 1;
+>C.s : Symbol(C.s, Decl(scopeCheckInsideStaticMethod1.ts, 2, 12))
+>C : Symbol(C, Decl(scopeCheckInsideStaticMethod1.ts, 0, 0))
+>s : Symbol(C.s, Decl(scopeCheckInsideStaticMethod1.ts, 2, 12))
+
+      this.p = 1; // ERR
+>this : Symbol(C, Decl(scopeCheckInsideStaticMethod1.ts, 0, 0))
+   }
+}

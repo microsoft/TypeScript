@@ -1,0 +1,47 @@
+=== tests/cases/compiler/foo.d.ts ===
+declare module "foo" {
+>"foo" : typeof import("foo")
+
+    export class Foo {
+>Foo : Foo
+
+        constructor();
+        method1(): any;
+>method1 : () => any
+    }
+}
+
+=== tests/cases/compiler/foo-ext.d.ts ===
+declare module "foo" {
+>"foo" : typeof import("foo")
+
+    export interface Foo {
+        method2(): any;
+>method2 : () => any
+    }
+}
+
+=== tests/cases/compiler/index.ts ===
+import * as foo from "foo";
+>foo : typeof foo
+
+class Test {
+>Test : Test
+
+    bar: foo.Foo;
+>bar : foo.Foo
+>foo : any
+
+    constructor() {
+        this.bar = new foo.Foo();
+>this.bar = new foo.Foo() : foo.Foo
+>this.bar : foo.Foo
+>this : this
+>bar : foo.Foo
+>new foo.Foo() : foo.Foo
+>foo.Foo : typeof foo.Foo
+>foo : typeof foo
+>Foo : typeof foo.Foo
+    }
+}
+

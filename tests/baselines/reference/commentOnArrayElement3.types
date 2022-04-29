@@ -1,0 +1,18 @@
+=== tests/cases/compiler/commentOnArrayElement3.ts ===
+const array = [
+>array : number[]
+>[    /* element 1*/    1    /* end of element 1 */,    2    /* end of element 2 */, ,    /* extra comment */] : number[]
+
+    /* element 1*/
+    1
+>1 : 1
+
+    /* end of element 1 */,
+    2
+>2 : 2
+
+    /* end of element 2 */, ,
+> : undefined
+
+    /* extra comment */
+];

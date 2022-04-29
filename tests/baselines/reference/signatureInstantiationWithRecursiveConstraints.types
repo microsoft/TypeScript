@@ -1,0 +1,24 @@
+=== tests/cases/compiler/signatureInstantiationWithRecursiveConstraints.ts ===
+// Repro from #17148
+
+class Foo {
+>Foo : Foo
+
+  myFunc<T extends Foo>(arg: T) {}
+>myFunc : <T extends Foo>(arg: T) => void
+>arg : T
+}
+
+class Bar {
+>Bar : Bar
+
+  myFunc<T extends Bar>(arg: T) {}
+>myFunc : <T extends Bar>(arg: T) => void
+>arg : T
+}
+
+const myVar: Foo = new Bar();
+>myVar : Foo
+>new Bar() : Bar
+>Bar : typeof Bar
+

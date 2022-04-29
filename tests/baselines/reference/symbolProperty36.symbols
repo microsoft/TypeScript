@@ -1,0 +1,16 @@
+=== tests/cases/conformance/es6/Symbols/symbolProperty36.ts ===
+var x = {
+>x : Symbol(x, Decl(symbolProperty36.ts, 0, 3))
+
+    [Symbol.isConcatSpreadable]: 0,
+>[Symbol.isConcatSpreadable] : Symbol([Symbol.isConcatSpreadable], Decl(symbolProperty36.ts, 0, 9), Decl(symbolProperty36.ts, 1, 35))
+>Symbol.isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+    [Symbol.isConcatSpreadable]: 1
+>[Symbol.isConcatSpreadable] : Symbol([Symbol.isConcatSpreadable], Decl(symbolProperty36.ts, 0, 9), Decl(symbolProperty36.ts, 1, 35))
+>Symbol.isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+}

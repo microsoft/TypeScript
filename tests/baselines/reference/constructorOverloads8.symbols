@@ -1,0 +1,35 @@
+=== tests/cases/compiler/constructorOverloads8.ts ===
+class C {
+>C : Symbol(C, Decl(constructorOverloads8.ts, 0, 0))
+
+    constructor(x) { }
+>x : Symbol(x, Decl(constructorOverloads8.ts, 1, 16))
+
+    constructor(y, x) { } // illegal, 2 constructor implementations
+>y : Symbol(y, Decl(constructorOverloads8.ts, 2, 16))
+>x : Symbol(x, Decl(constructorOverloads8.ts, 2, 18))
+}
+
+class D {
+>D : Symbol(D, Decl(constructorOverloads8.ts, 3, 1))
+
+    constructor(x: number);
+>x : Symbol(x, Decl(constructorOverloads8.ts, 6, 16))
+
+    constructor(y: string); // legal, overload signatures for 1 implementation
+>y : Symbol(y, Decl(constructorOverloads8.ts, 7, 16))
+
+    constructor(x) { }
+>x : Symbol(x, Decl(constructorOverloads8.ts, 8, 16))
+}
+
+interface I {
+>I : Symbol(I, Decl(constructorOverloads8.ts, 9, 1))
+
+    new (x);
+>x : Symbol(x, Decl(constructorOverloads8.ts, 12, 9))
+
+    new (x, y); // legal, overload signatures for (presumably) 1 implementation
+>x : Symbol(x, Decl(constructorOverloads8.ts, 13, 9))
+>y : Symbol(y, Decl(constructorOverloads8.ts, 13, 11))
+}

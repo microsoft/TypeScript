@@ -1,0 +1,7 @@
+=== tests/cases/compiler/exportToString.ts ===
+const toString = 0;
+>toString : Symbol(toString, Decl(exportToString.ts, 0, 5))
+
+export { toString };
+>toString : Symbol(toString, Decl(exportToString.ts, 1, 8))
+

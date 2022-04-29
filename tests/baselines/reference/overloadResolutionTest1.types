@@ -1,0 +1,120 @@
+=== tests/cases/compiler/overloadResolutionTest1.ts ===
+function foo(bar:{a:number;}[]):string;
+>foo : { (bar: {    a: number;}[]): string; (bar: { a: boolean; }[]): number; }
+>bar : { a: number; }[]
+>a : number
+
+function foo(bar:{a:boolean;}[]):number;
+>foo : { (bar: { a: number; }[]): string; (bar: {    a: boolean;}[]): number; }
+>bar : { a: boolean; }[]
+>a : boolean
+
+function foo(bar:{a:any;}[]):any{ return bar };
+>foo : { (bar: { a: number; }[]): string; (bar: { a: boolean; }[]): number; }
+>bar : { a: any; }[]
+>a : any
+>bar : { a: any; }[]
+
+var x1 = foo([{a:true}]); // works
+>x1 : number
+>foo([{a:true}]) : number
+>foo : { (bar: { a: number; }[]): string; (bar: { a: boolean; }[]): number; }
+>[{a:true}] : { a: true; }[]
+>{a:true} : { a: true; }
+>a : true
+>true : true
+
+var x11 = foo([{a:0}]); // works
+>x11 : string
+>foo([{a:0}]) : string
+>foo : { (bar: { a: number; }[]): string; (bar: { a: boolean; }[]): number; }
+>[{a:0}] : { a: number; }[]
+>{a:0} : { a: number; }
+>a : number
+>0 : 0
+
+var x111 = foo([{a:"s"}]); // error - does not match any signature
+>x111 : never
+>foo([{a:"s"}]) : never
+>foo : { (bar: { a: number; }[]): string; (bar: { a: boolean; }[]): number; }
+>[{a:"s"}] : { a: string; }[]
+>{a:"s"} : { a: string; }
+>a : string
+>"s" : "s"
+
+var x1111 = foo([{a:null}]); // works - ambiguous call is resolved to be the first in the overload set so this returns a string
+>x1111 : string
+>foo([{a:null}]) : string
+>foo : { (bar: { a: number; }[]): string; (bar: { a: boolean; }[]): number; }
+>[{a:null}] : { a: null; }[]
+>{a:null} : { a: null; }
+>a : null
+>null : null
+
+
+
+function foo2(bar:{a:number;}):string;
+>foo2 : { (bar: {    a: number;}): string; (bar: { a: boolean; }): number; }
+>bar : { a: number; }
+>a : number
+
+function foo2(bar:{a:boolean;}):number;
+>foo2 : { (bar: { a: number; }): string; (bar: {    a: boolean;}): number; }
+>bar : { a: boolean; }
+>a : boolean
+
+function foo2(bar:{a:any;}):any{ return bar };
+>foo2 : { (bar: { a: number; }): string; (bar: { a: boolean; }): number; }
+>bar : { a: any; }
+>a : any
+>bar : { a: any; }
+
+var x2 = foo2({a:0}); // works
+>x2 : string
+>foo2({a:0}) : string
+>foo2 : { (bar: { a: number; }): string; (bar: { a: boolean; }): number; }
+>{a:0} : { a: number; }
+>a : number
+>0 : 0
+
+var x3 = foo2({a:true}); // works
+>x3 : number
+>foo2({a:true}) : number
+>foo2 : { (bar: { a: number; }): string; (bar: { a: boolean; }): number; }
+>{a:true} : { a: true; }
+>a : true
+>true : true
+
+var x4 = foo2({a:"s"}); // error
+>x4 : never
+>foo2({a:"s"}) : never
+>foo2 : { (bar: { a: number; }): string; (bar: { a: boolean; }): number; }
+>{a:"s"} : { a: string; }
+>a : string
+>"s" : "s"
+
+
+function foo4(bar:{a:number;}):number;
+>foo4 : { (bar: {    a: number;}): number; (bar: { a: string; }): string; }
+>bar : { a: number; }
+>a : number
+
+function foo4(bar:{a:string;}):string;
+>foo4 : { (bar: { a: number; }): number; (bar: {    a: string;}): string; }
+>bar : { a: string; }
+>a : string
+
+function foo4(bar:{a:any;}):any{ return bar };
+>foo4 : { (bar: { a: number; }): number; (bar: { a: string; }): string; }
+>bar : { a: any; }
+>a : any
+>bar : { a: any; }
+
+var x = foo4({a:true}); // error
+>x : never
+>foo4({a:true}) : never
+>foo4 : { (bar: { a: number; }): number; (bar: { a: string; }): string; }
+>{a:true} : { a: boolean; }
+>a : boolean
+>true : true
+

@@ -1,0 +1,43 @@
+=== tests/cases/compiler/narrowingConstrainedTypeParameter.ts ===
+// Repro from #10811
+
+interface Pet {
+    name: string;
+>name : string
+}
+
+function isPet(pet: any): pet is Pet {
+>isPet : (pet: any) => pet is Pet
+>pet : any
+
+    return typeof pet.name === "string";
+>typeof pet.name === "string" : boolean
+>typeof pet.name : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>pet.name : any
+>pet : any
+>name : any
+>"string" : "string"
+}
+
+export function speak<TPet extends Pet>(pet: TPet, voice: (pet: TPet) => string): string {
+>speak : <TPet extends Pet>(pet: TPet, voice: (pet: TPet) => string) => string
+>pet : TPet
+>voice : (pet: TPet) => string
+>pet : TPet
+
+    if (!isPet(pet)) {
+>!isPet(pet) : boolean
+>isPet(pet) : boolean
+>isPet : (pet: any) => pet is Pet
+>pet : TPet
+
+        throw new Error("Expected \"pet\" to be a Pet");
+>new Error("Expected \"pet\" to be a Pet") : Error
+>Error : ErrorConstructor
+>"Expected \"pet\" to be a Pet" : "Expected \"pet\" to be a Pet"
+    }
+    return voice(pet);
+>voice(pet) : string
+>voice : (pet: TPet) => string
+>pet : TPet
+}

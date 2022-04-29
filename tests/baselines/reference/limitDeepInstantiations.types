@@ -1,0 +1,13 @@
+=== tests/cases/compiler/limitDeepInstantiations.ts ===
+// Repro from #14837
+
+type Foo<T extends "true", B> = { "true": Foo<T, Foo<T, B>> }[T];
+>Foo : Foo<T, B>
+>"true" : Foo<T, Foo<T, B>>
+
+let f1: Foo<"true", {}>;
+>f1 : any
+
+let f2: Foo<"false", {}>;
+>f2 : unknown
+

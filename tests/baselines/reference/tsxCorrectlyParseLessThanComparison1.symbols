@@ -1,0 +1,53 @@
+=== tests/cases/conformance/jsx/tsxCorrectlyParseLessThanComparison1.tsx ===
+declare module JSX {
+>JSX : Symbol(JSX, Decl(tsxCorrectlyParseLessThanComparison1.tsx, 0, 0))
+
+    interface Element {
+>Element : Symbol(Element, Decl(tsxCorrectlyParseLessThanComparison1.tsx, 0, 20))
+
+        div: string;
+>div : Symbol(Element.div, Decl(tsxCorrectlyParseLessThanComparison1.tsx, 1, 23))
+    }
+}
+declare namespace React {
+>React : Symbol(React, Decl(tsxCorrectlyParseLessThanComparison1.tsx, 4, 1))
+
+    class Component<P, S> {
+>Component : Symbol(Component, Decl(tsxCorrectlyParseLessThanComparison1.tsx, 5, 25))
+>P : Symbol(P, Decl(tsxCorrectlyParseLessThanComparison1.tsx, 6, 20))
+>S : Symbol(S, Decl(tsxCorrectlyParseLessThanComparison1.tsx, 6, 22))
+
+        constructor(props?: P, context?: any);
+>props : Symbol(props, Decl(tsxCorrectlyParseLessThanComparison1.tsx, 7, 20))
+>P : Symbol(P, Decl(tsxCorrectlyParseLessThanComparison1.tsx, 6, 20))
+>context : Symbol(context, Decl(tsxCorrectlyParseLessThanComparison1.tsx, 7, 30))
+
+        props: P;
+>props : Symbol(Component.props, Decl(tsxCorrectlyParseLessThanComparison1.tsx, 7, 46))
+>P : Symbol(P, Decl(tsxCorrectlyParseLessThanComparison1.tsx, 6, 20))
+    }
+}
+
+export class ShortDetails extends React.Component<{ id: number }, {}> {
+>ShortDetails : Symbol(ShortDetails, Decl(tsxCorrectlyParseLessThanComparison1.tsx, 10, 1))
+>React.Component : Symbol(React.Component, Decl(tsxCorrectlyParseLessThanComparison1.tsx, 5, 25))
+>React : Symbol(React, Decl(tsxCorrectlyParseLessThanComparison1.tsx, 4, 1))
+>Component : Symbol(React.Component, Decl(tsxCorrectlyParseLessThanComparison1.tsx, 5, 25))
+>id : Symbol(id, Decl(tsxCorrectlyParseLessThanComparison1.tsx, 12, 51))
+
+    public render(): JSX.Element {
+>render : Symbol(ShortDetails.render, Decl(tsxCorrectlyParseLessThanComparison1.tsx, 12, 71))
+>JSX : Symbol(JSX, Decl(tsxCorrectlyParseLessThanComparison1.tsx, 0, 0))
+>Element : Symbol(JSX.Element, Decl(tsxCorrectlyParseLessThanComparison1.tsx, 0, 20))
+
+        if (this.props.id < 1) {
+>this.props.id : Symbol(id, Decl(tsxCorrectlyParseLessThanComparison1.tsx, 12, 51))
+>this.props : Symbol(React.Component.props, Decl(tsxCorrectlyParseLessThanComparison1.tsx, 7, 46))
+>this : Symbol(ShortDetails, Decl(tsxCorrectlyParseLessThanComparison1.tsx, 10, 1))
+>props : Symbol(React.Component.props, Decl(tsxCorrectlyParseLessThanComparison1.tsx, 7, 46))
+>id : Symbol(id, Decl(tsxCorrectlyParseLessThanComparison1.tsx, 12, 51))
+
+            return (<div></div>);
+        }
+    }
+}

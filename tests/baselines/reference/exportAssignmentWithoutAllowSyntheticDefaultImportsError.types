@@ -1,0 +1,11 @@
+=== /bar.ts ===
+export = bar;
+>bar : () => void
+
+function bar() {}
+>bar : () => void
+
+=== /foo.ts ===
+import bar from './bar';
+>bar : any
+

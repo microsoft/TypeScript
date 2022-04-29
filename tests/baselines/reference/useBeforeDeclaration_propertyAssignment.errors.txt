@@ -1,0 +1,44 @@
+tests/cases/compiler/useBeforeDeclaration_propertyAssignment.ts(2,27): error TS2729: Property 'b' is used before its initialization.
+tests/cases/compiler/useBeforeDeclaration_propertyAssignment.ts(2,38): error TS2729: Property 'c' is used before its initialization.
+tests/cases/compiler/useBeforeDeclaration_propertyAssignment.ts(2,47): error TS2729: Property 'b' is used before its initialization.
+tests/cases/compiler/useBeforeDeclaration_propertyAssignment.ts(2,59): error TS2729: Property 'c' is used before its initialization.
+tests/cases/compiler/useBeforeDeclaration_propertyAssignment.ts(8,32): error TS2729: Property 'B' is used before its initialization.
+tests/cases/compiler/useBeforeDeclaration_propertyAssignment.ts(13,12): error TS2729: Property 'D' is used before its initialization.
+
+
+==== tests/cases/compiler/useBeforeDeclaration_propertyAssignment.ts (6 errors) ====
+    export class C {
+        public a =  { b: this.b, ...this.c, [this.b]: `${this.c}`};
+                              ~
+!!! error TS2729: Property 'b' is used before its initialization.
+!!! related TS2728 tests/cases/compiler/useBeforeDeclaration_propertyAssignment.ts:3:13: 'b' is declared here.
+                                         ~
+!!! error TS2729: Property 'c' is used before its initialization.
+!!! related TS2728 tests/cases/compiler/useBeforeDeclaration_propertyAssignment.ts:4:12: 'c' is declared here.
+                                                  ~
+!!! error TS2729: Property 'b' is used before its initialization.
+!!! related TS2728 tests/cases/compiler/useBeforeDeclaration_propertyAssignment.ts:3:13: 'b' is declared here.
+                                                              ~
+!!! error TS2729: Property 'c' is used before its initialization.
+!!! related TS2728 tests/cases/compiler/useBeforeDeclaration_propertyAssignment.ts:4:12: 'c' is declared here.
+        private b = 0;
+        public c = { c: this.b };
+    }
+    
+    class D {
+        static A = class extends D.B {
+                                   ~
+!!! error TS2729: Property 'B' is used before its initialization.
+!!! related TS2728 tests/cases/compiler/useBeforeDeclaration_propertyAssignment.ts:11:12: 'B' is declared here.
+            [D.D]() {} // should be an error
+        }
+        static B = class {}
+        static C = {
+            [D.D]: 1,
+               ~
+!!! error TS2729: Property 'D' is used before its initialization.
+!!! related TS2728 tests/cases/compiler/useBeforeDeclaration_propertyAssignment.ts:16:12: 'D' is declared here.
+            ...{get [D.D]() {return 0;}} // should be an error
+        };
+        static D = '';
+    }

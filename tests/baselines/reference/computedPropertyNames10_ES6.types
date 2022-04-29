@@ -1,0 +1,65 @@
+=== tests/cases/conformance/es6/computedProperties/computedPropertyNames10_ES6.ts ===
+var s: string;
+>s : string
+
+var n: number;
+>n : number
+
+var a: any;
+>a : any
+
+var v = {
+>v : { [x: string]: () => void; [x: number]: () => void; ""(): void; 0(): void; "hello bye"(): void; }
+>{    [s]() { },    [n]() { },    [s + s]() { },    [s + n]() { },    [+s]() { },    [""]() { },    [0]() { },    [a]() { },    [<any>true]() { },    [`hello bye`]() { },    [`hello ${a} bye`]() { }} : { [x: string]: () => void; [x: number]: () => void; ""(): void; 0(): void; "hello bye"(): void; }
+
+    [s]() { },
+>[s] : () => void
+>s : string
+
+    [n]() { },
+>[n] : () => void
+>n : number
+
+    [s + s]() { },
+>[s + s] : () => void
+>s + s : string
+>s : string
+>s : string
+
+    [s + n]() { },
+>[s + n] : () => void
+>s + n : string
+>s : string
+>n : number
+
+    [+s]() { },
+>[+s] : () => void
+>+s : number
+>s : string
+
+    [""]() { },
+>[""] : () => void
+>"" : ""
+
+    [0]() { },
+>[0] : () => void
+>0 : 0
+
+    [a]() { },
+>[a] : () => void
+>a : any
+
+    [<any>true]() { },
+>[<any>true] : () => void
+><any>true : any
+>true : true
+
+    [`hello bye`]() { },
+>[`hello bye`] : () => void
+>`hello bye` : "hello bye"
+
+    [`hello ${a} bye`]() { }
+>[`hello ${a} bye`] : () => void
+>`hello ${a} bye` : string
+>a : any
+}

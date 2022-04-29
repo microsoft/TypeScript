@@ -1,0 +1,111 @@
+=== tests/cases/compiler/numericEnumMappedType.ts ===
+// Repro from #31771
+
+enum E1 { ONE, TWO, THREE }
+>E1 : Symbol(E1, Decl(numericEnumMappedType.ts, 0, 0))
+>ONE : Symbol(E1.ONE, Decl(numericEnumMappedType.ts, 2, 9))
+>TWO : Symbol(E1.TWO, Decl(numericEnumMappedType.ts, 2, 14))
+>THREE : Symbol(E1.THREE, Decl(numericEnumMappedType.ts, 2, 19))
+
+declare enum E2 { ONE, TWO, THREE }
+>E2 : Symbol(E2, Decl(numericEnumMappedType.ts, 2, 27))
+>ONE : Symbol(E2.ONE, Decl(numericEnumMappedType.ts, 3, 17))
+>TWO : Symbol(E2.TWO, Decl(numericEnumMappedType.ts, 3, 22))
+>THREE : Symbol(E2.THREE, Decl(numericEnumMappedType.ts, 3, 27))
+
+type Bins1 = { [k in E1]?: string; }
+>Bins1 : Symbol(Bins1, Decl(numericEnumMappedType.ts, 3, 35))
+>k : Symbol(k, Decl(numericEnumMappedType.ts, 5, 16))
+>E1 : Symbol(E1, Decl(numericEnumMappedType.ts, 0, 0))
+
+type Bins2 = { [k in E2]?: string; }
+>Bins2 : Symbol(Bins2, Decl(numericEnumMappedType.ts, 5, 36))
+>k : Symbol(k, Decl(numericEnumMappedType.ts, 6, 16))
+>E2 : Symbol(E2, Decl(numericEnumMappedType.ts, 2, 27))
+
+const b1: Bins1 = {};
+>b1 : Symbol(b1, Decl(numericEnumMappedType.ts, 8, 5))
+>Bins1 : Symbol(Bins1, Decl(numericEnumMappedType.ts, 3, 35))
+
+const b2: Bins2 = {};
+>b2 : Symbol(b2, Decl(numericEnumMappedType.ts, 9, 5))
+>Bins2 : Symbol(Bins2, Decl(numericEnumMappedType.ts, 5, 36))
+
+const e1: E1 = E1.ONE;
+>e1 : Symbol(e1, Decl(numericEnumMappedType.ts, 11, 5))
+>E1 : Symbol(E1, Decl(numericEnumMappedType.ts, 0, 0))
+>E1.ONE : Symbol(E1.ONE, Decl(numericEnumMappedType.ts, 2, 9))
+>E1 : Symbol(E1, Decl(numericEnumMappedType.ts, 0, 0))
+>ONE : Symbol(E1.ONE, Decl(numericEnumMappedType.ts, 2, 9))
+
+const e2: E2 = E2.ONE;
+>e2 : Symbol(e2, Decl(numericEnumMappedType.ts, 12, 5))
+>E2 : Symbol(E2, Decl(numericEnumMappedType.ts, 2, 27))
+>E2.ONE : Symbol(E2.ONE, Decl(numericEnumMappedType.ts, 3, 17))
+>E2 : Symbol(E2, Decl(numericEnumMappedType.ts, 2, 27))
+>ONE : Symbol(E2.ONE, Decl(numericEnumMappedType.ts, 3, 17))
+
+b1[1] = "a";
+>b1 : Symbol(b1, Decl(numericEnumMappedType.ts, 8, 5))
+>1 : Symbol(1)
+
+b1[e1] = "b";
+>b1 : Symbol(b1, Decl(numericEnumMappedType.ts, 8, 5))
+>e1 : Symbol(e1, Decl(numericEnumMappedType.ts, 11, 5))
+
+b2[1] = "a";
+>b2 : Symbol(b2, Decl(numericEnumMappedType.ts, 9, 5))
+
+b2[e2] = "b";
+>b2 : Symbol(b2, Decl(numericEnumMappedType.ts, 9, 5))
+>e2 : Symbol(e2, Decl(numericEnumMappedType.ts, 12, 5))
+
+// Multiple numeric enum types accrue to the same numeric index signature in a mapped type
+
+declare function val(): number;
+>val : Symbol(val, Decl(numericEnumMappedType.ts, 18, 13))
+
+enum N1 { A = val(), B = val() }
+>N1 : Symbol(N1, Decl(numericEnumMappedType.ts, 22, 31))
+>A : Symbol(N1.A, Decl(numericEnumMappedType.ts, 24, 9))
+>val : Symbol(val, Decl(numericEnumMappedType.ts, 18, 13))
+>B : Symbol(N1.B, Decl(numericEnumMappedType.ts, 24, 20))
+>val : Symbol(val, Decl(numericEnumMappedType.ts, 18, 13))
+
+enum N2 { C = val(), D = val() }
+>N2 : Symbol(N2, Decl(numericEnumMappedType.ts, 24, 32))
+>C : Symbol(N2.C, Decl(numericEnumMappedType.ts, 25, 9))
+>val : Symbol(val, Decl(numericEnumMappedType.ts, 18, 13))
+>D : Symbol(N2.D, Decl(numericEnumMappedType.ts, 25, 20))
+>val : Symbol(val, Decl(numericEnumMappedType.ts, 18, 13))
+
+type T1 = { [K in N1 | N2]: K };
+>T1 : Symbol(T1, Decl(numericEnumMappedType.ts, 25, 32))
+>K : Symbol(K, Decl(numericEnumMappedType.ts, 27, 13))
+>N1 : Symbol(N1, Decl(numericEnumMappedType.ts, 22, 31))
+>N2 : Symbol(N2, Decl(numericEnumMappedType.ts, 24, 32))
+>K : Symbol(K, Decl(numericEnumMappedType.ts, 27, 13))
+
+// Enum types with string valued members are always literal enum types and therefore
+// ONE and TWO below are not computed members but rather just numerically valued members
+// with auto-incremented values.
+
+declare enum E { ONE, TWO, THREE = 'x' }
+>E : Symbol(E, Decl(numericEnumMappedType.ts, 27, 32))
+>ONE : Symbol(E.ONE, Decl(numericEnumMappedType.ts, 33, 16))
+>TWO : Symbol(E.TWO, Decl(numericEnumMappedType.ts, 33, 21))
+>THREE : Symbol(E.THREE, Decl(numericEnumMappedType.ts, 33, 26))
+
+const e: E = E.ONE;
+>e : Symbol(e, Decl(numericEnumMappedType.ts, 34, 5))
+>E : Symbol(E, Decl(numericEnumMappedType.ts, 27, 32))
+>E.ONE : Symbol(E.ONE, Decl(numericEnumMappedType.ts, 33, 16))
+>E : Symbol(E, Decl(numericEnumMappedType.ts, 27, 32))
+>ONE : Symbol(E.ONE, Decl(numericEnumMappedType.ts, 33, 16))
+
+const x: E.ONE = e;
+>x : Symbol(x, Decl(numericEnumMappedType.ts, 35, 5))
+>E : Symbol(E, Decl(numericEnumMappedType.ts, 27, 32))
+>ONE : Symbol(E.ONE, Decl(numericEnumMappedType.ts, 33, 16))
+>e : Symbol(e, Decl(numericEnumMappedType.ts, 34, 5))
+

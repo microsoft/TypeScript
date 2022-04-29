@@ -1,0 +1,16 @@
+=== tests/cases/compiler/importAndVariableDeclarationConflict4.ts ===
+module m {
+>m : Symbol(m, Decl(importAndVariableDeclarationConflict4.ts, 0, 0))
+
+  export var m = '';
+>m : Symbol(m, Decl(importAndVariableDeclarationConflict4.ts, 1, 12))
+}
+
+var x = '';
+>x : Symbol(x, Decl(importAndVariableDeclarationConflict4.ts, 4, 3), Decl(importAndVariableDeclarationConflict4.ts, 4, 11))
+
+import x = m.m;
+>x : Symbol(x, Decl(importAndVariableDeclarationConflict4.ts, 4, 3), Decl(importAndVariableDeclarationConflict4.ts, 4, 11))
+>m : Symbol(m, Decl(importAndVariableDeclarationConflict4.ts, 0, 0))
+>m : Symbol(x, Decl(importAndVariableDeclarationConflict4.ts, 1, 12))
+

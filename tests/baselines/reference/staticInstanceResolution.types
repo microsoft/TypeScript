@@ -1,0 +1,32 @@
+=== tests/cases/compiler/staticInstanceResolution.ts ===
+class Comment {
+>Comment : Comment
+
+    public getDocCommentText()
+>getDocCommentText : () => void
+    {
+
+    }
+
+    static getDocCommentText(comments: Comment[])
+>getDocCommentText : (comments: Comment[]) => void
+>comments : Comment[]
+    {
+        comments[0].getDocCommentText();
+>comments[0].getDocCommentText() : void
+>comments[0].getDocCommentText : () => void
+>comments[0] : Comment
+>comments : Comment[]
+>0 : 0
+>getDocCommentText : () => void
+
+        var c: Comment;
+>c : Comment
+
+        c.getDocCommentText();
+>c.getDocCommentText() : void
+>c.getDocCommentText : () => void
+>c : Comment
+>getDocCommentText : () => void
+    }
+}

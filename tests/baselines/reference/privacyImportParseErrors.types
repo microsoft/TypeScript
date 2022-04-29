@@ -1,0 +1,1168 @@
+=== tests/cases/compiler/privacyImportParseErrors.ts ===
+export module m1 {
+>m1 : typeof m1
+
+    export module m1_M1_public {
+>m1_M1_public : typeof m1_M1_public
+
+        export class c1 {
+>c1 : c1
+        }
+        export function f1() {
+>f1 : () => c1
+
+            return new c1;
+>new c1 : c1
+>c1 : typeof c1
+        }
+        export var v1 = c1;
+>v1 : typeof c1
+>c1 : typeof c1
+
+        export var v2: c1;
+>v2 : c1
+    }
+
+    module m1_M2_private {
+>m1_M2_private : typeof m1_M2_private
+
+        export class c1 {
+>c1 : c1
+        }
+        export function f1() {
+>f1 : () => c1
+
+            return new c1;
+>new c1 : c1
+>c1 : typeof c1
+        }
+        export var v1 = c1;
+>v1 : typeof c1
+>c1 : typeof c1
+
+        export var v2: c1;
+>v2 : c1
+    }
+
+    export declare module "m1_M3_public" {
+>"m1_M3_public" : typeof import("m1_M3_public")
+
+        export function f1();
+>f1 : () => any
+
+        export class c1 {
+>c1 : c1
+        }
+        export var v1: { new (): c1; };
+>v1 : new () => c1
+
+        export var v2: c1;
+>v2 : c1
+    }
+
+    declare module "m1_M4_private" {
+>"m1_M4_private" : typeof import("m1_M4_private")
+
+        export function f1();
+>f1 : () => any
+
+        export class c1 {
+>c1 : c1
+        }
+        export var v1: { new (): c1; };
+>v1 : new () => c1
+
+        export var v2: c1;
+>v2 : c1
+    }
+
+    import m1_im1_private = m1_M1_public;
+>m1_im1_private : typeof m1_M1_public
+>m1_M1_public : typeof m1_M1_public
+
+    export var m1_im1_private_v1_public = m1_im1_private.c1;
+>m1_im1_private_v1_public : typeof m1_im1_private.c1
+>m1_im1_private.c1 : typeof m1_im1_private.c1
+>m1_im1_private : typeof m1_M1_public
+>c1 : typeof m1_im1_private.c1
+
+    export var m1_im1_private_v2_public = new m1_im1_private.c1();
+>m1_im1_private_v2_public : m1_im1_private.c1
+>new m1_im1_private.c1() : m1_im1_private.c1
+>m1_im1_private.c1 : typeof m1_im1_private.c1
+>m1_im1_private : typeof m1_M1_public
+>c1 : typeof m1_im1_private.c1
+
+    export var m1_im1_private_v3_public = m1_im1_private.f1;
+>m1_im1_private_v3_public : () => m1_im1_private.c1
+>m1_im1_private.f1 : () => m1_im1_private.c1
+>m1_im1_private : typeof m1_M1_public
+>f1 : () => m1_im1_private.c1
+
+    export var m1_im1_private_v4_public = m1_im1_private.f1();
+>m1_im1_private_v4_public : m1_im1_private.c1
+>m1_im1_private.f1() : m1_im1_private.c1
+>m1_im1_private.f1 : () => m1_im1_private.c1
+>m1_im1_private : typeof m1_M1_public
+>f1 : () => m1_im1_private.c1
+
+    var m1_im1_private_v1_private = m1_im1_private.c1;
+>m1_im1_private_v1_private : typeof m1_im1_private.c1
+>m1_im1_private.c1 : typeof m1_im1_private.c1
+>m1_im1_private : typeof m1_M1_public
+>c1 : typeof m1_im1_private.c1
+
+    var m1_im1_private_v2_private = new m1_im1_private.c1();
+>m1_im1_private_v2_private : m1_im1_private.c1
+>new m1_im1_private.c1() : m1_im1_private.c1
+>m1_im1_private.c1 : typeof m1_im1_private.c1
+>m1_im1_private : typeof m1_M1_public
+>c1 : typeof m1_im1_private.c1
+
+    var m1_im1_private_v3_private = m1_im1_private.f1;
+>m1_im1_private_v3_private : () => m1_im1_private.c1
+>m1_im1_private.f1 : () => m1_im1_private.c1
+>m1_im1_private : typeof m1_M1_public
+>f1 : () => m1_im1_private.c1
+
+    var m1_im1_private_v4_private = m1_im1_private.f1();
+>m1_im1_private_v4_private : m1_im1_private.c1
+>m1_im1_private.f1() : m1_im1_private.c1
+>m1_im1_private.f1 : () => m1_im1_private.c1
+>m1_im1_private : typeof m1_M1_public
+>f1 : () => m1_im1_private.c1
+
+
+    import m1_im2_private = m1_M2_private;
+>m1_im2_private : typeof m1_M2_private
+>m1_M2_private : typeof m1_M2_private
+
+    export var m1_im2_private_v1_public = m1_im2_private.c1;
+>m1_im2_private_v1_public : typeof m1_im2_private.c1
+>m1_im2_private.c1 : typeof m1_im2_private.c1
+>m1_im2_private : typeof m1_M2_private
+>c1 : typeof m1_im2_private.c1
+
+    export var m1_im2_private_v2_public = new m1_im2_private.c1();
+>m1_im2_private_v2_public : m1_im2_private.c1
+>new m1_im2_private.c1() : m1_im2_private.c1
+>m1_im2_private.c1 : typeof m1_im2_private.c1
+>m1_im2_private : typeof m1_M2_private
+>c1 : typeof m1_im2_private.c1
+
+    export var m1_im2_private_v3_public = m1_im2_private.f1;
+>m1_im2_private_v3_public : () => m1_im2_private.c1
+>m1_im2_private.f1 : () => m1_im2_private.c1
+>m1_im2_private : typeof m1_M2_private
+>f1 : () => m1_im2_private.c1
+
+    export var m1_im2_private_v4_public = m1_im2_private.f1();
+>m1_im2_private_v4_public : m1_im2_private.c1
+>m1_im2_private.f1() : m1_im2_private.c1
+>m1_im2_private.f1 : () => m1_im2_private.c1
+>m1_im2_private : typeof m1_M2_private
+>f1 : () => m1_im2_private.c1
+
+    var m1_im2_private_v1_private = m1_im2_private.c1;
+>m1_im2_private_v1_private : typeof m1_im2_private.c1
+>m1_im2_private.c1 : typeof m1_im2_private.c1
+>m1_im2_private : typeof m1_M2_private
+>c1 : typeof m1_im2_private.c1
+
+    var m1_im2_private_v2_private = new m1_im2_private.c1();
+>m1_im2_private_v2_private : m1_im2_private.c1
+>new m1_im2_private.c1() : m1_im2_private.c1
+>m1_im2_private.c1 : typeof m1_im2_private.c1
+>m1_im2_private : typeof m1_M2_private
+>c1 : typeof m1_im2_private.c1
+
+    var m1_im2_private_v3_private = m1_im2_private.f1;
+>m1_im2_private_v3_private : () => m1_im2_private.c1
+>m1_im2_private.f1 : () => m1_im2_private.c1
+>m1_im2_private : typeof m1_M2_private
+>f1 : () => m1_im2_private.c1
+
+    var m1_im2_private_v4_private = m1_im2_private.f1();
+>m1_im2_private_v4_private : m1_im2_private.c1
+>m1_im2_private.f1() : m1_im2_private.c1
+>m1_im2_private.f1 : () => m1_im2_private.c1
+>m1_im2_private : typeof m1_M2_private
+>f1 : () => m1_im2_private.c1
+
+    import m1_im3_private = require("m1_M3_public");
+>m1_im3_private : any
+
+    export var m1_im3_private_v1_public = m1_im3_private.c1;
+>m1_im3_private_v1_public : any
+>m1_im3_private.c1 : any
+>m1_im3_private : any
+>c1 : any
+
+    export var m1_im3_private_v2_public = new m1_im3_private.c1();
+>m1_im3_private_v2_public : any
+>new m1_im3_private.c1() : any
+>m1_im3_private.c1 : any
+>m1_im3_private : any
+>c1 : any
+
+    export var m1_im3_private_v3_public = m1_im3_private.f1;
+>m1_im3_private_v3_public : any
+>m1_im3_private.f1 : any
+>m1_im3_private : any
+>f1 : any
+
+    export var m1_im3_private_v4_public = m1_im3_private.f1();
+>m1_im3_private_v4_public : any
+>m1_im3_private.f1() : any
+>m1_im3_private.f1 : any
+>m1_im3_private : any
+>f1 : any
+
+    var m1_im3_private_v1_private = m1_im3_private.c1;
+>m1_im3_private_v1_private : any
+>m1_im3_private.c1 : any
+>m1_im3_private : any
+>c1 : any
+
+    var m1_im3_private_v2_private = new m1_im3_private.c1();
+>m1_im3_private_v2_private : any
+>new m1_im3_private.c1() : any
+>m1_im3_private.c1 : any
+>m1_im3_private : any
+>c1 : any
+
+    var m1_im3_private_v3_private = m1_im3_private.f1;
+>m1_im3_private_v3_private : any
+>m1_im3_private.f1 : any
+>m1_im3_private : any
+>f1 : any
+
+    var m1_im3_private_v4_private = m1_im3_private.f1();
+>m1_im3_private_v4_private : any
+>m1_im3_private.f1() : any
+>m1_im3_private.f1 : any
+>m1_im3_private : any
+>f1 : any
+
+    import m1_im4_private = require("m1_M4_private");
+>m1_im4_private : any
+
+    export var m1_im4_private_v1_public = m1_im4_private.c1;
+>m1_im4_private_v1_public : any
+>m1_im4_private.c1 : any
+>m1_im4_private : any
+>c1 : any
+
+    export var m1_im4_private_v2_public = new m1_im4_private.c1();
+>m1_im4_private_v2_public : any
+>new m1_im4_private.c1() : any
+>m1_im4_private.c1 : any
+>m1_im4_private : any
+>c1 : any
+
+    export var m1_im4_private_v3_public = m1_im4_private.f1;
+>m1_im4_private_v3_public : any
+>m1_im4_private.f1 : any
+>m1_im4_private : any
+>f1 : any
+
+    export var m1_im4_private_v4_public = m1_im4_private.f1();
+>m1_im4_private_v4_public : any
+>m1_im4_private.f1() : any
+>m1_im4_private.f1 : any
+>m1_im4_private : any
+>f1 : any
+
+    var m1_im4_private_v1_private = m1_im4_private.c1;
+>m1_im4_private_v1_private : any
+>m1_im4_private.c1 : any
+>m1_im4_private : any
+>c1 : any
+
+    var m1_im4_private_v2_private = new m1_im4_private.c1();
+>m1_im4_private_v2_private : any
+>new m1_im4_private.c1() : any
+>m1_im4_private.c1 : any
+>m1_im4_private : any
+>c1 : any
+
+    var m1_im4_private_v3_private = m1_im4_private.f1;
+>m1_im4_private_v3_private : any
+>m1_im4_private.f1 : any
+>m1_im4_private : any
+>f1 : any
+
+    var m1_im4_private_v4_private = m1_im4_private.f1();
+>m1_im4_private_v4_private : any
+>m1_im4_private.f1() : any
+>m1_im4_private.f1 : any
+>m1_im4_private : any
+>f1 : any
+
+    export import m1_im1_public = m1_M1_public;
+>m1_im1_public : typeof m1_M1_public
+>m1_M1_public : typeof m1_M1_public
+
+    export import m1_im2_public = m1_M2_private;
+>m1_im2_public : typeof m1_M2_private
+>m1_M2_private : typeof m1_M2_private
+
+    export import m1_im3_public = require("m1_M3_public");
+>m1_im3_public : any
+
+    export import m1_im4_public = require("m1_M4_private");
+>m1_im4_public : any
+}
+
+module m2 {
+>m2 : typeof m2
+
+    export module m2_M1_public {
+>m2_M1_public : typeof m2_M1_public
+
+        export class c1 {
+>c1 : c1
+        }
+        export function f1() {
+>f1 : () => c1
+
+            return new c1;
+>new c1 : c1
+>c1 : typeof c1
+        }
+        export var v1 = c1;
+>v1 : typeof c1
+>c1 : typeof c1
+
+        export var v2: c1;
+>v2 : c1
+    }
+
+    module m2_M2_private {
+>m2_M2_private : typeof m2_M2_private
+
+        export class c1 {
+>c1 : c1
+        }
+        export function f1() {
+>f1 : () => c1
+
+            return new c1;
+>new c1 : c1
+>c1 : typeof c1
+        }
+        export var v1 = c1;
+>v1 : typeof c1
+>c1 : typeof c1
+
+        export var v2: c1;
+>v2 : c1
+    }
+
+    export declare module "m2_M3_public" {
+>"m2_M3_public" : typeof import("m2_M3_public")
+
+        export function f1();
+>f1 : () => any
+
+        export class c1 {
+>c1 : c1
+        }
+        export var v1: { new (): c1; };
+>v1 : new () => c1
+
+        export var v2: c1;
+>v2 : c1
+    }
+
+    declare module "m2_M4_private" {
+>"m2_M4_private" : typeof import("m2_M4_private")
+
+        export function f1();
+>f1 : () => any
+
+        export class c1 {
+>c1 : c1
+        }
+        export var v1: { new (): c1; };
+>v1 : new () => c1
+
+        export var v2: c1;
+>v2 : c1
+    }
+
+    import m1_im1_private = m2_M1_public;
+>m1_im1_private : typeof m2_M1_public
+>m2_M1_public : typeof m2_M1_public
+
+    export var m1_im1_private_v1_public = m1_im1_private.c1;
+>m1_im1_private_v1_public : typeof m1_im1_private.c1
+>m1_im1_private.c1 : typeof m1_im1_private.c1
+>m1_im1_private : typeof m2_M1_public
+>c1 : typeof m1_im1_private.c1
+
+    export var m1_im1_private_v2_public = new m1_im1_private.c1();
+>m1_im1_private_v2_public : m1_im1_private.c1
+>new m1_im1_private.c1() : m1_im1_private.c1
+>m1_im1_private.c1 : typeof m1_im1_private.c1
+>m1_im1_private : typeof m2_M1_public
+>c1 : typeof m1_im1_private.c1
+
+    export var m1_im1_private_v3_public = m1_im1_private.f1;
+>m1_im1_private_v3_public : () => m1_im1_private.c1
+>m1_im1_private.f1 : () => m1_im1_private.c1
+>m1_im1_private : typeof m2_M1_public
+>f1 : () => m1_im1_private.c1
+
+    export var m1_im1_private_v4_public = m1_im1_private.f1();
+>m1_im1_private_v4_public : m1_im1_private.c1
+>m1_im1_private.f1() : m1_im1_private.c1
+>m1_im1_private.f1 : () => m1_im1_private.c1
+>m1_im1_private : typeof m2_M1_public
+>f1 : () => m1_im1_private.c1
+
+    var m1_im1_private_v1_private = m1_im1_private.c1;
+>m1_im1_private_v1_private : typeof m1_im1_private.c1
+>m1_im1_private.c1 : typeof m1_im1_private.c1
+>m1_im1_private : typeof m2_M1_public
+>c1 : typeof m1_im1_private.c1
+
+    var m1_im1_private_v2_private = new m1_im1_private.c1();
+>m1_im1_private_v2_private : m1_im1_private.c1
+>new m1_im1_private.c1() : m1_im1_private.c1
+>m1_im1_private.c1 : typeof m1_im1_private.c1
+>m1_im1_private : typeof m2_M1_public
+>c1 : typeof m1_im1_private.c1
+
+    var m1_im1_private_v3_private = m1_im1_private.f1;
+>m1_im1_private_v3_private : () => m1_im1_private.c1
+>m1_im1_private.f1 : () => m1_im1_private.c1
+>m1_im1_private : typeof m2_M1_public
+>f1 : () => m1_im1_private.c1
+
+    var m1_im1_private_v4_private = m1_im1_private.f1();
+>m1_im1_private_v4_private : m1_im1_private.c1
+>m1_im1_private.f1() : m1_im1_private.c1
+>m1_im1_private.f1 : () => m1_im1_private.c1
+>m1_im1_private : typeof m2_M1_public
+>f1 : () => m1_im1_private.c1
+
+
+    import m1_im2_private = m2_M2_private;
+>m1_im2_private : typeof m2_M2_private
+>m2_M2_private : typeof m2_M2_private
+
+    export var m1_im2_private_v1_public = m1_im2_private.c1;
+>m1_im2_private_v1_public : typeof m1_im2_private.c1
+>m1_im2_private.c1 : typeof m1_im2_private.c1
+>m1_im2_private : typeof m2_M2_private
+>c1 : typeof m1_im2_private.c1
+
+    export var m1_im2_private_v2_public = new m1_im2_private.c1();
+>m1_im2_private_v2_public : m1_im2_private.c1
+>new m1_im2_private.c1() : m1_im2_private.c1
+>m1_im2_private.c1 : typeof m1_im2_private.c1
+>m1_im2_private : typeof m2_M2_private
+>c1 : typeof m1_im2_private.c1
+
+    export var m1_im2_private_v3_public = m1_im2_private.f1;
+>m1_im2_private_v3_public : () => m1_im2_private.c1
+>m1_im2_private.f1 : () => m1_im2_private.c1
+>m1_im2_private : typeof m2_M2_private
+>f1 : () => m1_im2_private.c1
+
+    export var m1_im2_private_v4_public = m1_im2_private.f1();
+>m1_im2_private_v4_public : m1_im2_private.c1
+>m1_im2_private.f1() : m1_im2_private.c1
+>m1_im2_private.f1 : () => m1_im2_private.c1
+>m1_im2_private : typeof m2_M2_private
+>f1 : () => m1_im2_private.c1
+
+    var m1_im2_private_v1_private = m1_im2_private.c1;
+>m1_im2_private_v1_private : typeof m1_im2_private.c1
+>m1_im2_private.c1 : typeof m1_im2_private.c1
+>m1_im2_private : typeof m2_M2_private
+>c1 : typeof m1_im2_private.c1
+
+    var m1_im2_private_v2_private = new m1_im2_private.c1();
+>m1_im2_private_v2_private : m1_im2_private.c1
+>new m1_im2_private.c1() : m1_im2_private.c1
+>m1_im2_private.c1 : typeof m1_im2_private.c1
+>m1_im2_private : typeof m2_M2_private
+>c1 : typeof m1_im2_private.c1
+
+    var m1_im2_private_v3_private = m1_im2_private.f1;
+>m1_im2_private_v3_private : () => m1_im2_private.c1
+>m1_im2_private.f1 : () => m1_im2_private.c1
+>m1_im2_private : typeof m2_M2_private
+>f1 : () => m1_im2_private.c1
+
+    var m1_im2_private_v4_private = m1_im2_private.f1();
+>m1_im2_private_v4_private : m1_im2_private.c1
+>m1_im2_private.f1() : m1_im2_private.c1
+>m1_im2_private.f1 : () => m1_im2_private.c1
+>m1_im2_private : typeof m2_M2_private
+>f1 : () => m1_im2_private.c1
+
+    import m1_im3_private = require("m2_M3_public");
+>m1_im3_private : any
+
+    export var m1_im3_private_v1_public = m1_im3_private.c1;
+>m1_im3_private_v1_public : any
+>m1_im3_private.c1 : any
+>m1_im3_private : any
+>c1 : any
+
+    export var m1_im3_private_v2_public = new m1_im3_private.c1();
+>m1_im3_private_v2_public : any
+>new m1_im3_private.c1() : any
+>m1_im3_private.c1 : any
+>m1_im3_private : any
+>c1 : any
+
+    export var m1_im3_private_v3_public = m1_im3_private.f1;
+>m1_im3_private_v3_public : any
+>m1_im3_private.f1 : any
+>m1_im3_private : any
+>f1 : any
+
+    export var m1_im3_private_v4_public = m1_im3_private.f1();
+>m1_im3_private_v4_public : any
+>m1_im3_private.f1() : any
+>m1_im3_private.f1 : any
+>m1_im3_private : any
+>f1 : any
+
+    var m1_im3_private_v1_private = m1_im3_private.c1;
+>m1_im3_private_v1_private : any
+>m1_im3_private.c1 : any
+>m1_im3_private : any
+>c1 : any
+
+    var m1_im3_private_v2_private = new m1_im3_private.c1();
+>m1_im3_private_v2_private : any
+>new m1_im3_private.c1() : any
+>m1_im3_private.c1 : any
+>m1_im3_private : any
+>c1 : any
+
+    var m1_im3_private_v3_private = m1_im3_private.f1;
+>m1_im3_private_v3_private : any
+>m1_im3_private.f1 : any
+>m1_im3_private : any
+>f1 : any
+
+    var m1_im3_private_v4_private = m1_im3_private.f1();
+>m1_im3_private_v4_private : any
+>m1_im3_private.f1() : any
+>m1_im3_private.f1 : any
+>m1_im3_private : any
+>f1 : any
+
+    import m1_im4_private = require("m2_M4_private");
+>m1_im4_private : any
+
+    export var m1_im4_private_v1_public = m1_im4_private.c1;
+>m1_im4_private_v1_public : any
+>m1_im4_private.c1 : any
+>m1_im4_private : any
+>c1 : any
+
+    export var m1_im4_private_v2_public = new m1_im4_private.c1();
+>m1_im4_private_v2_public : any
+>new m1_im4_private.c1() : any
+>m1_im4_private.c1 : any
+>m1_im4_private : any
+>c1 : any
+
+    export var m1_im4_private_v3_public = m1_im4_private.f1;
+>m1_im4_private_v3_public : any
+>m1_im4_private.f1 : any
+>m1_im4_private : any
+>f1 : any
+
+    export var m1_im4_private_v4_public = m1_im4_private.f1();
+>m1_im4_private_v4_public : any
+>m1_im4_private.f1() : any
+>m1_im4_private.f1 : any
+>m1_im4_private : any
+>f1 : any
+
+    var m1_im4_private_v1_private = m1_im4_private.c1;
+>m1_im4_private_v1_private : any
+>m1_im4_private.c1 : any
+>m1_im4_private : any
+>c1 : any
+
+    var m1_im4_private_v2_private = new m1_im4_private.c1();
+>m1_im4_private_v2_private : any
+>new m1_im4_private.c1() : any
+>m1_im4_private.c1 : any
+>m1_im4_private : any
+>c1 : any
+
+    var m1_im4_private_v3_private = m1_im4_private.f1;
+>m1_im4_private_v3_private : any
+>m1_im4_private.f1 : any
+>m1_im4_private : any
+>f1 : any
+
+    var m1_im4_private_v4_private = m1_im4_private.f1();
+>m1_im4_private_v4_private : any
+>m1_im4_private.f1() : any
+>m1_im4_private.f1 : any
+>m1_im4_private : any
+>f1 : any
+
+    // Parse error to export module
+    export import m1_im1_public = m2_M1_public;
+>m1_im1_public : typeof m2_M1_public
+>m2_M1_public : typeof m2_M1_public
+
+    export import m1_im2_public = m2_M2_private;
+>m1_im2_public : typeof m2_M2_private
+>m2_M2_private : typeof m2_M2_private
+
+    export import m1_im3_public = require("m2_M3_public");
+>m1_im3_public : any
+
+    export import m1_im4_public = require("m2_M4_private");
+>m1_im4_public : any
+}
+
+export module glo_M1_public {
+>glo_M1_public : typeof glo_M1_public
+
+    export class c1 {
+>c1 : c1
+    }
+    export function f1() {
+>f1 : () => c1
+
+        return new c1;
+>new c1 : c1
+>c1 : typeof c1
+    }
+    export var v1 = c1;
+>v1 : typeof c1
+>c1 : typeof c1
+
+    export var v2: c1;
+>v2 : c1
+}
+
+export declare module "glo_M2_public" {
+>"glo_M2_public" : typeof import("glo_M2_public")
+
+    export function f1();
+>f1 : () => any
+
+    export class c1 {
+>c1 : c1
+    }
+    export var v1: { new (): c1; };
+>v1 : new () => c1
+
+    export var v2: c1;
+>v2 : c1
+}
+
+export module glo_M3_private {
+>glo_M3_private : typeof glo_M3_private
+
+    export class c1 {
+>c1 : c1
+    }
+    export function f1() {
+>f1 : () => c1
+
+        return new c1;
+>new c1 : c1
+>c1 : typeof c1
+    }
+    export var v1 = c1;
+>v1 : typeof c1
+>c1 : typeof c1
+
+    export var v2: c1;
+>v2 : c1
+}
+
+export declare module "glo_M4_private" {
+>"glo_M4_private" : typeof import("glo_M4_private")
+
+    export function f1();
+>f1 : () => any
+
+    export class c1 {
+>c1 : c1
+    }
+    export var v1: { new (): c1; };
+>v1 : new () => c1
+
+    export var v2: c1;
+>v2 : c1
+}
+
+
+import glo_im1_private = glo_M1_public;
+>glo_im1_private : typeof glo_M1_public
+>glo_M1_public : typeof glo_M1_public
+
+export var glo_im1_private_v1_public = glo_im1_private.c1;
+>glo_im1_private_v1_public : typeof glo_im1_private.c1
+>glo_im1_private.c1 : typeof glo_im1_private.c1
+>glo_im1_private : typeof glo_M1_public
+>c1 : typeof glo_im1_private.c1
+
+export var glo_im1_private_v2_public = new glo_im1_private.c1();
+>glo_im1_private_v2_public : glo_im1_private.c1
+>new glo_im1_private.c1() : glo_im1_private.c1
+>glo_im1_private.c1 : typeof glo_im1_private.c1
+>glo_im1_private : typeof glo_M1_public
+>c1 : typeof glo_im1_private.c1
+
+export var glo_im1_private_v3_public = glo_im1_private.f1;
+>glo_im1_private_v3_public : () => glo_im1_private.c1
+>glo_im1_private.f1 : () => glo_im1_private.c1
+>glo_im1_private : typeof glo_M1_public
+>f1 : () => glo_im1_private.c1
+
+export var glo_im1_private_v4_public = glo_im1_private.f1();
+>glo_im1_private_v4_public : glo_im1_private.c1
+>glo_im1_private.f1() : glo_im1_private.c1
+>glo_im1_private.f1 : () => glo_im1_private.c1
+>glo_im1_private : typeof glo_M1_public
+>f1 : () => glo_im1_private.c1
+
+var glo_im1_private_v1_private = glo_im1_private.c1;
+>glo_im1_private_v1_private : typeof glo_im1_private.c1
+>glo_im1_private.c1 : typeof glo_im1_private.c1
+>glo_im1_private : typeof glo_M1_public
+>c1 : typeof glo_im1_private.c1
+
+var glo_im1_private_v2_private = new glo_im1_private.c1();
+>glo_im1_private_v2_private : glo_im1_private.c1
+>new glo_im1_private.c1() : glo_im1_private.c1
+>glo_im1_private.c1 : typeof glo_im1_private.c1
+>glo_im1_private : typeof glo_M1_public
+>c1 : typeof glo_im1_private.c1
+
+var glo_im1_private_v3_private = glo_im1_private.f1;
+>glo_im1_private_v3_private : () => glo_im1_private.c1
+>glo_im1_private.f1 : () => glo_im1_private.c1
+>glo_im1_private : typeof glo_M1_public
+>f1 : () => glo_im1_private.c1
+
+var glo_im1_private_v4_private = glo_im1_private.f1();
+>glo_im1_private_v4_private : glo_im1_private.c1
+>glo_im1_private.f1() : glo_im1_private.c1
+>glo_im1_private.f1 : () => glo_im1_private.c1
+>glo_im1_private : typeof glo_M1_public
+>f1 : () => glo_im1_private.c1
+
+
+import glo_im2_private = require("glo_M2_public");
+>glo_im2_private : any
+
+export var glo_im2_private_v1_public = glo_im2_private.c1;
+>glo_im2_private_v1_public : any
+>glo_im2_private.c1 : any
+>glo_im2_private : any
+>c1 : any
+
+export var glo_im2_private_v2_public = new glo_im2_private.c1();
+>glo_im2_private_v2_public : any
+>new glo_im2_private.c1() : any
+>glo_im2_private.c1 : any
+>glo_im2_private : any
+>c1 : any
+
+export var glo_im2_private_v3_public = glo_im2_private.f1;
+>glo_im2_private_v3_public : any
+>glo_im2_private.f1 : any
+>glo_im2_private : any
+>f1 : any
+
+export var glo_im2_private_v4_public = glo_im2_private.f1();
+>glo_im2_private_v4_public : any
+>glo_im2_private.f1() : any
+>glo_im2_private.f1 : any
+>glo_im2_private : any
+>f1 : any
+
+var glo_im2_private_v1_private = glo_im2_private.c1;
+>glo_im2_private_v1_private : any
+>glo_im2_private.c1 : any
+>glo_im2_private : any
+>c1 : any
+
+var glo_im2_private_v2_private = new glo_im2_private.c1();
+>glo_im2_private_v2_private : any
+>new glo_im2_private.c1() : any
+>glo_im2_private.c1 : any
+>glo_im2_private : any
+>c1 : any
+
+var glo_im2_private_v3_private = glo_im2_private.f1;
+>glo_im2_private_v3_private : any
+>glo_im2_private.f1 : any
+>glo_im2_private : any
+>f1 : any
+
+var glo_im2_private_v4_private = glo_im2_private.f1();
+>glo_im2_private_v4_private : any
+>glo_im2_private.f1() : any
+>glo_im2_private.f1 : any
+>glo_im2_private : any
+>f1 : any
+
+import glo_im3_private = glo_M3_private;
+>glo_im3_private : typeof glo_M3_private
+>glo_M3_private : typeof glo_M3_private
+
+export var glo_im3_private_v1_public = glo_im3_private.c1;
+>glo_im3_private_v1_public : typeof glo_im3_private.c1
+>glo_im3_private.c1 : typeof glo_im3_private.c1
+>glo_im3_private : typeof glo_M3_private
+>c1 : typeof glo_im3_private.c1
+
+export var glo_im3_private_v2_public = new glo_im3_private.c1();
+>glo_im3_private_v2_public : glo_im3_private.c1
+>new glo_im3_private.c1() : glo_im3_private.c1
+>glo_im3_private.c1 : typeof glo_im3_private.c1
+>glo_im3_private : typeof glo_M3_private
+>c1 : typeof glo_im3_private.c1
+
+export var glo_im3_private_v3_public = glo_im3_private.f1;
+>glo_im3_private_v3_public : () => glo_im3_private.c1
+>glo_im3_private.f1 : () => glo_im3_private.c1
+>glo_im3_private : typeof glo_M3_private
+>f1 : () => glo_im3_private.c1
+
+export var glo_im3_private_v4_public = glo_im3_private.f1();
+>glo_im3_private_v4_public : glo_im3_private.c1
+>glo_im3_private.f1() : glo_im3_private.c1
+>glo_im3_private.f1 : () => glo_im3_private.c1
+>glo_im3_private : typeof glo_M3_private
+>f1 : () => glo_im3_private.c1
+
+var glo_im3_private_v1_private = glo_im3_private.c1;
+>glo_im3_private_v1_private : typeof glo_im3_private.c1
+>glo_im3_private.c1 : typeof glo_im3_private.c1
+>glo_im3_private : typeof glo_M3_private
+>c1 : typeof glo_im3_private.c1
+
+var glo_im3_private_v2_private = new glo_im3_private.c1();
+>glo_im3_private_v2_private : glo_im3_private.c1
+>new glo_im3_private.c1() : glo_im3_private.c1
+>glo_im3_private.c1 : typeof glo_im3_private.c1
+>glo_im3_private : typeof glo_M3_private
+>c1 : typeof glo_im3_private.c1
+
+var glo_im3_private_v3_private = glo_im3_private.f1;
+>glo_im3_private_v3_private : () => glo_im3_private.c1
+>glo_im3_private.f1 : () => glo_im3_private.c1
+>glo_im3_private : typeof glo_M3_private
+>f1 : () => glo_im3_private.c1
+
+var glo_im3_private_v4_private = glo_im3_private.f1();
+>glo_im3_private_v4_private : glo_im3_private.c1
+>glo_im3_private.f1() : glo_im3_private.c1
+>glo_im3_private.f1 : () => glo_im3_private.c1
+>glo_im3_private : typeof glo_M3_private
+>f1 : () => glo_im3_private.c1
+
+import glo_im4_private = require("glo_M4_private");
+>glo_im4_private : any
+
+export var glo_im4_private_v1_public = glo_im4_private.c1;
+>glo_im4_private_v1_public : any
+>glo_im4_private.c1 : any
+>glo_im4_private : any
+>c1 : any
+
+export var glo_im4_private_v2_public = new glo_im4_private.c1();
+>glo_im4_private_v2_public : any
+>new glo_im4_private.c1() : any
+>glo_im4_private.c1 : any
+>glo_im4_private : any
+>c1 : any
+
+export var glo_im4_private_v3_public = glo_im4_private.f1;
+>glo_im4_private_v3_public : any
+>glo_im4_private.f1 : any
+>glo_im4_private : any
+>f1 : any
+
+export var glo_im4_private_v4_public = glo_im4_private.f1();
+>glo_im4_private_v4_public : any
+>glo_im4_private.f1() : any
+>glo_im4_private.f1 : any
+>glo_im4_private : any
+>f1 : any
+
+var glo_im4_private_v1_private = glo_im4_private.c1;
+>glo_im4_private_v1_private : any
+>glo_im4_private.c1 : any
+>glo_im4_private : any
+>c1 : any
+
+var glo_im4_private_v2_private = new glo_im4_private.c1();
+>glo_im4_private_v2_private : any
+>new glo_im4_private.c1() : any
+>glo_im4_private.c1 : any
+>glo_im4_private : any
+>c1 : any
+
+var glo_im4_private_v3_private = glo_im4_private.f1;
+>glo_im4_private_v3_private : any
+>glo_im4_private.f1 : any
+>glo_im4_private : any
+>f1 : any
+
+var glo_im4_private_v4_private = glo_im4_private.f1();
+>glo_im4_private_v4_private : any
+>glo_im4_private.f1() : any
+>glo_im4_private.f1 : any
+>glo_im4_private : any
+>f1 : any
+
+// Parse error to export module
+export import glo_im1_public = glo_M1_public;
+>glo_im1_public : typeof glo_M1_public
+>glo_M1_public : typeof glo_M1_public
+
+export import glo_im2_public = glo_M3_private;
+>glo_im2_public : typeof glo_M3_private
+>glo_M3_private : typeof glo_M3_private
+
+export import glo_im3_public = require("glo_M2_public");
+>glo_im3_public : any
+
+export import glo_im4_public = require("glo_M4_private");
+>glo_im4_public : any
+
+
+export declare module "use_glo_M1_public" {
+>"use_glo_M1_public" : typeof import("use_glo_M1_public")
+
+    import use_glo_M1_public = glo_M1_public;
+>use_glo_M1_public : typeof use_glo_M1_public
+>glo_M1_public : typeof use_glo_M1_public
+
+    export var use_glo_M1_public_v1_public: { new (): use_glo_M1_public.c1; };
+>use_glo_M1_public_v1_public : new () => use_glo_M1_public.c1
+>use_glo_M1_public : any
+
+    export var use_glo_M1_public_v2_public: use_glo_M1_public;
+>use_glo_M1_public_v2_public : use_glo_M1_public
+
+    export var use_glo_M1_public_v3_public: () => use_glo_M1_public.c1;
+>use_glo_M1_public_v3_public : () => use_glo_M1_public.c1
+>use_glo_M1_public : any
+
+    var use_glo_M1_public_v1_private: { new (): use_glo_M1_public.c1; };
+>use_glo_M1_public_v1_private : new () => use_glo_M1_public.c1
+>use_glo_M1_public : any
+
+    var use_glo_M1_public_v2_private: use_glo_M1_public;
+>use_glo_M1_public_v2_private : use_glo_M1_public
+
+    var use_glo_M1_public_v3_private: () => use_glo_M1_public.c1;
+>use_glo_M1_public_v3_private : () => use_glo_M1_public.c1
+>use_glo_M1_public : any
+
+    import use_glo_M2_public = require("glo_M2_public");
+>use_glo_M2_public : any
+
+    export var use_glo_M2_public_v1_public: { new (): use_glo_M2_public.c1; };
+>use_glo_M2_public_v1_public : new () => use_glo_M2_public.c1
+>use_glo_M2_public : any
+
+    export var use_glo_M2_public_v2_public: use_glo_M2_public;
+>use_glo_M2_public_v2_public : use_glo_M2_public
+
+    export var use_glo_M2_public_v3_public: () => use_glo_M2_public.c1;
+>use_glo_M2_public_v3_public : () => use_glo_M2_public.c1
+>use_glo_M2_public : any
+
+    var use_glo_M2_public_v1_private: { new (): use_glo_M2_public.c1; };
+>use_glo_M2_public_v1_private : new () => use_glo_M2_public.c1
+>use_glo_M2_public : any
+
+    var use_glo_M2_public_v2_private: use_glo_M2_public;
+>use_glo_M2_public_v2_private : use_glo_M2_public
+
+    var use_glo_M2_public_v3_private: () => use_glo_M2_public.c1;
+>use_glo_M2_public_v3_private : () => use_glo_M2_public.c1
+>use_glo_M2_public : any
+
+    module m2 {
+        import errorImport = require("glo_M2_public");
+>errorImport : any
+
+        import nonerrorImport = glo_M1_public;
+>nonerrorImport : typeof nonerrorImport
+>glo_M1_public : typeof nonerrorImport
+
+        module m5 {
+            import m5_errorImport = require("glo_M2_public");
+>m5_errorImport : any
+
+            import m5_nonerrorImport = glo_M1_public;
+>m5_nonerrorImport : typeof m5_nonerrorImport
+>glo_M1_public : typeof m5_nonerrorImport
+        }
+    }
+}
+
+
+declare module "use_glo_M3_private" {
+>"use_glo_M3_private" : typeof import("use_glo_M3_private")
+
+    import use_glo_M3_private = glo_M3_private;
+>use_glo_M3_private : typeof use_glo_M3_private
+>glo_M3_private : typeof use_glo_M3_private
+
+    export var use_glo_M3_private_v1_public: { new (): use_glo_M3_private.c1; };
+>use_glo_M3_private_v1_public : new () => use_glo_M3_private.c1
+>use_glo_M3_private : any
+
+    export var use_glo_M3_private_v2_public: use_glo_M3_private;
+>use_glo_M3_private_v2_public : use_glo_M3_private
+
+    export var use_glo_M3_private_v3_public: () => use_glo_M3_private.c1;
+>use_glo_M3_private_v3_public : () => use_glo_M3_private.c1
+>use_glo_M3_private : any
+
+    var use_glo_M3_private_v1_private: { new (): use_glo_M3_private.c1; };
+>use_glo_M3_private_v1_private : new () => use_glo_M3_private.c1
+>use_glo_M3_private : any
+
+    var use_glo_M3_private_v2_private: use_glo_M3_private;
+>use_glo_M3_private_v2_private : use_glo_M3_private
+
+    var use_glo_M3_private_v3_private: () => use_glo_M3_private.c1;
+>use_glo_M3_private_v3_private : () => use_glo_M3_private.c1
+>use_glo_M3_private : any
+
+    import use_glo_M4_private = require("glo_M4_private");
+>use_glo_M4_private : any
+
+    export var use_glo_M4_private_v1_public: { new (): use_glo_M4_private.c1; };
+>use_glo_M4_private_v1_public : new () => use_glo_M4_private.c1
+>use_glo_M4_private : any
+
+    export var use_glo_M4_private_v2_public: use_glo_M4_private;
+>use_glo_M4_private_v2_public : use_glo_M4_private
+
+    export var use_glo_M4_private_v3_public: () => use_glo_M4_private.c1;
+>use_glo_M4_private_v3_public : () => use_glo_M4_private.c1
+>use_glo_M4_private : any
+
+    var use_glo_M4_private_v1_private: { new (): use_glo_M4_private.c1; };
+>use_glo_M4_private_v1_private : new () => use_glo_M4_private.c1
+>use_glo_M4_private : any
+
+    var use_glo_M4_private_v2_private: use_glo_M4_private;
+>use_glo_M4_private_v2_private : use_glo_M4_private
+
+    var use_glo_M4_private_v3_private: () => use_glo_M4_private.c1;
+>use_glo_M4_private_v3_private : () => use_glo_M4_private.c1
+>use_glo_M4_private : any
+
+    module m2 {
+        import errorImport = require("glo_M4_private");
+>errorImport : any
+
+        import nonerrorImport = glo_M3_private;
+>nonerrorImport : typeof nonerrorImport
+>glo_M3_private : typeof nonerrorImport
+
+        module m5 {
+            import m5_errorImport = require("glo_M4_private");
+>m5_errorImport : any
+
+            import m5_nonerrorImport = glo_M3_private;
+>m5_nonerrorImport : typeof m5_nonerrorImport
+>glo_M3_private : typeof m5_nonerrorImport
+        }
+    }
+}
+
+declare module "anotherParseError" {
+>"anotherParseError" : any
+
+    module m2 {
+        declare module "abc" {
+>"abc" : typeof import("abc")
+        }
+    }
+
+    module m2 {
+        module "abc2" {
+>"abc2" : typeof import("abc2")
+        }
+    }
+    module "abc3" {
+>"abc3" : typeof import("abc3")
+    }
+}
+
+declare export module "anotherParseError2" {
+>"anotherParseError2" : any
+
+    module m2 {
+        declare module "abc" {
+>"abc" : typeof import("abc")
+        }
+    }
+
+    module m2 {
+        module "abc2" {
+>"abc2" : typeof import("abc2")
+        }
+    }
+    module "abc3" {
+>"abc3" : typeof import("abc3")
+    }
+}
+
+module m2 {
+>m2 : typeof m2
+
+    import m3 = require("use_glo_M1_public");
+>m3 : any
+
+    module m4 {
+>m4 : typeof m4
+
+        var a = 10;
+>a : number
+>10 : 10
+
+        import m2 = require("use_glo_M1_public");
+>m2 : any
+    }
+
+}
+
+export module m3 {
+>m3 : typeof import("tests/cases/compiler/privacyImportParseErrors").m3
+
+    import m3 = require("use_glo_M1_public");
+>m3 : any
+
+    module m4 {
+>m4 : typeof m4
+
+        var a = 10;
+>a : number
+>10 : 10
+
+        import m2 = require("use_glo_M1_public");
+>m2 : any
+    }
+
+}

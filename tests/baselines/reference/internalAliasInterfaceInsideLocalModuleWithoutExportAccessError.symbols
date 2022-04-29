@@ -1,0 +1,27 @@
+=== tests/cases/compiler/internalAliasInterfaceInsideLocalModuleWithoutExportAccessError.ts ===
+export module a {
+>a : Symbol(a, Decl(internalAliasInterfaceInsideLocalModuleWithoutExportAccessError.ts, 0, 0))
+
+    export interface I {
+>I : Symbol(I, Decl(internalAliasInterfaceInsideLocalModuleWithoutExportAccessError.ts, 0, 17))
+    }
+}
+
+export module c {
+>c : Symbol(c, Decl(internalAliasInterfaceInsideLocalModuleWithoutExportAccessError.ts, 3, 1))
+
+    import b = a.I;
+>b : Symbol(b, Decl(internalAliasInterfaceInsideLocalModuleWithoutExportAccessError.ts, 5, 17))
+>a : Symbol(a, Decl(internalAliasInterfaceInsideLocalModuleWithoutExportAccessError.ts, 0, 0))
+>I : Symbol(b, Decl(internalAliasInterfaceInsideLocalModuleWithoutExportAccessError.ts, 0, 17))
+
+    export var x: b;
+>x : Symbol(x, Decl(internalAliasInterfaceInsideLocalModuleWithoutExportAccessError.ts, 7, 14))
+>b : Symbol(b, Decl(internalAliasInterfaceInsideLocalModuleWithoutExportAccessError.ts, 5, 17))
+}
+
+var x: c.b;
+>x : Symbol(x, Decl(internalAliasInterfaceInsideLocalModuleWithoutExportAccessError.ts, 10, 3))
+>c : Symbol(c, Decl(internalAliasInterfaceInsideLocalModuleWithoutExportAccessError.ts, 3, 1))
+>b : Symbol(c.b)
+

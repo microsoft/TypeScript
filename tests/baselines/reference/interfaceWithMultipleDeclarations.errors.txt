@@ -1,0 +1,82 @@
+tests/cases/compiler/interfaceWithMultipleDeclarations.ts(1,11): error TS2428: All declarations of 'I1' must have identical type parameters.
+tests/cases/compiler/interfaceWithMultipleDeclarations.ts(3,11): error TS2428: All declarations of 'I1' must have identical type parameters.
+tests/cases/compiler/interfaceWithMultipleDeclarations.ts(5,11): error TS2428: All declarations of 'I1' must have identical type parameters.
+tests/cases/compiler/interfaceWithMultipleDeclarations.ts(7,11): error TS2428: All declarations of 'I1' must have identical type parameters.
+tests/cases/compiler/interfaceWithMultipleDeclarations.ts(9,11): error TS2428: All declarations of 'I1' must have identical type parameters.
+tests/cases/compiler/interfaceWithMultipleDeclarations.ts(11,11): error TS2428: All declarations of 'I1' must have identical type parameters.
+tests/cases/compiler/interfaceWithMultipleDeclarations.ts(14,11): error TS2428: All declarations of 'I2' must have identical type parameters.
+tests/cases/compiler/interfaceWithMultipleDeclarations.ts(16,11): error TS2428: All declarations of 'I2' must have identical type parameters.
+tests/cases/compiler/interfaceWithMultipleDeclarations.ts(18,11): error TS2428: All declarations of 'I2' must have identical type parameters.
+tests/cases/compiler/interfaceWithMultipleDeclarations.ts(20,11): error TS2428: All declarations of 'I2' must have identical type parameters.
+tests/cases/compiler/interfaceWithMultipleDeclarations.ts(22,11): error TS2428: All declarations of 'I2' must have identical type parameters.
+tests/cases/compiler/interfaceWithMultipleDeclarations.ts(24,11): error TS2428: All declarations of 'I2' must have identical type parameters.
+tests/cases/compiler/interfaceWithMultipleDeclarations.ts(27,11): error TS2428: All declarations of 'I3' must have identical type parameters.
+tests/cases/compiler/interfaceWithMultipleDeclarations.ts(29,11): error TS2428: All declarations of 'I3' must have identical type parameters.
+
+
+==== tests/cases/compiler/interfaceWithMultipleDeclarations.ts (14 errors) ====
+    interface I1<V> {
+              ~~
+!!! error TS2428: All declarations of 'I1' must have identical type parameters.
+    }
+    interface I1<S> { // Name mismatch
+              ~~
+!!! error TS2428: All declarations of 'I1' must have identical type parameters.
+    }
+    interface I1<T, U extends T> { // Length mismatch
+              ~~
+!!! error TS2428: All declarations of 'I1' must have identical type parameters.
+    }
+    interface I1<V extends string> { // constraint present
+              ~~
+!!! error TS2428: All declarations of 'I1' must have identical type parameters.
+    }
+    interface I1<V, X extends V> { // Length mismatch
+              ~~
+!!! error TS2428: All declarations of 'I1' must have identical type parameters.
+    }
+    interface I1 { // Length mismatch
+              ~~
+!!! error TS2428: All declarations of 'I1' must have identical type parameters.
+    }
+    
+    interface I2<T extends string> {
+              ~~
+!!! error TS2428: All declarations of 'I2' must have identical type parameters.
+    }
+    interface I2<T extends () => string> { // constraint mismatch
+              ~~
+!!! error TS2428: All declarations of 'I2' must have identical type parameters.
+    }
+    interface I2<T> { // constraint absent
+              ~~
+!!! error TS2428: All declarations of 'I2' must have identical type parameters.
+    }
+    interface I2<U> { // name mismatch
+              ~~
+!!! error TS2428: All declarations of 'I2' must have identical type parameters.
+    }
+    interface I2<X, Y> { // length mismatch
+              ~~
+!!! error TS2428: All declarations of 'I2' must have identical type parameters.
+    }
+    interface I2 { // length mismatch
+              ~~
+!!! error TS2428: All declarations of 'I2' must have identical type parameters.
+    }
+    
+    interface I3 {
+              ~~
+!!! error TS2428: All declarations of 'I3' must have identical type parameters.
+    }
+    interface I3<T> { // length mismatch
+              ~~
+!!! error TS2428: All declarations of 'I3' must have identical type parameters.
+    }
+    
+    class Foo<T> {
+    }
+    interface I4<T extends Foo<T>> {
+    }
+    interface I4<T extends Foo<T>> { // Should not be error
+    }

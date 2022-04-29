@@ -1,0 +1,35 @@
+=== tests/cases/compiler/tsxReactPropsInferenceSucceedsOnIntersections.tsx ===
+/// <reference path="react16.d.ts" />
+
+import React from "react";
+>React : typeof React
+
+export type ButtonProps<T = {}> = React.ButtonHTMLAttributes<HTMLButtonElement> & {
+>ButtonProps : ButtonProps<T>
+>React : any
+
+    outline?: boolean;
+>outline : boolean | undefined
+
+} & T;
+
+declare class Button<T = {}> extends React.Component<ButtonProps<T>> { }
+>Button : Button<T>
+>React.Component : React.Component<ButtonProps<T>, {}, any>
+>React : typeof React
+>Component : typeof React.Component
+
+interface CustomButtonProps extends ButtonProps {
+    customProp: string;
+>customProp : string
+}
+
+const CustomButton: React.SFC<CustomButtonProps> = props => <Button {...props} />;
+>CustomButton : React.SFC<CustomButtonProps>
+>React : any
+>props => <Button {...props} /> : (props: CustomButtonProps & { children?: React.ReactNode; }) => JSX.Element
+>props : CustomButtonProps & { children?: React.ReactNode; }
+><Button {...props} /> : JSX.Element
+>Button : typeof Button
+>props : CustomButtonProps & { children?: React.ReactNode; }
+

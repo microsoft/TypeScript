@@ -1,0 +1,62 @@
+=== tests/cases/compiler/enumAssignmentCompat4.ts ===
+namespace M {
+>M : typeof M
+
+    export enum MyEnum {
+>MyEnum : MyEnum
+
+        BAR
+>BAR : MyEnum.BAR
+    }
+    export var object2 = {
+>object2 : { foo: MyEnum; }
+>{        foo: MyEnum.BAR    } : { foo: MyEnum; }
+
+        foo: MyEnum.BAR
+>foo : MyEnum
+>MyEnum.BAR : MyEnum
+>MyEnum : typeof MyEnum
+>BAR : MyEnum
+
+    };
+}
+
+namespace N {
+>N : typeof N
+
+    export enum MyEnum {
+>MyEnum : MyEnum
+
+        FOO
+>FOO : MyEnum.FOO
+
+    };
+    export var object1 = {
+>object1 : { foo: MyEnum; }
+>{        foo: MyEnum.FOO    } : { foo: MyEnum; }
+
+        foo: MyEnum.FOO
+>foo : MyEnum
+>MyEnum.FOO : MyEnum
+>MyEnum : typeof MyEnum
+>FOO : MyEnum
+
+    };
+}
+
+let broken = [
+>broken : ({ foo: M.MyEnum; } | { foo: N.MyEnum; })[]
+>[    N.object1,    M.object2] : ({ foo: M.MyEnum; } | { foo: N.MyEnum; })[]
+
+    N.object1,
+>N.object1 : { foo: N.MyEnum; }
+>N : typeof N
+>object1 : { foo: N.MyEnum; }
+
+    M.object2
+>M.object2 : { foo: M.MyEnum; }
+>M : typeof M
+>object2 : { foo: M.MyEnum; }
+
+];
+

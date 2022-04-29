@@ -1,0 +1,25 @@
+=== tests/cases/compiler/extendGenericArray2.ts ===
+interface IFoo<T> {
+>IFoo : Symbol(IFoo, Decl(extendGenericArray2.ts, 0, 0))
+>T : Symbol(T, Decl(extendGenericArray2.ts, 0, 15))
+
+    x: T;
+>x : Symbol(IFoo.x, Decl(extendGenericArray2.ts, 0, 19))
+>T : Symbol(T, Decl(extendGenericArray2.ts, 0, 15))
+}
+
+interface Array<T> extends IFoo<T> { }
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(extendGenericArray2.ts, 2, 1))
+>T : Symbol(T, Decl(lib.es5.d.ts, --, --), Decl(extendGenericArray2.ts, 4, 16))
+>IFoo : Symbol(IFoo, Decl(extendGenericArray2.ts, 0, 0))
+>T : Symbol(T, Decl(lib.es5.d.ts, --, --), Decl(extendGenericArray2.ts, 4, 16))
+
+var arr: string[] = [];
+>arr : Symbol(arr, Decl(extendGenericArray2.ts, 6, 3))
+
+var y: number = arr.x;
+>y : Symbol(y, Decl(extendGenericArray2.ts, 7, 3))
+>arr.x : Symbol(IFoo.x, Decl(extendGenericArray2.ts, 0, 19))
+>arr : Symbol(arr, Decl(extendGenericArray2.ts, 6, 3))
+>x : Symbol(IFoo.x, Decl(extendGenericArray2.ts, 0, 19))
+

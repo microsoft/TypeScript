@@ -1,0 +1,61 @@
+=== tests/cases/compiler/exportPrivateType.ts ===
+module foo {
+>foo : typeof foo
+
+    class C1 {
+>C1 : C1
+
+        x: string;
+>x : string
+
+        y: C1;
+>y : C1
+    }
+ 
+    class C2 {
+>C2 : C2
+
+        test() { return true; }
+>test : () => boolean
+>true : true
+    }
+ 
+    interface I1 {
+        (a: string, b: string): string;
+>a : string
+>b : string
+
+        (x: number, y: number): I1;
+>x : number
+>y : number
+    }
+ 
+    interface I2 {
+        x: string;
+>x : string
+
+        y: number;
+>y : number
+    }
+ 
+    // None of the types are exported, so per section 10.3, should all be errors
+    export var e: C1;
+>e : C1
+
+    export var f: I1;
+>f : I1
+
+    export var g: C2;
+>g : C2
+
+    export var h: I2;
+>h : I2
+}
+ 
+var y = foo.g; // Exported variable 'y' has or is using private type 'foo.C2'.
+>y : C2
+>foo.g : C2
+>foo : typeof foo
+>g : C2
+
+

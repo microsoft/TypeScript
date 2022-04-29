@@ -1,0 +1,102 @@
+=== tests/cases/compiler/f1.ts ===
+export class A {}
+>A : Symbol(A, Decl(f1.ts, 0, 0), Decl(f3.ts, 12, 23))
+
+=== tests/cases/compiler/f2.ts ===
+export class B {
+>B : Symbol(B, Decl(f2.ts, 0, 0))
+
+    n: number;
+>n : Symbol(B.n, Decl(f2.ts, 0, 16))
+}
+
+=== tests/cases/compiler/f3.ts ===
+import {A} from "./f1";
+>A : Symbol(A, Decl(f3.ts, 0, 8))
+
+import {B} from "./f2";
+>B : Symbol(B, Decl(f3.ts, 1, 8))
+
+A.prototype.foo = function () { return undefined; }
+>A.prototype.foo : Symbol(A.foo, Decl(f3.ts, 13, 17))
+>A.prototype : Symbol(A.prototype)
+>A : Symbol(A, Decl(f3.ts, 0, 8))
+>prototype : Symbol(A.prototype)
+>foo : Symbol(A.foo, Decl(f3.ts, 13, 17))
+>undefined : Symbol(undefined)
+
+export namespace N {
+>N : Symbol(N, Decl(f3.ts, 3, 51))
+
+    export interface Ifc { a: number; }
+>Ifc : Symbol(Ifc, Decl(f3.ts, 5, 20))
+>a : Symbol(Ifc.a, Decl(f3.ts, 6, 26))
+
+    export interface Cls { b: number; }
+>Cls : Symbol(Cls, Decl(f3.ts, 6, 39))
+>b : Symbol(Cls.b, Decl(f3.ts, 7, 26))
+}
+import I = N.Ifc;
+>I : Symbol(I, Decl(f3.ts, 8, 1))
+>N : Symbol(N, Decl(f3.ts, 3, 51))
+>Ifc : Symbol(I, Decl(f3.ts, 5, 20))
+
+import C = N.Cls;
+>C : Symbol(C, Decl(f3.ts, 9, 17))
+>N : Symbol(N, Decl(f3.ts, 3, 51))
+>Cls : Symbol(C, Decl(f3.ts, 6, 39))
+
+declare module "./f1" {
+>"./f1" : Symbol("tests/cases/compiler/f1", Decl(f1.ts, 0, 0), Decl(f3.ts, 10, 17))
+
+    interface A {
+>A : Symbol(A, Decl(f1.ts, 0, 0), Decl(f3.ts, 12, 23))
+
+        foo(): B;
+>foo : Symbol(A.foo, Decl(f3.ts, 13, 17))
+>B : Symbol(B, Decl(f3.ts, 1, 8))
+
+        bar(): I;
+>bar : Symbol(A.bar, Decl(f3.ts, 14, 17))
+>I : Symbol(I, Decl(f3.ts, 8, 1))
+
+        baz(): C;
+>baz : Symbol(A.baz, Decl(f3.ts, 15, 17))
+>C : Symbol(C, Decl(f3.ts, 9, 17))
+    }
+}
+
+=== tests/cases/compiler/f4.ts ===
+import {A} from "./f1";
+>A : Symbol(A, Decl(f4.ts, 0, 8))
+
+import "./f3";
+
+let a: A;
+>a : Symbol(a, Decl(f4.ts, 3, 3))
+>A : Symbol(A, Decl(f4.ts, 0, 8))
+
+let b = a.foo().n;
+>b : Symbol(b, Decl(f4.ts, 4, 3))
+>a.foo().n : Symbol(B.n, Decl(f2.ts, 0, 16))
+>a.foo : Symbol(A.foo, Decl(f3.ts, 13, 17))
+>a : Symbol(a, Decl(f4.ts, 3, 3))
+>foo : Symbol(A.foo, Decl(f3.ts, 13, 17))
+>n : Symbol(B.n, Decl(f2.ts, 0, 16))
+
+let c = a.bar().a;
+>c : Symbol(c, Decl(f4.ts, 5, 3))
+>a.bar().a : Symbol(N.Ifc.a, Decl(f3.ts, 6, 26))
+>a.bar : Symbol(A.bar, Decl(f3.ts, 14, 17))
+>a : Symbol(a, Decl(f4.ts, 3, 3))
+>bar : Symbol(A.bar, Decl(f3.ts, 14, 17))
+>a : Symbol(N.Ifc.a, Decl(f3.ts, 6, 26))
+
+let d = a.baz().b;
+>d : Symbol(d, Decl(f4.ts, 6, 3))
+>a.baz().b : Symbol(N.Cls.b, Decl(f3.ts, 7, 26))
+>a.baz : Symbol(A.baz, Decl(f3.ts, 15, 17))
+>a : Symbol(a, Decl(f4.ts, 3, 3))
+>baz : Symbol(A.baz, Decl(f3.ts, 15, 17))
+>b : Symbol(N.Cls.b, Decl(f3.ts, 7, 26))
+

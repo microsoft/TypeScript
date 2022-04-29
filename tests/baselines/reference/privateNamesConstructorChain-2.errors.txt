@@ -1,0 +1,22 @@
+tests/cases/conformance/classes/members/privateNames/privateNamesConstructorChain-2.ts(6,15): error TS2339: Property '#bar' does not exist on type 'typeof Child'.
+
+
+==== tests/cases/conformance/classes/members/privateNames/privateNamesConstructorChain-2.ts (1 errors) ====
+    class Parent<T> {
+        #foo = 3;
+        static #bar = 5;
+        accessChildProps() {
+            new Child<string>().#foo; // OK (`#foo` was added when `Parent`'s constructor was called on `child`)
+            Child.#bar;       // Error: not found
+                  ~~~~
+!!! error TS2339: Property '#bar' does not exist on type 'typeof Child'.
+        }
+    }
+    
+    class Child<T> extends Parent<T> {
+        #foo = "foo";       // OK (Child's #foo does not conflict, as `Parent`'s `#foo` is not accessible)
+        #bar = "bar";       // OK
+    }
+    
+    new Parent<number>().accessChildProps();
+    

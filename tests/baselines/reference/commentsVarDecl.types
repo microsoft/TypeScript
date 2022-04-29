@@ -1,0 +1,82 @@
+=== tests/cases/compiler/commentsVarDecl.ts ===
+/** Variable comments*/
+var myVariable = 10; // This trailing Comment1
+>myVariable : number
+>10 : 10
+
+/** This is another variable comment*/
+var anotherVariable = 30;
+>anotherVariable : number
+>30 : 30
+
+// shouldn't appear
+var aVar = "";
+>aVar : string
+>"" : ""
+
+/** this is multiline comment
+  * All these variables are of number type */
+var anotherAnotherVariable = 70; /* these are multiple trailing comments */ /* multiple trailing comments */
+>anotherAnotherVariable : number
+>70 : 70
+
+/** Triple slash multiline comment*/
+/** another line in the comment*/
+/** comment line 2*/
+var x = 70; /* multiline trailing comment 
+>x : number
+>70 : 70
+
+this is multiline trailing comment */
+/** Triple slash comment on the assignment shouldnt be in .d.ts file*/
+x = myVariable;
+>x = myVariable : number
+>x : number
+>myVariable : number
+
+/** triple slash comment1*/
+/** jsdocstyle comment - only this comment should be in .d.ts file*/
+var n = 30;
+>n : number
+>30 : 30
+
+/** var deckaration with comment on type as well*/
+var y = /** value comment */ 20;
+>y : number
+>20 : 20
+
+/// var deckaration with comment on type as well
+var yy =
+>yy : number
+
+    /// value comment
+    20;
+>20 : 20
+
+/** comment2 */
+var z = /** lambda comment */ (x: number, y: number) => x + y;
+>z : (x: number, y: number) => number
+>(x: number, y: number) => x + y : (x: number, y: number) => number
+>x : number
+>y : number
+>x + y : number
+>x : number
+>y : number
+
+var z2: /** type comment*/ (x: number) => string;
+>z2 : (x: number) => string
+>x : number
+
+var x2 = z2;
+>x2 : (x: number) => string
+>z2 : (x: number) => string
+
+var n4: (x: number) => string;
+>n4 : (x: number) => string
+>x : number
+
+n4 = z2;
+>n4 = z2 : (x: number) => string
+>n4 : (x: number) => string
+>z2 : (x: number) => string
+

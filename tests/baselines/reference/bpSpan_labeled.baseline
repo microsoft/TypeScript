@@ -1,0 +1,11 @@
+
+1  >x:
+
+    ~~~                                           => Pos: (0 to 2)  SpanInfo: {"start":3,"length":10}
+    >var b = 10
+    >:=> (line 2, col 0) to (line 2, col 10)
+--------------------------------
+2  >var b = 10;
+    ~~~~~~~~~~~                                   => Pos: (3 to 13)  SpanInfo: {"start":3,"length":10}
+    >var b = 10
+    >:=> (line 2, col 0) to (line 2, col 10)

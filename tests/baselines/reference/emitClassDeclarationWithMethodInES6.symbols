@@ -1,0 +1,70 @@
+=== tests/cases/conformance/es6/classDeclaration/emitClassDeclarationWithMethodInES6.ts ===
+class D {
+>D : Symbol(D, Decl(emitClassDeclarationWithMethodInES6.ts, 0, 0))
+
+    _bar: string;
+>_bar : Symbol(D._bar, Decl(emitClassDeclarationWithMethodInES6.ts, 0, 9))
+
+    foo() { }
+>foo : Symbol(D.foo, Decl(emitClassDeclarationWithMethodInES6.ts, 1, 17))
+
+    ["computedName1"]() { }
+>["computedName1"] : Symbol(D["computedName1"], Decl(emitClassDeclarationWithMethodInES6.ts, 2, 13))
+>"computedName1" : Symbol(D["computedName1"], Decl(emitClassDeclarationWithMethodInES6.ts, 2, 13))
+
+    ["computedName2"](a: string) { }
+>["computedName2"] : Symbol(D["computedName2"], Decl(emitClassDeclarationWithMethodInES6.ts, 3, 27))
+>"computedName2" : Symbol(D["computedName2"], Decl(emitClassDeclarationWithMethodInES6.ts, 3, 27))
+>a : Symbol(a, Decl(emitClassDeclarationWithMethodInES6.ts, 4, 22))
+
+    ["computedName3"](a: string): number { return 1; }
+>["computedName3"] : Symbol(D["computedName3"], Decl(emitClassDeclarationWithMethodInES6.ts, 4, 36))
+>"computedName3" : Symbol(D["computedName3"], Decl(emitClassDeclarationWithMethodInES6.ts, 4, 36))
+>a : Symbol(a, Decl(emitClassDeclarationWithMethodInES6.ts, 5, 22))
+
+    bar(): string {
+>bar : Symbol(D.bar, Decl(emitClassDeclarationWithMethodInES6.ts, 5, 54))
+
+        return this._bar;
+>this._bar : Symbol(D._bar, Decl(emitClassDeclarationWithMethodInES6.ts, 0, 9))
+>this : Symbol(D, Decl(emitClassDeclarationWithMethodInES6.ts, 0, 0))
+>_bar : Symbol(D._bar, Decl(emitClassDeclarationWithMethodInES6.ts, 0, 9))
+    } 
+    baz(a: any, x: string): string {
+>baz : Symbol(D.baz, Decl(emitClassDeclarationWithMethodInES6.ts, 8, 5))
+>a : Symbol(a, Decl(emitClassDeclarationWithMethodInES6.ts, 9, 8))
+>x : Symbol(x, Decl(emitClassDeclarationWithMethodInES6.ts, 9, 15))
+
+        return "HELLO";
+    }
+    static ["computedname4"]() { }
+>["computedname4"] : Symbol(D["computedname4"], Decl(emitClassDeclarationWithMethodInES6.ts, 11, 5))
+>"computedname4" : Symbol(D["computedname4"], Decl(emitClassDeclarationWithMethodInES6.ts, 11, 5))
+
+    static ["computedname5"](a: string) { }
+>["computedname5"] : Symbol(D["computedname5"], Decl(emitClassDeclarationWithMethodInES6.ts, 12, 34))
+>"computedname5" : Symbol(D["computedname5"], Decl(emitClassDeclarationWithMethodInES6.ts, 12, 34))
+>a : Symbol(a, Decl(emitClassDeclarationWithMethodInES6.ts, 13, 29))
+
+    static ["computedname6"](a: string): boolean { return true; }
+>["computedname6"] : Symbol(D["computedname6"], Decl(emitClassDeclarationWithMethodInES6.ts, 13, 43))
+>"computedname6" : Symbol(D["computedname6"], Decl(emitClassDeclarationWithMethodInES6.ts, 13, 43))
+>a : Symbol(a, Decl(emitClassDeclarationWithMethodInES6.ts, 14, 29))
+
+    static staticMethod() {
+>staticMethod : Symbol(D.staticMethod, Decl(emitClassDeclarationWithMethodInES6.ts, 14, 65))
+
+        var x = 1 + 2;
+>x : Symbol(x, Decl(emitClassDeclarationWithMethodInES6.ts, 16, 11))
+
+        return x
+>x : Symbol(x, Decl(emitClassDeclarationWithMethodInES6.ts, 16, 11))
+    }
+    static foo(a: string) { }
+>foo : Symbol(D.foo, Decl(emitClassDeclarationWithMethodInES6.ts, 18, 5))
+>a : Symbol(a, Decl(emitClassDeclarationWithMethodInES6.ts, 19, 15))
+
+    static bar(a: string): number { return 1; }
+>bar : Symbol(D.bar, Decl(emitClassDeclarationWithMethodInES6.ts, 19, 29))
+>a : Symbol(a, Decl(emitClassDeclarationWithMethodInES6.ts, 20, 15))
+}

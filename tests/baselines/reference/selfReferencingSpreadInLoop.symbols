@@ -1,0 +1,13 @@
+=== tests/cases/compiler/selfReferencingSpreadInLoop.ts ===
+let additional = [];
+>additional : Symbol(additional, Decl(selfReferencingSpreadInLoop.ts, 0, 3))
+
+for (const subcomponent of [1, 2, 3]) {
+>subcomponent : Symbol(subcomponent, Decl(selfReferencingSpreadInLoop.ts, 1, 10))
+
+    additional = [...additional, subcomponent];
+>additional : Symbol(additional, Decl(selfReferencingSpreadInLoop.ts, 0, 3))
+>additional : Symbol(additional, Decl(selfReferencingSpreadInLoop.ts, 0, 3))
+>subcomponent : Symbol(subcomponent, Decl(selfReferencingSpreadInLoop.ts, 1, 10))
+}
+

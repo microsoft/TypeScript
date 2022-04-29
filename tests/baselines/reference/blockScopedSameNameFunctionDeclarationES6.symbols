@@ -1,0 +1,39 @@
+=== tests/cases/compiler/blockScopedSameNameFunctionDeclarationES6.ts ===
+function foo(a: number) {
+>foo : Symbol(foo, Decl(blockScopedSameNameFunctionDeclarationES6.ts, 0, 0))
+>a : Symbol(a, Decl(blockScopedSameNameFunctionDeclarationES6.ts, 0, 13))
+
+    if (a === 10) {
+>a : Symbol(a, Decl(blockScopedSameNameFunctionDeclarationES6.ts, 0, 13))
+
+        function foo() { } // duplicate
+>foo : Symbol(foo, Decl(blockScopedSameNameFunctionDeclarationES6.ts, 1, 19), Decl(blockScopedSameNameFunctionDeclarationES6.ts, 6, 10))
+
+        foo();
+>foo : Symbol(foo, Decl(blockScopedSameNameFunctionDeclarationES6.ts, 1, 19), Decl(blockScopedSameNameFunctionDeclarationES6.ts, 6, 10))
+
+        foo(10); // not ok
+>foo : Symbol(foo, Decl(blockScopedSameNameFunctionDeclarationES6.ts, 1, 19), Decl(blockScopedSameNameFunctionDeclarationES6.ts, 6, 10))
+    }
+    else {
+        function foo() { } // duplicate
+>foo : Symbol(foo, Decl(blockScopedSameNameFunctionDeclarationES6.ts, 1, 19), Decl(blockScopedSameNameFunctionDeclarationES6.ts, 6, 10))
+
+        foo();
+>foo : Symbol(foo, Decl(blockScopedSameNameFunctionDeclarationES6.ts, 1, 19), Decl(blockScopedSameNameFunctionDeclarationES6.ts, 6, 10))
+
+        foo(10);// not ok
+>foo : Symbol(foo, Decl(blockScopedSameNameFunctionDeclarationES6.ts, 1, 19), Decl(blockScopedSameNameFunctionDeclarationES6.ts, 6, 10))
+    }
+    foo(10); // not ok
+>foo : Symbol(foo, Decl(blockScopedSameNameFunctionDeclarationES6.ts, 1, 19), Decl(blockScopedSameNameFunctionDeclarationES6.ts, 6, 10))
+
+    foo(); 
+>foo : Symbol(foo, Decl(blockScopedSameNameFunctionDeclarationES6.ts, 1, 19), Decl(blockScopedSameNameFunctionDeclarationES6.ts, 6, 10))
+}
+foo(10);
+>foo : Symbol(foo, Decl(blockScopedSameNameFunctionDeclarationES6.ts, 0, 0))
+
+foo(); // not ok - needs number
+>foo : Symbol(foo, Decl(blockScopedSameNameFunctionDeclarationES6.ts, 0, 0))
+

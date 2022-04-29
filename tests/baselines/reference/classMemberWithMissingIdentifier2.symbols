@@ -1,0 +1,8 @@
+=== tests/cases/compiler/classMemberWithMissingIdentifier2.ts ===
+class C { 
+>C : Symbol(C, Decl(classMemberWithMissingIdentifier2.ts, 0, 0))
+
+    public {[name:string]:VariableDeclaration};
+> : Symbol(C[(Missing)], Decl(classMemberWithMissingIdentifier2.ts, 0, 9))
+>name : Symbol(name, Decl(lib.dom.d.ts, --, --))
+}

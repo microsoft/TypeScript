@@ -1,0 +1,41 @@
+=== tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiateNonGenericTypeWithTypeArguments.ts ===
+// it is an error to provide type arguments to a non-generic call
+// all of these are errors
+
+class C {
+>C : C
+
+    x: string;
+>x : string
+}
+
+var c = new C<number>();
+>c : C
+>new C<number>() : C
+>C : typeof C
+
+function Foo(): void { }
+>Foo : () => void
+
+var r = new Foo<number>();
+>r : any
+>new Foo<number>() : any
+>Foo : () => void
+
+var f: { (): void };
+>f : () => void
+
+var r2 = new f<number>();
+>r2 : any
+>new f<number>() : any
+>f : () => void
+
+var a: any;
+>a : any
+
+// BUG 790977
+var r2 = new a<number>();
+>r2 : any
+>new a<number>() : any
+>a : any
+

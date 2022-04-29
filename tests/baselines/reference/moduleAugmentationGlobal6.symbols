@@ -1,0 +1,9 @@
+=== tests/cases/compiler/moduleAugmentationGlobal6.ts ===
+declare global {
+>global : Symbol(global, Decl(moduleAugmentationGlobal6.ts, 0, 0))
+
+    interface Array<T> { x }
+>Array : Symbol(Array, Decl(moduleAugmentationGlobal6.ts, 0, 16))
+>T : Symbol(T, Decl(moduleAugmentationGlobal6.ts, 1, 20))
+>x : Symbol(Array.x, Decl(moduleAugmentationGlobal6.ts, 1, 24))
+}

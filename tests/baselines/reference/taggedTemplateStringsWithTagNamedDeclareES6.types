@@ -1,0 +1,13 @@
+=== tests/cases/conformance/es6/templates/taggedTemplateStringsWithTagNamedDeclareES6.ts ===
+function declare(x: any, ...ys: any[]) {
+>declare : (x: any, ...ys: any[]) => void
+>x : any
+>ys : any[]
+}
+
+declare `Hello ${0} world!`;
+>declare `Hello ${0} world!` : void
+>declare : (x: any, ...ys: any[]) => void
+>`Hello ${0} world!` : string
+>0 : 0
+

@@ -1,0 +1,19 @@
+=== tests/cases/compiler/a.ts ===
+var undefined;
+>undefined : Symbol(undefined, Decl(a.ts, 0, 3))
+
+export { undefined };
+>undefined : Symbol(undefined, Decl(a.ts, 1, 8))
+
+=== tests/cases/compiler/b.ts ===
+import { undefined } from "./a";
+>undefined : Symbol(undefined, Decl(b.ts, 0, 8))
+
+declare function use(a: number);
+>use : Symbol(use, Decl(b.ts, 0, 32))
+>a : Symbol(a, Decl(b.ts, 1, 21))
+
+use(undefined);
+>use : Symbol(use, Decl(b.ts, 0, 32))
+>undefined : Symbol(undefined, Decl(b.ts, 0, 8))
+

@@ -1,0 +1,12 @@
+tests/cases/conformance/es6/destructuring/declarationWithNoInitializer.ts(1,5): error TS1182: A destructuring declaration must have an initializer.
+tests/cases/conformance/es6/destructuring/declarationWithNoInitializer.ts(2,5): error TS1182: A destructuring declaration must have an initializer.
+
+
+==== tests/cases/conformance/es6/destructuring/declarationWithNoInitializer.ts (2 errors) ====
+    var [a, b];          // Error, no initializer
+        ~~~~~~
+!!! error TS1182: A destructuring declaration must have an initializer.
+    var {c, d};          // Error, no initializer
+        ~~~~~~
+!!! error TS1182: A destructuring declaration must have an initializer.
+    

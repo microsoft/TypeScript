@@ -1,0 +1,36 @@
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignatures2.ts(15,1): error TS2322: Type 'B' is not assignable to type 'A'.
+  Types of parameters 'y' and 'y' are incompatible.
+    Type 'T[]' is not assignable to type 'T'.
+      'T' could be instantiated with an arbitrary type which could be unrelated to 'T[]'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignatures2.ts(16,1): error TS2322: Type 'A' is not assignable to type 'B'.
+  Types of parameters 'y' and 'y' are incompatible.
+    Type 'S' is not assignable to type 'S[]'.
+
+
+==== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignatures2.ts (2 errors) ====
+    // some complex cases of assignment compat of generic signatures. No contextual signature instantiation
+    
+    interface A {
+        <T>(x: T, ...y: T[][]): void
+    }
+    
+    interface B {
+        <S>(x: S, ...y: S[]): void
+    }
+    
+    var a: A;
+    var b: B;
+    
+    // Both errors
+    a = b;
+    ~
+!!! error TS2322: Type 'B' is not assignable to type 'A'.
+!!! error TS2322:   Types of parameters 'y' and 'y' are incompatible.
+!!! error TS2322:     Type 'T[]' is not assignable to type 'T'.
+!!! error TS2322:       'T' could be instantiated with an arbitrary type which could be unrelated to 'T[]'.
+    b = a;
+    ~
+!!! error TS2322: Type 'A' is not assignable to type 'B'.
+!!! error TS2322:   Types of parameters 'y' and 'y' are incompatible.
+!!! error TS2322:     Type 'S' is not assignable to type 'S[]'.
+    

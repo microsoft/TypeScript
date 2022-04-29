@@ -1,0 +1,196 @@
+=== tests/cases/conformance/types/typeAliases/intrinsicTypes.ts ===
+type TU1 = Uppercase<'hello'>;  // "HELLO"
+>TU1 : Symbol(TU1, Decl(intrinsicTypes.ts, 0, 0))
+>Uppercase : Symbol(Uppercase, Decl(lib.es5.d.ts, --, --))
+
+type TU2 = Uppercase<'foo' | 'bar'>;  // "FOO" | "BAR"
+>TU2 : Symbol(TU2, Decl(intrinsicTypes.ts, 0, 30))
+>Uppercase : Symbol(Uppercase, Decl(lib.es5.d.ts, --, --))
+
+type TU3 = Uppercase<string>;  // string
+>TU3 : Symbol(TU3, Decl(intrinsicTypes.ts, 1, 36))
+>Uppercase : Symbol(Uppercase, Decl(lib.es5.d.ts, --, --))
+
+type TU4 = Uppercase<any>;  // any
+>TU4 : Symbol(TU4, Decl(intrinsicTypes.ts, 2, 29))
+>Uppercase : Symbol(Uppercase, Decl(lib.es5.d.ts, --, --))
+
+type TU5 = Uppercase<never>;  // never
+>TU5 : Symbol(TU5, Decl(intrinsicTypes.ts, 3, 26))
+>Uppercase : Symbol(Uppercase, Decl(lib.es5.d.ts, --, --))
+
+type TU6 = Uppercase<42>;  // Error
+>TU6 : Symbol(TU6, Decl(intrinsicTypes.ts, 4, 28))
+>Uppercase : Symbol(Uppercase, Decl(lib.es5.d.ts, --, --))
+
+type TL1 = Lowercase<'HELLO'>;  // "hello"
+>TL1 : Symbol(TL1, Decl(intrinsicTypes.ts, 5, 25))
+>Lowercase : Symbol(Lowercase, Decl(lib.es5.d.ts, --, --))
+
+type TL2 = Lowercase<'FOO' | 'BAR'>;  // "foo" | "bar"
+>TL2 : Symbol(TL2, Decl(intrinsicTypes.ts, 7, 30))
+>Lowercase : Symbol(Lowercase, Decl(lib.es5.d.ts, --, --))
+
+type TL3 = Lowercase<string>;  // string
+>TL3 : Symbol(TL3, Decl(intrinsicTypes.ts, 8, 36))
+>Lowercase : Symbol(Lowercase, Decl(lib.es5.d.ts, --, --))
+
+type TL4 = Lowercase<any>;  // any
+>TL4 : Symbol(TL4, Decl(intrinsicTypes.ts, 9, 29))
+>Lowercase : Symbol(Lowercase, Decl(lib.es5.d.ts, --, --))
+
+type TL5 = Lowercase<never>;  // never
+>TL5 : Symbol(TL5, Decl(intrinsicTypes.ts, 10, 26))
+>Lowercase : Symbol(Lowercase, Decl(lib.es5.d.ts, --, --))
+
+type TL6 = Lowercase<42>;  // Error
+>TL6 : Symbol(TL6, Decl(intrinsicTypes.ts, 11, 28))
+>Lowercase : Symbol(Lowercase, Decl(lib.es5.d.ts, --, --))
+
+type TC1 = Capitalize<'hello'>;  // "Hello"
+>TC1 : Symbol(TC1, Decl(intrinsicTypes.ts, 12, 25))
+>Capitalize : Symbol(Capitalize, Decl(lib.es5.d.ts, --, --))
+
+type TC2 = Capitalize<'foo' | 'bar'>;  // "Foo" | "Bar"
+>TC2 : Symbol(TC2, Decl(intrinsicTypes.ts, 14, 31))
+>Capitalize : Symbol(Capitalize, Decl(lib.es5.d.ts, --, --))
+
+type TC3 = Capitalize<string>;  // string
+>TC3 : Symbol(TC3, Decl(intrinsicTypes.ts, 15, 37))
+>Capitalize : Symbol(Capitalize, Decl(lib.es5.d.ts, --, --))
+
+type TC4 = Capitalize<any>;  // any
+>TC4 : Symbol(TC4, Decl(intrinsicTypes.ts, 16, 30))
+>Capitalize : Symbol(Capitalize, Decl(lib.es5.d.ts, --, --))
+
+type TC5 = Capitalize<never>;  // never
+>TC5 : Symbol(TC5, Decl(intrinsicTypes.ts, 17, 27))
+>Capitalize : Symbol(Capitalize, Decl(lib.es5.d.ts, --, --))
+
+type TC6 = Capitalize<42>;  // Error
+>TC6 : Symbol(TC6, Decl(intrinsicTypes.ts, 18, 29))
+>Capitalize : Symbol(Capitalize, Decl(lib.es5.d.ts, --, --))
+
+type TN1 = Uncapitalize<'Hello'>;  // "hello"
+>TN1 : Symbol(TN1, Decl(intrinsicTypes.ts, 19, 26))
+>Uncapitalize : Symbol(Uncapitalize, Decl(lib.es5.d.ts, --, --))
+
+type TN2 = Uncapitalize<'Foo' | 'Bar'>;  // "foo" | "bar"
+>TN2 : Symbol(TN2, Decl(intrinsicTypes.ts, 21, 33))
+>Uncapitalize : Symbol(Uncapitalize, Decl(lib.es5.d.ts, --, --))
+
+type TN3 = Uncapitalize<string>;  // string
+>TN3 : Symbol(TN3, Decl(intrinsicTypes.ts, 22, 39))
+>Uncapitalize : Symbol(Uncapitalize, Decl(lib.es5.d.ts, --, --))
+
+type TN4 = Uncapitalize<any>;  // any
+>TN4 : Symbol(TN4, Decl(intrinsicTypes.ts, 23, 32))
+>Uncapitalize : Symbol(Uncapitalize, Decl(lib.es5.d.ts, --, --))
+
+type TN5 = Uncapitalize<never>;  // never
+>TN5 : Symbol(TN5, Decl(intrinsicTypes.ts, 24, 29))
+>Uncapitalize : Symbol(Uncapitalize, Decl(lib.es5.d.ts, --, --))
+
+type TN6 = Uncapitalize<42>;  // Error
+>TN6 : Symbol(TN6, Decl(intrinsicTypes.ts, 25, 31))
+>Uncapitalize : Symbol(Uncapitalize, Decl(lib.es5.d.ts, --, --))
+
+type TX1<S extends string> = Uppercase<`aB${S}`>;
+>TX1 : Symbol(TX1, Decl(intrinsicTypes.ts, 26, 28))
+>S : Symbol(S, Decl(intrinsicTypes.ts, 28, 9))
+>Uppercase : Symbol(Uppercase, Decl(lib.es5.d.ts, --, --))
+>S : Symbol(S, Decl(intrinsicTypes.ts, 28, 9))
+
+type TX2 = TX1<'xYz'>;  // "ABXYZ"
+>TX2 : Symbol(TX2, Decl(intrinsicTypes.ts, 28, 49))
+>TX1 : Symbol(TX1, Decl(intrinsicTypes.ts, 26, 28))
+
+type TX3<S extends string> = Lowercase<`aB${S}`>;
+>TX3 : Symbol(TX3, Decl(intrinsicTypes.ts, 29, 22))
+>S : Symbol(S, Decl(intrinsicTypes.ts, 30, 9))
+>Lowercase : Symbol(Lowercase, Decl(lib.es5.d.ts, --, --))
+>S : Symbol(S, Decl(intrinsicTypes.ts, 30, 9))
+
+type TX4 = TX3<'xYz'>;  // "abxyz"
+>TX4 : Symbol(TX4, Decl(intrinsicTypes.ts, 30, 49))
+>TX3 : Symbol(TX3, Decl(intrinsicTypes.ts, 29, 22))
+
+type TX5 = `${Uppercase<'abc'>}${Lowercase<'XYZ'>}`;  // "ABCxyz"
+>TX5 : Symbol(TX5, Decl(intrinsicTypes.ts, 31, 22))
+>Uppercase : Symbol(Uppercase, Decl(lib.es5.d.ts, --, --))
+>Lowercase : Symbol(Lowercase, Decl(lib.es5.d.ts, --, --))
+
+type MyUppercase<S extends string> = intrinsic;  // Error
+>MyUppercase : Symbol(MyUppercase, Decl(intrinsicTypes.ts, 32, 52))
+>S : Symbol(S, Decl(intrinsicTypes.ts, 34, 17))
+
+function foo1<T extends string, U extends T>(s: string, x: Uppercase<T>, y: Uppercase<U>) {
+>foo1 : Symbol(foo1, Decl(intrinsicTypes.ts, 34, 47))
+>T : Symbol(T, Decl(intrinsicTypes.ts, 36, 14))
+>U : Symbol(U, Decl(intrinsicTypes.ts, 36, 31))
+>T : Symbol(T, Decl(intrinsicTypes.ts, 36, 14))
+>s : Symbol(s, Decl(intrinsicTypes.ts, 36, 45))
+>x : Symbol(x, Decl(intrinsicTypes.ts, 36, 55))
+>Uppercase : Symbol(Uppercase, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(intrinsicTypes.ts, 36, 14))
+>y : Symbol(y, Decl(intrinsicTypes.ts, 36, 72))
+>Uppercase : Symbol(Uppercase, Decl(lib.es5.d.ts, --, --))
+>U : Symbol(U, Decl(intrinsicTypes.ts, 36, 31))
+
+    s = x;
+>s : Symbol(s, Decl(intrinsicTypes.ts, 36, 45))
+>x : Symbol(x, Decl(intrinsicTypes.ts, 36, 55))
+
+    s = y;
+>s : Symbol(s, Decl(intrinsicTypes.ts, 36, 45))
+>y : Symbol(y, Decl(intrinsicTypes.ts, 36, 72))
+
+    x = s;  // Error
+>x : Symbol(x, Decl(intrinsicTypes.ts, 36, 55))
+>s : Symbol(s, Decl(intrinsicTypes.ts, 36, 45))
+
+    x = y;
+>x : Symbol(x, Decl(intrinsicTypes.ts, 36, 55))
+>y : Symbol(y, Decl(intrinsicTypes.ts, 36, 72))
+
+    y = s;  // Error
+>y : Symbol(y, Decl(intrinsicTypes.ts, 36, 72))
+>s : Symbol(s, Decl(intrinsicTypes.ts, 36, 45))
+
+    y = x;  // Error
+>y : Symbol(y, Decl(intrinsicTypes.ts, 36, 72))
+>x : Symbol(x, Decl(intrinsicTypes.ts, 36, 55))
+}
+
+function foo2<T extends 'foo' | 'bar'>(x: Uppercase<T>) {
+>foo2 : Symbol(foo2, Decl(intrinsicTypes.ts, 43, 1))
+>T : Symbol(T, Decl(intrinsicTypes.ts, 45, 14))
+>x : Symbol(x, Decl(intrinsicTypes.ts, 45, 39))
+>Uppercase : Symbol(Uppercase, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(intrinsicTypes.ts, 45, 14))
+
+    let s: 'FOO' | 'BAR' = x;
+>s : Symbol(s, Decl(intrinsicTypes.ts, 46, 7))
+>x : Symbol(x, Decl(intrinsicTypes.ts, 45, 39))
+}
+
+declare function foo3<T extends string>(x: Uppercase<T>): T;
+>foo3 : Symbol(foo3, Decl(intrinsicTypes.ts, 47, 1))
+>T : Symbol(T, Decl(intrinsicTypes.ts, 49, 22))
+>x : Symbol(x, Decl(intrinsicTypes.ts, 49, 40))
+>Uppercase : Symbol(Uppercase, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(intrinsicTypes.ts, 49, 22))
+>T : Symbol(T, Decl(intrinsicTypes.ts, 49, 22))
+
+function foo4<U extends string>(x: Uppercase<U>) {
+>foo4 : Symbol(foo4, Decl(intrinsicTypes.ts, 49, 60))
+>U : Symbol(U, Decl(intrinsicTypes.ts, 51, 14))
+>x : Symbol(x, Decl(intrinsicTypes.ts, 51, 32))
+>Uppercase : Symbol(Uppercase, Decl(lib.es5.d.ts, --, --))
+>U : Symbol(U, Decl(intrinsicTypes.ts, 51, 14))
+
+    return foo3(x);
+>foo3 : Symbol(foo3, Decl(intrinsicTypes.ts, 47, 1))
+>x : Symbol(x, Decl(intrinsicTypes.ts, 51, 32))
+}
+

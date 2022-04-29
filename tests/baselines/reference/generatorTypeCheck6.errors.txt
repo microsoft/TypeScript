@@ -1,0 +1,7 @@
+tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck6.ts(1,17): error TS2322: Type 'Generator<any, any, any>' is not assignable to type 'number'.
+
+
+==== tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck6.ts (1 errors) ====
+    function* g1(): number { }
+                    ~~~~~~
+!!! error TS2322: Type 'Generator<any, any, any>' is not assignable to type 'number'.

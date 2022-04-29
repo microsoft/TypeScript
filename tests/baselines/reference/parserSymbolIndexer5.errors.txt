@@ -1,0 +1,25 @@
+tests/cases/conformance/parser/ecmascript6/Symbols/parserSymbolIndexer5.ts(2,6): error TS2304: Cannot find name 's'.
+tests/cases/conformance/parser/ecmascript6/Symbols/parserSymbolIndexer5.ts(2,7): error TS1005: ']' expected.
+tests/cases/conformance/parser/ecmascript6/Symbols/parserSymbolIndexer5.ts(2,9): error TS2552: Cannot find name 'symbol'. Did you mean 'Symbol'?
+tests/cases/conformance/parser/ecmascript6/Symbols/parserSymbolIndexer5.ts(2,15): error TS1005: ',' expected.
+tests/cases/conformance/parser/ecmascript6/Symbols/parserSymbolIndexer5.ts(2,16): error TS1136: Property assignment expected.
+tests/cases/conformance/parser/ecmascript6/Symbols/parserSymbolIndexer5.ts(3,1): error TS1005: ':' expected.
+
+
+==== tests/cases/conformance/parser/ecmascript6/Symbols/parserSymbolIndexer5.ts (6 errors) ====
+    var x = {
+        [s: symbol]: ""
+         ~
+!!! error TS2304: Cannot find name 's'.
+          ~
+!!! error TS1005: ']' expected.
+            ~~~~~~
+!!! error TS2552: Cannot find name 'symbol'. Did you mean 'Symbol'?
+!!! related TS2728 /.ts/lib.es2015.symbol.d.ts:48:13: 'Symbol' is declared here.
+                  ~
+!!! error TS1005: ',' expected.
+                   ~
+!!! error TS1136: Property assignment expected.
+    }
+    ~
+!!! error TS1005: ':' expected.

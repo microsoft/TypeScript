@@ -1,0 +1,31 @@
+=== tests/cases/compiler/declFileTypeAnnotationStringLiteral.ts ===
+function foo(a: "hello"): number;
+>foo : { (a: "hello"): number; (a: "name"): string; (a: string): string | number; }
+>a : "hello"
+
+function foo(a: "name"): string;
+>foo : { (a: "hello"): number; (a: "name"): string; (a: string): string | number; }
+>a : "name"
+
+function foo(a: string): string | number;
+>foo : { (a: "hello"): number; (a: "name"): string; (a: string): string | number; }
+>a : string
+
+function foo(a: string): string | number {
+>foo : { (a: "hello"): number; (a: "name"): string; (a: string): string | number; }
+>a : string
+
+    if (a === "hello") {
+>a === "hello" : boolean
+>a : string
+>"hello" : "hello"
+
+        return a.length;
+>a.length : number
+>a : "hello"
+>length : number
+    }
+
+    return a;
+>a : string
+}

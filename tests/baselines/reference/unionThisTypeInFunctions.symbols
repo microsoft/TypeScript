@@ -1,0 +1,35 @@
+=== tests/cases/conformance/types/thisType/unionThisTypeInFunctions.ts ===
+interface Real {
+>Real : Symbol(Real, Decl(unionThisTypeInFunctions.ts, 0, 0))
+
+    method(this: this, n: number): void;
+>method : Symbol(Real.method, Decl(unionThisTypeInFunctions.ts, 0, 16))
+>this : Symbol(this, Decl(unionThisTypeInFunctions.ts, 1, 11))
+>n : Symbol(n, Decl(unionThisTypeInFunctions.ts, 1, 22))
+
+    data: string;
+>data : Symbol(Real.data, Decl(unionThisTypeInFunctions.ts, 1, 40))
+}
+interface Fake {
+>Fake : Symbol(Fake, Decl(unionThisTypeInFunctions.ts, 3, 1))
+
+    method(this: this, n: number): void;
+>method : Symbol(Fake.method, Decl(unionThisTypeInFunctions.ts, 4, 16))
+>this : Symbol(this, Decl(unionThisTypeInFunctions.ts, 5, 11))
+>n : Symbol(n, Decl(unionThisTypeInFunctions.ts, 5, 22))
+
+    data: number;
+>data : Symbol(Fake.data, Decl(unionThisTypeInFunctions.ts, 5, 40))
+}
+function test(r: Real | Fake) {
+>test : Symbol(test, Decl(unionThisTypeInFunctions.ts, 7, 1))
+>r : Symbol(r, Decl(unionThisTypeInFunctions.ts, 8, 14))
+>Real : Symbol(Real, Decl(unionThisTypeInFunctions.ts, 0, 0))
+>Fake : Symbol(Fake, Decl(unionThisTypeInFunctions.ts, 3, 1))
+
+    r.method(12); // error
+>r.method : Symbol(method, Decl(unionThisTypeInFunctions.ts, 0, 16), Decl(unionThisTypeInFunctions.ts, 4, 16))
+>r : Symbol(r, Decl(unionThisTypeInFunctions.ts, 8, 14))
+>method : Symbol(method, Decl(unionThisTypeInFunctions.ts, 0, 16), Decl(unionThisTypeInFunctions.ts, 4, 16))
+}
+

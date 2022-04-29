@@ -1,0 +1,25 @@
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembers5.ts(13,1): error TS2741: Property 'foo' is missing in type 'I' but required in type 'C'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembers5.ts(14,1): error TS2741: Property 'fooo' is missing in type 'C' but required in type 'I'.
+
+
+==== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembers5.ts (2 errors) ====
+    class C {
+        foo: string;
+    }
+    
+    var c: C;
+    
+    interface I {
+        fooo: string;
+    }
+    
+    var i: I;
+    
+    c = i; // error
+    ~
+!!! error TS2741: Property 'foo' is missing in type 'I' but required in type 'C'.
+!!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembers5.ts:2:5: 'foo' is declared here.
+    i = c; // error
+    ~
+!!! error TS2741: Property 'fooo' is missing in type 'C' but required in type 'I'.
+!!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembers5.ts:8:5: 'fooo' is declared here.

@@ -1,0 +1,17 @@
+=== tests/cases/compiler/abstractClassInLocalScope.ts ===
+(() => {
+    abstract class A {}
+>A : Symbol(A, Decl(abstractClassInLocalScope.ts, 0, 8))
+
+    class B extends A {}
+>B : Symbol(B, Decl(abstractClassInLocalScope.ts, 1, 23))
+>A : Symbol(A, Decl(abstractClassInLocalScope.ts, 0, 8))
+
+    new B();
+>B : Symbol(B, Decl(abstractClassInLocalScope.ts, 1, 23))
+
+    return A;
+>A : Symbol(A, Decl(abstractClassInLocalScope.ts, 0, 8))
+
+})();
+

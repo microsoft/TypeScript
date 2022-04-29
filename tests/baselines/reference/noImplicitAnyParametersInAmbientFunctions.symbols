@@ -1,0 +1,90 @@
+=== tests/cases/compiler/noImplicitAnyParametersInAmbientFunctions.ts ===
+// No implicit-'any' errors.
+declare function d_f1(): void;
+>d_f1 : Symbol(d_f1, Decl(noImplicitAnyParametersInAmbientFunctions.ts, 0, 0))
+
+// Implicit-'any' errors for x.
+declare function d_f2(x): void;
+>d_f2 : Symbol(d_f2, Decl(noImplicitAnyParametersInAmbientFunctions.ts, 1, 30))
+>x : Symbol(x, Decl(noImplicitAnyParametersInAmbientFunctions.ts, 4, 22))
+
+// No implicit-'any' errors.
+declare function d_f3(x: any): void;
+>d_f3 : Symbol(d_f3, Decl(noImplicitAnyParametersInAmbientFunctions.ts, 4, 31))
+>x : Symbol(x, Decl(noImplicitAnyParametersInAmbientFunctions.ts, 7, 22))
+
+// Implicit-'any' errors for x, y, and z.
+declare function d_f4(x, y, z): void;
+>d_f4 : Symbol(d_f4, Decl(noImplicitAnyParametersInAmbientFunctions.ts, 7, 36))
+>x : Symbol(x, Decl(noImplicitAnyParametersInAmbientFunctions.ts, 10, 22))
+>y : Symbol(y, Decl(noImplicitAnyParametersInAmbientFunctions.ts, 10, 24))
+>z : Symbol(z, Decl(noImplicitAnyParametersInAmbientFunctions.ts, 10, 27))
+
+// Implicit-'any' errors for x, and z.
+declare function d_f5(x, y: any, z): void;
+>d_f5 : Symbol(d_f5, Decl(noImplicitAnyParametersInAmbientFunctions.ts, 10, 37))
+>x : Symbol(x, Decl(noImplicitAnyParametersInAmbientFunctions.ts, 13, 22))
+>y : Symbol(y, Decl(noImplicitAnyParametersInAmbientFunctions.ts, 13, 24))
+>z : Symbol(z, Decl(noImplicitAnyParametersInAmbientFunctions.ts, 13, 32))
+
+// Implicit-'any[]' errors for r.
+declare function d_f6(...r): void;
+>d_f6 : Symbol(d_f6, Decl(noImplicitAnyParametersInAmbientFunctions.ts, 13, 42))
+>r : Symbol(r, Decl(noImplicitAnyParametersInAmbientFunctions.ts, 16, 22))
+
+// Implicit-'any'/'any[]' errors for x, r.
+declare function d_f7(x, ...r): void;
+>d_f7 : Symbol(d_f7, Decl(noImplicitAnyParametersInAmbientFunctions.ts, 16, 34))
+>x : Symbol(x, Decl(noImplicitAnyParametersInAmbientFunctions.ts, 19, 22))
+>r : Symbol(r, Decl(noImplicitAnyParametersInAmbientFunctions.ts, 19, 24))
+
+// Implicit-'any' errors for x1, y2, x3, and y3.
+declare function d_f8(x1, y1: number): any;
+>d_f8 : Symbol(d_f8, Decl(noImplicitAnyParametersInAmbientFunctions.ts, 19, 37), Decl(noImplicitAnyParametersInAmbientFunctions.ts, 22, 43), Decl(noImplicitAnyParametersInAmbientFunctions.ts, 23, 43))
+>x1 : Symbol(x1, Decl(noImplicitAnyParametersInAmbientFunctions.ts, 22, 22))
+>y1 : Symbol(y1, Decl(noImplicitAnyParametersInAmbientFunctions.ts, 22, 25))
+
+declare function d_f8(x2: string, y2): any;
+>d_f8 : Symbol(d_f8, Decl(noImplicitAnyParametersInAmbientFunctions.ts, 19, 37), Decl(noImplicitAnyParametersInAmbientFunctions.ts, 22, 43), Decl(noImplicitAnyParametersInAmbientFunctions.ts, 23, 43))
+>x2 : Symbol(x2, Decl(noImplicitAnyParametersInAmbientFunctions.ts, 23, 22))
+>y2 : Symbol(y2, Decl(noImplicitAnyParametersInAmbientFunctions.ts, 23, 33))
+
+declare function d_f8(x3, y3): any;
+>d_f8 : Symbol(d_f8, Decl(noImplicitAnyParametersInAmbientFunctions.ts, 19, 37), Decl(noImplicitAnyParametersInAmbientFunctions.ts, 22, 43), Decl(noImplicitAnyParametersInAmbientFunctions.ts, 23, 43))
+>x3 : Symbol(x3, Decl(noImplicitAnyParametersInAmbientFunctions.ts, 24, 22))
+>y3 : Symbol(y3, Decl(noImplicitAnyParametersInAmbientFunctions.ts, 24, 25))
+
+// No implicit-'any' errors.
+declare var d_f9: () => string;
+>d_f9 : Symbol(d_f9, Decl(noImplicitAnyParametersInAmbientFunctions.ts, 27, 11))
+
+// Implicit-'any' error for x.
+declare var d_f10: (x) => string;
+>d_f10 : Symbol(d_f10, Decl(noImplicitAnyParametersInAmbientFunctions.ts, 30, 11))
+>x : Symbol(x, Decl(noImplicitAnyParametersInAmbientFunctions.ts, 30, 20))
+
+// Implicit-'any' errors for x, y, and z.
+declare var d_f11: (x, y, z) => string;
+>d_f11 : Symbol(d_f11, Decl(noImplicitAnyParametersInAmbientFunctions.ts, 33, 11))
+>x : Symbol(x, Decl(noImplicitAnyParametersInAmbientFunctions.ts, 33, 20))
+>y : Symbol(y, Decl(noImplicitAnyParametersInAmbientFunctions.ts, 33, 22))
+>z : Symbol(z, Decl(noImplicitAnyParametersInAmbientFunctions.ts, 33, 25))
+
+// Implicit-'any' errors for x and z.
+declare var d_f12: (x, y: any, z) => string;
+>d_f12 : Symbol(d_f12, Decl(noImplicitAnyParametersInAmbientFunctions.ts, 36, 11))
+>x : Symbol(x, Decl(noImplicitAnyParametersInAmbientFunctions.ts, 36, 20))
+>y : Symbol(y, Decl(noImplicitAnyParametersInAmbientFunctions.ts, 36, 22))
+>z : Symbol(z, Decl(noImplicitAnyParametersInAmbientFunctions.ts, 36, 30))
+
+// Implicit-'any[]' error for r.
+declare var d_f13: (...r) => string;
+>d_f13 : Symbol(d_f13, Decl(noImplicitAnyParametersInAmbientFunctions.ts, 39, 11))
+>r : Symbol(r, Decl(noImplicitAnyParametersInAmbientFunctions.ts, 39, 20))
+
+// Implicit-'any'/'any[]' errors for x, r.
+declare var d_f14: (x, ...r) => string;
+>d_f14 : Symbol(d_f14, Decl(noImplicitAnyParametersInAmbientFunctions.ts, 42, 11))
+>x : Symbol(x, Decl(noImplicitAnyParametersInAmbientFunctions.ts, 42, 20))
+>r : Symbol(r, Decl(noImplicitAnyParametersInAmbientFunctions.ts, 42, 22))
+

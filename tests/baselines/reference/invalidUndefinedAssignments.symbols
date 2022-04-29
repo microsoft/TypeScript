@@ -1,0 +1,65 @@
+=== tests/cases/conformance/types/primitives/undefined/invalidUndefinedAssignments.ts ===
+var x: typeof undefined;
+>x : Symbol(x, Decl(invalidUndefinedAssignments.ts, 0, 3))
+>undefined : Symbol(undefined)
+
+enum E { A }
+>E : Symbol(E, Decl(invalidUndefinedAssignments.ts, 0, 24))
+>A : Symbol(E.A, Decl(invalidUndefinedAssignments.ts, 2, 8))
+
+E = x;
+>E : Symbol(E, Decl(invalidUndefinedAssignments.ts, 0, 24))
+>x : Symbol(x, Decl(invalidUndefinedAssignments.ts, 0, 3))
+
+E.A = x;
+>E.A : Symbol(E.A, Decl(invalidUndefinedAssignments.ts, 2, 8))
+>E : Symbol(E, Decl(invalidUndefinedAssignments.ts, 0, 24))
+>A : Symbol(E.A, Decl(invalidUndefinedAssignments.ts, 2, 8))
+>x : Symbol(x, Decl(invalidUndefinedAssignments.ts, 0, 3))
+
+class C { foo: string }
+>C : Symbol(C, Decl(invalidUndefinedAssignments.ts, 4, 8))
+>foo : Symbol(C.foo, Decl(invalidUndefinedAssignments.ts, 6, 9))
+
+var f: C;
+>f : Symbol(f, Decl(invalidUndefinedAssignments.ts, 7, 3))
+>C : Symbol(C, Decl(invalidUndefinedAssignments.ts, 4, 8))
+
+C = x;
+>C : Symbol(C, Decl(invalidUndefinedAssignments.ts, 4, 8))
+>x : Symbol(x, Decl(invalidUndefinedAssignments.ts, 0, 3))
+
+interface I { foo: string }
+>I : Symbol(I, Decl(invalidUndefinedAssignments.ts, 8, 6))
+>foo : Symbol(I.foo, Decl(invalidUndefinedAssignments.ts, 10, 13))
+
+var g: I;
+>g : Symbol(g, Decl(invalidUndefinedAssignments.ts, 11, 3))
+>I : Symbol(I, Decl(invalidUndefinedAssignments.ts, 8, 6))
+
+g = x;
+>g : Symbol(g, Decl(invalidUndefinedAssignments.ts, 11, 3))
+>x : Symbol(x, Decl(invalidUndefinedAssignments.ts, 0, 3))
+
+I = x;
+>x : Symbol(x, Decl(invalidUndefinedAssignments.ts, 0, 3))
+
+module M { export var x = 1; }
+>M : Symbol(M, Decl(invalidUndefinedAssignments.ts, 13, 6))
+>x : Symbol(x, Decl(invalidUndefinedAssignments.ts, 15, 21))
+
+M = x;
+>M : Symbol(M, Decl(invalidUndefinedAssignments.ts, 13, 6))
+>x : Symbol(x, Decl(invalidUndefinedAssignments.ts, 0, 3))
+
+function i<T>(a: T) { }
+>i : Symbol(i, Decl(invalidUndefinedAssignments.ts, 16, 6))
+>T : Symbol(T, Decl(invalidUndefinedAssignments.ts, 18, 11))
+>a : Symbol(a, Decl(invalidUndefinedAssignments.ts, 18, 14))
+>T : Symbol(T, Decl(invalidUndefinedAssignments.ts, 18, 11))
+
+// BUG 767030
+i = x; 
+>i : Symbol(i, Decl(invalidUndefinedAssignments.ts, 16, 6))
+>x : Symbol(x, Decl(invalidUndefinedAssignments.ts, 0, 3))
+

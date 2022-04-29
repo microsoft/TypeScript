@@ -1,0 +1,29 @@
+{
+    "scenario": "[Sourcemap]/[Maproot-Url]/[Sourceroot-Url]: outputdir_mixed_subfolder: no outdir",
+    "projectRoot": "tests/cases/projects/outputdir_mixed_subfolder",
+    "inputFiles": [
+        "test.ts"
+    ],
+    "sourceMap": true,
+    "declaration": true,
+    "baselineCheck": true,
+    "mapRoot": "http://www.typescriptlang.org/",
+    "sourceRoot": "http://typescript.codeplex.com/",
+    "resolvedInputFiles": [
+        "lib.es5.d.ts",
+        "ref/m1.ts",
+        "ref/m2.ts",
+        "test.ts"
+    ],
+    "emittedFiles": [
+        "ref/m1.js.map",
+        "ref/m1.js",
+        "ref/m1.d.ts",
+        "ref/m2.js.map",
+        "ref/m2.js",
+        "ref/m2.d.ts",
+        "test.js.map",
+        "test.js",
+        "test.d.ts"
+    ]
+}

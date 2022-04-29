@@ -1,0 +1,20 @@
+=== tests/cases/compiler/functionOverloads2.ts ===
+function foo(bar: string): string;
+>foo : { (bar: string): string; (bar: number): number; }
+>bar : string
+
+function foo(bar: number): number;
+>foo : { (bar: string): string; (bar: number): number; }
+>bar : number
+
+function foo(bar: any): any { return bar };
+>foo : { (bar: string): string; (bar: number): number; }
+>bar : any
+>bar : any
+
+var x = foo(true);
+>x : never
+>foo(true) : never
+>foo : { (bar: string): string; (bar: number): number; }
+>true : true
+

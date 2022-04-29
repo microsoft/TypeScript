@@ -1,0 +1,78 @@
+=== tests/cases/compiler/overloadOnConstNoStringImplementation.ts ===
+function x2(a: number, cb: (x: 'hi') => number);
+>x2 : { (a: number, cb: (x: 'hi') => number): any; (a: number, cb: (x: "bye") => number): any; }
+>a : number
+>cb : (x: 'hi') => number
+>x : "hi"
+
+function x2(a: number, cb: (x: 'bye') => number);
+>x2 : { (a: number, cb: (x: "hi") => number): any; (a: number, cb: (x: 'bye') => number): any; }
+>a : number
+>cb : (x: 'bye') => number
+>x : "bye"
+
+function x2(a: number, cb: (x: any) => number) {
+>x2 : { (a: number, cb: (x: "hi") => number): any; (a: number, cb: (x: "bye") => number): any; }
+>a : number
+>cb : (x: any) => number
+>x : any
+
+    cb('hi');
+>cb('hi') : number
+>cb : (x: any) => number
+>'hi' : "hi"
+
+    cb('bye');
+>cb('bye') : number
+>cb : (x: any) => number
+>'bye' : "bye"
+
+    var hm = 'hm';
+>hm : string
+>'hm' : "hm"
+
+    cb(hm); // should this work without a string definition?
+>cb(hm) : number
+>cb : (x: any) => number
+>hm : string
+
+    cb('uh');
+>cb('uh') : number
+>cb : (x: any) => number
+>'uh' : "uh"
+
+    cb(1); 
+>cb(1) : number
+>cb : (x: any) => number
+>1 : 1
+}
+
+var cb: (number) => number = (x: number) => 1;
+>cb : (number: any) => number
+>number : any
+>(x: number) => 1 : (x: number) => number
+>x : number
+>1 : 1
+
+x2(1, cb); // error
+>x2(1, cb) : any
+>x2 : { (a: number, cb: (x: "hi") => number): any; (a: number, cb: (x: "bye") => number): any; }
+>1 : 1
+>cb : (number: any) => number
+
+x2(1, (x: 'hi') => 1); // error
+>x2(1, (x: 'hi') => 1) : any
+>x2 : { (a: number, cb: (x: "hi") => number): any; (a: number, cb: (x: "bye") => number): any; }
+>1 : 1
+>(x: 'hi') => 1 : (x: 'hi') => number
+>x : "hi"
+>1 : 1
+
+x2(1, (x: string) => 1);
+>x2(1, (x: string) => 1) : any
+>x2 : { (a: number, cb: (x: "hi") => number): any; (a: number, cb: (x: "bye") => number): any; }
+>1 : 1
+>(x: string) => 1 : (x: string) => number
+>x : string
+>1 : 1
+

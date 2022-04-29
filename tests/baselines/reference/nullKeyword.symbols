@@ -1,0 +1,3 @@
+=== tests/cases/compiler/nullKeyword.ts ===
+null.foo;
+No type information for this code.

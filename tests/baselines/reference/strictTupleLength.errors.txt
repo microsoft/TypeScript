@@ -1,0 +1,36 @@
+tests/cases/conformance/types/tuple/strictTupleLength.ts(11,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 't1' must be of type '[number]', but here has type '[number, number]'.
+tests/cases/conformance/types/tuple/strictTupleLength.ts(12,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 't2' must be of type '[number, number]', but here has type '[number]'.
+tests/cases/conformance/types/tuple/strictTupleLength.ts(18,1): error TS2322: Type 'number[]' is not assignable to type '[number]'.
+  Target requires 1 element(s) but source may have fewer.
+
+
+==== tests/cases/conformance/types/tuple/strictTupleLength.ts (3 errors) ====
+    var t0: [];
+    var t1: [number];
+    var t2: [number, number];
+    var arr: number[];
+    
+    var len0: 0 = t0.length;
+    var len1: 1 = t1.length;
+    var len2: 2 = t2.length;
+    var lena: number = arr.length;
+    
+    var t1 = t2; // error
+        ~~
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 't1' must be of type '[number]', but here has type '[number, number]'.
+!!! related TS6203 tests/cases/conformance/types/tuple/strictTupleLength.ts:2:5: 't1' was also declared here.
+    var t2 = t1; // error
+        ~~
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 't2' must be of type '[number, number]', but here has type '[number]'.
+!!! related TS6203 tests/cases/conformance/types/tuple/strictTupleLength.ts:3:5: 't2' was also declared here.
+    
+    type A<T extends any[]> = T['length'];
+    var b: A<[boolean]>;
+    var c: 1 = b;
+    
+    t1 = arr; // error with or without strict
+    ~~
+!!! error TS2322: Type 'number[]' is not assignable to type '[number]'.
+!!! error TS2322:   Target requires 1 element(s) but source may have fewer.
+    arr = t1; // ok with or without strict
+    

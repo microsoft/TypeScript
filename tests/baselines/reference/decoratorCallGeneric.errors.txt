@@ -1,0 +1,22 @@
+tests/cases/conformance/decorators/decoratorCallGeneric.ts(7,2): error TS2345: Argument of type 'typeof C' is not assignable to parameter of type 'I<C>'.
+  The types returned by 'm()' are incompatible between these types.
+    Type 'void' is not assignable to type 'C'.
+
+
+==== tests/cases/conformance/decorators/decoratorCallGeneric.ts (1 errors) ====
+    interface I<T> {
+        prototype: T,
+        m: () => T
+    }
+    function dec<T>(c: I<T>) { }
+    
+    @dec
+     ~~~
+!!! error TS2345: Argument of type 'typeof C' is not assignable to parameter of type 'I<C>'.
+!!! error TS2345:   The types returned by 'm()' are incompatible between these types.
+!!! error TS2345:     Type 'void' is not assignable to type 'C'.
+    class C {
+        _brand: any;
+        static m() {}
+    }
+    

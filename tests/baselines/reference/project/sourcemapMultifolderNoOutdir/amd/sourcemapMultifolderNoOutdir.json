@@ -1,0 +1,27 @@
+{
+    "scenario": "[Sourcemap]: outputdir_multifolder: no outdir",
+    "projectRoot": "tests/cases/projects/outputdir_multifolder",
+    "inputFiles": [
+        "test.ts"
+    ],
+    "sourceMap": true,
+    "declaration": true,
+    "baselineCheck": true,
+    "resolvedInputFiles": [
+        "lib.es5.d.ts",
+        "ref/m1.ts",
+        "../outputdir_multifolder_ref/m2.ts",
+        "test.ts"
+    ],
+    "emittedFiles": [
+        "ref/m1.js.map",
+        "ref/m1.js",
+        "ref/m1.d.ts",
+        "../outputdir_multifolder_ref/m2.js.map",
+        "../outputdir_multifolder_ref/m2.js",
+        "../outputdir_multifolder_ref/m2.d.ts",
+        "test.js.map",
+        "test.js",
+        "test.d.ts"
+    ]
+}

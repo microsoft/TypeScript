@@ -1,0 +1,15 @@
+=== tests/cases/conformance/parser/ecmascript5/ClassDeclarations/parserClass2.ts ===
+    export class LoggerAdapter implements ILogger {
+>LoggerAdapter : Symbol(LoggerAdapter, Decl(parserClass2.ts, 0, 0))
+
+        constructor (public logger: ILogger) { 
+>logger : Symbol(LoggerAdapter.logger, Decl(parserClass2.ts, 1, 21))
+>ILogger : Symbol(ILogger)
+
+            this._information = this.logger.information();
+>this : Symbol(LoggerAdapter, Decl(parserClass2.ts, 0, 0))
+>this.logger : Symbol(LoggerAdapter.logger, Decl(parserClass2.ts, 1, 21))
+>this : Symbol(LoggerAdapter, Decl(parserClass2.ts, 0, 0))
+>logger : Symbol(LoggerAdapter.logger, Decl(parserClass2.ts, 1, 21))
+        }
+    }

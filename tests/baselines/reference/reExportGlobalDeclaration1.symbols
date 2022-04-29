@@ -1,0 +1,51 @@
+=== tests/cases/compiler/file1.d.ts ===
+declare var x: number;
+>x : Symbol(x, Decl(file1.d.ts, 0, 11))
+
+declare var x1: number;
+>x1 : Symbol(x1, Decl(file1.d.ts, 1, 11))
+
+declare let {a, b}: {a: number, b: number};
+>a : Symbol(a, Decl(file1.d.ts, 2, 13))
+>b : Symbol(b, Decl(file1.d.ts, 2, 15))
+>a : Symbol(a, Decl(file1.d.ts, 2, 21))
+>b : Symbol(b, Decl(file1.d.ts, 2, 31))
+
+=== tests/cases/compiler/file2.ts ===
+export {x, x as y};
+>x : Symbol(x, Decl(file2.ts, 0, 8))
+>x : Symbol(x, Decl(file1.d.ts, 0, 11))
+>y : Symbol(y, Decl(file2.ts, 0, 10))
+
+export {x1, x1 as y1};
+>x1 : Symbol(x1, Decl(file2.ts, 1, 8))
+>x1 : Symbol(x1, Decl(file1.d.ts, 1, 11))
+>y1 : Symbol(y1, Decl(file2.ts, 1, 11))
+
+export {a, a as a1};
+>a : Symbol(a, Decl(file2.ts, 3, 8))
+>a : Symbol(a, Decl(file1.d.ts, 2, 13))
+>a1 : Symbol(a1, Decl(file2.ts, 3, 10))
+
+export {b, b as b1};
+>b : Symbol(b, Decl(file2.ts, 4, 8))
+>b : Symbol(b, Decl(file1.d.ts, 2, 15))
+>b1 : Symbol(b1, Decl(file2.ts, 4, 10))
+
+
+export {x as z};
+>x : Symbol(x, Decl(file1.d.ts, 0, 11))
+>z : Symbol(z, Decl(file2.ts, 7, 8))
+
+export {x1 as z1};
+>x1 : Symbol(x1, Decl(file1.d.ts, 1, 11))
+>z1 : Symbol(z1, Decl(file2.ts, 8, 8))
+
+export {a as a2};
+>a : Symbol(a, Decl(file1.d.ts, 2, 13))
+>a2 : Symbol(a2, Decl(file2.ts, 9, 8))
+
+export {b as b2};
+>b : Symbol(b, Decl(file1.d.ts, 2, 15))
+>b2 : Symbol(b2, Decl(file2.ts, 10, 8))
+

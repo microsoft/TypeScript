@@ -1,0 +1,127 @@
+=== tests/cases/conformance/salsa/a.js ===
+var variable = {};
+>variable : typeof variable
+>{} : {}
+
+variable.a = 0;
+>variable.a = 0 : 0
+>variable.a : number
+>variable : typeof variable
+>a : number
+>0 : 0
+
+class C {
+>C : C
+
+    initializedMember = {};
+>initializedMember : {}
+>{} : {}
+
+    constructor() {
+        this.member = {};
+>this.member = {} : {}
+>this.member : any
+>this : this
+>member : any
+>{} : {}
+
+        this.member.a = 0;
+>this.member.a = 0 : 0
+>this.member.a : error
+>this.member : {}
+>this : this
+>member : {}
+>a : any
+>0 : 0
+    }
+}
+
+var obj = {
+>obj : { property: {}; }
+>{    property: {}} : { property: {}; }
+
+    property: {}
+>property : {}
+>{} : {}
+
+};
+
+obj.property.a = 0;
+>obj.property.a = 0 : 0
+>obj.property.a : error
+>obj.property : {}
+>obj : { property: {}; }
+>property : {}
+>a : any
+>0 : 0
+
+var arr = [{}];
+>arr : {}[]
+>[{}] : {}[]
+>{} : {}
+
+function getObj() {
+>getObj : () => {}
+
+    return {};
+>{} : {}
+}
+
+
+=== tests/cases/conformance/salsa/b.ts ===
+variable.a = 1;
+>variable.a = 1 : 1
+>variable.a : number
+>variable : typeof variable
+>a : number
+>1 : 1
+
+(new C()).member.a = 1;
+>(new C()).member.a = 1 : 1
+>(new C()).member.a : any
+>(new C()).member : {}
+>(new C()) : C
+>new C() : C
+>C : typeof C
+>member : {}
+>a : any
+>1 : 1
+
+(new C()).initializedMember.a = 1;
+>(new C()).initializedMember.a = 1 : 1
+>(new C()).initializedMember.a : any
+>(new C()).initializedMember : {}
+>(new C()) : C
+>new C() : C
+>C : typeof C
+>initializedMember : {}
+>a : any
+>1 : 1
+
+obj.property.a = 1;
+>obj.property.a = 1 : 1
+>obj.property.a : any
+>obj.property : {}
+>obj : { property: {}; }
+>property : {}
+>a : any
+>1 : 1
+
+arr[0].a = 1;
+>arr[0].a = 1 : 1
+>arr[0].a : any
+>arr[0] : {}
+>arr : {}[]
+>0 : 0
+>a : any
+>1 : 1
+
+getObj().a = 1;
+>getObj().a = 1 : 1
+>getObj().a : any
+>getObj() : {}
+>getObj : () => {}
+>a : any
+>1 : 1
+
+

@@ -1,0 +1,98 @@
+=== tests/cases/compiler/unusedLocalsAndObjectSpread.ts ===
+declare var console: { log(a: any): void };
+>console : { log(a: any): void; }
+>log : (a: any) => void
+>a : any
+
+function one() {
+>one : () => void
+
+    const foo = { a: 1, b: 2 };
+>foo : { a: number; b: number; }
+>{ a: 1, b: 2 } : { a: number; b: number; }
+>a : number
+>1 : 1
+>b : number
+>2 : 2
+
+    // 'a' is declared but never used
+    const {a, ...bar} = foo;
+>a : number
+>bar : { b: number; }
+>foo : { a: number; b: number; }
+
+    console.log(bar);
+>console.log(bar) : void
+>console.log : (a: any) => void
+>console : { log(a: any): void; }
+>log : (a: any) => void
+>bar : { b: number; }
+}
+
+function two() {
+>two : () => void
+
+    const foo = { a: 1, b: 2 };
+>foo : { a: number; b: number; }
+>{ a: 1, b: 2 } : { a: number; b: number; }
+>a : number
+>1 : 1
+>b : number
+>2 : 2
+
+    // '_' is declared but never used
+    const {a: _, ...bar} = foo;
+>a : any
+>_ : number
+>bar : { b: number; }
+>foo : { a: number; b: number; }
+
+    console.log(bar);
+>console.log(bar) : void
+>console.log : (a: any) => void
+>console : { log(a: any): void; }
+>log : (a: any) => void
+>bar : { b: number; }
+}
+
+function three() {
+>three : () => void
+
+    const foo = { a: 1, b: 2 };
+>foo : { a: number; b: number; }
+>{ a: 1, b: 2 } : { a: number; b: number; }
+>a : number
+>1 : 1
+>b : number
+>2 : 2
+
+    // 'a' is declared but never used
+    const {a, ...bar} = foo; // bar should be unused
+>a : number
+>bar : { b: number; }
+>foo : { a: number; b: number; }
+
+    //console.log(bar);
+}
+
+function four() {
+>four : () => void
+
+    const foo = { a: 1, b: 2 };
+>foo : { a: number; b: number; }
+>{ a: 1, b: 2 } : { a: number; b: number; }
+>a : number
+>1 : 1
+>b : number
+>2 : 2
+
+    // '_' is declared but never used
+    const {a: _, ...bar} = foo; // bar should be unused
+>a : any
+>_ : number
+>bar : { b: number; }
+>foo : { a: number; b: number; }
+
+    //console.log(bar);
+}
+

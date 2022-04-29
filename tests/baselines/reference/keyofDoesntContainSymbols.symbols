@@ -1,0 +1,87 @@
+=== tests/cases/compiler/keyofDoesntContainSymbols.ts ===
+const sym = Symbol();
+>sym : Symbol(sym, Decl(keyofDoesntContainSymbols.ts, 0, 5))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+const num = 0;
+>num : Symbol(num, Decl(keyofDoesntContainSymbols.ts, 1, 5))
+
+const obj = { num: 0, str: 's', [num]: num as 0, [sym]: sym };
+>obj : Symbol(obj, Decl(keyofDoesntContainSymbols.ts, 2, 5))
+>num : Symbol(num, Decl(keyofDoesntContainSymbols.ts, 2, 13))
+>str : Symbol(str, Decl(keyofDoesntContainSymbols.ts, 2, 21))
+>[num] : Symbol([num], Decl(keyofDoesntContainSymbols.ts, 2, 31))
+>num : Symbol(num, Decl(keyofDoesntContainSymbols.ts, 1, 5))
+>num : Symbol(num, Decl(keyofDoesntContainSymbols.ts, 1, 5))
+>[sym] : Symbol([sym], Decl(keyofDoesntContainSymbols.ts, 2, 48))
+>sym : Symbol(sym, Decl(keyofDoesntContainSymbols.ts, 0, 5))
+>sym : Symbol(sym, Decl(keyofDoesntContainSymbols.ts, 0, 5))
+
+function set <T extends object, K extends keyof T> (obj: T, key: K, value: T[K]): T[K] {
+>set : Symbol(set, Decl(keyofDoesntContainSymbols.ts, 2, 62))
+>T : Symbol(T, Decl(keyofDoesntContainSymbols.ts, 4, 14))
+>K : Symbol(K, Decl(keyofDoesntContainSymbols.ts, 4, 31))
+>T : Symbol(T, Decl(keyofDoesntContainSymbols.ts, 4, 14))
+>obj : Symbol(obj, Decl(keyofDoesntContainSymbols.ts, 4, 52))
+>T : Symbol(T, Decl(keyofDoesntContainSymbols.ts, 4, 14))
+>key : Symbol(key, Decl(keyofDoesntContainSymbols.ts, 4, 59))
+>K : Symbol(K, Decl(keyofDoesntContainSymbols.ts, 4, 31))
+>value : Symbol(value, Decl(keyofDoesntContainSymbols.ts, 4, 67))
+>T : Symbol(T, Decl(keyofDoesntContainSymbols.ts, 4, 14))
+>K : Symbol(K, Decl(keyofDoesntContainSymbols.ts, 4, 31))
+>T : Symbol(T, Decl(keyofDoesntContainSymbols.ts, 4, 14))
+>K : Symbol(K, Decl(keyofDoesntContainSymbols.ts, 4, 31))
+
+  return obj[key] = value;
+>obj : Symbol(obj, Decl(keyofDoesntContainSymbols.ts, 4, 52))
+>key : Symbol(key, Decl(keyofDoesntContainSymbols.ts, 4, 59))
+>value : Symbol(value, Decl(keyofDoesntContainSymbols.ts, 4, 67))
+}
+
+const val = set(obj, 'str', '');
+>val : Symbol(val, Decl(keyofDoesntContainSymbols.ts, 8, 5))
+>set : Symbol(set, Decl(keyofDoesntContainSymbols.ts, 2, 62))
+>obj : Symbol(obj, Decl(keyofDoesntContainSymbols.ts, 2, 5))
+
+// string
+const valB = set(obj, 'num', '');
+>valB : Symbol(valB, Decl(keyofDoesntContainSymbols.ts, 10, 5))
+>set : Symbol(set, Decl(keyofDoesntContainSymbols.ts, 2, 62))
+>obj : Symbol(obj, Decl(keyofDoesntContainSymbols.ts, 2, 5))
+
+// Expect type error
+// Argument of type '""' is not assignable to parameter of type 'number'.
+const valC = set(obj, sym, sym);
+>valC : Symbol(valC, Decl(keyofDoesntContainSymbols.ts, 13, 5))
+>set : Symbol(set, Decl(keyofDoesntContainSymbols.ts, 2, 62))
+>obj : Symbol(obj, Decl(keyofDoesntContainSymbols.ts, 2, 5))
+>sym : Symbol(sym, Decl(keyofDoesntContainSymbols.ts, 0, 5))
+>sym : Symbol(sym, Decl(keyofDoesntContainSymbols.ts, 0, 5))
+
+// Expect type error
+// Argument of type 'unique symbol' is not assignable to parameter of type "str" | "num"
+const valD = set(obj, num, num);
+>valD : Symbol(valD, Decl(keyofDoesntContainSymbols.ts, 16, 5))
+>set : Symbol(set, Decl(keyofDoesntContainSymbols.ts, 2, 62))
+>obj : Symbol(obj, Decl(keyofDoesntContainSymbols.ts, 2, 5))
+>num : Symbol(num, Decl(keyofDoesntContainSymbols.ts, 1, 5))
+>num : Symbol(num, Decl(keyofDoesntContainSymbols.ts, 1, 5))
+
+// Expect type error
+// Argument of type '0' is not assignable to parameter of type "str" | "num"
+type KeyofObj = keyof typeof obj;
+>KeyofObj : Symbol(KeyofObj, Decl(keyofDoesntContainSymbols.ts, 16, 32))
+>obj : Symbol(obj, Decl(keyofDoesntContainSymbols.ts, 2, 5))
+
+// "str" | "num"
+type Values<T> = T[keyof T];
+>Values : Symbol(Values, Decl(keyofDoesntContainSymbols.ts, 19, 33))
+>T : Symbol(T, Decl(keyofDoesntContainSymbols.ts, 21, 12))
+>T : Symbol(T, Decl(keyofDoesntContainSymbols.ts, 21, 12))
+>T : Symbol(T, Decl(keyofDoesntContainSymbols.ts, 21, 12))
+
+type ValuesOfObj = Values<typeof obj>;
+>ValuesOfObj : Symbol(ValuesOfObj, Decl(keyofDoesntContainSymbols.ts, 21, 28))
+>Values : Symbol(Values, Decl(keyofDoesntContainSymbols.ts, 19, 33))
+>obj : Symbol(obj, Decl(keyofDoesntContainSymbols.ts, 2, 5))
+

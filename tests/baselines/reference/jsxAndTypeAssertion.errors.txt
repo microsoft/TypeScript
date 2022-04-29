@@ -1,0 +1,93 @@
+tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(6,6): error TS17008: JSX element 'any' has no corresponding closing tag.
+tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(6,13): error TS2582: Cannot find name 'test'. Do you need to install type definitions for a test runner? Try `npm i --save-dev @types/jest` or `npm i --save-dev @types/mocha`.
+tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(6,17): error TS1005: '}' expected.
+tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(6,31): error TS1381: Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(8,6): error TS17008: JSX element 'any' has no corresponding closing tag.
+tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(10,6): error TS17008: JSX element 'foo' has no corresponding closing tag.
+tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(10,24): error TS1381: Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(10,32): error TS1005: '}' expected.
+tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(12,23): error TS1381: Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(12,24): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(12,36): error TS1005: '}' expected.
+tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(14,17): error TS17008: JSX element 'foo' has no corresponding closing tag.
+tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(14,23): error TS1381: Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(14,24): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(14,38): error TS1381: Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(14,45): error TS1005: '}' expected.
+tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(18,2): error TS17008: JSX element 'foo' has no corresponding closing tag.
+tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(18,8): error TS17008: JSX element 'foo' has no corresponding closing tag.
+tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(18,13): error TS17008: JSX element 'foo' has no corresponding closing tag.
+tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(18,69): error TS1381: Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(18,76): error TS1381: Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(21,1): error TS1005: ':' expected.
+tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(21,1): error TS1005: '</' expected.
+
+
+==== tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx (23 errors) ====
+    declare var createElement: any;
+    
+    class foo {}
+    
+    var x: any;
+    x = <any> { test: <any></any> };
+         ~~~
+!!! error TS17008: JSX element 'any' has no corresponding closing tag.
+                ~~~~
+!!! error TS2582: Cannot find name 'test'. Do you need to install type definitions for a test runner? Try `npm i --save-dev @types/jest` or `npm i --save-dev @types/mocha`.
+                    ~
+!!! error TS1005: '}' expected.
+                                  ~
+!!! error TS1381: Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+    
+    x = <any><any></any>;
+         ~~~
+!!! error TS17008: JSX element 'any' has no corresponding closing tag.
+     
+    x = <foo>hello {<foo>{}} </foo>;
+         ~~~
+!!! error TS17008: JSX element 'foo' has no corresponding closing tag.
+                           ~
+!!! error TS1381: Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+                                   ~
+!!! error TS1005: '}' expected.
+    
+    x = <foo test={<foo>{}}>hello</foo>;
+                          ~
+!!! error TS1381: Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+                           ~
+!!! error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+                                       ~
+!!! error TS1005: '}' expected.
+    
+    x = <foo test={<foo>{}}>hello{<foo>{}}</foo>;
+                    ~~~
+!!! error TS17008: JSX element 'foo' has no corresponding closing tag.
+                          ~
+!!! error TS1381: Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+                           ~
+!!! error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+                                         ~
+!!! error TS1381: Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+                                                ~
+!!! error TS1005: '}' expected.
+    
+    x = <foo>x</foo>, x = <foo/>;
+    
+    <foo>{<foo><foo>{/foo/.test(x) ? <foo><foo></foo> : <foo><foo></foo>}</foo>}</foo>
+     ~~~
+!!! error TS17008: JSX element 'foo' has no corresponding closing tag.
+           ~~~
+!!! error TS17008: JSX element 'foo' has no corresponding closing tag.
+                ~~~
+!!! error TS17008: JSX element 'foo' has no corresponding closing tag.
+                                                                        ~
+!!! error TS1381: Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+                                                                               ~
+!!! error TS1381: Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+    
+        
+    
+    
+!!! error TS1005: ':' expected.
+    
+!!! error TS1005: '</' expected.

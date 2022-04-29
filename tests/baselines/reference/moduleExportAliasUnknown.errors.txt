@@ -1,0 +1,12 @@
+tests/cases/conformance/salsa/bug27025.js(1,25): error TS2339: Property 'nonprop' does not exist on type 'Window & typeof globalThis'.
+tests/cases/conformance/salsa/bug27025.js(2,15): error TS2304: Cannot find name 'bar'.
+
+
+==== tests/cases/conformance/salsa/bug27025.js (2 errors) ====
+    module.exports = window.nonprop;
+                            ~~~~~~~
+!!! error TS2339: Property 'nonprop' does not exist on type 'Window & typeof globalThis'.
+    exports.foo = bar;
+                  ~~~
+!!! error TS2304: Cannot find name 'bar'.
+    

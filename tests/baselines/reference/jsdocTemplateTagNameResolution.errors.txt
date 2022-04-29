@@ -1,0 +1,16 @@
+tests/cases/conformance/jsdoc/file.js(10,7): error TS2322: Type 'string' is not assignable to type 'number'.
+
+
+==== tests/cases/conformance/jsdoc/file.js (1 errors) ====
+    /**
+     * @template T
+     * @template {keyof T} K
+     * @typedef {T[K]} Foo
+     */
+    
+    const x = { a: 1 };
+    
+    /** @type {Foo<typeof x, "a">} */
+    const y = "a";
+          ~
+!!! error TS2322: Type 'string' is not assignable to type 'number'.

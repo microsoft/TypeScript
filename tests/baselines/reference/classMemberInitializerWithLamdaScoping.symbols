@@ -1,0 +1,83 @@
+=== tests/cases/compiler/classMemberInitializerWithLamdaScoping.ts ===
+declare var console: {
+>console : Symbol(console, Decl(classMemberInitializerWithLamdaScoping.ts, 0, 11))
+
+    log(msg?: any): void;
+>log : Symbol(log, Decl(classMemberInitializerWithLamdaScoping.ts, 0, 22))
+>msg : Symbol(msg, Decl(classMemberInitializerWithLamdaScoping.ts, 1, 8))
+
+};
+class Test {
+>Test : Symbol(Test, Decl(classMemberInitializerWithLamdaScoping.ts, 2, 2))
+
+    constructor(private field: string) {
+>field : Symbol(Test.field, Decl(classMemberInitializerWithLamdaScoping.ts, 4, 16))
+    }
+    messageHandler = () => {
+>messageHandler : Symbol(Test.messageHandler, Decl(classMemberInitializerWithLamdaScoping.ts, 5, 5))
+
+        var field = this.field;
+>field : Symbol(field, Decl(classMemberInitializerWithLamdaScoping.ts, 7, 11))
+>this.field : Symbol(Test.field, Decl(classMemberInitializerWithLamdaScoping.ts, 4, 16))
+>this : Symbol(Test, Decl(classMemberInitializerWithLamdaScoping.ts, 2, 2))
+>field : Symbol(Test.field, Decl(classMemberInitializerWithLamdaScoping.ts, 4, 16))
+
+        console.log(field); // Using field here shouldnt be error
+>console.log : Symbol(log, Decl(classMemberInitializerWithLamdaScoping.ts, 0, 22))
+>console : Symbol(console, Decl(classMemberInitializerWithLamdaScoping.ts, 0, 11))
+>log : Symbol(log, Decl(classMemberInitializerWithLamdaScoping.ts, 0, 22))
+>field : Symbol(field, Decl(classMemberInitializerWithLamdaScoping.ts, 7, 11))
+
+    };
+    static field: number;
+>field : Symbol(Test.field, Decl(classMemberInitializerWithLamdaScoping.ts, 9, 6))
+
+    static staticMessageHandler = () => {
+>staticMessageHandler : Symbol(Test.staticMessageHandler, Decl(classMemberInitializerWithLamdaScoping.ts, 10, 25))
+
+        var field = Test.field;
+>field : Symbol(field, Decl(classMemberInitializerWithLamdaScoping.ts, 12, 11))
+>Test.field : Symbol(Test.field, Decl(classMemberInitializerWithLamdaScoping.ts, 9, 6))
+>Test : Symbol(Test, Decl(classMemberInitializerWithLamdaScoping.ts, 2, 2))
+>field : Symbol(Test.field, Decl(classMemberInitializerWithLamdaScoping.ts, 9, 6))
+
+        console.log(field); // Using field here shouldnt be error
+>console.log : Symbol(log, Decl(classMemberInitializerWithLamdaScoping.ts, 0, 22))
+>console : Symbol(console, Decl(classMemberInitializerWithLamdaScoping.ts, 0, 11))
+>log : Symbol(log, Decl(classMemberInitializerWithLamdaScoping.ts, 0, 22))
+>field : Symbol(field, Decl(classMemberInitializerWithLamdaScoping.ts, 12, 11))
+
+    };
+}
+
+var field1: string;
+>field1 : Symbol(field1, Decl(classMemberInitializerWithLamdaScoping.ts, 17, 3))
+
+class Test1 {
+>Test1 : Symbol(Test1, Decl(classMemberInitializerWithLamdaScoping.ts, 17, 19))
+
+    constructor(private field1: string) {
+>field1 : Symbol(Test1.field1, Decl(classMemberInitializerWithLamdaScoping.ts, 19, 16))
+    }
+    messageHandler = () => {
+>messageHandler : Symbol(Test1.messageHandler, Decl(classMemberInitializerWithLamdaScoping.ts, 20, 5))
+
+        console.log(field1); // But this should be error as the field1 will resolve to var field1 
+>console.log : Symbol(log, Decl(classMemberInitializerWithLamdaScoping.ts, 0, 22))
+>console : Symbol(console, Decl(classMemberInitializerWithLamdaScoping.ts, 0, 11))
+>log : Symbol(log, Decl(classMemberInitializerWithLamdaScoping.ts, 0, 22))
+
+                             // but since this code would be generated inside constructor, in generated js
+                             // it would resolve to private field1 and thats not what user intended here. 
+    };
+    static staticMessageHandler = () => {
+>staticMessageHandler : Symbol(Test1.staticMessageHandler, Decl(classMemberInitializerWithLamdaScoping.ts, 25, 6))
+
+        console.log(field1); // This shouldnt be error as its a static property
+>console.log : Symbol(log, Decl(classMemberInitializerWithLamdaScoping.ts, 0, 22))
+>console : Symbol(console, Decl(classMemberInitializerWithLamdaScoping.ts, 0, 11))
+>log : Symbol(log, Decl(classMemberInitializerWithLamdaScoping.ts, 0, 22))
+>field1 : Symbol(field1, Decl(classMemberInitializerWithLamdaScoping.ts, 17, 3))
+
+    };
+}

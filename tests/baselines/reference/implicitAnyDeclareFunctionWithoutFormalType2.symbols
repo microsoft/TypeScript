@@ -1,0 +1,32 @@
+=== tests/cases/compiler/implicitAnyDeclareFunctionWithoutFormalType2.ts ===
+// generates function fn1(): number;
+function fn1() {
+>fn1 : Symbol(fn1, Decl(implicitAnyDeclareFunctionWithoutFormalType2.ts, 0, 0))
+
+    var x: number;
+>x : Symbol(x, Decl(implicitAnyDeclareFunctionWithoutFormalType2.ts, 2, 7))
+
+    return x;
+>x : Symbol(x, Decl(implicitAnyDeclareFunctionWithoutFormalType2.ts, 2, 7))
+}
+// generates function fn2(): any;
+function fn2(): any {
+>fn2 : Symbol(fn2, Decl(implicitAnyDeclareFunctionWithoutFormalType2.ts, 4, 1))
+
+    var x: any;
+>x : Symbol(x, Decl(implicitAnyDeclareFunctionWithoutFormalType2.ts, 7, 7))
+
+    return x;
+>x : Symbol(x, Decl(implicitAnyDeclareFunctionWithoutFormalType2.ts, 7, 7))
+}
+// generates function fn3();
+function fn3() {
+>fn3 : Symbol(fn3, Decl(implicitAnyDeclareFunctionWithoutFormalType2.ts, 9, 1))
+
+    var x: any;
+>x : Symbol(x, Decl(implicitAnyDeclareFunctionWithoutFormalType2.ts, 12, 7))
+
+    return x;
+>x : Symbol(x, Decl(implicitAnyDeclareFunctionWithoutFormalType2.ts, 12, 7))
+}
+

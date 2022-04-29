@@ -1,0 +1,13 @@
+=== tests/cases/conformance/scanner/ecmascript5/scannerStringLiterals.ts ===
+""
+No type information for this code." "
+No type information for this code."a"
+No type information for this code."'"
+No type information for this code.'"'
+No type information for this code."\""
+No type information for this code.'\u2192\   '
+No type information for this code."Legal line continuation \
+No type information for this code."
+No type information for this code."Should error because of newline.
+No type information for this code."Should error because of end of file.
+No type information for this code.

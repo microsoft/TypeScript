@@ -1,0 +1,31 @@
+=== tests/cases/compiler/typeConstraintsWithConstructSignatures.ts ===
+interface Constructable {
+    new (): any;
+}
+
+class C<T extends Constructable> {
+>C : C<T>
+
+    constructor(public data: T, public data2: Constructable) { }
+>data : T
+>data2 : Constructable
+
+    create() {
+>create : () => void
+
+        var x = new this.data(); // should not error
+>x : any
+>new this.data() : any
+>this.data : T
+>this : this
+>data : T
+
+        var x2 = new this.data2(); // should not error
+>x2 : any
+>new this.data2() : any
+>this.data2 : Constructable
+>this : this
+>data2 : Constructable
+    }
+}
+

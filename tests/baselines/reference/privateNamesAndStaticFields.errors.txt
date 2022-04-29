@@ -1,0 +1,31 @@
+tests/cases/conformance/classes/members/privateNames/privateNamesAndStaticFields.ts(6,11): error TS18013: Property '#foo' is not accessible outside class 'B' because it has a private identifier.
+tests/cases/conformance/classes/members/privateNames/privateNamesAndStaticFields.ts(7,11): error TS2339: Property '#bar' does not exist on type 'typeof B'.
+
+
+==== tests/cases/conformance/classes/members/privateNames/privateNamesAndStaticFields.ts (2 errors) ====
+    class A {
+        static #foo: number;
+        static #bar: number;
+        constructor () {
+            A.#foo = 3;
+            B.#foo; // Error
+              ~~~~
+!!! error TS18013: Property '#foo' is not accessible outside class 'B' because it has a private identifier.
+            B.#bar; // Error
+              ~~~~
+!!! error TS2339: Property '#bar' does not exist on type 'typeof B'.
+        }
+    }
+    
+    class B extends A {
+        static #foo: string;
+        constructor () {
+            super();
+            B.#foo = "some string";
+        }
+    }
+    
+    // We currently filter out static private identifier fields in `getUnmatchedProperties`.
+    // We will need a more robust solution when we support static fields
+    const willErrorSomeDay: typeof A = class {}; // OK for now
+    

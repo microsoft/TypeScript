@@ -1,0 +1,12 @@
+=== tests/cases/compiler/shorthandOfExportedEntity01_targetES2015_CommonJS.ts ===
+export const test = "test";
+>test : Symbol(test, Decl(shorthandOfExportedEntity01_targetES2015_CommonJS.ts, 0, 12))
+
+export function foo () {
+>foo : Symbol(foo, Decl(shorthandOfExportedEntity01_targetES2015_CommonJS.ts, 0, 27))
+
+  const x = { test };
+>x : Symbol(x, Decl(shorthandOfExportedEntity01_targetES2015_CommonJS.ts, 3, 7))
+>test : Symbol(test, Decl(shorthandOfExportedEntity01_targetES2015_CommonJS.ts, 3, 13))
+}
+

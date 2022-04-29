@@ -1,0 +1,66 @@
+=== tests/cases/compiler/genericTypeAssertions5.ts ===
+interface A {
+    foo(): string;
+>foo : () => string
+}
+
+interface B extends A {
+    bar(): number;
+>bar : () => number
+}
+
+interface C extends A {
+    baz(): number;
+>baz : () => number
+}
+
+var a: A;
+>a : A
+
+var b: B;
+>b : B
+
+var c: C;
+>c : C
+
+function foo2<T extends A>(x: T) {
+>foo2 : <T extends A>(x: T) => void
+>x : T
+
+    var y = x;
+>y : T
+>x : T
+
+    y = a; // error: cannot convert A to T
+>y = a : A
+>y : T
+>a : A
+
+    y = b; // error: cannot convert B to T
+>y = b : B
+>y : T
+>b : B
+
+    y = c; // error: cannot convert C to T
+>y = c : C
+>y : T
+>c : C
+
+    y = <T>a;
+>y = <T>a : T
+>y : T
+><T>a : T
+>a : A
+
+    y = <T>b; // error: cannot convert B to T
+>y = <T>b : T
+>y : T
+><T>b : T
+>b : B
+
+    y = <T>c; // error: cannot convert C to T
+>y = <T>c : T
+>y : T
+><T>c : T
+>c : C
+}

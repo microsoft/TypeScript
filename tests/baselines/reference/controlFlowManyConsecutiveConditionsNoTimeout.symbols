@@ -1,0 +1,506 @@
+=== tests/cases/compiler/controlFlowManyConsecutiveConditionsNoTimeout.ts ===
+export enum Choice {
+>Choice : Symbol(Choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 0, 0))
+
+    One,
+>One : Symbol(Choice.One, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 0, 20))
+
+    Two,
+>Two : Symbol(Choice.Two, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 1, 8))
+}
+
+const choice: Choice = Choice.One;
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>Choice : Symbol(Choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 0, 0))
+>Choice.One : Symbol(Choice.One, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 0, 20))
+>Choice : Symbol(Choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 0, 0))
+>One : Symbol(Choice.One, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 0, 20))
+
+const choiceOne = Choice.One;
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+>Choice.One : Symbol(Choice.One, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 0, 20))
+>Choice : Symbol(Choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 0, 0))
+>One : Symbol(Choice.One, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 0, 20))
+
+if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+if (choice === choiceOne) {} 
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+while (true) {
+    if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+    if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+    if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+    if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+    if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+    if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+    if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+    if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+    if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+    if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+    if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+    if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+    if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+    if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+    if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+    if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+    if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+    if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+    if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+    if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+    if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+    if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+    if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+    if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+    if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+    if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+    if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+    if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+    if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+    if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+    if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+    if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+    if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+    if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+    if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+    if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+    if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+    if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+    if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+    if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+    if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+    if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+    if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+    if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+    if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+    if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+    if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+    if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+    if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+    if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+    if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+    if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+    if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+    if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+    if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+    if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+    if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+    if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+    if (choice === choiceOne) {}
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+
+    if (choice === choiceOne) {} 
+>choice : Symbol(choice, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 5, 5))
+>choiceOne : Symbol(choiceOne, Decl(controlFlowManyConsecutiveConditionsNoTimeout.ts, 6, 5))
+}
+

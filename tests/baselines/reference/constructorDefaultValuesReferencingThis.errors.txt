@@ -1,0 +1,23 @@
+tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorDefaultValuesReferencingThis.ts(2,21): error TS2333: 'this' cannot be referenced in constructor arguments.
+tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorDefaultValuesReferencingThis.ts(6,21): error TS2333: 'this' cannot be referenced in constructor arguments.
+tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorDefaultValuesReferencingThis.ts(10,28): error TS2333: 'this' cannot be referenced in constructor arguments.
+
+
+==== tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorDefaultValuesReferencingThis.ts (3 errors) ====
+    class C {
+        constructor(x = this) { }
+                        ~~~~
+!!! error TS2333: 'this' cannot be referenced in constructor arguments.
+    }
+    
+    class D<T> {
+        constructor(x = this) { }
+                        ~~~~
+!!! error TS2333: 'this' cannot be referenced in constructor arguments.
+    }
+    
+    class E<T> {
+        constructor(public x = this) { }
+                               ~~~~
+!!! error TS2333: 'this' cannot be referenced in constructor arguments.
+    }

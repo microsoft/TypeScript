@@ -1,0 +1,73 @@
+=== tests/cases/conformance/salsa/mod.js ===
+// Based on a pattern from adonis
+exports.formatters = {}
+>exports.formatters = {} : {}
+>exports.formatters : {}
+>exports : typeof import("tests/cases/conformance/salsa/mod")
+>formatters : {}
+>{} : {}
+
+=== tests/cases/conformance/salsa/first.js ===
+exports = require('./mod')
+>exports = require('./mod') : typeof import("tests/cases/conformance/salsa/mod")
+>exports : typeof import("tests/cases/conformance/salsa/first")
+>require('./mod') : typeof import("tests/cases/conformance/salsa/mod")
+>require : any
+>'./mod' : "./mod"
+
+exports.formatters.j = function (v) {
+>exports.formatters.j = function (v) {    return v} : (v: any) => any
+>exports.formatters.j : any
+>exports.formatters : any
+>exports : typeof import("tests/cases/conformance/salsa/first")
+>formatters : any
+>j : any
+>function (v) {    return v} : (v: any) => any
+>v : any
+
+    return v
+>v : any
+}
+=== tests/cases/conformance/salsa/second.js ===
+exports = require('./mod')
+>exports = require('./mod') : typeof import("tests/cases/conformance/salsa/mod")
+>exports : typeof import("tests/cases/conformance/salsa/second")
+>require('./mod') : typeof import("tests/cases/conformance/salsa/mod")
+>require : any
+>'./mod' : "./mod"
+
+exports.formatters.o = function (v) {
+>exports.formatters.o = function (v) {    return v} : (v: any) => any
+>exports.formatters.o : any
+>exports.formatters : any
+>exports : typeof import("tests/cases/conformance/salsa/second")
+>formatters : any
+>o : any
+>function (v) {    return v} : (v: any) => any
+>v : any
+
+    return v
+>v : any
+}
+
+=== tests/cases/conformance/salsa/use.js ===
+import * as debug from './mod'
+>debug : typeof debug
+
+debug.formatters.j
+>debug.formatters.j : any
+>debug.formatters : {}
+>debug : typeof debug
+>formatters : {}
+>j : any
+
+var one = debug.formatters.o(1)
+>one : any
+>debug.formatters.o(1) : any
+>debug.formatters.o : any
+>debug.formatters : {}
+>debug : typeof debug
+>formatters : {}
+>o : any
+>1 : 1
+

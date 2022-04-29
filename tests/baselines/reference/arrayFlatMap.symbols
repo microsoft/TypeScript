@@ -1,0 +1,20 @@
+=== tests/cases/compiler/arrayFlatMap.ts ===
+const array: number[] = [];
+>array : Symbol(array, Decl(arrayFlatMap.ts, 0, 5))
+
+const readonlyArray: ReadonlyArray<number> = [];
+>readonlyArray : Symbol(readonlyArray, Decl(arrayFlatMap.ts, 1, 5))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --), Decl(lib.es2019.array.d.ts, --, --))
+
+array.flatMap((): ReadonlyArray<number> => []); // ok
+>array.flatMap : Symbol(Array.flatMap, Decl(lib.es2019.array.d.ts, --, --))
+>array : Symbol(array, Decl(arrayFlatMap.ts, 0, 5))
+>flatMap : Symbol(Array.flatMap, Decl(lib.es2019.array.d.ts, --, --))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --), Decl(lib.es2019.array.d.ts, --, --))
+
+readonlyArray.flatMap((): ReadonlyArray<number> => []); // ok
+>readonlyArray.flatMap : Symbol(ReadonlyArray.flatMap, Decl(lib.es2019.array.d.ts, --, --))
+>readonlyArray : Symbol(readonlyArray, Decl(arrayFlatMap.ts, 1, 5))
+>flatMap : Symbol(ReadonlyArray.flatMap, Decl(lib.es2019.array.d.ts, --, --))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --), Decl(lib.es2019.array.d.ts, --, --))
+

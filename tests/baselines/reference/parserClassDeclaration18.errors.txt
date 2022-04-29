@@ -1,0 +1,13 @@
+tests/cases/conformance/parser/ecmascript5/ClassDeclarations/parserClassDeclaration18.ts(4,25): error TS1183: An implementation cannot be declared in ambient contexts.
+
+
+==== tests/cases/conformance/parser/ecmascript5/ClassDeclarations/parserClassDeclaration18.ts (1 errors) ====
+    declare class FooBase {
+        constructor(s: string);
+        constructor(n: number);
+        constructor(x: any) {
+                            ~
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
+        }
+        bar1():void;
+    }

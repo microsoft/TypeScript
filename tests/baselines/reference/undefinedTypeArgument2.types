@@ -1,0 +1,16 @@
+=== tests/cases/compiler/undefinedTypeArgument2.ts ===
+// once caused stack overflow
+interface Query<T> {
+    selectMany<U>(selector: (item: T) => U[]): Query<U>;
+>selectMany : { <U>(selector: (item: T) => U[]): Query<U>; <U>(arraySelector: (item: T) => U[], resultSelector: (outer: T, inner: U) => R): Query<R>; }
+>selector : (item: T) => U[]
+>item : T
+
+    selectMany<U>(arraySelector: (item: T) => U[], resultSelector: (outer: T, inner: U) => R): Query<R>;
+>selectMany : { <U>(selector: (item: T) => U[]): Query<U>; <U>(arraySelector: (item: T) => U[], resultSelector: (outer: T, inner: U) => R): Query<R>; }
+>arraySelector : (item: T) => U[]
+>item : T
+>resultSelector : (outer: T, inner: U) => R
+>outer : T
+>inner : U
+}

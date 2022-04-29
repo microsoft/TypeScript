@@ -1,0 +1,176 @@
+=== tests/cases/compiler/targetTypeTest1.ts ===
+declare class Point
+>Point : Symbol(Point, Decl(targetTypeTest1.ts, 8, 1), Decl(targetTypeTest1.ts, 0, 0), Decl(targetTypeTest1.ts, 22, 17))
+{
+      constructor(x: number, y: number);
+>x : Symbol(x, Decl(targetTypeTest1.ts, 2, 18))
+>y : Symbol(y, Decl(targetTypeTest1.ts, 2, 28))
+
+      public x: number;
+>x : Symbol(Point.x, Decl(targetTypeTest1.ts, 2, 40))
+
+      public y: number;
+>y : Symbol(Point.y, Decl(targetTypeTest1.ts, 3, 23))
+
+      public add(dx: number, dy: number): Point;
+>add : Symbol(Point.add, Decl(targetTypeTest1.ts, 4, 23))
+>dx : Symbol(dx, Decl(targetTypeTest1.ts, 5, 17))
+>dy : Symbol(dy, Decl(targetTypeTest1.ts, 5, 28))
+>Point : Symbol(Point, Decl(targetTypeTest1.ts, 8, 1), Decl(targetTypeTest1.ts, 0, 0), Decl(targetTypeTest1.ts, 22, 17))
+
+      static origin: Point;
+>origin : Symbol(Point.origin, Decl(targetTypeTest1.ts, 5, 48), Decl(targetTypeTest1.ts, 22, 17))
+>Point : Symbol(Point, Decl(targetTypeTest1.ts, 8, 1), Decl(targetTypeTest1.ts, 0, 0), Decl(targetTypeTest1.ts, 22, 17))
+
+}
+
+// Type provided by extern declaration
+// Because Point is a constructor function, this is inferred
+// to be Point and return type is inferred to be void
+function Point(x, y) {
+>Point : Symbol(Point, Decl(targetTypeTest1.ts, 8, 1), Decl(targetTypeTest1.ts, 0, 0), Decl(targetTypeTest1.ts, 22, 17))
+>x : Symbol(x, Decl(targetTypeTest1.ts, 13, 15))
+>y : Symbol(y, Decl(targetTypeTest1.ts, 13, 17))
+
+    this.x = x;
+>x : Symbol(x, Decl(targetTypeTest1.ts, 13, 15))
+
+    this.y = y;
+>y : Symbol(y, Decl(targetTypeTest1.ts, 13, 17))
+}
+
+declare function EF1(a:number, b:number):number;
+>EF1 : Symbol(EF1, Decl(targetTypeTest1.ts, 16, 1), Decl(targetTypeTest1.ts, 18, 48))
+>a : Symbol(a, Decl(targetTypeTest1.ts, 18, 21))
+>b : Symbol(b, Decl(targetTypeTest1.ts, 18, 30))
+
+function EF1(a,b) { return a+b; }
+>EF1 : Symbol(EF1, Decl(targetTypeTest1.ts, 16, 1), Decl(targetTypeTest1.ts, 18, 48))
+>a : Symbol(a, Decl(targetTypeTest1.ts, 20, 13))
+>b : Symbol(b, Decl(targetTypeTest1.ts, 20, 15))
+>a : Symbol(a, Decl(targetTypeTest1.ts, 20, 13))
+>b : Symbol(b, Decl(targetTypeTest1.ts, 20, 15))
+
+var x = EF1(1,2);
+>x : Symbol(x, Decl(targetTypeTest1.ts, 22, 3))
+>EF1 : Symbol(EF1, Decl(targetTypeTest1.ts, 16, 1), Decl(targetTypeTest1.ts, 18, 48))
+
+// Point.origin declared as type Point
+Point.origin = new Point(0, 0);
+>Point.origin : Symbol(Point.origin, Decl(targetTypeTest1.ts, 5, 48), Decl(targetTypeTest1.ts, 22, 17))
+>Point : Symbol(Point, Decl(targetTypeTest1.ts, 8, 1), Decl(targetTypeTest1.ts, 0, 0), Decl(targetTypeTest1.ts, 22, 17))
+>origin : Symbol(Point.origin, Decl(targetTypeTest1.ts, 5, 48), Decl(targetTypeTest1.ts, 22, 17))
+>Point : Symbol(Point, Decl(targetTypeTest1.ts, 8, 1), Decl(targetTypeTest1.ts, 0, 0), Decl(targetTypeTest1.ts, 22, 17))
+
+// Point.prototype declared as type Point
+// this inferred as Point because of obj.prop assignment
+// dx, dy, and return type inferred using target typing
+Point.prototype.add = function(dx, dy) {
+>Point.prototype.add : Symbol(Point.add, Decl(targetTypeTest1.ts, 4, 23))
+>Point.prototype : Symbol(Point.prototype)
+>Point : Symbol(Point, Decl(targetTypeTest1.ts, 8, 1), Decl(targetTypeTest1.ts, 0, 0), Decl(targetTypeTest1.ts, 22, 17))
+>prototype : Symbol(Point.prototype)
+>add : Symbol(Point.add, Decl(targetTypeTest1.ts, 4, 23))
+>dx : Symbol(dx, Decl(targetTypeTest1.ts, 30, 31))
+>dy : Symbol(dy, Decl(targetTypeTest1.ts, 30, 34))
+
+    return new Point(this.x + dx, this.y + dy);
+>Point : Symbol(Point, Decl(targetTypeTest1.ts, 8, 1), Decl(targetTypeTest1.ts, 0, 0), Decl(targetTypeTest1.ts, 22, 17))
+>dx : Symbol(dx, Decl(targetTypeTest1.ts, 30, 31))
+>dy : Symbol(dy, Decl(targetTypeTest1.ts, 30, 34))
+
+};
+
+var f : number = 5;
+>f : Symbol(f, Decl(targetTypeTest1.ts, 34, 3))
+
+// Object literal type inferred using target typing
+// this in function add inferred to be type of object literal (i.e. Point)
+// dx, dy, and return type of add inferred using target typing
+Point.prototype = {
+>Point.prototype : Symbol(Point.prototype)
+>Point : Symbol(Point, Decl(targetTypeTest1.ts, 8, 1), Decl(targetTypeTest1.ts, 0, 0), Decl(targetTypeTest1.ts, 22, 17))
+>prototype : Symbol(Point.prototype)
+
+    x: 0,
+>x : Symbol(x, Decl(targetTypeTest1.ts, 39, 19))
+
+    y: 0,
+>y : Symbol(y, Decl(targetTypeTest1.ts, 40, 9))
+
+    add: function(dx, dy) {
+>add : Symbol(add, Decl(targetTypeTest1.ts, 41, 9))
+>dx : Symbol(dx, Decl(targetTypeTest1.ts, 42, 18))
+>dy : Symbol(dy, Decl(targetTypeTest1.ts, 42, 21))
+
+        return new Point(this.x + dx, this.y + dy);
+>Point : Symbol(Point, Decl(targetTypeTest1.ts, 8, 1), Decl(targetTypeTest1.ts, 0, 0), Decl(targetTypeTest1.ts, 22, 17))
+>dx : Symbol(dx, Decl(targetTypeTest1.ts, 42, 18))
+>dy : Symbol(dy, Decl(targetTypeTest1.ts, 42, 21))
+    }
+};
+
+declare var z;
+>z : Symbol(z, Decl(targetTypeTest1.ts, 47, 11))
+
+z = function(a: number) {
+>z : Symbol(z, Decl(targetTypeTest1.ts, 47, 11))
+>a : Symbol(a, Decl(targetTypeTest1.ts, 48, 13))
+
+    a
+>a : Symbol(a, Decl(targetTypeTest1.ts, 48, 13))
+}
+
+declare class C {
+>C : Symbol(C, Decl(targetTypeTest1.ts, 57, 1), Decl(targetTypeTest1.ts, 50, 1))
+
+    constructor(a:number, b:number);
+>a : Symbol(a, Decl(targetTypeTest1.ts, 53, 16))
+>b : Symbol(b, Decl(targetTypeTest1.ts, 53, 25))
+
+	public a : number;
+>a : Symbol(C.a, Decl(targetTypeTest1.ts, 53, 36))
+
+	public b: number;    
+>b : Symbol(C.b, Decl(targetTypeTest1.ts, 54, 19))
+
+	C1M1(c:number,d:number):number;
+>C1M1 : Symbol(C.C1M1, Decl(targetTypeTest1.ts, 55, 18))
+>c : Symbol(c, Decl(targetTypeTest1.ts, 56, 6))
+>d : Symbol(d, Decl(targetTypeTest1.ts, 56, 15))
+} 
+
+function C(a,b) {
+>C : Symbol(C, Decl(targetTypeTest1.ts, 57, 1), Decl(targetTypeTest1.ts, 50, 1))
+>a : Symbol(a, Decl(targetTypeTest1.ts, 59, 11))
+>b : Symbol(b, Decl(targetTypeTest1.ts, 59, 13))
+
+	this.a=a;
+>a : Symbol(a, Decl(targetTypeTest1.ts, 59, 11))
+
+	this.b=b;
+>b : Symbol(b, Decl(targetTypeTest1.ts, 59, 13))
+}
+
+C.prototype = 
+>C.prototype : Symbol(C.prototype)
+>C : Symbol(C, Decl(targetTypeTest1.ts, 57, 1), Decl(targetTypeTest1.ts, 50, 1))
+>prototype : Symbol(C.prototype)
+
+	{	a:0,
+>a : Symbol(a, Decl(targetTypeTest1.ts, 65, 2))
+
+		b:0, 
+>b : Symbol(b, Decl(targetTypeTest1.ts, 65, 7))
+
+		C1M1: function(c,d) {     
+>C1M1 : Symbol(C1M1, Decl(targetTypeTest1.ts, 66, 6))
+>c : Symbol(c, Decl(targetTypeTest1.ts, 67, 17))
+>d : Symbol(d, Decl(targetTypeTest1.ts, 67, 19))
+
+				return (this.a + c) + (this.b + d);
+>c : Symbol(c, Decl(targetTypeTest1.ts, 67, 17))
+>d : Symbol(d, Decl(targetTypeTest1.ts, 67, 19))
+			}
+	};
+

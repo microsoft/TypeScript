@@ -1,0 +1,84 @@
+=== tests/cases/compiler/typeInferenceReturnTypeCallback.ts ===
+interface IList<A> {
+>IList : Symbol(IList, Decl(typeInferenceReturnTypeCallback.ts, 0, 0))
+>A : Symbol(A, Decl(typeInferenceReturnTypeCallback.ts, 0, 16))
+
+    map<B>(f: (t: A) => B): IList<B>;
+>map : Symbol(IList.map, Decl(typeInferenceReturnTypeCallback.ts, 0, 20))
+>B : Symbol(B, Decl(typeInferenceReturnTypeCallback.ts, 1, 8))
+>f : Symbol(f, Decl(typeInferenceReturnTypeCallback.ts, 1, 11))
+>t : Symbol(t, Decl(typeInferenceReturnTypeCallback.ts, 1, 15))
+>A : Symbol(A, Decl(typeInferenceReturnTypeCallback.ts, 0, 16))
+>B : Symbol(B, Decl(typeInferenceReturnTypeCallback.ts, 1, 8))
+>IList : Symbol(IList, Decl(typeInferenceReturnTypeCallback.ts, 0, 0))
+>B : Symbol(B, Decl(typeInferenceReturnTypeCallback.ts, 1, 8))
+}
+
+class Nil<C> implements IList<C>{
+>Nil : Symbol(Nil, Decl(typeInferenceReturnTypeCallback.ts, 2, 1))
+>C : Symbol(C, Decl(typeInferenceReturnTypeCallback.ts, 4, 10))
+>IList : Symbol(IList, Decl(typeInferenceReturnTypeCallback.ts, 0, 0))
+>C : Symbol(C, Decl(typeInferenceReturnTypeCallback.ts, 4, 10))
+
+    map<D>(f: (t: C) => D): IList<D> {
+>map : Symbol(Nil.map, Decl(typeInferenceReturnTypeCallback.ts, 4, 33))
+>D : Symbol(D, Decl(typeInferenceReturnTypeCallback.ts, 5, 8))
+>f : Symbol(f, Decl(typeInferenceReturnTypeCallback.ts, 5, 11))
+>t : Symbol(t, Decl(typeInferenceReturnTypeCallback.ts, 5, 15))
+>C : Symbol(C, Decl(typeInferenceReturnTypeCallback.ts, 4, 10))
+>D : Symbol(D, Decl(typeInferenceReturnTypeCallback.ts, 5, 8))
+>IList : Symbol(IList, Decl(typeInferenceReturnTypeCallback.ts, 0, 0))
+>D : Symbol(D, Decl(typeInferenceReturnTypeCallback.ts, 5, 8))
+
+        return null;
+    }
+}
+
+class Cons<T> implements IList<T>{
+>Cons : Symbol(Cons, Decl(typeInferenceReturnTypeCallback.ts, 8, 1))
+>T : Symbol(T, Decl(typeInferenceReturnTypeCallback.ts, 10, 11))
+>IList : Symbol(IList, Decl(typeInferenceReturnTypeCallback.ts, 0, 0))
+>T : Symbol(T, Decl(typeInferenceReturnTypeCallback.ts, 10, 11))
+
+    map<U>(f: (t: T) => U): IList<U> {
+>map : Symbol(Cons.map, Decl(typeInferenceReturnTypeCallback.ts, 10, 34))
+>U : Symbol(U, Decl(typeInferenceReturnTypeCallback.ts, 11, 8))
+>f : Symbol(f, Decl(typeInferenceReturnTypeCallback.ts, 11, 11))
+>t : Symbol(t, Decl(typeInferenceReturnTypeCallback.ts, 11, 15))
+>T : Symbol(T, Decl(typeInferenceReturnTypeCallback.ts, 10, 11))
+>U : Symbol(U, Decl(typeInferenceReturnTypeCallback.ts, 11, 8))
+>IList : Symbol(IList, Decl(typeInferenceReturnTypeCallback.ts, 0, 0))
+>U : Symbol(U, Decl(typeInferenceReturnTypeCallback.ts, 11, 8))
+
+        return this.foldRight(new Nil<U>(), (t, acc) => {
+>this.foldRight : Symbol(Cons.foldRight, Decl(typeInferenceReturnTypeCallback.ts, 15, 5))
+>this : Symbol(Cons, Decl(typeInferenceReturnTypeCallback.ts, 8, 1))
+>foldRight : Symbol(Cons.foldRight, Decl(typeInferenceReturnTypeCallback.ts, 15, 5))
+>Nil : Symbol(Nil, Decl(typeInferenceReturnTypeCallback.ts, 2, 1))
+>U : Symbol(U, Decl(typeInferenceReturnTypeCallback.ts, 11, 8))
+>t : Symbol(t, Decl(typeInferenceReturnTypeCallback.ts, 12, 45))
+>acc : Symbol(acc, Decl(typeInferenceReturnTypeCallback.ts, 12, 47))
+
+            return new Cons<U>();
+>Cons : Symbol(Cons, Decl(typeInferenceReturnTypeCallback.ts, 8, 1))
+>U : Symbol(U, Decl(typeInferenceReturnTypeCallback.ts, 11, 8))
+
+        });
+    }
+
+    foldRight<E>(z: E, f: (t: T, acc: E) => E): E {
+>foldRight : Symbol(Cons.foldRight, Decl(typeInferenceReturnTypeCallback.ts, 15, 5))
+>E : Symbol(E, Decl(typeInferenceReturnTypeCallback.ts, 17, 14))
+>z : Symbol(z, Decl(typeInferenceReturnTypeCallback.ts, 17, 17))
+>E : Symbol(E, Decl(typeInferenceReturnTypeCallback.ts, 17, 14))
+>f : Symbol(f, Decl(typeInferenceReturnTypeCallback.ts, 17, 22))
+>t : Symbol(t, Decl(typeInferenceReturnTypeCallback.ts, 17, 27))
+>T : Symbol(T, Decl(typeInferenceReturnTypeCallback.ts, 10, 11))
+>acc : Symbol(acc, Decl(typeInferenceReturnTypeCallback.ts, 17, 32))
+>E : Symbol(E, Decl(typeInferenceReturnTypeCallback.ts, 17, 14))
+>E : Symbol(E, Decl(typeInferenceReturnTypeCallback.ts, 17, 14))
+>E : Symbol(E, Decl(typeInferenceReturnTypeCallback.ts, 17, 14))
+
+        return null;
+    }
+}

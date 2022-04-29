@@ -1,0 +1,95 @@
+=== tests/cases/conformance/statements/for-await-ofStatements/file1.ts ===
+async function f1() {
+>f1 : Symbol(f1, Decl(file1.ts, 0, 0))
+
+    let y: any;
+>y : Symbol(y, Decl(file1.ts, 1, 7))
+
+    for await (const x of y) {
+>x : Symbol(x, Decl(file1.ts, 2, 20))
+>y : Symbol(y, Decl(file1.ts, 1, 7))
+    }
+}
+=== tests/cases/conformance/statements/for-await-ofStatements/file2.ts ===
+async function f2() {
+>f2 : Symbol(f2, Decl(file2.ts, 0, 0))
+
+    let x: any, y: any;
+>x : Symbol(x, Decl(file2.ts, 1, 7))
+>y : Symbol(y, Decl(file2.ts, 1, 15))
+
+    for await (x of y) {
+>x : Symbol(x, Decl(file2.ts, 1, 7))
+>y : Symbol(y, Decl(file2.ts, 1, 15))
+    }
+}
+=== tests/cases/conformance/statements/for-await-ofStatements/file3.ts ===
+async function* f3() {
+>f3 : Symbol(f3, Decl(file3.ts, 0, 0))
+
+    let y: any;
+>y : Symbol(y, Decl(file3.ts, 1, 7))
+
+    for await (const x of y) {
+>x : Symbol(x, Decl(file3.ts, 2, 20))
+>y : Symbol(y, Decl(file3.ts, 1, 7))
+    }
+}
+=== tests/cases/conformance/statements/for-await-ofStatements/file4.ts ===
+async function* f4() {
+>f4 : Symbol(f4, Decl(file4.ts, 0, 0))
+
+    let x: any, y: any;
+>x : Symbol(x, Decl(file4.ts, 1, 7))
+>y : Symbol(y, Decl(file4.ts, 1, 15))
+
+    for await (x of y) {
+>x : Symbol(x, Decl(file4.ts, 1, 7))
+>y : Symbol(y, Decl(file4.ts, 1, 15))
+    }
+}
+=== tests/cases/conformance/statements/for-await-ofStatements/file5.ts ===
+// https://github.com/Microsoft/TypeScript/issues/21363
+async function f5() {
+>f5 : Symbol(f5, Decl(file5.ts, 0, 0))
+
+    let y: any;
+>y : Symbol(y, Decl(file5.ts, 2, 7))
+
+    outer: for await (const x of y) {
+>x : Symbol(x, Decl(file5.ts, 3, 27))
+>y : Symbol(y, Decl(file5.ts, 2, 7))
+
+        continue outer;
+    }
+}
+=== tests/cases/conformance/statements/for-await-ofStatements/file6.ts ===
+// https://github.com/Microsoft/TypeScript/issues/21363
+async function* f6() {
+>f6 : Symbol(f6, Decl(file6.ts, 0, 0))
+
+    let y: any;
+>y : Symbol(y, Decl(file6.ts, 2, 7))
+
+    outer: for await (const x of y) {
+>x : Symbol(x, Decl(file6.ts, 3, 27))
+>y : Symbol(y, Decl(file6.ts, 2, 7))
+
+        continue outer;
+    }
+}
+=== tests/cases/conformance/statements/for-await-ofStatements/file7.ts ===
+// https://github.com/microsoft/TypeScript/issues/36166
+async function* f7() {
+>f7 : Symbol(f7, Decl(file7.ts, 0, 0))
+
+    let y: any;
+>y : Symbol(y, Decl(file7.ts, 2, 7))
+
+    for (;;) {
+        for await (const x of y) {
+>x : Symbol(x, Decl(file7.ts, 4, 24))
+>y : Symbol(y, Decl(file7.ts, 2, 7))
+        }
+    }
+}

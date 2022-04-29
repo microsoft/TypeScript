@@ -1,0 +1,77 @@
+=== tests/cases/compiler/sourceMap-FileWithComments.ts ===
+// Interface
+interface IPoint {
+>IPoint : Symbol(IPoint, Decl(sourceMap-FileWithComments.ts, 0, 0))
+
+    getDist(): number;
+>getDist : Symbol(IPoint.getDist, Decl(sourceMap-FileWithComments.ts, 1, 18))
+}
+
+// Module
+module Shapes {
+>Shapes : Symbol(Shapes, Decl(sourceMap-FileWithComments.ts, 3, 1))
+
+    // Class
+    export class Point implements IPoint {
+>Point : Symbol(Point, Decl(sourceMap-FileWithComments.ts, 6, 15))
+>IPoint : Symbol(IPoint, Decl(sourceMap-FileWithComments.ts, 0, 0))
+
+        // Constructor
+        constructor(public x: number, public y: number) { }
+>x : Symbol(Point.x, Decl(sourceMap-FileWithComments.ts, 11, 20))
+>y : Symbol(Point.y, Decl(sourceMap-FileWithComments.ts, 11, 37))
+
+        // Instance member
+        getDist() { return Math.sqrt(this.x * this.x + this.y * this.y); }
+>getDist : Symbol(Point.getDist, Decl(sourceMap-FileWithComments.ts, 11, 59))
+>Math.sqrt : Symbol(Math.sqrt, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>sqrt : Symbol(Math.sqrt, Decl(lib.es5.d.ts, --, --))
+>this.x : Symbol(Point.x, Decl(sourceMap-FileWithComments.ts, 11, 20))
+>this : Symbol(Point, Decl(sourceMap-FileWithComments.ts, 6, 15))
+>x : Symbol(Point.x, Decl(sourceMap-FileWithComments.ts, 11, 20))
+>this.x : Symbol(Point.x, Decl(sourceMap-FileWithComments.ts, 11, 20))
+>this : Symbol(Point, Decl(sourceMap-FileWithComments.ts, 6, 15))
+>x : Symbol(Point.x, Decl(sourceMap-FileWithComments.ts, 11, 20))
+>this.y : Symbol(Point.y, Decl(sourceMap-FileWithComments.ts, 11, 37))
+>this : Symbol(Point, Decl(sourceMap-FileWithComments.ts, 6, 15))
+>y : Symbol(Point.y, Decl(sourceMap-FileWithComments.ts, 11, 37))
+>this.y : Symbol(Point.y, Decl(sourceMap-FileWithComments.ts, 11, 37))
+>this : Symbol(Point, Decl(sourceMap-FileWithComments.ts, 6, 15))
+>y : Symbol(Point.y, Decl(sourceMap-FileWithComments.ts, 11, 37))
+
+        // Static member
+        static origin = new Point(0, 0);
+>origin : Symbol(Point.origin, Decl(sourceMap-FileWithComments.ts, 14, 74))
+>Point : Symbol(Point, Decl(sourceMap-FileWithComments.ts, 6, 15))
+    }
+
+    // Variable comment after class
+    var a = 10;
+>a : Symbol(a, Decl(sourceMap-FileWithComments.ts, 21, 7))
+
+    export function foo() {
+>foo : Symbol(foo, Decl(sourceMap-FileWithComments.ts, 21, 15))
+    }
+
+    /**  comment after function
+    * this is another comment 
+    */
+    var b = 10;
+>b : Symbol(b, Decl(sourceMap-FileWithComments.ts, 29, 7))
+}
+
+/** Local Variable */
+var p: IPoint = new Shapes.Point(3, 4);
+>p : Symbol(p, Decl(sourceMap-FileWithComments.ts, 33, 3))
+>IPoint : Symbol(IPoint, Decl(sourceMap-FileWithComments.ts, 0, 0))
+>Shapes.Point : Symbol(Shapes.Point, Decl(sourceMap-FileWithComments.ts, 6, 15))
+>Shapes : Symbol(Shapes, Decl(sourceMap-FileWithComments.ts, 3, 1))
+>Point : Symbol(Shapes.Point, Decl(sourceMap-FileWithComments.ts, 6, 15))
+
+var dist = p.getDist();
+>dist : Symbol(dist, Decl(sourceMap-FileWithComments.ts, 34, 3))
+>p.getDist : Symbol(IPoint.getDist, Decl(sourceMap-FileWithComments.ts, 1, 18))
+>p : Symbol(p, Decl(sourceMap-FileWithComments.ts, 33, 3))
+>getDist : Symbol(IPoint.getDist, Decl(sourceMap-FileWithComments.ts, 1, 18))
+

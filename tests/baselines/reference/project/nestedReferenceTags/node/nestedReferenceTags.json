@@ -1,0 +1,18 @@
+{
+    "scenario": "nested reference tags",
+    "projectRoot": "tests/cases/projects/reference-1",
+    "inputFiles": [
+        "main.ts"
+    ],
+    "resolvedInputFiles": [
+        "lib.es5.d.ts",
+        "lib/classA.ts",
+        "lib/classB.ts",
+        "main.ts"
+    ],
+    "emittedFiles": [
+        "lib/classA.js",
+        "lib/classB.js",
+        "main.js"
+    ]
+}

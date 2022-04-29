@@ -1,0 +1,5 @@
+=== tests/cases/conformance/parser/ecmascript5/Statements/parserDoStatement1.d.ts ===
+do {
+No type information for this code.}
+No type information for this code.while (e);
+No type information for this code.

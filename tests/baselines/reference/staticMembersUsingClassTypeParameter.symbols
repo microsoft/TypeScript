@@ -1,0 +1,45 @@
+=== tests/cases/conformance/types/typeParameters/typeParameterLists/staticMembersUsingClassTypeParameter.ts ===
+// BUG 745747
+class C<T> {
+>C : Symbol(C, Decl(staticMembersUsingClassTypeParameter.ts, 0, 0))
+>T : Symbol(T, Decl(staticMembersUsingClassTypeParameter.ts, 1, 8))
+
+    static x: T;
+>x : Symbol(C.x, Decl(staticMembersUsingClassTypeParameter.ts, 1, 12))
+>T : Symbol(T)
+
+    static f(x: T) {}
+>f : Symbol(C.f, Decl(staticMembersUsingClassTypeParameter.ts, 2, 16))
+>x : Symbol(x, Decl(staticMembersUsingClassTypeParameter.ts, 3, 13))
+>T : Symbol(T)
+}
+
+class C2<T, U> {
+>C2 : Symbol(C2, Decl(staticMembersUsingClassTypeParameter.ts, 4, 1))
+>T : Symbol(T, Decl(staticMembersUsingClassTypeParameter.ts, 6, 9))
+>U : Symbol(U, Decl(staticMembersUsingClassTypeParameter.ts, 6, 11))
+
+    static x: U;
+>x : Symbol(C2.x, Decl(staticMembersUsingClassTypeParameter.ts, 6, 16))
+>U : Symbol(U)
+
+    static f(x: U) { }
+>f : Symbol(C2.f, Decl(staticMembersUsingClassTypeParameter.ts, 7, 16))
+>x : Symbol(x, Decl(staticMembersUsingClassTypeParameter.ts, 8, 13))
+>U : Symbol(U)
+}
+
+class C3<T extends Date> {
+>C3 : Symbol(C3, Decl(staticMembersUsingClassTypeParameter.ts, 9, 1))
+>T : Symbol(T, Decl(staticMembersUsingClassTypeParameter.ts, 11, 9))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+    static x: T;
+>x : Symbol(C3.x, Decl(staticMembersUsingClassTypeParameter.ts, 11, 26))
+>T : Symbol(T)
+
+    static f(x: T) { }
+>f : Symbol(C3.f, Decl(staticMembersUsingClassTypeParameter.ts, 12, 16))
+>x : Symbol(x, Decl(staticMembersUsingClassTypeParameter.ts, 13, 13))
+>T : Symbol(T)
+}

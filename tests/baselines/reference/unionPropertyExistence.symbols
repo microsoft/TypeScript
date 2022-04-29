@@ -1,0 +1,101 @@
+=== tests/cases/compiler/unionPropertyExistence.ts ===
+interface A {
+>A : Symbol(A, Decl(unionPropertyExistence.ts, 0, 0))
+
+    inAll: string;
+>inAll : Symbol(A.inAll, Decl(unionPropertyExistence.ts, 0, 13))
+
+    notInB: string;
+>notInB : Symbol(A.notInB, Decl(unionPropertyExistence.ts, 1, 18))
+
+    notInC: string;
+>notInC : Symbol(A.notInC, Decl(unionPropertyExistence.ts, 2, 19))
+}
+
+interface B {
+>B : Symbol(B, Decl(unionPropertyExistence.ts, 4, 1))
+
+    inAll: boolean;
+>inAll : Symbol(B.inAll, Decl(unionPropertyExistence.ts, 6, 13))
+
+    onlyInB: number;
+>onlyInB : Symbol(B.onlyInB, Decl(unionPropertyExistence.ts, 7, 19))
+
+    notInC: string;
+>notInC : Symbol(B.notInC, Decl(unionPropertyExistence.ts, 8, 20))
+}
+
+interface C {
+>C : Symbol(C, Decl(unionPropertyExistence.ts, 10, 1))
+
+    inAll: number;
+>inAll : Symbol(C.inAll, Decl(unionPropertyExistence.ts, 12, 13))
+
+    notInB: string;
+>notInB : Symbol(C.notInB, Decl(unionPropertyExistence.ts, 13, 18))
+}
+
+type AB = A | B;
+>AB : Symbol(AB, Decl(unionPropertyExistence.ts, 15, 1))
+>A : Symbol(A, Decl(unionPropertyExistence.ts, 0, 0))
+>B : Symbol(B, Decl(unionPropertyExistence.ts, 4, 1))
+
+type ABC = C | AB;
+>ABC : Symbol(ABC, Decl(unionPropertyExistence.ts, 17, 16))
+>C : Symbol(C, Decl(unionPropertyExistence.ts, 10, 1))
+>AB : Symbol(AB, Decl(unionPropertyExistence.ts, 15, 1))
+
+var ab: AB;
+>ab : Symbol(ab, Decl(unionPropertyExistence.ts, 20, 3))
+>AB : Symbol(AB, Decl(unionPropertyExistence.ts, 15, 1))
+
+var abc: ABC;
+>abc : Symbol(abc, Decl(unionPropertyExistence.ts, 21, 3))
+>ABC : Symbol(ABC, Decl(unionPropertyExistence.ts, 17, 16))
+
+declare const x: "foo" | "bar";
+>x : Symbol(x, Decl(unionPropertyExistence.ts, 23, 13))
+
+declare const bFoo: B | "foo";
+>bFoo : Symbol(bFoo, Decl(unionPropertyExistence.ts, 24, 13))
+>B : Symbol(B, Decl(unionPropertyExistence.ts, 4, 1))
+
+x.nope();
+>x : Symbol(x, Decl(unionPropertyExistence.ts, 23, 13))
+
+bFoo.onlyInB;
+>bFoo : Symbol(bFoo, Decl(unionPropertyExistence.ts, 24, 13))
+
+x.length; // Ok
+>x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(unionPropertyExistence.ts, 23, 13))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+bFoo.length;
+>bFoo : Symbol(bFoo, Decl(unionPropertyExistence.ts, 24, 13))
+
+ab.onlyInB;
+>ab : Symbol(ab, Decl(unionPropertyExistence.ts, 20, 3))
+
+ab.notInC; // Ok
+>ab.notInC : Symbol(notInC, Decl(unionPropertyExistence.ts, 2, 19), Decl(unionPropertyExistence.ts, 8, 20))
+>ab : Symbol(ab, Decl(unionPropertyExistence.ts, 20, 3))
+>notInC : Symbol(notInC, Decl(unionPropertyExistence.ts, 2, 19), Decl(unionPropertyExistence.ts, 8, 20))
+
+abc.notInC;
+>abc : Symbol(abc, Decl(unionPropertyExistence.ts, 21, 3))
+
+ab.notInB;
+>ab : Symbol(ab, Decl(unionPropertyExistence.ts, 20, 3))
+
+abc.notInB;
+>abc : Symbol(abc, Decl(unionPropertyExistence.ts, 21, 3))
+
+abc.inAll; // Ok
+>abc.inAll : Symbol(inAll, Decl(unionPropertyExistence.ts, 0, 13), Decl(unionPropertyExistence.ts, 6, 13), Decl(unionPropertyExistence.ts, 12, 13))
+>abc : Symbol(abc, Decl(unionPropertyExistence.ts, 21, 3))
+>inAll : Symbol(inAll, Decl(unionPropertyExistence.ts, 0, 13), Decl(unionPropertyExistence.ts, 6, 13), Decl(unionPropertyExistence.ts, 12, 13))
+
+abc.inNone;
+>abc : Symbol(abc, Decl(unionPropertyExistence.ts, 21, 3))
+

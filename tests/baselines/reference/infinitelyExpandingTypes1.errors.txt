@@ -1,0 +1,29 @@
+tests/cases/compiler/infinitelyExpandingTypes1.ts(21,1): error TS2367: This condition will always return 'false' since the types 'List<number>' and 'List<string>' have no overlap.
+
+
+==== tests/cases/compiler/infinitelyExpandingTypes1.ts (1 errors) ====
+    interface List<T> {
+        data: T;
+        next: List<T>;
+        owner: List<List<T>>;
+    }
+    
+    
+    interface MyList<T> {
+        data: T;
+        next: MyList<T>;
+        owner: MyList<MyList<T>>;
+    }
+    
+    var l: List<number>;
+    var m: MyList<number>;
+    
+    l == m; // should error
+    
+    var l2: List<string>;
+    
+    l == l2; // should error;
+    ~~~~~~~
+!!! error TS2367: This condition will always return 'false' since the types 'List<number>' and 'List<string>' have no overlap.
+    
+    l == l; // should not error

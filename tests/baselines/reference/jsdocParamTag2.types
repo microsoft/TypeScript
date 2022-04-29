@@ -1,0 +1,117 @@
+=== tests/cases/conformance/jsdoc/0.js ===
+// Object literal syntax
+/**
+ * @param {{a: string, b: string}} obj
+ * @param {string} x
+ */
+function good1({a, b}, x) {}
+>good1 : ({ a, b }: {    a: string;    b: string;}, x: string) => void
+>a : string
+>b : string
+>x : string
+
+/**
+ * @param {{a: string, b: string}} obj
+ * @param {{c: number, d: number}} OBJECTION
+ */
+function good2({a, b}, {c, d}) {}
+>good2 : ({ a, b }: {    a: string;    b: string;}, { c, d }: {    c: number;    d: number;}) => void
+>a : string
+>b : string
+>c : number
+>d : number
+
+/**
+ * @param {number} x
+ * @param {{a: string, b: string}} obj
+ * @param {string} y
+ */
+function good3(x, {a, b}, y) {}
+>good3 : (x: number, { a, b }: {    a: string;    b: string;}, y: string) => void
+>x : number
+>a : string
+>b : string
+>y : string
+
+/**
+ * @param {{a: string, b: string}} obj
+ */
+function good4({a, b}) {}
+>good4 : ({ a, b }: {    a: string;    b: string;}) => void
+>a : string
+>b : string
+
+// nested object syntax
+/**
+ * @param {Object} obj
+ * @param {string} obj.a - this is like the saddest way to specify a type
+ * @param {string} obj.b - but it sure does allow a lot of documentation
+ * @param {string} x
+ */
+function good5({a, b}, x) {}
+>good5 : ({ a, b }: {    a: string;    b: string;}, x: string) => void
+>a : string
+>b : string
+>x : string
+
+/**
+ * @param {Object} obj
+ * @param {string} obj.a
+ * @param {string} obj.b - but it sure does allow a lot of documentation
+ * @param {Object} OBJECTION - documentation here too
+ * @param {string} OBJECTION.c
+ * @param {string} OBJECTION.d - meh
+ */
+function good6({a, b}, {c, d}) {}
+>good6 : ({ a, b }: {    a: string;    b: string;}, { c, d }: {    c: string;    d: string;}) => void
+>a : string
+>b : string
+>c : string
+>d : string
+
+/**
+ * @param {number} x
+ * @param {Object} obj
+ * @param {string} obj.a
+ * @param {string} obj.b
+ * @param {string} y
+ */
+function good7(x, {a, b}, y) {}
+>good7 : (x: number, { a, b }: {    a: string;    b: string;}, y: string) => void
+>x : number
+>a : string
+>b : string
+>y : string
+
+/**
+ * @param {Object} obj
+ * @param {string} obj.a
+ * @param {string} obj.b
+ */
+function good8({a, b}) {}
+>good8 : ({ a, b }: {    a: string;    b: string;}) => void
+>a : string
+>b : string
+
+/**
+ * @param {object} obj - this type gets ignored
+ * @param {string} obj.a
+ * @param {string} obj.b - and x's type gets used for both parameters
+ * @param {string} x
+ */
+function bad1(x, {a, b}) {}
+>bad1 : (x: string, { a, b }: string) => void
+>x : string
+>a : any
+>b : any
+
+/**
+ * @param {string} y - here, y's type gets ignored but obj's is fine
+ * @param {{a: string, b: string}} obj
+ */
+function bad2(x, {a, b}) {}
+>bad2 : (x: any, { a, b }: {    a: string;    b: string;}) => void
+>x : any
+>a : string
+>b : string
+

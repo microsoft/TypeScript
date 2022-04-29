@@ -1,0 +1,53 @@
+tests/cases/compiler/staticPropSuper.ts(16,5): error TS2377: Constructors for derived classes must contain a 'super' call.
+tests/cases/compiler/staticPropSuper.ts(24,5): error TS2377: Constructors for derived classes must contain a 'super' call.
+tests/cases/compiler/staticPropSuper.ts(32,5): error TS2377: Constructors for derived classes must contain a 'super' call.
+
+
+==== tests/cases/compiler/staticPropSuper.ts (3 errors) ====
+    class A {
+    }
+    
+    class B extends A {
+        public static s: number = 9;
+    
+        constructor() {
+            var x = 1; // should not error
+            super();
+        }
+    }
+    
+    class C extends A {
+        public p: number = 10;
+    
+        constructor() {
+        ~~~~~~~~~~~~~~~
+            var x = 1; // should error
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        }
+    ~~~~~
+!!! error TS2377: Constructors for derived classes must contain a 'super' call.
+    }
+    
+    class D extends A {
+        private p: number = 11;
+    
+        constructor() {
+        ~~~~~~~~~~~~~~~
+            var x = 1; // should error
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        }
+    ~~~~~
+!!! error TS2377: Constructors for derived classes must contain a 'super' call.
+    }
+    
+    class E extends A {
+        p: number = 12;
+    
+        constructor() {
+        ~~~~~~~~~~~~~~~
+            var x = 1; // should error
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        }
+    ~~~~~
+!!! error TS2377: Constructors for derived classes must contain a 'super' call.
+    }

@@ -1,0 +1,16 @@
+=== tests/cases/compiler/noImplicitReturnsInAsync1.ts ===
+async function test(isError: boolean = false) {
+>test : Symbol(test, Decl(noImplicitReturnsInAsync1.ts, 0, 0))
+>isError : Symbol(isError, Decl(noImplicitReturnsInAsync1.ts, 0, 20))
+
+    if (isError === true) {
+>isError : Symbol(isError, Decl(noImplicitReturnsInAsync1.ts, 0, 20))
+
+        return;
+    }
+    let x = await Promise.resolve("The test is passed without an error.");
+>x : Symbol(x, Decl(noImplicitReturnsInAsync1.ts, 4, 7))
+>Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+}

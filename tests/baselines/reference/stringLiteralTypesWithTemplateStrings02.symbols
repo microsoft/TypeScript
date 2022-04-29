@@ -1,0 +1,8 @@
+=== tests/cases/conformance/types/stringLiteral/stringLiteralTypesWithTemplateStrings02.ts ===
+let abc: "AB\r\nC" = `AB
+>abc : Symbol(abc, Decl(stringLiteralTypesWithTemplateStrings02.ts, 0, 3))
+
+C`;
+let de_NEWLINE_f: "DE\nF" = `DE${"\n"}F`;
+>de_NEWLINE_f : Symbol(de_NEWLINE_f, Decl(stringLiteralTypesWithTemplateStrings02.ts, 2, 3))
+

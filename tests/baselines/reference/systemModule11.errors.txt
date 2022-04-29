@@ -1,0 +1,54 @@
+tests/cases/compiler/file1.ts(6,15): error TS2792: Cannot find module 'bar'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+tests/cases/compiler/file2.ts(6,15): error TS2792: Cannot find module 'bar'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+tests/cases/compiler/file3.ts(1,25): error TS2792: Cannot find module 'a'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+tests/cases/compiler/file3.ts(3,15): error TS2792: Cannot find module 'bar'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+tests/cases/compiler/file4.ts(8,27): error TS2792: Cannot find module 'a'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+tests/cases/compiler/file5.ts(2,15): error TS2792: Cannot find module 'a'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+
+
+==== tests/cases/compiler/file1.ts (1 errors) ====
+    // set of tests cases that checks generation of local storage for exported names
+    
+    
+    export var x;
+    export function foo() {}
+    export * from 'bar';
+                  ~~~~~
+!!! error TS2792: Cannot find module 'bar'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+    
+==== tests/cases/compiler/file2.ts (1 errors) ====
+    var x;
+    var y;
+    export {x};
+    export {y as y1}
+    
+    export * from 'bar';
+                  ~~~~~
+!!! error TS2792: Cannot find module 'bar'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+    
+==== tests/cases/compiler/file3.ts (2 errors) ====
+    export {x, y as z} from 'a';
+                            ~~~
+!!! error TS2792: Cannot find module 'a'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+    export default function foo() {}
+    export * from 'bar';
+                  ~~~~~
+!!! error TS2792: Cannot find module 'bar'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+    
+==== tests/cases/compiler/file4.ts (1 errors) ====
+    export var x;
+    export function foo() {}
+    export default function (){}
+    
+    var z, z1;
+    export {z, z1 as z2};
+    
+    export {s, s1 as s2} from 'a'
+                              ~~~
+!!! error TS2792: Cannot find module 'a'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+    
+==== tests/cases/compiler/file5.ts (1 errors) ====
+    function foo() {}
+    export * from 'a';
+                  ~~~
+!!! error TS2792: Cannot find module 'a'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?

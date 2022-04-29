@@ -1,0 +1,10 @@
+EmitSkipped: true
+Diagnostics:
+ Cannot write file '/tests/cases/fourslash/b.js' because it would overwrite input file.
+  Adding a tsconfig.json file will help organize projects that contain both TypeScript and JavaScript files. Learn more at https://aka.ms/tsconfig.
+
+EmitSkipped: false
+
+FileName : /tests/cases/fourslash/a.js
+function foo2() { return 30; } // no error - should emit a.js
+

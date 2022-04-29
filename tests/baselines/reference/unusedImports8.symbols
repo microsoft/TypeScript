@@ -1,0 +1,39 @@
+=== tests/cases/compiler/file1.ts ===
+export class Calculator {
+>Calculator : Symbol(Calculator, Decl(file1.ts, 0, 0))
+
+    handleChar() {}
+>handleChar : Symbol(Calculator.handleChar, Decl(file1.ts, 0, 25))
+}
+
+export function test() {
+>test : Symbol(test, Decl(file1.ts, 2, 1))
+
+}
+
+export function test2() {
+>test2 : Symbol(test2, Decl(file1.ts, 6, 1))
+
+}
+
+=== tests/cases/compiler/file2.ts ===
+import {Calculator as calc, test as t1, test2 as t2} from "./file1"
+>Calculator : Symbol(calc, Decl(file1.ts, 0, 0))
+>calc : Symbol(calc, Decl(file2.ts, 0, 8))
+>test : Symbol(t1, Decl(file1.ts, 2, 1))
+>t1 : Symbol(t1, Decl(file2.ts, 0, 27))
+>test2 : Symbol(t2, Decl(file1.ts, 6, 1))
+>t2 : Symbol(t2, Decl(file2.ts, 0, 39))
+
+var x = new calc();
+>x : Symbol(x, Decl(file2.ts, 2, 3))
+>calc : Symbol(calc, Decl(file2.ts, 0, 8))
+
+x.handleChar();
+>x.handleChar : Symbol(calc.handleChar, Decl(file1.ts, 0, 25))
+>x : Symbol(x, Decl(file2.ts, 2, 3))
+>handleChar : Symbol(calc.handleChar, Decl(file1.ts, 0, 25))
+
+t1();
+>t1 : Symbol(t1, Decl(file2.ts, 0, 27))
+

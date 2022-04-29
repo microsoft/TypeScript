@@ -1,0 +1,23 @@
+=== tests/cases/compiler/unknownTypeArgOnCall.ts ===
+class Foo<T> {
+>Foo : Foo<T>
+
+  public clone<U>() {
+>clone : <U>() => any
+
+   return null;
+>null : null
+   }
+}
+var f = new Foo<number>();
+>f : Foo<number>
+>new Foo<number>() : Foo<number>
+>Foo : typeof Foo
+
+var r = f.clone<Uhhhh>()
+>r : any
+>f.clone<Uhhhh>() : any
+>f.clone : <U>() => any
+>f : Foo<number>
+>clone : <U>() => any
+

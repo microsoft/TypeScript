@@ -1,0 +1,11 @@
+tests/cases/conformance/es6/yieldExpressions/YieldExpression11_es6.ts(3,11): error TS2663: Cannot find name 'foo'. Did you mean the instance member 'this.foo'?
+
+
+==== tests/cases/conformance/es6/yieldExpressions/YieldExpression11_es6.ts (1 errors) ====
+    class C {
+      *foo() {
+        yield(foo);
+              ~~~
+!!! error TS2663: Cannot find name 'foo'. Did you mean the instance member 'this.foo'?
+      }
+    }

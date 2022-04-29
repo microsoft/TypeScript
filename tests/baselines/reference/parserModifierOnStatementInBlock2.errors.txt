@@ -1,0 +1,13 @@
+tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserModifierOnStatementInBlock2.ts(2,4): error TS1184: Modifiers cannot appear here.
+tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserModifierOnStatementInBlock2.ts(2,20): error TS1039: Initializers are not allowed in ambient contexts.
+
+
+==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserModifierOnStatementInBlock2.ts (2 errors) ====
+    {
+       declare var x = this;
+       ~~~~~~~
+!!! error TS1184: Modifiers cannot appear here.
+                       ~~~~
+!!! error TS1039: Initializers are not allowed in ambient contexts.
+    }
+    

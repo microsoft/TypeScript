@@ -1,0 +1,59 @@
+=== tests/cases/compiler/didYouMeanSuggestionErrors.ts ===
+describe("my test suite", () => {
+    it("should run", () => {
+        const a = $(".thing");
+>a : Symbol(a, Decl(didYouMeanSuggestionErrors.ts, 2, 13))
+
+    });
+});
+
+suite("another suite", () => {
+    test("everything else", () => {
+        console.log(process.env);
+        document.createElement("div");
+
+        const x = require("fs");
+>x : Symbol(x, Decl(didYouMeanSuggestionErrors.ts, 11, 13))
+
+        const y = Buffer.from([]);
+>y : Symbol(y, Decl(didYouMeanSuggestionErrors.ts, 12, 13))
+
+        const z = module.exports;
+>z : Symbol(z, Decl(didYouMeanSuggestionErrors.ts, 13, 13))
+
+        const a = new Map();
+>a : Symbol(a, Decl(didYouMeanSuggestionErrors.ts, 15, 13))
+
+        const b = new Set();
+>b : Symbol(b, Decl(didYouMeanSuggestionErrors.ts, 16, 13))
+
+        const c = new WeakMap();
+>c : Symbol(c, Decl(didYouMeanSuggestionErrors.ts, 17, 13))
+
+        const d = new WeakSet();
+>d : Symbol(d, Decl(didYouMeanSuggestionErrors.ts, 18, 13))
+
+        const e = Symbol();
+>e : Symbol(e, Decl(didYouMeanSuggestionErrors.ts, 19, 13))
+
+        const f = Promise.resolve(0);
+>f : Symbol(f, Decl(didYouMeanSuggestionErrors.ts, 20, 13))
+
+        const i: Iterator<any> = null as any;
+>i : Symbol(i, Decl(didYouMeanSuggestionErrors.ts, 22, 13))
+>Iterator : Symbol(Iterator)
+
+        const j: AsyncIterator<any> = null as any;
+>j : Symbol(j, Decl(didYouMeanSuggestionErrors.ts, 23, 13))
+>AsyncIterator : Symbol(AsyncIterator)
+
+        const k: Symbol = null as any;
+>k : Symbol(k, Decl(didYouMeanSuggestionErrors.ts, 24, 13))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --))
+
+        const l: Promise<any> = null as any;
+>l : Symbol(l, Decl(didYouMeanSuggestionErrors.ts, 25, 13))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+
+    });
+});

@@ -1,0 +1,537 @@
+=== tests/cases/compiler/moduledecl.ts ===
+module a {
+>a : Symbol(a, Decl(moduledecl.ts, 0, 0))
+}
+
+module b.a {
+>b : Symbol(b, Decl(moduledecl.ts, 1, 1))
+>a : Symbol(a, Decl(moduledecl.ts, 3, 9))
+}
+
+module c.a.b {
+>c : Symbol(c, Decl(moduledecl.ts, 4, 1))
+>a : Symbol(a, Decl(moduledecl.ts, 6, 9))
+>b : Symbol(ma.b, Decl(moduledecl.ts, 6, 11))
+
+    import ma = a;
+>ma : Symbol(ma, Decl(moduledecl.ts, 6, 14))
+>a : Symbol(ma, Decl(moduledecl.ts, 6, 9))
+}
+
+module mImport {
+>mImport : Symbol(mImport, Decl(moduledecl.ts, 8, 1))
+
+    import d = a;
+>d : Symbol(d, Decl(moduledecl.ts, 10, 16))
+>a : Symbol(d, Decl(moduledecl.ts, 0, 0))
+
+    import e = b.a;
+>e : Symbol(e, Decl(moduledecl.ts, 11, 17))
+>b : Symbol(b, Decl(moduledecl.ts, 1, 1))
+>a : Symbol(e, Decl(moduledecl.ts, 3, 9))
+
+    import d1 = a;
+>d1 : Symbol(d1, Decl(moduledecl.ts, 12, 19))
+>a : Symbol(d, Decl(moduledecl.ts, 0, 0))
+
+    import e1 = b.a;
+>e1 : Symbol(e1, Decl(moduledecl.ts, 13, 18))
+>b : Symbol(b, Decl(moduledecl.ts, 1, 1))
+>a : Symbol(e, Decl(moduledecl.ts, 3, 9))
+}
+
+module m0 {
+>m0 : Symbol(m0, Decl(moduledecl.ts, 15, 1))
+
+    function f1() {
+>f1 : Symbol(f1, Decl(moduledecl.ts, 17, 11))
+    }
+
+    function f2(s: string);
+>f2 : Symbol(f2, Decl(moduledecl.ts, 19, 5), Decl(moduledecl.ts, 21, 27), Decl(moduledecl.ts, 22, 27))
+>s : Symbol(s, Decl(moduledecl.ts, 21, 16))
+
+    function f2(n: number);
+>f2 : Symbol(f2, Decl(moduledecl.ts, 19, 5), Decl(moduledecl.ts, 21, 27), Decl(moduledecl.ts, 22, 27))
+>n : Symbol(n, Decl(moduledecl.ts, 22, 16))
+
+    function f2(ns: any) {
+>f2 : Symbol(f2, Decl(moduledecl.ts, 19, 5), Decl(moduledecl.ts, 21, 27), Decl(moduledecl.ts, 22, 27))
+>ns : Symbol(ns, Decl(moduledecl.ts, 23, 16))
+    }
+
+    class c1 {
+>c1 : Symbol(c1, Decl(moduledecl.ts, 24, 5))
+
+        public a : ()=>string;
+>a : Symbol(c1.a, Decl(moduledecl.ts, 26, 14))
+
+        private b: ()=>number;
+>b : Symbol(c1.b, Decl(moduledecl.ts, 27, 30))
+
+        private static s1;
+>s1 : Symbol(c1.s1, Decl(moduledecl.ts, 28, 30))
+
+        public static s2;
+>s2 : Symbol(c1.s2, Decl(moduledecl.ts, 29, 26))
+    }
+
+    interface i1 {
+>i1 : Symbol(i1, Decl(moduledecl.ts, 31, 5))
+
+        () : Object;
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+        [n: number]: c1;
+>n : Symbol(n, Decl(moduledecl.ts, 35, 9))
+>c1 : Symbol(c1, Decl(moduledecl.ts, 24, 5))
+    }
+
+    import m2 = a;
+>m2 : Symbol(m2, Decl(moduledecl.ts, 36, 5))
+>a : Symbol(m2, Decl(moduledecl.ts, 0, 0))
+
+    import m3 = b;
+>m3 : Symbol(m3, Decl(moduledecl.ts, 38, 18))
+>b : Symbol(m3, Decl(moduledecl.ts, 1, 1))
+
+    import m4 = b.a;
+>m4 : Symbol(m4, Decl(moduledecl.ts, 39, 18))
+>b : Symbol(m3, Decl(moduledecl.ts, 1, 1))
+>a : Symbol(m3.a, Decl(moduledecl.ts, 3, 9))
+
+    import m5 = c;
+>m5 : Symbol(m5, Decl(moduledecl.ts, 40, 20))
+>c : Symbol(m5, Decl(moduledecl.ts, 4, 1))
+
+    import m6 = c.a;
+>m6 : Symbol(m6, Decl(moduledecl.ts, 41, 18))
+>c : Symbol(m5, Decl(moduledecl.ts, 4, 1))
+>a : Symbol(m5.a, Decl(moduledecl.ts, 6, 9))
+
+    import m7 = c.a.b;
+>m7 : Symbol(m7, Decl(moduledecl.ts, 42, 20))
+>c : Symbol(m5, Decl(moduledecl.ts, 4, 1))
+>a : Symbol(m5.a, Decl(moduledecl.ts, 6, 9))
+>b : Symbol(m6.b, Decl(moduledecl.ts, 6, 11))
+}
+
+module m1 {
+>m1 : Symbol(m1, Decl(moduledecl.ts, 44, 1))
+
+    export function f1() {
+>f1 : Symbol(f1, Decl(moduledecl.ts, 46, 11))
+    }
+
+    export function f2(s: string);
+>f2 : Symbol(f2, Decl(moduledecl.ts, 48, 5), Decl(moduledecl.ts, 50, 34), Decl(moduledecl.ts, 51, 34))
+>s : Symbol(s, Decl(moduledecl.ts, 50, 23))
+
+    export function f2(n: number);
+>f2 : Symbol(f2, Decl(moduledecl.ts, 48, 5), Decl(moduledecl.ts, 50, 34), Decl(moduledecl.ts, 51, 34))
+>n : Symbol(n, Decl(moduledecl.ts, 51, 23))
+
+    export function f2(ns: any) {
+>f2 : Symbol(f2, Decl(moduledecl.ts, 48, 5), Decl(moduledecl.ts, 50, 34), Decl(moduledecl.ts, 51, 34))
+>ns : Symbol(ns, Decl(moduledecl.ts, 52, 23))
+    }
+
+    export class c1 {
+>c1 : Symbol(c1, Decl(moduledecl.ts, 53, 5))
+
+        public a: () =>string;
+>a : Symbol(c1.a, Decl(moduledecl.ts, 55, 21))
+
+        private b: () =>number;
+>b : Symbol(c1.b, Decl(moduledecl.ts, 56, 30))
+
+        private static s1;
+>s1 : Symbol(c1.s1, Decl(moduledecl.ts, 57, 31))
+
+        public static s2;
+>s2 : Symbol(c1.s2, Decl(moduledecl.ts, 58, 26))
+
+        public d() {
+>d : Symbol(c1.d, Decl(moduledecl.ts, 59, 25))
+
+            return "Hello";
+        }
+
+        public e: { x: number; y: string; };
+>e : Symbol(c1.e, Decl(moduledecl.ts, 63, 9))
+>x : Symbol(x, Decl(moduledecl.ts, 65, 19))
+>y : Symbol(y, Decl(moduledecl.ts, 65, 30))
+
+        constructor (public n, public n2: number, private n3, private n4: string) {
+>n : Symbol(c1.n, Decl(moduledecl.ts, 66, 21))
+>n2 : Symbol(c1.n2, Decl(moduledecl.ts, 66, 30))
+>n3 : Symbol(c1.n3, Decl(moduledecl.ts, 66, 49))
+>n4 : Symbol(c1.n4, Decl(moduledecl.ts, 66, 61))
+        }
+    }
+
+    export interface i1 {
+>i1 : Symbol(i1, Decl(moduledecl.ts, 68, 5))
+
+        () : Object;
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+        [n: number]: c1;
+>n : Symbol(n, Decl(moduledecl.ts, 72, 9))
+>c1 : Symbol(c1, Decl(moduledecl.ts, 53, 5))
+    }
+
+    import m2 = a;
+>m2 : Symbol(m2, Decl(moduledecl.ts, 73, 5))
+>a : Symbol(m2, Decl(moduledecl.ts, 0, 0))
+
+    import m3 = b;
+>m3 : Symbol(m3, Decl(moduledecl.ts, 75, 18))
+>b : Symbol(m3, Decl(moduledecl.ts, 1, 1))
+
+    import m4 = b.a;
+>m4 : Symbol(m4, Decl(moduledecl.ts, 76, 18))
+>b : Symbol(m3, Decl(moduledecl.ts, 1, 1))
+>a : Symbol(m3.a, Decl(moduledecl.ts, 3, 9))
+
+    import m5 = c;
+>m5 : Symbol(m5, Decl(moduledecl.ts, 77, 20))
+>c : Symbol(m5, Decl(moduledecl.ts, 4, 1))
+
+    import m6 = c.a;
+>m6 : Symbol(m6, Decl(moduledecl.ts, 78, 18))
+>c : Symbol(m5, Decl(moduledecl.ts, 4, 1))
+>a : Symbol(m5.a, Decl(moduledecl.ts, 6, 9))
+
+    import m7 = c.a.b;
+>m7 : Symbol(m7, Decl(moduledecl.ts, 79, 20))
+>c : Symbol(m5, Decl(moduledecl.ts, 4, 1))
+>a : Symbol(m5.a, Decl(moduledecl.ts, 6, 9))
+>b : Symbol(m6.b, Decl(moduledecl.ts, 6, 11))
+}
+
+module m {
+>m : Symbol(m, Decl(moduledecl.ts, 81, 1), Decl(moduledecl.ts, 92, 1))
+
+    export module m2 {
+>m2 : Symbol(m2, Decl(moduledecl.ts, 83, 10))
+
+        var a = 10;
+>a : Symbol(a, Decl(moduledecl.ts, 85, 11))
+
+        export var b: number;
+>b : Symbol(b, Decl(moduledecl.ts, 86, 18))
+    }
+
+    export module m3 {
+>m3 : Symbol(m3, Decl(moduledecl.ts, 87, 5))
+
+        export var c: number;
+>c : Symbol(c, Decl(moduledecl.ts, 90, 18))
+    }
+}
+
+module m {
+>m : Symbol(m, Decl(moduledecl.ts, 81, 1), Decl(moduledecl.ts, 92, 1))
+
+    export module m25 {
+>m25 : Symbol(m25, Decl(moduledecl.ts, 94, 10))
+
+        export module m5 {
+>m5 : Symbol(m5, Decl(moduledecl.ts, 96, 23))
+
+            export var c: number;
+>c : Symbol(c, Decl(moduledecl.ts, 98, 22))
+        }
+    }
+}
+
+module m13 {
+>m13 : Symbol(m13, Decl(moduledecl.ts, 101, 1))
+
+    export module m4 {
+>m4 : Symbol(m4, Decl(moduledecl.ts, 103, 12))
+
+        export module m2 {
+>m2 : Symbol(m2, Decl(moduledecl.ts, 104, 22))
+
+            export module m3 {
+>m3 : Symbol(m3, Decl(moduledecl.ts, 105, 26))
+
+                export var c: number;
+>c : Symbol(c, Decl(moduledecl.ts, 107, 26))
+            }
+        }
+
+        export function f() {
+>f : Symbol(f, Decl(moduledecl.ts, 109, 9))
+
+            return 20;
+        }
+    }
+}
+
+declare module m4 {
+>m4 : Symbol(m4, Decl(moduledecl.ts, 115, 1))
+
+    export var b;
+>b : Symbol(b, Decl(moduledecl.ts, 118, 14))
+}
+
+declare module m5 {
+>m5 : Symbol(m5, Decl(moduledecl.ts, 119, 1))
+
+    export var c;
+>c : Symbol(c, Decl(moduledecl.ts, 122, 14))
+}
+
+declare module m43 {
+>m43 : Symbol(m43, Decl(moduledecl.ts, 123, 1))
+
+    export var b;
+>b : Symbol(b, Decl(moduledecl.ts, 126, 14))
+}
+
+declare module m55 {
+>m55 : Symbol(m55, Decl(moduledecl.ts, 127, 1))
+
+    export var c;
+>c : Symbol(c, Decl(moduledecl.ts, 130, 14))
+}
+
+declare module "m3" {
+>"m3" : Symbol("m3", Decl(moduledecl.ts, 131, 1))
+
+    export var b: number;
+>b : Symbol(b, Decl(moduledecl.ts, 134, 14))
+}
+
+module exportTests {
+>exportTests : Symbol(exportTests, Decl(moduledecl.ts, 135, 1))
+
+    export class C1_public {
+>C1_public : Symbol(C1_public, Decl(moduledecl.ts, 137, 20))
+
+        private f2() {
+>f2 : Symbol(C1_public.f2, Decl(moduledecl.ts, 138, 28))
+
+            return 30;
+        }
+
+        public f3() {
+>f3 : Symbol(C1_public.f3, Decl(moduledecl.ts, 141, 9))
+
+            return "string";
+        }
+    }
+    class C2_private {
+>C2_private : Symbol(C2_private, Decl(moduledecl.ts, 146, 5))
+
+        private f2() {
+>f2 : Symbol(C2_private.f2, Decl(moduledecl.ts, 147, 22))
+
+            return 30;
+        }
+
+        public f3() {
+>f3 : Symbol(C2_private.f3, Decl(moduledecl.ts, 150, 9))
+
+            return "string";
+        }
+    }
+
+    export class C3_public {
+>C3_public : Symbol(C3_public, Decl(moduledecl.ts, 155, 5))
+
+        private getC2_private() {
+>getC2_private : Symbol(C3_public.getC2_private, Decl(moduledecl.ts, 157, 28))
+
+            return new C2_private();
+>C2_private : Symbol(C2_private, Decl(moduledecl.ts, 146, 5))
+        }
+        private setC2_private(arg: C2_private) {
+>setC2_private : Symbol(C3_public.setC2_private, Decl(moduledecl.ts, 160, 9))
+>arg : Symbol(arg, Decl(moduledecl.ts, 161, 30))
+>C2_private : Symbol(C2_private, Decl(moduledecl.ts, 146, 5))
+        }
+        private get c2() {
+>c2 : Symbol(C3_public.c2, Decl(moduledecl.ts, 162, 9))
+
+            return new C2_private();
+>C2_private : Symbol(C2_private, Decl(moduledecl.ts, 146, 5))
+        }
+        public getC1_public() {
+>getC1_public : Symbol(C3_public.getC1_public, Decl(moduledecl.ts, 165, 9))
+
+            return new C1_public();
+>C1_public : Symbol(C1_public, Decl(moduledecl.ts, 137, 20))
+        }
+        public setC1_public(arg: C1_public) {
+>setC1_public : Symbol(C3_public.setC1_public, Decl(moduledecl.ts, 168, 9))
+>arg : Symbol(arg, Decl(moduledecl.ts, 169, 28))
+>C1_public : Symbol(C1_public, Decl(moduledecl.ts, 137, 20))
+        }
+        public get c1() {
+>c1 : Symbol(C3_public.c1, Decl(moduledecl.ts, 170, 9))
+
+            return new C1_public();
+>C1_public : Symbol(C1_public, Decl(moduledecl.ts, 137, 20))
+        }
+    }
+}
+
+declare module mAmbient {
+>mAmbient : Symbol(mAmbient, Decl(moduledecl.ts, 175, 1))
+
+    class C {
+>C : Symbol(C, Decl(moduledecl.ts, 177, 25))
+
+        public myProp: number;
+>myProp : Symbol(C.myProp, Decl(moduledecl.ts, 178, 13))
+    }
+
+    function foo() : C;
+>foo : Symbol(foo, Decl(moduledecl.ts, 180, 5))
+>C : Symbol(C, Decl(moduledecl.ts, 177, 25))
+
+    var aVar: C;
+>aVar : Symbol(aVar, Decl(moduledecl.ts, 183, 7))
+>C : Symbol(C, Decl(moduledecl.ts, 177, 25))
+
+    interface B {
+>B : Symbol(B, Decl(moduledecl.ts, 183, 16))
+
+        x: number;
+>x : Symbol(B.x, Decl(moduledecl.ts, 184, 17))
+
+        y: C;
+>y : Symbol(B.y, Decl(moduledecl.ts, 185, 18))
+>C : Symbol(C, Decl(moduledecl.ts, 177, 25))
+    }
+    enum e {
+>e : Symbol(e, Decl(moduledecl.ts, 187, 5))
+
+        x,
+>x : Symbol(e.x, Decl(moduledecl.ts, 188, 12))
+
+        y,
+>y : Symbol(e.y, Decl(moduledecl.ts, 189, 10))
+
+        z
+>z : Symbol(e.z, Decl(moduledecl.ts, 190, 10))
+    }
+
+    module m3 {
+>m3 : Symbol(m3, Decl(moduledecl.ts, 192, 5))
+
+        class C {
+>C : Symbol(C, Decl(moduledecl.ts, 194, 15))
+
+            public myProp: number;
+>myProp : Symbol(C.myProp, Decl(moduledecl.ts, 195, 17))
+        }
+
+        function foo(): C;
+>foo : Symbol(foo, Decl(moduledecl.ts, 197, 9))
+>C : Symbol(C, Decl(moduledecl.ts, 194, 15))
+
+        var aVar: C;
+>aVar : Symbol(aVar, Decl(moduledecl.ts, 200, 11))
+>C : Symbol(C, Decl(moduledecl.ts, 194, 15))
+
+        interface B {
+>B : Symbol(B, Decl(moduledecl.ts, 200, 20))
+
+            x: number;
+>x : Symbol(B.x, Decl(moduledecl.ts, 201, 21))
+
+            y: C;
+>y : Symbol(B.y, Decl(moduledecl.ts, 202, 22))
+>C : Symbol(C, Decl(moduledecl.ts, 194, 15))
+        }
+        enum e {
+>e : Symbol(e, Decl(moduledecl.ts, 204, 9))
+
+            x,
+>x : Symbol(e.x, Decl(moduledecl.ts, 205, 16))
+
+            y,
+>y : Symbol(e.y, Decl(moduledecl.ts, 206, 14))
+
+            z
+>z : Symbol(e.z, Decl(moduledecl.ts, 207, 14))
+        }
+    }
+}
+
+function foo() {
+>foo : Symbol(foo, Decl(moduledecl.ts, 211, 1))
+
+    return mAmbient.foo();
+>mAmbient.foo : Symbol(mAmbient.foo, Decl(moduledecl.ts, 180, 5))
+>mAmbient : Symbol(mAmbient, Decl(moduledecl.ts, 175, 1))
+>foo : Symbol(mAmbient.foo, Decl(moduledecl.ts, 180, 5))
+}
+
+var cVar = new mAmbient.C();
+>cVar : Symbol(cVar, Decl(moduledecl.ts, 217, 3))
+>mAmbient.C : Symbol(mAmbient.C, Decl(moduledecl.ts, 177, 25))
+>mAmbient : Symbol(mAmbient, Decl(moduledecl.ts, 175, 1))
+>C : Symbol(mAmbient.C, Decl(moduledecl.ts, 177, 25))
+
+var aVar = mAmbient.aVar;
+>aVar : Symbol(aVar, Decl(moduledecl.ts, 218, 3))
+>mAmbient.aVar : Symbol(mAmbient.aVar, Decl(moduledecl.ts, 183, 7))
+>mAmbient : Symbol(mAmbient, Decl(moduledecl.ts, 175, 1))
+>aVar : Symbol(mAmbient.aVar, Decl(moduledecl.ts, 183, 7))
+
+var bB: mAmbient.B;
+>bB : Symbol(bB, Decl(moduledecl.ts, 219, 3))
+>mAmbient : Symbol(mAmbient, Decl(moduledecl.ts, 175, 1))
+>B : Symbol(mAmbient.B, Decl(moduledecl.ts, 183, 16))
+
+var eVar: mAmbient.e;
+>eVar : Symbol(eVar, Decl(moduledecl.ts, 220, 3))
+>mAmbient : Symbol(mAmbient, Decl(moduledecl.ts, 175, 1))
+>e : Symbol(mAmbient.e, Decl(moduledecl.ts, 187, 5))
+
+function m3foo() {
+>m3foo : Symbol(m3foo, Decl(moduledecl.ts, 220, 21))
+
+    return mAmbient.m3.foo();
+>mAmbient.m3.foo : Symbol(mAmbient.m3.foo, Decl(moduledecl.ts, 197, 9))
+>mAmbient.m3 : Symbol(mAmbient.m3, Decl(moduledecl.ts, 192, 5))
+>mAmbient : Symbol(mAmbient, Decl(moduledecl.ts, 175, 1))
+>m3 : Symbol(mAmbient.m3, Decl(moduledecl.ts, 192, 5))
+>foo : Symbol(mAmbient.m3.foo, Decl(moduledecl.ts, 197, 9))
+}
+
+var m3cVar = new mAmbient.m3.C();
+>m3cVar : Symbol(m3cVar, Decl(moduledecl.ts, 226, 3))
+>mAmbient.m3.C : Symbol(mAmbient.m3.C, Decl(moduledecl.ts, 194, 15))
+>mAmbient.m3 : Symbol(mAmbient.m3, Decl(moduledecl.ts, 192, 5))
+>mAmbient : Symbol(mAmbient, Decl(moduledecl.ts, 175, 1))
+>m3 : Symbol(mAmbient.m3, Decl(moduledecl.ts, 192, 5))
+>C : Symbol(mAmbient.m3.C, Decl(moduledecl.ts, 194, 15))
+
+var m3aVar = mAmbient.m3.aVar;
+>m3aVar : Symbol(m3aVar, Decl(moduledecl.ts, 227, 3))
+>mAmbient.m3.aVar : Symbol(mAmbient.m3.aVar, Decl(moduledecl.ts, 200, 11))
+>mAmbient.m3 : Symbol(mAmbient.m3, Decl(moduledecl.ts, 192, 5))
+>mAmbient : Symbol(mAmbient, Decl(moduledecl.ts, 175, 1))
+>m3 : Symbol(mAmbient.m3, Decl(moduledecl.ts, 192, 5))
+>aVar : Symbol(mAmbient.m3.aVar, Decl(moduledecl.ts, 200, 11))
+
+var m3bB: mAmbient.m3.B;
+>m3bB : Symbol(m3bB, Decl(moduledecl.ts, 228, 3))
+>mAmbient : Symbol(mAmbient, Decl(moduledecl.ts, 175, 1))
+>m3 : Symbol(mAmbient.m3, Decl(moduledecl.ts, 192, 5))
+>B : Symbol(mAmbient.m3.B, Decl(moduledecl.ts, 200, 20))
+
+var m3eVar: mAmbient.m3.e;
+>m3eVar : Symbol(m3eVar, Decl(moduledecl.ts, 229, 3))
+>mAmbient : Symbol(mAmbient, Decl(moduledecl.ts, 175, 1))
+>m3 : Symbol(mAmbient.m3, Decl(moduledecl.ts, 192, 5))
+>e : Symbol(mAmbient.m3.e, Decl(moduledecl.ts, 204, 9))
+
+

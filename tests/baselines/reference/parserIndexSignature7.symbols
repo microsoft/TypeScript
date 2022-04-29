@@ -1,0 +1,7 @@
+=== tests/cases/conformance/parser/ecmascript5/IndexSignatures/parserIndexSignature7.ts ===
+interface I {
+>I : Symbol(I, Decl(parserIndexSignature7.ts, 0, 0))
+
+  [a:string]
+>a : Symbol(a, Decl(parserIndexSignature7.ts, 1, 3))
+}

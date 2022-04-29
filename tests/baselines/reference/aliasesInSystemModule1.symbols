@@ -1,0 +1,47 @@
+=== tests/cases/compiler/aliasesInSystemModule1.ts ===
+import alias = require('foo');
+>alias : Symbol(alias, Decl(aliasesInSystemModule1.ts, 0, 0))
+
+import cls = alias.Class;
+>cls : Symbol(cls, Decl(aliasesInSystemModule1.ts, 0, 30))
+>alias : Symbol(alias, Decl(aliasesInSystemModule1.ts, 0, 0))
+>Class : Symbol(alias)
+
+export import cls2 = alias.Class;
+>cls2 : Symbol(cls2, Decl(aliasesInSystemModule1.ts, 1, 25))
+>alias : Symbol(alias, Decl(aliasesInSystemModule1.ts, 0, 0))
+>Class : Symbol(alias)
+
+let x = new alias.Class();
+>x : Symbol(x, Decl(aliasesInSystemModule1.ts, 4, 3))
+>alias : Symbol(alias, Decl(aliasesInSystemModule1.ts, 0, 0))
+
+let y = new cls();
+>y : Symbol(y, Decl(aliasesInSystemModule1.ts, 5, 3))
+>cls : Symbol(cls, Decl(aliasesInSystemModule1.ts, 0, 30))
+
+let z = new cls2();
+>z : Symbol(z, Decl(aliasesInSystemModule1.ts, 6, 3))
+>cls2 : Symbol(cls2, Decl(aliasesInSystemModule1.ts, 1, 25))
+
+module M {
+>M : Symbol(M, Decl(aliasesInSystemModule1.ts, 6, 19))
+
+  export import cls = alias.Class;
+>cls : Symbol(cls, Decl(aliasesInSystemModule1.ts, 8, 10))
+>alias : Symbol(alias, Decl(aliasesInSystemModule1.ts, 0, 0))
+>Class : Symbol(cls)
+
+  let x = new alias.Class();
+>x : Symbol(x, Decl(aliasesInSystemModule1.ts, 10, 5))
+>alias : Symbol(alias, Decl(aliasesInSystemModule1.ts, 0, 0))
+
+  let y = new cls(); 
+>y : Symbol(y, Decl(aliasesInSystemModule1.ts, 11, 5))
+>cls : Symbol(cls, Decl(aliasesInSystemModule1.ts, 8, 10))
+
+  let z = new cls2();
+>z : Symbol(z, Decl(aliasesInSystemModule1.ts, 12, 5))
+>cls2 : Symbol(cls2, Decl(aliasesInSystemModule1.ts, 1, 25))
+}
+  

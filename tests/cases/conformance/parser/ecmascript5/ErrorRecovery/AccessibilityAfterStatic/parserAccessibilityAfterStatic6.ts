@@ -1,0 +1,3 @@
+class Outer
+{
+static public

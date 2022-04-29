@@ -1,0 +1,167 @@
+=== tests/cases/compiler/fatarrowfunctions.ts ===
+function foo(x:any) {
+>foo : Symbol(foo, Decl(fatarrowfunctions.ts, 0, 0))
+>x : Symbol(x, Decl(fatarrowfunctions.ts, 0, 13))
+
+	return x();
+>x : Symbol(x, Decl(fatarrowfunctions.ts, 0, 13))
+}
+
+
+foo((x:number,y,z)=>{return x+y+z;});
+>foo : Symbol(foo, Decl(fatarrowfunctions.ts, 0, 0))
+>x : Symbol(x, Decl(fatarrowfunctions.ts, 5, 5))
+>y : Symbol(y, Decl(fatarrowfunctions.ts, 5, 14))
+>z : Symbol(z, Decl(fatarrowfunctions.ts, 5, 16))
+>x : Symbol(x, Decl(fatarrowfunctions.ts, 5, 5))
+>y : Symbol(y, Decl(fatarrowfunctions.ts, 5, 14))
+>z : Symbol(z, Decl(fatarrowfunctions.ts, 5, 16))
+
+foo((x,y,z)=>{return x+y+z;});
+>foo : Symbol(foo, Decl(fatarrowfunctions.ts, 0, 0))
+>x : Symbol(x, Decl(fatarrowfunctions.ts, 6, 5))
+>y : Symbol(y, Decl(fatarrowfunctions.ts, 6, 7))
+>z : Symbol(z, Decl(fatarrowfunctions.ts, 6, 9))
+>x : Symbol(x, Decl(fatarrowfunctions.ts, 6, 5))
+>y : Symbol(y, Decl(fatarrowfunctions.ts, 6, 7))
+>z : Symbol(z, Decl(fatarrowfunctions.ts, 6, 9))
+
+foo((x,y:number,z)=>{return x+y+z;});
+>foo : Symbol(foo, Decl(fatarrowfunctions.ts, 0, 0))
+>x : Symbol(x, Decl(fatarrowfunctions.ts, 7, 5))
+>y : Symbol(y, Decl(fatarrowfunctions.ts, 7, 7))
+>z : Symbol(z, Decl(fatarrowfunctions.ts, 7, 16))
+>x : Symbol(x, Decl(fatarrowfunctions.ts, 7, 5))
+>y : Symbol(y, Decl(fatarrowfunctions.ts, 7, 7))
+>z : Symbol(z, Decl(fatarrowfunctions.ts, 7, 16))
+
+foo((x,y:number,z:number)=>{return x+y+z;});
+>foo : Symbol(foo, Decl(fatarrowfunctions.ts, 0, 0))
+>x : Symbol(x, Decl(fatarrowfunctions.ts, 8, 5))
+>y : Symbol(y, Decl(fatarrowfunctions.ts, 8, 7))
+>z : Symbol(z, Decl(fatarrowfunctions.ts, 8, 16))
+>x : Symbol(x, Decl(fatarrowfunctions.ts, 8, 5))
+>y : Symbol(y, Decl(fatarrowfunctions.ts, 8, 7))
+>z : Symbol(z, Decl(fatarrowfunctions.ts, 8, 16))
+
+foo((x,y,z:number)=>{return x+y+z;});
+>foo : Symbol(foo, Decl(fatarrowfunctions.ts, 0, 0))
+>x : Symbol(x, Decl(fatarrowfunctions.ts, 9, 5))
+>y : Symbol(y, Decl(fatarrowfunctions.ts, 9, 7))
+>z : Symbol(z, Decl(fatarrowfunctions.ts, 9, 9))
+>x : Symbol(x, Decl(fatarrowfunctions.ts, 9, 5))
+>y : Symbol(y, Decl(fatarrowfunctions.ts, 9, 7))
+>z : Symbol(z, Decl(fatarrowfunctions.ts, 9, 9))
+
+foo(()=>{return 0;});
+>foo : Symbol(foo, Decl(fatarrowfunctions.ts, 0, 0))
+
+foo((x:number,y,z)=>x+y+z);
+>foo : Symbol(foo, Decl(fatarrowfunctions.ts, 0, 0))
+>x : Symbol(x, Decl(fatarrowfunctions.ts, 12, 5))
+>y : Symbol(y, Decl(fatarrowfunctions.ts, 12, 14))
+>z : Symbol(z, Decl(fatarrowfunctions.ts, 12, 16))
+>x : Symbol(x, Decl(fatarrowfunctions.ts, 12, 5))
+>y : Symbol(y, Decl(fatarrowfunctions.ts, 12, 14))
+>z : Symbol(z, Decl(fatarrowfunctions.ts, 12, 16))
+
+foo((x,y,z)=>x+y+z);
+>foo : Symbol(foo, Decl(fatarrowfunctions.ts, 0, 0))
+>x : Symbol(x, Decl(fatarrowfunctions.ts, 13, 5))
+>y : Symbol(y, Decl(fatarrowfunctions.ts, 13, 7))
+>z : Symbol(z, Decl(fatarrowfunctions.ts, 13, 9))
+>x : Symbol(x, Decl(fatarrowfunctions.ts, 13, 5))
+>y : Symbol(y, Decl(fatarrowfunctions.ts, 13, 7))
+>z : Symbol(z, Decl(fatarrowfunctions.ts, 13, 9))
+
+foo((x,y:number,z)=>{return x+y+z;});
+>foo : Symbol(foo, Decl(fatarrowfunctions.ts, 0, 0))
+>x : Symbol(x, Decl(fatarrowfunctions.ts, 14, 5))
+>y : Symbol(y, Decl(fatarrowfunctions.ts, 14, 7))
+>z : Symbol(z, Decl(fatarrowfunctions.ts, 14, 16))
+>x : Symbol(x, Decl(fatarrowfunctions.ts, 14, 5))
+>y : Symbol(y, Decl(fatarrowfunctions.ts, 14, 7))
+>z : Symbol(z, Decl(fatarrowfunctions.ts, 14, 16))
+
+foo((x,y:number,z:number)=>{return x+y+z;});
+>foo : Symbol(foo, Decl(fatarrowfunctions.ts, 0, 0))
+>x : Symbol(x, Decl(fatarrowfunctions.ts, 15, 5))
+>y : Symbol(y, Decl(fatarrowfunctions.ts, 15, 7))
+>z : Symbol(z, Decl(fatarrowfunctions.ts, 15, 16))
+>x : Symbol(x, Decl(fatarrowfunctions.ts, 15, 5))
+>y : Symbol(y, Decl(fatarrowfunctions.ts, 15, 7))
+>z : Symbol(z, Decl(fatarrowfunctions.ts, 15, 16))
+
+foo((x,y,z:number)=>{return x+y+z;});
+>foo : Symbol(foo, Decl(fatarrowfunctions.ts, 0, 0))
+>x : Symbol(x, Decl(fatarrowfunctions.ts, 16, 5))
+>y : Symbol(y, Decl(fatarrowfunctions.ts, 16, 7))
+>z : Symbol(z, Decl(fatarrowfunctions.ts, 16, 9))
+>x : Symbol(x, Decl(fatarrowfunctions.ts, 16, 5))
+>y : Symbol(y, Decl(fatarrowfunctions.ts, 16, 7))
+>z : Symbol(z, Decl(fatarrowfunctions.ts, 16, 9))
+
+foo(()=>{return 0;});
+>foo : Symbol(foo, Decl(fatarrowfunctions.ts, 0, 0))
+
+
+foo(((x) => x));
+>foo : Symbol(foo, Decl(fatarrowfunctions.ts, 0, 0))
+>x : Symbol(x, Decl(fatarrowfunctions.ts, 20, 6))
+>x : Symbol(x, Decl(fatarrowfunctions.ts, 20, 6))
+
+foo(x => x*x);
+>foo : Symbol(foo, Decl(fatarrowfunctions.ts, 0, 0))
+>x : Symbol(x, Decl(fatarrowfunctions.ts, 22, 4))
+>x : Symbol(x, Decl(fatarrowfunctions.ts, 22, 4))
+>x : Symbol(x, Decl(fatarrowfunctions.ts, 22, 4))
+
+var y = x => x*x;
+>y : Symbol(y, Decl(fatarrowfunctions.ts, 24, 3))
+>x : Symbol(x, Decl(fatarrowfunctions.ts, 24, 7))
+>x : Symbol(x, Decl(fatarrowfunctions.ts, 24, 7))
+>x : Symbol(x, Decl(fatarrowfunctions.ts, 24, 7))
+
+var z = (x:number) => x*x;
+>z : Symbol(z, Decl(fatarrowfunctions.ts, 25, 3))
+>x : Symbol(x, Decl(fatarrowfunctions.ts, 25, 9))
+>x : Symbol(x, Decl(fatarrowfunctions.ts, 25, 9))
+>x : Symbol(x, Decl(fatarrowfunctions.ts, 25, 9))
+
+var w = () => 3;
+>w : Symbol(w, Decl(fatarrowfunctions.ts, 27, 3))
+
+function ternaryTest(isWhile:boolean) {
+>ternaryTest : Symbol(ternaryTest, Decl(fatarrowfunctions.ts, 27, 16))
+>isWhile : Symbol(isWhile, Decl(fatarrowfunctions.ts, 29, 21))
+
+                var f = isWhile ? function (n) { return n > 0; } : function (n) { return n === 0; };
+>f : Symbol(f, Decl(fatarrowfunctions.ts, 31, 19))
+>isWhile : Symbol(isWhile, Decl(fatarrowfunctions.ts, 29, 21))
+>n : Symbol(n, Decl(fatarrowfunctions.ts, 31, 44))
+>n : Symbol(n, Decl(fatarrowfunctions.ts, 31, 44))
+>n : Symbol(n, Decl(fatarrowfunctions.ts, 31, 77))
+>n : Symbol(n, Decl(fatarrowfunctions.ts, 31, 77))
+
+}
+
+declare function setTimeout(expression: any, msec?: number, language?: any): number;
+>setTimeout : Symbol(setTimeout, Decl(lib.dom.d.ts, --, --), Decl(fatarrowfunctions.ts, 33, 1))
+>expression : Symbol(expression, Decl(fatarrowfunctions.ts, 35, 28))
+>msec : Symbol(msec, Decl(fatarrowfunctions.ts, 35, 44))
+>language : Symbol(language, Decl(fatarrowfunctions.ts, 35, 59))
+
+var messenger = {
+>messenger : Symbol(messenger, Decl(fatarrowfunctions.ts, 37, 3))
+
+    message: "Hello World",
+>message : Symbol(message, Decl(fatarrowfunctions.ts, 37, 17))
+
+    start: function() {
+>start : Symbol(start, Decl(fatarrowfunctions.ts, 38, 27))
+
+        setTimeout(() => { this.message.toString(); }, 3000);
+>setTimeout : Symbol(setTimeout, Decl(lib.dom.d.ts, --, --), Decl(fatarrowfunctions.ts, 33, 1))
+    }
+};
+

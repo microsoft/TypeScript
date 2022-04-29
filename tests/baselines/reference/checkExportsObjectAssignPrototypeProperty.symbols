@@ -1,0 +1,177 @@
+=== tests/cases/conformance/jsdoc/validator.ts ===
+import "./";
+
+import Person = require("./mod1");
+>Person : Symbol(Person, Decl(validator.ts, 0, 12))
+
+const m1 = new Person("Name")
+>m1 : Symbol(m1, Decl(validator.ts, 4, 5))
+>Person : Symbol(Person, Decl(validator.ts, 0, 12))
+
+m1.thing;
+>m1.thing : Symbol(Person.thing, Decl(mod1.js, 9, 2))
+>m1 : Symbol(m1, Decl(validator.ts, 4, 5))
+>thing : Symbol(Person.thing, Decl(mod1.js, 9, 2))
+
+m1.readonlyProp;
+>m1.readonlyProp : Symbol(Person.readonlyProp, Decl(mod1.js, 10, 80))
+>m1 : Symbol(m1, Decl(validator.ts, 4, 5))
+>readonlyProp : Symbol(Person.readonlyProp, Decl(mod1.js, 10, 80))
+
+m1.rwAccessors;
+>m1.rwAccessors : Symbol(Person.rwAccessors, Decl(mod1.js, 11, 93))
+>m1 : Symbol(m1, Decl(validator.ts, 4, 5))
+>rwAccessors : Symbol(Person.rwAccessors, Decl(mod1.js, 11, 93))
+
+m1.readonlyAccessor;
+>m1.readonlyAccessor : Symbol(Person.readonlyAccessor, Decl(mod1.js, 12, 106))
+>m1 : Symbol(m1, Decl(validator.ts, 4, 5))
+>readonlyAccessor : Symbol(Person.readonlyAccessor, Decl(mod1.js, 12, 106))
+
+m1.setonlyAccessor;
+>m1.setonlyAccessor : Symbol(Person.setonlyAccessor, Decl(mod1.js, 13, 88))
+>m1 : Symbol(m1, Decl(validator.ts, 4, 5))
+>setonlyAccessor : Symbol(Person.setonlyAccessor, Decl(mod1.js, 13, 88))
+
+// allowed assignments
+m1.thing = 10;
+>m1.thing : Symbol(Person.thing, Decl(mod1.js, 9, 2))
+>m1 : Symbol(m1, Decl(validator.ts, 4, 5))
+>thing : Symbol(Person.thing, Decl(mod1.js, 9, 2))
+
+m1.rwAccessors = 11;
+>m1.rwAccessors : Symbol(Person.rwAccessors, Decl(mod1.js, 11, 93))
+>m1 : Symbol(m1, Decl(validator.ts, 4, 5))
+>rwAccessors : Symbol(Person.rwAccessors, Decl(mod1.js, 11, 93))
+
+m1.setonlyAccessor = "yes";
+>m1.setonlyAccessor : Symbol(Person.setonlyAccessor, Decl(mod1.js, 13, 88))
+>m1 : Symbol(m1, Decl(validator.ts, 4, 5))
+>setonlyAccessor : Symbol(Person.setonlyAccessor, Decl(mod1.js, 13, 88))
+
+// disallowed assignments
+m1.readonlyProp = "name";
+>m1.readonlyProp : Symbol(Person.readonlyProp, Decl(mod1.js, 10, 80))
+>m1 : Symbol(m1, Decl(validator.ts, 4, 5))
+>readonlyProp : Symbol(Person.readonlyProp, Decl(mod1.js, 10, 80))
+
+m1.readonlyAccessor = 12;
+>m1.readonlyAccessor : Symbol(Person.readonlyAccessor, Decl(mod1.js, 12, 106))
+>m1 : Symbol(m1, Decl(validator.ts, 4, 5))
+>readonlyAccessor : Symbol(Person.readonlyAccessor, Decl(mod1.js, 12, 106))
+
+m1.thing = "no";
+>m1.thing : Symbol(Person.thing, Decl(mod1.js, 9, 2))
+>m1 : Symbol(m1, Decl(validator.ts, 4, 5))
+>thing : Symbol(Person.thing, Decl(mod1.js, 9, 2))
+
+m1.rwAccessors = "no";
+>m1.rwAccessors : Symbol(Person.rwAccessors, Decl(mod1.js, 11, 93))
+>m1 : Symbol(m1, Decl(validator.ts, 4, 5))
+>rwAccessors : Symbol(Person.rwAccessors, Decl(mod1.js, 11, 93))
+
+m1.setonlyAccessor = 0;
+>m1.setonlyAccessor : Symbol(Person.setonlyAccessor, Decl(mod1.js, 13, 88))
+>m1 : Symbol(m1, Decl(validator.ts, 4, 5))
+>setonlyAccessor : Symbol(Person.setonlyAccessor, Decl(mod1.js, 13, 88))
+
+
+=== tests/cases/conformance/jsdoc/mod1.js ===
+/**
+ * @constructor
+ * @param {string} name
+ */
+function Person(name) {
+>Person : Symbol(Person, Decl(mod1.js, 0, 0))
+>name : Symbol(name, Decl(mod1.js, 4, 16))
+
+    this.name = name;
+>this.name : Symbol(Person.name, Decl(mod1.js, 4, 23))
+>this : Symbol(Person, Decl(mod1.js, 0, 0))
+>name : Symbol(Person.name, Decl(mod1.js, 4, 23))
+>name : Symbol(name, Decl(mod1.js, 4, 16))
+}
+Person.prototype.describe = function () {
+>Person.prototype : Symbol(Person.describe, Decl(mod1.js, 6, 1))
+>Person : Symbol(Person, Decl(mod1.js, 0, 0))
+>prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+>describe : Symbol(Person.describe, Decl(mod1.js, 6, 1))
+
+    return "Person called " + this.name;
+>this.name : Symbol(Person.name, Decl(mod1.js, 4, 23))
+>this : Symbol(Person, Decl(mod1.js, 0, 0))
+>name : Symbol(Person.name, Decl(mod1.js, 4, 23))
+
+};
+Object.defineProperty(Person.prototype, "thing", { value: 42, writable: true });
+>Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>Person.prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+>Person : Symbol(Person, Decl(mod1.js, 0, 0))
+>prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+>"thing" : Symbol(Person.thing, Decl(mod1.js, 9, 2))
+>value : Symbol(value, Decl(mod1.js, 10, 50))
+>writable : Symbol(writable, Decl(mod1.js, 10, 61))
+
+Object.defineProperty(Person.prototype, "readonlyProp", { value: "Smith", writable: false });
+>Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>Person.prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+>Person : Symbol(Person, Decl(mod1.js, 0, 0))
+>prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+>"readonlyProp" : Symbol(Person.readonlyProp, Decl(mod1.js, 10, 80))
+>value : Symbol(value, Decl(mod1.js, 11, 57))
+>writable : Symbol(writable, Decl(mod1.js, 11, 73))
+
+Object.defineProperty(Person.prototype, "rwAccessors", { get() { return 98122 }, set(_) { /*ignore*/ } });
+>Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>Person.prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+>Person : Symbol(Person, Decl(mod1.js, 0, 0))
+>prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+>"rwAccessors" : Symbol(Person.rwAccessors, Decl(mod1.js, 11, 93))
+>get : Symbol(get, Decl(mod1.js, 12, 56))
+>set : Symbol(set, Decl(mod1.js, 12, 80))
+>_ : Symbol(_, Decl(mod1.js, 12, 85))
+
+Object.defineProperty(Person.prototype, "readonlyAccessor", { get() { return 21.75 } });
+>Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>Person.prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+>Person : Symbol(Person, Decl(mod1.js, 0, 0))
+>prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+>"readonlyAccessor" : Symbol(Person.readonlyAccessor, Decl(mod1.js, 12, 106))
+>get : Symbol(get, Decl(mod1.js, 13, 61))
+
+Object.defineProperty(Person.prototype, "setonlyAccessor", {
+>Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>Person.prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+>Person : Symbol(Person, Decl(mod1.js, 0, 0))
+>prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+>"setonlyAccessor" : Symbol(Person.setonlyAccessor, Decl(mod1.js, 13, 88))
+
+    /** @param {string} str */
+    set(str) {
+>set : Symbol(set, Decl(mod1.js, 14, 60))
+>str : Symbol(str, Decl(mod1.js, 16, 8))
+
+        this.rwAccessors = Number(str)
+>this.rwAccessors : Symbol(Person.rwAccessors, Decl(mod1.js, 11, 93))
+>this : Symbol(Person, Decl(mod1.js, 0, 0))
+>rwAccessors : Symbol(rwAccessors, Decl(mod1.js, 16, 14))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>str : Symbol(str, Decl(mod1.js, 16, 8))
+    }
+});
+module.exports = Person;
+>module.exports : Symbol(module.exports, Decl(mod1.js, 0, 0))
+>module : Symbol(export=, Decl(mod1.js, 19, 3))
+>exports : Symbol(export=, Decl(mod1.js, 19, 3))
+>Person : Symbol(Person, Decl(mod1.js, 0, 0))
+

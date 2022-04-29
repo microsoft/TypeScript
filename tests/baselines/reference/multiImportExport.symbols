@@ -1,0 +1,47 @@
+=== tests/cases/compiler/consumer.ts ===
+import Drawing = require('./Drawing');
+>Drawing : Symbol(Drawing, Decl(consumer.ts, 0, 0))
+
+var addr = new Drawing.Math.Adder();
+>addr : Symbol(addr, Decl(consumer.ts, 1, 3))
+>Drawing.Math.Adder : Symbol(Adder, Decl(Math.ts, 2, 12))
+>Drawing.Math : Symbol(Drawing.Math, Decl(Drawing.ts, 0, 0))
+>Drawing : Symbol(Drawing, Decl(consumer.ts, 0, 0))
+>Math : Symbol(Drawing.Math, Decl(Drawing.ts, 0, 0))
+>Adder : Symbol(Adder, Decl(Math.ts, 2, 12))
+
+=== tests/cases/compiler/Drawing.ts ===
+export import Math = require('./Math/Math')
+>Math : Symbol(Math, Decl(Drawing.ts, 0, 0))
+
+=== tests/cases/compiler/Math/Math.ts ===
+import Adder = require('./Adder');
+>Adder : Symbol(Adder, Decl(Math.ts, 0, 0))
+
+var Math = {
+>Math : Symbol(Math, Decl(Math.ts, 2, 3))
+
+    Adder:Adder
+>Adder : Symbol(Adder, Decl(Math.ts, 2, 12))
+>Adder : Symbol(Adder, Decl(Math.ts, 0, 0))
+
+};
+
+export = Math
+>Math : Symbol(Math, Decl(Math.ts, 2, 3))
+
+=== tests/cases/compiler/Math/Adder.ts ===
+class Adder {
+>Adder : Symbol(Adder, Decl(Adder.ts, 0, 0))
+
+    add(a: number, b: number) {
+>add : Symbol(Adder.add, Decl(Adder.ts, 0, 13))
+>a : Symbol(a, Decl(Adder.ts, 1, 8))
+>b : Symbol(b, Decl(Adder.ts, 1, 18))
+        
+    }
+}
+
+export = Adder;
+>Adder : Symbol(Adder, Decl(Adder.ts, 0, 0))
+

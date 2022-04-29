@@ -1,0 +1,207 @@
+Exit Code: 1
+Standard output:
+
+Rush Multi-Project Build Tool 5.X.X - https://rushjs.io
+Node.js version is 15.13.0 (unstable)
+Starting "rush rebuild"
+Executing a maximum of ?simultaneous processes...
+==[ @azure/eslint-plugin-azure-sdk ]==============================[ 1 of 77 ]==
+"@azure-tests/perf-ai-metrics-advisor" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/abort-controller" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/ai-text-analytics" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure-tests/perf-ai-text-analytics" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/communication-chat" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/communication-common" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/communication-identity" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/communication-phone-numbers" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/communication-sms" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/core-amqp" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/event-hubs" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/eventhubs-checkpointstore-blob" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/service-bus" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/core-auth" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/ai-anomaly-detector" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/ai-form-recognizer" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure-tests/perf-ai-form-recognizer" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/ai-metrics-advisor" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/container-registry" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/core-client" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/data-tables" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/eventgrid" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure-tests/perf-eventgrid" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/core-http" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure-tests/perf-storage-blob" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/app-configuration" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/attestation" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/core-lro" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/keyvault-admin" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/keyvault-certificates" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure-tests/perf-keyvault-certificates" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/keyvault-keys" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure-tests/perf-keyvault-keys" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/keyvault-secrets" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure-tests/perf-keyvault-secrets" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/storage-blob" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/quantum-jobs" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/storage-blob-changefeed" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/storage-file-datalake" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure-tests/perf-storage-file-datalake" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/synapse-artifacts" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/digital-twins-core" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/identity" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure-tests/perf-identity" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/iot-device-update" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/keyvault-common" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/mixedreality-authentication" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/monitor-opentelemetry-exporter" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/schema-registry" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/schema-registry-avro" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/search-documents" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure-tests/perf-search-documents" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/storage-file-share" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure-tests/perf-storage-file-share" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/storage-queue" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/synapse-access-control" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/synapse-managed-private-endpoints" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/synapse-monitoring" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/synapse-spark" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/template" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/test-utils-perfstress" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/test-utils-recorder" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/storage-internal-avro" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/test-utils-multi-version" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/core-rest-pipeline" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/core-tracing" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/cosmos" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/core-crypto" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/mock-hub" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/core-asynciterator-polyfill" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/core-paging" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/core-util" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/core-xml" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/event-processor-host" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/logger" is blocked by "@azure/eslint-plugin-azure-sdk".
+==[ @azure/dev-tool ]============================================[ 77 of 77 ]==
+==[ BLOCKED: 75 projects ]=====================================================
+These projects were blocked by dependencies that failed:
+  @azure-tests/perf-ai-form-recognizer
+  @azure-tests/perf-ai-metrics-advisor
+  @azure-tests/perf-ai-text-analytics
+  @azure-tests/perf-eventgrid
+  @azure-tests/perf-identity
+  @azure-tests/perf-keyvault-certificates
+  @azure-tests/perf-keyvault-keys
+  @azure-tests/perf-keyvault-secrets
+  @azure-tests/perf-search-documents
+  @azure-tests/perf-storage-blob
+  @azure-tests/perf-storage-file-datalake
+  @azure-tests/perf-storage-file-share
+  @azure/abort-controller
+  @azure/ai-anomaly-detector
+  @azure/ai-form-recognizer
+  @azure/ai-metrics-advisor
+  @azure/ai-text-analytics
+  @azure/app-configuration
+  @azure/attestation
+  @azure/communication-chat
+  @azure/communication-common
+  @azure/communication-identity
+  @azure/communication-phone-numbers
+  @azure/communication-sms
+  @azure/container-registry
+  @azure/core-amqp
+  @azure/core-asynciterator-polyfill
+  @azure/core-auth
+  @azure/core-client
+  @azure/core-crypto
+  @azure/core-http
+  @azure/core-lro
+  @azure/core-paging
+  @azure/core-rest-pipeline
+  @azure/core-tracing
+  @azure/core-util
+  @azure/core-xml
+  @azure/cosmos
+  @azure/data-tables
+  @azure/digital-twins-core
+  @azure/event-hubs
+  @azure/event-processor-host
+  @azure/eventgrid
+  @azure/eventhubs-checkpointstore-blob
+  @azure/identity
+  @azure/iot-device-update
+  @azure/keyvault-admin
+  @azure/keyvault-certificates
+  @azure/keyvault-common
+  @azure/keyvault-keys
+  @azure/keyvault-secrets
+  @azure/logger
+  @azure/mixedreality-authentication
+  @azure/mock-hub
+  @azure/monitor-opentelemetry-exporter
+  @azure/quantum-jobs
+  @azure/schema-registry
+  @azure/schema-registry-avro
+  @azure/search-documents
+  @azure/service-bus
+  @azure/storage-blob
+  @azure/storage-blob-changefeed
+  @azure/storage-file-datalake
+  @azure/storage-file-share
+  @azure/storage-internal-avro
+  @azure/storage-queue
+  @azure/synapse-access-control
+  @azure/synapse-artifacts
+  @azure/synapse-managed-private-endpoints
+  @azure/synapse-monitoring
+  @azure/synapse-spark
+  @azure/template
+  @azure/test-utils-multi-version
+  @azure/test-utils-perfstress
+  @azure/test-utils-recorder
+==[ FAILURE: 2 projects ]======================================================
+--[ FAILURE: @azure/eslint-plugin-azure-sdk ]----------------[ ? seconds ]--
+Invoking: tsc -p tsconfig.build.json && prettier --write dist/**/*.{js,json,md} 
+../../temp/node_modules/.pnpm/@typescript-eslint/experimental-utils@X.X.X_eslint@X.X.X+typescript@X.X.X/node_modules/@typescript-eslint/experimental-utils/_ts3.4/dist/ast-utils/eslint-utils/astUtilities.d.ts:22:136 - error TS2307: Cannot find module '@typescript-eslint/scope-manager/dist/scope/Scope'.
+22 declare const getPropertyName: (node: TSESTree.MemberExpression | TSESTree.Property | TSESTree.MethodDefinition, initialScope?: import("@typescript-eslint/scope-manager/dist/scope/Scope").Scope | undefined) => string | null;
+                                                                                                                                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../../temp/node_modules/.pnpm/@typescript-eslint/experimental-utils@X.X.X_eslint@X.X.X+typescript@X.X.X/node_modules/@typescript-eslint/experimental-utils/_ts3.4/dist/ast-utils/eslint-utils/astUtilities.d.ts:34:75 - error TS2307: Cannot find module '@typescript-eslint/scope-manager/dist/scope/Scope'.
+34 declare const getStaticValue: (node: TSESTree.Node, initialScope?: import("@typescript-eslint/scope-manager/dist/scope/Scope").Scope | undefined) => {
+  ...35 lines omitted...
+                                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/rules/ts-use-interface-parameters.ts:13:8 - error TS2307: Cannot find module '@typescript-eslint/typescript-estree/dist/parser-options'.
+13 } from "@typescript-eslint/typescript-estree/dist/parser-options";
+          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Found 10 errors.
+--[ FAILURE: @azure/dev-tool ]-------------------------------[ ? seconds ]--
+Invoking: tsc 
+src/commands/about.ts(39,44): error TS1109: Expression expected.
+src/commands/about.ts(39,51): error TS1005: ':' expected.
+src/commands/package/resolve.ts(33,36): error TS1109: Expression expected.
+src/commands/package/resolve.ts(33,53): error TS1005: ':' expected.
+src/commands/samples/checkNodeVersions.ts(240,49): error TS1109: Expression expected.
+src/commands/samples/checkNodeVersions.ts(240,60): error TS1005: ':' expected.
+src/commands/samples/publish.ts(202,37): error TS1109: Expression expected.
+src/commands/samples/publish.ts(202,66): error TS1005: ':' expected.
+  ...64 lines omitted...
+src/util/printer.ts(117,72): error TS1005: ':' expected.
+src/util/printer.ts(118,76): error TS1109: Expression expected.
+src/util/printer.ts(118,96): error TS1109: Expression expected.
+src/util/printer.ts(119,22): error TS1005: ':' expected.
+src/util/printer.ts(119,33): error TS1109: Expression expected.
+src/util/printer.ts(119,49): error TS1005: ':' expected.
+src/util/printer.ts(119,60): error TS1109: Expression expected.
+src/util/printer.ts(119,78): error TS1005: ':' expected.
+src/util/sampleConfiguration.ts(120,49): error TS1109: Expression expected.
+src/util/sampleConfiguration.ts(120,53): error TS1005: ':' expected.
+rush rebuild (? seconds)
+
+
+
+Standard error:
+Your version of Node.js (X.X.X) is an odd-numbered release. These releases frequently have bugs. Please consider installing a Long Term Support (LTS) version instead.
+Returned error code: 2
+"@azure/eslint-plugin-azure-sdk" failed to build.
+Returned error code: 1
+"@azure/dev-tool" failed to build.
+Projects failed to build.

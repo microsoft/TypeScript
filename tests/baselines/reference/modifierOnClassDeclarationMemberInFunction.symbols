@@ -1,0 +1,17 @@
+=== tests/cases/conformance/classes/classDeclarations/modifierOnClassDeclarationMemberInFunction.ts ===
+function f() {
+>f : Symbol(f, Decl(modifierOnClassDeclarationMemberInFunction.ts, 0, 0))
+
+    class C {
+>C : Symbol(C, Decl(modifierOnClassDeclarationMemberInFunction.ts, 0, 14))
+
+        public baz = 1;
+>baz : Symbol(C.baz, Decl(modifierOnClassDeclarationMemberInFunction.ts, 1, 13))
+
+        static foo() { }
+>foo : Symbol(C.foo, Decl(modifierOnClassDeclarationMemberInFunction.ts, 2, 23))
+
+        public bar() { }
+>bar : Symbol(C.bar, Decl(modifierOnClassDeclarationMemberInFunction.ts, 3, 24))
+    }
+}

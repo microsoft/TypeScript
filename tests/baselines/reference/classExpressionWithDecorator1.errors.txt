@@ -1,0 +1,10 @@
+tests/cases/compiler/classExpressionWithDecorator1.ts(1,9): error TS1109: Expression expected.
+tests/cases/compiler/classExpressionWithDecorator1.ts(1,10): error TS2304: Cannot find name 'decorate'.
+
+
+==== tests/cases/compiler/classExpressionWithDecorator1.ts (2 errors) ====
+    var v = @decorate class C { static p = 1 };
+            ~
+!!! error TS1109: Expression expected.
+             ~~~~~~~~
+!!! error TS2304: Cannot find name 'decorate'.

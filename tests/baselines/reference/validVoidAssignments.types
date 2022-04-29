@@ -1,0 +1,25 @@
+=== tests/cases/conformance/types/primitives/void/validVoidAssignments.ts ===
+var x: void;
+>x : void
+
+var y: any;
+>y : any
+
+var z: void;
+>z : void
+
+y = x;
+>y = x : void
+>y : any
+>x : void
+
+x = y;
+>x = y : any
+>x : void
+>y : any
+
+x = z;
+>x = z : void
+>x : void
+>z : void
+

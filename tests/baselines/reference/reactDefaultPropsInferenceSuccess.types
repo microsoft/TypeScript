@@ -1,0 +1,207 @@
+=== tests/cases/compiler/reactDefaultPropsInferenceSuccess.tsx ===
+/// <reference path="react16.d.ts" />
+
+import React from 'react';
+>React : typeof React
+
+interface BaseProps {
+  when?: ((value: string) => boolean) | "a" | "b";
+>when : "a" | "b" | ((value: string) => boolean) | undefined
+>value : string
+
+  error?: boolean;
+>error : boolean | undefined
+}
+
+interface Props extends BaseProps {
+}
+
+class FieldFeedback<P extends Props = BaseProps> extends React.Component<P> {
+>FieldFeedback : FieldFeedback<P>
+>React.Component : React.Component<P, {}, any>
+>React : typeof React
+>Component : typeof React.Component
+
+  static defaultProps = {
+>defaultProps : { when: () => boolean; }
+>{    when: () => true  } : { when: () => boolean; }
+
+    when: () => true
+>when : () => boolean
+>() => true : () => boolean
+>true : true
+
+  };
+
+  render() {
+>render : () => JSX.Element
+
+    return <div>Hello</div>;
+><div>Hello</div> : JSX.Element
+>div : any
+>div : any
+  }
+}
+
+// OK
+const Test1 = () => <FieldFeedback when={value => !!value} />;
+>Test1 : () => JSX.Element
+>() => <FieldFeedback when={value => !!value} /> : () => JSX.Element
+><FieldFeedback when={value => !!value} /> : JSX.Element
+>FieldFeedback : typeof FieldFeedback
+>when : (value: string) => boolean
+>value => !!value : (value: string) => boolean
+>value : string
+>!!value : boolean
+>!value : boolean
+>value : string
+
+// Error: Void not assignable to boolean
+const Test2 = () => <FieldFeedback when={value => console.log(value)} />;
+>Test2 : () => JSX.Element
+>() => <FieldFeedback when={value => console.log(value)} /> : () => JSX.Element
+><FieldFeedback when={value => console.log(value)} /> : JSX.Element
+>FieldFeedback : typeof FieldFeedback
+>when : (value: string) => void
+>value => console.log(value) : (value: string) => void
+>value : string
+>console.log(value) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>value : string
+
+class FieldFeedbackBeta<P extends Props = BaseProps> extends React.Component<P> {
+>FieldFeedbackBeta : FieldFeedbackBeta<P>
+>React.Component : React.Component<P, {}, any>
+>React : typeof React
+>Component : typeof React.Component
+
+  static defaultProps: BaseProps = {
+>defaultProps : BaseProps
+>{    when: () => true  } : { when: () => true; }
+
+    when: () => true
+>when : () => true
+>() => true : () => true
+>true : true
+
+  };
+
+  render() {
+>render : () => JSX.Element
+
+    return <div>Hello</div>;
+><div>Hello</div> : JSX.Element
+>div : any
+>div : any
+  }
+}
+
+// OK
+const Test1a = () => <FieldFeedbackBeta when={value => !!value} error>Hah</FieldFeedbackBeta>;
+>Test1a : () => JSX.Element
+>() => <FieldFeedbackBeta when={value => !!value} error>Hah</FieldFeedbackBeta> : () => JSX.Element
+><FieldFeedbackBeta when={value => !!value} error>Hah</FieldFeedbackBeta> : JSX.Element
+>FieldFeedbackBeta : typeof FieldFeedbackBeta
+>when : (value: string) => boolean
+>value => !!value : (value: string) => boolean
+>value : string
+>!!value : boolean
+>!value : boolean
+>value : string
+>error : true
+>FieldFeedbackBeta : typeof FieldFeedbackBeta
+
+// Error: Void not assignable to boolean
+const Test2a = () => <FieldFeedbackBeta when={value => console.log(value)} error>Hah</FieldFeedbackBeta>;
+>Test2a : () => JSX.Element
+>() => <FieldFeedbackBeta when={value => console.log(value)} error>Hah</FieldFeedbackBeta> : () => JSX.Element
+><FieldFeedbackBeta when={value => console.log(value)} error>Hah</FieldFeedbackBeta> : JSX.Element
+>FieldFeedbackBeta : typeof FieldFeedbackBeta
+>when : (value: string) => void
+>value => console.log(value) : (value: string) => void
+>value : string
+>console.log(value) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>value : string
+>error : true
+>FieldFeedbackBeta : typeof FieldFeedbackBeta
+
+interface MyPropsProps extends Props {
+  when: (value: string) => boolean;
+>when : (value: string) => boolean
+>value : string
+}
+
+class FieldFeedback2<P extends MyPropsProps = MyPropsProps> extends FieldFeedback<P> {
+>FieldFeedback2 : FieldFeedback2<P>
+>FieldFeedback : FieldFeedback<P>
+
+  static defaultProps = {
+>defaultProps : { when: () => boolean; }
+>{    when: () => true  } : { when: () => boolean; }
+
+    when: () => true
+>when : () => boolean
+>() => true : () => boolean
+>true : true
+
+  };
+
+  render() {
+>render : () => JSX.Element
+
+    this.props.when("now"); // OK, always defined
+>this.props.when("now") : boolean
+>this.props.when : P["when"]
+>this.props : Readonly<{ children?: React.ReactNode; }> & Readonly<P>
+>this : this
+>props : Readonly<{ children?: React.ReactNode; }> & Readonly<P>
+>when : P["when"]
+>"now" : "now"
+
+    return <div>Hello</div>;
+><div>Hello</div> : JSX.Element
+>div : any
+>div : any
+  }
+}
+
+// OK
+const Test3 = () => <FieldFeedback2 when={value => !!value} />;
+>Test3 : () => JSX.Element
+>() => <FieldFeedback2 when={value => !!value} /> : () => JSX.Element
+><FieldFeedback2 when={value => !!value} /> : JSX.Element
+>FieldFeedback2 : typeof FieldFeedback2
+>when : (value: string) => boolean
+>value => !!value : (value: string) => boolean
+>value : string
+>!!value : boolean
+>!value : boolean
+>value : string
+
+// Error: Void not assignable to boolean
+const Test4 = () => <FieldFeedback2 when={value => console.log(value)} />;
+>Test4 : () => JSX.Element
+>() => <FieldFeedback2 when={value => console.log(value)} /> : () => JSX.Element
+><FieldFeedback2 when={value => console.log(value)} /> : JSX.Element
+>FieldFeedback2 : typeof FieldFeedback2
+>when : (value: string) => void
+>value => console.log(value) : (value: string) => void
+>value : string
+>console.log(value) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>value : string
+
+// OK
+const Test5 = () => <FieldFeedback2 />;
+>Test5 : () => JSX.Element
+>() => <FieldFeedback2 /> : () => JSX.Element
+><FieldFeedback2 /> : JSX.Element
+>FieldFeedback2 : typeof FieldFeedback2
+

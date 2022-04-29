@@ -1,0 +1,38 @@
+=== tests/cases/compiler/differentTypesWithSameName.ts ===
+module m {
+>m : typeof m
+
+  export class variable{
+>variable : variable
+
+    s: string;
+>s : string
+  }
+  export function doSomething(v: m.variable) {
+>doSomething : (v: m.variable) => void
+>v : variable
+>m : any
+    
+  }
+}
+
+class variable {
+>variable : variable
+
+ t: number;
+>t : number
+}
+
+
+var v: variable = new variable();
+>v : variable
+>new variable() : variable
+>variable : typeof variable
+
+m.doSomething(v);
+>m.doSomething(v) : void
+>m.doSomething : (v: m.variable) => void
+>m : typeof m
+>doSomething : (v: m.variable) => void
+>v : variable
+

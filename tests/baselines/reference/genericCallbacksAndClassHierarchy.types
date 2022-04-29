@@ -1,0 +1,62 @@
+=== tests/cases/compiler/genericCallbacksAndClassHierarchy.ts ===
+module M {
+>M : typeof M
+
+    export interface I<T> {
+        subscribe(callback: (newValue: T) => void ): any;
+>subscribe : (callback: (newValue: T) => void) => any
+>callback : (newValue: T) => void
+>newValue : T
+    }
+    export class C1<T> {
+>C1 : C1<T>
+
+        public value: I<T>;
+>value : I<T>
+    }
+    export class A<T> {
+>A : A<T>
+
+        public dummy: any;
+>dummy : any
+    }
+    export class B<T> extends C1<A<T>> { }
+>B : B<T>
+>C1 : C1<A<T>>
+
+    export class D<T> {
+>D : D<T>
+
+        _subscribe(viewModel: B<T>): void {
+>_subscribe : (viewModel: B<T>) => void
+>viewModel : B<T>
+
+            var f = (newValue: A<T>) => { };
+>f : (newValue: A<T>) => void
+>(newValue: A<T>) => { } : (newValue: A<T>) => void
+>newValue : A<T>
+
+            var v: I<A<T>> = viewModel.value;
+>v : I<A<T>>
+>viewModel.value : I<A<T>>
+>viewModel : B<T>
+>value : I<A<T>>
+
+            // both of these should work
+            v.subscribe(f);
+>v.subscribe(f) : any
+>v.subscribe : (callback: (newValue: A<T>) => void) => any
+>v : I<A<T>>
+>subscribe : (callback: (newValue: A<T>) => void) => any
+>f : (newValue: A<T>) => void
+
+            v.subscribe((newValue: A<T>) => { });
+>v.subscribe((newValue: A<T>) => { }) : any
+>v.subscribe : (callback: (newValue: A<T>) => void) => any
+>v : I<A<T>>
+>subscribe : (callback: (newValue: A<T>) => void) => any
+>(newValue: A<T>) => { } : (newValue: A<T>) => void
+>newValue : A<T>
+        }
+    }
+}

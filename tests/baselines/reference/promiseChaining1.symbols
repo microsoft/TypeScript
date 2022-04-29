@@ -1,0 +1,52 @@
+=== tests/cases/compiler/promiseChaining1.ts ===
+// same example but with constraints on each type parameter
+class Chain2<T extends { length: number }> {
+>Chain2 : Symbol(Chain2, Decl(promiseChaining1.ts, 0, 0))
+>T : Symbol(T, Decl(promiseChaining1.ts, 1, 13))
+>length : Symbol(length, Decl(promiseChaining1.ts, 1, 24))
+
+    constructor(public value: T) { }
+>value : Symbol(Chain2.value, Decl(promiseChaining1.ts, 2, 16))
+>T : Symbol(T, Decl(promiseChaining1.ts, 1, 13))
+
+    then<S extends Function>(cb: (x: T) => S): Chain2<S> {
+>then : Symbol(Chain2.then, Decl(promiseChaining1.ts, 2, 36))
+>S : Symbol(S, Decl(promiseChaining1.ts, 3, 9))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>cb : Symbol(cb, Decl(promiseChaining1.ts, 3, 29))
+>x : Symbol(x, Decl(promiseChaining1.ts, 3, 34))
+>T : Symbol(T, Decl(promiseChaining1.ts, 1, 13))
+>S : Symbol(S, Decl(promiseChaining1.ts, 3, 9))
+>Chain2 : Symbol(Chain2, Decl(promiseChaining1.ts, 0, 0))
+>S : Symbol(S, Decl(promiseChaining1.ts, 3, 9))
+
+        var result = cb(this.value);
+>result : Symbol(result, Decl(promiseChaining1.ts, 4, 11))
+>cb : Symbol(cb, Decl(promiseChaining1.ts, 3, 29))
+>this.value : Symbol(Chain2.value, Decl(promiseChaining1.ts, 2, 16))
+>this : Symbol(Chain2, Decl(promiseChaining1.ts, 0, 0))
+>value : Symbol(Chain2.value, Decl(promiseChaining1.ts, 2, 16))
+
+        // should get a fresh type parameter which each then call
+        var z = this.then(x => result)/*S*/.then(x => "abc")/*Function*/.then(x => x.length)/*number*/; // Should error on "abc" because it is not a Function
+>z : Symbol(z, Decl(promiseChaining1.ts, 6, 11))
+>this.then(x => result)/*S*/.then(x => "abc")/*Function*/.then : Symbol(Chain2.then, Decl(promiseChaining1.ts, 2, 36))
+>this.then(x => result)/*S*/.then : Symbol(Chain2.then, Decl(promiseChaining1.ts, 2, 36))
+>this.then : Symbol(Chain2.then, Decl(promiseChaining1.ts, 2, 36))
+>this : Symbol(Chain2, Decl(promiseChaining1.ts, 0, 0))
+>then : Symbol(Chain2.then, Decl(promiseChaining1.ts, 2, 36))
+>x : Symbol(x, Decl(promiseChaining1.ts, 6, 26))
+>result : Symbol(result, Decl(promiseChaining1.ts, 4, 11))
+>then : Symbol(Chain2.then, Decl(promiseChaining1.ts, 2, 36))
+>x : Symbol(x, Decl(promiseChaining1.ts, 6, 49))
+>then : Symbol(Chain2.then, Decl(promiseChaining1.ts, 2, 36))
+>x : Symbol(x, Decl(promiseChaining1.ts, 6, 78))
+>x.length : Symbol(Function.length, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(promiseChaining1.ts, 6, 78))
+>length : Symbol(Function.length, Decl(lib.es5.d.ts, --, --))
+
+        return new Chain2(result);
+>Chain2 : Symbol(Chain2, Decl(promiseChaining1.ts, 0, 0))
+>result : Symbol(result, Decl(promiseChaining1.ts, 4, 11))
+    }
+}

@@ -1,0 +1,14 @@
+=== tests/cases/compiler/transformArrowInBlockScopedLoopVarInitializer.ts ===
+// https://github.com/Microsoft/TypeScript/issues/11236
+while (true)
+>true : true
+{
+    let local = null;
+>local : any
+>null : null
+
+    var a = () => local; // <-- Lambda should be converted to function()
+>a : () => any
+>() => local : () => any
+>local : any
+}

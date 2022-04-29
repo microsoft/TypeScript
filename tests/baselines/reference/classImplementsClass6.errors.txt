@@ -1,0 +1,30 @@
+tests/cases/compiler/classImplementsClass6.ts(20,3): error TS2339: Property 'bar' does not exist on type 'C'.
+tests/cases/compiler/classImplementsClass6.ts(21,4): error TS2576: Property 'bar' does not exist on type 'C2'. Did you mean to access the static member 'C2.bar' instead?
+
+
+==== tests/cases/compiler/classImplementsClass6.ts (2 errors) ====
+    class A {
+        static bar(): string {
+            return "";
+        }
+        foo(): number { return 1; }
+    }
+    class C implements A {
+        
+        foo() {
+            return 1;
+        }
+    }
+    
+    class C2 extends A {}
+    
+    var c: C;
+    var c2: C2;
+    c = c2;
+    c2 = c;
+    c.bar(); // error
+      ~~~
+!!! error TS2339: Property 'bar' does not exist on type 'C'.
+    c2.bar(); // should error
+       ~~~
+!!! error TS2576: Property 'bar' does not exist on type 'C2'. Did you mean to access the static member 'C2.bar' instead?

@@ -1,0 +1,189 @@
+=== tests/cases/conformance/jsx/jsxEsprimaFbTestSuite.tsx ===
+declare var React: any;
+>React : any
+
+declare var 日本語;
+>日本語 : any
+
+declare var AbC_def;
+>AbC_def : any
+
+declare var LeftRight;
+>LeftRight : any
+
+declare var x;
+>x : any
+
+declare var a;
+>a : any
+
+declare var props;
+>props : any
+
+declare var value;
+>value : any
+
+<a />;
+><a /> : any
+>a : any
+
+<n:a n:v />;
+><n:a n:v /> : any
+>n:a : any
+>n:v : true
+
+<a n:foo="bar"> {value} <b><c /></b></a>;
+><a n:foo="bar"> {value} <b><c /></b></a> : any
+>a : any
+>n:foo : string
+>value : any
+><b><c /></b> : any
+>b : any
+><c /> : any
+>c : any
+>b : any
+>a : any
+
+<a b={" "} c=" " d="&amp;" e="id=1&group=2" f="&#123456789" g="&#123*;" h="&#x;" />;
+><a b={" "} c=" " d="&amp;" e="id=1&group=2" f="&#123456789" g="&#123*;" h="&#x;" /> : any
+>a : any
+>b : string
+>" " : " "
+>c : string
+>d : string
+>e : string
+>f : string
+>g : string
+>h : string
+
+<a b="&notanentity;" />;
+><a b="&notanentity;" /> : any
+>a : any
+>b : string
+
+<a
+><a/> : any
+>a : any
+
+/>;
+
+<日本語></日本語>;
+><日本語></日本語> : any
+>日本語 : any
+>日本語 : any
+
+<AbC_def
+><AbC_def  test="&#x0026;&#38;">barbaz</AbC_def> : any
+>AbC_def : any
+
+  test="&#x0026;&#38;">
+>test : string
+
+bar
+baz
+</AbC_def>;
+>AbC_def : any
+
+<a b={x ? <c /> : <d />} />;
+><a b={x ? <c /> : <d />} /> : any
+>a : any
+>b : any
+>x ? <c /> : <d /> : any
+>x : any
+><c /> : any
+>c : any
+><d /> : any
+>d : any
+
+<a>{}</a>;
+><a>{}</a> : any
+>a : any
+>a : any
+
+<a>{/* this is a comment */}</a>;
+><a>{/* this is a comment */}</a> : any
+>a : any
+>a : any
+
+<div>@test content</div>;
+><div>@test content</div> : any
+>div : any
+>div : any
+
+<div><br />7x invalid-js-identifier</div>;
+><div><br />7x invalid-js-identifier</div> : any
+>div : any
+><br /> : any
+>br : any
+>div : any
+
+<LeftRight left=<a /> right=<b>monkeys /> gorillas</b> />;
+><LeftRight left=<a /> : any
+><LeftRight left= : any
+>LeftRight : any
+>left : true
+><a /> : any
+>a : any
+>right=<b>monkeys /> gorillas</b> /> : boolean
+>right : any
+><b>monkeys /> gorillas</b> /> : boolean
+><b>monkeys /> gorillas</b> / : number
+><b>monkeys /> gorillas</b> : any
+>b : any
+>b : any
+> : any
+> : any
+
+<a.b></a.b>;
+><a.b></a.b> : any
+>a.b : any
+>a : any
+>b : any
+>a.b : any
+>a : any
+>b : any
+
+<a.b.c></a.b.c>;
+><a.b.c></a.b.c> : any
+>a.b.c : any
+>a.b : any
+>a : any
+>b : any
+>c : any
+>a.b.c : any
+>a.b : any
+>a : any
+>b : any
+>c : any
+
+(<div />) < x;
+>(<div />) < x : boolean
+>(<div />) : any
+><div /> : any
+>div : any
+>x : any
+
+<div {...props} />;
+><div {...props} /> : any
+>div : any
+>props : any
+
+<div {...props} post="attribute" />;
+><div {...props} post="attribute" /> : any
+>div : any
+>props : any
+>post : string
+
+<div pre="leading" pre2="attribute" {...props}></div>;
+><div pre="leading" pre2="attribute" {...props}></div> : any
+>div : any
+>pre : string
+>pre2 : string
+>props : any
+>div : any
+
+<a>    </a>;
+><a>    </a> : any
+>a : any
+>a : any
+

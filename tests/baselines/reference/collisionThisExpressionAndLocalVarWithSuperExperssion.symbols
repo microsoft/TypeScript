@@ -1,0 +1,45 @@
+=== tests/cases/compiler/collisionThisExpressionAndLocalVarWithSuperExperssion.ts ===
+class a {
+>a : Symbol(a, Decl(collisionThisExpressionAndLocalVarWithSuperExperssion.ts, 0, 0))
+
+    public foo() {
+>foo : Symbol(a.foo, Decl(collisionThisExpressionAndLocalVarWithSuperExperssion.ts, 0, 9))
+    }
+}
+class b extends a {
+>b : Symbol(b, Decl(collisionThisExpressionAndLocalVarWithSuperExperssion.ts, 3, 1))
+>a : Symbol(a, Decl(collisionThisExpressionAndLocalVarWithSuperExperssion.ts, 0, 0))
+
+    public foo() {
+>foo : Symbol(b.foo, Decl(collisionThisExpressionAndLocalVarWithSuperExperssion.ts, 4, 19))
+
+        var _this = 10;
+>_this : Symbol(_this, Decl(collisionThisExpressionAndLocalVarWithSuperExperssion.ts, 6, 11))
+
+        var f = () => super.foo();
+>f : Symbol(f, Decl(collisionThisExpressionAndLocalVarWithSuperExperssion.ts, 7, 11))
+>super.foo : Symbol(a.foo, Decl(collisionThisExpressionAndLocalVarWithSuperExperssion.ts, 0, 9))
+>super : Symbol(a, Decl(collisionThisExpressionAndLocalVarWithSuperExperssion.ts, 0, 0))
+>foo : Symbol(a.foo, Decl(collisionThisExpressionAndLocalVarWithSuperExperssion.ts, 0, 9))
+    }
+}
+class b2 extends a {
+>b2 : Symbol(b2, Decl(collisionThisExpressionAndLocalVarWithSuperExperssion.ts, 9, 1))
+>a : Symbol(a, Decl(collisionThisExpressionAndLocalVarWithSuperExperssion.ts, 0, 0))
+
+    public foo() {
+>foo : Symbol(b2.foo, Decl(collisionThisExpressionAndLocalVarWithSuperExperssion.ts, 10, 20))
+
+        var f = () => {
+>f : Symbol(f, Decl(collisionThisExpressionAndLocalVarWithSuperExperssion.ts, 12, 11))
+
+            var _this = 10;
+>_this : Symbol(_this, Decl(collisionThisExpressionAndLocalVarWithSuperExperssion.ts, 13, 15))
+
+            return super.foo()
+>super.foo : Symbol(a.foo, Decl(collisionThisExpressionAndLocalVarWithSuperExperssion.ts, 0, 9))
+>super : Symbol(a, Decl(collisionThisExpressionAndLocalVarWithSuperExperssion.ts, 0, 0))
+>foo : Symbol(a.foo, Decl(collisionThisExpressionAndLocalVarWithSuperExperssion.ts, 0, 9))
+        }
+    }
+}

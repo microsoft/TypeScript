@@ -1,0 +1,64 @@
+=== tests/cases/compiler/decrementAndIncrementOperators.ts ===
+var x = 0;
+>x : Symbol(x, Decl(decrementAndIncrementOperators.ts, 0, 3))
+
+// errors
+1 ++;
+
+(1)++;
+(1)--;
+
+++(1);
+--(1);
+
+(1 + 2)++;
+(1 + 2)--;
+
+++(1 + 2);
+--(1 + 2);
+
+(x + x)++;
+>x : Symbol(x, Decl(decrementAndIncrementOperators.ts, 0, 3))
+>x : Symbol(x, Decl(decrementAndIncrementOperators.ts, 0, 3))
+
+(x + x)--;
+>x : Symbol(x, Decl(decrementAndIncrementOperators.ts, 0, 3))
+>x : Symbol(x, Decl(decrementAndIncrementOperators.ts, 0, 3))
+
+++(x + x);
+>x : Symbol(x, Decl(decrementAndIncrementOperators.ts, 0, 3))
+>x : Symbol(x, Decl(decrementAndIncrementOperators.ts, 0, 3))
+
+--(x + x);
+>x : Symbol(x, Decl(decrementAndIncrementOperators.ts, 0, 3))
+>x : Symbol(x, Decl(decrementAndIncrementOperators.ts, 0, 3))
+
+//OK
+x++;
+>x : Symbol(x, Decl(decrementAndIncrementOperators.ts, 0, 3))
+
+x--;
+>x : Symbol(x, Decl(decrementAndIncrementOperators.ts, 0, 3))
+
+++x;
+>x : Symbol(x, Decl(decrementAndIncrementOperators.ts, 0, 3))
+
+--x;
+>x : Symbol(x, Decl(decrementAndIncrementOperators.ts, 0, 3))
+
+(x)++;
+>x : Symbol(x, Decl(decrementAndIncrementOperators.ts, 0, 3))
+
+--(x);
+>x : Symbol(x, Decl(decrementAndIncrementOperators.ts, 0, 3))
+
+((x))++;
+>x : Symbol(x, Decl(decrementAndIncrementOperators.ts, 0, 3))
+
+((x))--;
+>x : Symbol(x, Decl(decrementAndIncrementOperators.ts, 0, 3))
+
+x[x++]++;
+>x : Symbol(x, Decl(decrementAndIncrementOperators.ts, 0, 3))
+>x : Symbol(x, Decl(decrementAndIncrementOperators.ts, 0, 3))
+

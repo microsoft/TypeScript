@@ -1,0 +1,14 @@
+=== tests/cases/compiler/functionType.ts ===
+function salt() {}
+>salt : Symbol(salt, Decl(functionType.ts, 0, 0))
+
+salt.apply("hello", []);
+>salt.apply : Symbol(Function.apply, Decl(lib.es5.d.ts, --, --))
+>salt : Symbol(salt, Decl(functionType.ts, 0, 0))
+>apply : Symbol(Function.apply, Decl(lib.es5.d.ts, --, --))
+
+(new Function("return 5"))();
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ 
+ 
+

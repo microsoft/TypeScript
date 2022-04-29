@@ -1,0 +1,28 @@
+=== tests/cases/conformance/decorators/class/a.ts ===
+declare function forwardRef(x: any): any;
+>forwardRef : (x: any) => any
+>x : any
+
+declare var Something: any;
+>Something : any
+
+@Something({ v: () => Testing123 })
+>Something({ v: () => Testing123 }) : any
+>Something : any
+>{ v: () => Testing123 } : { v: () => typeof Testing123; }
+>v : () => typeof Testing123
+>() => Testing123 : () => typeof Testing123
+>Testing123 : typeof Testing123
+
+export class Testing123 {
+>Testing123 : Testing123
+
+    static prop0: string;
+>prop0 : string
+
+    static prop1 = Testing123.prop0;
+>prop1 : string
+>Testing123.prop0 : string
+>Testing123 : typeof Testing123
+>prop0 : string
+}

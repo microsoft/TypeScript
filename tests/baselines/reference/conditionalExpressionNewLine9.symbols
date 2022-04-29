@@ -1,0 +1,8 @@
+=== tests/cases/compiler/conditionalExpressionNewLine9.ts ===
+var v = a 
+>v : Symbol(v, Decl(conditionalExpressionNewLine9.ts, 0, 3))
+
+  ? b
+    ? d : e
+  : c
+    ? f : g;

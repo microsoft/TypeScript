@@ -1,0 +1,8 @@
+tests/cases/conformance/parser/ecmascript5/ModuleDeclarations/parserModuleDeclaration2.d.ts(1,1): error TS1046: Top-level declarations in .d.ts files must start with either a 'declare' or 'export' modifier.
+
+
+==== tests/cases/conformance/parser/ecmascript5/ModuleDeclarations/parserModuleDeclaration2.d.ts (1 errors) ====
+    module M {
+    ~~~~~~
+!!! error TS1046: Top-level declarations in .d.ts files must start with either a 'declare' or 'export' modifier.
+    }

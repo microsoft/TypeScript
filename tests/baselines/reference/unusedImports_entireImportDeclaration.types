@@ -1,0 +1,47 @@
+=== /a.ts ===
+export const a = 0;
+>a : 0
+>0 : 0
+
+export const b = 0;
+>b : 0
+>0 : 0
+
+export default 0;
+
+=== /b.ts ===
+import d1, { a as a1, b as b1 } from "./a";
+>d1 : 0
+>a : 0
+>a1 : 0
+>b : 0
+>b1 : 0
+
+import d2, * as ns from "./a";
+>d2 : 0
+>ns : typeof ns
+
+import d3, { a as a2, b as b2 } from "./a";
+>d3 : 0
+>a : 0
+>a2 : 0
+>b : 0
+>b2 : 0
+
+d3;
+>d3 : 0
+
+import d4, * as ns2 from "./a";
+>d4 : 0
+>ns2 : typeof ns
+
+d4;
+>d4 : 0
+
+import d5, * as ns3 from "./a";
+>d5 : 0
+>ns3 : typeof ns
+
+ns3;
+>ns3 : typeof ns
+

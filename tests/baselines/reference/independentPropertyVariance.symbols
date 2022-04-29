@@ -1,0 +1,17 @@
+=== tests/cases/conformance/types/typeRelationships/comparable/independentPropertyVariance.ts ===
+// Verify that properties can vary independently in comparable relationship
+
+declare const x: { a: 1, b: string };
+>x : Symbol(x, Decl(independentPropertyVariance.ts, 2, 13))
+>a : Symbol(a, Decl(independentPropertyVariance.ts, 2, 18))
+>b : Symbol(b, Decl(independentPropertyVariance.ts, 2, 24))
+
+declare const y: { a: number, b: 'a' };
+>y : Symbol(y, Decl(independentPropertyVariance.ts, 3, 13))
+>a : Symbol(a, Decl(independentPropertyVariance.ts, 3, 18))
+>b : Symbol(b, Decl(independentPropertyVariance.ts, 3, 29))
+
+x === y;
+>x : Symbol(x, Decl(independentPropertyVariance.ts, 2, 13))
+>y : Symbol(y, Decl(independentPropertyVariance.ts, 3, 13))
+

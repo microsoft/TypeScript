@@ -1,0 +1,14 @@
+=== tests/cases/compiler/modularizeLibrary_Dom.iterable.ts ===
+for (const element of document.getElementsByTagName("a")) {
+>element : HTMLAnchorElement
+>document.getElementsByTagName("a") : HTMLCollectionOf<HTMLAnchorElement>
+>document.getElementsByTagName : { <K extends keyof HTMLElementTagNameMap>(qualifiedName: K): HTMLCollectionOf<HTMLElementTagNameMap[K]>; <K extends keyof SVGElementTagNameMap>(qualifiedName: K): HTMLCollectionOf<SVGElementTagNameMap[K]>; (qualifiedName: string): HTMLCollectionOf<Element>; }
+>document : Document
+>getElementsByTagName : { <K extends keyof HTMLElementTagNameMap>(qualifiedName: K): HTMLCollectionOf<HTMLElementTagNameMap[K]>; <K extends keyof SVGElementTagNameMap>(qualifiedName: K): HTMLCollectionOf<SVGElementTagNameMap[K]>; (qualifiedName: string): HTMLCollectionOf<Element>; }
+>"a" : "a"
+
+    element.href;
+>element.href : string
+>element : HTMLAnchorElement
+>href : string
+}

@@ -1,0 +1,7 @@
+tests/cases/conformance/statements/for-ofStatements/ES3For-ofTypeCheck1.ts(1,15): error TS2494: Using a string in a 'for...of' statement is only supported in ECMAScript 5 and higher.
+
+
+==== tests/cases/conformance/statements/for-ofStatements/ES3For-ofTypeCheck1.ts (1 errors) ====
+    for (var v of "") { }
+                  ~~
+!!! error TS2494: Using a string in a 'for...of' statement is only supported in ECMAScript 5 and higher.

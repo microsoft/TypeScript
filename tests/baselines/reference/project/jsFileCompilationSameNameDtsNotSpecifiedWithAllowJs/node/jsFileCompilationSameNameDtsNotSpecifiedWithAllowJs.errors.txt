@@ -1,0 +1,16 @@
+error TS5055: Cannot write file 'SameNameDTsNotSpecifiedWithAllowJs/a.d.ts' because it would overwrite input file.
+  Adding a tsconfig.json file will help organize projects that contain both TypeScript and JavaScript files. Learn more at https://aka.ms/tsconfig.
+error TS5055: Cannot write file 'SameNameDTsNotSpecifiedWithAllowJs/a.js' because it would overwrite input file.
+  Adding a tsconfig.json file will help organize projects that contain both TypeScript and JavaScript files. Learn more at https://aka.ms/tsconfig.
+
+
+!!! error TS5055: Cannot write file 'SameNameDTsNotSpecifiedWithAllowJs/a.d.ts' because it would overwrite input file.
+!!! error TS5055:   Adding a tsconfig.json file will help organize projects that contain both TypeScript and JavaScript files. Learn more at https://aka.ms/tsconfig.
+!!! error TS5055: Cannot write file 'SameNameDTsNotSpecifiedWithAllowJs/a.js' because it would overwrite input file.
+!!! error TS5055:   Adding a tsconfig.json file will help organize projects that contain both TypeScript and JavaScript files. Learn more at https://aka.ms/tsconfig.
+==== SameNameDTsNotSpecifiedWithAllowJs/tsconfig.json (0 errors) ====
+    { "compilerOptions": { "allowJs": true } }
+==== SameNameDTsNotSpecifiedWithAllowJs/a.d.ts (0 errors) ====
+    declare var a: number;
+==== SameNameDTsNotSpecifiedWithAllowJs/a.js (0 errors) ====
+    var test1 = 10; // Shouldnt get compiled

@@ -1,0 +1,31 @@
+tests/cases/compiler/parseTypes.ts(8,1): error TS2322: Type '(s: string) => void' is not assignable to type '() => number'.
+tests/cases/compiler/parseTypes.ts(9,1): error TS2322: Type '(s: string) => void' is not assignable to type '() => number'.
+tests/cases/compiler/parseTypes.ts(10,1): error TS2322: Type '(s: string) => void' is not assignable to type '{ [x: number]: number; }'.
+  Index signature for type 'number' is missing in type '(s: string) => void'.
+tests/cases/compiler/parseTypes.ts(11,1): error TS2322: Type '(s: string) => void' is not assignable to type 'new () => number'.
+  Type '(s: string) => void' provides no match for the signature 'new (): number'.
+
+
+==== tests/cases/compiler/parseTypes.ts (4 errors) ====
+    var x = <() => number>null;
+    var y = <{(): number; }>null;
+    var z = <{new(): number; }>null
+    var w = <{[x:number]: number; }>null
+    function f() { return 3 };
+    function g(s: string) { true };
+    y=f;
+    y=g;
+    ~
+!!! error TS2322: Type '(s: string) => void' is not assignable to type '() => number'.
+    x=g;
+    ~
+!!! error TS2322: Type '(s: string) => void' is not assignable to type '() => number'.
+    w=g;
+    ~
+!!! error TS2322: Type '(s: string) => void' is not assignable to type '{ [x: number]: number; }'.
+!!! error TS2322:   Index signature for type 'number' is missing in type '(s: string) => void'.
+    z=g;
+    ~
+!!! error TS2322: Type '(s: string) => void' is not assignable to type 'new () => number'.
+!!! error TS2322:   Type '(s: string) => void' provides no match for the signature 'new (): number'.
+    

@@ -1,0 +1,7 @@
+=== tests/cases/compiler/classImplementsClass1.ts ===
+class A { }
+>A : A
+
+class C implements A { }
+>C : C
+

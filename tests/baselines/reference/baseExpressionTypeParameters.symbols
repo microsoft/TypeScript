@@ -1,0 +1,33 @@
+=== tests/cases/compiler/baseExpressionTypeParameters.ts ===
+// Repro from #17829
+
+function base<T>() {
+>base : Symbol(base, Decl(baseExpressionTypeParameters.ts, 0, 0))
+>T : Symbol(T, Decl(baseExpressionTypeParameters.ts, 2, 14))
+
+    class Base {
+>Base : Symbol(Base, Decl(baseExpressionTypeParameters.ts, 2, 20))
+
+        static prop: T;
+>prop : Symbol(Base.prop, Decl(baseExpressionTypeParameters.ts, 3, 16))
+>T : Symbol(T, Decl(baseExpressionTypeParameters.ts, 2, 14))
+    }
+    return Base;
+>Base : Symbol(Base, Decl(baseExpressionTypeParameters.ts, 2, 20))
+}
+
+class Gen<T> extends base<T>() {}  // Error, T not in scope
+>Gen : Symbol(Gen, Decl(baseExpressionTypeParameters.ts, 7, 1))
+>T : Symbol(T, Decl(baseExpressionTypeParameters.ts, 9, 10))
+>base : Symbol(base, Decl(baseExpressionTypeParameters.ts, 0, 0))
+>T : Symbol(T)
+
+class Spec extends Gen<string> {}
+>Spec : Symbol(Spec, Decl(baseExpressionTypeParameters.ts, 9, 33))
+>Gen : Symbol(Gen, Decl(baseExpressionTypeParameters.ts, 7, 1))
+
+<string>Spec.prop;
+>Spec.prop : Symbol(Base.prop, Decl(baseExpressionTypeParameters.ts, 3, 16))
+>Spec : Symbol(Spec, Decl(baseExpressionTypeParameters.ts, 9, 33))
+>prop : Symbol(Base.prop, Decl(baseExpressionTypeParameters.ts, 3, 16))
+

@@ -1,0 +1,46 @@
+tests/cases/compiler/functionAssignment.ts(22,5): error TS2322: Type 'number' is not assignable to type 'string'.
+tests/cases/compiler/functionAssignment.ts(34,17): error TS2339: Property 'length' does not exist on type 'number'.
+
+
+==== tests/cases/compiler/functionAssignment.ts (2 errors) ====
+    function f(n: Function) { }
+    f(function () { });
+    
+    interface foo {
+        get(handler: (bar: number)=>void): void;
+    }
+    
+    interface baz {
+        get(callback: Function): number;
+    }
+    
+    var barbaz: baz;
+    var test: foo;
+    
+    test.get(function (param) {
+        var x = barbaz.get(function () { });
+    });
+    
+    function f2(n: () => void) { }
+    f2(() => {
+        var n = '';
+        n = 4;
+        ~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
+    });
+    
+    function f3(a: { a: number; b: number; }) { }
+    
+    f3({ a: 0, b: 0 });
+    
+    
+    function callb(lam:(l: number) => void );
+    function callb(lam:(n: string)=>void);
+    function callb(a) { }
+    
+    callb((a) =>{ a.length; });
+                    ~~~~~~
+!!! error TS2339: Property 'length' does not exist on type 'number'.
+    
+    
+    

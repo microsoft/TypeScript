@@ -1,0 +1,72 @@
+=== tests/cases/compiler/sourceMapValidationFor.ts ===
+for (var i = 0; i < 10; i++) {
+>i : Symbol(i, Decl(sourceMapValidationFor.ts, 0, 8))
+>i : Symbol(i, Decl(sourceMapValidationFor.ts, 0, 8))
+>i : Symbol(i, Decl(sourceMapValidationFor.ts, 0, 8))
+
+    WScript.Echo("i: " + i);
+>WScript.Echo : Symbol(Echo, Decl(lib.scripthost.d.ts, --, --))
+>WScript : Symbol(WScript, Decl(lib.scripthost.d.ts, --, --))
+>Echo : Symbol(Echo, Decl(lib.scripthost.d.ts, --, --))
+>i : Symbol(i, Decl(sourceMapValidationFor.ts, 0, 8))
+}
+for (i = 0; i < 10; i++)
+>i : Symbol(i, Decl(sourceMapValidationFor.ts, 0, 8))
+>i : Symbol(i, Decl(sourceMapValidationFor.ts, 0, 8))
+>i : Symbol(i, Decl(sourceMapValidationFor.ts, 0, 8))
+{
+    WScript.Echo("i: " + i);
+>WScript.Echo : Symbol(Echo, Decl(lib.scripthost.d.ts, --, --))
+>WScript : Symbol(WScript, Decl(lib.scripthost.d.ts, --, --))
+>Echo : Symbol(Echo, Decl(lib.scripthost.d.ts, --, --))
+>i : Symbol(i, Decl(sourceMapValidationFor.ts, 0, 8))
+}
+for (var j = 0; j < 10; ) {
+>j : Symbol(j, Decl(sourceMapValidationFor.ts, 7, 8))
+>j : Symbol(j, Decl(sourceMapValidationFor.ts, 7, 8))
+
+    j++;
+>j : Symbol(j, Decl(sourceMapValidationFor.ts, 7, 8))
+
+    if (j == 1) {
+>j : Symbol(j, Decl(sourceMapValidationFor.ts, 7, 8))
+
+        continue;
+    }
+}
+for (j = 0; j < 10;)
+>j : Symbol(j, Decl(sourceMapValidationFor.ts, 7, 8))
+>j : Symbol(j, Decl(sourceMapValidationFor.ts, 7, 8))
+{
+    j++;
+>j : Symbol(j, Decl(sourceMapValidationFor.ts, 7, 8))
+}
+for (var k = 0;; k++) {
+>k : Symbol(k, Decl(sourceMapValidationFor.ts, 17, 8))
+>k : Symbol(k, Decl(sourceMapValidationFor.ts, 17, 8))
+}
+for (k = 0;; k++)
+>k : Symbol(k, Decl(sourceMapValidationFor.ts, 17, 8))
+>k : Symbol(k, Decl(sourceMapValidationFor.ts, 17, 8))
+{
+}
+for (; k < 10; k++) {
+>k : Symbol(k, Decl(sourceMapValidationFor.ts, 17, 8))
+>k : Symbol(k, Decl(sourceMapValidationFor.ts, 17, 8))
+}
+for (;;) {
+    i++;
+>i : Symbol(i, Decl(sourceMapValidationFor.ts, 0, 8))
+}
+for (;;)
+{
+    i++;
+>i : Symbol(i, Decl(sourceMapValidationFor.ts, 0, 8))
+}
+for (i = 0, j = 20; j < 20, i < 20; j++) {
+>i : Symbol(i, Decl(sourceMapValidationFor.ts, 0, 8))
+>j : Symbol(j, Decl(sourceMapValidationFor.ts, 7, 8))
+>j : Symbol(j, Decl(sourceMapValidationFor.ts, 7, 8))
+>i : Symbol(i, Decl(sourceMapValidationFor.ts, 0, 8))
+>j : Symbol(j, Decl(sourceMapValidationFor.ts, 7, 8))
+}

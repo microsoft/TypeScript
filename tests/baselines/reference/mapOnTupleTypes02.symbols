@@ -1,0 +1,16 @@
+=== tests/cases/compiler/mapOnTupleTypes02.ts ===
+export type Point = [number, number];
+>Point : Symbol(Point, Decl(mapOnTupleTypes02.ts, 0, 0))
+
+export function increment(point: Point) {
+>increment : Symbol(increment, Decl(mapOnTupleTypes02.ts, 0, 37))
+>point : Symbol(point, Decl(mapOnTupleTypes02.ts, 2, 26))
+>Point : Symbol(Point, Decl(mapOnTupleTypes02.ts, 0, 0))
+
+  return point.map(d => d + 1);
+>point.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>point : Symbol(point, Decl(mapOnTupleTypes02.ts, 2, 26))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>d : Symbol(d, Decl(mapOnTupleTypes02.ts, 3, 19))
+>d : Symbol(d, Decl(mapOnTupleTypes02.ts, 3, 19))
+}

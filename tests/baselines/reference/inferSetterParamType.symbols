@@ -1,0 +1,29 @@
+=== tests/cases/compiler/inferSetterParamType.ts ===
+class Foo {
+>Foo : Symbol(Foo, Decl(inferSetterParamType.ts, 0, 0))
+
+    get bar() {
+>bar : Symbol(Foo.bar, Decl(inferSetterParamType.ts, 0, 11), Decl(inferSetterParamType.ts, 4, 5))
+
+        return 0;
+    }
+    set bar(n) { // should not be an error - infer number
+>bar : Symbol(Foo.bar, Decl(inferSetterParamType.ts, 0, 11), Decl(inferSetterParamType.ts, 4, 5))
+>n : Symbol(n, Decl(inferSetterParamType.ts, 5, 12))
+    }
+}
+
+class Foo2 {
+>Foo2 : Symbol(Foo2, Decl(inferSetterParamType.ts, 7, 1))
+
+    get bar() {
+>bar : Symbol(Foo2.bar, Decl(inferSetterParamType.ts, 9, 12), Decl(inferSetterParamType.ts, 13, 5))
+
+        return 0; // should be an error - can't coerce infered return type to match setter annotated type
+    }
+    set bar(n:string) {
+>bar : Symbol(Foo2.bar, Decl(inferSetterParamType.ts, 9, 12), Decl(inferSetterParamType.ts, 13, 5))
+>n : Symbol(n, Decl(inferSetterParamType.ts, 14, 12))
+    }
+}
+

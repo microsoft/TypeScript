@@ -1,0 +1,10 @@
+tests/cases/conformance/parser/ecmascript5/RegressionTests/parser618973.ts(1,8): error TS1030: 'export' modifier already seen.
+
+
+==== tests/cases/conformance/parser/ecmascript5/RegressionTests/parser618973.ts (1 errors) ====
+    export export class Foo {
+           ~~~~~~
+!!! error TS1030: 'export' modifier already seen.
+      public Bar() {
+      }
+    }

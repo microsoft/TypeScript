@@ -1,0 +1,4 @@
+=== tests/cases/conformance/parser/ecmascript5/Statements/parserForStatement8.ts ===
+for (this in b) {
+>this : Symbol(globalThis)
+}

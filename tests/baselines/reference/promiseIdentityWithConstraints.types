@@ -1,0 +1,21 @@
+=== tests/cases/compiler/promiseIdentityWithConstraints.ts ===
+export interface IPromise<T, V> {
+    then<U extends T, W extends V>(callback: (x: T) => IPromise<U, W>): IPromise<U, W>;
+>then : <U extends T, W extends V>(callback: (x: T) => IPromise<U, W>) => IPromise<U, W>
+>callback : (x: T) => IPromise<U, W>
+>x : T
+}
+export interface Promise<T, V> {
+    then<U extends T, W extends V>(callback: (x: T) => Promise<U, W>): Promise<U, W>;
+>then : <U extends T, W extends V>(callback: (x: T) => Promise<U, W>) => Promise<U, W>
+>callback : (x: T) => Promise<U, W>
+>x : T
+}
+
+// Error because constraint V doesn't match
+var x: IPromise<string, number>;
+>x : IPromise<string, number>
+
+var x: Promise<string, boolean>;
+>x : IPromise<string, number>
+

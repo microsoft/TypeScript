@@ -1,0 +1,30 @@
+=== tests/cases/compiler/typeParametersShouldNotBeEqual.ts ===
+function ff<T, U>(x: T, y: U) {
+>ff : <T, U>(x: T, y: U) => void
+>x : T
+>y : U
+
+    var z: Object;
+>z : Object
+
+    x = x;  // Ok
+>x = x : T
+>x : T
+>x : T
+
+    x = y;  // Error
+>x = y : U
+>x : T
+>y : U
+
+    x = z;  // Error
+>x = z : Object
+>x : T
+>z : Object
+
+    z = x;  // Ok
+>z = x : T
+>z : Object
+>x : T
+}
+

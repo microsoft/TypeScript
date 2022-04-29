@@ -1,0 +1,11 @@
+=== tests/cases/conformance/es6/Symbols/symbolProperty54.ts ===
+var obj = {
+>obj : Symbol(obj, Decl(symbolProperty54.ts, 0, 3))
+
+    [Symbol.prototype]: 0
+>[Symbol.prototype] : Symbol([Symbol.prototype], Decl(symbolProperty54.ts, 0, 11))
+>Symbol.prototype : Symbol(SymbolConstructor.prototype, Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>prototype : Symbol(SymbolConstructor.prototype, Decl(lib.es2015.symbol.d.ts, --, --))
+
+};

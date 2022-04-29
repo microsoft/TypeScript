@@ -1,0 +1,150 @@
+=== tests/cases/compiler/collisionSuperAndParameter.ts ===
+class Foo {
+>Foo : Symbol(Foo, Decl(collisionSuperAndParameter.ts, 0, 0))
+
+    a() {
+>a : Symbol(Foo.a, Decl(collisionSuperAndParameter.ts, 0, 11))
+
+        var lamda = (_super: number) => { // No Error 
+>lamda : Symbol(lamda, Decl(collisionSuperAndParameter.ts, 2, 11))
+>_super : Symbol(_super, Decl(collisionSuperAndParameter.ts, 2, 21))
+
+            return x => this;   // New scope.  So should inject new _this capture
+>x : Symbol(x, Decl(collisionSuperAndParameter.ts, 3, 18))
+>this : Symbol(Foo, Decl(collisionSuperAndParameter.ts, 0, 0))
+        }
+    }
+    b(_super: number) { // No Error 
+>b : Symbol(Foo.b, Decl(collisionSuperAndParameter.ts, 5, 5))
+>_super : Symbol(_super, Decl(collisionSuperAndParameter.ts, 6, 6))
+
+        var lambda = () => {
+>lambda : Symbol(lambda, Decl(collisionSuperAndParameter.ts, 7, 11))
+
+            return x => this;   // New scope.  So should inject new _this capture
+>x : Symbol(x, Decl(collisionSuperAndParameter.ts, 8, 18))
+>this : Symbol(Foo, Decl(collisionSuperAndParameter.ts, 0, 0))
+        }
+    }
+    set c(_super: number) { // No error
+>c : Symbol(Foo.c, Decl(collisionSuperAndParameter.ts, 10, 5))
+>_super : Symbol(_super, Decl(collisionSuperAndParameter.ts, 11, 10))
+    }
+}
+class Foo2 extends Foo {
+>Foo2 : Symbol(Foo2, Decl(collisionSuperAndParameter.ts, 13, 1))
+>Foo : Symbol(Foo, Decl(collisionSuperAndParameter.ts, 0, 0))
+
+    x() {
+>x : Symbol(Foo2.x, Decl(collisionSuperAndParameter.ts, 14, 24))
+
+        var lamda = (_super: number) => { // Error 
+>lamda : Symbol(lamda, Decl(collisionSuperAndParameter.ts, 16, 11))
+>_super : Symbol(_super, Decl(collisionSuperAndParameter.ts, 16, 21))
+
+            return x => this;   // New scope.  So should inject new _this capture
+>x : Symbol(x, Decl(collisionSuperAndParameter.ts, 17, 18))
+>this : Symbol(Foo2, Decl(collisionSuperAndParameter.ts, 13, 1))
+        }
+    }
+    y(_super: number) { // Error 
+>y : Symbol(Foo2.y, Decl(collisionSuperAndParameter.ts, 19, 5))
+>_super : Symbol(_super, Decl(collisionSuperAndParameter.ts, 20, 6))
+
+        var lambda = () => {
+>lambda : Symbol(lambda, Decl(collisionSuperAndParameter.ts, 21, 11))
+
+            return x => this;   // New scope.  So should inject new _this capture
+>x : Symbol(x, Decl(collisionSuperAndParameter.ts, 22, 18))
+>this : Symbol(Foo2, Decl(collisionSuperAndParameter.ts, 13, 1))
+        }
+    }
+    set z(_super: number) { // Error
+>z : Symbol(Foo2.z, Decl(collisionSuperAndParameter.ts, 24, 5))
+>_super : Symbol(_super, Decl(collisionSuperAndParameter.ts, 25, 10))
+    }
+    public prop3: {
+>prop3 : Symbol(Foo2.prop3, Decl(collisionSuperAndParameter.ts, 26, 5))
+
+        doStuff: (_super: number) => void; // no error - no code gen
+>doStuff : Symbol(doStuff, Decl(collisionSuperAndParameter.ts, 27, 19))
+>_super : Symbol(_super, Decl(collisionSuperAndParameter.ts, 28, 18))
+    }
+    public prop4 = {
+>prop4 : Symbol(Foo2.prop4, Decl(collisionSuperAndParameter.ts, 29, 5))
+
+        doStuff: (_super: number) => { // should be error
+>doStuff : Symbol(doStuff, Decl(collisionSuperAndParameter.ts, 30, 20))
+>_super : Symbol(_super, Decl(collisionSuperAndParameter.ts, 31, 18))
+        }
+    }
+    constructor(_super: number) { // should be error
+>_super : Symbol(_super, Decl(collisionSuperAndParameter.ts, 34, 16))
+
+        super();
+>super : Symbol(Foo, Decl(collisionSuperAndParameter.ts, 0, 0))
+    }
+}
+declare class Foo3 extends Foo {
+>Foo3 : Symbol(Foo3, Decl(collisionSuperAndParameter.ts, 37, 1))
+>Foo : Symbol(Foo, Decl(collisionSuperAndParameter.ts, 0, 0))
+
+    x();
+>x : Symbol(Foo3.x, Decl(collisionSuperAndParameter.ts, 38, 32))
+
+    y(_super: number); // No error - no code gen
+>y : Symbol(Foo3.y, Decl(collisionSuperAndParameter.ts, 39, 8))
+>_super : Symbol(_super, Decl(collisionSuperAndParameter.ts, 40, 6))
+
+    constructor(_super: number); // No error - no code gen
+>_super : Symbol(_super, Decl(collisionSuperAndParameter.ts, 41, 16))
+
+    public prop2: {
+>prop2 : Symbol(Foo3.prop2, Decl(collisionSuperAndParameter.ts, 41, 32))
+
+        doStuff: (_super: number) => void; // no error - no code gen
+>doStuff : Symbol(doStuff, Decl(collisionSuperAndParameter.ts, 42, 19))
+>_super : Symbol(_super, Decl(collisionSuperAndParameter.ts, 43, 18))
+
+    };
+    public _super: number; // No error
+>_super : Symbol(Foo3._super, Decl(collisionSuperAndParameter.ts, 44, 6))
+}
+
+class Foo4 extends Foo {
+>Foo4 : Symbol(Foo4, Decl(collisionSuperAndParameter.ts, 46, 1))
+>Foo : Symbol(Foo, Decl(collisionSuperAndParameter.ts, 0, 0))
+
+    constructor(_super: number); // no code gen - no error
+>_super : Symbol(_super, Decl(collisionSuperAndParameter.ts, 49, 16))
+
+    constructor(_super: string);// no code gen - no error
+>_super : Symbol(_super, Decl(collisionSuperAndParameter.ts, 50, 16))
+
+    constructor(_super: any) { // should be error
+>_super : Symbol(_super, Decl(collisionSuperAndParameter.ts, 51, 16))
+
+        super();
+>super : Symbol(Foo, Decl(collisionSuperAndParameter.ts, 0, 0))
+    }
+    y(_super: number); // no code gen - no error
+>y : Symbol(Foo4.y, Decl(collisionSuperAndParameter.ts, 53, 5), Decl(collisionSuperAndParameter.ts, 54, 22), Decl(collisionSuperAndParameter.ts, 55, 22))
+>_super : Symbol(_super, Decl(collisionSuperAndParameter.ts, 54, 6))
+
+    y(_super: string); // no code gen - no error
+>y : Symbol(Foo4.y, Decl(collisionSuperAndParameter.ts, 53, 5), Decl(collisionSuperAndParameter.ts, 54, 22), Decl(collisionSuperAndParameter.ts, 55, 22))
+>_super : Symbol(_super, Decl(collisionSuperAndParameter.ts, 55, 6))
+
+    y(_super: any) { // Error 
+>y : Symbol(Foo4.y, Decl(collisionSuperAndParameter.ts, 53, 5), Decl(collisionSuperAndParameter.ts, 54, 22), Decl(collisionSuperAndParameter.ts, 55, 22))
+>_super : Symbol(_super, Decl(collisionSuperAndParameter.ts, 56, 6))
+
+        var lambda = () => {
+>lambda : Symbol(lambda, Decl(collisionSuperAndParameter.ts, 57, 11))
+
+            return x => this;   // New scope.  So should inject new _this capture
+>x : Symbol(x, Decl(collisionSuperAndParameter.ts, 58, 18))
+>this : Symbol(Foo4, Decl(collisionSuperAndParameter.ts, 46, 1))
+        }
+    }
+}

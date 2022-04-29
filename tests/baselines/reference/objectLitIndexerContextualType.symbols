@@ -1,0 +1,66 @@
+=== tests/cases/compiler/objectLitIndexerContextualType.ts ===
+interface I {
+>I : Symbol(I, Decl(objectLitIndexerContextualType.ts, 0, 0))
+
+    [s: string]: (s: string) => number;
+>s : Symbol(s, Decl(objectLitIndexerContextualType.ts, 1, 5))
+>s : Symbol(s, Decl(objectLitIndexerContextualType.ts, 1, 18))
+}
+
+interface J {
+>J : Symbol(J, Decl(objectLitIndexerContextualType.ts, 2, 1))
+
+    [s: number]: (s: string) => number;
+>s : Symbol(s, Decl(objectLitIndexerContextualType.ts, 5, 5))
+>s : Symbol(s, Decl(objectLitIndexerContextualType.ts, 5, 18))
+}
+
+var x: I;
+>x : Symbol(x, Decl(objectLitIndexerContextualType.ts, 8, 3))
+>I : Symbol(I, Decl(objectLitIndexerContextualType.ts, 0, 0))
+
+var y: J;
+>y : Symbol(y, Decl(objectLitIndexerContextualType.ts, 9, 3))
+>J : Symbol(J, Decl(objectLitIndexerContextualType.ts, 2, 1))
+
+x = {
+>x : Symbol(x, Decl(objectLitIndexerContextualType.ts, 8, 3))
+
+    s: t => t * t, // Should error
+>s : Symbol(s, Decl(objectLitIndexerContextualType.ts, 10, 5))
+>t : Symbol(t, Decl(objectLitIndexerContextualType.ts, 11, 6))
+>t : Symbol(t, Decl(objectLitIndexerContextualType.ts, 11, 6))
+>t : Symbol(t, Decl(objectLitIndexerContextualType.ts, 11, 6))
+
+};
+x = {
+>x : Symbol(x, Decl(objectLitIndexerContextualType.ts, 8, 3))
+
+    0: t => t * t, // Should error
+>0 : Symbol(0, Decl(objectLitIndexerContextualType.ts, 13, 5))
+>t : Symbol(t, Decl(objectLitIndexerContextualType.ts, 14, 6))
+>t : Symbol(t, Decl(objectLitIndexerContextualType.ts, 14, 6))
+>t : Symbol(t, Decl(objectLitIndexerContextualType.ts, 14, 6))
+
+};
+y = {
+>y : Symbol(y, Decl(objectLitIndexerContextualType.ts, 9, 3))
+
+    s: t => t * t, // Should error
+>s : Symbol(s, Decl(objectLitIndexerContextualType.ts, 16, 5))
+>t : Symbol(t, Decl(objectLitIndexerContextualType.ts, 17, 6))
+>t : Symbol(t, Decl(objectLitIndexerContextualType.ts, 17, 6))
+>t : Symbol(t, Decl(objectLitIndexerContextualType.ts, 17, 6))
+
+};
+y = {
+>y : Symbol(y, Decl(objectLitIndexerContextualType.ts, 9, 3))
+
+    0: t => t * t, // Should error
+>0 : Symbol(0, Decl(objectLitIndexerContextualType.ts, 19, 5))
+>t : Symbol(t, Decl(objectLitIndexerContextualType.ts, 20, 6))
+>t : Symbol(t, Decl(objectLitIndexerContextualType.ts, 20, 6))
+>t : Symbol(t, Decl(objectLitIndexerContextualType.ts, 20, 6))
+
+};
+

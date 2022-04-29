@@ -1,0 +1,94 @@
+=== tests/cases/compiler/inferentialTypingWithFunctionTypeSyntacticScenarios.ts ===
+declare function map<T, U>(array: T, func: (x: T) => U): U;
+>map : Symbol(map, Decl(inferentialTypingWithFunctionTypeSyntacticScenarios.ts, 0, 0))
+>T : Symbol(T, Decl(inferentialTypingWithFunctionTypeSyntacticScenarios.ts, 0, 21))
+>U : Symbol(U, Decl(inferentialTypingWithFunctionTypeSyntacticScenarios.ts, 0, 23))
+>array : Symbol(array, Decl(inferentialTypingWithFunctionTypeSyntacticScenarios.ts, 0, 27))
+>T : Symbol(T, Decl(inferentialTypingWithFunctionTypeSyntacticScenarios.ts, 0, 21))
+>func : Symbol(func, Decl(inferentialTypingWithFunctionTypeSyntacticScenarios.ts, 0, 36))
+>x : Symbol(x, Decl(inferentialTypingWithFunctionTypeSyntacticScenarios.ts, 0, 44))
+>T : Symbol(T, Decl(inferentialTypingWithFunctionTypeSyntacticScenarios.ts, 0, 21))
+>U : Symbol(U, Decl(inferentialTypingWithFunctionTypeSyntacticScenarios.ts, 0, 23))
+>U : Symbol(U, Decl(inferentialTypingWithFunctionTypeSyntacticScenarios.ts, 0, 23))
+
+declare function identity<V>(y: V): V;
+>identity : Symbol(identity, Decl(inferentialTypingWithFunctionTypeSyntacticScenarios.ts, 0, 59))
+>V : Symbol(V, Decl(inferentialTypingWithFunctionTypeSyntacticScenarios.ts, 1, 26))
+>y : Symbol(y, Decl(inferentialTypingWithFunctionTypeSyntacticScenarios.ts, 1, 29))
+>V : Symbol(V, Decl(inferentialTypingWithFunctionTypeSyntacticScenarios.ts, 1, 26))
+>V : Symbol(V, Decl(inferentialTypingWithFunctionTypeSyntacticScenarios.ts, 1, 26))
+
+var s: string;
+>s : Symbol(s, Decl(inferentialTypingWithFunctionTypeSyntacticScenarios.ts, 2, 3))
+
+// dotted name
+var dottedIdentity = { x: identity };
+>dottedIdentity : Symbol(dottedIdentity, Decl(inferentialTypingWithFunctionTypeSyntacticScenarios.ts, 5, 3))
+>x : Symbol(x, Decl(inferentialTypingWithFunctionTypeSyntacticScenarios.ts, 5, 22))
+>identity : Symbol(identity, Decl(inferentialTypingWithFunctionTypeSyntacticScenarios.ts, 0, 59))
+
+s = map("", dottedIdentity.x);
+>s : Symbol(s, Decl(inferentialTypingWithFunctionTypeSyntacticScenarios.ts, 2, 3))
+>map : Symbol(map, Decl(inferentialTypingWithFunctionTypeSyntacticScenarios.ts, 0, 0))
+>dottedIdentity.x : Symbol(x, Decl(inferentialTypingWithFunctionTypeSyntacticScenarios.ts, 5, 22))
+>dottedIdentity : Symbol(dottedIdentity, Decl(inferentialTypingWithFunctionTypeSyntacticScenarios.ts, 5, 3))
+>x : Symbol(x, Decl(inferentialTypingWithFunctionTypeSyntacticScenarios.ts, 5, 22))
+
+// index expression
+s = map("", dottedIdentity['x']);
+>s : Symbol(s, Decl(inferentialTypingWithFunctionTypeSyntacticScenarios.ts, 2, 3))
+>map : Symbol(map, Decl(inferentialTypingWithFunctionTypeSyntacticScenarios.ts, 0, 0))
+>dottedIdentity : Symbol(dottedIdentity, Decl(inferentialTypingWithFunctionTypeSyntacticScenarios.ts, 5, 3))
+>'x' : Symbol(x, Decl(inferentialTypingWithFunctionTypeSyntacticScenarios.ts, 5, 22))
+
+// function call
+s = map("", (() => identity)());
+>s : Symbol(s, Decl(inferentialTypingWithFunctionTypeSyntacticScenarios.ts, 2, 3))
+>map : Symbol(map, Decl(inferentialTypingWithFunctionTypeSyntacticScenarios.ts, 0, 0))
+>identity : Symbol(identity, Decl(inferentialTypingWithFunctionTypeSyntacticScenarios.ts, 0, 59))
+
+// construct
+interface IdentityConstructor {
+>IdentityConstructor : Symbol(IdentityConstructor, Decl(inferentialTypingWithFunctionTypeSyntacticScenarios.ts, 12, 32))
+
+    new (): typeof identity;
+>identity : Symbol(identity, Decl(inferentialTypingWithFunctionTypeSyntacticScenarios.ts, 0, 59))
+}
+var ic: IdentityConstructor;
+>ic : Symbol(ic, Decl(inferentialTypingWithFunctionTypeSyntacticScenarios.ts, 18, 3))
+>IdentityConstructor : Symbol(IdentityConstructor, Decl(inferentialTypingWithFunctionTypeSyntacticScenarios.ts, 12, 32))
+
+s = map("", new ic());
+>s : Symbol(s, Decl(inferentialTypingWithFunctionTypeSyntacticScenarios.ts, 2, 3))
+>map : Symbol(map, Decl(inferentialTypingWithFunctionTypeSyntacticScenarios.ts, 0, 0))
+>ic : Symbol(ic, Decl(inferentialTypingWithFunctionTypeSyntacticScenarios.ts, 18, 3))
+
+// assignment
+var t;
+>t : Symbol(t, Decl(inferentialTypingWithFunctionTypeSyntacticScenarios.ts, 22, 3))
+
+s = map("", t = identity);
+>s : Symbol(s, Decl(inferentialTypingWithFunctionTypeSyntacticScenarios.ts, 2, 3))
+>map : Symbol(map, Decl(inferentialTypingWithFunctionTypeSyntacticScenarios.ts, 0, 0))
+>t : Symbol(t, Decl(inferentialTypingWithFunctionTypeSyntacticScenarios.ts, 22, 3))
+>identity : Symbol(identity, Decl(inferentialTypingWithFunctionTypeSyntacticScenarios.ts, 0, 59))
+
+// type assertion
+s = map("", <typeof identity>identity);
+>s : Symbol(s, Decl(inferentialTypingWithFunctionTypeSyntacticScenarios.ts, 2, 3))
+>map : Symbol(map, Decl(inferentialTypingWithFunctionTypeSyntacticScenarios.ts, 0, 0))
+>identity : Symbol(identity, Decl(inferentialTypingWithFunctionTypeSyntacticScenarios.ts, 0, 59))
+>identity : Symbol(identity, Decl(inferentialTypingWithFunctionTypeSyntacticScenarios.ts, 0, 59))
+
+// parenthesized expression
+s = map("", (identity));
+>s : Symbol(s, Decl(inferentialTypingWithFunctionTypeSyntacticScenarios.ts, 2, 3))
+>map : Symbol(map, Decl(inferentialTypingWithFunctionTypeSyntacticScenarios.ts, 0, 0))
+>identity : Symbol(identity, Decl(inferentialTypingWithFunctionTypeSyntacticScenarios.ts, 0, 59))
+
+// comma
+s = map("", ("", identity));
+>s : Symbol(s, Decl(inferentialTypingWithFunctionTypeSyntacticScenarios.ts, 2, 3))
+>map : Symbol(map, Decl(inferentialTypingWithFunctionTypeSyntacticScenarios.ts, 0, 0))
+>identity : Symbol(identity, Decl(inferentialTypingWithFunctionTypeSyntacticScenarios.ts, 0, 59))
+

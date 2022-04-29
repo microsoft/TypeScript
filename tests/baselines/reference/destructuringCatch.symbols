@@ -1,0 +1,50 @@
+=== tests/cases/conformance/es6/destructuring/destructuringCatch.ts ===
+try {
+    throw [0, 1];
+}
+catch ([a, b]) {
+>a : Symbol(a, Decl(destructuringCatch.ts, 3, 8))
+>b : Symbol(b, Decl(destructuringCatch.ts, 3, 10))
+
+    a + b;
+>a : Symbol(a, Decl(destructuringCatch.ts, 3, 8))
+>b : Symbol(b, Decl(destructuringCatch.ts, 3, 10))
+}
+
+try {
+    throw { a: 0, b: 1 };
+>a : Symbol(a, Decl(destructuringCatch.ts, 8, 11))
+>b : Symbol(b, Decl(destructuringCatch.ts, 8, 17))
+}
+catch ({a, b}) {
+>a : Symbol(a, Decl(destructuringCatch.ts, 10, 8))
+>b : Symbol(b, Decl(destructuringCatch.ts, 10, 10))
+
+    a + b;
+>a : Symbol(a, Decl(destructuringCatch.ts, 10, 8))
+>b : Symbol(b, Decl(destructuringCatch.ts, 10, 10))
+}
+
+try {
+    throw [{ x: [0], z: 1 }];
+>x : Symbol(x, Decl(destructuringCatch.ts, 15, 12))
+>z : Symbol(z, Decl(destructuringCatch.ts, 15, 20))
+}
+catch ([{x: [y], z}]) {
+>x : Symbol(x)
+>y : Symbol(y, Decl(destructuringCatch.ts, 17, 13))
+>z : Symbol(z, Decl(destructuringCatch.ts, 17, 16))
+
+    y + z;
+>y : Symbol(y, Decl(destructuringCatch.ts, 17, 13))
+>z : Symbol(z, Decl(destructuringCatch.ts, 17, 16))
+}
+
+// Test of comment ranges. A fix to GH#11755 should update this.
+try {
+}
+catch (/*Test comment ranges*/[/*a*/a]) {
+>a : Symbol(a, Decl(destructuringCatch.ts, 24, 31))
+
+}
+

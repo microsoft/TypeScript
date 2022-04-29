@@ -1,0 +1,51 @@
+=== tests/cases/compiler/f1.d.ts ===
+export {};
+
+declare module M.M1 {
+>M : Symbol(M, Decl(f1.d.ts, 0, 10))
+>M1 : Symbol(M1, Decl(f1.d.ts, 2, 17))
+
+    export let x: number;
+>x : Symbol(x, Decl(f1.d.ts, 3, 14))
+}
+declare global {
+>global : Symbol(global, Decl(f1.d.ts, 4, 1))
+
+    interface SymbolConstructor {
+>SymbolConstructor : Symbol(SymbolConstructor, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(f1.d.ts, 5, 16))
+
+        observable: symbol;
+>observable : Symbol(SymbolConstructor.observable, Decl(f1.d.ts, 6, 33))
+    }
+    class Cls {x}
+>Cls : Symbol(Cls, Decl(f1.d.ts, 8, 5))
+>x : Symbol(Cls.x, Decl(f1.d.ts, 9, 15))
+
+    let [a, b]: number[];
+>a : Symbol(a, Decl(f1.d.ts, 10, 9))
+>b : Symbol(b, Decl(f1.d.ts, 10, 11))
+
+    export import X = M.M1.x;
+>X : Symbol(X, Decl(f1.d.ts, 10, 25))
+>M : Symbol(M, Decl(f1.d.ts, 0, 10))
+>M1 : Symbol(M.M1, Decl(f1.d.ts, 2, 17))
+>x : Symbol(X, Decl(f1.d.ts, 3, 14))
+}
+
+=== tests/cases/compiler/main.ts ===
+Symbol.observable;
+>Symbol.observable : Symbol(SymbolConstructor.observable, Decl(f1.d.ts, 6, 33))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>observable : Symbol(SymbolConstructor.observable, Decl(f1.d.ts, 6, 33))
+
+new Cls().x
+>new Cls().x : Symbol(Cls.x, Decl(f1.d.ts, 9, 15))
+>Cls : Symbol(Cls, Decl(f1.d.ts, 8, 5))
+>x : Symbol(Cls.x, Decl(f1.d.ts, 9, 15))
+
+let c = a + b + X;
+>c : Symbol(c, Decl(main.ts, 2, 3))
+>a : Symbol(a, Decl(f1.d.ts, 10, 9))
+>b : Symbol(b, Decl(f1.d.ts, 10, 11))
+>X : Symbol(X, Decl(f1.d.ts, 10, 25))
+

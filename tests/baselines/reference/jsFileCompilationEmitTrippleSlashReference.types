@@ -1,0 +1,16 @@
+=== tests/cases/compiler/a.ts ===
+class c {
+>c : c
+}
+
+=== tests/cases/compiler/b.js ===
+/// <reference path="c.js"/>
+function foo() {
+>foo : () => void
+}
+
+=== tests/cases/compiler/c.js ===
+function bar() {
+>bar : () => void
+}
+

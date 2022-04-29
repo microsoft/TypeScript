@@ -1,0 +1,118 @@
+=== tests/cases/compiler/numericLiteralsWithTrailingDecimalPoints02.ts ===
+1..toString();
+>1..toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+
+1.0.toString();
+>1.0.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+
+1.toString();
+>toString : Symbol(toString, Decl(numericLiteralsWithTrailingDecimalPoints02.ts, 8, 14))
+
+1.+2.0 + 3. ;
+
+// Preserve whitespace where important for JS compatibility
+var i: number = 1;
+>i : Symbol(i, Decl(numericLiteralsWithTrailingDecimalPoints02.ts, 6, 3))
+
+var test1 = i.toString();
+>test1 : Symbol(test1, Decl(numericLiteralsWithTrailingDecimalPoints02.ts, 7, 3))
+>i.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>i : Symbol(i, Decl(numericLiteralsWithTrailingDecimalPoints02.ts, 6, 3))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+
+var test2 = 2.toString();
+>test2 : Symbol(test2, Decl(numericLiteralsWithTrailingDecimalPoints02.ts, 8, 3))
+>toString : Symbol(toString, Decl(numericLiteralsWithTrailingDecimalPoints02.ts, 8, 14))
+
+var test3 = 3 .toString();
+>test3 : Symbol(test3, Decl(numericLiteralsWithTrailingDecimalPoints02.ts, 9, 3))
+>3 .toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+
+var test4 = 3    .toString();
+>test4 : Symbol(test4, Decl(numericLiteralsWithTrailingDecimalPoints02.ts, 10, 3))
+>3    .toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+
+var test5 = 3	.toString();
+>test5 : Symbol(test5, Decl(numericLiteralsWithTrailingDecimalPoints02.ts, 11, 3))
+>3	.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+
+var test6 = 3.['toString']();
+>test6 : Symbol(test6, Decl(numericLiteralsWithTrailingDecimalPoints02.ts, 12, 3))
+>'toString' : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+
+var test7 = 3
+>test7 : Symbol(test7, Decl(numericLiteralsWithTrailingDecimalPoints02.ts, 13, 3))
+>3.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+
+.toString();
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+
+var test8 = new Number(4).toString();
+>test8 : Symbol(test8, Decl(numericLiteralsWithTrailingDecimalPoints02.ts, 15, 3))
+>new Number(4).toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+
+var test9 = 3. + 3.;
+>test9 : Symbol(test9, Decl(numericLiteralsWithTrailingDecimalPoints02.ts, 16, 3))
+
+var test10 = 0 /* comment */.toString();
+>test10 : Symbol(test10, Decl(numericLiteralsWithTrailingDecimalPoints02.ts, 17, 3))
+>0 /* comment */.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+
+var test11 = 3. /* comment */ .toString();
+>test11 : Symbol(test11, Decl(numericLiteralsWithTrailingDecimalPoints02.ts, 18, 3))
+>3. /* comment */ .toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+
+var test12 = 3
+>test12 : Symbol(test12, Decl(numericLiteralsWithTrailingDecimalPoints02.ts, 19, 3))
+>3  /* comment */ .toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+
+  /* comment */ .toString();
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+
+var test13 = 3.
+>test13 : Symbol(test13, Decl(numericLiteralsWithTrailingDecimalPoints02.ts, 21, 3))
+>3.  /* comment */ .toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+
+  /* comment */ .toString();
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+
+var test14 = 3
+>test14 : Symbol(test14, Decl(numericLiteralsWithTrailingDecimalPoints02.ts, 23, 3))
+>3    // comment    .toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+
+    // comment
+    .toString();
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+
+var test15 = 3.
+>test15 : Symbol(test15, Decl(numericLiteralsWithTrailingDecimalPoints02.ts, 26, 3))
+>3.    // comment    .toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+
+    // comment
+    .toString();
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+
+var test16 = 3  // comment time
+>test16 : Symbol(test16, Decl(numericLiteralsWithTrailingDecimalPoints02.ts, 29, 3))
+>3  // comment time    .toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+
+    .toString();
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+
+var test17 = 3. // comment time again
+>test17 : Symbol(test17, Decl(numericLiteralsWithTrailingDecimalPoints02.ts, 31, 3))
+>3. // comment time again    .toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+
+    .toString();
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+
+

@@ -1,0 +1,20 @@
+=== tests/cases/conformance/es6/for-ofStatements/for-of14.ts ===
+class StringIterator {
+>StringIterator : StringIterator
+
+    next() {
+>next : () => string
+
+        return "";
+>"" : ""
+    }
+}
+
+var v: string;
+>v : string
+
+for (v of new StringIterator) { } // Should fail because the iterator is not iterable
+>v : string
+>new StringIterator : StringIterator
+>StringIterator : typeof StringIterator
+

@@ -1,0 +1,27 @@
+=== tests/cases/compiler/asiInES6Classes.ts ===
+class Foo {
+>Foo : Symbol(Foo, Decl(asiInES6Classes.ts, 0, 0))
+
+ 
+
+    defaults = {
+>defaults : Symbol(Foo.defaults, Decl(asiInES6Classes.ts, 0, 11))
+
+        done: false
+>done : Symbol(done, Decl(asiInES6Classes.ts, 4, 16))
+
+    }
+
+ 
+
+    bar() {
+>bar : Symbol(Foo.bar, Decl(asiInES6Classes.ts, 8, 5))
+
+        return 3;
+
+    }
+
+ 
+
+}
+

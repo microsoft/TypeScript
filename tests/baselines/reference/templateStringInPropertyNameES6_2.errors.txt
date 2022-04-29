@@ -1,0 +1,23 @@
+tests/cases/conformance/es6/templates/templateStringInPropertyNameES6_2.ts(1,9): error TS2349: This expression is not callable.
+  Type '{}' has no call signatures.
+tests/cases/conformance/es6/templates/templateStringInPropertyNameES6_2.ts(2,5): error TS1136: Property assignment expected.
+tests/cases/conformance/es6/templates/templateStringInPropertyNameES6_2.ts(2,32): error TS1005: ',' expected.
+tests/cases/conformance/es6/templates/templateStringInPropertyNameES6_2.ts(2,34): error TS1134: Variable declaration expected.
+tests/cases/conformance/es6/templates/templateStringInPropertyNameES6_2.ts(3,1): error TS1128: Declaration or statement expected.
+
+
+==== tests/cases/conformance/es6/templates/templateStringInPropertyNameES6_2.ts (5 errors) ====
+    var x = {
+            ~
+!!! error TS2349: This expression is not callable.
+!!! error TS2349:   Type '{}' has no call signatures.
+        `abc${ 123 }def${ 456 }ghi`: 321
+        ~~~~~~
+!!! error TS1136: Property assignment expected.
+                                   ~
+!!! error TS1005: ',' expected.
+                                     ~~~
+!!! error TS1134: Variable declaration expected.
+    }
+    ~
+!!! error TS1128: Declaration or statement expected.

@@ -1,0 +1,1 @@
+const globalConst = 10;

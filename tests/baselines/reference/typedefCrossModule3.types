@@ -1,0 +1,21 @@
+=== tests/cases/conformance/jsdoc/mod2.js ===
+/** @typedef {number} Foo */
+const ns = {};
+>ns : typeof ns
+>{} : {}
+
+ns.Foo = class {}
+>ns.Foo = class {} : typeof Foo
+>ns.Foo : typeof Foo
+>ns : typeof ns
+>Foo : typeof Foo
+>class {} : typeof Foo
+
+module.exports = ns;
+>module.exports = ns : typeof ns
+>module.exports : typeof ns
+>module : { exports: typeof ns; }
+>exports : typeof ns
+>ns : typeof ns
+
+

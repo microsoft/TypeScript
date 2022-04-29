@@ -1,0 +1,41 @@
+=== tests/cases/conformance/types/specifyingTypes/typeQueries/typeQueryWithReservedWords.ts ===
+class Controller {
+>Controller : Controller
+
+    create() {
+>create : () => void
+    }
+    delete() {
+>delete : () => void
+    }
+    var() {
+>var : () => void
+    }
+}
+
+interface IScope {
+    create: typeof Controller.prototype.create;  
+>create : () => void
+>Controller.prototype.create : () => void
+>Controller.prototype : Controller
+>Controller : typeof Controller
+>prototype : Controller
+>create : () => void
+
+    delete: typeof Controller.prototype.delete;  // Should not error
+>delete : () => void
+>Controller.prototype.delete : () => void
+>Controller.prototype : Controller
+>Controller : typeof Controller
+>prototype : Controller
+>delete : () => void
+
+    var: typeof Controller.prototype.var;        // Should not error
+>var : () => void
+>Controller.prototype.var : () => void
+>Controller.prototype : Controller
+>Controller : typeof Controller
+>prototype : Controller
+>var : () => void
+}
+

@@ -1,0 +1,8 @@
+=== tests/cases/compiler/objectLiteralWithSemicolons4.ts ===
+var v = {
+>v : Symbol(v, Decl(objectLiteralWithSemicolons4.ts, 0, 3))
+
+  a
+>a : Symbol(a, Decl(objectLiteralWithSemicolons4.ts, 0, 9))
+
+;

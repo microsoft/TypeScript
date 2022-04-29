@@ -1,0 +1,28 @@
+=== tests/cases/compiler/a.ts ===
+/// <reference path="b.ts" />
+import ITest = require('ITest');
+>ITest : any
+
+var testData: ITest[];
+>testData : ITest[]
+
+var p = testData[0].name;
+>p : string
+>testData[0].name : string
+>testData[0] : ITest
+>testData : ITest[]
+>0 : 0
+>name : string
+ 
+=== tests/cases/compiler/b.ts ===
+declare module "ITest" {
+>"ITest" : typeof import("ITest")
+
+    interface Name {
+        name: string;
+>name : string
+    }
+    export = Name;
+>Name : Name
+}
+

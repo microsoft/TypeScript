@@ -1,0 +1,159 @@
+=== tests/cases/conformance/jsx/file.tsx ===
+import React = require('react')
+>React : Symbol(React, Decl(file.tsx, 0, 0))
+
+declare function OneThing(): JSX.Element;
+>OneThing : Symbol(OneThing, Decl(file.tsx, 0, 31), Decl(file.tsx, 1, 41))
+>JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
+>Element : Symbol(JSX.Element, Decl(react.d.ts, 2356, 27))
+
+declare function OneThing(l: {yy: number, yy1: string}): JSX.Element;
+>OneThing : Symbol(OneThing, Decl(file.tsx, 0, 31), Decl(file.tsx, 1, 41))
+>l : Symbol(l, Decl(file.tsx, 2, 26))
+>yy : Symbol(yy, Decl(file.tsx, 2, 30))
+>yy1 : Symbol(yy1, Decl(file.tsx, 2, 41))
+>JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
+>Element : Symbol(JSX.Element, Decl(react.d.ts, 2356, 27))
+
+let obj = {
+>obj : Symbol(obj, Decl(file.tsx, 4, 3))
+
+    yy: 10,
+>yy : Symbol(yy, Decl(file.tsx, 4, 11))
+
+    yy1: "hello"
+>yy1 : Symbol(yy1, Decl(file.tsx, 5, 11))
+}
+let obj2: any;
+>obj2 : Symbol(obj2, Decl(file.tsx, 8, 3))
+
+// Error
+const c0 = <OneThing extraProp />;  // extra property;
+>c0 : Symbol(c0, Decl(file.tsx, 11, 5))
+>OneThing : Symbol(OneThing, Decl(file.tsx, 0, 31), Decl(file.tsx, 1, 41))
+>extraProp : Symbol(extraProp, Decl(file.tsx, 11, 20))
+
+const c1 = <OneThing yy={10}/>;  // missing property;
+>c1 : Symbol(c1, Decl(file.tsx, 12, 5))
+>OneThing : Symbol(OneThing, Decl(file.tsx, 0, 31), Decl(file.tsx, 1, 41))
+>yy : Symbol(yy, Decl(file.tsx, 12, 20))
+
+const c2 = <OneThing {...obj} yy1 />; // type incompatible;
+>c2 : Symbol(c2, Decl(file.tsx, 13, 5))
+>OneThing : Symbol(OneThing, Decl(file.tsx, 0, 31), Decl(file.tsx, 1, 41))
+>obj : Symbol(obj, Decl(file.tsx, 4, 3))
+>yy1 : Symbol(yy1, Decl(file.tsx, 13, 29))
+
+const c3 = <OneThing {...obj} {...{extra: "extra attr"}} />;  //  This is OK because all attribute are spread
+>c3 : Symbol(c3, Decl(file.tsx, 14, 5))
+>OneThing : Symbol(OneThing, Decl(file.tsx, 0, 31), Decl(file.tsx, 1, 41))
+>obj : Symbol(obj, Decl(file.tsx, 4, 3))
+>extra : Symbol(extra, Decl(file.tsx, 14, 35))
+
+const c4 = <OneThing {...obj} y1={10000} />;  // extra property;
+>c4 : Symbol(c4, Decl(file.tsx, 15, 5))
+>OneThing : Symbol(OneThing, Decl(file.tsx, 0, 31), Decl(file.tsx, 1, 41))
+>obj : Symbol(obj, Decl(file.tsx, 4, 3))
+>y1 : Symbol(y1, Decl(file.tsx, 15, 29))
+
+const c5 = <OneThing {...obj} {...{yy: true}} />;  // type incompatible;
+>c5 : Symbol(c5, Decl(file.tsx, 16, 5))
+>OneThing : Symbol(OneThing, Decl(file.tsx, 0, 31), Decl(file.tsx, 1, 41))
+>obj : Symbol(obj, Decl(file.tsx, 4, 3))
+>yy : Symbol(yy, Decl(file.tsx, 16, 35))
+
+const c6 = <OneThing {...obj2} {...{extra: "extra attr"}} />;  // Should error as there is extra attribute that doesn't match any. Current it is not
+>c6 : Symbol(c6, Decl(file.tsx, 17, 5))
+>OneThing : Symbol(OneThing, Decl(file.tsx, 0, 31), Decl(file.tsx, 1, 41))
+>obj2 : Symbol(obj2, Decl(file.tsx, 8, 3))
+>extra : Symbol(extra, Decl(file.tsx, 17, 36))
+
+const c7 = <OneThing {...obj2} yy />;  // Should error as there is extra attribute that doesn't match any. Current it is not
+>c7 : Symbol(c7, Decl(file.tsx, 18, 5))
+>OneThing : Symbol(OneThing, Decl(file.tsx, 0, 31), Decl(file.tsx, 1, 41))
+>obj2 : Symbol(obj2, Decl(file.tsx, 8, 3))
+>yy : Symbol(yy, Decl(file.tsx, 18, 30))
+
+declare function TestingOneThing(j: {"extra-data": string}): JSX.Element;
+>TestingOneThing : Symbol(TestingOneThing, Decl(file.tsx, 18, 37), Decl(file.tsx, 20, 73))
+>j : Symbol(j, Decl(file.tsx, 20, 33))
+>"extra-data" : Symbol("extra-data", Decl(file.tsx, 20, 37))
+>JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
+>Element : Symbol(JSX.Element, Decl(react.d.ts, 2356, 27))
+
+declare function TestingOneThing(n: {yy: string, direction?: number}): JSX.Element;
+>TestingOneThing : Symbol(TestingOneThing, Decl(file.tsx, 18, 37), Decl(file.tsx, 20, 73))
+>n : Symbol(n, Decl(file.tsx, 21, 33))
+>yy : Symbol(yy, Decl(file.tsx, 21, 37))
+>direction : Symbol(direction, Decl(file.tsx, 21, 48))
+>JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
+>Element : Symbol(JSX.Element, Decl(react.d.ts, 2356, 27))
+
+// Error
+const d1 = <TestingOneThing extra-data />
+>d1 : Symbol(d1, Decl(file.tsx, 24, 5))
+>TestingOneThing : Symbol(TestingOneThing, Decl(file.tsx, 18, 37), Decl(file.tsx, 20, 73))
+>extra-data : Symbol(extra-data, Decl(file.tsx, 24, 27))
+
+const d2 = <TestingOneThing yy="hello" direction="left" />
+>d2 : Symbol(d2, Decl(file.tsx, 25, 5))
+>TestingOneThing : Symbol(TestingOneThing, Decl(file.tsx, 18, 37), Decl(file.tsx, 20, 73))
+>yy : Symbol(yy, Decl(file.tsx, 25, 27))
+>direction : Symbol(direction, Decl(file.tsx, 25, 38))
+
+declare function TestingOptional(a: {y1?: string, y2?: number}): JSX.Element;
+>TestingOptional : Symbol(TestingOptional, Decl(file.tsx, 25, 58), Decl(file.tsx, 27, 77), Decl(file.tsx, 28, 100))
+>a : Symbol(a, Decl(file.tsx, 27, 33))
+>y1 : Symbol(y1, Decl(file.tsx, 27, 37))
+>y2 : Symbol(y2, Decl(file.tsx, 27, 49))
+>JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
+>Element : Symbol(JSX.Element, Decl(react.d.ts, 2356, 27))
+
+declare function TestingOptional(a: {y1?: string, y2?: number, children: JSX.Element}): JSX.Element;
+>TestingOptional : Symbol(TestingOptional, Decl(file.tsx, 25, 58), Decl(file.tsx, 27, 77), Decl(file.tsx, 28, 100))
+>a : Symbol(a, Decl(file.tsx, 28, 33))
+>y1 : Symbol(y1, Decl(file.tsx, 28, 37))
+>y2 : Symbol(y2, Decl(file.tsx, 28, 49))
+>children : Symbol(children, Decl(file.tsx, 28, 62))
+>JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
+>Element : Symbol(JSX.Element, Decl(react.d.ts, 2356, 27))
+>JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
+>Element : Symbol(JSX.Element, Decl(react.d.ts, 2356, 27))
+
+declare function TestingOptional(a: {y1: boolean, y2?: number, y3: boolean}): JSX.Element;
+>TestingOptional : Symbol(TestingOptional, Decl(file.tsx, 25, 58), Decl(file.tsx, 27, 77), Decl(file.tsx, 28, 100))
+>a : Symbol(a, Decl(file.tsx, 29, 33))
+>y1 : Symbol(y1, Decl(file.tsx, 29, 37))
+>y2 : Symbol(y2, Decl(file.tsx, 29, 49))
+>y3 : Symbol(y3, Decl(file.tsx, 29, 62))
+>JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
+>Element : Symbol(JSX.Element, Decl(react.d.ts, 2356, 27))
+
+// Error
+const e1 = <TestingOptional y1 y3="hello"/>
+>e1 : Symbol(e1, Decl(file.tsx, 32, 5))
+>TestingOptional : Symbol(TestingOptional, Decl(file.tsx, 25, 58), Decl(file.tsx, 27, 77), Decl(file.tsx, 28, 100))
+>y1 : Symbol(y1, Decl(file.tsx, 32, 27))
+>y3 : Symbol(y3, Decl(file.tsx, 32, 30))
+
+const e2 = <TestingOptional y1="hello" y2={1000} y3 />
+>e2 : Symbol(e2, Decl(file.tsx, 33, 5))
+>TestingOptional : Symbol(TestingOptional, Decl(file.tsx, 25, 58), Decl(file.tsx, 27, 77), Decl(file.tsx, 28, 100))
+>y1 : Symbol(y1, Decl(file.tsx, 33, 27))
+>y2 : Symbol(y2, Decl(file.tsx, 33, 38))
+>y3 : Symbol(y3, Decl(file.tsx, 33, 48))
+
+const e3 = <TestingOptional y1="hello" y2={1000} children="hi" />
+>e3 : Symbol(e3, Decl(file.tsx, 34, 5))
+>TestingOptional : Symbol(TestingOptional, Decl(file.tsx, 25, 58), Decl(file.tsx, 27, 77), Decl(file.tsx, 28, 100))
+>y1 : Symbol(y1, Decl(file.tsx, 34, 27))
+>y2 : Symbol(y2, Decl(file.tsx, 34, 38))
+>children : Symbol(children, Decl(file.tsx, 34, 48))
+
+const e4 = <TestingOptional y1="hello" y2={1000}>Hi</TestingOptional>
+>e4 : Symbol(e4, Decl(file.tsx, 35, 5))
+>TestingOptional : Symbol(TestingOptional, Decl(file.tsx, 25, 58), Decl(file.tsx, 27, 77), Decl(file.tsx, 28, 100))
+>y1 : Symbol(y1, Decl(file.tsx, 35, 27))
+>y2 : Symbol(y2, Decl(file.tsx, 35, 38))
+>TestingOptional : Symbol(TestingOptional, Decl(file.tsx, 25, 58), Decl(file.tsx, 27, 77), Decl(file.tsx, 28, 100))
+

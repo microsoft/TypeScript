@@ -1,0 +1,32 @@
+tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesAssignmentErrorFromMissingIdentifier.ts(4,43): error TS2322: Type '{ name: string; id: number; }' is not assignable to type '{ b: string; id: number; }'.
+  Object literal may only specify known properties, and 'name' does not exist in type '{ b: string; id: number; }'.
+tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesAssignmentErrorFromMissingIdentifier.ts(5,81): error TS2322: Type 'string' is not assignable to type 'number'.
+tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesAssignmentErrorFromMissingIdentifier.ts(5,87): error TS2322: Type 'number' is not assignable to type 'string'.
+tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesAssignmentErrorFromMissingIdentifier.ts(8,5): error TS2322: Type '{ name: number; id: string; }' is not assignable to type '{ name: string; id: number; }'.
+  Types of property 'name' are incompatible.
+    Type 'number' is not assignable to type 'string'.
+
+
+==== tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesAssignmentErrorFromMissingIdentifier.ts (4 errors) ====
+    var id: number = 10000;
+    var name: string = "my name";
+    
+    var person: { b: string; id: number } = { name, id };  // error
+                                              ~~~~
+!!! error TS2322: Type '{ name: string; id: number; }' is not assignable to type '{ b: string; id: number; }'.
+!!! error TS2322:   Object literal may only specify known properties, and 'name' does not exist in type '{ b: string; id: number; }'.
+    function bar(name: string, id: number): { name: number, id: string } { return { name, id }; }  // error
+                                                                                    ~~~~
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
+!!! related TS6500 tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesAssignmentErrorFromMissingIdentifier.ts:5:43: The expected type comes from property 'name' which is declared here on type '{ name: number; id: string; }'
+                                                                                          ~~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
+!!! related TS6500 tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesAssignmentErrorFromMissingIdentifier.ts:5:57: The expected type comes from property 'id' which is declared here on type '{ name: number; id: string; }'
+    function foo(name: string, id: number): { name: string, id: number } { return { name, id }; }  // error
+    var person1: { name, id }; // ok
+    var person2: { name: string, id: number } = bar("hello", 5);
+        ~~~~~~~
+!!! error TS2322: Type '{ name: number; id: string; }' is not assignable to type '{ name: string; id: number; }'.
+!!! error TS2322:   Types of property 'name' are incompatible.
+!!! error TS2322:     Type 'number' is not assignable to type 'string'.
+    

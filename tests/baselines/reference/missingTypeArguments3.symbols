@@ -1,0 +1,172 @@
+=== tests/cases/compiler/missingTypeArguments3.ts ===
+declare module linq {
+>linq : Symbol(linq, Decl(missingTypeArguments3.ts, 0, 0))
+
+    interface Enumerable<T> {
+>Enumerable : Symbol(Enumerable, Decl(missingTypeArguments3.ts, 0, 21))
+>T : Symbol(T, Decl(missingTypeArguments3.ts, 2, 25))
+
+        OrderByDescending(keySelector?: string): OrderedEnumerable<T>;
+>OrderByDescending : Symbol(Enumerable.OrderByDescending, Decl(missingTypeArguments3.ts, 2, 29))
+>keySelector : Symbol(keySelector, Decl(missingTypeArguments3.ts, 3, 26))
+>OrderedEnumerable : Symbol(OrderedEnumerable, Decl(missingTypeArguments3.ts, 7, 5))
+>T : Symbol(T, Decl(missingTypeArguments3.ts, 2, 25))
+
+        GroupBy<TKey>(keySelector: (element: T) => TKey): Enumerable<Grouping<TKey, T>>;
+>GroupBy : Symbol(Enumerable.GroupBy, Decl(missingTypeArguments3.ts, 3, 70), Decl(missingTypeArguments3.ts, 4, 88))
+>TKey : Symbol(TKey, Decl(missingTypeArguments3.ts, 4, 16))
+>keySelector : Symbol(keySelector, Decl(missingTypeArguments3.ts, 4, 22))
+>element : Symbol(element, Decl(missingTypeArguments3.ts, 4, 36))
+>T : Symbol(T, Decl(missingTypeArguments3.ts, 2, 25))
+>TKey : Symbol(TKey, Decl(missingTypeArguments3.ts, 4, 16))
+>Enumerable : Symbol(Enumerable, Decl(missingTypeArguments3.ts, 0, 21))
+>Grouping : Symbol(Grouping, Decl(missingTypeArguments3.ts, 11, 5))
+>TKey : Symbol(TKey, Decl(missingTypeArguments3.ts, 4, 16))
+>T : Symbol(T, Decl(missingTypeArguments3.ts, 2, 25))
+
+        GroupBy<TKey, TElement>(keySelector: (element: T) => TKey, elementSelector: (element: T) => TElement): Enumerable<Grouping<TKey, TElement>>;
+>GroupBy : Symbol(Enumerable.GroupBy, Decl(missingTypeArguments3.ts, 3, 70), Decl(missingTypeArguments3.ts, 4, 88))
+>TKey : Symbol(TKey, Decl(missingTypeArguments3.ts, 5, 16))
+>TElement : Symbol(TElement, Decl(missingTypeArguments3.ts, 5, 21))
+>keySelector : Symbol(keySelector, Decl(missingTypeArguments3.ts, 5, 32))
+>element : Symbol(element, Decl(missingTypeArguments3.ts, 5, 46))
+>T : Symbol(T, Decl(missingTypeArguments3.ts, 2, 25))
+>TKey : Symbol(TKey, Decl(missingTypeArguments3.ts, 5, 16))
+>elementSelector : Symbol(elementSelector, Decl(missingTypeArguments3.ts, 5, 66))
+>element : Symbol(element, Decl(missingTypeArguments3.ts, 5, 85))
+>T : Symbol(T, Decl(missingTypeArguments3.ts, 2, 25))
+>TElement : Symbol(TElement, Decl(missingTypeArguments3.ts, 5, 21))
+>Enumerable : Symbol(Enumerable, Decl(missingTypeArguments3.ts, 0, 21))
+>Grouping : Symbol(Grouping, Decl(missingTypeArguments3.ts, 11, 5))
+>TKey : Symbol(TKey, Decl(missingTypeArguments3.ts, 5, 16))
+>TElement : Symbol(TElement, Decl(missingTypeArguments3.ts, 5, 21))
+
+        ToDictionary<TKey>(keySelector: (element: T) => TKey): Dictionary<TKey, T>;
+>ToDictionary : Symbol(Enumerable.ToDictionary, Decl(missingTypeArguments3.ts, 5, 148))
+>TKey : Symbol(TKey, Decl(missingTypeArguments3.ts, 6, 21))
+>keySelector : Symbol(keySelector, Decl(missingTypeArguments3.ts, 6, 27))
+>element : Symbol(element, Decl(missingTypeArguments3.ts, 6, 41))
+>T : Symbol(T, Decl(missingTypeArguments3.ts, 2, 25))
+>TKey : Symbol(TKey, Decl(missingTypeArguments3.ts, 6, 21))
+>Dictionary : Symbol(Dictionary, Decl(missingTypeArguments3.ts, 22, 5))
+>TKey : Symbol(TKey, Decl(missingTypeArguments3.ts, 6, 21))
+>T : Symbol(T, Decl(missingTypeArguments3.ts, 2, 25))
+    }
+
+    interface OrderedEnumerable<T> extends Enumerable<T> {
+>OrderedEnumerable : Symbol(OrderedEnumerable, Decl(missingTypeArguments3.ts, 7, 5))
+>T : Symbol(T, Decl(missingTypeArguments3.ts, 9, 32))
+>Enumerable : Symbol(Enumerable, Decl(missingTypeArguments3.ts, 0, 21))
+>T : Symbol(T, Decl(missingTypeArguments3.ts, 9, 32))
+
+        ThenBy<TCompare>(keySelector: (element: T) => TCompare): OrderedEnumerable<T>; // used to incorrectly think this was missing a type argument
+>ThenBy : Symbol(OrderedEnumerable.ThenBy, Decl(missingTypeArguments3.ts, 9, 58))
+>TCompare : Symbol(TCompare, Decl(missingTypeArguments3.ts, 10, 15))
+>keySelector : Symbol(keySelector, Decl(missingTypeArguments3.ts, 10, 25))
+>element : Symbol(element, Decl(missingTypeArguments3.ts, 10, 39))
+>T : Symbol(T, Decl(missingTypeArguments3.ts, 9, 32))
+>TCompare : Symbol(TCompare, Decl(missingTypeArguments3.ts, 10, 15))
+>OrderedEnumerable : Symbol(OrderedEnumerable, Decl(missingTypeArguments3.ts, 7, 5))
+>T : Symbol(T, Decl(missingTypeArguments3.ts, 9, 32))
+    }
+
+    interface Grouping<TKey, TElement> extends Enumerable<TElement> {
+>Grouping : Symbol(Grouping, Decl(missingTypeArguments3.ts, 11, 5))
+>TKey : Symbol(TKey, Decl(missingTypeArguments3.ts, 13, 23))
+>TElement : Symbol(TElement, Decl(missingTypeArguments3.ts, 13, 28))
+>Enumerable : Symbol(Enumerable, Decl(missingTypeArguments3.ts, 0, 21))
+>TElement : Symbol(TElement, Decl(missingTypeArguments3.ts, 13, 28))
+
+        Key(): TKey;
+>Key : Symbol(Grouping.Key, Decl(missingTypeArguments3.ts, 13, 69))
+>TKey : Symbol(TKey, Decl(missingTypeArguments3.ts, 13, 23))
+    }
+
+    interface Lookup<TKey, TElement> {
+>Lookup : Symbol(Lookup, Decl(missingTypeArguments3.ts, 15, 5))
+>TKey : Symbol(TKey, Decl(missingTypeArguments3.ts, 17, 21))
+>TElement : Symbol(TElement, Decl(missingTypeArguments3.ts, 17, 26))
+
+        Count(): number;
+>Count : Symbol(Lookup.Count, Decl(missingTypeArguments3.ts, 17, 38))
+
+        Get(key): Enumerable<any>;
+>Get : Symbol(Lookup.Get, Decl(missingTypeArguments3.ts, 18, 24))
+>key : Symbol(key, Decl(missingTypeArguments3.ts, 19, 12))
+>Enumerable : Symbol(Enumerable, Decl(missingTypeArguments3.ts, 0, 21))
+
+        Contains(key): boolean;
+>Contains : Symbol(Lookup.Contains, Decl(missingTypeArguments3.ts, 19, 34))
+>key : Symbol(key, Decl(missingTypeArguments3.ts, 20, 17))
+
+        ToEnumerable(): Enumerable<Grouping<TKey, any>>;
+>ToEnumerable : Symbol(Lookup.ToEnumerable, Decl(missingTypeArguments3.ts, 20, 31))
+>Enumerable : Symbol(Enumerable, Decl(missingTypeArguments3.ts, 0, 21))
+>Grouping : Symbol(Grouping, Decl(missingTypeArguments3.ts, 11, 5))
+>TKey : Symbol(TKey, Decl(missingTypeArguments3.ts, 17, 21))
+    }
+
+    interface Dictionary<TKey, TValue> {
+>Dictionary : Symbol(Dictionary, Decl(missingTypeArguments3.ts, 22, 5))
+>TKey : Symbol(TKey, Decl(missingTypeArguments3.ts, 24, 25))
+>TValue : Symbol(TValue, Decl(missingTypeArguments3.ts, 24, 30))
+
+        Add(key: TKey, value: TValue): void;
+>Add : Symbol(Dictionary.Add, Decl(missingTypeArguments3.ts, 24, 40))
+>key : Symbol(key, Decl(missingTypeArguments3.ts, 25, 12))
+>TKey : Symbol(TKey, Decl(missingTypeArguments3.ts, 24, 25))
+>value : Symbol(value, Decl(missingTypeArguments3.ts, 25, 22))
+>TValue : Symbol(TValue, Decl(missingTypeArguments3.ts, 24, 30))
+
+        Get(ke: TKey): TValue;
+>Get : Symbol(Dictionary.Get, Decl(missingTypeArguments3.ts, 25, 44))
+>ke : Symbol(ke, Decl(missingTypeArguments3.ts, 26, 12))
+>TKey : Symbol(TKey, Decl(missingTypeArguments3.ts, 24, 25))
+>TValue : Symbol(TValue, Decl(missingTypeArguments3.ts, 24, 30))
+
+        Set(key: TKey, value: TValue): boolean;
+>Set : Symbol(Dictionary.Set, Decl(missingTypeArguments3.ts, 26, 30))
+>key : Symbol(key, Decl(missingTypeArguments3.ts, 27, 12))
+>TKey : Symbol(TKey, Decl(missingTypeArguments3.ts, 24, 25))
+>value : Symbol(value, Decl(missingTypeArguments3.ts, 27, 22))
+>TValue : Symbol(TValue, Decl(missingTypeArguments3.ts, 24, 30))
+
+        Contains(key: TKey): boolean;
+>Contains : Symbol(Dictionary.Contains, Decl(missingTypeArguments3.ts, 27, 47))
+>key : Symbol(key, Decl(missingTypeArguments3.ts, 28, 17))
+>TKey : Symbol(TKey, Decl(missingTypeArguments3.ts, 24, 25))
+
+        Clear(): void;
+>Clear : Symbol(Dictionary.Clear, Decl(missingTypeArguments3.ts, 28, 37))
+
+        Remove(key: TKey): void;
+>Remove : Symbol(Dictionary.Remove, Decl(missingTypeArguments3.ts, 29, 22))
+>key : Symbol(key, Decl(missingTypeArguments3.ts, 30, 15))
+>TKey : Symbol(TKey, Decl(missingTypeArguments3.ts, 24, 25))
+
+        Count(): number;
+>Count : Symbol(Dictionary.Count, Decl(missingTypeArguments3.ts, 30, 32))
+
+        ToEnumerable(): Enumerable<KeyValuePair<TKey, TValue>>;
+>ToEnumerable : Symbol(Dictionary.ToEnumerable, Decl(missingTypeArguments3.ts, 31, 24))
+>Enumerable : Symbol(Enumerable, Decl(missingTypeArguments3.ts, 0, 21))
+>KeyValuePair : Symbol(KeyValuePair, Decl(missingTypeArguments3.ts, 33, 5))
+>TKey : Symbol(TKey, Decl(missingTypeArguments3.ts, 24, 25))
+>TValue : Symbol(TValue, Decl(missingTypeArguments3.ts, 24, 30))
+    }
+
+    interface KeyValuePair<TKey, TValue> {
+>KeyValuePair : Symbol(KeyValuePair, Decl(missingTypeArguments3.ts, 33, 5))
+>TKey : Symbol(TKey, Decl(missingTypeArguments3.ts, 35, 27))
+>TValue : Symbol(TValue, Decl(missingTypeArguments3.ts, 35, 32))
+
+        Key: TKey;
+>Key : Symbol(KeyValuePair.Key, Decl(missingTypeArguments3.ts, 35, 42))
+>TKey : Symbol(TKey, Decl(missingTypeArguments3.ts, 35, 27))
+
+        Value: TValue;
+>Value : Symbol(KeyValuePair.Value, Decl(missingTypeArguments3.ts, 36, 18))
+>TValue : Symbol(TValue, Decl(missingTypeArguments3.ts, 35, 32))
+    }
+}
+

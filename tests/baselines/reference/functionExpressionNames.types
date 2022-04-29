@@ -1,0 +1,103 @@
+=== tests/cases/compiler/b.js ===
+exports.E = function() {
+>exports.E = function() {    this.e = 'exported'} : typeof E
+>exports.E : typeof E
+>exports : typeof import("tests/cases/compiler/b")
+>E : typeof E
+>function() {    this.e = 'exported'} : typeof E
+
+    this.e = 'exported'
+>this.e = 'exported' : "exported"
+>this.e : any
+>this : this
+>e : any
+>'exported' : "exported"
+}
+var e = new exports.E();
+>e : E
+>new exports.E() : E
+>exports.E : typeof E
+>exports : typeof import("tests/cases/compiler/b")
+>E : typeof E
+
+var o = {
+>o : { C: typeof C; }
+>{    C: function () {        this.c = 'nested object'    }} : { C: typeof C; }
+
+    C: function () {
+>C : typeof C
+>function () {        this.c = 'nested object'    } : typeof C
+
+        this.c = 'nested object'
+>this.c = 'nested object' : "nested object"
+>this.c : any
+>this : this
+>c : any
+>'nested object' : "nested object"
+    }
+}
+var og = new o.C();
+>og : C
+>new o.C() : C
+>o.C : typeof C
+>o : { C: typeof C; }
+>C : typeof C
+
+var V = function () {
+>V : typeof V
+>function () {    this.v = 'simple'} : typeof V
+
+    this.v = 'simple'
+>this.v = 'simple' : "simple"
+>this.v : any
+>this : this
+>v : any
+>'simple' : "simple"
+}
+var v = new V();
+>v : V
+>new V() : V
+>V : typeof V
+
+var A;
+>A : any
+
+A = function () {
+>A = function () {    this.a = 'assignment'} : typeof A
+>A : any
+>function () {    this.a = 'assignment'} : typeof A
+
+    this.a = 'assignment'
+>this.a = 'assignment' : "assignment"
+>this.a : any
+>this : this
+>a : any
+>'assignment' : "assignment"
+}
+var a = new A();
+>a : A
+>new A() : A
+>A : typeof A
+
+const {
+    B = function() {
+>B : typeof B
+>function() {        this.b = 'binding pattern'    } : typeof B
+
+        this.b = 'binding pattern'
+>this.b = 'binding pattern' : "binding pattern"
+>this.b : any
+>this : this
+>b : any
+>'binding pattern' : "binding pattern"
+    }
+} = { B: undefined };
+>{ B: undefined } : { B?: undefined; }
+>B : undefined
+>undefined : undefined
+
+var b = new B();
+>b : B
+>new B() : B
+>B : typeof B
+

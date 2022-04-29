@@ -1,0 +1,176 @@
+=== tests/cases/compiler/privacyClassExtendsClauseDeclFile_externalModule.ts ===
+export module publicModule {
+>publicModule : Symbol(publicModule, Decl(privacyClassExtendsClauseDeclFile_externalModule.ts, 0, 0))
+
+    export class publicClassInPublicModule {
+>publicClassInPublicModule : Symbol(publicClassInPublicModule, Decl(privacyClassExtendsClauseDeclFile_externalModule.ts, 0, 28))
+
+        private f1() {
+>f1 : Symbol(publicClassInPublicModule.f1, Decl(privacyClassExtendsClauseDeclFile_externalModule.ts, 1, 44))
+        }
+    }
+
+    class privateClassInPublicModule {
+>privateClassInPublicModule : Symbol(privateClassInPublicModule, Decl(privacyClassExtendsClauseDeclFile_externalModule.ts, 4, 5))
+    }
+
+    class privateClassExtendingPublicClassInModule extends publicClassInPublicModule {
+>privateClassExtendingPublicClassInModule : Symbol(privateClassExtendingPublicClassInModule, Decl(privacyClassExtendsClauseDeclFile_externalModule.ts, 7, 5))
+>publicClassInPublicModule : Symbol(publicClassInPublicModule, Decl(privacyClassExtendsClauseDeclFile_externalModule.ts, 0, 28))
+    }
+    class privateClassExtendingPrivateClassInModule extends privateClassInPublicModule {
+>privateClassExtendingPrivateClassInModule : Symbol(privateClassExtendingPrivateClassInModule, Decl(privacyClassExtendsClauseDeclFile_externalModule.ts, 10, 5))
+>privateClassInPublicModule : Symbol(privateClassInPublicModule, Decl(privacyClassExtendsClauseDeclFile_externalModule.ts, 4, 5))
+    }
+    export class publicClassExtendingPublicClassInModule extends publicClassInPublicModule {
+>publicClassExtendingPublicClassInModule : Symbol(publicClassExtendingPublicClassInModule, Decl(privacyClassExtendsClauseDeclFile_externalModule.ts, 12, 5))
+>publicClassInPublicModule : Symbol(publicClassInPublicModule, Decl(privacyClassExtendsClauseDeclFile_externalModule.ts, 0, 28))
+    }
+    export class publicClassExtendingPrivateClassInModule extends privateClassInPublicModule { // Should error
+>publicClassExtendingPrivateClassInModule : Symbol(publicClassExtendingPrivateClassInModule, Decl(privacyClassExtendsClauseDeclFile_externalModule.ts, 14, 5))
+>privateClassInPublicModule : Symbol(privateClassInPublicModule, Decl(privacyClassExtendsClauseDeclFile_externalModule.ts, 4, 5))
+    }
+
+    class privateClassExtendingFromPrivateModuleClass extends privateModule.publicClassInPrivateModule {
+>privateClassExtendingFromPrivateModuleClass : Symbol(privateClassExtendingFromPrivateModuleClass, Decl(privacyClassExtendsClauseDeclFile_externalModule.ts, 16, 5))
+>privateModule.publicClassInPrivateModule : Symbol(privateModule.publicClassInPrivateModule, Decl(privacyClassExtendsClauseDeclFile_externalModule.ts, 24, 22))
+>privateModule : Symbol(privateModule, Decl(privacyClassExtendsClauseDeclFile_externalModule.ts, 22, 1))
+>publicClassInPrivateModule : Symbol(privateModule.publicClassInPrivateModule, Decl(privacyClassExtendsClauseDeclFile_externalModule.ts, 24, 22))
+    }
+    export class publicClassExtendingFromPrivateModuleClass extends privateModule.publicClassInPrivateModule { // Should error
+>publicClassExtendingFromPrivateModuleClass : Symbol(publicClassExtendingFromPrivateModuleClass, Decl(privacyClassExtendsClauseDeclFile_externalModule.ts, 19, 5))
+>privateModule.publicClassInPrivateModule : Symbol(privateModule.publicClassInPrivateModule, Decl(privacyClassExtendsClauseDeclFile_externalModule.ts, 24, 22))
+>privateModule : Symbol(privateModule, Decl(privacyClassExtendsClauseDeclFile_externalModule.ts, 22, 1))
+>publicClassInPrivateModule : Symbol(privateModule.publicClassInPrivateModule, Decl(privacyClassExtendsClauseDeclFile_externalModule.ts, 24, 22))
+    }
+}
+
+module privateModule {
+>privateModule : Symbol(privateModule, Decl(privacyClassExtendsClauseDeclFile_externalModule.ts, 22, 1))
+
+    export class publicClassInPrivateModule {
+>publicClassInPrivateModule : Symbol(publicClassInPrivateModule, Decl(privacyClassExtendsClauseDeclFile_externalModule.ts, 24, 22))
+
+        private f1() {
+>f1 : Symbol(publicClassInPrivateModule.f1, Decl(privacyClassExtendsClauseDeclFile_externalModule.ts, 25, 45))
+        }
+    }
+
+    class privateClassInPrivateModule {
+>privateClassInPrivateModule : Symbol(privateClassInPrivateModule, Decl(privacyClassExtendsClauseDeclFile_externalModule.ts, 28, 5))
+    }
+
+    class privateClassExtendingPublicClassInModule extends publicClassInPrivateModule {
+>privateClassExtendingPublicClassInModule : Symbol(privateClassExtendingPublicClassInModule, Decl(privacyClassExtendsClauseDeclFile_externalModule.ts, 31, 5))
+>publicClassInPrivateModule : Symbol(publicClassInPrivateModule, Decl(privacyClassExtendsClauseDeclFile_externalModule.ts, 24, 22))
+    }
+    class privateClassExtendingPrivateClassInModule extends privateClassInPrivateModule {
+>privateClassExtendingPrivateClassInModule : Symbol(privateClassExtendingPrivateClassInModule, Decl(privacyClassExtendsClauseDeclFile_externalModule.ts, 34, 5))
+>privateClassInPrivateModule : Symbol(privateClassInPrivateModule, Decl(privacyClassExtendsClauseDeclFile_externalModule.ts, 28, 5))
+    }
+    export class publicClassExtendingPublicClassInModule extends publicClassInPrivateModule {
+>publicClassExtendingPublicClassInModule : Symbol(publicClassExtendingPublicClassInModule, Decl(privacyClassExtendsClauseDeclFile_externalModule.ts, 36, 5))
+>publicClassInPrivateModule : Symbol(publicClassInPrivateModule, Decl(privacyClassExtendsClauseDeclFile_externalModule.ts, 24, 22))
+    }
+    export class publicClassExtendingPrivateClassInModule extends privateClassInPrivateModule { 
+>publicClassExtendingPrivateClassInModule : Symbol(publicClassExtendingPrivateClassInModule, Decl(privacyClassExtendsClauseDeclFile_externalModule.ts, 38, 5))
+>privateClassInPrivateModule : Symbol(privateClassInPrivateModule, Decl(privacyClassExtendsClauseDeclFile_externalModule.ts, 28, 5))
+    }
+
+    class privateClassExtendingFromPrivateModuleClass extends privateModule.publicClassInPrivateModule {
+>privateClassExtendingFromPrivateModuleClass : Symbol(privateClassExtendingFromPrivateModuleClass, Decl(privacyClassExtendsClauseDeclFile_externalModule.ts, 40, 5))
+>privateModule.publicClassInPrivateModule : Symbol(publicClassInPrivateModule, Decl(privacyClassExtendsClauseDeclFile_externalModule.ts, 24, 22))
+>privateModule : Symbol(privateModule, Decl(privacyClassExtendsClauseDeclFile_externalModule.ts, 22, 1))
+>publicClassInPrivateModule : Symbol(publicClassInPrivateModule, Decl(privacyClassExtendsClauseDeclFile_externalModule.ts, 24, 22))
+    }
+    export class publicClassExtendingFromPrivateModuleClass extends privateModule.publicClassInPrivateModule {
+>publicClassExtendingFromPrivateModuleClass : Symbol(publicClassExtendingFromPrivateModuleClass, Decl(privacyClassExtendsClauseDeclFile_externalModule.ts, 43, 5))
+>privateModule.publicClassInPrivateModule : Symbol(publicClassInPrivateModule, Decl(privacyClassExtendsClauseDeclFile_externalModule.ts, 24, 22))
+>privateModule : Symbol(privateModule, Decl(privacyClassExtendsClauseDeclFile_externalModule.ts, 22, 1))
+>publicClassInPrivateModule : Symbol(publicClassInPrivateModule, Decl(privacyClassExtendsClauseDeclFile_externalModule.ts, 24, 22))
+    }
+}
+
+export class publicClass {
+>publicClass : Symbol(publicClass, Decl(privacyClassExtendsClauseDeclFile_externalModule.ts, 46, 1))
+
+    private f1() {
+>f1 : Symbol(publicClass.f1, Decl(privacyClassExtendsClauseDeclFile_externalModule.ts, 48, 26))
+    }
+}
+
+class privateClass {
+>privateClass : Symbol(privateClass, Decl(privacyClassExtendsClauseDeclFile_externalModule.ts, 51, 1))
+}
+
+class privateClassExtendingPublicClass extends publicClass {
+>privateClassExtendingPublicClass : Symbol(privateClassExtendingPublicClass, Decl(privacyClassExtendsClauseDeclFile_externalModule.ts, 54, 1))
+>publicClass : Symbol(publicClass, Decl(privacyClassExtendsClauseDeclFile_externalModule.ts, 46, 1))
+}
+class privateClassExtendingPrivateClassInModule extends privateClass {
+>privateClassExtendingPrivateClassInModule : Symbol(privateClassExtendingPrivateClassInModule, Decl(privacyClassExtendsClauseDeclFile_externalModule.ts, 57, 1))
+>privateClass : Symbol(privateClass, Decl(privacyClassExtendsClauseDeclFile_externalModule.ts, 51, 1))
+}
+export class publicClassExtendingPublicClass extends publicClass {
+>publicClassExtendingPublicClass : Symbol(publicClassExtendingPublicClass, Decl(privacyClassExtendsClauseDeclFile_externalModule.ts, 59, 1))
+>publicClass : Symbol(publicClass, Decl(privacyClassExtendsClauseDeclFile_externalModule.ts, 46, 1))
+}
+export class publicClassExtendingPrivateClass extends privateClass { // Should error
+>publicClassExtendingPrivateClass : Symbol(publicClassExtendingPrivateClass, Decl(privacyClassExtendsClauseDeclFile_externalModule.ts, 61, 1))
+>privateClass : Symbol(privateClass, Decl(privacyClassExtendsClauseDeclFile_externalModule.ts, 51, 1))
+}
+
+class privateClassExtendingFromPrivateModuleClass extends privateModule.publicClassInPrivateModule {
+>privateClassExtendingFromPrivateModuleClass : Symbol(privateClassExtendingFromPrivateModuleClass, Decl(privacyClassExtendsClauseDeclFile_externalModule.ts, 63, 1))
+>privateModule.publicClassInPrivateModule : Symbol(privateModule.publicClassInPrivateModule, Decl(privacyClassExtendsClauseDeclFile_externalModule.ts, 24, 22))
+>privateModule : Symbol(privateModule, Decl(privacyClassExtendsClauseDeclFile_externalModule.ts, 22, 1))
+>publicClassInPrivateModule : Symbol(privateModule.publicClassInPrivateModule, Decl(privacyClassExtendsClauseDeclFile_externalModule.ts, 24, 22))
+}
+export class publicClassExtendingFromPrivateModuleClass extends privateModule.publicClassInPrivateModule { // Should error
+>publicClassExtendingFromPrivateModuleClass : Symbol(publicClassExtendingFromPrivateModuleClass, Decl(privacyClassExtendsClauseDeclFile_externalModule.ts, 66, 1))
+>privateModule.publicClassInPrivateModule : Symbol(privateModule.publicClassInPrivateModule, Decl(privacyClassExtendsClauseDeclFile_externalModule.ts, 24, 22))
+>privateModule : Symbol(privateModule, Decl(privacyClassExtendsClauseDeclFile_externalModule.ts, 22, 1))
+>publicClassInPrivateModule : Symbol(privateModule.publicClassInPrivateModule, Decl(privacyClassExtendsClauseDeclFile_externalModule.ts, 24, 22))
+}
+
+=== tests/cases/compiler/privacyClassExtendsClauseDeclFile_GlobalFile.ts ===
+module publicModuleInGlobal {
+>publicModuleInGlobal : Symbol(publicModuleInGlobal, Decl(privacyClassExtendsClauseDeclFile_GlobalFile.ts, 0, 0))
+
+    export class publicClassInPublicModule {
+>publicClassInPublicModule : Symbol(publicClassInPublicModule, Decl(privacyClassExtendsClauseDeclFile_GlobalFile.ts, 0, 29))
+
+        private f1() {
+>f1 : Symbol(publicClassInPublicModule.f1, Decl(privacyClassExtendsClauseDeclFile_GlobalFile.ts, 1, 44))
+        }
+    }
+
+    class privateClassInPublicModule {
+>privateClassInPublicModule : Symbol(privateClassInPublicModule, Decl(privacyClassExtendsClauseDeclFile_GlobalFile.ts, 4, 5))
+    }
+
+    class privateClassExtendingPublicClassInModule extends publicClassInPublicModule {
+>privateClassExtendingPublicClassInModule : Symbol(privateClassExtendingPublicClassInModule, Decl(privacyClassExtendsClauseDeclFile_GlobalFile.ts, 7, 5))
+>publicClassInPublicModule : Symbol(publicClassInPublicModule, Decl(privacyClassExtendsClauseDeclFile_GlobalFile.ts, 0, 29))
+    }
+    class privateClassExtendingPrivateClassInModule extends privateClassInPublicModule {
+>privateClassExtendingPrivateClassInModule : Symbol(privateClassExtendingPrivateClassInModule, Decl(privacyClassExtendsClauseDeclFile_GlobalFile.ts, 10, 5))
+>privateClassInPublicModule : Symbol(privateClassInPublicModule, Decl(privacyClassExtendsClauseDeclFile_GlobalFile.ts, 4, 5))
+    }
+    export class publicClassExtendingPublicClassInModule extends publicClassInPublicModule {
+>publicClassExtendingPublicClassInModule : Symbol(publicClassExtendingPublicClassInModule, Decl(privacyClassExtendsClauseDeclFile_GlobalFile.ts, 12, 5))
+>publicClassInPublicModule : Symbol(publicClassInPublicModule, Decl(privacyClassExtendsClauseDeclFile_GlobalFile.ts, 0, 29))
+    }
+    export class publicClassExtendingPrivateClassInModule extends privateClassInPublicModule { // Should error
+>publicClassExtendingPrivateClassInModule : Symbol(publicClassExtendingPrivateClassInModule, Decl(privacyClassExtendsClauseDeclFile_GlobalFile.ts, 14, 5))
+>privateClassInPublicModule : Symbol(privateClassInPublicModule, Decl(privacyClassExtendsClauseDeclFile_GlobalFile.ts, 4, 5))
+    }
+}
+class publicClassInGlobal {
+>publicClassInGlobal : Symbol(publicClassInGlobal, Decl(privacyClassExtendsClauseDeclFile_GlobalFile.ts, 17, 1))
+}
+class publicClassExtendingPublicClassInGlobal extends publicClassInGlobal {
+>publicClassExtendingPublicClassInGlobal : Symbol(publicClassExtendingPublicClassInGlobal, Decl(privacyClassExtendsClauseDeclFile_GlobalFile.ts, 19, 1))
+>publicClassInGlobal : Symbol(publicClassInGlobal, Decl(privacyClassExtendsClauseDeclFile_GlobalFile.ts, 17, 1))
+}
+

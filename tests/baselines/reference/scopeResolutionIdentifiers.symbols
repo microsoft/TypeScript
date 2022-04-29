@@ -1,0 +1,94 @@
+=== tests/cases/conformance/expressions/identifiers/scopeResolutionIdentifiers.ts ===
+// EveryType used in a nested scope of a different EveryType with the same name, type of the identifier is the one defined in the inner scope
+
+var s: string;
+>s : Symbol(s, Decl(scopeResolutionIdentifiers.ts, 2, 3))
+
+module M1 {
+>M1 : Symbol(M1, Decl(scopeResolutionIdentifiers.ts, 2, 14))
+
+    export var s: number;
+>s : Symbol(s, Decl(scopeResolutionIdentifiers.ts, 4, 14))
+
+    var n = s;
+>n : Symbol(n, Decl(scopeResolutionIdentifiers.ts, 5, 7), Decl(scopeResolutionIdentifiers.ts, 6, 7))
+>s : Symbol(s, Decl(scopeResolutionIdentifiers.ts, 4, 14))
+
+    var n: number;
+>n : Symbol(n, Decl(scopeResolutionIdentifiers.ts, 5, 7), Decl(scopeResolutionIdentifiers.ts, 6, 7))
+}
+
+module M2 {
+>M2 : Symbol(M2, Decl(scopeResolutionIdentifiers.ts, 7, 1))
+
+    var s: number;
+>s : Symbol(s, Decl(scopeResolutionIdentifiers.ts, 10, 7))
+
+    var n = s;
+>n : Symbol(n, Decl(scopeResolutionIdentifiers.ts, 11, 7), Decl(scopeResolutionIdentifiers.ts, 12, 7))
+>s : Symbol(s, Decl(scopeResolutionIdentifiers.ts, 10, 7))
+
+    var n: number;
+>n : Symbol(n, Decl(scopeResolutionIdentifiers.ts, 11, 7), Decl(scopeResolutionIdentifiers.ts, 12, 7))
+}
+
+function fn() {
+>fn : Symbol(fn, Decl(scopeResolutionIdentifiers.ts, 13, 1))
+
+    var s: boolean;
+>s : Symbol(s, Decl(scopeResolutionIdentifiers.ts, 16, 7))
+
+    var n = s;
+>n : Symbol(n, Decl(scopeResolutionIdentifiers.ts, 17, 7), Decl(scopeResolutionIdentifiers.ts, 18, 7))
+>s : Symbol(s, Decl(scopeResolutionIdentifiers.ts, 16, 7))
+
+    var n: boolean;
+>n : Symbol(n, Decl(scopeResolutionIdentifiers.ts, 17, 7), Decl(scopeResolutionIdentifiers.ts, 18, 7))
+}
+
+class C {
+>C : Symbol(C, Decl(scopeResolutionIdentifiers.ts, 19, 1))
+
+    s: Date;
+>s : Symbol(C.s, Decl(scopeResolutionIdentifiers.ts, 21, 9))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+    n = this.s;
+>n : Symbol(C.n, Decl(scopeResolutionIdentifiers.ts, 22, 12))
+>this.s : Symbol(C.s, Decl(scopeResolutionIdentifiers.ts, 21, 9))
+>this : Symbol(C, Decl(scopeResolutionIdentifiers.ts, 19, 1))
+>s : Symbol(C.s, Decl(scopeResolutionIdentifiers.ts, 21, 9))
+
+    x() {
+>x : Symbol(C.x, Decl(scopeResolutionIdentifiers.ts, 23, 15))
+
+        var p = this.n;
+>p : Symbol(p, Decl(scopeResolutionIdentifiers.ts, 25, 11), Decl(scopeResolutionIdentifiers.ts, 26, 11))
+>this.n : Symbol(C.n, Decl(scopeResolutionIdentifiers.ts, 22, 12))
+>this : Symbol(C, Decl(scopeResolutionIdentifiers.ts, 19, 1))
+>n : Symbol(C.n, Decl(scopeResolutionIdentifiers.ts, 22, 12))
+
+        var p: Date;
+>p : Symbol(p, Decl(scopeResolutionIdentifiers.ts, 25, 11), Decl(scopeResolutionIdentifiers.ts, 26, 11))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+    }
+}
+
+module M3 {
+>M3 : Symbol(M3, Decl(scopeResolutionIdentifiers.ts, 28, 1))
+
+    var s: any;
+>s : Symbol(s, Decl(scopeResolutionIdentifiers.ts, 31, 7))
+
+    module M4 {
+>M4 : Symbol(M4, Decl(scopeResolutionIdentifiers.ts, 31, 15))
+
+        var n = s;
+>n : Symbol(n, Decl(scopeResolutionIdentifiers.ts, 33, 11), Decl(scopeResolutionIdentifiers.ts, 34, 11))
+>s : Symbol(s, Decl(scopeResolutionIdentifiers.ts, 31, 7))
+
+        var n: any;
+>n : Symbol(n, Decl(scopeResolutionIdentifiers.ts, 33, 11), Decl(scopeResolutionIdentifiers.ts, 34, 11))
+    }
+}
+

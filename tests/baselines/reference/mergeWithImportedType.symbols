@@ -1,0 +1,13 @@
+=== tests/cases/compiler/f1.ts ===
+export enum E {X}
+>E : Symbol(E, Decl(f1.ts, 0, 0))
+>X : Symbol(E.X, Decl(f1.ts, 0, 15))
+
+=== tests/cases/compiler/f2.ts ===
+import {E} from "./f1";
+>E : Symbol(E, Decl(f2.ts, 0, 8), Decl(f2.ts, 0, 23))
+
+export type E = E;
+>E : Symbol(E, Decl(f2.ts, 0, 23))
+>E : Symbol(E, Decl(f2.ts, 0, 8), Decl(f2.ts, 0, 23))
+

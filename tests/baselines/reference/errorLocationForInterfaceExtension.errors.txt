@@ -1,0 +1,10 @@
+tests/cases/compiler/errorLocationForInterfaceExtension.ts(3,21): error TS2693: 'string' only refers to a type, but is being used as a value here.
+
+
+==== tests/cases/compiler/errorLocationForInterfaceExtension.ts (1 errors) ====
+    var n = '';
+    
+    interface x extends string { }
+                        ~~~~~~
+!!! error TS2693: 'string' only refers to a type, but is being used as a value here.
+    

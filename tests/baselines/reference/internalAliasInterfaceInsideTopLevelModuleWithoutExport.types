@@ -1,0 +1,14 @@
+=== tests/cases/compiler/internalAliasInterfaceInsideTopLevelModuleWithoutExport.ts ===
+export module a {
+    export interface I {
+    }
+}
+
+import b = a.I;
+>b : any
+>a : any
+>I : b
+
+export var x: b;
+>x : b
+

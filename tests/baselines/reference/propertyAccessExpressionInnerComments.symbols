@@ -1,0 +1,63 @@
+=== tests/cases/compiler/propertyAccessExpressionInnerComments.ts ===
+/*1*/Array/*2*/./*3*/toString/*4*/
+>Array/*2*/./*3*/toString : Symbol(Function.toString, Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>toString : Symbol(Function.toString, Decl(lib.es5.d.ts, --, --))
+
+/*1*/Array
+>Array/*2*/./*3*/    // Single-line comment    toString : Symbol(Function.toString, Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+/*2*/./*3*/
+    // Single-line comment
+    toString/*4*/
+>toString : Symbol(Function.toString, Decl(lib.es5.d.ts, --, --))
+
+/*1*/Array/*2*/./*3*/
+>Array/*2*/./*3*/    // Single-line comment    toString : Symbol(Function.toString, Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    // Single-line comment
+    toString/*4*/
+>toString : Symbol(Function.toString, Decl(lib.es5.d.ts, --, --))
+
+/*1*/Array
+>Array    // Single-line comment    /*2*/./*3*/toString : Symbol(Function.toString, Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    // Single-line comment
+    /*2*/./*3*/toString/*4*/
+>toString : Symbol(Function.toString, Decl(lib.es5.d.ts, --, --))
+
+/* Existing issue: the "2" comments below are duplicated and "3"s are missing */
+
+/*1*/Array/*2*/?./*3*/toString/*4*/
+>Array/*2*/?./*3*/toString : Symbol(Function.toString, Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>toString : Symbol(Function.toString, Decl(lib.es5.d.ts, --, --))
+
+/*1*/Array
+>Array/*2*/?./*3*/    // Single-line comment    toString : Symbol(Function.toString, Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+/*2*/?./*3*/
+    // Single-line comment
+    toString/*4*/
+>toString : Symbol(Function.toString, Decl(lib.es5.d.ts, --, --))
+
+/*1*/Array/*2*/?./*3*/
+>Array/*2*/?./*3*/    // Single-line comment    toString : Symbol(Function.toString, Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    // Single-line comment
+    toString/*4*/
+>toString : Symbol(Function.toString, Decl(lib.es5.d.ts, --, --))
+
+/*1*/Array
+>Array    // Single-line comment    /*2*/?./*3*/toString : Symbol(Function.toString, Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    // Single-line comment
+    /*2*/?./*3*/toString/*4*/
+>toString : Symbol(Function.toString, Decl(lib.es5.d.ts, --, --))
+

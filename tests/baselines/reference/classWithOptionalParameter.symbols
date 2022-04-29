@@ -1,0 +1,26 @@
+=== tests/cases/conformance/types/namedTypes/classWithOptionalParameter.ts ===
+// classes do not permit optional parameters, these are errors
+
+class C {
+>C : Symbol(C, Decl(classWithOptionalParameter.ts, 0, 0))
+
+    x?: string;
+>x : Symbol(C.x, Decl(classWithOptionalParameter.ts, 2, 9))
+
+    f?() {}
+>f : Symbol(C.f, Decl(classWithOptionalParameter.ts, 3, 15))
+}
+
+class C2<T> {
+>C2 : Symbol(C2, Decl(classWithOptionalParameter.ts, 5, 1))
+>T : Symbol(T, Decl(classWithOptionalParameter.ts, 7, 9))
+
+    x?: T;
+>x : Symbol(C2.x, Decl(classWithOptionalParameter.ts, 7, 13))
+>T : Symbol(T, Decl(classWithOptionalParameter.ts, 7, 9))
+
+    f?(x: T) {}
+>f : Symbol(C2.f, Decl(classWithOptionalParameter.ts, 8, 10))
+>x : Symbol(x, Decl(classWithOptionalParameter.ts, 9, 7))
+>T : Symbol(T, Decl(classWithOptionalParameter.ts, 7, 9))
+}

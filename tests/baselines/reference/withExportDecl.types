@@ -1,0 +1,156 @@
+=== tests/cases/compiler/withExportDecl.ts ===
+var simpleVar;
+>simpleVar : any
+
+export var exportedSimpleVar;
+>exportedSimpleVar : any
+
+var anotherVar: any;
+>anotherVar : any
+
+var varWithSimpleType: number;
+>varWithSimpleType : number
+
+var varWithArrayType: number[];
+>varWithArrayType : number[]
+
+var varWithInitialValue = 30;
+>varWithInitialValue : number
+>30 : 30
+
+export var exportedVarWithInitialValue = 70;
+>exportedVarWithInitialValue : number
+>70 : 70
+
+var withComplicatedValue = { x: 30, y: 70, desc: "position" };
+>withComplicatedValue : { x: number; y: number; desc: string; }
+>{ x: 30, y: 70, desc: "position" } : { x: number; y: number; desc: string; }
+>x : number
+>30 : 30
+>y : number
+>70 : 70
+>desc : string
+>"position" : "position"
+
+export var exportedWithComplicatedValue = { x: 30, y: 70, desc: "position" };
+>exportedWithComplicatedValue : { x: number; y: number; desc: string; }
+>{ x: 30, y: 70, desc: "position" } : { x: number; y: number; desc: string; }
+>x : number
+>30 : 30
+>y : number
+>70 : 70
+>desc : string
+>"position" : "position"
+
+declare var declaredVar;
+>declaredVar : any
+
+declare var declareVar2
+>declareVar2 : any
+
+declare var declaredVar;
+>declaredVar : any
+
+declare var deckareVarWithType: number;
+>deckareVarWithType : number
+
+export declare var exportedDeclaredVar: number;
+>exportedDeclaredVar : number
+
+var arrayVar: string[] = ['a', 'b'];
+>arrayVar : string[]
+>['a', 'b'] : string[]
+>'a' : "a"
+>'b' : "b"
+
+export var exportedArrayVar: { x: number; y: string; }[] ;
+>exportedArrayVar : { x: number; y: string; }[]
+>x : number
+>y : string
+
+exportedArrayVar.push({ x: 30, y : 'hello world' });
+>exportedArrayVar.push({ x: 30, y : 'hello world' }) : number
+>exportedArrayVar.push : (...items: { x: number; y: string; }[]) => number
+>exportedArrayVar : { x: number; y: string; }[]
+>push : (...items: { x: number; y: string; }[]) => number
+>{ x: 30, y : 'hello world' } : { x: number; y: string; }
+>x : number
+>30 : 30
+>y : string
+>'hello world' : "hello world"
+
+function simpleFunction() {
+>simpleFunction : () => { x: string; y: string; n: number; }
+
+    return {
+>{        x: "Hello",        y: "word",        n: 2    } : { x: string; y: string; n: number; }
+
+        x: "Hello",
+>x : string
+>"Hello" : "Hello"
+
+        y: "word",
+>y : string
+>"word" : "word"
+
+        n: 2
+>n : number
+>2 : 2
+
+    };
+}
+
+export function exportedFunction() {
+>exportedFunction : () => { x: string; y: string; n: number; }
+
+    return simpleFunction();
+>simpleFunction() : { x: string; y: string; n: number; }
+>simpleFunction : () => { x: string; y: string; n: number; }
+}
+
+module m1 {
+>m1 : typeof m1
+
+    export function foo() {
+>foo : () => string
+
+        return "Hello";
+>"Hello" : "Hello"
+    }
+}
+export declare module m2 {
+>m2 : typeof m2
+
+    export var a: number;
+>a : number
+}
+
+
+export module m3 {
+>m3 : typeof m3
+
+    export function foo() {
+>foo : () => string
+
+        return m1.foo();
+>m1.foo() : string
+>m1.foo : () => string
+>m1 : typeof m1
+>foo : () => string
+    }
+}
+
+export var eVar1, eVar2 = 10;
+>eVar1 : any
+>eVar2 : number
+>10 : 10
+
+var eVar22;
+>eVar22 : any
+
+export var eVar3 = 10, eVar4, eVar5;
+>eVar3 : number
+>10 : 10
+>eVar4 : any
+>eVar5 : any
+

@@ -1,0 +1,16 @@
+=== /a.d.ts ===
+declare class Foo {}
+>Foo : Foo
+
+=== /b.ts ===
+declare namespace Foo {
+>Foo : typeof Foo
+
+    namespace prototype {
+>prototype : typeof Foo.prototype
+
+        function f(): void;
+>f : () => void
+    }
+}
+

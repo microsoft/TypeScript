@@ -1,0 +1,37 @@
+=== tests/cases/conformance/types/specifyingTypes/typeLiterals/arrayLiteral.ts ===
+// valid uses of array literals
+
+var x = [];
+>x : Symbol(x, Decl(arrayLiteral.ts, 2, 3), Decl(arrayLiteral.ts, 3, 3))
+
+var x = new Array(1);
+>x : Symbol(x, Decl(arrayLiteral.ts, 2, 3), Decl(arrayLiteral.ts, 3, 3))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+var y = [1];
+>y : Symbol(y, Decl(arrayLiteral.ts, 5, 3), Decl(arrayLiteral.ts, 6, 3), Decl(arrayLiteral.ts, 7, 3))
+
+var y = [1, 2];
+>y : Symbol(y, Decl(arrayLiteral.ts, 5, 3), Decl(arrayLiteral.ts, 6, 3), Decl(arrayLiteral.ts, 7, 3))
+
+var y = new Array<number>();
+>y : Symbol(y, Decl(arrayLiteral.ts, 5, 3), Decl(arrayLiteral.ts, 6, 3), Decl(arrayLiteral.ts, 7, 3))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+var x2: number[] = [];
+>x2 : Symbol(x2, Decl(arrayLiteral.ts, 9, 3), Decl(arrayLiteral.ts, 10, 3))
+
+var x2: number[] = new Array(1);
+>x2 : Symbol(x2, Decl(arrayLiteral.ts, 9, 3), Decl(arrayLiteral.ts, 10, 3))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+var y2: number[] = [1];
+>y2 : Symbol(y2, Decl(arrayLiteral.ts, 12, 3), Decl(arrayLiteral.ts, 13, 3), Decl(arrayLiteral.ts, 14, 3))
+
+var y2: number[] = [1, 2];
+>y2 : Symbol(y2, Decl(arrayLiteral.ts, 12, 3), Decl(arrayLiteral.ts, 13, 3), Decl(arrayLiteral.ts, 14, 3))
+
+var y2: number[] = new Array<number>();
+>y2 : Symbol(y2, Decl(arrayLiteral.ts, 12, 3), Decl(arrayLiteral.ts, 13, 3), Decl(arrayLiteral.ts, 14, 3))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+

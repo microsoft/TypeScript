@@ -1,0 +1,35 @@
+=== tests/cases/conformance/expressions/nullishCoalescingOperator/nullishCoalescingOperator8.ts ===
+declare const a: { p: string | undefined, m(): string | undefined };
+>a : Symbol(a, Decl(nullishCoalescingOperator8.ts, 0, 13))
+>p : Symbol(p, Decl(nullishCoalescingOperator8.ts, 0, 18))
+>m : Symbol(m, Decl(nullishCoalescingOperator8.ts, 0, 41))
+
+declare const b: { p: string | undefined, m(): string | undefined };
+>b : Symbol(b, Decl(nullishCoalescingOperator8.ts, 1, 13))
+>p : Symbol(p, Decl(nullishCoalescingOperator8.ts, 1, 18))
+>m : Symbol(m, Decl(nullishCoalescingOperator8.ts, 1, 41))
+
+const n1 = a.p ?? "default";
+>n1 : Symbol(n1, Decl(nullishCoalescingOperator8.ts, 3, 5))
+>a.p : Symbol(p, Decl(nullishCoalescingOperator8.ts, 0, 18))
+>a : Symbol(a, Decl(nullishCoalescingOperator8.ts, 0, 13))
+>p : Symbol(p, Decl(nullishCoalescingOperator8.ts, 0, 18))
+
+const n2 = a.m() ?? "default";
+>n2 : Symbol(n2, Decl(nullishCoalescingOperator8.ts, 4, 5))
+>a.m : Symbol(m, Decl(nullishCoalescingOperator8.ts, 0, 41))
+>a : Symbol(a, Decl(nullishCoalescingOperator8.ts, 0, 13))
+>m : Symbol(m, Decl(nullishCoalescingOperator8.ts, 0, 41))
+
+const n3 = a.m() ?? b.p ?? b.m() ?? "default";;
+>n3 : Symbol(n3, Decl(nullishCoalescingOperator8.ts, 5, 5))
+>a.m : Symbol(m, Decl(nullishCoalescingOperator8.ts, 0, 41))
+>a : Symbol(a, Decl(nullishCoalescingOperator8.ts, 0, 13))
+>m : Symbol(m, Decl(nullishCoalescingOperator8.ts, 0, 41))
+>b.p : Symbol(p, Decl(nullishCoalescingOperator8.ts, 1, 18))
+>b : Symbol(b, Decl(nullishCoalescingOperator8.ts, 1, 13))
+>p : Symbol(p, Decl(nullishCoalescingOperator8.ts, 1, 18))
+>b.m : Symbol(m, Decl(nullishCoalescingOperator8.ts, 1, 41))
+>b : Symbol(b, Decl(nullishCoalescingOperator8.ts, 1, 13))
+>m : Symbol(m, Decl(nullishCoalescingOperator8.ts, 1, 41))
+

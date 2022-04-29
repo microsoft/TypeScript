@@ -1,0 +1,67 @@
+=== tests/cases/compiler/genericCloneReturnTypes2.ts ===
+class MyList<T> {
+>MyList : Symbol(MyList, Decl(genericCloneReturnTypes2.ts, 0, 0))
+>T : Symbol(T, Decl(genericCloneReturnTypes2.ts, 0, 13))
+
+    public size: number;
+>size : Symbol(MyList.size, Decl(genericCloneReturnTypes2.ts, 0, 17))
+
+    public data: T[];
+>data : Symbol(MyList.data, Decl(genericCloneReturnTypes2.ts, 1, 24))
+>T : Symbol(T, Decl(genericCloneReturnTypes2.ts, 0, 13))
+
+    constructor(n: number) {
+>n : Symbol(n, Decl(genericCloneReturnTypes2.ts, 3, 16))
+
+        this.size = n;
+>this.size : Symbol(MyList.size, Decl(genericCloneReturnTypes2.ts, 0, 17))
+>this : Symbol(MyList, Decl(genericCloneReturnTypes2.ts, 0, 0))
+>size : Symbol(MyList.size, Decl(genericCloneReturnTypes2.ts, 0, 17))
+>n : Symbol(n, Decl(genericCloneReturnTypes2.ts, 3, 16))
+
+        this.data = new Array<T>(this.size);
+>this.data : Symbol(MyList.data, Decl(genericCloneReturnTypes2.ts, 1, 24))
+>this : Symbol(MyList, Decl(genericCloneReturnTypes2.ts, 0, 0))
+>data : Symbol(MyList.data, Decl(genericCloneReturnTypes2.ts, 1, 24))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(genericCloneReturnTypes2.ts, 0, 13))
+>this.size : Symbol(MyList.size, Decl(genericCloneReturnTypes2.ts, 0, 17))
+>this : Symbol(MyList, Decl(genericCloneReturnTypes2.ts, 0, 0))
+>size : Symbol(MyList.size, Decl(genericCloneReturnTypes2.ts, 0, 17))
+    }
+    public clone() {
+>clone : Symbol(MyList.clone, Decl(genericCloneReturnTypes2.ts, 6, 5))
+
+        return new MyList<T>(this.size);
+>MyList : Symbol(MyList, Decl(genericCloneReturnTypes2.ts, 0, 0))
+>T : Symbol(T, Decl(genericCloneReturnTypes2.ts, 0, 13))
+>this.size : Symbol(MyList.size, Decl(genericCloneReturnTypes2.ts, 0, 17))
+>this : Symbol(MyList, Decl(genericCloneReturnTypes2.ts, 0, 0))
+>size : Symbol(MyList.size, Decl(genericCloneReturnTypes2.ts, 0, 17))
+    }
+}
+var a: MyList<string>;
+>a : Symbol(a, Decl(genericCloneReturnTypes2.ts, 11, 3))
+>MyList : Symbol(MyList, Decl(genericCloneReturnTypes2.ts, 0, 0))
+
+var b: MyList<any> = a.clone(); // ok
+>b : Symbol(b, Decl(genericCloneReturnTypes2.ts, 12, 3))
+>MyList : Symbol(MyList, Decl(genericCloneReturnTypes2.ts, 0, 0))
+>a.clone : Symbol(MyList.clone, Decl(genericCloneReturnTypes2.ts, 6, 5))
+>a : Symbol(a, Decl(genericCloneReturnTypes2.ts, 11, 3))
+>clone : Symbol(MyList.clone, Decl(genericCloneReturnTypes2.ts, 6, 5))
+
+var c: MyList<string> = a.clone(); // bug was there was an error on this line
+>c : Symbol(c, Decl(genericCloneReturnTypes2.ts, 13, 3))
+>MyList : Symbol(MyList, Decl(genericCloneReturnTypes2.ts, 0, 0))
+>a.clone : Symbol(MyList.clone, Decl(genericCloneReturnTypes2.ts, 6, 5))
+>a : Symbol(a, Decl(genericCloneReturnTypes2.ts, 11, 3))
+>clone : Symbol(MyList.clone, Decl(genericCloneReturnTypes2.ts, 6, 5))
+
+var d: MyList<number> = a.clone(); // error
+>d : Symbol(d, Decl(genericCloneReturnTypes2.ts, 14, 3))
+>MyList : Symbol(MyList, Decl(genericCloneReturnTypes2.ts, 0, 0))
+>a.clone : Symbol(MyList.clone, Decl(genericCloneReturnTypes2.ts, 6, 5))
+>a : Symbol(a, Decl(genericCloneReturnTypes2.ts, 11, 3))
+>clone : Symbol(MyList.clone, Decl(genericCloneReturnTypes2.ts, 6, 5))
+

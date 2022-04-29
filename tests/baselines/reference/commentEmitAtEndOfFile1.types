@@ -1,0 +1,17 @@
+=== tests/cases/compiler/commentEmitAtEndOfFile1.ts ===
+// test
+var f = ''
+>f : string
+>'' : ""
+
+// test #2
+module foo {
+>foo : typeof foo
+
+        function bar() { }
+>bar : () => void
+}
+// test #3
+module empty {
+}
+// test #4

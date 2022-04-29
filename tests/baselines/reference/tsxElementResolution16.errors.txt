@@ -1,0 +1,15 @@
+tests/cases/conformance/jsx/file.tsx(8,1): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+
+
+==== tests/cases/conformance/jsx/file.tsx (1 errors) ====
+    declare module JSX {
+    }
+    
+    interface Obj1 {
+    	new(n: string): {};
+    }
+    var obj1: Obj1;
+    <obj1 x={10} />; // Error (JSX.Element is implicit any)
+    ~~~~~~~~~~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+    

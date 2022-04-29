@@ -1,0 +1,18 @@
+tests/cases/compiler/indexSignatureOfTypeUnknownStillRequiresIndexSignature.ts(9,3): error TS2345: Argument of type '{ name: string; age: number; }[]' is not assignable to parameter of type '{ [x: string]: unknown; }'.
+  Index signature for type 'string' is missing in type '{ name: string; age: number; }[]'.
+
+
+==== tests/cases/compiler/indexSignatureOfTypeUnknownStillRequiresIndexSignature.ts (1 errors) ====
+    declare function f<T extends unknown = unknown>(x: { [x: string]: T }): T;
+    
+    var stooges = [
+      { name: "moe", age: 40 },
+      { name: "larry", age: 50 },
+      { name: "curly", age: 60 }
+    ];
+    
+    f(stooges); // Should throw
+      ~~~~~~~
+!!! error TS2345: Argument of type '{ name: string; age: number; }[]' is not assignable to parameter of type '{ [x: string]: unknown; }'.
+!!! error TS2345:   Index signature for type 'string' is missing in type '{ name: string; age: number; }[]'.
+    

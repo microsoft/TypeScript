@@ -1,0 +1,17 @@
+=== tests/cases/compiler/a.ts ===
+declare function foo(): any
+>foo : Symbol(foo, Decl(a.ts, 0, 0))
+
+declare function bar(): any;
+>bar : Symbol(bar, Decl(a.ts, 0, 27))
+
+export { foo, bar as baz };
+>foo : Symbol(foo, Decl(a.ts, 2, 8))
+>bar : Symbol(bar, Decl(a.ts, 0, 27))
+>baz : Symbol(baz, Decl(a.ts, 2, 13))
+
+=== tests/cases/compiler/b.ts ===
+import { foo, bar } from "./a";
+>foo : Symbol(foo, Decl(b.ts, 0, 8))
+>bar : Symbol(bar, Decl(b.ts, 0, 13))
+

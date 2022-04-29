@@ -1,0 +1,8 @@
+=== tests/cases/conformance/statements/for-ofStatements/ES5For-ofTypeCheck5.ts ===
+var union: string | number[];
+>union : string | number[]
+
+for (var v of union) { }
+>v : string | number
+>union : string | number[]
+

@@ -1,0 +1,10 @@
+tests/cases/conformance/parser/ecmascript5/Generics/parserGreaterThanTokenAmbiguity20.ts(1,1): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+
+
+==== tests/cases/conformance/parser/ecmascript5/Generics/parserGreaterThanTokenAmbiguity20.ts (1 errors) ====
+    1
+    ~
+!!! error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+    // Before
+    >>>= // after
+    2;

@@ -1,0 +1,18 @@
+=== tests/cases/compiler/unusedSetterInClass.ts ===
+class Employee {
+>Employee : Symbol(Employee, Decl(unusedSetterInClass.ts, 0, 0))
+
+    private _fullName: string;
+>_fullName : Symbol(Employee._fullName, Decl(unusedSetterInClass.ts, 0, 16))
+
+    private set fullName(newName: string) {
+>fullName : Symbol(Employee.fullName, Decl(unusedSetterInClass.ts, 1, 30))
+>newName : Symbol(newName, Decl(unusedSetterInClass.ts, 3, 25))
+
+        this._fullName = newName;
+>this._fullName : Symbol(Employee._fullName, Decl(unusedSetterInClass.ts, 0, 16))
+>this : Symbol(Employee, Decl(unusedSetterInClass.ts, 0, 0))
+>_fullName : Symbol(Employee._fullName, Decl(unusedSetterInClass.ts, 0, 16))
+>newName : Symbol(newName, Decl(unusedSetterInClass.ts, 3, 25))
+    }
+}

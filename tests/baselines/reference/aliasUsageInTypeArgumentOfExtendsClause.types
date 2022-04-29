@@ -1,0 +1,49 @@
+=== tests/cases/compiler/aliasUsageInTypeArgumentOfExtendsClause_main.ts ===
+import Backbone = require("./aliasUsageInTypeArgumentOfExtendsClause_backbone");
+>Backbone : typeof Backbone
+
+import moduleA = require("./aliasUsageInTypeArgumentOfExtendsClause_moduleA");
+>moduleA : typeof moduleA
+
+interface IHasVisualizationModel {
+    VisualizationModel: typeof Backbone.Model;
+>VisualizationModel : typeof Backbone.Model
+>Backbone.Model : typeof Backbone.Model
+>Backbone : typeof Backbone
+>Model : typeof Backbone.Model
+}
+class C<T extends IHasVisualizationModel> {
+>C : C<T>
+
+    x: T;
+>x : T
+}
+class D extends C<IHasVisualizationModel> {
+>D : D
+>C : C<IHasVisualizationModel>
+
+    x = moduleA;
+>x : typeof moduleA
+>moduleA : typeof moduleA
+}
+=== tests/cases/compiler/aliasUsageInTypeArgumentOfExtendsClause_backbone.ts ===
+export class Model {
+>Model : Model
+
+    public someData: string;
+>someData : string
+}
+
+=== tests/cases/compiler/aliasUsageInTypeArgumentOfExtendsClause_moduleA.ts ===
+import Backbone = require("./aliasUsageInTypeArgumentOfExtendsClause_backbone");
+>Backbone : typeof Backbone
+
+export class VisualizationModel extends Backbone.Model {
+>VisualizationModel : VisualizationModel
+>Backbone.Model : Backbone.Model
+>Backbone : typeof Backbone
+>Model : typeof Backbone.Model
+
+    // interesting stuff here
+}
+

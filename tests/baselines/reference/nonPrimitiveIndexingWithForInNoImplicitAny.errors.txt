@@ -1,0 +1,14 @@
+tests/cases/conformance/types/nonPrimitive/nonPrimitiveIndexingWithForInNoImplicitAny.ts(4,17): error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type '{}'.
+  No index signature with a parameter of type 'string' was found on type '{}'.
+
+
+==== tests/cases/conformance/types/nonPrimitive/nonPrimitiveIndexingWithForInNoImplicitAny.ts (1 errors) ====
+    var a: object;
+    
+    for (var key in a) {
+        var value = a[key]; // error
+                    ~~~~~~
+!!! error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type '{}'.
+!!! error TS7053:   No index signature with a parameter of type 'string' was found on type '{}'.
+    }
+    

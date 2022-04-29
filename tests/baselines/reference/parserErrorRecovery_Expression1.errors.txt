@@ -1,0 +1,7 @@
+tests/cases/conformance/parser/ecmascript5/ErrorRecovery/Expressions/parserErrorRecovery_Expression1.ts(1,10): error TS1109: Expression expected.
+
+
+==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/Expressions/parserErrorRecovery_Expression1.ts (1 errors) ====
+    var v = ()({});
+             ~
+!!! error TS1109: Expression expected.

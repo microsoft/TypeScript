@@ -1,0 +1,25 @@
+=== tests/cases/compiler/exportEqualNamespaces.ts ===
+declare module server {
+    interface Server extends Object { }
+}
+
+interface server {
+    (): server.Server;
+>server : any
+
+    startTime: Date;
+>startTime : Date
+}
+ 
+var x = 5;
+>x : number
+>5 : 5
+
+var server = new Date();
+>server : Date
+>new Date() : Date
+>Date : DateConstructor
+
+export = server;
+>server : server
+

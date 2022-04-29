@@ -1,0 +1,82 @@
+=== tests/cases/conformance/es6/templates/taggedTemplatesWithTypeArguments2.ts ===
+export interface SomethingTaggable {
+>SomethingTaggable : Symbol(SomethingTaggable, Decl(taggedTemplatesWithTypeArguments2.ts, 0, 0))
+
+    <T>(t: TemplateStringsArray, ...args: T[]): SomethingNewable;
+>T : Symbol(T, Decl(taggedTemplatesWithTypeArguments2.ts, 1, 5))
+>t : Symbol(t, Decl(taggedTemplatesWithTypeArguments2.ts, 1, 8))
+>TemplateStringsArray : Symbol(TemplateStringsArray, Decl(lib.es5.d.ts, --, --))
+>args : Symbol(args, Decl(taggedTemplatesWithTypeArguments2.ts, 1, 32))
+>T : Symbol(T, Decl(taggedTemplatesWithTypeArguments2.ts, 1, 5))
+>SomethingNewable : Symbol(SomethingNewable, Decl(taggedTemplatesWithTypeArguments2.ts, 2, 1))
+}
+
+export interface SomethingNewable {
+>SomethingNewable : Symbol(SomethingNewable, Decl(taggedTemplatesWithTypeArguments2.ts, 2, 1))
+
+    new <T>(...args: T[]): any;
+>T : Symbol(T, Decl(taggedTemplatesWithTypeArguments2.ts, 5, 9))
+>args : Symbol(args, Decl(taggedTemplatesWithTypeArguments2.ts, 5, 12))
+>T : Symbol(T, Decl(taggedTemplatesWithTypeArguments2.ts, 5, 9))
+}
+
+declare const tag: SomethingTaggable;
+>tag : Symbol(tag, Decl(taggedTemplatesWithTypeArguments2.ts, 8, 13))
+>SomethingTaggable : Symbol(SomethingTaggable, Decl(taggedTemplatesWithTypeArguments2.ts, 0, 0))
+
+const a = new tag `${100} ${200}`<string>("hello", "world");
+>a : Symbol(a, Decl(taggedTemplatesWithTypeArguments2.ts, 10, 5))
+>tag : Symbol(tag, Decl(taggedTemplatesWithTypeArguments2.ts, 8, 13))
+
+const b = new tag<number> `${"hello"} ${"world"}`(100, 200);
+>b : Symbol(b, Decl(taggedTemplatesWithTypeArguments2.ts, 12, 5))
+>tag : Symbol(tag, Decl(taggedTemplatesWithTypeArguments2.ts, 8, 13))
+
+const c = new tag<number> `${100} ${200}`<string>("hello", "world");
+>c : Symbol(c, Decl(taggedTemplatesWithTypeArguments2.ts, 14, 5))
+>tag : Symbol(tag, Decl(taggedTemplatesWithTypeArguments2.ts, 8, 13))
+
+const d = new tag<number> `${"hello"} ${"world"}`<string>(100, 200);
+>d : Symbol(d, Decl(taggedTemplatesWithTypeArguments2.ts, 16, 5))
+>tag : Symbol(tag, Decl(taggedTemplatesWithTypeArguments2.ts, 8, 13))
+
+/**
+ * Testing ASI. This should never parse as
+ *
+ * ```ts
+ * new tag<number>;
+ * `hello${369}`();
+ * ```
+ */
+const e = new tag<number>
+>e : Symbol(e, Decl(taggedTemplatesWithTypeArguments2.ts, 26, 5))
+>tag : Symbol(tag, Decl(taggedTemplatesWithTypeArguments2.ts, 8, 13))
+
+`hello`();
+
+class SomeBase<A, B, C> {
+>SomeBase : Symbol(SomeBase, Decl(taggedTemplatesWithTypeArguments2.ts, 27, 10))
+>A : Symbol(A, Decl(taggedTemplatesWithTypeArguments2.ts, 29, 15))
+>B : Symbol(B, Decl(taggedTemplatesWithTypeArguments2.ts, 29, 17))
+>C : Symbol(C, Decl(taggedTemplatesWithTypeArguments2.ts, 29, 20))
+
+    a!: A; b!: B; c!: C;
+>a : Symbol(SomeBase.a, Decl(taggedTemplatesWithTypeArguments2.ts, 29, 25))
+>A : Symbol(A, Decl(taggedTemplatesWithTypeArguments2.ts, 29, 15))
+>b : Symbol(SomeBase.b, Decl(taggedTemplatesWithTypeArguments2.ts, 30, 10))
+>B : Symbol(B, Decl(taggedTemplatesWithTypeArguments2.ts, 29, 17))
+>c : Symbol(SomeBase.c, Decl(taggedTemplatesWithTypeArguments2.ts, 30, 17))
+>C : Symbol(C, Decl(taggedTemplatesWithTypeArguments2.ts, 29, 20))
+}
+
+class SomeDerived<T> extends SomeBase<number, string, T> {
+>SomeDerived : Symbol(SomeDerived, Decl(taggedTemplatesWithTypeArguments2.ts, 31, 1))
+>T : Symbol(T, Decl(taggedTemplatesWithTypeArguments2.ts, 33, 18))
+>SomeBase : Symbol(SomeBase, Decl(taggedTemplatesWithTypeArguments2.ts, 27, 10))
+>T : Symbol(T, Decl(taggedTemplatesWithTypeArguments2.ts, 33, 18))
+
+    constructor() {
+        super<number, string, T> `hello world`;
+>super : Symbol(SomeBase, Decl(taggedTemplatesWithTypeArguments2.ts, 27, 10))
+    }
+}

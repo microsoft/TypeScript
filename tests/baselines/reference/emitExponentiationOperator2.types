@@ -1,0 +1,343 @@
+=== tests/cases/conformance/es7/exponentiationOperator/emitExponentiationOperator2.ts ===
+var temp = 10;
+>temp : number
+>10 : 10
+
+++temp ** 3;
+>++temp ** 3 : number
+>++temp : number
+>temp : number
+>3 : 3
+
+--temp ** 3;
+>--temp ** 3 : number
+>--temp : number
+>temp : number
+>3 : 3
+
+temp++ ** 3;
+>temp++ ** 3 : number
+>temp++ : number
+>temp : number
+>3 : 3
+
+temp-- ** 3;
+>temp-- ** 3 : number
+>temp-- : number
+>temp : number
+>3 : 3
+
+--temp + temp ** 3;
+>--temp + temp ** 3 : number
+>--temp : number
+>temp : number
+>temp ** 3 : number
+>temp : number
+>3 : 3
+
+--temp - temp ** 3;
+>--temp - temp ** 3 : number
+>--temp : number
+>temp : number
+>temp ** 3 : number
+>temp : number
+>3 : 3
+
+--temp * temp ** 3;
+>--temp * temp ** 3 : number
+>--temp : number
+>temp : number
+>temp ** 3 : number
+>temp : number
+>3 : 3
+
+--temp / temp ** 3;
+>--temp / temp ** 3 : number
+>--temp : number
+>temp : number
+>temp ** 3 : number
+>temp : number
+>3 : 3
+
+--temp % temp ** 3;
+>--temp % temp ** 3 : number
+>--temp : number
+>temp : number
+>temp ** 3 : number
+>temp : number
+>3 : 3
+
+temp-- ** 3;
+>temp-- ** 3 : number
+>temp-- : number
+>temp : number
+>3 : 3
+
+temp++ ** 3;
+>temp++ ** 3 : number
+>temp++ : number
+>temp : number
+>3 : 3
+
+temp-- ** -temp;
+>temp-- ** -temp : number
+>temp-- : number
+>temp : number
+>-temp : number
+>temp : number
+
+temp++ ** +temp;
+>temp++ ** +temp : number
+>temp++ : number
+>temp : number
+>+temp : number
+>temp : number
+
+temp-- + temp ** 3;
+>temp-- + temp ** 3 : number
+>temp-- : number
+>temp : number
+>temp ** 3 : number
+>temp : number
+>3 : 3
+
+temp-- - temp ** 3;
+>temp-- - temp ** 3 : number
+>temp-- : number
+>temp : number
+>temp ** 3 : number
+>temp : number
+>3 : 3
+
+temp-- * temp ** 3;
+>temp-- * temp ** 3 : number
+>temp-- : number
+>temp : number
+>temp ** 3 : number
+>temp : number
+>3 : 3
+
+temp-- / temp ** 3;
+>temp-- / temp ** 3 : number
+>temp-- : number
+>temp : number
+>temp ** 3 : number
+>temp : number
+>3 : 3
+
+temp-- % temp ** 3;
+>temp-- % temp ** 3 : number
+>temp-- : number
+>temp : number
+>temp ** 3 : number
+>temp : number
+>3 : 3
+
+--temp + 2 ** 3;
+>--temp + 2 ** 3 : number
+>--temp : number
+>temp : number
+>2 ** 3 : number
+>2 : 2
+>3 : 3
+
+--temp - 2 ** 3;
+>--temp - 2 ** 3 : number
+>--temp : number
+>temp : number
+>2 ** 3 : number
+>2 : 2
+>3 : 3
+
+--temp * 2 ** 3;
+>--temp * 2 ** 3 : number
+>--temp : number
+>temp : number
+>2 ** 3 : number
+>2 : 2
+>3 : 3
+
+--temp / 2 ** 3;
+>--temp / 2 ** 3 : number
+>--temp : number
+>temp : number
+>2 ** 3 : number
+>2 : 2
+>3 : 3
+
+--temp % 2 ** 3;
+>--temp % 2 ** 3 : number
+>--temp : number
+>temp : number
+>2 ** 3 : number
+>2 : 2
+>3 : 3
+
+++temp + 2 ** 3;
+>++temp + 2 ** 3 : number
+>++temp : number
+>temp : number
+>2 ** 3 : number
+>2 : 2
+>3 : 3
+
+++temp - 2 ** 3;
+>++temp - 2 ** 3 : number
+>++temp : number
+>temp : number
+>2 ** 3 : number
+>2 : 2
+>3 : 3
+
+++temp * 2 ** 3;
+>++temp * 2 ** 3 : number
+>++temp : number
+>temp : number
+>2 ** 3 : number
+>2 : 2
+>3 : 3
+
+++temp / 2 ** 3;
+>++temp / 2 ** 3 : number
+>++temp : number
+>temp : number
+>2 ** 3 : number
+>2 : 2
+>3 : 3
+
+3 ** ++temp;
+>3 ** ++temp : number
+>3 : 3
+>++temp : number
+>temp : number
+
+3 ** --temp;
+>3 ** --temp : number
+>3 : 3
+>--temp : number
+>temp : number
+
+3 ** temp++;
+>3 ** temp++ : number
+>3 : 3
+>temp++ : number
+>temp : number
+
+3 ** temp--;
+>3 ** temp-- : number
+>3 : 3
+>temp-- : number
+>temp : number
+
+3 ** ++temp ** 2;
+>3 ** ++temp ** 2 : number
+>3 : 3
+>++temp ** 2 : number
+>++temp : number
+>temp : number
+>2 : 2
+
+3 ** --temp ** 2;
+>3 ** --temp ** 2 : number
+>3 : 3
+>--temp ** 2 : number
+>--temp : number
+>temp : number
+>2 : 2
+
+3 ** temp++ ** 2;
+>3 ** temp++ ** 2 : number
+>3 : 3
+>temp++ ** 2 : number
+>temp++ : number
+>temp : number
+>2 : 2
+
+3 ** temp-- ** 2;
+>3 ** temp-- ** 2 : number
+>3 : 3
+>temp-- ** 2 : number
+>temp-- : number
+>temp : number
+>2 : 2
+
+3 ** ++temp + 2;
+>3 ** ++temp + 2 : number
+>3 ** ++temp : number
+>3 : 3
+>++temp : number
+>temp : number
+>2 : 2
+
+3 ** ++temp - 2;
+>3 ** ++temp - 2 : number
+>3 ** ++temp : number
+>3 : 3
+>++temp : number
+>temp : number
+>2 : 2
+
+3 ** ++temp * 2;
+>3 ** ++temp * 2 : number
+>3 ** ++temp : number
+>3 : 3
+>++temp : number
+>temp : number
+>2 : 2
+
+3 ** ++temp / 2;
+>3 ** ++temp / 2 : number
+>3 ** ++temp : number
+>3 : 3
+>++temp : number
+>temp : number
+>2 : 2
+
+3 ** ++temp % 2;
+>3 ** ++temp % 2 : number
+>3 ** ++temp : number
+>3 : 3
+>++temp : number
+>temp : number
+>2 : 2
+
+3 ** --temp + 2;
+>3 ** --temp + 2 : number
+>3 ** --temp : number
+>3 : 3
+>--temp : number
+>temp : number
+>2 : 2
+
+3 ** --temp - 2;
+>3 ** --temp - 2 : number
+>3 ** --temp : number
+>3 : 3
+>--temp : number
+>temp : number
+>2 : 2
+
+3 ** --temp * 2;
+>3 ** --temp * 2 : number
+>3 ** --temp : number
+>3 : 3
+>--temp : number
+>temp : number
+>2 : 2
+
+3 ** --temp / 2;
+>3 ** --temp / 2 : number
+>3 ** --temp : number
+>3 : 3
+>--temp : number
+>temp : number
+>2 : 2
+
+3 ** --temp % 2;
+>3 ** --temp % 2 : number
+>3 ** --temp : number
+>3 : 3
+>--temp : number
+>temp : number
+>2 : 2
+

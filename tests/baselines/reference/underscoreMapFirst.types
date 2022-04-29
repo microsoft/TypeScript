@@ -1,0 +1,108 @@
+=== tests/cases/compiler/underscoreMapFirst.ts ===
+declare module _ {
+>_ : typeof _
+
+    interface Collection<T> { }
+    interface List<T> extends Collection<T> {
+        [index: number]: T;
+>index : number
+
+        length: number;
+>length : number
+    }
+
+    interface ListIterator<T, TResult> {
+        (value: T, index: number, list: T[]): TResult;
+>value : T
+>index : number
+>list : T[]
+    }
+
+    interface Dictionary<T> extends Collection<T> {
+        [index: string]: T;
+>index : string
+    }
+    export function pluck<T extends {}>(
+>pluck : <T extends {}>(list: Collection<T>, propertyName: string) => any[]
+
+        list: Collection<T>,
+>list : Collection<T>
+
+        propertyName: string): any[];
+>propertyName : string
+
+    export function map<T, TResult>(
+>map : <T, TResult>(list: List<T>, iterator: ListIterator<T, TResult>, context?: any) => TResult[]
+
+        list: List<T>,
+>list : List<T>
+
+        iterator: ListIterator<T, TResult>,
+>iterator : ListIterator<T, TResult>
+
+        context?: any): TResult[];
+>context : any
+
+    export function first<T>(array: List<T>): T;
+>first : <T>(array: List<T>) => T
+>array : List<T>
+}
+
+declare class View {
+>View : View
+
+    model: any;
+>model : any
+}
+
+interface IData {
+    series: ISeries[];
+>series : ISeries[]
+}
+
+interface ISeries {
+    items: any[];
+>items : any[]
+
+    key: string;
+>key : string
+}
+
+class MyView extends View {
+>MyView : MyView
+>View : View
+
+    public getDataSeries(): ISeries[] {
+>getDataSeries : () => ISeries[]
+
+        var data: IData[] = this.model.get("data");
+>data : IData[]
+>this.model.get("data") : any
+>this.model.get : any
+>this.model : any
+>this : this
+>model : any
+>get : any
+>"data" : "data"
+
+        var allSeries: ISeries[][] = _.pluck(data, "series");
+>allSeries : ISeries[][]
+>_.pluck(data, "series") : any[]
+>_.pluck : <T extends {}>(list: _.Collection<T>, propertyName: string) => any[]
+>_ : typeof _
+>pluck : <T extends {}>(list: _.Collection<T>, propertyName: string) => any[]
+>data : IData[]
+>"series" : "series"
+
+        return _.map(allSeries, _.first);
+>_.map(allSeries, _.first) : ISeries[]
+>_.map : <T, TResult>(list: _.List<T>, iterator: _.ListIterator<T, TResult>, context?: any) => TResult[]
+>_ : typeof _
+>map : <T, TResult>(list: _.List<T>, iterator: _.ListIterator<T, TResult>, context?: any) => TResult[]
+>allSeries : ISeries[][]
+>_.first : <T>(array: _.List<T>) => T
+>_ : typeof _
+>first : <T>(array: _.List<T>) => T
+    }
+}
+

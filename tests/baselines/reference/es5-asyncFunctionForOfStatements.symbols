@@ -1,0 +1,185 @@
+=== tests/cases/compiler/es5-asyncFunctionForOfStatements.ts ===
+declare var x, y, z, a, b, c;
+>x : Symbol(x, Decl(es5-asyncFunctionForOfStatements.ts, 0, 11))
+>y : Symbol(y, Decl(es5-asyncFunctionForOfStatements.ts, 0, 14))
+>z : Symbol(z, Decl(es5-asyncFunctionForOfStatements.ts, 0, 17))
+>a : Symbol(a, Decl(es5-asyncFunctionForOfStatements.ts, 0, 20))
+>b : Symbol(b, Decl(es5-asyncFunctionForOfStatements.ts, 0, 23))
+>c : Symbol(c, Decl(es5-asyncFunctionForOfStatements.ts, 0, 26))
+
+async function forOfStatement0() {
+>forOfStatement0 : Symbol(forOfStatement0, Decl(es5-asyncFunctionForOfStatements.ts, 0, 29))
+
+    for (x of y) { z; }
+>x : Symbol(x, Decl(es5-asyncFunctionForOfStatements.ts, 0, 11))
+>y : Symbol(y, Decl(es5-asyncFunctionForOfStatements.ts, 0, 14))
+>z : Symbol(z, Decl(es5-asyncFunctionForOfStatements.ts, 0, 17))
+}
+
+async function forOfStatement1() {
+>forOfStatement1 : Symbol(forOfStatement1, Decl(es5-asyncFunctionForOfStatements.ts, 4, 1))
+
+    for (x of await y) { z; }
+>x : Symbol(x, Decl(es5-asyncFunctionForOfStatements.ts, 0, 11))
+>y : Symbol(y, Decl(es5-asyncFunctionForOfStatements.ts, 0, 14))
+>z : Symbol(z, Decl(es5-asyncFunctionForOfStatements.ts, 0, 17))
+}
+
+async function forOfStatement2() {
+>forOfStatement2 : Symbol(forOfStatement2, Decl(es5-asyncFunctionForOfStatements.ts, 8, 1))
+
+    for (x of y) { await z; }
+>x : Symbol(x, Decl(es5-asyncFunctionForOfStatements.ts, 0, 11))
+>y : Symbol(y, Decl(es5-asyncFunctionForOfStatements.ts, 0, 14))
+>z : Symbol(z, Decl(es5-asyncFunctionForOfStatements.ts, 0, 17))
+}
+
+async function forOfStatement3() {
+>forOfStatement3 : Symbol(forOfStatement3, Decl(es5-asyncFunctionForOfStatements.ts, 12, 1))
+
+    for ((await x).a of y) { z; }
+>x : Symbol(x, Decl(es5-asyncFunctionForOfStatements.ts, 0, 11))
+>y : Symbol(y, Decl(es5-asyncFunctionForOfStatements.ts, 0, 14))
+>z : Symbol(z, Decl(es5-asyncFunctionForOfStatements.ts, 0, 17))
+}
+
+async function forOfStatement4() {
+>forOfStatement4 : Symbol(forOfStatement4, Decl(es5-asyncFunctionForOfStatements.ts, 16, 1))
+
+    for (x.a of await y) { z; }
+>x : Symbol(x, Decl(es5-asyncFunctionForOfStatements.ts, 0, 11))
+>y : Symbol(y, Decl(es5-asyncFunctionForOfStatements.ts, 0, 14))
+>z : Symbol(z, Decl(es5-asyncFunctionForOfStatements.ts, 0, 17))
+}
+
+async function forOfStatement5() {
+>forOfStatement5 : Symbol(forOfStatement5, Decl(es5-asyncFunctionForOfStatements.ts, 20, 1))
+
+    for (x.a of y) { await z; }
+>x : Symbol(x, Decl(es5-asyncFunctionForOfStatements.ts, 0, 11))
+>y : Symbol(y, Decl(es5-asyncFunctionForOfStatements.ts, 0, 14))
+>z : Symbol(z, Decl(es5-asyncFunctionForOfStatements.ts, 0, 17))
+}
+
+async function forOfStatement6() {
+>forOfStatement6 : Symbol(forOfStatement6, Decl(es5-asyncFunctionForOfStatements.ts, 24, 1))
+
+    for (var b of y) { z; }
+>b : Symbol(b, Decl(es5-asyncFunctionForOfStatements.ts, 27, 12))
+>y : Symbol(y, Decl(es5-asyncFunctionForOfStatements.ts, 0, 14))
+>z : Symbol(z, Decl(es5-asyncFunctionForOfStatements.ts, 0, 17))
+}
+
+async function forOfStatement7() {
+>forOfStatement7 : Symbol(forOfStatement7, Decl(es5-asyncFunctionForOfStatements.ts, 28, 1))
+
+    for (var c of await y) { z; }
+>c : Symbol(c, Decl(es5-asyncFunctionForOfStatements.ts, 31, 12))
+>y : Symbol(y, Decl(es5-asyncFunctionForOfStatements.ts, 0, 14))
+>z : Symbol(z, Decl(es5-asyncFunctionForOfStatements.ts, 0, 17))
+}
+
+async function forOfStatement8() {
+>forOfStatement8 : Symbol(forOfStatement8, Decl(es5-asyncFunctionForOfStatements.ts, 32, 1))
+
+    for (var d of y) { await z; }
+>d : Symbol(d, Decl(es5-asyncFunctionForOfStatements.ts, 35, 12))
+>y : Symbol(y, Decl(es5-asyncFunctionForOfStatements.ts, 0, 14))
+>z : Symbol(z, Decl(es5-asyncFunctionForOfStatements.ts, 0, 17))
+}
+
+async function forOfStatement9() {
+>forOfStatement9 : Symbol(forOfStatement9, Decl(es5-asyncFunctionForOfStatements.ts, 36, 1))
+
+    for ([x] of await y) { z; }
+>x : Symbol(x, Decl(es5-asyncFunctionForOfStatements.ts, 0, 11))
+>y : Symbol(y, Decl(es5-asyncFunctionForOfStatements.ts, 0, 14))
+>z : Symbol(z, Decl(es5-asyncFunctionForOfStatements.ts, 0, 17))
+}
+
+async function forOfStatement10() {
+>forOfStatement10 : Symbol(forOfStatement10, Decl(es5-asyncFunctionForOfStatements.ts, 40, 1))
+
+    for ([x] of y) { await z; }
+>x : Symbol(x, Decl(es5-asyncFunctionForOfStatements.ts, 0, 11))
+>y : Symbol(y, Decl(es5-asyncFunctionForOfStatements.ts, 0, 14))
+>z : Symbol(z, Decl(es5-asyncFunctionForOfStatements.ts, 0, 17))
+}
+
+async function forOfStatement11() {
+>forOfStatement11 : Symbol(forOfStatement11, Decl(es5-asyncFunctionForOfStatements.ts, 44, 1))
+
+    for ([x = await a] of y) { z; }
+>x : Symbol(x, Decl(es5-asyncFunctionForOfStatements.ts, 0, 11))
+>a : Symbol(a, Decl(es5-asyncFunctionForOfStatements.ts, 0, 20))
+>y : Symbol(y, Decl(es5-asyncFunctionForOfStatements.ts, 0, 14))
+>z : Symbol(z, Decl(es5-asyncFunctionForOfStatements.ts, 0, 17))
+}
+
+async function forOfStatement12() {
+>forOfStatement12 : Symbol(forOfStatement12, Decl(es5-asyncFunctionForOfStatements.ts, 48, 1))
+
+    for ([x = a] of await y) { z; }
+>x : Symbol(x, Decl(es5-asyncFunctionForOfStatements.ts, 0, 11))
+>a : Symbol(a, Decl(es5-asyncFunctionForOfStatements.ts, 0, 20))
+>y : Symbol(y, Decl(es5-asyncFunctionForOfStatements.ts, 0, 14))
+>z : Symbol(z, Decl(es5-asyncFunctionForOfStatements.ts, 0, 17))
+}
+
+async function forOfStatement13() {
+>forOfStatement13 : Symbol(forOfStatement13, Decl(es5-asyncFunctionForOfStatements.ts, 52, 1))
+
+    for ([x = a] of y) { await z; }
+>x : Symbol(x, Decl(es5-asyncFunctionForOfStatements.ts, 0, 11))
+>a : Symbol(a, Decl(es5-asyncFunctionForOfStatements.ts, 0, 20))
+>y : Symbol(y, Decl(es5-asyncFunctionForOfStatements.ts, 0, 14))
+>z : Symbol(z, Decl(es5-asyncFunctionForOfStatements.ts, 0, 17))
+}
+
+async function forOfStatement14() {
+>forOfStatement14 : Symbol(forOfStatement14, Decl(es5-asyncFunctionForOfStatements.ts, 56, 1))
+
+    for ({ x } of await y) { z; }
+>x : Symbol(x, Decl(es5-asyncFunctionForOfStatements.ts, 59, 10))
+>y : Symbol(y, Decl(es5-asyncFunctionForOfStatements.ts, 0, 14))
+>z : Symbol(z, Decl(es5-asyncFunctionForOfStatements.ts, 0, 17))
+}
+
+async function forOfStatement15() {
+>forOfStatement15 : Symbol(forOfStatement15, Decl(es5-asyncFunctionForOfStatements.ts, 60, 1))
+
+    for ({ x } of y) { await z; }
+>x : Symbol(x, Decl(es5-asyncFunctionForOfStatements.ts, 63, 10))
+>y : Symbol(y, Decl(es5-asyncFunctionForOfStatements.ts, 0, 14))
+>z : Symbol(z, Decl(es5-asyncFunctionForOfStatements.ts, 0, 17))
+}
+
+async function forOfStatement16() {
+>forOfStatement16 : Symbol(forOfStatement16, Decl(es5-asyncFunctionForOfStatements.ts, 64, 1))
+
+    for ({ x = await a } of y) { z; }
+>x : Symbol(x, Decl(es5-asyncFunctionForOfStatements.ts, 67, 10))
+>a : Symbol(a, Decl(es5-asyncFunctionForOfStatements.ts, 0, 20))
+>y : Symbol(y, Decl(es5-asyncFunctionForOfStatements.ts, 0, 14))
+>z : Symbol(z, Decl(es5-asyncFunctionForOfStatements.ts, 0, 17))
+}
+
+async function forOfStatement17() {
+>forOfStatement17 : Symbol(forOfStatement17, Decl(es5-asyncFunctionForOfStatements.ts, 68, 1))
+
+    for ({ x = a } of await y) { z; }
+>x : Symbol(x, Decl(es5-asyncFunctionForOfStatements.ts, 71, 10))
+>a : Symbol(a, Decl(es5-asyncFunctionForOfStatements.ts, 0, 20))
+>y : Symbol(y, Decl(es5-asyncFunctionForOfStatements.ts, 0, 14))
+>z : Symbol(z, Decl(es5-asyncFunctionForOfStatements.ts, 0, 17))
+}
+
+async function forOfStatement18() {
+>forOfStatement18 : Symbol(forOfStatement18, Decl(es5-asyncFunctionForOfStatements.ts, 72, 1))
+
+    for ({ x = a } of y) { await z; }
+>x : Symbol(x, Decl(es5-asyncFunctionForOfStatements.ts, 75, 10))
+>a : Symbol(a, Decl(es5-asyncFunctionForOfStatements.ts, 0, 20))
+>y : Symbol(y, Decl(es5-asyncFunctionForOfStatements.ts, 0, 14))
+>z : Symbol(z, Decl(es5-asyncFunctionForOfStatements.ts, 0, 17))
+}

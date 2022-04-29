@@ -1,0 +1,15 @@
+=== tests/cases/compiler/controlFlowDestructuringParameters.ts ===
+// Repro for #8376
+
+
+[{ x: 1 }].map(
+>[{ x: 1 }].map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(controlFlowDestructuringParameters.ts, 3, 2))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+
+  ({ x }) => x
+>x : Symbol(x, Decl(controlFlowDestructuringParameters.ts, 4, 4))
+>x : Symbol(x, Decl(controlFlowDestructuringParameters.ts, 4, 4))
+
+);
+

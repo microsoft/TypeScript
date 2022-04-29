@@ -1,0 +1,22 @@
+tests/cases/compiler/augmentedTypesClass.ts(2,7): error TS2300: Duplicate identifier 'c1'.
+tests/cases/compiler/augmentedTypesClass.ts(3,5): error TS2300: Duplicate identifier 'c1'.
+tests/cases/compiler/augmentedTypesClass.ts(6,7): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
+tests/cases/compiler/augmentedTypesClass.ts(7,6): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
+
+
+==== tests/cases/compiler/augmentedTypesClass.ts (4 errors) ====
+    //// class then var
+    class c1 { public foo() { } }
+          ~~
+!!! error TS2300: Duplicate identifier 'c1'.
+    var c1 = 1; // error
+        ~~
+!!! error TS2300: Duplicate identifier 'c1'.
+    
+    //// class then enum
+    class c4 { public foo() { } }
+          ~~
+!!! error TS2567: Enum declarations can only merge with namespace or other enum declarations.
+    enum c4 { One } // error
+         ~~
+!!! error TS2567: Enum declarations can only merge with namespace or other enum declarations.

@@ -1,0 +1,4 @@
+=== tests/cases/conformance/parser/ecmascript5/RegressionTests/parserTernaryAndCommaOperators1.ts ===
+b.src ? 1 : 2, c && d;
+No type information for this code.
+No type information for this code.

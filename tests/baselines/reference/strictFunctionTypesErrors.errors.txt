@@ -1,0 +1,365 @@
+tests/cases/compiler/strictFunctionTypesErrors.ts(10,1): error TS2322: Type '(x: string) => Object' is not assignable to type '(x: Object) => Object'.
+  Types of parameters 'x' and 'x' are incompatible.
+    Type 'Object' is not assignable to type 'string'.
+tests/cases/compiler/strictFunctionTypesErrors.ts(11,1): error TS2322: Type '(x: string) => string' is not assignable to type '(x: Object) => Object'.
+  Types of parameters 'x' and 'x' are incompatible.
+    Type 'Object' is not assignable to type 'string'.
+tests/cases/compiler/strictFunctionTypesErrors.ts(13,1): error TS2322: Type '(x: Object) => Object' is not assignable to type '(x: Object) => string'.
+  Type 'Object' is not assignable to type 'string'.
+tests/cases/compiler/strictFunctionTypesErrors.ts(14,1): error TS2322: Type '(x: string) => Object' is not assignable to type '(x: Object) => string'.
+  Types of parameters 'x' and 'x' are incompatible.
+    Type 'Object' is not assignable to type 'string'.
+tests/cases/compiler/strictFunctionTypesErrors.ts(15,1): error TS2322: Type '(x: string) => string' is not assignable to type '(x: Object) => string'.
+  Types of parameters 'x' and 'x' are incompatible.
+    Type 'Object' is not assignable to type 'string'.
+tests/cases/compiler/strictFunctionTypesErrors.ts(21,1): error TS2322: Type '(x: Object) => Object' is not assignable to type '(x: string) => string'.
+  Type 'Object' is not assignable to type 'string'.
+tests/cases/compiler/strictFunctionTypesErrors.ts(23,1): error TS2322: Type '(x: string) => Object' is not assignable to type '(x: string) => string'.
+  Type 'Object' is not assignable to type 'string'.
+tests/cases/compiler/strictFunctionTypesErrors.ts(33,1): error TS2322: Type 'Func<string, Object>' is not assignable to type 'Func<Object, Object>'.
+  Type 'Object' is not assignable to type 'string'.
+tests/cases/compiler/strictFunctionTypesErrors.ts(34,1): error TS2322: Type 'Func<string, string>' is not assignable to type 'Func<Object, Object>'.
+  Type 'Object' is not assignable to type 'string'.
+tests/cases/compiler/strictFunctionTypesErrors.ts(36,1): error TS2322: Type 'Func<Object, Object>' is not assignable to type 'Func<Object, string>'.
+  Type 'Object' is not assignable to type 'string'.
+tests/cases/compiler/strictFunctionTypesErrors.ts(37,1): error TS2322: Type 'Func<string, Object>' is not assignable to type 'Func<Object, string>'.
+  Type 'Object' is not assignable to type 'string'.
+tests/cases/compiler/strictFunctionTypesErrors.ts(38,1): error TS2322: Type 'Func<string, string>' is not assignable to type 'Func<Object, string>'.
+  Type 'Object' is not assignable to type 'string'.
+tests/cases/compiler/strictFunctionTypesErrors.ts(44,1): error TS2322: Type 'Func<Object, Object>' is not assignable to type 'Func<string, string>'.
+  Type 'Object' is not assignable to type 'string'.
+tests/cases/compiler/strictFunctionTypesErrors.ts(46,1): error TS2322: Type 'Func<string, Object>' is not assignable to type 'Func<string, string>'.
+  Type 'Object' is not assignable to type 'string'.
+tests/cases/compiler/strictFunctionTypesErrors.ts(57,1): error TS2322: Type 'Func<Func<Object, void>, Object>' is not assignable to type 'Func<Func<Object, void>, string>'.
+  Type 'Object' is not assignable to type 'string'.
+tests/cases/compiler/strictFunctionTypesErrors.ts(58,1): error TS2322: Type 'Func<Func<string, void>, Object>' is not assignable to type 'Func<Func<Object, void>, string>'.
+  Type 'Object' is not assignable to type 'string'.
+tests/cases/compiler/strictFunctionTypesErrors.ts(61,1): error TS2322: Type 'Func<Func<Object, void>, Object>' is not assignable to type 'Func<Func<string, void>, Object>'.
+  Type 'Func<string, void>' is not assignable to type 'Func<Object, void>'.
+    Type 'Object' is not assignable to type 'string'.
+tests/cases/compiler/strictFunctionTypesErrors.ts(62,1): error TS2322: Type 'Func<Func<Object, void>, string>' is not assignable to type 'Func<Func<string, void>, Object>'.
+  Type 'Func<string, void>' is not assignable to type 'Func<Object, void>'.
+tests/cases/compiler/strictFunctionTypesErrors.ts(65,1): error TS2322: Type 'Func<Func<Object, void>, Object>' is not assignable to type 'Func<Func<string, void>, string>'.
+  Type 'Func<string, void>' is not assignable to type 'Func<Object, void>'.
+tests/cases/compiler/strictFunctionTypesErrors.ts(66,1): error TS2322: Type 'Func<Func<Object, void>, string>' is not assignable to type 'Func<Func<string, void>, string>'.
+  Type 'Func<string, void>' is not assignable to type 'Func<Object, void>'.
+tests/cases/compiler/strictFunctionTypesErrors.ts(67,1): error TS2322: Type 'Func<Func<string, void>, Object>' is not assignable to type 'Func<Func<string, void>, string>'.
+  Type 'Object' is not assignable to type 'string'.
+tests/cases/compiler/strictFunctionTypesErrors.ts(74,1): error TS2322: Type 'Func<Object, Func<string, void>>' is not assignable to type 'Func<Object, Func<Object, void>>'.
+  Type 'Func<string, void>' is not assignable to type 'Func<Object, void>'.
+tests/cases/compiler/strictFunctionTypesErrors.ts(75,1): error TS2322: Type 'Func<string, Func<Object, void>>' is not assignable to type 'Func<Object, Func<Object, void>>'.
+  Type 'Object' is not assignable to type 'string'.
+tests/cases/compiler/strictFunctionTypesErrors.ts(76,1): error TS2322: Type 'Func<string, Func<string, void>>' is not assignable to type 'Func<Object, Func<Object, void>>'.
+  Type 'Object' is not assignable to type 'string'.
+tests/cases/compiler/strictFunctionTypesErrors.ts(79,1): error TS2322: Type 'Func<string, Func<Object, void>>' is not assignable to type 'Func<Object, Func<string, void>>'.
+  Type 'Object' is not assignable to type 'string'.
+tests/cases/compiler/strictFunctionTypesErrors.ts(80,1): error TS2322: Type 'Func<string, Func<string, void>>' is not assignable to type 'Func<Object, Func<string, void>>'.
+  Type 'Object' is not assignable to type 'string'.
+tests/cases/compiler/strictFunctionTypesErrors.ts(83,1): error TS2322: Type 'Func<Object, Func<string, void>>' is not assignable to type 'Func<string, Func<Object, void>>'.
+  Type 'Func<string, void>' is not assignable to type 'Func<Object, void>'.
+tests/cases/compiler/strictFunctionTypesErrors.ts(84,1): error TS2322: Type 'Func<string, Func<string, void>>' is not assignable to type 'Func<string, Func<Object, void>>'.
+  Type 'Func<string, void>' is not assignable to type 'Func<Object, void>'.
+tests/cases/compiler/strictFunctionTypesErrors.ts(111,1): error TS2322: Type 'Comparer2<Dog>' is not assignable to type 'Comparer2<Animal>'.
+  Property 'dog' is missing in type 'Animal' but required in type 'Dog'.
+tests/cases/compiler/strictFunctionTypesErrors.ts(126,1): error TS2322: Type 'Crate<Dog>' is not assignable to type 'Crate<Animal>'.
+  Types of property 'onSetItem' are incompatible.
+    Type '(item: Dog) => void' is not assignable to type '(item: Animal) => void'.
+      Types of parameters 'item' and 'item' are incompatible.
+        Type 'Animal' is not assignable to type 'Dog'.
+tests/cases/compiler/strictFunctionTypesErrors.ts(127,1): error TS2322: Type 'Crate<Animal>' is not assignable to type 'Crate<Dog>'.
+  Types of property 'item' are incompatible.
+    Type 'Animal' is not assignable to type 'Dog'.
+tests/cases/compiler/strictFunctionTypesErrors.ts(133,1): error TS2328: Types of parameters 'f' and 'f' are incompatible.
+  Type 'Animal' is not assignable to type 'Dog'.
+tests/cases/compiler/strictFunctionTypesErrors.ts(134,1): error TS2322: Type '(f: (x: Animal) => Animal) => void' is not assignable to type '(f: (x: Dog) => Dog) => void'.
+  Types of parameters 'f' and 'f' are incompatible.
+    Types of parameters 'x' and 'x' are incompatible.
+      Type 'Animal' is not assignable to type 'Dog'.
+tests/cases/compiler/strictFunctionTypesErrors.ts(147,5): error TS2322: Type '(cb: (x: Animal) => Animal) => void' is not assignable to type '(cb: (x: Dog) => Animal) => void'.
+  Types of parameters 'cb' and 'cb' are incompatible.
+    Types of parameters 'x' and 'x' are incompatible.
+      Type 'Animal' is not assignable to type 'Dog'.
+tests/cases/compiler/strictFunctionTypesErrors.ts(155,5): error TS2322: Type '(cb: (x: Animal) => Animal) => void' is not assignable to type '(cb: (x: Dog) => Animal) => void'.
+  Types of parameters 'cb' and 'cb' are incompatible.
+    Types of parameters 'x' and 'x' are incompatible.
+      Type 'Animal' is not assignable to type 'Dog'.
+
+
+==== tests/cases/compiler/strictFunctionTypesErrors.ts (35 errors) ====
+    export {}
+    
+    
+    declare let f1: (x: Object) => Object;
+    declare let f2: (x: Object) => string;
+    declare let f3: (x: string) => Object;
+    declare let f4: (x: string) => string;
+    
+    f1 = f2;  // Ok
+    f1 = f3;  // Error
+    ~~
+!!! error TS2322: Type '(x: string) => Object' is not assignable to type '(x: Object) => Object'.
+!!! error TS2322:   Types of parameters 'x' and 'x' are incompatible.
+!!! error TS2322:     Type 'Object' is not assignable to type 'string'.
+    f1 = f4;  // Error
+    ~~
+!!! error TS2322: Type '(x: string) => string' is not assignable to type '(x: Object) => Object'.
+!!! error TS2322:   Types of parameters 'x' and 'x' are incompatible.
+!!! error TS2322:     Type 'Object' is not assignable to type 'string'.
+    
+    f2 = f1;  // Error
+    ~~
+!!! error TS2322: Type '(x: Object) => Object' is not assignable to type '(x: Object) => string'.
+!!! error TS2322:   Type 'Object' is not assignable to type 'string'.
+    f2 = f3;  // Error
+    ~~
+!!! error TS2322: Type '(x: string) => Object' is not assignable to type '(x: Object) => string'.
+!!! error TS2322:   Types of parameters 'x' and 'x' are incompatible.
+!!! error TS2322:     Type 'Object' is not assignable to type 'string'.
+    f2 = f4;  // Error
+    ~~
+!!! error TS2322: Type '(x: string) => string' is not assignable to type '(x: Object) => string'.
+!!! error TS2322:   Types of parameters 'x' and 'x' are incompatible.
+!!! error TS2322:     Type 'Object' is not assignable to type 'string'.
+    
+    f3 = f1;  // Ok
+    f3 = f2;  // Ok
+    f3 = f4;  // Ok
+    
+    f4 = f1;  // Error
+    ~~
+!!! error TS2322: Type '(x: Object) => Object' is not assignable to type '(x: string) => string'.
+!!! error TS2322:   Type 'Object' is not assignable to type 'string'.
+    f4 = f2;  // Ok
+    f4 = f3;  // Error
+    ~~
+!!! error TS2322: Type '(x: string) => Object' is not assignable to type '(x: string) => string'.
+!!! error TS2322:   Type 'Object' is not assignable to type 'string'.
+    
+    type Func<T, U> = (x: T) => U;
+    
+    declare let g1: Func<Object, Object>;
+    declare let g2: Func<Object, string>;
+    declare let g3: Func<string, Object>;
+    declare let g4: Func<string, string>;
+    
+    g1 = g2;  // Ok
+    g1 = g3;  // Error
+    ~~
+!!! error TS2322: Type 'Func<string, Object>' is not assignable to type 'Func<Object, Object>'.
+!!! error TS2322:   Type 'Object' is not assignable to type 'string'.
+    g1 = g4;  // Error
+    ~~
+!!! error TS2322: Type 'Func<string, string>' is not assignable to type 'Func<Object, Object>'.
+!!! error TS2322:   Type 'Object' is not assignable to type 'string'.
+    
+    g2 = g1;  // Error
+    ~~
+!!! error TS2322: Type 'Func<Object, Object>' is not assignable to type 'Func<Object, string>'.
+!!! error TS2322:   Type 'Object' is not assignable to type 'string'.
+    g2 = g3;  // Error
+    ~~
+!!! error TS2322: Type 'Func<string, Object>' is not assignable to type 'Func<Object, string>'.
+!!! error TS2322:   Type 'Object' is not assignable to type 'string'.
+    g2 = g4;  // Error
+    ~~
+!!! error TS2322: Type 'Func<string, string>' is not assignable to type 'Func<Object, string>'.
+!!! error TS2322:   Type 'Object' is not assignable to type 'string'.
+    
+    g3 = g1;  // Ok
+    g3 = g2;  // Ok
+    g3 = g4;  // Ok
+    
+    g4 = g1;  // Error
+    ~~
+!!! error TS2322: Type 'Func<Object, Object>' is not assignable to type 'Func<string, string>'.
+!!! error TS2322:   Type 'Object' is not assignable to type 'string'.
+    g4 = g2;  // Ok
+    g4 = g3;  // Error
+    ~~
+!!! error TS2322: Type 'Func<string, Object>' is not assignable to type 'Func<string, string>'.
+!!! error TS2322:   Type 'Object' is not assignable to type 'string'.
+    
+    declare let h1: Func<Func<Object, void>, Object>;
+    declare let h2: Func<Func<Object, void>, string>;
+    declare let h3: Func<Func<string, void>, Object>;
+    declare let h4: Func<Func<string, void>, string>;
+    
+    h1 = h2;  // Ok
+    h1 = h3;  // Ok
+    h1 = h4;  // Ok
+    
+    h2 = h1;  // Error
+    ~~
+!!! error TS2322: Type 'Func<Func<Object, void>, Object>' is not assignable to type 'Func<Func<Object, void>, string>'.
+!!! error TS2322:   Type 'Object' is not assignable to type 'string'.
+    h2 = h3;  // Error
+    ~~
+!!! error TS2322: Type 'Func<Func<string, void>, Object>' is not assignable to type 'Func<Func<Object, void>, string>'.
+!!! error TS2322:   Type 'Object' is not assignable to type 'string'.
+    h2 = h4;  // Ok
+    
+    h3 = h1;  // Error
+    ~~
+!!! error TS2322: Type 'Func<Func<Object, void>, Object>' is not assignable to type 'Func<Func<string, void>, Object>'.
+!!! error TS2322:   Type 'Func<string, void>' is not assignable to type 'Func<Object, void>'.
+!!! error TS2322:     Type 'Object' is not assignable to type 'string'.
+    h3 = h2;  // Error
+    ~~
+!!! error TS2322: Type 'Func<Func<Object, void>, string>' is not assignable to type 'Func<Func<string, void>, Object>'.
+!!! error TS2322:   Type 'Func<string, void>' is not assignable to type 'Func<Object, void>'.
+    h3 = h4;  // Ok
+    
+    h4 = h1;  // Error
+    ~~
+!!! error TS2322: Type 'Func<Func<Object, void>, Object>' is not assignable to type 'Func<Func<string, void>, string>'.
+!!! error TS2322:   Type 'Func<string, void>' is not assignable to type 'Func<Object, void>'.
+    h4 = h2;  // Error
+    ~~
+!!! error TS2322: Type 'Func<Func<Object, void>, string>' is not assignable to type 'Func<Func<string, void>, string>'.
+!!! error TS2322:   Type 'Func<string, void>' is not assignable to type 'Func<Object, void>'.
+    h4 = h3;  // Error
+    ~~
+!!! error TS2322: Type 'Func<Func<string, void>, Object>' is not assignable to type 'Func<Func<string, void>, string>'.
+!!! error TS2322:   Type 'Object' is not assignable to type 'string'.
+    
+    declare let i1: Func<Object, Func<Object, void>>;
+    declare let i2: Func<Object, Func<string, void>>;
+    declare let i3: Func<string, Func<Object, void>>;
+    declare let i4: Func<string, Func<string, void>>;
+    
+    i1 = i2;  // Error
+    ~~
+!!! error TS2322: Type 'Func<Object, Func<string, void>>' is not assignable to type 'Func<Object, Func<Object, void>>'.
+!!! error TS2322:   Type 'Func<string, void>' is not assignable to type 'Func<Object, void>'.
+    i1 = i3;  // Error
+    ~~
+!!! error TS2322: Type 'Func<string, Func<Object, void>>' is not assignable to type 'Func<Object, Func<Object, void>>'.
+!!! error TS2322:   Type 'Object' is not assignable to type 'string'.
+    i1 = i4;  // Error
+    ~~
+!!! error TS2322: Type 'Func<string, Func<string, void>>' is not assignable to type 'Func<Object, Func<Object, void>>'.
+!!! error TS2322:   Type 'Object' is not assignable to type 'string'.
+    
+    i2 = i1;  // Ok
+    i2 = i3;  // Error
+    ~~
+!!! error TS2322: Type 'Func<string, Func<Object, void>>' is not assignable to type 'Func<Object, Func<string, void>>'.
+!!! error TS2322:   Type 'Object' is not assignable to type 'string'.
+    i2 = i4;  // Error
+    ~~
+!!! error TS2322: Type 'Func<string, Func<string, void>>' is not assignable to type 'Func<Object, Func<string, void>>'.
+!!! error TS2322:   Type 'Object' is not assignable to type 'string'.
+    
+    i3 = i1;  // Ok
+    i3 = i2;  // Error
+    ~~
+!!! error TS2322: Type 'Func<Object, Func<string, void>>' is not assignable to type 'Func<string, Func<Object, void>>'.
+!!! error TS2322:   Type 'Func<string, void>' is not assignable to type 'Func<Object, void>'.
+    i3 = i4;  // Error
+    ~~
+!!! error TS2322: Type 'Func<string, Func<string, void>>' is not assignable to type 'Func<string, Func<Object, void>>'.
+!!! error TS2322:   Type 'Func<string, void>' is not assignable to type 'Func<Object, void>'.
+    
+    i4 = i1;  // Ok
+    i4 = i2;  // Ok
+    i4 = i3;  // Ok
+    
+    interface Animal { animal: void }
+    interface Dog extends Animal { dog: void }
+    interface Cat extends Animal { cat: void }
+    
+    interface Comparer1<T> {
+        compare(a: T, b: T): number;
+    }
+    
+    declare let animalComparer1: Comparer1<Animal>;
+    declare let dogComparer1: Comparer1<Dog>;
+    
+    animalComparer1 = dogComparer1;  // Ok
+    dogComparer1 = animalComparer1;  // Ok
+    
+    interface Comparer2<T> {
+        compare: (a: T, b: T) => number;
+    }
+    
+    declare let animalComparer2: Comparer2<Animal>;
+    declare let dogComparer2: Comparer2<Dog>;
+    
+    animalComparer2 = dogComparer2;  // Error
+    ~~~~~~~~~~~~~~~
+!!! error TS2322: Type 'Comparer2<Dog>' is not assignable to type 'Comparer2<Animal>'.
+!!! error TS2322:   Property 'dog' is missing in type 'Animal' but required in type 'Dog'.
+!!! related TS2728 tests/cases/compiler/strictFunctionTypesErrors.ts:91:32: 'dog' is declared here.
+    dogComparer2 = animalComparer2;  // Ok
+    
+    // Crate<T> is invariant in --strictFunctionTypes mode
+    
+    interface Crate<T> {
+        item: T;
+        onSetItem: (item: T) => void;
+    }
+    
+    declare let animalCrate: Crate<Animal>;
+    declare let dogCrate: Crate<Dog>;
+    
+    // Errors below should elaborate the reason for invariance
+    
+    animalCrate = dogCrate;  // Error
+    ~~~~~~~~~~~
+!!! error TS2322: Type 'Crate<Dog>' is not assignable to type 'Crate<Animal>'.
+!!! error TS2322:   Types of property 'onSetItem' are incompatible.
+!!! error TS2322:     Type '(item: Dog) => void' is not assignable to type '(item: Animal) => void'.
+!!! error TS2322:       Types of parameters 'item' and 'item' are incompatible.
+!!! error TS2322:         Type 'Animal' is not assignable to type 'Dog'.
+    dogCrate = animalCrate;  // Error
+    ~~~~~~~~
+!!! error TS2322: Type 'Crate<Animal>' is not assignable to type 'Crate<Dog>'.
+!!! error TS2322:   Types of property 'item' are incompatible.
+!!! error TS2322:     Type 'Animal' is not assignable to type 'Dog'.
+    
+    // Verify that callback parameters are strictly checked
+    
+    declare let fc1: (f: (x: Animal) => Animal) => void;
+    declare let fc2: (f: (x: Dog) => Dog) => void;
+    fc1 = fc2;  // Error
+    ~~~
+!!! error TS2328: Types of parameters 'f' and 'f' are incompatible.
+!!! error TS2328:   Type 'Animal' is not assignable to type 'Dog'.
+    fc2 = fc1;  // Error
+    ~~~
+!!! error TS2322: Type '(f: (x: Animal) => Animal) => void' is not assignable to type '(f: (x: Dog) => Dog) => void'.
+!!! error TS2322:   Types of parameters 'f' and 'f' are incompatible.
+!!! error TS2322:     Types of parameters 'x' and 'x' are incompatible.
+!!! error TS2322:       Type 'Animal' is not assignable to type 'Dog'.
+    
+    // Verify that callback parameters aren't loosely checked when types
+    // originate in method declarations
+    
+    namespace n1 {
+        class Foo {
+            static f1(x: Animal): Animal { throw "wat"; }
+            static f2(x: Dog): Animal { throw "wat"; };
+        }
+        declare let f1: (cb: typeof Foo.f1) => void;
+        declare let f2: (cb: typeof Foo.f2) => void;
+        f1 = f2;
+        f2 = f1;  // Error
+        ~~
+!!! error TS2322: Type '(cb: (x: Animal) => Animal) => void' is not assignable to type '(cb: (x: Dog) => Animal) => void'.
+!!! error TS2322:   Types of parameters 'cb' and 'cb' are incompatible.
+!!! error TS2322:     Types of parameters 'x' and 'x' are incompatible.
+!!! error TS2322:       Type 'Animal' is not assignable to type 'Dog'.
+    }
+    
+    namespace n2 {
+        type BivariantHack<Input, Output> = { foo(x: Input): Output }["foo"];
+        declare let f1: (cb: BivariantHack<Animal, Animal>) => void;
+        declare let f2: (cb: BivariantHack<Dog, Animal>) => void;
+        f1 = f2;
+        f2 = f1;  // Error
+        ~~
+!!! error TS2322: Type '(cb: (x: Animal) => Animal) => void' is not assignable to type '(cb: (x: Dog) => Animal) => void'.
+!!! error TS2322:   Types of parameters 'cb' and 'cb' are incompatible.
+!!! error TS2322:     Types of parameters 'x' and 'x' are incompatible.
+!!! error TS2322:       Type 'Animal' is not assignable to type 'Dog'.
+    }

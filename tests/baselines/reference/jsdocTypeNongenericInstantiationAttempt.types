@@ -1,0 +1,114 @@
+=== tests/cases/compiler/index.js ===
+/**
+ * @param {<T>(m: Boolean<T>) => string} somebody
+ */
+function sayHello(somebody) {
+>sayHello : (somebody: <T>(m: boolean) => string) => string
+>somebody : <T>(m: boolean) => string
+
+    return 'Hello ' + somebody;
+>'Hello ' + somebody : string
+>'Hello ' : "Hello "
+>somebody : <T>(m: boolean) => string
+}
+
+=== tests/cases/compiler/index2.js ===
+/**
+ * @param {<T>(m: Void<T>) => string} somebody
+ */
+function sayHello2(somebody) {
+>sayHello2 : (somebody: <T>(m: void) => string) => string
+>somebody : <T>(m: void) => string
+
+    return 'Hello ' + somebody;
+>'Hello ' + somebody : string
+>'Hello ' : "Hello "
+>somebody : <T>(m: void) => string
+}
+
+
+=== tests/cases/compiler/index3.js ===
+/**
+ * @param {<T>(m: Undefined<T>) => string} somebody
+ */
+function sayHello3(somebody) {
+>sayHello3 : (somebody: <T>(m: undefined) => string) => string
+>somebody : <T>(m: undefined) => string
+
+    return 'Hello ' + somebody;
+>'Hello ' + somebody : string
+>'Hello ' : "Hello "
+>somebody : <T>(m: undefined) => string
+}
+
+
+=== tests/cases/compiler/index4.js ===
+/**
+ * @param {<T>(m: Function<T>) => string} somebody
+ */
+function sayHello4(somebody) {
+>sayHello4 : (somebody: <T>(m: Function) => string) => string
+>somebody : <T>(m: Function) => string
+
+    return 'Hello ' + somebody;
+>'Hello ' + somebody : string
+>'Hello ' : "Hello "
+>somebody : <T>(m: Function) => string
+}
+
+
+=== tests/cases/compiler/index5.js ===
+/**
+ * @param {<T>(m: String<T>) => string} somebody
+ */
+function sayHello5(somebody) {
+>sayHello5 : (somebody: <T>(m: string) => string) => string
+>somebody : <T>(m: string) => string
+
+    return 'Hello ' + somebody;
+>'Hello ' + somebody : string
+>'Hello ' : "Hello "
+>somebody : <T>(m: string) => string
+}
+
+
+=== tests/cases/compiler/index6.js ===
+/**
+ * @param {<T>(m: Number<T>) => string} somebody
+ */
+function sayHello6(somebody) {
+>sayHello6 : (somebody: <T>(m: number) => string) => string
+>somebody : <T>(m: number) => string
+
+    return 'Hello ' + somebody;
+>'Hello ' + somebody : string
+>'Hello ' : "Hello "
+>somebody : <T>(m: number) => string
+}
+
+
+=== tests/cases/compiler/index7.js ===
+/**
+ * @param {<T>(m: Object<T>) => string} somebody
+ */
+function sayHello7(somebody) {
+>sayHello7 : (somebody: <T>(m: any) => string) => string
+>somebody : <T>(m: any) => string
+
+    return 'Hello ' + somebody;
+>'Hello ' + somebody : string
+>'Hello ' : "Hello "
+>somebody : <T>(m: any) => string
+}
+
+=== tests/cases/compiler/index8.js ===
+function fn() {}
+>fn : () => void
+
+/**
+ * @param {fn<T>} somebody
+ */
+function sayHello8(somebody) { }
+>sayHello8 : (somebody: () => void) => void
+>somebody : () => void
+

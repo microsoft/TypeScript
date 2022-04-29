@@ -1,0 +1,7 @@
+=== tests/cases/conformance/parser/ecmascript5/parserNoASIOnCallAfterFunctionExpression1.ts ===
+var x = function () { }
+>x : Symbol(x, Decl(parserNoASIOnCallAfterFunctionExpression1.ts, 0, 3))
+
+(<any>window).foo;
+>window : Symbol(window, Decl(lib.dom.d.ts, --, --))
+

@@ -1,0 +1,267 @@
+=== tests/cases/compiler/es5-asyncFunctionBinaryExpressions.ts ===
+declare var x, y, z, a, b, c;
+>x : Symbol(x, Decl(es5-asyncFunctionBinaryExpressions.ts, 0, 11))
+>y : Symbol(y, Decl(es5-asyncFunctionBinaryExpressions.ts, 0, 14))
+>z : Symbol(z, Decl(es5-asyncFunctionBinaryExpressions.ts, 0, 17))
+>a : Symbol(a, Decl(es5-asyncFunctionBinaryExpressions.ts, 0, 20))
+>b : Symbol(b, Decl(es5-asyncFunctionBinaryExpressions.ts, 0, 23))
+>c : Symbol(c, Decl(es5-asyncFunctionBinaryExpressions.ts, 0, 26))
+
+async function binaryPlus0() {
+>binaryPlus0 : Symbol(binaryPlus0, Decl(es5-asyncFunctionBinaryExpressions.ts, 0, 29))
+
+    (await x) + y;
+>x : Symbol(x, Decl(es5-asyncFunctionBinaryExpressions.ts, 0, 11))
+>y : Symbol(y, Decl(es5-asyncFunctionBinaryExpressions.ts, 0, 14))
+}
+
+async function binaryPlus1() {
+>binaryPlus1 : Symbol(binaryPlus1, Decl(es5-asyncFunctionBinaryExpressions.ts, 4, 1))
+
+    x + await y;
+>x : Symbol(x, Decl(es5-asyncFunctionBinaryExpressions.ts, 0, 11))
+>y : Symbol(y, Decl(es5-asyncFunctionBinaryExpressions.ts, 0, 14))
+}
+
+async function binaryLogicalAnd0() {
+>binaryLogicalAnd0 : Symbol(binaryLogicalAnd0, Decl(es5-asyncFunctionBinaryExpressions.ts, 8, 1))
+
+    (await x) && y;
+>x : Symbol(x, Decl(es5-asyncFunctionBinaryExpressions.ts, 0, 11))
+>y : Symbol(y, Decl(es5-asyncFunctionBinaryExpressions.ts, 0, 14))
+}
+
+async function binaryLogicalAnd1() {
+>binaryLogicalAnd1 : Symbol(binaryLogicalAnd1, Decl(es5-asyncFunctionBinaryExpressions.ts, 12, 1))
+
+    x && await y;
+>x : Symbol(x, Decl(es5-asyncFunctionBinaryExpressions.ts, 0, 11))
+>y : Symbol(y, Decl(es5-asyncFunctionBinaryExpressions.ts, 0, 14))
+}
+
+async function binaryAssignment0() {
+>binaryAssignment0 : Symbol(binaryAssignment0, Decl(es5-asyncFunctionBinaryExpressions.ts, 16, 1))
+
+    x = await y;
+>x : Symbol(x, Decl(es5-asyncFunctionBinaryExpressions.ts, 0, 11))
+>y : Symbol(y, Decl(es5-asyncFunctionBinaryExpressions.ts, 0, 14))
+}
+
+async function binaryAssignment1() {
+>binaryAssignment1 : Symbol(binaryAssignment1, Decl(es5-asyncFunctionBinaryExpressions.ts, 20, 1))
+
+    x.a = await y;
+>x : Symbol(x, Decl(es5-asyncFunctionBinaryExpressions.ts, 0, 11))
+>y : Symbol(y, Decl(es5-asyncFunctionBinaryExpressions.ts, 0, 14))
+}
+
+async function binaryAssignment2() {
+>binaryAssignment2 : Symbol(binaryAssignment2, Decl(es5-asyncFunctionBinaryExpressions.ts, 24, 1))
+
+    x.a.b = await y;
+>x : Symbol(x, Decl(es5-asyncFunctionBinaryExpressions.ts, 0, 11))
+>y : Symbol(y, Decl(es5-asyncFunctionBinaryExpressions.ts, 0, 14))
+}
+
+async function binaryAssignment3() {
+>binaryAssignment3 : Symbol(binaryAssignment3, Decl(es5-asyncFunctionBinaryExpressions.ts, 28, 1))
+
+    x[z] = await y;
+>x : Symbol(x, Decl(es5-asyncFunctionBinaryExpressions.ts, 0, 11))
+>z : Symbol(z, Decl(es5-asyncFunctionBinaryExpressions.ts, 0, 17))
+>y : Symbol(y, Decl(es5-asyncFunctionBinaryExpressions.ts, 0, 14))
+}
+
+async function binaryAssignment4() {
+>binaryAssignment4 : Symbol(binaryAssignment4, Decl(es5-asyncFunctionBinaryExpressions.ts, 32, 1))
+
+    x[z].b = await y;
+>x : Symbol(x, Decl(es5-asyncFunctionBinaryExpressions.ts, 0, 11))
+>z : Symbol(z, Decl(es5-asyncFunctionBinaryExpressions.ts, 0, 17))
+>y : Symbol(y, Decl(es5-asyncFunctionBinaryExpressions.ts, 0, 14))
+}
+
+async function binaryAssignment5() {
+>binaryAssignment5 : Symbol(binaryAssignment5, Decl(es5-asyncFunctionBinaryExpressions.ts, 36, 1))
+
+    x.a[z] = await y;
+>x : Symbol(x, Decl(es5-asyncFunctionBinaryExpressions.ts, 0, 11))
+>z : Symbol(z, Decl(es5-asyncFunctionBinaryExpressions.ts, 0, 17))
+>y : Symbol(y, Decl(es5-asyncFunctionBinaryExpressions.ts, 0, 14))
+}
+
+async function binaryAssignment6() {
+>binaryAssignment6 : Symbol(binaryAssignment6, Decl(es5-asyncFunctionBinaryExpressions.ts, 40, 1))
+
+    (await x).a = y;
+>x : Symbol(x, Decl(es5-asyncFunctionBinaryExpressions.ts, 0, 11))
+>y : Symbol(y, Decl(es5-asyncFunctionBinaryExpressions.ts, 0, 14))
+}
+
+async function binaryAssignment7() {
+>binaryAssignment7 : Symbol(binaryAssignment7, Decl(es5-asyncFunctionBinaryExpressions.ts, 44, 1))
+
+    (await x.a).b = y;
+>x : Symbol(x, Decl(es5-asyncFunctionBinaryExpressions.ts, 0, 11))
+>y : Symbol(y, Decl(es5-asyncFunctionBinaryExpressions.ts, 0, 14))
+}
+
+async function binaryAssignment8() {
+>binaryAssignment8 : Symbol(binaryAssignment8, Decl(es5-asyncFunctionBinaryExpressions.ts, 48, 1))
+
+    (await x)[z] = y;
+>x : Symbol(x, Decl(es5-asyncFunctionBinaryExpressions.ts, 0, 11))
+>z : Symbol(z, Decl(es5-asyncFunctionBinaryExpressions.ts, 0, 17))
+>y : Symbol(y, Decl(es5-asyncFunctionBinaryExpressions.ts, 0, 14))
+}
+
+async function binaryAssignment9() {
+>binaryAssignment9 : Symbol(binaryAssignment9, Decl(es5-asyncFunctionBinaryExpressions.ts, 52, 1))
+
+    x[await z] = y;
+>x : Symbol(x, Decl(es5-asyncFunctionBinaryExpressions.ts, 0, 11))
+>z : Symbol(z, Decl(es5-asyncFunctionBinaryExpressions.ts, 0, 17))
+>y : Symbol(y, Decl(es5-asyncFunctionBinaryExpressions.ts, 0, 14))
+}
+
+async function binaryAssignment10() {
+>binaryAssignment10 : Symbol(binaryAssignment10, Decl(es5-asyncFunctionBinaryExpressions.ts, 56, 1))
+
+    x[await z].b = y;
+>x : Symbol(x, Decl(es5-asyncFunctionBinaryExpressions.ts, 0, 11))
+>z : Symbol(z, Decl(es5-asyncFunctionBinaryExpressions.ts, 0, 17))
+>y : Symbol(y, Decl(es5-asyncFunctionBinaryExpressions.ts, 0, 14))
+}
+
+async function binaryAssignment11() {
+>binaryAssignment11 : Symbol(binaryAssignment11, Decl(es5-asyncFunctionBinaryExpressions.ts, 60, 1))
+
+    (await x[z]).b = y;
+>x : Symbol(x, Decl(es5-asyncFunctionBinaryExpressions.ts, 0, 11))
+>z : Symbol(z, Decl(es5-asyncFunctionBinaryExpressions.ts, 0, 17))
+>y : Symbol(y, Decl(es5-asyncFunctionBinaryExpressions.ts, 0, 14))
+}
+
+async function binaryAssignment12() {
+>binaryAssignment12 : Symbol(binaryAssignment12, Decl(es5-asyncFunctionBinaryExpressions.ts, 64, 1))
+
+    x.a[await z] = y;
+>x : Symbol(x, Decl(es5-asyncFunctionBinaryExpressions.ts, 0, 11))
+>z : Symbol(z, Decl(es5-asyncFunctionBinaryExpressions.ts, 0, 17))
+>y : Symbol(y, Decl(es5-asyncFunctionBinaryExpressions.ts, 0, 14))
+}
+
+async function binaryAssignment13() {
+>binaryAssignment13 : Symbol(binaryAssignment13, Decl(es5-asyncFunctionBinaryExpressions.ts, 68, 1))
+
+    (await x.a)[z] = y;
+>x : Symbol(x, Decl(es5-asyncFunctionBinaryExpressions.ts, 0, 11))
+>z : Symbol(z, Decl(es5-asyncFunctionBinaryExpressions.ts, 0, 17))
+>y : Symbol(y, Decl(es5-asyncFunctionBinaryExpressions.ts, 0, 14))
+}
+
+async function binaryCompoundAssignment0() {
+>binaryCompoundAssignment0 : Symbol(binaryCompoundAssignment0, Decl(es5-asyncFunctionBinaryExpressions.ts, 72, 1))
+
+    x += await y;
+>x : Symbol(x, Decl(es5-asyncFunctionBinaryExpressions.ts, 0, 11))
+>y : Symbol(y, Decl(es5-asyncFunctionBinaryExpressions.ts, 0, 14))
+}
+
+async function binaryCompoundAssignment1() {
+>binaryCompoundAssignment1 : Symbol(binaryCompoundAssignment1, Decl(es5-asyncFunctionBinaryExpressions.ts, 76, 1))
+
+    x.a += await y;
+>x : Symbol(x, Decl(es5-asyncFunctionBinaryExpressions.ts, 0, 11))
+>y : Symbol(y, Decl(es5-asyncFunctionBinaryExpressions.ts, 0, 14))
+}
+
+async function binaryCompoundAssignment2() {
+>binaryCompoundAssignment2 : Symbol(binaryCompoundAssignment2, Decl(es5-asyncFunctionBinaryExpressions.ts, 80, 1))
+
+    x[a] += await y;
+>x : Symbol(x, Decl(es5-asyncFunctionBinaryExpressions.ts, 0, 11))
+>a : Symbol(a, Decl(es5-asyncFunctionBinaryExpressions.ts, 0, 20))
+>y : Symbol(y, Decl(es5-asyncFunctionBinaryExpressions.ts, 0, 14))
+}
+
+async function binaryCompoundAssignment3() {
+>binaryCompoundAssignment3 : Symbol(binaryCompoundAssignment3, Decl(es5-asyncFunctionBinaryExpressions.ts, 84, 1))
+
+    (await x).a += y;
+>x : Symbol(x, Decl(es5-asyncFunctionBinaryExpressions.ts, 0, 11))
+>y : Symbol(y, Decl(es5-asyncFunctionBinaryExpressions.ts, 0, 14))
+}
+
+async function binaryCompoundAssignment4() {
+>binaryCompoundAssignment4 : Symbol(binaryCompoundAssignment4, Decl(es5-asyncFunctionBinaryExpressions.ts, 88, 1))
+
+    (await x)[a] += y;
+>x : Symbol(x, Decl(es5-asyncFunctionBinaryExpressions.ts, 0, 11))
+>a : Symbol(a, Decl(es5-asyncFunctionBinaryExpressions.ts, 0, 20))
+>y : Symbol(y, Decl(es5-asyncFunctionBinaryExpressions.ts, 0, 14))
+}
+
+async function binaryCompoundAssignment5() {
+>binaryCompoundAssignment5 : Symbol(binaryCompoundAssignment5, Decl(es5-asyncFunctionBinaryExpressions.ts, 92, 1))
+
+    x[await a] += y;
+>x : Symbol(x, Decl(es5-asyncFunctionBinaryExpressions.ts, 0, 11))
+>a : Symbol(a, Decl(es5-asyncFunctionBinaryExpressions.ts, 0, 20))
+>y : Symbol(y, Decl(es5-asyncFunctionBinaryExpressions.ts, 0, 14))
+}
+
+async function binaryCompoundAssignment6() {
+>binaryCompoundAssignment6 : Symbol(binaryCompoundAssignment6, Decl(es5-asyncFunctionBinaryExpressions.ts, 96, 1))
+
+    (await x).a += await y;
+>x : Symbol(x, Decl(es5-asyncFunctionBinaryExpressions.ts, 0, 11))
+>y : Symbol(y, Decl(es5-asyncFunctionBinaryExpressions.ts, 0, 14))
+}
+
+async function binaryCompoundAssignment7() {
+>binaryCompoundAssignment7 : Symbol(binaryCompoundAssignment7, Decl(es5-asyncFunctionBinaryExpressions.ts, 100, 1))
+
+    (await x)[a] += await y;
+>x : Symbol(x, Decl(es5-asyncFunctionBinaryExpressions.ts, 0, 11))
+>a : Symbol(a, Decl(es5-asyncFunctionBinaryExpressions.ts, 0, 20))
+>y : Symbol(y, Decl(es5-asyncFunctionBinaryExpressions.ts, 0, 14))
+}
+
+async function binaryCompoundAssignment8() {
+>binaryCompoundAssignment8 : Symbol(binaryCompoundAssignment8, Decl(es5-asyncFunctionBinaryExpressions.ts, 104, 1))
+
+    x[await a] += await y;
+>x : Symbol(x, Decl(es5-asyncFunctionBinaryExpressions.ts, 0, 11))
+>a : Symbol(a, Decl(es5-asyncFunctionBinaryExpressions.ts, 0, 20))
+>y : Symbol(y, Decl(es5-asyncFunctionBinaryExpressions.ts, 0, 14))
+}
+
+async function binaryExponentiation() {
+>binaryExponentiation : Symbol(binaryExponentiation, Decl(es5-asyncFunctionBinaryExpressions.ts, 108, 1))
+
+    (await x) ** y;
+>x : Symbol(x, Decl(es5-asyncFunctionBinaryExpressions.ts, 0, 11))
+>y : Symbol(y, Decl(es5-asyncFunctionBinaryExpressions.ts, 0, 14))
+
+    x ** await y;
+>x : Symbol(x, Decl(es5-asyncFunctionBinaryExpressions.ts, 0, 11))
+>y : Symbol(y, Decl(es5-asyncFunctionBinaryExpressions.ts, 0, 14))
+}
+
+async function binaryComma0() {
+>binaryComma0 : Symbol(binaryComma0, Decl(es5-asyncFunctionBinaryExpressions.ts, 113, 1))
+
+    return (await x), y;
+>x : Symbol(x, Decl(es5-asyncFunctionBinaryExpressions.ts, 0, 11))
+>y : Symbol(y, Decl(es5-asyncFunctionBinaryExpressions.ts, 0, 14))
+}
+
+async function binaryComma1(): Promise<any> {
+>binaryComma1 : Symbol(binaryComma1, Decl(es5-asyncFunctionBinaryExpressions.ts, 117, 1))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+
+    return x, await y;
+>x : Symbol(x, Decl(es5-asyncFunctionBinaryExpressions.ts, 0, 11))
+>y : Symbol(y, Decl(es5-asyncFunctionBinaryExpressions.ts, 0, 14))
+}

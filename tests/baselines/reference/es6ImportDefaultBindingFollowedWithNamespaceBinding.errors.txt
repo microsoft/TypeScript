@@ -1,0 +1,11 @@
+tests/cases/compiler/es6ImportDefaultBindingFollowedWithNamespaceBinding_1.ts(1,8): error TS1192: Module '"tests/cases/compiler/es6ImportDefaultBindingFollowedWithNamespaceBinding_0"' has no default export.
+
+
+==== tests/cases/compiler/es6ImportDefaultBindingFollowedWithNamespaceBinding_0.ts (0 errors) ====
+    export var a = 10;
+    
+==== tests/cases/compiler/es6ImportDefaultBindingFollowedWithNamespaceBinding_1.ts (1 errors) ====
+    import defaultBinding, * as nameSpaceBinding  from "es6ImportDefaultBindingFollowedWithNamespaceBinding_0";
+           ~~~~~~~~~~~~~~
+!!! error TS1192: Module '"tests/cases/compiler/es6ImportDefaultBindingFollowedWithNamespaceBinding_0"' has no default export.
+    var x: number = nameSpaceBinding.a;

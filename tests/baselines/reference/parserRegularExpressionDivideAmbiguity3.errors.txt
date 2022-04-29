@@ -1,0 +1,7 @@
+tests/cases/conformance/parser/ecmascript5/RegularExpressions/parserRegularExpressionDivideAmbiguity3.ts(1,18): error TS2339: Property 'foo' does not exist on type 'RegExp'.
+
+
+==== tests/cases/conformance/parser/ecmascript5/RegularExpressions/parserRegularExpressionDivideAmbiguity3.ts (1 errors) ====
+    if (1) /regexp/a.foo();
+                     ~~~
+!!! error TS2339: Property 'foo' does not exist on type 'RegExp'.

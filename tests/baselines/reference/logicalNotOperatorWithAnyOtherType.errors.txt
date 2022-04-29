@@ -1,0 +1,74 @@
+tests/cases/conformance/expressions/unaryOperators/logicalNotOperator/logicalNotOperatorWithAnyOtherType.ts(45,27): error TS2365: Operator '+' cannot be applied to types 'null' and 'undefined'.
+tests/cases/conformance/expressions/unaryOperators/logicalNotOperator/logicalNotOperatorWithAnyOtherType.ts(46,27): error TS2365: Operator '+' cannot be applied to types 'null' and 'null'.
+tests/cases/conformance/expressions/unaryOperators/logicalNotOperator/logicalNotOperatorWithAnyOtherType.ts(47,27): error TS2365: Operator '+' cannot be applied to types 'undefined' and 'undefined'.
+tests/cases/conformance/expressions/unaryOperators/logicalNotOperator/logicalNotOperatorWithAnyOtherType.ts(57,1): error TS2695: Left side of comma operator is unused and has no side effects.
+
+
+==== tests/cases/conformance/expressions/unaryOperators/logicalNotOperator/logicalNotOperatorWithAnyOtherType.ts (4 errors) ====
+    // ! operator on any type
+    
+    var ANY: any;
+    var ANY1;
+    var ANY2: any[] = ["", ""];
+    var obj: () => {}
+    var obj1 = { x: "", y: () => { }};
+    function foo(): any {
+        var a;
+        return a;
+    }
+    class A {
+        public a: any;
+        static foo() {
+            var a;
+            return a;
+        }
+    }
+    module M {
+        export var n: any;
+    }
+    var objA = new A();
+    
+    // any type var
+    var ResultIsBoolean1 = !ANY1;
+    var ResultIsBoolean2 = !ANY2;
+    var ResultIsBoolean3 = !A;
+    var ResultIsBoolean4 = !M;
+    var ResultIsBoolean5 = !obj;
+    var ResultIsBoolean6 = !obj1;
+    
+    // any type literal
+    var ResultIsBoolean7 = !undefined;
+    var ResultIsBoolean8 = !null;
+    
+    // any type expressions
+    var ResultIsBoolean9 = !ANY2[0];
+    var ResultIsBoolean10 = !obj1.x;
+    var ResultIsBoolean11 = !obj1.y;
+    var ResultIsBoolean12 = !objA.a;
+    var ResultIsBoolean13 = !M.n;
+    var ResultIsBoolean14 = !foo();
+    var ResultIsBoolean15 = !A.foo();
+    var ResultIsBoolean16 = !(ANY + ANY1);
+    var ResultIsBoolean17 = !(null + undefined);
+                              ~~~~~~~~~~~~~~~~
+!!! error TS2365: Operator '+' cannot be applied to types 'null' and 'undefined'.
+    var ResultIsBoolean18 = !(null + null);
+                              ~~~~~~~~~~~
+!!! error TS2365: Operator '+' cannot be applied to types 'null' and 'null'.
+    var ResultIsBoolean19 = !(undefined + undefined);
+                              ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2365: Operator '+' cannot be applied to types 'undefined' and 'undefined'.
+    
+    // multiple ! operators
+    var ResultIsBoolean20 = !!ANY;
+    var ResultIsBoolean21 = !!!(ANY + ANY1);
+    
+    // miss assignment operators
+    !ANY;
+    !ANY1;
+    !ANY2[0];
+    !ANY, ANY1;
+    ~~~~
+!!! error TS2695: Left side of comma operator is unused and has no side effects.
+    !objA.a;
+    !M.n;

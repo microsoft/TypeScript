@@ -1,0 +1,455 @@
+tests/cases/compiler/expr.ts(87,5): error TS2367: This condition will always return 'false' since the types 'number' and 'string' have no overlap.
+tests/cases/compiler/expr.ts(88,5): error TS2367: This condition will always return 'false' since the types 'number' and 'boolean' have no overlap.
+tests/cases/compiler/expr.ts(94,5): error TS2367: This condition will always return 'false' since the types 'string' and 'number' have no overlap.
+tests/cases/compiler/expr.ts(95,5): error TS2367: This condition will always return 'false' since the types 'string' and 'boolean' have no overlap.
+tests/cases/compiler/expr.ts(98,5): error TS2367: This condition will always return 'false' since the types 'string' and 'E' have no overlap.
+tests/cases/compiler/expr.ts(115,5): error TS2367: This condition will always return 'false' since the types 'E' and 'string' have no overlap.
+tests/cases/compiler/expr.ts(116,5): error TS2367: This condition will always return 'false' since the types 'E' and 'boolean' have no overlap.
+tests/cases/compiler/expr.ts(142,5): error TS2365: Operator '+' cannot be applied to types 'number' and 'boolean'.
+tests/cases/compiler/expr.ts(143,5): error TS2365: Operator '+' cannot be applied to types 'number' and 'I'.
+tests/cases/compiler/expr.ts(161,5): error TS2365: Operator '+' cannot be applied to types 'I' and 'number'.
+tests/cases/compiler/expr.ts(163,5): error TS2365: Operator '+' cannot be applied to types 'I' and 'boolean'.
+tests/cases/compiler/expr.ts(165,5): error TS2365: Operator '+' cannot be applied to types 'I' and 'I'.
+tests/cases/compiler/expr.ts(166,5): error TS2365: Operator '+' cannot be applied to types 'I' and 'E'.
+tests/cases/compiler/expr.ts(170,5): error TS2365: Operator '+' cannot be applied to types 'E' and 'boolean'.
+tests/cases/compiler/expr.ts(172,5): error TS2365: Operator '+' cannot be applied to types 'E' and 'I'.
+tests/cases/compiler/expr.ts(176,7): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/compiler/expr.ts(177,7): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/compiler/expr.ts(178,7): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/compiler/expr.ts(182,5): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/compiler/expr.ts(183,5): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/compiler/expr.ts(184,5): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/compiler/expr.ts(184,7): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/compiler/expr.ts(185,5): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/compiler/expr.ts(185,7): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/compiler/expr.ts(186,5): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/compiler/expr.ts(186,7): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/compiler/expr.ts(187,5): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/compiler/expr.ts(190,7): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/compiler/expr.ts(191,7): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/compiler/expr.ts(192,7): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/compiler/expr.ts(196,5): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/compiler/expr.ts(197,5): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/compiler/expr.ts(197,7): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/compiler/expr.ts(198,5): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/compiler/expr.ts(198,7): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/compiler/expr.ts(199,5): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/compiler/expr.ts(200,5): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/compiler/expr.ts(200,7): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/compiler/expr.ts(201,5): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/compiler/expr.ts(204,7): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/compiler/expr.ts(205,7): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/compiler/expr.ts(207,7): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/compiler/expr.ts(211,7): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/compiler/expr.ts(212,7): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/compiler/expr.ts(213,7): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/compiler/expr.ts(217,5): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/compiler/expr.ts(218,5): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/compiler/expr.ts(219,5): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/compiler/expr.ts(219,7): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/compiler/expr.ts(220,5): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/compiler/expr.ts(220,7): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/compiler/expr.ts(221,5): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/compiler/expr.ts(221,7): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/compiler/expr.ts(222,5): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/compiler/expr.ts(225,7): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/compiler/expr.ts(226,7): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/compiler/expr.ts(227,7): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/compiler/expr.ts(231,5): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/compiler/expr.ts(232,5): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/compiler/expr.ts(232,7): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/compiler/expr.ts(233,5): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/compiler/expr.ts(233,7): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/compiler/expr.ts(234,5): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/compiler/expr.ts(235,5): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/compiler/expr.ts(235,7): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/compiler/expr.ts(236,5): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/compiler/expr.ts(239,7): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/compiler/expr.ts(240,7): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/compiler/expr.ts(242,7): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+
+
+==== tests/cases/compiler/expr.ts (69 errors) ====
+    interface I {
+    }
+    
+    enum E {
+        Red, Green, Blue
+    }
+    
+    function f() {
+        var a: any;
+        var n=3;
+        var s="";
+        var b=false;
+        var i:I;
+        var e:E;
+    
+        n&&a;
+        n&&s;
+        n&&b;
+        n&&i;
+        n&&n;
+        n&&e;
+    
+        s&&a;
+        s&&n;
+        s&&b;
+        s&&i;
+        s&&s;
+        s&&e;
+    
+        a&&n;
+        a&&s;
+        a&&b;
+        a&&i;
+        a&&a;
+        a&&e;
+    
+        i&&n;
+        i&&s;
+        i&&b;
+        i&&a;
+        i&&i;
+        i&&e;
+    
+        e&&n;
+        e&&s;
+        e&&b;
+        e&&a;
+        e&&i;
+        e&&e;
+    
+        n||a;
+        n||s;
+        n||b;
+        n||i;
+        n||n;
+        n||e;
+    
+        s||a;
+        s||n;
+        s||b;
+        s||i;
+        s||s;
+        s||e;
+    
+        a||n;
+        a||s;
+        a||b;
+        a||i;
+        a||a;
+        a||e;
+    
+        i||n;
+        i||s;
+        i||b;
+        i||a;
+        i||i;
+        i||e;
+    
+        e||n;
+        e||s;
+        e||b;
+        e||a;
+        e||i;
+        e||e;
+    
+        n==a;
+        n==s;
+        ~~~~
+!!! error TS2367: This condition will always return 'false' since the types 'number' and 'string' have no overlap.
+        n==b;
+        ~~~~
+!!! error TS2367: This condition will always return 'false' since the types 'number' and 'boolean' have no overlap.
+        n==i;
+        n==n;
+        n==e;
+    
+        s==a;
+        s==n;
+        ~~~~
+!!! error TS2367: This condition will always return 'false' since the types 'string' and 'number' have no overlap.
+        s==b;
+        ~~~~
+!!! error TS2367: This condition will always return 'false' since the types 'string' and 'boolean' have no overlap.
+        s==i;
+        s==s;
+        s==e;
+        ~~~~
+!!! error TS2367: This condition will always return 'false' since the types 'string' and 'E' have no overlap.
+    
+        a==n;
+        a==s;
+        a==b;
+        a==i;
+        a==a;
+        a==e;
+    
+        i==n;
+        i==s;
+        i==b;
+        i==a;
+        i==i;
+        i==e;
+    
+        e==n;
+        e==s;
+        ~~~~
+!!! error TS2367: This condition will always return 'false' since the types 'E' and 'string' have no overlap.
+        e==b;
+        ~~~~
+!!! error TS2367: This condition will always return 'false' since the types 'E' and 'boolean' have no overlap.
+        e==a;
+        e==i;
+        e==e;
+    
+        +i;
+        +s;
+        +n;
+        +a;
+        +b;
+    
+        -i;
+        -s;
+        -n;
+        -a;
+        -b;
+    
+        !i;
+        !s;
+        !n;
+        !a;
+        !b;
+    
+    
+        n+a;
+        n+s;
+        n+b;
+        ~~~
+!!! error TS2365: Operator '+' cannot be applied to types 'number' and 'boolean'.
+        n+i;
+        ~~~
+!!! error TS2365: Operator '+' cannot be applied to types 'number' and 'I'.
+        n+n;
+        n+e;
+    
+        s+a;
+        s+n;
+        s+b;
+        s+i;
+        s+s;
+        s+e;
+    
+        a+n;
+        a+s;
+        a+b;
+        a+i;
+        a+a;
+        a+e;
+    
+        i+n;
+        ~~~
+!!! error TS2365: Operator '+' cannot be applied to types 'I' and 'number'.
+        i+s;
+        i+b;
+        ~~~
+!!! error TS2365: Operator '+' cannot be applied to types 'I' and 'boolean'.
+        i+a;
+        i+i;
+        ~~~
+!!! error TS2365: Operator '+' cannot be applied to types 'I' and 'I'.
+        i+e;
+        ~~~
+!!! error TS2365: Operator '+' cannot be applied to types 'I' and 'E'.
+    
+        e+n;
+        e+s;
+        e+b;
+        ~~~
+!!! error TS2365: Operator '+' cannot be applied to types 'E' and 'boolean'.
+        e+a;
+        e+i;
+        ~~~
+!!! error TS2365: Operator '+' cannot be applied to types 'E' and 'I'.
+        e+e;
+    
+        n^a;
+        n^s;
+          ~
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+        n^b;
+          ~
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+        n^i;
+          ~
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+        n^n;
+        n^e;
+    
+        s^a;
+        ~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+        s^n;
+        ~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+        s^b;
+        ~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+          ~
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+        s^i;
+        ~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+          ~
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+        s^s;
+        ~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+          ~
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+        s^e;
+        ~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+    
+        a^n;
+        a^s;
+          ~
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+        a^b;
+          ~
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+        a^i;
+          ~
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+        a^a;
+        a^e;
+    
+        i^n;
+        ~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+        i^s;
+        ~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+          ~
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+        i^b;
+        ~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+          ~
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+        i^a;
+        ~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+        i^i;
+        ~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+          ~
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+        i^e;
+        ~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+    
+        e^n;
+        e^s;
+          ~
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+        e^b;
+          ~
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+        e^a;
+        e^i;
+          ~
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+        e^e;
+    
+        n-a;
+        n-s;
+          ~
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+        n-b;
+          ~
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+        n-i;
+          ~
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+        n-n;
+        n-e;
+    
+        s-a;
+        ~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+        s-n;
+        ~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+        s-b;
+        ~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+          ~
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+        s-i;
+        ~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+          ~
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+        s-s;
+        ~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+          ~
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+        s-e;
+        ~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+    
+        a-n;
+        a-s;
+          ~
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+        a-b;
+          ~
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+        a-i;
+          ~
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+        a-a;
+        a-e;
+    
+        i-n;
+        ~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+        i-s;
+        ~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+          ~
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+        i-b;
+        ~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+          ~
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+        i-a;
+        ~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+        i-i;
+        ~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+          ~
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+        i-e;
+        ~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+    
+        e-n;
+        e-s;
+          ~
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+        e-b;
+          ~
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+        e-a;
+        e-i;
+          ~
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+        e-e;
+    
+    }

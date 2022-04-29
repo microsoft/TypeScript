@@ -1,0 +1,17 @@
+=== tests/cases/compiler/sigantureIsSubTypeIfTheyAreIdentical.ts ===
+interface ICache {
+    get<T>(key: string): T;
+>get : <T>(key: string) => T
+>key : string
+}
+class CacheService implements ICache { // Should not error that property type of get are incomaptible
+>CacheService : CacheService
+
+    get<T>(key: string): T {
+>get : <T>(key: string) => T
+>key : string
+
+        return undefined;
+>undefined : undefined
+    }
+}

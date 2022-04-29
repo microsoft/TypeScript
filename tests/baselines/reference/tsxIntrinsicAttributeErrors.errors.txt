@@ -1,0 +1,37 @@
+tests/cases/conformance/jsx/tsxIntrinsicAttributeErrors.tsx(29,2): error TS2741: Property 'key' is missing in type '{ x: number; }' but required in type 'IntrinsicAttributes'.
+
+
+==== tests/cases/conformance/jsx/tsxIntrinsicAttributeErrors.tsx (1 errors) ====
+    declare namespace JSX {
+        interface Element { }
+        interface ElementClass {
+            render: any;
+        }
+        interface IntrinsicAttributes {
+            key: string | number
+        }
+        interface IntrinsicClassAttributes<T> {
+            ref: T
+        }
+        interface IntrinsicElements {
+            div: {
+                text?: string;
+                width?: number;
+            }
+    
+            span: any;
+        }
+    }
+    
+    interface I {
+        new(n: string): {
+            x: number
+            render(): void
+        }
+    }
+    var E: I;
+    <E x={10} />
+     ~
+!!! error TS2741: Property 'key' is missing in type '{ x: number; }' but required in type 'IntrinsicAttributes'.
+!!! related TS2728 tests/cases/conformance/jsx/tsxIntrinsicAttributeErrors.tsx:7:9: 'key' is declared here.
+    

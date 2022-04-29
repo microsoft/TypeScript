@@ -1,0 +1,63 @@
+===================================================================
+JsFile: sourceMapForFunctionWithCommentPrecedingStatement01.js
+mapUrl: sourceMapForFunctionWithCommentPrecedingStatement01.js.map
+sourceRoot: 
+sources: sourceMapForFunctionWithCommentPrecedingStatement01.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:tests/cases/compiler/sourceMapForFunctionWithCommentPrecedingStatement01.js
+sourceFile:sourceMapForFunctionWithCommentPrecedingStatement01.ts
+-------------------------------------------------------------------
+>>>function P() {
+1 >
+2 >^^^^^^^^^
+3 >         ^
+4 >          ^^^^^^^->
+1 >
+2 >function 
+3 >         P
+1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(1, 10) Source(1, 10) + SourceIndex(0)
+3 >Emitted(1, 11) Source(1, 11) + SourceIndex(0)
+---
+>>>    // Test this
+1->^^^^
+2 >    ^^^^^^^^^^^^
+1->() {
+  >    
+2 >    // Test this
+1->Emitted(2, 5) Source(2, 5) + SourceIndex(0)
+2 >Emitted(2, 17) Source(2, 17) + SourceIndex(0)
+---
+>>>    var a = 1;
+1 >^^^^
+2 >    ^^^^
+3 >        ^
+4 >         ^^^
+5 >            ^
+6 >             ^
+1 >
+  >    
+2 >    var 
+3 >        a
+4 >          = 
+5 >            1
+6 >             ;
+1 >Emitted(3, 5) Source(3, 5) + SourceIndex(0)
+2 >Emitted(3, 9) Source(3, 9) + SourceIndex(0)
+3 >Emitted(3, 10) Source(3, 10) + SourceIndex(0)
+4 >Emitted(3, 13) Source(3, 13) + SourceIndex(0)
+5 >Emitted(3, 14) Source(3, 14) + SourceIndex(0)
+6 >Emitted(3, 15) Source(3, 15) + SourceIndex(0)
+---
+>>>}
+1 >
+2 >^
+3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >
+2 >}
+1 >Emitted(4, 1) Source(4, 1) + SourceIndex(0)
+2 >Emitted(4, 2) Source(4, 2) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=sourceMapForFunctionWithCommentPrecedingStatement01.js.map

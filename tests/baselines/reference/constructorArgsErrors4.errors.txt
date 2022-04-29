@@ -1,0 +1,11 @@
+tests/cases/compiler/constructorArgsErrors4.ts(2,26): error TS1028: Accessibility modifier already seen.
+
+
+==== tests/cases/compiler/constructorArgsErrors4.ts (1 errors) ====
+    class foo {
+        constructor (private public a: number) {
+                             ~~~~~~
+!!! error TS1028: Accessibility modifier already seen.
+        }
+    }
+    

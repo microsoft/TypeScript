@@ -1,0 +1,40 @@
+=== tests/cases/conformance/types/primitives/string/extendStringInterface.ts ===
+interface String {
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(extendStringInterface.ts, 0, 0))
+
+    doStuff(): string;
+>doStuff : Symbol(String.doStuff, Decl(extendStringInterface.ts, 0, 18))
+
+    doOtherStuff<T>(x:T): T;
+>doOtherStuff : Symbol(String.doOtherStuff, Decl(extendStringInterface.ts, 1, 22))
+>T : Symbol(T, Decl(extendStringInterface.ts, 2, 17))
+>x : Symbol(x, Decl(extendStringInterface.ts, 2, 20))
+>T : Symbol(T, Decl(extendStringInterface.ts, 2, 17))
+>T : Symbol(T, Decl(extendStringInterface.ts, 2, 17))
+}
+
+var x = '';
+>x : Symbol(x, Decl(extendStringInterface.ts, 5, 3))
+
+var a: string = x.doStuff();
+>a : Symbol(a, Decl(extendStringInterface.ts, 6, 3))
+>x.doStuff : Symbol(String.doStuff, Decl(extendStringInterface.ts, 0, 18))
+>x : Symbol(x, Decl(extendStringInterface.ts, 5, 3))
+>doStuff : Symbol(String.doStuff, Decl(extendStringInterface.ts, 0, 18))
+
+var b: string = x.doOtherStuff('hm');
+>b : Symbol(b, Decl(extendStringInterface.ts, 7, 3))
+>x.doOtherStuff : Symbol(String.doOtherStuff, Decl(extendStringInterface.ts, 1, 22))
+>x : Symbol(x, Decl(extendStringInterface.ts, 5, 3))
+>doOtherStuff : Symbol(String.doOtherStuff, Decl(extendStringInterface.ts, 1, 22))
+
+var c: string = x['doStuff']();
+>c : Symbol(c, Decl(extendStringInterface.ts, 8, 3))
+>x : Symbol(x, Decl(extendStringInterface.ts, 5, 3))
+>'doStuff' : Symbol(String.doStuff, Decl(extendStringInterface.ts, 0, 18))
+
+var d: string = x['doOtherStuff']('hm');
+>d : Symbol(d, Decl(extendStringInterface.ts, 9, 3))
+>x : Symbol(x, Decl(extendStringInterface.ts, 5, 3))
+>'doOtherStuff' : Symbol(String.doOtherStuff, Decl(extendStringInterface.ts, 1, 22))
+

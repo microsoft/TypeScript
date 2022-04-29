@@ -1,0 +1,70 @@
+=== tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts ===
+// grammar error from checker
+var ara: Array.<number> = [1,2,3];
+>ara : Symbol(ara, Decl(jsdocDisallowedInTypescript.ts, 1, 3))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+function f(x: ?number, y: Array.<number>) {
+>f : Symbol(f, Decl(jsdocDisallowedInTypescript.ts, 1, 34))
+>x : Symbol(x, Decl(jsdocDisallowedInTypescript.ts, 3, 11))
+>y : Symbol(y, Decl(jsdocDisallowedInTypescript.ts, 3, 22))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    return x ? x + y[1] : y[0];
+>x : Symbol(x, Decl(jsdocDisallowedInTypescript.ts, 3, 11))
+>x : Symbol(x, Decl(jsdocDisallowedInTypescript.ts, 3, 11))
+>y : Symbol(y, Decl(jsdocDisallowedInTypescript.ts, 3, 22))
+>y : Symbol(y, Decl(jsdocDisallowedInTypescript.ts, 3, 22))
+}
+function hof(ctor: function(new: number, string)) {
+>hof : Symbol(hof, Decl(jsdocDisallowedInTypescript.ts, 5, 1))
+>ctor : Symbol(ctor, Decl(jsdocDisallowedInTypescript.ts, 6, 13))
+>new : Symbol(new, Decl(jsdocDisallowedInTypescript.ts, 6, 28))
+
+    return new ctor('hi');
+>ctor : Symbol(ctor, Decl(jsdocDisallowedInTypescript.ts, 6, 13))
+}
+function hof2(f: function(this: number, string): string) {
+>hof2 : Symbol(hof2, Decl(jsdocDisallowedInTypescript.ts, 8, 1))
+>f : Symbol(f, Decl(jsdocDisallowedInTypescript.ts, 9, 14))
+>this : Symbol(this, Decl(jsdocDisallowedInTypescript.ts, 9, 26))
+
+    return f(12, 'hullo');
+>f : Symbol(f, Decl(jsdocDisallowedInTypescript.ts, 9, 14))
+}
+var whatevs: * = 1001;
+>whatevs : Symbol(whatevs, Decl(jsdocDisallowedInTypescript.ts, 12, 3))
+
+var ques: ? = 'what';
+>ques : Symbol(ques, Decl(jsdocDisallowedInTypescript.ts, 13, 3))
+
+var g: function(number, number): number = (n,m) => n + m;
+>g : Symbol(g, Decl(jsdocDisallowedInTypescript.ts, 14, 3))
+>n : Symbol(n, Decl(jsdocDisallowedInTypescript.ts, 14, 43))
+>m : Symbol(m, Decl(jsdocDisallowedInTypescript.ts, 14, 45))
+>n : Symbol(n, Decl(jsdocDisallowedInTypescript.ts, 14, 43))
+>m : Symbol(m, Decl(jsdocDisallowedInTypescript.ts, 14, 45))
+
+var most: !string = 'definite';
+>most : Symbol(most, Decl(jsdocDisallowedInTypescript.ts, 15, 3))
+
+var postfixdef: number! = 101;
+>postfixdef : Symbol(postfixdef, Decl(jsdocDisallowedInTypescript.ts, 16, 3))
+
+var postfixopt: number? = undefined;
+>postfixopt : Symbol(postfixopt, Decl(jsdocDisallowedInTypescript.ts, 17, 3))
+>undefined : Symbol(undefined)
+
+var nns: Array<?number>;
+>nns : Symbol(nns, Decl(jsdocDisallowedInTypescript.ts, 19, 3))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+var dns: Array<!number>;
+>dns : Symbol(dns, Decl(jsdocDisallowedInTypescript.ts, 20, 3))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+var anys: Array<*>;
+>anys : Symbol(anys, Decl(jsdocDisallowedInTypescript.ts, 21, 3))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+

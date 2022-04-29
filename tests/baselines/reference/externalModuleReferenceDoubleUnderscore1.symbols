@@ -1,0 +1,41 @@
+=== tests/cases/compiler/externalModuleReferenceDoubleUnderscore1.ts ===
+declare module 'timezonecomplete' {
+>'timezonecomplete' : Symbol("timezonecomplete", Decl(externalModuleReferenceDoubleUnderscore1.ts, 0, 0))
+
+    import basics = require("__timezonecomplete/basics");
+>basics : Symbol(basics, Decl(externalModuleReferenceDoubleUnderscore1.ts, 0, 35))
+
+    export import TimeUnit = basics.TimeUnit;
+>TimeUnit : Symbol(TimeUnit, Decl(externalModuleReferenceDoubleUnderscore1.ts, 1, 57))
+>basics : Symbol(basics, Decl(externalModuleReferenceDoubleUnderscore1.ts, 0, 35))
+>TimeUnit : Symbol(basics.TimeUnit, Decl(externalModuleReferenceDoubleUnderscore1.ts, 5, 44))
+}
+
+declare module '__timezonecomplete/basics' {
+>'__timezonecomplete/basics' : Symbol("__timezonecomplete/basics", Decl(externalModuleReferenceDoubleUnderscore1.ts, 3, 1))
+
+    export enum TimeUnit {
+>TimeUnit : Symbol(TimeUnit, Decl(externalModuleReferenceDoubleUnderscore1.ts, 5, 44))
+
+        Second = 0,
+>Second : Symbol(TimeUnit.Second, Decl(externalModuleReferenceDoubleUnderscore1.ts, 6, 26))
+
+        Minute = 1,
+>Minute : Symbol(TimeUnit.Minute, Decl(externalModuleReferenceDoubleUnderscore1.ts, 7, 19))
+
+        Hour = 2,
+>Hour : Symbol(TimeUnit.Hour, Decl(externalModuleReferenceDoubleUnderscore1.ts, 8, 19))
+
+        Day = 3,
+>Day : Symbol(TimeUnit.Day, Decl(externalModuleReferenceDoubleUnderscore1.ts, 9, 17))
+
+        Week = 4,
+>Week : Symbol(TimeUnit.Week, Decl(externalModuleReferenceDoubleUnderscore1.ts, 10, 16))
+
+        Month = 5,
+>Month : Symbol(TimeUnit.Month, Decl(externalModuleReferenceDoubleUnderscore1.ts, 11, 17))
+
+        Year = 6,
+>Year : Symbol(TimeUnit.Year, Decl(externalModuleReferenceDoubleUnderscore1.ts, 12, 18))
+    }
+}

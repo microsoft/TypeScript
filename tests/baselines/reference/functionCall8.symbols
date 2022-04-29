@@ -1,0 +1,17 @@
+=== tests/cases/compiler/functionCall8.ts ===
+function foo(a?:string){}
+>foo : Symbol(foo, Decl(functionCall8.ts, 0, 0))
+>a : Symbol(a, Decl(functionCall8.ts, 0, 13))
+
+foo('foo'); 
+>foo : Symbol(foo, Decl(functionCall8.ts, 0, 0))
+
+foo('foo', 'bar'); 
+>foo : Symbol(foo, Decl(functionCall8.ts, 0, 0))
+
+foo(4);
+>foo : Symbol(foo, Decl(functionCall8.ts, 0, 0))
+
+foo();
+>foo : Symbol(foo, Decl(functionCall8.ts, 0, 0))
+

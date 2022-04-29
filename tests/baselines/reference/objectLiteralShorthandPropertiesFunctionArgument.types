@@ -1,0 +1,35 @@
+=== tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesFunctionArgument.ts ===
+var id: number = 10000;
+>id : number
+>10000 : 10000
+
+var name: string = "my name";
+>name : string
+>"my name" : "my name"
+
+var person = { name, id };
+>person : { name: string; id: number; }
+>{ name, id } : { name: string; id: number; }
+>name : string
+>id : number
+
+function foo(p: { name: string; id: number }) { }
+>foo : (p: {    name: string;    id: number;}) => void
+>p : { name: string; id: number; }
+>name : string
+>id : number
+
+foo(person);
+>foo(person) : void
+>foo : (p: { name: string; id: number; }) => void
+>person : { name: string; id: number; }
+
+
+var obj = { name: name, id: id };
+>obj : { name: string; id: number; }
+>{ name: name, id: id } : { name: string; id: number; }
+>name : string
+>name : string
+>id : number
+>id : number
+

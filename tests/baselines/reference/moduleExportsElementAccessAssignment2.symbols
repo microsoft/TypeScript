@@ -1,0 +1,33 @@
+=== tests/cases/conformance/jsdoc/file1.js ===
+// this file _should_ be a global file
+var GlobalThing = { x: 12 };
+>GlobalThing : Symbol(GlobalThing, Decl(file1.js, 1, 3))
+>x : Symbol(x, Decl(file1.js, 1, 19))
+
+/**
+ * @param {*} type 
+ * @param {*} ctor
+ * @param {*} exports
+ */
+function f(type, ctor, exports) {
+>f : Symbol(f, Decl(file1.js, 1, 28))
+>type : Symbol(type, Decl(file1.js, 8, 11))
+>ctor : Symbol(ctor, Decl(file1.js, 8, 16))
+>exports : Symbol(exports, Decl(file1.js, 8, 22))
+
+    if (typeof exports !== "undefined") {
+>exports : Symbol(exports, Decl(file1.js, 8, 22))
+
+        exports["AST_" + type] = ctor;
+>exports : Symbol(exports, Decl(file1.js, 8, 22))
+>type : Symbol(type, Decl(file1.js, 8, 11))
+>ctor : Symbol(ctor, Decl(file1.js, 8, 16))
+    }
+}
+
+=== tests/cases/conformance/jsdoc/ref.js ===
+GlobalThing.x
+>GlobalThing.x : Symbol(x, Decl(file1.js, 1, 19))
+>GlobalThing : Symbol(GlobalThing, Decl(file1.js, 1, 3))
+>x : Symbol(x, Decl(file1.js, 1, 19))
+

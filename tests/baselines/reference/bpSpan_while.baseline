@@ -1,0 +1,119 @@
+
+1  >var a = 10;
+
+    ~~~~~~~~~~~~                                  => Pos: (0 to 11)  SpanInfo: {"start":0,"length":10}
+    >var a = 10
+    >:=> (line 1, col 0) to (line 1, col 10)
+--------------------------------
+2  >while (a == 10) {
+
+    ~~~~~~~~~~~~~~~~~~                            => Pos: (12 to 29)  SpanInfo: {"start":12,"length":15}
+    >while (a == 10)
+    >:=> (line 2, col 0) to (line 2, col 15)
+--------------------------------
+3  >    a++;
+
+    ~~~~~~~~~                                     => Pos: (30 to 38)  SpanInfo: {"start":34,"length":3}
+    >a++
+    >:=> (line 3, col 4) to (line 3, col 7)
+--------------------------------
+4  >}
+
+    ~~                                            => Pos: (39 to 40)  SpanInfo: {"start":34,"length":3}
+    >a++
+    >:=> (line 3, col 4) to (line 3, col 7)
+--------------------------------
+5  >while (a == 10) 
+
+    ~~~~~~~~~~~~~~~~~                             => Pos: (41 to 57)  SpanInfo: {"start":41,"length":15}
+    >while (a == 10)
+    >:=> (line 5, col 0) to (line 5, col 15)
+--------------------------------
+6  >{
+
+    ~~                                            => Pos: (58 to 59)  SpanInfo: {"start":64,"length":3}
+    >a++
+    >:=> (line 7, col 4) to (line 7, col 7)
+--------------------------------
+7  >    a++;
+
+    ~~~~~~~~~                                     => Pos: (60 to 68)  SpanInfo: {"start":64,"length":3}
+    >a++
+    >:=> (line 7, col 4) to (line 7, col 7)
+--------------------------------
+8  >}
+
+    ~~                                            => Pos: (69 to 70)  SpanInfo: {"start":64,"length":3}
+    >a++
+    >:=> (line 7, col 4) to (line 7, col 7)
+--------------------------------
+9  >while (a == 10)  a++;
+
+    ~~~~~~~~~~~~~~~                               => Pos: (71 to 85)  SpanInfo: {"start":71,"length":15}
+    >while (a == 10)
+    >:=> (line 9, col 0) to (line 9, col 15)
+9  >while (a == 10)  a++;
+
+                   ~~~~~~~                        => Pos: (86 to 92)  SpanInfo: {"start":88,"length":3}
+    >a++
+    >:=> (line 9, col 17) to (line 9, col 20)
+--------------------------------
+10 >while (a == 10) 
+
+    ~~~~~~~~~~~~~~~~~                             => Pos: (93 to 109)  SpanInfo: {"start":93,"length":15}
+    >while (a == 10)
+    >:=> (line 10, col 0) to (line 10, col 15)
+--------------------------------
+11 >    a++;
+
+    ~~~~~~~~~                                     => Pos: (110 to 118)  SpanInfo: {"start":114,"length":3}
+    >a++
+    >:=> (line 11, col 4) to (line 11, col 7)
+--------------------------------
+12 >while ((function () {
+
+    ~~~~~~~                                       => Pos: (119 to 125)  SpanInfo: {"start":119,"length":52}
+    >while ((function () {
+    >    return 30 * a;
+    >})() !== a)
+    >:=> (line 12, col 0) to (line 14, col 11)
+12 >while ((function () {
+
+           ~~~~~~~~~~~~~~~                        => Pos: (126 to 140)  SpanInfo: {"start":145,"length":13}
+    >return 30 * a
+    >:=> (line 13, col 4) to (line 13, col 17)
+--------------------------------
+13 >    return 30 * a;
+
+    ~~~~~~~~~~~~~~~~~~~                           => Pos: (141 to 159)  SpanInfo: {"start":145,"length":13}
+    >return 30 * a
+    >:=> (line 13, col 4) to (line 13, col 17)
+--------------------------------
+14 >})() !== a) {
+
+    ~~~~                                          => Pos: (160 to 163)  SpanInfo: {"start":160,"length":1}
+    >}
+    >:=> (line 14, col 0) to (line 14, col 1)
+14 >})() !== a) {
+
+        ~~~~~~~                                   => Pos: (164 to 170)  SpanInfo: {"start":119,"length":52}
+    >while ((function () {
+    >    return 30 * a;
+    >})() !== a)
+    >:=> (line 12, col 0) to (line 14, col 11)
+14 >})() !== a) {
+
+               ~~~                                => Pos: (171 to 173)  SpanInfo: {"start":178,"length":3}
+    >a--
+    >:=> (line 15, col 4) to (line 15, col 7)
+--------------------------------
+15 >    a--;
+
+    ~~~~~~~~~                                     => Pos: (174 to 182)  SpanInfo: {"start":178,"length":3}
+    >a--
+    >:=> (line 15, col 4) to (line 15, col 7)
+--------------------------------
+16 >}
+    ~                                             => Pos: (183 to 183)  SpanInfo: {"start":178,"length":3}
+    >a--
+    >:=> (line 15, col 4) to (line 15, col 7)

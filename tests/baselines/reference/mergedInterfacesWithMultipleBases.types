@@ -1,0 +1,97 @@
+=== tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithMultipleBases.ts ===
+// merged interfaces behave as if all extends clauses from each declaration are merged together
+// no errors expected
+
+class C {
+>C : C
+
+    a: number;
+>a : number
+}
+
+class C2 {
+>C2 : C2
+
+    b: number;
+>b : number
+}
+
+interface A extends C {
+    y: string;
+>y : string
+}
+
+interface A extends C2 {
+    z: string;
+>z : string
+}
+
+class D implements A {
+>D : D
+
+    a: number;
+>a : number
+
+    b: number;
+>b : number
+
+    y: string;
+>y : string
+
+    z: string;
+>z : string
+}
+
+var a: A;
+>a : A
+
+var r = a.a;
+>r : number
+>a.a : number
+>a : A
+>a : number
+
+// generic interfaces in a module
+module M {
+>M : typeof M
+
+    class C<T> {
+>C : C<T>
+
+        a: T;
+>a : T
+    }
+
+    class C2<T> {
+>C2 : C2<T>
+
+        b: T;
+>b : T
+    }
+
+    interface A<T> extends C<T> {
+        y: T;
+>y : T
+    }
+
+    interface A<T> extends C2<string> {
+        z: T;
+>z : T
+    }
+
+    class D implements A<boolean> {
+>D : D
+
+        a: boolean;
+>a : boolean
+
+        b: string;
+>b : string
+
+        y: boolean;
+>y : boolean
+
+        z: boolean;
+>z : boolean
+    }
+}

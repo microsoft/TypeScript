@@ -1,0 +1,9 @@
+tests/cases/conformance/parser/ecmascript6/ComputedPropertyNames/parserComputedPropertyName24.ts(2,10): error TS2304: Cannot find name 'e'.
+
+
+==== tests/cases/conformance/parser/ecmascript6/ComputedPropertyNames/parserComputedPropertyName24.ts (1 errors) ====
+    class C {
+        set [e](v) { }
+             ~
+!!! error TS2304: Cannot find name 'e'.
+    }

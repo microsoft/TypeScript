@@ -1,0 +1,41 @@
+=== tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendsEveryObjectType.ts ===
+interface I {
+>I : Symbol(I, Decl(classExtendsEveryObjectType.ts, 0, 0))
+
+    foo: string;
+>foo : Symbol(I.foo, Decl(classExtendsEveryObjectType.ts, 0, 13))
+}
+class C extends I { } // error
+>C : Symbol(C, Decl(classExtendsEveryObjectType.ts, 2, 1))
+>I : Symbol(I, Decl(classExtendsEveryObjectType.ts, 0, 0))
+
+class C2 extends { foo: string; } { } // error
+>C2 : Symbol(C2, Decl(classExtendsEveryObjectType.ts, 3, 21))
+>foo : Symbol(foo, Decl(classExtendsEveryObjectType.ts, 5, 18))
+
+var x: { foo: string; }
+>x : Symbol(x, Decl(classExtendsEveryObjectType.ts, 6, 3))
+>foo : Symbol(foo, Decl(classExtendsEveryObjectType.ts, 6, 8))
+
+class C3 extends x { } // error
+>C3 : Symbol(C3, Decl(classExtendsEveryObjectType.ts, 6, 23))
+>x : Symbol(x, Decl(classExtendsEveryObjectType.ts, 6, 3))
+
+module M { export var x = 1; }
+>M : Symbol(M, Decl(classExtendsEveryObjectType.ts, 7, 22))
+>x : Symbol(x, Decl(classExtendsEveryObjectType.ts, 9, 21))
+
+class C4 extends M { } // error
+>C4 : Symbol(C4, Decl(classExtendsEveryObjectType.ts, 9, 30))
+>M : Symbol(M, Decl(classExtendsEveryObjectType.ts, 7, 22))
+
+function foo() { }
+>foo : Symbol(foo, Decl(classExtendsEveryObjectType.ts, 10, 22))
+
+class C5 extends foo { } // error
+>C5 : Symbol(C5, Decl(classExtendsEveryObjectType.ts, 12, 18))
+>foo : Symbol(foo, Decl(classExtendsEveryObjectType.ts, 10, 22))
+
+class C6 extends []{ } // error
+>C6 : Symbol(C6, Decl(classExtendsEveryObjectType.ts, 13, 24))
+

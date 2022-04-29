@@ -1,0 +1,13 @@
+=== tests/cases/conformance/types/import/a.d.ts ===
+export type LookAt = "./b";
+>LookAt : "./b"
+
+=== tests/cases/conformance/types/import/b.d.ts ===
+export type Value = "yes";
+>Value : "yes"
+
+=== tests/cases/conformance/types/import/chainer.ts ===
+export const x: import(import("./a").LookAt).Value = "yes";
+>x : any
+>"yes" : "yes"
+

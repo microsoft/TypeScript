@@ -1,0 +1,11 @@
+=== tests/cases/compiler/mappedTypeNoTypeNoCrash.ts ===
+type T0<T> = ({[K in keyof T]}) extends ({[key in K]: T[K]}) ? number : never;
+>T0 : Symbol(T0, Decl(mappedTypeNoTypeNoCrash.ts, 0, 0))
+>T : Symbol(T, Decl(mappedTypeNoTypeNoCrash.ts, 0, 8))
+>K : Symbol(K, Decl(mappedTypeNoTypeNoCrash.ts, 0, 16))
+>T : Symbol(T, Decl(mappedTypeNoTypeNoCrash.ts, 0, 8))
+>key : Symbol(key, Decl(mappedTypeNoTypeNoCrash.ts, 0, 43))
+>K : Symbol(K)
+>T : Symbol(T, Decl(mappedTypeNoTypeNoCrash.ts, 0, 8))
+>K : Symbol(K)
+

@@ -1,0 +1,3 @@
+=== tests/cases/conformance/es6/templates/templateStringInTaggedTemplateES6.ts ===
+`I AM THE ${ `${ `TAG` } ` } PORTION`    `I ${ "AM" } THE TEMPLATE PORTION`
+No type information for this code.

@@ -1,0 +1,31 @@
+=== /src/bug25410.ts ===
+import { x } from './index'
+>x : number
+
+import { y } from '../tests/index'
+>y : number
+
+=== /src/index.ts ===
+import * as React from 'react';
+>React : any
+
+export var x = 1
+>x : number
+>1 : 1
+
+=== /tests/index.ts ===
+import * as React from 'react';
+>React : any
+
+export var y = 2
+>y : number
+>2 : 2
+
+=== /tests/node_modules/@types/react/index.d.ts ===
+
+>global : typeof global
+
+=== /node_modules/@types/react/index.d.ts ===
+declare global { }
+>global : typeof global
+

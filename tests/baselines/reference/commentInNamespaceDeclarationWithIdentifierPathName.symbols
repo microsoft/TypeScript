@@ -1,0 +1,11 @@
+=== tests/cases/compiler/commentInNamespaceDeclarationWithIdentifierPathName.ts ===
+namespace hello.hi.world
+>hello : Symbol(hello, Decl(commentInNamespaceDeclarationWithIdentifierPathName.ts, 0, 0))
+>hi : Symbol(hi, Decl(commentInNamespaceDeclarationWithIdentifierPathName.ts, 0, 16))
+>world : Symbol(world, Decl(commentInNamespaceDeclarationWithIdentifierPathName.ts, 0, 19))
+{
+    function foo() {}
+>foo : Symbol(foo, Decl(commentInNamespaceDeclarationWithIdentifierPathName.ts, 1, 1))
+
+    // TODO, blah
+}

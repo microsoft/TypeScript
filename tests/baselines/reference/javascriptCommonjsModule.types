@@ -1,0 +1,15 @@
+=== tests/cases/compiler/index.js ===
+class Foo {}
+>Foo : Foo
+
+class Bar extends Foo {}
+>Bar : Bar
+>Foo : Foo
+
+module.exports = Bar;
+>module.exports = Bar : typeof Bar
+>module.exports : typeof Bar
+>module : { exports: typeof Bar; }
+>exports : typeof Bar
+>Bar : typeof Bar
+

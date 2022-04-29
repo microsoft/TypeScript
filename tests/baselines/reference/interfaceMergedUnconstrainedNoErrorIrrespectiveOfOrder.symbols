@@ -1,0 +1,51 @@
+=== tests/cases/compiler/working.ts ===
+// minmal samples from #33395
+export namespace ns {
+>ns : Symbol(ns, Decl(working.ts, 0, 0))
+
+    interface Function<T extends (...args: any) => any> {
+>Function : Symbol(Function, Decl(working.ts, 1, 21), Decl(working.ts, 4, 5))
+>T : Symbol(T, Decl(working.ts, 2, 23), Decl(working.ts, 5, 23))
+>args : Symbol(args, Decl(working.ts, 2, 34))
+
+        throttle(): Function<T>;
+>throttle : Symbol(Function.throttle, Decl(working.ts, 2, 57))
+>Function : Symbol(Function, Decl(working.ts, 1, 21), Decl(working.ts, 4, 5))
+>T : Symbol(T, Decl(working.ts, 2, 23), Decl(working.ts, 5, 23))
+    }
+    interface Function<T> {
+>Function : Symbol(Function, Decl(working.ts, 1, 21), Decl(working.ts, 4, 5))
+>T : Symbol(T, Decl(working.ts, 2, 23), Decl(working.ts, 5, 23))
+
+        unary(): Function<() => ReturnType<T>>;
+>unary : Symbol(Function.unary, Decl(working.ts, 5, 27))
+>Function : Symbol(Function, Decl(working.ts, 1, 21), Decl(working.ts, 4, 5))
+>ReturnType : Symbol(ReturnType, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(working.ts, 2, 23), Decl(working.ts, 5, 23))
+    }
+}
+=== tests/cases/compiler/regression.ts ===
+export namespace ns {
+>ns : Symbol(ns, Decl(regression.ts, 0, 0))
+
+    interface Function<T> {
+>Function : Symbol(Function, Decl(regression.ts, 0, 21), Decl(regression.ts, 3, 5))
+>T : Symbol(T, Decl(regression.ts, 1, 23), Decl(regression.ts, 4, 23))
+
+        unary(): Function<() => ReturnType<T>>;
+>unary : Symbol(Function.unary, Decl(regression.ts, 1, 27))
+>Function : Symbol(Function, Decl(regression.ts, 0, 21), Decl(regression.ts, 3, 5))
+>ReturnType : Symbol(ReturnType, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(regression.ts, 1, 23), Decl(regression.ts, 4, 23))
+    }
+    interface Function<T extends (...args: any) => any> {
+>Function : Symbol(Function, Decl(regression.ts, 0, 21), Decl(regression.ts, 3, 5))
+>T : Symbol(T, Decl(regression.ts, 1, 23), Decl(regression.ts, 4, 23))
+>args : Symbol(args, Decl(regression.ts, 4, 34))
+
+        throttle(): Function<T>;
+>throttle : Symbol(Function.throttle, Decl(regression.ts, 4, 57))
+>Function : Symbol(Function, Decl(regression.ts, 0, 21), Decl(regression.ts, 3, 5))
+>T : Symbol(T, Decl(regression.ts, 1, 23), Decl(regression.ts, 4, 23))
+    }
+}

@@ -1,0 +1,51 @@
+=== tests/cases/conformance/expressions/binaryOperators/instanceofOperator/instanceofOperatorWithRHSIsSubtypeOfFunction.ts ===
+interface I extends Function { }
+>I : Symbol(I, Decl(instanceofOperatorWithRHSIsSubtypeOfFunction.ts, 0, 0))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+var x: any;
+>x : Symbol(x, Decl(instanceofOperatorWithRHSIsSubtypeOfFunction.ts, 2, 3))
+
+var f1: Function;
+>f1 : Symbol(f1, Decl(instanceofOperatorWithRHSIsSubtypeOfFunction.ts, 3, 3))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+var f2: I;
+>f2 : Symbol(f2, Decl(instanceofOperatorWithRHSIsSubtypeOfFunction.ts, 4, 3))
+>I : Symbol(I, Decl(instanceofOperatorWithRHSIsSubtypeOfFunction.ts, 0, 0))
+
+var f3: { (): void };
+>f3 : Symbol(f3, Decl(instanceofOperatorWithRHSIsSubtypeOfFunction.ts, 5, 3))
+
+var f4: { new (): number };
+>f4 : Symbol(f4, Decl(instanceofOperatorWithRHSIsSubtypeOfFunction.ts, 6, 3))
+
+var r1 = x instanceof f1;
+>r1 : Symbol(r1, Decl(instanceofOperatorWithRHSIsSubtypeOfFunction.ts, 8, 3))
+>x : Symbol(x, Decl(instanceofOperatorWithRHSIsSubtypeOfFunction.ts, 2, 3))
+>f1 : Symbol(f1, Decl(instanceofOperatorWithRHSIsSubtypeOfFunction.ts, 3, 3))
+
+var r2 = x instanceof f2;
+>r2 : Symbol(r2, Decl(instanceofOperatorWithRHSIsSubtypeOfFunction.ts, 9, 3))
+>x : Symbol(x, Decl(instanceofOperatorWithRHSIsSubtypeOfFunction.ts, 2, 3))
+>f2 : Symbol(f2, Decl(instanceofOperatorWithRHSIsSubtypeOfFunction.ts, 4, 3))
+
+var r3 = x instanceof f3;
+>r3 : Symbol(r3, Decl(instanceofOperatorWithRHSIsSubtypeOfFunction.ts, 10, 3))
+>x : Symbol(x, Decl(instanceofOperatorWithRHSIsSubtypeOfFunction.ts, 2, 3))
+>f3 : Symbol(f3, Decl(instanceofOperatorWithRHSIsSubtypeOfFunction.ts, 5, 3))
+
+var r4 = x instanceof f4;
+>r4 : Symbol(r4, Decl(instanceofOperatorWithRHSIsSubtypeOfFunction.ts, 11, 3))
+>x : Symbol(x, Decl(instanceofOperatorWithRHSIsSubtypeOfFunction.ts, 2, 3))
+>f4 : Symbol(f4, Decl(instanceofOperatorWithRHSIsSubtypeOfFunction.ts, 6, 3))
+
+var r5 = x instanceof null;
+>r5 : Symbol(r5, Decl(instanceofOperatorWithRHSIsSubtypeOfFunction.ts, 12, 3))
+>x : Symbol(x, Decl(instanceofOperatorWithRHSIsSubtypeOfFunction.ts, 2, 3))
+
+var r6 = x instanceof undefined;
+>r6 : Symbol(r6, Decl(instanceofOperatorWithRHSIsSubtypeOfFunction.ts, 13, 3))
+>x : Symbol(x, Decl(instanceofOperatorWithRHSIsSubtypeOfFunction.ts, 2, 3))
+>undefined : Symbol(undefined)
+

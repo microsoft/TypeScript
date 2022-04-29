@@ -1,0 +1,24 @@
+=== tests/cases/compiler/defaultIndexProps2.ts ===
+class Foo {
+>Foo : Symbol(Foo, Decl(defaultIndexProps2.ts, 0, 0))
+
+	public v = "Yo";
+>v : Symbol(Foo.v, Decl(defaultIndexProps2.ts, 0, 11))
+}
+
+var f = new Foo();
+>f : Symbol(f, Decl(defaultIndexProps2.ts, 4, 3))
+>Foo : Symbol(Foo, Decl(defaultIndexProps2.ts, 0, 0))
+
+// WScript.Echo(f[0]);
+
+var o = {v:"Yo2"};
+>o : Symbol(o, Decl(defaultIndexProps2.ts, 8, 3))
+>v : Symbol(v, Decl(defaultIndexProps2.ts, 8, 9))
+
+// WScript.Echo(o[0]);
+
+1[0];
+var q = "s"[0];
+>q : Symbol(q, Decl(defaultIndexProps2.ts, 13, 3))
+

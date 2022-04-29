@@ -1,0 +1,49 @@
+=== tests/cases/compiler/infinitelyExpandingTypes5.ts ===
+interface Query<T> {
+>Query : Symbol(Query, Decl(infinitelyExpandingTypes5.ts, 0, 0))
+>T : Symbol(T, Decl(infinitelyExpandingTypes5.ts, 0, 16))
+
+    foo(x: T): Query<T[]>;
+>foo : Symbol(Query.foo, Decl(infinitelyExpandingTypes5.ts, 0, 20))
+>x : Symbol(x, Decl(infinitelyExpandingTypes5.ts, 1, 8))
+>T : Symbol(T, Decl(infinitelyExpandingTypes5.ts, 0, 16))
+>Query : Symbol(Query, Decl(infinitelyExpandingTypes5.ts, 0, 0))
+>T : Symbol(T, Decl(infinitelyExpandingTypes5.ts, 0, 16))
+}
+
+interface Enumerator<T> {
+>Enumerator : Symbol(Enumerator, Decl(lib.scripthost.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(infinitelyExpandingTypes5.ts, 2, 1))
+>T : Symbol(T, Decl(lib.scripthost.d.ts, --, --), Decl(infinitelyExpandingTypes5.ts, 4, 21))
+
+    (action: (item: T, index: number) => boolean): boolean;
+>action : Symbol(action, Decl(infinitelyExpandingTypes5.ts, 5, 5))
+>item : Symbol(item, Decl(infinitelyExpandingTypes5.ts, 5, 14))
+>T : Symbol(T, Decl(lib.scripthost.d.ts, --, --), Decl(infinitelyExpandingTypes5.ts, 4, 21))
+>index : Symbol(index, Decl(infinitelyExpandingTypes5.ts, 5, 22))
+}
+
+function from<T>(array: T[]): Query<T>;
+>from : Symbol(from, Decl(infinitelyExpandingTypes5.ts, 6, 1), Decl(infinitelyExpandingTypes5.ts, 8, 39), Decl(infinitelyExpandingTypes5.ts, 9, 54))
+>T : Symbol(T, Decl(infinitelyExpandingTypes5.ts, 8, 14))
+>array : Symbol(array, Decl(infinitelyExpandingTypes5.ts, 8, 17))
+>T : Symbol(T, Decl(infinitelyExpandingTypes5.ts, 8, 14))
+>Query : Symbol(Query, Decl(infinitelyExpandingTypes5.ts, 0, 0))
+>T : Symbol(T, Decl(infinitelyExpandingTypes5.ts, 8, 14))
+
+function from<T>(enumerator: Enumerator<T>): Query<T>;
+>from : Symbol(from, Decl(infinitelyExpandingTypes5.ts, 6, 1), Decl(infinitelyExpandingTypes5.ts, 8, 39), Decl(infinitelyExpandingTypes5.ts, 9, 54))
+>T : Symbol(T, Decl(infinitelyExpandingTypes5.ts, 9, 14))
+>enumerator : Symbol(enumerator, Decl(infinitelyExpandingTypes5.ts, 9, 17))
+>Enumerator : Symbol(Enumerator, Decl(lib.scripthost.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(infinitelyExpandingTypes5.ts, 2, 1))
+>T : Symbol(T, Decl(infinitelyExpandingTypes5.ts, 9, 14))
+>Query : Symbol(Query, Decl(infinitelyExpandingTypes5.ts, 0, 0))
+>T : Symbol(T, Decl(infinitelyExpandingTypes5.ts, 9, 14))
+
+function from(arg: any): any {
+>from : Symbol(from, Decl(infinitelyExpandingTypes5.ts, 6, 1), Decl(infinitelyExpandingTypes5.ts, 8, 39), Decl(infinitelyExpandingTypes5.ts, 9, 54))
+>arg : Symbol(arg, Decl(infinitelyExpandingTypes5.ts, 10, 14))
+
+    return undefined;
+>undefined : Symbol(undefined)
+}
+

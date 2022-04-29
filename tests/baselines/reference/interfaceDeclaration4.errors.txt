@@ -1,0 +1,71 @@
+tests/cases/compiler/interfaceDeclaration4.ts(18,11): error TS2430: Interface 'I3' incorrectly extends interface 'I1'.
+  Types of property 'item' are incompatible.
+    Type 'number' is not assignable to type 'string'.
+tests/cases/compiler/interfaceDeclaration4.ts(27,7): error TS2420: Class 'C2' incorrectly implements interface 'I4'.
+  Property 'item' is missing in type 'C2' but required in type 'I4'.
+tests/cases/compiler/interfaceDeclaration4.ts(36,7): error TS2420: Class 'C3' incorrectly implements interface 'I1'.
+  Property 'item' is missing in type 'C3' but required in type 'I1'.
+tests/cases/compiler/interfaceDeclaration4.ts(39,14): error TS1005: '{' expected.
+tests/cases/compiler/interfaceDeclaration4.ts(39,15): error TS1434: Unexpected keyword or identifier.
+tests/cases/compiler/interfaceDeclaration4.ts(39,15): error TS2304: Cannot find name 'I1'.
+
+
+==== tests/cases/compiler/interfaceDeclaration4.ts (6 errors) ====
+    // Import this module when test harness supports external modules. Also remove the internal module below.
+    // import Foo = require("interfaceDeclaration5")
+    module Foo {
+        export interface I1 { item: string; }
+        export class C1 { }
+    }
+    
+    class C1 implements Foo.I1 {
+    	public item:string;
+    }
+    
+    // Allowed
+    interface I2 extends Foo.I1 {
+    	item:string;
+    }
+    
+    // Negative Case
+    interface I3 extends Foo.I1 {
+              ~~
+!!! error TS2430: Interface 'I3' incorrectly extends interface 'I1'.
+!!! error TS2430:   Types of property 'item' are incompatible.
+!!! error TS2430:     Type 'number' is not assignable to type 'string'.
+        item:number;
+    }
+    
+    interface I4 extends Foo.I1 {
+        token:string;
+    }
+    
+    // Err - not implemented item
+    class C2 implements I4 {
+          ~~
+!!! error TS2420: Class 'C2' incorrectly implements interface 'I4'.
+!!! error TS2420:   Property 'item' is missing in type 'C2' but required in type 'I4'.
+!!! related TS2728 tests/cases/compiler/interfaceDeclaration4.ts:4:27: 'item' is declared here.
+        public token: string;
+    }
+    
+    interface I5 extends Foo { }
+    
+    // Negative case
+    interface I6 extends Foo.C1 { }
+    
+    class C3 implements Foo.I1 { }
+          ~~
+!!! error TS2420: Class 'C3' incorrectly implements interface 'I1'.
+!!! error TS2420:   Property 'item' is missing in type 'C3' but required in type 'I1'.
+!!! related TS2728 tests/cases/compiler/interfaceDeclaration4.ts:4:27: 'item' is declared here.
+    
+    // Negative case 
+    interface Foo.I1 { }
+                 ~
+!!! error TS1005: '{' expected.
+                  ~~
+!!! error TS1434: Unexpected keyword or identifier.
+                  ~~
+!!! error TS2304: Cannot find name 'I1'.
+    

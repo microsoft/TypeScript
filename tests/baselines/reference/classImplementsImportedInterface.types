@@ -1,0 +1,23 @@
+=== tests/cases/compiler/classImplementsImportedInterface.ts ===
+module M1 {
+    export interface I {
+        foo();
+>foo : () => any
+    }
+}
+
+module M2 {
+>M2 : typeof M2
+
+    import T = M1.I;
+>T : any
+>M1 : any
+>I : T
+
+    class C implements T {
+>C : C
+
+        foo() {}
+>foo : () => void
+    }
+}

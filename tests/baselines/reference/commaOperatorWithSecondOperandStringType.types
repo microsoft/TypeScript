@@ -1,0 +1,182 @@
+=== tests/cases/conformance/expressions/commaOperator/commaOperatorWithSecondOperandStringType.ts ===
+var ANY: any;
+>ANY : any
+
+var BOOLEAN: boolean;
+>BOOLEAN : boolean
+
+var NUMBER: number;
+>NUMBER : number
+
+var STRING: string;
+>STRING : string
+
+var OBJECT: Object;
+>OBJECT : Object
+
+var resultIsString: string;
+>resultIsString : string
+
+//The second operand is string
+ANY, STRING;
+>ANY, STRING : string
+>ANY : any
+>STRING : string
+
+BOOLEAN, STRING;
+>BOOLEAN, STRING : string
+>BOOLEAN : boolean
+>STRING : string
+
+NUMBER, STRING;
+>NUMBER, STRING : string
+>NUMBER : number
+>STRING : string
+
+STRING, STRING;
+>STRING, STRING : string
+>STRING : string
+>STRING : string
+
+OBJECT, STRING;
+>OBJECT, STRING : string
+>OBJECT : Object
+>STRING : string
+
+//Return type is string
+var resultIsString1 = (ANY, STRING);
+>resultIsString1 : string
+>(ANY, STRING) : string
+>ANY, STRING : string
+>ANY : any
+>STRING : string
+
+var resultIsString2 = (BOOLEAN, STRING);
+>resultIsString2 : string
+>(BOOLEAN, STRING) : string
+>BOOLEAN, STRING : string
+>BOOLEAN : boolean
+>STRING : string
+
+var resultIsString3 = (NUMBER, STRING);
+>resultIsString3 : string
+>(NUMBER, STRING) : string
+>NUMBER, STRING : string
+>NUMBER : number
+>STRING : string
+
+var resultIsString4 = (STRING, STRING);
+>resultIsString4 : string
+>(STRING, STRING) : string
+>STRING, STRING : string
+>STRING : string
+>STRING : string
+
+var resultIsString5 = (OBJECT, STRING);
+>resultIsString5 : string
+>(OBJECT, STRING) : string
+>OBJECT, STRING : string
+>OBJECT : Object
+>STRING : string
+
+//Literal and expression
+null, STRING;
+>null, STRING : string
+>null : null
+>STRING : string
+
+ANY = new Date(), STRING;
+>ANY = new Date(), STRING : string
+>ANY = new Date() : Date
+>ANY : any
+>new Date() : Date
+>Date : DateConstructor
+>STRING : string
+
+true, "";
+>true, "" : ""
+>true : true
+>"" : ""
+
+BOOLEAN == undefined, "";
+>BOOLEAN == undefined, "" : ""
+>BOOLEAN == undefined : boolean
+>BOOLEAN : boolean
+>undefined : undefined
+>"" : ""
+
+["a", "b"], NUMBER.toString();
+>["a", "b"], NUMBER.toString() : string
+>["a", "b"] : string[]
+>"a" : "a"
+>"b" : "b"
+>NUMBER.toString() : string
+>NUMBER.toString : (radix?: number) => string
+>NUMBER : number
+>toString : (radix?: number) => string
+
+OBJECT = new Object, STRING + "string";
+>OBJECT = new Object, STRING + "string" : string
+>OBJECT = new Object : Object
+>OBJECT : Object
+>new Object : Object
+>Object : ObjectConstructor
+>STRING + "string" : string
+>STRING : string
+>"string" : "string"
+
+var resultIsString6 = (null, STRING);
+>resultIsString6 : string
+>(null, STRING) : string
+>null, STRING : string
+>null : null
+>STRING : string
+
+var resultIsString7 = (ANY = new Date(), STRING);
+>resultIsString7 : string
+>(ANY = new Date(), STRING) : string
+>ANY = new Date(), STRING : string
+>ANY = new Date() : Date
+>ANY : any
+>new Date() : Date
+>Date : DateConstructor
+>STRING : string
+
+var resultIsString8 = (true, "");
+>resultIsString8 : string
+>(true, "") : ""
+>true, "" : ""
+>true : true
+>"" : ""
+
+var resultIsString9 = (BOOLEAN == undefined, "");
+>resultIsString9 : string
+>(BOOLEAN == undefined, "") : ""
+>BOOLEAN == undefined, "" : ""
+>BOOLEAN == undefined : boolean
+>BOOLEAN : boolean
+>undefined : undefined
+>"" : ""
+
+var resultIsString10 = (["a", "b"], NUMBER.toString());
+>resultIsString10 : string
+>(["a", "b"], NUMBER.toString()) : string
+>["a", "b"], NUMBER.toString() : string
+>["a", "b"] : string[]
+>"a" : "a"
+>"b" : "b"
+>NUMBER.toString() : string
+>NUMBER.toString : (radix?: number) => string
+>NUMBER : number
+>toString : (radix?: number) => string
+
+var resultIsString11 = (new Object, STRING + "string");
+>resultIsString11 : string
+>(new Object, STRING + "string") : string
+>new Object, STRING + "string" : string
+>new Object : Object
+>Object : ObjectConstructor
+>STRING + "string" : string
+>STRING : string
+>"string" : "string"
+

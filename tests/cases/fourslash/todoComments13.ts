@@ -1,0 +1,3 @@
+//// TODO 
+
+verify.todoCommentsInCurrentFile(["TODO"]);

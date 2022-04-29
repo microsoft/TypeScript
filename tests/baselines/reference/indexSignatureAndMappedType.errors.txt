@@ -1,0 +1,49 @@
+tests/cases/compiler/indexSignatureAndMappedType.ts(6,5): error TS2322: Type '{ [key: string]: T; }' is not assignable to type 'Record<K, T>'.
+tests/cases/compiler/indexSignatureAndMappedType.ts(15,5): error TS2322: Type 'Record<K, U>' is not assignable to type '{ [key: string]: T; }'.
+  Type 'U' is not assignable to type 'T'.
+    'T' could be instantiated with an arbitrary type which could be unrelated to 'U'.
+tests/cases/compiler/indexSignatureAndMappedType.ts(16,5): error TS2322: Type '{ [key: string]: T; }' is not assignable to type 'Record<K, U>'.
+
+
+==== tests/cases/compiler/indexSignatureAndMappedType.ts (3 errors) ====
+    // A mapped type { [P in K]: X }, where K is a generic type, is related to
+    // { [key: string]: Y } if X is related to Y.
+    
+    function f1<T, K extends string>(x: { [key: string]: T }, y: Record<K, T>) {
+        x = y;
+        y = x;  // Error
+        ~
+!!! error TS2322: Type '{ [key: string]: T; }' is not assignable to type 'Record<K, T>'.
+    }
+    
+    function f2<T>(x: { [key: string]: T }, y: Record<string, T>) {
+        x = y;
+        y = x;
+    }
+    
+    function f3<T, U, K extends string>(x: { [key: string]: T }, y: Record<K, U>) {
+        x = y;  // Error
+        ~
+!!! error TS2322: Type 'Record<K, U>' is not assignable to type '{ [key: string]: T; }'.
+!!! error TS2322:   Type 'U' is not assignable to type 'T'.
+!!! error TS2322:     'T' could be instantiated with an arbitrary type which could be unrelated to 'U'.
+        y = x;  // Error
+        ~
+!!! error TS2322: Type '{ [key: string]: T; }' is not assignable to type 'Record<K, U>'.
+    }
+    
+    // Repro from #14548
+    
+    type Dictionary = {
+        [key: string]: string;
+    };
+    
+    interface IBaseEntity {
+        name: string;
+        properties: Dictionary;
+    }
+    
+    interface IEntity<T extends string> extends IBaseEntity {
+        properties: Record<T, string>;
+    }
+    

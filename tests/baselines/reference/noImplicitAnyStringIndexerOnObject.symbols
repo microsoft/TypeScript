@@ -1,0 +1,295 @@
+=== tests/cases/compiler/noImplicitAnyStringIndexerOnObject.ts ===
+var a = {}["hello"];
+>a : Symbol(a, Decl(noImplicitAnyStringIndexerOnObject.ts, 0, 3))
+
+var b: string = { '': 'foo' }[''];
+>b : Symbol(b, Decl(noImplicitAnyStringIndexerOnObject.ts, 1, 3))
+>'' : Symbol('', Decl(noImplicitAnyStringIndexerOnObject.ts, 1, 17))
+>'' : Symbol('', Decl(noImplicitAnyStringIndexerOnObject.ts, 1, 17))
+
+var c = {
+>c : Symbol(c, Decl(noImplicitAnyStringIndexerOnObject.ts, 3, 3))
+
+  get: (key: string) => 'foobar'
+>get : Symbol(get, Decl(noImplicitAnyStringIndexerOnObject.ts, 3, 9))
+>key : Symbol(key, Decl(noImplicitAnyStringIndexerOnObject.ts, 4, 8))
+
+};
+c['hello'];
+>c : Symbol(c, Decl(noImplicitAnyStringIndexerOnObject.ts, 3, 3))
+
+const foo = c['hello'];
+>foo : Symbol(foo, Decl(noImplicitAnyStringIndexerOnObject.ts, 7, 5))
+>c : Symbol(c, Decl(noImplicitAnyStringIndexerOnObject.ts, 3, 3))
+
+var d = {
+>d : Symbol(d, Decl(noImplicitAnyStringIndexerOnObject.ts, 9, 3))
+
+  set: (key: string) => 'foobar'
+>set : Symbol(set, Decl(noImplicitAnyStringIndexerOnObject.ts, 9, 9))
+>key : Symbol(key, Decl(noImplicitAnyStringIndexerOnObject.ts, 10, 8))
+
+};
+const bar = d['hello'];
+>bar : Symbol(bar, Decl(noImplicitAnyStringIndexerOnObject.ts, 12, 5))
+>d : Symbol(d, Decl(noImplicitAnyStringIndexerOnObject.ts, 9, 3))
+
+{
+  let e = {
+>e : Symbol(e, Decl(noImplicitAnyStringIndexerOnObject.ts, 15, 5))
+
+    get: (key: string) => 'foobar',
+>get : Symbol(get, Decl(noImplicitAnyStringIndexerOnObject.ts, 15, 11))
+>key : Symbol(key, Decl(noImplicitAnyStringIndexerOnObject.ts, 16, 10))
+
+    set: (key: string) => 'foobar'
+>set : Symbol(set, Decl(noImplicitAnyStringIndexerOnObject.ts, 16, 35))
+>key : Symbol(key, Decl(noImplicitAnyStringIndexerOnObject.ts, 17, 10))
+
+  };
+  e['hello'];
+>e : Symbol(e, Decl(noImplicitAnyStringIndexerOnObject.ts, 15, 5))
+
+  e['hello'] = 'modified';
+>e : Symbol(e, Decl(noImplicitAnyStringIndexerOnObject.ts, 15, 5))
+
+  e['hello'] += 1;
+>e : Symbol(e, Decl(noImplicitAnyStringIndexerOnObject.ts, 15, 5))
+
+  e['hello'] ++;
+>e : Symbol(e, Decl(noImplicitAnyStringIndexerOnObject.ts, 15, 5))
+}
+
+{
+  let e = {
+>e : Symbol(e, Decl(noImplicitAnyStringIndexerOnObject.ts, 26, 5))
+
+    get: (key: string) => 'foobar',
+>get : Symbol(get, Decl(noImplicitAnyStringIndexerOnObject.ts, 26, 11))
+>key : Symbol(key, Decl(noImplicitAnyStringIndexerOnObject.ts, 27, 10))
+
+    set: (key: string, value: string) => 'foobar'
+>set : Symbol(set, Decl(noImplicitAnyStringIndexerOnObject.ts, 27, 35))
+>key : Symbol(key, Decl(noImplicitAnyStringIndexerOnObject.ts, 28, 10))
+>value : Symbol(value, Decl(noImplicitAnyStringIndexerOnObject.ts, 28, 22))
+
+  };
+  e['hello'];
+>e : Symbol(e, Decl(noImplicitAnyStringIndexerOnObject.ts, 26, 5))
+
+  e['hello'] = 'modified';
+>e : Symbol(e, Decl(noImplicitAnyStringIndexerOnObject.ts, 26, 5))
+
+  e['hello'] += 1;
+>e : Symbol(e, Decl(noImplicitAnyStringIndexerOnObject.ts, 26, 5))
+
+  e['hello'] ++;
+>e : Symbol(e, Decl(noImplicitAnyStringIndexerOnObject.ts, 26, 5))
+}
+
+{
+  let e = {
+>e : Symbol(e, Decl(noImplicitAnyStringIndexerOnObject.ts, 37, 5))
+
+    get: (key: "hello" | "world") => 'foobar',
+>get : Symbol(get, Decl(noImplicitAnyStringIndexerOnObject.ts, 37, 11))
+>key : Symbol(key, Decl(noImplicitAnyStringIndexerOnObject.ts, 38, 10))
+
+    set: (key: "hello" | "world", value: string) => 'foobar'
+>set : Symbol(set, Decl(noImplicitAnyStringIndexerOnObject.ts, 38, 46))
+>key : Symbol(key, Decl(noImplicitAnyStringIndexerOnObject.ts, 39, 10))
+>value : Symbol(value, Decl(noImplicitAnyStringIndexerOnObject.ts, 39, 33))
+
+  };
+  e['hello'];
+>e : Symbol(e, Decl(noImplicitAnyStringIndexerOnObject.ts, 37, 5))
+
+  e['hello'] = 'modified';
+>e : Symbol(e, Decl(noImplicitAnyStringIndexerOnObject.ts, 37, 5))
+
+  e['hello'] += 1;
+>e : Symbol(e, Decl(noImplicitAnyStringIndexerOnObject.ts, 37, 5))
+
+  e['hello'] ++;
+>e : Symbol(e, Decl(noImplicitAnyStringIndexerOnObject.ts, 37, 5))
+}
+
+{
+  ({ get: (key: string) => 'hello', set: (key: string, value: string) => {} })['hello'];
+>get : Symbol(get, Decl(noImplicitAnyStringIndexerOnObject.ts, 48, 4))
+>key : Symbol(key, Decl(noImplicitAnyStringIndexerOnObject.ts, 48, 11))
+>set : Symbol(set, Decl(noImplicitAnyStringIndexerOnObject.ts, 48, 35))
+>key : Symbol(key, Decl(noImplicitAnyStringIndexerOnObject.ts, 48, 42))
+>value : Symbol(value, Decl(noImplicitAnyStringIndexerOnObject.ts, 48, 54))
+
+  ({ get: (key: string) => 'hello', set: (key: string, value: string) => {} })['hello'] = 'modified';
+>get : Symbol(get, Decl(noImplicitAnyStringIndexerOnObject.ts, 49, 4))
+>key : Symbol(key, Decl(noImplicitAnyStringIndexerOnObject.ts, 49, 11))
+>set : Symbol(set, Decl(noImplicitAnyStringIndexerOnObject.ts, 49, 35))
+>key : Symbol(key, Decl(noImplicitAnyStringIndexerOnObject.ts, 49, 42))
+>value : Symbol(value, Decl(noImplicitAnyStringIndexerOnObject.ts, 49, 54))
+
+  ({ get: (key: string) => 'hello', set: (key: string, value: string) => {} })['hello'] += 1;
+>get : Symbol(get, Decl(noImplicitAnyStringIndexerOnObject.ts, 50, 4))
+>key : Symbol(key, Decl(noImplicitAnyStringIndexerOnObject.ts, 50, 11))
+>set : Symbol(set, Decl(noImplicitAnyStringIndexerOnObject.ts, 50, 35))
+>key : Symbol(key, Decl(noImplicitAnyStringIndexerOnObject.ts, 50, 42))
+>value : Symbol(value, Decl(noImplicitAnyStringIndexerOnObject.ts, 50, 54))
+
+  ({ get: (key: string) => 'hello', set: (key: string, value: string) => {} })['hello'] ++;
+>get : Symbol(get, Decl(noImplicitAnyStringIndexerOnObject.ts, 51, 4))
+>key : Symbol(key, Decl(noImplicitAnyStringIndexerOnObject.ts, 51, 11))
+>set : Symbol(set, Decl(noImplicitAnyStringIndexerOnObject.ts, 51, 35))
+>key : Symbol(key, Decl(noImplicitAnyStringIndexerOnObject.ts, 51, 42))
+>value : Symbol(value, Decl(noImplicitAnyStringIndexerOnObject.ts, 51, 54))
+}
+
+{
+  ({ foo: { get: (key: string) => 'hello', set: (key: string, value: string) => {} } }).foo['hello'];
+>({ foo: { get: (key: string) => 'hello', set: (key: string, value: string) => {} } }).foo : Symbol(foo, Decl(noImplicitAnyStringIndexerOnObject.ts, 55, 4))
+>foo : Symbol(foo, Decl(noImplicitAnyStringIndexerOnObject.ts, 55, 4))
+>get : Symbol(get, Decl(noImplicitAnyStringIndexerOnObject.ts, 55, 11))
+>key : Symbol(key, Decl(noImplicitAnyStringIndexerOnObject.ts, 55, 18))
+>set : Symbol(set, Decl(noImplicitAnyStringIndexerOnObject.ts, 55, 42))
+>key : Symbol(key, Decl(noImplicitAnyStringIndexerOnObject.ts, 55, 49))
+>value : Symbol(value, Decl(noImplicitAnyStringIndexerOnObject.ts, 55, 61))
+>foo : Symbol(foo, Decl(noImplicitAnyStringIndexerOnObject.ts, 55, 4))
+
+  ({ foo: { get: (key: string) => 'hello', set: (key: string, value: string) => {} } }).foo['hello'] = 'modified';
+>({ foo: { get: (key: string) => 'hello', set: (key: string, value: string) => {} } }).foo : Symbol(foo, Decl(noImplicitAnyStringIndexerOnObject.ts, 56, 4))
+>foo : Symbol(foo, Decl(noImplicitAnyStringIndexerOnObject.ts, 56, 4))
+>get : Symbol(get, Decl(noImplicitAnyStringIndexerOnObject.ts, 56, 11))
+>key : Symbol(key, Decl(noImplicitAnyStringIndexerOnObject.ts, 56, 18))
+>set : Symbol(set, Decl(noImplicitAnyStringIndexerOnObject.ts, 56, 42))
+>key : Symbol(key, Decl(noImplicitAnyStringIndexerOnObject.ts, 56, 49))
+>value : Symbol(value, Decl(noImplicitAnyStringIndexerOnObject.ts, 56, 61))
+>foo : Symbol(foo, Decl(noImplicitAnyStringIndexerOnObject.ts, 56, 4))
+
+  ({ foo: { get: (key: string) => 'hello', set: (key: string, value: string) => {} } }).foo['hello'] += 1;
+>({ foo: { get: (key: string) => 'hello', set: (key: string, value: string) => {} } }).foo : Symbol(foo, Decl(noImplicitAnyStringIndexerOnObject.ts, 57, 4))
+>foo : Symbol(foo, Decl(noImplicitAnyStringIndexerOnObject.ts, 57, 4))
+>get : Symbol(get, Decl(noImplicitAnyStringIndexerOnObject.ts, 57, 11))
+>key : Symbol(key, Decl(noImplicitAnyStringIndexerOnObject.ts, 57, 18))
+>set : Symbol(set, Decl(noImplicitAnyStringIndexerOnObject.ts, 57, 42))
+>key : Symbol(key, Decl(noImplicitAnyStringIndexerOnObject.ts, 57, 49))
+>value : Symbol(value, Decl(noImplicitAnyStringIndexerOnObject.ts, 57, 61))
+>foo : Symbol(foo, Decl(noImplicitAnyStringIndexerOnObject.ts, 57, 4))
+
+  ({ foo: { get: (key: string) => 'hello', set: (key: string, value: string) => {} } }).foo['hello'] ++;
+>({ foo: { get: (key: string) => 'hello', set: (key: string, value: string) => {} } }).foo : Symbol(foo, Decl(noImplicitAnyStringIndexerOnObject.ts, 58, 4))
+>foo : Symbol(foo, Decl(noImplicitAnyStringIndexerOnObject.ts, 58, 4))
+>get : Symbol(get, Decl(noImplicitAnyStringIndexerOnObject.ts, 58, 11))
+>key : Symbol(key, Decl(noImplicitAnyStringIndexerOnObject.ts, 58, 18))
+>set : Symbol(set, Decl(noImplicitAnyStringIndexerOnObject.ts, 58, 42))
+>key : Symbol(key, Decl(noImplicitAnyStringIndexerOnObject.ts, 58, 49))
+>value : Symbol(value, Decl(noImplicitAnyStringIndexerOnObject.ts, 58, 61))
+>foo : Symbol(foo, Decl(noImplicitAnyStringIndexerOnObject.ts, 58, 4))
+}
+
+const o = { a: 0 };
+>o : Symbol(o, Decl(noImplicitAnyStringIndexerOnObject.ts, 61, 5))
+>a : Symbol(a, Decl(noImplicitAnyStringIndexerOnObject.ts, 61, 11))
+
+declare const k: "a" | "b" | "c";
+>k : Symbol(k, Decl(noImplicitAnyStringIndexerOnObject.ts, 63, 13))
+
+o[k];
+>o : Symbol(o, Decl(noImplicitAnyStringIndexerOnObject.ts, 61, 5))
+>k : Symbol(k, Decl(noImplicitAnyStringIndexerOnObject.ts, 63, 13))
+
+
+declare const k2: "c";
+>k2 : Symbol(k2, Decl(noImplicitAnyStringIndexerOnObject.ts, 67, 13))
+
+o[k2];
+>o : Symbol(o, Decl(noImplicitAnyStringIndexerOnObject.ts, 61, 5))
+>k2 : Symbol(k2, Decl(noImplicitAnyStringIndexerOnObject.ts, 67, 13))
+
+declare const sym : unique symbol;
+>sym : Symbol(sym, Decl(noImplicitAnyStringIndexerOnObject.ts, 70, 13))
+
+o[sym];
+>o : Symbol(o, Decl(noImplicitAnyStringIndexerOnObject.ts, 61, 5))
+>sym : Symbol(sym, Decl(noImplicitAnyStringIndexerOnObject.ts, 70, 13))
+
+enum NumEnum { a, b }
+>NumEnum : Symbol(NumEnum, Decl(noImplicitAnyStringIndexerOnObject.ts, 71, 7))
+>a : Symbol(NumEnum.a, Decl(noImplicitAnyStringIndexerOnObject.ts, 73, 14))
+>b : Symbol(NumEnum.b, Decl(noImplicitAnyStringIndexerOnObject.ts, 73, 17))
+
+let numEnumKey: NumEnum;
+>numEnumKey : Symbol(numEnumKey, Decl(noImplicitAnyStringIndexerOnObject.ts, 74, 3))
+>NumEnum : Symbol(NumEnum, Decl(noImplicitAnyStringIndexerOnObject.ts, 71, 7))
+
+o[numEnumKey];
+>o : Symbol(o, Decl(noImplicitAnyStringIndexerOnObject.ts, 61, 5))
+>numEnumKey : Symbol(numEnumKey, Decl(noImplicitAnyStringIndexerOnObject.ts, 74, 3))
+
+
+enum StrEnum { a = "a", b = "b" }
+>StrEnum : Symbol(StrEnum, Decl(noImplicitAnyStringIndexerOnObject.ts, 75, 14))
+>a : Symbol(StrEnum.a, Decl(noImplicitAnyStringIndexerOnObject.ts, 78, 14))
+>b : Symbol(StrEnum.b, Decl(noImplicitAnyStringIndexerOnObject.ts, 78, 23))
+
+let strEnumKey: StrEnum;
+>strEnumKey : Symbol(strEnumKey, Decl(noImplicitAnyStringIndexerOnObject.ts, 79, 3))
+>StrEnum : Symbol(StrEnum, Decl(noImplicitAnyStringIndexerOnObject.ts, 75, 14))
+
+o[strEnumKey];
+>o : Symbol(o, Decl(noImplicitAnyStringIndexerOnObject.ts, 61, 5))
+>strEnumKey : Symbol(strEnumKey, Decl(noImplicitAnyStringIndexerOnObject.ts, 79, 3))
+
+
+interface MyMap<K, T> {
+>MyMap : Symbol(MyMap, Decl(noImplicitAnyStringIndexerOnObject.ts, 80, 14))
+>K : Symbol(K, Decl(noImplicitAnyStringIndexerOnObject.ts, 83, 16))
+>T : Symbol(T, Decl(noImplicitAnyStringIndexerOnObject.ts, 83, 18))
+
+  get(key: K): T;
+>get : Symbol(MyMap.get, Decl(noImplicitAnyStringIndexerOnObject.ts, 83, 23))
+>key : Symbol(key, Decl(noImplicitAnyStringIndexerOnObject.ts, 84, 6))
+>K : Symbol(K, Decl(noImplicitAnyStringIndexerOnObject.ts, 83, 16))
+>T : Symbol(T, Decl(noImplicitAnyStringIndexerOnObject.ts, 83, 18))
+
+  set(key: K, value: T): void;
+>set : Symbol(MyMap.set, Decl(noImplicitAnyStringIndexerOnObject.ts, 84, 17))
+>key : Symbol(key, Decl(noImplicitAnyStringIndexerOnObject.ts, 85, 6))
+>K : Symbol(K, Decl(noImplicitAnyStringIndexerOnObject.ts, 83, 16))
+>value : Symbol(value, Decl(noImplicitAnyStringIndexerOnObject.ts, 85, 13))
+>T : Symbol(T, Decl(noImplicitAnyStringIndexerOnObject.ts, 83, 18))
+}
+
+interface Dog { bark(): void; }
+>Dog : Symbol(Dog, Decl(noImplicitAnyStringIndexerOnObject.ts, 86, 1))
+>bark : Symbol(Dog.bark, Decl(noImplicitAnyStringIndexerOnObject.ts, 88, 15))
+
+let rover: Dog = { bark() {} };
+>rover : Symbol(rover, Decl(noImplicitAnyStringIndexerOnObject.ts, 89, 3))
+>Dog : Symbol(Dog, Decl(noImplicitAnyStringIndexerOnObject.ts, 86, 1))
+>bark : Symbol(bark, Decl(noImplicitAnyStringIndexerOnObject.ts, 89, 18))
+
+declare let map: MyMap<Dog, string>;
+>map : Symbol(map, Decl(noImplicitAnyStringIndexerOnObject.ts, 91, 11))
+>MyMap : Symbol(MyMap, Decl(noImplicitAnyStringIndexerOnObject.ts, 80, 14))
+>Dog : Symbol(Dog, Decl(noImplicitAnyStringIndexerOnObject.ts, 86, 1))
+
+map[rover] = "Rover";
+>map : Symbol(map, Decl(noImplicitAnyStringIndexerOnObject.ts, 91, 11))
+>rover : Symbol(rover, Decl(noImplicitAnyStringIndexerOnObject.ts, 89, 3))
+
+interface I {
+>I : Symbol(I, Decl(noImplicitAnyStringIndexerOnObject.ts, 92, 21))
+
+  prop: MyMap<string, string>
+>prop : Symbol(I.prop, Decl(noImplicitAnyStringIndexerOnObject.ts, 94, 13))
+>MyMap : Symbol(MyMap, Decl(noImplicitAnyStringIndexerOnObject.ts, 80, 14))
+}
+declare const m: I;
+>m : Symbol(m, Decl(noImplicitAnyStringIndexerOnObject.ts, 97, 13))
+>I : Symbol(I, Decl(noImplicitAnyStringIndexerOnObject.ts, 92, 21))
+
+m.prop['a'];
+>m.prop : Symbol(I.prop, Decl(noImplicitAnyStringIndexerOnObject.ts, 94, 13))
+>m : Symbol(m, Decl(noImplicitAnyStringIndexerOnObject.ts, 97, 13))
+>prop : Symbol(I.prop, Decl(noImplicitAnyStringIndexerOnObject.ts, 94, 13))
+

@@ -1,0 +1,58 @@
+=== tests/cases/conformance/internalModules/moduleDeclarations/invalidNestedModules.ts ===
+module A.B.C {
+>A : typeof A
+>B : typeof B
+>C : typeof C
+
+    export class Point {
+>Point : Point
+
+        x: number;
+>x : number
+
+        y: number;
+>y : number
+    }
+}
+
+module A {
+>A : typeof A
+
+    export module B {
+>B : typeof B
+
+        export class C { // Error
+>C : C
+
+            name: string;
+>name : string
+        }
+    }
+}
+
+module M2.X {
+>M2 : typeof M2
+>X : typeof X
+
+    export class Point {
+>Point : Point
+
+        x: number; y: number;
+>x : number
+>y : number
+    }
+}
+
+module M2 {
+>M2 : typeof M2
+
+    export module X {
+>X : typeof X
+
+        export var Point: number; // Error
+>Point : number
+    }
+}
+
+
+

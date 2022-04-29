@@ -1,0 +1,24 @@
+=== tests/cases/conformance/types/literal/stringLiteralsAssertionsInEqualityComparisons01.ts ===
+var a = "foo" === "bar" as string;
+>a : boolean
+>"foo" === "bar" as string : boolean
+>"foo" : "foo"
+>"bar" as string : string
+>"bar" : "bar"
+
+var b = "foo" !== ("bar" as string);
+>b : boolean
+>"foo" !== ("bar" as string) : boolean
+>"foo" : "foo"
+>("bar" as string) : string
+>"bar" as string : string
+>"bar" : "bar"
+
+var c = "foo" == (<any>"bar");
+>c : boolean
+>"foo" == (<any>"bar") : boolean
+>"foo" : "foo"
+>(<any>"bar") : any
+><any>"bar" : any
+>"bar" : "bar"
+

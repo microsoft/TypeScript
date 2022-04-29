@@ -1,0 +1,50 @@
+=== tests/cases/conformance/expressions/commaOperator/commaOperatorInvalidAssignmentType.ts ===
+var BOOLEAN: boolean;
+>BOOLEAN : Symbol(BOOLEAN, Decl(commaOperatorInvalidAssignmentType.ts, 0, 3))
+
+var NUMBER: number;
+>NUMBER : Symbol(NUMBER, Decl(commaOperatorInvalidAssignmentType.ts, 1, 3))
+
+var STRING: string;
+>STRING : Symbol(STRING, Decl(commaOperatorInvalidAssignmentType.ts, 2, 3))
+
+var resultIsBoolean: boolean
+>resultIsBoolean : Symbol(resultIsBoolean, Decl(commaOperatorInvalidAssignmentType.ts, 4, 3))
+
+var resultIsNumber: number
+>resultIsNumber : Symbol(resultIsNumber, Decl(commaOperatorInvalidAssignmentType.ts, 5, 3))
+
+var resultIsString: string
+>resultIsString : Symbol(resultIsString, Decl(commaOperatorInvalidAssignmentType.ts, 6, 3))
+
+//Expect errors when the results type is different form the second operand
+resultIsBoolean = (BOOLEAN, STRING);
+>resultIsBoolean : Symbol(resultIsBoolean, Decl(commaOperatorInvalidAssignmentType.ts, 4, 3))
+>BOOLEAN : Symbol(BOOLEAN, Decl(commaOperatorInvalidAssignmentType.ts, 0, 3))
+>STRING : Symbol(STRING, Decl(commaOperatorInvalidAssignmentType.ts, 2, 3))
+
+resultIsBoolean = (BOOLEAN, NUMBER);
+>resultIsBoolean : Symbol(resultIsBoolean, Decl(commaOperatorInvalidAssignmentType.ts, 4, 3))
+>BOOLEAN : Symbol(BOOLEAN, Decl(commaOperatorInvalidAssignmentType.ts, 0, 3))
+>NUMBER : Symbol(NUMBER, Decl(commaOperatorInvalidAssignmentType.ts, 1, 3))
+
+resultIsNumber = (NUMBER, BOOLEAN);
+>resultIsNumber : Symbol(resultIsNumber, Decl(commaOperatorInvalidAssignmentType.ts, 5, 3))
+>NUMBER : Symbol(NUMBER, Decl(commaOperatorInvalidAssignmentType.ts, 1, 3))
+>BOOLEAN : Symbol(BOOLEAN, Decl(commaOperatorInvalidAssignmentType.ts, 0, 3))
+
+resultIsNumber = (NUMBER, STRING);
+>resultIsNumber : Symbol(resultIsNumber, Decl(commaOperatorInvalidAssignmentType.ts, 5, 3))
+>NUMBER : Symbol(NUMBER, Decl(commaOperatorInvalidAssignmentType.ts, 1, 3))
+>STRING : Symbol(STRING, Decl(commaOperatorInvalidAssignmentType.ts, 2, 3))
+
+resultIsString = (STRING, BOOLEAN);
+>resultIsString : Symbol(resultIsString, Decl(commaOperatorInvalidAssignmentType.ts, 6, 3))
+>STRING : Symbol(STRING, Decl(commaOperatorInvalidAssignmentType.ts, 2, 3))
+>BOOLEAN : Symbol(BOOLEAN, Decl(commaOperatorInvalidAssignmentType.ts, 0, 3))
+
+resultIsString = (STRING, NUMBER);
+>resultIsString : Symbol(resultIsString, Decl(commaOperatorInvalidAssignmentType.ts, 6, 3))
+>STRING : Symbol(STRING, Decl(commaOperatorInvalidAssignmentType.ts, 2, 3))
+>NUMBER : Symbol(NUMBER, Decl(commaOperatorInvalidAssignmentType.ts, 1, 3))
+

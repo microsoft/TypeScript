@@ -1,0 +1,13 @@
+tests/cases/compiler/argumentsObjectIterator01_ES5.ts(3,21): error TS2495: Type 'IArguments' is not an array type or a string type.
+
+
+==== tests/cases/compiler/argumentsObjectIterator01_ES5.ts (1 errors) ====
+    function doubleAndReturnAsArray(x: number, y: number, z: number): [number, number, number] {
+        let result = [];
+        for (let arg of arguments) {
+                        ~~~~~~~~~
+!!! error TS2495: Type 'IArguments' is not an array type or a string type.
+            result.push(arg + arg);
+        }
+        return <[any, any, any]>result;
+    }

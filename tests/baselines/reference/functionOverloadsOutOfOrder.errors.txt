@@ -1,0 +1,24 @@
+tests/cases/compiler/functionOverloadsOutOfOrder.ts(6,13): error TS2391: Function implementation is missing or not immediately following the declaration.
+tests/cases/compiler/functionOverloadsOutOfOrder.ts(14,13): error TS2391: Function implementation is missing or not immediately following the declaration.
+
+
+==== tests/cases/compiler/functionOverloadsOutOfOrder.ts (2 errors) ====
+    class d {
+        private foo(n: number): string;
+        private foo(ns: any) {
+            return ns.toString();
+        }
+        private foo(s: string): string;
+                ~~~
+!!! error TS2391: Function implementation is missing or not immediately following the declaration.
+    }
+    
+    class e {
+        private foo(ns: any) {
+            return ns.toString();
+        }
+        private foo(s: string): string;
+        private foo(n: number): string;
+                ~~~
+!!! error TS2391: Function implementation is missing or not immediately following the declaration.
+    }

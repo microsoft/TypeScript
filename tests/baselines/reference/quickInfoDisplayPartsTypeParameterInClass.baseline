@@ -1,0 +1,3560 @@
+[
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInClass.ts",
+      "position": 6,
+      "name": "1"
+    },
+    "quickInfo": {
+      "kind": "class",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 6,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "class",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "c",
+          "kind": "className"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInClass.ts",
+      "position": 8,
+      "name": "2"
+    },
+    "quickInfo": {
+      "kind": "type parameter",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 8,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "type parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "in",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "c",
+          "kind": "className"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInClass.ts",
+      "position": 17,
+      "name": "3"
+    },
+    "quickInfo": {
+      "kind": "constructor",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 17,
+        "length": 11
+      },
+      "displayParts": [
+        {
+          "text": "constructor",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "c",
+          "kind": "className"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "a",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "c",
+          "kind": "className"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInClass.ts",
+      "position": 29,
+      "name": "4"
+    },
+    "quickInfo": {
+      "kind": "parameter",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 29,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "a",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInClass.ts",
+      "position": 32,
+      "name": "5"
+    },
+    "quickInfo": {
+      "kind": "type parameter",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 32,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "type parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "in",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "c",
+          "kind": "className"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInClass.ts",
+      "position": 47,
+      "name": "6"
+    },
+    "quickInfo": {
+      "kind": "method",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 47,
+        "length": 6
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "method",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "c",
+          "kind": "className"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "method",
+          "kind": "methodName"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "a",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": ",",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "b",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInClass.ts",
+      "position": 54,
+      "name": "7"
+    },
+    "quickInfo": {
+      "kind": "type parameter",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 54,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "type parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "in",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "c",
+          "kind": "className"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "method",
+          "kind": "methodName"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "a",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": ",",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "b",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInClass.ts",
+      "position": 57,
+      "name": "8"
+    },
+    "quickInfo": {
+      "kind": "parameter",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 57,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "a",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInClass.ts",
+      "position": 60,
+      "name": "9"
+    },
+    "quickInfo": {
+      "kind": "type parameter",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 60,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "type parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "in",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "c",
+          "kind": "className"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "method",
+          "kind": "methodName"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "a",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": ",",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "b",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInClass.ts",
+      "position": 63,
+      "name": "10"
+    },
+    "quickInfo": {
+      "kind": "parameter",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 63,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "b",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInClass.ts",
+      "position": 66,
+      "name": "11"
+    },
+    "quickInfo": {
+      "kind": "type parameter",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 66,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "type parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "in",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "c",
+          "kind": "className"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInClass.ts",
+      "position": 86,
+      "name": "12"
+    },
+    "quickInfo": {
+      "kind": "parameter",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 86,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "a",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInClass.ts",
+      "position": 101,
+      "name": "13"
+    },
+    "quickInfo": {
+      "kind": "var",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 101,
+        "length": 9
+      },
+      "displayParts": [
+        {
+          "text": "var",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "cInstance",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "c",
+          "kind": "className"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInClass.ts",
+      "position": 117,
+      "name": "14"
+    },
+    "quickInfo": {
+      "kind": "constructor",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 117,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "constructor",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "c",
+          "kind": "className"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "a",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "c",
+          "kind": "className"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInClass.ts",
+      "position": 133,
+      "name": "15"
+    },
+    "quickInfo": {
+      "kind": "var",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 133,
+        "length": 4
+      },
+      "displayParts": [
+        {
+          "text": "var",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "cVal",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "typeof",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "c",
+          "kind": "className"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInClass.ts",
+      "position": 140,
+      "name": "16"
+    },
+    "quickInfo": {
+      "kind": "class",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 140,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "class",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "c",
+          "kind": "className"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInClass.ts",
+      "position": 143,
+      "name": "17"
+    },
+    "quickInfo": {
+      "kind": "var",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 143,
+        "length": 9
+      },
+      "displayParts": [
+        {
+          "text": "var",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "cInstance",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "c",
+          "kind": "className"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInClass.ts",
+      "position": 153,
+      "name": "18"
+    },
+    "quickInfo": {
+      "kind": "method",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 153,
+        "length": 6
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "method",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "c",
+          "kind": "className"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "method",
+          "kind": "methodName"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "\"hello\"",
+          "kind": "stringLiteral"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "a",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "\"hello\"",
+          "kind": "stringLiteral"
+        },
+        {
+          "text": ",",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "b",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "\"hello\"",
+          "kind": "stringLiteral"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInClass.ts",
+      "position": 185,
+      "name": "19"
+    },
+    "quickInfo": {
+      "kind": "class",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 185,
+        "length": 2
+      },
+      "displayParts": [
+        {
+          "text": "class",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "c2",
+          "kind": "className"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "extends",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "c",
+          "kind": "className"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInClass.ts",
+      "position": 188,
+      "name": "20"
+    },
+    "quickInfo": {
+      "kind": "type parameter",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 188,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "type parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "in",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "c2",
+          "kind": "className"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "extends",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "c",
+          "kind": "className"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInClass.ts",
+      "position": 198,
+      "name": "21"
+    },
+    "quickInfo": {
+      "kind": "class",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 198,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "class",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "c",
+          "kind": "className"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInClass.ts",
+      "position": 215,
+      "name": "22"
+    },
+    "quickInfo": {
+      "kind": "constructor",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 215,
+        "length": 11
+      },
+      "displayParts": [
+        {
+          "text": "constructor",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "c2",
+          "kind": "className"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "extends",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "c",
+          "kind": "className"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "a",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "c2",
+          "kind": "className"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInClass.ts",
+      "position": 227,
+      "name": "23"
+    },
+    "quickInfo": {
+      "kind": "parameter",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 227,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "a",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "extends",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "c",
+          "kind": "className"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInClass.ts",
+      "position": 230,
+      "name": "24"
+    },
+    "quickInfo": {
+      "kind": "type parameter",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 230,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "type parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "in",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "c2",
+          "kind": "className"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "extends",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "c",
+          "kind": "className"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInClass.ts",
+      "position": 245,
+      "name": "25"
+    },
+    "quickInfo": {
+      "kind": "method",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 245,
+        "length": 6
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "method",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "c2",
+          "kind": "className"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "extends",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "c",
+          "kind": "className"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "method",
+          "kind": "methodName"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "extends",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "c",
+          "kind": "className"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "a",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": ",",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "b",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInClass.ts",
+      "position": 252,
+      "name": "26"
+    },
+    "quickInfo": {
+      "kind": "type parameter",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 252,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "type parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "in",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "c2",
+          "kind": "className"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "extends",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "c",
+          "kind": "className"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "method",
+          "kind": "methodName"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "extends",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "c",
+          "kind": "className"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "a",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": ",",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "b",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInClass.ts",
+      "position": 262,
+      "name": "27"
+    },
+    "quickInfo": {
+      "kind": "class",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 262,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "class",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "c",
+          "kind": "className"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInClass.ts",
+      "position": 273,
+      "name": "28"
+    },
+    "quickInfo": {
+      "kind": "parameter",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 273,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "a",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "extends",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "c",
+          "kind": "className"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInClass.ts",
+      "position": 276,
+      "name": "29"
+    },
+    "quickInfo": {
+      "kind": "type parameter",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 276,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "type parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "in",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "c2",
+          "kind": "className"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "extends",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "c",
+          "kind": "className"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "method",
+          "kind": "methodName"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "extends",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "c",
+          "kind": "className"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "a",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": ",",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "b",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInClass.ts",
+      "position": 279,
+      "name": "30"
+    },
+    "quickInfo": {
+      "kind": "parameter",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 279,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "b",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "extends",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "c",
+          "kind": "className"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInClass.ts",
+      "position": 282,
+      "name": "31"
+    },
+    "quickInfo": {
+      "kind": "type parameter",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 282,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "type parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "in",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "c2",
+          "kind": "className"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "extends",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "c",
+          "kind": "className"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInClass.ts",
+      "position": 302,
+      "name": "32"
+    },
+    "quickInfo": {
+      "kind": "parameter",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 302,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "a",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "extends",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "c",
+          "kind": "className"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInClass.ts",
+      "position": 317,
+      "name": "33"
+    },
+    "quickInfo": {
+      "kind": "var",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 317,
+        "length": 10
+      },
+      "displayParts": [
+        {
+          "text": "var",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "cInstance1",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "c2",
+          "kind": "className"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "c",
+          "kind": "className"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInClass.ts",
+      "position": 334,
+      "name": "34"
+    },
+    "quickInfo": {
+      "kind": "constructor",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 334,
+        "length": 2
+      },
+      "displayParts": [
+        {
+          "text": "constructor",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "c2",
+          "kind": "className"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "c",
+          "kind": "className"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "a",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "c",
+          "kind": "className"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "c2",
+          "kind": "className"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "c",
+          "kind": "className"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInClass.ts",
+      "position": 337,
+      "name": "35"
+    },
+    "quickInfo": {
+      "kind": "var",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 337,
+        "length": 9
+      },
+      "displayParts": [
+        {
+          "text": "var",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "cInstance",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "c",
+          "kind": "className"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInClass.ts",
+      "position": 353,
+      "name": "36"
+    },
+    "quickInfo": {
+      "kind": "var",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 353,
+        "length": 5
+      },
+      "displayParts": [
+        {
+          "text": "var",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "cVal2",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "typeof",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "c2",
+          "kind": "className"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInClass.ts",
+      "position": 361,
+      "name": "37"
+    },
+    "quickInfo": {
+      "kind": "class",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 361,
+        "length": 2
+      },
+      "displayParts": [
+        {
+          "text": "class",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "c2",
+          "kind": "className"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "extends",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "c",
+          "kind": "className"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInClass.ts",
+      "position": 365,
+      "name": "38"
+    },
+    "quickInfo": {
+      "kind": "var",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 365,
+        "length": 10
+      },
+      "displayParts": [
+        {
+          "text": "var",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "cInstance1",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "c2",
+          "kind": "className"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "c",
+          "kind": "className"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInClass.ts",
+      "position": 376,
+      "name": "39"
+    },
+    "quickInfo": {
+      "kind": "method",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 376,
+        "length": 6
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "method",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "c2",
+          "kind": "className"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "c",
+          "kind": "className"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "method",
+          "kind": "methodName"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "c",
+          "kind": "className"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "a",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "c",
+          "kind": "className"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        },
+        {
+          "text": ",",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "b",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "c",
+          "kind": "className"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "c",
+          "kind": "className"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInClass.ts",
+      "position": 383,
+      "name": "40"
+    },
+    "quickInfo": {
+      "kind": "var",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 383,
+        "length": 9
+      },
+      "displayParts": [
+        {
+          "text": "var",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "cInstance",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "c",
+          "kind": "className"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInClass.ts",
+      "position": 394,
+      "name": "41"
+    },
+    "quickInfo": {
+      "kind": "var",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 394,
+        "length": 9
+      },
+      "displayParts": [
+        {
+          "text": "var",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "cInstance",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "c",
+          "kind": "className"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        }
+      ],
+      "documentation": []
+    }
+  }
+]

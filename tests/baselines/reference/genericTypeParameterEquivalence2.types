@@ -1,0 +1,177 @@
+=== tests/cases/compiler/genericTypeParameterEquivalence2.ts ===
+// compose :: (b->c) -> (a->b) -> (a->c)
+function compose<A, B, C>(f: (b: B) => C, g: (a:A) => B): (a:A) => C {
+>compose : <A, B, C>(f: (b: B) => C, g: (a: A) => B) => (a: A) => C
+>f : (b: B) => C
+>b : B
+>g : (a: A) => B
+>a : A
+>a : A
+
+    return function (a:A) : C {
+>function (a:A) : C {        return f(g.apply(null, a));    } : (a: A) => C
+>a : A
+
+        return f(g.apply(null, a));
+>f(g.apply(null, a)) : C
+>f : (b: B) => C
+>g.apply(null, a) : any
+>g.apply : (this: Function, thisArg: any, argArray?: any) => any
+>g : (a: A) => B
+>apply : (this: Function, thisArg: any, argArray?: any) => any
+>null : null
+>a : A
+
+    };
+}
+
+// forEach :: [a] -> (a -> ()) -> ()
+function forEach<A>(list: A[], f: (a: A, n?: number) => void ): void {
+>forEach : <A>(list: A[], f: (a: A, n?: number) => void) => void
+>list : A[]
+>f : (a: A, n?: number) => void
+>a : A
+>n : number
+
+    for (var i = 0; i < list.length; ++i) {
+>i : number
+>0 : 0
+>i < list.length : boolean
+>i : number
+>list.length : number
+>list : A[]
+>length : number
+>++i : number
+>i : number
+
+        f(list[i], i);
+>f(list[i], i) : void
+>f : (a: A, n?: number) => void
+>list[i] : A
+>list : A[]
+>i : number
+>i : number
+    }
+}
+
+// filter :: (a->bool) -> [a] -> [a]
+function filter<A>(f: (a: A) => boolean, ar: A[]): A[] {
+>filter : <A>(f: (a: A) => boolean, ar: A[]) => A[]
+>f : (a: A) => boolean
+>a : A
+>ar : A[]
+
+    var ret = [];
+>ret : any[]
+>[] : undefined[]
+
+    forEach(ar, (el) => {
+>forEach(ar, (el) => {        if (f(el)) {            ret.push(el);        }    } ) : void
+>forEach : <A>(list: A[], f: (a: A, n?: number) => void) => void
+>ar : A[]
+>(el) => {        if (f(el)) {            ret.push(el);        }    } : (el: A) => void
+>el : A
+
+        if (f(el)) {
+>f(el) : boolean
+>f : (a: A) => boolean
+>el : A
+
+            ret.push(el);
+>ret.push(el) : number
+>ret.push : (...items: any[]) => number
+>ret : any[]
+>push : (...items: any[]) => number
+>el : A
+        }
+    } );
+
+    return ret;
+>ret : any[]
+}
+
+// length :: [a] -> Num
+function length2<A>(ar: A[]): number {
+>length2 : <A>(ar: A[]) => number
+>ar : A[]
+
+    return ar.length;
+>ar.length : number
+>ar : A[]
+>length : number
+}
+
+// curry1 :: ((a,b)->c) -> (a->(b->c))
+function curry1<A, B, C>(f: (a: A, b: B) => C): (ax: A) => (bx: B) => C {
+>curry1 : <A, B, C>(f: (a: A, b: B) => C) => (ax: A) => (bx: B) => C
+>f : (a: A, b: B) => C
+>a : A
+>b : B
+>ax : A
+>bx : B
+
+    return function (ay: A) {
+>function (ay: A) {        return function (by: B) {            return f(ay, by);        };    } : (ay: A) => (by: B) => C
+>ay : A
+
+        return function (by: B) {
+>function (by: B) {            return f(ay, by);        } : (by: B) => C
+>by : B
+
+            return f(ay, by);
+>f(ay, by) : C
+>f : (a: A, b: B) => C
+>ay : A
+>by : B
+
+        };
+    };
+}
+
+var cfilter = curry1(filter);
+>cfilter : <A>(ax: (a: A) => boolean) => (bx: A[]) => A[]
+>curry1(filter) : <A>(ax: (a: A) => boolean) => (bx: A[]) => A[]
+>curry1 : <A, B, C>(f: (a: A, b: B) => C) => (ax: A) => (bx: B) => C
+>filter : <A>(f: (a: A) => boolean, ar: A[]) => A[]
+
+// compose :: (b->c) -> (a->b) -> (a->c)
+// length :: [a] -> Num
+// cfilter :: {} -> {} -> [{}]
+// pred :: a -> Bool 
+// cfilter(pred) :: {} -> [{}]
+// length2 :: [a] -> Num
+// countWhere :: (a -> Bool) -> [a] -> Num
+
+function countWhere_1<A>(pred: (a: A) => boolean): (a: A[]) => number {
+>countWhere_1 : <A>(pred: (a: A) => boolean) => (a: A[]) => number
+>pred : (a: A) => boolean
+>a : A
+>a : A[]
+
+    return compose(length2, cfilter(pred));
+>compose(length2, cfilter(pred)) : (a: A[]) => number
+>compose : <A, B, C>(f: (b: B) => C, g: (a: A) => B) => (a: A) => C
+>length2 : <A>(ar: A[]) => number
+>cfilter(pred) : (bx: A[]) => A[]
+>cfilter : <A>(ax: (a: A) => boolean) => (bx: A[]) => A[]
+>pred : (a: A) => boolean
+}
+
+function countWhere_2<A>(pred: (a: A) => boolean): (a: A[]) => number {
+>countWhere_2 : <A>(pred: (a: A) => boolean) => (a: A[]) => number
+>pred : (a: A) => boolean
+>a : A
+>a : A[]
+
+    var where = cfilter(pred);
+>where : (bx: A[]) => A[]
+>cfilter(pred) : (bx: A[]) => A[]
+>cfilter : <A>(ax: (a: A) => boolean) => (bx: A[]) => A[]
+>pred : (a: A) => boolean
+
+    return compose(length2, where);
+>compose(length2, where) : (a: A[]) => number
+>compose : <A, B, C>(f: (b: B) => C, g: (a: A) => B) => (a: A) => C
+>length2 : <A>(ar: A[]) => number
+>where : (bx: A[]) => A[]
+}

@@ -1,0 +1,32 @@
+=== tests/cases/conformance/types/objectTypeLiteral/callSignatures/callSignaturesThatDifferOnlyByReturnType2.ts ===
+// Normally it is an error to have multiple overloads which differ only by return type in a single type declaration.
+// Here the multiple overloads come from multiple bases.
+
+interface I<T> {
+    foo(x: number): T;
+>foo : (x: number) => T
+>x : number
+}
+
+interface A extends I<number>, I<string> { }
+
+var x: A;
+>x : A
+
+// BUG 822524
+var r = x.foo(1); // no error
+>r : number
+>x.foo(1) : number
+>x.foo : (x: number) => number
+>x : A
+>foo : (x: number) => number
+>1 : 1
+
+var r2 = x.foo(''); // error
+>r2 : number
+>x.foo('') : number
+>x.foo : (x: number) => number
+>x : A
+>foo : (x: number) => number
+>'' : ""
+

@@ -1,0 +1,38 @@
+=== tests/cases/compiler/file2.ts ===
+/// <reference path="./file1" />
+
+declare module "someMod" {
+>"someMod" : Symbol("someMod", Decl(file1.ts, 0, 0), Decl(file2.ts, 0, 0))
+
+    export interface TopLevel {
+>TopLevel : Symbol(TopLevel, Decl(file1.ts, 0, 26), Decl(file2.ts, 2, 26))
+
+        duplicate1(): number;
+>duplicate1 : Symbol(TopLevel.duplicate1, Decl(file2.ts, 3, 31))
+
+        duplicate2(): number;
+>duplicate2 : Symbol(TopLevel.duplicate2, Decl(file2.ts, 4, 29))
+
+        duplicate3(): number;
+>duplicate3 : Symbol(TopLevel.duplicate3, Decl(file2.ts, 5, 29))
+    }
+}
+export {};
+
+=== tests/cases/compiler/file1.ts ===
+declare module "someMod" {
+>"someMod" : Symbol("someMod", Decl(file1.ts, 0, 0), Decl(file2.ts, 0, 0))
+
+    export interface TopLevel {
+>TopLevel : Symbol(TopLevel, Decl(file1.ts, 0, 26), Decl(file2.ts, 2, 26))
+
+        duplicate1: () => string;
+>duplicate1 : Symbol(TopLevel.duplicate1, Decl(file1.ts, 1, 31))
+
+        duplicate2: () => string;
+>duplicate2 : Symbol(TopLevel.duplicate2, Decl(file1.ts, 2, 33))
+
+        duplicate3: () => string;
+>duplicate3 : Symbol(TopLevel.duplicate3, Decl(file1.ts, 3, 33))
+    }
+}

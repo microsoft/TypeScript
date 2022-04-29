@@ -1,0 +1,8 @@
+tests/cases/compiler/unusedTypeParameters_infer.ts(1,38): error TS6133: 'U' is declared but its value is never read.
+
+
+==== tests/cases/compiler/unusedTypeParameters_infer.ts (1 errors) ====
+    type Length<T> = T extends ArrayLike<infer U> ? number : never;
+                                         ~~~~~~~
+!!! error TS6133: 'U' is declared but its value is never read.
+    

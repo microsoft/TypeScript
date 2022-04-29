@@ -1,0 +1,37 @@
+=== /abc.ts ===
+export class A {}
+>A : Symbol(A, Decl(abc.ts, 0, 0))
+
+export type B  = { b: string };
+>B : Symbol(B, Decl(abc.ts, 0, 17))
+>b : Symbol(b, Decl(abc.ts, 1, 18))
+
+export const C = "";
+>C : Symbol(C, Decl(abc.ts, 2, 12))
+
+=== /d.ts ===
+import type { A, B, C } from './abc';
+>A : Symbol(A, Decl(d.ts, 0, 13))
+>B : Symbol(B, Decl(d.ts, 0, 16))
+>C : Symbol(C, Decl(d.ts, 0, 19))
+
+new A();
+>A : Symbol(A, Decl(d.ts, 0, 13))
+
+declare let a: A;
+>a : Symbol(a, Decl(d.ts, 2, 11))
+>A : Symbol(A, Decl(d.ts, 0, 13))
+
+declare let b: B;
+>b : Symbol(b, Decl(d.ts, 3, 11))
+>B : Symbol(B, Decl(d.ts, 0, 16))
+
+b.b;
+>b.b : Symbol(b, Decl(abc.ts, 1, 18))
+>b : Symbol(b, Decl(d.ts, 3, 11))
+>b : Symbol(b, Decl(abc.ts, 1, 18))
+
+const c = { A };
+>c : Symbol(c, Decl(d.ts, 5, 5))
+>A : Symbol(A, Decl(d.ts, 5, 11))
+

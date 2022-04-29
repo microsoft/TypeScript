@@ -1,0 +1,39 @@
+tests/cases/compiler/overloadOnConstNoStringImplementation2.ts(18,9): error TS2345: Argument of type '(x: 'bye') => number' is not assignable to parameter of type '(x: "hi") => number'.
+  Types of parameters 'x' and 'x' are incompatible.
+    Type '"hi"' is not assignable to type '"bye"'.
+tests/cases/compiler/overloadOnConstNoStringImplementation2.ts(20,9): error TS2345: Argument of type '(x: number) => number' is not assignable to parameter of type '(x: "hi") => number'.
+  Types of parameters 'x' and 'x' are incompatible.
+    Type 'string' is not assignable to type 'number'.
+
+
+==== tests/cases/compiler/overloadOnConstNoStringImplementation2.ts (2 errors) ====
+    interface I {
+        x1(a: number, callback: (x: 'hi') => number);
+    }
+    
+    class C implements I {
+        x1(a: number, callback: (x: 'hi') => number);
+        x1(a: number, callback: (x: any) => number) {
+            callback('hi');
+            callback('bye');
+            var hm = "hm";
+            callback(hm);
+            callback(1);
+        }
+    }
+    
+    var c: C;
+    c.x1(1, (x: 'hi') => { return 1; } );
+    c.x1(1, (x: 'bye') => { return 1; } ); 
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2345: Argument of type '(x: 'bye') => number' is not assignable to parameter of type '(x: "hi") => number'.
+!!! error TS2345:   Types of parameters 'x' and 'x' are incompatible.
+!!! error TS2345:     Type '"hi"' is not assignable to type '"bye"'.
+!!! related TS2793 tests/cases/compiler/overloadOnConstNoStringImplementation2.ts:7:5: The call would have succeeded against this implementation, but implementation signatures of overloads are not externally visible.
+    c.x1(1, (x: string) => { return 1; } );
+    c.x1(1, (x: number) => { return 1; } );
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2345: Argument of type '(x: number) => number' is not assignable to parameter of type '(x: "hi") => number'.
+!!! error TS2345:   Types of parameters 'x' and 'x' are incompatible.
+!!! error TS2345:     Type 'string' is not assignable to type 'number'.
+!!! related TS2793 tests/cases/compiler/overloadOnConstNoStringImplementation2.ts:7:5: The call would have succeeded against this implementation, but implementation signatures of overloads are not externally visible.

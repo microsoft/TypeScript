@@ -1,0 +1,38 @@
+=== tests/cases/conformance/es6/for-ofStatements/for-of20.ts ===
+class Foo { }
+>Foo : Symbol(Foo, Decl(for-of20.ts, 0, 0))
+
+class FooIterator {
+>FooIterator : Symbol(FooIterator, Decl(for-of20.ts, 0, 13))
+
+    next() {
+>next : Symbol(FooIterator.next, Decl(for-of20.ts, 1, 19))
+
+        return {
+            value: new Foo,
+>value : Symbol(value, Decl(for-of20.ts, 3, 16))
+>Foo : Symbol(Foo, Decl(for-of20.ts, 0, 0))
+
+            done: false
+>done : Symbol(done, Decl(for-of20.ts, 4, 27))
+
+        };
+    }
+    [Symbol.iterator]() {
+>[Symbol.iterator] : Symbol(FooIterator[Symbol.iterator], Decl(for-of20.ts, 7, 5))
+>Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+
+        return this;
+>this : Symbol(FooIterator, Decl(for-of20.ts, 0, 13))
+    }
+}
+
+for (let v of new FooIterator) {
+>v : Symbol(v, Decl(for-of20.ts, 13, 8))
+>FooIterator : Symbol(FooIterator, Decl(for-of20.ts, 0, 13))
+
+    v;
+>v : Symbol(v, Decl(for-of20.ts, 13, 8))
+}

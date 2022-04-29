@@ -1,0 +1,13 @@
+=== tests/cases/compiler/parseEntityNameWithReservedWord.ts ===
+enum Bool { false }
+>Bool : Symbol(Bool, Decl(parseEntityNameWithReservedWord.ts, 0, 0))
+>false : Symbol(Bool.false, Decl(parseEntityNameWithReservedWord.ts, 0, 11))
+
+const x: Bool.false = Bool.false;
+>x : Symbol(x, Decl(parseEntityNameWithReservedWord.ts, 1, 5))
+>Bool : Symbol(Bool, Decl(parseEntityNameWithReservedWord.ts, 0, 0))
+>false : Symbol(Bool.false, Decl(parseEntityNameWithReservedWord.ts, 0, 11))
+>Bool.false : Symbol(Bool.false, Decl(parseEntityNameWithReservedWord.ts, 0, 11))
+>Bool : Symbol(Bool, Decl(parseEntityNameWithReservedWord.ts, 0, 0))
+>false : Symbol(Bool.false, Decl(parseEntityNameWithReservedWord.ts, 0, 11))
+

@@ -1,0 +1,61 @@
+tests/cases/compiler/exhaustiveSwitchImplicitReturn.ts(35,32): error TS7030: Not all code paths return a value.
+
+
+==== tests/cases/compiler/exhaustiveSwitchImplicitReturn.ts (1 errors) ====
+    function foo1(bar: "a"): number {
+        switch(bar) {
+            case "a":
+                return 1;
+        }
+    }
+    
+    function foo2(bar: "a"): number {
+        switch(bar) {
+            case "a":
+                return 1;
+        }
+    
+        let unusedVariable;
+    }
+    
+    function foo3(bar: "a"): number {
+        switch(bar) {
+            case "a":
+                return 1;
+        }
+    
+        function neverCalled() {}
+    }
+    
+    function foo4(bar: "a"): number {
+        switch(bar) {
+            case "a":
+                return 1;
+        }
+    
+        foo3(bar);
+    }
+    
+    function foo5(bar: "a" | "b"): number {
+                                   ~~~~~~
+!!! error TS7030: Not all code paths return a value.
+        switch(bar) {
+            case "a":
+                return 1;
+        }
+    }
+    
+    function foo6(bar: "a", a: boolean, b: boolean): number {
+        if (a) {
+            switch (bar) {
+                case "a": return 1;
+            }
+        }
+        else {
+            switch (b) {
+                case true: return -1;
+                case false: return 0;
+            }
+        }
+    }
+    

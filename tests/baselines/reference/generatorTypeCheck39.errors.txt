@@ -1,0 +1,18 @@
+tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck39.ts(6,11): error TS1219: Experimental support for decorators is a feature that is subject to change in a future release. Set the 'experimentalDecorators' option in your 'tsconfig' or 'jsconfig' to remove this warning.
+tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck39.ts(7,13): error TS1163: A 'yield' expression is only allowed in a generator body.
+
+
+==== tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck39.ts (2 errors) ====
+    function decorator(x: any) {
+        return y => { };
+    }
+    function* g() {
+        @decorator(yield 0)
+        class C {
+              ~
+!!! error TS1219: Experimental support for decorators is a feature that is subject to change in a future release. Set the 'experimentalDecorators' option in your 'tsconfig' or 'jsconfig' to remove this warning.
+            x = yield 0;
+                ~~~~~
+!!! error TS1163: A 'yield' expression is only allowed in a generator body.
+        }
+    }

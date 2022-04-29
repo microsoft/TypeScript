@@ -1,0 +1,37 @@
+=== tests/cases/conformance/jsdoc/prefixPostfix.js ===
+/**
+ * @param {number![]} x - number[]
+ * @param {!number[]} y - number[]
+ * @param {(number[])!} z - number[]
+ * @param {number?[]} a - parse error without parentheses
+ * @param {?number[]} b - number[] | null
+ * @param {(number[])?} c - number[] | null
+ * @param {...?number} e - (number | null)[]
+ * @param {...number?} f - number[] | null
+ * @param {...number!?} g - number[] | null
+ * @param {...number?!} h - parse error without parentheses (also nonsensical)
+ * @param {...number[]} i - number[][]
+ * @param {...number![]?} j - number[][] | null
+ * @param {...number?[]!} k - parse error without parentheses
+ * @param {number extends number ? true : false} l - conditional types work
+ * @param {[number, number?]} m - [number, (number | undefined)?]
+ */
+function f(x, y, z, a, b, c, e, f, g, h, i, j, k, l, m) {
+>f : (x: number[], y: number[], z: (number[]), a: any, b: number[] | null, c: (number[]) | null, e: (number | null)[], f: (number | null)[], g: (number | null)[], h: any, i: number[][], j: (number[] | null)[], k: any, l: number extends number ? true : false, m: [number, number?]) => void
+>x : number[]
+>y : number[]
+>z : number[]
+>a : any
+>b : number[] | null
+>c : number[] | null
+>e : number | null | undefined
+>f : number | null | undefined
+>g : number | null | undefined
+>h : any
+>i : number[] | undefined
+>j : number[] | null | undefined
+>k : any
+>l : true
+>m : [number, (number | undefined)?]
+}
+

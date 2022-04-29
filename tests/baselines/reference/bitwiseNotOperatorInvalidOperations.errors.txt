@@ -1,0 +1,26 @@
+tests/cases/conformance/expressions/unaryOperators/bitwiseNotOperator/bitwiseNotOperatorInvalidOperations.ts(5,10): error TS1005: ',' expected.
+tests/cases/conformance/expressions/unaryOperators/bitwiseNotOperator/bitwiseNotOperatorInvalidOperations.ts(5,11): error TS1109: Expression expected.
+tests/cases/conformance/expressions/unaryOperators/bitwiseNotOperator/bitwiseNotOperatorInvalidOperations.ts(8,27): error TS1134: Variable declaration expected.
+tests/cases/conformance/expressions/unaryOperators/bitwiseNotOperator/bitwiseNotOperatorInvalidOperations.ts(11,9): error TS1109: Expression expected.
+
+
+==== tests/cases/conformance/expressions/unaryOperators/bitwiseNotOperator/bitwiseNotOperatorInvalidOperations.ts (4 errors) ====
+    // Unary operator ~
+    var q;
+    
+    // operand before ~
+    var a = q~;  //expect error
+             ~
+!!! error TS1005: ',' expected.
+              ~
+!!! error TS1109: Expression expected.
+    
+    // multiple operands after ~
+    var mul = ~[1, 2, "abc"], "";  //expect error
+                              ~~
+!!! error TS1134: Variable declaration expected.
+    
+    // miss an operand
+    var b =~;
+            ~
+!!! error TS1109: Expression expected.

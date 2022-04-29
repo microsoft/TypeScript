@@ -1,0 +1,666 @@
+=== tests/cases/conformance/parser/ecmascript5/parserRealSource6.ts ===
+// Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
+// See LICENSE.txt in the project root for complete license information.
+
+///<reference path='typescript.ts' />
+
+module TypeScript {
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource6.ts, 0, 0))
+
+    export class TypeCollectionContext {
+>TypeCollectionContext : Symbol(TypeCollectionContext, Decl(parserRealSource6.ts, 5, 19))
+
+        public script: Script = null;
+>script : Symbol(TypeCollectionContext.script, Decl(parserRealSource6.ts, 6, 40))
+>Script : Symbol(Script)
+
+        constructor (public scopeChain: ScopeChain, public checker: TypeChecker) {
+>scopeChain : Symbol(TypeCollectionContext.scopeChain, Decl(parserRealSource6.ts, 9, 21))
+>ScopeChain : Symbol(ScopeChain)
+>checker : Symbol(TypeCollectionContext.checker, Decl(parserRealSource6.ts, 9, 51))
+>TypeChecker : Symbol(TypeChecker)
+        }
+    }
+
+    export class MemberScopeContext {
+>MemberScopeContext : Symbol(MemberScopeContext, Decl(parserRealSource6.ts, 11, 5))
+
+        public type: Type = null;
+>type : Symbol(MemberScopeContext.type, Decl(parserRealSource6.ts, 13, 37))
+>Type : Symbol(Type)
+
+        public ast: AST = null;
+>ast : Symbol(MemberScopeContext.ast, Decl(parserRealSource6.ts, 14, 33))
+>AST : Symbol(AST)
+
+        public scope: SymbolScope;
+>scope : Symbol(MemberScopeContext.scope, Decl(parserRealSource6.ts, 15, 31))
+>SymbolScope : Symbol(SymbolScope)
+
+        public options = new AstWalkOptions();
+>options : Symbol(MemberScopeContext.options, Decl(parserRealSource6.ts, 16, 34))
+
+        constructor (public flow: TypeFlow, public pos: number, public matchFlag: ASTFlags) {
+>flow : Symbol(MemberScopeContext.flow, Decl(parserRealSource6.ts, 19, 21))
+>TypeFlow : Symbol(TypeFlow)
+>pos : Symbol(MemberScopeContext.pos, Decl(parserRealSource6.ts, 19, 43))
+>matchFlag : Symbol(MemberScopeContext.matchFlag, Decl(parserRealSource6.ts, 19, 63))
+>ASTFlags : Symbol(ASTFlags)
+        }
+    }
+
+    export class EnclosingScopeContext {
+>EnclosingScopeContext : Symbol(EnclosingScopeContext, Decl(parserRealSource6.ts, 21, 5))
+
+        public scopeGetter: () => SymbolScope = null;
+>scopeGetter : Symbol(EnclosingScopeContext.scopeGetter, Decl(parserRealSource6.ts, 23, 40))
+>SymbolScope : Symbol(SymbolScope)
+
+        public objectLiteralScopeGetter: () => SymbolScope = null;
+>objectLiteralScopeGetter : Symbol(EnclosingScopeContext.objectLiteralScopeGetter, Decl(parserRealSource6.ts, 25, 53))
+>SymbolScope : Symbol(SymbolScope)
+
+        public scopeStartAST: AST = null;
+>scopeStartAST : Symbol(EnclosingScopeContext.scopeStartAST, Decl(parserRealSource6.ts, 26, 66))
+>AST : Symbol(AST)
+
+        public skipNextFuncDeclForClass = false;
+>skipNextFuncDeclForClass : Symbol(EnclosingScopeContext.skipNextFuncDeclForClass, Decl(parserRealSource6.ts, 27, 41))
+
+        public deepestModuleDecl: ModuleDeclaration = null;
+>deepestModuleDecl : Symbol(EnclosingScopeContext.deepestModuleDecl, Decl(parserRealSource6.ts, 28, 48))
+>ModuleDeclaration : Symbol(ModuleDeclaration)
+
+        public enclosingClassDecl: TypeDeclaration = null;
+>enclosingClassDecl : Symbol(EnclosingScopeContext.enclosingClassDecl, Decl(parserRealSource6.ts, 29, 59))
+>TypeDeclaration : Symbol(TypeDeclaration)
+
+        public enclosingObjectLit: UnaryExpression = null;
+>enclosingObjectLit : Symbol(EnclosingScopeContext.enclosingObjectLit, Decl(parserRealSource6.ts, 30, 58))
+>UnaryExpression : Symbol(UnaryExpression)
+
+        public publicsOnly = true;
+>publicsOnly : Symbol(EnclosingScopeContext.publicsOnly, Decl(parserRealSource6.ts, 31, 58))
+
+        public useFullAst = false;
+>useFullAst : Symbol(EnclosingScopeContext.useFullAst, Decl(parserRealSource6.ts, 32, 34))
+
+        private scriptFragment: Script;
+>scriptFragment : Symbol(EnclosingScopeContext.scriptFragment, Decl(parserRealSource6.ts, 33, 34))
+>Script : Symbol(Script)
+
+        constructor (public logger: ILogger,
+>logger : Symbol(EnclosingScopeContext.logger, Decl(parserRealSource6.ts, 36, 21))
+>ILogger : Symbol(ILogger)
+
+                    public script: Script,
+>script : Symbol(EnclosingScopeContext.script, Decl(parserRealSource6.ts, 36, 44))
+>Script : Symbol(Script)
+
+                    public text: ISourceText,
+>text : Symbol(EnclosingScopeContext.text, Decl(parserRealSource6.ts, 37, 42))
+>ISourceText : Symbol(ISourceText)
+
+                    public pos: number,
+>pos : Symbol(EnclosingScopeContext.pos, Decl(parserRealSource6.ts, 38, 45))
+
+                    public isMemberCompletion: boolean) {
+>isMemberCompletion : Symbol(EnclosingScopeContext.isMemberCompletion, Decl(parserRealSource6.ts, 39, 39))
+        }
+
+        public getScope(): SymbolScope {
+>getScope : Symbol(EnclosingScopeContext.getScope, Decl(parserRealSource6.ts, 41, 9))
+>SymbolScope : Symbol(SymbolScope)
+
+            return this.scopeGetter();
+>this.scopeGetter : Symbol(EnclosingScopeContext.scopeGetter, Decl(parserRealSource6.ts, 23, 40))
+>this : Symbol(EnclosingScopeContext, Decl(parserRealSource6.ts, 21, 5))
+>scopeGetter : Symbol(EnclosingScopeContext.scopeGetter, Decl(parserRealSource6.ts, 23, 40))
+        }
+
+        public getObjectLiteralScope(): SymbolScope {
+>getObjectLiteralScope : Symbol(EnclosingScopeContext.getObjectLiteralScope, Decl(parserRealSource6.ts, 45, 9))
+>SymbolScope : Symbol(SymbolScope)
+
+            return this.objectLiteralScopeGetter();
+>this.objectLiteralScopeGetter : Symbol(EnclosingScopeContext.objectLiteralScopeGetter, Decl(parserRealSource6.ts, 25, 53))
+>this : Symbol(EnclosingScopeContext, Decl(parserRealSource6.ts, 21, 5))
+>objectLiteralScopeGetter : Symbol(EnclosingScopeContext.objectLiteralScopeGetter, Decl(parserRealSource6.ts, 25, 53))
+        }
+
+        public getScopeAST() {
+>getScopeAST : Symbol(EnclosingScopeContext.getScopeAST, Decl(parserRealSource6.ts, 49, 9))
+
+            return this.scopeStartAST;
+>this.scopeStartAST : Symbol(EnclosingScopeContext.scopeStartAST, Decl(parserRealSource6.ts, 26, 66))
+>this : Symbol(EnclosingScopeContext, Decl(parserRealSource6.ts, 21, 5))
+>scopeStartAST : Symbol(EnclosingScopeContext.scopeStartAST, Decl(parserRealSource6.ts, 26, 66))
+        }
+
+        public getScopePosition() {
+>getScopePosition : Symbol(EnclosingScopeContext.getScopePosition, Decl(parserRealSource6.ts, 53, 9))
+
+            return this.scopeStartAST.minChar;
+>this.scopeStartAST : Symbol(EnclosingScopeContext.scopeStartAST, Decl(parserRealSource6.ts, 26, 66))
+>this : Symbol(EnclosingScopeContext, Decl(parserRealSource6.ts, 21, 5))
+>scopeStartAST : Symbol(EnclosingScopeContext.scopeStartAST, Decl(parserRealSource6.ts, 26, 66))
+        }
+
+        public getScriptFragmentStartAST(): AST {
+>getScriptFragmentStartAST : Symbol(EnclosingScopeContext.getScriptFragmentStartAST, Decl(parserRealSource6.ts, 57, 9))
+>AST : Symbol(AST)
+
+            return this.scopeStartAST;
+>this.scopeStartAST : Symbol(EnclosingScopeContext.scopeStartAST, Decl(parserRealSource6.ts, 26, 66))
+>this : Symbol(EnclosingScopeContext, Decl(parserRealSource6.ts, 21, 5))
+>scopeStartAST : Symbol(EnclosingScopeContext.scopeStartAST, Decl(parserRealSource6.ts, 26, 66))
+        }
+
+        public getScriptFragmentPosition(): number {
+>getScriptFragmentPosition : Symbol(EnclosingScopeContext.getScriptFragmentPosition, Decl(parserRealSource6.ts, 61, 9))
+
+            return this.getScriptFragmentStartAST().minChar;
+>this.getScriptFragmentStartAST : Symbol(EnclosingScopeContext.getScriptFragmentStartAST, Decl(parserRealSource6.ts, 57, 9))
+>this : Symbol(EnclosingScopeContext, Decl(parserRealSource6.ts, 21, 5))
+>getScriptFragmentStartAST : Symbol(EnclosingScopeContext.getScriptFragmentStartAST, Decl(parserRealSource6.ts, 57, 9))
+        }
+
+        public getScriptFragment(): Script {
+>getScriptFragment : Symbol(EnclosingScopeContext.getScriptFragment, Decl(parserRealSource6.ts, 65, 9))
+>Script : Symbol(Script)
+
+            if (this.scriptFragment == null) {
+>this.scriptFragment : Symbol(EnclosingScopeContext.scriptFragment, Decl(parserRealSource6.ts, 33, 34))
+>this : Symbol(EnclosingScopeContext, Decl(parserRealSource6.ts, 21, 5))
+>scriptFragment : Symbol(EnclosingScopeContext.scriptFragment, Decl(parserRealSource6.ts, 33, 34))
+
+                var ast = this.getScriptFragmentStartAST();
+>ast : Symbol(ast, Decl(parserRealSource6.ts, 69, 19))
+>this.getScriptFragmentStartAST : Symbol(EnclosingScopeContext.getScriptFragmentStartAST, Decl(parserRealSource6.ts, 57, 9))
+>this : Symbol(EnclosingScopeContext, Decl(parserRealSource6.ts, 21, 5))
+>getScriptFragmentStartAST : Symbol(EnclosingScopeContext.getScriptFragmentStartAST, Decl(parserRealSource6.ts, 57, 9))
+
+                var minChar = ast.minChar;
+>minChar : Symbol(minChar, Decl(parserRealSource6.ts, 70, 19))
+>ast : Symbol(ast, Decl(parserRealSource6.ts, 69, 19))
+
+                var limChar = (this.isMemberCompletion ? this.pos : this.pos + 1);
+>limChar : Symbol(limChar, Decl(parserRealSource6.ts, 71, 19))
+>this.isMemberCompletion : Symbol(EnclosingScopeContext.isMemberCompletion, Decl(parserRealSource6.ts, 39, 39))
+>this : Symbol(EnclosingScopeContext, Decl(parserRealSource6.ts, 21, 5))
+>isMemberCompletion : Symbol(EnclosingScopeContext.isMemberCompletion, Decl(parserRealSource6.ts, 39, 39))
+>this.pos : Symbol(EnclosingScopeContext.pos, Decl(parserRealSource6.ts, 38, 45))
+>this : Symbol(EnclosingScopeContext, Decl(parserRealSource6.ts, 21, 5))
+>pos : Symbol(EnclosingScopeContext.pos, Decl(parserRealSource6.ts, 38, 45))
+>this.pos : Symbol(EnclosingScopeContext.pos, Decl(parserRealSource6.ts, 38, 45))
+>this : Symbol(EnclosingScopeContext, Decl(parserRealSource6.ts, 21, 5))
+>pos : Symbol(EnclosingScopeContext.pos, Decl(parserRealSource6.ts, 38, 45))
+
+                this.scriptFragment = TypeScript.quickParse(this.logger, ast, this.text, minChar, limChar, null/*errorCapture*/).Script;
+>this.scriptFragment : Symbol(EnclosingScopeContext.scriptFragment, Decl(parserRealSource6.ts, 33, 34))
+>this : Symbol(EnclosingScopeContext, Decl(parserRealSource6.ts, 21, 5))
+>scriptFragment : Symbol(EnclosingScopeContext.scriptFragment, Decl(parserRealSource6.ts, 33, 34))
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource6.ts, 0, 0))
+>this.logger : Symbol(EnclosingScopeContext.logger, Decl(parserRealSource6.ts, 36, 21))
+>this : Symbol(EnclosingScopeContext, Decl(parserRealSource6.ts, 21, 5))
+>logger : Symbol(EnclosingScopeContext.logger, Decl(parserRealSource6.ts, 36, 21))
+>ast : Symbol(ast, Decl(parserRealSource6.ts, 69, 19))
+>this.text : Symbol(EnclosingScopeContext.text, Decl(parserRealSource6.ts, 37, 42))
+>this : Symbol(EnclosingScopeContext, Decl(parserRealSource6.ts, 21, 5))
+>text : Symbol(EnclosingScopeContext.text, Decl(parserRealSource6.ts, 37, 42))
+>minChar : Symbol(minChar, Decl(parserRealSource6.ts, 70, 19))
+>limChar : Symbol(limChar, Decl(parserRealSource6.ts, 71, 19))
+            }
+            return this.scriptFragment;
+>this.scriptFragment : Symbol(EnclosingScopeContext.scriptFragment, Decl(parserRealSource6.ts, 33, 34))
+>this : Symbol(EnclosingScopeContext, Decl(parserRealSource6.ts, 21, 5))
+>scriptFragment : Symbol(EnclosingScopeContext.scriptFragment, Decl(parserRealSource6.ts, 33, 34))
+        }
+    }
+
+    export function preFindMemberScope(ast: AST, parent: AST, walker: IAstWalker) {
+>preFindMemberScope : Symbol(preFindMemberScope, Decl(parserRealSource6.ts, 76, 5))
+>ast : Symbol(ast, Decl(parserRealSource6.ts, 78, 39))
+>AST : Symbol(AST)
+>parent : Symbol(parent, Decl(parserRealSource6.ts, 78, 48))
+>AST : Symbol(AST)
+>walker : Symbol(walker, Decl(parserRealSource6.ts, 78, 61))
+>IAstWalker : Symbol(IAstWalker)
+
+        var memScope: MemberScopeContext = walker.state;
+>memScope : Symbol(memScope, Decl(parserRealSource6.ts, 79, 11))
+>MemberScopeContext : Symbol(MemberScopeContext, Decl(parserRealSource6.ts, 11, 5))
+>walker : Symbol(walker, Decl(parserRealSource6.ts, 78, 61))
+
+        if (hasFlag(ast.flags, memScope.matchFlag) && ((memScope.pos < 0) || (memScope.pos == ast.limChar))) {
+>ast : Symbol(ast, Decl(parserRealSource6.ts, 78, 39))
+>memScope.matchFlag : Symbol(MemberScopeContext.matchFlag, Decl(parserRealSource6.ts, 19, 63))
+>memScope : Symbol(memScope, Decl(parserRealSource6.ts, 79, 11))
+>matchFlag : Symbol(MemberScopeContext.matchFlag, Decl(parserRealSource6.ts, 19, 63))
+>memScope.pos : Symbol(MemberScopeContext.pos, Decl(parserRealSource6.ts, 19, 43))
+>memScope : Symbol(memScope, Decl(parserRealSource6.ts, 79, 11))
+>pos : Symbol(MemberScopeContext.pos, Decl(parserRealSource6.ts, 19, 43))
+>memScope.pos : Symbol(MemberScopeContext.pos, Decl(parserRealSource6.ts, 19, 43))
+>memScope : Symbol(memScope, Decl(parserRealSource6.ts, 79, 11))
+>pos : Symbol(MemberScopeContext.pos, Decl(parserRealSource6.ts, 19, 43))
+>ast : Symbol(ast, Decl(parserRealSource6.ts, 78, 39))
+
+            memScope.ast = ast;
+>memScope.ast : Symbol(MemberScopeContext.ast, Decl(parserRealSource6.ts, 14, 33))
+>memScope : Symbol(memScope, Decl(parserRealSource6.ts, 79, 11))
+>ast : Symbol(MemberScopeContext.ast, Decl(parserRealSource6.ts, 14, 33))
+>ast : Symbol(ast, Decl(parserRealSource6.ts, 78, 39))
+
+            if ((ast.type == null) && (memScope.pos >= 0)) {
+>ast : Symbol(ast, Decl(parserRealSource6.ts, 78, 39))
+>memScope.pos : Symbol(MemberScopeContext.pos, Decl(parserRealSource6.ts, 19, 43))
+>memScope : Symbol(memScope, Decl(parserRealSource6.ts, 79, 11))
+>pos : Symbol(MemberScopeContext.pos, Decl(parserRealSource6.ts, 19, 43))
+
+                memScope.flow.inScopeTypeCheck(ast, memScope.scope);
+>memScope.flow : Symbol(MemberScopeContext.flow, Decl(parserRealSource6.ts, 19, 21))
+>memScope : Symbol(memScope, Decl(parserRealSource6.ts, 79, 11))
+>flow : Symbol(MemberScopeContext.flow, Decl(parserRealSource6.ts, 19, 21))
+>ast : Symbol(ast, Decl(parserRealSource6.ts, 78, 39))
+>memScope.scope : Symbol(MemberScopeContext.scope, Decl(parserRealSource6.ts, 15, 31))
+>memScope : Symbol(memScope, Decl(parserRealSource6.ts, 79, 11))
+>scope : Symbol(MemberScopeContext.scope, Decl(parserRealSource6.ts, 15, 31))
+            }
+            memScope.type = ast.type;
+>memScope.type : Symbol(MemberScopeContext.type, Decl(parserRealSource6.ts, 13, 37))
+>memScope : Symbol(memScope, Decl(parserRealSource6.ts, 79, 11))
+>type : Symbol(MemberScopeContext.type, Decl(parserRealSource6.ts, 13, 37))
+>ast : Symbol(ast, Decl(parserRealSource6.ts, 78, 39))
+
+            memScope.options.stopWalk();
+>memScope.options : Symbol(MemberScopeContext.options, Decl(parserRealSource6.ts, 16, 34))
+>memScope : Symbol(memScope, Decl(parserRealSource6.ts, 79, 11))
+>options : Symbol(MemberScopeContext.options, Decl(parserRealSource6.ts, 16, 34))
+        }
+        return ast;
+>ast : Symbol(ast, Decl(parserRealSource6.ts, 78, 39))
+    }
+
+    export function pushTypeCollectionScope(container: Symbol,
+>pushTypeCollectionScope : Symbol(pushTypeCollectionScope, Decl(parserRealSource6.ts, 89, 5))
+>container : Symbol(container, Decl(parserRealSource6.ts, 91, 44))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --))
+
+        valueMembers: ScopedMembers,
+>valueMembers : Symbol(valueMembers, Decl(parserRealSource6.ts, 91, 62))
+>ScopedMembers : Symbol(ScopedMembers)
+
+        ambientValueMembers: ScopedMembers,
+>ambientValueMembers : Symbol(ambientValueMembers, Decl(parserRealSource6.ts, 92, 36))
+>ScopedMembers : Symbol(ScopedMembers)
+
+        enclosedTypes: ScopedMembers,
+>enclosedTypes : Symbol(enclosedTypes, Decl(parserRealSource6.ts, 93, 43))
+>ScopedMembers : Symbol(ScopedMembers)
+
+        ambientEnclosedTypes: ScopedMembers,
+>ambientEnclosedTypes : Symbol(ambientEnclosedTypes, Decl(parserRealSource6.ts, 94, 37))
+>ScopedMembers : Symbol(ScopedMembers)
+
+        context: TypeCollectionContext,
+>context : Symbol(context, Decl(parserRealSource6.ts, 95, 44))
+>TypeCollectionContext : Symbol(TypeCollectionContext, Decl(parserRealSource6.ts, 5, 19))
+
+        thisType: Type,
+>thisType : Symbol(thisType, Decl(parserRealSource6.ts, 96, 39))
+>Type : Symbol(Type)
+
+        classType: Type,
+>classType : Symbol(classType, Decl(parserRealSource6.ts, 97, 23))
+>Type : Symbol(Type)
+
+        moduleDecl: ModuleDeclaration) {
+>moduleDecl : Symbol(moduleDecl, Decl(parserRealSource6.ts, 98, 24))
+>ModuleDeclaration : Symbol(ModuleDeclaration)
+
+        var builder = new SymbolScopeBuilder(valueMembers, ambientValueMembers, enclosedTypes, ambientEnclosedTypes, null, container);
+>builder : Symbol(builder, Decl(parserRealSource6.ts, 100, 11))
+>valueMembers : Symbol(valueMembers, Decl(parserRealSource6.ts, 91, 62))
+>ambientValueMembers : Symbol(ambientValueMembers, Decl(parserRealSource6.ts, 92, 36))
+>enclosedTypes : Symbol(enclosedTypes, Decl(parserRealSource6.ts, 93, 43))
+>ambientEnclosedTypes : Symbol(ambientEnclosedTypes, Decl(parserRealSource6.ts, 94, 37))
+>container : Symbol(container, Decl(parserRealSource6.ts, 91, 44))
+
+        var chain: ScopeChain = new ScopeChain(container, context.scopeChain, builder);
+>chain : Symbol(chain, Decl(parserRealSource6.ts, 101, 11))
+>ScopeChain : Symbol(ScopeChain)
+>container : Symbol(container, Decl(parserRealSource6.ts, 91, 44))
+>context.scopeChain : Symbol(TypeCollectionContext.scopeChain, Decl(parserRealSource6.ts, 9, 21))
+>context : Symbol(context, Decl(parserRealSource6.ts, 95, 44))
+>scopeChain : Symbol(TypeCollectionContext.scopeChain, Decl(parserRealSource6.ts, 9, 21))
+>builder : Symbol(builder, Decl(parserRealSource6.ts, 100, 11))
+
+        chain.thisType = thisType;
+>chain : Symbol(chain, Decl(parserRealSource6.ts, 101, 11))
+>thisType : Symbol(thisType, Decl(parserRealSource6.ts, 96, 39))
+
+        chain.classType = classType;
+>chain : Symbol(chain, Decl(parserRealSource6.ts, 101, 11))
+>classType : Symbol(classType, Decl(parserRealSource6.ts, 97, 23))
+
+        chain.moduleDecl = moduleDecl;
+>chain : Symbol(chain, Decl(parserRealSource6.ts, 101, 11))
+>moduleDecl : Symbol(moduleDecl, Decl(parserRealSource6.ts, 98, 24))
+
+        context.scopeChain = chain;
+>context.scopeChain : Symbol(TypeCollectionContext.scopeChain, Decl(parserRealSource6.ts, 9, 21))
+>context : Symbol(context, Decl(parserRealSource6.ts, 95, 44))
+>scopeChain : Symbol(TypeCollectionContext.scopeChain, Decl(parserRealSource6.ts, 9, 21))
+>chain : Symbol(chain, Decl(parserRealSource6.ts, 101, 11))
+    }
+
+    export function popTypeCollectionScope(context: TypeCollectionContext) {
+>popTypeCollectionScope : Symbol(popTypeCollectionScope, Decl(parserRealSource6.ts, 106, 5))
+>context : Symbol(context, Decl(parserRealSource6.ts, 108, 43))
+>TypeCollectionContext : Symbol(TypeCollectionContext, Decl(parserRealSource6.ts, 5, 19))
+
+        context.scopeChain = context.scopeChain.previous;
+>context.scopeChain : Symbol(TypeCollectionContext.scopeChain, Decl(parserRealSource6.ts, 9, 21))
+>context : Symbol(context, Decl(parserRealSource6.ts, 108, 43))
+>scopeChain : Symbol(TypeCollectionContext.scopeChain, Decl(parserRealSource6.ts, 9, 21))
+>context.scopeChain : Symbol(TypeCollectionContext.scopeChain, Decl(parserRealSource6.ts, 9, 21))
+>context : Symbol(context, Decl(parserRealSource6.ts, 108, 43))
+>scopeChain : Symbol(TypeCollectionContext.scopeChain, Decl(parserRealSource6.ts, 9, 21))
+    }
+
+    export function preFindEnclosingScope(ast: AST, parent: AST, walker: IAstWalker) {
+>preFindEnclosingScope : Symbol(preFindEnclosingScope, Decl(parserRealSource6.ts, 110, 5))
+>ast : Symbol(ast, Decl(parserRealSource6.ts, 112, 42))
+>AST : Symbol(AST)
+>parent : Symbol(parent, Decl(parserRealSource6.ts, 112, 51))
+>AST : Symbol(AST)
+>walker : Symbol(walker, Decl(parserRealSource6.ts, 112, 64))
+>IAstWalker : Symbol(IAstWalker)
+
+        var context: EnclosingScopeContext = walker.state;
+>context : Symbol(context, Decl(parserRealSource6.ts, 113, 11))
+>EnclosingScopeContext : Symbol(EnclosingScopeContext, Decl(parserRealSource6.ts, 21, 5))
+>walker : Symbol(walker, Decl(parserRealSource6.ts, 112, 64))
+
+        var minChar = ast.minChar;
+>minChar : Symbol(minChar, Decl(parserRealSource6.ts, 114, 11))
+>ast : Symbol(ast, Decl(parserRealSource6.ts, 112, 42))
+
+        var limChar = ast.limChar;
+>limChar : Symbol(limChar, Decl(parserRealSource6.ts, 115, 11))
+>ast : Symbol(ast, Decl(parserRealSource6.ts, 112, 42))
+
+        // Account for the fact completion list may be called at the end of a file which
+        // is has not been fully re-parsed yet.
+        if (ast.nodeType == NodeType.Script && context.pos > limChar)
+>ast : Symbol(ast, Decl(parserRealSource6.ts, 112, 42))
+>context.pos : Symbol(EnclosingScopeContext.pos, Decl(parserRealSource6.ts, 38, 45))
+>context : Symbol(context, Decl(parserRealSource6.ts, 113, 11))
+>pos : Symbol(EnclosingScopeContext.pos, Decl(parserRealSource6.ts, 38, 45))
+>limChar : Symbol(limChar, Decl(parserRealSource6.ts, 115, 11))
+
+            limChar = context.pos;
+>limChar : Symbol(limChar, Decl(parserRealSource6.ts, 115, 11))
+>context.pos : Symbol(EnclosingScopeContext.pos, Decl(parserRealSource6.ts, 38, 45))
+>context : Symbol(context, Decl(parserRealSource6.ts, 113, 11))
+>pos : Symbol(EnclosingScopeContext.pos, Decl(parserRealSource6.ts, 38, 45))
+
+        if ((minChar <= context.pos) &&
+>minChar : Symbol(minChar, Decl(parserRealSource6.ts, 114, 11))
+>context.pos : Symbol(EnclosingScopeContext.pos, Decl(parserRealSource6.ts, 38, 45))
+>context : Symbol(context, Decl(parserRealSource6.ts, 113, 11))
+>pos : Symbol(EnclosingScopeContext.pos, Decl(parserRealSource6.ts, 38, 45))
+
+            (limChar >= context.pos)) {
+>limChar : Symbol(limChar, Decl(parserRealSource6.ts, 115, 11))
+>context.pos : Symbol(EnclosingScopeContext.pos, Decl(parserRealSource6.ts, 38, 45))
+>context : Symbol(context, Decl(parserRealSource6.ts, 113, 11))
+>pos : Symbol(EnclosingScopeContext.pos, Decl(parserRealSource6.ts, 38, 45))
+
+            switch (ast.nodeType) {
+>ast : Symbol(ast, Decl(parserRealSource6.ts, 112, 42))
+
+                case NodeType.Script:
+                    var script = <Script>ast;
+>script : Symbol(script, Decl(parserRealSource6.ts, 126, 23))
+>Script : Symbol(Script)
+>ast : Symbol(ast, Decl(parserRealSource6.ts, 112, 42))
+
+                    context.scopeGetter = function () {
+>context.scopeGetter : Symbol(EnclosingScopeContext.scopeGetter, Decl(parserRealSource6.ts, 23, 40))
+>context : Symbol(context, Decl(parserRealSource6.ts, 113, 11))
+>scopeGetter : Symbol(EnclosingScopeContext.scopeGetter, Decl(parserRealSource6.ts, 23, 40))
+
+                        return script.bod === null ? null : script.bod.enclosingScope;
+>script : Symbol(script, Decl(parserRealSource6.ts, 126, 23))
+>script : Symbol(script, Decl(parserRealSource6.ts, 126, 23))
+
+                    };
+                    context.scopeStartAST = script;
+>context.scopeStartAST : Symbol(EnclosingScopeContext.scopeStartAST, Decl(parserRealSource6.ts, 26, 66))
+>context : Symbol(context, Decl(parserRealSource6.ts, 113, 11))
+>scopeStartAST : Symbol(EnclosingScopeContext.scopeStartAST, Decl(parserRealSource6.ts, 26, 66))
+>script : Symbol(script, Decl(parserRealSource6.ts, 126, 23))
+
+                    break;
+
+                case NodeType.ClassDeclaration:
+                    context.scopeGetter = function () {
+>context.scopeGetter : Symbol(EnclosingScopeContext.scopeGetter, Decl(parserRealSource6.ts, 23, 40))
+>context : Symbol(context, Decl(parserRealSource6.ts, 113, 11))
+>scopeGetter : Symbol(EnclosingScopeContext.scopeGetter, Decl(parserRealSource6.ts, 23, 40))
+
+                        return (ast.type === null || ast.type.instanceType.containedScope === null) ? null : ast.type.instanceType.containedScope;
+>ast : Symbol(ast, Decl(parserRealSource6.ts, 112, 42))
+>ast : Symbol(ast, Decl(parserRealSource6.ts, 112, 42))
+>ast : Symbol(ast, Decl(parserRealSource6.ts, 112, 42))
+
+                    };
+                    context.scopeStartAST = ast;
+>context.scopeStartAST : Symbol(EnclosingScopeContext.scopeStartAST, Decl(parserRealSource6.ts, 26, 66))
+>context : Symbol(context, Decl(parserRealSource6.ts, 113, 11))
+>scopeStartAST : Symbol(EnclosingScopeContext.scopeStartAST, Decl(parserRealSource6.ts, 26, 66))
+>ast : Symbol(ast, Decl(parserRealSource6.ts, 112, 42))
+
+                    context.enclosingClassDecl = <TypeDeclaration>ast;
+>context.enclosingClassDecl : Symbol(EnclosingScopeContext.enclosingClassDecl, Decl(parserRealSource6.ts, 29, 59))
+>context : Symbol(context, Decl(parserRealSource6.ts, 113, 11))
+>enclosingClassDecl : Symbol(EnclosingScopeContext.enclosingClassDecl, Decl(parserRealSource6.ts, 29, 59))
+>TypeDeclaration : Symbol(TypeDeclaration)
+>ast : Symbol(ast, Decl(parserRealSource6.ts, 112, 42))
+
+                    break;
+
+                case NodeType.ObjectLit:
+                    var objectLit = <UnaryExpression>ast;
+>objectLit : Symbol(objectLit, Decl(parserRealSource6.ts, 142, 23))
+>UnaryExpression : Symbol(UnaryExpression)
+>ast : Symbol(ast, Decl(parserRealSource6.ts, 112, 42))
+
+                    // Only consider target-typed object literals
+                    if (objectLit.targetType) {
+>objectLit : Symbol(objectLit, Decl(parserRealSource6.ts, 142, 23))
+
+                        context.scopeGetter = function () {
+>context.scopeGetter : Symbol(EnclosingScopeContext.scopeGetter, Decl(parserRealSource6.ts, 23, 40))
+>context : Symbol(context, Decl(parserRealSource6.ts, 113, 11))
+>scopeGetter : Symbol(EnclosingScopeContext.scopeGetter, Decl(parserRealSource6.ts, 23, 40))
+
+                            return objectLit.targetType.containedScope;
+>objectLit : Symbol(objectLit, Decl(parserRealSource6.ts, 142, 23))
+
+                        };
+                        context.objectLiteralScopeGetter = function () {
+>context.objectLiteralScopeGetter : Symbol(EnclosingScopeContext.objectLiteralScopeGetter, Decl(parserRealSource6.ts, 25, 53))
+>context : Symbol(context, Decl(parserRealSource6.ts, 113, 11))
+>objectLiteralScopeGetter : Symbol(EnclosingScopeContext.objectLiteralScopeGetter, Decl(parserRealSource6.ts, 25, 53))
+
+                            return objectLit.targetType.memberScope;
+>objectLit : Symbol(objectLit, Decl(parserRealSource6.ts, 142, 23))
+                        }
+                        context.enclosingObjectLit = objectLit;
+>context.enclosingObjectLit : Symbol(EnclosingScopeContext.enclosingObjectLit, Decl(parserRealSource6.ts, 30, 58))
+>context : Symbol(context, Decl(parserRealSource6.ts, 113, 11))
+>enclosingObjectLit : Symbol(EnclosingScopeContext.enclosingObjectLit, Decl(parserRealSource6.ts, 30, 58))
+>objectLit : Symbol(objectLit, Decl(parserRealSource6.ts, 142, 23))
+                    }
+                    break;
+
+                case NodeType.ModuleDeclaration:
+                    context.deepestModuleDecl = <ModuleDeclaration>ast;
+>context.deepestModuleDecl : Symbol(EnclosingScopeContext.deepestModuleDecl, Decl(parserRealSource6.ts, 28, 48))
+>context : Symbol(context, Decl(parserRealSource6.ts, 113, 11))
+>deepestModuleDecl : Symbol(EnclosingScopeContext.deepestModuleDecl, Decl(parserRealSource6.ts, 28, 48))
+>ModuleDeclaration : Symbol(ModuleDeclaration)
+>ast : Symbol(ast, Decl(parserRealSource6.ts, 112, 42))
+
+                    context.scopeGetter = function () {
+>context.scopeGetter : Symbol(EnclosingScopeContext.scopeGetter, Decl(parserRealSource6.ts, 23, 40))
+>context : Symbol(context, Decl(parserRealSource6.ts, 113, 11))
+>scopeGetter : Symbol(EnclosingScopeContext.scopeGetter, Decl(parserRealSource6.ts, 23, 40))
+
+                        return ast.type === null ? null : ast.type.containedScope;
+>ast : Symbol(ast, Decl(parserRealSource6.ts, 112, 42))
+>ast : Symbol(ast, Decl(parserRealSource6.ts, 112, 42))
+
+                    };
+                    context.scopeStartAST = ast;
+>context.scopeStartAST : Symbol(EnclosingScopeContext.scopeStartAST, Decl(parserRealSource6.ts, 26, 66))
+>context : Symbol(context, Decl(parserRealSource6.ts, 113, 11))
+>scopeStartAST : Symbol(EnclosingScopeContext.scopeStartAST, Decl(parserRealSource6.ts, 26, 66))
+>ast : Symbol(ast, Decl(parserRealSource6.ts, 112, 42))
+
+                    break;
+
+                case NodeType.InterfaceDeclaration:
+                    context.scopeGetter = function () {
+>context.scopeGetter : Symbol(EnclosingScopeContext.scopeGetter, Decl(parserRealSource6.ts, 23, 40))
+>context : Symbol(context, Decl(parserRealSource6.ts, 113, 11))
+>scopeGetter : Symbol(EnclosingScopeContext.scopeGetter, Decl(parserRealSource6.ts, 23, 40))
+
+                        return (ast.type === null) ? null : ast.type.containedScope;
+>ast : Symbol(ast, Decl(parserRealSource6.ts, 112, 42))
+>ast : Symbol(ast, Decl(parserRealSource6.ts, 112, 42))
+
+                    };
+                    context.scopeStartAST = ast;
+>context.scopeStartAST : Symbol(EnclosingScopeContext.scopeStartAST, Decl(parserRealSource6.ts, 26, 66))
+>context : Symbol(context, Decl(parserRealSource6.ts, 113, 11))
+>scopeStartAST : Symbol(EnclosingScopeContext.scopeStartAST, Decl(parserRealSource6.ts, 26, 66))
+>ast : Symbol(ast, Decl(parserRealSource6.ts, 112, 42))
+
+                    break;
+
+                case NodeType.FuncDecl: {
+                    var funcDecl = <FuncDecl>ast;
+>funcDecl : Symbol(funcDecl, Decl(parserRealSource6.ts, 171, 23))
+>FuncDecl : Symbol(FuncDecl)
+>ast : Symbol(ast, Decl(parserRealSource6.ts, 112, 42))
+
+                    if (context.skipNextFuncDeclForClass) {
+>context.skipNextFuncDeclForClass : Symbol(EnclosingScopeContext.skipNextFuncDeclForClass, Decl(parserRealSource6.ts, 27, 41))
+>context : Symbol(context, Decl(parserRealSource6.ts, 113, 11))
+>skipNextFuncDeclForClass : Symbol(EnclosingScopeContext.skipNextFuncDeclForClass, Decl(parserRealSource6.ts, 27, 41))
+
+                        context.skipNextFuncDeclForClass = false;
+>context.skipNextFuncDeclForClass : Symbol(EnclosingScopeContext.skipNextFuncDeclForClass, Decl(parserRealSource6.ts, 27, 41))
+>context : Symbol(context, Decl(parserRealSource6.ts, 113, 11))
+>skipNextFuncDeclForClass : Symbol(EnclosingScopeContext.skipNextFuncDeclForClass, Decl(parserRealSource6.ts, 27, 41))
+                    }
+                    else {
+                        context.scopeGetter = function () {
+>context.scopeGetter : Symbol(EnclosingScopeContext.scopeGetter, Decl(parserRealSource6.ts, 23, 40))
+>context : Symbol(context, Decl(parserRealSource6.ts, 113, 11))
+>scopeGetter : Symbol(EnclosingScopeContext.scopeGetter, Decl(parserRealSource6.ts, 23, 40))
+
+                            // The scope of a class constructor is hidden somewhere we don't expect :-S
+                            if (funcDecl.isConstructor && hasFlag(funcDecl.fncFlags, FncFlags.ClassMethod)) {
+>funcDecl : Symbol(funcDecl, Decl(parserRealSource6.ts, 171, 23))
+>funcDecl : Symbol(funcDecl, Decl(parserRealSource6.ts, 171, 23))
+
+                                if (ast.type && ast.type.enclosingType) {
+>ast : Symbol(ast, Decl(parserRealSource6.ts, 112, 42))
+>ast : Symbol(ast, Decl(parserRealSource6.ts, 112, 42))
+
+                                    return ast.type.enclosingType.constructorScope;
+>ast : Symbol(ast, Decl(parserRealSource6.ts, 112, 42))
+                                }
+                            }
+
+                            if (funcDecl.scopeType) {
+>funcDecl : Symbol(funcDecl, Decl(parserRealSource6.ts, 171, 23))
+
+                                return funcDecl.scopeType.containedScope;
+>funcDecl : Symbol(funcDecl, Decl(parserRealSource6.ts, 171, 23))
+                            }
+
+                            if (funcDecl.type) {
+>funcDecl : Symbol(funcDecl, Decl(parserRealSource6.ts, 171, 23))
+
+                                return funcDecl.type.containedScope;
+>funcDecl : Symbol(funcDecl, Decl(parserRealSource6.ts, 171, 23))
+                            }
+                            return null;
+                        };
+                        context.scopeStartAST = ast;
+>context.scopeStartAST : Symbol(EnclosingScopeContext.scopeStartAST, Decl(parserRealSource6.ts, 26, 66))
+>context : Symbol(context, Decl(parserRealSource6.ts, 113, 11))
+>scopeStartAST : Symbol(EnclosingScopeContext.scopeStartAST, Decl(parserRealSource6.ts, 26, 66))
+>ast : Symbol(ast, Decl(parserRealSource6.ts, 112, 42))
+                    }
+                }
+                    break;
+            }
+            walker.options.goChildren = true;
+>walker : Symbol(walker, Decl(parserRealSource6.ts, 112, 64))
+        }
+        else {
+            walker.options.goChildren = false;
+>walker : Symbol(walker, Decl(parserRealSource6.ts, 112, 64))
+        }
+        return ast;
+>ast : Symbol(ast, Decl(parserRealSource6.ts, 112, 42))
+    }
+
+    //
+    // Find the enclosing scope context from a position inside a script AST.
+    // The "scopeStartAST" of the returned scope is always valid.
+    // Return "null" if the enclosing scope can't be found.
+    //
+    export function findEnclosingScopeAt(logger: ILogger, script: Script, text: ISourceText, pos: number, isMemberCompletion: boolean): EnclosingScopeContext {
+>findEnclosingScopeAt : Symbol(findEnclosingScopeAt, Decl(parserRealSource6.ts, 204, 5))
+>logger : Symbol(logger, Decl(parserRealSource6.ts, 211, 41))
+>ILogger : Symbol(ILogger)
+>script : Symbol(script, Decl(parserRealSource6.ts, 211, 57))
+>Script : Symbol(Script)
+>text : Symbol(text, Decl(parserRealSource6.ts, 211, 73))
+>ISourceText : Symbol(ISourceText)
+>pos : Symbol(pos, Decl(parserRealSource6.ts, 211, 92))
+>isMemberCompletion : Symbol(isMemberCompletion, Decl(parserRealSource6.ts, 211, 105))
+>EnclosingScopeContext : Symbol(EnclosingScopeContext, Decl(parserRealSource6.ts, 21, 5))
+
+        var context = new EnclosingScopeContext(logger, script, text, pos, isMemberCompletion);
+>context : Symbol(context, Decl(parserRealSource6.ts, 212, 11))
+>EnclosingScopeContext : Symbol(EnclosingScopeContext, Decl(parserRealSource6.ts, 21, 5))
+>logger : Symbol(logger, Decl(parserRealSource6.ts, 211, 41))
+>script : Symbol(script, Decl(parserRealSource6.ts, 211, 57))
+>text : Symbol(text, Decl(parserRealSource6.ts, 211, 73))
+>pos : Symbol(pos, Decl(parserRealSource6.ts, 211, 92))
+>isMemberCompletion : Symbol(isMemberCompletion, Decl(parserRealSource6.ts, 211, 105))
+
+        TypeScript.getAstWalkerFactory().walk(script, preFindEnclosingScope, null, null, context);
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource6.ts, 0, 0))
+>script : Symbol(script, Decl(parserRealSource6.ts, 211, 57))
+>preFindEnclosingScope : Symbol(preFindEnclosingScope, Decl(parserRealSource6.ts, 110, 5))
+>context : Symbol(context, Decl(parserRealSource6.ts, 212, 11))
+
+        if (context.scopeStartAST === null)
+>context.scopeStartAST : Symbol(EnclosingScopeContext.scopeStartAST, Decl(parserRealSource6.ts, 26, 66))
+>context : Symbol(context, Decl(parserRealSource6.ts, 212, 11))
+>scopeStartAST : Symbol(EnclosingScopeContext.scopeStartAST, Decl(parserRealSource6.ts, 26, 66))
+
+            return null;
+        return context;
+>context : Symbol(context, Decl(parserRealSource6.ts, 212, 11))
+    }
+}

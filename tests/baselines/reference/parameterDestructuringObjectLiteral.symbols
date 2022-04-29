@@ -1,0 +1,22 @@
+=== tests/cases/compiler/parameterDestructuringObjectLiteral.ts ===
+// Repro from #22644
+
+const fn1 = (options: { headers?: {} }) => { };
+>fn1 : Symbol(fn1, Decl(parameterDestructuringObjectLiteral.ts, 2, 5))
+>options : Symbol(options, Decl(parameterDestructuringObjectLiteral.ts, 2, 13))
+>headers : Symbol(headers, Decl(parameterDestructuringObjectLiteral.ts, 2, 23))
+
+fn1({ headers: { foo: 1 } });
+>fn1 : Symbol(fn1, Decl(parameterDestructuringObjectLiteral.ts, 2, 5))
+>headers : Symbol(headers, Decl(parameterDestructuringObjectLiteral.ts, 3, 5))
+>foo : Symbol(foo, Decl(parameterDestructuringObjectLiteral.ts, 3, 16))
+
+const fn2 = ({ headers = {} }) => { };
+>fn2 : Symbol(fn2, Decl(parameterDestructuringObjectLiteral.ts, 5, 5))
+>headers : Symbol(headers, Decl(parameterDestructuringObjectLiteral.ts, 5, 14))
+
+fn2({ headers: { foo: 1 } });
+>fn2 : Symbol(fn2, Decl(parameterDestructuringObjectLiteral.ts, 5, 5))
+>headers : Symbol(headers, Decl(parameterDestructuringObjectLiteral.ts, 6, 5))
+>foo : Symbol(foo, Decl(parameterDestructuringObjectLiteral.ts, 6, 16))
+

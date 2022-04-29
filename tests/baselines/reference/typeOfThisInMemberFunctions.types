@@ -1,0 +1,66 @@
+=== tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclarations/typeOfThisInMemberFunctions.ts ===
+class C {
+>C : C
+
+    foo() {
+>foo : () => void
+
+        var r = this;
+>r : this
+>this : this
+    }
+
+    static bar() {
+>bar : () => void
+
+        var r2 = this;
+>r2 : typeof C
+>this : typeof C
+    }
+}
+
+class D<T> {
+>D : D<T>
+
+    x: T;
+>x : T
+
+    foo() {
+>foo : () => void
+
+        var r = this;
+>r : this
+>this : this
+    }
+
+    static bar() {
+>bar : () => void
+
+        var r2 = this;
+>r2 : typeof D
+>this : typeof D
+    }
+}
+
+class E<T extends Date> {
+>E : E<T>
+
+    x: T;
+>x : T
+
+    foo() {
+>foo : () => void
+
+        var r = this;
+>r : this
+>this : this
+    }
+
+    static bar() {
+>bar : () => void
+
+        var r2 = this;
+>r2 : typeof E
+>this : typeof E
+    }
+}

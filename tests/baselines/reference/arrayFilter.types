@@ -1,0 +1,33 @@
+=== tests/cases/compiler/arrayFilter.ts ===
+var foo = [
+>foo : { name: string; }[]
+>[    { name: 'bar' },    { name: null },    { name: 'baz' }] : { name: string; }[]
+
+    { name: 'bar' },
+>{ name: 'bar' } : { name: string; }
+>name : string
+>'bar' : "bar"
+
+    { name: null },
+>{ name: null } : { name: null; }
+>name : null
+>null : null
+
+    { name: 'baz' }
+>{ name: 'baz' } : { name: string; }
+>name : string
+>'baz' : "baz"
+
+]
+
+foo.filter(x => x.name); //should accepted all possible types not only boolean! 
+>foo.filter(x => x.name) : { name: string; }[]
+>foo.filter : { <S extends { name: string; }>(predicate: (value: { name: string; }, index: number, array: { name: string; }[]) => value is S, thisArg?: any): S[]; (predicate: (value: { name: string; }, index: number, array: { name: string; }[]) => unknown, thisArg?: any): { name: string; }[]; }
+>foo : { name: string; }[]
+>filter : { <S extends { name: string; }>(predicate: (value: { name: string; }, index: number, array: { name: string; }[]) => value is S, thisArg?: any): S[]; (predicate: (value: { name: string; }, index: number, array: { name: string; }[]) => unknown, thisArg?: any): { name: string; }[]; }
+>x => x.name : (x: { name: string; }) => string
+>x : { name: string; }
+>x.name : string
+>x : { name: string; }
+>name : string
+

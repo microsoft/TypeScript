@@ -1,0 +1,17 @@
+=== tests/cases/conformance/salsa/a.js ===
+// this is a javascript file...
+
+export const Adapter = {};
+>Adapter : Symbol(Adapter, Decl(a.js, 2, 12), Decl(a.js, 2, 26), Decl(a.js, 4, 18))
+
+Adapter.prop = {};
+>Adapter.prop : Symbol(Adapter.prop, Decl(a.js, 2, 26))
+>Adapter : Symbol(Adapter, Decl(a.js, 2, 12), Decl(a.js, 2, 26), Decl(a.js, 4, 18))
+>prop : Symbol(Adapter.prop, Decl(a.js, 2, 26))
+
+// comment this out, and it works
+Adapter.asyncMethod = function() {}
+>Adapter.asyncMethod : Symbol(Adapter.asyncMethod, Decl(a.js, 4, 18))
+>Adapter : Symbol(Adapter, Decl(a.js, 2, 12), Decl(a.js, 2, 26), Decl(a.js, 4, 18))
+>asyncMethod : Symbol(Adapter.asyncMethod, Decl(a.js, 4, 18))
+

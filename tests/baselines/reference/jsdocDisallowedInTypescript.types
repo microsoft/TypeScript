@@ -1,0 +1,86 @@
+=== tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts ===
+// grammar error from checker
+var ara: Array.<number> = [1,2,3];
+>ara : number[]
+>[1,2,3] : number[]
+>1 : 1
+>2 : 2
+>3 : 3
+
+function f(x: ?number, y: Array.<number>) {
+>f : (x: number | null, y: Array<number>) => number
+>x : number | null
+>y : number[]
+
+    return x ? x + y[1] : y[0];
+>x ? x + y[1] : y[0] : number
+>x : number | null
+>x + y[1] : number
+>x : number
+>y[1] : number
+>y : number[]
+>1 : 1
+>y[0] : number
+>y : number[]
+>0 : 0
+}
+function hof(ctor: function(new: number, string)) {
+>hof : (ctor: new (arg1: string) => number) => number
+>ctor : new (arg1: string) => number
+>new : number
+
+    return new ctor('hi');
+>new ctor('hi') : number
+>ctor : new (arg1: string) => number
+>'hi' : "hi"
+}
+function hof2(f: function(this: number, string): string) {
+>hof2 : (f: (this: number, arg1: string) => string) => string
+>f : (this: number, arg1: string) => string
+>this : number
+
+    return f(12, 'hullo');
+>f(12, 'hullo') : string
+>f : (this: number, arg1: string) => string
+>12 : 12
+>'hullo' : "hullo"
+}
+var whatevs: * = 1001;
+>whatevs : any
+>1001 : 1001
+
+var ques: ? = 'what';
+>ques : any
+>'what' : "what"
+
+var g: function(number, number): number = (n,m) => n + m;
+>g : (arg0: number, arg1: number) => number
+>(n,m) => n + m : (n: number, m: number) => number
+>n : number
+>m : number
+>n + m : number
+>n : number
+>m : number
+
+var most: !string = 'definite';
+>most : string
+>'definite' : "definite"
+
+var postfixdef: number! = 101;
+>postfixdef : number
+>101 : 101
+
+var postfixopt: number? = undefined;
+>postfixopt : number | null
+>undefined : undefined
+
+var nns: Array<?number>;
+>nns : (number | null)[]
+
+var dns: Array<!number>;
+>dns : number[]
+
+var anys: Array<*>;
+>anys : any[]
+
+

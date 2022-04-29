@@ -1,0 +1,53 @@
+tests/cases/conformance/types/nonPrimitive/nonPrimitiveAssignError.ts(5,1): error TS2741: Property 'foo' is missing in type '{}' but required in type '{ foo: string; }'.
+tests/cases/conformance/types/nonPrimitive/nonPrimitiveAssignError.ts(13,1): error TS2322: Type 'number' is not assignable to type 'object'.
+tests/cases/conformance/types/nonPrimitive/nonPrimitiveAssignError.ts(14,1): error TS2322: Type 'boolean' is not assignable to type 'object'.
+tests/cases/conformance/types/nonPrimitive/nonPrimitiveAssignError.ts(15,1): error TS2322: Type 'string' is not assignable to type 'object'.
+tests/cases/conformance/types/nonPrimitive/nonPrimitiveAssignError.ts(17,1): error TS2322: Type 'object' is not assignable to type 'number'.
+tests/cases/conformance/types/nonPrimitive/nonPrimitiveAssignError.ts(18,1): error TS2322: Type 'object' is not assignable to type 'boolean'.
+tests/cases/conformance/types/nonPrimitive/nonPrimitiveAssignError.ts(19,1): error TS2322: Type 'object' is not assignable to type 'string'.
+
+
+==== tests/cases/conformance/types/nonPrimitive/nonPrimitiveAssignError.ts (7 errors) ====
+    var x = {};
+    var y = {foo: "bar"};
+    var a: object;
+    x = a;
+    y = a; // expect error
+    ~
+!!! error TS2741: Property 'foo' is missing in type '{}' but required in type '{ foo: string; }'.
+!!! related TS2728 tests/cases/conformance/types/nonPrimitive/nonPrimitiveAssignError.ts:2:10: 'foo' is declared here.
+    a = x;
+    a = y;
+    
+    var n = 123;
+    var b = true;
+    var s = "fooo";
+    
+    a = n; // expect error
+    ~
+!!! error TS2322: Type 'number' is not assignable to type 'object'.
+    a = b; // expect error
+    ~
+!!! error TS2322: Type 'boolean' is not assignable to type 'object'.
+    a = s; // expect error
+    ~
+!!! error TS2322: Type 'string' is not assignable to type 'object'.
+    
+    n = a; // expect error
+    ~
+!!! error TS2322: Type 'object' is not assignable to type 'number'.
+    b = a; // expect error
+    ~
+!!! error TS2322: Type 'object' is not assignable to type 'boolean'.
+    s = a; // expect error
+    ~
+!!! error TS2322: Type 'object' is not assignable to type 'string'.
+    
+    var numObj: Number = 123;
+    var boolObj: Boolean = true;
+    var strObj: String = "string";
+    
+    a = numObj; // ok
+    a = boolObj; // ok
+    a = strObj; // ok
+    

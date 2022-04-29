@@ -1,0 +1,63 @@
+=== tests/cases/compiler/overloadResolutionOverNonCTLambdas.ts ===
+module Bugs {
+>Bugs : Symbol(Bugs, Decl(overloadResolutionOverNonCTLambdas.ts, 0, 0))
+
+  class A {
+>A : Symbol(A, Decl(overloadResolutionOverNonCTLambdas.ts, 0, 13))
+  }
+  
+  // replace(searchValue: RegExp, replaceValue: (substring: string, ...args: any[]) => string): string;
+  function bug2(message:string, ...args:any[]):string {
+>bug2 : Symbol(bug2, Decl(overloadResolutionOverNonCTLambdas.ts, 2, 3))
+>message : Symbol(message, Decl(overloadResolutionOverNonCTLambdas.ts, 5, 16))
+>args : Symbol(args, Decl(overloadResolutionOverNonCTLambdas.ts, 5, 31))
+
+    var result= message.replace(/\{(\d+)\}/g, function(match, ...rest) {
+>result : Symbol(result, Decl(overloadResolutionOverNonCTLambdas.ts, 6, 7))
+>message.replace : Symbol(String.replace, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>message : Symbol(message, Decl(overloadResolutionOverNonCTLambdas.ts, 5, 16))
+>replace : Symbol(String.replace, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>match : Symbol(match, Decl(overloadResolutionOverNonCTLambdas.ts, 6, 55))
+>rest : Symbol(rest, Decl(overloadResolutionOverNonCTLambdas.ts, 6, 61))
+
+      var index= rest[0];
+>index : Symbol(index, Decl(overloadResolutionOverNonCTLambdas.ts, 7, 9))
+>rest : Symbol(rest, Decl(overloadResolutionOverNonCTLambdas.ts, 6, 61))
+
+      return typeof args[index] !== 'undefined'
+>args : Symbol(args, Decl(overloadResolutionOverNonCTLambdas.ts, 5, 31))
+>index : Symbol(index, Decl(overloadResolutionOverNonCTLambdas.ts, 7, 9))
+
+        ? args[index]
+>args : Symbol(args, Decl(overloadResolutionOverNonCTLambdas.ts, 5, 31))
+>index : Symbol(index, Decl(overloadResolutionOverNonCTLambdas.ts, 7, 9))
+
+        : match;
+>match : Symbol(match, Decl(overloadResolutionOverNonCTLambdas.ts, 6, 55))
+
+    });
+    return result;
+>result : Symbol(result, Decl(overloadResolutionOverNonCTLambdas.ts, 6, 7))
+  }
+}
+
+function bug3(f:(x:string)=>string) { return f("s") }
+>bug3 : Symbol(bug3, Decl(overloadResolutionOverNonCTLambdas.ts, 14, 1))
+>f : Symbol(f, Decl(overloadResolutionOverNonCTLambdas.ts, 16, 14))
+>x : Symbol(x, Decl(overloadResolutionOverNonCTLambdas.ts, 16, 17))
+>f : Symbol(f, Decl(overloadResolutionOverNonCTLambdas.ts, 16, 14))
+
+function fprime(x:string):string { return x; }
+>fprime : Symbol(fprime, Decl(overloadResolutionOverNonCTLambdas.ts, 16, 53))
+>x : Symbol(x, Decl(overloadResolutionOverNonCTLambdas.ts, 18, 16))
+>x : Symbol(x, Decl(overloadResolutionOverNonCTLambdas.ts, 18, 16))
+
+bug3(fprime);
+>bug3 : Symbol(bug3, Decl(overloadResolutionOverNonCTLambdas.ts, 14, 1))
+>fprime : Symbol(fprime, Decl(overloadResolutionOverNonCTLambdas.ts, 16, 53))
+
+bug3(function(x:string):string { return x; });
+>bug3 : Symbol(bug3, Decl(overloadResolutionOverNonCTLambdas.ts, 14, 1))
+>x : Symbol(x, Decl(overloadResolutionOverNonCTLambdas.ts, 22, 14))
+>x : Symbol(x, Decl(overloadResolutionOverNonCTLambdas.ts, 22, 14))
+

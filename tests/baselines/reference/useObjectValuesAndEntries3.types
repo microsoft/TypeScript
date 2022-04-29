@@ -1,0 +1,30 @@
+=== tests/cases/conformance/es2017/useObjectValuesAndEntries3.ts ===
+var o = { a: 1, b: 2 };
+>o : { a: number; b: number; }
+>{ a: 1, b: 2 } : { a: number; b: number; }
+>a : number
+>1 : 1
+>b : number
+>2 : 2
+
+for (var x of Object.values(o)) {
+>x : any
+>Object.values(o) : any
+>Object.values : any
+>Object : ObjectConstructor
+>values : any
+>o : { a: number; b: number; }
+
+    let y = x;
+>y : any
+>x : any
+}
+
+var entries = Object.entries(o);
+>entries : any
+>Object.entries(o) : any
+>Object.entries : any
+>Object : ObjectConstructor
+>entries : any
+>o : { a: number; b: number; }
+

@@ -1,0 +1,70 @@
+tests/cases/conformance/types/objectTypeLiteral/indexSignatures/stringIndexerConstrainsPropertyDeclarations2.ts(15,5): error TS2411: Property 'c' of type 'number' is not assignable to 'string' index type 'A'.
+tests/cases/conformance/types/objectTypeLiteral/indexSignatures/stringIndexerConstrainsPropertyDeclarations2.ts(16,5): error TS2411: Property 'd' of type 'string' is not assignable to 'string' index type 'A'.
+tests/cases/conformance/types/objectTypeLiteral/indexSignatures/stringIndexerConstrainsPropertyDeclarations2.ts(23,5): error TS2411: Property 'c' of type 'number' is not assignable to 'string' index type 'A'.
+tests/cases/conformance/types/objectTypeLiteral/indexSignatures/stringIndexerConstrainsPropertyDeclarations2.ts(24,5): error TS2411: Property 'd' of type 'string' is not assignable to 'string' index type 'A'.
+tests/cases/conformance/types/objectTypeLiteral/indexSignatures/stringIndexerConstrainsPropertyDeclarations2.ts(31,5): error TS2411: Property 'c' of type 'number' is not assignable to 'string' index type 'A'.
+tests/cases/conformance/types/objectTypeLiteral/indexSignatures/stringIndexerConstrainsPropertyDeclarations2.ts(32,5): error TS2411: Property 'd' of type 'string' is not assignable to 'string' index type 'A'.
+tests/cases/conformance/types/objectTypeLiteral/indexSignatures/stringIndexerConstrainsPropertyDeclarations2.ts(37,8): error TS2741: Property 'foo' is missing in type 'typeof A' but required in type 'A'.
+tests/cases/conformance/types/objectTypeLiteral/indexSignatures/stringIndexerConstrainsPropertyDeclarations2.ts(38,8): error TS2741: Property 'foo' is missing in type 'typeof B' but required in type 'A'.
+
+
+==== tests/cases/conformance/types/objectTypeLiteral/indexSignatures/stringIndexerConstrainsPropertyDeclarations2.ts (8 errors) ====
+    // String indexer providing a constraint of a user defined type
+    
+    class A {
+        foo(): string { return ''; }
+    }
+    
+    class B extends A {
+        bar(): string { return ''; }
+    }
+    
+    class Foo {
+        [x: string]: A;
+        a: A; // ok
+        b: B; // ok
+        c: number; // error
+        ~
+!!! error TS2411: Property 'c' of type 'number' is not assignable to 'string' index type 'A'.
+        d: string; // error
+        ~
+!!! error TS2411: Property 'd' of type 'string' is not assignable to 'string' index type 'A'.
+    }
+    
+    interface Foo2 {
+        [x: string]: A;
+        a: A; // ok
+        b: B; // ok
+        c: number; // error
+        ~
+!!! error TS2411: Property 'c' of type 'number' is not assignable to 'string' index type 'A'.
+        d: string; // error
+        ~
+!!! error TS2411: Property 'd' of type 'string' is not assignable to 'string' index type 'A'.
+    }
+    
+    var a: {
+        [x: string]: A;
+        a: A; // ok
+        b: B; // ok
+        c: number; // error
+        ~
+!!! error TS2411: Property 'c' of type 'number' is not assignable to 'string' index type 'A'.
+        d: string; // error
+        ~
+!!! error TS2411: Property 'd' of type 'string' is not assignable to 'string' index type 'A'.
+    };
+    
+    // error
+    var b: { [x: string]: A } = {
+        a: A,
+           ~
+!!! error TS2741: Property 'foo' is missing in type 'typeof A' but required in type 'A'.
+!!! related TS2728 tests/cases/conformance/types/objectTypeLiteral/indexSignatures/stringIndexerConstrainsPropertyDeclarations2.ts:4:5: 'foo' is declared here.
+!!! related TS6213 tests/cases/conformance/types/objectTypeLiteral/indexSignatures/stringIndexerConstrainsPropertyDeclarations2.ts:37:8: Did you mean to use 'new' with this expression?
+        b: B
+           ~
+!!! error TS2741: Property 'foo' is missing in type 'typeof B' but required in type 'A'.
+!!! related TS2728 tests/cases/conformance/types/objectTypeLiteral/indexSignatures/stringIndexerConstrainsPropertyDeclarations2.ts:4:5: 'foo' is declared here.
+!!! related TS6213 tests/cases/conformance/types/objectTypeLiteral/indexSignatures/stringIndexerConstrainsPropertyDeclarations2.ts:38:8: Did you mean to use 'new' with this expression?
+    }

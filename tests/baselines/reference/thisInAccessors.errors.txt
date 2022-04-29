@@ -1,0 +1,51 @@
+tests/cases/compiler/thisInAccessors.ts(3,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/thisInAccessors.ts(7,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/thisInAccessors.ts(13,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/thisInAccessors.ts(16,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/thisInAccessors.ts(23,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/thisInAccessors.ts(27,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+
+
+==== tests/cases/compiler/thisInAccessors.ts (6 errors) ====
+    // this capture only in getter
+    class GetterOnly {
+        get Value() {
+            ~~~~~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+            var fn = () => this;
+            return '';
+        }
+        set Value(val) {
+            ~~~~~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+        }
+    }
+    
+    // this capture only in setter
+    class SetterOnly {
+        get Value() {
+            ~~~~~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+            return '';
+        }
+        set Value(val) {
+            ~~~~~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+            var fn = () => this;
+        }
+    }
+    
+    // this capture only in both setter and getter
+    class GetterAndSetter {
+        get Value() {
+            ~~~~~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+            var fn = () => this;
+            return '';
+        }
+        set Value(val) {
+            ~~~~~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+            var fn = () => this;
+        }
+    }

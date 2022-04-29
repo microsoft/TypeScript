@@ -1,0 +1,35 @@
+=== tests/cases/compiler/nonContextuallyTypedLogicalOr.ts ===
+interface Contextual {
+>Contextual : Symbol(Contextual, Decl(nonContextuallyTypedLogicalOr.ts, 0, 0))
+
+    dummy;
+>dummy : Symbol(Contextual.dummy, Decl(nonContextuallyTypedLogicalOr.ts, 0, 22))
+
+    p?: number;
+>p : Symbol(Contextual.p, Decl(nonContextuallyTypedLogicalOr.ts, 1, 10))
+}
+
+interface Ellement {
+>Ellement : Symbol(Ellement, Decl(nonContextuallyTypedLogicalOr.ts, 3, 1))
+
+    dummy;
+>dummy : Symbol(Ellement.dummy, Decl(nonContextuallyTypedLogicalOr.ts, 5, 20))
+
+    p: any;
+>p : Symbol(Ellement.p, Decl(nonContextuallyTypedLogicalOr.ts, 6, 10))
+}
+
+var c: Contextual;
+>c : Symbol(c, Decl(nonContextuallyTypedLogicalOr.ts, 10, 3))
+>Contextual : Symbol(Contextual, Decl(nonContextuallyTypedLogicalOr.ts, 0, 0))
+
+var e: Ellement;
+>e : Symbol(e, Decl(nonContextuallyTypedLogicalOr.ts, 11, 3))
+>Ellement : Symbol(Ellement, Decl(nonContextuallyTypedLogicalOr.ts, 3, 1))
+
+(c || e).dummy;
+>(c || e).dummy : Symbol(dummy, Decl(nonContextuallyTypedLogicalOr.ts, 0, 22), Decl(nonContextuallyTypedLogicalOr.ts, 5, 20))
+>c : Symbol(c, Decl(nonContextuallyTypedLogicalOr.ts, 10, 3))
+>e : Symbol(e, Decl(nonContextuallyTypedLogicalOr.ts, 11, 3))
+>dummy : Symbol(dummy, Decl(nonContextuallyTypedLogicalOr.ts, 0, 22), Decl(nonContextuallyTypedLogicalOr.ts, 5, 20))
+

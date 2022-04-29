@@ -1,0 +1,1446 @@
+[
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsFunction.ts",
+      "position": 9,
+      "name": "1"
+    },
+    "quickInfo": {
+      "kind": "function",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 9,
+        "length": 3
+      },
+      "displayParts": [
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "foo",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "param",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ",",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "optionalParam",
+          "kind": "parameterName"
+        },
+        {
+          "text": "?",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ",",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "paramWithInitializer",
+          "kind": "parameterName"
+        },
+        {
+          "text": "?",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ",",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "...",
+          "kind": "punctuation"
+        },
+        {
+          "text": "restParam",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": "[",
+          "kind": "punctuation"
+        },
+        {
+          "text": "]",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsFunction.ts",
+      "position": 121,
+      "name": "2"
+    },
+    "quickInfo": {
+      "kind": "function",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 121,
+        "length": 15
+      },
+      "displayParts": [
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "foowithoverload",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "a",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "+",
+          "kind": "operator"
+        },
+        {
+          "text": "1",
+          "kind": "numericLiteral"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "overload",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsFunction.ts",
+      "position": 166,
+      "name": "3"
+    },
+    "quickInfo": {
+      "kind": "function",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 166,
+        "length": 15
+      },
+      "displayParts": [
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "foowithoverload",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "a",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "+",
+          "kind": "operator"
+        },
+        {
+          "text": "1",
+          "kind": "numericLiteral"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "overload",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsFunction.ts",
+      "position": 211,
+      "name": "4"
+    },
+    "quickInfo": {
+      "kind": "function",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 211,
+        "length": 15
+      },
+      "displayParts": [
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "foowithoverload",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "a",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "+",
+          "kind": "operator"
+        },
+        {
+          "text": "1",
+          "kind": "numericLiteral"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "overload",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsFunction.ts",
+      "position": 267,
+      "name": "5"
+    },
+    "quickInfo": {
+      "kind": "function",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 267,
+        "length": 16
+      },
+      "displayParts": [
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "foowith3overload",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "a",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "+",
+          "kind": "operator"
+        },
+        {
+          "text": "2",
+          "kind": "numericLiteral"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "overloads",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsFunction.ts",
+      "position": 313,
+      "name": "6"
+    },
+    "quickInfo": {
+      "kind": "function",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 313,
+        "length": 16
+      },
+      "displayParts": [
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "foowith3overload",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "a",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "+",
+          "kind": "operator"
+        },
+        {
+          "text": "2",
+          "kind": "numericLiteral"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "overloads",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsFunction.ts",
+      "position": 359,
+      "name": "7"
+    },
+    "quickInfo": {
+      "kind": "function",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 359,
+        "length": 16
+      },
+      "displayParts": [
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "foowith3overload",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "a",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "boolean",
+          "kind": "keyword"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "boolean",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "+",
+          "kind": "operator"
+        },
+        {
+          "text": "2",
+          "kind": "numericLiteral"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "overloads",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsFunction.ts",
+      "position": 407,
+      "name": "8"
+    },
+    "quickInfo": {
+      "kind": "function",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 407,
+        "length": 16
+      },
+      "displayParts": [
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "foowith3overload",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "a",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "+",
+          "kind": "operator"
+        },
+        {
+          "text": "2",
+          "kind": "numericLiteral"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "overloads",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsFunction.ts",
+      "position": 455,
+      "name": "9"
+    },
+    "quickInfo": {
+      "kind": "function",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 455,
+        "length": 3
+      },
+      "displayParts": [
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "foo",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "param",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ",",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "optionalParam",
+          "kind": "parameterName"
+        },
+        {
+          "text": "?",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ",",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "paramWithInitializer",
+          "kind": "parameterName"
+        },
+        {
+          "text": "?",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ",",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "...",
+          "kind": "punctuation"
+        },
+        {
+          "text": "restParam",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": "[",
+          "kind": "punctuation"
+        },
+        {
+          "text": "]",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsFunction.ts",
+      "position": 469,
+      "name": "10"
+    },
+    "quickInfo": {
+      "kind": "function",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 469,
+        "length": 15
+      },
+      "displayParts": [
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "foowithoverload",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "a",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "+",
+          "kind": "operator"
+        },
+        {
+          "text": "1",
+          "kind": "numericLiteral"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "overload",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsFunction.ts",
+      "position": 495,
+      "name": "11"
+    },
+    "quickInfo": {
+      "kind": "function",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 495,
+        "length": 15
+      },
+      "displayParts": [
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "foowithoverload",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "a",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "+",
+          "kind": "operator"
+        },
+        {
+          "text": "1",
+          "kind": "numericLiteral"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "overload",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsFunction.ts",
+      "position": 516,
+      "name": "12"
+    },
+    "quickInfo": {
+      "kind": "function",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 516,
+        "length": 16
+      },
+      "displayParts": [
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "foowith3overload",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "a",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "+",
+          "kind": "operator"
+        },
+        {
+          "text": "2",
+          "kind": "numericLiteral"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "overloads",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsFunction.ts",
+      "position": 543,
+      "name": "13"
+    },
+    "quickInfo": {
+      "kind": "function",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 543,
+        "length": 16
+      },
+      "displayParts": [
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "foowith3overload",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "a",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "+",
+          "kind": "operator"
+        },
+        {
+          "text": "2",
+          "kind": "numericLiteral"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "overloads",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsFunction.ts",
+      "position": 565,
+      "name": "14"
+    },
+    "quickInfo": {
+      "kind": "function",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 565,
+        "length": 16
+      },
+      "displayParts": [
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "foowith3overload",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "a",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "boolean",
+          "kind": "keyword"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "boolean",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "+",
+          "kind": "operator"
+        },
+        {
+          "text": "2",
+          "kind": "numericLiteral"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "overloads",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        }
+      ],
+      "documentation": []
+    }
+  }
+]

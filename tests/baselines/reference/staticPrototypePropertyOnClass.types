@@ -1,0 +1,42 @@
+=== tests/cases/compiler/staticPrototypePropertyOnClass.ts ===
+class c1 {
+>c1 : c1
+}
+class c2<T> {
+>c2 : c2<T>
+}
+class c3 {
+>c3 : c3
+
+    constructor() {
+    }
+}
+class c4 {
+>c4 : c4
+
+    constructor(param: string);
+>param : string
+
+    constructor(param: number);
+>param : number
+
+    constructor(param: any) {
+>param : any
+    }
+}
+var a = c1;
+>a : typeof c1
+>c1 : typeof c1
+
+var b = c2;
+>b : typeof c2
+>c2 : typeof c2
+
+var c = c3;
+>c : typeof c3
+>c3 : typeof c3
+
+var d = c4;
+>d : typeof c4
+>c4 : typeof c4
+

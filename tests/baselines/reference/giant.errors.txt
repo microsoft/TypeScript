@@ -1,0 +1,1424 @@
+tests/cases/compiler/giant.ts(22,12): error TS2300: Duplicate identifier 'pgF'.
+tests/cases/compiler/giant.ts(23,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/giant.ts(23,16): error TS2300: Duplicate identifier 'pgF'.
+tests/cases/compiler/giant.ts(24,12): error TS2300: Duplicate identifier 'psF'.
+tests/cases/compiler/giant.ts(25,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/giant.ts(25,16): error TS2300: Duplicate identifier 'psF'.
+tests/cases/compiler/giant.ts(26,13): error TS2300: Duplicate identifier 'rgF'.
+tests/cases/compiler/giant.ts(27,17): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/giant.ts(27,17): error TS2300: Duplicate identifier 'rgF'.
+tests/cases/compiler/giant.ts(28,13): error TS2300: Duplicate identifier 'rsF'.
+tests/cases/compiler/giant.ts(29,17): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/giant.ts(29,17): error TS2300: Duplicate identifier 'rsF'.
+tests/cases/compiler/giant.ts(32,12): error TS2300: Duplicate identifier 'tsF'.
+tests/cases/compiler/giant.ts(33,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/giant.ts(33,16): error TS2300: Duplicate identifier 'tsF'.
+tests/cases/compiler/giant.ts(34,12): error TS2300: Duplicate identifier 'tgF'.
+tests/cases/compiler/giant.ts(35,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/giant.ts(35,16): error TS2300: Duplicate identifier 'tgF'.
+tests/cases/compiler/giant.ts(60,5): error TS1169: A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.
+tests/cases/compiler/giant.ts(60,6): error TS2304: Cannot find name 'p'.
+tests/cases/compiler/giant.ts(61,5): error TS1021: An index signature must have a type annotation.
+tests/cases/compiler/giant.ts(62,6): error TS1096: An index signature must have exactly one parameter.
+tests/cases/compiler/giant.ts(75,5): error TS2386: Overload signatures must all be optional or required.
+tests/cases/compiler/giant.ts(86,16): error TS2300: Duplicate identifier 'pgF'.
+tests/cases/compiler/giant.ts(87,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/giant.ts(87,20): error TS2300: Duplicate identifier 'pgF'.
+tests/cases/compiler/giant.ts(88,16): error TS2300: Duplicate identifier 'psF'.
+tests/cases/compiler/giant.ts(89,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/giant.ts(89,20): error TS2300: Duplicate identifier 'psF'.
+tests/cases/compiler/giant.ts(90,17): error TS2300: Duplicate identifier 'rgF'.
+tests/cases/compiler/giant.ts(91,21): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/giant.ts(91,21): error TS2300: Duplicate identifier 'rgF'.
+tests/cases/compiler/giant.ts(92,17): error TS2300: Duplicate identifier 'rsF'.
+tests/cases/compiler/giant.ts(93,21): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/giant.ts(93,21): error TS2300: Duplicate identifier 'rsF'.
+tests/cases/compiler/giant.ts(96,16): error TS2300: Duplicate identifier 'tsF'.
+tests/cases/compiler/giant.ts(97,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/giant.ts(97,20): error TS2300: Duplicate identifier 'tsF'.
+tests/cases/compiler/giant.ts(98,16): error TS2300: Duplicate identifier 'tgF'.
+tests/cases/compiler/giant.ts(99,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/giant.ts(99,20): error TS2300: Duplicate identifier 'tgF'.
+tests/cases/compiler/giant.ts(124,9): error TS1169: A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.
+tests/cases/compiler/giant.ts(124,10): error TS2304: Cannot find name 'p'.
+tests/cases/compiler/giant.ts(125,9): error TS1021: An index signature must have a type annotation.
+tests/cases/compiler/giant.ts(126,10): error TS1096: An index signature must have exactly one parameter.
+tests/cases/compiler/giant.ts(139,9): error TS2386: Overload signatures must all be optional or required.
+tests/cases/compiler/giant.ts(153,39): error TS1183: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(165,16): error TS2300: Duplicate identifier 'pgF'.
+tests/cases/compiler/giant.ts(166,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/giant.ts(166,20): error TS2300: Duplicate identifier 'pgF'.
+tests/cases/compiler/giant.ts(167,16): error TS2300: Duplicate identifier 'psF'.
+tests/cases/compiler/giant.ts(168,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/giant.ts(168,20): error TS2300: Duplicate identifier 'psF'.
+tests/cases/compiler/giant.ts(169,17): error TS2300: Duplicate identifier 'rgF'.
+tests/cases/compiler/giant.ts(170,21): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/giant.ts(170,21): error TS2300: Duplicate identifier 'rgF'.
+tests/cases/compiler/giant.ts(171,17): error TS2300: Duplicate identifier 'rsF'.
+tests/cases/compiler/giant.ts(172,21): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/giant.ts(172,21): error TS2300: Duplicate identifier 'rsF'.
+tests/cases/compiler/giant.ts(175,16): error TS2300: Duplicate identifier 'tsF'.
+tests/cases/compiler/giant.ts(176,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/giant.ts(176,20): error TS2300: Duplicate identifier 'tsF'.
+tests/cases/compiler/giant.ts(177,16): error TS2300: Duplicate identifier 'tgF'.
+tests/cases/compiler/giant.ts(178,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/giant.ts(178,20): error TS2300: Duplicate identifier 'tgF'.
+tests/cases/compiler/giant.ts(203,9): error TS1169: A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.
+tests/cases/compiler/giant.ts(203,10): error TS2304: Cannot find name 'p'.
+tests/cases/compiler/giant.ts(204,9): error TS1021: An index signature must have a type annotation.
+tests/cases/compiler/giant.ts(205,10): error TS1096: An index signature must have exactly one parameter.
+tests/cases/compiler/giant.ts(218,9): error TS2386: Overload signatures must all be optional or required.
+tests/cases/compiler/giant.ts(232,39): error TS1183: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(237,35): error TS1183: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(239,24): error TS1183: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(242,21): error TS1183: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(243,22): error TS1183: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(244,16): error TS2300: Duplicate identifier 'pgF'.
+tests/cases/compiler/giant.ts(244,22): error TS1183: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(245,20): error TS2300: Duplicate identifier 'pgF'.
+tests/cases/compiler/giant.ts(246,16): error TS2300: Duplicate identifier 'psF'.
+tests/cases/compiler/giant.ts(246,31): error TS1183: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(247,20): error TS2300: Duplicate identifier 'psF'.
+tests/cases/compiler/giant.ts(248,17): error TS2300: Duplicate identifier 'rgF'.
+tests/cases/compiler/giant.ts(248,23): error TS1183: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(249,21): error TS2300: Duplicate identifier 'rgF'.
+tests/cases/compiler/giant.ts(250,17): error TS2300: Duplicate identifier 'rsF'.
+tests/cases/compiler/giant.ts(250,32): error TS1183: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(251,21): error TS2300: Duplicate identifier 'rsF'.
+tests/cases/compiler/giant.ts(253,21): error TS1183: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(254,16): error TS2300: Duplicate identifier 'tsF'.
+tests/cases/compiler/giant.ts(254,31): error TS1183: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(255,20): error TS2300: Duplicate identifier 'tsF'.
+tests/cases/compiler/giant.ts(256,16): error TS2300: Duplicate identifier 'tgF'.
+tests/cases/compiler/giant.ts(256,22): error TS1183: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(257,20): error TS2300: Duplicate identifier 'tgF'.
+tests/cases/compiler/giant.ts(261,22): error TS1183: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(261,25): error TS1036: Statements are not allowed in ambient contexts.
+tests/cases/compiler/giant.ts(266,30): error TS1183: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(280,12): error TS2300: Duplicate identifier 'pgF'.
+tests/cases/compiler/giant.ts(281,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/giant.ts(281,16): error TS2300: Duplicate identifier 'pgF'.
+tests/cases/compiler/giant.ts(282,12): error TS2300: Duplicate identifier 'psF'.
+tests/cases/compiler/giant.ts(283,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/giant.ts(283,16): error TS2300: Duplicate identifier 'psF'.
+tests/cases/compiler/giant.ts(284,13): error TS2300: Duplicate identifier 'rgF'.
+tests/cases/compiler/giant.ts(285,17): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/giant.ts(285,17): error TS2300: Duplicate identifier 'rgF'.
+tests/cases/compiler/giant.ts(286,13): error TS2300: Duplicate identifier 'rsF'.
+tests/cases/compiler/giant.ts(287,17): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/giant.ts(287,17): error TS2300: Duplicate identifier 'rsF'.
+tests/cases/compiler/giant.ts(290,12): error TS2300: Duplicate identifier 'tsF'.
+tests/cases/compiler/giant.ts(291,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/giant.ts(291,16): error TS2300: Duplicate identifier 'tsF'.
+tests/cases/compiler/giant.ts(292,12): error TS2300: Duplicate identifier 'tgF'.
+tests/cases/compiler/giant.ts(293,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/giant.ts(293,16): error TS2300: Duplicate identifier 'tgF'.
+tests/cases/compiler/giant.ts(318,5): error TS1169: A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.
+tests/cases/compiler/giant.ts(318,6): error TS2304: Cannot find name 'p'.
+tests/cases/compiler/giant.ts(319,5): error TS1021: An index signature must have a type annotation.
+tests/cases/compiler/giant.ts(320,6): error TS1096: An index signature must have exactly one parameter.
+tests/cases/compiler/giant.ts(333,5): error TS2386: Overload signatures must all be optional or required.
+tests/cases/compiler/giant.ts(344,16): error TS2300: Duplicate identifier 'pgF'.
+tests/cases/compiler/giant.ts(345,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/giant.ts(345,20): error TS2300: Duplicate identifier 'pgF'.
+tests/cases/compiler/giant.ts(346,16): error TS2300: Duplicate identifier 'psF'.
+tests/cases/compiler/giant.ts(347,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/giant.ts(347,20): error TS2300: Duplicate identifier 'psF'.
+tests/cases/compiler/giant.ts(348,17): error TS2300: Duplicate identifier 'rgF'.
+tests/cases/compiler/giant.ts(349,21): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/giant.ts(349,21): error TS2300: Duplicate identifier 'rgF'.
+tests/cases/compiler/giant.ts(350,17): error TS2300: Duplicate identifier 'rsF'.
+tests/cases/compiler/giant.ts(351,21): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/giant.ts(351,21): error TS2300: Duplicate identifier 'rsF'.
+tests/cases/compiler/giant.ts(354,16): error TS2300: Duplicate identifier 'tsF'.
+tests/cases/compiler/giant.ts(355,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/giant.ts(355,20): error TS2300: Duplicate identifier 'tsF'.
+tests/cases/compiler/giant.ts(356,16): error TS2300: Duplicate identifier 'tgF'.
+tests/cases/compiler/giant.ts(357,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/giant.ts(357,20): error TS2300: Duplicate identifier 'tgF'.
+tests/cases/compiler/giant.ts(382,9): error TS1169: A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.
+tests/cases/compiler/giant.ts(382,10): error TS2304: Cannot find name 'p'.
+tests/cases/compiler/giant.ts(383,9): error TS1021: An index signature must have a type annotation.
+tests/cases/compiler/giant.ts(384,10): error TS1096: An index signature must have exactly one parameter.
+tests/cases/compiler/giant.ts(397,9): error TS2386: Overload signatures must all be optional or required.
+tests/cases/compiler/giant.ts(411,39): error TS1183: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(423,16): error TS2300: Duplicate identifier 'pgF'.
+tests/cases/compiler/giant.ts(424,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/giant.ts(424,20): error TS2300: Duplicate identifier 'pgF'.
+tests/cases/compiler/giant.ts(425,16): error TS2300: Duplicate identifier 'psF'.
+tests/cases/compiler/giant.ts(426,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/giant.ts(426,20): error TS2300: Duplicate identifier 'psF'.
+tests/cases/compiler/giant.ts(427,17): error TS2300: Duplicate identifier 'rgF'.
+tests/cases/compiler/giant.ts(428,21): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/giant.ts(428,21): error TS2300: Duplicate identifier 'rgF'.
+tests/cases/compiler/giant.ts(429,17): error TS2300: Duplicate identifier 'rsF'.
+tests/cases/compiler/giant.ts(430,21): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/giant.ts(430,21): error TS2300: Duplicate identifier 'rsF'.
+tests/cases/compiler/giant.ts(433,16): error TS2300: Duplicate identifier 'tsF'.
+tests/cases/compiler/giant.ts(434,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/giant.ts(434,20): error TS2300: Duplicate identifier 'tsF'.
+tests/cases/compiler/giant.ts(435,16): error TS2300: Duplicate identifier 'tgF'.
+tests/cases/compiler/giant.ts(436,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/giant.ts(436,20): error TS2300: Duplicate identifier 'tgF'.
+tests/cases/compiler/giant.ts(461,9): error TS1169: A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.
+tests/cases/compiler/giant.ts(461,10): error TS2304: Cannot find name 'p'.
+tests/cases/compiler/giant.ts(462,9): error TS1021: An index signature must have a type annotation.
+tests/cases/compiler/giant.ts(463,10): error TS1096: An index signature must have exactly one parameter.
+tests/cases/compiler/giant.ts(476,9): error TS2386: Overload signatures must all be optional or required.
+tests/cases/compiler/giant.ts(490,39): error TS1183: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(495,35): error TS1183: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(497,24): error TS1183: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(500,21): error TS1183: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(501,22): error TS1183: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(502,16): error TS2300: Duplicate identifier 'pgF'.
+tests/cases/compiler/giant.ts(502,22): error TS1183: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(503,20): error TS2300: Duplicate identifier 'pgF'.
+tests/cases/compiler/giant.ts(504,16): error TS2300: Duplicate identifier 'psF'.
+tests/cases/compiler/giant.ts(504,31): error TS1183: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(505,20): error TS2300: Duplicate identifier 'psF'.
+tests/cases/compiler/giant.ts(506,17): error TS2300: Duplicate identifier 'rgF'.
+tests/cases/compiler/giant.ts(506,23): error TS1183: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(507,21): error TS2300: Duplicate identifier 'rgF'.
+tests/cases/compiler/giant.ts(508,17): error TS2300: Duplicate identifier 'rsF'.
+tests/cases/compiler/giant.ts(508,32): error TS1183: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(509,21): error TS2300: Duplicate identifier 'rsF'.
+tests/cases/compiler/giant.ts(511,21): error TS1183: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(512,16): error TS2300: Duplicate identifier 'tsF'.
+tests/cases/compiler/giant.ts(512,31): error TS1183: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(513,20): error TS2300: Duplicate identifier 'tsF'.
+tests/cases/compiler/giant.ts(514,16): error TS2300: Duplicate identifier 'tgF'.
+tests/cases/compiler/giant.ts(514,22): error TS1183: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(515,20): error TS2300: Duplicate identifier 'tgF'.
+tests/cases/compiler/giant.ts(519,22): error TS1183: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(519,25): error TS1036: Statements are not allowed in ambient contexts.
+tests/cases/compiler/giant.ts(524,30): error TS1183: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(531,31): error TS1183: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(533,20): error TS1183: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(536,17): error TS1183: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(537,18): error TS1183: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(538,12): error TS2300: Duplicate identifier 'pgF'.
+tests/cases/compiler/giant.ts(538,18): error TS1183: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(539,16): error TS2300: Duplicate identifier 'pgF'.
+tests/cases/compiler/giant.ts(540,12): error TS2300: Duplicate identifier 'psF'.
+tests/cases/compiler/giant.ts(540,27): error TS1183: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(541,16): error TS2300: Duplicate identifier 'psF'.
+tests/cases/compiler/giant.ts(542,13): error TS2300: Duplicate identifier 'rgF'.
+tests/cases/compiler/giant.ts(542,19): error TS1183: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(543,17): error TS2300: Duplicate identifier 'rgF'.
+tests/cases/compiler/giant.ts(544,13): error TS2300: Duplicate identifier 'rsF'.
+tests/cases/compiler/giant.ts(544,28): error TS1183: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(545,17): error TS2300: Duplicate identifier 'rsF'.
+tests/cases/compiler/giant.ts(547,17): error TS1183: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(548,12): error TS2300: Duplicate identifier 'tsF'.
+tests/cases/compiler/giant.ts(548,27): error TS1183: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(549,16): error TS2300: Duplicate identifier 'tsF'.
+tests/cases/compiler/giant.ts(550,12): error TS2300: Duplicate identifier 'tgF'.
+tests/cases/compiler/giant.ts(550,18): error TS1183: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(551,16): error TS2300: Duplicate identifier 'tgF'.
+tests/cases/compiler/giant.ts(555,18): error TS1183: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(555,21): error TS1036: Statements are not allowed in ambient contexts.
+tests/cases/compiler/giant.ts(557,24): error TS1183: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(560,21): error TS1183: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(562,21): error TS1183: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(586,9): error TS1169: A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.
+tests/cases/compiler/giant.ts(586,10): error TS2304: Cannot find name 'p'.
+tests/cases/compiler/giant.ts(587,9): error TS1021: An index signature must have a type annotation.
+tests/cases/compiler/giant.ts(588,10): error TS1096: An index signature must have exactly one parameter.
+tests/cases/compiler/giant.ts(601,9): error TS2386: Overload signatures must all be optional or required.
+tests/cases/compiler/giant.ts(605,22): error TS1183: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(605,25): error TS1036: Statements are not allowed in ambient contexts.
+tests/cases/compiler/giant.ts(610,30): error TS1183: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(614,16): error TS1038: A 'declare' modifier cannot be used in an already ambient context.
+tests/cases/compiler/giant.ts(615,16): error TS1038: A 'declare' modifier cannot be used in an already ambient context.
+tests/cases/compiler/giant.ts(615,39): error TS1183: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(616,16): error TS1038: A 'declare' modifier cannot be used in an already ambient context.
+tests/cases/compiler/giant.ts(617,16): error TS1038: A 'declare' modifier cannot be used in an already ambient context.
+tests/cases/compiler/giant.ts(620,26): error TS1183: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(622,24): error TS1183: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(625,21): error TS1183: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(627,21): error TS1183: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(652,9): error TS1169: A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.
+tests/cases/compiler/giant.ts(652,10): error TS2304: Cannot find name 'p'.
+tests/cases/compiler/giant.ts(653,9): error TS1021: An index signature must have a type annotation.
+tests/cases/compiler/giant.ts(654,10): error TS1096: An index signature must have exactly one parameter.
+tests/cases/compiler/giant.ts(667,9): error TS2386: Overload signatures must all be optional or required.
+tests/cases/compiler/giant.ts(671,22): error TS1183: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(671,25): error TS1036: Statements are not allowed in ambient contexts.
+tests/cases/compiler/giant.ts(675,30): error TS1183: An implementation cannot be declared in ambient contexts.
+
+
+==== tests/cases/compiler/giant.ts (247 errors) ====
+    /*
+        Prefixes
+        p -> public
+        r -> private
+        i -> import
+        e -> export
+        a -> ambient
+        t -> static
+        s -> set
+        g -> get
+    
+        MAX DEPTH 3 LEVELS
+    */
+    var V;
+    function F() { };
+    class C {
+        constructor () { }
+        public pV;
+        private rV;
+        public pF() { }
+        private rF() { }
+        public pgF() { }
+               ~~~
+!!! error TS2300: Duplicate identifier 'pgF'.
+        public get pgF()
+                   ~~~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+                   ~~~
+!!! error TS2300: Duplicate identifier 'pgF'.
+        public psF(param:any) { }
+               ~~~
+!!! error TS2300: Duplicate identifier 'psF'.
+        public set psF(param:any)
+                   ~~~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+                   ~~~
+!!! error TS2300: Duplicate identifier 'psF'.
+        private rgF() { }
+                ~~~
+!!! error TS2300: Duplicate identifier 'rgF'.
+        private get rgF()
+                    ~~~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+                    ~~~
+!!! error TS2300: Duplicate identifier 'rgF'.
+        private rsF(param:any) { }
+                ~~~
+!!! error TS2300: Duplicate identifier 'rsF'.
+        private set rsF(param:any)
+                    ~~~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+                    ~~~
+!!! error TS2300: Duplicate identifier 'rsF'.
+        static tV;
+        static tF() { }
+        static tsF(param:any) { }
+               ~~~
+!!! error TS2300: Duplicate identifier 'tsF'.
+        static set tsF(param:any)
+                   ~~~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+                   ~~~
+!!! error TS2300: Duplicate identifier 'tsF'.
+        static tgF() { }
+               ~~~
+!!! error TS2300: Duplicate identifier 'tgF'.
+        static get tgF()
+                   ~~~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+                   ~~~
+!!! error TS2300: Duplicate identifier 'tgF'.
+    }
+    interface I {
+        //Call Signature
+        ();
+        (): number;
+        (p);
+        (p1: string);
+        (p2?: string);
+        (...p3: any[]);
+        (p4: string, p5?: string);
+        (p6: string, ...p7: any[]);
+        //(p8?: string, ...p9: any[]);
+        //(p10:string, p8?: string, ...p9: any[]);
+        
+        //Construct Signature
+        new ();
+        new (): number;
+        new (p: string);
+        new (p2?: string);
+        new (...p3: any[]);
+        new (p4: string, p5?: string);
+        new (p6: string, ...p7: any[]);
+    
+        //Index Signature
+        [p];
+        ~~~
+!!! error TS1169: A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.
+         ~
+!!! error TS2304: Cannot find name 'p'.
+        [p1: string];
+        ~~~~~~~~~~~~~
+!!! error TS1021: An index signature must have a type annotation.
+        [p2: string, p3: number];
+         ~~
+!!! error TS1096: An index signature must have exactly one parameter.
+    
+        //Property Signature
+        p;
+        p1?;
+        p2?: string;
+        
+        //Function Signature
+        p3();
+        p4? ();
+        p5? (): void;
+        p6(pa1): void;
+        p7(pa1, pa2): void;
+        p7? (pa1, pa2): void;
+        ~~
+!!! error TS2386: Overload signatures must all be optional or required.
+    }
+    module M {
+        var V;
+        function F() { };
+        class C {
+            constructor () { }
+            public pV;
+            private rV;
+            public pF() { }
+            private rF() { }
+            public pgF() { }
+                   ~~~
+!!! error TS2300: Duplicate identifier 'pgF'.
+            public get pgF()
+                       ~~~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+                       ~~~
+!!! error TS2300: Duplicate identifier 'pgF'.
+            public psF(param:any) { }
+                   ~~~
+!!! error TS2300: Duplicate identifier 'psF'.
+            public set psF(param:any)
+                       ~~~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+                       ~~~
+!!! error TS2300: Duplicate identifier 'psF'.
+            private rgF() { }
+                    ~~~
+!!! error TS2300: Duplicate identifier 'rgF'.
+            private get rgF()
+                        ~~~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+                        ~~~
+!!! error TS2300: Duplicate identifier 'rgF'.
+            private rsF(param:any) { }
+                    ~~~
+!!! error TS2300: Duplicate identifier 'rsF'.
+            private set rsF(param:any)
+                        ~~~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+                        ~~~
+!!! error TS2300: Duplicate identifier 'rsF'.
+            static tV;
+            static tF() { }
+            static tsF(param:any) { }
+                   ~~~
+!!! error TS2300: Duplicate identifier 'tsF'.
+            static set tsF(param:any)
+                       ~~~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+                       ~~~
+!!! error TS2300: Duplicate identifier 'tsF'.
+            static tgF() { }
+                   ~~~
+!!! error TS2300: Duplicate identifier 'tgF'.
+            static get tgF()
+                       ~~~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+                       ~~~
+!!! error TS2300: Duplicate identifier 'tgF'.
+        }
+        interface I {
+            //Call Signature
+            ();
+            (): number;
+            (p);
+            (p1: string);
+            (p2?: string);
+            (...p3: any[]);
+            (p4: string, p5?: string);
+            (p6: string, ...p7: any[]);
+            //(p8?: string, ...p9: any[]);
+            //(p10:string, p8?: string, ...p9: any[]);
+        
+            //Construct Signature
+            new ();
+            new (): number;
+            new (p: string);
+            new (p2?: string);
+            new (...p3: any[]);
+            new (p4: string, p5?: string);
+            new (p6: string, ...p7: any[]);
+    
+            //Index Signature
+            [p];
+            ~~~
+!!! error TS1169: A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.
+             ~
+!!! error TS2304: Cannot find name 'p'.
+            [p1: string];
+            ~~~~~~~~~~~~~
+!!! error TS1021: An index signature must have a type annotation.
+            [p2: string, p3: number];
+             ~~
+!!! error TS1096: An index signature must have exactly one parameter.
+    
+            //Property Signature
+            p;
+            p1?;
+            p2?: string;
+        
+            //Function Signature
+            p3();
+            p4? ();
+            p5? (): void;
+            p6(pa1): void;
+            p7(pa1, pa2): void;
+            p7? (pa1, pa2): void;
+            ~~
+!!! error TS2386: Overload signatures must all be optional or required.
+        }
+        module M {
+            var V;
+            function F() { };
+            class C { };
+            interface I { };
+            module M { };
+            export var eV;
+            export function eF() { };
+            export class eC { };
+            export interface eI { };
+            export module eM { };
+            export declare var eaV;
+            export declare function eaF() { };
+                                          ~
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
+            export declare class eaC { };
+            export declare module eaM { };
+        }
+        export var eV;
+        export function eF() { };
+        export class eC {
+            constructor () { }
+            public pV;
+            private rV;
+            public pF() { }
+            private rF() { }
+            public pgF() { }
+                   ~~~
+!!! error TS2300: Duplicate identifier 'pgF'.
+            public get pgF()
+                       ~~~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+                       ~~~
+!!! error TS2300: Duplicate identifier 'pgF'.
+            public psF(param:any) { }
+                   ~~~
+!!! error TS2300: Duplicate identifier 'psF'.
+            public set psF(param:any)
+                       ~~~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+                       ~~~
+!!! error TS2300: Duplicate identifier 'psF'.
+            private rgF() { }
+                    ~~~
+!!! error TS2300: Duplicate identifier 'rgF'.
+            private get rgF()
+                        ~~~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+                        ~~~
+!!! error TS2300: Duplicate identifier 'rgF'.
+            private rsF(param:any) { }
+                    ~~~
+!!! error TS2300: Duplicate identifier 'rsF'.
+            private set rsF(param:any)
+                        ~~~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+                        ~~~
+!!! error TS2300: Duplicate identifier 'rsF'.
+            static tV;
+            static tF() { }
+            static tsF(param:any) { }
+                   ~~~
+!!! error TS2300: Duplicate identifier 'tsF'.
+            static set tsF(param:any)
+                       ~~~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+                       ~~~
+!!! error TS2300: Duplicate identifier 'tsF'.
+            static tgF() { }
+                   ~~~
+!!! error TS2300: Duplicate identifier 'tgF'.
+            static get tgF()
+                       ~~~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+                       ~~~
+!!! error TS2300: Duplicate identifier 'tgF'.
+        }
+        export interface eI {
+            //Call Signature
+            ();
+            (): number;
+            (p);
+            (p1: string);
+            (p2?: string);
+            (...p3: any[]);
+            (p4: string, p5?: string);
+            (p6: string, ...p7: any[]);
+            //(p8?: string, ...p9: any[]);
+            //(p10:string, p8?: string, ...p9: any[]);
+        
+            //Construct Signature
+            new ();
+            new (): number;
+            new (p: string);
+            new (p2?: string);
+            new (...p3: any[]);
+            new (p4: string, p5?: string);
+            new (p6: string, ...p7: any[]);
+    
+            //Index Signature
+            [p];
+            ~~~
+!!! error TS1169: A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.
+             ~
+!!! error TS2304: Cannot find name 'p'.
+            [p1: string];
+            ~~~~~~~~~~~~~
+!!! error TS1021: An index signature must have a type annotation.
+            [p2: string, p3: number];
+             ~~
+!!! error TS1096: An index signature must have exactly one parameter.
+    
+            //Property Signature
+            p;
+            p1?;
+            p2?: string;
+        
+            //Function Signature
+            p3();
+            p4? ();
+            p5? (): void;
+            p6(pa1): void;
+            p7(pa1, pa2): void;
+            p7? (pa1, pa2): void;
+            ~~
+!!! error TS2386: Overload signatures must all be optional or required.
+        }
+        export module eM {
+            var V;
+            function F() { };
+            class C { };
+            interface I { };
+            module M { };
+            export var eV;
+            export function eF() { };
+            export class eC { };
+            export interface eI { };
+            export module eM { };
+            export declare var eaV;
+            export declare function eaF() { };
+                                          ~
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
+            export declare class eaC { };
+            export declare module eaM { };
+        }
+        export declare var eaV;
+        export declare function eaF() { };
+                                      ~
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
+        export declare class eaC {
+            constructor () { }
+                           ~
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
+            public pV;
+            private rV;
+            public pF() { }
+                        ~
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
+            private rF() { }
+                         ~
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
+            public pgF() { }
+                   ~~~
+!!! error TS2300: Duplicate identifier 'pgF'.
+                         ~
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
+            public get pgF()
+                       ~~~
+!!! error TS2300: Duplicate identifier 'pgF'.
+            public psF(param:any) { }
+                   ~~~
+!!! error TS2300: Duplicate identifier 'psF'.
+                                  ~
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
+            public set psF(param:any)
+                       ~~~
+!!! error TS2300: Duplicate identifier 'psF'.
+            private rgF() { }
+                    ~~~
+!!! error TS2300: Duplicate identifier 'rgF'.
+                          ~
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
+            private get rgF()
+                        ~~~
+!!! error TS2300: Duplicate identifier 'rgF'.
+            private rsF(param:any) { }
+                    ~~~
+!!! error TS2300: Duplicate identifier 'rsF'.
+                                   ~
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
+            private set rsF(param:any)
+                        ~~~
+!!! error TS2300: Duplicate identifier 'rsF'.
+            static tV;
+            static tF() { }
+                        ~
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
+            static tsF(param:any) { }
+                   ~~~
+!!! error TS2300: Duplicate identifier 'tsF'.
+                                  ~
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
+            static set tsF(param:any)
+                       ~~~
+!!! error TS2300: Duplicate identifier 'tsF'.
+            static tgF() { }
+                   ~~~
+!!! error TS2300: Duplicate identifier 'tgF'.
+                         ~
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
+            static get tgF()
+                       ~~~
+!!! error TS2300: Duplicate identifier 'tgF'.
+        }
+        export declare module eaM {
+            var V;
+            function F() { };
+                         ~
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
+                            ~
+!!! error TS1036: Statements are not allowed in ambient contexts.
+            class C { }
+            interface I { }
+            module M { }
+            export var eV;
+            export function eF() { };
+                                 ~
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
+            export class eC { }
+            export interface eI { }
+            export module eM { }
+        }
+    }
+    export var eV;
+    export function eF() { };
+    export class eC {
+        constructor () { }
+        public pV;
+        private rV;
+        public pF() { }
+        private rF() { }
+        public pgF() { }
+               ~~~
+!!! error TS2300: Duplicate identifier 'pgF'.
+        public get pgF()
+                   ~~~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+                   ~~~
+!!! error TS2300: Duplicate identifier 'pgF'.
+        public psF(param:any) { }
+               ~~~
+!!! error TS2300: Duplicate identifier 'psF'.
+        public set psF(param:any)
+                   ~~~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+                   ~~~
+!!! error TS2300: Duplicate identifier 'psF'.
+        private rgF() { }
+                ~~~
+!!! error TS2300: Duplicate identifier 'rgF'.
+        private get rgF()
+                    ~~~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+                    ~~~
+!!! error TS2300: Duplicate identifier 'rgF'.
+        private rsF(param:any) { }
+                ~~~
+!!! error TS2300: Duplicate identifier 'rsF'.
+        private set rsF(param:any)
+                    ~~~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+                    ~~~
+!!! error TS2300: Duplicate identifier 'rsF'.
+        static tV;
+        static tF() { }
+        static tsF(param:any) { }
+               ~~~
+!!! error TS2300: Duplicate identifier 'tsF'.
+        static set tsF(param:any)
+                   ~~~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+                   ~~~
+!!! error TS2300: Duplicate identifier 'tsF'.
+        static tgF() { }
+               ~~~
+!!! error TS2300: Duplicate identifier 'tgF'.
+        static get tgF()
+                   ~~~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+                   ~~~
+!!! error TS2300: Duplicate identifier 'tgF'.
+    }
+    export interface eI {
+        //Call Signature
+        ();
+        (): number;
+        (p);
+        (p1: string);
+        (p2?: string);
+        (...p3: any[]);
+        (p4: string, p5?: string);
+        (p6: string, ...p7: any[]);
+        //(p8?: string, ...p9: any[]);
+        //(p10:string, p8?: string, ...p9: any[]);
+        
+        //Construct Signature
+        new ();
+        new (): number;
+        new (p: string);
+        new (p2?: string);
+        new (...p3: any[]);
+        new (p4: string, p5?: string);
+        new (p6: string, ...p7: any[]);
+    
+        //Index Signature
+        [p];
+        ~~~
+!!! error TS1169: A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.
+         ~
+!!! error TS2304: Cannot find name 'p'.
+        [p1: string];
+        ~~~~~~~~~~~~~
+!!! error TS1021: An index signature must have a type annotation.
+        [p2: string, p3: number];
+         ~~
+!!! error TS1096: An index signature must have exactly one parameter.
+    
+        //Property Signature
+        p;
+        p1?;
+        p2?: string;
+        
+        //Function Signature
+        p3();
+        p4? ();
+        p5? (): void;
+        p6(pa1): void;
+        p7(pa1, pa2): void;
+        p7? (pa1, pa2): void;
+        ~~
+!!! error TS2386: Overload signatures must all be optional or required.
+    }
+    export module eM {
+        var V;
+        function F() { };
+        class C {
+            constructor () { }
+            public pV;
+            private rV;
+            public pF() { }
+            private rF() { }
+            public pgF() { }
+                   ~~~
+!!! error TS2300: Duplicate identifier 'pgF'.
+            public get pgF()
+                       ~~~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+                       ~~~
+!!! error TS2300: Duplicate identifier 'pgF'.
+            public psF(param:any) { }
+                   ~~~
+!!! error TS2300: Duplicate identifier 'psF'.
+            public set psF(param:any)
+                       ~~~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+                       ~~~
+!!! error TS2300: Duplicate identifier 'psF'.
+            private rgF() { }
+                    ~~~
+!!! error TS2300: Duplicate identifier 'rgF'.
+            private get rgF()
+                        ~~~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+                        ~~~
+!!! error TS2300: Duplicate identifier 'rgF'.
+            private rsF(param:any) { }
+                    ~~~
+!!! error TS2300: Duplicate identifier 'rsF'.
+            private set rsF(param:any)
+                        ~~~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+                        ~~~
+!!! error TS2300: Duplicate identifier 'rsF'.
+            static tV;
+            static tF() { }
+            static tsF(param:any) { }
+                   ~~~
+!!! error TS2300: Duplicate identifier 'tsF'.
+            static set tsF(param:any)
+                       ~~~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+                       ~~~
+!!! error TS2300: Duplicate identifier 'tsF'.
+            static tgF() { }
+                   ~~~
+!!! error TS2300: Duplicate identifier 'tgF'.
+            static get tgF()
+                       ~~~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+                       ~~~
+!!! error TS2300: Duplicate identifier 'tgF'.
+        }
+        interface I {
+            //Call Signature
+            ();
+            (): number;
+            (p);
+            (p1: string);
+            (p2?: string);
+            (...p3: any[]);
+            (p4: string, p5?: string);
+            (p6: string, ...p7: any[]);
+            //(p8?: string, ...p9: any[]);
+            //(p10:string, p8?: string, ...p9: any[]);
+        
+            //Construct Signature
+            new ();
+            new (): number;
+            new (p: string);
+            new (p2?: string);
+            new (...p3: any[]);
+            new (p4: string, p5?: string);
+            new (p6: string, ...p7: any[]);
+    
+            //Index Signature
+            [p];
+            ~~~
+!!! error TS1169: A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.
+             ~
+!!! error TS2304: Cannot find name 'p'.
+            [p1: string];
+            ~~~~~~~~~~~~~
+!!! error TS1021: An index signature must have a type annotation.
+            [p2: string, p3: number];
+             ~~
+!!! error TS1096: An index signature must have exactly one parameter.
+    
+            //Property Signature
+            p;
+            p1?;
+            p2?: string;
+        
+            //Function Signature
+            p3();
+            p4? ();
+            p5? (): void;
+            p6(pa1): void;
+            p7(pa1, pa2): void;
+            p7? (pa1, pa2): void;
+            ~~
+!!! error TS2386: Overload signatures must all be optional or required.
+        }
+        module M {
+            var V;
+            function F() { };
+            class C { };
+            interface I { };
+            module M { };
+            export var eV;
+            export function eF() { };
+            export class eC { };
+            export interface eI { };
+            export module eM { };
+            export declare var eaV;
+            export declare function eaF() { };
+                                          ~
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
+            export declare class eaC { };
+            export declare module eaM { };
+        }
+        export var eV;
+        export function eF() { };
+        export class eC {
+            constructor () { }
+            public pV;
+            private rV;
+            public pF() { }
+            private rF() { }
+            public pgF() { }
+                   ~~~
+!!! error TS2300: Duplicate identifier 'pgF'.
+            public get pgF()
+                       ~~~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+                       ~~~
+!!! error TS2300: Duplicate identifier 'pgF'.
+            public psF(param:any) { }
+                   ~~~
+!!! error TS2300: Duplicate identifier 'psF'.
+            public set psF(param:any)
+                       ~~~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+                       ~~~
+!!! error TS2300: Duplicate identifier 'psF'.
+            private rgF() { }
+                    ~~~
+!!! error TS2300: Duplicate identifier 'rgF'.
+            private get rgF()
+                        ~~~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+                        ~~~
+!!! error TS2300: Duplicate identifier 'rgF'.
+            private rsF(param:any) { }
+                    ~~~
+!!! error TS2300: Duplicate identifier 'rsF'.
+            private set rsF(param:any)
+                        ~~~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+                        ~~~
+!!! error TS2300: Duplicate identifier 'rsF'.
+            static tV;
+            static tF() { }
+            static tsF(param:any) { }
+                   ~~~
+!!! error TS2300: Duplicate identifier 'tsF'.
+            static set tsF(param:any)
+                       ~~~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+                       ~~~
+!!! error TS2300: Duplicate identifier 'tsF'.
+            static tgF() { }
+                   ~~~
+!!! error TS2300: Duplicate identifier 'tgF'.
+            static get tgF()
+                       ~~~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+                       ~~~
+!!! error TS2300: Duplicate identifier 'tgF'.
+        }
+        export interface eI {
+            //Call Signature
+            ();
+            (): number;
+            (p);
+            (p1: string);
+            (p2?: string);
+            (...p3: any[]);
+            (p4: string, p5?: string);
+            (p6: string, ...p7: any[]);
+            //(p8?: string, ...p9: any[]);
+            //(p10:string, p8?: string, ...p9: any[]);
+        
+            //Construct Signature
+            new ();
+            new (): number;
+            new (p: string);
+            new (p2?: string);
+            new (...p3: any[]);
+            new (p4: string, p5?: string);
+            new (p6: string, ...p7: any[]);
+    
+            //Index Signature
+            [p];
+            ~~~
+!!! error TS1169: A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.
+             ~
+!!! error TS2304: Cannot find name 'p'.
+            [p1: string];
+            ~~~~~~~~~~~~~
+!!! error TS1021: An index signature must have a type annotation.
+            [p2: string, p3: number];
+             ~~
+!!! error TS1096: An index signature must have exactly one parameter.
+    
+            //Property Signature
+            p;
+            p1?;
+            p2?: string;
+        
+            //Function Signature
+            p3();
+            p4? ();
+            p5? (): void;
+            p6(pa1): void;
+            p7(pa1, pa2): void;
+            p7? (pa1, pa2): void;
+            ~~
+!!! error TS2386: Overload signatures must all be optional or required.
+        }
+        export module eM {
+            var V;
+            function F() { };
+            class C { };
+            interface I { };
+            module M { };
+            export var eV;
+            export function eF() { };
+            export class eC { };
+            export interface eI { };
+            export module eM { };
+            export declare var eaV;
+            export declare function eaF() { };
+                                          ~
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
+            export declare class eaC { };
+            export declare module eaM { };
+        }
+        export declare var eaV;
+        export declare function eaF() { };
+                                      ~
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
+        export declare class eaC {
+            constructor () { }
+                           ~
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
+            public pV;
+            private rV;
+            public pF() { }
+                        ~
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
+            private rF() { }
+                         ~
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
+            public pgF() { }
+                   ~~~
+!!! error TS2300: Duplicate identifier 'pgF'.
+                         ~
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
+            public get pgF()
+                       ~~~
+!!! error TS2300: Duplicate identifier 'pgF'.
+            public psF(param:any) { }
+                   ~~~
+!!! error TS2300: Duplicate identifier 'psF'.
+                                  ~
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
+            public set psF(param:any)
+                       ~~~
+!!! error TS2300: Duplicate identifier 'psF'.
+            private rgF() { }
+                    ~~~
+!!! error TS2300: Duplicate identifier 'rgF'.
+                          ~
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
+            private get rgF()
+                        ~~~
+!!! error TS2300: Duplicate identifier 'rgF'.
+            private rsF(param:any) { }
+                    ~~~
+!!! error TS2300: Duplicate identifier 'rsF'.
+                                   ~
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
+            private set rsF(param:any)
+                        ~~~
+!!! error TS2300: Duplicate identifier 'rsF'.
+            static tV;
+            static tF() { }
+                        ~
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
+            static tsF(param:any) { }
+                   ~~~
+!!! error TS2300: Duplicate identifier 'tsF'.
+                                  ~
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
+            static set tsF(param:any)
+                       ~~~
+!!! error TS2300: Duplicate identifier 'tsF'.
+            static tgF() { }
+                   ~~~
+!!! error TS2300: Duplicate identifier 'tgF'.
+                         ~
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
+            static get tgF()
+                       ~~~
+!!! error TS2300: Duplicate identifier 'tgF'.
+        }
+        export declare module eaM {
+            var V;
+            function F() { };
+                         ~
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
+                            ~
+!!! error TS1036: Statements are not allowed in ambient contexts.
+            class C { }
+            interface I { }
+            module M { }
+            export var eV;
+            export function eF() { };
+                                 ~
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
+            export class eC { }
+            export interface eI { }
+            export module eM { }
+        }
+    }
+    export declare var eaV;
+    export declare function eaF() { };
+                                  ~
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
+    export declare class eaC {
+        constructor () { }
+                       ~
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
+        public pV;
+        private rV;
+        public pF() { }
+                    ~
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
+        private rF() { }
+                     ~
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
+        public pgF() { }
+               ~~~
+!!! error TS2300: Duplicate identifier 'pgF'.
+                     ~
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
+        public get pgF()
+                   ~~~
+!!! error TS2300: Duplicate identifier 'pgF'.
+        public psF(param:any) { }
+               ~~~
+!!! error TS2300: Duplicate identifier 'psF'.
+                              ~
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
+        public set psF(param:any)
+                   ~~~
+!!! error TS2300: Duplicate identifier 'psF'.
+        private rgF() { }
+                ~~~
+!!! error TS2300: Duplicate identifier 'rgF'.
+                      ~
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
+        private get rgF()
+                    ~~~
+!!! error TS2300: Duplicate identifier 'rgF'.
+        private rsF(param:any) { }
+                ~~~
+!!! error TS2300: Duplicate identifier 'rsF'.
+                               ~
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
+        private set rsF(param:any)
+                    ~~~
+!!! error TS2300: Duplicate identifier 'rsF'.
+        static tV;
+        static tF() { }
+                    ~
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
+        static tsF(param:any) { }
+               ~~~
+!!! error TS2300: Duplicate identifier 'tsF'.
+                              ~
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
+        static set tsF(param:any)
+                   ~~~
+!!! error TS2300: Duplicate identifier 'tsF'.
+        static tgF() { }
+               ~~~
+!!! error TS2300: Duplicate identifier 'tgF'.
+                     ~
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
+        static get tgF()
+                   ~~~
+!!! error TS2300: Duplicate identifier 'tgF'.
+    }
+    export declare module eaM {
+        var V;
+        function F() { };
+                     ~
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
+                        ~
+!!! error TS1036: Statements are not allowed in ambient contexts.
+        class C {
+            constructor () { }
+                           ~
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
+            public pV;
+            private rV;
+            public pF() { }
+                        ~
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
+            static tV;
+            static tF() { }
+                        ~
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
+        }
+        interface I {
+            //Call Signature
+            ();
+            (): number;
+            (p: string);
+            (p2?: string);
+            (...p3: any[]);
+            (p4: string, p5?: string);
+            (p6: string, ...p7: any[]);
+            //(p8?: string, ...p9: any[]);
+            //(p10:string, p8?: string, ...p9: any[]);
+        
+            //Construct Signature
+            new ();
+            new (): number;
+            new (p: string);
+            new (p2?: string);
+            new (...p3: any[]);
+            new (p4: string, p5?: string);
+            new (p6: string, ...p7: any[]);
+    
+            //Index Signature
+            [p];
+            ~~~
+!!! error TS1169: A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.
+             ~
+!!! error TS2304: Cannot find name 'p'.
+            [p1: string];
+            ~~~~~~~~~~~~~
+!!! error TS1021: An index signature must have a type annotation.
+            [p2: string, p3: number];
+             ~~
+!!! error TS1096: An index signature must have exactly one parameter.
+    
+            //Property Signature
+            p;
+            p1?;
+            p2?: string;
+        
+            //Function Signature
+            p3();
+            p4? ();
+            p5? (): void;
+            p6(pa1): void;
+            p7(pa1, pa2): void;
+            p7? (pa1, pa2): void;
+            ~~
+!!! error TS2386: Overload signatures must all be optional or required.
+        }
+        module M {
+            var V;
+            function F() { };
+                         ~
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
+                            ~
+!!! error TS1036: Statements are not allowed in ambient contexts.
+            class C { }
+            interface I { }
+            module M { }
+            export var eV;
+            export function eF() { };
+                                 ~
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
+            export class eC { }
+            export interface eI { }
+            export module eM { }
+            export declare var eaV
+                   ~~~~~~~
+!!! error TS1038: A 'declare' modifier cannot be used in an already ambient context.
+            export declare function eaF() { };
+                   ~~~~~~~
+!!! error TS1038: A 'declare' modifier cannot be used in an already ambient context.
+                                          ~
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
+            export declare class eaC { }
+                   ~~~~~~~
+!!! error TS1038: A 'declare' modifier cannot be used in an already ambient context.
+            export declare module eaM { }
+                   ~~~~~~~
+!!! error TS1038: A 'declare' modifier cannot be used in an already ambient context.
+        }
+        export var eV;
+        export function eF() { };
+                             ~
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
+        export class eC {
+            constructor () { }
+                           ~
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
+            public pV;
+            private rV;
+            public pF() { }
+                        ~
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
+            static tV
+            static tF() { }
+                        ~
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
+        }
+        export interface eI {
+            //Call Signature
+            ();
+            (): number;
+            (p);
+            (p1: string);
+            (p2?: string);
+            (...p3: any[]);
+            (p4: string, p5?: string);
+            (p6: string, ...p7: any[]);
+            //(p8?: string, ...p9: any[]);
+            //(p10:string, p8?: string, ...p9: any[]);
+        
+            //Construct Signature
+            new ();
+            new (): number;
+            new (p: string);
+            new (p2?: string);
+            new (...p3: any[]);
+            new (p4: string, p5?: string);
+            new (p6: string, ...p7: any[]);
+    
+            //Index Signature
+            [p];
+            ~~~
+!!! error TS1169: A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.
+             ~
+!!! error TS2304: Cannot find name 'p'.
+            [p1: string];
+            ~~~~~~~~~~~~~
+!!! error TS1021: An index signature must have a type annotation.
+            [p2: string, p3: number];
+             ~~
+!!! error TS1096: An index signature must have exactly one parameter.
+    
+            //Property Signature
+            p;
+            p1?;
+            p2?: string;
+        
+            //Function Signature
+            p3();
+            p4? ();
+            p5? (): void;
+            p6(pa1): void;
+            p7(pa1, pa2): void;
+            p7? (pa1, pa2): void;
+            ~~
+!!! error TS2386: Overload signatures must all be optional or required.
+        }
+        export module eM {
+            var V;
+            function F() { };
+                         ~
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
+                            ~
+!!! error TS1036: Statements are not allowed in ambient contexts.
+            class C { }
+            module M { }
+            export var eV;
+            export function eF() { };
+                                 ~
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
+            export class eC { }
+            export interface eI { }
+            export module eM { }
+        }
+    }

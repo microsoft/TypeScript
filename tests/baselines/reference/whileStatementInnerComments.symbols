@@ -1,0 +1,6 @@
+=== tests/cases/compiler/whileStatementInnerComments.ts ===
+/*a*/ while /*b*/ ( /*c*/ false /*d*/ ) /*e*/ {}
+No type information for this code.
+No type information for this code./*a*/ do /*b*/ {} /*c*/ while /*d*/ ( /*e*/ true /*f*/ );
+No type information for this code.
+No type information for this code.

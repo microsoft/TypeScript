@@ -1,0 +1,41 @@
+tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorImplementationWithDefaultValues2.ts(3,17): error TS2322: Type 'number' is not assignable to type 'string'.
+tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorImplementationWithDefaultValues2.ts(10,17): error TS2322: Type 'number' is not assignable to type 'T'.
+  'T' could be instantiated with an arbitrary type which could be unrelated to 'number'.
+tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorImplementationWithDefaultValues2.ts(10,27): error TS2322: Type 'T' is not assignable to type 'U'.
+  'U' could be instantiated with an arbitrary type which could be unrelated to 'T'.
+tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorImplementationWithDefaultValues2.ts(17,17): error TS2322: Type 'Date' is not assignable to type 'T'.
+  'Date' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Date'.
+
+
+==== tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorImplementationWithDefaultValues2.ts (4 errors) ====
+    class C {
+        constructor(x);
+        constructor(public x: string = 1) { // error
+                    ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
+            var y = x;
+        }
+    }
+    
+    class D<T, U> {
+        constructor(x: T, y: U);
+        constructor(x: T = 1, public y: U = x) { // error
+                    ~~~~~~~~
+!!! error TS2322: Type 'number' is not assignable to type 'T'.
+!!! error TS2322:   'T' could be instantiated with an arbitrary type which could be unrelated to 'number'.
+                              ~~~~~~~~~~~~~~~
+!!! error TS2322: Type 'T' is not assignable to type 'U'.
+!!! error TS2322:   'U' could be instantiated with an arbitrary type which could be unrelated to 'T'.
+            var z = x;
+        }
+    }
+    
+    class E<T extends Date> {
+        constructor(x);
+        constructor(x: T = new Date()) { // error
+                    ~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type 'Date' is not assignable to type 'T'.
+!!! error TS2322:   'Date' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Date'.
+            var y = x;
+        }
+    }

@@ -1,0 +1,190 @@
+=== tests/cases/compiler/excessPropertyChecksWithNestedIntersections.ts ===
+// https://github.com/Microsoft/TypeScript/issues/13813
+
+interface A {
+>A : Symbol(A, Decl(excessPropertyChecksWithNestedIntersections.ts, 0, 0))
+
+    x: string
+>x : Symbol(A.x, Decl(excessPropertyChecksWithNestedIntersections.ts, 2, 13))
+}
+
+interface B {
+>B : Symbol(B, Decl(excessPropertyChecksWithNestedIntersections.ts, 4, 1))
+
+    a: A;
+>a : Symbol(B.a, Decl(excessPropertyChecksWithNestedIntersections.ts, 6, 13))
+>A : Symbol(A, Decl(excessPropertyChecksWithNestedIntersections.ts, 0, 0))
+}
+
+interface C {
+>C : Symbol(C, Decl(excessPropertyChecksWithNestedIntersections.ts, 8, 1))
+
+    c: number;
+>c : Symbol(C.c, Decl(excessPropertyChecksWithNestedIntersections.ts, 10, 13))
+}
+
+type D = B & C;
+>D : Symbol(D, Decl(excessPropertyChecksWithNestedIntersections.ts, 12, 1))
+>B : Symbol(B, Decl(excessPropertyChecksWithNestedIntersections.ts, 4, 1))
+>C : Symbol(C, Decl(excessPropertyChecksWithNestedIntersections.ts, 8, 1))
+
+let a: B = { a: { x: 'hello' } }; // ok
+>a : Symbol(a, Decl(excessPropertyChecksWithNestedIntersections.ts, 16, 3))
+>B : Symbol(B, Decl(excessPropertyChecksWithNestedIntersections.ts, 4, 1))
+>a : Symbol(a, Decl(excessPropertyChecksWithNestedIntersections.ts, 16, 12))
+>x : Symbol(x, Decl(excessPropertyChecksWithNestedIntersections.ts, 16, 17))
+
+let b: B = { a: { x: 2 } }; // error - types of property x are incompatible
+>b : Symbol(b, Decl(excessPropertyChecksWithNestedIntersections.ts, 17, 3))
+>B : Symbol(B, Decl(excessPropertyChecksWithNestedIntersections.ts, 4, 1))
+>a : Symbol(a, Decl(excessPropertyChecksWithNestedIntersections.ts, 17, 12))
+>x : Symbol(x, Decl(excessPropertyChecksWithNestedIntersections.ts, 17, 17))
+
+let c: B = { a: { x: 'hello', y: 2 } }; // error - y does not exist in type A
+>c : Symbol(c, Decl(excessPropertyChecksWithNestedIntersections.ts, 18, 3))
+>B : Symbol(B, Decl(excessPropertyChecksWithNestedIntersections.ts, 4, 1))
+>a : Symbol(a, Decl(excessPropertyChecksWithNestedIntersections.ts, 18, 12))
+>x : Symbol(x, Decl(excessPropertyChecksWithNestedIntersections.ts, 18, 17))
+>y : Symbol(y, Decl(excessPropertyChecksWithNestedIntersections.ts, 18, 29))
+
+let d: D = { a: { x: 'hello' }, c: 5 }; // ok
+>d : Symbol(d, Decl(excessPropertyChecksWithNestedIntersections.ts, 20, 3))
+>D : Symbol(D, Decl(excessPropertyChecksWithNestedIntersections.ts, 12, 1))
+>a : Symbol(a, Decl(excessPropertyChecksWithNestedIntersections.ts, 20, 12))
+>x : Symbol(x, Decl(excessPropertyChecksWithNestedIntersections.ts, 20, 17))
+>c : Symbol(c, Decl(excessPropertyChecksWithNestedIntersections.ts, 20, 31))
+
+let e: D = { a: { x: 2 }, c: 5 }; // error - types of property x are incompatible
+>e : Symbol(e, Decl(excessPropertyChecksWithNestedIntersections.ts, 21, 3))
+>D : Symbol(D, Decl(excessPropertyChecksWithNestedIntersections.ts, 12, 1))
+>a : Symbol(a, Decl(excessPropertyChecksWithNestedIntersections.ts, 21, 12))
+>x : Symbol(x, Decl(excessPropertyChecksWithNestedIntersections.ts, 21, 17))
+>c : Symbol(c, Decl(excessPropertyChecksWithNestedIntersections.ts, 21, 25))
+
+let f: D = { a: { x: 'hello', y: 2 }, c: 5 }; // error - y does not exist in type A
+>f : Symbol(f, Decl(excessPropertyChecksWithNestedIntersections.ts, 22, 3))
+>D : Symbol(D, Decl(excessPropertyChecksWithNestedIntersections.ts, 12, 1))
+>a : Symbol(a, Decl(excessPropertyChecksWithNestedIntersections.ts, 22, 12))
+>x : Symbol(x, Decl(excessPropertyChecksWithNestedIntersections.ts, 22, 17))
+>y : Symbol(y, Decl(excessPropertyChecksWithNestedIntersections.ts, 22, 29))
+>c : Symbol(c, Decl(excessPropertyChecksWithNestedIntersections.ts, 22, 37))
+
+// https://github.com/Microsoft/TypeScript/issues/18075
+
+export type MyType = { id: number; } & { name: string; } & { photo: { id: number; } & { url: string; } }
+>MyType : Symbol(MyType, Decl(excessPropertyChecksWithNestedIntersections.ts, 22, 45))
+>id : Symbol(id, Decl(excessPropertyChecksWithNestedIntersections.ts, 26, 22))
+>name : Symbol(name, Decl(excessPropertyChecksWithNestedIntersections.ts, 26, 40))
+>photo : Symbol(photo, Decl(excessPropertyChecksWithNestedIntersections.ts, 26, 60))
+>id : Symbol(id, Decl(excessPropertyChecksWithNestedIntersections.ts, 26, 69))
+>url : Symbol(url, Decl(excessPropertyChecksWithNestedIntersections.ts, 26, 87))
+
+export let obj: MyType;
+>obj : Symbol(obj, Decl(excessPropertyChecksWithNestedIntersections.ts, 28, 10))
+>MyType : Symbol(MyType, Decl(excessPropertyChecksWithNestedIntersections.ts, 22, 45))
+
+export const photo: typeof obj.photo = {
+>photo : Symbol(photo, Decl(excessPropertyChecksWithNestedIntersections.ts, 30, 12))
+>obj.photo : Symbol(photo, Decl(excessPropertyChecksWithNestedIntersections.ts, 26, 60))
+>obj : Symbol(obj, Decl(excessPropertyChecksWithNestedIntersections.ts, 28, 10))
+>photo : Symbol(photo, Decl(excessPropertyChecksWithNestedIntersections.ts, 26, 60))
+
+    id: 1,
+>id : Symbol(id, Decl(excessPropertyChecksWithNestedIntersections.ts, 30, 40))
+
+    url: '',
+>url : Symbol(url, Decl(excessPropertyChecksWithNestedIntersections.ts, 31, 10))
+
+    xyz: 1 // Great! This causes an error!
+>xyz : Symbol(xyz, Decl(excessPropertyChecksWithNestedIntersections.ts, 32, 12))
+
+};
+
+export const myInstance: MyType = {
+>myInstance : Symbol(myInstance, Decl(excessPropertyChecksWithNestedIntersections.ts, 36, 12))
+>MyType : Symbol(MyType, Decl(excessPropertyChecksWithNestedIntersections.ts, 22, 45))
+
+    id: 1,
+>id : Symbol(id, Decl(excessPropertyChecksWithNestedIntersections.ts, 36, 35))
+
+    name: '',
+>name : Symbol(name, Decl(excessPropertyChecksWithNestedIntersections.ts, 37, 10))
+
+    photo: {
+>photo : Symbol(photo, Decl(excessPropertyChecksWithNestedIntersections.ts, 38, 13))
+
+        id: 1,
+>id : Symbol(id, Decl(excessPropertyChecksWithNestedIntersections.ts, 39, 12))
+
+        url: '',
+>url : Symbol(url, Decl(excessPropertyChecksWithNestedIntersections.ts, 40, 14))
+
+        xyz: 2 // This should also be an error
+>xyz : Symbol(xyz, Decl(excessPropertyChecksWithNestedIntersections.ts, 41, 16))
+    }
+};
+
+// https://github.com/Microsoft/TypeScript/issues/28616
+
+export type View<T> = { [K in keyof T]: T[K] extends object ? boolean | View<T[K]> : boolean };
+>View : Symbol(View, Decl(excessPropertyChecksWithNestedIntersections.ts, 44, 2))
+>T : Symbol(T, Decl(excessPropertyChecksWithNestedIntersections.ts, 48, 17))
+>K : Symbol(K, Decl(excessPropertyChecksWithNestedIntersections.ts, 48, 25))
+>T : Symbol(T, Decl(excessPropertyChecksWithNestedIntersections.ts, 48, 17))
+>T : Symbol(T, Decl(excessPropertyChecksWithNestedIntersections.ts, 48, 17))
+>K : Symbol(K, Decl(excessPropertyChecksWithNestedIntersections.ts, 48, 25))
+>View : Symbol(View, Decl(excessPropertyChecksWithNestedIntersections.ts, 44, 2))
+>T : Symbol(T, Decl(excessPropertyChecksWithNestedIntersections.ts, 48, 17))
+>K : Symbol(K, Decl(excessPropertyChecksWithNestedIntersections.ts, 48, 25))
+
+interface TypeC {
+>TypeC : Symbol(TypeC, Decl(excessPropertyChecksWithNestedIntersections.ts, 48, 95))
+
+    foo: string;
+>foo : Symbol(TypeC.foo, Decl(excessPropertyChecksWithNestedIntersections.ts, 50, 17))
+
+    bar: string;
+>bar : Symbol(TypeC.bar, Decl(excessPropertyChecksWithNestedIntersections.ts, 51, 16))
+}
+
+interface TypeB {
+>TypeB : Symbol(TypeB, Decl(excessPropertyChecksWithNestedIntersections.ts, 53, 1))
+
+    foo: string,
+>foo : Symbol(TypeB.foo, Decl(excessPropertyChecksWithNestedIntersections.ts, 55, 17))
+
+    bar: TypeC
+>bar : Symbol(TypeB.bar, Decl(excessPropertyChecksWithNestedIntersections.ts, 56, 16))
+>TypeC : Symbol(TypeC, Decl(excessPropertyChecksWithNestedIntersections.ts, 48, 95))
+}
+
+interface TypeA {
+>TypeA : Symbol(TypeA, Decl(excessPropertyChecksWithNestedIntersections.ts, 58, 1))
+
+    foo: string,
+>foo : Symbol(TypeA.foo, Decl(excessPropertyChecksWithNestedIntersections.ts, 60, 17))
+
+    bar: TypeB,
+>bar : Symbol(TypeA.bar, Decl(excessPropertyChecksWithNestedIntersections.ts, 61, 16))
+>TypeB : Symbol(TypeB, Decl(excessPropertyChecksWithNestedIntersections.ts, 53, 1))
+}
+
+let test: View<TypeA>;
+>test : Symbol(test, Decl(excessPropertyChecksWithNestedIntersections.ts, 65, 3))
+>View : Symbol(View, Decl(excessPropertyChecksWithNestedIntersections.ts, 44, 2))
+>TypeA : Symbol(TypeA, Decl(excessPropertyChecksWithNestedIntersections.ts, 58, 1))
+
+test = { foo: true, bar: true, boo: true }
+>test : Symbol(test, Decl(excessPropertyChecksWithNestedIntersections.ts, 65, 3))
+>foo : Symbol(foo, Decl(excessPropertyChecksWithNestedIntersections.ts, 67, 8))
+>bar : Symbol(bar, Decl(excessPropertyChecksWithNestedIntersections.ts, 67, 19))
+>boo : Symbol(boo, Decl(excessPropertyChecksWithNestedIntersections.ts, 67, 30))
+
+test = { foo: true, bar: { foo: true, bar: true, boo: true } }
+>test : Symbol(test, Decl(excessPropertyChecksWithNestedIntersections.ts, 65, 3))
+>foo : Symbol(foo, Decl(excessPropertyChecksWithNestedIntersections.ts, 69, 8))
+>bar : Symbol(bar, Decl(excessPropertyChecksWithNestedIntersections.ts, 69, 19))
+>foo : Symbol(foo, Decl(excessPropertyChecksWithNestedIntersections.ts, 69, 26))
+>bar : Symbol(bar, Decl(excessPropertyChecksWithNestedIntersections.ts, 69, 37))
+>boo : Symbol(boo, Decl(excessPropertyChecksWithNestedIntersections.ts, 69, 48))
+

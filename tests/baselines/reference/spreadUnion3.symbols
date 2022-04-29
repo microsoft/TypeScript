@@ -1,0 +1,54 @@
+=== tests/cases/conformance/types/spread/spreadUnion3.ts ===
+function f(x: { y: string } | undefined): { y: string } {
+>f : Symbol(f, Decl(spreadUnion3.ts, 0, 0))
+>x : Symbol(x, Decl(spreadUnion3.ts, 0, 11))
+>y : Symbol(y, Decl(spreadUnion3.ts, 0, 15))
+>y : Symbol(y, Decl(spreadUnion3.ts, 0, 43))
+
+    return { y: 123, ...x } // y: string | number
+>y : Symbol(y, Decl(spreadUnion3.ts, 1, 12))
+>x : Symbol(x, Decl(spreadUnion3.ts, 0, 11))
+}
+f(undefined)
+>f : Symbol(f, Decl(spreadUnion3.ts, 0, 0))
+>undefined : Symbol(undefined)
+
+
+function g(t?: { a: number } | null): void {
+>g : Symbol(g, Decl(spreadUnion3.ts, 3, 12))
+>t : Symbol(t, Decl(spreadUnion3.ts, 6, 11))
+>a : Symbol(a, Decl(spreadUnion3.ts, 6, 16))
+
+    let b = { ...t };
+>b : Symbol(b, Decl(spreadUnion3.ts, 7, 7))
+>t : Symbol(t, Decl(spreadUnion3.ts, 6, 11))
+
+    let c: number = b.a;  // might not have 'a'
+>c : Symbol(c, Decl(spreadUnion3.ts, 8, 7))
+>b.a : Symbol(a, Decl(spreadUnion3.ts, 6, 16))
+>b : Symbol(b, Decl(spreadUnion3.ts, 7, 7))
+>a : Symbol(a, Decl(spreadUnion3.ts, 6, 16))
+}
+g()
+>g : Symbol(g, Decl(spreadUnion3.ts, 3, 12))
+
+g(undefined)
+>g : Symbol(g, Decl(spreadUnion3.ts, 3, 12))
+>undefined : Symbol(undefined)
+
+g(null)
+>g : Symbol(g, Decl(spreadUnion3.ts, 3, 12))
+
+// spreading nothing but null and undefined is not allowed
+declare const nullAndUndefinedUnion: null | undefined;
+>nullAndUndefinedUnion : Symbol(nullAndUndefinedUnion, Decl(spreadUnion3.ts, 15, 13))
+
+var x = { ...nullAndUndefinedUnion, ...nullAndUndefinedUnion };
+>x : Symbol(x, Decl(spreadUnion3.ts, 16, 3))
+>nullAndUndefinedUnion : Symbol(nullAndUndefinedUnion, Decl(spreadUnion3.ts, 15, 13))
+>nullAndUndefinedUnion : Symbol(nullAndUndefinedUnion, Decl(spreadUnion3.ts, 15, 13))
+
+var y = { ...nullAndUndefinedUnion };
+>y : Symbol(y, Decl(spreadUnion3.ts, 17, 3))
+>nullAndUndefinedUnion : Symbol(nullAndUndefinedUnion, Decl(spreadUnion3.ts, 15, 13))
+

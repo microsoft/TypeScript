@@ -1,0 +1,5 @@
+=== tests/cases/compiler/shorthandPropertyUndefined.ts ===
+var a = { b };
+>a : Symbol(a, Decl(shorthandPropertyUndefined.ts, 0, 3))
+>b : Symbol(b, Decl(shorthandPropertyUndefined.ts, 0, 9))
+

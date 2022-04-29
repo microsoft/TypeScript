@@ -1,0 +1,27 @@
+=== tests/cases/compiler/objectLiteralsAgainstUnionsOfArrays01.ts ===
+interface Foo {
+>Foo : Symbol(Foo, Decl(objectLiteralsAgainstUnionsOfArrays01.ts, 0, 0))
+
+  bar: Bar | Bar[];
+>bar : Symbol(Foo.bar, Decl(objectLiteralsAgainstUnionsOfArrays01.ts, 0, 15))
+>Bar : Symbol(Bar, Decl(objectLiteralsAgainstUnionsOfArrays01.ts, 2, 1))
+>Bar : Symbol(Bar, Decl(objectLiteralsAgainstUnionsOfArrays01.ts, 2, 1))
+}
+
+interface Bar {
+>Bar : Symbol(Bar, Decl(objectLiteralsAgainstUnionsOfArrays01.ts, 2, 1))
+
+  prop: string;
+>prop : Symbol(Bar.prop, Decl(objectLiteralsAgainstUnionsOfArrays01.ts, 4, 15))
+}
+
+let x: Foo[] = [
+>x : Symbol(x, Decl(objectLiteralsAgainstUnionsOfArrays01.ts, 8, 3))
+>Foo : Symbol(Foo, Decl(objectLiteralsAgainstUnionsOfArrays01.ts, 0, 0))
+
+  { bar: { prop: 100 } }
+>bar : Symbol(bar, Decl(objectLiteralsAgainstUnionsOfArrays01.ts, 9, 3))
+>prop : Symbol(prop, Decl(objectLiteralsAgainstUnionsOfArrays01.ts, 9, 10))
+
+]
+

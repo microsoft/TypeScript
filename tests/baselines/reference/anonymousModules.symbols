@@ -1,0 +1,19 @@
+=== tests/cases/compiler/anonymousModules.ts ===
+module {
+	export var foo = 1;
+>foo : Symbol(foo, Decl(anonymousModules.ts, 1, 11))
+
+	module {
+		export var bar = 1;
+>bar : Symbol(bar, Decl(anonymousModules.ts, 4, 12), Decl(anonymousModules.ts, 7, 4))
+	}
+
+	var bar = 2;
+>bar : Symbol(bar, Decl(anonymousModules.ts, 4, 12), Decl(anonymousModules.ts, 7, 4))
+
+	module {
+		var x = bar;
+>x : Symbol(x, Decl(anonymousModules.ts, 10, 5))
+>bar : Symbol(bar, Decl(anonymousModules.ts, 4, 12), Decl(anonymousModules.ts, 7, 4))
+	}
+}

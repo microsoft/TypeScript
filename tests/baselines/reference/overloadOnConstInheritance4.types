@@ -1,0 +1,25 @@
+=== tests/cases/compiler/overloadOnConstInheritance4.ts ===
+interface I {
+    x1(a: number, callback: (x: 'hi') => number);
+>x1 : (a: number, callback: (x: 'hi') => number) => any
+>a : number
+>callback : (x: 'hi') => number
+>x : "hi"
+}
+class C implements I {
+>C : C
+
+    x1(a: number, callback: (x: 'hi') => number);
+>x1 : (a: number, callback: (x: 'hi') => number) => any
+>a : number
+>callback : (x: 'hi') => number
+>x : "hi"
+
+    x1(a: number, callback: (x: 'hi') => number) {
+>x1 : (a: number, callback: (x: "hi") => number) => any
+>a : number
+>callback : (x: 'hi') => number
+>x : "hi"
+    }
+}
+

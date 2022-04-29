@@ -1,0 +1,41 @@
+=== tests/cases/compiler/taggedPrimitiveNarrowing.ts ===
+type Hash = string & { __hash: true };
+>Hash : Symbol(Hash, Decl(taggedPrimitiveNarrowing.ts, 0, 0))
+>__hash : Symbol(__hash, Decl(taggedPrimitiveNarrowing.ts, 0, 22))
+
+function getHashLength(hash: Hash): number {
+>getHashLength : Symbol(getHashLength, Decl(taggedPrimitiveNarrowing.ts, 0, 38))
+>hash : Symbol(hash, Decl(taggedPrimitiveNarrowing.ts, 2, 23))
+>Hash : Symbol(Hash, Decl(taggedPrimitiveNarrowing.ts, 0, 0))
+
+    if (typeof hash !== "string") {
+>hash : Symbol(hash, Decl(taggedPrimitiveNarrowing.ts, 2, 23))
+
+        throw new Error("This doesn't look like a hash");
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+    }
+    return hash.length;
+>hash.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>hash : Symbol(hash, Decl(taggedPrimitiveNarrowing.ts, 2, 23))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+}
+
+function getHashLength2<T extends { __tag__: unknown}>(hash: string & T): number {
+>getHashLength2 : Symbol(getHashLength2, Decl(taggedPrimitiveNarrowing.ts, 7, 1))
+>T : Symbol(T, Decl(taggedPrimitiveNarrowing.ts, 9, 24))
+>__tag__ : Symbol(__tag__, Decl(taggedPrimitiveNarrowing.ts, 9, 35))
+>hash : Symbol(hash, Decl(taggedPrimitiveNarrowing.ts, 9, 55))
+>T : Symbol(T, Decl(taggedPrimitiveNarrowing.ts, 9, 24))
+
+    if (typeof hash !== "string") {
+>hash : Symbol(hash, Decl(taggedPrimitiveNarrowing.ts, 9, 55))
+
+        throw new Error("This doesn't look like a hash");
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+    }
+    return hash.length;
+>hash.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>hash : Symbol(hash, Decl(taggedPrimitiveNarrowing.ts, 9, 55))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+}
+

@@ -1,0 +1,16 @@
+=== tests/cases/conformance/statements/for-ofStatements/ES5For-of18.ts ===
+for (let v of []) {
+>v : any
+>[] : undefined[]
+
+    v;
+>v : any
+}
+for (let v of []) {
+>v : any
+>[] : undefined[]
+
+    v;
+>v : any
+}
+

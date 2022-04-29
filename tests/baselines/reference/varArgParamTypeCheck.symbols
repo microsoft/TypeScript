@@ -1,0 +1,38 @@
+=== tests/cases/compiler/varArgParamTypeCheck.ts ===
+function sequence(...sequences:{():void;}[]) {
+>sequence : Symbol(sequence, Decl(varArgParamTypeCheck.ts, 0, 0))
+>sequences : Symbol(sequences, Decl(varArgParamTypeCheck.ts, 0, 18))
+}
+
+function callback(clb:()=>void) {
+>callback : Symbol(callback, Decl(varArgParamTypeCheck.ts, 1, 1))
+>clb : Symbol(clb, Decl(varArgParamTypeCheck.ts, 3, 18))
+}
+
+sequence(
+>sequence : Symbol(sequence, Decl(varArgParamTypeCheck.ts, 0, 0))
+
+    function bar() {
+>bar : Symbol(bar, Decl(varArgParamTypeCheck.ts, 6, 9))
+
+    },
+    function foo() {
+>foo : Symbol(foo, Decl(varArgParamTypeCheck.ts, 8, 6))
+
+        callback(()=>{
+>callback : Symbol(callback, Decl(varArgParamTypeCheck.ts, 1, 1))
+
+            this();
+        });
+    },
+    function baz() {
+>baz : Symbol(baz, Decl(varArgParamTypeCheck.ts, 13, 6))
+
+        callback(()=>{
+>callback : Symbol(callback, Decl(varArgParamTypeCheck.ts, 1, 1))
+
+            this();
+        });
+    }
+);
+

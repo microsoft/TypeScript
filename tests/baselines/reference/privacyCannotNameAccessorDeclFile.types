@@ -1,0 +1,350 @@
+=== tests/cases/compiler/privacyCannotNameAccessorDeclFile_consumer.ts ===
+import exporter = require("./privacyCannotNameAccessorDeclFile_exporter");
+>exporter : typeof exporter
+
+export class publicClassWithWithPrivateGetAccessorTypes {
+>publicClassWithWithPrivateGetAccessorTypes : publicClassWithWithPrivateGetAccessorTypes
+
+    static get myPublicStaticMethod() { // Error
+>myPublicStaticMethod : import("tests/cases/compiler/privacyCannotNameAccessorDeclFile_Widgets").Widget1
+
+        return exporter.createExportedWidget1();
+>exporter.createExportedWidget1() : import("tests/cases/compiler/privacyCannotNameAccessorDeclFile_Widgets").Widget1
+>exporter.createExportedWidget1 : () => import("tests/cases/compiler/privacyCannotNameAccessorDeclFile_Widgets").Widget1
+>exporter : typeof exporter
+>createExportedWidget1 : () => import("tests/cases/compiler/privacyCannotNameAccessorDeclFile_Widgets").Widget1
+    }
+    private static get myPrivateStaticMethod() {
+>myPrivateStaticMethod : import("tests/cases/compiler/privacyCannotNameAccessorDeclFile_Widgets").Widget1
+
+        return exporter.createExportedWidget1();
+>exporter.createExportedWidget1() : import("tests/cases/compiler/privacyCannotNameAccessorDeclFile_Widgets").Widget1
+>exporter.createExportedWidget1 : () => import("tests/cases/compiler/privacyCannotNameAccessorDeclFile_Widgets").Widget1
+>exporter : typeof exporter
+>createExportedWidget1 : () => import("tests/cases/compiler/privacyCannotNameAccessorDeclFile_Widgets").Widget1
+    }
+    get myPublicMethod() { // Error
+>myPublicMethod : import("tests/cases/compiler/privacyCannotNameAccessorDeclFile_Widgets").Widget1
+
+        return exporter.createExportedWidget1();
+>exporter.createExportedWidget1() : import("tests/cases/compiler/privacyCannotNameAccessorDeclFile_Widgets").Widget1
+>exporter.createExportedWidget1 : () => import("tests/cases/compiler/privacyCannotNameAccessorDeclFile_Widgets").Widget1
+>exporter : typeof exporter
+>createExportedWidget1 : () => import("tests/cases/compiler/privacyCannotNameAccessorDeclFile_Widgets").Widget1
+    }
+    private get myPrivateMethod() {
+>myPrivateMethod : import("tests/cases/compiler/privacyCannotNameAccessorDeclFile_Widgets").Widget1
+
+        return exporter.createExportedWidget1();
+>exporter.createExportedWidget1() : import("tests/cases/compiler/privacyCannotNameAccessorDeclFile_Widgets").Widget1
+>exporter.createExportedWidget1 : () => import("tests/cases/compiler/privacyCannotNameAccessorDeclFile_Widgets").Widget1
+>exporter : typeof exporter
+>createExportedWidget1 : () => import("tests/cases/compiler/privacyCannotNameAccessorDeclFile_Widgets").Widget1
+    }
+    static get myPublicStaticMethod1() { // Error
+>myPublicStaticMethod1 : import("GlobalWidgets").Widget3
+
+        return exporter.createExportedWidget3();
+>exporter.createExportedWidget3() : import("GlobalWidgets").Widget3
+>exporter.createExportedWidget3 : () => import("GlobalWidgets").Widget3
+>exporter : typeof exporter
+>createExportedWidget3 : () => import("GlobalWidgets").Widget3
+    }
+    private static get myPrivateStaticMethod1() {
+>myPrivateStaticMethod1 : import("GlobalWidgets").Widget3
+
+        return exporter.createExportedWidget3();
+>exporter.createExportedWidget3() : import("GlobalWidgets").Widget3
+>exporter.createExportedWidget3 : () => import("GlobalWidgets").Widget3
+>exporter : typeof exporter
+>createExportedWidget3 : () => import("GlobalWidgets").Widget3
+    }
+    get myPublicMethod1() { // Error
+>myPublicMethod1 : import("GlobalWidgets").Widget3
+
+        return exporter.createExportedWidget3();
+>exporter.createExportedWidget3() : import("GlobalWidgets").Widget3
+>exporter.createExportedWidget3 : () => import("GlobalWidgets").Widget3
+>exporter : typeof exporter
+>createExportedWidget3 : () => import("GlobalWidgets").Widget3
+    }
+    private get myPrivateMethod1() {
+>myPrivateMethod1 : import("GlobalWidgets").Widget3
+
+        return exporter.createExportedWidget3();
+>exporter.createExportedWidget3() : import("GlobalWidgets").Widget3
+>exporter.createExportedWidget3 : () => import("GlobalWidgets").Widget3
+>exporter : typeof exporter
+>createExportedWidget3 : () => import("GlobalWidgets").Widget3
+    }
+}
+
+class privateClassWithWithPrivateGetAccessorTypes {
+>privateClassWithWithPrivateGetAccessorTypes : privateClassWithWithPrivateGetAccessorTypes
+
+    static get myPublicStaticMethod() { 
+>myPublicStaticMethod : import("tests/cases/compiler/privacyCannotNameAccessorDeclFile_Widgets").Widget1
+
+        return exporter.createExportedWidget1();
+>exporter.createExportedWidget1() : import("tests/cases/compiler/privacyCannotNameAccessorDeclFile_Widgets").Widget1
+>exporter.createExportedWidget1 : () => import("tests/cases/compiler/privacyCannotNameAccessorDeclFile_Widgets").Widget1
+>exporter : typeof exporter
+>createExportedWidget1 : () => import("tests/cases/compiler/privacyCannotNameAccessorDeclFile_Widgets").Widget1
+    }
+    private static get myPrivateStaticMethod() {
+>myPrivateStaticMethod : import("tests/cases/compiler/privacyCannotNameAccessorDeclFile_Widgets").Widget1
+
+        return exporter.createExportedWidget1();
+>exporter.createExportedWidget1() : import("tests/cases/compiler/privacyCannotNameAccessorDeclFile_Widgets").Widget1
+>exporter.createExportedWidget1 : () => import("tests/cases/compiler/privacyCannotNameAccessorDeclFile_Widgets").Widget1
+>exporter : typeof exporter
+>createExportedWidget1 : () => import("tests/cases/compiler/privacyCannotNameAccessorDeclFile_Widgets").Widget1
+    }
+    get myPublicMethod() { 
+>myPublicMethod : import("tests/cases/compiler/privacyCannotNameAccessorDeclFile_Widgets").Widget1
+
+        return exporter.createExportedWidget1();
+>exporter.createExportedWidget1() : import("tests/cases/compiler/privacyCannotNameAccessorDeclFile_Widgets").Widget1
+>exporter.createExportedWidget1 : () => import("tests/cases/compiler/privacyCannotNameAccessorDeclFile_Widgets").Widget1
+>exporter : typeof exporter
+>createExportedWidget1 : () => import("tests/cases/compiler/privacyCannotNameAccessorDeclFile_Widgets").Widget1
+    }
+    private get myPrivateMethod() {
+>myPrivateMethod : import("tests/cases/compiler/privacyCannotNameAccessorDeclFile_Widgets").Widget1
+
+        return exporter.createExportedWidget1();
+>exporter.createExportedWidget1() : import("tests/cases/compiler/privacyCannotNameAccessorDeclFile_Widgets").Widget1
+>exporter.createExportedWidget1 : () => import("tests/cases/compiler/privacyCannotNameAccessorDeclFile_Widgets").Widget1
+>exporter : typeof exporter
+>createExportedWidget1 : () => import("tests/cases/compiler/privacyCannotNameAccessorDeclFile_Widgets").Widget1
+    }
+    static get myPublicStaticMethod1() { 
+>myPublicStaticMethod1 : import("GlobalWidgets").Widget3
+
+        return exporter.createExportedWidget3();
+>exporter.createExportedWidget3() : import("GlobalWidgets").Widget3
+>exporter.createExportedWidget3 : () => import("GlobalWidgets").Widget3
+>exporter : typeof exporter
+>createExportedWidget3 : () => import("GlobalWidgets").Widget3
+    }
+    private static get myPrivateStaticMethod1() {
+>myPrivateStaticMethod1 : import("GlobalWidgets").Widget3
+
+        return exporter.createExportedWidget3();
+>exporter.createExportedWidget3() : import("GlobalWidgets").Widget3
+>exporter.createExportedWidget3 : () => import("GlobalWidgets").Widget3
+>exporter : typeof exporter
+>createExportedWidget3 : () => import("GlobalWidgets").Widget3
+    }
+    get myPublicMethod1() { 
+>myPublicMethod1 : import("GlobalWidgets").Widget3
+
+        return exporter.createExportedWidget3();
+>exporter.createExportedWidget3() : import("GlobalWidgets").Widget3
+>exporter.createExportedWidget3 : () => import("GlobalWidgets").Widget3
+>exporter : typeof exporter
+>createExportedWidget3 : () => import("GlobalWidgets").Widget3
+    }
+    private get myPrivateMethod1() {
+>myPrivateMethod1 : import("GlobalWidgets").Widget3
+
+        return exporter.createExportedWidget3();
+>exporter.createExportedWidget3() : import("GlobalWidgets").Widget3
+>exporter.createExportedWidget3 : () => import("GlobalWidgets").Widget3
+>exporter : typeof exporter
+>createExportedWidget3 : () => import("GlobalWidgets").Widget3
+    }
+}
+
+export class publicClassWithPrivateModuleGetAccessorTypes {
+>publicClassWithPrivateModuleGetAccessorTypes : publicClassWithPrivateModuleGetAccessorTypes
+
+    static get myPublicStaticMethod() { // Error
+>myPublicStaticMethod : import("tests/cases/compiler/privacyCannotNameAccessorDeclFile_Widgets").SpecializedWidget.Widget2
+
+        return exporter.createExportedWidget2();
+>exporter.createExportedWidget2() : import("tests/cases/compiler/privacyCannotNameAccessorDeclFile_Widgets").SpecializedWidget.Widget2
+>exporter.createExportedWidget2 : () => import("tests/cases/compiler/privacyCannotNameAccessorDeclFile_Widgets").SpecializedWidget.Widget2
+>exporter : typeof exporter
+>createExportedWidget2 : () => import("tests/cases/compiler/privacyCannotNameAccessorDeclFile_Widgets").SpecializedWidget.Widget2
+    }
+    get myPublicMethod() { // Error
+>myPublicMethod : import("tests/cases/compiler/privacyCannotNameAccessorDeclFile_Widgets").SpecializedWidget.Widget2
+
+        return exporter.createExportedWidget2();
+>exporter.createExportedWidget2() : import("tests/cases/compiler/privacyCannotNameAccessorDeclFile_Widgets").SpecializedWidget.Widget2
+>exporter.createExportedWidget2 : () => import("tests/cases/compiler/privacyCannotNameAccessorDeclFile_Widgets").SpecializedWidget.Widget2
+>exporter : typeof exporter
+>createExportedWidget2 : () => import("tests/cases/compiler/privacyCannotNameAccessorDeclFile_Widgets").SpecializedWidget.Widget2
+    }
+    static get myPublicStaticMethod1() { // Error
+>myPublicStaticMethod1 : import("GlobalWidgets").SpecializedGlobalWidget.Widget4
+
+        return exporter.createExportedWidget4();
+>exporter.createExportedWidget4() : import("GlobalWidgets").SpecializedGlobalWidget.Widget4
+>exporter.createExportedWidget4 : () => import("GlobalWidgets").SpecializedGlobalWidget.Widget4
+>exporter : typeof exporter
+>createExportedWidget4 : () => import("GlobalWidgets").SpecializedGlobalWidget.Widget4
+    }
+    get myPublicMethod1() { // Error
+>myPublicMethod1 : import("GlobalWidgets").SpecializedGlobalWidget.Widget4
+
+        return exporter.createExportedWidget4();
+>exporter.createExportedWidget4() : import("GlobalWidgets").SpecializedGlobalWidget.Widget4
+>exporter.createExportedWidget4 : () => import("GlobalWidgets").SpecializedGlobalWidget.Widget4
+>exporter : typeof exporter
+>createExportedWidget4 : () => import("GlobalWidgets").SpecializedGlobalWidget.Widget4
+    }
+}
+
+class privateClassWithPrivateModuleGetAccessorTypes {
+>privateClassWithPrivateModuleGetAccessorTypes : privateClassWithPrivateModuleGetAccessorTypes
+
+    static get myPublicStaticMethod() { 
+>myPublicStaticMethod : import("tests/cases/compiler/privacyCannotNameAccessorDeclFile_Widgets").SpecializedWidget.Widget2
+
+        return exporter.createExportedWidget2();
+>exporter.createExportedWidget2() : import("tests/cases/compiler/privacyCannotNameAccessorDeclFile_Widgets").SpecializedWidget.Widget2
+>exporter.createExportedWidget2 : () => import("tests/cases/compiler/privacyCannotNameAccessorDeclFile_Widgets").SpecializedWidget.Widget2
+>exporter : typeof exporter
+>createExportedWidget2 : () => import("tests/cases/compiler/privacyCannotNameAccessorDeclFile_Widgets").SpecializedWidget.Widget2
+    }
+    get myPublicMethod() { 
+>myPublicMethod : import("tests/cases/compiler/privacyCannotNameAccessorDeclFile_Widgets").SpecializedWidget.Widget2
+
+        return exporter.createExportedWidget2();
+>exporter.createExportedWidget2() : import("tests/cases/compiler/privacyCannotNameAccessorDeclFile_Widgets").SpecializedWidget.Widget2
+>exporter.createExportedWidget2 : () => import("tests/cases/compiler/privacyCannotNameAccessorDeclFile_Widgets").SpecializedWidget.Widget2
+>exporter : typeof exporter
+>createExportedWidget2 : () => import("tests/cases/compiler/privacyCannotNameAccessorDeclFile_Widgets").SpecializedWidget.Widget2
+    }
+    static get myPublicStaticMethod1() { 
+>myPublicStaticMethod1 : import("GlobalWidgets").SpecializedGlobalWidget.Widget4
+
+        return exporter.createExportedWidget4();
+>exporter.createExportedWidget4() : import("GlobalWidgets").SpecializedGlobalWidget.Widget4
+>exporter.createExportedWidget4 : () => import("GlobalWidgets").SpecializedGlobalWidget.Widget4
+>exporter : typeof exporter
+>createExportedWidget4 : () => import("GlobalWidgets").SpecializedGlobalWidget.Widget4
+    }
+    get myPublicMethod1() { 
+>myPublicMethod1 : import("GlobalWidgets").SpecializedGlobalWidget.Widget4
+
+        return exporter.createExportedWidget4();
+>exporter.createExportedWidget4() : import("GlobalWidgets").SpecializedGlobalWidget.Widget4
+>exporter.createExportedWidget4 : () => import("GlobalWidgets").SpecializedGlobalWidget.Widget4
+>exporter : typeof exporter
+>createExportedWidget4 : () => import("GlobalWidgets").SpecializedGlobalWidget.Widget4
+    }
+}
+=== tests/cases/compiler/privacyCannotNameAccessorDeclFile_GlobalWidgets.ts ===
+declare module "GlobalWidgets" {
+>"GlobalWidgets" : typeof import("GlobalWidgets")
+
+    export class Widget3 {
+>Widget3 : Widget3
+
+        name: string;
+>name : string
+    }
+    export function createWidget3(): Widget3;
+>createWidget3 : () => Widget3
+
+    export module SpecializedGlobalWidget {
+>SpecializedGlobalWidget : typeof SpecializedGlobalWidget
+
+        export class Widget4 {
+>Widget4 : Widget4
+
+            name: string;
+>name : string
+        }
+        function createWidget4(): Widget4;
+>createWidget4 : () => Widget4
+    }
+}
+
+=== tests/cases/compiler/privacyCannotNameAccessorDeclFile_Widgets.ts ===
+export class Widget1 {
+>Widget1 : Widget1
+
+    name = 'one';
+>name : string
+>'one' : "one"
+}
+export function createWidget1() {
+>createWidget1 : () => Widget1
+
+    return new Widget1();
+>new Widget1() : Widget1
+>Widget1 : typeof Widget1
+}
+
+export module SpecializedWidget {
+>SpecializedWidget : typeof SpecializedWidget
+
+    export class Widget2 {
+>Widget2 : Widget2
+
+        name = 'one';
+>name : string
+>'one' : "one"
+    }
+    export function createWidget2() {
+>createWidget2 : () => Widget2
+
+        return new Widget2();
+>new Widget2() : Widget2
+>Widget2 : typeof Widget2
+    }
+}
+
+=== tests/cases/compiler/privacyCannotNameAccessorDeclFile_exporter.ts ===
+///<reference path='privacyCannotNameAccessorDeclFile_GlobalWidgets.ts'/>
+import Widgets = require("./privacyCannotNameAccessorDeclFile_Widgets");
+>Widgets : typeof Widgets
+
+import Widgets1 = require("GlobalWidgets");
+>Widgets1 : typeof Widgets1
+
+export function createExportedWidget1() {
+>createExportedWidget1 : () => Widgets.Widget1
+
+    return Widgets.createWidget1();
+>Widgets.createWidget1() : Widgets.Widget1
+>Widgets.createWidget1 : () => Widgets.Widget1
+>Widgets : typeof Widgets
+>createWidget1 : () => Widgets.Widget1
+}
+export function createExportedWidget2() {
+>createExportedWidget2 : () => Widgets.SpecializedWidget.Widget2
+
+    return Widgets.SpecializedWidget.createWidget2();
+>Widgets.SpecializedWidget.createWidget2() : Widgets.SpecializedWidget.Widget2
+>Widgets.SpecializedWidget.createWidget2 : () => Widgets.SpecializedWidget.Widget2
+>Widgets.SpecializedWidget : typeof Widgets.SpecializedWidget
+>Widgets : typeof Widgets
+>SpecializedWidget : typeof Widgets.SpecializedWidget
+>createWidget2 : () => Widgets.SpecializedWidget.Widget2
+}
+export function createExportedWidget3() {
+>createExportedWidget3 : () => Widgets1.Widget3
+
+    return Widgets1.createWidget3();
+>Widgets1.createWidget3() : Widgets1.Widget3
+>Widgets1.createWidget3 : () => Widgets1.Widget3
+>Widgets1 : typeof Widgets1
+>createWidget3 : () => Widgets1.Widget3
+}
+export function createExportedWidget4() {
+>createExportedWidget4 : () => Widgets1.SpecializedGlobalWidget.Widget4
+
+    return Widgets1.SpecializedGlobalWidget.createWidget4();
+>Widgets1.SpecializedGlobalWidget.createWidget4() : Widgets1.SpecializedGlobalWidget.Widget4
+>Widgets1.SpecializedGlobalWidget.createWidget4 : () => Widgets1.SpecializedGlobalWidget.Widget4
+>Widgets1.SpecializedGlobalWidget : typeof Widgets1.SpecializedGlobalWidget
+>Widgets1 : typeof Widgets1
+>SpecializedGlobalWidget : typeof Widgets1.SpecializedGlobalWidget
+>createWidget4 : () => Widgets1.SpecializedGlobalWidget.Widget4
+}
+

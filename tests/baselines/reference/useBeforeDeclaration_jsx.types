@@ -1,0 +1,69 @@
+=== tests/cases/compiler/useBeforeDeclaration_jsx.tsx ===
+namespace JSX {
+    export interface Element {}
+}
+
+class C {
+>C : C
+
+    static a = <C.z></C.z>;
+>a : JSX.Element
+><C.z></C.z> : JSX.Element
+>C.z : () => JSX.Element
+>C : typeof C
+>z : () => JSX.Element
+>C.z : () => JSX.Element
+>C : typeof C
+>z : () => JSX.Element
+
+    static b = <C.z/>;
+>b : JSX.Element
+><C.z/> : JSX.Element
+>C.z : () => JSX.Element
+>C : typeof C
+>z : () => JSX.Element
+
+    static c = <span {...C.x}></span>;
+>c : JSX.Element
+><span {...C.x}></span> : JSX.Element
+>span : any
+>C.x : {}
+>C : typeof C
+>x : {}
+>span : any
+
+    static d = <span id={C.y}></span>;
+>d : JSX.Element
+><span id={C.y}></span> : JSX.Element
+>span : any
+>id : string
+>C.y : string
+>C : typeof C
+>y : string
+>span : any
+
+    static e = <span>{C.y}</span>;
+>e : JSX.Element
+><span>{C.y}</span> : JSX.Element
+>span : any
+>C.y : string
+>C : typeof C
+>y : string
+>span : any
+
+    static x = {};
+>x : {}
+>{} : {}
+
+    static y = '';
+>y : string
+>'' : ""
+
+    static z = () => <b></b>;
+>z : () => JSX.Element
+>() => <b></b> : () => JSX.Element
+><b></b> : JSX.Element
+>b : any
+>b : any
+}
+

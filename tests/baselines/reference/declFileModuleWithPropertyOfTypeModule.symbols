@@ -1,0 +1,12 @@
+=== tests/cases/compiler/declFileModuleWithPropertyOfTypeModule.ts ===
+module m {
+>m : Symbol(m, Decl(declFileModuleWithPropertyOfTypeModule.ts, 0, 0))
+
+    export class c {
+>c : Symbol(c, Decl(declFileModuleWithPropertyOfTypeModule.ts, 0, 10))
+    }
+
+    export var a = m;
+>a : Symbol(a, Decl(declFileModuleWithPropertyOfTypeModule.ts, 4, 14))
+>m : Symbol(m, Decl(declFileModuleWithPropertyOfTypeModule.ts, 0, 0))
+}

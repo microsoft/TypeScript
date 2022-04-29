@@ -1,0 +1,49 @@
+=== tests/cases/conformance/es6/spread/iteratorSpreadInArray6.ts ===
+class SymbolIterator {
+>SymbolIterator : SymbolIterator
+
+    next() {
+>next : () => { value: symbol; done: boolean; }
+
+        return {
+>{            value: Symbol(),            done: false        } : { value: symbol; done: boolean; }
+
+            value: Symbol(),
+>value : symbol
+>Symbol() : symbol
+>Symbol : SymbolConstructor
+
+            done: false
+>done : boolean
+>false : false
+
+        };
+    }
+
+    [Symbol.iterator]() {
+>[Symbol.iterator] : () => this
+>Symbol.iterator : unique symbol
+>Symbol : SymbolConstructor
+>iterator : unique symbol
+
+        return this;
+>this : this
+    }
+}
+
+var array: number[] = [0, 1];
+>array : number[]
+>[0, 1] : number[]
+>0 : 0
+>1 : 1
+
+array.concat([...new SymbolIterator]);
+>array.concat([...new SymbolIterator]) : number[]
+>array.concat : { (...items: ConcatArray<number>[]): number[]; (...items: (number | ConcatArray<number>)[]): number[]; }
+>array : number[]
+>concat : { (...items: ConcatArray<number>[]): number[]; (...items: (number | ConcatArray<number>)[]): number[]; }
+>[...new SymbolIterator] : symbol[]
+>...new SymbolIterator : symbol
+>new SymbolIterator : SymbolIterator
+>SymbolIterator : typeof SymbolIterator
+

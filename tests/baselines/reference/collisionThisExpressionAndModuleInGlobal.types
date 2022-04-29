@@ -1,0 +1,13 @@
+=== tests/cases/compiler/collisionThisExpressionAndModuleInGlobal.ts ===
+module _this { //Error
+>_this : typeof _this
+
+    class c {
+>c : c
+    }
+}
+var f = () => this;
+>f : () => typeof globalThis
+>() => this : () => typeof globalThis
+>this : typeof globalThis
+

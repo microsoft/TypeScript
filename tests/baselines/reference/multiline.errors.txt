@@ -1,0 +1,60 @@
+tests/cases/conformance/directives/a.ts(12,1): error TS2578: Unused '@ts-expect-error' directive.
+tests/cases/conformance/directives/b.tsx(32,1): error TS2578: Unused '@ts-expect-error' directive.
+
+
+==== tests/cases/conformance/directives/a.ts (1 errors) ====
+    export const texts: string[] = [];
+    
+    /**
+     @ts-ignore */
+    texts.push(100);
+    
+    /**
+     @ts-expect-error */
+    texts.push(100);
+    
+    /**
+     @ts-expect-error */
+    ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2578: Unused '@ts-expect-error' directive.
+    texts.push("100");
+    
+==== tests/cases/conformance/directives/b.tsx (1 errors) ====
+    import * as React from "react";
+    
+    export function MyComponent(props: { foo: string }) {
+      return <div />;
+    }
+    
+    let x = (
+      <div>
+        {/*
+       @ts-ignore */}
+        <MyComponent foo={100} />
+    
+        {/*@ts-ignore*/}
+        <MyComponent foo={100} />
+    
+        {/*
+       @ts-expect-error */}
+        <MyComponent foo={100} />
+    
+        {/*
+       // @ts-expect-error */}
+        <MyComponent foo={100} />
+    
+        {/*
+       * @ts-expect-error */}
+        <MyComponent foo={100} />
+    
+        {/*@ts-expect-error*/}
+        <MyComponent foo={100} />
+    
+        {/*
+       @ts-expect-error */}
+    ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2578: Unused '@ts-expect-error' directive.
+        <MyComponent foo={"hooray"} />
+      </div>
+    );
+    

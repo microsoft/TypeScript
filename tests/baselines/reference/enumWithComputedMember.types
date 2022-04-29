@@ -1,0 +1,18 @@
+=== tests/cases/compiler/enumWithComputedMember.ts ===
+enum A { 
+>A : A
+
+    X = "".length, 
+>X : A
+>"".length : number
+>"" : ""
+>length : number
+
+    Y = X,
+>Y : A
+>X : A
+
+    Z
+>Z : A
+}
+

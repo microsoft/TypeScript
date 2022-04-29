@@ -1,0 +1,6 @@
+=== tests/cases/compiler/exportInFunction.ts ===
+function f() {
+>f : Symbol(f, Decl(exportInFunction.ts, 0, 0))
+
+    export = 0;
+

@@ -1,0 +1,14 @@
+=== tests/cases/conformance/es6/Symbols/symbolType16.ts ===
+interface Symbol {
+    newSymbolProp: number;
+>newSymbolProp : number
+}
+
+var sym: symbol;
+>sym : symbol
+
+sym.newSymbolProp;
+>sym.newSymbolProp : number
+>sym : symbol
+>newSymbolProp : number
+

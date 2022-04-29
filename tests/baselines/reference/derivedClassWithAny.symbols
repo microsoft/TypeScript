@@ -1,0 +1,122 @@
+=== tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWithAny.ts ===
+class C {
+>C : Symbol(C, Decl(derivedClassWithAny.ts, 0, 0))
+
+    x: number;
+>x : Symbol(C.x, Decl(derivedClassWithAny.ts, 0, 9))
+
+    get X(): number { return 1; }
+>X : Symbol(C.X, Decl(derivedClassWithAny.ts, 1, 14))
+
+    foo(): number {
+>foo : Symbol(C.foo, Decl(derivedClassWithAny.ts, 2, 33))
+
+        return 1;
+    }
+
+    static y: number;
+>y : Symbol(C.y, Decl(derivedClassWithAny.ts, 5, 5))
+
+    static get Y(): number {
+>Y : Symbol(C.Y, Decl(derivedClassWithAny.ts, 7, 21))
+
+        return 1;
+    }
+    static bar(): number {
+>bar : Symbol(C.bar, Decl(derivedClassWithAny.ts, 10, 5))
+
+        return 1;
+    }
+}
+
+class D extends C {
+>D : Symbol(D, Decl(derivedClassWithAny.ts, 14, 1))
+>C : Symbol(C, Decl(derivedClassWithAny.ts, 0, 0))
+
+    x: any;
+>x : Symbol(D.x, Decl(derivedClassWithAny.ts, 16, 19))
+
+    get X(): any {
+>X : Symbol(D.X, Decl(derivedClassWithAny.ts, 17, 11))
+
+        return null;
+    }
+    foo(): any {
+>foo : Symbol(D.foo, Decl(derivedClassWithAny.ts, 20, 5))
+
+        return 1;
+    }
+
+    static y: any;
+>y : Symbol(D.y, Decl(derivedClassWithAny.ts, 23, 5))
+
+    static get Y(): any {
+>Y : Symbol(D.Y, Decl(derivedClassWithAny.ts, 25, 18))
+
+        return null;
+    }
+    static bar(): any {
+>bar : Symbol(D.bar, Decl(derivedClassWithAny.ts, 28, 5))
+
+        return null;
+    }
+}
+
+// if D is a valid class definition than E is now not safe tranisitively through C
+class E extends D {
+>E : Symbol(E, Decl(derivedClassWithAny.ts, 32, 1))
+>D : Symbol(D, Decl(derivedClassWithAny.ts, 14, 1))
+
+    x: string;
+>x : Symbol(E.x, Decl(derivedClassWithAny.ts, 35, 19))
+
+    get X(): string{ return ''; }
+>X : Symbol(E.X, Decl(derivedClassWithAny.ts, 36, 14))
+
+    foo(): string {
+>foo : Symbol(E.foo, Decl(derivedClassWithAny.ts, 37, 33))
+
+        return '';
+    }
+
+    static y: string;
+>y : Symbol(E.y, Decl(derivedClassWithAny.ts, 40, 5))
+
+    static get Y(): string {
+>Y : Symbol(E.Y, Decl(derivedClassWithAny.ts, 42, 21))
+
+        return '';
+    }
+    static bar(): string {
+>bar : Symbol(E.bar, Decl(derivedClassWithAny.ts, 45, 5))
+
+        return '';
+    }
+}
+
+var c: C;
+>c : Symbol(c, Decl(derivedClassWithAny.ts, 51, 3))
+>C : Symbol(C, Decl(derivedClassWithAny.ts, 0, 0))
+
+var d: D;
+>d : Symbol(d, Decl(derivedClassWithAny.ts, 52, 3))
+>D : Symbol(D, Decl(derivedClassWithAny.ts, 14, 1))
+
+var e: E;
+>e : Symbol(e, Decl(derivedClassWithAny.ts, 53, 3))
+>E : Symbol(E, Decl(derivedClassWithAny.ts, 32, 1))
+
+c = d;
+>c : Symbol(c, Decl(derivedClassWithAny.ts, 51, 3))
+>d : Symbol(d, Decl(derivedClassWithAny.ts, 52, 3))
+
+c = e;
+>c : Symbol(c, Decl(derivedClassWithAny.ts, 51, 3))
+>e : Symbol(e, Decl(derivedClassWithAny.ts, 53, 3))
+
+var r = c.foo(); // e.foo would return string
+>r : Symbol(r, Decl(derivedClassWithAny.ts, 57, 3))
+>c.foo : Symbol(C.foo, Decl(derivedClassWithAny.ts, 2, 33))
+>c : Symbol(c, Decl(derivedClassWithAny.ts, 51, 3))
+>foo : Symbol(C.foo, Decl(derivedClassWithAny.ts, 2, 33))
+

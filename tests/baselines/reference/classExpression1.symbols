@@ -1,0 +1,5 @@
+=== tests/cases/conformance/classes/classExpressions/classExpression1.ts ===
+var v = class C {};
+>v : Symbol(v, Decl(classExpression1.ts, 0, 3))
+>C : Symbol(C, Decl(classExpression1.ts, 0, 7))
+

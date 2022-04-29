@@ -1,0 +1,21 @@
+=== tests/cases/compiler/classIndexer3.ts ===
+class C123 {
+>C123 : Symbol(C123, Decl(classIndexer3.ts, 0, 0))
+
+    [s: string]: number;
+>s : Symbol(s, Decl(classIndexer3.ts, 1, 5))
+
+    constructor() {
+    }
+}
+
+class D123 extends C123 {
+>D123 : Symbol(D123, Decl(classIndexer3.ts, 4, 1))
+>C123 : Symbol(C123, Decl(classIndexer3.ts, 0, 0))
+
+    x: number;
+>x : Symbol(D123.x, Decl(classIndexer3.ts, 6, 25))
+
+    y: string;
+>y : Symbol(D123.y, Decl(classIndexer3.ts, 7, 14))
+}

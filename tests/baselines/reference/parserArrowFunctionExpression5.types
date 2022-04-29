@@ -1,0 +1,16 @@
+=== tests/cases/conformance/parser/ecmascript5/ArrowFunctionExpressions/parserArrowFunctionExpression5.ts ===
+(bar(x,
+>(bar(x,    () => {},    () => {}  )) : any
+>bar(x,    () => {},    () => {}  ) : any
+>bar : any
+>x : any
+
+    () => {},
+>() => {} : () => void
+
+    () => {}
+>() => {} : () => void
+
+  )
+)
+

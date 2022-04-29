@@ -1,0 +1,5 @@
+=== tests/cases/compiler/verifyDefaultLib_dom.ts ===
+var x: HTMLElement;
+>x : Symbol(x, Decl(verifyDefaultLib_dom.ts, 0, 3))
+>HTMLElement : Symbol(HTMLElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+

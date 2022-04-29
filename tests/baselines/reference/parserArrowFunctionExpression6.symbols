@@ -1,0 +1,15 @@
+=== tests/cases/conformance/parser/ecmascript5/ArrowFunctionExpressions/parserArrowFunctionExpression6.ts ===
+function foo(q: string, b: number) {
+>foo : Symbol(foo, Decl(parserArrowFunctionExpression6.ts, 0, 0))
+>q : Symbol(q, Decl(parserArrowFunctionExpression6.ts, 0, 13))
+>b : Symbol(b, Decl(parserArrowFunctionExpression6.ts, 0, 23))
+
+    return true ? (q ? true : false) : (b = q.length, function() { });
+>q : Symbol(q, Decl(parserArrowFunctionExpression6.ts, 0, 13))
+>b : Symbol(b, Decl(parserArrowFunctionExpression6.ts, 0, 23))
+>q.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>q : Symbol(q, Decl(parserArrowFunctionExpression6.ts, 0, 13))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+};
+

@@ -1,0 +1,45 @@
+=== tests/cases/compiler/thisInConstructorParameter2.ts ===
+class P {
+>P : Symbol(P, Decl(thisInConstructorParameter2.ts, 0, 0))
+
+    x = this;
+>x : Symbol(P.x, Decl(thisInConstructorParameter2.ts, 0, 9))
+>this : Symbol(P, Decl(thisInConstructorParameter2.ts, 0, 0))
+
+    static y = this;
+>y : Symbol(P.y, Decl(thisInConstructorParameter2.ts, 1, 13))
+>this : Symbol(P, Decl(thisInConstructorParameter2.ts, 0, 0))
+
+    constructor(public z = this, zz = this, zzz = (p = this) => this) {
+>z : Symbol(P.z, Decl(thisInConstructorParameter2.ts, 4, 16))
+>this : Symbol(P, Decl(thisInConstructorParameter2.ts, 0, 0))
+>zz : Symbol(zz, Decl(thisInConstructorParameter2.ts, 4, 32))
+>this : Symbol(P, Decl(thisInConstructorParameter2.ts, 0, 0))
+>zzz : Symbol(zzz, Decl(thisInConstructorParameter2.ts, 4, 43))
+>p : Symbol(p, Decl(thisInConstructorParameter2.ts, 4, 51))
+>this : Symbol(P, Decl(thisInConstructorParameter2.ts, 0, 0))
+>this : Symbol(P, Decl(thisInConstructorParameter2.ts, 0, 0))
+
+        zzz = (p = this) => this;
+>zzz : Symbol(zzz, Decl(thisInConstructorParameter2.ts, 4, 43))
+>p : Symbol(p, Decl(thisInConstructorParameter2.ts, 5, 15))
+>this : Symbol(P, Decl(thisInConstructorParameter2.ts, 0, 0))
+>this : Symbol(P, Decl(thisInConstructorParameter2.ts, 0, 0))
+    }
+
+    foo(zz = this) { zz.x; }
+>foo : Symbol(P.foo, Decl(thisInConstructorParameter2.ts, 6, 5))
+>zz : Symbol(zz, Decl(thisInConstructorParameter2.ts, 8, 8))
+>this : Symbol(P, Decl(thisInConstructorParameter2.ts, 0, 0))
+>zz.x : Symbol(P.x, Decl(thisInConstructorParameter2.ts, 0, 9))
+>zz : Symbol(zz, Decl(thisInConstructorParameter2.ts, 8, 8))
+>x : Symbol(P.x, Decl(thisInConstructorParameter2.ts, 0, 9))
+
+    static bar(zz = this) { zz.y; }
+>bar : Symbol(P.bar, Decl(thisInConstructorParameter2.ts, 8, 28))
+>zz : Symbol(zz, Decl(thisInConstructorParameter2.ts, 9, 15))
+>this : Symbol(P, Decl(thisInConstructorParameter2.ts, 0, 0))
+>zz.y : Symbol(P.y, Decl(thisInConstructorParameter2.ts, 1, 13))
+>zz : Symbol(zz, Decl(thisInConstructorParameter2.ts, 9, 15))
+>y : Symbol(P.y, Decl(thisInConstructorParameter2.ts, 1, 13))
+}

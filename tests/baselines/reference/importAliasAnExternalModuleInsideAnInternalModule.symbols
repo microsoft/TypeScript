@@ -1,0 +1,28 @@
+=== tests/cases/compiler/importAliasAnExternalModuleInsideAnInternalModule_file1.ts ===
+import r = require('./importAliasAnExternalModuleInsideAnInternalModule_file0');
+>r : Symbol(r, Decl(importAliasAnExternalModuleInsideAnInternalModule_file1.ts, 0, 0))
+
+module m_private {
+>m_private : Symbol(m_private, Decl(importAliasAnExternalModuleInsideAnInternalModule_file1.ts, 0, 80))
+
+    //import r2 = require('m'); // would be error
+    export import C = r; // no error
+>C : Symbol(C, Decl(importAliasAnExternalModuleInsideAnInternalModule_file1.ts, 1, 18))
+>r : Symbol(r, Decl(importAliasAnExternalModuleInsideAnInternalModule_file1.ts, 0, 0))
+
+    C.m.foo();
+>C.m.foo : Symbol(C.m.foo, Decl(importAliasAnExternalModuleInsideAnInternalModule_file0.ts, 0, 17))
+>C.m : Symbol(C.m, Decl(importAliasAnExternalModuleInsideAnInternalModule_file0.ts, 0, 0))
+>C : Symbol(C, Decl(importAliasAnExternalModuleInsideAnInternalModule_file1.ts, 1, 18))
+>m : Symbol(C.m, Decl(importAliasAnExternalModuleInsideAnInternalModule_file0.ts, 0, 0))
+>foo : Symbol(C.m.foo, Decl(importAliasAnExternalModuleInsideAnInternalModule_file0.ts, 0, 17))
+}
+
+=== tests/cases/compiler/importAliasAnExternalModuleInsideAnInternalModule_file0.ts ===
+export module m {
+>m : Symbol(m, Decl(importAliasAnExternalModuleInsideAnInternalModule_file0.ts, 0, 0))
+
+    export function foo() { }
+>foo : Symbol(foo, Decl(importAliasAnExternalModuleInsideAnInternalModule_file0.ts, 0, 17))
+}
+

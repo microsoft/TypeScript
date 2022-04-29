@@ -1,0 +1,75 @@
+=== tests/cases/compiler/mergedDeclarations1.ts ===
+interface Point {
+    x: number;
+>x : number
+
+    y: number;
+>y : number
+}
+function point(x: number, y: number): Point {
+>point : typeof point
+>x : number
+>y : number
+
+    return { x: x, y: y };
+>{ x: x, y: y } : { x: number; y: number; }
+>x : number
+>x : number
+>y : number
+>y : number
+}
+module point {
+>point : typeof point
+
+    export var origin = point(0, 0);
+>origin : Point
+>point(0, 0) : Point
+>point : typeof point
+>0 : 0
+>0 : 0
+
+    export function equals(p1: Point, p2: Point) {
+>equals : (p1: Point, p2: Point) => boolean
+>p1 : Point
+>p2 : Point
+
+        return p1.x == p2.x && p1.y == p2.y;
+>p1.x == p2.x && p1.y == p2.y : boolean
+>p1.x == p2.x : boolean
+>p1.x : number
+>p1 : Point
+>x : number
+>p2.x : number
+>p2 : Point
+>x : number
+>p1.y == p2.y : boolean
+>p1.y : number
+>p1 : Point
+>y : number
+>p2.y : number
+>p2 : Point
+>y : number
+    }
+}
+var p1 = point(0, 0);
+>p1 : Point
+>point(0, 0) : Point
+>point : typeof point
+>0 : 0
+>0 : 0
+
+var p2 = point.origin;
+>p2 : Point
+>point.origin : Point
+>point : typeof point
+>origin : Point
+
+var b = point.equals(p1, p2);
+>b : boolean
+>point.equals(p1, p2) : boolean
+>point.equals : (p1: Point, p2: Point) => boolean
+>point : typeof point
+>equals : (p1: Point, p2: Point) => boolean
+>p1 : Point
+>p2 : Point
+

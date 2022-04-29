@@ -1,0 +1,13 @@
+EmitSkipped: false
+
+FileName : out.js
+/// <reference path='my.d.ts' />
+var foo;
+(function (foo) {
+    var bar;
+    (function (bar) {
+        var baz1 = bar.Baz.prototype; // Should emit as bar.Baz.prototype
+    })(bar = foo.bar || (foo.bar = {}));
+})(foo || (foo = {}));
+var x;
+

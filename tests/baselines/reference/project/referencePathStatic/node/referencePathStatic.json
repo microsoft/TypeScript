@@ -1,0 +1,16 @@
+{
+    "scenario": "Reference-path-static",
+    "projectRoot": "tests/cases/projects/reference-path-static",
+    "inputFiles": [
+        "test.ts"
+    ],
+    "resolvedInputFiles": [
+        "lib.es5.d.ts",
+        "lib.ts",
+        "test.ts"
+    ],
+    "emittedFiles": [
+        "lib.js",
+        "test.js"
+    ]
+}

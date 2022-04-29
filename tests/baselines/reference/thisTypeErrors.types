@@ -1,0 +1,137 @@
+=== tests/cases/conformance/types/thisType/thisTypeErrors.ts ===
+var x1: this;
+>x1 : any
+
+var x2: { a: this };
+>x2 : { a: any; }
+>a : any
+
+var x3: this[];
+>x3 : any[]
+
+function f1(x: this): this {
+>f1 : (x: any) => any
+>x : any
+
+    var y: this;
+>y : any
+
+    return this;
+>this : any
+}
+
+interface I1 {
+    a: { x: this };
+>a : { x: any; }
+>x : any
+
+    b: { (): this };
+>b : () => any
+
+    c: { new (): this };
+>c : new () => any
+
+    d: { [x: string]: this };
+>d : { [x: string]: any; }
+>x : string
+
+    e: { f(x: this): this };
+>e : { f(x: any): any; }
+>f : (x: any) => any
+>x : any
+}
+
+class C1 {
+>C1 : C1
+
+    a: { x: this };
+>a : { x: any; }
+>x : any
+
+    b: { (): this };
+>b : () => any
+
+    c: { new (): this };
+>c : new () => any
+
+    d: { [x: string]: this };
+>d : { [x: string]: any; }
+>x : string
+
+    e: { f(x: this): this };
+>e : { f(x: any): any; }
+>f : (x: any) => any
+>x : any
+}
+
+class C2 {
+>C2 : C2
+
+    static x: this;
+>x : any
+
+    static y = <this>undefined;
+>y : any
+><this>undefined : any
+>undefined : undefined
+
+    static foo(x: this): this {
+>foo : (x: any) => any
+>x : any
+
+        return undefined;
+>undefined : undefined
+    }
+}
+
+namespace N1 {
+>N1 : typeof N1
+
+    export var x: this;
+>x : any
+
+    export var y = this;
+>y : any
+>this : any
+}
+
+class C3 {
+>C3 : C3
+
+    x1 = {
+>x1 : { g(x: any): any; }
+>{        g(x: this): this {            return undefined;        }    } : { g(x: any): any; }
+
+        g(x: this): this {
+>g : (x: any) => any
+>x : any
+
+            return undefined;
+>undefined : undefined
+        }
+    }
+    f() {
+>f : () => void
+
+        function g(x: this): this {
+>g : (x: any) => any
+>x : any
+
+            return undefined;
+>undefined : undefined
+        }
+        let x2 = {
+>x2 : { h(x: any): any; }
+>{            h(x: this): this {                return undefined;            }        } : { h(x: any): any; }
+
+            h(x: this): this {
+>h : (x: any) => any
+>x : any
+
+                return undefined;
+>undefined : undefined
+            }
+        }
+    }
+}
+

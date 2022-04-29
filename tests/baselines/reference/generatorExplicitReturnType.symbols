@@ -1,0 +1,48 @@
+=== tests/cases/conformance/generators/generatorExplicitReturnType.ts ===
+function* g1(): Generator<number, boolean, string> {
+>g1 : Symbol(g1, Decl(generatorExplicitReturnType.ts, 0, 0))
+>Generator : Symbol(Generator, Decl(lib.es2015.generator.d.ts, --, --))
+
+    yield; // error
+    yield "a"; // error
+    const x: number = yield 1; // error
+>x : Symbol(x, Decl(generatorExplicitReturnType.ts, 3, 9))
+
+    return 10; // error
+}
+
+function* g2(): Generator<number, boolean, string> {
+>g2 : Symbol(g2, Decl(generatorExplicitReturnType.ts, 5, 1))
+>Generator : Symbol(Generator, Decl(lib.es2015.generator.d.ts, --, --))
+
+    const x = yield 1;
+>x : Symbol(x, Decl(generatorExplicitReturnType.ts, 8, 9))
+
+    return true;
+}
+
+declare const generator: Generator<number, symbol, string>;
+>generator : Symbol(generator, Decl(generatorExplicitReturnType.ts, 12, 13))
+>Generator : Symbol(Generator, Decl(lib.es2015.generator.d.ts, --, --))
+
+function* g3(): Generator<number, boolean, string> {
+>g3 : Symbol(g3, Decl(generatorExplicitReturnType.ts, 12, 59))
+>Generator : Symbol(Generator, Decl(lib.es2015.generator.d.ts, --, --))
+
+    const x: number = yield* generator; // error
+>x : Symbol(x, Decl(generatorExplicitReturnType.ts, 15, 9))
+>generator : Symbol(generator, Decl(generatorExplicitReturnType.ts, 12, 13))
+
+    return true;
+}
+
+function* g4(): Generator<number, boolean, string> {
+>g4 : Symbol(g4, Decl(generatorExplicitReturnType.ts, 17, 1))
+>Generator : Symbol(Generator, Decl(lib.es2015.generator.d.ts, --, --))
+
+    const x = yield* generator;
+>x : Symbol(x, Decl(generatorExplicitReturnType.ts, 20, 9))
+>generator : Symbol(generator, Decl(generatorExplicitReturnType.ts, 12, 13))
+
+    return true;
+}

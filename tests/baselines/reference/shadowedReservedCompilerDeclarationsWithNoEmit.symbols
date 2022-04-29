@@ -1,0 +1,89 @@
+=== tests/cases/compiler/shadowedReservedCompilerDeclarationsWithNoEmit.ts ===
+// Shadowed captured this and super
+class Base { }
+>Base : Symbol(Base, Decl(shadowedReservedCompilerDeclarationsWithNoEmit.ts, 0, 0))
+
+class C extends Base {
+>C : Symbol(C, Decl(shadowedReservedCompilerDeclarationsWithNoEmit.ts, 1, 14))
+>Base : Symbol(Base, Decl(shadowedReservedCompilerDeclarationsWithNoEmit.ts, 0, 0))
+
+    constructor() {
+        super();
+>super : Symbol(Base, Decl(shadowedReservedCompilerDeclarationsWithNoEmit.ts, 0, 0))
+    }
+
+    foo() {
+>foo : Symbol(C.foo, Decl(shadowedReservedCompilerDeclarationsWithNoEmit.ts, 5, 5))
+
+        let _this = this;
+>_this : Symbol(_this, Decl(shadowedReservedCompilerDeclarationsWithNoEmit.ts, 8, 11))
+>this : Symbol(C, Decl(shadowedReservedCompilerDeclarationsWithNoEmit.ts, 1, 14))
+
+        () => {
+            _this;
+>_this : Symbol(_this, Decl(shadowedReservedCompilerDeclarationsWithNoEmit.ts, 8, 11))
+
+        };
+    }
+
+    bar() {
+>bar : Symbol(C.bar, Decl(shadowedReservedCompilerDeclarationsWithNoEmit.ts, 13, 5))
+
+        let _super = this;
+>_super : Symbol(_super, Decl(shadowedReservedCompilerDeclarationsWithNoEmit.ts, 16, 11))
+>this : Symbol(C, Decl(shadowedReservedCompilerDeclarationsWithNoEmit.ts, 1, 14))
+    }
+}
+
+
+/// shadowed arguments
+function f1(arguments, ...a) {
+>f1 : Symbol(f1, Decl(shadowedReservedCompilerDeclarationsWithNoEmit.ts, 18, 1))
+>arguments : Symbol(arguments, Decl(shadowedReservedCompilerDeclarationsWithNoEmit.ts, 22, 12))
+>a : Symbol(a, Decl(shadowedReservedCompilerDeclarationsWithNoEmit.ts, 22, 22))
+}
+
+class C2 extends Base {
+>C2 : Symbol(C2, Decl(shadowedReservedCompilerDeclarationsWithNoEmit.ts, 23, 1))
+>Base : Symbol(Base, Decl(shadowedReservedCompilerDeclarationsWithNoEmit.ts, 0, 0))
+
+    constructor() {
+        super();
+>super : Symbol(Base, Decl(shadowedReservedCompilerDeclarationsWithNoEmit.ts, 0, 0))
+
+        var _newTarget = "";
+>_newTarget : Symbol(_newTarget, Decl(shadowedReservedCompilerDeclarationsWithNoEmit.ts, 28, 11))
+
+        var t = new.target;
+>t : Symbol(t, Decl(shadowedReservedCompilerDeclarationsWithNoEmit.ts, 29, 11))
+>new.target : Symbol(C2, Decl(shadowedReservedCompilerDeclarationsWithNoEmit.ts, 23, 1))
+>target : Symbol(C2, Decl(shadowedReservedCompilerDeclarationsWithNoEmit.ts, 23, 1))
+
+        var y = _newTarget;
+>y : Symbol(y, Decl(shadowedReservedCompilerDeclarationsWithNoEmit.ts, 30, 11))
+>_newTarget : Symbol(_newTarget, Decl(shadowedReservedCompilerDeclarationsWithNoEmit.ts, 28, 11))
+    }
+}
+
+
+// Shadowed Promise
+var Promise = null;
+>Promise : Symbol(Promise, Decl(shadowedReservedCompilerDeclarationsWithNoEmit.ts, 36, 3))
+
+async function f4() {
+>f4 : Symbol(f4, Decl(shadowedReservedCompilerDeclarationsWithNoEmit.ts, 36, 19))
+
+    return 0;
+}
+
+
+// shadowed require
+var require = 0;
+>require : Symbol(require, Decl(shadowedReservedCompilerDeclarationsWithNoEmit.ts, 43, 3))
+
+// shadowed exports
+var exports = 0;
+>exports : Symbol(exports, Decl(shadowedReservedCompilerDeclarationsWithNoEmit.ts, 46, 3))
+
+
+export { };

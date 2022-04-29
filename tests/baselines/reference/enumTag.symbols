@@ -1,0 +1,121 @@
+=== tests/cases/conformance/jsdoc/a.js ===
+/** @enum {string} */
+const Target = {
+>Target : Symbol(Target, Decl(a.js, 1, 5), Decl(a.js, 0, 4))
+
+    START: "start",
+>START : Symbol(START, Decl(a.js, 1, 16))
+
+    MIDDLE: "middle",
+>MIDDLE : Symbol(MIDDLE, Decl(a.js, 2, 19))
+
+    END: "end",
+>END : Symbol(END, Decl(a.js, 3, 21))
+
+    MISTAKE: 1,
+>MISTAKE : Symbol(MISTAKE, Decl(a.js, 4, 15))
+
+    /** @type {number} */
+    OK_I_GUESS: 2
+>OK_I_GUESS : Symbol(OK_I_GUESS, Decl(a.js, 5, 15))
+}
+/** @enum number */
+const Second = {
+>Second : Symbol(Second, Decl(a.js, 10, 5), Decl(a.js, 9, 4))
+
+    MISTAKE: "end",
+>MISTAKE : Symbol(MISTAKE, Decl(a.js, 10, 16))
+
+    OK: 1,
+>OK : Symbol(OK, Decl(a.js, 11, 19))
+
+    /** @type {number} */
+    FINE: 2,
+>FINE : Symbol(FINE, Decl(a.js, 12, 10))
+}
+/** @enum {function(number): number} */
+const Fs = {
+>Fs : Symbol(Fs, Decl(a.js, 17, 5), Decl(a.js, 16, 4))
+
+    ADD1: n => n + 1,
+>ADD1 : Symbol(ADD1, Decl(a.js, 17, 12))
+>n : Symbol(n, Decl(a.js, 18, 9))
+>n : Symbol(n, Decl(a.js, 18, 9))
+
+    ID: n => n,
+>ID : Symbol(ID, Decl(a.js, 18, 21))
+>n : Symbol(n, Decl(a.js, 19, 7))
+>n : Symbol(n, Decl(a.js, 19, 7))
+
+    SUB1: n => n - 1
+>SUB1 : Symbol(SUB1, Decl(a.js, 19, 15))
+>n : Symbol(n, Decl(a.js, 20, 9))
+>n : Symbol(n, Decl(a.js, 20, 9))
+}
+
+/** @param {Target} t
+ * @param {Second} s
+ * @param {Fs} f
+ */
+function consume(t,s,f) {
+>consume : Symbol(consume, Decl(a.js, 21, 1))
+>t : Symbol(t, Decl(a.js, 27, 17))
+>s : Symbol(s, Decl(a.js, 27, 19))
+>f : Symbol(f, Decl(a.js, 27, 21))
+
+    /** @type {string} */
+    var str = t
+>str : Symbol(str, Decl(a.js, 29, 7))
+>t : Symbol(t, Decl(a.js, 27, 17))
+
+    /** @type {number} */
+    var num = s
+>num : Symbol(num, Decl(a.js, 31, 7))
+>s : Symbol(s, Decl(a.js, 27, 19))
+
+    /** @type {(n: number) => number} */
+    var fun = f
+>fun : Symbol(fun, Decl(a.js, 33, 7))
+>f : Symbol(f, Decl(a.js, 27, 21))
+
+    /** @type {Target} */
+    var v = Target.START
+>v : Symbol(v, Decl(a.js, 35, 7))
+>Target.START : Symbol(START, Decl(a.js, 1, 16))
+>Target : Symbol(Target, Decl(a.js, 1, 5), Decl(a.js, 0, 4))
+>START : Symbol(START, Decl(a.js, 1, 16))
+
+    v = Target.UNKNOWN // error, can't find 'UNKNOWN'
+>v : Symbol(v, Decl(a.js, 35, 7))
+>Target : Symbol(Target, Decl(a.js, 1, 5), Decl(a.js, 0, 4))
+
+    v = Second.MISTAKE // meh..ok, I guess?
+>v : Symbol(v, Decl(a.js, 35, 7))
+>Second.MISTAKE : Symbol(MISTAKE, Decl(a.js, 10, 16))
+>Second : Symbol(Second, Decl(a.js, 10, 5), Decl(a.js, 9, 4))
+>MISTAKE : Symbol(MISTAKE, Decl(a.js, 10, 16))
+
+    v = 'something else' // allowed, like Typescript's classic enums and unlike its string enums
+>v : Symbol(v, Decl(a.js, 35, 7))
+}
+/** @param {string} s */
+function ff(s) {
+>ff : Symbol(ff, Decl(a.js, 39, 1))
+>s : Symbol(s, Decl(a.js, 41, 12))
+
+    // element access with arbitrary string is an error only with noImplicitAny
+    if (!Target[s]) {
+>Target : Symbol(Target, Decl(a.js, 1, 5), Decl(a.js, 0, 4))
+>s : Symbol(s, Decl(a.js, 41, 12))
+
+        return null
+    }
+    else {
+        return Target[s]
+>Target : Symbol(Target, Decl(a.js, 1, 5), Decl(a.js, 0, 4))
+>s : Symbol(s, Decl(a.js, 41, 12))
+    }
+}
+
+
+

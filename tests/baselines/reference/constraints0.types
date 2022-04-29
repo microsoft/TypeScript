@@ -1,0 +1,30 @@
+=== tests/cases/compiler/constraints0.ts ===
+interface A {
+	a: number;
+>a : number
+}
+
+interface B {
+	b: string;
+>b : string
+}
+
+interface C<T extends A> {
+    x: T;
+>x : T
+}
+
+var v1: C<A>; // should work
+>v1 : C<A>
+
+var v2: C<B>; // should not work
+>v2 : C<B>
+
+var y = v1.x.a; // 'a' should be of type 'number'
+>y : number
+>v1.x.a : number
+>v1.x : A
+>v1 : C<A>
+>x : A
+>a : number
+

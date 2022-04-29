@@ -1,0 +1,21 @@
+=== tests/cases/compiler/metadataOfClassFromModule.ts ===
+module MyModule {
+>MyModule : typeof MyModule
+
+    export function inject(target: any, key: string): void { }
+>inject : (target: any, key: string) => void
+>target : any
+>key : string
+
+    export class Leg { }
+>Leg : Leg
+
+    export class Person {
+>Person : Person
+
+        @inject leftLeg: Leg;
+>inject : (target: any, key: string) => void
+>leftLeg : Leg
+    }
+
+}

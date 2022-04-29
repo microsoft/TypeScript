@@ -1,0 +1,30 @@
+=== tests/cases/compiler/typeArgumentDefaultUsesConstraintOnCircularDefault.ts ===
+type Test<T extends string = T> = { value: T };  // Error
+>Test : Symbol(Test, Decl(typeArgumentDefaultUsesConstraintOnCircularDefault.ts, 0, 0))
+>T : Symbol(T, Decl(typeArgumentDefaultUsesConstraintOnCircularDefault.ts, 0, 10))
+>T : Symbol(T, Decl(typeArgumentDefaultUsesConstraintOnCircularDefault.ts, 0, 10))
+>value : Symbol(value, Decl(typeArgumentDefaultUsesConstraintOnCircularDefault.ts, 0, 35))
+>T : Symbol(T, Decl(typeArgumentDefaultUsesConstraintOnCircularDefault.ts, 0, 10))
+
+let zz: Test = { foo: "abc" };  // should error on comparison with Test<string>
+>zz : Symbol(zz, Decl(typeArgumentDefaultUsesConstraintOnCircularDefault.ts, 2, 3))
+>Test : Symbol(Test, Decl(typeArgumentDefaultUsesConstraintOnCircularDefault.ts, 0, 0))
+>foo : Symbol(foo, Decl(typeArgumentDefaultUsesConstraintOnCircularDefault.ts, 2, 16))
+
+let zzy: Test = { value: {} };
+>zzy : Symbol(zzy, Decl(typeArgumentDefaultUsesConstraintOnCircularDefault.ts, 4, 3))
+>Test : Symbol(Test, Decl(typeArgumentDefaultUsesConstraintOnCircularDefault.ts, 0, 0))
+>value : Symbol(value, Decl(typeArgumentDefaultUsesConstraintOnCircularDefault.ts, 4, 17))
+
+// Simplified repro from #28873
+
+class C1<T extends C1 = any> {}
+>C1 : Symbol(C1, Decl(typeArgumentDefaultUsesConstraintOnCircularDefault.ts, 4, 30))
+>T : Symbol(T, Decl(typeArgumentDefaultUsesConstraintOnCircularDefault.ts, 8, 9))
+>C1 : Symbol(C1, Decl(typeArgumentDefaultUsesConstraintOnCircularDefault.ts, 4, 30))
+
+class C2<T extends C2<any> = any> {}
+>C2 : Symbol(C2, Decl(typeArgumentDefaultUsesConstraintOnCircularDefault.ts, 8, 31))
+>T : Symbol(T, Decl(typeArgumentDefaultUsesConstraintOnCircularDefault.ts, 10, 9))
+>C2 : Symbol(C2, Decl(typeArgumentDefaultUsesConstraintOnCircularDefault.ts, 8, 31))
+

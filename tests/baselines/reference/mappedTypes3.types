@@ -1,0 +1,110 @@
+=== tests/cases/conformance/types/mapped/mappedTypes3.ts ===
+class Box<P> {
+>Box : Box<P>
+
+    value: P;
+>value : P
+}
+
+type Boxified<T> = {
+>Boxified : Boxified<T>
+
+    [K in keyof T]: Box<T[K]>;
+}
+
+declare function boxify<T>(obj: T): Boxified<T>;
+>boxify : <T>(obj: T) => Boxified<T>
+>obj : T
+
+declare function unboxify<T>(obj: Boxified<T>): T;
+>unboxify : <T>(obj: Boxified<T>) => T
+>obj : Boxified<T>
+
+interface Bacon {
+    isPerfect: boolean;
+>isPerfect : boolean
+
+    weight: number;
+>weight : number
+}
+
+interface BoxifiedBacon {
+    isPerfect: Box<boolean>;
+>isPerfect : Box<boolean>
+
+    weight: Box<number>;
+>weight : Box<number>
+}
+
+function f1(b: Bacon) {
+>f1 : (b: Bacon) => void
+>b : Bacon
+
+    let bb = boxify(b);
+>bb : Boxified<Bacon>
+>boxify(b) : Boxified<Bacon>
+>boxify : <T>(obj: T) => Boxified<T>
+>b : Bacon
+
+    let isPerfect = bb.isPerfect.value;
+>isPerfect : boolean
+>bb.isPerfect.value : boolean
+>bb.isPerfect : Box<boolean>
+>bb : Boxified<Bacon>
+>isPerfect : Box<boolean>
+>value : boolean
+
+    let weight = bb.weight.value;
+>weight : number
+>bb.weight.value : number
+>bb.weight : Box<number>
+>bb : Boxified<Bacon>
+>weight : Box<number>
+>value : number
+}
+
+function f2(bb: Boxified<Bacon>) {
+>f2 : (bb: Boxified<Bacon>) => void
+>bb : Boxified<Bacon>
+
+    let b = unboxify(bb);  // Infer Bacon for T
+>b : Bacon
+>unboxify(bb) : Bacon
+>unboxify : <T>(obj: Boxified<T>) => T
+>bb : Boxified<Bacon>
+
+    let bool = b.isPerfect;
+>bool : boolean
+>b.isPerfect : boolean
+>b : Bacon
+>isPerfect : boolean
+
+    let weight = b.weight;
+>weight : number
+>b.weight : number
+>b : Bacon
+>weight : number
+}
+
+function f3(bb: BoxifiedBacon) {
+>f3 : (bb: BoxifiedBacon) => void
+>bb : BoxifiedBacon
+
+    let b = unboxify<Bacon>(bb);  // Explicit type parameter required
+>b : Bacon
+>unboxify<Bacon>(bb) : Bacon
+>unboxify : <T>(obj: Boxified<T>) => T
+>bb : BoxifiedBacon
+
+    let bool = b.isPerfect;
+>bool : boolean
+>b.isPerfect : boolean
+>b : Bacon
+>isPerfect : boolean
+
+    let weight = bb.weight;
+>weight : Box<number>
+>bb.weight : Box<number>
+>bb : BoxifiedBacon
+>weight : Box<number>
+}

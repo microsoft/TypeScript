@@ -1,0 +1,37 @@
+=== tests/cases/conformance/controlFlow/controlFlowElementAccess2.ts ===
+declare const config: {
+>config : Symbol(config, Decl(controlFlowElementAccess2.ts, 0, 13))
+
+    [key: string]: boolean | { prop: string };
+>key : Symbol(key, Decl(controlFlowElementAccess2.ts, 1, 5))
+>prop : Symbol(prop, Decl(controlFlowElementAccess2.ts, 1, 30))
+
+};
+
+if (typeof config['works'] !== 'boolean') {
+>config : Symbol(config, Decl(controlFlowElementAccess2.ts, 0, 13))
+
+    config.works.prop = 'test'; // ok
+>config.works.prop : Symbol(prop, Decl(controlFlowElementAccess2.ts, 1, 30))
+>config : Symbol(config, Decl(controlFlowElementAccess2.ts, 0, 13))
+>prop : Symbol(prop, Decl(controlFlowElementAccess2.ts, 1, 30))
+
+    config['works'].prop = 'test'; // error, config['works']: boolean | { 'prop': string }
+>config['works'].prop : Symbol(prop, Decl(controlFlowElementAccess2.ts, 1, 30))
+>config : Symbol(config, Decl(controlFlowElementAccess2.ts, 0, 13))
+>prop : Symbol(prop, Decl(controlFlowElementAccess2.ts, 1, 30))
+}
+if (typeof config.works !== 'boolean') {
+>config : Symbol(config, Decl(controlFlowElementAccess2.ts, 0, 13))
+
+    config['works'].prop = 'test'; // error, config['works']: boolean | { 'prop': string }
+>config['works'].prop : Symbol(prop, Decl(controlFlowElementAccess2.ts, 1, 30))
+>config : Symbol(config, Decl(controlFlowElementAccess2.ts, 0, 13))
+>prop : Symbol(prop, Decl(controlFlowElementAccess2.ts, 1, 30))
+
+    config.works.prop = 'test'; // ok
+>config.works.prop : Symbol(prop, Decl(controlFlowElementAccess2.ts, 1, 30))
+>config : Symbol(config, Decl(controlFlowElementAccess2.ts, 0, 13))
+>prop : Symbol(prop, Decl(controlFlowElementAccess2.ts, 1, 30))
+}
+

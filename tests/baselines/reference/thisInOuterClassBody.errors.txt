@@ -1,0 +1,29 @@
+tests/cases/compiler/thisInOuterClassBody.ts(12,22): error TS2576: Property 'y' does not exist on type 'Foo'. Did you mean to access the static member 'Foo.y' instead?
+tests/cases/compiler/thisInOuterClassBody.ts(18,22): error TS2339: Property 'x' does not exist on type 'typeof Foo'.
+
+
+==== tests/cases/compiler/thisInOuterClassBody.ts (2 errors) ====
+    class Foo {
+    
+        x = this;
+    
+        static y = this;
+    
+        bar() {
+     
+            this.x; // 'this' is type 'Foo'
+     
+            var f = () => this.x; // 'this' should be type 'Foo' as well
+            var p = this.y;
+                         ~
+!!! error TS2576: Property 'y' does not exist on type 'Foo'. Did you mean to access the static member 'Foo.y' instead?
+            return this;
+        }
+    
+        static bar2() {
+            var a = this.y;
+            var b = this.x;
+                         ~
+!!! error TS2339: Property 'x' does not exist on type 'typeof Foo'.
+        }
+    }

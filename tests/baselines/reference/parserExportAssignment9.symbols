@@ -1,0 +1,12 @@
+=== tests/cases/conformance/parser/ecmascript5/ExportAssignments/parserExportAssignment9.ts ===
+namespace Foo {
+>Foo : Symbol(Foo, Decl(parserExportAssignment9.ts, 0, 0))
+
+  export default foo;
+}
+
+module Bar {
+>Bar : Symbol(Bar, Decl(parserExportAssignment9.ts, 2, 1))
+
+  export default bar;
+}

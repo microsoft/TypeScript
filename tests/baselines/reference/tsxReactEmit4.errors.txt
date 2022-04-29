@@ -1,0 +1,23 @@
+tests/cases/conformance/jsx/file.tsx(12,5): error TS2304: Cannot find name 'blah'.
+
+
+==== tests/cases/conformance/jsx/file.tsx (1 errors) ====
+    declare module JSX {
+    	interface Element { }
+    	interface IntrinsicElements {
+    		[s: string]: any;
+    	}
+    }
+    declare var React: any;
+    
+    var p: any;
+    var openClosed1 = <div>
+    
+       {blah}
+        ~~~~
+!!! error TS2304: Cannot find name 'blah'.
+    
+    </div>;
+    
+    // Should emit React.__spread({}, p, {x: 0})
+    var spread1 = <div {...p} x={0} />;

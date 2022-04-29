@@ -1,0 +1,3 @@
+=== tests/cases/conformance/parser/ecmascript5/Expressions/parserAssignmentExpression1.ts ===
+(foo()) = bar;
+No type information for this code.

@@ -1,0 +1,20 @@
+=== tests/cases/conformance/es6/classExpressions/typeArgumentInferenceWithClassExpression3.ts ===
+function foo<T>(x = class { prop: T }): T {
+>foo : <T>(x?: typeof (Anonymous class)) => T
+>x : typeof (Anonymous class)
+>class { prop: T } : typeof (Anonymous class)
+>prop : T
+
+    return undefined;
+>undefined : undefined
+}
+
+foo(class { prop = "hello" }).length;
+>foo(class { prop = "hello" }).length : number
+>foo(class { prop = "hello" }) : string
+>foo : <T>(x?: typeof (Anonymous class)) => T
+>class { prop = "hello" } : typeof (Anonymous class)
+>prop : string
+>"hello" : "hello"
+>length : number
+

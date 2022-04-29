@@ -1,0 +1,10 @@
+error TS6082: Only 'amd' and 'system' modules are supported alongside --outFile.
+
+
+!!! error TS6082: Only 'amd' and 'system' modules are supported alongside --outFile.
+==== tests/cases/compiler/a.ts (0 errors) ====
+    class A { }
+    
+==== tests/cases/compiler/b.ts (0 errors) ====
+    class B { }
+    

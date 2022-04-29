@@ -1,0 +1,31 @@
+tests/cases/compiler/collisionExportsRequireAndFunction.ts(1,17): error TS2441: Duplicate identifier 'exports'. Compiler reserves name 'exports' in top level scope of a module.
+tests/cases/compiler/collisionExportsRequireAndFunction.ts(4,17): error TS2441: Duplicate identifier 'require'. Compiler reserves name 'require' in top level scope of a module.
+
+
+==== tests/cases/compiler/collisionExportsRequireAndFunction.ts (2 errors) ====
+    export function exports() {
+                    ~~~~~~~
+!!! error TS2441: Duplicate identifier 'exports'. Compiler reserves name 'exports' in top level scope of a module.
+        return 1;
+    }
+    export function require() {
+                    ~~~~~~~
+!!! error TS2441: Duplicate identifier 'require'. Compiler reserves name 'require' in top level scope of a module.
+        return "require";
+    }
+    module m1 {
+        function exports() {
+            return 1;
+        }
+        function require() {
+            return "require";
+        }
+    }
+    module m2 {
+        export function exports() {
+            return 1;
+        }
+        export function require() {
+            return "require";
+        }
+    }

@@ -1,0 +1,47 @@
+=== tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractClinterfaceAssignability.ts ===
+interface I {
+    x: number;
+>x : number
+}
+
+interface IConstructor {
+    new (): I;
+    
+    y: number;
+>y : number
+
+    prototype: I;
+>prototype : I
+}
+
+var I: IConstructor;
+>I : IConstructor
+
+abstract class A {
+>A : A
+
+    x: number;
+>x : number
+
+    static y: number;
+>y : number
+}
+
+var AA: typeof A;
+>AA : typeof A
+>A : typeof A
+
+AA = I;
+>AA = I : IConstructor
+>AA : typeof A
+>I : IConstructor
+
+var AAA: typeof I;
+>AAA : IConstructor
+>I : IConstructor
+
+AAA = A;
+>AAA = A : typeof A
+>AAA : IConstructor
+>A : typeof A
+

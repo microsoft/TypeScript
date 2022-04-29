@@ -1,0 +1,4 @@
+=== tests/cases/compiler/es6ExportDefaultFunctionDeclaration.ts ===
+export default function f() { }
+>f : Symbol(f, Decl(es6ExportDefaultFunctionDeclaration.ts, 0, 0))
+

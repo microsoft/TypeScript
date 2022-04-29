@@ -1,0 +1,353 @@
+tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(7,9): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(8,9): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(11,9): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(12,9): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(15,9): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(16,9): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(21,5): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(22,5): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(25,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(26,1): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(30,1): error TS2631: Cannot assign to 'M' because it is a namespace.
+tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(31,1): error TS2631: Cannot assign to 'M' because it is a namespace.
+tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(33,1): error TS2629: Cannot assign to 'C' because it is a class.
+tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(34,1): error TS2629: Cannot assign to 'C' because it is a class.
+tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(37,1): error TS2628: Cannot assign to 'E' because it is an enum.
+tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(38,1): error TS2628: Cannot assign to 'E' because it is an enum.
+tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(40,1): error TS2630: Cannot assign to 'foo' because it is a function.
+tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(41,1): error TS2630: Cannot assign to 'foo' because it is a function.
+tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(44,1): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(44,1): error TS2531: Object is possibly 'null'.
+tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(45,1): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(46,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(47,1): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(48,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(49,1): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(50,1): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(51,1): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(52,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(53,1): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(54,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(55,1): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(58,9): error TS1128: Declaration or statement expected.
+tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(59,9): error TS1128: Declaration or statement expected.
+tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(62,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(63,1): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(69,15): error TS1034: 'super' must be followed by an argument list or member access.
+tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(70,15): error TS1034: 'super' must be followed by an argument list or member access.
+tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(74,15): error TS1034: 'super' must be followed by an argument list or member access.
+tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(75,15): error TS1034: 'super' must be followed by an argument list or member access.
+tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(79,15): error TS1034: 'super' must be followed by an argument list or member access.
+tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(80,15): error TS1034: 'super' must be followed by an argument list or member access.
+tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(85,21): error TS1128: Declaration or statement expected.
+tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(86,21): error TS1128: Declaration or statement expected.
+tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(87,11): error TS1005: ';' expected.
+tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(88,11): error TS1005: ';' expected.
+tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(91,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(92,1): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(95,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(96,1): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(97,2): error TS2631: Cannot assign to 'M' because it is a namespace.
+tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(98,2): error TS2631: Cannot assign to 'M' because it is a namespace.
+tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(99,2): error TS2629: Cannot assign to 'C' because it is a class.
+tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(100,2): error TS2629: Cannot assign to 'C' because it is a class.
+tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(101,2): error TS2628: Cannot assign to 'E' because it is an enum.
+tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(102,2): error TS2628: Cannot assign to 'E' because it is an enum.
+tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(103,2): error TS2630: Cannot assign to 'foo' because it is a function.
+tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(104,2): error TS2630: Cannot assign to 'foo' because it is a function.
+tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(105,1): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(105,1): error TS2531: Object is possibly 'null'.
+tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(106,1): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(107,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(108,1): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(109,1): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(110,1): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(111,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(112,1): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(113,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(114,1): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(115,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(116,1): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(117,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(118,1): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(119,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(120,1): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(121,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(122,1): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+
+
+==== tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts (76 errors) ====
+    // expected error for all the LHS of compound assignments (arithmetic and addition)
+    var value: any;
+    
+    // this
+    class C {
+        constructor() {
+            this *= value;
+            ~~~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+            this += value;
+            ~~~~
+!!! error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+        }
+        foo() {
+            this *= value;
+            ~~~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+            this += value;
+            ~~~~
+!!! error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+        }
+        static sfoo() {
+            this *= value;
+            ~~~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+            this += value;
+            ~~~~
+!!! error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+        }
+    }
+    
+    function foo() {
+        this *= value;
+        ~~~~
+!!! error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+        this += value;
+        ~~~~
+!!! error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+    }
+    
+    this *= value;
+    ~~~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+    this += value;
+    ~~~~
+!!! error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+    
+    // identifiers: module, class, enum, function
+    module M { export var a; }
+    M *= value;
+    ~
+!!! error TS2631: Cannot assign to 'M' because it is a namespace.
+    M += value;
+    ~
+!!! error TS2631: Cannot assign to 'M' because it is a namespace.
+    
+    C *= value;
+    ~
+!!! error TS2629: Cannot assign to 'C' because it is a class.
+    C += value;
+    ~
+!!! error TS2629: Cannot assign to 'C' because it is a class.
+    
+    enum E { }
+    E *= value;
+    ~
+!!! error TS2628: Cannot assign to 'E' because it is an enum.
+    E += value;
+    ~
+!!! error TS2628: Cannot assign to 'E' because it is an enum.
+    
+    foo *= value;
+    ~~~
+!!! error TS2630: Cannot assign to 'foo' because it is a function.
+    foo += value;
+    ~~~
+!!! error TS2630: Cannot assign to 'foo' because it is a function.
+    
+    // literals
+    null *= value;
+    ~~~~
+!!! error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+    ~~~~
+!!! error TS2531: Object is possibly 'null'.
+    null += value;
+    ~~~~
+!!! error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+    true *= value;
+    ~~~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+    true += value;
+    ~~~~
+!!! error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+    false *= value;
+    ~~~~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+    false += value;
+    ~~~~~
+!!! error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+    0 *= value;
+    ~
+!!! error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+    0 += value;
+    ~
+!!! error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+    '' *= value;
+    ~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+    '' += value;
+    ~~
+!!! error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+    /d+/ *= value;
+    ~~~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+    /d+/ += value;
+    ~~~~
+!!! error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+    
+    // object literals
+    { a: 0} *= value;
+            ~~
+!!! error TS1128: Declaration or statement expected.
+    { a: 0} += value;
+            ~~
+!!! error TS1128: Declaration or statement expected.
+    
+    // array literals
+    ['', ''] *= value;
+    ~~~~~~~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+    ['', ''] += value;
+    ~~~~~~~~
+!!! error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+    
+    // super
+    class Derived extends C {
+        constructor() {
+            super();
+            super *= value;
+                  ~~
+!!! error TS1034: 'super' must be followed by an argument list or member access.
+            super += value;
+                  ~~
+!!! error TS1034: 'super' must be followed by an argument list or member access.
+        }
+    
+        foo() {
+            super *= value;
+                  ~~
+!!! error TS1034: 'super' must be followed by an argument list or member access.
+            super += value;
+                  ~~
+!!! error TS1034: 'super' must be followed by an argument list or member access.
+        }
+    
+        static sfoo() {
+            super *= value;
+                  ~~
+!!! error TS1034: 'super' must be followed by an argument list or member access.
+            super += value;
+                  ~~
+!!! error TS1034: 'super' must be followed by an argument list or member access.
+        }
+    }
+    
+    // function expression
+    function bar1() { } *= value;
+                        ~~
+!!! error TS1128: Declaration or statement expected.
+    function bar2() { } += value;
+                        ~~
+!!! error TS1128: Declaration or statement expected.
+    () => { } *= value;
+              ~~
+!!! error TS1005: ';' expected.
+    () => { } += value;
+              ~~
+!!! error TS1005: ';' expected.
+    
+    // function calls
+    foo() *= value;
+    ~~~~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+    foo() += value;
+    ~~~~~
+!!! error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+    
+    // parentheses, the containted expression is value
+    (this) *= value;
+    ~~~~~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+    (this) += value;
+    ~~~~~~
+!!! error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+    (M) *= value;
+     ~
+!!! error TS2631: Cannot assign to 'M' because it is a namespace.
+    (M) += value;
+     ~
+!!! error TS2631: Cannot assign to 'M' because it is a namespace.
+    (C) *= value;
+     ~
+!!! error TS2629: Cannot assign to 'C' because it is a class.
+    (C) += value;
+     ~
+!!! error TS2629: Cannot assign to 'C' because it is a class.
+    (E) *= value;
+     ~
+!!! error TS2628: Cannot assign to 'E' because it is an enum.
+    (E) += value;
+     ~
+!!! error TS2628: Cannot assign to 'E' because it is an enum.
+    (foo) *= value;
+     ~~~
+!!! error TS2630: Cannot assign to 'foo' because it is a function.
+    (foo) += value;
+     ~~~
+!!! error TS2630: Cannot assign to 'foo' because it is a function.
+    (null) *= value;
+    ~~~~~~
+!!! error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+    ~~~~~~
+!!! error TS2531: Object is possibly 'null'.
+    (null) += value;
+    ~~~~~~
+!!! error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+    (true) *= value;
+    ~~~~~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+    (true) += value;
+    ~~~~~~
+!!! error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+    (0) *= value;
+    ~~~
+!!! error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+    (0) += value;
+    ~~~
+!!! error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+    ('') *= value;
+    ~~~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+    ('') += value;
+    ~~~~
+!!! error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+    (/d+/) *= value;
+    ~~~~~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+    (/d+/) += value;
+    ~~~~~~
+!!! error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+    ({}) *= value;
+    ~~~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+    ({}) += value;
+    ~~~~
+!!! error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+    ([]) *= value;
+    ~~~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+    ([]) += value;
+    ~~~~
+!!! error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+    (function baz1() { }) *= value;
+    ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+    (function baz2() { }) += value;
+    ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+    (foo()) *= value;
+    ~~~~~~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+    (foo()) += value;
+    ~~~~~~~
+!!! error TS2364: The left-hand side of an assignment expression must be a variable or a property access.

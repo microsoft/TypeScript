@@ -1,0 +1,13 @@
+tests/cases/compiler/functionExpressionInWithBlock.ts(2,2): error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
+
+
+==== tests/cases/compiler/functionExpressionInWithBlock.ts (1 errors) ====
+    function x() {
+     with({}) {
+     ~~~~~~~~
+!!! error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
+      function f() {
+       () => this;
+      }
+     }
+    }

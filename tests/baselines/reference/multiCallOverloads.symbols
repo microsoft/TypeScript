@@ -1,0 +1,38 @@
+=== tests/cases/compiler/multiCallOverloads.ts ===
+interface ICallback {
+>ICallback : Symbol(ICallback, Decl(multiCallOverloads.ts, 0, 0))
+
+    (x?: string):void;
+>x : Symbol(x, Decl(multiCallOverloads.ts, 1, 5))
+}
+
+function load(f: ICallback) {}
+>load : Symbol(load, Decl(multiCallOverloads.ts, 2, 1))
+>f : Symbol(f, Decl(multiCallOverloads.ts, 4, 14))
+>ICallback : Symbol(ICallback, Decl(multiCallOverloads.ts, 0, 0))
+
+var f1: ICallback = function(z?) {}
+>f1 : Symbol(f1, Decl(multiCallOverloads.ts, 6, 3))
+>ICallback : Symbol(ICallback, Decl(multiCallOverloads.ts, 0, 0))
+>z : Symbol(z, Decl(multiCallOverloads.ts, 6, 29))
+
+var f2: ICallback = function(z?) {}
+>f2 : Symbol(f2, Decl(multiCallOverloads.ts, 7, 3))
+>ICallback : Symbol(ICallback, Decl(multiCallOverloads.ts, 0, 0))
+>z : Symbol(z, Decl(multiCallOverloads.ts, 7, 29))
+
+load(f1) // ok
+>load : Symbol(load, Decl(multiCallOverloads.ts, 2, 1))
+>f1 : Symbol(f1, Decl(multiCallOverloads.ts, 6, 3))
+
+load(f2) // ok
+>load : Symbol(load, Decl(multiCallOverloads.ts, 2, 1))
+>f2 : Symbol(f2, Decl(multiCallOverloads.ts, 7, 3))
+
+load(function() {}) // this shouldn’t be an error
+>load : Symbol(load, Decl(multiCallOverloads.ts, 2, 1))
+
+load(function(z?) {}) // this shouldn't be an error
+>load : Symbol(load, Decl(multiCallOverloads.ts, 2, 1))
+>z : Symbol(z, Decl(multiCallOverloads.ts, 11, 14))
+

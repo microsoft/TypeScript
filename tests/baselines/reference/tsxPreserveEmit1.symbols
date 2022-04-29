@@ -1,0 +1,60 @@
+=== tests/cases/conformance/jsx/test.tsx ===
+// Should emit 'react-router' in the AMD dependency list
+import React = require('react');
+>React : Symbol(React, Decl(test.tsx, 0, 0))
+
+import ReactRouter = require('react-router');
+>ReactRouter : Symbol(ReactRouter, Decl(test.tsx, 1, 32))
+
+import Route = ReactRouter.Route;
+>Route : Symbol(Route, Decl(test.tsx, 2, 45))
+>ReactRouter : Symbol(ReactRouter, Decl(test.tsx, 1, 32))
+>Route : Symbol(ReactRouter.Route, Decl(react.d.ts, 6, 4))
+
+var routes1 = <Route />;
+>routes1 : Symbol(routes1, Decl(test.tsx, 6, 3))
+>Route : Symbol(Route, Decl(test.tsx, 2, 45))
+
+module M {
+>M : Symbol(M, Decl(test.tsx, 6, 24), Decl(test.tsx, 10, 1))
+
+	export var X: any;
+>X : Symbol(X, Decl(test.tsx, 9, 11))
+}
+module M {
+>M : Symbol(M, Decl(test.tsx, 6, 24), Decl(test.tsx, 10, 1))
+
+	// Should emit 'M.X' in both opening and closing tags
+	var y = <X></X>;
+>y : Symbol(y, Decl(test.tsx, 13, 4))
+>X : Symbol(X, Decl(test.tsx, 9, 11))
+>X : Symbol(X, Decl(test.tsx, 9, 11))
+}
+
+=== tests/cases/conformance/jsx/react.d.ts ===
+declare module 'react' {
+>'react' : Symbol("react", Decl(react.d.ts, 0, 0))
+
+	var x: any;
+>x : Symbol(x, Decl(react.d.ts, 1, 4))
+
+	export = x;
+>x : Symbol(x, Decl(react.d.ts, 1, 4))
+}
+
+declare module ReactRouter {
+>ReactRouter : Symbol(ReactRouter, Decl(react.d.ts, 3, 1))
+
+	var Route: any;
+>Route : Symbol(Route, Decl(react.d.ts, 6, 4))
+
+	interface Thing { }
+>Thing : Symbol(Thing, Decl(react.d.ts, 6, 16))
+}
+declare module 'react-router' {
+>'react-router' : Symbol("react-router", Decl(react.d.ts, 8, 1))
+
+	export = ReactRouter;
+>ReactRouter : Symbol(ReactRouter, Decl(react.d.ts, 3, 1))
+}
+

@@ -1,0 +1,186 @@
+=== tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSIsValue.ts ===
+// expected error for all the LHS of compound assignments (arithmetic and addition)
+var value: any;
+>value : Symbol(value, Decl(compoundExponentiationAssignmentLHSIsValue.ts, 1, 3))
+
+// this
+class C {
+>C : Symbol(C, Decl(compoundExponentiationAssignmentLHSIsValue.ts, 1, 15))
+
+    constructor() {
+        this **= value;
+>this : Symbol(C, Decl(compoundExponentiationAssignmentLHSIsValue.ts, 1, 15))
+>value : Symbol(value, Decl(compoundExponentiationAssignmentLHSIsValue.ts, 1, 3))
+    }
+    foo() {
+>foo : Symbol(C.foo, Decl(compoundExponentiationAssignmentLHSIsValue.ts, 7, 5))
+
+        this **= value;
+>this : Symbol(C, Decl(compoundExponentiationAssignmentLHSIsValue.ts, 1, 15))
+>value : Symbol(value, Decl(compoundExponentiationAssignmentLHSIsValue.ts, 1, 3))
+    }
+    static sfoo() {
+>sfoo : Symbol(C.sfoo, Decl(compoundExponentiationAssignmentLHSIsValue.ts, 10, 5))
+
+        this **= value;
+>this : Symbol(C, Decl(compoundExponentiationAssignmentLHSIsValue.ts, 1, 15))
+>value : Symbol(value, Decl(compoundExponentiationAssignmentLHSIsValue.ts, 1, 3))
+    }
+}
+
+function foo() {
+>foo : Symbol(foo, Decl(compoundExponentiationAssignmentLHSIsValue.ts, 14, 1))
+
+    this **= value;
+>value : Symbol(value, Decl(compoundExponentiationAssignmentLHSIsValue.ts, 1, 3))
+}
+
+this **= value;
+>this : Symbol(globalThis)
+>value : Symbol(value, Decl(compoundExponentiationAssignmentLHSIsValue.ts, 1, 3))
+
+// identifiers: module, class, enum, function
+module M { export var a; }
+>M : Symbol(M, Decl(compoundExponentiationAssignmentLHSIsValue.ts, 20, 15))
+>a : Symbol(a, Decl(compoundExponentiationAssignmentLHSIsValue.ts, 23, 21))
+
+M **= value;
+>M : Symbol(M, Decl(compoundExponentiationAssignmentLHSIsValue.ts, 20, 15))
+>value : Symbol(value, Decl(compoundExponentiationAssignmentLHSIsValue.ts, 1, 3))
+
+C **= value;
+>C : Symbol(C, Decl(compoundExponentiationAssignmentLHSIsValue.ts, 1, 15))
+>value : Symbol(value, Decl(compoundExponentiationAssignmentLHSIsValue.ts, 1, 3))
+
+enum E { }
+>E : Symbol(E, Decl(compoundExponentiationAssignmentLHSIsValue.ts, 26, 12))
+
+E **= value;
+>E : Symbol(E, Decl(compoundExponentiationAssignmentLHSIsValue.ts, 26, 12))
+>value : Symbol(value, Decl(compoundExponentiationAssignmentLHSIsValue.ts, 1, 3))
+
+foo **= value;
+>foo : Symbol(foo, Decl(compoundExponentiationAssignmentLHSIsValue.ts, 14, 1))
+>value : Symbol(value, Decl(compoundExponentiationAssignmentLHSIsValue.ts, 1, 3))
+
+// literals
+null **= value;
+>value : Symbol(value, Decl(compoundExponentiationAssignmentLHSIsValue.ts, 1, 3))
+
+true **= value;
+>value : Symbol(value, Decl(compoundExponentiationAssignmentLHSIsValue.ts, 1, 3))
+
+false **= value;
+>value : Symbol(value, Decl(compoundExponentiationAssignmentLHSIsValue.ts, 1, 3))
+
+0 **= value;
+>value : Symbol(value, Decl(compoundExponentiationAssignmentLHSIsValue.ts, 1, 3))
+
+'' **= value;
+>value : Symbol(value, Decl(compoundExponentiationAssignmentLHSIsValue.ts, 1, 3))
+
+/d+/ **= value;
+>value : Symbol(value, Decl(compoundExponentiationAssignmentLHSIsValue.ts, 1, 3))
+
+// object literals
+{ a: 0 } **= value;
+>value : Symbol(value, Decl(compoundExponentiationAssignmentLHSIsValue.ts, 1, 3))
+
+// array literals
+['', ''] **= value;
+>value : Symbol(value, Decl(compoundExponentiationAssignmentLHSIsValue.ts, 1, 3))
+
+// super
+class Derived extends C {
+>Derived : Symbol(Derived, Decl(compoundExponentiationAssignmentLHSIsValue.ts, 45, 19))
+>C : Symbol(C, Decl(compoundExponentiationAssignmentLHSIsValue.ts, 1, 15))
+
+    constructor() {
+        super();
+>super : Symbol(C, Decl(compoundExponentiationAssignmentLHSIsValue.ts, 1, 15))
+
+        super **= value;
+>super : Symbol(C, Decl(compoundExponentiationAssignmentLHSIsValue.ts, 1, 15))
+>value : Symbol(value, Decl(compoundExponentiationAssignmentLHSIsValue.ts, 1, 3))
+    }
+
+    foo() {
+>foo : Symbol(Derived.foo, Decl(compoundExponentiationAssignmentLHSIsValue.ts, 52, 5))
+
+        super **= value;
+>super : Symbol(C, Decl(compoundExponentiationAssignmentLHSIsValue.ts, 1, 15))
+>value : Symbol(value, Decl(compoundExponentiationAssignmentLHSIsValue.ts, 1, 3))
+    }
+
+    static sfoo() {
+>sfoo : Symbol(Derived.sfoo, Decl(compoundExponentiationAssignmentLHSIsValue.ts, 56, 5))
+
+        super **= value;
+>super : Symbol(C, Decl(compoundExponentiationAssignmentLHSIsValue.ts, 1, 15))
+>value : Symbol(value, Decl(compoundExponentiationAssignmentLHSIsValue.ts, 1, 3))
+    }
+}
+
+// function expression
+function bar1() { } **= value;
+>bar1 : Symbol(bar1, Decl(compoundExponentiationAssignmentLHSIsValue.ts, 61, 1))
+>value : Symbol(value, Decl(compoundExponentiationAssignmentLHSIsValue.ts, 1, 3))
+
+() => { } **= value;
+>value : Symbol(value, Decl(compoundExponentiationAssignmentLHSIsValue.ts, 1, 3))
+
+// function calls
+foo() **= value;
+>foo : Symbol(foo, Decl(compoundExponentiationAssignmentLHSIsValue.ts, 14, 1))
+>value : Symbol(value, Decl(compoundExponentiationAssignmentLHSIsValue.ts, 1, 3))
+
+// parentheses, the containted expression is value
+(this) **= value;
+>this : Symbol(globalThis)
+>value : Symbol(value, Decl(compoundExponentiationAssignmentLHSIsValue.ts, 1, 3))
+
+(M) **= value;
+>M : Symbol(M, Decl(compoundExponentiationAssignmentLHSIsValue.ts, 20, 15))
+>value : Symbol(value, Decl(compoundExponentiationAssignmentLHSIsValue.ts, 1, 3))
+
+(C) **= value;
+>C : Symbol(C, Decl(compoundExponentiationAssignmentLHSIsValue.ts, 1, 15))
+>value : Symbol(value, Decl(compoundExponentiationAssignmentLHSIsValue.ts, 1, 3))
+
+(E) **= value;
+>E : Symbol(E, Decl(compoundExponentiationAssignmentLHSIsValue.ts, 26, 12))
+>value : Symbol(value, Decl(compoundExponentiationAssignmentLHSIsValue.ts, 1, 3))
+
+(foo) **= value;
+>foo : Symbol(foo, Decl(compoundExponentiationAssignmentLHSIsValue.ts, 14, 1))
+>value : Symbol(value, Decl(compoundExponentiationAssignmentLHSIsValue.ts, 1, 3))
+
+(null) **= value;
+>value : Symbol(value, Decl(compoundExponentiationAssignmentLHSIsValue.ts, 1, 3))
+
+(true) **= value;
+>value : Symbol(value, Decl(compoundExponentiationAssignmentLHSIsValue.ts, 1, 3))
+
+(0) **= value;
+>value : Symbol(value, Decl(compoundExponentiationAssignmentLHSIsValue.ts, 1, 3))
+
+('') **= value;
+>value : Symbol(value, Decl(compoundExponentiationAssignmentLHSIsValue.ts, 1, 3))
+
+(/d+/) **= value;
+>value : Symbol(value, Decl(compoundExponentiationAssignmentLHSIsValue.ts, 1, 3))
+
+({}) **= value;
+>value : Symbol(value, Decl(compoundExponentiationAssignmentLHSIsValue.ts, 1, 3))
+
+([]) **= value;
+>value : Symbol(value, Decl(compoundExponentiationAssignmentLHSIsValue.ts, 1, 3))
+
+(function baz1() { }) **= value;
+>baz1 : Symbol(baz1, Decl(compoundExponentiationAssignmentLHSIsValue.ts, 83, 1))
+>value : Symbol(value, Decl(compoundExponentiationAssignmentLHSIsValue.ts, 1, 3))
+
+(foo()) **= value;
+>foo : Symbol(foo, Decl(compoundExponentiationAssignmentLHSIsValue.ts, 14, 1))
+>value : Symbol(value, Decl(compoundExponentiationAssignmentLHSIsValue.ts, 1, 3))
+

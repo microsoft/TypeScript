@@ -1,0 +1,5 @@
+=== tests/cases/compiler/ParameterList5.ts ===
+function A(): (public B) => C {
+>A : () => (B: any) => C
+>B : any
+}

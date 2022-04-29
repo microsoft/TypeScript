@@ -1,0 +1,110 @@
+=== tests/cases/conformance/types/specifyingTypes/typeLiterals/arrayOfFunctionTypes3.ts ===
+// valid uses of arrays of function types
+
+var x = [() => 1, () => { }];
+>x : (() => void)[]
+>[() => 1, () => { }] : (() => void)[]
+>() => 1 : () => number
+>1 : 1
+>() => { } : () => void
+
+var r2 = x[0]();
+>r2 : void
+>x[0]() : void
+>x[0] : () => void
+>x : (() => void)[]
+>0 : 0
+
+class C {
+>C : C
+
+    foo: string;
+>foo : string
+}
+var y = [C, C];
+>y : (typeof C)[]
+>[C, C] : (typeof C)[]
+>C : typeof C
+>C : typeof C
+
+var r3 = new y[0]();
+>r3 : C
+>new y[0]() : C
+>y[0] : typeof C
+>y : (typeof C)[]
+>0 : 0
+
+var a: { (x: number): number; (x: string): string; };
+>a : { (x: number): number; (x: string): string; }
+>x : number
+>x : string
+
+var b: { (x: number): number; (x: string): string; };
+>b : { (x: number): number; (x: string): string; }
+>x : number
+>x : string
+
+var c: { (x: number): number; (x: any): any; };
+>c : { (x: number): number; (x: any): any; }
+>x : number
+>x : any
+
+var z = [a, b, c];
+>z : { (x: number): number; (x: any): any; }[]
+>[a, b, c] : { (x: number): number; (x: any): any; }[]
+>a : { (x: number): number; (x: string): string; }
+>b : { (x: number): number; (x: string): string; }
+>c : { (x: number): number; (x: any): any; }
+
+var r4 = z[0];
+>r4 : { (x: number): number; (x: any): any; }
+>z[0] : { (x: number): number; (x: any): any; }
+>z : { (x: number): number; (x: any): any; }[]
+>0 : 0
+
+var r5 = r4(''); // any not string
+>r5 : any
+>r4('') : any
+>r4 : { (x: number): number; (x: any): any; }
+>'' : ""
+
+var r5b = r4(1);
+>r5b : number
+>r4(1) : number
+>r4 : { (x: number): number; (x: any): any; }
+>1 : 1
+
+var a2: { <T>(x: T): number; (x: string): string;};
+>a2 : { <T>(x: T): number; (x: string): string; }
+>x : T
+>x : string
+
+var b2: { <T>(x: T): number; (x: string): string; };
+>b2 : { <T>(x: T): number; (x: string): string; }
+>x : T
+>x : string
+
+var c2: { (x: number): number; <T>(x: T): any; };
+>c2 : { (x: number): number; <T>(x: T): any; }
+>x : number
+>x : T
+
+var z2 = [a2, b2, c2];
+>z2 : { (x: number): number; <T>(x: T): any; }[]
+>[a2, b2, c2] : { (x: number): number; <T>(x: T): any; }[]
+>a2 : { <T>(x: T): number; (x: string): string; }
+>b2 : { <T>(x: T): number; (x: string): string; }
+>c2 : { (x: number): number; <T>(x: T): any; }
+
+var r6 = z2[0];
+>r6 : { (x: number): number; <T>(x: T): any; }
+>z2[0] : { (x: number): number; <T>(x: T): any; }
+>z2 : { (x: number): number; <T>(x: T): any; }[]
+>0 : 0
+
+var r7 = r6(''); // any not string
+>r7 : any
+>r6('') : any
+>r6 : { (x: number): number; <T>(x: T): any; }
+>'' : ""
+

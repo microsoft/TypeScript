@@ -1,0 +1,326 @@
+=== tests/cases/compiler/reverseMappedPartiallyInferableTypes.ts ===
+// Repro from #30505
+
+export type Prop<T> = { (): T }
+>Prop : Prop<T>
+
+export type PropType<T> = Prop<T>;
+>PropType : PropType<T>
+
+export type PropDefaultValue<T> = T;
+>PropDefaultValue : T
+
+
+export type PropValidatorFunction<T> = (value: T) => boolean;
+>PropValidatorFunction : PropValidatorFunction<T>
+>value : T
+
+export type PropValidator<T> = PropOptions<T>;
+>PropValidator : PropValidator<T>
+
+
+export type PropOptions<T> = {
+>PropOptions : PropOptions<T>
+
+    type: PropType<T>;
+>type : PropType<T>
+
+    value?: PropDefaultValue<T>,
+>value : T | undefined
+
+    required?: boolean;
+>required : boolean | undefined
+
+    validator?: PropValidatorFunction<T>;
+>validator : PropValidatorFunction<T> | undefined
+}
+
+export type RecordPropsDefinition<T> = {
+>RecordPropsDefinition : RecordPropsDefinition<T>
+
+    [K in keyof T]: PropValidator<T[K]>
+}
+export type PropsDefinition<T> = RecordPropsDefinition<T>;
+>PropsDefinition : RecordPropsDefinition<T>
+
+
+declare function extend<T>({ props }: { props: PropsDefinition<T> }):  PropsDefinition<T>;
+>extend : <T>({ props }: { props: PropsDefinition<T>; }) => PropsDefinition<T>
+>props : RecordPropsDefinition<T>
+>props : RecordPropsDefinition<T>
+
+interface MyType {
+    valid: boolean;
+>valid : boolean
+}
+
+const r = extend({
+>r : RecordPropsDefinition<{ notResolved: MyType; explicit: MyType; }>
+>extend({    props: {        notResolved: {            type: Object as PropType<MyType>,            validator: x => {                return x.valid;            }        },        explicit: {            type: Object as PropType<MyType>,            validator: (x: MyType) => {                return x.valid;            }        }    }}) : RecordPropsDefinition<{ notResolved: MyType; explicit: MyType; }>
+>extend : <T>({ props }: { props: RecordPropsDefinition<T>; }) => RecordPropsDefinition<T>
+>{    props: {        notResolved: {            type: Object as PropType<MyType>,            validator: x => {                return x.valid;            }        },        explicit: {            type: Object as PropType<MyType>,            validator: (x: MyType) => {                return x.valid;            }        }    }} : { props: { notResolved: { type: PropType<MyType>; validator: (x: MyType) => boolean; }; explicit: { type: PropType<MyType>; validator: (x: MyType) => boolean; }; }; }
+
+    props: {
+>props : { notResolved: { type: PropType<MyType>; validator: (x: MyType) => boolean; }; explicit: { type: PropType<MyType>; validator: (x: MyType) => boolean; }; }
+>{        notResolved: {            type: Object as PropType<MyType>,            validator: x => {                return x.valid;            }        },        explicit: {            type: Object as PropType<MyType>,            validator: (x: MyType) => {                return x.valid;            }        }    } : { notResolved: { type: PropType<MyType>; validator: (x: MyType) => boolean; }; explicit: { type: PropType<MyType>; validator: (x: MyType) => boolean; }; }
+
+        notResolved: {
+>notResolved : { type: PropType<MyType>; validator: (x: MyType) => boolean; }
+>{            type: Object as PropType<MyType>,            validator: x => {                return x.valid;            }        } : { type: PropType<MyType>; validator: (x: MyType) => boolean; }
+
+            type: Object as PropType<MyType>,
+>type : PropType<MyType>
+>Object as PropType<MyType> : PropType<MyType>
+>Object : ObjectConstructor
+
+            validator: x => {
+>validator : (x: MyType) => boolean
+>x => {                return x.valid;            } : (x: MyType) => boolean
+>x : MyType
+
+                return x.valid;
+>x.valid : boolean
+>x : MyType
+>valid : boolean
+            }
+        },
+        explicit: {
+>explicit : { type: PropType<MyType>; validator: (x: MyType) => boolean; }
+>{            type: Object as PropType<MyType>,            validator: (x: MyType) => {                return x.valid;            }        } : { type: PropType<MyType>; validator: (x: MyType) => boolean; }
+
+            type: Object as PropType<MyType>,
+>type : PropType<MyType>
+>Object as PropType<MyType> : PropType<MyType>
+>Object : ObjectConstructor
+
+            validator: (x: MyType) => {
+>validator : (x: MyType) => boolean
+>(x: MyType) => {                return x.valid;            } : (x: MyType) => boolean
+>x : MyType
+
+                return x.valid;
+>x.valid : boolean
+>x : MyType
+>valid : boolean
+            }
+        }
+    }
+})
+
+r.explicit
+>r.explicit : PropValidator<MyType>
+>r : RecordPropsDefinition<{ notResolved: MyType; explicit: MyType; }>
+>explicit : PropValidator<MyType>
+
+r.notResolved
+>r.notResolved : PropValidator<MyType>
+>r : RecordPropsDefinition<{ notResolved: MyType; explicit: MyType; }>
+>notResolved : PropValidator<MyType>
+
+r.explicit.required
+>r.explicit.required : boolean | undefined
+>r.explicit : PropValidator<MyType>
+>r : RecordPropsDefinition<{ notResolved: MyType; explicit: MyType; }>
+>explicit : PropValidator<MyType>
+>required : boolean | undefined
+
+r.notResolved.required
+>r.notResolved.required : boolean | undefined
+>r.notResolved : PropValidator<MyType>
+>r : RecordPropsDefinition<{ notResolved: MyType; explicit: MyType; }>
+>notResolved : PropValidator<MyType>
+>required : boolean | undefined
+
+// Modified repro from #30505
+
+type Box<T> = {
+>Box : Box<T>
+
+    contents?: T;
+>contents : T | undefined
+
+    contains?(content: T): boolean;
+>contains : ((content: T) => boolean) | undefined
+>content : T
+
+};
+
+type Mapped<T> = {
+>Mapped : Mapped<T>
+
+    [K in keyof T]: Box<T[K]>;
+}
+
+declare function id<T>(arg: Mapped<T>): Mapped<T>;
+>id : <T>(arg: Mapped<T>) => Mapped<T>
+>arg : Mapped<T>
+
+// All properties have inferable types
+
+const obj1 = id({
+>obj1 : Mapped<{ foo: string; }>
+>id({    foo: {        contents: ""    }}) : Mapped<{ foo: string; }>
+>id : <T>(arg: Mapped<T>) => Mapped<T>
+>{    foo: {        contents: ""    }} : { foo: { contents: string; }; }
+
+    foo: {
+>foo : { contents: string; }
+>{        contents: ""    } : { contents: string; }
+
+        contents: ""
+>contents : string
+>"" : ""
+    }
+});
+
+// Some properties have inferable types
+
+const obj2 = id({
+>obj2 : Mapped<{ foo: string; }>
+>id({    foo: {        contents: "",        contains(k) {            return k.length > 0;        }    }}) : Mapped<{ foo: string; }>
+>id : <T>(arg: Mapped<T>) => Mapped<T>
+>{    foo: {        contents: "",        contains(k) {            return k.length > 0;        }    }} : { foo: { contents: string; contains(k: string): boolean; }; }
+
+    foo: {
+>foo : { contents: string; contains(k: string): boolean; }
+>{        contents: "",        contains(k) {            return k.length > 0;        }    } : { contents: string; contains(k: string): boolean; }
+
+        contents: "",
+>contents : string
+>"" : ""
+
+        contains(k) {
+>contains : (k: string) => boolean
+>k : string
+
+            return k.length > 0;
+>k.length > 0 : boolean
+>k.length : number
+>k : string
+>length : number
+>0 : 0
+        }
+    }
+});
+
+// No properties have inferable types
+
+const obj3 = id({
+>obj3 : Mapped<unknown>
+>id({    foo: {        contains(k) {            return k.length > 0;        }    }}) : Mapped<unknown>
+>id : <T>(arg: Mapped<T>) => Mapped<T>
+>{    foo: {        contains(k) {            return k.length > 0;        }    }} : { foo: { contains(k: unknown): boolean; }; }
+
+    foo: {
+>foo : { contains(k: unknown): boolean; }
+>{        contains(k) {            return k.length > 0;        }    } : { contains(k: unknown): boolean; }
+
+        contains(k) {
+>contains : (k: unknown) => boolean
+>k : unknown
+
+            return k.length > 0;
+>k.length > 0 : boolean
+>k.length : any
+>k : unknown
+>length : any
+>0 : 0
+        }
+    }
+});
+
+// Repros from #40809
+
+type Mapped1<T> = {
+>Mapped1 : Mapped1<T>
+
+    [K in keyof T]: [T[K], (arg: T) => boolean];
+>arg : T
+
+};
+
+declare function inferMapped1<T>(arg: Mapped1<T>): void;
+>inferMapped1 : <T>(arg: Mapped1<T>) => void
+>arg : Mapped1<T>
+
+inferMapped1({
+>inferMapped1({    key: [3, arg => arg.key > 5]}) : void
+>inferMapped1 : <T>(arg: Mapped1<T>) => void
+>{    key: [3, arg => arg.key > 5]} : { key: [number, (arg: { key: number; }) => boolean]; }
+
+    key: [3, arg => arg.key > 5]
+>key : [number, (arg: { key: number; }) => boolean]
+>[3, arg => arg.key > 5] : [number, (arg: { key: number; }) => boolean]
+>3 : 3
+>arg => arg.key > 5 : (arg: { key: number; }) => boolean
+>arg : { key: number; }
+>arg.key > 5 : boolean
+>arg.key : number
+>arg : { key: number; }
+>key : number
+>5 : 5
+
+});
+
+type Mapped2<T> = {
+>Mapped2 : Mapped2<T>
+
+    [K in keyof T]: [T[K], unknown extends T ? unknown : (arg: T) => boolean];
+>arg : T
+
+};
+
+declare function inferMapped2<T>(arg: Mapped2<T>): void;
+>inferMapped2 : <T>(arg: Mapped2<T>) => void
+>arg : Mapped2<T>
+
+inferMapped2({
+>inferMapped2({    key: [3, arg => arg.key > 5]}) : void
+>inferMapped2 : <T>(arg: Mapped2<T>) => void
+>{    key: [3, arg => arg.key > 5]} : { key: [number, (arg: { key: number; }) => boolean]; }
+
+    key: [3, arg => arg.key > 5]
+>key : [number, (arg: { key: number; }) => boolean]
+>[3, arg => arg.key > 5] : [number, (arg: { key: number; }) => boolean]
+>3 : 3
+>arg => arg.key > 5 : (arg: { key: number; }) => boolean
+>arg : { key: number; }
+>arg.key > 5 : boolean
+>arg.key : number
+>arg : { key: number; }
+>key : number
+>5 : 5
+
+});
+
+type MappedReadonly<T> = {
+>MappedReadonly : MappedReadonly<T>
+
+    readonly [K in keyof T]: readonly [T[K], (arg: T) => boolean];
+>arg : T
+
+};
+
+declare function inferMappedReadonly<T>(arg: MappedReadonly<T>): void;
+>inferMappedReadonly : <T>(arg: MappedReadonly<T>) => void
+>arg : MappedReadonly<T>
+
+inferMappedReadonly({
+>inferMappedReadonly({    key: [3, arg => arg.key > 5]}) : void
+>inferMappedReadonly : <T>(arg: MappedReadonly<T>) => void
+>{    key: [3, arg => arg.key > 5]} : { key: [number, (arg: { key: number; }) => boolean]; }
+
+    key: [3, arg => arg.key > 5]
+>key : [number, (arg: { key: number; }) => boolean]
+>[3, arg => arg.key > 5] : [number, (arg: { key: number; }) => boolean]
+>3 : 3
+>arg => arg.key > 5 : (arg: { key: number; }) => boolean
+>arg : { key: number; }
+>arg.key > 5 : boolean
+>arg.key : number
+>arg : { key: number; }
+>key : number
+>5 : 5
+
+});
+

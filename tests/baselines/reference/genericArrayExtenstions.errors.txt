@@ -1,0 +1,13 @@
+tests/cases/compiler/genericArrayExtenstions.ts(1,22): error TS2420: Class 'ObservableArray<T>' incorrectly implements interface 'T[]'.
+  Type 'ObservableArray<T>' is missing the following properties from type 'T[]': length, pop, push, join, and 15 more.
+
+
+==== tests/cases/compiler/genericArrayExtenstions.ts (1 errors) ====
+    export declare class ObservableArray<T> implements Array<T> { // MS.Entertainment.ObservableArray
+                         ~~~~~~~~~~~~~~~
+!!! error TS2420: Class 'ObservableArray<T>' incorrectly implements interface 'T[]'.
+!!! error TS2420:   Type 'ObservableArray<T>' is missing the following properties from type 'T[]': length, pop, push, join, and 15 more.
+    concat<U extends T[]>(...items: U[]): T[];
+    concat(...items: T[]): T[];
+    }
+    

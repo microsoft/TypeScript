@@ -1,0 +1,95 @@
+=== tests/cases/compiler/main.ts ===
+/// <reference path="d.d.ts"/>
+/// <reference path="e.d.ts"/>
+import {A} from "./a";
+>A : typeof A
+
+import "D";
+import "E";
+
+let a: A;
+>a : A
+
+let b = a.getB().x.toFixed();
+>b : string
+>a.getB().x.toFixed() : string
+>a.getB().x.toFixed : (fractionDigits?: number) => string
+>a.getB().x : number
+>a.getB() : import("tests/cases/compiler/b").B
+>a.getB : () => import("tests/cases/compiler/b").B
+>a : A
+>getB : () => import("tests/cases/compiler/b").B
+>x : number
+>toFixed : (fractionDigits?: number) => string
+
+let c = a.getCls().y.toLowerCase();
+>c : string
+>a.getCls().y.toLowerCase() : string
+>a.getCls().y.toLowerCase : () => string
+>a.getCls().y : string
+>a.getCls() : import("C").Cls
+>a.getCls : () => import("C").Cls
+>a : A
+>getCls : () => import("C").Cls
+>y : string
+>toLowerCase : () => string
+
+=== tests/cases/compiler/a.ts ===
+export class A {}
+>A : A
+
+=== tests/cases/compiler/b.ts ===
+export class B {x: number;}
+>B : B
+>x : number
+
+=== tests/cases/compiler/c.d.ts ===
+declare module "C" {
+>"C" : typeof import("C")
+
+    class Cls {y: string; }
+>Cls : Cls
+>y : string
+}
+
+=== tests/cases/compiler/d.d.ts ===
+declare module "D" {
+>"D" : typeof import("D")
+
+    import {A} from "a";
+>A : typeof A
+
+    import {B} from "b";
+>B : typeof B
+
+    module "a" {
+>"a" : typeof import("tests/cases/compiler/a")
+
+        interface A {
+            getB(): B;
+>getB : () => B
+        }
+    }
+}
+
+=== tests/cases/compiler/e.d.ts ===
+/// <reference path="c.d.ts"/>
+declare module "E" {
+>"E" : typeof import("E")
+
+    import {A} from "a";
+>A : typeof A
+
+    import {Cls} from "C";
+>Cls : typeof Cls
+
+    module "a" {
+>"a" : typeof import("tests/cases/compiler/a")
+
+        interface A {
+            getCls(): Cls;
+>getCls : () => Cls
+        }
+    }
+}
+

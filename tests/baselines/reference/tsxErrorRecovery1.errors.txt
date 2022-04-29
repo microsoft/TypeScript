@@ -1,0 +1,14 @@
+tests/cases/conformance/jsx/file.tsx(4,19): error TS1109: Expression expected.
+
+
+==== tests/cases/conformance/jsx/file.tsx (1 errors) ====
+    declare namespace JSX { interface Element { } }
+    
+    function foo() {
+    	var x = <div>  { </div>
+    	                 ~~
+!!! error TS1109: Expression expected.
+    }
+    // Shouldn't see any errors down here
+    var y = { a: 1 };
+    

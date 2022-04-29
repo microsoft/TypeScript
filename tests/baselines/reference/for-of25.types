@@ -1,0 +1,23 @@
+=== tests/cases/conformance/es6/for-ofStatements/for-of25.ts ===
+class StringIterator {
+>StringIterator : StringIterator
+
+    [Symbol.iterator]() {
+>[Symbol.iterator] : () => any
+>Symbol.iterator : unique symbol
+>Symbol : SymbolConstructor
+>iterator : unique symbol
+
+        return x;
+>x : any
+    }
+}
+
+var x: any;
+>x : any
+
+for (var v of new StringIterator) { }
+>v : any
+>new StringIterator : StringIterator
+>StringIterator : typeof StringIterator
+

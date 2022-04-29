@@ -1,0 +1,11 @@
+=== tests/cases/compiler/voidAsOperator.ts ===
+if (!void 0 !== true) {
+No type information for this code. 
+No type information for this code.}
+No type information for this code.
+No type information for this code.//CHECK#2
+No type information for this code.if (!null !== true) {
+No type information for this code. 
+No type information for this code.}
+No type information for this code.
+No type information for this code.

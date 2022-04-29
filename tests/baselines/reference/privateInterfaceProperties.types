@@ -1,0 +1,15 @@
+=== tests/cases/compiler/privateInterfaceProperties.ts ===
+interface i1 { name:string; }
+>name : string
+ 
+// should be an error 
+class c1 implements i1 { private name:string; }
+>c1 : c1
+>name : string
+ 
+// should be ok 
+class c2 implements i1 { public name:string; }
+>c2 : c2
+>name : string
+
+ 

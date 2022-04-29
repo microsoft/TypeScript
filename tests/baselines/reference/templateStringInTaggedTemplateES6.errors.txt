@@ -1,0 +1,9 @@
+tests/cases/conformance/es6/templates/templateStringInTaggedTemplateES6.ts(1,1): error TS2349: This expression is not callable.
+  Type 'String' has no call signatures.
+
+
+==== tests/cases/conformance/es6/templates/templateStringInTaggedTemplateES6.ts (1 errors) ====
+    `I AM THE ${ `${ `TAG` } ` } PORTION`    `I ${ "AM" } THE TEMPLATE PORTION`
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2349: This expression is not callable.
+!!! error TS2349:   Type 'String' has no call signatures.

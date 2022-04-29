@@ -1,0 +1,56 @@
+=== tests/cases/compiler/reachabilityChecks7.ts ===
+// async function without return type annotation - error
+async function f1() {    
+>f1 : () => Promise<void>
+}
+
+let x = async function() {
+>x : () => Promise<void>
+>async function() {} : () => Promise<void>
+}
+
+// async function with which promised type is void - return can be omitted
+async function f2(): Promise<void> {
+>f2 : () => Promise<void>
+    
+}
+
+async function f3(x) {
+>f3 : (x: any) => Promise<number>
+>x : any
+
+    if (x) return 10;
+>x : any
+>10 : 10
+}
+
+async function f4(): Promise<number> {
+>f4 : () => Promise<number>
+    
+}
+
+function voidFunc(): void {
+>voidFunc : () => void
+}
+
+function calltoVoidFunc(x) {
+>calltoVoidFunc : (x: any) => void
+>x : any
+
+    if (x) return voidFunc();
+>x : any
+>voidFunc() : void
+>voidFunc : () => void
+}
+
+declare function use(s: string): void;
+>use : (s: string) => void
+>s : string
+
+let x1 = () => { use("Test"); }
+>x1 : () => void
+>() => { use("Test"); } : () => void
+>use("Test") : void
+>use : (s: string) => void
+>"Test" : "Test"
+

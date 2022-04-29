@@ -1,0 +1,4 @@
+=== tests/cases/conformance/parser/ecmascript5/Fuzz/parser768531.ts ===
+{a: 3}
+No type information for this code./x/
+No type information for this code.

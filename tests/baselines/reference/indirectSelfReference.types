@@ -1,0 +1,9 @@
+=== tests/cases/compiler/indirectSelfReference.ts ===
+class a extends b{ }
+>a : a
+>b : typeof b
+
+class b extends a{ }
+>b : b
+>a : typeof a
+

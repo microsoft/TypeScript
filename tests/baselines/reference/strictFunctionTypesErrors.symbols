@@ -1,0 +1,504 @@
+=== tests/cases/compiler/strictFunctionTypesErrors.ts ===
+export {}
+
+
+declare let f1: (x: Object) => Object;
+>f1 : Symbol(f1, Decl(strictFunctionTypesErrors.ts, 3, 11))
+>x : Symbol(x, Decl(strictFunctionTypesErrors.ts, 3, 17))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+declare let f2: (x: Object) => string;
+>f2 : Symbol(f2, Decl(strictFunctionTypesErrors.ts, 4, 11))
+>x : Symbol(x, Decl(strictFunctionTypesErrors.ts, 4, 17))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+declare let f3: (x: string) => Object;
+>f3 : Symbol(f3, Decl(strictFunctionTypesErrors.ts, 5, 11))
+>x : Symbol(x, Decl(strictFunctionTypesErrors.ts, 5, 17))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+declare let f4: (x: string) => string;
+>f4 : Symbol(f4, Decl(strictFunctionTypesErrors.ts, 6, 11))
+>x : Symbol(x, Decl(strictFunctionTypesErrors.ts, 6, 17))
+
+f1 = f2;  // Ok
+>f1 : Symbol(f1, Decl(strictFunctionTypesErrors.ts, 3, 11))
+>f2 : Symbol(f2, Decl(strictFunctionTypesErrors.ts, 4, 11))
+
+f1 = f3;  // Error
+>f1 : Symbol(f1, Decl(strictFunctionTypesErrors.ts, 3, 11))
+>f3 : Symbol(f3, Decl(strictFunctionTypesErrors.ts, 5, 11))
+
+f1 = f4;  // Error
+>f1 : Symbol(f1, Decl(strictFunctionTypesErrors.ts, 3, 11))
+>f4 : Symbol(f4, Decl(strictFunctionTypesErrors.ts, 6, 11))
+
+f2 = f1;  // Error
+>f2 : Symbol(f2, Decl(strictFunctionTypesErrors.ts, 4, 11))
+>f1 : Symbol(f1, Decl(strictFunctionTypesErrors.ts, 3, 11))
+
+f2 = f3;  // Error
+>f2 : Symbol(f2, Decl(strictFunctionTypesErrors.ts, 4, 11))
+>f3 : Symbol(f3, Decl(strictFunctionTypesErrors.ts, 5, 11))
+
+f2 = f4;  // Error
+>f2 : Symbol(f2, Decl(strictFunctionTypesErrors.ts, 4, 11))
+>f4 : Symbol(f4, Decl(strictFunctionTypesErrors.ts, 6, 11))
+
+f3 = f1;  // Ok
+>f3 : Symbol(f3, Decl(strictFunctionTypesErrors.ts, 5, 11))
+>f1 : Symbol(f1, Decl(strictFunctionTypesErrors.ts, 3, 11))
+
+f3 = f2;  // Ok
+>f3 : Symbol(f3, Decl(strictFunctionTypesErrors.ts, 5, 11))
+>f2 : Symbol(f2, Decl(strictFunctionTypesErrors.ts, 4, 11))
+
+f3 = f4;  // Ok
+>f3 : Symbol(f3, Decl(strictFunctionTypesErrors.ts, 5, 11))
+>f4 : Symbol(f4, Decl(strictFunctionTypesErrors.ts, 6, 11))
+
+f4 = f1;  // Error
+>f4 : Symbol(f4, Decl(strictFunctionTypesErrors.ts, 6, 11))
+>f1 : Symbol(f1, Decl(strictFunctionTypesErrors.ts, 3, 11))
+
+f4 = f2;  // Ok
+>f4 : Symbol(f4, Decl(strictFunctionTypesErrors.ts, 6, 11))
+>f2 : Symbol(f2, Decl(strictFunctionTypesErrors.ts, 4, 11))
+
+f4 = f3;  // Error
+>f4 : Symbol(f4, Decl(strictFunctionTypesErrors.ts, 6, 11))
+>f3 : Symbol(f3, Decl(strictFunctionTypesErrors.ts, 5, 11))
+
+type Func<T, U> = (x: T) => U;
+>Func : Symbol(Func, Decl(strictFunctionTypesErrors.ts, 22, 8))
+>T : Symbol(T, Decl(strictFunctionTypesErrors.ts, 24, 10))
+>U : Symbol(U, Decl(strictFunctionTypesErrors.ts, 24, 12))
+>x : Symbol(x, Decl(strictFunctionTypesErrors.ts, 24, 19))
+>T : Symbol(T, Decl(strictFunctionTypesErrors.ts, 24, 10))
+>U : Symbol(U, Decl(strictFunctionTypesErrors.ts, 24, 12))
+
+declare let g1: Func<Object, Object>;
+>g1 : Symbol(g1, Decl(strictFunctionTypesErrors.ts, 26, 11))
+>Func : Symbol(Func, Decl(strictFunctionTypesErrors.ts, 22, 8))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+declare let g2: Func<Object, string>;
+>g2 : Symbol(g2, Decl(strictFunctionTypesErrors.ts, 27, 11))
+>Func : Symbol(Func, Decl(strictFunctionTypesErrors.ts, 22, 8))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+declare let g3: Func<string, Object>;
+>g3 : Symbol(g3, Decl(strictFunctionTypesErrors.ts, 28, 11))
+>Func : Symbol(Func, Decl(strictFunctionTypesErrors.ts, 22, 8))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+declare let g4: Func<string, string>;
+>g4 : Symbol(g4, Decl(strictFunctionTypesErrors.ts, 29, 11))
+>Func : Symbol(Func, Decl(strictFunctionTypesErrors.ts, 22, 8))
+
+g1 = g2;  // Ok
+>g1 : Symbol(g1, Decl(strictFunctionTypesErrors.ts, 26, 11))
+>g2 : Symbol(g2, Decl(strictFunctionTypesErrors.ts, 27, 11))
+
+g1 = g3;  // Error
+>g1 : Symbol(g1, Decl(strictFunctionTypesErrors.ts, 26, 11))
+>g3 : Symbol(g3, Decl(strictFunctionTypesErrors.ts, 28, 11))
+
+g1 = g4;  // Error
+>g1 : Symbol(g1, Decl(strictFunctionTypesErrors.ts, 26, 11))
+>g4 : Symbol(g4, Decl(strictFunctionTypesErrors.ts, 29, 11))
+
+g2 = g1;  // Error
+>g2 : Symbol(g2, Decl(strictFunctionTypesErrors.ts, 27, 11))
+>g1 : Symbol(g1, Decl(strictFunctionTypesErrors.ts, 26, 11))
+
+g2 = g3;  // Error
+>g2 : Symbol(g2, Decl(strictFunctionTypesErrors.ts, 27, 11))
+>g3 : Symbol(g3, Decl(strictFunctionTypesErrors.ts, 28, 11))
+
+g2 = g4;  // Error
+>g2 : Symbol(g2, Decl(strictFunctionTypesErrors.ts, 27, 11))
+>g4 : Symbol(g4, Decl(strictFunctionTypesErrors.ts, 29, 11))
+
+g3 = g1;  // Ok
+>g3 : Symbol(g3, Decl(strictFunctionTypesErrors.ts, 28, 11))
+>g1 : Symbol(g1, Decl(strictFunctionTypesErrors.ts, 26, 11))
+
+g3 = g2;  // Ok
+>g3 : Symbol(g3, Decl(strictFunctionTypesErrors.ts, 28, 11))
+>g2 : Symbol(g2, Decl(strictFunctionTypesErrors.ts, 27, 11))
+
+g3 = g4;  // Ok
+>g3 : Symbol(g3, Decl(strictFunctionTypesErrors.ts, 28, 11))
+>g4 : Symbol(g4, Decl(strictFunctionTypesErrors.ts, 29, 11))
+
+g4 = g1;  // Error
+>g4 : Symbol(g4, Decl(strictFunctionTypesErrors.ts, 29, 11))
+>g1 : Symbol(g1, Decl(strictFunctionTypesErrors.ts, 26, 11))
+
+g4 = g2;  // Ok
+>g4 : Symbol(g4, Decl(strictFunctionTypesErrors.ts, 29, 11))
+>g2 : Symbol(g2, Decl(strictFunctionTypesErrors.ts, 27, 11))
+
+g4 = g3;  // Error
+>g4 : Symbol(g4, Decl(strictFunctionTypesErrors.ts, 29, 11))
+>g3 : Symbol(g3, Decl(strictFunctionTypesErrors.ts, 28, 11))
+
+declare let h1: Func<Func<Object, void>, Object>;
+>h1 : Symbol(h1, Decl(strictFunctionTypesErrors.ts, 47, 11))
+>Func : Symbol(Func, Decl(strictFunctionTypesErrors.ts, 22, 8))
+>Func : Symbol(Func, Decl(strictFunctionTypesErrors.ts, 22, 8))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+declare let h2: Func<Func<Object, void>, string>;
+>h2 : Symbol(h2, Decl(strictFunctionTypesErrors.ts, 48, 11))
+>Func : Symbol(Func, Decl(strictFunctionTypesErrors.ts, 22, 8))
+>Func : Symbol(Func, Decl(strictFunctionTypesErrors.ts, 22, 8))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+declare let h3: Func<Func<string, void>, Object>;
+>h3 : Symbol(h3, Decl(strictFunctionTypesErrors.ts, 49, 11))
+>Func : Symbol(Func, Decl(strictFunctionTypesErrors.ts, 22, 8))
+>Func : Symbol(Func, Decl(strictFunctionTypesErrors.ts, 22, 8))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+declare let h4: Func<Func<string, void>, string>;
+>h4 : Symbol(h4, Decl(strictFunctionTypesErrors.ts, 50, 11))
+>Func : Symbol(Func, Decl(strictFunctionTypesErrors.ts, 22, 8))
+>Func : Symbol(Func, Decl(strictFunctionTypesErrors.ts, 22, 8))
+
+h1 = h2;  // Ok
+>h1 : Symbol(h1, Decl(strictFunctionTypesErrors.ts, 47, 11))
+>h2 : Symbol(h2, Decl(strictFunctionTypesErrors.ts, 48, 11))
+
+h1 = h3;  // Ok
+>h1 : Symbol(h1, Decl(strictFunctionTypesErrors.ts, 47, 11))
+>h3 : Symbol(h3, Decl(strictFunctionTypesErrors.ts, 49, 11))
+
+h1 = h4;  // Ok
+>h1 : Symbol(h1, Decl(strictFunctionTypesErrors.ts, 47, 11))
+>h4 : Symbol(h4, Decl(strictFunctionTypesErrors.ts, 50, 11))
+
+h2 = h1;  // Error
+>h2 : Symbol(h2, Decl(strictFunctionTypesErrors.ts, 48, 11))
+>h1 : Symbol(h1, Decl(strictFunctionTypesErrors.ts, 47, 11))
+
+h2 = h3;  // Error
+>h2 : Symbol(h2, Decl(strictFunctionTypesErrors.ts, 48, 11))
+>h3 : Symbol(h3, Decl(strictFunctionTypesErrors.ts, 49, 11))
+
+h2 = h4;  // Ok
+>h2 : Symbol(h2, Decl(strictFunctionTypesErrors.ts, 48, 11))
+>h4 : Symbol(h4, Decl(strictFunctionTypesErrors.ts, 50, 11))
+
+h3 = h1;  // Error
+>h3 : Symbol(h3, Decl(strictFunctionTypesErrors.ts, 49, 11))
+>h1 : Symbol(h1, Decl(strictFunctionTypesErrors.ts, 47, 11))
+
+h3 = h2;  // Error
+>h3 : Symbol(h3, Decl(strictFunctionTypesErrors.ts, 49, 11))
+>h2 : Symbol(h2, Decl(strictFunctionTypesErrors.ts, 48, 11))
+
+h3 = h4;  // Ok
+>h3 : Symbol(h3, Decl(strictFunctionTypesErrors.ts, 49, 11))
+>h4 : Symbol(h4, Decl(strictFunctionTypesErrors.ts, 50, 11))
+
+h4 = h1;  // Error
+>h4 : Symbol(h4, Decl(strictFunctionTypesErrors.ts, 50, 11))
+>h1 : Symbol(h1, Decl(strictFunctionTypesErrors.ts, 47, 11))
+
+h4 = h2;  // Error
+>h4 : Symbol(h4, Decl(strictFunctionTypesErrors.ts, 50, 11))
+>h2 : Symbol(h2, Decl(strictFunctionTypesErrors.ts, 48, 11))
+
+h4 = h3;  // Error
+>h4 : Symbol(h4, Decl(strictFunctionTypesErrors.ts, 50, 11))
+>h3 : Symbol(h3, Decl(strictFunctionTypesErrors.ts, 49, 11))
+
+declare let i1: Func<Object, Func<Object, void>>;
+>i1 : Symbol(i1, Decl(strictFunctionTypesErrors.ts, 68, 11))
+>Func : Symbol(Func, Decl(strictFunctionTypesErrors.ts, 22, 8))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Func : Symbol(Func, Decl(strictFunctionTypesErrors.ts, 22, 8))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+declare let i2: Func<Object, Func<string, void>>;
+>i2 : Symbol(i2, Decl(strictFunctionTypesErrors.ts, 69, 11))
+>Func : Symbol(Func, Decl(strictFunctionTypesErrors.ts, 22, 8))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Func : Symbol(Func, Decl(strictFunctionTypesErrors.ts, 22, 8))
+
+declare let i3: Func<string, Func<Object, void>>;
+>i3 : Symbol(i3, Decl(strictFunctionTypesErrors.ts, 70, 11))
+>Func : Symbol(Func, Decl(strictFunctionTypesErrors.ts, 22, 8))
+>Func : Symbol(Func, Decl(strictFunctionTypesErrors.ts, 22, 8))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+declare let i4: Func<string, Func<string, void>>;
+>i4 : Symbol(i4, Decl(strictFunctionTypesErrors.ts, 71, 11))
+>Func : Symbol(Func, Decl(strictFunctionTypesErrors.ts, 22, 8))
+>Func : Symbol(Func, Decl(strictFunctionTypesErrors.ts, 22, 8))
+
+i1 = i2;  // Error
+>i1 : Symbol(i1, Decl(strictFunctionTypesErrors.ts, 68, 11))
+>i2 : Symbol(i2, Decl(strictFunctionTypesErrors.ts, 69, 11))
+
+i1 = i3;  // Error
+>i1 : Symbol(i1, Decl(strictFunctionTypesErrors.ts, 68, 11))
+>i3 : Symbol(i3, Decl(strictFunctionTypesErrors.ts, 70, 11))
+
+i1 = i4;  // Error
+>i1 : Symbol(i1, Decl(strictFunctionTypesErrors.ts, 68, 11))
+>i4 : Symbol(i4, Decl(strictFunctionTypesErrors.ts, 71, 11))
+
+i2 = i1;  // Ok
+>i2 : Symbol(i2, Decl(strictFunctionTypesErrors.ts, 69, 11))
+>i1 : Symbol(i1, Decl(strictFunctionTypesErrors.ts, 68, 11))
+
+i2 = i3;  // Error
+>i2 : Symbol(i2, Decl(strictFunctionTypesErrors.ts, 69, 11))
+>i3 : Symbol(i3, Decl(strictFunctionTypesErrors.ts, 70, 11))
+
+i2 = i4;  // Error
+>i2 : Symbol(i2, Decl(strictFunctionTypesErrors.ts, 69, 11))
+>i4 : Symbol(i4, Decl(strictFunctionTypesErrors.ts, 71, 11))
+
+i3 = i1;  // Ok
+>i3 : Symbol(i3, Decl(strictFunctionTypesErrors.ts, 70, 11))
+>i1 : Symbol(i1, Decl(strictFunctionTypesErrors.ts, 68, 11))
+
+i3 = i2;  // Error
+>i3 : Symbol(i3, Decl(strictFunctionTypesErrors.ts, 70, 11))
+>i2 : Symbol(i2, Decl(strictFunctionTypesErrors.ts, 69, 11))
+
+i3 = i4;  // Error
+>i3 : Symbol(i3, Decl(strictFunctionTypesErrors.ts, 70, 11))
+>i4 : Symbol(i4, Decl(strictFunctionTypesErrors.ts, 71, 11))
+
+i4 = i1;  // Ok
+>i4 : Symbol(i4, Decl(strictFunctionTypesErrors.ts, 71, 11))
+>i1 : Symbol(i1, Decl(strictFunctionTypesErrors.ts, 68, 11))
+
+i4 = i2;  // Ok
+>i4 : Symbol(i4, Decl(strictFunctionTypesErrors.ts, 71, 11))
+>i2 : Symbol(i2, Decl(strictFunctionTypesErrors.ts, 69, 11))
+
+i4 = i3;  // Ok
+>i4 : Symbol(i4, Decl(strictFunctionTypesErrors.ts, 71, 11))
+>i3 : Symbol(i3, Decl(strictFunctionTypesErrors.ts, 70, 11))
+
+interface Animal { animal: void }
+>Animal : Symbol(Animal, Decl(strictFunctionTypesErrors.ts, 87, 8))
+>animal : Symbol(Animal.animal, Decl(strictFunctionTypesErrors.ts, 89, 18))
+
+interface Dog extends Animal { dog: void }
+>Dog : Symbol(Dog, Decl(strictFunctionTypesErrors.ts, 89, 33))
+>Animal : Symbol(Animal, Decl(strictFunctionTypesErrors.ts, 87, 8))
+>dog : Symbol(Dog.dog, Decl(strictFunctionTypesErrors.ts, 90, 30))
+
+interface Cat extends Animal { cat: void }
+>Cat : Symbol(Cat, Decl(strictFunctionTypesErrors.ts, 90, 42))
+>Animal : Symbol(Animal, Decl(strictFunctionTypesErrors.ts, 87, 8))
+>cat : Symbol(Cat.cat, Decl(strictFunctionTypesErrors.ts, 91, 30))
+
+interface Comparer1<T> {
+>Comparer1 : Symbol(Comparer1, Decl(strictFunctionTypesErrors.ts, 91, 42))
+>T : Symbol(T, Decl(strictFunctionTypesErrors.ts, 93, 20))
+
+    compare(a: T, b: T): number;
+>compare : Symbol(Comparer1.compare, Decl(strictFunctionTypesErrors.ts, 93, 24))
+>a : Symbol(a, Decl(strictFunctionTypesErrors.ts, 94, 12))
+>T : Symbol(T, Decl(strictFunctionTypesErrors.ts, 93, 20))
+>b : Symbol(b, Decl(strictFunctionTypesErrors.ts, 94, 17))
+>T : Symbol(T, Decl(strictFunctionTypesErrors.ts, 93, 20))
+}
+
+declare let animalComparer1: Comparer1<Animal>;
+>animalComparer1 : Symbol(animalComparer1, Decl(strictFunctionTypesErrors.ts, 97, 11))
+>Comparer1 : Symbol(Comparer1, Decl(strictFunctionTypesErrors.ts, 91, 42))
+>Animal : Symbol(Animal, Decl(strictFunctionTypesErrors.ts, 87, 8))
+
+declare let dogComparer1: Comparer1<Dog>;
+>dogComparer1 : Symbol(dogComparer1, Decl(strictFunctionTypesErrors.ts, 98, 11))
+>Comparer1 : Symbol(Comparer1, Decl(strictFunctionTypesErrors.ts, 91, 42))
+>Dog : Symbol(Dog, Decl(strictFunctionTypesErrors.ts, 89, 33))
+
+animalComparer1 = dogComparer1;  // Ok
+>animalComparer1 : Symbol(animalComparer1, Decl(strictFunctionTypesErrors.ts, 97, 11))
+>dogComparer1 : Symbol(dogComparer1, Decl(strictFunctionTypesErrors.ts, 98, 11))
+
+dogComparer1 = animalComparer1;  // Ok
+>dogComparer1 : Symbol(dogComparer1, Decl(strictFunctionTypesErrors.ts, 98, 11))
+>animalComparer1 : Symbol(animalComparer1, Decl(strictFunctionTypesErrors.ts, 97, 11))
+
+interface Comparer2<T> {
+>Comparer2 : Symbol(Comparer2, Decl(strictFunctionTypesErrors.ts, 101, 31))
+>T : Symbol(T, Decl(strictFunctionTypesErrors.ts, 103, 20))
+
+    compare: (a: T, b: T) => number;
+>compare : Symbol(Comparer2.compare, Decl(strictFunctionTypesErrors.ts, 103, 24))
+>a : Symbol(a, Decl(strictFunctionTypesErrors.ts, 104, 14))
+>T : Symbol(T, Decl(strictFunctionTypesErrors.ts, 103, 20))
+>b : Symbol(b, Decl(strictFunctionTypesErrors.ts, 104, 19))
+>T : Symbol(T, Decl(strictFunctionTypesErrors.ts, 103, 20))
+}
+
+declare let animalComparer2: Comparer2<Animal>;
+>animalComparer2 : Symbol(animalComparer2, Decl(strictFunctionTypesErrors.ts, 107, 11))
+>Comparer2 : Symbol(Comparer2, Decl(strictFunctionTypesErrors.ts, 101, 31))
+>Animal : Symbol(Animal, Decl(strictFunctionTypesErrors.ts, 87, 8))
+
+declare let dogComparer2: Comparer2<Dog>;
+>dogComparer2 : Symbol(dogComparer2, Decl(strictFunctionTypesErrors.ts, 108, 11))
+>Comparer2 : Symbol(Comparer2, Decl(strictFunctionTypesErrors.ts, 101, 31))
+>Dog : Symbol(Dog, Decl(strictFunctionTypesErrors.ts, 89, 33))
+
+animalComparer2 = dogComparer2;  // Error
+>animalComparer2 : Symbol(animalComparer2, Decl(strictFunctionTypesErrors.ts, 107, 11))
+>dogComparer2 : Symbol(dogComparer2, Decl(strictFunctionTypesErrors.ts, 108, 11))
+
+dogComparer2 = animalComparer2;  // Ok
+>dogComparer2 : Symbol(dogComparer2, Decl(strictFunctionTypesErrors.ts, 108, 11))
+>animalComparer2 : Symbol(animalComparer2, Decl(strictFunctionTypesErrors.ts, 107, 11))
+
+// Crate<T> is invariant in --strictFunctionTypes mode
+
+interface Crate<T> {
+>Crate : Symbol(Crate, Decl(strictFunctionTypesErrors.ts, 111, 31))
+>T : Symbol(T, Decl(strictFunctionTypesErrors.ts, 115, 16))
+
+    item: T;
+>item : Symbol(Crate.item, Decl(strictFunctionTypesErrors.ts, 115, 20))
+>T : Symbol(T, Decl(strictFunctionTypesErrors.ts, 115, 16))
+
+    onSetItem: (item: T) => void;
+>onSetItem : Symbol(Crate.onSetItem, Decl(strictFunctionTypesErrors.ts, 116, 12))
+>item : Symbol(item, Decl(strictFunctionTypesErrors.ts, 117, 16))
+>T : Symbol(T, Decl(strictFunctionTypesErrors.ts, 115, 16))
+}
+
+declare let animalCrate: Crate<Animal>;
+>animalCrate : Symbol(animalCrate, Decl(strictFunctionTypesErrors.ts, 120, 11))
+>Crate : Symbol(Crate, Decl(strictFunctionTypesErrors.ts, 111, 31))
+>Animal : Symbol(Animal, Decl(strictFunctionTypesErrors.ts, 87, 8))
+
+declare let dogCrate: Crate<Dog>;
+>dogCrate : Symbol(dogCrate, Decl(strictFunctionTypesErrors.ts, 121, 11))
+>Crate : Symbol(Crate, Decl(strictFunctionTypesErrors.ts, 111, 31))
+>Dog : Symbol(Dog, Decl(strictFunctionTypesErrors.ts, 89, 33))
+
+// Errors below should elaborate the reason for invariance
+
+animalCrate = dogCrate;  // Error
+>animalCrate : Symbol(animalCrate, Decl(strictFunctionTypesErrors.ts, 120, 11))
+>dogCrate : Symbol(dogCrate, Decl(strictFunctionTypesErrors.ts, 121, 11))
+
+dogCrate = animalCrate;  // Error
+>dogCrate : Symbol(dogCrate, Decl(strictFunctionTypesErrors.ts, 121, 11))
+>animalCrate : Symbol(animalCrate, Decl(strictFunctionTypesErrors.ts, 120, 11))
+
+// Verify that callback parameters are strictly checked
+
+declare let fc1: (f: (x: Animal) => Animal) => void;
+>fc1 : Symbol(fc1, Decl(strictFunctionTypesErrors.ts, 130, 11))
+>f : Symbol(f, Decl(strictFunctionTypesErrors.ts, 130, 18))
+>x : Symbol(x, Decl(strictFunctionTypesErrors.ts, 130, 22))
+>Animal : Symbol(Animal, Decl(strictFunctionTypesErrors.ts, 87, 8))
+>Animal : Symbol(Animal, Decl(strictFunctionTypesErrors.ts, 87, 8))
+
+declare let fc2: (f: (x: Dog) => Dog) => void;
+>fc2 : Symbol(fc2, Decl(strictFunctionTypesErrors.ts, 131, 11))
+>f : Symbol(f, Decl(strictFunctionTypesErrors.ts, 131, 18))
+>x : Symbol(x, Decl(strictFunctionTypesErrors.ts, 131, 22))
+>Dog : Symbol(Dog, Decl(strictFunctionTypesErrors.ts, 89, 33))
+>Dog : Symbol(Dog, Decl(strictFunctionTypesErrors.ts, 89, 33))
+
+fc1 = fc2;  // Error
+>fc1 : Symbol(fc1, Decl(strictFunctionTypesErrors.ts, 130, 11))
+>fc2 : Symbol(fc2, Decl(strictFunctionTypesErrors.ts, 131, 11))
+
+fc2 = fc1;  // Error
+>fc2 : Symbol(fc2, Decl(strictFunctionTypesErrors.ts, 131, 11))
+>fc1 : Symbol(fc1, Decl(strictFunctionTypesErrors.ts, 130, 11))
+
+// Verify that callback parameters aren't loosely checked when types
+// originate in method declarations
+
+namespace n1 {
+>n1 : Symbol(n1, Decl(strictFunctionTypesErrors.ts, 133, 10))
+
+    class Foo {
+>Foo : Symbol(Foo, Decl(strictFunctionTypesErrors.ts, 138, 14))
+
+        static f1(x: Animal): Animal { throw "wat"; }
+>f1 : Symbol(Foo.f1, Decl(strictFunctionTypesErrors.ts, 139, 15))
+>x : Symbol(x, Decl(strictFunctionTypesErrors.ts, 140, 18))
+>Animal : Symbol(Animal, Decl(strictFunctionTypesErrors.ts, 87, 8))
+>Animal : Symbol(Animal, Decl(strictFunctionTypesErrors.ts, 87, 8))
+
+        static f2(x: Dog): Animal { throw "wat"; };
+>f2 : Symbol(Foo.f2, Decl(strictFunctionTypesErrors.ts, 140, 53))
+>x : Symbol(x, Decl(strictFunctionTypesErrors.ts, 141, 18))
+>Dog : Symbol(Dog, Decl(strictFunctionTypesErrors.ts, 89, 33))
+>Animal : Symbol(Animal, Decl(strictFunctionTypesErrors.ts, 87, 8))
+    }
+    declare let f1: (cb: typeof Foo.f1) => void;
+>f1 : Symbol(f1, Decl(strictFunctionTypesErrors.ts, 143, 15))
+>cb : Symbol(cb, Decl(strictFunctionTypesErrors.ts, 143, 21))
+>Foo.f1 : Symbol(Foo.f1, Decl(strictFunctionTypesErrors.ts, 139, 15))
+>Foo : Symbol(Foo, Decl(strictFunctionTypesErrors.ts, 138, 14))
+>f1 : Symbol(Foo.f1, Decl(strictFunctionTypesErrors.ts, 139, 15))
+
+    declare let f2: (cb: typeof Foo.f2) => void;
+>f2 : Symbol(f2, Decl(strictFunctionTypesErrors.ts, 144, 15))
+>cb : Symbol(cb, Decl(strictFunctionTypesErrors.ts, 144, 21))
+>Foo.f2 : Symbol(Foo.f2, Decl(strictFunctionTypesErrors.ts, 140, 53))
+>Foo : Symbol(Foo, Decl(strictFunctionTypesErrors.ts, 138, 14))
+>f2 : Symbol(Foo.f2, Decl(strictFunctionTypesErrors.ts, 140, 53))
+
+    f1 = f2;
+>f1 : Symbol(f1, Decl(strictFunctionTypesErrors.ts, 143, 15))
+>f2 : Symbol(f2, Decl(strictFunctionTypesErrors.ts, 144, 15))
+
+    f2 = f1;  // Error
+>f2 : Symbol(f2, Decl(strictFunctionTypesErrors.ts, 144, 15))
+>f1 : Symbol(f1, Decl(strictFunctionTypesErrors.ts, 143, 15))
+}
+
+namespace n2 {
+>n2 : Symbol(n2, Decl(strictFunctionTypesErrors.ts, 147, 1))
+
+    type BivariantHack<Input, Output> = { foo(x: Input): Output }["foo"];
+>BivariantHack : Symbol(BivariantHack, Decl(strictFunctionTypesErrors.ts, 149, 14))
+>Input : Symbol(Input, Decl(strictFunctionTypesErrors.ts, 150, 23))
+>Output : Symbol(Output, Decl(strictFunctionTypesErrors.ts, 150, 29))
+>foo : Symbol(foo, Decl(strictFunctionTypesErrors.ts, 150, 41))
+>x : Symbol(x, Decl(strictFunctionTypesErrors.ts, 150, 46))
+>Input : Symbol(Input, Decl(strictFunctionTypesErrors.ts, 150, 23))
+>Output : Symbol(Output, Decl(strictFunctionTypesErrors.ts, 150, 29))
+
+    declare let f1: (cb: BivariantHack<Animal, Animal>) => void;
+>f1 : Symbol(f1, Decl(strictFunctionTypesErrors.ts, 151, 15))
+>cb : Symbol(cb, Decl(strictFunctionTypesErrors.ts, 151, 21))
+>BivariantHack : Symbol(BivariantHack, Decl(strictFunctionTypesErrors.ts, 149, 14))
+>Animal : Symbol(Animal, Decl(strictFunctionTypesErrors.ts, 87, 8))
+>Animal : Symbol(Animal, Decl(strictFunctionTypesErrors.ts, 87, 8))
+
+    declare let f2: (cb: BivariantHack<Dog, Animal>) => void;
+>f2 : Symbol(f2, Decl(strictFunctionTypesErrors.ts, 152, 15))
+>cb : Symbol(cb, Decl(strictFunctionTypesErrors.ts, 152, 21))
+>BivariantHack : Symbol(BivariantHack, Decl(strictFunctionTypesErrors.ts, 149, 14))
+>Dog : Symbol(Dog, Decl(strictFunctionTypesErrors.ts, 89, 33))
+>Animal : Symbol(Animal, Decl(strictFunctionTypesErrors.ts, 87, 8))
+
+    f1 = f2;
+>f1 : Symbol(f1, Decl(strictFunctionTypesErrors.ts, 151, 15))
+>f2 : Symbol(f2, Decl(strictFunctionTypesErrors.ts, 152, 15))
+
+    f2 = f1;  // Error
+>f2 : Symbol(f2, Decl(strictFunctionTypesErrors.ts, 152, 15))
+>f1 : Symbol(f1, Decl(strictFunctionTypesErrors.ts, 151, 15))
+}

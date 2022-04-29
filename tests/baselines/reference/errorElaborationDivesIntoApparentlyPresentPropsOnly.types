@@ -1,0 +1,44 @@
+=== tests/cases/compiler/errorElaborationDivesIntoApparentlyPresentPropsOnly.ts ===
+function foo<T extends { a: string }>(x: T) {
+>foo : <T extends { a: string; }>(x: T) => void
+>a : string
+>x : T
+
+    x = { a: "abc", b: 20, c: 30 };
+>x = { a: "abc", b: 20, c: 30 } : { a: string; b: number; c: number; }
+>x : T
+>{ a: "abc", b: 20, c: 30 } : { a: string; b: number; c: number; }
+>a : string
+>"abc" : "abc"
+>b : number
+>20 : 20
+>c : number
+>30 : 30
+}
+
+function bar<T extends { a: string }>(x: T) {
+>bar : <T extends { a: string; }>(x: T) => void
+>a : string
+>x : T
+
+    x = { a: 20 };
+>x = { a: 20 } : { a: number; }
+>x : T
+>{ a: 20 } : { a: number; }
+>a : number
+>20 : 20
+}
+
+function baz<T extends { a: string }>(x: T) {
+>baz : <T extends { a: string; }>(x: T) => void
+>a : string
+>x : T
+
+    x = { a: "not ok" };
+>x = { a: "not ok" } : { a: string; }
+>x : T
+>{ a: "not ok" } : { a: string; }
+>a : string
+>"not ok" : "not ok"
+}
+

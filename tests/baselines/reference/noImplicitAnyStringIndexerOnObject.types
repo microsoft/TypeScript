@@ -1,0 +1,434 @@
+=== tests/cases/compiler/noImplicitAnyStringIndexerOnObject.ts ===
+var a = {}["hello"];
+>a : undefined
+>{}["hello"] : undefined
+>{} : {}
+>"hello" : "hello"
+
+var b: string = { '': 'foo' }[''];
+>b : string
+>{ '': 'foo' }[''] : string
+>{ '': 'foo' } : { '': string; }
+>'' : string
+>'foo' : "foo"
+>'' : ""
+
+var c = {
+>c : { get: (key: string) => string; }
+>{  get: (key: string) => 'foobar'} : { get: (key: string) => string; }
+
+  get: (key: string) => 'foobar'
+>get : (key: string) => string
+>(key: string) => 'foobar' : (key: string) => string
+>key : string
+>'foobar' : "foobar"
+
+};
+c['hello'];
+>c['hello'] : any
+>c : { get: (key: string) => string; }
+>'hello' : "hello"
+
+const foo = c['hello'];
+>foo : any
+>c['hello'] : any
+>c : { get: (key: string) => string; }
+>'hello' : "hello"
+
+var d = {
+>d : { set: (key: string) => string; }
+>{  set: (key: string) => 'foobar'} : { set: (key: string) => string; }
+
+  set: (key: string) => 'foobar'
+>set : (key: string) => string
+>(key: string) => 'foobar' : (key: string) => string
+>key : string
+>'foobar' : "foobar"
+
+};
+const bar = d['hello'];
+>bar : any
+>d['hello'] : any
+>d : { set: (key: string) => string; }
+>'hello' : "hello"
+
+{
+  let e = {
+>e : { get: (key: string) => string; set: (key: string) => string; }
+>{    get: (key: string) => 'foobar',    set: (key: string) => 'foobar'  } : { get: (key: string) => string; set: (key: string) => string; }
+
+    get: (key: string) => 'foobar',
+>get : (key: string) => string
+>(key: string) => 'foobar' : (key: string) => string
+>key : string
+>'foobar' : "foobar"
+
+    set: (key: string) => 'foobar'
+>set : (key: string) => string
+>(key: string) => 'foobar' : (key: string) => string
+>key : string
+>'foobar' : "foobar"
+
+  };
+  e['hello'];
+>e['hello'] : any
+>e : { get: (key: string) => string; set: (key: string) => string; }
+>'hello' : "hello"
+
+  e['hello'] = 'modified';
+>e['hello'] = 'modified' : "modified"
+>e['hello'] : any
+>e : { get: (key: string) => string; set: (key: string) => string; }
+>'hello' : "hello"
+>'modified' : "modified"
+
+  e['hello'] += 1;
+>e['hello'] += 1 : any
+>e['hello'] : any
+>e : { get: (key: string) => string; set: (key: string) => string; }
+>'hello' : "hello"
+>1 : 1
+
+  e['hello'] ++;
+>e['hello'] ++ : number
+>e['hello'] : any
+>e : { get: (key: string) => string; set: (key: string) => string; }
+>'hello' : "hello"
+}
+
+{
+  let e = {
+>e : { get: (key: string) => string; set: (key: string, value: string) => string; }
+>{    get: (key: string) => 'foobar',    set: (key: string, value: string) => 'foobar'  } : { get: (key: string) => string; set: (key: string, value: string) => string; }
+
+    get: (key: string) => 'foobar',
+>get : (key: string) => string
+>(key: string) => 'foobar' : (key: string) => string
+>key : string
+>'foobar' : "foobar"
+
+    set: (key: string, value: string) => 'foobar'
+>set : (key: string, value: string) => string
+>(key: string, value: string) => 'foobar' : (key: string, value: string) => string
+>key : string
+>value : string
+>'foobar' : "foobar"
+
+  };
+  e['hello'];
+>e['hello'] : any
+>e : { get: (key: string) => string; set: (key: string, value: string) => string; }
+>'hello' : "hello"
+
+  e['hello'] = 'modified';
+>e['hello'] = 'modified' : "modified"
+>e['hello'] : any
+>e : { get: (key: string) => string; set: (key: string, value: string) => string; }
+>'hello' : "hello"
+>'modified' : "modified"
+
+  e['hello'] += 1;
+>e['hello'] += 1 : any
+>e['hello'] : any
+>e : { get: (key: string) => string; set: (key: string, value: string) => string; }
+>'hello' : "hello"
+>1 : 1
+
+  e['hello'] ++;
+>e['hello'] ++ : number
+>e['hello'] : any
+>e : { get: (key: string) => string; set: (key: string, value: string) => string; }
+>'hello' : "hello"
+}
+
+{
+  let e = {
+>e : { get: (key: "hello" | "world") => string; set: (key: "hello" | "world", value: string) => string; }
+>{    get: (key: "hello" | "world") => 'foobar',    set: (key: "hello" | "world", value: string) => 'foobar'  } : { get: (key: "hello" | "world") => string; set: (key: "hello" | "world", value: string) => string; }
+
+    get: (key: "hello" | "world") => 'foobar',
+>get : (key: "hello" | "world") => string
+>(key: "hello" | "world") => 'foobar' : (key: "hello" | "world") => string
+>key : "hello" | "world"
+>'foobar' : "foobar"
+
+    set: (key: "hello" | "world", value: string) => 'foobar'
+>set : (key: "hello" | "world", value: string) => string
+>(key: "hello" | "world", value: string) => 'foobar' : (key: "hello" | "world", value: string) => string
+>key : "hello" | "world"
+>value : string
+>'foobar' : "foobar"
+
+  };
+  e['hello'];
+>e['hello'] : any
+>e : { get: (key: "hello" | "world") => string; set: (key: "hello" | "world", value: string) => string; }
+>'hello' : "hello"
+
+  e['hello'] = 'modified';
+>e['hello'] = 'modified' : "modified"
+>e['hello'] : any
+>e : { get: (key: "hello" | "world") => string; set: (key: "hello" | "world", value: string) => string; }
+>'hello' : "hello"
+>'modified' : "modified"
+
+  e['hello'] += 1;
+>e['hello'] += 1 : any
+>e['hello'] : any
+>e : { get: (key: "hello" | "world") => string; set: (key: "hello" | "world", value: string) => string; }
+>'hello' : "hello"
+>1 : 1
+
+  e['hello'] ++;
+>e['hello'] ++ : number
+>e['hello'] : any
+>e : { get: (key: "hello" | "world") => string; set: (key: "hello" | "world", value: string) => string; }
+>'hello' : "hello"
+}
+
+{
+  ({ get: (key: string) => 'hello', set: (key: string, value: string) => {} })['hello'];
+>({ get: (key: string) => 'hello', set: (key: string, value: string) => {} })['hello'] : undefined
+>({ get: (key: string) => 'hello', set: (key: string, value: string) => {} }) : { get: (key: string) => string; set: (key: string, value: string) => void; }
+>{ get: (key: string) => 'hello', set: (key: string, value: string) => {} } : { get: (key: string) => string; set: (key: string, value: string) => void; }
+>get : (key: string) => string
+>(key: string) => 'hello' : (key: string) => string
+>key : string
+>'hello' : "hello"
+>set : (key: string, value: string) => void
+>(key: string, value: string) => {} : (key: string, value: string) => void
+>key : string
+>value : string
+>'hello' : "hello"
+
+  ({ get: (key: string) => 'hello', set: (key: string, value: string) => {} })['hello'] = 'modified';
+>({ get: (key: string) => 'hello', set: (key: string, value: string) => {} })['hello'] = 'modified' : "modified"
+>({ get: (key: string) => 'hello', set: (key: string, value: string) => {} })['hello'] : any
+>({ get: (key: string) => 'hello', set: (key: string, value: string) => {} }) : { get: (key: string) => string; set: (key: string, value: string) => void; }
+>{ get: (key: string) => 'hello', set: (key: string, value: string) => {} } : { get: (key: string) => string; set: (key: string, value: string) => void; }
+>get : (key: string) => string
+>(key: string) => 'hello' : (key: string) => string
+>key : string
+>'hello' : "hello"
+>set : (key: string, value: string) => void
+>(key: string, value: string) => {} : (key: string, value: string) => void
+>key : string
+>value : string
+>'hello' : "hello"
+>'modified' : "modified"
+
+  ({ get: (key: string) => 'hello', set: (key: string, value: string) => {} })['hello'] += 1;
+>({ get: (key: string) => 'hello', set: (key: string, value: string) => {} })['hello'] += 1 : any
+>({ get: (key: string) => 'hello', set: (key: string, value: string) => {} })['hello'] : any
+>({ get: (key: string) => 'hello', set: (key: string, value: string) => {} }) : { get: (key: string) => string; set: (key: string, value: string) => void; }
+>{ get: (key: string) => 'hello', set: (key: string, value: string) => {} } : { get: (key: string) => string; set: (key: string, value: string) => void; }
+>get : (key: string) => string
+>(key: string) => 'hello' : (key: string) => string
+>key : string
+>'hello' : "hello"
+>set : (key: string, value: string) => void
+>(key: string, value: string) => {} : (key: string, value: string) => void
+>key : string
+>value : string
+>'hello' : "hello"
+>1 : 1
+
+  ({ get: (key: string) => 'hello', set: (key: string, value: string) => {} })['hello'] ++;
+>({ get: (key: string) => 'hello', set: (key: string, value: string) => {} })['hello'] ++ : number
+>({ get: (key: string) => 'hello', set: (key: string, value: string) => {} })['hello'] : any
+>({ get: (key: string) => 'hello', set: (key: string, value: string) => {} }) : { get: (key: string) => string; set: (key: string, value: string) => void; }
+>{ get: (key: string) => 'hello', set: (key: string, value: string) => {} } : { get: (key: string) => string; set: (key: string, value: string) => void; }
+>get : (key: string) => string
+>(key: string) => 'hello' : (key: string) => string
+>key : string
+>'hello' : "hello"
+>set : (key: string, value: string) => void
+>(key: string, value: string) => {} : (key: string, value: string) => void
+>key : string
+>value : string
+>'hello' : "hello"
+}
+
+{
+  ({ foo: { get: (key: string) => 'hello', set: (key: string, value: string) => {} } }).foo['hello'];
+>({ foo: { get: (key: string) => 'hello', set: (key: string, value: string) => {} } }).foo['hello'] : undefined
+>({ foo: { get: (key: string) => 'hello', set: (key: string, value: string) => {} } }).foo : { get: (key: string) => string; set: (key: string, value: string) => void; }
+>({ foo: { get: (key: string) => 'hello', set: (key: string, value: string) => {} } }) : { foo: { get: (key: string) => string; set: (key: string, value: string) => void; }; }
+>{ foo: { get: (key: string) => 'hello', set: (key: string, value: string) => {} } } : { foo: { get: (key: string) => string; set: (key: string, value: string) => void; }; }
+>foo : { get: (key: string) => string; set: (key: string, value: string) => void; }
+>{ get: (key: string) => 'hello', set: (key: string, value: string) => {} } : { get: (key: string) => string; set: (key: string, value: string) => void; }
+>get : (key: string) => string
+>(key: string) => 'hello' : (key: string) => string
+>key : string
+>'hello' : "hello"
+>set : (key: string, value: string) => void
+>(key: string, value: string) => {} : (key: string, value: string) => void
+>key : string
+>value : string
+>foo : { get: (key: string) => string; set: (key: string, value: string) => void; }
+>'hello' : "hello"
+
+  ({ foo: { get: (key: string) => 'hello', set: (key: string, value: string) => {} } }).foo['hello'] = 'modified';
+>({ foo: { get: (key: string) => 'hello', set: (key: string, value: string) => {} } }).foo['hello'] = 'modified' : "modified"
+>({ foo: { get: (key: string) => 'hello', set: (key: string, value: string) => {} } }).foo['hello'] : any
+>({ foo: { get: (key: string) => 'hello', set: (key: string, value: string) => {} } }).foo : { get: (key: string) => string; set: (key: string, value: string) => void; }
+>({ foo: { get: (key: string) => 'hello', set: (key: string, value: string) => {} } }) : { foo: { get: (key: string) => string; set: (key: string, value: string) => void; }; }
+>{ foo: { get: (key: string) => 'hello', set: (key: string, value: string) => {} } } : { foo: { get: (key: string) => string; set: (key: string, value: string) => void; }; }
+>foo : { get: (key: string) => string; set: (key: string, value: string) => void; }
+>{ get: (key: string) => 'hello', set: (key: string, value: string) => {} } : { get: (key: string) => string; set: (key: string, value: string) => void; }
+>get : (key: string) => string
+>(key: string) => 'hello' : (key: string) => string
+>key : string
+>'hello' : "hello"
+>set : (key: string, value: string) => void
+>(key: string, value: string) => {} : (key: string, value: string) => void
+>key : string
+>value : string
+>foo : { get: (key: string) => string; set: (key: string, value: string) => void; }
+>'hello' : "hello"
+>'modified' : "modified"
+
+  ({ foo: { get: (key: string) => 'hello', set: (key: string, value: string) => {} } }).foo['hello'] += 1;
+>({ foo: { get: (key: string) => 'hello', set: (key: string, value: string) => {} } }).foo['hello'] += 1 : any
+>({ foo: { get: (key: string) => 'hello', set: (key: string, value: string) => {} } }).foo['hello'] : any
+>({ foo: { get: (key: string) => 'hello', set: (key: string, value: string) => {} } }).foo : { get: (key: string) => string; set: (key: string, value: string) => void; }
+>({ foo: { get: (key: string) => 'hello', set: (key: string, value: string) => {} } }) : { foo: { get: (key: string) => string; set: (key: string, value: string) => void; }; }
+>{ foo: { get: (key: string) => 'hello', set: (key: string, value: string) => {} } } : { foo: { get: (key: string) => string; set: (key: string, value: string) => void; }; }
+>foo : { get: (key: string) => string; set: (key: string, value: string) => void; }
+>{ get: (key: string) => 'hello', set: (key: string, value: string) => {} } : { get: (key: string) => string; set: (key: string, value: string) => void; }
+>get : (key: string) => string
+>(key: string) => 'hello' : (key: string) => string
+>key : string
+>'hello' : "hello"
+>set : (key: string, value: string) => void
+>(key: string, value: string) => {} : (key: string, value: string) => void
+>key : string
+>value : string
+>foo : { get: (key: string) => string; set: (key: string, value: string) => void; }
+>'hello' : "hello"
+>1 : 1
+
+  ({ foo: { get: (key: string) => 'hello', set: (key: string, value: string) => {} } }).foo['hello'] ++;
+>({ foo: { get: (key: string) => 'hello', set: (key: string, value: string) => {} } }).foo['hello'] ++ : number
+>({ foo: { get: (key: string) => 'hello', set: (key: string, value: string) => {} } }).foo['hello'] : any
+>({ foo: { get: (key: string) => 'hello', set: (key: string, value: string) => {} } }).foo : { get: (key: string) => string; set: (key: string, value: string) => void; }
+>({ foo: { get: (key: string) => 'hello', set: (key: string, value: string) => {} } }) : { foo: { get: (key: string) => string; set: (key: string, value: string) => void; }; }
+>{ foo: { get: (key: string) => 'hello', set: (key: string, value: string) => {} } } : { foo: { get: (key: string) => string; set: (key: string, value: string) => void; }; }
+>foo : { get: (key: string) => string; set: (key: string, value: string) => void; }
+>{ get: (key: string) => 'hello', set: (key: string, value: string) => {} } : { get: (key: string) => string; set: (key: string, value: string) => void; }
+>get : (key: string) => string
+>(key: string) => 'hello' : (key: string) => string
+>key : string
+>'hello' : "hello"
+>set : (key: string, value: string) => void
+>(key: string, value: string) => {} : (key: string, value: string) => void
+>key : string
+>value : string
+>foo : { get: (key: string) => string; set: (key: string, value: string) => void; }
+>'hello' : "hello"
+}
+
+const o = { a: 0 };
+>o : { a: number; }
+>{ a: 0 } : { a: number; }
+>a : number
+>0 : 0
+
+declare const k: "a" | "b" | "c";
+>k : "a" | "b" | "c"
+
+o[k];
+>o[k] : any
+>o : { a: number; }
+>k : "a" | "b" | "c"
+
+
+declare const k2: "c";
+>k2 : "c"
+
+o[k2];
+>o[k2] : any
+>o : { a: number; }
+>k2 : "c"
+
+declare const sym : unique symbol;
+>sym : unique symbol
+
+o[sym];
+>o[sym] : any
+>o : { a: number; }
+>sym : unique symbol
+
+enum NumEnum { a, b }
+>NumEnum : NumEnum
+>a : NumEnum.a
+>b : NumEnum.b
+
+let numEnumKey: NumEnum;
+>numEnumKey : NumEnum
+
+o[numEnumKey];
+>o[numEnumKey] : any
+>o : { a: number; }
+>numEnumKey : NumEnum
+
+
+enum StrEnum { a = "a", b = "b" }
+>StrEnum : StrEnum
+>a : StrEnum.a
+>"a" : "a"
+>b : StrEnum.b
+>"b" : "b"
+
+let strEnumKey: StrEnum;
+>strEnumKey : StrEnum
+
+o[strEnumKey];
+>o[strEnumKey] : any
+>o : { a: number; }
+>strEnumKey : StrEnum
+
+
+interface MyMap<K, T> {
+  get(key: K): T;
+>get : (key: K) => T
+>key : K
+
+  set(key: K, value: T): void;
+>set : (key: K, value: T) => void
+>key : K
+>value : T
+}
+
+interface Dog { bark(): void; }
+>bark : () => void
+
+let rover: Dog = { bark() {} };
+>rover : Dog
+>{ bark() {} } : { bark(): void; }
+>bark : () => void
+
+declare let map: MyMap<Dog, string>;
+>map : MyMap<Dog, string>
+
+map[rover] = "Rover";
+>map[rover] = "Rover" : "Rover"
+>map[rover] : any
+>map : MyMap<Dog, string>
+>rover : Dog
+>"Rover" : "Rover"
+
+interface I {
+  prop: MyMap<string, string>
+>prop : MyMap<string, string>
+}
+declare const m: I;
+>m : I
+
+m.prop['a'];
+>m.prop['a'] : any
+>m.prop : MyMap<string, string>
+>m : I
+>prop : MyMap<string, string>
+>'a' : "a"
+

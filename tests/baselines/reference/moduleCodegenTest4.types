@@ -1,0 +1,17 @@
+=== tests/cases/compiler/moduleCodegenTest4.ts ===
+export module Baz { export var x = "hello"; }
+>Baz : typeof Baz
+>x : string
+>"hello" : "hello"
+
+Baz.x = "goodbye";
+>Baz.x = "goodbye" : "goodbye"
+>Baz.x : string
+>Baz : typeof Baz
+>x : string
+>"goodbye" : "goodbye"
+
+void 0;
+>void 0 : undefined
+>0 : 0
+

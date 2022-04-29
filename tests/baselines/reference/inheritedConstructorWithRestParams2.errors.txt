@@ -1,0 +1,62 @@
+tests/cases/compiler/inheritedConstructorWithRestParams2.ts(32,13): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+tests/cases/compiler/inheritedConstructorWithRestParams2.ts(33,1): error TS2769: No overload matches this call.
+  Overload 1 of 3, '(x: string, ...y: number[]): Derived', gave the following error.
+    Argument of type 'string' is not assignable to parameter of type 'number'.
+  Overload 2 of 3, '(x1: string, x2: string, ...y: number[]): Derived', gave the following error.
+    Argument of type 'number' is not assignable to parameter of type 'string'.
+tests/cases/compiler/inheritedConstructorWithRestParams2.ts(34,1): error TS2769: No overload matches this call.
+  Overload 1 of 3, '(x: string, ...y: number[]): Derived', gave the following error.
+    Argument of type 'string' is not assignable to parameter of type 'number'.
+  Overload 2 of 3, '(x1: string, x2: string, ...y: number[]): Derived', gave the following error.
+    Argument of type 'number' is not assignable to parameter of type 'string'.
+
+
+==== tests/cases/compiler/inheritedConstructorWithRestParams2.ts (3 errors) ====
+    class IBaseBase<T, U> {
+        constructor(x: U) { }
+    }
+    
+    interface IBase<T, U> extends IBaseBase<T, U> { }
+    
+    class BaseBase2 {
+        constructor(x: number) { }
+    }
+    
+    declare class BaseBase<T, U> extends BaseBase2 implements IBase<T, U> {
+        constructor(x: T, ...y: U[]);
+        constructor(x1: T, x2: T, ...y: U[]);
+        constructor(x1: T, x2: U, y: T);
+    }
+    
+    class Base extends BaseBase<string, number> {
+    }
+    
+    class Derived extends Base { }
+    
+    // Ok
+    new Derived("", "");
+    new Derived("", 3);
+    new Derived("", 3, 3);
+    new Derived("", 3, 3, 3);
+    new Derived("", 3, "");
+    new Derived("", "", 3);
+    new Derived("", "", 3, 3);
+    
+    // Errors
+    new Derived(3);
+                ~
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+    new Derived("", 3, "", 3);
+    ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   Overload 1 of 3, '(x: string, ...y: number[]): Derived', gave the following error.
+!!! error TS2769:     Argument of type 'string' is not assignable to parameter of type 'number'.
+!!! error TS2769:   Overload 2 of 3, '(x1: string, x2: string, ...y: number[]): Derived', gave the following error.
+!!! error TS2769:     Argument of type 'number' is not assignable to parameter of type 'string'.
+    new Derived("", 3, "", "");
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   Overload 1 of 3, '(x: string, ...y: number[]): Derived', gave the following error.
+!!! error TS2769:     Argument of type 'string' is not assignable to parameter of type 'number'.
+!!! error TS2769:   Overload 2 of 3, '(x1: string, x2: string, ...y: number[]): Derived', gave the following error.
+!!! error TS2769:     Argument of type 'number' is not assignable to parameter of type 'string'.

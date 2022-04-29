@@ -1,0 +1,7 @@
+tests/cases/compiler/nullKeyword.ts(1,1): error TS2531: Object is possibly 'null'.
+
+
+==== tests/cases/compiler/nullKeyword.ts (1 errors) ====
+    null.foo;
+    ~~~~
+!!! error TS2531: Object is possibly 'null'.

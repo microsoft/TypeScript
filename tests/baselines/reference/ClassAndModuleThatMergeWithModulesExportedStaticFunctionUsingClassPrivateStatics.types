@@ -1,0 +1,35 @@
+=== tests/cases/conformance/internalModules/DeclarationMerging/ClassAndModuleThatMergeWithModulesExportedStaticFunctionUsingClassPrivateStatics.ts ===
+class clodule<T> {
+>clodule : clodule<T>
+
+    id: string;
+>id : string
+
+    value: T;
+>value : T
+
+    private static sfn(id: string) { return 42; }
+>sfn : (id: string) => number
+>id : string
+>42 : 42
+}
+
+module clodule {
+>clodule : typeof clodule
+
+    // error: duplicate identifier expected
+    export function fn<T>(x: T, y: T): number {
+>fn : <T>(x: T, y: T) => number
+>x : T
+>y : T
+
+        return clodule.sfn('a');
+>clodule.sfn('a') : number
+>clodule.sfn : (id: string) => number
+>clodule : typeof clodule
+>sfn : (id: string) => number
+>'a' : "a"
+    }
+}
+
+

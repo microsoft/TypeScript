@@ -1,0 +1,60 @@
+=== tests/cases/compiler/elaboratedErrors.ts ===
+interface FileSystem {
+  read: number;
+>read : number
+}
+
+function fn(s: WorkerFS): void;
+>fn : { (s: WorkerFS): void; (s: FileSystem): void; }
+>s : WorkerFS
+
+function fn(s: FileSystem): void;
+>fn : { (s: WorkerFS): void; (s: FileSystem): void; }
+>s : FileSystem
+
+function fn(s: FileSystem|WorkerFS) { }
+>fn : { (s: WorkerFS): void; (s: FileSystem): void; }
+>s : FileSystem | WorkerFS
+
+// This should issue a large error, not a small one
+class WorkerFS implements FileSystem {
+>WorkerFS : WorkerFS
+
+  read: string;
+>read : string
+}
+
+interface Alpha { x: string; }
+>x : string
+
+interface Beta { y: number; }
+>y : number
+
+var x: Alpha;
+>x : Alpha
+
+var y: Beta;
+>y : Beta
+
+// Only one of these errors should be large
+x = y;
+>x = y : Beta
+>x : Alpha
+>y : Beta
+
+x = y;
+>x = y : Beta
+>x : Alpha
+>y : Beta
+
+// Only one of these errors should be large
+y = x;
+>y = x : Alpha
+>y : Beta
+>x : Alpha
+
+y = x;
+>y = x : Alpha
+>y : Beta
+>x : Alpha
+

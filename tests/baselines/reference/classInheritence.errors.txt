@@ -1,0 +1,12 @@
+tests/cases/compiler/classInheritence.ts(1,17): error TS2449: Class 'A' used before its declaration.
+tests/cases/compiler/classInheritence.ts(2,7): error TS2506: 'A' is referenced directly or indirectly in its own base expression.
+
+
+==== tests/cases/compiler/classInheritence.ts (2 errors) ====
+    class B extends A { }
+                    ~
+!!! error TS2449: Class 'A' used before its declaration.
+!!! related TS2728 tests/cases/compiler/classInheritence.ts:2:7: 'A' is declared here.
+    class A extends A { }
+          ~
+!!! error TS2506: 'A' is referenced directly or indirectly in its own base expression.

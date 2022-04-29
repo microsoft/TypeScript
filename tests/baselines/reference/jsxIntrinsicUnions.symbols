@@ -1,0 +1,19 @@
+=== tests/cases/compiler/jsxIntrinsicUnions.tsx ===
+/// <reference path="react16.d.ts" />
+
+import * as React from "react";
+>React : Symbol(React, Decl(jsxIntrinsicUnions.tsx, 2, 6))
+
+const El = Math.random() ? 'h1' : 'h2';
+>El : Symbol(El, Decl(jsxIntrinsicUnions.tsx, 4, 5))
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+
+const tag = <El className="ok" key="key">{"Title"}</El>;
+>tag : Symbol(tag, Decl(jsxIntrinsicUnions.tsx, 6, 5))
+>El : Symbol(El, Decl(jsxIntrinsicUnions.tsx, 4, 5))
+>className : Symbol(className, Decl(jsxIntrinsicUnions.tsx, 6, 15))
+>key : Symbol(key, Decl(jsxIntrinsicUnions.tsx, 6, 30))
+>El : Symbol(El, Decl(jsxIntrinsicUnions.tsx, 4, 5))
+

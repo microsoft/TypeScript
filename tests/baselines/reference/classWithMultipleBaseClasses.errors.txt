@@ -1,0 +1,32 @@
+tests/cases/compiler/classWithMultipleBaseClasses.ts(18,7): error TS2420: Class 'D' incorrectly implements interface 'I'.
+  Type 'D' is missing the following properties from type 'I': foo, bar
+
+
+==== tests/cases/compiler/classWithMultipleBaseClasses.ts (1 errors) ====
+    class A {
+        foo() { }
+    }
+    
+    class B {
+        bar() { }
+    }
+    
+    interface I {
+        baz();
+    }
+    
+    interface J {
+        bat();
+    }
+    
+    
+    class D implements I, J {
+          ~
+!!! error TS2420: Class 'D' incorrectly implements interface 'I'.
+!!! error TS2420:   Type 'D' is missing the following properties from type 'I': foo, bar
+        baz() { }
+        bat() { }
+    }
+    
+    interface I extends A, B {
+    }

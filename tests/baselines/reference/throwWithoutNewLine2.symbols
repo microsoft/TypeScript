@@ -1,0 +1,4 @@
+=== tests/cases/compiler/throwWithoutNewLine2.ts ===
+throw
+No type information for this code.a;
+No type information for this code.

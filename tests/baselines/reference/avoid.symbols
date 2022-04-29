@@ -1,0 +1,43 @@
+=== tests/cases/compiler/avoid.ts ===
+function f() {
+>f : Symbol(f, Decl(avoid.ts, 0, 0))
+
+    var x=1;
+>x : Symbol(x, Decl(avoid.ts, 1, 7))
+}
+
+var y=f();  // error void fn
+>y : Symbol(y, Decl(avoid.ts, 4, 3))
+>f : Symbol(f, Decl(avoid.ts, 0, 0))
+
+var why:any=f(); // error void fn
+>why : Symbol(why, Decl(avoid.ts, 5, 3))
+>f : Symbol(f, Decl(avoid.ts, 0, 0))
+
+var w:any;
+>w : Symbol(w, Decl(avoid.ts, 6, 3))
+
+w=f(); // error void fn
+>w : Symbol(w, Decl(avoid.ts, 6, 3))
+>f : Symbol(f, Decl(avoid.ts, 0, 0))
+
+class C {
+>C : Symbol(C, Decl(avoid.ts, 7, 6))
+
+    g() {
+>g : Symbol(C.g, Decl(avoid.ts, 9, 9))
+        
+    }
+}
+
+var z=new C().g(); // error void fn
+>z : Symbol(z, Decl(avoid.ts, 15, 3))
+>new C().g : Symbol(C.g, Decl(avoid.ts, 9, 9))
+>C : Symbol(C, Decl(avoid.ts, 7, 6))
+>g : Symbol(C.g, Decl(avoid.ts, 9, 9))
+
+var N=new f();  // ok with void fn
+>N : Symbol(N, Decl(avoid.ts, 16, 3))
+>f : Symbol(f, Decl(avoid.ts, 0, 0))
+
+

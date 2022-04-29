@@ -1,0 +1,84 @@
+=== tests/cases/compiler/es6ModuleInternalImport.ts ===
+export module m {
+>m : typeof m
+
+    export var a = 10;
+>a : number
+>10 : 10
+}
+export import a1 = m.a;
+>a1 : number
+>m : typeof m
+>a : number
+
+import a2 = m.a;
+>a2 : number
+>m : typeof m
+>a : number
+
+var x = a1 + a2;
+>x : number
+>a1 + a2 : number
+>a1 : number
+>a2 : number
+
+export module m1 {
+>m1 : typeof m1
+
+    export import a3 = m.a;
+>a3 : number
+>m : typeof m
+>a : number
+
+    import a4 = m.a;
+>a4 : number
+>m : typeof m
+>a : number
+
+    var x = a1 + a2;
+>x : number
+>a1 + a2 : number
+>a1 : number
+>a2 : number
+
+    var x2 = a3 + a4;
+>x2 : number
+>a3 + a4 : number
+>a3 : number
+>a4 : number
+}
+module m2 {
+>m2 : typeof m2
+
+    export import a3 = m.a;
+>a3 : number
+>m : typeof m
+>a : number
+
+    import a4 = m.a;
+>a4 : number
+>m : typeof m
+>a : number
+
+    var x = a1 + a2;
+>x : number
+>a1 + a2 : number
+>a1 : number
+>a2 : number
+
+    var x2 = a3 + a4;
+>x2 : number
+>a3 + a4 : number
+>a3 : number
+>a4 : number
+
+    var x4 = m1.a3 + m2.a3;
+>x4 : number
+>m1.a3 + m2.a3 : number
+>m1.a3 : number
+>m1 : typeof m1
+>a3 : number
+>m2.a3 : number
+>m2 : typeof m2
+>a3 : number
+}

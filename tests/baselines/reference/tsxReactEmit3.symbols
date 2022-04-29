@@ -1,0 +1,22 @@
+=== tests/cases/conformance/jsx/test.tsx ===
+declare module JSX { interface Element { } }
+>JSX : Symbol(JSX, Decl(test.tsx, 0, 0))
+>Element : Symbol(Element, Decl(test.tsx, 0, 20))
+
+declare var React: any;
+>React : Symbol(React, Decl(test.tsx, 1, 11))
+
+declare var Foo, Bar, baz;
+>Foo : Symbol(Foo, Decl(test.tsx, 3, 11))
+>Bar : Symbol(Bar, Decl(test.tsx, 3, 16))
+>baz : Symbol(baz, Decl(test.tsx, 3, 21))
+
+<Foo> <Bar> q </Bar> <Bar/>   s <Bar/><Bar/></Foo>;
+>Foo : Symbol(Foo, Decl(test.tsx, 3, 11))
+>Bar : Symbol(Bar, Decl(test.tsx, 3, 16))
+>Bar : Symbol(Bar, Decl(test.tsx, 3, 16))
+>Bar : Symbol(Bar, Decl(test.tsx, 3, 16))
+>Bar : Symbol(Bar, Decl(test.tsx, 3, 16))
+>Bar : Symbol(Bar, Decl(test.tsx, 3, 16))
+>Foo : Symbol(Foo, Decl(test.tsx, 3, 11))
+

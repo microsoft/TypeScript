@@ -1,0 +1,16 @@
+=== tests/cases/compiler/unusedTypeParameterInInterface2.ts ===
+interface int<T, U, V> {
+>int : Symbol(int, Decl(unusedTypeParameterInInterface2.ts, 0, 0))
+>T : Symbol(T, Decl(unusedTypeParameterInInterface2.ts, 0, 14))
+>U : Symbol(U, Decl(unusedTypeParameterInInterface2.ts, 0, 16))
+>V : Symbol(V, Decl(unusedTypeParameterInInterface2.ts, 0, 19))
+
+    f1(a: T): string;
+>f1 : Symbol(int.f1, Decl(unusedTypeParameterInInterface2.ts, 0, 24))
+>a : Symbol(a, Decl(unusedTypeParameterInInterface2.ts, 1, 7))
+>T : Symbol(T, Decl(unusedTypeParameterInInterface2.ts, 0, 14))
+
+    c: V;
+>c : Symbol(int.c, Decl(unusedTypeParameterInInterface2.ts, 1, 21))
+>V : Symbol(V, Decl(unusedTypeParameterInInterface2.ts, 0, 19))
+}

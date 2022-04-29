@@ -1,0 +1,110 @@
+=== tests/cases/conformance/types/typeParameters/typeArgumentLists/callGenericFunctionWithZeroTypeArguments.ts ===
+// valid invocations of generic functions with no explicit type arguments provided 
+
+function f<T>(x: T): T { return null; }
+>f : <T>(x: T) => T
+>x : T
+>null : null
+
+var r = f(1);
+>r : number
+>f(1) : 1
+>f : <T>(x: T) => T
+>1 : 1
+
+var f2 = <T>(x: T): T => { return null; }
+>f2 : <T>(x: T) => T
+><T>(x: T): T => { return null; } : <T>(x: T) => T
+>x : T
+>null : null
+
+var r2 = f2(1);
+>r2 : number
+>f2(1) : 1
+>f2 : <T>(x: T) => T
+>1 : 1
+
+var f3: { <T>(x: T): T; }
+>f3 : <T>(x: T) => T
+>x : T
+
+var r3 = f3(1);
+>r3 : number
+>f3(1) : 1
+>f3 : <T>(x: T) => T
+>1 : 1
+
+class C {
+>C : C
+
+    f<T>(x: T): T {
+>f : <T>(x: T) => T
+>x : T
+
+        return null;
+>null : null
+    }
+}
+var r4 = (new C()).f(1);
+>r4 : number
+>(new C()).f(1) : 1
+>(new C()).f : <T>(x: T) => T
+>(new C()) : C
+>new C() : C
+>C : typeof C
+>f : <T>(x: T) => T
+>1 : 1
+
+interface I {
+    f<T>(x: T): T;
+>f : <T>(x: T) => T
+>x : T
+}
+var i: I;
+>i : I
+
+var r5 = i.f(1);
+>r5 : number
+>i.f(1) : 1
+>i.f : <T>(x: T) => T
+>i : I
+>f : <T>(x: T) => T
+>1 : 1
+
+class C2<T> {
+>C2 : C2<T>
+
+    f(x: T): T {
+>f : (x: T) => T
+>x : T
+
+        return null;
+>null : null
+    }
+}
+var r6 = (new C2()).f(1);
+>r6 : unknown
+>(new C2()).f(1) : unknown
+>(new C2()).f : (x: unknown) => unknown
+>(new C2()) : C2<unknown>
+>new C2() : C2<unknown>
+>C2 : typeof C2
+>f : (x: unknown) => unknown
+>1 : 1
+
+interface I2<T> {
+    f(x: T): T;
+>f : (x: T) => T
+>x : T
+}
+var i2: I2<number>;
+>i2 : I2<number>
+
+var r7 = i2.f(1);
+>r7 : number
+>i2.f(1) : number
+>i2.f : (x: number) => number
+>i2 : I2<number>
+>f : (x: number) => number
+>1 : 1
+

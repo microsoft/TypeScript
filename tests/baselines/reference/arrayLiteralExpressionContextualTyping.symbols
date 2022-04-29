@@ -1,0 +1,33 @@
+=== tests/cases/conformance/expressions/contextualTyping/arrayLiteralExpressionContextualTyping.ts ===
+// In a contextually typed array literal expression containing no spread elements, an element expression at index N is contextually typed by
+//      the type of the property with the numeric name N in the contextual type, if any, or otherwise
+//      the numeric index type of the contextual type, if any.
+var array = [1, 2, 3];
+>array : Symbol(array, Decl(arrayLiteralExpressionContextualTyping.ts, 3, 3))
+
+var array1 = [true, 2, 3];  // Contextual type by the numeric index type of the contextual type
+>array1 : Symbol(array1, Decl(arrayLiteralExpressionContextualTyping.ts, 4, 3))
+
+var tup: [number, number, number] = [1, 2, 3, 4];
+>tup : Symbol(tup, Decl(arrayLiteralExpressionContextualTyping.ts, 5, 3))
+
+var tup1: [number|string, number|string, number|string] = [1, 2, 3, "string"];
+>tup1 : Symbol(tup1, Decl(arrayLiteralExpressionContextualTyping.ts, 6, 3))
+
+var tup2: [number, number, number] = [1, 2, 3, "string"];  // Error
+>tup2 : Symbol(tup2, Decl(arrayLiteralExpressionContextualTyping.ts, 7, 3))
+
+// In a contextually typed array literal expression containing one or more spread elements,
+// an element expression at index N is contextually typed by the numeric index type of the contextual type, if any.
+var spr = [1, 2, 3, ...array];
+>spr : Symbol(spr, Decl(arrayLiteralExpressionContextualTyping.ts, 11, 3))
+>array : Symbol(array, Decl(arrayLiteralExpressionContextualTyping.ts, 3, 3))
+
+var spr1 = [1, 2, 3, ...tup];
+>spr1 : Symbol(spr1, Decl(arrayLiteralExpressionContextualTyping.ts, 12, 3))
+>tup : Symbol(tup, Decl(arrayLiteralExpressionContextualTyping.ts, 5, 3))
+
+var spr2:[number, number, number] = [1, 2, 3, ...tup];  // Error
+>spr2 : Symbol(spr2, Decl(arrayLiteralExpressionContextualTyping.ts, 13, 3))
+>tup : Symbol(tup, Decl(arrayLiteralExpressionContextualTyping.ts, 5, 3))
+

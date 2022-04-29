@@ -1,0 +1,13 @@
+=== tests/cases/compiler/importDeclWithExportModifierAndExportAssignment.ts ===
+module x {
+    interface c {
+    }
+}
+export import a = x.c;
+>a : any
+>x : typeof x
+>c : any
+
+export = x;
+>x : typeof x
+

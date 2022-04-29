@@ -1,0 +1,12 @@
+=== tests/cases/conformance/es6/arrowFunction/emitArrowFunctionWhenUsingArguments08.ts ===
+function f(arguments) {
+>f : (arguments: any) => void
+>arguments : any
+
+    var a = () => (arguments) => arguments;
+>a : () => (arguments: any) => any
+>() => (arguments) => arguments : () => (arguments: any) => any
+>(arguments) => arguments : (arguments: any) => any
+>arguments : any
+>arguments : any
+}

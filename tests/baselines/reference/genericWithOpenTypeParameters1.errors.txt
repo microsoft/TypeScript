@@ -1,0 +1,25 @@
+tests/cases/compiler/genericWithOpenTypeParameters1.ts(7,40): error TS2345: Argument of type 'number' is not assignable to parameter of type 'T'.
+  'T' could be instantiated with an arbitrary type which could be unrelated to 'number'.
+tests/cases/compiler/genericWithOpenTypeParameters1.ts(8,41): error TS2558: Expected 0 type arguments, but got 1.
+tests/cases/compiler/genericWithOpenTypeParameters1.ts(9,41): error TS2558: Expected 0 type arguments, but got 1.
+
+
+==== tests/cases/compiler/genericWithOpenTypeParameters1.ts (3 errors) ====
+    class B<T> {
+       foo(x: T): T { return null; }
+    }
+    
+    var x: B<number>;
+    x.foo(1); // no error
+    var f = <T>(x: B<T>) => { return x.foo(1); } // error
+                                           ~
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'T'.
+!!! error TS2345:   'T' could be instantiated with an arbitrary type which could be unrelated to 'number'.
+    var f2 = <T>(x: B<T>) => { return x.foo<T>(1); } // error
+                                            ~
+!!! error TS2558: Expected 0 type arguments, but got 1.
+    var f3 = <T>(x: B<T>) => { return x.foo<number>(1); } // error
+                                            ~~~~~~
+!!! error TS2558: Expected 0 type arguments, but got 1.
+    var f4 = (x: B<number>) => { return x.foo(1); } // no error
+    

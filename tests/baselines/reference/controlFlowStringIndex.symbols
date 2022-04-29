@@ -1,0 +1,32 @@
+=== tests/cases/conformance/controlFlow/controlFlowStringIndex.ts ===
+type A = {
+>A : Symbol(A, Decl(controlFlowStringIndex.ts, 0, 0))
+
+    other: number | null;
+>other : Symbol(other, Decl(controlFlowStringIndex.ts, 0, 10))
+
+    [index: string]: number | null
+>index : Symbol(index, Decl(controlFlowStringIndex.ts, 2, 5))
+
+};
+declare const value: A;
+>value : Symbol(value, Decl(controlFlowStringIndex.ts, 4, 13))
+>A : Symbol(A, Decl(controlFlowStringIndex.ts, 0, 0))
+
+if (value.foo !== null) {
+>value : Symbol(value, Decl(controlFlowStringIndex.ts, 4, 13))
+
+    value.foo.toExponential()
+>value.foo.toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
+>value : Symbol(value, Decl(controlFlowStringIndex.ts, 4, 13))
+>toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
+
+    value.other // should still be number | null
+>value.other : Symbol(other, Decl(controlFlowStringIndex.ts, 0, 10))
+>value : Symbol(value, Decl(controlFlowStringIndex.ts, 4, 13))
+>other : Symbol(other, Decl(controlFlowStringIndex.ts, 0, 10))
+
+    value.bar // should still be number | null
+>value : Symbol(value, Decl(controlFlowStringIndex.ts, 4, 13))
+}
+

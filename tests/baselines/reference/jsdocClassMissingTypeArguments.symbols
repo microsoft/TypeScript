@@ -1,0 +1,10 @@
+=== /a.js ===
+/** @template T */
+class C {}
+>C : Symbol(C, Decl(a.js, 0, 0))
+
+/** @param {C} p */
+function f(p) {}
+>f : Symbol(f, Decl(a.js, 1, 10))
+>p : Symbol(p, Decl(a.js, 4, 11))
+

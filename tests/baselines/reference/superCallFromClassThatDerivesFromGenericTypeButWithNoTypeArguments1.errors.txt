@@ -1,0 +1,15 @@
+tests/cases/compiler/superCallFromClassThatDerivesFromGenericTypeButWithNoTypeArguments1.ts(7,17): error TS2314: Generic type 'A<T1, T2>' requires 2 type argument(s).
+
+
+==== tests/cases/compiler/superCallFromClassThatDerivesFromGenericTypeButWithNoTypeArguments1.ts (1 errors) ====
+    class A<T1, T2> {
+        constructor(private map: (value: T1) => T2) {
+    
+        }
+    }
+    
+    class B extends A {
+                    ~
+!!! error TS2314: Generic type 'A<T1, T2>' requires 2 type argument(s).
+        constructor() { super(value => String(value)); }
+    }

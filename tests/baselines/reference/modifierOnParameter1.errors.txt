@@ -1,0 +1,9 @@
+tests/cases/compiler/modifierOnParameter1.ts(2,16): error TS1090: 'declare' modifier cannot appear on a parameter.
+
+
+==== tests/cases/compiler/modifierOnParameter1.ts (1 errors) ====
+    class C {
+       constructor(declare p) { }
+                   ~~~~~~~
+!!! error TS1090: 'declare' modifier cannot appear on a parameter.
+    }

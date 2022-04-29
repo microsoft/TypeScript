@@ -1,0 +1,28 @@
+=== tests/cases/compiler/noImplicitAnyMissingGetAccessor.ts ===
+abstract class Parent
+>Parent : Parent
+{
+    public abstract set message(str);
+>message : any
+>str : any
+}
+
+class Child extends Parent {
+>Child : Child
+>Parent : Parent
+
+    _x: any;
+>_x : any
+
+    public set message(str) {
+>message : any
+>str : any
+
+        this._x = str;
+>this._x = str : any
+>this._x : any
+>this : this
+>_x : any
+>str : any
+    }
+}

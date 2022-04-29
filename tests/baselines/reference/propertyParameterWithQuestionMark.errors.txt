@@ -1,0 +1,17 @@
+tests/cases/compiler/propertyParameterWithQuestionMark.ts(9,5): error TS2322: Type 'C' is not assignable to type '{ x: any; }'.
+  Property 'x' is optional in type 'C' but required in type '{ x: any; }'.
+
+
+==== tests/cases/compiler/propertyParameterWithQuestionMark.ts (1 errors) ====
+    class C {
+        constructor(public x?) { }
+    }
+    
+    // x should be an optional property
+    var v: C = {}; // Should succeed
+    var v2: { x? }
+    v = v2; // Should succeed
+    var v3: { x } = new C; // Should fail
+        ~~
+!!! error TS2322: Type 'C' is not assignable to type '{ x: any; }'.
+!!! error TS2322:   Property 'x' is optional in type 'C' but required in type '{ x: any; }'.

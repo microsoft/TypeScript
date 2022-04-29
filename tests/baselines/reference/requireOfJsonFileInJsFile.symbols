@@ -1,0 +1,50 @@
+=== /user.js ===
+const json0 = require("./json.json");
+>json0 : Symbol(json0, Decl(user.js, 0, 5))
+>require : Symbol(require)
+>"./json.json" : Symbol("/json", Decl(json.json, 0, 0))
+
+json0.b; // Error (good)
+>json0 : Symbol(json0, Decl(user.js, 0, 5))
+
+/** @type {{ b: number }} */
+const json1 = require("./json.json"); // No error (bad)
+>json1 : Symbol(json1, Decl(user.js, 4, 5))
+>require : Symbol(require)
+>"./json.json" : Symbol("/json", Decl(json.json, 0, 0))
+
+json1.b; // No error (OK since that's the type annotation)
+>json1.b : Symbol(b, Decl(user.js, 3, 12))
+>json1 : Symbol(json1, Decl(user.js, 4, 5))
+>b : Symbol(b, Decl(user.js, 3, 12))
+
+const js0 = require("./js.js");
+>js0 : Symbol(js0, Decl(user.js, 7, 5))
+>require : Symbol(require)
+>"./js.js" : Symbol("/js", Decl(js.js, 0, 0))
+
+json0.b; // Error (good)
+>json0 : Symbol(json0, Decl(user.js, 0, 5))
+
+/** @type {{ b: number }} */
+const js1 = require("./js.js"); // Error (good)
+>js1 : Symbol(js1, Decl(user.js, 11, 5))
+>require : Symbol(require)
+>"./js.js" : Symbol("/js", Decl(js.js, 0, 0))
+
+js1.b;
+>js1.b : Symbol(b, Decl(user.js, 10, 12))
+>js1 : Symbol(js1, Decl(user.js, 11, 5))
+>b : Symbol(b, Decl(user.js, 10, 12))
+
+=== /json.json ===
+{ "a": 0 }
+>"a" : Symbol("a", Decl(json.json, 0, 1))
+
+=== /js.js ===
+module.exports = { a: 0 };
+>module.exports : Symbol(module.exports, Decl(js.js, 0, 0))
+>module : Symbol(export=, Decl(js.js, 0, 0))
+>exports : Symbol(export=, Decl(js.js, 0, 0))
+>a : Symbol(a, Decl(js.js, 0, 18))
+

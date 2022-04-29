@@ -1,0 +1,46 @@
+=== tests/cases/compiler/circularInferredTypeOfVariable.ts ===
+// Repro from #14428
+
+(async () => {
+>(async () => {    function foo(p: string[]): string[] {        return [];    }    function bar(p: string[]): string[] {        return [];    }    let a1: string[] | undefined = [];    while (true) {        let a2 = foo(a1!);        a1 = await bar(a2);    }}) : () => Promise<never>
+>async () => {    function foo(p: string[]): string[] {        return [];    }    function bar(p: string[]): string[] {        return [];    }    let a1: string[] | undefined = [];    while (true) {        let a2 = foo(a1!);        a1 = await bar(a2);    }} : () => Promise<never>
+
+    function foo(p: string[]): string[] {
+>foo : (p: string[]) => string[]
+>p : string[]
+
+        return [];
+>[] : undefined[]
+    }
+
+    function bar(p: string[]): string[] {
+>bar : (p: string[]) => string[]
+>p : string[]
+
+        return [];
+>[] : undefined[]
+    }
+
+    let a1: string[] | undefined = [];
+>a1 : string[]
+>[] : undefined[]
+
+    while (true) {
+>true : true
+
+        let a2 = foo(a1!);
+>a2 : string[]
+>foo(a1!) : string[]
+>foo : (p: string[]) => string[]
+>a1! : string[]
+>a1 : string[]
+
+        a1 = await bar(a2);
+>a1 = await bar(a2) : string[]
+>a1 : string[]
+>await bar(a2) : string[]
+>bar(a2) : string[]
+>bar : (p: string[]) => string[]
+>a2 : string[]
+    }
+});

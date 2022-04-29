@@ -1,0 +1,76 @@
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures6.ts(30,1): error TS2322: Type '<T>(x: T) => void' is not assignable to type '<T>(x: T) => T'.
+  Type 'void' is not assignable to type 'T'.
+    'T' could be instantiated with an arbitrary type which could be unrelated to 'void'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures6.ts(39,1): error TS2322: Type '<T>(x: { foo: T; }, y: { foo: T; bar: T; }) => Base' is not assignable to type '<T, U>(x: { foo: T; }, y: { foo: U; bar: U; }) => Base'.
+  Types of parameters 'y' and 'y' are incompatible.
+    Type '{ foo: U; bar: U; }' is not assignable to type '{ foo: T; bar: T; }'.
+      Types of property 'foo' are incompatible.
+        Type 'U' is not assignable to type 'T'.
+          'T' could be instantiated with an arbitrary type which could be unrelated to 'U'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures6.ts(42,1): error TS2322: Type '<T extends Base>(x: { a: T; b: T; }) => T[]' is not assignable to type '<T>(x: { a: T; b: T; }) => T[]'.
+  Types of parameters 'x' and 'x' are incompatible.
+    Type '{ a: T; b: T; }' is not assignable to type '{ a: Base; b: Base; }'.
+      Types of property 'a' are incompatible.
+        Type 'T' is not assignable to type 'Base'.
+
+
+==== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures6.ts (3 errors) ====
+    // checking assignment compatibility relations for function types. All valid
+    
+    class Base { foo: string; }
+    class Derived extends Base { bar: string; }
+    class Derived2 extends Derived { baz: string; }
+    class OtherDerived extends Base { bing: string; }
+    
+    interface A {
+        a: <T>(x: T) => T[];
+        a2: <T>(x: T) => string[];
+        a3: <T>(x: T) => void;
+        a4: <T,U>(x: T, y: U) => string;
+        a5: <T,U>(x: (arg: T) => U) => T;
+        a6: <T extends Base>(x: (arg: T) => Derived) => T;
+        a11: <T>(x: { foo: T }, y: { foo: T; bar: T }) => Base;
+        a15: <T>(x: { a: T; b: T }) => T[];
+        a16: <T extends Base>(x: { a: T; b: T }) => T[];
+    }
+    
+    var x: A;
+    
+    var b: <T>(x: T) => T[]; 
+    x.a = b;
+    b = x.a;
+    var b2: <T>(x: T) => string[]; 
+    x.a2 = b2;
+    b2 = x.a2;
+    var b3: <T>(x: T) => T;
+    x.a3 = b3;
+    b3 = x.a3;
+    ~~
+!!! error TS2322: Type '<T>(x: T) => void' is not assignable to type '<T>(x: T) => T'.
+!!! error TS2322:   Type 'void' is not assignable to type 'T'.
+!!! error TS2322:     'T' could be instantiated with an arbitrary type which could be unrelated to 'void'.
+    var b4: <T, U>(x: T, y: U) => string; 
+    x.a4 = b4;
+    b4 = x.a4;
+    var b5: <T, U>(x: (arg: T) => U) => T; 
+    x.a5 = b5;
+    b5 = x.a5;
+    var b11: <T, U>(x: { foo: T }, y: { foo: U; bar: U }) => Base; 
+    x.a11 = b11;
+    b11 = x.a11;
+    ~~~
+!!! error TS2322: Type '<T>(x: { foo: T; }, y: { foo: T; bar: T; }) => Base' is not assignable to type '<T, U>(x: { foo: T; }, y: { foo: U; bar: U; }) => Base'.
+!!! error TS2322:   Types of parameters 'y' and 'y' are incompatible.
+!!! error TS2322:     Type '{ foo: U; bar: U; }' is not assignable to type '{ foo: T; bar: T; }'.
+!!! error TS2322:       Types of property 'foo' are incompatible.
+!!! error TS2322:         Type 'U' is not assignable to type 'T'.
+!!! error TS2322:           'T' could be instantiated with an arbitrary type which could be unrelated to 'U'.
+    var b16: <T>(x: { a: T; b: T }) => T[]; 
+    x.a16 = b16;
+    b16 = x.a16;
+    ~~~
+!!! error TS2322: Type '<T extends Base>(x: { a: T; b: T; }) => T[]' is not assignable to type '<T>(x: { a: T; b: T; }) => T[]'.
+!!! error TS2322:   Types of parameters 'x' and 'x' are incompatible.
+!!! error TS2322:     Type '{ a: T; b: T; }' is not assignable to type '{ a: Base; b: Base; }'.
+!!! error TS2322:       Types of property 'a' are incompatible.
+!!! error TS2322:         Type 'T' is not assignable to type 'Base'.

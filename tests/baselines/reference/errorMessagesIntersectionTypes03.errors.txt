@@ -1,0 +1,52 @@
+tests/cases/compiler/errorMessagesIntersectionTypes03.ts(17,5): error TS2322: Type 'A & B' is not assignable to type 'T'.
+  'T' could be instantiated with an arbitrary type which could be unrelated to 'A & B'.
+tests/cases/compiler/errorMessagesIntersectionTypes03.ts(18,5): error TS2322: Type 'A & B' is not assignable to type 'U'.
+  'A & B' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint 'A'.
+tests/cases/compiler/errorMessagesIntersectionTypes03.ts(19,5): error TS2322: Type 'A & B' is not assignable to type 'V'.
+  'A & B' is assignable to the constraint of type 'V', but 'V' could be instantiated with a different subtype of constraint 'A'.
+tests/cases/compiler/errorMessagesIntersectionTypes03.ts(22,5): error TS2322: Type 'T & B' is not assignable to type 'U'.
+  'U' could be instantiated with an arbitrary type which could be unrelated to 'T & B'.
+tests/cases/compiler/errorMessagesIntersectionTypes03.ts(23,5): error TS2322: Type 'T & B' is not assignable to type 'V'.
+  'V' could be instantiated with an arbitrary type which could be unrelated to 'T & B'.
+
+
+==== tests/cases/compiler/errorMessagesIntersectionTypes03.ts (5 errors) ====
+    interface A {
+        a;
+    }
+    
+    interface B {
+        b;
+    }
+    
+    function f<T, U extends A, V extends U>(): void {
+        let t: T;
+        let u: U;
+        let v: V;
+    
+        let a_and_b: A & B;
+        let t_and_b: T & B;
+    
+        t = a_and_b;
+        ~
+!!! error TS2322: Type 'A & B' is not assignable to type 'T'.
+!!! error TS2322:   'T' could be instantiated with an arbitrary type which could be unrelated to 'A & B'.
+        u = a_and_b;
+        ~
+!!! error TS2322: Type 'A & B' is not assignable to type 'U'.
+!!! error TS2322:   'A & B' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint 'A'.
+        v = a_and_b;
+        ~
+!!! error TS2322: Type 'A & B' is not assignable to type 'V'.
+!!! error TS2322:   'A & B' is assignable to the constraint of type 'V', but 'V' could be instantiated with a different subtype of constraint 'A'.
+    
+        t = t_and_b;
+        u = t_and_b;
+        ~
+!!! error TS2322: Type 'T & B' is not assignable to type 'U'.
+!!! error TS2322:   'U' could be instantiated with an arbitrary type which could be unrelated to 'T & B'.
+        v = t_and_b;
+        ~
+!!! error TS2322: Type 'T & B' is not assignable to type 'V'.
+!!! error TS2322:   'V' could be instantiated with an arbitrary type which could be unrelated to 'T & B'.
+    }

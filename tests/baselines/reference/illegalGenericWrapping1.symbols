@@ -1,0 +1,44 @@
+=== tests/cases/compiler/illegalGenericWrapping1.ts ===
+interface Sequence<T> {
+>Sequence : Symbol(Sequence, Decl(illegalGenericWrapping1.ts, 0, 0))
+>T : Symbol(T, Decl(illegalGenericWrapping1.ts, 0, 19))
+
+    each(iterator: (value: T) => void ): void;
+>each : Symbol(Sequence.each, Decl(illegalGenericWrapping1.ts, 0, 23))
+>iterator : Symbol(iterator, Decl(illegalGenericWrapping1.ts, 1, 9))
+>value : Symbol(value, Decl(illegalGenericWrapping1.ts, 1, 20))
+>T : Symbol(T, Decl(illegalGenericWrapping1.ts, 0, 19))
+
+    map<U>(iterator: (value: T) => U): Sequence<U>;
+>map : Symbol(Sequence.map, Decl(illegalGenericWrapping1.ts, 1, 46))
+>U : Symbol(U, Decl(illegalGenericWrapping1.ts, 2, 8))
+>iterator : Symbol(iterator, Decl(illegalGenericWrapping1.ts, 2, 11))
+>value : Symbol(value, Decl(illegalGenericWrapping1.ts, 2, 22))
+>T : Symbol(T, Decl(illegalGenericWrapping1.ts, 0, 19))
+>U : Symbol(U, Decl(illegalGenericWrapping1.ts, 2, 8))
+>Sequence : Symbol(Sequence, Decl(illegalGenericWrapping1.ts, 0, 0))
+>U : Symbol(U, Decl(illegalGenericWrapping1.ts, 2, 8))
+
+    filter(iterator: (value: T) => boolean): Sequence<T>;
+>filter : Symbol(Sequence.filter, Decl(illegalGenericWrapping1.ts, 2, 51))
+>iterator : Symbol(iterator, Decl(illegalGenericWrapping1.ts, 3, 11))
+>value : Symbol(value, Decl(illegalGenericWrapping1.ts, 3, 22))
+>T : Symbol(T, Decl(illegalGenericWrapping1.ts, 0, 19))
+>Sequence : Symbol(Sequence, Decl(illegalGenericWrapping1.ts, 0, 0))
+>T : Symbol(T, Decl(illegalGenericWrapping1.ts, 0, 19))
+
+    groupBy<K>(keySelector: (value: T) => K): Sequence<{ key: K; items: Sequence<T>; }>;
+>groupBy : Symbol(Sequence.groupBy, Decl(illegalGenericWrapping1.ts, 3, 57))
+>K : Symbol(K, Decl(illegalGenericWrapping1.ts, 4, 12))
+>keySelector : Symbol(keySelector, Decl(illegalGenericWrapping1.ts, 4, 15))
+>value : Symbol(value, Decl(illegalGenericWrapping1.ts, 4, 29))
+>T : Symbol(T, Decl(illegalGenericWrapping1.ts, 0, 19))
+>K : Symbol(K, Decl(illegalGenericWrapping1.ts, 4, 12))
+>Sequence : Symbol(Sequence, Decl(illegalGenericWrapping1.ts, 0, 0))
+>key : Symbol(key, Decl(illegalGenericWrapping1.ts, 4, 56))
+>K : Symbol(K, Decl(illegalGenericWrapping1.ts, 4, 12))
+>items : Symbol(items, Decl(illegalGenericWrapping1.ts, 4, 64))
+>Sequence : Symbol(Sequence, Decl(illegalGenericWrapping1.ts, 0, 0))
+>T : Symbol(T, Decl(illegalGenericWrapping1.ts, 0, 19))
+}
+

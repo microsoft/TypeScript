@@ -1,0 +1,96 @@
+=== tests/cases/conformance/jsx/1.tsx ===
+declare var React: any;
+>React : Symbol(React, Decl(1.tsx, 0, 11))
+
+</>;
+=== tests/cases/conformance/jsx/2.tsx ===
+<a: />;
+No type information for this code.=== tests/cases/conformance/jsx/3.tsx ===
+<:a />;
+No type information for this code.=== tests/cases/conformance/jsx/4.tsx ===
+<a b=d />;
+>b : Symbol(b, Decl(4.tsx, 0, 2))
+>d : Symbol(d, Decl(4.tsx, 0, 5))
+
+=== tests/cases/conformance/jsx/5.tsx ===
+<a>;
+No type information for this code.=== tests/cases/conformance/jsx/6.tsx ===
+<a></b>;
+No type information for this code.=== tests/cases/conformance/jsx/7.tsx ===
+<a foo="bar;
+>foo : Symbol(foo, Decl(7.tsx, 0, 2))
+
+=== tests/cases/conformance/jsx/8.tsx ===
+<a:b></b>;
+No type information for this code.=== tests/cases/conformance/jsx/9.tsx ===
+<a:b.c></a:b.c>;
+No type information for this code.=== tests/cases/conformance/jsx/10.tsx ===
+<a.b:c></a.b:c>;
+>c : Symbol(c, Decl(10.tsx, 0, 5))
+
+=== tests/cases/conformance/jsx/11.tsx ===
+<a.b.c></a>;
+No type information for this code.=== tests/cases/conformance/jsx/12.tsx ===
+<.a></.a>;
+No type information for this code.=== tests/cases/conformance/jsx/13.tsx ===
+<a.></a.>;
+No type information for this code.=== tests/cases/conformance/jsx/14.tsx ===
+<a[foo]></a[foo]>;
+No type information for this code.=== tests/cases/conformance/jsx/15.tsx ===
+<a['foo']></a['foo']>;
+No type information for this code.=== tests/cases/conformance/jsx/16.tsx ===
+<a><a />;
+No type information for this code.=== tests/cases/conformance/jsx/17.tsx ===
+<a b={}>;
+>b : Symbol(b, Decl(17.tsx, 0, 2))
+
+=== tests/cases/conformance/jsx/18.tsx ===
+var x = /* Leading trivia */ <div>one</div><div>two</div>;;
+>x : Symbol(x, Decl(18.tsx, 0, 3), Decl(19.tsx, 0, 3))
+
+=== tests/cases/conformance/jsx/19.tsx ===
+var x = <div>one</div> /* intervening comment */ <div>two</div>;;
+>x : Symbol(x, Decl(18.tsx, 0, 3), Decl(19.tsx, 0, 3))
+
+=== tests/cases/conformance/jsx/20.tsx ===
+<a>{"str";}</a>;
+No type information for this code.=== tests/cases/conformance/jsx/21.tsx ===
+<span className="a", id="b" />;
+>className : Symbol(className, Decl(21.tsx, 0, 5))
+>id : Symbol(id, Decl(21.tsx, 0, 20))
+
+=== tests/cases/conformance/jsx/22.tsx ===
+<div className"app">;
+>className : Symbol(className, Decl(22.tsx, 0, 4))
+
+=== tests/cases/conformance/jsx/23.tsx ===
+<div {props} />;
+No type information for this code.
+No type information for this code.=== tests/cases/conformance/jsx/24.tsx ===
+<div>stuff</div {...props}>;
+No type information for this code.
+No type information for this code.=== tests/cases/conformance/jsx/25.tsx ===
+<div {...props}>stuff</div {...props}>;
+No type information for this code.
+No type information for this code.
+No type information for this code.=== tests/cases/conformance/jsx/26.tsx ===
+<a>></a>;
+No type information for this code.
+No type information for this code.=== tests/cases/conformance/jsx/27.tsx ===
+<a> ></a>;
+No type information for this code.
+No type information for this code.=== tests/cases/conformance/jsx/28.tsx ===
+<a b=}>;
+>b : Symbol(b, Decl(28.tsx, 0, 2))
+
+=== tests/cases/conformance/jsx/29.tsx ===
+<a b=<}>;
+>b : Symbol(b, Decl(29.tsx, 0, 2))
+
+=== tests/cases/conformance/jsx/30.tsx ===
+<a>}</a>;
+No type information for this code.
+No type information for this code.=== tests/cases/conformance/jsx/31.tsx ===
+<a .../*hai*/asdf/>;
+>asdf : Symbol(asdf, Decl(31.tsx, 0, 6))
+

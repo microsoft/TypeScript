@@ -1,0 +1,17 @@
+=== tests/cases/compiler/exportEqualsClassNoRedeclarationError.ts ===
+class SomeClass {
+>SomeClass : Symbol(SomeClass, Decl(exportEqualsClassNoRedeclarationError.ts, 0, 0))
+
+    static get someProp(): number {
+>someProp : Symbol(SomeClass.someProp, Decl(exportEqualsClassNoRedeclarationError.ts, 0, 17), Decl(exportEqualsClassNoRedeclarationError.ts, 3, 5))
+
+        return 0;
+    }
+
+    static set someProp(value: number) {}
+>someProp : Symbol(SomeClass.someProp, Decl(exportEqualsClassNoRedeclarationError.ts, 0, 17), Decl(exportEqualsClassNoRedeclarationError.ts, 3, 5))
+>value : Symbol(value, Decl(exportEqualsClassNoRedeclarationError.ts, 5, 24))
+}
+export = SomeClass;
+>SomeClass : Symbol(SomeClass, Decl(exportEqualsClassNoRedeclarationError.ts, 0, 0))
+

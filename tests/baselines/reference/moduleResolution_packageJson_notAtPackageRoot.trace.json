@@ -1,0 +1,15 @@
+[
+    "======== Resolving module 'foo/bar' from '/a.ts'. ========",
+    "Module resolution kind is not specified, using 'NodeJs'.",
+    "Loading module 'foo/bar' from 'node_modules' folder, target file type 'TypeScript'.",
+    "Found 'package.json' at '/node_modules/foo/bar/package.json'.",
+    "'package.json' does not have a 'typesVersions' field.",
+    "File '/node_modules/foo/bar.ts' does not exist.",
+    "File '/node_modules/foo/bar.tsx' does not exist.",
+    "File '/node_modules/foo/bar.d.ts' does not exist.",
+    "'package.json' does not have a 'typings' field.",
+    "'package.json' has 'types' field 'types.d.ts' that references '/node_modules/foo/bar/types.d.ts'.",
+    "File '/node_modules/foo/bar/types.d.ts' exist - use it as a name resolution result.",
+    "Resolving real path for '/node_modules/foo/bar/types.d.ts', result '/node_modules/foo/bar/types.d.ts'.",
+    "======== Module name 'foo/bar' was successfully resolved to '/node_modules/foo/bar/types.d.ts'. ========"
+]

@@ -1,0 +1,7 @@
+{
+    "scenario": "relative - nested - ref",
+    "projectRoot": "tests/cases/projects/relative-nested-ref",
+    "inputFiles": [
+        "main/consume.ts"
+    ]
+}

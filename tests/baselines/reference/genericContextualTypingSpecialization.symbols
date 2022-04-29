@@ -1,0 +1,13 @@
+=== tests/cases/compiler/genericContextualTypingSpecialization.ts ===
+var b: number[];
+>b : Symbol(b, Decl(genericContextualTypingSpecialization.ts, 0, 3))
+
+b.reduce<number>((c, d) => c + d, 0); // should not error on '+'
+>b.reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>b : Symbol(b, Decl(genericContextualTypingSpecialization.ts, 0, 3))
+>reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>c : Symbol(c, Decl(genericContextualTypingSpecialization.ts, 1, 18))
+>d : Symbol(d, Decl(genericContextualTypingSpecialization.ts, 1, 20))
+>c : Symbol(c, Decl(genericContextualTypingSpecialization.ts, 1, 18))
+>d : Symbol(d, Decl(genericContextualTypingSpecialization.ts, 1, 20))
+

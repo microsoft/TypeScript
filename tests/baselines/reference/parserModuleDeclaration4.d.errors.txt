@@ -1,0 +1,13 @@
+tests/cases/conformance/parser/ecmascript5/ModuleDeclarations/parserModuleDeclaration4.d.ts(1,1): error TS1046: Top-level declarations in .d.ts files must start with either a 'declare' or 'export' modifier.
+tests/cases/conformance/parser/ecmascript5/ModuleDeclarations/parserModuleDeclaration4.d.ts(2,3): error TS1038: A 'declare' modifier cannot be used in an already ambient context.
+
+
+==== tests/cases/conformance/parser/ecmascript5/ModuleDeclarations/parserModuleDeclaration4.d.ts (2 errors) ====
+    module M {
+    ~~~~~~
+!!! error TS1046: Top-level declarations in .d.ts files must start with either a 'declare' or 'export' modifier.
+      declare module M1 {
+      ~~~~~~~
+!!! error TS1038: A 'declare' modifier cannot be used in an already ambient context.
+      }
+    }

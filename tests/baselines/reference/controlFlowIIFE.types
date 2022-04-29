@@ -1,0 +1,222 @@
+=== tests/cases/conformance/controlFlow/controlFlowIIFE.ts ===
+declare function getStringOrNumber(): string | number;
+>getStringOrNumber : () => string | number
+
+function f1() {
+>f1 : () => void
+
+    let x = getStringOrNumber();
+>x : string | number
+>getStringOrNumber() : string | number
+>getStringOrNumber : () => string | number
+
+    if (typeof x === "string") {
+>typeof x === "string" : boolean
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>x : string | number
+>"string" : "string"
+
+        let n = function() {
+>n : number
+>function() {            return x.length;        }() : number
+>function() {            return x.length;        } : () => number
+
+            return x.length;
+>x.length : number
+>x : string
+>length : number
+
+        }();
+    }
+}
+
+function f2() {
+>f2 : () => void
+
+    let x = getStringOrNumber();
+>x : string | number
+>getStringOrNumber() : string | number
+>getStringOrNumber : () => string | number
+
+    if (typeof x === "string") {
+>typeof x === "string" : boolean
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>x : string | number
+>"string" : "string"
+
+        let n = (function() {
+>n : number
+>(function() {            return x.length;        })() : number
+>(function() {            return x.length;        }) : () => number
+>function() {            return x.length;        } : () => number
+
+            return x.length;
+>x.length : number
+>x : string
+>length : number
+
+        })();
+    }
+}
+
+function f3() {
+>f3 : () => void
+
+    let x = getStringOrNumber();
+>x : string | number
+>getStringOrNumber() : string | number
+>getStringOrNumber : () => string | number
+
+    let y: number;
+>y : number
+
+    if (typeof x === "string") {
+>typeof x === "string" : boolean
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>x : string | number
+>"string" : "string"
+
+        let n = (z => x.length + y + z)(y = 1);
+>n : number
+>(z => x.length + y + z)(y = 1) : number
+>(z => x.length + y + z) : (z: number) => number
+>z => x.length + y + z : (z: number) => number
+>z : number
+>x.length + y + z : number
+>x.length + y : number
+>x.length : number
+>x : string
+>length : number
+>y : number
+>z : number
+>y = 1 : 1
+>y : number
+>1 : 1
+    }
+}
+
+// Repros from #8381
+
+let maybeNumber: number | undefined;
+>maybeNumber : number | undefined
+
+(function () {
+>(function () {    maybeNumber = 1;})() : void
+>(function () {    maybeNumber = 1;}) : () => void
+>function () {    maybeNumber = 1;} : () => void
+
+    maybeNumber = 1;
+>maybeNumber = 1 : 1
+>maybeNumber : number | undefined
+>1 : 1
+
+})();
+maybeNumber++;
+>maybeNumber++ : number
+>maybeNumber : number
+
+if (maybeNumber !== undefined) {
+>maybeNumber !== undefined : boolean
+>maybeNumber : number
+>undefined : undefined
+
+    maybeNumber++;
+>maybeNumber++ : number
+>maybeNumber : number
+}
+
+let test: string | undefined;
+>test : string | undefined
+
+if (!test) {
+>!test : boolean
+>test : string | undefined
+
+    throw new Error('Test is not defined');
+>new Error('Test is not defined') : Error
+>Error : ErrorConstructor
+>'Test is not defined' : "Test is not defined"
+}
+(() => {
+>(() => {    test.slice(1); // No error})() : void
+>(() => {    test.slice(1); // No error}) : () => void
+>() => {    test.slice(1); // No error} : () => void
+
+    test.slice(1); // No error
+>test.slice(1) : string
+>test.slice : (start?: number | undefined, end?: number | undefined) => string
+>test : string
+>slice : (start?: number | undefined, end?: number | undefined) => string
+>1 : 1
+
+})();
+
+// Repro from #23565
+
+function f4() {
+>f4 : () => void
+
+    let v: number;
+>v : number
+
+    (function() {
+>(function() {        v = 1;    })() : void
+>(function() {        v = 1;    }) : () => void
+>function() {        v = 1;    } : () => void
+
+        v = 1;
+>v = 1 : 1
+>v : number
+>1 : 1
+
+    })();
+    v;
+>v : number
+}
+
+function f5() {
+>f5 : () => void
+
+    let v: number;
+>v : number
+
+    (function*() {
+>(function*() {        yield 1;        v = 1;    })() : Generator<number, void, unknown>
+>(function*() {        yield 1;        v = 1;    }) : () => Generator<number, void, unknown>
+>function*() {        yield 1;        v = 1;    } : () => Generator<number, void, unknown>
+
+        yield 1;
+>yield 1 : any
+>1 : 1
+
+        v = 1;
+>v = 1 : 1
+>v : number
+>1 : 1
+
+    })();
+    v; // still undefined
+>v : number
+}
+
+function f6() {
+>f6 : () => void
+
+    let v: number;
+>v : number
+
+    (async function() {
+>(async function() {        v = await 1;    })() : Promise<void>
+>(async function() {        v = await 1;    }) : () => Promise<void>
+>async function() {        v = await 1;    } : () => Promise<void>
+
+        v = await 1;
+>v = await 1 : 1
+>v : number
+>await 1 : 1
+>1 : 1
+
+    })();
+    v; // still undefined
+>v : number
+}

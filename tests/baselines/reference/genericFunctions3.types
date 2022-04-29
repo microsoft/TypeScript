@@ -1,0 +1,19 @@
+=== tests/cases/compiler/genericFunctions3.ts ===
+interface Query<T> {
+    foo(x: string): Query<T[]>;
+>foo : (x: string) => Query<T[]>
+>x : string
+}
+ 
+function from<T>(arg: boolean): Query<T>; // was Error: Overload signature is not compatible with function definition.
+>from : <T>(arg: boolean) => Query<T>
+>arg : boolean
+
+function from<T>(arg: any): Query<T> {
+>from : <T>(arg: boolean) => Query<T>
+>arg : any
+
+    return undefined;
+>undefined : undefined
+}
+

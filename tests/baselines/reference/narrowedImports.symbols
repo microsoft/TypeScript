@@ -1,0 +1,61 @@
+=== /x.ts ===
+import a0, { a1, a1 as a2 } from "./a";
+>a0 : Symbol(a0, Decl(x.ts, 0, 6))
+>a1 : Symbol(a1, Decl(x.ts, 0, 12))
+>a1 : Symbol(a1, Decl(a.d.ts, 2, 12))
+>a2 : Symbol(a2, Decl(x.ts, 0, 16))
+
+import * as b0 from "./b";
+>b0 : Symbol(b0, Decl(x.ts, 1, 6))
+
+import b1 = require("./b");
+>b1 : Symbol(b1, Decl(x.ts, 1, 26))
+
+let x: number;
+>x : Symbol(x, Decl(x.ts, 4, 3))
+
+if (a0) x = a0;
+>a0 : Symbol(a0, Decl(x.ts, 0, 6))
+>x : Symbol(x, Decl(x.ts, 4, 3))
+>a0 : Symbol(a0, Decl(x.ts, 0, 6))
+
+if (a1) x = a1;
+>a1 : Symbol(a1, Decl(x.ts, 0, 12))
+>x : Symbol(x, Decl(x.ts, 4, 3))
+>a1 : Symbol(a1, Decl(x.ts, 0, 12))
+
+if (a2) x = a2;
+>a2 : Symbol(a2, Decl(x.ts, 0, 16))
+>x : Symbol(x, Decl(x.ts, 4, 3))
+>a2 : Symbol(a2, Decl(x.ts, 0, 16))
+
+if (b0) x = b0;
+>b0 : Symbol(b0, Decl(x.ts, 1, 6))
+>x : Symbol(x, Decl(x.ts, 4, 3))
+>b0 : Symbol(b0, Decl(x.ts, 1, 6))
+
+if (b1) x = b1;
+>b1 : Symbol(b1, Decl(x.ts, 1, 26))
+>x : Symbol(x, Decl(x.ts, 4, 3))
+>b1 : Symbol(b1, Decl(x.ts, 1, 26))
+
+=== /a.d.ts ===
+declare const a0: number | undefined;
+>a0 : Symbol(a0, Decl(a.d.ts, 0, 13))
+
+export default a0;
+>a0 : Symbol(a0, Decl(a.d.ts, 0, 13))
+
+export const a1: number | undefined;
+>a1 : Symbol(a1, Decl(a.d.ts, 2, 12))
+
+=== /b.d.ts ===
+declare const b: number | undefined;
+>b : Symbol(b, Decl(b.d.ts, 0, 13), Decl(b.d.ts, 0, 36))
+
+declare namespace b {}
+>b : Symbol(b, Decl(b.d.ts, 0, 13), Decl(b.d.ts, 0, 36))
+
+export = b;
+>b : Symbol(b, Decl(b.d.ts, 0, 13), Decl(b.d.ts, 0, 36))
+

@@ -1,0 +1,22 @@
+{
+    "scenario": "referenceResolution1_FromFooFolder_NoResolve",
+    "projectRoot": "tests/cases/projects/ReferenceResolution/src/ts/foo",
+    "inputFiles": [
+        "foo.ts",
+        "../../../bar/bar.ts"
+    ],
+    "noResolve": true,
+    "declaration": true,
+    "baselineCheck": true,
+    "resolvedInputFiles": [
+        "lib.es5.d.ts",
+        "foo.ts",
+        "../../../bar/bar.ts"
+    ],
+    "emittedFiles": [
+        "foo.js",
+        "foo.d.ts",
+        "../../../bar/bar.js",
+        "../../../bar/bar.d.ts"
+    ]
+}

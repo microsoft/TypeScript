@@ -1,0 +1,28 @@
+tests/cases/conformance/internalModules/moduleDeclarations/invalidInstantiatedModule.ts(2,18): error TS2300: Duplicate identifier 'Point'.
+tests/cases/conformance/internalModules/moduleDeclarations/invalidInstantiatedModule.ts(3,16): error TS2300: Duplicate identifier 'Point'.
+tests/cases/conformance/internalModules/moduleDeclarations/invalidInstantiatedModule.ts(12,8): error TS2833: Cannot find namespace 'm'. Did you mean 'M'?
+
+
+==== tests/cases/conformance/internalModules/moduleDeclarations/invalidInstantiatedModule.ts (3 errors) ====
+    module M {
+        export class Point { x: number; y: number }
+                     ~~~~~
+!!! error TS2300: Duplicate identifier 'Point'.
+        export var Point = 1;  // Error
+                   ~~~~~
+!!! error TS2300: Duplicate identifier 'Point'.
+    }
+    
+    module M2 {
+        export interface Point { x: number; y: number }
+        export var Point = 1;
+    }
+    
+    var m = M2;
+    var p: m.Point; // Error
+           ~
+!!! error TS2833: Cannot find namespace 'm'. Did you mean 'M'?
+!!! related TS2728 tests/cases/conformance/internalModules/moduleDeclarations/invalidInstantiatedModule.ts:1:8: 'M' is declared here.
+    
+    
+     

@@ -1,0 +1,24 @@
+tests/cases/conformance/es6/Symbols/symbolType9.ts(3,1): error TS2367: This condition will always return 'false' since the types 'symbol' and 'boolean' have no overlap.
+tests/cases/conformance/es6/Symbols/symbolType9.ts(5,1): error TS2367: This condition will always return 'true' since the types 'number' and 'symbol' have no overlap.
+tests/cases/conformance/es6/Symbols/symbolType9.ts(7,1): error TS2367: This condition will always return 'false' since the types 'symbol' and 'number' have no overlap.
+tests/cases/conformance/es6/Symbols/symbolType9.ts(9,1): error TS2367: This condition will always return 'true' since the types 'boolean' and 'symbol' have no overlap.
+
+
+==== tests/cases/conformance/es6/Symbols/symbolType9.ts (4 errors) ====
+    var s = Symbol.for("equal");
+    s == s;
+    s == true;
+    ~~~~~~~~~
+!!! error TS2367: This condition will always return 'false' since the types 'symbol' and 'boolean' have no overlap.
+    s != s;
+    0 != s;
+    ~~~~~~
+!!! error TS2367: This condition will always return 'true' since the types 'number' and 'symbol' have no overlap.
+    s === s;
+    s === 1;
+    ~~~~~~~
+!!! error TS2367: This condition will always return 'false' since the types 'symbol' and 'number' have no overlap.
+    s !== s;
+    false !== s;
+    ~~~~~~~~~~~
+!!! error TS2367: This condition will always return 'true' since the types 'boolean' and 'symbol' have no overlap.

@@ -1,0 +1,18 @@
+=== tests/cases/conformance/es6/destructuring/restElementWithAssignmentPattern1.ts ===
+var a: string, b: number;
+>a : string
+>b : number
+
+[...[a, b = 0]] = ["", 1];
+>[...[a, b = 0]] = ["", 1] : [string, number]
+>[...[a, b = 0]] : [string, number]
+>...[a, b = 0] : string | number
+>[a, b = 0] : [string, number]
+>a : string
+>b = 0 : 0
+>b : number
+>0 : 0
+>["", 1] : [string, number]
+>"" : ""
+>1 : 1
+

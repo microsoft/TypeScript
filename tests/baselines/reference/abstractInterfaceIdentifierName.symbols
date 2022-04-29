@@ -1,0 +1,8 @@
+=== tests/cases/compiler/abstractInterfaceIdentifierName.ts ===
+interface abstract {
+>abstract : Symbol(abstract, Decl(abstractInterfaceIdentifierName.ts, 0, 0))
+
+    abstract(): void;
+>abstract : Symbol(abstract.abstract, Decl(abstractInterfaceIdentifierName.ts, 0, 20))
+}
+

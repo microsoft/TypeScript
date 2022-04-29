@@ -1,0 +1,11 @@
+=== tests/cases/conformance/declarationEmit/typePredicates/declarationEmitIdentifierPredicates01.ts ===
+export function f(x: any): x is number {
+>f : (x: any) => x is number
+>x : any
+
+    return typeof x === "number";
+>typeof x === "number" : boolean
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>x : any
+>"number" : "number"
+}

@@ -1,0 +1,32 @@
+=== tests/cases/conformance/ambient/ambientExternalModuleMerging_use.ts ===
+import M = require("M");
+>M : typeof M
+
+// Should be strings
+var x = M.x;
+>x : string
+>M.x : string
+>M : typeof M
+>x : string
+
+var y = M.y;
+>y : string
+>M.y : string
+>M : typeof M
+>y : string
+
+=== tests/cases/conformance/ambient/ambientExternalModuleMerging_declare.ts ===
+declare module "M" {
+>"M" : typeof import("M")
+
+    export var x: string;
+>x : string
+}
+
+// Merge
+declare module "M" {
+>"M" : typeof import("M")
+
+    export var y: string;
+>y : string
+}

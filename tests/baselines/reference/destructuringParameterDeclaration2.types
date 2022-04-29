@@ -1,0 +1,272 @@
+=== tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts ===
+// A parameter declaration may specify either an identifier or a binding pattern.
+// The identifiers specified in parameter declarations and binding patterns
+// in a parameter list must be unique within that parameter list.
+
+// If the declaration includes a type annotation, the parameter is of that type
+function a0([a, b, [[c]]]: [number, number, string[][]]) { }
+>a0 : ([a, b, [[c]]]: [number, number, string[][]]) => void
+>a : number
+>b : number
+>c : string
+
+a0([1, "string", [["world"]]);      // Error
+>a0([1, "string", [["world"]]) : void
+>a0 : ([a, b, [[c]]]: [number, number, string[][]]) => void
+>[1, "string", [["world"]] : [number, string, string[][]]
+>1 : 1
+>"string" : "string"
+>[["world"]] : string[][]
+>["world"] : string[]
+>"world" : "world"
+
+a0([1, 2, [["world"]], "string"]);  // Error
+>a0([1, 2, [["world"]], "string"]) : void
+>a0 : ([a, b, [[c]]]: [number, number, string[][]]) => void
+>[1, 2, [["world"]], "string"] : [number, number, string[][], string]
+>1 : 1
+>2 : 2
+>[["world"]] : string[][]
+>["world"] : string[]
+>"world" : "world"
+>"string" : "string"
+
+
+// If the declaration includes an initializer expression (which is permitted only
+// when the parameter list occurs in conjunction with a function body),
+// the parameter type is the widened form (section 3.11) of the type of the initializer expression.
+
+interface F1 {
+    b0(z = 10, [[a, b], d, {u}] = [[1, 2], "string", { u: false }]);  // Error, no function body
+>b0 : (z?: number, [[a, b], d, { u }]?: [[number, number], string, { u: boolean; }]) => any
+>z : number
+>10 : 10
+>a : number
+>b : number
+>d : string
+>u : boolean
+>[[1, 2], "string", { u: false }] : [[number, number], string, { u: boolean; }]
+>[1, 2] : [number, number]
+>1 : 1
+>2 : 2
+>"string" : "string"
+>{ u: false } : { u: boolean; }
+>u : boolean
+>false : false
+}
+
+function b1(z = null, o = { x: 0, y: undefined }) { }
+>b1 : (z?: any, o?: { x: number; y: any; }) => void
+>z : any
+>null : null
+>o : { x: number; y: any; }
+>{ x: 0, y: undefined } : { x: number; y: undefined; }
+>x : number
+>0 : 0
+>y : undefined
+>undefined : undefined
+
+function b2([a, z, y] = [undefined, null, undefined]) { }
+>b2 : ([a, z, y]?: [any, any, any]) => void
+>a : any
+>z : any
+>y : any
+>[undefined, null, undefined] : [undefined, null, undefined]
+>undefined : undefined
+>null : null
+>undefined : undefined
+
+function b3([[a], b, [[c, d]]] = [[undefined], undefined, [[undefined, undefined]]]) { }
+>b3 : ([[a], b, [[c, d]]]?: [[any], any, [[any, any]]]) => void
+>a : any
+>b : any
+>c : any
+>d : any
+>[[undefined], undefined, [[undefined, undefined]]] : [[undefined], undefined, [[undefined, undefined]]]
+>[undefined] : [undefined]
+>undefined : undefined
+>undefined : undefined
+>[[undefined, undefined]] : [[undefined, undefined]]
+>[undefined, undefined] : [undefined, undefined]
+>undefined : undefined
+>undefined : undefined
+
+b1("string", { x: "string", y: true });  // Error
+>b1("string", { x: "string", y: true }) : void
+>b1 : (z?: any, o?: { x: number; y: any; }) => void
+>"string" : "string"
+>{ x: "string", y: true } : { x: string; y: boolean; }
+>x : string
+>"string" : "string"
+>y : boolean
+>true : true
+
+// If the declaration specifies a binding pattern, the parameter type is the implied type of that binding pattern (section 5.1.3)
+function c0({z: {x, y: {j}}}) { }
+>c0 : ({ z: { x, y: { j } } }: { z: { x: any; y: { j: any; }; }; }) => void
+>z : any
+>x : any
+>y : any
+>j : any
+
+function c1({z} = { z: 10 }) { }
+>c1 : ({ z }?: { z: number; }) => void
+>z : number
+>{ z: 10 } : { z: number; }
+>z : number
+>10 : 10
+
+function c2({z = 10}) { }
+>c2 : ({ z }: { z?: number; }) => void
+>z : number
+>10 : 10
+
+function c3({b}: { b: number|string } = { b: "hello" }) { }
+>c3 : ({ b }?: {    b: number | string;}) => void
+>b : string | number
+>b : string | number
+>{ b: "hello" } : { b: string; }
+>b : string
+>"hello" : "hello"
+
+function c4([z], z: number) { }  // Error Duplicate identifier
+>c4 : ([z]: [any], z: number) => void
+>z : any
+>z : number
+
+function c5([a, b, [[c]]]) { }
+>c5 : ([a, b, [[c]]]: [any, any, [[any]]]) => void
+>a : any
+>b : any
+>c : any
+
+function c6([a, b, [[c = 1]]]) { }
+>c6 : ([a, b, [[c]]]: [any, any, [[number?]]]) => void
+>a : any
+>b : any
+>c : number
+>1 : 1
+
+c0({ z: 1 });      // Error, implied type is { z: {x: any, y: {j: any}} }
+>c0({ z: 1 }) : void
+>c0 : ({ z: { x, y: { j } } }: { z: { x: any; y: { j: any; }; }; }) => void
+>{ z: 1 } : { z: number; }
+>z : number
+>1 : 1
+
+c1({});            // Error, implied type is {z:number}?
+>c1({}) : void
+>c1 : ({ z }?: { z: number; }) => void
+>{} : {}
+
+c1({ z: true });   // Error, implied type is {z:number}?
+>c1({ z: true }) : void
+>c1 : ({ z }?: { z: number; }) => void
+>{ z: true } : { z: boolean; }
+>z : boolean
+>true : true
+
+c2({ z: false });  // Error, implied type is {z?: number}
+>c2({ z: false }) : void
+>c2 : ({ z }: { z?: number; }) => void
+>{ z: false } : { z: boolean; }
+>z : boolean
+>false : false
+
+c3({ b: true });   // Error, implied type is { b: number|string }. 
+>c3({ b: true }) : void
+>c3 : ({ b }?: { b: string | number; }) => void
+>{ b: true } : { b: boolean; }
+>b : boolean
+>true : true
+
+c5([1, 2, false, true]);   // Error, implied type is [any, any, [[any]]]
+>c5([1, 2, false, true]) : void
+>c5 : ([a, b, [[c]]]: [any, any, [[any]]]) => void
+>[1, 2, false, true] : [number, number, boolean, boolean]
+>1 : 1
+>2 : 2
+>false : false
+>true : true
+
+c6([1, 2, [["string"]]]);  // Error, implied type is [any, any, [[number]]]  // Use initializer
+>c6([1, 2, [["string"]]]) : void
+>c6 : ([a, b, [[c]]]: [any, any, [[number?]]]) => void
+>[1, 2, [["string"]]] : [number, number, [[string]]]
+>1 : 1
+>2 : 2
+>[["string"]] : [[string]]
+>["string"] : [string]
+>"string" : "string"
+
+// A parameter can be marked optional by following its name or binding pattern with a question mark (?)
+// or by including an initializer.  Initializers (including binding property or element initializers) are
+// permitted only when the parameter list occurs in conjunction with a function body
+
+function d1([a, b, c]?) { }  // Error, binding pattern can't be optional in implementation signature
+>d1 : ([a, b, c]?: [any, any, any]) => void
+>a : any
+>b : any
+>c : any
+
+function d2({x, y, z}?) { }  // Error, binding pattern can't be optional in implementation signature
+>d2 : ({ x, y, z }?: { x: any; y: any; z: any; }) => void
+>x : any
+>y : any
+>z : any
+
+interface F2 {
+    d3([a, b, c]?);
+>d3 : ([a, b, c]?: [any, any, any]) => any
+>a : any
+>b : any
+>c : any
+
+    d4({x, y, z}?);
+>d4 : ({ x, y, z }?: { x: any; y: any; z: any; }) => any
+>x : any
+>y : any
+>z : any
+
+    e0([a, b, c]);
+>e0 : ([a, b, c]: [any, any, any]) => any
+>a : any
+>b : any
+>c : any
+}
+
+class C4 implements F2 {
+>C4 : C4
+
+    d3([a, b, c]?) { }  // Error, binding pattern can't be optional in implementation signature
+>d3 : ([a, b, c]?: [any, any, any]) => void
+>a : any
+>b : any
+>c : any
+
+    d4({x, y, c}) { }
+>d4 : ({ x, y, c }: { x: any; y: any; c: any; }) => void
+>x : any
+>y : any
+>c : any
+
+    e0([a, b, q]) { }
+>e0 : ([a, b, q]: [any, any, any]) => void
+>a : any
+>b : any
+>q : any
+}
+
+// Destructuring parameter declarations do not permit type annotations on the individual binding patterns,
+// as such annotations would conflict with the already established meaning of colons in object literals.
+// Type annotations must instead be written on the top- level parameter declaration
+
+function e0({x: [number, number, number]}) { }  // error, duplicate identifier;
+>e0 : ({ x: [number, number, number] }: { x: [any, any, any]; }) => void
+>x : any
+>number : any
+>number : any
+>number : any
+
+
+

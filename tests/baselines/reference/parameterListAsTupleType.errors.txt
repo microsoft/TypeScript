@@ -1,0 +1,35 @@
+tests/cases/compiler/parameterListAsTupleType.ts(8,17): error TS2322: Type 'string' is not assignable to type 'number'.
+tests/cases/compiler/parameterListAsTupleType.ts(16,23): error TS2344: Type 'typeof C' does not satisfy the constraint '(...args: any) => any'.
+  Type 'typeof C' provides no match for the signature '(...args: any): any'.
+
+
+==== tests/cases/compiler/parameterListAsTupleType.ts (2 errors) ====
+    function foo(a: number, b: string) {
+      return true;
+    }
+    type Foops = Parameters<typeof foo>;
+    
+    const x = (a: number) => 5;
+    type Xps = Parameters<typeof x>;
+    const a: Xps = ['should-not-work']; // works, but shouldn't
+                    ~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
+    function t(...args: Xps) {} // should work
+    
+    class C {
+        constructor(a: number, b: string) {
+        }
+    }
+    
+    type Cps = Parameters<typeof C>; // should not work
+                          ~~~~~~~~
+!!! error TS2344: Type 'typeof C' does not satisfy the constraint '(...args: any) => any'.
+!!! error TS2344:   Type 'typeof C' provides no match for the signature '(...args: any): any'.
+    type Ccps = ConstructorParameters<typeof C>; // should be [number, string]
+    
+    class D {
+        constructor(a: number, ...rest: string[]) {
+        }
+    }
+    type Dcps = ConstructorParameters<typeof D>; // should be [number, ...string[]]
+    

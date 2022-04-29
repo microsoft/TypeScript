@@ -1,0 +1,12 @@
+tests/cases/conformance/jsdoc/bug27346.js(2,11): error TS8030: The type of a function declaration must match the function's signature.
+
+
+==== tests/cases/conformance/jsdoc/bug27346.js (1 errors) ====
+    /**
+     * @type {MyClass}
+              ~~~~~~~
+!!! error TS8030: The type of a function declaration must match the function's signature.
+     */
+    function MyClass() { }
+    MyClass.prototype = {};
+    

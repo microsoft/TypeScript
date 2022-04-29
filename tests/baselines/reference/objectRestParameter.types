@@ -1,0 +1,104 @@
+=== tests/cases/conformance/types/rest/objectRestParameter.ts ===
+function cloneAgain({ a, ...clone }: { a: number, b: string }): void {
+>cloneAgain : ({ a, ...clone }: {    a: number;    b: string;}) => void
+>a : number
+>clone : { b: string; }
+>a : number
+>b : string
+}
+
+declare function suddenly(f: (a: { x: { z, ka }, y: string }) => void);
+>suddenly : (f: (a: {    x: {        z;        ka;    };    y: string;}) => void) => any
+>f : (a: {    x: {        z;        ka;    };    y: string;}) => void
+>a : { x: {    z;    ka;}; y: string; }
+>x : { z: any; ka: any; }
+>z : any
+>ka : any
+>y : string
+
+suddenly(({ x: a, ...rest }) => rest.y);
+>suddenly(({ x: a, ...rest }) => rest.y) : any
+>suddenly : (f: (a: { x: { z: any; ka: any; }; y: string; }) => void) => any
+>({ x: a, ...rest }) => rest.y : ({ x: a, ...rest }: { x: { z: any; ka: any; }; y: string; }) => string
+>x : any
+>a : { z: any; ka: any; }
+>rest : { y: string; }
+>rest.y : string
+>rest : { y: string; }
+>y : string
+
+suddenly(({ x: { z = 12, ...nested }, ...rest } = { x: { z: 1, ka: 1 }, y: 'noo' }) => rest.y + nested.ka);
+>suddenly(({ x: { z = 12, ...nested }, ...rest } = { x: { z: 1, ka: 1 }, y: 'noo' }) => rest.y + nested.ka) : any
+>suddenly : (f: (a: { x: { z: any; ka: any; }; y: string; }) => void) => any
+>({ x: { z = 12, ...nested }, ...rest } = { x: { z: 1, ka: 1 }, y: 'noo' }) => rest.y + nested.ka : ({ x: { z, ...nested }, ...rest }?: { x: { z: any; ka: any; }; y: string; }) => string
+>x : any
+>z : any
+>12 : 12
+>nested : { ka: any; }
+>rest : { y: string; }
+>{ x: { z: 1, ka: 1 }, y: 'noo' } : { x: { z: number; ka: number; }; y: string; }
+>x : { z: number; ka: number; }
+>{ z: 1, ka: 1 } : { z: number; ka: number; }
+>z : number
+>1 : 1
+>ka : number
+>1 : 1
+>y : string
+>'noo' : "noo"
+>rest.y + nested.ka : string
+>rest.y : string
+>rest : { y: string; }
+>y : string
+>nested.ka : any
+>nested : { ka: any; }
+>ka : any
+
+class C {
+>C : C
+
+    m({ a, ...clone }: { a: number, b: string}): void {
+>m : ({ a, ...clone }: {    a: number;    b: string;}) => void
+>a : number
+>clone : { b: string; }
+>a : number
+>b : string
+
+        // actually, never mind, don't clone
+    }
+    set p({ a, ...clone }: { a: number, b: string}) {
+>p : { a: number; b: string; }
+>a : number
+>clone : { b: string; }
+>a : number
+>b : string
+
+        // actually, never mind, don't clone
+    }
+}
+function foobar({ bar={}, ...opts }: any = {}) {
+>foobar : ({ bar, ...opts }?: any) => void
+>bar : any
+>{} : {}
+>opts : any
+>{} : {}
+}
+foobar();
+>foobar() : void
+>foobar : ({ bar, ...opts }?: any) => void
+
+foobar({ baz: 'hello' });
+>foobar({ baz: 'hello' }) : void
+>foobar : ({ bar, ...opts }?: any) => void
+>{ baz: 'hello' } : { baz: string; }
+>baz : string
+>'hello' : "hello"
+
+foobar({ bar: { greeting: 'hello' } });
+>foobar({ bar: { greeting: 'hello' } }) : void
+>foobar : ({ bar, ...opts }?: any) => void
+>{ bar: { greeting: 'hello' } } : { bar: { greeting: string; }; }
+>bar : { greeting: string; }
+>{ greeting: 'hello' } : { greeting: string; }
+>greeting : string
+>'hello' : "hello"
+

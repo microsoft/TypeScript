@@ -1,0 +1,15 @@
+/src/a.js(1,6): error TS8016: Type assertion expressions can only be used in TypeScript files.
+/src/a.js(2,10): error TS17008: JSX element 'string' has no corresponding closing tag.
+/src/a.js(3,1): error TS1005: '</' expected.
+
+
+==== /src/a.js (3 errors) ====
+    0 as number;
+         ~~~~~~
+!!! error TS8016: Type assertion expressions can only be used in TypeScript files.
+    var v = <string>undefined;
+             ~~~~~~
+!!! error TS17008: JSX element 'string' has no corresponding closing tag.
+    
+    
+!!! error TS1005: '</' expected.

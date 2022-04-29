@@ -1,0 +1,7 @@
+=== tests/cases/conformance/parser/ecmascript5/MemberAccessorDeclarations/parserMemberAccessorDeclaration3.ts ===
+class C {
+>C : C
+
+  get 0() { }
+>0 : void
+}

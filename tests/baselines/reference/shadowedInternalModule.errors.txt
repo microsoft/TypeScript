@@ -1,0 +1,42 @@
+tests/cases/conformance/internalModules/importDeclarations/shadowedInternalModule.ts(13,20): error TS2437: Module 'A' is hidden by a local declaration with the same name.
+tests/cases/conformance/internalModules/importDeclarations/shadowedInternalModule.ts(30,5): error TS2440: Import declaration conflicts with local declaration of 'Y'.
+
+
+==== tests/cases/conformance/internalModules/importDeclarations/shadowedInternalModule.ts (2 errors) ====
+    // all errors imported modules conflict with local variables
+    
+    module A {
+        export var Point = { x: 0, y: 0 }
+        export interface Point {
+            x: number;
+            y: number;
+        }
+    } 
+    
+    module B {
+        var A = { x: 0, y: 0 };
+        import Point = A;
+                       ~
+!!! error TS2437: Module 'A' is hidden by a local declaration with the same name.
+    }
+    
+    module X {
+        export module Y {
+            export interface Point{
+                x: number;
+                y: number
+            }
+        }
+    
+        export class Y {
+            name: string;
+        }
+    }
+    
+    module Z {
+        import Y = X.Y;
+        ~~~~~~~~~~~~~~~
+!!! error TS2440: Import declaration conflicts with local declaration of 'Y'.
+    
+        var Y = 12;
+    }

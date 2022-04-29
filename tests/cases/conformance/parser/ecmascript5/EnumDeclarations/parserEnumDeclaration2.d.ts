@@ -1,0 +1,2 @@
+declare enum E {
+}

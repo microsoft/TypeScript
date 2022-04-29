@@ -1,0 +1,47 @@
+=== tests/cases/compiler/functionOverloads43.ts ===
+function foo(bar: { a:number }[]): number;
+>foo : { (bar: {    a: number;}[]): number; (bar: { a: string; }[]): string; }
+>bar : { a: number; }[]
+>a : number
+
+function foo(bar: { a:string }[]): string;
+>foo : { (bar: { a: number; }[]): number; (bar: {    a: string;}[]): string; }
+>bar : { a: string; }[]
+>a : string
+
+function foo([x]: { a:number | string }[]): string | number {
+>foo : { (bar: { a: number; }[]): number; (bar: { a: string; }[]): string; }
+>x : { a: string | number; }
+>a : string | number
+
+    if (x) {
+>x : { a: string | number; }
+
+        return x.a;
+>x.a : string | number
+>x : { a: string | number; }
+>a : string | number
+    }
+    
+    return undefined;
+>undefined : undefined
+}
+
+var x = foo([{a: "str"}]);
+>x : string
+>foo([{a: "str"}]) : string
+>foo : { (bar: { a: number; }[]): number; (bar: { a: string; }[]): string; }
+>[{a: "str"}] : { a: string; }[]
+>{a: "str"} : { a: string; }
+>a : string
+>"str" : "str"
+
+var y = foo([{a: 100}]);
+>y : number
+>foo([{a: 100}]) : number
+>foo : { (bar: { a: number; }[]): number; (bar: { a: string; }[]): string; }
+>[{a: 100}] : { a: number; }[]
+>{a: 100} : { a: number; }
+>a : number
+>100 : 100
+

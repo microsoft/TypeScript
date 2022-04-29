@@ -1,0 +1,16 @@
+=== tests/cases/conformance/parser/ecmascript5/parserS7.6.1.1_A1.10.ts ===
+// Copyright 2009 the Sputnik authors.  All rights reserved.
+No type information for this code.// This code is governed by the BSD license found in the LICENSE file.
+No type information for this code.
+No type information for this code./**
+No type information for this code. * The "for" token can not be used as identifier
+No type information for this code. *
+No type information for this code. * @path ch07/7.6/7.6.1/7.6.1.1/S7.6.1.1_A1.10.js
+No type information for this code. * @description Checking if execution of "for=1" fails
+No type information for this code. * @negative
+No type information for this code. */
+No type information for this code.
+No type information for this code.//for = 1;
+No type information for this code.
+No type information for this code.
+No type information for this code.

@@ -1,0 +1,94 @@
+=== tests/cases/conformance/salsa/a.js ===
+/** @param {number} x */
+function C(x) {
+>C : typeof C
+>x : number
+
+    this.x = x
+>this.x = x : number
+>this.x : any
+>this : this
+>x : any
+>x : number
+}
+C.prototype.m = function() {
+>C.prototype.m = function() {    this.y = 12} : () => void
+>C.prototype.m : any
+>C.prototype : any
+>C : typeof C
+>prototype : any
+>m : any
+>function() {    this.y = 12} : () => void
+
+    this.y = 12
+>this.y = 12 : 12
+>this.y : number | undefined
+>this : this
+>y : number | undefined
+>12 : 12
+}
+var c = new C(1)
+>c : C
+>new C(1) : C
+>C : typeof C
+>1 : 1
+
+c.x = undefined // should error
+>c.x = undefined : undefined
+>c.x : number
+>c : C
+>x : number
+>undefined : undefined
+
+c.y = undefined // ok
+>c.y = undefined : undefined
+>c.y : number | undefined
+>c : C
+>y : number | undefined
+>undefined : undefined
+
+/** @param {number} x */
+function A(x) {
+>A : typeof A
+>x : number
+
+    if (!(this instanceof A)) {
+>!(this instanceof A) : boolean
+>(this instanceof A) : boolean
+>this instanceof A : boolean
+>this : this
+>A : typeof A
+
+        return new A(x)
+>new A(x) : A
+>A : typeof A
+>x : number
+    }
+    this.x = x
+>this.x = x : number
+>this.x : any
+>this : this
+>x : any
+>x : number
+}
+var k = A(1)
+>k : A
+>A(1) : A
+>A : typeof A
+>1 : 1
+
+var j = new A(2)
+>j : A
+>new A(2) : A
+>A : typeof A
+>2 : 2
+
+k.x === j.x
+>k.x === j.x : boolean
+>k.x : number | undefined
+>k : A
+>x : number | undefined
+>j.x : number | undefined
+>j : A
+>x : number | undefined
+

@@ -1,0 +1,62 @@
+=== tests/cases/conformance/types/literal/literalTypesAndTypeAssertions.ts ===
+const obj = {
+>obj : { a: "foo"; b: "foo"; c: string; }
+>{    a: "foo" as "foo",    b: <"foo">"foo",    c: "foo"} : { a: "foo"; b: "foo"; c: string; }
+
+    a: "foo" as "foo",
+>a : "foo"
+>"foo" as "foo" : "foo"
+>"foo" : "foo"
+
+    b: <"foo">"foo",
+>b : "foo"
+><"foo">"foo" : "foo"
+>"foo" : "foo"
+
+    c: "foo"
+>c : string
+>"foo" : "foo"
+
+};
+
+let x1 = 1 as (0 | 1);
+>x1 : 0 | 1
+>1 as (0 | 1) : 0 | 1
+>1 : 1
+
+let x2 = 1;
+>x2 : number
+>1 : 1
+
+let { a = "foo" } = { a: "foo" };
+>a : string
+>"foo" : "foo"
+>{ a: "foo" } : { a?: string; }
+>a : string
+>"foo" : "foo"
+
+let { b = "foo" as "foo" } = { b: "bar" };
+>b : string
+>"foo" as "foo" : "foo"
+>"foo" : "foo"
+>{ b: "bar" } : { b?: "bar"; }
+>b : "bar"
+>"bar" : "bar"
+
+let { c = "foo" } = { c: "bar" as "bar" };
+>c : string
+>"foo" : "foo"
+>{ c: "bar" as "bar" } : { c?: "bar"; }
+>c : "bar"
+>"bar" as "bar" : "bar"
+>"bar" : "bar"
+
+let { d = "foo" as "foo" } = { d: "bar" as "bar" };
+>d : "foo" | "bar"
+>"foo" as "foo" : "foo"
+>"foo" : "foo"
+>{ d: "bar" as "bar" } : { d?: "bar"; }
+>d : "bar"
+>"bar" as "bar" : "bar"
+>"bar" : "bar"
+

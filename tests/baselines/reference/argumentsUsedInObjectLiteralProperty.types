@@ -1,0 +1,21 @@
+=== tests/cases/compiler/argumentsUsedInObjectLiteralProperty.ts ===
+class A {
+>A : A
+
+    public static createSelectableViewModel(initialState?: any, selectedValue?: any) {
+>createSelectableViewModel : (initialState?: any, selectedValue?: any) => { selectedValue: number; }
+>initialState : any
+>selectedValue : any
+
+        return {
+>{            selectedValue: arguments.length        } : { selectedValue: number; }
+
+            selectedValue: arguments.length
+>selectedValue : number
+>arguments.length : number
+>arguments : IArguments
+>length : number
+
+        };
+    }
+}

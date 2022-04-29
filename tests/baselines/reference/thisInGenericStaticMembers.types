@@ -1,0 +1,57 @@
+=== tests/cases/compiler/thisInGenericStaticMembers.ts ===
+// this.call in static generic method not resolved correctly
+
+class A {
+>A : A
+
+    static one<T>(source:T, value: number): T {
+>one : <T>(source: T, value: number) => T
+>source : T
+>value : number
+
+        return source;
+>source : T
+    }
+
+    static two<T>(source: T): T {
+>two : <T>(source: T) => T
+>source : T
+
+        return this.one<T>(source, 42);
+>this.one<T>(source, 42) : T
+>this.one : <T>(source: T, value: number) => T
+>this : typeof A
+>one : <T>(source: T, value: number) => T
+>source : T
+>42 : 42
+    }
+}
+
+class B {
+>B : B
+
+    static one(source: B, value: number): B {
+>one : (source: B, value: number) => B
+>source : B
+>value : number
+
+        return source;
+>source : B
+    }
+
+    static two(source: B): B {
+>two : (source: B) => B
+>source : B
+
+        return this.one(source, 42);
+>this.one(source, 42) : B
+>this.one : (source: B, value: number) => B
+>this : typeof B
+>one : (source: B, value: number) => B
+>source : B
+>42 : 42
+    }
+}
+
+
+

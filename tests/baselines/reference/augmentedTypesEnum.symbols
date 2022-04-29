@@ -1,0 +1,77 @@
+=== tests/cases/compiler/augmentedTypesEnum.ts ===
+// enum then var
+enum e1111 { One } // error
+>e1111 : Symbol(e1111, Decl(augmentedTypesEnum.ts, 0, 0))
+>One : Symbol(e1111.One, Decl(augmentedTypesEnum.ts, 1, 12))
+
+var e1111 = 1; // error
+>e1111 : Symbol(e1111, Decl(augmentedTypesEnum.ts, 2, 3))
+
+// enum then function
+enum e2 { One } // error
+>e2 : Symbol(e2, Decl(augmentedTypesEnum.ts, 2, 14))
+>One : Symbol(e2.One, Decl(augmentedTypesEnum.ts, 5, 9))
+
+function e2() { } // error
+>e2 : Symbol(e2, Decl(augmentedTypesEnum.ts, 5, 15))
+
+enum e3 { One } // error
+>e3 : Symbol(e3, Decl(augmentedTypesEnum.ts, 6, 17))
+>One : Symbol(e3.One, Decl(augmentedTypesEnum.ts, 8, 9))
+
+var e3 = () => { } // error
+>e3 : Symbol(e3, Decl(augmentedTypesEnum.ts, 9, 3))
+
+// enum then class
+enum e4 { One } // error
+>e4 : Symbol(e4, Decl(augmentedTypesEnum.ts, 9, 18))
+>One : Symbol(e4.One, Decl(augmentedTypesEnum.ts, 12, 9))
+
+class e4 { public foo() { } } // error
+>e4 : Symbol(e4, Decl(augmentedTypesEnum.ts, 12, 15))
+>foo : Symbol(e4.foo, Decl(augmentedTypesEnum.ts, 13, 10))
+
+// enum then enum
+enum e5 { One }
+>e5 : Symbol(e5, Decl(augmentedTypesEnum.ts, 13, 29), Decl(augmentedTypesEnum.ts, 16, 15))
+>One : Symbol(e5.One, Decl(augmentedTypesEnum.ts, 16, 9))
+
+enum e5 { Two } // error
+>e5 : Symbol(e5, Decl(augmentedTypesEnum.ts, 13, 29), Decl(augmentedTypesEnum.ts, 16, 15))
+>Two : Symbol(e5.Two, Decl(augmentedTypesEnum.ts, 17, 9))
+
+enum e5a { One } // error
+>e5a : Symbol(e5a, Decl(augmentedTypesEnum.ts, 17, 15), Decl(augmentedTypesEnum.ts, 19, 16))
+>One : Symbol(e5a.One, Decl(augmentedTypesEnum.ts, 19, 10))
+
+enum e5a { One } // error
+>e5a : Symbol(e5a, Decl(augmentedTypesEnum.ts, 17, 15), Decl(augmentedTypesEnum.ts, 19, 16))
+>One : Symbol(e5a.One, Decl(augmentedTypesEnum.ts, 20, 10))
+
+// enum then internal module
+enum e6 { One } 
+>e6 : Symbol(e6, Decl(augmentedTypesEnum.ts, 20, 16), Decl(augmentedTypesEnum.ts, 23, 15))
+>One : Symbol(e6.One, Decl(augmentedTypesEnum.ts, 23, 9))
+
+module e6 { } // ok
+>e6 : Symbol(e6, Decl(augmentedTypesEnum.ts, 20, 16), Decl(augmentedTypesEnum.ts, 23, 15))
+
+enum e6a { One }
+>e6a : Symbol(e6a, Decl(augmentedTypesEnum.ts, 24, 13), Decl(augmentedTypesEnum.ts, 26, 16))
+>One : Symbol(e6a.One, Decl(augmentedTypesEnum.ts, 26, 10))
+
+module e6a { var y = 2; } // should be error
+>e6a : Symbol(e6a, Decl(augmentedTypesEnum.ts, 24, 13), Decl(augmentedTypesEnum.ts, 26, 16))
+>y : Symbol(y, Decl(augmentedTypesEnum.ts, 27, 16))
+
+enum e6b { One }
+>e6b : Symbol(e6b, Decl(augmentedTypesEnum.ts, 27, 25), Decl(augmentedTypesEnum.ts, 29, 16))
+>One : Symbol(e6b.One, Decl(augmentedTypesEnum.ts, 29, 10))
+
+module e6b { export var y = 2; } // should be error
+>e6b : Symbol(e6b, Decl(augmentedTypesEnum.ts, 27, 25), Decl(augmentedTypesEnum.ts, 29, 16))
+>y : Symbol(y, Decl(augmentedTypesEnum.ts, 30, 23))
+
+// enum then import, messes with error reporting
+//enum e7 { One }
+//import e7 = require(''); // should be error

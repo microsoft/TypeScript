@@ -1,0 +1,17 @@
+tests/cases/compiler/assignmentCompatability24.ts(9,1): error TS2322: Type 'interfaceWithPublicAndOptional<number, string>' is not assignable to type '<Tstring>(a: Tstring) => Tstring'.
+  Type 'interfaceWithPublicAndOptional<number, string>' provides no match for the signature '<Tstring>(a: Tstring): Tstring'.
+
+
+==== tests/cases/compiler/assignmentCompatability24.ts (1 errors) ====
+    module __test1__ {
+        export interface interfaceWithPublicAndOptional<T,U> { one: T; two?: U; };  var obj4: interfaceWithPublicAndOptional<number,string> = { one: 1 };;
+        export var __val__obj4 = obj4;
+    }
+    module __test2__ {
+        export var obj = function f<Tstring>(a: Tstring) { return a; };;
+        export var __val__obj = obj;
+    }
+    __test2__.__val__obj = __test1__.__val__obj4
+    ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type 'interfaceWithPublicAndOptional<number, string>' is not assignable to type '<Tstring>(a: Tstring) => Tstring'.
+!!! error TS2322:   Type 'interfaceWithPublicAndOptional<number, string>' provides no match for the signature '<Tstring>(a: Tstring): Tstring'.

@@ -1,0 +1,1202 @@
+[
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsLet.ts",
+      "position": 4,
+      "name": "1"
+    },
+    "quickInfo": {
+      "kind": "let",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 4,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "let",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "a",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsLet.ts",
+      "position": 37,
+      "name": "2"
+    },
+    "quickInfo": {
+      "kind": "let",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 37,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "let",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "b",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsLet.ts",
+      "position": 41,
+      "name": "3"
+    },
+    "quickInfo": {
+      "kind": "let",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 41,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "let",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "a",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsLet.ts",
+      "position": 69,
+      "name": "4"
+    },
+    "quickInfo": {
+      "kind": "let",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 69,
+        "length": 2
+      },
+      "displayParts": [
+        {
+          "text": "let",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "b1",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsLet.ts",
+      "position": 105,
+      "name": "5"
+    },
+    "quickInfo": {
+      "kind": "let",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 105,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "let",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "c",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsLet.ts",
+      "position": 128,
+      "name": "6"
+    },
+    "quickInfo": {
+      "kind": "let",
+      "kindModifiers": "export",
+      "textSpan": {
+        "start": 128,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "let",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "m",
+          "kind": "moduleName"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "d",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsLet.ts",
+      "position": 161,
+      "name": "7"
+    },
+    "quickInfo": {
+      "kind": "let",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 161,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "let",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "e",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsLet.ts",
+      "position": 181,
+      "name": "8"
+    },
+    "quickInfo": {
+      "kind": "let",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 181,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "let",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "f",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "=>",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsLet.ts",
+      "position": 202,
+      "name": "9"
+    },
+    "quickInfo": {
+      "kind": "let",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 202,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "let",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "g",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "=>",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsLet.ts",
+      "position": 206,
+      "name": "10"
+    },
+    "quickInfo": {
+      "kind": "let",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 206,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "let",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "f",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "=>",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsLet.ts",
+      "position": 209,
+      "name": "11"
+    },
+    "quickInfo": {
+      "kind": "let",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 209,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "let",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "f",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "=>",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsLet.ts",
+      "position": 218,
+      "name": "12"
+    },
+    "quickInfo": {
+      "kind": "let",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 218,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "let",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "h",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "{",
+          "kind": "punctuation"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "    ",
+          "kind": "space"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "a",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        },
+        {
+          "text": ";",
+          "kind": "punctuation"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "    ",
+          "kind": "space"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "a",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ";",
+          "kind": "punctuation"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "}",
+          "kind": "punctuation"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsLet.ts",
+      "position": 272,
+      "name": "13"
+    },
+    "quickInfo": {
+      "kind": "let",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 272,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "let",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "i",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "{",
+          "kind": "punctuation"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "    ",
+          "kind": "space"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "a",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        },
+        {
+          "text": ";",
+          "kind": "punctuation"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "    ",
+          "kind": "space"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "a",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ";",
+          "kind": "punctuation"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "}",
+          "kind": "punctuation"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsLet.ts",
+      "position": 276,
+      "name": "14"
+    },
+    "quickInfo": {
+      "kind": "let",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 276,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "let",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "h",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "{",
+          "kind": "punctuation"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "    ",
+          "kind": "space"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "a",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        },
+        {
+          "text": ";",
+          "kind": "punctuation"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "    ",
+          "kind": "space"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "a",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ";",
+          "kind": "punctuation"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "}",
+          "kind": "punctuation"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsLet.ts",
+      "position": 279,
+      "name": "15"
+    },
+    "quickInfo": {
+      "kind": "let",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 279,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "let",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "h",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "a",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "=>",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "+",
+          "kind": "operator"
+        },
+        {
+          "text": "1",
+          "kind": "numericLiteral"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "overload",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsLet.ts",
+      "position": 286,
+      "name": "16"
+    },
+    "quickInfo": {
+      "kind": "let",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 286,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "let",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "h",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "a",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "=>",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "+",
+          "kind": "operator"
+        },
+        {
+          "text": "1",
+          "kind": "numericLiteral"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "overload",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        }
+      ],
+      "documentation": []
+    }
+  }
+]

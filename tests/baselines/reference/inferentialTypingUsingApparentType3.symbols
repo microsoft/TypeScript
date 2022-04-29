@@ -1,0 +1,69 @@
+=== tests/cases/compiler/inferentialTypingUsingApparentType3.ts ===
+interface Field<T> {
+>Field : Symbol(Field, Decl(inferentialTypingUsingApparentType3.ts, 0, 0))
+>T : Symbol(T, Decl(inferentialTypingUsingApparentType3.ts, 0, 16))
+
+    clean(input: T): T
+>clean : Symbol(Field.clean, Decl(inferentialTypingUsingApparentType3.ts, 0, 20))
+>input : Symbol(input, Decl(inferentialTypingUsingApparentType3.ts, 1, 10))
+>T : Symbol(T, Decl(inferentialTypingUsingApparentType3.ts, 0, 16))
+>T : Symbol(T, Decl(inferentialTypingUsingApparentType3.ts, 0, 16))
+}
+
+class CharField implements Field<string> {
+>CharField : Symbol(CharField, Decl(inferentialTypingUsingApparentType3.ts, 2, 1))
+>Field : Symbol(Field, Decl(inferentialTypingUsingApparentType3.ts, 0, 0))
+
+    clean(input: string) {
+>clean : Symbol(CharField.clean, Decl(inferentialTypingUsingApparentType3.ts, 4, 42))
+>input : Symbol(input, Decl(inferentialTypingUsingApparentType3.ts, 5, 10))
+
+        return "Yup";
+    }
+}
+
+class NumberField implements Field<number> {
+>NumberField : Symbol(NumberField, Decl(inferentialTypingUsingApparentType3.ts, 8, 1))
+>Field : Symbol(Field, Decl(inferentialTypingUsingApparentType3.ts, 0, 0))
+
+    clean(input: number) {
+>clean : Symbol(NumberField.clean, Decl(inferentialTypingUsingApparentType3.ts, 10, 44))
+>input : Symbol(input, Decl(inferentialTypingUsingApparentType3.ts, 11, 10))
+
+        return 123;
+    }
+}
+
+class ObjectField<A, T extends { [name: string]: Field<any> }> {
+>ObjectField : Symbol(ObjectField, Decl(inferentialTypingUsingApparentType3.ts, 14, 1))
+>A : Symbol(A, Decl(inferentialTypingUsingApparentType3.ts, 16, 18))
+>T : Symbol(T, Decl(inferentialTypingUsingApparentType3.ts, 16, 20))
+>name : Symbol(name, Decl(inferentialTypingUsingApparentType3.ts, 16, 34))
+>Field : Symbol(Field, Decl(inferentialTypingUsingApparentType3.ts, 0, 0))
+
+    constructor(public fields: T) { }
+>fields : Symbol(ObjectField.fields, Decl(inferentialTypingUsingApparentType3.ts, 17, 16))
+>T : Symbol(T, Decl(inferentialTypingUsingApparentType3.ts, 16, 20))
+}
+
+var person = new ObjectField({
+>person : Symbol(person, Decl(inferentialTypingUsingApparentType3.ts, 20, 3))
+>ObjectField : Symbol(ObjectField, Decl(inferentialTypingUsingApparentType3.ts, 14, 1))
+
+    id: new NumberField(),
+>id : Symbol(id, Decl(inferentialTypingUsingApparentType3.ts, 20, 30))
+>NumberField : Symbol(NumberField, Decl(inferentialTypingUsingApparentType3.ts, 8, 1))
+
+    name: new CharField()
+>name : Symbol(name, Decl(inferentialTypingUsingApparentType3.ts, 21, 26))
+>CharField : Symbol(CharField, Decl(inferentialTypingUsingApparentType3.ts, 2, 1))
+
+});
+
+person.fields.id;
+>person.fields.id : Symbol(id, Decl(inferentialTypingUsingApparentType3.ts, 20, 30))
+>person.fields : Symbol(ObjectField.fields, Decl(inferentialTypingUsingApparentType3.ts, 17, 16))
+>person : Symbol(person, Decl(inferentialTypingUsingApparentType3.ts, 20, 3))
+>fields : Symbol(ObjectField.fields, Decl(inferentialTypingUsingApparentType3.ts, 17, 16))
+>id : Symbol(id, Decl(inferentialTypingUsingApparentType3.ts, 20, 30))
+

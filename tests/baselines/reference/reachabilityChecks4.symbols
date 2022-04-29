@@ -1,0 +1,112 @@
+=== tests/cases/compiler/reachabilityChecks4.ts ===
+function foo(x, y) {
+>foo : Symbol(foo, Decl(reachabilityChecks4.ts, 0, 0))
+>x : Symbol(x, Decl(reachabilityChecks4.ts, 0, 13))
+>y : Symbol(y, Decl(reachabilityChecks4.ts, 0, 15))
+
+    switch (x) {
+>x : Symbol(x, Decl(reachabilityChecks4.ts, 0, 13))
+
+        case 1:
+        case 2:
+            return 1;
+        case 3:
+            if (y) {
+>y : Symbol(y, Decl(reachabilityChecks4.ts, 0, 15))
+
+                return 2;
+            }
+        case 4:
+            return 3;
+    }
+}
+
+declare function noop(): void;
+>noop : Symbol(noop, Decl(reachabilityChecks4.ts, 12, 1))
+
+declare function fail(): never;
+>fail : Symbol(fail, Decl(reachabilityChecks4.ts, 14, 30))
+
+function f1(x: 0 | 1 | 2) {
+>f1 : Symbol(f1, Decl(reachabilityChecks4.ts, 15, 31))
+>x : Symbol(x, Decl(reachabilityChecks4.ts, 17, 12))
+
+    switch (x) {
+>x : Symbol(x, Decl(reachabilityChecks4.ts, 17, 12))
+
+        case 0:
+            fail();
+>fail : Symbol(fail, Decl(reachabilityChecks4.ts, 14, 30))
+
+        case 1:
+            noop();
+>noop : Symbol(noop, Decl(reachabilityChecks4.ts, 12, 1))
+
+        case 2:
+            return;
+    }
+}
+
+// Repro from #34021
+
+type Behavior = 'SLIDE' | 'SLIDE_OUT'
+>Behavior : Symbol(Behavior, Decl(reachabilityChecks4.ts, 26, 1))
+
+type Direction = 'LEFT' | 'RIGHT' | 'TOP' | 'BOTTOM'
+>Direction : Symbol(Direction, Decl(reachabilityChecks4.ts, 30, 37))
+
+interface Transition {
+>Transition : Symbol(Transition, Decl(reachabilityChecks4.ts, 31, 52))
+
+  behavior: Behavior
+>behavior : Symbol(Transition.behavior, Decl(reachabilityChecks4.ts, 33, 22))
+>Behavior : Symbol(Behavior, Decl(reachabilityChecks4.ts, 26, 1))
+
+  direction: Direction
+>direction : Symbol(Transition.direction, Decl(reachabilityChecks4.ts, 34, 20))
+>Direction : Symbol(Direction, Decl(reachabilityChecks4.ts, 30, 37))
+}
+
+function f2(transition: Transition): any {
+>f2 : Symbol(f2, Decl(reachabilityChecks4.ts, 36, 1))
+>transition : Symbol(transition, Decl(reachabilityChecks4.ts, 38, 12))
+>Transition : Symbol(Transition, Decl(reachabilityChecks4.ts, 31, 52))
+
+    switch (transition.behavior) {
+>transition.behavior : Symbol(Transition.behavior, Decl(reachabilityChecks4.ts, 33, 22))
+>transition : Symbol(transition, Decl(reachabilityChecks4.ts, 38, 12))
+>behavior : Symbol(Transition.behavior, Decl(reachabilityChecks4.ts, 33, 22))
+
+        case 'SLIDE':
+            switch (transition.direction) {
+>transition.direction : Symbol(Transition.direction, Decl(reachabilityChecks4.ts, 34, 20))
+>transition : Symbol(transition, Decl(reachabilityChecks4.ts, 38, 12))
+>direction : Symbol(Transition.direction, Decl(reachabilityChecks4.ts, 34, 20))
+
+                case 'LEFT':
+                    return []
+                case 'RIGHT':
+                    return []
+                case 'TOP':
+                    return []
+                case 'BOTTOM':
+                    return []
+            }
+        case 'SLIDE_OUT':
+            switch (transition.direction) {
+>transition.direction : Symbol(Transition.direction, Decl(reachabilityChecks4.ts, 34, 20))
+>transition : Symbol(transition, Decl(reachabilityChecks4.ts, 38, 12))
+>direction : Symbol(Transition.direction, Decl(reachabilityChecks4.ts, 34, 20))
+
+                case 'LEFT':
+                    return []
+                case 'RIGHT':
+                    return []
+                case 'TOP':
+                    return []
+                case 'BOTTOM':
+                    return []
+            }
+    }
+}
+

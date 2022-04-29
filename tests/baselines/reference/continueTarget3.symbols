@@ -1,0 +1,7 @@
+=== tests/cases/compiler/continueTarget3.ts ===
+target1:
+No type information for this code.target2:
+No type information for this code.while (true) {
+No type information for this code.  continue target1;
+No type information for this code.}
+No type information for this code.

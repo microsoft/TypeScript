@@ -1,0 +1,188 @@
+=== tests/cases/compiler/constDeclarations-access4.ts ===
+declare module M {
+>M : typeof M
+
+    const x: number;
+>x : number
+}
+
+// Errors
+M.x = 1;
+>M.x = 1 : 1
+>M.x : any
+>M : typeof M
+>x : any
+>1 : 1
+
+M.x += 2;
+>M.x += 2 : any
+>M.x : any
+>M : typeof M
+>x : any
+>2 : 2
+
+M.x -= 3;
+>M.x -= 3 : number
+>M.x : any
+>M : typeof M
+>x : any
+>3 : 3
+
+M.x *= 4;
+>M.x *= 4 : number
+>M.x : any
+>M : typeof M
+>x : any
+>4 : 4
+
+M.x /= 5;
+>M.x /= 5 : number
+>M.x : any
+>M : typeof M
+>x : any
+>5 : 5
+
+M.x %= 6;
+>M.x %= 6 : number
+>M.x : any
+>M : typeof M
+>x : any
+>6 : 6
+
+M.x <<= 7;
+>M.x <<= 7 : number
+>M.x : any
+>M : typeof M
+>x : any
+>7 : 7
+
+M.x >>= 8;
+>M.x >>= 8 : number
+>M.x : any
+>M : typeof M
+>x : any
+>8 : 8
+
+M.x >>>= 9;
+>M.x >>>= 9 : number
+>M.x : any
+>M : typeof M
+>x : any
+>9 : 9
+
+M.x &= 10;
+>M.x &= 10 : number
+>M.x : any
+>M : typeof M
+>x : any
+>10 : 10
+
+M.x |= 11;
+>M.x |= 11 : number
+>M.x : any
+>M : typeof M
+>x : any
+>11 : 11
+
+M.x ^= 12;
+>M.x ^= 12 : number
+>M.x : any
+>M : typeof M
+>x : any
+>12 : 12
+
+M.x++;
+>M.x++ : number
+>M.x : any
+>M : typeof M
+>x : any
+
+M.x--;
+>M.x-- : number
+>M.x : any
+>M : typeof M
+>x : any
+
+++M.x;
+>++M.x : number
+>M.x : any
+>M : typeof M
+>x : any
+
+--M.x;
+>--M.x : number
+>M.x : any
+>M : typeof M
+>x : any
+
+++((M.x));
+>++((M.x)) : number
+>((M.x)) : any
+>(M.x) : any
+>M.x : any
+>M : typeof M
+>x : any
+
+M["x"] = 0;
+>M["x"] = 0 : 0
+>M["x"] : any
+>M : typeof M
+>"x" : "x"
+>0 : 0
+
+// OK
+var a = M.x + 1;
+>a : number
+>M.x + 1 : number
+>M.x : number
+>M : typeof M
+>x : number
+>1 : 1
+
+function f(v: number) { }
+>f : (v: number) => void
+>v : number
+
+f(M.x);
+>f(M.x) : void
+>f : (v: number) => void
+>M.x : number
+>M : typeof M
+>x : number
+
+if (M.x) { }
+>M.x : number
+>M : typeof M
+>x : number
+
+M.x;
+>M.x : number
+>M : typeof M
+>x : number
+
+(M.x);
+>(M.x) : number
+>M.x : number
+>M : typeof M
+>x : number
+
+-M.x;
+>-M.x : number
+>M.x : number
+>M : typeof M
+>x : number
+
++M.x;
+>+M.x : number
+>M.x : number
+>M : typeof M
+>x : number
+
+M.x.toString();
+>M.x.toString() : string
+>M.x.toString : (radix?: number) => string
+>M.x : number
+>M : typeof M
+>x : number
+>toString : (radix?: number) => string
+

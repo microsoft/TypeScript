@@ -1,0 +1,99 @@
+=== tests/cases/compiler/a.ts ===
+declare var Err: any
+>Err : any
+
+class A extends Err {
+>A : A
+>Err : any
+
+    payload: string
+>payload : string
+
+    constructor() {
+        super(1,2,3,3,4,56)
+>super(1,2,3,3,4,56) : void
+>super : any
+>1 : 1
+>2 : 2
+>3 : 3
+>3 : 3
+>4 : 4
+>56 : 56
+
+        super.unknown
+>super.unknown : any
+>super : any
+>unknown : any
+
+        super['unknown']
+>super['unknown'] : any
+>super : any
+>'unknown' : "unknown"
+    }
+    process() {
+>process : () => string
+
+        return this.payload + "!";
+>this.payload + "!" : string
+>this.payload : string
+>this : this
+>payload : string
+>"!" : "!"
+    }
+}
+
+var o = {
+>o : { m(): void; }
+>{    m() {        super.unknown    }} : { m(): void; }
+
+    m() {
+>m : () => void
+
+        super.unknown
+>super.unknown : any
+>super : any
+>unknown : any
+    }
+}
+=== tests/cases/compiler/b.js ===
+class B extends Err {
+>B : B
+>Err : any
+
+    constructor() {
+        super()
+>super() : void
+>super : any
+
+        this.wat = 12
+>this.wat = 12 : 12
+>this.wat : any
+>this : this
+>wat : any
+>12 : 12
+    }
+    f() {
+>f : () => void
+
+        this.wat
+>this.wat : number
+>this : this
+>wat : number
+
+        this.wit
+>this.wit : any
+>this : this
+>wit : any
+
+        this['wot']
+>this['wot'] : any
+>this : this
+>'wot' : "wot"
+
+        super.alsoBad
+>super.alsoBad : any
+>super : any
+>alsoBad : any
+    }
+}
+

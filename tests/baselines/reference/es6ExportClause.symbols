@@ -1,0 +1,37 @@
+=== tests/cases/compiler/server.ts ===
+class c {
+>c : Symbol(c, Decl(server.ts, 0, 0))
+}
+interface i {
+>i : Symbol(i, Decl(server.ts, 1, 1))
+}
+module m {
+>m : Symbol(m, Decl(server.ts, 3, 1))
+
+    export var x = 10;
+>x : Symbol(x, Decl(server.ts, 5, 14))
+}
+var x = 10;
+>x : Symbol(x, Decl(server.ts, 7, 3))
+
+module uninstantiated {
+>uninstantiated : Symbol(uninstantiated, Decl(server.ts, 7, 11))
+}
+export { c };
+>c : Symbol(c, Decl(server.ts, 10, 8))
+
+export { c as c2 };
+>c : Symbol(c, Decl(server.ts, 0, 0))
+>c2 : Symbol(c2, Decl(server.ts, 11, 8))
+
+export { i, m as instantiatedModule };
+>i : Symbol(i, Decl(server.ts, 12, 8))
+>m : Symbol(m, Decl(server.ts, 3, 1))
+>instantiatedModule : Symbol(instantiatedModule, Decl(server.ts, 12, 11))
+
+export { uninstantiated };
+>uninstantiated : Symbol(uninstantiated, Decl(server.ts, 13, 8))
+
+export { x };
+>x : Symbol(x, Decl(server.ts, 14, 8))
+

@@ -1,0 +1,22 @@
+=== tests/cases/conformance/es6/destructuring/restElementWithNullInitializer.ts ===
+function foo1([...r] = null) {
+>foo1 : Symbol(foo1, Decl(restElementWithNullInitializer.ts, 0, 0))
+>r : Symbol(r, Decl(restElementWithNullInitializer.ts, 0, 15))
+}
+
+function foo2([...r] = undefined) {
+>foo2 : Symbol(foo2, Decl(restElementWithNullInitializer.ts, 1, 1))
+>r : Symbol(r, Decl(restElementWithNullInitializer.ts, 3, 15))
+>undefined : Symbol(undefined)
+}
+
+function foo3([...r] = {}) {
+>foo3 : Symbol(foo3, Decl(restElementWithNullInitializer.ts, 4, 1))
+>r : Symbol(r, Decl(restElementWithNullInitializer.ts, 6, 15))
+}
+
+function foo4([...r] = []) {
+>foo4 : Symbol(foo4, Decl(restElementWithNullInitializer.ts, 7, 1))
+>r : Symbol(r, Decl(restElementWithNullInitializer.ts, 9, 15))
+}
+

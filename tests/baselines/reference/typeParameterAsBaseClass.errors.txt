@@ -1,0 +1,11 @@
+tests/cases/compiler/typeParameterAsBaseClass.ts(1,20): error TS2304: Cannot find name 'T'.
+tests/cases/compiler/typeParameterAsBaseClass.ts(2,24): error TS2422: A class can only implement an object type or intersection of object types with statically known members.
+
+
+==== tests/cases/compiler/typeParameterAsBaseClass.ts (2 errors) ====
+    class C<T> extends T {}
+                       ~
+!!! error TS2304: Cannot find name 'T'.
+    class C2<T> implements T {}
+                           ~
+!!! error TS2422: A class can only implement an object type or intersection of object types with statically known members.

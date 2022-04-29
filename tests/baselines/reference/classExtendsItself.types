@@ -1,0 +1,13 @@
+=== tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendsItself.ts ===
+class C extends C { } // error
+>C : C
+>C : typeof C
+
+class D<T> extends D<T> { } // error
+>D : D<T>
+>D : typeof D
+
+class E<T> extends E<string> { } // error
+>E : E<T>
+>E : typeof E
+

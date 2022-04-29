@@ -1,0 +1,17 @@
+=== tests/cases/conformance/declarationEmit/typePredicates/declarationEmitIdentifierPredicatesWithPrivateName01.ts ===
+interface I {
+>I : Symbol(I, Decl(declarationEmitIdentifierPredicatesWithPrivateName01.ts, 0, 0))
+
+    a: number;
+>a : Symbol(I.a, Decl(declarationEmitIdentifierPredicatesWithPrivateName01.ts, 0, 13))
+}
+
+export function f(x: any): x is I {
+>f : Symbol(f, Decl(declarationEmitIdentifierPredicatesWithPrivateName01.ts, 2, 1))
+>x : Symbol(x, Decl(declarationEmitIdentifierPredicatesWithPrivateName01.ts, 4, 18))
+>x : Symbol(x, Decl(declarationEmitIdentifierPredicatesWithPrivateName01.ts, 4, 18))
+>I : Symbol(I, Decl(declarationEmitIdentifierPredicatesWithPrivateName01.ts, 0, 0))
+
+    return typeof x.a === "number";
+>x : Symbol(x, Decl(declarationEmitIdentifierPredicatesWithPrivateName01.ts, 4, 18))
+}

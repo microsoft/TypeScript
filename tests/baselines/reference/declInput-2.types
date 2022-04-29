@@ -1,0 +1,62 @@
+=== tests/cases/compiler/declInput-2.ts ===
+module M {
+>M : typeof M
+
+    class C { }
+>C : C
+
+    export class E {}
+>E : E
+
+    export interface I1 {}
+    interface I2 {}
+    export class D {
+>D : D
+
+        private c: C; // don't generate
+>c : C
+
+        public m1: number;
+>m1 : number
+
+        public m2: string;
+>m2 : string
+
+        public m22: C; // don't generate
+>m22 : C
+
+        public m23: E;
+>m23 : E
+
+        public m24: I1;
+>m24 : I1
+
+        public m25: I2; // don't generate
+>m25 : I2
+
+        public m232(): E { return null;}
+>m232 : () => E
+>null : null
+
+        public m242(): I1 { return null; }
+>m242 : () => I1
+>null : null
+
+        public m252(): I2 { return null; } // don't generate
+>m252 : () => I2
+>null : null
+
+        public m26(i:I1) {}
+>m26 : (i: I1) => void
+>i : I1
+
+        public m262(i:I2) {}
+>m262 : (i: I2) => void
+>i : I2
+
+        public m3():C { return new C(); }
+>m3 : () => C
+>new C() : C
+>C : typeof C
+    }
+}

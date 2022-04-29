@@ -1,0 +1,86 @@
+=== tests/cases/compiler/arrayLiteralContextualType.ts ===
+interface IAnimal {
+    name: string;
+>name : string
+}
+
+class Giraffe {
+>Giraffe : Giraffe
+
+    name = "Giraffe";
+>name : string
+>"Giraffe" : "Giraffe"
+
+    neckLength = "3m";
+>neckLength : string
+>"3m" : "3m"
+}
+
+class Elephant {
+>Elephant : Elephant
+
+    name = "Elephant";
+>name : string
+>"Elephant" : "Elephant"
+
+    trunkDiameter = "20cm";
+>trunkDiameter : string
+>"20cm" : "20cm"
+}
+
+function foo(animals: IAnimal[]) { }
+>foo : (animals: IAnimal[]) => void
+>animals : IAnimal[]
+
+function bar(animals: { [n: number]: IAnimal }) { }
+>bar : (animals: { [n: number]: IAnimal; }) => void
+>animals : { [n: number]: IAnimal; }
+>n : number
+
+foo([
+>foo([    new Giraffe(),    new Elephant()]) : void
+>foo : (animals: IAnimal[]) => void
+>[    new Giraffe(),    new Elephant()] : (Giraffe | Elephant)[]
+
+    new Giraffe(),
+>new Giraffe() : Giraffe
+>Giraffe : typeof Giraffe
+
+    new Elephant()
+>new Elephant() : Elephant
+>Elephant : typeof Elephant
+
+]); // Legal because of the contextual type IAnimal provided by the parameter
+bar([
+>bar([    new Giraffe(),    new Elephant()]) : void
+>bar : (animals: { [n: number]: IAnimal; }) => void
+>[    new Giraffe(),    new Elephant()] : (Giraffe | Elephant)[]
+
+    new Giraffe(),
+>new Giraffe() : Giraffe
+>Giraffe : typeof Giraffe
+
+    new Elephant()
+>new Elephant() : Elephant
+>Elephant : typeof Elephant
+
+]); // Legal because of the contextual type IAnimal provided by the parameter
+
+var arr = [new Giraffe(), new Elephant()];
+>arr : (Giraffe | Elephant)[]
+>[new Giraffe(), new Elephant()] : (Giraffe | Elephant)[]
+>new Giraffe() : Giraffe
+>Giraffe : typeof Giraffe
+>new Elephant() : Elephant
+>Elephant : typeof Elephant
+
+foo(arr); // ok because arr is Array<Giraffe|Elephant> not {}[]
+>foo(arr) : void
+>foo : (animals: IAnimal[]) => void
+>arr : (Giraffe | Elephant)[]
+
+bar(arr); // ok because arr is Array<Giraffe|Elephant> not {}[]
+>bar(arr) : void
+>bar : (animals: { [n: number]: IAnimal; }) => void
+>arr : (Giraffe | Elephant)[]
+

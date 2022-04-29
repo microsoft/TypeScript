@@ -1,0 +1,74 @@
+tests/cases/compiler/es5ModuleInternalNamedImports.ts(22,5): error TS1194: Export declarations are not permitted in a namespace.
+tests/cases/compiler/es5ModuleInternalNamedImports.ts(23,5): error TS1194: Export declarations are not permitted in a namespace.
+tests/cases/compiler/es5ModuleInternalNamedImports.ts(24,5): error TS1194: Export declarations are not permitted in a namespace.
+tests/cases/compiler/es5ModuleInternalNamedImports.ts(25,5): error TS1194: Export declarations are not permitted in a namespace.
+tests/cases/compiler/es5ModuleInternalNamedImports.ts(26,5): error TS1194: Export declarations are not permitted in a namespace.
+tests/cases/compiler/es5ModuleInternalNamedImports.ts(27,5): error TS1194: Export declarations are not permitted in a namespace.
+tests/cases/compiler/es5ModuleInternalNamedImports.ts(28,5): error TS1194: Export declarations are not permitted in a namespace.
+tests/cases/compiler/es5ModuleInternalNamedImports.ts(29,5): error TS1194: Export declarations are not permitted in a namespace.
+tests/cases/compiler/es5ModuleInternalNamedImports.ts(30,25): error TS1147: Import declarations in a namespace cannot reference a module.
+tests/cases/compiler/es5ModuleInternalNamedImports.ts(31,20): error TS1147: Import declarations in a namespace cannot reference a module.
+tests/cases/compiler/es5ModuleInternalNamedImports.ts(32,32): error TS1147: Import declarations in a namespace cannot reference a module.
+tests/cases/compiler/es5ModuleInternalNamedImports.ts(34,16): error TS2792: Cannot find module 'M3'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+
+
+==== tests/cases/compiler/es5ModuleInternalNamedImports.ts (12 errors) ====
+    export module M {
+        // variable
+        export var M_V = 0;
+        // interface
+        export interface M_I { }
+        //calss
+        export class M_C { }
+        // instantiated module
+        export module M_M { var x; }
+        // uninstantiated module
+        export module M_MU { }
+        // function
+        export function M_F() { }
+        // enum
+        export enum M_E { }
+        // type
+        export type M_T = number;
+        // alias
+        export import M_A = M_M;
+    
+        // Reexports
+        export {M_V as v};
+        ~~~~~~~~~~~~~~~~~~
+!!! error TS1194: Export declarations are not permitted in a namespace.
+        export {M_I as i};
+        ~~~~~~~~~~~~~~~~~~
+!!! error TS1194: Export declarations are not permitted in a namespace.
+        export {M_C as c};
+        ~~~~~~~~~~~~~~~~~~
+!!! error TS1194: Export declarations are not permitted in a namespace.
+        export {M_M as m};
+        ~~~~~~~~~~~~~~~~~~
+!!! error TS1194: Export declarations are not permitted in a namespace.
+        export {M_MU as mu};
+        ~~~~~~~~~~~~~~~~~~~~
+!!! error TS1194: Export declarations are not permitted in a namespace.
+        export {M_F as f};
+        ~~~~~~~~~~~~~~~~~~
+!!! error TS1194: Export declarations are not permitted in a namespace.
+        export {M_E as e};
+        ~~~~~~~~~~~~~~~~~~
+!!! error TS1194: Export declarations are not permitted in a namespace.
+        export {M_A as a};
+        ~~~~~~~~~~~~~~~~~~
+!!! error TS1194: Export declarations are not permitted in a namespace.
+        import * as M2 from "M2";
+                            ~~~~
+!!! error TS1147: Import declarations in a namespace cannot reference a module.
+        import M4 from "M4";
+                       ~~~~
+!!! error TS1147: Import declarations in a namespace cannot reference a module.
+        export import M5 = require("M5");
+                                   ~~~~
+!!! error TS1147: Import declarations in a namespace cannot reference a module.
+    }
+    import M3 from "M3";
+                   ~~~~
+!!! error TS2792: Cannot find module 'M3'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+    

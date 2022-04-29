@@ -1,0 +1,26 @@
+=== tests/cases/compiler/multipleClassPropertyModifiersErrors.ts ===
+class C {
+>C : Symbol(C, Decl(multipleClassPropertyModifiersErrors.ts, 0, 0))
+
+	public public p1;
+>p1 : Symbol(C.p1, Decl(multipleClassPropertyModifiersErrors.ts, 0, 9))
+
+	private private p2;
+>p2 : Symbol(C.p2, Decl(multipleClassPropertyModifiersErrors.ts, 1, 18))
+
+	static static p3;
+>static : Symbol(C.static, Decl(multipleClassPropertyModifiersErrors.ts, 2, 20))
+>p3 : Symbol(C.p3, Decl(multipleClassPropertyModifiersErrors.ts, 3, 14))
+
+	public private p4;
+>p4 : Symbol(C.p4, Decl(multipleClassPropertyModifiersErrors.ts, 3, 18))
+
+	private public p5;
+>p5 : Symbol(C.p5, Decl(multipleClassPropertyModifiersErrors.ts, 4, 19))
+
+	public static p6;
+>p6 : Symbol(C.p6, Decl(multipleClassPropertyModifiersErrors.ts, 5, 19))
+
+	private static p7;
+>p7 : Symbol(C.p7, Decl(multipleClassPropertyModifiersErrors.ts, 6, 18))
+}

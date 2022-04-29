@@ -1,0 +1,19 @@
+tests/cases/conformance/externalModules/multipleExportDefault5.ts(1,25): error TS2323: Cannot redeclare exported variable 'default'.
+tests/cases/conformance/externalModules/multipleExportDefault5.ts(1,25): error TS2814: Function with bodies can only merge with classes that are ambient.
+tests/cases/conformance/externalModules/multipleExportDefault5.ts(2,22): error TS2323: Cannot redeclare exported variable 'default'.
+tests/cases/conformance/externalModules/multipleExportDefault5.ts(2,22): error TS2813: Class declaration cannot implement overload list for 'default'.
+
+
+==== tests/cases/conformance/externalModules/multipleExportDefault5.ts (4 errors) ====
+    export default function bar() { }
+                            ~~~
+!!! error TS2323: Cannot redeclare exported variable 'default'.
+                            ~~~
+!!! error TS2814: Function with bodies can only merge with classes that are ambient.
+!!! related TS6506 tests/cases/conformance/externalModules/multipleExportDefault5.ts:2:22: Consider adding a 'declare' modifier to this class.
+    export default class C {}
+                         ~
+!!! error TS2323: Cannot redeclare exported variable 'default'.
+                         ~
+!!! error TS2813: Class declaration cannot implement overload list for 'default'.
+!!! related TS6506 tests/cases/conformance/externalModules/multipleExportDefault5.ts:2:22: Consider adding a 'declare' modifier to this class.

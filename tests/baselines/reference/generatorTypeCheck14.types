@@ -1,0 +1,11 @@
+=== tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck14.ts ===
+function* g() {
+>g : () => Generator<number, string, unknown>
+
+    yield 0;
+>yield 0 : any
+>0 : 0
+
+    return "";
+>"" : ""
+}

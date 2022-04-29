@@ -1,0 +1,30 @@
+=== tests/cases/compiler/declFileWithInternalModuleNameConflictsInExtendsClause1.ts ===
+module X.A.C {
+>X : Symbol(X, Decl(declFileWithInternalModuleNameConflictsInExtendsClause1.ts, 0, 0), Decl(declFileWithInternalModuleNameConflictsInExtendsClause1.ts, 3, 1))
+>A : Symbol(A, Decl(declFileWithInternalModuleNameConflictsInExtendsClause1.ts, 0, 9), Decl(declFileWithInternalModuleNameConflictsInExtendsClause1.ts, 4, 9))
+>C : Symbol(C, Decl(declFileWithInternalModuleNameConflictsInExtendsClause1.ts, 0, 11))
+
+    export interface Z {
+>Z : Symbol(Z, Decl(declFileWithInternalModuleNameConflictsInExtendsClause1.ts, 0, 14))
+    }
+}
+module X.A.B.C {
+>X : Symbol(X, Decl(declFileWithInternalModuleNameConflictsInExtendsClause1.ts, 0, 0), Decl(declFileWithInternalModuleNameConflictsInExtendsClause1.ts, 3, 1))
+>A : Symbol(A, Decl(declFileWithInternalModuleNameConflictsInExtendsClause1.ts, 0, 9), Decl(declFileWithInternalModuleNameConflictsInExtendsClause1.ts, 4, 9))
+>B : Symbol(B, Decl(declFileWithInternalModuleNameConflictsInExtendsClause1.ts, 4, 11))
+>C : Symbol(C, Decl(declFileWithInternalModuleNameConflictsInExtendsClause1.ts, 4, 13))
+
+    module A {
+>A : Symbol(A, Decl(declFileWithInternalModuleNameConflictsInExtendsClause1.ts, 4, 16))
+    }
+    export class W implements X.A.C.Z { // This needs to be referred as X.A.C.Z as A has conflict
+>W : Symbol(W, Decl(declFileWithInternalModuleNameConflictsInExtendsClause1.ts, 6, 5))
+>X.A.C.Z : Symbol(X.A.C.Z, Decl(declFileWithInternalModuleNameConflictsInExtendsClause1.ts, 0, 14))
+>X.A.C : Symbol(C, Decl(declFileWithInternalModuleNameConflictsInExtendsClause1.ts, 0, 11))
+>X.A : Symbol(A, Decl(declFileWithInternalModuleNameConflictsInExtendsClause1.ts, 0, 9), Decl(declFileWithInternalModuleNameConflictsInExtendsClause1.ts, 4, 9))
+>X : Symbol(X, Decl(declFileWithInternalModuleNameConflictsInExtendsClause1.ts, 0, 0), Decl(declFileWithInternalModuleNameConflictsInExtendsClause1.ts, 3, 1))
+>A : Symbol(A, Decl(declFileWithInternalModuleNameConflictsInExtendsClause1.ts, 0, 9), Decl(declFileWithInternalModuleNameConflictsInExtendsClause1.ts, 4, 9))
+>C : Symbol(C, Decl(declFileWithInternalModuleNameConflictsInExtendsClause1.ts, 0, 11))
+>Z : Symbol(X.A.C.Z, Decl(declFileWithInternalModuleNameConflictsInExtendsClause1.ts, 0, 14))
+    }
+}

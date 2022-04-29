@@ -1,0 +1,140 @@
+=== tests/cases/conformance/types/thisType/thisTypeInAccessors.ts ===
+interface Foo {
+>Foo : Symbol(Foo, Decl(thisTypeInAccessors.ts, 0, 0))
+
+    n: number;
+>n : Symbol(Foo.n, Decl(thisTypeInAccessors.ts, 0, 15))
+
+    x: number;
+>x : Symbol(Foo.x, Decl(thisTypeInAccessors.ts, 1, 14))
+}
+
+const explicit = {
+>explicit : Symbol(explicit, Decl(thisTypeInAccessors.ts, 5, 5))
+
+    n: 12,
+>n : Symbol(n, Decl(thisTypeInAccessors.ts, 5, 18))
+
+    get x(this: Foo): number { return this.n; },
+>x : Symbol(x, Decl(thisTypeInAccessors.ts, 6, 10), Decl(thisTypeInAccessors.ts, 7, 48))
+>this : Symbol(this, Decl(thisTypeInAccessors.ts, 7, 10))
+>Foo : Symbol(Foo, Decl(thisTypeInAccessors.ts, 0, 0))
+>this.n : Symbol(Foo.n, Decl(thisTypeInAccessors.ts, 0, 15))
+>this : Symbol(this, Decl(thisTypeInAccessors.ts, 7, 10))
+>n : Symbol(Foo.n, Decl(thisTypeInAccessors.ts, 0, 15))
+
+    set x(this: Foo, n: number) { this.n = n; }
+>x : Symbol(x, Decl(thisTypeInAccessors.ts, 6, 10), Decl(thisTypeInAccessors.ts, 7, 48))
+>this : Symbol(this, Decl(thisTypeInAccessors.ts, 8, 10))
+>Foo : Symbol(Foo, Decl(thisTypeInAccessors.ts, 0, 0))
+>n : Symbol(n, Decl(thisTypeInAccessors.ts, 8, 20))
+>this.n : Symbol(Foo.n, Decl(thisTypeInAccessors.ts, 0, 15))
+>this : Symbol(this, Decl(thisTypeInAccessors.ts, 8, 10))
+>n : Symbol(Foo.n, Decl(thisTypeInAccessors.ts, 0, 15))
+>n : Symbol(n, Decl(thisTypeInAccessors.ts, 8, 20))
+}
+const copiedFromGetter = {
+>copiedFromGetter : Symbol(copiedFromGetter, Decl(thisTypeInAccessors.ts, 10, 5))
+
+    n: 14,
+>n : Symbol(n, Decl(thisTypeInAccessors.ts, 10, 26))
+
+    get x(this: Foo): number { return this.n; },
+>x : Symbol(x, Decl(thisTypeInAccessors.ts, 11, 10), Decl(thisTypeInAccessors.ts, 12, 48))
+>this : Symbol(this, Decl(thisTypeInAccessors.ts, 12, 10))
+>Foo : Symbol(Foo, Decl(thisTypeInAccessors.ts, 0, 0))
+>this.n : Symbol(Foo.n, Decl(thisTypeInAccessors.ts, 0, 15))
+>this : Symbol(this, Decl(thisTypeInAccessors.ts, 12, 10))
+>n : Symbol(Foo.n, Decl(thisTypeInAccessors.ts, 0, 15))
+
+    set x(n) { this.n = n; }
+>x : Symbol(x, Decl(thisTypeInAccessors.ts, 11, 10), Decl(thisTypeInAccessors.ts, 12, 48))
+>n : Symbol(n, Decl(thisTypeInAccessors.ts, 13, 10))
+>this.n : Symbol(Foo.n, Decl(thisTypeInAccessors.ts, 0, 15))
+>this : Symbol(this, Decl(thisTypeInAccessors.ts, 12, 10))
+>n : Symbol(Foo.n, Decl(thisTypeInAccessors.ts, 0, 15))
+>n : Symbol(n, Decl(thisTypeInAccessors.ts, 13, 10))
+}
+const copiedFromSetter = {
+>copiedFromSetter : Symbol(copiedFromSetter, Decl(thisTypeInAccessors.ts, 15, 5))
+
+    n: 15,
+>n : Symbol(n, Decl(thisTypeInAccessors.ts, 15, 26))
+
+    get x() { return this.n },
+>x : Symbol(x, Decl(thisTypeInAccessors.ts, 16, 10), Decl(thisTypeInAccessors.ts, 17, 30))
+>this.n : Symbol(Foo.n, Decl(thisTypeInAccessors.ts, 0, 15))
+>this : Symbol(this, Decl(thisTypeInAccessors.ts, 18, 10))
+>n : Symbol(Foo.n, Decl(thisTypeInAccessors.ts, 0, 15))
+
+    set x(this: Foo, n: number) { this.n = n; }
+>x : Symbol(x, Decl(thisTypeInAccessors.ts, 16, 10), Decl(thisTypeInAccessors.ts, 17, 30))
+>this : Symbol(this, Decl(thisTypeInAccessors.ts, 18, 10))
+>Foo : Symbol(Foo, Decl(thisTypeInAccessors.ts, 0, 0))
+>n : Symbol(n, Decl(thisTypeInAccessors.ts, 18, 20))
+>this.n : Symbol(Foo.n, Decl(thisTypeInAccessors.ts, 0, 15))
+>this : Symbol(this, Decl(thisTypeInAccessors.ts, 18, 10))
+>n : Symbol(Foo.n, Decl(thisTypeInAccessors.ts, 0, 15))
+>n : Symbol(n, Decl(thisTypeInAccessors.ts, 18, 20))
+}
+const copiedFromGetterUnannotated = {
+>copiedFromGetterUnannotated : Symbol(copiedFromGetterUnannotated, Decl(thisTypeInAccessors.ts, 20, 5))
+
+    n: 16,
+>n : Symbol(n, Decl(thisTypeInAccessors.ts, 20, 37))
+
+    get x(this: Foo) { return this.n },
+>x : Symbol(x, Decl(thisTypeInAccessors.ts, 21, 10), Decl(thisTypeInAccessors.ts, 22, 39))
+>this : Symbol(this, Decl(thisTypeInAccessors.ts, 22, 10))
+>Foo : Symbol(Foo, Decl(thisTypeInAccessors.ts, 0, 0))
+>this.n : Symbol(Foo.n, Decl(thisTypeInAccessors.ts, 0, 15))
+>this : Symbol(this, Decl(thisTypeInAccessors.ts, 22, 10))
+>n : Symbol(Foo.n, Decl(thisTypeInAccessors.ts, 0, 15))
+
+    set x(this, n) { this.n = n; }
+>x : Symbol(x, Decl(thisTypeInAccessors.ts, 21, 10), Decl(thisTypeInAccessors.ts, 22, 39))
+>this : Symbol(this, Decl(thisTypeInAccessors.ts, 23, 10))
+>n : Symbol(n, Decl(thisTypeInAccessors.ts, 23, 15))
+>this.n : Symbol(Foo.n, Decl(thisTypeInAccessors.ts, 0, 15))
+>this : Symbol(this, Decl(thisTypeInAccessors.ts, 23, 10))
+>n : Symbol(Foo.n, Decl(thisTypeInAccessors.ts, 0, 15))
+>n : Symbol(n, Decl(thisTypeInAccessors.ts, 23, 15))
+}
+
+class Explicit {
+>Explicit : Symbol(Explicit, Decl(thisTypeInAccessors.ts, 24, 1))
+
+    n = 17;
+>n : Symbol(Explicit.n, Decl(thisTypeInAccessors.ts, 26, 16))
+
+    get x(this: Foo): number { return this.n; }
+>x : Symbol(Explicit.x, Decl(thisTypeInAccessors.ts, 27, 11), Decl(thisTypeInAccessors.ts, 28, 47))
+>this : Symbol(this, Decl(thisTypeInAccessors.ts, 28, 10))
+>Foo : Symbol(Foo, Decl(thisTypeInAccessors.ts, 0, 0))
+>this.n : Symbol(Foo.n, Decl(thisTypeInAccessors.ts, 0, 15))
+>this : Symbol(this, Decl(thisTypeInAccessors.ts, 28, 10))
+>n : Symbol(Foo.n, Decl(thisTypeInAccessors.ts, 0, 15))
+
+    set x(this: Foo, n: number) { this.n = n; }
+>x : Symbol(Explicit.x, Decl(thisTypeInAccessors.ts, 27, 11), Decl(thisTypeInAccessors.ts, 28, 47))
+>this : Symbol(this, Decl(thisTypeInAccessors.ts, 29, 10))
+>Foo : Symbol(Foo, Decl(thisTypeInAccessors.ts, 0, 0))
+>n : Symbol(n, Decl(thisTypeInAccessors.ts, 29, 20))
+>this.n : Symbol(Foo.n, Decl(thisTypeInAccessors.ts, 0, 15))
+>this : Symbol(this, Decl(thisTypeInAccessors.ts, 29, 10))
+>n : Symbol(Foo.n, Decl(thisTypeInAccessors.ts, 0, 15))
+>n : Symbol(n, Decl(thisTypeInAccessors.ts, 29, 20))
+}
+class Contextual {
+>Contextual : Symbol(Contextual, Decl(thisTypeInAccessors.ts, 30, 1))
+
+    n = 21;
+>n : Symbol(Contextual.n, Decl(thisTypeInAccessors.ts, 31, 18))
+
+    get x() { return this.n } // inside a class, so already correct
+>x : Symbol(Contextual.x, Decl(thisTypeInAccessors.ts, 32, 11))
+>this.n : Symbol(Contextual.n, Decl(thisTypeInAccessors.ts, 31, 18))
+>this : Symbol(Contextual, Decl(thisTypeInAccessors.ts, 30, 1))
+>n : Symbol(Contextual.n, Decl(thisTypeInAccessors.ts, 31, 18))
+}
+

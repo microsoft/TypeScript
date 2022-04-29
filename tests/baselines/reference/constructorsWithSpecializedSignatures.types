@@ -1,0 +1,86 @@
+=== tests/cases/compiler/constructorsWithSpecializedSignatures.ts ===
+// errors
+declare class C {
+>C : C
+
+    constructor(x: "hi");
+>x : "hi"
+
+    constructor(x: "foo");
+>x : "foo"
+
+    constructor(x: number);
+>x : number
+}
+
+// ok
+declare class C2 {
+>C2 : C2
+
+    constructor(x: "hi");
+>x : "hi"
+
+    constructor(x: "foo");
+>x : "foo"
+
+    constructor(x: string);
+>x : string
+}
+
+// errors
+class D {
+>D : D
+
+    constructor(x: "hi");
+>x : "hi"
+
+    constructor(x: "foo");
+>x : "foo"
+
+    constructor(x: number);
+>x : number
+
+    constructor(x: "hi") { }
+>x : "hi"
+}
+
+// overloads are ok
+class D2 {
+>D2 : D2
+
+    constructor(x: "hi");
+>x : "hi"
+
+    constructor(x: "foo");
+>x : "foo"
+
+    constructor(x: string);
+>x : string
+
+    constructor(x: "hi") { } // error
+>x : "hi"
+}
+
+// errors
+interface I {
+    new (x: "hi");
+>x : "hi"
+
+    new (x: "foo");
+>x : "foo"
+
+    new (x: number);
+>x : number
+}
+
+// ok
+interface I2 {
+    new (x: "hi");
+>x : "hi"
+
+    new (x: "foo");
+>x : "foo"
+
+    new (x: string);
+>x : string
+}

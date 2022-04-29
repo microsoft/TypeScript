@@ -1,0 +1,18 @@
+=== tests/cases/compiler/testTypings.ts ===
+interface IComparable<T> {
+   compareTo(other: T);
+>compareTo : (other: T) => any
+>other : T
+}
+
+declare function sort<U extends IComparable<U>>(items: U[]): U[];
+>sort : <U extends IComparable<U>>(items: U[]) => U[]
+>items : U[]
+
+
+
+
+
+
+
+

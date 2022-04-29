@@ -1,0 +1,550 @@
+=== tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndValidOperands.ts ===
+// If one operand is the undefined or undefined value, it is treated as having the type of the
+// other operand.
+
+enum E {
+>E : E
+
+    a,
+>a : E.a
+
+    b
+>b : E.b
+}
+
+var a: any;
+>a : any
+
+var b: number;
+>b : number
+
+// operator *
+var ra1 = undefined * a;
+>ra1 : number
+>undefined * a : number
+>undefined : undefined
+>a : any
+
+var ra2 = undefined * b;
+>ra2 : number
+>undefined * b : number
+>undefined : undefined
+>b : number
+
+var ra3 = undefined * 1;
+>ra3 : number
+>undefined * 1 : number
+>undefined : undefined
+>1 : 1
+
+var ra4 = undefined * E.a;
+>ra4 : number
+>undefined * E.a : number
+>undefined : undefined
+>E.a : E.a
+>E : typeof E
+>a : E.a
+
+var ra5 = a * undefined;
+>ra5 : number
+>a * undefined : number
+>a : any
+>undefined : undefined
+
+var ra6 = b * undefined;
+>ra6 : number
+>b * undefined : number
+>b : number
+>undefined : undefined
+
+var ra7 = 0 * undefined;
+>ra7 : number
+>0 * undefined : number
+>0 : 0
+>undefined : undefined
+
+var ra8 = E.b * undefined;
+>ra8 : number
+>E.b * undefined : number
+>E.b : E.b
+>E : typeof E
+>b : E.b
+>undefined : undefined
+
+// operator /
+var rb1 = undefined / a;
+>rb1 : number
+>undefined / a : number
+>undefined : undefined
+>a : any
+
+var rb2 = undefined / b;
+>rb2 : number
+>undefined / b : number
+>undefined : undefined
+>b : number
+
+var rb3 = undefined / 1;
+>rb3 : number
+>undefined / 1 : number
+>undefined : undefined
+>1 : 1
+
+var rb4 = undefined / E.a;
+>rb4 : number
+>undefined / E.a : number
+>undefined : undefined
+>E.a : E.a
+>E : typeof E
+>a : E.a
+
+var rb5 = a / undefined;
+>rb5 : number
+>a / undefined : number
+>a : any
+>undefined : undefined
+
+var rb6 = b / undefined;
+>rb6 : number
+>b / undefined : number
+>b : number
+>undefined : undefined
+
+var rb7 = 0 / undefined;
+>rb7 : number
+>0 / undefined : number
+>0 : 0
+>undefined : undefined
+
+var rb8 = E.b / undefined;
+>rb8 : number
+>E.b / undefined : number
+>E.b : E.b
+>E : typeof E
+>b : E.b
+>undefined : undefined
+
+// operator %
+var rc1 = undefined % a;
+>rc1 : number
+>undefined % a : number
+>undefined : undefined
+>a : any
+
+var rc2 = undefined % b;
+>rc2 : number
+>undefined % b : number
+>undefined : undefined
+>b : number
+
+var rc3 = undefined % 1;
+>rc3 : number
+>undefined % 1 : number
+>undefined : undefined
+>1 : 1
+
+var rc4 = undefined % E.a;
+>rc4 : number
+>undefined % E.a : number
+>undefined : undefined
+>E.a : E.a
+>E : typeof E
+>a : E.a
+
+var rc5 = a % undefined;
+>rc5 : number
+>a % undefined : number
+>a : any
+>undefined : undefined
+
+var rc6 = b % undefined;
+>rc6 : number
+>b % undefined : number
+>b : number
+>undefined : undefined
+
+var rc7 = 0 % undefined;
+>rc7 : number
+>0 % undefined : number
+>0 : 0
+>undefined : undefined
+
+var rc8 = E.b % undefined;
+>rc8 : number
+>E.b % undefined : number
+>E.b : E.b
+>E : typeof E
+>b : E.b
+>undefined : undefined
+
+// operator -
+var rd1 = undefined - a;
+>rd1 : number
+>undefined - a : number
+>undefined : undefined
+>a : any
+
+var rd2 = undefined - b;
+>rd2 : number
+>undefined - b : number
+>undefined : undefined
+>b : number
+
+var rd3 = undefined - 1;
+>rd3 : number
+>undefined - 1 : number
+>undefined : undefined
+>1 : 1
+
+var rd4 = undefined - E.a;
+>rd4 : number
+>undefined - E.a : number
+>undefined : undefined
+>E.a : E.a
+>E : typeof E
+>a : E.a
+
+var rd5 = a - undefined;
+>rd5 : number
+>a - undefined : number
+>a : any
+>undefined : undefined
+
+var rd6 = b - undefined;
+>rd6 : number
+>b - undefined : number
+>b : number
+>undefined : undefined
+
+var rd7 = 0 - undefined;
+>rd7 : number
+>0 - undefined : number
+>0 : 0
+>undefined : undefined
+
+var rd8 = E.b - undefined;
+>rd8 : number
+>E.b - undefined : number
+>E.b : E.b
+>E : typeof E
+>b : E.b
+>undefined : undefined
+
+// operator <<
+var re1 = undefined << a;
+>re1 : number
+>undefined << a : number
+>undefined : undefined
+>a : any
+
+var re2 = undefined << b;
+>re2 : number
+>undefined << b : number
+>undefined : undefined
+>b : number
+
+var re3 = undefined << 1;
+>re3 : number
+>undefined << 1 : number
+>undefined : undefined
+>1 : 1
+
+var re4 = undefined << E.a;
+>re4 : number
+>undefined << E.a : number
+>undefined : undefined
+>E.a : E.a
+>E : typeof E
+>a : E.a
+
+var re5 = a << undefined;
+>re5 : number
+>a << undefined : number
+>a : any
+>undefined : undefined
+
+var re6 = b << undefined;
+>re6 : number
+>b << undefined : number
+>b : number
+>undefined : undefined
+
+var re7 = 0 << undefined;
+>re7 : number
+>0 << undefined : number
+>0 : 0
+>undefined : undefined
+
+var re8 = E.b << undefined;
+>re8 : number
+>E.b << undefined : number
+>E.b : E.b
+>E : typeof E
+>b : E.b
+>undefined : undefined
+
+// operator >>
+var rf1 = undefined >> a;
+>rf1 : number
+>undefined >> a : number
+>undefined : undefined
+>a : any
+
+var rf2 = undefined >> b;
+>rf2 : number
+>undefined >> b : number
+>undefined : undefined
+>b : number
+
+var rf3 = undefined >> 1;
+>rf3 : number
+>undefined >> 1 : number
+>undefined : undefined
+>1 : 1
+
+var rf4 = undefined >> E.a;
+>rf4 : number
+>undefined >> E.a : number
+>undefined : undefined
+>E.a : E.a
+>E : typeof E
+>a : E.a
+
+var rf5 = a >> undefined;
+>rf5 : number
+>a >> undefined : number
+>a : any
+>undefined : undefined
+
+var rf6 = b >> undefined;
+>rf6 : number
+>b >> undefined : number
+>b : number
+>undefined : undefined
+
+var rf7 = 0 >> undefined;
+>rf7 : number
+>0 >> undefined : number
+>0 : 0
+>undefined : undefined
+
+var rf8 = E.b >> undefined;
+>rf8 : number
+>E.b >> undefined : number
+>E.b : E.b
+>E : typeof E
+>b : E.b
+>undefined : undefined
+
+// operator >>>
+var rg1 = undefined >>> a;
+>rg1 : number
+>undefined >>> a : number
+>undefined : undefined
+>a : any
+
+var rg2 = undefined >>> b;
+>rg2 : number
+>undefined >>> b : number
+>undefined : undefined
+>b : number
+
+var rg3 = undefined >>> 1;
+>rg3 : number
+>undefined >>> 1 : number
+>undefined : undefined
+>1 : 1
+
+var rg4 = undefined >>> E.a;
+>rg4 : number
+>undefined >>> E.a : number
+>undefined : undefined
+>E.a : E.a
+>E : typeof E
+>a : E.a
+
+var rg5 = a >>> undefined;
+>rg5 : number
+>a >>> undefined : number
+>a : any
+>undefined : undefined
+
+var rg6 = b >>> undefined;
+>rg6 : number
+>b >>> undefined : number
+>b : number
+>undefined : undefined
+
+var rg7 = 0 >>> undefined;
+>rg7 : number
+>0 >>> undefined : number
+>0 : 0
+>undefined : undefined
+
+var rg8 = E.b >>> undefined;
+>rg8 : number
+>E.b >>> undefined : number
+>E.b : E.b
+>E : typeof E
+>b : E.b
+>undefined : undefined
+
+// operator &
+var rh1 = undefined & a;
+>rh1 : number
+>undefined & a : number
+>undefined : undefined
+>a : any
+
+var rh2 = undefined & b;
+>rh2 : number
+>undefined & b : number
+>undefined : undefined
+>b : number
+
+var rh3 = undefined & 1;
+>rh3 : number
+>undefined & 1 : number
+>undefined : undefined
+>1 : 1
+
+var rh4 = undefined & E.a;
+>rh4 : number
+>undefined & E.a : number
+>undefined : undefined
+>E.a : E.a
+>E : typeof E
+>a : E.a
+
+var rh5 = a & undefined;
+>rh5 : number
+>a & undefined : number
+>a : any
+>undefined : undefined
+
+var rh6 = b & undefined;
+>rh6 : number
+>b & undefined : number
+>b : number
+>undefined : undefined
+
+var rh7 = 0 & undefined;
+>rh7 : number
+>0 & undefined : number
+>0 : 0
+>undefined : undefined
+
+var rh8 = E.b & undefined;
+>rh8 : number
+>E.b & undefined : number
+>E.b : E.b
+>E : typeof E
+>b : E.b
+>undefined : undefined
+
+// operator ^
+var ri1 = undefined ^ a;
+>ri1 : number
+>undefined ^ a : number
+>undefined : undefined
+>a : any
+
+var ri2 = undefined ^ b;
+>ri2 : number
+>undefined ^ b : number
+>undefined : undefined
+>b : number
+
+var ri3 = undefined ^ 1;
+>ri3 : number
+>undefined ^ 1 : number
+>undefined : undefined
+>1 : 1
+
+var ri4 = undefined ^ E.a;
+>ri4 : number
+>undefined ^ E.a : number
+>undefined : undefined
+>E.a : E.a
+>E : typeof E
+>a : E.a
+
+var ri5 = a ^ undefined;
+>ri5 : number
+>a ^ undefined : number
+>a : any
+>undefined : undefined
+
+var ri6 = b ^ undefined;
+>ri6 : number
+>b ^ undefined : number
+>b : number
+>undefined : undefined
+
+var ri7 = 0 ^ undefined;
+>ri7 : number
+>0 ^ undefined : number
+>0 : 0
+>undefined : undefined
+
+var ri8 = E.b ^ undefined;
+>ri8 : number
+>E.b ^ undefined : number
+>E.b : E.b
+>E : typeof E
+>b : E.b
+>undefined : undefined
+
+// operator |
+var rj1 = undefined | a;
+>rj1 : number
+>undefined | a : number
+>undefined : undefined
+>a : any
+
+var rj2 = undefined | b;
+>rj2 : number
+>undefined | b : number
+>undefined : undefined
+>b : number
+
+var rj3 = undefined | 1;
+>rj3 : number
+>undefined | 1 : number
+>undefined : undefined
+>1 : 1
+
+var rj4 = undefined | E.a;
+>rj4 : number
+>undefined | E.a : number
+>undefined : undefined
+>E.a : E.a
+>E : typeof E
+>a : E.a
+
+var rj5 = a | undefined;
+>rj5 : number
+>a | undefined : number
+>a : any
+>undefined : undefined
+
+var rj6 = b | undefined;
+>rj6 : number
+>b | undefined : number
+>b : number
+>undefined : undefined
+
+var rj7 = 0 | undefined;
+>rj7 : number
+>0 | undefined : number
+>0 : 0
+>undefined : undefined
+
+var rj8 = E.b | undefined;
+>rj8 : number
+>E.b | undefined : number
+>E.b : E.b
+>E : typeof E
+>b : E.b
+>undefined : undefined
+

@@ -1,0 +1,14 @@
+=== tests/cases/compiler/extendNonClassSymbol2.ts ===
+function Foo() {
+>Foo : Symbol(Foo, Decl(extendNonClassSymbol2.ts, 0, 0))
+
+   this.x = 1;
+}
+var x = new Foo(); // legal, considered a constructor function
+>x : Symbol(x, Decl(extendNonClassSymbol2.ts, 3, 3))
+>Foo : Symbol(Foo, Decl(extendNonClassSymbol2.ts, 0, 0))
+
+class C extends Foo {} // error, could not find symbol Foo
+>C : Symbol(C, Decl(extendNonClassSymbol2.ts, 3, 18))
+>Foo : Symbol(Foo, Decl(extendNonClassSymbol2.ts, 0, 0))
+

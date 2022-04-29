@@ -1,0 +1,60 @@
+
+1  >var x = 10;
+
+    ~~~~~~~~~~~~                                  => Pos: (0 to 11)  SpanInfo: {"start":0,"length":10}
+    >var x = 10
+    >:=> (line 1, col 0) to (line 1, col 10)
+--------------------------------
+2  >var y = 20;
+
+    ~~~~~~~~~~~~                                  => Pos: (12 to 23)  SpanInfo: {"start":12,"length":10}
+    >var y = 20
+    >:=> (line 2, col 0) to (line 2, col 10)
+--------------------------------
+3  >x++;
+
+    ~~~~~                                         => Pos: (24 to 28)  SpanInfo: {"start":24,"length":3}
+    >x++
+    >:=> (line 3, col 0) to (line 3, col 3)
+--------------------------------
+4  >y--;
+
+    ~~~~~                                         => Pos: (29 to 33)  SpanInfo: {"start":29,"length":3}
+    >y--
+    >:=> (line 4, col 0) to (line 4, col 3)
+--------------------------------
+5  >typeof (function foo() {
+
+    ~~~~~~                                        => Pos: (34 to 39)  SpanInfo: {"start":34,"length":43}
+    >typeof (function foo() {
+    >    return y;
+    >})()
+    >:=> (line 5, col 0) to (line 7, col 4)
+5  >typeof (function foo() {
+
+          ~~~~~~~~~~~~~~~~~~~                     => Pos: (40 to 58)  SpanInfo: {"start":63,"length":8}
+    >return y
+    >:=> (line 6, col 4) to (line 6, col 12)
+--------------------------------
+6  >    return y;
+
+    ~~~~~~~~~~~~~~                                => Pos: (59 to 72)  SpanInfo: {"start":63,"length":8}
+    >return y
+    >:=> (line 6, col 4) to (line 6, col 12)
+--------------------------------
+7  >})();
+
+    ~~~~~~                                        => Pos: (73 to 78)  SpanInfo: {"start":73,"length":1}
+    >}
+    >:=> (line 7, col 0) to (line 7, col 1)
+--------------------------------
+8  >++x;
+
+    ~~~~~                                         => Pos: (79 to 83)  SpanInfo: {"start":79,"length":3}
+    >++x
+    >:=> (line 8, col 0) to (line 8, col 3)
+--------------------------------
+9  >++y;
+    ~~~~                                          => Pos: (84 to 87)  SpanInfo: {"start":84,"length":3}
+    >++y
+    >:=> (line 9, col 0) to (line 9, col 3)

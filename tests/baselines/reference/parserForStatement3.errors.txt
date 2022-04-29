@@ -1,0 +1,22 @@
+tests/cases/conformance/parser/ecmascript5/Statements/parserForStatement3.ts(1,5): error TS2304: Cannot find name 'd'.
+tests/cases/conformance/parser/ecmascript5/Statements/parserForStatement3.ts(1,10): error TS2304: Cannot find name '_'.
+tests/cases/conformance/parser/ecmascript5/Statements/parserForStatement3.ts(1,15): error TS2304: Cannot find name 'a'.
+tests/cases/conformance/parser/ecmascript5/Statements/parserForStatement3.ts(1,18): error TS2304: Cannot find name '_'.
+tests/cases/conformance/parser/ecmascript5/Statements/parserForStatement3.ts(1,23): error TS2304: Cannot find name 'a'.
+tests/cases/conformance/parser/ecmascript5/Statements/parserForStatement3.ts(1,30): error TS2304: Cannot find name 'b'.
+
+
+==== tests/cases/conformance/parser/ecmascript5/Statements/parserForStatement3.ts (6 errors) ====
+    for(d in _.jh[a]=_.jh[a]||[],b);
+        ~
+!!! error TS2304: Cannot find name 'd'.
+             ~
+!!! error TS2304: Cannot find name '_'.
+                  ~
+!!! error TS2304: Cannot find name 'a'.
+                     ~
+!!! error TS2304: Cannot find name '_'.
+                          ~
+!!! error TS2304: Cannot find name 'a'.
+                                 ~
+!!! error TS2304: Cannot find name 'b'.

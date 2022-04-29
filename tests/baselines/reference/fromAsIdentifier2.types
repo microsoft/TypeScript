@@ -1,0 +1,7 @@
+=== tests/cases/compiler/fromAsIdentifier2.ts ===
+"use strict";
+>"use strict" : "use strict"
+
+var from;
+>from : any
+

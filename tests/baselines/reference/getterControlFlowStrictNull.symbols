@@ -1,0 +1,57 @@
+=== tests/cases/compiler/getterControlFlowStrictNull.ts ===
+class A {
+>A : Symbol(A, Decl(getterControlFlowStrictNull.ts, 0, 0))
+
+   a(): string | null {
+>a : Symbol(A.a, Decl(getterControlFlowStrictNull.ts, 0, 9))
+
+        if (Math.random() > 0.5) {
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+
+            return '';
+        }
+
+        // it does error here as expected
+    }
+}
+class B {
+>B : Symbol(B, Decl(getterControlFlowStrictNull.ts, 8, 1))
+
+    get a(): string | null {
+>a : Symbol(B.a, Decl(getterControlFlowStrictNull.ts, 9, 9))
+
+        if (Math.random() > 0.5) {
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+
+            return '';
+        }
+
+        // it should error here because it returns undefined
+    }
+}
+class C {
+>C : Symbol(C, Decl(getterControlFlowStrictNull.ts, 17, 1))
+
+    get a() {
+>a : Symbol(C.a, Decl(getterControlFlowStrictNull.ts, 18, 9), Decl(getterControlFlowStrictNull.ts, 25, 5))
+
+        if (Math.random() > 0.5) {
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+
+            return 0;
+        }
+
+        // it should error here because it returns undefined
+    }
+
+    set a(value: number) {
+>a : Symbol(C.a, Decl(getterControlFlowStrictNull.ts, 18, 9), Decl(getterControlFlowStrictNull.ts, 25, 5))
+>value : Symbol(value, Decl(getterControlFlowStrictNull.ts, 27, 10))
+    }
+}

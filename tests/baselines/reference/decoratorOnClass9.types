@@ -1,0 +1,34 @@
+=== tests/cases/conformance/decorators/class/decoratorOnClass9.ts ===
+declare var dec: any;
+>dec : any
+
+class A {}
+>A : A
+
+// https://github.com/Microsoft/TypeScript/issues/16417
+@dec
+>dec : any
+
+class B extends A {
+>B : B
+>A : A
+
+    static x = 1;
+>x : number
+>1 : 1
+
+    static y = B.x;
+>y : number
+>B.x : number
+>B : typeof B
+>x : number
+
+    m() {
+>m : () => number
+
+        return B.x;
+>B.x : number
+>B : typeof B
+>x : number
+    }
+}

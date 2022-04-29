@@ -1,0 +1,34 @@
+=== tests/cases/conformance/types/specifyingTypes/typeLiterals/unionTypeLiterals.ts ===
+// basic valid forms of union literals
+
+var simpleUnion: string | number;
+>simpleUnion : Symbol(simpleUnion, Decl(unionTypeLiterals.ts, 2, 3))
+
+var unionOfUnion: string | number | boolean;
+>unionOfUnion : Symbol(unionOfUnion, Decl(unionTypeLiterals.ts, 3, 3))
+
+var arrayOfUnions: (string | number)[];
+>arrayOfUnions : Symbol(arrayOfUnions, Decl(unionTypeLiterals.ts, 5, 3), Decl(unionTypeLiterals.ts, 6, 3))
+
+var arrayOfUnions: Array<string | number>;
+>arrayOfUnions : Symbol(arrayOfUnions, Decl(unionTypeLiterals.ts, 5, 3), Decl(unionTypeLiterals.ts, 6, 3))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+var unionOfFunctionType: (() => string) | (() => number);
+>unionOfFunctionType : Symbol(unionOfFunctionType, Decl(unionTypeLiterals.ts, 8, 3), Decl(unionTypeLiterals.ts, 9, 3), Decl(unionTypeLiterals.ts, 10, 3))
+
+var unionOfFunctionType: { (): string } | { (): number };
+>unionOfFunctionType : Symbol(unionOfFunctionType, Decl(unionTypeLiterals.ts, 8, 3), Decl(unionTypeLiterals.ts, 9, 3), Decl(unionTypeLiterals.ts, 10, 3))
+
+var unionOfFunctionType: () => string | number;
+>unionOfFunctionType : Symbol(unionOfFunctionType, Decl(unionTypeLiterals.ts, 8, 3), Decl(unionTypeLiterals.ts, 9, 3), Decl(unionTypeLiterals.ts, 10, 3))
+
+var unionOfConstructorType: (new () => string) | (new () => number);
+>unionOfConstructorType : Symbol(unionOfConstructorType, Decl(unionTypeLiterals.ts, 12, 3), Decl(unionTypeLiterals.ts, 13, 3), Decl(unionTypeLiterals.ts, 14, 3))
+
+var unionOfConstructorType: { new (): string } | { new (): number };
+>unionOfConstructorType : Symbol(unionOfConstructorType, Decl(unionTypeLiterals.ts, 12, 3), Decl(unionTypeLiterals.ts, 13, 3), Decl(unionTypeLiterals.ts, 14, 3))
+
+var unionOfConstructorType: new () => string | number;
+>unionOfConstructorType : Symbol(unionOfConstructorType, Decl(unionTypeLiterals.ts, 12, 3), Decl(unionTypeLiterals.ts, 13, 3), Decl(unionTypeLiterals.ts, 14, 3))
+

@@ -1,0 +1,26 @@
+=== tests/cases/compiler/sourceMapValidationImport.ts ===
+export module m {
+>m : Symbol(m, Decl(sourceMapValidationImport.ts, 0, 0))
+
+    export class c {
+>c : Symbol(c, Decl(sourceMapValidationImport.ts, 0, 17))
+    }
+}
+import a = m.c;
+>a : Symbol(a, Decl(sourceMapValidationImport.ts, 3, 1))
+>m : Symbol(m, Decl(sourceMapValidationImport.ts, 0, 0))
+>c : Symbol(a, Decl(sourceMapValidationImport.ts, 0, 17))
+
+export import b = m.c;
+>b : Symbol(b, Decl(sourceMapValidationImport.ts, 4, 15))
+>m : Symbol(m, Decl(sourceMapValidationImport.ts, 0, 0))
+>c : Symbol(a, Decl(sourceMapValidationImport.ts, 0, 17))
+
+var x = new a();
+>x : Symbol(x, Decl(sourceMapValidationImport.ts, 6, 3))
+>a : Symbol(a, Decl(sourceMapValidationImport.ts, 3, 1))
+
+var y = new b();
+>y : Symbol(y, Decl(sourceMapValidationImport.ts, 7, 3))
+>b : Symbol(b, Decl(sourceMapValidationImport.ts, 4, 15))
+

@@ -1,0 +1,14 @@
+=== tests/cases/compiler/variableDeclarationDeclarationEmitUniqueSymbolPartialStatement.ts ===
+const key = Symbol(), value = 12;
+>key : Symbol(key, Decl(variableDeclarationDeclarationEmitUniqueSymbolPartialStatement.ts, 0, 5))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>value : Symbol(value, Decl(variableDeclarationDeclarationEmitUniqueSymbolPartialStatement.ts, 0, 21))
+
+export class Foo {
+>Foo : Symbol(Foo, Decl(variableDeclarationDeclarationEmitUniqueSymbolPartialStatement.ts, 0, 33))
+
+    [key] = value;
+>[key] : Symbol(Foo[key], Decl(variableDeclarationDeclarationEmitUniqueSymbolPartialStatement.ts, 2, 18))
+>key : Symbol(key, Decl(variableDeclarationDeclarationEmitUniqueSymbolPartialStatement.ts, 0, 5))
+>value : Symbol(value, Decl(variableDeclarationDeclarationEmitUniqueSymbolPartialStatement.ts, 0, 21))
+}

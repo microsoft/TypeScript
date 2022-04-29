@@ -1,0 +1,41 @@
+=== tests/cases/conformance/salsa/a.js ===
+var Outer = function O() {
+>Outer : Symbol(Outer, Decl(a.js, 0, 3), Decl(a.js, 2, 1))
+>O : Symbol(O, Decl(a.js, 0, 11))
+
+    this.y = 2
+>this.y : Symbol(O.y, Decl(a.js, 0, 26))
+>this : Symbol(O, Decl(a.js, 0, 11))
+>y : Symbol(O.y, Decl(a.js, 0, 26))
+}
+Outer.Inner = class I {
+>Outer.Inner : Symbol(Outer.Inner, Decl(a.js, 2, 1))
+>Outer : Symbol(Outer, Decl(a.js, 0, 3), Decl(a.js, 2, 1))
+>Inner : Symbol(Outer.Inner, Decl(a.js, 2, 1))
+>I : Symbol(I, Decl(a.js, 3, 13))
+
+    constructor() {
+        this.x = 1
+>this.x : Symbol(I.x, Decl(a.js, 4, 19))
+>this : Symbol(I, Decl(a.js, 3, 13))
+>x : Symbol(I.x, Decl(a.js, 4, 19))
+    }
+}
+/** @type {Outer} */
+var ja
+>ja : Symbol(ja, Decl(a.js, 9, 3))
+
+ja.y
+>ja.y : Symbol(O.y, Decl(a.js, 0, 26))
+>ja : Symbol(ja, Decl(a.js, 9, 3))
+>y : Symbol(O.y, Decl(a.js, 0, 26))
+
+/** @type {Outer.Inner} */
+var da
+>da : Symbol(da, Decl(a.js, 12, 3))
+
+da.x
+>da.x : Symbol(I.x, Decl(a.js, 4, 19))
+>da : Symbol(da, Decl(a.js, 12, 3))
+>x : Symbol(I.x, Decl(a.js, 4, 19))
+

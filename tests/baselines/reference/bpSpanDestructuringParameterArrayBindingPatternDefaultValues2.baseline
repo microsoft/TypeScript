@@ -1,0 +1,172 @@
+
+1  >declare var console: {
+
+    ~~~~~~~~~~~~~~~~~~~~~~~                       => Pos: (0 to 22)  SpanInfo: undefined
+--------------------------------
+2  >    log(msg: any): void;
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~                     => Pos: (23 to 47)  SpanInfo: undefined
+--------------------------------
+3  >}
+
+    ~~                                            => Pos: (48 to 49)  SpanInfo: undefined
+--------------------------------
+4  >type Robot = [string, string[]];
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~             => Pos: (50 to 82)  SpanInfo: undefined
+--------------------------------
+5  >var robotA: Robot = ["trimmer", ["trimming", "edging"]];
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (83 to 139)  SpanInfo: {"start":83,"length":55}
+    >var robotA: Robot = ["trimmer", ["trimming", "edging"]]
+    >:=> (line 5, col 0) to (line 5, col 55)
+--------------------------------
+6  >function foo1([, skillA = ["noSkill", "noSkill"]]: Robot= ["name", ["skill1", "skill2"]]) {
+
+    ~~~~~~~~~~~~~~                                => Pos: (140 to 153)  SpanInfo: {"start":236,"length":19}
+    >console.log(skillA)
+    >:=> (line 7, col 4) to (line 7, col 23)
+6  >function foo1([, skillA = ["noSkill", "noSkill"]]: Robot= ["name", ["skill1", "skill2"]]) {
+
+                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (154 to 228)  SpanInfo: {"start":157,"length":31}
+    >skillA = ["noSkill", "noSkill"]
+    >:=> (line 6, col 17) to (line 6, col 48)
+6  >function foo1([, skillA = ["noSkill", "noSkill"]]: Robot= ["name", ["skill1", "skill2"]]) {
+
+                                                                                             ~~~=> Pos: (229 to 231)  SpanInfo: {"start":236,"length":19}
+    >console.log(skillA)
+    >:=> (line 7, col 4) to (line 7, col 23)
+--------------------------------
+7  >    console.log(skillA);
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~                     => Pos: (232 to 256)  SpanInfo: {"start":236,"length":19}
+    >console.log(skillA)
+    >:=> (line 7, col 4) to (line 7, col 23)
+--------------------------------
+8  >}
+
+    ~~                                            => Pos: (257 to 258)  SpanInfo: {"start":257,"length":1}
+    >}
+    >:=> (line 8, col 0) to (line 8, col 1)
+--------------------------------
+9  >function foo2([nameMB = "noName"]: Robot = ["name", ["skill1", "skill2"]]) {
+
+    ~~~~~~~~~~~~~~                                => Pos: (259 to 272)  SpanInfo: {"start":340,"length":19}
+    >console.log(nameMB)
+    >:=> (line 10, col 4) to (line 10, col 23)
+9  >function foo2([nameMB = "noName"]: Robot = ["name", ["skill1", "skill2"]]) {
+
+                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (273 to 332)  SpanInfo: {"start":274,"length":17}
+    >nameMB = "noName"
+    >:=> (line 9, col 15) to (line 9, col 32)
+9  >function foo2([nameMB = "noName"]: Robot = ["name", ["skill1", "skill2"]]) {
+
+                                                                              ~~~=> Pos: (333 to 335)  SpanInfo: {"start":340,"length":19}
+    >console.log(nameMB)
+    >:=> (line 10, col 4) to (line 10, col 23)
+--------------------------------
+10 >    console.log(nameMB);
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~                     => Pos: (336 to 360)  SpanInfo: {"start":340,"length":19}
+    >console.log(nameMB)
+    >:=> (line 10, col 4) to (line 10, col 23)
+--------------------------------
+11 >}
+
+    ~~                                            => Pos: (361 to 362)  SpanInfo: {"start":361,"length":1}
+    >}
+    >:=> (line 11, col 0) to (line 11, col 1)
+--------------------------------
+12 >function foo3([nameMA = "noName", [
+
+    ~~~~~~~~~~~~~~                                => Pos: (363 to 376)  SpanInfo: {"start":506,"length":19}
+    >console.log(nameMA)
+    >:=> (line 16, col 4) to (line 16, col 23)
+12 >function foo3([nameMA = "noName", [
+
+                  ~~~~~~~~~~~~~~~~~~~             => Pos: (377 to 395)  SpanInfo: {"start":378,"length":17}
+    >nameMA = "noName"
+    >:=> (line 12, col 15) to (line 12, col 32)
+12 >function foo3([nameMA = "noName", [
+
+                                     ~~~          => Pos: (396 to 398)  SpanInfo: {"start":403,"length":25}
+    >primarySkillA = "primary"
+    >:=> (line 13, col 4) to (line 13, col 29)
+--------------------------------
+13 >    primarySkillA = "primary",
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~               => Pos: (399 to 429)  SpanInfo: {"start":403,"length":25}
+    >primarySkillA = "primary"
+    >:=> (line 13, col 4) to (line 13, col 29)
+--------------------------------
+14 >    secondarySkillA = "secondary"
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~            => Pos: (430 to 463)  SpanInfo: {"start":434,"length":29}
+    >secondarySkillA = "secondary"
+    >:=> (line 14, col 4) to (line 14, col 33)
+--------------------------------
+15 >] = ["noSkill", "noSkill"]]: Robot) {
+
+    ~                                             => Pos: (464 to 464)  SpanInfo: {"start":434,"length":29}
+    >secondarySkillA = "secondary"
+    >:=> (line 14, col 4) to (line 14, col 33)
+15 >] = ["noSkill", "noSkill"]]: Robot) {
+
+     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~           => Pos: (465 to 498)  SpanInfo: {"start":397,"length":93}
+    >[
+    >    primarySkillA = "primary",
+    >    secondarySkillA = "secondary"
+    >] = ["noSkill", "noSkill"]
+    >:=> (line 12, col 34) to (line 15, col 26)
+15 >] = ["noSkill", "noSkill"]]: Robot) {
+
+                                       ~~~        => Pos: (499 to 501)  SpanInfo: {"start":506,"length":19}
+    >console.log(nameMA)
+    >:=> (line 16, col 4) to (line 16, col 23)
+--------------------------------
+16 >    console.log(nameMA);
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~                     => Pos: (502 to 526)  SpanInfo: {"start":506,"length":19}
+    >console.log(nameMA)
+    >:=> (line 16, col 4) to (line 16, col 23)
+--------------------------------
+17 >}
+
+    ~~                                            => Pos: (527 to 528)  SpanInfo: {"start":527,"length":1}
+    >}
+    >:=> (line 17, col 0) to (line 17, col 1)
+--------------------------------
+18 >foo1(robotA);
+
+    ~~~~~~~~~~~~~~                                => Pos: (529 to 542)  SpanInfo: {"start":529,"length":12}
+    >foo1(robotA)
+    >:=> (line 18, col 0) to (line 18, col 12)
+--------------------------------
+19 >foo1(["roomba", ["vacuum", "mopping"]]);
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~     => Pos: (543 to 583)  SpanInfo: {"start":543,"length":39}
+    >foo1(["roomba", ["vacuum", "mopping"]])
+    >:=> (line 19, col 0) to (line 19, col 39)
+--------------------------------
+20 >foo2(robotA);
+
+    ~~~~~~~~~~~~~~                                => Pos: (584 to 597)  SpanInfo: {"start":584,"length":12}
+    >foo2(robotA)
+    >:=> (line 20, col 0) to (line 20, col 12)
+--------------------------------
+21 >foo2(["roomba", ["vacuum", "mopping"]]);
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~     => Pos: (598 to 638)  SpanInfo: {"start":598,"length":39}
+    >foo2(["roomba", ["vacuum", "mopping"]])
+    >:=> (line 21, col 0) to (line 21, col 39)
+--------------------------------
+22 >foo3(robotA);
+
+    ~~~~~~~~~~~~~~                                => Pos: (639 to 652)  SpanInfo: {"start":639,"length":12}
+    >foo3(robotA)
+    >:=> (line 22, col 0) to (line 22, col 12)
+--------------------------------
+23 >foo3(["roomba", ["vacuum", "mopping"]]);
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~      => Pos: (653 to 692)  SpanInfo: {"start":653,"length":39}
+    >foo3(["roomba", ["vacuum", "mopping"]])
+    >:=> (line 23, col 0) to (line 23, col 39)

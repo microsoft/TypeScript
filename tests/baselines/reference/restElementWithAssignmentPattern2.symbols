@@ -1,0 +1,10 @@
+=== tests/cases/conformance/es6/destructuring/restElementWithAssignmentPattern2.ts ===
+var a: string, b: number;
+>a : Symbol(a, Decl(restElementWithAssignmentPattern2.ts, 0, 3))
+>b : Symbol(b, Decl(restElementWithAssignmentPattern2.ts, 0, 14))
+
+[...{ 0: a = "", b }] = ["", 1];
+>0 : Symbol(0, Decl(restElementWithAssignmentPattern2.ts, 1, 5))
+>a : Symbol(a, Decl(restElementWithAssignmentPattern2.ts, 0, 3))
+>b : Symbol(b, Decl(restElementWithAssignmentPattern2.ts, 1, 16))
+

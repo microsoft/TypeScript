@@ -1,0 +1,21 @@
+=== tests/cases/compiler/constDeclarations-useBeforeDefinition.ts ===
+{
+    c1;
+>c1 : 0
+
+    const c1 = 0;
+>c1 : 0
+>0 : 0
+}
+
+var v1;
+>v1 : any
+{
+    v1;
+>v1 : 0
+
+    const v1 = 0;
+>v1 : 0
+>0 : 0
+}
+

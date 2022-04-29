@@ -1,0 +1,42 @@
+=== tests/cases/compiler/jsDocOptionality.js ===
+function MyClass() {
+>MyClass : Symbol(MyClass, Decl(jsDocOptionality.js, 0, 0))
+
+  this.prop = null;
+>this.prop : Symbol(MyClass.prop, Decl(jsDocOptionality.js, 0, 20))
+>this : Symbol(MyClass, Decl(jsDocOptionality.js, 0, 0))
+>prop : Symbol(MyClass.prop, Decl(jsDocOptionality.js, 0, 20))
+}
+/**
+ * @param  {string} required
+ * @param  {string} [notRequired]
+ * @returns {MyClass}
+ */
+MyClass.prototype.optionalParam = function(required, notRequired) {
+>MyClass.prototype : Symbol(MyClass.optionalParam, Decl(jsDocOptionality.js, 2, 1))
+>MyClass : Symbol(MyClass, Decl(jsDocOptionality.js, 0, 0))
+>prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+>optionalParam : Symbol(MyClass.optionalParam, Decl(jsDocOptionality.js, 2, 1))
+>required : Symbol(required, Decl(jsDocOptionality.js, 8, 43))
+>notRequired : Symbol(notRequired, Decl(jsDocOptionality.js, 8, 52))
+
+    return this;
+>this : Symbol(MyClass, Decl(jsDocOptionality.js, 0, 0))
+
+};
+let pInst = new MyClass();
+>pInst : Symbol(pInst, Decl(jsDocOptionality.js, 11, 3))
+>MyClass : Symbol(MyClass, Decl(jsDocOptionality.js, 0, 0))
+
+let c1 = pInst.optionalParam('hello')
+>c1 : Symbol(c1, Decl(jsDocOptionality.js, 12, 3))
+>pInst.optionalParam : Symbol(MyClass.optionalParam, Decl(jsDocOptionality.js, 2, 1))
+>pInst : Symbol(pInst, Decl(jsDocOptionality.js, 11, 3))
+>optionalParam : Symbol(MyClass.optionalParam, Decl(jsDocOptionality.js, 2, 1))
+
+let c2 = pInst.optionalParam('hello', null)
+>c2 : Symbol(c2, Decl(jsDocOptionality.js, 13, 3))
+>pInst.optionalParam : Symbol(MyClass.optionalParam, Decl(jsDocOptionality.js, 2, 1))
+>pInst : Symbol(pInst, Decl(jsDocOptionality.js, 11, 3))
+>optionalParam : Symbol(MyClass.optionalParam, Decl(jsDocOptionality.js, 2, 1))
+

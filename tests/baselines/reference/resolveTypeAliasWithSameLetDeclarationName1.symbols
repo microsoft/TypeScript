@@ -1,0 +1,12 @@
+=== tests/cases/compiler/resolveTypeAliasWithSameLetDeclarationName1.ts ===
+class C { }
+>C : Symbol(C, Decl(resolveTypeAliasWithSameLetDeclarationName1.ts, 0, 0))
+
+type baz = C;
+>baz : Symbol(baz, Decl(resolveTypeAliasWithSameLetDeclarationName1.ts, 0, 11), Decl(resolveTypeAliasWithSameLetDeclarationName1.ts, 2, 3))
+>C : Symbol(C, Decl(resolveTypeAliasWithSameLetDeclarationName1.ts, 0, 0))
+
+let baz: baz;
+>baz : Symbol(baz, Decl(resolveTypeAliasWithSameLetDeclarationName1.ts, 0, 11), Decl(resolveTypeAliasWithSameLetDeclarationName1.ts, 2, 3))
+>baz : Symbol(baz, Decl(resolveTypeAliasWithSameLetDeclarationName1.ts, 0, 11), Decl(resolveTypeAliasWithSameLetDeclarationName1.ts, 2, 3))
+

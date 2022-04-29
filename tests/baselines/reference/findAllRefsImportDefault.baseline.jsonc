@@ -1,0 +1,416 @@
+// === /tests/cases/fourslash/b.ts ===
+// import [|bar|] from "./f";
+// [|bar|](1, 2);
+
+// === /tests/cases/fourslash/f.ts ===
+// export { [|foo|] as [|default|] };
+// function /*FIND ALL REFS*/[|foo|](a: number, b: number) {
+//     return a + b;
+// }
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/f.ts",
+      "kind": "function",
+      "name": "function foo(a: number, b: number): number",
+      "textSpan": {
+        "start": 36,
+        "length": 3
+      },
+      "displayParts": [
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "foo",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "a",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        },
+        {
+          "text": ",",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "b",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 27,
+        "length": 56
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 9,
+          "length": 3
+        },
+        "fileName": "/tests/cases/fourslash/f.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 26
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 36,
+          "length": 3
+        },
+        "fileName": "/tests/cases/fourslash/f.ts",
+        "contextSpan": {
+          "start": 27,
+          "length": 56
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/f.ts",
+      "kind": "alias",
+      "name": "(alias) function foo(a: number, b: number): number\nexport default",
+      "textSpan": {
+        "start": 16,
+        "length": 7
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "alias",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "foo",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "a",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        },
+        {
+          "text": ",",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "b",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "export",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "default",
+          "kind": "aliasName"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 26
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 16,
+          "length": 7
+        },
+        "fileName": "/tests/cases/fourslash/f.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 26
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/b.ts",
+      "kind": "alias",
+      "name": "(alias) function bar(a: number, b: number): number\nimport bar",
+      "textSpan": {
+        "start": 7,
+        "length": 3
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "alias",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "bar",
+          "kind": "aliasName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "a",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        },
+        {
+          "text": ",",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "b",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "import",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "bar",
+          "kind": "aliasName"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 22
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 7,
+          "length": 3
+        },
+        "fileName": "/tests/cases/fourslash/b.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 22
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 23,
+          "length": 3
+        },
+        "fileName": "/tests/cases/fourslash/b.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]

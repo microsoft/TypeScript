@@ -1,0 +1,219 @@
+=== tests/cases/conformance/expressions/typeGuards/typeGuardOfFormThisMember.ts ===
+// There's a 'File' class in the stdlib, wrap with a namespace to avoid collision
+namespace Test {
+>Test : typeof Test
+
+	export class FileSystemObject {
+>FileSystemObject : FileSystemObject
+
+		isFSO: this is FileSystemObject;
+>isFSO : boolean
+
+		get isFile(): this is File {
+>isFile : boolean
+
+			return this instanceof File;
+>this instanceof File : boolean
+>this : this
+>File : typeof File
+		}
+		set isFile(param) {
+>isFile : boolean
+>param : boolean
+
+			// noop
+		}
+		get isDirectory(): this is Directory {
+>isDirectory : boolean
+
+			return this instanceof Directory;
+>this instanceof Directory : boolean
+>this : this
+>Directory : typeof Directory
+		}
+		isNetworked: this is (Networked & this);
+>isNetworked : boolean
+
+		constructor(public path: string) {}
+>path : string
+	}
+
+	export class File extends FileSystemObject {
+>File : File
+>FileSystemObject : FileSystemObject
+
+		constructor(path: string, public content: string) { super(path); }
+>path : string
+>content : string
+>super(path) : void
+>super : typeof FileSystemObject
+>path : string
+	}
+	export class Directory extends FileSystemObject {
+>Directory : Directory
+>FileSystemObject : FileSystemObject
+
+		children: FileSystemObject[];
+>children : FileSystemObject[]
+	}
+	export interface Networked {
+		host: string;
+>host : string
+	}
+
+	let file: FileSystemObject = new File("foo/bar.txt", "foo");
+>file : FileSystemObject
+>new File("foo/bar.txt", "foo") : File
+>File : typeof File
+>"foo/bar.txt" : "foo/bar.txt"
+>"foo" : "foo"
+
+	file.isNetworked = false;
+>file.isNetworked = false : false
+>file.isNetworked : boolean
+>file : FileSystemObject
+>isNetworked : boolean
+>false : false
+
+	file.isFSO = file.isFile;
+>file.isFSO = file.isFile : boolean
+>file.isFSO : boolean
+>file : FileSystemObject
+>isFSO : boolean
+>file.isFile : boolean
+>file : FileSystemObject
+>isFile : boolean
+
+	file.isFile = true;
+>file.isFile = true : true
+>file.isFile : boolean
+>file : FileSystemObject
+>isFile : boolean
+>true : true
+
+	let x = file.isFile;
+>x : boolean
+>file.isFile : true
+>file : FileSystemObject
+>isFile : true
+
+	if (file.isFile) {
+>file.isFile : true
+>file : FileSystemObject
+>isFile : true
+
+		file.content;
+>file.content : any
+>file : FileSystemObject
+>content : any
+
+		if (file.isNetworked) {
+>file.isNetworked : false
+>file : FileSystemObject
+>isNetworked : false
+
+			file.host;
+>file.host : any
+>file : FileSystemObject
+>host : any
+
+			file.content;
+>file.content : any
+>file : FileSystemObject
+>content : any
+		}
+	}
+	else if (file.isDirectory) {
+>file.isDirectory : boolean
+>file : FileSystemObject
+>isDirectory : boolean
+
+		file.children;
+>file.children : any
+>file : FileSystemObject
+>children : any
+	}
+	else if (file.isNetworked) {
+>file.isNetworked : false
+>file : FileSystemObject
+>isNetworked : false
+
+		file.host;
+>file.host : any
+>file : FileSystemObject
+>host : any
+	}
+	
+	interface GenericLeadGuard<T> extends GenericGuard<T> {
+		lead(): void;
+>lead : () => void
+	}
+	
+	interface GenericFollowerGuard<T> extends GenericGuard<T> {
+		follow(): void;
+>follow : () => void
+	}
+	
+	interface GenericGuard<T> {
+		target: T;
+>target : T
+
+		isLeader: this is (GenericLeadGuard<T>);
+>isLeader : boolean
+
+		isFollower: this is GenericFollowerGuard<T>;
+>isFollower : boolean
+	}
+
+	let guard: GenericGuard<File>;
+>guard : GenericGuard<File>
+
+	if (guard.isLeader) {
+>guard.isLeader : boolean
+>guard : GenericGuard<File>
+>isLeader : boolean
+
+		guard.lead();
+>guard.lead() : any
+>guard.lead : any
+>guard : GenericGuard<File>
+>lead : any
+	}
+	else if (guard.isFollower) {
+>guard.isFollower : boolean
+>guard : GenericGuard<File>
+>isFollower : boolean
+
+		guard.follow();
+>guard.follow() : any
+>guard.follow : any
+>guard : GenericGuard<File>
+>follow : any
+	}
+
+	interface SpecificGuard {
+		isMoreSpecific: this is MoreSpecificGuard;
+>isMoreSpecific : boolean
+	}
+
+	interface MoreSpecificGuard extends SpecificGuard {
+		do(): void;
+>do : () => void
+	}
+
+	let general: SpecificGuard;
+>general : SpecificGuard
+
+	if (general.isMoreSpecific) {
+>general.isMoreSpecific : boolean
+>general : SpecificGuard
+>isMoreSpecific : boolean
+
+		general.do();
+>general.do() : any
+>general.do : any
+>general : SpecificGuard
+>do : any
+	}
+}
+

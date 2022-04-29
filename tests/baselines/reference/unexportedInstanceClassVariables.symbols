@@ -1,0 +1,23 @@
+=== tests/cases/compiler/unexportedInstanceClassVariables.ts ===
+module M{
+>M : Symbol(M, Decl(unexportedInstanceClassVariables.ts, 0, 0), Decl(unexportedInstanceClassVariables.ts, 4, 1))
+
+	class A{
+>A : Symbol(A, Decl(unexportedInstanceClassVariables.ts, 0, 9))
+
+		constructor(val:string){}
+>val : Symbol(val, Decl(unexportedInstanceClassVariables.ts, 2, 14))
+	}
+}
+
+module M{
+>M : Symbol(M, Decl(unexportedInstanceClassVariables.ts, 0, 0), Decl(unexportedInstanceClassVariables.ts, 4, 1))
+
+	class A {}  
+>A : Symbol(A, Decl(unexportedInstanceClassVariables.ts, 6, 9))
+ 
+ 	var a = new A();
+>a : Symbol(a, Decl(unexportedInstanceClassVariables.ts, 9, 5))
+>A : Symbol(A, Decl(unexportedInstanceClassVariables.ts, 6, 9))
+}
+

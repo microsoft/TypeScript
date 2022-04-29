@@ -1,0 +1,69 @@
+=== tests/cases/compiler/useBeforeDeclaration_propertyAssignment.ts ===
+export class C {
+>C : Symbol(C, Decl(useBeforeDeclaration_propertyAssignment.ts, 0, 0))
+
+    public a =  { b: this.b, ...this.c, [this.b]: `${this.c}`};
+>a : Symbol(C.a, Decl(useBeforeDeclaration_propertyAssignment.ts, 0, 16))
+>b : Symbol(b, Decl(useBeforeDeclaration_propertyAssignment.ts, 1, 17))
+>this.b : Symbol(C.b, Decl(useBeforeDeclaration_propertyAssignment.ts, 1, 63))
+>this : Symbol(C, Decl(useBeforeDeclaration_propertyAssignment.ts, 0, 0))
+>b : Symbol(C.b, Decl(useBeforeDeclaration_propertyAssignment.ts, 1, 63))
+>this.c : Symbol(C.c, Decl(useBeforeDeclaration_propertyAssignment.ts, 2, 18))
+>this : Symbol(C, Decl(useBeforeDeclaration_propertyAssignment.ts, 0, 0))
+>c : Symbol(C.c, Decl(useBeforeDeclaration_propertyAssignment.ts, 2, 18))
+>[this.b] : Symbol([this.b], Decl(useBeforeDeclaration_propertyAssignment.ts, 1, 39))
+>this.b : Symbol(C.b, Decl(useBeforeDeclaration_propertyAssignment.ts, 1, 63))
+>this : Symbol(C, Decl(useBeforeDeclaration_propertyAssignment.ts, 0, 0))
+>b : Symbol(C.b, Decl(useBeforeDeclaration_propertyAssignment.ts, 1, 63))
+>this.c : Symbol(C.c, Decl(useBeforeDeclaration_propertyAssignment.ts, 2, 18))
+>this : Symbol(C, Decl(useBeforeDeclaration_propertyAssignment.ts, 0, 0))
+>c : Symbol(C.c, Decl(useBeforeDeclaration_propertyAssignment.ts, 2, 18))
+
+    private b = 0;
+>b : Symbol(C.b, Decl(useBeforeDeclaration_propertyAssignment.ts, 1, 63))
+
+    public c = { c: this.b };
+>c : Symbol(C.c, Decl(useBeforeDeclaration_propertyAssignment.ts, 2, 18))
+>c : Symbol(c, Decl(useBeforeDeclaration_propertyAssignment.ts, 3, 16))
+>this.b : Symbol(C.b, Decl(useBeforeDeclaration_propertyAssignment.ts, 1, 63))
+>this : Symbol(C, Decl(useBeforeDeclaration_propertyAssignment.ts, 0, 0))
+>b : Symbol(C.b, Decl(useBeforeDeclaration_propertyAssignment.ts, 1, 63))
+}
+
+class D {
+>D : Symbol(D, Decl(useBeforeDeclaration_propertyAssignment.ts, 4, 1))
+
+    static A = class extends D.B {
+>A : Symbol(D.A, Decl(useBeforeDeclaration_propertyAssignment.ts, 6, 9))
+>D.B : Symbol(D.B, Decl(useBeforeDeclaration_propertyAssignment.ts, 9, 5))
+>D : Symbol(D, Decl(useBeforeDeclaration_propertyAssignment.ts, 4, 1))
+>B : Symbol(D.B, Decl(useBeforeDeclaration_propertyAssignment.ts, 9, 5))
+
+        [D.D]() {} // should be an error
+>[D.D] : Symbol((Anonymous class)[D.D], Decl(useBeforeDeclaration_propertyAssignment.ts, 7, 34))
+>D.D : Symbol(D.D, Decl(useBeforeDeclaration_propertyAssignment.ts, 14, 6))
+>D : Symbol(D, Decl(useBeforeDeclaration_propertyAssignment.ts, 4, 1))
+>D : Symbol(D.D, Decl(useBeforeDeclaration_propertyAssignment.ts, 14, 6))
+    }
+    static B = class {}
+>B : Symbol(D.B, Decl(useBeforeDeclaration_propertyAssignment.ts, 9, 5))
+
+    static C = {
+>C : Symbol(D.C, Decl(useBeforeDeclaration_propertyAssignment.ts, 10, 23))
+
+        [D.D]: 1,
+>[D.D] : Symbol([D.D], Decl(useBeforeDeclaration_propertyAssignment.ts, 11, 16))
+>D.D : Symbol(D.D, Decl(useBeforeDeclaration_propertyAssignment.ts, 14, 6))
+>D : Symbol(D, Decl(useBeforeDeclaration_propertyAssignment.ts, 4, 1))
+>D : Symbol(D.D, Decl(useBeforeDeclaration_propertyAssignment.ts, 14, 6))
+
+        ...{get [D.D]() {return 0;}} // should be an error
+>[D.D] : Symbol([D.D], Decl(useBeforeDeclaration_propertyAssignment.ts, 13, 12))
+>D.D : Symbol(D.D, Decl(useBeforeDeclaration_propertyAssignment.ts, 14, 6))
+>D : Symbol(D, Decl(useBeforeDeclaration_propertyAssignment.ts, 4, 1))
+>D : Symbol(D.D, Decl(useBeforeDeclaration_propertyAssignment.ts, 14, 6))
+
+    };
+    static D = '';
+>D : Symbol(D.D, Decl(useBeforeDeclaration_propertyAssignment.ts, 14, 6))
+}

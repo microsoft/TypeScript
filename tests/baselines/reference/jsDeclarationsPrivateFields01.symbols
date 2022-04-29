@@ -1,0 +1,44 @@
+=== tests/cases/conformance/jsdoc/declarations/file.js ===
+export class C {
+>C : Symbol(C, Decl(file.js, 0, 0))
+
+    #hello = "hello";
+>#hello : Symbol(C.#hello, Decl(file.js, 0, 16))
+
+    #world = 100;
+>#world : Symbol(C.#world, Decl(file.js, 1, 21))
+
+    #calcHello() {
+>#calcHello : Symbol(C.#calcHello, Decl(file.js, 2, 17))
+
+        return this.#hello;
+>this.#hello : Symbol(C.#hello, Decl(file.js, 0, 16))
+>this : Symbol(C, Decl(file.js, 0, 0))
+    }
+
+    get #screamingHello() {
+>#screamingHello : Symbol(C.#screamingHello, Decl(file.js, 6, 5), Decl(file.js, 10, 5))
+
+        return this.#hello.toUpperCase();
+>this.#hello.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+>this.#hello : Symbol(C.#hello, Decl(file.js, 0, 16))
+>this : Symbol(C, Decl(file.js, 0, 0))
+>toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+    }
+    /** @param value {string} */
+    set #screamingHello(value) {
+>#screamingHello : Symbol(C.#screamingHello, Decl(file.js, 6, 5), Decl(file.js, 10, 5))
+>value : Symbol(value, Decl(file.js, 12, 24))
+
+        throw "NO";
+    }
+
+    getWorld() {
+>getWorld : Symbol(C.getWorld, Decl(file.js, 14, 5))
+
+        return this.#world;
+>this.#world : Symbol(C.#world, Decl(file.js, 1, 21))
+>this : Symbol(C, Decl(file.js, 0, 0))
+    }
+}
+

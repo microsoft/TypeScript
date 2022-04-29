@@ -1,0 +1,22 @@
+=== tests/cases/conformance/salsa/typeFromPropertyAssignment38.ts ===
+function F() {}
+>F : typeof F
+
+F["prop"] = 3;
+>F["prop"] = 3 : 3
+>F["prop"] : number
+>F : typeof F
+>"prop" : "prop"
+>3 : 3
+
+const f = function () {};
+>f : { (): void; prop: number; }
+>function () {} : { (): void; prop: number; }
+
+f["prop"] = 3;
+>f["prop"] = 3 : 3
+>f["prop"] : number
+>f : { (): void; prop: number; }
+>"prop" : "prop"
+>3 : 3
+

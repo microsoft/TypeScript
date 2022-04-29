@@ -1,0 +1,50 @@
+=== tests/cases/compiler/classStaticPropertyAccess.ts ===
+class A {
+>A : A
+
+    public static "\""() {}
+>"\"" : () => void
+
+    public static x: number = 1;
+>x : number
+>1 : 1
+
+    public static y: number = 1;
+>y : number
+>1 : 1
+
+    private static _b: number = 2;
+>_b : number
+>2 : 2
+}
+
+const a = new A();
+>a : A
+>new A() : A
+>A : typeof A
+
+a["\""] // Error
+>a["\""] : any
+>a : A
+>"\"" : "\""
+
+a['y']  // Error
+>a['y'] : any
+>a : A
+>'y' : "y"
+
+a.y     // Error
+>a.y : any
+>a : A
+>y : any
+
+A._b    // Error
+>A._b : number
+>A : typeof A
+>_b : number
+
+A.a
+>A.a : any
+>A : typeof A
+>a : any
+

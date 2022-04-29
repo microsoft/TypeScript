@@ -1,0 +1,53 @@
+=== tests/cases/conformance/internalModules/DeclarationMerging/ClassAndModuleThatMergeWithStaticFunctionAndNonExportedFunctionThatShareAName.ts ===
+class Point {
+>Point : Point
+
+    constructor(public x: number, public y: number) { }
+>x : number
+>y : number
+
+    static Origin(): Point { return { x: 0, y: 0 }; }
+>Origin : () => Point
+>{ x: 0, y: 0 } : { x: number; y: number; }
+>x : number
+>0 : 0
+>y : number
+>0 : 0
+}
+
+module Point {
+>Point : typeof Point
+
+    function Origin() { return ""; }// not an error, since not exported
+>Origin : () => string
+>"" : ""
+}
+
+
+module A {
+>A : typeof A
+
+    export class Point {
+>Point : Point
+
+        constructor(public x: number, public y: number) { }
+>x : number
+>y : number
+
+        static Origin(): Point { return { x: 0, y: 0 }; }
+>Origin : () => Point
+>{ x: 0, y: 0 } : { x: number; y: number; }
+>x : number
+>0 : 0
+>y : number
+>0 : 0
+    }
+
+    export module Point {
+>Point : typeof Point
+
+        function Origin() { return ""; }// not an error since not exported
+>Origin : () => string
+>"" : ""
+    }
+}

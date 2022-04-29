@@ -1,0 +1,89 @@
+=== tests/cases/conformance/jsdoc/declarations/index.js ===
+const {taskGroups, taskNameToGroup} = require('./module.js');
+>taskGroups : Symbol(taskGroups, Decl(index.js, 0, 7))
+>taskNameToGroup : Symbol(taskNameToGroup, Decl(index.js, 0, 18))
+>require : Symbol(require)
+>'./module.js' : Symbol("tests/cases/conformance/jsdoc/declarations/module", Decl(module.js, 0, 0))
+
+/** @typedef {import('./module.js').TaskGroup} TaskGroup */
+
+/**
+ * @typedef TaskNode
+ * @prop {TaskNode[]} children
+ * @prop {TaskNode|undefined} parent
+ * @prop {TaskGroup} group
+ */
+
+/** @typedef {{timers: Map<string, TaskNode>}} PriorTaskData */
+class MainThreadTasks {
+>MainThreadTasks : Symbol(MainThreadTasks, Decl(index.js, 0, 61))
+
+    /**
+     * @param {TaskGroup} x
+     * @param {TaskNode} y
+     */
+    constructor(x, y){}
+>x : Symbol(x, Decl(index.js, 17, 16))
+>y : Symbol(y, Decl(index.js, 17, 18))
+}
+
+module.exports = MainThreadTasks;
+>module.exports : Symbol(module.exports, Decl(index.js, 0, 0))
+>module : Symbol(export=, Decl(index.js, 18, 1))
+>exports : Symbol(export=, Decl(index.js, 18, 1))
+>MainThreadTasks : Symbol(MainThreadTasks, Decl(index.js, 0, 61))
+
+=== tests/cases/conformance/jsdoc/declarations/module.js ===
+/** @typedef {'parseHTML'|'styleLayout'} TaskGroupIds */
+
+/**
+ * @typedef TaskGroup
+ * @property {TaskGroupIds} id
+ * @property {string} label
+ * @property {string[]} traceEventNames
+ */
+
+/**
+ * @type {{[P in TaskGroupIds]: {id: P, label: string}}}
+ */
+const taskGroups = {
+>taskGroups : Symbol(taskGroups, Decl(module.js, 12, 5))
+
+    parseHTML: {
+>parseHTML : Symbol(parseHTML, Decl(module.js, 12, 20))
+
+        id: 'parseHTML',
+>id : Symbol(id, Decl(module.js, 13, 16))
+
+        label: 'Parse HTML & CSS'
+>label : Symbol(label, Decl(module.js, 14, 24))
+
+    },
+    styleLayout: {
+>styleLayout : Symbol(styleLayout, Decl(module.js, 16, 6))
+
+        id: 'styleLayout',
+>id : Symbol(id, Decl(module.js, 17, 18))
+
+        label: 'Style & Layout'
+>label : Symbol(label, Decl(module.js, 18, 26))
+
+    },
+}
+
+/** @type {Object<string, TaskGroup>} */
+const taskNameToGroup = {};
+>taskNameToGroup : Symbol(taskNameToGroup, Decl(module.js, 24, 5))
+
+module.exports = {
+>module.exports : Symbol(module.exports, Decl(module.js, 0, 0))
+>module : Symbol(module, Decl(module.js, 24, 27))
+>exports : Symbol(module.exports, Decl(module.js, 0, 0))
+
+    taskGroups,
+>taskGroups : Symbol(taskGroups, Decl(module.js, 26, 18))
+
+    taskNameToGroup,
+>taskNameToGroup : Symbol(taskNameToGroup, Decl(module.js, 27, 15))
+
+};

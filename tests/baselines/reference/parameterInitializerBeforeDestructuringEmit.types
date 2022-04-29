@@ -1,0 +1,54 @@
+=== tests/cases/compiler/parameterInitializerBeforeDestructuringEmit.ts ===
+interface Foo {
+    bar?: any;
+>bar : any
+
+    baz?: any;
+>baz : any
+}
+
+function foobar({ bar = {}, ...opts }: Foo = {}) {
+>foobar : ({ bar, ...opts }?: Foo) => void
+>bar : any
+>{} : {}
+>opts : { baz?: any; }
+>{} : {}
+
+    "use strict";
+>"use strict" : "use strict"
+
+    "Some other prologue";
+>"Some other prologue" : "Some other prologue"
+
+    opts.baz(bar);
+>opts.baz(bar) : any
+>opts.baz : any
+>opts : { baz?: any; }
+>baz : any
+>bar : any
+}
+
+class C {
+>C : C
+
+    constructor({ bar = {}, ...opts }: Foo = {}) {
+>bar : any
+>{} : {}
+>opts : { baz?: any; }
+>{} : {}
+
+        "use strict";
+>"use strict" : "use strict"
+
+        "Some other prologue";
+>"Some other prologue" : "Some other prologue"
+
+        opts.baz(bar);
+>opts.baz(bar) : any
+>opts.baz : any
+>opts : { baz?: any; }
+>baz : any
+>bar : any
+    }
+}
+

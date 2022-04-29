@@ -1,0 +1,138 @@
+tests/cases/conformance/jsx/file.tsx(48,12): error TS2769: No overload matches this call.
+  Overload 1 of 3, '(buttonProps: ButtonProps): Element', gave the following error.
+    Type '{ children: string; to: string; onClick: (e: MouseEvent<any>) => void; }' is not assignable to type 'IntrinsicAttributes & ButtonProps'.
+      Property 'to' does not exist on type 'IntrinsicAttributes & ButtonProps'.
+  Overload 2 of 3, '(linkProps: LinkProps): Element', gave the following error.
+    Type '{ children: string; to: string; onClick: (e: MouseEvent<any>) => void; }' is not assignable to type 'IntrinsicAttributes & LinkProps'.
+      Property 'onClick' does not exist on type 'IntrinsicAttributes & LinkProps'.
+  Overload 3 of 3, '(hyphenProps: HyphenProps): Element', gave the following error.
+    Type '{ children: string; to: string; onClick: (e: MouseEvent<any>) => void; }' is not assignable to type 'IntrinsicAttributes & HyphenProps'.
+      Property 'to' does not exist on type 'IntrinsicAttributes & HyphenProps'.
+tests/cases/conformance/jsx/file.tsx(54,51): error TS2769: No overload matches this call.
+  Overload 1 of 3, '(buttonProps: ButtonProps): Element', gave the following error.
+    Type 'number' is not assignable to type 'string'.
+  Overload 2 of 3, '(linkProps: LinkProps): Element', gave the following error.
+    Type 'number' is not assignable to type 'string'.
+  Overload 3 of 3, '(hyphenProps: HyphenProps): Element', gave the following error.
+    Type 'number' is not assignable to type 'string'.
+tests/cases/conformance/jsx/file.tsx(55,68): error TS2769: No overload matches this call.
+  Overload 1 of 3, '(buttonProps: ButtonProps): Element', gave the following error.
+    Type 'boolean' is not assignable to type 'string'.
+  Overload 2 of 3, '(linkProps: LinkProps): Element', gave the following error.
+    Type 'boolean' is not assignable to type 'string'.
+  Overload 3 of 3, '(hyphenProps: HyphenProps): Element', gave the following error.
+    Type 'boolean' is not assignable to type 'string'.
+tests/cases/conformance/jsx/file.tsx(56,13): error TS2769: No overload matches this call.
+  Overload 1 of 3, '(buttonProps: ButtonProps): Element', gave the following error.
+    Property 'onClick' is missing in type '{ "data-format": true; }' but required in type 'ButtonProps'.
+  Overload 2 of 3, '(linkProps: LinkProps): Element', gave the following error.
+    Property 'to' is missing in type '{ "data-format": true; }' but required in type 'LinkProps'.
+  Overload 3 of 3, '(hyphenProps: HyphenProps): Element', gave the following error.
+    Type '{ "data-format": true; }' is not assignable to type 'HyphenProps'.
+      Types of property '"data-format"' are incompatible.
+        Type 'boolean' is not assignable to type 'string'.
+
+
+==== tests/cases/conformance/jsx/file.tsx (4 errors) ====
+    import React = require('react')
+    
+    export interface ClickableProps {
+        children?: string;
+        className?: string;
+    }
+    
+    export interface ButtonProps extends ClickableProps {
+        onClick: React.MouseEventHandler<any>;
+    }
+    
+    export interface LinkProps extends ClickableProps {
+        to: string;
+    }
+    
+    export interface HyphenProps extends ClickableProps {
+        "data-format": string;
+    }
+    
+    let obj0 = {
+        to: "world"
+    };
+    
+    let obj1 = {
+        children: "hi",
+        to: "boo"
+    }
+    
+    let obj2 = {
+        onClick: ()=>{}
+    }
+    
+    let obj3: any;
+    
+    export function MainButton(buttonProps: ButtonProps): JSX.Element;
+    export function MainButton(linkProps: LinkProps): JSX.Element;
+    export function MainButton(hyphenProps: HyphenProps): JSX.Element;
+    export function MainButton(props: ButtonProps | LinkProps | HyphenProps): JSX.Element {
+        const linkProps = props as LinkProps;
+        if(linkProps.to) {
+            return this._buildMainLink(props);
+        }
+    
+        return this._buildMainButton(props);
+    }
+    
+    // Error
+    const b0 = <MainButton to='/some/path' onClick={(e)=>{}}>GO</MainButton>;  // extra property;
+               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   Overload 1 of 3, '(buttonProps: ButtonProps): Element', gave the following error.
+!!! error TS2769:     Type '{ children: string; to: string; onClick: (e: MouseEvent<any>) => void; }' is not assignable to type 'IntrinsicAttributes & ButtonProps'.
+!!! error TS2769:       Property 'to' does not exist on type 'IntrinsicAttributes & ButtonProps'.
+!!! error TS2769:   Overload 2 of 3, '(linkProps: LinkProps): Element', gave the following error.
+!!! error TS2769:     Type '{ children: string; to: string; onClick: (e: MouseEvent<any>) => void; }' is not assignable to type 'IntrinsicAttributes & LinkProps'.
+!!! error TS2769:       Property 'onClick' does not exist on type 'IntrinsicAttributes & LinkProps'.
+!!! error TS2769:   Overload 3 of 3, '(hyphenProps: HyphenProps): Element', gave the following error.
+!!! error TS2769:     Type '{ children: string; to: string; onClick: (e: MouseEvent<any>) => void; }' is not assignable to type 'IntrinsicAttributes & HyphenProps'.
+!!! error TS2769:       Property 'to' does not exist on type 'IntrinsicAttributes & HyphenProps'.
+!!! related TS2793 tests/cases/conformance/jsx/file.tsx:38:17: The call would have succeeded against this implementation, but implementation signatures of overloads are not externally visible.
+    const b1 = <MainButton onClick={(e: any)=> {}} {...obj0}>Hello world</MainButton>;  // extra property;
+    const b2 = <MainButton {...{to: "10000"}} {...obj2} />;  // extra property
+    const b3 = <MainButton {...{to: "10000"}} {...{onClick: (k) => {}}} />;  // extra property
+    const b4 = <MainButton {...obj3} to />;  // Should error because Incorrect type; but attributes are any so everything is allowed
+    const b5 = <MainButton {...{ onClick(e: any) { } }} {...obj0} />;  // Spread retain method declaration (see GitHub #13365), so now there is an extra attributes
+    const b6 = <MainButton {...{ onClick(e: any){} }} children={10} />;  // incorrect type for optional attribute
+                                                      ~~~~~~~~
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   Overload 1 of 3, '(buttonProps: ButtonProps): Element', gave the following error.
+!!! error TS2769:     Type 'number' is not assignable to type 'string'.
+!!! error TS2769:   Overload 2 of 3, '(linkProps: LinkProps): Element', gave the following error.
+!!! error TS2769:     Type 'number' is not assignable to type 'string'.
+!!! error TS2769:   Overload 3 of 3, '(hyphenProps: HyphenProps): Element', gave the following error.
+!!! error TS2769:     Type 'number' is not assignable to type 'string'.
+!!! related TS6500 tests/cases/conformance/jsx/file.tsx:4:5: The expected type comes from property 'children' which is declared here on type 'IntrinsicAttributes & ButtonProps'
+!!! related TS6500 tests/cases/conformance/jsx/file.tsx:4:5: The expected type comes from property 'children' which is declared here on type 'IntrinsicAttributes & LinkProps'
+!!! related TS6500 tests/cases/conformance/jsx/file.tsx:4:5: The expected type comes from property 'children' which is declared here on type 'IntrinsicAttributes & HyphenProps'
+    const b7 = <MainButton {...{ onClick(e: any){} }} children="hello" className />;  // incorrect type for optional attribute
+                                                                       ~~~~~~~~~
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   Overload 1 of 3, '(buttonProps: ButtonProps): Element', gave the following error.
+!!! error TS2769:     Type 'boolean' is not assignable to type 'string'.
+!!! error TS2769:   Overload 2 of 3, '(linkProps: LinkProps): Element', gave the following error.
+!!! error TS2769:     Type 'boolean' is not assignable to type 'string'.
+!!! error TS2769:   Overload 3 of 3, '(hyphenProps: HyphenProps): Element', gave the following error.
+!!! error TS2769:     Type 'boolean' is not assignable to type 'string'.
+!!! related TS6500 tests/cases/conformance/jsx/file.tsx:5:5: The expected type comes from property 'className' which is declared here on type 'IntrinsicAttributes & ButtonProps'
+!!! related TS6500 tests/cases/conformance/jsx/file.tsx:5:5: The expected type comes from property 'className' which is declared here on type 'IntrinsicAttributes & LinkProps'
+!!! related TS6500 tests/cases/conformance/jsx/file.tsx:5:5: The expected type comes from property 'className' which is declared here on type 'IntrinsicAttributes & HyphenProps'
+    const b8 = <MainButton data-format />;  // incorrect type for specified hyphanated name
+                ~~~~~~~~~~
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   Overload 1 of 3, '(buttonProps: ButtonProps): Element', gave the following error.
+!!! error TS2769:     Property 'onClick' is missing in type '{ "data-format": true; }' but required in type 'ButtonProps'.
+!!! error TS2769:   Overload 2 of 3, '(linkProps: LinkProps): Element', gave the following error.
+!!! error TS2769:     Property 'to' is missing in type '{ "data-format": true; }' but required in type 'LinkProps'.
+!!! error TS2769:   Overload 3 of 3, '(hyphenProps: HyphenProps): Element', gave the following error.
+!!! error TS2769:     Type '{ "data-format": true; }' is not assignable to type 'HyphenProps'.
+!!! error TS2769:       Types of property '"data-format"' are incompatible.
+!!! error TS2769:         Type 'boolean' is not assignable to type 'string'.
+!!! related TS2728 tests/cases/conformance/jsx/file.tsx:9:5: 'onClick' is declared here.
+!!! related TS2728 tests/cases/conformance/jsx/file.tsx:13:5: 'to' is declared here.

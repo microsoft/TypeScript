@@ -1,0 +1,11 @@
+=== tests/cases/compiler/strictModeWordInImportDeclaration.ts ===
+"use strict"
+import * as package from "./1"
+>package : Symbol(package, Decl(strictModeWordInImportDeclaration.ts, 1, 6))
+
+import {foo as private} from "./1"
+>private : Symbol(private, Decl(strictModeWordInImportDeclaration.ts, 2, 8))
+
+import public from "./1"
+>public : Symbol(public, Decl(strictModeWordInImportDeclaration.ts, 3, 6))
+

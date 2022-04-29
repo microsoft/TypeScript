@@ -1,0 +1,53 @@
+=== tests/cases/compiler/blockScopedSameNameFunctionDeclarationES6.ts ===
+function foo(a: number) {
+>foo : (a: number) => void
+>a : number
+
+    if (a === 10) {
+>a === 10 : boolean
+>a : number
+>10 : 10
+
+        function foo() { } // duplicate
+>foo : { (): void; (): void; }
+
+        foo();
+>foo() : void
+>foo : { (): void; (): void; }
+
+        foo(10); // not ok
+>foo(10) : void
+>foo : { (): void; (): void; }
+>10 : 10
+    }
+    else {
+        function foo() { } // duplicate
+>foo : { (): void; (): void; }
+
+        foo();
+>foo() : void
+>foo : { (): void; (): void; }
+
+        foo(10);// not ok
+>foo(10) : void
+>foo : { (): void; (): void; }
+>10 : 10
+    }
+    foo(10); // not ok
+>foo(10) : void
+>foo : { (): void; (): void; }
+>10 : 10
+
+    foo(); 
+>foo() : void
+>foo : { (): void; (): void; }
+}
+foo(10);
+>foo(10) : void
+>foo : (a: number) => void
+>10 : 10
+
+foo(); // not ok - needs number
+>foo() : void
+>foo : (a: number) => void
+

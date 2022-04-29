@@ -1,0 +1,8 @@
+{
+    "scenario": "declarations_IndirectImport should result in error",
+    "projectRoot": "tests/cases/projects/declarations_IndirectImport",
+    "inputFiles": [
+        "useModule.ts"
+    ],
+    "baselineCheck": true
+}

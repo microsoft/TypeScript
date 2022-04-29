@@ -1,0 +1,36 @@
+=== tests/cases/compiler/functionTypeArgumentAssignmentCompat.ts ===
+var f : {
+>f : Symbol(f, Decl(functionTypeArgumentAssignmentCompat.ts, 0, 3))
+
+ <T>(x:T): T;
+>T : Symbol(T, Decl(functionTypeArgumentAssignmentCompat.ts, 1, 2))
+>x : Symbol(x, Decl(functionTypeArgumentAssignmentCompat.ts, 1, 5))
+>T : Symbol(T, Decl(functionTypeArgumentAssignmentCompat.ts, 1, 2))
+>T : Symbol(T, Decl(functionTypeArgumentAssignmentCompat.ts, 1, 2))
+}
+
+var g : {
+>g : Symbol(g, Decl(functionTypeArgumentAssignmentCompat.ts, 4, 3))
+
+ <S>() : S[];
+>S : Symbol(S, Decl(functionTypeArgumentAssignmentCompat.ts, 5, 2))
+>S : Symbol(S, Decl(functionTypeArgumentAssignmentCompat.ts, 5, 2))
+
+} = () => [];
+
+f = g;
+>f : Symbol(f, Decl(functionTypeArgumentAssignmentCompat.ts, 0, 3))
+>g : Symbol(g, Decl(functionTypeArgumentAssignmentCompat.ts, 4, 3))
+
+var s = f("str").toUpperCase();
+>s : Symbol(s, Decl(functionTypeArgumentAssignmentCompat.ts, 9, 3))
+>f("str").toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+>f : Symbol(f, Decl(functionTypeArgumentAssignmentCompat.ts, 0, 3))
+>toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+
+console.log(s);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>s : Symbol(s, Decl(functionTypeArgumentAssignmentCompat.ts, 9, 3))
+

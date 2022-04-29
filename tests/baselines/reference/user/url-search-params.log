@@ -1,0 +1,7 @@
+Exit Code: 2
+Standard output:
+node_modules/url-search-params/build/url-search-params.node.js(174,1): error TS2629: Cannot assign to 'URLSearchParams' because it is a class.
+
+
+
+Standard error:

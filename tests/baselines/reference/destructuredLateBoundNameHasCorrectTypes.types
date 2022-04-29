@@ -1,0 +1,38 @@
+=== tests/cases/compiler/destructuredLateBoundNameHasCorrectTypes.ts ===
+let { [Symbol.iterator]: destructured } = [];
+>Symbol.iterator : unique symbol
+>Symbol : SymbolConstructor
+>iterator : unique symbol
+>destructured : () => IterableIterator<undefined>
+>[] : undefined[]
+
+void destructured;
+>void destructured : undefined
+>destructured : () => IterableIterator<undefined>
+
+const named = "prop";
+>named : "prop"
+>"prop" : "prop"
+
+let { [named]: computed } = { prop: "b" };
+>named : "prop"
+>computed : string
+>{ prop: "b" } : { prop: string; }
+>prop : string
+>"b" : "b"
+
+void computed;
+>void computed : undefined
+>computed : string
+
+const notPresent = "prop2";
+>notPresent : "prop2"
+>"prop2" : "prop2"
+
+let { [notPresent]: computed2 } = { prop: "b" };
+>notPresent : "prop2"
+>computed2 : any
+>{ prop: "b" } : { prop: string; prop2: any; }
+>prop : string
+>"b" : "b"
+

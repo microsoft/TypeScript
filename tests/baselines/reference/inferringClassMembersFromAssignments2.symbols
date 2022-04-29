@@ -1,0 +1,21 @@
+=== tests/cases/conformance/salsa/a.js ===
+OOOrder.prototype.m = function () {
+>OOOrder.prototype : Symbol(OOOrder.m, Decl(a.js, 0, 0))
+>OOOrder : Symbol(OOOrder, Decl(a.js, 2, 1))
+>prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+>m : Symbol(OOOrder.m, Decl(a.js, 0, 0))
+
+    this.p = 1
+>this.p : Symbol(OOOrder.p, Decl(a.js, 0, 35))
+>this : Symbol(OOOrder, Decl(a.js, 2, 1))
+>p : Symbol(OOOrder.p, Decl(a.js, 0, 35))
+}
+function OOOrder() {
+>OOOrder : Symbol(OOOrder, Decl(a.js, 2, 1))
+
+    this.x = 1
+>this.x : Symbol(OOOrder.x, Decl(a.js, 3, 20))
+>this : Symbol(OOOrder, Decl(a.js, 2, 1))
+>x : Symbol(OOOrder.x, Decl(a.js, 3, 20))
+}
+

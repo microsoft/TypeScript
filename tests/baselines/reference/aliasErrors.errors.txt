@@ -1,0 +1,54 @@
+tests/cases/compiler/aliasErrors.ts(11,12): error TS2503: Cannot find namespace 'no'.
+tests/cases/compiler/aliasErrors.ts(12,13): error TS2503: Cannot find namespace 'no'.
+tests/cases/compiler/aliasErrors.ts(13,12): error TS1003: Identifier expected.
+tests/cases/compiler/aliasErrors.ts(14,12): error TS1003: Identifier expected.
+tests/cases/compiler/aliasErrors.ts(15,12): error TS1359: Identifier expected. 'null' is a reserved word that cannot be used here.
+tests/cases/compiler/aliasErrors.ts(16,12): error TS2503: Cannot find namespace 'undefined'.
+tests/cases/compiler/aliasErrors.ts(26,15): error TS2694: Namespace 'foo.bar.baz' has no exported member 'bar'.
+
+
+==== tests/cases/compiler/aliasErrors.ts (7 errors) ====
+    module foo {    
+        export class Provide {
+        }
+        export module bar { export module baz {export class boo {}}}
+    }
+    
+    import provide = foo;
+    import booz = foo.bar.baz;
+    import beez = foo.bar;
+    
+    import m = no;
+               ~~
+!!! error TS2503: Cannot find namespace 'no'.
+    import m2 = no.mod;
+                ~~
+!!! error TS2503: Cannot find namespace 'no'.
+    import n = 5;
+               ~
+!!! error TS1003: Identifier expected.
+    import o = "s";
+               ~~~
+!!! error TS1003: Identifier expected.
+    import q = null;
+               ~~~~
+!!! error TS1359: Identifier expected. 'null' is a reserved word that cannot be used here.
+    import r = undefined;
+               ~~~~~~~~~
+!!! error TS2503: Cannot find namespace 'undefined'.
+    
+    
+    var p = new provide.Provide();
+    
+    function use() {
+        
+      beez.baz.boo;
+      var p1: provide.Provide; 
+      var p2: foo.Provide;
+      var p3:booz.bar;
+                  ~~~
+!!! error TS2694: Namespace 'foo.bar.baz' has no exported member 'bar'.
+      var p22 = new provide.Provide();
+    }
+    
+    

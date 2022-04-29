@@ -1,0 +1,11 @@
+=== tests/cases/compiler/defaultValueInConstructorOverload1.ts ===
+class C {
+>C : Symbol(C, Decl(defaultValueInConstructorOverload1.ts, 0, 0))
+
+    constructor(x = '');
+>x : Symbol(x, Decl(defaultValueInConstructorOverload1.ts, 1, 16))
+
+    constructor(x = '') {
+>x : Symbol(x, Decl(defaultValueInConstructorOverload1.ts, 2, 16))
+    }
+}

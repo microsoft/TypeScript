@@ -1,0 +1,25 @@
+tests/cases/compiler/anyIdenticalToItself.ts(1,10): error TS2394: This overload signature is not compatible with its implementation signature.
+tests/cases/compiler/anyIdenticalToItself.ts(6,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/anyIdenticalToItself.ts(10,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+
+
+==== tests/cases/compiler/anyIdenticalToItself.ts (3 errors) ====
+    function foo(x: any);
+             ~~~
+!!! error TS2394: This overload signature is not compatible with its implementation signature.
+!!! related TS2750 tests/cases/compiler/anyIdenticalToItself.ts:3:10: The implementation signature is declared here.
+    function foo(x: any);
+    function foo(x: any, y: number) { }
+    
+    class C {
+        get X(): any {
+            ~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+            var y: any;
+            return y;
+        }
+        set X(v: any) {
+            ~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+        }
+    }

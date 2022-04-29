@@ -1,0 +1,33 @@
+tests/cases/compiler/defaultBestCommonTypesHaveDecls.ts(2,6): error TS2339: Property 'length' does not exist on type '{}'.
+tests/cases/compiler/defaultBestCommonTypesHaveDecls.ts(5,6): error TS2339: Property 'length' does not exist on type 'Object'.
+tests/cases/compiler/defaultBestCommonTypesHaveDecls.ts(8,24): error TS2345: Argument of type '""' is not assignable to parameter of type '1'.
+tests/cases/compiler/defaultBestCommonTypesHaveDecls.ts(9,27): error TS2339: Property 'length' does not exist on type 'number'.
+tests/cases/compiler/defaultBestCommonTypesHaveDecls.ts(13,28): error TS2339: Property 'length' does not exist on type 'number'.
+
+
+==== tests/cases/compiler/defaultBestCommonTypesHaveDecls.ts (5 errors) ====
+    var obj1: {};
+    obj1.length;
+         ~~~~~~
+!!! error TS2339: Property 'length' does not exist on type '{}'.
+    
+    var obj2: Object;
+    obj2.length;
+         ~~~~~~
+!!! error TS2339: Property 'length' does not exist on type 'Object'.
+    
+    function concat<T>(x: T, y: T): T { return null; }
+    var result = concat(1, ""); // error
+                           ~~
+!!! error TS2345: Argument of type '""' is not assignable to parameter of type '1'.
+    var elementCount = result.length; 
+                              ~~~~~~
+!!! error TS2339: Property 'length' does not exist on type 'number'.
+    
+    function concat2<T, U>(x: T, y: U) { return null; }
+    var result2 = concat2(1, ""); // result2 will be number|string
+    var elementCount2 = result.length; 
+                               ~~~~~~
+!!! error TS2339: Property 'length' does not exist on type 'number'.
+    
+    

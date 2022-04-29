@@ -1,0 +1,12 @@
+=== tests/cases/compiler/1.ts ===
+export var j = "hello"; // error
+>j : string
+>"hello" : "hello"
+
+=== tests/cases/compiler/0.d.ts ===
+export = a;
+>a : number
+
+declare var a: number;
+>a : number
+

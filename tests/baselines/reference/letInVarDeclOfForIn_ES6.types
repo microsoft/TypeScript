@@ -1,0 +1,18 @@
+=== tests/cases/compiler/letInVarDeclOfForIn_ES6.ts ===
+// should not be an error
+for (var let in [1,2,3]) {}
+>let : string
+>[1,2,3] : number[]
+>1 : 1
+>2 : 2
+>3 : 3
+
+{
+	for (var let in [1,2,3]) {}
+>let : string
+>[1,2,3] : number[]
+>1 : 1
+>2 : 2
+>3 : 3
+}
+

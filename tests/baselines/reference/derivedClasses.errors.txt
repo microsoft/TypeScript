@@ -1,0 +1,37 @@
+tests/cases/compiler/derivedClasses.ts(1,19): error TS2449: Class 'Color' used before its declaration.
+
+
+==== tests/cases/compiler/derivedClasses.ts (1 errors) ====
+    class Red extends Color {
+                      ~~~~~
+!!! error TS2449: Class 'Color' used before its declaration.
+!!! related TS2728 tests/cases/compiler/derivedClasses.ts:8:7: 'Color' is declared here.
+        public shade() { 
+        	var getHue = () => { return this.hue(); };
+        	return getHue() + " red"; 
+        }
+    }
+    
+    class Color {
+        public shade() { return "some shade"; }
+        public hue() { return "some hue"; }
+    }
+    
+    class Blue extends Color {
+        
+        public shade() { 
+        	var getHue = () => { return this.hue(); };
+        	return getHue() + " blue"; 
+        }
+    }
+    
+    var r = new Red();
+    var b = new Blue();
+    
+    r.shade();
+    r.hue();
+    b.shade();
+    b.hue();
+    
+    
+    

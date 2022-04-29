@@ -1,0 +1,7 @@
+=== tests/cases/conformance/es6/memberFunctionDeclarations/MemberFunctionDeclaration6_es6.ts ===
+class C {
+>C : Symbol(C, Decl(MemberFunctionDeclaration6_es6.ts, 0, 0))
+
+   *foo
+>foo : Symbol(C.foo, Decl(MemberFunctionDeclaration6_es6.ts, 0, 9))
+}

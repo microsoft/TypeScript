@@ -1,0 +1,34 @@
+tests/cases/compiler/noImplicitAnyModule.ts(4,9): error TS7013: Construct signature, which lacks return-type annotation, implicitly has an 'any' return type.
+tests/cases/compiler/noImplicitAnyModule.ts(9,18): error TS7006: Parameter 'x' implicitly has an 'any' type.
+tests/cases/compiler/noImplicitAnyModule.ts(10,16): error TS7010: 'g', which lacks return-type annotation, implicitly has an 'any' return type.
+tests/cases/compiler/noImplicitAnyModule.ts(17,14): error TS7010: 'f', which lacks return-type annotation, implicitly has an 'any' return type.
+
+
+==== tests/cases/compiler/noImplicitAnyModule.ts (4 errors) ====
+    declare module Module {
+        interface Interface {
+            // Should return error for implicit any on return type.
+            new ();
+            ~~~~~~~
+!!! error TS7013: Construct signature, which lacks return-type annotation, implicitly has an 'any' return type.
+        }
+    
+        class Class {
+            // Should return error for implicit `any` on parameter.
+            public f(x): any;
+                     ~
+!!! error TS7006: Parameter 'x' implicitly has an 'any' type.
+            public g(x: any);
+                   ~
+!!! error TS7010: 'g', which lacks return-type annotation, implicitly has an 'any' return type.
+    
+            // Should not return error at all.
+            private h(x);
+        }
+    
+        // Should return error for implicit any on return type.
+        function f(x: number);
+                 ~
+!!! error TS7010: 'f', which lacks return-type annotation, implicitly has an 'any' return type.
+    }
+    

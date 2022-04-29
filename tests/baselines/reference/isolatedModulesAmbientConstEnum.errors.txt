@@ -1,0 +1,9 @@
+tests/cases/compiler/file1.ts(2,16): error TS2748: Cannot access ambient const enums when the '--isolatedModules' flag is provided.
+
+
+==== tests/cases/compiler/file1.ts (1 errors) ====
+    declare const enum E { X = 1}
+    export var y = E.X;
+                   ~
+!!! error TS2748: Cannot access ambient const enums when the '--isolatedModules' flag is provided.
+    

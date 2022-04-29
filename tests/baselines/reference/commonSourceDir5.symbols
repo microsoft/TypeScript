@@ -1,0 +1,42 @@
+=== A:/bar.ts ===
+import {z} from "./foo";
+>z : Symbol(z, Decl(bar.ts, 0, 8))
+
+export var x = z + z;
+>x : Symbol(x, Decl(bar.ts, 1, 10))
+>z : Symbol(z, Decl(bar.ts, 0, 8))
+>z : Symbol(z, Decl(bar.ts, 0, 8))
+
+=== A:/foo.ts ===
+import {pi} from "B:/baz";
+>pi : Symbol(pi, Decl(foo.ts, 0, 8))
+
+export var i = Math.sqrt(-1);
+>i : Symbol(i, Decl(foo.ts, 1, 10))
+>Math.sqrt : Symbol(Math.sqrt, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>sqrt : Symbol(Math.sqrt, Decl(lib.es5.d.ts, --, --))
+
+export var z = pi * pi;
+>z : Symbol(z, Decl(foo.ts, 2, 10))
+>pi : Symbol(pi, Decl(foo.ts, 0, 8))
+>pi : Symbol(pi, Decl(foo.ts, 0, 8))
+
+=== B:/baz.ts ===
+import {x} from "A:/bar";
+>x : Symbol(x, Decl(baz.ts, 0, 8))
+
+import {i} from "A:/foo";
+>i : Symbol(i, Decl(baz.ts, 1, 8))
+
+export var pi = Math.PI;
+>pi : Symbol(pi, Decl(baz.ts, 2, 10))
+>Math.PI : Symbol(Math.PI, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>PI : Symbol(Math.PI, Decl(lib.es5.d.ts, --, --))
+
+export var y = x * i;
+>y : Symbol(y, Decl(baz.ts, 3, 10))
+>x : Symbol(x, Decl(baz.ts, 0, 8))
+>i : Symbol(i, Decl(baz.ts, 1, 8))
+

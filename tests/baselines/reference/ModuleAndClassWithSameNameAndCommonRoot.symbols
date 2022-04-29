@@ -1,0 +1,64 @@
+=== tests/cases/conformance/internalModules/DeclarationMerging/module.ts ===
+module X.Y {
+>X : Symbol(X, Decl(module.ts, 0, 0), Decl(classPoint.ts, 0, 0))
+>Y : Symbol(Y, Decl(module.ts, 0, 9), Decl(classPoint.ts, 0, 9))
+
+    export module Point {
+>Point : Symbol(Point, Decl(module.ts, 0, 12), Decl(classPoint.ts, 0, 12))
+
+        export var Origin = new Point(0, 0);
+>Origin : Symbol(Origin, Decl(module.ts, 2, 18))
+>Point : Symbol(Point, Decl(module.ts, 0, 12), Decl(classPoint.ts, 0, 12))
+    }
+}
+
+=== tests/cases/conformance/internalModules/DeclarationMerging/classPoint.ts ===
+module X.Y {
+>X : Symbol(X, Decl(module.ts, 0, 0), Decl(classPoint.ts, 0, 0))
+>Y : Symbol(Y, Decl(module.ts, 0, 9), Decl(classPoint.ts, 0, 9))
+
+    // duplicate identifier
+    export class Point {
+>Point : Symbol(Point, Decl(module.ts, 0, 12), Decl(classPoint.ts, 0, 12))
+
+        constructor(x: number, y: number) {
+>x : Symbol(x, Decl(classPoint.ts, 3, 20))
+>y : Symbol(y, Decl(classPoint.ts, 3, 30))
+
+            this.x = x;
+>this.x : Symbol(Point.x, Decl(classPoint.ts, 6, 9))
+>this : Symbol(Point, Decl(module.ts, 0, 12), Decl(classPoint.ts, 0, 12))
+>x : Symbol(Point.x, Decl(classPoint.ts, 6, 9))
+>x : Symbol(x, Decl(classPoint.ts, 3, 20))
+
+            this.y = y;
+>this.y : Symbol(Point.y, Decl(classPoint.ts, 7, 18))
+>this : Symbol(Point, Decl(module.ts, 0, 12), Decl(classPoint.ts, 0, 12))
+>y : Symbol(Point.y, Decl(classPoint.ts, 7, 18))
+>y : Symbol(y, Decl(classPoint.ts, 3, 30))
+        }
+        x: number;
+>x : Symbol(Point.x, Decl(classPoint.ts, 6, 9))
+
+        y: number;
+>y : Symbol(Point.y, Decl(classPoint.ts, 7, 18))
+    }
+}
+
+=== tests/cases/conformance/internalModules/DeclarationMerging/simple.ts ===
+module A {
+>A : Symbol(A, Decl(simple.ts, 0, 0), Decl(simple.ts, 2, 1))
+
+    export var Instance = new A();
+>Instance : Symbol(Instance, Decl(simple.ts, 1, 14))
+>A : Symbol(A, Decl(simple.ts, 0, 0), Decl(simple.ts, 2, 1))
+}
+
+// duplicate identifier
+class A {
+>A : Symbol(A, Decl(simple.ts, 0, 0), Decl(simple.ts, 2, 1))
+
+    id: string;
+>id : Symbol(A.id, Decl(simple.ts, 5, 9))
+}
+

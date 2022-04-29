@@ -1,0 +1,26 @@
+=== tests/cases/compiler/errorForwardReferenceForwadingConstructor.ts ===
+// Error forward referencing derived class with forwarding constructor
+
+function f() {
+>f : () => void
+
+    var d1 = new derived();
+>d1 : derived
+>new derived() : derived
+>derived : typeof derived
+
+    var d2 = new derived(4);
+>d2 : derived
+>new derived(4) : derived
+>derived : typeof derived
+>4 : 4
+}
+
+class base { constructor(public n: number) { } }
+>base : base
+>n : number
+
+class derived extends base { }
+>derived : derived
+>base : base
+

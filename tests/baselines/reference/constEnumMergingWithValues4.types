@@ -1,0 +1,19 @@
+=== tests/cases/compiler/m1.ts ===
+module foo {
+    const enum E { X }
+>E : E
+>X : E.X
+}
+
+module foo {
+>foo : typeof foo
+
+    var x = 1;
+>x : number
+>1 : 1
+}
+
+
+export = foo
+>foo : typeof foo
+

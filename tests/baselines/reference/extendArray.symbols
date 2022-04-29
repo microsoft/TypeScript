@@ -1,0 +1,69 @@
+=== tests/cases/compiler/extendArray.ts ===
+var a = [1,2];
+>a : Symbol(a, Decl(extendArray.ts, 0, 3))
+
+a.forEach(function (v,i,a) {});
+>a.forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(extendArray.ts, 0, 3))
+>forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>v : Symbol(v, Decl(extendArray.ts, 1, 20))
+>i : Symbol(i, Decl(extendArray.ts, 1, 22))
+>a : Symbol(a, Decl(extendArray.ts, 1, 24))
+
+
+declare module _Core {
+>_Core : Symbol(_Core, Decl(extendArray.ts, 1, 31))
+
+  interface Array {
+>Array : Symbol(Array, Decl(extendArray.ts, 4, 22))
+
+    collect(fn:(e:_element) => _element[]) : any[];
+>collect : Symbol(Array.collect, Decl(extendArray.ts, 5, 19))
+>fn : Symbol(fn, Decl(extendArray.ts, 6, 12))
+>e : Symbol(e, Decl(extendArray.ts, 6, 16))
+>_element : Symbol(_element)
+>_element : Symbol(_element)
+  }
+}
+
+
+var arr = (<any>Array).prototype;
+>arr : Symbol(arr, Decl(extendArray.ts, 11, 3))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+arr.collect = function (fn) {
+>arr : Symbol(arr, Decl(extendArray.ts, 11, 3))
+>fn : Symbol(fn, Decl(extendArray.ts, 12, 24))
+
+    var res = [];
+>res : Symbol(res, Decl(extendArray.ts, 13, 7))
+
+    for (var i = 0; i < this.length; ++i) {
+>i : Symbol(i, Decl(extendArray.ts, 14, 12))
+>i : Symbol(i, Decl(extendArray.ts, 14, 12))
+>i : Symbol(i, Decl(extendArray.ts, 14, 12))
+
+        var tmp = fn(this[i]);
+>tmp : Symbol(tmp, Decl(extendArray.ts, 15, 11))
+>fn : Symbol(fn, Decl(extendArray.ts, 12, 24))
+>i : Symbol(i, Decl(extendArray.ts, 14, 12))
+
+        for (var j = 0; j < tmp.length; ++j) {
+>j : Symbol(j, Decl(extendArray.ts, 16, 16))
+>j : Symbol(j, Decl(extendArray.ts, 16, 16))
+>tmp : Symbol(tmp, Decl(extendArray.ts, 15, 11))
+>j : Symbol(j, Decl(extendArray.ts, 16, 16))
+
+            res.push(tmp[j]);
+>res.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>res : Symbol(res, Decl(extendArray.ts, 13, 7))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>tmp : Symbol(tmp, Decl(extendArray.ts, 15, 11))
+>j : Symbol(j, Decl(extendArray.ts, 16, 16))
+        }
+    }
+    return res;
+>res : Symbol(res, Decl(extendArray.ts, 13, 7))
+
+};
+

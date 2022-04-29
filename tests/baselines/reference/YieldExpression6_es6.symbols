@@ -1,0 +1,7 @@
+=== tests/cases/conformance/es6/yieldExpressions/YieldExpression6_es6.ts ===
+function* foo() {
+>foo : Symbol(foo, Decl(YieldExpression6_es6.ts, 0, 0))
+
+  yield*foo
+>foo : Symbol(foo, Decl(YieldExpression6_es6.ts, 0, 0))
+}

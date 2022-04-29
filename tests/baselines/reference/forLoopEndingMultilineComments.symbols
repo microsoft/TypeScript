@@ -1,0 +1,30 @@
+=== tests/cases/compiler/forLoopEndingMultilineComments.ts ===
+declare var a: any;
+>a : Symbol(a, Decl(forLoopEndingMultilineComments.ts, 0, 11))
+
+export function consoleTestResultHandler(testResult: any): boolean {
+>consoleTestResultHandler : Symbol(consoleTestResultHandler, Decl(forLoopEndingMultilineComments.ts, 0, 19))
+>testResult : Symbol(testResult, Decl(forLoopEndingMultilineComments.ts, 2, 41))
+
+    // needed to get colors to show up when passing through Grunt
+    void a;
+>a : Symbol(a, Decl(forLoopEndingMultilineComments.ts, 0, 11))
+
+    for (const q of a) {
+>q : Symbol(q, Decl(forLoopEndingMultilineComments.ts, 6, 14))
+>a : Symbol(a, Decl(forLoopEndingMultilineComments.ts, 0, 11))
+
+        void a;
+>a : Symbol(a, Decl(forLoopEndingMultilineComments.ts, 0, 11))
+
+        /* eslint-disable no-console */
+        if (a) {
+>a : Symbol(a, Decl(forLoopEndingMultilineComments.ts, 0, 11))
+
+        } else {
+        }
+        /* eslint-enable no-console */
+    }
+
+    return true;
+}

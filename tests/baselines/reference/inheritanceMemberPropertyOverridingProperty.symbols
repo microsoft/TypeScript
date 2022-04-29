@@ -1,0 +1,15 @@
+=== tests/cases/compiler/inheritanceMemberPropertyOverridingProperty.ts ===
+class a {
+>a : Symbol(a, Decl(inheritanceMemberPropertyOverridingProperty.ts, 0, 0))
+
+    x: () => string;
+>x : Symbol(a.x, Decl(inheritanceMemberPropertyOverridingProperty.ts, 0, 9))
+}
+
+class b extends a {
+>b : Symbol(b, Decl(inheritanceMemberPropertyOverridingProperty.ts, 2, 1))
+>a : Symbol(a, Decl(inheritanceMemberPropertyOverridingProperty.ts, 0, 0))
+
+    x: () => string;
+>x : Symbol(b.x, Decl(inheritanceMemberPropertyOverridingProperty.ts, 4, 19))
+}

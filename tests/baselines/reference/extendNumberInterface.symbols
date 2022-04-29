@@ -1,0 +1,40 @@
+=== tests/cases/conformance/types/primitives/number/extendNumberInterface.ts ===
+interface Number {
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(extendNumberInterface.ts, 0, 0))
+
+    doStuff(): string;
+>doStuff : Symbol(Number.doStuff, Decl(extendNumberInterface.ts, 0, 18))
+
+    doOtherStuff<T>(x:T): T;
+>doOtherStuff : Symbol(Number.doOtherStuff, Decl(extendNumberInterface.ts, 1, 22))
+>T : Symbol(T, Decl(extendNumberInterface.ts, 2, 17))
+>x : Symbol(x, Decl(extendNumberInterface.ts, 2, 20))
+>T : Symbol(T, Decl(extendNumberInterface.ts, 2, 17))
+>T : Symbol(T, Decl(extendNumberInterface.ts, 2, 17))
+}
+
+var x = 1;
+>x : Symbol(x, Decl(extendNumberInterface.ts, 5, 3))
+
+var a: string = x.doStuff();
+>a : Symbol(a, Decl(extendNumberInterface.ts, 6, 3))
+>x.doStuff : Symbol(Number.doStuff, Decl(extendNumberInterface.ts, 0, 18))
+>x : Symbol(x, Decl(extendNumberInterface.ts, 5, 3))
+>doStuff : Symbol(Number.doStuff, Decl(extendNumberInterface.ts, 0, 18))
+
+var b: string = x.doOtherStuff('hm');
+>b : Symbol(b, Decl(extendNumberInterface.ts, 7, 3))
+>x.doOtherStuff : Symbol(Number.doOtherStuff, Decl(extendNumberInterface.ts, 1, 22))
+>x : Symbol(x, Decl(extendNumberInterface.ts, 5, 3))
+>doOtherStuff : Symbol(Number.doOtherStuff, Decl(extendNumberInterface.ts, 1, 22))
+
+var c: string = x['doStuff']();
+>c : Symbol(c, Decl(extendNumberInterface.ts, 8, 3))
+>x : Symbol(x, Decl(extendNumberInterface.ts, 5, 3))
+>'doStuff' : Symbol(Number.doStuff, Decl(extendNumberInterface.ts, 0, 18))
+
+var d: string = x['doOtherStuff']('hm');
+>d : Symbol(d, Decl(extendNumberInterface.ts, 9, 3))
+>x : Symbol(x, Decl(extendNumberInterface.ts, 5, 3))
+>'doOtherStuff' : Symbol(Number.doOtherStuff, Decl(extendNumberInterface.ts, 1, 22))
+

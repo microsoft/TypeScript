@@ -1,0 +1,8 @@
+=== tests/cases/compiler/noCollisionThisExpressionAndClassInGlobal.ts ===
+class _this {
+>_this : Symbol(_this, Decl(noCollisionThisExpressionAndClassInGlobal.ts, 0, 0))
+}
+var f = () => _this;
+>f : Symbol(f, Decl(noCollisionThisExpressionAndClassInGlobal.ts, 2, 3))
+>_this : Symbol(_this, Decl(noCollisionThisExpressionAndClassInGlobal.ts, 0, 0))
+

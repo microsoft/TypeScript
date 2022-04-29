@@ -1,0 +1,147 @@
+=== tests/cases/compiler/es6ModuleConstEnumDeclaration2.ts ===
+export const enum e1 {
+>e1 : e1
+
+    a,
+>a : e1.a
+
+    b,
+>b : e1.b
+
+    c
+>c : e1.c
+}
+const enum e2 {
+>e2 : e2
+
+    x,
+>x : e2.x
+
+    y,
+>y : e2.y
+
+    z
+>z : e2.z
+}
+var x = e1.a;
+>x : e1
+>e1.a : e1.a
+>e1 : typeof e1
+>a : e1.a
+
+var y = e2.x;
+>y : e2
+>e2.x : e2.x
+>e2 : typeof e2
+>x : e2.x
+
+export module m1 {
+>m1 : typeof m1
+
+    export const enum e3 {
+>e3 : e3
+
+        a,
+>a : e3.a
+
+        b,
+>b : e3.b
+
+        c
+>c : e3.c
+    }
+    const enum e4 {
+>e4 : e4
+
+        x,
+>x : e4.x
+
+        y,
+>y : e4.y
+
+        z
+>z : e4.z
+    }
+    var x1 = e1.a;
+>x1 : e1
+>e1.a : e1.a
+>e1 : typeof e1
+>a : e1.a
+
+    var y1 = e2.x;
+>y1 : e2
+>e2.x : e2.x
+>e2 : typeof e2
+>x : e2.x
+
+    var x2 = e3.a;
+>x2 : e3
+>e3.a : e3.a
+>e3 : typeof e3
+>a : e3.a
+
+    var y2 = e4.x;
+>y2 : e4
+>e4.x : e4.x
+>e4 : typeof e4
+>x : e4.x
+}
+module m2 {
+>m2 : typeof m2
+
+    export const enum e5 {
+>e5 : e5
+
+        a,
+>a : e5.a
+
+        b,
+>b : e5.b
+
+        c
+>c : e5.c
+    }
+    const enum e6 {
+>e6 : e6
+
+        x,
+>x : e6.x
+
+        y,
+>y : e6.y
+
+        z
+>z : e6.z
+    }
+    var x1 = e1.a;
+>x1 : e1
+>e1.a : e1.a
+>e1 : typeof e1
+>a : e1.a
+
+    var y1 = e2.x;
+>y1 : e2
+>e2.x : e2.x
+>e2 : typeof e2
+>x : e2.x
+
+    var x2 = e5.a;
+>x2 : e5
+>e5.a : e5.a
+>e5 : typeof e5
+>a : e5.a
+
+    var y2 = e6.x;
+>y2 : e6
+>e6.x : e6.x
+>e6 : typeof e6
+>x : e6.x
+
+    var x3 = m1.e3.a;
+>x3 : m1.e3
+>m1.e3.a : m1.e3.a
+>m1.e3 : typeof m1.e3
+>m1 : typeof m1
+>e3 : typeof m1.e3
+>a : m1.e3.a
+}

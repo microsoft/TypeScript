@@ -1,0 +1,27 @@
+=== tests/cases/compiler/staticClassMemberError.ts ===
+class C {
+>C : C
+
+	static s;
+>s : any
+
+	public a() {
+>a : () => void
+
+		s = 1;
+>s = 1 : 1
+>s : any
+>1 : 1
+	}
+}
+
+// just want to make sure this one doesn't crash the compiler
+function Foo();
+>Foo : typeof Foo
+
+class Foo {
+>Foo : Foo
+
+ static bar;
+>bar : any
+}

@@ -1,0 +1,56 @@
+=== tests/cases/conformance/es6/modules/m1.ts ===
+export default function Decl() {
+>Decl : () => number
+
+    return 0;
+>0 : 0
+}
+
+export interface Decl {
+    p1: number;
+>p1 : number
+
+    p2: number;
+>p2 : number
+}
+
+export namespace Decl {
+>Decl : typeof Decl
+
+    export var x = 10;
+>x : number
+>10 : 10
+
+    export var y = 20;
+>y : number
+>20 : 20
+
+    interface I {
+    }
+}
+
+=== tests/cases/conformance/es6/modules/m2.ts ===
+import Entity from "m1"
+>Entity : any
+
+Entity();
+>Entity() : any
+>Entity : any
+
+var x: Entity;
+>x : Entity
+
+var y: Entity.I;
+>y : Entity.I
+>Entity : any
+
+Entity.x;
+>Entity.x : any
+>Entity : any
+>x : any
+
+Entity.y;
+>Entity.y : any
+>Entity : any
+>y : any
+

@@ -1,0 +1,36 @@
+=== tests/cases/conformance/expressions/commaOperator/commaOperatorOtherInvalidOperation.ts ===
+//Expect to have compiler errors
+//Comma operator in function arguments and return
+function foo(x: number, y: string) {
+>foo : Symbol(foo, Decl(commaOperatorOtherInvalidOperation.ts, 0, 0))
+>x : Symbol(x, Decl(commaOperatorOtherInvalidOperation.ts, 2, 13))
+>y : Symbol(y, Decl(commaOperatorOtherInvalidOperation.ts, 2, 23))
+
+    return x, y;
+>x : Symbol(x, Decl(commaOperatorOtherInvalidOperation.ts, 2, 13))
+>y : Symbol(y, Decl(commaOperatorOtherInvalidOperation.ts, 2, 23))
+}
+var resultIsString: number = foo(1, "123"); //error here
+>resultIsString : Symbol(resultIsString, Decl(commaOperatorOtherInvalidOperation.ts, 5, 3))
+>foo : Symbol(foo, Decl(commaOperatorOtherInvalidOperation.ts, 0, 0))
+
+//TypeParameters
+function foo1<T1, T2>() {
+>foo1 : Symbol(foo1, Decl(commaOperatorOtherInvalidOperation.ts, 5, 43))
+>T1 : Symbol(T1, Decl(commaOperatorOtherInvalidOperation.ts, 8, 14))
+>T2 : Symbol(T2, Decl(commaOperatorOtherInvalidOperation.ts, 8, 17))
+
+    var x: T1;
+>x : Symbol(x, Decl(commaOperatorOtherInvalidOperation.ts, 9, 7))
+>T1 : Symbol(T1, Decl(commaOperatorOtherInvalidOperation.ts, 8, 14))
+
+    var y: T2;
+>y : Symbol(y, Decl(commaOperatorOtherInvalidOperation.ts, 10, 7))
+>T2 : Symbol(T2, Decl(commaOperatorOtherInvalidOperation.ts, 8, 17))
+
+    var result: T1 = (x, y); //error here
+>result : Symbol(result, Decl(commaOperatorOtherInvalidOperation.ts, 11, 7))
+>T1 : Symbol(T1, Decl(commaOperatorOtherInvalidOperation.ts, 8, 14))
+>x : Symbol(x, Decl(commaOperatorOtherInvalidOperation.ts, 9, 7))
+>y : Symbol(y, Decl(commaOperatorOtherInvalidOperation.ts, 10, 7))
+}

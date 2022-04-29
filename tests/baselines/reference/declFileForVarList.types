@@ -1,0 +1,15 @@
+=== tests/cases/compiler/declFileForVarList.ts ===
+var x, y, z = 1;
+>x : any
+>y : any
+>z : number
+>1 : 1
+
+var x1 = 1, y2 = 2, z2 = 3;
+>x1 : number
+>1 : 1
+>y2 : number
+>2 : 2
+>z2 : number
+>3 : 3
+

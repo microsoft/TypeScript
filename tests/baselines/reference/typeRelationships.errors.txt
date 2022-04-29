@@ -1,0 +1,56 @@
+tests/cases/conformance/types/thisType/typeRelationships.ts(9,9): error TS2322: Type 'C' is not assignable to type 'this'.
+  'C' is assignable to the constraint of type 'this', but 'this' could be instantiated with a different subtype of constraint 'C'.
+tests/cases/conformance/types/thisType/typeRelationships.ts(35,9): error TS2739: Type 'C' is missing the following properties from type 'D': self1, self2, self3, d, bar
+tests/cases/conformance/types/thisType/typeRelationships.ts(36,9): error TS2322: Type 'D' is not assignable to type 'this'.
+  'D' is assignable to the constraint of type 'this', but 'this' could be instantiated with a different subtype of constraint 'D'.
+
+
+==== tests/cases/conformance/types/thisType/typeRelationships.ts (3 errors) ====
+    class C {
+        self = this;
+        c = new C();
+        foo() {
+            return this;
+        }
+        f1() {
+            this.c = this.self;
+            this.self = this.c;  // Error
+            ~~~~~~~~~
+!!! error TS2322: Type 'C' is not assignable to type 'this'.
+!!! error TS2322:   'C' is assignable to the constraint of type 'this', but 'this' could be instantiated with a different subtype of constraint 'C'.
+        }
+        f2() {
+            var a: C[];
+            var a = [this, this.c];  // C[] since this is subtype of C
+            var b: this[];
+            var b = [this, this.self, null, undefined];
+        }
+        f3(b: boolean) {
+            return b ? this.c : this.self;  // Should be C
+        }
+    }
+    
+    class D extends C {
+        self1 = this;
+        self2 = this.self;
+        self3 = this.foo();
+        d = new D();
+        bar() {
+            this.self = this.self1;
+            this.self = this.self2;
+            this.self = this.self3;
+            this.self1 = this.self;
+            this.self2 = this.self;
+            this.self3 = this.self;
+            this.d = this.self;
+            this.d = this.c;  // Error
+            ~~~~~~
+!!! error TS2739: Type 'C' is missing the following properties from type 'D': self1, self2, self3, d, bar
+            this.self = this.d;  // Error
+            ~~~~~~~~~
+!!! error TS2322: Type 'D' is not assignable to type 'this'.
+!!! error TS2322:   'D' is assignable to the constraint of type 'this', but 'this' could be instantiated with a different subtype of constraint 'D'.
+            this.c = this.d;
+        }
+    }
+    

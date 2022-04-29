@@ -1,0 +1,10 @@
+=== tests/cases/conformance/jsx/tsxDynamicTagName1.tsx ===
+var CustomTag = "h1";
+>CustomTag : string
+>"h1" : "h1"
+
+<CustomTag> Hello World </CustomTag>  // No error
+><CustomTag> Hello World </CustomTag> : error
+>CustomTag : string
+>CustomTag : string
+

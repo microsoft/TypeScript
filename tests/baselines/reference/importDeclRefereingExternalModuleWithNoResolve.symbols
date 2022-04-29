@@ -1,0 +1,11 @@
+=== tests/cases/compiler/importDeclRefereingExternalModuleWithNoResolve.ts ===
+import b = require("externalModule");
+>b : Symbol(b, Decl(importDeclRefereingExternalModuleWithNoResolve.ts, 0, 0))
+
+declare module "m1" {
+>"m1" : Symbol("m1", Decl(importDeclRefereingExternalModuleWithNoResolve.ts, 0, 37))
+
+    import im2 = require("externalModule");
+>im2 : Symbol(im2, Decl(importDeclRefereingExternalModuleWithNoResolve.ts, 1, 21))
+}
+

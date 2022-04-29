@@ -1,0 +1,139 @@
+tests/cases/compiler/missingFunctionImplementation.ts(2,3): error TS2391: Function implementation is missing or not immediately following the declaration.
+tests/cases/compiler/missingFunctionImplementation.ts(7,3): error TS2391: Function implementation is missing or not immediately following the declaration.
+tests/cases/compiler/missingFunctionImplementation.ts(15,3): error TS2391: Function implementation is missing or not immediately following the declaration.
+tests/cases/compiler/missingFunctionImplementation.ts(21,10): error TS2391: Function implementation is missing or not immediately following the declaration.
+tests/cases/compiler/missingFunctionImplementation.ts(27,10): error TS2391: Function implementation is missing or not immediately following the declaration.
+tests/cases/compiler/missingFunctionImplementation.ts(32,10): error TS2391: Function implementation is missing or not immediately following the declaration.
+tests/cases/compiler/missingFunctionImplementation.ts(40,10): error TS2391: Function implementation is missing or not immediately following the declaration.
+tests/cases/compiler/missingFunctionImplementation.ts(47,10): error TS2300: Duplicate identifier 'm'.
+tests/cases/compiler/missingFunctionImplementation.ts(48,10): error TS2300: Duplicate identifier 'm'.
+tests/cases/compiler/missingFunctionImplementation.ts(48,10): error TS2391: Function implementation is missing or not immediately following the declaration.
+tests/cases/compiler/missingFunctionImplementation.ts(51,19): error TS2300: Duplicate identifier 'm'.
+tests/cases/compiler/missingFunctionImplementation.ts(56,10): error TS2300: Duplicate identifier 'm'.
+tests/cases/compiler/missingFunctionImplementation.ts(59,19): error TS2300: Duplicate identifier 'm'.
+tests/cases/compiler/missingFunctionImplementation.ts(59,19): error TS2391: Function implementation is missing or not immediately following the declaration.
+tests/cases/compiler/missingFunctionImplementation.ts(64,19): error TS2391: Function implementation is missing or not immediately following the declaration.
+tests/cases/compiler/missingFunctionImplementation.ts(72,19): error TS2393: Duplicate function implementation.
+tests/cases/compiler/missingFunctionImplementation.ts(73,19): error TS2393: Duplicate function implementation.
+tests/cases/compiler/missingFunctionImplementation.ts(74,19): error TS2393: Duplicate function implementation.
+tests/cases/compiler/missingFunctionImplementation.ts(77,19): error TS2393: Duplicate function implementation.
+
+
+==== tests/cases/compiler/missingFunctionImplementation.ts (19 errors) ====
+    export class C1 {
+      m(): void;
+      ~
+!!! error TS2391: Function implementation is missing or not immediately following the declaration.
+    }
+    
+    // merged with a namespace
+    export class C2 {
+      m(): void;
+      ~
+!!! error TS2391: Function implementation is missing or not immediately following the declaration.
+    }
+    export namespace C2 { }
+    
+    
+    // merged with a namespace, multiple overloads
+    class C3 {
+      m(a, b);
+      m(a);
+      ~
+!!! error TS2391: Function implementation is missing or not immediately following the declaration.
+    }
+    namespace C3 { }
+    
+    // static methods, multiple overloads
+    class C4 {
+      static m(a): void;
+             ~
+!!! error TS2391: Function implementation is missing or not immediately following the declaration.
+    }
+    
+    // static methods, multiple overloads
+    class C5 {
+      static m(a): void;
+      static m(): void;
+             ~
+!!! error TS2391: Function implementation is missing or not immediately following the declaration.
+    }
+    
+    // merged with namespace, static methods
+    class C6 {
+      static m(): void;
+             ~
+!!! error TS2391: Function implementation is missing or not immediately following the declaration.
+    }
+    namespace C6 {
+    }
+    
+    // merged with namespace, static methods, multiple overloads
+    class C7 {
+      static m(a): void;
+      static m(): void;
+             ~
+!!! error TS2391: Function implementation is missing or not immediately following the declaration.
+    }
+    namespace C7 {
+    }
+    
+    // merged with namespace, static methods, duplicate declarations
+    class C8 {
+      static m(a): void;
+             ~
+!!! error TS2300: Duplicate identifier 'm'.
+      static m(a, b): void;
+             ~
+!!! error TS2300: Duplicate identifier 'm'.
+             ~
+!!! error TS2391: Function implementation is missing or not immediately following the declaration.
+    }
+    namespace C8 {
+      export function m(a?, b?): void { }
+                      ~
+!!! error TS2300: Duplicate identifier 'm'.
+    }
+    
+    // merged with namespace, static methods, duplicate declarations
+    class C9 {
+      static m(a): void { }
+             ~
+!!! error TS2300: Duplicate identifier 'm'.
+    }
+    namespace C9 {
+      export function m(a): void;
+                      ~
+!!! error TS2300: Duplicate identifier 'm'.
+                      ~
+!!! error TS2391: Function implementation is missing or not immediately following the declaration.
+    }
+    
+    // merged namespaces
+    namespace N10 {
+      export function m(a): void;
+                      ~
+!!! error TS2391: Function implementation is missing or not immediately following the declaration.
+    }
+    namespace N10 {
+      export function m(a): void { }
+    }
+    
+    // merged namespaces, duplicate defintions
+    namespace N12 {
+      export function m(a): void;
+                      ~
+!!! error TS2393: Duplicate function implementation.
+      export function m(): void;
+                      ~
+!!! error TS2393: Duplicate function implementation.
+      export function m(a?): void { }
+                      ~
+!!! error TS2393: Duplicate function implementation.
+    }
+    namespace N12 {
+      export function m(a): void { }
+                      ~
+!!! error TS2393: Duplicate function implementation.
+    }
+    

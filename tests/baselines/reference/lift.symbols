@@ -1,0 +1,50 @@
+=== tests/cases/compiler/lift.ts ===
+class B {
+>B : Symbol(B, Decl(lift.ts, 0, 0))
+
+    constructor(public y:number) {
+>y : Symbol(B.y, Decl(lift.ts, 1, 16))
+    }
+    public ll:number;  // to be shadowed
+>ll : Symbol(B.ll, Decl(lift.ts, 2, 5))
+}
+
+class C extends B {
+>C : Symbol(C, Decl(lift.ts, 4, 1))
+>B : Symbol(B, Decl(lift.ts, 0, 0))
+
+    constructor(y:number,z:number,w:number) {
+>y : Symbol(y, Decl(lift.ts, 7, 16))
+>z : Symbol(z, Decl(lift.ts, 7, 25))
+>w : Symbol(w, Decl(lift.ts, 7, 34))
+
+        super(y)
+>super : Symbol(B, Decl(lift.ts, 0, 0))
+>y : Symbol(y, Decl(lift.ts, 7, 16))
+
+        var x=10+w;
+>x : Symbol(x, Decl(lift.ts, 9, 11))
+>w : Symbol(w, Decl(lift.ts, 7, 34))
+
+        var ll=x*w;
+>ll : Symbol(ll, Decl(lift.ts, 10, 11))
+>x : Symbol(x, Decl(lift.ts, 9, 11))
+>w : Symbol(w, Decl(lift.ts, 7, 34))
+    }
+
+    public liftxyz () { return x+z+this.y; }
+>liftxyz : Symbol(C.liftxyz, Decl(lift.ts, 11, 5))
+>this.y : Symbol(B.y, Decl(lift.ts, 1, 16))
+>this : Symbol(C, Decl(lift.ts, 4, 1))
+>y : Symbol(B.y, Decl(lift.ts, 1, 16))
+
+    public liftxylocllz () { return x+z+this.y+this.ll; }
+>liftxylocllz : Symbol(C.liftxylocllz, Decl(lift.ts, 13, 44))
+>this.y : Symbol(B.y, Decl(lift.ts, 1, 16))
+>this : Symbol(C, Decl(lift.ts, 4, 1))
+>y : Symbol(B.y, Decl(lift.ts, 1, 16))
+>this.ll : Symbol(B.ll, Decl(lift.ts, 2, 5))
+>this : Symbol(C, Decl(lift.ts, 4, 1))
+>ll : Symbol(B.ll, Decl(lift.ts, 2, 5))
+}
+

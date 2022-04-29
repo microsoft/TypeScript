@@ -1,0 +1,18 @@
+=== tests/cases/compiler/simpleArrowFunctionParameterReferencedInObjectLiteral1.ts ===
+[].map(() => [].map(p => ({ X: p })));
+>[].map(() => [].map(p => ({ X: p }))) : { X: any; }[][]
+>[].map : <U>(callbackfn: (value: any, index: number, array: any[]) => U, thisArg?: any) => U[]
+>[] : undefined[]
+>map : <U>(callbackfn: (value: any, index: number, array: any[]) => U, thisArg?: any) => U[]
+>() => [].map(p => ({ X: p })) : () => { X: any; }[]
+>[].map(p => ({ X: p })) : { X: any; }[]
+>[].map : <U>(callbackfn: (value: any, index: number, array: any[]) => U, thisArg?: any) => U[]
+>[] : undefined[]
+>map : <U>(callbackfn: (value: any, index: number, array: any[]) => U, thisArg?: any) => U[]
+>p => ({ X: p }) : (p: any) => { X: any; }
+>p : any
+>({ X: p }) : { X: any; }
+>{ X: p } : { X: any; }
+>X : any
+>p : any
+

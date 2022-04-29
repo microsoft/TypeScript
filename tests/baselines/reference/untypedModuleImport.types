@@ -1,0 +1,31 @@
+=== /c.ts ===
+import foo, { bar } from "foo";
+>foo : any
+>bar : any
+
+import "./a";
+import "./b";
+foo(bar());
+>foo(bar()) : error
+>foo : error
+>bar() : error
+>bar : error
+
+=== /a.ts ===
+import * as foo from "foo";
+>foo : error
+
+foo.bar();
+>foo.bar() : error
+>foo.bar : error
+>foo : any
+>bar : any
+
+=== /b.ts ===
+import foo = require("foo");
+>foo : any
+
+foo();
+>foo() : error
+>foo : error
+

@@ -1,0 +1,15 @@
+=== tests/cases/compiler/commentOnAmbientVariable2_2.ts ===
+/// <reference path='commentOnAmbientVariable2_1.ts'/>
+declare var x: number;
+>x : number
+
+x = 2;
+>x = 2 : 2
+>x : number
+>2 : 2
+
+=== tests/cases/compiler/commentOnAmbientVariable2_1.ts ===
+var y = 1;
+>y : number
+>1 : 1
+

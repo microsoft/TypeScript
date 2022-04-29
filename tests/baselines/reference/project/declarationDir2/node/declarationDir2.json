@@ -1,0 +1,27 @@
+{
+    "scenario": "declarationDir: specify declarationDir with outDir",
+    "projectRoot": "tests/cases/projects/declarationDir",
+    "inputFiles": [
+        "a.ts",
+        "subfolder/b.ts",
+        "subfolder/c.ts"
+    ],
+    "outDir": "out",
+    "declaration": true,
+    "declarationDir": "declarations",
+    "baselineCheck": true,
+    "resolvedInputFiles": [
+        "lib.es5.d.ts",
+        "subfolder/b.ts",
+        "a.ts",
+        "subfolder/c.ts"
+    ],
+    "emittedFiles": [
+        "out/subfolder/b.js",
+        "declarations/subfolder/b.d.ts",
+        "out/a.js",
+        "declarations/a.d.ts",
+        "out/subfolder/c.js",
+        "declarations/subfolder/c.d.ts"
+    ]
+}

@@ -1,0 +1,34 @@
+=== tests/cases/compiler/constructorReturningAPrimitive.ts ===
+// technically not allowed by JavaScript but we don't have a 'not-primitive' constraint
+// functionally only possible when your class is otherwise devoid of members so of little consequence in practice
+
+class A {
+>A : Symbol(A, Decl(constructorReturningAPrimitive.ts, 0, 0))
+
+    constructor() {
+        return 1;
+    }
+}
+
+var a = new A();
+>a : Symbol(a, Decl(constructorReturningAPrimitive.ts, 9, 3))
+>A : Symbol(A, Decl(constructorReturningAPrimitive.ts, 0, 0))
+
+class B<T> {
+>B : Symbol(B, Decl(constructorReturningAPrimitive.ts, 9, 16))
+>T : Symbol(T, Decl(constructorReturningAPrimitive.ts, 11, 8))
+
+    constructor() {
+        var x: T;
+>x : Symbol(x, Decl(constructorReturningAPrimitive.ts, 13, 11))
+>T : Symbol(T, Decl(constructorReturningAPrimitive.ts, 11, 8))
+
+        return x;
+>x : Symbol(x, Decl(constructorReturningAPrimitive.ts, 13, 11))
+    }
+}
+
+var b = new B<number>();
+>b : Symbol(b, Decl(constructorReturningAPrimitive.ts, 18, 3))
+>B : Symbol(B, Decl(constructorReturningAPrimitive.ts, 9, 16))
+

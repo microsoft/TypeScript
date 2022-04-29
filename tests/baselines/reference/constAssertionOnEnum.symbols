@@ -1,0 +1,66 @@
+=== tests/cases/conformance/expressions/typeAssertions/enum.ts ===
+export enum Foo {
+>Foo : Symbol(Foo, Decl(enum.ts, 0, 0))
+
+    A,
+>A : Symbol(Foo.A, Decl(enum.ts, 0, 17))
+
+    B,
+>B : Symbol(Foo.B, Decl(enum.ts, 1, 6))
+}
+
+=== tests/cases/conformance/expressions/typeAssertions/test.ts ===
+import {Foo} from './enum';
+>Foo : Symbol(Foo, Decl(test.ts, 0, 8))
+
+enum Bar {
+>Bar : Symbol(Bar, Decl(test.ts, 0, 27))
+
+    A,
+>A : Symbol(Bar.A, Decl(test.ts, 2, 10))
+
+    B,
+>B : Symbol(Bar.B, Decl(test.ts, 3, 6))
+}
+let foo = Foo.A as const;
+>foo : Symbol(foo, Decl(test.ts, 6, 3))
+>Foo.A : Symbol(Foo.A, Decl(enum.ts, 0, 17))
+>Foo : Symbol(Foo, Decl(test.ts, 0, 8))
+>A : Symbol(Foo.A, Decl(enum.ts, 0, 17))
+>const : Symbol(const)
+
+let bar = Bar.A as const;
+>bar : Symbol(bar, Decl(test.ts, 7, 3))
+>Bar.A : Symbol(Bar.A, Decl(test.ts, 2, 10))
+>Bar : Symbol(Bar, Decl(test.ts, 0, 27))
+>A : Symbol(Bar.A, Decl(test.ts, 2, 10))
+>const : Symbol(const)
+
+=== tests/cases/conformance/expressions/typeAssertions/ns.ts ===
+namespace ns {
+>ns : Symbol(ns, Decl(ns.ts, 0, 0))
+
+    export enum Foo { X }
+>Foo : Symbol(Foo, Decl(ns.ts, 0, 14))
+>X : Symbol(Foo.X, Decl(ns.ts, 1, 21))
+
+    ns.Foo.X as const;
+>ns.Foo.X : Symbol(Foo.X, Decl(ns.ts, 1, 21))
+>ns.Foo : Symbol(Foo, Decl(ns.ts, 0, 14))
+>ns : Symbol(ns, Decl(ns.ts, 0, 0))
+>Foo : Symbol(Foo, Decl(ns.ts, 0, 14))
+>X : Symbol(Foo.X, Decl(ns.ts, 1, 21))
+>const : Symbol(const)
+}
+
+=== tests/cases/conformance/expressions/typeAssertions/more.ts ===
+export enum Foo { X }
+>Foo : Symbol(Foo, Decl(more.ts, 0, 0))
+>X : Symbol(Foo.X, Decl(more.ts, 0, 17))
+
+(Foo).X as const;
+>(Foo).X : Symbol(Foo.X, Decl(more.ts, 0, 17))
+>Foo : Symbol(Foo, Decl(more.ts, 0, 0))
+>X : Symbol(Foo.X, Decl(more.ts, 0, 17))
+>const : Symbol(const)
+

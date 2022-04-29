@@ -1,0 +1,32 @@
+=== tests/cases/conformance/es6/modules/m1.ts ===
+var R: any
+>R : any
+
+export default R = {
+>R = {    "___": 30,    "___hello": 21,    "_hi": 40,} : { ___: number; ___hello: number; _hi: number; }
+>R : any
+>{    "___": 30,    "___hello": 21,    "_hi": 40,} : { ___: number; ___hello: number; _hi: number; }
+
+    "___": 30,
+>"___" : number
+>30 : 30
+
+    "___hello": 21,
+>"___hello" : number
+>21 : 21
+
+    "_hi": 40,
+>"_hi" : number
+>40 : 40
+}
+
+=== tests/cases/conformance/es6/modules/m2.ts ===
+import R from "./m1";
+>R : { ___: number; ___hello: number; _hi: number; }
+
+const { ___, ___hello, _hi } = R;
+>___ : number
+>___hello : number
+>_hi : number
+>R : { ___: number; ___hello: number; _hi: number; }
+

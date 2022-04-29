@@ -1,0 +1,399 @@
+=== tests/cases/conformance/classes/mixinAccessModifiers.ts ===
+type Constructable = new (...args: any[]) => object;
+>Constructable : Symbol(Constructable, Decl(mixinAccessModifiers.ts, 0, 0))
+>args : Symbol(args, Decl(mixinAccessModifiers.ts, 0, 26))
+
+class Private {
+>Private : Symbol(Private, Decl(mixinAccessModifiers.ts, 0, 52))
+
+	constructor (...args: any[]) {}
+>args : Symbol(args, Decl(mixinAccessModifiers.ts, 3, 14))
+
+	private p: string;
+>p : Symbol(Private.p, Decl(mixinAccessModifiers.ts, 3, 32))
+}
+
+class Private2 {
+>Private2 : Symbol(Private2, Decl(mixinAccessModifiers.ts, 5, 1))
+
+	constructor (...args: any[]) {}
+>args : Symbol(args, Decl(mixinAccessModifiers.ts, 8, 14))
+
+	private p: string;
+>p : Symbol(Private2.p, Decl(mixinAccessModifiers.ts, 8, 32))
+}
+
+class Protected {
+>Protected : Symbol(Protected, Decl(mixinAccessModifiers.ts, 10, 1))
+
+	constructor (...args: any[]) {}
+>args : Symbol(args, Decl(mixinAccessModifiers.ts, 13, 14))
+
+	protected p: string;
+>p : Symbol(Protected.p, Decl(mixinAccessModifiers.ts, 13, 32))
+
+	protected static s: string;
+>s : Symbol(Protected.s, Decl(mixinAccessModifiers.ts, 14, 21))
+}
+
+class Protected2 {
+>Protected2 : Symbol(Protected2, Decl(mixinAccessModifiers.ts, 16, 1))
+
+	constructor (...args: any[]) {}
+>args : Symbol(args, Decl(mixinAccessModifiers.ts, 19, 14))
+
+	protected p: string;
+>p : Symbol(Protected2.p, Decl(mixinAccessModifiers.ts, 19, 32))
+
+	protected static s: string;
+>s : Symbol(Protected2.s, Decl(mixinAccessModifiers.ts, 20, 21))
+}
+
+class Public {
+>Public : Symbol(Public, Decl(mixinAccessModifiers.ts, 22, 1))
+
+	constructor (...args: any[]) {}
+>args : Symbol(args, Decl(mixinAccessModifiers.ts, 25, 14))
+
+	public p: string;
+>p : Symbol(Public.p, Decl(mixinAccessModifiers.ts, 25, 32))
+
+	public static s: string;
+>s : Symbol(Public.s, Decl(mixinAccessModifiers.ts, 26, 18))
+}
+
+class Public2 {
+>Public2 : Symbol(Public2, Decl(mixinAccessModifiers.ts, 28, 1))
+
+	constructor (...args: any[]) {}
+>args : Symbol(args, Decl(mixinAccessModifiers.ts, 31, 14))
+
+	public p: string;
+>p : Symbol(Public2.p, Decl(mixinAccessModifiers.ts, 31, 32))
+
+	public static s: string;
+>s : Symbol(Public2.s, Decl(mixinAccessModifiers.ts, 32, 18))
+}
+
+function f1(x: Private & Private2) {
+>f1 : Symbol(f1, Decl(mixinAccessModifiers.ts, 34, 1))
+>x : Symbol(x, Decl(mixinAccessModifiers.ts, 36, 12))
+>Private : Symbol(Private, Decl(mixinAccessModifiers.ts, 0, 52))
+>Private2 : Symbol(Private2, Decl(mixinAccessModifiers.ts, 5, 1))
+
+	x.p;  // Error, private constituent makes property inaccessible
+>x : Symbol(x, Decl(mixinAccessModifiers.ts, 36, 12))
+}
+
+function f2(x: Private & Protected) {
+>f2 : Symbol(f2, Decl(mixinAccessModifiers.ts, 38, 1))
+>x : Symbol(x, Decl(mixinAccessModifiers.ts, 40, 12))
+>Private : Symbol(Private, Decl(mixinAccessModifiers.ts, 0, 52))
+>Protected : Symbol(Protected, Decl(mixinAccessModifiers.ts, 10, 1))
+
+	x.p;  // Error, private constituent makes property inaccessible
+>x : Symbol(x, Decl(mixinAccessModifiers.ts, 40, 12))
+}
+
+function f3(x: Private & Public) {
+>f3 : Symbol(f3, Decl(mixinAccessModifiers.ts, 42, 1))
+>x : Symbol(x, Decl(mixinAccessModifiers.ts, 44, 12))
+>Private : Symbol(Private, Decl(mixinAccessModifiers.ts, 0, 52))
+>Public : Symbol(Public, Decl(mixinAccessModifiers.ts, 22, 1))
+
+	x.p;  // Error, private constituent makes property inaccessible
+>x : Symbol(x, Decl(mixinAccessModifiers.ts, 44, 12))
+}
+
+function f4(x: Protected & Protected2) {
+>f4 : Symbol(f4, Decl(mixinAccessModifiers.ts, 46, 1))
+>x : Symbol(x, Decl(mixinAccessModifiers.ts, 48, 12))
+>Protected : Symbol(Protected, Decl(mixinAccessModifiers.ts, 10, 1))
+>Protected2 : Symbol(Protected2, Decl(mixinAccessModifiers.ts, 16, 1))
+
+	x.p;  // Error, protected when all constituents are protected
+>x.p : Symbol(p, Decl(mixinAccessModifiers.ts, 13, 32), Decl(mixinAccessModifiers.ts, 19, 32))
+>x : Symbol(x, Decl(mixinAccessModifiers.ts, 48, 12))
+>p : Symbol(p, Decl(mixinAccessModifiers.ts, 13, 32), Decl(mixinAccessModifiers.ts, 19, 32))
+}
+
+function f5(x: Protected & Public) {
+>f5 : Symbol(f5, Decl(mixinAccessModifiers.ts, 50, 1))
+>x : Symbol(x, Decl(mixinAccessModifiers.ts, 52, 12))
+>Protected : Symbol(Protected, Decl(mixinAccessModifiers.ts, 10, 1))
+>Public : Symbol(Public, Decl(mixinAccessModifiers.ts, 22, 1))
+
+	x.p;  // Ok, public if any constituent is public
+>x.p : Symbol(p, Decl(mixinAccessModifiers.ts, 13, 32), Decl(mixinAccessModifiers.ts, 25, 32))
+>x : Symbol(x, Decl(mixinAccessModifiers.ts, 52, 12))
+>p : Symbol(p, Decl(mixinAccessModifiers.ts, 13, 32), Decl(mixinAccessModifiers.ts, 25, 32))
+}
+
+function f6(x: Public & Public2) {
+>f6 : Symbol(f6, Decl(mixinAccessModifiers.ts, 54, 1))
+>x : Symbol(x, Decl(mixinAccessModifiers.ts, 56, 12))
+>Public : Symbol(Public, Decl(mixinAccessModifiers.ts, 22, 1))
+>Public2 : Symbol(Public2, Decl(mixinAccessModifiers.ts, 28, 1))
+
+	x.p;  // Ok, public if any constituent is public
+>x.p : Symbol(p, Decl(mixinAccessModifiers.ts, 25, 32), Decl(mixinAccessModifiers.ts, 31, 32))
+>x : Symbol(x, Decl(mixinAccessModifiers.ts, 56, 12))
+>p : Symbol(p, Decl(mixinAccessModifiers.ts, 25, 32), Decl(mixinAccessModifiers.ts, 31, 32))
+}
+
+declare function Mix<T, U>(c1: T, c2: U): T & U;
+>Mix : Symbol(Mix, Decl(mixinAccessModifiers.ts, 58, 1))
+>T : Symbol(T, Decl(mixinAccessModifiers.ts, 60, 21))
+>U : Symbol(U, Decl(mixinAccessModifiers.ts, 60, 23))
+>c1 : Symbol(c1, Decl(mixinAccessModifiers.ts, 60, 27))
+>T : Symbol(T, Decl(mixinAccessModifiers.ts, 60, 21))
+>c2 : Symbol(c2, Decl(mixinAccessModifiers.ts, 60, 33))
+>U : Symbol(U, Decl(mixinAccessModifiers.ts, 60, 23))
+>T : Symbol(T, Decl(mixinAccessModifiers.ts, 60, 21))
+>U : Symbol(U, Decl(mixinAccessModifiers.ts, 60, 23))
+
+// Can't derive from type with inaccessible properties
+
+class C1 extends Mix(Private, Private2) {}
+>C1 : Symbol(C1, Decl(mixinAccessModifiers.ts, 60, 48))
+>Mix : Symbol(Mix, Decl(mixinAccessModifiers.ts, 58, 1))
+>Private : Symbol(Private, Decl(mixinAccessModifiers.ts, 0, 52))
+>Private2 : Symbol(Private2, Decl(mixinAccessModifiers.ts, 5, 1))
+
+class C2 extends Mix(Private, Protected) {}
+>C2 : Symbol(C2, Decl(mixinAccessModifiers.ts, 64, 42))
+>Mix : Symbol(Mix, Decl(mixinAccessModifiers.ts, 58, 1))
+>Private : Symbol(Private, Decl(mixinAccessModifiers.ts, 0, 52))
+>Protected : Symbol(Protected, Decl(mixinAccessModifiers.ts, 10, 1))
+
+class C3 extends Mix(Private, Public) {}
+>C3 : Symbol(C3, Decl(mixinAccessModifiers.ts, 65, 43))
+>Mix : Symbol(Mix, Decl(mixinAccessModifiers.ts, 58, 1))
+>Private : Symbol(Private, Decl(mixinAccessModifiers.ts, 0, 52))
+>Public : Symbol(Public, Decl(mixinAccessModifiers.ts, 22, 1))
+
+class C4 extends Mix(Protected, Protected2) {
+>C4 : Symbol(C4, Decl(mixinAccessModifiers.ts, 66, 40))
+>Mix : Symbol(Mix, Decl(mixinAccessModifiers.ts, 58, 1))
+>Protected : Symbol(Protected, Decl(mixinAccessModifiers.ts, 10, 1))
+>Protected2 : Symbol(Protected2, Decl(mixinAccessModifiers.ts, 16, 1))
+
+	f(c4: C4, c5: C5, c6: C6) {
+>f : Symbol(C4.f, Decl(mixinAccessModifiers.ts, 68, 45))
+>c4 : Symbol(c4, Decl(mixinAccessModifiers.ts, 69, 3))
+>C4 : Symbol(C4, Decl(mixinAccessModifiers.ts, 66, 40))
+>c5 : Symbol(c5, Decl(mixinAccessModifiers.ts, 69, 10))
+>C5 : Symbol(C5, Decl(mixinAccessModifiers.ts, 79, 1))
+>c6 : Symbol(c6, Decl(mixinAccessModifiers.ts, 69, 18))
+>C6 : Symbol(C6, Decl(mixinAccessModifiers.ts, 92, 1))
+
+		c4.p;
+>c4.p : Symbol(p, Decl(mixinAccessModifiers.ts, 13, 32), Decl(mixinAccessModifiers.ts, 19, 32))
+>c4 : Symbol(c4, Decl(mixinAccessModifiers.ts, 69, 3))
+>p : Symbol(p, Decl(mixinAccessModifiers.ts, 13, 32), Decl(mixinAccessModifiers.ts, 19, 32))
+
+		c5.p;
+>c5.p : Symbol(p, Decl(mixinAccessModifiers.ts, 13, 32), Decl(mixinAccessModifiers.ts, 25, 32))
+>c5 : Symbol(c5, Decl(mixinAccessModifiers.ts, 69, 10))
+>p : Symbol(p, Decl(mixinAccessModifiers.ts, 13, 32), Decl(mixinAccessModifiers.ts, 25, 32))
+
+		c6.p;
+>c6.p : Symbol(p, Decl(mixinAccessModifiers.ts, 25, 32), Decl(mixinAccessModifiers.ts, 31, 32))
+>c6 : Symbol(c6, Decl(mixinAccessModifiers.ts, 69, 18))
+>p : Symbol(p, Decl(mixinAccessModifiers.ts, 25, 32), Decl(mixinAccessModifiers.ts, 31, 32))
+	}
+	static g() {
+>g : Symbol(C4.g, Decl(mixinAccessModifiers.ts, 73, 2))
+
+		C4.s;
+>C4.s : Symbol(s, Decl(mixinAccessModifiers.ts, 14, 21), Decl(mixinAccessModifiers.ts, 20, 21))
+>C4 : Symbol(C4, Decl(mixinAccessModifiers.ts, 66, 40))
+>s : Symbol(s, Decl(mixinAccessModifiers.ts, 14, 21), Decl(mixinAccessModifiers.ts, 20, 21))
+
+		C5.s;
+>C5.s : Symbol(s, Decl(mixinAccessModifiers.ts, 14, 21), Decl(mixinAccessModifiers.ts, 26, 18))
+>C5 : Symbol(C5, Decl(mixinAccessModifiers.ts, 79, 1))
+>s : Symbol(s, Decl(mixinAccessModifiers.ts, 14, 21), Decl(mixinAccessModifiers.ts, 26, 18))
+
+		C6.s
+>C6.s : Symbol(s, Decl(mixinAccessModifiers.ts, 26, 18), Decl(mixinAccessModifiers.ts, 32, 18))
+>C6 : Symbol(C6, Decl(mixinAccessModifiers.ts, 92, 1))
+>s : Symbol(s, Decl(mixinAccessModifiers.ts, 26, 18), Decl(mixinAccessModifiers.ts, 32, 18))
+	}
+}
+
+class C5 extends Mix(Protected, Public) {
+>C5 : Symbol(C5, Decl(mixinAccessModifiers.ts, 79, 1))
+>Mix : Symbol(Mix, Decl(mixinAccessModifiers.ts, 58, 1))
+>Protected : Symbol(Protected, Decl(mixinAccessModifiers.ts, 10, 1))
+>Public : Symbol(Public, Decl(mixinAccessModifiers.ts, 22, 1))
+
+	f(c4: C4, c5: C5, c6: C6) {
+>f : Symbol(C5.f, Decl(mixinAccessModifiers.ts, 81, 41))
+>c4 : Symbol(c4, Decl(mixinAccessModifiers.ts, 82, 3))
+>C4 : Symbol(C4, Decl(mixinAccessModifiers.ts, 66, 40))
+>c5 : Symbol(c5, Decl(mixinAccessModifiers.ts, 82, 10))
+>C5 : Symbol(C5, Decl(mixinAccessModifiers.ts, 79, 1))
+>c6 : Symbol(c6, Decl(mixinAccessModifiers.ts, 82, 18))
+>C6 : Symbol(C6, Decl(mixinAccessModifiers.ts, 92, 1))
+
+		c4.p;  // Error, not in class deriving from Protected2
+>c4.p : Symbol(p, Decl(mixinAccessModifiers.ts, 13, 32), Decl(mixinAccessModifiers.ts, 19, 32))
+>c4 : Symbol(c4, Decl(mixinAccessModifiers.ts, 82, 3))
+>p : Symbol(p, Decl(mixinAccessModifiers.ts, 13, 32), Decl(mixinAccessModifiers.ts, 19, 32))
+
+		c5.p;
+>c5.p : Symbol(p, Decl(mixinAccessModifiers.ts, 13, 32), Decl(mixinAccessModifiers.ts, 25, 32))
+>c5 : Symbol(c5, Decl(mixinAccessModifiers.ts, 82, 10))
+>p : Symbol(p, Decl(mixinAccessModifiers.ts, 13, 32), Decl(mixinAccessModifiers.ts, 25, 32))
+
+		c6.p;
+>c6.p : Symbol(p, Decl(mixinAccessModifiers.ts, 25, 32), Decl(mixinAccessModifiers.ts, 31, 32))
+>c6 : Symbol(c6, Decl(mixinAccessModifiers.ts, 82, 18))
+>p : Symbol(p, Decl(mixinAccessModifiers.ts, 25, 32), Decl(mixinAccessModifiers.ts, 31, 32))
+	}
+	static g() {
+>g : Symbol(C5.g, Decl(mixinAccessModifiers.ts, 86, 2))
+
+		C4.s;  // Error, not in class deriving from Protected2
+>C4.s : Symbol(s, Decl(mixinAccessModifiers.ts, 14, 21), Decl(mixinAccessModifiers.ts, 20, 21))
+>C4 : Symbol(C4, Decl(mixinAccessModifiers.ts, 66, 40))
+>s : Symbol(s, Decl(mixinAccessModifiers.ts, 14, 21), Decl(mixinAccessModifiers.ts, 20, 21))
+
+		C5.s;
+>C5.s : Symbol(s, Decl(mixinAccessModifiers.ts, 14, 21), Decl(mixinAccessModifiers.ts, 26, 18))
+>C5 : Symbol(C5, Decl(mixinAccessModifiers.ts, 79, 1))
+>s : Symbol(s, Decl(mixinAccessModifiers.ts, 14, 21), Decl(mixinAccessModifiers.ts, 26, 18))
+
+		C6.s
+>C6.s : Symbol(s, Decl(mixinAccessModifiers.ts, 26, 18), Decl(mixinAccessModifiers.ts, 32, 18))
+>C6 : Symbol(C6, Decl(mixinAccessModifiers.ts, 92, 1))
+>s : Symbol(s, Decl(mixinAccessModifiers.ts, 26, 18), Decl(mixinAccessModifiers.ts, 32, 18))
+	}
+}
+
+class C6 extends Mix(Public, Public2) {
+>C6 : Symbol(C6, Decl(mixinAccessModifiers.ts, 92, 1))
+>Mix : Symbol(Mix, Decl(mixinAccessModifiers.ts, 58, 1))
+>Public : Symbol(Public, Decl(mixinAccessModifiers.ts, 22, 1))
+>Public2 : Symbol(Public2, Decl(mixinAccessModifiers.ts, 28, 1))
+
+	f(c4: C4, c5: C5, c6: C6) {
+>f : Symbol(C6.f, Decl(mixinAccessModifiers.ts, 94, 39))
+>c4 : Symbol(c4, Decl(mixinAccessModifiers.ts, 95, 3))
+>C4 : Symbol(C4, Decl(mixinAccessModifiers.ts, 66, 40))
+>c5 : Symbol(c5, Decl(mixinAccessModifiers.ts, 95, 10))
+>C5 : Symbol(C5, Decl(mixinAccessModifiers.ts, 79, 1))
+>c6 : Symbol(c6, Decl(mixinAccessModifiers.ts, 95, 18))
+>C6 : Symbol(C6, Decl(mixinAccessModifiers.ts, 92, 1))
+
+		c4.p;  // Error, not in class deriving from Protected2
+>c4.p : Symbol(p, Decl(mixinAccessModifiers.ts, 13, 32), Decl(mixinAccessModifiers.ts, 19, 32))
+>c4 : Symbol(c4, Decl(mixinAccessModifiers.ts, 95, 3))
+>p : Symbol(p, Decl(mixinAccessModifiers.ts, 13, 32), Decl(mixinAccessModifiers.ts, 19, 32))
+
+		c5.p;
+>c5.p : Symbol(p, Decl(mixinAccessModifiers.ts, 13, 32), Decl(mixinAccessModifiers.ts, 25, 32))
+>c5 : Symbol(c5, Decl(mixinAccessModifiers.ts, 95, 10))
+>p : Symbol(p, Decl(mixinAccessModifiers.ts, 13, 32), Decl(mixinAccessModifiers.ts, 25, 32))
+
+		c6.p;
+>c6.p : Symbol(p, Decl(mixinAccessModifiers.ts, 25, 32), Decl(mixinAccessModifiers.ts, 31, 32))
+>c6 : Symbol(c6, Decl(mixinAccessModifiers.ts, 95, 18))
+>p : Symbol(p, Decl(mixinAccessModifiers.ts, 25, 32), Decl(mixinAccessModifiers.ts, 31, 32))
+	}
+	static g() {
+>g : Symbol(C6.g, Decl(mixinAccessModifiers.ts, 99, 2))
+
+		C4.s;  // Error, not in class deriving from Protected2
+>C4.s : Symbol(s, Decl(mixinAccessModifiers.ts, 14, 21), Decl(mixinAccessModifiers.ts, 20, 21))
+>C4 : Symbol(C4, Decl(mixinAccessModifiers.ts, 66, 40))
+>s : Symbol(s, Decl(mixinAccessModifiers.ts, 14, 21), Decl(mixinAccessModifiers.ts, 20, 21))
+
+		C5.s;
+>C5.s : Symbol(s, Decl(mixinAccessModifiers.ts, 14, 21), Decl(mixinAccessModifiers.ts, 26, 18))
+>C5 : Symbol(C5, Decl(mixinAccessModifiers.ts, 79, 1))
+>s : Symbol(s, Decl(mixinAccessModifiers.ts, 14, 21), Decl(mixinAccessModifiers.ts, 26, 18))
+
+		C6.s
+>C6.s : Symbol(s, Decl(mixinAccessModifiers.ts, 26, 18), Decl(mixinAccessModifiers.ts, 32, 18))
+>C6 : Symbol(C6, Decl(mixinAccessModifiers.ts, 92, 1))
+>s : Symbol(s, Decl(mixinAccessModifiers.ts, 26, 18), Decl(mixinAccessModifiers.ts, 32, 18))
+	}
+}
+
+class ProtectedGeneric<T> {
+>ProtectedGeneric : Symbol(ProtectedGeneric, Decl(mixinAccessModifiers.ts, 105, 1))
+>T : Symbol(T, Decl(mixinAccessModifiers.ts, 107, 23))
+
+	private privateMethod() {}
+>privateMethod : Symbol(ProtectedGeneric.privateMethod, Decl(mixinAccessModifiers.ts, 107, 27))
+
+	protected protectedMethod() {}
+>protectedMethod : Symbol(ProtectedGeneric.protectedMethod, Decl(mixinAccessModifiers.ts, 108, 27))
+}
+
+class ProtectedGeneric2<T> {
+>ProtectedGeneric2 : Symbol(ProtectedGeneric2, Decl(mixinAccessModifiers.ts, 110, 1))
+>T : Symbol(T, Decl(mixinAccessModifiers.ts, 112, 24))
+
+	private privateMethod() {}
+>privateMethod : Symbol(ProtectedGeneric2.privateMethod, Decl(mixinAccessModifiers.ts, 112, 28))
+
+	protected protectedMethod() {}
+>protectedMethod : Symbol(ProtectedGeneric2.protectedMethod, Decl(mixinAccessModifiers.ts, 113, 27))
+}
+
+function f7(x: ProtectedGeneric<{}> & ProtectedGeneric<{}>) {
+>f7 : Symbol(f7, Decl(mixinAccessModifiers.ts, 115, 1))
+>x : Symbol(x, Decl(mixinAccessModifiers.ts, 117, 12))
+>ProtectedGeneric : Symbol(ProtectedGeneric, Decl(mixinAccessModifiers.ts, 105, 1))
+>ProtectedGeneric : Symbol(ProtectedGeneric, Decl(mixinAccessModifiers.ts, 105, 1))
+
+	x.privateMethod(); // Error, private constituent makes method inaccessible
+>x.privateMethod : Symbol(ProtectedGeneric.privateMethod, Decl(mixinAccessModifiers.ts, 107, 27))
+>x : Symbol(x, Decl(mixinAccessModifiers.ts, 117, 12))
+>privateMethod : Symbol(ProtectedGeneric.privateMethod, Decl(mixinAccessModifiers.ts, 107, 27))
+
+	x.protectedMethod(); // Error, protected when all constituents are protected
+>x.protectedMethod : Symbol(ProtectedGeneric.protectedMethod, Decl(mixinAccessModifiers.ts, 108, 27))
+>x : Symbol(x, Decl(mixinAccessModifiers.ts, 117, 12))
+>protectedMethod : Symbol(ProtectedGeneric.protectedMethod, Decl(mixinAccessModifiers.ts, 108, 27))
+}
+
+function f8(x: ProtectedGeneric<{a: void;}> & ProtectedGeneric2<{a:void;b:void;}>) {
+>f8 : Symbol(f8, Decl(mixinAccessModifiers.ts, 120, 1))
+>x : Symbol(x, Decl(mixinAccessModifiers.ts, 122, 12))
+>ProtectedGeneric : Symbol(ProtectedGeneric, Decl(mixinAccessModifiers.ts, 105, 1))
+>a : Symbol(a, Decl(mixinAccessModifiers.ts, 122, 33))
+>ProtectedGeneric2 : Symbol(ProtectedGeneric2, Decl(mixinAccessModifiers.ts, 110, 1))
+>a : Symbol(a, Decl(mixinAccessModifiers.ts, 122, 65))
+>b : Symbol(b, Decl(mixinAccessModifiers.ts, 122, 72))
+
+	x.privateMethod(); // Error, private constituent makes method inaccessible
+>x : Symbol(x, Decl(mixinAccessModifiers.ts, 122, 12))
+
+	x.protectedMethod(); // Error, protected when all constituents are protected
+>x : Symbol(x, Decl(mixinAccessModifiers.ts, 122, 12))
+}
+
+function f9(x: ProtectedGeneric<{a: void;}> & ProtectedGeneric<{a:void;b:void;}>) {
+>f9 : Symbol(f9, Decl(mixinAccessModifiers.ts, 125, 1))
+>x : Symbol(x, Decl(mixinAccessModifiers.ts, 127, 12))
+>ProtectedGeneric : Symbol(ProtectedGeneric, Decl(mixinAccessModifiers.ts, 105, 1))
+>a : Symbol(a, Decl(mixinAccessModifiers.ts, 127, 33))
+>ProtectedGeneric : Symbol(ProtectedGeneric, Decl(mixinAccessModifiers.ts, 105, 1))
+>a : Symbol(a, Decl(mixinAccessModifiers.ts, 127, 64))
+>b : Symbol(b, Decl(mixinAccessModifiers.ts, 127, 71))
+
+	x.privateMethod(); // Error, private constituent makes method inaccessible
+>x.privateMethod : Symbol(ProtectedGeneric.privateMethod, Decl(mixinAccessModifiers.ts, 107, 27), Decl(mixinAccessModifiers.ts, 107, 27))
+>x : Symbol(x, Decl(mixinAccessModifiers.ts, 127, 12))
+>privateMethod : Symbol(ProtectedGeneric.privateMethod, Decl(mixinAccessModifiers.ts, 107, 27), Decl(mixinAccessModifiers.ts, 107, 27))
+
+	x.protectedMethod(); // Error, protected when all constituents are protected
+>x.protectedMethod : Symbol(ProtectedGeneric.protectedMethod, Decl(mixinAccessModifiers.ts, 108, 27), Decl(mixinAccessModifiers.ts, 108, 27))
+>x : Symbol(x, Decl(mixinAccessModifiers.ts, 127, 12))
+>protectedMethod : Symbol(ProtectedGeneric.protectedMethod, Decl(mixinAccessModifiers.ts, 108, 27), Decl(mixinAccessModifiers.ts, 108, 27))
+}
+

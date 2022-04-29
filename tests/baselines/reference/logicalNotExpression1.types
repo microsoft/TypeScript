@@ -1,0 +1,5 @@
+=== tests/cases/compiler/logicalNotExpression1.ts ===
+!foo;
+>!foo : boolean
+>foo : any
+

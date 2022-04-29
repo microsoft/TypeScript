@@ -1,0 +1,11 @@
+=== tests/cases/conformance/classes/propertyMemberDeclarations/propertyNamedPrototype.ts ===
+class C {
+>C : Symbol(C, Decl(propertyNamedPrototype.ts, 0, 0))
+
+    prototype: number; // ok
+>prototype : Symbol(C.prototype, Decl(propertyNamedPrototype.ts, 0, 9))
+
+    static prototype: C; // error
+>prototype : Symbol(C.prototype, Decl(propertyNamedPrototype.ts, 1, 22))
+>C : Symbol(C, Decl(propertyNamedPrototype.ts, 0, 0))
+}

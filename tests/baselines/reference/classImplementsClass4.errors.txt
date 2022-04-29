@@ -1,0 +1,29 @@
+tests/cases/compiler/classImplementsClass4.ts(5,7): error TS2720: Class 'C' incorrectly implements class 'A'. Did you mean to extend 'A' and inherit its members as a subclass?
+  Property 'x' is missing in type 'C' but required in type 'A'.
+tests/cases/compiler/classImplementsClass4.ts(16,1): error TS2741: Property 'x' is missing in type 'C' but required in type 'A'.
+
+
+==== tests/cases/compiler/classImplementsClass4.ts (2 errors) ====
+    class A {
+        private x = 1;
+        foo(): number { return 1; }
+    }
+    class C implements A {
+          ~
+!!! error TS2720: Class 'C' incorrectly implements class 'A'. Did you mean to extend 'A' and inherit its members as a subclass?
+!!! error TS2720:   Property 'x' is missing in type 'C' but required in type 'A'.
+!!! related TS2728 tests/cases/compiler/classImplementsClass4.ts:2:13: 'x' is declared here.
+        foo() {
+            return 1;
+        }
+    }
+    
+    class C2 extends A {}
+    
+    var c: C;
+    var c2: C2;
+    c = c2;
+    c2 = c;
+    ~~
+!!! error TS2741: Property 'x' is missing in type 'C' but required in type 'A'.
+!!! related TS2728 tests/cases/compiler/classImplementsClass4.ts:2:13: 'x' is declared here.

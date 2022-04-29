@@ -1,0 +1,125 @@
+=== tests/cases/compiler/recursiveTypeRelations.ts ===
+// Repro from #14896
+
+type Attributes<Keys extends keyof any> = {
+>Attributes : Symbol(Attributes, Decl(recursiveTypeRelations.ts, 0, 0))
+>Keys : Symbol(Keys, Decl(recursiveTypeRelations.ts, 2, 16))
+
+    [Key in Keys]: string;
+>Key : Symbol(Key, Decl(recursiveTypeRelations.ts, 3, 5))
+>Keys : Symbol(Keys, Decl(recursiveTypeRelations.ts, 2, 16))
+}
+
+class Query<A extends Attributes<keyof A>> {
+>Query : Symbol(Query, Decl(recursiveTypeRelations.ts, 4, 1))
+>A : Symbol(A, Decl(recursiveTypeRelations.ts, 6, 12))
+>Attributes : Symbol(Attributes, Decl(recursiveTypeRelations.ts, 0, 0))
+>A : Symbol(A, Decl(recursiveTypeRelations.ts, 6, 12))
+
+    multiply<B extends Attributes<keyof B>>(x: B): Query<A & B>;
+>multiply : Symbol(Query.multiply, Decl(recursiveTypeRelations.ts, 6, 44))
+>B : Symbol(B, Decl(recursiveTypeRelations.ts, 7, 13))
+>Attributes : Symbol(Attributes, Decl(recursiveTypeRelations.ts, 0, 0))
+>B : Symbol(B, Decl(recursiveTypeRelations.ts, 7, 13))
+>x : Symbol(x, Decl(recursiveTypeRelations.ts, 7, 44))
+>B : Symbol(B, Decl(recursiveTypeRelations.ts, 7, 13))
+>Query : Symbol(Query, Decl(recursiveTypeRelations.ts, 4, 1))
+>A : Symbol(A, Decl(recursiveTypeRelations.ts, 6, 12))
+>B : Symbol(B, Decl(recursiveTypeRelations.ts, 7, 13))
+}
+
+// Repro from #14940
+
+type ClassName<S> = keyof S;
+>ClassName : Symbol(ClassName, Decl(recursiveTypeRelations.ts, 8, 1))
+>S : Symbol(S, Decl(recursiveTypeRelations.ts, 12, 15))
+>S : Symbol(S, Decl(recursiveTypeRelations.ts, 12, 15))
+
+type ClassNameMap<S> = { [K in keyof S]?: boolean }
+>ClassNameMap : Symbol(ClassNameMap, Decl(recursiveTypeRelations.ts, 12, 28))
+>S : Symbol(S, Decl(recursiveTypeRelations.ts, 13, 18))
+>K : Symbol(K, Decl(recursiveTypeRelations.ts, 13, 26))
+>S : Symbol(S, Decl(recursiveTypeRelations.ts, 13, 18))
+
+type ClassNameObjectMap<S> = object & ClassNameMap<S>;
+>ClassNameObjectMap : Symbol(ClassNameObjectMap, Decl(recursiveTypeRelations.ts, 13, 51))
+>S : Symbol(S, Decl(recursiveTypeRelations.ts, 14, 24))
+>ClassNameMap : Symbol(ClassNameMap, Decl(recursiveTypeRelations.ts, 12, 28))
+>S : Symbol(S, Decl(recursiveTypeRelations.ts, 14, 24))
+
+type ClassNameArg<S> = ClassName<S> | ClassNameObjectMap<S>;
+>ClassNameArg : Symbol(ClassNameArg, Decl(recursiveTypeRelations.ts, 14, 54))
+>S : Symbol(S, Decl(recursiveTypeRelations.ts, 15, 18))
+>ClassName : Symbol(ClassName, Decl(recursiveTypeRelations.ts, 8, 1))
+>S : Symbol(S, Decl(recursiveTypeRelations.ts, 15, 18))
+>ClassNameObjectMap : Symbol(ClassNameObjectMap, Decl(recursiveTypeRelations.ts, 13, 51))
+>S : Symbol(S, Decl(recursiveTypeRelations.ts, 15, 18))
+
+export function css<S extends { [K in keyof S]: string }>(styles: S, ...classNames: ClassNameArg<S>[]): string {
+>css : Symbol(css, Decl(recursiveTypeRelations.ts, 15, 60))
+>S : Symbol(S, Decl(recursiveTypeRelations.ts, 17, 20))
+>K : Symbol(K, Decl(recursiveTypeRelations.ts, 17, 33))
+>S : Symbol(S, Decl(recursiveTypeRelations.ts, 17, 20))
+>styles : Symbol(styles, Decl(recursiveTypeRelations.ts, 17, 58))
+>S : Symbol(S, Decl(recursiveTypeRelations.ts, 17, 20))
+>classNames : Symbol(classNames, Decl(recursiveTypeRelations.ts, 17, 68))
+>ClassNameArg : Symbol(ClassNameArg, Decl(recursiveTypeRelations.ts, 14, 54))
+>S : Symbol(S, Decl(recursiveTypeRelations.ts, 17, 20))
+
+  const args = classNames.map(arg => {
+>args : Symbol(args, Decl(recursiveTypeRelations.ts, 18, 7))
+>classNames.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>classNames : Symbol(classNames, Decl(recursiveTypeRelations.ts, 17, 68))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>arg : Symbol(arg, Decl(recursiveTypeRelations.ts, 18, 30))
+
+    if (arg == null) {
+>arg : Symbol(arg, Decl(recursiveTypeRelations.ts, 18, 30))
+
+      return null;
+    }
+    if (typeof arg == "string") {
+>arg : Symbol(arg, Decl(recursiveTypeRelations.ts, 18, 30))
+
+      return styles[arg];
+>styles : Symbol(styles, Decl(recursiveTypeRelations.ts, 17, 58))
+>arg : Symbol(arg, Decl(recursiveTypeRelations.ts, 18, 30))
+    }
+    if (typeof arg == "object") {
+>arg : Symbol(arg, Decl(recursiveTypeRelations.ts, 18, 30))
+
+      return Object.keys(arg).reduce<ClassNameObject>((obj: ClassNameObject, key: keyof S) => {
+>Object.keys(arg).reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Object.keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --))
+>arg : Symbol(arg, Decl(recursiveTypeRelations.ts, 18, 30))
+>reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>ClassNameObject : Symbol(ClassNameObject)
+>obj : Symbol(obj, Decl(recursiveTypeRelations.ts, 26, 55))
+>ClassNameObject : Symbol(ClassNameObject)
+>key : Symbol(key, Decl(recursiveTypeRelations.ts, 26, 76))
+>S : Symbol(S, Decl(recursiveTypeRelations.ts, 17, 20))
+
+        const exportedClassName = styles[key];
+>exportedClassName : Symbol(exportedClassName, Decl(recursiveTypeRelations.ts, 27, 13))
+>styles : Symbol(styles, Decl(recursiveTypeRelations.ts, 17, 58))
+>key : Symbol(key, Decl(recursiveTypeRelations.ts, 26, 76))
+
+        obj[exportedClassName] = (arg as ClassNameMap<S>)[key]; 
+>obj : Symbol(obj, Decl(recursiveTypeRelations.ts, 26, 55))
+>exportedClassName : Symbol(exportedClassName, Decl(recursiveTypeRelations.ts, 27, 13))
+>arg : Symbol(arg, Decl(recursiveTypeRelations.ts, 18, 30))
+>ClassNameMap : Symbol(ClassNameMap, Decl(recursiveTypeRelations.ts, 12, 28))
+>S : Symbol(S, Decl(recursiveTypeRelations.ts, 17, 20))
+>key : Symbol(key, Decl(recursiveTypeRelations.ts, 26, 76))
+
+        return obj;
+>obj : Symbol(obj, Decl(recursiveTypeRelations.ts, 26, 55))
+
+      }, {});
+    }
+  });
+  return "";
+}
+

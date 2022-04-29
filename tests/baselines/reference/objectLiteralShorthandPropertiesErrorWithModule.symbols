@@ -1,0 +1,31 @@
+=== tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesErrorWithModule.ts ===
+// module export
+var x = "Foo";
+>x : Symbol(x, Decl(objectLiteralShorthandPropertiesErrorWithModule.ts, 1, 3))
+
+module m {
+>m : Symbol(m, Decl(objectLiteralShorthandPropertiesErrorWithModule.ts, 1, 14))
+
+    export var x;
+>x : Symbol(x, Decl(objectLiteralShorthandPropertiesErrorWithModule.ts, 3, 14))
+}
+
+module n {
+>n : Symbol(n, Decl(objectLiteralShorthandPropertiesErrorWithModule.ts, 4, 1))
+
+    var z = 10000;
+>z : Symbol(z, Decl(objectLiteralShorthandPropertiesErrorWithModule.ts, 7, 7))
+
+    export var y = {
+>y : Symbol(y, Decl(objectLiteralShorthandPropertiesErrorWithModule.ts, 8, 14))
+
+        m.x  // error
+>m : Symbol(m, Decl(objectLiteralShorthandPropertiesErrorWithModule.ts, 8, 20))
+> : Symbol((Missing), Decl(objectLiteralShorthandPropertiesErrorWithModule.ts, 9, 9))
+
+    };
+}
+
+m.y.x;
+>m : Symbol(m, Decl(objectLiteralShorthandPropertiesErrorWithModule.ts, 1, 14))
+

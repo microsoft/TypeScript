@@ -1,0 +1,53 @@
+tests/cases/compiler/arithAssignTyping.ts(3,1): error TS2629: Cannot assign to 'f' because it is a class.
+tests/cases/compiler/arithAssignTyping.ts(4,1): error TS2629: Cannot assign to 'f' because it is a class.
+tests/cases/compiler/arithAssignTyping.ts(5,1): error TS2629: Cannot assign to 'f' because it is a class.
+tests/cases/compiler/arithAssignTyping.ts(6,1): error TS2629: Cannot assign to 'f' because it is a class.
+tests/cases/compiler/arithAssignTyping.ts(7,1): error TS2629: Cannot assign to 'f' because it is a class.
+tests/cases/compiler/arithAssignTyping.ts(8,1): error TS2629: Cannot assign to 'f' because it is a class.
+tests/cases/compiler/arithAssignTyping.ts(9,1): error TS2629: Cannot assign to 'f' because it is a class.
+tests/cases/compiler/arithAssignTyping.ts(10,1): error TS2629: Cannot assign to 'f' because it is a class.
+tests/cases/compiler/arithAssignTyping.ts(11,1): error TS2629: Cannot assign to 'f' because it is a class.
+tests/cases/compiler/arithAssignTyping.ts(12,1): error TS2629: Cannot assign to 'f' because it is a class.
+tests/cases/compiler/arithAssignTyping.ts(13,1): error TS2629: Cannot assign to 'f' because it is a class.
+tests/cases/compiler/arithAssignTyping.ts(14,1): error TS2629: Cannot assign to 'f' because it is a class.
+
+
+==== tests/cases/compiler/arithAssignTyping.ts (12 errors) ====
+    class f { }
+    
+    f += ''; // error
+    ~
+!!! error TS2629: Cannot assign to 'f' because it is a class.
+    f += 1; // error
+    ~
+!!! error TS2629: Cannot assign to 'f' because it is a class.
+    f -= 1; // error
+    ~
+!!! error TS2629: Cannot assign to 'f' because it is a class.
+    f *= 1; // error
+    ~
+!!! error TS2629: Cannot assign to 'f' because it is a class.
+    f /= 1; // error
+    ~
+!!! error TS2629: Cannot assign to 'f' because it is a class.
+    f %= 1; // error
+    ~
+!!! error TS2629: Cannot assign to 'f' because it is a class.
+    f &= 1; // error
+    ~
+!!! error TS2629: Cannot assign to 'f' because it is a class.
+    f |= 1; // error
+    ~
+!!! error TS2629: Cannot assign to 'f' because it is a class.
+    f <<= 1; // error
+    ~
+!!! error TS2629: Cannot assign to 'f' because it is a class.
+    f >>= 1; // error
+    ~
+!!! error TS2629: Cannot assign to 'f' because it is a class.
+    f >>>= 1; // error
+    ~
+!!! error TS2629: Cannot assign to 'f' because it is a class.
+    f ^= 1; // error
+    ~
+!!! error TS2629: Cannot assign to 'f' because it is a class.

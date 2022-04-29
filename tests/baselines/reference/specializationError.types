@@ -1,0 +1,22 @@
+=== tests/cases/compiler/specializationError.ts ===
+interface Promise<T> {
+    then<U>(value: T): void;
+>then : { <TResult1 = T, TResult2 = never>(onfulfilled?: (value: T) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>; <U>(value: T): void; }
+>value : T
+}
+
+interface Bar {
+    bar(value: "Menu"): Promise<string>;
+>bar : { (value: "Menu"): Promise<string>; <T>(value: string, element: string): Promise<T>; <T>(value: string): Promise<T>; }
+>value : "Menu"
+
+    bar<T>(value: string, element: string): Promise<T>;
+>bar : { (value: "Menu"): Promise<string>; <T>(value: string, element: string): Promise<T>; <T>(value: string): Promise<T>; }
+>value : string
+>element : string
+
+    bar<T>(value: string): Promise<T>;
+>bar : { (value: "Menu"): Promise<string>; <T>(value: string, element: string): Promise<T>; <T>(value: string): Promise<T>; }
+>value : string
+}
+

@@ -1,0 +1,77 @@
+=== tests/cases/conformance/jsx/file.tsx ===
+declare module JSX {
+>JSX : Symbol(JSX, Decl(file.tsx, 0, 0))
+
+	interface Element { }
+>Element : Symbol(Element, Decl(file.tsx, 0, 20))
+
+	interface IntrinsicElements { }
+>IntrinsicElements : Symbol(IntrinsicElements, Decl(file.tsx, 1, 22))
+}
+
+module M {
+>M : Symbol(M, Decl(file.tsx, 3, 1), Decl(file.tsx, 13, 1), Decl(file.tsx, 27, 1), Decl(file.tsx, 32, 1))
+
+	export class Foo { constructor() { } }
+>Foo : Symbol(Foo, Decl(file.tsx, 5, 10))
+
+	export module S {
+>S : Symbol(S, Decl(file.tsx, 6, 39), Decl(file.tsx, 17, 14))
+
+		export class Bar { }
+>Bar : Symbol(Bar, Decl(file.tsx, 7, 18))
+
+		// Emit Foo
+		// Foo, <Foo />;
+	}
+}
+
+module M {
+>M : Symbol(M, Decl(file.tsx, 3, 1), Decl(file.tsx, 13, 1), Decl(file.tsx, 27, 1), Decl(file.tsx, 32, 1))
+
+	// Emit M.Foo
+	Foo, <Foo />;
+>Foo : Symbol(Foo, Decl(file.tsx, 5, 10))
+>Foo : Symbol(Foo, Decl(file.tsx, 5, 10))
+
+	export module S {
+>S : Symbol(S, Decl(file.tsx, 6, 39), Decl(file.tsx, 17, 14))
+
+		// Emit M.Foo
+		Foo, <Foo />;
+>Foo : Symbol(Foo, Decl(file.tsx, 5, 10))
+>Foo : Symbol(Foo, Decl(file.tsx, 5, 10))
+
+		// Emit S.Bar
+		Bar, <Bar />;
+>Bar : Symbol(Bar, Decl(file.tsx, 7, 18))
+>Bar : Symbol(Bar, Decl(file.tsx, 7, 18))
+	}
+
+}
+
+module M {
+>M : Symbol(M, Decl(file.tsx, 3, 1), Decl(file.tsx, 13, 1), Decl(file.tsx, 27, 1), Decl(file.tsx, 32, 1))
+
+	// Emit M.S.Bar
+	S.Bar, <S.Bar />;
+>S.Bar : Symbol(S.Bar, Decl(file.tsx, 7, 18))
+>S : Symbol(S, Decl(file.tsx, 6, 39), Decl(file.tsx, 17, 14))
+>Bar : Symbol(S.Bar, Decl(file.tsx, 7, 18))
+>S.Bar : Symbol(S.Bar, Decl(file.tsx, 7, 18))
+>S : Symbol(S, Decl(file.tsx, 6, 39), Decl(file.tsx, 17, 14))
+>Bar : Symbol(S.Bar, Decl(file.tsx, 7, 18))
+}
+
+module M {
+>M : Symbol(M, Decl(file.tsx, 3, 1), Decl(file.tsx, 13, 1), Decl(file.tsx, 27, 1), Decl(file.tsx, 32, 1))
+
+	var M = 100;
+>M : Symbol(M, Decl(file.tsx, 35, 4))
+
+	// Emit M_1.Foo
+	Foo, <Foo />;
+>Foo : Symbol(Foo, Decl(file.tsx, 5, 10))
+>Foo : Symbol(Foo, Decl(file.tsx, 5, 10))
+}
+

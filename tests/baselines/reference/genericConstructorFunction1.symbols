@@ -1,0 +1,60 @@
+=== tests/cases/compiler/genericConstructorFunction1.ts ===
+function f1<T>(args: T) {
+>f1 : Symbol(f1, Decl(genericConstructorFunction1.ts, 0, 0))
+>T : Symbol(T, Decl(genericConstructorFunction1.ts, 0, 12))
+>args : Symbol(args, Decl(genericConstructorFunction1.ts, 0, 15))
+>T : Symbol(T, Decl(genericConstructorFunction1.ts, 0, 12))
+
+    var v1: { [index: string]: new (arg: T) => Date };
+>v1 : Symbol(v1, Decl(genericConstructorFunction1.ts, 1, 7))
+>index : Symbol(index, Decl(genericConstructorFunction1.ts, 1, 15))
+>arg : Symbol(arg, Decl(genericConstructorFunction1.ts, 1, 36))
+>T : Symbol(T, Decl(genericConstructorFunction1.ts, 0, 12))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+    var v2 = v1['test'];
+>v2 : Symbol(v2, Decl(genericConstructorFunction1.ts, 2, 7))
+>v1 : Symbol(v1, Decl(genericConstructorFunction1.ts, 1, 7))
+
+    v2(args); 
+>v2 : Symbol(v2, Decl(genericConstructorFunction1.ts, 2, 7))
+>args : Symbol(args, Decl(genericConstructorFunction1.ts, 0, 15))
+
+    return new v2(args); // used to give error
+>v2 : Symbol(v2, Decl(genericConstructorFunction1.ts, 2, 7))
+>args : Symbol(args, Decl(genericConstructorFunction1.ts, 0, 15))
+}
+
+
+interface I1<T> { new (arg: T): Date };
+>I1 : Symbol(I1, Decl(genericConstructorFunction1.ts, 5, 1))
+>T : Symbol(T, Decl(genericConstructorFunction1.ts, 8, 13))
+>arg : Symbol(arg, Decl(genericConstructorFunction1.ts, 8, 23))
+>T : Symbol(T, Decl(genericConstructorFunction1.ts, 8, 13))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+function f2<T>(args: T) {
+>f2 : Symbol(f2, Decl(genericConstructorFunction1.ts, 8, 39))
+>T : Symbol(T, Decl(genericConstructorFunction1.ts, 9, 12))
+>args : Symbol(args, Decl(genericConstructorFunction1.ts, 9, 15))
+>T : Symbol(T, Decl(genericConstructorFunction1.ts, 9, 12))
+
+    var v1: { [index: string]: I1<T> };
+>v1 : Symbol(v1, Decl(genericConstructorFunction1.ts, 10, 7))
+>index : Symbol(index, Decl(genericConstructorFunction1.ts, 10, 15))
+>I1 : Symbol(I1, Decl(genericConstructorFunction1.ts, 5, 1))
+>T : Symbol(T, Decl(genericConstructorFunction1.ts, 9, 12))
+
+    var v2 = v1['test'];
+>v2 : Symbol(v2, Decl(genericConstructorFunction1.ts, 11, 7))
+>v1 : Symbol(v1, Decl(genericConstructorFunction1.ts, 10, 7))
+
+    var y = v2(args); 
+>y : Symbol(y, Decl(genericConstructorFunction1.ts, 12, 7))
+>v2 : Symbol(v2, Decl(genericConstructorFunction1.ts, 11, 7))
+>args : Symbol(args, Decl(genericConstructorFunction1.ts, 9, 15))
+
+    return new v2(args); // used to give error
+>v2 : Symbol(v2, Decl(genericConstructorFunction1.ts, 11, 7))
+>args : Symbol(args, Decl(genericConstructorFunction1.ts, 9, 15))
+}

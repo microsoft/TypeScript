@@ -1,0 +1,44 @@
+=== tests/cases/conformance/es6/Symbols/symbolProperty60.ts ===
+// https://github.com/Microsoft/TypeScript/issues/20146
+interface I1 {
+    [Symbol.toStringTag]: string;
+>[Symbol.toStringTag] : string
+>Symbol.toStringTag : unique symbol
+>Symbol : SymbolConstructor
+>toStringTag : unique symbol
+
+    [key: string]: number;
+>key : string
+}
+
+interface I2 {
+    [Symbol.toStringTag]: string;
+>[Symbol.toStringTag] : string
+>Symbol.toStringTag : unique symbol
+>Symbol : SymbolConstructor
+>toStringTag : unique symbol
+
+    [key: number]: boolean;
+>key : number
+}
+
+declare const mySymbol: unique symbol;
+>mySymbol : unique symbol
+
+interface I3 {
+    [mySymbol]: string;
+>[mySymbol] : string
+>mySymbol : unique symbol
+
+    [key: string]: number;
+>key : string
+}
+
+interface I4 {
+    [mySymbol]: string;
+>[mySymbol] : string
+>mySymbol : unique symbol
+
+    [key: number]: boolean;
+>key : number
+}

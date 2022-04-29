@@ -1,0 +1,58 @@
+=== tests/cases/compiler/overloadReturnTypes.ts ===
+class Accessor {}
+>Accessor : Accessor
+
+function attr(name: string): string;
+>attr : { (name: string): string; (name: string, value: string): Accessor; (map: any): Accessor; }
+>name : string
+
+function attr(name: string, value: string): Accessor;
+>attr : { (name: string): string; (name: string, value: string): Accessor; (map: any): Accessor; }
+>name : string
+>value : string
+
+function attr(map: any): Accessor;
+>attr : { (name: string): string; (name: string, value: string): Accessor; (map: any): Accessor; }
+>map : any
+
+function attr(nameOrMap: any, value?: string): any {
+>attr : { (name: string): string; (name: string, value: string): Accessor; (map: any): Accessor; }
+>nameOrMap : any
+>value : string
+
+    if (nameOrMap && typeof nameOrMap === "object") {
+>nameOrMap && typeof nameOrMap === "object" : boolean
+>nameOrMap : any
+>typeof nameOrMap === "object" : boolean
+>typeof nameOrMap : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>nameOrMap : any
+>"object" : "object"
+
+        // handle map case
+        return new Accessor;
+>new Accessor : Accessor
+>Accessor : typeof Accessor
+    }
+    else {
+        // handle string case
+        return "s";
+>"s" : "s"
+    }
+}
+
+
+interface IFace {
+	attr(name:string):string;
+>attr : { (name: string): string; (name: string, value: string): Accessor; (map: any): Accessor; }
+>name : string
+
+	attr(name: string, value: string): Accessor;
+>attr : { (name: string): string; (name: string, value: string): Accessor; (map: any): Accessor; }
+>name : string
+>value : string
+
+	attr(map: any): Accessor;
+>attr : { (name: string): string; (name: string, value: string): Accessor; (map: any): Accessor; }
+>map : any
+}
+

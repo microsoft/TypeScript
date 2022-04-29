@@ -1,0 +1,84 @@
+=== tests/cases/compiler/a.js ===
+"use strict";
+>"use strict" : "use strict"
+
+var a = {
+>a : { a: number; b: number; }
+>{    a: "hello", // error    b: 10,    a: 10 // error} : { a: number; b: number; }
+
+    a: "hello", // error
+>a : string
+>"hello" : "hello"
+
+    b: 10,
+>b : number
+>10 : 10
+
+    a: 10 // error
+>a : string
+>10 : 10
+
+};
+var let = 10; // error
+>let : number
+>10 : 10
+
+delete a; // error
+>delete a : boolean
+>a : { a: number; b: number; }
+
+try {
+} catch (eval) { // error
+>eval : any
+}
+function arguments() { // error
+>arguments : () => void
+}
+
+with (a) {
+>a : { a: number; b: number; }
+
+    b = 10;
+>b = 10 : any
+>b : any
+>10 : any
+}
+
+=== tests/cases/compiler/b.js ===
+// this is not in strict mode but class definitions are always in strict mode
+class c {
+>c : c
+
+    a(eval) { //error
+>a : (eval: any) => void
+>eval : any
+    }
+    method() {
+>method : () => void
+
+        var let = 10; // error
+>let : number
+>10 : 10
+    }
+}
+
+=== tests/cases/compiler/c.js ===
+export var let = 10; // external modules are automatically in strict mode
+>let : number
+>10 : 10
+
+var eval = function () {
+>eval : () => void
+>function () {} : () => void
+
+};
+
+=== tests/cases/compiler/d.js ===
+"use strict";
+>"use strict" : "use strict"
+
+var x = 009; // error
+>x : number
+>00 : 0
+>9 : 9
+

@@ -1,0 +1,28 @@
+=== tests/cases/compiler/genericCallSpecializedToTypeArg.ts ===
+function dupe<T>(x: T): T {
+>dupe : <T>(x: T) => T
+>x : T
+
+  return x;
+>x : T
+}
+function dupeAndGetDist<U>(x: U): U {
+>dupeAndGetDist : <U>(x: U) => U
+>x : U
+
+  var y = dupe(x); //<-- dupe has incorrect type here
+>y : U
+>dupe(x) : U
+>dupe : <T>(x: T) => T
+>x : U
+
+  y.getDist();     //<-- this requires a missing constraint, but it's not caught
+>y.getDist() : any
+>y.getDist : any
+>y : U
+>getDist : any
+
+  return y;
+>y : U
+}
+

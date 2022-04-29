@@ -1,0 +1,86 @@
+=== tests/cases/conformance/jsdoc/declarations/index.js ===
+const j = require("./package.json");
+>j : Symbol(j, Decl(index.js, 0, 5))
+>require : Symbol(require)
+>"./package.json" : Symbol("tests/cases/conformance/jsdoc/declarations/package", Decl(package.json, 0, 0))
+
+module.exports = j;
+>module.exports : Symbol(module.exports, Decl(index.js, 0, 0))
+>module : Symbol(export=, Decl(index.js, 0, 36))
+>exports : Symbol(export=, Decl(index.js, 0, 36))
+>j : Symbol(j, Decl(index.js, 0, 5))
+
+=== tests/cases/conformance/jsdoc/declarations/package.json ===
+{
+    "name": "pkg",
+>"name" : Symbol("name", Decl(package.json, 0, 1))
+
+    "version": "0.1.0",
+>"version" : Symbol("version", Decl(package.json, 1, 18))
+
+    "description": "A package",
+>"description" : Symbol("description", Decl(package.json, 2, 23))
+
+    "main": "./dist/index.js",
+>"main" : Symbol("main", Decl(package.json, 3, 31))
+
+    "bin": {
+>"bin" : Symbol("bin", Decl(package.json, 4, 30))
+
+      "cli": "./bin/cli.js",
+>"cli" : Symbol("cli", Decl(package.json, 5, 12))
+
+    },
+    "engines": {
+>"engines" : Symbol("engines", Decl(package.json, 7, 6))
+
+      "node": ">=0"
+>"node" : Symbol("node", Decl(package.json, 8, 16))
+
+    },
+    "scripts": {
+>"scripts" : Symbol("scripts", Decl(package.json, 10, 6))
+
+      "scriptname": "run && run again",
+>"scriptname" : Symbol("scriptname", Decl(package.json, 11, 16))
+
+    },
+    "devDependencies": {
+>"devDependencies" : Symbol("devDependencies", Decl(package.json, 13, 6))
+
+      "@ns/dep": "0.1.2",
+>"@ns/dep" : Symbol("@ns/dep", Decl(package.json, 14, 24))
+
+    },
+    "dependencies": {
+>"dependencies" : Symbol("dependencies", Decl(package.json, 16, 6))
+
+      "dep": "1.2.3",
+>"dep" : Symbol("dep", Decl(package.json, 17, 21))
+
+    },
+    "repository": "microsoft/TypeScript",
+>"repository" : Symbol("repository", Decl(package.json, 19, 6))
+
+    "keywords": [
+>"keywords" : Symbol("keywords", Decl(package.json, 20, 41))
+
+      "kw"
+    ],
+    "author": "Auth",
+>"author" : Symbol("author", Decl(package.json, 23, 6))
+
+    "license": "See Licensce",
+>"license" : Symbol("license", Decl(package.json, 24, 21))
+
+    "homepage": "https://site",
+>"homepage" : Symbol("homepage", Decl(package.json, 25, 30))
+
+    "config": {
+>"config" : Symbol("config", Decl(package.json, 26, 31))
+
+      "o": ["a"]
+>"o" : Symbol("o", Decl(package.json, 27, 15))
+    }
+}
+  

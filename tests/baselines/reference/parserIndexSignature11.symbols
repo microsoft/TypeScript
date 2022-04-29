@@ -1,0 +1,14 @@
+=== tests/cases/conformance/parser/ecmascript5/IndexSignatures/parserIndexSignature11.ts ===
+interface I {
+>I : Symbol(I, Decl(parserIndexSignature11.ts, 0, 0))
+
+        [p]; // Used to be indexer, now it is a computed property
+>[p] : Symbol(I[p], Decl(parserIndexSignature11.ts, 0, 13))
+
+        [p1: string];
+>p1 : Symbol(p1, Decl(parserIndexSignature11.ts, 2, 9))
+
+        [p2: string, p3: number];
+>p2 : Symbol(p2, Decl(parserIndexSignature11.ts, 3, 9))
+>p3 : Symbol(p3, Decl(parserIndexSignature11.ts, 3, 20))
+}

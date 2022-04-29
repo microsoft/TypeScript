@@ -1,0 +1,21 @@
+tests/cases/conformance/parser/ecmascript5/RegularExpressions/parseRegularExpressionMixedWithComments.ts(5,18): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/parser/ecmascript5/RegularExpressions/parseRegularExpressionMixedWithComments.ts(5,23): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/parser/ecmascript5/RegularExpressions/parseRegularExpressionMixedWithComments.ts(6,18): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/parser/ecmascript5/RegularExpressions/parseRegularExpressionMixedWithComments.ts(6,27): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+
+
+==== tests/cases/conformance/parser/ecmascript5/RegularExpressions/parseRegularExpressionMixedWithComments.ts (4 errors) ====
+    var regex1 = / asdf /;
+    var regex2 = /**// asdf /;
+    var regex3 = /**///**/ asdf /       // should be a comment line
+    1;
+    var regex4 = /**// /**/asdf /;
+                     ~~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+                          ~~~~~~~
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+    var regex5 = /**// asdf/**/ /;
+                     ~~~~~~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+                              ~~~
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.

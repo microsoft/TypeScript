@@ -1,0 +1,6 @@
+function getObj() {
+
+   ().toString();
+
+}
+ 

@@ -1,0 +1,85 @@
+=== tests/cases/conformance/es6/newTarget/newTarget.es6.ts ===
+class A {
+>A : Symbol(A, Decl(newTarget.es6.ts, 0, 0))
+
+    constructor() {
+        const a = new.target;
+>a : Symbol(a, Decl(newTarget.es6.ts, 2, 13))
+>new.target : Symbol(A, Decl(newTarget.es6.ts, 0, 0))
+>target : Symbol(A, Decl(newTarget.es6.ts, 0, 0))
+
+        const b = () => new.target;
+>b : Symbol(b, Decl(newTarget.es6.ts, 3, 13))
+>new.target : Symbol(A, Decl(newTarget.es6.ts, 0, 0))
+>target : Symbol(A, Decl(newTarget.es6.ts, 0, 0))
+    }
+    static c = function () { return new.target; }
+>c : Symbol(A.c, Decl(newTarget.es6.ts, 4, 5))
+>new.target : Symbol((Anonymous function), Decl(newTarget.es6.ts, 5, 14))
+>target : Symbol((Anonymous function), Decl(newTarget.es6.ts, 5, 14))
+
+    d = function () { return new.target; }
+>d : Symbol(A.d, Decl(newTarget.es6.ts, 5, 49))
+>new.target : Symbol((Anonymous function), Decl(newTarget.es6.ts, 6, 7))
+>target : Symbol((Anonymous function), Decl(newTarget.es6.ts, 6, 7))
+}
+
+class B extends A {
+>B : Symbol(B, Decl(newTarget.es6.ts, 7, 1))
+>A : Symbol(A, Decl(newTarget.es6.ts, 0, 0))
+
+    constructor() {
+        super();
+>super : Symbol(A, Decl(newTarget.es6.ts, 0, 0))
+
+        const e = new.target;
+>e : Symbol(e, Decl(newTarget.es6.ts, 12, 13))
+>new.target : Symbol(B, Decl(newTarget.es6.ts, 7, 1))
+>target : Symbol(B, Decl(newTarget.es6.ts, 7, 1))
+
+        const f = () => new.target;
+>f : Symbol(f, Decl(newTarget.es6.ts, 13, 13))
+>new.target : Symbol(B, Decl(newTarget.es6.ts, 7, 1))
+>target : Symbol(B, Decl(newTarget.es6.ts, 7, 1))
+    }
+}
+
+function f1() {
+>f1 : Symbol(f1, Decl(newTarget.es6.ts, 15, 1))
+
+    const g = new.target;
+>g : Symbol(g, Decl(newTarget.es6.ts, 18, 9))
+>new.target : Symbol(f1, Decl(newTarget.es6.ts, 15, 1))
+>target : Symbol(f1, Decl(newTarget.es6.ts, 15, 1))
+
+    const h = () => new.target;
+>h : Symbol(h, Decl(newTarget.es6.ts, 19, 9))
+>new.target : Symbol(f1, Decl(newTarget.es6.ts, 15, 1))
+>target : Symbol(f1, Decl(newTarget.es6.ts, 15, 1))
+}
+
+const f2 = function () {
+>f2 : Symbol(f2, Decl(newTarget.es6.ts, 22, 5))
+
+    const i = new.target;
+>i : Symbol(i, Decl(newTarget.es6.ts, 23, 9))
+>new.target : Symbol(f2, Decl(newTarget.es6.ts, 22, 10))
+>target : Symbol(f2, Decl(newTarget.es6.ts, 22, 10))
+
+    const j = () => new.target;
+>j : Symbol(j, Decl(newTarget.es6.ts, 24, 9))
+>new.target : Symbol(f2, Decl(newTarget.es6.ts, 22, 10))
+>target : Symbol(f2, Decl(newTarget.es6.ts, 22, 10))
+}
+
+const O = {
+>O : Symbol(O, Decl(newTarget.es6.ts, 27, 5))
+
+    k: function () { return new.target; }
+>k : Symbol(k, Decl(newTarget.es6.ts, 27, 11))
+>new.target : Symbol(k, Decl(newTarget.es6.ts, 28, 6))
+>target : Symbol(k, Decl(newTarget.es6.ts, 28, 6))
+
+};
+
+

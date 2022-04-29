@@ -1,0 +1,5 @@
+=== tests/cases/conformance/parser/ecmascript5/IndexSignatures/parserIndexSignature9.ts ===
+interface I {
+No type information for this code.   []: number
+No type information for this code.}
+No type information for this code.

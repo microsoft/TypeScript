@@ -1,0 +1,42 @@
+=== tests/cases/compiler/typeofAmbientExternalModules_2.ts ===
+///<reference path='typeofAmbientExternalModules_0.ts'/>
+///<reference path='typeofAmbientExternalModules_1.ts'/>
+import ext = require('./typeofAmbientExternalModules_0');
+>ext : typeof ext
+
+import exp = require('./typeofAmbientExternalModules_1');
+>exp : typeof exp
+
+var y1: typeof ext = ext;
+>y1 : typeof ext
+>ext : typeof ext
+>ext : typeof ext
+
+y1 = exp;
+>y1 = exp : typeof exp
+>y1 : typeof ext
+>exp : typeof exp
+
+var y2: typeof exp = exp;
+>y2 : typeof exp
+>exp : typeof exp
+>exp : typeof exp
+
+y2 = ext;
+>y2 = ext : typeof ext
+>y2 : typeof exp
+>ext : typeof ext
+
+=== tests/cases/compiler/typeofAmbientExternalModules_0.ts ===
+export class C { foo: string; }
+>C : C
+>foo : string
+
+=== tests/cases/compiler/typeofAmbientExternalModules_1.ts ===
+class D { bar: string; }
+>D : D
+>bar : string
+
+export = D;
+>D : D
+

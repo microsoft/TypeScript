@@ -1,0 +1,26 @@
+=== tests/cases/conformance/es6/computedProperties/computedPropertyNames8_ES5.ts ===
+function f<T, U extends string>() {
+>f : <T, U extends string>() => void
+
+    var t: T;
+>t : T
+
+    var u: U;
+>u : U
+
+    var v = {
+>v : { [x: string]: number; }
+>{        [t]: 0,        [u]: 1    } : { [x: string]: number; }
+
+        [t]: 0,
+>[t] : number
+>t : T
+>0 : 0
+
+        [u]: 1
+>[u] : number
+>u : U
+>1 : 1
+
+    };
+}

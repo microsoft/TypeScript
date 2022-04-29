@@ -1,0 +1,106 @@
+=== tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithFunctionTypedArguments5.ts ===
+// Generic call with parameter of object type with member of function type of n args passed object whose associated member is call signature with n+1 args
+
+function foo<T, U>(arg: { cb: (t: T) => U }) {
+>foo : <T, U>(arg: { cb: (t: T) => U; }) => U
+>arg : { cb: (t: T) => U; }
+>cb : (t: T) => U
+>t : T
+
+    return arg.cb(null);
+>arg.cb(null) : U
+>arg.cb : (t: T) => U
+>arg : { cb: (t: T) => U; }
+>cb : (t: T) => U
+>null : null
+}
+
+var arg = { cb: <T>(x: T) => '' };
+>arg : { cb: <T>(x: T) => string; }
+>{ cb: <T>(x: T) => '' } : { cb: <T>(x: T) => string; }
+>cb : <T>(x: T) => string
+><T>(x: T) => '' : <T>(x: T) => string
+>x : T
+>'' : ""
+
+var r = foo(arg); // {}
+>r : string
+>foo(arg) : string
+>foo : <T, U>(arg: { cb: (t: T) => U; }) => U
+>arg : { cb: <T>(x: T) => string; }
+
+// more args not allowed
+var r2 = foo({ cb: <T>(x: T, y: T) => '' }); // error
+>r2 : unknown
+>foo({ cb: <T>(x: T, y: T) => '' }) : unknown
+>foo : <T, U>(arg: { cb: (t: T) => U; }) => U
+>{ cb: <T>(x: T, y: T) => '' } : { cb: <T>(x: T, y: T) => string; }
+>cb : <T>(x: T, y: T) => string
+><T>(x: T, y: T) => '' : <T>(x: T, y: T) => string
+>x : T
+>y : T
+>'' : ""
+
+var r3 = foo({ cb: (x: string, y: number) => '' }); // error
+>r3 : string
+>foo({ cb: (x: string, y: number) => '' }) : string
+>foo : <T, U>(arg: { cb: (t: T) => U; }) => U
+>{ cb: (x: string, y: number) => '' } : { cb: (x: string, y: number) => string; }
+>cb : (x: string, y: number) => string
+>(x: string, y: number) => '' : (x: string, y: number) => string
+>x : string
+>y : number
+>'' : ""
+
+function foo2<T, U>(arg: { cb: (t: T, t2: T) => U }) {
+>foo2 : <T, U>(arg: { cb: (t: T, t2: T) => U; }) => U
+>arg : { cb: (t: T, t2: T) => U; }
+>cb : (t: T, t2: T) => U
+>t : T
+>t2 : T
+
+    return arg.cb(null, null);
+>arg.cb(null, null) : U
+>arg.cb : (t: T, t2: T) => U
+>arg : { cb: (t: T, t2: T) => U; }
+>cb : (t: T, t2: T) => U
+>null : null
+>null : null
+}
+
+// fewer args ok
+var r4 = foo(arg); // {}
+>r4 : string
+>foo(arg) : string
+>foo : <T, U>(arg: { cb: (t: T) => U; }) => U
+>arg : { cb: <T>(x: T) => string; }
+
+var r5 = foo({ cb: <T>(x: T) => '' }); // {}
+>r5 : string
+>foo({ cb: <T>(x: T) => '' }) : string
+>foo : <T, U>(arg: { cb: (t: T) => U; }) => U
+>{ cb: <T>(x: T) => '' } : { cb: <T>(x: T) => string; }
+>cb : <T>(x: T) => string
+><T>(x: T) => '' : <T>(x: T) => string
+>x : T
+>'' : ""
+
+var r6 = foo({ cb: (x: string) => '' }); // string
+>r6 : string
+>foo({ cb: (x: string) => '' }) : string
+>foo : <T, U>(arg: { cb: (t: T) => U; }) => U
+>{ cb: (x: string) => '' } : { cb: (x: string) => string; }
+>cb : (x: string) => string
+>(x: string) => '' : (x: string) => string
+>x : string
+>'' : ""
+
+var r7 = foo({ cb: () => '' }); // string
+>r7 : string
+>foo({ cb: () => '' }) : string
+>foo : <T, U>(arg: { cb: (t: T) => U; }) => U
+>{ cb: () => '' } : { cb: () => string; }
+>cb : () => string
+>() => '' : () => string
+>'' : ""
+

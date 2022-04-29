@@ -1,0 +1,16 @@
+=== tests/cases/conformance/interfaces/interfaceDeclarations/asiPreventsParsingAsInterface04.ts ===
+var declare: boolean, interface: number, I: string;
+>declare : Symbol(declare, Decl(asiPreventsParsingAsInterface04.ts, 0, 3))
+>interface : Symbol(interface, Decl(asiPreventsParsingAsInterface04.ts, 0, 21))
+>I : Symbol(I, Decl(asiPreventsParsingAsInterface04.ts, 0, 40))
+
+declare     // This should be the identifier 'declare'
+>declare : Symbol(declare, Decl(asiPreventsParsingAsInterface04.ts, 0, 3))
+
+interface   // This should be the identifier 'interface'
+>interface : Symbol(interface, Decl(asiPreventsParsingAsInterface04.ts, 0, 21))
+
+I           // This should be the identifier 'I'
+>I : Symbol(I, Decl(asiPreventsParsingAsInterface04.ts, 0, 40))
+
+{}          // This should be a block body

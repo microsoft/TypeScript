@@ -1,0 +1,23 @@
+=== tests/cases/compiler/nonMergedDeclarationsAndOverloads.ts ===
+class A {
+>A : A
+
+    m1: string;
+>m1 : string
+
+    f() {}
+>f : () => void
+
+    m1 (a: string): void;
+>m1 : (a: string) => void
+>a : string
+
+    m1 (a: number): void;
+>m1 : (a: number) => void
+>a : number
+
+    m1 (a: any): void {
+>m1 : (a: any) => void
+>a : any
+    }
+}

@@ -1,0 +1,18 @@
+{
+    "scenario": "privacy Check on imported module - simple reference",
+    "projectRoot": "tests/cases/projects/privacyCheck-SimpleReference",
+    "inputFiles": [
+        "test.ts"
+    ],
+    "resolvedInputFiles": [
+        "lib.es5.d.ts",
+        "mExported.ts",
+        "mNonExported.ts",
+        "test.ts"
+    ],
+    "emittedFiles": [
+        "mExported.js",
+        "mNonExported.js",
+        "test.js"
+    ]
+}

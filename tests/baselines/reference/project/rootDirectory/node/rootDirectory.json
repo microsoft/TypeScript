@@ -1,0 +1,25 @@
+{
+    "scenario": "rootDirectory: specify rootDirectory",
+    "projectRoot": "tests/cases/projects/rootDirectory",
+    "inputFiles": [
+        "FolderA/FolderB/fileB.ts"
+    ],
+    "outDir": "outdir/simple",
+    "rootDir": "FolderA",
+    "sourceMap": true,
+    "declaration": true,
+    "baselineCheck": true,
+    "resolvedInputFiles": [
+        "lib.es5.d.ts",
+        "FolderA/FolderB/FolderC/fileC.ts",
+        "FolderA/FolderB/fileB.ts"
+    ],
+    "emittedFiles": [
+        "outdir/simple/FolderB/FolderC/fileC.js.map",
+        "outdir/simple/FolderB/FolderC/fileC.js",
+        "outdir/simple/FolderB/FolderC/fileC.d.ts",
+        "outdir/simple/FolderB/fileB.js.map",
+        "outdir/simple/FolderB/fileB.js",
+        "outdir/simple/FolderB/fileB.d.ts"
+    ]
+}

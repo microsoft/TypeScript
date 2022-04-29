@@ -1,0 +1,45 @@
+=== tests/cases/conformance/es6/Symbols/symbolProperty47.ts ===
+class C {
+>C : C
+
+    get [Symbol.hasInstance]() {
+>[Symbol.hasInstance] : number
+>Symbol.hasInstance : unique symbol
+>Symbol : SymbolConstructor
+>hasInstance : unique symbol
+
+        return "";
+>"" : ""
+    }
+    // Should take a string
+    set [Symbol.hasInstance](x: number) {
+>[Symbol.hasInstance] : number
+>Symbol.hasInstance : unique symbol
+>Symbol : SymbolConstructor
+>hasInstance : unique symbol
+>x : number
+    }
+}
+
+(new C)[Symbol.hasInstance] = 0;
+>(new C)[Symbol.hasInstance] = 0 : 0
+>(new C)[Symbol.hasInstance] : number
+>(new C) : C
+>new C : C
+>C : typeof C
+>Symbol.hasInstance : unique symbol
+>Symbol : SymbolConstructor
+>hasInstance : unique symbol
+>0 : 0
+
+(new C)[Symbol.hasInstance] = "";
+>(new C)[Symbol.hasInstance] = "" : ""
+>(new C)[Symbol.hasInstance] : number
+>(new C) : C
+>new C : C
+>C : typeof C
+>Symbol.hasInstance : unique symbol
+>Symbol : SymbolConstructor
+>hasInstance : unique symbol
+>"" : ""
+

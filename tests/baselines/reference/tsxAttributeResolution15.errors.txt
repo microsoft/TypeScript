@@ -1,0 +1,26 @@
+tests/cases/conformance/jsx/file.tsx(11,21): error TS2322: Type '{ prop1: string; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<BigGreeter> & { children?: ReactNode; }'.
+  Property 'prop1' does not exist on type 'IntrinsicAttributes & IntrinsicClassAttributes<BigGreeter> & { children?: ReactNode; }'.
+tests/cases/conformance/jsx/file.tsx(14,39): error TS2532: Object is possibly 'undefined'.
+
+
+==== tests/cases/conformance/jsx/file.tsx (2 errors) ====
+    import React = require('react');
+    
+    class BigGreeter extends React.Component<{ }, {}> {
+        render() {
+            return <div>Default hi</div>;
+        }
+        greeting: string;
+    }
+    
+    // Error
+    let a = <BigGreeter prop1="hello" />
+                        ~~~~~
+!!! error TS2322: Type '{ prop1: string; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<BigGreeter> & { children?: ReactNode; }'.
+!!! error TS2322:   Property 'prop1' does not exist on type 'IntrinsicAttributes & IntrinsicClassAttributes<BigGreeter> & { children?: ReactNode; }'.
+    
+    // OK
+    let b = <BigGreeter ref={(input) => { this.textInput = input; }} />
+                                          ~~~~
+!!! error TS2532: Object is possibly 'undefined'.
+    let c = <BigGreeter data-extra="hi" />

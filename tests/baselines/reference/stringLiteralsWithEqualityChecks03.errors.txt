@@ -1,0 +1,51 @@
+tests/cases/conformance/types/literal/stringLiteralsWithEqualityChecks03.ts(16,5): error TS2367: This condition will always return 'false' since the types '"foo"' and '"bar"' have no overlap.
+tests/cases/conformance/types/literal/stringLiteralsWithEqualityChecks03.ts(19,5): error TS2367: This condition will always return 'false' since the types 'Refrigerator | "foo"' and '"bar"' have no overlap.
+tests/cases/conformance/types/literal/stringLiteralsWithEqualityChecks03.ts(20,5): error TS2367: This condition will always return 'false' since the types '"bar"' and 'Refrigerator | "foo"' have no overlap.
+tests/cases/conformance/types/literal/stringLiteralsWithEqualityChecks03.ts(25,5): error TS2367: This condition will always return 'true' since the types '"foo"' and '"bar"' have no overlap.
+tests/cases/conformance/types/literal/stringLiteralsWithEqualityChecks03.ts(28,5): error TS2367: This condition will always return 'true' since the types 'Refrigerator | "foo"' and '"bar"' have no overlap.
+tests/cases/conformance/types/literal/stringLiteralsWithEqualityChecks03.ts(29,5): error TS2367: This condition will always return 'true' since the types '"bar"' and 'Refrigerator | "foo"' have no overlap.
+
+
+==== tests/cases/conformance/types/literal/stringLiteralsWithEqualityChecks03.ts (6 errors) ====
+    interface Runnable {
+        isRunning: boolean;
+    }
+    
+    interface Refrigerator extends Runnable {
+        makesFoodGoBrrr: boolean;
+    }
+    
+    let x: string;
+    let y: "foo" | Refrigerator;
+    
+    let b: boolean;
+    b = x === y;
+    b = "foo" === y
+    b = y === "foo";
+    b = "foo" === "bar";
+        ~~~~~~~~~~~~~~~
+!!! error TS2367: This condition will always return 'false' since the types '"foo"' and '"bar"' have no overlap.
+    b = "bar" === x;
+    b = x === "bar";
+    b = y === "bar";
+        ~~~~~~~~~~~
+!!! error TS2367: This condition will always return 'false' since the types 'Refrigerator | "foo"' and '"bar"' have no overlap.
+    b = "bar" === y;
+        ~~~~~~~~~~~
+!!! error TS2367: This condition will always return 'false' since the types '"bar"' and 'Refrigerator | "foo"' have no overlap.
+    
+    b = x !== y;
+    b = "foo" !== y
+    b = y !== "foo";
+    b = "foo" !== "bar";
+        ~~~~~~~~~~~~~~~
+!!! error TS2367: This condition will always return 'true' since the types '"foo"' and '"bar"' have no overlap.
+    b = "bar" !== x;
+    b = x !== "bar";
+    b = y !== "bar";
+        ~~~~~~~~~~~
+!!! error TS2367: This condition will always return 'true' since the types 'Refrigerator | "foo"' and '"bar"' have no overlap.
+    b = "bar" !== y;
+        ~~~~~~~~~~~
+!!! error TS2367: This condition will always return 'true' since the types '"bar"' and 'Refrigerator | "foo"' have no overlap.
+    

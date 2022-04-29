@@ -1,0 +1,70 @@
+=== tests/cases/compiler/deepExcessPropertyCheckingWhenTargetIsIntersection.ts ===
+interface StatelessComponent<P = {}> {
+  (props: P & { children?: number }, context?: any): null;
+>props : P & { children?: number; }
+>children : number
+>context : any
+>null : null
+}
+ 
+const TestComponent: StatelessComponent<TestProps> = (props) => {
+>TestComponent : StatelessComponent<TestProps>
+>(props) => {  return null;} : (props: TestProps & { children?: number; }) => any
+>props : TestProps & { children?: number; }
+
+  return null;
+>null : null
+}
+ 
+interface ITestProps {
+  ariaLabel?: string;
+>ariaLabel : string
+}
+ 
+interface NestedProp<TProps> {
+  props: TProps;
+>props : TProps
+}
+ 
+interface TestProps {
+  icon: NestedProp<ITestProps>;
+>icon : NestedProp<ITestProps>
+}
+ 
+TestComponent({icon: { props: { INVALID_PROP_NAME: 'share', ariaLabel: 'test label' } }});
+>TestComponent({icon: { props: { INVALID_PROP_NAME: 'share', ariaLabel: 'test label' } }}) : null
+>TestComponent : StatelessComponent<TestProps>
+>{icon: { props: { INVALID_PROP_NAME: 'share', ariaLabel: 'test label' } }} : { icon: { props: { INVALID_PROP_NAME: string; ariaLabel: string; }; }; }
+>icon : { props: { INVALID_PROP_NAME: string; ariaLabel: string; }; }
+>{ props: { INVALID_PROP_NAME: 'share', ariaLabel: 'test label' } } : { props: { INVALID_PROP_NAME: string; ariaLabel: string; }; }
+>props : { INVALID_PROP_NAME: string; ariaLabel: string; }
+>{ INVALID_PROP_NAME: 'share', ariaLabel: 'test label' } : { INVALID_PROP_NAME: string; ariaLabel: string; }
+>INVALID_PROP_NAME : string
+>'share' : "share"
+>ariaLabel : string
+>'test label' : "test label"
+
+const TestComponent2: StatelessComponent<TestProps | {props2: {x: number}}> = (props) => {
+>TestComponent2 : StatelessComponent<TestProps | { props2: {    x: number;}; }>
+>props2 : { x: number; }
+>x : number
+>(props) => {  return null;} : (props: (TestProps | { props2: {    x: number;}; }) & { children?: number; }) => any
+>props : (TestProps | { props2: { x: number; }; }) & { children?: number; }
+
+  return null;
+>null : null
+}
+
+TestComponent2({icon: { props: { INVALID_PROP_NAME: 'share', ariaLabel: 'test label' } }});
+>TestComponent2({icon: { props: { INVALID_PROP_NAME: 'share', ariaLabel: 'test label' } }}) : null
+>TestComponent2 : StatelessComponent<TestProps | { props2: { x: number; }; }>
+>{icon: { props: { INVALID_PROP_NAME: 'share', ariaLabel: 'test label' } }} : { icon: { props: { INVALID_PROP_NAME: string; ariaLabel: string; }; }; }
+>icon : { props: { INVALID_PROP_NAME: string; ariaLabel: string; }; }
+>{ props: { INVALID_PROP_NAME: 'share', ariaLabel: 'test label' } } : { props: { INVALID_PROP_NAME: string; ariaLabel: string; }; }
+>props : { INVALID_PROP_NAME: string; ariaLabel: string; }
+>{ INVALID_PROP_NAME: 'share', ariaLabel: 'test label' } : { INVALID_PROP_NAME: string; ariaLabel: string; }
+>INVALID_PROP_NAME : string
+>'share' : "share"
+>ariaLabel : string
+>'test label' : "test label"
+

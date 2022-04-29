@@ -1,0 +1,20 @@
+=== tests/cases/conformance/types/typeAliases/asiPreventsParsingAsTypeAlias02.ts ===
+var type;
+>type : Symbol(type, Decl(asiPreventsParsingAsTypeAlias02.ts, 0, 3))
+
+var string;
+>string : Symbol(string, Decl(asiPreventsParsingAsTypeAlias02.ts, 1, 3))
+
+var Foo;
+>Foo : Symbol(Foo, Decl(asiPreventsParsingAsTypeAlias02.ts, 2, 3))
+
+namespace container {
+>container : Symbol(container, Decl(asiPreventsParsingAsTypeAlias02.ts, 2, 8))
+
+    type
+>type : Symbol(type, Decl(asiPreventsParsingAsTypeAlias02.ts, 0, 3))
+
+    Foo = string;
+>Foo : Symbol(Foo, Decl(asiPreventsParsingAsTypeAlias02.ts, 2, 3))
+>string : Symbol(string, Decl(asiPreventsParsingAsTypeAlias02.ts, 1, 3))
+}

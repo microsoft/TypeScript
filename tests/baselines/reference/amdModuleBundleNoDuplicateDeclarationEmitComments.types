@@ -1,0 +1,10 @@
+=== tests/cases/compiler/file1.ts ===
+/// <amd-module name="mynamespace::SomeModuleA" />
+export class Foo {}
+>Foo : Foo
+
+=== tests/cases/compiler/file2.ts ===
+/// <amd-module name="mynamespace::SomeModuleB" />
+export class Bar {}
+>Bar : Bar
+

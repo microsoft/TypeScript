@@ -1,0 +1,44 @@
+tests/cases/compiler/overloadAssignmentCompat.ts(34,10): error TS2394: This overload signature is not compatible with its implementation signature.
+
+
+==== tests/cases/compiler/overloadAssignmentCompat.ts (1 errors) ====
+    // ok - overload signatures are assignment compatible with their implementation
+    class Accessor {}
+    
+    function attr(name: string): string;
+    function attr(name: string, value: string): Accessor;
+    function attr(map: any): Accessor;
+    function attr(nameOrMap: any, value?: string): any {
+        if (nameOrMap && typeof nameOrMap === "object") {
+            // handle map case
+            return new Accessor;
+        }
+        else {
+            // handle string case
+            return "s";
+        }
+    }
+    
+    // not ok - there's an assignment compat error
+    function attr2(name: string): string;
+    function attr2(name: string, value: string): Accessor;
+    function attr2(map: any): Accessor;
+    function attr2(nameOrMap: any, value?: string): string {
+        if (nameOrMap && typeof nameOrMap === "object") {
+            // handle map case
+            return "t";
+        }
+        else {
+            // handle string case
+            return "s";
+        }
+    }
+    
+    // error - signatures are not assignment compatible
+    function foo():number; 
+             ~~~
+!!! error TS2394: This overload signature is not compatible with its implementation signature.
+!!! related TS2750 tests/cases/compiler/overloadAssignmentCompat.ts:35:10: The implementation signature is declared here.
+    function foo():string { return "a" };
+    
+    

@@ -1,0 +1,165 @@
+=== tests/cases/compiler/declFileGenericType.ts ===
+export module C {
+>C : Symbol(C, Decl(declFileGenericType.ts, 0, 0))
+
+    export class A<T>{ }
+>A : Symbol(A, Decl(declFileGenericType.ts, 0, 17))
+>T : Symbol(T, Decl(declFileGenericType.ts, 1, 19))
+
+    export class B { }
+>B : Symbol(B, Decl(declFileGenericType.ts, 1, 24))
+    
+    export function F<T>(x: T): A<B> { return null; }
+>F : Symbol(F, Decl(declFileGenericType.ts, 2, 22))
+>T : Symbol(T, Decl(declFileGenericType.ts, 4, 22))
+>x : Symbol(x, Decl(declFileGenericType.ts, 4, 25))
+>T : Symbol(T, Decl(declFileGenericType.ts, 4, 22))
+>A : Symbol(A, Decl(declFileGenericType.ts, 0, 17))
+>B : Symbol(B, Decl(declFileGenericType.ts, 1, 24))
+
+    export function F2<T>(x: T): C.A<C.B> { return null; }
+>F2 : Symbol(F2, Decl(declFileGenericType.ts, 4, 53))
+>T : Symbol(T, Decl(declFileGenericType.ts, 5, 23))
+>x : Symbol(x, Decl(declFileGenericType.ts, 5, 26))
+>T : Symbol(T, Decl(declFileGenericType.ts, 5, 23))
+>C : Symbol(C, Decl(declFileGenericType.ts, 0, 0))
+>A : Symbol(A, Decl(declFileGenericType.ts, 0, 17))
+>C : Symbol(C, Decl(declFileGenericType.ts, 0, 0))
+>B : Symbol(B, Decl(declFileGenericType.ts, 1, 24))
+
+    export function F3<T>(x: T): C.A<C.B>[] { return null; }
+>F3 : Symbol(F3, Decl(declFileGenericType.ts, 5, 58))
+>T : Symbol(T, Decl(declFileGenericType.ts, 6, 23))
+>x : Symbol(x, Decl(declFileGenericType.ts, 6, 26))
+>T : Symbol(T, Decl(declFileGenericType.ts, 6, 23))
+>C : Symbol(C, Decl(declFileGenericType.ts, 0, 0))
+>A : Symbol(A, Decl(declFileGenericType.ts, 0, 17))
+>C : Symbol(C, Decl(declFileGenericType.ts, 0, 0))
+>B : Symbol(B, Decl(declFileGenericType.ts, 1, 24))
+
+    export function F4<T extends A<B>>(x: T): Array<C.A<C.B>> { return null; }
+>F4 : Symbol(F4, Decl(declFileGenericType.ts, 6, 60))
+>T : Symbol(T, Decl(declFileGenericType.ts, 7, 23))
+>A : Symbol(A, Decl(declFileGenericType.ts, 0, 17))
+>B : Symbol(B, Decl(declFileGenericType.ts, 1, 24))
+>x : Symbol(x, Decl(declFileGenericType.ts, 7, 39))
+>T : Symbol(T, Decl(declFileGenericType.ts, 7, 23))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>C : Symbol(C, Decl(declFileGenericType.ts, 0, 0))
+>A : Symbol(A, Decl(declFileGenericType.ts, 0, 17))
+>C : Symbol(C, Decl(declFileGenericType.ts, 0, 0))
+>B : Symbol(B, Decl(declFileGenericType.ts, 1, 24))
+
+    export function F5<T>(): T { return null; }
+>F5 : Symbol(F5, Decl(declFileGenericType.ts, 7, 78))
+>T : Symbol(T, Decl(declFileGenericType.ts, 9, 23))
+>T : Symbol(T, Decl(declFileGenericType.ts, 9, 23))
+
+    export function F6<T extends A<B>>(x: T): T { return null; }
+>F6 : Symbol(F6, Decl(declFileGenericType.ts, 9, 47))
+>T : Symbol(T, Decl(declFileGenericType.ts, 11, 23))
+>A : Symbol(A, Decl(declFileGenericType.ts, 0, 17))
+>B : Symbol(B, Decl(declFileGenericType.ts, 1, 24))
+>x : Symbol(x, Decl(declFileGenericType.ts, 11, 39))
+>T : Symbol(T, Decl(declFileGenericType.ts, 11, 23))
+>T : Symbol(T, Decl(declFileGenericType.ts, 11, 23))
+
+    export class D<T>{
+>D : Symbol(D, Decl(declFileGenericType.ts, 11, 64))
+>T : Symbol(T, Decl(declFileGenericType.ts, 13, 19))
+
+        constructor(public val: T) { }
+>val : Symbol(D.val, Decl(declFileGenericType.ts, 15, 20))
+>T : Symbol(T, Decl(declFileGenericType.ts, 13, 19))
+
+    }
+}
+
+export var a: C.A<C.B>;
+>a : Symbol(a, Decl(declFileGenericType.ts, 20, 10))
+>C : Symbol(C, Decl(declFileGenericType.ts, 0, 0))
+>A : Symbol(C.A, Decl(declFileGenericType.ts, 0, 17))
+>C : Symbol(C, Decl(declFileGenericType.ts, 0, 0))
+>B : Symbol(C.B, Decl(declFileGenericType.ts, 1, 24))
+
+export var b = C.F;
+>b : Symbol(b, Decl(declFileGenericType.ts, 22, 10))
+>C.F : Symbol(C.F, Decl(declFileGenericType.ts, 2, 22))
+>C : Symbol(C, Decl(declFileGenericType.ts, 0, 0))
+>F : Symbol(C.F, Decl(declFileGenericType.ts, 2, 22))
+
+export var c = C.F2;
+>c : Symbol(c, Decl(declFileGenericType.ts, 23, 10))
+>C.F2 : Symbol(C.F2, Decl(declFileGenericType.ts, 4, 53))
+>C : Symbol(C, Decl(declFileGenericType.ts, 0, 0))
+>F2 : Symbol(C.F2, Decl(declFileGenericType.ts, 4, 53))
+
+export var d = C.F3;
+>d : Symbol(d, Decl(declFileGenericType.ts, 24, 10))
+>C.F3 : Symbol(C.F3, Decl(declFileGenericType.ts, 5, 58))
+>C : Symbol(C, Decl(declFileGenericType.ts, 0, 0))
+>F3 : Symbol(C.F3, Decl(declFileGenericType.ts, 5, 58))
+
+export var e = C.F4;
+>e : Symbol(e, Decl(declFileGenericType.ts, 25, 10))
+>C.F4 : Symbol(C.F4, Decl(declFileGenericType.ts, 6, 60))
+>C : Symbol(C, Decl(declFileGenericType.ts, 0, 0))
+>F4 : Symbol(C.F4, Decl(declFileGenericType.ts, 6, 60))
+
+export var x = (new C.D<C.A<C.B>>(new C.A<C.B>())).val;
+>x : Symbol(x, Decl(declFileGenericType.ts, 27, 10))
+>(new C.D<C.A<C.B>>(new C.A<C.B>())).val : Symbol(C.D.val, Decl(declFileGenericType.ts, 15, 20))
+>C.D : Symbol(C.D, Decl(declFileGenericType.ts, 11, 64))
+>C : Symbol(C, Decl(declFileGenericType.ts, 0, 0))
+>D : Symbol(C.D, Decl(declFileGenericType.ts, 11, 64))
+>C : Symbol(C, Decl(declFileGenericType.ts, 0, 0))
+>A : Symbol(C.A, Decl(declFileGenericType.ts, 0, 17))
+>C : Symbol(C, Decl(declFileGenericType.ts, 0, 0))
+>B : Symbol(C.B, Decl(declFileGenericType.ts, 1, 24))
+>C.A : Symbol(C.A, Decl(declFileGenericType.ts, 0, 17))
+>C : Symbol(C, Decl(declFileGenericType.ts, 0, 0))
+>A : Symbol(C.A, Decl(declFileGenericType.ts, 0, 17))
+>C : Symbol(C, Decl(declFileGenericType.ts, 0, 0))
+>B : Symbol(C.B, Decl(declFileGenericType.ts, 1, 24))
+>val : Symbol(C.D.val, Decl(declFileGenericType.ts, 15, 20))
+
+export function f<T extends C.A<C.B>>() { }
+>f : Symbol(f, Decl(declFileGenericType.ts, 27, 55))
+>T : Symbol(T, Decl(declFileGenericType.ts, 29, 18))
+>C : Symbol(C, Decl(declFileGenericType.ts, 0, 0))
+>A : Symbol(C.A, Decl(declFileGenericType.ts, 0, 17))
+>C : Symbol(C, Decl(declFileGenericType.ts, 0, 0))
+>B : Symbol(C.B, Decl(declFileGenericType.ts, 1, 24))
+
+export var g = C.F5<C.A<C.B>>();
+>g : Symbol(g, Decl(declFileGenericType.ts, 31, 10))
+>C.F5 : Symbol(C.F5, Decl(declFileGenericType.ts, 7, 78))
+>C : Symbol(C, Decl(declFileGenericType.ts, 0, 0))
+>F5 : Symbol(C.F5, Decl(declFileGenericType.ts, 7, 78))
+>C : Symbol(C, Decl(declFileGenericType.ts, 0, 0))
+>A : Symbol(C.A, Decl(declFileGenericType.ts, 0, 17))
+>C : Symbol(C, Decl(declFileGenericType.ts, 0, 0))
+>B : Symbol(C.B, Decl(declFileGenericType.ts, 1, 24))
+
+export class h extends C.A<C.B>{ }
+>h : Symbol(h, Decl(declFileGenericType.ts, 31, 32))
+>C.A : Symbol(C.A, Decl(declFileGenericType.ts, 0, 17))
+>C : Symbol(C, Decl(declFileGenericType.ts, 0, 0))
+>A : Symbol(C.A, Decl(declFileGenericType.ts, 0, 17))
+>C : Symbol(C, Decl(declFileGenericType.ts, 0, 0))
+>B : Symbol(C.B, Decl(declFileGenericType.ts, 1, 24))
+
+export interface i extends C.A<C.B> { }
+>i : Symbol(i, Decl(declFileGenericType.ts, 33, 34))
+>C.A : Symbol(C.A, Decl(declFileGenericType.ts, 0, 17))
+>C : Symbol(C, Decl(declFileGenericType.ts, 0, 0))
+>A : Symbol(C.A, Decl(declFileGenericType.ts, 0, 17))
+>C : Symbol(C, Decl(declFileGenericType.ts, 0, 0))
+>B : Symbol(C.B, Decl(declFileGenericType.ts, 1, 24))
+
+export var j = C.F6;
+>j : Symbol(j, Decl(declFileGenericType.ts, 37, 10))
+>C.F6 : Symbol(C.F6, Decl(declFileGenericType.ts, 9, 47))
+>C : Symbol(C, Decl(declFileGenericType.ts, 0, 0))
+>F6 : Symbol(C.F6, Decl(declFileGenericType.ts, 9, 47))
+

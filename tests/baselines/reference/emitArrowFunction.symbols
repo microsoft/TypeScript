@@ -1,0 +1,31 @@
+=== tests/cases/conformance/es6/arrowFunction/emitArrowFunction.ts ===
+var f1 = () => { }
+>f1 : Symbol(f1, Decl(emitArrowFunction.ts, 0, 3))
+
+var f2 = (x: string, y: string) => { }
+>f2 : Symbol(f2, Decl(emitArrowFunction.ts, 1, 3))
+>x : Symbol(x, Decl(emitArrowFunction.ts, 1, 10))
+>y : Symbol(y, Decl(emitArrowFunction.ts, 1, 20))
+
+var f3 = (x: string, y: number, ...rest) => { }
+>f3 : Symbol(f3, Decl(emitArrowFunction.ts, 2, 3))
+>x : Symbol(x, Decl(emitArrowFunction.ts, 2, 10))
+>y : Symbol(y, Decl(emitArrowFunction.ts, 2, 20))
+>rest : Symbol(rest, Decl(emitArrowFunction.ts, 2, 31))
+
+var f4 = (x: string, y: number, z = 10) => { }
+>f4 : Symbol(f4, Decl(emitArrowFunction.ts, 3, 3))
+>x : Symbol(x, Decl(emitArrowFunction.ts, 3, 10))
+>y : Symbol(y, Decl(emitArrowFunction.ts, 3, 20))
+>z : Symbol(z, Decl(emitArrowFunction.ts, 3, 31))
+
+function foo(func: () => boolean) { }
+>foo : Symbol(foo, Decl(emitArrowFunction.ts, 3, 46))
+>func : Symbol(func, Decl(emitArrowFunction.ts, 4, 13))
+
+foo(() => true);
+>foo : Symbol(foo, Decl(emitArrowFunction.ts, 3, 46))
+
+foo(() => { return false; });
+>foo : Symbol(foo, Decl(emitArrowFunction.ts, 3, 46))
+

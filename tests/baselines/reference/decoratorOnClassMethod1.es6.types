@@ -1,0 +1,12 @@
+=== tests/cases/conformance/es6/decorators/class/method/decoratorOnClassMethod1.es6.ts ===
+declare function dec<T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>): TypedPropertyDescriptor<T>;
+>dec : <T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T>
+>target : any
+>propertyKey : string
+>descriptor : TypedPropertyDescriptor<T>
+
+export default class {
+    @dec method() {}
+>dec : <T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T>
+>method : () => void
+}

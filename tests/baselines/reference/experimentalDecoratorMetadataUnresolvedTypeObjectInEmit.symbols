@@ -1,0 +1,30 @@
+=== tests/cases/compiler/types.d.ts ===
+declare namespace A {
+>A : Symbol(A, Decl(types.d.ts, 0, 0))
+
+    export namespace B {
+>B : Symbol(B, Decl(types.d.ts, 0, 21))
+
+        export namespace C {
+>C : Symbol(C, Decl(types.d.ts, 1, 24))
+
+            export namespace D {
+>D : Symbol(D, Decl(types.d.ts, 2, 28))
+            }
+        }
+    }
+}
+=== tests/cases/compiler/usage.ts ===
+class Foo {
+>Foo : Symbol(Foo, Decl(usage.ts, 0, 0))
+
+    f(@decorate user: A.B.C.D.E): void {}
+>f : Symbol(Foo.f, Decl(usage.ts, 0, 11))
+>user : Symbol(user, Decl(usage.ts, 1, 6))
+>A : Symbol(A, Decl(types.d.ts, 0, 0))
+>B : Symbol(A.B, Decl(types.d.ts, 0, 21))
+>C : Symbol(A.B.C, Decl(types.d.ts, 1, 24))
+>D : Symbol(A.B.C.D, Decl(types.d.ts, 2, 28))
+>E : Symbol(A.B.C.D.E)
+}
+

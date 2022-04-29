@@ -1,0 +1,123 @@
+=== tests/cases/conformance/jsdoc/a.js ===
+/**
+ * Should work for function declarations
+ * @constructor
+ * @template {string} K
+ * @template V
+ */
+function Multimap() {
+>Multimap : Symbol(Multimap, Decl(a.js, 0, 0), Decl(a.js, 9, 2))
+
+    /** @type {Object<string, V>} TODO: Remove the prototype from the fresh object */
+    this._map = {};
+>this._map : Symbol(Multimap._map, Decl(a.js, 6, 21))
+>this : Symbol(Multimap, Decl(a.js, 0, 0), Decl(a.js, 9, 2))
+>_map : Symbol(Multimap._map, Decl(a.js, 6, 21))
+
+};
+
+Multimap.prototype = {
+>Multimap.prototype : Symbol(Multimap.prototype, Decl(a.js, 9, 2))
+>Multimap : Symbol(Multimap, Decl(a.js, 0, 0), Decl(a.js, 9, 2))
+>prototype : Symbol(Multimap.prototype, Decl(a.js, 9, 2))
+
+    /**
+     * @param {K} key the key ok
+     * @returns {V} the value ok
+     */
+    get(key) {
+>get : Symbol(get, Decl(a.js, 11, 22))
+>key : Symbol(key, Decl(a.js, 16, 8))
+
+        return this._map[key + ''];
+>this._map : Symbol(Multimap._map, Decl(a.js, 6, 21))
+>this : Symbol(Multimap, Decl(a.js, 0, 0), Decl(a.js, 9, 2))
+>_map : Symbol(Multimap._map, Decl(a.js, 6, 21))
+>key : Symbol(key, Decl(a.js, 16, 8))
+    }
+}
+
+/**
+ * Should work for initialisers too
+ * @constructor
+ * @template {string} K
+ * @template V
+ */
+var Multimap2 = function() {
+>Multimap2 : Symbol(Multimap2, Decl(a.js, 27, 3), Decl(a.js, 30, 2))
+
+    /** @type {Object<string, V>} TODO: Remove the prototype from the fresh object */
+    this._map = {};
+>this._map : Symbol(Multimap2._map, Decl(a.js, 27, 28))
+>this : Symbol(Multimap2, Decl(a.js, 27, 15))
+>_map : Symbol(Multimap2._map, Decl(a.js, 27, 28))
+
+};
+
+Multimap2.prototype = {
+>Multimap2.prototype : Symbol(Multimap2.prototype, Decl(a.js, 30, 2))
+>Multimap2 : Symbol(Multimap2, Decl(a.js, 27, 3), Decl(a.js, 30, 2))
+>prototype : Symbol(Multimap2.prototype, Decl(a.js, 30, 2))
+
+    /**
+     * @param {K} key the key ok
+     * @returns {V} the value ok
+     */
+    get: function(key) {
+>get : Symbol(get, Decl(a.js, 32, 23))
+>key : Symbol(key, Decl(a.js, 37, 18))
+
+        return this._map[key + ''];
+>this._map : Symbol(Multimap2._map, Decl(a.js, 27, 28))
+>this : Symbol(Multimap2, Decl(a.js, 27, 15))
+>_map : Symbol(Multimap2._map, Decl(a.js, 27, 28))
+>key : Symbol(key, Decl(a.js, 37, 18))
+    }
+}
+
+var Ns = {};
+>Ns : Symbol(Ns, Decl(a.js, 42, 3), Decl(a.js, 42, 12), Decl(a.js, 52, 2))
+
+/**
+ * Should work for expando-namespaced initialisers too
+ * @constructor
+ * @template {string} K
+ * @template V
+ */
+Ns.Multimap3 = function() {
+>Ns.Multimap3 : Symbol(Ns.Multimap3, Decl(a.js, 42, 12), Decl(a.js, 54, 3))
+>Ns : Symbol(Ns, Decl(a.js, 42, 3), Decl(a.js, 42, 12), Decl(a.js, 52, 2))
+>Multimap3 : Symbol(Ns.Multimap3, Decl(a.js, 42, 12), Decl(a.js, 54, 3))
+
+    /** @type {Object<string, V>} TODO: Remove the prototype from the fresh object */
+    this._map = {};
+>this._map : Symbol(Multimap3._map, Decl(a.js, 49, 27))
+>this : Symbol(Multimap3, Decl(a.js, 49, 14))
+>_map : Symbol(Multimap3._map, Decl(a.js, 49, 27))
+
+};
+
+Ns.Multimap3.prototype = {
+>Ns.Multimap3.prototype : Symbol(Ns.Multimap3.prototype, Decl(a.js, 52, 2))
+>Ns.Multimap3 : Symbol(Ns.Multimap3, Decl(a.js, 42, 12), Decl(a.js, 54, 3))
+>Ns : Symbol(Ns, Decl(a.js, 42, 3), Decl(a.js, 42, 12), Decl(a.js, 52, 2))
+>Multimap3 : Symbol(Ns.Multimap3, Decl(a.js, 42, 12), Decl(a.js, 54, 3))
+>prototype : Symbol(Ns.Multimap3.prototype, Decl(a.js, 52, 2))
+
+    /**
+     * @param {K} key the key ok
+     * @returns {V} the value ok
+     */
+    get(key) {
+>get : Symbol(get, Decl(a.js, 54, 26))
+>key : Symbol(key, Decl(a.js, 59, 8))
+
+        return this._map[key + ''];
+>this._map : Symbol(Multimap3._map, Decl(a.js, 49, 27))
+>this : Symbol(Multimap3, Decl(a.js, 49, 14))
+>_map : Symbol(Multimap3._map, Decl(a.js, 49, 27))
+>key : Symbol(key, Decl(a.js, 59, 8))
+    }
+}
+
+

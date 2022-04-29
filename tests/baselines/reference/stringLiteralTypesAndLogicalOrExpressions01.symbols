@@ -1,0 +1,23 @@
+=== tests/cases/conformance/types/stringLiteral/stringLiteralTypesAndLogicalOrExpressions01.ts ===
+declare function myRandBool(): boolean;
+>myRandBool : Symbol(myRandBool, Decl(stringLiteralTypesAndLogicalOrExpressions01.ts, 0, 0))
+
+let a: "foo" = "foo";
+>a : Symbol(a, Decl(stringLiteralTypesAndLogicalOrExpressions01.ts, 2, 3))
+
+let b = a || "foo";
+>b : Symbol(b, Decl(stringLiteralTypesAndLogicalOrExpressions01.ts, 3, 3))
+>a : Symbol(a, Decl(stringLiteralTypesAndLogicalOrExpressions01.ts, 2, 3))
+
+let c: "foo" = b;
+>c : Symbol(c, Decl(stringLiteralTypesAndLogicalOrExpressions01.ts, 4, 3))
+>b : Symbol(b, Decl(stringLiteralTypesAndLogicalOrExpressions01.ts, 3, 3))
+
+let d = b || "bar";
+>d : Symbol(d, Decl(stringLiteralTypesAndLogicalOrExpressions01.ts, 5, 3))
+>b : Symbol(b, Decl(stringLiteralTypesAndLogicalOrExpressions01.ts, 3, 3))
+
+let e: "foo" | "bar" = d;
+>e : Symbol(e, Decl(stringLiteralTypesAndLogicalOrExpressions01.ts, 6, 3))
+>d : Symbol(d, Decl(stringLiteralTypesAndLogicalOrExpressions01.ts, 5, 3))
+

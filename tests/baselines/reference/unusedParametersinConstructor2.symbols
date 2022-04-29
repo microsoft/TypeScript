@@ -1,0 +1,13 @@
+=== tests/cases/compiler/unusedParametersinConstructor2.ts ===
+class greeter {
+>greeter : Symbol(greeter, Decl(unusedParametersinConstructor2.ts, 0, 0))
+
+    constructor(param1: string, param2: string) {
+>param1 : Symbol(param1, Decl(unusedParametersinConstructor2.ts, 1, 16))
+>param2 : Symbol(param2, Decl(unusedParametersinConstructor2.ts, 1, 31))
+
+        param2 = param2 + "dummy value";
+>param2 : Symbol(param2, Decl(unusedParametersinConstructor2.ts, 1, 31))
+>param2 : Symbol(param2, Decl(unusedParametersinConstructor2.ts, 1, 31))
+    }
+}

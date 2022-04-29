@@ -1,0 +1,49 @@
+tests/cases/conformance/expressions/unaryOperators/negateOperator/negateOperatorInvalidOperations.ts(4,15): error TS1109: Expression expected.
+tests/cases/conformance/expressions/unaryOperators/negateOperator/negateOperatorInvalidOperations.ts(4,25): error TS1005: ',' expected.
+tests/cases/conformance/expressions/unaryOperators/negateOperator/negateOperatorInvalidOperations.ts(4,26): error TS1109: Expression expected.
+tests/cases/conformance/expressions/unaryOperators/negateOperator/negateOperatorInvalidOperations.ts(7,17): error TS2531: Object is possibly 'null'.
+tests/cases/conformance/expressions/unaryOperators/negateOperator/negateOperatorInvalidOperations.ts(7,24): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/expressions/unaryOperators/negateOperator/negateOperatorInvalidOperations.ts(8,17): error TS2531: Object is possibly 'null'.
+tests/cases/conformance/expressions/unaryOperators/negateOperator/negateOperatorInvalidOperations.ts(8,24): error TS2531: Object is possibly 'null'.
+tests/cases/conformance/expressions/unaryOperators/negateOperator/negateOperatorInvalidOperations.ts(9,17): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/expressions/unaryOperators/negateOperator/negateOperatorInvalidOperations.ts(9,29): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/expressions/unaryOperators/negateOperator/negateOperatorInvalidOperations.ts(12,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'NUMBER' must be of type 'any', but here has type 'number'.
+tests/cases/conformance/expressions/unaryOperators/negateOperator/negateOperatorInvalidOperations.ts(12,14): error TS1109: Expression expected.
+
+
+==== tests/cases/conformance/expressions/unaryOperators/negateOperator/negateOperatorInvalidOperations.ts (11 errors) ====
+    // Unary operator -
+    
+    // operand before -
+    var NUMBER1 = var NUMBER-;  //expect error
+                  ~~~
+!!! error TS1109: Expression expected.
+                            ~
+!!! error TS1005: ',' expected.
+                             ~
+!!! error TS1109: Expression expected.
+    
+    // invalid expressions
+    var NUMBER2 = -(null - undefined);
+                    ~~~~
+!!! error TS2531: Object is possibly 'null'.
+                           ~~~~~~~~~
+!!! error TS2532: Object is possibly 'undefined'.
+    var NUMBER3 = -(null - null);
+                    ~~~~
+!!! error TS2531: Object is possibly 'null'.
+                           ~~~~
+!!! error TS2531: Object is possibly 'null'.
+    var NUMBER4 = -(undefined - undefined);
+                    ~~~~~~~~~
+!!! error TS2532: Object is possibly 'undefined'.
+                                ~~~~~~~~~
+!!! error TS2532: Object is possibly 'undefined'.
+    
+    // miss operand
+    var NUMBER =-;
+        ~~~~~~
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'NUMBER' must be of type 'any', but here has type 'number'.
+!!! related TS6203 tests/cases/conformance/expressions/unaryOperators/negateOperator/negateOperatorInvalidOperations.ts:4:19: 'NUMBER' was also declared here.
+                 ~
+!!! error TS1109: Expression expected.

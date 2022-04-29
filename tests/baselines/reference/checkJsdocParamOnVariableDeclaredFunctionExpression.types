@@ -1,0 +1,37 @@
+=== tests/cases/conformance/jsdoc/0.js ===
+// @ts-check
+/**
+ * @param {number=} n
+ * @param {string} [s]
+ */
+var x = function foo(n, s) {}
+>x : (n?: number | undefined, s?: string) => void
+>function foo(n, s) {} : (n?: number | undefined, s?: string) => void
+>foo : (n?: number | undefined, s?: string) => void
+>n : number
+>s : string
+
+var y;
+>y : any
+
+/**
+ * @param {boolean!} b
+ */
+y = function bar(b) {}
+>y = function bar(b) {} : (b: boolean) => void
+>y : any
+>function bar(b) {} : (b: boolean) => void
+>bar : (b: boolean) => void
+>b : boolean
+
+/**
+ * @param {string} s
+ */
+var one = function (s) { }, two = function (untyped) { };
+>one : (s: string) => void
+>function (s) { } : (s: string) => void
+>s : string
+>two : (untyped: any) => void
+>function (untyped) { } : (untyped: any) => void
+>untyped : any
+

@@ -1,0 +1,164 @@
+=== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers.ts ===
+class Base { foo: string; }
+>Base : Symbol(Base, Decl(subtypingWithObjectMembers.ts, 0, 0))
+>foo : Symbol(Base.foo, Decl(subtypingWithObjectMembers.ts, 0, 12))
+
+class Derived extends Base { bar: string; }
+>Derived : Symbol(Derived, Decl(subtypingWithObjectMembers.ts, 0, 27))
+>Base : Symbol(Base, Decl(subtypingWithObjectMembers.ts, 0, 0))
+>bar : Symbol(Derived.bar, Decl(subtypingWithObjectMembers.ts, 1, 28))
+
+class Derived2 extends Derived { baz: string; }
+>Derived2 : Symbol(Derived2, Decl(subtypingWithObjectMembers.ts, 1, 43))
+>Derived : Symbol(Derived, Decl(subtypingWithObjectMembers.ts, 0, 27))
+>baz : Symbol(Derived2.baz, Decl(subtypingWithObjectMembers.ts, 2, 32))
+
+// N and M have the same name, same accessibility, same optionality, and N is a subtype of M
+// foo properties are valid, bar properties cause errors in the derived class declarations
+class A {
+>A : Symbol(A, Decl(subtypingWithObjectMembers.ts, 2, 47))
+
+    foo: Base;
+>foo : Symbol(A.foo, Decl(subtypingWithObjectMembers.ts, 6, 9))
+>Base : Symbol(Base, Decl(subtypingWithObjectMembers.ts, 0, 0))
+
+    bar: Base;
+>bar : Symbol(A.bar, Decl(subtypingWithObjectMembers.ts, 7, 14))
+>Base : Symbol(Base, Decl(subtypingWithObjectMembers.ts, 0, 0))
+}
+
+class B extends A {
+>B : Symbol(B, Decl(subtypingWithObjectMembers.ts, 9, 1))
+>A : Symbol(A, Decl(subtypingWithObjectMembers.ts, 2, 47))
+
+    foo: Derived; // ok
+>foo : Symbol(B.foo, Decl(subtypingWithObjectMembers.ts, 11, 19))
+>Derived : Symbol(Derived, Decl(subtypingWithObjectMembers.ts, 0, 27))
+
+    bar: string; // error
+>bar : Symbol(B.bar, Decl(subtypingWithObjectMembers.ts, 12, 17))
+}
+
+class A2 {
+>A2 : Symbol(A2, Decl(subtypingWithObjectMembers.ts, 14, 1))
+
+    1: Base; 
+>1 : Symbol(A2[1], Decl(subtypingWithObjectMembers.ts, 16, 10))
+>Base : Symbol(Base, Decl(subtypingWithObjectMembers.ts, 0, 0))
+
+    2.0: Base;
+>2.0 : Symbol(A2[2.0], Decl(subtypingWithObjectMembers.ts, 17, 12))
+>Base : Symbol(Base, Decl(subtypingWithObjectMembers.ts, 0, 0))
+}
+
+class B2 extends A2 {
+>B2 : Symbol(B2, Decl(subtypingWithObjectMembers.ts, 19, 1))
+>A2 : Symbol(A2, Decl(subtypingWithObjectMembers.ts, 14, 1))
+
+    1: Derived; // ok
+>1 : Symbol(B2[1], Decl(subtypingWithObjectMembers.ts, 21, 21))
+>Derived : Symbol(Derived, Decl(subtypingWithObjectMembers.ts, 0, 27))
+
+    2: string; // error
+>2 : Symbol(B2[2], Decl(subtypingWithObjectMembers.ts, 22, 15))
+}
+
+class A3 {
+>A3 : Symbol(A3, Decl(subtypingWithObjectMembers.ts, 24, 1))
+
+    '1': Base;
+>'1' : Symbol(A3['1'], Decl(subtypingWithObjectMembers.ts, 26, 10))
+>Base : Symbol(Base, Decl(subtypingWithObjectMembers.ts, 0, 0))
+
+    '2.0': Base;
+>'2.0' : Symbol(A3['2.0'], Decl(subtypingWithObjectMembers.ts, 27, 14))
+>Base : Symbol(Base, Decl(subtypingWithObjectMembers.ts, 0, 0))
+}
+
+class B3 extends A3 {
+>B3 : Symbol(B3, Decl(subtypingWithObjectMembers.ts, 29, 1))
+>A3 : Symbol(A3, Decl(subtypingWithObjectMembers.ts, 24, 1))
+
+    '1': Derived; // ok
+>'1' : Symbol(B3['1'], Decl(subtypingWithObjectMembers.ts, 31, 21))
+>Derived : Symbol(Derived, Decl(subtypingWithObjectMembers.ts, 0, 27))
+
+    '2.0': string; // error
+>'2.0' : Symbol(B3['2.0'], Decl(subtypingWithObjectMembers.ts, 32, 17))
+}
+
+module TwoLevels {
+>TwoLevels : Symbol(TwoLevels, Decl(subtypingWithObjectMembers.ts, 34, 1))
+
+    class A {
+>A : Symbol(A, Decl(subtypingWithObjectMembers.ts, 36, 18))
+
+        foo: Base;
+>foo : Symbol(A.foo, Decl(subtypingWithObjectMembers.ts, 37, 13))
+>Base : Symbol(Base, Decl(subtypingWithObjectMembers.ts, 0, 0))
+
+        bar: Base;
+>bar : Symbol(A.bar, Decl(subtypingWithObjectMembers.ts, 38, 18))
+>Base : Symbol(Base, Decl(subtypingWithObjectMembers.ts, 0, 0))
+    }
+
+    class B extends A {
+>B : Symbol(B, Decl(subtypingWithObjectMembers.ts, 40, 5))
+>A : Symbol(A, Decl(subtypingWithObjectMembers.ts, 36, 18))
+
+        foo: Derived2; // ok
+>foo : Symbol(B.foo, Decl(subtypingWithObjectMembers.ts, 42, 23))
+>Derived2 : Symbol(Derived2, Decl(subtypingWithObjectMembers.ts, 1, 43))
+
+        bar: string; // error
+>bar : Symbol(B.bar, Decl(subtypingWithObjectMembers.ts, 43, 22))
+    }
+
+    class A2 {
+>A2 : Symbol(A2, Decl(subtypingWithObjectMembers.ts, 45, 5))
+
+        1: Base;
+>1 : Symbol(A2[1], Decl(subtypingWithObjectMembers.ts, 47, 14))
+>Base : Symbol(Base, Decl(subtypingWithObjectMembers.ts, 0, 0))
+
+        2.0: Base;
+>2.0 : Symbol(A2[2.0], Decl(subtypingWithObjectMembers.ts, 48, 16))
+>Base : Symbol(Base, Decl(subtypingWithObjectMembers.ts, 0, 0))
+    }
+
+    class B2 extends A2 {
+>B2 : Symbol(B2, Decl(subtypingWithObjectMembers.ts, 50, 5))
+>A2 : Symbol(A2, Decl(subtypingWithObjectMembers.ts, 45, 5))
+
+        1: Derived2; // ok
+>1 : Symbol(B2[1], Decl(subtypingWithObjectMembers.ts, 52, 25))
+>Derived2 : Symbol(Derived2, Decl(subtypingWithObjectMembers.ts, 1, 43))
+
+        2: string; // error
+>2 : Symbol(B2[2], Decl(subtypingWithObjectMembers.ts, 53, 20))
+    }
+
+    class A3 {
+>A3 : Symbol(A3, Decl(subtypingWithObjectMembers.ts, 55, 5))
+
+        '1': Base;
+>'1' : Symbol(A3['1'], Decl(subtypingWithObjectMembers.ts, 57, 14))
+>Base : Symbol(Base, Decl(subtypingWithObjectMembers.ts, 0, 0))
+
+        '2.0': Base;
+>'2.0' : Symbol(A3['2.0'], Decl(subtypingWithObjectMembers.ts, 58, 18))
+>Base : Symbol(Base, Decl(subtypingWithObjectMembers.ts, 0, 0))
+    }
+
+    class B3 extends A3 {
+>B3 : Symbol(B3, Decl(subtypingWithObjectMembers.ts, 60, 5))
+>A3 : Symbol(A3, Decl(subtypingWithObjectMembers.ts, 55, 5))
+
+        '1': Derived2; // ok
+>'1' : Symbol(B3['1'], Decl(subtypingWithObjectMembers.ts, 62, 25))
+>Derived2 : Symbol(Derived2, Decl(subtypingWithObjectMembers.ts, 1, 43))
+
+        '2.0': string; // error
+>'2.0' : Symbol(B3['2.0'], Decl(subtypingWithObjectMembers.ts, 63, 22))
+    }
+}

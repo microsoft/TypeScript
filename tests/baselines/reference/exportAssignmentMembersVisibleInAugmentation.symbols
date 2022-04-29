@@ -1,0 +1,36 @@
+=== /node_modules/foo/index.d.ts ===
+export = foo;
+>foo : Symbol(foo, Decl(index.d.ts, 0, 13), Decl(a.ts, 0, 27), Decl(b.ts, 0, 27))
+
+declare namespace foo {
+>foo : Symbol(foo, Decl(index.d.ts, 0, 13), Decl(a.ts, 0, 27), Decl(b.ts, 0, 27))
+
+    export type T = number;
+>T : Symbol(T, Decl(index.d.ts, 1, 23))
+}
+
+=== /a.ts ===
+import * as foo from "foo";
+>foo : Symbol(foo, Decl(a.ts, 0, 6))
+
+declare module "foo" {
+>"foo" : Symbol(foo, Decl(index.d.ts, 0, 13), Decl(a.ts, 0, 27), Decl(b.ts, 0, 27))
+
+    export function f(): T; // OK
+>f : Symbol(f, Decl(a.ts, 1, 22))
+>T : Symbol(T, Decl(index.d.ts, 1, 23))
+}
+
+=== /b.ts ===
+import * as foo from "foo";
+>foo : Symbol(foo, Decl(b.ts, 0, 6))
+
+declare module "foo" {
+>"foo" : Symbol(foo, Decl(index.d.ts, 0, 13), Decl(a.ts, 0, 27), Decl(b.ts, 0, 27))
+
+    export function g(): foo.T; // OK
+>g : Symbol(g, Decl(b.ts, 1, 22))
+>foo : Symbol(foo, Decl(b.ts, 0, 6))
+>T : Symbol(T, Decl(index.d.ts, 1, 23))
+}
+

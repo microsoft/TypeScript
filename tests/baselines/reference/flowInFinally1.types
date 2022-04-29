@@ -1,0 +1,32 @@
+=== tests/cases/compiler/flowInFinally1.ts ===
+class A {
+>A : A
+
+  constructor() { }
+  method() { }
+>method : () => void
+}
+
+let a: A | null = null;
+>a : A | null
+>null : null
+>null : null
+
+try {
+  a = new A();
+>a = new A() : A
+>a : A | null
+>new A() : A
+>A : typeof A
+
+} finally {
+  if (a) {
+>a : A | null
+
+    a.method();
+>a.method() : void
+>a.method : () => void
+>a : A
+>method : () => void
+  }
+}

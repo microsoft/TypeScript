@@ -1,0 +1,33 @@
+=== tests/cases/compiler/overloadEquivalenceWithStatics.ts ===
+class A1<T> {
+>A1 : Symbol(A1, Decl(overloadEquivalenceWithStatics.ts, 0, 0))
+>T : Symbol(T, Decl(overloadEquivalenceWithStatics.ts, 0, 9))
+
+static B<S>(v: A1<S>): A1<S>; // 1 
+>B : Symbol(A1.B, Decl(overloadEquivalenceWithStatics.ts, 0, 13), Decl(overloadEquivalenceWithStatics.ts, 1, 29), Decl(overloadEquivalenceWithStatics.ts, 2, 25))
+>S : Symbol(S, Decl(overloadEquivalenceWithStatics.ts, 1, 9))
+>v : Symbol(v, Decl(overloadEquivalenceWithStatics.ts, 1, 12))
+>A1 : Symbol(A1, Decl(overloadEquivalenceWithStatics.ts, 0, 0))
+>S : Symbol(S, Decl(overloadEquivalenceWithStatics.ts, 1, 9))
+>A1 : Symbol(A1, Decl(overloadEquivalenceWithStatics.ts, 0, 0))
+>S : Symbol(S, Decl(overloadEquivalenceWithStatics.ts, 1, 9))
+
+static B<S>(v: S): A1<S>; // 2 : Error Duplicate signature
+>B : Symbol(A1.B, Decl(overloadEquivalenceWithStatics.ts, 0, 13), Decl(overloadEquivalenceWithStatics.ts, 1, 29), Decl(overloadEquivalenceWithStatics.ts, 2, 25))
+>S : Symbol(S, Decl(overloadEquivalenceWithStatics.ts, 2, 9))
+>v : Symbol(v, Decl(overloadEquivalenceWithStatics.ts, 2, 12))
+>S : Symbol(S, Decl(overloadEquivalenceWithStatics.ts, 2, 9))
+>A1 : Symbol(A1, Decl(overloadEquivalenceWithStatics.ts, 0, 0))
+>S : Symbol(S, Decl(overloadEquivalenceWithStatics.ts, 2, 9))
+
+static B<S>(v: any): A1<S> {
+>B : Symbol(A1.B, Decl(overloadEquivalenceWithStatics.ts, 0, 13), Decl(overloadEquivalenceWithStatics.ts, 1, 29), Decl(overloadEquivalenceWithStatics.ts, 2, 25))
+>S : Symbol(S, Decl(overloadEquivalenceWithStatics.ts, 3, 9))
+>v : Symbol(v, Decl(overloadEquivalenceWithStatics.ts, 3, 12))
+>A1 : Symbol(A1, Decl(overloadEquivalenceWithStatics.ts, 0, 0))
+>S : Symbol(S, Decl(overloadEquivalenceWithStatics.ts, 3, 9))
+
+return null;
+}
+}
+

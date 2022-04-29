@@ -1,0 +1,34 @@
+=== tests/cases/compiler/jsxAttributeWithoutExpressionReact.tsx ===
+declare var React: any;
+>React : any
+
+<View>
+><View>    <ListView refreshControl={        <RefreshControl onRefresh={} refreshing={} />    } dataSource={this.state.ds} renderRow={}>    </ListView></View> : any
+>View : any
+
+    <ListView refreshControl={
+><ListView refreshControl={        <RefreshControl onRefresh={} refreshing={} />    } dataSource={this.state.ds} renderRow={}>    </ListView> : any
+>ListView : any
+>refreshControl : any
+
+        <RefreshControl onRefresh={} refreshing={} />
+><RefreshControl onRefresh={} refreshing={} /> : any
+>RefreshControl : any
+>onRefresh : any
+>refreshing : any
+
+    } dataSource={this.state.ds} renderRow={}>
+>dataSource : any
+>this.state.ds : any
+>this.state : any
+>this : typeof globalThis
+>state : any
+>ds : any
+>renderRow : any
+
+    </ListView>
+>ListView : any
+
+</View>
+>View : any
+

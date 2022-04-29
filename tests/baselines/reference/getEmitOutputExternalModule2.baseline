@@ -1,0 +1,16 @@
+EmitSkipped: false
+
+FileName : declSingleFile.js
+var x = 5;
+var Bar = /** @class */ (function () {
+    function Bar() {
+    }
+    return Bar;
+}());
+var x = "world";
+var Bar2 = /** @class */ (function () {
+    function Bar2() {
+    }
+    return Bar2;
+}());
+

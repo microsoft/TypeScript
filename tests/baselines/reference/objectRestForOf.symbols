@@ -1,0 +1,52 @@
+=== tests/cases/conformance/types/rest/objectRestForOf.ts ===
+let array: { x: number, y: string }[];
+>array : Symbol(array, Decl(objectRestForOf.ts, 0, 3))
+>x : Symbol(x, Decl(objectRestForOf.ts, 0, 12))
+>y : Symbol(y, Decl(objectRestForOf.ts, 0, 23))
+
+for (let { x, ...restOf } of array) {
+>x : Symbol(x, Decl(objectRestForOf.ts, 1, 10))
+>restOf : Symbol(restOf, Decl(objectRestForOf.ts, 1, 13))
+>array : Symbol(array, Decl(objectRestForOf.ts, 0, 3))
+
+    [x, restOf];
+>x : Symbol(x, Decl(objectRestForOf.ts, 1, 10))
+>restOf : Symbol(restOf, Decl(objectRestForOf.ts, 1, 13))
+}
+let xx: number;
+>xx : Symbol(xx, Decl(objectRestForOf.ts, 4, 3))
+
+let rrestOff: { y: string };
+>rrestOff : Symbol(rrestOff, Decl(objectRestForOf.ts, 5, 3))
+>y : Symbol(y, Decl(objectRestForOf.ts, 5, 15))
+
+for ({ x: xx, ...rrestOff } of array ) {
+>x : Symbol(x, Decl(objectRestForOf.ts, 6, 6))
+>xx : Symbol(xx, Decl(objectRestForOf.ts, 4, 3))
+>rrestOff : Symbol(rrestOff, Decl(objectRestForOf.ts, 5, 3))
+>array : Symbol(array, Decl(objectRestForOf.ts, 0, 3))
+
+    [xx, rrestOff];
+>xx : Symbol(xx, Decl(objectRestForOf.ts, 4, 3))
+>rrestOff : Symbol(rrestOff, Decl(objectRestForOf.ts, 5, 3))
+}
+for (const norest of array.map(a => ({ ...a, x: 'a string' }))) {
+>norest : Symbol(norest, Decl(objectRestForOf.ts, 9, 10))
+>array.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>array : Symbol(array, Decl(objectRestForOf.ts, 0, 3))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(objectRestForOf.ts, 9, 31))
+>a : Symbol(a, Decl(objectRestForOf.ts, 9, 31))
+>x : Symbol(x, Decl(objectRestForOf.ts, 9, 44))
+
+    [norest.x, norest.y];
+>norest.x : Symbol(x, Decl(objectRestForOf.ts, 9, 44))
+>norest : Symbol(norest, Decl(objectRestForOf.ts, 9, 10))
+>x : Symbol(x, Decl(objectRestForOf.ts, 9, 44))
+>norest.y : Symbol(y, Decl(objectRestForOf.ts, 0, 23))
+>norest : Symbol(norest, Decl(objectRestForOf.ts, 9, 10))
+>y : Symbol(y, Decl(objectRestForOf.ts, 0, 23))
+
+    // x is now a string. who knows why.
+}
+

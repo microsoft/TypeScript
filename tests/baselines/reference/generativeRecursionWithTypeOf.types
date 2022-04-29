@@ -1,0 +1,26 @@
+=== tests/cases/compiler/generativeRecursionWithTypeOf.ts ===
+class C<T> {
+>C : C<T>
+
+    static foo(x: number) { }
+>foo : (x: number) => void
+>x : number
+
+    type: T;
+>type : T
+}
+
+module M {
+>M : typeof M
+
+    export function f(x: typeof C) {   
+>f : (x: typeof C) => C<typeof C>
+>x : typeof C
+>C : typeof C
+
+        return new x<typeof x>();     
+>new x<typeof x>() : C<typeof C>
+>x : typeof C
+>x : typeof C
+    }
+}

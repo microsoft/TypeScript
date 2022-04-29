@@ -1,0 +1,16 @@
+=== tests/cases/conformance/es6/Symbols/symbolProperty37.ts ===
+interface I {
+>I : Symbol(I, Decl(symbolProperty37.ts, 0, 0))
+
+    [Symbol.isConcatSpreadable]: string;
+>[Symbol.isConcatSpreadable] : Symbol(I[Symbol.isConcatSpreadable], Decl(symbolProperty37.ts, 0, 13), Decl(symbolProperty37.ts, 1, 40))
+>Symbol.isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+    [Symbol.isConcatSpreadable]: string;
+>[Symbol.isConcatSpreadable] : Symbol(I[Symbol.isConcatSpreadable], Decl(symbolProperty37.ts, 0, 13), Decl(symbolProperty37.ts, 1, 40))
+>Symbol.isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+}

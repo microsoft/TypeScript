@@ -1,0 +1,28 @@
+EmitSkipped: false
+
+FileName : declSingleFile.js
+var x = 5;
+var Bar = /** @class */ (function () {
+    function Bar() {
+    }
+    return Bar;
+}());
+var x1 = "hello world";
+var Foo = /** @class */ (function () {
+    function Foo() {
+    }
+    return Foo;
+}());
+
+FileName : declSingleFile.d.ts
+declare var x: number;
+declare class Bar {
+    x: string;
+    y: number;
+}
+declare var x1: string;
+declare class Foo {
+    x: string;
+    y: number;
+}
+

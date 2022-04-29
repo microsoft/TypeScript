@@ -1,0 +1,18 @@
+=== tests/cases/compiler/importAndVariableDeclarationConflict4.ts ===
+module m {
+>m : typeof globalThis.m
+
+  export var m = '';
+>m : string
+>'' : ""
+}
+
+var x = '';
+>x : string
+>'' : ""
+
+import x = m.m;
+>x : string
+>m : typeof m
+>m : string
+

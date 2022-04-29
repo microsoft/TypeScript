@@ -1,0 +1,59 @@
+tests/cases/conformance/jsx/Error1.tsx(2,16): error TS17008: JSX element 'span' has no corresponding closing tag.
+tests/cases/conformance/jsx/Error2.tsx(1,17): error TS17002: Expected corresponding JSX closing tag for 'div'.
+tests/cases/conformance/jsx/Error3.tsx(1,11): error TS17008: JSX element 'div' has no corresponding closing tag.
+tests/cases/conformance/jsx/Error3.tsx(3,1): error TS1005: '</' expected.
+tests/cases/conformance/jsx/Error4.tsx(1,11): error TS17008: JSX element 'div' has no corresponding closing tag.
+tests/cases/conformance/jsx/Error4.tsx(1,22): error TS17002: Expected corresponding JSX closing tag for 'div'.
+tests/cases/conformance/jsx/Error4.tsx(2,1): error TS1005: '</' expected.
+tests/cases/conformance/jsx/Error5.tsx(1,11): error TS17008: JSX element 'div' has no corresponding closing tag.
+tests/cases/conformance/jsx/Error5.tsx(1,16): error TS17008: JSX element 'span' has no corresponding closing tag.
+tests/cases/conformance/jsx/Error5.tsx(3,1): error TS1005: '</' expected.
+
+
+==== tests/cases/conformance/jsx/file.tsx (0 errors) ====
+    declare module JSX {
+    	interface Element { }
+    	interface IntrinsicElements {
+    		[s: string]: any;
+    	}
+    }
+    
+==== tests/cases/conformance/jsx/Error1.tsx (1 errors) ====
+    // Issue error about missing span closing tag, not missing div closing tag
+    let x1 = <div><span></div>;
+                   ~~~~
+!!! error TS17008: JSX element 'span' has no corresponding closing tag.
+    
+==== tests/cases/conformance/jsx/Error2.tsx (1 errors) ====
+    let x2 = <div></span>;
+                    ~~~~
+!!! error TS17002: Expected corresponding JSX closing tag for 'div'.
+    
+    
+==== tests/cases/conformance/jsx/Error3.tsx (2 errors) ====
+    let x3 = <div>;
+              ~~~
+!!! error TS17008: JSX element 'div' has no corresponding closing tag.
+    
+    
+    
+!!! error TS1005: '</' expected.
+==== tests/cases/conformance/jsx/Error4.tsx (3 errors) ====
+    let x4 = <div><div></span>;
+              ~~~
+!!! error TS17008: JSX element 'div' has no corresponding closing tag.
+                         ~~~~
+!!! error TS17002: Expected corresponding JSX closing tag for 'div'.
+    
+    
+!!! error TS1005: '</' expected.
+==== tests/cases/conformance/jsx/Error5.tsx (3 errors) ====
+    let x5 = <div><span>
+              ~~~
+!!! error TS17008: JSX element 'div' has no corresponding closing tag.
+                   ~~~~
+!!! error TS17008: JSX element 'span' has no corresponding closing tag.
+    
+    
+    
+!!! error TS1005: '</' expected.

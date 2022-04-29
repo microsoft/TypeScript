@@ -1,0 +1,13 @@
+tests/cases/compiler/accessorParameterAccessibilityModifier.ts(2,11): error TS2369: A parameter property is only allowed in a constructor implementation.
+tests/cases/compiler/accessorParameterAccessibilityModifier.ts(3,18): error TS2369: A parameter property is only allowed in a constructor implementation.
+
+
+==== tests/cases/compiler/accessorParameterAccessibilityModifier.ts (2 errors) ====
+    class C {
+        set X(public v) { }
+              ~~~~~~~~
+!!! error TS2369: A parameter property is only allowed in a constructor implementation.
+        static set X(public v2) { }
+                     ~~~~~~~~~
+!!! error TS2369: A parameter property is only allowed in a constructor implementation.
+    }

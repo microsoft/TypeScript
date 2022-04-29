@@ -1,0 +1,443 @@
+=== tests/cases/compiler/variableDeclaratorResolvedDuringContextualTyping.ts ===
+module WinJS {
+>WinJS : Symbol(WinJS, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 0, 0))
+
+    export interface ValueCallback {
+>ValueCallback : Symbol(ValueCallback, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 0, 14))
+
+        (value: any): any;
+>value : Symbol(value, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 2, 9))
+    }
+
+    export interface EventCallback {
+>EventCallback : Symbol(EventCallback, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 3, 5))
+
+        (value: any): void;
+>value : Symbol(value, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 6, 9))
+    }
+
+    export interface ErrorCallback {
+>ErrorCallback : Symbol(ErrorCallback, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 7, 5))
+
+        (error: any): any;
+>error : Symbol(error, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 10, 9))
+    }
+
+    export interface ProgressCallback {
+>ProgressCallback : Symbol(ProgressCallback, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 11, 5))
+
+        (progress: any): any;
+>progress : Symbol(progress, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 14, 9))
+    }
+
+    export declare class Promise {
+>Promise : Symbol(Promise, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 15, 5))
+
+        constructor(init: (complete: ValueCallback, error: ErrorCallback, progress: ProgressCallback) => void, oncancel?: any);
+>init : Symbol(init, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 18, 20))
+>complete : Symbol(complete, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 18, 27))
+>ValueCallback : Symbol(ValueCallback, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 0, 14))
+>error : Symbol(error, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 18, 51))
+>ErrorCallback : Symbol(ErrorCallback, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 7, 5))
+>progress : Symbol(progress, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 18, 73))
+>ProgressCallback : Symbol(ProgressCallback, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 11, 5))
+>oncancel : Symbol(oncancel, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 18, 110))
+
+        static as(value: any): Promise;
+>as : Symbol(Promise.as, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 18, 127))
+>value : Symbol(value, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 20, 18))
+>Promise : Symbol(Promise, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 15, 5))
+
+        static join(promises: { [name: string]: Promise; }): Promise;
+>join : Symbol(Promise.join, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 20, 39), Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 21, 69))
+>promises : Symbol(promises, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 21, 20))
+>name : Symbol(name, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 21, 33))
+>Promise : Symbol(Promise, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 15, 5))
+>Promise : Symbol(Promise, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 15, 5))
+
+        static join(promises: Promise[]): Promise;
+>join : Symbol(Promise.join, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 20, 39), Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 21, 69))
+>promises : Symbol(promises, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 22, 20))
+>Promise : Symbol(Promise, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 15, 5))
+>Promise : Symbol(Promise, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 15, 5))
+
+        static any(promises: Promise[]): Promise;
+>any : Symbol(Promise.any, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 22, 50))
+>promises : Symbol(promises, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 23, 19))
+>Promise : Symbol(Promise, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 15, 5))
+>Promise : Symbol(Promise, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 15, 5))
+
+        static timeout(delay: number): Promise;
+>timeout : Symbol(Promise.timeout, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 23, 49))
+>delay : Symbol(delay, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 24, 23))
+>Promise : Symbol(Promise, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 15, 5))
+
+        static wrapError(error: any): Promise;
+>wrapError : Symbol(Promise.wrapError, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 24, 47))
+>error : Symbol(error, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 25, 25))
+>Promise : Symbol(Promise, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 15, 5))
+
+        static is(value: any): boolean;
+>is : Symbol(Promise.is, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 25, 46))
+>value : Symbol(value, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 26, 18))
+
+        static addEventListener(type: string, fn: EventCallback);
+>addEventListener : Symbol(Promise.addEventListener, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 26, 39))
+>type : Symbol(type, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 27, 32))
+>fn : Symbol(fn, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 27, 45))
+>EventCallback : Symbol(EventCallback, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 3, 5))
+
+        public then(success?: ValueCallback, error?: ErrorCallback, progress?: ProgressCallback): Promise;
+>then : Symbol(Promise.then, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 27, 65))
+>success : Symbol(success, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 29, 20))
+>ValueCallback : Symbol(ValueCallback, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 0, 14))
+>error : Symbol(error, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 29, 44))
+>ErrorCallback : Symbol(ErrorCallback, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 7, 5))
+>progress : Symbol(progress, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 29, 67))
+>ProgressCallback : Symbol(ProgressCallback, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 11, 5))
+>Promise : Symbol(Promise, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 15, 5))
+
+        public done(success?: ValueCallback, error?: ErrorCallback, progress?: ProgressCallback): void;
+>done : Symbol(Promise.done, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 29, 106))
+>success : Symbol(success, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 30, 20))
+>ValueCallback : Symbol(ValueCallback, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 0, 14))
+>error : Symbol(error, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 30, 44))
+>ErrorCallback : Symbol(ErrorCallback, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 7, 5))
+>progress : Symbol(progress, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 30, 67))
+>ProgressCallback : Symbol(ProgressCallback, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 11, 5))
+
+        public cancel(): void;
+>cancel : Symbol(Promise.cancel, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 30, 103))
+    }
+
+    export declare class TPromise<V> {
+>TPromise : Symbol(TPromise, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 32, 5))
+>V : Symbol(V, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 34, 34))
+
+        constructor(init: (complete: (value: V) => void, error: (err: any) => void, progress: ProgressCallback) => void, oncancel?: any);
+>init : Symbol(init, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 36, 20))
+>complete : Symbol(complete, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 36, 27))
+>value : Symbol(value, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 36, 38))
+>V : Symbol(V, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 34, 34))
+>error : Symbol(error, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 36, 56))
+>err : Symbol(err, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 36, 65))
+>progress : Symbol(progress, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 36, 83))
+>ProgressCallback : Symbol(ProgressCallback, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 11, 5))
+>oncancel : Symbol(oncancel, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 36, 120))
+
+        public then<U>(success?: (value: V) => TPromise<U>, error?: (err: any) => TPromise<U>, progress?: ProgressCallback): TPromise<U>;
+>then : Symbol(TPromise.then, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 36, 137), Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 38, 137), Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 39, 127), Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 40, 127))
+>U : Symbol(U, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 38, 20))
+>success : Symbol(success, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 38, 23))
+>value : Symbol(value, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 38, 34))
+>V : Symbol(V, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 34, 34))
+>TPromise : Symbol(TPromise, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 32, 5))
+>U : Symbol(U, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 38, 20))
+>error : Symbol(error, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 38, 59))
+>err : Symbol(err, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 38, 69))
+>TPromise : Symbol(TPromise, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 32, 5))
+>U : Symbol(U, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 38, 20))
+>progress : Symbol(progress, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 38, 94))
+>ProgressCallback : Symbol(ProgressCallback, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 11, 5))
+>TPromise : Symbol(TPromise, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 32, 5))
+>U : Symbol(U, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 38, 20))
+
+        public then<U>(success?: (value: V) => TPromise<U>, error?: (err: any) => U, progress?: ProgressCallback): TPromise<U>;
+>then : Symbol(TPromise.then, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 36, 137), Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 38, 137), Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 39, 127), Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 40, 127))
+>U : Symbol(U, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 39, 20))
+>success : Symbol(success, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 39, 23))
+>value : Symbol(value, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 39, 34))
+>V : Symbol(V, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 34, 34))
+>TPromise : Symbol(TPromise, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 32, 5))
+>U : Symbol(U, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 39, 20))
+>error : Symbol(error, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 39, 59))
+>err : Symbol(err, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 39, 69))
+>U : Symbol(U, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 39, 20))
+>progress : Symbol(progress, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 39, 84))
+>ProgressCallback : Symbol(ProgressCallback, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 11, 5))
+>TPromise : Symbol(TPromise, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 32, 5))
+>U : Symbol(U, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 39, 20))
+
+        public then<U>(success?: (value: V) => U, error?: (err: any) => TPromise<U>, progress?: ProgressCallback): TPromise<U>;
+>then : Symbol(TPromise.then, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 36, 137), Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 38, 137), Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 39, 127), Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 40, 127))
+>U : Symbol(U, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 40, 20))
+>success : Symbol(success, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 40, 23))
+>value : Symbol(value, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 40, 34))
+>V : Symbol(V, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 34, 34))
+>U : Symbol(U, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 40, 20))
+>error : Symbol(error, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 40, 49))
+>err : Symbol(err, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 40, 59))
+>TPromise : Symbol(TPromise, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 32, 5))
+>U : Symbol(U, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 40, 20))
+>progress : Symbol(progress, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 40, 84))
+>ProgressCallback : Symbol(ProgressCallback, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 11, 5))
+>TPromise : Symbol(TPromise, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 32, 5))
+>U : Symbol(U, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 40, 20))
+
+        public then<U>(success?: (value: V) => U, error?: (err: any) => U, progress?: ProgressCallback): TPromise<U>;
+>then : Symbol(TPromise.then, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 36, 137), Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 38, 137), Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 39, 127), Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 40, 127))
+>U : Symbol(U, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 41, 20))
+>success : Symbol(success, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 41, 23))
+>value : Symbol(value, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 41, 34))
+>V : Symbol(V, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 34, 34))
+>U : Symbol(U, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 41, 20))
+>error : Symbol(error, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 41, 49))
+>err : Symbol(err, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 41, 59))
+>U : Symbol(U, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 41, 20))
+>progress : Symbol(progress, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 41, 74))
+>ProgressCallback : Symbol(ProgressCallback, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 11, 5))
+>TPromise : Symbol(TPromise, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 32, 5))
+>U : Symbol(U, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 41, 20))
+
+        public done(success?: (value: V) => void, error?: (err: any) => any, progress?: ProgressCallback): void;
+>done : Symbol(TPromise.done, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 41, 117))
+>success : Symbol(success, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 43, 20))
+>value : Symbol(value, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 43, 31))
+>V : Symbol(V, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 34, 34))
+>error : Symbol(error, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 43, 49))
+>err : Symbol(err, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 43, 59))
+>progress : Symbol(progress, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 43, 76))
+>ProgressCallback : Symbol(ProgressCallback, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 11, 5))
+
+        public cancel(): void;
+>cancel : Symbol(TPromise.cancel, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 43, 112))
+
+        public static as<ValueType>(value: ValueType): TPromise<ValueType>;
+>as : Symbol(TPromise.as, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 44, 30))
+>ValueType : Symbol(ValueType, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 46, 25))
+>value : Symbol(value, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 46, 36))
+>ValueType : Symbol(ValueType, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 46, 25))
+>TPromise : Symbol(TPromise, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 32, 5))
+>ValueType : Symbol(ValueType, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 46, 25))
+
+        public static timeout(delay: number): TPromise<void>;
+>timeout : Symbol(TPromise.timeout, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 46, 75))
+>delay : Symbol(delay, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 47, 30))
+>TPromise : Symbol(TPromise, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 32, 5))
+
+        public static join<ValueType>(promises: TPromise<ValueType>[]): TPromise<ValueType[]>;
+>join : Symbol(TPromise.join, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 47, 61))
+>ValueType : Symbol(ValueType, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 48, 27))
+>promises : Symbol(promises, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 48, 38))
+>TPromise : Symbol(TPromise, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 32, 5))
+>ValueType : Symbol(ValueType, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 48, 27))
+>TPromise : Symbol(TPromise, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 32, 5))
+>ValueType : Symbol(ValueType, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 48, 27))
+
+        public static any<ValueType>(promises: TPromise<ValueType>[]): TPromise<ValueType>;
+>any : Symbol(TPromise.any, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 48, 94))
+>ValueType : Symbol(ValueType, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 49, 26))
+>promises : Symbol(promises, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 49, 37))
+>TPromise : Symbol(TPromise, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 32, 5))
+>ValueType : Symbol(ValueType, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 49, 26))
+>TPromise : Symbol(TPromise, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 32, 5))
+>ValueType : Symbol(ValueType, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 49, 26))
+
+        public static wrapError<ValueType>(error: any): TPromise<ValueType>;
+>wrapError : Symbol(TPromise.wrapError, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 49, 91))
+>ValueType : Symbol(ValueType, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 50, 32))
+>error : Symbol(error, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 50, 43))
+>TPromise : Symbol(TPromise, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 32, 5))
+>ValueType : Symbol(ValueType, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 50, 32))
+    }
+
+    export interface IXHROptions {
+>IXHROptions : Symbol(IXHROptions, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 51, 5))
+
+        type?: string;
+>type : Symbol(IXHROptions.type, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 53, 34))
+
+        url?: string;
+>url : Symbol(IXHROptions.url, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 54, 22))
+
+        user?: string;
+>user : Symbol(IXHROptions.user, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 55, 21))
+
+        password?: string;
+>password : Symbol(IXHROptions.password, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 56, 22))
+
+        responseType?: string;
+>responseType : Symbol(IXHROptions.responseType, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 57, 26))
+
+        headers?: any;
+>headers : Symbol(IXHROptions.headers, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 58, 30))
+
+        customRequestInitializer?: (req: any) => void;
+>customRequestInitializer : Symbol(IXHROptions.customRequestInitializer, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 59, 22))
+>req : Symbol(req, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 60, 36))
+
+        data?: any;
+>data : Symbol(IXHROptions.data, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 60, 54))
+    }
+}
+
+module Services {
+>Services : Symbol(Services, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 63, 1))
+
+    export interface IRequestService {
+>IRequestService : Symbol(IRequestService, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 65, 17))
+
+        /**
+         * Returns the URL that can be used to access the provided service. The optional second argument can
+         * be provided to narrow down the request URL to a specific file system resource. The third argument
+         * allows to specify to return a fully absolute server URL. 
+         */
+        getRequestUrl(service: string, path?: string): string;
+>getRequestUrl : Symbol(IRequestService.getRequestUrl, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 66, 38), Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 72, 62))
+>service : Symbol(service, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 72, 22))
+>path : Symbol(path, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 72, 38))
+
+        getRequestUrl(service: string, path?: string, absolute?: boolean): string;
+>getRequestUrl : Symbol(IRequestService.getRequestUrl, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 66, 38), Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 72, 62))
+>service : Symbol(service, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 73, 22))
+>path : Symbol(path, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 73, 38))
+>absolute : Symbol(absolute, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 73, 53))
+
+        /**
+         * Wraps the call into WinJS.XHR to allow for mocking and telemetry. Use this instead
+         * of calling WinJS.XHR directly.
+         */
+        makeRequest(options: WinJS.IXHROptions): WinJS.Promise;
+>makeRequest : Symbol(IRequestService.makeRequest, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 73, 82))
+>options : Symbol(options, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 79, 20))
+>WinJS : Symbol(WinJS, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 0, 0))
+>IXHROptions : Symbol(WinJS.IXHROptions, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 51, 5))
+>WinJS : Symbol(WinJS, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 0, 0))
+>Promise : Symbol(WinJS.Promise, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 15, 5))
+    }
+}
+
+module Errors {
+>Errors : Symbol(Errors, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 81, 1))
+
+    export class ConnectionError /* extends Error */ {
+>ConnectionError : Symbol(ConnectionError, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 83, 15))
+
+        constructor(request: XMLHttpRequest) {
+>request : Symbol(request, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 85, 20))
+>XMLHttpRequest : Symbol(XMLHttpRequest, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 95, 1))
+        }
+    }
+}
+
+module Files {
+>Files : Symbol(Files, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 88, 1))
+
+    export interface IUploadResult {
+>IUploadResult : Symbol(IUploadResult, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 90, 14))
+
+        stat: string;
+>stat : Symbol(IUploadResult.stat, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 91, 36))
+
+        isNew: boolean;
+>isNew : Symbol(IUploadResult.isNew, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 92, 21))
+    }
+}
+
+interface XMLHttpRequest {
+>XMLHttpRequest : Symbol(XMLHttpRequest, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 95, 1))
+
+    status: number;
+>status : Symbol(XMLHttpRequest.status, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 97, 26))
+
+    responseText: string;
+>responseText : Symbol(XMLHttpRequest.responseText, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 98, 19))
+
+    statusText: string;
+>statusText : Symbol(XMLHttpRequest.statusText, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 99, 25))
+
+}
+
+class FileService {
+>FileService : Symbol(FileService, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 102, 1))
+
+    private requestService: Services.IRequestService;
+>requestService : Symbol(FileService.requestService, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 104, 19))
+>Services : Symbol(Services, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 63, 1))
+>IRequestService : Symbol(Services.IRequestService, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 65, 17))
+
+    public uploadData(): WinJS.TPromise<Files.IUploadResult> {
+>uploadData : Symbol(FileService.uploadData, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 105, 53))
+>WinJS : Symbol(WinJS, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 0, 0))
+>TPromise : Symbol(WinJS.TPromise, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 32, 5))
+>Files : Symbol(Files, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 88, 1))
+>IUploadResult : Symbol(Files.IUploadResult, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 90, 14))
+
+        var path = "";
+>path : Symbol(path, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 107, 11))
+
+        return this.requestService.makeRequest({
+>this.requestService.makeRequest({            url: this.requestService.getRequestUrl('root', path),            type: 'POST',            headers: {},            data: "someData"        }).then : Symbol(WinJS.Promise.then, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 27, 65))
+>this.requestService.makeRequest : Symbol(Services.IRequestService.makeRequest, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 73, 82))
+>this.requestService : Symbol(FileService.requestService, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 104, 19))
+>this : Symbol(FileService, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 102, 1))
+>requestService : Symbol(FileService.requestService, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 104, 19))
+>makeRequest : Symbol(Services.IRequestService.makeRequest, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 73, 82))
+
+            url: this.requestService.getRequestUrl('root', path),
+>url : Symbol(url, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 108, 48))
+>this.requestService.getRequestUrl : Symbol(Services.IRequestService.getRequestUrl, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 66, 38), Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 72, 62))
+>this.requestService : Symbol(FileService.requestService, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 104, 19))
+>this : Symbol(FileService, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 102, 1))
+>requestService : Symbol(FileService.requestService, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 104, 19))
+>getRequestUrl : Symbol(Services.IRequestService.getRequestUrl, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 66, 38), Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 72, 62))
+>path : Symbol(path, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 107, 11))
+
+            type: 'POST',
+>type : Symbol(type, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 109, 65))
+
+            headers: {},
+>headers : Symbol(headers, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 110, 25))
+
+            data: "someData"
+>data : Symbol(data, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 111, 24))
+
+        }).then((response: XMLHttpRequest) => {
+>then : Symbol(WinJS.Promise.then, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 27, 65))
+>response : Symbol(response, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 113, 17))
+>XMLHttpRequest : Symbol(XMLHttpRequest, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 95, 1))
+
+                var result: IUploadResult = { // This should be error
+>result : Symbol(result, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 114, 19))
+>IUploadResult : Symbol(IUploadResult)
+
+                    stat: this.jsonToStat(newFilePath, "someString"), // _this needs to be emitted to the js file
+>stat : Symbol(stat, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 114, 45))
+>this : Symbol(FileService, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 102, 1))
+
+                    isNew: response.status === 201
+>isNew : Symbol(isNew, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 115, 69))
+>response.status : Symbol(XMLHttpRequest.status, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 97, 26))
+>response : Symbol(response, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 113, 17))
+>status : Symbol(XMLHttpRequest.status, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 97, 26))
+
+                };
+
+                return WinJS.TPromise.as<Files.IUploadResult>(result);
+>WinJS.TPromise.as : Symbol(WinJS.TPromise.as, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 44, 30))
+>WinJS.TPromise : Symbol(WinJS.TPromise, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 32, 5))
+>WinJS : Symbol(WinJS, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 0, 0))
+>TPromise : Symbol(WinJS.TPromise, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 32, 5))
+>as : Symbol(WinJS.TPromise.as, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 44, 30))
+>Files : Symbol(Files, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 88, 1))
+>IUploadResult : Symbol(Files.IUploadResult, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 90, 14))
+>result : Symbol(result, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 114, 19))
+
+            }, (xhr: XMLHttpRequest) => {
+>xhr : Symbol(xhr, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 120, 16))
+>XMLHttpRequest : Symbol(XMLHttpRequest, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 95, 1))
+
+                return WinJS.Promise.wrapError(new Errors.ConnectionError(xhr));
+>WinJS.Promise.wrapError : Symbol(WinJS.Promise.wrapError, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 24, 47))
+>WinJS.Promise : Symbol(WinJS.Promise, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 15, 5))
+>WinJS : Symbol(WinJS, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 0, 0))
+>Promise : Symbol(WinJS.Promise, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 15, 5))
+>wrapError : Symbol(WinJS.Promise.wrapError, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 24, 47))
+>Errors.ConnectionError : Symbol(Errors.ConnectionError, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 83, 15))
+>Errors : Symbol(Errors, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 81, 1))
+>ConnectionError : Symbol(Errors.ConnectionError, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 83, 15))
+>xhr : Symbol(xhr, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 120, 16))
+
+            });
+    }
+}

@@ -1,0 +1,40 @@
+=== tests/cases/conformance/es6/destructuring/destructuringObjectBindingPatternAndAssignment3.ts ===
+// Error
+var {h?} = { h?: 1 };
+>h : number
+>{ h?: 1 } : { h: number; }
+>h : number
+>1 : 1
+
+var {i}: string | number = { i: 2 };
+>i : any
+>{ i: 2 } : { i: number; }
+>i : number
+>2 : 2
+
+var {i1}: string | number| {} = { i1: 2 };
+>i1 : any
+>{ i1: 2 } : { i1: number; }
+>i1 : number
+>2 : 2
+
+var { f2: {f21} = { f212: "string" } }: any = undefined;
+>f2 : any
+>f21 : any
+>{ f212: "string" } : { f212: string; f21: any; }
+>f212 : string
+>"string" : "string"
+>undefined : undefined
+
+var {1} = { 1 };
+> : any
+>{ 1 } : { 1: any; }
+>1 : any
+> : any
+
+var {"prop"} = { "prop": 1 };
+> : any
+>{ "prop": 1 } : { prop: number; }
+>"prop" : number
+>1 : 1
+

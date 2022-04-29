@@ -1,0 +1,1013 @@
+=== tests/cases/compiler/duplicateLocalVariable1.ts ===
+//import FileManager = require('filemanager');
+//import App = require('app');
+
+declare var FileManager: any;
+>FileManager : Symbol(FileManager, Decl(duplicateLocalVariable1.ts, 3, 11))
+
+declare var App: any;
+>App : Symbol(App, Decl(duplicateLocalVariable1.ts, 4, 11))
+
+var TestFileDir = ".\\TempTestFiles";
+>TestFileDir : Symbol(TestFileDir, Decl(duplicateLocalVariable1.ts, 6, 3))
+
+export class TestCase {
+>TestCase : Symbol(TestCase, Decl(duplicateLocalVariable1.ts, 6, 37))
+
+    constructor (public name: string, public test: ()=>boolean, public errorMessageRegEx?: string) {
+>name : Symbol(TestCase.name, Decl(duplicateLocalVariable1.ts, 9, 17))
+>test : Symbol(TestCase.test, Decl(duplicateLocalVariable1.ts, 9, 37))
+>errorMessageRegEx : Symbol(TestCase.errorMessageRegEx, Decl(duplicateLocalVariable1.ts, 9, 63))
+    }
+}
+export class TestRunner { 
+>TestRunner : Symbol(TestRunner, Decl(duplicateLocalVariable1.ts, 11, 1))
+
+    private tests: TestCase[] = [];
+>tests : Symbol(TestRunner.tests, Decl(duplicateLocalVariable1.ts, 12, 25))
+>TestCase : Symbol(TestCase, Decl(duplicateLocalVariable1.ts, 6, 37))
+
+    static arrayCompare(arg1: any[], arg2: any[]): boolean {
+>arrayCompare : Symbol(TestRunner.arrayCompare, Decl(duplicateLocalVariable1.ts, 13, 35))
+>arg1 : Symbol(arg1, Decl(duplicateLocalVariable1.ts, 15, 24))
+>arg2 : Symbol(arg2, Decl(duplicateLocalVariable1.ts, 15, 36))
+
+        return (arg1.every(function (val, index) { return val === arg2[index] }));
+>arg1.every : Symbol(Array.every, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>arg1 : Symbol(arg1, Decl(duplicateLocalVariable1.ts, 15, 24))
+>every : Symbol(Array.every, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>val : Symbol(val, Decl(duplicateLocalVariable1.ts, 16, 37))
+>index : Symbol(index, Decl(duplicateLocalVariable1.ts, 16, 41))
+>val : Symbol(val, Decl(duplicateLocalVariable1.ts, 16, 37))
+>arg2 : Symbol(arg2, Decl(duplicateLocalVariable1.ts, 15, 36))
+>index : Symbol(index, Decl(duplicateLocalVariable1.ts, 16, 41))
+    }
+
+    public addTest(test: TestCase) {
+>addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+>test : Symbol(test, Decl(duplicateLocalVariable1.ts, 19, 19))
+>TestCase : Symbol(TestCase, Decl(duplicateLocalVariable1.ts, 6, 37))
+
+        this.tests.push(test);
+>this.tests.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>this.tests : Symbol(TestRunner.tests, Decl(duplicateLocalVariable1.ts, 12, 25))
+>this : Symbol(TestRunner, Decl(duplicateLocalVariable1.ts, 11, 1))
+>tests : Symbol(TestRunner.tests, Decl(duplicateLocalVariable1.ts, 12, 25))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>test : Symbol(test, Decl(duplicateLocalVariable1.ts, 19, 19))
+    }
+    public run() {
+>run : Symbol(TestRunner.run, Decl(duplicateLocalVariable1.ts, 21, 5))
+
+        var success = true;
+>success : Symbol(success, Decl(duplicateLocalVariable1.ts, 23, 11))
+
+        for (var test in this.tests) {
+>test : Symbol(test, Decl(duplicateLocalVariable1.ts, 24, 16))
+>this.tests : Symbol(TestRunner.tests, Decl(duplicateLocalVariable1.ts, 12, 25))
+>this : Symbol(TestRunner, Decl(duplicateLocalVariable1.ts, 11, 1))
+>tests : Symbol(TestRunner.tests, Decl(duplicateLocalVariable1.ts, 12, 25))
+
+            var exception = false;
+>exception : Symbol(exception, Decl(duplicateLocalVariable1.ts, 25, 15))
+
+            var testcase = <TestCase>this.tests[test]
+>testcase : Symbol(testcase, Decl(duplicateLocalVariable1.ts, 26, 15))
+>TestCase : Symbol(TestCase, Decl(duplicateLocalVariable1.ts, 6, 37))
+>this.tests : Symbol(TestRunner.tests, Decl(duplicateLocalVariable1.ts, 12, 25))
+>this : Symbol(TestRunner, Decl(duplicateLocalVariable1.ts, 11, 1))
+>tests : Symbol(TestRunner.tests, Decl(duplicateLocalVariable1.ts, 12, 25))
+>test : Symbol(test, Decl(duplicateLocalVariable1.ts, 24, 16))
+
+            var testResult: boolean = false;
+>testResult : Symbol(testResult, Decl(duplicateLocalVariable1.ts, 27, 15))
+
+            try {
+                testResult = testcase.test();
+>testResult : Symbol(testResult, Decl(duplicateLocalVariable1.ts, 27, 15))
+>testcase.test : Symbol(TestCase.test, Decl(duplicateLocalVariable1.ts, 9, 37))
+>testcase : Symbol(testcase, Decl(duplicateLocalVariable1.ts, 26, 15))
+>test : Symbol(TestCase.test, Decl(duplicateLocalVariable1.ts, 9, 37))
+            }
+            catch (e) {
+>e : Symbol(e, Decl(duplicateLocalVariable1.ts, 31, 19))
+
+                exception = true;
+>exception : Symbol(exception, Decl(duplicateLocalVariable1.ts, 25, 15))
+
+                testResult = false;
+>testResult : Symbol(testResult, Decl(duplicateLocalVariable1.ts, 27, 15))
+
+                if (typeof testcase.errorMessageRegEx === "string") {
+>testcase.errorMessageRegEx : Symbol(TestCase.errorMessageRegEx, Decl(duplicateLocalVariable1.ts, 9, 63))
+>testcase : Symbol(testcase, Decl(duplicateLocalVariable1.ts, 26, 15))
+>errorMessageRegEx : Symbol(TestCase.errorMessageRegEx, Decl(duplicateLocalVariable1.ts, 9, 63))
+
+                    if (testcase.errorMessageRegEx === "") { // Any error is fine
+>testcase.errorMessageRegEx : Symbol(TestCase.errorMessageRegEx, Decl(duplicateLocalVariable1.ts, 9, 63))
+>testcase : Symbol(testcase, Decl(duplicateLocalVariable1.ts, 26, 15))
+>errorMessageRegEx : Symbol(TestCase.errorMessageRegEx, Decl(duplicateLocalVariable1.ts, 9, 63))
+
+                        testResult = true;
+>testResult : Symbol(testResult, Decl(duplicateLocalVariable1.ts, 27, 15))
+
+                    } else if (e.message) {
+>e : Symbol(e, Decl(duplicateLocalVariable1.ts, 31, 19))
+
+                        var regex = new RegExp(testcase.errorMessageRegEx);
+>regex : Symbol(regex, Decl(duplicateLocalVariable1.ts, 38, 27))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>testcase.errorMessageRegEx : Symbol(TestCase.errorMessageRegEx, Decl(duplicateLocalVariable1.ts, 9, 63))
+>testcase : Symbol(testcase, Decl(duplicateLocalVariable1.ts, 26, 15))
+>errorMessageRegEx : Symbol(TestCase.errorMessageRegEx, Decl(duplicateLocalVariable1.ts, 9, 63))
+
+                        testResult = regex.test(e.message);
+>testResult : Symbol(testResult, Decl(duplicateLocalVariable1.ts, 27, 15))
+>regex.test : Symbol(RegExp.test, Decl(lib.es5.d.ts, --, --))
+>regex : Symbol(regex, Decl(duplicateLocalVariable1.ts, 38, 27))
+>test : Symbol(RegExp.test, Decl(lib.es5.d.ts, --, --))
+>e : Symbol(e, Decl(duplicateLocalVariable1.ts, 31, 19))
+                    }
+                } 
+                if (testResult === false) {
+>testResult : Symbol(testResult, Decl(duplicateLocalVariable1.ts, 27, 15))
+
+                    //console.log(e.message);
+                }
+            }
+            if ((testcase.errorMessageRegEx !== undefined) && !exception) {
+>testcase.errorMessageRegEx : Symbol(TestCase.errorMessageRegEx, Decl(duplicateLocalVariable1.ts, 9, 63))
+>testcase : Symbol(testcase, Decl(duplicateLocalVariable1.ts, 26, 15))
+>errorMessageRegEx : Symbol(TestCase.errorMessageRegEx, Decl(duplicateLocalVariable1.ts, 9, 63))
+>undefined : Symbol(undefined)
+>exception : Symbol(exception, Decl(duplicateLocalVariable1.ts, 25, 15))
+
+                success = false;
+>success : Symbol(success, Decl(duplicateLocalVariable1.ts, 23, 11))
+
+            } else if (!testResult) {
+>testResult : Symbol(testResult, Decl(duplicateLocalVariable1.ts, 27, 15))
+
+                success = false;
+>success : Symbol(success, Decl(duplicateLocalVariable1.ts, 23, 11))
+            }
+        }
+        if (success) {
+>success : Symbol(success, Decl(duplicateLocalVariable1.ts, 23, 11))
+
+        } else {
+        }
+    }
+}
+
+export var tests: TestRunner = (function () {
+>tests : Symbol(tests, Decl(duplicateLocalVariable1.ts, 58, 10))
+>TestRunner : Symbol(TestRunner, Decl(duplicateLocalVariable1.ts, 11, 1))
+
+    var testRunner = new TestRunner();
+>testRunner : Symbol(testRunner, Decl(duplicateLocalVariable1.ts, 59, 7))
+>TestRunner : Symbol(TestRunner, Decl(duplicateLocalVariable1.ts, 11, 1))
+
+    // First 3 are for simple harness validation
+    testRunner.addTest(new TestCase("Basic test", function () { return true; }));
+>testRunner.addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+>testRunner : Symbol(testRunner, Decl(duplicateLocalVariable1.ts, 59, 7))
+>addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+>TestCase : Symbol(TestCase, Decl(duplicateLocalVariable1.ts, 6, 37))
+
+    testRunner.addTest(new TestCase("Test for any error", function () { throw new Error(); return false; }, ""));
+>testRunner.addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+>testRunner : Symbol(testRunner, Decl(duplicateLocalVariable1.ts, 59, 7))
+>addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+>TestCase : Symbol(TestCase, Decl(duplicateLocalVariable1.ts, 6, 37))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    testRunner.addTest(new TestCase("Test RegEx error message match", function () { throw new Error("Should also pass"); return false; }, "Should [also]+ pass"));
+>testRunner.addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+>testRunner : Symbol(testRunner, Decl(duplicateLocalVariable1.ts, 59, 7))
+>addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+>TestCase : Symbol(TestCase, Decl(duplicateLocalVariable1.ts, 6, 37))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    testRunner.addTest(new TestCase("Test array compare true", function () { return TestRunner.arrayCompare([1, 2, 3], [1, 2, 3]); }));
+>testRunner.addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+>testRunner : Symbol(testRunner, Decl(duplicateLocalVariable1.ts, 59, 7))
+>addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+>TestCase : Symbol(TestCase, Decl(duplicateLocalVariable1.ts, 6, 37))
+>TestRunner.arrayCompare : Symbol(TestRunner.arrayCompare, Decl(duplicateLocalVariable1.ts, 13, 35))
+>TestRunner : Symbol(TestRunner, Decl(duplicateLocalVariable1.ts, 11, 1))
+>arrayCompare : Symbol(TestRunner.arrayCompare, Decl(duplicateLocalVariable1.ts, 13, 35))
+
+    testRunner.addTest(new TestCase("Test array compare false", function () { return !TestRunner.arrayCompare([3, 2, 3], [1, 2, 3]); }));
+>testRunner.addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+>testRunner : Symbol(testRunner, Decl(duplicateLocalVariable1.ts, 59, 7))
+>addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+>TestCase : Symbol(TestCase, Decl(duplicateLocalVariable1.ts, 6, 37))
+>TestRunner.arrayCompare : Symbol(TestRunner.arrayCompare, Decl(duplicateLocalVariable1.ts, 13, 35))
+>TestRunner : Symbol(TestRunner, Decl(duplicateLocalVariable1.ts, 11, 1))
+>arrayCompare : Symbol(TestRunner.arrayCompare, Decl(duplicateLocalVariable1.ts, 13, 35))
+
+    // File detection tests
+    testRunner.addTest(new TestCase("Check file exists",
+>testRunner.addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+>testRunner : Symbol(testRunner, Decl(duplicateLocalVariable1.ts, 59, 7))
+>addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+>TestCase : Symbol(TestCase, Decl(duplicateLocalVariable1.ts, 6, 37))
+
+        function () {
+            return FileManager.DirectoryManager.fileExists(TestFileDir + "\\Test.txt");
+>FileManager : Symbol(FileManager, Decl(duplicateLocalVariable1.ts, 3, 11))
+>TestFileDir : Symbol(TestFileDir, Decl(duplicateLocalVariable1.ts, 6, 3))
+
+        }));
+    testRunner.addTest(new TestCase("Check file doesn't exist",
+>testRunner.addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+>testRunner : Symbol(testRunner, Decl(duplicateLocalVariable1.ts, 59, 7))
+>addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+>TestCase : Symbol(TestCase, Decl(duplicateLocalVariable1.ts, 6, 37))
+
+        function () {
+            return !FileManager.DirectoryManager.fileExists(TestFileDir + "\\Test2.txt");
+>FileManager : Symbol(FileManager, Decl(duplicateLocalVariable1.ts, 3, 11))
+>TestFileDir : Symbol(TestFileDir, Decl(duplicateLocalVariable1.ts, 6, 3))
+
+        }));
+
+    // File pattern matching tests
+    testRunner.addTest(new TestCase("Check text file match",
+>testRunner.addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+>testRunner : Symbol(testRunner, Decl(duplicateLocalVariable1.ts, 59, 7))
+>addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+>TestCase : Symbol(TestCase, Decl(duplicateLocalVariable1.ts, 6, 37))
+
+        function () {
+            return (FileManager.FileBuffer.isTextFile("C:\\somedir\\readme.txt") &&
+>FileManager : Symbol(FileManager, Decl(duplicateLocalVariable1.ts, 3, 11))
+
+                FileManager.FileBuffer.isTextFile("C:\\spaces path\\myapp.str") &&
+>FileManager : Symbol(FileManager, Decl(duplicateLocalVariable1.ts, 3, 11))
+
+                FileManager.FileBuffer.isTextFile("C:\\somedir\\code.js"))
+>FileManager : Symbol(FileManager, Decl(duplicateLocalVariable1.ts, 3, 11))
+
+        }));
+    testRunner.addTest(new TestCase("Check makefile match",
+>testRunner.addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+>testRunner : Symbol(testRunner, Decl(duplicateLocalVariable1.ts, 59, 7))
+>addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+>TestCase : Symbol(TestCase, Decl(duplicateLocalVariable1.ts, 6, 37))
+
+        function () {
+            return FileManager.FileBuffer.isTextFile("C:\\some dir\\makefile");
+>FileManager : Symbol(FileManager, Decl(duplicateLocalVariable1.ts, 3, 11))
+
+        }));
+    testRunner.addTest(new TestCase("Check binary file doesn't match",
+>testRunner.addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+>testRunner : Symbol(testRunner, Decl(duplicateLocalVariable1.ts, 59, 7))
+>addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+>TestCase : Symbol(TestCase, Decl(duplicateLocalVariable1.ts, 6, 37))
+
+        function () {
+            return (!FileManager.FileBuffer.isTextFile("C:\\somedir\\app.exe") &&
+>FileManager : Symbol(FileManager, Decl(duplicateLocalVariable1.ts, 3, 11))
+
+            !FileManager.FileBuffer.isTextFile("C:\\somedir\\my lib.dll"));
+>FileManager : Symbol(FileManager, Decl(duplicateLocalVariable1.ts, 3, 11))
+
+        }));
+
+    // Command-line parameter tests
+    testRunner.addTest(new TestCase("Check App defaults",
+>testRunner.addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+>testRunner : Symbol(testRunner, Decl(duplicateLocalVariable1.ts, 59, 7))
+>addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+>TestCase : Symbol(TestCase, Decl(duplicateLocalVariable1.ts, 6, 37))
+
+        function () {
+            var app = new App.App([]);
+>app : Symbol(app, Decl(duplicateLocalVariable1.ts, 97, 15))
+>App : Symbol(App, Decl(duplicateLocalVariable1.ts, 4, 11))
+
+            return (app.fixLines === false &&
+>app : Symbol(app, Decl(duplicateLocalVariable1.ts, 97, 15))
+
+                   app.recurse === true &&
+>app : Symbol(app, Decl(duplicateLocalVariable1.ts, 97, 15))
+
+                   app.lineEndings === "CRLF" &&
+>app : Symbol(app, Decl(duplicateLocalVariable1.ts, 97, 15))
+
+                   app.matchPattern === undefined &&
+>app : Symbol(app, Decl(duplicateLocalVariable1.ts, 97, 15))
+>undefined : Symbol(undefined)
+
+                   app.rootDirectory === ".\\" &&
+>app : Symbol(app, Decl(duplicateLocalVariable1.ts, 97, 15))
+
+                   app.encodings[0] === "ascii" &&
+>app : Symbol(app, Decl(duplicateLocalVariable1.ts, 97, 15))
+
+                   app.encodings[1] === "utf8nobom");
+>app : Symbol(app, Decl(duplicateLocalVariable1.ts, 97, 15))
+
+        }));
+    testRunner.addTest(new TestCase("Check App params",
+>testRunner.addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+>testRunner : Symbol(testRunner, Decl(duplicateLocalVariable1.ts, 59, 7))
+>addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+>TestCase : Symbol(TestCase, Decl(duplicateLocalVariable1.ts, 6, 37))
+
+        function () {
+            var app = new App.App(["-dir=C:\\test dir", "-lineEndings=LF", "-encodings=utf16be,ascii", "-recurse=false", "-fixlines"]);
+>app : Symbol(app, Decl(duplicateLocalVariable1.ts, 108, 15))
+>App : Symbol(App, Decl(duplicateLocalVariable1.ts, 4, 11))
+
+            return (app.fixLines === true &&
+>app : Symbol(app, Decl(duplicateLocalVariable1.ts, 108, 15))
+
+                   app.lineEndings === "LF" &&
+>app : Symbol(app, Decl(duplicateLocalVariable1.ts, 108, 15))
+
+                   app.recurse === false &&
+>app : Symbol(app, Decl(duplicateLocalVariable1.ts, 108, 15))
+
+                   app.matchPattern === undefined &&
+>app : Symbol(app, Decl(duplicateLocalVariable1.ts, 108, 15))
+>undefined : Symbol(undefined)
+
+                   app.rootDirectory === "C:\\test dir" &&
+>app : Symbol(app, Decl(duplicateLocalVariable1.ts, 108, 15))
+
+                   app.encodings[0] === "utf16be" &&
+>app : Symbol(app, Decl(duplicateLocalVariable1.ts, 108, 15))
+
+                   app.encodings[1] === "ascii" &&
+>app : Symbol(app, Decl(duplicateLocalVariable1.ts, 108, 15))
+
+                   app.encodings.length === 2);
+>app : Symbol(app, Decl(duplicateLocalVariable1.ts, 108, 15))
+
+        }));
+
+    // File BOM detection tests
+    testRunner.addTest(new TestCase("Check encoding detection no BOM",
+>testRunner.addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+>testRunner : Symbol(testRunner, Decl(duplicateLocalVariable1.ts, 59, 7))
+>addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+>TestCase : Symbol(TestCase, Decl(duplicateLocalVariable1.ts, 6, 37))
+
+        function () {
+            var fb = new FileManager.FileBuffer(TestFileDir + "\\noBOM.txt");
+>fb : Symbol(fb, Decl(duplicateLocalVariable1.ts, 122, 15))
+>FileManager : Symbol(FileManager, Decl(duplicateLocalVariable1.ts, 3, 11))
+>TestFileDir : Symbol(TestFileDir, Decl(duplicateLocalVariable1.ts, 6, 3))
+
+            return fb.bom === 'none' && fb.encoding === 'utf8';
+>fb : Symbol(fb, Decl(duplicateLocalVariable1.ts, 122, 15))
+>fb : Symbol(fb, Decl(duplicateLocalVariable1.ts, 122, 15))
+
+        }));
+    testRunner.addTest(new TestCase("Check encoding detection UTF8 BOM",
+>testRunner.addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+>testRunner : Symbol(testRunner, Decl(duplicateLocalVariable1.ts, 59, 7))
+>addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+>TestCase : Symbol(TestCase, Decl(duplicateLocalVariable1.ts, 6, 37))
+
+        function () {
+            var fb = new FileManager.FileBuffer(TestFileDir + "\\UTF8BOM.txt");
+>fb : Symbol(fb, Decl(duplicateLocalVariable1.ts, 127, 15))
+>FileManager : Symbol(FileManager, Decl(duplicateLocalVariable1.ts, 3, 11))
+>TestFileDir : Symbol(TestFileDir, Decl(duplicateLocalVariable1.ts, 6, 3))
+
+            return fb.bom === 'utf8' && fb.encoding === 'utf8';
+>fb : Symbol(fb, Decl(duplicateLocalVariable1.ts, 127, 15))
+>fb : Symbol(fb, Decl(duplicateLocalVariable1.ts, 127, 15))
+
+        }));
+    testRunner.addTest(new TestCase("Check encoding detection UTF16be BOM",
+>testRunner.addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+>testRunner : Symbol(testRunner, Decl(duplicateLocalVariable1.ts, 59, 7))
+>addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+>TestCase : Symbol(TestCase, Decl(duplicateLocalVariable1.ts, 6, 37))
+
+        function () {
+            var fb = new FileManager.FileBuffer(TestFileDir + "\\UTF16BE.txt");
+>fb : Symbol(fb, Decl(duplicateLocalVariable1.ts, 132, 15))
+>FileManager : Symbol(FileManager, Decl(duplicateLocalVariable1.ts, 3, 11))
+>TestFileDir : Symbol(TestFileDir, Decl(duplicateLocalVariable1.ts, 6, 3))
+
+            return fb.bom === 'utf16be' && fb.encoding === 'utf16be';
+>fb : Symbol(fb, Decl(duplicateLocalVariable1.ts, 132, 15))
+>fb : Symbol(fb, Decl(duplicateLocalVariable1.ts, 132, 15))
+
+        }));
+    testRunner.addTest(new TestCase("Check encoding detection UTF16le BOM",
+>testRunner.addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+>testRunner : Symbol(testRunner, Decl(duplicateLocalVariable1.ts, 59, 7))
+>addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+>TestCase : Symbol(TestCase, Decl(duplicateLocalVariable1.ts, 6, 37))
+
+        function () {
+            var fb = new FileManager.FileBuffer(TestFileDir + "\\UTF16LE.txt");
+>fb : Symbol(fb, Decl(duplicateLocalVariable1.ts, 137, 15))
+>FileManager : Symbol(FileManager, Decl(duplicateLocalVariable1.ts, 3, 11))
+>TestFileDir : Symbol(TestFileDir, Decl(duplicateLocalVariable1.ts, 6, 3))
+
+            return fb.bom === 'utf16le' && fb.encoding === 'utf16le';
+>fb : Symbol(fb, Decl(duplicateLocalVariable1.ts, 137, 15))
+>fb : Symbol(fb, Decl(duplicateLocalVariable1.ts, 137, 15))
+
+        }));
+    testRunner.addTest(new TestCase("Check encoding on 1 bytes file",
+>testRunner.addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+>testRunner : Symbol(testRunner, Decl(duplicateLocalVariable1.ts, 59, 7))
+>addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+>TestCase : Symbol(TestCase, Decl(duplicateLocalVariable1.ts, 6, 37))
+
+        function () {
+            var fb = new FileManager.FileBuffer(TestFileDir + "\\1bytefile.txt");
+>fb : Symbol(fb, Decl(duplicateLocalVariable1.ts, 142, 15))
+>FileManager : Symbol(FileManager, Decl(duplicateLocalVariable1.ts, 3, 11))
+>TestFileDir : Symbol(TestFileDir, Decl(duplicateLocalVariable1.ts, 6, 3))
+
+            return fb.bom === 'none' && fb.encoding === 'utf8';
+>fb : Symbol(fb, Decl(duplicateLocalVariable1.ts, 142, 15))
+>fb : Symbol(fb, Decl(duplicateLocalVariable1.ts, 142, 15))
+
+        }));
+    testRunner.addTest(new TestCase("Check encoding on 0 bytes file",
+>testRunner.addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+>testRunner : Symbol(testRunner, Decl(duplicateLocalVariable1.ts, 59, 7))
+>addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+>TestCase : Symbol(TestCase, Decl(duplicateLocalVariable1.ts, 6, 37))
+
+        function () {
+            var fb = new FileManager.FileBuffer(TestFileDir + "\\0bytefile.txt");
+>fb : Symbol(fb, Decl(duplicateLocalVariable1.ts, 147, 15))
+>FileManager : Symbol(FileManager, Decl(duplicateLocalVariable1.ts, 3, 11))
+>TestFileDir : Symbol(TestFileDir, Decl(duplicateLocalVariable1.ts, 6, 3))
+
+            return fb.bom === 'none' && fb.encoding === 'utf8';
+>fb : Symbol(fb, Decl(duplicateLocalVariable1.ts, 147, 15))
+>fb : Symbol(fb, Decl(duplicateLocalVariable1.ts, 147, 15))
+
+        }));
+
+    // UTF8 encoding tests
+    testRunner.addTest(new TestCase("Check byte reader",
+>testRunner.addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+>testRunner : Symbol(testRunner, Decl(duplicateLocalVariable1.ts, 59, 7))
+>addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+>TestCase : Symbol(TestCase, Decl(duplicateLocalVariable1.ts, 6, 37))
+
+        function () {
+            var fb = new FileManager.FileBuffer(TestFileDir + "\\UTF8BOM.txt");
+>fb : Symbol(fb, Decl(duplicateLocalVariable1.ts, 154, 15))
+>FileManager : Symbol(FileManager, Decl(duplicateLocalVariable1.ts, 3, 11))
+>TestFileDir : Symbol(TestFileDir, Decl(duplicateLocalVariable1.ts, 6, 3))
+
+            var chars = [];
+>chars : Symbol(chars, Decl(duplicateLocalVariable1.ts, 155, 15))
+
+            for (var i = 0; i < 11; i++) {
+>i : Symbol(i, Decl(duplicateLocalVariable1.ts, 156, 20))
+>i : Symbol(i, Decl(duplicateLocalVariable1.ts, 156, 20))
+>i : Symbol(i, Decl(duplicateLocalVariable1.ts, 156, 20))
+
+                chars.push(fb.readByte());
+>chars.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>chars : Symbol(chars, Decl(duplicateLocalVariable1.ts, 155, 15))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>fb : Symbol(fb, Decl(duplicateLocalVariable1.ts, 154, 15))
+            }
+            return TestRunner.arrayCompare(chars, [0x54, 0xC3, 0xA8, 0xE1, 0xB4, 0xA3, 0xE2, 0x80, 0xA0, 0x0D, 0x0A]);
+>TestRunner.arrayCompare : Symbol(TestRunner.arrayCompare, Decl(duplicateLocalVariable1.ts, 13, 35))
+>TestRunner : Symbol(TestRunner, Decl(duplicateLocalVariable1.ts, 11, 1))
+>arrayCompare : Symbol(TestRunner.arrayCompare, Decl(duplicateLocalVariable1.ts, 13, 35))
+>chars : Symbol(chars, Decl(duplicateLocalVariable1.ts, 155, 15))
+
+        }));
+
+
+    testRunner.addTest(new TestCase("Check UTF8 decoding",
+>testRunner.addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+>testRunner : Symbol(testRunner, Decl(duplicateLocalVariable1.ts, 59, 7))
+>addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+>TestCase : Symbol(TestCase, Decl(duplicateLocalVariable1.ts, 6, 37))
+
+        function () {
+            var fb = new FileManager.FileBuffer(TestFileDir + "\\UTF8BOM.txt");
+>fb : Symbol(fb, Decl(duplicateLocalVariable1.ts, 165, 15))
+>FileManager : Symbol(FileManager, Decl(duplicateLocalVariable1.ts, 3, 11))
+>TestFileDir : Symbol(TestFileDir, Decl(duplicateLocalVariable1.ts, 6, 3))
+
+            var chars = [];
+>chars : Symbol(chars, Decl(duplicateLocalVariable1.ts, 166, 15))
+
+            for (var i = 0; i < 6; i++) {
+>i : Symbol(i, Decl(duplicateLocalVariable1.ts, 167, 20))
+>i : Symbol(i, Decl(duplicateLocalVariable1.ts, 167, 20))
+>i : Symbol(i, Decl(duplicateLocalVariable1.ts, 167, 20))
+
+                chars.push(fb.readUtf8CodePoint());
+>chars.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>chars : Symbol(chars, Decl(duplicateLocalVariable1.ts, 166, 15))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>fb : Symbol(fb, Decl(duplicateLocalVariable1.ts, 165, 15))
+            }
+            return TestRunner.arrayCompare(chars, [0x0054, 0x00E8, 0x1D23, 0x2020, 0x000D, 0x000A]);
+>TestRunner.arrayCompare : Symbol(TestRunner.arrayCompare, Decl(duplicateLocalVariable1.ts, 13, 35))
+>TestRunner : Symbol(TestRunner, Decl(duplicateLocalVariable1.ts, 11, 1))
+>arrayCompare : Symbol(TestRunner.arrayCompare, Decl(duplicateLocalVariable1.ts, 13, 35))
+>chars : Symbol(chars, Decl(duplicateLocalVariable1.ts, 166, 15))
+
+        }));
+
+    testRunner.addTest(new TestCase("Check UTF8 encoding",
+>testRunner.addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+>testRunner : Symbol(testRunner, Decl(duplicateLocalVariable1.ts, 59, 7))
+>addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+>TestCase : Symbol(TestCase, Decl(duplicateLocalVariable1.ts, 6, 37))
+
+        function () {
+            var fb = new FileManager.FileBuffer(20);
+>fb : Symbol(fb, Decl(duplicateLocalVariable1.ts, 175, 15))
+>FileManager : Symbol(FileManager, Decl(duplicateLocalVariable1.ts, 3, 11))
+
+            fb.writeUtf8Bom();
+>fb : Symbol(fb, Decl(duplicateLocalVariable1.ts, 175, 15))
+
+            var chars = [0x0054, 0x00E8, 0x1D23, 0x2020, 0x000D, 0x000A];
+>chars : Symbol(chars, Decl(duplicateLocalVariable1.ts, 177, 15))
+
+            for (var i in chars) {
+>i : Symbol(i, Decl(duplicateLocalVariable1.ts, 178, 20), Decl(duplicateLocalVariable1.ts, 183, 20))
+>chars : Symbol(chars, Decl(duplicateLocalVariable1.ts, 177, 15))
+
+                fb.writeUtf8CodePoint(chars[i]);
+>fb : Symbol(fb, Decl(duplicateLocalVariable1.ts, 175, 15))
+>chars : Symbol(chars, Decl(duplicateLocalVariable1.ts, 177, 15))
+>i : Symbol(i, Decl(duplicateLocalVariable1.ts, 178, 20), Decl(duplicateLocalVariable1.ts, 183, 20))
+            }
+            fb.index = 0;
+>fb : Symbol(fb, Decl(duplicateLocalVariable1.ts, 175, 15))
+
+            var bytes = [];
+>bytes : Symbol(bytes, Decl(duplicateLocalVariable1.ts, 182, 15))
+
+            for (var i = 0; i < 14; i++) {
+>i : Symbol(i, Decl(duplicateLocalVariable1.ts, 178, 20), Decl(duplicateLocalVariable1.ts, 183, 20))
+>i : Symbol(i, Decl(duplicateLocalVariable1.ts, 178, 20), Decl(duplicateLocalVariable1.ts, 183, 20))
+>i : Symbol(i, Decl(duplicateLocalVariable1.ts, 178, 20), Decl(duplicateLocalVariable1.ts, 183, 20))
+
+                bytes.push(fb.readByte());
+>bytes.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>bytes : Symbol(bytes, Decl(duplicateLocalVariable1.ts, 182, 15))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>fb : Symbol(fb, Decl(duplicateLocalVariable1.ts, 175, 15))
+            }
+            var expected = [0xEF, 0xBB, 0xBF, 0x54, 0xC3, 0xA8, 0xE1, 0xB4, 0xA3, 0xE2, 0x80, 0xA0, 0x0D, 0x0A];
+>expected : Symbol(expected, Decl(duplicateLocalVariable1.ts, 186, 15))
+
+            return TestRunner.arrayCompare(bytes, expected);
+>TestRunner.arrayCompare : Symbol(TestRunner.arrayCompare, Decl(duplicateLocalVariable1.ts, 13, 35))
+>TestRunner : Symbol(TestRunner, Decl(duplicateLocalVariable1.ts, 11, 1))
+>arrayCompare : Symbol(TestRunner.arrayCompare, Decl(duplicateLocalVariable1.ts, 13, 35))
+>bytes : Symbol(bytes, Decl(duplicateLocalVariable1.ts, 182, 15))
+>expected : Symbol(expected, Decl(duplicateLocalVariable1.ts, 186, 15))
+
+        }));
+
+    // Test reading and writing files
+    testRunner.addTest(new TestCase("Check saving a file",
+>testRunner.addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+>testRunner : Symbol(testRunner, Decl(duplicateLocalVariable1.ts, 59, 7))
+>addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+>TestCase : Symbol(TestCase, Decl(duplicateLocalVariable1.ts, 6, 37))
+
+        function () {
+            var filename = TestFileDir + "\\tmpUTF16LE.txt";
+>filename : Symbol(filename, Decl(duplicateLocalVariable1.ts, 193, 15))
+>TestFileDir : Symbol(TestFileDir, Decl(duplicateLocalVariable1.ts, 6, 3))
+
+            var fb = new FileManager.FileBuffer(14);
+>fb : Symbol(fb, Decl(duplicateLocalVariable1.ts, 194, 15))
+>FileManager : Symbol(FileManager, Decl(duplicateLocalVariable1.ts, 3, 11))
+
+            fb.writeUtf16leBom();
+>fb : Symbol(fb, Decl(duplicateLocalVariable1.ts, 194, 15))
+
+            var chars = [0x0054, 0x00E8, 0x1D23, 0x2020, 0x000D, 0x000A];
+>chars : Symbol(chars, Decl(duplicateLocalVariable1.ts, 196, 15))
+
+            chars.forEach(function (val) { fb.writeUtf16CodePoint(val, false); });
+>chars.forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>chars : Symbol(chars, Decl(duplicateLocalVariable1.ts, 196, 15))
+>forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>val : Symbol(val, Decl(duplicateLocalVariable1.ts, 197, 36))
+>fb : Symbol(fb, Decl(duplicateLocalVariable1.ts, 194, 15))
+>val : Symbol(val, Decl(duplicateLocalVariable1.ts, 197, 36))
+
+            fb.save(filename);
+>fb : Symbol(fb, Decl(duplicateLocalVariable1.ts, 194, 15))
+>filename : Symbol(filename, Decl(duplicateLocalVariable1.ts, 193, 15))
+
+            var savedFile = new FileManager.FileBuffer(filename);
+>savedFile : Symbol(savedFile, Decl(duplicateLocalVariable1.ts, 200, 15))
+>FileManager : Symbol(FileManager, Decl(duplicateLocalVariable1.ts, 3, 11))
+>filename : Symbol(filename, Decl(duplicateLocalVariable1.ts, 193, 15))
+
+            if (savedFile.encoding !== 'utf16le') {
+>savedFile : Symbol(savedFile, Decl(duplicateLocalVariable1.ts, 200, 15))
+
+                throw Error("Incorrect encoding");
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+            }
+            var expectedBytes = [0xFF, 0xFE, 0x54, 0x00, 0xE8, 0x00, 0x23, 0x1D, 0x20, 0x20, 0x0D, 0x00, 0x0A, 0x00]
+>expectedBytes : Symbol(expectedBytes, Decl(duplicateLocalVariable1.ts, 204, 15))
+
+            savedFile.index = 0;
+>savedFile : Symbol(savedFile, Decl(duplicateLocalVariable1.ts, 200, 15))
+
+            expectedBytes.forEach(function (val) {
+>expectedBytes.forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>expectedBytes : Symbol(expectedBytes, Decl(duplicateLocalVariable1.ts, 204, 15))
+>forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>val : Symbol(val, Decl(duplicateLocalVariable1.ts, 206, 44))
+
+                var byteVal = savedFile.readByte();
+>byteVal : Symbol(byteVal, Decl(duplicateLocalVariable1.ts, 207, 19))
+>savedFile : Symbol(savedFile, Decl(duplicateLocalVariable1.ts, 200, 15))
+
+                if (byteVal !== val) {
+>byteVal : Symbol(byteVal, Decl(duplicateLocalVariable1.ts, 207, 19))
+>val : Symbol(val, Decl(duplicateLocalVariable1.ts, 206, 44))
+
+                    throw Error("Incorrect byte value");
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+                }
+            });
+            return true;
+        }));
+
+    testRunner.addTest(new TestCase("Check reading past buffer asserts",
+>testRunner.addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+>testRunner : Symbol(testRunner, Decl(duplicateLocalVariable1.ts, 59, 7))
+>addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+>TestCase : Symbol(TestCase, Decl(duplicateLocalVariable1.ts, 6, 37))
+
+    function () {
+        var fb = new FileManager.FileBuffer(TestFileDir + "\\UTF8BOM.txt");
+>fb : Symbol(fb, Decl(duplicateLocalVariable1.ts, 217, 11))
+>FileManager : Symbol(FileManager, Decl(duplicateLocalVariable1.ts, 3, 11))
+>TestFileDir : Symbol(TestFileDir, Decl(duplicateLocalVariable1.ts, 6, 3))
+
+        var result = fb.readByte(200);
+>result : Symbol(result, Decl(duplicateLocalVariable1.ts, 218, 11))
+>fb : Symbol(fb, Decl(duplicateLocalVariable1.ts, 217, 11))
+
+        return true;
+    }, "read beyond buffer length"));
+    testRunner.addTest(new TestCase("Check writing past buffer asserts",
+>testRunner.addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+>testRunner : Symbol(testRunner, Decl(duplicateLocalVariable1.ts, 59, 7))
+>addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+>TestCase : Symbol(TestCase, Decl(duplicateLocalVariable1.ts, 6, 37))
+
+    function () {
+        var fb = new FileManager.FileBuffer(TestFileDir + "\\UTF8BOM.txt");
+>fb : Symbol(fb, Decl(duplicateLocalVariable1.ts, 223, 11))
+>FileManager : Symbol(FileManager, Decl(duplicateLocalVariable1.ts, 3, 11))
+>TestFileDir : Symbol(TestFileDir, Decl(duplicateLocalVariable1.ts, 6, 3))
+
+        fb.writeByte(5, 200);
+>fb : Symbol(fb, Decl(duplicateLocalVariable1.ts, 223, 11))
+
+        return true;
+    }, "write beyond buffer length"));
+
+    // Non-BMP unicode char tests
+    testRunner.addTest(new TestCase("Read non-BMP utf16 chars",
+>testRunner.addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+>testRunner : Symbol(testRunner, Decl(duplicateLocalVariable1.ts, 59, 7))
+>addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+>TestCase : Symbol(TestCase, Decl(duplicateLocalVariable1.ts, 6, 37))
+
+        function () {
+            var savedFile = new FileManager.FileBuffer(TestFileDir + "\\utf16leNonBmp.txt");
+>savedFile : Symbol(savedFile, Decl(duplicateLocalVariable1.ts, 231, 15))
+>FileManager : Symbol(FileManager, Decl(duplicateLocalVariable1.ts, 3, 11))
+>TestFileDir : Symbol(TestFileDir, Decl(duplicateLocalVariable1.ts, 6, 3))
+
+            if (savedFile.encoding !== 'utf16le') {
+>savedFile : Symbol(savedFile, Decl(duplicateLocalVariable1.ts, 231, 15))
+
+                throw Error("Incorrect encoding");
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+            }
+
+            var codePoints = [];
+>codePoints : Symbol(codePoints, Decl(duplicateLocalVariable1.ts, 236, 15))
+
+            for (var i = 0; i < 6; i++) {
+>i : Symbol(i, Decl(duplicateLocalVariable1.ts, 237, 20))
+>i : Symbol(i, Decl(duplicateLocalVariable1.ts, 237, 20))
+>i : Symbol(i, Decl(duplicateLocalVariable1.ts, 237, 20))
+
+                codePoints.push(savedFile.readUtf16CodePoint(false));
+>codePoints.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>codePoints : Symbol(codePoints, Decl(duplicateLocalVariable1.ts, 236, 15))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>savedFile : Symbol(savedFile, Decl(duplicateLocalVariable1.ts, 231, 15))
+            }
+            var expectedCodePoints = [0x10480, 0x10481, 0x10482, 0x54, 0x68, 0x69];
+>expectedCodePoints : Symbol(expectedCodePoints, Decl(duplicateLocalVariable1.ts, 240, 15))
+
+            return TestRunner.arrayCompare(codePoints, expectedCodePoints);
+>TestRunner.arrayCompare : Symbol(TestRunner.arrayCompare, Decl(duplicateLocalVariable1.ts, 13, 35))
+>TestRunner : Symbol(TestRunner, Decl(duplicateLocalVariable1.ts, 11, 1))
+>arrayCompare : Symbol(TestRunner.arrayCompare, Decl(duplicateLocalVariable1.ts, 13, 35))
+>codePoints : Symbol(codePoints, Decl(duplicateLocalVariable1.ts, 236, 15))
+>expectedCodePoints : Symbol(expectedCodePoints, Decl(duplicateLocalVariable1.ts, 240, 15))
+
+        }));
+
+    testRunner.addTest(new TestCase("Read non-BMP utf8 chars",
+>testRunner.addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+>testRunner : Symbol(testRunner, Decl(duplicateLocalVariable1.ts, 59, 7))
+>addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+>TestCase : Symbol(TestCase, Decl(duplicateLocalVariable1.ts, 6, 37))
+
+        function () {
+            var savedFile = new FileManager.FileBuffer(TestFileDir + "\\utf8NonBmp.txt");
+>savedFile : Symbol(savedFile, Decl(duplicateLocalVariable1.ts, 246, 15))
+>FileManager : Symbol(FileManager, Decl(duplicateLocalVariable1.ts, 3, 11))
+>TestFileDir : Symbol(TestFileDir, Decl(duplicateLocalVariable1.ts, 6, 3))
+
+            if (savedFile.encoding !== 'utf8') {
+>savedFile : Symbol(savedFile, Decl(duplicateLocalVariable1.ts, 246, 15))
+
+                throw Error("Incorrect encoding");
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+            }
+
+            var codePoints = [];
+>codePoints : Symbol(codePoints, Decl(duplicateLocalVariable1.ts, 251, 15))
+
+            for (var i = 0; i < 6; i++) {
+>i : Symbol(i, Decl(duplicateLocalVariable1.ts, 252, 20))
+>i : Symbol(i, Decl(duplicateLocalVariable1.ts, 252, 20))
+>i : Symbol(i, Decl(duplicateLocalVariable1.ts, 252, 20))
+
+                codePoints.push(savedFile.readUtf8CodePoint());
+>codePoints.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>codePoints : Symbol(codePoints, Decl(duplicateLocalVariable1.ts, 251, 15))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>savedFile : Symbol(savedFile, Decl(duplicateLocalVariable1.ts, 246, 15))
+            }
+            var expectedCodePoints = [0x10480, 0x10481, 0x10482, 0x54, 0x68, 0x69];
+>expectedCodePoints : Symbol(expectedCodePoints, Decl(duplicateLocalVariable1.ts, 255, 15))
+
+            return TestRunner.arrayCompare(codePoints, expectedCodePoints);
+>TestRunner.arrayCompare : Symbol(TestRunner.arrayCompare, Decl(duplicateLocalVariable1.ts, 13, 35))
+>TestRunner : Symbol(TestRunner, Decl(duplicateLocalVariable1.ts, 11, 1))
+>arrayCompare : Symbol(TestRunner.arrayCompare, Decl(duplicateLocalVariable1.ts, 13, 35))
+>codePoints : Symbol(codePoints, Decl(duplicateLocalVariable1.ts, 251, 15))
+>expectedCodePoints : Symbol(expectedCodePoints, Decl(duplicateLocalVariable1.ts, 255, 15))
+
+        }));
+
+    testRunner.addTest(new TestCase("Write non-BMP utf8 chars",
+>testRunner.addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+>testRunner : Symbol(testRunner, Decl(duplicateLocalVariable1.ts, 59, 7))
+>addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+>TestCase : Symbol(TestCase, Decl(duplicateLocalVariable1.ts, 6, 37))
+
+        function () {
+            var filename = TestFileDir + "\\tmpUTF8nonBmp.txt";
+>filename : Symbol(filename, Decl(duplicateLocalVariable1.ts, 261, 15))
+>TestFileDir : Symbol(TestFileDir, Decl(duplicateLocalVariable1.ts, 6, 3))
+
+            var fb = new FileManager.FileBuffer(15);
+>fb : Symbol(fb, Decl(duplicateLocalVariable1.ts, 262, 15))
+>FileManager : Symbol(FileManager, Decl(duplicateLocalVariable1.ts, 3, 11))
+
+            var chars = [0x10480, 0x10481, 0x10482, 0x54, 0x68, 0x69];
+>chars : Symbol(chars, Decl(duplicateLocalVariable1.ts, 263, 15))
+
+            chars.forEach(function (val) { fb.writeUtf8CodePoint(val); });
+>chars.forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>chars : Symbol(chars, Decl(duplicateLocalVariable1.ts, 263, 15))
+>forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>val : Symbol(val, Decl(duplicateLocalVariable1.ts, 264, 36))
+>fb : Symbol(fb, Decl(duplicateLocalVariable1.ts, 262, 15))
+>val : Symbol(val, Decl(duplicateLocalVariable1.ts, 264, 36))
+
+            fb.save(filename);
+>fb : Symbol(fb, Decl(duplicateLocalVariable1.ts, 262, 15))
+>filename : Symbol(filename, Decl(duplicateLocalVariable1.ts, 261, 15))
+
+            var savedFile = new FileManager.FileBuffer(filename);
+>savedFile : Symbol(savedFile, Decl(duplicateLocalVariable1.ts, 267, 15))
+>FileManager : Symbol(FileManager, Decl(duplicateLocalVariable1.ts, 3, 11))
+>filename : Symbol(filename, Decl(duplicateLocalVariable1.ts, 261, 15))
+
+            if (savedFile.encoding !== 'utf8') {
+>savedFile : Symbol(savedFile, Decl(duplicateLocalVariable1.ts, 267, 15))
+
+                throw Error("Incorrect encoding");
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+            }
+            var expectedBytes = [0xF0, 0x90, 0x92, 0x80, 0xF0, 0x90, 0x92, 0x81, 0xF0, 0x90, 0x92, 0x82, 0x54, 0x68, 0x69];
+>expectedBytes : Symbol(expectedBytes, Decl(duplicateLocalVariable1.ts, 271, 15))
+
+            expectedBytes.forEach(function (val) {
+>expectedBytes.forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>expectedBytes : Symbol(expectedBytes, Decl(duplicateLocalVariable1.ts, 271, 15))
+>forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>val : Symbol(val, Decl(duplicateLocalVariable1.ts, 272, 44))
+
+                var byteVal = savedFile.readByte();
+>byteVal : Symbol(byteVal, Decl(duplicateLocalVariable1.ts, 273, 19))
+>savedFile : Symbol(savedFile, Decl(duplicateLocalVariable1.ts, 267, 15))
+
+                if (byteVal !== val) {
+>byteVal : Symbol(byteVal, Decl(duplicateLocalVariable1.ts, 273, 19))
+>val : Symbol(val, Decl(duplicateLocalVariable1.ts, 272, 44))
+
+                    throw Error("Incorrect byte value");
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+                }
+            });
+            return true;
+        }));
+
+    testRunner.addTest(new TestCase("Test invalid lead UTF8 byte",
+>testRunner.addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+>testRunner : Symbol(testRunner, Decl(duplicateLocalVariable1.ts, 59, 7))
+>addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+>TestCase : Symbol(TestCase, Decl(duplicateLocalVariable1.ts, 6, 37))
+
+        function () {
+            var filename = TestFileDir + "\\utf8BadLeadByte.txt";
+>filename : Symbol(filename, Decl(duplicateLocalVariable1.ts, 283, 15))
+>TestFileDir : Symbol(TestFileDir, Decl(duplicateLocalVariable1.ts, 6, 3))
+
+            var fb = new FileManager.FileBuffer(filename);
+>fb : Symbol(fb, Decl(duplicateLocalVariable1.ts, 284, 15))
+>FileManager : Symbol(FileManager, Decl(duplicateLocalVariable1.ts, 3, 11))
+>filename : Symbol(filename, Decl(duplicateLocalVariable1.ts, 283, 15))
+
+            return true;
+        }, "Invalid UTF8 byte sequence at index: 4"));
+
+    testRunner.addTest(new TestCase("Test invalid tail UTF8 byte",
+>testRunner.addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+>testRunner : Symbol(testRunner, Decl(duplicateLocalVariable1.ts, 59, 7))
+>addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+>TestCase : Symbol(TestCase, Decl(duplicateLocalVariable1.ts, 6, 37))
+
+        function () {
+            var filename = TestFileDir + "\\utf8InvalidTail.txt";
+>filename : Symbol(filename, Decl(duplicateLocalVariable1.ts, 290, 15))
+>TestFileDir : Symbol(TestFileDir, Decl(duplicateLocalVariable1.ts, 6, 3))
+
+            var fb = new FileManager.FileBuffer(filename);
+>fb : Symbol(fb, Decl(duplicateLocalVariable1.ts, 291, 15))
+>FileManager : Symbol(FileManager, Decl(duplicateLocalVariable1.ts, 3, 11))
+>filename : Symbol(filename, Decl(duplicateLocalVariable1.ts, 290, 15))
+
+            return true;
+        }, "Trailing byte invalid at index: 8"));
+
+    testRunner.addTest(new TestCase("Test ANSI fails validation",
+>testRunner.addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+>testRunner : Symbol(testRunner, Decl(duplicateLocalVariable1.ts, 59, 7))
+>addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+>TestCase : Symbol(TestCase, Decl(duplicateLocalVariable1.ts, 6, 37))
+
+        function () {
+            var filename = TestFileDir + "\\ansi.txt";
+>filename : Symbol(filename, Decl(duplicateLocalVariable1.ts, 297, 15))
+>TestFileDir : Symbol(TestFileDir, Decl(duplicateLocalVariable1.ts, 6, 3))
+
+            var fb = new FileManager.FileBuffer(filename);
+>fb : Symbol(fb, Decl(duplicateLocalVariable1.ts, 298, 15))
+>FileManager : Symbol(FileManager, Decl(duplicateLocalVariable1.ts, 3, 11))
+>filename : Symbol(filename, Decl(duplicateLocalVariable1.ts, 297, 15))
+
+            return true;
+        }, "Trailing byte invalid at index: 6"));
+
+    testRunner.addTest(new TestCase("Test UTF-16LE with invalid surrogate trail fails",
+>testRunner.addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+>testRunner : Symbol(testRunner, Decl(duplicateLocalVariable1.ts, 59, 7))
+>addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+>TestCase : Symbol(TestCase, Decl(duplicateLocalVariable1.ts, 6, 37))
+
+        function () {
+            var filename = TestFileDir + "\\utf16leInvalidSurrogate.txt";
+>filename : Symbol(filename, Decl(duplicateLocalVariable1.ts, 304, 15))
+>TestFileDir : Symbol(TestFileDir, Decl(duplicateLocalVariable1.ts, 6, 3))
+
+            var fb = new FileManager.FileBuffer(filename);
+>fb : Symbol(fb, Decl(duplicateLocalVariable1.ts, 305, 15))
+>FileManager : Symbol(FileManager, Decl(duplicateLocalVariable1.ts, 3, 11))
+>filename : Symbol(filename, Decl(duplicateLocalVariable1.ts, 304, 15))
+
+            return true;
+        }, "Trail surrogate has an invalid value"));
+
+    testRunner.addTest(new TestCase("Test UTF-16BE with invalid surrogate head fails",
+>testRunner.addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+>testRunner : Symbol(testRunner, Decl(duplicateLocalVariable1.ts, 59, 7))
+>addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+>TestCase : Symbol(TestCase, Decl(duplicateLocalVariable1.ts, 6, 37))
+
+        function () {
+            var filename = TestFileDir + "\\UTF16BEInvalidSurrogate.txt";
+>filename : Symbol(filename, Decl(duplicateLocalVariable1.ts, 311, 15))
+>TestFileDir : Symbol(TestFileDir, Decl(duplicateLocalVariable1.ts, 6, 3))
+
+            var fb = new FileManager.FileBuffer(filename);
+>fb : Symbol(fb, Decl(duplicateLocalVariable1.ts, 312, 15))
+>FileManager : Symbol(FileManager, Decl(duplicateLocalVariable1.ts, 3, 11))
+>filename : Symbol(filename, Decl(duplicateLocalVariable1.ts, 311, 15))
+
+            return true;
+        }, "Byte sequence starts with a trail surrogate"));
+
+    testRunner.addTest(new TestCase("Test UTF-16LE with missing trail surrogate fails",
+>testRunner.addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+>testRunner : Symbol(testRunner, Decl(duplicateLocalVariable1.ts, 59, 7))
+>addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+>TestCase : Symbol(TestCase, Decl(duplicateLocalVariable1.ts, 6, 37))
+
+        function () {
+            var filename = TestFileDir + "\\utf16leMissingTrailSurrogate.txt";
+>filename : Symbol(filename, Decl(duplicateLocalVariable1.ts, 318, 15))
+>TestFileDir : Symbol(TestFileDir, Decl(duplicateLocalVariable1.ts, 6, 3))
+
+            var fb = new FileManager.FileBuffer(filename);
+>fb : Symbol(fb, Decl(duplicateLocalVariable1.ts, 319, 15))
+>FileManager : Symbol(FileManager, Decl(duplicateLocalVariable1.ts, 3, 11))
+>filename : Symbol(filename, Decl(duplicateLocalVariable1.ts, 318, 15))
+
+            return true;
+        }, "Trail surrogate has an invalid value"));
+
+    // Count of CRs & LFs
+    testRunner.addTest(new TestCase("Count character occurrences",
+>testRunner.addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+>testRunner : Symbol(testRunner, Decl(duplicateLocalVariable1.ts, 59, 7))
+>addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+>TestCase : Symbol(TestCase, Decl(duplicateLocalVariable1.ts, 6, 37))
+
+        function () {
+            var filename = TestFileDir + "\\charCountASCII.txt";
+>filename : Symbol(filename, Decl(duplicateLocalVariable1.ts, 326, 15))
+>TestFileDir : Symbol(TestFileDir, Decl(duplicateLocalVariable1.ts, 6, 3))
+
+            var fb = new FileManager.FileBuffer(filename);
+>fb : Symbol(fb, Decl(duplicateLocalVariable1.ts, 327, 15))
+>FileManager : Symbol(FileManager, Decl(duplicateLocalVariable1.ts, 3, 11))
+>filename : Symbol(filename, Decl(duplicateLocalVariable1.ts, 326, 15))
+
+            var result = (fb.countCR === 5 && fb.countLF === 4 && fb.countCRLF === 5 && fb.countHT === 3);
+>result : Symbol(result, Decl(duplicateLocalVariable1.ts, 328, 15))
+>fb : Symbol(fb, Decl(duplicateLocalVariable1.ts, 327, 15))
+>fb : Symbol(fb, Decl(duplicateLocalVariable1.ts, 327, 15))
+>fb : Symbol(fb, Decl(duplicateLocalVariable1.ts, 327, 15))
+>fb : Symbol(fb, Decl(duplicateLocalVariable1.ts, 327, 15))
+
+            return result;
+>result : Symbol(result, Decl(duplicateLocalVariable1.ts, 328, 15))
+
+        }));
+
+    // Control characters in text
+    testRunner.addTest(new TestCase("Test file with control character",
+>testRunner.addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+>testRunner : Symbol(testRunner, Decl(duplicateLocalVariable1.ts, 59, 7))
+>addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+>TestCase : Symbol(TestCase, Decl(duplicateLocalVariable1.ts, 6, 37))
+
+        function () {
+            var filename = TestFileDir + "\\controlChar.txt";
+>filename : Symbol(filename, Decl(duplicateLocalVariable1.ts, 335, 15))
+>TestFileDir : Symbol(TestFileDir, Decl(duplicateLocalVariable1.ts, 6, 3))
+
+            var fb = new FileManager.FileBuffer(filename);
+>fb : Symbol(fb, Decl(duplicateLocalVariable1.ts, 336, 15))
+>FileManager : Symbol(FileManager, Decl(duplicateLocalVariable1.ts, 3, 11))
+>filename : Symbol(filename, Decl(duplicateLocalVariable1.ts, 335, 15))
+
+            return true;
+        }, "Codepoint at index: 3 has control value: 8"));
+
+    return testRunner;
+>testRunner : Symbol(testRunner, Decl(duplicateLocalVariable1.ts, 59, 7))
+
+})();
+

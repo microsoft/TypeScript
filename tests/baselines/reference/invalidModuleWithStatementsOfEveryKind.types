@@ -1,0 +1,163 @@
+=== tests/cases/conformance/internalModules/moduleBody/invalidModuleWithStatementsOfEveryKind.ts ===
+// All of these should be an error
+
+module Y {
+>Y : typeof Y
+
+    public class A { s: string }
+>A : A
+>s : string
+
+    public class BB<T> extends A {
+>BB : BB<T>
+>A : A
+
+        id: number;
+>id : number
+    }
+}
+
+module Y2 {
+>Y2 : typeof Y2
+
+    public class AA<T> { s: T }
+>AA : AA<T>
+>s : T
+
+    public interface I { id: number }
+>id : number
+
+    public class B extends AA<string> implements I { id: number }
+>B : B
+>AA : AA<string>
+>id : number
+}
+
+module Y3 {
+>Y3 : typeof Y3
+
+    public module Module {
+>Module : typeof Module
+
+        class A { s: string }
+>A : A
+>s : string
+    }
+}
+
+module Y4 {
+>Y4 : typeof Y4
+
+    public enum Color { Blue, Red }
+>Color : Color
+>Blue : Color.Blue
+>Red : Color.Red
+}
+
+module YY {
+>YY : typeof YY
+
+    private class A { s: string }
+>A : A
+>s : string
+
+    private class BB<T> extends A {
+>BB : BB<T>
+>A : A
+
+        id: number;
+>id : number
+    }
+}
+
+module YY2 {
+>YY2 : typeof YY2
+
+    private class AA<T> { s: T }
+>AA : AA<T>
+>s : T
+
+    private interface I { id: number }
+>id : number
+
+    private class B extends AA<string> implements I { id: number }
+>B : B
+>AA : AA<string>
+>id : number
+}
+
+module YY3 {
+>YY3 : typeof YY3
+
+    private module Module {
+>Module : typeof Module
+
+        class A { s: string }
+>A : A
+>s : string
+    }
+}
+
+module YY4 {
+>YY4 : typeof YY4
+
+    private enum Color { Blue, Red }
+>Color : Color
+>Blue : Color.Blue
+>Red : Color.Red
+}
+
+
+module YYY {
+>YYY : typeof YYY
+
+    static class A { s: string }
+>A : A
+>s : string
+
+    static class BB<T> extends A {
+>BB : BB<T>
+>A : A
+
+        id: number;
+>id : number
+    }
+}
+
+module YYY2 {
+>YYY2 : typeof YYY2
+
+    static class AA<T> { s: T }
+>AA : AA<T>
+>s : T
+
+    static interface I { id: number }
+>id : number
+
+    static class B extends AA<string> implements I { id: number }
+>B : B
+>AA : AA<string>
+>id : number
+}
+
+module YYY3 {
+>YYY3 : typeof YYY3
+
+    static module Module {
+>Module : typeof Module
+
+        class A { s: string }
+>A : A
+>s : string
+    }
+}
+
+module YYY4 {
+>YYY4 : typeof YYY4
+
+    static enum Color { Blue, Red }
+>Color : Color
+>Blue : Color.Blue
+>Red : Color.Red
+}
+

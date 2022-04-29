@@ -1,0 +1,116 @@
+=== tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInInstanceMember.ts ===
+class C {
+>C : C
+
+    x = this;
+>x : this
+>this : this
+
+    foo() {
+>foo : () => this
+
+        return this;
+>this : this
+    }
+    constructor(x: number) {
+>x : number
+
+        var t = this;
+>t : this
+>this : this
+
+        t.x;
+>t.x : this
+>t : this
+>x : this
+
+        t.y;
+>t.y : this
+>t : this
+>y : this
+
+        t.z;
+>t.z : any
+>t : this
+>z : any
+
+        var r = t.foo();
+>r : this
+>t.foo() : this
+>t.foo : () => this
+>t : this
+>foo : () => this
+    }
+
+    get y() {
+>y : this
+
+        return this;
+>this : this
+    }
+}
+
+var c: C;
+>c : C
+
+// all ok
+var r = c.x;
+>r : C
+>c.x : C
+>c : C
+>x : C
+
+var ra = c.x.x.x;
+>ra : C
+>c.x.x.x : C
+>c.x.x : C
+>c.x : C
+>c : C
+>x : C
+>x : C
+>x : C
+
+var r2 = c.y;
+>r2 : C
+>c.y : C
+>c : C
+>y : C
+
+var r3 = c.foo();
+>r3 : C
+>c.foo() : C
+>c.foo : () => C
+>c : C
+>foo : () => C
+
+var rs = [r, r2, r3];
+>rs : C[]
+>[r, r2, r3] : C[]
+>r : C
+>r2 : C
+>r3 : C
+
+rs.forEach(x => {
+>rs.forEach(x => {    x.foo;    x.x;    x.y;}) : void
+>rs.forEach : (callbackfn: (value: C, index: number, array: C[]) => void, thisArg?: any) => void
+>rs : C[]
+>forEach : (callbackfn: (value: C, index: number, array: C[]) => void, thisArg?: any) => void
+>x => {    x.foo;    x.x;    x.y;} : (x: C) => void
+>x : C
+
+    x.foo;
+>x.foo : () => C
+>x : C
+>foo : () => C
+
+    x.x;
+>x.x : C
+>x : C
+>x : C
+
+    x.y;
+>x.y : C
+>x : C
+>y : C
+
+});

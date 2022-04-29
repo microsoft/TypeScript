@@ -1,0 +1,34 @@
+=== tests/cases/compiler/unusedLocalsOnFunctionExpressionWithinFunctionExpression2.ts ===
+var greeter = function (person: string, person2: string) {
+>greeter : (person: string, person2: string) => void
+>function (person: string, person2: string) {    var unused = 20;    var maker = function (child: string): void {        var unused2 = 22;    }    var maker2 = function (child2: string): void {        var unused3 = 23;    }    maker2(person2);} : (person: string, person2: string) => void
+>person : string
+>person2 : string
+
+    var unused = 20;
+>unused : number
+>20 : 20
+
+    var maker = function (child: string): void {
+>maker : (child: string) => void
+>function (child: string): void {        var unused2 = 22;    } : (child: string) => void
+>child : string
+
+        var unused2 = 22;
+>unused2 : number
+>22 : 22
+    }
+    var maker2 = function (child2: string): void {
+>maker2 : (child2: string) => void
+>function (child2: string): void {        var unused3 = 23;    } : (child2: string) => void
+>child2 : string
+
+        var unused3 = 23;
+>unused3 : number
+>23 : 23
+    }
+    maker2(person2);
+>maker2(person2) : void
+>maker2 : (child2: string) => void
+>person2 : string
+}

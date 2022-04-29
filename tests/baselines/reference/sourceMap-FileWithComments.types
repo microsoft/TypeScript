@@ -1,0 +1,86 @@
+=== tests/cases/compiler/sourceMap-FileWithComments.ts ===
+// Interface
+interface IPoint {
+    getDist(): number;
+>getDist : () => number
+}
+
+// Module
+module Shapes {
+>Shapes : typeof Shapes
+
+    // Class
+    export class Point implements IPoint {
+>Point : Point
+
+        // Constructor
+        constructor(public x: number, public y: number) { }
+>x : number
+>y : number
+
+        // Instance member
+        getDist() { return Math.sqrt(this.x * this.x + this.y * this.y); }
+>getDist : () => number
+>Math.sqrt(this.x * this.x + this.y * this.y) : number
+>Math.sqrt : (x: number) => number
+>Math : Math
+>sqrt : (x: number) => number
+>this.x * this.x + this.y * this.y : number
+>this.x * this.x : number
+>this.x : number
+>this : this
+>x : number
+>this.x : number
+>this : this
+>x : number
+>this.y * this.y : number
+>this.y : number
+>this : this
+>y : number
+>this.y : number
+>this : this
+>y : number
+
+        // Static member
+        static origin = new Point(0, 0);
+>origin : Point
+>new Point(0, 0) : Point
+>Point : typeof Point
+>0 : 0
+>0 : 0
+    }
+
+    // Variable comment after class
+    var a = 10;
+>a : number
+>10 : 10
+
+    export function foo() {
+>foo : () => void
+    }
+
+    /**  comment after function
+    * this is another comment 
+    */
+    var b = 10;
+>b : number
+>10 : 10
+}
+
+/** Local Variable */
+var p: IPoint = new Shapes.Point(3, 4);
+>p : IPoint
+>new Shapes.Point(3, 4) : Shapes.Point
+>Shapes.Point : typeof Shapes.Point
+>Shapes : typeof Shapes
+>Point : typeof Shapes.Point
+>3 : 3
+>4 : 4
+
+var dist = p.getDist();
+>dist : number
+>p.getDist() : number
+>p.getDist : () => number
+>p : IPoint
+>getDist : () => number
+

@@ -1,0 +1,35 @@
+=== tests/cases/compiler/typeOfEnumAndVarRedeclarations.ts ===
+enum E {
+>E : E
+
+    a
+>a : E.a
+}
+enum E {
+>E : E
+
+    b = 1
+>b : E.b
+>1 : 1
+}
+var x = E;
+>x : typeof E
+>E : typeof E
+
+var x: { readonly a: E; readonly b: E; readonly [x: number]: string; }; // Shouldnt error
+>x : typeof E
+>a : E
+>b : E
+>x : number
+
+var y = E;
+>y : typeof E
+>E : typeof E
+
+var y: { readonly a: E; readonly b: E; readonly [x: number]: string; readonly [x: number]: string } // two errors: the types are not identical and duplicate signatures
+>y : typeof E
+>a : E
+>b : E
+>x : number
+>x : number
+

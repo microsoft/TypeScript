@@ -1,0 +1,170 @@
+=== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/covariantCallbacks.ts ===
+// Test that callback parameters are related covariantly
+
+interface P<T> {
+    then(cb: (value: T) => void): void;
+>then : (cb: (value: T) => void) => void
+>cb : (value: T) => void
+>value : T
+
+};
+
+interface A { a: string }
+>a : string
+
+interface B extends A { b: string }
+>b : string
+
+function f1(a: P<A>, b: P<B>) {
+>f1 : (a: P<A>, b: P<B>) => void
+>a : P<A>
+>b : P<B>
+
+    a = b;
+>a = b : P<B>
+>a : P<A>
+>b : P<B>
+
+    b = a;  // Error
+>b = a : P<A>
+>b : P<B>
+>a : P<A>
+}
+
+function f2(a: Promise<A>, b: Promise<B>) {
+>f2 : (a: Promise<A>, b: Promise<B>) => void
+>a : Promise<A>
+>b : Promise<B>
+
+    a = b;
+>a = b : Promise<B>
+>a : Promise<A>
+>b : Promise<B>
+
+    b = a;  // Error
+>b = a : Promise<A>
+>b : Promise<B>
+>a : Promise<A>
+}
+
+interface AList1 {
+    forEach(cb: (item: A) => void): void;
+>forEach : (cb: (item: A) => void) => void
+>cb : (item: A) => void
+>item : A
+}
+
+interface BList1 {
+    forEach(cb: (item: B) => void): void;
+>forEach : (cb: (item: B) => void) => void
+>cb : (item: B) => void
+>item : B
+}
+
+function f11(a: AList1, b: BList1) {
+>f11 : (a: AList1, b: BList1) => void
+>a : AList1
+>b : BList1
+
+    a = b;
+>a = b : BList1
+>a : AList1
+>b : BList1
+
+    b = a;  // Error
+>b = a : AList1
+>b : BList1
+>a : AList1
+}
+
+interface AList2 {
+    forEach(cb: (item: A) => boolean): void;
+>forEach : (cb: (item: A) => boolean) => void
+>cb : (item: A) => boolean
+>item : A
+}
+
+interface BList2 {
+    forEach(cb: (item: A) => void): void;
+>forEach : (cb: (item: A) => void) => void
+>cb : (item: A) => void
+>item : A
+}
+
+function f12(a: AList2, b: BList2) {
+>f12 : (a: AList2, b: BList2) => void
+>a : AList2
+>b : BList2
+
+    a = b;
+>a = b : BList2
+>a : AList2
+>b : BList2
+
+    b = a;  // Error
+>b = a : AList2
+>b : BList2
+>a : AList2
+}
+
+interface AList3 {
+    forEach(cb: (item: A) => void): void;
+>forEach : (cb: (item: A) => void) => void
+>cb : (item: A) => void
+>item : A
+}
+
+interface BList3 {
+    forEach(cb: (item: A, context: any) => void): void;
+>forEach : (cb: (item: A, context: any) => void) => void
+>cb : (item: A, context: any) => void
+>item : A
+>context : any
+}
+
+function f13(a: AList3, b: BList3) {
+>f13 : (a: AList3, b: BList3) => void
+>a : AList3
+>b : BList3
+
+    a = b;
+>a = b : BList3
+>a : AList3
+>b : BList3
+
+    b = a;  // Error
+>b = a : AList3
+>b : BList3
+>a : AList3
+}
+
+interface AList4 {
+    forEach(cb: (item: A) => A): void;
+>forEach : (cb: (item: A) => A) => void
+>cb : (item: A) => A
+>item : A
+}
+
+interface BList4 {
+    forEach(cb: (item: B) => B): void;
+>forEach : (cb: (item: B) => B) => void
+>cb : (item: B) => B
+>item : B
+}
+
+function f14(a: AList4, b: BList4) {
+>f14 : (a: AList4, b: BList4) => void
+>a : AList4
+>b : BList4
+
+    a = b;
+>a = b : BList4
+>a : AList4
+>b : BList4
+
+    b = a;  // Error
+>b = a : AList4
+>b : BList4
+>a : AList4
+}
+

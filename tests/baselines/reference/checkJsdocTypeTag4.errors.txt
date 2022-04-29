@@ -1,0 +1,21 @@
+tests/cases/conformance/jsdoc/test.js(5,14): error TS2344: Type 'number' does not satisfy the constraint 'string'.
+tests/cases/conformance/jsdoc/test.js(7,14): error TS2344: Type 'number' does not satisfy the constraint 'string'.
+
+
+==== tests/cases/conformance/jsdoc/t.d.ts (0 errors) ====
+    type A<T extends string> = { a: T }
+    
+==== tests/cases/conformance/jsdoc/test.js (2 errors) ====
+    /** Also should error for jsdoc typedefs
+     * @template {string} U
+     * @typedef {{ b: U }} B
+     */
+    /** @type {A<number>} */
+                 ~~~~~~
+!!! error TS2344: Type 'number' does not satisfy the constraint 'string'.
+    var a;
+    /** @type {B<number>} */
+                 ~~~~~~
+!!! error TS2344: Type 'number' does not satisfy the constraint 'string'.
+    var b;
+    

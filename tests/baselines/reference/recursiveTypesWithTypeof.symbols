@@ -1,0 +1,186 @@
+=== tests/cases/conformance/types/specifyingTypes/typeQueries/recursiveTypesWithTypeof.ts ===
+// The following are errors because of circular references
+var c: typeof c;
+>c : Symbol(c, Decl(recursiveTypesWithTypeof.ts, 1, 3), Decl(recursiveTypesWithTypeof.ts, 2, 3))
+>c : Symbol(c, Decl(recursiveTypesWithTypeof.ts, 1, 3), Decl(recursiveTypesWithTypeof.ts, 2, 3))
+
+var c: any;
+>c : Symbol(c, Decl(recursiveTypesWithTypeof.ts, 1, 3), Decl(recursiveTypesWithTypeof.ts, 2, 3))
+
+var d: typeof e;
+>d : Symbol(d, Decl(recursiveTypesWithTypeof.ts, 3, 3), Decl(recursiveTypesWithTypeof.ts, 4, 3))
+>e : Symbol(e, Decl(recursiveTypesWithTypeof.ts, 5, 3), Decl(recursiveTypesWithTypeof.ts, 6, 3))
+
+var d: any;
+>d : Symbol(d, Decl(recursiveTypesWithTypeof.ts, 3, 3), Decl(recursiveTypesWithTypeof.ts, 4, 3))
+
+var e: typeof d;
+>e : Symbol(e, Decl(recursiveTypesWithTypeof.ts, 5, 3), Decl(recursiveTypesWithTypeof.ts, 6, 3))
+>d : Symbol(d, Decl(recursiveTypesWithTypeof.ts, 3, 3), Decl(recursiveTypesWithTypeof.ts, 4, 3))
+
+var e: any;
+>e : Symbol(e, Decl(recursiveTypesWithTypeof.ts, 5, 3), Decl(recursiveTypesWithTypeof.ts, 6, 3))
+
+interface Foo<T> { }
+>Foo : Symbol(Foo, Decl(recursiveTypesWithTypeof.ts, 6, 11))
+>T : Symbol(T, Decl(recursiveTypesWithTypeof.ts, 8, 14))
+
+var f: Array<typeof f>;
+>f : Symbol(f, Decl(recursiveTypesWithTypeof.ts, 9, 3), Decl(recursiveTypesWithTypeof.ts, 10, 3))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>f : Symbol(f, Decl(recursiveTypesWithTypeof.ts, 9, 3), Decl(recursiveTypesWithTypeof.ts, 10, 3))
+
+var f: any;
+>f : Symbol(f, Decl(recursiveTypesWithTypeof.ts, 9, 3), Decl(recursiveTypesWithTypeof.ts, 10, 3))
+
+var f2: Foo<typeof f2>;
+>f2 : Symbol(f2, Decl(recursiveTypesWithTypeof.ts, 11, 3), Decl(recursiveTypesWithTypeof.ts, 12, 3))
+>Foo : Symbol(Foo, Decl(recursiveTypesWithTypeof.ts, 6, 11))
+>f2 : Symbol(f2, Decl(recursiveTypesWithTypeof.ts, 11, 3), Decl(recursiveTypesWithTypeof.ts, 12, 3))
+
+var f2: any;
+>f2 : Symbol(f2, Decl(recursiveTypesWithTypeof.ts, 11, 3), Decl(recursiveTypesWithTypeof.ts, 12, 3))
+
+var f3: Foo<typeof f3>[];
+>f3 : Symbol(f3, Decl(recursiveTypesWithTypeof.ts, 13, 3), Decl(recursiveTypesWithTypeof.ts, 14, 3))
+>Foo : Symbol(Foo, Decl(recursiveTypesWithTypeof.ts, 6, 11))
+>f3 : Symbol(f3, Decl(recursiveTypesWithTypeof.ts, 13, 3), Decl(recursiveTypesWithTypeof.ts, 14, 3))
+
+var f3: any;
+>f3 : Symbol(f3, Decl(recursiveTypesWithTypeof.ts, 13, 3), Decl(recursiveTypesWithTypeof.ts, 14, 3))
+
+// None of these declarations should have any errors!
+// Truly recursive types
+var g: { x: typeof g; };
+>g : Symbol(g, Decl(recursiveTypesWithTypeof.ts, 18, 3), Decl(recursiveTypesWithTypeof.ts, 19, 3))
+>x : Symbol(x, Decl(recursiveTypesWithTypeof.ts, 18, 8))
+>g : Symbol(g, Decl(recursiveTypesWithTypeof.ts, 18, 3), Decl(recursiveTypesWithTypeof.ts, 19, 3))
+
+var g: typeof g.x;
+>g : Symbol(g, Decl(recursiveTypesWithTypeof.ts, 18, 3), Decl(recursiveTypesWithTypeof.ts, 19, 3))
+>g.x : Symbol(x, Decl(recursiveTypesWithTypeof.ts, 18, 8))
+>g : Symbol(g, Decl(recursiveTypesWithTypeof.ts, 18, 3), Decl(recursiveTypesWithTypeof.ts, 19, 3))
+>x : Symbol(x, Decl(recursiveTypesWithTypeof.ts, 18, 8))
+
+var h: () => typeof h;
+>h : Symbol(h, Decl(recursiveTypesWithTypeof.ts, 20, 3), Decl(recursiveTypesWithTypeof.ts, 21, 3))
+>h : Symbol(h, Decl(recursiveTypesWithTypeof.ts, 20, 3), Decl(recursiveTypesWithTypeof.ts, 21, 3))
+
+var h = h();
+>h : Symbol(h, Decl(recursiveTypesWithTypeof.ts, 20, 3), Decl(recursiveTypesWithTypeof.ts, 21, 3))
+>h : Symbol(h, Decl(recursiveTypesWithTypeof.ts, 20, 3), Decl(recursiveTypesWithTypeof.ts, 21, 3))
+
+var i: (x: typeof i) => typeof x;
+>i : Symbol(i, Decl(recursiveTypesWithTypeof.ts, 22, 3), Decl(recursiveTypesWithTypeof.ts, 23, 3))
+>x : Symbol(x, Decl(recursiveTypesWithTypeof.ts, 22, 8))
+>i : Symbol(i, Decl(recursiveTypesWithTypeof.ts, 22, 3), Decl(recursiveTypesWithTypeof.ts, 23, 3))
+>x : Symbol(x, Decl(recursiveTypesWithTypeof.ts, 22, 8))
+
+var i = i(i);
+>i : Symbol(i, Decl(recursiveTypesWithTypeof.ts, 22, 3), Decl(recursiveTypesWithTypeof.ts, 23, 3))
+>i : Symbol(i, Decl(recursiveTypesWithTypeof.ts, 22, 3), Decl(recursiveTypesWithTypeof.ts, 23, 3))
+>i : Symbol(i, Decl(recursiveTypesWithTypeof.ts, 22, 3), Decl(recursiveTypesWithTypeof.ts, 23, 3))
+
+var j: <T extends typeof j>(x: T) => T;
+>j : Symbol(j, Decl(recursiveTypesWithTypeof.ts, 24, 3), Decl(recursiveTypesWithTypeof.ts, 25, 3))
+>T : Symbol(T, Decl(recursiveTypesWithTypeof.ts, 24, 8))
+>j : Symbol(j, Decl(recursiveTypesWithTypeof.ts, 24, 3), Decl(recursiveTypesWithTypeof.ts, 25, 3))
+>x : Symbol(x, Decl(recursiveTypesWithTypeof.ts, 24, 28))
+>T : Symbol(T, Decl(recursiveTypesWithTypeof.ts, 24, 8))
+>T : Symbol(T, Decl(recursiveTypesWithTypeof.ts, 24, 8))
+
+var j = j(j);
+>j : Symbol(j, Decl(recursiveTypesWithTypeof.ts, 24, 3), Decl(recursiveTypesWithTypeof.ts, 25, 3))
+>j : Symbol(j, Decl(recursiveTypesWithTypeof.ts, 24, 3), Decl(recursiveTypesWithTypeof.ts, 25, 3))
+>j : Symbol(j, Decl(recursiveTypesWithTypeof.ts, 24, 3), Decl(recursiveTypesWithTypeof.ts, 25, 3))
+
+// Same as h, i, j with construct signatures
+var h2: new () => typeof h2;
+>h2 : Symbol(h2, Decl(recursiveTypesWithTypeof.ts, 28, 3), Decl(recursiveTypesWithTypeof.ts, 29, 3))
+>h2 : Symbol(h2, Decl(recursiveTypesWithTypeof.ts, 28, 3), Decl(recursiveTypesWithTypeof.ts, 29, 3))
+
+var h2 = new h2();
+>h2 : Symbol(h2, Decl(recursiveTypesWithTypeof.ts, 28, 3), Decl(recursiveTypesWithTypeof.ts, 29, 3))
+>h2 : Symbol(h2, Decl(recursiveTypesWithTypeof.ts, 28, 3), Decl(recursiveTypesWithTypeof.ts, 29, 3))
+
+var i2: new (x: typeof i2) => typeof x;
+>i2 : Symbol(i2, Decl(recursiveTypesWithTypeof.ts, 30, 3), Decl(recursiveTypesWithTypeof.ts, 31, 3))
+>x : Symbol(x, Decl(recursiveTypesWithTypeof.ts, 30, 13))
+>i2 : Symbol(i2, Decl(recursiveTypesWithTypeof.ts, 30, 3), Decl(recursiveTypesWithTypeof.ts, 31, 3))
+>x : Symbol(x, Decl(recursiveTypesWithTypeof.ts, 30, 13))
+
+var i2 = new i2(i2);
+>i2 : Symbol(i2, Decl(recursiveTypesWithTypeof.ts, 30, 3), Decl(recursiveTypesWithTypeof.ts, 31, 3))
+>i2 : Symbol(i2, Decl(recursiveTypesWithTypeof.ts, 30, 3), Decl(recursiveTypesWithTypeof.ts, 31, 3))
+>i2 : Symbol(i2, Decl(recursiveTypesWithTypeof.ts, 30, 3), Decl(recursiveTypesWithTypeof.ts, 31, 3))
+
+var j2: new <T extends typeof j2>(x: T) => T;
+>j2 : Symbol(j2, Decl(recursiveTypesWithTypeof.ts, 32, 3), Decl(recursiveTypesWithTypeof.ts, 33, 3))
+>T : Symbol(T, Decl(recursiveTypesWithTypeof.ts, 32, 13))
+>j2 : Symbol(j2, Decl(recursiveTypesWithTypeof.ts, 32, 3), Decl(recursiveTypesWithTypeof.ts, 33, 3))
+>x : Symbol(x, Decl(recursiveTypesWithTypeof.ts, 32, 34))
+>T : Symbol(T, Decl(recursiveTypesWithTypeof.ts, 32, 13))
+>T : Symbol(T, Decl(recursiveTypesWithTypeof.ts, 32, 13))
+
+var j2 = new j2(j2);
+>j2 : Symbol(j2, Decl(recursiveTypesWithTypeof.ts, 32, 3), Decl(recursiveTypesWithTypeof.ts, 33, 3))
+>j2 : Symbol(j2, Decl(recursiveTypesWithTypeof.ts, 32, 3), Decl(recursiveTypesWithTypeof.ts, 33, 3))
+>j2 : Symbol(j2, Decl(recursiveTypesWithTypeof.ts, 32, 3), Decl(recursiveTypesWithTypeof.ts, 33, 3))
+
+// Indexers
+var k: { [n: number]: typeof k;[s: string]: typeof k };
+>k : Symbol(k, Decl(recursiveTypesWithTypeof.ts, 36, 3), Decl(recursiveTypesWithTypeof.ts, 37, 3), Decl(recursiveTypesWithTypeof.ts, 38, 3))
+>n : Symbol(n, Decl(recursiveTypesWithTypeof.ts, 36, 10))
+>k : Symbol(k, Decl(recursiveTypesWithTypeof.ts, 36, 3), Decl(recursiveTypesWithTypeof.ts, 37, 3), Decl(recursiveTypesWithTypeof.ts, 38, 3))
+>s : Symbol(s, Decl(recursiveTypesWithTypeof.ts, 36, 32))
+>k : Symbol(k, Decl(recursiveTypesWithTypeof.ts, 36, 3), Decl(recursiveTypesWithTypeof.ts, 37, 3), Decl(recursiveTypesWithTypeof.ts, 38, 3))
+
+var k = k[0];
+>k : Symbol(k, Decl(recursiveTypesWithTypeof.ts, 36, 3), Decl(recursiveTypesWithTypeof.ts, 37, 3), Decl(recursiveTypesWithTypeof.ts, 38, 3))
+>k : Symbol(k, Decl(recursiveTypesWithTypeof.ts, 36, 3), Decl(recursiveTypesWithTypeof.ts, 37, 3), Decl(recursiveTypesWithTypeof.ts, 38, 3))
+
+var k = k[''];
+>k : Symbol(k, Decl(recursiveTypesWithTypeof.ts, 36, 3), Decl(recursiveTypesWithTypeof.ts, 37, 3), Decl(recursiveTypesWithTypeof.ts, 38, 3))
+>k : Symbol(k, Decl(recursiveTypesWithTypeof.ts, 36, 3), Decl(recursiveTypesWithTypeof.ts, 37, 3), Decl(recursiveTypesWithTypeof.ts, 38, 3))
+
+// Hybrid - contains type literals as well as type arguments
+// These two are recursive
+var hy1: { x: typeof hy1 }[];
+>hy1 : Symbol(hy1, Decl(recursiveTypesWithTypeof.ts, 42, 3), Decl(recursiveTypesWithTypeof.ts, 43, 3))
+>x : Symbol(x, Decl(recursiveTypesWithTypeof.ts, 42, 10))
+>hy1 : Symbol(hy1, Decl(recursiveTypesWithTypeof.ts, 42, 3), Decl(recursiveTypesWithTypeof.ts, 43, 3))
+
+var hy1 = hy1[0].x;
+>hy1 : Symbol(hy1, Decl(recursiveTypesWithTypeof.ts, 42, 3), Decl(recursiveTypesWithTypeof.ts, 43, 3))
+>hy1[0].x : Symbol(x, Decl(recursiveTypesWithTypeof.ts, 42, 10))
+>hy1 : Symbol(hy1, Decl(recursiveTypesWithTypeof.ts, 42, 3), Decl(recursiveTypesWithTypeof.ts, 43, 3))
+>x : Symbol(x, Decl(recursiveTypesWithTypeof.ts, 42, 10))
+
+var hy2: { x: Array<typeof hy2> };
+>hy2 : Symbol(hy2, Decl(recursiveTypesWithTypeof.ts, 44, 3), Decl(recursiveTypesWithTypeof.ts, 45, 3))
+>x : Symbol(x, Decl(recursiveTypesWithTypeof.ts, 44, 10))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>hy2 : Symbol(hy2, Decl(recursiveTypesWithTypeof.ts, 44, 3), Decl(recursiveTypesWithTypeof.ts, 45, 3))
+
+var hy2 = hy2.x[0];
+>hy2 : Symbol(hy2, Decl(recursiveTypesWithTypeof.ts, 44, 3), Decl(recursiveTypesWithTypeof.ts, 45, 3))
+>hy2.x : Symbol(x, Decl(recursiveTypesWithTypeof.ts, 44, 10))
+>hy2 : Symbol(hy2, Decl(recursiveTypesWithTypeof.ts, 44, 3), Decl(recursiveTypesWithTypeof.ts, 45, 3))
+>x : Symbol(x, Decl(recursiveTypesWithTypeof.ts, 44, 10))
+
+interface Foo2<T, U> { }
+>Foo2 : Symbol(Foo2, Decl(recursiveTypesWithTypeof.ts, 45, 19))
+>T : Symbol(T, Decl(recursiveTypesWithTypeof.ts, 47, 15))
+>U : Symbol(U, Decl(recursiveTypesWithTypeof.ts, 47, 17))
+
+// This one should be an error because the first type argument is not contained inside a type literal
+var hy3: Foo2<typeof hy3, { x: typeof hy3 }>;
+>hy3 : Symbol(hy3, Decl(recursiveTypesWithTypeof.ts, 50, 3), Decl(recursiveTypesWithTypeof.ts, 51, 3))
+>Foo2 : Symbol(Foo2, Decl(recursiveTypesWithTypeof.ts, 45, 19))
+>hy3 : Symbol(hy3, Decl(recursiveTypesWithTypeof.ts, 50, 3), Decl(recursiveTypesWithTypeof.ts, 51, 3))
+>x : Symbol(x, Decl(recursiveTypesWithTypeof.ts, 50, 27))
+>hy3 : Symbol(hy3, Decl(recursiveTypesWithTypeof.ts, 50, 3), Decl(recursiveTypesWithTypeof.ts, 51, 3))
+
+var hy3: any;
+>hy3 : Symbol(hy3, Decl(recursiveTypesWithTypeof.ts, 50, 3), Decl(recursiveTypesWithTypeof.ts, 51, 3))
+

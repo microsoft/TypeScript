@@ -1,0 +1,23 @@
+=== tests/cases/compiler/library_ArraySlice.ts ===
+// Array.prototype.slice can have zero, one, or two arguments
+Array.prototype.slice();
+>Array.prototype.slice : Symbol(Array.slice, Decl(lib.es5.d.ts, --, --))
+>Array.prototype : Symbol(ArrayConstructor.prototype, Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>prototype : Symbol(ArrayConstructor.prototype, Decl(lib.es5.d.ts, --, --))
+>slice : Symbol(Array.slice, Decl(lib.es5.d.ts, --, --))
+
+Array.prototype.slice(0);
+>Array.prototype.slice : Symbol(Array.slice, Decl(lib.es5.d.ts, --, --))
+>Array.prototype : Symbol(ArrayConstructor.prototype, Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>prototype : Symbol(ArrayConstructor.prototype, Decl(lib.es5.d.ts, --, --))
+>slice : Symbol(Array.slice, Decl(lib.es5.d.ts, --, --))
+
+Array.prototype.slice(0, 1);
+>Array.prototype.slice : Symbol(Array.slice, Decl(lib.es5.d.ts, --, --))
+>Array.prototype : Symbol(ArrayConstructor.prototype, Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>prototype : Symbol(ArrayConstructor.prototype, Decl(lib.es5.d.ts, --, --))
+>slice : Symbol(Array.slice, Decl(lib.es5.d.ts, --, --))
+

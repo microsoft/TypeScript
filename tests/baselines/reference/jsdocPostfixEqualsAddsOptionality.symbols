@@ -1,0 +1,57 @@
+=== tests/cases/conformance/jsdoc/a.js ===
+/** @param {number=} a */
+function f(a) {
+>f : Symbol(f, Decl(a.js, 0, 0))
+>a : Symbol(a, Decl(a.js, 1, 11))
+
+    a = 1
+>a : Symbol(a, Decl(a.js, 1, 11))
+
+    a = null // should not be allowed
+>a : Symbol(a, Decl(a.js, 1, 11))
+
+    a = undefined
+>a : Symbol(a, Decl(a.js, 1, 11))
+>undefined : Symbol(undefined)
+}
+f()
+>f : Symbol(f, Decl(a.js, 0, 0))
+
+f(null) // should not be allowed
+>f : Symbol(f, Decl(a.js, 0, 0))
+
+f(undefined)
+>f : Symbol(f, Decl(a.js, 0, 0))
+>undefined : Symbol(undefined)
+
+f(1)
+>f : Symbol(f, Decl(a.js, 0, 0))
+
+/** @param {???!?number?=} a */
+function g(a) {
+>g : Symbol(g, Decl(a.js, 9, 4))
+>a : Symbol(a, Decl(a.js, 12, 11))
+
+    a = 1
+>a : Symbol(a, Decl(a.js, 12, 11))
+
+    a = null
+>a : Symbol(a, Decl(a.js, 12, 11))
+
+    a = undefined
+>a : Symbol(a, Decl(a.js, 12, 11))
+>undefined : Symbol(undefined)
+}
+g()
+>g : Symbol(g, Decl(a.js, 9, 4))
+
+g(null)
+>g : Symbol(g, Decl(a.js, 9, 4))
+
+g(undefined)
+>g : Symbol(g, Decl(a.js, 9, 4))
+>undefined : Symbol(undefined)
+
+g(1)
+>g : Symbol(g, Decl(a.js, 9, 4))
+

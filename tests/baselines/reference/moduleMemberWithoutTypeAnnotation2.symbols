@@ -1,0 +1,33 @@
+=== tests/cases/compiler/moduleMemberWithoutTypeAnnotation2.ts ===
+module TypeScript {
+>TypeScript : Symbol(TypeScript, Decl(moduleMemberWithoutTypeAnnotation2.ts, 0, 0))
+
+    export module CompilerDiagnostics {
+>CompilerDiagnostics : Symbol(CompilerDiagnostics, Decl(moduleMemberWithoutTypeAnnotation2.ts, 0, 19))
+
+        export interface IDiagnosticWriter {
+>IDiagnosticWriter : Symbol(IDiagnosticWriter, Decl(moduleMemberWithoutTypeAnnotation2.ts, 1, 39))
+
+            Alert(output: string): void;
+>Alert : Symbol(IDiagnosticWriter.Alert, Decl(moduleMemberWithoutTypeAnnotation2.ts, 3, 44))
+>output : Symbol(output, Decl(moduleMemberWithoutTypeAnnotation2.ts, 4, 18))
+        }
+
+        export var diagnosticWriter = null;
+>diagnosticWriter : Symbol(diagnosticWriter, Decl(moduleMemberWithoutTypeAnnotation2.ts, 7, 18))
+
+        export function Alert(output: string) {
+>Alert : Symbol(Alert, Decl(moduleMemberWithoutTypeAnnotation2.ts, 7, 43))
+>output : Symbol(output, Decl(moduleMemberWithoutTypeAnnotation2.ts, 9, 30))
+
+            if (diagnosticWriter) {
+>diagnosticWriter : Symbol(diagnosticWriter, Decl(moduleMemberWithoutTypeAnnotation2.ts, 7, 18))
+
+                diagnosticWriter.Alert(output);
+>diagnosticWriter : Symbol(diagnosticWriter, Decl(moduleMemberWithoutTypeAnnotation2.ts, 7, 18))
+>output : Symbol(output, Decl(moduleMemberWithoutTypeAnnotation2.ts, 9, 30))
+            }
+        }
+    }
+}
+

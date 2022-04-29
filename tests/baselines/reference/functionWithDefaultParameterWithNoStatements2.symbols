@@ -1,0 +1,5 @@
+=== tests/cases/compiler/functionWithDefaultParameterWithNoStatements2.ts ===
+function foo(x = 0) {
+>foo : Symbol(foo, Decl(functionWithDefaultParameterWithNoStatements2.ts, 0, 0))
+>x : Symbol(x, Decl(functionWithDefaultParameterWithNoStatements2.ts, 0, 13))
+}

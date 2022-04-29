@@ -1,0 +1,10 @@
+=== tests/cases/compiler/invalidUseOfTypeAsNamespace.ts ===
+interface OhNo {
+>OhNo : Symbol(OhNo, Decl(invalidUseOfTypeAsNamespace.ts, 0, 0))
+}
+
+declare let y: OhNo.hello;
+>y : Symbol(y, Decl(invalidUseOfTypeAsNamespace.ts, 3, 11))
+>OhNo : Symbol(OhNo)
+>hello : Symbol(OhNo.hello)
+

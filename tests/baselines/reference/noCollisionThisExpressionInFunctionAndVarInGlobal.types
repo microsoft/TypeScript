@@ -1,0 +1,24 @@
+=== tests/cases/compiler/noCollisionThisExpressionInFunctionAndVarInGlobal.ts ===
+var console: {
+>console : { log(val: any): any; }
+
+    log(val: any);
+>log : (val: any) => any
+>val : any
+}
+var _this = 5;
+>_this : number
+>5 : 5
+
+function x() {
+>x : () => void
+
+    x => { console.log(this); };
+>x => { console.log(this); } : (x: any) => void
+>x : any
+>console.log(this) : any
+>console.log : (val: any) => any
+>console : { log(val: any): any; }
+>log : (val: any) => any
+>this : any
+}

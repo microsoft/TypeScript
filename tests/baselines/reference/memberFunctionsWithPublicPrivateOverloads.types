@@ -1,0 +1,219 @@
+=== tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclarations/memberFunctionsWithPublicPrivateOverloads.ts ===
+class C {
+>C : C
+
+    private foo(x: number);
+>foo : { (x: number): any; (x: number, y: string): any; }
+>x : number
+
+    public foo(x: number, y: string); // error
+>foo : { (x: number): any; (x: number, y: string): any; }
+>x : number
+>y : string
+
+    private foo(x: any, y?: any) { }
+>foo : { (x: number): any; (x: number, y: string): any; }
+>x : any
+>y : any
+
+    private bar(x: 'hi');
+>bar : { (x: 'hi'): any; (x: string): any; (x: number, y: string): any; }
+>x : "hi"
+
+    public bar(x: string); // error
+>bar : { (x: "hi"): any; (x: string): any; (x: number, y: string): any; }
+>x : string
+
+    private bar(x: number, y: string);
+>bar : { (x: "hi"): any; (x: string): any; (x: number, y: string): any; }
+>x : number
+>y : string
+
+    private bar(x: any, y?: any) { }
+>bar : { (x: "hi"): any; (x: string): any; (x: number, y: string): any; }
+>x : any
+>y : any
+
+    private static foo(x: number);
+>foo : { (x: number): any; (x: number, y: string): any; }
+>x : number
+
+    public static foo(x: number, y: string); // error
+>foo : { (x: number): any; (x: number, y: string): any; }
+>x : number
+>y : string
+
+    private static foo(x: any, y?: any) { }
+>foo : { (x: number): any; (x: number, y: string): any; }
+>x : any
+>y : any
+
+    protected baz(x: string); // error
+>baz : { (x: string): any; (x: number, y: string): any; }
+>x : string
+
+    protected baz(x: number, y: string); // error
+>baz : { (x: string): any; (x: number, y: string): any; }
+>x : number
+>y : string
+
+    private baz(x: any, y?: any) { }
+>baz : { (x: string): any; (x: number, y: string): any; }
+>x : any
+>y : any
+
+    private static bar(x: 'hi');
+>bar : { (x: 'hi'): any; (x: string): any; (x: number, y: string): any; }
+>x : "hi"
+
+    public static bar(x: string); // error
+>bar : { (x: "hi"): any; (x: string): any; (x: number, y: string): any; }
+>x : string
+
+    private static bar(x: number, y: string);
+>bar : { (x: "hi"): any; (x: string): any; (x: number, y: string): any; }
+>x : number
+>y : string
+
+    private static bar(x: any, y?: any) { }
+>bar : { (x: "hi"): any; (x: string): any; (x: number, y: string): any; }
+>x : any
+>y : any
+
+    protected static baz(x: 'hi');
+>baz : { (x: 'hi'): any; (x: string): any; (x: number, y: string): any; }
+>x : "hi"
+
+    public static baz(x: string); // error
+>baz : { (x: "hi"): any; (x: string): any; (x: number, y: string): any; }
+>x : string
+
+    protected static baz(x: number, y: string);
+>baz : { (x: "hi"): any; (x: string): any; (x: number, y: string): any; }
+>x : number
+>y : string
+
+    protected static baz(x: any, y?: any) { }
+>baz : { (x: "hi"): any; (x: string): any; (x: number, y: string): any; }
+>x : any
+>y : any
+}
+
+class D<T> {
+>D : D<T>
+
+    private foo(x: number); 
+>foo : { (x: number): any; (x: T, y: T): any; }
+>x : number
+
+    public foo(x: T, y: T); // error
+>foo : { (x: number): any; (x: T, y: T): any; }
+>x : T
+>y : T
+
+    private foo(x: any, y?: any) { }
+>foo : { (x: number): any; (x: T, y: T): any; }
+>x : any
+>y : any
+
+    private bar(x: 'hi');
+>bar : { (x: 'hi'): any; (x: string): any; (x: T, y: T): any; }
+>x : "hi"
+
+    public bar(x: string); // error
+>bar : { (x: "hi"): any; (x: string): any; (x: T, y: T): any; }
+>x : string
+
+    private bar(x: T, y: T);
+>bar : { (x: "hi"): any; (x: string): any; (x: T, y: T): any; }
+>x : T
+>y : T
+
+    private bar(x: any, y?: any) { }
+>bar : { (x: "hi"): any; (x: string): any; (x: T, y: T): any; }
+>x : any
+>y : any
+
+    private baz(x: string); 
+>baz : { (x: string): any; (x: number, y: string): any; }
+>x : string
+
+    protected baz(x: number, y: string); // error
+>baz : { (x: string): any; (x: number, y: string): any; }
+>x : number
+>y : string
+
+    private baz(x: any, y?: any) { }
+>baz : { (x: string): any; (x: number, y: string): any; }
+>x : any
+>y : any
+
+    private static foo(x: number);
+>foo : { (x: number): any; (x: number, y: string): any; }
+>x : number
+
+    public static foo(x: number, y: string); // error
+>foo : { (x: number): any; (x: number, y: string): any; }
+>x : number
+>y : string
+
+    private static foo(x: any, y?: any) { }
+>foo : { (x: number): any; (x: number, y: string): any; }
+>x : any
+>y : any
+
+    private static bar(x: 'hi');
+>bar : { (x: 'hi'): any; (x: string): any; (x: number, y: string): any; }
+>x : "hi"
+
+    public static bar(x: string); // error
+>bar : { (x: "hi"): any; (x: string): any; (x: number, y: string): any; }
+>x : string
+
+    private static bar(x: number, y: string);
+>bar : { (x: "hi"): any; (x: string): any; (x: number, y: string): any; }
+>x : number
+>y : string
+
+    private static bar(x: any, y?: any) { }
+>bar : { (x: "hi"): any; (x: string): any; (x: number, y: string): any; }
+>x : any
+>y : any
+
+    public static baz(x: string); // error
+>baz : { (x: string): any; (x: number, y: string): any; }
+>x : string
+
+    protected static baz(x: number, y: string);
+>baz : { (x: string): any; (x: number, y: string): any; }
+>x : number
+>y : string
+
+    protected static baz(x: any, y?: any) { }
+>baz : { (x: string): any; (x: number, y: string): any; }
+>x : any
+>y : any
+}
+
+var c: C;
+>c : C
+
+var r = c.foo(1); // error
+>r : any
+>c.foo(1) : any
+>c.foo : { (x: number): any; (x: number, y: string): any; }
+>c : C
+>foo : { (x: number): any; (x: number, y: string): any; }
+>1 : 1
+
+var d: D<number>;
+>d : D<number>
+
+var r2 = d.foo(2); // error
+>r2 : any
+>d.foo(2) : any
+>d.foo : { (x: number): any; (x: number, y: number): any; }
+>d : D<number>
+>foo : { (x: number): any; (x: number, y: number): any; }
+>2 : 2
+

@@ -1,0 +1,47 @@
+=== tests/cases/compiler/arguments.ts ===
+function f() {
+>f : () => void
+
+    var x=arguments[12];
+>x : any
+>arguments[12] : any
+>arguments : IArguments
+>12 : 12
+
+    (() => arguments)();
+>(() => arguments)() : IArguments
+>(() => arguments) : () => IArguments
+>() => arguments : () => IArguments
+>arguments : IArguments
+}
+
+(() => arguments)();
+>(() => arguments)() : any
+>(() => arguments) : () => any
+>() => arguments : () => any
+>arguments : any
+
+interface I {
+    method(args: typeof arguments): void;
+>method : (args: any) => void
+>args : any
+>arguments : any
+
+    fn: (args: typeof arguments) => void;
+>fn : (args: any) => void
+>args : any
+>arguments : any
+
+    (args: typeof arguments): void;
+>args : any
+>arguments : any
+
+    new (args: typeof arguments): void;
+>args : any
+>arguments : any
+
+    construct: new (args: typeof arguments) => void;
+>construct : new (args: any) => void
+>args : any
+>arguments : any
+}

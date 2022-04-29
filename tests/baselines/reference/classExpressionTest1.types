@@ -1,0 +1,34 @@
+=== tests/cases/compiler/classExpressionTest1.ts ===
+function M() {
+>M : () => { t: string; x: number; }
+
+    class C<X> {
+>C : C<X>
+
+        f<T>() {
+>f : <T>() => { t: T; x: X; }
+
+            var t: T;
+>t : T
+
+            var x: X;
+>x : X
+
+            return { t, x };
+>{ t, x } : { t: T; x: X; }
+>t : T
+>x : X
+        }
+    }
+
+    var v = new C<number>();
+>v : C<number>
+>new C<number>() : C<number>
+>C : typeof C
+
+    return v.f<string>();
+>v.f<string>() : { t: string; x: number; }
+>v.f : <T>() => { t: T; x: number; }
+>v : C<number>
+>f : <T>() => { t: T; x: number; }
+}

@@ -1,0 +1,32 @@
+=== tests/cases/compiler/exportAssignValueAndType.ts ===
+declare module http {
+>http : Symbol(http, Decl(exportAssignValueAndType.ts, 0, 0))
+
+	export interface Server { openPort: number; }
+>Server : Symbol(Server, Decl(exportAssignValueAndType.ts, 0, 21))
+>openPort : Symbol(Server.openPort, Decl(exportAssignValueAndType.ts, 1, 26))
+}
+
+interface server {
+>server : Symbol(server, Decl(exportAssignValueAndType.ts, 2, 1), Decl(exportAssignValueAndType.ts, 10, 3))
+
+    (): http.Server;
+>http : Symbol(http, Decl(exportAssignValueAndType.ts, 0, 0))
+>Server : Symbol(http.Server, Decl(exportAssignValueAndType.ts, 0, 21))
+
+    startTime: Date;
+>startTime : Symbol(server.startTime, Decl(exportAssignValueAndType.ts, 5, 20))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+}
+ 
+var x = 5;
+>x : Symbol(x, Decl(exportAssignValueAndType.ts, 9, 3))
+
+var server = new Date();
+>server : Symbol(server, Decl(exportAssignValueAndType.ts, 2, 1), Decl(exportAssignValueAndType.ts, 10, 3))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+export = server;
+>server : Symbol(server, Decl(exportAssignValueAndType.ts, 2, 1), Decl(exportAssignValueAndType.ts, 10, 3))
+ 
+

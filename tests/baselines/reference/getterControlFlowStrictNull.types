@@ -1,0 +1,71 @@
+=== tests/cases/compiler/getterControlFlowStrictNull.ts ===
+class A {
+>A : A
+
+   a(): string | null {
+>a : () => string | null
+>null : null
+
+        if (Math.random() > 0.5) {
+>Math.random() > 0.5 : boolean
+>Math.random() : number
+>Math.random : () => number
+>Math : Math
+>random : () => number
+>0.5 : 0.5
+
+            return '';
+>'' : ""
+        }
+
+        // it does error here as expected
+    }
+}
+class B {
+>B : B
+
+    get a(): string | null {
+>a : string | null
+>null : null
+
+        if (Math.random() > 0.5) {
+>Math.random() > 0.5 : boolean
+>Math.random() : number
+>Math.random : () => number
+>Math : Math
+>random : () => number
+>0.5 : 0.5
+
+            return '';
+>'' : ""
+        }
+
+        // it should error here because it returns undefined
+    }
+}
+class C {
+>C : C
+
+    get a() {
+>a : number
+
+        if (Math.random() > 0.5) {
+>Math.random() > 0.5 : boolean
+>Math.random() : number
+>Math.random : () => number
+>Math : Math
+>random : () => number
+>0.5 : 0.5
+
+            return 0;
+>0 : 0
+        }
+
+        // it should error here because it returns undefined
+    }
+
+    set a(value: number) {
+>a : number
+>value : number
+    }
+}

@@ -1,0 +1,14 @@
+=== tests/cases/conformance/parser/ecmascript5/parserAdditiveExpression1.ts ===
+m.index+1+m[0].length;
+>m.index+1+m[0].length : any
+>m.index+1 : any
+>m.index : any
+>m : any
+>index : any
+>1 : 1
+>m[0].length : any
+>m[0] : any
+>m : any
+>0 : 0
+>length : any
+

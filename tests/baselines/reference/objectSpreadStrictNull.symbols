@@ -1,0 +1,144 @@
+=== tests/cases/conformance/types/spread/objectSpreadStrictNull.ts ===
+function f(
+>f : Symbol(f, Decl(objectSpreadStrictNull.ts, 0, 0))
+
+    definiteBoolean: { sn: boolean },
+>definiteBoolean : Symbol(definiteBoolean, Decl(objectSpreadStrictNull.ts, 0, 11))
+>sn : Symbol(sn, Decl(objectSpreadStrictNull.ts, 1, 22))
+
+    definiteString: { sn: string },
+>definiteString : Symbol(definiteString, Decl(objectSpreadStrictNull.ts, 1, 37))
+>sn : Symbol(sn, Decl(objectSpreadStrictNull.ts, 2, 21))
+
+    optionalString: { sn?: string },
+>optionalString : Symbol(optionalString, Decl(objectSpreadStrictNull.ts, 2, 35))
+>sn : Symbol(sn, Decl(objectSpreadStrictNull.ts, 3, 21))
+
+    optionalNumber: { sn?: number },
+>optionalNumber : Symbol(optionalNumber, Decl(objectSpreadStrictNull.ts, 3, 36))
+>sn : Symbol(sn, Decl(objectSpreadStrictNull.ts, 4, 21))
+
+    undefinedString: { sn: string | undefined },
+>undefinedString : Symbol(undefinedString, Decl(objectSpreadStrictNull.ts, 4, 36))
+>sn : Symbol(sn, Decl(objectSpreadStrictNull.ts, 5, 22))
+
+    undefinedNumber: { sn: number | undefined }) {
+>undefinedNumber : Symbol(undefinedNumber, Decl(objectSpreadStrictNull.ts, 5, 48))
+>sn : Symbol(sn, Decl(objectSpreadStrictNull.ts, 6, 22))
+
+    // optional
+    let optionalUnionStops: { sn: string | number } = { ...definiteBoolean, ...definiteString, ...optionalNumber };
+>optionalUnionStops : Symbol(optionalUnionStops, Decl(objectSpreadStrictNull.ts, 8, 7))
+>sn : Symbol(sn, Decl(objectSpreadStrictNull.ts, 8, 29))
+>definiteBoolean : Symbol(definiteBoolean, Decl(objectSpreadStrictNull.ts, 0, 11))
+>definiteString : Symbol(definiteString, Decl(objectSpreadStrictNull.ts, 1, 37))
+>optionalNumber : Symbol(optionalNumber, Decl(objectSpreadStrictNull.ts, 3, 36))
+
+    let optionalUnionDuplicates: { sn: string | number } = { ...definiteBoolean, ...definiteString, ...optionalString, ...optionalNumber };
+>optionalUnionDuplicates : Symbol(optionalUnionDuplicates, Decl(objectSpreadStrictNull.ts, 9, 7))
+>sn : Symbol(sn, Decl(objectSpreadStrictNull.ts, 9, 34))
+>definiteBoolean : Symbol(definiteBoolean, Decl(objectSpreadStrictNull.ts, 0, 11))
+>definiteString : Symbol(definiteString, Decl(objectSpreadStrictNull.ts, 1, 37))
+>optionalString : Symbol(optionalString, Decl(objectSpreadStrictNull.ts, 2, 35))
+>optionalNumber : Symbol(optionalNumber, Decl(objectSpreadStrictNull.ts, 3, 36))
+
+    let allOptional: { sn?: string | number } = { ...optionalString, ...optionalNumber };
+>allOptional : Symbol(allOptional, Decl(objectSpreadStrictNull.ts, 10, 7))
+>sn : Symbol(sn, Decl(objectSpreadStrictNull.ts, 10, 22))
+>optionalString : Symbol(optionalString, Decl(objectSpreadStrictNull.ts, 2, 35))
+>optionalNumber : Symbol(optionalNumber, Decl(objectSpreadStrictNull.ts, 3, 36))
+
+    // undefined
+    let undefinedUnionStops: { sn: string | number } = { ...definiteBoolean, ...definiteString, ...undefinedNumber };
+>undefinedUnionStops : Symbol(undefinedUnionStops, Decl(objectSpreadStrictNull.ts, 13, 7))
+>sn : Symbol(sn, Decl(objectSpreadStrictNull.ts, 13, 30))
+>definiteBoolean : Symbol(definiteBoolean, Decl(objectSpreadStrictNull.ts, 0, 11))
+>definiteString : Symbol(definiteString, Decl(objectSpreadStrictNull.ts, 1, 37))
+>undefinedNumber : Symbol(undefinedNumber, Decl(objectSpreadStrictNull.ts, 5, 48))
+
+    let undefinedUnionDuplicates: { sn: string | number } = { ...definiteBoolean, ...definiteString, ...undefinedString, ...undefinedNumber };
+>undefinedUnionDuplicates : Symbol(undefinedUnionDuplicates, Decl(objectSpreadStrictNull.ts, 14, 7))
+>sn : Symbol(sn, Decl(objectSpreadStrictNull.ts, 14, 35))
+>definiteBoolean : Symbol(definiteBoolean, Decl(objectSpreadStrictNull.ts, 0, 11))
+>definiteString : Symbol(definiteString, Decl(objectSpreadStrictNull.ts, 1, 37))
+>undefinedString : Symbol(undefinedString, Decl(objectSpreadStrictNull.ts, 4, 36))
+>undefinedNumber : Symbol(undefinedNumber, Decl(objectSpreadStrictNull.ts, 5, 48))
+
+    let allUndefined: { sn: string | number | undefined } = { ...undefinedString, ...undefinedNumber };
+>allUndefined : Symbol(allUndefined, Decl(objectSpreadStrictNull.ts, 15, 7))
+>sn : Symbol(sn, Decl(objectSpreadStrictNull.ts, 15, 23))
+>undefinedString : Symbol(undefinedString, Decl(objectSpreadStrictNull.ts, 4, 36))
+>undefinedNumber : Symbol(undefinedNumber, Decl(objectSpreadStrictNull.ts, 5, 48))
+
+    let undefinedWithOptionalContinues: { sn: string | number | boolean } = { ...definiteBoolean, ...undefinedString, ...optionalNumber };
+>undefinedWithOptionalContinues : Symbol(undefinedWithOptionalContinues, Decl(objectSpreadStrictNull.ts, 17, 7))
+>sn : Symbol(sn, Decl(objectSpreadStrictNull.ts, 17, 41))
+>definiteBoolean : Symbol(definiteBoolean, Decl(objectSpreadStrictNull.ts, 0, 11))
+>undefinedString : Symbol(undefinedString, Decl(objectSpreadStrictNull.ts, 4, 36))
+>optionalNumber : Symbol(optionalNumber, Decl(objectSpreadStrictNull.ts, 3, 36))
+}
+
+type Movie = {
+>Movie : Symbol(Movie, Decl(objectSpreadStrictNull.ts, 18, 1))
+
+    title: string;
+>title : Symbol(title, Decl(objectSpreadStrictNull.ts, 20, 14))
+
+    yearReleased: number;
+>yearReleased : Symbol(yearReleased, Decl(objectSpreadStrictNull.ts, 21, 18))
+}
+
+const m = { title: "The Matrix", yearReleased: 1999 };
+>m : Symbol(m, Decl(objectSpreadStrictNull.ts, 25, 5))
+>title : Symbol(title, Decl(objectSpreadStrictNull.ts, 25, 11))
+>yearReleased : Symbol(yearReleased, Decl(objectSpreadStrictNull.ts, 25, 32))
+
+// should error here because title: undefined is not assignable to string
+const x: Movie = { ...m, title: undefined };
+>x : Symbol(x, Decl(objectSpreadStrictNull.ts, 27, 5))
+>Movie : Symbol(Movie, Decl(objectSpreadStrictNull.ts, 18, 1))
+>m : Symbol(m, Decl(objectSpreadStrictNull.ts, 25, 5))
+>title : Symbol(title, Decl(objectSpreadStrictNull.ts, 27, 24))
+>undefined : Symbol(undefined)
+
+interface Fields {
+>Fields : Symbol(Fields, Decl(objectSpreadStrictNull.ts, 27, 44))
+
+    foo: number;
+>foo : Symbol(Fields.foo, Decl(objectSpreadStrictNull.ts, 29, 18))
+
+    bar: string;
+>bar : Symbol(Fields.bar, Decl(objectSpreadStrictNull.ts, 30, 16))
+}
+interface NearlyPartialFields {
+>NearlyPartialFields : Symbol(NearlyPartialFields, Decl(objectSpreadStrictNull.ts, 32, 1))
+
+    foo: number | undefined;
+>foo : Symbol(NearlyPartialFields.foo, Decl(objectSpreadStrictNull.ts, 33, 31))
+
+    bar: string | undefined;
+>bar : Symbol(NearlyPartialFields.bar, Decl(objectSpreadStrictNull.ts, 34, 28))
+}
+function g(fields: Fields, partialFields: Partial<Fields>, nearlyPartialFields: NearlyPartialFields) {
+>g : Symbol(g, Decl(objectSpreadStrictNull.ts, 36, 1))
+>fields : Symbol(fields, Decl(objectSpreadStrictNull.ts, 37, 11))
+>Fields : Symbol(Fields, Decl(objectSpreadStrictNull.ts, 27, 44))
+>partialFields : Symbol(partialFields, Decl(objectSpreadStrictNull.ts, 37, 26))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>Fields : Symbol(Fields, Decl(objectSpreadStrictNull.ts, 27, 44))
+>nearlyPartialFields : Symbol(nearlyPartialFields, Decl(objectSpreadStrictNull.ts, 37, 58))
+>NearlyPartialFields : Symbol(NearlyPartialFields, Decl(objectSpreadStrictNull.ts, 32, 1))
+
+    // ok, undefined is stripped from optional properties when spread
+    fields = { ...fields, ...partialFields };
+>fields : Symbol(fields, Decl(objectSpreadStrictNull.ts, 37, 11))
+>fields : Symbol(fields, Decl(objectSpreadStrictNull.ts, 37, 11))
+>partialFields : Symbol(partialFields, Decl(objectSpreadStrictNull.ts, 37, 26))
+
+    // error: not optional, undefined remains
+    fields = { ...fields, ...nearlyPartialFields };
+>fields : Symbol(fields, Decl(objectSpreadStrictNull.ts, 37, 11))
+>fields : Symbol(fields, Decl(objectSpreadStrictNull.ts, 37, 11))
+>nearlyPartialFields : Symbol(nearlyPartialFields, Decl(objectSpreadStrictNull.ts, 37, 58))
+}
+

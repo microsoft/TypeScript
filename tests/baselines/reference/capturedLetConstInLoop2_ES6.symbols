@@ -1,0 +1,517 @@
+=== tests/cases/compiler/capturedLetConstInLoop2_ES6.ts ===
+// ========let
+function foo0(x) {
+>foo0 : Symbol(foo0, Decl(capturedLetConstInLoop2_ES6.ts, 0, 0))
+>x : Symbol(x, Decl(capturedLetConstInLoop2_ES6.ts, 1, 14))
+
+    for (let x of []) {
+>x : Symbol(x, Decl(capturedLetConstInLoop2_ES6.ts, 2, 12))
+
+        let a = arguments.length;
+>a : Symbol(a, Decl(capturedLetConstInLoop2_ES6.ts, 3, 11))
+>arguments.length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
+>arguments : Symbol(arguments)
+>length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
+
+        (function() { return x + a });
+>x : Symbol(x, Decl(capturedLetConstInLoop2_ES6.ts, 2, 12))
+>a : Symbol(a, Decl(capturedLetConstInLoop2_ES6.ts, 3, 11))
+
+        (() => x + a);
+>x : Symbol(x, Decl(capturedLetConstInLoop2_ES6.ts, 2, 12))
+>a : Symbol(a, Decl(capturedLetConstInLoop2_ES6.ts, 3, 11))
+    }
+}
+
+function foo0_1(x) {
+>foo0_1 : Symbol(foo0_1, Decl(capturedLetConstInLoop2_ES6.ts, 7, 1))
+>x : Symbol(x, Decl(capturedLetConstInLoop2_ES6.ts, 9, 16))
+
+    for (let x in []) {
+>x : Symbol(x, Decl(capturedLetConstInLoop2_ES6.ts, 10, 12))
+
+        let a = arguments.length;
+>a : Symbol(a, Decl(capturedLetConstInLoop2_ES6.ts, 11, 11))
+>arguments.length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
+>arguments : Symbol(arguments)
+>length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
+
+        (function() { return x + a });
+>x : Symbol(x, Decl(capturedLetConstInLoop2_ES6.ts, 10, 12))
+>a : Symbol(a, Decl(capturedLetConstInLoop2_ES6.ts, 11, 11))
+
+        (() => x + a);
+>x : Symbol(x, Decl(capturedLetConstInLoop2_ES6.ts, 10, 12))
+>a : Symbol(a, Decl(capturedLetConstInLoop2_ES6.ts, 11, 11))
+    }
+}
+
+function foo1(x) {
+>foo1 : Symbol(foo1, Decl(capturedLetConstInLoop2_ES6.ts, 15, 1))
+>x : Symbol(x, Decl(capturedLetConstInLoop2_ES6.ts, 17, 14))
+
+    for (let x = 0; x < 1; ++x) {
+>x : Symbol(x, Decl(capturedLetConstInLoop2_ES6.ts, 18, 12))
+>x : Symbol(x, Decl(capturedLetConstInLoop2_ES6.ts, 18, 12))
+>x : Symbol(x, Decl(capturedLetConstInLoop2_ES6.ts, 18, 12))
+
+        let a = arguments.length;
+>a : Symbol(a, Decl(capturedLetConstInLoop2_ES6.ts, 19, 11))
+>arguments.length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
+>arguments : Symbol(arguments)
+>length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
+
+        (function() { return x + a });
+>x : Symbol(x, Decl(capturedLetConstInLoop2_ES6.ts, 18, 12))
+>a : Symbol(a, Decl(capturedLetConstInLoop2_ES6.ts, 19, 11))
+
+        (() => x + a);
+>x : Symbol(x, Decl(capturedLetConstInLoop2_ES6.ts, 18, 12))
+>a : Symbol(a, Decl(capturedLetConstInLoop2_ES6.ts, 19, 11))
+    }
+}
+
+function foo2(x) {
+>foo2 : Symbol(foo2, Decl(capturedLetConstInLoop2_ES6.ts, 23, 1))
+>x : Symbol(x, Decl(capturedLetConstInLoop2_ES6.ts, 25, 14))
+
+    while (1 === 1) {
+        let a = arguments.length;
+>a : Symbol(a, Decl(capturedLetConstInLoop2_ES6.ts, 27, 11))
+>arguments.length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
+>arguments : Symbol(arguments)
+>length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
+
+        (function() { return x + a });
+>x : Symbol(x, Decl(capturedLetConstInLoop2_ES6.ts, 25, 14))
+>a : Symbol(a, Decl(capturedLetConstInLoop2_ES6.ts, 27, 11))
+
+        (() => x + a);
+>x : Symbol(x, Decl(capturedLetConstInLoop2_ES6.ts, 25, 14))
+>a : Symbol(a, Decl(capturedLetConstInLoop2_ES6.ts, 27, 11))
+    }
+}
+
+function foo3(x) {
+>foo3 : Symbol(foo3, Decl(capturedLetConstInLoop2_ES6.ts, 31, 1))
+>x : Symbol(x, Decl(capturedLetConstInLoop2_ES6.ts, 33, 14))
+
+    do {
+        let x;
+>x : Symbol(x, Decl(capturedLetConstInLoop2_ES6.ts, 35, 11))
+
+        let a = arguments.length;
+>a : Symbol(a, Decl(capturedLetConstInLoop2_ES6.ts, 36, 11))
+>arguments.length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
+>arguments : Symbol(arguments)
+>length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
+
+        (function() { return x + a });
+>x : Symbol(x, Decl(capturedLetConstInLoop2_ES6.ts, 35, 11))
+>a : Symbol(a, Decl(capturedLetConstInLoop2_ES6.ts, 36, 11))
+
+        (() => x + a);
+>x : Symbol(x, Decl(capturedLetConstInLoop2_ES6.ts, 35, 11))
+>a : Symbol(a, Decl(capturedLetConstInLoop2_ES6.ts, 36, 11))
+
+    } while (1 === 1)
+}
+
+function foo4(x) {
+>foo4 : Symbol(foo4, Decl(capturedLetConstInLoop2_ES6.ts, 40, 1))
+>x : Symbol(x, Decl(capturedLetConstInLoop2_ES6.ts, 42, 14))
+
+    for (let y = 0; y < 1; ++y) {
+>y : Symbol(y, Decl(capturedLetConstInLoop2_ES6.ts, 43, 12))
+>y : Symbol(y, Decl(capturedLetConstInLoop2_ES6.ts, 43, 12))
+>y : Symbol(y, Decl(capturedLetConstInLoop2_ES6.ts, 43, 12))
+
+        let a = arguments.length;
+>a : Symbol(a, Decl(capturedLetConstInLoop2_ES6.ts, 44, 11))
+>arguments.length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
+>arguments : Symbol(arguments)
+>length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
+
+        let x = 1;
+>x : Symbol(x, Decl(capturedLetConstInLoop2_ES6.ts, 45, 11))
+
+        (function() { return x + a });
+>x : Symbol(x, Decl(capturedLetConstInLoop2_ES6.ts, 45, 11))
+>a : Symbol(a, Decl(capturedLetConstInLoop2_ES6.ts, 44, 11))
+
+        (() => x + a);
+>x : Symbol(x, Decl(capturedLetConstInLoop2_ES6.ts, 45, 11))
+>a : Symbol(a, Decl(capturedLetConstInLoop2_ES6.ts, 44, 11))
+    }
+}
+
+function foo5(x) {
+>foo5 : Symbol(foo5, Decl(capturedLetConstInLoop2_ES6.ts, 49, 1))
+>x : Symbol(x, Decl(capturedLetConstInLoop2_ES6.ts, 51, 14))
+
+    for (let x = 0, y = 1; x < 1; ++x) {
+>x : Symbol(x, Decl(capturedLetConstInLoop2_ES6.ts, 52, 12))
+>y : Symbol(y, Decl(capturedLetConstInLoop2_ES6.ts, 52, 19))
+>x : Symbol(x, Decl(capturedLetConstInLoop2_ES6.ts, 52, 12))
+>x : Symbol(x, Decl(capturedLetConstInLoop2_ES6.ts, 52, 12))
+
+        let a = arguments.length;
+>a : Symbol(a, Decl(capturedLetConstInLoop2_ES6.ts, 53, 11))
+>arguments.length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
+>arguments : Symbol(arguments)
+>length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
+
+        (function() { return x + y + a });
+>x : Symbol(x, Decl(capturedLetConstInLoop2_ES6.ts, 52, 12))
+>y : Symbol(y, Decl(capturedLetConstInLoop2_ES6.ts, 52, 19))
+>a : Symbol(a, Decl(capturedLetConstInLoop2_ES6.ts, 53, 11))
+
+        (() => x + y + a);
+>x : Symbol(x, Decl(capturedLetConstInLoop2_ES6.ts, 52, 12))
+>y : Symbol(y, Decl(capturedLetConstInLoop2_ES6.ts, 52, 19))
+>a : Symbol(a, Decl(capturedLetConstInLoop2_ES6.ts, 53, 11))
+    }
+}
+
+
+function foo6(x) {
+>foo6 : Symbol(foo6, Decl(capturedLetConstInLoop2_ES6.ts, 57, 1))
+>x : Symbol(x, Decl(capturedLetConstInLoop2_ES6.ts, 60, 14))
+
+    while (1 === 1) {
+        let x, y;
+>x : Symbol(x, Decl(capturedLetConstInLoop2_ES6.ts, 62, 11))
+>y : Symbol(y, Decl(capturedLetConstInLoop2_ES6.ts, 62, 14))
+
+        let a = arguments.length;
+>a : Symbol(a, Decl(capturedLetConstInLoop2_ES6.ts, 63, 11))
+>arguments.length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
+>arguments : Symbol(arguments)
+>length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
+
+        (function() { return x + y + a });
+>x : Symbol(x, Decl(capturedLetConstInLoop2_ES6.ts, 62, 11))
+>y : Symbol(y, Decl(capturedLetConstInLoop2_ES6.ts, 62, 14))
+>a : Symbol(a, Decl(capturedLetConstInLoop2_ES6.ts, 63, 11))
+
+        (() => x + y + a);
+>x : Symbol(x, Decl(capturedLetConstInLoop2_ES6.ts, 62, 11))
+>y : Symbol(y, Decl(capturedLetConstInLoop2_ES6.ts, 62, 14))
+>a : Symbol(a, Decl(capturedLetConstInLoop2_ES6.ts, 63, 11))
+    }
+}
+
+function foo7(x) {
+>foo7 : Symbol(foo7, Decl(capturedLetConstInLoop2_ES6.ts, 67, 1))
+>x : Symbol(x, Decl(capturedLetConstInLoop2_ES6.ts, 69, 14))
+
+    do {
+        let x, y;
+>x : Symbol(x, Decl(capturedLetConstInLoop2_ES6.ts, 71, 11))
+>y : Symbol(y, Decl(capturedLetConstInLoop2_ES6.ts, 71, 14))
+
+        let a = arguments.length;
+>a : Symbol(a, Decl(capturedLetConstInLoop2_ES6.ts, 72, 11))
+>arguments.length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
+>arguments : Symbol(arguments)
+>length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
+
+        (function() { return x + y + a });
+>x : Symbol(x, Decl(capturedLetConstInLoop2_ES6.ts, 71, 11))
+>y : Symbol(y, Decl(capturedLetConstInLoop2_ES6.ts, 71, 14))
+>a : Symbol(a, Decl(capturedLetConstInLoop2_ES6.ts, 72, 11))
+
+        (() => x + y + a);
+>x : Symbol(x, Decl(capturedLetConstInLoop2_ES6.ts, 71, 11))
+>y : Symbol(y, Decl(capturedLetConstInLoop2_ES6.ts, 71, 14))
+>a : Symbol(a, Decl(capturedLetConstInLoop2_ES6.ts, 72, 11))
+
+    } while (1 === 1)
+}
+
+
+function foo8(x) {
+>foo8 : Symbol(foo8, Decl(capturedLetConstInLoop2_ES6.ts, 76, 1))
+>x : Symbol(x, Decl(capturedLetConstInLoop2_ES6.ts, 79, 14))
+
+    for (let y = 0; y < 1; ++y) {
+>y : Symbol(y, Decl(capturedLetConstInLoop2_ES6.ts, 80, 12))
+>y : Symbol(y, Decl(capturedLetConstInLoop2_ES6.ts, 80, 12))
+>y : Symbol(y, Decl(capturedLetConstInLoop2_ES6.ts, 80, 12))
+
+        let x = 1;
+>x : Symbol(x, Decl(capturedLetConstInLoop2_ES6.ts, 81, 11))
+
+        let a = arguments.length;
+>a : Symbol(a, Decl(capturedLetConstInLoop2_ES6.ts, 82, 11))
+>arguments.length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
+>arguments : Symbol(arguments)
+>length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
+
+        (function() { return x + y + a });
+>x : Symbol(x, Decl(capturedLetConstInLoop2_ES6.ts, 81, 11))
+>y : Symbol(y, Decl(capturedLetConstInLoop2_ES6.ts, 80, 12))
+>a : Symbol(a, Decl(capturedLetConstInLoop2_ES6.ts, 82, 11))
+
+        (() => x + y + a);
+>x : Symbol(x, Decl(capturedLetConstInLoop2_ES6.ts, 81, 11))
+>y : Symbol(y, Decl(capturedLetConstInLoop2_ES6.ts, 80, 12))
+>a : Symbol(a, Decl(capturedLetConstInLoop2_ES6.ts, 82, 11))
+    }
+}
+///=======const
+function foo0_c(x) {
+>foo0_c : Symbol(foo0_c, Decl(capturedLetConstInLoop2_ES6.ts, 86, 1))
+>x : Symbol(x, Decl(capturedLetConstInLoop2_ES6.ts, 88, 16))
+
+    for (const x of []) {
+>x : Symbol(x, Decl(capturedLetConstInLoop2_ES6.ts, 89, 14))
+
+        const a = arguments.length;
+>a : Symbol(a, Decl(capturedLetConstInLoop2_ES6.ts, 90, 13))
+>arguments.length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
+>arguments : Symbol(arguments)
+>length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
+
+        (function() { return x + a });
+>x : Symbol(x, Decl(capturedLetConstInLoop2_ES6.ts, 89, 14))
+>a : Symbol(a, Decl(capturedLetConstInLoop2_ES6.ts, 90, 13))
+
+        (() => x + a);
+>x : Symbol(x, Decl(capturedLetConstInLoop2_ES6.ts, 89, 14))
+>a : Symbol(a, Decl(capturedLetConstInLoop2_ES6.ts, 90, 13))
+    }
+}
+
+function foo0_1_c(x) {
+>foo0_1_c : Symbol(foo0_1_c, Decl(capturedLetConstInLoop2_ES6.ts, 94, 1))
+>x : Symbol(x, Decl(capturedLetConstInLoop2_ES6.ts, 96, 18))
+
+    for (const x in []) {
+>x : Symbol(x, Decl(capturedLetConstInLoop2_ES6.ts, 97, 14))
+
+        const a = arguments.length;
+>a : Symbol(a, Decl(capturedLetConstInLoop2_ES6.ts, 98, 13))
+>arguments.length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
+>arguments : Symbol(arguments)
+>length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
+
+        (function() { return x + a });
+>x : Symbol(x, Decl(capturedLetConstInLoop2_ES6.ts, 97, 14))
+>a : Symbol(a, Decl(capturedLetConstInLoop2_ES6.ts, 98, 13))
+
+        (() => x + a);
+>x : Symbol(x, Decl(capturedLetConstInLoop2_ES6.ts, 97, 14))
+>a : Symbol(a, Decl(capturedLetConstInLoop2_ES6.ts, 98, 13))
+    }
+}
+
+function foo1_c(x) {
+>foo1_c : Symbol(foo1_c, Decl(capturedLetConstInLoop2_ES6.ts, 102, 1))
+>x : Symbol(x, Decl(capturedLetConstInLoop2_ES6.ts, 104, 16))
+
+    for (const x = 0; x < 1;) {
+>x : Symbol(x, Decl(capturedLetConstInLoop2_ES6.ts, 105, 14))
+>x : Symbol(x, Decl(capturedLetConstInLoop2_ES6.ts, 105, 14))
+
+        const a = arguments.length;
+>a : Symbol(a, Decl(capturedLetConstInLoop2_ES6.ts, 106, 13))
+>arguments.length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
+>arguments : Symbol(arguments)
+>length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
+
+        (function() { return x + a });
+>x : Symbol(x, Decl(capturedLetConstInLoop2_ES6.ts, 105, 14))
+>a : Symbol(a, Decl(capturedLetConstInLoop2_ES6.ts, 106, 13))
+
+        (() => x + a);
+>x : Symbol(x, Decl(capturedLetConstInLoop2_ES6.ts, 105, 14))
+>a : Symbol(a, Decl(capturedLetConstInLoop2_ES6.ts, 106, 13))
+    }
+}
+
+function foo2_c(x) {
+>foo2_c : Symbol(foo2_c, Decl(capturedLetConstInLoop2_ES6.ts, 110, 1))
+>x : Symbol(x, Decl(capturedLetConstInLoop2_ES6.ts, 112, 16))
+
+    while (1 === 1) {
+        const a = arguments.length;
+>a : Symbol(a, Decl(capturedLetConstInLoop2_ES6.ts, 114, 13))
+>arguments.length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
+>arguments : Symbol(arguments)
+>length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
+
+        (function() { return x + a });
+>x : Symbol(x, Decl(capturedLetConstInLoop2_ES6.ts, 112, 16))
+>a : Symbol(a, Decl(capturedLetConstInLoop2_ES6.ts, 114, 13))
+
+        (() => x + a);
+>x : Symbol(x, Decl(capturedLetConstInLoop2_ES6.ts, 112, 16))
+>a : Symbol(a, Decl(capturedLetConstInLoop2_ES6.ts, 114, 13))
+    }
+}
+
+function foo3_c(x) {
+>foo3_c : Symbol(foo3_c, Decl(capturedLetConstInLoop2_ES6.ts, 118, 1))
+>x : Symbol(x, Decl(capturedLetConstInLoop2_ES6.ts, 120, 16))
+
+    do {
+        const x = 1;
+>x : Symbol(x, Decl(capturedLetConstInLoop2_ES6.ts, 122, 13))
+
+        const a = arguments.length;
+>a : Symbol(a, Decl(capturedLetConstInLoop2_ES6.ts, 123, 13))
+>arguments.length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
+>arguments : Symbol(arguments)
+>length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
+
+        (function() { return x + a });
+>x : Symbol(x, Decl(capturedLetConstInLoop2_ES6.ts, 122, 13))
+>a : Symbol(a, Decl(capturedLetConstInLoop2_ES6.ts, 123, 13))
+
+        (() => x + a);
+>x : Symbol(x, Decl(capturedLetConstInLoop2_ES6.ts, 122, 13))
+>a : Symbol(a, Decl(capturedLetConstInLoop2_ES6.ts, 123, 13))
+
+    } while (1 === 1)
+}
+
+function foo4_c(x) {
+>foo4_c : Symbol(foo4_c, Decl(capturedLetConstInLoop2_ES6.ts, 127, 1))
+>x : Symbol(x, Decl(capturedLetConstInLoop2_ES6.ts, 129, 16))
+
+    for (const y = 0; y < 1;) {
+>y : Symbol(y, Decl(capturedLetConstInLoop2_ES6.ts, 130, 14))
+>y : Symbol(y, Decl(capturedLetConstInLoop2_ES6.ts, 130, 14))
+
+        const a = arguments.length;
+>a : Symbol(a, Decl(capturedLetConstInLoop2_ES6.ts, 131, 13))
+>arguments.length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
+>arguments : Symbol(arguments)
+>length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
+
+        const x = 1;
+>x : Symbol(x, Decl(capturedLetConstInLoop2_ES6.ts, 132, 13))
+
+        (function() { return x + a });
+>x : Symbol(x, Decl(capturedLetConstInLoop2_ES6.ts, 132, 13))
+>a : Symbol(a, Decl(capturedLetConstInLoop2_ES6.ts, 131, 13))
+
+        (() => x + a);
+>x : Symbol(x, Decl(capturedLetConstInLoop2_ES6.ts, 132, 13))
+>a : Symbol(a, Decl(capturedLetConstInLoop2_ES6.ts, 131, 13))
+    }
+}
+
+function foo5_c(x) {
+>foo5_c : Symbol(foo5_c, Decl(capturedLetConstInLoop2_ES6.ts, 136, 1))
+>x : Symbol(x, Decl(capturedLetConstInLoop2_ES6.ts, 138, 16))
+
+    for (const x = 0, y = 1; x < 1;) {
+>x : Symbol(x, Decl(capturedLetConstInLoop2_ES6.ts, 139, 14))
+>y : Symbol(y, Decl(capturedLetConstInLoop2_ES6.ts, 139, 21))
+>x : Symbol(x, Decl(capturedLetConstInLoop2_ES6.ts, 139, 14))
+
+        const a = arguments.length;
+>a : Symbol(a, Decl(capturedLetConstInLoop2_ES6.ts, 140, 13))
+>arguments.length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
+>arguments : Symbol(arguments)
+>length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
+
+        (function() { return x + y + a });
+>x : Symbol(x, Decl(capturedLetConstInLoop2_ES6.ts, 139, 14))
+>y : Symbol(y, Decl(capturedLetConstInLoop2_ES6.ts, 139, 21))
+>a : Symbol(a, Decl(capturedLetConstInLoop2_ES6.ts, 140, 13))
+
+        (() => x + y + a);
+>x : Symbol(x, Decl(capturedLetConstInLoop2_ES6.ts, 139, 14))
+>y : Symbol(y, Decl(capturedLetConstInLoop2_ES6.ts, 139, 21))
+>a : Symbol(a, Decl(capturedLetConstInLoop2_ES6.ts, 140, 13))
+    }
+}
+
+
+function foo6_c(x) {
+>foo6_c : Symbol(foo6_c, Decl(capturedLetConstInLoop2_ES6.ts, 144, 1))
+>x : Symbol(x, Decl(capturedLetConstInLoop2_ES6.ts, 147, 16))
+
+    while (1 === 1) {
+        const x = 1, y =1 ;
+>x : Symbol(x, Decl(capturedLetConstInLoop2_ES6.ts, 149, 13))
+>y : Symbol(y, Decl(capturedLetConstInLoop2_ES6.ts, 149, 20))
+
+        const a = arguments.length;
+>a : Symbol(a, Decl(capturedLetConstInLoop2_ES6.ts, 150, 13))
+>arguments.length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
+>arguments : Symbol(arguments)
+>length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
+
+        (function() { return x + y + a });
+>x : Symbol(x, Decl(capturedLetConstInLoop2_ES6.ts, 149, 13))
+>y : Symbol(y, Decl(capturedLetConstInLoop2_ES6.ts, 149, 20))
+>a : Symbol(a, Decl(capturedLetConstInLoop2_ES6.ts, 150, 13))
+
+        (() => x + y + a);
+>x : Symbol(x, Decl(capturedLetConstInLoop2_ES6.ts, 149, 13))
+>y : Symbol(y, Decl(capturedLetConstInLoop2_ES6.ts, 149, 20))
+>a : Symbol(a, Decl(capturedLetConstInLoop2_ES6.ts, 150, 13))
+    }
+}
+
+function foo7_c(x) {
+>foo7_c : Symbol(foo7_c, Decl(capturedLetConstInLoop2_ES6.ts, 154, 1))
+>x : Symbol(x, Decl(capturedLetConstInLoop2_ES6.ts, 156, 16))
+
+    do {
+        const x = 1, y = 1;
+>x : Symbol(x, Decl(capturedLetConstInLoop2_ES6.ts, 158, 13))
+>y : Symbol(y, Decl(capturedLetConstInLoop2_ES6.ts, 158, 20))
+
+        const a = arguments.length;
+>a : Symbol(a, Decl(capturedLetConstInLoop2_ES6.ts, 159, 13))
+>arguments.length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
+>arguments : Symbol(arguments)
+>length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
+
+        (function() { return x + y + a });
+>x : Symbol(x, Decl(capturedLetConstInLoop2_ES6.ts, 158, 13))
+>y : Symbol(y, Decl(capturedLetConstInLoop2_ES6.ts, 158, 20))
+>a : Symbol(a, Decl(capturedLetConstInLoop2_ES6.ts, 159, 13))
+
+        (() => x + y + a);
+>x : Symbol(x, Decl(capturedLetConstInLoop2_ES6.ts, 158, 13))
+>y : Symbol(y, Decl(capturedLetConstInLoop2_ES6.ts, 158, 20))
+>a : Symbol(a, Decl(capturedLetConstInLoop2_ES6.ts, 159, 13))
+
+    } while (1 === 1)
+}
+
+
+function foo8_c(x) {
+>foo8_c : Symbol(foo8_c, Decl(capturedLetConstInLoop2_ES6.ts, 163, 1))
+>x : Symbol(x, Decl(capturedLetConstInLoop2_ES6.ts, 166, 16))
+
+    for (const y = 0; y < 1;) {
+>y : Symbol(y, Decl(capturedLetConstInLoop2_ES6.ts, 167, 14))
+>y : Symbol(y, Decl(capturedLetConstInLoop2_ES6.ts, 167, 14))
+
+        const x = 1;
+>x : Symbol(x, Decl(capturedLetConstInLoop2_ES6.ts, 168, 13))
+
+        const a = arguments.length;
+>a : Symbol(a, Decl(capturedLetConstInLoop2_ES6.ts, 169, 13))
+>arguments.length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
+>arguments : Symbol(arguments)
+>length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
+
+        (function() { return x + y + a });
+>x : Symbol(x, Decl(capturedLetConstInLoop2_ES6.ts, 168, 13))
+>y : Symbol(y, Decl(capturedLetConstInLoop2_ES6.ts, 167, 14))
+>a : Symbol(a, Decl(capturedLetConstInLoop2_ES6.ts, 169, 13))
+
+        (() => x + y + a);
+>x : Symbol(x, Decl(capturedLetConstInLoop2_ES6.ts, 168, 13))
+>y : Symbol(y, Decl(capturedLetConstInLoop2_ES6.ts, 167, 14))
+>a : Symbol(a, Decl(capturedLetConstInLoop2_ES6.ts, 169, 13))
+    }
+}

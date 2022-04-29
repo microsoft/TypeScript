@@ -1,0 +1,142 @@
+=== tests/cases/compiler/unusedLocalsAndParameters.ts ===
+export { };
+
+// function declaration paramter
+function f(a) {
+>f : Symbol(f, Decl(unusedLocalsAndParameters.ts, 0, 11))
+>a : Symbol(a, Decl(unusedLocalsAndParameters.ts, 3, 11))
+}
+f(0);
+>f : Symbol(f, Decl(unusedLocalsAndParameters.ts, 0, 11))
+
+// function expression paramter
+var fexp = function (a) {
+>fexp : Symbol(fexp, Decl(unusedLocalsAndParameters.ts, 8, 3))
+>a : Symbol(a, Decl(unusedLocalsAndParameters.ts, 8, 21))
+
+};
+
+fexp(0);
+>fexp : Symbol(fexp, Decl(unusedLocalsAndParameters.ts, 8, 3))
+
+// arrow function paramter
+var farrow = (a) => {
+>farrow : Symbol(farrow, Decl(unusedLocalsAndParameters.ts, 14, 3))
+>a : Symbol(a, Decl(unusedLocalsAndParameters.ts, 14, 14))
+
+};
+
+class C {
+>C : Symbol(C, Decl(unusedLocalsAndParameters.ts, 15, 2))
+
+    // Method declaration paramter
+    method(a) {
+>method : Symbol(C.method, Decl(unusedLocalsAndParameters.ts, 17, 9))
+>a : Symbol(a, Decl(unusedLocalsAndParameters.ts, 19, 11))
+    }
+    // Accessor declaration paramter
+    set x(v: number) {
+>x : Symbol(C.x, Decl(unusedLocalsAndParameters.ts, 20, 5))
+>v : Symbol(v, Decl(unusedLocalsAndParameters.ts, 22, 10))
+    }
+}
+
+var E = class {
+>E : Symbol(E, Decl(unusedLocalsAndParameters.ts, 26, 3))
+
+    // Method declaration paramter
+    method(a) {
+>method : Symbol(E.method, Decl(unusedLocalsAndParameters.ts, 26, 15))
+>a : Symbol(a, Decl(unusedLocalsAndParameters.ts, 28, 11))
+    }
+    // Accessor declaration paramter
+    set x(v: number) {
+>x : Symbol(E.x, Decl(unusedLocalsAndParameters.ts, 29, 5))
+>v : Symbol(v, Decl(unusedLocalsAndParameters.ts, 31, 10))
+    }
+}
+
+var o = {
+>o : Symbol(o, Decl(unusedLocalsAndParameters.ts, 35, 3))
+
+    // Object literal method declaration paramter
+    method(a) {
+>method : Symbol(method, Decl(unusedLocalsAndParameters.ts, 35, 9))
+>a : Symbol(a, Decl(unusedLocalsAndParameters.ts, 37, 11))
+
+    },
+    // Accessor declaration paramter
+    set x(v: number) {
+>x : Symbol(x, Decl(unusedLocalsAndParameters.ts, 38, 6))
+>v : Symbol(v, Decl(unusedLocalsAndParameters.ts, 40, 10))
+    }
+};
+
+o;
+>o : Symbol(o, Decl(unusedLocalsAndParameters.ts, 35, 3))
+
+// in a for..in statment
+for (let i in o) {
+>i : Symbol(i, Decl(unusedLocalsAndParameters.ts, 47, 8))
+>o : Symbol(o, Decl(unusedLocalsAndParameters.ts, 35, 3))
+}
+
+// in a for..of statment
+for (let i of [1, 2, 3]) {
+>i : Symbol(i, Decl(unusedLocalsAndParameters.ts, 51, 8))
+}
+
+// in a for. statment
+for (let i = 0, n; i < 10; i++) {
+>i : Symbol(i, Decl(unusedLocalsAndParameters.ts, 55, 8))
+>n : Symbol(n, Decl(unusedLocalsAndParameters.ts, 55, 15))
+>i : Symbol(i, Decl(unusedLocalsAndParameters.ts, 55, 8))
+>i : Symbol(i, Decl(unusedLocalsAndParameters.ts, 55, 8))
+}
+
+// in a block
+
+const condition = false;
+>condition : Symbol(condition, Decl(unusedLocalsAndParameters.ts, 60, 5))
+
+if (condition) {
+>condition : Symbol(condition, Decl(unusedLocalsAndParameters.ts, 60, 5))
+
+    const c = 0;
+>c : Symbol(c, Decl(unusedLocalsAndParameters.ts, 62, 9))
+}
+
+// in try/catch/finally
+try {
+    const a = 0;
+>a : Symbol(a, Decl(unusedLocalsAndParameters.ts, 67, 9))
+}
+catch (e) {
+>e : Symbol(e, Decl(unusedLocalsAndParameters.ts, 69, 7))
+
+    const c = 1;
+>c : Symbol(c, Decl(unusedLocalsAndParameters.ts, 70, 9))
+}
+finally {
+    const c = 0;
+>c : Symbol(c, Decl(unusedLocalsAndParameters.ts, 73, 9))
+}
+
+
+// in a namespace
+namespace N {
+>N : Symbol(N, Decl(unusedLocalsAndParameters.ts, 74, 1))
+
+    var x;
+>x : Symbol(x, Decl(unusedLocalsAndParameters.ts, 79, 7))
+}
+
+for (let x: y) {
+>x : Symbol(x, Decl(unusedLocalsAndParameters.ts, 82, 8))
+>y : Symbol(y)
+
+    z(x);
+>z : Symbol(z, Decl(unusedLocalsAndParameters.ts, 82, 16))
+>x : Symbol(x, Decl(unusedLocalsAndParameters.ts, 82, 8))
+}
+

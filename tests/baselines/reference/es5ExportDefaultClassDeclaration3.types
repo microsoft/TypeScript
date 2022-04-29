@@ -1,0 +1,29 @@
+=== tests/cases/compiler/es5ExportDefaultClassDeclaration3.ts ===
+var before: C = new C();
+>before : C
+>new C() : C
+>C : typeof C
+
+export default class C {
+>C : C
+
+    method(): C {
+>method : () => C
+
+        return new C();
+>new C() : C
+>C : typeof C
+    }
+}
+
+var after: C = new C();
+>after : C
+>new C() : C
+>C : typeof C
+
+var t: typeof C = C;
+>t : typeof C
+>C : typeof C
+>C : typeof C
+
+

@@ -1,0 +1,1 @@
+import electron = require("electron");

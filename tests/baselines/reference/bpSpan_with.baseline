@@ -1,0 +1,21 @@
+
+1  >var obj: string;
+
+    ~~~~~~~~~~~~~~~~~                             => Pos: (0 to 16)  SpanInfo: undefined
+--------------------------------
+2  >with (obj) {
+
+    ~~~~~~~~~~~~~                                 => Pos: (17 to 29)  SpanInfo: {"start":34,"length":6}
+    >x = 10
+    >:=> (line 3, col 4) to (line 3, col 10)
+--------------------------------
+3  >    x = 10;
+
+    ~~~~~~~~~~~~                                  => Pos: (30 to 41)  SpanInfo: {"start":34,"length":6}
+    >x = 10
+    >:=> (line 3, col 4) to (line 3, col 10)
+--------------------------------
+4  >}
+    ~                                             => Pos: (42 to 42)  SpanInfo: {"start":34,"length":6}
+    >x = 10
+    >:=> (line 3, col 4) to (line 3, col 10)

@@ -1,0 +1,114 @@
+=== tests/cases/conformance/interfaces/declarationMerging/mergeTwoInterfaces.ts ===
+// two interfaces with the same root module should merge
+
+// basic case
+interface A {
+    foo: string;
+>foo : string
+}
+
+interface A {
+    bar: number;
+>bar : number
+}
+
+var a: A;
+>a : A
+
+var r1 = a.foo
+>r1 : string
+>a.foo : string
+>a : A
+>foo : string
+
+var r2 = a.bar;
+>r2 : number
+>a.bar : number
+>a : A
+>bar : number
+
+// basic generic case
+interface B<T> {
+    baz: string;
+>baz : string
+
+    foo: T;
+>foo : T
+}
+
+interface B<T> {
+    bar: T;
+>bar : T
+}
+
+var b: B<string>;
+>b : B<string>
+
+var r3 = b.foo
+>r3 : string
+>b.foo : string
+>b : B<string>
+>foo : string
+
+var r4 = b.bar;
+>r4 : string
+>b.bar : string
+>b : B<string>
+>bar : string
+
+// basic non-generic and generic case inside a module
+module M {
+>M : typeof M
+
+    interface A {
+        foo: string;
+>foo : string
+    }
+
+    interface A {
+        bar: number;
+>bar : number
+    }
+
+    var a: A;
+>a : A
+
+    var r1 = a.foo;
+>r1 : string
+>a.foo : string
+>a : A
+>foo : string
+
+    // BUG 856491
+    var r2 = a.bar; // any, should be number
+>r2 : number
+>a.bar : number
+>a : A
+>bar : number
+
+    interface B<T> {
+        foo: T;
+>foo : T
+    }
+
+    interface B<T> {
+        bar: T;
+>bar : T
+    }
+
+    var b: B<string>;
+>b : B<string>
+
+    var r3 = b.foo
+>r3 : string
+>b.foo : string
+>b : B<string>
+>foo : string
+
+    // BUG 856491
+    var r4 = b.bar; // any, should be string
+>r4 : string
+>b.bar : string
+>b : B<string>
+>bar : string
+}

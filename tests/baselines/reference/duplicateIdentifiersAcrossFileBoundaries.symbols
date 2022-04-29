@@ -1,0 +1,64 @@
+=== tests/cases/compiler/file1.ts ===
+interface I { }
+>I : Symbol(I, Decl(file1.ts, 0, 0), Decl(file2.ts, 0, 0))
+
+class C1 { }
+>C1 : Symbol(C1, Decl(file1.ts, 0, 15), Decl(file2.ts, 0, 11))
+
+class C2 { }
+>C2 : Symbol(C2, Decl(file1.ts, 1, 12), Decl(file2.ts, 1, 16))
+
+function f() { }
+>f : Symbol(f, Decl(file1.ts, 2, 12), Decl(file2.ts, 2, 17))
+
+var v = 3;
+>v : Symbol(v, Decl(file1.ts, 4, 3), Decl(file2.ts, 4, 3))
+
+class Foo {
+>Foo : Symbol(Foo, Decl(file1.ts, 4, 10), Decl(file2.ts, 4, 10))
+
+    static x: number;
+>x : Symbol(Foo.x, Decl(file1.ts, 6, 11))
+}
+
+module N {
+>N : Symbol(N, Decl(file1.ts, 8, 1), Decl(file2.ts, 8, 1))
+
+    export module F {
+>F : Symbol(F, Decl(file1.ts, 10, 10), Decl(file2.ts, 10, 18))
+
+        var t;
+>t : Symbol(t, Decl(file1.ts, 12, 11))
+    }
+}
+
+=== tests/cases/compiler/file2.ts ===
+class I { } // error -- cannot merge interface with non-ambient class
+>I : Symbol(I, Decl(file1.ts, 0, 0), Decl(file2.ts, 0, 0))
+
+interface C1 { } // error -- cannot merge interface with non-ambient class
+>C1 : Symbol(C1, Decl(file1.ts, 0, 15), Decl(file2.ts, 0, 11))
+
+function C2() { } // error -- cannot merge function with non-ambient class
+>C2 : Symbol(C2, Decl(file1.ts, 1, 12), Decl(file2.ts, 1, 16))
+
+class f { } // error -- cannot merge function with non-ambient class
+>f : Symbol(f, Decl(file1.ts, 2, 12), Decl(file2.ts, 2, 17))
+
+var v = 3;
+>v : Symbol(v, Decl(file1.ts, 4, 3), Decl(file2.ts, 4, 3))
+
+module Foo {
+>Foo : Symbol(Foo, Decl(file1.ts, 4, 10), Decl(file2.ts, 4, 10))
+
+    export var x: number; // error for redeclaring var in a different parent
+>x : Symbol(x, Decl(file2.ts, 7, 14))
+}
+
+declare module N {
+>N : Symbol(N, Decl(file1.ts, 8, 1), Decl(file2.ts, 8, 1))
+
+    export function F(); // no error because function is ambient
+>F : Symbol(F, Decl(file1.ts, 10, 10), Decl(file2.ts, 10, 18))
+}
+

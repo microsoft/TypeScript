@@ -1,0 +1,23 @@
+=== tests/cases/compiler/nestedSelf.ts ===
+module M {
+>M : Symbol(M, Decl(nestedSelf.ts, 0, 0))
+
+ export class C {
+>C : Symbol(C, Decl(nestedSelf.ts, 0, 10))
+
+   public n = 42;
+>n : Symbol(C.n, Decl(nestedSelf.ts, 1, 17))
+
+   public foo() { [1,2,3].map((x) => { return this.n * x; })}
+>foo : Symbol(C.foo, Decl(nestedSelf.ts, 2, 17))
+>[1,2,3].map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(nestedSelf.ts, 3, 31))
+>this.n : Symbol(C.n, Decl(nestedSelf.ts, 1, 17))
+>this : Symbol(C, Decl(nestedSelf.ts, 0, 10))
+>n : Symbol(C.n, Decl(nestedSelf.ts, 1, 17))
+>x : Symbol(x, Decl(nestedSelf.ts, 3, 31))
+ }
+}
+
+

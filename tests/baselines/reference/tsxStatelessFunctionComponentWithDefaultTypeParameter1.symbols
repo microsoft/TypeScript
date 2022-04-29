@@ -1,0 +1,34 @@
+=== tests/cases/conformance/jsx/file.tsx ===
+import React = require('react')
+>React : Symbol(React, Decl(file.tsx, 0, 0))
+
+interface MyComponentProp {
+>MyComponentProp : Symbol(MyComponentProp, Decl(file.tsx, 0, 31))
+
+    values: string;
+>values : Symbol(MyComponentProp.values, Decl(file.tsx, 2, 27))
+}
+
+function MyComponent<T = MyComponentProp>(attr: T) {
+>MyComponent : Symbol(MyComponent, Decl(file.tsx, 4, 1))
+>T : Symbol(T, Decl(file.tsx, 6, 21))
+>MyComponentProp : Symbol(MyComponentProp, Decl(file.tsx, 0, 31))
+>attr : Symbol(attr, Decl(file.tsx, 6, 42))
+>T : Symbol(T, Decl(file.tsx, 6, 21))
+
+    return <div>attr.values</div>
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
+}
+
+// OK
+let i = <MyComponent values />;  // We infer type arguments here
+>i : Symbol(i, Decl(file.tsx, 11, 3))
+>MyComponent : Symbol(MyComponent, Decl(file.tsx, 4, 1))
+>values : Symbol(values, Decl(file.tsx, 11, 20))
+
+let i1 = <MyComponent values="Hello"/>;
+>i1 : Symbol(i1, Decl(file.tsx, 12, 3))
+>MyComponent : Symbol(MyComponent, Decl(file.tsx, 4, 1))
+>values : Symbol(values, Decl(file.tsx, 12, 21))
+

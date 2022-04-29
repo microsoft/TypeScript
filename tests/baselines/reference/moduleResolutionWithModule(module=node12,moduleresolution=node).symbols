@@ -1,0 +1,11 @@
+=== tests/cases/compiler/node_modules/pkg/entrypoint.d.ts ===
+export declare function thing(): void;
+>thing : Symbol(thing, Decl(entrypoint.d.ts, 0, 0))
+
+=== tests/cases/compiler/index.ts ===
+import * as p from "pkg";
+>p : Symbol(p, Decl(index.ts, 0, 6))
+
+p.thing();
+>p : Symbol(p, Decl(index.ts, 0, 6))
+

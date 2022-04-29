@@ -1,0 +1,10 @@
+tests/cases/conformance/parser/ecmascript5/Expressions/parserUnaryExpression7.ts(1,4): error TS2357: The operand of an increment or decrement operator must be a variable or a property access.
+tests/cases/conformance/parser/ecmascript5/Expressions/parserUnaryExpression7.ts(1,8): error TS2304: Cannot find name 'Foo'.
+
+
+==== tests/cases/conformance/parser/ecmascript5/Expressions/parserUnaryExpression7.ts (2 errors) ====
+    ++ new Foo();
+       ~~~~~~~~~
+!!! error TS2357: The operand of an increment or decrement operator must be a variable or a property access.
+           ~~~
+!!! error TS2304: Cannot find name 'Foo'.

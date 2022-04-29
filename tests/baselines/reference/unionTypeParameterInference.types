@@ -1,0 +1,22 @@
+=== tests/cases/compiler/unionTypeParameterInference.ts ===
+// Regression test for #5861
+
+interface Foo<T> { prop: T; }
+>prop : T
+
+declare function lift<U>(value: U | Foo<U>): Foo<U>;
+>lift : <U>(value: U | Foo<U>) => Foo<U>
+>value : U | Foo<U>
+
+function unlift<U>(value: U | Foo<U>): U {
+>unlift : <U>(value: U | Foo<U>) => U
+>value : U | Foo<U>
+
+    return lift(value).prop;
+>lift(value).prop : U
+>lift(value) : Foo<U>
+>lift : <U>(value: U | Foo<U>) => Foo<U>
+>value : U | Foo<U>
+>prop : U
+}
+

@@ -1,0 +1,86 @@
+tests/cases/compiler/narrowByEquality.ts(54,15): error TS2322: Type 'string | number' is not assignable to type 'number'.
+  Type 'string' is not assignable to type 'number'.
+tests/cases/compiler/narrowByEquality.ts(55,9): error TS2322: Type 'string | number' is not assignable to type 'number'.
+  Type 'string' is not assignable to type 'number'.
+
+
+==== tests/cases/compiler/narrowByEquality.ts (2 errors) ====
+    declare let x: number | string | boolean
+    declare let n: number;
+    declare let s: string;
+    declare let b: boolean;
+    declare let xUnknown: unknown;
+    
+    if (x == n) {
+        x;
+    }
+    
+    if (x == s) {
+        x;
+    }
+    
+    if (x == b) {
+        x;
+    }
+    
+    if (x == 1) {
+        x;
+    }
+    
+    if (x == "") {
+        x;
+    }
+    
+    if (x == "foo") {
+        x;
+    }
+    
+    if (x == true) {
+        x;
+    }
+    
+    if (x == false) {
+        x;
+    }
+    
+    declare let xAndObj: number | string | boolean | object
+    
+    if (xAndObj == {}) {
+        xAndObj;
+    }
+    
+    if (x == xAndObj) {
+        x;
+        xAndObj;
+    }
+    
+    // Repro from #24991
+    
+    function test(level: number | string):number {
+        if (level == +level) {
+            const q2: number = level; // error
+                  ~~
+!!! error TS2322: Type 'string | number' is not assignable to type 'number'.
+!!! error TS2322:   Type 'string' is not assignable to type 'number'.
+            return level;
+            ~~~~~~~~~~~~~
+!!! error TS2322: Type 'string | number' is not assignable to type 'number'.
+!!! error TS2322:   Type 'string' is not assignable to type 'number'.
+        }
+        return 0;
+    }
+    
+    // From issue #32798
+    if (xUnknown == null) {
+        xUnknown;
+    } else {
+        xUnknown
+    }
+    
+    if (xUnknown != null) {
+        xUnknown;
+    } else {
+        xUnknown;
+    }
+    
+    

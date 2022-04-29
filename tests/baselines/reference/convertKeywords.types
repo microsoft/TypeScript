@@ -1,0 +1,6 @@
+=== tests/cases/compiler/convertKeywords.ts ===
+var abstract;
+>abstract : any
+
+
+

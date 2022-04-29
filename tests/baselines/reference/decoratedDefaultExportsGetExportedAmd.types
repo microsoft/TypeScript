@@ -1,0 +1,19 @@
+=== tests/cases/conformance/es6/moduleExportsAmd/a.ts ===
+var decorator: ClassDecorator;
+>decorator : ClassDecorator
+
+@decorator
+>decorator : ClassDecorator
+
+export default class Foo {}
+>Foo : Foo
+
+=== tests/cases/conformance/es6/moduleExportsAmd/b.ts ===
+var decorator: ClassDecorator;
+>decorator : ClassDecorator
+
+@decorator
+>decorator : ClassDecorator
+
+export default class {}
+

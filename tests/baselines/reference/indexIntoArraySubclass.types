@@ -1,0 +1,16 @@
+=== tests/cases/compiler/indexIntoArraySubclass.ts ===
+interface Foo2<T> extends Array<T> { }
+var x2: Foo2<string>;
+>x2 : Foo2<string>
+
+var r = x2[0]; // string
+>r : string
+>x2[0] : string
+>x2 : Foo2<string>
+>0 : 0
+
+r = 0; //error
+>r = 0 : 0
+>r : string
+>0 : 0
+

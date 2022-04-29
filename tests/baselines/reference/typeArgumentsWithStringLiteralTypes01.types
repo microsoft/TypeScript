@@ -1,0 +1,504 @@
+=== tests/cases/conformance/types/stringLiteral/typeArgumentsWithStringLiteralTypes01.ts ===
+declare function randBool(): boolean;
+>randBool : () => boolean
+
+declare function takeReturnString(str: string): string;
+>takeReturnString : (str: string) => string
+>str : string
+
+declare function takeReturnHello(str: "Hello"): "Hello";
+>takeReturnHello : (str: "Hello") => "Hello"
+>str : "Hello"
+
+declare function takeReturnHelloWorld(str: "Hello" | "World"): "Hello" | "World";
+>takeReturnHelloWorld : (str: "Hello" | "World") => "Hello" | "World"
+>str : "Hello" | "World"
+
+function fun1<T>(x: T, y: T) {
+>fun1 : <T>(x: T, y: T) => T
+>x : T
+>y : T
+
+    return randBool() ? x : y;
+>randBool() ? x : y : T
+>randBool() : boolean
+>randBool : () => boolean
+>x : T
+>y : T
+}
+
+function fun2<T, U>(x: T, y: U) {
+>fun2 : <T, U>(x: T, y: U) => T | U
+>x : T
+>y : U
+
+    return randBool() ? x : y;
+>randBool() ? x : y : T | U
+>randBool() : boolean
+>randBool : () => boolean
+>x : T
+>y : U
+}
+
+function fun3<T>(...args: T[]): T {
+>fun3 : <T>(...args: T[]) => T
+>args : T[]
+
+    return args[+randBool()];
+>args[+randBool()] : T
+>args : T[]
+>+randBool() : number
+>randBool() : boolean
+>randBool : () => boolean
+}
+
+namespace n1 {
+>n1 : typeof n1
+
+    // The following should all come back as strings.
+    // They should be assignable to/from something of a type 'string'.
+    // They should not be assignable to either "Hello" or "World".
+    export let a = fun1("Hello", "World");
+>a : string
+>fun1("Hello", "World") : "Hello" | "World"
+>fun1 : <T>(x: T, y: T) => T
+>"Hello" : "Hello"
+>"World" : "World"
+
+    export let b = fun1("Hello", "Hello");
+>b : string
+>fun1("Hello", "Hello") : "Hello"
+>fun1 : <T>(x: T, y: T) => T
+>"Hello" : "Hello"
+>"Hello" : "Hello"
+
+    export let c = fun2("Hello", "World");
+>c : string
+>fun2("Hello", "World") : "Hello" | "World"
+>fun2 : <T, U>(x: T, y: U) => T | U
+>"Hello" : "Hello"
+>"World" : "World"
+
+    export let d = fun2("Hello", "Hello");
+>d : string
+>fun2("Hello", "Hello") : "Hello"
+>fun2 : <T, U>(x: T, y: U) => T | U
+>"Hello" : "Hello"
+>"Hello" : "Hello"
+
+    export let e = fun3("Hello", "Hello", "World", "Foo");
+>e : string
+>fun3("Hello", "Hello", "World", "Foo") : "Hello" | "World" | "Foo"
+>fun3 : <T>(...args: T[]) => T
+>"Hello" : "Hello"
+>"Hello" : "Hello"
+>"World" : "World"
+>"Foo" : "Foo"
+
+    // Should be valid
+    a = takeReturnString(a);
+>a = takeReturnString(a) : string
+>a : string
+>takeReturnString(a) : string
+>takeReturnString : (str: string) => string
+>a : string
+
+    b = takeReturnString(b);
+>b = takeReturnString(b) : string
+>b : string
+>takeReturnString(b) : string
+>takeReturnString : (str: string) => string
+>b : string
+
+    c = takeReturnString(c);
+>c = takeReturnString(c) : string
+>c : string
+>takeReturnString(c) : string
+>takeReturnString : (str: string) => string
+>c : string
+
+    d = takeReturnString(d);
+>d = takeReturnString(d) : string
+>d : string
+>takeReturnString(d) : string
+>takeReturnString : (str: string) => string
+>d : string
+
+    e = takeReturnString(e);
+>e = takeReturnString(e) : string
+>e : string
+>takeReturnString(e) : string
+>takeReturnString : (str: string) => string
+>e : string
+    
+    // Passing these as arguments should cause an error.
+    a = takeReturnHello(a);
+>a = takeReturnHello(a) : "Hello"
+>a : string
+>takeReturnHello(a) : "Hello"
+>takeReturnHello : (str: "Hello") => "Hello"
+>a : string
+
+    b = takeReturnHello(b);
+>b = takeReturnHello(b) : "Hello"
+>b : string
+>takeReturnHello(b) : "Hello"
+>takeReturnHello : (str: "Hello") => "Hello"
+>b : string
+
+    c = takeReturnHello(c);
+>c = takeReturnHello(c) : "Hello"
+>c : string
+>takeReturnHello(c) : "Hello"
+>takeReturnHello : (str: "Hello") => "Hello"
+>c : string
+
+    d = takeReturnHello(d);
+>d = takeReturnHello(d) : "Hello"
+>d : string
+>takeReturnHello(d) : "Hello"
+>takeReturnHello : (str: "Hello") => "Hello"
+>d : string
+
+    e = takeReturnHello(e);
+>e = takeReturnHello(e) : "Hello"
+>e : string
+>takeReturnHello(e) : "Hello"
+>takeReturnHello : (str: "Hello") => "Hello"
+>e : string
+
+    // Passing these as arguments should cause an error.
+    a = takeReturnHelloWorld(a);
+>a = takeReturnHelloWorld(a) : "Hello" | "World"
+>a : string
+>takeReturnHelloWorld(a) : "Hello" | "World"
+>takeReturnHelloWorld : (str: "Hello" | "World") => "Hello" | "World"
+>a : string
+
+    b = takeReturnHelloWorld(b);
+>b = takeReturnHelloWorld(b) : "Hello" | "World"
+>b : string
+>takeReturnHelloWorld(b) : "Hello" | "World"
+>takeReturnHelloWorld : (str: "Hello" | "World") => "Hello" | "World"
+>b : string
+
+    c = takeReturnHelloWorld(c);
+>c = takeReturnHelloWorld(c) : "Hello" | "World"
+>c : string
+>takeReturnHelloWorld(c) : "Hello" | "World"
+>takeReturnHelloWorld : (str: "Hello" | "World") => "Hello" | "World"
+>c : string
+
+    d = takeReturnHelloWorld(d);
+>d = takeReturnHelloWorld(d) : "Hello" | "World"
+>d : string
+>takeReturnHelloWorld(d) : "Hello" | "World"
+>takeReturnHelloWorld : (str: "Hello" | "World") => "Hello" | "World"
+>d : string
+
+    e = takeReturnHelloWorld(e);
+>e = takeReturnHelloWorld(e) : "Hello" | "World"
+>e : string
+>takeReturnHelloWorld(e) : "Hello" | "World"
+>takeReturnHelloWorld : (str: "Hello" | "World") => "Hello" | "World"
+>e : string
+}
+
+namespace n2 {
+>n2 : typeof n2
+
+    // The following (regardless of errors) should come back typed
+    // as "Hello" (or "Hello" | "Hello").
+    export let a = fun1<"Hello">("Hello", "Hello");
+>a : "Hello"
+>fun1<"Hello">("Hello", "Hello") : "Hello"
+>fun1 : <T>(x: T, y: T) => T
+>"Hello" : "Hello"
+>"Hello" : "Hello"
+
+    export let b = fun1<"Hello">("Hello", "World");
+>b : "Hello"
+>fun1<"Hello">("Hello", "World") : "Hello"
+>fun1 : <T>(x: T, y: T) => T
+>"Hello" : "Hello"
+>"World" : "World"
+
+    export let c = fun2<"Hello", "Hello">("Hello", "Hello");
+>c : "Hello"
+>fun2<"Hello", "Hello">("Hello", "Hello") : "Hello"
+>fun2 : <T, U>(x: T, y: U) => T | U
+>"Hello" : "Hello"
+>"Hello" : "Hello"
+
+    export let d = fun2<"Hello", "Hello">("Hello", "World");
+>d : "Hello"
+>fun2<"Hello", "Hello">("Hello", "World") : "Hello"
+>fun2 : <T, U>(x: T, y: U) => T | U
+>"Hello" : "Hello"
+>"World" : "World"
+
+    export let e = fun3<"Hello">("Hello", "World");
+>e : "Hello"
+>fun3<"Hello">("Hello", "World") : "Hello"
+>fun3 : <T>(...args: T[]) => T
+>"Hello" : "Hello"
+>"World" : "World"
+
+    // Assignment from the returned value should cause an error.
+    a = takeReturnString(a);
+>a = takeReturnString(a) : string
+>a : "Hello"
+>takeReturnString(a) : string
+>takeReturnString : (str: string) => string
+>a : "Hello"
+
+    b = takeReturnString(b);
+>b = takeReturnString(b) : string
+>b : "Hello"
+>takeReturnString(b) : string
+>takeReturnString : (str: string) => string
+>b : "Hello"
+
+    c = takeReturnString(c);
+>c = takeReturnString(c) : string
+>c : "Hello"
+>takeReturnString(c) : string
+>takeReturnString : (str: string) => string
+>c : "Hello"
+
+    d = takeReturnString(d);
+>d = takeReturnString(d) : string
+>d : "Hello"
+>takeReturnString(d) : string
+>takeReturnString : (str: string) => string
+>d : "Hello"
+
+    e = takeReturnString(e);
+>e = takeReturnString(e) : string
+>e : "Hello"
+>takeReturnString(e) : string
+>takeReturnString : (str: string) => string
+>e : "Hello"
+
+    // Should be valid
+    a = takeReturnHello(a);
+>a = takeReturnHello(a) : "Hello"
+>a : "Hello"
+>takeReturnHello(a) : "Hello"
+>takeReturnHello : (str: "Hello") => "Hello"
+>a : "Hello"
+
+    b = takeReturnHello(b);
+>b = takeReturnHello(b) : "Hello"
+>b : "Hello"
+>takeReturnHello(b) : "Hello"
+>takeReturnHello : (str: "Hello") => "Hello"
+>b : "Hello"
+
+    c = takeReturnHello(c);
+>c = takeReturnHello(c) : "Hello"
+>c : "Hello"
+>takeReturnHello(c) : "Hello"
+>takeReturnHello : (str: "Hello") => "Hello"
+>c : "Hello"
+
+    d = takeReturnHello(d);
+>d = takeReturnHello(d) : "Hello"
+>d : "Hello"
+>takeReturnHello(d) : "Hello"
+>takeReturnHello : (str: "Hello") => "Hello"
+>d : "Hello"
+
+    e = takeReturnHello(e);
+>e = takeReturnHello(e) : "Hello"
+>e : "Hello"
+>takeReturnHello(e) : "Hello"
+>takeReturnHello : (str: "Hello") => "Hello"
+>e : "Hello"
+
+    // Assignment from the returned value should cause an error.
+    a = takeReturnHelloWorld(a);
+>a = takeReturnHelloWorld(a) : "Hello" | "World"
+>a : "Hello"
+>takeReturnHelloWorld(a) : "Hello" | "World"
+>takeReturnHelloWorld : (str: "Hello" | "World") => "Hello" | "World"
+>a : "Hello"
+
+    b = takeReturnHelloWorld(b);
+>b = takeReturnHelloWorld(b) : "Hello" | "World"
+>b : "Hello"
+>takeReturnHelloWorld(b) : "Hello" | "World"
+>takeReturnHelloWorld : (str: "Hello" | "World") => "Hello" | "World"
+>b : "Hello"
+
+    c = takeReturnHelloWorld(c);
+>c = takeReturnHelloWorld(c) : "Hello" | "World"
+>c : "Hello"
+>takeReturnHelloWorld(c) : "Hello" | "World"
+>takeReturnHelloWorld : (str: "Hello" | "World") => "Hello" | "World"
+>c : "Hello"
+
+    d = takeReturnHelloWorld(d);
+>d = takeReturnHelloWorld(d) : "Hello" | "World"
+>d : "Hello"
+>takeReturnHelloWorld(d) : "Hello" | "World"
+>takeReturnHelloWorld : (str: "Hello" | "World") => "Hello" | "World"
+>d : "Hello"
+
+    e = takeReturnHelloWorld(e);
+>e = takeReturnHelloWorld(e) : "Hello" | "World"
+>e : "Hello"
+>takeReturnHelloWorld(e) : "Hello" | "World"
+>takeReturnHelloWorld : (str: "Hello" | "World") => "Hello" | "World"
+>e : "Hello"
+}
+
+
+namespace n3 {
+>n3 : typeof n3
+
+    // The following (regardless of errors) should come back typed
+    // as "Hello" | "World" (or "World" | "Hello").
+    export let a = fun2<"Hello", "World">("Hello", "World");
+>a : "Hello" | "World"
+>fun2<"Hello", "World">("Hello", "World") : "Hello" | "World"
+>fun2 : <T, U>(x: T, y: U) => T | U
+>"Hello" : "Hello"
+>"World" : "World"
+
+    export let b = fun2<"Hello", "World">("World", "Hello");
+>b : "Hello" | "World"
+>fun2<"Hello", "World">("World", "Hello") : "Hello" | "World"
+>fun2 : <T, U>(x: T, y: U) => T | U
+>"World" : "World"
+>"Hello" : "Hello"
+
+    export let c = fun2<"World", "Hello">("Hello", "Hello");
+>c : "Hello" | "World"
+>fun2<"World", "Hello">("Hello", "Hello") : "Hello" | "World"
+>fun2 : <T, U>(x: T, y: U) => T | U
+>"Hello" : "Hello"
+>"Hello" : "Hello"
+
+    export let d = fun2<"World", "Hello">("World", "World");
+>d : "Hello" | "World"
+>fun2<"World", "Hello">("World", "World") : "Hello" | "World"
+>fun2 : <T, U>(x: T, y: U) => T | U
+>"World" : "World"
+>"World" : "World"
+
+    export let e = fun3<"Hello" | "World">("Hello", "World");
+>e : "Hello" | "World"
+>fun3<"Hello" | "World">("Hello", "World") : "Hello" | "World"
+>fun3 : <T>(...args: T[]) => T
+>"Hello" : "Hello"
+>"World" : "World"
+
+    // Assignment from the returned value should cause an error.
+    a = takeReturnString(a);
+>a = takeReturnString(a) : string
+>a : "Hello" | "World"
+>takeReturnString(a) : string
+>takeReturnString : (str: string) => string
+>a : "Hello" | "World"
+
+    b = takeReturnString(b);
+>b = takeReturnString(b) : string
+>b : "Hello" | "World"
+>takeReturnString(b) : string
+>takeReturnString : (str: string) => string
+>b : "Hello" | "World"
+
+    c = takeReturnString(c);
+>c = takeReturnString(c) : string
+>c : "Hello" | "World"
+>takeReturnString(c) : string
+>takeReturnString : (str: string) => string
+>c : "Hello" | "World"
+
+    d = takeReturnString(d);
+>d = takeReturnString(d) : string
+>d : "Hello" | "World"
+>takeReturnString(d) : string
+>takeReturnString : (str: string) => string
+>d : "Hello" | "World"
+
+    e = takeReturnString(e);
+>e = takeReturnString(e) : string
+>e : "Hello" | "World"
+>takeReturnString(e) : string
+>takeReturnString : (str: string) => string
+>e : "Hello" | "World"
+
+    // Passing these as arguments should cause an error.
+    a = takeReturnHello(a);
+>a = takeReturnHello(a) : "Hello"
+>a : "Hello" | "World"
+>takeReturnHello(a) : "Hello"
+>takeReturnHello : (str: "Hello") => "Hello"
+>a : "Hello" | "World"
+
+    b = takeReturnHello(b);
+>b = takeReturnHello(b) : "Hello"
+>b : "Hello" | "World"
+>takeReturnHello(b) : "Hello"
+>takeReturnHello : (str: "Hello") => "Hello"
+>b : "Hello" | "World"
+
+    c = takeReturnHello(c);
+>c = takeReturnHello(c) : "Hello"
+>c : "Hello" | "World"
+>takeReturnHello(c) : "Hello"
+>takeReturnHello : (str: "Hello") => "Hello"
+>c : "Hello" | "World"
+
+    d = takeReturnHello(d);
+>d = takeReturnHello(d) : "Hello"
+>d : "Hello" | "World"
+>takeReturnHello(d) : "Hello"
+>takeReturnHello : (str: "Hello") => "Hello"
+>d : "Hello" | "World"
+
+    e = takeReturnHello(e);
+>e = takeReturnHello(e) : "Hello"
+>e : "Hello" | "World"
+>takeReturnHello(e) : "Hello"
+>takeReturnHello : (str: "Hello") => "Hello"
+>e : "Hello" | "World"
+
+    // Both should be valid.
+    a = takeReturnHelloWorld(a);
+>a = takeReturnHelloWorld(a) : "Hello" | "World"
+>a : "Hello" | "World"
+>takeReturnHelloWorld(a) : "Hello" | "World"
+>takeReturnHelloWorld : (str: "Hello" | "World") => "Hello" | "World"
+>a : "Hello"
+
+    b = takeReturnHelloWorld(b);
+>b = takeReturnHelloWorld(b) : "Hello" | "World"
+>b : "Hello" | "World"
+>takeReturnHelloWorld(b) : "Hello" | "World"
+>takeReturnHelloWorld : (str: "Hello" | "World") => "Hello" | "World"
+>b : "Hello"
+
+    c = takeReturnHelloWorld(c);
+>c = takeReturnHelloWorld(c) : "Hello" | "World"
+>c : "Hello" | "World"
+>takeReturnHelloWorld(c) : "Hello" | "World"
+>takeReturnHelloWorld : (str: "Hello" | "World") => "Hello" | "World"
+>c : "Hello"
+
+    d = takeReturnHelloWorld(d);
+>d = takeReturnHelloWorld(d) : "Hello" | "World"
+>d : "Hello" | "World"
+>takeReturnHelloWorld(d) : "Hello" | "World"
+>takeReturnHelloWorld : (str: "Hello" | "World") => "Hello" | "World"
+>d : "Hello"
+
+    e = takeReturnHelloWorld(e);
+>e = takeReturnHelloWorld(e) : "Hello" | "World"
+>e : "Hello" | "World"
+>takeReturnHelloWorld(e) : "Hello" | "World"
+>takeReturnHelloWorld : (str: "Hello" | "World") => "Hello" | "World"
+>e : "Hello"
+}

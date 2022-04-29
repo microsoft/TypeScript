@@ -1,0 +1,20 @@
+=== tests/cases/compiler/this_inside-enum-should-not-be-allowed.ts ===
+enum TopLevelEnum {
+>TopLevelEnum : TopLevelEnum
+
+    ThisWasAllowedButShouldNotBe = this // Should not be allowed
+>ThisWasAllowedButShouldNotBe : TopLevelEnum
+>this : any
+}
+
+module ModuleEnum {
+>ModuleEnum : typeof ModuleEnum
+
+    enum EnumInModule {
+>EnumInModule : EnumInModule
+
+        WasADifferentError = this // this was handled as if this was in a module
+>WasADifferentError : EnumInModule
+>this : any
+    }
+}

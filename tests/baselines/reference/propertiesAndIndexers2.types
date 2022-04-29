@@ -1,0 +1,33 @@
+=== tests/cases/compiler/propertiesAndIndexers2.ts ===
+interface A {
+    [n: number]: string;
+>n : number
+
+    [s: string]: number;
+>s : string
+}
+
+// All of these should fail.
+interface B extends A {
+    c: string;
+>c : string
+
+    3: string;
+>3 : string
+
+    Infinity: string;
+>Infinity : string
+
+    "-Infinity": string;
+>"-Infinity" : string
+
+    NaN: string;
+>NaN : string
+
+    "-NaN": string;
+>"-NaN" : string
+
+    6(): string;
+>6 : () => string
+}
+

@@ -1,0 +1,8 @@
+=== tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck50.ts ===
+function* g() {
+>g : () => Generator<any, void, unknown>
+
+    yield yield;
+>yield yield : any
+>yield : any
+}

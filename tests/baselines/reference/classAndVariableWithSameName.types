@@ -1,0 +1,23 @@
+=== tests/cases/conformance/classes/classDeclarations/classAndVariableWithSameName.ts ===
+class C { foo: string; } // error
+>C : C
+>foo : string
+
+var C = ''; // error
+>C : string
+>'' : ""
+
+module M {
+>M : typeof M
+
+    class D { // error
+>D : D
+
+        bar: string;
+>bar : string
+    }
+
+    var D = 1; // error
+>D : number
+>1 : 1
+}

@@ -1,0 +1,12 @@
+=== tests/cases/compiler/ambientFundule.ts ===
+declare function f();
+>f : Symbol(f, Decl(ambientFundule.ts, 0, 0), Decl(ambientFundule.ts, 1, 26), Decl(ambientFundule.ts, 0, 21))
+
+declare module f { var x }
+>f : Symbol(f, Decl(ambientFundule.ts, 0, 0), Decl(ambientFundule.ts, 1, 26), Decl(ambientFundule.ts, 0, 21))
+>x : Symbol(x, Decl(ambientFundule.ts, 1, 22))
+
+declare function f(x);
+>f : Symbol(f, Decl(ambientFundule.ts, 0, 0), Decl(ambientFundule.ts, 1, 26), Decl(ambientFundule.ts, 0, 21))
+>x : Symbol(x, Decl(ambientFundule.ts, 2, 19))
+

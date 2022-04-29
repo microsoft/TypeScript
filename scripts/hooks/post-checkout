@@ -1,0 +1,2 @@
+#!/bin/sh
+npm run gulp -- generate-diagnostics

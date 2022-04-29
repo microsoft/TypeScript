@@ -1,0 +1,74 @@
+=== tests/cases/conformance/salsa/a.js ===
+/** @param {number} x */
+function C(x) {
+>C : Symbol(C, Decl(a.js, 0, 0))
+>x : Symbol(x, Decl(a.js, 1, 11))
+
+    this.x = x
+>this.x : Symbol(C.x, Decl(a.js, 1, 15))
+>this : Symbol(C, Decl(a.js, 0, 0))
+>x : Symbol(C.x, Decl(a.js, 1, 15))
+>x : Symbol(x, Decl(a.js, 1, 11))
+}
+C.prototype.m = function() {
+>C.prototype : Symbol(C.m, Decl(a.js, 3, 1))
+>C : Symbol(C, Decl(a.js, 0, 0))
+>prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+>m : Symbol(C.m, Decl(a.js, 3, 1))
+
+    this.y = 12
+>this.y : Symbol(C.y, Decl(a.js, 4, 28))
+>this : Symbol(C, Decl(a.js, 0, 0))
+>y : Symbol(C.y, Decl(a.js, 4, 28))
+}
+var c = new C(1)
+>c : Symbol(c, Decl(a.js, 7, 3), Decl(a.js, 7, 16), Decl(a.js, 8, 15))
+>C : Symbol(C, Decl(a.js, 0, 0))
+
+c.x = undefined // should error
+>c.x : Symbol(C.x, Decl(a.js, 1, 15))
+>c : Symbol(c, Decl(a.js, 7, 3), Decl(a.js, 7, 16), Decl(a.js, 8, 15))
+>x : Symbol(C.x, Decl(a.js, 1, 15))
+>undefined : Symbol(undefined)
+
+c.y = undefined // ok
+>c.y : Symbol(C.y, Decl(a.js, 4, 28))
+>c : Symbol(c, Decl(a.js, 7, 3), Decl(a.js, 7, 16), Decl(a.js, 8, 15))
+>y : Symbol(C.y, Decl(a.js, 4, 28))
+>undefined : Symbol(undefined)
+
+/** @param {number} x */
+function A(x) {
+>A : Symbol(A, Decl(a.js, 9, 15))
+>x : Symbol(x, Decl(a.js, 12, 11))
+
+    if (!(this instanceof A)) {
+>this : Symbol(A, Decl(a.js, 9, 15))
+>A : Symbol(A, Decl(a.js, 9, 15))
+
+        return new A(x)
+>A : Symbol(A, Decl(a.js, 9, 15))
+>x : Symbol(x, Decl(a.js, 12, 11))
+    }
+    this.x = x
+>this.x : Symbol(A.x, Decl(a.js, 15, 5))
+>this : Symbol(A, Decl(a.js, 9, 15))
+>x : Symbol(A.x, Decl(a.js, 15, 5))
+>x : Symbol(x, Decl(a.js, 12, 11))
+}
+var k = A(1)
+>k : Symbol(k, Decl(a.js, 18, 3))
+>A : Symbol(A, Decl(a.js, 9, 15))
+
+var j = new A(2)
+>j : Symbol(j, Decl(a.js, 19, 3))
+>A : Symbol(A, Decl(a.js, 9, 15))
+
+k.x === j.x
+>k.x : Symbol(A.x, Decl(a.js, 15, 5))
+>k : Symbol(k, Decl(a.js, 18, 3))
+>x : Symbol(A.x, Decl(a.js, 15, 5))
+>j.x : Symbol(A.x, Decl(a.js, 15, 5))
+>j : Symbol(j, Decl(a.js, 19, 3))
+>x : Symbol(A.x, Decl(a.js, 15, 5))
+

@@ -1,0 +1,47 @@
+=== tests/cases/compiler/passport.d.ts ===
+declare module 'passport' {
+>'passport' : Symbol("passport", Decl(passport.d.ts, 0, 0))
+
+    namespace passport {
+>passport : Symbol(passport, Decl(passport.d.ts, 0, 27), Decl(passport.d.ts, 11, 9))
+
+        interface Passport {
+>Passport : Symbol(Passport, Decl(passport.d.ts, 1, 24))
+
+            use(): this;
+>use : Symbol(Passport.use, Decl(passport.d.ts, 2, 28))
+        }
+
+        interface PassportStatic extends Passport {
+>PassportStatic : Symbol(PassportStatic, Decl(passport.d.ts, 4, 9))
+>Passport : Symbol(Passport, Decl(passport.d.ts, 1, 24))
+
+            Passport: {new(): Passport};
+>Passport : Symbol(PassportStatic.Passport, Decl(passport.d.ts, 6, 51))
+>Passport : Symbol(Passport, Decl(passport.d.ts, 1, 24))
+        }
+    }
+
+    const passport: passport.PassportStatic;
+>passport : Symbol(passport, Decl(passport.d.ts, 0, 27), Decl(passport.d.ts, 11, 9))
+>passport : Symbol(passport, Decl(passport.d.ts, 0, 27), Decl(passport.d.ts, 11, 9))
+>PassportStatic : Symbol(passport.PassportStatic, Decl(passport.d.ts, 4, 9))
+
+    export = passport;
+>passport : Symbol(passport, Decl(passport.d.ts, 0, 27), Decl(passport.d.ts, 11, 9))
+}
+
+=== tests/cases/compiler/test.ts ===
+import * as passport from "passport";
+>passport : Symbol(passport, Decl(test.ts, 0, 6))
+
+import { Passport } from "passport";
+>Passport : Symbol(Passport, Decl(test.ts, 1, 8))
+
+let p: Passport = passport.use();
+>p : Symbol(p, Decl(test.ts, 3, 3))
+>Passport : Symbol(Passport, Decl(test.ts, 1, 8))
+>passport.use : Symbol(passport.Passport.use, Decl(passport.d.ts, 2, 28))
+>passport : Symbol(passport, Decl(test.ts, 0, 6))
+>use : Symbol(passport.Passport.use, Decl(passport.d.ts, 2, 28))
+

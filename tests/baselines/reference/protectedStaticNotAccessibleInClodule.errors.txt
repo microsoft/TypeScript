@@ -1,0 +1,17 @@
+tests/cases/conformance/classes/members/accessibility/protectedStaticNotAccessibleInClodule.ts(10,22): error TS2445: Property 'bar' is protected and only accessible within class 'C' and its subclasses.
+
+
+==== tests/cases/conformance/classes/members/accessibility/protectedStaticNotAccessibleInClodule.ts (1 errors) ====
+    // Any attempt to access a private property member outside the class body that contains its declaration results in a compile-time error.
+    
+    class C {
+        public static foo: string;
+        protected static bar: string;
+    }
+    
+    module C {
+        export var f = C.foo; // OK
+        export var b = C.bar; // error
+                         ~~~
+!!! error TS2445: Property 'bar' is protected and only accessible within class 'C' and its subclasses.
+    }

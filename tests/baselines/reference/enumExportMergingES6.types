@@ -1,0 +1,25 @@
+=== tests/cases/conformance/enums/enumExportMergingES6.ts ===
+export enum Animals {
+>Animals : Animals
+
+	Cat = 1
+>Cat : Animals
+>1 : 1
+}
+export enum Animals {
+>Animals : Animals
+
+	Dog = 2
+>Dog : Animals
+>2 : 2
+}
+export enum Animals {
+>Animals : Animals
+
+	CatDog = Cat | Dog
+>CatDog : Animals
+>Cat | Dog : number
+>Cat : Animals
+>Dog : Animals
+}
+

@@ -1,0 +1,77 @@
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/restParametersOfNonArrayTypes2.ts(9,11): error TS1014: A rest parameter must be last in a parameter list.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/restParametersOfNonArrayTypes2.ts(17,9): error TS1014: A rest parameter must be last in a parameter list.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/restParametersOfNonArrayTypes2.ts(27,21): error TS1014: A rest parameter must be last in a parameter list.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/restParametersOfNonArrayTypes2.ts(36,11): error TS1014: A rest parameter must be last in a parameter list.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/restParametersOfNonArrayTypes2.ts(44,9): error TS1014: A rest parameter must be last in a parameter list.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/restParametersOfNonArrayTypes2.ts(54,21): error TS1014: A rest parameter must be last in a parameter list.
+
+
+==== tests/cases/conformance/types/objectTypeLiteral/callSignatures/restParametersOfNonArrayTypes2.ts (6 errors) ====
+    // Rest parameters must be an array type if they have a type annotation, 
+    // user defined subtypes of array do not count, all of these are errors
+    
+    interface MyThing extends Array<any> { }
+    interface MyThing2<T> extends Array<T> { }
+    
+    function foo(...x: MyThing) { }
+    var f = function foo(...x: MyThing) { }
+    var f2 = (...x: MyThing, ...y: MyThing) => { }
+              ~~~
+!!! error TS1014: A rest parameter must be last in a parameter list.
+    
+    class C {
+        foo(...x: MyThing) { }
+    }
+    
+    interface I {
+        (...x: MyThing);
+        foo(...x: MyThing, ...y: MyThing);
+            ~~~
+!!! error TS1014: A rest parameter must be last in a parameter list.
+    }
+    
+    var a: {
+        (...x: MyThing);
+        foo(...x: MyThing);
+    }
+    
+    var b = {
+        foo(...x: MyThing) { },
+        a: function foo(...x: MyThing, ...y: MyThing) { },
+                        ~~~
+!!! error TS1014: A rest parameter must be last in a parameter list.
+        b: (...x: MyThing) => { }
+    }
+    
+    
+    
+    
+    function foo2(...x: MyThing2<string>) { }
+    var f3 = function foo(...x: MyThing2<string>) { }
+    var f4 = (...x: MyThing2<string>, ...y: MyThing2<string>) => { }
+              ~~~
+!!! error TS1014: A rest parameter must be last in a parameter list.
+    
+    class C2 {
+        foo(...x: MyThing2<string>) { }
+    }
+    
+    interface I2 {
+        (...x: MyThing2<string>);
+        foo(...x: MyThing2<string>, ...y: MyThing2<string>);
+            ~~~
+!!! error TS1014: A rest parameter must be last in a parameter list.
+    }
+    
+    var a2: {
+        (...x: MyThing2<string>);
+        foo(...x: MyThing2<string>);
+    }
+    
+    var b2 = {
+        foo(...x: MyThing2<string>) { },
+        a: function foo(...x: MyThing2<string>, ...y: MyThing2<string>) { },
+                        ~~~
+!!! error TS1014: A rest parameter must be last in a parameter list.
+        b: (...x: MyThing2<string>) => { }
+    }

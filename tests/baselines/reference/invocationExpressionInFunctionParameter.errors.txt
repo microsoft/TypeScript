@@ -1,0 +1,10 @@
+tests/cases/compiler/invocationExpressionInFunctionParameter.ts(3,24): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+
+
+==== tests/cases/compiler/invocationExpressionInFunctionParameter.ts (1 errors) ====
+    function foo1(val: string) {
+    }
+    function foo3(x = foo1(123)) { //should error, 123 is not string
+                           ~~~
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+    }

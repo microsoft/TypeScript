@@ -1,0 +1,12 @@
+=== /a/b/node_modules/foo.d.ts ===
+export declare let x: number
+>x : Symbol(x, Decl(foo.d.ts, 0, 18))
+
+=== /a/b/c/d/e/app.ts ===
+import {x} from "foo";
+>x : Symbol(x, Decl(app.ts, 0, 8))
+
+=== /a/b/c/lib.ts ===
+import {x} from "foo";
+>x : Symbol(x, Decl(lib.ts, 0, 8))
+

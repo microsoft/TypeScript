@@ -1,0 +1,39 @@
+tests/cases/conformance/es6/restParameters/readonlyRestParameters.ts(8,8): error TS2556: A spread argument must either have a tuple type or be passed to a rest parameter.
+tests/cases/conformance/es6/restParameters/readonlyRestParameters.ts(20,15): error TS2554: Expected 2 arguments, but got 3.
+tests/cases/conformance/es6/restParameters/readonlyRestParameters.ts(25,5): error TS2542: Index signature in type 'readonly string[]' only permits reading.
+
+
+==== tests/cases/conformance/es6/restParameters/readonlyRestParameters.ts (3 errors) ====
+    function f0(a: string, b: string) {
+        f0(a, b);
+        f1(a, b);
+        f2(a, b);
+    }
+    
+    function f1(...args: readonly string[]) {
+        f0(...args);  // Error
+           ~~~~~~~
+!!! error TS2556: A spread argument must either have a tuple type or be passed to a rest parameter.
+        f1('abc', 'def');
+        f1('abc', ...args);
+        f1(...args);
+    }
+    
+    function f2(...args: readonly [string, string]) {
+        f0(...args);
+        f1('abc', 'def');
+        f1('abc', ...args);
+        f1(...args);
+        f2('abc', 'def');
+        f2('abc', ...args);  // Error
+                  ~~~~~~~
+!!! error TS2554: Expected 2 arguments, but got 3.
+        f2(...args);
+    }
+    
+    function f4(...args: readonly string[]) {
+        args[0] = 'abc';  // Error
+        ~~~~~~~
+!!! error TS2542: Index signature in type 'readonly string[]' only permits reading.
+    }
+    

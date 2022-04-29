@@ -1,0 +1,16 @@
+=== tests/cases/conformance/interfaces/interfaceDeclarations/asiPreventsParsingAsInterface03.ts ===
+var interface: number, I: string;
+>interface : number
+>I : string
+
+namespace n {
+>n : typeof n
+
+    interface   // This should be the identifier 'interface'
+>interface : number
+
+    I           // This should be the identifier 'I'
+>I : string
+
+    {}          // This should be a block body
+}

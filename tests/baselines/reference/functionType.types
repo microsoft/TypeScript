@@ -1,0 +1,21 @@
+=== tests/cases/compiler/functionType.ts ===
+function salt() {}
+>salt : () => void
+
+salt.apply("hello", []);
+>salt.apply("hello", []) : any
+>salt.apply : (this: Function, thisArg: any, argArray?: any) => any
+>salt : () => void
+>apply : (this: Function, thisArg: any, argArray?: any) => any
+>"hello" : "hello"
+>[] : undefined[]
+
+(new Function("return 5"))();
+>(new Function("return 5"))() : any
+>(new Function("return 5")) : Function
+>new Function("return 5") : Function
+>Function : FunctionConstructor
+>"return 5" : "return 5"
+ 
+ 
+

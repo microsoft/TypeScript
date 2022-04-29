@@ -1,0 +1,20 @@
+tests/cases/compiler/es5-commonjs4.ts(13,12): error TS1216: Identifier expected. '__esModule' is reserved as an exported marker when transforming ECMAScript modules.
+
+
+==== tests/cases/compiler/es5-commonjs4.ts (1 errors) ====
+    export default class A
+    {
+        constructor ()
+        {
+    
+        }
+    
+        public B()
+        {
+            return 42;
+        }
+    }
+    export var __esModule = 1;
+               ~~~~~~~~~~
+!!! error TS1216: Identifier expected. '__esModule' is reserved as an exported marker when transforming ECMAScript modules.
+    

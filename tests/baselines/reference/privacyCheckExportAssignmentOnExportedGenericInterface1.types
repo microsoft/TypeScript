@@ -1,0 +1,14 @@
+=== tests/cases/compiler/privacyCheckExportAssignmentOnExportedGenericInterface1.ts ===
+module Foo {
+    export interface A<T> {
+    }
+}
+interface Foo<T> {
+}
+var Foo: new () => Foo.A<Foo<string>>;
+>Foo : new () => Foo.A<Foo<string>>
+>Foo : any
+
+export = Foo;
+>Foo : Foo<T>
+

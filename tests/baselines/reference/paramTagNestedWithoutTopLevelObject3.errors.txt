@@ -1,0 +1,13 @@
+tests/cases/conformance/jsdoc/paramTagNestedWithoutTopLevelObject3.js(3,20): error TS8032: Qualified name 'xyz.bar.p' is not allowed without a leading '@param {object} xyz.bar'.
+
+
+==== tests/cases/conformance/jsdoc/paramTagNestedWithoutTopLevelObject3.js (1 errors) ====
+    /**
+     * @param {object} xyz
+     * @param {number} xyz.bar.p
+                       ~~~~~~~~~
+!!! error TS8032: Qualified name 'xyz.bar.p' is not allowed without a leading '@param {object} xyz.bar'.
+     */
+    function g(xyz) {
+        return xyz.bar.p;
+    }

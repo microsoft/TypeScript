@@ -1,0 +1,50 @@
+=== tests/cases/compiler/capturedParametersInInitializers2.ts ===
+function foo(
+>foo : (y?: typeof (Anonymous class), x?: number, z?: number) => void
+
+    y = class {
+>y : typeof (Anonymous class)
+>class {        static c = x;        get [x]() {return x;}        constructor() { x; }        [z]() { return z; }    } : typeof (Anonymous class)
+
+        static c = x;
+>c : number
+>x : number
+
+        get [x]() {return x;}
+>[x] : number
+>x : number
+>x : number
+
+        constructor() { x; }
+>x : number
+
+        [z]() { return z; }
+>[z] : () => number
+>z : number
+>z : number
+
+    },
+    x = 1,
+>x : number
+>1 : 1
+
+    z = 2
+>z : number
+>2 : 2
+
+) {
+    y.c
+>y.c : number
+>y : typeof (Anonymous class)
+>c : number
+}
+function foo2(y = class {[x] = x}, x = 1) {
+>foo2 : (y?: typeof (Anonymous class), x?: number) => void
+>y : typeof (Anonymous class)
+>class {[x] = x} : typeof (Anonymous class)
+>[x] : number
+>x : number
+>x : number
+>x : number
+>1 : 1
+}

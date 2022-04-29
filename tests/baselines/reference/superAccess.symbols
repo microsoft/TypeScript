@@ -1,0 +1,38 @@
+=== tests/cases/compiler/superAccess.ts ===
+class MyBase {
+>MyBase : Symbol(MyBase, Decl(superAccess.ts, 0, 0))
+
+    static S1: number = 5;
+>S1 : Symbol(MyBase.S1, Decl(superAccess.ts, 0, 14))
+
+    private S2: string = "test";
+>S2 : Symbol(MyBase.S2, Decl(superAccess.ts, 1, 26))
+
+    f = () => 5;
+>f : Symbol(MyBase.f, Decl(superAccess.ts, 2, 32))
+}
+
+class MyDerived extends MyBase {
+>MyDerived : Symbol(MyDerived, Decl(superAccess.ts, 4, 1))
+>MyBase : Symbol(MyBase, Decl(superAccess.ts, 0, 0))
+
+    foo() {
+>foo : Symbol(MyDerived.foo, Decl(superAccess.ts, 6, 32))
+
+        var l3 = super.S1;    // Expected => Error: Only public instance methods of the base class are accessible via the 'super' keyword
+>l3 : Symbol(l3, Decl(superAccess.ts, 8, 11))
+>super : Symbol(MyBase, Decl(superAccess.ts, 0, 0))
+
+        var l4 = super.S2;    // Expected => Error: Only public instance methods of the base class are accessible via the 'super' keyword
+>l4 : Symbol(l4, Decl(superAccess.ts, 9, 11))
+>super.S2 : Symbol(MyBase.S2, Decl(superAccess.ts, 1, 26))
+>super : Symbol(MyBase, Decl(superAccess.ts, 0, 0))
+>S2 : Symbol(MyBase.S2, Decl(superAccess.ts, 1, 26))
+
+        var l5 = super.f();   // Expected => Error: Only public instance methods of the base class are accessible via the 'super' keyword
+>l5 : Symbol(l5, Decl(superAccess.ts, 10, 11))
+>super.f : Symbol(MyBase.f, Decl(superAccess.ts, 2, 32))
+>super : Symbol(MyBase, Decl(superAccess.ts, 0, 0))
+>f : Symbol(MyBase.f, Decl(superAccess.ts, 2, 32))
+    }
+}

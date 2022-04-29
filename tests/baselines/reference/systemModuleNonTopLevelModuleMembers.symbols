@@ -1,0 +1,32 @@
+=== tests/cases/compiler/systemModuleNonTopLevelModuleMembers.ts ===
+export class TopLevelClass {}
+>TopLevelClass : Symbol(TopLevelClass, Decl(systemModuleNonTopLevelModuleMembers.ts, 0, 0))
+
+export module TopLevelModule {var v;}
+>TopLevelModule : Symbol(TopLevelModule, Decl(systemModuleNonTopLevelModuleMembers.ts, 0, 29))
+>v : Symbol(v, Decl(systemModuleNonTopLevelModuleMembers.ts, 1, 33))
+
+export function TopLevelFunction(): void {}
+>TopLevelFunction : Symbol(TopLevelFunction, Decl(systemModuleNonTopLevelModuleMembers.ts, 1, 37))
+
+export enum TopLevelEnum {E}
+>TopLevelEnum : Symbol(TopLevelEnum, Decl(systemModuleNonTopLevelModuleMembers.ts, 2, 43))
+>E : Symbol(TopLevelEnum.E, Decl(systemModuleNonTopLevelModuleMembers.ts, 3, 26))
+
+export module TopLevelModule2 {
+>TopLevelModule2 : Symbol(TopLevelModule2, Decl(systemModuleNonTopLevelModuleMembers.ts, 3, 28))
+
+    export class NonTopLevelClass {}
+>NonTopLevelClass : Symbol(NonTopLevelClass, Decl(systemModuleNonTopLevelModuleMembers.ts, 5, 31))
+
+    export module NonTopLevelModule {var v;}
+>NonTopLevelModule : Symbol(NonTopLevelModule, Decl(systemModuleNonTopLevelModuleMembers.ts, 6, 36))
+>v : Symbol(v, Decl(systemModuleNonTopLevelModuleMembers.ts, 7, 40))
+
+    export function NonTopLevelFunction(): void {}
+>NonTopLevelFunction : Symbol(NonTopLevelFunction, Decl(systemModuleNonTopLevelModuleMembers.ts, 7, 44))
+
+    export enum NonTopLevelEnum {E}
+>NonTopLevelEnum : Symbol(NonTopLevelEnum, Decl(systemModuleNonTopLevelModuleMembers.ts, 8, 50))
+>E : Symbol(NonTopLevelEnum.E, Decl(systemModuleNonTopLevelModuleMembers.ts, 9, 33))
+}

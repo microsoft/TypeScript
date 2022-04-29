@@ -1,0 +1,53 @@
+=== tests/cases/compiler/b.ts ===
+export const zzz = 123;
+>zzz : 123
+>123 : 123
+
+export default zzz;
+>zzz : 123
+
+=== tests/cases/compiler/a.ts ===
+export default interface zzz {
+    x: string;
+>x : string
+}
+
+import zzz from "./b";
+>zzz : 123
+
+const x: zzz = { x: "" };
+>x : zzz
+>{ x: "" } : { x: string; }
+>x : string
+>"" : ""
+
+zzz;
+>zzz : 123
+
+export { zzz as default };
+>zzz : 123
+>default : 123
+
+=== tests/cases/compiler/index.ts ===
+import zzz from "./a";
+>zzz : any
+
+const x: zzz = { x: "" };
+>x : zzz
+>{ x: "" } : { x: string; }
+>x : string
+>"" : ""
+
+zzz;
+>zzz : any
+
+import originalZZZ from "./b";
+>originalZZZ : 123
+
+originalZZZ;
+>originalZZZ : 123
+
+const y: originalZZZ = x;
+>y : originalZZZ
+>x : zzz
+

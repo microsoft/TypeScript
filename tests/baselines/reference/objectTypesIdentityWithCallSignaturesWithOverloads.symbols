@@ -1,0 +1,376 @@
+=== tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/objectTypesIdentityWithCallSignaturesWithOverloads.ts ===
+// object types are identical structurally
+
+class A {
+>A : Symbol(A, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 0, 0))
+
+    foo(x: number): number;
+>foo : Symbol(A.foo, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 2, 9), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 3, 27), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 4, 27))
+>x : Symbol(x, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 3, 8))
+
+    foo(x: string): string;
+>foo : Symbol(A.foo, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 2, 9), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 3, 27), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 4, 27))
+>x : Symbol(x, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 4, 8))
+
+    foo(x: any): any { return null; }
+>foo : Symbol(A.foo, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 2, 9), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 3, 27), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 4, 27))
+>x : Symbol(x, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 5, 8))
+}
+
+class B {
+>B : Symbol(B, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 6, 1))
+
+    foo(x: number): number;
+>foo : Symbol(B.foo, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 8, 9), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 9, 27), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 10, 27))
+>x : Symbol(x, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 9, 8))
+
+    foo(x: string): string;
+>foo : Symbol(B.foo, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 8, 9), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 9, 27), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 10, 27))
+>x : Symbol(x, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 10, 8))
+
+    foo(x: any): any { return null; }
+>foo : Symbol(B.foo, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 8, 9), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 9, 27), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 10, 27))
+>x : Symbol(x, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 11, 8))
+}
+
+class C<T> {
+>C : Symbol(C, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 12, 1))
+>T : Symbol(T, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 14, 8))
+
+    foo(x: number): number;
+>foo : Symbol(C.foo, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 14, 12), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 15, 27), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 16, 27), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 17, 17))
+>x : Symbol(x, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 15, 8))
+
+    foo(x: string): string;
+>foo : Symbol(C.foo, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 14, 12), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 15, 27), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 16, 27), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 17, 17))
+>x : Symbol(x, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 16, 8))
+
+    foo(x: T): T;
+>foo : Symbol(C.foo, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 14, 12), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 15, 27), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 16, 27), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 17, 17))
+>x : Symbol(x, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 17, 8))
+>T : Symbol(T, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 14, 8))
+>T : Symbol(T, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 14, 8))
+
+    foo(x: any): any { return null; }
+>foo : Symbol(C.foo, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 14, 12), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 15, 27), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 16, 27), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 17, 17))
+>x : Symbol(x, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 18, 8))
+}
+
+interface I {
+>I : Symbol(I, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 19, 1))
+
+    foo(x: number): number;
+>foo : Symbol(I.foo, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 21, 13), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 22, 27))
+>x : Symbol(x, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 22, 8))
+
+    foo(x: string): string;    
+>foo : Symbol(I.foo, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 21, 13), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 22, 27))
+>x : Symbol(x, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 23, 8))
+}
+
+interface I2<T> {
+>I2 : Symbol(I2, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 24, 1))
+>T : Symbol(T, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 26, 13))
+
+    foo(x: number): number;
+>foo : Symbol(I2.foo, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 26, 17), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 27, 27), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 28, 27))
+>x : Symbol(x, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 27, 8))
+
+    foo(x: string): string;
+>foo : Symbol(I2.foo, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 26, 17), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 27, 27), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 28, 27))
+>x : Symbol(x, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 28, 8))
+
+    foo(x: T): T;
+>foo : Symbol(I2.foo, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 26, 17), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 27, 27), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 28, 27))
+>x : Symbol(x, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 29, 8))
+>T : Symbol(T, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 26, 13))
+>T : Symbol(T, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 26, 13))
+}
+
+var a: {
+>a : Symbol(a, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 32, 3))
+
+    foo(x: number): number
+>foo : Symbol(foo, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 32, 8), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 33, 26))
+>x : Symbol(x, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 33, 8))
+
+    foo(x: string): string
+>foo : Symbol(foo, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 32, 8), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 33, 26))
+>x : Symbol(x, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 34, 8))
+}
+
+var b = {
+>b : Symbol(b, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 37, 3))
+
+    foo(x: any) { return <any>''; }
+>foo : Symbol(foo, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 37, 9))
+>x : Symbol(x, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 38, 8))
+
+};
+
+function foo1(x: A);
+>foo1 : Symbol(foo1, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 39, 2), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 41, 20), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 42, 20))
+>x : Symbol(x, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 41, 14))
+>A : Symbol(A, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 0, 0))
+
+function foo1(x: A); // error
+>foo1 : Symbol(foo1, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 39, 2), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 41, 20), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 42, 20))
+>x : Symbol(x, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 42, 14))
+>A : Symbol(A, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 0, 0))
+
+function foo1(x: any) { }
+>foo1 : Symbol(foo1, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 39, 2), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 41, 20), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 42, 20))
+>x : Symbol(x, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 43, 14))
+
+function foo1b(x: B);
+>foo1b : Symbol(foo1b, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 43, 25), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 45, 21), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 46, 21))
+>x : Symbol(x, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 45, 15))
+>B : Symbol(B, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 6, 1))
+
+function foo1b(x: B); // error
+>foo1b : Symbol(foo1b, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 43, 25), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 45, 21), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 46, 21))
+>x : Symbol(x, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 46, 15))
+>B : Symbol(B, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 6, 1))
+
+function foo1b(x: any) { }
+>foo1b : Symbol(foo1b, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 43, 25), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 45, 21), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 46, 21))
+>x : Symbol(x, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 47, 15))
+
+function foo1c(x: C<string>);
+>foo1c : Symbol(foo1c, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 47, 26), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 49, 29), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 50, 29))
+>x : Symbol(x, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 49, 15))
+>C : Symbol(C, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 12, 1))
+
+function foo1c(x: C<string>); // error
+>foo1c : Symbol(foo1c, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 47, 26), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 49, 29), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 50, 29))
+>x : Symbol(x, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 50, 15))
+>C : Symbol(C, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 12, 1))
+
+function foo1c(x: any) { }
+>foo1c : Symbol(foo1c, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 47, 26), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 49, 29), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 50, 29))
+>x : Symbol(x, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 51, 15))
+
+function foo2(x: I);
+>foo2 : Symbol(foo2, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 51, 26), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 53, 20), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 54, 20))
+>x : Symbol(x, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 53, 14))
+>I : Symbol(I, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 19, 1))
+
+function foo2(x: I); // error
+>foo2 : Symbol(foo2, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 51, 26), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 53, 20), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 54, 20))
+>x : Symbol(x, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 54, 14))
+>I : Symbol(I, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 19, 1))
+
+function foo2(x: any) { }
+>foo2 : Symbol(foo2, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 51, 26), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 53, 20), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 54, 20))
+>x : Symbol(x, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 55, 14))
+
+function foo3(x: typeof a);
+>foo3 : Symbol(foo3, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 55, 25), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 57, 27), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 58, 27))
+>x : Symbol(x, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 57, 14))
+>a : Symbol(a, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 32, 3))
+
+function foo3(x: typeof a); // error
+>foo3 : Symbol(foo3, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 55, 25), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 57, 27), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 58, 27))
+>x : Symbol(x, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 58, 14))
+>a : Symbol(a, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 32, 3))
+
+function foo3(x: any) { }
+>foo3 : Symbol(foo3, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 55, 25), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 57, 27), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 58, 27))
+>x : Symbol(x, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 59, 14))
+
+function foo4(x: typeof b);
+>foo4 : Symbol(foo4, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 59, 25), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 61, 27), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 62, 27))
+>x : Symbol(x, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 61, 14))
+>b : Symbol(b, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 37, 3))
+
+function foo4(x: typeof b); // error
+>foo4 : Symbol(foo4, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 59, 25), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 61, 27), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 62, 27))
+>x : Symbol(x, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 62, 14))
+>b : Symbol(b, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 37, 3))
+
+function foo4(x: any) { }
+>foo4 : Symbol(foo4, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 59, 25), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 61, 27), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 62, 27))
+>x : Symbol(x, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 63, 14))
+
+function foo5(x: A);
+>foo5 : Symbol(foo5, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 63, 25), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 65, 20), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 66, 20))
+>x : Symbol(x, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 65, 14))
+>A : Symbol(A, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 0, 0))
+
+function foo5(x: B); // error
+>foo5 : Symbol(foo5, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 63, 25), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 65, 20), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 66, 20))
+>x : Symbol(x, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 66, 14))
+>B : Symbol(B, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 6, 1))
+
+function foo5(x: any) { }
+>foo5 : Symbol(foo5, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 63, 25), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 65, 20), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 66, 20))
+>x : Symbol(x, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 67, 14))
+
+function foo5b(x: A);
+>foo5b : Symbol(foo5b, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 67, 25), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 69, 21), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 70, 29))
+>x : Symbol(x, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 69, 15))
+>A : Symbol(A, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 0, 0))
+
+function foo5b(x: C<string>); // ok
+>foo5b : Symbol(foo5b, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 67, 25), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 69, 21), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 70, 29))
+>x : Symbol(x, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 70, 15))
+>C : Symbol(C, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 12, 1))
+
+function foo5b(x: any) { }
+>foo5b : Symbol(foo5b, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 67, 25), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 69, 21), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 70, 29))
+>x : Symbol(x, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 71, 15))
+
+function foo6(x: A);
+>foo6 : Symbol(foo6, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 71, 26), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 73, 20), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 74, 20))
+>x : Symbol(x, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 73, 14))
+>A : Symbol(A, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 0, 0))
+
+function foo6(x: I); // BUG 831930
+>foo6 : Symbol(foo6, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 71, 26), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 73, 20), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 74, 20))
+>x : Symbol(x, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 74, 14))
+>I : Symbol(I, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 19, 1))
+
+function foo6(x: any) { }
+>foo6 : Symbol(foo6, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 71, 26), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 73, 20), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 74, 20))
+>x : Symbol(x, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 75, 14))
+
+function foo7(x: A);
+>foo7 : Symbol(foo7, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 75, 25), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 77, 20), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 78, 27))
+>x : Symbol(x, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 77, 14))
+>A : Symbol(A, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 0, 0))
+
+function foo7(x: typeof a); // BUG 831930
+>foo7 : Symbol(foo7, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 75, 25), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 77, 20), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 78, 27))
+>x : Symbol(x, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 78, 14))
+>a : Symbol(a, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 32, 3))
+
+function foo7(x: any) { }
+>foo7 : Symbol(foo7, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 75, 25), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 77, 20), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 78, 27))
+>x : Symbol(x, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 79, 14))
+
+function foo8(x: B);
+>foo8 : Symbol(foo8, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 79, 25), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 81, 20), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 82, 20))
+>x : Symbol(x, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 81, 14))
+>B : Symbol(B, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 6, 1))
+
+function foo8(x: I); // BUG 831930
+>foo8 : Symbol(foo8, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 79, 25), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 81, 20), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 82, 20))
+>x : Symbol(x, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 82, 14))
+>I : Symbol(I, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 19, 1))
+
+function foo8(x: any) { }
+>foo8 : Symbol(foo8, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 79, 25), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 81, 20), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 82, 20))
+>x : Symbol(x, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 83, 14))
+
+function foo9(x: B);
+>foo9 : Symbol(foo9, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 83, 25), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 85, 20), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 86, 28))
+>x : Symbol(x, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 85, 14))
+>B : Symbol(B, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 6, 1))
+
+function foo9(x: C<string>); // ok
+>foo9 : Symbol(foo9, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 83, 25), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 85, 20), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 86, 28))
+>x : Symbol(x, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 86, 14))
+>C : Symbol(C, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 12, 1))
+
+function foo9(x: any) { }
+>foo9 : Symbol(foo9, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 83, 25), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 85, 20), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 86, 28))
+>x : Symbol(x, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 87, 14))
+
+function foo10(x: B);
+>foo10 : Symbol(foo10, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 87, 25), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 89, 21), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 90, 28))
+>x : Symbol(x, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 89, 15))
+>B : Symbol(B, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 6, 1))
+
+function foo10(x: typeof a); // BUG 831930
+>foo10 : Symbol(foo10, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 87, 25), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 89, 21), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 90, 28))
+>x : Symbol(x, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 90, 15))
+>a : Symbol(a, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 32, 3))
+
+function foo10(x: any) { }
+>foo10 : Symbol(foo10, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 87, 25), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 89, 21), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 90, 28))
+>x : Symbol(x, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 91, 15))
+
+function foo11(x: B);
+>foo11 : Symbol(foo11, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 91, 26), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 93, 21), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 94, 28))
+>x : Symbol(x, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 93, 15))
+>B : Symbol(B, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 6, 1))
+
+function foo11(x: typeof b); // ok
+>foo11 : Symbol(foo11, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 91, 26), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 93, 21), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 94, 28))
+>x : Symbol(x, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 94, 15))
+>b : Symbol(b, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 37, 3))
+
+function foo11(x: any) { }
+>foo11 : Symbol(foo11, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 91, 26), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 93, 21), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 94, 28))
+>x : Symbol(x, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 95, 15))
+
+function foo12(x: I);
+>foo12 : Symbol(foo12, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 95, 26), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 97, 21), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 98, 29))
+>x : Symbol(x, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 97, 15))
+>I : Symbol(I, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 19, 1))
+
+function foo12(x: C<string>); // ok
+>foo12 : Symbol(foo12, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 95, 26), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 97, 21), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 98, 29))
+>x : Symbol(x, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 98, 15))
+>C : Symbol(C, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 12, 1))
+
+function foo12(x: any) { }
+>foo12 : Symbol(foo12, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 95, 26), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 97, 21), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 98, 29))
+>x : Symbol(x, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 99, 15))
+
+function foo12b(x: I2<string>);
+>foo12b : Symbol(foo12b, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 99, 26), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 101, 31), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 102, 30))
+>x : Symbol(x, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 101, 16))
+>I2 : Symbol(I2, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 24, 1))
+
+function foo12b(x: C<string>); // ok
+>foo12b : Symbol(foo12b, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 99, 26), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 101, 31), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 102, 30))
+>x : Symbol(x, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 102, 16))
+>C : Symbol(C, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 12, 1))
+
+function foo12b(x: any) { }
+>foo12b : Symbol(foo12b, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 99, 26), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 101, 31), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 102, 30))
+>x : Symbol(x, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 103, 16))
+
+function foo13(x: I);
+>foo13 : Symbol(foo13, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 103, 27), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 105, 21), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 106, 28))
+>x : Symbol(x, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 105, 15))
+>I : Symbol(I, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 19, 1))
+
+function foo13(x: typeof a);  // error
+>foo13 : Symbol(foo13, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 103, 27), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 105, 21), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 106, 28))
+>x : Symbol(x, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 106, 15))
+>a : Symbol(a, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 32, 3))
+
+function foo13(x: any) { }
+>foo13 : Symbol(foo13, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 103, 27), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 105, 21), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 106, 28))
+>x : Symbol(x, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 107, 15))
+
+function foo14(x: I);
+>foo14 : Symbol(foo14, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 107, 26), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 109, 21), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 110, 28))
+>x : Symbol(x, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 109, 15))
+>I : Symbol(I, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 19, 1))
+
+function foo14(x: typeof b); // ok
+>foo14 : Symbol(foo14, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 107, 26), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 109, 21), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 110, 28))
+>x : Symbol(x, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 110, 15))
+>b : Symbol(b, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 37, 3))
+
+function foo14(x: any) { }
+>foo14 : Symbol(foo14, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 107, 26), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 109, 21), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 110, 28))
+>x : Symbol(x, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 111, 15))
+
+function foo15(x: I2<string>);
+>foo15 : Symbol(foo15, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 111, 26), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 113, 30), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 114, 29))
+>x : Symbol(x, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 113, 15))
+>I2 : Symbol(I2, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 24, 1))
+
+function foo15(x: C<number>); // ok
+>foo15 : Symbol(foo15, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 111, 26), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 113, 30), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 114, 29))
+>x : Symbol(x, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 114, 15))
+>C : Symbol(C, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 12, 1))
+
+function foo15(x: any) { }
+>foo15 : Symbol(foo15, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 111, 26), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 113, 30), Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 114, 29))
+>x : Symbol(x, Decl(objectTypesIdentityWithCallSignaturesWithOverloads.ts, 115, 15))
+

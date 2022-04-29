@@ -1,0 +1,14 @@
+=== tests/cases/conformance/es6/destructuring/emptyArrayBindingPatternParameter04.ts ===
+function f([] = [1,2,3,4]) {
+>f : ([]?: number[]) => void
+>[1,2,3,4] : number[]
+>1 : 1
+>2 : 2
+>3 : 3
+>4 : 4
+
+    var x, y, z;
+>x : any
+>y : any
+>z : any
+}

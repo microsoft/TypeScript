@@ -1,0 +1,64 @@
+=== tests/cases/conformance/es6/computedProperties/computedPropertyNames13_ES6.ts ===
+var s: string;
+>s : string
+
+var n: number;
+>n : number
+
+var a: any;
+>a : any
+
+class C {
+>C : C
+
+    [s]() {}
+>[s] : () => void
+>s : string
+
+    [n]() { }
+>[n] : () => void
+>n : number
+
+    static [s + s]() { }
+>[s + s] : () => void
+>s + s : string
+>s : string
+>s : string
+
+    [s + n]() { }
+>[s + n] : () => void
+>s + n : string
+>s : string
+>n : number
+
+    [+s]() { }
+>[+s] : () => void
+>+s : number
+>s : string
+
+    static [""]() { }
+>[""] : () => void
+>"" : ""
+
+    [0]() { }
+>[0] : () => void
+>0 : 0
+
+    [a]() { }
+>[a] : () => void
+>a : any
+
+    static [<any>true]() { }
+>[<any>true] : () => void
+><any>true : any
+>true : true
+
+    [`hello bye`]() { }
+>[`hello bye`] : () => void
+>`hello bye` : "hello bye"
+
+    static [`hello ${a} bye`]() { }
+>[`hello ${a} bye`] : () => void
+>`hello ${a} bye` : string
+>a : any
+}

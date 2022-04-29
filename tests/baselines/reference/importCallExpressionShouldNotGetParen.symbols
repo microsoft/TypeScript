@@ -1,0 +1,28 @@
+=== tests/cases/conformance/dynamicImport/importCallExpressionShouldNotGetParen.ts ===
+const localeName = "zh-CN";
+>localeName : Symbol(localeName, Decl(importCallExpressionShouldNotGetParen.ts, 0, 5))
+
+import(`./locales/${localeName}.js`).then(bar => {
+>import(`./locales/${localeName}.js`).then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>localeName : Symbol(localeName, Decl(importCallExpressionShouldNotGetParen.ts, 0, 5))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>bar : Symbol(bar, Decl(importCallExpressionShouldNotGetParen.ts, 1, 42))
+
+    let x = bar;
+>x : Symbol(x, Decl(importCallExpressionShouldNotGetParen.ts, 2, 7))
+>bar : Symbol(bar, Decl(importCallExpressionShouldNotGetParen.ts, 1, 42))
+
+});
+
+import("./locales/" + localeName + ".js").then(bar => {
+>import("./locales/" + localeName + ".js").then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>localeName : Symbol(localeName, Decl(importCallExpressionShouldNotGetParen.ts, 0, 5))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>bar : Symbol(bar, Decl(importCallExpressionShouldNotGetParen.ts, 5, 47))
+
+    let x = bar;
+>x : Symbol(x, Decl(importCallExpressionShouldNotGetParen.ts, 6, 7))
+>bar : Symbol(bar, Decl(importCallExpressionShouldNotGetParen.ts, 5, 47))
+
+});
+

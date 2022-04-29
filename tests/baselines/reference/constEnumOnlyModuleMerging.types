@@ -1,0 +1,36 @@
+=== tests/cases/compiler/constEnumOnlyModuleMerging.ts ===
+module Outer {
+>Outer : typeof Outer
+
+    export var x = 1;
+>x : number
+>1 : 1
+}
+
+module Outer {
+    export const enum A { X }
+>A : A
+>X : A.X
+}
+
+module B {
+>B : typeof B
+
+    import O = Outer;
+>O : typeof O
+>Outer : typeof O
+
+    var x = O.A.X;
+>x : O.A
+>O.A.X : O.A
+>O.A : typeof O.A
+>O : typeof O
+>A : typeof O.A
+>X : O.A
+
+    var y = O.x;
+>y : number
+>O.x : number
+>O : typeof O
+>x : number
+}

@@ -1,0 +1,182 @@
+=== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssignability.ts ===
+// enums assignable to number, any, Object, errors unless otherwise noted
+
+enum E { A }
+>E : E
+>A : E.A
+
+enum F { B }
+>F : F
+>B : F.B
+
+var e = E.A;
+>e : E
+>E.A : E
+>E : typeof E
+>A : E
+
+var f = F.B;
+>f : F
+>F.B : F
+>F : typeof F
+>B : F
+
+e = f; 
+>e = f : F
+>e : E
+>f : F
+
+f = e; 
+>f = e : E
+>f : F
+>e : E
+
+e = 1; // ok
+>e = 1 : 1
+>e : E
+>1 : 1
+
+f = 1; // ok
+>f = 1 : 1
+>f : F
+>1 : 1
+
+var x: number = e; // ok
+>x : number
+>e : E
+
+x = f; // ok
+>x = f : F
+>x : number
+>f : F
+
+module Others {
+>Others : typeof Others
+
+    var a: any = e; // ok
+>a : any
+>e : E
+
+    class C {
+>C : C
+
+        foo: string;
+>foo : string
+    }
+    var ac: C;
+>ac : C
+
+    interface I {
+        foo: string;
+>foo : string
+    }
+    var ai: I;
+>ai : I
+
+    var b: number = e; // ok
+>b : number
+>e : E
+
+    var c: string = e;
+>c : string
+>e : E
+
+    var d: boolean = e;
+>d : boolean
+>e : E
+
+    var ee: Date = e;
+>ee : Date
+>e : E
+
+    var f: any = e; // ok
+>f : any
+>e : E
+
+    var g: void = e;
+>g : void
+>e : E
+
+    var h: Object = e;
+>h : Object
+>e : E
+
+    var i: {} = e;
+>i : {}
+>e : E
+
+    var j: () => {} = e;
+>j : () => {}
+>e : E
+
+    var k: Function = e;
+>k : Function
+>e : E
+
+    var l: (x: number) => string = e;
+>l : (x: number) => string
+>x : number
+>e : E
+
+    ac = e;
+>ac = e : E
+>ac : C
+>e : E
+
+    ai = e;
+>ai = e : E
+>ai : I
+>e : E
+
+    var m: number[] = e;
+>m : number[]
+>e : E
+
+    var n: { foo: string } = e;
+>n : { foo: string; }
+>foo : string
+>e : E
+
+    var o: <T>(x: T) => T = e;
+>o : <T>(x: T) => T
+>x : T
+>e : E
+
+    var p: Number = e;
+>p : Number
+>e : E
+
+    var q: String = e;
+>q : String
+>e : E
+
+    function foo<T, U extends T, V extends Date, A extends Number, B extends E>(x: T, y: U, z: V) {
+>foo : <T, U extends T, V extends Date, A extends Number, B extends E>(x: T, y: U, z: V) => void
+>x : T
+>y : U
+>z : V
+
+        x = e;
+>x = e : E
+>x : T
+>e : E
+
+        y = e;
+>y = e : E
+>y : U
+>e : E
+
+        z = e;
+>z = e : E
+>z : V
+>e : E
+
+        var a: A = e;
+>a : A
+>e : E
+
+        var b: B = e;
+>b : B
+>e : E
+    }
+}

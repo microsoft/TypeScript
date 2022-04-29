@@ -1,0 +1,36 @@
+=== tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithOverloadedCallAndConstructSignatures.ts ===
+interface Foo {
+    (): number;
+    (x: string): number;
+>x : string
+
+    new (): any;
+    new (x: string): Object;
+>x : string
+}
+
+var f: Foo;
+>f : Foo
+
+var r1 = f();
+>r1 : number
+>f() : number
+>f : Foo
+
+var r2 = f('');
+>r2 : number
+>f('') : number
+>f : Foo
+>'' : ""
+
+var r3 = new f();
+>r3 : any
+>new f() : any
+>f : Foo
+
+var r4 = new f('');
+>r4 : Object
+>new f('') : Object
+>f : Foo
+>'' : ""
+

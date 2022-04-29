@@ -1,0 +1,164 @@
+=== tests/cases/compiler/objectLiteralEnumPropertyNames.ts ===
+// Fixes #16887
+enum Strs {
+>Strs : Symbol(Strs, Decl(objectLiteralEnumPropertyNames.ts, 0, 0))
+
+    A = 'a',
+>A : Symbol(Strs.A, Decl(objectLiteralEnumPropertyNames.ts, 1, 11))
+
+    B = 'b'
+>B : Symbol(Strs.B, Decl(objectLiteralEnumPropertyNames.ts, 2, 12))
+}
+type TestStrs = { [key in Strs]: string }
+>TestStrs : Symbol(TestStrs, Decl(objectLiteralEnumPropertyNames.ts, 4, 1))
+>key : Symbol(key, Decl(objectLiteralEnumPropertyNames.ts, 5, 19))
+>Strs : Symbol(Strs, Decl(objectLiteralEnumPropertyNames.ts, 0, 0))
+
+const x: TestStrs = {
+>x : Symbol(x, Decl(objectLiteralEnumPropertyNames.ts, 6, 5))
+>TestStrs : Symbol(TestStrs, Decl(objectLiteralEnumPropertyNames.ts, 4, 1))
+
+    [Strs.A]: 'xo',
+>[Strs.A] : Symbol([Strs.A], Decl(objectLiteralEnumPropertyNames.ts, 6, 21))
+>Strs.A : Symbol(Strs.A, Decl(objectLiteralEnumPropertyNames.ts, 1, 11))
+>Strs : Symbol(Strs, Decl(objectLiteralEnumPropertyNames.ts, 0, 0))
+>A : Symbol(Strs.A, Decl(objectLiteralEnumPropertyNames.ts, 1, 11))
+
+    [Strs.B]: 'xe'
+>[Strs.B] : Symbol([Strs.B], Decl(objectLiteralEnumPropertyNames.ts, 7, 19))
+>Strs.B : Symbol(Strs.B, Decl(objectLiteralEnumPropertyNames.ts, 2, 12))
+>Strs : Symbol(Strs, Decl(objectLiteralEnumPropertyNames.ts, 0, 0))
+>B : Symbol(Strs.B, Decl(objectLiteralEnumPropertyNames.ts, 2, 12))
+}
+const ux = {
+>ux : Symbol(ux, Decl(objectLiteralEnumPropertyNames.ts, 10, 5))
+
+    [Strs.A]: 'xo',
+>[Strs.A] : Symbol([Strs.A], Decl(objectLiteralEnumPropertyNames.ts, 10, 12))
+>Strs.A : Symbol(Strs.A, Decl(objectLiteralEnumPropertyNames.ts, 1, 11))
+>Strs : Symbol(Strs, Decl(objectLiteralEnumPropertyNames.ts, 0, 0))
+>A : Symbol(Strs.A, Decl(objectLiteralEnumPropertyNames.ts, 1, 11))
+
+    [Strs.B]: 'xe'
+>[Strs.B] : Symbol([Strs.B], Decl(objectLiteralEnumPropertyNames.ts, 11, 19))
+>Strs.B : Symbol(Strs.B, Decl(objectLiteralEnumPropertyNames.ts, 2, 12))
+>Strs : Symbol(Strs, Decl(objectLiteralEnumPropertyNames.ts, 0, 0))
+>B : Symbol(Strs.B, Decl(objectLiteralEnumPropertyNames.ts, 2, 12))
+}
+const y: TestStrs = {
+>y : Symbol(y, Decl(objectLiteralEnumPropertyNames.ts, 14, 5))
+>TestStrs : Symbol(TestStrs, Decl(objectLiteralEnumPropertyNames.ts, 4, 1))
+
+    ['a']: 'yo',
+>['a'] : Symbol(['a'], Decl(objectLiteralEnumPropertyNames.ts, 14, 21))
+>'a' : Symbol(['a'], Decl(objectLiteralEnumPropertyNames.ts, 14, 21))
+
+    ['b']: 'ye'
+>['b'] : Symbol(['b'], Decl(objectLiteralEnumPropertyNames.ts, 15, 16))
+>'b' : Symbol(['b'], Decl(objectLiteralEnumPropertyNames.ts, 15, 16))
+}
+const a = 'a';
+>a : Symbol(a, Decl(objectLiteralEnumPropertyNames.ts, 18, 5))
+
+const b = 'b';
+>b : Symbol(b, Decl(objectLiteralEnumPropertyNames.ts, 19, 5))
+
+const z: TestStrs = {
+>z : Symbol(z, Decl(objectLiteralEnumPropertyNames.ts, 20, 5))
+>TestStrs : Symbol(TestStrs, Decl(objectLiteralEnumPropertyNames.ts, 4, 1))
+
+    [a]: 'zo',
+>[a] : Symbol([a], Decl(objectLiteralEnumPropertyNames.ts, 20, 21))
+>a : Symbol(a, Decl(objectLiteralEnumPropertyNames.ts, 18, 5))
+
+    [b]: 'ze'
+>[b] : Symbol([b], Decl(objectLiteralEnumPropertyNames.ts, 21, 14))
+>b : Symbol(b, Decl(objectLiteralEnumPropertyNames.ts, 19, 5))
+}
+const uz = {
+>uz : Symbol(uz, Decl(objectLiteralEnumPropertyNames.ts, 24, 5))
+
+    [a]: 'zo',
+>[a] : Symbol([a], Decl(objectLiteralEnumPropertyNames.ts, 24, 12))
+>a : Symbol(a, Decl(objectLiteralEnumPropertyNames.ts, 18, 5))
+
+    [b]: 'ze'
+>[b] : Symbol([b], Decl(objectLiteralEnumPropertyNames.ts, 25, 14))
+>b : Symbol(b, Decl(objectLiteralEnumPropertyNames.ts, 19, 5))
+}
+
+enum Nums {
+>Nums : Symbol(Nums, Decl(objectLiteralEnumPropertyNames.ts, 27, 1))
+
+    A,
+>A : Symbol(Nums.A, Decl(objectLiteralEnumPropertyNames.ts, 29, 11))
+
+    B
+>B : Symbol(Nums.B, Decl(objectLiteralEnumPropertyNames.ts, 30, 6))
+}
+type TestNums = { 0: number, 1: number }
+>TestNums : Symbol(TestNums, Decl(objectLiteralEnumPropertyNames.ts, 32, 1))
+>0 : Symbol(0, Decl(objectLiteralEnumPropertyNames.ts, 33, 17))
+>1 : Symbol(1, Decl(objectLiteralEnumPropertyNames.ts, 33, 28))
+
+const n: TestNums = {
+>n : Symbol(n, Decl(objectLiteralEnumPropertyNames.ts, 34, 5))
+>TestNums : Symbol(TestNums, Decl(objectLiteralEnumPropertyNames.ts, 32, 1))
+
+    [Nums.A]: 1,
+>[Nums.A] : Symbol([Nums.A], Decl(objectLiteralEnumPropertyNames.ts, 34, 21))
+>Nums.A : Symbol(Nums.A, Decl(objectLiteralEnumPropertyNames.ts, 29, 11))
+>Nums : Symbol(Nums, Decl(objectLiteralEnumPropertyNames.ts, 27, 1))
+>A : Symbol(Nums.A, Decl(objectLiteralEnumPropertyNames.ts, 29, 11))
+
+    [Nums.B]: 2
+>[Nums.B] : Symbol([Nums.B], Decl(objectLiteralEnumPropertyNames.ts, 35, 16))
+>Nums.B : Symbol(Nums.B, Decl(objectLiteralEnumPropertyNames.ts, 30, 6))
+>Nums : Symbol(Nums, Decl(objectLiteralEnumPropertyNames.ts, 27, 1))
+>B : Symbol(Nums.B, Decl(objectLiteralEnumPropertyNames.ts, 30, 6))
+}
+const un = {
+>un : Symbol(un, Decl(objectLiteralEnumPropertyNames.ts, 38, 5))
+
+    [Nums.A]: 3,
+>[Nums.A] : Symbol([Nums.A], Decl(objectLiteralEnumPropertyNames.ts, 38, 12))
+>Nums.A : Symbol(Nums.A, Decl(objectLiteralEnumPropertyNames.ts, 29, 11))
+>Nums : Symbol(Nums, Decl(objectLiteralEnumPropertyNames.ts, 27, 1))
+>A : Symbol(Nums.A, Decl(objectLiteralEnumPropertyNames.ts, 29, 11))
+
+    [Nums.B]: 4
+>[Nums.B] : Symbol([Nums.B], Decl(objectLiteralEnumPropertyNames.ts, 39, 16))
+>Nums.B : Symbol(Nums.B, Decl(objectLiteralEnumPropertyNames.ts, 30, 6))
+>Nums : Symbol(Nums, Decl(objectLiteralEnumPropertyNames.ts, 27, 1))
+>B : Symbol(Nums.B, Decl(objectLiteralEnumPropertyNames.ts, 30, 6))
+}
+const an = 0;
+>an : Symbol(an, Decl(objectLiteralEnumPropertyNames.ts, 42, 5))
+
+const bn = 1;
+>bn : Symbol(bn, Decl(objectLiteralEnumPropertyNames.ts, 43, 5))
+
+const m: TestNums = {
+>m : Symbol(m, Decl(objectLiteralEnumPropertyNames.ts, 44, 5))
+>TestNums : Symbol(TestNums, Decl(objectLiteralEnumPropertyNames.ts, 32, 1))
+
+    [an]: 5,
+>[an] : Symbol([an], Decl(objectLiteralEnumPropertyNames.ts, 44, 21))
+>an : Symbol(an, Decl(objectLiteralEnumPropertyNames.ts, 42, 5))
+
+    [bn]: 6
+>[bn] : Symbol([bn], Decl(objectLiteralEnumPropertyNames.ts, 45, 12))
+>bn : Symbol(bn, Decl(objectLiteralEnumPropertyNames.ts, 43, 5))
+}
+const um = {
+>um : Symbol(um, Decl(objectLiteralEnumPropertyNames.ts, 48, 5))
+
+    [an]: 7,
+>[an] : Symbol([an], Decl(objectLiteralEnumPropertyNames.ts, 48, 12))
+>an : Symbol(an, Decl(objectLiteralEnumPropertyNames.ts, 42, 5))
+
+    [bn]: 8
+>[bn] : Symbol([bn], Decl(objectLiteralEnumPropertyNames.ts, 49, 12))
+>bn : Symbol(bn, Decl(objectLiteralEnumPropertyNames.ts, 43, 5))
+}
+

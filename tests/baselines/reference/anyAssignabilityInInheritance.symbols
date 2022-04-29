@@ -1,0 +1,304 @@
+=== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/anyAssignabilityInInheritance.ts ===
+// any is not a subtype of any other types, errors expected on all the below derived classes unless otherwise noted
+
+interface I {
+>I : Symbol(I, Decl(anyAssignabilityInInheritance.ts, 0, 0))
+
+    [x: string]: any;
+>x : Symbol(x, Decl(anyAssignabilityInInheritance.ts, 3, 5))
+
+    foo: any; // ok, any identical to itself
+>foo : Symbol(I.foo, Decl(anyAssignabilityInInheritance.ts, 3, 21))
+}
+
+var a: any;
+>a : Symbol(a, Decl(anyAssignabilityInInheritance.ts, 7, 3))
+
+declare function foo2(x: number): number;
+>foo2 : Symbol(foo2, Decl(anyAssignabilityInInheritance.ts, 7, 11), Decl(anyAssignabilityInInheritance.ts, 9, 41))
+>x : Symbol(x, Decl(anyAssignabilityInInheritance.ts, 9, 22))
+
+declare function foo2(x: any): any;
+>foo2 : Symbol(foo2, Decl(anyAssignabilityInInheritance.ts, 7, 11), Decl(anyAssignabilityInInheritance.ts, 9, 41))
+>x : Symbol(x, Decl(anyAssignabilityInInheritance.ts, 10, 22))
+
+var r3 = foo2(a); // any, not a subtype of number so it skips that overload, is a subtype of itself so it picks second (if truly ambiguous it would pick first overload)
+>r3 : Symbol(r3, Decl(anyAssignabilityInInheritance.ts, 11, 3), Decl(anyAssignabilityInInheritance.ts, 15, 3), Decl(anyAssignabilityInInheritance.ts, 19, 3), Decl(anyAssignabilityInInheritance.ts, 23, 3), Decl(anyAssignabilityInInheritance.ts, 27, 3) ... and 12 more)
+>foo2 : Symbol(foo2, Decl(anyAssignabilityInInheritance.ts, 7, 11), Decl(anyAssignabilityInInheritance.ts, 9, 41))
+>a : Symbol(a, Decl(anyAssignabilityInInheritance.ts, 7, 3))
+
+declare function foo3(x: string): string;
+>foo3 : Symbol(foo3, Decl(anyAssignabilityInInheritance.ts, 11, 17), Decl(anyAssignabilityInInheritance.ts, 13, 41))
+>x : Symbol(x, Decl(anyAssignabilityInInheritance.ts, 13, 22))
+
+declare function foo3(x: any): any;
+>foo3 : Symbol(foo3, Decl(anyAssignabilityInInheritance.ts, 11, 17), Decl(anyAssignabilityInInheritance.ts, 13, 41))
+>x : Symbol(x, Decl(anyAssignabilityInInheritance.ts, 14, 22))
+
+var r3 = foo3(a); // any
+>r3 : Symbol(r3, Decl(anyAssignabilityInInheritance.ts, 11, 3), Decl(anyAssignabilityInInheritance.ts, 15, 3), Decl(anyAssignabilityInInheritance.ts, 19, 3), Decl(anyAssignabilityInInheritance.ts, 23, 3), Decl(anyAssignabilityInInheritance.ts, 27, 3) ... and 12 more)
+>foo3 : Symbol(foo3, Decl(anyAssignabilityInInheritance.ts, 11, 17), Decl(anyAssignabilityInInheritance.ts, 13, 41))
+>a : Symbol(a, Decl(anyAssignabilityInInheritance.ts, 7, 3))
+
+declare function foo4(x: boolean): boolean;
+>foo4 : Symbol(foo4, Decl(anyAssignabilityInInheritance.ts, 15, 17), Decl(anyAssignabilityInInheritance.ts, 17, 43))
+>x : Symbol(x, Decl(anyAssignabilityInInheritance.ts, 17, 22))
+
+declare function foo4(x: any): any;
+>foo4 : Symbol(foo4, Decl(anyAssignabilityInInheritance.ts, 15, 17), Decl(anyAssignabilityInInheritance.ts, 17, 43))
+>x : Symbol(x, Decl(anyAssignabilityInInheritance.ts, 18, 22))
+
+var r3 = foo3(a); // any
+>r3 : Symbol(r3, Decl(anyAssignabilityInInheritance.ts, 11, 3), Decl(anyAssignabilityInInheritance.ts, 15, 3), Decl(anyAssignabilityInInheritance.ts, 19, 3), Decl(anyAssignabilityInInheritance.ts, 23, 3), Decl(anyAssignabilityInInheritance.ts, 27, 3) ... and 12 more)
+>foo3 : Symbol(foo3, Decl(anyAssignabilityInInheritance.ts, 11, 17), Decl(anyAssignabilityInInheritance.ts, 13, 41))
+>a : Symbol(a, Decl(anyAssignabilityInInheritance.ts, 7, 3))
+
+declare function foo5(x: Date): Date;
+>foo5 : Symbol(foo5, Decl(anyAssignabilityInInheritance.ts, 19, 17), Decl(anyAssignabilityInInheritance.ts, 21, 37))
+>x : Symbol(x, Decl(anyAssignabilityInInheritance.ts, 21, 22))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+declare function foo5(x: any): any;
+>foo5 : Symbol(foo5, Decl(anyAssignabilityInInheritance.ts, 19, 17), Decl(anyAssignabilityInInheritance.ts, 21, 37))
+>x : Symbol(x, Decl(anyAssignabilityInInheritance.ts, 22, 22))
+
+var r3 = foo3(a); // any
+>r3 : Symbol(r3, Decl(anyAssignabilityInInheritance.ts, 11, 3), Decl(anyAssignabilityInInheritance.ts, 15, 3), Decl(anyAssignabilityInInheritance.ts, 19, 3), Decl(anyAssignabilityInInheritance.ts, 23, 3), Decl(anyAssignabilityInInheritance.ts, 27, 3) ... and 12 more)
+>foo3 : Symbol(foo3, Decl(anyAssignabilityInInheritance.ts, 11, 17), Decl(anyAssignabilityInInheritance.ts, 13, 41))
+>a : Symbol(a, Decl(anyAssignabilityInInheritance.ts, 7, 3))
+
+declare function foo6(x: RegExp): RegExp;
+>foo6 : Symbol(foo6, Decl(anyAssignabilityInInheritance.ts, 23, 17), Decl(anyAssignabilityInInheritance.ts, 25, 41))
+>x : Symbol(x, Decl(anyAssignabilityInInheritance.ts, 25, 22))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+declare function foo6(x: any): any;
+>foo6 : Symbol(foo6, Decl(anyAssignabilityInInheritance.ts, 23, 17), Decl(anyAssignabilityInInheritance.ts, 25, 41))
+>x : Symbol(x, Decl(anyAssignabilityInInheritance.ts, 26, 22))
+
+var r3 = foo3(a); // any
+>r3 : Symbol(r3, Decl(anyAssignabilityInInheritance.ts, 11, 3), Decl(anyAssignabilityInInheritance.ts, 15, 3), Decl(anyAssignabilityInInheritance.ts, 19, 3), Decl(anyAssignabilityInInheritance.ts, 23, 3), Decl(anyAssignabilityInInheritance.ts, 27, 3) ... and 12 more)
+>foo3 : Symbol(foo3, Decl(anyAssignabilityInInheritance.ts, 11, 17), Decl(anyAssignabilityInInheritance.ts, 13, 41))
+>a : Symbol(a, Decl(anyAssignabilityInInheritance.ts, 7, 3))
+
+declare function foo7(x: { bar: number }): { bar: number };
+>foo7 : Symbol(foo7, Decl(anyAssignabilityInInheritance.ts, 27, 17), Decl(anyAssignabilityInInheritance.ts, 29, 59))
+>x : Symbol(x, Decl(anyAssignabilityInInheritance.ts, 29, 22))
+>bar : Symbol(bar, Decl(anyAssignabilityInInheritance.ts, 29, 26))
+>bar : Symbol(bar, Decl(anyAssignabilityInInheritance.ts, 29, 44))
+
+declare function foo7(x: any): any;
+>foo7 : Symbol(foo7, Decl(anyAssignabilityInInheritance.ts, 27, 17), Decl(anyAssignabilityInInheritance.ts, 29, 59))
+>x : Symbol(x, Decl(anyAssignabilityInInheritance.ts, 30, 22))
+
+var r3 = foo3(a); // any
+>r3 : Symbol(r3, Decl(anyAssignabilityInInheritance.ts, 11, 3), Decl(anyAssignabilityInInheritance.ts, 15, 3), Decl(anyAssignabilityInInheritance.ts, 19, 3), Decl(anyAssignabilityInInheritance.ts, 23, 3), Decl(anyAssignabilityInInheritance.ts, 27, 3) ... and 12 more)
+>foo3 : Symbol(foo3, Decl(anyAssignabilityInInheritance.ts, 11, 17), Decl(anyAssignabilityInInheritance.ts, 13, 41))
+>a : Symbol(a, Decl(anyAssignabilityInInheritance.ts, 7, 3))
+
+declare function foo8(x: number[]): number[];
+>foo8 : Symbol(foo8, Decl(anyAssignabilityInInheritance.ts, 31, 17), Decl(anyAssignabilityInInheritance.ts, 33, 45))
+>x : Symbol(x, Decl(anyAssignabilityInInheritance.ts, 33, 22))
+
+declare function foo8(x: any): any;
+>foo8 : Symbol(foo8, Decl(anyAssignabilityInInheritance.ts, 31, 17), Decl(anyAssignabilityInInheritance.ts, 33, 45))
+>x : Symbol(x, Decl(anyAssignabilityInInheritance.ts, 34, 22))
+
+var r3 = foo3(a); // any
+>r3 : Symbol(r3, Decl(anyAssignabilityInInheritance.ts, 11, 3), Decl(anyAssignabilityInInheritance.ts, 15, 3), Decl(anyAssignabilityInInheritance.ts, 19, 3), Decl(anyAssignabilityInInheritance.ts, 23, 3), Decl(anyAssignabilityInInheritance.ts, 27, 3) ... and 12 more)
+>foo3 : Symbol(foo3, Decl(anyAssignabilityInInheritance.ts, 11, 17), Decl(anyAssignabilityInInheritance.ts, 13, 41))
+>a : Symbol(a, Decl(anyAssignabilityInInheritance.ts, 7, 3))
+
+interface I8 { foo: string }
+>I8 : Symbol(I8, Decl(anyAssignabilityInInheritance.ts, 35, 17))
+>foo : Symbol(I8.foo, Decl(anyAssignabilityInInheritance.ts, 37, 14))
+
+declare function foo9(x: I8): I8;
+>foo9 : Symbol(foo9, Decl(anyAssignabilityInInheritance.ts, 37, 28), Decl(anyAssignabilityInInheritance.ts, 38, 33))
+>x : Symbol(x, Decl(anyAssignabilityInInheritance.ts, 38, 22))
+>I8 : Symbol(I8, Decl(anyAssignabilityInInheritance.ts, 35, 17))
+>I8 : Symbol(I8, Decl(anyAssignabilityInInheritance.ts, 35, 17))
+
+declare function foo9(x: any): any;
+>foo9 : Symbol(foo9, Decl(anyAssignabilityInInheritance.ts, 37, 28), Decl(anyAssignabilityInInheritance.ts, 38, 33))
+>x : Symbol(x, Decl(anyAssignabilityInInheritance.ts, 39, 22))
+
+var r3 = foo3(a); // any
+>r3 : Symbol(r3, Decl(anyAssignabilityInInheritance.ts, 11, 3), Decl(anyAssignabilityInInheritance.ts, 15, 3), Decl(anyAssignabilityInInheritance.ts, 19, 3), Decl(anyAssignabilityInInheritance.ts, 23, 3), Decl(anyAssignabilityInInheritance.ts, 27, 3) ... and 12 more)
+>foo3 : Symbol(foo3, Decl(anyAssignabilityInInheritance.ts, 11, 17), Decl(anyAssignabilityInInheritance.ts, 13, 41))
+>a : Symbol(a, Decl(anyAssignabilityInInheritance.ts, 7, 3))
+
+class A { foo: number; }
+>A : Symbol(A, Decl(anyAssignabilityInInheritance.ts, 40, 17))
+>foo : Symbol(A.foo, Decl(anyAssignabilityInInheritance.ts, 42, 9))
+
+declare function foo10(x: A): A;
+>foo10 : Symbol(foo10, Decl(anyAssignabilityInInheritance.ts, 42, 24), Decl(anyAssignabilityInInheritance.ts, 43, 32))
+>x : Symbol(x, Decl(anyAssignabilityInInheritance.ts, 43, 23))
+>A : Symbol(A, Decl(anyAssignabilityInInheritance.ts, 40, 17))
+>A : Symbol(A, Decl(anyAssignabilityInInheritance.ts, 40, 17))
+
+declare function foo10(x: any): any;
+>foo10 : Symbol(foo10, Decl(anyAssignabilityInInheritance.ts, 42, 24), Decl(anyAssignabilityInInheritance.ts, 43, 32))
+>x : Symbol(x, Decl(anyAssignabilityInInheritance.ts, 44, 23))
+
+var r3 = foo3(a); // any
+>r3 : Symbol(r3, Decl(anyAssignabilityInInheritance.ts, 11, 3), Decl(anyAssignabilityInInheritance.ts, 15, 3), Decl(anyAssignabilityInInheritance.ts, 19, 3), Decl(anyAssignabilityInInheritance.ts, 23, 3), Decl(anyAssignabilityInInheritance.ts, 27, 3) ... and 12 more)
+>foo3 : Symbol(foo3, Decl(anyAssignabilityInInheritance.ts, 11, 17), Decl(anyAssignabilityInInheritance.ts, 13, 41))
+>a : Symbol(a, Decl(anyAssignabilityInInheritance.ts, 7, 3))
+
+class A2<T> { foo: T; }
+>A2 : Symbol(A2, Decl(anyAssignabilityInInheritance.ts, 45, 17))
+>T : Symbol(T, Decl(anyAssignabilityInInheritance.ts, 47, 9))
+>foo : Symbol(A2.foo, Decl(anyAssignabilityInInheritance.ts, 47, 13))
+>T : Symbol(T, Decl(anyAssignabilityInInheritance.ts, 47, 9))
+
+declare function foo11(x: A2<string>): A2<string>;
+>foo11 : Symbol(foo11, Decl(anyAssignabilityInInheritance.ts, 47, 23), Decl(anyAssignabilityInInheritance.ts, 48, 50))
+>x : Symbol(x, Decl(anyAssignabilityInInheritance.ts, 48, 23))
+>A2 : Symbol(A2, Decl(anyAssignabilityInInheritance.ts, 45, 17))
+>A2 : Symbol(A2, Decl(anyAssignabilityInInheritance.ts, 45, 17))
+
+declare function foo11(x: any): any;
+>foo11 : Symbol(foo11, Decl(anyAssignabilityInInheritance.ts, 47, 23), Decl(anyAssignabilityInInheritance.ts, 48, 50))
+>x : Symbol(x, Decl(anyAssignabilityInInheritance.ts, 49, 23))
+
+var r3 = foo3(a); // any
+>r3 : Symbol(r3, Decl(anyAssignabilityInInheritance.ts, 11, 3), Decl(anyAssignabilityInInheritance.ts, 15, 3), Decl(anyAssignabilityInInheritance.ts, 19, 3), Decl(anyAssignabilityInInheritance.ts, 23, 3), Decl(anyAssignabilityInInheritance.ts, 27, 3) ... and 12 more)
+>foo3 : Symbol(foo3, Decl(anyAssignabilityInInheritance.ts, 11, 17), Decl(anyAssignabilityInInheritance.ts, 13, 41))
+>a : Symbol(a, Decl(anyAssignabilityInInheritance.ts, 7, 3))
+
+declare function foo12(x: (x) => number): (x) => number;
+>foo12 : Symbol(foo12, Decl(anyAssignabilityInInheritance.ts, 50, 17), Decl(anyAssignabilityInInheritance.ts, 52, 56))
+>x : Symbol(x, Decl(anyAssignabilityInInheritance.ts, 52, 23))
+>x : Symbol(x, Decl(anyAssignabilityInInheritance.ts, 52, 27))
+>x : Symbol(x, Decl(anyAssignabilityInInheritance.ts, 52, 43))
+
+declare function foo12(x: any): any;
+>foo12 : Symbol(foo12, Decl(anyAssignabilityInInheritance.ts, 50, 17), Decl(anyAssignabilityInInheritance.ts, 52, 56))
+>x : Symbol(x, Decl(anyAssignabilityInInheritance.ts, 53, 23))
+
+var r3 = foo3(a); // any
+>r3 : Symbol(r3, Decl(anyAssignabilityInInheritance.ts, 11, 3), Decl(anyAssignabilityInInheritance.ts, 15, 3), Decl(anyAssignabilityInInheritance.ts, 19, 3), Decl(anyAssignabilityInInheritance.ts, 23, 3), Decl(anyAssignabilityInInheritance.ts, 27, 3) ... and 12 more)
+>foo3 : Symbol(foo3, Decl(anyAssignabilityInInheritance.ts, 11, 17), Decl(anyAssignabilityInInheritance.ts, 13, 41))
+>a : Symbol(a, Decl(anyAssignabilityInInheritance.ts, 7, 3))
+
+declare function foo13(x: <T>(x: T) => T): <T>(x: T) => T;
+>foo13 : Symbol(foo13, Decl(anyAssignabilityInInheritance.ts, 54, 17), Decl(anyAssignabilityInInheritance.ts, 56, 58))
+>x : Symbol(x, Decl(anyAssignabilityInInheritance.ts, 56, 23))
+>T : Symbol(T, Decl(anyAssignabilityInInheritance.ts, 56, 27))
+>x : Symbol(x, Decl(anyAssignabilityInInheritance.ts, 56, 30))
+>T : Symbol(T, Decl(anyAssignabilityInInheritance.ts, 56, 27))
+>T : Symbol(T, Decl(anyAssignabilityInInheritance.ts, 56, 27))
+>T : Symbol(T, Decl(anyAssignabilityInInheritance.ts, 56, 44))
+>x : Symbol(x, Decl(anyAssignabilityInInheritance.ts, 56, 47))
+>T : Symbol(T, Decl(anyAssignabilityInInheritance.ts, 56, 44))
+>T : Symbol(T, Decl(anyAssignabilityInInheritance.ts, 56, 44))
+
+declare function foo13(x: any): any;
+>foo13 : Symbol(foo13, Decl(anyAssignabilityInInheritance.ts, 54, 17), Decl(anyAssignabilityInInheritance.ts, 56, 58))
+>x : Symbol(x, Decl(anyAssignabilityInInheritance.ts, 57, 23))
+
+var r3 = foo3(a); // any
+>r3 : Symbol(r3, Decl(anyAssignabilityInInheritance.ts, 11, 3), Decl(anyAssignabilityInInheritance.ts, 15, 3), Decl(anyAssignabilityInInheritance.ts, 19, 3), Decl(anyAssignabilityInInheritance.ts, 23, 3), Decl(anyAssignabilityInInheritance.ts, 27, 3) ... and 12 more)
+>foo3 : Symbol(foo3, Decl(anyAssignabilityInInheritance.ts, 11, 17), Decl(anyAssignabilityInInheritance.ts, 13, 41))
+>a : Symbol(a, Decl(anyAssignabilityInInheritance.ts, 7, 3))
+
+enum E { A }
+>E : Symbol(E, Decl(anyAssignabilityInInheritance.ts, 58, 17))
+>A : Symbol(E.A, Decl(anyAssignabilityInInheritance.ts, 60, 8))
+
+declare function foo14(x: E): E;
+>foo14 : Symbol(foo14, Decl(anyAssignabilityInInheritance.ts, 60, 12), Decl(anyAssignabilityInInheritance.ts, 61, 32))
+>x : Symbol(x, Decl(anyAssignabilityInInheritance.ts, 61, 23))
+>E : Symbol(E, Decl(anyAssignabilityInInheritance.ts, 58, 17))
+>E : Symbol(E, Decl(anyAssignabilityInInheritance.ts, 58, 17))
+
+declare function foo14(x: any): any;
+>foo14 : Symbol(foo14, Decl(anyAssignabilityInInheritance.ts, 60, 12), Decl(anyAssignabilityInInheritance.ts, 61, 32))
+>x : Symbol(x, Decl(anyAssignabilityInInheritance.ts, 62, 23))
+
+var r3 = foo3(a); // any
+>r3 : Symbol(r3, Decl(anyAssignabilityInInheritance.ts, 11, 3), Decl(anyAssignabilityInInheritance.ts, 15, 3), Decl(anyAssignabilityInInheritance.ts, 19, 3), Decl(anyAssignabilityInInheritance.ts, 23, 3), Decl(anyAssignabilityInInheritance.ts, 27, 3) ... and 12 more)
+>foo3 : Symbol(foo3, Decl(anyAssignabilityInInheritance.ts, 11, 17), Decl(anyAssignabilityInInheritance.ts, 13, 41))
+>a : Symbol(a, Decl(anyAssignabilityInInheritance.ts, 7, 3))
+
+function f() { }
+>f : Symbol(f, Decl(anyAssignabilityInInheritance.ts, 63, 17), Decl(anyAssignabilityInInheritance.ts, 65, 16))
+
+module f {
+>f : Symbol(f, Decl(anyAssignabilityInInheritance.ts, 63, 17), Decl(anyAssignabilityInInheritance.ts, 65, 16))
+
+    export var bar = 1;
+>bar : Symbol(bar, Decl(anyAssignabilityInInheritance.ts, 67, 14))
+}
+declare function foo15(x: typeof f): typeof f;
+>foo15 : Symbol(foo15, Decl(anyAssignabilityInInheritance.ts, 68, 1), Decl(anyAssignabilityInInheritance.ts, 69, 46))
+>x : Symbol(x, Decl(anyAssignabilityInInheritance.ts, 69, 23))
+>f : Symbol(f, Decl(anyAssignabilityInInheritance.ts, 63, 17), Decl(anyAssignabilityInInheritance.ts, 65, 16))
+>f : Symbol(f, Decl(anyAssignabilityInInheritance.ts, 63, 17), Decl(anyAssignabilityInInheritance.ts, 65, 16))
+
+declare function foo15(x: any): any;
+>foo15 : Symbol(foo15, Decl(anyAssignabilityInInheritance.ts, 68, 1), Decl(anyAssignabilityInInheritance.ts, 69, 46))
+>x : Symbol(x, Decl(anyAssignabilityInInheritance.ts, 70, 23))
+
+var r3 = foo3(a); // any
+>r3 : Symbol(r3, Decl(anyAssignabilityInInheritance.ts, 11, 3), Decl(anyAssignabilityInInheritance.ts, 15, 3), Decl(anyAssignabilityInInheritance.ts, 19, 3), Decl(anyAssignabilityInInheritance.ts, 23, 3), Decl(anyAssignabilityInInheritance.ts, 27, 3) ... and 12 more)
+>foo3 : Symbol(foo3, Decl(anyAssignabilityInInheritance.ts, 11, 17), Decl(anyAssignabilityInInheritance.ts, 13, 41))
+>a : Symbol(a, Decl(anyAssignabilityInInheritance.ts, 7, 3))
+
+class CC { baz: string }
+>CC : Symbol(CC, Decl(anyAssignabilityInInheritance.ts, 71, 17), Decl(anyAssignabilityInInheritance.ts, 73, 24))
+>baz : Symbol(CC.baz, Decl(anyAssignabilityInInheritance.ts, 73, 10))
+
+module CC {
+>CC : Symbol(CC, Decl(anyAssignabilityInInheritance.ts, 71, 17), Decl(anyAssignabilityInInheritance.ts, 73, 24))
+
+    export var bar = 1;
+>bar : Symbol(bar, Decl(anyAssignabilityInInheritance.ts, 75, 14))
+}
+declare function foo16(x: CC): CC;
+>foo16 : Symbol(foo16, Decl(anyAssignabilityInInheritance.ts, 76, 1), Decl(anyAssignabilityInInheritance.ts, 77, 34))
+>x : Symbol(x, Decl(anyAssignabilityInInheritance.ts, 77, 23))
+>CC : Symbol(CC, Decl(anyAssignabilityInInheritance.ts, 71, 17), Decl(anyAssignabilityInInheritance.ts, 73, 24))
+>CC : Symbol(CC, Decl(anyAssignabilityInInheritance.ts, 71, 17), Decl(anyAssignabilityInInheritance.ts, 73, 24))
+
+declare function foo16(x: any): any;
+>foo16 : Symbol(foo16, Decl(anyAssignabilityInInheritance.ts, 76, 1), Decl(anyAssignabilityInInheritance.ts, 77, 34))
+>x : Symbol(x, Decl(anyAssignabilityInInheritance.ts, 78, 23))
+
+var r3 = foo3(a); // any
+>r3 : Symbol(r3, Decl(anyAssignabilityInInheritance.ts, 11, 3), Decl(anyAssignabilityInInheritance.ts, 15, 3), Decl(anyAssignabilityInInheritance.ts, 19, 3), Decl(anyAssignabilityInInheritance.ts, 23, 3), Decl(anyAssignabilityInInheritance.ts, 27, 3) ... and 12 more)
+>foo3 : Symbol(foo3, Decl(anyAssignabilityInInheritance.ts, 11, 17), Decl(anyAssignabilityInInheritance.ts, 13, 41))
+>a : Symbol(a, Decl(anyAssignabilityInInheritance.ts, 7, 3))
+
+declare function foo17(x: Object): Object;
+>foo17 : Symbol(foo17, Decl(anyAssignabilityInInheritance.ts, 79, 17), Decl(anyAssignabilityInInheritance.ts, 81, 42))
+>x : Symbol(x, Decl(anyAssignabilityInInheritance.ts, 81, 23))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+declare function foo17(x: any): any;
+>foo17 : Symbol(foo17, Decl(anyAssignabilityInInheritance.ts, 79, 17), Decl(anyAssignabilityInInheritance.ts, 81, 42))
+>x : Symbol(x, Decl(anyAssignabilityInInheritance.ts, 82, 23))
+
+var r3 = foo3(a); // any
+>r3 : Symbol(r3, Decl(anyAssignabilityInInheritance.ts, 11, 3), Decl(anyAssignabilityInInheritance.ts, 15, 3), Decl(anyAssignabilityInInheritance.ts, 19, 3), Decl(anyAssignabilityInInheritance.ts, 23, 3), Decl(anyAssignabilityInInheritance.ts, 27, 3) ... and 12 more)
+>foo3 : Symbol(foo3, Decl(anyAssignabilityInInheritance.ts, 11, 17), Decl(anyAssignabilityInInheritance.ts, 13, 41))
+>a : Symbol(a, Decl(anyAssignabilityInInheritance.ts, 7, 3))
+
+declare function foo18(x: {}): {};
+>foo18 : Symbol(foo18, Decl(anyAssignabilityInInheritance.ts, 83, 17), Decl(anyAssignabilityInInheritance.ts, 85, 34))
+>x : Symbol(x, Decl(anyAssignabilityInInheritance.ts, 85, 23))
+
+declare function foo18(x: any): any;
+>foo18 : Symbol(foo18, Decl(anyAssignabilityInInheritance.ts, 83, 17), Decl(anyAssignabilityInInheritance.ts, 85, 34))
+>x : Symbol(x, Decl(anyAssignabilityInInheritance.ts, 86, 23))
+
+var r3 = foo3(a); // any
+>r3 : Symbol(r3, Decl(anyAssignabilityInInheritance.ts, 11, 3), Decl(anyAssignabilityInInheritance.ts, 15, 3), Decl(anyAssignabilityInInheritance.ts, 19, 3), Decl(anyAssignabilityInInheritance.ts, 23, 3), Decl(anyAssignabilityInInheritance.ts, 27, 3) ... and 12 more)
+>foo3 : Symbol(foo3, Decl(anyAssignabilityInInheritance.ts, 11, 17), Decl(anyAssignabilityInInheritance.ts, 13, 41))
+>a : Symbol(a, Decl(anyAssignabilityInInheritance.ts, 7, 3))
+

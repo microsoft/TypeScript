@@ -1,0 +1,21 @@
+=== tests/cases/compiler/declFileForInterfaceWithRestParams.ts ===
+interface I {
+>I : Symbol(I, Decl(declFileForInterfaceWithRestParams.ts, 0, 0))
+
+    foo(...x): typeof x;
+>foo : Symbol(I.foo, Decl(declFileForInterfaceWithRestParams.ts, 0, 13))
+>x : Symbol(x, Decl(declFileForInterfaceWithRestParams.ts, 1, 8))
+>x : Symbol(x, Decl(declFileForInterfaceWithRestParams.ts, 1, 8))
+
+    foo2(a: number, ...x): typeof x;
+>foo2 : Symbol(I.foo2, Decl(declFileForInterfaceWithRestParams.ts, 1, 24))
+>a : Symbol(a, Decl(declFileForInterfaceWithRestParams.ts, 2, 9))
+>x : Symbol(x, Decl(declFileForInterfaceWithRestParams.ts, 2, 19))
+>x : Symbol(x, Decl(declFileForInterfaceWithRestParams.ts, 2, 19))
+
+    foo3(b: string, ...x: string[]): typeof x;
+>foo3 : Symbol(I.foo3, Decl(declFileForInterfaceWithRestParams.ts, 2, 36))
+>b : Symbol(b, Decl(declFileForInterfaceWithRestParams.ts, 3, 9))
+>x : Symbol(x, Decl(declFileForInterfaceWithRestParams.ts, 3, 19))
+>x : Symbol(x, Decl(declFileForInterfaceWithRestParams.ts, 3, 19))
+}

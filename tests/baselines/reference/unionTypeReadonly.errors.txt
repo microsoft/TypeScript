@@ -1,0 +1,47 @@
+tests/cases/conformance/types/union/unionTypeReadonly.ts(17,6): error TS2540: Cannot assign to 'value' because it is a read-only property.
+tests/cases/conformance/types/union/unionTypeReadonly.ts(19,11): error TS2540: Cannot assign to 'value' because it is a read-only property.
+tests/cases/conformance/types/union/unionTypeReadonly.ts(21,9): error TS2540: Cannot assign to 'value' because it is a read-only property.
+tests/cases/conformance/types/union/unionTypeReadonly.ts(23,15): error TS2540: Cannot assign to 'value' because it is a read-only property.
+tests/cases/conformance/types/union/unionTypeReadonly.ts(25,15): error TS2339: Property 'value' does not exist on type 'Base | DifferentName'.
+  Property 'value' does not exist on type 'DifferentName'.
+
+
+==== tests/cases/conformance/types/union/unionTypeReadonly.ts (5 errors) ====
+    interface Base {
+        readonly value: number;
+    }
+    interface Identical {
+        readonly value: number;
+    }
+    interface Mutable {
+        value: number;
+    }
+    interface DifferentType {
+        readonly value: string;
+    }
+    interface DifferentName {
+        readonly other: number;
+    }
+    let base: Base;
+    base.value = 12 // error, lhs can't be a readonly property
+         ~~~~~
+!!! error TS2540: Cannot assign to 'value' because it is a read-only property.
+    let identical: Base | Identical;
+    identical.value = 12; // error, lhs can't be a readonly property
+              ~~~~~
+!!! error TS2540: Cannot assign to 'value' because it is a read-only property.
+    let mutable: Base | Mutable;
+    mutable.value = 12; // error, lhs can't be a readonly property
+            ~~~~~
+!!! error TS2540: Cannot assign to 'value' because it is a read-only property.
+    let differentType: Base | DifferentType;
+    differentType.value = 12; // error, lhs can't be a readonly property
+                  ~~~~~
+!!! error TS2540: Cannot assign to 'value' because it is a read-only property.
+    let differentName: Base | DifferentName;
+    differentName.value = 12; // error, property 'value' doesn't exist
+                  ~~~~~
+!!! error TS2339: Property 'value' does not exist on type 'Base | DifferentName'.
+!!! error TS2339:   Property 'value' does not exist on type 'DifferentName'.
+    
+    

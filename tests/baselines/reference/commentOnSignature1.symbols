@@ -1,0 +1,67 @@
+=== tests/cases/compiler/b.ts ===
+///<reference path='a.ts'/>
+function foo2(n: number): void;
+>foo2 : Symbol(foo2, Decl(b.ts, 0, 0), Decl(b.ts, 1, 31), Decl(b.ts, 3, 31))
+>n : Symbol(n, Decl(b.ts, 1, 14))
+
+// Don't keep this comment.
+function foo2(s: string): void;
+>foo2 : Symbol(foo2, Decl(b.ts, 0, 0), Decl(b.ts, 1, 31), Decl(b.ts, 3, 31))
+>s : Symbol(s, Decl(b.ts, 3, 14))
+
+function foo2(a: any): void {
+>foo2 : Symbol(foo2, Decl(b.ts, 0, 0), Decl(b.ts, 1, 31), Decl(b.ts, 3, 31))
+>a : Symbol(a, Decl(b.ts, 4, 14))
+}
+=== tests/cases/compiler/a.ts ===
+/*!=================
+    Keep this pinned
+   =================
+*/
+
+/*! Don't keep this pinned comment */
+function foo(n: number): void;
+>foo : Symbol(foo, Decl(a.ts, 0, 0), Decl(a.ts, 6, 30), Decl(a.ts, 8, 30))
+>n : Symbol(n, Decl(a.ts, 6, 13))
+
+// Don't keep this comment.
+function foo(s: string): void;
+>foo : Symbol(foo, Decl(a.ts, 0, 0), Decl(a.ts, 6, 30), Decl(a.ts, 8, 30))
+>s : Symbol(s, Decl(a.ts, 8, 13))
+
+function foo(a: any): void {
+>foo : Symbol(foo, Decl(a.ts, 0, 0), Decl(a.ts, 6, 30), Decl(a.ts, 8, 30))
+>a : Symbol(a, Decl(a.ts, 9, 13))
+}
+
+class c {
+>c : Symbol(c, Decl(a.ts, 10, 1))
+
+    // dont keep this comment
+    constructor(a: string);
+>a : Symbol(a, Decl(a.ts, 14, 16))
+
+    /*! keep this pinned comment */
+    constructor(a: number);
+>a : Symbol(a, Decl(a.ts, 16, 16))
+
+    constructor(a: any) {
+>a : Symbol(a, Decl(a.ts, 17, 16))
+    }
+
+    // dont keep this comment
+    foo(a: string);
+>foo : Symbol(c.foo, Decl(a.ts, 18, 5), Decl(a.ts, 21, 19), Decl(a.ts, 23, 19))
+>a : Symbol(a, Decl(a.ts, 21, 8))
+
+    /*! keep this pinned comment */
+    foo(a: number);
+>foo : Symbol(c.foo, Decl(a.ts, 18, 5), Decl(a.ts, 21, 19), Decl(a.ts, 23, 19))
+>a : Symbol(a, Decl(a.ts, 23, 8))
+
+    foo(a: any) {
+>foo : Symbol(c.foo, Decl(a.ts, 18, 5), Decl(a.ts, 21, 19), Decl(a.ts, 23, 19))
+>a : Symbol(a, Decl(a.ts, 24, 8))
+    }
+}
+

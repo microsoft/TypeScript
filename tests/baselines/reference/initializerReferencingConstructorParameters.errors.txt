@@ -1,0 +1,43 @@
+tests/cases/conformance/classes/propertyMemberDeclarations/initializerReferencingConstructorParameters.ts(4,9): error TS2304: Cannot find name 'x'.
+tests/cases/conformance/classes/propertyMemberDeclarations/initializerReferencingConstructorParameters.ts(5,15): error TS2304: Cannot find name 'x'.
+tests/cases/conformance/classes/propertyMemberDeclarations/initializerReferencingConstructorParameters.ts(10,9): error TS2663: Cannot find name 'x'. Did you mean the instance member 'this.x'?
+tests/cases/conformance/classes/propertyMemberDeclarations/initializerReferencingConstructorParameters.ts(11,15): error TS2304: Cannot find name 'x'.
+tests/cases/conformance/classes/propertyMemberDeclarations/initializerReferencingConstructorParameters.ts(23,9): error TS2663: Cannot find name 'x'. Did you mean the instance member 'this.x'?
+
+
+==== tests/cases/conformance/classes/propertyMemberDeclarations/initializerReferencingConstructorParameters.ts (5 errors) ====
+    // Initializer expressions for instance member variables are evaluated in the scope of the class constructor body but are not permitted to reference parameters or local variables of the constructor. 
+    
+    class C {
+        a = x; // error
+            ~
+!!! error TS2304: Cannot find name 'x'.
+        b: typeof x; // error
+                  ~
+!!! error TS2304: Cannot find name 'x'.
+        constructor(x) { }
+    }
+    
+    class D {
+        a = x; // error
+            ~
+!!! error TS2663: Cannot find name 'x'. Did you mean the instance member 'this.x'?
+        b: typeof x; // error
+                  ~
+!!! error TS2304: Cannot find name 'x'.
+        constructor(public x) { }
+    }
+    
+    class E {
+        a = this.x; // ok
+        b: typeof this.x; // ok
+        constructor(public x) { }
+    }
+    
+    class F<T> {
+        a = this.x; // ok
+        b = x; // error
+            ~
+!!! error TS2663: Cannot find name 'x'. Did you mean the instance member 'this.x'?
+        constructor(public x: T) { }
+    }

@@ -1,0 +1,10 @@
+tests/cases/compiler/arrowFunctionMissingCurlyWithSemicolon.ts(2,15): error TS1109: Expression expected.
+
+
+==== tests/cases/compiler/arrowFunctionMissingCurlyWithSemicolon.ts (1 errors) ====
+    // Should error at semicolon.
+    var f = () => ;
+                  ~
+!!! error TS1109: Expression expected.
+    var b = 1 * 2 * 3 * 4;
+    var square = (x: number) => x * x;

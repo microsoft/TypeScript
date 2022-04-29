@@ -1,0 +1,25 @@
+=== tests/cases/compiler/declFileExportAssignmentOfGenericInterface_1.ts ===
+import a = require('declFileExportAssignmentOfGenericInterface_0');
+>a : Symbol(a, Decl(declFileExportAssignmentOfGenericInterface_1.ts, 0, 0))
+
+export var x: a<a<string>>;
+>x : Symbol(x, Decl(declFileExportAssignmentOfGenericInterface_1.ts, 1, 10))
+>a : Symbol(a, Decl(declFileExportAssignmentOfGenericInterface_1.ts, 0, 0))
+>a : Symbol(a, Decl(declFileExportAssignmentOfGenericInterface_1.ts, 0, 0))
+
+x.a;
+>x.a : Symbol(a.a, Decl(declFileExportAssignmentOfGenericInterface_0.ts, 0, 18))
+>x : Symbol(x, Decl(declFileExportAssignmentOfGenericInterface_1.ts, 1, 10))
+>a : Symbol(a.a, Decl(declFileExportAssignmentOfGenericInterface_0.ts, 0, 18))
+
+=== tests/cases/compiler/declFileExportAssignmentOfGenericInterface_0.ts ===
+interface Foo<T> {
+>Foo : Symbol(Foo, Decl(declFileExportAssignmentOfGenericInterface_0.ts, 0, 0))
+>T : Symbol(T, Decl(declFileExportAssignmentOfGenericInterface_0.ts, 0, 14))
+
+    a: string;
+>a : Symbol(Foo.a, Decl(declFileExportAssignmentOfGenericInterface_0.ts, 0, 18))
+}
+export = Foo;
+>Foo : Symbol(Foo, Decl(declFileExportAssignmentOfGenericInterface_0.ts, 0, 0))
+

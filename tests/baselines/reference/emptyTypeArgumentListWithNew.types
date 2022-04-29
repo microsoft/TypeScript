@@ -1,0 +1,16 @@
+=== tests/cases/compiler/emptyTypeArgumentListWithNew.ts ===
+class foo<T> { }
+>foo : foo<T>
+
+new foo<>();
+>new foo<>() : foo<unknown>
+>foo : typeof foo
+
+// https://github.com/microsoft/TypeScript/issues/33041
+class noParams {}
+>noParams : noParams
+
+new noParams<>();
+>new noParams<>() : noParams
+>noParams : typeof noParams
+

@@ -1,0 +1,66 @@
+/a.ts(2,25): error TS7016: Could not find a declaration file for module 'foo/sub'. '/node_modules/foo/sub.js' implicitly has an 'any' type.
+  If the 'foo' package actually exposes this module, consider sending a pull request to amend 'https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/foo'
+/a.ts(3,25): error TS7016: Could not find a declaration file for module 'bar/sub'. '/node_modules/bar/sub.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/bar` if it exists or add a new declaration (.d.ts) file containing `declare module 'bar/sub';`
+/a.ts(5,30): error TS7016: Could not find a declaration file for module '@scope/foo/sub'. '/node_modules/@scope/foo/sub.js' implicitly has an 'any' type.
+  If the '@scope/foo' package actually exposes this module, consider sending a pull request to amend 'https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/scope__foo'
+/a.ts(6,30): error TS7016: Could not find a declaration file for module '@scope/bar/sub'. '/node_modules/@scope/bar/sub.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/scope__bar` if it exists or add a new declaration (.d.ts) file containing `declare module '@scope/bar/sub';`
+
+
+==== /a.ts (4 errors) ====
+    import * as foo from "foo";
+    import * as fooSub from "foo/sub";
+                            ~~~~~~~~~
+!!! error TS7016: Could not find a declaration file for module 'foo/sub'. '/node_modules/foo/sub.js' implicitly has an 'any' type.
+!!! error TS7016:   If the 'foo' package actually exposes this module, consider sending a pull request to amend 'https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/foo'
+    import * as barSub from "bar/sub";
+                            ~~~~~~~~~
+!!! error TS7016: Could not find a declaration file for module 'bar/sub'. '/node_modules/bar/sub.js' implicitly has an 'any' type.
+!!! error TS7016:   Try `npm i --save-dev @types/bar` if it exists or add a new declaration (.d.ts) file containing `declare module 'bar/sub';`
+    import * as scopeFoo from "@scope/foo";
+    import * as scopeFooSub from "@scope/foo/sub";
+                                 ~~~~~~~~~~~~~~~~
+!!! error TS7016: Could not find a declaration file for module '@scope/foo/sub'. '/node_modules/@scope/foo/sub.js' implicitly has an 'any' type.
+!!! error TS7016:   If the '@scope/foo' package actually exposes this module, consider sending a pull request to amend 'https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/scope__foo'
+    import * as scopeBarSub from "@scope/bar/sub";
+                                 ~~~~~~~~~~~~~~~~
+!!! error TS7016: Could not find a declaration file for module '@scope/bar/sub'. '/node_modules/@scope/bar/sub.js' implicitly has an 'any' type.
+!!! error TS7016:   Try `npm i --save-dev @types/scope__bar` if it exists or add a new declaration (.d.ts) file containing `declare module '@scope/bar/sub';`
+    
+==== /node_modules/@types/foo/index.d.ts (0 errors) ====
+    export const foo: number;
+    
+==== /node_modules/@types/foo/package.json (0 errors) ====
+    { "name": "@types/foo", "version": "1.2.3" }
+    
+==== /node_modules/foo/sub.js (0 errors) ====
+    const x = 0;
+    
+==== /node_modules/foo/package.json (0 errors) ====
+    { "name": "foo", "version": "1.2.3" }
+    
+==== /node_modules/bar/sub.js (0 errors) ====
+    const x = 0;
+    
+==== /node_modules/bar/package.json (0 errors) ====
+    { "name": "bar", "version": "1.2.3" }
+    
+==== /node_modules/@types/scope__foo/index.d.ts (0 errors) ====
+    export const foo: number;
+    
+==== /node_modules/@types/scope__foo/package.json (0 errors) ====
+    { "name": "@types/scope__foo", "version": "1.2.3" }
+    
+==== /node_modules/@scope/foo/sub.js (0 errors) ====
+    const x = 0;
+    
+==== /node_modules/@scope/foo/package.json (0 errors) ====
+    { "name": "@scope/foo", "version": "1.2.3" }
+    
+==== /node_modules/@scope/bar/sub.js (0 errors) ====
+    const x = 0;
+    
+==== /node_modules/@scope/bar/package.json (0 errors) ====
+    { "name": "@scope/bar", "version": "1.2.3" }
+    

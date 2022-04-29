@@ -1,0 +1,9 @@
+=== tests/cases/compiler/accessorDeclarationEmitVisibilityErrors.ts ===
+export class Q {
+>Q : Symbol(Q, Decl(accessorDeclarationEmitVisibilityErrors.ts, 0, 0))
+
+    set bet(arg: DoesNotExist) {}
+>bet : Symbol(Q.bet, Decl(accessorDeclarationEmitVisibilityErrors.ts, 0, 16))
+>arg : Symbol(arg, Decl(accessorDeclarationEmitVisibilityErrors.ts, 1, 12))
+>DoesNotExist : Symbol(DoesNotExist)
+}

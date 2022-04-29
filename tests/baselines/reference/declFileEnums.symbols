@@ -1,0 +1,82 @@
+=== tests/cases/compiler/declFileEnums.ts ===
+enum e1 {
+>e1 : Symbol(e1, Decl(declFileEnums.ts, 0, 0))
+
+    a,
+>a : Symbol(e1.a, Decl(declFileEnums.ts, 0, 9))
+
+    b,
+>b : Symbol(e1.b, Decl(declFileEnums.ts, 1, 6))
+
+    c
+>c : Symbol(e1.c, Decl(declFileEnums.ts, 2, 6))
+}
+
+enum e2 {
+>e2 : Symbol(e2, Decl(declFileEnums.ts, 4, 1))
+
+    a = 10,
+>a : Symbol(e2.a, Decl(declFileEnums.ts, 6, 9))
+
+    b = a + 2,
+>b : Symbol(e2.b, Decl(declFileEnums.ts, 7, 11))
+>a : Symbol(e2.a, Decl(declFileEnums.ts, 6, 9))
+
+    c = 10,
+>c : Symbol(e2.c, Decl(declFileEnums.ts, 8, 14))
+}
+
+enum e3 {
+>e3 : Symbol(e3, Decl(declFileEnums.ts, 10, 1))
+
+    a = 10,
+>a : Symbol(e3.a, Decl(declFileEnums.ts, 12, 9))
+
+    b = Math.PI,
+>b : Symbol(e3.b, Decl(declFileEnums.ts, 13, 11))
+>Math.PI : Symbol(Math.PI, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>PI : Symbol(Math.PI, Decl(lib.es5.d.ts, --, --))
+
+    c = a + 3
+>c : Symbol(e3.c, Decl(declFileEnums.ts, 14, 16))
+>a : Symbol(e3.a, Decl(declFileEnums.ts, 12, 9))
+}
+
+enum e4 {
+>e4 : Symbol(e4, Decl(declFileEnums.ts, 16, 1))
+
+    a,
+>a : Symbol(e4.a, Decl(declFileEnums.ts, 18, 9))
+
+    b,
+>b : Symbol(e4.b, Decl(declFileEnums.ts, 19, 6))
+
+    c,
+>c : Symbol(e4.c, Decl(declFileEnums.ts, 20, 6))
+
+    d = 10,
+>d : Symbol(e4.d, Decl(declFileEnums.ts, 21, 6))
+
+    e
+>e : Symbol(e4.e, Decl(declFileEnums.ts, 22, 11))
+}
+
+enum e5 {
+>e5 : Symbol(e5, Decl(declFileEnums.ts, 24, 1))
+
+    "Friday",
+>"Friday" : Symbol(e5["Friday"], Decl(declFileEnums.ts, 26, 9))
+
+    "Saturday",
+>"Saturday" : Symbol(e5["Saturday"], Decl(declFileEnums.ts, 27, 13))
+
+    "Sunday",
+>"Sunday" : Symbol(e5["Sunday"], Decl(declFileEnums.ts, 28, 15))
+
+    "Weekend days"
+>"Weekend days" : Symbol(e5["Weekend days"], Decl(declFileEnums.ts, 29, 13))
+}
+
+
+

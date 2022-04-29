@@ -1,0 +1,11 @@
+=== tests/cases/compiler/classCannotExtendVar.ts ===
+var Markup;
+>Markup : any
+
+class Markup {
+>Markup : Markup
+
+    constructor() {
+    }
+}
+

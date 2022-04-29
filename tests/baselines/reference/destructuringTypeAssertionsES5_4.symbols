@@ -1,0 +1,4 @@
+=== tests/cases/conformance/es6/destructuring/destructuringTypeAssertionsES5_4.ts ===
+var { x } = <any><any>foo();
+>x : Symbol(x, Decl(destructuringTypeAssertionsES5_4.ts, 0, 5))
+

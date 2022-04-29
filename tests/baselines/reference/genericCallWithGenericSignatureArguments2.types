@@ -1,0 +1,292 @@
+=== tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGenericSignatureArguments2.ts ===
+// When a function expression is inferentially typed (section 4.9.3) and a type assigned to a parameter in that expression references type parameters for which inferences are being made, 
+// the corresponding inferred type arguments to become fixed and no further candidate inferences are made for them.
+
+module onlyT {
+>onlyT : typeof onlyT
+
+    function foo<T>(a: (x: T) => T, b: (x: T) => T) {
+>foo : <T>(a: (x: T) => T, b: (x: T) => T) => (x: T) => T
+>a : (x: T) => T
+>x : T
+>b : (x: T) => T
+>x : T
+
+        var r: (x: T) => T;
+>r : (x: T) => T
+>x : T
+
+        return r;
+>r : (x: T) => T
+    }
+
+    var r1: (x: {}) => {} = foo((x: number) => 1, (x: string) => '');
+>r1 : (x: {}) => {}
+>x : {}
+>foo((x: number) => 1, (x: string) => '') : (x: number) => number
+>foo : <T>(a: (x: T) => T, b: (x: T) => T) => (x: T) => T
+>(x: number) => 1 : (x: number) => number
+>x : number
+>1 : 1
+>(x: string) => '' : (x: string) => string
+>x : string
+>'' : ""
+
+    function other2<T extends Date>(x: T) {
+>other2 : <T extends Date>(x: T) => void
+>x : T
+
+        var r7 = foo((a: T) => a, (b: T) => b); // T => T
+>r7 : (x: T) => T
+>foo((a: T) => a, (b: T) => b) : (x: T) => T
+>foo : <T>(a: (x: T) => T, b: (x: T) => T) => (x: T) => T
+>(a: T) => a : (a: T) => T
+>a : T
+>a : T
+>(b: T) => b : (b: T) => T
+>b : T
+>b : T
+
+        // BUG 835518
+        var r9 = r7(new Date()); // should be ok
+>r9 : T
+>r7(new Date()) : T
+>r7 : (x: T) => T
+>new Date() : Date
+>Date : DateConstructor
+
+        var r10 = r7(1); // error
+>r10 : T
+>r7(1) : T
+>r7 : (x: T) => T
+>1 : 1
+    }
+
+    function foo2<T extends Date>(a: (x: T) => T, b: (x: T) => T) {
+>foo2 : <T extends Date>(a: (x: T) => T, b: (x: T) => T) => (x: T) => T
+>a : (x: T) => T
+>x : T
+>b : (x: T) => T
+>x : T
+
+        var r: (x: T) => T;
+>r : (x: T) => T
+>x : T
+
+        return r;
+>r : (x: T) => T
+    }
+
+    function other3<T extends RegExp>(x: T) {
+>other3 : <T extends RegExp>(x: T) => void
+>x : T
+
+        var r7 = foo2((a: T) => a, (b: T) => b); // error
+>r7 : (x: Date) => Date
+>foo2((a: T) => a, (b: T) => b) : (x: Date) => Date
+>foo2 : <T extends Date>(a: (x: T) => T, b: (x: T) => T) => (x: T) => T
+>(a: T) => a : (a: T) => T
+>a : T
+>a : T
+>(b: T) => b : (b: T) => T
+>b : T
+>b : T
+
+        var r7b = foo2((a) => a, (b) => b); // valid, T is inferred to be Date
+>r7b : (x: Date) => Date
+>foo2((a) => a, (b) => b) : (x: Date) => Date
+>foo2 : <T extends Date>(a: (x: T) => T, b: (x: T) => T) => (x: T) => T
+>(a) => a : (a: Date) => Date
+>a : Date
+>a : Date
+>(b) => b : (b: Date) => Date
+>b : Date
+>b : Date
+    }
+
+    enum E { A }
+>E : E
+>A : E.A
+
+    enum F { A }
+>F : F
+>A : F.A
+
+    function foo3<T>(x: T, a: (x: T) => T, b: (x: T) => T) {
+>foo3 : <T>(x: T, a: (x: T) => T, b: (x: T) => T) => (x: T) => T
+>x : T
+>a : (x: T) => T
+>x : T
+>b : (x: T) => T
+>x : T
+
+        var r: (x: T) => T;
+>r : (x: T) => T
+>x : T
+
+        return r;
+>r : (x: T) => T
+    }
+
+    var r7 = foo3(E.A, (x) => E.A, (x) => F.A); // error
+>r7 : (x: E) => E
+>foo3(E.A, (x) => E.A, (x) => F.A) : (x: E) => E
+>foo3 : <T>(x: T, a: (x: T) => T, b: (x: T) => T) => (x: T) => T
+>E.A : E
+>E : typeof E
+>A : E
+>(x) => E.A : (x: E) => E
+>x : E
+>E.A : E
+>E : typeof E
+>A : E
+>(x) => F.A : (x: E) => F
+>x : E
+>F.A : F
+>F : typeof F
+>A : F
+}
+
+module TU {
+>TU : typeof TU
+
+    function foo<T, U>(a: (x: T) => T, b: (x: U) => U) {
+>foo : <T, U>(a: (x: T) => T, b: (x: U) => U) => (x: T) => T
+>a : (x: T) => T
+>x : T
+>b : (x: U) => U
+>x : U
+
+        var r: (x: T) => T;
+>r : (x: T) => T
+>x : T
+
+        return r;
+>r : (x: T) => T
+    }
+
+    var r1: (x: {}) => {} = foo((x: number) => 1, (x: string) => '');
+>r1 : (x: {}) => {}
+>x : {}
+>foo((x: number) => 1, (x: string) => '') : (x: number) => number
+>foo : <T, U>(a: (x: T) => T, b: (x: U) => U) => (x: T) => T
+>(x: number) => 1 : (x: number) => number
+>x : number
+>1 : 1
+>(x: string) => '' : (x: string) => string
+>x : string
+>'' : ""
+
+    function other2<T extends Date>(x: T) {
+>other2 : <T extends Date>(x: T) => void
+>x : T
+
+        var r7 = foo((a: T) => a, (b: T) => b); 
+>r7 : (x: T) => T
+>foo((a: T) => a, (b: T) => b) : (x: T) => T
+>foo : <T, U>(a: (x: T) => T, b: (x: U) => U) => (x: T) => T
+>(a: T) => a : (a: T) => T
+>a : T
+>a : T
+>(b: T) => b : (b: T) => T
+>b : T
+>b : T
+
+        var r9 = r7(new Date()); 
+>r9 : T
+>r7(new Date()) : T
+>r7 : (x: T) => T
+>new Date() : Date
+>Date : DateConstructor
+
+        var r10 = r7(1); 
+>r10 : T
+>r7(1) : T
+>r7 : (x: T) => T
+>1 : 1
+    }
+
+    function foo2<T extends Date, U extends Date>(a: (x: T) => T, b: (x: U) => U) {
+>foo2 : <T extends Date, U extends Date>(a: (x: T) => T, b: (x: U) => U) => (x: T) => T
+>a : (x: T) => T
+>x : T
+>b : (x: U) => U
+>x : U
+
+        var r: (x: T) => T;
+>r : (x: T) => T
+>x : T
+
+        return r;
+>r : (x: T) => T
+    }
+
+    function other3<T extends RegExp>(x: T) {
+>other3 : <T extends RegExp>(x: T) => void
+>x : T
+
+        var r7 = foo2((a: T) => a, (b: T) => b); 
+>r7 : (x: Date) => Date
+>foo2((a: T) => a, (b: T) => b) : (x: Date) => Date
+>foo2 : <T extends Date, U extends Date>(a: (x: T) => T, b: (x: U) => U) => (x: T) => T
+>(a: T) => a : (a: T) => T
+>a : T
+>a : T
+>(b: T) => b : (b: T) => T
+>b : T
+>b : T
+
+        var r7b = foo2((a) => a, (b) => b); 
+>r7b : (x: Date) => Date
+>foo2((a) => a, (b) => b) : (x: Date) => Date
+>foo2 : <T extends Date, U extends Date>(a: (x: T) => T, b: (x: U) => U) => (x: T) => T
+>(a) => a : (a: Date) => Date
+>a : Date
+>a : Date
+>(b) => b : (b: Date) => Date
+>b : Date
+>b : Date
+    }
+
+    enum E { A }
+>E : E
+>A : E.A
+
+    enum F { A }
+>F : F
+>A : F.A
+
+    function foo3<T>(x: T, a: (x: T) => T, b: (x: U) => U) {
+>foo3 : <T>(x: T, a: (x: T) => T, b: (x: U) => U) => (x: T) => T
+>x : T
+>a : (x: T) => T
+>x : T
+>b : (x: U) => U
+>x : U
+
+        var r: (x: T) => T;
+>r : (x: T) => T
+>x : T
+
+        return r;
+>r : (x: T) => T
+    }
+
+    var r7 = foo3(E.A, (x) => E.A, (x) => F.A);
+>r7 : (x: E) => E
+>foo3(E.A, (x) => E.A, (x) => F.A) : (x: E) => E
+>foo3 : <T>(x: T, a: (x: T) => T, b: (x: U) => U) => (x: T) => T
+>E.A : E
+>E : typeof E
+>A : E
+>(x) => E.A : (x: E) => E
+>x : E
+>E.A : E
+>E : typeof E
+>A : E
+>(x) => F.A : (x: U) => F
+>x : U
+>F.A : F
+>F : typeof F
+>A : F
+}

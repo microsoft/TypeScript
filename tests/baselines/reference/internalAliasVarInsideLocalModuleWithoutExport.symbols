@@ -1,0 +1,21 @@
+=== tests/cases/compiler/internalAliasVarInsideLocalModuleWithoutExport.ts ===
+export module a {
+>a : Symbol(a, Decl(internalAliasVarInsideLocalModuleWithoutExport.ts, 0, 0))
+
+    export var x = 10;
+>x : Symbol(x, Decl(internalAliasVarInsideLocalModuleWithoutExport.ts, 1, 14))
+}
+
+export module c {
+>c : Symbol(c, Decl(internalAliasVarInsideLocalModuleWithoutExport.ts, 2, 1))
+
+    import b = a.x;
+>b : Symbol(b, Decl(internalAliasVarInsideLocalModuleWithoutExport.ts, 4, 17))
+>a : Symbol(a, Decl(internalAliasVarInsideLocalModuleWithoutExport.ts, 0, 0))
+>x : Symbol(b, Decl(internalAliasVarInsideLocalModuleWithoutExport.ts, 1, 14))
+
+    export var bVal = b;
+>bVal : Symbol(bVal, Decl(internalAliasVarInsideLocalModuleWithoutExport.ts, 6, 14))
+>b : Symbol(b, Decl(internalAliasVarInsideLocalModuleWithoutExport.ts, 4, 17))
+}
+

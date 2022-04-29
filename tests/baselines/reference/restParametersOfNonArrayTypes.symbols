@@ -1,0 +1,68 @@
+=== tests/cases/conformance/types/objectTypeLiteral/callSignatures/restParametersOfNonArrayTypes.ts ===
+// Rest parameters must be an array type if they have a type annotation, so all these are errors
+
+function foo(...x: string) { }
+>foo : Symbol(foo, Decl(restParametersOfNonArrayTypes.ts, 0, 0))
+>x : Symbol(x, Decl(restParametersOfNonArrayTypes.ts, 2, 13))
+
+var f = function foo(...x: number) { }
+>f : Symbol(f, Decl(restParametersOfNonArrayTypes.ts, 3, 3))
+>foo : Symbol(foo, Decl(restParametersOfNonArrayTypes.ts, 3, 7))
+>x : Symbol(x, Decl(restParametersOfNonArrayTypes.ts, 3, 21))
+
+var f2 = (...x: Date, ...y: boolean) => { }
+>f2 : Symbol(f2, Decl(restParametersOfNonArrayTypes.ts, 4, 3))
+>x : Symbol(x, Decl(restParametersOfNonArrayTypes.ts, 4, 10))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>y : Symbol(y, Decl(restParametersOfNonArrayTypes.ts, 4, 21))
+
+class C {
+>C : Symbol(C, Decl(restParametersOfNonArrayTypes.ts, 4, 43))
+
+    foo(...x: C) { }
+>foo : Symbol(C.foo, Decl(restParametersOfNonArrayTypes.ts, 6, 9))
+>x : Symbol(x, Decl(restParametersOfNonArrayTypes.ts, 7, 8))
+>C : Symbol(C, Decl(restParametersOfNonArrayTypes.ts, 4, 43))
+}
+
+interface I {
+>I : Symbol(I, Decl(restParametersOfNonArrayTypes.ts, 8, 1))
+
+    (...x: string);
+>x : Symbol(x, Decl(restParametersOfNonArrayTypes.ts, 11, 5))
+
+    foo(...x: number, ...y: number);
+>foo : Symbol(I.foo, Decl(restParametersOfNonArrayTypes.ts, 11, 19))
+>x : Symbol(x, Decl(restParametersOfNonArrayTypes.ts, 12, 8))
+>y : Symbol(y, Decl(restParametersOfNonArrayTypes.ts, 12, 21))
+}
+
+var a: {
+>a : Symbol(a, Decl(restParametersOfNonArrayTypes.ts, 15, 3))
+
+    (...x: string);
+>x : Symbol(x, Decl(restParametersOfNonArrayTypes.ts, 16, 5))
+
+    foo(...x: string);
+>foo : Symbol(foo, Decl(restParametersOfNonArrayTypes.ts, 16, 19))
+>x : Symbol(x, Decl(restParametersOfNonArrayTypes.ts, 17, 8))
+}
+
+var b = {
+>b : Symbol(b, Decl(restParametersOfNonArrayTypes.ts, 20, 3))
+
+    foo(...x: string) { },
+>foo : Symbol(foo, Decl(restParametersOfNonArrayTypes.ts, 20, 9))
+>x : Symbol(x, Decl(restParametersOfNonArrayTypes.ts, 21, 8))
+
+    a: function foo(...x: number, ...y: Date) { },
+>a : Symbol(a, Decl(restParametersOfNonArrayTypes.ts, 21, 26))
+>foo : Symbol(foo, Decl(restParametersOfNonArrayTypes.ts, 22, 6))
+>x : Symbol(x, Decl(restParametersOfNonArrayTypes.ts, 22, 20))
+>y : Symbol(y, Decl(restParametersOfNonArrayTypes.ts, 22, 33))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+    b: (...x: string) => { }
+>b : Symbol(b, Decl(restParametersOfNonArrayTypes.ts, 22, 50))
+>x : Symbol(x, Decl(restParametersOfNonArrayTypes.ts, 23, 8))
+}

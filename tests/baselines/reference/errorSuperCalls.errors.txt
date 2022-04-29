@@ -1,0 +1,119 @@
+tests/cases/conformance/expressions/superCalls/errorSuperCalls.ts(4,9): error TS2335: 'super' can only be referenced in a derived class.
+tests/cases/conformance/expressions/superCalls/errorSuperCalls.ts(9,9): error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
+tests/cases/conformance/expressions/superCalls/errorSuperCalls.ts(14,9): error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
+tests/cases/conformance/expressions/superCalls/errorSuperCalls.ts(18,9): error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
+tests/cases/conformance/expressions/superCalls/errorSuperCalls.ts(22,9): error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
+tests/cases/conformance/expressions/superCalls/errorSuperCalls.ts(26,9): error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
+tests/cases/conformance/expressions/superCalls/errorSuperCalls.ts(30,16): error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
+tests/cases/conformance/expressions/superCalls/errorSuperCalls.ts(34,9): error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
+tests/cases/conformance/expressions/superCalls/errorSuperCalls.ts(38,9): error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
+tests/cases/conformance/expressions/superCalls/errorSuperCalls.ts(46,14): error TS2754: 'super' may not use type arguments.
+tests/cases/conformance/expressions/superCalls/errorSuperCalls.ts(58,9): error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
+tests/cases/conformance/expressions/superCalls/errorSuperCalls.ts(62,9): error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
+tests/cases/conformance/expressions/superCalls/errorSuperCalls.ts(67,9): error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
+tests/cases/conformance/expressions/superCalls/errorSuperCalls.ts(71,9): error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
+
+
+==== tests/cases/conformance/expressions/superCalls/errorSuperCalls.ts (14 errors) ====
+    //super call in class constructor with no base type
+    class NoBase {
+        constructor() {
+            super();
+            ~~~~~
+!!! error TS2335: 'super' can only be referenced in a derived class.
+        }
+    
+        //super call in class member function with no base type
+        fn() {
+            super();
+            ~~~~~
+!!! error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
+        }
+    
+        //super call in class accessor (get and set) with no base type
+        get foo() {
+            super();
+            ~~~~~
+!!! error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
+            return null;
+        }
+        set foo(v) {
+            super();
+            ~~~~~
+!!! error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
+        }
+    
+        //super call in class member initializer with no base type
+        p = super();
+            ~~~~~
+!!! error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
+    
+        //super call in static class member function with no base type
+        static fn() {
+            super();
+            ~~~~~
+!!! error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
+        }
+    
+        //super call in static class member initializer with no base type
+        static k = super();
+                   ~~~~~
+!!! error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
+    
+        //super call in static class accessor (get and set) with no base type
+        static get q() {
+            super();
+            ~~~~~
+!!! error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
+            return null;
+        }
+        static set q(n) {
+            super();
+            ~~~~~
+!!! error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
+        }
+    }
+    
+    class Base<T> { private n: T; }
+    class Derived<T> extends Base<T> {
+        //super call with type arguments 
+        constructor() {
+            super<string>();
+                 ~~~~~~~~
+!!! error TS2754: 'super' may not use type arguments.
+            super();
+        }
+    }
+    
+    
+    class OtherBase {
+        private n: string;
+    }
+    
+    class OtherDerived extends OtherBase {
+        //super call in class member initializer of derived type
+        t = super();
+            ~~~~~
+!!! error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
+    
+        fn() {
+            //super call in class member function of derived type
+            super();
+            ~~~~~
+!!! error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
+        }
+    
+        //super call in class accessor (get and set) of derived type
+        get foo() {
+            super();
+            ~~~~~
+!!! error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
+            return null;
+        }
+        set foo(n) {
+            super();
+            ~~~~~
+!!! error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
+        }
+    }
+    

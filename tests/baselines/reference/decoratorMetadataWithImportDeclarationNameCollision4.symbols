@@ -1,0 +1,51 @@
+=== tests/cases/compiler/db.ts ===
+export class db {
+>db : Symbol(db, Decl(db.ts, 0, 0))
+
+    public doSomething() {
+>doSomething : Symbol(db.doSomething, Decl(db.ts, 0, 17))
+    }
+}
+
+=== tests/cases/compiler/service.ts ===
+import db from './db'; // error no default export
+>db : Symbol(db, Decl(service.ts, 0, 6))
+
+function someDecorator(target) {
+>someDecorator : Symbol(someDecorator, Decl(service.ts, 0, 22))
+>target : Symbol(target, Decl(service.ts, 1, 23))
+
+    return target;
+>target : Symbol(target, Decl(service.ts, 1, 23))
+}
+@someDecorator
+>someDecorator : Symbol(someDecorator, Decl(service.ts, 0, 22))
+
+class MyClass {
+>MyClass : Symbol(MyClass, Decl(service.ts, 3, 1))
+
+    db: db.db;
+>db : Symbol(MyClass.db, Decl(service.ts, 5, 15))
+>db : Symbol(db, Decl(service.ts, 0, 6))
+>db : Symbol(db.db)
+
+    constructor(db: db.db) {
+>db : Symbol(db, Decl(service.ts, 8, 16))
+>db : Symbol(db, Decl(service.ts, 0, 6))
+>db : Symbol(db.db)
+
+        this.db = db;
+>this.db : Symbol(MyClass.db, Decl(service.ts, 5, 15))
+>this : Symbol(MyClass, Decl(service.ts, 3, 1))
+>db : Symbol(MyClass.db, Decl(service.ts, 5, 15))
+>db : Symbol(db, Decl(service.ts, 8, 16))
+
+        this.db.doSomething();
+>this.db : Symbol(MyClass.db, Decl(service.ts, 5, 15))
+>this : Symbol(MyClass, Decl(service.ts, 3, 1))
+>db : Symbol(MyClass.db, Decl(service.ts, 5, 15))
+    }
+}
+export {MyClass};
+>MyClass : Symbol(MyClass, Decl(service.ts, 13, 8))
+

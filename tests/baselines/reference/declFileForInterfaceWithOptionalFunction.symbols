@@ -1,0 +1,12 @@
+=== tests/cases/compiler/declFileForInterfaceWithOptionalFunction.ts ===
+interface I {
+>I : Symbol(I, Decl(declFileForInterfaceWithOptionalFunction.ts, 0, 0))
+
+    foo? (x?);
+>foo : Symbol(I.foo, Decl(declFileForInterfaceWithOptionalFunction.ts, 0, 13))
+>x : Symbol(x, Decl(declFileForInterfaceWithOptionalFunction.ts, 1, 10))
+
+    foo2? (x?: number): number;
+>foo2 : Symbol(I.foo2, Decl(declFileForInterfaceWithOptionalFunction.ts, 1, 14))
+>x : Symbol(x, Decl(declFileForInterfaceWithOptionalFunction.ts, 2, 11))
+}

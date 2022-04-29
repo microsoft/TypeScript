@@ -1,0 +1,21 @@
+EmitSkipped: false
+
+FileName : /tests/cases/fourslash/inputFile.js
+var M;
+(function (M) {
+    var C = /** @class */ (function () {
+        function C() {
+        }
+        return C;
+    }());
+    M.foo = new C();
+})(M || (M = {}));
+
+FileName : /tests/cases/fourslash/inputFile.d.ts
+declare module M {
+    class C {
+    }
+    export var foo: C;
+    export {};
+}
+

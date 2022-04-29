@@ -1,0 +1,498 @@
+=== tests/cases/conformance/parser/ecmascript5/RegularExpressions/parserRegularExpressionDivideAmbiguity6.ts ===
+function c255lsqr8h(a7, a6, a5, a4, a3, a2, a1, a0) {
+>c255lsqr8h : (a7: any, a6: any, a5: any, a4: any, a3: any, a2: any, a1: any, a0: any) => any[]
+>a7 : any
+>a6 : any
+>a5 : any
+>a4 : any
+>a3 : any
+>a2 : any
+>a1 : any
+>a0 : any
+
+    let r = [];
+>r : any[]
+>[] : undefined[]
+
+    let v;
+>v : any
+
+    r[0] = (v = a0*a0) & 0xFFFF;
+>r[0] = (v = a0*a0) & 0xFFFF : number
+>r[0] : any
+>r : any[]
+>0 : 0
+>(v = a0*a0) & 0xFFFF : number
+>(v = a0*a0) : number
+>v = a0*a0 : number
+>v : any
+>a0*a0 : number
+>a0 : any
+>a0 : any
+>0xFFFF : 65535
+
+    r[1] = (v = ((v / 0x10000) | 0) + 2*a0*a1) & 0xFFFF;
+>r[1] = (v = ((v / 0x10000) | 0) + 2*a0*a1) & 0xFFFF : number
+>r[1] : any
+>r : any[]
+>1 : 1
+>(v = ((v / 0x10000) | 0) + 2*a0*a1) & 0xFFFF : number
+>(v = ((v / 0x10000) | 0) + 2*a0*a1) : number
+>v = ((v / 0x10000) | 0) + 2*a0*a1 : number
+>v : any
+>((v / 0x10000) | 0) + 2*a0*a1 : number
+>((v / 0x10000) | 0) : number
+>(v / 0x10000) | 0 : number
+>(v / 0x10000) : number
+>v / 0x10000 : number
+>v : any
+>0x10000 : 65536
+>0 : 0
+>2*a0*a1 : number
+>2*a0 : number
+>2 : 2
+>a0 : any
+>a1 : any
+>0xFFFF : 65535
+
+    r[2] = (v = ((v / 0x10000) | 0) + 2*a0*a2 + a1*a1) & 0xFFFF;
+>r[2] = (v = ((v / 0x10000) | 0) + 2*a0*a2 + a1*a1) & 0xFFFF : number
+>r[2] : any
+>r : any[]
+>2 : 2
+>(v = ((v / 0x10000) | 0) + 2*a0*a2 + a1*a1) & 0xFFFF : number
+>(v = ((v / 0x10000) | 0) + 2*a0*a2 + a1*a1) : number
+>v = ((v / 0x10000) | 0) + 2*a0*a2 + a1*a1 : number
+>v : any
+>((v / 0x10000) | 0) + 2*a0*a2 + a1*a1 : number
+>((v / 0x10000) | 0) + 2*a0*a2 : number
+>((v / 0x10000) | 0) : number
+>(v / 0x10000) | 0 : number
+>(v / 0x10000) : number
+>v / 0x10000 : number
+>v : any
+>0x10000 : 65536
+>0 : 0
+>2*a0*a2 : number
+>2*a0 : number
+>2 : 2
+>a0 : any
+>a2 : any
+>a1*a1 : number
+>a1 : any
+>a1 : any
+>0xFFFF : 65535
+
+    r[3] = (v = ((v / 0x10000) | 0) + 2*a0*a3 + 2*a1*a2) & 0xFFFF;
+>r[3] = (v = ((v / 0x10000) | 0) + 2*a0*a3 + 2*a1*a2) & 0xFFFF : number
+>r[3] : any
+>r : any[]
+>3 : 3
+>(v = ((v / 0x10000) | 0) + 2*a0*a3 + 2*a1*a2) & 0xFFFF : number
+>(v = ((v / 0x10000) | 0) + 2*a0*a3 + 2*a1*a2) : number
+>v = ((v / 0x10000) | 0) + 2*a0*a3 + 2*a1*a2 : number
+>v : any
+>((v / 0x10000) | 0) + 2*a0*a3 + 2*a1*a2 : number
+>((v / 0x10000) | 0) + 2*a0*a3 : number
+>((v / 0x10000) | 0) : number
+>(v / 0x10000) | 0 : number
+>(v / 0x10000) : number
+>v / 0x10000 : number
+>v : any
+>0x10000 : 65536
+>0 : 0
+>2*a0*a3 : number
+>2*a0 : number
+>2 : 2
+>a0 : any
+>a3 : any
+>2*a1*a2 : number
+>2*a1 : number
+>2 : 2
+>a1 : any
+>a2 : any
+>0xFFFF : 65535
+
+    r[4] = (v = ((v / 0x10000) | 0) + 2*a0*a4 + 2*a1*a3 + a2*a2) & 0xFFFF;
+>r[4] = (v = ((v / 0x10000) | 0) + 2*a0*a4 + 2*a1*a3 + a2*a2) & 0xFFFF : number
+>r[4] : any
+>r : any[]
+>4 : 4
+>(v = ((v / 0x10000) | 0) + 2*a0*a4 + 2*a1*a3 + a2*a2) & 0xFFFF : number
+>(v = ((v / 0x10000) | 0) + 2*a0*a4 + 2*a1*a3 + a2*a2) : number
+>v = ((v / 0x10000) | 0) + 2*a0*a4 + 2*a1*a3 + a2*a2 : number
+>v : any
+>((v / 0x10000) | 0) + 2*a0*a4 + 2*a1*a3 + a2*a2 : number
+>((v / 0x10000) | 0) + 2*a0*a4 + 2*a1*a3 : number
+>((v / 0x10000) | 0) + 2*a0*a4 : number
+>((v / 0x10000) | 0) : number
+>(v / 0x10000) | 0 : number
+>(v / 0x10000) : number
+>v / 0x10000 : number
+>v : any
+>0x10000 : 65536
+>0 : 0
+>2*a0*a4 : number
+>2*a0 : number
+>2 : 2
+>a0 : any
+>a4 : any
+>2*a1*a3 : number
+>2*a1 : number
+>2 : 2
+>a1 : any
+>a3 : any
+>a2*a2 : number
+>a2 : any
+>a2 : any
+>0xFFFF : 65535
+
+    r[5] = (v = ((v / 0x10000) | 0) + 2*a0*a5 + 2*a1*a4 + 2*a2*a3) & 0xFFFF;
+>r[5] = (v = ((v / 0x10000) | 0) + 2*a0*a5 + 2*a1*a4 + 2*a2*a3) & 0xFFFF : number
+>r[5] : any
+>r : any[]
+>5 : 5
+>(v = ((v / 0x10000) | 0) + 2*a0*a5 + 2*a1*a4 + 2*a2*a3) & 0xFFFF : number
+>(v = ((v / 0x10000) | 0) + 2*a0*a5 + 2*a1*a4 + 2*a2*a3) : number
+>v = ((v / 0x10000) | 0) + 2*a0*a5 + 2*a1*a4 + 2*a2*a3 : number
+>v : any
+>((v / 0x10000) | 0) + 2*a0*a5 + 2*a1*a4 + 2*a2*a3 : number
+>((v / 0x10000) | 0) + 2*a0*a5 + 2*a1*a4 : number
+>((v / 0x10000) | 0) + 2*a0*a5 : number
+>((v / 0x10000) | 0) : number
+>(v / 0x10000) | 0 : number
+>(v / 0x10000) : number
+>v / 0x10000 : number
+>v : any
+>0x10000 : 65536
+>0 : 0
+>2*a0*a5 : number
+>2*a0 : number
+>2 : 2
+>a0 : any
+>a5 : any
+>2*a1*a4 : number
+>2*a1 : number
+>2 : 2
+>a1 : any
+>a4 : any
+>2*a2*a3 : number
+>2*a2 : number
+>2 : 2
+>a2 : any
+>a3 : any
+>0xFFFF : 65535
+
+    r[6] = (v = ((v / 0x10000) | 0) + 2*a0*a6 + 2*a1*a5 + 2*a2*a4 + a3*a3) & 0xFFFF;
+>r[6] = (v = ((v / 0x10000) | 0) + 2*a0*a6 + 2*a1*a5 + 2*a2*a4 + a3*a3) & 0xFFFF : number
+>r[6] : any
+>r : any[]
+>6 : 6
+>(v = ((v / 0x10000) | 0) + 2*a0*a6 + 2*a1*a5 + 2*a2*a4 + a3*a3) & 0xFFFF : number
+>(v = ((v / 0x10000) | 0) + 2*a0*a6 + 2*a1*a5 + 2*a2*a4 + a3*a3) : number
+>v = ((v / 0x10000) | 0) + 2*a0*a6 + 2*a1*a5 + 2*a2*a4 + a3*a3 : number
+>v : any
+>((v / 0x10000) | 0) + 2*a0*a6 + 2*a1*a5 + 2*a2*a4 + a3*a3 : number
+>((v / 0x10000) | 0) + 2*a0*a6 + 2*a1*a5 + 2*a2*a4 : number
+>((v / 0x10000) | 0) + 2*a0*a6 + 2*a1*a5 : number
+>((v / 0x10000) | 0) + 2*a0*a6 : number
+>((v / 0x10000) | 0) : number
+>(v / 0x10000) | 0 : number
+>(v / 0x10000) : number
+>v / 0x10000 : number
+>v : any
+>0x10000 : 65536
+>0 : 0
+>2*a0*a6 : number
+>2*a0 : number
+>2 : 2
+>a0 : any
+>a6 : any
+>2*a1*a5 : number
+>2*a1 : number
+>2 : 2
+>a1 : any
+>a5 : any
+>2*a2*a4 : number
+>2*a2 : number
+>2 : 2
+>a2 : any
+>a4 : any
+>a3*a3 : number
+>a3 : any
+>a3 : any
+>0xFFFF : 65535
+
+    r[7] = (v = ((v / 0x10000) | 0) + 2*a0*a7 + 2*a1*a6 + 2*a2*a5 + 2*a3*a4) & 0xFFFF;
+>r[7] = (v = ((v / 0x10000) | 0) + 2*a0*a7 + 2*a1*a6 + 2*a2*a5 + 2*a3*a4) & 0xFFFF : number
+>r[7] : any
+>r : any[]
+>7 : 7
+>(v = ((v / 0x10000) | 0) + 2*a0*a7 + 2*a1*a6 + 2*a2*a5 + 2*a3*a4) & 0xFFFF : number
+>(v = ((v / 0x10000) | 0) + 2*a0*a7 + 2*a1*a6 + 2*a2*a5 + 2*a3*a4) : number
+>v = ((v / 0x10000) | 0) + 2*a0*a7 + 2*a1*a6 + 2*a2*a5 + 2*a3*a4 : number
+>v : any
+>((v / 0x10000) | 0) + 2*a0*a7 + 2*a1*a6 + 2*a2*a5 + 2*a3*a4 : number
+>((v / 0x10000) | 0) + 2*a0*a7 + 2*a1*a6 + 2*a2*a5 : number
+>((v / 0x10000) | 0) + 2*a0*a7 + 2*a1*a6 : number
+>((v / 0x10000) | 0) + 2*a0*a7 : number
+>((v / 0x10000) | 0) : number
+>(v / 0x10000) | 0 : number
+>(v / 0x10000) : number
+>v / 0x10000 : number
+>v : any
+>0x10000 : 65536
+>0 : 0
+>2*a0*a7 : number
+>2*a0 : number
+>2 : 2
+>a0 : any
+>a7 : any
+>2*a1*a6 : number
+>2*a1 : number
+>2 : 2
+>a1 : any
+>a6 : any
+>2*a2*a5 : number
+>2*a2 : number
+>2 : 2
+>a2 : any
+>a5 : any
+>2*a3*a4 : number
+>2*a3 : number
+>2 : 2
+>a3 : any
+>a4 : any
+>0xFFFF : 65535
+
+    r[8] = (v = ((v / 0x10000) | 0) + 2*a1*a7 + 2*a2*a6 + 2*a3*a5 + a4*a4) & 0xFFFF;
+>r[8] = (v = ((v / 0x10000) | 0) + 2*a1*a7 + 2*a2*a6 + 2*a3*a5 + a4*a4) & 0xFFFF : number
+>r[8] : any
+>r : any[]
+>8 : 8
+>(v = ((v / 0x10000) | 0) + 2*a1*a7 + 2*a2*a6 + 2*a3*a5 + a4*a4) & 0xFFFF : number
+>(v = ((v / 0x10000) | 0) + 2*a1*a7 + 2*a2*a6 + 2*a3*a5 + a4*a4) : number
+>v = ((v / 0x10000) | 0) + 2*a1*a7 + 2*a2*a6 + 2*a3*a5 + a4*a4 : number
+>v : any
+>((v / 0x10000) | 0) + 2*a1*a7 + 2*a2*a6 + 2*a3*a5 + a4*a4 : number
+>((v / 0x10000) | 0) + 2*a1*a7 + 2*a2*a6 + 2*a3*a5 : number
+>((v / 0x10000) | 0) + 2*a1*a7 + 2*a2*a6 : number
+>((v / 0x10000) | 0) + 2*a1*a7 : number
+>((v / 0x10000) | 0) : number
+>(v / 0x10000) | 0 : number
+>(v / 0x10000) : number
+>v / 0x10000 : number
+>v : any
+>0x10000 : 65536
+>0 : 0
+>2*a1*a7 : number
+>2*a1 : number
+>2 : 2
+>a1 : any
+>a7 : any
+>2*a2*a6 : number
+>2*a2 : number
+>2 : 2
+>a2 : any
+>a6 : any
+>2*a3*a5 : number
+>2*a3 : number
+>2 : 2
+>a3 : any
+>a5 : any
+>a4*a4 : number
+>a4 : any
+>a4 : any
+>0xFFFF : 65535
+
+    r[9] = (v = ((v / 0x10000) | 0) + 2*a2*a7 + 2*a3*a6 + 2*a4*a5) & 0xFFFF;
+>r[9] = (v = ((v / 0x10000) | 0) + 2*a2*a7 + 2*a3*a6 + 2*a4*a5) & 0xFFFF : number
+>r[9] : any
+>r : any[]
+>9 : 9
+>(v = ((v / 0x10000) | 0) + 2*a2*a7 + 2*a3*a6 + 2*a4*a5) & 0xFFFF : number
+>(v = ((v / 0x10000) | 0) + 2*a2*a7 + 2*a3*a6 + 2*a4*a5) : number
+>v = ((v / 0x10000) | 0) + 2*a2*a7 + 2*a3*a6 + 2*a4*a5 : number
+>v : any
+>((v / 0x10000) | 0) + 2*a2*a7 + 2*a3*a6 + 2*a4*a5 : number
+>((v / 0x10000) | 0) + 2*a2*a7 + 2*a3*a6 : number
+>((v / 0x10000) | 0) + 2*a2*a7 : number
+>((v / 0x10000) | 0) : number
+>(v / 0x10000) | 0 : number
+>(v / 0x10000) : number
+>v / 0x10000 : number
+>v : any
+>0x10000 : 65536
+>0 : 0
+>2*a2*a7 : number
+>2*a2 : number
+>2 : 2
+>a2 : any
+>a7 : any
+>2*a3*a6 : number
+>2*a3 : number
+>2 : 2
+>a3 : any
+>a6 : any
+>2*a4*a5 : number
+>2*a4 : number
+>2 : 2
+>a4 : any
+>a5 : any
+>0xFFFF : 65535
+
+    r[10] = (v = ((v / 0x10000) | 0) + 2*a3*a7 + 2*a4*a6 + a5*a5) & 0xFFFF;
+>r[10] = (v = ((v / 0x10000) | 0) + 2*a3*a7 + 2*a4*a6 + a5*a5) & 0xFFFF : number
+>r[10] : any
+>r : any[]
+>10 : 10
+>(v = ((v / 0x10000) | 0) + 2*a3*a7 + 2*a4*a6 + a5*a5) & 0xFFFF : number
+>(v = ((v / 0x10000) | 0) + 2*a3*a7 + 2*a4*a6 + a5*a5) : number
+>v = ((v / 0x10000) | 0) + 2*a3*a7 + 2*a4*a6 + a5*a5 : number
+>v : any
+>((v / 0x10000) | 0) + 2*a3*a7 + 2*a4*a6 + a5*a5 : number
+>((v / 0x10000) | 0) + 2*a3*a7 + 2*a4*a6 : number
+>((v / 0x10000) | 0) + 2*a3*a7 : number
+>((v / 0x10000) | 0) : number
+>(v / 0x10000) | 0 : number
+>(v / 0x10000) : number
+>v / 0x10000 : number
+>v : any
+>0x10000 : 65536
+>0 : 0
+>2*a3*a7 : number
+>2*a3 : number
+>2 : 2
+>a3 : any
+>a7 : any
+>2*a4*a6 : number
+>2*a4 : number
+>2 : 2
+>a4 : any
+>a6 : any
+>a5*a5 : number
+>a5 : any
+>a5 : any
+>0xFFFF : 65535
+
+    r[11] = (v = ((v / 0x10000) | 0) + 2*a4*a7 + 2*a5*a6) & 0xFFFF;
+>r[11] = (v = ((v / 0x10000) | 0) + 2*a4*a7 + 2*a5*a6) & 0xFFFF : number
+>r[11] : any
+>r : any[]
+>11 : 11
+>(v = ((v / 0x10000) | 0) + 2*a4*a7 + 2*a5*a6) & 0xFFFF : number
+>(v = ((v / 0x10000) | 0) + 2*a4*a7 + 2*a5*a6) : number
+>v = ((v / 0x10000) | 0) + 2*a4*a7 + 2*a5*a6 : number
+>v : any
+>((v / 0x10000) | 0) + 2*a4*a7 + 2*a5*a6 : number
+>((v / 0x10000) | 0) + 2*a4*a7 : number
+>((v / 0x10000) | 0) : number
+>(v / 0x10000) | 0 : number
+>(v / 0x10000) : number
+>v / 0x10000 : number
+>v : any
+>0x10000 : 65536
+>0 : 0
+>2*a4*a7 : number
+>2*a4 : number
+>2 : 2
+>a4 : any
+>a7 : any
+>2*a5*a6 : number
+>2*a5 : number
+>2 : 2
+>a5 : any
+>a6 : any
+>0xFFFF : 65535
+
+    r[12] = (v = ((v / 0x10000) | 0) + 2*a5*a7 + a6*a6) & 0xFFFF;
+>r[12] = (v = ((v / 0x10000) | 0) + 2*a5*a7 + a6*a6) & 0xFFFF : number
+>r[12] : any
+>r : any[]
+>12 : 12
+>(v = ((v / 0x10000) | 0) + 2*a5*a7 + a6*a6) & 0xFFFF : number
+>(v = ((v / 0x10000) | 0) + 2*a5*a7 + a6*a6) : number
+>v = ((v / 0x10000) | 0) + 2*a5*a7 + a6*a6 : number
+>v : any
+>((v / 0x10000) | 0) + 2*a5*a7 + a6*a6 : number
+>((v / 0x10000) | 0) + 2*a5*a7 : number
+>((v / 0x10000) | 0) : number
+>(v / 0x10000) | 0 : number
+>(v / 0x10000) : number
+>v / 0x10000 : number
+>v : any
+>0x10000 : 65536
+>0 : 0
+>2*a5*a7 : number
+>2*a5 : number
+>2 : 2
+>a5 : any
+>a7 : any
+>a6*a6 : number
+>a6 : any
+>a6 : any
+>0xFFFF : 65535
+
+    r[13] = (v = ((v / 0x10000) | 0) + 2*a6*a7) & 0xFFFF;
+>r[13] = (v = ((v / 0x10000) | 0) + 2*a6*a7) & 0xFFFF : number
+>r[13] : any
+>r : any[]
+>13 : 13
+>(v = ((v / 0x10000) | 0) + 2*a6*a7) & 0xFFFF : number
+>(v = ((v / 0x10000) | 0) + 2*a6*a7) : number
+>v = ((v / 0x10000) | 0) + 2*a6*a7 : number
+>v : any
+>((v / 0x10000) | 0) + 2*a6*a7 : number
+>((v / 0x10000) | 0) : number
+>(v / 0x10000) | 0 : number
+>(v / 0x10000) : number
+>v / 0x10000 : number
+>v : any
+>0x10000 : 65536
+>0 : 0
+>2*a6*a7 : number
+>2*a6 : number
+>2 : 2
+>a6 : any
+>a7 : any
+>0xFFFF : 65535
+
+    r[14] = (v = ((v / 0x10000) | 0) + a7*a7) & 0xFFFF;
+>r[14] = (v = ((v / 0x10000) | 0) + a7*a7) & 0xFFFF : number
+>r[14] : any
+>r : any[]
+>14 : 14
+>(v = ((v / 0x10000) | 0) + a7*a7) & 0xFFFF : number
+>(v = ((v / 0x10000) | 0) + a7*a7) : number
+>v = ((v / 0x10000) | 0) + a7*a7 : number
+>v : any
+>((v / 0x10000) | 0) + a7*a7 : number
+>((v / 0x10000) | 0) : number
+>(v / 0x10000) | 0 : number
+>(v / 0x10000) : number
+>v / 0x10000 : number
+>v : any
+>0x10000 : 65536
+>0 : 0
+>a7*a7 : number
+>a7 : any
+>a7 : any
+>0xFFFF : 65535
+
+    r[15] = ((v / 0x10000) | 0);
+>r[15] = ((v / 0x10000) | 0) : number
+>r[15] : any
+>r : any[]
+>15 : 15
+>((v / 0x10000) | 0) : number
+>(v / 0x10000) | 0 : number
+>(v / 0x10000) : number
+>v / 0x10000 : number
+>v : any
+>0x10000 : 65536
+>0 : 0
+
+    return r;
+>r : any[]
+}
+

@@ -1,0 +1,285 @@
+=== tests/cases/compiler/contextualTypeShouldBeLiteral.ts ===
+interface X {
+>X : Symbol(X, Decl(contextualTypeShouldBeLiteral.ts, 0, 0))
+
+    type: 'x';
+>type : Symbol(X.type, Decl(contextualTypeShouldBeLiteral.ts, 0, 13))
+
+    value: string;
+>value : Symbol(X.value, Decl(contextualTypeShouldBeLiteral.ts, 1, 14))
+
+    method(): void;
+>method : Symbol(X.method, Decl(contextualTypeShouldBeLiteral.ts, 2, 18))
+}
+
+interface Y {
+>Y : Symbol(Y, Decl(contextualTypeShouldBeLiteral.ts, 4, 1))
+
+    type: 'y';
+>type : Symbol(Y.type, Decl(contextualTypeShouldBeLiteral.ts, 6, 13))
+
+    value: 'none' | 'done';
+>value : Symbol(Y.value, Decl(contextualTypeShouldBeLiteral.ts, 7, 14))
+
+    method(): void;
+>method : Symbol(Y.method, Decl(contextualTypeShouldBeLiteral.ts, 8, 27))
+}
+
+function foo(bar: X | Y) { }
+>foo : Symbol(foo, Decl(contextualTypeShouldBeLiteral.ts, 10, 1))
+>bar : Symbol(bar, Decl(contextualTypeShouldBeLiteral.ts, 12, 13))
+>X : Symbol(X, Decl(contextualTypeShouldBeLiteral.ts, 0, 0))
+>Y : Symbol(Y, Decl(contextualTypeShouldBeLiteral.ts, 4, 1))
+
+foo({
+>foo : Symbol(foo, Decl(contextualTypeShouldBeLiteral.ts, 10, 1))
+
+    type: 'y',
+>type : Symbol(type, Decl(contextualTypeShouldBeLiteral.ts, 14, 5))
+
+    value: 'done',
+>value : Symbol(value, Decl(contextualTypeShouldBeLiteral.ts, 15, 14))
+
+    method() {
+>method : Symbol(method, Decl(contextualTypeShouldBeLiteral.ts, 16, 18))
+
+        this;
+>this : Symbol(Y, Decl(contextualTypeShouldBeLiteral.ts, 4, 1))
+
+        this.type;
+>this.type : Symbol(Y.type, Decl(contextualTypeShouldBeLiteral.ts, 6, 13))
+>this : Symbol(Y, Decl(contextualTypeShouldBeLiteral.ts, 4, 1))
+>type : Symbol(Y.type, Decl(contextualTypeShouldBeLiteral.ts, 6, 13))
+
+        this.value;
+>this.value : Symbol(Y.value, Decl(contextualTypeShouldBeLiteral.ts, 7, 14))
+>this : Symbol(Y, Decl(contextualTypeShouldBeLiteral.ts, 4, 1))
+>value : Symbol(Y.value, Decl(contextualTypeShouldBeLiteral.ts, 7, 14))
+    }
+});
+
+interface X2 {
+>X2 : Symbol(X2, Decl(contextualTypeShouldBeLiteral.ts, 22, 3))
+
+    type1: 'x';
+>type1 : Symbol(X2.type1, Decl(contextualTypeShouldBeLiteral.ts, 24, 14))
+
+    value: string;
+>value : Symbol(X2.value, Decl(contextualTypeShouldBeLiteral.ts, 25, 15))
+
+    method(): void;
+>method : Symbol(X2.method, Decl(contextualTypeShouldBeLiteral.ts, 26, 18))
+}
+
+interface Y2 {
+>Y2 : Symbol(Y2, Decl(contextualTypeShouldBeLiteral.ts, 28, 1))
+
+    type2: 'y';
+>type2 : Symbol(Y2.type2, Decl(contextualTypeShouldBeLiteral.ts, 30, 14))
+
+    value: 'none' | 'done';
+>value : Symbol(Y2.value, Decl(contextualTypeShouldBeLiteral.ts, 31, 15))
+
+    method(): void;
+>method : Symbol(Y2.method, Decl(contextualTypeShouldBeLiteral.ts, 32, 27))
+}
+
+function foo2(bar: X2 | Y2) { }
+>foo2 : Symbol(foo2, Decl(contextualTypeShouldBeLiteral.ts, 34, 1))
+>bar : Symbol(bar, Decl(contextualTypeShouldBeLiteral.ts, 36, 14))
+>X2 : Symbol(X2, Decl(contextualTypeShouldBeLiteral.ts, 22, 3))
+>Y2 : Symbol(Y2, Decl(contextualTypeShouldBeLiteral.ts, 28, 1))
+
+foo2({
+>foo2 : Symbol(foo2, Decl(contextualTypeShouldBeLiteral.ts, 34, 1))
+
+    type2: 'y',
+>type2 : Symbol(type2, Decl(contextualTypeShouldBeLiteral.ts, 38, 6))
+
+    value: 'done',
+>value : Symbol(value, Decl(contextualTypeShouldBeLiteral.ts, 39, 15))
+
+    method() {
+>method : Symbol(method, Decl(contextualTypeShouldBeLiteral.ts, 40, 18))
+
+        this;
+        this.value;
+>this.value : Symbol(value, Decl(contextualTypeShouldBeLiteral.ts, 25, 15), Decl(contextualTypeShouldBeLiteral.ts, 31, 15))
+>value : Symbol(value, Decl(contextualTypeShouldBeLiteral.ts, 25, 15), Decl(contextualTypeShouldBeLiteral.ts, 31, 15))
+    }
+});
+
+interface X3 {
+>X3 : Symbol(X3, Decl(contextualTypeShouldBeLiteral.ts, 45, 3))
+
+    type: 'x';
+>type : Symbol(X3.type, Decl(contextualTypeShouldBeLiteral.ts, 47, 14))
+
+    value: 1 | 2 | 3;
+>value : Symbol(X3.value, Decl(contextualTypeShouldBeLiteral.ts, 48, 14))
+
+    xtra: number;
+>xtra : Symbol(X3.xtra, Decl(contextualTypeShouldBeLiteral.ts, 49, 21))
+}
+
+interface Y3 {
+>Y3 : Symbol(Y3, Decl(contextualTypeShouldBeLiteral.ts, 51, 1))
+
+    type: 'y';
+>type : Symbol(Y3.type, Decl(contextualTypeShouldBeLiteral.ts, 53, 14))
+
+    value: 11 | 12 | 13;
+>value : Symbol(Y3.value, Decl(contextualTypeShouldBeLiteral.ts, 54, 14))
+
+    ytra: number;
+>ytra : Symbol(Y3.ytra, Decl(contextualTypeShouldBeLiteral.ts, 55, 24))
+}
+
+let xy: X3 | Y3 = {
+>xy : Symbol(xy, Decl(contextualTypeShouldBeLiteral.ts, 59, 3))
+>X3 : Symbol(X3, Decl(contextualTypeShouldBeLiteral.ts, 45, 3))
+>Y3 : Symbol(Y3, Decl(contextualTypeShouldBeLiteral.ts, 51, 1))
+
+    type: 'y',
+>type : Symbol(type, Decl(contextualTypeShouldBeLiteral.ts, 59, 19))
+
+    value: 11,
+>value : Symbol(value, Decl(contextualTypeShouldBeLiteral.ts, 60, 14))
+
+    ytra: 12
+>ytra : Symbol(ytra, Decl(contextualTypeShouldBeLiteral.ts, 61, 14))
+
+};
+
+xy;
+>xy : Symbol(xy, Decl(contextualTypeShouldBeLiteral.ts, 59, 3))
+
+
+interface LikeA {
+>LikeA : Symbol(LikeA, Decl(contextualTypeShouldBeLiteral.ts, 65, 3))
+
+    x: 'x';
+>x : Symbol(LikeA.x, Decl(contextualTypeShouldBeLiteral.ts, 68, 17))
+
+    y: 'y';
+>y : Symbol(LikeA.y, Decl(contextualTypeShouldBeLiteral.ts, 69, 11))
+
+    value: string;
+>value : Symbol(LikeA.value, Decl(contextualTypeShouldBeLiteral.ts, 70, 11))
+
+    method(): void;
+>method : Symbol(LikeA.method, Decl(contextualTypeShouldBeLiteral.ts, 71, 18))
+}
+
+interface LikeB {
+>LikeB : Symbol(LikeB, Decl(contextualTypeShouldBeLiteral.ts, 73, 1))
+
+    x: 'xx';
+>x : Symbol(LikeB.x, Decl(contextualTypeShouldBeLiteral.ts, 75, 17))
+
+    y: 'yy';
+>y : Symbol(LikeB.y, Decl(contextualTypeShouldBeLiteral.ts, 76, 12))
+
+    value: number;
+>value : Symbol(LikeB.value, Decl(contextualTypeShouldBeLiteral.ts, 77, 12))
+
+    method(): void;
+>method : Symbol(LikeB.method, Decl(contextualTypeShouldBeLiteral.ts, 78, 18))
+}
+
+let xyz: LikeA | LikeB = {
+>xyz : Symbol(xyz, Decl(contextualTypeShouldBeLiteral.ts, 82, 3))
+>LikeA : Symbol(LikeA, Decl(contextualTypeShouldBeLiteral.ts, 65, 3))
+>LikeB : Symbol(LikeB, Decl(contextualTypeShouldBeLiteral.ts, 73, 1))
+
+    x: 'x',
+>x : Symbol(x, Decl(contextualTypeShouldBeLiteral.ts, 82, 26))
+
+    y: 'y',
+>y : Symbol(y, Decl(contextualTypeShouldBeLiteral.ts, 83, 11))
+
+    value: "foo",
+>value : Symbol(value, Decl(contextualTypeShouldBeLiteral.ts, 84, 11))
+
+    method() {
+>method : Symbol(method, Decl(contextualTypeShouldBeLiteral.ts, 85, 17))
+
+        this;
+>this : Symbol(LikeA, Decl(contextualTypeShouldBeLiteral.ts, 65, 3))
+
+        this.x;
+>this.x : Symbol(LikeA.x, Decl(contextualTypeShouldBeLiteral.ts, 68, 17))
+>this : Symbol(LikeA, Decl(contextualTypeShouldBeLiteral.ts, 65, 3))
+>x : Symbol(LikeA.x, Decl(contextualTypeShouldBeLiteral.ts, 68, 17))
+
+        this.y;
+>this.y : Symbol(LikeA.y, Decl(contextualTypeShouldBeLiteral.ts, 69, 11))
+>this : Symbol(LikeA, Decl(contextualTypeShouldBeLiteral.ts, 65, 3))
+>y : Symbol(LikeA.y, Decl(contextualTypeShouldBeLiteral.ts, 69, 11))
+
+        this.value;
+>this.value : Symbol(LikeA.value, Decl(contextualTypeShouldBeLiteral.ts, 70, 11))
+>this : Symbol(LikeA, Decl(contextualTypeShouldBeLiteral.ts, 65, 3))
+>value : Symbol(LikeA.value, Decl(contextualTypeShouldBeLiteral.ts, 70, 11))
+    }
+};
+
+xyz;
+>xyz : Symbol(xyz, Decl(contextualTypeShouldBeLiteral.ts, 82, 3))
+
+// Repro from #29168
+
+interface TestObject {
+>TestObject : Symbol(TestObject, Decl(contextualTypeShouldBeLiteral.ts, 94, 4))
+
+  type?: 'object';
+>type : Symbol(TestObject.type, Decl(contextualTypeShouldBeLiteral.ts, 98, 22))
+
+  items: {
+>items : Symbol(TestObject.items, Decl(contextualTypeShouldBeLiteral.ts, 99, 18))
+
+    [k: string]: TestGeneric;
+>k : Symbol(k, Decl(contextualTypeShouldBeLiteral.ts, 101, 5))
+>TestGeneric : Symbol(TestGeneric, Decl(contextualTypeShouldBeLiteral.ts, 107, 1))
+
+  };
+}
+
+interface TestString {
+>TestString : Symbol(TestString, Decl(contextualTypeShouldBeLiteral.ts, 103, 1))
+
+  type: 'string';
+>type : Symbol(TestString.type, Decl(contextualTypeShouldBeLiteral.ts, 105, 22))
+}
+
+type TestGeneric = (TestString | TestObject) & { [k: string]: any; };
+>TestGeneric : Symbol(TestGeneric, Decl(contextualTypeShouldBeLiteral.ts, 107, 1))
+>TestString : Symbol(TestString, Decl(contextualTypeShouldBeLiteral.ts, 103, 1))
+>TestObject : Symbol(TestObject, Decl(contextualTypeShouldBeLiteral.ts, 94, 4))
+>k : Symbol(k, Decl(contextualTypeShouldBeLiteral.ts, 109, 50))
+
+const test: TestGeneric = {
+>test : Symbol(test, Decl(contextualTypeShouldBeLiteral.ts, 111, 5))
+>TestGeneric : Symbol(TestGeneric, Decl(contextualTypeShouldBeLiteral.ts, 107, 1))
+
+  items: {
+>items : Symbol(items, Decl(contextualTypeShouldBeLiteral.ts, 111, 27))
+
+    hello: { type: 'string' },
+>hello : Symbol(hello, Decl(contextualTypeShouldBeLiteral.ts, 112, 10))
+>type : Symbol(type, Decl(contextualTypeShouldBeLiteral.ts, 113, 12))
+
+    world: {
+>world : Symbol(world, Decl(contextualTypeShouldBeLiteral.ts, 113, 30))
+
+      items: {
+>items : Symbol(items, Decl(contextualTypeShouldBeLiteral.ts, 114, 12))
+
+        nested: { type: 'string' }
+>nested : Symbol(nested, Decl(contextualTypeShouldBeLiteral.ts, 115, 14))
+>type : Symbol(type, Decl(contextualTypeShouldBeLiteral.ts, 116, 17))
+      }
+    }
+  }
+};
+

@@ -1,0 +1,33 @@
+=== tests/cases/conformance/salsa/jsdocConstructorFunctionTypeReference.js ===
+var Validator = function VFunc() {
+>Validator : Symbol(Validator, Decl(jsdocConstructorFunctionTypeReference.js, 0, 3))
+>VFunc : Symbol(VFunc, Decl(jsdocConstructorFunctionTypeReference.js, 0, 15))
+
+    this.flags = "gim"
+>this.flags : Symbol(VFunc.flags, Decl(jsdocConstructorFunctionTypeReference.js, 0, 34))
+>this : Symbol(VFunc, Decl(jsdocConstructorFunctionTypeReference.js, 0, 15))
+>flags : Symbol(VFunc.flags, Decl(jsdocConstructorFunctionTypeReference.js, 0, 34))
+
+};
+
+Validator.prototype.num = 12
+>Validator.prototype : Symbol(Validator.num, Decl(jsdocConstructorFunctionTypeReference.js, 2, 2))
+>Validator : Symbol(Validator, Decl(jsdocConstructorFunctionTypeReference.js, 0, 3))
+>prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+>num : Symbol(Validator.num, Decl(jsdocConstructorFunctionTypeReference.js, 2, 2))
+
+/**
+ * @param {Validator} state
+ */
+var validateRegExpFlags = function(state) {
+>validateRegExpFlags : Symbol(validateRegExpFlags, Decl(jsdocConstructorFunctionTypeReference.js, 9, 3))
+>state : Symbol(state, Decl(jsdocConstructorFunctionTypeReference.js, 9, 35))
+
+    return state.flags
+>state.flags : Symbol(VFunc.flags, Decl(jsdocConstructorFunctionTypeReference.js, 0, 34))
+>state : Symbol(state, Decl(jsdocConstructorFunctionTypeReference.js, 9, 35))
+>flags : Symbol(VFunc.flags, Decl(jsdocConstructorFunctionTypeReference.js, 0, 34))
+
+};
+
+

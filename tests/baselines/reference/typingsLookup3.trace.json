@@ -1,0 +1,11 @@
+[
+    "======== Resolving type reference directive 'jquery', containing file '/a.ts', root directory '/node_modules/@types'. ========",
+    "Resolving with primary search path '/node_modules/@types'.",
+    "File '/node_modules/@types/jquery/package.json' does not exist.",
+    "File '/node_modules/@types/jquery/index.d.ts' exist - use it as a name resolution result.",
+    "Resolving real path for '/node_modules/@types/jquery/index.d.ts', result '/node_modules/@types/jquery/index.d.ts'.",
+    "======== Type reference directive 'jquery' was successfully resolved to '/node_modules/@types/jquery/index.d.ts', primary: true. ========",
+    "======== Resolving type reference directive 'jquery', containing file '/__inferred type names__.ts'. ========",
+    "Resolution for type reference directive 'jquery' was found in cache from location '/'.",
+    "======== Type reference directive 'jquery' was successfully resolved to '/node_modules/@types/jquery/index.d.ts', primary: true. ========"
+]

@@ -1,0 +1,190 @@
+=== tests/cases/compiler/infiniteConstraints.ts ===
+// Both of the following types trigger the recursion limiter in getImmediateBaseConstraint
+
+type T1<B extends { [K in keyof B]: Extract<B[Exclude<keyof B, K>], { val: string }>["val"] }> = B;
+>T1 : Symbol(T1, Decl(infiniteConstraints.ts, 0, 0))
+>B : Symbol(B, Decl(infiniteConstraints.ts, 2, 8))
+>K : Symbol(K, Decl(infiniteConstraints.ts, 2, 21))
+>B : Symbol(B, Decl(infiniteConstraints.ts, 2, 8))
+>Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
+>B : Symbol(B, Decl(infiniteConstraints.ts, 2, 8))
+>Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>B : Symbol(B, Decl(infiniteConstraints.ts, 2, 8))
+>K : Symbol(K, Decl(infiniteConstraints.ts, 2, 21))
+>val : Symbol(val, Decl(infiniteConstraints.ts, 2, 69))
+>B : Symbol(B, Decl(infiniteConstraints.ts, 2, 8))
+
+type T2<B extends { [K in keyof B]: B[Exclude<keyof B, K>]["val"] }> = B;
+>T2 : Symbol(T2, Decl(infiniteConstraints.ts, 2, 99))
+>B : Symbol(B, Decl(infiniteConstraints.ts, 3, 8))
+>K : Symbol(K, Decl(infiniteConstraints.ts, 3, 21))
+>B : Symbol(B, Decl(infiniteConstraints.ts, 3, 8))
+>B : Symbol(B, Decl(infiniteConstraints.ts, 3, 8))
+>Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>B : Symbol(B, Decl(infiniteConstraints.ts, 3, 8))
+>K : Symbol(K, Decl(infiniteConstraints.ts, 3, 21))
+>B : Symbol(B, Decl(infiniteConstraints.ts, 3, 8))
+
+// Repros from #22950
+
+type AProp<T extends { a: string }> = T
+>AProp : Symbol(AProp, Decl(infiniteConstraints.ts, 3, 73))
+>T : Symbol(T, Decl(infiniteConstraints.ts, 7, 11))
+>a : Symbol(a, Decl(infiniteConstraints.ts, 7, 22))
+>T : Symbol(T, Decl(infiniteConstraints.ts, 7, 11))
+
+declare function myBug<
+>myBug : Symbol(myBug, Decl(infiniteConstraints.ts, 7, 39))
+
+  T extends { [K in keyof T]: T[K] extends AProp<infer U> ? U : never }
+>T : Symbol(T, Decl(infiniteConstraints.ts, 9, 23))
+>K : Symbol(K, Decl(infiniteConstraints.ts, 10, 15))
+>T : Symbol(T, Decl(infiniteConstraints.ts, 9, 23))
+>T : Symbol(T, Decl(infiniteConstraints.ts, 9, 23))
+>K : Symbol(K, Decl(infiniteConstraints.ts, 10, 15))
+>AProp : Symbol(AProp, Decl(infiniteConstraints.ts, 3, 73))
+>U : Symbol(U, Decl(infiniteConstraints.ts, 10, 54))
+>U : Symbol(U, Decl(infiniteConstraints.ts, 10, 54))
+
+>(arg: T): T
+>arg : Symbol(arg, Decl(infiniteConstraints.ts, 11, 2))
+>T : Symbol(T, Decl(infiniteConstraints.ts, 9, 23))
+>T : Symbol(T, Decl(infiniteConstraints.ts, 9, 23))
+
+const out = myBug({obj1: {a: "test"}})
+>out : Symbol(out, Decl(infiniteConstraints.ts, 13, 5))
+>myBug : Symbol(myBug, Decl(infiniteConstraints.ts, 7, 39))
+>obj1 : Symbol(obj1, Decl(infiniteConstraints.ts, 13, 19))
+>a : Symbol(a, Decl(infiniteConstraints.ts, 13, 26))
+
+type Value<V extends string = string> = Record<"val", V>;
+>Value : Symbol(Value, Decl(infiniteConstraints.ts, 13, 38))
+>V : Symbol(V, Decl(infiniteConstraints.ts, 15, 11))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>V : Symbol(V, Decl(infiniteConstraints.ts, 15, 11))
+
+declare function value<V extends string>(val: V): Value<V>;
+>value : Symbol(value, Decl(infiniteConstraints.ts, 15, 57))
+>V : Symbol(V, Decl(infiniteConstraints.ts, 16, 23))
+>val : Symbol(val, Decl(infiniteConstraints.ts, 16, 41))
+>V : Symbol(V, Decl(infiniteConstraints.ts, 16, 23))
+>Value : Symbol(Value, Decl(infiniteConstraints.ts, 13, 38))
+>V : Symbol(V, Decl(infiniteConstraints.ts, 16, 23))
+
+declare function ensureNoDuplicates<
+>ensureNoDuplicates : Symbol(ensureNoDuplicates, Decl(infiniteConstraints.ts, 16, 59))
+
+  T extends {
+>T : Symbol(T, Decl(infiniteConstraints.ts, 18, 36))
+
+    [K in keyof T]: Extract<T[K], Value>["val"] extends Extract<T[Exclude<keyof T, K>], Value>["val"]
+>K : Symbol(K, Decl(infiniteConstraints.ts, 20, 5))
+>T : Symbol(T, Decl(infiniteConstraints.ts, 18, 36))
+>Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(infiniteConstraints.ts, 18, 36))
+>K : Symbol(K, Decl(infiniteConstraints.ts, 20, 5))
+>Value : Symbol(Value, Decl(infiniteConstraints.ts, 13, 38))
+>Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(infiniteConstraints.ts, 18, 36))
+>Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(infiniteConstraints.ts, 18, 36))
+>K : Symbol(K, Decl(infiniteConstraints.ts, 20, 5))
+>Value : Symbol(Value, Decl(infiniteConstraints.ts, 13, 38))
+
+      ? never
+      : any
+  }
+>(vals: T): void;
+>vals : Symbol(vals, Decl(infiniteConstraints.ts, 24, 2))
+>T : Symbol(T, Decl(infiniteConstraints.ts, 18, 36))
+
+const noError = ensureNoDuplicates({main: value("test"), alternate: value("test2")});
+>noError : Symbol(noError, Decl(infiniteConstraints.ts, 26, 5))
+>ensureNoDuplicates : Symbol(ensureNoDuplicates, Decl(infiniteConstraints.ts, 16, 59))
+>main : Symbol(main, Decl(infiniteConstraints.ts, 26, 36))
+>value : Symbol(value, Decl(infiniteConstraints.ts, 15, 57))
+>alternate : Symbol(alternate, Decl(infiniteConstraints.ts, 26, 56))
+>value : Symbol(value, Decl(infiniteConstraints.ts, 15, 57))
+
+const shouldBeNoError = ensureNoDuplicates({main: value("test")});
+>shouldBeNoError : Symbol(shouldBeNoError, Decl(infiniteConstraints.ts, 28, 5))
+>ensureNoDuplicates : Symbol(ensureNoDuplicates, Decl(infiniteConstraints.ts, 16, 59))
+>main : Symbol(main, Decl(infiniteConstraints.ts, 28, 44))
+>value : Symbol(value, Decl(infiniteConstraints.ts, 15, 57))
+
+const shouldBeError = ensureNoDuplicates({main: value("dup"), alternate: value("dup")});
+>shouldBeError : Symbol(shouldBeError, Decl(infiniteConstraints.ts, 30, 5))
+>ensureNoDuplicates : Symbol(ensureNoDuplicates, Decl(infiniteConstraints.ts, 16, 59))
+>main : Symbol(main, Decl(infiniteConstraints.ts, 30, 42))
+>value : Symbol(value, Decl(infiniteConstraints.ts, 15, 57))
+>alternate : Symbol(alternate, Decl(infiniteConstraints.ts, 30, 61))
+>value : Symbol(value, Decl(infiniteConstraints.ts, 15, 57))
+
+// Repro from #26448
+
+type Cond<T> = T extends number ? number : never;
+>Cond : Symbol(Cond, Decl(infiniteConstraints.ts, 30, 88))
+>T : Symbol(T, Decl(infiniteConstraints.ts, 34, 10))
+>T : Symbol(T, Decl(infiniteConstraints.ts, 34, 10))
+
+declare function function1<T extends {[K in keyof T]: Cond<T[K]>}>(): T[keyof T]["foo"];
+>function1 : Symbol(function1, Decl(infiniteConstraints.ts, 34, 49))
+>T : Symbol(T, Decl(infiniteConstraints.ts, 35, 27))
+>K : Symbol(K, Decl(infiniteConstraints.ts, 35, 39))
+>T : Symbol(T, Decl(infiniteConstraints.ts, 35, 27))
+>Cond : Symbol(Cond, Decl(infiniteConstraints.ts, 30, 88))
+>T : Symbol(T, Decl(infiniteConstraints.ts, 35, 27))
+>K : Symbol(K, Decl(infiniteConstraints.ts, 35, 39))
+>T : Symbol(T, Decl(infiniteConstraints.ts, 35, 27))
+>T : Symbol(T, Decl(infiniteConstraints.ts, 35, 27))
+
+// Repro from #31823
+
+export type Prepend<Elm, T extends unknown[]> =
+>Prepend : Symbol(Prepend, Decl(infiniteConstraints.ts, 35, 88))
+>Elm : Symbol(Elm, Decl(infiniteConstraints.ts, 39, 20))
+>T : Symbol(T, Decl(infiniteConstraints.ts, 39, 24))
+
+  T extends unknown ?
+>T : Symbol(T, Decl(infiniteConstraints.ts, 39, 24))
+
+  ((arg: Elm, ...rest: T) => void) extends ((...args: infer T2) => void) ? T2 :
+>arg : Symbol(arg, Decl(infiniteConstraints.ts, 41, 4))
+>Elm : Symbol(Elm, Decl(infiniteConstraints.ts, 39, 20))
+>rest : Symbol(rest, Decl(infiniteConstraints.ts, 41, 13))
+>T : Symbol(T, Decl(infiniteConstraints.ts, 39, 24))
+>args : Symbol(args, Decl(infiniteConstraints.ts, 41, 45))
+>T2 : Symbol(T2, Decl(infiniteConstraints.ts, 41, 59))
+>T2 : Symbol(T2, Decl(infiniteConstraints.ts, 41, 59))
+
+  never :
+  never;
+export type ExactExtract<T, U> = T extends U ? U extends T ? T : never : never;
+>ExactExtract : Symbol(ExactExtract, Decl(infiniteConstraints.ts, 43, 8))
+>T : Symbol(T, Decl(infiniteConstraints.ts, 44, 25))
+>U : Symbol(U, Decl(infiniteConstraints.ts, 44, 27))
+>T : Symbol(T, Decl(infiniteConstraints.ts, 44, 25))
+>U : Symbol(U, Decl(infiniteConstraints.ts, 44, 27))
+>U : Symbol(U, Decl(infiniteConstraints.ts, 44, 27))
+>T : Symbol(T, Decl(infiniteConstraints.ts, 44, 25))
+>T : Symbol(T, Decl(infiniteConstraints.ts, 44, 25))
+
+type Conv<T, U = T> =
+>Conv : Symbol(Conv, Decl(infiniteConstraints.ts, 44, 79))
+>T : Symbol(T, Decl(infiniteConstraints.ts, 46, 10))
+>U : Symbol(U, Decl(infiniteConstraints.ts, 46, 12))
+>T : Symbol(T, Decl(infiniteConstraints.ts, 46, 10))
+
+  { 0: [T]; 1: Prepend<T, Conv<ExactExtract<U, T>>>;}[U extends T ? 0 : 1];
+>0 : Symbol(0, Decl(infiniteConstraints.ts, 47, 3))
+>T : Symbol(T, Decl(infiniteConstraints.ts, 46, 10))
+>1 : Symbol(1, Decl(infiniteConstraints.ts, 47, 11))
+>Prepend : Symbol(Prepend, Decl(infiniteConstraints.ts, 35, 88))
+>T : Symbol(T, Decl(infiniteConstraints.ts, 46, 10))
+>Conv : Symbol(Conv, Decl(infiniteConstraints.ts, 44, 79))
+>ExactExtract : Symbol(ExactExtract, Decl(infiniteConstraints.ts, 43, 8))
+>U : Symbol(U, Decl(infiniteConstraints.ts, 46, 12))
+>T : Symbol(T, Decl(infiniteConstraints.ts, 46, 10))
+>U : Symbol(U, Decl(infiniteConstraints.ts, 46, 12))
+>T : Symbol(T, Decl(infiniteConstraints.ts, 46, 10))
+

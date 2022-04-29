@@ -1,0 +1,13 @@
+=== tests/cases/compiler/errorTypesAsTypeArguments.ts ===
+interface Foo<A> {
+>Foo : Symbol(Foo, Decl(errorTypesAsTypeArguments.ts, 0, 0))
+>A : Symbol(A, Decl(errorTypesAsTypeArguments.ts, 0, 14))
+
+  bar(baz: Foo<B>): Foo<C>;
+>bar : Symbol(Foo.bar, Decl(errorTypesAsTypeArguments.ts, 0, 18))
+>baz : Symbol(baz, Decl(errorTypesAsTypeArguments.ts, 1, 6))
+>Foo : Symbol(Foo, Decl(errorTypesAsTypeArguments.ts, 0, 0))
+>B : Symbol(B)
+>Foo : Symbol(Foo, Decl(errorTypesAsTypeArguments.ts, 0, 0))
+>C : Symbol(C)
+}

@@ -1,0 +1,26 @@
+tests/cases/conformance/async/es6/await_unaryExpression_es6_3.ts(2,7): error TS1109: Expression expected.
+tests/cases/conformance/async/es6/await_unaryExpression_es6_3.ts(6,7): error TS1109: Expression expected.
+
+
+==== tests/cases/conformance/async/es6/await_unaryExpression_es6_3.ts (2 errors) ====
+    async function bar1() {
+        ++await 42; // Error
+          ~~~~~
+!!! error TS1109: Expression expected.
+    }
+    
+    async function bar2() {
+        --await 42; // Error
+          ~~~~~
+!!! error TS1109: Expression expected.
+    }
+    
+    async function bar3() {
+        var x = 42;
+        await x++; // OK but shouldn't need parenthesis
+    }
+    
+    async function bar4() {
+        var x = 42;
+        await x--; // OK but shouldn't need parenthesis
+    }

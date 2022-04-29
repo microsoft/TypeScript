@@ -1,0 +1,33 @@
+=== tests/cases/compiler/moduleAssignmentCompat3.ts ===
+module A {
+>A : typeof A
+
+    export var x = 1;
+>x : number
+>1 : 1
+}
+module B {
+>B : typeof B
+
+    export var x = "";
+>x : string
+>"" : ""
+}
+
+var a: A;
+>a : A
+
+var b: B;
+>b : B
+
+// both errors
+a = b;
+>a = b : B
+>a : A
+>b : B
+
+b = a;
+>b = a : A
+>b : B
+>a : A
+

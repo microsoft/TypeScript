@@ -1,0 +1,11 @@
+=== tests/cases/compiler/b.ts ===
+export const b = null;
+>b : Symbol(b, Decl(b.ts, 0, 12))
+
+=== tests/cases/compiler/a.ts ===
+export { b } from "./b";
+>b : Symbol(b, Decl(a.ts, 0, 8))
+
+export { default as a } from "./b";
+>a : Symbol(a, Decl(a.ts, 1, 8))
+

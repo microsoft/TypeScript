@@ -1,0 +1,62 @@
+=== tests/cases/conformance/jsx/file.tsx ===
+declare module JSX {
+	interface Element { }
+	interface IntrinsicElements {
+		[s: string]: any;
+>s : string
+	}
+}
+
+var p1: any, p2: any, p3: any;
+>p1 : any
+>p2 : any
+>p3 : any
+
+var spreads1 = <div {...p1}>{p2}</div>;
+>spreads1 : JSX.Element
+><div {...p1}>{p2}</div> : JSX.Element
+>div : any
+>p1 : any
+>p2 : any
+>div : any
+
+var spreads2 = <div {...p1}>{p2}</div>;
+>spreads2 : JSX.Element
+><div {...p1}>{p2}</div> : JSX.Element
+>div : any
+>p1 : any
+>p2 : any
+>div : any
+
+var spreads3 = <div x={p3} {...p1}>{p2}</div>;
+>spreads3 : JSX.Element
+><div x={p3} {...p1}>{p2}</div> : JSX.Element
+>div : any
+>x : any
+>p3 : any
+>p1 : any
+>p2 : any
+>div : any
+
+var spreads4 = <div {...p1} x={p3} >{p2}</div>;
+>spreads4 : JSX.Element
+><div {...p1} x={p3} >{p2}</div> : JSX.Element
+>div : any
+>p1 : any
+>x : any
+>p3 : any
+>p2 : any
+>div : any
+
+var spreads5 = <div x={p2} {...p1} y={p3}>{p2}</div>;
+>spreads5 : JSX.Element
+><div x={p2} {...p1} y={p3}>{p2}</div> : JSX.Element
+>div : any
+>x : any
+>p2 : any
+>p1 : any
+>y : any
+>p3 : any
+>p2 : any
+>div : any
+

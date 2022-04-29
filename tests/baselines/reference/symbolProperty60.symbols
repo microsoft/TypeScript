@@ -1,0 +1,52 @@
+=== tests/cases/conformance/es6/Symbols/symbolProperty60.ts ===
+// https://github.com/Microsoft/TypeScript/issues/20146
+interface I1 {
+>I1 : Symbol(I1, Decl(symbolProperty60.ts, 0, 0))
+
+    [Symbol.toStringTag]: string;
+>[Symbol.toStringTag] : Symbol(I1[Symbol.toStringTag], Decl(symbolProperty60.ts, 1, 14))
+>Symbol.toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+    [key: string]: number;
+>key : Symbol(key, Decl(symbolProperty60.ts, 3, 5))
+}
+
+interface I2 {
+>I2 : Symbol(I2, Decl(symbolProperty60.ts, 4, 1))
+
+    [Symbol.toStringTag]: string;
+>[Symbol.toStringTag] : Symbol(I2[Symbol.toStringTag], Decl(symbolProperty60.ts, 6, 14))
+>Symbol.toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+    [key: number]: boolean;
+>key : Symbol(key, Decl(symbolProperty60.ts, 8, 5))
+}
+
+declare const mySymbol: unique symbol;
+>mySymbol : Symbol(mySymbol, Decl(symbolProperty60.ts, 11, 13))
+
+interface I3 {
+>I3 : Symbol(I3, Decl(symbolProperty60.ts, 11, 38))
+
+    [mySymbol]: string;
+>[mySymbol] : Symbol(I3[mySymbol], Decl(symbolProperty60.ts, 13, 14))
+>mySymbol : Symbol(mySymbol, Decl(symbolProperty60.ts, 11, 13))
+
+    [key: string]: number;
+>key : Symbol(key, Decl(symbolProperty60.ts, 15, 5))
+}
+
+interface I4 {
+>I4 : Symbol(I4, Decl(symbolProperty60.ts, 16, 1))
+
+    [mySymbol]: string;
+>[mySymbol] : Symbol(I4[mySymbol], Decl(symbolProperty60.ts, 18, 14))
+>mySymbol : Symbol(mySymbol, Decl(symbolProperty60.ts, 11, 13))
+
+    [key: number]: boolean;
+>key : Symbol(key, Decl(symbolProperty60.ts, 20, 5))
+}

@@ -1,0 +1,21 @@
+tests/cases/conformance/es6/Symbols/symbolProperty9.ts(10,5): error TS2322: Type 'I' is not assignable to type 'C'.
+  Types of property '[Symbol.iterator]' are incompatible.
+    Property 'y' is missing in type '{ x: any; }' but required in type '{ x: any; y: any; }'.
+
+
+==== tests/cases/conformance/es6/Symbols/symbolProperty9.ts (1 errors) ====
+    class C {
+        [Symbol.iterator]: { x; y };
+    }
+    interface I {
+        [Symbol.iterator]: { x };
+    }
+    
+    var i: I;
+    i = new C;
+    var c: C = i;
+        ~
+!!! error TS2322: Type 'I' is not assignable to type 'C'.
+!!! error TS2322:   Types of property '[Symbol.iterator]' are incompatible.
+!!! error TS2322:     Property 'y' is missing in type '{ x: any; }' but required in type '{ x: any; y: any; }'.
+!!! related TS2728 tests/cases/conformance/es6/Symbols/symbolProperty9.ts:2:29: 'y' is declared here.

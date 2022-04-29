@@ -1,0 +1,231 @@
+=== tests/cases/conformance/types/objectTypeLiteral/indexSignatures/stringIndexerConstrainsPropertyDeclarations.ts ===
+// String indexer types constrain the types of named properties in their containing type
+
+interface MyString extends String {
+    foo: number;
+>foo : number
+}
+
+class C {
+>C : C
+
+    [x: string]: string;
+>x : string
+
+    constructor() { } // ok
+
+    a: string; // ok
+>a : string
+
+    b: number; // error
+>b : number
+
+    c: () => {} // error
+>c : () => {}
+
+    "d": string; // ok
+>"d" : string
+
+    "e": number; // error
+>"e" : number
+
+    1.0: string; // ok
+>1.0 : string
+
+    2.0: number; // error
+>2.0 : number
+
+    "3.0": string; // ok
+>"3.0" : string
+
+    "4.0": number; // error
+>"4.0" : number
+
+    f: MyString; // error
+>f : MyString
+
+    get X() { // ok
+>X : string
+
+        return '';
+>'' : ""
+    }
+    set X(v) { } // ok
+>X : string
+>v : string
+
+    foo() { // error
+>foo : () => string
+
+        return '';
+>'' : ""
+    }
+
+    static sa: number; // ok
+>sa : number
+
+    static sb: string; // ok
+>sb : string
+
+    static foo() { } // ok
+>foo : () => void
+
+    static get X() { // ok
+>X : number
+
+        return 1;
+>1 : 1
+    }
+}
+
+interface I {
+    [x: string]: string;
+>x : string
+
+    a: string; // ok
+>a : string
+
+    b: number; // error
+>b : number
+
+    c: () => {} // error
+>c : () => {}
+
+    "d": string; // ok
+>"d" : string
+
+    "e": number; // error
+>"e" : number
+
+    1.0: string; // ok
+>1.0 : string
+
+    2.0: number; // error
+>2.0 : number
+
+    (): string; // ok
+    (x): number // ok
+>x : any
+
+    foo(): string; // error
+>foo : () => string
+
+    "3.0": string; // ok
+>"3.0" : string
+
+    "4.0": number; // error
+>"4.0" : number
+
+    f: MyString; // error
+>f : MyString
+}
+
+var a: {
+>a : { (): string; (x: any): number; [x: string]: string; a: string; b: number; c: () => {}; d: string; e: number; 1: string; 2: number; foo(): string; "3.0": string; "4.0": number; f: MyString; }
+
+    [x: string]: string;
+>x : string
+
+    a: string; // ok
+>a : string
+
+    b: number; // error
+>b : number
+
+    c: () => {} // error
+>c : () => {}
+
+    "d": string; // ok
+>"d" : string
+
+    "e": number; // error
+>"e" : number
+
+    1.0: string; // ok
+>1.0 : string
+
+    2.0: number; // error
+>2.0 : number
+
+    (): string; // ok
+    (x): number // ok
+>x : any
+
+    foo(): string; // error
+>foo : () => string
+
+    "3.0": string; // ok
+>"3.0" : string
+
+    "4.0": number; // error
+>"4.0" : number
+
+    f: MyString; // error
+>f : MyString
+}
+
+// error
+var b: { [x: string]: string; } = {
+>b : { [x: string]: string; }
+>x : string
+>{    a: '',    b: 1,     c: () => { },     "d": '',     "e": 1,     1.0: '',    2.0: 1,     "3.0": '',     "4.0": 1,     f: <MyString>null,     get X() {         return '';    },    set X(v) { },     foo() {         return '';    }} : { a: string; b: number; c: () => void; d: string; e: number; 1: string; 2: number; "3.0": string; "4.0": number; f: MyString; X: string; foo(): string; }
+
+    a: '',
+>a : string
+>'' : ""
+
+    b: 1, 
+>b : number
+>1 : 1
+
+    c: () => { }, 
+>c : () => void
+>() => { } : () => void
+
+    "d": '', 
+>"d" : string
+>'' : ""
+
+    "e": 1, 
+>"e" : number
+>1 : 1
+
+    1.0: '',
+>1.0 : string
+>'' : ""
+
+    2.0: 1, 
+>2.0 : number
+>1 : 1
+
+    "3.0": '', 
+>"3.0" : string
+>'' : ""
+
+    "4.0": 1, 
+>"4.0" : number
+>1 : 1
+
+    f: <MyString>null, 
+>f : MyString
+><MyString>null : MyString
+>null : null
+
+    get X() { 
+>X : string
+
+        return '';
+>'' : ""
+
+    },
+    set X(v) { }, 
+>X : string
+>v : string
+
+    foo() { 
+>foo : () => string
+
+        return '';
+>'' : ""
+    }
+}

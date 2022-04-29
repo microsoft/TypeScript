@@ -1,0 +1,10 @@
+tests/cases/conformance/async/es5/asyncConstructor_es5.ts(2,3): error TS1089: 'async' modifier cannot appear on a constructor declaration.
+
+
+==== tests/cases/conformance/async/es5/asyncConstructor_es5.ts (1 errors) ====
+    class C {
+      async constructor() {
+      ~~~~~
+!!! error TS1089: 'async' modifier cannot appear on a constructor declaration.
+      }
+    }

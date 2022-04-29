@@ -1,0 +1,16 @@
+tests/cases/conformance/externalModules/foo_0.ts(10,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
+
+
+==== tests/cases/conformance/externalModules/foo_0.ts (1 errors) ====
+    export enum E1 {
+    	A,B,C
+    }
+    
+    class C1 {
+    
+    }
+    
+    // Invalid, as there is already an exported member.
+    export = C1;
+    ~~~~~~~~~~~~
+!!! error TS2309: An export assignment cannot be used in a module with other exported elements.

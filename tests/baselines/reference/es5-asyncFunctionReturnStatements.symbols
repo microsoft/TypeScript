@@ -1,0 +1,56 @@
+=== tests/cases/compiler/es5-asyncFunctionReturnStatements.ts ===
+declare var x, y, z, a, b, c;
+>x : Symbol(x, Decl(es5-asyncFunctionReturnStatements.ts, 0, 11))
+>y : Symbol(y, Decl(es5-asyncFunctionReturnStatements.ts, 0, 14))
+>z : Symbol(z, Decl(es5-asyncFunctionReturnStatements.ts, 0, 17))
+>a : Symbol(a, Decl(es5-asyncFunctionReturnStatements.ts, 0, 20))
+>b : Symbol(b, Decl(es5-asyncFunctionReturnStatements.ts, 0, 23))
+>c : Symbol(c, Decl(es5-asyncFunctionReturnStatements.ts, 0, 26))
+
+async function returnStatement0(): Promise<any> {
+>returnStatement0 : Symbol(returnStatement0, Decl(es5-asyncFunctionReturnStatements.ts, 0, 29))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+
+    return;
+}
+
+async function returnStatement1(): Promise<any> {
+>returnStatement1 : Symbol(returnStatement1, Decl(es5-asyncFunctionReturnStatements.ts, 4, 1))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+
+    return x;
+>x : Symbol(x, Decl(es5-asyncFunctionReturnStatements.ts, 0, 11))
+}
+
+async function returnStatement2(): Promise<any> {
+>returnStatement2 : Symbol(returnStatement2, Decl(es5-asyncFunctionReturnStatements.ts, 8, 1))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+
+    return await x;
+>x : Symbol(x, Decl(es5-asyncFunctionReturnStatements.ts, 0, 11))
+}
+
+async function returnStatement3(): Promise<any> {
+>returnStatement3 : Symbol(returnStatement3, Decl(es5-asyncFunctionReturnStatements.ts, 12, 1))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+
+    { return; }
+}
+
+async function returnStatement4(): Promise<any> {
+>returnStatement4 : Symbol(returnStatement4, Decl(es5-asyncFunctionReturnStatements.ts, 16, 1))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+
+    await x;
+>x : Symbol(x, Decl(es5-asyncFunctionReturnStatements.ts, 0, 11))
+
+    { return; }
+}
+
+async function returnStatement5(): Promise<any>{
+>returnStatement5 : Symbol(returnStatement5, Decl(es5-asyncFunctionReturnStatements.ts, 21, 1))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+
+    { return await x; }
+>x : Symbol(x, Decl(es5-asyncFunctionReturnStatements.ts, 0, 11))
+}

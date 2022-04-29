@@ -1,0 +1,185 @@
+=== tests/cases/conformance/jsdoc/mod1.js ===
+/** 
+ * @typedef {function(string): boolean}
+ * Type1
+ */
+
+/**
+ * Tries to use a type whose name is on a different
+ * line than the typedef tag.
+ * @param {Type1} func The function to call.
+ * @param {string} arg The argument to call it with.
+ * @returns {boolean} The return.
+ */
+function callIt(func, arg) {
+>callIt : Symbol(callIt, Decl(mod1.js, 0, 0))
+>func : Symbol(func, Decl(mod1.js, 12, 16))
+>arg : Symbol(arg, Decl(mod1.js, 12, 21))
+
+  return func(arg);
+>func : Symbol(func, Decl(mod1.js, 12, 16))
+>arg : Symbol(arg, Decl(mod1.js, 12, 21))
+}
+
+=== tests/cases/conformance/jsdoc/mod2.js ===
+/** 
+ * @typedef {{
+ *   num: number,
+ *   str: string,
+ *   boo: boolean
+ * }} Type2
+ */
+
+/**
+ * Makes use of a type with a multiline type expression.
+ * @param {Type2} obj The object.
+ * @returns {string|number} The return.
+ */
+function check(obj) {
+>check : Symbol(check, Decl(mod2.js, 0, 0))
+>obj : Symbol(obj, Decl(mod2.js, 13, 15))
+
+  return obj.boo ? obj.num : obj.str;
+>obj.boo : Symbol(boo, Decl(mod2.js, 3, 17))
+>obj : Symbol(obj, Decl(mod2.js, 13, 15))
+>boo : Symbol(boo, Decl(mod2.js, 3, 17))
+>obj.num : Symbol(num, Decl(mod2.js, 1, 14))
+>obj : Symbol(obj, Decl(mod2.js, 13, 15))
+>num : Symbol(num, Decl(mod2.js, 1, 14))
+>obj.str : Symbol(str, Decl(mod2.js, 2, 17))
+>obj : Symbol(obj, Decl(mod2.js, 13, 15))
+>str : Symbol(str, Decl(mod2.js, 2, 17))
+}
+
+=== tests/cases/conformance/jsdoc/mod3.js ===
+/**
+ * A function whose signature is very long.
+ *
+ * @typedef {function(boolean, string, number):
+ *     (string|number)} StringOrNumber1
+ */
+
+/**
+ * Makes use of a function type with a long signature.
+ * @param {StringOrNumber1} func The function.
+ * @param {boolean} bool The condition.
+ * @param {string} str The string.
+ * @param {number} num The number.
+ * @returns {string|number} The return.
+ */
+function use1(func, bool, str, num) {
+>use1 : Symbol(use1, Decl(mod3.js, 0, 0))
+>func : Symbol(func, Decl(mod3.js, 15, 14))
+>bool : Symbol(bool, Decl(mod3.js, 15, 19))
+>str : Symbol(str, Decl(mod3.js, 15, 25))
+>num : Symbol(num, Decl(mod3.js, 15, 30))
+
+  return func(bool, str, num)
+>func : Symbol(func, Decl(mod3.js, 15, 14))
+>bool : Symbol(bool, Decl(mod3.js, 15, 19))
+>str : Symbol(str, Decl(mod3.js, 15, 25))
+>num : Symbol(num, Decl(mod3.js, 15, 30))
+}
+
+=== tests/cases/conformance/jsdoc/mod4.js ===
+/**
+ * A function whose signature is very long.
+ *
+ * @typedef {function(boolean, string,
+ *    number):
+ *    (string|number)} StringOrNumber2
+ */
+
+/**
+ * Makes use of a function type with a long signature.
+ * @param {StringOrNumber2} func The function.
+ * @param {boolean} bool The condition.
+ * @param {string} str The string.
+ * @param {number} num The number.
+ * @returns {string|number} The return.
+ */
+function use2(func, bool, str, num) {
+>use2 : Symbol(use2, Decl(mod4.js, 0, 0))
+>func : Symbol(func, Decl(mod4.js, 16, 14))
+>bool : Symbol(bool, Decl(mod4.js, 16, 19))
+>str : Symbol(str, Decl(mod4.js, 16, 25))
+>num : Symbol(num, Decl(mod4.js, 16, 30))
+
+  return func(bool, str, num)
+>func : Symbol(func, Decl(mod4.js, 16, 14))
+>bool : Symbol(bool, Decl(mod4.js, 16, 19))
+>str : Symbol(str, Decl(mod4.js, 16, 25))
+>num : Symbol(num, Decl(mod4.js, 16, 30))
+}
+
+=== tests/cases/conformance/jsdoc/mod5.js ===
+/** 
+ * @typedef {{
+ *   num:
+ *   number,
+ *   str:
+ *   string,
+ *   boo:
+ *   boolean
+ * }} Type5
+ */
+
+/**
+ * Makes use of a type with a multiline type expression.
+ * @param {Type5} obj The object.
+ * @returns {string|number} The return.
+ */
+function check5(obj) {
+>check5 : Symbol(check5, Decl(mod5.js, 0, 0))
+>obj : Symbol(obj, Decl(mod5.js, 16, 16))
+
+  return obj.boo ? obj.num : obj.str;
+>obj.boo : Symbol(boo, Decl(mod5.js, 5, 12))
+>obj : Symbol(obj, Decl(mod5.js, 16, 16))
+>boo : Symbol(boo, Decl(mod5.js, 5, 12))
+>obj.num : Symbol(num, Decl(mod5.js, 1, 14))
+>obj : Symbol(obj, Decl(mod5.js, 16, 16))
+>num : Symbol(num, Decl(mod5.js, 1, 14))
+>obj.str : Symbol(str, Decl(mod5.js, 3, 12))
+>obj : Symbol(obj, Decl(mod5.js, 16, 16))
+>str : Symbol(str, Decl(mod5.js, 3, 12))
+}
+
+=== tests/cases/conformance/jsdoc/mod6.js ===
+/** 
+ * @typedef {{
+ *   foo:
+ *   *,
+ *   bar:
+ *   *
+ * }} Type6
+ */
+
+/**
+ * Makes use of a type with a multiline type expression.
+ * @param {Type6} obj The object.
+ * @returns {*} The return.
+ */
+function check6(obj) {
+>check6 : Symbol(check6, Decl(mod6.js, 0, 0))
+>obj : Symbol(obj, Decl(mod6.js, 14, 16))
+
+  return obj.foo;
+>obj.foo : Symbol(foo, Decl(mod6.js, 1, 14))
+>obj : Symbol(obj, Decl(mod6.js, 14, 16))
+>foo : Symbol(foo, Decl(mod6.js, 1, 14))
+}
+
+
+=== tests/cases/conformance/jsdoc/mod7.js ===
+/** 
+No type information for this code.   Multiline type expressions in comments without leading * are not supported.
+No type information for this code.   @typedef {{
+No type information for this code.     foo:
+No type information for this code.     *,
+No type information for this code.     bar:
+No type information for this code.     *
+No type information for this code.   }} Type7
+No type information for this code. */
+No type information for this code.
+No type information for this code.

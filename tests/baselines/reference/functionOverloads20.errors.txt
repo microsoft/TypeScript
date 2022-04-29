@@ -1,0 +1,11 @@
+tests/cases/compiler/functionOverloads20.ts(1,10): error TS2394: This overload signature is not compatible with its implementation signature.
+
+
+==== tests/cases/compiler/functionOverloads20.ts (1 errors) ====
+    function foo(bar:{a:number;}): number;
+             ~~~
+!!! error TS2394: This overload signature is not compatible with its implementation signature.
+!!! related TS2750 tests/cases/compiler/functionOverloads20.ts:3:10: The implementation signature is declared here.
+    function foo(bar:{a:string;}): string;
+    function foo(bar:{a:any;}): string {return ""}
+    

@@ -1,0 +1,14 @@
+=== tests/cases/compiler/optionalParamReferencingOtherParams3.ts ===
+function right(a = b, b = a) {
+>right : Symbol(right, Decl(optionalParamReferencingOtherParams3.ts, 0, 0))
+>a : Symbol(a, Decl(optionalParamReferencingOtherParams3.ts, 0, 15))
+>b : Symbol(b, Decl(optionalParamReferencingOtherParams3.ts, 0, 21))
+>b : Symbol(b, Decl(optionalParamReferencingOtherParams3.ts, 0, 21))
+>a : Symbol(a, Decl(optionalParamReferencingOtherParams3.ts, 0, 15))
+
+    a;
+>a : Symbol(a, Decl(optionalParamReferencingOtherParams3.ts, 0, 15))
+
+    b;
+>b : Symbol(b, Decl(optionalParamReferencingOtherParams3.ts, 0, 21))
+}

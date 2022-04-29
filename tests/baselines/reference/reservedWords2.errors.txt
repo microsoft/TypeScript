@@ -1,0 +1,121 @@
+tests/cases/compiler/reservedWords2.ts(1,8): error TS1109: Expression expected.
+tests/cases/compiler/reservedWords2.ts(1,14): error TS1005: '(' expected.
+tests/cases/compiler/reservedWords2.ts(1,16): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+tests/cases/compiler/reservedWords2.ts(1,31): error TS1005: ')' expected.
+tests/cases/compiler/reservedWords2.ts(2,12): error TS2300: Duplicate identifier '(Missing)'.
+tests/cases/compiler/reservedWords2.ts(2,12): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
+tests/cases/compiler/reservedWords2.ts(2,14): error TS1359: Identifier expected. 'while' is a reserved word that cannot be used here.
+tests/cases/compiler/reservedWords2.ts(2,20): error TS1005: '(' expected.
+tests/cases/compiler/reservedWords2.ts(2,20): error TS2304: Cannot find name 'from'.
+tests/cases/compiler/reservedWords2.ts(2,25): error TS1005: ')' expected.
+tests/cases/compiler/reservedWords2.ts(4,5): error TS1389: 'typeof' is not allowed as a variable declaration name.
+tests/cases/compiler/reservedWords2.ts(4,12): error TS1109: Expression expected.
+tests/cases/compiler/reservedWords2.ts(5,9): error TS2300: Duplicate identifier '(Missing)'.
+tests/cases/compiler/reservedWords2.ts(5,9): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
+tests/cases/compiler/reservedWords2.ts(5,10): error TS1359: Identifier expected. 'throw' is a reserved word that cannot be used here.
+tests/cases/compiler/reservedWords2.ts(5,18): error TS1005: '=>' expected.
+tests/cases/compiler/reservedWords2.ts(6,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+tests/cases/compiler/reservedWords2.ts(6,8): error TS2819: Namespace name cannot be 'void'.
+tests/cases/compiler/reservedWords2.ts(7,11): error TS2300: Duplicate identifier '(Missing)'.
+tests/cases/compiler/reservedWords2.ts(7,11): error TS1005: ':' expected.
+tests/cases/compiler/reservedWords2.ts(7,19): error TS2300: Duplicate identifier '(Missing)'.
+tests/cases/compiler/reservedWords2.ts(7,19): error TS1005: ':' expected.
+tests/cases/compiler/reservedWords2.ts(8,10): error TS2300: Duplicate identifier '(Missing)'.
+tests/cases/compiler/reservedWords2.ts(8,10): error TS1005: ':' expected.
+tests/cases/compiler/reservedWords2.ts(8,30): error TS2300: Duplicate identifier '(Missing)'.
+tests/cases/compiler/reservedWords2.ts(8,30): error TS1005: ':' expected.
+tests/cases/compiler/reservedWords2.ts(9,6): error TS1181: Array element destructuring pattern expected.
+tests/cases/compiler/reservedWords2.ts(9,14): error TS1005: ';' expected.
+tests/cases/compiler/reservedWords2.ts(9,18): error TS1005: '(' expected.
+tests/cases/compiler/reservedWords2.ts(9,20): error TS1128: Declaration or statement expected.
+tests/cases/compiler/reservedWords2.ts(10,5): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
+tests/cases/compiler/reservedWords2.ts(10,6): error TS1359: Identifier expected. 'void' is a reserved word that cannot be used here.
+tests/cases/compiler/reservedWords2.ts(11,12): error TS1359: Identifier expected. 'default' is a reserved word that cannot be used here.
+tests/cases/compiler/reservedWords2.ts(12,13): error TS1359: Identifier expected. 'null' is a reserved word that cannot be used here.
+tests/cases/compiler/reservedWords2.ts(12,17): error TS1138: Parameter declaration expected.
+
+
+==== tests/cases/compiler/reservedWords2.ts (35 errors) ====
+    import while = require("dfdf");
+           ~~~~~
+!!! error TS1109: Expression expected.
+                 ~
+!!! error TS1005: '(' expected.
+                   ~~~~~~~
+!!! error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+                                  ~
+!!! error TS1005: ')' expected.
+    import * as  while from "foo"
+               
+!!! error TS2300: Duplicate identifier '(Missing)'.
+               
+!!! error TS2567: Enum declarations can only merge with namespace or other enum declarations.
+                 ~~~~~
+!!! error TS1359: Identifier expected. 'while' is a reserved word that cannot be used here.
+                       ~~~~
+!!! error TS1005: '(' expected.
+                       ~~~~
+!!! error TS2304: Cannot find name 'from'.
+                            ~~~~~
+!!! error TS1005: ')' expected.
+    
+    var typeof = 10;
+        ~~~~~~
+!!! error TS1389: 'typeof' is not allowed as a variable declaration name.
+               ~
+!!! error TS1109: Expression expected.
+    function throw() {}
+            
+!!! error TS2300: Duplicate identifier '(Missing)'.
+            
+!!! error TS2567: Enum declarations can only merge with namespace or other enum declarations.
+             ~~~~~
+!!! error TS1359: Identifier expected. 'throw' is a reserved word that cannot be used here.
+                     ~
+!!! error TS1005: '=>' expected.
+    module void {}
+    ~~~~~~
+!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+           ~~~~
+!!! error TS2819: Namespace name cannot be 'void'.
+    var {while, return} = { while: 1, return: 2 };
+              
+!!! error TS2300: Duplicate identifier '(Missing)'.
+              ~
+!!! error TS1005: ':' expected.
+                      
+!!! error TS2300: Duplicate identifier '(Missing)'.
+                      ~
+!!! error TS1005: ':' expected.
+    var {this, switch: { continue} } = { this: 1, switch: { continue: 2 }};
+             
+!!! error TS2300: Duplicate identifier '(Missing)'.
+             ~
+!!! error TS1005: ':' expected.
+                                 
+!!! error TS2300: Duplicate identifier '(Missing)'.
+                                 ~
+!!! error TS1005: ':' expected.
+    var [debugger, if] = [1, 2];
+         ~~~~~~~~
+!!! error TS1181: Array element destructuring pattern expected.
+                 ~
+!!! error TS1005: ';' expected.
+                     ~
+!!! error TS1005: '(' expected.
+                       ~
+!!! error TS1128: Declaration or statement expected.
+    enum void {}
+        
+!!! error TS2567: Enum declarations can only merge with namespace or other enum declarations.
+         ~~~~
+!!! error TS1359: Identifier expected. 'void' is a reserved word that cannot be used here.
+    function f(default: number) {}
+               ~~~~~~~
+!!! error TS1359: Identifier expected. 'default' is a reserved word that cannot be used here.
+    class C { m(null: string) {} }
+                ~~~~
+!!! error TS1359: Identifier expected. 'null' is a reserved word that cannot be used here.
+                    ~
+!!! error TS1138: Parameter declaration expected.
+    

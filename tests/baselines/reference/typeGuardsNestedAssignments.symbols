@@ -1,0 +1,112 @@
+=== tests/cases/conformance/controlFlow/typeGuardsNestedAssignments.ts ===
+class Foo {
+>Foo : Symbol(Foo, Decl(typeGuardsNestedAssignments.ts, 0, 0))
+
+    x: string;
+>x : Symbol(Foo.x, Decl(typeGuardsNestedAssignments.ts, 0, 11))
+}
+
+declare function getFooOrNull(): Foo | null;
+>getFooOrNull : Symbol(getFooOrNull, Decl(typeGuardsNestedAssignments.ts, 2, 1))
+>Foo : Symbol(Foo, Decl(typeGuardsNestedAssignments.ts, 0, 0))
+
+declare function getStringOrNumberOrNull(): string | number | null;
+>getStringOrNumberOrNull : Symbol(getStringOrNumberOrNull, Decl(typeGuardsNestedAssignments.ts, 4, 44))
+
+function f1() {
+>f1 : Symbol(f1, Decl(typeGuardsNestedAssignments.ts, 5, 67))
+
+    let foo: Foo | null;
+>foo : Symbol(foo, Decl(typeGuardsNestedAssignments.ts, 8, 7))
+>Foo : Symbol(Foo, Decl(typeGuardsNestedAssignments.ts, 0, 0))
+
+    if ((foo = getFooOrNull()) !== null) {
+>foo : Symbol(foo, Decl(typeGuardsNestedAssignments.ts, 8, 7))
+>getFooOrNull : Symbol(getFooOrNull, Decl(typeGuardsNestedAssignments.ts, 2, 1))
+
+        foo;  // Foo
+>foo : Symbol(foo, Decl(typeGuardsNestedAssignments.ts, 8, 7))
+    }
+}
+
+function f2() {
+>f2 : Symbol(f2, Decl(typeGuardsNestedAssignments.ts, 12, 1))
+
+    let foo1: Foo | null;
+>foo1 : Symbol(foo1, Decl(typeGuardsNestedAssignments.ts, 15, 7))
+>Foo : Symbol(Foo, Decl(typeGuardsNestedAssignments.ts, 0, 0))
+
+    let foo2: Foo | null;
+>foo2 : Symbol(foo2, Decl(typeGuardsNestedAssignments.ts, 16, 7))
+>Foo : Symbol(Foo, Decl(typeGuardsNestedAssignments.ts, 0, 0))
+
+    if ((foo1 = getFooOrNull(), foo2 = foo1) !== null) {
+>foo1 : Symbol(foo1, Decl(typeGuardsNestedAssignments.ts, 15, 7))
+>getFooOrNull : Symbol(getFooOrNull, Decl(typeGuardsNestedAssignments.ts, 2, 1))
+>foo2 : Symbol(foo2, Decl(typeGuardsNestedAssignments.ts, 16, 7))
+>foo1 : Symbol(foo1, Decl(typeGuardsNestedAssignments.ts, 15, 7))
+
+        foo1;  // Foo | null
+>foo1 : Symbol(foo1, Decl(typeGuardsNestedAssignments.ts, 15, 7))
+
+        foo2;  // Foo
+>foo2 : Symbol(foo2, Decl(typeGuardsNestedAssignments.ts, 16, 7))
+    }
+}
+
+function f3() {
+>f3 : Symbol(f3, Decl(typeGuardsNestedAssignments.ts, 21, 1))
+
+    let obj: Object | null;
+>obj : Symbol(obj, Decl(typeGuardsNestedAssignments.ts, 24, 7))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    if ((obj = getFooOrNull()) instanceof Foo) {
+>obj : Symbol(obj, Decl(typeGuardsNestedAssignments.ts, 24, 7))
+>getFooOrNull : Symbol(getFooOrNull, Decl(typeGuardsNestedAssignments.ts, 2, 1))
+>Foo : Symbol(Foo, Decl(typeGuardsNestedAssignments.ts, 0, 0))
+
+        obj;
+>obj : Symbol(obj, Decl(typeGuardsNestedAssignments.ts, 24, 7))
+    }
+}
+
+function f4() {
+>f4 : Symbol(f4, Decl(typeGuardsNestedAssignments.ts, 28, 1))
+
+    let x: string | number | null;
+>x : Symbol(x, Decl(typeGuardsNestedAssignments.ts, 31, 7))
+
+    if (typeof (x = getStringOrNumberOrNull()) === "number") {
+>x : Symbol(x, Decl(typeGuardsNestedAssignments.ts, 31, 7))
+>getStringOrNumberOrNull : Symbol(getStringOrNumberOrNull, Decl(typeGuardsNestedAssignments.ts, 4, 44))
+
+        x;
+>x : Symbol(x, Decl(typeGuardsNestedAssignments.ts, 31, 7))
+    }
+}
+
+// Repro from #8851
+
+const re = /./g
+>re : Symbol(re, Decl(typeGuardsNestedAssignments.ts, 39, 5))
+
+let match: RegExpExecArray | null
+>match : Symbol(match, Decl(typeGuardsNestedAssignments.ts, 40, 3))
+>RegExpExecArray : Symbol(RegExpExecArray, Decl(lib.es5.d.ts, --, --))
+
+while ((match = re.exec("xxx")) != null) {
+>match : Symbol(match, Decl(typeGuardsNestedAssignments.ts, 40, 3))
+>re.exec : Symbol(RegExp.exec, Decl(lib.es5.d.ts, --, --))
+>re : Symbol(re, Decl(typeGuardsNestedAssignments.ts, 39, 5))
+>exec : Symbol(RegExp.exec, Decl(lib.es5.d.ts, --, --))
+
+    const length = match[1].length + match[2].length
+>length : Symbol(length, Decl(typeGuardsNestedAssignments.ts, 43, 9))
+>match[1].length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>match : Symbol(match, Decl(typeGuardsNestedAssignments.ts, 40, 3))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>match[2].length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>match : Symbol(match, Decl(typeGuardsNestedAssignments.ts, 40, 3))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+}

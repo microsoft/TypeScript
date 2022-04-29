@@ -1,0 +1,32 @@
+tests/cases/compiler/badArraySyntax.ts(6,16): error TS1011: An element access expression should take an argument.
+tests/cases/compiler/badArraySyntax.ts(7,16): error TS1011: An element access expression should take an argument.
+tests/cases/compiler/badArraySyntax.ts(8,21): error TS1011: An element access expression should take an argument.
+tests/cases/compiler/badArraySyntax.ts(9,21): error TS1011: An element access expression should take an argument.
+tests/cases/compiler/badArraySyntax.ts(10,30): error TS1011: An element access expression should take an argument.
+tests/cases/compiler/badArraySyntax.ts(10,41): error TS1011: An element access expression should take an argument.
+
+
+==== tests/cases/compiler/badArraySyntax.ts (6 errors) ====
+    class Z {
+     public x = "";
+    }
+    
+    var a1: Z[] = [];
+    var a2 = new Z[];
+                   
+!!! error TS1011: An element access expression should take an argument.
+    var a3 = new Z[]();
+                   
+!!! error TS1011: An element access expression should take an argument.
+    var a4: Z[] = new Z[];
+                        
+!!! error TS1011: An element access expression should take an argument.
+    var a5: Z[] = new Z[]();
+                        
+!!! error TS1011: An element access expression should take an argument.
+    var a6: Z[][] = new   Z     [      ]   [  ];
+                                 
+!!! error TS1011: An element access expression should take an argument.
+                                            
+!!! error TS1011: An element access expression should take an argument.
+    

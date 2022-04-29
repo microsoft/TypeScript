@@ -1,0 +1,16 @@
+=== tests/cases/compiler/file1.ts ===
+import * as b  from './b.json';
+>b : { a: boolean; b: string; }
+
+=== tests/cases/compiler/b.json ===
+{
+>{    "a": true,    "b": "hello"} : { a: boolean; b: string; }
+
+    "a": true,
+>"a" : boolean
+>true : true
+
+    "b": "hello"
+>"b" : string
+>"hello" : "hello"
+}

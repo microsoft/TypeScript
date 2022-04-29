@@ -1,0 +1,73 @@
+=== tests/cases/conformance/expressions/functionCalls/functionCalls.ts ===
+// Invoke function call on value of type 'any' with no type arguments
+var anyVar: any;
+>anyVar : Symbol(anyVar, Decl(functionCalls.ts, 1, 3))
+
+anyVar(0);
+>anyVar : Symbol(anyVar, Decl(functionCalls.ts, 1, 3))
+
+anyVar('');
+>anyVar : Symbol(anyVar, Decl(functionCalls.ts, 1, 3))
+
+// Invoke function call on value of type 'any' with type arguments
+// These should be errors
+anyVar<string>('hello');
+>anyVar : Symbol(anyVar, Decl(functionCalls.ts, 1, 3))
+
+anyVar<number>();
+>anyVar : Symbol(anyVar, Decl(functionCalls.ts, 1, 3))
+
+anyVar<Window>(undefined);
+>anyVar : Symbol(anyVar, Decl(functionCalls.ts, 1, 3))
+>Window : Symbol(Window, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>undefined : Symbol(undefined)
+
+
+// Invoke function call on value of a subtype of Function with no call signatures with no type arguments
+interface SubFunc extends Function {
+>SubFunc : Symbol(SubFunc, Decl(functionCalls.ts, 9, 26))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    prop: number;
+>prop : Symbol(SubFunc.prop, Decl(functionCalls.ts, 13, 36))
+}
+var subFunc: SubFunc;
+>subFunc : Symbol(subFunc, Decl(functionCalls.ts, 16, 3))
+>SubFunc : Symbol(SubFunc, Decl(functionCalls.ts, 9, 26))
+
+subFunc(0);
+>subFunc : Symbol(subFunc, Decl(functionCalls.ts, 16, 3))
+
+subFunc('');
+>subFunc : Symbol(subFunc, Decl(functionCalls.ts, 16, 3))
+
+subFunc();
+>subFunc : Symbol(subFunc, Decl(functionCalls.ts, 16, 3))
+
+
+// Invoke function call on value of a subtype of Function with no call signatures with type arguments
+// These should be errors
+subFunc<number>(0);
+>subFunc : Symbol(subFunc, Decl(functionCalls.ts, 16, 3))
+
+subFunc<string>('');
+>subFunc : Symbol(subFunc, Decl(functionCalls.ts, 16, 3))
+
+subFunc<any>();
+>subFunc : Symbol(subFunc, Decl(functionCalls.ts, 16, 3))
+
+// Invoke function call on value of type Function with no call signatures with type arguments
+// These should be errors
+var func: Function;
+>func : Symbol(func, Decl(functionCalls.ts, 30, 3))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+func<number>(0);
+>func : Symbol(func, Decl(functionCalls.ts, 30, 3))
+
+func<string>('');
+>func : Symbol(func, Decl(functionCalls.ts, 30, 3))
+
+func<any>();
+>func : Symbol(func, Decl(functionCalls.ts, 30, 3))
+

@@ -1,0 +1,202 @@
+=== tests/cases/conformance/types/rest/objectRest.ts ===
+var o = { a: 1, b: 'no' }
+>o : Symbol(o, Decl(objectRest.ts, 0, 3), Decl(objectRest.ts, 42, 51))
+>a : Symbol(a, Decl(objectRest.ts, 0, 9))
+>b : Symbol(b, Decl(objectRest.ts, 0, 15))
+
+var { ...clone } = o;
+>clone : Symbol(clone, Decl(objectRest.ts, 1, 5))
+>o : Symbol(o, Decl(objectRest.ts, 0, 3), Decl(objectRest.ts, 42, 51))
+
+var { a, ...justB } = o;
+>a : Symbol(a, Decl(objectRest.ts, 2, 5), Decl(objectRest.ts, 3, 5))
+>justB : Symbol(justB, Decl(objectRest.ts, 2, 8))
+>o : Symbol(o, Decl(objectRest.ts, 0, 3), Decl(objectRest.ts, 42, 51))
+
+var { a, b: renamed, ...empty } = o;
+>a : Symbol(a, Decl(objectRest.ts, 2, 5), Decl(objectRest.ts, 3, 5))
+>b : Symbol(b, Decl(objectRest.ts, 0, 15))
+>renamed : Symbol(renamed, Decl(objectRest.ts, 3, 8), Decl(objectRest.ts, 4, 5), Decl(objectRest.ts, 5, 5), Decl(objectRest.ts, 9, 5))
+>empty : Symbol(empty, Decl(objectRest.ts, 3, 20))
+>o : Symbol(o, Decl(objectRest.ts, 0, 3), Decl(objectRest.ts, 42, 51))
+
+var { ['b']: renamed, ...justA } = o;
+>'b' : Symbol(renamed, Decl(objectRest.ts, 3, 8), Decl(objectRest.ts, 4, 5), Decl(objectRest.ts, 5, 5), Decl(objectRest.ts, 9, 5))
+>renamed : Symbol(renamed, Decl(objectRest.ts, 3, 8), Decl(objectRest.ts, 4, 5), Decl(objectRest.ts, 5, 5), Decl(objectRest.ts, 9, 5))
+>justA : Symbol(justA, Decl(objectRest.ts, 4, 21), Decl(objectRest.ts, 5, 19), Decl(objectRest.ts, 6, 31))
+>o : Symbol(o, Decl(objectRest.ts, 0, 3), Decl(objectRest.ts, 42, 51))
+
+var { 'b': renamed, ...justA } = o;
+>renamed : Symbol(renamed, Decl(objectRest.ts, 3, 8), Decl(objectRest.ts, 4, 5), Decl(objectRest.ts, 5, 5), Decl(objectRest.ts, 9, 5))
+>justA : Symbol(justA, Decl(objectRest.ts, 4, 21), Decl(objectRest.ts, 5, 19), Decl(objectRest.ts, 6, 31))
+>o : Symbol(o, Decl(objectRest.ts, 0, 3), Decl(objectRest.ts, 42, 51))
+
+var { b: { '0': n, '1': oooo }, ...justA } = o;
+>b : Symbol(b, Decl(objectRest.ts, 0, 15))
+>n : Symbol(n, Decl(objectRest.ts, 6, 10))
+>oooo : Symbol(oooo, Decl(objectRest.ts, 6, 18))
+>justA : Symbol(justA, Decl(objectRest.ts, 4, 21), Decl(objectRest.ts, 5, 19), Decl(objectRest.ts, 6, 31))
+>o : Symbol(o, Decl(objectRest.ts, 0, 3), Decl(objectRest.ts, 42, 51))
+
+let o2 = { c: 'terrible idea?', d: 'yes' };
+>o2 : Symbol(o2, Decl(objectRest.ts, 8, 3))
+>c : Symbol(c, Decl(objectRest.ts, 8, 10))
+>d : Symbol(d, Decl(objectRest.ts, 8, 31))
+
+var { d: renamed, ...d } = o2;
+>d : Symbol(d, Decl(objectRest.ts, 8, 31))
+>renamed : Symbol(renamed, Decl(objectRest.ts, 3, 8), Decl(objectRest.ts, 4, 5), Decl(objectRest.ts, 5, 5), Decl(objectRest.ts, 9, 5))
+>d : Symbol(d, Decl(objectRest.ts, 9, 17))
+>o2 : Symbol(o2, Decl(objectRest.ts, 8, 3))
+
+let nestedrest: { x: number, n1: { y: number, n2: { z: number, n3: { n4: number } } }, rest: number, restrest: number };
+>nestedrest : Symbol(nestedrest, Decl(objectRest.ts, 11, 3))
+>x : Symbol(x, Decl(objectRest.ts, 11, 17))
+>n1 : Symbol(n1, Decl(objectRest.ts, 11, 28))
+>y : Symbol(y, Decl(objectRest.ts, 11, 34))
+>n2 : Symbol(n2, Decl(objectRest.ts, 11, 45))
+>z : Symbol(z, Decl(objectRest.ts, 11, 51))
+>n3 : Symbol(n3, Decl(objectRest.ts, 11, 62))
+>n4 : Symbol(n4, Decl(objectRest.ts, 11, 68))
+>rest : Symbol(rest, Decl(objectRest.ts, 11, 86))
+>restrest : Symbol(restrest, Decl(objectRest.ts, 11, 100))
+
+var { x, n1: { y, n2: { z, n3: { ...nr } } }, ...restrest } = nestedrest;
+>x : Symbol(x, Decl(objectRest.ts, 12, 5), Decl(objectRest.ts, 17, 5))
+>n1 : Symbol(n1, Decl(objectRest.ts, 11, 28))
+>y : Symbol(y, Decl(objectRest.ts, 12, 14))
+>n2 : Symbol(n2, Decl(objectRest.ts, 11, 45))
+>z : Symbol(z, Decl(objectRest.ts, 12, 23))
+>n3 : Symbol(n3, Decl(objectRest.ts, 11, 62))
+>nr : Symbol(nr, Decl(objectRest.ts, 12, 32))
+>restrest : Symbol(restrest, Decl(objectRest.ts, 12, 45))
+>nestedrest : Symbol(nestedrest, Decl(objectRest.ts, 11, 3))
+
+let complex: { x: { ka, ki }, y: number };
+>complex : Symbol(complex, Decl(objectRest.ts, 14, 3))
+>x : Symbol(x, Decl(objectRest.ts, 14, 14))
+>ka : Symbol(ka, Decl(objectRest.ts, 14, 19))
+>ki : Symbol(ki, Decl(objectRest.ts, 14, 23))
+>y : Symbol(y, Decl(objectRest.ts, 14, 29))
+
+var { x: { ka, ...nested }, y: other, ...rest } = complex;
+>x : Symbol(x, Decl(objectRest.ts, 14, 14))
+>ka : Symbol(ka, Decl(objectRest.ts, 15, 10))
+>nested : Symbol(nested, Decl(objectRest.ts, 15, 14))
+>y : Symbol(y, Decl(objectRest.ts, 14, 29))
+>other : Symbol(other, Decl(objectRest.ts, 15, 27))
+>rest : Symbol(rest, Decl(objectRest.ts, 15, 37))
+>complex : Symbol(complex, Decl(objectRest.ts, 14, 3))
+
+({x: { ka, ...nested }, y: other, ...rest} = complex);
+>x : Symbol(x, Decl(objectRest.ts, 16, 2))
+>ka : Symbol(ka, Decl(objectRest.ts, 16, 6))
+>nested : Symbol(nested, Decl(objectRest.ts, 15, 14))
+>y : Symbol(y, Decl(objectRest.ts, 16, 23))
+>other : Symbol(other, Decl(objectRest.ts, 15, 27))
+>rest : Symbol(rest, Decl(objectRest.ts, 15, 37))
+>complex : Symbol(complex, Decl(objectRest.ts, 14, 3))
+
+var { x, ...fresh } = { x: 1, y: 2 };
+>x : Symbol(x, Decl(objectRest.ts, 12, 5), Decl(objectRest.ts, 17, 5))
+>fresh : Symbol(fresh, Decl(objectRest.ts, 17, 8))
+>x : Symbol(x, Decl(objectRest.ts, 17, 23))
+>y : Symbol(y, Decl(objectRest.ts, 17, 29))
+
+({ x, ...fresh } = { x: 1, y: 2 });
+>x : Symbol(x, Decl(objectRest.ts, 18, 2))
+>fresh : Symbol(fresh, Decl(objectRest.ts, 17, 8))
+>x : Symbol(x, Decl(objectRest.ts, 18, 20))
+>y : Symbol(y, Decl(objectRest.ts, 18, 26))
+
+class Removable {
+>Removable : Symbol(Removable, Decl(objectRest.ts, 18, 35))
+
+    private x: number;
+>x : Symbol(Removable.x, Decl(objectRest.ts, 20, 17))
+
+    protected y: number;
+>y : Symbol(Removable.y, Decl(objectRest.ts, 21, 22))
+
+    set z(value: number) { }
+>z : Symbol(Removable.z, Decl(objectRest.ts, 22, 24))
+>value : Symbol(value, Decl(objectRest.ts, 23, 10))
+
+    get both(): number { return 12 }
+>both : Symbol(Removable.both, Decl(objectRest.ts, 23, 28), Decl(objectRest.ts, 24, 36))
+
+    set both(value: number) { }
+>both : Symbol(Removable.both, Decl(objectRest.ts, 23, 28), Decl(objectRest.ts, 24, 36))
+>value : Symbol(value, Decl(objectRest.ts, 25, 13))
+
+    m() { }
+>m : Symbol(Removable.m, Decl(objectRest.ts, 25, 31))
+
+    removed: string;
+>removed : Symbol(Removable.removed, Decl(objectRest.ts, 26, 11))
+
+    remainder: string;
+>remainder : Symbol(Removable.remainder, Decl(objectRest.ts, 27, 20))
+}
+interface I {
+>I : Symbol(I, Decl(objectRest.ts, 29, 1))
+
+    m(): void;
+>m : Symbol(I.m, Decl(objectRest.ts, 30, 13))
+
+    removed: string;
+>removed : Symbol(I.removed, Decl(objectRest.ts, 31, 14))
+
+    remainder: string;
+>remainder : Symbol(I.remainder, Decl(objectRest.ts, 32, 20))
+}
+var removable = new Removable();
+>removable : Symbol(removable, Decl(objectRest.ts, 35, 3))
+>Removable : Symbol(Removable, Decl(objectRest.ts, 18, 35))
+
+var { removed, ...removableRest } = removable;
+>removed : Symbol(removed, Decl(objectRest.ts, 36, 5), Decl(objectRest.ts, 38, 5))
+>removableRest : Symbol(removableRest, Decl(objectRest.ts, 36, 14))
+>removable : Symbol(removable, Decl(objectRest.ts, 35, 3))
+
+var i: I = removable;
+>i : Symbol(i, Decl(objectRest.ts, 37, 3))
+>I : Symbol(I, Decl(objectRest.ts, 29, 1))
+>removable : Symbol(removable, Decl(objectRest.ts, 35, 3))
+
+var { removed, ...removableRest2 } = i;
+>removed : Symbol(removed, Decl(objectRest.ts, 36, 5), Decl(objectRest.ts, 38, 5))
+>removableRest2 : Symbol(removableRest2, Decl(objectRest.ts, 38, 14))
+>i : Symbol(i, Decl(objectRest.ts, 37, 3))
+
+let computed = 'b';
+>computed : Symbol(computed, Decl(objectRest.ts, 40, 3))
+
+let computed2 = 'a';
+>computed2 : Symbol(computed2, Decl(objectRest.ts, 41, 3))
+
+var { [computed]: stillNotGreat, [computed2]: soSo,  ...o } = o;
+>computed : Symbol(computed, Decl(objectRest.ts, 40, 3))
+>stillNotGreat : Symbol(stillNotGreat, Decl(objectRest.ts, 42, 5))
+>computed2 : Symbol(computed2, Decl(objectRest.ts, 41, 3))
+>soSo : Symbol(soSo, Decl(objectRest.ts, 42, 32))
+>o : Symbol(o, Decl(objectRest.ts, 0, 3), Decl(objectRest.ts, 42, 51))
+>o : Symbol(o, Decl(objectRest.ts, 0, 3), Decl(objectRest.ts, 42, 51))
+
+({ [computed]: stillNotGreat, [computed2]: soSo, ...o } = o);
+>[computed] : Symbol([computed], Decl(objectRest.ts, 43, 2))
+>computed : Symbol(computed, Decl(objectRest.ts, 40, 3))
+>stillNotGreat : Symbol(stillNotGreat, Decl(objectRest.ts, 42, 5))
+>[computed2] : Symbol([computed2], Decl(objectRest.ts, 43, 29))
+>computed2 : Symbol(computed2, Decl(objectRest.ts, 41, 3))
+>soSo : Symbol(soSo, Decl(objectRest.ts, 42, 32))
+>o : Symbol(o, Decl(objectRest.ts, 0, 3), Decl(objectRest.ts, 42, 51))
+>o : Symbol(o, Decl(objectRest.ts, 0, 3), Decl(objectRest.ts, 42, 51))
+
+var noContextualType = ({ aNumber = 12, ...notEmptyObject }) => aNumber + notEmptyObject.anythingGoes;
+>noContextualType : Symbol(noContextualType, Decl(objectRest.ts, 45, 3))
+>aNumber : Symbol(aNumber, Decl(objectRest.ts, 45, 25))
+>notEmptyObject : Symbol(notEmptyObject, Decl(objectRest.ts, 45, 39))
+>aNumber : Symbol(aNumber, Decl(objectRest.ts, 45, 25))
+>notEmptyObject : Symbol(notEmptyObject, Decl(objectRest.ts, 45, 39))
+

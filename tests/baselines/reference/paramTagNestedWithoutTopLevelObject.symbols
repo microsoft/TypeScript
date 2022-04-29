@@ -1,0 +1,11 @@
+=== tests/cases/conformance/jsdoc/paramTagNestedWithoutTopLevelObject.js ===
+/**
+ * @param {number} xyz.p
+ */
+function g(xyz) {
+>g : Symbol(g, Decl(paramTagNestedWithoutTopLevelObject.js, 0, 0))
+>xyz : Symbol(xyz, Decl(paramTagNestedWithoutTopLevelObject.js, 3, 11))
+
+    return xyz.p;
+>xyz : Symbol(xyz, Decl(paramTagNestedWithoutTopLevelObject.js, 3, 11))
+}

@@ -1,0 +1,15 @@
+=== tests/cases/compiler/collisionThisExpressionAndAliasInGlobal.ts ===
+module a {
+>a : Symbol(a, Decl(collisionThisExpressionAndAliasInGlobal.ts, 0, 0))
+
+    export var b = 10;
+>b : Symbol(b, Decl(collisionThisExpressionAndAliasInGlobal.ts, 1, 14))
+}
+var f = () => this;
+>f : Symbol(f, Decl(collisionThisExpressionAndAliasInGlobal.ts, 3, 3))
+>this : Symbol(globalThis)
+
+import _this = a; // Error
+>_this : Symbol(_this, Decl(collisionThisExpressionAndAliasInGlobal.ts, 3, 19))
+>a : Symbol(a, Decl(collisionThisExpressionAndAliasInGlobal.ts, 0, 0))
+

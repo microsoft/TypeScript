@@ -1,0 +1,25 @@
+tests/cases/conformance/es6/destructuring/iterableArrayPattern6.ts(17,8): error TS2322: Type 'Foo[]' is not assignable to type 'string[]'.
+  Type 'Foo' is not assignable to type 'string'.
+
+
+==== tests/cases/conformance/es6/destructuring/iterableArrayPattern6.ts (1 errors) ====
+    class Bar { x }
+    class Foo extends Bar { y }
+    class FooIterator {
+        next() {
+            return {
+                value: new Foo,
+                done: false
+            };
+        }
+    
+        [Symbol.iterator]() {
+            return this;
+        }
+    }
+    
+    var a: Bar, b: string[];
+    [a, ...b] = new FooIterator;
+           ~
+!!! error TS2322: Type 'Foo[]' is not assignable to type 'string[]'.
+!!! error TS2322:   Type 'Foo' is not assignable to type 'string'.

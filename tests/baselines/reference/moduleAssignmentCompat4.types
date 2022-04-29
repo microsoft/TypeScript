@@ -1,0 +1,38 @@
+=== tests/cases/compiler/moduleAssignmentCompat4.ts ===
+module A {
+>A : typeof A
+
+   export module M {
+>M : typeof M
+
+        class C { }
+>C : C
+    }
+}
+module B {
+>B : typeof B
+
+    export module M {
+>M : typeof M
+
+        export class D { }
+>D : D
+    }
+}
+
+var a: A;
+>a : A
+
+var b: B;
+>b : B
+
+a = b;
+>a = b : B
+>a : A
+>b : B
+
+b = a; // error
+>b = a : A
+>b : B
+>a : A
+

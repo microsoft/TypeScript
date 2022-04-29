@@ -1,0 +1,80 @@
+=== tests/cases/conformance/jsdoc/templateTagWithNestedTypeLiteral.js ===
+/**
+ * @param {T} t
+ * @template T
+ */
+function Zet(t) {
+>Zet : Symbol(Zet, Decl(templateTagWithNestedTypeLiteral.js, 0, 0))
+>t : Symbol(t, Decl(templateTagWithNestedTypeLiteral.js, 4, 13))
+
+    /** @type {T} */
+    this.u
+>this.u : Symbol(Zet.u, Decl(templateTagWithNestedTypeLiteral.js, 4, 17), Decl(templateTagWithNestedTypeLiteral.js, 14, 36))
+>this : Symbol(Zet, Decl(templateTagWithNestedTypeLiteral.js, 0, 0))
+>u : Symbol(Zet.u, Decl(templateTagWithNestedTypeLiteral.js, 4, 17), Decl(templateTagWithNestedTypeLiteral.js, 14, 36))
+
+    this.t = t
+>this.t : Symbol(Zet.t, Decl(templateTagWithNestedTypeLiteral.js, 6, 10))
+>this : Symbol(Zet, Decl(templateTagWithNestedTypeLiteral.js, 0, 0))
+>t : Symbol(Zet.t, Decl(templateTagWithNestedTypeLiteral.js, 6, 10))
+>t : Symbol(t, Decl(templateTagWithNestedTypeLiteral.js, 4, 13))
+}
+/**
+ * @param {T} v
+ * @param {object} o
+ * @param {T} o.nested
+ */
+Zet.prototype.add = function(v, o) {
+>Zet.prototype : Symbol(Zet.add, Decl(templateTagWithNestedTypeLiteral.js, 8, 1))
+>Zet : Symbol(Zet, Decl(templateTagWithNestedTypeLiteral.js, 0, 0))
+>prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+>add : Symbol(Zet.add, Decl(templateTagWithNestedTypeLiteral.js, 8, 1))
+>v : Symbol(v, Decl(templateTagWithNestedTypeLiteral.js, 14, 29))
+>o : Symbol(o, Decl(templateTagWithNestedTypeLiteral.js, 14, 31))
+
+    this.u = v || o.nested
+>this.u : Symbol(Zet.u, Decl(templateTagWithNestedTypeLiteral.js, 4, 17), Decl(templateTagWithNestedTypeLiteral.js, 14, 36))
+>this : Symbol(Zet, Decl(templateTagWithNestedTypeLiteral.js, 0, 0))
+>u : Symbol(Zet.u, Decl(templateTagWithNestedTypeLiteral.js, 4, 17), Decl(templateTagWithNestedTypeLiteral.js, 14, 36))
+>v : Symbol(v, Decl(templateTagWithNestedTypeLiteral.js, 14, 29))
+>o.nested : Symbol(nested, Decl(templateTagWithNestedTypeLiteral.js, 12, 3))
+>o : Symbol(o, Decl(templateTagWithNestedTypeLiteral.js, 14, 31))
+>nested : Symbol(nested, Decl(templateTagWithNestedTypeLiteral.js, 12, 3))
+
+    return this.u
+>this.u : Symbol(Zet.u, Decl(templateTagWithNestedTypeLiteral.js, 4, 17), Decl(templateTagWithNestedTypeLiteral.js, 14, 36))
+>this : Symbol(Zet, Decl(templateTagWithNestedTypeLiteral.js, 0, 0))
+>u : Symbol(Zet.u, Decl(templateTagWithNestedTypeLiteral.js, 4, 17), Decl(templateTagWithNestedTypeLiteral.js, 14, 36))
+}
+var z = new Zet(1)
+>z : Symbol(z, Decl(templateTagWithNestedTypeLiteral.js, 18, 3), Decl(templateTagWithNestedTypeLiteral.js, 18, 18), Decl(templateTagWithNestedTypeLiteral.js, 19, 7))
+>Zet : Symbol(Zet, Decl(templateTagWithNestedTypeLiteral.js, 0, 0))
+
+z.t = 2
+>z.t : Symbol(Zet.t, Decl(templateTagWithNestedTypeLiteral.js, 6, 10))
+>z : Symbol(z, Decl(templateTagWithNestedTypeLiteral.js, 18, 3), Decl(templateTagWithNestedTypeLiteral.js, 18, 18), Decl(templateTagWithNestedTypeLiteral.js, 19, 7))
+>t : Symbol(Zet.t, Decl(templateTagWithNestedTypeLiteral.js, 6, 10))
+
+z.u = false
+>z.u : Symbol(Zet.u, Decl(templateTagWithNestedTypeLiteral.js, 4, 17), Decl(templateTagWithNestedTypeLiteral.js, 14, 36))
+>z : Symbol(z, Decl(templateTagWithNestedTypeLiteral.js, 18, 3), Decl(templateTagWithNestedTypeLiteral.js, 18, 18), Decl(templateTagWithNestedTypeLiteral.js, 19, 7))
+>u : Symbol(Zet.u, Decl(templateTagWithNestedTypeLiteral.js, 4, 17), Decl(templateTagWithNestedTypeLiteral.js, 14, 36))
+
+/** @type {number} */
+let answer = z.add(3, { nested: 4 })
+>answer : Symbol(answer, Decl(templateTagWithNestedTypeLiteral.js, 22, 3))
+>z.add : Symbol(Zet.add, Decl(templateTagWithNestedTypeLiteral.js, 8, 1))
+>z : Symbol(z, Decl(templateTagWithNestedTypeLiteral.js, 18, 3), Decl(templateTagWithNestedTypeLiteral.js, 18, 18), Decl(templateTagWithNestedTypeLiteral.js, 19, 7))
+>add : Symbol(Zet.add, Decl(templateTagWithNestedTypeLiteral.js, 8, 1))
+>nested : Symbol(nested, Decl(templateTagWithNestedTypeLiteral.js, 22, 23))
+
+// lookup in typedef should not crash the compiler, even when the type is unknown
+/**
+ * @typedef {Object} A
+ * @property {T} value
+ */
+/** @type {A} */
+const options = { value: null };
+>options : Symbol(options, Decl(templateTagWithNestedTypeLiteral.js, 30, 5))
+>value : Symbol(value, Decl(templateTagWithNestedTypeLiteral.js, 30, 17))
+

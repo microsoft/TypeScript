@@ -1,0 +1,18 @@
+=== tests/cases/compiler/reachabilityCheckWithEmptyDefault.ts ===
+declare function print(s: string): void;
+>print : Symbol(print, Decl(lib.dom.d.ts, --, --), Decl(reachabilityCheckWithEmptyDefault.ts, 0, 0))
+>s : Symbol(s, Decl(reachabilityCheckWithEmptyDefault.ts, 0, 23))
+
+function foo(x: any) {
+>foo : Symbol(foo, Decl(reachabilityCheckWithEmptyDefault.ts, 0, 40))
+>x : Symbol(x, Decl(reachabilityCheckWithEmptyDefault.ts, 1, 13))
+
+	switch(x) {
+>x : Symbol(x, Decl(reachabilityCheckWithEmptyDefault.ts, 1, 13))
+
+		case 1: return;
+		default:
+	}
+	print('1');
+>print : Symbol(print, Decl(lib.dom.d.ts, --, --), Decl(reachabilityCheckWithEmptyDefault.ts, 0, 0))
+}

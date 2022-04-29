@@ -1,0 +1,71 @@
+=== tests/cases/conformance/expressions/arrayLiterals/arrayLiterals3.ts ===
+// Each element expression in a non-empty array literal is processed as follows:
+//    - If the array literal contains no spread elements, and if the array literal is contextually typed (section 4.19)
+//      by a type T and T has a property with the numeric name N, where N is the index of the element expression in the array literal,
+//      the element expression is contextually typed by the type of that property.
+
+// The resulting type an array literal expression is determined as follows:
+//     - If the array literal contains no spread elements and is contextually typed by a tuple-like type,
+//       the resulting type is a tuple type constructed from the types of the element expressions.
+
+var a0: [any, any, any] = [];                             // Error
+>a0 : Symbol(a0, Decl(arrayLiterals3.ts, 9, 3))
+
+var a1: [boolean, string, number] = ["string", 1, true];  // Error
+>a1 : Symbol(a1, Decl(arrayLiterals3.ts, 10, 3))
+
+// The resulting type an array literal expression is determined as follows:
+//     - If the array literal contains no spread elements and is an array assignment pattern in a destructuring assignment (section 4.17.1),
+//       the resulting type is a tuple type constructed from the types of the element expressions.
+
+var [b1, b2]: [number, number] = [1, 2, "string", true];
+>b1 : Symbol(b1, Decl(arrayLiterals3.ts, 16, 5))
+>b2 : Symbol(b2, Decl(arrayLiterals3.ts, 16, 8))
+
+// The resulting type an array literal expression is determined as follows:
+//      - the resulting type is an array type with an element type that is the union of the types of the
+//        non - spread element expressions and the numeric index signature types of the spread element expressions
+var temp = ["s", "t", "r"];
+>temp : Symbol(temp, Decl(arrayLiterals3.ts, 21, 3))
+
+var temp1 = [1, 2, 3];
+>temp1 : Symbol(temp1, Decl(arrayLiterals3.ts, 22, 3))
+
+var temp2: [number[], string[]] = [[1, 2, 3], ["hello", "string"]];
+>temp2 : Symbol(temp2, Decl(arrayLiterals3.ts, 23, 3))
+
+interface tup {
+>tup : Symbol(tup, Decl(arrayLiterals3.ts, 23, 67))
+
+    0: number[]|string[];
+>0 : Symbol(tup[0], Decl(arrayLiterals3.ts, 25, 15))
+
+    1: number[]|string[];
+>1 : Symbol(tup[1], Decl(arrayLiterals3.ts, 26, 25))
+}
+interface myArray extends Array<Number> { }
+>myArray : Symbol(myArray, Decl(arrayLiterals3.ts, 28, 1))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+interface myArray2 extends Array<Number|String> { }
+>myArray2 : Symbol(myArray2, Decl(arrayLiterals3.ts, 29, 43))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+var c0: tup = [...temp2];                         // Error
+>c0 : Symbol(c0, Decl(arrayLiterals3.ts, 31, 3))
+>tup : Symbol(tup, Decl(arrayLiterals3.ts, 23, 67))
+>temp2 : Symbol(temp2, Decl(arrayLiterals3.ts, 23, 3))
+
+var c1: [number, number, number] = [...temp1];    // Error cannot assign number[] to [number, number, number]
+>c1 : Symbol(c1, Decl(arrayLiterals3.ts, 32, 3))
+>temp1 : Symbol(temp1, Decl(arrayLiterals3.ts, 22, 3))
+
+var c2: myArray = [...temp1, ...temp];            // Error cannot assign (number|string)[] to number[]
+>c2 : Symbol(c2, Decl(arrayLiterals3.ts, 33, 3))
+>myArray : Symbol(myArray, Decl(arrayLiterals3.ts, 28, 1))
+>temp1 : Symbol(temp1, Decl(arrayLiterals3.ts, 22, 3))
+>temp : Symbol(temp, Decl(arrayLiterals3.ts, 21, 3))
+

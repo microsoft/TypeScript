@@ -1,0 +1,529 @@
+=== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures3.ts ===
+// these are all permitted with the current rules, since we do not do contextual signature instantiation
+
+class Base { foo: string; }
+>Base : Symbol(Base, Decl(assignmentCompatWithCallSignatures3.ts, 0, 0))
+>foo : Symbol(Base.foo, Decl(assignmentCompatWithCallSignatures3.ts, 2, 12))
+
+class Derived extends Base { bar: string; }
+>Derived : Symbol(Derived, Decl(assignmentCompatWithCallSignatures3.ts, 2, 27))
+>Base : Symbol(Base, Decl(assignmentCompatWithCallSignatures3.ts, 0, 0))
+>bar : Symbol(Derived.bar, Decl(assignmentCompatWithCallSignatures3.ts, 3, 28))
+
+class Derived2 extends Derived { baz: string; }
+>Derived2 : Symbol(Derived2, Decl(assignmentCompatWithCallSignatures3.ts, 3, 43))
+>Derived : Symbol(Derived, Decl(assignmentCompatWithCallSignatures3.ts, 2, 27))
+>baz : Symbol(Derived2.baz, Decl(assignmentCompatWithCallSignatures3.ts, 4, 32))
+
+class OtherDerived extends Base { bing: string; }
+>OtherDerived : Symbol(OtherDerived, Decl(assignmentCompatWithCallSignatures3.ts, 4, 47))
+>Base : Symbol(Base, Decl(assignmentCompatWithCallSignatures3.ts, 0, 0))
+>bing : Symbol(OtherDerived.bing, Decl(assignmentCompatWithCallSignatures3.ts, 5, 33))
+
+var a: (x: number) => number[];
+>a : Symbol(a, Decl(assignmentCompatWithCallSignatures3.ts, 7, 3))
+>x : Symbol(x, Decl(assignmentCompatWithCallSignatures3.ts, 7, 8))
+
+var a2: (x: number) => string[];
+>a2 : Symbol(a2, Decl(assignmentCompatWithCallSignatures3.ts, 8, 3))
+>x : Symbol(x, Decl(assignmentCompatWithCallSignatures3.ts, 8, 9))
+
+var a3: (x: number) => void;
+>a3 : Symbol(a3, Decl(assignmentCompatWithCallSignatures3.ts, 9, 3))
+>x : Symbol(x, Decl(assignmentCompatWithCallSignatures3.ts, 9, 9))
+
+var a4: (x: string, y: number) => string;
+>a4 : Symbol(a4, Decl(assignmentCompatWithCallSignatures3.ts, 10, 3))
+>x : Symbol(x, Decl(assignmentCompatWithCallSignatures3.ts, 10, 9))
+>y : Symbol(y, Decl(assignmentCompatWithCallSignatures3.ts, 10, 19))
+
+var a5: (x: (arg: string) => number) => string;
+>a5 : Symbol(a5, Decl(assignmentCompatWithCallSignatures3.ts, 11, 3))
+>x : Symbol(x, Decl(assignmentCompatWithCallSignatures3.ts, 11, 9))
+>arg : Symbol(arg, Decl(assignmentCompatWithCallSignatures3.ts, 11, 13))
+
+var a6: (x: (arg: Base) => Derived) => Base;
+>a6 : Symbol(a6, Decl(assignmentCompatWithCallSignatures3.ts, 12, 3))
+>x : Symbol(x, Decl(assignmentCompatWithCallSignatures3.ts, 12, 9))
+>arg : Symbol(arg, Decl(assignmentCompatWithCallSignatures3.ts, 12, 13))
+>Base : Symbol(Base, Decl(assignmentCompatWithCallSignatures3.ts, 0, 0))
+>Derived : Symbol(Derived, Decl(assignmentCompatWithCallSignatures3.ts, 2, 27))
+>Base : Symbol(Base, Decl(assignmentCompatWithCallSignatures3.ts, 0, 0))
+
+var a7: (x: (arg: Base) => Derived) => (r: Base) => Derived;
+>a7 : Symbol(a7, Decl(assignmentCompatWithCallSignatures3.ts, 13, 3))
+>x : Symbol(x, Decl(assignmentCompatWithCallSignatures3.ts, 13, 9))
+>arg : Symbol(arg, Decl(assignmentCompatWithCallSignatures3.ts, 13, 13))
+>Base : Symbol(Base, Decl(assignmentCompatWithCallSignatures3.ts, 0, 0))
+>Derived : Symbol(Derived, Decl(assignmentCompatWithCallSignatures3.ts, 2, 27))
+>r : Symbol(r, Decl(assignmentCompatWithCallSignatures3.ts, 13, 40))
+>Base : Symbol(Base, Decl(assignmentCompatWithCallSignatures3.ts, 0, 0))
+>Derived : Symbol(Derived, Decl(assignmentCompatWithCallSignatures3.ts, 2, 27))
+
+var a8: (x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived;
+>a8 : Symbol(a8, Decl(assignmentCompatWithCallSignatures3.ts, 14, 3))
+>x : Symbol(x, Decl(assignmentCompatWithCallSignatures3.ts, 14, 9))
+>arg : Symbol(arg, Decl(assignmentCompatWithCallSignatures3.ts, 14, 13))
+>Base : Symbol(Base, Decl(assignmentCompatWithCallSignatures3.ts, 0, 0))
+>Derived : Symbol(Derived, Decl(assignmentCompatWithCallSignatures3.ts, 2, 27))
+>y : Symbol(y, Decl(assignmentCompatWithCallSignatures3.ts, 14, 35))
+>arg2 : Symbol(arg2, Decl(assignmentCompatWithCallSignatures3.ts, 14, 40))
+>Base : Symbol(Base, Decl(assignmentCompatWithCallSignatures3.ts, 0, 0))
+>Derived : Symbol(Derived, Decl(assignmentCompatWithCallSignatures3.ts, 2, 27))
+>r : Symbol(r, Decl(assignmentCompatWithCallSignatures3.ts, 14, 68))
+>Base : Symbol(Base, Decl(assignmentCompatWithCallSignatures3.ts, 0, 0))
+>Derived : Symbol(Derived, Decl(assignmentCompatWithCallSignatures3.ts, 2, 27))
+
+var a9: (x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived;
+>a9 : Symbol(a9, Decl(assignmentCompatWithCallSignatures3.ts, 15, 3))
+>x : Symbol(x, Decl(assignmentCompatWithCallSignatures3.ts, 15, 9))
+>arg : Symbol(arg, Decl(assignmentCompatWithCallSignatures3.ts, 15, 13))
+>Base : Symbol(Base, Decl(assignmentCompatWithCallSignatures3.ts, 0, 0))
+>Derived : Symbol(Derived, Decl(assignmentCompatWithCallSignatures3.ts, 2, 27))
+>y : Symbol(y, Decl(assignmentCompatWithCallSignatures3.ts, 15, 35))
+>arg2 : Symbol(arg2, Decl(assignmentCompatWithCallSignatures3.ts, 15, 40))
+>Base : Symbol(Base, Decl(assignmentCompatWithCallSignatures3.ts, 0, 0))
+>Derived : Symbol(Derived, Decl(assignmentCompatWithCallSignatures3.ts, 2, 27))
+>r : Symbol(r, Decl(assignmentCompatWithCallSignatures3.ts, 15, 68))
+>Base : Symbol(Base, Decl(assignmentCompatWithCallSignatures3.ts, 0, 0))
+>Derived : Symbol(Derived, Decl(assignmentCompatWithCallSignatures3.ts, 2, 27))
+
+var a10: (...x: Derived[]) => Derived;
+>a10 : Symbol(a10, Decl(assignmentCompatWithCallSignatures3.ts, 16, 3))
+>x : Symbol(x, Decl(assignmentCompatWithCallSignatures3.ts, 16, 10))
+>Derived : Symbol(Derived, Decl(assignmentCompatWithCallSignatures3.ts, 2, 27))
+>Derived : Symbol(Derived, Decl(assignmentCompatWithCallSignatures3.ts, 2, 27))
+
+var a11: (x: { foo: string }, y: { foo: string; bar: string }) => Base;
+>a11 : Symbol(a11, Decl(assignmentCompatWithCallSignatures3.ts, 17, 3))
+>x : Symbol(x, Decl(assignmentCompatWithCallSignatures3.ts, 17, 10))
+>foo : Symbol(foo, Decl(assignmentCompatWithCallSignatures3.ts, 17, 14))
+>y : Symbol(y, Decl(assignmentCompatWithCallSignatures3.ts, 17, 29))
+>foo : Symbol(foo, Decl(assignmentCompatWithCallSignatures3.ts, 17, 34))
+>bar : Symbol(bar, Decl(assignmentCompatWithCallSignatures3.ts, 17, 47))
+>Base : Symbol(Base, Decl(assignmentCompatWithCallSignatures3.ts, 0, 0))
+
+var a12: (x: Array<Base>, y: Array<Derived2>) => Array<Derived>;
+>a12 : Symbol(a12, Decl(assignmentCompatWithCallSignatures3.ts, 18, 3))
+>x : Symbol(x, Decl(assignmentCompatWithCallSignatures3.ts, 18, 10))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Base : Symbol(Base, Decl(assignmentCompatWithCallSignatures3.ts, 0, 0))
+>y : Symbol(y, Decl(assignmentCompatWithCallSignatures3.ts, 18, 25))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Derived2 : Symbol(Derived2, Decl(assignmentCompatWithCallSignatures3.ts, 3, 43))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Derived : Symbol(Derived, Decl(assignmentCompatWithCallSignatures3.ts, 2, 27))
+
+var a13: (x: Array<Base>, y: Array<Derived>) => Array<Derived>;
+>a13 : Symbol(a13, Decl(assignmentCompatWithCallSignatures3.ts, 19, 3))
+>x : Symbol(x, Decl(assignmentCompatWithCallSignatures3.ts, 19, 10))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Base : Symbol(Base, Decl(assignmentCompatWithCallSignatures3.ts, 0, 0))
+>y : Symbol(y, Decl(assignmentCompatWithCallSignatures3.ts, 19, 25))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Derived : Symbol(Derived, Decl(assignmentCompatWithCallSignatures3.ts, 2, 27))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Derived : Symbol(Derived, Decl(assignmentCompatWithCallSignatures3.ts, 2, 27))
+
+var a14: (x: { a: string; b: number }) => Object;
+>a14 : Symbol(a14, Decl(assignmentCompatWithCallSignatures3.ts, 20, 3))
+>x : Symbol(x, Decl(assignmentCompatWithCallSignatures3.ts, 20, 10))
+>a : Symbol(a, Decl(assignmentCompatWithCallSignatures3.ts, 20, 14))
+>b : Symbol(b, Decl(assignmentCompatWithCallSignatures3.ts, 20, 25))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+var a15: {
+>a15 : Symbol(a15, Decl(assignmentCompatWithCallSignatures3.ts, 21, 3))
+
+    (x: number): number[];
+>x : Symbol(x, Decl(assignmentCompatWithCallSignatures3.ts, 22, 5))
+
+    (x: string): string[];
+>x : Symbol(x, Decl(assignmentCompatWithCallSignatures3.ts, 23, 5))
+}
+var a16: {
+>a16 : Symbol(a16, Decl(assignmentCompatWithCallSignatures3.ts, 25, 3))
+
+    <T extends Derived>(x: T): number[];
+>T : Symbol(T, Decl(assignmentCompatWithCallSignatures3.ts, 26, 5))
+>Derived : Symbol(Derived, Decl(assignmentCompatWithCallSignatures3.ts, 2, 27))
+>x : Symbol(x, Decl(assignmentCompatWithCallSignatures3.ts, 26, 24))
+>T : Symbol(T, Decl(assignmentCompatWithCallSignatures3.ts, 26, 5))
+
+    <U extends Base>(x: U): number[];
+>U : Symbol(U, Decl(assignmentCompatWithCallSignatures3.ts, 27, 5))
+>Base : Symbol(Base, Decl(assignmentCompatWithCallSignatures3.ts, 0, 0))
+>x : Symbol(x, Decl(assignmentCompatWithCallSignatures3.ts, 27, 21))
+>U : Symbol(U, Decl(assignmentCompatWithCallSignatures3.ts, 27, 5))
+}
+var a17: {
+>a17 : Symbol(a17, Decl(assignmentCompatWithCallSignatures3.ts, 29, 3))
+
+    (x: (a: number) => number): number[];
+>x : Symbol(x, Decl(assignmentCompatWithCallSignatures3.ts, 30, 5))
+>a : Symbol(a, Decl(assignmentCompatWithCallSignatures3.ts, 30, 9))
+
+    (x: (a: string) => string): string[];
+>x : Symbol(x, Decl(assignmentCompatWithCallSignatures3.ts, 31, 5))
+>a : Symbol(a, Decl(assignmentCompatWithCallSignatures3.ts, 31, 9))
+
+};
+var a18: {
+>a18 : Symbol(a18, Decl(assignmentCompatWithCallSignatures3.ts, 33, 3))
+
+    (x: {
+>x : Symbol(x, Decl(assignmentCompatWithCallSignatures3.ts, 34, 5))
+
+        (a: number): number;
+>a : Symbol(a, Decl(assignmentCompatWithCallSignatures3.ts, 35, 9))
+
+        (a: string): string;
+>a : Symbol(a, Decl(assignmentCompatWithCallSignatures3.ts, 36, 9))
+
+    }): any[];
+    (x: {
+>x : Symbol(x, Decl(assignmentCompatWithCallSignatures3.ts, 38, 5))
+
+        (a: boolean): boolean;
+>a : Symbol(a, Decl(assignmentCompatWithCallSignatures3.ts, 39, 9))
+
+        (a: Date): Date;
+>a : Symbol(a, Decl(assignmentCompatWithCallSignatures3.ts, 40, 9))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+    }): any[];
+}
+
+var b: <T>(x: T) => T[]; 
+>b : Symbol(b, Decl(assignmentCompatWithCallSignatures3.ts, 44, 3))
+>T : Symbol(T, Decl(assignmentCompatWithCallSignatures3.ts, 44, 8))
+>x : Symbol(x, Decl(assignmentCompatWithCallSignatures3.ts, 44, 11))
+>T : Symbol(T, Decl(assignmentCompatWithCallSignatures3.ts, 44, 8))
+>T : Symbol(T, Decl(assignmentCompatWithCallSignatures3.ts, 44, 8))
+
+a = b; // ok
+>a : Symbol(a, Decl(assignmentCompatWithCallSignatures3.ts, 7, 3))
+>b : Symbol(b, Decl(assignmentCompatWithCallSignatures3.ts, 44, 3))
+
+b = a; // ok
+>b : Symbol(b, Decl(assignmentCompatWithCallSignatures3.ts, 44, 3))
+>a : Symbol(a, Decl(assignmentCompatWithCallSignatures3.ts, 7, 3))
+
+var b2: <T>(x: T) => string[]; 
+>b2 : Symbol(b2, Decl(assignmentCompatWithCallSignatures3.ts, 47, 3))
+>T : Symbol(T, Decl(assignmentCompatWithCallSignatures3.ts, 47, 9))
+>x : Symbol(x, Decl(assignmentCompatWithCallSignatures3.ts, 47, 12))
+>T : Symbol(T, Decl(assignmentCompatWithCallSignatures3.ts, 47, 9))
+
+a2 = b2; // ok 
+>a2 : Symbol(a2, Decl(assignmentCompatWithCallSignatures3.ts, 8, 3))
+>b2 : Symbol(b2, Decl(assignmentCompatWithCallSignatures3.ts, 47, 3))
+
+b2 = a2; // ok
+>b2 : Symbol(b2, Decl(assignmentCompatWithCallSignatures3.ts, 47, 3))
+>a2 : Symbol(a2, Decl(assignmentCompatWithCallSignatures3.ts, 8, 3))
+
+var b3: <T>(x: T) => T; 
+>b3 : Symbol(b3, Decl(assignmentCompatWithCallSignatures3.ts, 50, 3))
+>T : Symbol(T, Decl(assignmentCompatWithCallSignatures3.ts, 50, 9))
+>x : Symbol(x, Decl(assignmentCompatWithCallSignatures3.ts, 50, 12))
+>T : Symbol(T, Decl(assignmentCompatWithCallSignatures3.ts, 50, 9))
+>T : Symbol(T, Decl(assignmentCompatWithCallSignatures3.ts, 50, 9))
+
+a3 = b3; // ok
+>a3 : Symbol(a3, Decl(assignmentCompatWithCallSignatures3.ts, 9, 3))
+>b3 : Symbol(b3, Decl(assignmentCompatWithCallSignatures3.ts, 50, 3))
+
+b3 = a3; // ok
+>b3 : Symbol(b3, Decl(assignmentCompatWithCallSignatures3.ts, 50, 3))
+>a3 : Symbol(a3, Decl(assignmentCompatWithCallSignatures3.ts, 9, 3))
+
+var b4: <T, U>(x: T, y: U) => T; 
+>b4 : Symbol(b4, Decl(assignmentCompatWithCallSignatures3.ts, 53, 3))
+>T : Symbol(T, Decl(assignmentCompatWithCallSignatures3.ts, 53, 9))
+>U : Symbol(U, Decl(assignmentCompatWithCallSignatures3.ts, 53, 11))
+>x : Symbol(x, Decl(assignmentCompatWithCallSignatures3.ts, 53, 15))
+>T : Symbol(T, Decl(assignmentCompatWithCallSignatures3.ts, 53, 9))
+>y : Symbol(y, Decl(assignmentCompatWithCallSignatures3.ts, 53, 20))
+>U : Symbol(U, Decl(assignmentCompatWithCallSignatures3.ts, 53, 11))
+>T : Symbol(T, Decl(assignmentCompatWithCallSignatures3.ts, 53, 9))
+
+a4 = b4; // ok
+>a4 : Symbol(a4, Decl(assignmentCompatWithCallSignatures3.ts, 10, 3))
+>b4 : Symbol(b4, Decl(assignmentCompatWithCallSignatures3.ts, 53, 3))
+
+b4 = a4; // ok
+>b4 : Symbol(b4, Decl(assignmentCompatWithCallSignatures3.ts, 53, 3))
+>a4 : Symbol(a4, Decl(assignmentCompatWithCallSignatures3.ts, 10, 3))
+
+var b5: <T, U>(x: (arg: T) => U) => T; 
+>b5 : Symbol(b5, Decl(assignmentCompatWithCallSignatures3.ts, 56, 3))
+>T : Symbol(T, Decl(assignmentCompatWithCallSignatures3.ts, 56, 9))
+>U : Symbol(U, Decl(assignmentCompatWithCallSignatures3.ts, 56, 11))
+>x : Symbol(x, Decl(assignmentCompatWithCallSignatures3.ts, 56, 15))
+>arg : Symbol(arg, Decl(assignmentCompatWithCallSignatures3.ts, 56, 19))
+>T : Symbol(T, Decl(assignmentCompatWithCallSignatures3.ts, 56, 9))
+>U : Symbol(U, Decl(assignmentCompatWithCallSignatures3.ts, 56, 11))
+>T : Symbol(T, Decl(assignmentCompatWithCallSignatures3.ts, 56, 9))
+
+a5 = b5; // ok
+>a5 : Symbol(a5, Decl(assignmentCompatWithCallSignatures3.ts, 11, 3))
+>b5 : Symbol(b5, Decl(assignmentCompatWithCallSignatures3.ts, 56, 3))
+
+b5 = a5; // ok
+>b5 : Symbol(b5, Decl(assignmentCompatWithCallSignatures3.ts, 56, 3))
+>a5 : Symbol(a5, Decl(assignmentCompatWithCallSignatures3.ts, 11, 3))
+
+var b6: <T extends Base, U extends Derived>(x: (arg: T) => U) => T; 
+>b6 : Symbol(b6, Decl(assignmentCompatWithCallSignatures3.ts, 59, 3))
+>T : Symbol(T, Decl(assignmentCompatWithCallSignatures3.ts, 59, 9))
+>Base : Symbol(Base, Decl(assignmentCompatWithCallSignatures3.ts, 0, 0))
+>U : Symbol(U, Decl(assignmentCompatWithCallSignatures3.ts, 59, 24))
+>Derived : Symbol(Derived, Decl(assignmentCompatWithCallSignatures3.ts, 2, 27))
+>x : Symbol(x, Decl(assignmentCompatWithCallSignatures3.ts, 59, 44))
+>arg : Symbol(arg, Decl(assignmentCompatWithCallSignatures3.ts, 59, 48))
+>T : Symbol(T, Decl(assignmentCompatWithCallSignatures3.ts, 59, 9))
+>U : Symbol(U, Decl(assignmentCompatWithCallSignatures3.ts, 59, 24))
+>T : Symbol(T, Decl(assignmentCompatWithCallSignatures3.ts, 59, 9))
+
+a6 = b6; // ok
+>a6 : Symbol(a6, Decl(assignmentCompatWithCallSignatures3.ts, 12, 3))
+>b6 : Symbol(b6, Decl(assignmentCompatWithCallSignatures3.ts, 59, 3))
+
+b6 = a6; // ok
+>b6 : Symbol(b6, Decl(assignmentCompatWithCallSignatures3.ts, 59, 3))
+>a6 : Symbol(a6, Decl(assignmentCompatWithCallSignatures3.ts, 12, 3))
+
+var b7: <T extends Base, U extends Derived>(x: (arg: T) => U) => (r: T) => U; 
+>b7 : Symbol(b7, Decl(assignmentCompatWithCallSignatures3.ts, 62, 3))
+>T : Symbol(T, Decl(assignmentCompatWithCallSignatures3.ts, 62, 9))
+>Base : Symbol(Base, Decl(assignmentCompatWithCallSignatures3.ts, 0, 0))
+>U : Symbol(U, Decl(assignmentCompatWithCallSignatures3.ts, 62, 24))
+>Derived : Symbol(Derived, Decl(assignmentCompatWithCallSignatures3.ts, 2, 27))
+>x : Symbol(x, Decl(assignmentCompatWithCallSignatures3.ts, 62, 44))
+>arg : Symbol(arg, Decl(assignmentCompatWithCallSignatures3.ts, 62, 48))
+>T : Symbol(T, Decl(assignmentCompatWithCallSignatures3.ts, 62, 9))
+>U : Symbol(U, Decl(assignmentCompatWithCallSignatures3.ts, 62, 24))
+>r : Symbol(r, Decl(assignmentCompatWithCallSignatures3.ts, 62, 66))
+>T : Symbol(T, Decl(assignmentCompatWithCallSignatures3.ts, 62, 9))
+>U : Symbol(U, Decl(assignmentCompatWithCallSignatures3.ts, 62, 24))
+
+a7 = b7; // ok
+>a7 : Symbol(a7, Decl(assignmentCompatWithCallSignatures3.ts, 13, 3))
+>b7 : Symbol(b7, Decl(assignmentCompatWithCallSignatures3.ts, 62, 3))
+
+b7 = a7; // ok
+>b7 : Symbol(b7, Decl(assignmentCompatWithCallSignatures3.ts, 62, 3))
+>a7 : Symbol(a7, Decl(assignmentCompatWithCallSignatures3.ts, 13, 3))
+
+var b8: <T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: T) => U) => (r: T) => U;
+>b8 : Symbol(b8, Decl(assignmentCompatWithCallSignatures3.ts, 65, 3))
+>T : Symbol(T, Decl(assignmentCompatWithCallSignatures3.ts, 65, 9))
+>Base : Symbol(Base, Decl(assignmentCompatWithCallSignatures3.ts, 0, 0))
+>U : Symbol(U, Decl(assignmentCompatWithCallSignatures3.ts, 65, 24))
+>Derived : Symbol(Derived, Decl(assignmentCompatWithCallSignatures3.ts, 2, 27))
+>x : Symbol(x, Decl(assignmentCompatWithCallSignatures3.ts, 65, 44))
+>arg : Symbol(arg, Decl(assignmentCompatWithCallSignatures3.ts, 65, 48))
+>T : Symbol(T, Decl(assignmentCompatWithCallSignatures3.ts, 65, 9))
+>U : Symbol(U, Decl(assignmentCompatWithCallSignatures3.ts, 65, 24))
+>y : Symbol(y, Decl(assignmentCompatWithCallSignatures3.ts, 65, 61))
+>arg2 : Symbol(arg2, Decl(assignmentCompatWithCallSignatures3.ts, 65, 66))
+>T : Symbol(T, Decl(assignmentCompatWithCallSignatures3.ts, 65, 9))
+>U : Symbol(U, Decl(assignmentCompatWithCallSignatures3.ts, 65, 24))
+>r : Symbol(r, Decl(assignmentCompatWithCallSignatures3.ts, 65, 85))
+>T : Symbol(T, Decl(assignmentCompatWithCallSignatures3.ts, 65, 9))
+>U : Symbol(U, Decl(assignmentCompatWithCallSignatures3.ts, 65, 24))
+
+a8 = b8; // ok
+>a8 : Symbol(a8, Decl(assignmentCompatWithCallSignatures3.ts, 14, 3))
+>b8 : Symbol(b8, Decl(assignmentCompatWithCallSignatures3.ts, 65, 3))
+
+b8 = a8; // ok
+>b8 : Symbol(b8, Decl(assignmentCompatWithCallSignatures3.ts, 65, 3))
+>a8 : Symbol(a8, Decl(assignmentCompatWithCallSignatures3.ts, 14, 3))
+
+var b9: <T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: { foo: string; bing: number }) => U) => (r: T) => U; 
+>b9 : Symbol(b9, Decl(assignmentCompatWithCallSignatures3.ts, 68, 3))
+>T : Symbol(T, Decl(assignmentCompatWithCallSignatures3.ts, 68, 9))
+>Base : Symbol(Base, Decl(assignmentCompatWithCallSignatures3.ts, 0, 0))
+>U : Symbol(U, Decl(assignmentCompatWithCallSignatures3.ts, 68, 24))
+>Derived : Symbol(Derived, Decl(assignmentCompatWithCallSignatures3.ts, 2, 27))
+>x : Symbol(x, Decl(assignmentCompatWithCallSignatures3.ts, 68, 44))
+>arg : Symbol(arg, Decl(assignmentCompatWithCallSignatures3.ts, 68, 48))
+>T : Symbol(T, Decl(assignmentCompatWithCallSignatures3.ts, 68, 9))
+>U : Symbol(U, Decl(assignmentCompatWithCallSignatures3.ts, 68, 24))
+>y : Symbol(y, Decl(assignmentCompatWithCallSignatures3.ts, 68, 61))
+>arg2 : Symbol(arg2, Decl(assignmentCompatWithCallSignatures3.ts, 68, 66))
+>foo : Symbol(foo, Decl(assignmentCompatWithCallSignatures3.ts, 68, 73))
+>bing : Symbol(bing, Decl(assignmentCompatWithCallSignatures3.ts, 68, 86))
+>U : Symbol(U, Decl(assignmentCompatWithCallSignatures3.ts, 68, 24))
+>r : Symbol(r, Decl(assignmentCompatWithCallSignatures3.ts, 68, 113))
+>T : Symbol(T, Decl(assignmentCompatWithCallSignatures3.ts, 68, 9))
+>U : Symbol(U, Decl(assignmentCompatWithCallSignatures3.ts, 68, 24))
+
+a9 = b9; // ok
+>a9 : Symbol(a9, Decl(assignmentCompatWithCallSignatures3.ts, 15, 3))
+>b9 : Symbol(b9, Decl(assignmentCompatWithCallSignatures3.ts, 68, 3))
+
+b9 = a9; // ok
+>b9 : Symbol(b9, Decl(assignmentCompatWithCallSignatures3.ts, 68, 3))
+>a9 : Symbol(a9, Decl(assignmentCompatWithCallSignatures3.ts, 15, 3))
+
+var b10: <T extends Derived>(...x: T[]) => T; 
+>b10 : Symbol(b10, Decl(assignmentCompatWithCallSignatures3.ts, 71, 3))
+>T : Symbol(T, Decl(assignmentCompatWithCallSignatures3.ts, 71, 10))
+>Derived : Symbol(Derived, Decl(assignmentCompatWithCallSignatures3.ts, 2, 27))
+>x : Symbol(x, Decl(assignmentCompatWithCallSignatures3.ts, 71, 29))
+>T : Symbol(T, Decl(assignmentCompatWithCallSignatures3.ts, 71, 10))
+>T : Symbol(T, Decl(assignmentCompatWithCallSignatures3.ts, 71, 10))
+
+a10 = b10; // ok
+>a10 : Symbol(a10, Decl(assignmentCompatWithCallSignatures3.ts, 16, 3))
+>b10 : Symbol(b10, Decl(assignmentCompatWithCallSignatures3.ts, 71, 3))
+
+b10 = a10; // ok
+>b10 : Symbol(b10, Decl(assignmentCompatWithCallSignatures3.ts, 71, 3))
+>a10 : Symbol(a10, Decl(assignmentCompatWithCallSignatures3.ts, 16, 3))
+
+var b11: <T extends Base>(x: T, y: T) => T; 
+>b11 : Symbol(b11, Decl(assignmentCompatWithCallSignatures3.ts, 74, 3))
+>T : Symbol(T, Decl(assignmentCompatWithCallSignatures3.ts, 74, 10))
+>Base : Symbol(Base, Decl(assignmentCompatWithCallSignatures3.ts, 0, 0))
+>x : Symbol(x, Decl(assignmentCompatWithCallSignatures3.ts, 74, 26))
+>T : Symbol(T, Decl(assignmentCompatWithCallSignatures3.ts, 74, 10))
+>y : Symbol(y, Decl(assignmentCompatWithCallSignatures3.ts, 74, 31))
+>T : Symbol(T, Decl(assignmentCompatWithCallSignatures3.ts, 74, 10))
+>T : Symbol(T, Decl(assignmentCompatWithCallSignatures3.ts, 74, 10))
+
+a11 = b11; // ok
+>a11 : Symbol(a11, Decl(assignmentCompatWithCallSignatures3.ts, 17, 3))
+>b11 : Symbol(b11, Decl(assignmentCompatWithCallSignatures3.ts, 74, 3))
+
+b11 = a11; // ok
+>b11 : Symbol(b11, Decl(assignmentCompatWithCallSignatures3.ts, 74, 3))
+>a11 : Symbol(a11, Decl(assignmentCompatWithCallSignatures3.ts, 17, 3))
+
+var b12: <T extends Array<Base>>(x: Array<Base>, y: T) => Array<Derived>; 
+>b12 : Symbol(b12, Decl(assignmentCompatWithCallSignatures3.ts, 77, 3))
+>T : Symbol(T, Decl(assignmentCompatWithCallSignatures3.ts, 77, 10))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Base : Symbol(Base, Decl(assignmentCompatWithCallSignatures3.ts, 0, 0))
+>x : Symbol(x, Decl(assignmentCompatWithCallSignatures3.ts, 77, 33))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Base : Symbol(Base, Decl(assignmentCompatWithCallSignatures3.ts, 0, 0))
+>y : Symbol(y, Decl(assignmentCompatWithCallSignatures3.ts, 77, 48))
+>T : Symbol(T, Decl(assignmentCompatWithCallSignatures3.ts, 77, 10))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Derived : Symbol(Derived, Decl(assignmentCompatWithCallSignatures3.ts, 2, 27))
+
+a12 = b12; // ok
+>a12 : Symbol(a12, Decl(assignmentCompatWithCallSignatures3.ts, 18, 3))
+>b12 : Symbol(b12, Decl(assignmentCompatWithCallSignatures3.ts, 77, 3))
+
+b12 = a12; // ok
+>b12 : Symbol(b12, Decl(assignmentCompatWithCallSignatures3.ts, 77, 3))
+>a12 : Symbol(a12, Decl(assignmentCompatWithCallSignatures3.ts, 18, 3))
+
+var b13: <T extends Array<Derived>>(x: Array<Base>, y: T) => T; 
+>b13 : Symbol(b13, Decl(assignmentCompatWithCallSignatures3.ts, 80, 3))
+>T : Symbol(T, Decl(assignmentCompatWithCallSignatures3.ts, 80, 10))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Derived : Symbol(Derived, Decl(assignmentCompatWithCallSignatures3.ts, 2, 27))
+>x : Symbol(x, Decl(assignmentCompatWithCallSignatures3.ts, 80, 36))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Base : Symbol(Base, Decl(assignmentCompatWithCallSignatures3.ts, 0, 0))
+>y : Symbol(y, Decl(assignmentCompatWithCallSignatures3.ts, 80, 51))
+>T : Symbol(T, Decl(assignmentCompatWithCallSignatures3.ts, 80, 10))
+>T : Symbol(T, Decl(assignmentCompatWithCallSignatures3.ts, 80, 10))
+
+a13 = b13; // ok
+>a13 : Symbol(a13, Decl(assignmentCompatWithCallSignatures3.ts, 19, 3))
+>b13 : Symbol(b13, Decl(assignmentCompatWithCallSignatures3.ts, 80, 3))
+
+b13 = a13; // ok
+>b13 : Symbol(b13, Decl(assignmentCompatWithCallSignatures3.ts, 80, 3))
+>a13 : Symbol(a13, Decl(assignmentCompatWithCallSignatures3.ts, 19, 3))
+
+var b14: <T>(x: { a: T; b: T }) => T; 
+>b14 : Symbol(b14, Decl(assignmentCompatWithCallSignatures3.ts, 83, 3))
+>T : Symbol(T, Decl(assignmentCompatWithCallSignatures3.ts, 83, 10))
+>x : Symbol(x, Decl(assignmentCompatWithCallSignatures3.ts, 83, 13))
+>a : Symbol(a, Decl(assignmentCompatWithCallSignatures3.ts, 83, 17))
+>T : Symbol(T, Decl(assignmentCompatWithCallSignatures3.ts, 83, 10))
+>b : Symbol(b, Decl(assignmentCompatWithCallSignatures3.ts, 83, 23))
+>T : Symbol(T, Decl(assignmentCompatWithCallSignatures3.ts, 83, 10))
+>T : Symbol(T, Decl(assignmentCompatWithCallSignatures3.ts, 83, 10))
+
+a14 = b14; // ok
+>a14 : Symbol(a14, Decl(assignmentCompatWithCallSignatures3.ts, 20, 3))
+>b14 : Symbol(b14, Decl(assignmentCompatWithCallSignatures3.ts, 83, 3))
+
+b14 = a14; // ok
+>b14 : Symbol(b14, Decl(assignmentCompatWithCallSignatures3.ts, 83, 3))
+>a14 : Symbol(a14, Decl(assignmentCompatWithCallSignatures3.ts, 20, 3))
+
+var b15: <T>(x: T) => T[]; 
+>b15 : Symbol(b15, Decl(assignmentCompatWithCallSignatures3.ts, 86, 3))
+>T : Symbol(T, Decl(assignmentCompatWithCallSignatures3.ts, 86, 10))
+>x : Symbol(x, Decl(assignmentCompatWithCallSignatures3.ts, 86, 13))
+>T : Symbol(T, Decl(assignmentCompatWithCallSignatures3.ts, 86, 10))
+>T : Symbol(T, Decl(assignmentCompatWithCallSignatures3.ts, 86, 10))
+
+a15 = b15; // ok
+>a15 : Symbol(a15, Decl(assignmentCompatWithCallSignatures3.ts, 21, 3))
+>b15 : Symbol(b15, Decl(assignmentCompatWithCallSignatures3.ts, 86, 3))
+
+b15 = a15; // ok
+>b15 : Symbol(b15, Decl(assignmentCompatWithCallSignatures3.ts, 86, 3))
+>a15 : Symbol(a15, Decl(assignmentCompatWithCallSignatures3.ts, 21, 3))
+
+var b16: <T extends Base>(x: T) => number[];
+>b16 : Symbol(b16, Decl(assignmentCompatWithCallSignatures3.ts, 89, 3))
+>T : Symbol(T, Decl(assignmentCompatWithCallSignatures3.ts, 89, 10))
+>Base : Symbol(Base, Decl(assignmentCompatWithCallSignatures3.ts, 0, 0))
+>x : Symbol(x, Decl(assignmentCompatWithCallSignatures3.ts, 89, 26))
+>T : Symbol(T, Decl(assignmentCompatWithCallSignatures3.ts, 89, 10))
+
+a16 = b16; // ok
+>a16 : Symbol(a16, Decl(assignmentCompatWithCallSignatures3.ts, 25, 3))
+>b16 : Symbol(b16, Decl(assignmentCompatWithCallSignatures3.ts, 89, 3))
+
+b16 = a16; // ok
+>b16 : Symbol(b16, Decl(assignmentCompatWithCallSignatures3.ts, 89, 3))
+>a16 : Symbol(a16, Decl(assignmentCompatWithCallSignatures3.ts, 25, 3))
+
+var b17: <T>(x: (a: T) => T) => T[]; // ok
+>b17 : Symbol(b17, Decl(assignmentCompatWithCallSignatures3.ts, 92, 3))
+>T : Symbol(T, Decl(assignmentCompatWithCallSignatures3.ts, 92, 10))
+>x : Symbol(x, Decl(assignmentCompatWithCallSignatures3.ts, 92, 13))
+>a : Symbol(a, Decl(assignmentCompatWithCallSignatures3.ts, 92, 17))
+>T : Symbol(T, Decl(assignmentCompatWithCallSignatures3.ts, 92, 10))
+>T : Symbol(T, Decl(assignmentCompatWithCallSignatures3.ts, 92, 10))
+>T : Symbol(T, Decl(assignmentCompatWithCallSignatures3.ts, 92, 10))
+
+a17 = b17; // ok
+>a17 : Symbol(a17, Decl(assignmentCompatWithCallSignatures3.ts, 29, 3))
+>b17 : Symbol(b17, Decl(assignmentCompatWithCallSignatures3.ts, 92, 3))
+
+b17 = a17; // ok
+>b17 : Symbol(b17, Decl(assignmentCompatWithCallSignatures3.ts, 92, 3))
+>a17 : Symbol(a17, Decl(assignmentCompatWithCallSignatures3.ts, 29, 3))
+
+var b18: <T>(x: (a: T) => T) => T[]; 
+>b18 : Symbol(b18, Decl(assignmentCompatWithCallSignatures3.ts, 95, 3))
+>T : Symbol(T, Decl(assignmentCompatWithCallSignatures3.ts, 95, 10))
+>x : Symbol(x, Decl(assignmentCompatWithCallSignatures3.ts, 95, 13))
+>a : Symbol(a, Decl(assignmentCompatWithCallSignatures3.ts, 95, 17))
+>T : Symbol(T, Decl(assignmentCompatWithCallSignatures3.ts, 95, 10))
+>T : Symbol(T, Decl(assignmentCompatWithCallSignatures3.ts, 95, 10))
+>T : Symbol(T, Decl(assignmentCompatWithCallSignatures3.ts, 95, 10))
+
+a18 = b18; // ok
+>a18 : Symbol(a18, Decl(assignmentCompatWithCallSignatures3.ts, 33, 3))
+>b18 : Symbol(b18, Decl(assignmentCompatWithCallSignatures3.ts, 95, 3))
+
+b18 = a18; // ok
+>b18 : Symbol(b18, Decl(assignmentCompatWithCallSignatures3.ts, 95, 3))
+>a18 : Symbol(a18, Decl(assignmentCompatWithCallSignatures3.ts, 33, 3))
+

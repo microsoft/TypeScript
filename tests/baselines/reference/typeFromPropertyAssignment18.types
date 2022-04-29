@@ -1,0 +1,52 @@
+=== tests/cases/conformance/salsa/a.js ===
+var GLOBSTAR = m.GLOBSTAR = {}
+>GLOBSTAR : typeof m.GLOBSTAR
+>m.GLOBSTAR = {} : typeof m.GLOBSTAR
+>m.GLOBSTAR : typeof m.GLOBSTAR
+>m : typeof m
+>GLOBSTAR : typeof m.GLOBSTAR
+>{} : {}
+
+function m() {
+>m : typeof m
+}
+GLOBSTAR.p = 1
+>GLOBSTAR.p = 1 : 1
+>GLOBSTAR.p : number
+>GLOBSTAR : typeof m.GLOBSTAR
+>p : number
+>1 : 1
+
+m.GLOBSTAR.q = 2
+>m.GLOBSTAR.q = 2 : 2
+>m.GLOBSTAR.q : number
+>m.GLOBSTAR : typeof m.GLOBSTAR
+>m : typeof m
+>GLOBSTAR : typeof m.GLOBSTAR
+>q : number
+>2 : 2
+
+GLOBSTAR.p
+>GLOBSTAR.p : number
+>GLOBSTAR : typeof m.GLOBSTAR
+>p : number
+
+GLOBSTAR.q
+>GLOBSTAR.q : number
+>GLOBSTAR : typeof m.GLOBSTAR
+>q : number
+
+m.GLOBSTAR.p
+>m.GLOBSTAR.p : number
+>m.GLOBSTAR : typeof m.GLOBSTAR
+>m : typeof m
+>GLOBSTAR : typeof m.GLOBSTAR
+>p : number
+
+m.GLOBSTAR.q
+>m.GLOBSTAR.q : number
+>m.GLOBSTAR : typeof m.GLOBSTAR
+>m : typeof m
+>GLOBSTAR : typeof m.GLOBSTAR
+>q : number
+

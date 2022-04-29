@@ -1,0 +1,14 @@
+tests/cases/compiler/staticOffOfInstance2.ts(3,14): error TS2576: Property 'Foo' does not exist on type 'List<T>'. Did you mean to access the static member 'List<T>.Foo' instead?
+
+
+==== tests/cases/compiler/staticOffOfInstance2.ts (1 errors) ====
+    class List<T> {
+        public Blah() {
+            this.Foo(); // no error
+                 ~~~
+!!! error TS2576: Property 'Foo' does not exist on type 'List<T>'. Did you mean to access the static member 'List<T>.Foo' instead?
+            List.Foo();
+        }
+        public static Foo() { }
+    }
+    

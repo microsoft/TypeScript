@@ -1,0 +1,30 @@
+=== /src/a.ts ===
+export default 0;
+No type information for this code.
+No type information for this code.// No extension: '.ts' added
+No type information for this code.=== /src/b.ts ===
+import a from './a';
+>a : Symbol(a, Decl(b.ts, 0, 6))
+
+// '.js' extension: stripped and replaced with '.ts'
+=== /src/d.ts ===
+import a from './a.js';
+>a : Symbol(a, Decl(d.ts, 0, 6))
+
+=== /src/jquery.d.ts ===
+declare var x: number;
+>x : Symbol(x, Decl(jquery.d.ts, 0, 11))
+
+export default x;
+>x : Symbol(x, Decl(jquery.d.ts, 0, 11))
+
+// No extension: '.d.ts' added
+=== /src/jquery_user_1.ts ===
+import j from "./jquery";
+>j : Symbol(j, Decl(jquery_user_1.ts, 0, 6))
+
+// '.js' extension: stripped and replaced with '.d.ts'
+=== /src/jquery_user_1.ts ===
+import j from "./jquery.js"
+>j : Symbol(j, Decl(jquery_user_1.ts, 0, 6))
+

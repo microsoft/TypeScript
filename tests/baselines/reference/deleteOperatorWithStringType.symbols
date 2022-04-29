@@ -1,0 +1,123 @@
+=== tests/cases/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorWithStringType.ts ===
+// delete  operator on string type
+var STRING: string;
+>STRING : Symbol(STRING, Decl(deleteOperatorWithStringType.ts, 1, 3))
+
+var STRING1: string[] = ["", "abc"];
+>STRING1 : Symbol(STRING1, Decl(deleteOperatorWithStringType.ts, 2, 3))
+
+function foo(): string { return "abc"; }
+>foo : Symbol(foo, Decl(deleteOperatorWithStringType.ts, 2, 36))
+
+class A {
+>A : Symbol(A, Decl(deleteOperatorWithStringType.ts, 4, 40))
+
+    public a: string;
+>a : Symbol(A.a, Decl(deleteOperatorWithStringType.ts, 6, 9))
+
+    static foo() { return ""; }
+>foo : Symbol(A.foo, Decl(deleteOperatorWithStringType.ts, 7, 21))
+}
+module M {
+>M : Symbol(M, Decl(deleteOperatorWithStringType.ts, 9, 1))
+
+    export var n: string;
+>n : Symbol(n, Decl(deleteOperatorWithStringType.ts, 11, 14))
+}
+
+var objA = new A();
+>objA : Symbol(objA, Decl(deleteOperatorWithStringType.ts, 14, 3))
+>A : Symbol(A, Decl(deleteOperatorWithStringType.ts, 4, 40))
+
+// string type var
+var ResultIsBoolean1 = delete STRING;
+>ResultIsBoolean1 : Symbol(ResultIsBoolean1, Decl(deleteOperatorWithStringType.ts, 17, 3))
+>STRING : Symbol(STRING, Decl(deleteOperatorWithStringType.ts, 1, 3))
+
+var ResultIsBoolean2 = delete STRING1;
+>ResultIsBoolean2 : Symbol(ResultIsBoolean2, Decl(deleteOperatorWithStringType.ts, 18, 3))
+>STRING1 : Symbol(STRING1, Decl(deleteOperatorWithStringType.ts, 2, 3))
+
+// string type literal
+var ResultIsBoolean3 = delete "";
+>ResultIsBoolean3 : Symbol(ResultIsBoolean3, Decl(deleteOperatorWithStringType.ts, 21, 3))
+
+var ResultIsBoolean4 = delete { x: "", y: "" };
+>ResultIsBoolean4 : Symbol(ResultIsBoolean4, Decl(deleteOperatorWithStringType.ts, 22, 3))
+>x : Symbol(x, Decl(deleteOperatorWithStringType.ts, 22, 31))
+>y : Symbol(y, Decl(deleteOperatorWithStringType.ts, 22, 38))
+
+var ResultIsBoolean5 = delete { x: "", y: (s: string) => { return s; } };
+>ResultIsBoolean5 : Symbol(ResultIsBoolean5, Decl(deleteOperatorWithStringType.ts, 23, 3))
+>x : Symbol(x, Decl(deleteOperatorWithStringType.ts, 23, 31))
+>y : Symbol(y, Decl(deleteOperatorWithStringType.ts, 23, 38))
+>s : Symbol(s, Decl(deleteOperatorWithStringType.ts, 23, 43))
+>s : Symbol(s, Decl(deleteOperatorWithStringType.ts, 23, 43))
+
+// string type expressions
+var ResultIsBoolean6 = delete objA.a;
+>ResultIsBoolean6 : Symbol(ResultIsBoolean6, Decl(deleteOperatorWithStringType.ts, 26, 3))
+>objA.a : Symbol(A.a, Decl(deleteOperatorWithStringType.ts, 6, 9))
+>objA : Symbol(objA, Decl(deleteOperatorWithStringType.ts, 14, 3))
+>a : Symbol(A.a, Decl(deleteOperatorWithStringType.ts, 6, 9))
+
+var ResultIsBoolean7 = delete M.n;
+>ResultIsBoolean7 : Symbol(ResultIsBoolean7, Decl(deleteOperatorWithStringType.ts, 27, 3))
+>M.n : Symbol(M.n, Decl(deleteOperatorWithStringType.ts, 11, 14))
+>M : Symbol(M, Decl(deleteOperatorWithStringType.ts, 9, 1))
+>n : Symbol(M.n, Decl(deleteOperatorWithStringType.ts, 11, 14))
+
+var ResultIsBoolean8 = delete STRING1[0];
+>ResultIsBoolean8 : Symbol(ResultIsBoolean8, Decl(deleteOperatorWithStringType.ts, 28, 3))
+>STRING1 : Symbol(STRING1, Decl(deleteOperatorWithStringType.ts, 2, 3))
+
+var ResultIsBoolean9 = delete foo();
+>ResultIsBoolean9 : Symbol(ResultIsBoolean9, Decl(deleteOperatorWithStringType.ts, 29, 3))
+>foo : Symbol(foo, Decl(deleteOperatorWithStringType.ts, 2, 36))
+
+var ResultIsBoolean10 = delete A.foo();
+>ResultIsBoolean10 : Symbol(ResultIsBoolean10, Decl(deleteOperatorWithStringType.ts, 30, 3))
+>A.foo : Symbol(A.foo, Decl(deleteOperatorWithStringType.ts, 7, 21))
+>A : Symbol(A, Decl(deleteOperatorWithStringType.ts, 4, 40))
+>foo : Symbol(A.foo, Decl(deleteOperatorWithStringType.ts, 7, 21))
+
+var ResultIsBoolean11 = delete (STRING + STRING);
+>ResultIsBoolean11 : Symbol(ResultIsBoolean11, Decl(deleteOperatorWithStringType.ts, 31, 3))
+>STRING : Symbol(STRING, Decl(deleteOperatorWithStringType.ts, 1, 3))
+>STRING : Symbol(STRING, Decl(deleteOperatorWithStringType.ts, 1, 3))
+
+var ResultIsBoolean12 = delete STRING.charAt(0);
+>ResultIsBoolean12 : Symbol(ResultIsBoolean12, Decl(deleteOperatorWithStringType.ts, 32, 3))
+>STRING.charAt : Symbol(String.charAt, Decl(lib.es5.d.ts, --, --))
+>STRING : Symbol(STRING, Decl(deleteOperatorWithStringType.ts, 1, 3))
+>charAt : Symbol(String.charAt, Decl(lib.es5.d.ts, --, --))
+
+// multiple delete  operator
+var ResultIsBoolean13 = delete delete STRING;
+>ResultIsBoolean13 : Symbol(ResultIsBoolean13, Decl(deleteOperatorWithStringType.ts, 35, 3))
+>STRING : Symbol(STRING, Decl(deleteOperatorWithStringType.ts, 1, 3))
+
+var ResultIsBoolean14 = delete delete delete (STRING + STRING);
+>ResultIsBoolean14 : Symbol(ResultIsBoolean14, Decl(deleteOperatorWithStringType.ts, 36, 3))
+>STRING : Symbol(STRING, Decl(deleteOperatorWithStringType.ts, 1, 3))
+>STRING : Symbol(STRING, Decl(deleteOperatorWithStringType.ts, 1, 3))
+
+// miss assignment operators
+delete "";
+delete STRING;
+>STRING : Symbol(STRING, Decl(deleteOperatorWithStringType.ts, 1, 3))
+
+delete STRING1;
+>STRING1 : Symbol(STRING1, Decl(deleteOperatorWithStringType.ts, 2, 3))
+
+delete foo();
+>foo : Symbol(foo, Decl(deleteOperatorWithStringType.ts, 2, 36))
+
+delete objA.a,M.n;
+>objA.a : Symbol(A.a, Decl(deleteOperatorWithStringType.ts, 6, 9))
+>objA : Symbol(objA, Decl(deleteOperatorWithStringType.ts, 14, 3))
+>a : Symbol(A.a, Decl(deleteOperatorWithStringType.ts, 6, 9))
+>M.n : Symbol(M.n, Decl(deleteOperatorWithStringType.ts, 11, 14))
+>M : Symbol(M, Decl(deleteOperatorWithStringType.ts, 9, 1))
+>n : Symbol(M.n, Decl(deleteOperatorWithStringType.ts, 11, 14))
+

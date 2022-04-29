@@ -1,0 +1,10 @@
+=== tests/cases/compiler/concatTuples.ts ===
+let ijs: [number, number][] = [[1, 2]];
+>ijs : Symbol(ijs, Decl(concatTuples.ts, 0, 3))
+
+ijs = ijs.concat([[3, 4], [5, 6]]);
+>ijs : Symbol(ijs, Decl(concatTuples.ts, 0, 3))
+>ijs.concat : Symbol(Array.concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>ijs : Symbol(ijs, Decl(concatTuples.ts, 0, 3))
+>concat : Symbol(Array.concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+

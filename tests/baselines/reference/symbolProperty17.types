@@ -1,0 +1,26 @@
+=== tests/cases/conformance/es6/Symbols/symbolProperty17.ts ===
+interface I {
+    [Symbol.iterator]: number;
+>[Symbol.iterator] : number
+>Symbol.iterator : unique symbol
+>Symbol : SymbolConstructor
+>iterator : unique symbol
+
+    [s: symbol]: string;
+>s : symbol
+
+    "__@iterator": string;
+>"__@iterator" : string
+}
+
+var i: I;
+>i : I
+
+var it = i[Symbol.iterator];
+>it : number
+>i[Symbol.iterator] : number
+>i : I
+>Symbol.iterator : unique symbol
+>Symbol : SymbolConstructor
+>iterator : unique symbol
+

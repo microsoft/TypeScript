@@ -1,0 +1,94 @@
+=== tests/cases/conformance/expressions/arrayLiterals/arrayLiterals.ts ===
+// Empty array literal with no contextual type has type Undefined[]
+
+var arr1= [[], [1], ['']];
+>arr1 : Symbol(arr1, Decl(arrayLiterals.ts, 2, 3))
+
+var arr2 = [[null], [1], ['']];
+>arr2 : Symbol(arr2, Decl(arrayLiterals.ts, 4, 3))
+
+
+// Array literal with elements of only EveryType E has type E[]
+var stringArrArr = [[''], [""]];
+>stringArrArr : Symbol(stringArrArr, Decl(arrayLiterals.ts, 8, 3))
+
+var stringArr = ['', ""];
+>stringArr : Symbol(stringArr, Decl(arrayLiterals.ts, 10, 3))
+
+var numberArr = [0, 0.0, 0x00, 1e1];
+>numberArr : Symbol(numberArr, Decl(arrayLiterals.ts, 12, 3))
+
+var boolArr = [false, true, false, true];
+>boolArr : Symbol(boolArr, Decl(arrayLiterals.ts, 14, 3))
+
+class C { private p; }
+>C : Symbol(C, Decl(arrayLiterals.ts, 14, 41))
+>p : Symbol(C.p, Decl(arrayLiterals.ts, 16, 9))
+
+var classArr = [new C(), new C()];
+>classArr : Symbol(classArr, Decl(arrayLiterals.ts, 17, 3))
+>C : Symbol(C, Decl(arrayLiterals.ts, 14, 41))
+>C : Symbol(C, Decl(arrayLiterals.ts, 14, 41))
+
+var classTypeArray = [C, C, C];
+>classTypeArray : Symbol(classTypeArray, Decl(arrayLiterals.ts, 19, 3), Decl(arrayLiterals.ts, 20, 3))
+>C : Symbol(C, Decl(arrayLiterals.ts, 14, 41))
+>C : Symbol(C, Decl(arrayLiterals.ts, 14, 41))
+>C : Symbol(C, Decl(arrayLiterals.ts, 14, 41))
+
+var classTypeArray: Array<typeof C>; // Should OK, not be a parse error
+>classTypeArray : Symbol(classTypeArray, Decl(arrayLiterals.ts, 19, 3), Decl(arrayLiterals.ts, 20, 3))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>C : Symbol(C, Decl(arrayLiterals.ts, 14, 41))
+
+// Contextual type C with numeric index signature makes array literal of EveryType E of type BCT(E,C)[]
+var context1: { [n: number]: { a: string; b: number; }; } = [{ a: '', b: 0, c: '' }, { a: "", b: 3, c: 0 }];
+>context1 : Symbol(context1, Decl(arrayLiterals.ts, 23, 3))
+>n : Symbol(n, Decl(arrayLiterals.ts, 23, 17))
+>a : Symbol(a, Decl(arrayLiterals.ts, 23, 30))
+>b : Symbol(b, Decl(arrayLiterals.ts, 23, 41))
+>a : Symbol(a, Decl(arrayLiterals.ts, 23, 62))
+>b : Symbol(b, Decl(arrayLiterals.ts, 23, 69))
+>c : Symbol(c, Decl(arrayLiterals.ts, 23, 75))
+>a : Symbol(a, Decl(arrayLiterals.ts, 23, 86))
+>b : Symbol(b, Decl(arrayLiterals.ts, 23, 93))
+>c : Symbol(c, Decl(arrayLiterals.ts, 23, 99))
+
+var context2 = [{ a: '', b: 0, c: '' }, { a: "", b: 3, c: 0 }];
+>context2 : Symbol(context2, Decl(arrayLiterals.ts, 24, 3))
+>a : Symbol(a, Decl(arrayLiterals.ts, 24, 17))
+>b : Symbol(b, Decl(arrayLiterals.ts, 24, 24))
+>c : Symbol(c, Decl(arrayLiterals.ts, 24, 30))
+>a : Symbol(a, Decl(arrayLiterals.ts, 24, 41))
+>b : Symbol(b, Decl(arrayLiterals.ts, 24, 48))
+>c : Symbol(c, Decl(arrayLiterals.ts, 24, 54))
+
+// Contextual type C with numeric index signature of type Base makes array literal of Derived have type Base[]
+class Base { private p; }
+>Base : Symbol(Base, Decl(arrayLiterals.ts, 24, 63))
+>p : Symbol(Base.p, Decl(arrayLiterals.ts, 27, 12))
+
+class Derived1 extends Base { private m };
+>Derived1 : Symbol(Derived1, Decl(arrayLiterals.ts, 27, 25))
+>Base : Symbol(Base, Decl(arrayLiterals.ts, 24, 63))
+>m : Symbol(Derived1.m, Decl(arrayLiterals.ts, 28, 29))
+
+class Derived2 extends Base { private n };
+>Derived2 : Symbol(Derived2, Decl(arrayLiterals.ts, 28, 42))
+>Base : Symbol(Base, Decl(arrayLiterals.ts, 24, 63))
+>n : Symbol(Derived2.n, Decl(arrayLiterals.ts, 29, 29))
+
+var context3: Base[] = [new Derived1(), new Derived2()];
+>context3 : Symbol(context3, Decl(arrayLiterals.ts, 30, 3))
+>Base : Symbol(Base, Decl(arrayLiterals.ts, 24, 63))
+>Derived1 : Symbol(Derived1, Decl(arrayLiterals.ts, 27, 25))
+>Derived2 : Symbol(Derived2, Decl(arrayLiterals.ts, 28, 42))
+
+// Contextual type C with numeric index signature of type Base makes array literal of Derived1 and Derived2 have type Base[]
+var context4: Base[] = [new Derived1(), new Derived1()];
+>context4 : Symbol(context4, Decl(arrayLiterals.ts, 33, 3))
+>Base : Symbol(Base, Decl(arrayLiterals.ts, 24, 63))
+>Derived1 : Symbol(Derived1, Decl(arrayLiterals.ts, 27, 25))
+>Derived1 : Symbol(Derived1, Decl(arrayLiterals.ts, 27, 25))
+
+

@@ -1,0 +1,267 @@
+tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts(7,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts(8,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts(8,8): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts(9,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts(9,8): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts(10,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts(11,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts(11,8): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts(12,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts(13,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts(13,8): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts(14,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts(14,8): error TS2531: Object is possibly 'null'.
+tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts(15,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts(15,8): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts(18,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts(19,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts(19,8): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts(20,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts(20,8): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts(21,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts(22,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts(22,8): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts(23,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts(24,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts(24,8): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts(25,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts(25,8): error TS2531: Object is possibly 'null'.
+tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts(26,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts(26,8): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts(29,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts(30,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts(30,8): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts(31,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts(31,8): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts(32,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts(33,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts(33,8): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts(34,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts(35,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts(35,8): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts(36,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts(36,8): error TS2531: Object is possibly 'null'.
+tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts(37,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts(37,8): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts(40,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts(41,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts(41,8): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts(42,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts(42,8): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts(43,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts(44,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts(44,8): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts(45,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts(46,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts(46,8): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts(47,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts(47,8): error TS2531: Object is possibly 'null'.
+tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts(48,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts(48,8): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts(51,8): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts(52,8): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts(53,8): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts(54,8): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts(57,8): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts(58,8): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts(59,8): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts(60,8): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+
+
+==== tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts (68 errors) ====
+    enum E { a, b }
+    
+    var a: any;
+    var b: void;
+    
+    var x1: boolean;
+    x1 **= a;
+    ~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+    x1 **= b;
+    ~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+           ~
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+    x1 **= true;
+    ~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+           ~~~~
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+    x1 **= 0;
+    ~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+    x1 **= ''
+    ~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+           ~~
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+    x1 **= E.a;
+    ~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+    x1 **= {};
+    ~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+           ~~
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+    x1 **= null;
+    ~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+           ~~~~
+!!! error TS2531: Object is possibly 'null'.
+    x1 **= undefined;
+    ~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+           ~~~~~~~~~
+!!! error TS2532: Object is possibly 'undefined'.
+    
+    var x2: string;
+    x2 **= a;
+    ~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+    x2 **= b;
+    ~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+           ~
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+    x2 **= true;
+    ~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+           ~~~~
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+    x2 **= 0;
+    ~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+    x2 **= ''
+    ~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+           ~~
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+    x2 **= E.a;
+    ~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+    x2 **= {};
+    ~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+           ~~
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+    x2 **= null;
+    ~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+           ~~~~
+!!! error TS2531: Object is possibly 'null'.
+    x2 **= undefined;
+    ~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+           ~~~~~~~~~
+!!! error TS2532: Object is possibly 'undefined'.
+    
+    var x3: {};
+    x3 **= a;
+    ~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+    x3 **= b;
+    ~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+           ~
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+    x3 **= true;
+    ~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+           ~~~~
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+    x3 **= 0;
+    ~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+    x3 **= ''
+    ~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+           ~~
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+    x3 **= E.a;
+    ~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+    x3 **= {};
+    ~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+           ~~
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+    x3 **= null;
+    ~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+           ~~~~
+!!! error TS2531: Object is possibly 'null'.
+    x3 **= undefined;
+    ~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+           ~~~~~~~~~
+!!! error TS2532: Object is possibly 'undefined'.
+    
+    var x4: void;
+    x4 **= a;
+    ~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+    x4 **= b;
+    ~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+           ~
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+    x4 **= true;
+    ~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+           ~~~~
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+    x4 **= 0;
+    ~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+    x4 **= ''
+    ~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+           ~~
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+    x4 **= E.a;
+    ~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+    x4 **= {};
+    ~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+           ~~
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+    x4 **= null;
+    ~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+           ~~~~
+!!! error TS2531: Object is possibly 'null'.
+    x4 **= undefined;
+    ~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+           ~~~~~~~~~
+!!! error TS2532: Object is possibly 'undefined'.
+    
+    var x5: number;
+    x5 **= b;
+           ~
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+    x5 **= true;
+           ~~~~
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+    x5 **= ''
+           ~~
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+    x5 **= {};
+           ~~
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+    
+    var x6: E;
+    x6 **= b;
+           ~
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+    x6 **= true;
+           ~~~~
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+    x6 **= ''
+           ~~
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+    x6 **= {};
+           ~~
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.

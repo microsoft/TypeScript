@@ -1,0 +1,10 @@
+=== tests/cases/conformance/es6/templates/templateStringWithEmbeddedObjectLiteral.ts ===
+var x = `abc${ { x: 10, y: 20 } }def`;
+>x : string
+>`abc${ { x: 10, y: 20 } }def` : string
+>{ x: 10, y: 20 } : { x: number; y: number; }
+>x : number
+>10 : 10
+>y : number
+>20 : 20
+

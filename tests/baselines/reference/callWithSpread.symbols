@@ -1,0 +1,212 @@
+=== tests/cases/conformance/expressions/functionCalls/callWithSpread.ts ===
+interface X {
+>X : Symbol(X, Decl(callWithSpread.ts, 0, 0))
+
+    foo(x: number, y: number, ...z: string[]): X;
+>foo : Symbol(X.foo, Decl(callWithSpread.ts, 0, 13))
+>x : Symbol(x, Decl(callWithSpread.ts, 1, 8))
+>y : Symbol(y, Decl(callWithSpread.ts, 1, 18))
+>z : Symbol(z, Decl(callWithSpread.ts, 1, 29))
+>X : Symbol(X, Decl(callWithSpread.ts, 0, 0))
+}
+
+function foo(x: number, y: number, ...z: string[]) {
+>foo : Symbol(foo, Decl(callWithSpread.ts, 2, 1))
+>x : Symbol(x, Decl(callWithSpread.ts, 4, 13))
+>y : Symbol(y, Decl(callWithSpread.ts, 4, 23))
+>z : Symbol(z, Decl(callWithSpread.ts, 4, 34))
+}
+
+var a: string[];
+>a : Symbol(a, Decl(callWithSpread.ts, 7, 3))
+
+var z: number[];
+>z : Symbol(z, Decl(callWithSpread.ts, 8, 3))
+
+var obj: X;
+>obj : Symbol(obj, Decl(callWithSpread.ts, 9, 3))
+>X : Symbol(X, Decl(callWithSpread.ts, 0, 0))
+
+var xa: X[];
+>xa : Symbol(xa, Decl(callWithSpread.ts, 10, 3))
+>X : Symbol(X, Decl(callWithSpread.ts, 0, 0))
+
+foo(1, 2, "abc");
+>foo : Symbol(foo, Decl(callWithSpread.ts, 2, 1))
+
+foo(1, 2, ...a);
+>foo : Symbol(foo, Decl(callWithSpread.ts, 2, 1))
+>a : Symbol(a, Decl(callWithSpread.ts, 7, 3))
+
+foo(1, 2, ...a, "abc");
+>foo : Symbol(foo, Decl(callWithSpread.ts, 2, 1))
+>a : Symbol(a, Decl(callWithSpread.ts, 7, 3))
+
+obj.foo(1, 2, "abc");
+>obj.foo : Symbol(X.foo, Decl(callWithSpread.ts, 0, 13))
+>obj : Symbol(obj, Decl(callWithSpread.ts, 9, 3))
+>foo : Symbol(X.foo, Decl(callWithSpread.ts, 0, 13))
+
+obj.foo(1, 2, ...a);
+>obj.foo : Symbol(X.foo, Decl(callWithSpread.ts, 0, 13))
+>obj : Symbol(obj, Decl(callWithSpread.ts, 9, 3))
+>foo : Symbol(X.foo, Decl(callWithSpread.ts, 0, 13))
+>a : Symbol(a, Decl(callWithSpread.ts, 7, 3))
+
+obj.foo(1, 2, ...a, "abc");
+>obj.foo : Symbol(X.foo, Decl(callWithSpread.ts, 0, 13))
+>obj : Symbol(obj, Decl(callWithSpread.ts, 9, 3))
+>foo : Symbol(X.foo, Decl(callWithSpread.ts, 0, 13))
+>a : Symbol(a, Decl(callWithSpread.ts, 7, 3))
+
+obj.foo(1, 2, ...a).foo(1, 2, "abc");
+>obj.foo(1, 2, ...a).foo : Symbol(X.foo, Decl(callWithSpread.ts, 0, 13))
+>obj.foo : Symbol(X.foo, Decl(callWithSpread.ts, 0, 13))
+>obj : Symbol(obj, Decl(callWithSpread.ts, 9, 3))
+>foo : Symbol(X.foo, Decl(callWithSpread.ts, 0, 13))
+>a : Symbol(a, Decl(callWithSpread.ts, 7, 3))
+>foo : Symbol(X.foo, Decl(callWithSpread.ts, 0, 13))
+
+obj.foo(1, 2, ...a).foo(1, 2, ...a);
+>obj.foo(1, 2, ...a).foo : Symbol(X.foo, Decl(callWithSpread.ts, 0, 13))
+>obj.foo : Symbol(X.foo, Decl(callWithSpread.ts, 0, 13))
+>obj : Symbol(obj, Decl(callWithSpread.ts, 9, 3))
+>foo : Symbol(X.foo, Decl(callWithSpread.ts, 0, 13))
+>a : Symbol(a, Decl(callWithSpread.ts, 7, 3))
+>foo : Symbol(X.foo, Decl(callWithSpread.ts, 0, 13))
+>a : Symbol(a, Decl(callWithSpread.ts, 7, 3))
+
+obj.foo(1, 2, ...a).foo(1, 2, ...a, "abc");
+>obj.foo(1, 2, ...a).foo : Symbol(X.foo, Decl(callWithSpread.ts, 0, 13))
+>obj.foo : Symbol(X.foo, Decl(callWithSpread.ts, 0, 13))
+>obj : Symbol(obj, Decl(callWithSpread.ts, 9, 3))
+>foo : Symbol(X.foo, Decl(callWithSpread.ts, 0, 13))
+>a : Symbol(a, Decl(callWithSpread.ts, 7, 3))
+>foo : Symbol(X.foo, Decl(callWithSpread.ts, 0, 13))
+>a : Symbol(a, Decl(callWithSpread.ts, 7, 3))
+
+(obj.foo)(1, 2, "abc");
+>obj.foo : Symbol(X.foo, Decl(callWithSpread.ts, 0, 13))
+>obj : Symbol(obj, Decl(callWithSpread.ts, 9, 3))
+>foo : Symbol(X.foo, Decl(callWithSpread.ts, 0, 13))
+
+(obj.foo)(1, 2, ...a);
+>obj.foo : Symbol(X.foo, Decl(callWithSpread.ts, 0, 13))
+>obj : Symbol(obj, Decl(callWithSpread.ts, 9, 3))
+>foo : Symbol(X.foo, Decl(callWithSpread.ts, 0, 13))
+>a : Symbol(a, Decl(callWithSpread.ts, 7, 3))
+
+(obj.foo)(1, 2, ...a, "abc");
+>obj.foo : Symbol(X.foo, Decl(callWithSpread.ts, 0, 13))
+>obj : Symbol(obj, Decl(callWithSpread.ts, 9, 3))
+>foo : Symbol(X.foo, Decl(callWithSpread.ts, 0, 13))
+>a : Symbol(a, Decl(callWithSpread.ts, 7, 3))
+
+((obj.foo)(1, 2, ...a).foo)(1, 2, "abc");
+>(obj.foo)(1, 2, ...a).foo : Symbol(X.foo, Decl(callWithSpread.ts, 0, 13))
+>obj.foo : Symbol(X.foo, Decl(callWithSpread.ts, 0, 13))
+>obj : Symbol(obj, Decl(callWithSpread.ts, 9, 3))
+>foo : Symbol(X.foo, Decl(callWithSpread.ts, 0, 13))
+>a : Symbol(a, Decl(callWithSpread.ts, 7, 3))
+>foo : Symbol(X.foo, Decl(callWithSpread.ts, 0, 13))
+
+((obj.foo)(1, 2, ...a).foo)(1, 2, ...a);
+>(obj.foo)(1, 2, ...a).foo : Symbol(X.foo, Decl(callWithSpread.ts, 0, 13))
+>obj.foo : Symbol(X.foo, Decl(callWithSpread.ts, 0, 13))
+>obj : Symbol(obj, Decl(callWithSpread.ts, 9, 3))
+>foo : Symbol(X.foo, Decl(callWithSpread.ts, 0, 13))
+>a : Symbol(a, Decl(callWithSpread.ts, 7, 3))
+>foo : Symbol(X.foo, Decl(callWithSpread.ts, 0, 13))
+>a : Symbol(a, Decl(callWithSpread.ts, 7, 3))
+
+((obj.foo)(1, 2, ...a).foo)(1, 2, ...a, "abc");
+>(obj.foo)(1, 2, ...a).foo : Symbol(X.foo, Decl(callWithSpread.ts, 0, 13))
+>obj.foo : Symbol(X.foo, Decl(callWithSpread.ts, 0, 13))
+>obj : Symbol(obj, Decl(callWithSpread.ts, 9, 3))
+>foo : Symbol(X.foo, Decl(callWithSpread.ts, 0, 13))
+>a : Symbol(a, Decl(callWithSpread.ts, 7, 3))
+>foo : Symbol(X.foo, Decl(callWithSpread.ts, 0, 13))
+>a : Symbol(a, Decl(callWithSpread.ts, 7, 3))
+
+xa[1].foo(1, 2, "abc");
+>xa[1].foo : Symbol(X.foo, Decl(callWithSpread.ts, 0, 13))
+>xa : Symbol(xa, Decl(callWithSpread.ts, 10, 3))
+>foo : Symbol(X.foo, Decl(callWithSpread.ts, 0, 13))
+
+xa[1].foo(1, 2, ...a);
+>xa[1].foo : Symbol(X.foo, Decl(callWithSpread.ts, 0, 13))
+>xa : Symbol(xa, Decl(callWithSpread.ts, 10, 3))
+>foo : Symbol(X.foo, Decl(callWithSpread.ts, 0, 13))
+>a : Symbol(a, Decl(callWithSpread.ts, 7, 3))
+
+xa[1].foo(1, 2, ...a, "abc");
+>xa[1].foo : Symbol(X.foo, Decl(callWithSpread.ts, 0, 13))
+>xa : Symbol(xa, Decl(callWithSpread.ts, 10, 3))
+>foo : Symbol(X.foo, Decl(callWithSpread.ts, 0, 13))
+>a : Symbol(a, Decl(callWithSpread.ts, 7, 3))
+
+(<Function>xa[1].foo)(...[1, 2, "abc"]);
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>xa[1].foo : Symbol(X.foo, Decl(callWithSpread.ts, 0, 13))
+>xa : Symbol(xa, Decl(callWithSpread.ts, 10, 3))
+>foo : Symbol(X.foo, Decl(callWithSpread.ts, 0, 13))
+
+class C {
+>C : Symbol(C, Decl(callWithSpread.ts, 36, 40))
+
+    constructor(x: number, y: number, ...z: string[]) {
+>x : Symbol(x, Decl(callWithSpread.ts, 39, 16))
+>y : Symbol(y, Decl(callWithSpread.ts, 39, 26))
+>z : Symbol(z, Decl(callWithSpread.ts, 39, 37))
+
+        this.foo(x, y);
+>this.foo : Symbol(C.foo, Decl(callWithSpread.ts, 42, 5))
+>this : Symbol(C, Decl(callWithSpread.ts, 36, 40))
+>foo : Symbol(C.foo, Decl(callWithSpread.ts, 42, 5))
+>x : Symbol(x, Decl(callWithSpread.ts, 39, 16))
+>y : Symbol(y, Decl(callWithSpread.ts, 39, 26))
+
+        this.foo(x, y, ...z);
+>this.foo : Symbol(C.foo, Decl(callWithSpread.ts, 42, 5))
+>this : Symbol(C, Decl(callWithSpread.ts, 36, 40))
+>foo : Symbol(C.foo, Decl(callWithSpread.ts, 42, 5))
+>x : Symbol(x, Decl(callWithSpread.ts, 39, 16))
+>y : Symbol(y, Decl(callWithSpread.ts, 39, 26))
+>z : Symbol(z, Decl(callWithSpread.ts, 39, 37))
+    }
+    foo(x: number, y: number, ...z: string[]) {
+>foo : Symbol(C.foo, Decl(callWithSpread.ts, 42, 5))
+>x : Symbol(x, Decl(callWithSpread.ts, 43, 8))
+>y : Symbol(y, Decl(callWithSpread.ts, 43, 18))
+>z : Symbol(z, Decl(callWithSpread.ts, 43, 29))
+    }
+}
+
+class D extends C {
+>D : Symbol(D, Decl(callWithSpread.ts, 45, 1))
+>C : Symbol(C, Decl(callWithSpread.ts, 36, 40))
+
+    constructor() {
+        super(1, 2);
+>super : Symbol(C, Decl(callWithSpread.ts, 36, 40))
+
+        super(1, 2, ...a);
+>super : Symbol(C, Decl(callWithSpread.ts, 36, 40))
+>a : Symbol(a, Decl(callWithSpread.ts, 7, 3))
+    }
+    foo() {
+>foo : Symbol(D.foo, Decl(callWithSpread.ts, 51, 5))
+
+        super.foo(1, 2);
+>super.foo : Symbol(C.foo, Decl(callWithSpread.ts, 42, 5))
+>super : Symbol(C, Decl(callWithSpread.ts, 36, 40))
+>foo : Symbol(C.foo, Decl(callWithSpread.ts, 42, 5))
+
+        super.foo(1, 2, ...a);
+>super.foo : Symbol(C.foo, Decl(callWithSpread.ts, 42, 5))
+>super : Symbol(C, Decl(callWithSpread.ts, 36, 40))
+>foo : Symbol(C.foo, Decl(callWithSpread.ts, 42, 5))
+>a : Symbol(a, Decl(callWithSpread.ts, 7, 3))
+    }
+}
+

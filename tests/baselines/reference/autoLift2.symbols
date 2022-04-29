@@ -1,0 +1,52 @@
+=== tests/cases/compiler/autoLift2.ts ===
+class A
+>A : Symbol(A, Decl(autoLift2.ts, 0, 0))
+
+{
+    constructor() {
+        this.foo: any;
+>this : Symbol(A, Decl(autoLift2.ts, 0, 0))
+
+        this.bar: any;
+>this : Symbol(A, Decl(autoLift2.ts, 0, 0))
+    }
+
+
+  baz() {
+>baz : Symbol(A.baz, Decl(autoLift2.ts, 6, 5))
+
+     this.foo = "foo";
+>this : Symbol(A, Decl(autoLift2.ts, 0, 0))
+
+     this.bar = "bar";
+>this : Symbol(A, Decl(autoLift2.ts, 0, 0))
+
+     [1, 2].forEach((p) => this.foo);
+>[1, 2].forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>p : Symbol(p, Decl(autoLift2.ts, 15, 21))
+>this : Symbol(A, Decl(autoLift2.ts, 0, 0))
+
+     [1, 2].forEach((p) => this.bar);
+>[1, 2].forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>p : Symbol(p, Decl(autoLift2.ts, 17, 21))
+>this : Symbol(A, Decl(autoLift2.ts, 0, 0))
+
+  }
+
+}
+
+
+
+var a = new A();
+>a : Symbol(a, Decl(autoLift2.ts, 25, 3))
+>A : Symbol(A, Decl(autoLift2.ts, 0, 0))
+
+a.baz();
+>a.baz : Symbol(A.baz, Decl(autoLift2.ts, 6, 5))
+>a : Symbol(a, Decl(autoLift2.ts, 25, 3))
+>baz : Symbol(A.baz, Decl(autoLift2.ts, 6, 5))
+
+
+

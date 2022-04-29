@@ -1,0 +1,19 @@
+=== tests/cases/compiler/declarationEmitLambdaWithMissingTypeParameterNoCrash.ts ===
+export interface Foo {
+>Foo : Symbol(Foo, Decl(declarationEmitLambdaWithMissingTypeParameterNoCrash.ts, 0, 0))
+
+    preFetch: <T1 extends T2> (c: T1) => void; // Type T2 is not defined
+>preFetch : Symbol(Foo.preFetch, Decl(declarationEmitLambdaWithMissingTypeParameterNoCrash.ts, 0, 22))
+>T1 : Symbol(T1, Decl(declarationEmitLambdaWithMissingTypeParameterNoCrash.ts, 1, 15))
+>T2 : Symbol(T2)
+>c : Symbol(c, Decl(declarationEmitLambdaWithMissingTypeParameterNoCrash.ts, 1, 31))
+>T1 : Symbol(T1, Decl(declarationEmitLambdaWithMissingTypeParameterNoCrash.ts, 1, 15))
+
+    preFetcher: new <T1 extends T2> (c: T1) => void; // Type T2 is not defined
+>preFetcher : Symbol(Foo.preFetcher, Decl(declarationEmitLambdaWithMissingTypeParameterNoCrash.ts, 1, 46))
+>T1 : Symbol(T1, Decl(declarationEmitLambdaWithMissingTypeParameterNoCrash.ts, 2, 21))
+>T2 : Symbol(T2)
+>c : Symbol(c, Decl(declarationEmitLambdaWithMissingTypeParameterNoCrash.ts, 2, 37))
+>T1 : Symbol(T1, Decl(declarationEmitLambdaWithMissingTypeParameterNoCrash.ts, 2, 21))
+}
+

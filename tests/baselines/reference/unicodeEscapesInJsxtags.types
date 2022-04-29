@@ -1,0 +1,79 @@
+=== tests/cases/conformance/jsx/file.tsx ===
+import * as React from "react";
+>React : typeof React
+
+declare global {
+>global : any
+
+    namespace JSX {
+        interface IntrinsicElements {
+            "a-b": any;
+>"a-b" : any
+
+            "a-c": any;
+>"a-c" : any
+        }
+    }
+}
+const Compa = (x: {x: number}) => <div>{"" + x}</div>;
+>Compa : (x: { x: number; }) => JSX.Element
+>(x: {x: number}) => <div>{"" + x}</div> : (x: { x: number; }) => JSX.Element
+>x : { x: number; }
+>x : number
+><div>{"" + x}</div> : JSX.Element
+>div : any
+>"" + x : string
+>"" : ""
+>x : { x: number; }
+>div : any
+
+let a = <\u0061></a>; // works
+>a : JSX.Element
+><\u0061></a> : JSX.Element
+>\u0061 : JSX.Element
+>a : JSX.Element
+
+let ab = <\u0061-b></a-b>; // works
+>ab : JSX.Element
+><\u0061-b></a-b> : JSX.Element
+>\u0061-b : any
+>a-b : any
+
+let ac = <a-\u0063></a-c>; // works
+>ac : JSX.Element
+><a-\u0063></a-c> : JSX.Element
+>a-\u0063 : any
+>a-c : any
+
+let compa = <Comp\u0061 x={12} />; // works
+>compa : JSX.Element
+><Comp\u0061 x={12} /> : JSX.Element
+>Comp\u0061 : (x: { x: number; }) => JSX.Element
+>x : number
+>12 : 12
+
+let a2 = <\u{0061}></a>; // works
+>a2 : JSX.Element
+><\u{0061}></a> : JSX.Element
+>\u{0061} : JSX.Element
+>a : JSX.Element
+
+let ab2 = <\u{0061}-b></a-b>; // works
+>ab2 : JSX.Element
+><\u{0061}-b></a-b> : JSX.Element
+>\u{0061}-b : any
+>a-b : any
+
+let ac2 = <a-\u{0063}></a-c>; // works
+>ac2 : JSX.Element
+><a-\u{0063}></a-c> : JSX.Element
+>a-\u{0063} : any
+>a-c : any
+
+let compa2 = <Comp\u{0061} x={12} />; // works
+>compa2 : JSX.Element
+><Comp\u{0061} x={12} /> : JSX.Element
+>Comp\u{0061} : (x: { x: number; }) => JSX.Element
+>x : number
+>12 : 12
+

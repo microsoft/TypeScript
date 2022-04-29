@@ -1,0 +1,31 @@
+=== tests/cases/compiler/a.ts ===
+export default interface A { value: number; }
+>A : Symbol(A, Decl(a.ts, 0, 0))
+>value : Symbol(A.value, Decl(a.ts, 0, 28))
+
+var a: A;
+>a : Symbol(a, Decl(a.ts, 2, 3))
+>A : Symbol(A, Decl(a.ts, 0, 0))
+
+a.value.toExponential();
+>a.value.toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
+>a.value : Symbol(A.value, Decl(a.ts, 0, 28))
+>a : Symbol(a, Decl(a.ts, 2, 3))
+>value : Symbol(A.value, Decl(a.ts, 0, 28))
+>toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
+
+=== tests/cases/compiler/b.ts ===
+import A from './a';
+>A : Symbol(A, Decl(b.ts, 0, 6))
+
+var a: A;
+>a : Symbol(a, Decl(b.ts, 2, 3))
+>A : Symbol(A, Decl(b.ts, 0, 6))
+
+a.value.toExponential();
+>a.value.toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
+>a.value : Symbol(A.value, Decl(a.ts, 0, 28))
+>a : Symbol(a, Decl(b.ts, 2, 3))
+>value : Symbol(A.value, Decl(a.ts, 0, 28))
+>toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
+

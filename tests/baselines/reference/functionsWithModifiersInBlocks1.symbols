@@ -1,0 +1,11 @@
+=== tests/cases/compiler/functionsWithModifiersInBlocks1.ts ===
+{
+   declare function f() { }
+>f : Symbol(f, Decl(functionsWithModifiersInBlocks1.ts, 0, 1), Decl(functionsWithModifiersInBlocks1.ts, 1, 27), Decl(functionsWithModifiersInBlocks1.ts, 2, 26))
+
+   export function f() { }
+>f : Symbol(f, Decl(functionsWithModifiersInBlocks1.ts, 0, 1), Decl(functionsWithModifiersInBlocks1.ts, 1, 27), Decl(functionsWithModifiersInBlocks1.ts, 2, 26))
+
+   declare export function f() { }
+>f : Symbol(f, Decl(functionsWithModifiersInBlocks1.ts, 0, 1), Decl(functionsWithModifiersInBlocks1.ts, 1, 27), Decl(functionsWithModifiersInBlocks1.ts, 2, 26))
+}

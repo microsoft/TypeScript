@@ -1,0 +1,24 @@
+=== tests/cases/conformance/expressions/asOperator/asOperator1.ts ===
+var as = 43;
+>as : Symbol(as, Decl(asOperator1.ts, 0, 3))
+
+var x = undefined as number;
+>x : Symbol(x, Decl(asOperator1.ts, 1, 3))
+>undefined : Symbol(undefined)
+
+var y = (null as string).length;
+>y : Symbol(y, Decl(asOperator1.ts, 2, 3))
+>(null as string).length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+var z = Date as any as string;
+>z : Symbol(z, Decl(asOperator1.ts, 3, 3))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+// Should parse as a union type, not a bitwise 'or' of (32 as number) and 'string'
+var j = 32 as number|string;
+>j : Symbol(j, Decl(asOperator1.ts, 6, 3))
+
+j = '';
+>j : Symbol(j, Decl(asOperator1.ts, 6, 3))
+

@@ -1,0 +1,2384 @@
+=== tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts ===
+// Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
+// See LICENSE.txt in the project root for complete license information.
+
+///<reference path='typescript.ts' />
+
+module TypeScript {
+>TypeScript : typeof TypeScript
+
+    export class AssignScopeContext {
+>AssignScopeContext : AssignScopeContext
+
+        constructor (public scopeChain: ScopeChain,
+>scopeChain : ScopeChain
+
+                     public typeFlow: TypeFlow,
+>typeFlow : TypeFlow
+
+                     public modDeclChain: ModuleDeclaration[]) {
+>modDeclChain : ModuleDeclaration[]
+        }
+    }
+
+    export function pushAssignScope(scope: SymbolScope,
+>pushAssignScope : (scope: SymbolScope, context: AssignScopeContext, type: Type, classType: Type, fnc: FuncDecl) => void
+>scope : SymbolScope
+
+        context: AssignScopeContext,
+>context : AssignScopeContext
+
+        type: Type,
+>type : Type
+
+        classType: Type,
+>classType : Type
+
+        fnc: FuncDecl) {
+>fnc : FuncDecl
+
+        var chain = new ScopeChain(null, context.scopeChain, scope);
+>chain : any
+>new ScopeChain(null, context.scopeChain, scope) : any
+>ScopeChain : any
+>null : null
+>context.scopeChain : ScopeChain
+>context : AssignScopeContext
+>scopeChain : ScopeChain
+>scope : SymbolScope
+
+        chain.thisType = type;
+>chain.thisType = type : Type
+>chain.thisType : any
+>chain : any
+>thisType : any
+>type : Type
+
+        chain.classType = classType;
+>chain.classType = classType : Type
+>chain.classType : any
+>chain : any
+>classType : any
+>classType : Type
+
+        chain.fnc = fnc;
+>chain.fnc = fnc : FuncDecl
+>chain.fnc : any
+>chain : any
+>fnc : any
+>fnc : FuncDecl
+
+        context.scopeChain = chain;
+>context.scopeChain = chain : any
+>context.scopeChain : ScopeChain
+>context : AssignScopeContext
+>scopeChain : ScopeChain
+>chain : any
+    }
+
+    export function popAssignScope(context: AssignScopeContext) {
+>popAssignScope : (context: AssignScopeContext) => void
+>context : AssignScopeContext
+
+        context.scopeChain = context.scopeChain.previous;
+>context.scopeChain = context.scopeChain.previous : any
+>context.scopeChain : ScopeChain
+>context : AssignScopeContext
+>scopeChain : ScopeChain
+>context.scopeChain.previous : any
+>context.scopeChain : ScopeChain
+>context : AssignScopeContext
+>scopeChain : ScopeChain
+>previous : any
+    }
+
+    export function instanceCompare(a: Symbol, b: Symbol) {
+>instanceCompare : (a: Symbol, b: Symbol) => Symbol
+>a : Symbol
+>b : Symbol
+
+        if (((a == null) || (!a.isInstanceProperty()))) {
+>((a == null) || (!a.isInstanceProperty())) : boolean
+>(a == null) || (!a.isInstanceProperty()) : boolean
+>(a == null) : boolean
+>a == null : boolean
+>a : Symbol
+>null : null
+>(!a.isInstanceProperty()) : boolean
+>!a.isInstanceProperty() : boolean
+>a.isInstanceProperty() : any
+>a.isInstanceProperty : any
+>a : Symbol
+>isInstanceProperty : any
+
+            return b;
+>b : Symbol
+        }
+        else {
+            return a;
+>a : Symbol
+        }
+    }
+
+    export function instanceFilterStop(s: Symbol) {
+>instanceFilterStop : (s: Symbol) => any
+>s : Symbol
+
+        return s.isInstanceProperty();
+>s.isInstanceProperty() : any
+>s.isInstanceProperty : any
+>s : Symbol
+>isInstanceProperty : any
+    }
+
+    export class ScopeSearchFilter {
+>ScopeSearchFilter : ScopeSearchFilter
+
+        constructor (public select: (a: Symbol, b: Symbol) =>Symbol,
+>select : (a: Symbol, b: Symbol) => Symbol
+>a : Symbol
+>b : Symbol
+
+                            public stop: (s: Symbol) =>boolean) { }
+>stop : (s: Symbol) => boolean
+>s : Symbol
+
+        public result: Symbol = null;
+>result : Symbol
+>null : null
+
+        public reset() {
+>reset : () => void
+
+            this.result = null;
+>this.result = null : null
+>this.result : Symbol
+>this : this
+>result : Symbol
+>null : null
+        }
+
+        public update(b: Symbol): boolean {
+>update : (b: Symbol) => boolean
+>b : Symbol
+
+            this.result = this.select(this.result, b);
+>this.result = this.select(this.result, b) : Symbol
+>this.result : Symbol
+>this : this
+>result : Symbol
+>this.select(this.result, b) : Symbol
+>this.select : (a: Symbol, b: Symbol) => Symbol
+>this : this
+>select : (a: Symbol, b: Symbol) => Symbol
+>this.result : Symbol
+>this : this
+>result : Symbol
+>b : Symbol
+
+            if (this.result) {
+>this.result : Symbol
+>this : this
+>result : Symbol
+
+                return this.stop(this.result);
+>this.stop(this.result) : boolean
+>this.stop : (s: Symbol) => boolean
+>this : this
+>stop : (s: Symbol) => boolean
+>this.result : Symbol
+>this : this
+>result : Symbol
+            }
+            else {
+                return false;
+>false : false
+            }
+        }
+    }
+
+    export var instanceFilter = new ScopeSearchFilter(instanceCompare, instanceFilterStop);
+>instanceFilter : ScopeSearchFilter
+>new ScopeSearchFilter(instanceCompare, instanceFilterStop) : ScopeSearchFilter
+>ScopeSearchFilter : typeof ScopeSearchFilter
+>instanceCompare : (a: Symbol, b: Symbol) => Symbol
+>instanceFilterStop : (s: Symbol) => any
+
+    export function preAssignModuleScopes(ast: AST, context: AssignScopeContext) {
+>preAssignModuleScopes : (ast: AST, context: AssignScopeContext) => void
+>ast : AST
+>context : AssignScopeContext
+
+        var moduleDecl = <ModuleDeclaration>ast;
+>moduleDecl : ModuleDeclaration
+><ModuleDeclaration>ast : ModuleDeclaration
+>ast : AST
+
+        var memberScope: SymbolTableScope = null;
+>memberScope : SymbolTableScope
+>null : null
+
+        var aggScope: SymbolAggregateScope = null;
+>aggScope : SymbolAggregateScope
+>null : null
+
+        if (moduleDecl.name && moduleDecl.mod) {
+>moduleDecl.name && moduleDecl.mod : any
+>moduleDecl.name : any
+>moduleDecl : ModuleDeclaration
+>name : any
+>moduleDecl.mod : any
+>moduleDecl : ModuleDeclaration
+>mod : any
+
+            moduleDecl.name.sym = moduleDecl.mod.symbol;
+>moduleDecl.name.sym = moduleDecl.mod.symbol : any
+>moduleDecl.name.sym : any
+>moduleDecl.name : any
+>moduleDecl : ModuleDeclaration
+>name : any
+>sym : any
+>moduleDecl.mod.symbol : any
+>moduleDecl.mod : any
+>moduleDecl : ModuleDeclaration
+>mod : any
+>symbol : any
+        }
+
+        var mod = moduleDecl.mod;
+>mod : any
+>moduleDecl.mod : any
+>moduleDecl : ModuleDeclaration
+>mod : any
+
+        // We're likely here because of error recovery
+        if (!mod) {
+>!mod : boolean
+>mod : any
+
+            return;
+        }
+
+        memberScope = new SymbolTableScope(mod.members, mod.ambientMembers, mod.enclosedTypes, mod.ambientEnclosedTypes, mod.symbol);
+>memberScope = new SymbolTableScope(mod.members, mod.ambientMembers, mod.enclosedTypes, mod.ambientEnclosedTypes, mod.symbol) : any
+>memberScope : SymbolTableScope
+>new SymbolTableScope(mod.members, mod.ambientMembers, mod.enclosedTypes, mod.ambientEnclosedTypes, mod.symbol) : any
+>SymbolTableScope : any
+>mod.members : any
+>mod : any
+>members : any
+>mod.ambientMembers : any
+>mod : any
+>ambientMembers : any
+>mod.enclosedTypes : any
+>mod : any
+>enclosedTypes : any
+>mod.ambientEnclosedTypes : any
+>mod : any
+>ambientEnclosedTypes : any
+>mod.symbol : any
+>mod : any
+>symbol : any
+
+        mod.memberScope = memberScope;
+>mod.memberScope = memberScope : SymbolTableScope
+>mod.memberScope : any
+>mod : any
+>memberScope : any
+>memberScope : SymbolTableScope
+
+        context.modDeclChain.push(moduleDecl);
+>context.modDeclChain.push(moduleDecl) : number
+>context.modDeclChain.push : (...items: ModuleDeclaration[]) => number
+>context.modDeclChain : ModuleDeclaration[]
+>context : AssignScopeContext
+>modDeclChain : ModuleDeclaration[]
+>push : (...items: ModuleDeclaration[]) => number
+>moduleDecl : ModuleDeclaration
+
+        context.typeFlow.checker.currentModDecl = moduleDecl;
+>context.typeFlow.checker.currentModDecl = moduleDecl : ModuleDeclaration
+>context.typeFlow.checker.currentModDecl : any
+>context.typeFlow.checker : any
+>context.typeFlow : TypeFlow
+>context : AssignScopeContext
+>typeFlow : TypeFlow
+>checker : any
+>currentModDecl : any
+>moduleDecl : ModuleDeclaration
+
+        aggScope = new SymbolAggregateScope(mod.symbol);
+>aggScope = new SymbolAggregateScope(mod.symbol) : any
+>aggScope : SymbolAggregateScope
+>new SymbolAggregateScope(mod.symbol) : any
+>SymbolAggregateScope : any
+>mod.symbol : any
+>mod : any
+>symbol : any
+
+        aggScope.addParentScope(memberScope);
+>aggScope.addParentScope(memberScope) : any
+>aggScope.addParentScope : any
+>aggScope : SymbolAggregateScope
+>addParentScope : any
+>memberScope : SymbolTableScope
+
+        aggScope.addParentScope(context.scopeChain.scope);
+>aggScope.addParentScope(context.scopeChain.scope) : any
+>aggScope.addParentScope : any
+>aggScope : SymbolAggregateScope
+>addParentScope : any
+>context.scopeChain.scope : any
+>context.scopeChain : ScopeChain
+>context : AssignScopeContext
+>scopeChain : ScopeChain
+>scope : any
+
+        pushAssignScope(aggScope, context, null, null, null);
+>pushAssignScope(aggScope, context, null, null, null) : void
+>pushAssignScope : (scope: SymbolScope, context: AssignScopeContext, type: Type, classType: Type, fnc: FuncDecl) => void
+>aggScope : SymbolAggregateScope
+>context : AssignScopeContext
+>null : null
+>null : null
+>null : null
+
+        mod.containedScope = aggScope;
+>mod.containedScope = aggScope : SymbolAggregateScope
+>mod.containedScope : any
+>mod : any
+>containedScope : any
+>aggScope : SymbolAggregateScope
+
+        if (mod.symbol) {
+>mod.symbol : any
+>mod : any
+>symbol : any
+
+            context.typeFlow.addLocalsFromScope(mod.containedScope, mod.symbol, moduleDecl.vars, mod.members.privateMembers, true);
+>context.typeFlow.addLocalsFromScope(mod.containedScope, mod.symbol, moduleDecl.vars, mod.members.privateMembers, true) : any
+>context.typeFlow.addLocalsFromScope : any
+>context.typeFlow : TypeFlow
+>context : AssignScopeContext
+>typeFlow : TypeFlow
+>addLocalsFromScope : any
+>mod.containedScope : any
+>mod : any
+>containedScope : any
+>mod.symbol : any
+>mod : any
+>symbol : any
+>moduleDecl.vars : any
+>moduleDecl : ModuleDeclaration
+>vars : any
+>mod.members.privateMembers : any
+>mod.members : any
+>mod : any
+>members : any
+>privateMembers : any
+>true : true
+        }
+    }
+
+    export function preAssignClassScopes(ast: AST, context: AssignScopeContext) {
+>preAssignClassScopes : (ast: AST, context: AssignScopeContext) => void
+>ast : AST
+>context : AssignScopeContext
+
+        var classDecl = <InterfaceDeclaration>ast;
+>classDecl : InterfaceDeclaration
+><InterfaceDeclaration>ast : InterfaceDeclaration
+>ast : AST
+
+        var memberScope: SymbolTableScope = null;
+>memberScope : SymbolTableScope
+>null : null
+
+        var aggScope: SymbolAggregateScope = null;
+>aggScope : SymbolAggregateScope
+>null : null
+
+        if (classDecl.name && classDecl.type) {
+>classDecl.name && classDecl.type : any
+>classDecl.name : any
+>classDecl : InterfaceDeclaration
+>name : any
+>classDecl.type : any
+>classDecl : InterfaceDeclaration
+>type : any
+
+            classDecl.name.sym = classDecl.type.symbol;
+>classDecl.name.sym = classDecl.type.symbol : any
+>classDecl.name.sym : any
+>classDecl.name : any
+>classDecl : InterfaceDeclaration
+>name : any
+>sym : any
+>classDecl.type.symbol : any
+>classDecl.type : any
+>classDecl : InterfaceDeclaration
+>type : any
+>symbol : any
+        }
+
+        var classType = ast.type;
+>classType : any
+>ast.type : any
+>ast : AST
+>type : any
+
+        if (classType) {
+>classType : any
+
+            var classSym = classType.symbol;
+>classSym : any
+>classType.symbol : any
+>classType : any
+>symbol : any
+
+            memberScope = <SymbolTableScope>context.typeFlow.checker.scopeOf(classType);
+>memberScope = <SymbolTableScope>context.typeFlow.checker.scopeOf(classType) : SymbolTableScope
+>memberScope : SymbolTableScope
+><SymbolTableScope>context.typeFlow.checker.scopeOf(classType) : SymbolTableScope
+>context.typeFlow.checker.scopeOf(classType) : any
+>context.typeFlow.checker.scopeOf : any
+>context.typeFlow.checker : any
+>context.typeFlow : TypeFlow
+>context : AssignScopeContext
+>typeFlow : TypeFlow
+>checker : any
+>scopeOf : any
+>classType : any
+
+            aggScope = new SymbolAggregateScope(classType.symbol);
+>aggScope = new SymbolAggregateScope(classType.symbol) : any
+>aggScope : SymbolAggregateScope
+>new SymbolAggregateScope(classType.symbol) : any
+>SymbolAggregateScope : any
+>classType.symbol : any
+>classType : any
+>symbol : any
+
+            aggScope.addParentScope(memberScope);
+>aggScope.addParentScope(memberScope) : any
+>aggScope.addParentScope : any
+>aggScope : SymbolAggregateScope
+>addParentScope : any
+>memberScope : SymbolTableScope
+
+            aggScope.addParentScope(context.scopeChain.scope);
+>aggScope.addParentScope(context.scopeChain.scope) : any
+>aggScope.addParentScope : any
+>aggScope : SymbolAggregateScope
+>addParentScope : any
+>context.scopeChain.scope : any
+>context.scopeChain : ScopeChain
+>context : AssignScopeContext
+>scopeChain : ScopeChain
+>scope : any
+
+            classType.containedScope = aggScope;
+>classType.containedScope = aggScope : SymbolAggregateScope
+>classType.containedScope : any
+>classType : any
+>containedScope : any
+>aggScope : SymbolAggregateScope
+
+            classType.memberScope = memberScope;
+>classType.memberScope = memberScope : SymbolTableScope
+>classType.memberScope : any
+>classType : any
+>memberScope : any
+>memberScope : SymbolTableScope
+
+            var instanceType = classType.instanceType;
+>instanceType : any
+>classType.instanceType : any
+>classType : any
+>instanceType : any
+
+            memberScope = <SymbolTableScope>context.typeFlow.checker.scopeOf(instanceType);
+>memberScope = <SymbolTableScope>context.typeFlow.checker.scopeOf(instanceType) : SymbolTableScope
+>memberScope : SymbolTableScope
+><SymbolTableScope>context.typeFlow.checker.scopeOf(instanceType) : SymbolTableScope
+>context.typeFlow.checker.scopeOf(instanceType) : any
+>context.typeFlow.checker.scopeOf : any
+>context.typeFlow.checker : any
+>context.typeFlow : TypeFlow
+>context : AssignScopeContext
+>typeFlow : TypeFlow
+>checker : any
+>scopeOf : any
+>instanceType : any
+
+            instanceType.memberScope = memberScope;
+>instanceType.memberScope = memberScope : SymbolTableScope
+>instanceType.memberScope : any
+>instanceType : any
+>memberScope : any
+>memberScope : SymbolTableScope
+
+            aggScope = new SymbolAggregateScope(instanceType.symbol);
+>aggScope = new SymbolAggregateScope(instanceType.symbol) : any
+>aggScope : SymbolAggregateScope
+>new SymbolAggregateScope(instanceType.symbol) : any
+>SymbolAggregateScope : any
+>instanceType.symbol : any
+>instanceType : any
+>symbol : any
+
+            aggScope.addParentScope(context.scopeChain.scope);
+>aggScope.addParentScope(context.scopeChain.scope) : any
+>aggScope.addParentScope : any
+>aggScope : SymbolAggregateScope
+>addParentScope : any
+>context.scopeChain.scope : any
+>context.scopeChain : ScopeChain
+>context : AssignScopeContext
+>scopeChain : ScopeChain
+>scope : any
+
+            pushAssignScope(aggScope, context, instanceType, classType, null);
+>pushAssignScope(aggScope, context, instanceType, classType, null) : void
+>pushAssignScope : (scope: SymbolScope, context: AssignScopeContext, type: Type, classType: Type, fnc: FuncDecl) => void
+>aggScope : SymbolAggregateScope
+>context : AssignScopeContext
+>instanceType : any
+>classType : any
+>null : null
+
+            instanceType.containedScope = aggScope;
+>instanceType.containedScope = aggScope : SymbolAggregateScope
+>instanceType.containedScope : any
+>instanceType : any
+>containedScope : any
+>aggScope : SymbolAggregateScope
+        }
+        else {
+            ast.type = context.typeFlow.anyType;
+>ast.type = context.typeFlow.anyType : any
+>ast.type : any
+>ast : AST
+>type : any
+>context.typeFlow.anyType : any
+>context.typeFlow : TypeFlow
+>context : AssignScopeContext
+>typeFlow : TypeFlow
+>anyType : any
+        }
+    }
+
+    export function preAssignInterfaceScopes(ast: AST, context: AssignScopeContext) {
+>preAssignInterfaceScopes : (ast: AST, context: AssignScopeContext) => void
+>ast : AST
+>context : AssignScopeContext
+
+        var interfaceDecl = <InterfaceDeclaration>ast;
+>interfaceDecl : InterfaceDeclaration
+><InterfaceDeclaration>ast : InterfaceDeclaration
+>ast : AST
+
+        var memberScope: SymbolTableScope = null;
+>memberScope : SymbolTableScope
+>null : null
+
+        var aggScope: SymbolAggregateScope = null;
+>aggScope : SymbolAggregateScope
+>null : null
+
+        if (interfaceDecl.name && interfaceDecl.type) {
+>interfaceDecl.name && interfaceDecl.type : any
+>interfaceDecl.name : any
+>interfaceDecl : InterfaceDeclaration
+>name : any
+>interfaceDecl.type : any
+>interfaceDecl : InterfaceDeclaration
+>type : any
+
+            interfaceDecl.name.sym = interfaceDecl.type.symbol;
+>interfaceDecl.name.sym = interfaceDecl.type.symbol : any
+>interfaceDecl.name.sym : any
+>interfaceDecl.name : any
+>interfaceDecl : InterfaceDeclaration
+>name : any
+>sym : any
+>interfaceDecl.type.symbol : any
+>interfaceDecl.type : any
+>interfaceDecl : InterfaceDeclaration
+>type : any
+>symbol : any
+        }
+
+        var interfaceType = ast.type;
+>interfaceType : any
+>ast.type : any
+>ast : AST
+>type : any
+
+        memberScope = <SymbolTableScope>context.typeFlow.checker.scopeOf(interfaceType);
+>memberScope = <SymbolTableScope>context.typeFlow.checker.scopeOf(interfaceType) : SymbolTableScope
+>memberScope : SymbolTableScope
+><SymbolTableScope>context.typeFlow.checker.scopeOf(interfaceType) : SymbolTableScope
+>context.typeFlow.checker.scopeOf(interfaceType) : any
+>context.typeFlow.checker.scopeOf : any
+>context.typeFlow.checker : any
+>context.typeFlow : TypeFlow
+>context : AssignScopeContext
+>typeFlow : TypeFlow
+>checker : any
+>scopeOf : any
+>interfaceType : any
+
+        interfaceType.memberScope = memberScope;
+>interfaceType.memberScope = memberScope : SymbolTableScope
+>interfaceType.memberScope : any
+>interfaceType : any
+>memberScope : any
+>memberScope : SymbolTableScope
+
+        aggScope = new SymbolAggregateScope(interfaceType.symbol);
+>aggScope = new SymbolAggregateScope(interfaceType.symbol) : any
+>aggScope : SymbolAggregateScope
+>new SymbolAggregateScope(interfaceType.symbol) : any
+>SymbolAggregateScope : any
+>interfaceType.symbol : any
+>interfaceType : any
+>symbol : any
+
+        aggScope.addParentScope(memberScope);
+>aggScope.addParentScope(memberScope) : any
+>aggScope.addParentScope : any
+>aggScope : SymbolAggregateScope
+>addParentScope : any
+>memberScope : SymbolTableScope
+
+        aggScope.addParentScope(context.scopeChain.scope);
+>aggScope.addParentScope(context.scopeChain.scope) : any
+>aggScope.addParentScope : any
+>aggScope : SymbolAggregateScope
+>addParentScope : any
+>context.scopeChain.scope : any
+>context.scopeChain : ScopeChain
+>context : AssignScopeContext
+>scopeChain : ScopeChain
+>scope : any
+
+        pushAssignScope(aggScope, context, null, null, null);
+>pushAssignScope(aggScope, context, null, null, null) : void
+>pushAssignScope : (scope: SymbolScope, context: AssignScopeContext, type: Type, classType: Type, fnc: FuncDecl) => void
+>aggScope : SymbolAggregateScope
+>context : AssignScopeContext
+>null : null
+>null : null
+>null : null
+
+        interfaceType.containedScope = aggScope;
+>interfaceType.containedScope = aggScope : SymbolAggregateScope
+>interfaceType.containedScope : any
+>interfaceType : any
+>containedScope : any
+>aggScope : SymbolAggregateScope
+    }
+
+    export function preAssignWithScopes(ast: AST, context: AssignScopeContext) {
+>preAssignWithScopes : (ast: AST, context: AssignScopeContext) => void
+>ast : AST
+>context : AssignScopeContext
+
+        var withStmt = <WithStatement>ast;
+>withStmt : WithStatement
+><WithStatement>ast : WithStatement
+>ast : AST
+
+        var withType = withStmt.type;
+>withType : any
+>withStmt.type : any
+>withStmt : WithStatement
+>type : any
+
+        var members = new ScopedMembers(new DualStringHashTable(new StringHashTable(), new StringHashTable()));
+>members : any
+>new ScopedMembers(new DualStringHashTable(new StringHashTable(), new StringHashTable())) : any
+>ScopedMembers : any
+>new DualStringHashTable(new StringHashTable(), new StringHashTable()) : any
+>DualStringHashTable : any
+>new StringHashTable() : any
+>StringHashTable : any
+>new StringHashTable() : any
+>StringHashTable : any
+
+        var ambientMembers = new ScopedMembers(new DualStringHashTable(new StringHashTable(), new StringHashTable()));
+>ambientMembers : any
+>new ScopedMembers(new DualStringHashTable(new StringHashTable(), new StringHashTable())) : any
+>ScopedMembers : any
+>new DualStringHashTable(new StringHashTable(), new StringHashTable()) : any
+>DualStringHashTable : any
+>new StringHashTable() : any
+>StringHashTable : any
+>new StringHashTable() : any
+>StringHashTable : any
+
+        var withType = new Type();
+>withType : any
+>new Type() : any
+>Type : any
+
+        var withSymbol = new WithSymbol(withStmt.minChar, context.typeFlow.checker.locationInfo.unitIndex, withType);
+>withSymbol : any
+>new WithSymbol(withStmt.minChar, context.typeFlow.checker.locationInfo.unitIndex, withType) : any
+>WithSymbol : any
+>withStmt.minChar : any
+>withStmt : WithStatement
+>minChar : any
+>context.typeFlow.checker.locationInfo.unitIndex : any
+>context.typeFlow.checker.locationInfo : any
+>context.typeFlow.checker : any
+>context.typeFlow : TypeFlow
+>context : AssignScopeContext
+>typeFlow : TypeFlow
+>checker : any
+>locationInfo : any
+>unitIndex : any
+>withType : any
+
+        withType.members = members;
+>withType.members = members : any
+>withType.members : any
+>withType : any
+>members : any
+>members : any
+
+        withType.ambientMembers = ambientMembers;
+>withType.ambientMembers = ambientMembers : any
+>withType.ambientMembers : any
+>withType : any
+>ambientMembers : any
+>ambientMembers : any
+
+        withType.symbol = withSymbol;
+>withType.symbol = withSymbol : any
+>withType.symbol : any
+>withType : any
+>symbol : any
+>withSymbol : any
+
+        withType.setHasImplementation();
+>withType.setHasImplementation() : any
+>withType.setHasImplementation : any
+>withType : any
+>setHasImplementation : any
+
+        withStmt.type = withType;
+>withStmt.type = withType : any
+>withStmt.type : any
+>withStmt : WithStatement
+>type : any
+>withType : any
+
+        var withScope = new TypeScript.SymbolScopeBuilder(withType.members, withType.ambientMembers, null, null, context.scopeChain.scope, withType.symbol);
+>withScope : any
+>new TypeScript.SymbolScopeBuilder(withType.members, withType.ambientMembers, null, null, context.scopeChain.scope, withType.symbol) : any
+>TypeScript.SymbolScopeBuilder : any
+>TypeScript : typeof TypeScript
+>SymbolScopeBuilder : any
+>withType.members : any
+>withType : any
+>members : any
+>withType.ambientMembers : any
+>withType : any
+>ambientMembers : any
+>null : null
+>null : null
+>context.scopeChain.scope : any
+>context.scopeChain : ScopeChain
+>context : AssignScopeContext
+>scopeChain : ScopeChain
+>scope : any
+>withType.symbol : any
+>withType : any
+>symbol : any
+
+        pushAssignScope(withScope, context, null, null, null);
+>pushAssignScope(withScope, context, null, null, null) : void
+>pushAssignScope : (scope: SymbolScope, context: AssignScopeContext, type: Type, classType: Type, fnc: FuncDecl) => void
+>withScope : any
+>context : AssignScopeContext
+>null : null
+>null : null
+>null : null
+
+        withType.containedScope = withScope;
+>withType.containedScope = withScope : any
+>withType.containedScope : any
+>withType : any
+>containedScope : any
+>withScope : any
+    }
+
+    export function preAssignFuncDeclScopes(ast: AST, context: AssignScopeContext) {
+>preAssignFuncDeclScopes : (ast: AST, context: AssignScopeContext) => void
+>ast : AST
+>context : AssignScopeContext
+
+        var funcDecl = <FuncDecl>ast;
+>funcDecl : FuncDecl
+><FuncDecl>ast : FuncDecl
+>ast : AST
+
+        var container: Symbol = null;
+>container : Symbol
+>null : null
+
+        var localContainer: Symbol = null;
+>localContainer : Symbol
+>null : null
+
+        if (funcDecl.type) {
+>funcDecl.type : any
+>funcDecl : FuncDecl
+>type : any
+
+            localContainer = ast.type.symbol;
+>localContainer = ast.type.symbol : any
+>localContainer : Symbol
+>ast.type.symbol : any
+>ast.type : any
+>ast : AST
+>type : any
+>symbol : any
+        }
+
+        var isStatic = hasFlag(funcDecl.fncFlags, FncFlags.Static);
+>isStatic : any
+>hasFlag(funcDecl.fncFlags, FncFlags.Static) : any
+>hasFlag : any
+>funcDecl.fncFlags : any
+>funcDecl : FuncDecl
+>fncFlags : any
+>FncFlags.Static : any
+>FncFlags : any
+>Static : any
+
+        var isInnerStatic = isStatic && context.scopeChain.fnc != null;
+>isInnerStatic : boolean
+>isStatic && context.scopeChain.fnc != null : boolean
+>isStatic : any
+>context.scopeChain.fnc != null : boolean
+>context.scopeChain.fnc : any
+>context.scopeChain : ScopeChain
+>context : AssignScopeContext
+>scopeChain : ScopeChain
+>fnc : any
+>null : null
+
+        // for inner static functions, use the parent's member scope, so local vars cannot be captured
+        var parentScope = isInnerStatic ? context.scopeChain.fnc.type.memberScope : context.scopeChain.scope;
+>parentScope : any
+>isInnerStatic ? context.scopeChain.fnc.type.memberScope : context.scopeChain.scope : any
+>isInnerStatic : boolean
+>context.scopeChain.fnc.type.memberScope : any
+>context.scopeChain.fnc.type : any
+>context.scopeChain.fnc : any
+>context.scopeChain : ScopeChain
+>context : AssignScopeContext
+>scopeChain : ScopeChain
+>fnc : any
+>type : any
+>memberScope : any
+>context.scopeChain.scope : any
+>context.scopeChain : ScopeChain
+>context : AssignScopeContext
+>scopeChain : ScopeChain
+>scope : any
+
+        // if this is not a method, but enclosed by class, use constructor as
+        // the enclosing scope
+        // REVIEW: Some twisted logic here - this needs to be cleaned up once old classes are removed
+        //  - if it's a new class, always use the contained scope, since we initialize the constructor scope below
+        if (context.scopeChain.thisType &&
+>context.scopeChain.thisType &&            (!funcDecl.isConstructor || hasFlag(funcDecl.fncFlags, FncFlags.ClassMethod)) : any
+>context.scopeChain.thisType : any
+>context.scopeChain : ScopeChain
+>context : AssignScopeContext
+>scopeChain : ScopeChain
+>thisType : any
+
+            (!funcDecl.isConstructor || hasFlag(funcDecl.fncFlags, FncFlags.ClassMethod))) {
+>(!funcDecl.isConstructor || hasFlag(funcDecl.fncFlags, FncFlags.ClassMethod)) : any
+>!funcDecl.isConstructor || hasFlag(funcDecl.fncFlags, FncFlags.ClassMethod) : any
+>!funcDecl.isConstructor : boolean
+>funcDecl.isConstructor : any
+>funcDecl : FuncDecl
+>isConstructor : any
+>hasFlag(funcDecl.fncFlags, FncFlags.ClassMethod) : any
+>hasFlag : any
+>funcDecl.fncFlags : any
+>funcDecl : FuncDecl
+>fncFlags : any
+>FncFlags.ClassMethod : any
+>FncFlags : any
+>ClassMethod : any
+
+            var instType = context.scopeChain.thisType;
+>instType : any
+>context.scopeChain.thisType : any
+>context.scopeChain : ScopeChain
+>context : AssignScopeContext
+>scopeChain : ScopeChain
+>thisType : any
+
+            if (!(instType.typeFlags & TypeFlags.IsClass) && !hasFlag(funcDecl.fncFlags, FncFlags.ClassMethod)) {
+>!(instType.typeFlags & TypeFlags.IsClass) && !hasFlag(funcDecl.fncFlags, FncFlags.ClassMethod) : boolean
+>!(instType.typeFlags & TypeFlags.IsClass) : boolean
+>(instType.typeFlags & TypeFlags.IsClass) : number
+>instType.typeFlags & TypeFlags.IsClass : number
+>instType.typeFlags : any
+>instType : any
+>typeFlags : any
+>TypeFlags.IsClass : any
+>TypeFlags : any
+>IsClass : any
+>!hasFlag(funcDecl.fncFlags, FncFlags.ClassMethod) : boolean
+>hasFlag(funcDecl.fncFlags, FncFlags.ClassMethod) : any
+>hasFlag : any
+>funcDecl.fncFlags : any
+>funcDecl : FuncDecl
+>fncFlags : any
+>FncFlags.ClassMethod : any
+>FncFlags : any
+>ClassMethod : any
+
+                if (!funcDecl.isMethod() || isStatic) {
+>!funcDecl.isMethod() || isStatic : any
+>!funcDecl.isMethod() : boolean
+>funcDecl.isMethod() : any
+>funcDecl.isMethod : any
+>funcDecl : FuncDecl
+>isMethod : any
+>isStatic : any
+
+                    parentScope = instType.constructorScope;
+>parentScope = instType.constructorScope : any
+>parentScope : any
+>instType.constructorScope : any
+>instType : any
+>constructorScope : any
+                }
+                else {
+                    // use constructor scope if a method as well
+                    parentScope = instType.containedScope;
+>parentScope = instType.containedScope : any
+>parentScope : any
+>instType.containedScope : any
+>instType : any
+>containedScope : any
+                }
+            }
+            else {
+                if (context.scopeChain.previous.scope.container &&
+>context.scopeChain.previous.scope.container &&                    context.scopeChain.previous.scope.container.declAST &&                    context.scopeChain.previous.scope.container.declAST.nodeType == NodeType.FuncDecl &&                    (<FuncDecl>context.scopeChain.previous.scope.container.declAST).isConstructor : any
+>context.scopeChain.previous.scope.container &&                    context.scopeChain.previous.scope.container.declAST &&                    context.scopeChain.previous.scope.container.declAST.nodeType == NodeType.FuncDecl : boolean
+>context.scopeChain.previous.scope.container &&                    context.scopeChain.previous.scope.container.declAST : any
+>context.scopeChain.previous.scope.container : any
+>context.scopeChain.previous.scope : any
+>context.scopeChain.previous : any
+>context.scopeChain : ScopeChain
+>context : AssignScopeContext
+>scopeChain : ScopeChain
+>previous : any
+>scope : any
+>container : any
+
+                    context.scopeChain.previous.scope.container.declAST &&
+>context.scopeChain.previous.scope.container.declAST : any
+>context.scopeChain.previous.scope.container : any
+>context.scopeChain.previous.scope : any
+>context.scopeChain.previous : any
+>context.scopeChain : ScopeChain
+>context : AssignScopeContext
+>scopeChain : ScopeChain
+>previous : any
+>scope : any
+>container : any
+>declAST : any
+
+                    context.scopeChain.previous.scope.container.declAST.nodeType == NodeType.FuncDecl &&
+>context.scopeChain.previous.scope.container.declAST.nodeType == NodeType.FuncDecl : boolean
+>context.scopeChain.previous.scope.container.declAST.nodeType : any
+>context.scopeChain.previous.scope.container.declAST : any
+>context.scopeChain.previous.scope.container : any
+>context.scopeChain.previous.scope : any
+>context.scopeChain.previous : any
+>context.scopeChain : ScopeChain
+>context : AssignScopeContext
+>scopeChain : ScopeChain
+>previous : any
+>scope : any
+>container : any
+>declAST : any
+>nodeType : any
+>NodeType.FuncDecl : any
+>NodeType : any
+>FuncDecl : any
+
+                    (<FuncDecl>context.scopeChain.previous.scope.container.declAST).isConstructor) {
+>(<FuncDecl>context.scopeChain.previous.scope.container.declAST).isConstructor : any
+>(<FuncDecl>context.scopeChain.previous.scope.container.declAST) : FuncDecl
+><FuncDecl>context.scopeChain.previous.scope.container.declAST : FuncDecl
+>context.scopeChain.previous.scope.container.declAST : any
+>context.scopeChain.previous.scope.container : any
+>context.scopeChain.previous.scope : any
+>context.scopeChain.previous : any
+>context.scopeChain : ScopeChain
+>context : AssignScopeContext
+>scopeChain : ScopeChain
+>previous : any
+>scope : any
+>container : any
+>declAST : any
+>isConstructor : any
+
+                        // if the parent is the class constructor, use the constructor scope
+                    parentScope = instType.constructorScope;
+>parentScope = instType.constructorScope : any
+>parentScope : any
+>instType.constructorScope : any
+>instType : any
+>constructorScope : any
+                }
+                else if (isStatic && context.scopeChain.classType) {
+>isStatic && context.scopeChain.classType : any
+>isStatic : any
+>context.scopeChain.classType : any
+>context.scopeChain : ScopeChain
+>context : AssignScopeContext
+>scopeChain : ScopeChain
+>classType : any
+
+                    parentScope = context.scopeChain.classType.containedScope;
+>parentScope = context.scopeChain.classType.containedScope : any
+>parentScope : any
+>context.scopeChain.classType.containedScope : any
+>context.scopeChain.classType : any
+>context.scopeChain : ScopeChain
+>context : AssignScopeContext
+>scopeChain : ScopeChain
+>classType : any
+>containedScope : any
+                }
+                else {
+                    // else, use the contained scope
+                    parentScope = instType.containedScope;
+>parentScope = instType.containedScope : any
+>parentScope : any
+>instType.containedScope : any
+>instType : any
+>containedScope : any
+                }
+            }
+            container = instType.symbol;
+>container = instType.symbol : any
+>container : Symbol
+>instType.symbol : any
+>instType : any
+>symbol : any
+        }
+        else if (funcDecl.isConstructor && context.scopeChain.thisType) {
+>funcDecl.isConstructor && context.scopeChain.thisType : any
+>funcDecl.isConstructor : any
+>funcDecl : FuncDecl
+>isConstructor : any
+>context.scopeChain.thisType : any
+>context.scopeChain : ScopeChain
+>context : AssignScopeContext
+>scopeChain : ScopeChain
+>thisType : any
+
+            // sets the container to the class type's symbol (which is shared by the instance type)
+            container = context.scopeChain.thisType.symbol;
+>container = context.scopeChain.thisType.symbol : any
+>container : Symbol
+>context.scopeChain.thisType.symbol : any
+>context.scopeChain.thisType : any
+>context.scopeChain : ScopeChain
+>context : AssignScopeContext
+>scopeChain : ScopeChain
+>thisType : any
+>symbol : any
+        }
+
+        if (funcDecl.type == null || hasFlag(funcDecl.type.symbol.flags, SymbolFlags.TypeSetDuringScopeAssignment)) {
+>funcDecl.type == null || hasFlag(funcDecl.type.symbol.flags, SymbolFlags.TypeSetDuringScopeAssignment) : any
+>funcDecl.type == null : boolean
+>funcDecl.type : any
+>funcDecl : FuncDecl
+>type : any
+>null : null
+>hasFlag(funcDecl.type.symbol.flags, SymbolFlags.TypeSetDuringScopeAssignment) : any
+>hasFlag : any
+>funcDecl.type.symbol.flags : any
+>funcDecl.type.symbol : any
+>funcDecl.type : any
+>funcDecl : FuncDecl
+>type : any
+>symbol : any
+>flags : any
+>SymbolFlags.TypeSetDuringScopeAssignment : any
+>SymbolFlags : any
+>TypeSetDuringScopeAssignment : any
+
+            if (context.scopeChain.fnc && context.scopeChain.fnc.type) {
+>context.scopeChain.fnc && context.scopeChain.fnc.type : any
+>context.scopeChain.fnc : any
+>context.scopeChain : ScopeChain
+>context : AssignScopeContext
+>scopeChain : ScopeChain
+>fnc : any
+>context.scopeChain.fnc.type : any
+>context.scopeChain.fnc : any
+>context.scopeChain : ScopeChain
+>context : AssignScopeContext
+>scopeChain : ScopeChain
+>fnc : any
+>type : any
+
+                container = context.scopeChain.fnc.type.symbol;
+>container = context.scopeChain.fnc.type.symbol : any
+>container : Symbol
+>context.scopeChain.fnc.type.symbol : any
+>context.scopeChain.fnc.type : any
+>context.scopeChain.fnc : any
+>context.scopeChain : ScopeChain
+>context : AssignScopeContext
+>scopeChain : ScopeChain
+>fnc : any
+>type : any
+>symbol : any
+            }
+
+            var funcScope = null;
+>funcScope : any
+>null : null
+
+            var outerFnc: FuncDecl = context.scopeChain.fnc;
+>outerFnc : FuncDecl
+>context.scopeChain.fnc : any
+>context.scopeChain : ScopeChain
+>context : AssignScopeContext
+>scopeChain : ScopeChain
+>fnc : any
+
+            var nameText = funcDecl.name ? funcDecl.name.actualText : null;
+>nameText : any
+>funcDecl.name ? funcDecl.name.actualText : null : any
+>funcDecl.name : any
+>funcDecl : FuncDecl
+>name : any
+>funcDecl.name.actualText : any
+>funcDecl.name : any
+>funcDecl : FuncDecl
+>name : any
+>actualText : any
+>null : null
+
+            var fgSym: TypeSymbol = null;
+>fgSym : TypeSymbol
+>null : null
+
+            if (isStatic) {
+>isStatic : any
+
+                // In the case of function-nested statics, no member list will have bee initialized for the function, so we need
+                // to copy it over.  We don't set this by default because having a non-null member list will throw off assignment
+                // compatibility tests
+                if (outerFnc.type.members == null && container.getType().memberScope) {
+>outerFnc.type.members == null && container.getType().memberScope : any
+>outerFnc.type.members == null : boolean
+>outerFnc.type.members : any
+>outerFnc.type : any
+>outerFnc : FuncDecl
+>type : any
+>members : any
+>null : null
+>container.getType().memberScope : any
+>container.getType() : any
+>container.getType : any
+>container : Symbol
+>getType : any
+>memberScope : any
+
+                    outerFnc.type.members = (<SymbolScopeBuilder>(<TypeSymbol>container).type.memberScope).valueMembers;
+>outerFnc.type.members = (<SymbolScopeBuilder>(<TypeSymbol>container).type.memberScope).valueMembers : any
+>outerFnc.type.members : any
+>outerFnc.type : any
+>outerFnc : FuncDecl
+>type : any
+>members : any
+>(<SymbolScopeBuilder>(<TypeSymbol>container).type.memberScope).valueMembers : any
+>(<SymbolScopeBuilder>(<TypeSymbol>container).type.memberScope) : SymbolScopeBuilder
+><SymbolScopeBuilder>(<TypeSymbol>container).type.memberScope : SymbolScopeBuilder
+>(<TypeSymbol>container).type.memberScope : any
+>(<TypeSymbol>container).type : any
+>(<TypeSymbol>container) : TypeSymbol
+><TypeSymbol>container : TypeSymbol
+>container : Symbol
+>type : any
+>memberScope : any
+>valueMembers : any
+                }
+                funcScope = context.scopeChain.fnc.type.memberScope;
+>funcScope = context.scopeChain.fnc.type.memberScope : any
+>funcScope : any
+>context.scopeChain.fnc.type.memberScope : any
+>context.scopeChain.fnc.type : any
+>context.scopeChain.fnc : any
+>context.scopeChain : ScopeChain
+>context : AssignScopeContext
+>scopeChain : ScopeChain
+>fnc : any
+>type : any
+>memberScope : any
+
+                outerFnc.innerStaticFuncs[outerFnc.innerStaticFuncs.length] = funcDecl;
+>outerFnc.innerStaticFuncs[outerFnc.innerStaticFuncs.length] = funcDecl : FuncDecl
+>outerFnc.innerStaticFuncs[outerFnc.innerStaticFuncs.length] : any
+>outerFnc.innerStaticFuncs : any
+>outerFnc : FuncDecl
+>innerStaticFuncs : any
+>outerFnc.innerStaticFuncs.length : any
+>outerFnc.innerStaticFuncs : any
+>outerFnc : FuncDecl
+>innerStaticFuncs : any
+>length : any
+>funcDecl : FuncDecl
+            }
+            else {
+
+                if (!funcDecl.isConstructor &&
+>!funcDecl.isConstructor &&                    container &&                    container.declAST &&                    container.declAST.nodeType == NodeType.FuncDecl &&                    (<FuncDecl>container.declAST).isConstructor &&                    !funcDecl.isMethod() : boolean
+>!funcDecl.isConstructor &&                    container &&                    container.declAST &&                    container.declAST.nodeType == NodeType.FuncDecl &&                    (<FuncDecl>container.declAST).isConstructor : any
+>!funcDecl.isConstructor &&                    container &&                    container.declAST &&                    container.declAST.nodeType == NodeType.FuncDecl : boolean
+>!funcDecl.isConstructor &&                    container &&                    container.declAST : any
+>!funcDecl.isConstructor &&                    container : Symbol
+>!funcDecl.isConstructor : boolean
+>funcDecl.isConstructor : any
+>funcDecl : FuncDecl
+>isConstructor : any
+
+                    container &&
+>container : Symbol
+
+                    container.declAST &&
+>container.declAST : any
+>container : Symbol
+>declAST : any
+
+                    container.declAST.nodeType == NodeType.FuncDecl &&
+>container.declAST.nodeType == NodeType.FuncDecl : boolean
+>container.declAST.nodeType : any
+>container.declAST : any
+>container : Symbol
+>declAST : any
+>nodeType : any
+>NodeType.FuncDecl : any
+>NodeType : any
+>FuncDecl : any
+
+                    (<FuncDecl>container.declAST).isConstructor &&
+>(<FuncDecl>container.declAST).isConstructor : any
+>(<FuncDecl>container.declAST) : FuncDecl
+><FuncDecl>container.declAST : FuncDecl
+>container.declAST : any
+>container : Symbol
+>declAST : any
+>isConstructor : any
+
+                    !funcDecl.isMethod()) {
+>!funcDecl.isMethod() : boolean
+>funcDecl.isMethod() : any
+>funcDecl.isMethod : any
+>funcDecl : FuncDecl
+>isMethod : any
+
+                    funcScope = context.scopeChain.thisType.constructorScope;//locals;
+>funcScope = context.scopeChain.thisType.constructorScope : any
+>funcScope : any
+>context.scopeChain.thisType.constructorScope : any
+>context.scopeChain.thisType : any
+>context.scopeChain : ScopeChain
+>context : AssignScopeContext
+>scopeChain : ScopeChain
+>thisType : any
+>constructorScope : any
+                }
+                else {
+                    funcScope = context.scopeChain.scope;
+>funcScope = context.scopeChain.scope : any
+>funcScope : any
+>context.scopeChain.scope : any
+>context.scopeChain : ScopeChain
+>context : AssignScopeContext
+>scopeChain : ScopeChain
+>scope : any
+                }
+            }
+
+            // REVIEW: We don't search for another sym for accessors to prevent us from
+            // accidentally coalescing function signatures with the same name (E.g., a function
+            // 'f' the outer scope and a setter 'f' in an object literal within that scope)
+            if (nameText && nameText != "__missing" && !funcDecl.isAccessor()) {
+>nameText && nameText != "__missing" && !funcDecl.isAccessor() : boolean
+>nameText && nameText != "__missing" : boolean
+>nameText : any
+>nameText != "__missing" : boolean
+>nameText : any
+>"__missing" : "__missing"
+>!funcDecl.isAccessor() : boolean
+>funcDecl.isAccessor() : any
+>funcDecl.isAccessor : any
+>funcDecl : FuncDecl
+>isAccessor : any
+
+                if (isStatic) {
+>isStatic : any
+
+                    fgSym = funcScope.findLocal(nameText, false, false);
+>fgSym = funcScope.findLocal(nameText, false, false) : any
+>fgSym : TypeSymbol
+>funcScope.findLocal(nameText, false, false) : any
+>funcScope.findLocal : any
+>funcScope : any
+>findLocal : any
+>nameText : any
+>false : false
+>false : false
+                }
+                else {
+                    // REVIEW: This logic should be symmetric with preCollectClassTypes
+                    fgSym = funcScope.findLocal(nameText, false, false);
+>fgSym = funcScope.findLocal(nameText, false, false) : any
+>fgSym : TypeSymbol
+>funcScope.findLocal(nameText, false, false) : any
+>funcScope.findLocal : any
+>funcScope : any
+>findLocal : any
+>nameText : any
+>false : false
+>false : false
+                }
+            }
+
+            context.typeFlow.checker.createFunctionSignature(funcDecl, container,
+>context.typeFlow.checker.createFunctionSignature(funcDecl, container,                                                            funcScope, fgSym, fgSym == null) : any
+>context.typeFlow.checker.createFunctionSignature : any
+>context.typeFlow.checker : any
+>context.typeFlow : TypeFlow
+>context : AssignScopeContext
+>typeFlow : TypeFlow
+>checker : any
+>createFunctionSignature : any
+>funcDecl : FuncDecl
+>container : Symbol
+
+                                                            funcScope, fgSym, fgSym == null);
+>funcScope : any
+>fgSym : TypeSymbol
+>fgSym == null : boolean
+>fgSym : TypeSymbol
+>null : null
+
+            // it's a getter or setter for a class property                     
+            if (!funcDecl.accessorSymbol && 
+>!funcDecl.accessorSymbol &&                 (funcDecl.fncFlags & FncFlags.ClassMethod) &&                container &&                 ((!fgSym || fgSym.declAST.nodeType != NodeType.FuncDecl) && funcDecl.isAccessor()) ||                     (fgSym && fgSym.isAccessor()) : any
+>!funcDecl.accessorSymbol &&                 (funcDecl.fncFlags & FncFlags.ClassMethod) &&                container &&                 ((!fgSym || fgSym.declAST.nodeType != NodeType.FuncDecl) && funcDecl.isAccessor()) : any
+>!funcDecl.accessorSymbol &&                 (funcDecl.fncFlags & FncFlags.ClassMethod) &&                container : Symbol
+>!funcDecl.accessorSymbol &&                 (funcDecl.fncFlags & FncFlags.ClassMethod) : number
+>!funcDecl.accessorSymbol : boolean
+>funcDecl.accessorSymbol : any
+>funcDecl : FuncDecl
+>accessorSymbol : any
+
+                (funcDecl.fncFlags & FncFlags.ClassMethod) &&
+>(funcDecl.fncFlags & FncFlags.ClassMethod) : number
+>funcDecl.fncFlags & FncFlags.ClassMethod : number
+>funcDecl.fncFlags : any
+>funcDecl : FuncDecl
+>fncFlags : any
+>FncFlags.ClassMethod : any
+>FncFlags : any
+>ClassMethod : any
+
+                container && 
+>container : Symbol
+
+                ((!fgSym || fgSym.declAST.nodeType != NodeType.FuncDecl) && funcDecl.isAccessor()) || 
+>((!fgSym || fgSym.declAST.nodeType != NodeType.FuncDecl) && funcDecl.isAccessor()) : any
+>(!fgSym || fgSym.declAST.nodeType != NodeType.FuncDecl) && funcDecl.isAccessor() : any
+>(!fgSym || fgSym.declAST.nodeType != NodeType.FuncDecl) : boolean
+>!fgSym || fgSym.declAST.nodeType != NodeType.FuncDecl : boolean
+>!fgSym : boolean
+>fgSym : TypeSymbol
+>fgSym.declAST.nodeType != NodeType.FuncDecl : boolean
+>fgSym.declAST.nodeType : any
+>fgSym.declAST : any
+>fgSym : TypeSymbol
+>declAST : any
+>nodeType : any
+>NodeType.FuncDecl : any
+>NodeType : any
+>FuncDecl : any
+>funcDecl.isAccessor() : any
+>funcDecl.isAccessor : any
+>funcDecl : FuncDecl
+>isAccessor : any
+
+                    (fgSym && fgSym.isAccessor())) 
+>(fgSym && fgSym.isAccessor()) : any
+>fgSym && fgSym.isAccessor() : any
+>fgSym : TypeSymbol
+>fgSym.isAccessor() : any
+>fgSym.isAccessor : any
+>fgSym : TypeSymbol
+>isAccessor : any
+            {
+                funcDecl.accessorSymbol = context.typeFlow.checker.createAccessorSymbol(funcDecl, fgSym, container.getType(), (funcDecl.isMethod() && isStatic), true, funcScope, container);
+>funcDecl.accessorSymbol = context.typeFlow.checker.createAccessorSymbol(funcDecl, fgSym, container.getType(), (funcDecl.isMethod() && isStatic), true, funcScope, container) : any
+>funcDecl.accessorSymbol : any
+>funcDecl : FuncDecl
+>accessorSymbol : any
+>context.typeFlow.checker.createAccessorSymbol(funcDecl, fgSym, container.getType(), (funcDecl.isMethod() && isStatic), true, funcScope, container) : any
+>context.typeFlow.checker.createAccessorSymbol : any
+>context.typeFlow.checker : any
+>context.typeFlow : TypeFlow
+>context : AssignScopeContext
+>typeFlow : TypeFlow
+>checker : any
+>createAccessorSymbol : any
+>funcDecl : FuncDecl
+>fgSym : TypeSymbol
+>container.getType() : any
+>container.getType : any
+>container : Symbol
+>getType : any
+>(funcDecl.isMethod() && isStatic) : any
+>funcDecl.isMethod() && isStatic : any
+>funcDecl.isMethod() : any
+>funcDecl.isMethod : any
+>funcDecl : FuncDecl
+>isMethod : any
+>isStatic : any
+>true : true
+>funcScope : any
+>container : Symbol
+            }
+
+            funcDecl.type.symbol.flags |= SymbolFlags.TypeSetDuringScopeAssignment;
+>funcDecl.type.symbol.flags |= SymbolFlags.TypeSetDuringScopeAssignment : number
+>funcDecl.type.symbol.flags : any
+>funcDecl.type.symbol : any
+>funcDecl.type : any
+>funcDecl : FuncDecl
+>type : any
+>symbol : any
+>flags : any
+>SymbolFlags.TypeSetDuringScopeAssignment : any
+>SymbolFlags : any
+>TypeSetDuringScopeAssignment : any
+        }
+
+        // Set the symbol for functions and their overloads
+        if (funcDecl.name && funcDecl.type) {
+>funcDecl.name && funcDecl.type : any
+>funcDecl.name : any
+>funcDecl : FuncDecl
+>name : any
+>funcDecl.type : any
+>funcDecl : FuncDecl
+>type : any
+
+            funcDecl.name.sym = funcDecl.type.symbol;
+>funcDecl.name.sym = funcDecl.type.symbol : any
+>funcDecl.name.sym : any
+>funcDecl.name : any
+>funcDecl : FuncDecl
+>name : any
+>sym : any
+>funcDecl.type.symbol : any
+>funcDecl.type : any
+>funcDecl : FuncDecl
+>type : any
+>symbol : any
+        }
+
+        // Keep track of the original scope type, because target typing might override
+        // the "type" member. We need the original "Scope type" for completion list, etc.
+        funcDecl.scopeType = funcDecl.type;
+>funcDecl.scopeType = funcDecl.type : any
+>funcDecl.scopeType : any
+>funcDecl : FuncDecl
+>scopeType : any
+>funcDecl.type : any
+>funcDecl : FuncDecl
+>type : any
+
+        // Overloads have no scope, so bail here
+        if (funcDecl.isOverload) {
+>funcDecl.isOverload : any
+>funcDecl : FuncDecl
+>isOverload : any
+
+            return;
+        }
+
+        var funcTable = new StringHashTable();
+>funcTable : any
+>new StringHashTable() : any
+>StringHashTable : any
+
+        var funcMembers = new ScopedMembers(new DualStringHashTable(funcTable, new StringHashTable()));
+>funcMembers : any
+>new ScopedMembers(new DualStringHashTable(funcTable, new StringHashTable())) : any
+>ScopedMembers : any
+>new DualStringHashTable(funcTable, new StringHashTable()) : any
+>DualStringHashTable : any
+>funcTable : any
+>new StringHashTable() : any
+>StringHashTable : any
+
+        var ambientFuncTable = new StringHashTable();
+>ambientFuncTable : any
+>new StringHashTable() : any
+>StringHashTable : any
+
+        var ambientFuncMembers = new ScopedMembers(new DualStringHashTable(ambientFuncTable, new StringHashTable()));
+>ambientFuncMembers : any
+>new ScopedMembers(new DualStringHashTable(ambientFuncTable, new StringHashTable())) : any
+>ScopedMembers : any
+>new DualStringHashTable(ambientFuncTable, new StringHashTable()) : any
+>DualStringHashTable : any
+>ambientFuncTable : any
+>new StringHashTable() : any
+>StringHashTable : any
+
+        var funcStaticTable = new StringHashTable();
+>funcStaticTable : any
+>new StringHashTable() : any
+>StringHashTable : any
+
+        var funcStaticMembers = new ScopedMembers(new DualStringHashTable(funcStaticTable, new StringHashTable()));
+>funcStaticMembers : any
+>new ScopedMembers(new DualStringHashTable(funcStaticTable, new StringHashTable())) : any
+>ScopedMembers : any
+>new DualStringHashTable(funcStaticTable, new StringHashTable()) : any
+>DualStringHashTable : any
+>funcStaticTable : any
+>new StringHashTable() : any
+>StringHashTable : any
+
+        var ambientFuncStaticTable = new StringHashTable();
+>ambientFuncStaticTable : any
+>new StringHashTable() : any
+>StringHashTable : any
+
+        var ambientFuncStaticMembers = new ScopedMembers(new DualStringHashTable(ambientFuncStaticTable, new StringHashTable()));
+>ambientFuncStaticMembers : any
+>new ScopedMembers(new DualStringHashTable(ambientFuncStaticTable, new StringHashTable())) : any
+>ScopedMembers : any
+>new DualStringHashTable(ambientFuncStaticTable, new StringHashTable()) : any
+>DualStringHashTable : any
+>ambientFuncStaticTable : any
+>new StringHashTable() : any
+>StringHashTable : any
+
+        // REVIEW: Is it a problem that this is being set twice for properties and constructors?
+        funcDecl.unitIndex = context.typeFlow.checker.locationInfo.unitIndex;
+>funcDecl.unitIndex = context.typeFlow.checker.locationInfo.unitIndex : any
+>funcDecl.unitIndex : any
+>funcDecl : FuncDecl
+>unitIndex : any
+>context.typeFlow.checker.locationInfo.unitIndex : any
+>context.typeFlow.checker.locationInfo : any
+>context.typeFlow.checker : any
+>context.typeFlow : TypeFlow
+>context : AssignScopeContext
+>typeFlow : TypeFlow
+>checker : any
+>locationInfo : any
+>unitIndex : any
+
+        var locals = new SymbolScopeBuilder(funcMembers, ambientFuncMembers, null, null, parentScope, localContainer);
+>locals : any
+>new SymbolScopeBuilder(funcMembers, ambientFuncMembers, null, null, parentScope, localContainer) : any
+>SymbolScopeBuilder : any
+>funcMembers : any
+>ambientFuncMembers : any
+>null : null
+>null : null
+>parentScope : any
+>localContainer : Symbol
+
+        var statics = new SymbolScopeBuilder(funcStaticMembers, ambientFuncStaticMembers, null, null, parentScope, null);
+>statics : any
+>new SymbolScopeBuilder(funcStaticMembers, ambientFuncStaticMembers, null, null, parentScope, null) : any
+>SymbolScopeBuilder : any
+>funcStaticMembers : any
+>ambientFuncStaticMembers : any
+>null : null
+>null : null
+>parentScope : any
+>null : null
+
+        if (funcDecl.isConstructor && context.scopeChain.thisType) {
+>funcDecl.isConstructor && context.scopeChain.thisType : any
+>funcDecl.isConstructor : any
+>funcDecl : FuncDecl
+>isConstructor : any
+>context.scopeChain.thisType : any
+>context.scopeChain : ScopeChain
+>context : AssignScopeContext
+>scopeChain : ScopeChain
+>thisType : any
+
+            context.scopeChain.thisType.constructorScope = locals;
+>context.scopeChain.thisType.constructorScope = locals : any
+>context.scopeChain.thisType.constructorScope : any
+>context.scopeChain.thisType : any
+>context.scopeChain : ScopeChain
+>context : AssignScopeContext
+>scopeChain : ScopeChain
+>thisType : any
+>constructorScope : any
+>locals : any
+        }
+
+        // basically, there are two problems
+        // - Above, for new classes, we were overwriting the constructor scope with the containing scope.  This caused constructor params to be
+        // in scope everywhere
+        // - Below, we're setting the contained scope table to the same table we were overwriting the constructor scope with, which we need to
+        // fish lambda params, etc, out (see funcTable below)
+        //
+        // A good first approach to solving this would be to change addLocalsFromScope to take a scope instead of a table, and add to the
+        // constructor scope as appropriate
+
+        funcDecl.symbols = funcTable;
+>funcDecl.symbols = funcTable : any
+>funcDecl.symbols : any
+>funcDecl : FuncDecl
+>symbols : any
+>funcTable : any
+
+        if (!funcDecl.isSpecialFn()) {
+>!funcDecl.isSpecialFn() : boolean
+>funcDecl.isSpecialFn() : any
+>funcDecl.isSpecialFn : any
+>funcDecl : FuncDecl
+>isSpecialFn : any
+
+            var group = funcDecl.type;
+>group : any
+>funcDecl.type : any
+>funcDecl : FuncDecl
+>type : any
+
+            var signature = funcDecl.signature;
+>signature : any
+>funcDecl.signature : any
+>funcDecl : FuncDecl
+>signature : any
+
+            if (!funcDecl.isConstructor) {
+>!funcDecl.isConstructor : boolean
+>funcDecl.isConstructor : any
+>funcDecl : FuncDecl
+>isConstructor : any
+
+                group.containedScope = locals;
+>group.containedScope = locals : any
+>group.containedScope : any
+>group : any
+>containedScope : any
+>locals : any
+
+                locals.container = group.symbol;
+>locals.container = group.symbol : any
+>locals.container : any
+>locals : any
+>container : any
+>group.symbol : any
+>group : any
+>symbol : any
+
+                group.memberScope = statics;
+>group.memberScope = statics : any
+>group.memberScope : any
+>group : any
+>memberScope : any
+>statics : any
+
+                statics.container = group.symbol;
+>statics.container = group.symbol : any
+>statics.container : any
+>statics : any
+>container : any
+>group.symbol : any
+>group : any
+>symbol : any
+            }
+            funcDecl.enclosingFnc = context.scopeChain.fnc;
+>funcDecl.enclosingFnc = context.scopeChain.fnc : any
+>funcDecl.enclosingFnc : any
+>funcDecl : FuncDecl
+>enclosingFnc : any
+>context.scopeChain.fnc : any
+>context.scopeChain : ScopeChain
+>context : AssignScopeContext
+>scopeChain : ScopeChain
+>fnc : any
+
+            group.enclosingType = isStatic ? context.scopeChain.classType : context.scopeChain.thisType;
+>group.enclosingType = isStatic ? context.scopeChain.classType : context.scopeChain.thisType : any
+>group.enclosingType : any
+>group : any
+>enclosingType : any
+>isStatic ? context.scopeChain.classType : context.scopeChain.thisType : any
+>isStatic : any
+>context.scopeChain.classType : any
+>context.scopeChain : ScopeChain
+>context : AssignScopeContext
+>scopeChain : ScopeChain
+>classType : any
+>context.scopeChain.thisType : any
+>context.scopeChain : ScopeChain
+>context : AssignScopeContext
+>scopeChain : ScopeChain
+>thisType : any
+
+            // for mapping when type checking
+            var fgSym = <TypeSymbol>ast.type.symbol;
+>fgSym : TypeSymbol
+><TypeSymbol>ast.type.symbol : TypeSymbol
+>ast.type.symbol : any
+>ast.type : any
+>ast : AST
+>type : any
+>symbol : any
+
+            if (((funcDecl.fncFlags & FncFlags.Signature) == FncFlags.None) && funcDecl.vars) {
+>((funcDecl.fncFlags & FncFlags.Signature) == FncFlags.None) && funcDecl.vars : any
+>((funcDecl.fncFlags & FncFlags.Signature) == FncFlags.None) : boolean
+>(funcDecl.fncFlags & FncFlags.Signature) == FncFlags.None : boolean
+>(funcDecl.fncFlags & FncFlags.Signature) : number
+>funcDecl.fncFlags & FncFlags.Signature : number
+>funcDecl.fncFlags : any
+>funcDecl : FuncDecl
+>fncFlags : any
+>FncFlags.Signature : any
+>FncFlags : any
+>Signature : any
+>FncFlags.None : any
+>FncFlags : any
+>None : any
+>funcDecl.vars : any
+>funcDecl : FuncDecl
+>vars : any
+
+                context.typeFlow.addLocalsFromScope(locals, fgSym, funcDecl.vars,
+>context.typeFlow.addLocalsFromScope(locals, fgSym, funcDecl.vars,                                                    funcTable, false) : any
+>context.typeFlow.addLocalsFromScope : any
+>context.typeFlow : TypeFlow
+>context : AssignScopeContext
+>typeFlow : TypeFlow
+>addLocalsFromScope : any
+>locals : any
+>fgSym : TypeSymbol
+>funcDecl.vars : any
+>funcDecl : FuncDecl
+>vars : any
+
+                                                    funcTable, false);
+>funcTable : any
+>false : false
+
+                context.typeFlow.addLocalsFromScope(statics, fgSym, funcDecl.statics,
+>context.typeFlow.addLocalsFromScope(statics, fgSym, funcDecl.statics,                                                    funcStaticTable, false) : any
+>context.typeFlow.addLocalsFromScope : any
+>context.typeFlow : TypeFlow
+>context : AssignScopeContext
+>typeFlow : TypeFlow
+>addLocalsFromScope : any
+>statics : any
+>fgSym : TypeSymbol
+>funcDecl.statics : any
+>funcDecl : FuncDecl
+>statics : any
+
+                                                    funcStaticTable, false);
+>funcStaticTable : any
+>false : false
+            }
+            if (signature.parameters) {
+>signature.parameters : any
+>signature : any
+>parameters : any
+
+                var len = signature.parameters.length;
+>len : any
+>signature.parameters.length : any
+>signature.parameters : any
+>signature : any
+>parameters : any
+>length : any
+
+                for (var i = 0; i < len; i++) {
+>i : number
+>0 : 0
+>i < len : boolean
+>i : number
+>len : any
+>i++ : number
+>i : number
+
+                    var paramSym: ParameterSymbol = signature.parameters[i];
+>paramSym : ParameterSymbol
+>signature.parameters[i] : any
+>signature.parameters : any
+>signature : any
+>parameters : any
+>i : number
+
+                    context.typeFlow.checker.resolveTypeLink(locals,
+>context.typeFlow.checker.resolveTypeLink(locals,                                                                paramSym.parameter.typeLink, true) : any
+>context.typeFlow.checker.resolveTypeLink : any
+>context.typeFlow.checker : any
+>context.typeFlow : TypeFlow
+>context : AssignScopeContext
+>typeFlow : TypeFlow
+>checker : any
+>resolveTypeLink : any
+>locals : any
+
+                                                                paramSym.parameter.typeLink, true);
+>paramSym.parameter.typeLink : any
+>paramSym.parameter : any
+>paramSym : ParameterSymbol
+>parameter : any
+>typeLink : any
+>true : true
+                }
+            }
+            context.typeFlow.checker.resolveTypeLink(locals, signature.returnType,
+>context.typeFlow.checker.resolveTypeLink(locals, signature.returnType,                                                        funcDecl.isSignature()) : any
+>context.typeFlow.checker.resolveTypeLink : any
+>context.typeFlow.checker : any
+>context.typeFlow : TypeFlow
+>context : AssignScopeContext
+>typeFlow : TypeFlow
+>checker : any
+>resolveTypeLink : any
+>locals : any
+>signature.returnType : any
+>signature : any
+>returnType : any
+
+                                                        funcDecl.isSignature());
+>funcDecl.isSignature() : any
+>funcDecl.isSignature : any
+>funcDecl : FuncDecl
+>isSignature : any
+        }
+
+        if (!funcDecl.isConstructor || hasFlag(funcDecl.fncFlags, FncFlags.ClassMethod)) {
+>!funcDecl.isConstructor || hasFlag(funcDecl.fncFlags, FncFlags.ClassMethod) : any
+>!funcDecl.isConstructor : boolean
+>funcDecl.isConstructor : any
+>funcDecl : FuncDecl
+>isConstructor : any
+>hasFlag(funcDecl.fncFlags, FncFlags.ClassMethod) : any
+>hasFlag : any
+>funcDecl.fncFlags : any
+>funcDecl : FuncDecl
+>fncFlags : any
+>FncFlags.ClassMethod : any
+>FncFlags : any
+>ClassMethod : any
+
+            var thisType = (funcDecl.isConstructor && hasFlag(funcDecl.fncFlags, FncFlags.ClassMethod)) ? context.scopeChain.thisType : null;
+>thisType : any
+>(funcDecl.isConstructor && hasFlag(funcDecl.fncFlags, FncFlags.ClassMethod)) ? context.scopeChain.thisType : null : any
+>(funcDecl.isConstructor && hasFlag(funcDecl.fncFlags, FncFlags.ClassMethod)) : any
+>funcDecl.isConstructor && hasFlag(funcDecl.fncFlags, FncFlags.ClassMethod) : any
+>funcDecl.isConstructor : any
+>funcDecl : FuncDecl
+>isConstructor : any
+>hasFlag(funcDecl.fncFlags, FncFlags.ClassMethod) : any
+>hasFlag : any
+>funcDecl.fncFlags : any
+>funcDecl : FuncDecl
+>fncFlags : any
+>FncFlags.ClassMethod : any
+>FncFlags : any
+>ClassMethod : any
+>context.scopeChain.thisType : any
+>context.scopeChain : ScopeChain
+>context : AssignScopeContext
+>scopeChain : ScopeChain
+>thisType : any
+>null : null
+
+            pushAssignScope(locals, context, thisType, null, funcDecl);
+>pushAssignScope(locals, context, thisType, null, funcDecl) : void
+>pushAssignScope : (scope: SymbolScope, context: AssignScopeContext, type: Type, classType: Type, fnc: FuncDecl) => void
+>locals : any
+>context : AssignScopeContext
+>thisType : any
+>null : null
+>funcDecl : FuncDecl
+        }
+    }
+
+    export function preAssignCatchScopes(ast: AST, context: AssignScopeContext) {
+>preAssignCatchScopes : (ast: AST, context: AssignScopeContext) => void
+>ast : AST
+>context : AssignScopeContext
+
+        var catchBlock = <Catch>ast;
+>catchBlock : Catch
+><Catch>ast : Catch
+>ast : AST
+
+        if (catchBlock.param) {
+>catchBlock.param : any
+>catchBlock : Catch
+>param : any
+
+            var catchTable = new ScopedMembers(new DualStringHashTable(new StringHashTable(), new StringHashTable())); // REVIEW: Should we be allocating a public table instead of a private one?
+>catchTable : any
+>new ScopedMembers(new DualStringHashTable(new StringHashTable(), new StringHashTable())) : any
+>ScopedMembers : any
+>new DualStringHashTable(new StringHashTable(), new StringHashTable()) : any
+>DualStringHashTable : any
+>new StringHashTable() : any
+>StringHashTable : any
+>new StringHashTable() : any
+>StringHashTable : any
+
+            var catchLocals = new SymbolScopeBuilder(catchTable, null, null, null, context.scopeChain.scope,
+>catchLocals : any
+>new SymbolScopeBuilder(catchTable, null, null, null, context.scopeChain.scope,                                                   context.scopeChain.scope.container) : any
+>SymbolScopeBuilder : any
+>catchTable : any
+>null : null
+>null : null
+>null : null
+>context.scopeChain.scope : any
+>context.scopeChain : ScopeChain
+>context : AssignScopeContext
+>scopeChain : ScopeChain
+>scope : any
+
+                                                   context.scopeChain.scope.container);
+>context.scopeChain.scope.container : any
+>context.scopeChain.scope : any
+>context.scopeChain : ScopeChain
+>context : AssignScopeContext
+>scopeChain : ScopeChain
+>scope : any
+>container : any
+
+            catchBlock.containedScope = catchLocals;
+>catchBlock.containedScope = catchLocals : any
+>catchBlock.containedScope : any
+>catchBlock : Catch
+>containedScope : any
+>catchLocals : any
+
+            pushAssignScope(catchLocals, context, context.scopeChain.thisType, context.scopeChain.classType, context.scopeChain.fnc);
+>pushAssignScope(catchLocals, context, context.scopeChain.thisType, context.scopeChain.classType, context.scopeChain.fnc) : void
+>pushAssignScope : (scope: SymbolScope, context: AssignScopeContext, type: Type, classType: Type, fnc: FuncDecl) => void
+>catchLocals : any
+>context : AssignScopeContext
+>context.scopeChain.thisType : any
+>context.scopeChain : ScopeChain
+>context : AssignScopeContext
+>scopeChain : ScopeChain
+>thisType : any
+>context.scopeChain.classType : any
+>context.scopeChain : ScopeChain
+>context : AssignScopeContext
+>scopeChain : ScopeChain
+>classType : any
+>context.scopeChain.fnc : any
+>context.scopeChain : ScopeChain
+>context : AssignScopeContext
+>scopeChain : ScopeChain
+>fnc : any
+        }
+    }
+
+    export function preAssignScopes(ast: AST, parent: AST, walker: IAstWalker) {
+>preAssignScopes : (ast: AST, parent: AST, walker: IAstWalker) => AST
+>ast : AST
+>parent : AST
+>walker : IAstWalker
+
+        var context:AssignScopeContext = walker.state;
+>context : AssignScopeContext
+>walker.state : any
+>walker : IAstWalker
+>state : any
+
+        var go = true;
+>go : boolean
+>true : true
+
+        if (ast) {
+>ast : AST
+
+            if (ast.nodeType == NodeType.List) {
+>ast.nodeType == NodeType.List : boolean
+>ast.nodeType : any
+>ast : AST
+>nodeType : any
+>NodeType.List : any
+>NodeType : any
+>List : any
+
+                var list = <ASTList>ast;
+>list : ASTList
+><ASTList>ast : ASTList
+>ast : AST
+
+                list.enclosingScope = context.scopeChain.scope;
+>list.enclosingScope = context.scopeChain.scope : any
+>list.enclosingScope : any
+>list : ASTList
+>enclosingScope : any
+>context.scopeChain.scope : any
+>context.scopeChain : ScopeChain
+>context : AssignScopeContext
+>scopeChain : ScopeChain
+>scope : any
+            }
+            else if (ast.nodeType == NodeType.ModuleDeclaration) {
+>ast.nodeType == NodeType.ModuleDeclaration : boolean
+>ast.nodeType : any
+>ast : AST
+>nodeType : any
+>NodeType.ModuleDeclaration : any
+>NodeType : any
+>ModuleDeclaration : any
+
+                preAssignModuleScopes(ast, context);
+>preAssignModuleScopes(ast, context) : void
+>preAssignModuleScopes : (ast: AST, context: AssignScopeContext) => void
+>ast : AST
+>context : AssignScopeContext
+            }
+            else if (ast.nodeType == NodeType.ClassDeclaration) {
+>ast.nodeType == NodeType.ClassDeclaration : boolean
+>ast.nodeType : any
+>ast : AST
+>nodeType : any
+>NodeType.ClassDeclaration : any
+>NodeType : any
+>ClassDeclaration : any
+
+                preAssignClassScopes(ast, context);
+>preAssignClassScopes(ast, context) : void
+>preAssignClassScopes : (ast: AST, context: AssignScopeContext) => void
+>ast : AST
+>context : AssignScopeContext
+            }
+            else if (ast.nodeType == NodeType.InterfaceDeclaration) {
+>ast.nodeType == NodeType.InterfaceDeclaration : boolean
+>ast.nodeType : any
+>ast : AST
+>nodeType : any
+>NodeType.InterfaceDeclaration : any
+>NodeType : any
+>InterfaceDeclaration : any
+
+                preAssignInterfaceScopes(ast, context);
+>preAssignInterfaceScopes(ast, context) : void
+>preAssignInterfaceScopes : (ast: AST, context: AssignScopeContext) => void
+>ast : AST
+>context : AssignScopeContext
+            }
+            else if (ast.nodeType == NodeType.With) {
+>ast.nodeType == NodeType.With : boolean
+>ast.nodeType : any
+>ast : AST
+>nodeType : any
+>NodeType.With : any
+>NodeType : any
+>With : any
+
+                preAssignWithScopes(ast, context);
+>preAssignWithScopes(ast, context) : void
+>preAssignWithScopes : (ast: AST, context: AssignScopeContext) => void
+>ast : AST
+>context : AssignScopeContext
+            }
+            else if (ast.nodeType == NodeType.FuncDecl) {
+>ast.nodeType == NodeType.FuncDecl : boolean
+>ast.nodeType : any
+>ast : AST
+>nodeType : any
+>NodeType.FuncDecl : any
+>NodeType : any
+>FuncDecl : any
+
+                preAssignFuncDeclScopes(ast, context);
+>preAssignFuncDeclScopes(ast, context) : void
+>preAssignFuncDeclScopes : (ast: AST, context: AssignScopeContext) => void
+>ast : AST
+>context : AssignScopeContext
+            }
+            else if (ast.nodeType == NodeType.Catch) {
+>ast.nodeType == NodeType.Catch : boolean
+>ast.nodeType : any
+>ast : AST
+>nodeType : any
+>NodeType.Catch : any
+>NodeType : any
+>Catch : any
+
+                preAssignCatchScopes(ast, context);
+>preAssignCatchScopes(ast, context) : void
+>preAssignCatchScopes : (ast: AST, context: AssignScopeContext) => void
+>ast : AST
+>context : AssignScopeContext
+            }
+            else if (ast.nodeType == NodeType.TypeRef) {
+>ast.nodeType == NodeType.TypeRef : boolean
+>ast.nodeType : any
+>ast : AST
+>nodeType : any
+>NodeType.TypeRef : any
+>NodeType : any
+>TypeRef : any
+
+                go = false;
+>go = false : false
+>go : boolean
+>false : false
+            }
+        }
+        walker.options.goChildren = go;
+>walker.options.goChildren = go : boolean
+>walker.options.goChildren : any
+>walker.options : any
+>walker : IAstWalker
+>options : any
+>goChildren : any
+>go : boolean
+
+        return ast;
+>ast : AST
+    }
+
+    export function postAssignScopes(ast: AST, parent: AST, walker: IAstWalker) {
+>postAssignScopes : (ast: AST, parent: AST, walker: IAstWalker) => AST
+>ast : AST
+>parent : AST
+>walker : IAstWalker
+
+        var context:AssignScopeContext = walker.state;
+>context : AssignScopeContext
+>walker.state : any
+>walker : IAstWalker
+>state : any
+
+        var go = true;
+>go : boolean
+>true : true
+
+        if (ast) {
+>ast : AST
+
+            if (ast.nodeType == NodeType.ModuleDeclaration) {
+>ast.nodeType == NodeType.ModuleDeclaration : boolean
+>ast.nodeType : any
+>ast : AST
+>nodeType : any
+>NodeType.ModuleDeclaration : any
+>NodeType : any
+>ModuleDeclaration : any
+
+                var prevModDecl = <ModuleDeclaration>ast;
+>prevModDecl : ModuleDeclaration
+><ModuleDeclaration>ast : ModuleDeclaration
+>ast : AST
+
+                popAssignScope(context);
+>popAssignScope(context) : void
+>popAssignScope : (context: AssignScopeContext) => void
+>context : AssignScopeContext
+
+                context.modDeclChain.pop();
+>context.modDeclChain.pop() : ModuleDeclaration
+>context.modDeclChain.pop : () => ModuleDeclaration
+>context.modDeclChain : ModuleDeclaration[]
+>context : AssignScopeContext
+>modDeclChain : ModuleDeclaration[]
+>pop : () => ModuleDeclaration
+
+                if (context.modDeclChain.length >= 1) {
+>context.modDeclChain.length >= 1 : boolean
+>context.modDeclChain.length : number
+>context.modDeclChain : ModuleDeclaration[]
+>context : AssignScopeContext
+>modDeclChain : ModuleDeclaration[]
+>length : number
+>1 : 1
+
+                    context.typeFlow.checker.currentModDecl = context.modDeclChain[context.modDeclChain.length - 1];
+>context.typeFlow.checker.currentModDecl = context.modDeclChain[context.modDeclChain.length - 1] : ModuleDeclaration
+>context.typeFlow.checker.currentModDecl : any
+>context.typeFlow.checker : any
+>context.typeFlow : TypeFlow
+>context : AssignScopeContext
+>typeFlow : TypeFlow
+>checker : any
+>currentModDecl : any
+>context.modDeclChain[context.modDeclChain.length - 1] : ModuleDeclaration
+>context.modDeclChain : ModuleDeclaration[]
+>context : AssignScopeContext
+>modDeclChain : ModuleDeclaration[]
+>context.modDeclChain.length - 1 : number
+>context.modDeclChain.length : number
+>context.modDeclChain : ModuleDeclaration[]
+>context : AssignScopeContext
+>modDeclChain : ModuleDeclaration[]
+>length : number
+>1 : 1
+                }
+            }
+            else if (ast.nodeType == NodeType.ClassDeclaration) {
+>ast.nodeType == NodeType.ClassDeclaration : boolean
+>ast.nodeType : any
+>ast : AST
+>nodeType : any
+>NodeType.ClassDeclaration : any
+>NodeType : any
+>ClassDeclaration : any
+
+                popAssignScope(context);
+>popAssignScope(context) : void
+>popAssignScope : (context: AssignScopeContext) => void
+>context : AssignScopeContext
+            }
+            else if (ast.nodeType == NodeType.InterfaceDeclaration) {
+>ast.nodeType == NodeType.InterfaceDeclaration : boolean
+>ast.nodeType : any
+>ast : AST
+>nodeType : any
+>NodeType.InterfaceDeclaration : any
+>NodeType : any
+>InterfaceDeclaration : any
+
+                popAssignScope(context);
+>popAssignScope(context) : void
+>popAssignScope : (context: AssignScopeContext) => void
+>context : AssignScopeContext
+            }
+            else if (ast.nodeType == NodeType.With) {
+>ast.nodeType == NodeType.With : boolean
+>ast.nodeType : any
+>ast : AST
+>nodeType : any
+>NodeType.With : any
+>NodeType : any
+>With : any
+
+                popAssignScope(context);
+>popAssignScope(context) : void
+>popAssignScope : (context: AssignScopeContext) => void
+>context : AssignScopeContext
+            }
+            else if (ast.nodeType == NodeType.FuncDecl) {
+>ast.nodeType == NodeType.FuncDecl : boolean
+>ast.nodeType : any
+>ast : AST
+>nodeType : any
+>NodeType.FuncDecl : any
+>NodeType : any
+>FuncDecl : any
+
+                var funcDecl = <FuncDecl>ast;
+>funcDecl : FuncDecl
+><FuncDecl>ast : FuncDecl
+>ast : AST
+
+                if ((!funcDecl.isConstructor || hasFlag(funcDecl.fncFlags, FncFlags.ClassMethod)) && !funcDecl.isOverload) {
+>(!funcDecl.isConstructor || hasFlag(funcDecl.fncFlags, FncFlags.ClassMethod)) && !funcDecl.isOverload : boolean
+>(!funcDecl.isConstructor || hasFlag(funcDecl.fncFlags, FncFlags.ClassMethod)) : any
+>!funcDecl.isConstructor || hasFlag(funcDecl.fncFlags, FncFlags.ClassMethod) : any
+>!funcDecl.isConstructor : boolean
+>funcDecl.isConstructor : any
+>funcDecl : FuncDecl
+>isConstructor : any
+>hasFlag(funcDecl.fncFlags, FncFlags.ClassMethod) : any
+>hasFlag : any
+>funcDecl.fncFlags : any
+>funcDecl : FuncDecl
+>fncFlags : any
+>FncFlags.ClassMethod : any
+>FncFlags : any
+>ClassMethod : any
+>!funcDecl.isOverload : boolean
+>funcDecl.isOverload : any
+>funcDecl : FuncDecl
+>isOverload : any
+
+                    popAssignScope(context);
+>popAssignScope(context) : void
+>popAssignScope : (context: AssignScopeContext) => void
+>context : AssignScopeContext
+                }
+            }
+            else if (ast.nodeType == NodeType.Catch) {
+>ast.nodeType == NodeType.Catch : boolean
+>ast.nodeType : any
+>ast : AST
+>nodeType : any
+>NodeType.Catch : any
+>NodeType : any
+>Catch : any
+
+                var catchBlock = <Catch>ast;
+>catchBlock : Catch
+><Catch>ast : Catch
+>ast : AST
+
+                if (catchBlock.param) {
+>catchBlock.param : any
+>catchBlock : Catch
+>param : any
+
+                    popAssignScope(context);
+>popAssignScope(context) : void
+>popAssignScope : (context: AssignScopeContext) => void
+>context : AssignScopeContext
+                }
+            }
+            else {
+                go = false;
+>go = false : false
+>go : boolean
+>false : false
+            }
+        }
+        walker.options.goChildren = go;
+>walker.options.goChildren = go : boolean
+>walker.options.goChildren : any
+>walker.options : any
+>walker : IAstWalker
+>options : any
+>goChildren : any
+>go : boolean
+
+        return ast;
+>ast : AST
+    }
+}

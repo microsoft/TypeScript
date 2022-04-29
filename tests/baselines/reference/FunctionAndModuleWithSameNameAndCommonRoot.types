@@ -1,0 +1,125 @@
+=== tests/cases/conformance/internalModules/DeclarationMerging/function.ts ===
+module A {
+>A : typeof A
+
+    export function Point() {
+>Point : typeof Point
+
+        return { x: 0, y: 0 };
+>{ x: 0, y: 0 } : { x: number; y: number; }
+>x : number
+>0 : 0
+>y : number
+>0 : 0
+    }
+}
+
+=== tests/cases/conformance/internalModules/DeclarationMerging/module.ts ===
+module A {
+>A : typeof A
+
+    export module Point {
+>Point : typeof Point
+
+        export var Origin = { x: 0, y: 0 };
+>Origin : { x: number; y: number; }
+>{ x: 0, y: 0 } : { x: number; y: number; }
+>x : number
+>0 : 0
+>y : number
+>0 : 0
+    }
+}
+
+=== tests/cases/conformance/internalModules/DeclarationMerging/test.ts ===
+var fn: () => { x: number; y: number };
+>fn : () => {    x: number;    y: number;}
+>x : number
+>y : number
+
+var fn = A.Point;
+>fn : () => { x: number; y: number; }
+>A.Point : typeof A.Point
+>A : typeof A
+>Point : typeof A.Point
+
+var cl: { x: number; y: number; }
+>cl : { x: number; y: number; }
+>x : number
+>y : number
+
+var cl = A.Point();
+>cl : { x: number; y: number; }
+>A.Point() : { x: number; y: number; }
+>A.Point : typeof A.Point
+>A : typeof A
+>Point : typeof A.Point
+
+var cl = A.Point.Origin; // not expected to be an error.
+>cl : { x: number; y: number; }
+>A.Point.Origin : { x: number; y: number; }
+>A.Point : typeof A.Point
+>A : typeof A
+>Point : typeof A.Point
+>Origin : { x: number; y: number; }
+
+
+=== tests/cases/conformance/internalModules/DeclarationMerging/simple.ts ===
+module B {
+>B : typeof B
+
+    export function Point() {
+>Point : typeof Point
+
+        return { x: 0, y: 0 };
+>{ x: 0, y: 0 } : { x: number; y: number; }
+>x : number
+>0 : 0
+>y : number
+>0 : 0
+    }
+
+    export module Point {
+>Point : typeof Point
+
+        export var Origin = { x: 0, y: 0 };
+>Origin : { x: number; y: number; }
+>{ x: 0, y: 0 } : { x: number; y: number; }
+>x : number
+>0 : 0
+>y : number
+>0 : 0
+    }
+}
+
+var fn: () => { x: number; y: number };
+>fn : () => { x: number; y: number; }
+>x : number
+>y : number
+
+var fn = B.Point;  // not expected to be an error. bug 840000: [corelang] Function of fundule not assignalbe as expected
+>fn : () => { x: number; y: number; }
+>B.Point : typeof B.Point
+>B : typeof B
+>Point : typeof B.Point
+
+var cl: { x: number; y: number; }
+>cl : { x: number; y: number; }
+>x : number
+>y : number
+
+var cl = B.Point();
+>cl : { x: number; y: number; }
+>B.Point() : { x: number; y: number; }
+>B.Point : typeof B.Point
+>B : typeof B
+>Point : typeof B.Point
+
+var cl = B.Point.Origin;
+>cl : { x: number; y: number; }
+>B.Point.Origin : { x: number; y: number; }
+>B.Point : typeof B.Point
+>B : typeof B
+>Point : typeof B.Point
+>Origin : { x: number; y: number; }
+

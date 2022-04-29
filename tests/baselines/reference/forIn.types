@@ -1,0 +1,72 @@
+=== tests/cases/compiler/forIn.ts ===
+var arr = null;
+>arr : any
+>null : null
+
+for (var i:number in arr) { // error
+>i : string
+>arr : any
+
+    var x1 = arr[i];
+>x1 : any
+>arr[i] : any
+>arr : any
+>i : string
+
+    var y1 = arr[i];
+>y1 : any
+>arr[i] : any
+>arr : any
+>i : string
+}
+
+for (var j in arr) { // ok
+>j : string
+>arr : any
+
+    var x2 = arr[j];
+>x2 : any
+>arr[j] : any
+>arr : any
+>j : string
+
+    var y2 = arr[j];
+>y2 : any
+>arr[j] : any
+>arr : any
+>j : string
+}
+
+var arr2 = [];
+>arr2 : any[]
+>[] : undefined[]
+
+for (j in arr2) { // ok
+>j : string
+>arr2 : any[]
+
+    var x3 = arr2[j];
+>x3 : any
+>arr2[j] : any
+>arr2 : any[]
+>j : string
+
+    var y3 = arr2[j];
+>y3 : any
+>arr2[j] : any
+>arr2 : any[]
+>j : string
+}
+
+for (var l in arr) { 
+>l : string
+>arr : any
+
+   // error in the body
+   k[l] = 1;
+>k[l] = 1 : 1
+>k[l] : any
+>k : any
+>l : string
+>1 : 1
+}

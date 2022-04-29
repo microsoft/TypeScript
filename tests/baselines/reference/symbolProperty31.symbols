@@ -1,0 +1,22 @@
+=== tests/cases/conformance/es6/Symbols/symbolProperty31.ts ===
+class C1 {
+>C1 : Symbol(C1, Decl(symbolProperty31.ts, 0, 0))
+
+    [Symbol.toStringTag]() {
+>[Symbol.toStringTag] : Symbol(C1[Symbol.toStringTag], Decl(symbolProperty31.ts, 0, 10))
+>Symbol.toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+        return { x: "" };
+>x : Symbol(x, Decl(symbolProperty31.ts, 2, 16))
+    }
+}
+class C2 extends C1 {
+>C2 : Symbol(C2, Decl(symbolProperty31.ts, 4, 1))
+>C1 : Symbol(C1, Decl(symbolProperty31.ts, 0, 0))
+
+    [s: symbol]: () => { x: string };
+>s : Symbol(s, Decl(symbolProperty31.ts, 6, 5))
+>x : Symbol(x, Decl(symbolProperty31.ts, 6, 24))
+}

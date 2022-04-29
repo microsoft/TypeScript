@@ -1,0 +1,196 @@
+=== tests/cases/conformance/salsa/a.js ===
+function A () {
+>A : Symbol(A, Decl(a.js, 0, 0))
+
+    // should get any on this-assignments in constructor
+    this.unknown = null
+>this.unknown : Symbol(A.unknown, Decl(a.js, 0, 15))
+>this : Symbol(A, Decl(a.js, 0, 0))
+>unknown : Symbol(A.unknown, Decl(a.js, 0, 15))
+
+    this.unknowable = undefined
+>this.unknowable : Symbol(A.unknowable, Decl(a.js, 2, 23))
+>this : Symbol(A, Decl(a.js, 0, 0))
+>unknowable : Symbol(A.unknowable, Decl(a.js, 2, 23))
+>undefined : Symbol(undefined)
+
+    this.empty = []
+>this.empty : Symbol(A.empty, Decl(a.js, 3, 31))
+>this : Symbol(A, Decl(a.js, 0, 0))
+>empty : Symbol(A.empty, Decl(a.js, 3, 31))
+}
+var a = new A()
+>a : Symbol(a, Decl(a.js, 6, 3), Decl(a.js, 6, 15), Decl(a.js, 7, 13), Decl(a.js, 8, 16), Decl(a.js, 9, 14) ... and 4 more)
+>A : Symbol(A, Decl(a.js, 0, 0))
+
+a.unknown = 1
+>a.unknown : Symbol(A.unknown, Decl(a.js, 0, 15))
+>a : Symbol(a, Decl(a.js, 6, 3), Decl(a.js, 6, 15), Decl(a.js, 7, 13), Decl(a.js, 8, 16), Decl(a.js, 9, 14) ... and 4 more)
+>unknown : Symbol(A.unknown, Decl(a.js, 0, 15))
+
+a.unknown = true
+>a.unknown : Symbol(A.unknown, Decl(a.js, 0, 15))
+>a : Symbol(a, Decl(a.js, 6, 3), Decl(a.js, 6, 15), Decl(a.js, 7, 13), Decl(a.js, 8, 16), Decl(a.js, 9, 14) ... and 4 more)
+>unknown : Symbol(A.unknown, Decl(a.js, 0, 15))
+
+a.unknown = {}
+>a.unknown : Symbol(A.unknown, Decl(a.js, 0, 15))
+>a : Symbol(a, Decl(a.js, 6, 3), Decl(a.js, 6, 15), Decl(a.js, 7, 13), Decl(a.js, 8, 16), Decl(a.js, 9, 14) ... and 4 more)
+>unknown : Symbol(A.unknown, Decl(a.js, 0, 15))
+
+a.unknown = 'hi'
+>a.unknown : Symbol(A.unknown, Decl(a.js, 0, 15))
+>a : Symbol(a, Decl(a.js, 6, 3), Decl(a.js, 6, 15), Decl(a.js, 7, 13), Decl(a.js, 8, 16), Decl(a.js, 9, 14) ... and 4 more)
+>unknown : Symbol(A.unknown, Decl(a.js, 0, 15))
+
+a.unknowable = 1
+>a.unknowable : Symbol(A.unknowable, Decl(a.js, 2, 23))
+>a : Symbol(a, Decl(a.js, 6, 3), Decl(a.js, 6, 15), Decl(a.js, 7, 13), Decl(a.js, 8, 16), Decl(a.js, 9, 14) ... and 4 more)
+>unknowable : Symbol(A.unknowable, Decl(a.js, 2, 23))
+
+a.unknowable = true
+>a.unknowable : Symbol(A.unknowable, Decl(a.js, 2, 23))
+>a : Symbol(a, Decl(a.js, 6, 3), Decl(a.js, 6, 15), Decl(a.js, 7, 13), Decl(a.js, 8, 16), Decl(a.js, 9, 14) ... and 4 more)
+>unknowable : Symbol(A.unknowable, Decl(a.js, 2, 23))
+
+a.unknowable = {}
+>a.unknowable : Symbol(A.unknowable, Decl(a.js, 2, 23))
+>a : Symbol(a, Decl(a.js, 6, 3), Decl(a.js, 6, 15), Decl(a.js, 7, 13), Decl(a.js, 8, 16), Decl(a.js, 9, 14) ... and 4 more)
+>unknowable : Symbol(A.unknowable, Decl(a.js, 2, 23))
+
+a.unknowable = 'hi'
+>a.unknowable : Symbol(A.unknowable, Decl(a.js, 2, 23))
+>a : Symbol(a, Decl(a.js, 6, 3), Decl(a.js, 6, 15), Decl(a.js, 7, 13), Decl(a.js, 8, 16), Decl(a.js, 9, 14) ... and 4 more)
+>unknowable : Symbol(A.unknowable, Decl(a.js, 2, 23))
+
+a.empty.push(1)
+>a.empty.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>a.empty : Symbol(A.empty, Decl(a.js, 3, 31))
+>a : Symbol(a, Decl(a.js, 6, 3), Decl(a.js, 6, 15), Decl(a.js, 7, 13), Decl(a.js, 8, 16), Decl(a.js, 9, 14) ... and 4 more)
+>empty : Symbol(A.empty, Decl(a.js, 3, 31))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+
+a.empty.push(true)
+>a.empty.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>a.empty : Symbol(A.empty, Decl(a.js, 3, 31))
+>a : Symbol(a, Decl(a.js, 6, 3), Decl(a.js, 6, 15), Decl(a.js, 7, 13), Decl(a.js, 8, 16), Decl(a.js, 9, 14) ... and 4 more)
+>empty : Symbol(A.empty, Decl(a.js, 3, 31))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+
+a.empty.push({})
+>a.empty.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>a.empty : Symbol(A.empty, Decl(a.js, 3, 31))
+>a : Symbol(a, Decl(a.js, 6, 3), Decl(a.js, 6, 15), Decl(a.js, 7, 13), Decl(a.js, 8, 16), Decl(a.js, 9, 14) ... and 4 more)
+>empty : Symbol(A.empty, Decl(a.js, 3, 31))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+
+a.empty.push('hi')
+>a.empty.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>a.empty : Symbol(A.empty, Decl(a.js, 3, 31))
+>a : Symbol(a, Decl(a.js, 6, 3), Decl(a.js, 6, 15), Decl(a.js, 7, 13), Decl(a.js, 8, 16), Decl(a.js, 9, 14) ... and 4 more)
+>empty : Symbol(A.empty, Decl(a.js, 3, 31))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+
+/** @type {number | undefined} */
+var n;
+>n : Symbol(n, Decl(a.js, 21, 3))
+
+// should get any on parameter initialisers
+function f(a = null, b = n, l = []) {
+>f : Symbol(f, Decl(a.js, 21, 6))
+>a : Symbol(a, Decl(a.js, 24, 11))
+>b : Symbol(b, Decl(a.js, 24, 20))
+>n : Symbol(n, Decl(a.js, 21, 3))
+>l : Symbol(l, Decl(a.js, 24, 27))
+
+    // a should be null in strict mode
+    a = undefined
+>a : Symbol(a, Decl(a.js, 24, 11))
+>undefined : Symbol(undefined)
+
+    a = null
+>a : Symbol(a, Decl(a.js, 24, 11))
+
+    a = 1
+>a : Symbol(a, Decl(a.js, 24, 11))
+
+    a = true
+>a : Symbol(a, Decl(a.js, 24, 11))
+
+    a = {}
+>a : Symbol(a, Decl(a.js, 24, 11))
+
+    a = 'ok'
+>a : Symbol(a, Decl(a.js, 24, 11))
+
+    // b should be number | undefined, not any
+    b = 1
+>b : Symbol(b, Decl(a.js, 24, 20))
+
+    b = undefined
+>b : Symbol(b, Decl(a.js, 24, 20))
+>undefined : Symbol(undefined)
+
+    b = 'error'
+>b : Symbol(b, Decl(a.js, 24, 20))
+
+    // l should be any[]
+    l.push(1)
+>l.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>l : Symbol(l, Decl(a.js, 24, 27))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+
+    l.push('ok')
+>l.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>l : Symbol(l, Decl(a.js, 24, 27))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+}
+
+// should get any on variable initialisers
+var u = undefined;
+>u : Symbol(u, Decl(a.js, 44, 3))
+>undefined : Symbol(undefined)
+
+var l = [];
+>l : Symbol(l, Decl(a.js, 45, 3))
+
+u = undefined
+>u : Symbol(u, Decl(a.js, 44, 3))
+>undefined : Symbol(undefined)
+
+u = 1
+>u : Symbol(u, Decl(a.js, 44, 3))
+
+u = true
+>u : Symbol(u, Decl(a.js, 44, 3))
+
+u = {}
+>u : Symbol(u, Decl(a.js, 44, 3))
+
+u = 'ok'
+>u : Symbol(u, Decl(a.js, 44, 3))
+
+l.push('ok')
+>l.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>l : Symbol(l, Decl(a.js, 45, 3))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+
+/** @type {(v: unknown) => v is undefined} */
+const isUndef = v => v === undefined;
+>isUndef : Symbol(isUndef, Decl(a.js, 55, 5))
+>v : Symbol(v, Decl(a.js, 55, 15))
+>v : Symbol(v, Decl(a.js, 55, 15))
+>undefined : Symbol(undefined)
+
+const e = [1, undefined];
+>e : Symbol(e, Decl(a.js, 56, 5))
+>undefined : Symbol(undefined)
+
+// should be undefined[]
+const g = e.filter(isUndef);
+>g : Symbol(g, Decl(a.js, 59, 5))
+>e.filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>e : Symbol(e, Decl(a.js, 56, 5))
+>filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>isUndef : Symbol(isUndef, Decl(a.js, 55, 5))
+

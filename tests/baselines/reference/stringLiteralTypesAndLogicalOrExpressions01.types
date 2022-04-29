@@ -1,0 +1,28 @@
+=== tests/cases/conformance/types/stringLiteral/stringLiteralTypesAndLogicalOrExpressions01.ts ===
+declare function myRandBool(): boolean;
+>myRandBool : () => boolean
+
+let a: "foo" = "foo";
+>a : "foo"
+>"foo" : "foo"
+
+let b = a || "foo";
+>b : "foo"
+>a || "foo" : "foo"
+>a : "foo"
+>"foo" : "foo"
+
+let c: "foo" = b;
+>c : "foo"
+>b : "foo"
+
+let d = b || "bar";
+>d : string
+>b || "bar" : "foo" | "bar"
+>b : "foo"
+>"bar" : "bar"
+
+let e: "foo" | "bar" = d;
+>e : "foo" | "bar"
+>d : string
+

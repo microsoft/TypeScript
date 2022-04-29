@@ -1,0 +1,86 @@
+=== tests/cases/compiler/aliasErrors.ts ===
+module foo {    
+>foo : Symbol(foo, Decl(aliasErrors.ts, 0, 0))
+
+    export class Provide {
+>Provide : Symbol(Provide, Decl(aliasErrors.ts, 0, 12))
+    }
+    export module bar { export module baz {export class boo {}}}
+>bar : Symbol(bar, Decl(aliasErrors.ts, 2, 5))
+>baz : Symbol(baz, Decl(aliasErrors.ts, 3, 23))
+>boo : Symbol(boo, Decl(aliasErrors.ts, 3, 43))
+}
+
+import provide = foo;
+>provide : Symbol(provide, Decl(aliasErrors.ts, 4, 1))
+>foo : Symbol(foo, Decl(aliasErrors.ts, 0, 0))
+
+import booz = foo.bar.baz;
+>booz : Symbol(booz, Decl(aliasErrors.ts, 6, 21))
+>foo : Symbol(foo, Decl(aliasErrors.ts, 0, 0))
+>bar : Symbol(provide.bar, Decl(aliasErrors.ts, 2, 5))
+>baz : Symbol(booz, Decl(aliasErrors.ts, 3, 23))
+
+import beez = foo.bar;
+>beez : Symbol(beez, Decl(aliasErrors.ts, 7, 26))
+>foo : Symbol(foo, Decl(aliasErrors.ts, 0, 0))
+>bar : Symbol(provide.bar, Decl(aliasErrors.ts, 2, 5))
+
+import m = no;
+>m : Symbol(m, Decl(aliasErrors.ts, 8, 22))
+
+import m2 = no.mod;
+>m2 : Symbol(m2, Decl(aliasErrors.ts, 10, 14))
+
+import n = 5;
+>n : Symbol(n, Decl(aliasErrors.ts, 11, 19))
+
+import o = "s";
+>o : Symbol(o, Decl(aliasErrors.ts, 12, 13))
+
+import q = null;
+>q : Symbol(q, Decl(aliasErrors.ts, 13, 15))
+
+import r = undefined;
+>r : Symbol(r, Decl(aliasErrors.ts, 14, 16))
+
+
+var p = new provide.Provide();
+>p : Symbol(p, Decl(aliasErrors.ts, 18, 3))
+>provide.Provide : Symbol(provide.Provide, Decl(aliasErrors.ts, 0, 12))
+>provide : Symbol(provide, Decl(aliasErrors.ts, 4, 1))
+>Provide : Symbol(provide.Provide, Decl(aliasErrors.ts, 0, 12))
+
+function use() {
+>use : Symbol(use, Decl(aliasErrors.ts, 18, 30))
+    
+  beez.baz.boo;
+>beez.baz.boo : Symbol(booz.boo, Decl(aliasErrors.ts, 3, 43))
+>beez.baz : Symbol(booz, Decl(aliasErrors.ts, 3, 23))
+>beez : Symbol(beez, Decl(aliasErrors.ts, 7, 26))
+>baz : Symbol(booz, Decl(aliasErrors.ts, 3, 23))
+>boo : Symbol(booz.boo, Decl(aliasErrors.ts, 3, 43))
+
+  var p1: provide.Provide; 
+>p1 : Symbol(p1, Decl(aliasErrors.ts, 23, 5))
+>provide : Symbol(provide, Decl(aliasErrors.ts, 4, 1))
+>Provide : Symbol(provide.Provide, Decl(aliasErrors.ts, 0, 12))
+
+  var p2: foo.Provide;
+>p2 : Symbol(p2, Decl(aliasErrors.ts, 24, 5))
+>foo : Symbol(foo, Decl(aliasErrors.ts, 0, 0))
+>Provide : Symbol(provide.Provide, Decl(aliasErrors.ts, 0, 12))
+
+  var p3:booz.bar;
+>p3 : Symbol(p3, Decl(aliasErrors.ts, 25, 5))
+>booz : Symbol(booz, Decl(aliasErrors.ts, 6, 21))
+>bar : Symbol(booz.bar)
+
+  var p22 = new provide.Provide();
+>p22 : Symbol(p22, Decl(aliasErrors.ts, 26, 5))
+>provide.Provide : Symbol(provide.Provide, Decl(aliasErrors.ts, 0, 12))
+>provide : Symbol(provide, Decl(aliasErrors.ts, 4, 1))
+>Provide : Symbol(provide.Provide, Decl(aliasErrors.ts, 0, 12))
+}
+
+

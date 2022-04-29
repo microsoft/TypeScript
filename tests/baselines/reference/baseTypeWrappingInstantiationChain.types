@@ -1,0 +1,55 @@
+=== tests/cases/compiler/baseTypeWrappingInstantiationChain.ts ===
+class CBaseBase<T3> {
+>CBaseBase : CBaseBase<T3>
+
+    constructor(x: Parameter<T3>) { }
+>x : Parameter<T3>
+}
+
+class CBase<T2> extends CBaseBase<Wrapper<T2>> {
+>CBase : CBase<T2>
+>CBaseBase : CBaseBase<Wrapper<T2>>
+
+}
+
+class Parameter<T4> {
+>Parameter : Parameter<T4>
+
+    method(t: T4) { }
+>method : (t: T4) => void
+>t : T4
+}
+
+class Wrapper<T5> {
+>Wrapper : Wrapper<T5>
+
+    property: T5;
+>property : T5
+}
+
+class C<T1> extends CBase<T1> {
+>C : C<T1>
+>CBase : CBase<T1>
+
+    public works() {
+>works : () => void
+
+        new CBaseBase<Wrapper<T1>>(this);
+>new CBaseBase<Wrapper<T1>>(this) : CBaseBase<Wrapper<T1>>
+>CBaseBase : typeof CBaseBase
+>this : this
+    }
+    public alsoWorks() {
+>alsoWorks : () => void
+
+        new CBase<T1>(this); // Should not error, parameter is of type Parameter<Wrapper<T1>>
+>new CBase<T1>(this) : CBase<T1>
+>CBase : typeof CBase
+>this : this
+    }
+
+    public method(t: Wrapper<T1>) { }
+>method : (t: Wrapper<T1>) => void
+>t : Wrapper<T1>
+}
+

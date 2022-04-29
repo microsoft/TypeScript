@@ -1,0 +1,83 @@
+=== tests/cases/conformance/types/typeRelationships/bestCommonType/bestCommonTypeOfConditionalExpressions2.ts ===
+// conditional expressions return the best common type of the branches plus contextual type (using the first candidate if multiple BCTs exist)
+// these are errors
+
+class Base { foo: string; }
+>Base : Symbol(Base, Decl(bestCommonTypeOfConditionalExpressions2.ts, 0, 0))
+>foo : Symbol(Base.foo, Decl(bestCommonTypeOfConditionalExpressions2.ts, 3, 12))
+
+class Derived extends Base { bar: string; }
+>Derived : Symbol(Derived, Decl(bestCommonTypeOfConditionalExpressions2.ts, 3, 27))
+>Base : Symbol(Base, Decl(bestCommonTypeOfConditionalExpressions2.ts, 0, 0))
+>bar : Symbol(Derived.bar, Decl(bestCommonTypeOfConditionalExpressions2.ts, 4, 28))
+
+class Derived2 extends Base { baz: string; }
+>Derived2 : Symbol(Derived2, Decl(bestCommonTypeOfConditionalExpressions2.ts, 4, 43))
+>Base : Symbol(Base, Decl(bestCommonTypeOfConditionalExpressions2.ts, 0, 0))
+>baz : Symbol(Derived2.baz, Decl(bestCommonTypeOfConditionalExpressions2.ts, 5, 29))
+
+var base: Base;
+>base : Symbol(base, Decl(bestCommonTypeOfConditionalExpressions2.ts, 6, 3))
+>Base : Symbol(Base, Decl(bestCommonTypeOfConditionalExpressions2.ts, 0, 0))
+
+var derived: Derived;
+>derived : Symbol(derived, Decl(bestCommonTypeOfConditionalExpressions2.ts, 7, 3))
+>Derived : Symbol(Derived, Decl(bestCommonTypeOfConditionalExpressions2.ts, 3, 27))
+
+var derived2: Derived2;
+>derived2 : Symbol(derived2, Decl(bestCommonTypeOfConditionalExpressions2.ts, 8, 3))
+>Derived2 : Symbol(Derived2, Decl(bestCommonTypeOfConditionalExpressions2.ts, 4, 43))
+
+var r2 = true ? 1 : '';
+>r2 : Symbol(r2, Decl(bestCommonTypeOfConditionalExpressions2.ts, 10, 3))
+
+var r9 = true ? derived : derived2;
+>r9 : Symbol(r9, Decl(bestCommonTypeOfConditionalExpressions2.ts, 11, 3))
+>derived : Symbol(derived, Decl(bestCommonTypeOfConditionalExpressions2.ts, 7, 3))
+>derived2 : Symbol(derived2, Decl(bestCommonTypeOfConditionalExpressions2.ts, 8, 3))
+
+function foo<T, U>(t: T, u: U) {
+>foo : Symbol(foo, Decl(bestCommonTypeOfConditionalExpressions2.ts, 11, 35))
+>T : Symbol(T, Decl(bestCommonTypeOfConditionalExpressions2.ts, 13, 13))
+>U : Symbol(U, Decl(bestCommonTypeOfConditionalExpressions2.ts, 13, 15))
+>t : Symbol(t, Decl(bestCommonTypeOfConditionalExpressions2.ts, 13, 19))
+>T : Symbol(T, Decl(bestCommonTypeOfConditionalExpressions2.ts, 13, 13))
+>u : Symbol(u, Decl(bestCommonTypeOfConditionalExpressions2.ts, 13, 24))
+>U : Symbol(U, Decl(bestCommonTypeOfConditionalExpressions2.ts, 13, 15))
+
+    return true ? t : u;
+>t : Symbol(t, Decl(bestCommonTypeOfConditionalExpressions2.ts, 13, 19))
+>u : Symbol(u, Decl(bestCommonTypeOfConditionalExpressions2.ts, 13, 24))
+}
+
+function foo2<T extends U, U>(t: T, u: U) { // Error for referencing own type parameter
+>foo2 : Symbol(foo2, Decl(bestCommonTypeOfConditionalExpressions2.ts, 15, 1))
+>T : Symbol(T, Decl(bestCommonTypeOfConditionalExpressions2.ts, 17, 14))
+>U : Symbol(U, Decl(bestCommonTypeOfConditionalExpressions2.ts, 17, 26))
+>U : Symbol(U, Decl(bestCommonTypeOfConditionalExpressions2.ts, 17, 26))
+>t : Symbol(t, Decl(bestCommonTypeOfConditionalExpressions2.ts, 17, 30))
+>T : Symbol(T, Decl(bestCommonTypeOfConditionalExpressions2.ts, 17, 14))
+>u : Symbol(u, Decl(bestCommonTypeOfConditionalExpressions2.ts, 17, 35))
+>U : Symbol(U, Decl(bestCommonTypeOfConditionalExpressions2.ts, 17, 26))
+
+    return true ? t : u; // Ok because BCT(T, U) = U
+>t : Symbol(t, Decl(bestCommonTypeOfConditionalExpressions2.ts, 17, 30))
+>u : Symbol(u, Decl(bestCommonTypeOfConditionalExpressions2.ts, 17, 35))
+}
+
+function foo3<T extends U, U extends V, V>(t: T, u: U) {
+>foo3 : Symbol(foo3, Decl(bestCommonTypeOfConditionalExpressions2.ts, 19, 1))
+>T : Symbol(T, Decl(bestCommonTypeOfConditionalExpressions2.ts, 21, 14))
+>U : Symbol(U, Decl(bestCommonTypeOfConditionalExpressions2.ts, 21, 26))
+>U : Symbol(U, Decl(bestCommonTypeOfConditionalExpressions2.ts, 21, 26))
+>V : Symbol(V, Decl(bestCommonTypeOfConditionalExpressions2.ts, 21, 39))
+>V : Symbol(V, Decl(bestCommonTypeOfConditionalExpressions2.ts, 21, 39))
+>t : Symbol(t, Decl(bestCommonTypeOfConditionalExpressions2.ts, 21, 43))
+>T : Symbol(T, Decl(bestCommonTypeOfConditionalExpressions2.ts, 21, 14))
+>u : Symbol(u, Decl(bestCommonTypeOfConditionalExpressions2.ts, 21, 48))
+>U : Symbol(U, Decl(bestCommonTypeOfConditionalExpressions2.ts, 21, 26))
+
+    return true ? t : u;
+>t : Symbol(t, Decl(bestCommonTypeOfConditionalExpressions2.ts, 21, 43))
+>u : Symbol(u, Decl(bestCommonTypeOfConditionalExpressions2.ts, 21, 48))
+}

@@ -1,0 +1,38 @@
+=== tests/cases/compiler/assignmentCompatability14.ts ===
+module __test1__ {
+>__test1__ : typeof __test1__
+
+    export interface interfaceWithPublicAndOptional<T,U> { one: T; two?: U; };  var obj4: interfaceWithPublicAndOptional<number,string> = { one: 1 };;
+>one : T
+>two : U
+>obj4 : interfaceWithPublicAndOptional<number, string>
+>{ one: 1 } : { one: number; }
+>one : number
+>1 : 1
+
+    export var __val__obj4 = obj4;
+>__val__obj4 : interfaceWithPublicAndOptional<number, string>
+>obj4 : interfaceWithPublicAndOptional<number, string>
+}
+module __test2__ {
+>__test2__ : typeof __test2__
+
+    export var obj = {one: true};
+>obj : { one: boolean; }
+>{one: true} : { one: boolean; }
+>one : boolean
+>true : true
+
+    export var __val__obj = obj;
+>__val__obj : { one: boolean; }
+>obj : { one: boolean; }
+}
+__test2__.__val__obj = __test1__.__val__obj4
+>__test2__.__val__obj = __test1__.__val__obj4 : __test1__.interfaceWithPublicAndOptional<number, string>
+>__test2__.__val__obj : { one: boolean; }
+>__test2__ : typeof __test2__
+>__val__obj : { one: boolean; }
+>__test1__.__val__obj4 : __test1__.interfaceWithPublicAndOptional<number, string>
+>__test1__ : typeof __test1__
+>__val__obj4 : __test1__.interfaceWithPublicAndOptional<number, string>
+

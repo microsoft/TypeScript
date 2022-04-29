@@ -1,0 +1,8 @@
+tests/cases/conformance/types/primitives/undefined/directReferenceToUndefined.ts(1,8): error TS2304: Cannot find name 'Undefined'.
+
+
+==== tests/cases/conformance/types/primitives/undefined/directReferenceToUndefined.ts (1 errors) ====
+    var x: Undefined;
+           ~~~~~~~~~
+!!! error TS2304: Cannot find name 'Undefined'.
+    var y = undefined;

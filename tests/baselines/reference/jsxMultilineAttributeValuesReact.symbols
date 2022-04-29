@@ -1,0 +1,23 @@
+=== tests/cases/compiler/jsxMultilineAttributeValuesReact.tsx ===
+declare var React: any;
+>React : Symbol(React, Decl(jsxMultilineAttributeValuesReact.tsx, 0, 11))
+
+const a = <input value="
+>a : Symbol(a, Decl(jsxMultilineAttributeValuesReact.tsx, 1, 5))
+>value : Symbol(value, Decl(jsxMultilineAttributeValuesReact.tsx, 1, 16))
+
+foo: 23
+"></input>;
+const b = <input value='
+>b : Symbol(b, Decl(jsxMultilineAttributeValuesReact.tsx, 4, 5))
+>value : Symbol(value, Decl(jsxMultilineAttributeValuesReact.tsx, 4, 16))
+
+foo: 23
+'></input>;
+const c = <input value='
+>c : Symbol(c, Decl(jsxMultilineAttributeValuesReact.tsx, 7, 5))
+>value : Symbol(value, Decl(jsxMultilineAttributeValuesReact.tsx, 7, 16))
+
+foo: 23\n
+'></input>;
+

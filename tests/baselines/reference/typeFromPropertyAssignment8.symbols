@@ -1,0 +1,74 @@
+=== tests/cases/conformance/salsa/a.js ===
+var my = my || {};
+>my : Symbol(my, Decl(a.js, 0, 3), Decl(a.js, 0, 18), Decl(a.js, 1, 22))
+>my : Symbol(my, Decl(a.js, 0, 3), Decl(a.js, 0, 18), Decl(a.js, 1, 22))
+
+my.app = my.app || {};
+>my.app : Symbol(my.app, Decl(a.js, 0, 18), Decl(a.js, 3, 3))
+>my : Symbol(my, Decl(a.js, 0, 3), Decl(a.js, 0, 18), Decl(a.js, 1, 22))
+>app : Symbol(my.app, Decl(a.js, 0, 18), Decl(a.js, 3, 3))
+>my.app : Symbol(my.app, Decl(a.js, 0, 18), Decl(a.js, 3, 3))
+>my : Symbol(my, Decl(a.js, 0, 3), Decl(a.js, 0, 18), Decl(a.js, 1, 22))
+>app : Symbol(my.app, Decl(a.js, 0, 18), Decl(a.js, 3, 3))
+
+my.app.Application = (function () {
+>my.app.Application : Symbol(my.app.Application, Decl(a.js, 1, 22))
+>my.app : Symbol(my.app, Decl(a.js, 0, 18), Decl(a.js, 3, 3))
+>my : Symbol(my, Decl(a.js, 0, 3), Decl(a.js, 0, 18), Decl(a.js, 1, 22))
+>app : Symbol(my.app, Decl(a.js, 0, 18), Decl(a.js, 3, 3))
+>Application : Symbol(my.app.Application, Decl(a.js, 1, 22))
+
+var Application = function () {
+>Application : Symbol(Application, Decl(a.js, 4, 3))
+
+    //...
+};
+return Application;
+>Application : Symbol(Application, Decl(a.js, 4, 3))
+
+})();
+my.app.Application()
+>my.app.Application : Symbol(my.app.Application, Decl(a.js, 1, 22))
+>my.app : Symbol(my.app, Decl(a.js, 0, 18), Decl(a.js, 3, 3))
+>my : Symbol(my, Decl(a.js, 0, 3), Decl(a.js, 0, 18), Decl(a.js, 1, 22))
+>app : Symbol(my.app, Decl(a.js, 0, 18), Decl(a.js, 3, 3))
+>Application : Symbol(my.app.Application, Decl(a.js, 1, 22))
+
+=== tests/cases/conformance/salsa/b.js ===
+var min = window.min || {};
+>min : Symbol(min, Decl(b.js, 0, 3), Decl(b.js, 0, 27), Decl(b.js, 1, 24))
+>window.min : Symbol(min, Decl(b.js, 0, 3), Decl(b.js, 0, 27), Decl(b.js, 1, 24))
+>window : Symbol(window, Decl(lib.dom.d.ts, --, --))
+>min : Symbol(min, Decl(b.js, 0, 3), Decl(b.js, 0, 27), Decl(b.js, 1, 24))
+
+min.app = min.app || {};
+>min.app : Symbol(min.app, Decl(b.js, 0, 27), Decl(b.js, 3, 4))
+>min : Symbol(min, Decl(b.js, 0, 3), Decl(b.js, 0, 27), Decl(b.js, 1, 24))
+>app : Symbol(min.app, Decl(b.js, 0, 27), Decl(b.js, 3, 4))
+>min.app : Symbol(min.app, Decl(b.js, 0, 27), Decl(b.js, 3, 4))
+>min : Symbol(min, Decl(b.js, 0, 3), Decl(b.js, 0, 27), Decl(b.js, 1, 24))
+>app : Symbol(min.app, Decl(b.js, 0, 27), Decl(b.js, 3, 4))
+
+min.app.Application = (function () {
+>min.app.Application : Symbol(min.app.Application, Decl(b.js, 1, 24))
+>min.app : Symbol(min.app, Decl(b.js, 0, 27), Decl(b.js, 3, 4))
+>min : Symbol(min, Decl(b.js, 0, 3), Decl(b.js, 0, 27), Decl(b.js, 1, 24))
+>app : Symbol(min.app, Decl(b.js, 0, 27), Decl(b.js, 3, 4))
+>Application : Symbol(min.app.Application, Decl(b.js, 1, 24))
+
+var Application = function () {
+>Application : Symbol(Application, Decl(b.js, 4, 3))
+
+    //...
+};
+return Application;
+>Application : Symbol(Application, Decl(b.js, 4, 3))
+
+})();
+min.app.Application()
+>min.app.Application : Symbol(min.app.Application, Decl(b.js, 1, 24))
+>min.app : Symbol(min.app, Decl(b.js, 0, 27), Decl(b.js, 3, 4))
+>min : Symbol(min, Decl(b.js, 0, 3), Decl(b.js, 0, 27), Decl(b.js, 1, 24))
+>app : Symbol(min.app, Decl(b.js, 0, 27), Decl(b.js, 3, 4))
+>Application : Symbol(min.app.Application, Decl(b.js, 1, 24))
+

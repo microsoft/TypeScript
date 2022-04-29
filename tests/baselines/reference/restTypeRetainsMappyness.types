@@ -1,0 +1,24 @@
+=== tests/cases/compiler/restTypeRetainsMappyness.ts ===
+type Foo<T extends any[]> = {
+>Foo : Foo<T>
+
+    [P in keyof T]: T[P]
+}
+
+function test<T extends any[]>(fn: (...args: Foo<T>) => void) {
+>test : <T extends any[]>(fn: (...args: Foo<T>) => void) => void
+>fn : (...args: Foo<T>) => void
+>args : Foo<T>
+
+    const arr: Foo<T> = {} as any
+>arr : Foo<T>
+>{} as any : any
+>{} : {}
+
+    fn(...arr) // Error: Argument of type 'any[]' is not assignable to parameter of type 'Foo<T>'
+>fn(...arr) : void
+>fn : (...args: Foo<T>) => void
+>...arr : any
+>arr : Foo<T>
+}
+

@@ -1,0 +1,24 @@
+=== tests/cases/compiler/mergedModuleDeclarationCodeGen2.ts ===
+module my.data.foo {
+>my : typeof my
+>data : typeof data
+>foo : typeof foo
+
+    export function buz() { }
+>buz : () => void
+}
+module my.data {
+>my : typeof my
+>data : typeof my.data
+
+    function data(my) {
+>data : (my: any) => void
+>my : any
+
+        foo.buz();
+>foo.buz() : void
+>foo.buz : () => void
+>foo : typeof foo
+>buz : () => void
+    }
+}

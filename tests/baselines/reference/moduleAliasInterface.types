@@ -1,0 +1,107 @@
+=== tests/cases/compiler/moduleAliasInterface.ts ===
+module _modes {
+>_modes : typeof _modes
+
+ export interface IMode {
+  
+ }
+ 
+ export class Mode {
+>Mode : Mode
+  
+ }
+}
+
+// _modes. // produces an internal error - please implement in derived class
+
+module editor {
+>editor : typeof editor
+
+ import modes = _modes;
+>modes : typeof modes
+>_modes : typeof modes
+ 
+ var i : modes.IMode;
+>i : modes.IMode
+>modes : any
+  
+ // If you just use p1:modes, the compiler accepts it - should be an error
+ class Bug { 
+>Bug : Bug
+
+  constructor(p1: modes.IMode, p2: modes.Mode) { }// should be an error on p2 - it's not exported
+>p1 : modes.IMode
+>modes : any
+>p2 : modes.Mode
+>modes : any
+
+  public foo(p1:modes.IMode) {
+>foo : (p1: modes.IMode) => void
+>p1 : modes.IMode
+>modes : any
+   
+  } 
+ }
+}
+
+import modesOuter = _modes;
+>modesOuter : typeof _modes
+>_modes : typeof _modes
+
+module editor2 {
+>editor2 : typeof editor2
+ 
+ var i : modesOuter.IMode;
+>i : modesOuter.IMode
+>modesOuter : any
+ 
+ class Bug {
+>Bug : Bug
+
+     constructor(p1: modesOuter.IMode, p2: modesOuter.Mode) { }// no error here, since modesOuter is declared externally
+>p1 : modesOuter.IMode
+>modesOuter : any
+>p2 : modesOuter.Mode
+>modesOuter : any
+  
+ }
+ 
+  module Foo { export class Bar{} }
+>Foo : typeof Foo
+>Bar : Bar
+ 
+  class Bug2 {
+>Bug2 : Bug2
+
+      constructor(p1: Foo.Bar, p2: modesOuter.Mode) { }
+>p1 : Foo.Bar
+>Foo : any
+>p2 : modesOuter.Mode
+>modesOuter : any
+  }
+}
+
+module A1 {
+>A1 : typeof A1
+
+    export interface A1I1 {}
+    export class A1C1 {}
+>A1C1 : A1C1
+}
+
+module B1 {
+>B1 : typeof B1
+
+    import A1Alias1 = A1;
+>A1Alias1 : typeof A1Alias1
+>A1 : typeof A1Alias1
+    
+    var i : A1Alias1.A1I1;   
+>i : A1Alias1.A1I1
+>A1Alias1 : any
+
+    var c : A1Alias1.A1C1;
+>c : A1Alias1.A1C1
+>A1Alias1 : any
+}
+

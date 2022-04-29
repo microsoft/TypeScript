@@ -1,0 +1,75 @@
+=== tests/cases/compiler/typeInferenceFBoundedTypeParams.ts ===
+// Example from #6037
+
+function fold<a, r>(values: a[], result: r, fold: (result: r, value: a) => r): r {
+>fold : <a, r>(values: a[], result: r, fold: (result: r, value: a) => r) => r
+>values : a[]
+>result : r
+>fold : (result: r, value: a) => r
+>result : r
+>value : a
+
+    for (let value of values) {
+>value : a
+>values : a[]
+
+        result = fold(result, value);
+>result = fold(result, value) : r
+>result : r
+>fold(result, value) : r
+>fold : (result: r, value: a) => r
+>result : r
+>value : a
+    }
+    return result;
+>result : r
+}
+
+function append<a, b extends a>(values: a[], value: b): a[] {
+>append : <a, b extends a>(values: a[], value: b) => a[]
+>values : a[]
+>value : b
+
+    values.push(value);
+>values.push(value) : number
+>values.push : (...items: a[]) => number
+>values : a[]
+>push : (...items: a[]) => number
+>value : b
+
+    return values;
+>values : a[]
+}
+
+fold(
+>fold(    [1, 2, 3],    [] as [string, string][],    (result, value) => append(        result,        ["", ""]    )) : [string, string][]
+>fold : <a, r>(values: a[], result: r, fold: (result: r, value: a) => r) => r
+
+    [1, 2, 3],
+>[1, 2, 3] : number[]
+>1 : 1
+>2 : 2
+>3 : 3
+
+    [] as [string, string][],
+>[] as [string, string][] : [string, string][]
+>[] : undefined[]
+
+    (result, value) => append(
+>(result, value) => append(        result,        ["", ""]    ) : (result: [string, string][], value: number) => [string, string][]
+>result : [string, string][]
+>value : number
+>append(        result,        ["", ""]    ) : [string, string][]
+>append : <a, b extends a>(values: a[], value: b) => a[]
+
+        result,
+>result : [string, string][]
+
+        ["", ""]
+>["", ""] : [string, string]
+>"" : ""
+>"" : ""
+
+    )
+);
+

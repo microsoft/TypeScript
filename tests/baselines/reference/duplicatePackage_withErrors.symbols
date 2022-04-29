@@ -1,0 +1,25 @@
+=== /src/a.ts ===
+import { x as xa } from "a";
+>x : Symbol(x, Decl(index.d.ts, 0, 8))
+>xa : Symbol(xa, Decl(a.ts, 0, 8))
+
+import { x as xb } from "b";
+>x : Symbol(x, Decl(index.d.ts, 0, 8))
+>xb : Symbol(xb, Decl(a.ts, 1, 8))
+
+=== /node_modules/a/index.d.ts ===
+export { x } from "x";
+>x : Symbol(x, Decl(index.d.ts, 0, 8))
+
+=== /node_modules/a/node_modules/x/index.d.ts ===
+export const x = 1 + 1;
+>x : Symbol(x, Decl(index.d.ts, 0, 12))
+
+=== /node_modules/b/index.d.ts ===
+export { x } from "x";
+>x : Symbol(x, Decl(index.d.ts, 0, 8))
+
+=== /node_modules/b/node_modules/x/index.d.ts ===
+content not parsed
+>x : Symbol(x, Decl(index.d.ts, 0, 12))
+

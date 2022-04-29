@@ -1,0 +1,17 @@
+=== tests/cases/compiler/stradac.ts ===
+var x = 10;
+>x : Symbol(x, Decl(stradac.ts, 0, 3))
+
+// C++-style comment
+
+/*
+    C-Style comment
+    */
+    
+    
+function foo() {
+>foo : Symbol(foo, Decl(stradac.ts, 0, 11))
+
+    x++;
+>x : Symbol(x, Decl(stradac.ts, 0, 3))
+}

@@ -1,0 +1,48 @@
+=== A:/bar.ts ===
+import {z} from "./foo";
+>z : number
+
+export var x = z + z;
+>x : number
+>z + z : number
+>z : number
+>z : number
+
+=== A:/foo.ts ===
+import {pi} from "B:/baz";
+>pi : number
+
+export var i = Math.sqrt(-1);
+>i : number
+>Math.sqrt(-1) : number
+>Math.sqrt : (x: number) => number
+>Math : Math
+>sqrt : (x: number) => number
+>-1 : -1
+>1 : 1
+
+export var z = pi * pi;
+>z : number
+>pi * pi : number
+>pi : number
+>pi : number
+
+=== B:/baz.ts ===
+import {x} from "A:/bar";
+>x : number
+
+import {i} from "A:/foo";
+>i : number
+
+export var pi = Math.PI;
+>pi : number
+>Math.PI : number
+>Math : Math
+>PI : number
+
+export var y = x * i;
+>y : number
+>x * i : number
+>x : number
+>i : number
+

@@ -1,0 +1,7 @@
+tests/cases/conformance/parser/ecmascript5/parserImportDeclaration1.ts(1,21): error TS2503: Cannot find namespace 'TypeScriptServices'.
+
+
+==== tests/cases/conformance/parser/ecmascript5/parserImportDeclaration1.ts (1 errors) ====
+    import TypeScript = TypeScriptServices.TypeScript;
+                        ~~~~~~~~~~~~~~~~~~
+!!! error TS2503: Cannot find namespace 'TypeScriptServices'.

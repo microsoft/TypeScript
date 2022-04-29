@@ -1,0 +1,91 @@
+=== tests/cases/compiler/typePredicateStructuralMatch.ts ===
+// Repro from #12235
+
+getResults1([]);
+>getResults1 : Symbol(getResults1, Decl(typePredicateStructuralMatch.ts, 13, 1))
+
+getResults1({data: []});
+>getResults1 : Symbol(getResults1, Decl(typePredicateStructuralMatch.ts, 13, 1))
+>data : Symbol(data, Decl(typePredicateStructuralMatch.ts, 3, 13))
+
+getResults2([]);
+>getResults2 : Symbol(getResults2, Decl(typePredicateStructuralMatch.ts, 21, 1))
+
+getResults2({data: []});
+>getResults2 : Symbol(getResults2, Decl(typePredicateStructuralMatch.ts, 21, 1))
+>data : Symbol(data, Decl(typePredicateStructuralMatch.ts, 6, 13))
+
+type Result = { value: string };
+>Result : Symbol(Result, Decl(typePredicateStructuralMatch.ts, 6, 24))
+>value : Symbol(value, Decl(typePredicateStructuralMatch.ts, 8, 15))
+
+type Results = Result[];
+>Results : Symbol(Results, Decl(typePredicateStructuralMatch.ts, 8, 32))
+>Result : Symbol(Result, Decl(typePredicateStructuralMatch.ts, 6, 24))
+
+function isResponseInData<T>(value: T | { data: T}): value is { data: T } {
+>isResponseInData : Symbol(isResponseInData, Decl(typePredicateStructuralMatch.ts, 9, 24))
+>T : Symbol(T, Decl(typePredicateStructuralMatch.ts, 11, 26))
+>value : Symbol(value, Decl(typePredicateStructuralMatch.ts, 11, 29))
+>T : Symbol(T, Decl(typePredicateStructuralMatch.ts, 11, 26))
+>data : Symbol(data, Decl(typePredicateStructuralMatch.ts, 11, 41))
+>T : Symbol(T, Decl(typePredicateStructuralMatch.ts, 11, 26))
+>value : Symbol(value, Decl(typePredicateStructuralMatch.ts, 11, 29))
+>data : Symbol(data, Decl(typePredicateStructuralMatch.ts, 11, 63))
+>T : Symbol(T, Decl(typePredicateStructuralMatch.ts, 11, 26))
+
+    return value.hasOwnProperty('data');
+>value.hasOwnProperty : Symbol(Object.hasOwnProperty, Decl(lib.es5.d.ts, --, --))
+>value : Symbol(value, Decl(typePredicateStructuralMatch.ts, 11, 29))
+>hasOwnProperty : Symbol(Object.hasOwnProperty, Decl(lib.es5.d.ts, --, --))
+}
+
+function getResults1(value: Results | { data: Results }): Results {
+>getResults1 : Symbol(getResults1, Decl(typePredicateStructuralMatch.ts, 13, 1))
+>value : Symbol(value, Decl(typePredicateStructuralMatch.ts, 15, 21))
+>Results : Symbol(Results, Decl(typePredicateStructuralMatch.ts, 8, 32))
+>data : Symbol(data, Decl(typePredicateStructuralMatch.ts, 15, 39))
+>Results : Symbol(Results, Decl(typePredicateStructuralMatch.ts, 8, 32))
+>Results : Symbol(Results, Decl(typePredicateStructuralMatch.ts, 8, 32))
+
+    return isResponseInData(value) ? value.data : value;
+>isResponseInData : Symbol(isResponseInData, Decl(typePredicateStructuralMatch.ts, 9, 24))
+>value : Symbol(value, Decl(typePredicateStructuralMatch.ts, 15, 21))
+>value.data : Symbol(data, Decl(typePredicateStructuralMatch.ts, 15, 39))
+>value : Symbol(value, Decl(typePredicateStructuralMatch.ts, 15, 21))
+>data : Symbol(data, Decl(typePredicateStructuralMatch.ts, 15, 39))
+>value : Symbol(value, Decl(typePredicateStructuralMatch.ts, 15, 21))
+}
+
+function isPlainResponse<T>(value: T | { data: T}): value is T {
+>isPlainResponse : Symbol(isPlainResponse, Decl(typePredicateStructuralMatch.ts, 17, 1))
+>T : Symbol(T, Decl(typePredicateStructuralMatch.ts, 19, 25))
+>value : Symbol(value, Decl(typePredicateStructuralMatch.ts, 19, 28))
+>T : Symbol(T, Decl(typePredicateStructuralMatch.ts, 19, 25))
+>data : Symbol(data, Decl(typePredicateStructuralMatch.ts, 19, 40))
+>T : Symbol(T, Decl(typePredicateStructuralMatch.ts, 19, 25))
+>value : Symbol(value, Decl(typePredicateStructuralMatch.ts, 19, 28))
+>T : Symbol(T, Decl(typePredicateStructuralMatch.ts, 19, 25))
+
+    return !value.hasOwnProperty('data');
+>value.hasOwnProperty : Symbol(Object.hasOwnProperty, Decl(lib.es5.d.ts, --, --))
+>value : Symbol(value, Decl(typePredicateStructuralMatch.ts, 19, 28))
+>hasOwnProperty : Symbol(Object.hasOwnProperty, Decl(lib.es5.d.ts, --, --))
+}
+
+function getResults2(value: Results | { data: Results }): Results {
+>getResults2 : Symbol(getResults2, Decl(typePredicateStructuralMatch.ts, 21, 1))
+>value : Symbol(value, Decl(typePredicateStructuralMatch.ts, 23, 21))
+>Results : Symbol(Results, Decl(typePredicateStructuralMatch.ts, 8, 32))
+>data : Symbol(data, Decl(typePredicateStructuralMatch.ts, 23, 39))
+>Results : Symbol(Results, Decl(typePredicateStructuralMatch.ts, 8, 32))
+>Results : Symbol(Results, Decl(typePredicateStructuralMatch.ts, 8, 32))
+
+    return isPlainResponse(value) ? value : value.data;
+>isPlainResponse : Symbol(isPlainResponse, Decl(typePredicateStructuralMatch.ts, 17, 1))
+>value : Symbol(value, Decl(typePredicateStructuralMatch.ts, 23, 21))
+>value : Symbol(value, Decl(typePredicateStructuralMatch.ts, 23, 21))
+>value.data : Symbol(data, Decl(typePredicateStructuralMatch.ts, 23, 39))
+>value : Symbol(value, Decl(typePredicateStructuralMatch.ts, 23, 21))
+>data : Symbol(data, Decl(typePredicateStructuralMatch.ts, 23, 39))
+}

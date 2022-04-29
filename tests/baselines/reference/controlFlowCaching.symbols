@@ -1,0 +1,278 @@
+=== tests/cases/compiler/controlFlowCaching.ts ===
+// Repro for #8401
+
+function f(dim, offsets, arr, acommon, centerAnchorLimit, g, has, lin) {
+>f : Symbol(f, Decl(controlFlowCaching.ts, 0, 0))
+>dim : Symbol(dim, Decl(controlFlowCaching.ts, 2, 11))
+>offsets : Symbol(offsets, Decl(controlFlowCaching.ts, 2, 15))
+>arr : Symbol(arr, Decl(controlFlowCaching.ts, 2, 24))
+>acommon : Symbol(acommon, Decl(controlFlowCaching.ts, 2, 29))
+>centerAnchorLimit : Symbol(centerAnchorLimit, Decl(controlFlowCaching.ts, 2, 38))
+>g : Symbol(g, Decl(controlFlowCaching.ts, 2, 57))
+>has : Symbol(has, Decl(controlFlowCaching.ts, 2, 60))
+>lin : Symbol(lin, Decl(controlFlowCaching.ts, 2, 65))
+
+    var isRtl = this._isRtl();  // chart mirroring
+>isRtl : Symbol(isRtl, Decl(controlFlowCaching.ts, 3, 7))
+
+    // prepare variable
+    var o = this.opt, ta = this.chart.theme.axis, position = o.position,
+>o : Symbol(o, Decl(controlFlowCaching.ts, 5, 7))
+>ta : Symbol(ta, Decl(controlFlowCaching.ts, 5, 21))
+>position : Symbol(position, Decl(controlFlowCaching.ts, 5, 49))
+>o : Symbol(o, Decl(controlFlowCaching.ts, 5, 7))
+
+        leftBottom = position !== "rightOrTop", rotation = o.rotation % 360,
+>leftBottom : Symbol(leftBottom, Decl(controlFlowCaching.ts, 5, 72))
+>position : Symbol(position, Decl(controlFlowCaching.ts, 5, 49))
+>rotation : Symbol(rotation, Decl(controlFlowCaching.ts, 6, 47))
+>o : Symbol(o, Decl(controlFlowCaching.ts, 5, 7))
+
+        start, stop, titlePos, titleRotation = 0, titleOffset, axisVector, tickVector, anchorOffset, labelOffset, labelAlign,
+>start : Symbol(start, Decl(controlFlowCaching.ts, 6, 76))
+>stop : Symbol(stop, Decl(controlFlowCaching.ts, 7, 14))
+>titlePos : Symbol(titlePos, Decl(controlFlowCaching.ts, 7, 20))
+>titleRotation : Symbol(titleRotation, Decl(controlFlowCaching.ts, 7, 30))
+>titleOffset : Symbol(titleOffset, Decl(controlFlowCaching.ts, 7, 49))
+>axisVector : Symbol(axisVector, Decl(controlFlowCaching.ts, 7, 62))
+>tickVector : Symbol(tickVector, Decl(controlFlowCaching.ts, 7, 74))
+>anchorOffset : Symbol(anchorOffset, Decl(controlFlowCaching.ts, 7, 86))
+>labelOffset : Symbol(labelOffset, Decl(controlFlowCaching.ts, 7, 100))
+>labelAlign : Symbol(labelAlign, Decl(controlFlowCaching.ts, 7, 113))
+
+        labelGap = this.chart.theme.axis.tick.labelGap,
+>labelGap : Symbol(labelGap, Decl(controlFlowCaching.ts, 7, 125))
+
+        taFont = o.font || (ta.majorTick && ta.majorTick.font) || (ta.tick && ta.tick.font),
+>taFont : Symbol(taFont, Decl(controlFlowCaching.ts, 8, 55))
+>o : Symbol(o, Decl(controlFlowCaching.ts, 5, 7))
+>ta : Symbol(ta, Decl(controlFlowCaching.ts, 5, 21))
+>ta : Symbol(ta, Decl(controlFlowCaching.ts, 5, 21))
+>ta : Symbol(ta, Decl(controlFlowCaching.ts, 5, 21))
+>ta : Symbol(ta, Decl(controlFlowCaching.ts, 5, 21))
+
+        taTitleFont = o.titleFont || (ta.title && ta.title.font),
+>taTitleFont : Symbol(taTitleFont, Decl(controlFlowCaching.ts, 9, 92))
+>o : Symbol(o, Decl(controlFlowCaching.ts, 5, 7))
+>ta : Symbol(ta, Decl(controlFlowCaching.ts, 5, 21))
+>ta : Symbol(ta, Decl(controlFlowCaching.ts, 5, 21))
+
+        taFontColor = o.fontColor || (ta.majorTick && ta.majorTick.fontColor) || (ta.tick && ta.tick.fontColor) || "black",
+>taFontColor : Symbol(taFontColor, Decl(controlFlowCaching.ts, 10, 65))
+>o : Symbol(o, Decl(controlFlowCaching.ts, 5, 7))
+>ta : Symbol(ta, Decl(controlFlowCaching.ts, 5, 21))
+>ta : Symbol(ta, Decl(controlFlowCaching.ts, 5, 21))
+>ta : Symbol(ta, Decl(controlFlowCaching.ts, 5, 21))
+>ta : Symbol(ta, Decl(controlFlowCaching.ts, 5, 21))
+
+        taTitleFontColor = o.titleFontColor || (ta.title && ta.title.fontColor) || "black",
+>taTitleFontColor : Symbol(taTitleFontColor, Decl(controlFlowCaching.ts, 11, 123))
+>o : Symbol(o, Decl(controlFlowCaching.ts, 5, 7))
+>ta : Symbol(ta, Decl(controlFlowCaching.ts, 5, 21))
+>ta : Symbol(ta, Decl(controlFlowCaching.ts, 5, 21))
+
+        taTitleGap = (o.titleGap == 0) ? 0 : o.titleGap || (ta.title && ta.title.gap) || 15,
+>taTitleGap : Symbol(taTitleGap, Decl(controlFlowCaching.ts, 12, 91))
+>o : Symbol(o, Decl(controlFlowCaching.ts, 5, 7))
+>o : Symbol(o, Decl(controlFlowCaching.ts, 5, 7))
+>ta : Symbol(ta, Decl(controlFlowCaching.ts, 5, 21))
+>ta : Symbol(ta, Decl(controlFlowCaching.ts, 5, 21))
+
+        taTitleOrientation = o.titleOrientation || (ta.title && ta.title.orientation) || "axis",
+>taTitleOrientation : Symbol(taTitleOrientation, Decl(controlFlowCaching.ts, 13, 92))
+>o : Symbol(o, Decl(controlFlowCaching.ts, 5, 7))
+>ta : Symbol(ta, Decl(controlFlowCaching.ts, 5, 21))
+>ta : Symbol(ta, Decl(controlFlowCaching.ts, 5, 21))
+
+        taMajorTick = this.chart.theme.getTick("major", o),
+>taMajorTick : Symbol(taMajorTick, Decl(controlFlowCaching.ts, 14, 96))
+>o : Symbol(o, Decl(controlFlowCaching.ts, 5, 7))
+
+        taMinorTick = this.chart.theme.getTick("minor", o),
+>taMinorTick : Symbol(taMinorTick, Decl(controlFlowCaching.ts, 15, 59))
+>o : Symbol(o, Decl(controlFlowCaching.ts, 5, 7))
+
+        taMicroTick = this.chart.theme.getTick("micro", o),
+>taMicroTick : Symbol(taMicroTick, Decl(controlFlowCaching.ts, 16, 59))
+>o : Symbol(o, Decl(controlFlowCaching.ts, 5, 7))
+
+        taStroke = "stroke" in o ? o.stroke : ta.stroke,
+>taStroke : Symbol(taStroke, Decl(controlFlowCaching.ts, 17, 59))
+>o : Symbol(o, Decl(controlFlowCaching.ts, 5, 7))
+>o : Symbol(o, Decl(controlFlowCaching.ts, 5, 7))
+>ta : Symbol(ta, Decl(controlFlowCaching.ts, 5, 21))
+
+        size = taFont ? g.normalizedLength(g.splitFontString(taFont).size) : 0,
+>size : Symbol(size, Decl(controlFlowCaching.ts, 19, 56))
+>taFont : Symbol(taFont, Decl(controlFlowCaching.ts, 8, 55))
+>g : Symbol(g, Decl(controlFlowCaching.ts, 2, 57))
+>g : Symbol(g, Decl(controlFlowCaching.ts, 2, 57))
+>taFont : Symbol(taFont, Decl(controlFlowCaching.ts, 8, 55))
+
+        cosr = Math.abs(Math.cos(rotation * Math.PI / 180)),
+>cosr : Symbol(cosr, Decl(controlFlowCaching.ts, 20, 79))
+>Math.abs : Symbol(Math.abs, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>abs : Symbol(Math.abs, Decl(lib.es5.d.ts, --, --))
+>Math.cos : Symbol(Math.cos, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>cos : Symbol(Math.cos, Decl(lib.es5.d.ts, --, --))
+>rotation : Symbol(rotation, Decl(controlFlowCaching.ts, 6, 47))
+>Math.PI : Symbol(Math.PI, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>PI : Symbol(Math.PI, Decl(lib.es5.d.ts, --, --))
+
+        sinr = Math.abs(Math.sin(rotation * Math.PI / 180)),
+>sinr : Symbol(sinr, Decl(controlFlowCaching.ts, 21, 60))
+>Math.abs : Symbol(Math.abs, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>abs : Symbol(Math.abs, Decl(lib.es5.d.ts, --, --))
+>Math.sin : Symbol(Math.sin, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>sin : Symbol(Math.sin, Decl(lib.es5.d.ts, --, --))
+>rotation : Symbol(rotation, Decl(controlFlowCaching.ts, 6, 47))
+>Math.PI : Symbol(Math.PI, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>PI : Symbol(Math.PI, Decl(lib.es5.d.ts, --, --))
+
+        tsize = taTitleFont ? g.normalizedLength(g.splitFontString(taTitleFont).size) : 0;
+>tsize : Symbol(tsize, Decl(controlFlowCaching.ts, 22, 60))
+>taTitleFont : Symbol(taTitleFont, Decl(controlFlowCaching.ts, 9, 92))
+>g : Symbol(g, Decl(controlFlowCaching.ts, 2, 57))
+>g : Symbol(g, Decl(controlFlowCaching.ts, 2, 57))
+>taTitleFont : Symbol(taTitleFont, Decl(controlFlowCaching.ts, 9, 92))
+
+    if (rotation < 0) {
+>rotation : Symbol(rotation, Decl(controlFlowCaching.ts, 6, 47))
+
+        rotation += 360;
+>rotation : Symbol(rotation, Decl(controlFlowCaching.ts, 6, 47))
+    }
+    var cachedLabelW = this._getMaxLabelSize();
+>cachedLabelW : Symbol(cachedLabelW, Decl(controlFlowCaching.ts, 27, 7))
+
+    cachedLabelW = cachedLabelW && cachedLabelW.majLabelW;
+>cachedLabelW : Symbol(cachedLabelW, Decl(controlFlowCaching.ts, 27, 7))
+>cachedLabelW : Symbol(cachedLabelW, Decl(controlFlowCaching.ts, 27, 7))
+>cachedLabelW : Symbol(cachedLabelW, Decl(controlFlowCaching.ts, 27, 7))
+
+    titleOffset = size * cosr + (cachedLabelW || 0) * sinr + labelGap + Math.max(taMajorTick.length > 0 ? taMajorTick.length : 0,
+>titleOffset : Symbol(titleOffset, Decl(controlFlowCaching.ts, 7, 49))
+>size : Symbol(size, Decl(controlFlowCaching.ts, 19, 56))
+>cosr : Symbol(cosr, Decl(controlFlowCaching.ts, 20, 79))
+>cachedLabelW : Symbol(cachedLabelW, Decl(controlFlowCaching.ts, 27, 7))
+>sinr : Symbol(sinr, Decl(controlFlowCaching.ts, 21, 60))
+>labelGap : Symbol(labelGap, Decl(controlFlowCaching.ts, 7, 125))
+>Math.max : Symbol(Math.max, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>max : Symbol(Math.max, Decl(lib.es5.d.ts, --, --))
+>taMajorTick : Symbol(taMajorTick, Decl(controlFlowCaching.ts, 14, 96))
+>taMajorTick : Symbol(taMajorTick, Decl(controlFlowCaching.ts, 14, 96))
+
+        taMinorTick.length > 0 ? taMinorTick.length : 0) +
+>taMinorTick : Symbol(taMinorTick, Decl(controlFlowCaching.ts, 15, 59))
+>taMinorTick : Symbol(taMinorTick, Decl(controlFlowCaching.ts, 15, 59))
+
+        tsize + taTitleGap;
+>tsize : Symbol(tsize, Decl(controlFlowCaching.ts, 22, 60))
+>taTitleGap : Symbol(taTitleGap, Decl(controlFlowCaching.ts, 12, 91))
+
+    axisVector = { x: isRtl ? -1 : 1, y: 0 };     // chart mirroring
+>axisVector : Symbol(axisVector, Decl(controlFlowCaching.ts, 7, 62))
+>x : Symbol(x, Decl(controlFlowCaching.ts, 32, 18))
+>isRtl : Symbol(isRtl, Decl(controlFlowCaching.ts, 3, 7))
+>y : Symbol(y, Decl(controlFlowCaching.ts, 32, 37))
+
+    switch (rotation) {
+>rotation : Symbol(rotation, Decl(controlFlowCaching.ts, 6, 47))
+
+        default:
+            if (rotation < (90 - centerAnchorLimit)) {
+>rotation : Symbol(rotation, Decl(controlFlowCaching.ts, 6, 47))
+>centerAnchorLimit : Symbol(centerAnchorLimit, Decl(controlFlowCaching.ts, 2, 38))
+
+                labelOffset.y = leftBottom ? size : 0;
+>labelOffset : Symbol(labelOffset, Decl(controlFlowCaching.ts, 7, 100))
+>leftBottom : Symbol(leftBottom, Decl(controlFlowCaching.ts, 5, 72))
+>size : Symbol(size, Decl(controlFlowCaching.ts, 19, 56))
+
+            } else if (rotation < (90 + centerAnchorLimit)) {
+>rotation : Symbol(rotation, Decl(controlFlowCaching.ts, 6, 47))
+>centerAnchorLimit : Symbol(centerAnchorLimit, Decl(controlFlowCaching.ts, 2, 38))
+
+                labelOffset.x = -size * 0.4;
+>labelOffset : Symbol(labelOffset, Decl(controlFlowCaching.ts, 7, 100))
+>size : Symbol(size, Decl(controlFlowCaching.ts, 19, 56))
+
+            } else if (rotation < 180) {
+>rotation : Symbol(rotation, Decl(controlFlowCaching.ts, 6, 47))
+
+                labelOffset.y = leftBottom ? 0 : -size;
+>labelOffset : Symbol(labelOffset, Decl(controlFlowCaching.ts, 7, 100))
+>leftBottom : Symbol(leftBottom, Decl(controlFlowCaching.ts, 5, 72))
+>size : Symbol(size, Decl(controlFlowCaching.ts, 19, 56))
+
+            } else if (rotation < (270 - centerAnchorLimit)) {
+>rotation : Symbol(rotation, Decl(controlFlowCaching.ts, 6, 47))
+>centerAnchorLimit : Symbol(centerAnchorLimit, Decl(controlFlowCaching.ts, 2, 38))
+
+                labelOffset.y = leftBottom ? 0 : -size;
+>labelOffset : Symbol(labelOffset, Decl(controlFlowCaching.ts, 7, 100))
+>leftBottom : Symbol(leftBottom, Decl(controlFlowCaching.ts, 5, 72))
+>size : Symbol(size, Decl(controlFlowCaching.ts, 19, 56))
+
+            } else if (rotation < (270 + centerAnchorLimit)) {
+>rotation : Symbol(rotation, Decl(controlFlowCaching.ts, 6, 47))
+>centerAnchorLimit : Symbol(centerAnchorLimit, Decl(controlFlowCaching.ts, 2, 38))
+
+                labelOffset.y = leftBottom ? size * 0.4 : 0;
+>labelOffset : Symbol(labelOffset, Decl(controlFlowCaching.ts, 7, 100))
+>leftBottom : Symbol(leftBottom, Decl(controlFlowCaching.ts, 5, 72))
+>size : Symbol(size, Decl(controlFlowCaching.ts, 19, 56))
+
+            } else {
+                labelOffset.y = leftBottom ? size : 0;
+>labelOffset : Symbol(labelOffset, Decl(controlFlowCaching.ts, 7, 100))
+>leftBottom : Symbol(leftBottom, Decl(controlFlowCaching.ts, 5, 72))
+>size : Symbol(size, Decl(controlFlowCaching.ts, 19, 56))
+            }
+    }
+
+    titleRotation = (taTitleOrientation && taTitleOrientation == "away") ? 180 : 0;
+>titleRotation : Symbol(titleRotation, Decl(controlFlowCaching.ts, 7, 30))
+>taTitleOrientation : Symbol(taTitleOrientation, Decl(controlFlowCaching.ts, 13, 92))
+>taTitleOrientation : Symbol(taTitleOrientation, Decl(controlFlowCaching.ts, 13, 92))
+
+    titlePos.y = offsets.t - titleOffset + (titleRotation ? 0 : tsize);
+>titlePos : Symbol(titlePos, Decl(controlFlowCaching.ts, 7, 20))
+>offsets : Symbol(offsets, Decl(controlFlowCaching.ts, 2, 15))
+>titleOffset : Symbol(titleOffset, Decl(controlFlowCaching.ts, 7, 49))
+>titleRotation : Symbol(titleRotation, Decl(controlFlowCaching.ts, 7, 30))
+>tsize : Symbol(tsize, Decl(controlFlowCaching.ts, 22, 60))
+
+    switch (labelAlign) {
+>labelAlign : Symbol(labelAlign, Decl(controlFlowCaching.ts, 7, 113))
+
+        case "start":
+            labelAlign = "end";
+>labelAlign : Symbol(labelAlign, Decl(controlFlowCaching.ts, 7, 113))
+
+            break;
+        case "end":
+            labelAlign = "start";
+>labelAlign : Symbol(labelAlign, Decl(controlFlowCaching.ts, 7, 113))
+
+            break;
+        case "middle":
+            labelOffset.y -= size;
+>labelOffset : Symbol(labelOffset, Decl(controlFlowCaching.ts, 7, 100))
+>size : Symbol(size, Decl(controlFlowCaching.ts, 19, 56))
+
+            break;
+    }
+
+    let _ = rotation;
+>_ : Symbol(_, Decl(controlFlowCaching.ts, 64, 7))
+>rotation : Symbol(rotation, Decl(controlFlowCaching.ts, 6, 47))
+}
+

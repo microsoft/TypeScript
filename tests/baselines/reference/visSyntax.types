@@ -1,0 +1,17 @@
+=== tests/cases/compiler/visSyntax.ts ===
+module M {
+>M : typeof M
+
+    export class C {
+>C : C
+    }
+
+    export interface I {
+	
+    }
+
+    export var x=10;
+>x : number
+>10 : 10
+}
+

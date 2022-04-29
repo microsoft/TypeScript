@@ -1,0 +1,61 @@
+=== tests/cases/compiler/assignmentCompatBug3.ts ===
+function makePoint(x: number, y: number) {
+>makePoint : Symbol(makePoint, Decl(assignmentCompatBug3.ts, 0, 0))
+>x : Symbol(x, Decl(assignmentCompatBug3.ts, 0, 19))
+>y : Symbol(y, Decl(assignmentCompatBug3.ts, 0, 29))
+
+    return {
+        get x() { return x;}, // shouldn't be "void"
+>x : Symbol(x, Decl(assignmentCompatBug3.ts, 1, 12))
+>x : Symbol(x, Decl(assignmentCompatBug3.ts, 0, 19))
+
+        get y() { return y;}, // shouldn't be "void"
+>y : Symbol(y, Decl(assignmentCompatBug3.ts, 2, 29))
+>y : Symbol(y, Decl(assignmentCompatBug3.ts, 0, 29))
+
+        //x: "yo",
+        //y: "boo",
+        dist: function () {
+>dist : Symbol(dist, Decl(assignmentCompatBug3.ts, 3, 29))
+
+			return Math.sqrt(x*x+y*y); // shouldn't be picking up "x" and "y" from the object lit
+>Math.sqrt : Symbol(Math.sqrt, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>sqrt : Symbol(Math.sqrt, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(assignmentCompatBug3.ts, 0, 19))
+>x : Symbol(x, Decl(assignmentCompatBug3.ts, 0, 19))
+>y : Symbol(y, Decl(assignmentCompatBug3.ts, 0, 29))
+>y : Symbol(y, Decl(assignmentCompatBug3.ts, 0, 29))
+		}
+	}
+}
+
+class C {
+>C : Symbol(C, Decl(assignmentCompatBug3.ts, 10, 1))
+
+    get x() {
+>x : Symbol(C.x, Decl(assignmentCompatBug3.ts, 12, 9))
+
+        return 0;
+    }
+}
+
+function foo(test: string) { }
+>foo : Symbol(foo, Decl(assignmentCompatBug3.ts, 16, 1))
+>test : Symbol(test, Decl(assignmentCompatBug3.ts, 18, 13))
+
+var x: any;
+>x : Symbol(x, Decl(assignmentCompatBug3.ts, 20, 3))
+
+var y: any;
+>y : Symbol(y, Decl(assignmentCompatBug3.ts, 21, 3))
+
+foo(x);
+>foo : Symbol(foo, Decl(assignmentCompatBug3.ts, 16, 1))
+>x : Symbol(x, Decl(assignmentCompatBug3.ts, 20, 3))
+
+foo(x + y);
+>foo : Symbol(foo, Decl(assignmentCompatBug3.ts, 16, 1))
+>x : Symbol(x, Decl(assignmentCompatBug3.ts, 20, 3))
+>y : Symbol(y, Decl(assignmentCompatBug3.ts, 21, 3))
+

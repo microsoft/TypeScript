@@ -1,0 +1,22 @@
+=== tests/cases/compiler/constDeclarations2.ts ===
+// No error
+module M {
+>M : typeof M
+
+    export const c1 = false;
+>c1 : false
+>false : false
+
+    export const c2: number = 23;
+>c2 : number
+>23 : 23
+
+    export const c3 = 0, c4 :string = "", c5 = null;
+>c3 : 0
+>0 : 0
+>c4 : string
+>"" : ""
+>c5 : any
+>null : null
+}
+

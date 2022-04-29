@@ -1,0 +1,24 @@
+=== tests/cases/compiler/a.ts ===
+export class A {
+>A : A
+
+    protected _f: number;
+>_f : number
+
+    getF() { return this._f; }
+>getF : () => number
+>this._f : number
+>this : this
+>_f : number
+}
+
+=== tests/cases/compiler/b.ts ===
+export {}
+declare module "./a" {
+>"./a" : typeof import("tests/cases/compiler/a")
+
+    interface A {
+        run();
+>run : () => any
+    }
+}

@@ -1,0 +1,18 @@
+{
+    "scenario": "relative paths",
+    "projectRoot": "tests/cases/projects/RelativePaths",
+    "inputFiles": [
+        "app.ts"
+    ],
+    "resolvedInputFiles": [
+        "lib.es5.d.ts",
+        "A/b.ts",
+        "A/a.ts",
+        "app.ts"
+    ],
+    "emittedFiles": [
+        "A/b.js",
+        "A/a.js",
+        "app.js"
+    ]
+}

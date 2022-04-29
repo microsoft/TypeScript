@@ -1,0 +1,106 @@
+=== tests/cases/conformance/externalModules/b.ts ===
+/// <reference path="math2d-augment.d.ts" />
+import * as m from 'math2d';
+>m : typeof m
+
+let v = new m.Vector(3, 2);
+>v : m.Vector
+>new m.Vector(3, 2) : m.Vector
+>m.Vector : typeof m.Vector
+>m : typeof m
+>Vector : typeof m.Vector
+>3 : 3
+>2 : 2
+
+let magnitude = m.getLength(v);
+>magnitude : number
+>m.getLength(v) : number
+>m.getLength : (p: m.Vector) => number
+>m : typeof m
+>getLength : (p: m.Vector) => number
+>v : m.Vector
+
+let p: m.Point = v.translate(5, 5);
+>p : m.Point
+>m : any
+>v.translate(5, 5) : m.Vector
+>v.translate : (dx: number, dy: number) => m.Vector
+>v : m.Vector
+>translate : (dx: number, dy: number) => m.Vector
+>5 : 5
+>5 : 5
+
+p = v.reverse();
+>p = v.reverse() : m.Point
+>p : m.Point
+>v.reverse() : m.Point
+>v.reverse : () => m.Point
+>v : m.Vector
+>reverse : () => m.Point
+
+var t = p.x;
+>t : number
+>p.x : number
+>p : m.Point
+>x : number
+
+=== tests/cases/conformance/externalModules/node_modules/math2d/index.d.ts ===
+export as namespace Math2d;
+>Math2d : typeof import("tests/cases/conformance/externalModules/node_modules/math2d/index.d.ts")
+
+export = M2D;
+>M2D : typeof import("tests/cases/conformance/externalModules/node_modules/math2d/index.d.ts")
+
+declare namespace M2D {
+>M2D : typeof import("tests/cases/conformance/externalModules/node_modules/math2d/index.d.ts")
+
+	interface Point {
+		x: number;
+>x : number
+
+		y: number;
+>y : number
+	}
+
+	class Vector implements Point {
+>Vector : Vector
+
+		x: number;
+>x : number
+
+		y: number;
+>y : number
+
+		constructor(x: number, y: number);
+>x : number
+>y : number
+
+		translate(dx: number, dy: number): Vector;
+>translate : (dx: number, dy: number) => Vector
+>dx : number
+>dy : number
+	}
+
+	function getLength(p: Vector): number;
+>getLength : (p: Vector) => number
+>p : Vector
+
+}
+
+
+=== tests/cases/conformance/externalModules/math2d-augment.d.ts ===
+import * as Math2d from 'math2d';
+>Math2d : typeof Math2d
+
+// Augment the module
+declare module 'math2d' {
+>'math2d' : typeof Math2d
+
+	// Add a method to the class
+	interface Vector {
+		reverse(): Math2d.Point;
+>reverse : () => Math2d.Point
+>Math2d : any
+	}
+}
+

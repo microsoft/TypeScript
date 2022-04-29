@@ -1,0 +1,137 @@
+=== tests/cases/compiler/server.ts ===
+export class a { }
+>a : Symbol(a, Decl(server.ts, 0, 0))
+
+export class a11 { }
+>a11 : Symbol(a11, Decl(server.ts, 0, 18))
+
+export class a12 { }
+>a12 : Symbol(a12, Decl(server.ts, 1, 20))
+
+export class x { }
+>x : Symbol(x, Decl(server.ts, 2, 20))
+
+export class x11 { }
+>x11 : Symbol(x11, Decl(server.ts, 3, 18))
+
+export class m { }
+>m : Symbol(m, Decl(server.ts, 4, 20))
+
+export class a1 { }
+>a1 : Symbol(a1, Decl(server.ts, 5, 18))
+
+export class x1 { }
+>x1 : Symbol(x1, Decl(server.ts, 6, 19))
+
+export class a111 { }
+>a111 : Symbol(a111, Decl(server.ts, 7, 19))
+
+export class x111 { }
+>x111 : Symbol(x111, Decl(server.ts, 8, 21))
+
+export class z1 { }
+>z1 : Symbol(z1, Decl(server.ts, 9, 21))
+
+export class z2 { }
+>z2 : Symbol(z2, Decl(server.ts, 10, 19))
+
+export class aaaa { }
+>aaaa : Symbol(aaaa, Decl(server.ts, 11, 19))
+
+export class aaaa1 { }
+>aaaa1 : Symbol(aaaa1, Decl(server.ts, 12, 21))
+
+=== tests/cases/compiler/client.ts ===
+import { } from "./server";
+import { a } from "./server";
+>a : Symbol(a, Decl(client.ts, 1, 8))
+
+export var xxxx = new a();
+>xxxx : Symbol(xxxx, Decl(client.ts, 2, 10))
+>a : Symbol(a, Decl(client.ts, 1, 8))
+
+import { a11 as b } from "./server";
+>a11 : Symbol(b, Decl(server.ts, 0, 18))
+>b : Symbol(b, Decl(client.ts, 3, 8))
+
+export var xxxx1 = new b();
+>xxxx1 : Symbol(xxxx1, Decl(client.ts, 4, 10))
+>b : Symbol(b, Decl(client.ts, 3, 8))
+
+import { x, a12 as y } from "./server";
+>x : Symbol(x, Decl(client.ts, 5, 8))
+>a12 : Symbol(y, Decl(server.ts, 1, 20))
+>y : Symbol(y, Decl(client.ts, 5, 11))
+
+export var xxxx2 = new x();
+>xxxx2 : Symbol(xxxx2, Decl(client.ts, 6, 10))
+>x : Symbol(x, Decl(client.ts, 5, 8))
+
+export var xxxx3 = new y();
+>xxxx3 : Symbol(xxxx3, Decl(client.ts, 7, 10))
+>y : Symbol(y, Decl(client.ts, 5, 11))
+
+import { x11 as z,  } from "./server";
+>x11 : Symbol(z, Decl(server.ts, 3, 18))
+>z : Symbol(z, Decl(client.ts, 8, 8))
+
+export var xxxx4 = new z();
+>xxxx4 : Symbol(xxxx4, Decl(client.ts, 9, 10))
+>z : Symbol(z, Decl(client.ts, 8, 8))
+
+import { m,  } from "./server";
+>m : Symbol(m, Decl(client.ts, 10, 8))
+
+export var xxxx5 = new m();
+>xxxx5 : Symbol(xxxx5, Decl(client.ts, 11, 10))
+>m : Symbol(m, Decl(client.ts, 10, 8))
+
+import { a1, x1 } from "./server";
+>a1 : Symbol(a1, Decl(client.ts, 12, 8))
+>x1 : Symbol(x1, Decl(client.ts, 12, 12))
+
+export var xxxx6 = new a1();
+>xxxx6 : Symbol(xxxx6, Decl(client.ts, 13, 10))
+>a1 : Symbol(a1, Decl(client.ts, 12, 8))
+
+export var xxxx7 = new x1();
+>xxxx7 : Symbol(xxxx7, Decl(client.ts, 14, 10))
+>x1 : Symbol(x1, Decl(client.ts, 12, 12))
+
+import { a111 as a11, x111 as x11 } from "./server";
+>a111 : Symbol(a11, Decl(server.ts, 7, 19))
+>a11 : Symbol(a11, Decl(client.ts, 15, 8))
+>x111 : Symbol(x11, Decl(server.ts, 8, 21))
+>x11 : Symbol(x11, Decl(client.ts, 15, 21))
+
+export var xxxx8 = new a11();
+>xxxx8 : Symbol(xxxx8, Decl(client.ts, 16, 10))
+>a11 : Symbol(a11, Decl(client.ts, 15, 8))
+
+export var xxxx9 = new x11();
+>xxxx9 : Symbol(xxxx9, Decl(client.ts, 17, 10))
+>x11 : Symbol(x11, Decl(client.ts, 15, 21))
+
+import { z1 } from "./server";
+>z1 : Symbol(z1, Decl(client.ts, 18, 8))
+
+export var z111 = new z1();
+>z111 : Symbol(z111, Decl(client.ts, 19, 10))
+>z1 : Symbol(z1, Decl(client.ts, 18, 8))
+
+import { z2 as z3 } from "./server";
+>z2 : Symbol(z3, Decl(server.ts, 10, 19))
+>z3 : Symbol(z3, Decl(client.ts, 20, 8))
+
+export var z2 = new z3(); // z2 shouldn't give redeclare error
+>z2 : Symbol(z2, Decl(client.ts, 21, 10))
+>z3 : Symbol(z3, Decl(client.ts, 20, 8))
+
+// not referenced
+import { aaaa } from "./server";
+>aaaa : Symbol(aaaa, Decl(client.ts, 24, 8))
+
+import { aaaa1 as bbbb } from "./server";
+>aaaa1 : Symbol(bbbb, Decl(server.ts, 12, 21))
+>bbbb : Symbol(bbbb, Decl(client.ts, 25, 8))
+

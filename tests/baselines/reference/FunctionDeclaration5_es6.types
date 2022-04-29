@@ -1,0 +1,5 @@
+=== tests/cases/conformance/es6/functionDeclarations/FunctionDeclaration5_es6.ts ===
+function*foo(yield) {
+>foo : (yield: any) => Generator<never, void, unknown>
+>yield : any
+}

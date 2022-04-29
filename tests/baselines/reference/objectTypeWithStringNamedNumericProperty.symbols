@@ -1,0 +1,469 @@
+=== tests/cases/conformance/types/members/objectTypeWithStringNamedNumericProperty.ts ===
+// string named numeric properties are legal and distinct when indexed by string values
+// indexed numerically the value is converted to a number
+// no errors expected below
+
+class C {
+>C : Symbol(C, Decl(objectTypeWithStringNamedNumericProperty.ts, 0, 0))
+
+    "0.1": void;
+>"0.1" : Symbol(C["0.1"], Decl(objectTypeWithStringNamedNumericProperty.ts, 4, 9))
+
+    ".1": Object;
+>".1" : Symbol(C[".1"], Decl(objectTypeWithStringNamedNumericProperty.ts, 5, 16))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    "1": number;
+>"1" : Symbol(C["1"], Decl(objectTypeWithStringNamedNumericProperty.ts, 6, 17))
+
+    "1.": string;
+>"1." : Symbol(C["1."], Decl(objectTypeWithStringNamedNumericProperty.ts, 7, 16))
+
+    "1..": boolean;
+>"1.." : Symbol(C["1.."], Decl(objectTypeWithStringNamedNumericProperty.ts, 8, 17))
+
+    "1.0": Date;
+>"1.0" : Symbol(C["1.0"], Decl(objectTypeWithStringNamedNumericProperty.ts, 9, 19))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+    "-1.0": RegExp;
+>"-1.0" : Symbol(C["-1.0"], Decl(objectTypeWithStringNamedNumericProperty.ts, 10, 16))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    "-1": Date;
+>"-1" : Symbol(C["-1"], Decl(objectTypeWithStringNamedNumericProperty.ts, 11, 19))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+}
+
+var c: C;
+>c : Symbol(c, Decl(objectTypeWithStringNamedNumericProperty.ts, 15, 3))
+>C : Symbol(C, Decl(objectTypeWithStringNamedNumericProperty.ts, 0, 0))
+
+var r1 = c['0.1'];
+>r1 : Symbol(r1, Decl(objectTypeWithStringNamedNumericProperty.ts, 16, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 47, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 77, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 107, 3))
+>c : Symbol(c, Decl(objectTypeWithStringNamedNumericProperty.ts, 15, 3))
+>'0.1' : Symbol(C["0.1"], Decl(objectTypeWithStringNamedNumericProperty.ts, 4, 9))
+
+var r2 = c['.1'];
+>r2 : Symbol(r2, Decl(objectTypeWithStringNamedNumericProperty.ts, 17, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 48, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 78, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 108, 3))
+>c : Symbol(c, Decl(objectTypeWithStringNamedNumericProperty.ts, 15, 3))
+>'.1' : Symbol(C[".1"], Decl(objectTypeWithStringNamedNumericProperty.ts, 5, 16))
+
+var r3 = c['1'];
+>r3 : Symbol(r3, Decl(objectTypeWithStringNamedNumericProperty.ts, 18, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 19, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 21, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 24, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 49, 3) ... and 11 more)
+>c : Symbol(c, Decl(objectTypeWithStringNamedNumericProperty.ts, 15, 3))
+>'1' : Symbol(C["1"], Decl(objectTypeWithStringNamedNumericProperty.ts, 6, 17))
+
+var r3 = c[1];
+>r3 : Symbol(r3, Decl(objectTypeWithStringNamedNumericProperty.ts, 18, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 19, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 21, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 24, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 49, 3) ... and 11 more)
+>c : Symbol(c, Decl(objectTypeWithStringNamedNumericProperty.ts, 15, 3))
+>1 : Symbol(C["1"], Decl(objectTypeWithStringNamedNumericProperty.ts, 6, 17))
+
+var r4 = c['1.'];
+>r4 : Symbol(r4, Decl(objectTypeWithStringNamedNumericProperty.ts, 20, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 51, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 81, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 111, 3))
+>c : Symbol(c, Decl(objectTypeWithStringNamedNumericProperty.ts, 15, 3))
+>'1.' : Symbol(C["1."], Decl(objectTypeWithStringNamedNumericProperty.ts, 7, 16))
+
+var r3 = c[1.]; // same as indexing by 1 when done numerically
+>r3 : Symbol(r3, Decl(objectTypeWithStringNamedNumericProperty.ts, 18, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 19, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 21, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 24, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 49, 3) ... and 11 more)
+>c : Symbol(c, Decl(objectTypeWithStringNamedNumericProperty.ts, 15, 3))
+>1. : Symbol(C["1"], Decl(objectTypeWithStringNamedNumericProperty.ts, 6, 17))
+
+var r5 = c['1..'];
+>r5 : Symbol(r5, Decl(objectTypeWithStringNamedNumericProperty.ts, 22, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 53, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 83, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 113, 3))
+>c : Symbol(c, Decl(objectTypeWithStringNamedNumericProperty.ts, 15, 3))
+>'1..' : Symbol(C["1.."], Decl(objectTypeWithStringNamedNumericProperty.ts, 8, 17))
+
+var r6 = c['1.0'];
+>r6 : Symbol(r6, Decl(objectTypeWithStringNamedNumericProperty.ts, 23, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 54, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 84, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 114, 3))
+>c : Symbol(c, Decl(objectTypeWithStringNamedNumericProperty.ts, 15, 3))
+>'1.0' : Symbol(C["1.0"], Decl(objectTypeWithStringNamedNumericProperty.ts, 9, 19))
+
+var r3 = c[1.0]; // same as indexing by 1 when done numerically
+>r3 : Symbol(r3, Decl(objectTypeWithStringNamedNumericProperty.ts, 18, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 19, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 21, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 24, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 49, 3) ... and 11 more)
+>c : Symbol(c, Decl(objectTypeWithStringNamedNumericProperty.ts, 15, 3))
+>1.0 : Symbol(C["1"], Decl(objectTypeWithStringNamedNumericProperty.ts, 6, 17))
+
+// BUG 823822
+var r7 = i[-1];
+>r7 : Symbol(r7, Decl(objectTypeWithStringNamedNumericProperty.ts, 26, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 27, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 57, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 58, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 87, 3) ... and 3 more)
+>i : Symbol(i, Decl(objectTypeWithStringNamedNumericProperty.ts, 46, 3))
+
+var r7 = i[-1.0];
+>r7 : Symbol(r7, Decl(objectTypeWithStringNamedNumericProperty.ts, 26, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 27, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 57, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 58, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 87, 3) ... and 3 more)
+>i : Symbol(i, Decl(objectTypeWithStringNamedNumericProperty.ts, 46, 3))
+
+var r8 = i["-1.0"];
+>r8 : Symbol(r8, Decl(objectTypeWithStringNamedNumericProperty.ts, 28, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 59, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 89, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 119, 3))
+>i : Symbol(i, Decl(objectTypeWithStringNamedNumericProperty.ts, 46, 3))
+>"-1.0" : Symbol(I["-1.0"], Decl(objectTypeWithStringNamedNumericProperty.ts, 41, 16))
+
+var r9 = i["-1"];
+>r9 : Symbol(r9, Decl(objectTypeWithStringNamedNumericProperty.ts, 29, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 60, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 90, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 120, 3))
+>i : Symbol(i, Decl(objectTypeWithStringNamedNumericProperty.ts, 46, 3))
+>"-1" : Symbol(I["-1"], Decl(objectTypeWithStringNamedNumericProperty.ts, 42, 19))
+
+var r10 = i[0x1]
+>r10 : Symbol(r10, Decl(objectTypeWithStringNamedNumericProperty.ts, 30, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 61, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 91, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 121, 3))
+>i : Symbol(i, Decl(objectTypeWithStringNamedNumericProperty.ts, 46, 3))
+>0x1 : Symbol(I["1"], Decl(objectTypeWithStringNamedNumericProperty.ts, 37, 17))
+
+var r11 = i[-0x1]
+>r11 : Symbol(r11, Decl(objectTypeWithStringNamedNumericProperty.ts, 31, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 62, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 92, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 122, 3))
+>i : Symbol(i, Decl(objectTypeWithStringNamedNumericProperty.ts, 46, 3))
+
+var r12 = i[01]
+>r12 : Symbol(r12, Decl(objectTypeWithStringNamedNumericProperty.ts, 32, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 63, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 93, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 123, 3))
+>i : Symbol(i, Decl(objectTypeWithStringNamedNumericProperty.ts, 46, 3))
+>01 : Symbol(I["1"], Decl(objectTypeWithStringNamedNumericProperty.ts, 37, 17))
+
+var r13 = i[-01]
+>r13 : Symbol(r13, Decl(objectTypeWithStringNamedNumericProperty.ts, 33, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 64, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 94, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 124, 3))
+>i : Symbol(i, Decl(objectTypeWithStringNamedNumericProperty.ts, 46, 3))
+
+interface I {
+>I : Symbol(I, Decl(objectTypeWithStringNamedNumericProperty.ts, 33, 16))
+
+    "0.1": void;
+>"0.1" : Symbol(I["0.1"], Decl(objectTypeWithStringNamedNumericProperty.ts, 35, 13))
+
+    ".1": Object;
+>".1" : Symbol(I[".1"], Decl(objectTypeWithStringNamedNumericProperty.ts, 36, 16))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    "1": number;
+>"1" : Symbol(I["1"], Decl(objectTypeWithStringNamedNumericProperty.ts, 37, 17))
+
+    "1.": string;
+>"1." : Symbol(I["1."], Decl(objectTypeWithStringNamedNumericProperty.ts, 38, 16))
+
+    "1..": boolean;
+>"1.." : Symbol(I["1.."], Decl(objectTypeWithStringNamedNumericProperty.ts, 39, 17))
+
+    "1.0": Date;
+>"1.0" : Symbol(I["1.0"], Decl(objectTypeWithStringNamedNumericProperty.ts, 40, 19))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+    "-1.0": RegExp;
+>"-1.0" : Symbol(I["-1.0"], Decl(objectTypeWithStringNamedNumericProperty.ts, 41, 16))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    "-1": Date;
+>"-1" : Symbol(I["-1"], Decl(objectTypeWithStringNamedNumericProperty.ts, 42, 19))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+}
+
+var i: I;
+>i : Symbol(i, Decl(objectTypeWithStringNamedNumericProperty.ts, 46, 3))
+>I : Symbol(I, Decl(objectTypeWithStringNamedNumericProperty.ts, 33, 16))
+
+var r1 = i['0.1'];
+>r1 : Symbol(r1, Decl(objectTypeWithStringNamedNumericProperty.ts, 16, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 47, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 77, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 107, 3))
+>i : Symbol(i, Decl(objectTypeWithStringNamedNumericProperty.ts, 46, 3))
+>'0.1' : Symbol(I["0.1"], Decl(objectTypeWithStringNamedNumericProperty.ts, 35, 13))
+
+var r2 = i['.1'];
+>r2 : Symbol(r2, Decl(objectTypeWithStringNamedNumericProperty.ts, 17, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 48, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 78, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 108, 3))
+>i : Symbol(i, Decl(objectTypeWithStringNamedNumericProperty.ts, 46, 3))
+>'.1' : Symbol(I[".1"], Decl(objectTypeWithStringNamedNumericProperty.ts, 36, 16))
+
+var r3 = i['1'];
+>r3 : Symbol(r3, Decl(objectTypeWithStringNamedNumericProperty.ts, 18, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 19, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 21, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 24, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 49, 3) ... and 11 more)
+>i : Symbol(i, Decl(objectTypeWithStringNamedNumericProperty.ts, 46, 3))
+>'1' : Symbol(I["1"], Decl(objectTypeWithStringNamedNumericProperty.ts, 37, 17))
+
+var r3 = c[1];
+>r3 : Symbol(r3, Decl(objectTypeWithStringNamedNumericProperty.ts, 18, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 19, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 21, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 24, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 49, 3) ... and 11 more)
+>c : Symbol(c, Decl(objectTypeWithStringNamedNumericProperty.ts, 15, 3))
+>1 : Symbol(C["1"], Decl(objectTypeWithStringNamedNumericProperty.ts, 6, 17))
+
+var r4 = i['1.'];
+>r4 : Symbol(r4, Decl(objectTypeWithStringNamedNumericProperty.ts, 20, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 51, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 81, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 111, 3))
+>i : Symbol(i, Decl(objectTypeWithStringNamedNumericProperty.ts, 46, 3))
+>'1.' : Symbol(I["1."], Decl(objectTypeWithStringNamedNumericProperty.ts, 38, 16))
+
+var r3 = c[1.]; // same as indexing by 1 when done numerically
+>r3 : Symbol(r3, Decl(objectTypeWithStringNamedNumericProperty.ts, 18, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 19, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 21, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 24, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 49, 3) ... and 11 more)
+>c : Symbol(c, Decl(objectTypeWithStringNamedNumericProperty.ts, 15, 3))
+>1. : Symbol(C["1"], Decl(objectTypeWithStringNamedNumericProperty.ts, 6, 17))
+
+var r5 = i['1..'];
+>r5 : Symbol(r5, Decl(objectTypeWithStringNamedNumericProperty.ts, 22, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 53, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 83, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 113, 3))
+>i : Symbol(i, Decl(objectTypeWithStringNamedNumericProperty.ts, 46, 3))
+>'1..' : Symbol(I["1.."], Decl(objectTypeWithStringNamedNumericProperty.ts, 39, 17))
+
+var r6 = i['1.0'];
+>r6 : Symbol(r6, Decl(objectTypeWithStringNamedNumericProperty.ts, 23, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 54, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 84, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 114, 3))
+>i : Symbol(i, Decl(objectTypeWithStringNamedNumericProperty.ts, 46, 3))
+>'1.0' : Symbol(I["1.0"], Decl(objectTypeWithStringNamedNumericProperty.ts, 40, 19))
+
+var r3 = c[1.0]; // same as indexing by 1 when done numerically
+>r3 : Symbol(r3, Decl(objectTypeWithStringNamedNumericProperty.ts, 18, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 19, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 21, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 24, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 49, 3) ... and 11 more)
+>c : Symbol(c, Decl(objectTypeWithStringNamedNumericProperty.ts, 15, 3))
+>1.0 : Symbol(C["1"], Decl(objectTypeWithStringNamedNumericProperty.ts, 6, 17))
+
+// BUG 823822
+var r7 = i[-1]; 
+>r7 : Symbol(r7, Decl(objectTypeWithStringNamedNumericProperty.ts, 26, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 27, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 57, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 58, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 87, 3) ... and 3 more)
+>i : Symbol(i, Decl(objectTypeWithStringNamedNumericProperty.ts, 46, 3))
+
+var r7 = i[-1.0]; 
+>r7 : Symbol(r7, Decl(objectTypeWithStringNamedNumericProperty.ts, 26, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 27, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 57, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 58, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 87, 3) ... and 3 more)
+>i : Symbol(i, Decl(objectTypeWithStringNamedNumericProperty.ts, 46, 3))
+
+var r8 = i["-1.0"];
+>r8 : Symbol(r8, Decl(objectTypeWithStringNamedNumericProperty.ts, 28, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 59, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 89, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 119, 3))
+>i : Symbol(i, Decl(objectTypeWithStringNamedNumericProperty.ts, 46, 3))
+>"-1.0" : Symbol(I["-1.0"], Decl(objectTypeWithStringNamedNumericProperty.ts, 41, 16))
+
+var r9 = i["-1"];
+>r9 : Symbol(r9, Decl(objectTypeWithStringNamedNumericProperty.ts, 29, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 60, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 90, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 120, 3))
+>i : Symbol(i, Decl(objectTypeWithStringNamedNumericProperty.ts, 46, 3))
+>"-1" : Symbol(I["-1"], Decl(objectTypeWithStringNamedNumericProperty.ts, 42, 19))
+
+var r10 = i[0x1]
+>r10 : Symbol(r10, Decl(objectTypeWithStringNamedNumericProperty.ts, 30, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 61, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 91, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 121, 3))
+>i : Symbol(i, Decl(objectTypeWithStringNamedNumericProperty.ts, 46, 3))
+>0x1 : Symbol(I["1"], Decl(objectTypeWithStringNamedNumericProperty.ts, 37, 17))
+
+var r11 = i[-0x1]
+>r11 : Symbol(r11, Decl(objectTypeWithStringNamedNumericProperty.ts, 31, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 62, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 92, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 122, 3))
+>i : Symbol(i, Decl(objectTypeWithStringNamedNumericProperty.ts, 46, 3))
+
+var r12 = i[01]
+>r12 : Symbol(r12, Decl(objectTypeWithStringNamedNumericProperty.ts, 32, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 63, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 93, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 123, 3))
+>i : Symbol(i, Decl(objectTypeWithStringNamedNumericProperty.ts, 46, 3))
+>01 : Symbol(I["1"], Decl(objectTypeWithStringNamedNumericProperty.ts, 37, 17))
+
+var r13 = i[-01]
+>r13 : Symbol(r13, Decl(objectTypeWithStringNamedNumericProperty.ts, 33, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 64, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 94, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 124, 3))
+>i : Symbol(i, Decl(objectTypeWithStringNamedNumericProperty.ts, 46, 3))
+
+var a: {
+>a : Symbol(a, Decl(objectTypeWithStringNamedNumericProperty.ts, 66, 3))
+
+    "0.1": void;
+>"0.1" : Symbol("0.1", Decl(objectTypeWithStringNamedNumericProperty.ts, 66, 8))
+
+    ".1": Object;
+>".1" : Symbol(".1", Decl(objectTypeWithStringNamedNumericProperty.ts, 67, 16))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    "1": number;
+>"1" : Symbol("1", Decl(objectTypeWithStringNamedNumericProperty.ts, 68, 17))
+
+    "1.": string;
+>"1." : Symbol("1.", Decl(objectTypeWithStringNamedNumericProperty.ts, 69, 16))
+
+    "1..": boolean;
+>"1.." : Symbol("1..", Decl(objectTypeWithStringNamedNumericProperty.ts, 70, 17))
+
+    "1.0": Date;
+>"1.0" : Symbol("1.0", Decl(objectTypeWithStringNamedNumericProperty.ts, 71, 19))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+    "-1.0": RegExp;
+>"-1.0" : Symbol("-1.0", Decl(objectTypeWithStringNamedNumericProperty.ts, 72, 16))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    "-1": Date;
+>"-1" : Symbol("-1", Decl(objectTypeWithStringNamedNumericProperty.ts, 73, 19))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+}
+
+var r1 = a['0.1'];
+>r1 : Symbol(r1, Decl(objectTypeWithStringNamedNumericProperty.ts, 16, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 47, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 77, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 107, 3))
+>a : Symbol(a, Decl(objectTypeWithStringNamedNumericProperty.ts, 66, 3))
+>'0.1' : Symbol("0.1", Decl(objectTypeWithStringNamedNumericProperty.ts, 66, 8))
+
+var r2 = a['.1'];
+>r2 : Symbol(r2, Decl(objectTypeWithStringNamedNumericProperty.ts, 17, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 48, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 78, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 108, 3))
+>a : Symbol(a, Decl(objectTypeWithStringNamedNumericProperty.ts, 66, 3))
+>'.1' : Symbol(".1", Decl(objectTypeWithStringNamedNumericProperty.ts, 67, 16))
+
+var r3 = a['1'];
+>r3 : Symbol(r3, Decl(objectTypeWithStringNamedNumericProperty.ts, 18, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 19, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 21, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 24, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 49, 3) ... and 11 more)
+>a : Symbol(a, Decl(objectTypeWithStringNamedNumericProperty.ts, 66, 3))
+>'1' : Symbol("1", Decl(objectTypeWithStringNamedNumericProperty.ts, 68, 17))
+
+var r3 = c[1];
+>r3 : Symbol(r3, Decl(objectTypeWithStringNamedNumericProperty.ts, 18, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 19, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 21, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 24, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 49, 3) ... and 11 more)
+>c : Symbol(c, Decl(objectTypeWithStringNamedNumericProperty.ts, 15, 3))
+>1 : Symbol(C["1"], Decl(objectTypeWithStringNamedNumericProperty.ts, 6, 17))
+
+var r4 = a['1.'];
+>r4 : Symbol(r4, Decl(objectTypeWithStringNamedNumericProperty.ts, 20, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 51, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 81, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 111, 3))
+>a : Symbol(a, Decl(objectTypeWithStringNamedNumericProperty.ts, 66, 3))
+>'1.' : Symbol("1.", Decl(objectTypeWithStringNamedNumericProperty.ts, 69, 16))
+
+var r3 = c[1.]; // same as indexing by 1 when done numerically
+>r3 : Symbol(r3, Decl(objectTypeWithStringNamedNumericProperty.ts, 18, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 19, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 21, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 24, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 49, 3) ... and 11 more)
+>c : Symbol(c, Decl(objectTypeWithStringNamedNumericProperty.ts, 15, 3))
+>1. : Symbol(C["1"], Decl(objectTypeWithStringNamedNumericProperty.ts, 6, 17))
+
+var r5 = a['1..'];
+>r5 : Symbol(r5, Decl(objectTypeWithStringNamedNumericProperty.ts, 22, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 53, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 83, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 113, 3))
+>a : Symbol(a, Decl(objectTypeWithStringNamedNumericProperty.ts, 66, 3))
+>'1..' : Symbol("1..", Decl(objectTypeWithStringNamedNumericProperty.ts, 70, 17))
+
+var r6 = a['1.0'];
+>r6 : Symbol(r6, Decl(objectTypeWithStringNamedNumericProperty.ts, 23, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 54, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 84, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 114, 3))
+>a : Symbol(a, Decl(objectTypeWithStringNamedNumericProperty.ts, 66, 3))
+>'1.0' : Symbol("1.0", Decl(objectTypeWithStringNamedNumericProperty.ts, 71, 19))
+
+var r3 = c[1.0]; // same as indexing by 1 when done numerically
+>r3 : Symbol(r3, Decl(objectTypeWithStringNamedNumericProperty.ts, 18, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 19, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 21, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 24, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 49, 3) ... and 11 more)
+>c : Symbol(c, Decl(objectTypeWithStringNamedNumericProperty.ts, 15, 3))
+>1.0 : Symbol(C["1"], Decl(objectTypeWithStringNamedNumericProperty.ts, 6, 17))
+
+// BUG 823822
+var r7 = i[-1];
+>r7 : Symbol(r7, Decl(objectTypeWithStringNamedNumericProperty.ts, 26, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 27, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 57, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 58, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 87, 3) ... and 3 more)
+>i : Symbol(i, Decl(objectTypeWithStringNamedNumericProperty.ts, 46, 3))
+
+var r7 = i[-1.0];
+>r7 : Symbol(r7, Decl(objectTypeWithStringNamedNumericProperty.ts, 26, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 27, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 57, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 58, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 87, 3) ... and 3 more)
+>i : Symbol(i, Decl(objectTypeWithStringNamedNumericProperty.ts, 46, 3))
+
+var r8 = i["-1.0"];
+>r8 : Symbol(r8, Decl(objectTypeWithStringNamedNumericProperty.ts, 28, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 59, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 89, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 119, 3))
+>i : Symbol(i, Decl(objectTypeWithStringNamedNumericProperty.ts, 46, 3))
+>"-1.0" : Symbol(I["-1.0"], Decl(objectTypeWithStringNamedNumericProperty.ts, 41, 16))
+
+var r9 = i["-1"];
+>r9 : Symbol(r9, Decl(objectTypeWithStringNamedNumericProperty.ts, 29, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 60, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 90, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 120, 3))
+>i : Symbol(i, Decl(objectTypeWithStringNamedNumericProperty.ts, 46, 3))
+>"-1" : Symbol(I["-1"], Decl(objectTypeWithStringNamedNumericProperty.ts, 42, 19))
+
+var r10 = i[0x1]
+>r10 : Symbol(r10, Decl(objectTypeWithStringNamedNumericProperty.ts, 30, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 61, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 91, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 121, 3))
+>i : Symbol(i, Decl(objectTypeWithStringNamedNumericProperty.ts, 46, 3))
+>0x1 : Symbol(I["1"], Decl(objectTypeWithStringNamedNumericProperty.ts, 37, 17))
+
+var r11 = i[-0x1]
+>r11 : Symbol(r11, Decl(objectTypeWithStringNamedNumericProperty.ts, 31, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 62, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 92, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 122, 3))
+>i : Symbol(i, Decl(objectTypeWithStringNamedNumericProperty.ts, 46, 3))
+
+var r12 = i[01]
+>r12 : Symbol(r12, Decl(objectTypeWithStringNamedNumericProperty.ts, 32, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 63, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 93, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 123, 3))
+>i : Symbol(i, Decl(objectTypeWithStringNamedNumericProperty.ts, 46, 3))
+>01 : Symbol(I["1"], Decl(objectTypeWithStringNamedNumericProperty.ts, 37, 17))
+
+var r13 = i[-01]
+>r13 : Symbol(r13, Decl(objectTypeWithStringNamedNumericProperty.ts, 33, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 64, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 94, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 124, 3))
+>i : Symbol(i, Decl(objectTypeWithStringNamedNumericProperty.ts, 46, 3))
+
+var b = {
+>b : Symbol(b, Decl(objectTypeWithStringNamedNumericProperty.ts, 96, 3))
+
+    "0.1": <void>null,
+>"0.1" : Symbol("0.1", Decl(objectTypeWithStringNamedNumericProperty.ts, 96, 9))
+
+    ".1": new Object(),
+>".1" : Symbol(".1", Decl(objectTypeWithStringNamedNumericProperty.ts, 97, 22))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    "1": 1,
+>"1" : Symbol("1", Decl(objectTypeWithStringNamedNumericProperty.ts, 98, 23))
+
+    "1.": "",
+>"1." : Symbol("1.", Decl(objectTypeWithStringNamedNumericProperty.ts, 99, 11))
+
+    "1..": true,
+>"1.." : Symbol("1..", Decl(objectTypeWithStringNamedNumericProperty.ts, 100, 13))
+
+    "1.0": new Date(),
+>"1.0" : Symbol("1.0", Decl(objectTypeWithStringNamedNumericProperty.ts, 101, 16))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+    "-1.0": /123/,
+>"-1.0" : Symbol("-1.0", Decl(objectTypeWithStringNamedNumericProperty.ts, 102, 22))
+
+    "-1": Date
+>"-1" : Symbol("-1", Decl(objectTypeWithStringNamedNumericProperty.ts, 103, 18))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+};
+
+var r1 = b['0.1'];
+>r1 : Symbol(r1, Decl(objectTypeWithStringNamedNumericProperty.ts, 16, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 47, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 77, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 107, 3))
+>b : Symbol(b, Decl(objectTypeWithStringNamedNumericProperty.ts, 96, 3))
+>'0.1' : Symbol("0.1", Decl(objectTypeWithStringNamedNumericProperty.ts, 96, 9))
+
+var r2 = b['.1'];
+>r2 : Symbol(r2, Decl(objectTypeWithStringNamedNumericProperty.ts, 17, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 48, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 78, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 108, 3))
+>b : Symbol(b, Decl(objectTypeWithStringNamedNumericProperty.ts, 96, 3))
+>'.1' : Symbol(".1", Decl(objectTypeWithStringNamedNumericProperty.ts, 97, 22))
+
+var r3 = b['1'];
+>r3 : Symbol(r3, Decl(objectTypeWithStringNamedNumericProperty.ts, 18, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 19, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 21, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 24, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 49, 3) ... and 11 more)
+>b : Symbol(b, Decl(objectTypeWithStringNamedNumericProperty.ts, 96, 3))
+>'1' : Symbol("1", Decl(objectTypeWithStringNamedNumericProperty.ts, 98, 23))
+
+var r3 = c[1];
+>r3 : Symbol(r3, Decl(objectTypeWithStringNamedNumericProperty.ts, 18, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 19, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 21, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 24, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 49, 3) ... and 11 more)
+>c : Symbol(c, Decl(objectTypeWithStringNamedNumericProperty.ts, 15, 3))
+>1 : Symbol(C["1"], Decl(objectTypeWithStringNamedNumericProperty.ts, 6, 17))
+
+var r4 = b['1.'];
+>r4 : Symbol(r4, Decl(objectTypeWithStringNamedNumericProperty.ts, 20, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 51, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 81, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 111, 3))
+>b : Symbol(b, Decl(objectTypeWithStringNamedNumericProperty.ts, 96, 3))
+>'1.' : Symbol("1.", Decl(objectTypeWithStringNamedNumericProperty.ts, 99, 11))
+
+var r3 = c[1.]; // same as indexing by 1 when done numerically
+>r3 : Symbol(r3, Decl(objectTypeWithStringNamedNumericProperty.ts, 18, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 19, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 21, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 24, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 49, 3) ... and 11 more)
+>c : Symbol(c, Decl(objectTypeWithStringNamedNumericProperty.ts, 15, 3))
+>1. : Symbol(C["1"], Decl(objectTypeWithStringNamedNumericProperty.ts, 6, 17))
+
+var r5 = b['1..'];
+>r5 : Symbol(r5, Decl(objectTypeWithStringNamedNumericProperty.ts, 22, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 53, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 83, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 113, 3))
+>b : Symbol(b, Decl(objectTypeWithStringNamedNumericProperty.ts, 96, 3))
+>'1..' : Symbol("1..", Decl(objectTypeWithStringNamedNumericProperty.ts, 100, 13))
+
+var r6 = b['1.0'];
+>r6 : Symbol(r6, Decl(objectTypeWithStringNamedNumericProperty.ts, 23, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 54, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 84, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 114, 3))
+>b : Symbol(b, Decl(objectTypeWithStringNamedNumericProperty.ts, 96, 3))
+>'1.0' : Symbol("1.0", Decl(objectTypeWithStringNamedNumericProperty.ts, 101, 16))
+
+var r3 = c[1.0]; // same as indexing by 1 when done numerically
+>r3 : Symbol(r3, Decl(objectTypeWithStringNamedNumericProperty.ts, 18, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 19, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 21, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 24, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 49, 3) ... and 11 more)
+>c : Symbol(c, Decl(objectTypeWithStringNamedNumericProperty.ts, 15, 3))
+>1.0 : Symbol(C["1"], Decl(objectTypeWithStringNamedNumericProperty.ts, 6, 17))
+
+// BUG 823822
+var r7 = i[-1];
+>r7 : Symbol(r7, Decl(objectTypeWithStringNamedNumericProperty.ts, 26, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 27, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 57, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 58, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 87, 3) ... and 3 more)
+>i : Symbol(i, Decl(objectTypeWithStringNamedNumericProperty.ts, 46, 3))
+
+var r7 = i[-1.0];
+>r7 : Symbol(r7, Decl(objectTypeWithStringNamedNumericProperty.ts, 26, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 27, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 57, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 58, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 87, 3) ... and 3 more)
+>i : Symbol(i, Decl(objectTypeWithStringNamedNumericProperty.ts, 46, 3))
+
+var r8 = i["-1.0"];
+>r8 : Symbol(r8, Decl(objectTypeWithStringNamedNumericProperty.ts, 28, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 59, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 89, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 119, 3))
+>i : Symbol(i, Decl(objectTypeWithStringNamedNumericProperty.ts, 46, 3))
+>"-1.0" : Symbol(I["-1.0"], Decl(objectTypeWithStringNamedNumericProperty.ts, 41, 16))
+
+var r9 = i["-1"];
+>r9 : Symbol(r9, Decl(objectTypeWithStringNamedNumericProperty.ts, 29, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 60, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 90, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 120, 3))
+>i : Symbol(i, Decl(objectTypeWithStringNamedNumericProperty.ts, 46, 3))
+>"-1" : Symbol(I["-1"], Decl(objectTypeWithStringNamedNumericProperty.ts, 42, 19))
+
+var r10 = i[0x1]
+>r10 : Symbol(r10, Decl(objectTypeWithStringNamedNumericProperty.ts, 30, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 61, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 91, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 121, 3))
+>i : Symbol(i, Decl(objectTypeWithStringNamedNumericProperty.ts, 46, 3))
+>0x1 : Symbol(I["1"], Decl(objectTypeWithStringNamedNumericProperty.ts, 37, 17))
+
+var r11 = i[-0x1]
+>r11 : Symbol(r11, Decl(objectTypeWithStringNamedNumericProperty.ts, 31, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 62, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 92, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 122, 3))
+>i : Symbol(i, Decl(objectTypeWithStringNamedNumericProperty.ts, 46, 3))
+
+var r12 = i[01]
+>r12 : Symbol(r12, Decl(objectTypeWithStringNamedNumericProperty.ts, 32, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 63, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 93, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 123, 3))
+>i : Symbol(i, Decl(objectTypeWithStringNamedNumericProperty.ts, 46, 3))
+>01 : Symbol(I["1"], Decl(objectTypeWithStringNamedNumericProperty.ts, 37, 17))
+
+var r13 = i[-01]
+>r13 : Symbol(r13, Decl(objectTypeWithStringNamedNumericProperty.ts, 33, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 64, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 94, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 124, 3))
+>i : Symbol(i, Decl(objectTypeWithStringNamedNumericProperty.ts, 46, 3))
+

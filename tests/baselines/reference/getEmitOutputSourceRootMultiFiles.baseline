@@ -1,0 +1,25 @@
+EmitSkipped: false
+
+FileName : /tests/cases/fourslash/inputFile1.js.map
+{"version":3,"file":"inputFile1.js","sourceRoot":"sourceRootDir/","sources":["inputFile1.ts"],"names":[],"mappings":"AAAA,IAAI,CAAC,GAAG,GAAG,CAAC;AACZ,IAAI,GAAG,GAAG,aAAa,CAAC;AACxB;IAAA;IAGA,CAAC;IAAD,QAAC;AAAD,CAAC,AAHD,IAGC"}
+FileName : /tests/cases/fourslash/inputFile1.js
+var x = 109;
+var foo = "hello world";
+var M = /** @class */ (function () {
+    function M() {
+    }
+    return M;
+}());
+//# sourceMappingURL=inputFile1.js.map
+EmitSkipped: false
+
+FileName : /tests/cases/fourslash/inputFile2.js.map
+{"version":3,"file":"inputFile2.js","sourceRoot":"sourceRootDir/","sources":["inputFile2.ts"],"names":[],"mappings":"AAAA,IAAI,GAAG,GAAG,wBAAwB,CAAC;AACnC;IAAA;IAGA,CAAC;IAAD,QAAC;AAAD,CAAC,AAHD,IAGC"}
+FileName : /tests/cases/fourslash/inputFile2.js
+var bar = "hello world Typescript";
+var C = /** @class */ (function () {
+    function C() {
+    }
+    return C;
+}());
+//# sourceMappingURL=inputFile2.js.map

@@ -1,0 +1,20 @@
+{
+    "scenario": "declarations_SimpleImport",
+    "projectRoot": "tests/cases/projects/declarations_SimpleImport",
+    "inputFiles": [
+        "useModule.ts"
+    ],
+    "declaration": true,
+    "baselineCheck": true,
+    "resolvedInputFiles": [
+        "lib.es5.d.ts",
+        "m4.ts",
+        "useModule.ts"
+    ],
+    "emittedFiles": [
+        "m4.js",
+        "m4.d.ts",
+        "useModule.js",
+        "useModule.d.ts"
+    ]
+}

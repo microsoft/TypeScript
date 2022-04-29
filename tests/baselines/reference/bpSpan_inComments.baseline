@@ -1,0 +1,19 @@
+
+1  >/*comment here*/ var x = 10; /*comment here*/
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (0 to 45)  SpanInfo: {"start":17,"length":10}
+    >var x = 10
+    >:=> (line 1, col 17) to (line 1, col 27)
+--------------------------------
+2  >// comment only line
+
+    ~~~~~~~~~~~~~~~~~~~~~                         => Pos: (46 to 66)  SpanInfo: undefined
+--------------------------------
+3  >/*multiline comment
+
+    ~~~~~~~~~~~~~~~~~~~~                          => Pos: (67 to 86)  SpanInfo: undefined
+--------------------------------
+4  >another line of multiline comment */ var y = 10; // comment here
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (87 to 150)  SpanInfo: {"start":124,"length":10}
+    >var y = 10
+    >:=> (line 4, col 37) to (line 4, col 47)

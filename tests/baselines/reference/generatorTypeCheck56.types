@@ -1,0 +1,20 @@
+=== tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck56.ts ===
+function* g() {
+>g : () => Generator<number, void, unknown>
+
+    var x = class C {
+>x : typeof C
+>class C {        *[yield 0]() {            yield 0;        }    } : typeof C
+>C : typeof C
+
+        *[yield 0]() {
+>[yield 0] : () => Generator<number, void, unknown>
+>yield 0 : any
+>0 : 0
+
+            yield 0;
+>yield 0 : any
+>0 : 0
+        }
+    };
+}

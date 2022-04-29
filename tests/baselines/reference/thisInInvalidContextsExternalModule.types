@@ -1,0 +1,85 @@
+=== tests/cases/conformance/expressions/thisKeyword/thisInInvalidContextsExternalModule.ts ===
+class BaseErrClass {
+>BaseErrClass : BaseErrClass
+
+    constructor(t: any) { }
+>t : any
+}
+
+class ClassWithNoInitializer extends BaseErrClass {
+>ClassWithNoInitializer : ClassWithNoInitializer
+>BaseErrClass : BaseErrClass
+
+    t;
+>t : any
+
+    //'this' in optional super call
+    constructor() {
+        super(this); // error: "super" has to be called before "this" accessing
+>super(this) : void
+>super : typeof BaseErrClass
+>this : this
+    }
+}
+
+class ClassWithInitializer extends BaseErrClass {
+>ClassWithInitializer : ClassWithInitializer
+>BaseErrClass : BaseErrClass
+
+    t = 4;
+>t : number
+>4 : 4
+
+    //'this' in required super call
+    constructor() {
+        super(this); // Error
+>super(this) : void
+>super : typeof BaseErrClass
+>this : this
+    }
+}
+
+module M {
+>M : typeof M
+
+    //'this' in module variable
+    var x = this; // Error
+>x : any
+>this : any
+}
+
+//'this' as type parameter constraint
+// function fn<T extends this >() { } // Error
+
+//'this' as a type argument
+function genericFunc<T>(x: T) { }
+>genericFunc : <T>(x: T) => void
+>x : T
+
+genericFunc<this>(undefined);  // Should be an error
+>genericFunc<this>(undefined) : void
+>genericFunc : <T>(x: T) => void
+>undefined : undefined
+
+class ErrClass3 extends this {
+>ErrClass3 : ErrClass3
+>this : undefined
+
+}
+
+//'this' as a computed enum value
+enum SomeEnum {
+>SomeEnum : SomeEnum
+
+    A = this, // Should not be allowed
+>A : SomeEnum
+>this : any
+
+    B = this.spaaaace // Also should not be allowed
+>B : SomeEnum
+>this.spaaaace : any
+>this : any
+>spaaaace : any
+}
+
+export = this; // Should be an error

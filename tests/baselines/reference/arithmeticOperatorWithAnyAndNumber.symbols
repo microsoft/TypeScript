@@ -1,0 +1,357 @@
+=== tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithAnyAndNumber.ts ===
+var a: any;
+>a : Symbol(a, Decl(arithmeticOperatorWithAnyAndNumber.ts, 0, 3))
+
+var b: number;
+>b : Symbol(b, Decl(arithmeticOperatorWithAnyAndNumber.ts, 1, 3))
+
+// operator *
+var ra1 = a * a;
+>ra1 : Symbol(ra1, Decl(arithmeticOperatorWithAnyAndNumber.ts, 4, 3))
+>a : Symbol(a, Decl(arithmeticOperatorWithAnyAndNumber.ts, 0, 3))
+>a : Symbol(a, Decl(arithmeticOperatorWithAnyAndNumber.ts, 0, 3))
+
+var ra2 = a * b;
+>ra2 : Symbol(ra2, Decl(arithmeticOperatorWithAnyAndNumber.ts, 5, 3))
+>a : Symbol(a, Decl(arithmeticOperatorWithAnyAndNumber.ts, 0, 3))
+>b : Symbol(b, Decl(arithmeticOperatorWithAnyAndNumber.ts, 1, 3))
+
+var ra3 = a * 0;
+>ra3 : Symbol(ra3, Decl(arithmeticOperatorWithAnyAndNumber.ts, 6, 3))
+>a : Symbol(a, Decl(arithmeticOperatorWithAnyAndNumber.ts, 0, 3))
+
+var ra4 = 0 * a;
+>ra4 : Symbol(ra4, Decl(arithmeticOperatorWithAnyAndNumber.ts, 7, 3))
+>a : Symbol(a, Decl(arithmeticOperatorWithAnyAndNumber.ts, 0, 3))
+
+var ra5 = 0 * 0;
+>ra5 : Symbol(ra5, Decl(arithmeticOperatorWithAnyAndNumber.ts, 8, 3))
+
+var ra6 = b * 0;
+>ra6 : Symbol(ra6, Decl(arithmeticOperatorWithAnyAndNumber.ts, 9, 3))
+>b : Symbol(b, Decl(arithmeticOperatorWithAnyAndNumber.ts, 1, 3))
+
+var ra7 = 0 * b;
+>ra7 : Symbol(ra7, Decl(arithmeticOperatorWithAnyAndNumber.ts, 10, 3))
+>b : Symbol(b, Decl(arithmeticOperatorWithAnyAndNumber.ts, 1, 3))
+
+var ra8 = b * b;
+>ra8 : Symbol(ra8, Decl(arithmeticOperatorWithAnyAndNumber.ts, 11, 3))
+>b : Symbol(b, Decl(arithmeticOperatorWithAnyAndNumber.ts, 1, 3))
+>b : Symbol(b, Decl(arithmeticOperatorWithAnyAndNumber.ts, 1, 3))
+
+// operator /
+var rb1 = a / a;
+>rb1 : Symbol(rb1, Decl(arithmeticOperatorWithAnyAndNumber.ts, 14, 3))
+>a : Symbol(a, Decl(arithmeticOperatorWithAnyAndNumber.ts, 0, 3))
+>a : Symbol(a, Decl(arithmeticOperatorWithAnyAndNumber.ts, 0, 3))
+
+var rb2 = a / b;
+>rb2 : Symbol(rb2, Decl(arithmeticOperatorWithAnyAndNumber.ts, 15, 3))
+>a : Symbol(a, Decl(arithmeticOperatorWithAnyAndNumber.ts, 0, 3))
+>b : Symbol(b, Decl(arithmeticOperatorWithAnyAndNumber.ts, 1, 3))
+
+var rb3 = a / 0;
+>rb3 : Symbol(rb3, Decl(arithmeticOperatorWithAnyAndNumber.ts, 16, 3))
+>a : Symbol(a, Decl(arithmeticOperatorWithAnyAndNumber.ts, 0, 3))
+
+var rb4 = 0 / a;
+>rb4 : Symbol(rb4, Decl(arithmeticOperatorWithAnyAndNumber.ts, 17, 3))
+>a : Symbol(a, Decl(arithmeticOperatorWithAnyAndNumber.ts, 0, 3))
+
+var rb5 = 0 / 0;
+>rb5 : Symbol(rb5, Decl(arithmeticOperatorWithAnyAndNumber.ts, 18, 3))
+
+var rb6 = b / 0;
+>rb6 : Symbol(rb6, Decl(arithmeticOperatorWithAnyAndNumber.ts, 19, 3))
+>b : Symbol(b, Decl(arithmeticOperatorWithAnyAndNumber.ts, 1, 3))
+
+var rb7 = 0 / b;
+>rb7 : Symbol(rb7, Decl(arithmeticOperatorWithAnyAndNumber.ts, 20, 3))
+>b : Symbol(b, Decl(arithmeticOperatorWithAnyAndNumber.ts, 1, 3))
+
+var rb8 = b / b;
+>rb8 : Symbol(rb8, Decl(arithmeticOperatorWithAnyAndNumber.ts, 21, 3))
+>b : Symbol(b, Decl(arithmeticOperatorWithAnyAndNumber.ts, 1, 3))
+>b : Symbol(b, Decl(arithmeticOperatorWithAnyAndNumber.ts, 1, 3))
+
+// operator %
+var rc1 = a % a;
+>rc1 : Symbol(rc1, Decl(arithmeticOperatorWithAnyAndNumber.ts, 24, 3))
+>a : Symbol(a, Decl(arithmeticOperatorWithAnyAndNumber.ts, 0, 3))
+>a : Symbol(a, Decl(arithmeticOperatorWithAnyAndNumber.ts, 0, 3))
+
+var rc2 = a % b;
+>rc2 : Symbol(rc2, Decl(arithmeticOperatorWithAnyAndNumber.ts, 25, 3))
+>a : Symbol(a, Decl(arithmeticOperatorWithAnyAndNumber.ts, 0, 3))
+>b : Symbol(b, Decl(arithmeticOperatorWithAnyAndNumber.ts, 1, 3))
+
+var rc3 = a % 0;
+>rc3 : Symbol(rc3, Decl(arithmeticOperatorWithAnyAndNumber.ts, 26, 3))
+>a : Symbol(a, Decl(arithmeticOperatorWithAnyAndNumber.ts, 0, 3))
+
+var rc4 = 0 % a;
+>rc4 : Symbol(rc4, Decl(arithmeticOperatorWithAnyAndNumber.ts, 27, 3))
+>a : Symbol(a, Decl(arithmeticOperatorWithAnyAndNumber.ts, 0, 3))
+
+var rc5 = 0 % 0;
+>rc5 : Symbol(rc5, Decl(arithmeticOperatorWithAnyAndNumber.ts, 28, 3))
+
+var rc6 = b % 0;
+>rc6 : Symbol(rc6, Decl(arithmeticOperatorWithAnyAndNumber.ts, 29, 3))
+>b : Symbol(b, Decl(arithmeticOperatorWithAnyAndNumber.ts, 1, 3))
+
+var rc7 = 0 % b;
+>rc7 : Symbol(rc7, Decl(arithmeticOperatorWithAnyAndNumber.ts, 30, 3))
+>b : Symbol(b, Decl(arithmeticOperatorWithAnyAndNumber.ts, 1, 3))
+
+var rc8 = b % b;
+>rc8 : Symbol(rc8, Decl(arithmeticOperatorWithAnyAndNumber.ts, 31, 3))
+>b : Symbol(b, Decl(arithmeticOperatorWithAnyAndNumber.ts, 1, 3))
+>b : Symbol(b, Decl(arithmeticOperatorWithAnyAndNumber.ts, 1, 3))
+
+// operator -
+var rd1 = a - a;
+>rd1 : Symbol(rd1, Decl(arithmeticOperatorWithAnyAndNumber.ts, 34, 3))
+>a : Symbol(a, Decl(arithmeticOperatorWithAnyAndNumber.ts, 0, 3))
+>a : Symbol(a, Decl(arithmeticOperatorWithAnyAndNumber.ts, 0, 3))
+
+var rd2 = a - b;
+>rd2 : Symbol(rd2, Decl(arithmeticOperatorWithAnyAndNumber.ts, 35, 3))
+>a : Symbol(a, Decl(arithmeticOperatorWithAnyAndNumber.ts, 0, 3))
+>b : Symbol(b, Decl(arithmeticOperatorWithAnyAndNumber.ts, 1, 3))
+
+var rd3 = a - 0;
+>rd3 : Symbol(rd3, Decl(arithmeticOperatorWithAnyAndNumber.ts, 36, 3))
+>a : Symbol(a, Decl(arithmeticOperatorWithAnyAndNumber.ts, 0, 3))
+
+var rd4 = 0 - a;
+>rd4 : Symbol(rd4, Decl(arithmeticOperatorWithAnyAndNumber.ts, 37, 3))
+>a : Symbol(a, Decl(arithmeticOperatorWithAnyAndNumber.ts, 0, 3))
+
+var rd5 = 0 - 0;
+>rd5 : Symbol(rd5, Decl(arithmeticOperatorWithAnyAndNumber.ts, 38, 3))
+
+var rd6 = b - 0;
+>rd6 : Symbol(rd6, Decl(arithmeticOperatorWithAnyAndNumber.ts, 39, 3))
+>b : Symbol(b, Decl(arithmeticOperatorWithAnyAndNumber.ts, 1, 3))
+
+var rd7 = 0 - b;
+>rd7 : Symbol(rd7, Decl(arithmeticOperatorWithAnyAndNumber.ts, 40, 3))
+>b : Symbol(b, Decl(arithmeticOperatorWithAnyAndNumber.ts, 1, 3))
+
+var rd8 = b - b;
+>rd8 : Symbol(rd8, Decl(arithmeticOperatorWithAnyAndNumber.ts, 41, 3))
+>b : Symbol(b, Decl(arithmeticOperatorWithAnyAndNumber.ts, 1, 3))
+>b : Symbol(b, Decl(arithmeticOperatorWithAnyAndNumber.ts, 1, 3))
+
+// operator <<
+var re1 = a << a;
+>re1 : Symbol(re1, Decl(arithmeticOperatorWithAnyAndNumber.ts, 44, 3))
+>a : Symbol(a, Decl(arithmeticOperatorWithAnyAndNumber.ts, 0, 3))
+>a : Symbol(a, Decl(arithmeticOperatorWithAnyAndNumber.ts, 0, 3))
+
+var re2 = a << b;
+>re2 : Symbol(re2, Decl(arithmeticOperatorWithAnyAndNumber.ts, 45, 3))
+>a : Symbol(a, Decl(arithmeticOperatorWithAnyAndNumber.ts, 0, 3))
+>b : Symbol(b, Decl(arithmeticOperatorWithAnyAndNumber.ts, 1, 3))
+
+var re3 = a << 0;
+>re3 : Symbol(re3, Decl(arithmeticOperatorWithAnyAndNumber.ts, 46, 3))
+>a : Symbol(a, Decl(arithmeticOperatorWithAnyAndNumber.ts, 0, 3))
+
+var re4 = 0 << a;
+>re4 : Symbol(re4, Decl(arithmeticOperatorWithAnyAndNumber.ts, 47, 3))
+>a : Symbol(a, Decl(arithmeticOperatorWithAnyAndNumber.ts, 0, 3))
+
+var re5 = 0 << 0;
+>re5 : Symbol(re5, Decl(arithmeticOperatorWithAnyAndNumber.ts, 48, 3))
+
+var re6 = b << 0;
+>re6 : Symbol(re6, Decl(arithmeticOperatorWithAnyAndNumber.ts, 49, 3))
+>b : Symbol(b, Decl(arithmeticOperatorWithAnyAndNumber.ts, 1, 3))
+
+var re7 = 0 << b;
+>re7 : Symbol(re7, Decl(arithmeticOperatorWithAnyAndNumber.ts, 50, 3))
+>b : Symbol(b, Decl(arithmeticOperatorWithAnyAndNumber.ts, 1, 3))
+
+var re8 = b << b;
+>re8 : Symbol(re8, Decl(arithmeticOperatorWithAnyAndNumber.ts, 51, 3))
+>b : Symbol(b, Decl(arithmeticOperatorWithAnyAndNumber.ts, 1, 3))
+>b : Symbol(b, Decl(arithmeticOperatorWithAnyAndNumber.ts, 1, 3))
+
+// operator >>
+var rf1 = a >> a;
+>rf1 : Symbol(rf1, Decl(arithmeticOperatorWithAnyAndNumber.ts, 54, 3))
+>a : Symbol(a, Decl(arithmeticOperatorWithAnyAndNumber.ts, 0, 3))
+>a : Symbol(a, Decl(arithmeticOperatorWithAnyAndNumber.ts, 0, 3))
+
+var rf2 = a >> b;
+>rf2 : Symbol(rf2, Decl(arithmeticOperatorWithAnyAndNumber.ts, 55, 3))
+>a : Symbol(a, Decl(arithmeticOperatorWithAnyAndNumber.ts, 0, 3))
+>b : Symbol(b, Decl(arithmeticOperatorWithAnyAndNumber.ts, 1, 3))
+
+var rf3 = a >> 0;
+>rf3 : Symbol(rf3, Decl(arithmeticOperatorWithAnyAndNumber.ts, 56, 3))
+>a : Symbol(a, Decl(arithmeticOperatorWithAnyAndNumber.ts, 0, 3))
+
+var rf4 = 0 >> a;
+>rf4 : Symbol(rf4, Decl(arithmeticOperatorWithAnyAndNumber.ts, 57, 3))
+>a : Symbol(a, Decl(arithmeticOperatorWithAnyAndNumber.ts, 0, 3))
+
+var rf5 = 0 >> 0;
+>rf5 : Symbol(rf5, Decl(arithmeticOperatorWithAnyAndNumber.ts, 58, 3))
+
+var rf6 = b >> 0;
+>rf6 : Symbol(rf6, Decl(arithmeticOperatorWithAnyAndNumber.ts, 59, 3))
+>b : Symbol(b, Decl(arithmeticOperatorWithAnyAndNumber.ts, 1, 3))
+
+var rf7 = 0 >> b;
+>rf7 : Symbol(rf7, Decl(arithmeticOperatorWithAnyAndNumber.ts, 60, 3))
+>b : Symbol(b, Decl(arithmeticOperatorWithAnyAndNumber.ts, 1, 3))
+
+var rf8 = b >> b;
+>rf8 : Symbol(rf8, Decl(arithmeticOperatorWithAnyAndNumber.ts, 61, 3))
+>b : Symbol(b, Decl(arithmeticOperatorWithAnyAndNumber.ts, 1, 3))
+>b : Symbol(b, Decl(arithmeticOperatorWithAnyAndNumber.ts, 1, 3))
+
+// operator >>>
+var rg1 = a >>> a;
+>rg1 : Symbol(rg1, Decl(arithmeticOperatorWithAnyAndNumber.ts, 64, 3))
+>a : Symbol(a, Decl(arithmeticOperatorWithAnyAndNumber.ts, 0, 3))
+>a : Symbol(a, Decl(arithmeticOperatorWithAnyAndNumber.ts, 0, 3))
+
+var rg2 = a >>> b;
+>rg2 : Symbol(rg2, Decl(arithmeticOperatorWithAnyAndNumber.ts, 65, 3))
+>a : Symbol(a, Decl(arithmeticOperatorWithAnyAndNumber.ts, 0, 3))
+>b : Symbol(b, Decl(arithmeticOperatorWithAnyAndNumber.ts, 1, 3))
+
+var rg3 = a >>> 0;
+>rg3 : Symbol(rg3, Decl(arithmeticOperatorWithAnyAndNumber.ts, 66, 3))
+>a : Symbol(a, Decl(arithmeticOperatorWithAnyAndNumber.ts, 0, 3))
+
+var rg4 = 0 >>> a;
+>rg4 : Symbol(rg4, Decl(arithmeticOperatorWithAnyAndNumber.ts, 67, 3))
+>a : Symbol(a, Decl(arithmeticOperatorWithAnyAndNumber.ts, 0, 3))
+
+var rg5 = 0 >>> 0;
+>rg5 : Symbol(rg5, Decl(arithmeticOperatorWithAnyAndNumber.ts, 68, 3))
+
+var rg6 = b >>> 0;
+>rg6 : Symbol(rg6, Decl(arithmeticOperatorWithAnyAndNumber.ts, 69, 3))
+>b : Symbol(b, Decl(arithmeticOperatorWithAnyAndNumber.ts, 1, 3))
+
+var rg7 = 0 >>> b;
+>rg7 : Symbol(rg7, Decl(arithmeticOperatorWithAnyAndNumber.ts, 70, 3))
+>b : Symbol(b, Decl(arithmeticOperatorWithAnyAndNumber.ts, 1, 3))
+
+var rg8 = b >>> b;
+>rg8 : Symbol(rg8, Decl(arithmeticOperatorWithAnyAndNumber.ts, 71, 3))
+>b : Symbol(b, Decl(arithmeticOperatorWithAnyAndNumber.ts, 1, 3))
+>b : Symbol(b, Decl(arithmeticOperatorWithAnyAndNumber.ts, 1, 3))
+
+// operator &
+var rh1 = a & a;
+>rh1 : Symbol(rh1, Decl(arithmeticOperatorWithAnyAndNumber.ts, 74, 3))
+>a : Symbol(a, Decl(arithmeticOperatorWithAnyAndNumber.ts, 0, 3))
+>a : Symbol(a, Decl(arithmeticOperatorWithAnyAndNumber.ts, 0, 3))
+
+var rh2 = a & b;
+>rh2 : Symbol(rh2, Decl(arithmeticOperatorWithAnyAndNumber.ts, 75, 3))
+>a : Symbol(a, Decl(arithmeticOperatorWithAnyAndNumber.ts, 0, 3))
+>b : Symbol(b, Decl(arithmeticOperatorWithAnyAndNumber.ts, 1, 3))
+
+var rh3 = a & 0;
+>rh3 : Symbol(rh3, Decl(arithmeticOperatorWithAnyAndNumber.ts, 76, 3))
+>a : Symbol(a, Decl(arithmeticOperatorWithAnyAndNumber.ts, 0, 3))
+
+var rh4 = 0 & a;
+>rh4 : Symbol(rh4, Decl(arithmeticOperatorWithAnyAndNumber.ts, 77, 3))
+>a : Symbol(a, Decl(arithmeticOperatorWithAnyAndNumber.ts, 0, 3))
+
+var rh5 = 0 & 0;
+>rh5 : Symbol(rh5, Decl(arithmeticOperatorWithAnyAndNumber.ts, 78, 3))
+
+var rh6 = b & 0;
+>rh6 : Symbol(rh6, Decl(arithmeticOperatorWithAnyAndNumber.ts, 79, 3))
+>b : Symbol(b, Decl(arithmeticOperatorWithAnyAndNumber.ts, 1, 3))
+
+var rh7 = 0 & b;
+>rh7 : Symbol(rh7, Decl(arithmeticOperatorWithAnyAndNumber.ts, 80, 3))
+>b : Symbol(b, Decl(arithmeticOperatorWithAnyAndNumber.ts, 1, 3))
+
+var rh8 = b & b;
+>rh8 : Symbol(rh8, Decl(arithmeticOperatorWithAnyAndNumber.ts, 81, 3))
+>b : Symbol(b, Decl(arithmeticOperatorWithAnyAndNumber.ts, 1, 3))
+>b : Symbol(b, Decl(arithmeticOperatorWithAnyAndNumber.ts, 1, 3))
+
+// operator ^
+var ri1 = a ^ a;
+>ri1 : Symbol(ri1, Decl(arithmeticOperatorWithAnyAndNumber.ts, 84, 3))
+>a : Symbol(a, Decl(arithmeticOperatorWithAnyAndNumber.ts, 0, 3))
+>a : Symbol(a, Decl(arithmeticOperatorWithAnyAndNumber.ts, 0, 3))
+
+var ri2 = a ^ b;
+>ri2 : Symbol(ri2, Decl(arithmeticOperatorWithAnyAndNumber.ts, 85, 3))
+>a : Symbol(a, Decl(arithmeticOperatorWithAnyAndNumber.ts, 0, 3))
+>b : Symbol(b, Decl(arithmeticOperatorWithAnyAndNumber.ts, 1, 3))
+
+var ri3 = a ^ 0;
+>ri3 : Symbol(ri3, Decl(arithmeticOperatorWithAnyAndNumber.ts, 86, 3))
+>a : Symbol(a, Decl(arithmeticOperatorWithAnyAndNumber.ts, 0, 3))
+
+var ri4 = 0 ^ a;
+>ri4 : Symbol(ri4, Decl(arithmeticOperatorWithAnyAndNumber.ts, 87, 3))
+>a : Symbol(a, Decl(arithmeticOperatorWithAnyAndNumber.ts, 0, 3))
+
+var ri5 = 0 ^ 0;
+>ri5 : Symbol(ri5, Decl(arithmeticOperatorWithAnyAndNumber.ts, 88, 3))
+
+var ri6 = b ^ 0;
+>ri6 : Symbol(ri6, Decl(arithmeticOperatorWithAnyAndNumber.ts, 89, 3))
+>b : Symbol(b, Decl(arithmeticOperatorWithAnyAndNumber.ts, 1, 3))
+
+var ri7 = 0 ^ b;
+>ri7 : Symbol(ri7, Decl(arithmeticOperatorWithAnyAndNumber.ts, 90, 3))
+>b : Symbol(b, Decl(arithmeticOperatorWithAnyAndNumber.ts, 1, 3))
+
+var ri8 = b ^ b;
+>ri8 : Symbol(ri8, Decl(arithmeticOperatorWithAnyAndNumber.ts, 91, 3))
+>b : Symbol(b, Decl(arithmeticOperatorWithAnyAndNumber.ts, 1, 3))
+>b : Symbol(b, Decl(arithmeticOperatorWithAnyAndNumber.ts, 1, 3))
+
+// operator |
+var rj1 = a | a;
+>rj1 : Symbol(rj1, Decl(arithmeticOperatorWithAnyAndNumber.ts, 94, 3))
+>a : Symbol(a, Decl(arithmeticOperatorWithAnyAndNumber.ts, 0, 3))
+>a : Symbol(a, Decl(arithmeticOperatorWithAnyAndNumber.ts, 0, 3))
+
+var rj2 = a | b;
+>rj2 : Symbol(rj2, Decl(arithmeticOperatorWithAnyAndNumber.ts, 95, 3))
+>a : Symbol(a, Decl(arithmeticOperatorWithAnyAndNumber.ts, 0, 3))
+>b : Symbol(b, Decl(arithmeticOperatorWithAnyAndNumber.ts, 1, 3))
+
+var rj3 = a | 0;
+>rj3 : Symbol(rj3, Decl(arithmeticOperatorWithAnyAndNumber.ts, 96, 3))
+>a : Symbol(a, Decl(arithmeticOperatorWithAnyAndNumber.ts, 0, 3))
+
+var rj4 = 0 | a;
+>rj4 : Symbol(rj4, Decl(arithmeticOperatorWithAnyAndNumber.ts, 97, 3))
+>a : Symbol(a, Decl(arithmeticOperatorWithAnyAndNumber.ts, 0, 3))
+
+var rj5 = 0 | 0;
+>rj5 : Symbol(rj5, Decl(arithmeticOperatorWithAnyAndNumber.ts, 98, 3))
+
+var rj6 = b | 0;
+>rj6 : Symbol(rj6, Decl(arithmeticOperatorWithAnyAndNumber.ts, 99, 3))
+>b : Symbol(b, Decl(arithmeticOperatorWithAnyAndNumber.ts, 1, 3))
+
+var rj7 = 0 | b;
+>rj7 : Symbol(rj7, Decl(arithmeticOperatorWithAnyAndNumber.ts, 100, 3))
+>b : Symbol(b, Decl(arithmeticOperatorWithAnyAndNumber.ts, 1, 3))
+
+var rj8 = b | b;
+>rj8 : Symbol(rj8, Decl(arithmeticOperatorWithAnyAndNumber.ts, 101, 3))
+>b : Symbol(b, Decl(arithmeticOperatorWithAnyAndNumber.ts, 1, 3))
+>b : Symbol(b, Decl(arithmeticOperatorWithAnyAndNumber.ts, 1, 3))
+

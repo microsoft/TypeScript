@@ -1,0 +1,56 @@
+=== tests/cases/compiler/duplicateVariablesByScope.ts ===
+// duplicate local variables are only reported at global scope
+
+module M {
+>M : Symbol(M, Decl(duplicateVariablesByScope.ts, 0, 0))
+
+    for (var j = 0; j < 10; j++) {
+>j : Symbol(j, Decl(duplicateVariablesByScope.ts, 3, 12), Decl(duplicateVariablesByScope.ts, 6, 12))
+>j : Symbol(j, Decl(duplicateVariablesByScope.ts, 3, 12), Decl(duplicateVariablesByScope.ts, 6, 12))
+>j : Symbol(j, Decl(duplicateVariablesByScope.ts, 3, 12), Decl(duplicateVariablesByScope.ts, 6, 12))
+    }
+
+    for (var j = 0; j < 10; j++) {
+>j : Symbol(j, Decl(duplicateVariablesByScope.ts, 3, 12), Decl(duplicateVariablesByScope.ts, 6, 12))
+>j : Symbol(j, Decl(duplicateVariablesByScope.ts, 3, 12), Decl(duplicateVariablesByScope.ts, 6, 12))
+>j : Symbol(j, Decl(duplicateVariablesByScope.ts, 3, 12), Decl(duplicateVariablesByScope.ts, 6, 12))
+    }
+}
+
+function foo() {
+>foo : Symbol(foo, Decl(duplicateVariablesByScope.ts, 8, 1))
+
+    var x = 2;
+>x : Symbol(x, Decl(duplicateVariablesByScope.ts, 11, 7), Decl(duplicateVariablesByScope.ts, 12, 7))
+
+    var x = 1;
+>x : Symbol(x, Decl(duplicateVariablesByScope.ts, 11, 7), Decl(duplicateVariablesByScope.ts, 12, 7))
+
+    if (true) {
+        var result = 1;
+>result : Symbol(result, Decl(duplicateVariablesByScope.ts, 14, 11), Decl(duplicateVariablesByScope.ts, 17, 11))
+    }
+    else {
+        var result = 2;
+>result : Symbol(result, Decl(duplicateVariablesByScope.ts, 14, 11), Decl(duplicateVariablesByScope.ts, 17, 11))
+    }
+}
+
+class C {
+>C : Symbol(C, Decl(duplicateVariablesByScope.ts, 19, 1))
+
+    foo() {
+>foo : Symbol(C.foo, Decl(duplicateVariablesByScope.ts, 21, 9))
+
+        try {
+            var x = 1;
+>x : Symbol(x, Decl(duplicateVariablesByScope.ts, 24, 15), Decl(duplicateVariablesByScope.ts, 27, 15))
+        }
+        catch (e) {
+>e : Symbol(e, Decl(duplicateVariablesByScope.ts, 26, 15))
+
+            var x = 2;
+>x : Symbol(x, Decl(duplicateVariablesByScope.ts, 24, 15), Decl(duplicateVariablesByScope.ts, 27, 15))
+        }
+    }
+}

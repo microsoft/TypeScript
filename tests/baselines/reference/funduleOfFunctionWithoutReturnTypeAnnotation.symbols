@@ -1,0 +1,16 @@
+=== tests/cases/compiler/funduleOfFunctionWithoutReturnTypeAnnotation.ts ===
+function fn() {
+>fn : Symbol(fn, Decl(funduleOfFunctionWithoutReturnTypeAnnotation.ts, 0, 0), Decl(funduleOfFunctionWithoutReturnTypeAnnotation.ts, 2, 1))
+
+    return fn.n;
+>fn.n : Symbol(fn.n, Decl(funduleOfFunctionWithoutReturnTypeAnnotation.ts, 4, 14))
+>fn : Symbol(fn, Decl(funduleOfFunctionWithoutReturnTypeAnnotation.ts, 0, 0), Decl(funduleOfFunctionWithoutReturnTypeAnnotation.ts, 2, 1))
+>n : Symbol(fn.n, Decl(funduleOfFunctionWithoutReturnTypeAnnotation.ts, 4, 14))
+}
+module fn {
+>fn : Symbol(fn, Decl(funduleOfFunctionWithoutReturnTypeAnnotation.ts, 0, 0), Decl(funduleOfFunctionWithoutReturnTypeAnnotation.ts, 2, 1))
+
+    export var n = 1;
+>n : Symbol(n, Decl(funduleOfFunctionWithoutReturnTypeAnnotation.ts, 4, 14))
+}
+

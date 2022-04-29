@@ -1,0 +1,79 @@
+=== tests/cases/conformance/types/members/objectTypeWithConstructSignatureHidingMembersOfFunction.ts ===
+interface I {
+>I : Symbol(I, Decl(objectTypeWithConstructSignatureHidingMembersOfFunction.ts, 0, 0))
+
+    new(): number;
+    apply(a: any, b?: any): void;
+>apply : Symbol(I.apply, Decl(objectTypeWithConstructSignatureHidingMembersOfFunction.ts, 1, 18))
+>a : Symbol(a, Decl(objectTypeWithConstructSignatureHidingMembersOfFunction.ts, 2, 10))
+>b : Symbol(b, Decl(objectTypeWithConstructSignatureHidingMembersOfFunction.ts, 2, 17))
+
+    call(thisArg: number, ...argArray: number[]): any;
+>call : Symbol(I.call, Decl(objectTypeWithConstructSignatureHidingMembersOfFunction.ts, 2, 33))
+>thisArg : Symbol(thisArg, Decl(objectTypeWithConstructSignatureHidingMembersOfFunction.ts, 3, 9))
+>argArray : Symbol(argArray, Decl(objectTypeWithConstructSignatureHidingMembersOfFunction.ts, 3, 25))
+}
+
+var i: I;
+>i : Symbol(i, Decl(objectTypeWithConstructSignatureHidingMembersOfFunction.ts, 6, 3))
+>I : Symbol(I, Decl(objectTypeWithConstructSignatureHidingMembersOfFunction.ts, 0, 0))
+
+var r1: (a: any, b?: any) => void = i.apply;
+>r1 : Symbol(r1, Decl(objectTypeWithConstructSignatureHidingMembersOfFunction.ts, 7, 3))
+>a : Symbol(a, Decl(objectTypeWithConstructSignatureHidingMembersOfFunction.ts, 7, 9))
+>b : Symbol(b, Decl(objectTypeWithConstructSignatureHidingMembersOfFunction.ts, 7, 16))
+>i.apply : Symbol(I.apply, Decl(objectTypeWithConstructSignatureHidingMembersOfFunction.ts, 1, 18))
+>i : Symbol(i, Decl(objectTypeWithConstructSignatureHidingMembersOfFunction.ts, 6, 3))
+>apply : Symbol(I.apply, Decl(objectTypeWithConstructSignatureHidingMembersOfFunction.ts, 1, 18))
+
+var r1b: (thisArg: number, ...argArray: number[]) => void = i.call;
+>r1b : Symbol(r1b, Decl(objectTypeWithConstructSignatureHidingMembersOfFunction.ts, 8, 3))
+>thisArg : Symbol(thisArg, Decl(objectTypeWithConstructSignatureHidingMembersOfFunction.ts, 8, 10))
+>argArray : Symbol(argArray, Decl(objectTypeWithConstructSignatureHidingMembersOfFunction.ts, 8, 26))
+>i.call : Symbol(I.call, Decl(objectTypeWithConstructSignatureHidingMembersOfFunction.ts, 2, 33))
+>i : Symbol(i, Decl(objectTypeWithConstructSignatureHidingMembersOfFunction.ts, 6, 3))
+>call : Symbol(I.call, Decl(objectTypeWithConstructSignatureHidingMembersOfFunction.ts, 2, 33))
+
+var r1c = i.arguments;
+>r1c : Symbol(r1c, Decl(objectTypeWithConstructSignatureHidingMembersOfFunction.ts, 9, 3))
+>i.arguments : Symbol(Function.arguments, Decl(lib.es5.d.ts, --, --))
+>i : Symbol(i, Decl(objectTypeWithConstructSignatureHidingMembersOfFunction.ts, 6, 3))
+>arguments : Symbol(Function.arguments, Decl(lib.es5.d.ts, --, --))
+
+var x: {
+>x : Symbol(x, Decl(objectTypeWithConstructSignatureHidingMembersOfFunction.ts, 11, 3))
+
+    new(): number;
+    apply(a: any, b?: any): void;
+>apply : Symbol(apply, Decl(objectTypeWithConstructSignatureHidingMembersOfFunction.ts, 12, 18))
+>a : Symbol(a, Decl(objectTypeWithConstructSignatureHidingMembersOfFunction.ts, 13, 10))
+>b : Symbol(b, Decl(objectTypeWithConstructSignatureHidingMembersOfFunction.ts, 13, 17))
+
+    call(thisArg: number, ...argArray: number[]): any;
+>call : Symbol(call, Decl(objectTypeWithConstructSignatureHidingMembersOfFunction.ts, 13, 33))
+>thisArg : Symbol(thisArg, Decl(objectTypeWithConstructSignatureHidingMembersOfFunction.ts, 14, 9))
+>argArray : Symbol(argArray, Decl(objectTypeWithConstructSignatureHidingMembersOfFunction.ts, 14, 25))
+}
+
+var r2: (a: any, b?: any) => void = x.apply;
+>r2 : Symbol(r2, Decl(objectTypeWithConstructSignatureHidingMembersOfFunction.ts, 17, 3))
+>a : Symbol(a, Decl(objectTypeWithConstructSignatureHidingMembersOfFunction.ts, 17, 9))
+>b : Symbol(b, Decl(objectTypeWithConstructSignatureHidingMembersOfFunction.ts, 17, 16))
+>x.apply : Symbol(apply, Decl(objectTypeWithConstructSignatureHidingMembersOfFunction.ts, 12, 18))
+>x : Symbol(x, Decl(objectTypeWithConstructSignatureHidingMembersOfFunction.ts, 11, 3))
+>apply : Symbol(apply, Decl(objectTypeWithConstructSignatureHidingMembersOfFunction.ts, 12, 18))
+
+var r2b: (thisArg: number, ...argArray: number[]) => void = x.call;
+>r2b : Symbol(r2b, Decl(objectTypeWithConstructSignatureHidingMembersOfFunction.ts, 18, 3))
+>thisArg : Symbol(thisArg, Decl(objectTypeWithConstructSignatureHidingMembersOfFunction.ts, 18, 10))
+>argArray : Symbol(argArray, Decl(objectTypeWithConstructSignatureHidingMembersOfFunction.ts, 18, 26))
+>x.call : Symbol(call, Decl(objectTypeWithConstructSignatureHidingMembersOfFunction.ts, 13, 33))
+>x : Symbol(x, Decl(objectTypeWithConstructSignatureHidingMembersOfFunction.ts, 11, 3))
+>call : Symbol(call, Decl(objectTypeWithConstructSignatureHidingMembersOfFunction.ts, 13, 33))
+
+var r2c = x.arguments;
+>r2c : Symbol(r2c, Decl(objectTypeWithConstructSignatureHidingMembersOfFunction.ts, 19, 3))
+>x.arguments : Symbol(Function.arguments, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(objectTypeWithConstructSignatureHidingMembersOfFunction.ts, 11, 3))
+>arguments : Symbol(Function.arguments, Decl(lib.es5.d.ts, --, --))
+

@@ -1,0 +1,97 @@
+=== tests/cases/compiler/functionAssignment.ts ===
+function f(n: Function) { }
+>f : Symbol(f, Decl(functionAssignment.ts, 0, 0))
+>n : Symbol(n, Decl(functionAssignment.ts, 0, 11))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+f(function () { });
+>f : Symbol(f, Decl(functionAssignment.ts, 0, 0))
+
+interface foo {
+>foo : Symbol(foo, Decl(functionAssignment.ts, 1, 19))
+
+    get(handler: (bar: number)=>void): void;
+>get : Symbol(foo.get, Decl(functionAssignment.ts, 3, 15))
+>handler : Symbol(handler, Decl(functionAssignment.ts, 4, 8))
+>bar : Symbol(bar, Decl(functionAssignment.ts, 4, 18))
+}
+
+interface baz {
+>baz : Symbol(baz, Decl(functionAssignment.ts, 5, 1))
+
+    get(callback: Function): number;
+>get : Symbol(baz.get, Decl(functionAssignment.ts, 7, 15))
+>callback : Symbol(callback, Decl(functionAssignment.ts, 8, 8))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+}
+
+var barbaz: baz;
+>barbaz : Symbol(barbaz, Decl(functionAssignment.ts, 11, 3))
+>baz : Symbol(baz, Decl(functionAssignment.ts, 5, 1))
+
+var test: foo;
+>test : Symbol(test, Decl(functionAssignment.ts, 12, 3))
+>foo : Symbol(foo, Decl(functionAssignment.ts, 1, 19))
+
+test.get(function (param) {
+>test.get : Symbol(foo.get, Decl(functionAssignment.ts, 3, 15))
+>test : Symbol(test, Decl(functionAssignment.ts, 12, 3))
+>get : Symbol(foo.get, Decl(functionAssignment.ts, 3, 15))
+>param : Symbol(param, Decl(functionAssignment.ts, 14, 19))
+
+    var x = barbaz.get(function () { });
+>x : Symbol(x, Decl(functionAssignment.ts, 15, 7))
+>barbaz.get : Symbol(baz.get, Decl(functionAssignment.ts, 7, 15))
+>barbaz : Symbol(barbaz, Decl(functionAssignment.ts, 11, 3))
+>get : Symbol(baz.get, Decl(functionAssignment.ts, 7, 15))
+
+});
+
+function f2(n: () => void) { }
+>f2 : Symbol(f2, Decl(functionAssignment.ts, 16, 3))
+>n : Symbol(n, Decl(functionAssignment.ts, 18, 12))
+
+f2(() => {
+>f2 : Symbol(f2, Decl(functionAssignment.ts, 16, 3))
+
+    var n = '';
+>n : Symbol(n, Decl(functionAssignment.ts, 20, 7))
+
+    n = 4;
+>n : Symbol(n, Decl(functionAssignment.ts, 20, 7))
+
+});
+
+function f3(a: { a: number; b: number; }) { }
+>f3 : Symbol(f3, Decl(functionAssignment.ts, 22, 3))
+>a : Symbol(a, Decl(functionAssignment.ts, 24, 12))
+>a : Symbol(a, Decl(functionAssignment.ts, 24, 16))
+>b : Symbol(b, Decl(functionAssignment.ts, 24, 27))
+
+f3({ a: 0, b: 0 });
+>f3 : Symbol(f3, Decl(functionAssignment.ts, 22, 3))
+>a : Symbol(a, Decl(functionAssignment.ts, 26, 4))
+>b : Symbol(b, Decl(functionAssignment.ts, 26, 10))
+
+
+function callb(lam:(l: number) => void );
+>callb : Symbol(callb, Decl(functionAssignment.ts, 26, 19), Decl(functionAssignment.ts, 29, 41), Decl(functionAssignment.ts, 30, 38))
+>lam : Symbol(lam, Decl(functionAssignment.ts, 29, 15))
+>l : Symbol(l, Decl(functionAssignment.ts, 29, 20))
+
+function callb(lam:(n: string)=>void);
+>callb : Symbol(callb, Decl(functionAssignment.ts, 26, 19), Decl(functionAssignment.ts, 29, 41), Decl(functionAssignment.ts, 30, 38))
+>lam : Symbol(lam, Decl(functionAssignment.ts, 30, 15))
+>n : Symbol(n, Decl(functionAssignment.ts, 30, 20))
+
+function callb(a) { }
+>callb : Symbol(callb, Decl(functionAssignment.ts, 26, 19), Decl(functionAssignment.ts, 29, 41), Decl(functionAssignment.ts, 30, 38))
+>a : Symbol(a, Decl(functionAssignment.ts, 31, 15))
+
+callb((a) =>{ a.length; });
+>callb : Symbol(callb, Decl(functionAssignment.ts, 26, 19), Decl(functionAssignment.ts, 29, 41), Decl(functionAssignment.ts, 30, 38))
+>a : Symbol(a, Decl(functionAssignment.ts, 33, 7))
+>a : Symbol(a, Decl(functionAssignment.ts, 33, 7))
+
+
+

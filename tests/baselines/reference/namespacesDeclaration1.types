@@ -1,0 +1,9 @@
+=== tests/cases/compiler/namespacesDeclaration1.ts ===
+module M {
+No type information for this code.   export namespace N {
+No type information for this code.      export module M2 {
+No type information for this code.         export interface I {}
+No type information for this code.      }
+No type information for this code.   }
+No type information for this code.}
+No type information for this code.

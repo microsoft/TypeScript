@@ -1,0 +1,19 @@
+=== tests/cases/compiler/amdModuleName2.ts ===
+///<amd-module name='FirstModuleName'/>
+///<amd-module name='SecondModuleName'/>
+class Foo {
+>Foo : Symbol(Foo, Decl(amdModuleName2.ts, 0, 0))
+
+    x: number;
+>x : Symbol(Foo.x, Decl(amdModuleName2.ts, 2, 11))
+
+    constructor() {
+        this.x = 5;
+>this.x : Symbol(Foo.x, Decl(amdModuleName2.ts, 2, 11))
+>this : Symbol(Foo, Decl(amdModuleName2.ts, 0, 0))
+>x : Symbol(Foo.x, Decl(amdModuleName2.ts, 2, 11))
+    }
+}
+export = Foo;
+>Foo : Symbol(Foo, Decl(amdModuleName2.ts, 0, 0))
+

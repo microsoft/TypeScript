@@ -1,0 +1,19 @@
+=== tests/cases/compiler/spellingSuggestionModule.ts ===
+declare module "foobar" { export const x: number; }
+>"foobar" : Symbol("foobar", Decl(spellingSuggestionModule.ts, 0, 0))
+>x : Symbol(x, Decl(spellingSuggestionModule.ts, 0, 38))
+
+foobar;
+
+declare module 'barfoo' { export const x: number; }
+>'barfoo' : Symbol("barfoo", Decl(spellingSuggestionModule.ts, 1, 7))
+>x : Symbol(x, Decl(spellingSuggestionModule.ts, 3, 38))
+
+barfoo;
+
+declare module farboo { export const x: number; }
+>farboo : Symbol(farboo, Decl(spellingSuggestionModule.ts, 4, 7))
+>x : Symbol(x, Decl(spellingSuggestionModule.ts, 6, 36))
+
+faroo;
+

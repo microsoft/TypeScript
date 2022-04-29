@@ -1,0 +1,10 @@
+=== /a.js ===
+/** @param {...number} a */
+function f(...a) {
+>f : Symbol(f, Decl(a.js, 0, 0))
+>a : Symbol(a, Decl(a.js, 1, 11))
+
+    a; // number[]
+>a : Symbol(a, Decl(a.js, 1, 11))
+}
+

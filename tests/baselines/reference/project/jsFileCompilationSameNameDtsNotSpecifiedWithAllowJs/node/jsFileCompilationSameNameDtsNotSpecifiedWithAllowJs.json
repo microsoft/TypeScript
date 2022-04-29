@@ -1,0 +1,13 @@
+{
+    "scenario": "Verify when same named .d.ts and .js file exists in the folder but no file is specified in tsconfig.json and .js files are consumed",
+    "projectRoot": "tests/cases/projects/jsFileCompilation",
+    "baselineCheck": true,
+    "declaration": true,
+    "project": "SameNameDTsNotSpecifiedWithAllowJs",
+    "resolvedInputFiles": [
+        "lib.es5.d.ts",
+        "SameNameDTsNotSpecifiedWithAllowJs/a.d.ts",
+        "SameNameDTsNotSpecifiedWithAllowJs/a.js"
+    ],
+    "emittedFiles": []
+}

@@ -1,0 +1,17 @@
+=== tests/cases/compiler/complicatedGenericRecursiveBaseClassReference.ts ===
+class S18<B, A, C> extends S18<A[], { S19: A; (): A }[], C[]>
+>S18 : S18<B, A, C>
+>S18 : typeof S18
+>S19 : A
+{
+}
+(new S18(123)).S18 = 0;
+>(new S18(123)).S18 = 0 : 0
+>(new S18(123)).S18 : any
+>(new S18(123)) : S18<unknown, unknown, unknown>
+>new S18(123) : S18<unknown, unknown, unknown>
+>S18 : typeof S18
+>123 : 123
+>S18 : any
+>0 : 0
+

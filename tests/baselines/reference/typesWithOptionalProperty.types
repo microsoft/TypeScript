@@ -1,0 +1,96 @@
+=== tests/cases/conformance/types/members/typesWithOptionalProperty.ts ===
+// basic uses of optional properties without errors
+
+interface I {
+    foo: string;
+>foo : string
+
+    bar?: number;
+>bar : number
+
+    baz? (): string;
+>baz : () => string
+}
+
+var a: {
+>a : { foo: string; bar?: number; baz?(): string; }
+
+    foo: string;
+>foo : string
+
+    bar?: number;
+>bar : number
+
+    baz? (): string;
+>baz : () => string
+
+};
+
+var b = { foo: '' };
+>b : { foo: string; }
+>{ foo: '' } : { foo: string; }
+>foo : string
+>'' : ""
+
+var c = { foo: '', bar: 3 };
+>c : { foo: string; bar: number; }
+>{ foo: '', bar: 3 } : { foo: string; bar: number; }
+>foo : string
+>'' : ""
+>bar : number
+>3 : 3
+
+var d = { foo: '', bar: 3, baz: () => '' };
+>d : { foo: string; bar: number; baz: () => string; }
+>{ foo: '', bar: 3, baz: () => '' } : { foo: string; bar: number; baz: () => string; }
+>foo : string
+>'' : ""
+>bar : number
+>3 : 3
+>baz : () => string
+>() => '' : () => string
+>'' : ""
+
+var i: I;
+>i : I
+
+i = b;
+>i = b : { foo: string; }
+>i : I
+>b : { foo: string; }
+
+i = c;
+>i = c : { foo: string; bar: number; }
+>i : I
+>c : { foo: string; bar: number; }
+
+i = d;
+>i = d : { foo: string; bar: number; baz: () => string; }
+>i : I
+>d : { foo: string; bar: number; baz: () => string; }
+
+a = b;
+>a = b : { foo: string; }
+>a : { foo: string; bar?: number; baz?(): string; }
+>b : { foo: string; }
+
+a = c;
+>a = c : { foo: string; bar: number; }
+>a : { foo: string; bar?: number; baz?(): string; }
+>c : { foo: string; bar: number; }
+
+a = d;
+>a = d : { foo: string; bar: number; baz: () => string; }
+>a : { foo: string; bar?: number; baz?(): string; }
+>d : { foo: string; bar: number; baz: () => string; }
+
+i = a;
+>i = a : { foo: string; bar?: number; baz?(): string; }
+>i : I
+>a : { foo: string; bar?: number; baz?(): string; }
+
+a = i;
+>a = i : I
+>a : { foo: string; bar?: number; baz?(): string; }
+>i : I
+

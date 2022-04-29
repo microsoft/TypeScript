@@ -1,0 +1,69 @@
+=== tests/cases/conformance/internalModules/DeclarationMerging/part1.ts ===
+export module A {
+>A : Symbol(A, Decl(part1.ts, 0, 0))
+
+    export interface Point {
+>Point : Symbol(Point, Decl(part1.ts, 0, 17))
+
+        x: number;
+>x : Symbol(Point.x, Decl(part1.ts, 1, 28))
+
+        y: number;
+>y : Symbol(Point.y, Decl(part1.ts, 2, 18))
+    }
+
+    export module Utils {
+>Utils : Symbol(Utils, Decl(part1.ts, 4, 5))
+
+        export function mirror<T extends Point>(p: T) {
+>mirror : Symbol(mirror, Decl(part1.ts, 6, 25))
+>T : Symbol(T, Decl(part1.ts, 7, 31))
+>Point : Symbol(Point, Decl(part1.ts, 0, 17))
+>p : Symbol(p, Decl(part1.ts, 7, 48))
+>T : Symbol(T, Decl(part1.ts, 7, 31))
+
+            return { x: p.y, y: p.x };
+>x : Symbol(x, Decl(part1.ts, 8, 20))
+>p.y : Symbol(Point.y, Decl(part1.ts, 2, 18))
+>p : Symbol(p, Decl(part1.ts, 7, 48))
+>y : Symbol(Point.y, Decl(part1.ts, 2, 18))
+>y : Symbol(y, Decl(part1.ts, 8, 28))
+>p.x : Symbol(Point.x, Decl(part1.ts, 1, 28))
+>p : Symbol(p, Decl(part1.ts, 7, 48))
+>x : Symbol(Point.x, Decl(part1.ts, 1, 28))
+        }
+    }
+
+    export var Origin: Point = { x: 0, y: 0 };
+>Origin : Symbol(Origin, Decl(part1.ts, 12, 14))
+>Point : Symbol(Point, Decl(part1.ts, 0, 17))
+>x : Symbol(x, Decl(part1.ts, 12, 32))
+>y : Symbol(y, Decl(part1.ts, 12, 38))
+}
+
+=== tests/cases/conformance/internalModules/DeclarationMerging/part2.ts ===
+export module A {
+>A : Symbol(A, Decl(part2.ts, 0, 0))
+
+    // collision with 'Origin' var in other part of merged module
+    export var Origin: Point = { x: 0, y: 0 };
+>Origin : Symbol(Origin, Decl(part2.ts, 2, 14))
+>Point : Symbol(Point)
+>x : Symbol(x, Decl(part2.ts, 2, 32))
+>y : Symbol(y, Decl(part2.ts, 2, 38))
+
+    export module Utils {
+>Utils : Symbol(Utils, Decl(part2.ts, 2, 46))
+
+        export class Plane {
+>Plane : Symbol(Plane, Decl(part2.ts, 4, 25))
+
+            constructor(public tl: Point, public br: Point) { }
+>tl : Symbol(Plane.tl, Decl(part2.ts, 6, 24))
+>Point : Symbol(Point)
+>br : Symbol(Plane.br, Decl(part2.ts, 6, 41))
+>Point : Symbol(Point)
+        }
+    }
+}
+

@@ -1,0 +1,219 @@
+=== tests/cases/conformance/enums/enumMerging.ts ===
+// Enum with only constant members across 2 declarations with the same root module
+// Enum with initializer in all declarations with constant members with the same root module
+module M1 {
+>M1 : typeof M1
+
+    enum EImpl1 {
+>EImpl1 : EImpl1
+
+        A, B, C
+>A : EImpl1.A
+>B : EImpl1.B
+>C : EImpl1.C
+    }
+
+    enum EImpl1 {
+>EImpl1 : EImpl1
+
+        D = 1, E, F
+>D : EImpl1.B
+>1 : 1
+>E : EImpl1.C
+>F : EImpl1.F
+    }
+
+    export enum EConst1 {
+>EConst1 : EConst1
+
+        A = 3, B = 2, C = 1
+>A : EConst1.A
+>3 : 3
+>B : EConst1.B
+>2 : 2
+>C : EConst1.C
+>1 : 1
+    }
+
+    export enum EConst1 {
+>EConst1 : EConst1
+
+        D = 7, E = 9, F = 8
+>D : EConst1.D
+>7 : 7
+>E : EConst1.E
+>9 : 9
+>F : EConst1.F
+>8 : 8
+    }
+
+    var x = [EConst1.A, EConst1.B, EConst1.C, EConst1.D, EConst1.E, EConst1.F];
+>x : EConst1[]
+>[EConst1.A, EConst1.B, EConst1.C, EConst1.D, EConst1.E, EConst1.F] : EConst1[]
+>EConst1.A : EConst1.A
+>EConst1 : typeof EConst1
+>A : EConst1.A
+>EConst1.B : EConst1.B
+>EConst1 : typeof EConst1
+>B : EConst1.B
+>EConst1.C : EConst1.C
+>EConst1 : typeof EConst1
+>C : EConst1.C
+>EConst1.D : EConst1.D
+>EConst1 : typeof EConst1
+>D : EConst1.D
+>EConst1.E : EConst1.E
+>EConst1 : typeof EConst1
+>E : EConst1.E
+>EConst1.F : EConst1.F
+>EConst1 : typeof EConst1
+>F : EConst1.F
+}
+
+// Enum with only computed members across 2 declarations with the same root module 
+module M2 {
+>M2 : typeof M2
+
+    export enum EComp2 {
+>EComp2 : EComp2
+
+        A = 'foo'.length, B = 'foo'.length, C = 'foo'.length
+>A : EComp2
+>'foo'.length : number
+>'foo' : "foo"
+>length : number
+>B : EComp2
+>'foo'.length : number
+>'foo' : "foo"
+>length : number
+>C : EComp2
+>'foo'.length : number
+>'foo' : "foo"
+>length : number
+    }
+
+    export enum EComp2 {
+>EComp2 : EComp2
+
+        D = 'foo'.length, E = 'foo'.length, F = 'foo'.length
+>D : EComp2
+>'foo'.length : number
+>'foo' : "foo"
+>length : number
+>E : EComp2
+>'foo'.length : number
+>'foo' : "foo"
+>length : number
+>F : EComp2
+>'foo'.length : number
+>'foo' : "foo"
+>length : number
+    }
+
+    var x = [EComp2.A, EComp2.B, EComp2.C, EComp2.D, EComp2.E, EComp2.F];
+>x : EComp2[]
+>[EComp2.A, EComp2.B, EComp2.C, EComp2.D, EComp2.E, EComp2.F] : EComp2[]
+>EComp2.A : EComp2
+>EComp2 : typeof EComp2
+>A : EComp2
+>EComp2.B : EComp2
+>EComp2 : typeof EComp2
+>B : EComp2
+>EComp2.C : EComp2
+>EComp2 : typeof EComp2
+>C : EComp2
+>EComp2.D : EComp2
+>EComp2 : typeof EComp2
+>D : EComp2
+>EComp2.E : EComp2
+>EComp2 : typeof EComp2
+>E : EComp2
+>EComp2.F : EComp2
+>EComp2 : typeof EComp2
+>F : EComp2
+}
+
+// Enum with initializer in only one of two declarations with constant members with the same root module
+module M3 {
+>M3 : typeof M3
+
+    enum EInit {
+>EInit : EInit
+
+        A,
+>A : EInit.A
+
+        B
+>B : EInit.B
+    }
+
+    enum EInit {
+>EInit : EInit
+
+        C = 1, D, E
+>C : EInit.B
+>1 : 1
+>D : EInit.D
+>E : EInit.E
+    }
+}
+
+// Enums with same name but different root module
+module M4 {
+>M4 : typeof M4
+
+    export enum Color { Red, Green, Blue }
+>Color : Color
+>Red : Color.Red
+>Green : Color.Green
+>Blue : Color.Blue
+}
+module M5 {
+>M5 : typeof M5
+
+    export enum Color { Red, Green, Blue }
+>Color : Color
+>Red : Color.Red
+>Green : Color.Green
+>Blue : Color.Blue
+}
+
+module M6.A {
+>M6 : typeof M6
+>A : typeof A
+
+    export enum Color { Red, Green, Blue }
+>Color : Color
+>Red : Color.Red
+>Green : Color.Green
+>Blue : Color.Blue
+}
+module M6 {
+>M6 : typeof M6
+
+    export module A {
+>A : typeof A
+
+        export enum Color { Yellow = 1 }
+>Color : Color
+>Yellow : Color.Green
+>1 : 1
+    }
+    var t = A.Color.Yellow;
+>t : A.Color
+>A.Color.Yellow : A.Color.Green
+>A.Color : typeof A.Color
+>A : typeof A
+>Color : typeof A.Color
+>Yellow : A.Color.Green
+
+    t = A.Color.Red;
+>t = A.Color.Red : A.Color.Red
+>t : A.Color
+>A.Color.Red : A.Color.Red
+>A.Color : typeof A.Color
+>A : typeof A
+>Color : typeof A.Color
+>Red : A.Color.Red
+}
+

@@ -1,0 +1,16 @@
+=== tests/cases/conformance/salsa/a.d.ts ===
+declare class A {}
+>A : A
+
+=== tests/cases/conformance/salsa/b.js ===
+const A = { };
+>A : typeof A
+>{ } : {}
+
+A.d = { };
+>A.d = { } : {}
+>A.d : {}
+>A : typeof A
+>d : {}
+>{ } : {}
+

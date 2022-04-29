@@ -1,0 +1,53 @@
+=== tests/cases/compiler/promiseChaining2.ts ===
+// same example but with constraints on each type parameter
+class Chain2<T extends { length: number }> {
+>Chain2 : Chain2<T>
+>length : number
+
+    constructor(public value: T) { }
+>value : T
+
+    then<S extends Function>(cb: (x: T) => S): Chain2<S> {
+>then : <S extends Function>(cb: (x: T) => S) => Chain2<S>
+>cb : (x: T) => S
+>x : T
+
+        var result = cb(this.value);
+>result : S
+>cb(this.value) : S
+>cb : (x: T) => S
+>this.value : T
+>this : this
+>value : T
+
+        // should get a fresh type parameter which each then call
+        var z = this.then(x => result).then(x => "abc").then(x => x.length);
+>z : Chain2<Function>
+>this.then(x => result).then(x => "abc").then(x => x.length) : Chain2<Function>
+>this.then(x => result).then(x => "abc").then : <S extends Function>(cb: (x: Function) => S) => Chain2<S>
+>this.then(x => result).then(x => "abc") : Chain2<Function>
+>this.then(x => result).then : <S extends Function>(cb: (x: S) => S) => Chain2<S>
+>this.then(x => result) : Chain2<S>
+>this.then : <S extends Function>(cb: (x: T) => S) => Chain2<S>
+>this : this
+>then : <S extends Function>(cb: (x: T) => S) => Chain2<S>
+>x => result : (x: T) => S
+>x : T
+>result : S
+>then : <S extends Function>(cb: (x: S) => S) => Chain2<S>
+>x => "abc" : (x: S) => string
+>x : S
+>"abc" : "abc"
+>then : <S extends Function>(cb: (x: Function) => S) => Chain2<S>
+>x => x.length : (x: Function) => number
+>x : Function
+>x.length : number
+>x : Function
+>length : number
+
+        return new Chain2(result);
+>new Chain2(result) : Chain2<S>
+>Chain2 : typeof Chain2
+>result : S
+    }
+}

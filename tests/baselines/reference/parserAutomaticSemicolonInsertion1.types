@@ -1,0 +1,36 @@
+=== tests/cases/conformance/parser/ecmascript5/AutomaticSemicolonInsertion/parserAutomaticSemicolonInsertion1.ts ===
+interface I {
+    (): void;
+}
+ 
+var i: I;
+>i : I
+
+var o: Object;
+>o : Object
+
+o = i;
+>o = i : I
+>o : Object
+>i : I
+
+i = o;
+>i = o : Object
+>i : I
+>o : Object
+ 
+var a: {
+>a : () => void
+
+    (): void
+}
+o = a;
+>o = a : () => void
+>o : Object
+>a : () => void
+
+a = o;
+>a = o : Object
+>a : () => void
+>o : Object
+

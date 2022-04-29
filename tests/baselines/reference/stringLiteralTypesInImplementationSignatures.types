@@ -1,0 +1,69 @@
+=== tests/cases/conformance/types/objectTypeLiteral/callSignatures/stringLiteralTypesInImplementationSignatures.ts ===
+// String literal types are only valid in overload signatures
+
+function foo(x: 'hi') { }
+>foo : (x: 'hi') => void
+>x : "hi"
+
+var f = function foo(x: 'hi') { }
+>f : (x: 'hi') => void
+>function foo(x: 'hi') { } : (x: 'hi') => void
+>foo : (x: 'hi') => void
+>x : "hi"
+
+var f2 = (x: 'hi', y: 'hi') => { }
+>f2 : (x: 'hi', y: 'hi') => void
+>(x: 'hi', y: 'hi') => { } : (x: 'hi', y: 'hi') => void
+>x : "hi"
+>y : "hi"
+
+class C {
+>C : C
+
+    foo(x: 'hi') { }
+>foo : (x: 'hi') => void
+>x : "hi"
+}
+
+interface I {
+    (x: 'hi');
+>x : "hi"
+
+    foo(x: 'hi', y: 'hi');
+>foo : (x: 'hi', y: 'hi') => any
+>x : "hi"
+>y : "hi"
+}
+
+var a: {
+>a : { (x: 'hi'): any; foo(x: 'hi'): any; }
+
+    (x: 'hi');
+>x : "hi"
+
+    foo(x: 'hi');
+>foo : (x: 'hi') => any
+>x : "hi"
+}
+
+var b = {
+>b : { foo(x: 'hi'): void; a: (x: 'hi', y: 'hi') => void; b: (x: 'hi') => void; }
+>{    foo(x: 'hi') { },    a: function foo(x: 'hi', y: 'hi') { },    b: (x: 'hi') => { }} : { foo(x: 'hi'): void; a: (x: 'hi', y: 'hi') => void; b: (x: 'hi') => void; }
+
+    foo(x: 'hi') { },
+>foo : (x: 'hi') => void
+>x : "hi"
+
+    a: function foo(x: 'hi', y: 'hi') { },
+>a : (x: 'hi', y: 'hi') => void
+>function foo(x: 'hi', y: 'hi') { } : (x: 'hi', y: 'hi') => void
+>foo : (x: 'hi', y: 'hi') => void
+>x : "hi"
+>y : "hi"
+
+    b: (x: 'hi') => { }
+>b : (x: 'hi') => void
+>(x: 'hi') => { } : (x: 'hi') => void
+>x : "hi"
+}
+

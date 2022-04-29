@@ -1,0 +1,17 @@
+tests/cases/compiler/literals-negative.ts(5,9): error TS2352: Conversion of type 'number' to type 'boolean' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+
+
+==== tests/cases/compiler/literals-negative.ts (1 errors) ====
+    // Type type of the null literal is the Null type.
+    // Null can be converted to anything except Void
+    var n = <number>(null);
+    var s = <string>(null);
+    var b = <boolean>(n);
+            ~~~~~~~~~~~~
+!!! error TS2352: Conversion of type 'number' to type 'boolean' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+    
+    function isVoid() : void { }
+    
+    // Expected error: Values of type null and void cannot be compared
+    if(null === isVoid()) { }
+    

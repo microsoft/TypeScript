@@ -1,0 +1,145 @@
+=== tests/cases/conformance/types/objectTypeLiteral/callSignatures/restParametersWithArrayTypeAnnotations.ts ===
+// Rest parameters must be an array type if they have a type annotation, errors only for the functions with 2 rest params
+
+function foo(...x: number[]) { }
+>foo : Symbol(foo, Decl(restParametersWithArrayTypeAnnotations.ts, 0, 0))
+>x : Symbol(x, Decl(restParametersWithArrayTypeAnnotations.ts, 2, 13))
+
+var f = function foo(...x: number[]) { }
+>f : Symbol(f, Decl(restParametersWithArrayTypeAnnotations.ts, 3, 3))
+>foo : Symbol(foo, Decl(restParametersWithArrayTypeAnnotations.ts, 3, 7))
+>x : Symbol(x, Decl(restParametersWithArrayTypeAnnotations.ts, 3, 21))
+
+var f2 = (...x: number[], ...y: number[]) => { }
+>f2 : Symbol(f2, Decl(restParametersWithArrayTypeAnnotations.ts, 4, 3))
+>x : Symbol(x, Decl(restParametersWithArrayTypeAnnotations.ts, 4, 10))
+>y : Symbol(y, Decl(restParametersWithArrayTypeAnnotations.ts, 4, 25))
+
+class C {
+>C : Symbol(C, Decl(restParametersWithArrayTypeAnnotations.ts, 4, 48))
+
+    foo(...x: number[]) { }
+>foo : Symbol(C.foo, Decl(restParametersWithArrayTypeAnnotations.ts, 6, 9))
+>x : Symbol(x, Decl(restParametersWithArrayTypeAnnotations.ts, 7, 8))
+}
+
+interface I {
+>I : Symbol(I, Decl(restParametersWithArrayTypeAnnotations.ts, 8, 1))
+
+    (...x: number[]);
+>x : Symbol(x, Decl(restParametersWithArrayTypeAnnotations.ts, 11, 5))
+
+    foo(...x: number[], ...y: number[]);
+>foo : Symbol(I.foo, Decl(restParametersWithArrayTypeAnnotations.ts, 11, 21))
+>x : Symbol(x, Decl(restParametersWithArrayTypeAnnotations.ts, 12, 8))
+>y : Symbol(y, Decl(restParametersWithArrayTypeAnnotations.ts, 12, 23))
+}
+
+var a: {
+>a : Symbol(a, Decl(restParametersWithArrayTypeAnnotations.ts, 15, 3))
+
+    (...x: number[]);
+>x : Symbol(x, Decl(restParametersWithArrayTypeAnnotations.ts, 16, 5))
+
+    foo(...x: number[]);
+>foo : Symbol(foo, Decl(restParametersWithArrayTypeAnnotations.ts, 16, 21))
+>x : Symbol(x, Decl(restParametersWithArrayTypeAnnotations.ts, 17, 8))
+}
+
+var b = {
+>b : Symbol(b, Decl(restParametersWithArrayTypeAnnotations.ts, 20, 3))
+
+    foo(...x: number[]) { },
+>foo : Symbol(foo, Decl(restParametersWithArrayTypeAnnotations.ts, 20, 9))
+>x : Symbol(x, Decl(restParametersWithArrayTypeAnnotations.ts, 21, 8))
+
+    a: function foo(...x: number[], ...y: number[]) { },
+>a : Symbol(a, Decl(restParametersWithArrayTypeAnnotations.ts, 21, 28))
+>foo : Symbol(foo, Decl(restParametersWithArrayTypeAnnotations.ts, 22, 6))
+>x : Symbol(x, Decl(restParametersWithArrayTypeAnnotations.ts, 22, 20))
+>y : Symbol(y, Decl(restParametersWithArrayTypeAnnotations.ts, 22, 35))
+
+    b: (...x: number[]) => { }
+>b : Symbol(b, Decl(restParametersWithArrayTypeAnnotations.ts, 22, 56))
+>x : Symbol(x, Decl(restParametersWithArrayTypeAnnotations.ts, 23, 8))
+}
+
+
+
+
+function foo2(...x: Array<string>) { }
+>foo2 : Symbol(foo2, Decl(restParametersWithArrayTypeAnnotations.ts, 24, 1))
+>x : Symbol(x, Decl(restParametersWithArrayTypeAnnotations.ts, 29, 14))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+var f3 = function foo(...x: Array<string>) { }
+>f3 : Symbol(f3, Decl(restParametersWithArrayTypeAnnotations.ts, 30, 3))
+>foo : Symbol(foo, Decl(restParametersWithArrayTypeAnnotations.ts, 30, 8))
+>x : Symbol(x, Decl(restParametersWithArrayTypeAnnotations.ts, 30, 22))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+var f4 = (...x: Array<string>, ...y: Array<string>) => { }
+>f4 : Symbol(f4, Decl(restParametersWithArrayTypeAnnotations.ts, 31, 3))
+>x : Symbol(x, Decl(restParametersWithArrayTypeAnnotations.ts, 31, 10))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>y : Symbol(y, Decl(restParametersWithArrayTypeAnnotations.ts, 31, 30))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+class C2 {
+>C2 : Symbol(C2, Decl(restParametersWithArrayTypeAnnotations.ts, 31, 58))
+
+    foo(...x: Array<string>) { }
+>foo : Symbol(C2.foo, Decl(restParametersWithArrayTypeAnnotations.ts, 33, 10))
+>x : Symbol(x, Decl(restParametersWithArrayTypeAnnotations.ts, 34, 8))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+}
+
+interface I2 {
+>I2 : Symbol(I2, Decl(restParametersWithArrayTypeAnnotations.ts, 35, 1))
+
+    (...x: Array<string>);
+>x : Symbol(x, Decl(restParametersWithArrayTypeAnnotations.ts, 38, 5))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    foo(...x: Array<string>, ...y: Array<string>);
+>foo : Symbol(I2.foo, Decl(restParametersWithArrayTypeAnnotations.ts, 38, 26))
+>x : Symbol(x, Decl(restParametersWithArrayTypeAnnotations.ts, 39, 8))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>y : Symbol(y, Decl(restParametersWithArrayTypeAnnotations.ts, 39, 28))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+}
+
+var a2: {
+>a2 : Symbol(a2, Decl(restParametersWithArrayTypeAnnotations.ts, 42, 3))
+
+    (...x: Array<string>);
+>x : Symbol(x, Decl(restParametersWithArrayTypeAnnotations.ts, 43, 5))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    foo(...x: Array<string>);
+>foo : Symbol(foo, Decl(restParametersWithArrayTypeAnnotations.ts, 43, 26))
+>x : Symbol(x, Decl(restParametersWithArrayTypeAnnotations.ts, 44, 8))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+}
+
+var b2 = {
+>b2 : Symbol(b2, Decl(restParametersWithArrayTypeAnnotations.ts, 47, 3))
+
+    foo(...x: Array<string>) { },
+>foo : Symbol(foo, Decl(restParametersWithArrayTypeAnnotations.ts, 47, 10))
+>x : Symbol(x, Decl(restParametersWithArrayTypeAnnotations.ts, 48, 8))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    a: function foo(...x: Array<string>, ...y: Array<string>) { },
+>a : Symbol(a, Decl(restParametersWithArrayTypeAnnotations.ts, 48, 33))
+>foo : Symbol(foo, Decl(restParametersWithArrayTypeAnnotations.ts, 49, 6))
+>x : Symbol(x, Decl(restParametersWithArrayTypeAnnotations.ts, 49, 20))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>y : Symbol(y, Decl(restParametersWithArrayTypeAnnotations.ts, 49, 40))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    b: (...x: Array<string>) => { }
+>b : Symbol(b, Decl(restParametersWithArrayTypeAnnotations.ts, 49, 66))
+>x : Symbol(x, Decl(restParametersWithArrayTypeAnnotations.ts, 50, 8))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+}

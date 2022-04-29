@@ -1,0 +1,49 @@
+=== tests/cases/conformance/classes/propertyMemberDeclarations/overrideInterfaceProperty.ts ===
+interface Mup<K, V> {
+>Mup : Symbol(Mup, Decl(overrideInterfaceProperty.ts, 0, 0), Decl(overrideInterfaceProperty.ts, 8, 11))
+>K : Symbol(K, Decl(overrideInterfaceProperty.ts, 0, 14))
+>V : Symbol(V, Decl(overrideInterfaceProperty.ts, 0, 16))
+
+    readonly size: number;
+>size : Symbol(Mup.size, Decl(overrideInterfaceProperty.ts, 0, 21))
+}
+interface MupConstructor {
+>MupConstructor : Symbol(MupConstructor, Decl(overrideInterfaceProperty.ts, 2, 1))
+
+    new(): Mup<any, any>;
+>Mup : Symbol(Mup, Decl(overrideInterfaceProperty.ts, 0, 0), Decl(overrideInterfaceProperty.ts, 8, 11))
+
+    new<K, V>(entries?: readonly (readonly [K, V])[] | null): Mup<K, V>;
+>K : Symbol(K, Decl(overrideInterfaceProperty.ts, 5, 8))
+>V : Symbol(V, Decl(overrideInterfaceProperty.ts, 5, 10))
+>entries : Symbol(entries, Decl(overrideInterfaceProperty.ts, 5, 14))
+>K : Symbol(K, Decl(overrideInterfaceProperty.ts, 5, 8))
+>V : Symbol(V, Decl(overrideInterfaceProperty.ts, 5, 10))
+>Mup : Symbol(Mup, Decl(overrideInterfaceProperty.ts, 0, 0), Decl(overrideInterfaceProperty.ts, 8, 11))
+>K : Symbol(K, Decl(overrideInterfaceProperty.ts, 5, 8))
+>V : Symbol(V, Decl(overrideInterfaceProperty.ts, 5, 10))
+
+    readonly prototype: Mup<any, any>;
+>prototype : Symbol(MupConstructor.prototype, Decl(overrideInterfaceProperty.ts, 5, 72))
+>Mup : Symbol(Mup, Decl(overrideInterfaceProperty.ts, 0, 0), Decl(overrideInterfaceProperty.ts, 8, 11))
+}
+declare var Mup: MupConstructor;
+>Mup : Symbol(Mup, Decl(overrideInterfaceProperty.ts, 0, 0), Decl(overrideInterfaceProperty.ts, 8, 11))
+>MupConstructor : Symbol(MupConstructor, Decl(overrideInterfaceProperty.ts, 2, 1))
+
+class Sizz extends Mup {
+>Sizz : Symbol(Sizz, Decl(overrideInterfaceProperty.ts, 8, 32))
+>Mup : Symbol(Mup, Decl(overrideInterfaceProperty.ts, 0, 0), Decl(overrideInterfaceProperty.ts, 8, 11))
+
+    // ok, because Mup is an interface
+    get size() { return 0 }
+>size : Symbol(Sizz.size, Decl(overrideInterfaceProperty.ts, 10, 24))
+}
+class Kasizz extends Mup {
+>Kasizz : Symbol(Kasizz, Decl(overrideInterfaceProperty.ts, 13, 1))
+>Mup : Symbol(Mup, Decl(overrideInterfaceProperty.ts, 0, 0), Decl(overrideInterfaceProperty.ts, 8, 11))
+
+    size = -1
+>size : Symbol(Kasizz.size, Decl(overrideInterfaceProperty.ts, 14, 26))
+}
+

@@ -1,0 +1,9 @@
+=== tests/cases/compiler/instantiateTypeParameter.ts ===
+interface Foo<T> {
+>Foo : Symbol(Foo, Decl(instantiateTypeParameter.ts, 0, 0))
+>T : Symbol(T, Decl(instantiateTypeParameter.ts, 0, 14))
+
+    var x: T<>;
+>x : Symbol(x, Decl(instantiateTypeParameter.ts, 1, 7))
+>T : Symbol(T)
+}

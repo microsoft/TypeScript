@@ -1,0 +1,17 @@
+=== tests/cases/compiler/anyPlusAny1.ts ===
+var x: any;
+>x : any
+
+x.name = "hello";
+>x.name = "hello" : "hello"
+>x.name : any
+>x : any
+>name : any
+>"hello" : "hello"
+
+var z = x + x;
+>z : any
+>x + x : any
+>x : any
+>x : any
+

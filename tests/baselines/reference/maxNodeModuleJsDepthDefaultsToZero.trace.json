@@ -1,0 +1,20 @@
+[
+    "======== Resolving module 'shortid' from '/index.ts'. ========",
+    "Explicitly specified module resolution kind: 'NodeJs'.",
+    "Loading module 'shortid' from 'node_modules' folder, target file type 'TypeScript'.",
+    "File '/node_modules/shortid/package.json' does not exist.",
+    "File '/node_modules/shortid.ts' does not exist.",
+    "File '/node_modules/shortid.tsx' does not exist.",
+    "File '/node_modules/shortid.d.ts' does not exist.",
+    "File '/node_modules/shortid/index.ts' does not exist.",
+    "File '/node_modules/shortid/index.tsx' does not exist.",
+    "File '/node_modules/shortid/index.d.ts' does not exist.",
+    "Directory '/node_modules/@types' does not exist, skipping all lookups in it.",
+    "Loading module 'shortid' from 'node_modules' folder, target file type 'JavaScript'.",
+    "File '/node_modules/shortid/package.json' does not exist according to earlier cached lookups.",
+    "File '/node_modules/shortid.js' does not exist.",
+    "File '/node_modules/shortid.jsx' does not exist.",
+    "File '/node_modules/shortid/index.js' exist - use it as a name resolution result.",
+    "Resolving real path for '/node_modules/shortid/index.js', result '/node_modules/shortid/index.js'.",
+    "======== Module name 'shortid' was successfully resolved to '/node_modules/shortid/index.js'. ========"
+]

@@ -1,0 +1,22 @@
+tests/cases/compiler/noExcessiveStackDepthError.ts(13,9): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type 'FindConditions<any>', but here has type 'FindConditions<Entity>'.
+
+
+==== tests/cases/compiler/noExcessiveStackDepthError.ts (1 errors) ====
+    // Repro from #46631
+    
+    interface FindOperator<T> {
+        foo: T;
+    }
+    
+    type FindConditions<T> = {
+        [P in keyof T]?: FindConditions<T[P]> | FindOperator<FindConditions<T[P]>>;
+    };
+    
+    function foo<Entity>() {
+        var x: FindConditions<any>;
+        var x: FindConditions<Entity>;  // Excessive stack depth error not expected here
+            ~
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type 'FindConditions<any>', but here has type 'FindConditions<Entity>'.
+!!! related TS6203 tests/cases/compiler/noExcessiveStackDepthError.ts:12:9: 'x' was also declared here.
+    }
+    

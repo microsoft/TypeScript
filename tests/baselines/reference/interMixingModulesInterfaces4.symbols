@@ -1,0 +1,33 @@
+=== tests/cases/compiler/interMixingModulesInterfaces4.ts ===
+module A {
+>A : Symbol(A, Decl(interMixingModulesInterfaces4.ts, 0, 0))
+
+    export module B {
+>B : Symbol(B, Decl(interMixingModulesInterfaces4.ts, 0, 10))
+
+        export function createB(): number {
+>createB : Symbol(createB, Decl(interMixingModulesInterfaces4.ts, 2, 21))
+
+            return null;
+        }
+    }
+
+    interface B {
+>B : Symbol(B, Decl(interMixingModulesInterfaces4.ts, 0, 10), Decl(interMixingModulesInterfaces4.ts, 6, 5))
+
+        name: string;
+>name : Symbol(B.name, Decl(interMixingModulesInterfaces4.ts, 8, 17))
+
+        value: number;
+>value : Symbol(B.value, Decl(interMixingModulesInterfaces4.ts, 9, 21))
+    }
+}
+
+var x : number = A.B.createB();
+>x : Symbol(x, Decl(interMixingModulesInterfaces4.ts, 14, 3))
+>A.B.createB : Symbol(A.B.createB, Decl(interMixingModulesInterfaces4.ts, 2, 21))
+>A.B : Symbol(A.B, Decl(interMixingModulesInterfaces4.ts, 0, 10))
+>A : Symbol(A, Decl(interMixingModulesInterfaces4.ts, 0, 0))
+>B : Symbol(A.B, Decl(interMixingModulesInterfaces4.ts, 0, 10))
+>createB : Symbol(A.B.createB, Decl(interMixingModulesInterfaces4.ts, 2, 21))
+

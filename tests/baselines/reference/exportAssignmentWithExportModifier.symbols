@@ -1,0 +1,7 @@
+=== tests/cases/compiler/exportAssignmentWithExportModifier.ts ===
+var x;
+>x : Symbol(x, Decl(exportAssignmentWithExportModifier.ts, 0, 3))
+
+export export = x;
+>x : Symbol(x, Decl(exportAssignmentWithExportModifier.ts, 0, 3))
+

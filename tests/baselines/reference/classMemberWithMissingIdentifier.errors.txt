@@ -1,0 +1,15 @@
+tests/cases/compiler/classMemberWithMissingIdentifier.ts(2,11): error TS1146: Declaration expected.
+tests/cases/compiler/classMemberWithMissingIdentifier.ts(2,12): error TS1005: ';' expected.
+tests/cases/compiler/classMemberWithMissingIdentifier.ts(3,1): error TS1128: Declaration or statement expected.
+
+
+==== tests/cases/compiler/classMemberWithMissingIdentifier.ts (3 errors) ====
+    class C { 
+        public {};
+              
+!!! error TS1146: Declaration expected.
+               ~
+!!! error TS1005: ';' expected.
+    }
+    ~
+!!! error TS1128: Declaration or statement expected.

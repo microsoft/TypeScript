@@ -1,0 +1,10 @@
+tests/cases/conformance/parser/ecmascript5/Expressions/parserUnaryExpression5.ts(1,4): error TS1109: Expression expected.
+tests/cases/conformance/parser/ecmascript5/Expressions/parserUnaryExpression5.ts(1,11): error TS2304: Cannot find name 'foo'.
+
+
+==== tests/cases/conformance/parser/ecmascript5/Expressions/parserUnaryExpression5.ts (2 errors) ====
+    ++ delete foo.bar
+       ~~~~~~
+!!! error TS1109: Expression expected.
+              ~~~
+!!! error TS2304: Cannot find name 'foo'.

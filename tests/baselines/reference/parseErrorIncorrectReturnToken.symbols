@@ -1,0 +1,32 @@
+=== tests/cases/compiler/parseErrorIncorrectReturnToken.ts ===
+type F1 = {
+>F1 : Symbol(F1, Decl(parseErrorIncorrectReturnToken.ts, 0, 0))
+
+    (n: number) => string; // should be : not =>
+>n : Symbol(n, Decl(parseErrorIncorrectReturnToken.ts, 1, 5))
+}
+type F2 = (n: number): string; // should be => not :
+>F2 : Symbol(F2, Decl(parseErrorIncorrectReturnToken.ts, 2, 1))
+>n : Symbol(n, Decl(parseErrorIncorrectReturnToken.ts, 3, 11))
+> : Symbol(unknown)
+
+// doesn't work in non-type contexts, where the return type is optional
+let f = (n: number) => string => n.toString();
+>f : Symbol(f, Decl(parseErrorIncorrectReturnToken.ts, 6, 3))
+>n : Symbol(n, Decl(parseErrorIncorrectReturnToken.ts, 6, 9))
+>string : Symbol(string, Decl(parseErrorIncorrectReturnToken.ts, 6, 22))
+>n.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>n : Symbol(n, Decl(parseErrorIncorrectReturnToken.ts, 6, 9))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+
+let o = {
+>o : Symbol(o, Decl(parseErrorIncorrectReturnToken.ts, 7, 3))
+
+    m(n: number) => string {
+>m : Symbol(m, Decl(parseErrorIncorrectReturnToken.ts, 7, 9))
+>n : Symbol(n, Decl(parseErrorIncorrectReturnToken.ts, 8, 6))
+
+        return n.toString();
+    }
+};
+

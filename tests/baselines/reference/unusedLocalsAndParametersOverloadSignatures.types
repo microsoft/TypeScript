@@ -1,0 +1,71 @@
+=== tests/cases/compiler/unusedLocalsAndParametersOverloadSignatures.ts ===
+export function func(details: number, message: string, ...args: any[]): void;
+>func : (details: number, message: string, ...args: any[]) => void
+>details : number
+>message : string
+>args : any[]
+
+export function func(details: number, message: string): any {
+>func : (details: number, message: string, ...args: any[]) => void
+>details : number
+>message : string
+
+    return details + message;
+>details + message : string
+>details : number
+>message : string
+}
+
+export class C {
+>C : C
+
+    constructor(details: number, message: string, ...args: any[]);
+>details : number
+>message : string
+>args : any[]
+
+    constructor(details: number, message: string) {
+>details : number
+>message : string
+
+        details + message;
+>details + message : string
+>details : number
+>message : string
+    }
+
+    method(details: number, message: string, ...args: any[]): void;
+>method : (details: number, message: string, ...args: any[]) => void
+>details : number
+>message : string
+>args : any[]
+
+    method(details: number, message: string): any {
+>method : (details: number, message: string, ...args: any[]) => void
+>details : number
+>message : string
+
+        return details + message;
+>details + message : string
+>details : number
+>message : string
+    }
+}
+
+
+export function genericFunc<T>(details: number, message: T, ...args: any[]): void;
+>genericFunc : <T>(details: number, message: T, ...args: any[]) => void
+>details : number
+>message : T
+>args : any[]
+
+export function genericFunc(details: number, message: any): any {
+>genericFunc : <T>(details: number, message: T, ...args: any[]) => void
+>details : number
+>message : any
+
+    return details + message;
+>details + message : any
+>details : number
+>message : any
+}

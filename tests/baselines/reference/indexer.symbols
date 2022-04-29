@@ -1,0 +1,29 @@
+=== tests/cases/compiler/indexer.ts ===
+interface JQueryElement {
+>JQueryElement : Symbol(JQueryElement, Decl(indexer.ts, 0, 0))
+
+    id:string;
+>id : Symbol(JQueryElement.id, Decl(indexer.ts, 0, 25))
+}
+
+interface JQuery {
+>JQuery : Symbol(JQuery, Decl(indexer.ts, 2, 1))
+
+    [n:number]:JQueryElement;
+>n : Symbol(n, Decl(indexer.ts, 5, 5))
+>JQueryElement : Symbol(JQueryElement, Decl(indexer.ts, 0, 0))
+}
+
+var jq:JQuery={ 0: { id : "a" }, 1: { id : "b" } };
+>jq : Symbol(jq, Decl(indexer.ts, 8, 3))
+>JQuery : Symbol(JQuery, Decl(indexer.ts, 2, 1))
+>0 : Symbol(0, Decl(indexer.ts, 8, 15))
+>id : Symbol(id, Decl(indexer.ts, 8, 20))
+>1 : Symbol(1, Decl(indexer.ts, 8, 32))
+>id : Symbol(id, Decl(indexer.ts, 8, 37))
+
+jq[0].id;
+>jq[0].id : Symbol(JQueryElement.id, Decl(indexer.ts, 0, 25))
+>jq : Symbol(jq, Decl(indexer.ts, 8, 3))
+>id : Symbol(JQueryElement.id, Decl(indexer.ts, 0, 25))
+

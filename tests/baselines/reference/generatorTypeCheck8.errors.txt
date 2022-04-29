@@ -1,0 +1,18 @@
+tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck8.ts(2,17): error TS2322: Type 'Generator<string, any, undefined>' is not assignable to type 'BadGenerator'.
+  The types returned by 'next(...)' are incompatible between these types.
+    Type 'IteratorResult<string, any>' is not assignable to type 'IteratorResult<number, any>'.
+      Type 'IteratorYieldResult<string>' is not assignable to type 'IteratorResult<number, any>'.
+        Type 'IteratorYieldResult<string>' is not assignable to type 'IteratorYieldResult<number>'.
+          Type 'string' is not assignable to type 'number'.
+
+
+==== tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck8.ts (1 errors) ====
+    interface BadGenerator extends Iterator<number>, Iterable<string> { }
+    function* g3(): BadGenerator { }
+                    ~~~~~~~~~~~~
+!!! error TS2322: Type 'Generator<string, any, undefined>' is not assignable to type 'BadGenerator'.
+!!! error TS2322:   The types returned by 'next(...)' are incompatible between these types.
+!!! error TS2322:     Type 'IteratorResult<string, any>' is not assignable to type 'IteratorResult<number, any>'.
+!!! error TS2322:       Type 'IteratorYieldResult<string>' is not assignable to type 'IteratorResult<number, any>'.
+!!! error TS2322:         Type 'IteratorYieldResult<string>' is not assignable to type 'IteratorYieldResult<number>'.
+!!! error TS2322:           Type 'string' is not assignable to type 'number'.

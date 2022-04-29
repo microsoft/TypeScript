@@ -1,0 +1,35 @@
+=== tests/cases/compiler/es6ClassTest3.ts ===
+module M {	
+>M : Symbol(M, Decl(es6ClassTest3.ts, 0, 0))
+
+	class Visibility {
+>Visibility : Symbol(Visibility, Decl(es6ClassTest3.ts, 0, 10))
+
+	    public foo() { };
+>foo : Symbol(Visibility.foo, Decl(es6ClassTest3.ts, 1, 19))
+
+	    private bar() { };
+>bar : Symbol(Visibility.bar, Decl(es6ClassTest3.ts, 2, 22))
+
+        private x: number;
+>x : Symbol(Visibility.x, Decl(es6ClassTest3.ts, 3, 23))
+
+	    public y: number;
+>y : Symbol(Visibility.y, Decl(es6ClassTest3.ts, 4, 26))
+
+	    public z: number;
+>z : Symbol(Visibility.z, Decl(es6ClassTest3.ts, 5, 22))
+
+	    constructor() {
+	        this.x = 1;
+>this.x : Symbol(Visibility.x, Decl(es6ClassTest3.ts, 3, 23))
+>this : Symbol(Visibility, Decl(es6ClassTest3.ts, 0, 10))
+>x : Symbol(Visibility.x, Decl(es6ClassTest3.ts, 3, 23))
+
+	        this.y = 2;
+>this.y : Symbol(Visibility.y, Decl(es6ClassTest3.ts, 4, 26))
+>this : Symbol(Visibility, Decl(es6ClassTest3.ts, 0, 10))
+>y : Symbol(Visibility.y, Decl(es6ClassTest3.ts, 4, 26))
+	    }
+	}
+}

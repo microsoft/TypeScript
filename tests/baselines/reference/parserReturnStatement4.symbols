@@ -1,0 +1,5 @@
+=== tests/cases/conformance/parser/ecmascript5/Statements/ReturnStatements/parserReturnStatement4.ts ===
+var v = { get foo() { return } };
+>v : Symbol(v, Decl(parserReturnStatement4.ts, 0, 3))
+>foo : Symbol(foo, Decl(parserReturnStatement4.ts, 0, 9))
+

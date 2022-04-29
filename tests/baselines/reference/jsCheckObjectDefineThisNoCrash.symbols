@@ -1,0 +1,21 @@
+=== tests/cases/compiler/jsCheckObjectDefineThisNoCrash.js ===
+class C {
+>C : Symbol(C, Decl(jsCheckObjectDefineThisNoCrash.js, 0, 0))
+
+    constructor() {
+        // Neither of the following should be recognized as declarations yet
+        Object.defineProperty(this, "_prop", { value: {} });
+>Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>this : Symbol(C, Decl(jsCheckObjectDefineThisNoCrash.js, 0, 0))
+>value : Symbol(value, Decl(jsCheckObjectDefineThisNoCrash.js, 3, 46))
+
+        Object.defineProperty(this._prop, "num", { value: 12 });
+>Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>this : Symbol(C, Decl(jsCheckObjectDefineThisNoCrash.js, 0, 0))
+>value : Symbol(value, Decl(jsCheckObjectDefineThisNoCrash.js, 4, 50))
+    }
+}

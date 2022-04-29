@@ -1,0 +1,13 @@
+=== tests/cases/compiler/declarationEmitDestructuringPrivacyError.ts ===
+module m {
+>m : Symbol(m, Decl(declarationEmitDestructuringPrivacyError.ts, 0, 0))
+
+    class c {
+>c : Symbol(c, Decl(declarationEmitDestructuringPrivacyError.ts, 0, 10))
+    }
+    export var [x, y, z] = [10, new c(), 30];
+>x : Symbol(x, Decl(declarationEmitDestructuringPrivacyError.ts, 3, 16))
+>y : Symbol(y, Decl(declarationEmitDestructuringPrivacyError.ts, 3, 18))
+>z : Symbol(z, Decl(declarationEmitDestructuringPrivacyError.ts, 3, 21))
+>c : Symbol(c, Decl(declarationEmitDestructuringPrivacyError.ts, 0, 10))
+}

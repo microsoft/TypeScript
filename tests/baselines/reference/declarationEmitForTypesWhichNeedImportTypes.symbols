@@ -1,0 +1,18 @@
+=== tests/cases/compiler/b.ts ===
+export interface Named {}
+>Named : Symbol(Named, Decl(b.ts, 0, 0))
+
+export function createNamed(): Named {
+>createNamed : Symbol(createNamed, Decl(b.ts, 0, 25))
+>Named : Symbol(Named, Decl(b.ts, 0, 0))
+
+  return {};
+}
+=== tests/cases/compiler/a.ts ===
+import { createNamed } from "./b";
+>createNamed : Symbol(createNamed, Decl(a.ts, 0, 8))
+
+export const Value = createNamed();
+>Value : Symbol(Value, Decl(a.ts, 2, 12))
+>createNamed : Symbol(createNamed, Decl(a.ts, 0, 8))
+

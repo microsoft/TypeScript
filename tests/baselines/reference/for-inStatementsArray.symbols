@@ -1,0 +1,121 @@
+=== tests/cases/conformance/statements/for-inStatements/for-inStatementsArray.ts ===
+let a: Date[];
+>a : Symbol(a, Decl(for-inStatementsArray.ts, 0, 3))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+let b: boolean[];
+>b : Symbol(b, Decl(for-inStatementsArray.ts, 1, 3))
+
+for (let x in a) {
+>x : Symbol(x, Decl(for-inStatementsArray.ts, 3, 8))
+>a : Symbol(a, Decl(for-inStatementsArray.ts, 0, 3))
+
+    let a1 = a[x];
+>a1 : Symbol(a1, Decl(for-inStatementsArray.ts, 4, 7))
+>a : Symbol(a, Decl(for-inStatementsArray.ts, 0, 3))
+>x : Symbol(x, Decl(for-inStatementsArray.ts, 3, 8))
+
+    let a2 = a[(x)];
+>a2 : Symbol(a2, Decl(for-inStatementsArray.ts, 5, 7))
+>a : Symbol(a, Decl(for-inStatementsArray.ts, 0, 3))
+>x : Symbol(x, Decl(for-inStatementsArray.ts, 3, 8))
+
+    let a3 = a[+x];
+>a3 : Symbol(a3, Decl(for-inStatementsArray.ts, 6, 7))
+>a : Symbol(a, Decl(for-inStatementsArray.ts, 0, 3))
+>x : Symbol(x, Decl(for-inStatementsArray.ts, 3, 8))
+
+    let b1 = b[x];
+>b1 : Symbol(b1, Decl(for-inStatementsArray.ts, 7, 7))
+>b : Symbol(b, Decl(for-inStatementsArray.ts, 1, 3))
+>x : Symbol(x, Decl(for-inStatementsArray.ts, 3, 8))
+
+    let b2 = b[(x)];
+>b2 : Symbol(b2, Decl(for-inStatementsArray.ts, 8, 7))
+>b : Symbol(b, Decl(for-inStatementsArray.ts, 1, 3))
+>x : Symbol(x, Decl(for-inStatementsArray.ts, 3, 8))
+
+    let b3 = b[+x];
+>b3 : Symbol(b3, Decl(for-inStatementsArray.ts, 9, 7))
+>b : Symbol(b, Decl(for-inStatementsArray.ts, 1, 3))
+>x : Symbol(x, Decl(for-inStatementsArray.ts, 3, 8))
+}
+
+for (let x in a) {
+>x : Symbol(x, Decl(for-inStatementsArray.ts, 12, 8))
+>a : Symbol(a, Decl(for-inStatementsArray.ts, 0, 3))
+
+    for (let y in a) {
+>y : Symbol(y, Decl(for-inStatementsArray.ts, 13, 12))
+>a : Symbol(a, Decl(for-inStatementsArray.ts, 0, 3))
+
+        for (let z in a) {
+>z : Symbol(z, Decl(for-inStatementsArray.ts, 14, 16))
+>a : Symbol(a, Decl(for-inStatementsArray.ts, 0, 3))
+
+            let a1 = a[x];
+>a1 : Symbol(a1, Decl(for-inStatementsArray.ts, 15, 15))
+>a : Symbol(a, Decl(for-inStatementsArray.ts, 0, 3))
+>x : Symbol(x, Decl(for-inStatementsArray.ts, 12, 8))
+
+            let a2 = a[y];
+>a2 : Symbol(a2, Decl(for-inStatementsArray.ts, 16, 15))
+>a : Symbol(a, Decl(for-inStatementsArray.ts, 0, 3))
+>y : Symbol(y, Decl(for-inStatementsArray.ts, 13, 12))
+
+            let a3 = a[z];
+>a3 : Symbol(a3, Decl(for-inStatementsArray.ts, 17, 15))
+>a : Symbol(a, Decl(for-inStatementsArray.ts, 0, 3))
+>z : Symbol(z, Decl(for-inStatementsArray.ts, 14, 16))
+        }
+    }
+}
+
+let i: string;
+>i : Symbol(i, Decl(for-inStatementsArray.ts, 22, 3))
+
+let j: string;
+>j : Symbol(j, Decl(for-inStatementsArray.ts, 23, 3))
+
+for (i in a) {
+>i : Symbol(i, Decl(for-inStatementsArray.ts, 22, 3))
+>a : Symbol(a, Decl(for-inStatementsArray.ts, 0, 3))
+
+    for (j in b) {
+>j : Symbol(j, Decl(for-inStatementsArray.ts, 23, 3))
+>b : Symbol(b, Decl(for-inStatementsArray.ts, 1, 3))
+
+        let a1 = a[i];
+>a1 : Symbol(a1, Decl(for-inStatementsArray.ts, 26, 11))
+>a : Symbol(a, Decl(for-inStatementsArray.ts, 0, 3))
+>i : Symbol(i, Decl(for-inStatementsArray.ts, 22, 3))
+
+        let a2 = a[j];
+>a2 : Symbol(a2, Decl(for-inStatementsArray.ts, 27, 11))
+>a : Symbol(a, Decl(for-inStatementsArray.ts, 0, 3))
+>j : Symbol(j, Decl(for-inStatementsArray.ts, 23, 3))
+    }
+}
+
+var s: string;
+>s : Symbol(s, Decl(for-inStatementsArray.ts, 31, 3), Decl(for-inStatementsArray.ts, 32, 8))
+
+for (var s in a) {
+>s : Symbol(s, Decl(for-inStatementsArray.ts, 31, 3), Decl(for-inStatementsArray.ts, 32, 8))
+>a : Symbol(a, Decl(for-inStatementsArray.ts, 0, 3))
+
+    let a1 = a[s];
+>a1 : Symbol(a1, Decl(for-inStatementsArray.ts, 33, 7))
+>a : Symbol(a, Decl(for-inStatementsArray.ts, 0, 3))
+>s : Symbol(s, Decl(for-inStatementsArray.ts, 31, 3), Decl(for-inStatementsArray.ts, 32, 8))
+}
+for (s in a) {
+>s : Symbol(s, Decl(for-inStatementsArray.ts, 31, 3), Decl(for-inStatementsArray.ts, 32, 8))
+>a : Symbol(a, Decl(for-inStatementsArray.ts, 0, 3))
+
+    let a1 = a[s];
+>a1 : Symbol(a1, Decl(for-inStatementsArray.ts, 36, 7))
+>a : Symbol(a, Decl(for-inStatementsArray.ts, 0, 3))
+>s : Symbol(s, Decl(for-inStatementsArray.ts, 31, 3), Decl(for-inStatementsArray.ts, 32, 8))
+}
+

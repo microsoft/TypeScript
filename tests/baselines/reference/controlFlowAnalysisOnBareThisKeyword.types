@@ -1,0 +1,38 @@
+=== tests/cases/compiler/controlFlowAnalysisOnBareThisKeyword.ts ===
+declare function isBig(x: any): x is { big: true };
+>isBig : (x: any) => x is { big: true; }
+>x : any
+>big : true
+>true : true
+
+function bigger(this: {}) {
+>bigger : (this: {}) => void
+>this : {}
+
+    if (isBig(this)) {
+>isBig(this) : boolean
+>isBig : (x: any) => x is { big: true; }
+>this : {}
+
+        this.big; // Expect property to exist
+>this.big : true
+>this : { big: true; }
+>big : true
+    }
+}
+
+function bar(this: string | number) {
+>bar : (this: string | number) => void
+>this : string | number
+
+    if (typeof this === "string") {
+>typeof this === "string" : boolean
+>typeof this : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>this : string | number
+>"string" : "string"
+
+        const x: string = this;
+>x : string
+>this : string
+    }
+}

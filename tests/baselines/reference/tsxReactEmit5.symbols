@@ -1,0 +1,35 @@
+=== tests/cases/conformance/jsx/file.tsx ===
+declare module JSX {
+>JSX : Symbol(JSX, Decl(file.tsx, 0, 0))
+
+	interface Element { }
+>Element : Symbol(Element, Decl(file.tsx, 0, 20))
+
+	interface IntrinsicElements {
+>IntrinsicElements : Symbol(IntrinsicElements, Decl(file.tsx, 1, 22))
+
+		[s: string]: any;
+>s : Symbol(s, Decl(file.tsx, 3, 3))
+	}
+}
+
+=== tests/cases/conformance/jsx/test.d.ts ===
+export var React;
+>React : Symbol(React, Decl(test.d.ts, 0, 10))
+
+=== tests/cases/conformance/jsx/react-consumer.tsx ===
+import {React} from "./test";
+>React : Symbol(React, Decl(react-consumer.tsx, 0, 8))
+
+// Should emit test_1.React.createElement
+//  and React.__spread
+var foo: any;
+>foo : Symbol(foo, Decl(react-consumer.tsx, 3, 3))
+
+var spread1 = <div x='' {...foo} y='' />;
+>spread1 : Symbol(spread1, Decl(react-consumer.tsx, 4, 3))
+>div : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 1, 22))
+>x : Symbol(x, Decl(react-consumer.tsx, 4, 18))
+>foo : Symbol(foo, Decl(react-consumer.tsx, 3, 3))
+>y : Symbol(y, Decl(react-consumer.tsx, 4, 32))
+

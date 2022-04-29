@@ -1,0 +1,47 @@
+=== tests/cases/conformance/jsx/react.d.ts ===
+declare module JSX {
+>JSX : Symbol(JSX, Decl(react.d.ts, 0, 0))
+
+	interface Element { }
+>Element : Symbol(Element, Decl(react.d.ts, 0, 20))
+
+	interface IntrinsicElements {
+>IntrinsicElements : Symbol(IntrinsicElements, Decl(react.d.ts, 1, 22))
+	}
+	interface ElementAttributesProperty {
+>ElementAttributesProperty : Symbol(ElementAttributesProperty, Decl(react.d.ts, 3, 2))
+
+		props;
+>props : Symbol(ElementAttributesProperty.props, Decl(react.d.ts, 4, 38))
+	}
+	interface IntrinsicAttributes {
+>IntrinsicAttributes : Symbol(IntrinsicAttributes, Decl(react.d.ts, 6, 2))
+
+		ref?: string;
+>ref : Symbol(IntrinsicAttributes.ref, Decl(react.d.ts, 7, 32))
+	}
+}
+
+=== tests/cases/conformance/jsx/file.tsx ===
+class MyComponent {  
+>MyComponent : Symbol(MyComponent, Decl(file.tsx, 0, 0))
+
+  render() {
+>render : Symbol(MyComponent.render, Decl(file.tsx, 0, 19))
+  }
+
+  props: {
+>props : Symbol(MyComponent.props, Decl(file.tsx, 2, 3))
+
+	  ref?: string;
+>ref : Symbol(ref, Decl(file.tsx, 4, 10))
+  }
+}
+
+// Should be an OK
+var x = <MyComponent bar='world' />;
+>x : Symbol(x, Decl(file.tsx, 10, 3))
+>MyComponent : Symbol(MyComponent, Decl(file.tsx, 0, 0))
+>bar : Symbol(bar, Decl(file.tsx, 10, 20))
+
+

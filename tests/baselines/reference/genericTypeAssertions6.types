@@ -1,0 +1,83 @@
+=== tests/cases/compiler/genericTypeAssertions6.ts ===
+class A<T,U> {
+>A : A<T, U>
+
+    constructor(x) {
+>x : any
+
+        var y = <T>x;
+>y : T
+><T>x : T
+>x : any
+
+        var z = <U>x;
+>z : U
+><U>x : U
+>x : any
+    }
+
+    f(x: T, y: U) {
+>f : (x: T, y: U) => void
+>x : T
+>y : U
+
+        x = <T>y;
+>x = <T>y : T
+>x : T
+><T>y : T
+>y : U
+
+        y = <U>x;
+>y = <U>x : U
+>y : U
+><U>x : U
+>x : T
+    }
+}
+
+class B<T extends Date, U extends Date> extends A<T, U> {
+>B : B<T, U>
+>A : A<T, U>
+
+    g(x: T) {
+>g : (x: T) => void
+>x : T
+
+        var a: Date = x;
+>a : Date
+>x : T
+
+        var b = <Date>x;
+>b : Date
+><Date>x : Date
+>x : T
+
+        var c = <T>new Date();
+>c : T
+><T>new Date() : T
+>new Date() : Date
+>Date : DateConstructor
+
+        var d = <U>new Date();
+>d : U
+><U>new Date() : U
+>new Date() : Date
+>Date : DateConstructor
+
+        var e = <T><U>new Date();
+>e : T
+><T><U>new Date() : T
+><U>new Date() : U
+>new Date() : Date
+>Date : DateConstructor
+    }
+}
+
+var b: B<Date, Date>;
+>b : B<Date, Date>
+
+var c: A<Date, Date> = <A<Date, Date>>b;
+>c : A<Date, Date>
+><A<Date, Date>>b : A<Date, Date>
+>b : B<Date, Date>
+

@@ -1,0 +1,3 @@
+=== tests/cases/conformance/parser/ecmascript5/Expressions/parserUnaryExpression5.ts ===
+++ delete foo.bar
+No type information for this code.

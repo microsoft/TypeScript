@@ -1,0 +1,67 @@
+=== tests/cases/compiler/awaitUnionPromise.ts ===
+// https://github.com/Microsoft/TypeScript/issues/18186
+
+class AsyncEnumeratorDone { };
+>AsyncEnumeratorDone : Symbol(AsyncEnumeratorDone, Decl(awaitUnionPromise.ts, 0, 0))
+
+interface IAsyncEnumerator<T> {
+>IAsyncEnumerator : Symbol(IAsyncEnumerator, Decl(awaitUnionPromise.ts, 2, 30))
+>T : Symbol(T, Decl(awaitUnionPromise.ts, 4, 27))
+
+    next1(): Promise<T | AsyncEnumeratorDone>;
+>next1 : Symbol(IAsyncEnumerator.next1, Decl(awaitUnionPromise.ts, 4, 31))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>T : Symbol(T, Decl(awaitUnionPromise.ts, 4, 27))
+>AsyncEnumeratorDone : Symbol(AsyncEnumeratorDone, Decl(awaitUnionPromise.ts, 0, 0))
+
+    next2(): Promise<T> | Promise<AsyncEnumeratorDone>;
+>next2 : Symbol(IAsyncEnumerator.next2, Decl(awaitUnionPromise.ts, 5, 46))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>T : Symbol(T, Decl(awaitUnionPromise.ts, 4, 27))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>AsyncEnumeratorDone : Symbol(AsyncEnumeratorDone, Decl(awaitUnionPromise.ts, 0, 0))
+
+    next3(): Promise<T | {}>;
+>next3 : Symbol(IAsyncEnumerator.next3, Decl(awaitUnionPromise.ts, 6, 55))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>T : Symbol(T, Decl(awaitUnionPromise.ts, 4, 27))
+
+    next4(): Promise<T | { x: string }>;
+>next4 : Symbol(IAsyncEnumerator.next4, Decl(awaitUnionPromise.ts, 7, 29))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>T : Symbol(T, Decl(awaitUnionPromise.ts, 4, 27))
+>x : Symbol(x, Decl(awaitUnionPromise.ts, 8, 26))
+}
+
+async function main() {
+>main : Symbol(main, Decl(awaitUnionPromise.ts, 9, 1))
+
+    const x: IAsyncEnumerator<number> = null;
+>x : Symbol(x, Decl(awaitUnionPromise.ts, 12, 9))
+>IAsyncEnumerator : Symbol(IAsyncEnumerator, Decl(awaitUnionPromise.ts, 2, 30))
+
+    let a = await x.next1();
+>a : Symbol(a, Decl(awaitUnionPromise.ts, 13, 7))
+>x.next1 : Symbol(IAsyncEnumerator.next1, Decl(awaitUnionPromise.ts, 4, 31))
+>x : Symbol(x, Decl(awaitUnionPromise.ts, 12, 9))
+>next1 : Symbol(IAsyncEnumerator.next1, Decl(awaitUnionPromise.ts, 4, 31))
+
+    let b = await x.next2();
+>b : Symbol(b, Decl(awaitUnionPromise.ts, 14, 7))
+>x.next2 : Symbol(IAsyncEnumerator.next2, Decl(awaitUnionPromise.ts, 5, 46))
+>x : Symbol(x, Decl(awaitUnionPromise.ts, 12, 9))
+>next2 : Symbol(IAsyncEnumerator.next2, Decl(awaitUnionPromise.ts, 5, 46))
+
+    let c = await x.next3();
+>c : Symbol(c, Decl(awaitUnionPromise.ts, 15, 7))
+>x.next3 : Symbol(IAsyncEnumerator.next3, Decl(awaitUnionPromise.ts, 6, 55))
+>x : Symbol(x, Decl(awaitUnionPromise.ts, 12, 9))
+>next3 : Symbol(IAsyncEnumerator.next3, Decl(awaitUnionPromise.ts, 6, 55))
+
+    let d = await x.next4();
+>d : Symbol(d, Decl(awaitUnionPromise.ts, 16, 7))
+>x.next4 : Symbol(IAsyncEnumerator.next4, Decl(awaitUnionPromise.ts, 7, 29))
+>x : Symbol(x, Decl(awaitUnionPromise.ts, 12, 9))
+>next4 : Symbol(IAsyncEnumerator.next4, Decl(awaitUnionPromise.ts, 7, 29))
+}
+

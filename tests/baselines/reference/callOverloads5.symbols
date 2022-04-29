@@ -1,0 +1,49 @@
+=== tests/cases/compiler/callOverloads5.ts ===
+function Foo():Foo; // error
+>Foo : Symbol(Foo, Decl(callOverloads5.ts, 0, 0), Decl(callOverloads5.ts, 0, 19), Decl(callOverloads5.ts, 1, 27))
+>Foo : Symbol(Foo, Decl(callOverloads5.ts, 0, 0), Decl(callOverloads5.ts, 0, 19), Decl(callOverloads5.ts, 1, 27))
+
+function Foo(s:string):Foo; // error
+>Foo : Symbol(Foo, Decl(callOverloads5.ts, 0, 0), Decl(callOverloads5.ts, 0, 19), Decl(callOverloads5.ts, 1, 27))
+>s : Symbol(s, Decl(callOverloads5.ts, 1, 13))
+>Foo : Symbol(Foo, Decl(callOverloads5.ts, 0, 0), Decl(callOverloads5.ts, 0, 19), Decl(callOverloads5.ts, 1, 27))
+
+class Foo { // error
+>Foo : Symbol(Foo, Decl(callOverloads5.ts, 0, 0), Decl(callOverloads5.ts, 0, 19), Decl(callOverloads5.ts, 1, 27))
+
+	bar1(s:string);
+>bar1 : Symbol(Foo.bar1, Decl(callOverloads5.ts, 2, 11), Decl(callOverloads5.ts, 3, 16), Decl(callOverloads5.ts, 4, 16))
+>s : Symbol(s, Decl(callOverloads5.ts, 3, 6))
+
+	bar1(n:number);
+>bar1 : Symbol(Foo.bar1, Decl(callOverloads5.ts, 2, 11), Decl(callOverloads5.ts, 3, 16), Decl(callOverloads5.ts, 4, 16))
+>n : Symbol(n, Decl(callOverloads5.ts, 4, 6))
+
+    bar1(a:any) { /*WScript.Echo(a);*/ }
+>bar1 : Symbol(Foo.bar1, Decl(callOverloads5.ts, 2, 11), Decl(callOverloads5.ts, 3, 16), Decl(callOverloads5.ts, 4, 16))
+>a : Symbol(a, Decl(callOverloads5.ts, 5, 9))
+
+    constructor(x: any) {
+>x : Symbol(x, Decl(callOverloads5.ts, 6, 16))
+
+        // WScript.Echo("Constructor function has executed");
+    }
+}
+//class Foo(s: String);
+
+var f1 = new Foo("hey");
+>f1 : Symbol(f1, Decl(callOverloads5.ts, 12, 3))
+>Foo : Symbol(Foo, Decl(callOverloads5.ts, 0, 0), Decl(callOverloads5.ts, 0, 19), Decl(callOverloads5.ts, 1, 27))
+
+
+f1.bar1("a");
+>f1.bar1 : Symbol(Foo.bar1, Decl(callOverloads5.ts, 2, 11), Decl(callOverloads5.ts, 3, 16), Decl(callOverloads5.ts, 4, 16))
+>f1 : Symbol(f1, Decl(callOverloads5.ts, 12, 3))
+>bar1 : Symbol(Foo.bar1, Decl(callOverloads5.ts, 2, 11), Decl(callOverloads5.ts, 3, 16), Decl(callOverloads5.ts, 4, 16))
+
+Foo();
+>Foo : Symbol(Foo, Decl(callOverloads5.ts, 0, 0), Decl(callOverloads5.ts, 0, 19), Decl(callOverloads5.ts, 1, 27))
+
+Foo("s");
+>Foo : Symbol(Foo, Decl(callOverloads5.ts, 0, 0), Decl(callOverloads5.ts, 0, 19), Decl(callOverloads5.ts, 1, 27))
+

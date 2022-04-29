@@ -1,0 +1,1 @@
+var foo = <{():number; (i:number):number; }> (function(){return "err";});

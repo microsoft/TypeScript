@@ -1,0 +1,186 @@
+=== tests/cases/compiler/collisionArgumentsClassConstructor.ts ===
+// Constructors
+class c1 {
+>c1 : Symbol(c1, Decl(collisionArgumentsClassConstructor.ts, 0, 0))
+
+    constructor(i: number, ...arguments) { // error
+>i : Symbol(i, Decl(collisionArgumentsClassConstructor.ts, 2, 16))
+>arguments : Symbol(arguments, Decl(collisionArgumentsClassConstructor.ts, 2, 26), Decl(collisionArgumentsClassConstructor.ts, 3, 11))
+
+        var arguments: any[]; // no error
+>arguments : Symbol(arguments, Decl(collisionArgumentsClassConstructor.ts, 2, 26), Decl(collisionArgumentsClassConstructor.ts, 3, 11))
+    }
+}
+class c12 {
+>c12 : Symbol(c12, Decl(collisionArgumentsClassConstructor.ts, 5, 1))
+
+    constructor(arguments: number, ...rest) { // error
+>arguments : Symbol(arguments, Decl(collisionArgumentsClassConstructor.ts, 7, 16), Decl(collisionArgumentsClassConstructor.ts, 8, 11))
+>rest : Symbol(rest, Decl(collisionArgumentsClassConstructor.ts, 7, 34))
+
+        var arguments = 10; // no error
+>arguments : Symbol(arguments, Decl(collisionArgumentsClassConstructor.ts, 7, 16), Decl(collisionArgumentsClassConstructor.ts, 8, 11))
+    }
+}
+class c1NoError {
+>c1NoError : Symbol(c1NoError, Decl(collisionArgumentsClassConstructor.ts, 10, 1))
+
+    constructor(arguments: number) { // no error
+>arguments : Symbol(arguments, Decl(collisionArgumentsClassConstructor.ts, 12, 16), Decl(collisionArgumentsClassConstructor.ts, 13, 11))
+
+        var arguments = 10; // no error
+>arguments : Symbol(arguments, Decl(collisionArgumentsClassConstructor.ts, 12, 16), Decl(collisionArgumentsClassConstructor.ts, 13, 11))
+    }
+}
+
+class c2 {
+>c2 : Symbol(c2, Decl(collisionArgumentsClassConstructor.ts, 15, 1))
+
+    constructor(...restParameters) {
+>restParameters : Symbol(restParameters, Decl(collisionArgumentsClassConstructor.ts, 18, 16))
+
+        var arguments = 10; // no error
+>arguments : Symbol(arguments, Decl(collisionArgumentsClassConstructor.ts, 19, 11))
+    }
+}
+class c2NoError {
+>c2NoError : Symbol(c2NoError, Decl(collisionArgumentsClassConstructor.ts, 21, 1))
+
+    constructor() {
+        var arguments = 10; // no error
+>arguments : Symbol(arguments, Decl(collisionArgumentsClassConstructor.ts, 24, 11))
+    }
+}
+
+class c3 {
+>c3 : Symbol(c3, Decl(collisionArgumentsClassConstructor.ts, 26, 1))
+
+    constructor(public arguments: number, ...restParameters) { //arguments is error
+>arguments : Symbol(c3.arguments, Decl(collisionArgumentsClassConstructor.ts, 29, 16))
+>restParameters : Symbol(restParameters, Decl(collisionArgumentsClassConstructor.ts, 29, 41))
+
+        var arguments = 10; // no error
+>arguments : Symbol(arguments, Decl(collisionArgumentsClassConstructor.ts, 29, 16), Decl(collisionArgumentsClassConstructor.ts, 30, 11))
+    }
+}
+class c3NoError {
+>c3NoError : Symbol(c3NoError, Decl(collisionArgumentsClassConstructor.ts, 32, 1))
+
+    constructor(public arguments: number) { // no error
+>arguments : Symbol(c3NoError.arguments, Decl(collisionArgumentsClassConstructor.ts, 34, 16))
+
+        var arguments = 10; // no error
+>arguments : Symbol(arguments, Decl(collisionArgumentsClassConstructor.ts, 34, 16), Decl(collisionArgumentsClassConstructor.ts, 35, 11))
+    }
+}
+
+declare class c4 {
+>c4 : Symbol(c4, Decl(collisionArgumentsClassConstructor.ts, 37, 1))
+
+    constructor(i: number, ...arguments); // No error - no code gen
+>i : Symbol(i, Decl(collisionArgumentsClassConstructor.ts, 40, 16))
+>arguments : Symbol(arguments, Decl(collisionArgumentsClassConstructor.ts, 40, 26))
+}
+declare class c42 {
+>c42 : Symbol(c42, Decl(collisionArgumentsClassConstructor.ts, 41, 1))
+
+    constructor(arguments: number, ...rest); // No error - no code gen
+>arguments : Symbol(arguments, Decl(collisionArgumentsClassConstructor.ts, 43, 16))
+>rest : Symbol(rest, Decl(collisionArgumentsClassConstructor.ts, 43, 34))
+}
+declare class c4NoError {
+>c4NoError : Symbol(c4NoError, Decl(collisionArgumentsClassConstructor.ts, 44, 1))
+
+    constructor(arguments: number);  // no error
+>arguments : Symbol(arguments, Decl(collisionArgumentsClassConstructor.ts, 46, 16))
+}
+
+class c5 {
+>c5 : Symbol(c5, Decl(collisionArgumentsClassConstructor.ts, 47, 1))
+
+    constructor(i: number, ...arguments); // no codegen no error
+>i : Symbol(i, Decl(collisionArgumentsClassConstructor.ts, 50, 16))
+>arguments : Symbol(arguments, Decl(collisionArgumentsClassConstructor.ts, 50, 26))
+
+    constructor(i: string, ...arguments); // no codegen no error
+>i : Symbol(i, Decl(collisionArgumentsClassConstructor.ts, 51, 16))
+>arguments : Symbol(arguments, Decl(collisionArgumentsClassConstructor.ts, 51, 26))
+
+    constructor(i: any, ...arguments) { // error
+>i : Symbol(i, Decl(collisionArgumentsClassConstructor.ts, 52, 16))
+>arguments : Symbol(arguments, Decl(collisionArgumentsClassConstructor.ts, 52, 23), Decl(collisionArgumentsClassConstructor.ts, 53, 11))
+
+        var arguments: any[]; // no error
+>arguments : Symbol(arguments, Decl(collisionArgumentsClassConstructor.ts, 52, 23), Decl(collisionArgumentsClassConstructor.ts, 53, 11))
+    }
+}
+
+class c52 {
+>c52 : Symbol(c52, Decl(collisionArgumentsClassConstructor.ts, 55, 1))
+
+    constructor(arguments: number, ...rest); // no codegen no error
+>arguments : Symbol(arguments, Decl(collisionArgumentsClassConstructor.ts, 58, 16))
+>rest : Symbol(rest, Decl(collisionArgumentsClassConstructor.ts, 58, 34))
+
+    constructor(arguments: string, ...rest); // no codegen no error
+>arguments : Symbol(arguments, Decl(collisionArgumentsClassConstructor.ts, 59, 16))
+>rest : Symbol(rest, Decl(collisionArgumentsClassConstructor.ts, 59, 34))
+
+    constructor(arguments: any, ...rest) { // error
+>arguments : Symbol(arguments, Decl(collisionArgumentsClassConstructor.ts, 60, 16), Decl(collisionArgumentsClassConstructor.ts, 61, 11))
+>rest : Symbol(rest, Decl(collisionArgumentsClassConstructor.ts, 60, 31))
+
+        var arguments: any; // no error
+>arguments : Symbol(arguments, Decl(collisionArgumentsClassConstructor.ts, 60, 16), Decl(collisionArgumentsClassConstructor.ts, 61, 11))
+    }
+}
+
+class c5NoError {
+>c5NoError : Symbol(c5NoError, Decl(collisionArgumentsClassConstructor.ts, 63, 1))
+
+    constructor(arguments: number); // no error
+>arguments : Symbol(arguments, Decl(collisionArgumentsClassConstructor.ts, 66, 16))
+
+    constructor(arguments: string); // no error
+>arguments : Symbol(arguments, Decl(collisionArgumentsClassConstructor.ts, 67, 16))
+
+    constructor(arguments: any) { // no error
+>arguments : Symbol(arguments, Decl(collisionArgumentsClassConstructor.ts, 68, 16), Decl(collisionArgumentsClassConstructor.ts, 69, 11))
+
+        var arguments: any; // no error
+>arguments : Symbol(arguments, Decl(collisionArgumentsClassConstructor.ts, 68, 16), Decl(collisionArgumentsClassConstructor.ts, 69, 11))
+    }
+}
+
+declare class c6 {
+>c6 : Symbol(c6, Decl(collisionArgumentsClassConstructor.ts, 71, 1))
+
+    constructor(i: number, ...arguments); // no codegen no error
+>i : Symbol(i, Decl(collisionArgumentsClassConstructor.ts, 74, 16))
+>arguments : Symbol(arguments, Decl(collisionArgumentsClassConstructor.ts, 74, 26))
+
+    constructor(i: string, ...arguments); // no codegen no error
+>i : Symbol(i, Decl(collisionArgumentsClassConstructor.ts, 75, 16))
+>arguments : Symbol(arguments, Decl(collisionArgumentsClassConstructor.ts, 75, 26))
+}
+declare class c62 {
+>c62 : Symbol(c62, Decl(collisionArgumentsClassConstructor.ts, 76, 1))
+
+    constructor(arguments: number, ...rest); // no codegen no error
+>arguments : Symbol(arguments, Decl(collisionArgumentsClassConstructor.ts, 78, 16))
+>rest : Symbol(rest, Decl(collisionArgumentsClassConstructor.ts, 78, 34))
+
+    constructor(arguments: string, ...rest); // no codegen no error
+>arguments : Symbol(arguments, Decl(collisionArgumentsClassConstructor.ts, 79, 16))
+>rest : Symbol(rest, Decl(collisionArgumentsClassConstructor.ts, 79, 34))
+}
+
+declare class c6NoError {
+>c6NoError : Symbol(c6NoError, Decl(collisionArgumentsClassConstructor.ts, 80, 1))
+
+    constructor(arguments: number); // no error
+>arguments : Symbol(arguments, Decl(collisionArgumentsClassConstructor.ts, 83, 16))
+
+    constructor(arguments: string); // no error
+>arguments : Symbol(arguments, Decl(collisionArgumentsClassConstructor.ts, 84, 16))
+}

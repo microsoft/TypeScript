@@ -1,0 +1,16 @@
+tests/cases/compiler/thisShadowingErrorSpans.ts(5,13): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+
+
+==== tests/cases/compiler/thisShadowingErrorSpans.ts (1 errors) ====
+    class C {
+        m() {
+            this.m();
+            function f() {
+                this.m();
+                ~~~~
+!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+!!! related TS2738 tests/cases/compiler/thisShadowingErrorSpans.ts:4:18: An outer value of 'this' is shadowed by this container.
+            }
+        }
+    }
+    

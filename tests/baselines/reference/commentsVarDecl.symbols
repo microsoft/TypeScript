@@ -1,0 +1,70 @@
+=== tests/cases/compiler/commentsVarDecl.ts ===
+/** Variable comments*/
+var myVariable = 10; // This trailing Comment1
+>myVariable : Symbol(myVariable, Decl(commentsVarDecl.ts, 1, 3))
+
+/** This is another variable comment*/
+var anotherVariable = 30;
+>anotherVariable : Symbol(anotherVariable, Decl(commentsVarDecl.ts, 4, 3))
+
+// shouldn't appear
+var aVar = "";
+>aVar : Symbol(aVar, Decl(commentsVarDecl.ts, 7, 3))
+
+/** this is multiline comment
+  * All these variables are of number type */
+var anotherAnotherVariable = 70; /* these are multiple trailing comments */ /* multiple trailing comments */
+>anotherAnotherVariable : Symbol(anotherAnotherVariable, Decl(commentsVarDecl.ts, 11, 3))
+
+/** Triple slash multiline comment*/
+/** another line in the comment*/
+/** comment line 2*/
+var x = 70; /* multiline trailing comment 
+>x : Symbol(x, Decl(commentsVarDecl.ts, 16, 3))
+
+this is multiline trailing comment */
+/** Triple slash comment on the assignment shouldnt be in .d.ts file*/
+x = myVariable;
+>x : Symbol(x, Decl(commentsVarDecl.ts, 16, 3))
+>myVariable : Symbol(myVariable, Decl(commentsVarDecl.ts, 1, 3))
+
+/** triple slash comment1*/
+/** jsdocstyle comment - only this comment should be in .d.ts file*/
+var n = 30;
+>n : Symbol(n, Decl(commentsVarDecl.ts, 23, 3))
+
+/** var deckaration with comment on type as well*/
+var y = /** value comment */ 20;
+>y : Symbol(y, Decl(commentsVarDecl.ts, 26, 3))
+
+/// var deckaration with comment on type as well
+var yy =
+>yy : Symbol(yy, Decl(commentsVarDecl.ts, 29, 3))
+
+    /// value comment
+    20;
+
+/** comment2 */
+var z = /** lambda comment */ (x: number, y: number) => x + y;
+>z : Symbol(z, Decl(commentsVarDecl.ts, 34, 3))
+>x : Symbol(x, Decl(commentsVarDecl.ts, 34, 31))
+>y : Symbol(y, Decl(commentsVarDecl.ts, 34, 41))
+>x : Symbol(x, Decl(commentsVarDecl.ts, 34, 31))
+>y : Symbol(y, Decl(commentsVarDecl.ts, 34, 41))
+
+var z2: /** type comment*/ (x: number) => string;
+>z2 : Symbol(z2, Decl(commentsVarDecl.ts, 36, 3))
+>x : Symbol(x, Decl(commentsVarDecl.ts, 36, 28))
+
+var x2 = z2;
+>x2 : Symbol(x2, Decl(commentsVarDecl.ts, 38, 3))
+>z2 : Symbol(z2, Decl(commentsVarDecl.ts, 36, 3))
+
+var n4: (x: number) => string;
+>n4 : Symbol(n4, Decl(commentsVarDecl.ts, 40, 3))
+>x : Symbol(x, Decl(commentsVarDecl.ts, 40, 9))
+
+n4 = z2;
+>n4 : Symbol(n4, Decl(commentsVarDecl.ts, 40, 3))
+>z2 : Symbol(z2, Decl(commentsVarDecl.ts, 36, 3))
+

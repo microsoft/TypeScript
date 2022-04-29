@@ -1,0 +1,101 @@
+=== tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithNumberAndEnum.ts ===
+enum E { a, b }
+>E : Symbol(E, Decl(additionOperatorWithNumberAndEnum.ts, 0, 0))
+>a : Symbol(E.a, Decl(additionOperatorWithNumberAndEnum.ts, 0, 8))
+>b : Symbol(E.b, Decl(additionOperatorWithNumberAndEnum.ts, 0, 11))
+
+enum F { c, d }
+>F : Symbol(F, Decl(additionOperatorWithNumberAndEnum.ts, 0, 15))
+>c : Symbol(F.c, Decl(additionOperatorWithNumberAndEnum.ts, 1, 8))
+>d : Symbol(F.d, Decl(additionOperatorWithNumberAndEnum.ts, 1, 11))
+
+var a: number;
+>a : Symbol(a, Decl(additionOperatorWithNumberAndEnum.ts, 3, 3))
+
+var b: E;
+>b : Symbol(b, Decl(additionOperatorWithNumberAndEnum.ts, 4, 3))
+>E : Symbol(E, Decl(additionOperatorWithNumberAndEnum.ts, 0, 0))
+
+var c: E | F;
+>c : Symbol(c, Decl(additionOperatorWithNumberAndEnum.ts, 5, 3))
+>E : Symbol(E, Decl(additionOperatorWithNumberAndEnum.ts, 0, 0))
+>F : Symbol(F, Decl(additionOperatorWithNumberAndEnum.ts, 0, 15))
+
+var r1 = a + a;
+>r1 : Symbol(r1, Decl(additionOperatorWithNumberAndEnum.ts, 7, 3))
+>a : Symbol(a, Decl(additionOperatorWithNumberAndEnum.ts, 3, 3))
+>a : Symbol(a, Decl(additionOperatorWithNumberAndEnum.ts, 3, 3))
+
+var r2 = a + b;
+>r2 : Symbol(r2, Decl(additionOperatorWithNumberAndEnum.ts, 8, 3))
+>a : Symbol(a, Decl(additionOperatorWithNumberAndEnum.ts, 3, 3))
+>b : Symbol(b, Decl(additionOperatorWithNumberAndEnum.ts, 4, 3))
+
+var r3 = b + a;
+>r3 : Symbol(r3, Decl(additionOperatorWithNumberAndEnum.ts, 9, 3))
+>b : Symbol(b, Decl(additionOperatorWithNumberAndEnum.ts, 4, 3))
+>a : Symbol(a, Decl(additionOperatorWithNumberAndEnum.ts, 3, 3))
+
+var r4 = b + b;
+>r4 : Symbol(r4, Decl(additionOperatorWithNumberAndEnum.ts, 10, 3))
+>b : Symbol(b, Decl(additionOperatorWithNumberAndEnum.ts, 4, 3))
+>b : Symbol(b, Decl(additionOperatorWithNumberAndEnum.ts, 4, 3))
+
+var r5 = 0 + a;
+>r5 : Symbol(r5, Decl(additionOperatorWithNumberAndEnum.ts, 12, 3))
+>a : Symbol(a, Decl(additionOperatorWithNumberAndEnum.ts, 3, 3))
+
+var r6 = E.a + 0;
+>r6 : Symbol(r6, Decl(additionOperatorWithNumberAndEnum.ts, 13, 3))
+>E.a : Symbol(E.a, Decl(additionOperatorWithNumberAndEnum.ts, 0, 8))
+>E : Symbol(E, Decl(additionOperatorWithNumberAndEnum.ts, 0, 0))
+>a : Symbol(E.a, Decl(additionOperatorWithNumberAndEnum.ts, 0, 8))
+
+var r7 = E.a + E.b;
+>r7 : Symbol(r7, Decl(additionOperatorWithNumberAndEnum.ts, 14, 3))
+>E.a : Symbol(E.a, Decl(additionOperatorWithNumberAndEnum.ts, 0, 8))
+>E : Symbol(E, Decl(additionOperatorWithNumberAndEnum.ts, 0, 0))
+>a : Symbol(E.a, Decl(additionOperatorWithNumberAndEnum.ts, 0, 8))
+>E.b : Symbol(E.b, Decl(additionOperatorWithNumberAndEnum.ts, 0, 11))
+>E : Symbol(E, Decl(additionOperatorWithNumberAndEnum.ts, 0, 0))
+>b : Symbol(E.b, Decl(additionOperatorWithNumberAndEnum.ts, 0, 11))
+
+var r8 = E['a'] + E['b'];
+>r8 : Symbol(r8, Decl(additionOperatorWithNumberAndEnum.ts, 15, 3))
+>E : Symbol(E, Decl(additionOperatorWithNumberAndEnum.ts, 0, 0))
+>'a' : Symbol(E.a, Decl(additionOperatorWithNumberAndEnum.ts, 0, 8))
+>E : Symbol(E, Decl(additionOperatorWithNumberAndEnum.ts, 0, 0))
+>'b' : Symbol(E.b, Decl(additionOperatorWithNumberAndEnum.ts, 0, 11))
+
+var r9 = E['a'] + F['c'];
+>r9 : Symbol(r9, Decl(additionOperatorWithNumberAndEnum.ts, 16, 3))
+>E : Symbol(E, Decl(additionOperatorWithNumberAndEnum.ts, 0, 0))
+>'a' : Symbol(E.a, Decl(additionOperatorWithNumberAndEnum.ts, 0, 8))
+>F : Symbol(F, Decl(additionOperatorWithNumberAndEnum.ts, 0, 15))
+>'c' : Symbol(F.c, Decl(additionOperatorWithNumberAndEnum.ts, 1, 8))
+
+var r10 = a + c;
+>r10 : Symbol(r10, Decl(additionOperatorWithNumberAndEnum.ts, 18, 3))
+>a : Symbol(a, Decl(additionOperatorWithNumberAndEnum.ts, 3, 3))
+>c : Symbol(c, Decl(additionOperatorWithNumberAndEnum.ts, 5, 3))
+
+var r11 = c + a;
+>r11 : Symbol(r11, Decl(additionOperatorWithNumberAndEnum.ts, 19, 3))
+>c : Symbol(c, Decl(additionOperatorWithNumberAndEnum.ts, 5, 3))
+>a : Symbol(a, Decl(additionOperatorWithNumberAndEnum.ts, 3, 3))
+
+var r12 = b + c;
+>r12 : Symbol(r12, Decl(additionOperatorWithNumberAndEnum.ts, 20, 3))
+>b : Symbol(b, Decl(additionOperatorWithNumberAndEnum.ts, 4, 3))
+>c : Symbol(c, Decl(additionOperatorWithNumberAndEnum.ts, 5, 3))
+
+var r13 = c + b;
+>r13 : Symbol(r13, Decl(additionOperatorWithNumberAndEnum.ts, 21, 3))
+>c : Symbol(c, Decl(additionOperatorWithNumberAndEnum.ts, 5, 3))
+>b : Symbol(b, Decl(additionOperatorWithNumberAndEnum.ts, 4, 3))
+
+var r14 = c + c;
+>r14 : Symbol(r14, Decl(additionOperatorWithNumberAndEnum.ts, 22, 3))
+>c : Symbol(c, Decl(additionOperatorWithNumberAndEnum.ts, 5, 3))
+>c : Symbol(c, Decl(additionOperatorWithNumberAndEnum.ts, 5, 3))
+

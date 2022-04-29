@@ -1,0 +1,3 @@
+//// [/app/bin/index.js.map]
+{"version":3,"file":"index.js","sourceRoot":"mySourceRoot/","sources":["index.ts"],"names":[],"mappings":";;;AAAA,wCAAwC;AAC3B,QAAA,CAAC,GAAG,CAAC,CAAC"}
+//// https://sokra.github.io/source-map-visualization#base64,InVzZSBzdHJpY3QiOw0KZXhwb3J0cy5fX2VzTW9kdWxlID0gdHJ1ZTsNCmV4cG9ydHMueCA9IHZvaWQgMDsNCi8vLyA8cmVmZXJlbmNlIHBhdGg9Ii4uL2xpYi9iYXIuZC50cyIgLz4NCmV4cG9ydHMueCA9IHk7DQovLyMgc291cmNlTWFwcGluZ1VSTD0uLi9zcmMvbXlNYXBSb290L2luZGV4LmpzLm1hcA==,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW5kZXguanMiLCJzb3VyY2VSb290IjoibXlTb3VyY2VSb290LyIsInNvdXJjZXMiOlsiaW5kZXgudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7O0FBQUEsd0NBQXdDO0FBQzNCLFFBQUEsQ0FBQyxHQUFHLENBQUMsQ0FBQyJ9,Ly8vIDxyZWZlcmVuY2UgcGF0aD0iLi4vbGliL2Jhci5kLnRzIiAvPgpleHBvcnQgY29uc3QgeCA9IHk7Cg==

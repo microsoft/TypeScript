@@ -1,0 +1,29 @@
+=== tests/cases/conformance/salsa/file1.js ===
+var SomeClass = function () {
+>SomeClass : typeof SomeClass
+>function () {    this.otherProp = 0;} : typeof SomeClass
+
+    this.otherProp = 0;
+>this.otherProp = 0 : 0
+>this.otherProp : any
+>this : this
+>otherProp : any
+>0 : 0
+
+};
+
+new SomeClass();
+>new SomeClass() : SomeClass
+>SomeClass : typeof SomeClass
+
+=== tests/cases/conformance/salsa/file2.js ===
+class SomeClass { }
+>SomeClass : SomeClass
+
+SomeClass.prop = 0
+>SomeClass.prop = 0 : 0
+>SomeClass.prop : number
+>SomeClass : typeof SomeClass
+>prop : number
+>0 : 0
+

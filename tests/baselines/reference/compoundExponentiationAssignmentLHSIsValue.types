@@ -1,0 +1,264 @@
+=== tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSIsValue.ts ===
+// expected error for all the LHS of compound assignments (arithmetic and addition)
+var value: any;
+>value : any
+
+// this
+class C {
+>C : C
+
+    constructor() {
+        this **= value;
+>this **= value : number
+>this : this
+>value : any
+    }
+    foo() {
+>foo : () => void
+
+        this **= value;
+>this **= value : number
+>this : this
+>value : any
+    }
+    static sfoo() {
+>sfoo : () => void
+
+        this **= value;
+>this **= value : number
+>this : typeof C
+>value : any
+    }
+}
+
+function foo() {
+>foo : () => void
+
+    this **= value;
+>this **= value : number
+>this : any
+>value : any
+}
+
+this **= value;
+>this **= value : number
+>this : typeof globalThis
+>value : any
+
+// identifiers: module, class, enum, function
+module M { export var a; }
+>M : typeof M
+>a : any
+
+M **= value;
+>M **= value : number
+>M : any
+>value : any
+
+C **= value;
+>C **= value : number
+>C : any
+>value : any
+
+enum E { }
+>E : E
+
+E **= value;
+>E **= value : number
+>E : any
+>value : any
+
+foo **= value;
+>foo **= value : number
+>foo : any
+>value : any
+
+// literals
+null **= value;
+>null **= value : number
+>null : null
+>value : any
+
+true **= value;
+>true **= value : number
+>true : true
+>value : any
+
+false **= value;
+>false **= value : number
+>false : false
+>value : any
+
+0 **= value;
+>0 **= value : number
+>0 : 0
+>value : any
+
+'' **= value;
+>'' **= value : number
+>'' : ""
+>value : any
+
+/d+/ **= value;
+>/d+/ **= value : number
+>/d+/ : RegExp
+>value : any
+
+// object literals
+{ a: 0 } **= value;
+>a : any
+>0 : 0
+>value : any
+
+// array literals
+['', ''] **= value;
+>['', ''] **= value : number
+>['', ''] : [string, string]
+>'' : ""
+>'' : ""
+>value : any
+
+// super
+class Derived extends C {
+>Derived : Derived
+>C : C
+
+    constructor() {
+        super();
+>super() : void
+>super : typeof C
+
+        super **= value;
+>super **= value : number
+>super : any
+>super : C
+> : any
+>value : any
+    }
+
+    foo() {
+>foo : () => void
+
+        super **= value;
+>super **= value : number
+>super : any
+>super : C
+> : any
+>value : any
+    }
+
+    static sfoo() {
+>sfoo : () => void
+
+        super **= value;
+>super **= value : number
+>super : any
+>super : typeof C
+> : any
+>value : any
+    }
+}
+
+// function expression
+function bar1() { } **= value;
+>bar1 : () => void
+>value : any
+
+() => { } **= value;
+>() => { } : () => void
+>value : any
+
+// function calls
+foo() **= value;
+>foo() **= value : number
+>foo() : void
+>foo : () => void
+>value : any
+
+// parentheses, the containted expression is value
+(this) **= value;
+>(this) **= value : number
+>(this) : typeof globalThis
+>this : typeof globalThis
+>value : any
+
+(M) **= value;
+>(M) **= value : number
+>(M) : any
+>M : any
+>value : any
+
+(C) **= value;
+>(C) **= value : number
+>(C) : any
+>C : any
+>value : any
+
+(E) **= value;
+>(E) **= value : number
+>(E) : any
+>E : any
+>value : any
+
+(foo) **= value;
+>(foo) **= value : number
+>(foo) : any
+>foo : any
+>value : any
+
+(null) **= value;
+>(null) **= value : number
+>(null) : null
+>null : null
+>value : any
+
+(true) **= value;
+>(true) **= value : number
+>(true) : true
+>true : true
+>value : any
+
+(0) **= value;
+>(0) **= value : number
+>(0) : 0
+>0 : 0
+>value : any
+
+('') **= value;
+>('') **= value : number
+>('') : ""
+>'' : ""
+>value : any
+
+(/d+/) **= value;
+>(/d+/) **= value : number
+>(/d+/) : RegExp
+>/d+/ : RegExp
+>value : any
+
+({}) **= value;
+>({}) **= value : number
+>({}) : {}
+>{} : {}
+>value : any
+
+([]) **= value;
+>([]) **= value : number
+>([]) : []
+>[] : []
+>value : any
+
+(function baz1() { }) **= value;
+>(function baz1() { }) **= value : number
+>(function baz1() { }) : () => void
+>function baz1() { } : () => void
+>baz1 : () => void
+>value : any
+
+(foo()) **= value;
+>(foo()) **= value : number
+>(foo()) : void
+>foo() : void
+>foo : () => void
+>value : any
+

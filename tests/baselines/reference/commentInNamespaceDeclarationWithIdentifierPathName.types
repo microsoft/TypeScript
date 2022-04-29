@@ -1,0 +1,11 @@
+=== tests/cases/compiler/commentInNamespaceDeclarationWithIdentifierPathName.ts ===
+namespace hello.hi.world
+>hello : typeof hello
+>hi : typeof hi
+>world : typeof world
+{
+    function foo() {}
+>foo : () => void
+
+    // TODO, blah
+}

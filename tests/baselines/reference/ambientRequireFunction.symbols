@@ -1,0 +1,27 @@
+=== tests/cases/compiler/app.js ===
+/// <reference path="node.d.ts"/>
+
+const fs = require("fs");
+>fs : Symbol(fs, Decl(app.js, 2, 5))
+>require : Symbol(require, Decl(node.d.ts, 0, 0))
+>"fs" : Symbol(fs, Decl(node.d.ts, 0, 50))
+
+const text = fs.readFileSync("/a/b/c");
+>text : Symbol(text, Decl(app.js, 3, 5))
+>fs.readFileSync : Symbol(fs.readFileSync, Decl(node.d.ts, 2, 21))
+>fs : Symbol(fs, Decl(app.js, 2, 5))
+>readFileSync : Symbol(fs.readFileSync, Decl(node.d.ts, 2, 21))
+
+=== tests/cases/compiler/node.d.ts ===
+declare function require(moduleName: string): any;
+>require : Symbol(require, Decl(node.d.ts, 0, 0))
+>moduleName : Symbol(moduleName, Decl(node.d.ts, 0, 25))
+
+declare module "fs" {
+>"fs" : Symbol("fs", Decl(node.d.ts, 0, 50))
+
+    export function readFileSync(s: string): string;
+>readFileSync : Symbol(readFileSync, Decl(node.d.ts, 2, 21))
+>s : Symbol(s, Decl(node.d.ts, 3, 33))
+}
+

@@ -1,0 +1,40 @@
+tests/cases/conformance/expressions/contextualTyping/argumentExpressionContextualTyping.ts(16,5): error TS2345: Argument of type '(string | number | boolean)[]' is not assignable to parameter of type '[string, number, boolean]'.
+  Target requires 3 element(s) but source may have fewer.
+tests/cases/conformance/expressions/contextualTyping/argumentExpressionContextualTyping.ts(17,5): error TS2345: Argument of type '[string, number, true, ...(string | number | boolean)[]]' is not assignable to parameter of type '[string, number, boolean]'.
+  Target allows only 3 element(s) but source may have more.
+tests/cases/conformance/expressions/contextualTyping/argumentExpressionContextualTyping.ts(18,5): error TS2345: Argument of type '{ x: (string | number)[]; y: { c: boolean; d: string; e: number; }; }' is not assignable to parameter of type '{ x: [any, any]; y: { c: any; d: any; e: any; }; }'.
+  Types of property 'x' are incompatible.
+    Type '(string | number)[]' is not assignable to type '[any, any]'.
+      Target requires 2 element(s) but source may have fewer.
+
+
+==== tests/cases/conformance/expressions/contextualTyping/argumentExpressionContextualTyping.ts (3 errors) ====
+    // In a typed function call, argument expressions are contextually typed by their corresponding parameter types.
+    function foo({x: [a, b], y: {c, d, e}}) { }
+    function bar({x: [a, b = 10], y: {c, d, e = { f:1 }}}) { }
+    function baz(x: [string, number, boolean]) { }
+    
+    var o = { x: ["string", 1], y: { c: true, d: "world", e: 3 } };
+    var o1: { x: [string, number], y: { c: boolean, d: string, e: number } } = { x: ["string", 1], y: { c: true, d: "world", e: 3 } };
+    foo(o1); // Not error since x has contextual type of tuple namely [string, number]
+    foo({ x: ["string", 1], y: { c: true, d: "world", e: 3 } }); // Not error
+    
+    var array = ["string", 1, true];
+    var tuple: [string, number, boolean] = ["string", 1, true];
+    baz(tuple);
+    baz(["string", 1, true]);
+    
+    baz(array);                          // Error
+        ~~~~~
+!!! error TS2345: Argument of type '(string | number | boolean)[]' is not assignable to parameter of type '[string, number, boolean]'.
+!!! error TS2345:   Target requires 3 element(s) but source may have fewer.
+    baz(["string", 1, true, ...array]);  // Error
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2345: Argument of type '[string, number, true, ...(string | number | boolean)[]]' is not assignable to parameter of type '[string, number, boolean]'.
+!!! error TS2345:   Target allows only 3 element(s) but source may have more.
+    foo(o);                              // Error because x has an array type namely (string|number)[]
+        ~
+!!! error TS2345: Argument of type '{ x: (string | number)[]; y: { c: boolean; d: string; e: number; }; }' is not assignable to parameter of type '{ x: [any, any]; y: { c: any; d: any; e: any; }; }'.
+!!! error TS2345:   Types of property 'x' are incompatible.
+!!! error TS2345:     Type '(string | number)[]' is not assignable to type '[any, any]'.
+!!! error TS2345:       Target requires 2 element(s) but source may have fewer.

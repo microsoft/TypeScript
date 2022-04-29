@@ -1,0 +1,10 @@
+=== tests/cases/compiler/stringIndexerAndConstructor1.ts ===
+interface I {
+>I : Symbol(I, Decl(stringIndexerAndConstructor1.ts, 0, 0))
+
+    [s: string]: number;
+>s : Symbol(s, Decl(stringIndexerAndConstructor1.ts, 1, 5))
+
+    "": string;
+>"" : Symbol(I[""], Decl(stringIndexerAndConstructor1.ts, 1, 24))
+}

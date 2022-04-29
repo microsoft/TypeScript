@@ -1,0 +1,63 @@
+=== tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithInheritedPrivates3.ts ===
+class C {
+>C : C
+
+    private x: number;
+>x : number
+}
+
+class C2 {
+>C2 : C2
+
+    private x: number;
+>x : number
+}
+
+interface A extends C { // error
+    y: string;
+>y : string
+}
+
+interface A extends C2 { 
+    z: string;
+>z : string
+}
+
+class D extends C implements A { // error
+>D : D
+>C : C
+
+    y: string;
+>y : string
+
+    z: string;
+>z : string
+}
+
+module M {
+>M : typeof M
+
+    class C {
+>C : C
+
+        private x: string;
+>x : string
+    }
+
+    class C2 {
+>C2 : C2
+
+        private x: number;
+>x : number
+    }
+
+    interface A extends C { // error, privates conflict
+        y: string;
+>y : string
+    }
+
+    interface A extends C2 {
+        z: string;
+>z : string
+    }
+}

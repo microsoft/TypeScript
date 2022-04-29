@@ -1,0 +1,33 @@
+=== tests/cases/compiler/constructorOverloads8.ts ===
+class C {
+>C : C
+
+    constructor(x) { }
+>x : any
+
+    constructor(y, x) { } // illegal, 2 constructor implementations
+>y : any
+>x : any
+}
+
+class D {
+>D : D
+
+    constructor(x: number);
+>x : number
+
+    constructor(y: string); // legal, overload signatures for 1 implementation
+>y : string
+
+    constructor(x) { }
+>x : any
+}
+
+interface I {
+    new (x);
+>x : any
+
+    new (x, y); // legal, overload signatures for (presumably) 1 implementation
+>x : any
+>y : any
+}

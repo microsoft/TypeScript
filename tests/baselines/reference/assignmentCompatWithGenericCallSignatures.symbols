@@ -1,0 +1,25 @@
+=== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignatures.ts ===
+// some complex cases of assignment compat of generic signatures that stress contextual signature instantiation
+
+var f: <S extends { p: string }[]>(x: S) => void
+>f : Symbol(f, Decl(assignmentCompatWithGenericCallSignatures.ts, 2, 3))
+>S : Symbol(S, Decl(assignmentCompatWithGenericCallSignatures.ts, 2, 8))
+>p : Symbol(p, Decl(assignmentCompatWithGenericCallSignatures.ts, 2, 19))
+>x : Symbol(x, Decl(assignmentCompatWithGenericCallSignatures.ts, 2, 35))
+>S : Symbol(S, Decl(assignmentCompatWithGenericCallSignatures.ts, 2, 8))
+
+var g: <T extends { p: string }>(x: T[]) => void
+>g : Symbol(g, Decl(assignmentCompatWithGenericCallSignatures.ts, 3, 3))
+>T : Symbol(T, Decl(assignmentCompatWithGenericCallSignatures.ts, 3, 8))
+>p : Symbol(p, Decl(assignmentCompatWithGenericCallSignatures.ts, 3, 19))
+>x : Symbol(x, Decl(assignmentCompatWithGenericCallSignatures.ts, 3, 33))
+>T : Symbol(T, Decl(assignmentCompatWithGenericCallSignatures.ts, 3, 8))
+
+f = g; // ok
+>f : Symbol(f, Decl(assignmentCompatWithGenericCallSignatures.ts, 2, 3))
+>g : Symbol(g, Decl(assignmentCompatWithGenericCallSignatures.ts, 3, 3))
+
+g = f; // ok
+>g : Symbol(g, Decl(assignmentCompatWithGenericCallSignatures.ts, 3, 3))
+>f : Symbol(f, Decl(assignmentCompatWithGenericCallSignatures.ts, 2, 3))
+

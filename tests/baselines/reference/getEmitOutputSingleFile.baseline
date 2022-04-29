@@ -1,0 +1,16 @@
+EmitSkipped: false
+
+FileName : outputDir/singleFile.js
+var x;
+var Bar = /** @class */ (function () {
+    function Bar() {
+    }
+    return Bar;
+}());
+var x;
+var Foo = /** @class */ (function () {
+    function Foo() {
+    }
+    return Foo;
+}());
+

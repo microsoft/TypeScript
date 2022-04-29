@@ -1,0 +1,33 @@
+=== tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceTransitiveConstraints.ts ===
+function fn<A extends Date, B extends A, C extends B>(a: A, b: B, c: C) {
+>fn : Symbol(fn, Decl(typeArgumentInferenceTransitiveConstraints.ts, 0, 0))
+>A : Symbol(A, Decl(typeArgumentInferenceTransitiveConstraints.ts, 0, 12))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>B : Symbol(B, Decl(typeArgumentInferenceTransitiveConstraints.ts, 0, 27))
+>A : Symbol(A, Decl(typeArgumentInferenceTransitiveConstraints.ts, 0, 12))
+>C : Symbol(C, Decl(typeArgumentInferenceTransitiveConstraints.ts, 0, 40))
+>B : Symbol(B, Decl(typeArgumentInferenceTransitiveConstraints.ts, 0, 27))
+>a : Symbol(a, Decl(typeArgumentInferenceTransitiveConstraints.ts, 0, 54))
+>A : Symbol(A, Decl(typeArgumentInferenceTransitiveConstraints.ts, 0, 12))
+>b : Symbol(b, Decl(typeArgumentInferenceTransitiveConstraints.ts, 0, 59))
+>B : Symbol(B, Decl(typeArgumentInferenceTransitiveConstraints.ts, 0, 27))
+>c : Symbol(c, Decl(typeArgumentInferenceTransitiveConstraints.ts, 0, 65))
+>C : Symbol(C, Decl(typeArgumentInferenceTransitiveConstraints.ts, 0, 40))
+
+    return [a, b, c];
+>a : Symbol(a, Decl(typeArgumentInferenceTransitiveConstraints.ts, 0, 54))
+>b : Symbol(b, Decl(typeArgumentInferenceTransitiveConstraints.ts, 0, 59))
+>c : Symbol(c, Decl(typeArgumentInferenceTransitiveConstraints.ts, 0, 65))
+}
+
+var d = fn(new Date(), new Date(), new Date());
+>d : Symbol(d, Decl(typeArgumentInferenceTransitiveConstraints.ts, 4, 3), Decl(typeArgumentInferenceTransitiveConstraints.ts, 5, 3))
+>fn : Symbol(fn, Decl(typeArgumentInferenceTransitiveConstraints.ts, 0, 0))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+var d: Date[]; // Should be OK (d should be Date[])
+>d : Symbol(d, Decl(typeArgumentInferenceTransitiveConstraints.ts, 4, 3), Decl(typeArgumentInferenceTransitiveConstraints.ts, 5, 3))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+

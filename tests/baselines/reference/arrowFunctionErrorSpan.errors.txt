@@ -1,0 +1,111 @@
+tests/cases/compiler/arrowFunctionErrorSpan.ts(4,3): error TS2345: Argument of type '() => void' is not assignable to parameter of type '() => number'.
+  Type 'void' is not assignable to type 'number'.
+tests/cases/compiler/arrowFunctionErrorSpan.ts(7,3): error TS2345: Argument of type '() => void' is not assignable to parameter of type '() => number'.
+  Type 'void' is not assignable to type 'number'.
+tests/cases/compiler/arrowFunctionErrorSpan.ts(12,3): error TS2345: Argument of type '() => void' is not assignable to parameter of type '() => number'.
+  Type 'void' is not assignable to type 'number'.
+tests/cases/compiler/arrowFunctionErrorSpan.ts(17,3): error TS2345: Argument of type '() => void' is not assignable to parameter of type '() => number'.
+  Type 'void' is not assignable to type 'number'.
+tests/cases/compiler/arrowFunctionErrorSpan.ts(18,5): error TS1200: Line terminator not permitted before arrow.
+tests/cases/compiler/arrowFunctionErrorSpan.ts(21,3): error TS2345: Argument of type '(a: any, b: any, c: any, d: any) => void' is not assignable to parameter of type '() => number'.
+tests/cases/compiler/arrowFunctionErrorSpan.ts(28,7): error TS2345: Argument of type '() => void' is not assignable to parameter of type '() => number'.
+  Type 'void' is not assignable to type 'number'.
+tests/cases/compiler/arrowFunctionErrorSpan.ts(32,7): error TS2345: Argument of type '() => void' is not assignable to parameter of type '() => number'.
+  Type 'void' is not assignable to type 'number'.
+tests/cases/compiler/arrowFunctionErrorSpan.ts(36,7): error TS2345: Argument of type '() => void' is not assignable to parameter of type '() => number'.
+  Type 'void' is not assignable to type 'number'.
+tests/cases/compiler/arrowFunctionErrorSpan.ts(43,5): error TS2345: Argument of type '() => void' is not assignable to parameter of type '() => number'.
+  Type 'void' is not assignable to type 'number'.
+tests/cases/compiler/arrowFunctionErrorSpan.ts(52,3): error TS2345: Argument of type '(_: any) => number' is not assignable to parameter of type '() => number'.
+
+
+==== tests/cases/compiler/arrowFunctionErrorSpan.ts (11 errors) ====
+    function f(a: () => number) { }
+    
+    // oneliner
+    f(() => { });
+      ~~~~~~~~~
+!!! error TS2345: Argument of type '() => void' is not assignable to parameter of type '() => number'.
+!!! error TS2345:   Type 'void' is not assignable to type 'number'.
+    
+    // multiline, body
+    f(() => {
+      ~~~~~~~
+!!! error TS2345: Argument of type '() => void' is not assignable to parameter of type '() => number'.
+!!! error TS2345:   Type 'void' is not assignable to type 'number'.
+    
+    });
+    
+    // multiline 2, body
+    f(() => {
+      ~~~~~~~
+!!! error TS2345: Argument of type '() => void' is not assignable to parameter of type '() => number'.
+!!! error TS2345:   Type 'void' is not assignable to type 'number'.
+    
+    });
+    
+    // multiline 3, arrow on a new line
+    f(()
+      ~~
+        => { });
+    ~~~~~~~~~~
+!!! error TS2345: Argument of type '() => void' is not assignable to parameter of type '() => number'.
+!!! error TS2345:   Type 'void' is not assignable to type 'number'.
+        ~~
+!!! error TS1200: Line terminator not permitted before arrow.
+    
+    // multiline 4, arguments
+    f((a,
+      ~~~
+        b,
+    ~~~~~~
+        c,
+    ~~~~~~
+        d) => { });
+    ~~~~~~~~~~~~~
+!!! error TS2345: Argument of type '(a: any, b: any, c: any, d: any) => void' is not assignable to parameter of type '() => number'.
+    
+    // single line with a comment
+    f(/*
+        */() => { });
+          ~~~~~~~~~
+!!! error TS2345: Argument of type '() => void' is not assignable to parameter of type '() => number'.
+!!! error TS2345:   Type 'void' is not assignable to type 'number'.
+    
+    // multi line with a comment
+    f(/*
+        */() => { });
+          ~~~~~~~~~
+!!! error TS2345: Argument of type '() => void' is not assignable to parameter of type '() => number'.
+!!! error TS2345:   Type 'void' is not assignable to type 'number'.
+    
+    // multi line with a comment 2
+    f(/*
+        */() => { 
+          ~~~~~~~~
+!!! error TS2345: Argument of type '() => void' is not assignable to parameter of type '() => number'.
+!!! error TS2345:   Type 'void' is not assignable to type 'number'.
+    
+        });
+    
+    // multi line with a comment 3
+    f(  // comment 1
+        // comment 2
+        () =>
+        ~~~~~
+!!! error TS2345: Argument of type '() => void' is not assignable to parameter of type '() => number'.
+!!! error TS2345:   Type 'void' is not assignable to type 'number'.
+        // comment 3
+        {
+            // comment 4
+        }
+        // comment 5
+    ); 
+    
+    // body is not a block
+    f(_ => 1 +
+      ~~~~~~~~
+        2);
+    ~~~~~
+!!! error TS2345: Argument of type '(_: any) => number' is not assignable to parameter of type '() => number'.
+    

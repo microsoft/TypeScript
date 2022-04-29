@@ -1,0 +1,37 @@
+tests/cases/compiler/arrayOfSubtypeIsAssignableToReadonlyArray.ts(13,1): error TS2322: Type 'A[]' is not assignable to type 'readonly B[]'.
+  Property 'b' is missing in type 'A' but required in type 'B'.
+tests/cases/compiler/arrayOfSubtypeIsAssignableToReadonlyArray.ts(18,1): error TS2322: Type 'C<A>' is not assignable to type 'readonly B[]'.
+  The types returned by 'concat(...)' are incompatible between these types.
+    Type 'A[]' is not assignable to type 'B[]'.
+      Type 'A' is not assignable to type 'B'.
+
+
+==== tests/cases/compiler/arrayOfSubtypeIsAssignableToReadonlyArray.ts (2 errors) ====
+    class A { a }
+    class B extends A { b }
+    class C<T> extends Array<T> { c }
+    declare var ara: A[];
+    declare var arb: B[];
+    declare var cra: C<A>;
+    declare var crb: C<B>;
+    declare var rra: ReadonlyArray<A>;
+    declare var rrb: ReadonlyArray<B>;
+    rra = ara;
+    rrb = arb; // OK, Array<B> is assignable to ReadonlyArray<A>
+    rra = arb;
+    rrb = ara; // error: 'A' is not assignable to 'B'
+    ~~~
+!!! error TS2322: Type 'A[]' is not assignable to type 'readonly B[]'.
+!!! error TS2322:   Property 'b' is missing in type 'A' but required in type 'B'.
+!!! related TS2728 tests/cases/compiler/arrayOfSubtypeIsAssignableToReadonlyArray.ts:2:21: 'b' is declared here.
+    
+    rra = cra;
+    rra = crb; // OK, C<B> is assignable to ReadonlyArray<A>
+    rrb = crb;
+    rrb = cra; // error: 'A' is not assignable to 'B'
+    ~~~
+!!! error TS2322: Type 'C<A>' is not assignable to type 'readonly B[]'.
+!!! error TS2322:   The types returned by 'concat(...)' are incompatible between these types.
+!!! error TS2322:     Type 'A[]' is not assignable to type 'B[]'.
+!!! error TS2322:       Type 'A' is not assignable to type 'B'.
+    

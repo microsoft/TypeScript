@@ -1,0 +1,41 @@
+=== tests/cases/compiler/promiseIdentity.ts ===
+export interface IPromise<T> {
+    then<U>(callback: (x: T) => IPromise<U>): IPromise<U>;
+>then : <U>(callback: (x: T) => IPromise<U>) => IPromise<U>
+>callback : (x: T) => IPromise<U>
+>x : T
+}
+interface Promise<T> {
+    then<U>(callback: (x: T) => Promise<U>): Promise<U>;
+>then : <U>(callback: (x: T) => Promise<U>) => Promise<U>
+>callback : (x: T) => Promise<U>
+>x : T
+}
+var x: IPromise<string>;
+>x : IPromise<string>
+
+var x: Promise<string>;
+>x : IPromise<string>
+
+
+interface IPromise2<T, V> {
+    then<U, W>(callback: (x: T) => IPromise2<U, W>): IPromise2<W, U>;
+>then : <U, W>(callback: (x: T) => IPromise2<U, W>) => IPromise2<W, U>
+>callback : (x: T) => IPromise2<U, W>
+>x : T
+}
+interface Promise2<T, V> {
+    then<U, W>(callback: (x: V) => Promise2<U, T>): Promise2<T, W>; // Uses V instead of T in callback's parameter
+>then : <U, W>(callback: (x: V) => Promise2<U, T>) => Promise2<T, W>
+>callback : (x: V) => Promise2<U, T>
+>x : V
+}
+
+// Ok because T in this particular Promise2 is any, as are all the U and W references.
+// Also, the V of Promise2 happens to coincide with the T of IPromise2 (they are both string).
+var y: IPromise2<string, number>;
+>y : IPromise2<string, number>
+
+var y: Promise2<any, string>;
+>y : IPromise2<string, number>
+

@@ -1,0 +1,67 @@
+=== /user.ts ===
+// Error, can't re-export something that's only a type.
+export { T } from "./exportT";
+>T : Symbol(T, Decl(user.ts, 1, 8))
+
+export import T2 = require("./exportEqualsT");
+>T2 : Symbol(T2, Decl(user.ts, 1, 30))
+
+// OK, has a value side
+export { C } from "./exportValue";
+>C : Symbol(C, Decl(user.ts, 5, 8))
+
+// OK, even though the namespace it exports is only types.
+import * as NS from "./exportT";
+>NS : Symbol(NS, Decl(user.ts, 8, 6))
+
+export { NS };
+>NS : Symbol(NS, Decl(user.ts, 9, 8))
+
+// OK, syntactically clear that a type is being re-exported.
+export type T3 = T;
+>T3 : Symbol(T3, Decl(user.ts, 9, 14))
+>T : Symbol(T, Decl(user.ts, 15, 8))
+
+// Error, not clear (to an isolated module) whether `T4` is a type.
+import { T } from "./exportT";
+>T : Symbol(T, Decl(user.ts, 15, 8))
+
+export { T as T4 };
+>T : Symbol(T, Decl(user.ts, 15, 8))
+>T4 : Symbol(T4, Decl(user.ts, 16, 8))
+
+// Ok, type-only import indicates that the export can be elided.
+import type { T as TT } from "./exportT";
+>T : Symbol(NS.T, Decl(exportT.ts, 0, 0))
+>TT : Symbol(TT, Decl(user.ts, 19, 13))
+
+export { TT };
+>TT : Symbol(TT, Decl(user.ts, 20, 8))
+
+// Error, type-only declaration is in a different file.
+import { C as CC } from "./reExportValueAsTypeOnly";
+>C : Symbol(C, Decl(reExportValueAsTypeOnly.ts, 0, 13))
+>CC : Symbol(CC, Decl(user.ts, 23, 8))
+
+export { CC };
+>CC : Symbol(CC, Decl(user.ts, 24, 8))
+
+=== /exportT.ts ===
+export type T = number;
+>T : Symbol(T, Decl(exportT.ts, 0, 0))
+
+=== /exportValue.ts ===
+export class C {}
+>C : Symbol(C, Decl(exportValue.ts, 0, 0))
+
+=== /exportEqualsT.ts ===
+declare type T = number;
+>T : Symbol(T, Decl(exportEqualsT.ts, 0, 0))
+
+export = T;
+>T : Symbol(T, Decl(exportEqualsT.ts, 0, 0))
+
+=== /reExportValueAsTypeOnly.ts ===
+export type { C } from "./exportValue";
+>C : Symbol(C, Decl(reExportValueAsTypeOnly.ts, 0, 13))
+

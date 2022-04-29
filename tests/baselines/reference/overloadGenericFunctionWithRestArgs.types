@@ -1,0 +1,25 @@
+=== tests/cases/compiler/overloadGenericFunctionWithRestArgs.ts ===
+class B<V>{
+>B : B<V>
+
+    private id: V;
+>id : V
+}
+class A<U>{
+>A : A<U>
+
+    GetEnumerator: () => B<U>;
+>GetEnumerator : () => B<U>
+}
+function Choice<T>(...v_args: T[]): A<T>;
+>Choice : <T>(...v_args: T[]) => A<T>
+>v_args : T[]
+
+function Choice<T>(...v_args: T[]): A<T> {
+>Choice : <T>(...v_args: T[]) => A<T>
+>v_args : T[]
+
+    return new A<T>();
+>new A<T>() : A<T>
+>A : typeof A
+}

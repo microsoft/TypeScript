@@ -1,0 +1,21 @@
+tests/cases/compiler/user.ts(3,5): error TS2322: Type '() => void' is not assignable to type 'string'.
+tests/cases/compiler/user.ts(4,5): error TS2322: Type '() => void' is not assignable to type 'string'.
+
+
+==== tests/cases/compiler/demo.d.ts (0 errors) ====
+    declare namespace demoNS {
+        function f(): void;
+    }
+    declare module 'demoModule' {
+        import alias = demoNS;
+        export = alias;
+    }
+==== tests/cases/compiler/user.ts (2 errors) ====
+    import { f } from 'demoModule';
+    // Assign an incorrect type here to see the type of 'f'.
+    let x1: string = demoNS.f;
+        ~~
+!!! error TS2322: Type '() => void' is not assignable to type 'string'.
+    let x2: string = f;
+        ~~
+!!! error TS2322: Type '() => void' is not assignable to type 'string'.

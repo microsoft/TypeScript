@@ -1,0 +1,26 @@
+tests/cases/compiler/tooManyTypeParameters1.ts(2,3): error TS2558: Expected 1 type arguments, but got 2.
+tests/cases/compiler/tooManyTypeParameters1.ts(5,3): error TS2558: Expected 1 type arguments, but got 2.
+tests/cases/compiler/tooManyTypeParameters1.ts(8,15): error TS2558: Expected 1 type arguments, but got 2.
+tests/cases/compiler/tooManyTypeParameters1.ts(11,8): error TS2314: Generic type 'I<T>' requires 1 type argument(s).
+
+
+==== tests/cases/compiler/tooManyTypeParameters1.ts (4 errors) ====
+    function f<T>() { }
+    f<string, string>();
+      ~~~~~~~~~~~~~~
+!!! error TS2558: Expected 1 type arguments, but got 2.
+    
+    var x = <T>() => {};
+    x<number,number>();
+      ~~~~~~~~~~~~~
+!!! error TS2558: Expected 1 type arguments, but got 2.
+    
+    class C<T> {}
+    var c = new C<Date,Date>();
+                  ~~~~~~~~~
+!!! error TS2558: Expected 1 type arguments, but got 2.
+    
+    interface I<T> {}
+    var i: I<number,number>;
+           ~~~~~~~~~~~~~~~~
+!!! error TS2314: Generic type 'I<T>' requires 1 type argument(s).

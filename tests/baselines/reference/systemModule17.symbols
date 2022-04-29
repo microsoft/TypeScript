@@ -1,0 +1,90 @@
+=== tests/cases/compiler/f1.ts ===
+export class A {}
+>A : Symbol(A, Decl(f1.ts, 0, 0))
+
+export interface I {}
+>I : Symbol(I, Decl(f1.ts, 0, 17))
+
+=== tests/cases/compiler/f2.ts ===
+var x = 1;
+>x : Symbol(x, Decl(f2.ts, 0, 3))
+
+interface I { }
+>I : Symbol(I, Decl(f2.ts, 0, 10))
+
+namespace N {
+>N : Symbol(N, Decl(f2.ts, 1, 15))
+
+	export var x = 1;
+>x : Symbol(x, Decl(f2.ts, 4, 11))
+
+	export interface I { }	
+>I : Symbol(I, Decl(f2.ts, 4, 18))
+}
+
+import IX = N.x;
+>IX : Symbol(IX, Decl(f2.ts, 6, 1))
+>N : Symbol(N, Decl(f2.ts, 1, 15))
+>x : Symbol(IX, Decl(f2.ts, 4, 11))
+
+import II = N.I;
+>II : Symbol(II, Decl(f2.ts, 8, 16))
+>N : Symbol(N, Decl(f2.ts, 1, 15))
+>I : Symbol(II, Decl(f2.ts, 4, 18))
+
+import { A, A as EA, I as EI } from "f1";
+>A : Symbol(A, Decl(f2.ts, 10, 8))
+>A : Symbol(A, Decl(f1.ts, 0, 0))
+>EA : Symbol(EA, Decl(f2.ts, 10, 11))
+>I : Symbol(EI, Decl(f1.ts, 0, 17))
+>EI : Symbol(EI, Decl(f2.ts, 10, 20))
+
+export {x};
+>x : Symbol(x, Decl(f2.ts, 12, 8))
+
+export {x as x1};
+>x : Symbol(x, Decl(f2.ts, 0, 3))
+>x1 : Symbol(x1, Decl(f2.ts, 13, 8))
+
+export {I};
+>I : Symbol(I, Decl(f2.ts, 15, 8))
+
+export {I as I1};
+>I : Symbol(I, Decl(f2.ts, 0, 10))
+>I1 : Symbol(I1, Decl(f2.ts, 16, 8))
+
+export {A};
+>A : Symbol(A, Decl(f2.ts, 18, 8))
+
+export {A as A1};
+>A : Symbol(A, Decl(f2.ts, 10, 8))
+>A1 : Symbol(A1, Decl(f2.ts, 19, 8))
+
+export {EA};
+>EA : Symbol(EA, Decl(f2.ts, 21, 8))
+
+export {EA as EA1};
+>EA : Symbol(EA, Decl(f2.ts, 10, 11))
+>EA1 : Symbol(EA1, Decl(f2.ts, 22, 8))
+
+export {EI };
+>EI : Symbol(EI, Decl(f2.ts, 24, 8))
+
+export {EI as EI1};
+>EI : Symbol(EI, Decl(f2.ts, 10, 20))
+>EI1 : Symbol(EI1, Decl(f2.ts, 25, 8))
+
+export {IX};
+>IX : Symbol(IX, Decl(f2.ts, 27, 8))
+
+export {IX as IX1};
+>IX : Symbol(IX, Decl(f2.ts, 6, 1))
+>IX1 : Symbol(IX1, Decl(f2.ts, 28, 8))
+
+export {II};
+>II : Symbol(II, Decl(f2.ts, 30, 8))
+
+export {II as II1};
+>II : Symbol(II, Decl(f2.ts, 8, 16))
+>II1 : Symbol(II1, Decl(f2.ts, 31, 8))
+

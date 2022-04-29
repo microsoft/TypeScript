@@ -1,0 +1,28 @@
+=== tests/cases/conformance/salsa/a.js ===
+OOOrder.prototype.m = function () {
+>OOOrder.prototype.m = function () {    this.p = 1} : () => void
+>OOOrder.prototype.m : any
+>OOOrder.prototype : any
+>OOOrder : typeof OOOrder
+>prototype : any
+>m : any
+>function () {    this.p = 1} : () => void
+
+    this.p = 1
+>this.p = 1 : 1
+>this.p : number
+>this : this
+>p : number
+>1 : 1
+}
+function OOOrder() {
+>OOOrder : typeof OOOrder
+
+    this.x = 1
+>this.x = 1 : 1
+>this.x : any
+>this : this
+>x : any
+>1 : 1
+}
+

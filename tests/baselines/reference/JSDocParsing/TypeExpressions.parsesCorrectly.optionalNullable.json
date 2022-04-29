@@ -1,0 +1,16 @@
+{
+    "kind": "JSDocOptionalType",
+    "pos": 1,
+    "end": 3,
+    "flags": "JSDoc",
+    "modifierFlagsCache": 0,
+    "transformFlags": 0,
+    "type": {
+        "kind": "JSDocUnknownType",
+        "pos": 1,
+        "end": 2,
+        "flags": "JSDoc",
+        "modifierFlagsCache": 0,
+        "transformFlags": 0
+    }
+}

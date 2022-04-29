@@ -1,0 +1,9 @@
+=== tests/cases/conformance/es6/for-ofStatements/for-of13.ts ===
+var v: string;
+>v : Symbol(v, Decl(for-of13.ts, 0, 3))
+
+for (v of [""].values()) { }
+>v : Symbol(v, Decl(for-of13.ts, 0, 3))
+>[""].values : Symbol(Array.values, Decl(lib.es2015.iterable.d.ts, --, --))
+>values : Symbol(Array.values, Decl(lib.es2015.iterable.d.ts, --, --))
+

@@ -1,0 +1,18 @@
+=== tests/cases/conformance/jsx/file.tsx ===
+import React = require('react');
+>React : Symbol(React, Decl(file.tsx, 0, 0))
+
+type Invalid1 = React.ComponentClass<any> | number;
+>Invalid1 : Symbol(Invalid1, Decl(file.tsx, 0, 32))
+>React : Symbol(React, Decl(file.tsx, 0, 0))
+>ComponentClass : Symbol(React.ComponentClass, Decl(react.d.ts, 205, 5))
+
+const X: Invalid1 = 1;
+>X : Symbol(X, Decl(file.tsx, 4, 5))
+>Invalid1 : Symbol(Invalid1, Decl(file.tsx, 0, 32))
+
+<X />;
+>X : Symbol(X, Decl(file.tsx, 4, 5))
+
+
+

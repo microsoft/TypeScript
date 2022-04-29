@@ -1,0 +1,10 @@
+tests/cases/compiler/numericIndexerConstraint.ts(2,5): error TS2411: Property '0' of type 'number' is not assignable to 'number' index type 'RegExp'.
+
+
+==== tests/cases/compiler/numericIndexerConstraint.ts (1 errors) ====
+    class C {
+        0: number;
+        ~
+!!! error TS2411: Property '0' of type 'number' is not assignable to 'number' index type 'RegExp'.
+        [x: number]: RegExp;
+    }

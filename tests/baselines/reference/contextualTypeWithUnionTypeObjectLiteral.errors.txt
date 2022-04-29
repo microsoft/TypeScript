@@ -1,0 +1,127 @@
+tests/cases/conformance/types/union/contextualTypeWithUnionTypeObjectLiteral.ts(14,5): error TS2322: Type '{ prop: string | number; }' is not assignable to type '{ prop: string; } | { prop: number; }'.
+  Type '{ prop: string | number; }' is not assignable to type '{ prop: number; }'.
+    Types of property 'prop' are incompatible.
+      Type 'string | number' is not assignable to type 'number'.
+        Type 'string' is not assignable to type 'number'.
+tests/cases/conformance/types/union/contextualTypeWithUnionTypeObjectLiteral.ts(20,5): error TS2322: Type '{ prop: string | number; }' is not assignable to type '{ prop: string; anotherP: string; } | { prop: number; }'.
+  Type '{ prop: string | number; }' is not assignable to type '{ prop: number; }'.
+    Types of property 'prop' are incompatible.
+      Type 'string | number' is not assignable to type 'number'.
+        Type 'string' is not assignable to type 'number'.
+tests/cases/conformance/types/union/contextualTypeWithUnionTypeObjectLiteral.ts(21,5): error TS2322: Type '{ prop: string | number; anotherP: string; }' is not assignable to type '{ prop: string; anotherP: string; } | { prop: number; }'.
+  Type '{ prop: string | number; anotherP: string; }' is not assignable to type '{ prop: string; anotherP: string; }'.
+    Types of property 'prop' are incompatible.
+      Type 'string | number' is not assignable to type 'string'.
+        Type 'number' is not assignable to type 'string'.
+tests/cases/conformance/types/union/contextualTypeWithUnionTypeObjectLiteral.ts(25,5): error TS2322: Type '{ prop: string | number; anotherP: string; }' is not assignable to type '{ prop: string; anotherP: string; } | { prop: number; anotherP1: number; }'.
+  Type '{ prop: string | number; anotherP: string; }' is not assignable to type '{ prop: string; anotherP: string; }'.
+    Types of property 'prop' are incompatible.
+      Type 'string | number' is not assignable to type 'string'.
+        Type 'number' is not assignable to type 'string'.
+tests/cases/conformance/types/union/contextualTypeWithUnionTypeObjectLiteral.ts(29,5): error TS2322: Type '{ prop: string | number; anotherP: string; anotherP1: number; }' is not assignable to type '{ prop: string; anotherP: string; } | { prop: number; anotherP1: number; }'.
+  Type '{ prop: string | number; anotherP: string; anotherP1: number; }' is not assignable to type '{ prop: number; anotherP1: number; }'.
+    Types of property 'prop' are incompatible.
+      Type 'string | number' is not assignable to type 'number'.
+        Type 'string' is not assignable to type 'number'.
+tests/cases/conformance/types/union/contextualTypeWithUnionTypeObjectLiteral.ts(58,5): error TS2322: Type '(a: string, b: number) => string | number' is not assignable to type '((a: string, b: number) => string) | ((a: string, b: number) => number)'.
+  Type '(a: string, b: number) => string | number' is not assignable to type '(a: string, b: number) => string'.
+    Type 'string | number' is not assignable to type 'string'.
+      Type 'number' is not assignable to type 'string'.
+
+
+==== tests/cases/conformance/types/union/contextualTypeWithUnionTypeObjectLiteral.ts (6 errors) ====
+    var str: string;
+    var num: number;
+    var strOrNumber: string | number = str || num;
+    var objStr: { prop: string };
+    var objNum: { prop: number };
+    var objStrOrNum1: { prop: string } | { prop: number } = objStr || objNum;
+    var objStrOrNum2: { prop: string | number } = objStr || objNum;
+    // Below is error because :
+    // Spec says:
+    // S is a union type and each constituent type of S is assignable to T.
+    // T is a union type and S is assignable to at least one constituent type of T.
+    // In case of objStrOrNum3, the S is not union Type but object Literal so we go to next step. 
+    // Since T is union Type we only allow the assignment of either object with property of type string or object with property of type number but do not allow object with property of type string | number
+    var objStrOrNum3: { prop: string } | { prop: number } = {
+        ~~~~~~~~~~~~
+!!! error TS2322: Type '{ prop: string | number; }' is not assignable to type '{ prop: string; } | { prop: number; }'.
+!!! error TS2322:   Type '{ prop: string | number; }' is not assignable to type '{ prop: number; }'.
+!!! error TS2322:     Types of property 'prop' are incompatible.
+!!! error TS2322:       Type 'string | number' is not assignable to type 'number'.
+!!! error TS2322:         Type 'string' is not assignable to type 'number'.
+        prop: strOrNumber
+    };
+    var objStrOrNum4: { prop: string | number } = {
+        prop: strOrNumber
+    };
+    var objStrOrNum5: { prop: string; anotherP: string; } | { prop: number } = { prop: strOrNumber };
+        ~~~~~~~~~~~~
+!!! error TS2322: Type '{ prop: string | number; }' is not assignable to type '{ prop: string; anotherP: string; } | { prop: number; }'.
+!!! error TS2322:   Type '{ prop: string | number; }' is not assignable to type '{ prop: number; }'.
+!!! error TS2322:     Types of property 'prop' are incompatible.
+!!! error TS2322:       Type 'string | number' is not assignable to type 'number'.
+!!! error TS2322:         Type 'string' is not assignable to type 'number'.
+    var objStrOrNum6: { prop: string; anotherP: string; } | { prop: number } = {
+        ~~~~~~~~~~~~
+!!! error TS2322: Type '{ prop: string | number; anotherP: string; }' is not assignable to type '{ prop: string; anotherP: string; } | { prop: number; }'.
+!!! error TS2322:   Type '{ prop: string | number; anotherP: string; }' is not assignable to type '{ prop: string; anotherP: string; }'.
+!!! error TS2322:     Types of property 'prop' are incompatible.
+!!! error TS2322:       Type 'string | number' is not assignable to type 'string'.
+!!! error TS2322:         Type 'number' is not assignable to type 'string'.
+        prop: strOrNumber,
+        anotherP: str
+    };
+    var objStrOrNum7: { prop: string; anotherP: string; } | { prop: number; anotherP1: number } = {
+        ~~~~~~~~~~~~
+!!! error TS2322: Type '{ prop: string | number; anotherP: string; }' is not assignable to type '{ prop: string; anotherP: string; } | { prop: number; anotherP1: number; }'.
+!!! error TS2322:   Type '{ prop: string | number; anotherP: string; }' is not assignable to type '{ prop: string; anotherP: string; }'.
+!!! error TS2322:     Types of property 'prop' are incompatible.
+!!! error TS2322:       Type 'string | number' is not assignable to type 'string'.
+!!! error TS2322:         Type 'number' is not assignable to type 'string'.
+        prop: strOrNumber,
+        anotherP: str
+    };
+    var objStrOrNum8: { prop: string; anotherP: string; } | { prop: number; anotherP1: number } = {
+        ~~~~~~~~~~~~
+!!! error TS2322: Type '{ prop: string | number; anotherP: string; anotherP1: number; }' is not assignable to type '{ prop: string; anotherP: string; } | { prop: number; anotherP1: number; }'.
+!!! error TS2322:   Type '{ prop: string | number; anotherP: string; anotherP1: number; }' is not assignable to type '{ prop: number; anotherP1: number; }'.
+!!! error TS2322:     Types of property 'prop' are incompatible.
+!!! error TS2322:       Type 'string | number' is not assignable to type 'number'.
+!!! error TS2322:         Type 'string' is not assignable to type 'number'.
+        prop: strOrNumber,
+        anotherP: str,
+        anotherP1: num
+    };
+    interface I11 {
+        commonMethodDifferentReturnType(a: string, b: number): string;
+    }
+    interface I21 {
+        commonMethodDifferentReturnType(a: string, b: number): number;
+    }
+    var i11: I11;
+    var i21: I21;
+    var i11Ori21: I11 | I21 = i11;
+    var i11Ori21: I11 | I21 = i21;
+    var i11Ori21: I11 | I21 = { // Like i1
+        commonMethodDifferentReturnType: (a, b) => {
+            var z = a.charAt(b);
+            return z;
+        },
+    };
+    var i11Ori21: I11 | I21 = { // Like i2
+        commonMethodDifferentReturnType: (a, b) => {
+            var z = a.charCodeAt(b);
+            return z;
+        },
+    };
+    var strOrNumber: string | number;
+    var i11Ori21: I11 | I21 = { // Like i1 and i2 both
+        commonMethodDifferentReturnType: (a, b) => strOrNumber,
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type '(a: string, b: number) => string | number' is not assignable to type '((a: string, b: number) => string) | ((a: string, b: number) => number)'.
+!!! error TS2322:   Type '(a: string, b: number) => string | number' is not assignable to type '(a: string, b: number) => string'.
+!!! error TS2322:     Type 'string | number' is not assignable to type 'string'.
+!!! error TS2322:       Type 'number' is not assignable to type 'string'.
+!!! related TS6500 tests/cases/conformance/types/union/contextualTypeWithUnionTypeObjectLiteral.ts:35:5: The expected type comes from property 'commonMethodDifferentReturnType' which is declared here on type 'I11 | I21'
+    };

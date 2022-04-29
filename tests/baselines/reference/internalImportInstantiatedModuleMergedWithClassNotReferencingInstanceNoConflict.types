@@ -1,0 +1,24 @@
+=== tests/cases/compiler/internalImportInstantiatedModuleMergedWithClassNotReferencingInstanceNoConflict.ts ===
+class A {
+>A : A
+
+    aProp: string;
+>aProp : string
+}
+module A {
+>A : typeof A
+
+    export interface X { s: string }
+>s : string
+
+    export var a = 10;
+>a : number
+>10 : 10
+}
+
+module B {
+    import Y = A;
+>Y : typeof Y
+>A : Y
+}
+

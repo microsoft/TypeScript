@@ -1,0 +1,25 @@
+=== tests/cases/compiler/arrowFunctionMissingCurlyWithSemicolon.ts ===
+// Should error at semicolon.
+var f = () => ;
+>f : () => any
+>() => : () => any
+> : any
+
+var b = 1 * 2 * 3 * 4;
+>b : number
+>1 * 2 * 3 * 4 : number
+>1 * 2 * 3 : number
+>1 * 2 : number
+>1 : 1
+>2 : 2
+>3 : 3
+>4 : 4
+
+var square = (x: number) => x * x;
+>square : (x: number) => number
+>(x: number) => x * x : (x: number) => number
+>x : number
+>x * x : number
+>x : number
+>x : number
+

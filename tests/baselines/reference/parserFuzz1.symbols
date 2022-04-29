@@ -1,0 +1,4 @@
+=== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserFuzz1.ts ===
+cla <ss {
+No type information for this code.  _ static try
+No type information for this code.

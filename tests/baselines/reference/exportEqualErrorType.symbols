@@ -1,0 +1,48 @@
+=== tests/cases/compiler/exportEqualErrorType_1.ts ===
+///<reference path='exportEqualErrorType_0.ts'/>
+import connect = require('exportEqualErrorType_0');
+>connect : Symbol(connect, Decl(exportEqualErrorType_1.ts, 0, 0))
+
+connect().use(connect.static('foo')); // Error  1      The property 'static' does not exist on value of type ''.
+>connect().use : Symbol(connect.connectExport.use, Decl(exportEqualErrorType_0.ts, 4, 36))
+>connect : Symbol(connect, Decl(exportEqualErrorType_1.ts, 0, 0))
+>use : Symbol(connect.connectExport.use, Decl(exportEqualErrorType_0.ts, 4, 36))
+>connect : Symbol(connect, Decl(exportEqualErrorType_1.ts, 0, 0))
+
+=== tests/cases/compiler/exportEqualErrorType_0.ts ===
+module server {
+>server : Symbol(server, Decl(exportEqualErrorType_0.ts, 0, 0), Decl(exportEqualErrorType_0.ts, 8, 3))
+
+    export interface connectModule {
+>connectModule : Symbol(connectModule, Decl(exportEqualErrorType_0.ts, 0, 15))
+
+        (res, req, next): void;
+>res : Symbol(res, Decl(exportEqualErrorType_0.ts, 2, 9))
+>req : Symbol(req, Decl(exportEqualErrorType_0.ts, 2, 13))
+>next : Symbol(next, Decl(exportEqualErrorType_0.ts, 2, 18))
+    }
+    export interface connectExport {
+>connectExport : Symbol(connectExport, Decl(exportEqualErrorType_0.ts, 3, 5))
+
+        use: (mod: connectModule) => connectExport;
+>use : Symbol(connectExport.use, Decl(exportEqualErrorType_0.ts, 4, 36))
+>mod : Symbol(mod, Decl(exportEqualErrorType_0.ts, 5, 14))
+>connectModule : Symbol(connectModule, Decl(exportEqualErrorType_0.ts, 0, 15))
+>connectExport : Symbol(connectExport, Decl(exportEqualErrorType_0.ts, 3, 5))
+    }
+}
+var server: {
+>server : Symbol(server, Decl(exportEqualErrorType_0.ts, 0, 0), Decl(exportEqualErrorType_0.ts, 8, 3))
+
+    (): server.connectExport;
+>server : Symbol(server, Decl(exportEqualErrorType_0.ts, 0, 0), Decl(exportEqualErrorType_0.ts, 8, 3))
+>connectExport : Symbol(server.connectExport, Decl(exportEqualErrorType_0.ts, 3, 5))
+
+    foo: Date;
+>foo : Symbol(foo, Decl(exportEqualErrorType_0.ts, 9, 29))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+};
+export = server;
+>server : Symbol(server, Decl(exportEqualErrorType_0.ts, 0, 0), Decl(exportEqualErrorType_0.ts, 8, 3))
+ 

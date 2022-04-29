@@ -1,0 +1,35 @@
+=== tests/cases/compiler/restParameterWithBindingPattern3.ts ===
+function a(...[a = 1, b = true]: string[]) { }
+>a : (...[a, b]: string[]) => void
+>a : string
+>1 : 1
+>b : string
+>true : true
+
+function b(...[...foo = []]: string[]) { }
+>b : (...[...foo]: string[]) => void
+>foo : string[]
+>[] : undefined[]
+
+function c(...{0: a, length, 3: d}: [boolean, string, number]) { }
+>c : (__0_0: boolean, __0_1: string, __0_2: number) => void
+>a : boolean
+>length : 3
+>d : undefined
+
+function d(...[a, , , d]: [boolean, string, number]) { }
+>d : (__0_0: boolean, __0_1: string, __0_2: number) => void
+>a : boolean
+> : undefined
+> : undefined
+>d : undefined
+
+function e(...{0: a = 1, 1: b = true, ...rest: rest}: [boolean, string, number]) { }
+>e : (__0_0: boolean, __0_1: string, __0_2: number) => void
+>a : boolean
+>1 : 1
+>b : string
+>true : true
+>rest : any
+>rest : { [n: number]: string | number | boolean; 0: boolean; 1: string; 2: number; length: 3; toString(): string; toLocaleString(): string; pop(): string | number | boolean; push(...items: (string | number | boolean)[]): number; concat(...items: ConcatArray<string | number | boolean>[]): (string | number | boolean)[]; concat(...items: (string | number | boolean | ConcatArray<string | number | boolean>)[]): (string | number | boolean)[]; join(separator?: string): string; reverse(): (string | number | boolean)[]; shift(): string | number | boolean; slice(start?: number, end?: number): (string | number | boolean)[]; sort(compareFn?: (a: string | number | boolean, b: string | number | boolean) => number): [boolean, string, number]; splice(start: number, deleteCount?: number): (string | number | boolean)[]; splice(start: number, deleteCount: number, ...items: (string | number | boolean)[]): (string | number | boolean)[]; unshift(...items: (string | number | boolean)[]): number; indexOf(searchElement: string | number | boolean, fromIndex?: number): number; lastIndexOf(searchElement: string | number | boolean, fromIndex?: number): number; every<S extends string | number | boolean>(predicate: (value: string | number | boolean, index: number, array: (string | number | boolean)[]) => value is S, thisArg?: any): this is S[]; every(predicate: (value: string | number | boolean, index: number, array: (string | number | boolean)[]) => unknown, thisArg?: any): boolean; some(predicate: (value: string | number | boolean, index: number, array: (string | number | boolean)[]) => unknown, thisArg?: any): boolean; forEach(callbackfn: (value: string | number | boolean, index: number, array: (string | number | boolean)[]) => void, thisArg?: any): void; map<U>(callbackfn: (value: string | number | boolean, index: number, array: (string | number | boolean)[]) => U, thisArg?: any): U[]; filter<S extends string | number | boolean>(predicate: (value: string | number | boolean, index: number, array: (string | number | boolean)[]) => value is S, thisArg?: any): S[]; filter(predicate: (value: string | number | boolean, index: number, array: (string | number | boolean)[]) => unknown, thisArg?: any): (string | number | boolean)[]; reduce(callbackfn: (previousValue: string | number | boolean, currentValue: string | number | boolean, currentIndex: number, array: (string | number | boolean)[]) => string | number | boolean): string | number | boolean; reduce(callbackfn: (previousValue: string | number | boolean, currentValue: string | number | boolean, currentIndex: number, array: (string | number | boolean)[]) => string | number | boolean, initialValue: string | number | boolean): string | number | boolean; reduce<U>(callbackfn: (previousValue: U, currentValue: string | number | boolean, currentIndex: number, array: (string | number | boolean)[]) => U, initialValue: U): U; reduceRight(callbackfn: (previousValue: string | number | boolean, currentValue: string | number | boolean, currentIndex: number, array: (string | number | boolean)[]) => string | number | boolean): string | number | boolean; reduceRight(callbackfn: (previousValue: string | number | boolean, currentValue: string | number | boolean, currentIndex: number, array: (string | number | boolean)[]) => string | number | boolean, initialValue: string | number | boolean): string | number | boolean; reduceRight<U>(callbackfn: (previousValue: U, currentValue: string | number | boolean, currentIndex: number, array: (string | number | boolean)[]) => U, initialValue: U): U; }
+

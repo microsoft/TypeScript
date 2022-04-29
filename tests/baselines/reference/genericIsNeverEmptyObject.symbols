@@ -1,0 +1,33 @@
+=== tests/cases/compiler/genericIsNeverEmptyObject.ts ===
+// Repro from #29067
+
+function test<T extends { a: string }>(obj: T) {
+>test : Symbol(test, Decl(genericIsNeverEmptyObject.ts, 0, 0))
+>T : Symbol(T, Decl(genericIsNeverEmptyObject.ts, 2, 14))
+>a : Symbol(a, Decl(genericIsNeverEmptyObject.ts, 2, 25))
+>obj : Symbol(obj, Decl(genericIsNeverEmptyObject.ts, 2, 39))
+>T : Symbol(T, Decl(genericIsNeverEmptyObject.ts, 2, 14))
+
+    let { a, ...rest } = obj;
+>a : Symbol(a, Decl(genericIsNeverEmptyObject.ts, 3, 9))
+>rest : Symbol(rest, Decl(genericIsNeverEmptyObject.ts, 3, 12))
+>obj : Symbol(obj, Decl(genericIsNeverEmptyObject.ts, 2, 39))
+
+    return { ...rest, b: a };
+>rest : Symbol(rest, Decl(genericIsNeverEmptyObject.ts, 3, 12))
+>b : Symbol(b, Decl(genericIsNeverEmptyObject.ts, 4, 21))
+>a : Symbol(a, Decl(genericIsNeverEmptyObject.ts, 3, 9))
+}
+
+let o1 = { a: 'hello', x: 42 };
+>o1 : Symbol(o1, Decl(genericIsNeverEmptyObject.ts, 7, 3))
+>a : Symbol(a, Decl(genericIsNeverEmptyObject.ts, 7, 10))
+>x : Symbol(x, Decl(genericIsNeverEmptyObject.ts, 7, 22))
+
+let o2: { b: string, x: number } = test(o1);
+>o2 : Symbol(o2, Decl(genericIsNeverEmptyObject.ts, 8, 3))
+>b : Symbol(b, Decl(genericIsNeverEmptyObject.ts, 8, 9))
+>x : Symbol(x, Decl(genericIsNeverEmptyObject.ts, 8, 20))
+>test : Symbol(test, Decl(genericIsNeverEmptyObject.ts, 0, 0))
+>o1 : Symbol(o1, Decl(genericIsNeverEmptyObject.ts, 7, 3))
+

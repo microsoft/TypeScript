@@ -1,0 +1,12 @@
+=== tests/cases/compiler/collisionThisExpressionAndAmbientClassInGlobal.ts ===
+declare class _this { // no error - as no code generation
+>_this : Symbol(_this, Decl(collisionThisExpressionAndAmbientClassInGlobal.ts, 0, 0))
+}
+var f = () => this;
+>f : Symbol(f, Decl(collisionThisExpressionAndAmbientClassInGlobal.ts, 2, 3))
+>this : Symbol(globalThis)
+
+var a = new _this(); // Error
+>a : Symbol(a, Decl(collisionThisExpressionAndAmbientClassInGlobal.ts, 3, 3))
+>_this : Symbol(_this, Decl(collisionThisExpressionAndAmbientClassInGlobal.ts, 0, 0))
+

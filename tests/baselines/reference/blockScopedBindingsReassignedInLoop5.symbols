@@ -1,0 +1,23 @@
+=== tests/cases/compiler/blockScopedBindingsReassignedInLoop5.ts ===
+for (let x = 1, y = 2; x < y; ++x, --y) {
+>x : Symbol(x, Decl(blockScopedBindingsReassignedInLoop5.ts, 0, 8))
+>y : Symbol(y, Decl(blockScopedBindingsReassignedInLoop5.ts, 0, 15))
+>x : Symbol(x, Decl(blockScopedBindingsReassignedInLoop5.ts, 0, 8))
+>y : Symbol(y, Decl(blockScopedBindingsReassignedInLoop5.ts, 0, 15))
+>x : Symbol(x, Decl(blockScopedBindingsReassignedInLoop5.ts, 0, 8))
+>y : Symbol(y, Decl(blockScopedBindingsReassignedInLoop5.ts, 0, 15))
+
+    let a = () => x++ + y++;
+>a : Symbol(a, Decl(blockScopedBindingsReassignedInLoop5.ts, 1, 7))
+>x : Symbol(x, Decl(blockScopedBindingsReassignedInLoop5.ts, 0, 8))
+>y : Symbol(y, Decl(blockScopedBindingsReassignedInLoop5.ts, 0, 15))
+
+    if (x == 1) 
+>x : Symbol(x, Decl(blockScopedBindingsReassignedInLoop5.ts, 0, 8))
+
+        break;
+    else 
+        y = 5;
+>y : Symbol(y, Decl(blockScopedBindingsReassignedInLoop5.ts, 0, 15))
+}
+

@@ -1,0 +1,190 @@
+=== tests/cases/compiler/inheritance1.ts ===
+class Control {
+>Control : Control
+
+    private state: any;
+>state : any
+}
+interface SelectableControl extends Control {
+    select(): void;
+>select : () => void
+}
+
+class Button extends Control implements SelectableControl {
+>Button : Button
+>Control : Control
+
+    select() { }
+>select : () => void
+}
+class TextBox extends Control {
+>TextBox : TextBox
+>Control : Control
+
+    select() { }
+>select : () => void
+}
+class ImageBase extends Control implements SelectableControl{
+>ImageBase : ImageBase
+>Control : Control
+}
+class Image1 extends Control {
+>Image1 : Image1
+>Control : Control
+}
+class Locations implements SelectableControl {
+>Locations : Locations
+
+    select() { }
+>select : () => void
+}
+class Locations1 {
+>Locations1 : Locations1
+
+    select() { }
+>select : () => void
+}
+var sc: SelectableControl;
+>sc : SelectableControl
+
+var c: Control;
+>c : Control
+
+var b: Button;
+>b : Button
+
+sc = b;
+>sc = b : Button
+>sc : SelectableControl
+>b : Button
+
+c = b;
+>c = b : Button
+>c : Control
+>b : Button
+
+b = sc;
+>b = sc : SelectableControl
+>b : Button
+>sc : SelectableControl
+
+b = c;
+>b = c : Control
+>b : Button
+>c : Control
+
+var t: TextBox;
+>t : TextBox
+
+sc = t;
+>sc = t : TextBox
+>sc : SelectableControl
+>t : TextBox
+
+c = t;
+>c = t : TextBox
+>c : Control
+>t : TextBox
+
+t = sc;
+>t = sc : SelectableControl
+>t : TextBox
+>sc : SelectableControl
+
+t = c;
+>t = c : Control
+>t : TextBox
+>c : Control
+
+var i: ImageBase;
+>i : ImageBase
+
+sc = i;
+>sc = i : ImageBase
+>sc : SelectableControl
+>i : ImageBase
+
+c = i;
+>c = i : ImageBase
+>c : Control
+>i : ImageBase
+
+i = sc;
+>i = sc : SelectableControl
+>i : ImageBase
+>sc : SelectableControl
+
+i = c;
+>i = c : Control
+>i : ImageBase
+>c : Control
+
+var i1: Image1;
+>i1 : Image1
+
+sc = i1;
+>sc = i1 : Image1
+>sc : SelectableControl
+>i1 : Image1
+
+c = i1;
+>c = i1 : Image1
+>c : Control
+>i1 : Image1
+
+i1 = sc;
+>i1 = sc : SelectableControl
+>i1 : Image1
+>sc : SelectableControl
+
+i1 = c;
+>i1 = c : Control
+>i1 : Image1
+>c : Control
+
+var l: Locations;
+>l : Locations
+
+sc = l;
+>sc = l : Locations
+>sc : SelectableControl
+>l : Locations
+
+c = l;
+>c = l : Locations
+>c : Control
+>l : Locations
+
+l = sc;
+>l = sc : SelectableControl
+>l : Locations
+>sc : SelectableControl
+
+l = c;
+>l = c : Control
+>l : Locations
+>c : Control
+
+var l1: Locations1;
+>l1 : Locations1
+
+sc = l1;
+>sc = l1 : Locations1
+>sc : SelectableControl
+>l1 : Locations1
+
+c = l1;
+>c = l1 : Locations1
+>c : Control
+>l1 : Locations1
+
+l1 = sc;
+>l1 = sc : SelectableControl
+>l1 : Locations1
+>sc : SelectableControl
+
+l1 = c;
+>l1 = c : Control
+>l1 : Locations1
+>c : Control
+

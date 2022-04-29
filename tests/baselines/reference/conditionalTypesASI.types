@@ -1,0 +1,11 @@
+=== tests/cases/compiler/conditionalTypesASI.ts ===
+// Repro from #21637
+
+interface JSONSchema4 {
+  a?: number
+>a : number
+
+  extends?: string | string[]
+>extends : string | string[]
+}
+

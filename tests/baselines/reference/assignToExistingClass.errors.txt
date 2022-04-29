@@ -1,0 +1,21 @@
+tests/cases/compiler/assignToExistingClass.ts(8,13): error TS2629: Cannot assign to 'Mocked' because it is a class.
+
+
+==== tests/cases/compiler/assignToExistingClass.ts (1 errors) ====
+    module Test {
+        class Mocked {
+            myProp: string;
+        }
+    
+        class Tester {
+            willThrowError() {
+                Mocked = Mocked || function () { // => Error: Invalid left-hand side of assignment expression.
+                ~~~~~~
+!!! error TS2629: Cannot assign to 'Mocked' because it is a class.
+                    return { myProp: "test" };
+                };
+            }
+        }
+     
+    }
+    

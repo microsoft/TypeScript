@@ -1,0 +1,53 @@
+=== tests/cases/compiler/service.ts ===
+import database = require('./db');
+>database : typeof database
+
+function someDecorator(target) {
+>someDecorator : (target: any) => any
+>target : any
+
+    return target;
+>target : any
+}
+@someDecorator
+>someDecorator : (target: any) => any
+
+class MyClass {
+>MyClass : MyClass
+
+    db: database.db;
+>db : database.db
+>database : any
+
+    constructor(db: database.db) { // no collision
+>db : database.db
+>database : any
+
+        this.db = db;
+>this.db = db : database.db
+>this.db : database.db
+>this : this
+>db : database.db
+>db : database.db
+
+        this.db.doSomething();
+>this.db.doSomething() : void
+>this.db.doSomething : () => void
+>this.db : database.db
+>this : this
+>db : database.db
+>doSomething : () => void
+    }
+}
+export {MyClass};
+>MyClass : typeof MyClass
+
+=== tests/cases/compiler/db.ts ===
+export class db {
+>db : db
+
+    public doSomething() {
+>doSomething : () => void
+    }
+}
+

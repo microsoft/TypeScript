@@ -1,0 +1,22 @@
+tests/cases/compiler/reachabilityChecks2.ts(4,1): error TS7027: Unreachable code detected.
+
+
+==== tests/cases/compiler/reachabilityChecks2.ts (1 errors) ====
+    while (true) { }
+    const enum E { X }
+    
+    module A4 {
+    ~~~~~~~~~~~
+        while (true);
+    ~~~~~~~~~~~~~~~~~
+        module A {
+    ~~~~~~~~~~~~~~
+            const enum E { X }
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~
+        }
+    ~~~~~
+    }
+    ~
+!!! error TS7027: Unreachable code detected.
+    
+    

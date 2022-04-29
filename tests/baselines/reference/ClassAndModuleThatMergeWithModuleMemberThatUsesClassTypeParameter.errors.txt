@@ -1,0 +1,67 @@
+tests/cases/conformance/internalModules/DeclarationMerging/ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts(10,19): error TS2304: Cannot find name 'T'.
+tests/cases/conformance/internalModules/DeclarationMerging/ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts(20,12): error TS2304: Cannot find name 'T'.
+tests/cases/conformance/internalModules/DeclarationMerging/ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts(22,23): error TS2304: Cannot find name 'T'.
+tests/cases/conformance/internalModules/DeclarationMerging/ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts(35,26): error TS2304: Cannot find name 'T'.
+tests/cases/conformance/internalModules/DeclarationMerging/ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts(46,15): error TS2304: Cannot find name 'T'.
+
+
+==== tests/cases/conformance/internalModules/DeclarationMerging/ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts (5 errors) ====
+    // all expected to be errors
+    
+    class clodule1<T>{
+    
+        id: string;
+        value: T;
+    }
+    
+    module clodule1 {
+        function f(x: T) { }
+                      ~
+!!! error TS2304: Cannot find name 'T'.
+    }
+    
+    class clodule2<T>{
+    
+        id: string;
+        value: T;
+    }
+    
+    module clodule2 {
+        var x: T;
+               ~
+!!! error TS2304: Cannot find name 'T'.
+    
+        class D<U extends T>{
+                          ~
+!!! error TS2304: Cannot find name 'T'.
+            id: string;
+            value: U;
+        }
+    }
+    
+    class clodule3<T>{
+    
+        id: string;
+        value: T;
+    }
+    
+    module clodule3 {
+        export var y = { id: T };
+                             ~
+!!! error TS2304: Cannot find name 'T'.
+    }
+    
+    class clodule4<T>{
+    
+        id: string;
+        value: T;
+    }
+    
+    module clodule4 {
+        class D {
+            name: T;
+                  ~
+!!! error TS2304: Cannot find name 'T'.
+        }
+    }
+    

@@ -1,0 +1,86 @@
+=== tests/cases/compiler/genericFunctionsWithOptionalParameters3.ts ===
+class Collection<T> {
+>Collection : Collection<T>
+
+    public add(x: T) { }
+>add : (x: T) => void
+>x : T
+}
+interface Utils {
+    fold<T, S>(c?: Collection<T>, folder?: (s: S, t: T) => T, init?: S): T;
+>fold : <T, S>(c?: Collection<T>, folder?: (s: S, t: T) => T, init?: S) => T
+>c : Collection<T>
+>folder : (s: S, t: T) => T
+>s : S
+>t : T
+>init : S
+
+    mapReduce<T, U, V>(c: Collection<T>, mapper: (x: T) => U, reducer: (y: U) => V): Collection<V>;
+>mapReduce : <T, U, V>(c: Collection<T>, mapper: (x: T) => U, reducer: (y: U) => V) => Collection<V>
+>c : Collection<T>
+>mapper : (x: T) => U
+>x : T
+>reducer : (y: U) => V
+>y : U
+}
+var utils: Utils;
+>utils : Utils
+
+var c = new Collection<string>();
+>c : Collection<string>
+>new Collection<string>() : Collection<string>
+>Collection : typeof Collection
+
+var r3 = utils.mapReduce(c, (x) => { return 1 }, (y) => { return new Date() });
+>r3 : Collection<Date>
+>utils.mapReduce(c, (x) => { return 1 }, (y) => { return new Date() }) : Collection<Date>
+>utils.mapReduce : <T, U, V>(c: Collection<T>, mapper: (x: T) => U, reducer: (y: U) => V) => Collection<V>
+>utils : Utils
+>mapReduce : <T, U, V>(c: Collection<T>, mapper: (x: T) => U, reducer: (y: U) => V) => Collection<V>
+>c : Collection<string>
+>(x) => { return 1 } : (x: string) => number
+>x : string
+>1 : 1
+>(y) => { return new Date() } : (y: number) => Date
+>y : number
+>new Date() : Date
+>Date : DateConstructor
+
+var r4 = utils.mapReduce(c, (x: string) => { return 1 }, (y: number) => { return new Date() });
+>r4 : Collection<Date>
+>utils.mapReduce(c, (x: string) => { return 1 }, (y: number) => { return new Date() }) : Collection<Date>
+>utils.mapReduce : <T, U, V>(c: Collection<T>, mapper: (x: T) => U, reducer: (y: U) => V) => Collection<V>
+>utils : Utils
+>mapReduce : <T, U, V>(c: Collection<T>, mapper: (x: T) => U, reducer: (y: U) => V) => Collection<V>
+>c : Collection<string>
+>(x: string) => { return 1 } : (x: string) => number
+>x : string
+>1 : 1
+>(y: number) => { return new Date() } : (y: number) => Date
+>y : number
+>new Date() : Date
+>Date : DateConstructor
+
+var f1 = (x: string) => { return 1 };
+>f1 : (x: string) => number
+>(x: string) => { return 1 } : (x: string) => number
+>x : string
+>1 : 1
+
+var f2 = (y: number) => { return new Date() };
+>f2 : (y: number) => Date
+>(y: number) => { return new Date() } : (y: number) => Date
+>y : number
+>new Date() : Date
+>Date : DateConstructor
+
+var r5 = utils.mapReduce(c, f1, f2);
+>r5 : Collection<Date>
+>utils.mapReduce(c, f1, f2) : Collection<Date>
+>utils.mapReduce : <T, U, V>(c: Collection<T>, mapper: (x: T) => U, reducer: (y: U) => V) => Collection<V>
+>utils : Utils
+>mapReduce : <T, U, V>(c: Collection<T>, mapper: (x: T) => U, reducer: (y: U) => V) => Collection<V>
+>c : Collection<string>
+>f1 : (x: string) => number
+>f2 : (y: number) => Date
+

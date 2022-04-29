@@ -1,0 +1,7 @@
+=== tests/cases/conformance/async/es6/asyncEnum_es6.ts ===
+async enum E {  
+>E : E
+
+  Value
+>Value : E.Value
+}

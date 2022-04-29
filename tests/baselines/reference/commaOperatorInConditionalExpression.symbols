@@ -1,0 +1,20 @@
+=== tests/cases/compiler/commaOperatorInConditionalExpression.ts ===
+function f (m: string) {
+>f : Symbol(f, Decl(commaOperatorInConditionalExpression.ts, 0, 0))
+>m : Symbol(m, Decl(commaOperatorInConditionalExpression.ts, 0, 12))
+
+    [1, 2, 3].map(i => {
+>[1, 2, 3].map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>i : Symbol(i, Decl(commaOperatorInConditionalExpression.ts, 1, 18))
+
+        return true? { [m]: i } : { [m]: i + 1 }
+>[m] : Symbol([m], Decl(commaOperatorInConditionalExpression.ts, 2, 22))
+>m : Symbol(m, Decl(commaOperatorInConditionalExpression.ts, 0, 12))
+>i : Symbol(i, Decl(commaOperatorInConditionalExpression.ts, 1, 18))
+>[m] : Symbol([m], Decl(commaOperatorInConditionalExpression.ts, 2, 35))
+>m : Symbol(m, Decl(commaOperatorInConditionalExpression.ts, 0, 12))
+>i : Symbol(i, Decl(commaOperatorInConditionalExpression.ts, 1, 18))
+
+    })
+}

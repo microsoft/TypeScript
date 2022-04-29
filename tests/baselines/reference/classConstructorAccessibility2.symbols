@@ -1,0 +1,128 @@
+=== tests/cases/conformance/classes/constructorDeclarations/classConstructorAccessibility2.ts ===
+class BaseA {
+>BaseA : Symbol(BaseA, Decl(classConstructorAccessibility2.ts, 0, 0))
+
+    public constructor(public x: number) { }
+>x : Symbol(BaseA.x, Decl(classConstructorAccessibility2.ts, 1, 23))
+
+    createInstance() { new BaseA(1); }
+>createInstance : Symbol(BaseA.createInstance, Decl(classConstructorAccessibility2.ts, 1, 44))
+>BaseA : Symbol(BaseA, Decl(classConstructorAccessibility2.ts, 0, 0))
+}
+
+class BaseB {
+>BaseB : Symbol(BaseB, Decl(classConstructorAccessibility2.ts, 3, 1))
+
+    protected constructor(public x: number) { }
+>x : Symbol(BaseB.x, Decl(classConstructorAccessibility2.ts, 6, 26))
+
+    createInstance() { new BaseB(2); }
+>createInstance : Symbol(BaseB.createInstance, Decl(classConstructorAccessibility2.ts, 6, 47))
+>BaseB : Symbol(BaseB, Decl(classConstructorAccessibility2.ts, 3, 1))
+}
+
+class BaseC {
+>BaseC : Symbol(BaseC, Decl(classConstructorAccessibility2.ts, 8, 1))
+
+    private constructor(public x: number) { }
+>x : Symbol(BaseC.x, Decl(classConstructorAccessibility2.ts, 11, 24))
+
+    createInstance() { new BaseC(3); }
+>createInstance : Symbol(BaseC.createInstance, Decl(classConstructorAccessibility2.ts, 11, 45))
+>BaseC : Symbol(BaseC, Decl(classConstructorAccessibility2.ts, 8, 1))
+
+    static staticInstance() { new BaseC(4); }
+>staticInstance : Symbol(BaseC.staticInstance, Decl(classConstructorAccessibility2.ts, 12, 38))
+>BaseC : Symbol(BaseC, Decl(classConstructorAccessibility2.ts, 8, 1))
+}
+
+class DerivedA extends BaseA {
+>DerivedA : Symbol(DerivedA, Decl(classConstructorAccessibility2.ts, 14, 1))
+>BaseA : Symbol(BaseA, Decl(classConstructorAccessibility2.ts, 0, 0))
+
+    constructor(public x: number) { super(x); }
+>x : Symbol(DerivedA.x, Decl(classConstructorAccessibility2.ts, 17, 16))
+>super : Symbol(BaseA, Decl(classConstructorAccessibility2.ts, 0, 0))
+>x : Symbol(x, Decl(classConstructorAccessibility2.ts, 17, 16))
+
+    createInstance() { new DerivedA(5); }
+>createInstance : Symbol(DerivedA.createInstance, Decl(classConstructorAccessibility2.ts, 17, 47))
+>DerivedA : Symbol(DerivedA, Decl(classConstructorAccessibility2.ts, 14, 1))
+
+    createBaseInstance() { new BaseA(6); }
+>createBaseInstance : Symbol(DerivedA.createBaseInstance, Decl(classConstructorAccessibility2.ts, 18, 41))
+>BaseA : Symbol(BaseA, Decl(classConstructorAccessibility2.ts, 0, 0))
+
+    static staticBaseInstance() { new BaseA(7); }
+>staticBaseInstance : Symbol(DerivedA.staticBaseInstance, Decl(classConstructorAccessibility2.ts, 19, 42))
+>BaseA : Symbol(BaseA, Decl(classConstructorAccessibility2.ts, 0, 0))
+}
+
+class DerivedB extends BaseB {
+>DerivedB : Symbol(DerivedB, Decl(classConstructorAccessibility2.ts, 21, 1))
+>BaseB : Symbol(BaseB, Decl(classConstructorAccessibility2.ts, 3, 1))
+
+    constructor(public x: number) { super(x); }
+>x : Symbol(DerivedB.x, Decl(classConstructorAccessibility2.ts, 24, 16))
+>super : Symbol(BaseB, Decl(classConstructorAccessibility2.ts, 3, 1))
+>x : Symbol(x, Decl(classConstructorAccessibility2.ts, 24, 16))
+
+    createInstance() { new DerivedB(7); }
+>createInstance : Symbol(DerivedB.createInstance, Decl(classConstructorAccessibility2.ts, 24, 47))
+>DerivedB : Symbol(DerivedB, Decl(classConstructorAccessibility2.ts, 21, 1))
+
+    createBaseInstance() { new BaseB(8); } // ok
+>createBaseInstance : Symbol(DerivedB.createBaseInstance, Decl(classConstructorAccessibility2.ts, 25, 41))
+>BaseB : Symbol(BaseB, Decl(classConstructorAccessibility2.ts, 3, 1))
+
+    static staticBaseInstance() { new BaseB(9); } // ok
+>staticBaseInstance : Symbol(DerivedB.staticBaseInstance, Decl(classConstructorAccessibility2.ts, 26, 42))
+>BaseB : Symbol(BaseB, Decl(classConstructorAccessibility2.ts, 3, 1))
+}
+
+class DerivedC extends BaseC { // error
+>DerivedC : Symbol(DerivedC, Decl(classConstructorAccessibility2.ts, 28, 1))
+>BaseC : Symbol(BaseC, Decl(classConstructorAccessibility2.ts, 8, 1))
+
+    constructor(public x: number) { super(x); }
+>x : Symbol(DerivedC.x, Decl(classConstructorAccessibility2.ts, 31, 16))
+>super : Symbol(BaseC, Decl(classConstructorAccessibility2.ts, 8, 1))
+>x : Symbol(x, Decl(classConstructorAccessibility2.ts, 31, 16))
+
+    createInstance() { new DerivedC(9); }
+>createInstance : Symbol(DerivedC.createInstance, Decl(classConstructorAccessibility2.ts, 31, 47))
+>DerivedC : Symbol(DerivedC, Decl(classConstructorAccessibility2.ts, 28, 1))
+
+    createBaseInstance() { new BaseC(10); } // error
+>createBaseInstance : Symbol(DerivedC.createBaseInstance, Decl(classConstructorAccessibility2.ts, 32, 41))
+>BaseC : Symbol(BaseC, Decl(classConstructorAccessibility2.ts, 8, 1))
+
+    static staticBaseInstance() { new BaseC(11); } // error
+>staticBaseInstance : Symbol(DerivedC.staticBaseInstance, Decl(classConstructorAccessibility2.ts, 33, 43))
+>BaseC : Symbol(BaseC, Decl(classConstructorAccessibility2.ts, 8, 1))
+}
+
+var ba = new BaseA(1);
+>ba : Symbol(ba, Decl(classConstructorAccessibility2.ts, 37, 3))
+>BaseA : Symbol(BaseA, Decl(classConstructorAccessibility2.ts, 0, 0))
+
+var bb = new BaseB(1); // error
+>bb : Symbol(bb, Decl(classConstructorAccessibility2.ts, 38, 3))
+>BaseB : Symbol(BaseB, Decl(classConstructorAccessibility2.ts, 3, 1))
+
+var bc = new BaseC(1); // error
+>bc : Symbol(bc, Decl(classConstructorAccessibility2.ts, 39, 3))
+>BaseC : Symbol(BaseC, Decl(classConstructorAccessibility2.ts, 8, 1))
+
+var da = new DerivedA(1);
+>da : Symbol(da, Decl(classConstructorAccessibility2.ts, 41, 3))
+>DerivedA : Symbol(DerivedA, Decl(classConstructorAccessibility2.ts, 14, 1))
+
+var db = new DerivedB(1);
+>db : Symbol(db, Decl(classConstructorAccessibility2.ts, 42, 3))
+>DerivedB : Symbol(DerivedB, Decl(classConstructorAccessibility2.ts, 21, 1))
+
+var dc = new DerivedC(1);
+>dc : Symbol(dc, Decl(classConstructorAccessibility2.ts, 43, 3))
+>DerivedC : Symbol(DerivedC, Decl(classConstructorAccessibility2.ts, 28, 1))
+

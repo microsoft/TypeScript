@@ -1,0 +1,25 @@
+=== tests/cases/conformance/decorators/class/method/decoratorOnClassMethod12.ts ===
+module M {
+>M : typeof M
+
+    class S {
+>S : S
+
+        decorator(target: Object, key: string): void { }
+>decorator : (target: Object, key: string) => void
+>target : Object
+>key : string
+    }
+    class C extends S {
+>C : C
+>S : S
+
+        @super.decorator
+>super.decorator : any
+>super : any
+>decorator : any
+
+        method() { }
+>method : () => void
+    }
+}

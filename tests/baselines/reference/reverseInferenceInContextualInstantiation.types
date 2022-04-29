@@ -1,0 +1,17 @@
+=== tests/cases/compiler/reverseInferenceInContextualInstantiation.ts ===
+function compare<T>(a: T, b: T): number { return 0; }
+>compare : <T>(a: T, b: T) => number
+>a : T
+>b : T
+>0 : 0
+
+var x: number[];
+>x : number[]
+
+x.sort(compare); // Error, but shouldn't be
+>x.sort(compare) : number[]
+>x.sort : (compareFn?: (a: number, b: number) => number) => number[]
+>x : number[]
+>sort : (compareFn?: (a: number, b: number) => number) => number[]
+>compare : <T>(a: T, b: T) => number
+

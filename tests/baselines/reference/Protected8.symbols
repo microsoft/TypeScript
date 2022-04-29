@@ -1,0 +1,10 @@
+=== tests/cases/conformance/parser/ecmascript5/Protected/Protected8.ts ===
+interface I {
+>I : Symbol(I, Decl(Protected8.ts, 0, 0))
+
+   protected
+>protected : Symbol(I.protected, Decl(Protected8.ts, 0, 13))
+
+   p
+>p : Symbol(I.p, Decl(Protected8.ts, 1, 12))
+}

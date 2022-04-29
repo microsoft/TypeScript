@@ -1,0 +1,81 @@
+=== tests/cases/compiler/overloadAssignmentCompat.ts ===
+// ok - overload signatures are assignment compatible with their implementation
+class Accessor {}
+>Accessor : Symbol(Accessor, Decl(overloadAssignmentCompat.ts, 0, 0))
+
+function attr(name: string): string;
+>attr : Symbol(attr, Decl(overloadAssignmentCompat.ts, 1, 17), Decl(overloadAssignmentCompat.ts, 3, 36), Decl(overloadAssignmentCompat.ts, 4, 53), Decl(overloadAssignmentCompat.ts, 5, 34))
+>name : Symbol(name, Decl(overloadAssignmentCompat.ts, 3, 14))
+
+function attr(name: string, value: string): Accessor;
+>attr : Symbol(attr, Decl(overloadAssignmentCompat.ts, 1, 17), Decl(overloadAssignmentCompat.ts, 3, 36), Decl(overloadAssignmentCompat.ts, 4, 53), Decl(overloadAssignmentCompat.ts, 5, 34))
+>name : Symbol(name, Decl(overloadAssignmentCompat.ts, 4, 14))
+>value : Symbol(value, Decl(overloadAssignmentCompat.ts, 4, 27))
+>Accessor : Symbol(Accessor, Decl(overloadAssignmentCompat.ts, 0, 0))
+
+function attr(map: any): Accessor;
+>attr : Symbol(attr, Decl(overloadAssignmentCompat.ts, 1, 17), Decl(overloadAssignmentCompat.ts, 3, 36), Decl(overloadAssignmentCompat.ts, 4, 53), Decl(overloadAssignmentCompat.ts, 5, 34))
+>map : Symbol(map, Decl(overloadAssignmentCompat.ts, 5, 14))
+>Accessor : Symbol(Accessor, Decl(overloadAssignmentCompat.ts, 0, 0))
+
+function attr(nameOrMap: any, value?: string): any {
+>attr : Symbol(attr, Decl(overloadAssignmentCompat.ts, 1, 17), Decl(overloadAssignmentCompat.ts, 3, 36), Decl(overloadAssignmentCompat.ts, 4, 53), Decl(overloadAssignmentCompat.ts, 5, 34))
+>nameOrMap : Symbol(nameOrMap, Decl(overloadAssignmentCompat.ts, 6, 14))
+>value : Symbol(value, Decl(overloadAssignmentCompat.ts, 6, 29))
+
+    if (nameOrMap && typeof nameOrMap === "object") {
+>nameOrMap : Symbol(nameOrMap, Decl(overloadAssignmentCompat.ts, 6, 14))
+>nameOrMap : Symbol(nameOrMap, Decl(overloadAssignmentCompat.ts, 6, 14))
+
+        // handle map case
+        return new Accessor;
+>Accessor : Symbol(Accessor, Decl(overloadAssignmentCompat.ts, 0, 0))
+    }
+    else {
+        // handle string case
+        return "s";
+    }
+}
+
+// not ok - there's an assignment compat error
+function attr2(name: string): string;
+>attr2 : Symbol(attr2, Decl(overloadAssignmentCompat.ts, 15, 1), Decl(overloadAssignmentCompat.ts, 18, 37), Decl(overloadAssignmentCompat.ts, 19, 54), Decl(overloadAssignmentCompat.ts, 20, 35))
+>name : Symbol(name, Decl(overloadAssignmentCompat.ts, 18, 15))
+
+function attr2(name: string, value: string): Accessor;
+>attr2 : Symbol(attr2, Decl(overloadAssignmentCompat.ts, 15, 1), Decl(overloadAssignmentCompat.ts, 18, 37), Decl(overloadAssignmentCompat.ts, 19, 54), Decl(overloadAssignmentCompat.ts, 20, 35))
+>name : Symbol(name, Decl(overloadAssignmentCompat.ts, 19, 15))
+>value : Symbol(value, Decl(overloadAssignmentCompat.ts, 19, 28))
+>Accessor : Symbol(Accessor, Decl(overloadAssignmentCompat.ts, 0, 0))
+
+function attr2(map: any): Accessor;
+>attr2 : Symbol(attr2, Decl(overloadAssignmentCompat.ts, 15, 1), Decl(overloadAssignmentCompat.ts, 18, 37), Decl(overloadAssignmentCompat.ts, 19, 54), Decl(overloadAssignmentCompat.ts, 20, 35))
+>map : Symbol(map, Decl(overloadAssignmentCompat.ts, 20, 15))
+>Accessor : Symbol(Accessor, Decl(overloadAssignmentCompat.ts, 0, 0))
+
+function attr2(nameOrMap: any, value?: string): string {
+>attr2 : Symbol(attr2, Decl(overloadAssignmentCompat.ts, 15, 1), Decl(overloadAssignmentCompat.ts, 18, 37), Decl(overloadAssignmentCompat.ts, 19, 54), Decl(overloadAssignmentCompat.ts, 20, 35))
+>nameOrMap : Symbol(nameOrMap, Decl(overloadAssignmentCompat.ts, 21, 15))
+>value : Symbol(value, Decl(overloadAssignmentCompat.ts, 21, 30))
+
+    if (nameOrMap && typeof nameOrMap === "object") {
+>nameOrMap : Symbol(nameOrMap, Decl(overloadAssignmentCompat.ts, 21, 15))
+>nameOrMap : Symbol(nameOrMap, Decl(overloadAssignmentCompat.ts, 21, 15))
+
+        // handle map case
+        return "t";
+    }
+    else {
+        // handle string case
+        return "s";
+    }
+}
+
+// error - signatures are not assignment compatible
+function foo():number; 
+>foo : Symbol(foo, Decl(overloadAssignmentCompat.ts, 30, 1), Decl(overloadAssignmentCompat.ts, 33, 22))
+
+function foo():string { return "a" };
+>foo : Symbol(foo, Decl(overloadAssignmentCompat.ts, 30, 1), Decl(overloadAssignmentCompat.ts, 33, 22))
+
+

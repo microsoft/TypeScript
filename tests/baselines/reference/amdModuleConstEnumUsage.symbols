@@ -1,0 +1,29 @@
+=== /proj/defs/cc.ts ===
+export const enum CharCode {
+>CharCode : Symbol(CharCode, Decl(cc.ts, 0, 0))
+
+    A,
+>A : Symbol(CharCode.A, Decl(cc.ts, 0, 28))
+
+    B
+>B : Symbol(CharCode.B, Decl(cc.ts, 1, 6))
+}
+=== /proj/component/file.ts ===
+import { CharCode } from 'defs/cc';
+>CharCode : Symbol(CharCode, Decl(file.ts, 0, 8))
+
+export class User {
+>User : Symbol(User, Decl(file.ts, 0, 35))
+
+    method(input: number) {
+>method : Symbol(User.method, Decl(file.ts, 1, 19))
+>input : Symbol(input, Decl(file.ts, 2, 11))
+
+        if (CharCode.A === input) {}
+>CharCode.A : Symbol(CharCode.A, Decl(cc.ts, 0, 28))
+>CharCode : Symbol(CharCode, Decl(file.ts, 0, 8))
+>A : Symbol(CharCode.A, Decl(cc.ts, 0, 28))
+>input : Symbol(input, Decl(file.ts, 2, 11))
+    }
+}
+

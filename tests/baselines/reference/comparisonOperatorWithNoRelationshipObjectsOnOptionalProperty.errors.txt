@@ -1,0 +1,93 @@
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnOptionalProperty.ts(13,11): error TS2365: Operator '<' cannot be applied to types 'A1' and 'B1'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnOptionalProperty.ts(14,11): error TS2365: Operator '<' cannot be applied to types 'B1' and 'A1'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnOptionalProperty.ts(17,11): error TS2365: Operator '>' cannot be applied to types 'A1' and 'B1'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnOptionalProperty.ts(18,11): error TS2365: Operator '>' cannot be applied to types 'B1' and 'A1'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnOptionalProperty.ts(21,11): error TS2365: Operator '<=' cannot be applied to types 'A1' and 'B1'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnOptionalProperty.ts(22,11): error TS2365: Operator '<=' cannot be applied to types 'B1' and 'A1'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnOptionalProperty.ts(25,11): error TS2365: Operator '>=' cannot be applied to types 'A1' and 'B1'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnOptionalProperty.ts(26,11): error TS2365: Operator '>=' cannot be applied to types 'B1' and 'A1'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnOptionalProperty.ts(29,11): error TS2367: This condition will always return 'false' since the types 'A1' and 'B1' have no overlap.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnOptionalProperty.ts(30,11): error TS2367: This condition will always return 'false' since the types 'B1' and 'A1' have no overlap.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnOptionalProperty.ts(33,11): error TS2367: This condition will always return 'true' since the types 'A1' and 'B1' have no overlap.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnOptionalProperty.ts(34,11): error TS2367: This condition will always return 'true' since the types 'B1' and 'A1' have no overlap.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnOptionalProperty.ts(37,11): error TS2367: This condition will always return 'false' since the types 'A1' and 'B1' have no overlap.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnOptionalProperty.ts(38,11): error TS2367: This condition will always return 'false' since the types 'B1' and 'A1' have no overlap.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnOptionalProperty.ts(41,11): error TS2367: This condition will always return 'true' since the types 'A1' and 'B1' have no overlap.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnOptionalProperty.ts(42,11): error TS2367: This condition will always return 'true' since the types 'B1' and 'A1' have no overlap.
+
+
+==== tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnOptionalProperty.ts (16 errors) ====
+    interface A1 {
+        b?: number;
+    }
+    
+    interface B1 {
+        b?: string;
+    }
+    
+    var a: A1;
+    var b: B1;
+    
+    // operator <
+    var ra1 = a < b;
+              ~~~~~
+!!! error TS2365: Operator '<' cannot be applied to types 'A1' and 'B1'.
+    var ra2 = b < a;
+              ~~~~~
+!!! error TS2365: Operator '<' cannot be applied to types 'B1' and 'A1'.
+    
+    // operator >
+    var rb1 = a > b;
+              ~~~~~
+!!! error TS2365: Operator '>' cannot be applied to types 'A1' and 'B1'.
+    var rb2 = b > a;
+              ~~~~~
+!!! error TS2365: Operator '>' cannot be applied to types 'B1' and 'A1'.
+    
+    // operator <=
+    var rc1 = a <= b;
+              ~~~~~~
+!!! error TS2365: Operator '<=' cannot be applied to types 'A1' and 'B1'.
+    var rc2 = b <= a;
+              ~~~~~~
+!!! error TS2365: Operator '<=' cannot be applied to types 'B1' and 'A1'.
+    
+    // operator >=
+    var rd1 = a >= b;
+              ~~~~~~
+!!! error TS2365: Operator '>=' cannot be applied to types 'A1' and 'B1'.
+    var rd2 = b >= a;
+              ~~~~~~
+!!! error TS2365: Operator '>=' cannot be applied to types 'B1' and 'A1'.
+    
+    // operator ==
+    var re1 = a == b;
+              ~~~~~~
+!!! error TS2367: This condition will always return 'false' since the types 'A1' and 'B1' have no overlap.
+    var re2 = b == a;
+              ~~~~~~
+!!! error TS2367: This condition will always return 'false' since the types 'B1' and 'A1' have no overlap.
+    
+    // operator !=
+    var rf1 = a != b;
+              ~~~~~~
+!!! error TS2367: This condition will always return 'true' since the types 'A1' and 'B1' have no overlap.
+    var rf2 = b != a;
+              ~~~~~~
+!!! error TS2367: This condition will always return 'true' since the types 'B1' and 'A1' have no overlap.
+    
+    // operator ===
+    var rg1 = a === b;
+              ~~~~~~~
+!!! error TS2367: This condition will always return 'false' since the types 'A1' and 'B1' have no overlap.
+    var rg2 = b === a;
+              ~~~~~~~
+!!! error TS2367: This condition will always return 'false' since the types 'B1' and 'A1' have no overlap.
+    
+    // operator !==
+    var rh1 = a !== b;
+              ~~~~~~~
+!!! error TS2367: This condition will always return 'true' since the types 'A1' and 'B1' have no overlap.
+    var rh2 = b !== a;
+              ~~~~~~~
+!!! error TS2367: This condition will always return 'true' since the types 'B1' and 'A1' have no overlap.

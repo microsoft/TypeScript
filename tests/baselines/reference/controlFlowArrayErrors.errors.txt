@@ -1,0 +1,104 @@
+tests/cases/compiler/controlFlowArrayErrors.ts(4,9): error TS7034: Variable 'x' implicitly has type 'any[]' in some locations where its type cannot be determined.
+tests/cases/compiler/controlFlowArrayErrors.ts(5,13): error TS7005: Variable 'x' implicitly has an 'any[]' type.
+tests/cases/compiler/controlFlowArrayErrors.ts(11,9): error TS7034: Variable 'x' implicitly has type 'any[]' in some locations where its type cannot be determined.
+tests/cases/compiler/controlFlowArrayErrors.ts(13,13): error TS7005: Variable 'x' implicitly has an 'any[]' type.
+tests/cases/compiler/controlFlowArrayErrors.ts(19,9): error TS7034: Variable 'x' implicitly has type 'any[]' in some locations where its type cannot be determined.
+tests/cases/compiler/controlFlowArrayErrors.ts(22,9): error TS7005: Variable 'x' implicitly has an 'any[]' type.
+tests/cases/compiler/controlFlowArrayErrors.ts(29,12): error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'string | number'.
+tests/cases/compiler/controlFlowArrayErrors.ts(34,12): error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'string | number'.
+tests/cases/compiler/controlFlowArrayErrors.ts(48,12): error TS2345: Argument of type 'number' is not assignable to parameter of type 'never'.
+tests/cases/compiler/controlFlowArrayErrors.ts(56,12): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+tests/cases/compiler/controlFlowArrayErrors.ts(60,11): error TS7034: Variable 'x' implicitly has type 'any[]' in some locations where its type cannot be determined.
+tests/cases/compiler/controlFlowArrayErrors.ts(63,9): error TS7005: Variable 'x' implicitly has an 'any[]' type.
+
+
+==== tests/cases/compiler/controlFlowArrayErrors.ts (12 errors) ====
+    declare function cond(): boolean;
+    
+    function f1() {
+        let x = [];  // Implicit any[] error in some locations
+            ~
+!!! error TS7034: Variable 'x' implicitly has type 'any[]' in some locations where its type cannot be determined.
+        let y = x;   // Implicit any[] error
+                ~
+!!! error TS7005: Variable 'x' implicitly has an 'any[]' type.
+        x.push(5);
+        let z = x;
+    }
+    
+    function f2() {
+        let x;       // Implicit any[] error in some locations
+            ~
+!!! error TS7034: Variable 'x' implicitly has type 'any[]' in some locations where its type cannot be determined.
+        x = [];
+        let y = x;   // Implicit any[] error
+                ~
+!!! error TS7005: Variable 'x' implicitly has an 'any[]' type.
+        x.push(5);
+        let z = x;
+    }
+    
+    function f3() {
+        let x = [];  // Implicit any[] error in some locations
+            ~
+!!! error TS7034: Variable 'x' implicitly has type 'any[]' in some locations where its type cannot be determined.
+        x.push(5);
+        function g() {
+            x;       // Implicit any[] error
+            ~
+!!! error TS7005: Variable 'x' implicitly has an 'any[]' type.
+        }
+    }
+    
+    function f4() {
+        let x;
+        x = [5, "hello"];  // Non-evolving array
+        x.push(true);      // Error
+               ~~~~
+!!! error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'string | number'.
+    }
+    
+    function f5() {
+        let x = [5, "hello"];  // Non-evolving array
+        x.push(true);          // Error
+               ~~~~
+!!! error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'string | number'.
+    }
+    
+    function f6() {
+        let x;
+        if (cond()) {
+            x = [];
+            x.push(5);
+            x.push("hello");
+        }
+        else {
+            x = [true];  // Non-evolving array
+        }
+        x;           // boolean[] | (string | number)[]
+        x.push(99);  // Error
+               ~~
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'never'.
+    }
+    
+    function f7() {
+        let x = [];       // x has evolving array value
+        x.push(5);
+        let y = x;        // y has non-evolving array value
+        x.push("hello");  // Ok
+        y.push("hello");  // Error
+               ~~~~~~~
+!!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+    }
+    
+    function f8() {
+        const x = [];  // Implicit any[] error in some locations
+              ~
+!!! error TS7034: Variable 'x' implicitly has type 'any[]' in some locations where its type cannot be determined.
+        x.push(5);
+        function g() {
+            x;  // Implicit any[] error
+            ~
+!!! error TS7005: Variable 'x' implicitly has an 'any[]' type.
+        }
+    }

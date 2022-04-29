@@ -1,0 +1,258 @@
+=== tests/cases/conformance/generators/generatorReturnTypeInference.ts ===
+declare const iterableIterator: IterableIterator<number>;
+>iterableIterator : Symbol(iterableIterator, Decl(generatorReturnTypeInference.ts, 0, 13))
+>IterableIterator : Symbol(IterableIterator, Decl(lib.es2015.iterable.d.ts, --, --))
+
+declare const generator: Generator<number, string, boolean>;
+>generator : Symbol(generator, Decl(generatorReturnTypeInference.ts, 1, 13))
+>Generator : Symbol(Generator, Decl(lib.es2015.generator.d.ts, --, --))
+
+declare const never: never;
+>never : Symbol(never, Decl(generatorReturnTypeInference.ts, 2, 13))
+
+function* g000() { // Generator<never, void, unknown>
+>g000 : Symbol(g000, Decl(generatorReturnTypeInference.ts, 2, 27))
+}
+
+// 'yield' iteration type inference
+function* g001() { // Generator<undefined, void, unknown>
+>g001 : Symbol(g001, Decl(generatorReturnTypeInference.ts, 5, 1))
+
+    yield;
+}
+
+function* g002() { // Generator<number, void, unknown>
+>g002 : Symbol(g002, Decl(generatorReturnTypeInference.ts, 10, 1))
+
+    yield 1;
+}
+
+function* g003() { // Generator<never, void, undefined>
+>g003 : Symbol(g003, Decl(generatorReturnTypeInference.ts, 14, 1))
+
+    yield* [];
+}
+
+function* g004() { // Generator<number, void, undefined>
+>g004 : Symbol(g004, Decl(generatorReturnTypeInference.ts, 18, 1))
+
+    yield* iterableIterator;
+>iterableIterator : Symbol(iterableIterator, Decl(generatorReturnTypeInference.ts, 0, 13))
+}
+
+function* g005() { // Generator<number, void, boolean>
+>g005 : Symbol(g005, Decl(generatorReturnTypeInference.ts, 22, 1))
+
+    const x = yield* generator;
+>x : Symbol(x, Decl(generatorReturnTypeInference.ts, 25, 9))
+>generator : Symbol(generator, Decl(generatorReturnTypeInference.ts, 1, 13))
+}
+
+function* g006() { // Generator<1 | 2, void, unknown>
+>g006 : Symbol(g006, Decl(generatorReturnTypeInference.ts, 26, 1))
+
+    yield 1;
+    yield 2;
+}
+
+function* g007() { // Generator<never, void, unknown>
+>g007 : Symbol(g007, Decl(generatorReturnTypeInference.ts, 31, 1))
+
+    yield never;
+>never : Symbol(never, Decl(generatorReturnTypeInference.ts, 2, 13))
+}
+
+// 'return' iteration type inference
+function* g102() { // Generator<never, number, unknown>
+>g102 : Symbol(g102, Decl(generatorReturnTypeInference.ts, 35, 1))
+
+    return 1;
+}
+
+function* g103() { // Generator<never, 1 | 2, unknown>
+>g103 : Symbol(g103, Decl(generatorReturnTypeInference.ts, 40, 1))
+
+    if (Math.random()) return 1;
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+
+    return 2;
+}
+
+function* g104() { // Generator<never, never, unknown>
+>g104 : Symbol(g104, Decl(generatorReturnTypeInference.ts, 45, 1))
+
+    return never;
+>never : Symbol(never, Decl(generatorReturnTypeInference.ts, 2, 13))
+}
+
+// 'next' iteration type inference
+function* g201() { // Generator<number, void, string>
+>g201 : Symbol(g201, Decl(generatorReturnTypeInference.ts, 49, 1))
+
+    let a: string = yield 1;
+>a : Symbol(a, Decl(generatorReturnTypeInference.ts, 53, 7))
+}
+
+function* g202() { // Generator<1 | 2, void, never>
+>g202 : Symbol(g202, Decl(generatorReturnTypeInference.ts, 54, 1))
+
+    let a: string = yield 1;
+>a : Symbol(a, Decl(generatorReturnTypeInference.ts, 57, 7))
+
+    let b: number = yield 2;
+>b : Symbol(b, Decl(generatorReturnTypeInference.ts, 58, 7))
+}
+
+declare function f1(x: string): void;
+>f1 : Symbol(f1, Decl(generatorReturnTypeInference.ts, 59, 1), Decl(generatorReturnTypeInference.ts, 61, 37))
+>x : Symbol(x, Decl(generatorReturnTypeInference.ts, 61, 20))
+
+declare function f1(x: number): void;
+>f1 : Symbol(f1, Decl(generatorReturnTypeInference.ts, 59, 1), Decl(generatorReturnTypeInference.ts, 61, 37))
+>x : Symbol(x, Decl(generatorReturnTypeInference.ts, 62, 20))
+
+function* g203() { // Generator<number, void, string>
+>g203 : Symbol(g203, Decl(generatorReturnTypeInference.ts, 62, 37))
+
+	const x = f1(yield 1);
+>x : Symbol(x, Decl(generatorReturnTypeInference.ts, 65, 6))
+>f1 : Symbol(f1, Decl(generatorReturnTypeInference.ts, 59, 1), Decl(generatorReturnTypeInference.ts, 61, 37))
+}
+
+declare function f2<T>(x: T): T;
+>f2 : Symbol(f2, Decl(generatorReturnTypeInference.ts, 66, 1))
+>T : Symbol(T, Decl(generatorReturnTypeInference.ts, 68, 20))
+>x : Symbol(x, Decl(generatorReturnTypeInference.ts, 68, 23))
+>T : Symbol(T, Decl(generatorReturnTypeInference.ts, 68, 20))
+>T : Symbol(T, Decl(generatorReturnTypeInference.ts, 68, 20))
+
+function* g204() { // Generator<number, void, any>
+>g204 : Symbol(g204, Decl(generatorReturnTypeInference.ts, 68, 32))
+
+	const x = f2(yield 1);
+>x : Symbol(x, Decl(generatorReturnTypeInference.ts, 71, 6))
+>f2 : Symbol(f2, Decl(generatorReturnTypeInference.ts, 66, 1))
+}
+
+// mixed iteration types inference
+
+function* g301() { // Generator<undefined, void, unknown>
+>g301 : Symbol(g301, Decl(generatorReturnTypeInference.ts, 72, 1))
+
+    yield;
+    return;
+}
+
+function* g302() { // Generator<number, void, unknown>
+>g302 : Symbol(g302, Decl(generatorReturnTypeInference.ts, 79, 1))
+
+    yield 1;
+    return;
+}
+
+function* g303() { // Generator<undefined, string, unknown>
+>g303 : Symbol(g303, Decl(generatorReturnTypeInference.ts, 84, 1))
+
+    yield;
+    return "a";
+}
+
+function* g304() { // Generator<number, string, unknown>
+>g304 : Symbol(g304, Decl(generatorReturnTypeInference.ts, 89, 1))
+
+    yield 1;
+    return "a";
+}
+
+function* g305() { // Generator<1 | 2, "a" | "b", unknown>
+>g305 : Symbol(g305, Decl(generatorReturnTypeInference.ts, 94, 1))
+
+    if (Math.random()) yield 1;
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+
+    yield 2;
+    if (Math.random()) return "a";
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+
+    return "b";
+}
+
+function* g306() { // Generator<number, boolean, "hi">
+>g306 : Symbol(g306, Decl(generatorReturnTypeInference.ts, 101, 1))
+
+    const a: "hi" = yield 1;
+>a : Symbol(a, Decl(generatorReturnTypeInference.ts, 104, 9))
+
+    return true;
+}
+
+function* g307<T>() { // Generator<number, T, T>
+>g307 : Symbol(g307, Decl(generatorReturnTypeInference.ts, 106, 1))
+>T : Symbol(T, Decl(generatorReturnTypeInference.ts, 108, 15))
+
+    const a: T = yield 0;
+>a : Symbol(a, Decl(generatorReturnTypeInference.ts, 109, 9))
+>T : Symbol(T, Decl(generatorReturnTypeInference.ts, 108, 15))
+
+    return a;
+>a : Symbol(a, Decl(generatorReturnTypeInference.ts, 109, 9))
+}
+
+function* g308<T>(x: T) { // Generator<T, T, T>
+>g308 : Symbol(g308, Decl(generatorReturnTypeInference.ts, 111, 1))
+>T : Symbol(T, Decl(generatorReturnTypeInference.ts, 113, 15))
+>x : Symbol(x, Decl(generatorReturnTypeInference.ts, 113, 18))
+>T : Symbol(T, Decl(generatorReturnTypeInference.ts, 113, 15))
+
+    const a: T = yield x;
+>a : Symbol(a, Decl(generatorReturnTypeInference.ts, 114, 9))
+>T : Symbol(T, Decl(generatorReturnTypeInference.ts, 113, 15))
+>x : Symbol(x, Decl(generatorReturnTypeInference.ts, 113, 18))
+
+    return a;
+>a : Symbol(a, Decl(generatorReturnTypeInference.ts, 114, 9))
+}
+
+function* g309<T, U, V>(x: T, y: U) { // Generator<T, U, V>
+>g309 : Symbol(g309, Decl(generatorReturnTypeInference.ts, 116, 1))
+>T : Symbol(T, Decl(generatorReturnTypeInference.ts, 118, 15))
+>U : Symbol(U, Decl(generatorReturnTypeInference.ts, 118, 17))
+>V : Symbol(V, Decl(generatorReturnTypeInference.ts, 118, 20))
+>x : Symbol(x, Decl(generatorReturnTypeInference.ts, 118, 24))
+>T : Symbol(T, Decl(generatorReturnTypeInference.ts, 118, 15))
+>y : Symbol(y, Decl(generatorReturnTypeInference.ts, 118, 29))
+>U : Symbol(U, Decl(generatorReturnTypeInference.ts, 118, 17))
+
+    const a: V = yield x;
+>a : Symbol(a, Decl(generatorReturnTypeInference.ts, 119, 9))
+>V : Symbol(V, Decl(generatorReturnTypeInference.ts, 118, 20))
+>x : Symbol(x, Decl(generatorReturnTypeInference.ts, 118, 24))
+
+    return y;
+>y : Symbol(y, Decl(generatorReturnTypeInference.ts, 118, 29))
+}
+
+function* g310() { // Generator<undefined, void, [(1 | undefined)?, (2 | undefined)?]>
+>g310 : Symbol(g310, Decl(generatorReturnTypeInference.ts, 121, 1))
+
+	const [a = 1, b = 2] = yield;
+>a : Symbol(a, Decl(generatorReturnTypeInference.ts, 124, 8))
+>b : Symbol(b, Decl(generatorReturnTypeInference.ts, 124, 14))
+}
+
+function* g311() { // Generator<undefined, void, string>
+>g311 : Symbol(g311, Decl(generatorReturnTypeInference.ts, 125, 1))
+
+	yield* (function*() {
+		const y: string = yield;
+>y : Symbol(y, Decl(generatorReturnTypeInference.ts, 129, 7))
+
+	})();
+}
+

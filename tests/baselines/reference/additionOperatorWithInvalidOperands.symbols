@@ -1,0 +1,142 @@
+=== tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithInvalidOperands.ts ===
+function foo() { }
+>foo : Symbol(foo, Decl(additionOperatorWithInvalidOperands.ts, 0, 0))
+
+class C {
+>C : Symbol(C, Decl(additionOperatorWithInvalidOperands.ts, 0, 18))
+
+    public a: string;
+>a : Symbol(C.a, Decl(additionOperatorWithInvalidOperands.ts, 1, 9))
+
+    static foo() { }
+>foo : Symbol(C.foo, Decl(additionOperatorWithInvalidOperands.ts, 2, 21))
+}
+enum E { a, b, c }
+>E : Symbol(E, Decl(additionOperatorWithInvalidOperands.ts, 4, 1))
+>a : Symbol(E.a, Decl(additionOperatorWithInvalidOperands.ts, 5, 8))
+>b : Symbol(E.b, Decl(additionOperatorWithInvalidOperands.ts, 5, 11))
+>c : Symbol(E.c, Decl(additionOperatorWithInvalidOperands.ts, 5, 14))
+
+module M { export var a }
+>M : Symbol(M, Decl(additionOperatorWithInvalidOperands.ts, 5, 18))
+>a : Symbol(a, Decl(additionOperatorWithInvalidOperands.ts, 6, 21))
+
+var a: boolean;
+>a : Symbol(a, Decl(additionOperatorWithInvalidOperands.ts, 8, 3))
+
+var b: number;
+>b : Symbol(b, Decl(additionOperatorWithInvalidOperands.ts, 9, 3))
+
+var c: Object;
+>c : Symbol(c, Decl(additionOperatorWithInvalidOperands.ts, 10, 3))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+var d: Number;
+>d : Symbol(d, Decl(additionOperatorWithInvalidOperands.ts, 11, 3))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+// boolean + every type except any and string
+var r1 = a + a;
+>r1 : Symbol(r1, Decl(additionOperatorWithInvalidOperands.ts, 14, 3))
+>a : Symbol(a, Decl(additionOperatorWithInvalidOperands.ts, 8, 3))
+>a : Symbol(a, Decl(additionOperatorWithInvalidOperands.ts, 8, 3))
+
+var r2 = a + b;
+>r2 : Symbol(r2, Decl(additionOperatorWithInvalidOperands.ts, 15, 3))
+>a : Symbol(a, Decl(additionOperatorWithInvalidOperands.ts, 8, 3))
+>b : Symbol(b, Decl(additionOperatorWithInvalidOperands.ts, 9, 3))
+
+var r3 = a + c;
+>r3 : Symbol(r3, Decl(additionOperatorWithInvalidOperands.ts, 16, 3))
+>a : Symbol(a, Decl(additionOperatorWithInvalidOperands.ts, 8, 3))
+>c : Symbol(c, Decl(additionOperatorWithInvalidOperands.ts, 10, 3))
+
+// number + every type except any and string
+var r4 = b + a;
+>r4 : Symbol(r4, Decl(additionOperatorWithInvalidOperands.ts, 19, 3))
+>b : Symbol(b, Decl(additionOperatorWithInvalidOperands.ts, 9, 3))
+>a : Symbol(a, Decl(additionOperatorWithInvalidOperands.ts, 8, 3))
+
+var r5 = b + b; // number + number is valid
+>r5 : Symbol(r5, Decl(additionOperatorWithInvalidOperands.ts, 20, 3))
+>b : Symbol(b, Decl(additionOperatorWithInvalidOperands.ts, 9, 3))
+>b : Symbol(b, Decl(additionOperatorWithInvalidOperands.ts, 9, 3))
+
+var r6 = b + c;
+>r6 : Symbol(r6, Decl(additionOperatorWithInvalidOperands.ts, 21, 3))
+>b : Symbol(b, Decl(additionOperatorWithInvalidOperands.ts, 9, 3))
+>c : Symbol(c, Decl(additionOperatorWithInvalidOperands.ts, 10, 3))
+
+// object + every type except any and string
+var r7 = c + a;
+>r7 : Symbol(r7, Decl(additionOperatorWithInvalidOperands.ts, 24, 3))
+>c : Symbol(c, Decl(additionOperatorWithInvalidOperands.ts, 10, 3))
+>a : Symbol(a, Decl(additionOperatorWithInvalidOperands.ts, 8, 3))
+
+var r8 = c + b;
+>r8 : Symbol(r8, Decl(additionOperatorWithInvalidOperands.ts, 25, 3))
+>c : Symbol(c, Decl(additionOperatorWithInvalidOperands.ts, 10, 3))
+>b : Symbol(b, Decl(additionOperatorWithInvalidOperands.ts, 9, 3))
+
+var r9 = c + c;
+>r9 : Symbol(r9, Decl(additionOperatorWithInvalidOperands.ts, 26, 3))
+>c : Symbol(c, Decl(additionOperatorWithInvalidOperands.ts, 10, 3))
+>c : Symbol(c, Decl(additionOperatorWithInvalidOperands.ts, 10, 3))
+
+// other cases
+var r10 = a + true;
+>r10 : Symbol(r10, Decl(additionOperatorWithInvalidOperands.ts, 29, 3))
+>a : Symbol(a, Decl(additionOperatorWithInvalidOperands.ts, 8, 3))
+
+var r11 = true + false;
+>r11 : Symbol(r11, Decl(additionOperatorWithInvalidOperands.ts, 30, 3))
+
+var r12 = true + 123;
+>r12 : Symbol(r12, Decl(additionOperatorWithInvalidOperands.ts, 31, 3))
+
+var r13 = {} + {};
+>r13 : Symbol(r13, Decl(additionOperatorWithInvalidOperands.ts, 32, 3))
+
+var r14 = b + d;
+>r14 : Symbol(r14, Decl(additionOperatorWithInvalidOperands.ts, 33, 3))
+>b : Symbol(b, Decl(additionOperatorWithInvalidOperands.ts, 9, 3))
+>d : Symbol(d, Decl(additionOperatorWithInvalidOperands.ts, 11, 3))
+
+var r15 = b + foo;
+>r15 : Symbol(r15, Decl(additionOperatorWithInvalidOperands.ts, 34, 3))
+>b : Symbol(b, Decl(additionOperatorWithInvalidOperands.ts, 9, 3))
+>foo : Symbol(foo, Decl(additionOperatorWithInvalidOperands.ts, 0, 0))
+
+var r16 = b + foo();
+>r16 : Symbol(r16, Decl(additionOperatorWithInvalidOperands.ts, 35, 3))
+>b : Symbol(b, Decl(additionOperatorWithInvalidOperands.ts, 9, 3))
+>foo : Symbol(foo, Decl(additionOperatorWithInvalidOperands.ts, 0, 0))
+
+var r17 = b + C;
+>r17 : Symbol(r17, Decl(additionOperatorWithInvalidOperands.ts, 36, 3))
+>b : Symbol(b, Decl(additionOperatorWithInvalidOperands.ts, 9, 3))
+>C : Symbol(C, Decl(additionOperatorWithInvalidOperands.ts, 0, 18))
+
+var r18 = E.a + new C();
+>r18 : Symbol(r18, Decl(additionOperatorWithInvalidOperands.ts, 37, 3))
+>E.a : Symbol(E.a, Decl(additionOperatorWithInvalidOperands.ts, 5, 8))
+>E : Symbol(E, Decl(additionOperatorWithInvalidOperands.ts, 4, 1))
+>a : Symbol(E.a, Decl(additionOperatorWithInvalidOperands.ts, 5, 8))
+>C : Symbol(C, Decl(additionOperatorWithInvalidOperands.ts, 0, 18))
+
+var r19 = E.a + C.foo();
+>r19 : Symbol(r19, Decl(additionOperatorWithInvalidOperands.ts, 38, 3))
+>E.a : Symbol(E.a, Decl(additionOperatorWithInvalidOperands.ts, 5, 8))
+>E : Symbol(E, Decl(additionOperatorWithInvalidOperands.ts, 4, 1))
+>a : Symbol(E.a, Decl(additionOperatorWithInvalidOperands.ts, 5, 8))
+>C.foo : Symbol(C.foo, Decl(additionOperatorWithInvalidOperands.ts, 2, 21))
+>C : Symbol(C, Decl(additionOperatorWithInvalidOperands.ts, 0, 18))
+>foo : Symbol(C.foo, Decl(additionOperatorWithInvalidOperands.ts, 2, 21))
+
+var r20 = E.a + M;
+>r20 : Symbol(r20, Decl(additionOperatorWithInvalidOperands.ts, 39, 3))
+>E.a : Symbol(E.a, Decl(additionOperatorWithInvalidOperands.ts, 5, 8))
+>E : Symbol(E, Decl(additionOperatorWithInvalidOperands.ts, 4, 1))
+>a : Symbol(E.a, Decl(additionOperatorWithInvalidOperands.ts, 5, 8))
+>M : Symbol(M, Decl(additionOperatorWithInvalidOperands.ts, 5, 18))
+

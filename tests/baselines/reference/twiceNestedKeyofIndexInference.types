@@ -1,0 +1,76 @@
+=== tests/cases/compiler/twiceNestedKeyofIndexInference.ts ===
+type Set1<T, K1 extends keyof T> = T extends any[] ? T : Pick<T, Exclude<keyof T, K1>> & {
+>Set1 : Set1<T, K1>
+
+    [SK1 in K1]-?: Required<Pick<T, SK1>>;
+}[K1];
+
+type Set2<T, K1 extends keyof T, K2 extends keyof T[K1]> = T extends any[] ? T : Pick<T, Exclude<keyof T, K1>> & {
+>Set2 : Set2<T, K1, K2>
+
+    [SK1 in K1]-?: Required<{
+        [key in K1]: Set1<T[K1], K2>;
+    }>;
+}[K1];
+
+declare function set<T, K1 extends keyof T>(source: T, path: [K1], value: T[K1]): Set1<T, K1>;
+>set : { <T, K1 extends keyof T>(source: T, path: [K1], value: T[K1]): Set1<T, K1>; <T, K1 extends keyof T, K2 extends keyof T[K1]>(source: T, path: [K1, K2], value: T[K1][K2]): Set2<T, K1, K2>; }
+>source : T
+>path : [K1]
+>value : T[K1]
+
+declare function set<T, K1 extends keyof T, K2 extends keyof T[K1]>(source: T, path: [K1, K2], value: T[K1][K2]): Set2<T, K1, K2>;
+>set : { <T, K1 extends keyof T>(source: T, path: [K1], value: T[K1]): Set1<T, K1>; <T, K1 extends keyof T, K2 extends keyof T[K1]>(source: T, path: [K1, K2], value: T[K1][K2]): Set2<T, K1, K2>; }
+>source : T
+>path : [K1, K2]
+>value : T[K1][K2]
+
+
+interface State {
+    a: {
+>a : { b: string; c: number; }
+
+        b: string;
+>b : string
+
+        c: number;
+>c : number
+
+    };
+    d: boolean;
+>d : boolean
+}
+
+const state: State = {
+>state : State
+>{    a: {        b: "",        c: 0,    },    d: false,} : { a: { b: string; c: number; }; d: false; }
+
+    a: {
+>a : { b: string; c: number; }
+>{        b: "",        c: 0,    } : { b: string; c: number; }
+
+        b: "",
+>b : string
+>"" : ""
+
+        c: 0,
+>c : number
+>0 : 0
+
+    },
+    d: false,
+>d : false
+>false : false
+
+};
+
+const newState: State = set(state, ["a", 'b'], 'why'); // shouldn't be an error
+>newState : State
+>set(state, ["a", 'b'], 'why') : Pick<State, "d"> & Required<{ a: Pick<{ b: string; c: number; }, "c"> & Required<Pick<{ b: string; c: number; }, "b">>; }>
+>set : { <T, K1 extends keyof T>(source: T, path: [K1], value: T[K1]): Set1<T, K1>; <T, K1 extends keyof T, K2 extends keyof T[K1]>(source: T, path: [K1, K2], value: T[K1][K2]): Set2<T, K1, K2>; }
+>state : State
+>["a", 'b'] : ["a", "b"]
+>"a" : "a"
+>'b' : "b"
+>'why' : "why"
+

@@ -1,0 +1,6 @@
+=== tests/cases/conformance/parser/ecmascript5/Accessors/parserAccessors3.ts ===
+var v = { get Foo() { } };
+>v : { readonly Foo: void; }
+>{ get Foo() { } } : { readonly Foo: void; }
+>Foo : void
+

@@ -1,0 +1,149 @@
+=== tests/cases/compiler/unusedPrivateMembers.ts ===
+class Test1 {
+>Test1 : Symbol(Test1, Decl(unusedPrivateMembers.ts, 0, 0))
+
+    private initializeInternal() {
+>initializeInternal : Symbol(Test1.initializeInternal, Decl(unusedPrivateMembers.ts, 0, 13))
+    }
+
+    public test() {
+>test : Symbol(Test1.test, Decl(unusedPrivateMembers.ts, 2, 5))
+
+        var x = new Test1();
+>x : Symbol(x, Decl(unusedPrivateMembers.ts, 5, 11))
+>Test1 : Symbol(Test1, Decl(unusedPrivateMembers.ts, 0, 0))
+
+        x.initializeInternal();
+>x.initializeInternal : Symbol(Test1.initializeInternal, Decl(unusedPrivateMembers.ts, 0, 13))
+>x : Symbol(x, Decl(unusedPrivateMembers.ts, 5, 11))
+>initializeInternal : Symbol(Test1.initializeInternal, Decl(unusedPrivateMembers.ts, 0, 13))
+    }
+}
+
+class Test2 {
+>Test2 : Symbol(Test2, Decl(unusedPrivateMembers.ts, 8, 1))
+
+    private p = 0;
+>p : Symbol(Test2.p, Decl(unusedPrivateMembers.ts, 10, 13))
+
+    public test() {
+>test : Symbol(Test2.test, Decl(unusedPrivateMembers.ts, 11, 18))
+
+        var x = new Test2();
+>x : Symbol(x, Decl(unusedPrivateMembers.ts, 13, 11))
+>Test2 : Symbol(Test2, Decl(unusedPrivateMembers.ts, 8, 1))
+
+        x.p;
+>x.p : Symbol(Test2.p, Decl(unusedPrivateMembers.ts, 10, 13))
+>x : Symbol(x, Decl(unusedPrivateMembers.ts, 13, 11))
+>p : Symbol(Test2.p, Decl(unusedPrivateMembers.ts, 10, 13))
+    }
+}
+
+class Test3 {
+>Test3 : Symbol(Test3, Decl(unusedPrivateMembers.ts, 16, 1))
+
+    private get x () {
+>x : Symbol(Test3.x, Decl(unusedPrivateMembers.ts, 18, 13))
+
+        return 0;
+    }
+
+    public test() {
+>test : Symbol(Test3.test, Decl(unusedPrivateMembers.ts, 21, 5))
+
+        var x = new Test3();
+>x : Symbol(x, Decl(unusedPrivateMembers.ts, 24, 11))
+>Test3 : Symbol(Test3, Decl(unusedPrivateMembers.ts, 16, 1))
+
+        x.x;
+>x.x : Symbol(Test3.x, Decl(unusedPrivateMembers.ts, 18, 13))
+>x : Symbol(x, Decl(unusedPrivateMembers.ts, 24, 11))
+>x : Symbol(Test3.x, Decl(unusedPrivateMembers.ts, 18, 13))
+    }
+}
+
+class Test4 {
+>Test4 : Symbol(Test4, Decl(unusedPrivateMembers.ts, 27, 1))
+
+    private set x(v) {
+>x : Symbol(Test4.x, Decl(unusedPrivateMembers.ts, 29, 13))
+>v : Symbol(v, Decl(unusedPrivateMembers.ts, 30, 18))
+
+        v;
+>v : Symbol(v, Decl(unusedPrivateMembers.ts, 30, 18))
+    }
+
+    public test() {
+>test : Symbol(Test4.test, Decl(unusedPrivateMembers.ts, 32, 5))
+
+        var x = new Test4();
+>x : Symbol(x, Decl(unusedPrivateMembers.ts, 35, 11))
+>Test4 : Symbol(Test4, Decl(unusedPrivateMembers.ts, 27, 1))
+
+        x.x;
+>x.x : Symbol(Test4.x, Decl(unusedPrivateMembers.ts, 29, 13))
+>x : Symbol(x, Decl(unusedPrivateMembers.ts, 35, 11))
+>x : Symbol(Test4.x, Decl(unusedPrivateMembers.ts, 29, 13))
+    }
+}
+
+class Test5<T> {
+>Test5 : Symbol(Test5, Decl(unusedPrivateMembers.ts, 38, 1))
+>T : Symbol(T, Decl(unusedPrivateMembers.ts, 40, 12))
+
+    private p: T;
+>p : Symbol(Test5.p, Decl(unusedPrivateMembers.ts, 40, 16))
+>T : Symbol(T, Decl(unusedPrivateMembers.ts, 40, 12))
+
+    public test() {
+>test : Symbol(Test5.test, Decl(unusedPrivateMembers.ts, 41, 17))
+
+        var x = new Test5<number>();
+>x : Symbol(x, Decl(unusedPrivateMembers.ts, 43, 11))
+>Test5 : Symbol(Test5, Decl(unusedPrivateMembers.ts, 38, 1))
+
+        x.p;
+>x.p : Symbol(Test5.p, Decl(unusedPrivateMembers.ts, 40, 16))
+>x : Symbol(x, Decl(unusedPrivateMembers.ts, 43, 11))
+>p : Symbol(Test5.p, Decl(unusedPrivateMembers.ts, 40, 16))
+    }
+}
+
+class Test6 {
+>Test6 : Symbol(Test6, Decl(unusedPrivateMembers.ts, 46, 1))
+
+    private get a() {
+>a : Symbol(Test6.a, Decl(unusedPrivateMembers.ts, 48, 13), Decl(unusedPrivateMembers.ts, 51, 5))
+
+        return 0;
+    }
+    private set a(v) {
+>a : Symbol(Test6.a, Decl(unusedPrivateMembers.ts, 48, 13), Decl(unusedPrivateMembers.ts, 51, 5))
+>v : Symbol(v, Decl(unusedPrivateMembers.ts, 52, 18))
+
+        v;
+>v : Symbol(v, Decl(unusedPrivateMembers.ts, 52, 18))
+    }
+    private b = 0;
+>b : Symbol(Test6.b, Decl(unusedPrivateMembers.ts, 54, 5))
+
+    public test() {
+>test : Symbol(Test6.test, Decl(unusedPrivateMembers.ts, 55, 18))
+
+        var x = new Test6();
+>x : Symbol(x, Decl(unusedPrivateMembers.ts, 58, 11))
+>Test6 : Symbol(Test6, Decl(unusedPrivateMembers.ts, 46, 1))
+
+        x.a++;
+>x.a : Symbol(Test6.a, Decl(unusedPrivateMembers.ts, 48, 13), Decl(unusedPrivateMembers.ts, 51, 5))
+>x : Symbol(x, Decl(unusedPrivateMembers.ts, 58, 11))
+>a : Symbol(Test6.a, Decl(unusedPrivateMembers.ts, 48, 13), Decl(unusedPrivateMembers.ts, 51, 5))
+
+        x.b++;
+>x.b : Symbol(Test6.b, Decl(unusedPrivateMembers.ts, 54, 5))
+>x : Symbol(x, Decl(unusedPrivateMembers.ts, 58, 11))
+>b : Symbol(Test6.b, Decl(unusedPrivateMembers.ts, 54, 5))
+    }
+}
+

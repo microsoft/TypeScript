@@ -1,0 +1,20 @@
+=== tests/cases/compiler/functionOverloads31.ts ===
+function foo(bar:string):string;
+>foo : { (bar: string): string; (bar: number): number; }
+>bar : string
+
+function foo(bar:number):number;
+>foo : { (bar: string): string; (bar: number): number; }
+>bar : number
+
+function foo(bar:any):any{ return bar }
+>foo : { (bar: string): string; (bar: number): number; }
+>bar : any
+>bar : any
+
+var x = foo(5);
+>x : number
+>foo(5) : number
+>foo : { (bar: string): string; (bar: number): number; }
+>5 : 5
+

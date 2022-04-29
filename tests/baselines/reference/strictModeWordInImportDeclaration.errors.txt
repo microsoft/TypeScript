@@ -1,0 +1,25 @@
+tests/cases/compiler/strictModeWordInImportDeclaration.ts(2,13): error TS1214: Identifier expected. 'package' is a reserved word in strict mode. Modules are automatically in strict mode.
+tests/cases/compiler/strictModeWordInImportDeclaration.ts(2,26): error TS2792: Cannot find module './1'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+tests/cases/compiler/strictModeWordInImportDeclaration.ts(3,16): error TS1214: Identifier expected. 'private' is a reserved word in strict mode. Modules are automatically in strict mode.
+tests/cases/compiler/strictModeWordInImportDeclaration.ts(3,30): error TS2792: Cannot find module './1'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+tests/cases/compiler/strictModeWordInImportDeclaration.ts(4,8): error TS1214: Identifier expected. 'public' is a reserved word in strict mode. Modules are automatically in strict mode.
+tests/cases/compiler/strictModeWordInImportDeclaration.ts(4,20): error TS2792: Cannot find module './1'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+
+
+==== tests/cases/compiler/strictModeWordInImportDeclaration.ts (6 errors) ====
+    "use strict"
+    import * as package from "./1"
+                ~~~~~~~
+!!! error TS1214: Identifier expected. 'package' is a reserved word in strict mode. Modules are automatically in strict mode.
+                             ~~~~~
+!!! error TS2792: Cannot find module './1'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+    import {foo as private} from "./1"
+                   ~~~~~~~
+!!! error TS1214: Identifier expected. 'private' is a reserved word in strict mode. Modules are automatically in strict mode.
+                                 ~~~~~
+!!! error TS2792: Cannot find module './1'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+    import public from "./1"
+           ~~~~~~
+!!! error TS1214: Identifier expected. 'public' is a reserved word in strict mode. Modules are automatically in strict mode.
+                       ~~~~~
+!!! error TS2792: Cannot find module './1'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?

@@ -1,0 +1,38 @@
+=== tests/cases/compiler/json.stringify.ts ===
+var value = null;
+>value : Symbol(value, Decl(json.stringify.ts, 0, 3))
+
+JSON.stringify(value, undefined, 2);
+>JSON.stringify : Symbol(JSON.stringify, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>JSON : Symbol(JSON, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>stringify : Symbol(JSON.stringify, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>value : Symbol(value, Decl(json.stringify.ts, 0, 3))
+>undefined : Symbol(undefined)
+
+JSON.stringify(value, null, 2);
+>JSON.stringify : Symbol(JSON.stringify, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>JSON : Symbol(JSON, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>stringify : Symbol(JSON.stringify, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>value : Symbol(value, Decl(json.stringify.ts, 0, 3))
+
+JSON.stringify(value, ["a", 1], 2);
+>JSON.stringify : Symbol(JSON.stringify, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>JSON : Symbol(JSON, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>stringify : Symbol(JSON.stringify, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>value : Symbol(value, Decl(json.stringify.ts, 0, 3))
+
+JSON.stringify(value, (k) => undefined, 2);
+>JSON.stringify : Symbol(JSON.stringify, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>JSON : Symbol(JSON, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>stringify : Symbol(JSON.stringify, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>value : Symbol(value, Decl(json.stringify.ts, 0, 3))
+>k : Symbol(k, Decl(json.stringify.ts, 4, 23))
+>undefined : Symbol(undefined)
+
+JSON.stringify(value, undefined, 2);
+>JSON.stringify : Symbol(JSON.stringify, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>JSON : Symbol(JSON, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>stringify : Symbol(JSON.stringify, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>value : Symbol(value, Decl(json.stringify.ts, 0, 3))
+>undefined : Symbol(undefined)
+

@@ -1,0 +1,74 @@
+=== tests/cases/compiler/map.ts ===
+import { Observable } from "./observable"
+>Observable : Symbol(Observable, Decl(map.ts, 0, 8))
+
+(<any>Observable.prototype).map = function() { }
+>Observable.prototype : Symbol(Observable.prototype)
+>Observable : Symbol(Observable, Decl(map.ts, 0, 8))
+>prototype : Symbol(Observable.prototype)
+
+declare module "./observable" {
+>"./observable" : Symbol("tests/cases/compiler/observable", Decl(observable.ts, 0, 0), Decl(map.ts, 2, 48))
+
+    interface Observable<T> {
+>Observable : Symbol(Observable, Decl(observable.ts, 0, 0), Decl(observable.ts, 2, 1), Decl(map.ts, 4, 31), Decl(map.ts, 7, 5))
+>T : Symbol(T, Decl(observable.ts, 0, 32), Decl(map.ts, 5, 25))
+
+        map<U>(proj: (e:T) => U): Observable<U>
+>map : Symbol(Observable.map, Decl(map.ts, 5, 29))
+>U : Symbol(U, Decl(map.ts, 6, 12))
+>proj : Symbol(proj, Decl(map.ts, 6, 15))
+>e : Symbol(e, Decl(map.ts, 6, 22))
+>T : Symbol(T, Decl(observable.ts, 0, 32), Decl(map.ts, 5, 25))
+>U : Symbol(U, Decl(map.ts, 6, 12))
+>Observable : Symbol(Observable, Decl(observable.ts, 0, 0), Decl(observable.ts, 2, 1), Decl(map.ts, 4, 31), Decl(map.ts, 7, 5))
+>U : Symbol(U, Decl(map.ts, 6, 12))
+    }
+    namespace Observable {
+>Observable : Symbol(Observable, Decl(observable.ts, 0, 0), Decl(observable.ts, 2, 1), Decl(map.ts, 4, 31), Decl(map.ts, 7, 5))
+
+        let someAnotherValue: number;
+>someAnotherValue : Symbol(someAnotherValue, Decl(map.ts, 9, 11))
+    }
+}
+
+=== tests/cases/compiler/observable.ts ===
+export declare class Observable<T> {
+>Observable : Symbol(Observable, Decl(observable.ts, 0, 0), Decl(observable.ts, 2, 1), Decl(map.ts, 4, 31), Decl(map.ts, 7, 5))
+>T : Symbol(T, Decl(observable.ts, 0, 32), Decl(map.ts, 5, 25))
+
+    filter(pred: (e:T) => boolean): Observable<T>;
+>filter : Symbol(Observable.filter, Decl(observable.ts, 0, 36))
+>pred : Symbol(pred, Decl(observable.ts, 1, 11))
+>e : Symbol(e, Decl(observable.ts, 1, 18))
+>T : Symbol(T, Decl(observable.ts, 0, 32), Decl(map.ts, 5, 25))
+>Observable : Symbol(Observable, Decl(observable.ts, 0, 0), Decl(observable.ts, 2, 1), Decl(map.ts, 4, 31), Decl(map.ts, 7, 5))
+>T : Symbol(T, Decl(observable.ts, 0, 32), Decl(map.ts, 5, 25))
+}
+
+export namespace Observable {
+>Observable : Symbol(Observable, Decl(observable.ts, 0, 0), Decl(observable.ts, 2, 1), Decl(map.ts, 4, 31), Decl(map.ts, 7, 5))
+
+    let someValue: number;
+>someValue : Symbol(someValue, Decl(observable.ts, 5, 7))
+}
+
+
+=== tests/cases/compiler/main.ts ===
+import { Observable } from "./observable"
+>Observable : Symbol(Observable, Decl(main.ts, 0, 8))
+
+import "./map";
+
+let x: Observable<number>;
+>x : Symbol(x, Decl(main.ts, 3, 3))
+>Observable : Symbol(Observable, Decl(main.ts, 0, 8))
+
+let y = x.map(x => x + 1);
+>y : Symbol(y, Decl(main.ts, 4, 3))
+>x.map : Symbol(Observable.map, Decl(map.ts, 5, 29))
+>x : Symbol(x, Decl(main.ts, 3, 3))
+>map : Symbol(Observable.map, Decl(map.ts, 5, 29))
+>x : Symbol(x, Decl(main.ts, 4, 14))
+>x : Symbol(x, Decl(main.ts, 4, 14))
+

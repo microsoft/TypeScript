@@ -1,0 +1,41 @@
+tests/cases/compiler/implementGenericWithMismatchedTypes.ts(8,5): error TS2416: Property 'foo' in type 'C<T>' is not assignable to the same property in base type 'IFoo<T>'.
+  Type '(x: string) => number' is not assignable to type '(x: T) => T'.
+    Types of parameters 'x' and 'x' are incompatible.
+      Type 'T' is not assignable to type 'string'.
+tests/cases/compiler/implementGenericWithMismatchedTypes.ts(17,5): error TS2416: Property 'foo' in type 'C2<T>' is not assignable to the same property in base type 'IFoo2<T>'.
+  Type '<Tstring>(x: Tstring) => number' is not assignable to type '(x: T) => T'.
+    Type 'number' is not assignable to type 'T'.
+      'T' could be instantiated with an arbitrary type which could be unrelated to 'number'.
+
+
+==== tests/cases/compiler/implementGenericWithMismatchedTypes.ts (2 errors) ====
+    // no errors because in the derived types the best common type for T's value is Object
+    // and that matches the original signature for assignability since we treat its T's as Object
+    
+    interface IFoo<T> {
+        foo(x: T): T;
+    }
+    class C<T> implements IFoo<T> { // error
+        foo(x: string): number {
+        ~~~
+!!! error TS2416: Property 'foo' in type 'C<T>' is not assignable to the same property in base type 'IFoo<T>'.
+!!! error TS2416:   Type '(x: string) => number' is not assignable to type '(x: T) => T'.
+!!! error TS2416:     Types of parameters 'x' and 'x' are incompatible.
+!!! error TS2416:       Type 'T' is not assignable to type 'string'.
+            return null;
+        }
+    }
+    
+    interface IFoo2<T> {
+        foo(x: T): T;
+    }
+    class C2<T> implements IFoo2<T> { // error
+        foo<Tstring>(x: Tstring): number {
+        ~~~
+!!! error TS2416: Property 'foo' in type 'C2<T>' is not assignable to the same property in base type 'IFoo2<T>'.
+!!! error TS2416:   Type '<Tstring>(x: Tstring) => number' is not assignable to type '(x: T) => T'.
+!!! error TS2416:     Type 'number' is not assignable to type 'T'.
+!!! error TS2416:       'T' could be instantiated with an arbitrary type which could be unrelated to 'number'.
+            return null;
+        }
+    }

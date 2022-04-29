@@ -1,0 +1,9 @@
+=== tests/cases/conformance/parser/ecmascript5/ObjectTypes/parserObjectType6.ts ===
+var v: {
+>v : { a: B; }
+
+   a: B
+>a : B
+
+   [];
+};

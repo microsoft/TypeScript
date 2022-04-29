@@ -1,0 +1,75 @@
+=== tests/cases/compiler/asyncFunctionContextuallyTypedReturns.ts ===
+declare function f(cb: (v: boolean) => [0] | PromiseLike<[0]>): void;
+>f : Symbol(f, Decl(asyncFunctionContextuallyTypedReturns.ts, 0, 0))
+>cb : Symbol(cb, Decl(asyncFunctionContextuallyTypedReturns.ts, 0, 19))
+>v : Symbol(v, Decl(asyncFunctionContextuallyTypedReturns.ts, 0, 24))
+>PromiseLike : Symbol(PromiseLike, Decl(lib.es5.d.ts, --, --))
+
+f(v => v ? [0] : Promise.reject());
+>f : Symbol(f, Decl(asyncFunctionContextuallyTypedReturns.ts, 0, 0))
+>v : Symbol(v, Decl(asyncFunctionContextuallyTypedReturns.ts, 1, 2))
+>v : Symbol(v, Decl(asyncFunctionContextuallyTypedReturns.ts, 1, 2))
+>Promise.reject : Symbol(PromiseConstructor.reject, Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>reject : Symbol(PromiseConstructor.reject, Decl(lib.es2015.promise.d.ts, --, --))
+
+f(async v => v ? [0] : Promise.reject());
+>f : Symbol(f, Decl(asyncFunctionContextuallyTypedReturns.ts, 0, 0))
+>v : Symbol(v, Decl(asyncFunctionContextuallyTypedReturns.ts, 2, 7))
+>v : Symbol(v, Decl(asyncFunctionContextuallyTypedReturns.ts, 2, 7))
+>Promise.reject : Symbol(PromiseConstructor.reject, Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>reject : Symbol(PromiseConstructor.reject, Decl(lib.es2015.promise.d.ts, --, --))
+
+declare function g(cb: (v: boolean) => "contextuallyTypable" | PromiseLike<"contextuallyTypable">): void;
+>g : Symbol(g, Decl(asyncFunctionContextuallyTypedReturns.ts, 2, 41))
+>cb : Symbol(cb, Decl(asyncFunctionContextuallyTypedReturns.ts, 4, 19))
+>v : Symbol(v, Decl(asyncFunctionContextuallyTypedReturns.ts, 4, 24))
+>PromiseLike : Symbol(PromiseLike, Decl(lib.es5.d.ts, --, --))
+
+g(v => v ? "contextuallyTypable" : Promise.reject());
+>g : Symbol(g, Decl(asyncFunctionContextuallyTypedReturns.ts, 2, 41))
+>v : Symbol(v, Decl(asyncFunctionContextuallyTypedReturns.ts, 5, 2))
+>v : Symbol(v, Decl(asyncFunctionContextuallyTypedReturns.ts, 5, 2))
+>Promise.reject : Symbol(PromiseConstructor.reject, Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>reject : Symbol(PromiseConstructor.reject, Decl(lib.es2015.promise.d.ts, --, --))
+
+g(async v => v ? "contextuallyTypable" : Promise.reject());
+>g : Symbol(g, Decl(asyncFunctionContextuallyTypedReturns.ts, 2, 41))
+>v : Symbol(v, Decl(asyncFunctionContextuallyTypedReturns.ts, 6, 7))
+>v : Symbol(v, Decl(asyncFunctionContextuallyTypedReturns.ts, 6, 7))
+>Promise.reject : Symbol(PromiseConstructor.reject, Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>reject : Symbol(PromiseConstructor.reject, Decl(lib.es2015.promise.d.ts, --, --))
+
+type MyCallback = (thing: string) => void;
+>MyCallback : Symbol(MyCallback, Decl(asyncFunctionContextuallyTypedReturns.ts, 6, 59))
+>thing : Symbol(thing, Decl(asyncFunctionContextuallyTypedReturns.ts, 8, 19))
+
+declare function h(cb: (v: boolean) => MyCallback | PromiseLike<MyCallback>): void;
+>h : Symbol(h, Decl(asyncFunctionContextuallyTypedReturns.ts, 8, 42))
+>cb : Symbol(cb, Decl(asyncFunctionContextuallyTypedReturns.ts, 9, 19))
+>v : Symbol(v, Decl(asyncFunctionContextuallyTypedReturns.ts, 9, 24))
+>MyCallback : Symbol(MyCallback, Decl(asyncFunctionContextuallyTypedReturns.ts, 6, 59))
+>PromiseLike : Symbol(PromiseLike, Decl(lib.es5.d.ts, --, --))
+>MyCallback : Symbol(MyCallback, Decl(asyncFunctionContextuallyTypedReturns.ts, 6, 59))
+
+h(v => v ? (abc) => { } : Promise.reject());
+>h : Symbol(h, Decl(asyncFunctionContextuallyTypedReturns.ts, 8, 42))
+>v : Symbol(v, Decl(asyncFunctionContextuallyTypedReturns.ts, 10, 2))
+>v : Symbol(v, Decl(asyncFunctionContextuallyTypedReturns.ts, 10, 2))
+>abc : Symbol(abc, Decl(asyncFunctionContextuallyTypedReturns.ts, 10, 12))
+>Promise.reject : Symbol(PromiseConstructor.reject, Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>reject : Symbol(PromiseConstructor.reject, Decl(lib.es2015.promise.d.ts, --, --))
+
+h(async v => v ? (def) => { } : Promise.reject());
+>h : Symbol(h, Decl(asyncFunctionContextuallyTypedReturns.ts, 8, 42))
+>v : Symbol(v, Decl(asyncFunctionContextuallyTypedReturns.ts, 11, 7))
+>v : Symbol(v, Decl(asyncFunctionContextuallyTypedReturns.ts, 11, 7))
+>def : Symbol(def, Decl(asyncFunctionContextuallyTypedReturns.ts, 11, 18))
+>Promise.reject : Symbol(PromiseConstructor.reject, Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>reject : Symbol(PromiseConstructor.reject, Decl(lib.es2015.promise.d.ts, --, --))
+

@@ -1,0 +1,71 @@
+=== tests/cases/compiler/deferredLookupTypeResolution2.ts ===
+// Repro from #17456
+
+type StringContains<S extends string, L extends string> = ({ [K in S]: 'true' } & { [key: string]: 'false'})[L];
+>StringContains : Symbol(StringContains, Decl(deferredLookupTypeResolution2.ts, 0, 0))
+>S : Symbol(S, Decl(deferredLookupTypeResolution2.ts, 2, 20))
+>L : Symbol(L, Decl(deferredLookupTypeResolution2.ts, 2, 37))
+>K : Symbol(K, Decl(deferredLookupTypeResolution2.ts, 2, 62))
+>S : Symbol(S, Decl(deferredLookupTypeResolution2.ts, 2, 20))
+>key : Symbol(key, Decl(deferredLookupTypeResolution2.ts, 2, 85))
+>L : Symbol(L, Decl(deferredLookupTypeResolution2.ts, 2, 37))
+
+type ObjectHasKey<O, L extends string> = StringContains<Extract<keyof O, string>, L>;
+>ObjectHasKey : Symbol(ObjectHasKey, Decl(deferredLookupTypeResolution2.ts, 2, 112))
+>O : Symbol(O, Decl(deferredLookupTypeResolution2.ts, 4, 18))
+>L : Symbol(L, Decl(deferredLookupTypeResolution2.ts, 4, 20))
+>StringContains : Symbol(StringContains, Decl(deferredLookupTypeResolution2.ts, 0, 0))
+>Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
+>O : Symbol(O, Decl(deferredLookupTypeResolution2.ts, 4, 18))
+>L : Symbol(L, Decl(deferredLookupTypeResolution2.ts, 4, 20))
+
+type A<T> = ObjectHasKey<T, '0'>;
+>A : Symbol(A, Decl(deferredLookupTypeResolution2.ts, 4, 85))
+>T : Symbol(T, Decl(deferredLookupTypeResolution2.ts, 6, 7))
+>ObjectHasKey : Symbol(ObjectHasKey, Decl(deferredLookupTypeResolution2.ts, 2, 112))
+>T : Symbol(T, Decl(deferredLookupTypeResolution2.ts, 6, 7))
+
+type B = ObjectHasKey<[string, number], '1'>;  // "true"
+>B : Symbol(B, Decl(deferredLookupTypeResolution2.ts, 6, 33))
+>ObjectHasKey : Symbol(ObjectHasKey, Decl(deferredLookupTypeResolution2.ts, 2, 112))
+
+type C = ObjectHasKey<[string, number], '2'>;  // "false"
+>C : Symbol(C, Decl(deferredLookupTypeResolution2.ts, 8, 45))
+>ObjectHasKey : Symbol(ObjectHasKey, Decl(deferredLookupTypeResolution2.ts, 2, 112))
+
+type D = A<[string]>;  // "true"
+>D : Symbol(D, Decl(deferredLookupTypeResolution2.ts, 9, 45))
+>A : Symbol(A, Decl(deferredLookupTypeResolution2.ts, 4, 85))
+
+// Error, "false" not handled
+type E<T> = { true: 'true' }[ObjectHasKey<T, '1'>];
+>E : Symbol(E, Decl(deferredLookupTypeResolution2.ts, 10, 21))
+>T : Symbol(T, Decl(deferredLookupTypeResolution2.ts, 13, 7))
+>true : Symbol(true, Decl(deferredLookupTypeResolution2.ts, 13, 13))
+>ObjectHasKey : Symbol(ObjectHasKey, Decl(deferredLookupTypeResolution2.ts, 2, 112))
+>T : Symbol(T, Decl(deferredLookupTypeResolution2.ts, 13, 7))
+
+type Juxtapose<T> = ({ true: 'otherwise' } & { [k: string]: 'true' })[ObjectHasKey<T, '1'>];
+>Juxtapose : Symbol(Juxtapose, Decl(deferredLookupTypeResolution2.ts, 13, 51))
+>T : Symbol(T, Decl(deferredLookupTypeResolution2.ts, 15, 15))
+>true : Symbol(true, Decl(deferredLookupTypeResolution2.ts, 15, 22))
+>k : Symbol(k, Decl(deferredLookupTypeResolution2.ts, 15, 48))
+>ObjectHasKey : Symbol(ObjectHasKey, Decl(deferredLookupTypeResolution2.ts, 2, 112))
+>T : Symbol(T, Decl(deferredLookupTypeResolution2.ts, 15, 15))
+
+// Error, "otherwise" is missing
+type DeepError<T> = { true: 'true' }[Juxtapose<T>];
+>DeepError : Symbol(DeepError, Decl(deferredLookupTypeResolution2.ts, 15, 92))
+>T : Symbol(T, Decl(deferredLookupTypeResolution2.ts, 18, 15))
+>true : Symbol(true, Decl(deferredLookupTypeResolution2.ts, 18, 21))
+>Juxtapose : Symbol(Juxtapose, Decl(deferredLookupTypeResolution2.ts, 13, 51))
+>T : Symbol(T, Decl(deferredLookupTypeResolution2.ts, 18, 15))
+
+type DeepOK<T> = { true: 'true', otherwise: 'false' }[Juxtapose<T>];
+>DeepOK : Symbol(DeepOK, Decl(deferredLookupTypeResolution2.ts, 18, 51))
+>T : Symbol(T, Decl(deferredLookupTypeResolution2.ts, 20, 12))
+>true : Symbol(true, Decl(deferredLookupTypeResolution2.ts, 20, 18))
+>otherwise : Symbol(otherwise, Decl(deferredLookupTypeResolution2.ts, 20, 32))
+>Juxtapose : Symbol(Juxtapose, Decl(deferredLookupTypeResolution2.ts, 13, 51))
+>T : Symbol(T, Decl(deferredLookupTypeResolution2.ts, 20, 12))
+

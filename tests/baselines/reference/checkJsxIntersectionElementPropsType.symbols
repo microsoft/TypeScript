@@ -1,0 +1,41 @@
+=== tests/cases/conformance/jsx/checkJsxIntersectionElementPropsType.tsx ===
+declare namespace JSX {
+>JSX : Symbol(JSX, Decl(checkJsxIntersectionElementPropsType.tsx, 0, 0))
+
+    interface ElementAttributesProperty { props: {}; }
+>ElementAttributesProperty : Symbol(ElementAttributesProperty, Decl(checkJsxIntersectionElementPropsType.tsx, 0, 23))
+>props : Symbol(ElementAttributesProperty.props, Decl(checkJsxIntersectionElementPropsType.tsx, 1, 41))
+}
+
+declare class Component<P> {
+>Component : Symbol(Component, Decl(checkJsxIntersectionElementPropsType.tsx, 2, 1))
+>P : Symbol(P, Decl(checkJsxIntersectionElementPropsType.tsx, 4, 24))
+
+  constructor(props: Readonly<P>);
+>props : Symbol(props, Decl(checkJsxIntersectionElementPropsType.tsx, 5, 14))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>P : Symbol(P, Decl(checkJsxIntersectionElementPropsType.tsx, 4, 24))
+
+  readonly props: Readonly<P>;
+>props : Symbol(Component.props, Decl(checkJsxIntersectionElementPropsType.tsx, 5, 34))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>P : Symbol(P, Decl(checkJsxIntersectionElementPropsType.tsx, 4, 24))
+}
+
+class C<T> extends Component<{ x?: boolean; } & T> {}
+>C : Symbol(C, Decl(checkJsxIntersectionElementPropsType.tsx, 7, 1))
+>T : Symbol(T, Decl(checkJsxIntersectionElementPropsType.tsx, 9, 8))
+>Component : Symbol(Component, Decl(checkJsxIntersectionElementPropsType.tsx, 2, 1))
+>x : Symbol(x, Decl(checkJsxIntersectionElementPropsType.tsx, 9, 30))
+>T : Symbol(T, Decl(checkJsxIntersectionElementPropsType.tsx, 9, 8))
+
+const y = new C({foobar: "example"});
+>y : Symbol(y, Decl(checkJsxIntersectionElementPropsType.tsx, 10, 5))
+>C : Symbol(C, Decl(checkJsxIntersectionElementPropsType.tsx, 7, 1))
+>foobar : Symbol(foobar, Decl(checkJsxIntersectionElementPropsType.tsx, 10, 17))
+
+const x = <C foobar="example" />
+>x : Symbol(x, Decl(checkJsxIntersectionElementPropsType.tsx, 11, 5))
+>C : Symbol(C, Decl(checkJsxIntersectionElementPropsType.tsx, 7, 1))
+>foobar : Symbol(foobar, Decl(checkJsxIntersectionElementPropsType.tsx, 11, 12))
+

@@ -1,0 +1,35 @@
+=== tests/cases/conformance/ambient/ambientEnumDeclaration1.ts ===
+// In ambient enum declarations, all values specified in enum member declarations must be classified as constant enum expressions.
+
+declare enum E {
+>E : E
+
+    a = 10,
+>a : E
+>10 : 10
+
+    b = 10 + 1,
+>b : E
+>10 + 1 : number
+>10 : 10
+>1 : 1
+
+    c = b,
+>c : E
+>b : E
+
+    d = (c) + 1,
+>d : E
+>(c) + 1 : number
+>(c) : E
+>c : E
+>1 : 1
+
+    e = 10 << 2 * 8,
+>e : E
+>10 << 2 * 8 : number
+>10 : 10
+>2 * 8 : number
+>2 : 2
+>8 : 8
+}

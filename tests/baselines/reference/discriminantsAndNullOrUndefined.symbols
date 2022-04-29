@@ -1,0 +1,60 @@
+=== tests/cases/compiler/discriminantsAndNullOrUndefined.ts ===
+// Repro from #10228
+
+interface A { kind: 'A'; }
+>A : Symbol(A, Decl(discriminantsAndNullOrUndefined.ts, 0, 0))
+>kind : Symbol(A.kind, Decl(discriminantsAndNullOrUndefined.ts, 2, 13))
+
+interface B { kind: 'B'; }
+>B : Symbol(B, Decl(discriminantsAndNullOrUndefined.ts, 2, 26))
+>kind : Symbol(B.kind, Decl(discriminantsAndNullOrUndefined.ts, 3, 13))
+
+type C = A | B | undefined;
+>C : Symbol(C, Decl(discriminantsAndNullOrUndefined.ts, 3, 26))
+>A : Symbol(A, Decl(discriminantsAndNullOrUndefined.ts, 0, 0))
+>B : Symbol(B, Decl(discriminantsAndNullOrUndefined.ts, 2, 26))
+
+function never(_: never): never {
+>never : Symbol(never, Decl(discriminantsAndNullOrUndefined.ts, 5, 27))
+>_ : Symbol(_, Decl(discriminantsAndNullOrUndefined.ts, 7, 15))
+
+    throw new Error();
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+}
+
+function useA(_: A): void { }
+>useA : Symbol(useA, Decl(discriminantsAndNullOrUndefined.ts, 9, 1))
+>_ : Symbol(_, Decl(discriminantsAndNullOrUndefined.ts, 11, 14))
+>A : Symbol(A, Decl(discriminantsAndNullOrUndefined.ts, 0, 0))
+
+function useB(_: B): void { }
+>useB : Symbol(useB, Decl(discriminantsAndNullOrUndefined.ts, 11, 29))
+>_ : Symbol(_, Decl(discriminantsAndNullOrUndefined.ts, 12, 14))
+>B : Symbol(B, Decl(discriminantsAndNullOrUndefined.ts, 2, 26))
+
+declare var c: C;
+>c : Symbol(c, Decl(discriminantsAndNullOrUndefined.ts, 14, 11))
+>C : Symbol(C, Decl(discriminantsAndNullOrUndefined.ts, 3, 26))
+
+if (c !== undefined) {
+>c : Symbol(c, Decl(discriminantsAndNullOrUndefined.ts, 14, 11))
+>undefined : Symbol(undefined)
+
+    switch (c.kind) {
+>c.kind : Symbol(kind, Decl(discriminantsAndNullOrUndefined.ts, 2, 13), Decl(discriminantsAndNullOrUndefined.ts, 3, 13))
+>c : Symbol(c, Decl(discriminantsAndNullOrUndefined.ts, 14, 11))
+>kind : Symbol(kind, Decl(discriminantsAndNullOrUndefined.ts, 2, 13), Decl(discriminantsAndNullOrUndefined.ts, 3, 13))
+
+        case 'A': useA(c); break;
+>useA : Symbol(useA, Decl(discriminantsAndNullOrUndefined.ts, 9, 1))
+>c : Symbol(c, Decl(discriminantsAndNullOrUndefined.ts, 14, 11))
+
+        case 'B': useB(c); break;
+>useB : Symbol(useB, Decl(discriminantsAndNullOrUndefined.ts, 11, 29))
+>c : Symbol(c, Decl(discriminantsAndNullOrUndefined.ts, 14, 11))
+
+        default: never(c);
+>never : Symbol(never, Decl(discriminantsAndNullOrUndefined.ts, 5, 27))
+>c : Symbol(c, Decl(discriminantsAndNullOrUndefined.ts, 14, 11))
+    }
+}

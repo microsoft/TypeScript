@@ -1,0 +1,126 @@
+=== tests/cases/conformance/classes/members/accessibility/privateClassPropertyAccessibleWithinClass.ts ===
+// no errors
+
+class C {
+>C : Symbol(C, Decl(privateClassPropertyAccessibleWithinClass.ts, 0, 0))
+
+    private x: string;
+>x : Symbol(C.x, Decl(privateClassPropertyAccessibleWithinClass.ts, 2, 9))
+
+    private get y() { return this.x; }
+>y : Symbol(C.y, Decl(privateClassPropertyAccessibleWithinClass.ts, 3, 22), Decl(privateClassPropertyAccessibleWithinClass.ts, 4, 38))
+>this.x : Symbol(C.x, Decl(privateClassPropertyAccessibleWithinClass.ts, 2, 9))
+>this : Symbol(C, Decl(privateClassPropertyAccessibleWithinClass.ts, 0, 0))
+>x : Symbol(C.x, Decl(privateClassPropertyAccessibleWithinClass.ts, 2, 9))
+
+    private set y(x) { this.y = this.x; }
+>y : Symbol(C.y, Decl(privateClassPropertyAccessibleWithinClass.ts, 3, 22), Decl(privateClassPropertyAccessibleWithinClass.ts, 4, 38))
+>x : Symbol(x, Decl(privateClassPropertyAccessibleWithinClass.ts, 5, 18))
+>this.y : Symbol(C.y, Decl(privateClassPropertyAccessibleWithinClass.ts, 3, 22), Decl(privateClassPropertyAccessibleWithinClass.ts, 4, 38))
+>this : Symbol(C, Decl(privateClassPropertyAccessibleWithinClass.ts, 0, 0))
+>y : Symbol(C.y, Decl(privateClassPropertyAccessibleWithinClass.ts, 3, 22), Decl(privateClassPropertyAccessibleWithinClass.ts, 4, 38))
+>this.x : Symbol(C.x, Decl(privateClassPropertyAccessibleWithinClass.ts, 2, 9))
+>this : Symbol(C, Decl(privateClassPropertyAccessibleWithinClass.ts, 0, 0))
+>x : Symbol(C.x, Decl(privateClassPropertyAccessibleWithinClass.ts, 2, 9))
+
+    private foo() { return this.foo; }
+>foo : Symbol(C.foo, Decl(privateClassPropertyAccessibleWithinClass.ts, 5, 41))
+>this.foo : Symbol(C.foo, Decl(privateClassPropertyAccessibleWithinClass.ts, 5, 41))
+>this : Symbol(C, Decl(privateClassPropertyAccessibleWithinClass.ts, 0, 0))
+>foo : Symbol(C.foo, Decl(privateClassPropertyAccessibleWithinClass.ts, 5, 41))
+
+    private static x: string;
+>x : Symbol(C.x, Decl(privateClassPropertyAccessibleWithinClass.ts, 6, 38))
+
+    private static get y() { return this.x; }
+>y : Symbol(C.y, Decl(privateClassPropertyAccessibleWithinClass.ts, 8, 29), Decl(privateClassPropertyAccessibleWithinClass.ts, 9, 45))
+>this.x : Symbol(C.x, Decl(privateClassPropertyAccessibleWithinClass.ts, 6, 38))
+>this : Symbol(C, Decl(privateClassPropertyAccessibleWithinClass.ts, 0, 0))
+>x : Symbol(C.x, Decl(privateClassPropertyAccessibleWithinClass.ts, 6, 38))
+
+    private static set y(x) { this.y = this.x; }
+>y : Symbol(C.y, Decl(privateClassPropertyAccessibleWithinClass.ts, 8, 29), Decl(privateClassPropertyAccessibleWithinClass.ts, 9, 45))
+>x : Symbol(x, Decl(privateClassPropertyAccessibleWithinClass.ts, 10, 25))
+>this.y : Symbol(C.y, Decl(privateClassPropertyAccessibleWithinClass.ts, 8, 29), Decl(privateClassPropertyAccessibleWithinClass.ts, 9, 45))
+>this : Symbol(C, Decl(privateClassPropertyAccessibleWithinClass.ts, 0, 0))
+>y : Symbol(C.y, Decl(privateClassPropertyAccessibleWithinClass.ts, 8, 29), Decl(privateClassPropertyAccessibleWithinClass.ts, 9, 45))
+>this.x : Symbol(C.x, Decl(privateClassPropertyAccessibleWithinClass.ts, 6, 38))
+>this : Symbol(C, Decl(privateClassPropertyAccessibleWithinClass.ts, 0, 0))
+>x : Symbol(C.x, Decl(privateClassPropertyAccessibleWithinClass.ts, 6, 38))
+
+    private static foo() { return this.foo; }
+>foo : Symbol(C.foo, Decl(privateClassPropertyAccessibleWithinClass.ts, 10, 48))
+>this.foo : Symbol(C.foo, Decl(privateClassPropertyAccessibleWithinClass.ts, 10, 48))
+>this : Symbol(C, Decl(privateClassPropertyAccessibleWithinClass.ts, 0, 0))
+>foo : Symbol(C.foo, Decl(privateClassPropertyAccessibleWithinClass.ts, 10, 48))
+
+    private static bar() { this.foo(); }
+>bar : Symbol(C.bar, Decl(privateClassPropertyAccessibleWithinClass.ts, 11, 45))
+>this.foo : Symbol(C.foo, Decl(privateClassPropertyAccessibleWithinClass.ts, 10, 48))
+>this : Symbol(C, Decl(privateClassPropertyAccessibleWithinClass.ts, 0, 0))
+>foo : Symbol(C.foo, Decl(privateClassPropertyAccessibleWithinClass.ts, 10, 48))
+}
+
+// added level of function nesting
+class C2 {
+>C2 : Symbol(C2, Decl(privateClassPropertyAccessibleWithinClass.ts, 13, 1))
+
+    private x: string;
+>x : Symbol(C2.x, Decl(privateClassPropertyAccessibleWithinClass.ts, 16, 10))
+
+    private get y() { () => this.x; return null; }
+>y : Symbol(C2.y, Decl(privateClassPropertyAccessibleWithinClass.ts, 17, 22), Decl(privateClassPropertyAccessibleWithinClass.ts, 18, 50))
+>this.x : Symbol(C2.x, Decl(privateClassPropertyAccessibleWithinClass.ts, 16, 10))
+>this : Symbol(C2, Decl(privateClassPropertyAccessibleWithinClass.ts, 13, 1))
+>x : Symbol(C2.x, Decl(privateClassPropertyAccessibleWithinClass.ts, 16, 10))
+
+    private set y(x) { () => { this.y = this.x; } }
+>y : Symbol(C2.y, Decl(privateClassPropertyAccessibleWithinClass.ts, 17, 22), Decl(privateClassPropertyAccessibleWithinClass.ts, 18, 50))
+>x : Symbol(x, Decl(privateClassPropertyAccessibleWithinClass.ts, 19, 18))
+>this.y : Symbol(C2.y, Decl(privateClassPropertyAccessibleWithinClass.ts, 17, 22), Decl(privateClassPropertyAccessibleWithinClass.ts, 18, 50))
+>this : Symbol(C2, Decl(privateClassPropertyAccessibleWithinClass.ts, 13, 1))
+>y : Symbol(C2.y, Decl(privateClassPropertyAccessibleWithinClass.ts, 17, 22), Decl(privateClassPropertyAccessibleWithinClass.ts, 18, 50))
+>this.x : Symbol(C2.x, Decl(privateClassPropertyAccessibleWithinClass.ts, 16, 10))
+>this : Symbol(C2, Decl(privateClassPropertyAccessibleWithinClass.ts, 13, 1))
+>x : Symbol(C2.x, Decl(privateClassPropertyAccessibleWithinClass.ts, 16, 10))
+
+    private foo() { () => this.foo; }
+>foo : Symbol(C2.foo, Decl(privateClassPropertyAccessibleWithinClass.ts, 19, 51))
+>this.foo : Symbol(C2.foo, Decl(privateClassPropertyAccessibleWithinClass.ts, 19, 51))
+>this : Symbol(C2, Decl(privateClassPropertyAccessibleWithinClass.ts, 13, 1))
+>foo : Symbol(C2.foo, Decl(privateClassPropertyAccessibleWithinClass.ts, 19, 51))
+
+    private static x: string;
+>x : Symbol(C2.x, Decl(privateClassPropertyAccessibleWithinClass.ts, 20, 37))
+
+    private static get y() { () => this.x; return null; }
+>y : Symbol(C2.y, Decl(privateClassPropertyAccessibleWithinClass.ts, 22, 29), Decl(privateClassPropertyAccessibleWithinClass.ts, 23, 57))
+>this.x : Symbol(C2.x, Decl(privateClassPropertyAccessibleWithinClass.ts, 20, 37))
+>this : Symbol(C2, Decl(privateClassPropertyAccessibleWithinClass.ts, 13, 1))
+>x : Symbol(C2.x, Decl(privateClassPropertyAccessibleWithinClass.ts, 20, 37))
+
+    private static set y(x) {
+>y : Symbol(C2.y, Decl(privateClassPropertyAccessibleWithinClass.ts, 22, 29), Decl(privateClassPropertyAccessibleWithinClass.ts, 23, 57))
+>x : Symbol(x, Decl(privateClassPropertyAccessibleWithinClass.ts, 24, 25))
+
+        () => { this.y = this.x; }
+>this.y : Symbol(C2.y, Decl(privateClassPropertyAccessibleWithinClass.ts, 22, 29), Decl(privateClassPropertyAccessibleWithinClass.ts, 23, 57))
+>this : Symbol(C2, Decl(privateClassPropertyAccessibleWithinClass.ts, 13, 1))
+>y : Symbol(C2.y, Decl(privateClassPropertyAccessibleWithinClass.ts, 22, 29), Decl(privateClassPropertyAccessibleWithinClass.ts, 23, 57))
+>this.x : Symbol(C2.x, Decl(privateClassPropertyAccessibleWithinClass.ts, 20, 37))
+>this : Symbol(C2, Decl(privateClassPropertyAccessibleWithinClass.ts, 13, 1))
+>x : Symbol(C2.x, Decl(privateClassPropertyAccessibleWithinClass.ts, 20, 37))
+     }
+    private static foo() { () => this.foo; }
+>foo : Symbol(C2.foo, Decl(privateClassPropertyAccessibleWithinClass.ts, 26, 6))
+>this.foo : Symbol(C2.foo, Decl(privateClassPropertyAccessibleWithinClass.ts, 26, 6))
+>this : Symbol(C2, Decl(privateClassPropertyAccessibleWithinClass.ts, 13, 1))
+>foo : Symbol(C2.foo, Decl(privateClassPropertyAccessibleWithinClass.ts, 26, 6))
+
+    private static bar() { () => this.foo(); }
+>bar : Symbol(C2.bar, Decl(privateClassPropertyAccessibleWithinClass.ts, 27, 44))
+>this.foo : Symbol(C2.foo, Decl(privateClassPropertyAccessibleWithinClass.ts, 26, 6))
+>this : Symbol(C2, Decl(privateClassPropertyAccessibleWithinClass.ts, 13, 1))
+>foo : Symbol(C2.foo, Decl(privateClassPropertyAccessibleWithinClass.ts, 26, 6))
+}
+

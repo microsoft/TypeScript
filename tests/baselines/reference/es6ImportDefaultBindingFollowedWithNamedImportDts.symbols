@@ -1,0 +1,71 @@
+=== tests/cases/compiler/server.ts ===
+export class a { }
+>a : Symbol(a, Decl(server.ts, 0, 0))
+
+export class x { }
+>x : Symbol(x, Decl(server.ts, 0, 18))
+
+export class m { }
+>m : Symbol(m, Decl(server.ts, 1, 18))
+
+export class a11 { }
+>a11 : Symbol(a11, Decl(server.ts, 2, 18))
+
+export class a12 { }
+>a12 : Symbol(a12, Decl(server.ts, 3, 20))
+
+export class x11 { }
+>x11 : Symbol(x11, Decl(server.ts, 4, 20))
+
+=== tests/cases/compiler/client.ts ===
+import defaultBinding1, { } from "./server";
+>defaultBinding1 : Symbol(defaultBinding1, Decl(client.ts, 0, 6))
+
+import defaultBinding2, { a } from "./server";
+>defaultBinding2 : Symbol(defaultBinding2, Decl(client.ts, 1, 6))
+>a : Symbol(a, Decl(client.ts, 1, 25))
+
+export var x1 = new a();
+>x1 : Symbol(x1, Decl(client.ts, 2, 10))
+>a : Symbol(a, Decl(client.ts, 1, 25))
+
+import defaultBinding3, { a11 as b } from "./server";
+>defaultBinding3 : Symbol(defaultBinding3, Decl(client.ts, 3, 6))
+>a11 : Symbol(b, Decl(server.ts, 2, 18))
+>b : Symbol(b, Decl(client.ts, 3, 25))
+
+export var x2 = new b();
+>x2 : Symbol(x2, Decl(client.ts, 4, 10))
+>b : Symbol(b, Decl(client.ts, 3, 25))
+
+import defaultBinding4, { x, a12 as y } from "./server";
+>defaultBinding4 : Symbol(defaultBinding4, Decl(client.ts, 5, 6))
+>x : Symbol(x, Decl(client.ts, 5, 25))
+>a12 : Symbol(y, Decl(server.ts, 3, 20))
+>y : Symbol(y, Decl(client.ts, 5, 28))
+
+export var x4 = new x();
+>x4 : Symbol(x4, Decl(client.ts, 6, 10))
+>x : Symbol(x, Decl(client.ts, 5, 25))
+
+export var x5 = new y();
+>x5 : Symbol(x5, Decl(client.ts, 7, 10))
+>y : Symbol(y, Decl(client.ts, 5, 28))
+
+import defaultBinding5, { x11 as z,  } from "./server";
+>defaultBinding5 : Symbol(defaultBinding5, Decl(client.ts, 8, 6))
+>x11 : Symbol(z, Decl(server.ts, 4, 20))
+>z : Symbol(z, Decl(client.ts, 8, 25))
+
+export var x3 = new z();
+>x3 : Symbol(x3, Decl(client.ts, 9, 10))
+>z : Symbol(z, Decl(client.ts, 8, 25))
+
+import defaultBinding6, { m,  } from "./server";
+>defaultBinding6 : Symbol(defaultBinding6, Decl(client.ts, 10, 6))
+>m : Symbol(m, Decl(client.ts, 10, 25))
+
+export var x6 = new m();
+>x6 : Symbol(x6, Decl(client.ts, 11, 10))
+>m : Symbol(m, Decl(client.ts, 10, 25))
+

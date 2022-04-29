@@ -1,0 +1,50 @@
+=== tests/cases/compiler/main.ts ===
+// https://github.com/Microsoft/TypeScript/issues/11177
+import * as Bluebird from 'bluebird';
+>Bluebird : PromiseConstructor
+
+async function a(): Bluebird<void> {
+>a : () => Bluebird<void>
+
+  try {
+    const b = async function b(): Bluebird<void> {
+>b : () => Bluebird<void>
+>async function b(): Bluebird<void> {      try {        await Bluebird.resolve(); // -- remove this and it compiles      } catch (error) { }    } : () => Bluebird<void>
+>b : () => Bluebird<void>
+
+      try {
+        await Bluebird.resolve(); // -- remove this and it compiles
+>await Bluebird.resolve() : void
+>Bluebird.resolve() : Promise<void>
+>Bluebird.resolve : { (): Promise<void>; <T>(value: T | PromiseLike<T>): Promise<T>; }
+>Bluebird : PromiseConstructor
+>resolve : { (): Promise<void>; <T>(value: T | PromiseLike<T>): Promise<T>; }
+
+      } catch (error) { }
+>error : any
+
+    };
+
+    await b(); // -- or remove this and it compiles
+>await b() : void
+>b() : Bluebird<void>
+>b : () => Bluebird<void>
+
+  } catch (error) { }
+>error : any
+}
+
+=== tests/cases/compiler/bluebird.d.ts ===
+declare module "bluebird" {
+>"bluebird" : typeof import("bluebird")
+
+    type Bluebird<T> = Promise<T>;
+>Bluebird : Bluebird<T>
+
+    const Bluebird: typeof Promise;
+>Bluebird : PromiseConstructor
+>Promise : PromiseConstructor
+
+    export = Bluebird;
+>Bluebird : Bluebird<T>
+}

@@ -1,0 +1,18 @@
+{
+    "scenario": "baseline",
+    "projectRoot": "tests/cases/projects/baseline",
+    "inputFiles": [
+        "emit.ts"
+    ],
+    "baselineCheck": true,
+    "runTest": true,
+    "resolvedInputFiles": [
+        "lib.es5.d.ts",
+        "decl.ts",
+        "emit.ts"
+    ],
+    "emittedFiles": [
+        "decl.js",
+        "emit.js"
+    ]
+}

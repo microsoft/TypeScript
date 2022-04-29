@@ -1,0 +1,31 @@
+tests/cases/compiler/grammarAmbiguities1.ts(8,3): error TS2365: Operator '<' cannot be applied to types '<T, U>(x: any) => any' and 'typeof A'.
+tests/cases/compiler/grammarAmbiguities1.ts(8,10): error TS2365: Operator '>' cannot be applied to types 'typeof B' and 'number'.
+tests/cases/compiler/grammarAmbiguities1.ts(8,10): error TS2554: Expected 1 arguments, but got 2.
+tests/cases/compiler/grammarAmbiguities1.ts(9,3): error TS2365: Operator '<' cannot be applied to types '<T, U>(x: any) => any' and 'typeof A'.
+tests/cases/compiler/grammarAmbiguities1.ts(9,10): error TS2365: Operator '>' cannot be applied to types 'typeof B' and 'number'.
+tests/cases/compiler/grammarAmbiguities1.ts(9,10): error TS2554: Expected 1 arguments, but got 2.
+
+
+==== tests/cases/compiler/grammarAmbiguities1.ts (6 errors) ====
+    class A { foo() { } }
+    class B { bar() { }}
+    function f(x) { return x; }
+    function g<T, U>(x) { return f(x); }
+    g<A, B>(7)
+    
+    f(g<A, B>(7));
+    f(g < A, B > 7);
+      ~~~~~
+!!! error TS2365: Operator '<' cannot be applied to types '<T, U>(x: any) => any' and 'typeof A'.
+             ~~~~~
+!!! error TS2365: Operator '>' cannot be applied to types 'typeof B' and 'number'.
+             ~~~~~
+!!! error TS2554: Expected 1 arguments, but got 2.
+    f(g < A, B > +(7));
+      ~~~~~
+!!! error TS2365: Operator '<' cannot be applied to types '<T, U>(x: any) => any' and 'typeof A'.
+             ~~~~~~~~
+!!! error TS2365: Operator '>' cannot be applied to types 'typeof B' and 'number'.
+             ~~~~~~~~
+!!! error TS2554: Expected 1 arguments, but got 2.
+    

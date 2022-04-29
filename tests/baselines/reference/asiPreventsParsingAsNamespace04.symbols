@@ -1,0 +1,7 @@
+=== tests/cases/conformance/internalModules/moduleDeclarations/asiPreventsParsingAsNamespace04.ts ===
+let module = 10;
+>module : Symbol(module, Decl(asiPreventsParsingAsNamespace04.ts, 0, 3))
+
+module in {}
+>module : Symbol(module, Decl(asiPreventsParsingAsNamespace04.ts, 0, 3))
+

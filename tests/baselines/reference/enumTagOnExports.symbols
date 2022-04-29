@@ -1,0 +1,15 @@
+=== tests/cases/conformance/jsdoc/enumTagOnExports.js ===
+/** @enum {number} */
+exports.a = {};
+>exports.a : Symbol(a, Decl(enumTagOnExports.js, 0, 0), Decl(enumTagOnExports.js, 1, 8), Decl(enumTagOnExports.js, 0, 4))
+>exports : Symbol(a, Decl(enumTagOnExports.js, 0, 0), Decl(enumTagOnExports.js, 1, 8), Decl(enumTagOnExports.js, 0, 4))
+>a : Symbol(a, Decl(enumTagOnExports.js, 0, 0), Decl(enumTagOnExports.js, 1, 8), Decl(enumTagOnExports.js, 0, 4))
+
+/** @enum {string} */
+module.exports.b = {};
+>module.exports.b : Symbol(b, Decl(enumTagOnExports.js, 1, 15), Decl(enumTagOnExports.js, 4, 15), Decl(enumTagOnExports.js, 3, 4))
+>module.exports : Symbol(b, Decl(enumTagOnExports.js, 1, 15), Decl(enumTagOnExports.js, 4, 15), Decl(enumTagOnExports.js, 3, 4))
+>module : Symbol(module, Decl(enumTagOnExports.js, 1, 15))
+>exports : Symbol(module.exports, Decl(enumTagOnExports.js, 0, 0))
+>b : Symbol(b, Decl(enumTagOnExports.js, 1, 15), Decl(enumTagOnExports.js, 4, 15), Decl(enumTagOnExports.js, 3, 4))
+

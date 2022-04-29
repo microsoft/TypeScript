@@ -1,0 +1,123 @@
+=== tests/cases/conformance/types/union/unionTypeWithIndexSignature.ts ===
+type Two = { foo: { bar: true }, baz: true } | { [s: string]: string };
+>Two : Symbol(Two, Decl(unionTypeWithIndexSignature.ts, 0, 0))
+>foo : Symbol(foo, Decl(unionTypeWithIndexSignature.ts, 0, 12))
+>bar : Symbol(bar, Decl(unionTypeWithIndexSignature.ts, 0, 19))
+>baz : Symbol(baz, Decl(unionTypeWithIndexSignature.ts, 0, 32))
+>s : Symbol(s, Decl(unionTypeWithIndexSignature.ts, 0, 50))
+
+declare var u: Two
+>u : Symbol(u, Decl(unionTypeWithIndexSignature.ts, 1, 11))
+>Two : Symbol(Two, Decl(unionTypeWithIndexSignature.ts, 0, 0))
+
+u.foo = 'bye'
+>u.foo : Symbol(foo, Decl(unionTypeWithIndexSignature.ts, 0, 12))
+>u : Symbol(u, Decl(unionTypeWithIndexSignature.ts, 1, 11))
+>foo : Symbol(foo, Decl(unionTypeWithIndexSignature.ts, 0, 12))
+
+u.baz = 'hi'
+>u.baz : Symbol(baz, Decl(unionTypeWithIndexSignature.ts, 0, 32))
+>u : Symbol(u, Decl(unionTypeWithIndexSignature.ts, 1, 11))
+>baz : Symbol(baz, Decl(unionTypeWithIndexSignature.ts, 0, 32))
+
+type Three = { foo: number } | { [s: string]: string } | { [s: string]: boolean };
+>Three : Symbol(Three, Decl(unionTypeWithIndexSignature.ts, 3, 12))
+>foo : Symbol(foo, Decl(unionTypeWithIndexSignature.ts, 4, 14))
+>s : Symbol(s, Decl(unionTypeWithIndexSignature.ts, 4, 34))
+>s : Symbol(s, Decl(unionTypeWithIndexSignature.ts, 4, 60))
+
+declare var v: Three
+>v : Symbol(v, Decl(unionTypeWithIndexSignature.ts, 5, 11))
+>Three : Symbol(Three, Decl(unionTypeWithIndexSignature.ts, 3, 12))
+
+v.foo = false
+>v.foo : Symbol(foo, Decl(unionTypeWithIndexSignature.ts, 4, 14))
+>v : Symbol(v, Decl(unionTypeWithIndexSignature.ts, 5, 11))
+>foo : Symbol(foo, Decl(unionTypeWithIndexSignature.ts, 4, 14))
+
+type Missing = { foo: number, bar: true } | { [s: string]: string } | { foo: boolean }
+>Missing : Symbol(Missing, Decl(unionTypeWithIndexSignature.ts, 6, 13))
+>foo : Symbol(foo, Decl(unionTypeWithIndexSignature.ts, 7, 16))
+>bar : Symbol(bar, Decl(unionTypeWithIndexSignature.ts, 7, 29))
+>s : Symbol(s, Decl(unionTypeWithIndexSignature.ts, 7, 47))
+>foo : Symbol(foo, Decl(unionTypeWithIndexSignature.ts, 7, 71))
+
+declare var m: Missing
+>m : Symbol(m, Decl(unionTypeWithIndexSignature.ts, 8, 11))
+>Missing : Symbol(Missing, Decl(unionTypeWithIndexSignature.ts, 6, 13))
+
+m.foo = 'hi'
+>m.foo : Symbol(foo, Decl(unionTypeWithIndexSignature.ts, 7, 16), Decl(unionTypeWithIndexSignature.ts, 7, 71))
+>m : Symbol(m, Decl(unionTypeWithIndexSignature.ts, 8, 11))
+>foo : Symbol(foo, Decl(unionTypeWithIndexSignature.ts, 7, 16), Decl(unionTypeWithIndexSignature.ts, 7, 71))
+
+m.bar
+>m : Symbol(m, Decl(unionTypeWithIndexSignature.ts, 8, 11))
+
+type RO = { foo: number } | { readonly [s: string]: string }
+>RO : Symbol(RO, Decl(unionTypeWithIndexSignature.ts, 10, 5))
+>foo : Symbol(foo, Decl(unionTypeWithIndexSignature.ts, 11, 11))
+>s : Symbol(s, Decl(unionTypeWithIndexSignature.ts, 11, 40))
+
+declare var ro: RO
+>ro : Symbol(ro, Decl(unionTypeWithIndexSignature.ts, 12, 11))
+>RO : Symbol(RO, Decl(unionTypeWithIndexSignature.ts, 10, 5))
+
+ro.foo = 'not allowed'
+>ro.foo : Symbol(foo, Decl(unionTypeWithIndexSignature.ts, 11, 11))
+>ro : Symbol(ro, Decl(unionTypeWithIndexSignature.ts, 12, 11))
+>foo : Symbol(foo, Decl(unionTypeWithIndexSignature.ts, 11, 11))
+
+type Num = { '0': string } | { [n: number]: number }
+>Num : Symbol(Num, Decl(unionTypeWithIndexSignature.ts, 13, 22))
+>'0' : Symbol('0', Decl(unionTypeWithIndexSignature.ts, 14, 12))
+>n : Symbol(n, Decl(unionTypeWithIndexSignature.ts, 14, 32))
+
+declare var num: Num
+>num : Symbol(num, Decl(unionTypeWithIndexSignature.ts, 15, 11))
+>Num : Symbol(Num, Decl(unionTypeWithIndexSignature.ts, 13, 22))
+
+num[0] = 1
+>num : Symbol(num, Decl(unionTypeWithIndexSignature.ts, 15, 11))
+>0 : Symbol('0', Decl(unionTypeWithIndexSignature.ts, 14, 12))
+
+num['0'] = 'ok'
+>num : Symbol(num, Decl(unionTypeWithIndexSignature.ts, 15, 11))
+>'0' : Symbol('0', Decl(unionTypeWithIndexSignature.ts, 14, 12))
+
+const sym = Symbol()
+>sym : Symbol(sym, Decl(unionTypeWithIndexSignature.ts, 18, 5))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+
+type Both = { s: number, '0': number, [sym]: boolean } | { [n: number]: number, [s: string]: string | number }
+>Both : Symbol(Both, Decl(unionTypeWithIndexSignature.ts, 18, 20))
+>s : Symbol(s, Decl(unionTypeWithIndexSignature.ts, 19, 13))
+>'0' : Symbol('0', Decl(unionTypeWithIndexSignature.ts, 19, 24))
+>[sym] : Symbol([sym], Decl(unionTypeWithIndexSignature.ts, 19, 37))
+>sym : Symbol(sym, Decl(unionTypeWithIndexSignature.ts, 18, 5))
+>n : Symbol(n, Decl(unionTypeWithIndexSignature.ts, 19, 60))
+>s : Symbol(s, Decl(unionTypeWithIndexSignature.ts, 19, 81))
+
+declare var both: Both
+>both : Symbol(both, Decl(unionTypeWithIndexSignature.ts, 20, 11))
+>Both : Symbol(Both, Decl(unionTypeWithIndexSignature.ts, 18, 20))
+
+both['s'] = 'ok'
+>both : Symbol(both, Decl(unionTypeWithIndexSignature.ts, 20, 11))
+>'s' : Symbol(s, Decl(unionTypeWithIndexSignature.ts, 19, 13))
+
+both[0] = 1
+>both : Symbol(both, Decl(unionTypeWithIndexSignature.ts, 20, 11))
+>0 : Symbol('0', Decl(unionTypeWithIndexSignature.ts, 19, 24))
+
+both[1] = 0 // not ok
+>both : Symbol(both, Decl(unionTypeWithIndexSignature.ts, 20, 11))
+
+both[0] = 'not ok'
+>both : Symbol(both, Decl(unionTypeWithIndexSignature.ts, 20, 11))
+>0 : Symbol('0', Decl(unionTypeWithIndexSignature.ts, 19, 24))
+
+both[sym] = 'not ok'
+>both : Symbol(both, Decl(unionTypeWithIndexSignature.ts, 20, 11))
+>sym : Symbol(sym, Decl(unionTypeWithIndexSignature.ts, 18, 5))
+

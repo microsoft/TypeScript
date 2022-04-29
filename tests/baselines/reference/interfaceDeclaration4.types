@@ -1,0 +1,66 @@
+=== tests/cases/compiler/interfaceDeclaration4.ts ===
+// Import this module when test harness supports external modules. Also remove the internal module below.
+// import Foo = require("interfaceDeclaration5")
+module Foo {
+>Foo : typeof Foo
+
+    export interface I1 { item: string; }
+>item : string
+
+    export class C1 { }
+>C1 : C1
+}
+
+class C1 implements Foo.I1 {
+>C1 : C1
+>Foo : typeof Foo
+
+	public item:string;
+>item : string
+}
+
+// Allowed
+interface I2 extends Foo.I1 {
+>Foo : typeof Foo
+
+	item:string;
+>item : string
+}
+
+// Negative Case
+interface I3 extends Foo.I1 {
+>Foo : typeof Foo
+
+    item:number;
+>item : number
+}
+
+interface I4 extends Foo.I1 {
+>Foo : typeof Foo
+
+    token:string;
+>token : string
+}
+
+// Err - not implemented item
+class C2 implements I4 {
+>C2 : C2
+
+    public token: string;
+>token : string
+}
+
+interface I5 extends Foo { }
+
+// Negative case
+interface I6 extends Foo.C1 { }
+>Foo : typeof Foo
+
+class C3 implements Foo.I1 { }
+>C3 : C3
+>Foo : typeof Foo
+
+// Negative case 
+interface Foo.I1 { }
+>I1 : any
+

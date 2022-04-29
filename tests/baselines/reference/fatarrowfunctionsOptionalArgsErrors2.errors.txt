@@ -1,0 +1,70 @@
+tests/cases/compiler/fatarrowfunctionsOptionalArgsErrors2.ts(1,12): error TS2304: Cannot find name 'a'.
+tests/cases/compiler/fatarrowfunctionsOptionalArgsErrors2.ts(1,12): error TS2695: Left side of comma operator is unused and has no side effects.
+tests/cases/compiler/fatarrowfunctionsOptionalArgsErrors2.ts(1,16): error TS2304: Cannot find name 'b'.
+tests/cases/compiler/fatarrowfunctionsOptionalArgsErrors2.ts(1,16): error TS2695: Left side of comma operator is unused and has no side effects.
+tests/cases/compiler/fatarrowfunctionsOptionalArgsErrors2.ts(1,19): error TS2304: Cannot find name 'c'.
+tests/cases/compiler/fatarrowfunctionsOptionalArgsErrors2.ts(1,23): error TS1005: ';' expected.
+tests/cases/compiler/fatarrowfunctionsOptionalArgsErrors2.ts(1,26): error TS2304: Cannot find name 'a'.
+tests/cases/compiler/fatarrowfunctionsOptionalArgsErrors2.ts(1,28): error TS2304: Cannot find name 'b'.
+tests/cases/compiler/fatarrowfunctionsOptionalArgsErrors2.ts(1,30): error TS2304: Cannot find name 'c'.
+tests/cases/compiler/fatarrowfunctionsOptionalArgsErrors2.ts(2,12): error TS2695: Left side of comma operator is unused and has no side effects.
+tests/cases/compiler/fatarrowfunctionsOptionalArgsErrors2.ts(2,12): error TS2695: Left side of comma operator is unused and has no side effects.
+tests/cases/compiler/fatarrowfunctionsOptionalArgsErrors2.ts(2,13): error TS2304: Cannot find name 'a'.
+tests/cases/compiler/fatarrowfunctionsOptionalArgsErrors2.ts(2,17): error TS2304: Cannot find name 'b'.
+tests/cases/compiler/fatarrowfunctionsOptionalArgsErrors2.ts(2,20): error TS2304: Cannot find name 'c'.
+tests/cases/compiler/fatarrowfunctionsOptionalArgsErrors2.ts(2,23): error TS1005: ';' expected.
+tests/cases/compiler/fatarrowfunctionsOptionalArgsErrors2.ts(2,26): error TS2304: Cannot find name 'a'.
+tests/cases/compiler/fatarrowfunctionsOptionalArgsErrors2.ts(2,28): error TS2304: Cannot find name 'b'.
+tests/cases/compiler/fatarrowfunctionsOptionalArgsErrors2.ts(2,30): error TS2304: Cannot find name 'c'.
+tests/cases/compiler/fatarrowfunctionsOptionalArgsErrors2.ts(4,13): error TS2304: Cannot find name 'a'.
+tests/cases/compiler/fatarrowfunctionsOptionalArgsErrors2.ts(4,17): error TS1005: ';' expected.
+tests/cases/compiler/fatarrowfunctionsOptionalArgsErrors2.ts(4,20): error TS2304: Cannot find name 'a'.
+
+
+==== tests/cases/compiler/fatarrowfunctionsOptionalArgsErrors2.ts (21 errors) ====
+    var tt1 = (a, (b, c)) => a+b+c;
+               ~
+!!! error TS2304: Cannot find name 'a'.
+               ~
+!!! error TS2695: Left side of comma operator is unused and has no side effects.
+                   ~
+!!! error TS2304: Cannot find name 'b'.
+                   ~
+!!! error TS2695: Left side of comma operator is unused and has no side effects.
+                      ~
+!!! error TS2304: Cannot find name 'c'.
+                          ~~
+!!! error TS1005: ';' expected.
+                             ~
+!!! error TS2304: Cannot find name 'a'.
+                               ~
+!!! error TS2304: Cannot find name 'b'.
+                                 ~
+!!! error TS2304: Cannot find name 'c'.
+    var tt2 = ((a), b, c) => a+b+c;
+               ~~~
+!!! error TS2695: Left side of comma operator is unused and has no side effects.
+               ~~~~~~
+!!! error TS2695: Left side of comma operator is unused and has no side effects.
+                ~
+!!! error TS2304: Cannot find name 'a'.
+                    ~
+!!! error TS2304: Cannot find name 'b'.
+                       ~
+!!! error TS2304: Cannot find name 'c'.
+                          ~~
+!!! error TS1005: ';' expected.
+                             ~
+!!! error TS2304: Cannot find name 'a'.
+                               ~
+!!! error TS2304: Cannot find name 'b'.
+                                 ~
+!!! error TS2304: Cannot find name 'c'.
+    
+    var tt3 = ((a)) => a;
+                ~
+!!! error TS2304: Cannot find name 'a'.
+                    ~~
+!!! error TS1005: ';' expected.
+                       ~
+!!! error TS2304: Cannot find name 'a'.

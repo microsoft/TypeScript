@@ -1,0 +1,39 @@
+=== tests/cases/compiler/inferentialTypingObjectLiteralMethod2.ts ===
+interface Int<T, U> {
+>Int : Symbol(Int, Decl(inferentialTypingObjectLiteralMethod2.ts, 0, 0))
+>T : Symbol(T, Decl(inferentialTypingObjectLiteralMethod2.ts, 0, 14))
+>U : Symbol(U, Decl(inferentialTypingObjectLiteralMethod2.ts, 0, 16))
+
+    [s: string]: (x: T) => U;
+>s : Symbol(s, Decl(inferentialTypingObjectLiteralMethod2.ts, 1, 5))
+>x : Symbol(x, Decl(inferentialTypingObjectLiteralMethod2.ts, 1, 18))
+>T : Symbol(T, Decl(inferentialTypingObjectLiteralMethod2.ts, 0, 14))
+>U : Symbol(U, Decl(inferentialTypingObjectLiteralMethod2.ts, 0, 16))
+}
+declare function foo<T, U>(x: T, y: Int<T, U>, z: Int<U, T>): T;
+>foo : Symbol(foo, Decl(inferentialTypingObjectLiteralMethod2.ts, 2, 1))
+>T : Symbol(T, Decl(inferentialTypingObjectLiteralMethod2.ts, 3, 21))
+>U : Symbol(U, Decl(inferentialTypingObjectLiteralMethod2.ts, 3, 23))
+>x : Symbol(x, Decl(inferentialTypingObjectLiteralMethod2.ts, 3, 27))
+>T : Symbol(T, Decl(inferentialTypingObjectLiteralMethod2.ts, 3, 21))
+>y : Symbol(y, Decl(inferentialTypingObjectLiteralMethod2.ts, 3, 32))
+>Int : Symbol(Int, Decl(inferentialTypingObjectLiteralMethod2.ts, 0, 0))
+>T : Symbol(T, Decl(inferentialTypingObjectLiteralMethod2.ts, 3, 21))
+>U : Symbol(U, Decl(inferentialTypingObjectLiteralMethod2.ts, 3, 23))
+>z : Symbol(z, Decl(inferentialTypingObjectLiteralMethod2.ts, 3, 46))
+>Int : Symbol(Int, Decl(inferentialTypingObjectLiteralMethod2.ts, 0, 0))
+>U : Symbol(U, Decl(inferentialTypingObjectLiteralMethod2.ts, 3, 23))
+>T : Symbol(T, Decl(inferentialTypingObjectLiteralMethod2.ts, 3, 21))
+>T : Symbol(T, Decl(inferentialTypingObjectLiteralMethod2.ts, 3, 21))
+
+foo("", { method(p1) { return p1.length } }, { method(p2) { return undefined } });
+>foo : Symbol(foo, Decl(inferentialTypingObjectLiteralMethod2.ts, 2, 1))
+>method : Symbol(method, Decl(inferentialTypingObjectLiteralMethod2.ts, 4, 9))
+>p1 : Symbol(p1, Decl(inferentialTypingObjectLiteralMethod2.ts, 4, 17))
+>p1.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>p1 : Symbol(p1, Decl(inferentialTypingObjectLiteralMethod2.ts, 4, 17))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>method : Symbol(method, Decl(inferentialTypingObjectLiteralMethod2.ts, 4, 46))
+>p2 : Symbol(p2, Decl(inferentialTypingObjectLiteralMethod2.ts, 4, 54))
+>undefined : Symbol(undefined)
+

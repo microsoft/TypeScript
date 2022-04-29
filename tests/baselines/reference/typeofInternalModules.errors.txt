@@ -1,0 +1,44 @@
+tests/cases/compiler/typeofInternalModules.ts(15,16): error TS2708: Cannot use namespace 'importUninst' as a value.
+tests/cases/compiler/typeofInternalModules.ts(17,9): error TS2709: Cannot use namespace 'Outer' as a type.
+tests/cases/compiler/typeofInternalModules.ts(19,1): error TS2741: Property 'C' is missing in type 'typeof Outer' but required in type 'typeof instantiated'.
+tests/cases/compiler/typeofInternalModules.ts(21,16): error TS2708: Cannot use namespace 'importUninst' as a value.
+tests/cases/compiler/typeofInternalModules.ts(23,1): error TS2741: Property 'instantiated' is missing in type 'typeof instantiated' but required in type 'typeof Outer'.
+
+
+==== tests/cases/compiler/typeofInternalModules.ts (5 errors) ====
+    module Outer {
+        export module instantiated {
+            export class C { }
+        }
+        export module uninstantiated {
+            export interface P { }
+        }
+    }
+    
+    import importInst = Outer.instantiated;
+    import importUninst = Outer.uninstantiated;
+    
+    var x1: typeof importInst.C = importInst.C;
+    var x2: importInst.C = new x1();
+    var x3: typeof importUninst.P; // Error again
+                   ~~~~~~~~~~~~
+!!! error TS2708: Cannot use namespace 'importUninst' as a value.
+    
+    var x4: Outer = Outer;
+            ~~~~~
+!!! error TS2709: Cannot use namespace 'Outer' as a type.
+    var x5: typeof importInst;
+    x5 = Outer;
+    ~~
+!!! error TS2741: Property 'C' is missing in type 'typeof Outer' but required in type 'typeof instantiated'.
+!!! related TS2728 tests/cases/compiler/typeofInternalModules.ts:3:22: 'C' is declared here.
+    x5 = Outer.instantiated;
+    var x6: typeof importUninst;
+                   ~~~~~~~~~~~~
+!!! error TS2708: Cannot use namespace 'importUninst' as a value.
+    var x7: typeof Outer = Outer;
+    x7 = importInst;
+    ~~
+!!! error TS2741: Property 'instantiated' is missing in type 'typeof instantiated' but required in type 'typeof Outer'.
+!!! related TS2728 tests/cases/compiler/typeofInternalModules.ts:2:19: 'instantiated' is declared here.
+    

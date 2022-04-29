@@ -1,0 +1,62 @@
+tests/cases/compiler/letDeclarations-invalidContexts.ts(3,5): error TS1157: 'let' declarations can only be declared inside a block.
+tests/cases/compiler/letDeclarations-invalidContexts.ts(5,5): error TS1157: 'let' declarations can only be declared inside a block.
+tests/cases/compiler/letDeclarations-invalidContexts.ts(8,5): error TS1157: 'let' declarations can only be declared inside a block.
+tests/cases/compiler/letDeclarations-invalidContexts.ts(11,5): error TS1157: 'let' declarations can only be declared inside a block.
+tests/cases/compiler/letDeclarations-invalidContexts.ts(15,1): error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
+tests/cases/compiler/letDeclarations-invalidContexts.ts(19,5): error TS1157: 'let' declarations can only be declared inside a block.
+tests/cases/compiler/letDeclarations-invalidContexts.ts(22,5): error TS1157: 'let' declarations can only be declared inside a block.
+tests/cases/compiler/letDeclarations-invalidContexts.ts(25,12): error TS1157: 'let' declarations can only be declared inside a block.
+tests/cases/compiler/letDeclarations-invalidContexts.ts(28,29): error TS1157: 'let' declarations can only be declared inside a block.
+
+
+==== tests/cases/compiler/letDeclarations-invalidContexts.ts (9 errors) ====
+    // Errors, let must be defined inside a block
+    if (true) 
+        let l1 = 0;
+        ~~~~~~~~~~~
+!!! error TS1157: 'let' declarations can only be declared inside a block.
+    else 
+        let l2 = 0;
+        ~~~~~~~~~~~
+!!! error TS1157: 'let' declarations can only be declared inside a block.
+    
+    while (true) 
+        let l3 = 0;
+        ~~~~~~~~~~~
+!!! error TS1157: 'let' declarations can only be declared inside a block.
+    
+    do 
+        let l4 = 0;
+        ~~~~~~~~~~~
+!!! error TS1157: 'let' declarations can only be declared inside a block.
+    while (true);
+    
+    var obj;
+    with (obj) 
+    ~~~~~~~~~~
+!!! error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
+        let l5 = 0;
+    
+    for (var i = 0; i < 10; i++)
+        let l6 = 0;
+        ~~~~~~~~~~~
+!!! error TS1157: 'let' declarations can only be declared inside a block.
+    
+    for (var i2 in {}) 
+        let l7 = 0;
+        ~~~~~~~~~~~
+!!! error TS1157: 'let' declarations can only be declared inside a block.
+    
+    if (true) 
+        label: let l8 = 0;
+               ~~~~~~~~~~~
+!!! error TS1157: 'let' declarations can only be declared inside a block.
+    
+    while (false)
+        label2: label3: label4: let l9 = 0;
+                                ~~~~~~~~~~~
+!!! error TS1157: 'let' declarations can only be declared inside a block.
+    
+    
+    
+    

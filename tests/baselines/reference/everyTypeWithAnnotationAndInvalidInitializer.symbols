@@ -1,0 +1,155 @@
+=== tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAndInvalidInitializer.ts ===
+interface I {
+>I : Symbol(I, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 0, 0))
+
+    id: number;
+>id : Symbol(I.id, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 0, 13))
+}
+
+class C implements I {
+>C : Symbol(C, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 2, 1))
+>I : Symbol(I, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 0, 0))
+
+    id: number;
+>id : Symbol(C.id, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 4, 22))
+}
+
+class D<T>{
+>D : Symbol(D, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 6, 1))
+>T : Symbol(T, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 8, 8))
+
+    source: T;
+>source : Symbol(D.source, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 8, 11))
+>T : Symbol(T, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 8, 8))
+
+    recurse: D<T>;
+>recurse : Symbol(D.recurse, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 9, 14))
+>D : Symbol(D, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 6, 1))
+>T : Symbol(T, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 8, 8))
+
+    wrapped: D<D<T>>
+>wrapped : Symbol(D.wrapped, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 10, 18))
+>D : Symbol(D, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 6, 1))
+>D : Symbol(D, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 6, 1))
+>T : Symbol(T, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 8, 8))
+}
+
+function F(x: string): number { return 42; }
+>F : Symbol(F, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 12, 1))
+>x : Symbol(x, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 14, 11))
+
+function F2(x: number): boolean { return x < 42; }
+>F2 : Symbol(F2, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 14, 44))
+>x : Symbol(x, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 15, 12))
+>x : Symbol(x, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 15, 12))
+
+module M {
+>M : Symbol(M, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 15, 50))
+
+    export class A {
+>A : Symbol(A, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 17, 10))
+
+        name: string;
+>name : Symbol(A.name, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 18, 20))
+    }
+
+    export function F2(x: number): string { return x.toString(); }
+>F2 : Symbol(F2, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 20, 5))
+>x : Symbol(x, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 22, 23))
+>x.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 22, 23))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+}
+
+module N {
+>N : Symbol(N, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 23, 1))
+
+    export class A {
+>A : Symbol(A, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 25, 10))
+
+        id: number;
+>id : Symbol(A.id, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 26, 20))
+    }
+
+    export function F2(x: number): string { return x.toString(); }
+>F2 : Symbol(F2, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 28, 5))
+>x : Symbol(x, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 30, 23))
+>x.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 30, 23))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+}
+
+var aNumber: number = 'this is a string';
+>aNumber : Symbol(aNumber, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 33, 3))
+
+var aString: string = 9.9;
+>aString : Symbol(aString, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 34, 3))
+
+var aDate: Date = 9.9;
+>aDate : Symbol(aDate, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 35, 3))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+var aVoid: void = 9.9;
+>aVoid : Symbol(aVoid, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 37, 3))
+
+var anInterface: I = new D();
+>anInterface : Symbol(anInterface, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 39, 3))
+>I : Symbol(I, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 0, 0))
+>D : Symbol(D, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 6, 1))
+
+var aClass: C = new D();
+>aClass : Symbol(aClass, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 40, 3))
+>C : Symbol(C, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 2, 1))
+>D : Symbol(D, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 6, 1))
+
+var aGenericClass: D<string> = new C();
+>aGenericClass : Symbol(aGenericClass, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 41, 3))
+>D : Symbol(D, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 6, 1))
+>C : Symbol(C, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 2, 1))
+
+var anObjectLiteral: I = { id: 'a string' };
+>anObjectLiteral : Symbol(anObjectLiteral, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 42, 3))
+>I : Symbol(I, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 0, 0))
+>id : Symbol(id, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 42, 26))
+
+var anOtherObjectLiteral: { id: string } = new C();
+>anOtherObjectLiteral : Symbol(anOtherObjectLiteral, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 43, 3))
+>id : Symbol(id, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 43, 27))
+>C : Symbol(C, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 2, 1))
+
+var aFunction: typeof F = F2;
+>aFunction : Symbol(aFunction, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 45, 3))
+>F : Symbol(F, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 12, 1))
+>F2 : Symbol(F2, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 14, 44))
+
+var anOtherFunction: (x: string) => number = F2;
+>anOtherFunction : Symbol(anOtherFunction, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 46, 3))
+>x : Symbol(x, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 46, 22))
+>F2 : Symbol(F2, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 14, 44))
+
+var aLambda: typeof F = (x) => 'a string';
+>aLambda : Symbol(aLambda, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 47, 3))
+>F : Symbol(F, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 12, 1))
+>x : Symbol(x, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 47, 25))
+
+var aModule: typeof M = N;
+>aModule : Symbol(aModule, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 49, 3))
+>M : Symbol(M, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 15, 50))
+>N : Symbol(N, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 23, 1))
+
+var aClassInModule: M.A = new N.A();
+>aClassInModule : Symbol(aClassInModule, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 50, 3))
+>M : Symbol(M, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 15, 50))
+>A : Symbol(M.A, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 17, 10))
+>N.A : Symbol(N.A, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 25, 10))
+>N : Symbol(N, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 23, 1))
+>A : Symbol(N.A, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 25, 10))
+
+var aFunctionInModule: typeof M.F2 = F2;
+>aFunctionInModule : Symbol(aFunctionInModule, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 51, 3))
+>M.F2 : Symbol(M.F2, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 20, 5))
+>M : Symbol(M, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 15, 50))
+>F2 : Symbol(M.F2, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 20, 5))
+>F2 : Symbol(F2, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 14, 44))
+
+

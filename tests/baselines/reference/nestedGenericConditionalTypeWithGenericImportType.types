@@ -1,0 +1,13 @@
+=== tests/cases/compiler/name.ts ===
+// #31824
+
+export type Name<T> = any;
+>Name : any
+
+=== tests/cases/compiler/index.ts ===
+type T<X> = any extends ((any extends any ? any : string) extends any ? import("./name").Name<X> : any)
+>T : any
+
+  ? any
+  : any;
+

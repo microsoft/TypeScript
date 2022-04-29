@@ -1,0 +1,61 @@
+=== tests/cases/compiler/cyclicGenericTypeInstantiationInference.ts ===
+function foo<T>() {
+>foo : Symbol(foo, Decl(cyclicGenericTypeInstantiationInference.ts, 0, 0))
+>T : Symbol(T, Decl(cyclicGenericTypeInstantiationInference.ts, 0, 13))
+
+    var z = foo<typeof y>();
+>z : Symbol(z, Decl(cyclicGenericTypeInstantiationInference.ts, 1, 7))
+>foo : Symbol(foo, Decl(cyclicGenericTypeInstantiationInference.ts, 0, 0))
+>y : Symbol(y, Decl(cyclicGenericTypeInstantiationInference.ts, 2, 7))
+
+    var y: {
+>y : Symbol(y, Decl(cyclicGenericTypeInstantiationInference.ts, 2, 7))
+
+        y2: typeof z
+>y2 : Symbol(y2, Decl(cyclicGenericTypeInstantiationInference.ts, 2, 12))
+>z : Symbol(z, Decl(cyclicGenericTypeInstantiationInference.ts, 1, 7))
+
+    };
+    return y;
+>y : Symbol(y, Decl(cyclicGenericTypeInstantiationInference.ts, 2, 7))
+}
+
+
+function bar<T>() {
+>bar : Symbol(bar, Decl(cyclicGenericTypeInstantiationInference.ts, 6, 1))
+>T : Symbol(T, Decl(cyclicGenericTypeInstantiationInference.ts, 9, 13))
+
+    var z = bar<typeof y>();
+>z : Symbol(z, Decl(cyclicGenericTypeInstantiationInference.ts, 10, 7))
+>bar : Symbol(bar, Decl(cyclicGenericTypeInstantiationInference.ts, 6, 1))
+>y : Symbol(y, Decl(cyclicGenericTypeInstantiationInference.ts, 11, 7))
+
+    var y: {
+>y : Symbol(y, Decl(cyclicGenericTypeInstantiationInference.ts, 11, 7))
+
+        y2: typeof z;
+>y2 : Symbol(y2, Decl(cyclicGenericTypeInstantiationInference.ts, 11, 12))
+>z : Symbol(z, Decl(cyclicGenericTypeInstantiationInference.ts, 10, 7))
+    }
+    return y;
+>y : Symbol(y, Decl(cyclicGenericTypeInstantiationInference.ts, 11, 7))
+}
+
+var a = foo<number>();
+>a : Symbol(a, Decl(cyclicGenericTypeInstantiationInference.ts, 17, 3))
+>foo : Symbol(foo, Decl(cyclicGenericTypeInstantiationInference.ts, 0, 0))
+
+var b = bar<number>();
+>b : Symbol(b, Decl(cyclicGenericTypeInstantiationInference.ts, 18, 3))
+>bar : Symbol(bar, Decl(cyclicGenericTypeInstantiationInference.ts, 6, 1))
+
+function test<T>(x: typeof a): void { }
+>test : Symbol(test, Decl(cyclicGenericTypeInstantiationInference.ts, 18, 22))
+>T : Symbol(T, Decl(cyclicGenericTypeInstantiationInference.ts, 20, 14))
+>x : Symbol(x, Decl(cyclicGenericTypeInstantiationInference.ts, 20, 17))
+>a : Symbol(a, Decl(cyclicGenericTypeInstantiationInference.ts, 17, 3))
+
+test(b);
+>test : Symbol(test, Decl(cyclicGenericTypeInstantiationInference.ts, 18, 22))
+>b : Symbol(b, Decl(cyclicGenericTypeInstantiationInference.ts, 18, 3))
+

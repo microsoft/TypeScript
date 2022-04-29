@@ -1,0 +1,10 @@
+=== tests/cases/conformance/es6/destructuring/objectBindingPatternKeywordIdentifiers02.ts ===
+var { while: while } = { while: 1 }
+>while : any
+> : number
+>while : any
+> : number
+>{ while: 1 } : { while: number; }
+>while : number
+>1 : 1
+

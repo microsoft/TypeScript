@@ -1,0 +1,37 @@
+=== tests/cases/compiler/moduleVariables.ts ===
+declare var console: any;
+>console : Symbol(console, Decl(moduleVariables.ts, 0, 11))
+ 
+var x = 1;
+>x : Symbol(x, Decl(moduleVariables.ts, 2, 3))
+
+module M {
+>M : Symbol(M, Decl(moduleVariables.ts, 2, 10), Decl(moduleVariables.ts, 6, 1), Decl(moduleVariables.ts, 10, 1))
+
+    export var x = 2;
+>x : Symbol(x, Decl(moduleVariables.ts, 4, 14))
+
+    console.log(x); // 2
+>console : Symbol(console, Decl(moduleVariables.ts, 0, 11))
+>x : Symbol(x, Decl(moduleVariables.ts, 4, 14))
+}
+ 
+module M {
+>M : Symbol(M, Decl(moduleVariables.ts, 2, 10), Decl(moduleVariables.ts, 6, 1), Decl(moduleVariables.ts, 10, 1))
+
+    console.log(x); // 2
+>console : Symbol(console, Decl(moduleVariables.ts, 0, 11))
+>x : Symbol(x, Decl(moduleVariables.ts, 4, 14))
+}
+ 
+module M {
+>M : Symbol(M, Decl(moduleVariables.ts, 2, 10), Decl(moduleVariables.ts, 6, 1), Decl(moduleVariables.ts, 10, 1))
+
+    var x = 3;
+>x : Symbol(x, Decl(moduleVariables.ts, 13, 7))
+
+    console.log(x); // 3
+>console : Symbol(console, Decl(moduleVariables.ts, 0, 11))
+>x : Symbol(x, Decl(moduleVariables.ts, 13, 7))
+}
+

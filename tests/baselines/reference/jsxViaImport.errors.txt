@@ -1,0 +1,26 @@
+tests/cases/compiler/consumer.tsx(5,17): error TS2604: JSX element type 'BaseComponent' does not have any construct or call signatures.
+
+
+==== tests/cases/compiler/consumer.tsx (1 errors) ====
+    /// <reference path="component.d.ts" />
+    import BaseComponent = require('BaseComponent');
+    class TestComponent extends React.Component<any, {}> {
+        render() {
+            return <BaseComponent />;
+                    ~~~~~~~~~~~~~
+!!! error TS2604: JSX element type 'BaseComponent' does not have any construct or call signatures.
+        }
+    }
+    
+==== tests/cases/compiler/component.d.ts (0 errors) ====
+    declare module JSX {
+      interface ElementAttributesProperty { props; }
+    }
+    declare module React {
+      class Component<T, U> { }
+    }
+    declare module "BaseComponent" {
+        var base: React.Component<any, {}>;
+        export = base;
+    }
+    

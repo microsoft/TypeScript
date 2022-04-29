@@ -1,0 +1,158 @@
+=== tests/cases/compiler/optionalPropertiesTest.ts ===
+var x: {p1:number; p2?:string; p3?:{():number;};};
+>x : { p1: number; p2?: string; p3?: {    (): number;}; }
+>p1 : number
+>p2 : string
+>p3 : () => number
+
+interface IFoo
+{
+    id: number;
+>id : number
+
+    name?: string;
+>name : string
+
+    print?(): void;
+>print : () => void
+}
+
+
+var foo: IFoo;
+>foo : IFoo
+
+foo = { id: 1234 };                // Ok
+>foo = { id: 1234 } : { id: number; }
+>foo : IFoo
+>{ id: 1234 } : { id: number; }
+>id : number
+>1234 : 1234
+
+foo = { id: 1234, name: "test" };  // Ok
+>foo = { id: 1234, name: "test" } : { id: number; name: string; }
+>foo : IFoo
+>{ id: 1234, name: "test" } : { id: number; name: string; }
+>id : number
+>1234 : 1234
+>name : string
+>"test" : "test"
+
+foo = { name: "test" };            // Error, id missing
+>foo = { name: "test" } : { name: string; }
+>foo : IFoo
+>{ name: "test" } : { name: string; }
+>name : string
+>"test" : "test"
+
+foo = {id: 1234, print:()=>{}}	   // Ok
+>foo = {id: 1234, print:()=>{}} : { id: number; print: () => void; }
+>foo : IFoo
+>{id: 1234, print:()=>{}} : { id: number; print: () => void; }
+>id : number
+>1234 : 1234
+>print : () => void
+>()=>{} : () => void
+
+var s = foo.name || "default";
+>s : string
+>foo.name || "default" : string
+>foo.name : string
+>foo : IFoo
+>name : string
+>"default" : "default"
+
+if (foo.print !== undefined) foo.print();
+>foo.print !== undefined : boolean
+>foo.print : () => void
+>foo : IFoo
+>print : () => void
+>undefined : undefined
+>foo.print() : void
+>foo.print : () => void
+>foo : IFoo
+>print : () => void
+
+interface i1 { M: () => void; };
+>M : () => void
+
+interface i2 { M?: () => void; };
+>M : () => void
+
+interface i3 { M: number; };
+>M : number
+
+interface i4 { M?: number; };
+>M : number
+
+var test1: i1 = {};
+>test1 : i1
+>{} : {}
+
+var test2: i3 = {};
+>test2 : i3
+>{} : {}
+
+var test3: i2 = {};
+>test3 : i2
+>{} : {}
+
+var test4: i4 = {};
+>test4 : i4
+>{} : {}
+
+var test5: i1 = { M: function () { } };
+>test5 : i1
+>{ M: function () { } } : { M: () => void; }
+>M : () => void
+>function () { } : () => void
+
+var test6: i3 = { M: 5 };
+>test6 : i3
+>{ M: 5 } : { M: number; }
+>M : number
+>5 : 5
+
+var test7: i2 = { M: function () { } };
+>test7 : i2
+>{ M: function () { } } : { M: () => void; }
+>M : () => void
+>function () { } : () => void
+
+test7 = {};
+>test7 = {} : {}
+>test7 : i2
+>{} : {}
+
+var test8: i4 = { M: 5 }
+>test8 : i4
+>{ M: 5 } : { M: number; }
+>M : number
+>5 : 5
+
+test8 = {};
+>test8 = {} : {}
+>test8 : i4
+>{} : {}
+
+var test9_1: i2;
+>test9_1 : i2
+
+var test9_2: i1;
+>test9_2 : i1
+
+test9_1 = test9_2;
+>test9_1 = test9_2 : i1
+>test9_1 : i2
+>test9_2 : i1
+
+var test10_1: i1;
+>test10_1 : i1
+
+var test10_2: i2;
+>test10_2 : i2
+
+test10_1 = test10_2;
+>test10_1 = test10_2 : i2
+>test10_1 : i1
+>test10_2 : i2
+

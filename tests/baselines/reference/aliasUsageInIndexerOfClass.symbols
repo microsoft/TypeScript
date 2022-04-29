@@ -1,0 +1,59 @@
+=== tests/cases/compiler/aliasUsageInIndexerOfClass_main.ts ===
+import Backbone = require("./aliasUsageInIndexerOfClass_backbone");
+>Backbone : Symbol(Backbone, Decl(aliasUsageInIndexerOfClass_main.ts, 0, 0))
+
+import moduleA = require("./aliasUsageInIndexerOfClass_moduleA");
+>moduleA : Symbol(moduleA, Decl(aliasUsageInIndexerOfClass_main.ts, 0, 67))
+
+interface IHasVisualizationModel {
+>IHasVisualizationModel : Symbol(IHasVisualizationModel, Decl(aliasUsageInIndexerOfClass_main.ts, 1, 65))
+
+    VisualizationModel: typeof Backbone.Model;
+>VisualizationModel : Symbol(IHasVisualizationModel.VisualizationModel, Decl(aliasUsageInIndexerOfClass_main.ts, 2, 34))
+>Backbone.Model : Symbol(Backbone.Model, Decl(aliasUsageInIndexerOfClass_backbone.ts, 0, 0))
+>Backbone : Symbol(Backbone, Decl(aliasUsageInIndexerOfClass_main.ts, 0, 0))
+>Model : Symbol(Backbone.Model, Decl(aliasUsageInIndexerOfClass_backbone.ts, 0, 0))
+}
+class N {
+>N : Symbol(N, Decl(aliasUsageInIndexerOfClass_main.ts, 4, 1))
+
+    [idx: string]: IHasVisualizationModel
+>idx : Symbol(idx, Decl(aliasUsageInIndexerOfClass_main.ts, 6, 5))
+>IHasVisualizationModel : Symbol(IHasVisualizationModel, Decl(aliasUsageInIndexerOfClass_main.ts, 1, 65))
+
+    x = moduleA;
+>x : Symbol(N.x, Decl(aliasUsageInIndexerOfClass_main.ts, 6, 41))
+>moduleA : Symbol(moduleA, Decl(aliasUsageInIndexerOfClass_main.ts, 0, 67))
+}
+class N2 {
+>N2 : Symbol(N2, Decl(aliasUsageInIndexerOfClass_main.ts, 8, 1))
+
+    [idx: string]: typeof moduleA
+>idx : Symbol(idx, Decl(aliasUsageInIndexerOfClass_main.ts, 10, 5))
+>moduleA : Symbol(moduleA, Decl(aliasUsageInIndexerOfClass_main.ts, 0, 67))
+
+    x: IHasVisualizationModel;
+>x : Symbol(N2.x, Decl(aliasUsageInIndexerOfClass_main.ts, 10, 33))
+>IHasVisualizationModel : Symbol(IHasVisualizationModel, Decl(aliasUsageInIndexerOfClass_main.ts, 1, 65))
+}
+=== tests/cases/compiler/aliasUsageInIndexerOfClass_backbone.ts ===
+export class Model {
+>Model : Symbol(Model, Decl(aliasUsageInIndexerOfClass_backbone.ts, 0, 0))
+
+    public someData: string;
+>someData : Symbol(Model.someData, Decl(aliasUsageInIndexerOfClass_backbone.ts, 0, 20))
+}
+
+=== tests/cases/compiler/aliasUsageInIndexerOfClass_moduleA.ts ===
+import Backbone = require("./aliasUsageInIndexerOfClass_backbone");
+>Backbone : Symbol(Backbone, Decl(aliasUsageInIndexerOfClass_moduleA.ts, 0, 0))
+
+export class VisualizationModel extends Backbone.Model {
+>VisualizationModel : Symbol(VisualizationModel, Decl(aliasUsageInIndexerOfClass_moduleA.ts, 0, 67))
+>Backbone.Model : Symbol(Backbone.Model, Decl(aliasUsageInIndexerOfClass_backbone.ts, 0, 0))
+>Backbone : Symbol(Backbone, Decl(aliasUsageInIndexerOfClass_moduleA.ts, 0, 0))
+>Model : Symbol(Backbone.Model, Decl(aliasUsageInIndexerOfClass_backbone.ts, 0, 0))
+
+    // interesting stuff here
+}
+

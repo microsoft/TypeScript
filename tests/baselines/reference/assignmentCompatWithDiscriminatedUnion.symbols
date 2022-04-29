@@ -1,0 +1,517 @@
+=== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithDiscriminatedUnion.ts ===
+// see 'typeRelatedToDiscriminatedType' in checker.ts:
+
+// IteratorResult
+namespace Example1 {
+>Example1 : Symbol(Example1, Decl(assignmentCompatWithDiscriminatedUnion.ts, 0, 0))
+
+    type S = { done: boolean, value: number };
+>S : Symbol(S, Decl(assignmentCompatWithDiscriminatedUnion.ts, 3, 20))
+>done : Symbol(done, Decl(assignmentCompatWithDiscriminatedUnion.ts, 4, 14))
+>value : Symbol(value, Decl(assignmentCompatWithDiscriminatedUnion.ts, 4, 29))
+
+    type T =
+>T : Symbol(T, Decl(assignmentCompatWithDiscriminatedUnion.ts, 4, 46))
+
+        | { done: true, value: number }     // T0
+>done : Symbol(done, Decl(assignmentCompatWithDiscriminatedUnion.ts, 6, 11))
+>value : Symbol(value, Decl(assignmentCompatWithDiscriminatedUnion.ts, 6, 23))
+
+        | { done: false, value: number };   // T1
+>done : Symbol(done, Decl(assignmentCompatWithDiscriminatedUnion.ts, 7, 11))
+>value : Symbol(value, Decl(assignmentCompatWithDiscriminatedUnion.ts, 7, 24))
+
+    declare let s: S;
+>s : Symbol(s, Decl(assignmentCompatWithDiscriminatedUnion.ts, 9, 15))
+>S : Symbol(S, Decl(assignmentCompatWithDiscriminatedUnion.ts, 3, 20))
+
+    declare let t: T;
+>t : Symbol(t, Decl(assignmentCompatWithDiscriminatedUnion.ts, 10, 15))
+>T : Symbol(T, Decl(assignmentCompatWithDiscriminatedUnion.ts, 4, 46))
+
+    // S is assignable to T0 when S["done"] is true
+    // S is assignable to T1 when S["done"] is false
+    t = s;
+>t : Symbol(t, Decl(assignmentCompatWithDiscriminatedUnion.ts, 10, 15))
+>s : Symbol(s, Decl(assignmentCompatWithDiscriminatedUnion.ts, 9, 15))
+}
+
+// Dropping constituents of T
+namespace Example2 {
+>Example2 : Symbol(Example2, Decl(assignmentCompatWithDiscriminatedUnion.ts, 15, 1))
+
+    type S = { a: 0 | 2, b: 4 };
+>S : Symbol(S, Decl(assignmentCompatWithDiscriminatedUnion.ts, 18, 20))
+>a : Symbol(a, Decl(assignmentCompatWithDiscriminatedUnion.ts, 19, 14))
+>b : Symbol(b, Decl(assignmentCompatWithDiscriminatedUnion.ts, 19, 24))
+
+    type T = { a: 0,     b: 1 | 4 }     // T0
+>T : Symbol(T, Decl(assignmentCompatWithDiscriminatedUnion.ts, 19, 32))
+>a : Symbol(a, Decl(assignmentCompatWithDiscriminatedUnion.ts, 20, 14))
+>b : Symbol(b, Decl(assignmentCompatWithDiscriminatedUnion.ts, 20, 20))
+
+           | { a: 1,     b: 2 }         // T1
+>a : Symbol(a, Decl(assignmentCompatWithDiscriminatedUnion.ts, 21, 14))
+>b : Symbol(b, Decl(assignmentCompatWithDiscriminatedUnion.ts, 21, 20))
+
+           | { a: 2,     b: 3 | 4 };    // T2
+>a : Symbol(a, Decl(assignmentCompatWithDiscriminatedUnion.ts, 22, 14))
+>b : Symbol(b, Decl(assignmentCompatWithDiscriminatedUnion.ts, 22, 20))
+
+    declare let s: S;
+>s : Symbol(s, Decl(assignmentCompatWithDiscriminatedUnion.ts, 23, 15))
+>S : Symbol(S, Decl(assignmentCompatWithDiscriminatedUnion.ts, 18, 20))
+
+    declare let t: T;
+>t : Symbol(t, Decl(assignmentCompatWithDiscriminatedUnion.ts, 24, 15))
+>T : Symbol(T, Decl(assignmentCompatWithDiscriminatedUnion.ts, 19, 32))
+
+    // S is assignable to T0 when S["a"] is 0
+    // S is assignable to T2 when S["a"] is 2
+    t = s;
+>t : Symbol(t, Decl(assignmentCompatWithDiscriminatedUnion.ts, 24, 15))
+>s : Symbol(s, Decl(assignmentCompatWithDiscriminatedUnion.ts, 23, 15))
+}
+
+// Unmatched discriminants
+namespace Example3 {
+>Example3 : Symbol(Example3, Decl(assignmentCompatWithDiscriminatedUnion.ts, 29, 1))
+
+    type S = { a: 0 | 2, b: 4 };
+>S : Symbol(S, Decl(assignmentCompatWithDiscriminatedUnion.ts, 32, 20))
+>a : Symbol(a, Decl(assignmentCompatWithDiscriminatedUnion.ts, 33, 14))
+>b : Symbol(b, Decl(assignmentCompatWithDiscriminatedUnion.ts, 33, 24))
+
+    type T = { a: 0,     b: 1 | 4 }     // T0
+>T : Symbol(T, Decl(assignmentCompatWithDiscriminatedUnion.ts, 33, 32))
+>a : Symbol(a, Decl(assignmentCompatWithDiscriminatedUnion.ts, 34, 14))
+>b : Symbol(b, Decl(assignmentCompatWithDiscriminatedUnion.ts, 34, 20))
+
+           | { a: 1,     b: 2 | 4 }     // T1
+>a : Symbol(a, Decl(assignmentCompatWithDiscriminatedUnion.ts, 35, 14))
+>b : Symbol(b, Decl(assignmentCompatWithDiscriminatedUnion.ts, 35, 20))
+
+           | { a: 2,     b: 3 };        // T2
+>a : Symbol(a, Decl(assignmentCompatWithDiscriminatedUnion.ts, 36, 14))
+>b : Symbol(b, Decl(assignmentCompatWithDiscriminatedUnion.ts, 36, 20))
+
+    declare let s: S;
+>s : Symbol(s, Decl(assignmentCompatWithDiscriminatedUnion.ts, 37, 15))
+>S : Symbol(S, Decl(assignmentCompatWithDiscriminatedUnion.ts, 32, 20))
+
+    declare let t: T;
+>t : Symbol(t, Decl(assignmentCompatWithDiscriminatedUnion.ts, 38, 15))
+>T : Symbol(T, Decl(assignmentCompatWithDiscriminatedUnion.ts, 33, 32))
+
+    // S is assignable to T0 when S["a"] is 0
+    // S is *not* assignable to T1 when S["b"] is 4
+    // S is *not* assignable to T2 when S["a"] is 2
+    t = s;
+>t : Symbol(t, Decl(assignmentCompatWithDiscriminatedUnion.ts, 38, 15))
+>s : Symbol(s, Decl(assignmentCompatWithDiscriminatedUnion.ts, 37, 15))
+}
+
+// Unmatched non-discriminants
+namespace Example4 {
+>Example4 : Symbol(Example4, Decl(assignmentCompatWithDiscriminatedUnion.ts, 44, 1))
+
+    type S = { a: 0 | 2, b: 4 };
+>S : Symbol(S, Decl(assignmentCompatWithDiscriminatedUnion.ts, 47, 20))
+>a : Symbol(a, Decl(assignmentCompatWithDiscriminatedUnion.ts, 48, 14))
+>b : Symbol(b, Decl(assignmentCompatWithDiscriminatedUnion.ts, 48, 24))
+
+    type T = { a: 0,     b: 1 | 4 }             // T0
+>T : Symbol(T, Decl(assignmentCompatWithDiscriminatedUnion.ts, 48, 32))
+>a : Symbol(a, Decl(assignmentCompatWithDiscriminatedUnion.ts, 49, 14))
+>b : Symbol(b, Decl(assignmentCompatWithDiscriminatedUnion.ts, 49, 20))
+
+           | { a: 1,     b: 2 }                 // T1
+>a : Symbol(a, Decl(assignmentCompatWithDiscriminatedUnion.ts, 50, 14))
+>b : Symbol(b, Decl(assignmentCompatWithDiscriminatedUnion.ts, 50, 20))
+
+           | { a: 2,     b: 3 | 4, c: string }; // T2
+>a : Symbol(a, Decl(assignmentCompatWithDiscriminatedUnion.ts, 51, 14))
+>b : Symbol(b, Decl(assignmentCompatWithDiscriminatedUnion.ts, 51, 20))
+>c : Symbol(c, Decl(assignmentCompatWithDiscriminatedUnion.ts, 51, 34))
+
+    declare let s: S;
+>s : Symbol(s, Decl(assignmentCompatWithDiscriminatedUnion.ts, 52, 15))
+>S : Symbol(S, Decl(assignmentCompatWithDiscriminatedUnion.ts, 47, 20))
+
+    declare let t: T;
+>t : Symbol(t, Decl(assignmentCompatWithDiscriminatedUnion.ts, 53, 15))
+>T : Symbol(T, Decl(assignmentCompatWithDiscriminatedUnion.ts, 48, 32))
+
+    // S is assignable to T0 when S["a"] is 0
+    // S is *not* assignable to T2 when S["a"] is 2 as S is missing "c"
+    t = s;
+>t : Symbol(t, Decl(assignmentCompatWithDiscriminatedUnion.ts, 53, 15))
+>s : Symbol(s, Decl(assignmentCompatWithDiscriminatedUnion.ts, 52, 15))
+}
+
+// Maximum discriminant combinations
+namespace Example5 {
+>Example5 : Symbol(Example5, Decl(assignmentCompatWithDiscriminatedUnion.ts, 58, 1))
+
+    // NOTE: The maximum number of discriminant type combinations is currently 25.
+    //       3 discriminant properties with 3 types a piece
+    //       is 27 possible combinations.
+    type N = 0 | 1 | 2;
+>N : Symbol(N, Decl(assignmentCompatWithDiscriminatedUnion.ts, 61, 20))
+
+    type S = { a: N, b: N, c: N };
+>S : Symbol(S, Decl(assignmentCompatWithDiscriminatedUnion.ts, 65, 23))
+>a : Symbol(a, Decl(assignmentCompatWithDiscriminatedUnion.ts, 66, 14))
+>N : Symbol(N, Decl(assignmentCompatWithDiscriminatedUnion.ts, 61, 20))
+>b : Symbol(b, Decl(assignmentCompatWithDiscriminatedUnion.ts, 66, 20))
+>N : Symbol(N, Decl(assignmentCompatWithDiscriminatedUnion.ts, 61, 20))
+>c : Symbol(c, Decl(assignmentCompatWithDiscriminatedUnion.ts, 66, 26))
+>N : Symbol(N, Decl(assignmentCompatWithDiscriminatedUnion.ts, 61, 20))
+
+    type T = { a: 0, b: N, c: N }
+>T : Symbol(T, Decl(assignmentCompatWithDiscriminatedUnion.ts, 66, 34))
+>a : Symbol(a, Decl(assignmentCompatWithDiscriminatedUnion.ts, 67, 14))
+>b : Symbol(b, Decl(assignmentCompatWithDiscriminatedUnion.ts, 67, 20))
+>N : Symbol(N, Decl(assignmentCompatWithDiscriminatedUnion.ts, 61, 20))
+>c : Symbol(c, Decl(assignmentCompatWithDiscriminatedUnion.ts, 67, 26))
+>N : Symbol(N, Decl(assignmentCompatWithDiscriminatedUnion.ts, 61, 20))
+
+           | { a: 1, b: N, c: N }
+>a : Symbol(a, Decl(assignmentCompatWithDiscriminatedUnion.ts, 68, 14))
+>b : Symbol(b, Decl(assignmentCompatWithDiscriminatedUnion.ts, 68, 20))
+>N : Symbol(N, Decl(assignmentCompatWithDiscriminatedUnion.ts, 61, 20))
+>c : Symbol(c, Decl(assignmentCompatWithDiscriminatedUnion.ts, 68, 26))
+>N : Symbol(N, Decl(assignmentCompatWithDiscriminatedUnion.ts, 61, 20))
+
+           | { a: 2, b: N, c: N }
+>a : Symbol(a, Decl(assignmentCompatWithDiscriminatedUnion.ts, 69, 14))
+>b : Symbol(b, Decl(assignmentCompatWithDiscriminatedUnion.ts, 69, 20))
+>N : Symbol(N, Decl(assignmentCompatWithDiscriminatedUnion.ts, 61, 20))
+>c : Symbol(c, Decl(assignmentCompatWithDiscriminatedUnion.ts, 69, 26))
+>N : Symbol(N, Decl(assignmentCompatWithDiscriminatedUnion.ts, 61, 20))
+
+           | { a: N, b: 0, c: N }
+>a : Symbol(a, Decl(assignmentCompatWithDiscriminatedUnion.ts, 70, 14))
+>N : Symbol(N, Decl(assignmentCompatWithDiscriminatedUnion.ts, 61, 20))
+>b : Symbol(b, Decl(assignmentCompatWithDiscriminatedUnion.ts, 70, 20))
+>c : Symbol(c, Decl(assignmentCompatWithDiscriminatedUnion.ts, 70, 26))
+>N : Symbol(N, Decl(assignmentCompatWithDiscriminatedUnion.ts, 61, 20))
+
+           | { a: N, b: 1, c: N }
+>a : Symbol(a, Decl(assignmentCompatWithDiscriminatedUnion.ts, 71, 14))
+>N : Symbol(N, Decl(assignmentCompatWithDiscriminatedUnion.ts, 61, 20))
+>b : Symbol(b, Decl(assignmentCompatWithDiscriminatedUnion.ts, 71, 20))
+>c : Symbol(c, Decl(assignmentCompatWithDiscriminatedUnion.ts, 71, 26))
+>N : Symbol(N, Decl(assignmentCompatWithDiscriminatedUnion.ts, 61, 20))
+
+           | { a: N, b: 2, c: N }
+>a : Symbol(a, Decl(assignmentCompatWithDiscriminatedUnion.ts, 72, 14))
+>N : Symbol(N, Decl(assignmentCompatWithDiscriminatedUnion.ts, 61, 20))
+>b : Symbol(b, Decl(assignmentCompatWithDiscriminatedUnion.ts, 72, 20))
+>c : Symbol(c, Decl(assignmentCompatWithDiscriminatedUnion.ts, 72, 26))
+>N : Symbol(N, Decl(assignmentCompatWithDiscriminatedUnion.ts, 61, 20))
+
+           | { a: N, b: N, c: 0 }
+>a : Symbol(a, Decl(assignmentCompatWithDiscriminatedUnion.ts, 73, 14))
+>N : Symbol(N, Decl(assignmentCompatWithDiscriminatedUnion.ts, 61, 20))
+>b : Symbol(b, Decl(assignmentCompatWithDiscriminatedUnion.ts, 73, 20))
+>N : Symbol(N, Decl(assignmentCompatWithDiscriminatedUnion.ts, 61, 20))
+>c : Symbol(c, Decl(assignmentCompatWithDiscriminatedUnion.ts, 73, 26))
+
+           | { a: N, b: N, c: 1 }
+>a : Symbol(a, Decl(assignmentCompatWithDiscriminatedUnion.ts, 74, 14))
+>N : Symbol(N, Decl(assignmentCompatWithDiscriminatedUnion.ts, 61, 20))
+>b : Symbol(b, Decl(assignmentCompatWithDiscriminatedUnion.ts, 74, 20))
+>N : Symbol(N, Decl(assignmentCompatWithDiscriminatedUnion.ts, 61, 20))
+>c : Symbol(c, Decl(assignmentCompatWithDiscriminatedUnion.ts, 74, 26))
+
+           | { a: N, b: N, c: 2 };
+>a : Symbol(a, Decl(assignmentCompatWithDiscriminatedUnion.ts, 75, 14))
+>N : Symbol(N, Decl(assignmentCompatWithDiscriminatedUnion.ts, 61, 20))
+>b : Symbol(b, Decl(assignmentCompatWithDiscriminatedUnion.ts, 75, 20))
+>N : Symbol(N, Decl(assignmentCompatWithDiscriminatedUnion.ts, 61, 20))
+>c : Symbol(c, Decl(assignmentCompatWithDiscriminatedUnion.ts, 75, 26))
+
+    declare let s: S;
+>s : Symbol(s, Decl(assignmentCompatWithDiscriminatedUnion.ts, 76, 15))
+>S : Symbol(S, Decl(assignmentCompatWithDiscriminatedUnion.ts, 65, 23))
+
+    declare let t: T;
+>t : Symbol(t, Decl(assignmentCompatWithDiscriminatedUnion.ts, 77, 15))
+>T : Symbol(T, Decl(assignmentCompatWithDiscriminatedUnion.ts, 66, 34))
+
+    // S *should* be assignable but the number of
+    // combinations is too complex.
+    t = s;
+>t : Symbol(t, Decl(assignmentCompatWithDiscriminatedUnion.ts, 77, 15))
+>s : Symbol(s, Decl(assignmentCompatWithDiscriminatedUnion.ts, 76, 15))
+}
+
+// https://github.com/Microsoft/TypeScript/issues/14865
+namespace GH14865 {
+>GH14865 : Symbol(GH14865, Decl(assignmentCompatWithDiscriminatedUnion.ts, 82, 1))
+
+    type Style1 = {
+>Style1 : Symbol(Style1, Decl(assignmentCompatWithDiscriminatedUnion.ts, 85, 19))
+
+        type: "A";
+>type : Symbol(type, Decl(assignmentCompatWithDiscriminatedUnion.ts, 86, 19))
+
+        data: string;
+>data : Symbol(data, Decl(assignmentCompatWithDiscriminatedUnion.ts, 87, 18))
+
+    } | {
+        type: "B";
+>type : Symbol(type, Decl(assignmentCompatWithDiscriminatedUnion.ts, 89, 9))
+
+        data: string;
+>data : Symbol(data, Decl(assignmentCompatWithDiscriminatedUnion.ts, 90, 18))
+
+    };
+
+    type Style2 = {
+>Style2 : Symbol(Style2, Decl(assignmentCompatWithDiscriminatedUnion.ts, 92, 6))
+
+        type: "A" | "B";
+>type : Symbol(type, Decl(assignmentCompatWithDiscriminatedUnion.ts, 94, 19))
+
+        data: string;
+>data : Symbol(data, Decl(assignmentCompatWithDiscriminatedUnion.ts, 95, 24))
+    }
+
+    const a: Style2 = { type: "A", data: "whatevs" };
+>a : Symbol(a, Decl(assignmentCompatWithDiscriminatedUnion.ts, 99, 9))
+>Style2 : Symbol(Style2, Decl(assignmentCompatWithDiscriminatedUnion.ts, 92, 6))
+>type : Symbol(type, Decl(assignmentCompatWithDiscriminatedUnion.ts, 99, 23))
+>data : Symbol(data, Decl(assignmentCompatWithDiscriminatedUnion.ts, 99, 34))
+
+    let b: Style1;
+>b : Symbol(b, Decl(assignmentCompatWithDiscriminatedUnion.ts, 100, 7))
+>Style1 : Symbol(Style1, Decl(assignmentCompatWithDiscriminatedUnion.ts, 85, 19))
+
+    a.type; // "A" | "B"
+>a.type : Symbol(type, Decl(assignmentCompatWithDiscriminatedUnion.ts, 94, 19))
+>a : Symbol(a, Decl(assignmentCompatWithDiscriminatedUnion.ts, 99, 9))
+>type : Symbol(type, Decl(assignmentCompatWithDiscriminatedUnion.ts, 94, 19))
+
+    b.type; // "A" | "B"
+>b.type : Symbol(type, Decl(assignmentCompatWithDiscriminatedUnion.ts, 86, 19), Decl(assignmentCompatWithDiscriminatedUnion.ts, 89, 9))
+>b : Symbol(b, Decl(assignmentCompatWithDiscriminatedUnion.ts, 100, 7))
+>type : Symbol(type, Decl(assignmentCompatWithDiscriminatedUnion.ts, 86, 19), Decl(assignmentCompatWithDiscriminatedUnion.ts, 89, 9))
+
+    b = a; // should be assignable
+>b : Symbol(b, Decl(assignmentCompatWithDiscriminatedUnion.ts, 100, 7))
+>a : Symbol(a, Decl(assignmentCompatWithDiscriminatedUnion.ts, 99, 9))
+}
+
+// https://github.com/Microsoft/TypeScript/issues/30170
+namespace GH30170 {
+>GH30170 : Symbol(GH30170, Decl(assignmentCompatWithDiscriminatedUnion.ts, 104, 1))
+
+    interface Blue {
+>Blue : Symbol(Blue, Decl(assignmentCompatWithDiscriminatedUnion.ts, 107, 19))
+
+        color: 'blue'
+>color : Symbol(Blue.color, Decl(assignmentCompatWithDiscriminatedUnion.ts, 108, 20))
+    }
+    interface Yellow {
+>Yellow : Symbol(Yellow, Decl(assignmentCompatWithDiscriminatedUnion.ts, 110, 5))
+
+        color?: 'yellow',
+>color : Symbol(Yellow.color, Decl(assignmentCompatWithDiscriminatedUnion.ts, 111, 22))
+    }
+    function draw(val: Blue | Yellow) { }
+>draw : Symbol(draw, Decl(assignmentCompatWithDiscriminatedUnion.ts, 113, 5))
+>val : Symbol(val, Decl(assignmentCompatWithDiscriminatedUnion.ts, 114, 18))
+>Blue : Symbol(Blue, Decl(assignmentCompatWithDiscriminatedUnion.ts, 107, 19))
+>Yellow : Symbol(Yellow, Decl(assignmentCompatWithDiscriminatedUnion.ts, 110, 5))
+
+    function drawWithColor(currentColor: 'blue' | 'yellow' | undefined) {
+>drawWithColor : Symbol(drawWithColor, Decl(assignmentCompatWithDiscriminatedUnion.ts, 114, 41))
+>currentColor : Symbol(currentColor, Decl(assignmentCompatWithDiscriminatedUnion.ts, 116, 27))
+
+        return draw({ color: currentColor });
+>draw : Symbol(draw, Decl(assignmentCompatWithDiscriminatedUnion.ts, 113, 5))
+>color : Symbol(color, Decl(assignmentCompatWithDiscriminatedUnion.ts, 117, 21))
+>currentColor : Symbol(currentColor, Decl(assignmentCompatWithDiscriminatedUnion.ts, 116, 27))
+    }
+}
+
+// https://github.com/Microsoft/TypeScript/issues/12052
+namespace GH12052 {
+>GH12052 : Symbol(GH12052, Decl(assignmentCompatWithDiscriminatedUnion.ts, 119, 1))
+
+    interface ILinearAxis { type: "linear"; }
+>ILinearAxis : Symbol(ILinearAxis, Decl(assignmentCompatWithDiscriminatedUnion.ts, 122, 19))
+>type : Symbol(ILinearAxis.type, Decl(assignmentCompatWithDiscriminatedUnion.ts, 123, 27))
+
+    interface ICategoricalAxis { type: "categorical"; }
+>ICategoricalAxis : Symbol(ICategoricalAxis, Decl(assignmentCompatWithDiscriminatedUnion.ts, 123, 45))
+>type : Symbol(ICategoricalAxis.type, Decl(assignmentCompatWithDiscriminatedUnion.ts, 125, 32))
+
+    type IAxis = ILinearAxis | ICategoricalAxis;
+>IAxis : Symbol(IAxis, Decl(assignmentCompatWithDiscriminatedUnion.ts, 125, 55))
+>ILinearAxis : Symbol(ILinearAxis, Decl(assignmentCompatWithDiscriminatedUnion.ts, 122, 19))
+>ICategoricalAxis : Symbol(ICategoricalAxis, Decl(assignmentCompatWithDiscriminatedUnion.ts, 123, 45))
+
+    type IAxisType = "linear" | "categorical";
+>IAxisType : Symbol(IAxisType, Decl(assignmentCompatWithDiscriminatedUnion.ts, 127, 48))
+
+    function getAxisType(): IAxisType {
+>getAxisType : Symbol(getAxisType, Decl(assignmentCompatWithDiscriminatedUnion.ts, 128, 46))
+>IAxisType : Symbol(IAxisType, Decl(assignmentCompatWithDiscriminatedUnion.ts, 127, 48))
+
+        if (1 == 1) {
+            return "categorical";
+        } else {
+            return "linear";
+        }
+    }
+
+    const bad: IAxis = { type: getAxisType() };
+>bad : Symbol(bad, Decl(assignmentCompatWithDiscriminatedUnion.ts, 138, 9))
+>IAxis : Symbol(IAxis, Decl(assignmentCompatWithDiscriminatedUnion.ts, 125, 55))
+>type : Symbol(type, Decl(assignmentCompatWithDiscriminatedUnion.ts, 138, 24))
+>getAxisType : Symbol(getAxisType, Decl(assignmentCompatWithDiscriminatedUnion.ts, 128, 46))
+
+    const good: IAxis = { type: undefined };
+>good : Symbol(good, Decl(assignmentCompatWithDiscriminatedUnion.ts, 139, 9))
+>IAxis : Symbol(IAxis, Decl(assignmentCompatWithDiscriminatedUnion.ts, 125, 55))
+>type : Symbol(type, Decl(assignmentCompatWithDiscriminatedUnion.ts, 139, 25))
+>undefined : Symbol(undefined)
+
+    good.type = getAxisType();
+>good.type : Symbol(type, Decl(assignmentCompatWithDiscriminatedUnion.ts, 123, 27), Decl(assignmentCompatWithDiscriminatedUnion.ts, 125, 32))
+>good : Symbol(good, Decl(assignmentCompatWithDiscriminatedUnion.ts, 139, 9))
+>type : Symbol(type, Decl(assignmentCompatWithDiscriminatedUnion.ts, 123, 27), Decl(assignmentCompatWithDiscriminatedUnion.ts, 125, 32))
+>getAxisType : Symbol(getAxisType, Decl(assignmentCompatWithDiscriminatedUnion.ts, 128, 46))
+}
+
+// https://github.com/Microsoft/TypeScript/issues/18421
+namespace GH18421 {
+>GH18421 : Symbol(GH18421, Decl(assignmentCompatWithDiscriminatedUnion.ts, 141, 1))
+
+    interface ThingTypeOne {
+>ThingTypeOne : Symbol(ThingTypeOne, Decl(assignmentCompatWithDiscriminatedUnion.ts, 144, 19))
+
+        type: 'one';
+>type : Symbol(ThingTypeOne.type, Decl(assignmentCompatWithDiscriminatedUnion.ts, 145, 28))
+    }
+
+    interface ThingTypeTwo {
+>ThingTypeTwo : Symbol(ThingTypeTwo, Decl(assignmentCompatWithDiscriminatedUnion.ts, 147, 5))
+
+        type: 'two';
+>type : Symbol(ThingTypeTwo.type, Decl(assignmentCompatWithDiscriminatedUnion.ts, 149, 28))
+    }
+
+    type ThingType = 'one' | 'two';
+>ThingType : Symbol(ThingType, Decl(assignmentCompatWithDiscriminatedUnion.ts, 151, 5))
+
+    type Thing = ThingTypeOne | ThingTypeTwo;
+>Thing : Symbol(Thing, Decl(assignmentCompatWithDiscriminatedUnion.ts, 153, 35))
+>ThingTypeOne : Symbol(ThingTypeOne, Decl(assignmentCompatWithDiscriminatedUnion.ts, 144, 19))
+>ThingTypeTwo : Symbol(ThingTypeTwo, Decl(assignmentCompatWithDiscriminatedUnion.ts, 147, 5))
+
+    function makeNewThing(thingType: ThingType): Thing {
+>makeNewThing : Symbol(makeNewThing, Decl(assignmentCompatWithDiscriminatedUnion.ts, 155, 45))
+>thingType : Symbol(thingType, Decl(assignmentCompatWithDiscriminatedUnion.ts, 157, 26))
+>ThingType : Symbol(ThingType, Decl(assignmentCompatWithDiscriminatedUnion.ts, 151, 5))
+>Thing : Symbol(Thing, Decl(assignmentCompatWithDiscriminatedUnion.ts, 153, 35))
+
+        return {
+            type: thingType
+>type : Symbol(type, Decl(assignmentCompatWithDiscriminatedUnion.ts, 158, 16))
+>thingType : Symbol(thingType, Decl(assignmentCompatWithDiscriminatedUnion.ts, 157, 26))
+
+        };
+    }
+}
+
+// https://github.com/Microsoft/TypeScript/issues/15907
+namespace GH15907 {
+>GH15907 : Symbol(GH15907, Decl(assignmentCompatWithDiscriminatedUnion.ts, 162, 1))
+
+    type Action = { type: 'activate' } | { type: 'disactivate' };
+>Action : Symbol(Action, Decl(assignmentCompatWithDiscriminatedUnion.ts, 165, 19))
+>type : Symbol(type, Decl(assignmentCompatWithDiscriminatedUnion.ts, 166, 19))
+>type : Symbol(type, Decl(assignmentCompatWithDiscriminatedUnion.ts, 166, 42))
+
+    function dispatchAction(action: Action): void {
+>dispatchAction : Symbol(dispatchAction, Decl(assignmentCompatWithDiscriminatedUnion.ts, 166, 65))
+>action : Symbol(action, Decl(assignmentCompatWithDiscriminatedUnion.ts, 168, 28))
+>Action : Symbol(Action, Decl(assignmentCompatWithDiscriminatedUnion.ts, 165, 19))
+
+    }
+
+    const active = true;
+>active : Symbol(active, Decl(assignmentCompatWithDiscriminatedUnion.ts, 172, 9))
+
+    dispatchAction({ type : (active? 'disactivate' : 'activate') });
+>dispatchAction : Symbol(dispatchAction, Decl(assignmentCompatWithDiscriminatedUnion.ts, 166, 65))
+>type : Symbol(type, Decl(assignmentCompatWithDiscriminatedUnion.ts, 174, 20))
+>active : Symbol(active, Decl(assignmentCompatWithDiscriminatedUnion.ts, 172, 9))
+}
+
+// https://github.com/Microsoft/TypeScript/issues/20889
+namespace GH20889 {
+>GH20889 : Symbol(GH20889, Decl(assignmentCompatWithDiscriminatedUnion.ts, 175, 1))
+
+    interface A1 {
+>A1 : Symbol(A1, Decl(assignmentCompatWithDiscriminatedUnion.ts, 178, 19))
+
+        type: "A1";
+>type : Symbol(A1.type, Decl(assignmentCompatWithDiscriminatedUnion.ts, 179, 18))
+    }
+    interface A2 {
+>A2 : Symbol(A2, Decl(assignmentCompatWithDiscriminatedUnion.ts, 181, 5))
+
+        type: "A2";
+>type : Symbol(A2.type, Decl(assignmentCompatWithDiscriminatedUnion.ts, 182, 18))
+    }
+    type AU = A1 | A2;
+>AU : Symbol(AU, Decl(assignmentCompatWithDiscriminatedUnion.ts, 184, 5))
+>A1 : Symbol(A1, Decl(assignmentCompatWithDiscriminatedUnion.ts, 178, 19))
+>A2 : Symbol(A2, Decl(assignmentCompatWithDiscriminatedUnion.ts, 181, 5))
+
+    function foo(obj1: AU) {
+>foo : Symbol(foo, Decl(assignmentCompatWithDiscriminatedUnion.ts, 185, 22))
+>obj1 : Symbol(obj1, Decl(assignmentCompatWithDiscriminatedUnion.ts, 187, 17))
+>AU : Symbol(AU, Decl(assignmentCompatWithDiscriminatedUnion.ts, 184, 5))
+
+        const obj2: AU = {
+>obj2 : Symbol(obj2, Decl(assignmentCompatWithDiscriminatedUnion.ts, 188, 13))
+>AU : Symbol(AU, Decl(assignmentCompatWithDiscriminatedUnion.ts, 184, 5))
+
+            type: obj1.type
+>type : Symbol(type, Decl(assignmentCompatWithDiscriminatedUnion.ts, 188, 26))
+>obj1.type : Symbol(type, Decl(assignmentCompatWithDiscriminatedUnion.ts, 179, 18), Decl(assignmentCompatWithDiscriminatedUnion.ts, 182, 18))
+>obj1 : Symbol(obj1, Decl(assignmentCompatWithDiscriminatedUnion.ts, 187, 17))
+>type : Symbol(type, Decl(assignmentCompatWithDiscriminatedUnion.ts, 179, 18), Decl(assignmentCompatWithDiscriminatedUnion.ts, 182, 18))
+
+        };
+    }
+}
+
+// https://github.com/microsoft/TypeScript/issues/39357
+namespace GH39357 {
+>GH39357 : Symbol(GH39357, Decl(assignmentCompatWithDiscriminatedUnion.ts, 192, 1))
+
+    type A = ["a", number] | ["b", number] | ["c", string];
+>A : Symbol(A, Decl(assignmentCompatWithDiscriminatedUnion.ts, 195, 19))
+
+    type B = "a" | "b" | "c";
+>B : Symbol(B, Decl(assignmentCompatWithDiscriminatedUnion.ts, 196, 59))
+
+    declare const b: B;
+>b : Symbol(b, Decl(assignmentCompatWithDiscriminatedUnion.ts, 198, 17))
+>B : Symbol(B, Decl(assignmentCompatWithDiscriminatedUnion.ts, 196, 59))
+
+    const a: A = b === "a" || b === "b" ? [b, 1] : ["c", ""];
+>a : Symbol(a, Decl(assignmentCompatWithDiscriminatedUnion.ts, 199, 9))
+>A : Symbol(A, Decl(assignmentCompatWithDiscriminatedUnion.ts, 195, 19))
+>b : Symbol(b, Decl(assignmentCompatWithDiscriminatedUnion.ts, 198, 17))
+>b : Symbol(b, Decl(assignmentCompatWithDiscriminatedUnion.ts, 198, 17))
+>b : Symbol(b, Decl(assignmentCompatWithDiscriminatedUnion.ts, 198, 17))
+}
+

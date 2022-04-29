@@ -1,0 +1,57 @@
+tests/cases/compiler/controlFlowLoopAnalysis.ts(12,25): error TS2345: Argument of type 'number | undefined' is not assignable to parameter of type 'number'.
+  Type 'undefined' is not assignable to type 'number'.
+
+
+==== tests/cases/compiler/controlFlowLoopAnalysis.ts (1 errors) ====
+    // Repro from #8418
+    
+    let cond: boolean;
+    
+    function foo(x: number): number { return 1; }
+    
+    function test1() {
+        let x: number | undefined;
+        while (cond) {
+            while (cond) {
+                while (cond) {
+                    x = foo(x);
+                            ~
+!!! error TS2345: Argument of type 'number | undefined' is not assignable to parameter of type 'number'.
+!!! error TS2345:   Type 'undefined' is not assignable to type 'number'.
+                }
+            }
+            x = 1;
+        }
+    }
+    
+    // Repro from #8418
+    
+    function test2() {
+        let x: number | undefined;
+        x = 1;
+        while (cond) {
+            while (cond) {
+                x = foo(x);
+            }
+        }
+    }
+    
+    // Repro from #8511
+    
+    function mapUntilCant<a, b>(
+        values: a[],
+        canTake: (value: a, index: number) => boolean,
+        mapping: (value: a, index: number) => b
+    ): b[] {
+        let result: b[] = [];
+        for (let index = 0, length = values.length; index < length; index++) {
+            let value = values[index];
+            if (canTake(value, index)) {
+                result.push(mapping(value, index));
+            } else {
+                return result;
+            }
+        }
+        return result;
+    }
+    

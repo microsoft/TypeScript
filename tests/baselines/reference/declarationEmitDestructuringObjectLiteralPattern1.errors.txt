@@ -1,0 +1,28 @@
+tests/cases/compiler/declarationEmitDestructuringObjectLiteralPattern1.ts(1,13): error TS2353: Object literal may only specify known properties, and 'x' does not exist in type '{}'.
+tests/cases/compiler/declarationEmitDestructuringObjectLiteralPattern1.ts(1,19): error TS2353: Object literal may only specify known properties, and 'y' does not exist in type '{}'.
+tests/cases/compiler/declarationEmitDestructuringObjectLiteralPattern1.ts(2,23): error TS2353: Object literal may only specify known properties, and 'y4' does not exist in type '{ x4: any; }'.
+tests/cases/compiler/declarationEmitDestructuringObjectLiteralPattern1.ts(3,16): error TS2353: Object literal may only specify known properties, and 'x5' does not exist in type '{ y5: any; }'.
+tests/cases/compiler/declarationEmitDestructuringObjectLiteralPattern1.ts(5,27): error TS2353: Object literal may only specify known properties, and 'y7' does not exist in type '{ x7: any; }'.
+tests/cases/compiler/declarationEmitDestructuringObjectLiteralPattern1.ts(6,20): error TS2353: Object literal may only specify known properties, and 'x8' does not exist in type '{ y8: any; }'.
+
+
+==== tests/cases/compiler/declarationEmitDestructuringObjectLiteralPattern1.ts (6 errors) ====
+    var { } = { x: 5, y: "hello" };
+                ~
+!!! error TS2353: Object literal may only specify known properties, and 'x' does not exist in type '{}'.
+                      ~
+!!! error TS2353: Object literal may only specify known properties, and 'y' does not exist in type '{}'.
+    var { x4 } = { x4: 5, y4: "hello" };
+                          ~~
+!!! error TS2353: Object literal may only specify known properties, and 'y4' does not exist in type '{ x4: any; }'.
+    var { y5 } = { x5: 5, y5: "hello" };
+                   ~~
+!!! error TS2353: Object literal may only specify known properties, and 'x5' does not exist in type '{ y5: any; }'.
+    var { x6, y6 } = { x6: 5, y6: "hello" };
+    var { x7: a1 } = { x7: 5, y7: "hello" };
+                              ~~
+!!! error TS2353: Object literal may only specify known properties, and 'y7' does not exist in type '{ x7: any; }'.
+    var { y8: b1 } = { x8: 5, y8: "hello" };
+                       ~~
+!!! error TS2353: Object literal may only specify known properties, and 'x8' does not exist in type '{ y8: any; }'.
+    var { x9: a2, y9: b2 } = { x9: 5, y9: "hello" };

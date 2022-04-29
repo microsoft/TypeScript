@@ -1,0 +1,383 @@
+=== tests/cases/compiler/controlFlowPropertyDeclarations.ts ===
+// Repro from ##8913
+
+declare var require:any;
+>require : any
+
+var HTMLDOMPropertyConfig = require('react/lib/HTMLDOMPropertyConfig');
+>HTMLDOMPropertyConfig : any
+>require('react/lib/HTMLDOMPropertyConfig') : any
+>require : any
+>'react/lib/HTMLDOMPropertyConfig' : "react/lib/HTMLDOMPropertyConfig"
+
+// Populate property map with ReactJS's attribute and property mappings
+// TODO handle/use .Properties value eg: MUST_USE_PROPERTY is not HTML attr
+for (var propname in HTMLDOMPropertyConfig.Properties) {
+>propname : string
+>HTMLDOMPropertyConfig.Properties : any
+>HTMLDOMPropertyConfig : any
+>Properties : any
+
+  if (!HTMLDOMPropertyConfig.Properties.hasOwnProperty(propname)) {
+>!HTMLDOMPropertyConfig.Properties.hasOwnProperty(propname) : boolean
+>HTMLDOMPropertyConfig.Properties.hasOwnProperty(propname) : any
+>HTMLDOMPropertyConfig.Properties.hasOwnProperty : any
+>HTMLDOMPropertyConfig.Properties : any
+>HTMLDOMPropertyConfig : any
+>Properties : any
+>hasOwnProperty : any
+>propname : string
+
+    continue;
+  }
+
+  var mapFrom = HTMLDOMPropertyConfig.DOMAttributeNames[propname] || propname.toLowerCase();
+>mapFrom : any
+>HTMLDOMPropertyConfig.DOMAttributeNames[propname] || propname.toLowerCase() : any
+>HTMLDOMPropertyConfig.DOMAttributeNames[propname] : any
+>HTMLDOMPropertyConfig.DOMAttributeNames : any
+>HTMLDOMPropertyConfig : any
+>DOMAttributeNames : any
+>propname : string
+>propname.toLowerCase() : string
+>propname.toLowerCase : () => string
+>propname : string
+>toLowerCase : () => string
+}
+
+/**
+ * Repeats a string a certain number of times.
+ * Also: the future is bright and consists of native string repetition:
+ * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/repeat
+ *
+ * @param {string} string  String to repeat
+ * @param {number} times   Number of times to repeat string. Integer.
+ * @see http://jsperf.com/string-repeater/2
+ */
+function repeatString(string, times) {
+>repeatString : (string: any, times: any) => any
+>string : any
+>times : any
+
+  if (times === 1) {
+>times === 1 : boolean
+>times : any
+>1 : 1
+
+    return string;
+>string : any
+  }
+  if (times < 0) { throw new Error(); }
+>times < 0 : boolean
+>times : any
+>0 : 0
+>new Error() : Error
+>Error : ErrorConstructor
+
+  var repeated = '';
+>repeated : string
+>'' : ""
+
+  while (times) {
+>times : any
+
+    if (times & 1) {
+>times & 1 : number
+>times : any
+>1 : 1
+
+      repeated += string;
+>repeated += string : string
+>repeated : string
+>string : any
+    }
+    if (times >>= 1) {
+>times >>= 1 : number
+>times : any
+>1 : 1
+
+      string += string;
+>string += string : any
+>string : any
+>string : any
+    }
+  }
+  return repeated;
+>repeated : string
+}
+
+/**
+ * Determine if the string ends with the specified substring.
+ *
+ * @param {string} haystack String to search in
+ * @param {string} needle   String to search for
+ * @return {boolean}
+ */
+function endsWith(haystack, needle) {
+>endsWith : (haystack: any, needle: any) => boolean
+>haystack : any
+>needle : any
+
+  return haystack.slice(-needle.length) === needle;
+>haystack.slice(-needle.length) === needle : boolean
+>haystack.slice(-needle.length) : any
+>haystack.slice : any
+>haystack : any
+>slice : any
+>-needle.length : number
+>needle.length : any
+>needle : any
+>length : any
+>needle : any
+}
+
+/**
+ * Trim the specified substring off the string. If the string does not end
+ * with the specified substring, this is a no-op.
+ *
+ * @param {string} haystack String to search in
+ * @param {string} needle   String to search for
+ * @return {string}
+ */
+function trimEnd(haystack, needle) {
+>trimEnd : (haystack: any, needle: any) => any
+>haystack : any
+>needle : any
+
+  return endsWith(haystack, needle)
+>endsWith(haystack, needle)    ? haystack.slice(0, -needle.length)    : haystack : any
+>endsWith(haystack, needle) : boolean
+>endsWith : (haystack: any, needle: any) => boolean
+>haystack : any
+>needle : any
+
+    ? haystack.slice(0, -needle.length)
+>haystack.slice(0, -needle.length) : any
+>haystack.slice : any
+>haystack : any
+>slice : any
+>0 : 0
+>-needle.length : number
+>needle.length : any
+>needle : any
+>length : any
+
+    : haystack;
+>haystack : any
+}
+
+/**
+ * Convert a hyphenated string to camelCase.
+ */
+function hyphenToCamelCase(string) {
+>hyphenToCamelCase : (string: any) => any
+>string : any
+
+  return string.replace(/-(.)/g, function(match, chr) {
+>string.replace(/-(.)/g, function(match, chr) {    return chr.toUpperCase();  }) : any
+>string.replace : any
+>string : any
+>replace : any
+>/-(.)/g : RegExp
+>function(match, chr) {    return chr.toUpperCase();  } : (match: any, chr: any) => any
+>match : any
+>chr : any
+
+    return chr.toUpperCase();
+>chr.toUpperCase() : any
+>chr.toUpperCase : any
+>chr : any
+>toUpperCase : any
+
+  });
+}
+
+/**
+ * Determines if the specified string consists entirely of whitespace.
+ */
+function isEmpty(string) {
+>isEmpty : (string: any) => boolean
+>string : any
+
+   return !/[^\s]/.test(string);
+>!/[^\s]/.test(string) : boolean
+>/[^\s]/.test(string) : boolean
+>/[^\s]/.test : (string: string) => boolean
+>/[^\s]/ : RegExp
+>test : (string: string) => boolean
+>string : any
+}
+
+/**
+ * Determines if the CSS value can be converted from a
+ * 'px' suffixed string to a numeric value
+ *
+ * @param {string} value CSS property value
+ * @return {boolean}
+ */
+function isConvertiblePixelValue(value) {
+>isConvertiblePixelValue : (value: any) => boolean
+>value : any
+
+  return /^\d+px$/.test(value);
+>/^\d+px$/.test(value) : boolean
+>/^\d+px$/.test : (string: string) => boolean
+>/^\d+px$/ : RegExp
+>test : (string: string) => boolean
+>value : any
+}
+
+export class HTMLtoJSX {
+>HTMLtoJSX : HTMLtoJSX
+
+    private output: string;
+>output : string
+
+    private level: number;
+>level : number
+
+    private _inPreTag: boolean;
+>_inPreTag : boolean
+
+
+  /**
+   * Handles processing of the specified text node
+   *
+   * @param {TextNode} node
+   */
+  _visitText = (node) => {
+>_visitText : (node: any) => void
+>(node) => {    var parentTag = node.parentNode && node.parentNode.tagName.toLowerCase();    if (parentTag === 'textarea' || parentTag === 'style') {      // Ignore text content of textareas and styles, as it will have already been moved      // to a "defaultValue" attribute and "dangerouslySetInnerHTML" attribute respectively.      return;    }    var text = ''    if (this._inPreTag) {      // If this text is contained within a <pre>, we need to ensure the JSX      // whitespace coalescing rules don't eat the whitespace. This means      // wrapping newlines and sequences of two or more spaces in variables.      text = text        .replace(/\r/g, '')        .replace(/( {2,}|\n|\t|\{|\})/g, function(whitespace) {          return '{' + JSON.stringify(whitespace) + '}';        });    } else {      // If there's a newline in the text, adjust the indent level      if (text.indexOf('\n') > -1) {      }    }    this.output += text;  } : (node: any) => void
+>node : any
+
+    var parentTag = node.parentNode && node.parentNode.tagName.toLowerCase();
+>parentTag : any
+>node.parentNode && node.parentNode.tagName.toLowerCase() : any
+>node.parentNode : any
+>node : any
+>parentNode : any
+>node.parentNode.tagName.toLowerCase() : any
+>node.parentNode.tagName.toLowerCase : any
+>node.parentNode.tagName : any
+>node.parentNode : any
+>node : any
+>parentNode : any
+>tagName : any
+>toLowerCase : any
+
+    if (parentTag === 'textarea' || parentTag === 'style') {
+>parentTag === 'textarea' || parentTag === 'style' : boolean
+>parentTag === 'textarea' : boolean
+>parentTag : any
+>'textarea' : "textarea"
+>parentTag === 'style' : boolean
+>parentTag : any
+>'style' : "style"
+
+      // Ignore text content of textareas and styles, as it will have already been moved
+      // to a "defaultValue" attribute and "dangerouslySetInnerHTML" attribute respectively.
+      return;
+    }
+
+    var text = ''
+>text : string
+>'' : ""
+
+    if (this._inPreTag) {
+>this._inPreTag : boolean
+>this : this
+>_inPreTag : boolean
+
+      // If this text is contained within a <pre>, we need to ensure the JSX
+      // whitespace coalescing rules don't eat the whitespace. This means
+      // wrapping newlines and sequences of two or more spaces in variables.
+      text = text
+>text = text        .replace(/\r/g, '')        .replace(/( {2,}|\n|\t|\{|\})/g, function(whitespace) {          return '{' + JSON.stringify(whitespace) + '}';        }) : string
+>text : string
+>text        .replace(/\r/g, '')        .replace(/( {2,}|\n|\t|\{|\})/g, function(whitespace) {          return '{' + JSON.stringify(whitespace) + '}';        }) : string
+>text        .replace(/\r/g, '')        .replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
+>text        .replace(/\r/g, '') : string
+>text        .replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
+>text : string
+
+        .replace(/\r/g, '')
+>replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
+>/\r/g : RegExp
+>'' : ""
+
+        .replace(/( {2,}|\n|\t|\{|\})/g, function(whitespace) {
+>replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
+>/( {2,}|\n|\t|\{|\})/g : RegExp
+>function(whitespace) {          return '{' + JSON.stringify(whitespace) + '}';        } : (whitespace: string) => string
+>whitespace : string
+
+          return '{' + JSON.stringify(whitespace) + '}';
+>'{' + JSON.stringify(whitespace) + '}' : string
+>'{' + JSON.stringify(whitespace) : string
+>'{' : "{"
+>JSON.stringify(whitespace) : string
+>JSON.stringify : { (value: any, replacer?: (this: any, key: string, value: any) => any, space?: string | number): string; (value: any, replacer?: (string | number)[], space?: string | number): string; }
+>JSON : JSON
+>stringify : { (value: any, replacer?: (this: any, key: string, value: any) => any, space?: string | number): string; (value: any, replacer?: (string | number)[], space?: string | number): string; }
+>whitespace : string
+>'}' : "}"
+
+        });
+    } else {
+      // If there's a newline in the text, adjust the indent level
+      if (text.indexOf('\n') > -1) {
+>text.indexOf('\n') > -1 : boolean
+>text.indexOf('\n') : number
+>text.indexOf : (searchString: string, position?: number) => number
+>text : string
+>indexOf : (searchString: string, position?: number) => number
+>'\n' : "\n"
+>-1 : -1
+>1 : 1
+      }
+    }
+    this.output += text;
+>this.output += text : string
+>this.output : string
+>this : this
+>output : string
+>text : string
+  }
+
+
+
+};
+
+/**
+ * Handles parsing of inline styles
+ */
+export class StyleParser {
+>StyleParser : StyleParser
+
+  styles = {};
+>styles : {}
+>{} : {}
+
+  toJSXString = () => {
+>toJSXString : () => void
+>() => {    for (var key in this.styles) {      if (!this.styles.hasOwnProperty(key)) {      }    }  } : () => void
+
+    for (var key in this.styles) {
+>key : string
+>this.styles : {}
+>this : this
+>styles : {}
+
+      if (!this.styles.hasOwnProperty(key)) {
+>!this.styles.hasOwnProperty(key) : boolean
+>this.styles.hasOwnProperty(key) : boolean
+>this.styles.hasOwnProperty : (v: PropertyKey) => boolean
+>this.styles : {}
+>this : this
+>styles : {}
+>hasOwnProperty : (v: PropertyKey) => boolean
+>key : string
+      }
+    }
+  }
+}

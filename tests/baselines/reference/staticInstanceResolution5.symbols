@@ -1,0 +1,33 @@
+=== tests/cases/compiler/staticInstanceResolution5_1.ts ===
+import WinJS = require('staticInstanceResolution5_0');
+>WinJS : Symbol(WinJS, Decl(staticInstanceResolution5_1.ts, 0, 0))
+
+// these 3 should be errors
+var x = (w1: WinJS) => { };
+>x : Symbol(x, Decl(staticInstanceResolution5_1.ts, 3, 3))
+>w1 : Symbol(w1, Decl(staticInstanceResolution5_1.ts, 3, 9))
+>WinJS : Symbol(WinJS)
+
+var y = function (w2: WinJS) { }
+>y : Symbol(y, Decl(staticInstanceResolution5_1.ts, 4, 3))
+>w2 : Symbol(w2, Decl(staticInstanceResolution5_1.ts, 4, 18))
+>WinJS : Symbol(WinJS)
+
+function z(w3: WinJS) { }
+>z : Symbol(z, Decl(staticInstanceResolution5_1.ts, 4, 32))
+>w3 : Symbol(w3, Decl(staticInstanceResolution5_1.ts, 5, 11))
+>WinJS : Symbol(WinJS)
+
+=== tests/cases/compiler/staticInstanceResolution5_0.ts ===
+export class Promise {
+>Promise : Symbol(Promise, Decl(staticInstanceResolution5_0.ts, 0, 0))
+
+    static timeout(delay: number): Promise {
+>timeout : Symbol(Promise.timeout, Decl(staticInstanceResolution5_0.ts, 0, 22))
+>delay : Symbol(delay, Decl(staticInstanceResolution5_0.ts, 1, 19))
+>Promise : Symbol(Promise, Decl(staticInstanceResolution5_0.ts, 0, 0))
+
+        return null;
+    }
+}
+

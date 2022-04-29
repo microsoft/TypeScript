@@ -1,0 +1,13 @@
+tests/cases/compiler/accessStaticMemberFromInstanceMethod01.ts(5,17): error TS2304: Cannot find name 'foo'.
+
+
+==== tests/cases/compiler/accessStaticMemberFromInstanceMethod01.ts (1 errors) ====
+    class C {
+        foo: string;
+    
+        static bar() {
+            let k = foo;
+                    ~~~
+!!! error TS2304: Cannot find name 'foo'.
+        }
+    }

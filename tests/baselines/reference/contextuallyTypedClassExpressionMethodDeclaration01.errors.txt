@@ -1,0 +1,54 @@
+tests/cases/conformance/types/contextualTypes/methodDeclarations/contextuallyTypedClassExpressionMethodDeclaration01.ts(16,24): error TS7006: Parameter 'arg' implicitly has an 'any' type.
+tests/cases/conformance/types/contextualTypes/methodDeclarations/contextuallyTypedClassExpressionMethodDeclaration01.ts(19,24): error TS7006: Parameter 'arg' implicitly has an 'any' type.
+
+
+==== tests/cases/conformance/types/contextualTypes/methodDeclarations/contextuallyTypedClassExpressionMethodDeclaration01.ts (2 errors) ====
+    interface A {
+        numProp: number;
+    }
+    
+    interface B  {
+        strProp: string;
+    }
+    
+    interface Foo {
+        method1(arg: A): void;
+        method2(arg: B): void;
+    }
+    
+    function getFoo1(): Foo {
+        return class {
+            static method1(arg) {
+                           ~~~
+!!! error TS7006: Parameter 'arg' implicitly has an 'any' type.
+                arg.numProp = 10;
+            }
+            static method2(arg) {
+                           ~~~
+!!! error TS7006: Parameter 'arg' implicitly has an 'any' type.
+                arg.strProp = "hello";
+            }
+        }
+    }
+    
+    function getFoo2(): Foo {
+        return class {
+            static method1 = (arg) => {
+                arg.numProp = 10;
+            }
+            static method2 = (arg) => {
+                arg.strProp = "hello";
+            }
+        }
+    }
+    
+    function getFoo3(): Foo {
+        return class {
+            static method1 = function (arg) {
+                arg.numProp = 10;
+            }
+            static method2 = function (arg) {
+                arg.strProp = "hello";
+            }
+        }
+    }

@@ -1,0 +1,99 @@
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithConstructSignaturesWithSpecializedSignatures.ts(70,15): error TS2430: Interface 'I2' incorrectly extends interface 'Base2'.
+  The types returned by 'new a(...)' are incompatible between these types.
+    Type 'string' is not assignable to type 'number'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithConstructSignaturesWithSpecializedSignatures.ts(76,15): error TS2430: Interface 'I3' incorrectly extends interface 'Base2'.
+  The types returned by 'new a2(...)' are incompatible between these types.
+    Type 'string' is not assignable to type 'T'.
+      'T' could be instantiated with an arbitrary type which could be unrelated to 'string'.
+
+
+==== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithConstructSignaturesWithSpecializedSignatures.ts (2 errors) ====
+    // same as subtypingWithCallSignatures but with additional specialized signatures that should not affect the results
+    
+    module CallSignature {
+        interface Base { // T
+            // M's
+            new (x: 'a'): void;
+            new (x: string, y: number): void;
+        }
+    
+        // S's
+        interface I extends Base {
+            // N's
+            new (x: 'a'): number; // ok because base returns void
+            new (x: string, y: number): number; // ok because base returns void
+            new <T>(x: T): string; // ok because base returns void
+        }   
+    
+        interface Base2 { // T
+            // M's
+            new (x: 'a'): number;
+            new (x: string): number;
+        }
+    
+        // S's
+        interface I2 extends Base2 {
+            // N's
+            new (x: 'a'): string;
+            new (x: string): string; // error because base returns non-void;
+        }
+    
+        // S's
+        interface I3 extends Base2 {
+            // N's
+            new <T>(x: T): string; // ok, adds a new call signature
+        }
+    }
+    
+    module MemberWithCallSignature {
+        interface Base { // T
+            // M's
+            a: {
+                new (x: 'a'): void;
+                new (x: string): void;
+            }
+            a2: {
+                new (x: 'a', y: number): void;
+                new (x: string, y: number): void;
+            }
+            a3: new <T>(x: T) => void;
+        }
+    
+        // S's
+        interface I extends Base {
+            // N's
+            a: new (x: string) => number; // ok because base returns void
+            a2: new  (x: string, y: number) => boolean; // ok because base returns void
+            a3: new <T>(x: T) => string; // ok because base returns void
+        }
+    
+        interface Base2 { // T
+            // M's
+            a: {
+                new (x: 'a'): number;
+                new (x: string): number;
+            }
+            a2: new <T>(x: T) => T;
+        }
+    
+        // S's
+        interface I2 extends Base2 {
+                  ~~
+!!! error TS2430: Interface 'I2' incorrectly extends interface 'Base2'.
+!!! error TS2430:   The types returned by 'new a(...)' are incompatible between these types.
+!!! error TS2430:     Type 'string' is not assignable to type 'number'.
+            // N's
+            a: new (x: string) => string; // error because base returns non-void;
+        }
+    
+        // S's
+        interface I3 extends Base2 {
+                  ~~
+!!! error TS2430: Interface 'I3' incorrectly extends interface 'Base2'.
+!!! error TS2430:   The types returned by 'new a2(...)' are incompatible between these types.
+!!! error TS2430:     Type 'string' is not assignable to type 'T'.
+!!! error TS2430:       'T' could be instantiated with an arbitrary type which could be unrelated to 'string'.
+            // N's
+            a2: new <T>(x: T) => string; // error because base returns non-void;
+        }
+    }

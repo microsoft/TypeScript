@@ -1,0 +1,105 @@
+=== tests/cases/conformance/types/members/classWithProtectedProperty.ts ===
+// accessing any protected outside the class is an error
+
+class C {
+>C : C
+
+    protected x;
+>x : any
+
+    protected a = '';
+>a : string
+>'' : ""
+
+    protected b: string = '';
+>b : string
+>'' : ""
+
+    protected c() { return '' }
+>c : () => string
+>'' : ""
+
+    protected d = () => '';
+>d : () => string
+>() => '' : () => string
+>'' : ""
+
+    protected static e;
+>e : any
+
+    protected static f() { return '' }
+>f : () => string
+>'' : ""
+
+    protected static g = () => '';
+>g : () => string
+>() => '' : () => string
+>'' : ""
+}
+
+class D extends C {
+>D : D
+>C : C
+
+    method() {
+>method : () => void
+
+        // No errors
+        var d = new D();
+>d : D
+>new D() : D
+>D : typeof D
+
+        var r1: string = d.x;
+>r1 : string
+>d.x : any
+>d : D
+>x : any
+
+        var r2: string = d.a;
+>r2 : string
+>d.a : string
+>d : D
+>a : string
+
+        var r3: string = d.b;
+>r3 : string
+>d.b : string
+>d : D
+>b : string
+
+        var r4: string = d.c();
+>r4 : string
+>d.c() : string
+>d.c : () => string
+>d : D
+>c : () => string
+
+        var r5: string = d.d();
+>r5 : string
+>d.d() : string
+>d.d : () => string
+>d : D
+>d : () => string
+
+        var r6: string = C.e;
+>r6 : string
+>C.e : any
+>C : typeof C
+>e : any
+
+        var r7: string = C.f();
+>r7 : string
+>C.f() : string
+>C.f : () => string
+>C : typeof C
+>f : () => string
+
+        var r8: string = C.g();
+>r8 : string
+>C.g() : string
+>C.g : () => string
+>C : typeof C
+>g : () => string
+    }
+}

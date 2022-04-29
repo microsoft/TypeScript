@@ -1,0 +1,81 @@
+=== tests/cases/conformance/externalModules/foo_1.ts ===
+import foo = require("./foo_0");
+>foo : Symbol(foo, Decl(foo_1.ts, 0, 0))
+
+// None of the below should cause a runtime dependency on foo_0
+import f = foo.M1;
+>f : Symbol(f, Decl(foo_1.ts, 0, 32))
+>foo : Symbol(foo, Decl(foo_1.ts, 0, 0))
+>M1 : Symbol(foo.M1, Decl(foo_0.ts, 8, 1))
+
+var i: f.I2;
+>i : Symbol(i, Decl(foo_1.ts, 3, 3))
+>f : Symbol(f, Decl(foo_1.ts, 0, 32))
+>I2 : Symbol(f.I2, Decl(foo_0.ts, 10, 18))
+
+var x: foo.C1 = <{m1: number}>{};
+>x : Symbol(x, Decl(foo_1.ts, 4, 3))
+>foo : Symbol(foo, Decl(foo_1.ts, 0, 0))
+>C1 : Symbol(foo.C1, Decl(foo_0.ts, 0, 0))
+>m1 : Symbol(m1, Decl(foo_1.ts, 4, 18))
+
+var y: typeof foo.C1.s1 = false;
+>y : Symbol(y, Decl(foo_1.ts, 5, 3))
+>foo.C1.s1 : Symbol(foo.C1.s1, Decl(foo_0.ts, 1, 9))
+>foo.C1 : Symbol(foo.C1, Decl(foo_0.ts, 0, 0))
+>foo : Symbol(foo, Decl(foo_1.ts, 0, 0))
+>C1 : Symbol(foo.C1, Decl(foo_0.ts, 0, 0))
+>s1 : Symbol(foo.C1.s1, Decl(foo_0.ts, 1, 9))
+
+var z: foo.M1.I2;
+>z : Symbol(z, Decl(foo_1.ts, 6, 3))
+>foo : Symbol(foo, Decl(foo_1.ts, 0, 0))
+>M1 : Symbol(foo.M1, Decl(foo_0.ts, 8, 1))
+>I2 : Symbol(f.I2, Decl(foo_0.ts, 10, 18))
+
+var e: number = <foo.E1>0;
+>e : Symbol(e, Decl(foo_1.ts, 7, 3))
+>foo : Symbol(foo, Decl(foo_1.ts, 0, 0))
+>E1 : Symbol(foo.E1, Decl(foo_0.ts, 14, 1))
+
+=== tests/cases/conformance/externalModules/foo_0.ts ===
+export class C1 {
+>C1 : Symbol(C1, Decl(foo_0.ts, 0, 0))
+
+	m1 = 42;
+>m1 : Symbol(C1.m1, Decl(foo_0.ts, 0, 17))
+
+	static s1 = true;
+>s1 : Symbol(C1.s1, Decl(foo_0.ts, 1, 9))
+}
+
+export interface I1 {
+>I1 : Symbol(I1, Decl(foo_0.ts, 3, 1))
+
+	name: string;
+>name : Symbol(I1.name, Decl(foo_0.ts, 5, 21))
+
+	age: number;
+>age : Symbol(I1.age, Decl(foo_0.ts, 6, 14))
+}
+
+export module M1 {
+>M1 : Symbol(M1, Decl(foo_0.ts, 8, 1))
+
+	export interface I2 {
+>I2 : Symbol(I2, Decl(foo_0.ts, 10, 18))
+
+		foo: string;
+>foo : Symbol(I2.foo, Decl(foo_0.ts, 11, 22))
+	}
+}
+
+export enum E1 {
+>E1 : Symbol(E1, Decl(foo_0.ts, 14, 1))
+
+	A,B,C
+>A : Symbol(E1.A, Decl(foo_0.ts, 16, 16))
+>B : Symbol(E1.B, Decl(foo_0.ts, 17, 3))
+>C : Symbol(E1.C, Decl(foo_0.ts, 17, 5))
+}
+

@@ -1,0 +1,15 @@
+=== tests/cases/conformance/async/es6/task.ts ===
+export class Task<T> extends Promise<T> { }
+>Task : Task<T>
+>Promise : Promise<T>
+
+=== tests/cases/conformance/async/es6/test.ts ===
+import { Task } from "./task";
+>Task : typeof Task
+
+class Test {
+>Test : Test
+
+    async example<T>(): Task<T> { return; }
+>example : <T>() => Task<T>
+}

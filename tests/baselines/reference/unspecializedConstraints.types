@@ -1,0 +1,604 @@
+=== tests/cases/compiler/unspecializedConstraints.ts ===
+module ts {
+>ts : typeof ts
+
+    interface Map<T> {
+        [index: string]: T;
+>index : string
+    }
+
+    interface Equals<T> {
+        equals(other: T): boolean;
+>equals : (other: T) => boolean
+>other : T
+    }
+
+    class Symbol {
+>Symbol : Symbol
+    }
+
+    class Type extends Symbol {
+>Type : Type
+>Symbol : Symbol
+
+        equals(that: Type): boolean {
+>equals : (that: Type) => boolean
+>that : Type
+
+            if (this === that) return true;
+>this === that : boolean
+>this : this
+>that : Type
+>true : true
+
+            if (!(this.isObjectType() && that.isObjectType())) return false;
+>!(this.isObjectType() && that.isObjectType()) : boolean
+>(this.isObjectType() && that.isObjectType()) : boolean
+>this.isObjectType() && that.isObjectType() : boolean
+>this.isObjectType() : boolean
+>this.isObjectType : () => boolean
+>this : this
+>isObjectType : () => boolean
+>that.isObjectType() : boolean
+>that.isObjectType : () => boolean
+>that : Type
+>isObjectType : () => boolean
+>false : false
+
+            var propCount = that.getPropertyCount();
+>propCount : number
+>that.getPropertyCount() : number
+>that.getPropertyCount : () => number
+>that : Type
+>getPropertyCount : () => number
+
+            if (propCount !== this.getPropertyCount()) return false;
+>propCount !== this.getPropertyCount() : boolean
+>propCount : number
+>this.getPropertyCount() : number
+>this.getPropertyCount : () => number
+>this : this
+>getPropertyCount : () => number
+>false : false
+
+            var sigCount = that.getSignatureCount();
+>sigCount : number
+>that.getSignatureCount() : number
+>that.getSignatureCount : () => number
+>that : Type
+>getSignatureCount : () => number
+
+            if (sigCount !== this.getSignatureCount()) return false;
+>sigCount !== this.getSignatureCount() : boolean
+>sigCount : number
+>this.getSignatureCount() : number
+>this.getSignatureCount : () => number
+>this : this
+>getSignatureCount : () => number
+>false : false
+
+            if (propCount) {
+>propCount : number
+
+                for (var i = 0; i < propCount; i++) {
+>i : number
+>0 : 0
+>i < propCount : boolean
+>i : number
+>propCount : number
+>i++ : number
+>i : number
+
+                    var thisProp = this.getProperty(i);
+>thisProp : Property
+>this.getProperty(i) : Property
+>this.getProperty : (index: number) => Property
+>this : this
+>getProperty : (index: number) => Property
+>i : number
+
+                    var thatProp = that.getPropertyByName(thisProp.name);
+>thatProp : Property
+>that.getPropertyByName(thisProp.name) : Property
+>that.getPropertyByName : (name: string) => Property
+>that : Type
+>getPropertyByName : (name: string) => Property
+>thisProp.name : string
+>thisProp : Property
+>name : string
+
+                    if (!(thatProp && thisProp.flags === thatProp.flags && thisProp.type.equals(thatProp.type))) return false;
+>!(thatProp && thisProp.flags === thatProp.flags && thisProp.type.equals(thatProp.type)) : boolean
+>(thatProp && thisProp.flags === thatProp.flags && thisProp.type.equals(thatProp.type)) : boolean
+>thatProp && thisProp.flags === thatProp.flags && thisProp.type.equals(thatProp.type) : boolean
+>thatProp && thisProp.flags === thatProp.flags : boolean
+>thatProp : Property
+>thisProp.flags === thatProp.flags : boolean
+>thisProp.flags : PropertyFlags
+>thisProp : Property
+>flags : PropertyFlags
+>thatProp.flags : PropertyFlags
+>thatProp : Property
+>flags : PropertyFlags
+>thisProp.type.equals(thatProp.type) : boolean
+>thisProp.type.equals : (that: Type) => boolean
+>thisProp.type : Type
+>thisProp : Property
+>type : Type
+>equals : (that: Type) => boolean
+>thatProp.type : Type
+>thatProp : Property
+>type : Type
+>false : false
+                }
+            }
+            if (sigCount) {
+>sigCount : number
+
+                if (!setEquals(this.getSignatures(), that.getSignatures())) return false;
+>!setEquals(this.getSignatures(), that.getSignatures()) : boolean
+>setEquals(this.getSignatures(), that.getSignatures()) : boolean
+>setEquals : <T extends Equals<T>>(a: T[], b: T[]) => boolean
+>this.getSignatures() : Signature[]
+>this.getSignatures : () => Signature[]
+>this : this
+>getSignatures : () => Signature[]
+>that.getSignatures() : Signature[]
+>that.getSignatures : () => Signature[]
+>that : Type
+>getSignatures : () => Signature[]
+>false : false
+            }
+            return true;
+>true : true
+        }
+        getProperties(): Property[] {
+>getProperties : () => Property[]
+
+            return [];
+>[] : undefined[]
+        }
+        getProperty(index: number): Property {
+>getProperty : (index: number) => Property
+>index : number
+
+            return undefined;
+>undefined : undefined
+        }
+        getPropertyByName(name: string): Property {
+>getPropertyByName : (name: string) => Property
+>name : string
+
+            return undefined;
+>undefined : undefined
+        }
+        getPropertyCount(): number {
+>getPropertyCount : () => number
+
+            return 0;
+>0 : 0
+        }
+        getSignature(index: number): Signature {
+>getSignature : (index: number) => Signature
+>index : number
+
+            return undefined;
+>undefined : undefined
+        }
+        getSignatureCount(): number {
+>getSignatureCount : () => number
+
+            return 0;
+>0 : 0
+        }
+        getSignatures(): Signature[] {
+>getSignatures : () => Signature[]
+
+            return [];
+>[] : undefined[]
+        }
+        isPrimitive(): boolean {
+>isPrimitive : () => boolean
+
+            return false;
+>false : false
+        }
+        isObjectType(): boolean {
+>isObjectType : () => boolean
+
+            return false;
+>false : false
+        }
+        isTypeParameter(): boolean {
+>isTypeParameter : () => boolean
+
+            return false;
+>false : false
+        }
+        isSubTypeOf(type: Type) {
+>isSubTypeOf : (type: Type) => void
+>type : Type
+        }
+    }
+
+    class Property extends Symbol {
+>Property : Property
+>Symbol : Symbol
+
+        constructor(public name: string, public type: Type, public flags: PropertyFlags) {
+>name : string
+>type : Type
+>flags : PropertyFlags
+
+            super();
+>super() : void
+>super : typeof Symbol
+        }
+        equals(other: Property): boolean {
+>equals : (other: Property) => boolean
+>other : Property
+
+            return this.name === other.name &&
+>this.name === other.name &&                this.flags === other.flags &&                this.type.equals(other.type) : boolean
+>this.name === other.name &&                this.flags === other.flags : boolean
+>this.name === other.name : boolean
+>this.name : string
+>this : this
+>name : string
+>other.name : string
+>other : Property
+>name : string
+
+                this.flags === other.flags &&
+>this.flags === other.flags : boolean
+>this.flags : PropertyFlags
+>this : this
+>flags : PropertyFlags
+>other.flags : PropertyFlags
+>other : Property
+>flags : PropertyFlags
+
+                this.type.equals(other.type);
+>this.type.equals(other.type) : boolean
+>this.type.equals : (that: Type) => boolean
+>this.type : Type
+>this : this
+>type : Type
+>equals : (that: Type) => boolean
+>other.type : Type
+>other : Property
+>type : Type
+        }
+    }
+
+    enum PropertyFlags {
+>PropertyFlags : PropertyFlags
+
+        Optional = 1,
+>Optional : PropertyFlags.Optional
+>1 : 1
+
+        Private = 2
+>Private : PropertyFlags.Private
+>2 : 2
+    }
+
+    class Signature extends Symbol {
+>Signature : Signature
+>Symbol : Symbol
+
+        constructor(public typeParameters: TypeParameter[], public parameters: Parameter[], public returnType: Type) {
+>typeParameters : TypeParameter[]
+>parameters : Parameter[]
+>returnType : Type
+
+            super();
+>super() : void
+>super : typeof Symbol
+        }
+        equalsNoReturn(other: Signature): boolean {
+>equalsNoReturn : (other: Signature) => boolean
+>other : Signature
+
+            return this.parameters.length === other.parameters.length &&
+>this.parameters.length === other.parameters.length &&                this.typeParameters.length === other.typeParameters.length &&                arrayEquals(this.parameters, other.parameters) &&                arrayEquals(this.typeParameters, other.typeParameters) : boolean
+>this.parameters.length === other.parameters.length &&                this.typeParameters.length === other.typeParameters.length &&                arrayEquals(this.parameters, other.parameters) : boolean
+>this.parameters.length === other.parameters.length &&                this.typeParameters.length === other.typeParameters.length : boolean
+>this.parameters.length === other.parameters.length : boolean
+>this.parameters.length : number
+>this.parameters : Parameter[]
+>this : this
+>parameters : Parameter[]
+>length : number
+>other.parameters.length : number
+>other.parameters : Parameter[]
+>other : Signature
+>parameters : Parameter[]
+>length : number
+
+                this.typeParameters.length === other.typeParameters.length &&
+>this.typeParameters.length === other.typeParameters.length : boolean
+>this.typeParameters.length : number
+>this.typeParameters : TypeParameter[]
+>this : this
+>typeParameters : TypeParameter[]
+>length : number
+>other.typeParameters.length : number
+>other.typeParameters : TypeParameter[]
+>other : Signature
+>typeParameters : TypeParameter[]
+>length : number
+
+                arrayEquals(this.parameters, other.parameters) &&
+>arrayEquals(this.parameters, other.parameters) : boolean
+>arrayEquals : <T extends Equals<T>>(a: T[], b: T[]) => boolean
+>this.parameters : Parameter[]
+>this : this
+>parameters : Parameter[]
+>other.parameters : Parameter[]
+>other : Signature
+>parameters : Parameter[]
+
+                arrayEquals(this.typeParameters, other.typeParameters);
+>arrayEquals(this.typeParameters, other.typeParameters) : boolean
+>arrayEquals : <T extends Equals<T>>(a: T[], b: T[]) => boolean
+>this.typeParameters : TypeParameter[]
+>this : this
+>typeParameters : TypeParameter[]
+>other.typeParameters : TypeParameter[]
+>other : Signature
+>typeParameters : TypeParameter[]
+        }
+        equals(other: Signature): boolean {
+>equals : (other: Signature) => boolean
+>other : Signature
+
+            return this.equalsNoReturn(other) &&
+>this.equalsNoReturn(other) &&                this.returnType.equals(other.returnType) : boolean
+>this.equalsNoReturn(other) : boolean
+>this.equalsNoReturn : (other: Signature) => boolean
+>this : this
+>equalsNoReturn : (other: Signature) => boolean
+>other : Signature
+
+                this.returnType.equals(other.returnType);
+>this.returnType.equals(other.returnType) : boolean
+>this.returnType.equals : (that: Type) => boolean
+>this.returnType : Type
+>this : this
+>returnType : Type
+>equals : (that: Type) => boolean
+>other.returnType : Type
+>other : Signature
+>returnType : Type
+        }
+    }
+
+    class Parameter extends Symbol {
+>Parameter : Parameter
+>Symbol : Symbol
+
+        constructor(public name: string, public type: Type, public flags: ParameterFlags) {
+>name : string
+>type : Type
+>flags : ParameterFlags
+
+            super();
+>super() : void
+>super : typeof Symbol
+        }
+        equals(other: Parameter) {
+>equals : (other: Parameter) => boolean
+>other : Parameter
+
+            return this.name === other.name &&
+>this.name === other.name &&                this.flags === other.flags &&                this.type.equals(other.type) : boolean
+>this.name === other.name &&                this.flags === other.flags : boolean
+>this.name === other.name : boolean
+>this.name : string
+>this : this
+>name : string
+>other.name : string
+>other : Parameter
+>name : string
+
+                this.flags === other.flags &&
+>this.flags === other.flags : boolean
+>this.flags : ParameterFlags
+>this : this
+>flags : ParameterFlags
+>other.flags : ParameterFlags
+>other : Parameter
+>flags : ParameterFlags
+
+                this.type.equals(other.type);
+>this.type.equals(other.type) : boolean
+>this.type.equals : (that: Type) => boolean
+>this.type : Type
+>this : this
+>type : Type
+>equals : (that: Type) => boolean
+>other.type : Type
+>other : Parameter
+>type : Type
+        }
+    }
+
+    enum ParameterFlags {
+>ParameterFlags : ParameterFlags
+
+        Optional = 1,
+>Optional : ParameterFlags.Optional
+>1 : 1
+
+        Rest = 2
+>Rest : ParameterFlags.Rest
+>2 : 2
+    }
+
+   
+    var hasOwnProperty = Object.prototype.hasOwnProperty;
+>hasOwnProperty : (v: PropertyKey) => boolean
+>Object.prototype.hasOwnProperty : (v: PropertyKey) => boolean
+>Object.prototype : Object
+>Object : ObjectConstructor
+>prototype : Object
+>hasOwnProperty : (v: PropertyKey) => boolean
+
+    function getProperty<T>(map: Map<T>, key: string): T {
+>getProperty : <T>(map: Map<T>, key: string) => T
+>map : Map<T>
+>key : string
+
+        if (!hasOwnProperty.call(map, key)) return undefined;
+>!hasOwnProperty.call(map, key) : boolean
+>hasOwnProperty.call(map, key) : any
+>hasOwnProperty.call : (this: Function, thisArg: any, ...argArray: any[]) => any
+>hasOwnProperty : (v: PropertyKey) => boolean
+>call : (this: Function, thisArg: any, ...argArray: any[]) => any
+>map : Map<T>
+>key : string
+>undefined : undefined
+
+        return map[key];
+>map[key] : T
+>map : Map<T>
+>key : string
+    }
+
+    function hasProperty<T>(map: Map<T>, key: string): boolean {
+>hasProperty : <T>(map: Map<T>, key: string) => boolean
+>map : Map<T>
+>key : string
+
+        return hasOwnProperty.call(map, key);
+>hasOwnProperty.call(map, key) : any
+>hasOwnProperty.call : (this: Function, thisArg: any, ...argArray: any[]) => any
+>hasOwnProperty : (v: PropertyKey) => boolean
+>call : (this: Function, thisArg: any, ...argArray: any[]) => any
+>map : Map<T>
+>key : string
+    }
+
+    function arrayContains<T extends Equals<T>>(a: T[], item: T): boolean {
+>arrayContains : <T extends Equals<T>>(a: T[], item: T) => boolean
+>a : T[]
+>item : T
+
+        var len = a.length;
+>len : number
+>a.length : number
+>a : T[]
+>length : number
+
+        for (var i = 0; i < len; i++) {
+>i : number
+>0 : 0
+>i < len : boolean
+>i : number
+>len : number
+>i++ : number
+>i : number
+
+            if (item.equals(a[i])) return true;
+>item.equals(a[i]) : boolean
+>item.equals : (other: T) => boolean
+>item : T
+>equals : (other: T) => boolean
+>a[i] : T
+>a : T[]
+>i : number
+>true : true
+        }
+        return false;
+>false : false
+    }
+
+    function arrayEquals<T extends Equals<T>>(a: T[], b: T[]): boolean {
+>arrayEquals : <T extends Equals<T>>(a: T[], b: T[]) => boolean
+>a : T[]
+>b : T[]
+
+        var len = a.length;
+>len : number
+>a.length : number
+>a : T[]
+>length : number
+
+        if (b.length !== len) return false;
+>b.length !== len : boolean
+>b.length : number
+>b : T[]
+>length : number
+>len : number
+>false : false
+
+        for (var i = 0; i < len; i++) {
+>i : number
+>0 : 0
+>i < len : boolean
+>i : number
+>len : number
+>i++ : number
+>i : number
+
+            if (!a[i].equals(b[i])) return false;
+>!a[i].equals(b[i]) : boolean
+>a[i].equals(b[i]) : boolean
+>a[i].equals : (other: T) => boolean
+>a[i] : T
+>a : T[]
+>i : number
+>equals : (other: T) => boolean
+>b[i] : T
+>b : T[]
+>i : number
+>false : false
+        }
+        return true;
+>true : true
+    }
+
+    function setEquals<T extends Equals<T>>(a: T[], b: T[]): boolean {
+>setEquals : <T extends Equals<T>>(a: T[], b: T[]) => boolean
+>a : T[]
+>b : T[]
+
+        var len = a.length;
+>len : number
+>a.length : number
+>a : T[]
+>length : number
+
+        if (b.length !== len) return false;
+>b.length !== len : boolean
+>b.length : number
+>b : T[]
+>length : number
+>len : number
+>false : false
+
+        for (var i = 0; i < len; i++) {
+>i : number
+>0 : 0
+>i < len : boolean
+>i : number
+>len : number
+>i++ : number
+>i : number
+
+            if (!arrayContains(b, a[i])) return false;
+>!arrayContains(b, a[i]) : boolean
+>arrayContains(b, a[i]) : boolean
+>arrayContains : <T extends Equals<T>>(a: T[], item: T) => boolean
+>b : T[]
+>a[i] : T
+>a : T[]
+>i : number
+>false : false
+        }
+        return true;
+>true : true
+    }
+}
+

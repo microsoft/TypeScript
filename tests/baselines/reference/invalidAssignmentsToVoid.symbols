@@ -1,0 +1,66 @@
+=== tests/cases/conformance/types/primitives/void/invalidAssignmentsToVoid.ts ===
+var x: void;
+>x : Symbol(x, Decl(invalidAssignmentsToVoid.ts, 0, 3))
+
+x = 1;
+>x : Symbol(x, Decl(invalidAssignmentsToVoid.ts, 0, 3))
+
+x = true;
+>x : Symbol(x, Decl(invalidAssignmentsToVoid.ts, 0, 3))
+
+x = '';
+>x : Symbol(x, Decl(invalidAssignmentsToVoid.ts, 0, 3))
+
+x = {}
+>x : Symbol(x, Decl(invalidAssignmentsToVoid.ts, 0, 3))
+
+class C { foo: string; }
+>C : Symbol(C, Decl(invalidAssignmentsToVoid.ts, 4, 6))
+>foo : Symbol(C.foo, Decl(invalidAssignmentsToVoid.ts, 6, 9))
+
+var c: C;
+>c : Symbol(c, Decl(invalidAssignmentsToVoid.ts, 7, 3))
+>C : Symbol(C, Decl(invalidAssignmentsToVoid.ts, 4, 6))
+
+x = C;
+>x : Symbol(x, Decl(invalidAssignmentsToVoid.ts, 0, 3))
+>C : Symbol(C, Decl(invalidAssignmentsToVoid.ts, 4, 6))
+
+x = c;
+>x : Symbol(x, Decl(invalidAssignmentsToVoid.ts, 0, 3))
+>c : Symbol(c, Decl(invalidAssignmentsToVoid.ts, 7, 3))
+
+interface I { foo: string; }
+>I : Symbol(I, Decl(invalidAssignmentsToVoid.ts, 9, 6))
+>foo : Symbol(I.foo, Decl(invalidAssignmentsToVoid.ts, 11, 13))
+
+var i: I;
+>i : Symbol(i, Decl(invalidAssignmentsToVoid.ts, 12, 3))
+>I : Symbol(I, Decl(invalidAssignmentsToVoid.ts, 9, 6))
+
+x = i;
+>x : Symbol(x, Decl(invalidAssignmentsToVoid.ts, 0, 3))
+>i : Symbol(i, Decl(invalidAssignmentsToVoid.ts, 12, 3))
+
+module M { export var x = 1; }
+>M : Symbol(M, Decl(invalidAssignmentsToVoid.ts, 13, 6))
+>x : Symbol(x, Decl(invalidAssignmentsToVoid.ts, 15, 21))
+
+x = M;
+>x : Symbol(x, Decl(invalidAssignmentsToVoid.ts, 0, 3))
+>M : Symbol(M, Decl(invalidAssignmentsToVoid.ts, 13, 6))
+
+function f<T>(a: T) {
+>f : Symbol(f, Decl(invalidAssignmentsToVoid.ts, 16, 6))
+>T : Symbol(T, Decl(invalidAssignmentsToVoid.ts, 18, 11))
+>a : Symbol(a, Decl(invalidAssignmentsToVoid.ts, 18, 14))
+>T : Symbol(T, Decl(invalidAssignmentsToVoid.ts, 18, 11))
+
+    x = a;
+>x : Symbol(x, Decl(invalidAssignmentsToVoid.ts, 0, 3))
+>a : Symbol(a, Decl(invalidAssignmentsToVoid.ts, 18, 14))
+}
+x = f;
+>x : Symbol(x, Decl(invalidAssignmentsToVoid.ts, 0, 3))
+>f : Symbol(f, Decl(invalidAssignmentsToVoid.ts, 16, 6))
+

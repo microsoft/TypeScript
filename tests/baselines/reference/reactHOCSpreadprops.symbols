@@ -1,0 +1,36 @@
+=== tests/cases/compiler/reactHOCSpreadprops.tsx ===
+/// <reference path="react16.d.ts" />
+import React = require("react");
+>React : Symbol(React, Decl(reactHOCSpreadprops.tsx, 0, 0))
+
+function f<P>(App: React.ComponentClass<P> | React.StatelessComponent<P>): void {
+>f : Symbol(f, Decl(reactHOCSpreadprops.tsx, 1, 32))
+>P : Symbol(P, Decl(reactHOCSpreadprops.tsx, 2, 11))
+>App : Symbol(App, Decl(reactHOCSpreadprops.tsx, 2, 14))
+>React : Symbol(React, Decl(reactHOCSpreadprops.tsx, 0, 0))
+>ComponentClass : Symbol(React.ComponentClass, Decl(react16.d.ts, 421, 9))
+>P : Symbol(P, Decl(reactHOCSpreadprops.tsx, 2, 11))
+>React : Symbol(React, Decl(reactHOCSpreadprops.tsx, 0, 0))
+>StatelessComponent : Symbol(React.StatelessComponent, Decl(react16.d.ts, 406, 49))
+>P : Symbol(P, Decl(reactHOCSpreadprops.tsx, 2, 11))
+
+    class C extends React.Component<P & { x: number }> {
+>C : Symbol(C, Decl(reactHOCSpreadprops.tsx, 2, 81))
+>React.Component : Symbol(React.Component, Decl(react16.d.ts, 345, 54), Decl(react16.d.ts, 349, 94))
+>React : Symbol(React, Decl(reactHOCSpreadprops.tsx, 0, 0))
+>Component : Symbol(React.Component, Decl(react16.d.ts, 345, 54), Decl(react16.d.ts, 349, 94))
+>P : Symbol(P, Decl(reactHOCSpreadprops.tsx, 2, 11))
+>x : Symbol(x, Decl(reactHOCSpreadprops.tsx, 3, 41))
+
+        render() {
+>render : Symbol(C.render, Decl(reactHOCSpreadprops.tsx, 3, 56))
+
+            return <App {...this.props} />;
+>App : Symbol(App, Decl(reactHOCSpreadprops.tsx, 2, 14))
+>this.props : Symbol(React.Component.props, Decl(react16.d.ts, 367, 32))
+>this : Symbol(C, Decl(reactHOCSpreadprops.tsx, 2, 81))
+>props : Symbol(React.Component.props, Decl(react16.d.ts, 367, 32))
+        }
+    }
+}
+

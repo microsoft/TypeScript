@@ -1,0 +1,29 @@
+=== tests/cases/compiler/namedFunctionExpressionCall.ts ===
+var recurser = function foo() {
+>recurser : () => void
+>function foo() {    // using the local name    foo();    // using the globally visible name    recurser();} : () => void
+>foo : () => void
+
+    // using the local name
+    foo();
+>foo() : void
+>foo : () => void
+
+    // using the globally visible name
+    recurser();
+>recurser() : void
+>recurser : () => void
+
+};
+
+
+(function bar() {
+>(function bar() {    bar();}) : () => void
+>function bar() {    bar();} : () => void
+>bar : () => void
+
+    bar();
+>bar() : void
+>bar : () => void
+
+});

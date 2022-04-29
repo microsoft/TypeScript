@@ -1,0 +1,9 @@
+tests/cases/conformance/parser/ecmascript5/IndexSignatures/parserIndexSignature9.ts(2,4): error TS1096: An index signature must have exactly one parameter.
+
+
+==== tests/cases/conformance/parser/ecmascript5/IndexSignatures/parserIndexSignature9.ts (1 errors) ====
+    interface I {
+       []: number
+       ~~~~~~~~~~
+!!! error TS1096: An index signature must have exactly one parameter.
+    }

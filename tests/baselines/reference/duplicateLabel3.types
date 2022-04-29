@@ -1,0 +1,18 @@
+=== tests/cases/compiler/duplicateLabel3.ts ===
+target:
+>target : any
+
+while (true) {
+>true : true
+
+  function f() {
+>f : () => void
+
+    target:
+>target : any
+
+    while (true) {
+>true : true
+    }
+  }
+}

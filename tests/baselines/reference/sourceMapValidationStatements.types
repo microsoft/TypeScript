@@ -1,0 +1,289 @@
+=== tests/cases/compiler/sourceMapValidationStatements.ts ===
+function f() {
+>f : () => void
+
+    var y;
+>y : any
+
+    var x = 0;
+>x : number
+>0 : 0
+
+    for (var i = 0; i < 10; i++) {
+>i : number
+>0 : 0
+>i < 10 : boolean
+>i : number
+>10 : 10
+>i++ : number
+>i : number
+
+        x += i;
+>x += i : number
+>x : number
+>i : number
+
+        x *= 0;
+>x *= 0 : number
+>x : number
+>0 : 0
+    }
+    if (x > 17) {
+>x > 17 : boolean
+>x : number
+>17 : 17
+
+        x /= 9;
+>x /= 9 : number
+>x : number
+>9 : 9
+
+    } else {
+        x += 10;
+>x += 10 : number
+>x : number
+>10 : 10
+
+        x++;
+>x++ : number
+>x : number
+    }
+    var a = [
+>a : number[]
+>[        1,        2,        3    ] : number[]
+
+        1,
+>1 : 1
+
+        2,
+>2 : 2
+
+        3
+>3 : 3
+
+    ];
+    var obj = {
+>obj : { z: number; q: string; }
+>{        z: 1,        q: "hello"    } : { z: number; q: string; }
+
+        z: 1,
+>z : number
+>1 : 1
+
+        q: "hello"
+>q : string
+>"hello" : "hello"
+
+    };
+    for (var j in a) {
+>j : string
+>a : number[]
+
+        obj.z = a[j];
+>obj.z = a[j] : number
+>obj.z : number
+>obj : { z: number; q: string; }
+>z : number
+>a[j] : number
+>a : number[]
+>j : string
+
+        var v = 10;
+>v : number
+>10 : 10
+    }
+    try {
+        obj.q = "ohhh";
+>obj.q = "ohhh" : "ohhh"
+>obj.q : string
+>obj : { z: number; q: string; }
+>q : string
+>"ohhh" : "ohhh"
+
+    } catch (e) {
+>e : any
+
+        if (obj.z < 10) {
+>obj.z < 10 : boolean
+>obj.z : number
+>obj : { z: number; q: string; }
+>z : number
+>10 : 10
+
+            obj.z = 12;
+>obj.z = 12 : 12
+>obj.z : number
+>obj : { z: number; q: string; }
+>z : number
+>12 : 12
+
+        } else {
+            obj.q = "hmm";
+>obj.q = "hmm" : "hmm"
+>obj.q : string
+>obj : { z: number; q: string; }
+>q : string
+>"hmm" : "hmm"
+        }
+    }
+    try {
+        throw new Error();
+>new Error() : Error
+>Error : ErrorConstructor
+
+    } catch (e1) {
+>e1 : any
+
+        var b = e1;
+>b : any
+>e1 : any
+
+    } finally {
+        y = 70;
+>y = 70 : 70
+>y : any
+>70 : 70
+    }
+    with (obj) {
+>obj : { z: number; q: string; }
+
+        i = 2;
+>i = 2 : any
+>i : any
+>2 : any
+
+        z = 10;
+>z = 10 : any
+>z : any
+>10 : any
+    }
+    switch (obj.z) {
+>obj.z : number
+>obj : { z: number; q: string; }
+>z : number
+
+        case 0: {
+>0 : 0
+
+            x++;
+>x++ : number
+>x : number
+
+            break;
+
+        }
+        case 1: {
+>1 : 1
+
+            x--;
+>x-- : number
+>x : number
+
+            break;
+
+        }
+        default: {
+            x *= 2;
+>x *= 2 : number
+>x : number
+>2 : 2
+
+            x = 50;
+>x = 50 : 50
+>x : number
+>50 : 50
+
+            break;
+
+        }
+    }
+    while (x < 10) {
+>x < 10 : boolean
+>x : number
+>10 : 10
+
+        x++;
+>x++ : number
+>x : number
+    }
+    do {
+        x--;
+>x-- : number
+>x : number
+
+    } while (x > 4)
+>x > 4 : boolean
+>x : number
+>4 : 4
+
+    x = y;
+>x = y : any
+>x : number
+>y : any
+
+    var z = (x == 1) ? x + 1 : x - 1;
+>z : number
+>(x == 1) ? x + 1 : x - 1 : number
+>(x == 1) : boolean
+>x == 1 : boolean
+>x : number
+>1 : 1
+>x + 1 : number
+>x : 1
+>1 : 1
+>x - 1 : number
+>x : number
+>1 : 1
+
+    (x == 1) ? x + 1 : x - 1;
+>(x == 1) ? x + 1 : x - 1 : number
+>(x == 1) : boolean
+>x == 1 : boolean
+>x : number
+>1 : 1
+>x + 1 : number
+>x : 1
+>1 : 1
+>x - 1 : number
+>x : number
+>1 : 1
+
+    x === 1;
+>x === 1 : boolean
+>x : number
+>1 : 1
+
+    x = z = 40;
+>x = z = 40 : 40
+>x : number
+>z = 40 : 40
+>z : number
+>40 : 40
+
+    eval("y");
+>eval("y") : any
+>eval : (x: string) => any
+>"y" : "y"
+
+    return;
+}
+var b = function () {
+>b : () => void
+>function () {    var x = 10;    x = x + 1;} : () => void
+
+    var x = 10;
+>x : number
+>10 : 10
+
+    x = x + 1;
+>x = x + 1 : number
+>x : number
+>x + 1 : number
+>x : number
+>1 : 1
+
+};
+f();
+>f() : void
+>f : () => void
+

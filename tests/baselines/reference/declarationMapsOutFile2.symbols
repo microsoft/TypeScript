@@ -1,0 +1,40 @@
+=== tests/cases/compiler/a.ts ===
+class Foo {
+>Foo : Symbol(Foo, Decl(a.ts, 0, 0))
+
+    doThing(x: {a: number}) {
+>doThing : Symbol(Foo.doThing, Decl(a.ts, 0, 11))
+>x : Symbol(x, Decl(a.ts, 1, 12))
+>a : Symbol(a, Decl(a.ts, 1, 16))
+
+        return {b: x.a};
+>b : Symbol(b, Decl(a.ts, 2, 16))
+>x.a : Symbol(a, Decl(a.ts, 1, 16))
+>x : Symbol(x, Decl(a.ts, 1, 12))
+>a : Symbol(a, Decl(a.ts, 1, 16))
+    }
+    static make() {
+>make : Symbol(Foo.make, Decl(a.ts, 3, 5))
+
+        return new Foo();
+>Foo : Symbol(Foo, Decl(a.ts, 0, 0))
+    }
+}
+=== tests/cases/compiler/index.ts ===
+const c = new Foo();
+>c : Symbol(c, Decl(index.ts, 0, 5))
+>Foo : Symbol(Foo, Decl(a.ts, 0, 0))
+
+c.doThing({a: 42});
+>c.doThing : Symbol(Foo.doThing, Decl(a.ts, 0, 11))
+>c : Symbol(c, Decl(index.ts, 0, 5))
+>doThing : Symbol(Foo.doThing, Decl(a.ts, 0, 11))
+>a : Symbol(a, Decl(index.ts, 1, 11))
+
+let x = c.doThing({a: 12});
+>x : Symbol(x, Decl(index.ts, 3, 3))
+>c.doThing : Symbol(Foo.doThing, Decl(a.ts, 0, 11))
+>c : Symbol(c, Decl(index.ts, 0, 5))
+>doThing : Symbol(Foo.doThing, Decl(a.ts, 0, 11))
+>a : Symbol(a, Decl(index.ts, 3, 19))
+

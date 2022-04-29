@@ -1,0 +1,279 @@
+=== tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/objectTypesIdentityWithPublics.ts ===
+// object types are identical structurally
+
+class A {
+>A : Symbol(A, Decl(objectTypesIdentityWithPublics.ts, 0, 0))
+
+    public foo: string;
+>foo : Symbol(A.foo, Decl(objectTypesIdentityWithPublics.ts, 2, 9))
+}
+
+class B {
+>B : Symbol(B, Decl(objectTypesIdentityWithPublics.ts, 4, 1))
+
+    public foo: string;
+>foo : Symbol(B.foo, Decl(objectTypesIdentityWithPublics.ts, 6, 9))
+}
+
+class C<T> {
+>C : Symbol(C, Decl(objectTypesIdentityWithPublics.ts, 8, 1))
+>T : Symbol(T, Decl(objectTypesIdentityWithPublics.ts, 10, 8))
+
+    public foo: T;
+>foo : Symbol(C.foo, Decl(objectTypesIdentityWithPublics.ts, 10, 12))
+>T : Symbol(T, Decl(objectTypesIdentityWithPublics.ts, 10, 8))
+}
+
+interface I {
+>I : Symbol(I, Decl(objectTypesIdentityWithPublics.ts, 12, 1))
+
+    foo: string;
+>foo : Symbol(I.foo, Decl(objectTypesIdentityWithPublics.ts, 14, 13))
+}
+
+var a: { foo: string; }
+>a : Symbol(a, Decl(objectTypesIdentityWithPublics.ts, 18, 3))
+>foo : Symbol(foo, Decl(objectTypesIdentityWithPublics.ts, 18, 8))
+
+var b = { foo: '' };
+>b : Symbol(b, Decl(objectTypesIdentityWithPublics.ts, 19, 3))
+>foo : Symbol(foo, Decl(objectTypesIdentityWithPublics.ts, 19, 9))
+
+function foo1(x: A);
+>foo1 : Symbol(foo1, Decl(objectTypesIdentityWithPublics.ts, 19, 20), Decl(objectTypesIdentityWithPublics.ts, 21, 20), Decl(objectTypesIdentityWithPublics.ts, 22, 20))
+>x : Symbol(x, Decl(objectTypesIdentityWithPublics.ts, 21, 14))
+>A : Symbol(A, Decl(objectTypesIdentityWithPublics.ts, 0, 0))
+
+function foo1(x: A); // error
+>foo1 : Symbol(foo1, Decl(objectTypesIdentityWithPublics.ts, 19, 20), Decl(objectTypesIdentityWithPublics.ts, 21, 20), Decl(objectTypesIdentityWithPublics.ts, 22, 20))
+>x : Symbol(x, Decl(objectTypesIdentityWithPublics.ts, 22, 14))
+>A : Symbol(A, Decl(objectTypesIdentityWithPublics.ts, 0, 0))
+
+function foo1(x: any) { }
+>foo1 : Symbol(foo1, Decl(objectTypesIdentityWithPublics.ts, 19, 20), Decl(objectTypesIdentityWithPublics.ts, 21, 20), Decl(objectTypesIdentityWithPublics.ts, 22, 20))
+>x : Symbol(x, Decl(objectTypesIdentityWithPublics.ts, 23, 14))
+
+function foo1b(x: B);
+>foo1b : Symbol(foo1b, Decl(objectTypesIdentityWithPublics.ts, 23, 25), Decl(objectTypesIdentityWithPublics.ts, 25, 21), Decl(objectTypesIdentityWithPublics.ts, 26, 21))
+>x : Symbol(x, Decl(objectTypesIdentityWithPublics.ts, 25, 15))
+>B : Symbol(B, Decl(objectTypesIdentityWithPublics.ts, 4, 1))
+
+function foo1b(x: B); // error
+>foo1b : Symbol(foo1b, Decl(objectTypesIdentityWithPublics.ts, 23, 25), Decl(objectTypesIdentityWithPublics.ts, 25, 21), Decl(objectTypesIdentityWithPublics.ts, 26, 21))
+>x : Symbol(x, Decl(objectTypesIdentityWithPublics.ts, 26, 15))
+>B : Symbol(B, Decl(objectTypesIdentityWithPublics.ts, 4, 1))
+
+function foo1b(x: any) { }
+>foo1b : Symbol(foo1b, Decl(objectTypesIdentityWithPublics.ts, 23, 25), Decl(objectTypesIdentityWithPublics.ts, 25, 21), Decl(objectTypesIdentityWithPublics.ts, 26, 21))
+>x : Symbol(x, Decl(objectTypesIdentityWithPublics.ts, 27, 15))
+
+function foo1c(x: C<string>);
+>foo1c : Symbol(foo1c, Decl(objectTypesIdentityWithPublics.ts, 27, 26), Decl(objectTypesIdentityWithPublics.ts, 29, 29), Decl(objectTypesIdentityWithPublics.ts, 30, 29))
+>x : Symbol(x, Decl(objectTypesIdentityWithPublics.ts, 29, 15))
+>C : Symbol(C, Decl(objectTypesIdentityWithPublics.ts, 8, 1))
+
+function foo1c(x: C<string>); // error
+>foo1c : Symbol(foo1c, Decl(objectTypesIdentityWithPublics.ts, 27, 26), Decl(objectTypesIdentityWithPublics.ts, 29, 29), Decl(objectTypesIdentityWithPublics.ts, 30, 29))
+>x : Symbol(x, Decl(objectTypesIdentityWithPublics.ts, 30, 15))
+>C : Symbol(C, Decl(objectTypesIdentityWithPublics.ts, 8, 1))
+
+function foo1c(x: any) { }
+>foo1c : Symbol(foo1c, Decl(objectTypesIdentityWithPublics.ts, 27, 26), Decl(objectTypesIdentityWithPublics.ts, 29, 29), Decl(objectTypesIdentityWithPublics.ts, 30, 29))
+>x : Symbol(x, Decl(objectTypesIdentityWithPublics.ts, 31, 15))
+
+function foo2(x: I);
+>foo2 : Symbol(foo2, Decl(objectTypesIdentityWithPublics.ts, 31, 26), Decl(objectTypesIdentityWithPublics.ts, 33, 20), Decl(objectTypesIdentityWithPublics.ts, 34, 20))
+>x : Symbol(x, Decl(objectTypesIdentityWithPublics.ts, 33, 14))
+>I : Symbol(I, Decl(objectTypesIdentityWithPublics.ts, 12, 1))
+
+function foo2(x: I); // error
+>foo2 : Symbol(foo2, Decl(objectTypesIdentityWithPublics.ts, 31, 26), Decl(objectTypesIdentityWithPublics.ts, 33, 20), Decl(objectTypesIdentityWithPublics.ts, 34, 20))
+>x : Symbol(x, Decl(objectTypesIdentityWithPublics.ts, 34, 14))
+>I : Symbol(I, Decl(objectTypesIdentityWithPublics.ts, 12, 1))
+
+function foo2(x: any) { }
+>foo2 : Symbol(foo2, Decl(objectTypesIdentityWithPublics.ts, 31, 26), Decl(objectTypesIdentityWithPublics.ts, 33, 20), Decl(objectTypesIdentityWithPublics.ts, 34, 20))
+>x : Symbol(x, Decl(objectTypesIdentityWithPublics.ts, 35, 14))
+
+function foo3(x: typeof a);
+>foo3 : Symbol(foo3, Decl(objectTypesIdentityWithPublics.ts, 35, 25), Decl(objectTypesIdentityWithPublics.ts, 37, 27), Decl(objectTypesIdentityWithPublics.ts, 38, 27))
+>x : Symbol(x, Decl(objectTypesIdentityWithPublics.ts, 37, 14))
+>a : Symbol(a, Decl(objectTypesIdentityWithPublics.ts, 18, 3))
+
+function foo3(x: typeof a); // error
+>foo3 : Symbol(foo3, Decl(objectTypesIdentityWithPublics.ts, 35, 25), Decl(objectTypesIdentityWithPublics.ts, 37, 27), Decl(objectTypesIdentityWithPublics.ts, 38, 27))
+>x : Symbol(x, Decl(objectTypesIdentityWithPublics.ts, 38, 14))
+>a : Symbol(a, Decl(objectTypesIdentityWithPublics.ts, 18, 3))
+
+function foo3(x: any) { }
+>foo3 : Symbol(foo3, Decl(objectTypesIdentityWithPublics.ts, 35, 25), Decl(objectTypesIdentityWithPublics.ts, 37, 27), Decl(objectTypesIdentityWithPublics.ts, 38, 27))
+>x : Symbol(x, Decl(objectTypesIdentityWithPublics.ts, 39, 14))
+
+function foo4(x: typeof b);
+>foo4 : Symbol(foo4, Decl(objectTypesIdentityWithPublics.ts, 39, 25), Decl(objectTypesIdentityWithPublics.ts, 41, 27), Decl(objectTypesIdentityWithPublics.ts, 42, 27))
+>x : Symbol(x, Decl(objectTypesIdentityWithPublics.ts, 41, 14))
+>b : Symbol(b, Decl(objectTypesIdentityWithPublics.ts, 19, 3))
+
+function foo4(x: typeof b); // error
+>foo4 : Symbol(foo4, Decl(objectTypesIdentityWithPublics.ts, 39, 25), Decl(objectTypesIdentityWithPublics.ts, 41, 27), Decl(objectTypesIdentityWithPublics.ts, 42, 27))
+>x : Symbol(x, Decl(objectTypesIdentityWithPublics.ts, 42, 14))
+>b : Symbol(b, Decl(objectTypesIdentityWithPublics.ts, 19, 3))
+
+function foo4(x: any) { }
+>foo4 : Symbol(foo4, Decl(objectTypesIdentityWithPublics.ts, 39, 25), Decl(objectTypesIdentityWithPublics.ts, 41, 27), Decl(objectTypesIdentityWithPublics.ts, 42, 27))
+>x : Symbol(x, Decl(objectTypesIdentityWithPublics.ts, 43, 14))
+
+function foo5(x: A);
+>foo5 : Symbol(foo5, Decl(objectTypesIdentityWithPublics.ts, 43, 25), Decl(objectTypesIdentityWithPublics.ts, 45, 20), Decl(objectTypesIdentityWithPublics.ts, 46, 20))
+>x : Symbol(x, Decl(objectTypesIdentityWithPublics.ts, 45, 14))
+>A : Symbol(A, Decl(objectTypesIdentityWithPublics.ts, 0, 0))
+
+function foo5(x: B); // error
+>foo5 : Symbol(foo5, Decl(objectTypesIdentityWithPublics.ts, 43, 25), Decl(objectTypesIdentityWithPublics.ts, 45, 20), Decl(objectTypesIdentityWithPublics.ts, 46, 20))
+>x : Symbol(x, Decl(objectTypesIdentityWithPublics.ts, 46, 14))
+>B : Symbol(B, Decl(objectTypesIdentityWithPublics.ts, 4, 1))
+
+function foo5(x: any) { }
+>foo5 : Symbol(foo5, Decl(objectTypesIdentityWithPublics.ts, 43, 25), Decl(objectTypesIdentityWithPublics.ts, 45, 20), Decl(objectTypesIdentityWithPublics.ts, 46, 20))
+>x : Symbol(x, Decl(objectTypesIdentityWithPublics.ts, 47, 14))
+
+function foo5b(x: A);
+>foo5b : Symbol(foo5b, Decl(objectTypesIdentityWithPublics.ts, 47, 25), Decl(objectTypesIdentityWithPublics.ts, 49, 21), Decl(objectTypesIdentityWithPublics.ts, 50, 29))
+>x : Symbol(x, Decl(objectTypesIdentityWithPublics.ts, 49, 15))
+>A : Symbol(A, Decl(objectTypesIdentityWithPublics.ts, 0, 0))
+
+function foo5b(x: C<string>); // error
+>foo5b : Symbol(foo5b, Decl(objectTypesIdentityWithPublics.ts, 47, 25), Decl(objectTypesIdentityWithPublics.ts, 49, 21), Decl(objectTypesIdentityWithPublics.ts, 50, 29))
+>x : Symbol(x, Decl(objectTypesIdentityWithPublics.ts, 50, 15))
+>C : Symbol(C, Decl(objectTypesIdentityWithPublics.ts, 8, 1))
+
+function foo5b(x: any) { }
+>foo5b : Symbol(foo5b, Decl(objectTypesIdentityWithPublics.ts, 47, 25), Decl(objectTypesIdentityWithPublics.ts, 49, 21), Decl(objectTypesIdentityWithPublics.ts, 50, 29))
+>x : Symbol(x, Decl(objectTypesIdentityWithPublics.ts, 51, 15))
+
+function foo6(x: A);
+>foo6 : Symbol(foo6, Decl(objectTypesIdentityWithPublics.ts, 51, 26), Decl(objectTypesIdentityWithPublics.ts, 53, 20), Decl(objectTypesIdentityWithPublics.ts, 54, 20))
+>x : Symbol(x, Decl(objectTypesIdentityWithPublics.ts, 53, 14))
+>A : Symbol(A, Decl(objectTypesIdentityWithPublics.ts, 0, 0))
+
+function foo6(x: I); // error
+>foo6 : Symbol(foo6, Decl(objectTypesIdentityWithPublics.ts, 51, 26), Decl(objectTypesIdentityWithPublics.ts, 53, 20), Decl(objectTypesIdentityWithPublics.ts, 54, 20))
+>x : Symbol(x, Decl(objectTypesIdentityWithPublics.ts, 54, 14))
+>I : Symbol(I, Decl(objectTypesIdentityWithPublics.ts, 12, 1))
+
+function foo6(x: any) { }
+>foo6 : Symbol(foo6, Decl(objectTypesIdentityWithPublics.ts, 51, 26), Decl(objectTypesIdentityWithPublics.ts, 53, 20), Decl(objectTypesIdentityWithPublics.ts, 54, 20))
+>x : Symbol(x, Decl(objectTypesIdentityWithPublics.ts, 55, 14))
+
+function foo7(x: A);
+>foo7 : Symbol(foo7, Decl(objectTypesIdentityWithPublics.ts, 55, 25), Decl(objectTypesIdentityWithPublics.ts, 57, 20), Decl(objectTypesIdentityWithPublics.ts, 58, 27))
+>x : Symbol(x, Decl(objectTypesIdentityWithPublics.ts, 57, 14))
+>A : Symbol(A, Decl(objectTypesIdentityWithPublics.ts, 0, 0))
+
+function foo7(x: typeof a); // error
+>foo7 : Symbol(foo7, Decl(objectTypesIdentityWithPublics.ts, 55, 25), Decl(objectTypesIdentityWithPublics.ts, 57, 20), Decl(objectTypesIdentityWithPublics.ts, 58, 27))
+>x : Symbol(x, Decl(objectTypesIdentityWithPublics.ts, 58, 14))
+>a : Symbol(a, Decl(objectTypesIdentityWithPublics.ts, 18, 3))
+
+function foo7(x: any) { }
+>foo7 : Symbol(foo7, Decl(objectTypesIdentityWithPublics.ts, 55, 25), Decl(objectTypesIdentityWithPublics.ts, 57, 20), Decl(objectTypesIdentityWithPublics.ts, 58, 27))
+>x : Symbol(x, Decl(objectTypesIdentityWithPublics.ts, 59, 14))
+
+function foo8(x: B);
+>foo8 : Symbol(foo8, Decl(objectTypesIdentityWithPublics.ts, 59, 25), Decl(objectTypesIdentityWithPublics.ts, 61, 20), Decl(objectTypesIdentityWithPublics.ts, 62, 20))
+>x : Symbol(x, Decl(objectTypesIdentityWithPublics.ts, 61, 14))
+>B : Symbol(B, Decl(objectTypesIdentityWithPublics.ts, 4, 1))
+
+function foo8(x: I); // error
+>foo8 : Symbol(foo8, Decl(objectTypesIdentityWithPublics.ts, 59, 25), Decl(objectTypesIdentityWithPublics.ts, 61, 20), Decl(objectTypesIdentityWithPublics.ts, 62, 20))
+>x : Symbol(x, Decl(objectTypesIdentityWithPublics.ts, 62, 14))
+>I : Symbol(I, Decl(objectTypesIdentityWithPublics.ts, 12, 1))
+
+function foo8(x: any) { }
+>foo8 : Symbol(foo8, Decl(objectTypesIdentityWithPublics.ts, 59, 25), Decl(objectTypesIdentityWithPublics.ts, 61, 20), Decl(objectTypesIdentityWithPublics.ts, 62, 20))
+>x : Symbol(x, Decl(objectTypesIdentityWithPublics.ts, 63, 14))
+
+function foo9(x: B);
+>foo9 : Symbol(foo9, Decl(objectTypesIdentityWithPublics.ts, 63, 25), Decl(objectTypesIdentityWithPublics.ts, 65, 20), Decl(objectTypesIdentityWithPublics.ts, 66, 28))
+>x : Symbol(x, Decl(objectTypesIdentityWithPublics.ts, 65, 14))
+>B : Symbol(B, Decl(objectTypesIdentityWithPublics.ts, 4, 1))
+
+function foo9(x: C<string>); // error
+>foo9 : Symbol(foo9, Decl(objectTypesIdentityWithPublics.ts, 63, 25), Decl(objectTypesIdentityWithPublics.ts, 65, 20), Decl(objectTypesIdentityWithPublics.ts, 66, 28))
+>x : Symbol(x, Decl(objectTypesIdentityWithPublics.ts, 66, 14))
+>C : Symbol(C, Decl(objectTypesIdentityWithPublics.ts, 8, 1))
+
+function foo9(x: any) { }
+>foo9 : Symbol(foo9, Decl(objectTypesIdentityWithPublics.ts, 63, 25), Decl(objectTypesIdentityWithPublics.ts, 65, 20), Decl(objectTypesIdentityWithPublics.ts, 66, 28))
+>x : Symbol(x, Decl(objectTypesIdentityWithPublics.ts, 67, 14))
+
+function foo10(x: B);
+>foo10 : Symbol(foo10, Decl(objectTypesIdentityWithPublics.ts, 67, 25), Decl(objectTypesIdentityWithPublics.ts, 69, 21), Decl(objectTypesIdentityWithPublics.ts, 70, 28))
+>x : Symbol(x, Decl(objectTypesIdentityWithPublics.ts, 69, 15))
+>B : Symbol(B, Decl(objectTypesIdentityWithPublics.ts, 4, 1))
+
+function foo10(x: typeof a); // error
+>foo10 : Symbol(foo10, Decl(objectTypesIdentityWithPublics.ts, 67, 25), Decl(objectTypesIdentityWithPublics.ts, 69, 21), Decl(objectTypesIdentityWithPublics.ts, 70, 28))
+>x : Symbol(x, Decl(objectTypesIdentityWithPublics.ts, 70, 15))
+>a : Symbol(a, Decl(objectTypesIdentityWithPublics.ts, 18, 3))
+
+function foo10(x: any) { }
+>foo10 : Symbol(foo10, Decl(objectTypesIdentityWithPublics.ts, 67, 25), Decl(objectTypesIdentityWithPublics.ts, 69, 21), Decl(objectTypesIdentityWithPublics.ts, 70, 28))
+>x : Symbol(x, Decl(objectTypesIdentityWithPublics.ts, 71, 15))
+
+function foo11(x: B);
+>foo11 : Symbol(foo11, Decl(objectTypesIdentityWithPublics.ts, 71, 26), Decl(objectTypesIdentityWithPublics.ts, 73, 21), Decl(objectTypesIdentityWithPublics.ts, 74, 28))
+>x : Symbol(x, Decl(objectTypesIdentityWithPublics.ts, 73, 15))
+>B : Symbol(B, Decl(objectTypesIdentityWithPublics.ts, 4, 1))
+
+function foo11(x: typeof b); // error
+>foo11 : Symbol(foo11, Decl(objectTypesIdentityWithPublics.ts, 71, 26), Decl(objectTypesIdentityWithPublics.ts, 73, 21), Decl(objectTypesIdentityWithPublics.ts, 74, 28))
+>x : Symbol(x, Decl(objectTypesIdentityWithPublics.ts, 74, 15))
+>b : Symbol(b, Decl(objectTypesIdentityWithPublics.ts, 19, 3))
+
+function foo11(x: any) { }
+>foo11 : Symbol(foo11, Decl(objectTypesIdentityWithPublics.ts, 71, 26), Decl(objectTypesIdentityWithPublics.ts, 73, 21), Decl(objectTypesIdentityWithPublics.ts, 74, 28))
+>x : Symbol(x, Decl(objectTypesIdentityWithPublics.ts, 75, 15))
+
+function foo12(x: I);
+>foo12 : Symbol(foo12, Decl(objectTypesIdentityWithPublics.ts, 75, 26), Decl(objectTypesIdentityWithPublics.ts, 77, 21), Decl(objectTypesIdentityWithPublics.ts, 78, 29))
+>x : Symbol(x, Decl(objectTypesIdentityWithPublics.ts, 77, 15))
+>I : Symbol(I, Decl(objectTypesIdentityWithPublics.ts, 12, 1))
+
+function foo12(x: C<string>); // error
+>foo12 : Symbol(foo12, Decl(objectTypesIdentityWithPublics.ts, 75, 26), Decl(objectTypesIdentityWithPublics.ts, 77, 21), Decl(objectTypesIdentityWithPublics.ts, 78, 29))
+>x : Symbol(x, Decl(objectTypesIdentityWithPublics.ts, 78, 15))
+>C : Symbol(C, Decl(objectTypesIdentityWithPublics.ts, 8, 1))
+
+function foo12(x: any) { }
+>foo12 : Symbol(foo12, Decl(objectTypesIdentityWithPublics.ts, 75, 26), Decl(objectTypesIdentityWithPublics.ts, 77, 21), Decl(objectTypesIdentityWithPublics.ts, 78, 29))
+>x : Symbol(x, Decl(objectTypesIdentityWithPublics.ts, 79, 15))
+
+function foo13(x: I);
+>foo13 : Symbol(foo13, Decl(objectTypesIdentityWithPublics.ts, 79, 26), Decl(objectTypesIdentityWithPublics.ts, 81, 21), Decl(objectTypesIdentityWithPublics.ts, 82, 28))
+>x : Symbol(x, Decl(objectTypesIdentityWithPublics.ts, 81, 15))
+>I : Symbol(I, Decl(objectTypesIdentityWithPublics.ts, 12, 1))
+
+function foo13(x: typeof a); // error
+>foo13 : Symbol(foo13, Decl(objectTypesIdentityWithPublics.ts, 79, 26), Decl(objectTypesIdentityWithPublics.ts, 81, 21), Decl(objectTypesIdentityWithPublics.ts, 82, 28))
+>x : Symbol(x, Decl(objectTypesIdentityWithPublics.ts, 82, 15))
+>a : Symbol(a, Decl(objectTypesIdentityWithPublics.ts, 18, 3))
+
+function foo13(x: any) { }
+>foo13 : Symbol(foo13, Decl(objectTypesIdentityWithPublics.ts, 79, 26), Decl(objectTypesIdentityWithPublics.ts, 81, 21), Decl(objectTypesIdentityWithPublics.ts, 82, 28))
+>x : Symbol(x, Decl(objectTypesIdentityWithPublics.ts, 83, 15))
+
+function foo14(x: I);
+>foo14 : Symbol(foo14, Decl(objectTypesIdentityWithPublics.ts, 83, 26), Decl(objectTypesIdentityWithPublics.ts, 85, 21), Decl(objectTypesIdentityWithPublics.ts, 86, 28))
+>x : Symbol(x, Decl(objectTypesIdentityWithPublics.ts, 85, 15))
+>I : Symbol(I, Decl(objectTypesIdentityWithPublics.ts, 12, 1))
+
+function foo14(x: typeof b); // error
+>foo14 : Symbol(foo14, Decl(objectTypesIdentityWithPublics.ts, 83, 26), Decl(objectTypesIdentityWithPublics.ts, 85, 21), Decl(objectTypesIdentityWithPublics.ts, 86, 28))
+>x : Symbol(x, Decl(objectTypesIdentityWithPublics.ts, 86, 15))
+>b : Symbol(b, Decl(objectTypesIdentityWithPublics.ts, 19, 3))
+
+function foo14(x: any) { }
+>foo14 : Symbol(foo14, Decl(objectTypesIdentityWithPublics.ts, 83, 26), Decl(objectTypesIdentityWithPublics.ts, 85, 21), Decl(objectTypesIdentityWithPublics.ts, 86, 28))
+>x : Symbol(x, Decl(objectTypesIdentityWithPublics.ts, 87, 15))
+

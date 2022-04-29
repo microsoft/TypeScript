@@ -1,0 +1,44 @@
+=== tests/cases/compiler/global.d.ts ===
+declare global {
+>global : typeof global
+
+    const React: typeof import("./module");
+>React : typeof React
+}
+
+export { };
+
+=== tests/cases/compiler/module.d.ts ===
+export = React;
+>React : typeof React
+
+export as namespace React;
+>React : typeof import("tests/cases/compiler/module")
+
+declare namespace React {
+>React : typeof React
+
+    function createRef(): any;
+>createRef : () => any
+}
+
+=== tests/cases/compiler/some_module.ts ===
+export { };
+React.createRef;
+>React.createRef : () => any
+>React : typeof React
+>createRef : () => any
+
+=== tests/cases/compiler/emits.ts ===
+console.log("hello");
+>console.log("hello") : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>"hello" : "hello"
+
+React.createRef;
+>React.createRef : () => any
+>React : typeof React
+>createRef : () => any
+

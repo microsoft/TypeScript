@@ -1,0 +1,63 @@
+=== tests/cases/conformance/statements/continueStatements/forContinueStatements.ts ===
+for (; ;) {
+    continue;
+}
+
+ONE:
+>ONE : any
+
+for (; ;) {
+    continue ONE;
+>ONE : any
+}
+
+TWO:
+>TWO : any
+
+THREE:
+>THREE : any
+
+for (; ;) {
+    continue THREE;
+>THREE : any
+}
+
+FOUR:
+>FOUR : any
+
+for (; ;) {
+    FIVE:
+>FIVE : any
+
+    for (; ;) {
+        continue FOUR;
+>FOUR : any
+    }
+}
+
+for (; ;) {
+    SIX:
+>SIX : any
+
+    for (; ;) continue SIX;
+>SIX : any
+}
+
+SEVEN:
+>SEVEN : any
+
+for (; ;) for (; ;) for (; ;) continue SEVEN;
+>SEVEN : any
+
+EIGHT:
+>EIGHT : any
+
+for (; ;) {
+    var fn = function () { }
+>fn : () => void
+>function () { } : () => void
+
+    continue EIGHT;
+>EIGHT : any
+}
+

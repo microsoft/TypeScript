@@ -1,0 +1,15 @@
+=== tests/cases/compiler/decoratorWithNegativeLiteralTypeNoCrash.ts ===
+class A {
+>A : Symbol(A, Decl(decoratorWithNegativeLiteralTypeNoCrash.ts, 0, 0))
+
+    @decorator
+>decorator : Symbol(decorator, Decl(decoratorWithNegativeLiteralTypeNoCrash.ts, 3, 1))
+
+    public field1: -1 = -1;
+>field1 : Symbol(A.field1, Decl(decoratorWithNegativeLiteralTypeNoCrash.ts, 0, 9))
+}
+function decorator(target: any, field: any) {}
+>decorator : Symbol(decorator, Decl(decoratorWithNegativeLiteralTypeNoCrash.ts, 3, 1))
+>target : Symbol(target, Decl(decoratorWithNegativeLiteralTypeNoCrash.ts, 4, 19))
+>field : Symbol(field, Decl(decoratorWithNegativeLiteralTypeNoCrash.ts, 4, 31))
+

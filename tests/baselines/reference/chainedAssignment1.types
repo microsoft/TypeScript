@@ -1,0 +1,63 @@
+=== tests/cases/compiler/chainedAssignment1.ts ===
+class X {
+>X : X
+
+    constructor(public z) { }
+>z : any
+
+    a: number;
+>a : number
+}
+
+class Y {
+>Y : Y
+
+    constructor(public z) {
+>z : any
+    }
+    a: number;
+>a : number
+
+    b: string;
+>b : string
+}
+
+class Z {
+>Z : Z
+
+    z: any;
+>z : any
+
+    c: string;
+>c : string
+}
+
+var c1 = new X(3);
+>c1 : X
+>new X(3) : X
+>X : typeof X
+>3 : 3
+
+var c2 = new Y(5);
+>c2 : Y
+>new Y(5) : Y
+>Y : typeof Y
+>5 : 5
+
+var c3 = new Z();
+>c3 : Z
+>new Z() : Z
+>Z : typeof Z
+
+c1 = c2 = c3; // a bug made this not report the same error as below
+>c1 = c2 = c3 : Z
+>c1 : X
+>c2 = c3 : Z
+>c2 : Y
+>c3 : Z
+
+c2 = c3; // Error TS111: Cannot convert Z to Y
+>c2 = c3 : Z
+>c2 : Y
+>c3 : Z
+

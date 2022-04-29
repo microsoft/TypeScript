@@ -1,0 +1,256 @@
+tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(5,16): error TS2493: Tuple type '[number, string]' of length '2' has no element at index '2'.
+tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(22,17): error TS2353: Object literal may only specify known properties, and 'x' does not exist in type '{}'.
+tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(22,23): error TS2353: Object literal may only specify known properties, and 'y' does not exist in type '{}'.
+tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(23,25): error TS2353: Object literal may only specify known properties, and 'y' does not exist in type '{ x: any; }'.
+tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(24,19): error TS2353: Object literal may only specify known properties, and 'x' does not exist in type '{ y: any; }'.
+tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(28,28): error TS2353: Object literal may only specify known properties, and 'y' does not exist in type '{ x: any; }'.
+tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(29,22): error TS2353: Object literal may only specify known properties, and 'x' does not exist in type '{ y: any; }'.
+tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(58,9): error TS2403: Subsequent variable declarations must have the same type.  Variable 'y' must be of type 'string | number', but here has type 'string'.
+tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(62,10): error TS2493: Tuple type '[]' of length '0' has no element at index '0'.
+tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(62,13): error TS2493: Tuple type '[]' of length '0' has no element at index '1'.
+tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(62,16): error TS2493: Tuple type '[]' of length '0' has no element at index '2'.
+tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(63,13): error TS2493: Tuple type '[number]' of length '1' has no element at index '1'.
+tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(63,16): error TS2493: Tuple type '[number]' of length '1' has no element at index '2'.
+tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(67,9): error TS2461: Type '{}' is not an array type.
+tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(68,9): error TS2461: Type '{ 0: number; 1: number; }' is not an array type.
+tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(73,11): error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
+tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(73,14): error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
+tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(74,11): error TS2339: Property 'a' does not exist on type 'undefined[]'.
+tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(74,14): error TS2339: Property 'b' does not exist on type 'undefined[]'.
+tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(106,17): error TS2741: Property 'x' is missing in type '{ y: false; }' but required in type '{ x: any; y?: boolean; }'.
+tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(138,6): error TS2322: Type 'string' is not assignable to type 'number'.
+tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(138,9): error TS2322: Type 'number' is not assignable to type 'string'.
+
+
+==== tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts (22 errors) ====
+    function f0() {
+        var [] = [1, "hello"];
+        var [x] = [1, "hello"];
+        var [x, y] = [1, "hello"];
+        var [x, y, z] = [1, "hello"];
+                   ~
+!!! error TS2493: Tuple type '[number, string]' of length '2' has no element at index '2'.
+        var [,, x] = [0, 1, 2];
+        var x: number;
+        var y: string;
+    }
+    
+    function f1() {
+        var a = [1, "hello"];
+        var [x] = a;
+        var [x, y] = a;
+        var [x, y, z] = a;
+        var x: number | string;
+        var y: number | string;
+        var z: number | string;
+    }
+    
+    function f2() {
+        var { } = { x: 5, y: "hello" };       // Error, no x and y in target
+                    ~
+!!! error TS2353: Object literal may only specify known properties, and 'x' does not exist in type '{}'.
+                          ~
+!!! error TS2353: Object literal may only specify known properties, and 'y' does not exist in type '{}'.
+        var { x } = { x: 5, y: "hello" };     // Error, no y in target
+                            ~
+!!! error TS2353: Object literal may only specify known properties, and 'y' does not exist in type '{ x: any; }'.
+        var { y } = { x: 5, y: "hello" };     // Error, no x in target
+                      ~
+!!! error TS2353: Object literal may only specify known properties, and 'x' does not exist in type '{ y: any; }'.
+        var { x, y } = { x: 5, y: "hello" };
+        var x: number;
+        var y: string;
+        var { x: a } = { x: 5, y: "hello" };  // Error, no y in target
+                               ~
+!!! error TS2353: Object literal may only specify known properties, and 'y' does not exist in type '{ x: any; }'.
+        var { y: b } = { x: 5, y: "hello" };  // Error, no x in target
+                         ~
+!!! error TS2353: Object literal may only specify known properties, and 'x' does not exist in type '{ y: any; }'.
+        var { x: a, y: b } = { x: 5, y: "hello" };
+        var a: number;
+        var b: string;
+    }
+    
+    function f3() {
+        var [x, [y, [z]]] = [1, ["hello", [true]]];
+        var x: number;
+        var y: string;
+        var z: boolean;
+    }
+    
+    function f4() {
+        var { a: x, b: { a: y, b: { a: z }}} = { a: 1, b: { a: "hello", b: { a: true } } };
+        var x: number;
+        var y: string;
+        var z: boolean;
+    }
+    
+    function f6() {
+        var [x = 0, y = ""] = [1, "hello"];
+        var x: number;
+        var y: string;
+    }
+    
+    function f7() {
+        var [x = 0, y = 1] = [1, "hello"];  // Error, initializer for y must be string
+        var x: number;
+        var y: string;
+            ~
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'y' must be of type 'string | number', but here has type 'string'.
+!!! related TS6203 tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts:56:17: 'y' was also declared here.
+    }
+    
+    function f8() {
+        var [a, b, c] = [];   // Error, [] is an empty tuple
+             ~
+!!! error TS2493: Tuple type '[]' of length '0' has no element at index '0'.
+                ~
+!!! error TS2493: Tuple type '[]' of length '0' has no element at index '1'.
+                   ~
+!!! error TS2493: Tuple type '[]' of length '0' has no element at index '2'.
+        var [d, e, f] = [1];  // Error, [1] is a tuple
+                ~
+!!! error TS2493: Tuple type '[number]' of length '1' has no element at index '1'.
+                   ~
+!!! error TS2493: Tuple type '[number]' of length '1' has no element at index '2'.
+    }
+    
+    function f9() {
+        var [a, b] = {};                // Error, not array type
+            ~~~~~~
+!!! error TS2461: Type '{}' is not an array type.
+        var [c, d] = { 0: 10, 1: 20 };  // Error, not array type
+            ~~~~~~
+!!! error TS2461: Type '{ 0: number; 1: number; }' is not an array type.
+        var [e, f] = [10, 20];
+    }
+    
+    function f10() {
+        var { a, b } = {};  // Error
+              ~
+!!! error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
+                 ~
+!!! error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
+        var { a, b } = [];  // Error
+              ~
+!!! error TS2339: Property 'a' does not exist on type 'undefined[]'.
+                 ~
+!!! error TS2339: Property 'b' does not exist on type 'undefined[]'.
+    }
+    
+    function f11() {
+        var { x: a, y: b } = { x: 10, y: "hello" };
+        var { 0: a, 1: b } = { 0: 10, 1: "hello" };
+        var { "<": a, ">": b } = { "<": 10, ">": "hello" };
+        var { 0: a, 1: b } = [10, "hello"];
+        var a: number;
+        var b: string;
+    }
+    
+    function f12() {
+        var [a, [b, { x, y: c }] = ["abc", { x: 10, y: false }]] = [1, ["hello", { x: 5, y: true }]];
+        var a: number;
+        var b: string;
+        var x: number;
+        var c: boolean;
+    }
+    
+    function f13() {
+        var [x, y] = [1, "hello"];
+        var [a, b] = [[x, y], { x: x, y: y }];
+    }
+    
+    function f14([a = 1, [b = "hello", { x, y: c = false }]]) {
+        var a: number;
+        var b: string;
+        var c: boolean;
+    }
+    f14([2, ["abc", { x: 0, y: true }]]);
+    f14([2, ["abc", { x: 0 }]]);
+    f14([2, ["abc", { y: false }]]);  // Error, no x
+                    ~~~~~~~~~~~~
+!!! error TS2741: Property 'x' is missing in type '{ y: false; }' but required in type '{ x: any; y?: boolean; }'.
+    
+    module M {
+        export var [a, b] = [1, 2];
+    }
+    
+    function f15() {
+        var a = "hello";
+        var b = 1;
+        var c = true;
+        return { a, b, c };
+    }
+    
+    function f16() {
+        var { a, b, c } = f15();
+    }
+    
+    function f17({ a = "", b = 0, c = false }) {
+    }
+    
+    f17({});
+    f17({ a: "hello" });
+    f17({ c: true });
+    f17(f15());
+    
+    function f18() {
+        var a: number;
+        var b: string;
+        var aa: number[];
+        ({ a, b } = { a, b });
+        ({ a, b } = { b, a });
+        [aa[0], b] = [a, b];
+        [a, b] = [b, a];  // Error
+         ~
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
+            ~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
+        [a = 1, b = "abc"] = [2, "def"];
+    }
+    
+    function f19() {
+        var a, b;
+        [a, b] = [1, 2];
+        [a, b] = [b, a];
+        ({ a, b } = { b, a });
+        [[a, b] = [1, 2]] = [[2, 3]];
+        var x = ([a, b] = [1, 2]);
+    }
+    
+    function f20(v: [number, number, number]) {
+        var x: number;
+        var y: number;
+        var z: number;
+        var a0: [];
+        var a1: [number];
+        var a2: [number, number];
+        var a3: [number, number, number];
+        var [...a3] = v;
+        var [x, ...a2] = v;
+        var [x, y, ...a1] = v;
+        var [x, y, z, ...a0] = v;
+        [...a3] = v;
+        [x, ...a2] = v;
+        [x, y, ...a1] = v;
+        [x, y, z, ...a0] = v;
+    }
+    
+    function f21(v: [number, string, boolean]) {
+        var x: number;
+        var y: string;
+        var z: boolean;
+        var a0: [number, string, boolean];
+        var a1: [string, boolean];
+        var a2: [boolean];
+        var a3: [];
+        var [...a0] = v;
+        var [x, ...a1] = v;
+        var [x, y, ...a2] = v;
+        var [x, y, z, ...a3] = v;
+        [...a0] = v;
+        [x, ...a1] = v;
+        [x, y, ...a2] = v;
+        [x, y, z, ...a3] = v;
+    }
+    

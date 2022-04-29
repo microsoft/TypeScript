@@ -1,0 +1,20 @@
+error TS6053: File 'a.ts' not found.
+  The file is in the program because:
+    Root file specified for compilation
+error TS6054: File 'a.t' has an unsupported extension. The only supported extensions are '.ts', '.tsx', '.d.ts', '.cts', '.d.cts', '.mts', '.d.mts'.
+  The file is in the program because:
+    Root file specified for compilation
+error TS6231: Could not resolve the path 'a' with the extensions: '.ts', '.tsx', '.d.ts', '.cts', '.d.cts', '.mts', '.d.mts'.
+  The file is in the program because:
+    Root file specified for compilation
+
+
+!!! error TS6053: File 'a.ts' not found.
+!!! error TS6053:   The file is in the program because:
+!!! error TS6053:     Root file specified for compilation
+!!! error TS6054: File 'a.t' has an unsupported extension. The only supported extensions are '.ts', '.tsx', '.d.ts', '.cts', '.d.cts', '.mts', '.d.mts'.
+!!! error TS6054:   The file is in the program because:
+!!! error TS6054:     Root file specified for compilation
+!!! error TS6231: Could not resolve the path 'a' with the extensions: '.ts', '.tsx', '.d.ts', '.cts', '.d.cts', '.mts', '.d.mts'.
+!!! error TS6231:   The file is in the program because:
+!!! error TS6231:     Root file specified for compilation

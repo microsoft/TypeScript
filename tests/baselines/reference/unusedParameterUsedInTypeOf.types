@@ -1,0 +1,10 @@
+=== tests/cases/compiler/unusedParameterUsedInTypeOf.ts ===
+function f1 (a: number, b: typeof a) {
+>f1 : (a: number, b: typeof a) => number
+>a : number
+>b : number
+>a : number
+
+    return b;
+>b : number
+}

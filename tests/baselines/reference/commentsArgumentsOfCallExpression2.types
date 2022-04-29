@@ -1,0 +1,55 @@
+=== tests/cases/compiler/commentsArgumentsOfCallExpression2.ts ===
+function foo(/*c1*/ x: any, /*d1*/ y: any,/*e1*/w?: any) { }
+>foo : (x: any, y: any, w?: any) => void
+>x : any
+>y : any
+>w : any
+
+var a, b: any;
+>a : any
+>b : any
+
+foo(/*c2*/ 1, /*d2*/ 1 + 2, /*e1*/ a + b);
+>foo(/*c2*/ 1, /*d2*/ 1 + 2, /*e1*/ a + b) : void
+>foo : (x: any, y: any, w?: any) => void
+>1 : 1
+>1 + 2 : number
+>1 : 1
+>2 : 2
+>a + b : any
+>a : any
+>b : any
+
+foo(/*c3*/ function () { }, /*d2*/() => { }, /*e2*/ a + /*e3*/ b);
+>foo(/*c3*/ function () { }, /*d2*/() => { }, /*e2*/ a + /*e3*/ b) : void
+>foo : (x: any, y: any, w?: any) => void
+>function () { } : () => void
+>() => { } : () => void
+>a + /*e3*/ b : any
+>a : any
+>b : any
+
+foo(/*c3*/ function () { }, /*d3*/() => { }, /*e3*/(a + b));
+>foo(/*c3*/ function () { }, /*d3*/() => { }, /*e3*/(a + b)) : void
+>foo : (x: any, y: any, w?: any) => void
+>function () { } : () => void
+>() => { } : () => void
+>(a + b) : any
+>a + b : any
+>a : any
+>b : any
+
+foo(
+>foo(    /*c4*/ function () { },    /*d4*/() => { },    /*e4*/    /*e5*/ "hello") : void
+>foo : (x: any, y: any, w?: any) => void
+
+    /*c4*/ function () { },
+>function () { } : () => void
+
+    /*d4*/() => { },
+>() => { } : () => void
+
+    /*e4*/
+    /*e5*/ "hello");
+>"hello" : "hello"
+

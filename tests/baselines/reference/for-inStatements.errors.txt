@@ -1,0 +1,94 @@
+tests/cases/conformance/statements/for-inStatements/for-inStatements.ts(33,18): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type 'string', but here has type 'Extract<keyof this, string>'.
+tests/cases/conformance/statements/for-inStatements/for-inStatements.ts(50,18): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type 'string', but here has type 'Extract<keyof this, string>'.
+tests/cases/conformance/statements/for-inStatements/for-inStatements.ts(79,15): error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter, but here has type 'Color.Blue'.
+
+
+==== tests/cases/conformance/statements/for-inStatements/for-inStatements.ts (3 errors) ====
+    var aString: string;
+    for (aString in {}) { }
+    
+    var anAny: any;
+    for (anAny in {}) { }
+    
+    for (var x in {}) { }
+    for (var x in []) { }
+    for (var x in [1, 2, 3, 4, 5]) { }
+    
+    function fn(): any { }
+    for (var x in fn()) { }
+    
+    for (var x in /[a-z]/) { }
+    for (var x in new Date()) { }
+    
+    var c: any, d: any, e: any;
+    
+    for (var x in c || d) { }
+    for (var x in e ? c : d) { }
+    for (var x in 42 ? c : d) { }
+    for (var x in '' ? c : d) { }
+    for (var x in 42 ? d[x] : c[x]) { }
+    for (var x in c[d]) { }
+    
+    for (var x in (<T>(x: T) => x)) { }
+    for (var x in function (x: string, y: number) { return x + y }) { }
+    
+    class A {
+        biz() {
+            for (var x in this.biz()) { }
+            for (var x in this.biz) { }
+            for (var x in this) { }
+                     ~
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type 'string', but here has type 'Extract<keyof this, string>'.
+!!! related TS6203 tests/cases/conformance/statements/for-inStatements/for-inStatements.ts:31:18: 'x' was also declared here.
+            return null;
+        }
+    
+        static baz() {
+            for (var x in this) { }
+            for (var x in this.baz) { }
+            for (var x in this.baz()) { }
+    
+            return null;
+        }
+    }
+    
+    class B extends A {
+        boz() {
+            for (var x in this.biz()) { }
+            for (var x in this.biz) { }
+            for (var x in this) { }
+                     ~
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type 'string', but here has type 'Extract<keyof this, string>'.
+!!! related TS6203 tests/cases/conformance/statements/for-inStatements/for-inStatements.ts:48:18: 'x' was also declared here.
+    
+            for (var x in super.biz) { }
+            for (var x in super.biz()) { }
+            return null;
+        }
+    }
+    
+    interface I {
+        id: number;
+        [idx: number]: I;
+    }
+    var i: I;
+    
+    for (var x in i[42]) { } 
+    
+    
+    module M {
+        export class X<T> {
+            name:string
+        }
+    }
+    
+    for (var x in M) { }
+    for (var x in M.X) { }
+    
+    enum Color { Red, Blue }
+    
+    for (var x in Color) { }
+    for (var x in Color.Blue) { }
+                  ~~~~~~~~~~
+!!! error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter, but here has type 'Color.Blue'.
+    

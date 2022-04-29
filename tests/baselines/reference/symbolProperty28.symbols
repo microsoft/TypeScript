@@ -1,0 +1,32 @@
+=== tests/cases/conformance/es6/Symbols/symbolProperty28.ts ===
+class C1 {
+>C1 : Symbol(C1, Decl(symbolProperty28.ts, 0, 0))
+
+    [Symbol.toStringTag]() {
+>[Symbol.toStringTag] : Symbol(C1[Symbol.toStringTag], Decl(symbolProperty28.ts, 0, 10))
+>Symbol.toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+        return { x: "" };
+>x : Symbol(x, Decl(symbolProperty28.ts, 2, 16))
+    }
+}
+
+class C2 extends C1 { }
+>C2 : Symbol(C2, Decl(symbolProperty28.ts, 4, 1))
+>C1 : Symbol(C1, Decl(symbolProperty28.ts, 0, 0))
+
+var c: C2;
+>c : Symbol(c, Decl(symbolProperty28.ts, 8, 3))
+>C2 : Symbol(C2, Decl(symbolProperty28.ts, 4, 1))
+
+var obj = c[Symbol.toStringTag]().x;
+>obj : Symbol(obj, Decl(symbolProperty28.ts, 9, 3))
+>c[Symbol.toStringTag]().x : Symbol(x, Decl(symbolProperty28.ts, 2, 16))
+>c : Symbol(c, Decl(symbolProperty28.ts, 8, 3))
+>Symbol.toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>x : Symbol(x, Decl(symbolProperty28.ts, 2, 16))
+

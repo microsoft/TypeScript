@@ -1,0 +1,9 @@
+=== tests/cases/conformance/jsx/test.tsx ===
+var Route: any;
+>Route : any
+
+var routes1 = <Route />;
+>routes1 : error
+><Route /> : error
+>Route : any
+

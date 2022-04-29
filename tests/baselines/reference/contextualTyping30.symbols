@@ -1,0 +1,6 @@
+=== tests/cases/compiler/contextualTyping30.ts ===
+function foo(param:number[]){}; foo([1, "a"]);
+>foo : Symbol(foo, Decl(contextualTyping30.ts, 0, 0))
+>param : Symbol(param, Decl(contextualTyping30.ts, 0, 13))
+>foo : Symbol(foo, Decl(contextualTyping30.ts, 0, 0))
+

@@ -1,0 +1,13 @@
+=== tests/cases/conformance/jsdoc/0.js ===
+// @ts-check
+/**
+ * @param {number} a
+ * @param {number} [b]
+ * @param {number} c
+ */
+function foo(a, b, c) {}
+>foo : (a: number, b?: number, c: number) => void
+>a : number
+>b : number
+>c : number
+

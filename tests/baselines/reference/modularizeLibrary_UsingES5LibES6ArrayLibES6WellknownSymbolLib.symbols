@@ -1,0 +1,26 @@
+=== tests/cases/compiler/modularizeLibrary_UsingES5LibES6ArrayLibES6WellknownSymbolLib.ts ===
+function f(x: number, y: number, z: number) {
+>f : Symbol(f, Decl(modularizeLibrary_UsingES5LibES6ArrayLibES6WellknownSymbolLib.ts, 0, 0))
+>x : Symbol(x, Decl(modularizeLibrary_UsingES5LibES6ArrayLibES6WellknownSymbolLib.ts, 0, 11))
+>y : Symbol(y, Decl(modularizeLibrary_UsingES5LibES6ArrayLibES6WellknownSymbolLib.ts, 0, 21))
+>z : Symbol(z, Decl(modularizeLibrary_UsingES5LibES6ArrayLibES6WellknownSymbolLib.ts, 0, 32))
+
+    return Array.from(arguments);
+>Array.from : Symbol(ArrayConstructor.from, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>from : Symbol(ArrayConstructor.from, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>arguments : Symbol(arguments)
+}
+
+f(1, 2, 3);   // no error
+>f : Symbol(f, Decl(modularizeLibrary_UsingES5LibES6ArrayLibES6WellknownSymbolLib.ts, 0, 0))
+
+let a = ['c', 'd'];
+>a : Symbol(a, Decl(modularizeLibrary_UsingES5LibES6ArrayLibES6WellknownSymbolLib.ts, 5, 3))
+
+a[Symbol.isConcatSpreadable] = false;
+>a : Symbol(a, Decl(modularizeLibrary_UsingES5LibES6ArrayLibES6WellknownSymbolLib.ts, 5, 3))
+>Symbol.isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+

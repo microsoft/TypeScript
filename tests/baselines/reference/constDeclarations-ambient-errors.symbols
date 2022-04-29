@@ -1,0 +1,22 @@
+=== tests/cases/compiler/constDeclarations-ambient-errors.ts ===
+// error: no intialization expected in ambient declarations
+declare const c1: boolean = true;
+>c1 : Symbol(c1, Decl(constDeclarations-ambient-errors.ts, 1, 13))
+
+declare const c2: number = 0;
+>c2 : Symbol(c2, Decl(constDeclarations-ambient-errors.ts, 2, 13))
+
+declare const c3 = null, c4 :string = "", c5: any = 0;
+>c3 : Symbol(c3, Decl(constDeclarations-ambient-errors.ts, 3, 13))
+>c4 : Symbol(c4, Decl(constDeclarations-ambient-errors.ts, 3, 24))
+>c5 : Symbol(c5, Decl(constDeclarations-ambient-errors.ts, 3, 41))
+
+declare module M {
+>M : Symbol(M, Decl(constDeclarations-ambient-errors.ts, 3, 54))
+
+    const c6 = 0;
+>c6 : Symbol(c6, Decl(constDeclarations-ambient-errors.ts, 6, 9))
+
+    const c7: number = 7;
+>c7 : Symbol(c7, Decl(constDeclarations-ambient-errors.ts, 7, 9))
+}

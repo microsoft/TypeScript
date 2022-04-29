@@ -1,0 +1,7 @@
+tests/cases/conformance/es6/variableDeclarations/VariableDeclaration6_es6.ts(1,1): error TS2304: Cannot find name 'let'.
+
+
+==== tests/cases/conformance/es6/variableDeclarations/VariableDeclaration6_es6.ts (1 errors) ====
+    let
+    ~~~
+!!! error TS2304: Cannot find name 'let'.

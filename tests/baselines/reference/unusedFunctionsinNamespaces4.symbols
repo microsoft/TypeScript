@@ -1,0 +1,13 @@
+=== tests/cases/compiler/unusedFunctionsinNamespaces4.ts ===
+namespace Validation {
+>Validation : Symbol(Validation, Decl(unusedFunctionsinNamespaces4.ts, 0, 0))
+
+    var function1 = function() {
+>function1 : Symbol(function1, Decl(unusedFunctionsinNamespaces4.ts, 1, 7))
+    }
+
+    export function function2() {
+>function2 : Symbol(function2, Decl(unusedFunctionsinNamespaces4.ts, 2, 5))
+
+    }
+}

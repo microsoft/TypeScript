@@ -1,0 +1,34 @@
+=== tests/cases/compiler/file1.d.ts ===
+declare namespace NS1 {
+>NS1 : Symbol(NS1, Decl(file1.d.ts, 0, 0))
+
+    export var foo: number;
+>foo : Symbol(foo, Decl(file1.d.ts, 1, 14))
+}
+
+declare namespace NS2 {
+>NS2 : Symbol(NS2, Decl(file1.d.ts, 2, 1))
+
+    export var foo: number;
+>foo : Symbol(foo, Decl(file1.d.ts, 5, 14))
+}
+
+=== tests/cases/compiler/file2.ts ===
+export {NS1, NS1 as NNS1};
+>NS1 : Symbol(NS1, Decl(file2.ts, 0, 8))
+>NS1 : Symbol(NS1, Decl(file1.d.ts, 0, 0))
+>NNS1 : Symbol(NNS1, Decl(file2.ts, 0, 12))
+
+export {NS2, NS2 as NNS2};
+>NS2 : Symbol(NS2, Decl(file2.ts, 1, 8))
+>NS2 : Symbol(NS2, Decl(file1.d.ts, 2, 1))
+>NNS2 : Symbol(NNS2, Decl(file2.ts, 1, 12))
+
+export {NS1 as NNNS1};
+>NS1 : Symbol(NS1, Decl(file1.d.ts, 0, 0))
+>NNNS1 : Symbol(NNNS1, Decl(file2.ts, 2, 8))
+
+export {NS2 as NNNS2};
+>NS2 : Symbol(NS2, Decl(file1.d.ts, 2, 1))
+>NNNS2 : Symbol(NNNS2, Decl(file2.ts, 3, 8))
+

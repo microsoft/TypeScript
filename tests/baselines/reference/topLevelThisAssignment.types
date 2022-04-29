@@ -1,0 +1,25 @@
+=== tests/cases/conformance/salsa/a.js ===
+this.a = 10;
+>this.a = 10 : 10
+>this.a : number
+>this : typeof globalThis
+>a : number
+>10 : 10
+
+this.a;
+>this.a : number
+>this : typeof globalThis
+>a : number
+
+a;
+>a : number
+
+=== tests/cases/conformance/salsa/b.js ===
+this.a;
+>this.a : number
+>this : typeof globalThis
+>a : number
+
+a;
+>a : number
+

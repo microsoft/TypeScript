@@ -1,0 +1,137 @@
+=== tests/cases/conformance/statements/tryStatements/catchClauseWithTypeAnnotation.ts ===
+type any1 = any;
+>any1 : Symbol(any1, Decl(catchClauseWithTypeAnnotation.ts, 0, 0))
+
+type unknown1 = unknown;
+>unknown1 : Symbol(unknown1, Decl(catchClauseWithTypeAnnotation.ts, 0, 16))
+
+function fn(x: boolean) {
+>fn : Symbol(fn, Decl(catchClauseWithTypeAnnotation.ts, 1, 24))
+>x : Symbol(x, Decl(catchClauseWithTypeAnnotation.ts, 3, 12), Decl(catchClauseWithTypeAnnotation.ts, 29, 27), Decl(catchClauseWithTypeAnnotation.ts, 30, 27))
+
+    // no type annotation allowed other than `any` and `unknown`
+    try { } catch (x) { } // should be OK
+>x : Symbol(x, Decl(catchClauseWithTypeAnnotation.ts, 6, 19))
+
+    try { } catch (x: any) { } // should be OK
+>x : Symbol(x, Decl(catchClauseWithTypeAnnotation.ts, 7, 19))
+
+    try { } catch (x: any1) { } // should be OK
+>x : Symbol(x, Decl(catchClauseWithTypeAnnotation.ts, 8, 19))
+>any1 : Symbol(any1, Decl(catchClauseWithTypeAnnotation.ts, 0, 0))
+
+    try { } catch (x: unknown) { } // should be OK
+>x : Symbol(x, Decl(catchClauseWithTypeAnnotation.ts, 9, 19))
+
+    try { } catch (x: unknown1) { } // should be OK
+>x : Symbol(x, Decl(catchClauseWithTypeAnnotation.ts, 10, 19))
+>unknown1 : Symbol(unknown1, Decl(catchClauseWithTypeAnnotation.ts, 0, 16))
+
+    try { } catch (x) { x.foo; } // should be OK
+>x : Symbol(x, Decl(catchClauseWithTypeAnnotation.ts, 11, 19))
+>x : Symbol(x, Decl(catchClauseWithTypeAnnotation.ts, 11, 19))
+
+    try { } catch (x: any) { x.foo; } // should be OK
+>x : Symbol(x, Decl(catchClauseWithTypeAnnotation.ts, 12, 19))
+>x : Symbol(x, Decl(catchClauseWithTypeAnnotation.ts, 12, 19))
+
+    try { } catch (x: any1) { x.foo; } // should be OK
+>x : Symbol(x, Decl(catchClauseWithTypeAnnotation.ts, 13, 19))
+>any1 : Symbol(any1, Decl(catchClauseWithTypeAnnotation.ts, 0, 0))
+>x : Symbol(x, Decl(catchClauseWithTypeAnnotation.ts, 13, 19))
+
+    try { } catch (x: unknown) { console.log(x); } // should be OK
+>x : Symbol(x, Decl(catchClauseWithTypeAnnotation.ts, 14, 19))
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>x : Symbol(x, Decl(catchClauseWithTypeAnnotation.ts, 14, 19))
+
+    try { } catch (x: unknown1) { console.log(x); } // should be OK
+>x : Symbol(x, Decl(catchClauseWithTypeAnnotation.ts, 15, 19))
+>unknown1 : Symbol(unknown1, Decl(catchClauseWithTypeAnnotation.ts, 0, 16))
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>x : Symbol(x, Decl(catchClauseWithTypeAnnotation.ts, 15, 19))
+
+    try { } catch (x: unknown) { x.foo; } // error in the body
+>x : Symbol(x, Decl(catchClauseWithTypeAnnotation.ts, 16, 19))
+>x : Symbol(x, Decl(catchClauseWithTypeAnnotation.ts, 16, 19))
+
+    try { } catch (x: unknown1) { x.foo; } // error in the body
+>x : Symbol(x, Decl(catchClauseWithTypeAnnotation.ts, 17, 19))
+>unknown1 : Symbol(unknown1, Decl(catchClauseWithTypeAnnotation.ts, 0, 16))
+>x : Symbol(x, Decl(catchClauseWithTypeAnnotation.ts, 17, 19))
+
+    try { } catch (x: Error) { } // error in the type
+>x : Symbol(x, Decl(catchClauseWithTypeAnnotation.ts, 18, 19))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    try { } catch (x: object) { } // error in the type
+>x : Symbol(x, Decl(catchClauseWithTypeAnnotation.ts, 19, 19))
+
+    try { console.log(); }
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+
+    // @ts-ignore
+    catch (e: number) { // e should not be a `number`
+>e : Symbol(e, Decl(catchClauseWithTypeAnnotation.ts, 23, 11))
+
+        console.log(e.toLowerCase());
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>e : Symbol(e, Decl(catchClauseWithTypeAnnotation.ts, 23, 11))
+    }
+
+    // minor bug: shows that the `catch` argument is skipped when checking scope
+    try { } catch (x) { let x: string; }
+>x : Symbol(x, Decl(catchClauseWithTypeAnnotation.ts, 28, 19))
+>x : Symbol(x, Decl(catchClauseWithTypeAnnotation.ts, 28, 27))
+
+    try { } catch (x) { var x: string; }
+>x : Symbol(x, Decl(catchClauseWithTypeAnnotation.ts, 29, 19))
+>x : Symbol(x, Decl(catchClauseWithTypeAnnotation.ts, 3, 12), Decl(catchClauseWithTypeAnnotation.ts, 29, 27), Decl(catchClauseWithTypeAnnotation.ts, 30, 27))
+
+    try { } catch (x) { var x: boolean; }
+>x : Symbol(x, Decl(catchClauseWithTypeAnnotation.ts, 30, 19))
+>x : Symbol(x, Decl(catchClauseWithTypeAnnotation.ts, 3, 12), Decl(catchClauseWithTypeAnnotation.ts, 29, 27), Decl(catchClauseWithTypeAnnotation.ts, 30, 27))
+
+    try { } catch ({ x }) { } // should be OK
+>x : Symbol(x, Decl(catchClauseWithTypeAnnotation.ts, 32, 20))
+
+    try { } catch ({ x }: any) { x.foo; } // should be OK
+>x : Symbol(x, Decl(catchClauseWithTypeAnnotation.ts, 33, 20))
+>x : Symbol(x, Decl(catchClauseWithTypeAnnotation.ts, 33, 20))
+
+    try { } catch ({ x }: any1) { x.foo;} // should be OK
+>x : Symbol(x, Decl(catchClauseWithTypeAnnotation.ts, 34, 20))
+>any1 : Symbol(any1, Decl(catchClauseWithTypeAnnotation.ts, 0, 0))
+>x : Symbol(x, Decl(catchClauseWithTypeAnnotation.ts, 34, 20))
+
+    try { } catch ({ x }: unknown) { console.log(x); } // should be OK
+>x : Symbol(x, Decl(catchClauseWithTypeAnnotation.ts, 35, 20))
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>x : Symbol(x, Decl(catchClauseWithTypeAnnotation.ts, 35, 20))
+
+    try { } catch ({ x }: unknown1) { console.log(x); } // should be OK
+>x : Symbol(x, Decl(catchClauseWithTypeAnnotation.ts, 36, 20))
+>unknown1 : Symbol(unknown1, Decl(catchClauseWithTypeAnnotation.ts, 0, 16))
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>x : Symbol(x, Decl(catchClauseWithTypeAnnotation.ts, 36, 20))
+
+    try { } catch ({ x }: object) { } // error in the type
+>x : Symbol(x, Decl(catchClauseWithTypeAnnotation.ts, 37, 20))
+
+    try { } catch ({ x }: Error) { } // error in the type
+>x : Symbol(x, Decl(catchClauseWithTypeAnnotation.ts, 38, 20))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+}
+

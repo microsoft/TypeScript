@@ -1,0 +1,58 @@
+=== tests/cases/compiler/substitutionTypesInIndexedAccessTypes.ts ===
+// Repro from #31086
+
+type UserArgs = {
+>UserArgs : Symbol(UserArgs, Decl(substitutionTypesInIndexedAccessTypes.ts, 0, 0))
+
+  select?: boolean
+>select : Symbol(select, Decl(substitutionTypesInIndexedAccessTypes.ts, 2, 17))
+
+};
+
+type Subset<T, U> = { [key in keyof T]: key extends keyof U ? T[key] : never };
+>Subset : Symbol(Subset, Decl(substitutionTypesInIndexedAccessTypes.ts, 4, 2))
+>T : Symbol(T, Decl(substitutionTypesInIndexedAccessTypes.ts, 6, 12))
+>U : Symbol(U, Decl(substitutionTypesInIndexedAccessTypes.ts, 6, 14))
+>key : Symbol(key, Decl(substitutionTypesInIndexedAccessTypes.ts, 6, 23))
+>T : Symbol(T, Decl(substitutionTypesInIndexedAccessTypes.ts, 6, 12))
+>key : Symbol(key, Decl(substitutionTypesInIndexedAccessTypes.ts, 6, 23))
+>U : Symbol(U, Decl(substitutionTypesInIndexedAccessTypes.ts, 6, 14))
+>T : Symbol(T, Decl(substitutionTypesInIndexedAccessTypes.ts, 6, 12))
+>key : Symbol(key, Decl(substitutionTypesInIndexedAccessTypes.ts, 6, 23))
+
+declare function withBoundary<T extends UserArgs>(args?: Subset<T, UserArgs>): T;
+>withBoundary : Symbol(withBoundary, Decl(substitutionTypesInIndexedAccessTypes.ts, 6, 79))
+>T : Symbol(T, Decl(substitutionTypesInIndexedAccessTypes.ts, 8, 30))
+>UserArgs : Symbol(UserArgs, Decl(substitutionTypesInIndexedAccessTypes.ts, 0, 0))
+>args : Symbol(args, Decl(substitutionTypesInIndexedAccessTypes.ts, 8, 50))
+>Subset : Symbol(Subset, Decl(substitutionTypesInIndexedAccessTypes.ts, 4, 2))
+>T : Symbol(T, Decl(substitutionTypesInIndexedAccessTypes.ts, 8, 30))
+>UserArgs : Symbol(UserArgs, Decl(substitutionTypesInIndexedAccessTypes.ts, 0, 0))
+>T : Symbol(T, Decl(substitutionTypesInIndexedAccessTypes.ts, 8, 30))
+
+declare function withoutBoundary<T extends UserArgs>(args?: T): T;
+>withoutBoundary : Symbol(withoutBoundary, Decl(substitutionTypesInIndexedAccessTypes.ts, 8, 81))
+>T : Symbol(T, Decl(substitutionTypesInIndexedAccessTypes.ts, 9, 33))
+>UserArgs : Symbol(UserArgs, Decl(substitutionTypesInIndexedAccessTypes.ts, 0, 0))
+>args : Symbol(args, Decl(substitutionTypesInIndexedAccessTypes.ts, 9, 53))
+>T : Symbol(T, Decl(substitutionTypesInIndexedAccessTypes.ts, 9, 33))
+>T : Symbol(T, Decl(substitutionTypesInIndexedAccessTypes.ts, 9, 33))
+
+const boundaryResult = withBoundary({
+>boundaryResult : Symbol(boundaryResult, Decl(substitutionTypesInIndexedAccessTypes.ts, 11, 5))
+>withBoundary : Symbol(withBoundary, Decl(substitutionTypesInIndexedAccessTypes.ts, 6, 79))
+
+  select: true,
+>select : Symbol(select, Decl(substitutionTypesInIndexedAccessTypes.ts, 11, 37))
+
+});
+
+const withoutBoundaryResult = withoutBoundary({
+>withoutBoundaryResult : Symbol(withoutBoundaryResult, Decl(substitutionTypesInIndexedAccessTypes.ts, 15, 5))
+>withoutBoundary : Symbol(withoutBoundary, Decl(substitutionTypesInIndexedAccessTypes.ts, 8, 81))
+
+  select: true,
+>select : Symbol(select, Decl(substitutionTypesInIndexedAccessTypes.ts, 15, 47))
+
+});
+

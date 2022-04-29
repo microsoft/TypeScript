@@ -1,0 +1,10 @@
+=== tests/cases/compiler/ClassDeclaration21.ts ===
+class C {
+>C : C
+
+    0();
+>0 : () => any
+
+    1() { }
+>1 : () => void
+}

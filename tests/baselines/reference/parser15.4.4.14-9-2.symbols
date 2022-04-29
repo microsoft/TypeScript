@@ -1,0 +1,59 @@
+=== tests/cases/conformance/parser/ecmascript5/parser15.4.4.14-9-2.ts ===
+/// Copyright (c) 2012 Ecma International.  All rights reserved. 
+/// Ecma International makes this code available under the terms and conditions set
+/// forth on http://hg.ecmascript.org/tests/test262/raw-file/tip/LICENSE (the 
+/// "Use Terms").   Any redistribution of this code must retain the above 
+/// copyright and this notice and otherwise comply with the Use Terms.
+/**
+ * @path ch15/15.4/15.4.4/15.4.4.14/15.4.4.14-9-2.js
+ * @description Array.prototype.indexOf must return correct index (Number)
+ */
+
+
+function testcase() {
+>testcase : Symbol(testcase, Decl(parser15.4.4.14-9-2.ts, 0, 0))
+
+  var obj = {toString:function (){return 0}};
+>obj : Symbol(obj, Decl(parser15.4.4.14-9-2.ts, 12, 5))
+>toString : Symbol(toString, Decl(parser15.4.4.14-9-2.ts, 12, 13))
+
+  var one = 1;
+>one : Symbol(one, Decl(parser15.4.4.14-9-2.ts, 13, 5))
+
+  var _float = -(4/3);
+>_float : Symbol(_float, Decl(parser15.4.4.14-9-2.ts, 14, 5))
+
+  var a = new Array(false,undefined,null,"0",obj,-1.3333333333333, "str",-0,true,+0, one, 1,0, false, _float, -(4/3));
+>a : Symbol(a, Decl(parser15.4.4.14-9-2.ts, 15, 5))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>undefined : Symbol(undefined)
+>obj : Symbol(obj, Decl(parser15.4.4.14-9-2.ts, 12, 5))
+>one : Symbol(one, Decl(parser15.4.4.14-9-2.ts, 13, 5))
+>_float : Symbol(_float, Decl(parser15.4.4.14-9-2.ts, 14, 5))
+
+  if (a.indexOf(-(4/3)) === 14 &&      // a[14]=_float===-(4/3)
+>a.indexOf : Symbol(Array.indexOf, Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(parser15.4.4.14-9-2.ts, 15, 5))
+>indexOf : Symbol(Array.indexOf, Decl(lib.es5.d.ts, --, --))
+
+      a.indexOf(0) === 7      &&       // a[7] = +0, 0===+0
+>a.indexOf : Symbol(Array.indexOf, Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(parser15.4.4.14-9-2.ts, 15, 5))
+>indexOf : Symbol(Array.indexOf, Decl(lib.es5.d.ts, --, --))
+
+      a.indexOf(-0) === 7      &&     // a[7] = +0, -0===+0
+>a.indexOf : Symbol(Array.indexOf, Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(parser15.4.4.14-9-2.ts, 15, 5))
+>indexOf : Symbol(Array.indexOf, Decl(lib.es5.d.ts, --, --))
+
+      a.indexOf(1) === 10 )            // a[10] =one=== 1
+>a.indexOf : Symbol(Array.indexOf, Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(parser15.4.4.14-9-2.ts, 15, 5))
+>indexOf : Symbol(Array.indexOf, Decl(lib.es5.d.ts, --, --))
+  {
+    return true;
+  }
+ }
+runTestCase(testcase);
+>testcase : Symbol(testcase, Decl(parser15.4.4.14-9-2.ts, 0, 0))
+

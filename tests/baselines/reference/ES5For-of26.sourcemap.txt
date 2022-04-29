@@ -1,0 +1,141 @@
+===================================================================
+JsFile: ES5For-of26.js
+mapUrl: ES5For-of26.js.map
+sourceRoot: 
+sources: ES5For-of26.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:tests/cases/conformance/statements/for-ofStatements/ES5For-of26.js
+sourceFile:ES5For-of26.ts
+-------------------------------------------------------------------
+>>>for (var _i = 0, _a = [2, 3]; _i < _a.length; _i++) {
+1 >
+2 >^^^^^
+3 >     ^^^^^^^^^^
+4 >               ^^
+5 >                 ^^^^^^
+6 >                       ^
+7 >                        ^^
+8 >                          ^
+9 >                           ^
+10>                            ^^
+11>                              ^^^^^^^^^^^^^^
+12>                                            ^^
+13>                                              ^^^^
+14>                                                  ^^
+15>                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+2 >for (var [a = 0, b = 1] of 
+3 >     [2, 3]
+4 >               
+5 >                 [
+6 >                       2
+7 >                        , 
+8 >                          3
+9 >                           ]
+10>                            
+11>                              [2, 3]
+12>                                            
+13>                                              [2, 3]
+14>                                                  ) 
+1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(1, 6) Source(1, 28) + SourceIndex(0)
+3 >Emitted(1, 16) Source(1, 34) + SourceIndex(0)
+4 >Emitted(1, 18) Source(1, 28) + SourceIndex(0)
+5 >Emitted(1, 24) Source(1, 29) + SourceIndex(0)
+6 >Emitted(1, 25) Source(1, 30) + SourceIndex(0)
+7 >Emitted(1, 27) Source(1, 32) + SourceIndex(0)
+8 >Emitted(1, 28) Source(1, 33) + SourceIndex(0)
+9 >Emitted(1, 29) Source(1, 34) + SourceIndex(0)
+10>Emitted(1, 31) Source(1, 28) + SourceIndex(0)
+11>Emitted(1, 45) Source(1, 34) + SourceIndex(0)
+12>Emitted(1, 47) Source(1, 28) + SourceIndex(0)
+13>Emitted(1, 51) Source(1, 34) + SourceIndex(0)
+14>Emitted(1, 53) Source(1, 36) + SourceIndex(0)
+---
+>>>    var _b = _a[_i], _c = _b[0], a = _c === void 0 ? 0 : _c, _d = _b[1], b = _d === void 0 ? 1 : _d;
+1->^^^^
+2 >    ^^^^
+3 >        ^^^^^^^^^^^
+4 >                   ^^
+5 >                     ^^^^^^^^^^
+6 >                               ^^
+7 >                                 ^
+8 >                                  ^^^^^^^^^^^^^^^^^^^
+9 >                                                     ^
+10>                                                      ^^^^^
+11>                                                           ^^
+12>                                                             ^^^^^^^^^^
+13>                                                                       ^^
+14>                                                                         ^
+15>                                                                          ^^^^^^^^^^^^^^^^^^^
+16>                                                                                             ^
+17>                                                                                              ^^^^^
+1->
+2 >    
+3 >        [a = 0, b = 1]
+4 >                   
+5 >                     a = 0
+6 >                               
+7 >                                 a
+8 >                                   = 
+9 >                                                     0
+10>                                                      
+11>                                                           , 
+12>                                                             b = 1
+13>                                                                       
+14>                                                                         b
+15>                                                                           = 
+16>                                                                                             1
+17>                                                                                              
+1->Emitted(2, 5) Source(1, 10) + SourceIndex(0)
+2 >Emitted(2, 9) Source(1, 10) + SourceIndex(0)
+3 >Emitted(2, 20) Source(1, 24) + SourceIndex(0)
+4 >Emitted(2, 22) Source(1, 11) + SourceIndex(0)
+5 >Emitted(2, 32) Source(1, 16) + SourceIndex(0)
+6 >Emitted(2, 34) Source(1, 11) + SourceIndex(0)
+7 >Emitted(2, 35) Source(1, 12) + SourceIndex(0)
+8 >Emitted(2, 54) Source(1, 15) + SourceIndex(0)
+9 >Emitted(2, 55) Source(1, 16) + SourceIndex(0)
+10>Emitted(2, 60) Source(1, 16) + SourceIndex(0)
+11>Emitted(2, 62) Source(1, 18) + SourceIndex(0)
+12>Emitted(2, 72) Source(1, 23) + SourceIndex(0)
+13>Emitted(2, 74) Source(1, 18) + SourceIndex(0)
+14>Emitted(2, 75) Source(1, 19) + SourceIndex(0)
+15>Emitted(2, 94) Source(1, 22) + SourceIndex(0)
+16>Emitted(2, 95) Source(1, 23) + SourceIndex(0)
+17>Emitted(2, 100) Source(1, 23) + SourceIndex(0)
+---
+>>>    a;
+1 >^^^^
+2 >    ^
+3 >     ^
+4 >      ^->
+1 >] of [2, 3]) {
+  >    
+2 >    a
+3 >     ;
+1 >Emitted(3, 5) Source(2, 5) + SourceIndex(0)
+2 >Emitted(3, 6) Source(2, 6) + SourceIndex(0)
+3 >Emitted(3, 7) Source(2, 7) + SourceIndex(0)
+---
+>>>    b;
+1->^^^^
+2 >    ^
+3 >     ^
+1->
+  >    
+2 >    b
+3 >     ;
+1->Emitted(4, 5) Source(3, 5) + SourceIndex(0)
+2 >Emitted(4, 6) Source(3, 6) + SourceIndex(0)
+3 >Emitted(4, 7) Source(3, 7) + SourceIndex(0)
+---
+>>>}
+1 >^
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >}
+1 >Emitted(5, 2) Source(4, 2) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=ES5For-of26.js.map

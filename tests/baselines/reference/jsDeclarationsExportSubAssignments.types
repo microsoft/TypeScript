@@ -1,0 +1,33 @@
+=== tests/cases/conformance/jsdoc/declarations/cls.js ===
+const Strings = {
+>Strings : { a: string; b: string; }
+>{    a: "A",    b: "B"} : { a: string; b: string; }
+
+    a: "A",
+>a : string
+>"A" : "A"
+
+    b: "B"
+>b : string
+>"B" : "B"
+
+};
+class Foo {}
+>Foo : Foo
+
+module.exports = Foo;
+>module.exports = Foo : typeof Foo
+>module.exports : typeof Foo
+>module : { exports: typeof Foo; }
+>exports : typeof Foo
+>Foo : typeof Foo
+
+module.exports.Strings = Strings;
+>module.exports.Strings = Strings : { a: string; b: string; }
+>module.exports.Strings : { a: string; b: string; }
+>module.exports : typeof Foo
+>module : { exports: typeof Foo; }
+>exports : typeof Foo
+>Strings : { a: string; b: string; }
+>Strings : { a: string; b: string; }
+

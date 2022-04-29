@@ -1,0 +1,36 @@
+=== tests/cases/compiler/constDeclarations.ts ===
+// No error
+const c1 = false;
+>c1 : false
+>false : false
+
+const c2: number = 23;
+>c2 : number
+>23 : 23
+
+const c3 = 0, c4 :string = "", c5 = null;
+>c3 : 0
+>0 : 0
+>c4 : string
+>"" : ""
+>c5 : any
+>null : null
+
+
+for(const c4 = 0; c4 < 9; ) { break; }
+>c4 : 0
+>0 : 0
+>c4 < 9 : boolean
+>c4 : 0
+>9 : 9
+
+
+for(const c5 = 0, c6 = 0; c5 < c6; ) { break; }
+>c5 : 0
+>0 : 0
+>c6 : 0
+>0 : 0
+>c5 < c6 : boolean
+>c5 : 0
+>c6 : 0
+

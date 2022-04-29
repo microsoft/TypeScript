@@ -1,0 +1,13 @@
+=== tests/cases/compiler/recursiveBaseCheck5.ts ===
+interface I1<T> extends I2<string> { }
+interface I2<T> extends I1<T> { }
+class X<T, U> implements I2<T> { }
+>X : X<T, U>
+
+(new X).blah;
+>(new X).blah : any
+>(new X) : X<unknown, unknown>
+>new X : X<unknown, unknown>
+>X : typeof X
+>blah : any
+

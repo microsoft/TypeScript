@@ -1,0 +1,34 @@
+=== tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithIndexers2.ts ===
+// indexers should behave like other members when merging interface declarations
+
+interface A {
+    [x: number]: string; // error
+>x : number
+}
+
+
+interface A {
+    [x: string]: { length: string }; // error
+>x : string
+>length : string
+}
+
+interface A2 {
+    [x: number]: string;
+>x : number
+
+    'a': number; //error
+>'a' : number
+}
+
+
+interface A2 {
+    [x: string]: { length: number };
+>x : string
+>length : number
+
+    1: { length: number }; // error
+>1 : { length: number; }
+>length : number
+}
+

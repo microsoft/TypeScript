@@ -1,0 +1,70 @@
+=== tests/cases/compiler/es6ModuleVariableStatement.ts ===
+export var a = "hello";
+>a : Symbol(a, Decl(es6ModuleVariableStatement.ts, 0, 10))
+
+export var x: string = a, y = x;
+>x : Symbol(x, Decl(es6ModuleVariableStatement.ts, 1, 10))
+>a : Symbol(a, Decl(es6ModuleVariableStatement.ts, 0, 10))
+>y : Symbol(y, Decl(es6ModuleVariableStatement.ts, 1, 25))
+>x : Symbol(x, Decl(es6ModuleVariableStatement.ts, 1, 10))
+
+var b = y;
+>b : Symbol(b, Decl(es6ModuleVariableStatement.ts, 2, 3))
+>y : Symbol(y, Decl(es6ModuleVariableStatement.ts, 1, 25))
+
+var c: string = b, d = c;
+>c : Symbol(c, Decl(es6ModuleVariableStatement.ts, 3, 3))
+>b : Symbol(b, Decl(es6ModuleVariableStatement.ts, 2, 3))
+>d : Symbol(d, Decl(es6ModuleVariableStatement.ts, 3, 18))
+>c : Symbol(c, Decl(es6ModuleVariableStatement.ts, 3, 3))
+
+export module m1 {
+>m1 : Symbol(m1, Decl(es6ModuleVariableStatement.ts, 3, 25))
+
+    export var k = a;
+>k : Symbol(k, Decl(es6ModuleVariableStatement.ts, 5, 14))
+>a : Symbol(a, Decl(es6ModuleVariableStatement.ts, 0, 10))
+
+    export var l: string = b, m = k;
+>l : Symbol(l, Decl(es6ModuleVariableStatement.ts, 6, 14))
+>b : Symbol(b, Decl(es6ModuleVariableStatement.ts, 2, 3))
+>m : Symbol(m, Decl(es6ModuleVariableStatement.ts, 6, 29))
+>k : Symbol(k, Decl(es6ModuleVariableStatement.ts, 5, 14))
+
+    var n = m1.k;
+>n : Symbol(n, Decl(es6ModuleVariableStatement.ts, 7, 7))
+>m1.k : Symbol(k, Decl(es6ModuleVariableStatement.ts, 5, 14))
+>m1 : Symbol(m1, Decl(es6ModuleVariableStatement.ts, 3, 25))
+>k : Symbol(k, Decl(es6ModuleVariableStatement.ts, 5, 14))
+
+    var o: string = n, p = k;
+>o : Symbol(o, Decl(es6ModuleVariableStatement.ts, 8, 7))
+>n : Symbol(n, Decl(es6ModuleVariableStatement.ts, 7, 7))
+>p : Symbol(p, Decl(es6ModuleVariableStatement.ts, 8, 22))
+>k : Symbol(k, Decl(es6ModuleVariableStatement.ts, 5, 14))
+}
+module m2 {
+>m2 : Symbol(m2, Decl(es6ModuleVariableStatement.ts, 9, 1))
+
+    export var k = a;
+>k : Symbol(k, Decl(es6ModuleVariableStatement.ts, 11, 14))
+>a : Symbol(a, Decl(es6ModuleVariableStatement.ts, 0, 10))
+
+    export var l: string = b, m = k;
+>l : Symbol(l, Decl(es6ModuleVariableStatement.ts, 12, 14))
+>b : Symbol(b, Decl(es6ModuleVariableStatement.ts, 2, 3))
+>m : Symbol(m, Decl(es6ModuleVariableStatement.ts, 12, 29))
+>k : Symbol(k, Decl(es6ModuleVariableStatement.ts, 11, 14))
+
+    var n = m1.k;
+>n : Symbol(n, Decl(es6ModuleVariableStatement.ts, 13, 7))
+>m1.k : Symbol(m1.k, Decl(es6ModuleVariableStatement.ts, 5, 14))
+>m1 : Symbol(m1, Decl(es6ModuleVariableStatement.ts, 3, 25))
+>k : Symbol(m1.k, Decl(es6ModuleVariableStatement.ts, 5, 14))
+
+    var o: string = n, p = k;
+>o : Symbol(o, Decl(es6ModuleVariableStatement.ts, 14, 7))
+>n : Symbol(n, Decl(es6ModuleVariableStatement.ts, 13, 7))
+>p : Symbol(p, Decl(es6ModuleVariableStatement.ts, 14, 22))
+>k : Symbol(k, Decl(es6ModuleVariableStatement.ts, 11, 14))
+}

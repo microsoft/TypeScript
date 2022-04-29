@@ -1,0 +1,57 @@
+=== tests/cases/conformance/es6/computedProperties/computedPropertyNamesContextualType7_ES6.ts ===
+interface I<T> {
+    [n: number]: T;
+>n : number
+}
+interface J<T> {
+    [s: string]: T;
+>s : string
+}
+
+declare function foo<T>(obj: I<T>): T;
+>foo : <T>(obj: I<T>) => T
+>obj : I<T>
+
+declare function g<T>(obj: J<T>): T;
+>g : <T>(obj: J<T>) => T
+>obj : J<T>
+
+foo({
+>foo({    0: () => { },    ["hi" + "bye"]: true,    [0 + 1]: 0,    [+"hi"]: [0]}) : number | (() => void) | number[]
+>foo : <T>(obj: I<T>) => T
+>{    0: () => { },    ["hi" + "bye"]: true,    [0 + 1]: 0,    [+"hi"]: [0]} : { [x: string]: number | boolean | (() => void) | number[]; [x: number]: number | (() => void) | number[]; 0: () => void; }
+
+    0: () => { },
+>0 : () => void
+>() => { } : () => void
+
+    ["hi" + "bye"]: true,
+>["hi" + "bye"] : boolean
+>"hi" + "bye" : string
+>"hi" : "hi"
+>"bye" : "bye"
+>true : true
+
+    [0 + 1]: 0,
+>[0 + 1] : number
+>0 + 1 : number
+>0 : 0
+>1 : 1
+>0 : 0
+
+    [+"hi"]: [0]
+>[+"hi"] : number[]
+>+"hi" : number
+>"hi" : "hi"
+>[0] : number[]
+>0 : 0
+
+});
+
+g({ p: "" });
+>g({ p: "" }) : string
+>g : <T>(obj: J<T>) => T
+>{ p: "" } : { p: string; }
+>p : string
+>"" : ""
+

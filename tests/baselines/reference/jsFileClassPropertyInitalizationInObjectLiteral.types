@@ -1,0 +1,24 @@
+=== tests/cases/compiler/foo.js ===
+module.exports = function () {
+>module.exports = function () {  class A { }  return {    c: A.b = 1,  }} : () => { c: number; }
+>module.exports : () => { c: number; }
+>module : { exports: () => { c: number; }; }
+>exports : () => { c: number; }
+>function () {  class A { }  return {    c: A.b = 1,  }} : () => { c: number; }
+
+  class A { }
+>A : A
+
+  return {
+>{    c: A.b = 1,  } : { c: number; }
+
+    c: A.b = 1,
+>c : number
+>A.b = 1 : 1
+>A.b : error
+>A : typeof A
+>b : any
+>1 : 1
+  }
+};
+

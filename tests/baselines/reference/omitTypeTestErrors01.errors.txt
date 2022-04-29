@@ -1,0 +1,27 @@
+tests/cases/compiler/omitTypeTestErrors01.ts(11,16): error TS2339: Property 'c' does not exist on type 'Bar'.
+tests/cases/compiler/omitTypeTestErrors01.ts(15,16): error TS2339: Property 'b' does not exist on type 'Baz'.
+
+
+==== tests/cases/compiler/omitTypeTestErrors01.ts (2 errors) ====
+    interface Foo {
+        a: string;
+        b: number;
+        c: boolean;
+    }
+    
+    export type Bar = Omit<Foo, "c">;
+    export type Baz = Omit<Foo, "b" | "c">;
+    
+    export function getBarC(bar: Bar) {
+        return bar.c;
+                   ~
+!!! error TS2339: Property 'c' does not exist on type 'Bar'.
+    }
+    
+    export function getBazB(baz: Baz) {
+        return baz.b;
+                   ~
+!!! error TS2339: Property 'b' does not exist on type 'Baz'.
+    }
+    
+    

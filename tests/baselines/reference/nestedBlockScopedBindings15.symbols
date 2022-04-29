@@ -1,0 +1,46 @@
+=== tests/cases/compiler/nestedBlockScopedBindings15.ts ===
+for (; false;) {
+    {
+        let x;
+>x : Symbol(x, Decl(nestedBlockScopedBindings15.ts, 2, 11))
+
+        () => x;
+>x : Symbol(x, Decl(nestedBlockScopedBindings15.ts, 2, 11))
+    }
+}
+
+for (; false;) {
+    {
+        let y;
+>y : Symbol(y, Decl(nestedBlockScopedBindings15.ts, 9, 11))
+
+        y = 1;
+>y : Symbol(y, Decl(nestedBlockScopedBindings15.ts, 9, 11))
+    }
+}
+
+for (; false;) {
+    switch (1){
+        case 1:
+            let z0;
+>z0 : Symbol(z0, Decl(nestedBlockScopedBindings15.ts, 17, 15))
+
+            () => z0;
+>z0 : Symbol(z0, Decl(nestedBlockScopedBindings15.ts, 17, 15))
+
+            break;
+    }
+}
+
+for (; false;) {
+    switch (1){
+        case 1:
+            let z;
+>z : Symbol(z, Decl(nestedBlockScopedBindings15.ts, 26, 15))
+
+            z = 1;
+>z : Symbol(z, Decl(nestedBlockScopedBindings15.ts, 26, 15))
+
+            break;
+    }
+}

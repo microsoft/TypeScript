@@ -1,0 +1,12 @@
+=== tests/cases/conformance/async/es2017/functionDeclarations/asyncFunctionDeclaration9_es2017.ts ===
+async function foo(): Promise<void> {
+>foo : () => Promise<void>
+
+  var v = { [await]: foo }
+>v : { [x: number]: () => Promise<void>; }
+>{ [await]: foo } : { [x: number]: () => Promise<void>; }
+>[await] : () => Promise<void>
+>await : any
+> : any
+>foo : () => Promise<void>
+}

@@ -1,0 +1,257 @@
+=== tests/cases/conformance/controlFlow/controlFlowWhileStatement.ts ===
+let cond: boolean;
+>cond : Symbol(cond, Decl(controlFlowWhileStatement.ts, 0, 3))
+
+function a() {
+>a : Symbol(a, Decl(controlFlowWhileStatement.ts, 0, 18))
+
+    let x: string | number;
+>x : Symbol(x, Decl(controlFlowWhileStatement.ts, 2, 7))
+
+    x = "";
+>x : Symbol(x, Decl(controlFlowWhileStatement.ts, 2, 7))
+
+    while (cond) {
+>cond : Symbol(cond, Decl(controlFlowWhileStatement.ts, 0, 3))
+
+        x; // string
+>x : Symbol(x, Decl(controlFlowWhileStatement.ts, 2, 7))
+    }
+}
+function b() {
+>b : Symbol(b, Decl(controlFlowWhileStatement.ts, 7, 1))
+
+    let x: string | number;
+>x : Symbol(x, Decl(controlFlowWhileStatement.ts, 9, 7))
+
+    x = "";
+>x : Symbol(x, Decl(controlFlowWhileStatement.ts, 9, 7))
+
+    while (cond) {
+>cond : Symbol(cond, Decl(controlFlowWhileStatement.ts, 0, 3))
+
+        x; // string
+>x : Symbol(x, Decl(controlFlowWhileStatement.ts, 9, 7))
+
+        x = 42;
+>x : Symbol(x, Decl(controlFlowWhileStatement.ts, 9, 7))
+
+        break;
+    }
+}
+function c() {
+>c : Symbol(c, Decl(controlFlowWhileStatement.ts, 16, 1))
+
+    let x: string | number;
+>x : Symbol(x, Decl(controlFlowWhileStatement.ts, 18, 7))
+
+    x = "";
+>x : Symbol(x, Decl(controlFlowWhileStatement.ts, 18, 7))
+
+    while (cond) {
+>cond : Symbol(cond, Decl(controlFlowWhileStatement.ts, 0, 3))
+
+        x; // string
+>x : Symbol(x, Decl(controlFlowWhileStatement.ts, 18, 7))
+
+        x = undefined;
+>x : Symbol(x, Decl(controlFlowWhileStatement.ts, 18, 7))
+>undefined : Symbol(undefined)
+
+        if (typeof x === "string") continue;
+>x : Symbol(x, Decl(controlFlowWhileStatement.ts, 18, 7))
+
+        break;
+    }
+}
+function d() {
+>d : Symbol(d, Decl(controlFlowWhileStatement.ts, 26, 1))
+
+    let x: string | number;
+>x : Symbol(x, Decl(controlFlowWhileStatement.ts, 28, 7))
+
+    x = "";
+>x : Symbol(x, Decl(controlFlowWhileStatement.ts, 28, 7))
+
+    while (x = x.length) {
+>x : Symbol(x, Decl(controlFlowWhileStatement.ts, 28, 7))
+>x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(controlFlowWhileStatement.ts, 28, 7))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+        x; // number
+>x : Symbol(x, Decl(controlFlowWhileStatement.ts, 28, 7))
+
+        x = "";
+>x : Symbol(x, Decl(controlFlowWhileStatement.ts, 28, 7))
+    }
+}
+function e() {
+>e : Symbol(e, Decl(controlFlowWhileStatement.ts, 34, 1))
+
+    let x: string | number;
+>x : Symbol(x, Decl(controlFlowWhileStatement.ts, 36, 7))
+
+    x = "";
+>x : Symbol(x, Decl(controlFlowWhileStatement.ts, 36, 7))
+
+    while (cond) {
+>cond : Symbol(cond, Decl(controlFlowWhileStatement.ts, 0, 3))
+
+        x; // string | number
+>x : Symbol(x, Decl(controlFlowWhileStatement.ts, 36, 7))
+
+        x = 42;
+>x : Symbol(x, Decl(controlFlowWhileStatement.ts, 36, 7))
+
+        x; // number
+>x : Symbol(x, Decl(controlFlowWhileStatement.ts, 36, 7))
+    }
+    x; // string | number
+>x : Symbol(x, Decl(controlFlowWhileStatement.ts, 36, 7))
+}
+function f() {
+>f : Symbol(f, Decl(controlFlowWhileStatement.ts, 44, 1))
+
+    let x: string | number | boolean | RegExp | Function;
+>x : Symbol(x, Decl(controlFlowWhileStatement.ts, 46, 7))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    x = "";
+>x : Symbol(x, Decl(controlFlowWhileStatement.ts, 46, 7))
+
+    while (cond) {
+>cond : Symbol(cond, Decl(controlFlowWhileStatement.ts, 0, 3))
+
+        if (cond) {
+>cond : Symbol(cond, Decl(controlFlowWhileStatement.ts, 0, 3))
+
+            x = 42;
+>x : Symbol(x, Decl(controlFlowWhileStatement.ts, 46, 7))
+
+            break;
+        }
+        if (cond) {
+>cond : Symbol(cond, Decl(controlFlowWhileStatement.ts, 0, 3))
+
+            x = true;
+>x : Symbol(x, Decl(controlFlowWhileStatement.ts, 46, 7))
+
+            continue;
+        }
+        x = /a/;
+>x : Symbol(x, Decl(controlFlowWhileStatement.ts, 46, 7))
+    }
+    x; // string | number | boolean | RegExp
+>x : Symbol(x, Decl(controlFlowWhileStatement.ts, 46, 7))
+}
+function g() {
+>g : Symbol(g, Decl(controlFlowWhileStatement.ts, 60, 1))
+
+    let x: string | number | boolean | RegExp | Function;
+>x : Symbol(x, Decl(controlFlowWhileStatement.ts, 62, 7))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    x = "";
+>x : Symbol(x, Decl(controlFlowWhileStatement.ts, 62, 7))
+
+    while (true) {
+        if (cond) {
+>cond : Symbol(cond, Decl(controlFlowWhileStatement.ts, 0, 3))
+
+            x = 42;
+>x : Symbol(x, Decl(controlFlowWhileStatement.ts, 62, 7))
+
+            break;
+        }
+        if (cond) {
+>cond : Symbol(cond, Decl(controlFlowWhileStatement.ts, 0, 3))
+
+            x = true;
+>x : Symbol(x, Decl(controlFlowWhileStatement.ts, 62, 7))
+
+            continue;
+        }
+        x = /a/;
+>x : Symbol(x, Decl(controlFlowWhileStatement.ts, 62, 7))
+    }
+    x; // number
+>x : Symbol(x, Decl(controlFlowWhileStatement.ts, 62, 7))
+}
+function h1() {
+>h1 : Symbol(h1, Decl(controlFlowWhileStatement.ts, 76, 1))
+
+    let x: string | number | boolean;
+>x : Symbol(x, Decl(controlFlowWhileStatement.ts, 78, 7))
+
+    x = "";
+>x : Symbol(x, Decl(controlFlowWhileStatement.ts, 78, 7))
+
+    while (x > 1) {
+>x : Symbol(x, Decl(controlFlowWhileStatement.ts, 78, 7))
+
+        x; // string | number
+>x : Symbol(x, Decl(controlFlowWhileStatement.ts, 78, 7))
+
+        x = 1;
+>x : Symbol(x, Decl(controlFlowWhileStatement.ts, 78, 7))
+
+        x; // number
+>x : Symbol(x, Decl(controlFlowWhileStatement.ts, 78, 7))
+    }
+    x; // string | number
+>x : Symbol(x, Decl(controlFlowWhileStatement.ts, 78, 7))
+}
+declare function len(s: string | number): number;
+>len : Symbol(len, Decl(controlFlowWhileStatement.ts, 86, 1))
+>s : Symbol(s, Decl(controlFlowWhileStatement.ts, 87, 21))
+
+function h2() {
+>h2 : Symbol(h2, Decl(controlFlowWhileStatement.ts, 87, 49))
+
+    let x: string | number | boolean;
+>x : Symbol(x, Decl(controlFlowWhileStatement.ts, 89, 7))
+
+    x = "";
+>x : Symbol(x, Decl(controlFlowWhileStatement.ts, 89, 7))
+
+    while (cond) {
+>cond : Symbol(cond, Decl(controlFlowWhileStatement.ts, 0, 3))
+
+        x = len(x);
+>x : Symbol(x, Decl(controlFlowWhileStatement.ts, 89, 7))
+>len : Symbol(len, Decl(controlFlowWhileStatement.ts, 86, 1))
+>x : Symbol(x, Decl(controlFlowWhileStatement.ts, 89, 7))
+
+        x; // number
+>x : Symbol(x, Decl(controlFlowWhileStatement.ts, 89, 7))
+    }
+    x; // string | number
+>x : Symbol(x, Decl(controlFlowWhileStatement.ts, 89, 7))
+}
+function h3() {
+>h3 : Symbol(h3, Decl(controlFlowWhileStatement.ts, 96, 1))
+
+    let x: string | number | boolean;
+>x : Symbol(x, Decl(controlFlowWhileStatement.ts, 98, 7))
+
+    x = "";
+>x : Symbol(x, Decl(controlFlowWhileStatement.ts, 98, 7))
+
+    while (cond) {
+>cond : Symbol(cond, Decl(controlFlowWhileStatement.ts, 0, 3))
+
+        x; // string | number
+>x : Symbol(x, Decl(controlFlowWhileStatement.ts, 98, 7))
+
+        x = len(x);
+>x : Symbol(x, Decl(controlFlowWhileStatement.ts, 98, 7))
+>len : Symbol(len, Decl(controlFlowWhileStatement.ts, 86, 1))
+>x : Symbol(x, Decl(controlFlowWhileStatement.ts, 98, 7))
+    }
+    x; // string | number
+>x : Symbol(x, Decl(controlFlowWhileStatement.ts, 98, 7))
+}
+

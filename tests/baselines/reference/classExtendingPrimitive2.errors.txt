@@ -1,0 +1,10 @@
+tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendingPrimitive2.ts(3,19): error TS1109: Expression expected.
+
+
+==== tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendingPrimitive2.ts (1 errors) ====
+    // classes cannot extend primitives
+    
+    class C4a extends void {}
+                      ~~~~
+!!! error TS1109: Expression expected.
+    class C5a extends null { }

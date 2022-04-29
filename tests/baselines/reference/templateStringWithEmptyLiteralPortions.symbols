@@ -1,0 +1,40 @@
+=== tests/cases/conformance/es6/templates/templateStringWithEmptyLiteralPortions.ts ===
+var a = ``;
+>a : Symbol(a, Decl(templateStringWithEmptyLiteralPortions.ts, 0, 3))
+
+var b = `${ 0 }`;
+>b : Symbol(b, Decl(templateStringWithEmptyLiteralPortions.ts, 2, 3))
+
+var c = `1${ 0 }`;
+>c : Symbol(c, Decl(templateStringWithEmptyLiteralPortions.ts, 4, 3))
+
+var d = `${ 0 }2`;
+>d : Symbol(d, Decl(templateStringWithEmptyLiteralPortions.ts, 6, 3))
+
+var e = `1${ 0 }2`;
+>e : Symbol(e, Decl(templateStringWithEmptyLiteralPortions.ts, 8, 3))
+
+var f = `${ 0 }${ 0 }`;
+>f : Symbol(f, Decl(templateStringWithEmptyLiteralPortions.ts, 10, 3))
+
+var g = `1${ 0 }${ 0 }`;
+>g : Symbol(g, Decl(templateStringWithEmptyLiteralPortions.ts, 12, 3))
+
+var h = `${ 0 }2${ 0 }`;
+>h : Symbol(h, Decl(templateStringWithEmptyLiteralPortions.ts, 14, 3))
+
+var i = `1${ 0 }2${ 0 }`;
+>i : Symbol(i, Decl(templateStringWithEmptyLiteralPortions.ts, 16, 3))
+
+var j = `${ 0 }${ 0 }3`;
+>j : Symbol(j, Decl(templateStringWithEmptyLiteralPortions.ts, 18, 3))
+
+var k = `1${ 0 }${ 0 }3`;
+>k : Symbol(k, Decl(templateStringWithEmptyLiteralPortions.ts, 20, 3))
+
+var l = `${ 0 }2${ 0 }3`;
+>l : Symbol(l, Decl(templateStringWithEmptyLiteralPortions.ts, 22, 3))
+
+var m = `1${ 0 }2${ 0 }3`;
+>m : Symbol(m, Decl(templateStringWithEmptyLiteralPortions.ts, 24, 3))
+

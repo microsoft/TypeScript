@@ -1,0 +1,70 @@
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts(1,10): error TS2394: This overload signature is not compatible with its implementation signature.
+
+
+==== tests/cases/conformance/types/objectTypeLiteral/callSignatures/specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts (1 errors) ====
+    function foo(x: 'a');
+             ~~~
+!!! error TS2394: This overload signature is not compatible with its implementation signature.
+!!! related TS2750 tests/cases/conformance/types/objectTypeLiteral/callSignatures/specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts:2:10: The implementation signature is declared here.
+    function foo(x: number) { }
+    
+    class C {
+        foo(x: 'a');
+        foo(x: number);
+        foo(x: any) { }
+    }
+    
+    class C2<T> {
+        foo(x: 'a');
+        foo(x: T);
+        foo(x: any) { }
+    }
+    
+    class C3<T extends String> {
+        foo(x: 'a');
+        foo(x: T);
+        foo(x: any) { }
+    }
+    
+    interface I {
+        (x: 'a');
+        (x: number);
+        foo(x: 'a');
+        foo(x: number);
+    }
+    
+    interface I2<T> {
+        (x: 'a');
+        (x: T);
+        foo(x: 'a');
+        foo(x: T);
+    }
+    
+    interface I3<T extends String> {
+        (x: 'a');
+        (x: T);
+        foo(x: 'a');
+        foo(x: T);
+    }
+    
+    var a: {
+        (x: 'a');
+        (x: number);
+        foo(x: 'a');
+        foo(x: number);
+    }
+    
+    var a2: {
+        (x: 'a');
+        <T>(x: T);
+        foo(x: 'a');
+        foo<T>(x: T);
+    }
+    
+    var a3: {
+        (x: 'a');
+        <T>(x: T);
+        foo(x: 'a');
+        foo<T extends String>(x: T);
+    }
+    

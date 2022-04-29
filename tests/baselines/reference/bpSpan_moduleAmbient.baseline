@@ -1,0 +1,19 @@
+
+1  >declare module Bar {
+
+    ~~~~~~~~~~~~~~~~~~~~~                         => Pos: (0 to 20)  SpanInfo: undefined
+--------------------------------
+2  >}
+
+    ~~                                            => Pos: (21 to 22)  SpanInfo: undefined
+--------------------------------
+3  >declare module Foo {
+
+    ~~~~~~~~~~~~~~~~~~~~~                         => Pos: (23 to 43)  SpanInfo: undefined
+--------------------------------
+4  >    var x;
+
+    ~~~~~~~~~~~                                   => Pos: (44 to 54)  SpanInfo: undefined
+--------------------------------
+5  >}
+    ~                                             => Pos: (55 to 55)  SpanInfo: undefined

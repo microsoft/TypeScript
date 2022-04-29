@@ -1,0 +1,49 @@
+tests/cases/conformance/types/members/classWithPrivateProperty.ts(15,20): error TS2341: Property 'x' is private and only accessible within class 'C'.
+tests/cases/conformance/types/members/classWithPrivateProperty.ts(16,20): error TS2341: Property 'a' is private and only accessible within class 'C'.
+tests/cases/conformance/types/members/classWithPrivateProperty.ts(17,20): error TS2341: Property 'b' is private and only accessible within class 'C'.
+tests/cases/conformance/types/members/classWithPrivateProperty.ts(18,20): error TS2341: Property 'c' is private and only accessible within class 'C'.
+tests/cases/conformance/types/members/classWithPrivateProperty.ts(19,20): error TS2341: Property 'd' is private and only accessible within class 'C'.
+tests/cases/conformance/types/members/classWithPrivateProperty.ts(20,20): error TS2341: Property 'e' is private and only accessible within class 'C'.
+tests/cases/conformance/types/members/classWithPrivateProperty.ts(21,20): error TS2341: Property 'f' is private and only accessible within class 'C'.
+tests/cases/conformance/types/members/classWithPrivateProperty.ts(22,20): error TS2341: Property 'g' is private and only accessible within class 'C'.
+
+
+==== tests/cases/conformance/types/members/classWithPrivateProperty.ts (8 errors) ====
+    // accessing any private outside the class is an error
+    
+    class C {
+        private x;
+        private a = '';
+        private b: string = '';
+        private c() { return '' }
+        private d = () => '';
+        private static e;
+        private static f() { return '' }
+        private static g = () => '';
+    }
+    
+    var c = new C();
+    var r1: string = c.x;
+                       ~
+!!! error TS2341: Property 'x' is private and only accessible within class 'C'.
+    var r2: string = c.a;
+                       ~
+!!! error TS2341: Property 'a' is private and only accessible within class 'C'.
+    var r3: string = c.b;
+                       ~
+!!! error TS2341: Property 'b' is private and only accessible within class 'C'.
+    var r4: string = c.c();
+                       ~
+!!! error TS2341: Property 'c' is private and only accessible within class 'C'.
+    var r5: string = c.d();
+                       ~
+!!! error TS2341: Property 'd' is private and only accessible within class 'C'.
+    var r6: string = C.e;
+                       ~
+!!! error TS2341: Property 'e' is private and only accessible within class 'C'.
+    var r7: string = C.f();
+                       ~
+!!! error TS2341: Property 'f' is private and only accessible within class 'C'.
+    var r8: string = C.g();
+                       ~
+!!! error TS2341: Property 'g' is private and only accessible within class 'C'.

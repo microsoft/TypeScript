@@ -1,0 +1,21 @@
+=== tests/cases/compiler/classExpressionWithStaticProperties1.ts ===
+var v = class C {
+>v : Symbol(v, Decl(classExpressionWithStaticProperties1.ts, 0, 3))
+>C : Symbol(C, Decl(classExpressionWithStaticProperties1.ts, 0, 7))
+
+    static a = 1;
+>a : Symbol(C.a, Decl(classExpressionWithStaticProperties1.ts, 0, 17))
+
+    static b = 2;
+>b : Symbol(C.b, Decl(classExpressionWithStaticProperties1.ts, 1, 17))
+
+    static c = C.a + C.b;
+>c : Symbol(C.c, Decl(classExpressionWithStaticProperties1.ts, 2, 17))
+>C.a : Symbol(C.a, Decl(classExpressionWithStaticProperties1.ts, 0, 17))
+>C : Symbol(C, Decl(classExpressionWithStaticProperties1.ts, 0, 7))
+>a : Symbol(C.a, Decl(classExpressionWithStaticProperties1.ts, 0, 17))
+>C.b : Symbol(C.b, Decl(classExpressionWithStaticProperties1.ts, 1, 17))
+>C : Symbol(C, Decl(classExpressionWithStaticProperties1.ts, 0, 7))
+>b : Symbol(C.b, Decl(classExpressionWithStaticProperties1.ts, 1, 17))
+
+};

@@ -1,0 +1,63 @@
+=== tests/cases/compiler/indexedAccessCanBeHighOrder.ts ===
+declare function get<U, Y extends keyof U>(x: U, y: Y): U[Y];
+>get : Symbol(get, Decl(indexedAccessCanBeHighOrder.ts, 0, 0))
+>U : Symbol(U, Decl(indexedAccessCanBeHighOrder.ts, 0, 21))
+>Y : Symbol(Y, Decl(indexedAccessCanBeHighOrder.ts, 0, 23))
+>U : Symbol(U, Decl(indexedAccessCanBeHighOrder.ts, 0, 21))
+>x : Symbol(x, Decl(indexedAccessCanBeHighOrder.ts, 0, 43))
+>U : Symbol(U, Decl(indexedAccessCanBeHighOrder.ts, 0, 21))
+>y : Symbol(y, Decl(indexedAccessCanBeHighOrder.ts, 0, 48))
+>Y : Symbol(Y, Decl(indexedAccessCanBeHighOrder.ts, 0, 23))
+>U : Symbol(U, Decl(indexedAccessCanBeHighOrder.ts, 0, 21))
+>Y : Symbol(Y, Decl(indexedAccessCanBeHighOrder.ts, 0, 23))
+
+declare function find<T, K extends keyof T>(o: T[K]): [T, K];
+>find : Symbol(find, Decl(indexedAccessCanBeHighOrder.ts, 0, 61))
+>T : Symbol(T, Decl(indexedAccessCanBeHighOrder.ts, 1, 22))
+>K : Symbol(K, Decl(indexedAccessCanBeHighOrder.ts, 1, 24))
+>T : Symbol(T, Decl(indexedAccessCanBeHighOrder.ts, 1, 22))
+>o : Symbol(o, Decl(indexedAccessCanBeHighOrder.ts, 1, 44))
+>T : Symbol(T, Decl(indexedAccessCanBeHighOrder.ts, 1, 22))
+>K : Symbol(K, Decl(indexedAccessCanBeHighOrder.ts, 1, 24))
+>T : Symbol(T, Decl(indexedAccessCanBeHighOrder.ts, 1, 22))
+>K : Symbol(K, Decl(indexedAccessCanBeHighOrder.ts, 1, 24))
+
+function impl<A, B extends keyof A>(a: A, b: B) {
+>impl : Symbol(impl, Decl(indexedAccessCanBeHighOrder.ts, 1, 61))
+>A : Symbol(A, Decl(indexedAccessCanBeHighOrder.ts, 3, 14))
+>B : Symbol(B, Decl(indexedAccessCanBeHighOrder.ts, 3, 16))
+>A : Symbol(A, Decl(indexedAccessCanBeHighOrder.ts, 3, 14))
+>a : Symbol(a, Decl(indexedAccessCanBeHighOrder.ts, 3, 36))
+>A : Symbol(A, Decl(indexedAccessCanBeHighOrder.ts, 3, 14))
+>b : Symbol(b, Decl(indexedAccessCanBeHighOrder.ts, 3, 41))
+>B : Symbol(B, Decl(indexedAccessCanBeHighOrder.ts, 3, 16))
+
+    const item = get(a, b);
+>item : Symbol(item, Decl(indexedAccessCanBeHighOrder.ts, 4, 9))
+>get : Symbol(get, Decl(indexedAccessCanBeHighOrder.ts, 0, 0))
+>a : Symbol(a, Decl(indexedAccessCanBeHighOrder.ts, 3, 36))
+>b : Symbol(b, Decl(indexedAccessCanBeHighOrder.ts, 3, 41))
+
+    return find(item);
+>find : Symbol(find, Decl(indexedAccessCanBeHighOrder.ts, 0, 61))
+>item : Symbol(item, Decl(indexedAccessCanBeHighOrder.ts, 4, 9))
+}
+
+const o = {x: 42};
+>o : Symbol(o, Decl(indexedAccessCanBeHighOrder.ts, 8, 5))
+>x : Symbol(x, Decl(indexedAccessCanBeHighOrder.ts, 8, 11))
+
+const r = impl(o, "x");
+>r : Symbol(r, Decl(indexedAccessCanBeHighOrder.ts, 9, 5))
+>impl : Symbol(impl, Decl(indexedAccessCanBeHighOrder.ts, 1, 61))
+>o : Symbol(o, Decl(indexedAccessCanBeHighOrder.ts, 8, 5))
+
+r[0][r[1]] = o[r[1]];
+>r : Symbol(r, Decl(indexedAccessCanBeHighOrder.ts, 9, 5))
+>0 : Symbol(0)
+>r : Symbol(r, Decl(indexedAccessCanBeHighOrder.ts, 9, 5))
+>1 : Symbol(1)
+>o : Symbol(o, Decl(indexedAccessCanBeHighOrder.ts, 8, 5))
+>r : Symbol(r, Decl(indexedAccessCanBeHighOrder.ts, 9, 5))
+>1 : Symbol(1)
+

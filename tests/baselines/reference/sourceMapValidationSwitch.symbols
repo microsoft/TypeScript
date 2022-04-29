@@ -1,0 +1,46 @@
+=== tests/cases/compiler/sourceMapValidationSwitch.ts ===
+var x = 10;
+>x : Symbol(x, Decl(sourceMapValidationSwitch.ts, 0, 3))
+
+switch (x) {
+>x : Symbol(x, Decl(sourceMapValidationSwitch.ts, 0, 3))
+
+    case 5:
+        x++;
+>x : Symbol(x, Decl(sourceMapValidationSwitch.ts, 0, 3))
+
+        break;
+    case 10:
+        {
+            x--;
+>x : Symbol(x, Decl(sourceMapValidationSwitch.ts, 0, 3))
+
+            break;
+        }
+    default:
+        x = x *10;
+>x : Symbol(x, Decl(sourceMapValidationSwitch.ts, 0, 3))
+>x : Symbol(x, Decl(sourceMapValidationSwitch.ts, 0, 3))
+}
+switch (x)
+>x : Symbol(x, Decl(sourceMapValidationSwitch.ts, 0, 3))
+{
+    case 5:
+        x++;
+>x : Symbol(x, Decl(sourceMapValidationSwitch.ts, 0, 3))
+
+        break;
+    case 10:
+        {
+            x--;
+>x : Symbol(x, Decl(sourceMapValidationSwitch.ts, 0, 3))
+
+            break;
+        }
+    default:
+        {
+            x = x * 10;
+>x : Symbol(x, Decl(sourceMapValidationSwitch.ts, 0, 3))
+>x : Symbol(x, Decl(sourceMapValidationSwitch.ts, 0, 3))
+        }
+}

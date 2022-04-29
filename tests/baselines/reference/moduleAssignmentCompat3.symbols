@@ -1,0 +1,31 @@
+=== tests/cases/compiler/moduleAssignmentCompat3.ts ===
+module A {
+>A : Symbol(A, Decl(moduleAssignmentCompat3.ts, 0, 0))
+
+    export var x = 1;
+>x : Symbol(x, Decl(moduleAssignmentCompat3.ts, 1, 14))
+}
+module B {
+>B : Symbol(B, Decl(moduleAssignmentCompat3.ts, 2, 1))
+
+    export var x = "";
+>x : Symbol(x, Decl(moduleAssignmentCompat3.ts, 4, 14))
+}
+
+var a: A;
+>a : Symbol(a, Decl(moduleAssignmentCompat3.ts, 7, 3))
+>A : Symbol(A)
+
+var b: B;
+>b : Symbol(b, Decl(moduleAssignmentCompat3.ts, 8, 3))
+>B : Symbol(B)
+
+// both errors
+a = b;
+>a : Symbol(a, Decl(moduleAssignmentCompat3.ts, 7, 3))
+>b : Symbol(b, Decl(moduleAssignmentCompat3.ts, 8, 3))
+
+b = a;
+>b : Symbol(b, Decl(moduleAssignmentCompat3.ts, 8, 3))
+>a : Symbol(a, Decl(moduleAssignmentCompat3.ts, 7, 3))
+

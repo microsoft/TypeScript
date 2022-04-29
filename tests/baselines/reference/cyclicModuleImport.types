@@ -1,0 +1,42 @@
+=== tests/cases/compiler/cyclicModuleImport.ts ===
+declare module "SubModule" {
+>"SubModule" : typeof import("SubModule")
+
+    import MainModule = require('MainModule');
+>MainModule : typeof MainModule
+
+    class SubModule {
+>SubModule : SubModule
+
+        public static StaticVar: number;
+>StaticVar : number
+
+        public InstanceVar: number;
+>InstanceVar : number
+
+        public main: MainModule;
+>main : MainModule
+
+        constructor();
+    }
+    export = SubModule;
+>SubModule : SubModule
+}
+declare module "MainModule" {
+>"MainModule" : typeof import("MainModule")
+
+    import SubModule = require('SubModule');
+>SubModule : typeof SubModule
+
+    class MainModule {
+>MainModule : MainModule
+
+        public SubModule: SubModule;
+>SubModule : SubModule
+
+        constructor();
+    }
+    export = MainModule;
+>MainModule : MainModule
+}
+

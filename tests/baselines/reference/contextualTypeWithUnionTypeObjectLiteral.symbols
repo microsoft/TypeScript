@@ -1,0 +1,212 @@
+=== tests/cases/conformance/types/union/contextualTypeWithUnionTypeObjectLiteral.ts ===
+var str: string;
+>str : Symbol(str, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 0, 3))
+
+var num: number;
+>num : Symbol(num, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 1, 3))
+
+var strOrNumber: string | number = str || num;
+>strOrNumber : Symbol(strOrNumber, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 2, 3), Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 55, 3))
+>str : Symbol(str, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 0, 3))
+>num : Symbol(num, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 1, 3))
+
+var objStr: { prop: string };
+>objStr : Symbol(objStr, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 3, 3))
+>prop : Symbol(prop, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 3, 13))
+
+var objNum: { prop: number };
+>objNum : Symbol(objNum, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 4, 3))
+>prop : Symbol(prop, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 4, 13))
+
+var objStrOrNum1: { prop: string } | { prop: number } = objStr || objNum;
+>objStrOrNum1 : Symbol(objStrOrNum1, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 5, 3))
+>prop : Symbol(prop, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 5, 19))
+>prop : Symbol(prop, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 5, 38))
+>objStr : Symbol(objStr, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 3, 3))
+>objNum : Symbol(objNum, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 4, 3))
+
+var objStrOrNum2: { prop: string | number } = objStr || objNum;
+>objStrOrNum2 : Symbol(objStrOrNum2, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 6, 3))
+>prop : Symbol(prop, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 6, 19))
+>objStr : Symbol(objStr, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 3, 3))
+>objNum : Symbol(objNum, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 4, 3))
+
+// Below is error because :
+// Spec says:
+// S is a union type and each constituent type of S is assignable to T.
+// T is a union type and S is assignable to at least one constituent type of T.
+// In case of objStrOrNum3, the S is not union Type but object Literal so we go to next step. 
+// Since T is union Type we only allow the assignment of either object with property of type string or object with property of type number but do not allow object with property of type string | number
+var objStrOrNum3: { prop: string } | { prop: number } = {
+>objStrOrNum3 : Symbol(objStrOrNum3, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 13, 3))
+>prop : Symbol(prop, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 13, 19))
+>prop : Symbol(prop, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 13, 38))
+
+    prop: strOrNumber
+>prop : Symbol(prop, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 13, 57))
+>strOrNumber : Symbol(strOrNumber, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 2, 3), Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 55, 3))
+
+};
+var objStrOrNum4: { prop: string | number } = {
+>objStrOrNum4 : Symbol(objStrOrNum4, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 16, 3))
+>prop : Symbol(prop, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 16, 19))
+
+    prop: strOrNumber
+>prop : Symbol(prop, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 16, 47))
+>strOrNumber : Symbol(strOrNumber, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 2, 3), Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 55, 3))
+
+};
+var objStrOrNum5: { prop: string; anotherP: string; } | { prop: number } = { prop: strOrNumber };
+>objStrOrNum5 : Symbol(objStrOrNum5, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 19, 3))
+>prop : Symbol(prop, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 19, 19))
+>anotherP : Symbol(anotherP, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 19, 33))
+>prop : Symbol(prop, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 19, 57))
+>prop : Symbol(prop, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 19, 76))
+>strOrNumber : Symbol(strOrNumber, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 2, 3), Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 55, 3))
+
+var objStrOrNum6: { prop: string; anotherP: string; } | { prop: number } = {
+>objStrOrNum6 : Symbol(objStrOrNum6, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 20, 3))
+>prop : Symbol(prop, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 20, 19))
+>anotherP : Symbol(anotherP, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 20, 33))
+>prop : Symbol(prop, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 20, 57))
+
+    prop: strOrNumber,
+>prop : Symbol(prop, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 20, 76))
+>strOrNumber : Symbol(strOrNumber, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 2, 3), Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 55, 3))
+
+    anotherP: str
+>anotherP : Symbol(anotherP, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 21, 22))
+>str : Symbol(str, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 0, 3))
+
+};
+var objStrOrNum7: { prop: string; anotherP: string; } | { prop: number; anotherP1: number } = {
+>objStrOrNum7 : Symbol(objStrOrNum7, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 24, 3))
+>prop : Symbol(prop, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 24, 19))
+>anotherP : Symbol(anotherP, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 24, 33))
+>prop : Symbol(prop, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 24, 57))
+>anotherP1 : Symbol(anotherP1, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 24, 71))
+
+    prop: strOrNumber,
+>prop : Symbol(prop, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 24, 95))
+>strOrNumber : Symbol(strOrNumber, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 2, 3), Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 55, 3))
+
+    anotherP: str
+>anotherP : Symbol(anotherP, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 25, 22))
+>str : Symbol(str, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 0, 3))
+
+};
+var objStrOrNum8: { prop: string; anotherP: string; } | { prop: number; anotherP1: number } = {
+>objStrOrNum8 : Symbol(objStrOrNum8, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 28, 3))
+>prop : Symbol(prop, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 28, 19))
+>anotherP : Symbol(anotherP, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 28, 33))
+>prop : Symbol(prop, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 28, 57))
+>anotherP1 : Symbol(anotherP1, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 28, 71))
+
+    prop: strOrNumber,
+>prop : Symbol(prop, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 28, 95))
+>strOrNumber : Symbol(strOrNumber, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 2, 3), Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 55, 3))
+
+    anotherP: str,
+>anotherP : Symbol(anotherP, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 29, 22))
+>str : Symbol(str, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 0, 3))
+
+    anotherP1: num
+>anotherP1 : Symbol(anotherP1, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 30, 18))
+>num : Symbol(num, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 1, 3))
+
+};
+interface I11 {
+>I11 : Symbol(I11, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 32, 2))
+
+    commonMethodDifferentReturnType(a: string, b: number): string;
+>commonMethodDifferentReturnType : Symbol(I11.commonMethodDifferentReturnType, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 33, 15))
+>a : Symbol(a, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 34, 36))
+>b : Symbol(b, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 34, 46))
+}
+interface I21 {
+>I21 : Symbol(I21, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 35, 1))
+
+    commonMethodDifferentReturnType(a: string, b: number): number;
+>commonMethodDifferentReturnType : Symbol(I21.commonMethodDifferentReturnType, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 36, 15))
+>a : Symbol(a, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 37, 36))
+>b : Symbol(b, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 37, 46))
+}
+var i11: I11;
+>i11 : Symbol(i11, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 39, 3))
+>I11 : Symbol(I11, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 32, 2))
+
+var i21: I21;
+>i21 : Symbol(i21, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 40, 3))
+>I21 : Symbol(I21, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 35, 1))
+
+var i11Ori21: I11 | I21 = i11;
+>i11Ori21 : Symbol(i11Ori21, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 41, 3), Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 42, 3), Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 43, 3), Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 49, 3), Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 56, 3))
+>I11 : Symbol(I11, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 32, 2))
+>I21 : Symbol(I21, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 35, 1))
+>i11 : Symbol(i11, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 39, 3))
+
+var i11Ori21: I11 | I21 = i21;
+>i11Ori21 : Symbol(i11Ori21, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 41, 3), Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 42, 3), Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 43, 3), Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 49, 3), Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 56, 3))
+>I11 : Symbol(I11, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 32, 2))
+>I21 : Symbol(I21, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 35, 1))
+>i21 : Symbol(i21, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 40, 3))
+
+var i11Ori21: I11 | I21 = { // Like i1
+>i11Ori21 : Symbol(i11Ori21, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 41, 3), Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 42, 3), Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 43, 3), Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 49, 3), Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 56, 3))
+>I11 : Symbol(I11, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 32, 2))
+>I21 : Symbol(I21, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 35, 1))
+
+    commonMethodDifferentReturnType: (a, b) => {
+>commonMethodDifferentReturnType : Symbol(commonMethodDifferentReturnType, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 43, 27))
+>a : Symbol(a, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 44, 38))
+>b : Symbol(b, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 44, 40))
+
+        var z = a.charAt(b);
+>z : Symbol(z, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 45, 11))
+>a.charAt : Symbol(String.charAt, Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 44, 38))
+>charAt : Symbol(String.charAt, Decl(lib.es5.d.ts, --, --))
+>b : Symbol(b, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 44, 40))
+
+        return z;
+>z : Symbol(z, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 45, 11))
+
+    },
+};
+var i11Ori21: I11 | I21 = { // Like i2
+>i11Ori21 : Symbol(i11Ori21, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 41, 3), Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 42, 3), Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 43, 3), Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 49, 3), Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 56, 3))
+>I11 : Symbol(I11, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 32, 2))
+>I21 : Symbol(I21, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 35, 1))
+
+    commonMethodDifferentReturnType: (a, b) => {
+>commonMethodDifferentReturnType : Symbol(commonMethodDifferentReturnType, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 49, 27))
+>a : Symbol(a, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 50, 38))
+>b : Symbol(b, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 50, 40))
+
+        var z = a.charCodeAt(b);
+>z : Symbol(z, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 51, 11))
+>a.charCodeAt : Symbol(String.charCodeAt, Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 50, 38))
+>charCodeAt : Symbol(String.charCodeAt, Decl(lib.es5.d.ts, --, --))
+>b : Symbol(b, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 50, 40))
+
+        return z;
+>z : Symbol(z, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 51, 11))
+
+    },
+};
+var strOrNumber: string | number;
+>strOrNumber : Symbol(strOrNumber, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 2, 3), Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 55, 3))
+
+var i11Ori21: I11 | I21 = { // Like i1 and i2 both
+>i11Ori21 : Symbol(i11Ori21, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 41, 3), Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 42, 3), Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 43, 3), Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 49, 3), Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 56, 3))
+>I11 : Symbol(I11, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 32, 2))
+>I21 : Symbol(I21, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 35, 1))
+
+    commonMethodDifferentReturnType: (a, b) => strOrNumber,
+>commonMethodDifferentReturnType : Symbol(commonMethodDifferentReturnType, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 56, 27))
+>a : Symbol(a, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 57, 38))
+>b : Symbol(b, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 57, 40))
+>strOrNumber : Symbol(strOrNumber, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 2, 3), Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 55, 3))
+
+};

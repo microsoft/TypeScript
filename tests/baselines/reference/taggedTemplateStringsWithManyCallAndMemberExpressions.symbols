@@ -1,0 +1,35 @@
+=== tests/cases/conformance/es6/templates/taggedTemplateStringsWithManyCallAndMemberExpressions.ts ===
+interface I {
+>I : Symbol(I, Decl(taggedTemplateStringsWithManyCallAndMemberExpressions.ts, 0, 0))
+
+    (strs: TemplateStringsArray, ...subs: number[]): I;
+>strs : Symbol(strs, Decl(taggedTemplateStringsWithManyCallAndMemberExpressions.ts, 1, 5))
+>TemplateStringsArray : Symbol(TemplateStringsArray, Decl(lib.es5.d.ts, --, --))
+>subs : Symbol(subs, Decl(taggedTemplateStringsWithManyCallAndMemberExpressions.ts, 1, 32))
+>I : Symbol(I, Decl(taggedTemplateStringsWithManyCallAndMemberExpressions.ts, 0, 0))
+
+    member: {
+>member : Symbol(I.member, Decl(taggedTemplateStringsWithManyCallAndMemberExpressions.ts, 1, 55))
+
+        new (s: string): {
+>s : Symbol(s, Decl(taggedTemplateStringsWithManyCallAndMemberExpressions.ts, 3, 13))
+
+            new (n: number): {
+>n : Symbol(n, Decl(taggedTemplateStringsWithManyCallAndMemberExpressions.ts, 4, 17))
+
+                new (): boolean;
+            }
+        }
+    };
+}
+var f: I;
+>f : Symbol(f, Decl(taggedTemplateStringsWithManyCallAndMemberExpressions.ts, 10, 3))
+>I : Symbol(I, Decl(taggedTemplateStringsWithManyCallAndMemberExpressions.ts, 0, 0))
+
+var x = new new new f `abc${ 0 }def`.member("hello")(42) === true;
+>x : Symbol(x, Decl(taggedTemplateStringsWithManyCallAndMemberExpressions.ts, 12, 3))
+>f `abc${ 0 }def`.member : Symbol(I.member, Decl(taggedTemplateStringsWithManyCallAndMemberExpressions.ts, 1, 55))
+>f : Symbol(f, Decl(taggedTemplateStringsWithManyCallAndMemberExpressions.ts, 10, 3))
+>member : Symbol(I.member, Decl(taggedTemplateStringsWithManyCallAndMemberExpressions.ts, 1, 55))
+
+

@@ -1,0 +1,80 @@
+=== tests/cases/conformance/types/typeRelationships/bestCommonType/bestCommonTypeOfTuple2.ts ===
+interface base { }
+interface base1 { i }
+>i : any
+
+class C implements base { c }
+>C : C
+>c : any
+
+class D implements base { d }
+>D : D
+>d : any
+
+class E implements base { e }
+>E : E
+>e : any
+
+class F extends C { f }
+>F : F
+>C : C
+>f : any
+
+class C1 implements base1 { i = "foo"; c }
+>C1 : C1
+>i : string
+>"foo" : "foo"
+>c : any
+
+class D1 extends C1 { i = "bar"; d }
+>D1 : D1
+>C1 : C1
+>i : string
+>"bar" : "bar"
+>d : any
+
+var t1: [C, base];
+>t1 : [C, base]
+
+var t2: [C, D];
+>t2 : [C, D]
+
+var t3: [C1, D1];
+>t3 : [C1, D1]
+
+var t4: [base1, C1];
+>t4 : [base1, C1]
+
+var t5: [C1, F]
+>t5 : [C1, F]
+
+var e11 = t1[4]; // base
+>e11 : undefined
+>t1[4] : undefined
+>t1 : [C, base]
+>4 : 4
+
+var e21 = t2[4]; // {}
+>e21 : undefined
+>t2[4] : undefined
+>t2 : [C, D]
+>4 : 4
+
+var e31 = t3[4]; // C1
+>e31 : undefined
+>t3[4] : undefined
+>t3 : [C1, D1]
+>4 : 4
+
+var e41 = t4[2]; // base1
+>e41 : undefined
+>t4[2] : undefined
+>t4 : [base1, C1]
+>2 : 2
+
+var e51 = t5[2]; // {}
+>e51 : undefined
+>t5[2] : undefined
+>t5 : [C1, F]
+>2 : 2
+

@@ -1,0 +1,24 @@
+tests/cases/compiler/file2.ts(1,1): error TS6133: 'd' is declared but its value is never read.
+
+
+==== tests/cases/compiler/file1.ts (0 errors) ====
+    export class Calculator {
+        handleChar() {}
+    }
+    
+    export function test() {
+    
+    }
+    
+    export default function test2() {
+    
+    }
+    
+==== tests/cases/compiler/file2.ts (1 errors) ====
+    import d from "./file1"
+    ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS6133: 'd' is declared but its value is never read.
+    
+    
+    
+    

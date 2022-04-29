@@ -1,0 +1,26 @@
+=== tests/cases/compiler/stringPropCodeGen.ts ===
+var a = {
+>a : Symbol(a, Decl(stringPropCodeGen.ts, 0, 3))
+
+  "foo" : function() { },
+>"foo" : Symbol("foo", Decl(stringPropCodeGen.ts, 0, 9))
+
+  "bar" : 5
+>"bar" : Symbol("bar", Decl(stringPropCodeGen.ts, 2, 25))
+
+};
+
+
+
+a.foo();
+>a.foo : Symbol("foo", Decl(stringPropCodeGen.ts, 0, 9))
+>a : Symbol(a, Decl(stringPropCodeGen.ts, 0, 3))
+>foo : Symbol("foo", Decl(stringPropCodeGen.ts, 0, 9))
+
+a.bar.toString();
+>a.bar.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>a.bar : Symbol("bar", Decl(stringPropCodeGen.ts, 2, 25))
+>a : Symbol(a, Decl(stringPropCodeGen.ts, 0, 3))
+>bar : Symbol("bar", Decl(stringPropCodeGen.ts, 2, 25))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+

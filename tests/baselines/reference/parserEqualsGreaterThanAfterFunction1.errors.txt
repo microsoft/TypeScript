@@ -1,0 +1,7 @@
+tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserEqualsGreaterThanAfterFunction1.ts(1,10): error TS1003: Identifier expected.
+
+
+==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserEqualsGreaterThanAfterFunction1.ts (1 errors) ====
+    function =>
+             ~~
+!!! error TS1003: Identifier expected.

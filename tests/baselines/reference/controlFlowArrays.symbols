@@ -1,0 +1,491 @@
+=== tests/cases/compiler/controlFlowArrays.ts ===
+declare function cond(): boolean;
+>cond : Symbol(cond, Decl(controlFlowArrays.ts, 0, 0))
+
+function f1() {
+>f1 : Symbol(f1, Decl(controlFlowArrays.ts, 0, 33))
+
+    let x = [];
+>x : Symbol(x, Decl(controlFlowArrays.ts, 3, 7))
+
+    x[0] = 5;
+>x : Symbol(x, Decl(controlFlowArrays.ts, 3, 7))
+
+    x[1] = "hello";
+>x : Symbol(x, Decl(controlFlowArrays.ts, 3, 7))
+
+    x[2] = true;
+>x : Symbol(x, Decl(controlFlowArrays.ts, 3, 7))
+
+    return x;  // (string | number | boolean)[]
+>x : Symbol(x, Decl(controlFlowArrays.ts, 3, 7))
+}
+
+function f2() {
+>f2 : Symbol(f2, Decl(controlFlowArrays.ts, 8, 1))
+
+    let x = [];
+>x : Symbol(x, Decl(controlFlowArrays.ts, 11, 7))
+
+    x.push(5);
+>x.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(controlFlowArrays.ts, 11, 7))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+
+    x.push("hello");
+>x.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(controlFlowArrays.ts, 11, 7))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+
+    x.push(true);
+>x.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(controlFlowArrays.ts, 11, 7))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+
+    return x;  // (string | number | boolean)[]
+>x : Symbol(x, Decl(controlFlowArrays.ts, 11, 7))
+}
+
+function f3() {
+>f3 : Symbol(f3, Decl(controlFlowArrays.ts, 16, 1))
+
+    let x;
+>x : Symbol(x, Decl(controlFlowArrays.ts, 19, 7))
+
+    x = [];
+>x : Symbol(x, Decl(controlFlowArrays.ts, 19, 7))
+
+    x.push(5, "hello");
+>x.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(controlFlowArrays.ts, 19, 7))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+
+    return x;  // (string | number)[]
+>x : Symbol(x, Decl(controlFlowArrays.ts, 19, 7))
+}
+
+function f4() {
+>f4 : Symbol(f4, Decl(controlFlowArrays.ts, 23, 1))
+
+    let x = [];
+>x : Symbol(x, Decl(controlFlowArrays.ts, 26, 7))
+
+    if (cond()) {
+>cond : Symbol(cond, Decl(controlFlowArrays.ts, 0, 0))
+
+        x.push(5);
+>x.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(controlFlowArrays.ts, 26, 7))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+    }
+    else {
+        x.push("hello");
+>x.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(controlFlowArrays.ts, 26, 7))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+    }
+    return x;  // (string | number)[]
+>x : Symbol(x, Decl(controlFlowArrays.ts, 26, 7))
+}
+
+function f5() {
+>f5 : Symbol(f5, Decl(controlFlowArrays.ts, 34, 1))
+
+    let x;
+>x : Symbol(x, Decl(controlFlowArrays.ts, 37, 7))
+
+    if (cond()) {
+>cond : Symbol(cond, Decl(controlFlowArrays.ts, 0, 0))
+
+        x = [];
+>x : Symbol(x, Decl(controlFlowArrays.ts, 37, 7))
+
+        x.push(5);
+>x.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(controlFlowArrays.ts, 37, 7))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+    }
+    else {
+        x = [];
+>x : Symbol(x, Decl(controlFlowArrays.ts, 37, 7))
+
+        x.push("hello");
+>x.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(controlFlowArrays.ts, 37, 7))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+    }
+    return x;  // (string | number)[]
+>x : Symbol(x, Decl(controlFlowArrays.ts, 37, 7))
+}
+
+function f6() {
+>f6 : Symbol(f6, Decl(controlFlowArrays.ts, 47, 1))
+
+    let x;
+>x : Symbol(x, Decl(controlFlowArrays.ts, 50, 7))
+
+    if (cond()) {
+>cond : Symbol(cond, Decl(controlFlowArrays.ts, 0, 0))
+
+        x = 5;
+>x : Symbol(x, Decl(controlFlowArrays.ts, 50, 7))
+    }
+    else {
+        x = [];
+>x : Symbol(x, Decl(controlFlowArrays.ts, 50, 7))
+
+        x.push("hello");
+>x.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(controlFlowArrays.ts, 50, 7))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+    }
+    return x;  // number | string[]
+>x : Symbol(x, Decl(controlFlowArrays.ts, 50, 7))
+}
+
+function f7() {
+>f7 : Symbol(f7, Decl(controlFlowArrays.ts, 59, 1))
+
+    let x = null;
+>x : Symbol(x, Decl(controlFlowArrays.ts, 62, 7))
+
+    if (cond()) {
+>cond : Symbol(cond, Decl(controlFlowArrays.ts, 0, 0))
+
+        x = [];
+>x : Symbol(x, Decl(controlFlowArrays.ts, 62, 7))
+
+        while (cond()) {
+>cond : Symbol(cond, Decl(controlFlowArrays.ts, 0, 0))
+
+            x.push("hello");
+>x.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(controlFlowArrays.ts, 62, 7))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+        }
+    }
+    return x;  // string[] | null
+>x : Symbol(x, Decl(controlFlowArrays.ts, 62, 7))
+}
+
+function f8() {
+>f8 : Symbol(f8, Decl(controlFlowArrays.ts, 70, 1))
+
+    let x = [];
+>x : Symbol(x, Decl(controlFlowArrays.ts, 73, 7))
+
+    x.push(5);
+>x.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(controlFlowArrays.ts, 73, 7))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+
+    if (cond()) return x;  // number[]
+>cond : Symbol(cond, Decl(controlFlowArrays.ts, 0, 0))
+>x : Symbol(x, Decl(controlFlowArrays.ts, 73, 7))
+
+    x.push("hello");
+>x.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(controlFlowArrays.ts, 73, 7))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+
+    if (cond()) return x;  // (string | number)[]
+>cond : Symbol(cond, Decl(controlFlowArrays.ts, 0, 0))
+>x : Symbol(x, Decl(controlFlowArrays.ts, 73, 7))
+
+    x.push(true);
+>x.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(controlFlowArrays.ts, 73, 7))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+
+    return x;  // (string | number | boolean)[]
+>x : Symbol(x, Decl(controlFlowArrays.ts, 73, 7))
+}
+
+function f9() {
+>f9 : Symbol(f9, Decl(controlFlowArrays.ts, 80, 1))
+
+    let x = [];
+>x : Symbol(x, Decl(controlFlowArrays.ts, 83, 7))
+
+    if (cond()) {
+>cond : Symbol(cond, Decl(controlFlowArrays.ts, 0, 0))
+
+        x.push(5);
+>x.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(controlFlowArrays.ts, 83, 7))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+
+        return x;  // number[]
+>x : Symbol(x, Decl(controlFlowArrays.ts, 83, 7))
+    }
+    else {
+        x.push("hello");
+>x.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(controlFlowArrays.ts, 83, 7))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+
+        return x;  // string[]
+>x : Symbol(x, Decl(controlFlowArrays.ts, 83, 7))
+    }
+}
+
+function f10() {
+>f10 : Symbol(f10, Decl(controlFlowArrays.ts, 92, 1))
+
+    let x = [];
+>x : Symbol(x, Decl(controlFlowArrays.ts, 95, 7))
+
+    if (cond()) {
+>cond : Symbol(cond, Decl(controlFlowArrays.ts, 0, 0))
+
+        x.push(true);
+>x.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(controlFlowArrays.ts, 95, 7))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+
+        x;  // boolean[]
+>x : Symbol(x, Decl(controlFlowArrays.ts, 95, 7))
+    }
+    else {
+        x.push(5);
+>x.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(controlFlowArrays.ts, 95, 7))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+
+        x;  // number[]
+>x : Symbol(x, Decl(controlFlowArrays.ts, 95, 7))
+
+        while (cond()) {
+>cond : Symbol(cond, Decl(controlFlowArrays.ts, 0, 0))
+
+            x.push("hello");
+>x.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(controlFlowArrays.ts, 95, 7))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+        }
+        x;  // (string | number)[]
+>x : Symbol(x, Decl(controlFlowArrays.ts, 95, 7))
+    }
+    x.push(99);
+>x.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(controlFlowArrays.ts, 95, 7))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+
+    return x;  // (string | number | boolean)[]
+>x : Symbol(x, Decl(controlFlowArrays.ts, 95, 7))
+}
+
+function f11() {
+>f11 : Symbol(f11, Decl(controlFlowArrays.ts, 110, 1))
+
+    let x = [];
+>x : Symbol(x, Decl(controlFlowArrays.ts, 113, 7))
+
+    if (x.length === 0) {  // x.length ok on implicit any[]
+>x.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(controlFlowArrays.ts, 113, 7))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+
+        x.push("hello");
+>x.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(controlFlowArrays.ts, 113, 7))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+    }
+    return x;
+>x : Symbol(x, Decl(controlFlowArrays.ts, 113, 7))
+}
+
+function f12() {
+>f12 : Symbol(f12, Decl(controlFlowArrays.ts, 118, 1))
+
+    let x;
+>x : Symbol(x, Decl(controlFlowArrays.ts, 121, 7))
+
+    x = [];
+>x : Symbol(x, Decl(controlFlowArrays.ts, 121, 7))
+
+    if (x.length === 0) {  // x.length ok on implicit any[]
+>x.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(controlFlowArrays.ts, 121, 7))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+
+        x.push("hello");
+>x.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(controlFlowArrays.ts, 121, 7))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+    }
+    return x;
+>x : Symbol(x, Decl(controlFlowArrays.ts, 121, 7))
+}
+
+function f13() {
+>f13 : Symbol(f13, Decl(controlFlowArrays.ts, 127, 1))
+
+    var x = [];
+>x : Symbol(x, Decl(controlFlowArrays.ts, 130, 7))
+
+    x.push(5);
+>x.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(controlFlowArrays.ts, 130, 7))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+
+    x.push("hello");
+>x.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(controlFlowArrays.ts, 130, 7))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+
+    x.push(true);
+>x.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(controlFlowArrays.ts, 130, 7))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+
+    return x;  // (string | number | boolean)[]
+>x : Symbol(x, Decl(controlFlowArrays.ts, 130, 7))
+}
+
+function f14() {
+>f14 : Symbol(f14, Decl(controlFlowArrays.ts, 135, 1))
+
+    const x = [];
+>x : Symbol(x, Decl(controlFlowArrays.ts, 138, 9))
+
+    x.push(5);
+>x.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(controlFlowArrays.ts, 138, 9))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+
+    x.push("hello");
+>x.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(controlFlowArrays.ts, 138, 9))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+
+    x.push(true);
+>x.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(controlFlowArrays.ts, 138, 9))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+
+    return x;  // (string | number | boolean)[]
+>x : Symbol(x, Decl(controlFlowArrays.ts, 138, 9))
+}
+
+function f15() {
+>f15 : Symbol(f15, Decl(controlFlowArrays.ts, 143, 1))
+
+    let x = [];
+>x : Symbol(x, Decl(controlFlowArrays.ts, 146, 7))
+
+    while (cond()) {
+>cond : Symbol(cond, Decl(controlFlowArrays.ts, 0, 0))
+
+        while (cond()) {}
+>cond : Symbol(cond, Decl(controlFlowArrays.ts, 0, 0))
+
+        x.push("hello");
+>x.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(controlFlowArrays.ts, 146, 7))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+    }
+    return x;  // string[]
+>x : Symbol(x, Decl(controlFlowArrays.ts, 146, 7))
+}
+
+function f16() {
+>f16 : Symbol(f16, Decl(controlFlowArrays.ts, 152, 1))
+
+    let x;
+>x : Symbol(x, Decl(controlFlowArrays.ts, 155, 7))
+
+    let y;
+>y : Symbol(y, Decl(controlFlowArrays.ts, 156, 7))
+
+    (x = [], x).push(5);
+>(x = [], x).push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(controlFlowArrays.ts, 155, 7))
+>x : Symbol(x, Decl(controlFlowArrays.ts, 155, 7))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+
+    (x.push("hello"), x).push(true);
+>(x.push("hello"), x).push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>x.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(controlFlowArrays.ts, 155, 7))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(controlFlowArrays.ts, 155, 7))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+
+    ((x))[3] = { a: 1 };
+>x : Symbol(x, Decl(controlFlowArrays.ts, 155, 7))
+>a : Symbol(a, Decl(controlFlowArrays.ts, 159, 16))
+
+    return x;  // (string | number | boolean | { a: number })[]
+>x : Symbol(x, Decl(controlFlowArrays.ts, 155, 7))
+}
+
+function f17() {
+>f17 : Symbol(f17, Decl(controlFlowArrays.ts, 161, 1))
+
+    let x = [];
+>x : Symbol(x, Decl(controlFlowArrays.ts, 164, 7))
+
+    x.unshift(5);
+>x.unshift : Symbol(Array.unshift, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(controlFlowArrays.ts, 164, 7))
+>unshift : Symbol(Array.unshift, Decl(lib.es5.d.ts, --, --))
+
+    x.unshift("hello");
+>x.unshift : Symbol(Array.unshift, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(controlFlowArrays.ts, 164, 7))
+>unshift : Symbol(Array.unshift, Decl(lib.es5.d.ts, --, --))
+
+    x.unshift(true);
+>x.unshift : Symbol(Array.unshift, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(controlFlowArrays.ts, 164, 7))
+>unshift : Symbol(Array.unshift, Decl(lib.es5.d.ts, --, --))
+
+    return x;  // (string | number | boolean)[]
+>x : Symbol(x, Decl(controlFlowArrays.ts, 164, 7))
+}
+
+function f18() {
+>f18 : Symbol(f18, Decl(controlFlowArrays.ts, 169, 1))
+
+    let x = [];
+>x : Symbol(x, Decl(controlFlowArrays.ts, 172, 7))
+
+    x.push(5);
+>x.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(controlFlowArrays.ts, 172, 7))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+
+    x.unshift("hello");
+>x.unshift : Symbol(Array.unshift, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(controlFlowArrays.ts, 172, 7))
+>unshift : Symbol(Array.unshift, Decl(lib.es5.d.ts, --, --))
+
+    x[2] = true;
+>x : Symbol(x, Decl(controlFlowArrays.ts, 172, 7))
+
+    return x;  // (string | number | boolean)[]
+>x : Symbol(x, Decl(controlFlowArrays.ts, 172, 7))
+}
+
+// Repro from #39470
+
+declare function foo(arg: { val: number }[]): void;
+>foo : Symbol(foo, Decl(controlFlowArrays.ts, 177, 1))
+>arg : Symbol(arg, Decl(controlFlowArrays.ts, 181, 21))
+>val : Symbol(val, Decl(controlFlowArrays.ts, 181, 27))
+
+let arr = []
+>arr : Symbol(arr, Decl(controlFlowArrays.ts, 183, 3))
+
+arr.push({ val: 1, bar: 2 });
+>arr.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>arr : Symbol(arr, Decl(controlFlowArrays.ts, 183, 3))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>val : Symbol(val, Decl(controlFlowArrays.ts, 184, 10))
+>bar : Symbol(bar, Decl(controlFlowArrays.ts, 184, 18))
+
+foo(arr);
+>foo : Symbol(foo, Decl(controlFlowArrays.ts, 177, 1))
+>arr : Symbol(arr, Decl(controlFlowArrays.ts, 183, 3))
+

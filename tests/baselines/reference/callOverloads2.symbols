@@ -1,0 +1,49 @@
+=== tests/cases/compiler/callOverloads2.ts ===
+class Foo { // error
+>Foo : Symbol(Foo, Decl(callOverloads2.ts, 6, 1), Decl(callOverloads2.ts, 0, 0))
+
+    bar1() { /*WScript.Echo("bar1");*/ }
+>bar1 : Symbol(Foo.bar1, Decl(callOverloads2.ts, 0, 11))
+
+    constructor(x: any) {
+>x : Symbol(x, Decl(callOverloads2.ts, 3, 16))
+
+        // WScript.Echo("Constructor function has executed");
+    }
+}
+
+function Foo(); // error
+>Foo : Symbol(Foo, Decl(callOverloads2.ts, 6, 1), Decl(callOverloads2.ts, 0, 0))
+
+function F1(s:string) {return s;} // error
+>F1 : Symbol(F1, Decl(callOverloads2.ts, 8, 15), Decl(callOverloads2.ts, 10, 33))
+>s : Symbol(s, Decl(callOverloads2.ts, 10, 12))
+>s : Symbol(s, Decl(callOverloads2.ts, 10, 12))
+
+function F1(a:any) { return a;} // error
+>F1 : Symbol(F1, Decl(callOverloads2.ts, 8, 15), Decl(callOverloads2.ts, 10, 33))
+>a : Symbol(a, Decl(callOverloads2.ts, 11, 12))
+>a : Symbol(a, Decl(callOverloads2.ts, 11, 12))
+
+function Goo(s:string); // error - no implementation
+>Goo : Symbol(Goo, Decl(callOverloads2.ts, 11, 31))
+>s : Symbol(s, Decl(callOverloads2.ts, 13, 13))
+
+declare function Gar(s:String); // expect no error
+>Gar : Symbol(Gar, Decl(callOverloads2.ts, 13, 23))
+>s : Symbol(s, Decl(callOverloads2.ts, 15, 21))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+var f1 = new Foo("hey");
+>f1 : Symbol(f1, Decl(callOverloads2.ts, 17, 3))
+>Foo : Symbol(Foo, Decl(callOverloads2.ts, 6, 1), Decl(callOverloads2.ts, 0, 0))
+
+
+f1.bar1();
+>f1.bar1 : Symbol(Foo.bar1, Decl(callOverloads2.ts, 0, 11))
+>f1 : Symbol(f1, Decl(callOverloads2.ts, 17, 3))
+>bar1 : Symbol(Foo.bar1, Decl(callOverloads2.ts, 0, 11))
+
+Foo();
+>Foo : Symbol(Foo, Decl(callOverloads2.ts, 6, 1), Decl(callOverloads2.ts, 0, 0))
+

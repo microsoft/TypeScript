@@ -1,0 +1,274 @@
+=== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/anyAssignableToEveryType2.ts ===
+// any is not a subtype of any other types, but is assignable, all the below should work
+
+interface I {
+>I : Symbol(I, Decl(anyAssignableToEveryType2.ts, 0, 0))
+
+    [x: string]: any;
+>x : Symbol(x, Decl(anyAssignableToEveryType2.ts, 3, 5))
+
+    foo: any; // ok, any identical to itself
+>foo : Symbol(I.foo, Decl(anyAssignableToEveryType2.ts, 3, 21))
+}
+
+
+interface I2 {
+>I2 : Symbol(I2, Decl(anyAssignableToEveryType2.ts, 5, 1))
+
+    [x: string]: number;
+>x : Symbol(x, Decl(anyAssignableToEveryType2.ts, 9, 5))
+
+    foo: any;
+>foo : Symbol(I2.foo, Decl(anyAssignableToEveryType2.ts, 9, 24))
+}
+
+
+interface I3 {
+>I3 : Symbol(I3, Decl(anyAssignableToEveryType2.ts, 11, 1))
+
+    [x: string]: string;
+>x : Symbol(x, Decl(anyAssignableToEveryType2.ts, 15, 5))
+
+    foo: any;
+>foo : Symbol(I3.foo, Decl(anyAssignableToEveryType2.ts, 15, 24))
+}
+
+
+interface I4 {
+>I4 : Symbol(I4, Decl(anyAssignableToEveryType2.ts, 17, 1))
+
+    [x: string]: boolean;
+>x : Symbol(x, Decl(anyAssignableToEveryType2.ts, 21, 5))
+
+    foo: any;
+>foo : Symbol(I4.foo, Decl(anyAssignableToEveryType2.ts, 21, 25))
+}
+
+
+interface I5 {
+>I5 : Symbol(I5, Decl(anyAssignableToEveryType2.ts, 23, 1))
+
+    [x: string]: Date;
+>x : Symbol(x, Decl(anyAssignableToEveryType2.ts, 27, 5))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+    foo: any;
+>foo : Symbol(I5.foo, Decl(anyAssignableToEveryType2.ts, 27, 22))
+}
+
+
+interface I6 {
+>I6 : Symbol(I6, Decl(anyAssignableToEveryType2.ts, 29, 1))
+
+    [x: string]: RegExp;
+>x : Symbol(x, Decl(anyAssignableToEveryType2.ts, 33, 5))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    foo: any;
+>foo : Symbol(I6.foo, Decl(anyAssignableToEveryType2.ts, 33, 24))
+}
+
+
+interface I7 {
+>I7 : Symbol(I7, Decl(anyAssignableToEveryType2.ts, 35, 1))
+
+    [x: string]: { bar: number };
+>x : Symbol(x, Decl(anyAssignableToEveryType2.ts, 39, 5))
+>bar : Symbol(bar, Decl(anyAssignableToEveryType2.ts, 39, 18))
+
+    foo: any;
+>foo : Symbol(I7.foo, Decl(anyAssignableToEveryType2.ts, 39, 33))
+}
+
+
+interface I8 {
+>I8 : Symbol(I8, Decl(anyAssignableToEveryType2.ts, 41, 1))
+
+    [x: string]: number[];
+>x : Symbol(x, Decl(anyAssignableToEveryType2.ts, 45, 5))
+
+    foo: any;
+>foo : Symbol(I8.foo, Decl(anyAssignableToEveryType2.ts, 45, 26))
+}
+
+
+interface I9 {
+>I9 : Symbol(I9, Decl(anyAssignableToEveryType2.ts, 47, 1))
+
+    [x: string]: I8;
+>x : Symbol(x, Decl(anyAssignableToEveryType2.ts, 51, 5))
+>I8 : Symbol(I8, Decl(anyAssignableToEveryType2.ts, 41, 1))
+
+    foo: any;
+>foo : Symbol(I9.foo, Decl(anyAssignableToEveryType2.ts, 51, 20))
+}
+
+class A { foo: number; }
+>A : Symbol(A, Decl(anyAssignableToEveryType2.ts, 53, 1))
+>foo : Symbol(A.foo, Decl(anyAssignableToEveryType2.ts, 55, 9))
+
+interface I10 {
+>I10 : Symbol(I10, Decl(anyAssignableToEveryType2.ts, 55, 24))
+
+    [x: string]: A;
+>x : Symbol(x, Decl(anyAssignableToEveryType2.ts, 57, 5))
+>A : Symbol(A, Decl(anyAssignableToEveryType2.ts, 53, 1))
+
+    foo: any;
+>foo : Symbol(I10.foo, Decl(anyAssignableToEveryType2.ts, 57, 19))
+}
+
+class A2<T> { foo: T; }
+>A2 : Symbol(A2, Decl(anyAssignableToEveryType2.ts, 59, 1))
+>T : Symbol(T, Decl(anyAssignableToEveryType2.ts, 61, 9))
+>foo : Symbol(A2.foo, Decl(anyAssignableToEveryType2.ts, 61, 13))
+>T : Symbol(T, Decl(anyAssignableToEveryType2.ts, 61, 9))
+
+interface I11 {
+>I11 : Symbol(I11, Decl(anyAssignableToEveryType2.ts, 61, 23))
+
+    [x: string]: A2<number>;
+>x : Symbol(x, Decl(anyAssignableToEveryType2.ts, 63, 5))
+>A2 : Symbol(A2, Decl(anyAssignableToEveryType2.ts, 59, 1))
+
+    foo: any;
+>foo : Symbol(I11.foo, Decl(anyAssignableToEveryType2.ts, 63, 28))
+}
+
+
+interface I12 {
+>I12 : Symbol(I12, Decl(anyAssignableToEveryType2.ts, 65, 1))
+
+    [x: string]: (x) => number;
+>x : Symbol(x, Decl(anyAssignableToEveryType2.ts, 69, 5))
+>x : Symbol(x, Decl(anyAssignableToEveryType2.ts, 69, 18))
+
+    foo: any;
+>foo : Symbol(I12.foo, Decl(anyAssignableToEveryType2.ts, 69, 31))
+}
+
+
+interface I13 {
+>I13 : Symbol(I13, Decl(anyAssignableToEveryType2.ts, 71, 1))
+
+    [x: string]: <T>(x: T) => T;
+>x : Symbol(x, Decl(anyAssignableToEveryType2.ts, 75, 5))
+>T : Symbol(T, Decl(anyAssignableToEveryType2.ts, 75, 18))
+>x : Symbol(x, Decl(anyAssignableToEveryType2.ts, 75, 21))
+>T : Symbol(T, Decl(anyAssignableToEveryType2.ts, 75, 18))
+>T : Symbol(T, Decl(anyAssignableToEveryType2.ts, 75, 18))
+
+    foo: any;
+>foo : Symbol(I13.foo, Decl(anyAssignableToEveryType2.ts, 75, 32))
+}
+
+
+enum E { A }
+>E : Symbol(E, Decl(anyAssignableToEveryType2.ts, 77, 1))
+>A : Symbol(E.A, Decl(anyAssignableToEveryType2.ts, 80, 8))
+
+interface I14 {
+>I14 : Symbol(I14, Decl(anyAssignableToEveryType2.ts, 80, 12))
+
+    [x: string]: E;
+>x : Symbol(x, Decl(anyAssignableToEveryType2.ts, 82, 5))
+>E : Symbol(E, Decl(anyAssignableToEveryType2.ts, 77, 1))
+
+    foo: any;
+>foo : Symbol(I14.foo, Decl(anyAssignableToEveryType2.ts, 82, 19))
+}
+
+
+function f() { }
+>f : Symbol(f, Decl(anyAssignableToEveryType2.ts, 84, 1), Decl(anyAssignableToEveryType2.ts, 87, 16))
+
+module f {
+>f : Symbol(f, Decl(anyAssignableToEveryType2.ts, 84, 1), Decl(anyAssignableToEveryType2.ts, 87, 16))
+
+    export var bar = 1;
+>bar : Symbol(bar, Decl(anyAssignableToEveryType2.ts, 89, 14))
+}
+interface I15 {
+>I15 : Symbol(I15, Decl(anyAssignableToEveryType2.ts, 90, 1))
+
+    [x: string]: typeof f;
+>x : Symbol(x, Decl(anyAssignableToEveryType2.ts, 92, 5))
+>f : Symbol(f, Decl(anyAssignableToEveryType2.ts, 84, 1), Decl(anyAssignableToEveryType2.ts, 87, 16))
+
+    foo: any;
+>foo : Symbol(I15.foo, Decl(anyAssignableToEveryType2.ts, 92, 26))
+}
+
+
+class c { baz: string }
+>c : Symbol(c, Decl(anyAssignableToEveryType2.ts, 94, 1), Decl(anyAssignableToEveryType2.ts, 97, 23))
+>baz : Symbol(c.baz, Decl(anyAssignableToEveryType2.ts, 97, 9))
+
+module c {
+>c : Symbol(c, Decl(anyAssignableToEveryType2.ts, 94, 1), Decl(anyAssignableToEveryType2.ts, 97, 23))
+
+    export var bar = 1;
+>bar : Symbol(bar, Decl(anyAssignableToEveryType2.ts, 99, 14))
+}
+interface I16 {
+>I16 : Symbol(I16, Decl(anyAssignableToEveryType2.ts, 100, 1))
+
+    [x: string]: typeof c;
+>x : Symbol(x, Decl(anyAssignableToEveryType2.ts, 102, 5))
+>c : Symbol(c, Decl(anyAssignableToEveryType2.ts, 94, 1), Decl(anyAssignableToEveryType2.ts, 97, 23))
+
+    foo: any;
+>foo : Symbol(I16.foo, Decl(anyAssignableToEveryType2.ts, 102, 26))
+}
+
+
+interface I17<T> {
+>I17 : Symbol(I17, Decl(anyAssignableToEveryType2.ts, 104, 1))
+>T : Symbol(T, Decl(anyAssignableToEveryType2.ts, 107, 14))
+
+    [x: string]: T;
+>x : Symbol(x, Decl(anyAssignableToEveryType2.ts, 108, 5))
+>T : Symbol(T, Decl(anyAssignableToEveryType2.ts, 107, 14))
+
+    foo: any;
+>foo : Symbol(I17.foo, Decl(anyAssignableToEveryType2.ts, 108, 19))
+}
+
+
+interface I18<T, U extends T> {
+>I18 : Symbol(I18, Decl(anyAssignableToEveryType2.ts, 110, 1))
+>T : Symbol(T, Decl(anyAssignableToEveryType2.ts, 113, 14))
+>U : Symbol(U, Decl(anyAssignableToEveryType2.ts, 113, 16))
+>T : Symbol(T, Decl(anyAssignableToEveryType2.ts, 113, 14))
+
+    [x: string]: U;
+>x : Symbol(x, Decl(anyAssignableToEveryType2.ts, 114, 5))
+>U : Symbol(U, Decl(anyAssignableToEveryType2.ts, 113, 16))
+
+    foo: any;
+>foo : Symbol(I18.foo, Decl(anyAssignableToEveryType2.ts, 114, 19))
+}
+
+
+interface I19 {
+>I19 : Symbol(I19, Decl(anyAssignableToEveryType2.ts, 116, 1))
+
+    [x: string]: Object;
+>x : Symbol(x, Decl(anyAssignableToEveryType2.ts, 120, 5))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    foo: any;
+>foo : Symbol(I19.foo, Decl(anyAssignableToEveryType2.ts, 120, 24))
+}
+
+
+interface I20 {
+>I20 : Symbol(I20, Decl(anyAssignableToEveryType2.ts, 122, 1))
+
+    [x: string]: {};
+>x : Symbol(x, Decl(anyAssignableToEveryType2.ts, 126, 5))
+
+    foo: any;
+>foo : Symbol(I20.foo, Decl(anyAssignableToEveryType2.ts, 126, 20))
+}
+

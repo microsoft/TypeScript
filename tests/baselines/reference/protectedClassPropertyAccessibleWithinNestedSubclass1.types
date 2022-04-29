@@ -1,0 +1,332 @@
+=== tests/cases/conformance/classes/members/accessibility/protectedClassPropertyAccessibleWithinNestedSubclass1.ts ===
+class Base {
+>Base : Base
+
+    protected x: string;
+>x : string
+
+    method() {
+>method : () => void
+
+        class A {
+>A : A
+
+            methoda() {
+>methoda : () => void
+
+                var b: Base;
+>b : Base
+
+                var d1: Derived1;
+>d1 : Derived1
+
+                var d2: Derived2;
+>d2 : Derived2
+
+                var d3: Derived3;
+>d3 : Derived3
+
+                var d4: Derived4;
+>d4 : Derived4
+
+                b.x;            // OK, accessed within their declaring class
+>b.x : string
+>b : Base
+>x : string
+
+                d1.x;           // OK, accessed within their declaring class
+>d1.x : string
+>d1 : Derived1
+>x : string
+
+                d2.x;           // OK, accessed within their declaring class
+>d2.x : string
+>d2 : Derived2
+>x : string
+
+                d3.x;           // Error, redefined in a subclass, can only be accessed in the declaring class or one of its subclasses
+>d3.x : string
+>d3 : Derived3
+>x : string
+
+                d4.x;           // OK, accessed within their declaring class
+>d4.x : string
+>d4 : Derived4
+>x : string
+            }
+        }
+    }
+}
+
+class Derived1 extends Base {
+>Derived1 : Derived1
+>Base : Base
+
+    method1() {
+>method1 : () => void
+
+        class B {
+>B : B
+
+            method1b() {
+>method1b : () => void
+
+                var b: Base;
+>b : Base
+
+                var d1: Derived1;
+>d1 : Derived1
+
+                var d2: Derived2;
+>d2 : Derived2
+
+                var d3: Derived3;
+>d3 : Derived3
+
+                var d4: Derived4;
+>d4 : Derived4
+
+                b.x;            // Error, isn't accessed through an instance of the enclosing class
+>b.x : string
+>b : Base
+>x : string
+
+                d1.x;           // OK, accessed within a class derived from their declaring class, and through an instance of the enclosing class
+>d1.x : string
+>d1 : Derived1
+>x : string
+
+                d2.x;           // Error, isn't accessed through an instance of the enclosing class
+>d2.x : string
+>d2 : Derived2
+>x : string
+
+                d3.x;           // Error, redefined in a subclass, can only be accessed in the declaring class or one of its subclasses
+>d3.x : string
+>d3 : Derived3
+>x : string
+
+                d4.x;           // Error, isn't accessed through an instance of the enclosing class
+>d4.x : string
+>d4 : Derived4
+>x : string
+            }
+        }
+    }
+}
+
+class Derived2 extends Base {
+>Derived2 : Derived2
+>Base : Base
+
+    method2() {
+>method2 : () => void
+
+        class C {
+>C : C
+
+            method2c() {
+>method2c : () => void
+
+                var b: Base;
+>b : Base
+
+                var d1: Derived1;
+>d1 : Derived1
+
+                var d2: Derived2;
+>d2 : Derived2
+
+                var d3: Derived3;
+>d3 : Derived3
+
+                var d4: Derived4;
+>d4 : Derived4
+
+                b.x;            // Error, isn't accessed through an instance of the enclosing class
+>b.x : string
+>b : Base
+>x : string
+
+                d1.x;           // Error, isn't accessed through an instance of the enclosing class
+>d1.x : string
+>d1 : Derived1
+>x : string
+
+                d2.x;           // OK, accessed within a class derived from their declaring class, and through an instance of the enclosing class
+>d2.x : string
+>d2 : Derived2
+>x : string
+
+                d3.x;           // Error, redefined in a subclass, can only be accessed in the declaring class or one of its subclasses
+>d3.x : string
+>d3 : Derived3
+>x : string
+
+                d4.x;           // OK, accessed within a class derived from their declaring class, and through an instance of the enclosing class or one of its subclasses
+>d4.x : string
+>d4 : Derived4
+>x : string
+            }
+        }
+    }
+}
+
+class Derived3 extends Derived1 {
+>Derived3 : Derived3
+>Derived1 : Derived1
+
+    protected x: string;
+>x : string
+
+    method3() {
+>method3 : () => void
+
+        class D {
+>D : D
+
+            method3d() {
+>method3d : () => void
+
+                var b: Base;
+>b : Base
+
+                var d1: Derived1;
+>d1 : Derived1
+
+                var d2: Derived2;
+>d2 : Derived2
+
+                var d3: Derived3;
+>d3 : Derived3
+
+                var d4: Derived4;
+>d4 : Derived4
+
+                b.x;            // Error, isn't accessed through an instance of the enclosing class
+>b.x : string
+>b : Base
+>x : string
+
+                d1.x;           // Error, isn't accessed through an instance of the enclosing class
+>d1.x : string
+>d1 : Derived1
+>x : string
+
+                d2.x;           // Error, isn't accessed through an instance of the enclosing class
+>d2.x : string
+>d2 : Derived2
+>x : string
+
+                d3.x;           // OK, accessed within their declaring class
+>d3.x : string
+>d3 : Derived3
+>x : string
+
+                d4.x;           // Error, isn't accessed through an instance of the enclosing class
+>d4.x : string
+>d4 : Derived4
+>x : string
+            }
+        }
+    }
+}
+
+class Derived4 extends Derived2 {
+>Derived4 : Derived4
+>Derived2 : Derived2
+
+    method4() {
+>method4 : () => void
+
+        class E {
+>E : E
+
+            method4e() {
+>method4e : () => void
+
+                var b: Base;
+>b : Base
+
+                var d1: Derived1;
+>d1 : Derived1
+
+                var d2: Derived2;
+>d2 : Derived2
+
+                var d3: Derived3;
+>d3 : Derived3
+
+                var d4: Derived4;
+>d4 : Derived4
+
+                b.x;            // Error, isn't accessed through an instance of the enclosing class
+>b.x : string
+>b : Base
+>x : string
+
+                d1.x;           // Error, isn't accessed through an instance of the enclosing class
+>d1.x : string
+>d1 : Derived1
+>x : string
+
+                d2.x;           // Error, isn't accessed through an instance of the enclosing class
+>d2.x : string
+>d2 : Derived2
+>x : string
+
+                d3.x;           // Error, redefined in a subclass, can only be accessed in the declaring class or one of its subclasses
+>d3.x : string
+>d3 : Derived3
+>x : string
+
+                d4.x;           // OK, accessed within a class derived from their declaring class, and through an instance of the enclosing class
+>d4.x : string
+>d4 : Derived4
+>x : string
+            }
+        }
+    }
+}
+
+
+var b: Base;
+>b : Base
+
+var d1: Derived1;
+>d1 : Derived1
+
+var d2: Derived2;
+>d2 : Derived2
+
+var d3: Derived3;
+>d3 : Derived3
+
+var d4: Derived4;
+>d4 : Derived4
+
+b.x;                    // Error, neither within their declaring class nor classes derived from their declaring class
+>b.x : string
+>b : Base
+>x : string
+
+d1.x;                   // Error, neither within their declaring class nor classes derived from their declaring class
+>d1.x : string
+>d1 : Derived1
+>x : string
+
+d2.x;                   // Error, neither within their declaring class nor classes derived from their declaring class
+>d2.x : string
+>d2 : Derived2
+>x : string
+
+d3.x;                   // Error, neither within their declaring class nor classes derived from their declaring class
+>d3.x : string
+>d3 : Derived3
+>x : string
+
+d4.x;                   // Error, neither within their declaring class nor classes derived from their declaring class
+>d4.x : string
+>d4 : Derived4
+>x : string
+

@@ -1,0 +1,6368 @@
+[
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
+      "position": 10,
+      "name": "1"
+    },
+    "quickInfo": {
+      "kind": "interface",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 10,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "interface",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "I",
+          "kind": "interfaceName"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
+      "position": 12,
+      "name": "2"
+    },
+    "quickInfo": {
+      "kind": "type parameter",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 12,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "type parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "in",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "I",
+          "kind": "interfaceName"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
+      "position": 26,
+      "name": "3"
+    },
+    "quickInfo": {
+      "kind": "type parameter",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 26,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "type parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "in",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "new",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "a",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": ",",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "b",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
+      "position": 29,
+      "name": "4"
+    },
+    "quickInfo": {
+      "kind": "parameter",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 29,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "a",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
+      "position": 32,
+      "name": "5"
+    },
+    "quickInfo": {
+      "kind": "type parameter",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 32,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "type parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "in",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "new",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "a",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": ",",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "b",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
+      "position": 35,
+      "name": "6"
+    },
+    "quickInfo": {
+      "kind": "parameter",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 35,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "b",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
+      "position": 38,
+      "name": "7"
+    },
+    "quickInfo": {
+      "kind": "type parameter",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 38,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "type parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "in",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "I",
+          "kind": "interfaceName"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
+      "position": 42,
+      "name": "8"
+    },
+    "quickInfo": {
+      "kind": "type parameter",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 42,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "type parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "in",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "new",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "a",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": ",",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "b",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
+      "position": 50,
+      "name": "9"
+    },
+    "quickInfo": {
+      "kind": "type parameter",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 50,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "type parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "in",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "a",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": ",",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "b",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
+      "position": 53,
+      "name": "10"
+    },
+    "quickInfo": {
+      "kind": "parameter",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 53,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "a",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
+      "position": 56,
+      "name": "11"
+    },
+    "quickInfo": {
+      "kind": "type parameter",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 56,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "type parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "in",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "a",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": ",",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "b",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
+      "position": 59,
+      "name": "12"
+    },
+    "quickInfo": {
+      "kind": "parameter",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 59,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "b",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
+      "position": 62,
+      "name": "13"
+    },
+    "quickInfo": {
+      "kind": "type parameter",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 62,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "type parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "in",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "I",
+          "kind": "interfaceName"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
+      "position": 66,
+      "name": "14"
+    },
+    "quickInfo": {
+      "kind": "type parameter",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 66,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "type parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "in",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "a",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": ",",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "b",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
+      "position": 73,
+      "name": "15"
+    },
+    "quickInfo": {
+      "kind": "method",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 73,
+        "length": 6
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "method",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "I",
+          "kind": "interfaceName"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "method",
+          "kind": "methodName"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "a",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": ",",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "b",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
+      "position": 80,
+      "name": "16"
+    },
+    "quickInfo": {
+      "kind": "type parameter",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 80,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "type parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "in",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "I",
+          "kind": "interfaceName"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "method",
+          "kind": "methodName"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "a",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": ",",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "b",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
+      "position": 83,
+      "name": "17"
+    },
+    "quickInfo": {
+      "kind": "parameter",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 83,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "a",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
+      "position": 86,
+      "name": "18"
+    },
+    "quickInfo": {
+      "kind": "type parameter",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 86,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "type parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "in",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "I",
+          "kind": "interfaceName"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "method",
+          "kind": "methodName"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "a",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": ",",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "b",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
+      "position": 89,
+      "name": "19"
+    },
+    "quickInfo": {
+      "kind": "parameter",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 89,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "b",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
+      "position": 92,
+      "name": "20"
+    },
+    "quickInfo": {
+      "kind": "type parameter",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 92,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "type parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "in",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "I",
+          "kind": "interfaceName"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
+      "position": 96,
+      "name": "21"
+    },
+    "quickInfo": {
+      "kind": "type parameter",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 96,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "type parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "in",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "I",
+          "kind": "interfaceName"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "method",
+          "kind": "methodName"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "a",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": ",",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "b",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
+      "position": 105,
+      "name": "22"
+    },
+    "quickInfo": {
+      "kind": "var",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 105,
+        "length": 4
+      },
+      "displayParts": [
+        {
+          "text": "var",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "iVal",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "I",
+          "kind": "interfaceName"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
+      "position": 111,
+      "name": "23"
+    },
+    "quickInfo": {
+      "kind": "interface",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 111,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "interface",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "I",
+          "kind": "interfaceName"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
+      "position": 126,
+      "name": "24"
+    },
+    "quickInfo": {
+      "kind": "var",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 126,
+        "length": 4
+      },
+      "displayParts": [
+        {
+          "text": "var",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "iVal",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "I",
+          "kind": "interfaceName"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "new",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "\"hello\"",
+          "kind": "stringLiteral"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "a",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "\"hello\"",
+          "kind": "stringLiteral"
+        },
+        {
+          "text": ",",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "b",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "=>",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "\"hello\"",
+          "kind": "stringLiteral"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
+      "position": 150,
+      "name": "25"
+    },
+    "quickInfo": {
+      "kind": "var",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 150,
+        "length": 4
+      },
+      "displayParts": [
+        {
+          "text": "var",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "iVal",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "I",
+          "kind": "interfaceName"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "\"hello\"",
+          "kind": "stringLiteral"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "a",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "\"hello\"",
+          "kind": "stringLiteral"
+        },
+        {
+          "text": ",",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "b",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "=>",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "\"hello\"",
+          "kind": "stringLiteral"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
+      "position": 174,
+      "name": "26"
+    },
+    "quickInfo": {
+      "kind": "var",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 174,
+        "length": 4
+      },
+      "displayParts": [
+        {
+          "text": "var",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "iVal",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "I",
+          "kind": "interfaceName"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
+      "position": 179,
+      "name": "27"
+    },
+    "quickInfo": {
+      "kind": "method",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 179,
+        "length": 6
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "method",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "I",
+          "kind": "interfaceName"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "method",
+          "kind": "methodName"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "\"hello\"",
+          "kind": "stringLiteral"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "a",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "\"hello\"",
+          "kind": "stringLiteral"
+        },
+        {
+          "text": ",",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "b",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "\"hello\"",
+          "kind": "stringLiteral"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
+      "position": 215,
+      "name": "28"
+    },
+    "quickInfo": {
+      "kind": "interface",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 215,
+        "length": 2
+      },
+      "displayParts": [
+        {
+          "text": "interface",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "I1",
+          "kind": "interfaceName"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "extends",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "I",
+          "kind": "interfaceName"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
+      "position": 218,
+      "name": "29"
+    },
+    "quickInfo": {
+      "kind": "type parameter",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 218,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "type parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "in",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "I1",
+          "kind": "interfaceName"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "extends",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "I",
+          "kind": "interfaceName"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
+      "position": 228,
+      "name": "30"
+    },
+    "quickInfo": {
+      "kind": "interface",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 228,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "interface",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "I",
+          "kind": "interfaceName"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
+      "position": 250,
+      "name": "31"
+    },
+    "quickInfo": {
+      "kind": "type parameter",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 250,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "type parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "in",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "new",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "extends",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "I",
+          "kind": "interfaceName"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "a",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": ",",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "b",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
+      "position": 260,
+      "name": "32"
+    },
+    "quickInfo": {
+      "kind": "interface",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 260,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "interface",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "I",
+          "kind": "interfaceName"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
+      "position": 271,
+      "name": "33"
+    },
+    "quickInfo": {
+      "kind": "parameter",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 271,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "a",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "extends",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "I",
+          "kind": "interfaceName"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
+      "position": 274,
+      "name": "34"
+    },
+    "quickInfo": {
+      "kind": "type parameter",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 274,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "type parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "in",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "new",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "extends",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "I",
+          "kind": "interfaceName"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "a",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": ",",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "b",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
+      "position": 277,
+      "name": "35"
+    },
+    "quickInfo": {
+      "kind": "parameter",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 277,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "b",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "extends",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "I",
+          "kind": "interfaceName"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
+      "position": 280,
+      "name": "36"
+    },
+    "quickInfo": {
+      "kind": "type parameter",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 280,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "type parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "in",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "I1",
+          "kind": "interfaceName"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "extends",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "I",
+          "kind": "interfaceName"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
+      "position": 284,
+      "name": "37"
+    },
+    "quickInfo": {
+      "kind": "type parameter",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 284,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "type parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "in",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "new",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "extends",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "I",
+          "kind": "interfaceName"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "a",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": ",",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "b",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
+      "position": 292,
+      "name": "38"
+    },
+    "quickInfo": {
+      "kind": "type parameter",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 292,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "type parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "in",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "extends",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "I",
+          "kind": "interfaceName"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "a",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": ",",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "b",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
+      "position": 302,
+      "name": "39"
+    },
+    "quickInfo": {
+      "kind": "interface",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 302,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "interface",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "I",
+          "kind": "interfaceName"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
+      "position": 313,
+      "name": "40"
+    },
+    "quickInfo": {
+      "kind": "parameter",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 313,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "a",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "extends",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "I",
+          "kind": "interfaceName"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
+      "position": 316,
+      "name": "41"
+    },
+    "quickInfo": {
+      "kind": "type parameter",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 316,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "type parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "in",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "extends",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "I",
+          "kind": "interfaceName"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "a",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": ",",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "b",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
+      "position": 319,
+      "name": "42"
+    },
+    "quickInfo": {
+      "kind": "parameter",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 319,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "b",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "extends",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "I",
+          "kind": "interfaceName"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
+      "position": 322,
+      "name": "43"
+    },
+    "quickInfo": {
+      "kind": "type parameter",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 322,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "type parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "in",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "I1",
+          "kind": "interfaceName"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "extends",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "I",
+          "kind": "interfaceName"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
+      "position": 326,
+      "name": "44"
+    },
+    "quickInfo": {
+      "kind": "type parameter",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 326,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "type parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "in",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "extends",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "I",
+          "kind": "interfaceName"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "a",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": ",",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "b",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
+      "position": 333,
+      "name": "45"
+    },
+    "quickInfo": {
+      "kind": "method",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 333,
+        "length": 6
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "method",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "I1",
+          "kind": "interfaceName"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "extends",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "I",
+          "kind": "interfaceName"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "method",
+          "kind": "methodName"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "extends",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "I",
+          "kind": "interfaceName"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "a",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": ",",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "b",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
+      "position": 340,
+      "name": "46"
+    },
+    "quickInfo": {
+      "kind": "type parameter",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 340,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "type parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "in",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "I1",
+          "kind": "interfaceName"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "extends",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "I",
+          "kind": "interfaceName"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "method",
+          "kind": "methodName"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "extends",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "I",
+          "kind": "interfaceName"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "a",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": ",",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "b",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
+      "position": 350,
+      "name": "47"
+    },
+    "quickInfo": {
+      "kind": "interface",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 350,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "interface",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "I",
+          "kind": "interfaceName"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
+      "position": 361,
+      "name": "48"
+    },
+    "quickInfo": {
+      "kind": "parameter",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 361,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "a",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "extends",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "I",
+          "kind": "interfaceName"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
+      "position": 364,
+      "name": "49"
+    },
+    "quickInfo": {
+      "kind": "type parameter",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 364,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "type parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "in",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "I1",
+          "kind": "interfaceName"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "extends",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "I",
+          "kind": "interfaceName"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "method",
+          "kind": "methodName"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "extends",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "I",
+          "kind": "interfaceName"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "a",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": ",",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "b",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
+      "position": 367,
+      "name": "50"
+    },
+    "quickInfo": {
+      "kind": "parameter",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 367,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "b",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "extends",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "I",
+          "kind": "interfaceName"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
+      "position": 370,
+      "name": "51"
+    },
+    "quickInfo": {
+      "kind": "type parameter",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 370,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "type parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "in",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "I1",
+          "kind": "interfaceName"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "extends",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "I",
+          "kind": "interfaceName"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
+      "position": 374,
+      "name": "52"
+    },
+    "quickInfo": {
+      "kind": "type parameter",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 374,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "type parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "in",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "I1",
+          "kind": "interfaceName"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "extends",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "I",
+          "kind": "interfaceName"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "method",
+          "kind": "methodName"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "extends",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "I",
+          "kind": "interfaceName"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "a",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": ",",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "b",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
+      "position": 383,
+      "name": "53"
+    },
+    "quickInfo": {
+      "kind": "var",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 383,
+        "length": 5
+      },
+      "displayParts": [
+        {
+          "text": "var",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "iVal1",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "I1",
+          "kind": "interfaceName"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "I",
+          "kind": "interfaceName"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
+      "position": 390,
+      "name": "54"
+    },
+    "quickInfo": {
+      "kind": "interface",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 390,
+        "length": 2
+      },
+      "displayParts": [
+        {
+          "text": "interface",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "I1",
+          "kind": "interfaceName"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "extends",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "I",
+          "kind": "interfaceName"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
+      "position": 393,
+      "name": "55"
+    },
+    "quickInfo": {
+      "kind": "interface",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 393,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "interface",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "I",
+          "kind": "interfaceName"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
+      "position": 409,
+      "name": "56"
+    },
+    "quickInfo": {
+      "kind": "var",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 409,
+        "length": 5
+      },
+      "displayParts": [
+        {
+          "text": "var",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "iVal1",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "I1",
+          "kind": "interfaceName"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "new",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "I",
+          "kind": "interfaceName"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "a",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "I",
+          "kind": "interfaceName"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        },
+        {
+          "text": ",",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "b",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "I",
+          "kind": "interfaceName"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "=>",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "I",
+          "kind": "interfaceName"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
+      "position": 415,
+      "name": "57"
+    },
+    "quickInfo": {
+      "kind": "var",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 415,
+        "length": 4
+      },
+      "displayParts": [
+        {
+          "text": "var",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "iVal",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "I",
+          "kind": "interfaceName"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
+      "position": 421,
+      "name": "58"
+    },
+    "quickInfo": {
+      "kind": "var",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 421,
+        "length": 4
+      },
+      "displayParts": [
+        {
+          "text": "var",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "iVal",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "I",
+          "kind": "interfaceName"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
+      "position": 428,
+      "name": "59"
+    },
+    "quickInfo": {
+      "kind": "var",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 428,
+        "length": 5
+      },
+      "displayParts": [
+        {
+          "text": "var",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "iVal1",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "I1",
+          "kind": "interfaceName"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "I",
+          "kind": "interfaceName"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "a",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "I",
+          "kind": "interfaceName"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        },
+        {
+          "text": ",",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "b",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "I",
+          "kind": "interfaceName"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "=>",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "I",
+          "kind": "interfaceName"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
+      "position": 434,
+      "name": "60"
+    },
+    "quickInfo": {
+      "kind": "var",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 434,
+        "length": 4
+      },
+      "displayParts": [
+        {
+          "text": "var",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "iVal",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "I",
+          "kind": "interfaceName"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
+      "position": 440,
+      "name": "61"
+    },
+    "quickInfo": {
+      "kind": "var",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 440,
+        "length": 4
+      },
+      "displayParts": [
+        {
+          "text": "var",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "iVal",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "I",
+          "kind": "interfaceName"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
+      "position": 447,
+      "name": "62"
+    },
+    "quickInfo": {
+      "kind": "var",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 447,
+        "length": 5
+      },
+      "displayParts": [
+        {
+          "text": "var",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "iVal1",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "I1",
+          "kind": "interfaceName"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "I",
+          "kind": "interfaceName"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
+      "position": 453,
+      "name": "63"
+    },
+    "quickInfo": {
+      "kind": "method",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 453,
+        "length": 6
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "method",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "I1",
+          "kind": "interfaceName"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "I",
+          "kind": "interfaceName"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "method",
+          "kind": "methodName"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "I",
+          "kind": "interfaceName"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "a",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "I",
+          "kind": "interfaceName"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        },
+        {
+          "text": ",",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "b",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "I",
+          "kind": "interfaceName"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "I",
+          "kind": "interfaceName"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
+      "position": 460,
+      "name": "64"
+    },
+    "quickInfo": {
+      "kind": "var",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 460,
+        "length": 4
+      },
+      "displayParts": [
+        {
+          "text": "var",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "iVal",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "I",
+          "kind": "interfaceName"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
+      "position": 466,
+      "name": "65"
+    },
+    "quickInfo": {
+      "kind": "var",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 466,
+        "length": 4
+      },
+      "displayParts": [
+        {
+          "text": "var",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "iVal",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "I",
+          "kind": "interfaceName"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        }
+      ],
+      "documentation": []
+    }
+  }
+]

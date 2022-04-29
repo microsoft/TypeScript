@@ -1,0 +1,8 @@
+tests/cases/conformance/es6/unicodeExtendedEscapes/unicodeExtendedEscapesInStrings12_ES6.ts(1,21): error TS1198: An extended Unicode escape value must be between 0x0 and 0x10FFFF inclusive.
+
+
+==== tests/cases/conformance/es6/unicodeExtendedEscapes/unicodeExtendedEscapesInStrings12_ES6.ts (1 errors) ====
+    var x = "\u{FFFFFFFF}";
+                        
+!!! error TS1198: An extended Unicode escape value must be between 0x0 and 0x10FFFF inclusive.
+    

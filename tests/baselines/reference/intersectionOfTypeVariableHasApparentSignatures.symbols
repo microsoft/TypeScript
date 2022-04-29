@@ -1,0 +1,41 @@
+=== tests/cases/compiler/intersectionOfTypeVariableHasApparentSignatures.ts ===
+interface Component<P> {
+>Component : Symbol(Component, Decl(intersectionOfTypeVariableHasApparentSignatures.ts, 0, 0))
+>P : Symbol(P, Decl(intersectionOfTypeVariableHasApparentSignatures.ts, 0, 20))
+
+    props: Readonly<P> & Readonly<{ children?: {} }>;
+>props : Symbol(Component.props, Decl(intersectionOfTypeVariableHasApparentSignatures.ts, 0, 24))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>P : Symbol(P, Decl(intersectionOfTypeVariableHasApparentSignatures.ts, 0, 20))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>children : Symbol(children, Decl(intersectionOfTypeVariableHasApparentSignatures.ts, 1, 35))
+}
+
+interface Props {
+>Props : Symbol(Props, Decl(intersectionOfTypeVariableHasApparentSignatures.ts, 2, 1))
+
+    children?: (items: {x: number}) => void
+>children : Symbol(Props.children, Decl(intersectionOfTypeVariableHasApparentSignatures.ts, 4, 17))
+>items : Symbol(items, Decl(intersectionOfTypeVariableHasApparentSignatures.ts, 5, 16))
+>x : Symbol(x, Decl(intersectionOfTypeVariableHasApparentSignatures.ts, 5, 24))
+}
+
+declare function f<T extends Props>(i: Component<T>): void;
+>f : Symbol(f, Decl(intersectionOfTypeVariableHasApparentSignatures.ts, 6, 1))
+>T : Symbol(T, Decl(intersectionOfTypeVariableHasApparentSignatures.ts, 8, 19))
+>Props : Symbol(Props, Decl(intersectionOfTypeVariableHasApparentSignatures.ts, 2, 1))
+>i : Symbol(i, Decl(intersectionOfTypeVariableHasApparentSignatures.ts, 8, 36))
+>Component : Symbol(Component, Decl(intersectionOfTypeVariableHasApparentSignatures.ts, 0, 0))
+>T : Symbol(T, Decl(intersectionOfTypeVariableHasApparentSignatures.ts, 8, 19))
+
+f({
+>f : Symbol(f, Decl(intersectionOfTypeVariableHasApparentSignatures.ts, 6, 1))
+
+    props: {
+>props : Symbol(props, Decl(intersectionOfTypeVariableHasApparentSignatures.ts, 10, 3))
+
+        children: (({ x }) => { })
+>children : Symbol(children, Decl(intersectionOfTypeVariableHasApparentSignatures.ts, 11, 12))
+>x : Symbol(x, Decl(intersectionOfTypeVariableHasApparentSignatures.ts, 12, 21))
+    }
+});

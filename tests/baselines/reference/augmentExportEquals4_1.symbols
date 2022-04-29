@@ -1,0 +1,56 @@
+=== tests/cases/compiler/file1.d.ts ===
+declare module "file1" {
+>"file1" : Symbol("file1", Decl(file1.d.ts, 0, 0))
+
+    class foo {}
+>foo : Symbol(foo, Decl(file1.d.ts, 0, 24), Decl(file1.d.ts, 1, 16), Decl(file2.ts, 2, 8))
+
+    namespace foo {
+>foo : Symbol(foo, Decl(file1.d.ts, 0, 24), Decl(file1.d.ts, 1, 16), Decl(file2.ts, 2, 8))
+
+        export var v: number;
+>v : Symbol(v, Decl(file1.d.ts, 3, 18))
+    }
+    export = foo;
+>foo : Symbol(foo, Decl(file1.d.ts, 0, 24), Decl(file1.d.ts, 1, 16), Decl(file2.ts, 2, 8))
+}
+
+
+=== tests/cases/compiler/file2.ts ===
+/// <reference path="file1.d.ts"/>
+import x = require("file1"); 
+>x : Symbol(x, Decl(file2.ts, 0, 0))
+
+x.b = 1;
+>x.b : Symbol(x.b, Decl(file2.ts, 7, 7))
+>x : Symbol(x, Decl(file2.ts, 0, 0))
+>b : Symbol(x.b, Decl(file2.ts, 7, 7))
+
+// OK - './file1' is a namespace
+declare module "file1" {
+>"file1" : Symbol(x, Decl(file1.d.ts, 0, 24), Decl(file1.d.ts, 1, 16), Decl(file2.ts, 2, 8))
+
+    interface A { a }
+>A : Symbol(A, Decl(file2.ts, 5, 24))
+>a : Symbol(A.a, Decl(file2.ts, 6, 17))
+
+    let b: number;
+>b : Symbol(b, Decl(file2.ts, 7, 7))
+}
+
+=== tests/cases/compiler/file3.ts ===
+import * as x from "file1";
+>x : Symbol(x, Decl(file3.ts, 0, 6))
+
+import "file2";
+let a: x.A;
+>a : Symbol(a, Decl(file3.ts, 2, 3))
+>x : Symbol(x, Decl(file3.ts, 0, 6))
+>A : Symbol(x.A, Decl(file2.ts, 5, 24))
+
+let b = x.b;
+>b : Symbol(b, Decl(file3.ts, 3, 3))
+>x.b : Symbol(x.b, Decl(file2.ts, 7, 7))
+>x : Symbol(x, Decl(file3.ts, 0, 6))
+>b : Symbol(x.b, Decl(file2.ts, 7, 7))
+

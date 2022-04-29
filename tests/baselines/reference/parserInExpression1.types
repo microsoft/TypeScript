@@ -1,0 +1,12 @@
+=== tests/cases/conformance/parser/ecmascript5/parserInExpression1.ts ===
+console.log("a" in { "a": true });
+>console.log("a" in { "a": true }) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>"a" in { "a": true } : boolean
+>"a" : "a"
+>{ "a": true } : { a: boolean; }
+>"a" : boolean
+>true : true
+

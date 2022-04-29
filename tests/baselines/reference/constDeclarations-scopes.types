@@ -1,0 +1,372 @@
+=== tests/cases/compiler/constDeclarations-scopes.ts ===
+// global
+const c = "string";
+>c : "string"
+>"string" : "string"
+
+var n: number;
+>n : number
+
+// Control flow statements with blocks
+if (true) { 
+>true : true
+
+    const c = 0;
+>c : 0
+>0 : 0
+
+    n = c;
+>n = c : 0
+>n : number
+>c : 0
+}
+else { 
+    const c = 0;
+>c : 0
+>0 : 0
+
+    n = c;
+>n = c : 0
+>n : number
+>c : 0
+}
+
+while (true) { 
+>true : true
+
+    const c = 0;
+>c : 0
+>0 : 0
+
+    n = c;
+>n = c : 0
+>n : number
+>c : 0
+}
+
+do { 
+   const c = 0;
+>c : 0
+>0 : 0
+
+    n = c;
+>n = c : 0
+>n : number
+>c : 0
+
+} while (true);
+>true : true
+
+var obj;
+>obj : any
+
+with (obj) {
+>obj : any
+
+    const c = 0;
+>c : any
+>0 : any
+
+    n = c;
+>n = c : any
+>n : any
+>c : any
+}
+
+for (var i = 0; i < 10; i++) {
+>i : number
+>0 : 0
+>i < 10 : boolean
+>i : number
+>10 : 10
+>i++ : number
+>i : number
+
+    const c = 0;
+>c : 0
+>0 : 0
+
+    n = c;
+>n = c : 0
+>n : number
+>c : 0
+}
+
+for (var i2 in {}) {
+>i2 : string
+>{} : {}
+
+    const c = 0;
+>c : 0
+>0 : 0
+
+    n = c;
+>n = c : 0
+>n : number
+>c : 0
+}
+
+if (true) {
+>true : true
+
+    label: const c = 0;
+>label : any
+>c : 0
+>0 : 0
+
+    n = c;
+>n = c : 0
+>n : number
+>c : 0
+}
+
+while (false) {
+>false : false
+
+    label2: label3: label4: const c = 0;
+>label2 : any
+>label3 : any
+>label4 : any
+>c : 0
+>0 : 0
+
+    n = c;
+>n = c : 0
+>n : number
+>c : 0
+}
+
+// Try/catch/finally
+try {
+    const c = 0;
+>c : 0
+>0 : 0
+
+    n = c;
+>n = c : 0
+>n : number
+>c : 0
+}
+catch (e) {
+>e : any
+
+    const c = 0;
+>c : 0
+>0 : 0
+
+    n = c;
+>n = c : 0
+>n : number
+>c : 0
+}
+finally {
+    const c = 0;
+>c : 0
+>0 : 0
+
+    n = c;
+>n = c : 0
+>n : number
+>c : 0
+}
+
+// Switch
+switch (0) {
+>0 : 0
+
+    case 0:
+>0 : 0
+
+        const c = 0;
+>c : 0
+>0 : 0
+
+        n = c;
+>n = c : 0
+>n : number
+>c : 0
+
+        break;
+}
+
+// blocks
+{
+    const c = 0;
+>c : 0
+>0 : 0
+
+    n = c;
+>n = c : 0
+>n : number
+>c : 0
+    {
+        const c = false;
+>c : false
+>false : false
+
+        var b: boolean = c;
+>b : boolean
+>c : false
+    }
+}
+
+// functions
+
+function F() {
+>F : () => void
+
+    const c = 0;
+>c : 0
+>0 : 0
+
+    n = c;
+>n = c : 0
+>n : number
+>c : 0
+}
+
+var F2 = () => {
+>F2 : () => void
+>() => {    const c = 0;    n = c;} : () => void
+
+    const c = 0;
+>c : 0
+>0 : 0
+
+    n = c;
+>n = c : 0
+>n : number
+>c : 0
+
+};
+
+var F3 = function () {
+>F3 : () => void
+>function () {    const c = 0;    n = c;} : () => void
+
+    const c = 0;
+>c : 0
+>0 : 0
+
+    n = c;
+>n = c : 0
+>n : number
+>c : 0
+
+};
+
+// modules
+module m {
+>m : typeof m
+
+    const c = 0;
+>c : 0
+>0 : 0
+
+    n = c;
+>n = c : 0
+>n : number
+>c : 0
+
+    {
+       const c = false;
+>c : false
+>false : false
+
+       var b2: boolean = c;
+>b2 : boolean
+>c : false
+    }
+}
+
+// methods
+class C {
+>C : C
+
+    constructor() {
+        const c = 0;
+>c : 0
+>0 : 0
+
+        n = c;
+>n = c : 0
+>n : number
+>c : 0
+    }
+
+    method() {
+>method : () => void
+
+        const c = 0;
+>c : 0
+>0 : 0
+
+        n = c;
+>n = c : 0
+>n : number
+>c : 0
+    }
+
+    get v() {
+>v : number
+
+        const c = 0;
+>c : 0
+>0 : 0
+
+        n = c;
+>n = c : 0
+>n : number
+>c : 0
+
+        return n;
+>n : number
+    }
+
+    set v(value) {
+>v : number
+>value : number
+
+        const c = 0;
+>c : 0
+>0 : 0
+
+        n = c;
+>n = c : 0
+>n : number
+>c : 0
+    }
+}
+
+// object literals
+var o = {
+>o : { f(): void; f2: () => void; }
+>{    f() {        const c = 0;        n = c;    },    f2: () => {        const c = 0;        n = c;    }} : { f(): void; f2: () => void; }
+
+    f() {
+>f : () => void
+
+        const c = 0;
+>c : 0
+>0 : 0
+
+        n = c;
+>n = c : 0
+>n : number
+>c : 0
+
+    },
+    f2: () => {
+>f2 : () => void
+>() => {        const c = 0;        n = c;    } : () => void
+
+        const c = 0;
+>c : 0
+>0 : 0
+
+        n = c;
+>n = c : 0
+>n : number
+>c : 0
+    }
+}

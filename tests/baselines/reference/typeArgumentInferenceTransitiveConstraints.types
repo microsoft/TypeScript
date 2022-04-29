@@ -1,0 +1,28 @@
+=== tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceTransitiveConstraints.ts ===
+function fn<A extends Date, B extends A, C extends B>(a: A, b: B, c: C) {
+>fn : <A extends Date, B extends A, C extends B>(a: A, b: B, c: C) => A[]
+>a : A
+>b : B
+>c : C
+
+    return [a, b, c];
+>[a, b, c] : A[]
+>a : A
+>b : B
+>c : C
+}
+
+var d = fn(new Date(), new Date(), new Date());
+>d : Date[]
+>fn(new Date(), new Date(), new Date()) : Date[]
+>fn : <A extends Date, B extends A, C extends B>(a: A, b: B, c: C) => A[]
+>new Date() : Date
+>Date : DateConstructor
+>new Date() : Date
+>Date : DateConstructor
+>new Date() : Date
+>Date : DateConstructor
+
+var d: Date[]; // Should be OK (d should be Date[])
+>d : Date[]
+

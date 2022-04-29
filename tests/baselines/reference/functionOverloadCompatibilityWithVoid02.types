@@ -1,0 +1,12 @@
+=== tests/cases/conformance/functions/functionOverloadCompatibilityWithVoid02.ts ===
+function f(x: string): void;
+>f : (x: string) => void
+>x : string
+
+function f(x: string): number {
+>f : (x: string) => void
+>x : string
+
+    return 0;
+>0 : 0
+} 

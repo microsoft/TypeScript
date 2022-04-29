@@ -1,0 +1,15 @@
+=== tests/cases/compiler/typeParametersInStaticMethods.ts ===
+class foo<T> {
+>foo : Symbol(foo, Decl(typeParametersInStaticMethods.ts, 0, 0))
+>T : Symbol(T, Decl(typeParametersInStaticMethods.ts, 0, 10))
+
+    static M(x: (x: T) => { x: { y: T } }) {
+>M : Symbol(foo.M, Decl(typeParametersInStaticMethods.ts, 0, 14))
+>x : Symbol(x, Decl(typeParametersInStaticMethods.ts, 1, 13))
+>x : Symbol(x, Decl(typeParametersInStaticMethods.ts, 1, 17))
+>T : Symbol(T)
+>x : Symbol(x, Decl(typeParametersInStaticMethods.ts, 1, 27))
+>y : Symbol(y, Decl(typeParametersInStaticMethods.ts, 1, 32))
+>T : Symbol(T)
+    }
+} 

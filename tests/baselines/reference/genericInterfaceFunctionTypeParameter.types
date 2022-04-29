@@ -1,0 +1,15 @@
+=== tests/cases/compiler/genericInterfaceFunctionTypeParameter.ts ===
+export interface IFoo<A> { }
+export function foo<A>(fn: (ifoo: IFoo<A>) => void) {
+>foo : <A>(fn: (ifoo: IFoo<A>) => void) => void
+>fn : (ifoo: IFoo<A>) => void
+>ifoo : IFoo<A>
+
+    foo(fn); // Invocation is necessary to repro (!)
+>foo(fn) : void
+>foo : <A>(fn: (ifoo: IFoo<A>) => void) => void
+>fn : (ifoo: IFoo<A>) => void
+}
+
+
+

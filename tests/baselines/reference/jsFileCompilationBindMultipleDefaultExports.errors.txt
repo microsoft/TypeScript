@@ -1,0 +1,23 @@
+tests/cases/compiler/a.js(1,22): error TS2528: A module cannot have multiple default exports.
+tests/cases/compiler/a.js(1,22): error TS2652: Merged declaration 'a' cannot include a default export declaration. Consider adding a separate 'export default a' declaration instead.
+tests/cases/compiler/a.js(3,15): error TS2528: A module cannot have multiple default exports.
+tests/cases/compiler/a.js(3,16): error TS1109: Expression expected.
+tests/cases/compiler/a.js(3,20): error TS2652: Merged declaration 'a' cannot include a default export declaration. Consider adding a separate 'export default a' declaration instead.
+
+
+==== tests/cases/compiler/a.js (5 errors) ====
+    export default class a {
+                         ~
+!!! error TS2528: A module cannot have multiple default exports.
+!!! related TS2753 tests/cases/compiler/a.js:3:15: Another export default is here.
+                         ~
+!!! error TS2652: Merged declaration 'a' cannot include a default export declaration. Consider adding a separate 'export default a' declaration instead.
+    }
+    export default var a = 10;
+                  
+!!! error TS2528: A module cannot have multiple default exports.
+!!! related TS2752 tests/cases/compiler/a.js:1:22: The first export default is here.
+                   ~~~
+!!! error TS1109: Expression expected.
+                       ~
+!!! error TS2652: Merged declaration 'a' cannot include a default export declaration. Consider adding a separate 'export default a' declaration instead.

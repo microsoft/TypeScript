@@ -1,0 +1,24 @@
+tests/cases/compiler/es6ImportNameSpaceImportMergeErrors_1.ts(4,13): error TS2300: Duplicate identifier 'nameSpaceBinding1'.
+tests/cases/compiler/es6ImportNameSpaceImportMergeErrors_1.ts(5,13): error TS2300: Duplicate identifier 'nameSpaceBinding1'.
+tests/cases/compiler/es6ImportNameSpaceImportMergeErrors_1.ts(7,13): error TS2440: Import declaration conflicts with local declaration of 'nameSpaceBinding3'.
+
+
+==== tests/cases/compiler/es6ImportNameSpaceImportMergeErrors_0.ts (0 errors) ====
+    export var a = 10;
+    
+==== tests/cases/compiler/es6ImportNameSpaceImportMergeErrors_1.ts (3 errors) ====
+    import * as nameSpaceBinding from "./es6ImportNameSpaceImportMergeErrors_0"; 
+    interface nameSpaceBinding { } // this should be ok
+    
+    import * as nameSpaceBinding1 from "./es6ImportNameSpaceImportMergeErrors_0"; // should be error
+                ~~~~~~~~~~~~~~~~~
+!!! error TS2300: Duplicate identifier 'nameSpaceBinding1'.
+    import * as nameSpaceBinding1 from "./es6ImportNameSpaceImportMergeErrors_0"; // should be error
+                ~~~~~~~~~~~~~~~~~
+!!! error TS2300: Duplicate identifier 'nameSpaceBinding1'.
+    
+    import * as nameSpaceBinding3 from "./es6ImportNameSpaceImportMergeErrors_0"; // should be error
+                ~~~~~~~~~~~~~~~~~
+!!! error TS2440: Import declaration conflicts with local declaration of 'nameSpaceBinding3'.
+    var nameSpaceBinding3 = 10;
+    

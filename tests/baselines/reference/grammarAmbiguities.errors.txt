@@ -1,0 +1,20 @@
+tests/cases/conformance/expressions/functionCalls/grammarAmbiguities.ts(8,10): error TS2554: Expected 1 arguments, but got 2.
+tests/cases/conformance/expressions/functionCalls/grammarAmbiguities.ts(9,10): error TS2554: Expected 1 arguments, but got 2.
+
+
+==== tests/cases/conformance/expressions/functionCalls/grammarAmbiguities.ts (2 errors) ====
+    function f(n: any) { return null; }
+    function g<A, B>(x: any) { return null; }
+    interface A { }
+    interface B { }
+    var A, B;
+    
+    f(g<A, B>(7));
+    f(g < A, B > 7); // Should error
+             ~~~~~
+!!! error TS2554: Expected 1 arguments, but got 2.
+    f(g < A, B > +(7)); // Should error
+             ~~~~~~~~
+!!! error TS2554: Expected 1 arguments, but got 2.
+    
+    

@@ -1,0 +1,734 @@
+=== tests/cases/conformance/parser/ecmascript5/parserRealSource2.ts ===
+// Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
+// See LICENSE.txt in the project root for complete license information.
+
+///<reference path='typescript.ts' />
+
+module TypeScript {
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource2.ts, 0, 0))
+
+    export function hasFlag(val: number, flag: number) {
+>hasFlag : Symbol(hasFlag, Decl(parserRealSource2.ts, 5, 19))
+>val : Symbol(val, Decl(parserRealSource2.ts, 7, 28))
+>flag : Symbol(flag, Decl(parserRealSource2.ts, 7, 40))
+
+        return (val & flag) != 0;
+>val : Symbol(val, Decl(parserRealSource2.ts, 7, 28))
+>flag : Symbol(flag, Decl(parserRealSource2.ts, 7, 40))
+    }
+
+    export enum ErrorRecoverySet {
+>ErrorRecoverySet : Symbol(ErrorRecoverySet, Decl(parserRealSource2.ts, 9, 5))
+
+        None = 0,
+>None : Symbol(ErrorRecoverySet.None, Decl(parserRealSource2.ts, 11, 34))
+
+        Comma = 1, // Comma
+>Comma : Symbol(ErrorRecoverySet.Comma, Decl(parserRealSource2.ts, 12, 17))
+
+        SColon = 1 << 1, // SColon
+>SColon : Symbol(ErrorRecoverySet.SColon, Decl(parserRealSource2.ts, 13, 18))
+
+        Asg = 1 << 2, // Asg
+>Asg : Symbol(ErrorRecoverySet.Asg, Decl(parserRealSource2.ts, 14, 24))
+
+        BinOp = 1 << 3, // Lsh, Rsh, Rs2, Le, Ge, INSTANCEOF, EQ, NE, Eqv, NEqv, LogAnd, LogOr, AsgMul, AsgDiv
+>BinOp : Symbol(ErrorRecoverySet.BinOp, Decl(parserRealSource2.ts, 15, 21))
+
+        // AsgMod, AsgAdd, AsgSub, AsgLsh, AsgRsh, AsgRs2, AsgAnd, AsgXor, AsgOr, QMark, Mult, Div, 
+        // Pct, GT, LT, And, Xor, Or
+        RBrack = 1 << 4, // RBrack
+>RBrack : Symbol(ErrorRecoverySet.RBrack, Decl(parserRealSource2.ts, 16, 23))
+
+        RCurly = 1 << 5, // RCurly
+>RCurly : Symbol(ErrorRecoverySet.RCurly, Decl(parserRealSource2.ts, 19, 24))
+
+        RParen = 1 << 6, // RParen
+>RParen : Symbol(ErrorRecoverySet.RParen, Decl(parserRealSource2.ts, 20, 24))
+
+        Dot = 1 << 7, // Dot
+>Dot : Symbol(ErrorRecoverySet.Dot, Decl(parserRealSource2.ts, 21, 24))
+
+        Colon = 1 << 8, // Colon
+>Colon : Symbol(ErrorRecoverySet.Colon, Decl(parserRealSource2.ts, 22, 21))
+
+        PrimType = 1 << 9, // number, string, boolean
+>PrimType : Symbol(ErrorRecoverySet.PrimType, Decl(parserRealSource2.ts, 23, 23))
+
+        AddOp = 1 << 10, // Add, Sub
+>AddOp : Symbol(ErrorRecoverySet.AddOp, Decl(parserRealSource2.ts, 24, 26))
+
+        LCurly = 1 << 11, // LCurly
+>LCurly : Symbol(ErrorRecoverySet.LCurly, Decl(parserRealSource2.ts, 25, 24))
+
+        PreOp = 1 << 12, // Tilde, Bang, Inc, Dec
+>PreOp : Symbol(ErrorRecoverySet.PreOp, Decl(parserRealSource2.ts, 26, 25))
+
+        RegExp = 1 << 13, // RegExp
+>RegExp : Symbol(ErrorRecoverySet.RegExp, Decl(parserRealSource2.ts, 27, 24))
+
+        LParen = 1 << 14, // LParen
+>LParen : Symbol(ErrorRecoverySet.LParen, Decl(parserRealSource2.ts, 28, 25))
+
+        LBrack = 1 << 15, // LBrack
+>LBrack : Symbol(ErrorRecoverySet.LBrack, Decl(parserRealSource2.ts, 29, 25))
+
+        Scope = 1 << 16, // Scope
+>Scope : Symbol(ErrorRecoverySet.Scope, Decl(parserRealSource2.ts, 30, 25))
+
+        In = 1 << 17, // IN
+>In : Symbol(ErrorRecoverySet.In, Decl(parserRealSource2.ts, 31, 24))
+
+        SCase = 1 << 18, // CASE, DEFAULT
+>SCase : Symbol(ErrorRecoverySet.SCase, Decl(parserRealSource2.ts, 32, 21))
+
+        Else = 1 << 19, // ELSE
+>Else : Symbol(ErrorRecoverySet.Else, Decl(parserRealSource2.ts, 33, 24))
+
+        Catch = 1 << 20, // CATCH, FINALLY
+>Catch : Symbol(ErrorRecoverySet.Catch, Decl(parserRealSource2.ts, 34, 23))
+
+        Var = 1 << 21, // 
+>Var : Symbol(ErrorRecoverySet.Var, Decl(parserRealSource2.ts, 35, 24))
+
+        Stmt = 1 << 22, // BREAK, RETURN, THROW, DEBUGGER, FOR, SWITCH, DO, IF, TRY, WITH
+>Stmt : Symbol(ErrorRecoverySet.Stmt, Decl(parserRealSource2.ts, 36, 22))
+
+        While = 1 << 23, // WHILE
+>While : Symbol(ErrorRecoverySet.While, Decl(parserRealSource2.ts, 37, 23))
+
+        ID = 1 << 24, // ID
+>ID : Symbol(ErrorRecoverySet.ID, Decl(parserRealSource2.ts, 38, 24))
+
+        Prefix = 1 << 25, // VOID, DELETE, TYPEOF, AWAIT
+>Prefix : Symbol(ErrorRecoverySet.Prefix, Decl(parserRealSource2.ts, 39, 21))
+
+        Literal = 1 << 26, // IntCon, FltCon, StrCon
+>Literal : Symbol(ErrorRecoverySet.Literal, Decl(parserRealSource2.ts, 40, 25))
+
+        RLit = 1 << 27, // THIS, TRUE, FALSE, NULL
+>RLit : Symbol(ErrorRecoverySet.RLit, Decl(parserRealSource2.ts, 41, 26))
+
+        Func = 1 << 28, // FUNCTION
+>Func : Symbol(ErrorRecoverySet.Func, Decl(parserRealSource2.ts, 42, 23))
+
+        EOF = 1 << 29, // EOF
+>EOF : Symbol(ErrorRecoverySet.EOF, Decl(parserRealSource2.ts, 43, 23))
+
+        // REVIEW: Name this something clearer.
+        TypeScriptS = 1 << 30, // PROPERTY, PRIVATE, STATIC, INTERFACE, CLASS, MODULE, EXPORT, IMPORT
+>TypeScriptS : Symbol(ErrorRecoverySet.TypeScriptS, Decl(parserRealSource2.ts, 44, 22))
+
+        ExprStart = SColon | AddOp | LCurly | PreOp | RegExp | LParen | LBrack | ID | Prefix | RLit | Func | Literal,
+>ExprStart : Symbol(ErrorRecoverySet.ExprStart, Decl(parserRealSource2.ts, 47, 30))
+>SColon : Symbol(ErrorRecoverySet.SColon, Decl(parserRealSource2.ts, 13, 18))
+>AddOp : Symbol(ErrorRecoverySet.AddOp, Decl(parserRealSource2.ts, 24, 26))
+>LCurly : Symbol(ErrorRecoverySet.LCurly, Decl(parserRealSource2.ts, 25, 24))
+>PreOp : Symbol(ErrorRecoverySet.PreOp, Decl(parserRealSource2.ts, 26, 25))
+>RegExp : Symbol(ErrorRecoverySet.RegExp, Decl(parserRealSource2.ts, 27, 24))
+>LParen : Symbol(ErrorRecoverySet.LParen, Decl(parserRealSource2.ts, 28, 25))
+>LBrack : Symbol(ErrorRecoverySet.LBrack, Decl(parserRealSource2.ts, 29, 25))
+>ID : Symbol(ErrorRecoverySet.ID, Decl(parserRealSource2.ts, 38, 24))
+>Prefix : Symbol(ErrorRecoverySet.Prefix, Decl(parserRealSource2.ts, 39, 21))
+>RLit : Symbol(ErrorRecoverySet.RLit, Decl(parserRealSource2.ts, 41, 26))
+>Func : Symbol(ErrorRecoverySet.Func, Decl(parserRealSource2.ts, 42, 23))
+>Literal : Symbol(ErrorRecoverySet.Literal, Decl(parserRealSource2.ts, 40, 25))
+
+        StmtStart = ExprStart | SColon | Var | Stmt | While | TypeScriptS,
+>StmtStart : Symbol(ErrorRecoverySet.StmtStart, Decl(parserRealSource2.ts, 48, 117))
+>ExprStart : Symbol(ErrorRecoverySet.ExprStart, Decl(parserRealSource2.ts, 47, 30))
+>SColon : Symbol(ErrorRecoverySet.SColon, Decl(parserRealSource2.ts, 13, 18))
+>Var : Symbol(ErrorRecoverySet.Var, Decl(parserRealSource2.ts, 35, 24))
+>Stmt : Symbol(ErrorRecoverySet.Stmt, Decl(parserRealSource2.ts, 36, 22))
+>While : Symbol(ErrorRecoverySet.While, Decl(parserRealSource2.ts, 37, 23))
+>TypeScriptS : Symbol(ErrorRecoverySet.TypeScriptS, Decl(parserRealSource2.ts, 44, 22))
+
+        Postfix = Dot | LParen | LBrack,
+>Postfix : Symbol(ErrorRecoverySet.Postfix, Decl(parserRealSource2.ts, 49, 74))
+>Dot : Symbol(ErrorRecoverySet.Dot, Decl(parserRealSource2.ts, 21, 24))
+>LParen : Symbol(ErrorRecoverySet.LParen, Decl(parserRealSource2.ts, 28, 25))
+>LBrack : Symbol(ErrorRecoverySet.LBrack, Decl(parserRealSource2.ts, 29, 25))
+    }
+
+    export enum AllowedElements {
+>AllowedElements : Symbol(AllowedElements, Decl(parserRealSource2.ts, 51, 5))
+
+        None = 0,
+>None : Symbol(AllowedElements.None, Decl(parserRealSource2.ts, 53, 33))
+
+        ModuleDeclarations = 1 << 2,
+>ModuleDeclarations : Symbol(AllowedElements.ModuleDeclarations, Decl(parserRealSource2.ts, 54, 17))
+
+        ClassDeclarations = 1 << 3,
+>ClassDeclarations : Symbol(AllowedElements.ClassDeclarations, Decl(parserRealSource2.ts, 55, 36))
+
+        InterfaceDeclarations = 1 << 4,
+>InterfaceDeclarations : Symbol(AllowedElements.InterfaceDeclarations, Decl(parserRealSource2.ts, 56, 35))
+
+        AmbientDeclarations = 1 << 10,
+>AmbientDeclarations : Symbol(AllowedElements.AmbientDeclarations, Decl(parserRealSource2.ts, 57, 39))
+
+        Properties = 1 << 11,
+>Properties : Symbol(AllowedElements.Properties, Decl(parserRealSource2.ts, 58, 38))
+
+        Global = ModuleDeclarations | ClassDeclarations | InterfaceDeclarations | AmbientDeclarations,
+>Global : Symbol(AllowedElements.Global, Decl(parserRealSource2.ts, 59, 29))
+>ModuleDeclarations : Symbol(AllowedElements.ModuleDeclarations, Decl(parserRealSource2.ts, 54, 17))
+>ClassDeclarations : Symbol(AllowedElements.ClassDeclarations, Decl(parserRealSource2.ts, 55, 36))
+>InterfaceDeclarations : Symbol(AllowedElements.InterfaceDeclarations, Decl(parserRealSource2.ts, 56, 35))
+>AmbientDeclarations : Symbol(AllowedElements.AmbientDeclarations, Decl(parserRealSource2.ts, 57, 39))
+
+        QuickParse = Global | Properties,
+>QuickParse : Symbol(AllowedElements.QuickParse, Decl(parserRealSource2.ts, 61, 102))
+>Global : Symbol(AllowedElements.Global, Decl(parserRealSource2.ts, 59, 29))
+>Properties : Symbol(AllowedElements.Properties, Decl(parserRealSource2.ts, 58, 38))
+    }
+
+    export enum Modifiers {
+>Modifiers : Symbol(Modifiers, Decl(parserRealSource2.ts, 63, 5))
+
+        None = 0,
+>None : Symbol(Modifiers.None, Decl(parserRealSource2.ts, 65, 27))
+
+        Private = 1,
+>Private : Symbol(Modifiers.Private, Decl(parserRealSource2.ts, 66, 17))
+
+        Public = 1 << 1,
+>Public : Symbol(Modifiers.Public, Decl(parserRealSource2.ts, 67, 20))
+
+        Readonly = 1 << 2,
+>Readonly : Symbol(Modifiers.Readonly, Decl(parserRealSource2.ts, 68, 24))
+
+        Ambient = 1 << 3,
+>Ambient : Symbol(Modifiers.Ambient, Decl(parserRealSource2.ts, 69, 26))
+
+        Exported = 1 << 4,
+>Exported : Symbol(Modifiers.Exported, Decl(parserRealSource2.ts, 70, 25))
+
+        Getter = 1 << 5,
+>Getter : Symbol(Modifiers.Getter, Decl(parserRealSource2.ts, 71, 26))
+
+        Setter = 1 << 6,
+>Setter : Symbol(Modifiers.Setter, Decl(parserRealSource2.ts, 72, 24))
+
+        Static = 1 << 7,
+>Static : Symbol(Modifiers.Static, Decl(parserRealSource2.ts, 73, 24))
+    }
+
+    export enum ASTFlags {
+>ASTFlags : Symbol(ASTFlags, Decl(parserRealSource2.ts, 75, 5))
+
+        None = 0,
+>None : Symbol(ASTFlags.None, Decl(parserRealSource2.ts, 77, 26))
+
+        ExplicitSemicolon = 1, // statment terminated by an explicit semicolon
+>ExplicitSemicolon : Symbol(ASTFlags.ExplicitSemicolon, Decl(parserRealSource2.ts, 78, 17))
+
+        AutomaticSemicolon = 1 << 1, // statment terminated by an automatic semicolon
+>AutomaticSemicolon : Symbol(ASTFlags.AutomaticSemicolon, Decl(parserRealSource2.ts, 79, 30))
+
+        Writeable = 1 << 2,  // node is lhs that can be modified
+>Writeable : Symbol(ASTFlags.Writeable, Decl(parserRealSource2.ts, 80, 36))
+
+        Error = 1 << 3, // node has an error
+>Error : Symbol(ASTFlags.Error, Decl(parserRealSource2.ts, 81, 27))
+
+        DotLHSPartial = 1 << 4, // node is the lhs of an incomplete dot expr at cursor
+>DotLHSPartial : Symbol(ASTFlags.DotLHSPartial, Decl(parserRealSource2.ts, 82, 23))
+
+        DotLHS = 1 << 5, // node is the lhs of a dot expr
+>DotLHS : Symbol(ASTFlags.DotLHS, Decl(parserRealSource2.ts, 83, 31))
+
+        IsStatement = 1 << 6, // node is a statement
+>IsStatement : Symbol(ASTFlags.IsStatement, Decl(parserRealSource2.ts, 84, 24))
+
+        StrictMode = 1 << 7, // node is in the strict mode environment
+>StrictMode : Symbol(ASTFlags.StrictMode, Decl(parserRealSource2.ts, 85, 29))
+
+        PossibleOptionalParameter = 1 << 8,
+>PossibleOptionalParameter : Symbol(ASTFlags.PossibleOptionalParameter, Decl(parserRealSource2.ts, 86, 28))
+
+        ClassBaseConstructorCall = 1 << 9,
+>ClassBaseConstructorCall : Symbol(ASTFlags.ClassBaseConstructorCall, Decl(parserRealSource2.ts, 87, 43))
+
+        OptionalName = 1 << 10,
+>OptionalName : Symbol(ASTFlags.OptionalName, Decl(parserRealSource2.ts, 88, 42))
+
+        // REVIEW: This flag is to mark lambda nodes to note that the LParen of an expression has already been matched in the lambda header.
+        //         The flag is used to communicate this piece of information to the calling parseTerm, which intern will remove it.
+        //         Once we have a better way to associate information with nodes, this flag should not be used.
+        SkipNextRParen = 1 << 11, 
+>SkipNextRParen : Symbol(ASTFlags.SkipNextRParen, Decl(parserRealSource2.ts, 89, 31))
+    }
+
+    export enum DeclFlags {
+>DeclFlags : Symbol(DeclFlags, Decl(parserRealSource2.ts, 94, 5))
+
+        None = 0,
+>None : Symbol(DeclFlags.None, Decl(parserRealSource2.ts, 96, 27))
+
+        Exported = 1,
+>Exported : Symbol(DeclFlags.Exported, Decl(parserRealSource2.ts, 97, 17))
+
+        Private = 1 << 1,
+>Private : Symbol(DeclFlags.Private, Decl(parserRealSource2.ts, 98, 21))
+
+        Public = 1 << 2,
+>Public : Symbol(DeclFlags.Public, Decl(parserRealSource2.ts, 99, 25))
+
+        Ambient = 1 << 3,
+>Ambient : Symbol(DeclFlags.Ambient, Decl(parserRealSource2.ts, 100, 24))
+
+        Static = 1 << 4,
+>Static : Symbol(DeclFlags.Static, Decl(parserRealSource2.ts, 101, 25))
+
+        LocalStatic = 1 << 5,
+>LocalStatic : Symbol(DeclFlags.LocalStatic, Decl(parserRealSource2.ts, 102, 24))
+
+        GetAccessor = 1 << 6,
+>GetAccessor : Symbol(DeclFlags.GetAccessor, Decl(parserRealSource2.ts, 103, 29))
+
+        SetAccessor = 1 << 7,
+>SetAccessor : Symbol(DeclFlags.SetAccessor, Decl(parserRealSource2.ts, 104, 29))
+    }
+
+    export enum ModuleFlags {
+>ModuleFlags : Symbol(ModuleFlags, Decl(parserRealSource2.ts, 106, 5))
+
+        None = 0,
+>None : Symbol(ModuleFlags.None, Decl(parserRealSource2.ts, 108, 29))
+
+        Exported = 1,
+>Exported : Symbol(ModuleFlags.Exported, Decl(parserRealSource2.ts, 109, 17))
+
+        Private = 1 << 1,
+>Private : Symbol(ModuleFlags.Private, Decl(parserRealSource2.ts, 110, 21))
+
+        Public = 1 << 2,
+>Public : Symbol(ModuleFlags.Public, Decl(parserRealSource2.ts, 111, 25))
+
+        Ambient = 1 << 3,
+>Ambient : Symbol(ModuleFlags.Ambient, Decl(parserRealSource2.ts, 112, 24))
+
+        Static = 1 << 4,
+>Static : Symbol(ModuleFlags.Static, Decl(parserRealSource2.ts, 113, 25))
+
+        LocalStatic = 1 << 5,
+>LocalStatic : Symbol(ModuleFlags.LocalStatic, Decl(parserRealSource2.ts, 114, 24))
+
+        GetAccessor = 1 << 6,
+>GetAccessor : Symbol(ModuleFlags.GetAccessor, Decl(parserRealSource2.ts, 115, 29))
+
+        SetAccessor = 1 << 7,
+>SetAccessor : Symbol(ModuleFlags.SetAccessor, Decl(parserRealSource2.ts, 116, 29))
+
+        IsEnum = 1 << 8,
+>IsEnum : Symbol(ModuleFlags.IsEnum, Decl(parserRealSource2.ts, 117, 29))
+
+        ShouldEmitModuleDecl = 1 << 9,
+>ShouldEmitModuleDecl : Symbol(ModuleFlags.ShouldEmitModuleDecl, Decl(parserRealSource2.ts, 118, 24))
+
+        IsWholeFile = 1 << 10,
+>IsWholeFile : Symbol(ModuleFlags.IsWholeFile, Decl(parserRealSource2.ts, 119, 38))
+
+        IsDynamic = 1 << 11,
+>IsDynamic : Symbol(ModuleFlags.IsDynamic, Decl(parserRealSource2.ts, 120, 30))
+
+        MustCaptureThis = 1 << 12,
+>MustCaptureThis : Symbol(ModuleFlags.MustCaptureThis, Decl(parserRealSource2.ts, 121, 28))
+    }
+
+    export enum SymbolFlags {
+>SymbolFlags : Symbol(SymbolFlags, Decl(parserRealSource2.ts, 123, 5))
+
+        None = 0,
+>None : Symbol(SymbolFlags.None, Decl(parserRealSource2.ts, 125, 29))
+
+        Exported = 1,
+>Exported : Symbol(SymbolFlags.Exported, Decl(parserRealSource2.ts, 126, 17))
+
+        Private = 1 << 1,
+>Private : Symbol(SymbolFlags.Private, Decl(parserRealSource2.ts, 127, 21))
+
+        Public = 1 << 2,
+>Public : Symbol(SymbolFlags.Public, Decl(parserRealSource2.ts, 128, 25))
+
+        Ambient = 1 << 3,
+>Ambient : Symbol(SymbolFlags.Ambient, Decl(parserRealSource2.ts, 129, 24))
+
+        Static = 1 << 4,
+>Static : Symbol(SymbolFlags.Static, Decl(parserRealSource2.ts, 130, 25))
+
+        LocalStatic = 1 << 5,
+>LocalStatic : Symbol(SymbolFlags.LocalStatic, Decl(parserRealSource2.ts, 131, 24))
+
+        GetAccessor = 1 << 6,
+>GetAccessor : Symbol(SymbolFlags.GetAccessor, Decl(parserRealSource2.ts, 132, 29))
+
+        SetAccessor = 1 << 7,
+>SetAccessor : Symbol(SymbolFlags.SetAccessor, Decl(parserRealSource2.ts, 133, 29))
+
+        Property = 1 << 8,
+>Property : Symbol(SymbolFlags.Property, Decl(parserRealSource2.ts, 134, 29))
+
+        Readonly = 1 << 9,
+>Readonly : Symbol(SymbolFlags.Readonly, Decl(parserRealSource2.ts, 135, 26))
+
+        ModuleMember = 1 << 10,
+>ModuleMember : Symbol(SymbolFlags.ModuleMember, Decl(parserRealSource2.ts, 136, 26))
+
+        InterfaceMember = 1 << 11,
+>InterfaceMember : Symbol(SymbolFlags.InterfaceMember, Decl(parserRealSource2.ts, 137, 31))
+
+        ClassMember = 1 << 12,
+>ClassMember : Symbol(SymbolFlags.ClassMember, Decl(parserRealSource2.ts, 138, 34))
+
+        BuiltIn = 1 << 13,
+>BuiltIn : Symbol(SymbolFlags.BuiltIn, Decl(parserRealSource2.ts, 139, 30))
+
+        TypeSetDuringScopeAssignment = 1 << 14,
+>TypeSetDuringScopeAssignment : Symbol(SymbolFlags.TypeSetDuringScopeAssignment, Decl(parserRealSource2.ts, 140, 26))
+
+        Constant = 1 << 15,
+>Constant : Symbol(SymbolFlags.Constant, Decl(parserRealSource2.ts, 141, 47))
+
+        Optional = 1 << 16,
+>Optional : Symbol(SymbolFlags.Optional, Decl(parserRealSource2.ts, 142, 27))
+
+        RecursivelyReferenced = 1 << 17,
+>RecursivelyReferenced : Symbol(SymbolFlags.RecursivelyReferenced, Decl(parserRealSource2.ts, 143, 27))
+
+        Bound = 1 << 18,
+>Bound : Symbol(SymbolFlags.Bound, Decl(parserRealSource2.ts, 144, 40))
+
+        CompilerGenerated = 1 << 19,
+>CompilerGenerated : Symbol(SymbolFlags.CompilerGenerated, Decl(parserRealSource2.ts, 145, 24))
+    }
+
+    export enum VarFlags {
+>VarFlags : Symbol(VarFlags, Decl(parserRealSource2.ts, 147, 5))
+
+        None = 0,
+>None : Symbol(VarFlags.None, Decl(parserRealSource2.ts, 149, 26))
+
+        Exported = 1,
+>Exported : Symbol(VarFlags.Exported, Decl(parserRealSource2.ts, 150, 17))
+
+        Private = 1 << 1,
+>Private : Symbol(VarFlags.Private, Decl(parserRealSource2.ts, 151, 21))
+
+        Public = 1 << 2,
+>Public : Symbol(VarFlags.Public, Decl(parserRealSource2.ts, 152, 25))
+
+        Ambient = 1 << 3,
+>Ambient : Symbol(VarFlags.Ambient, Decl(parserRealSource2.ts, 153, 24))
+
+        Static = 1 << 4,
+>Static : Symbol(VarFlags.Static, Decl(parserRealSource2.ts, 154, 25))
+
+        LocalStatic = 1 << 5,
+>LocalStatic : Symbol(VarFlags.LocalStatic, Decl(parserRealSource2.ts, 155, 24))
+
+        GetAccessor = 1 << 6,
+>GetAccessor : Symbol(VarFlags.GetAccessor, Decl(parserRealSource2.ts, 156, 29))
+
+        SetAccessor = 1 << 7,
+>SetAccessor : Symbol(VarFlags.SetAccessor, Decl(parserRealSource2.ts, 157, 29))
+
+        AutoInit = 1 << 8,
+>AutoInit : Symbol(VarFlags.AutoInit, Decl(parserRealSource2.ts, 158, 29))
+
+        Property = 1 << 9,
+>Property : Symbol(VarFlags.Property, Decl(parserRealSource2.ts, 159, 26))
+
+        Readonly = 1 << 10,
+>Readonly : Symbol(VarFlags.Readonly, Decl(parserRealSource2.ts, 160, 26))
+
+        Class = 1 << 11,
+>Class : Symbol(VarFlags.Class, Decl(parserRealSource2.ts, 161, 27))
+
+        ClassProperty = 1 << 12,
+>ClassProperty : Symbol(VarFlags.ClassProperty, Decl(parserRealSource2.ts, 162, 24))
+
+        ClassBodyProperty = 1 << 13,
+>ClassBodyProperty : Symbol(VarFlags.ClassBodyProperty, Decl(parserRealSource2.ts, 163, 32))
+
+        ClassConstructorProperty = 1 << 14,
+>ClassConstructorProperty : Symbol(VarFlags.ClassConstructorProperty, Decl(parserRealSource2.ts, 164, 36))
+
+        ClassSuperMustBeFirstCallInConstructor = 1 << 15,
+>ClassSuperMustBeFirstCallInConstructor : Symbol(VarFlags.ClassSuperMustBeFirstCallInConstructor, Decl(parserRealSource2.ts, 165, 43))
+
+        Constant = 1 << 16,
+>Constant : Symbol(VarFlags.Constant, Decl(parserRealSource2.ts, 166, 57))
+
+        MustCaptureThis = 1 << 17,
+>MustCaptureThis : Symbol(VarFlags.MustCaptureThis, Decl(parserRealSource2.ts, 167, 27))
+    }
+
+    export enum FncFlags {
+>FncFlags : Symbol(FncFlags, Decl(parserRealSource2.ts, 169, 5))
+
+        None = 0,
+>None : Symbol(FncFlags.None, Decl(parserRealSource2.ts, 171, 26))
+
+        Exported = 1,
+>Exported : Symbol(FncFlags.Exported, Decl(parserRealSource2.ts, 172, 17))
+
+        Private = 1 << 1,
+>Private : Symbol(FncFlags.Private, Decl(parserRealSource2.ts, 173, 21))
+
+        Public = 1 << 2,
+>Public : Symbol(FncFlags.Public, Decl(parserRealSource2.ts, 174, 25))
+
+        Ambient = 1 << 3,
+>Ambient : Symbol(FncFlags.Ambient, Decl(parserRealSource2.ts, 175, 24))
+
+        Static = 1 << 4,
+>Static : Symbol(FncFlags.Static, Decl(parserRealSource2.ts, 176, 25))
+
+        LocalStatic = 1 << 5,
+>LocalStatic : Symbol(FncFlags.LocalStatic, Decl(parserRealSource2.ts, 177, 24))
+
+        GetAccessor = 1 << 6,
+>GetAccessor : Symbol(FncFlags.GetAccessor, Decl(parserRealSource2.ts, 178, 29))
+
+        SetAccessor = 1 << 7,
+>SetAccessor : Symbol(FncFlags.SetAccessor, Decl(parserRealSource2.ts, 179, 29))
+
+        Definition = 1 << 8,
+>Definition : Symbol(FncFlags.Definition, Decl(parserRealSource2.ts, 180, 29))
+
+        Signature = 1 << 9,
+>Signature : Symbol(FncFlags.Signature, Decl(parserRealSource2.ts, 181, 28))
+
+        Method = 1 << 10,
+>Method : Symbol(FncFlags.Method, Decl(parserRealSource2.ts, 182, 27))
+
+        HasReturnExpression = 1 << 11,
+>HasReturnExpression : Symbol(FncFlags.HasReturnExpression, Decl(parserRealSource2.ts, 183, 25))
+
+        CallMember = 1 << 12,
+>CallMember : Symbol(FncFlags.CallMember, Decl(parserRealSource2.ts, 184, 38))
+
+        ConstructMember = 1 << 13,
+>ConstructMember : Symbol(FncFlags.ConstructMember, Decl(parserRealSource2.ts, 185, 29))
+
+        HasSelfReference = 1 << 14,
+>HasSelfReference : Symbol(FncFlags.HasSelfReference, Decl(parserRealSource2.ts, 186, 34))
+
+        IsFatArrowFunction = 1 << 15,
+>IsFatArrowFunction : Symbol(FncFlags.IsFatArrowFunction, Decl(parserRealSource2.ts, 187, 35))
+
+        IndexerMember = 1 << 16,
+>IndexerMember : Symbol(FncFlags.IndexerMember, Decl(parserRealSource2.ts, 188, 37))
+
+        IsFunctionExpression = 1 << 17,
+>IsFunctionExpression : Symbol(FncFlags.IsFunctionExpression, Decl(parserRealSource2.ts, 189, 32))
+
+        ClassMethod = 1 << 18,
+>ClassMethod : Symbol(FncFlags.ClassMethod, Decl(parserRealSource2.ts, 190, 39))
+
+        ClassPropertyMethodExported = 1 << 19,
+>ClassPropertyMethodExported : Symbol(FncFlags.ClassPropertyMethodExported, Decl(parserRealSource2.ts, 191, 30))
+    }
+
+    export enum SignatureFlags {
+>SignatureFlags : Symbol(SignatureFlags, Decl(parserRealSource2.ts, 193, 5))
+
+        None = 0,
+>None : Symbol(SignatureFlags.None, Decl(parserRealSource2.ts, 195, 32))
+
+        IsIndexer = 1,
+>IsIndexer : Symbol(SignatureFlags.IsIndexer, Decl(parserRealSource2.ts, 196, 17))
+
+        IsStringIndexer = 1 << 1,
+>IsStringIndexer : Symbol(SignatureFlags.IsStringIndexer, Decl(parserRealSource2.ts, 197, 22))
+
+        IsNumberIndexer = 1 << 2,
+>IsNumberIndexer : Symbol(SignatureFlags.IsNumberIndexer, Decl(parserRealSource2.ts, 198, 33))
+    }
+
+    export function ToDeclFlags(fncFlags: FncFlags) : DeclFlags;
+>ToDeclFlags : Symbol(ToDeclFlags, Decl(parserRealSource2.ts, 200, 5), Decl(parserRealSource2.ts, 202, 64), Decl(parserRealSource2.ts, 203, 64), Decl(parserRealSource2.ts, 204, 66), Decl(parserRealSource2.ts, 205, 69))
+>fncFlags : Symbol(fncFlags, Decl(parserRealSource2.ts, 202, 32))
+>FncFlags : Symbol(FncFlags, Decl(parserRealSource2.ts, 169, 5))
+>DeclFlags : Symbol(DeclFlags, Decl(parserRealSource2.ts, 94, 5))
+
+    export function ToDeclFlags(varFlags: VarFlags) : DeclFlags;
+>ToDeclFlags : Symbol(ToDeclFlags, Decl(parserRealSource2.ts, 200, 5), Decl(parserRealSource2.ts, 202, 64), Decl(parserRealSource2.ts, 203, 64), Decl(parserRealSource2.ts, 204, 66), Decl(parserRealSource2.ts, 205, 69))
+>varFlags : Symbol(varFlags, Decl(parserRealSource2.ts, 203, 32))
+>VarFlags : Symbol(VarFlags, Decl(parserRealSource2.ts, 147, 5))
+>DeclFlags : Symbol(DeclFlags, Decl(parserRealSource2.ts, 94, 5))
+
+    export function ToDeclFlags(symFlags: SymbolFlags): DeclFlags;
+>ToDeclFlags : Symbol(ToDeclFlags, Decl(parserRealSource2.ts, 200, 5), Decl(parserRealSource2.ts, 202, 64), Decl(parserRealSource2.ts, 203, 64), Decl(parserRealSource2.ts, 204, 66), Decl(parserRealSource2.ts, 205, 69))
+>symFlags : Symbol(symFlags, Decl(parserRealSource2.ts, 204, 32))
+>SymbolFlags : Symbol(SymbolFlags, Decl(parserRealSource2.ts, 123, 5))
+>DeclFlags : Symbol(DeclFlags, Decl(parserRealSource2.ts, 94, 5))
+
+    export function ToDeclFlags(moduleFlags: ModuleFlags): DeclFlags;
+>ToDeclFlags : Symbol(ToDeclFlags, Decl(parserRealSource2.ts, 200, 5), Decl(parserRealSource2.ts, 202, 64), Decl(parserRealSource2.ts, 203, 64), Decl(parserRealSource2.ts, 204, 66), Decl(parserRealSource2.ts, 205, 69))
+>moduleFlags : Symbol(moduleFlags, Decl(parserRealSource2.ts, 205, 32))
+>ModuleFlags : Symbol(ModuleFlags, Decl(parserRealSource2.ts, 106, 5))
+>DeclFlags : Symbol(DeclFlags, Decl(parserRealSource2.ts, 94, 5))
+
+    export function ToDeclFlags(fncOrVarOrSymbolOrModuleFlags: any) {
+>ToDeclFlags : Symbol(ToDeclFlags, Decl(parserRealSource2.ts, 200, 5), Decl(parserRealSource2.ts, 202, 64), Decl(parserRealSource2.ts, 203, 64), Decl(parserRealSource2.ts, 204, 66), Decl(parserRealSource2.ts, 205, 69))
+>fncOrVarOrSymbolOrModuleFlags : Symbol(fncOrVarOrSymbolOrModuleFlags, Decl(parserRealSource2.ts, 206, 32))
+
+        return <DeclFlags>fncOrVarOrSymbolOrModuleFlags;
+>DeclFlags : Symbol(DeclFlags, Decl(parserRealSource2.ts, 94, 5))
+>fncOrVarOrSymbolOrModuleFlags : Symbol(fncOrVarOrSymbolOrModuleFlags, Decl(parserRealSource2.ts, 206, 32))
+    }
+
+    export enum TypeFlags {
+>TypeFlags : Symbol(TypeFlags, Decl(parserRealSource2.ts, 208, 5))
+
+        None = 0,
+>None : Symbol(TypeFlags.None, Decl(parserRealSource2.ts, 210, 27))
+
+        HasImplementation = 1,
+>HasImplementation : Symbol(TypeFlags.HasImplementation, Decl(parserRealSource2.ts, 211, 17))
+
+        HasSelfReference = 1 << 1,
+>HasSelfReference : Symbol(TypeFlags.HasSelfReference, Decl(parserRealSource2.ts, 212, 30))
+
+        MergeResult = 1 << 2,
+>MergeResult : Symbol(TypeFlags.MergeResult, Decl(parserRealSource2.ts, 213, 34))
+
+        IsEnum = 1 << 3,
+>IsEnum : Symbol(TypeFlags.IsEnum, Decl(parserRealSource2.ts, 214, 29))
+
+        BuildingName = 1 << 4,
+>BuildingName : Symbol(TypeFlags.BuildingName, Decl(parserRealSource2.ts, 215, 24))
+
+        HasBaseType = 1 << 5,
+>HasBaseType : Symbol(TypeFlags.HasBaseType, Decl(parserRealSource2.ts, 216, 30))
+
+        HasBaseTypeOfObject = 1 << 6,
+>HasBaseTypeOfObject : Symbol(TypeFlags.HasBaseTypeOfObject, Decl(parserRealSource2.ts, 217, 29))
+
+        IsClass = 1 << 7,
+>IsClass : Symbol(TypeFlags.IsClass, Decl(parserRealSource2.ts, 218, 37))
+    }
+
+    export enum TypeRelationshipFlags {
+>TypeRelationshipFlags : Symbol(TypeRelationshipFlags, Decl(parserRealSource2.ts, 220, 5))
+
+        SuccessfulComparison = 0,
+>SuccessfulComparison : Symbol(TypeRelationshipFlags.SuccessfulComparison, Decl(parserRealSource2.ts, 222, 39))
+
+        SourceIsNullTargetIsVoidOrUndefined = 1,
+>SourceIsNullTargetIsVoidOrUndefined : Symbol(TypeRelationshipFlags.SourceIsNullTargetIsVoidOrUndefined, Decl(parserRealSource2.ts, 223, 33))
+
+        RequiredPropertyIsMissing = 1 << 1,
+>RequiredPropertyIsMissing : Symbol(TypeRelationshipFlags.RequiredPropertyIsMissing, Decl(parserRealSource2.ts, 224, 48))
+
+        IncompatibleSignatures = 1 << 2,
+>IncompatibleSignatures : Symbol(TypeRelationshipFlags.IncompatibleSignatures, Decl(parserRealSource2.ts, 225, 43))
+
+        SourceSignatureHasTooManyParameters = 3,
+>SourceSignatureHasTooManyParameters : Symbol(TypeRelationshipFlags.SourceSignatureHasTooManyParameters, Decl(parserRealSource2.ts, 226, 40))
+
+        IncompatibleReturnTypes = 1 << 4,
+>IncompatibleReturnTypes : Symbol(TypeRelationshipFlags.IncompatibleReturnTypes, Decl(parserRealSource2.ts, 227, 48))
+
+        IncompatiblePropertyTypes = 1 << 5,
+>IncompatiblePropertyTypes : Symbol(TypeRelationshipFlags.IncompatiblePropertyTypes, Decl(parserRealSource2.ts, 228, 41))
+
+        IncompatibleParameterTypes = 1 << 6,
+>IncompatibleParameterTypes : Symbol(TypeRelationshipFlags.IncompatibleParameterTypes, Decl(parserRealSource2.ts, 229, 43))
+    }
+
+    export enum CodeGenTarget {
+>CodeGenTarget : Symbol(CodeGenTarget, Decl(parserRealSource2.ts, 231, 5))
+
+        ES3 = 0,
+>ES3 : Symbol(CodeGenTarget.ES3, Decl(parserRealSource2.ts, 233, 31))
+
+        ES5 = 1,
+>ES5 : Symbol(CodeGenTarget.ES5, Decl(parserRealSource2.ts, 234, 16))
+    }
+
+    export enum ModuleGenTarget {
+>ModuleGenTarget : Symbol(ModuleGenTarget, Decl(parserRealSource2.ts, 236, 5))
+
+        Synchronous = 0,
+>Synchronous : Symbol(ModuleGenTarget.Synchronous, Decl(parserRealSource2.ts, 238, 33))
+
+        Asynchronous = 1,
+>Asynchronous : Symbol(ModuleGenTarget.Asynchronous, Decl(parserRealSource2.ts, 239, 24))
+
+        Local = 1 << 1,
+>Local : Symbol(ModuleGenTarget.Local, Decl(parserRealSource2.ts, 240, 25))
+    }
+
+    // Compiler defaults to generating ES5-compliant code for
+    //  - getters and setters
+    export var codeGenTarget: CodeGenTarget = CodeGenTarget.ES3;
+>codeGenTarget : Symbol(codeGenTarget, Decl(parserRealSource2.ts, 246, 14))
+>CodeGenTarget : Symbol(CodeGenTarget, Decl(parserRealSource2.ts, 231, 5))
+>CodeGenTarget.ES3 : Symbol(CodeGenTarget.ES3, Decl(parserRealSource2.ts, 233, 31))
+>CodeGenTarget : Symbol(CodeGenTarget, Decl(parserRealSource2.ts, 231, 5))
+>ES3 : Symbol(CodeGenTarget.ES3, Decl(parserRealSource2.ts, 233, 31))
+
+    export var moduleGenTarget: ModuleGenTarget = ModuleGenTarget.Synchronous;
+>moduleGenTarget : Symbol(moduleGenTarget, Decl(parserRealSource2.ts, 248, 14))
+>ModuleGenTarget : Symbol(ModuleGenTarget, Decl(parserRealSource2.ts, 236, 5))
+>ModuleGenTarget.Synchronous : Symbol(ModuleGenTarget.Synchronous, Decl(parserRealSource2.ts, 238, 33))
+>ModuleGenTarget : Symbol(ModuleGenTarget, Decl(parserRealSource2.ts, 236, 5))
+>Synchronous : Symbol(ModuleGenTarget.Synchronous, Decl(parserRealSource2.ts, 238, 33))
+
+    export var optimizeModuleCodeGen = true;
+>optimizeModuleCodeGen : Symbol(optimizeModuleCodeGen, Decl(parserRealSource2.ts, 250, 14))
+
+    export function flagsToString(e, flags: number): string {
+>flagsToString : Symbol(flagsToString, Decl(parserRealSource2.ts, 250, 44))
+>e : Symbol(e, Decl(parserRealSource2.ts, 252, 34))
+>flags : Symbol(flags, Decl(parserRealSource2.ts, 252, 36))
+
+        var builder = "";
+>builder : Symbol(builder, Decl(parserRealSource2.ts, 253, 11))
+
+        for (var i = 1; i < (1 << 31) ; i = i << 1) {
+>i : Symbol(i, Decl(parserRealSource2.ts, 254, 16))
+>i : Symbol(i, Decl(parserRealSource2.ts, 254, 16))
+>i : Symbol(i, Decl(parserRealSource2.ts, 254, 16))
+>i : Symbol(i, Decl(parserRealSource2.ts, 254, 16))
+
+            if ((flags & i) != 0) {
+>flags : Symbol(flags, Decl(parserRealSource2.ts, 252, 36))
+>i : Symbol(i, Decl(parserRealSource2.ts, 254, 16))
+
+                for (var k in e) {
+>k : Symbol(k, Decl(parserRealSource2.ts, 256, 24))
+>e : Symbol(e, Decl(parserRealSource2.ts, 252, 34))
+
+                    if (e[k] == i) {
+>e : Symbol(e, Decl(parserRealSource2.ts, 252, 34))
+>k : Symbol(k, Decl(parserRealSource2.ts, 256, 24))
+>i : Symbol(i, Decl(parserRealSource2.ts, 254, 16))
+
+                        if (builder.length > 0) {
+>builder.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>builder : Symbol(builder, Decl(parserRealSource2.ts, 253, 11))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+                            builder += "|";
+>builder : Symbol(builder, Decl(parserRealSource2.ts, 253, 11))
+                        }
+                        builder += k;
+>builder : Symbol(builder, Decl(parserRealSource2.ts, 253, 11))
+>k : Symbol(k, Decl(parserRealSource2.ts, 256, 24))
+
+                        break;
+                    }
+                }
+            }
+        }
+        return builder;
+>builder : Symbol(builder, Decl(parserRealSource2.ts, 253, 11))
+    }
+
+}

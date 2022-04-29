@@ -1,0 +1,95 @@
+=== tests/cases/conformance/internalModules/codeGeneration/importStatements.ts ===
+module A {
+>A : typeof A
+
+    export class Point {
+>Point : Point
+
+        constructor(public x: number, public y: number) { }
+>x : number
+>y : number
+    }
+
+    export var Origin = new Point(0, 0);
+>Origin : Point
+>new Point(0, 0) : Point
+>Point : typeof Point
+>0 : 0
+>0 : 0
+}
+
+// no code gen expected
+module B {
+    import a = A; //Error generates 'var <Alias> = <EntityName>;'
+>a : typeof a
+>A : typeof a
+}
+
+// no code gen expected
+module C {
+>C : typeof C
+
+    import a = A; //Error generates 'var <Alias> = <EntityName>;'
+>a : typeof a
+>A : typeof a
+
+    var m: typeof a;
+>m : typeof a
+>a : typeof a
+
+    var p: a.Point;
+>p : a.Point
+>a : any
+
+    var p = {x:0, y:0 };
+>p : a.Point
+>{x:0, y:0 } : { x: number; y: number; }
+>x : number
+>0 : 0
+>y : number
+>0 : 0
+}
+
+// code gen expected
+module D {
+>D : typeof D
+
+    import a = A;
+>a : typeof a
+>A : typeof a
+
+    var p = new a.Point(1, 1);
+>p : a.Point
+>new a.Point(1, 1) : a.Point
+>a.Point : typeof a.Point
+>a : typeof a
+>Point : typeof a.Point
+>1 : 1
+>1 : 1
+}
+
+module E {
+>E : typeof E
+
+    import a = A;
+>a : typeof a
+>A : typeof a
+
+    export function xDist(x: a.Point) {
+>xDist : (x: a.Point) => number
+>x : a.Point
+>a : any
+
+        return (a.Origin.x - x.x);
+>(a.Origin.x - x.x) : number
+>a.Origin.x - x.x : number
+>a.Origin.x : number
+>a.Origin : a.Point
+>a : typeof a
+>Origin : a.Point
+>x : number
+>x.x : number
+>x : a.Point
+>x : number
+    }
+}

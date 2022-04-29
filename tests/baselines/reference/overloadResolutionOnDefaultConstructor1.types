@@ -1,0 +1,13 @@
+=== tests/cases/compiler/overloadResolutionOnDefaultConstructor1.ts ===
+class Bar {
+>Bar : Bar
+
+    public clone() {
+>clone : () => Bar
+
+        return new Bar(0);
+>new Bar(0) : Bar
+>Bar : typeof Bar
+>0 : 0
+    }
+}

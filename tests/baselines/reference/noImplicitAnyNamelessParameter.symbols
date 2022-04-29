@@ -1,0 +1,29 @@
+=== tests/cases/compiler/noImplicitAnyNamelessParameter.ts ===
+class C { }
+>C : Symbol(C, Decl(noImplicitAnyNamelessParameter.ts, 0, 0))
+
+declare var a: { m(...string): void }
+>a : Symbol(a, Decl(noImplicitAnyNamelessParameter.ts, 1, 11))
+>m : Symbol(m, Decl(noImplicitAnyNamelessParameter.ts, 1, 16))
+>string : Symbol(string, Decl(noImplicitAnyNamelessParameter.ts, 1, 19))
+
+declare var b: (string, C) => void;
+>b : Symbol(b, Decl(noImplicitAnyNamelessParameter.ts, 2, 11))
+>string : Symbol(string, Decl(noImplicitAnyNamelessParameter.ts, 2, 16))
+>C : Symbol(C, Decl(noImplicitAnyNamelessParameter.ts, 2, 23))
+
+declare var c: { (C, number): void };
+>c : Symbol(c, Decl(noImplicitAnyNamelessParameter.ts, 3, 11))
+>C : Symbol(C, Decl(noImplicitAnyNamelessParameter.ts, 3, 18))
+>number : Symbol(number, Decl(noImplicitAnyNamelessParameter.ts, 3, 20))
+
+declare var d: { m(boolean, C, object, undefined): void }
+>d : Symbol(d, Decl(noImplicitAnyNamelessParameter.ts, 4, 11))
+>m : Symbol(m, Decl(noImplicitAnyNamelessParameter.ts, 4, 16))
+>boolean : Symbol(boolean, Decl(noImplicitAnyNamelessParameter.ts, 4, 19))
+>C : Symbol(C, Decl(noImplicitAnyNamelessParameter.ts, 4, 27))
+>object : Symbol(object, Decl(noImplicitAnyNamelessParameter.ts, 4, 30))
+>undefined : Symbol(undefined, Decl(noImplicitAnyNamelessParameter.ts, 4, 38))
+
+// note: null and void do not parse correctly without a preceding parameter name
+

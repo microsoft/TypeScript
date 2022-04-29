@@ -1,0 +1,206 @@
+=== tests/cases/compiler/classUpdateTests.ts ===
+//
+// test codegen for instance properties
+//
+class A {
+>A : Symbol(A, Decl(classUpdateTests.ts, 0, 0))
+
+	public p1 = 0;
+>p1 : Symbol(A.p1, Decl(classUpdateTests.ts, 3, 9))
+
+	private p2 = 0;
+>p2 : Symbol(A.p2, Decl(classUpdateTests.ts, 4, 15))
+
+	p3;
+>p3 : Symbol(A.p3, Decl(classUpdateTests.ts, 5, 16))
+}
+
+class B {
+>B : Symbol(B, Decl(classUpdateTests.ts, 7, 1))
+
+	public p1 = 0;
+>p1 : Symbol(B.p1, Decl(classUpdateTests.ts, 9, 9))
+
+	private p2 = 0;
+>p2 : Symbol(B.p2, Decl(classUpdateTests.ts, 10, 15))
+
+	p3;
+>p3 : Symbol(B.p3, Decl(classUpdateTests.ts, 11, 16))
+
+	constructor() {}
+}
+
+class C {
+>C : Symbol(C, Decl(classUpdateTests.ts, 15, 1))
+
+	constructor(public p1=0, private p2=0, p3=0) {}
+>p1 : Symbol(C.p1, Decl(classUpdateTests.ts, 18, 13))
+>p2 : Symbol(C.p2, Decl(classUpdateTests.ts, 18, 25))
+>p3 : Symbol(p3, Decl(classUpdateTests.ts, 18, 39))
+}
+
+//
+// test requirements for super calls
+//
+class D { // NO ERROR
+>D : Symbol(D, Decl(classUpdateTests.ts, 19, 1))
+	
+}
+
+class E extends D { // NO ERROR
+>E : Symbol(E, Decl(classUpdateTests.ts, 26, 1))
+>D : Symbol(D, Decl(classUpdateTests.ts, 19, 1))
+
+	public p1 = 0;
+>p1 : Symbol(E.p1, Decl(classUpdateTests.ts, 28, 19))
+}
+
+class F extends E {
+>F : Symbol(F, Decl(classUpdateTests.ts, 30, 1))
+>E : Symbol(E, Decl(classUpdateTests.ts, 26, 1))
+
+	constructor() {} // ERROR - super call required
+}
+
+class G extends D {
+>G : Symbol(G, Decl(classUpdateTests.ts, 34, 1))
+>D : Symbol(D, Decl(classUpdateTests.ts, 19, 1))
+
+	public p1 = 0;
+>p1 : Symbol(G.p1, Decl(classUpdateTests.ts, 36, 19))
+
+	constructor() { super(); } // NO ERROR
+>super : Symbol(D, Decl(classUpdateTests.ts, 19, 1))
+}
+
+class H {
+>H : Symbol(H, Decl(classUpdateTests.ts, 39, 1))
+
+	constructor() { super(); } // ERROR - no super call allowed
+}
+
+class I extends Object {
+>I : Symbol(I, Decl(classUpdateTests.ts, 43, 1))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+	constructor() { super(); } // ERROR - no super call allowed
+>super : Symbol(ObjectConstructor, Decl(lib.es5.d.ts, --, --))
+}
+
+class J extends G {
+>J : Symbol(J, Decl(classUpdateTests.ts, 47, 1))
+>G : Symbol(G, Decl(classUpdateTests.ts, 34, 1))
+
+	constructor(public p1:number) {
+>p1 : Symbol(J.p1, Decl(classUpdateTests.ts, 50, 13))
+
+		super(); // NO ERROR
+>super : Symbol(G, Decl(classUpdateTests.ts, 34, 1))
+	}
+}
+
+class K extends G {
+>K : Symbol(K, Decl(classUpdateTests.ts, 53, 1))
+>G : Symbol(G, Decl(classUpdateTests.ts, 34, 1))
+
+	constructor(public p1:number) { // ERROR
+>p1 : Symbol(K.p1, Decl(classUpdateTests.ts, 56, 13))
+
+		var i = 0;
+>i : Symbol(i, Decl(classUpdateTests.ts, 57, 5))
+
+		super();
+>super : Symbol(G, Decl(classUpdateTests.ts, 34, 1))
+	}
+}
+
+class L extends G {
+>L : Symbol(L, Decl(classUpdateTests.ts, 60, 1))
+>G : Symbol(G, Decl(classUpdateTests.ts, 34, 1))
+
+	constructor(private p1:number) {
+>p1 : Symbol(L.p1, Decl(classUpdateTests.ts, 63, 13))
+
+		super(); // NO ERROR
+>super : Symbol(G, Decl(classUpdateTests.ts, 34, 1))
+	}
+}
+
+class M extends G {
+>M : Symbol(M, Decl(classUpdateTests.ts, 66, 1))
+>G : Symbol(G, Decl(classUpdateTests.ts, 34, 1))
+
+	constructor(private p1:number) { // ERROR
+>p1 : Symbol(M.p1, Decl(classUpdateTests.ts, 69, 13))
+
+		var i = 0;
+>i : Symbol(i, Decl(classUpdateTests.ts, 70, 5))
+
+		super();
+>super : Symbol(G, Decl(classUpdateTests.ts, 34, 1))
+	}
+}
+
+//
+// test this reference in field initializers
+//
+class N {
+>N : Symbol(N, Decl(classUpdateTests.ts, 73, 1))
+
+	public p1 = 0;
+>p1 : Symbol(N.p1, Decl(classUpdateTests.ts, 78, 9))
+
+	public p2 = this.p1;
+>p2 : Symbol(N.p2, Decl(classUpdateTests.ts, 79, 15))
+>this.p1 : Symbol(N.p1, Decl(classUpdateTests.ts, 78, 9))
+>this : Symbol(N, Decl(classUpdateTests.ts, 73, 1))
+>p1 : Symbol(N.p1, Decl(classUpdateTests.ts, 78, 9))
+
+	constructor() {
+		this.p2 = 0;
+>this.p2 : Symbol(N.p2, Decl(classUpdateTests.ts, 79, 15))
+>this : Symbol(N, Decl(classUpdateTests.ts, 73, 1))
+>p2 : Symbol(N.p2, Decl(classUpdateTests.ts, 79, 15))
+	}
+}
+
+//
+// test error on property declarations within class constructors
+//
+class O {
+>O : Symbol(O, Decl(classUpdateTests.ts, 85, 1))
+
+	constructor() {
+		public p1 = 0; // ERROR
+>p1 : Symbol(O.p1, Decl(classUpdateTests.ts, 91, 16))
+	}
+}
+
+class P {
+>P : Symbol(P, Decl(classUpdateTests.ts, 94, 1))
+
+	constructor() {
+		private p1 = 0; // ERROR
+>p1 : Symbol(P.p1, Decl(classUpdateTests.ts, 97, 16))
+	}
+}
+
+class Q {
+>Q : Symbol(Q, Decl(classUpdateTests.ts, 100, 1))
+
+	constructor() {
+		public this.p1 = 0; // ERROR
+>this : Symbol(Q.this, Decl(classUpdateTests.ts, 103, 16))
+>p1 : Symbol(Q.p1, Decl(classUpdateTests.ts, 104, 14))
+	}
+}
+
+class R {
+>R : Symbol(R, Decl(classUpdateTests.ts, 106, 1))
+
+	constructor() {
+		private this.p1 = 0; // ERROR
+>this : Symbol(R.this, Decl(classUpdateTests.ts, 109, 16))
+>p1 : Symbol(R.p1, Decl(classUpdateTests.ts, 110, 15))
+	}
+}

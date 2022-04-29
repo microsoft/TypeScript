@@ -1,0 +1,21 @@
+=== tests/cases/compiler/checkSuperCallBeforeThisAccessing7.ts ===
+class Base {
+>Base : Base
+
+    constructor(func: ()=>Base) {
+>func : () => Base
+    }
+}
+class Super extends Base {
+>Super : Super
+>Base : Base
+
+    constructor() {
+        super((() => this)); // No error
+>super((() => this)) : void
+>super : typeof Base
+>(() => this) : () => this
+>() => this : () => this
+>this : this
+    }
+}

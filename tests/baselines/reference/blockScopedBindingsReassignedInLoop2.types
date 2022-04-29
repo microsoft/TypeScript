@@ -1,0 +1,160 @@
+=== tests/cases/compiler/blockScopedBindingsReassignedInLoop2.ts ===
+for (let x = 1, y = 2; x < y; ++x, --y) {
+>x : number
+>1 : 1
+>y : number
+>2 : 2
+>x < y : boolean
+>x : number
+>y : number
+>++x, --y : number
+>++x : number
+>x : number
+>--y : number
+>y : number
+
+    let a = () => x++ + y++;
+>a : () => number
+>() => x++ + y++ : () => number
+>x++ + y++ : number
+>x++ : number
+>x : number
+>y++ : number
+>y : number
+
+    if (x == 1) {
+>x == 1 : boolean
+>x : number
+>1 : 1
+
+        break;
+    }
+    else {
+        y = 5;
+>y = 5 : 5
+>y : number
+>5 : 5
+    }
+}
+
+for (let x = 1, y = 2; x < y; ++x, --y) {
+>x : number
+>1 : 1
+>y : number
+>2 : 2
+>x < y : boolean
+>x : number
+>y : number
+>++x, --y : number
+>++x : number
+>x : number
+>--y : number
+>y : number
+
+    let a = () => x++ + y++;
+>a : () => number
+>() => x++ + y++ : () => number
+>x++ + y++ : number
+>x++ : number
+>x : number
+>y++ : number
+>y : number
+
+    if (x == 1) {
+>x == 1 : boolean
+>x : number
+>1 : 1
+
+        continue;
+    }
+    else {
+        y = 5;
+>y = 5 : 5
+>y : number
+>5 : 5
+    }
+}
+
+loop:
+>loop : any
+
+for (let x = 1, y = 2; x < y; ++x, --y) {
+>x : number
+>1 : 1
+>y : number
+>2 : 2
+>x < y : boolean
+>x : number
+>y : number
+>++x, --y : number
+>++x : number
+>x : number
+>--y : number
+>y : number
+
+    let a = () => x++ + y++;
+>a : () => number
+>() => x++ + y++ : () => number
+>x++ + y++ : number
+>x++ : number
+>x : number
+>y++ : number
+>y : number
+
+    if (x == 1) {
+>x == 1 : boolean
+>x : number
+>1 : 1
+
+        break loop;
+>loop : any
+    }
+    else {
+        y = 5;
+>y = 5 : 5
+>y : number
+>5 : 5
+    }
+}
+
+loop:
+>loop : any
+
+for (let x = 1, y = 2; x < y; ++x, --y) {
+>x : number
+>1 : 1
+>y : number
+>2 : 2
+>x < y : boolean
+>x : number
+>y : number
+>++x, --y : number
+>++x : number
+>x : number
+>--y : number
+>y : number
+
+    let a = () => x++ + y++;
+>a : () => number
+>() => x++ + y++ : () => number
+>x++ + y++ : number
+>x++ : number
+>x : number
+>y++ : number
+>y : number
+
+    if (x == 1) {
+>x == 1 : boolean
+>x : number
+>1 : 1
+
+        continue loop;
+>loop : any
+    }
+    else {
+        y = 5;
+>y = 5 : 5
+>y : number
+>5 : 5
+    }
+}

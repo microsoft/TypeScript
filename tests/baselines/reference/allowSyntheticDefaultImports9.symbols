@@ -1,0 +1,22 @@
+=== tests/cases/compiler/b.d.ts ===
+export function foo();
+>foo : Symbol(foo, Decl(b.d.ts, 0, 0))
+
+export function bar();
+>bar : Symbol(bar, Decl(b.d.ts, 0, 22))
+
+=== tests/cases/compiler/a.ts ===
+import { default as Foo } from "./b";
+>default : Symbol(Foo, Decl(b.d.ts, 0, 0))
+>Foo : Symbol(Foo, Decl(a.ts, 0, 8))
+
+Foo.bar();
+>Foo.bar : Symbol(Foo.bar, Decl(b.d.ts, 0, 22))
+>Foo : Symbol(Foo, Decl(a.ts, 0, 8))
+>bar : Symbol(Foo.bar, Decl(b.d.ts, 0, 22))
+
+Foo.foo();
+>Foo.foo : Symbol(Foo.foo, Decl(b.d.ts, 0, 0))
+>Foo : Symbol(Foo, Decl(a.ts, 0, 8))
+>foo : Symbol(Foo.foo, Decl(b.d.ts, 0, 0))
+

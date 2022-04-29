@@ -1,0 +1,16 @@
+=== tests/cases/conformance/types/typeParameters/typeParameterLists/typesWithDuplicateTypeParameters.ts ===
+class C<T, T> { }
+>C : C<T>
+
+class C2<T, U, T> { }
+>C2 : C2<T, U>
+
+interface I<T, T> { }
+interface I2<T, U, T> { }
+
+function f<T, T>() { }
+>f : <T>() => void
+
+function f2<T, U, T>() { }
+>f2 : <T, U>() => void
+

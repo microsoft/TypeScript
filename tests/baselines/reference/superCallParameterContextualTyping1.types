@@ -1,0 +1,29 @@
+=== tests/cases/conformance/expressions/contextualTyping/superCallParameterContextualTyping1.ts ===
+class A<T1, T2> {
+>A : A<T1, T2>
+
+    constructor(private map: (value: T1) => T2) {
+>map : (value: T1) => T2
+>value : T1
+
+    }
+}
+
+class B extends A<number, string> {
+>B : B
+>A : A<number, string>
+
+    // Ensure 'value' is of type 'number (and not '{}') by using its 'toExponential()' method.
+    constructor() { super(value => String(value.toExponential())); }
+>super(value => String(value.toExponential())) : void
+>super : typeof A
+>value => String(value.toExponential()) : (value: number) => string
+>value : number
+>String(value.toExponential()) : string
+>String : StringConstructor
+>value.toExponential() : string
+>value.toExponential : (fractionDigits?: number) => string
+>value : number
+>toExponential : (fractionDigits?: number) => string
+}
+

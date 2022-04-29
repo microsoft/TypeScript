@@ -1,0 +1,329 @@
+tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(10,18): error TS2304: Cannot find name 'K0'.
+tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(20,18): error TS2339: Property 'foo' does not exist on type 'Shape'.
+tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(21,18): error TS2339: Property 'foo' does not exist on type 'Shape'.
+tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(22,18): error TS2538: Type 'any' cannot be used as an index type.
+tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(23,18): error TS2537: Type 'Shape' has no matching index signature for type 'string'.
+tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(24,18): error TS2537: Type 'Shape' has no matching index signature for type 'number'.
+tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(25,18): error TS2538: Type 'boolean' cannot be used as an index type.
+tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(26,18): error TS2538: Type 'void' cannot be used as an index type.
+tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(27,18): error TS2538: Type 'undefined' cannot be used as an index type.
+tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(28,18): error TS2538: Type '{ x: string; }' cannot be used as an index type.
+tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(29,18): error TS2537: Type 'Shape' has no matching index signature for type 'number'.
+tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(29,18): error TS2537: Type 'Shape' has no matching index signature for type 'string'.
+tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(31,18): error TS2537: Type 'Shape' has no matching index signature for type 'string'.
+tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(31,18): error TS2538: Type 'false' cannot be used as an index type.
+tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(31,18): error TS2538: Type 'true' cannot be used as an index type.
+tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(35,21): error TS2537: Type 'string[]' has no matching index signature for type 'string'.
+tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(36,21): error TS2538: Type 'boolean' cannot be used as an index type.
+tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(41,31): error TS2538: Type 'boolean' cannot be used as an index type.
+tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(46,16): error TS2538: Type 'boolean' cannot be used as an index type.
+tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(63,33): error TS2345: Argument of type '"size"' is not assignable to parameter of type 'keyof Shape'.
+tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(64,33): error TS2345: Argument of type '"name" | "size"' is not assignable to parameter of type 'keyof Shape'.
+  Type '"size"' is not assignable to type 'keyof Shape'.
+tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(66,24): error TS2345: Argument of type '"size"' is not assignable to parameter of type 'keyof Shape'.
+tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(67,24): error TS2345: Argument of type '"name" | "size"' is not assignable to parameter of type 'keyof Shape'.
+tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(73,5): error TS2536: Type 'keyof T | keyof U' cannot be used to index type 'T | U'.
+tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(74,5): error TS2536: Type 'keyof T | keyof U' cannot be used to index type 'T | U'.
+tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(82,5): error TS2322: Type 'keyof T | keyof U' is not assignable to type 'keyof T & keyof U'.
+  Type 'keyof T' is not assignable to type 'keyof T & keyof U'.
+    Type 'string | number | symbol' is not assignable to type 'keyof T & keyof U'.
+      Type 'string' is not assignable to type 'keyof T & keyof U'.
+        Type 'string' is not assignable to type 'keyof T'.
+          Type 'keyof T' is not assignable to type 'keyof U'.
+            Type 'string | number | symbol' is not assignable to type 'keyof U'.
+              Type 'string' is not assignable to type 'keyof U'.
+tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(83,5): error TS2322: Type 'keyof T | keyof U' is not assignable to type 'keyof T & keyof U'.
+  Type 'keyof T' is not assignable to type 'keyof T & keyof U'.
+tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(86,5): error TS2322: Type 'keyof T | keyof U' is not assignable to type 'keyof T & keyof U'.
+  Type 'keyof T' is not assignable to type 'keyof T & keyof U'.
+tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(87,5): error TS2322: Type 'keyof T | keyof U' is not assignable to type 'keyof T & keyof U'.
+  Type 'keyof T' is not assignable to type 'keyof T & keyof U'.
+tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(103,9): error TS2322: Type 'Extract<keyof T, string>' is not assignable to type 'K'.
+  'Extract<keyof T, string>' is assignable to the constraint of type 'K', but 'K' could be instantiated with a different subtype of constraint 'string'.
+    Type 'string & keyof T' is not assignable to type 'K'.
+      'string & keyof T' is assignable to the constraint of type 'K', but 'K' could be instantiated with a different subtype of constraint 'string'.
+        Type 'string' is not assignable to type 'K'.
+          'string' is assignable to the constraint of type 'K', but 'K' could be instantiated with a different subtype of constraint 'string'.
+tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(105,9): error TS2322: Type 'T[Extract<keyof T, string>]' is not assignable to type 'T[K]'.
+  Type 'Extract<keyof T, string>' is not assignable to type 'K'.
+    'Extract<keyof T, string>' is assignable to the constraint of type 'K', but 'K' could be instantiated with a different subtype of constraint 'string'.
+tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(108,5): error TS2322: Type 'T[K]' is not assignable to type 'U[K]'.
+  Type 'T' is not assignable to type 'U'.
+    'U' could be instantiated with an arbitrary type which could be unrelated to 'T'.
+tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(111,5): error TS2322: Type 'T[J]' is not assignable to type 'U[J]'.
+  Type 'T' is not assignable to type 'U'.
+    'U' could be instantiated with an arbitrary type which could be unrelated to 'T'.
+tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(114,5): error TS2322: Type 'T[K]' is not assignable to type 'T[J]'.
+  Type 'K' is not assignable to type 'J'.
+    'K' is assignable to the constraint of type 'J', but 'J' could be instantiated with a different subtype of constraint 'string'.
+tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(117,5): error TS2322: Type 'T[K]' is not assignable to type 'U[J]'.
+  Type 'T' is not assignable to type 'U'.
+    'U' could be instantiated with an arbitrary type which could be unrelated to 'T'.
+tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(122,5): error TS2322: Type 'number' is not assignable to type 'keyof T'.
+tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(123,5): error TS2322: Type 'string' is not assignable to type 'keyof T'.
+tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(140,5): error TS2322: Type 'number' is not assignable to type 'T[K]'.
+tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(141,5): error TS2322: Type 'string' is not assignable to type 'T[K]'.
+tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(142,5): error TS2322: Type 'number[]' is not assignable to type 'T[K]'.
+
+
+==== tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts (40 errors) ====
+    class Shape {
+        name: string;
+        width: number;
+        height: number;
+        visible: boolean;
+    }
+    
+    type Dictionary<T> = { [x: string]: T };
+    
+    type T00 = keyof K0;  // Error
+                     ~~
+!!! error TS2304: Cannot find name 'K0'.
+    
+    type T01 = keyof Object;
+    type T02 = keyof keyof Object;
+    type T03 = keyof keyof keyof Object;
+    type T04 = keyof keyof keyof keyof Object;
+    type T05 = keyof keyof keyof keyof keyof Object;
+    type T06 = keyof keyof keyof keyof keyof keyof Object;
+    
+    type T10 = Shape["name"];
+    type T11 = Shape["foo"];  // Error
+                     ~~~~~
+!!! error TS2339: Property 'foo' does not exist on type 'Shape'.
+    type T12 = Shape["name" | "foo"];  // Error
+                     ~~~~~~~~~~~~~~
+!!! error TS2339: Property 'foo' does not exist on type 'Shape'.
+    type T13 = Shape[any];  // Error
+                     ~~~
+!!! error TS2538: Type 'any' cannot be used as an index type.
+    type T14 = Shape[string];  // Error
+                     ~~~~~~
+!!! error TS2537: Type 'Shape' has no matching index signature for type 'string'.
+    type T15 = Shape[number];  // Error
+                     ~~~~~~
+!!! error TS2537: Type 'Shape' has no matching index signature for type 'number'.
+    type T16 = Shape[boolean];  // Error
+                     ~~~~~~~
+!!! error TS2538: Type 'boolean' cannot be used as an index type.
+    type T17 = Shape[void];  // Error
+                     ~~~~
+!!! error TS2538: Type 'void' cannot be used as an index type.
+    type T18 = Shape[undefined];  // Error
+                     ~~~~~~~~~
+!!! error TS2538: Type 'undefined' cannot be used as an index type.
+    type T19 = Shape[{ x: string }];  // Error
+                     ~~~~~~~~~~~~~
+!!! error TS2538: Type '{ x: string; }' cannot be used as an index type.
+    type T20 = Shape[string | number];  // Error
+                     ~~~~~~~~~~~~~~~
+!!! error TS2537: Type 'Shape' has no matching index signature for type 'number'.
+                     ~~~~~~~~~~~~~~~
+!!! error TS2537: Type 'Shape' has no matching index signature for type 'string'.
+    type T21 = Shape[string & number];
+    type T22 = Shape[string | boolean];  // Error
+                     ~~~~~~~~~~~~~~~~
+!!! error TS2537: Type 'Shape' has no matching index signature for type 'string'.
+                     ~~~~~~~~~~~~~~~~
+!!! error TS2538: Type 'false' cannot be used as an index type.
+                     ~~~~~~~~~~~~~~~~
+!!! error TS2538: Type 'true' cannot be used as an index type.
+    
+    type T30 = string[]["length"];
+    type T31 = string[][number];
+    type T32 = string[][string];  // Error
+                        ~~~~~~
+!!! error TS2537: Type 'string[]' has no matching index signature for type 'string'.
+    type T33 = string[][boolean];  // Error
+                        ~~~~~~~
+!!! error TS2538: Type 'boolean' cannot be used as an index type.
+    
+    type T40 = Dictionary<string>[any];
+    type T41 = Dictionary<string>[number];
+    type T42 = Dictionary<string>[string];
+    type T43 = Dictionary<string>[boolean];  // Error
+                                  ~~~~~~~
+!!! error TS2538: Type 'boolean' cannot be used as an index type.
+    
+    type T50 = any[any];
+    type T51 = any[number];
+    type T52 = any[string];
+    type T53 = any[boolean];  // Error
+                   ~~~~~~~
+!!! error TS2538: Type 'boolean' cannot be used as an index type.
+    
+    type T60 = {}["toString"];
+    type T61 = []["toString"];
+    
+    declare let cond: boolean;
+    
+    function getProperty<T, K extends keyof T>(obj: T, key: K) {
+        return obj[key];
+    }
+    
+    function setProperty<T, K extends keyof T>(obj: T, key: K, value: T[K]) {
+        obj[key] = value;
+    }
+    
+    function f10(shape: Shape) {
+        let x1 = getProperty(shape, "name");
+        let x2 = getProperty(shape, "size");  // Error
+                                    ~~~~~~
+!!! error TS2345: Argument of type '"size"' is not assignable to parameter of type 'keyof Shape'.
+        let x3 = getProperty(shape, cond ? "name" : "size");  // Error
+                                    ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2345: Argument of type '"name" | "size"' is not assignable to parameter of type 'keyof Shape'.
+!!! error TS2345:   Type '"size"' is not assignable to type 'keyof Shape'.
+        setProperty(shape, "name", "rectangle");
+        setProperty(shape, "size", 10);  // Error
+                           ~~~~~~
+!!! error TS2345: Argument of type '"size"' is not assignable to parameter of type 'keyof Shape'.
+        setProperty(shape, cond ? "name" : "size", 10);  // Error
+                           ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2345: Argument of type '"name" | "size"' is not assignable to parameter of type 'keyof Shape'.
+    }
+    
+    function f20<T, U>(x: T | U, y: T & U, k1: keyof (T | U), k2: keyof T & keyof U, k3: keyof (T & U), k4: keyof T | keyof U) {
+        x[k1];
+        x[k2];
+        x[k3];  // Error
+        ~~~~~
+!!! error TS2536: Type 'keyof T | keyof U' cannot be used to index type 'T | U'.
+        x[k4];  // Error
+        ~~~~~
+!!! error TS2536: Type 'keyof T | keyof U' cannot be used to index type 'T | U'.
+    
+        y[k1];
+        y[k2];
+        y[k3];
+        y[k4];
+    
+        k1 = k2;
+        k1 = k3;  // Error
+        ~~
+!!! error TS2322: Type 'keyof T | keyof U' is not assignable to type 'keyof T & keyof U'.
+!!! error TS2322:   Type 'keyof T' is not assignable to type 'keyof T & keyof U'.
+!!! error TS2322:     Type 'string | number | symbol' is not assignable to type 'keyof T & keyof U'.
+!!! error TS2322:       Type 'string' is not assignable to type 'keyof T & keyof U'.
+!!! error TS2322:         Type 'string' is not assignable to type 'keyof T'.
+!!! error TS2322:           Type 'keyof T' is not assignable to type 'keyof U'.
+!!! error TS2322:             Type 'string | number | symbol' is not assignable to type 'keyof U'.
+!!! error TS2322:               Type 'string' is not assignable to type 'keyof U'.
+        k1 = k4;  // Error
+        ~~
+!!! error TS2322: Type 'keyof T | keyof U' is not assignable to type 'keyof T & keyof U'.
+!!! error TS2322:   Type 'keyof T' is not assignable to type 'keyof T & keyof U'.
+    
+        k2 = k1;
+        k2 = k3;  // Error
+        ~~
+!!! error TS2322: Type 'keyof T | keyof U' is not assignable to type 'keyof T & keyof U'.
+!!! error TS2322:   Type 'keyof T' is not assignable to type 'keyof T & keyof U'.
+        k2 = k4;  // Error
+        ~~
+!!! error TS2322: Type 'keyof T | keyof U' is not assignable to type 'keyof T & keyof U'.
+!!! error TS2322:   Type 'keyof T' is not assignable to type 'keyof T & keyof U'.
+    
+        k3 = k1;
+        k3 = k2;
+        k3 = k4;
+    
+        k4 = k1;
+        k4 = k2;
+        k4 = k3;
+    }
+    
+    // Repro from #17166
+    function f3<T, K extends Extract<keyof T, string>, U extends T, J extends K>(
+        t: T, k: K, tk: T[K], u: U, j: J, uk: U[K], tj: T[J], uj: U[J]): void {
+        for (let key in t) {
+            key = k // ok, K ==> keyof T
+            k = key // error, keyof T =/=> K
+            ~
+!!! error TS2322: Type 'Extract<keyof T, string>' is not assignable to type 'K'.
+!!! error TS2322:   'Extract<keyof T, string>' is assignable to the constraint of type 'K', but 'K' could be instantiated with a different subtype of constraint 'string'.
+!!! error TS2322:     Type 'string & keyof T' is not assignable to type 'K'.
+!!! error TS2322:       'string & keyof T' is assignable to the constraint of type 'K', but 'K' could be instantiated with a different subtype of constraint 'string'.
+!!! error TS2322:         Type 'string' is not assignable to type 'K'.
+!!! error TS2322:           'string' is assignable to the constraint of type 'K', but 'K' could be instantiated with a different subtype of constraint 'string'.
+            t[key] = tk; // ok, T[K] ==> T[keyof T]
+            tk = t[key]; // error, T[keyof T] =/=> T[K]
+            ~~
+!!! error TS2322: Type 'T[Extract<keyof T, string>]' is not assignable to type 'T[K]'.
+!!! error TS2322:   Type 'Extract<keyof T, string>' is not assignable to type 'K'.
+!!! error TS2322:     'Extract<keyof T, string>' is assignable to the constraint of type 'K', but 'K' could be instantiated with a different subtype of constraint 'string'.
+        }
+        tk = uk;
+        uk = tk; // error
+        ~~
+!!! error TS2322: Type 'T[K]' is not assignable to type 'U[K]'.
+!!! error TS2322:   Type 'T' is not assignable to type 'U'.
+!!! error TS2322:     'U' could be instantiated with an arbitrary type which could be unrelated to 'T'.
+    
+        tj = uj;
+        uj = tj; // error
+        ~~
+!!! error TS2322: Type 'T[J]' is not assignable to type 'U[J]'.
+!!! error TS2322:   Type 'T' is not assignable to type 'U'.
+!!! error TS2322:     'U' could be instantiated with an arbitrary type which could be unrelated to 'T'.
+    
+        tk = tj;
+        tj = tk; // error
+        ~~
+!!! error TS2322: Type 'T[K]' is not assignable to type 'T[J]'.
+!!! error TS2322:   Type 'K' is not assignable to type 'J'.
+!!! error TS2322:     'K' is assignable to the constraint of type 'J', but 'J' could be instantiated with a different subtype of constraint 'string'.
+    
+        tk = uj;
+        uj = tk; // error
+        ~~
+!!! error TS2322: Type 'T[K]' is not assignable to type 'U[J]'.
+!!! error TS2322:   Type 'T' is not assignable to type 'U'.
+!!! error TS2322:     'U' could be instantiated with an arbitrary type which could be unrelated to 'T'.
+    }
+    
+    // The constraint of 'keyof T' is 'keyof T'
+    function f4<T extends { [K in keyof T]: string }>(k: keyof T) {
+        k = 42; // error
+        ~
+!!! error TS2322: Type 'number' is not assignable to type 'keyof T'.
+        k = "hello"; // error
+        ~
+!!! error TS2322: Type 'string' is not assignable to type 'keyof T'.
+    }
+    
+    // Repro from #27470
+    
+    type UndefinedKeys<T extends Record<string, any>> = {
+      [K in keyof T]: undefined extends T[K] ? K : never
+    };
+    
+    type MyType = {a: string, b: string | undefined}
+    
+    type Result1 = UndefinedKeys<MyType>;
+    
+    const a1: Result1['a'] = 'a';  // Error
+    const b1: Result1['b'] = 'b';
+    
+    function test1<T extends Record<string, any>, K extends keyof T>(t: T, k: K) {
+        t[k] = 42;  // Error
+        ~~~~
+!!! error TS2322: Type 'number' is not assignable to type 'T[K]'.
+        t[k] = "hello";  // Error
+        ~~~~
+!!! error TS2322: Type 'string' is not assignable to type 'T[K]'.
+        t[k] = [10, 20];  // Error
+        ~~~~
+!!! error TS2322: Type 'number[]' is not assignable to type 'T[K]'.
+    }
+    
+    // Repro from #28839
+    
+    function f30<T, K extends keyof T>() {
+        let x: Partial<Record<keyof T, string>>[K] = "hello";
+    }
+    
+    function f31<T, K extends keyof T>() {
+        let x: Partial<Partial<Partial<Partial<Partial<Partial<Partial<Record<keyof T, string>>>>>>>>[K] = "hello";
+    }
+    

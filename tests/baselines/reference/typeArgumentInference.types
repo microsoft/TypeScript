@@ -1,0 +1,458 @@
+=== tests/cases/conformance/expressions/functionCalls/typeArgumentInference.ts ===
+// Generic call with no parameters
+function noParams<T>() { }
+>noParams : <T>() => void
+
+noParams();
+>noParams() : void
+>noParams : <T>() => void
+
+noParams<string>();
+>noParams<string>() : void
+>noParams : <T>() => void
+
+noParams<{}>();
+>noParams<{}>() : void
+>noParams : <T>() => void
+
+// Generic call with parameters but none use type parameter type
+function noGenericParams<T>(n: string) { }
+>noGenericParams : <T>(n: string) => void
+>n : string
+
+noGenericParams('');
+>noGenericParams('') : void
+>noGenericParams : <T>(n: string) => void
+>'' : ""
+
+noGenericParams<number>('');
+>noGenericParams<number>('') : void
+>noGenericParams : <T>(n: string) => void
+>'' : ""
+
+noGenericParams<{}>('');
+>noGenericParams<{}>('') : void
+>noGenericParams : <T>(n: string) => void
+>'' : ""
+
+// Generic call with multiple type parameters and only one used in parameter type annotation
+function someGenerics1<T, U>(n: T, m: number) { }
+>someGenerics1 : <T, U>(n: T, m: number) => void
+>n : T
+>m : number
+
+someGenerics1(3, 4);
+>someGenerics1(3, 4) : void
+>someGenerics1 : <T, U>(n: T, m: number) => void
+>3 : 3
+>4 : 4
+
+someGenerics1<number, {}>(3, 4);
+>someGenerics1<number, {}>(3, 4) : void
+>someGenerics1 : <T, U>(n: T, m: number) => void
+>3 : 3
+>4 : 4
+
+// Generic call with argument of function type whose parameter is of type parameter type
+function someGenerics2a<T>(n: (x: T) => void) { }
+>someGenerics2a : <T>(n: (x: T) => void) => void
+>n : (x: T) => void
+>x : T
+
+someGenerics2a((n: string) => n);
+>someGenerics2a((n: string) => n) : void
+>someGenerics2a : <T>(n: (x: T) => void) => void
+>(n: string) => n : (n: string) => string
+>n : string
+>n : string
+
+someGenerics2a<string>((n: string) => n);
+>someGenerics2a<string>((n: string) => n) : void
+>someGenerics2a : <T>(n: (x: T) => void) => void
+>(n: string) => n : (n: string) => string
+>n : string
+>n : string
+
+someGenerics2a<string>((n) => n.substr(0));
+>someGenerics2a<string>((n) => n.substr(0)) : void
+>someGenerics2a : <T>(n: (x: T) => void) => void
+>(n) => n.substr(0) : (n: string) => string
+>n : string
+>n.substr(0) : string
+>n.substr : (from: number, length?: number) => string
+>n : string
+>substr : (from: number, length?: number) => string
+>0 : 0
+
+function someGenerics2b<T, U>(n: (x: T, y: U) => void) { }
+>someGenerics2b : <T, U>(n: (x: T, y: U) => void) => void
+>n : (x: T, y: U) => void
+>x : T
+>y : U
+
+someGenerics2b((n: string, x: number) => n);
+>someGenerics2b((n: string, x: number) => n) : void
+>someGenerics2b : <T, U>(n: (x: T, y: U) => void) => void
+>(n: string, x: number) => n : (n: string, x: number) => string
+>n : string
+>x : number
+>n : string
+
+someGenerics2b<string, number>((n: string, t: number) => n);
+>someGenerics2b<string, number>((n: string, t: number) => n) : void
+>someGenerics2b : <T, U>(n: (x: T, y: U) => void) => void
+>(n: string, t: number) => n : (n: string, t: number) => string
+>n : string
+>t : number
+>n : string
+
+someGenerics2b<string, number>((n, t) => n.substr(t * t));
+>someGenerics2b<string, number>((n, t) => n.substr(t * t)) : void
+>someGenerics2b : <T, U>(n: (x: T, y: U) => void) => void
+>(n, t) => n.substr(t * t) : (n: string, t: number) => string
+>n : string
+>t : number
+>n.substr(t * t) : string
+>n.substr : (from: number, length?: number) => string
+>n : string
+>substr : (from: number, length?: number) => string
+>t * t : number
+>t : number
+>t : number
+
+// Generic call with argument of function type whose parameter is not of type parameter type but body/return type uses type parameter
+function someGenerics3<T>(producer: () => T) { }
+>someGenerics3 : <T>(producer: () => T) => void
+>producer : () => T
+
+someGenerics3(() => '');
+>someGenerics3(() => '') : void
+>someGenerics3 : <T>(producer: () => T) => void
+>() => '' : () => string
+>'' : ""
+
+someGenerics3<Date>(() => undefined);
+>someGenerics3<Date>(() => undefined) : void
+>someGenerics3 : <T>(producer: () => T) => void
+>() => undefined : () => any
+>undefined : undefined
+
+someGenerics3<number>(() => 3);
+>someGenerics3<number>(() => 3) : void
+>someGenerics3 : <T>(producer: () => T) => void
+>() => 3 : () => number
+>3 : 3
+
+// 2 parameter generic call with argument 1 of type parameter type and argument 2 of function type whose parameter is of type parameter type
+function someGenerics4<T, U>(n: T, f: (x: U) => void) { }
+>someGenerics4 : <T, U>(n: T, f: (x: U) => void) => void
+>n : T
+>f : (x: U) => void
+>x : U
+
+someGenerics4(4, () => null);
+>someGenerics4(4, () => null) : void
+>someGenerics4 : <T, U>(n: T, f: (x: U) => void) => void
+>4 : 4
+>() => null : () => any
+>null : null
+
+someGenerics4<string, number>('', () => 3);
+>someGenerics4<string, number>('', () => 3) : void
+>someGenerics4 : <T, U>(n: T, f: (x: U) => void) => void
+>'' : ""
+>() => 3 : () => number
+>3 : 3
+
+someGenerics4<string, number>(null, null);
+>someGenerics4<string, number>(null, null) : void
+>someGenerics4 : <T, U>(n: T, f: (x: U) => void) => void
+>null : null
+>null : null
+
+// 2 parameter generic call with argument 2 of type parameter type and argument 1 of function type whose parameter is of type parameter type
+function someGenerics5<U, T>(n: T, f: (x: U) => void) { }
+>someGenerics5 : <U, T>(n: T, f: (x: U) => void) => void
+>n : T
+>f : (x: U) => void
+>x : U
+
+someGenerics5(4, () => null);
+>someGenerics5(4, () => null) : void
+>someGenerics5 : <U, T>(n: T, f: (x: U) => void) => void
+>4 : 4
+>() => null : () => any
+>null : null
+
+someGenerics5<number, string>('', () => 3);
+>someGenerics5<number, string>('', () => 3) : void
+>someGenerics5 : <U, T>(n: T, f: (x: U) => void) => void
+>'' : ""
+>() => 3 : () => number
+>3 : 3
+
+someGenerics5<string, number>(null, null);
+>someGenerics5<string, number>(null, null) : void
+>someGenerics5 : <U, T>(n: T, f: (x: U) => void) => void
+>null : null
+>null : null
+
+// Generic call with multiple arguments of function types that each have parameters of the same generic type
+function someGenerics6<A>(a: (a: A) => A, b: (b: A) => A, c: (c: A) => A) { }
+>someGenerics6 : <A>(a: (a: A) => A, b: (b: A) => A, c: (c: A) => A) => void
+>a : (a: A) => A
+>a : A
+>b : (b: A) => A
+>b : A
+>c : (c: A) => A
+>c : A
+
+someGenerics6(n => n, n => n, n => n);
+>someGenerics6(n => n, n => n, n => n) : void
+>someGenerics6 : <A>(a: (a: A) => A, b: (b: A) => A, c: (c: A) => A) => void
+>n => n : (n: unknown) => unknown
+>n : unknown
+>n : unknown
+>n => n : (n: unknown) => unknown
+>n : unknown
+>n : unknown
+>n => n : (n: unknown) => unknown
+>n : unknown
+>n : unknown
+
+someGenerics6<number>(n => n, n => n, n => n);
+>someGenerics6<number>(n => n, n => n, n => n) : void
+>someGenerics6 : <A>(a: (a: A) => A, b: (b: A) => A, c: (c: A) => A) => void
+>n => n : (n: number) => number
+>n : number
+>n : number
+>n => n : (n: number) => number
+>n : number
+>n : number
+>n => n : (n: number) => number
+>n : number
+>n : number
+
+someGenerics6<number>((n: number) => n, (n: number) => n, (n: number) => n);
+>someGenerics6<number>((n: number) => n, (n: number) => n, (n: number) => n) : void
+>someGenerics6 : <A>(a: (a: A) => A, b: (b: A) => A, c: (c: A) => A) => void
+>(n: number) => n : (n: number) => number
+>n : number
+>n : number
+>(n: number) => n : (n: number) => number
+>n : number
+>n : number
+>(n: number) => n : (n: number) => number
+>n : number
+>n : number
+
+// Generic call with multiple arguments of function types that each have parameters of different generic type
+function someGenerics7<A, B, C>(a: (a: A) => A, b: (b: B) => B, c: (c: C) => C) { }
+>someGenerics7 : <A, B, C>(a: (a: A) => A, b: (b: B) => B, c: (c: C) => C) => void
+>a : (a: A) => A
+>a : A
+>b : (b: B) => B
+>b : B
+>c : (c: C) => C
+>c : C
+
+someGenerics7(n => n, n => n, n => n);
+>someGenerics7(n => n, n => n, n => n) : void
+>someGenerics7 : <A, B, C>(a: (a: A) => A, b: (b: B) => B, c: (c: C) => C) => void
+>n => n : (n: unknown) => unknown
+>n : unknown
+>n : unknown
+>n => n : (n: unknown) => unknown
+>n : unknown
+>n : unknown
+>n => n : (n: unknown) => unknown
+>n : unknown
+>n : unknown
+
+someGenerics7<number, string, number>(n => n, n => n, n => n);
+>someGenerics7<number, string, number>(n => n, n => n, n => n) : void
+>someGenerics7 : <A, B, C>(a: (a: A) => A, b: (b: B) => B, c: (c: C) => C) => void
+>n => n : (n: number) => number
+>n : number
+>n : number
+>n => n : (n: string) => string
+>n : string
+>n : string
+>n => n : (n: number) => number
+>n : number
+>n : number
+
+someGenerics7<number, string, number>((n: number) => n, (n: string) => n, (n: number) => n);
+>someGenerics7<number, string, number>((n: number) => n, (n: string) => n, (n: number) => n) : void
+>someGenerics7 : <A, B, C>(a: (a: A) => A, b: (b: B) => B, c: (c: C) => C) => void
+>(n: number) => n : (n: number) => number
+>n : number
+>n : number
+>(n: string) => n : (n: string) => string
+>n : string
+>n : string
+>(n: number) => n : (n: number) => number
+>n : number
+>n : number
+
+// Generic call with argument of generic function type
+function someGenerics8<T>(n: T): T { return n; }
+>someGenerics8 : <T>(n: T) => T
+>n : T
+>n : T
+
+var x = someGenerics8(someGenerics7);
+>x : <A, B, C>(a: (a: A) => A, b: (b: B) => B, c: (c: C) => C) => void
+>someGenerics8(someGenerics7) : <A, B, C>(a: (a: A) => A, b: (b: B) => B, c: (c: C) => C) => void
+>someGenerics8 : <T>(n: T) => T
+>someGenerics7 : <A, B, C>(a: (a: A) => A, b: (b: B) => B, c: (c: C) => C) => void
+
+x<string, string, string>(null, null, null);
+>x<string, string, string>(null, null, null) : void
+>x : <A, B, C>(a: (a: A) => A, b: (b: B) => B, c: (c: C) => C) => void
+>null : null
+>null : null
+>null : null
+
+// Generic call with multiple parameters of generic type passed arguments with no best common type
+function someGenerics9<T>(a: T, b: T, c: T): T {
+>someGenerics9 : <T>(a: T, b: T, c: T) => T
+>a : T
+>b : T
+>c : T
+
+    return null;
+>null : null
+}
+var a9a = someGenerics9('', 0, []);
+>a9a : string
+>someGenerics9('', 0, []) : ""
+>someGenerics9 : <T>(a: T, b: T, c: T) => T
+>'' : ""
+>0 : 0
+>[] : undefined[]
+
+var a9a: {};
+>a9a : string
+
+var a9b = someGenerics9<{ a?: number; b?: string; }>({ a: 0 }, { b: '' }, null);
+>a9b : { a?: number; b?: string; }
+>someGenerics9<{ a?: number; b?: string; }>({ a: 0 }, { b: '' }, null) : { a?: number; b?: string; }
+>someGenerics9 : <T>(a: T, b: T, c: T) => T
+>a : number
+>b : string
+>{ a: 0 } : { a: number; }
+>a : number
+>0 : 0
+>{ b: '' } : { b: string; }
+>b : string
+>'' : ""
+>null : null
+
+var a9b: { a?: number; b?: string; };
+>a9b : { a?: number; b?: string; }
+>a : number
+>b : string
+
+// Generic call with multiple parameters of generic type passed arguments with multiple best common types
+interface A91 {
+    x: number;
+>x : number
+
+    y?: string;
+>y : string
+}
+interface A92 {
+    x: number;
+>x : number
+
+    z?: Date;
+>z : Date
+}
+var a9e = someGenerics9(undefined, { x: 6, z: new Date() }, { x: 6, y: '' });
+>a9e : { x: number; z: Date; y?: undefined; } | { x: number; y: string; z?: undefined; }
+>someGenerics9(undefined, { x: 6, z: new Date() }, { x: 6, y: '' }) : { x: number; z: Date; y?: undefined; } | { x: number; y: string; z?: undefined; }
+>someGenerics9 : <T>(a: T, b: T, c: T) => T
+>undefined : undefined
+>{ x: 6, z: new Date() } : { x: number; z: Date; }
+>x : number
+>6 : 6
+>z : Date
+>new Date() : Date
+>Date : DateConstructor
+>{ x: 6, y: '' } : { x: number; y: string; }
+>x : number
+>6 : 6
+>y : string
+>'' : ""
+
+var a9e: {};
+>a9e : { x: number; z: Date; y?: undefined; } | { x: number; y: string; z?: undefined; }
+
+var a9f = someGenerics9<A92>(undefined, { x: 6, z: new Date() }, { x: 6, y: '' });
+>a9f : A92
+>someGenerics9<A92>(undefined, { x: 6, z: new Date() }, { x: 6, y: '' }) : A92
+>someGenerics9 : <T>(a: T, b: T, c: T) => T
+>undefined : undefined
+>{ x: 6, z: new Date() } : { x: number; z: Date; }
+>x : number
+>6 : 6
+>z : Date
+>new Date() : Date
+>Date : DateConstructor
+>{ x: 6, y: '' } : { x: number; y: string; }
+>x : number
+>6 : 6
+>y : string
+>'' : ""
+
+var a9f: A92;
+>a9f : A92
+
+// Generic call with multiple parameters of generic type passed arguments with a single best common type
+var a9d = someGenerics9({ x: 3 }, { x: 6 }, { x: 6 });
+>a9d : { x: number; }
+>someGenerics9({ x: 3 }, { x: 6 }, { x: 6 }) : { x: number; }
+>someGenerics9 : <T>(a: T, b: T, c: T) => T
+>{ x: 3 } : { x: number; }
+>x : number
+>3 : 3
+>{ x: 6 } : { x: number; }
+>x : number
+>6 : 6
+>{ x: 6 } : { x: number; }
+>x : number
+>6 : 6
+
+var a9d: { x: number; };
+>a9d : { x: number; }
+>x : number
+
+// Generic call with multiple parameters of generic type where one argument is of type 'any'
+var anyVar: any;
+>anyVar : any
+
+var a = someGenerics9(7, anyVar, 4);
+>a : any
+>someGenerics9(7, anyVar, 4) : any
+>someGenerics9 : <T>(a: T, b: T, c: T) => T
+>7 : 7
+>anyVar : any
+>4 : 4
+
+var a: any;
+>a : any
+
+// Generic call with multiple parameters of generic type where one argument is [] and the other is not 'any'
+var arr = someGenerics9([], null, undefined);
+>arr : any[]
+>someGenerics9([], null, undefined) : any[]
+>someGenerics9 : <T>(a: T, b: T, c: T) => T
+>[] : undefined[]
+>null : null
+>undefined : undefined
+
+var arr: any[];
+>arr : any[]
+
+

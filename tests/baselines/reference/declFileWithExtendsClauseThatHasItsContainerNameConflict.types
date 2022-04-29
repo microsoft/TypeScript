@@ -1,0 +1,37 @@
+=== tests/cases/compiler/declFileWithExtendsClauseThatHasItsContainerNameConflict.ts ===
+declare module A.B.C {
+>A : typeof A
+>B : typeof B
+>C : typeof C
+
+    class B {
+>B : B
+    }
+}
+
+module A.B {
+>A : typeof A
+>B : typeof B
+
+    export class EventManager {
+>EventManager : EventManager
+
+        id: number;
+>id : number
+
+    }
+}
+
+module A.B.C {
+>A : typeof A
+>B : typeof B
+>C : typeof C
+
+    export class ContextMenu extends EventManager {
+>ContextMenu : ContextMenu
+>EventManager : EventManager
+
+        name: string;
+>name : string
+    }
+}

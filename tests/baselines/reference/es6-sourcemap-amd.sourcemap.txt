@@ -1,0 +1,86 @@
+===================================================================
+JsFile: es6-sourcemap-amd.js
+mapUrl: es6-sourcemap-amd.js.map
+sourceRoot: 
+sources: es6-sourcemap-amd.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:tests/cases/compiler/es6-sourcemap-amd.js
+sourceFile:es6-sourcemap-amd.ts
+-------------------------------------------------------------------
+>>>class A {
+1 >
+2 >^^^^^^
+3 >      ^
+4 >       ^^^^^^^^^^^^^->
+1 >
+2 >class 
+3 >      A
+1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(1, 7) Source(1, 7) + SourceIndex(0)
+3 >Emitted(1, 8) Source(1, 8) + SourceIndex(0)
+---
+>>>    constructor() {
+1->^^^^
+2 >    ^^->
+1->
+  >{
+  >    
+1->Emitted(2, 5) Source(3, 5) + SourceIndex(0)
+---
+>>>    }
+1->^^^^
+2 >    ^
+3 >     ^^^^^->
+1->constructor ()
+  >    {
+  >
+  >    
+2 >    }
+1->Emitted(3, 5) Source(6, 5) + SourceIndex(0)
+2 >Emitted(3, 6) Source(6, 6) + SourceIndex(0)
+---
+>>>    B() {
+1->^^^^
+2 >    ^
+3 >     ^^^^^^^^^^^^^^->
+1->
+  >
+  >    public 
+2 >    B
+1->Emitted(4, 5) Source(8, 12) + SourceIndex(0)
+2 >Emitted(4, 6) Source(8, 13) + SourceIndex(0)
+---
+>>>        return 42;
+1->^^^^^^^^
+2 >        ^^^^^^^
+3 >               ^^
+4 >                 ^
+1->()
+  >    {
+  >        
+2 >        return 
+3 >               42
+4 >                 ;
+1->Emitted(5, 9) Source(10, 9) + SourceIndex(0)
+2 >Emitted(5, 16) Source(10, 16) + SourceIndex(0)
+3 >Emitted(5, 18) Source(10, 18) + SourceIndex(0)
+4 >Emitted(5, 19) Source(10, 19) + SourceIndex(0)
+---
+>>>    }
+1 >^^^^
+2 >    ^
+1 >
+  >    
+2 >    }
+1 >Emitted(6, 5) Source(11, 5) + SourceIndex(0)
+2 >Emitted(6, 6) Source(11, 6) + SourceIndex(0)
+---
+>>>}
+1 >^
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >}
+1 >Emitted(7, 2) Source(12, 2) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=es6-sourcemap-amd.js.map

@@ -1,0 +1,220 @@
+=== tests/cases/conformance/expressions/typeGuards/typeGuardOfFormInstanceOf.ts ===
+// A type guard of the form x instanceof C, where C is of a subtype of the global type 'Function' 
+// and C has a property named 'prototype'
+//  - when true, narrows the type of x to the type of the 'prototype' property in C provided 
+//    it is a subtype of the type of x, or
+//  - when false, has no effect on the type of x.
+
+class C1 {
+>C1 : C1
+
+    p1: string;
+>p1 : string
+}
+class C2 {
+>C2 : C2
+
+    p2: number;
+>p2 : number
+}
+class D1 extends C1 {
+>D1 : D1
+>C1 : C1
+
+    p3: number;
+>p3 : number
+}
+class C3 {
+>C3 : C3
+
+    p4: number;
+>p4 : number
+}
+var str: string;
+>str : string
+
+var num: number;
+>num : number
+
+var strOrNum: string | number;
+>strOrNum : string | number
+
+var ctor1: C1 | C2;
+>ctor1 : C1 | C2
+
+str = ctor1 instanceof C1 && ctor1.p1; // C1
+>str = ctor1 instanceof C1 && ctor1.p1 : string
+>str : string
+>ctor1 instanceof C1 && ctor1.p1 : string
+>ctor1 instanceof C1 : boolean
+>ctor1 : C1 | C2
+>C1 : typeof C1
+>ctor1.p1 : string
+>ctor1 : C1
+>p1 : string
+
+num = ctor1 instanceof C2 && ctor1.p2; // C2
+>num = ctor1 instanceof C2 && ctor1.p2 : number
+>num : number
+>ctor1 instanceof C2 && ctor1.p2 : number
+>ctor1 instanceof C2 : boolean
+>ctor1 : C1 | C2
+>C2 : typeof C2
+>ctor1.p2 : number
+>ctor1 : C2
+>p2 : number
+
+str = ctor1 instanceof D1 && ctor1.p1; // D1
+>str = ctor1 instanceof D1 && ctor1.p1 : string
+>str : string
+>ctor1 instanceof D1 && ctor1.p1 : string
+>ctor1 instanceof D1 : boolean
+>ctor1 : C1 | C2
+>D1 : typeof D1
+>ctor1.p1 : string
+>ctor1 : D1
+>p1 : string
+
+num = ctor1 instanceof D1 && ctor1.p3; // D1
+>num = ctor1 instanceof D1 && ctor1.p3 : number
+>num : number
+>ctor1 instanceof D1 && ctor1.p3 : number
+>ctor1 instanceof D1 : boolean
+>ctor1 : C1 | C2
+>D1 : typeof D1
+>ctor1.p3 : number
+>ctor1 : D1
+>p3 : number
+
+var ctor2: C2 | D1;
+>ctor2 : C2 | D1
+
+num = ctor2 instanceof C2 && ctor2.p2; // C2
+>num = ctor2 instanceof C2 && ctor2.p2 : number
+>num : number
+>ctor2 instanceof C2 && ctor2.p2 : number
+>ctor2 instanceof C2 : boolean
+>ctor2 : C2 | D1
+>C2 : typeof C2
+>ctor2.p2 : number
+>ctor2 : C2
+>p2 : number
+
+num = ctor2 instanceof D1 && ctor2.p3; // D1
+>num = ctor2 instanceof D1 && ctor2.p3 : number
+>num : number
+>ctor2 instanceof D1 && ctor2.p3 : number
+>ctor2 instanceof D1 : boolean
+>ctor2 : C2 | D1
+>D1 : typeof D1
+>ctor2.p3 : number
+>ctor2 : D1
+>p3 : number
+
+str = ctor2 instanceof D1 && ctor2.p1; // D1
+>str = ctor2 instanceof D1 && ctor2.p1 : string
+>str : string
+>ctor2 instanceof D1 && ctor2.p1 : string
+>ctor2 instanceof D1 : boolean
+>ctor2 : C2 | D1
+>D1 : typeof D1
+>ctor2.p1 : string
+>ctor2 : D1
+>p1 : string
+
+var r2: D1 | C2 = ctor2 instanceof C1 && ctor2; // C2 | D1
+>r2 : C2 | D1
+>ctor2 instanceof C1 && ctor2 : D1
+>ctor2 instanceof C1 : boolean
+>ctor2 : C2 | D1
+>C1 : typeof C1
+>ctor2 : D1
+
+var ctor3: C1 | C2;
+>ctor3 : C1 | C2
+
+if (ctor3 instanceof C1) {
+>ctor3 instanceof C1 : boolean
+>ctor3 : C1 | C2
+>C1 : typeof C1
+
+    ctor3.p1; // C1
+>ctor3.p1 : string
+>ctor3 : C1
+>p1 : string
+}
+else {
+    ctor3.p2; // C2
+>ctor3.p2 : number
+>ctor3 : C2
+>p2 : number
+}
+
+var ctor4: C1 | C2 | C3;
+>ctor4 : C1 | C2 | C3
+
+if (ctor4 instanceof C1) {
+>ctor4 instanceof C1 : boolean
+>ctor4 : C1 | C2 | C3
+>C1 : typeof C1
+
+    ctor4.p1; // C1
+>ctor4.p1 : string
+>ctor4 : C1
+>p1 : string
+}
+else if (ctor4 instanceof C2) {
+>ctor4 instanceof C2 : boolean
+>ctor4 : C2 | C3
+>C2 : typeof C2
+
+    ctor4.p2; // C2
+>ctor4.p2 : number
+>ctor4 : C2
+>p2 : number
+}
+else {
+    ctor4.p4; // C3
+>ctor4.p4 : number
+>ctor4 : C3
+>p4 : number
+}
+
+var ctor5: C1 | D1 | C2;
+>ctor5 : C1 | C2 | D1
+
+if (ctor5 instanceof C1) {
+>ctor5 instanceof C1 : boolean
+>ctor5 : C1 | C2 | D1
+>C1 : typeof C1
+
+    ctor5.p1; // C1
+>ctor5.p1 : string
+>ctor5 : C1 | D1
+>p1 : string
+}
+else {
+    ctor5.p2; // C2
+>ctor5.p2 : number
+>ctor5 : C2
+>p2 : number
+}
+
+var ctor6: C1 | C2 | C3;
+>ctor6 : C1 | C2 | C3
+
+if (ctor6 instanceof C1 || ctor6 instanceof C2) {
+>ctor6 instanceof C1 || ctor6 instanceof C2 : boolean
+>ctor6 instanceof C1 : boolean
+>ctor6 : C1 | C2 | C3
+>C1 : typeof C1
+>ctor6 instanceof C2 : boolean
+>ctor6 : C2 | C3
+>C2 : typeof C2
+}
+else {
+    ctor6.p4; // C3
+>ctor6.p4 : number
+>ctor6 : C3
+>p4 : number
+}

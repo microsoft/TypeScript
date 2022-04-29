@@ -1,0 +1,6 @@
+=== tests/cases/compiler/objectLiteralMemberWithModifiers1.ts ===
+var v = { public foo() { } }
+>v : { foo(): void; }
+>{ public foo() { } } : { foo(): void; }
+>foo : () => void
+

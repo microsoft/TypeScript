@@ -1,0 +1,15 @@
+=== tests/cases/compiler/overloadsWithConstraints.ts ===
+declare function f<T extends Number>(x: T): T;
+>f : { <T extends Number>(x: T): T; <T extends String>(x: T): T; }
+>x : T
+
+declare function f<T extends String>(x: T): T
+>f : { <T extends Number>(x: T): T; <T extends String>(x: T): T; }
+>x : T
+
+var v = f<string>("");
+>v : string
+>f<string>("") : string
+>f : { <T extends Number>(x: T): T; <T extends String>(x: T): T; }
+>"" : ""
+

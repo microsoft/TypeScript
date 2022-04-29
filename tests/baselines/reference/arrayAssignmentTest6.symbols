@@ -1,0 +1,52 @@
+=== tests/cases/compiler/arrayAssignmentTest6.ts ===
+module Test {
+>Test : Symbol(Test, Decl(arrayAssignmentTest6.ts, 0, 0))
+
+    interface IState {
+>IState : Symbol(IState, Decl(arrayAssignmentTest6.ts, 0, 13))
+    }
+    interface IToken {
+>IToken : Symbol(IToken, Decl(arrayAssignmentTest6.ts, 2, 5))
+
+        startIndex: number;
+>startIndex : Symbol(IToken.startIndex, Decl(arrayAssignmentTest6.ts, 3, 22))
+    }
+    interface ILineTokens {
+>ILineTokens : Symbol(ILineTokens, Decl(arrayAssignmentTest6.ts, 5, 5))
+
+        tokens: IToken[];
+>tokens : Symbol(ILineTokens.tokens, Decl(arrayAssignmentTest6.ts, 6, 27))
+>IToken : Symbol(IToken, Decl(arrayAssignmentTest6.ts, 2, 5))
+
+        endState: IState;
+>endState : Symbol(ILineTokens.endState, Decl(arrayAssignmentTest6.ts, 7, 25))
+>IState : Symbol(IState, Decl(arrayAssignmentTest6.ts, 0, 13))
+    }
+    interface IMode {
+>IMode : Symbol(IMode, Decl(arrayAssignmentTest6.ts, 9, 5))
+
+        tokenize(line:string, state:IState, includeStates:boolean):ILineTokens;
+>tokenize : Symbol(IMode.tokenize, Decl(arrayAssignmentTest6.ts, 10, 21))
+>line : Symbol(line, Decl(arrayAssignmentTest6.ts, 11, 17))
+>state : Symbol(state, Decl(arrayAssignmentTest6.ts, 11, 29))
+>IState : Symbol(IState, Decl(arrayAssignmentTest6.ts, 0, 13))
+>includeStates : Symbol(includeStates, Decl(arrayAssignmentTest6.ts, 11, 43))
+>ILineTokens : Symbol(ILineTokens, Decl(arrayAssignmentTest6.ts, 5, 5))
+    }
+    export class Bug implements IMode {
+>Bug : Symbol(Bug, Decl(arrayAssignmentTest6.ts, 12, 5))
+>IMode : Symbol(IMode, Decl(arrayAssignmentTest6.ts, 9, 5))
+
+        public tokenize(line:string, tokens:IToken[], includeStates:boolean):ILineTokens {
+>tokenize : Symbol(Bug.tokenize, Decl(arrayAssignmentTest6.ts, 13, 39))
+>line : Symbol(line, Decl(arrayAssignmentTest6.ts, 14, 24))
+>tokens : Symbol(tokens, Decl(arrayAssignmentTest6.ts, 14, 36))
+>IToken : Symbol(IToken, Decl(arrayAssignmentTest6.ts, 2, 5))
+>includeStates : Symbol(includeStates, Decl(arrayAssignmentTest6.ts, 14, 53))
+>ILineTokens : Symbol(ILineTokens, Decl(arrayAssignmentTest6.ts, 5, 5))
+
+            return null;
+        }
+    }    
+}
+

@@ -1,0 +1,24 @@
+=== tests/cases/conformance/ambient/declarations.d.ts ===
+declare module "jquery";
+>"jquery" : any
+
+=== tests/cases/conformance/ambient/reExportX.ts ===
+export {x} from "jquery";
+>x : any
+
+=== tests/cases/conformance/ambient/reExportAll.ts ===
+export * from "jquery";
+No type information for this code.
+No type information for this code.=== tests/cases/conformance/ambient/reExportUser.ts ===
+import {x} from "./reExportX";
+>x : any
+
+import * as $ from "./reExportAll";
+>$ : typeof $
+
+// '$' is not callable, it is an object.
+x($);
+>x($) : any
+>x : any
+>$ : typeof $
+

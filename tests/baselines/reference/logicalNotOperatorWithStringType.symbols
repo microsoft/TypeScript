@@ -1,0 +1,123 @@
+=== tests/cases/conformance/expressions/unaryOperators/logicalNotOperator/logicalNotOperatorWithStringType.ts ===
+// ! operator on string type
+var STRING: string;
+>STRING : Symbol(STRING, Decl(logicalNotOperatorWithStringType.ts, 1, 3))
+
+var STRING1: string[] = ["", "abc"];
+>STRING1 : Symbol(STRING1, Decl(logicalNotOperatorWithStringType.ts, 2, 3))
+
+function foo(): string { return "abc"; }
+>foo : Symbol(foo, Decl(logicalNotOperatorWithStringType.ts, 2, 36))
+
+class A {
+>A : Symbol(A, Decl(logicalNotOperatorWithStringType.ts, 4, 40))
+
+    public a: string;
+>a : Symbol(A.a, Decl(logicalNotOperatorWithStringType.ts, 6, 9))
+
+    static foo() { return ""; }
+>foo : Symbol(A.foo, Decl(logicalNotOperatorWithStringType.ts, 7, 21))
+}
+module M {
+>M : Symbol(M, Decl(logicalNotOperatorWithStringType.ts, 9, 1))
+
+    export var n: string;
+>n : Symbol(n, Decl(logicalNotOperatorWithStringType.ts, 11, 14))
+}
+
+var objA = new A();
+>objA : Symbol(objA, Decl(logicalNotOperatorWithStringType.ts, 14, 3))
+>A : Symbol(A, Decl(logicalNotOperatorWithStringType.ts, 4, 40))
+
+// string type var
+var ResultIsBoolean1 = !STRING;
+>ResultIsBoolean1 : Symbol(ResultIsBoolean1, Decl(logicalNotOperatorWithStringType.ts, 17, 3))
+>STRING : Symbol(STRING, Decl(logicalNotOperatorWithStringType.ts, 1, 3))
+
+var ResultIsBoolean2 = !STRING1;
+>ResultIsBoolean2 : Symbol(ResultIsBoolean2, Decl(logicalNotOperatorWithStringType.ts, 18, 3))
+>STRING1 : Symbol(STRING1, Decl(logicalNotOperatorWithStringType.ts, 2, 3))
+
+// string type literal
+var ResultIsBoolean3 = !"";
+>ResultIsBoolean3 : Symbol(ResultIsBoolean3, Decl(logicalNotOperatorWithStringType.ts, 21, 3))
+
+var ResultIsBoolean4 = !{ x: "", y: "" };
+>ResultIsBoolean4 : Symbol(ResultIsBoolean4, Decl(logicalNotOperatorWithStringType.ts, 22, 3))
+>x : Symbol(x, Decl(logicalNotOperatorWithStringType.ts, 22, 25))
+>y : Symbol(y, Decl(logicalNotOperatorWithStringType.ts, 22, 32))
+
+var ResultIsBoolean5 = !{ x: "", y: (s: string) => { return s; } };
+>ResultIsBoolean5 : Symbol(ResultIsBoolean5, Decl(logicalNotOperatorWithStringType.ts, 23, 3))
+>x : Symbol(x, Decl(logicalNotOperatorWithStringType.ts, 23, 25))
+>y : Symbol(y, Decl(logicalNotOperatorWithStringType.ts, 23, 32))
+>s : Symbol(s, Decl(logicalNotOperatorWithStringType.ts, 23, 37))
+>s : Symbol(s, Decl(logicalNotOperatorWithStringType.ts, 23, 37))
+
+// string type expressions
+var ResultIsBoolean6 = !objA.a;
+>ResultIsBoolean6 : Symbol(ResultIsBoolean6, Decl(logicalNotOperatorWithStringType.ts, 26, 3))
+>objA.a : Symbol(A.a, Decl(logicalNotOperatorWithStringType.ts, 6, 9))
+>objA : Symbol(objA, Decl(logicalNotOperatorWithStringType.ts, 14, 3))
+>a : Symbol(A.a, Decl(logicalNotOperatorWithStringType.ts, 6, 9))
+
+var ResultIsBoolean7 = !M.n;
+>ResultIsBoolean7 : Symbol(ResultIsBoolean7, Decl(logicalNotOperatorWithStringType.ts, 27, 3))
+>M.n : Symbol(M.n, Decl(logicalNotOperatorWithStringType.ts, 11, 14))
+>M : Symbol(M, Decl(logicalNotOperatorWithStringType.ts, 9, 1))
+>n : Symbol(M.n, Decl(logicalNotOperatorWithStringType.ts, 11, 14))
+
+var ResultIsBoolean8 = !STRING1[0];
+>ResultIsBoolean8 : Symbol(ResultIsBoolean8, Decl(logicalNotOperatorWithStringType.ts, 28, 3))
+>STRING1 : Symbol(STRING1, Decl(logicalNotOperatorWithStringType.ts, 2, 3))
+
+var ResultIsBoolean9 = !foo();
+>ResultIsBoolean9 : Symbol(ResultIsBoolean9, Decl(logicalNotOperatorWithStringType.ts, 29, 3))
+>foo : Symbol(foo, Decl(logicalNotOperatorWithStringType.ts, 2, 36))
+
+var ResultIsBoolean10 = !A.foo();
+>ResultIsBoolean10 : Symbol(ResultIsBoolean10, Decl(logicalNotOperatorWithStringType.ts, 30, 3))
+>A.foo : Symbol(A.foo, Decl(logicalNotOperatorWithStringType.ts, 7, 21))
+>A : Symbol(A, Decl(logicalNotOperatorWithStringType.ts, 4, 40))
+>foo : Symbol(A.foo, Decl(logicalNotOperatorWithStringType.ts, 7, 21))
+
+var ResultIsBoolean11 = !(STRING + STRING);
+>ResultIsBoolean11 : Symbol(ResultIsBoolean11, Decl(logicalNotOperatorWithStringType.ts, 31, 3))
+>STRING : Symbol(STRING, Decl(logicalNotOperatorWithStringType.ts, 1, 3))
+>STRING : Symbol(STRING, Decl(logicalNotOperatorWithStringType.ts, 1, 3))
+
+var ResultIsBoolean12 = !STRING.charAt(0);
+>ResultIsBoolean12 : Symbol(ResultIsBoolean12, Decl(logicalNotOperatorWithStringType.ts, 32, 3))
+>STRING.charAt : Symbol(String.charAt, Decl(lib.es5.d.ts, --, --))
+>STRING : Symbol(STRING, Decl(logicalNotOperatorWithStringType.ts, 1, 3))
+>charAt : Symbol(String.charAt, Decl(lib.es5.d.ts, --, --))
+
+// multiple ! operator
+var ResultIsBoolean13 = !!STRING;
+>ResultIsBoolean13 : Symbol(ResultIsBoolean13, Decl(logicalNotOperatorWithStringType.ts, 35, 3))
+>STRING : Symbol(STRING, Decl(logicalNotOperatorWithStringType.ts, 1, 3))
+
+var ResultIsBoolean14 = !!!(STRING + STRING);
+>ResultIsBoolean14 : Symbol(ResultIsBoolean14, Decl(logicalNotOperatorWithStringType.ts, 36, 3))
+>STRING : Symbol(STRING, Decl(logicalNotOperatorWithStringType.ts, 1, 3))
+>STRING : Symbol(STRING, Decl(logicalNotOperatorWithStringType.ts, 1, 3))
+
+// miss assignment operators
+!"";
+!STRING;
+>STRING : Symbol(STRING, Decl(logicalNotOperatorWithStringType.ts, 1, 3))
+
+!STRING1;
+>STRING1 : Symbol(STRING1, Decl(logicalNotOperatorWithStringType.ts, 2, 3))
+
+!foo();
+>foo : Symbol(foo, Decl(logicalNotOperatorWithStringType.ts, 2, 36))
+
+!objA.a,M.n;
+>objA.a : Symbol(A.a, Decl(logicalNotOperatorWithStringType.ts, 6, 9))
+>objA : Symbol(objA, Decl(logicalNotOperatorWithStringType.ts, 14, 3))
+>a : Symbol(A.a, Decl(logicalNotOperatorWithStringType.ts, 6, 9))
+>M.n : Symbol(M.n, Decl(logicalNotOperatorWithStringType.ts, 11, 14))
+>M : Symbol(M, Decl(logicalNotOperatorWithStringType.ts, 9, 1))
+>n : Symbol(M.n, Decl(logicalNotOperatorWithStringType.ts, 11, 14))
+

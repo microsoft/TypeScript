@@ -1,0 +1,196 @@
+=== tests/cases/conformance/salsa/node.d.ts ===
+declare function require(id: string): any;
+>require : Symbol(require, Decl(node.d.ts, 0, 0))
+>id : Symbol(id, Decl(node.d.ts, 0, 25))
+
+declare var module: any, exports: any;
+>module : Symbol(module, Decl(node.d.ts, 1, 11))
+>exports : Symbol(exports, Decl(node.d.ts, 1, 24))
+
+=== tests/cases/conformance/salsa/a-ext.js ===
+exports.A = function () {
+>exports.A : Symbol(A, Decl(a-ext.js, 0, 0))
+>exports : Symbol(A, Decl(a-ext.js, 0, 0))
+>A : Symbol(A, Decl(a-ext.js, 0, 0))
+
+    this.x = 1;
+>this.x : Symbol(A.x, Decl(a-ext.js, 0, 25))
+>this : Symbol(A, Decl(a-ext.js, 0, 11))
+>x : Symbol(A.x, Decl(a-ext.js, 0, 25))
+
+};
+
+=== tests/cases/conformance/salsa/a.js ===
+const { A } = require("./a-ext");
+>A : Symbol(A, Decl(a.js, 0, 7))
+>require : Symbol(require, Decl(node.d.ts, 0, 0))
+>"./a-ext" : Symbol("tests/cases/conformance/salsa/a-ext", Decl(a-ext.js, 0, 0))
+
+/** @param {A} p */
+function a(p) { p.x; }
+>a : Symbol(a, Decl(a.js, 0, 33))
+>p : Symbol(p, Decl(a.js, 3, 11))
+>p.x : Symbol(A.x, Decl(a-ext.js, 0, 25))
+>p : Symbol(p, Decl(a.js, 3, 11))
+>x : Symbol(A.x, Decl(a-ext.js, 0, 25))
+
+=== tests/cases/conformance/salsa/b-ext.js ===
+exports.B = class {
+>exports.B : Symbol(B, Decl(b-ext.js, 0, 0))
+>exports : Symbol(B, Decl(b-ext.js, 0, 0))
+>B : Symbol(B, Decl(b-ext.js, 0, 0))
+
+    constructor() {
+        this.x = 1;
+>this.x : Symbol(B.x, Decl(b-ext.js, 1, 19))
+>this : Symbol(B, Decl(b-ext.js, 0, 11))
+>x : Symbol(B.x, Decl(b-ext.js, 1, 19))
+    }
+};
+
+=== tests/cases/conformance/salsa/b.js ===
+const { B } = require("./b-ext");
+>B : Symbol(B, Decl(b.js, 0, 7))
+>require : Symbol(require, Decl(node.d.ts, 0, 0))
+>"./b-ext" : Symbol("tests/cases/conformance/salsa/b-ext", Decl(b-ext.js, 0, 0))
+
+/** @param {B} p */
+function b(p) { p.x; }
+>b : Symbol(b, Decl(b.js, 0, 33))
+>p : Symbol(p, Decl(b.js, 3, 11))
+>p.x : Symbol(B.x, Decl(b-ext.js, 1, 19))
+>p : Symbol(p, Decl(b.js, 3, 11))
+>x : Symbol(B.x, Decl(b-ext.js, 1, 19))
+
+=== tests/cases/conformance/salsa/c-ext.js ===
+export function C() {
+>C : Symbol(C, Decl(c-ext.js, 0, 0))
+
+    this.x = 1;
+>this.x : Symbol(C.x, Decl(c-ext.js, 0, 21))
+>this : Symbol(C, Decl(c-ext.js, 0, 0))
+>x : Symbol(C.x, Decl(c-ext.js, 0, 21))
+}
+
+=== tests/cases/conformance/salsa/c.js ===
+const { C } = require("./c-ext");
+>C : Symbol(C, Decl(c.js, 0, 7))
+>require : Symbol(require, Decl(node.d.ts, 0, 0))
+>"./c-ext" : Symbol("tests/cases/conformance/salsa/c-ext", Decl(c-ext.js, 0, 0))
+
+/** @param {C} p */
+function c(p) { p.x; }
+>c : Symbol(c, Decl(c.js, 0, 33))
+>p : Symbol(p, Decl(c.js, 3, 11))
+>p.x : Symbol(C.x, Decl(c-ext.js, 0, 21))
+>p : Symbol(p, Decl(c.js, 3, 11))
+>x : Symbol(C.x, Decl(c-ext.js, 0, 21))
+
+=== tests/cases/conformance/salsa/d-ext.js ===
+export var D = function() {
+>D : Symbol(D, Decl(d-ext.js, 0, 10))
+
+    this.x = 1;
+>this.x : Symbol(D.x, Decl(d-ext.js, 0, 27))
+>this : Symbol(D, Decl(d-ext.js, 0, 14))
+>x : Symbol(D.x, Decl(d-ext.js, 0, 27))
+
+};
+
+=== tests/cases/conformance/salsa/d.js ===
+const { D } = require("./d-ext");
+>D : Symbol(D, Decl(d.js, 0, 7))
+>require : Symbol(require, Decl(node.d.ts, 0, 0))
+>"./d-ext" : Symbol("tests/cases/conformance/salsa/d-ext", Decl(d-ext.js, 0, 0))
+
+/** @param {D} p */
+function d(p) { p.x; }
+>d : Symbol(d, Decl(d.js, 0, 33))
+>p : Symbol(p, Decl(d.js, 3, 11))
+>p.x : Symbol(D.x, Decl(d-ext.js, 0, 27))
+>p : Symbol(p, Decl(d.js, 3, 11))
+>x : Symbol(D.x, Decl(d-ext.js, 0, 27))
+
+=== tests/cases/conformance/salsa/e-ext.js ===
+export class E {
+>E : Symbol(E, Decl(e-ext.js, 0, 0))
+
+    constructor() {
+        this.x = 1;
+>this.x : Symbol(E.x, Decl(e-ext.js, 1, 19))
+>this : Symbol(E, Decl(e-ext.js, 0, 0))
+>x : Symbol(E.x, Decl(e-ext.js, 1, 19))
+    }
+}
+
+=== tests/cases/conformance/salsa/e.js ===
+const { E } = require("./e-ext");
+>E : Symbol(E, Decl(e.js, 0, 7))
+>require : Symbol(require, Decl(node.d.ts, 0, 0))
+>"./e-ext" : Symbol("tests/cases/conformance/salsa/e-ext", Decl(e-ext.js, 0, 0))
+
+/** @param {E} p */
+function e(p) { p.x; }
+>e : Symbol(e, Decl(e.js, 0, 33))
+>p : Symbol(p, Decl(e.js, 3, 11))
+>p.x : Symbol(E.x, Decl(e-ext.js, 1, 19))
+>p : Symbol(p, Decl(e.js, 3, 11))
+>x : Symbol(E.x, Decl(e-ext.js, 1, 19))
+
+=== tests/cases/conformance/salsa/f.js ===
+var F = function () {
+>F : Symbol(F, Decl(f.js, 0, 3))
+
+    this.x = 1;
+>this.x : Symbol(F.x, Decl(f.js, 0, 21))
+>this : Symbol(F, Decl(f.js, 0, 7))
+>x : Symbol(F.x, Decl(f.js, 0, 21))
+
+};
+
+/** @param {F} p */
+function f(p) { p.x; }
+>f : Symbol(f, Decl(f.js, 2, 2))
+>p : Symbol(p, Decl(f.js, 5, 11))
+>p.x : Symbol(F.x, Decl(f.js, 0, 21))
+>p : Symbol(p, Decl(f.js, 5, 11))
+>x : Symbol(F.x, Decl(f.js, 0, 21))
+
+=== tests/cases/conformance/salsa/g.js ===
+function G() {
+>G : Symbol(G, Decl(g.js, 0, 0))
+
+    this.x = 1;
+>this.x : Symbol(G.x, Decl(g.js, 0, 14))
+>this : Symbol(G, Decl(g.js, 0, 0))
+>x : Symbol(G.x, Decl(g.js, 0, 14))
+}
+
+/** @param {G} p */
+function g(p) { p.x; }
+>g : Symbol(g, Decl(g.js, 2, 1))
+>p : Symbol(p, Decl(g.js, 5, 11))
+>p.x : Symbol(G.x, Decl(g.js, 0, 14))
+>p : Symbol(p, Decl(g.js, 5, 11))
+>x : Symbol(G.x, Decl(g.js, 0, 14))
+
+=== tests/cases/conformance/salsa/h.js ===
+class H {
+>H : Symbol(H, Decl(h.js, 0, 0))
+
+    constructor() {
+        this.x = 1;
+>this.x : Symbol(H.x, Decl(h.js, 1, 19))
+>this : Symbol(H, Decl(h.js, 0, 0))
+>x : Symbol(H.x, Decl(h.js, 1, 19))
+    }
+}
+
+/** @param {H} p */
+function h(p) { p.x; }
+>h : Symbol(h, Decl(h.js, 4, 1))
+>p : Symbol(p, Decl(h.js, 7, 11))
+>p.x : Symbol(H.x, Decl(h.js, 1, 19))
+>p : Symbol(p, Decl(h.js, 7, 11))
+>x : Symbol(H.x, Decl(h.js, 1, 19))
+

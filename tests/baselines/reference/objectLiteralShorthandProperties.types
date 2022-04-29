@@ -1,0 +1,50 @@
+=== tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandProperties.ts ===
+var a, b, c;
+>a : any
+>b : any
+>c : any
+
+var x1 = {
+>x1 : { a: any; }
+>{    a} : { a: any; }
+
+    a
+>a : any
+
+};
+
+var x2 = {
+>x2 : { a: any; }
+>{    a,} : { a: any; }
+
+    a,
+>a : any
+}
+
+var x3 = {
+>x3 : any
+>{    a: 0,    b,    c,    d() { },    x3,    parent: x3} : { a: number; b: any; c: any; d(): void; x3: any; parent: any; }
+
+    a: 0,
+>a : number
+>0 : 0
+
+    b,
+>b : any
+
+    c,
+>c : any
+
+    d() { },
+>d : () => void
+
+    x3,
+>x3 : any
+
+    parent: x3
+>parent : any
+>x3 : any
+
+};
+
+

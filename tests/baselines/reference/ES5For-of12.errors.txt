@@ -1,0 +1,7 @@
+tests/cases/conformance/statements/for-ofStatements/ES5For-of12.ts(1,7): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+
+
+==== tests/cases/conformance/statements/for-ofStatements/ES5For-of12.ts (1 errors) ====
+    for ([""] of [[""]]) { }
+          ~~
+!!! error TS2364: The left-hand side of an assignment expression must be a variable or a property access.

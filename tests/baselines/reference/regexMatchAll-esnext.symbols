@@ -1,0 +1,16 @@
+=== tests/cases/compiler/regexMatchAll-esnext.ts ===
+const matches = /\w/g[Symbol.matchAll]("matchAll");
+>matches : Symbol(matches, Decl(regexMatchAll-esnext.ts, 0, 5))
+>Symbol.matchAll : Symbol(SymbolConstructor.matchAll, Decl(lib.es2020.symbol.wellknown.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>matchAll : Symbol(SymbolConstructor.matchAll, Decl(lib.es2020.symbol.wellknown.d.ts, --, --))
+
+const array = [...matches];
+>array : Symbol(array, Decl(regexMatchAll-esnext.ts, 1, 5))
+>matches : Symbol(matches, Decl(regexMatchAll-esnext.ts, 0, 5))
+
+const { index, input } = array[0];
+>index : Symbol(index, Decl(regexMatchAll-esnext.ts, 2, 7))
+>input : Symbol(input, Decl(regexMatchAll-esnext.ts, 2, 14))
+>array : Symbol(array, Decl(regexMatchAll-esnext.ts, 1, 5))
+

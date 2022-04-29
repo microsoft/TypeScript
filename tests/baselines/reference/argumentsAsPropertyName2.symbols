@@ -1,0 +1,31 @@
+=== tests/cases/compiler/argumentsAsPropertyName2.ts ===
+// target: es5
+
+function foo() {
+>foo : Symbol(foo, Decl(argumentsAsPropertyName2.ts, 0, 0))
+
+    for (let x = 0; x < 1; ++x) {
+>x : Symbol(x, Decl(argumentsAsPropertyName2.ts, 3, 12))
+>x : Symbol(x, Decl(argumentsAsPropertyName2.ts, 3, 12))
+>x : Symbol(x, Decl(argumentsAsPropertyName2.ts, 3, 12))
+
+        let i : number;
+>i : Symbol(i, Decl(argumentsAsPropertyName2.ts, 4, 11))
+
+        [].forEach(function () { i });
+>[].forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>i : Symbol(i, Decl(argumentsAsPropertyName2.ts, 4, 11))
+
+        ({ arguments: 0 });
+>arguments : Symbol(arguments, Decl(argumentsAsPropertyName2.ts, 6, 10))
+
+        ({ arguments });
+>arguments : Symbol(arguments, Decl(argumentsAsPropertyName2.ts, 7, 10))
+
+        ({ arguments: arguments });
+>arguments : Symbol(arguments, Decl(argumentsAsPropertyName2.ts, 8, 10))
+>arguments : Symbol(arguments)
+    }
+}
+

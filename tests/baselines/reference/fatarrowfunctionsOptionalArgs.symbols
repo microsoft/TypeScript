@@ -1,0 +1,316 @@
+=== tests/cases/compiler/fatarrowfunctionsOptionalArgs.ts ===
+// valid
+
+// no params
+() => 1;
+
+// one param, no type
+(arg) => 2;
+>arg : Symbol(arg, Decl(fatarrowfunctionsOptionalArgs.ts, 6, 1))
+
+// one param, no type
+arg => 2;
+>arg : Symbol(arg, Decl(fatarrowfunctionsOptionalArgs.ts, 6, 11))
+
+// one param, no type with default value
+(arg = 1) => 3;
+>arg : Symbol(arg, Decl(fatarrowfunctionsOptionalArgs.ts, 12, 1))
+
+// one param, no type, optional
+(arg?) => 4;
+>arg : Symbol(arg, Decl(fatarrowfunctionsOptionalArgs.ts, 15, 1))
+
+// typed param
+(arg: number) => 5;
+>arg : Symbol(arg, Decl(fatarrowfunctionsOptionalArgs.ts, 18, 1))
+
+// typed param with default value
+(arg: number = 0) => 6;
+>arg : Symbol(arg, Decl(fatarrowfunctionsOptionalArgs.ts, 21, 1))
+
+// optional param
+(arg?: number) => 7;
+>arg : Symbol(arg, Decl(fatarrowfunctionsOptionalArgs.ts, 24, 1))
+
+// var arg param
+(...arg: number[]) => 8;
+>arg : Symbol(arg, Decl(fatarrowfunctionsOptionalArgs.ts, 27, 1))
+
+// multiple arguments
+(arg1, arg2) => 12;
+>arg1 : Symbol(arg1, Decl(fatarrowfunctionsOptionalArgs.ts, 30, 1))
+>arg2 : Symbol(arg2, Decl(fatarrowfunctionsOptionalArgs.ts, 30, 6))
+
+(arg1 = 1, arg2 =3) => 13;
+>arg1 : Symbol(arg1, Decl(fatarrowfunctionsOptionalArgs.ts, 31, 1))
+>arg2 : Symbol(arg2, Decl(fatarrowfunctionsOptionalArgs.ts, 31, 10))
+
+(arg1?, arg2?) => 14;
+>arg1 : Symbol(arg1, Decl(fatarrowfunctionsOptionalArgs.ts, 32, 1))
+>arg2 : Symbol(arg2, Decl(fatarrowfunctionsOptionalArgs.ts, 32, 7))
+
+(arg1: number, arg2: number) => 15;
+>arg1 : Symbol(arg1, Decl(fatarrowfunctionsOptionalArgs.ts, 33, 1))
+>arg2 : Symbol(arg2, Decl(fatarrowfunctionsOptionalArgs.ts, 33, 14))
+
+(arg1: number = 0, arg2: number = 1) => 16;
+>arg1 : Symbol(arg1, Decl(fatarrowfunctionsOptionalArgs.ts, 34, 1))
+>arg2 : Symbol(arg2, Decl(fatarrowfunctionsOptionalArgs.ts, 34, 18))
+
+(arg1?: number, arg2?: number) => 17;
+>arg1 : Symbol(arg1, Decl(fatarrowfunctionsOptionalArgs.ts, 35, 1))
+>arg2 : Symbol(arg2, Decl(fatarrowfunctionsOptionalArgs.ts, 35, 15))
+
+(arg1, ...arg2: number[]) => 18;
+>arg1 : Symbol(arg1, Decl(fatarrowfunctionsOptionalArgs.ts, 36, 1))
+>arg2 : Symbol(arg2, Decl(fatarrowfunctionsOptionalArgs.ts, 36, 6))
+
+(arg1, arg2?: number) => 19;
+>arg1 : Symbol(arg1, Decl(fatarrowfunctionsOptionalArgs.ts, 37, 1))
+>arg2 : Symbol(arg2, Decl(fatarrowfunctionsOptionalArgs.ts, 37, 6))
+
+// in paren
+(() => 21);
+((arg) => 22);
+>arg : Symbol(arg, Decl(fatarrowfunctionsOptionalArgs.ts, 41, 2))
+
+((arg = 1) => 23);
+>arg : Symbol(arg, Decl(fatarrowfunctionsOptionalArgs.ts, 42, 2))
+
+((arg?) => 24);
+>arg : Symbol(arg, Decl(fatarrowfunctionsOptionalArgs.ts, 43, 2))
+
+((arg: number) => 25);
+>arg : Symbol(arg, Decl(fatarrowfunctionsOptionalArgs.ts, 44, 2))
+
+((arg: number = 0) => 26);
+>arg : Symbol(arg, Decl(fatarrowfunctionsOptionalArgs.ts, 45, 2))
+
+((arg?: number) => 27);
+>arg : Symbol(arg, Decl(fatarrowfunctionsOptionalArgs.ts, 46, 2))
+
+((...arg: number[]) => 28);
+>arg : Symbol(arg, Decl(fatarrowfunctionsOptionalArgs.ts, 47, 2))
+
+// in multiple paren
+(((((arg) => { return 32; }))));
+>arg : Symbol(arg, Decl(fatarrowfunctionsOptionalArgs.ts, 50, 5))
+
+// in ternary exression
+false ? () => 41 : null;
+false ? (arg) => 42 : null;
+>arg : Symbol(arg, Decl(fatarrowfunctionsOptionalArgs.ts, 54, 9))
+
+false ? (arg = 1) => 43 : null;
+>arg : Symbol(arg, Decl(fatarrowfunctionsOptionalArgs.ts, 55, 9))
+
+false ? (arg?) => 44 : null;
+>arg : Symbol(arg, Decl(fatarrowfunctionsOptionalArgs.ts, 56, 9))
+
+false ? (arg: number) => 45 : null;
+>arg : Symbol(arg, Decl(fatarrowfunctionsOptionalArgs.ts, 57, 9))
+
+false ? (arg?: number) => 46 : null;
+>arg : Symbol(arg, Decl(fatarrowfunctionsOptionalArgs.ts, 58, 9))
+
+false ? (arg?: number = 0) => 47 : null;
+>arg : Symbol(arg, Decl(fatarrowfunctionsOptionalArgs.ts, 59, 9))
+
+false ? (...arg: number[]) => 48 : null;
+>arg : Symbol(arg, Decl(fatarrowfunctionsOptionalArgs.ts, 60, 9))
+
+// in ternary exression within paren
+false ? (() => 51) : null;
+false ? ((arg) => 52) : null;
+>arg : Symbol(arg, Decl(fatarrowfunctionsOptionalArgs.ts, 64, 10))
+
+false ? ((arg = 1) => 53) : null;
+>arg : Symbol(arg, Decl(fatarrowfunctionsOptionalArgs.ts, 65, 10))
+
+false ? ((arg?) => 54) : null;
+>arg : Symbol(arg, Decl(fatarrowfunctionsOptionalArgs.ts, 66, 10))
+
+false ? ((arg: number) => 55) : null;
+>arg : Symbol(arg, Decl(fatarrowfunctionsOptionalArgs.ts, 67, 10))
+
+false ? ((arg?: number) => 56) : null;
+>arg : Symbol(arg, Decl(fatarrowfunctionsOptionalArgs.ts, 68, 10))
+
+false ? ((arg?: number = 0) => 57) : null;
+>arg : Symbol(arg, Decl(fatarrowfunctionsOptionalArgs.ts, 69, 10))
+
+false ? ((...arg: number[]) => 58) : null;
+>arg : Symbol(arg, Decl(fatarrowfunctionsOptionalArgs.ts, 70, 10))
+
+// ternary exression's else clause
+false ? null : () => 61;
+false ? null : (arg) => 62;
+>arg : Symbol(arg, Decl(fatarrowfunctionsOptionalArgs.ts, 74, 16))
+
+false ? null : (arg = 1) => 63;
+>arg : Symbol(arg, Decl(fatarrowfunctionsOptionalArgs.ts, 75, 16))
+
+false ? null : (arg?) => 64;
+>arg : Symbol(arg, Decl(fatarrowfunctionsOptionalArgs.ts, 76, 16))
+
+false ? null : (arg: number) => 65;
+>arg : Symbol(arg, Decl(fatarrowfunctionsOptionalArgs.ts, 77, 16))
+
+false ? null : (arg?: number) => 66;
+>arg : Symbol(arg, Decl(fatarrowfunctionsOptionalArgs.ts, 78, 16))
+
+false ? null : (arg?: number = 0) => 67;
+>arg : Symbol(arg, Decl(fatarrowfunctionsOptionalArgs.ts, 79, 16))
+
+false ? null : (...arg: number[]) => 68;
+>arg : Symbol(arg, Decl(fatarrowfunctionsOptionalArgs.ts, 80, 16))
+
+
+// nested ternary expressions
+((a?) => { return a; }) ? (b? ) => { return b; } : (c? ) => { return c; };
+>a : Symbol(a, Decl(fatarrowfunctionsOptionalArgs.ts, 84, 2))
+>a : Symbol(a, Decl(fatarrowfunctionsOptionalArgs.ts, 84, 2))
+>b : Symbol(b, Decl(fatarrowfunctionsOptionalArgs.ts, 84, 27))
+>b : Symbol(b, Decl(fatarrowfunctionsOptionalArgs.ts, 84, 27))
+>c : Symbol(c, Decl(fatarrowfunctionsOptionalArgs.ts, 84, 52))
+>c : Symbol(c, Decl(fatarrowfunctionsOptionalArgs.ts, 84, 52))
+
+//multiple levels
+(a?) => { return a; } ? (b)=>(c)=>81 : (c)=>(d)=>82;
+>a : Symbol(a, Decl(fatarrowfunctionsOptionalArgs.ts, 87, 1))
+>a : Symbol(a, Decl(fatarrowfunctionsOptionalArgs.ts, 87, 1))
+>b : Symbol(b, Decl(fatarrowfunctionsOptionalArgs.ts, 87, 25))
+>c : Symbol(c, Decl(fatarrowfunctionsOptionalArgs.ts, 87, 30))
+>c : Symbol(c, Decl(fatarrowfunctionsOptionalArgs.ts, 87, 40))
+>d : Symbol(d, Decl(fatarrowfunctionsOptionalArgs.ts, 87, 45))
+
+
+// In Expressions
+((arg) => 90) instanceof Function;
+>arg : Symbol(arg, Decl(fatarrowfunctionsOptionalArgs.ts, 91, 2))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+((arg = 1) => 91) instanceof Function;
+>arg : Symbol(arg, Decl(fatarrowfunctionsOptionalArgs.ts, 92, 2))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+((arg? ) => 92) instanceof Function;
+>arg : Symbol(arg, Decl(fatarrowfunctionsOptionalArgs.ts, 93, 2))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+((arg: number) => 93) instanceof Function;
+>arg : Symbol(arg, Decl(fatarrowfunctionsOptionalArgs.ts, 94, 2))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+((arg: number = 1) => 94) instanceof Function;
+>arg : Symbol(arg, Decl(fatarrowfunctionsOptionalArgs.ts, 95, 2))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+((arg?: number) => 95) instanceof Function;
+>arg : Symbol(arg, Decl(fatarrowfunctionsOptionalArgs.ts, 96, 2))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+((...arg: number[]) => 96) instanceof Function;
+>arg : Symbol(arg, Decl(fatarrowfunctionsOptionalArgs.ts, 97, 2))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+'' + ((arg) => 100);
+>arg : Symbol(arg, Decl(fatarrowfunctionsOptionalArgs.ts, 99, 7))
+
+((arg) => 0) + '' + ((arg) => 101);
+>arg : Symbol(arg, Decl(fatarrowfunctionsOptionalArgs.ts, 100, 2))
+>arg : Symbol(arg, Decl(fatarrowfunctionsOptionalArgs.ts, 100, 22))
+
+((arg = 1) => 0) + '' + ((arg = 2) => 102);
+>arg : Symbol(arg, Decl(fatarrowfunctionsOptionalArgs.ts, 101, 2))
+>arg : Symbol(arg, Decl(fatarrowfunctionsOptionalArgs.ts, 101, 26))
+
+((arg?) => 0) + '' + ((arg?) => 103);
+>arg : Symbol(arg, Decl(fatarrowfunctionsOptionalArgs.ts, 102, 2))
+>arg : Symbol(arg, Decl(fatarrowfunctionsOptionalArgs.ts, 102, 23))
+
+((arg:number) => 0) + '' + ((arg:number) => 104);
+>arg : Symbol(arg, Decl(fatarrowfunctionsOptionalArgs.ts, 103, 2))
+>arg : Symbol(arg, Decl(fatarrowfunctionsOptionalArgs.ts, 103, 29))
+
+((arg:number = 1) => 0) + '' + ((arg:number = 2) => 105);
+>arg : Symbol(arg, Decl(fatarrowfunctionsOptionalArgs.ts, 104, 2))
+>arg : Symbol(arg, Decl(fatarrowfunctionsOptionalArgs.ts, 104, 33))
+
+((arg?:number = 1) => 0) + '' + ((arg?:number = 2) => 106);
+>arg : Symbol(arg, Decl(fatarrowfunctionsOptionalArgs.ts, 105, 2))
+>arg : Symbol(arg, Decl(fatarrowfunctionsOptionalArgs.ts, 105, 34))
+
+((...arg:number[]) => 0) + '' + ((...arg:number[]) => 107);
+>arg : Symbol(arg, Decl(fatarrowfunctionsOptionalArgs.ts, 106, 2))
+>arg : Symbol(arg, Decl(fatarrowfunctionsOptionalArgs.ts, 106, 34))
+
+((arg1, arg2?) => 0) + '' + ((arg1,arg2?) => 108);
+>arg1 : Symbol(arg1, Decl(fatarrowfunctionsOptionalArgs.ts, 107, 2))
+>arg2 : Symbol(arg2, Decl(fatarrowfunctionsOptionalArgs.ts, 107, 7))
+>arg1 : Symbol(arg1, Decl(fatarrowfunctionsOptionalArgs.ts, 107, 30))
+>arg2 : Symbol(arg2, Decl(fatarrowfunctionsOptionalArgs.ts, 107, 35))
+
+((arg1, ...arg2:number[]) => 0) + '' + ((arg1, ...arg2:number[]) => 108);
+>arg1 : Symbol(arg1, Decl(fatarrowfunctionsOptionalArgs.ts, 108, 2))
+>arg2 : Symbol(arg2, Decl(fatarrowfunctionsOptionalArgs.ts, 108, 7))
+>arg1 : Symbol(arg1, Decl(fatarrowfunctionsOptionalArgs.ts, 108, 41))
+>arg2 : Symbol(arg2, Decl(fatarrowfunctionsOptionalArgs.ts, 108, 46))
+
+
+// Function Parameters
+function foo(...arg: any[]) { }
+>foo : Symbol(foo, Decl(fatarrowfunctionsOptionalArgs.ts, 108, 73))
+>arg : Symbol(arg, Decl(fatarrowfunctionsOptionalArgs.ts, 112, 13))
+
+foo(
+>foo : Symbol(foo, Decl(fatarrowfunctionsOptionalArgs.ts, 108, 73))
+
+    (a) => 110, 
+>a : Symbol(a, Decl(fatarrowfunctionsOptionalArgs.ts, 115, 5))
+
+    ((a) => 111), 
+>a : Symbol(a, Decl(fatarrowfunctionsOptionalArgs.ts, 116, 6))
+
+    (a) => {
+>a : Symbol(a, Decl(fatarrowfunctionsOptionalArgs.ts, 117, 5))
+
+        return 112;
+    },
+    (a? ) => 113, 
+>a : Symbol(a, Decl(fatarrowfunctionsOptionalArgs.ts, 120, 5))
+
+    (a, b? ) => 114, 
+>a : Symbol(a, Decl(fatarrowfunctionsOptionalArgs.ts, 121, 5))
+>b : Symbol(b, Decl(fatarrowfunctionsOptionalArgs.ts, 121, 7))
+
+    (a: number) => 115, 
+>a : Symbol(a, Decl(fatarrowfunctionsOptionalArgs.ts, 122, 5))
+
+    (a: number = 0) => 116, 
+>a : Symbol(a, Decl(fatarrowfunctionsOptionalArgs.ts, 123, 5))
+
+    (a = 0) => 117, 
+>a : Symbol(a, Decl(fatarrowfunctionsOptionalArgs.ts, 124, 5))
+
+    (a?: number = 0) => 118, 
+>a : Symbol(a, Decl(fatarrowfunctionsOptionalArgs.ts, 125, 5))
+
+    (...a: number[]) => 119, 
+>a : Symbol(a, Decl(fatarrowfunctionsOptionalArgs.ts, 126, 5))
+
+    (a, b? = 0, ...c: number[]) => 120,
+>a : Symbol(a, Decl(fatarrowfunctionsOptionalArgs.ts, 127, 5))
+>b : Symbol(b, Decl(fatarrowfunctionsOptionalArgs.ts, 127, 7))
+>c : Symbol(c, Decl(fatarrowfunctionsOptionalArgs.ts, 127, 15))
+
+    (a) => (b) => (c) => 121,
+>a : Symbol(a, Decl(fatarrowfunctionsOptionalArgs.ts, 128, 5))
+>b : Symbol(b, Decl(fatarrowfunctionsOptionalArgs.ts, 128, 12))
+>c : Symbol(c, Decl(fatarrowfunctionsOptionalArgs.ts, 128, 19))
+
+    false? (a) => 0 : (b) => 122
+>a : Symbol(a, Decl(fatarrowfunctionsOptionalArgs.ts, 129, 12))
+>b : Symbol(b, Decl(fatarrowfunctionsOptionalArgs.ts, 129, 23))
+
+);

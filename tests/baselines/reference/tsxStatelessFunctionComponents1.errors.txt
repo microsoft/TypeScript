@@ -1,0 +1,91 @@
+tests/cases/conformance/jsx/file.tsx(19,16): error TS2322: Type '{ naaame: string; }' is not assignable to type 'IntrinsicAttributes & { name: string; }'.
+  Property 'naaame' does not exist on type 'IntrinsicAttributes & { name: string; }'. Did you mean 'name'?
+tests/cases/conformance/jsx/file.tsx(27,15): error TS2322: Type 'number' is not assignable to type 'string'.
+tests/cases/conformance/jsx/file.tsx(29,15): error TS2322: Type '{ naaaaaaame: string; }' is not assignable to type 'IntrinsicAttributes & { name?: string; }'.
+  Property 'naaaaaaame' does not exist on type 'IntrinsicAttributes & { name?: string; }'.
+tests/cases/conformance/jsx/file.tsx(34,10): error TS2741: Property '"prop-name"' is missing in type '{ "extra-prop-name": string; }' but required in type '{ "prop-name": string; }'.
+tests/cases/conformance/jsx/file.tsx(37,23): error TS2322: Type '{ prop1: true; }' is not assignable to type 'IntrinsicAttributes'.
+  Property 'prop1' does not exist on type 'IntrinsicAttributes'.
+tests/cases/conformance/jsx/file.tsx(38,24): error TS2322: Type '{ ref: (x: any) => any; }' is not assignable to type 'IntrinsicAttributes'.
+  Property 'ref' does not exist on type 'IntrinsicAttributes'.
+tests/cases/conformance/jsx/file.tsx(41,16): error TS1005: ',' expected.
+tests/cases/conformance/jsx/file.tsx(45,11): error TS2559: Type '{ prop1: boolean; }' has no properties in common with type 'IntrinsicAttributes'.
+
+
+==== tests/cases/conformance/jsx/file.tsx (8 errors) ====
+    function EmptyPropSFC() {
+        return <div> Default Greeting </div>;
+    }
+    
+    function Greet(x: {name: string}) {
+    	return <div>Hello, {x}</div>;
+    }
+    function Meet({name = 'world'}) {
+    	return <div>Hello, {name}</div>;
+    }
+    function MeetAndGreet(k: {"prop-name": string}) {
+    	return <div>Hi Hi</div>;
+    }
+    
+    // OK
+    let a = <Greet name='world' />;
+    let a1 = <Greet name='world' extra-prop />;
+    // Error
+    let b = <Greet naaame='world' />;
+                   ~~~~~~
+!!! error TS2322: Type '{ naaame: string; }' is not assignable to type 'IntrinsicAttributes & { name: string; }'.
+!!! error TS2322:   Property 'naaame' does not exist on type 'IntrinsicAttributes & { name: string; }'. Did you mean 'name'?
+    
+    // OK
+    let c = <Meet />;
+    let c1 = <Meet extra-prop/>;
+    // OK
+    let d = <Meet name='me' />;
+    // Error
+    let e = <Meet name={42} />;
+                  ~~~~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
+    // Error
+    let f = <Meet naaaaaaame='no' />;
+                  ~~~~~~~~~~
+!!! error TS2322: Type '{ naaaaaaame: string; }' is not assignable to type 'IntrinsicAttributes & { name?: string; }'.
+!!! error TS2322:   Property 'naaaaaaame' does not exist on type 'IntrinsicAttributes & { name?: string; }'.
+    
+    // OK
+    let g = <MeetAndGreet prop-name="Bob" />;
+    // Error
+    let h = <MeetAndGreet extra-prop-name="World" />;
+             ~~~~~~~~~~~~
+!!! error TS2741: Property '"prop-name"' is missing in type '{ "extra-prop-name": string; }' but required in type '{ "prop-name": string; }'.
+!!! related TS2728 tests/cases/conformance/jsx/file.tsx:11:27: '"prop-name"' is declared here.
+    
+    // Error
+    let i = <EmptyPropSFC prop1 />
+                          ~~~~~
+!!! error TS2322: Type '{ prop1: true; }' is not assignable to type 'IntrinsicAttributes'.
+!!! error TS2322:   Property 'prop1' does not exist on type 'IntrinsicAttributes'.
+    let i1 = <EmptyPropSFC ref={x => x.greeting.substr(10)} />
+                           ~~~
+!!! error TS2322: Type '{ ref: (x: any) => any; }' is not assignable to type 'IntrinsicAttributes'.
+!!! error TS2322:   Property 'ref' does not exist on type 'IntrinsicAttributes'.
+    
+    let o = {
+        prop1: true;
+                   ~
+!!! error TS1005: ',' expected.
+    }
+    
+    // OK as access properties are allow when spread
+    let i2 = <EmptyPropSFC {...o} />
+              ~~~~~~~~~~~~
+!!! error TS2559: Type '{ prop1: boolean; }' has no properties in common with type 'IntrinsicAttributes'.
+    
+    let o1: any;
+    // OK
+    let j = <EmptyPropSFC {...o1} />
+    let j1 = <EmptyPropSFC />
+    let j2 = <EmptyPropSFC data-prop />
+    let j3 = <EmptyPropSFC {...{}} />
+    let j4 = <EmptyPropSFC {...{ "data-info": "hi"}} />
+    
+    

@@ -1,0 +1,15 @@
+tests/cases/compiler/avoidListingPropertiesForTypesWithOnlyCallOrConstructSignatures.ts(7,20): error TS2322: Type '() => Dog' is not assignable to type 'Dog'.
+
+
+==== tests/cases/compiler/avoidListingPropertiesForTypesWithOnlyCallOrConstructSignatures.ts (1 errors) ====
+    interface Dog {
+        barkable: true
+    }
+    
+    declare function getRover(): Dog
+        
+    export let x:Dog = getRover;
+                       ~~~~~~~~
+!!! error TS2322: Type '() => Dog' is not assignable to type 'Dog'.
+!!! related TS6212 tests/cases/compiler/avoidListingPropertiesForTypesWithOnlyCallOrConstructSignatures.ts:7:20: Did you mean to call this expression?
+    // export let x: Dog = getRover; 

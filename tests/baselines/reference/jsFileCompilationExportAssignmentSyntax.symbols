@@ -1,0 +1,3 @@
+=== tests/cases/compiler/a.js ===
+export = b;
+No type information for this code.

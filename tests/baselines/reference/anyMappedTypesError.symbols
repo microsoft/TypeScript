@@ -1,0 +1,5 @@
+=== tests/cases/compiler/anyMappedTypesError.ts ===
+type Foo = {[P in "bar"]};
+>Foo : Symbol(Foo, Decl(anyMappedTypesError.ts, 0, 0))
+>P : Symbol(P, Decl(anyMappedTypesError.ts, 0, 13))
+

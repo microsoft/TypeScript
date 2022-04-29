@@ -1,0 +1,93 @@
+=== tests/cases/conformance/expressions/functions/typeOfThisInFunctionExpression.ts ===
+// type of 'this' in FunctionExpression is Any
+
+function fn() {
+>fn : Symbol(fn, Decl(typeOfThisInFunctionExpression.ts, 0, 0))
+
+    var p = this;
+>p : Symbol(p, Decl(typeOfThisInFunctionExpression.ts, 3, 7), Decl(typeOfThisInFunctionExpression.ts, 4, 7))
+
+    var p: any;
+>p : Symbol(p, Decl(typeOfThisInFunctionExpression.ts, 3, 7), Decl(typeOfThisInFunctionExpression.ts, 4, 7))
+}
+
+var t = function () {
+>t : Symbol(t, Decl(typeOfThisInFunctionExpression.ts, 7, 3))
+
+    var p = this;
+>p : Symbol(p, Decl(typeOfThisInFunctionExpression.ts, 8, 7), Decl(typeOfThisInFunctionExpression.ts, 9, 7))
+
+    var p: any;
+>p : Symbol(p, Decl(typeOfThisInFunctionExpression.ts, 8, 7), Decl(typeOfThisInFunctionExpression.ts, 9, 7))
+}
+
+var t2 = function f() {
+>t2 : Symbol(t2, Decl(typeOfThisInFunctionExpression.ts, 12, 3))
+>f : Symbol(f, Decl(typeOfThisInFunctionExpression.ts, 12, 8))
+
+    var x = this;
+>x : Symbol(x, Decl(typeOfThisInFunctionExpression.ts, 13, 7), Decl(typeOfThisInFunctionExpression.ts, 14, 7))
+
+    var x: any;
+>x : Symbol(x, Decl(typeOfThisInFunctionExpression.ts, 13, 7), Decl(typeOfThisInFunctionExpression.ts, 14, 7))
+}
+
+class C {
+>C : Symbol(C, Decl(typeOfThisInFunctionExpression.ts, 15, 1))
+
+    x = function () {
+>x : Symbol(C.x, Decl(typeOfThisInFunctionExpression.ts, 17, 9))
+
+        var q: any;
+>q : Symbol(q, Decl(typeOfThisInFunctionExpression.ts, 19, 11), Decl(typeOfThisInFunctionExpression.ts, 20, 11))
+
+        var q = this;
+>q : Symbol(q, Decl(typeOfThisInFunctionExpression.ts, 19, 11), Decl(typeOfThisInFunctionExpression.ts, 20, 11))
+    }
+    y = function ff() {
+>y : Symbol(C.y, Decl(typeOfThisInFunctionExpression.ts, 21, 5))
+>ff : Symbol(ff, Decl(typeOfThisInFunctionExpression.ts, 22, 7))
+
+        var q: any;
+>q : Symbol(q, Decl(typeOfThisInFunctionExpression.ts, 23, 11), Decl(typeOfThisInFunctionExpression.ts, 24, 11))
+
+        var q = this;
+>q : Symbol(q, Decl(typeOfThisInFunctionExpression.ts, 23, 11), Decl(typeOfThisInFunctionExpression.ts, 24, 11))
+    }
+}
+
+module M {
+>M : Symbol(M, Decl(typeOfThisInFunctionExpression.ts, 26, 1))
+
+    function fn() {
+>fn : Symbol(fn, Decl(typeOfThisInFunctionExpression.ts, 28, 10))
+
+        var p = this;
+>p : Symbol(p, Decl(typeOfThisInFunctionExpression.ts, 30, 11), Decl(typeOfThisInFunctionExpression.ts, 31, 11))
+
+        var p: any;
+>p : Symbol(p, Decl(typeOfThisInFunctionExpression.ts, 30, 11), Decl(typeOfThisInFunctionExpression.ts, 31, 11))
+    }
+
+    var t = function () {
+>t : Symbol(t, Decl(typeOfThisInFunctionExpression.ts, 34, 7))
+
+        var p = this;
+>p : Symbol(p, Decl(typeOfThisInFunctionExpression.ts, 35, 11), Decl(typeOfThisInFunctionExpression.ts, 36, 11))
+
+        var p: any;
+>p : Symbol(p, Decl(typeOfThisInFunctionExpression.ts, 35, 11), Decl(typeOfThisInFunctionExpression.ts, 36, 11))
+    }
+
+    var t2 = function f() {
+>t2 : Symbol(t2, Decl(typeOfThisInFunctionExpression.ts, 39, 7))
+>f : Symbol(f, Decl(typeOfThisInFunctionExpression.ts, 39, 12))
+
+        var x = this;
+>x : Symbol(x, Decl(typeOfThisInFunctionExpression.ts, 40, 11), Decl(typeOfThisInFunctionExpression.ts, 41, 11))
+
+        var x: any;
+>x : Symbol(x, Decl(typeOfThisInFunctionExpression.ts, 40, 11), Decl(typeOfThisInFunctionExpression.ts, 41, 11))
+    }
+
+}

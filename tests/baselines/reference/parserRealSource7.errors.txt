@@ -1,0 +1,1747 @@
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(4,21): error TS6053: File 'tests/cases/conformance/parser/ecmascript5/typescript.ts' not found.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(12,38): error TS2304: Cannot find name 'ASTList'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(12,62): error TS2304: Cannot find name 'TypeLink'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(16,37): error TS2552: Cannot find name 'TypeLink'. Did you mean 'typeLink'?
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(16,46): error TS1011: An element access expression should take an argument.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(21,36): error TS2552: Cannot find name 'TypeLink'. Did you mean 'typeLink'?
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(29,29): error TS2304: Cannot find name 'Type'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(29,45): error TS2304: Cannot find name 'TypeDeclaration'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(34,43): error TS2304: Cannot find name 'Type'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(34,54): error TS2304: Cannot find name 'AST'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(34,68): error TS2304: Cannot find name 'TypeCollectionContext'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(35,25): error TS2304: Cannot find name 'ValueLocation'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(36,30): error TS2304: Cannot find name 'TypeLink'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(41,17): error TS2304: Cannot find name 'FieldSymbol'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(43,31): error TS2304: Cannot find name 'SymbolFlags'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(43,54): error TS2304: Cannot find name 'SymbolFlags'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(49,58): error TS2304: Cannot find name 'Type'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(50,29): error TS2304: Cannot find name 'Signature'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(51,36): error TS2304: Cannot find name 'TypeLink'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(55,30): error TS2304: Cannot find name 'SignatureGroup'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(59,66): error TS2304: Cannot find name 'Type'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(59,80): error TS2304: Cannot find name 'Type'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(60,31): error TS2304: Cannot find name 'SignatureGroup'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(61,18): error TS2304: Cannot find name 'Signature'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(68,23): error TS2304: Cannot find name 'Signature'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(73,34): error TS2304: Cannot find name 'TypeLink'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(83,24): error TS2304: Cannot find name 'ScopeChain'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(84,18): error TS2304: Cannot find name 'IHashTable'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(85,20): error TS2304: Cannot find name 'TypeCollectionContext'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(88,67): error TS2304: Cannot find name 'ScopeChain'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(98,41): error TS2304: Cannot find name 'AST'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(101,18): error TS2304: Cannot find name 'NodeType'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(102,30): error TS2304: Cannot find name 'Identifier'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(103,33): error TS2304: Cannot find name 'isQuoted'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(123,18): error TS2304: Cannot find name 'NodeType'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(124,35): error TS2304: Cannot find name 'BinaryExpression'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(127,38): error TS2339: Property 'getType' does not exist on type 'Symbol'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(138,34): error TS2339: Property 'getType' does not exist on type 'Symbol'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(150,48): error TS2304: Cannot find name 'AST'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(150,61): error TS2304: Cannot find name 'AST'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(150,75): error TS2304: Cannot find name 'TypeCollectionContext'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(152,25): error TS2304: Cannot find name 'TypeSymbol'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(153,22): error TS2304: Cannot find name 'ModuleType'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(154,27): error TS2304: Cannot find name 'ImportDeclaration'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(155,26): error TS2304: Cannot find name 'hasFlag'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(155,55): error TS2304: Cannot find name 'VarFlags'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(162,51): error TS2339: Property 'getType' does not exist on type 'Symbol'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(165,28): error TS2304: Cannot find name 'ModuleType'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(169,26): error TS2304: Cannot find name 'TypeSymbol'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(186,48): error TS2304: Cannot find name 'AST'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(186,61): error TS2304: Cannot find name 'AST'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(186,75): error TS2304: Cannot find name 'TypeCollectionContext'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(189,25): error TS2304: Cannot find name 'ModuleDeclaration'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(189,46): error TS2304: Cannot find name 'ModuleDeclaration'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(191,25): error TS2304: Cannot find name 'hasFlag'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(191,54): error TS2304: Cannot find name 'ModuleFlags'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(192,22): error TS2304: Cannot find name 'hasFlag'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(192,51): error TS2304: Cannot find name 'ModuleFlags'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(194,26): error TS2304: Cannot find name 'hasFlag'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(194,55): error TS2304: Cannot find name 'ModuleFlags'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(195,25): error TS2304: Cannot find name 'Identifier'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(197,25): error TS2304: Cannot find name 'isQuoted'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(200,25): error TS2304: Cannot find name 'TypeSymbol'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(201,22): error TS2304: Cannot find name 'ModuleType'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(202,51): error TS2304: Cannot find name 'SymbolKind'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(205,41): error TS2304: Cannot find name 'ScopedMembers'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(205,59): error TS2304: Cannot find name 'DualStringHashTable'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(205,83): error TS2304: Cannot find name 'StringHashTable'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(205,106): error TS2304: Cannot find name 'StringHashTable'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(206,48): error TS2304: Cannot find name 'ScopedMembers'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(206,66): error TS2304: Cannot find name 'DualStringHashTable'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(206,90): error TS2304: Cannot find name 'StringHashTable'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(206,113): error TS2304: Cannot find name 'StringHashTable'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(207,31): error TS2304: Cannot find name 'ModuleType'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(209,42): error TS2304: Cannot find name 'TypeFlags'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(211,39): error TS2304: Cannot find name 'ScopedMembers'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(211,57): error TS2304: Cannot find name 'DualStringHashTable'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(211,81): error TS2304: Cannot find name 'StringHashTable'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(211,104): error TS2304: Cannot find name 'StringHashTable'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(212,46): error TS2304: Cannot find name 'ScopedMembers'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(212,64): error TS2304: Cannot find name 'DualStringHashTable'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(212,88): error TS2304: Cannot find name 'StringHashTable'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(212,111): error TS2304: Cannot find name 'StringHashTable'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(216,30): error TS2304: Cannot find name 'TypeSymbol'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(231,72): error TS2304: Cannot find name 'NodeType'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(234,27): error TS2304: Cannot find name 'TypeSymbol'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(238,80): error TS2304: Cannot find name 'StringHashTable'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(239,37): error TS2304: Cannot find name 'ScopedMembers'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(239,55): error TS2304: Cannot find name 'DualStringHashTable'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(239,105): error TS2304: Cannot find name 'StringHashTable'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(242,94): error TS2304: Cannot find name 'StringHashTable'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(243,44): error TS2304: Cannot find name 'ScopedMembers'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(243,62): error TS2304: Cannot find name 'DualStringHashTable'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(243,119): error TS2304: Cannot find name 'StringHashTable'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(246,68): error TS2304: Cannot find name 'StringHashTable'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(247,31): error TS2304: Cannot find name 'ScopedMembers'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(247,49): error TS2304: Cannot find name 'DualStringHashTable'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(247,93): error TS2304: Cannot find name 'StringHashTable'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(250,82): error TS2304: Cannot find name 'StringHashTable'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(251,38): error TS2304: Cannot find name 'ScopedMembers'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(251,56): error TS2304: Cannot find name 'DualStringHashTable'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(251,107): error TS2304: Cannot find name 'StringHashTable'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(253,27): error TS2304: Cannot find name 'ModuleType'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(255,38): error TS2304: Cannot find name 'TypeFlags'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(272,33): error TS2304: Cannot find name 'SymbolFlags'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(276,33): error TS2304: Cannot find name 'SymbolFlags'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(280,9): error TS2304: Cannot find name 'pushTypeCollectionScope'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(289,47): error TS2304: Cannot find name 'AST'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(289,60): error TS2304: Cannot find name 'AST'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(289,74): error TS2304: Cannot find name 'TypeCollectionContext'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(291,26): error TS2304: Cannot find name 'ClassDeclaration'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(293,24): error TS2304: Cannot find name 'Type'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(294,27): error TS2304: Cannot find name 'Type'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(295,25): error TS2304: Cannot find name 'TypeSymbol'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(296,27): error TS2304: Cannot find name 'Identifier'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(298,25): error TS2304: Cannot find name 'hasFlag'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(298,53): error TS2304: Cannot find name 'VarFlags'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(299,26): error TS2304: Cannot find name 'hasFlag'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(299,54): error TS2304: Cannot find name 'VarFlags'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(301,29): error TS2304: Cannot find name 'TypeSymbol'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(304,23): error TS2304: Cannot find name 'TypeSymbol'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(314,51): error TS2304: Cannot find name 'NodeType'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(315,19): error TS2304: Cannot find name 'FuncDecl'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(317,31): error TS2304: Cannot find name 'TypeSymbol'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(321,41): error TS2304: Cannot find name 'SymbolFlags'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(325,41): error TS2304: Cannot find name 'SymbolFlags'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(340,29): error TS2304: Cannot find name 'Type'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(342,32): error TS2304: Cannot find name 'Type'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(345,37): error TS2304: Cannot find name 'ScopedMembers'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(345,55): error TS2304: Cannot find name 'DualStringHashTable'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(345,79): error TS2304: Cannot find name 'StringHashTable'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(345,102): error TS2304: Cannot find name 'StringHashTable'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(346,44): error TS2304: Cannot find name 'ScopedMembers'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(346,62): error TS2304: Cannot find name 'DualStringHashTable'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(346,86): error TS2304: Cannot find name 'StringHashTable'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(346,109): error TS2304: Cannot find name 'StringHashTable'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(348,40): error TS2304: Cannot find name 'ScopedMembers'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(348,58): error TS2304: Cannot find name 'DualStringHashTable'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(348,82): error TS2304: Cannot find name 'StringHashTable'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(348,105): error TS2304: Cannot find name 'StringHashTable'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(349,47): error TS2304: Cannot find name 'ScopedMembers'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(349,65): error TS2304: Cannot find name 'DualStringHashTable'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(349,89): error TS2304: Cannot find name 'StringHashTable'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(349,112): error TS2304: Cannot find name 'StringHashTable'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(350,30): error TS2304: Cannot find name 'TypeSymbol'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(360,37): error TS2304: Cannot find name 'SymbolFlags'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(364,37): error TS2304: Cannot find name 'SymbolFlags'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(368,37): error TS2304: Cannot find name 'SymbolFlags'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(387,46): error TS2304: Cannot find name 'Type'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(389,54): error TS2304: Cannot find name 'ScopedMembers'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(389,72): error TS2304: Cannot find name 'DualStringHashTable'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(389,96): error TS2304: Cannot find name 'StringHashTable'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(389,119): error TS2304: Cannot find name 'StringHashTable'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(391,41): error TS2304: Cannot find name 'ScopedMembers'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(391,59): error TS2304: Cannot find name 'DualStringHashTable'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(391,83): error TS2304: Cannot find name 'StringHashTable'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(391,106): error TS2304: Cannot find name 'StringHashTable'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(392,48): error TS2304: Cannot find name 'ScopedMembers'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(392,66): error TS2304: Cannot find name 'DualStringHashTable'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(392,90): error TS2304: Cannot find name 'StringHashTable'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(392,113): error TS2304: Cannot find name 'StringHashTable'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(403,115): error TS2304: Cannot find name 'FuncDecl'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(410,32): error TS2304: Cannot find name 'TypeFlags'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(411,35): error TS2304: Cannot find name 'TypeFlags'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(414,9): error TS2304: Cannot find name 'pushTypeCollectionScope'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(419,51): error TS2304: Cannot find name 'AST'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(419,64): error TS2304: Cannot find name 'AST'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(419,78): error TS2304: Cannot find name 'TypeCollectionContext'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(421,30): error TS2304: Cannot find name 'InterfaceDeclaration'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(422,30): error TS2304: Cannot find name 'TypeSymbol'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(423,28): error TS2304: Cannot find name 'Type'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(424,26): error TS2304: Cannot find name 'hasFlag'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(424,58): error TS2304: Cannot find name 'VarFlags'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(429,31): error TS2304: Cannot find name 'Identifier'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(430,28): error TS2304: Cannot find name 'TypeSymbol'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(432,33): error TS2304: Cannot find name 'Type'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(433,35): error TS2304: Cannot find name 'TypeSymbol'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(439,41): error TS2304: Cannot find name 'ScopedMembers'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(439,59): error TS2304: Cannot find name 'DualStringHashTable'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(439,83): error TS2304: Cannot find name 'StringHashTable'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(439,106): error TS2304: Cannot find name 'StringHashTable'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(440,48): error TS2304: Cannot find name 'ScopedMembers'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(440,66): error TS2304: Cannot find name 'DualStringHashTable'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(440,90): error TS2304: Cannot find name 'StringHashTable'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(440,113): error TS2304: Cannot find name 'StringHashTable'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(457,38): error TS2304: Cannot find name 'SymbolFlags'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(461,38): error TS2304: Cannot find name 'SymbolFlags'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(468,9): error TS2304: Cannot find name 'pushTypeCollectionScope'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(473,49): error TS2304: Cannot find name 'AST'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(473,62): error TS2304: Cannot find name 'AST'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(473,76): error TS2304: Cannot find name 'TypeCollectionContext'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(475,24): error TS2304: Cannot find name 'ArgDecl'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(476,13): error TS2304: Cannot find name 'hasFlag'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(476,39): error TS2304: Cannot find name 'VarFlags'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(476,57): error TS2304: Cannot find name 'VarFlags'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(477,29): error TS2304: Cannot find name 'ValueLocation'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(478,29): error TS2304: Cannot find name 'hasFlag'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(478,55): error TS2304: Cannot find name 'VarFlags'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(480,21): error TS2304: Cannot find name 'FieldSymbol'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(482,34): error TS2304: Cannot find name 'hasFlag'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(482,60): error TS2304: Cannot find name 'VarFlags'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(492,30): error TS2304: Cannot find name 'getTypeLink'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(498,49): error TS2304: Cannot find name 'AST'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(498,62): error TS2304: Cannot find name 'AST'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(498,76): error TS2304: Cannot find name 'TypeCollectionContext'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(500,24): error TS2304: Cannot find name 'VarDecl'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(501,25): error TS2304: Cannot find name 'hasFlag'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(501,51): error TS2304: Cannot find name 'VarFlags'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(502,26): error TS2304: Cannot find name 'hasFlag'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(502,52): error TS2304: Cannot find name 'VarFlags'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(504,26): error TS2304: Cannot find name 'hasFlag'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(504,52): error TS2304: Cannot find name 'VarFlags'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(505,24): error TS2304: Cannot find name 'hasFlag'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(505,50): error TS2304: Cannot find name 'VarFlags'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(506,25): error TS2304: Cannot find name 'hasFlag'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(506,51): error TS2304: Cannot find name 'VarFlags'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(507,26): error TS2304: Cannot find name 'hasFlag'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(507,52): error TS2304: Cannot find name 'ASTFlags'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(518,22): error TS2304: Cannot find name 'FieldSymbol'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(531,29): error TS2304: Cannot find name 'ValueLocation'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(533,21): error TS2304: Cannot find name 'FieldSymbol'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(535,53): error TS2304: Cannot find name 'VarFlags'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(535,75): error TS2304: Cannot find name 'VarFlags'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(539,38): error TS2304: Cannot find name 'SymbolFlags'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(545,38): error TS2304: Cannot find name 'SymbolFlags'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(550,17): error TS2304: Cannot find name 'hasFlag'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(550,43): error TS2304: Cannot find name 'VarFlags'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(566,17): error TS2304: Cannot find name 'hasFlag'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(566,43): error TS2304: Cannot find name 'VarFlags'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(567,38): error TS2304: Cannot find name 'SymbolFlags'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(570,30): error TS2304: Cannot find name 'getTypeLink'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(577,50): error TS2304: Cannot find name 'AST'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(577,63): error TS2304: Cannot find name 'AST'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(577,77): error TS2304: Cannot find name 'TypeCollectionContext'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(585,25): error TS2304: Cannot find name 'FuncDecl'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(586,20): error TS2304: Cannot find name 'TypeSymbol'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(588,26): error TS2304: Cannot find name 'hasFlag'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(588,53): error TS2304: Cannot find name 'FncFlags'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(588,73): error TS2304: Cannot find name 'FncFlags'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(589,24): error TS2304: Cannot find name 'hasFlag'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(589,51): error TS2304: Cannot find name 'FncFlags'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(590,25): error TS2304: Cannot find name 'hasFlag'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(590,52): error TS2304: Cannot find name 'FncFlags'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(592,26): error TS2304: Cannot find name 'TypeSymbol'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(592,40): error TS2304: Cannot find name 'TypeSymbol'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(593,29): error TS2304: Cannot find name 'SymbolScope'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(595,43): error TS2304: Cannot find name 'hasFlag'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(595,72): error TS2304: Cannot find name 'ASTFlags'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(600,30): error TS2304: Cannot find name 'hasFlag'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(600,57): error TS2304: Cannot find name 'FncFlags'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(601,29): error TS2304: Cannot find name 'TypeSymbol'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(613,46): error TS2304: Cannot find name 'NodeType'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(614,15): error TS2304: Cannot find name 'FuncDecl'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(620,13): error TS2304: Cannot find name 'hasFlag'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(620,40): error TS2304: Cannot find name 'FncFlags'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(630,30): error TS2304: Cannot find name 'TypeSymbol'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(637,34): error TS2304: Cannot find name 'TypeSymbol'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(646,53): error TS2304: Cannot find name 'hasFlag'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(646,80): error TS2304: Cannot find name 'FncFlags'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(646,101): error TS2304: Cannot find name 'hasFlag'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(646,122): error TS2304: Cannot find name 'SymbolFlags'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(674,38): error TS2304: Cannot find name 'SymbolKind'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(700,34): error TS2304: Cannot find name 'TypeSymbol'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(704,34): error TS2304: Cannot find name 'TypeSymbol'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(710,69): error TS2304: Cannot find name 'NodeType'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(710,93): error TS2304: Cannot find name 'FuncDecl'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(710,136): error TS2304: Cannot find name 'FuncDecl'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(724,22): error TS2304: Cannot find name 'hasFlag'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(724,83): error TS2304: Cannot find name 'FncFlags'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(729,44): error TS2304: Cannot find name 'SymbolKind'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(736,55): error TS2304: Cannot find name 'NodeType'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(747,47): error TS2304: Cannot find name 'SymbolFlags'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(751,65): error TS2304: Cannot find name 'SymbolKind'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(752,32): error TS2304: Cannot find name 'SymbolFlags'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(756,43): error TS2304: Cannot find name 'SymbolFlags'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(761,28): error TS2304: Cannot find name 'SymbolFlags'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(767,42): error TS2304: Cannot find name 'AST'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(767,55): error TS2304: Cannot find name 'AST'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(767,68): error TS2304: Cannot find name 'IAstWalker'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(768,22): error TS2304: Cannot find name 'TypeCollectionContext'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(772,29): error TS2304: Cannot find name 'NodeType'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(773,25): error TS2304: Cannot find name 'Script'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(773,35): error TS2304: Cannot find name 'Script'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(777,34): error TS2304: Cannot find name 'NodeType'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(780,34): error TS2304: Cannot find name 'NodeType'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(783,34): error TS2304: Cannot find name 'NodeType'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(786,34): error TS2304: Cannot find name 'NodeType'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(789,34): error TS2304: Cannot find name 'NodeType'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(792,34): error TS2304: Cannot find name 'NodeType'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(795,34): error TS2304: Cannot find name 'NodeType'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(800,34): error TS2304: Cannot find name 'NodeType'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(803,34): error TS2304: Cannot find name 'NodeType'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(806,34): error TS2304: Cannot find name 'NodeType'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(818,43): error TS2304: Cannot find name 'AST'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(818,56): error TS2304: Cannot find name 'AST'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(818,69): error TS2304: Cannot find name 'IAstWalker'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(819,22): error TS2304: Cannot find name 'TypeCollectionContext'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(821,29): error TS2304: Cannot find name 'NodeType'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(822,13): error TS2304: Cannot find name 'popTypeCollectionScope'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(824,34): error TS2304: Cannot find name 'NodeType'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(825,13): error TS2304: Cannot find name 'popTypeCollectionScope'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(827,34): error TS2304: Cannot find name 'NodeType'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(828,13): error TS2304: Cannot find name 'popTypeCollectionScope'.
+
+
+==== tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts (303 errors) ====
+    // Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
+    // See LICENSE.txt in the project root for complete license information.
+    
+    ///<reference path='typescript.ts' />
+                        ~~~~~~~~~~~~~
+!!! error TS6053: File 'tests/cases/conformance/parser/ecmascript5/typescript.ts' not found.
+    
+    module TypeScript {
+        export class Continuation {
+            public exceptionBlock = -1;
+            constructor (public normalBlock: number) { }
+        }
+    
+        function getBaseTypeLinks(bases: ASTList, baseTypeLinks: TypeLink[]) {
+                                         ~~~~~~~
+!!! error TS2304: Cannot find name 'ASTList'.
+                                                                 ~~~~~~~~
+!!! error TS2304: Cannot find name 'TypeLink'.
+            if (bases) {
+                var len = bases.members.length;
+                if (baseTypeLinks == null) {
+                    baseTypeLinks = new TypeLink[];
+                                        ~~~~~~~~
+!!! error TS2552: Cannot find name 'TypeLink'. Did you mean 'typeLink'?
+!!! related TS2728 tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts:21:21: 'typeLink' is declared here.
+                                                 
+!!! error TS1011: An element access expression should take an argument.
+                }
+                for (var i = 0; i < len; i++) {
+                    var baseExpr = bases.members[i];
+                    var name = baseExpr;
+                    var typeLink = new TypeLink();
+                                       ~~~~~~~~
+!!! error TS2552: Cannot find name 'TypeLink'. Did you mean 'typeLink'?
+!!! related TS2728 tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts:21:21: 'typeLink' is declared here.
+                    typeLink.ast = name;
+                    baseTypeLinks[baseTypeLinks.length] = typeLink;
+                }
+            }
+            return baseTypeLinks;
+        }
+    
+        function getBases(type: Type, typeDecl: TypeDeclaration) {
+                                ~~~~
+!!! error TS2304: Cannot find name 'Type'.
+                                                ~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'TypeDeclaration'.
+            type.extendsTypeLinks = getBaseTypeLinks(typeDecl.extendsList, type.extendsTypeLinks);
+            type.implementsTypeLinks = getBaseTypeLinks(typeDecl.implementsList, type.implementsTypeLinks);
+        }
+    
+        function addPrototypeField(classType: Type, ast: AST, context: TypeCollectionContext) {
+                                              ~~~~
+!!! error TS2304: Cannot find name 'Type'.
+                                                         ~~~
+!!! error TS2304: Cannot find name 'AST'.
+                                                                       ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'TypeCollectionContext'.
+            var field = new ValueLocation();
+                            ~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'ValueLocation'.
+            field.typeLink = new TypeLink();
+                                 ~~~~~~~~
+!!! error TS2304: Cannot find name 'TypeLink'.
+            field.typeLink.ast = ast;
+            field.typeLink.type = classType.instanceType;
+    
+            var fieldSymbol =
+                new FieldSymbol("prototype", ast.minChar,
+                    ~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'FieldSymbol'.
+                                context.checker.locationInfo.unitIndex, true, field);
+            fieldSymbol.flags |= (SymbolFlags.Property | SymbolFlags.BuiltIn);
+                                  ~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'SymbolFlags'.
+                                                         ~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'SymbolFlags'.
+            field.symbol = fieldSymbol;
+            fieldSymbol.declAST = ast;
+            classType.members.addPublicMember("prototype", fieldSymbol);
+        }
+    
+        export function createNewConstructGroupForType(type: Type) {
+                                                             ~~~~
+!!! error TS2304: Cannot find name 'Type'.
+            var signature = new Signature();
+                                ~~~~~~~~~
+!!! error TS2304: Cannot find name 'Signature'.
+            signature.returnType = new TypeLink();
+                                       ~~~~~~~~
+!!! error TS2304: Cannot find name 'TypeLink'.
+            signature.returnType.type = type.instanceType;
+            signature.parameters = [];
+    
+            type.construct = new SignatureGroup();
+                                 ~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'SignatureGroup'.
+            type.construct.addSignature(signature);     
+        }
+    
+        export function cloneParentConstructGroupForChildType(child: Type, parent: Type) {
+                                                                     ~~~~
+!!! error TS2304: Cannot find name 'Type'.
+                                                                                   ~~~~
+!!! error TS2304: Cannot find name 'Type'.
+            child.construct = new SignatureGroup();
+                                  ~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'SignatureGroup'.
+            var sig: Signature = null;
+                     ~~~~~~~~~
+!!! error TS2304: Cannot find name 'Signature'.
+    
+            if (!parent.construct) {
+                createNewConstructGroupForType(parent);
+            }
+    
+            for (var i = 0; i < parent.construct.signatures.length; i++) { 
+                sig = new Signature();
+                          ~~~~~~~~~
+!!! error TS2304: Cannot find name 'Signature'.
+                sig.parameters = parent.construct.signatures[i].parameters;
+                sig.nonOptionalParameterCount = parent.construct.signatures[i].nonOptionalParameterCount;
+                sig.typeCheckStatus = parent.construct.signatures[i].typeCheckStatus;
+                sig.declAST = parent.construct.signatures[i].declAST;
+                sig.returnType = new TypeLink();
+                                     ~~~~~~~~
+!!! error TS2304: Cannot find name 'TypeLink'.
+                sig.returnType.type = child.instanceType;
+                child.construct.addSignature(sig);
+            }
+    
+        }
+    
+        export var globalId = "__GLO";
+    
+        export interface IAliasScopeContext {
+            topLevelScope: ScopeChain;
+                           ~~~~~~~~~~
+!!! error TS2304: Cannot find name 'ScopeChain'.
+            members: IHashTable;
+                     ~~~~~~~~~~
+!!! error TS2304: Cannot find name 'IHashTable'.
+            tcContext: TypeCollectionContext;
+                       ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'TypeCollectionContext'.
+        }
+    
+        function findTypeSymbolInScopeChain(name: string, scopeChain: ScopeChain): Symbol {
+                                                                      ~~~~~~~~~~
+!!! error TS2304: Cannot find name 'ScopeChain'.
+            var symbol = scopeChain.scope.find(name, false, true);
+    
+            if (symbol == null && scopeChain.previous) {
+                symbol = findTypeSymbolInScopeChain(name, scopeChain.previous);
+            }
+    
+            return symbol;
+        }
+    
+        function findSymbolFromAlias(alias: AST, context: IAliasScopeContext): Symbol {
+                                            ~~~
+!!! error TS2304: Cannot find name 'AST'.
+            var symbol: Symbol = null;
+            switch (alias.nodeType) {
+                case NodeType.Name:
+                     ~~~~~~~~
+!!! error TS2304: Cannot find name 'NodeType'.
+                    var name = (<Identifier>alias).text;
+                                 ~~~~~~~~~~
+!!! error TS2304: Cannot find name 'Identifier'.
+                    var isDynamic = isQuoted(name);
+                                    ~~~~~~~~
+!!! error TS2304: Cannot find name 'isQuoted'.
+    
+                    var findSym = (id: string) => {
+                        if (context.members) {
+                            return context.members.lookup(name);
+                        }
+                        else {
+                            return findTypeSymbolInScopeChain(name, context.topLevelScope);
+                        }
+                    }
+    
+                    if (isDynamic) {
+                        symbol = context.tcContext.checker.findSymbolForDynamicModule(name, context.tcContext.script.locationInfo.filename, findSym);
+                    }
+                    else {
+                        symbol = findSym(name);
+                    }
+    
+                    break;
+    
+                case NodeType.Dot:
+                     ~~~~~~~~
+!!! error TS2304: Cannot find name 'NodeType'.
+                    var dottedExpr = <BinaryExpression>alias;
+                                      ~~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'BinaryExpression'.
+                    var op1Sym = findSymbolFromAlias(dottedExpr.operand1, context);
+    
+                    if (op1Sym && op1Sym.getType()) {
+                                         ~~~~~~~
+!!! error TS2339: Property 'getType' does not exist on type 'Symbol'.
+                        symbol = findSymbolFromAlias(dottedExpr.operand2, context);
+                    }
+    
+                    break;
+    
+                default:
+                    break;
+            }
+    
+            if (symbol) {
+                var symType = symbol.getType();
+                                     ~~~~~~~
+!!! error TS2339: Property 'getType' does not exist on type 'Symbol'.
+                if (symType) {
+                    var members = symType.members;
+                    if (members) {
+                        context.members = members.publicMembers;
+                    }
+                }
+            }
+    
+            return symbol;
+        }
+    
+        export function preCollectImportTypes(ast: AST, parent: AST, context: TypeCollectionContext) {
+                                                   ~~~
+!!! error TS2304: Cannot find name 'AST'.
+                                                                ~~~
+!!! error TS2304: Cannot find name 'AST'.
+                                                                              ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'TypeCollectionContext'.
+            var scopeChain = context.scopeChain;
+            var typeSymbol: TypeSymbol = null;
+                            ~~~~~~~~~~
+!!! error TS2304: Cannot find name 'TypeSymbol'.
+            var modType: ModuleType = null;
+                         ~~~~~~~~~~
+!!! error TS2304: Cannot find name 'ModuleType'.
+            var importDecl = <ImportDeclaration>ast;
+                              ~~~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'ImportDeclaration'.
+            var isExported = hasFlag(importDecl.varFlags, VarFlags.Exported);
+                             ~~~~~~~
+!!! error TS2304: Cannot find name 'hasFlag'.
+                                                          ~~~~~~~~
+!!! error TS2304: Cannot find name 'VarFlags'.
+    
+            // REVIEW: technically, this call isn't strictly necessary, since we'll find the type during the call to resolveTypeMembers
+            var aliasedModSymbol = findSymbolFromAlias(importDecl.alias, { topLevelScope: scopeChain, members: null, tcContext: context });
+            var isGlobal = context.scopeChain.container == context.checker.gloMod;
+    
+            if (aliasedModSymbol) {
+                var aliasedModType = aliasedModSymbol.getType();
+                                                      ~~~~~~~
+!!! error TS2339: Property 'getType' does not exist on type 'Symbol'.
+    
+                if (aliasedModType) {
+                    modType = <ModuleType>aliasedModType;
+                               ~~~~~~~~~~
+!!! error TS2304: Cannot find name 'ModuleType'.
+                }
+            }
+    
+            typeSymbol = new TypeSymbol(importDecl.id.text, importDecl.minChar,
+                             ~~~~~~~~~~
+!!! error TS2304: Cannot find name 'TypeSymbol'.
+                                        context.checker.locationInfo.unitIndex, modType);
+    
+            typeSymbol.aliasLink = importDecl;
+    
+            if (context.scopeChain.moduleDecl) {
+                typeSymbol.declModule = context.scopeChain.moduleDecl;
+            }
+            typeSymbol.declAST = importDecl;
+            importDecl.id.sym = typeSymbol;
+            scopeChain.scope.enter(scopeChain.container, ast, typeSymbol,
+                                    context.checker.errorReporter, isExported || isGlobal, true, false);
+            scopeChain.scope.enter(scopeChain.container, ast, typeSymbol,
+                                    context.checker.errorReporter, isExported || isGlobal, false, false);
+            return true;
+        }
+    
+        export function preCollectModuleTypes(ast: AST, parent: AST, context: TypeCollectionContext) {
+                                                   ~~~
+!!! error TS2304: Cannot find name 'AST'.
+                                                                ~~~
+!!! error TS2304: Cannot find name 'AST'.
+                                                                              ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'TypeCollectionContext'.
+            var scopeChain = context.scopeChain;
+    
+            var moduleDecl: ModuleDeclaration = <ModuleDeclaration>ast;
+                            ~~~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'ModuleDeclaration'.
+                                                 ~~~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'ModuleDeclaration'.
+    
+            var isAmbient = hasFlag(moduleDecl.modFlags, ModuleFlags.Ambient);
+                            ~~~~~~~
+!!! error TS2304: Cannot find name 'hasFlag'.
+                                                         ~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'ModuleFlags'.
+            var isEnum = hasFlag(moduleDecl.modFlags, ModuleFlags.IsEnum);
+                         ~~~~~~~
+!!! error TS2304: Cannot find name 'hasFlag'.
+                                                      ~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'ModuleFlags'.
+            var isGlobal = context.scopeChain.container == context.checker.gloMod;
+            var isExported = hasFlag(moduleDecl.modFlags, ModuleFlags.Exported);
+                             ~~~~~~~
+!!! error TS2304: Cannot find name 'hasFlag'.
+                                                          ~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'ModuleFlags'.
+            var modName = (<Identifier>moduleDecl.name).text;
+                            ~~~~~~~~~~
+!!! error TS2304: Cannot find name 'Identifier'.
+    
+            var isDynamic = isQuoted(modName);
+                            ~~~~~~~~
+!!! error TS2304: Cannot find name 'isQuoted'.
+    
+            var symbol = scopeChain.scope.findLocal(modName, false, false);
+            var typeSymbol: TypeSymbol = null;
+                            ~~~~~~~~~~
+!!! error TS2304: Cannot find name 'TypeSymbol'.
+            var modType: ModuleType = null;
+                         ~~~~~~~~~~
+!!! error TS2304: Cannot find name 'ModuleType'.
+            if ((symbol == null) || (symbol.kind() != SymbolKind.Type)) {
+                                                      ~~~~~~~~~~
+!!! error TS2304: Cannot find name 'SymbolKind'.
+    
+                if (modType == null) {
+                    var enclosedTypes = new ScopedMembers(new DualStringHashTable(new StringHashTable(), new StringHashTable()));
+                                            ~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'ScopedMembers'.
+                                                              ~~~~~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'DualStringHashTable'.
+                                                                                      ~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'StringHashTable'.
+                                                                                                             ~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'StringHashTable'.
+                    var ambientEnclosedTypes = new ScopedMembers(new DualStringHashTable(new StringHashTable(), new StringHashTable()));
+                                                   ~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'ScopedMembers'.
+                                                                     ~~~~~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'DualStringHashTable'.
+                                                                                             ~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'StringHashTable'.
+                                                                                                                    ~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'StringHashTable'.
+                    modType = new ModuleType(enclosedTypes, ambientEnclosedTypes);
+                                  ~~~~~~~~~~
+!!! error TS2304: Cannot find name 'ModuleType'.
+                    if (isEnum) {
+                        modType.typeFlags |= TypeFlags.IsEnum;
+                                             ~~~~~~~~~
+!!! error TS2304: Cannot find name 'TypeFlags'.
+                    }
+                    modType.members = new ScopedMembers(new DualStringHashTable(new StringHashTable(), new StringHashTable()));
+                                          ~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'ScopedMembers'.
+                                                            ~~~~~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'DualStringHashTable'.
+                                                                                    ~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'StringHashTable'.
+                                                                                                           ~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'StringHashTable'.
+                    modType.ambientMembers = new ScopedMembers(new DualStringHashTable(new StringHashTable(), new StringHashTable()));
+                                                 ~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'ScopedMembers'.
+                                                                   ~~~~~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'DualStringHashTable'.
+                                                                                           ~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'StringHashTable'.
+                                                                                                                  ~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'StringHashTable'.
+                    modType.setHasImplementation();
+                }
+    
+                typeSymbol = new TypeSymbol(modName, moduleDecl.minChar,
+                                 ~~~~~~~~~~
+!!! error TS2304: Cannot find name 'TypeSymbol'.
+                                            context.checker.locationInfo.unitIndex, modType);
+    
+                if (context.scopeChain.moduleDecl) {
+                    typeSymbol.declModule = context.scopeChain.moduleDecl;
+                }
+                typeSymbol.declAST = moduleDecl;
+                typeSymbol.prettyName = moduleDecl.prettyName;
+                scopeChain.scope.enter(scopeChain.container, ast, typeSymbol,
+                                        context.checker.errorReporter, isExported || isGlobal, true, isAmbient);
+                scopeChain.scope.enter(scopeChain.container, ast, typeSymbol,
+                                        context.checker.errorReporter, isExported || isGlobal, false, isAmbient);
+                modType.symbol = typeSymbol;
+            }
+            else {
+                if (symbol && symbol.declAST && symbol.declAST.nodeType != NodeType.ModuleDeclaration) {
+                                                                           ~~~~~~~~
+!!! error TS2304: Cannot find name 'NodeType'.
+                    context.checker.errorReporter.simpleError(moduleDecl, "Conflicting symbol name for module '" + modName + "'");
+                }
+                typeSymbol = <TypeSymbol>symbol;
+                              ~~~~~~~~~~
+!!! error TS2304: Cannot find name 'TypeSymbol'.
+    
+                // initialize new private scope for the type
+                var publicEnclosedTypes = typeSymbol.type.getAllEnclosedTypes().publicMembers;
+                var publicEnclosedTypesTable = (publicEnclosedTypes == null) ? new StringHashTable() : publicEnclosedTypes;
+                                                                                   ~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'StringHashTable'.
+                var enclosedTypes = new ScopedMembers(new DualStringHashTable(publicEnclosedTypesTable, new StringHashTable()));
+                                        ~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'ScopedMembers'.
+                                                          ~~~~~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'DualStringHashTable'.
+                                                                                                            ~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'StringHashTable'.
+    
+                var publicEnclosedAmbientTypes = typeSymbol.type.getAllAmbientEnclosedTypes().publicMembers;
+                var publicAmbientEnclosedTypesTable = (publicEnclosedAmbientTypes == null) ? new StringHashTable() : publicEnclosedAmbientTypes;
+                                                                                                 ~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'StringHashTable'.
+                var ambientEnclosedTypes = new ScopedMembers(new DualStringHashTable(publicAmbientEnclosedTypesTable, new StringHashTable()));
+                                               ~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'ScopedMembers'.
+                                                                 ~~~~~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'DualStringHashTable'.
+                                                                                                                          ~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'StringHashTable'.
+    
+                var publicMembers = typeSymbol.type.members.publicMembers;
+                var publicMembersTable = (publicMembers == null) ? new StringHashTable() : publicMembers;
+                                                                       ~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'StringHashTable'.
+                var members = new ScopedMembers(new DualStringHashTable(publicMembersTable, new StringHashTable()));
+                                  ~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'ScopedMembers'.
+                                                    ~~~~~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'DualStringHashTable'.
+                                                                                                ~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'StringHashTable'.
+    
+                var publicAmbientMembers = typeSymbol.type.ambientMembers.publicMembers;
+                var publicAmbientMembersTable = (publicAmbientMembers == null) ? new StringHashTable() : publicAmbientMembers;
+                                                                                     ~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'StringHashTable'.
+                var ambientMembers = new ScopedMembers(new DualStringHashTable(publicAmbientMembersTable, new StringHashTable()));
+                                         ~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'ScopedMembers'.
+                                                           ~~~~~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'DualStringHashTable'.
+                                                                                                              ~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'StringHashTable'.
+    
+                modType = new ModuleType(enclosedTypes, ambientEnclosedTypes);
+                              ~~~~~~~~~~
+!!! error TS2304: Cannot find name 'ModuleType'.
+                if (isEnum) {
+                    modType.typeFlags |= TypeFlags.IsEnum;
+                                         ~~~~~~~~~
+!!! error TS2304: Cannot find name 'TypeFlags'.
+                }
+                modType.members = members;
+                modType.ambientMembers = ambientMembers;
+                modType.setHasImplementation();
+                modType.symbol = typeSymbol;
+    
+                typeSymbol.addLocation(moduleDecl.minChar);
+                typeSymbol.expansions.push(modType);
+    
+            }
+            if (context.scopeChain.moduleDecl) {
+                context.scopeChain.moduleDecl.recordNonInterface();
+            }
+            // REVIEW: If multiple disparate module decls for the same module don't agree
+            // in export privileges, how should we handle it?
+            if (isExported) {
+                typeSymbol.flags |= SymbolFlags.Exported;
+                                    ~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'SymbolFlags'.
+            }
+            if ((context.scopeChain.moduleDecl) ||
+                (context.scopeChain.container == context.checker.gloMod)) {
+                typeSymbol.flags |= SymbolFlags.ModuleMember;
+                                    ~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'SymbolFlags'.
+            }
+    
+            moduleDecl.mod = modType;
+            pushTypeCollectionScope(typeSymbol, modType.members,
+            ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'pushTypeCollectionScope'.
+                                    modType.ambientMembers,
+                                    modType.enclosedTypes,
+                                    modType.ambientEnclosedTypes,
+                                    context, null, null, moduleDecl);
+    
+            return true;
+        }
+    
+        export function preCollectClassTypes(ast: AST, parent: AST, context: TypeCollectionContext) {
+                                                  ~~~
+!!! error TS2304: Cannot find name 'AST'.
+                                                               ~~~
+!!! error TS2304: Cannot find name 'AST'.
+                                                                             ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'TypeCollectionContext'.
+            var scopeChain = context.scopeChain;
+            var classDecl = <ClassDeclaration>ast;
+                             ~~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'ClassDeclaration'.
+    
+            var classType: Type;
+                           ~~~~
+!!! error TS2304: Cannot find name 'Type'.
+            var instanceType: Type;
+                              ~~~~
+!!! error TS2304: Cannot find name 'Type'.
+            var typeSymbol: TypeSymbol = null;
+                            ~~~~~~~~~~
+!!! error TS2304: Cannot find name 'TypeSymbol'.
+            var className = (<Identifier>classDecl.name).text;
+                              ~~~~~~~~~~
+!!! error TS2304: Cannot find name 'Identifier'.
+            var alreadyInScope = false;
+            var isAmbient = hasFlag(classDecl.varFlags, VarFlags.Ambient);
+                            ~~~~~~~
+!!! error TS2304: Cannot find name 'hasFlag'.
+                                                        ~~~~~~~~
+!!! error TS2304: Cannot find name 'VarFlags'.
+            var isExported = hasFlag(classDecl.varFlags, VarFlags.Exported);
+                             ~~~~~~~
+!!! error TS2304: Cannot find name 'hasFlag'.
+                                                         ~~~~~~~~
+!!! error TS2304: Cannot find name 'VarFlags'.
+            var isGlobal = context.scopeChain.container == context.checker.gloMod;
+            var containerMod = <TypeSymbol>scopeChain.container;
+                                ~~~~~~~~~~
+!!! error TS2304: Cannot find name 'TypeSymbol'.
+            var foundValSymbol = false;
+    
+            typeSymbol = <TypeSymbol>scopeChain.scope.findLocal(className, false, true);
+                          ~~~~~~~~~~
+!!! error TS2304: Cannot find name 'TypeSymbol'.
+            
+            // check the value space, since an override may have been declared with the type's name
+            // REVIEW-CLASSES
+            if (!typeSymbol) {
+                var valTypeSymbol = scopeChain.scope.findLocal(className, false, false);
+                
+                if (valTypeSymbol &&
+                    valTypeSymbol.isType() &&
+                    valTypeSymbol.declAST &&
+                    valTypeSymbol.declAST.nodeType == NodeType.FuncDecl &&
+                                                      ~~~~~~~~
+!!! error TS2304: Cannot find name 'NodeType'.
+                    (<FuncDecl>valTypeSymbol.declAST).isSignature()) {
+                      ~~~~~~~~
+!!! error TS2304: Cannot find name 'FuncDecl'.
+                    
+                    typeSymbol = <TypeSymbol>valTypeSymbol;
+                                  ~~~~~~~~~~
+!!! error TS2304: Cannot find name 'TypeSymbol'.
+                    foundValSymbol = true;
+                    
+                    if (isExported) {
+                        typeSymbol.flags |= SymbolFlags.Exported;
+                                            ~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'SymbolFlags'.
+                    }
+                
+                    if (isAmbient) {
+                        typeSymbol.flags |= SymbolFlags.Ambient;
+                                            ~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'SymbolFlags'.
+                    }                
+                    
+                    // the class was never entered into type space, so add it
+                    context.scopeChain.scope.enter(context.scopeChain.container, ast, typeSymbol,
+                                                context.checker.errorReporter, isExported || isGlobal, true, isAmbient);                
+                }
+            }
+            
+            if (typeSymbol && !foundValSymbol && (typeSymbol.declAST != classDecl)) {
+                typeSymbol = null;
+            }
+    
+            if (typeSymbol == null) {
+                var valueSymbol = scopeChain.scope.findLocal(className, false, false);
+                classType = new Type();
+                                ~~~~
+!!! error TS2304: Cannot find name 'Type'.
+                classType.setHasImplementation();
+                instanceType = new Type();
+                                   ~~~~
+!!! error TS2304: Cannot find name 'Type'.
+                instanceType.setHasImplementation();
+                classType.instanceType = instanceType;
+                classType.members = new ScopedMembers(new DualStringHashTable(new StringHashTable(), new StringHashTable()));
+                                        ~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'ScopedMembers'.
+                                                          ~~~~~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'DualStringHashTable'.
+                                                                                  ~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'StringHashTable'.
+                                                                                                         ~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'StringHashTable'.
+                classType.ambientMembers = new ScopedMembers(new DualStringHashTable(new StringHashTable(), new StringHashTable()));
+                                               ~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'ScopedMembers'.
+                                                                 ~~~~~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'DualStringHashTable'.
+                                                                                         ~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'StringHashTable'.
+                                                                                                                ~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'StringHashTable'.
+                addPrototypeField(classType, classDecl, context);
+                instanceType.members = new ScopedMembers(new DualStringHashTable(new StringHashTable(), new StringHashTable()));
+                                           ~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'ScopedMembers'.
+                                                             ~~~~~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'DualStringHashTable'.
+                                                                                     ~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'StringHashTable'.
+                                                                                                            ~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'StringHashTable'.
+                instanceType.ambientMembers = new ScopedMembers(new DualStringHashTable(new StringHashTable(), new StringHashTable()));
+                                                  ~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'ScopedMembers'.
+                                                                    ~~~~~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'DualStringHashTable'.
+                                                                                            ~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'StringHashTable'.
+                                                                                                                   ~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'StringHashTable'.
+                typeSymbol = new TypeSymbol(className, classDecl.minChar,
+                                 ~~~~~~~~~~
+!!! error TS2304: Cannot find name 'TypeSymbol'.
+                                            context.checker.locationInfo.unitIndex, classType);
+                typeSymbol.declAST = classDecl;
+                typeSymbol.instanceType = instanceType;
+                classType.symbol = typeSymbol;
+                instanceType.symbol = typeSymbol;
+    
+                if (context.scopeChain.moduleDecl) {
+                    context.scopeChain.moduleDecl.recordNonInterface();
+                    typeSymbol.declModule = context.scopeChain.moduleDecl;
+                    typeSymbol.flags |= SymbolFlags.ModuleMember;
+                                        ~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'SymbolFlags'.
+                }
+    
+                if (isExported) {
+                    typeSymbol.flags |= SymbolFlags.Exported;
+                                        ~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'SymbolFlags'.
+                }
+                
+                if (isAmbient) {
+                    typeSymbol.flags |= SymbolFlags.Ambient;
+                                        ~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'SymbolFlags'.
+                }
+    
+                ast.type = classType;
+    
+                // class in both name spaces (type for instance type; constructor representative in value space)
+                context.scopeChain.scope.enter(context.scopeChain.container, ast, typeSymbol,
+                                                context.checker.errorReporter, isExported || isGlobal, true, isAmbient);
+    
+                if (valueSymbol == null) {
+                    context.scopeChain.scope.enter(context.scopeChain.container, ast, typeSymbol,
+                                                context.checker.errorReporter, isExported || isGlobal, false, isAmbient);
+                }
+            }
+            else {                            
+                classType = typeSymbol.type;
+                
+                // If the instance type is null, a call overload was likely declared before the class constructor
+                if (classType.instanceType == null) {
+                    classType.instanceType = new Type();
+                                                 ~~~~
+!!! error TS2304: Cannot find name 'Type'.
+                    classType.instanceType.setHasImplementation();
+                    classType.instanceType.members = new ScopedMembers(new DualStringHashTable(new StringHashTable(), new StringHashTable()));
+                                                         ~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'ScopedMembers'.
+                                                                           ~~~~~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'DualStringHashTable'.
+                                                                                                   ~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'StringHashTable'.
+                                                                                                                          ~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'StringHashTable'.
+                    classType.instanceType.symbol = classType.symbol;
+                    classType.members = new ScopedMembers(new DualStringHashTable(new StringHashTable(), new StringHashTable()));
+                                            ~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'ScopedMembers'.
+                                                              ~~~~~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'DualStringHashTable'.
+                                                                                      ~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'StringHashTable'.
+                                                                                                             ~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'StringHashTable'.
+                    classType.ambientMembers = new ScopedMembers(new DualStringHashTable(new StringHashTable(), new StringHashTable()));
+                                                   ~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'ScopedMembers'.
+                                                                     ~~~~~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'DualStringHashTable'.
+                                                                                             ~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'StringHashTable'.
+                                                                                                                    ~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'StringHashTable'.
+                }
+                
+                instanceType = classType.instanceType;
+                ast.type = classType;
+            }
+            
+            // if the class has no declared constructor, either create a default signature or adapt 
+            // it's base class's signature group
+            if (!classDecl.constructorDecl) {
+    
+                if (typeSymbol && typeSymbol.declAST && typeSymbol.declAST.type && typeSymbol.declAST.type.call && !(<FuncDecl>typeSymbol.declAST).isOverload) {
+                                                                                                                      ~~~~~~~~
+!!! error TS2304: Cannot find name 'FuncDecl'.
+                    context.checker.errorReporter.duplicateIdentifier(typeSymbol.declAST, typeSymbol.name);
+                }
+    
+                createNewConstructGroupForType(classDecl.type);
+            }
+    
+            classType.typeFlags |= TypeFlags.IsClass;
+                                   ~~~~~~~~~
+!!! error TS2304: Cannot find name 'TypeFlags'.
+            instanceType.typeFlags |= TypeFlags.IsClass;
+                                      ~~~~~~~~~
+!!! error TS2304: Cannot find name 'TypeFlags'.
+    
+            getBases(instanceType, classDecl);
+            pushTypeCollectionScope(typeSymbol, instanceType.members, instanceType.ambientMembers, null, null,
+            ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'pushTypeCollectionScope'.
+                                    context, instanceType, classType, null);
+            return true;
+        }
+    
+        export function preCollectInterfaceTypes(ast: AST, parent: AST, context: TypeCollectionContext) {
+                                                      ~~~
+!!! error TS2304: Cannot find name 'AST'.
+                                                                   ~~~
+!!! error TS2304: Cannot find name 'AST'.
+                                                                                 ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'TypeCollectionContext'.
+            var scopeChain = context.scopeChain;
+            var interfaceDecl = <InterfaceDeclaration>ast;
+                                 ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'InterfaceDeclaration'.
+            var interfaceSymbol: TypeSymbol = null;
+                                 ~~~~~~~~~~
+!!! error TS2304: Cannot find name 'TypeSymbol'.
+            var interfaceType: Type = null;
+                               ~~~~
+!!! error TS2304: Cannot find name 'Type'.
+            var isExported = hasFlag(interfaceDecl.varFlags, VarFlags.Exported);
+                             ~~~~~~~
+!!! error TS2304: Cannot find name 'hasFlag'.
+                                                             ~~~~~~~~
+!!! error TS2304: Cannot find name 'VarFlags'.
+            var isGlobal = context.scopeChain.container == context.checker.gloMod;
+            var alreadyInScope = true;
+    
+            alreadyInScope = false;
+            var interfaceName = (<Identifier>interfaceDecl.name).text;
+                                  ~~~~~~~~~~
+!!! error TS2304: Cannot find name 'Identifier'.
+            interfaceSymbol = <TypeSymbol>scopeChain.scope.findLocal(interfaceName, false, true);
+                               ~~~~~~~~~~
+!!! error TS2304: Cannot find name 'TypeSymbol'.
+            if (interfaceSymbol == null) {
+                interfaceType = new Type();
+                                    ~~~~
+!!! error TS2304: Cannot find name 'Type'.
+                interfaceSymbol = new TypeSymbol(interfaceName,
+                                      ~~~~~~~~~~
+!!! error TS2304: Cannot find name 'TypeSymbol'.
+                                            ast.minChar,
+                                            context.checker.locationInfo.unitIndex,
+                                            interfaceType);
+                interfaceType.symbol = interfaceSymbol;
+                // REVIEW: Shouldn't allocate another table for interface privates
+                interfaceType.members = new ScopedMembers(new DualStringHashTable(new StringHashTable(), new StringHashTable()));
+                                            ~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'ScopedMembers'.
+                                                              ~~~~~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'DualStringHashTable'.
+                                                                                      ~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'StringHashTable'.
+                                                                                                             ~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'StringHashTable'.
+                interfaceType.ambientMembers = new ScopedMembers(new DualStringHashTable(new StringHashTable(), new StringHashTable()));
+                                                   ~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'ScopedMembers'.
+                                                                     ~~~~~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'DualStringHashTable'.
+                                                                                             ~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'StringHashTable'.
+                                                                                                                    ~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'StringHashTable'.
+                interfaceSymbol.declAST = interfaceDecl;
+                interfaceSymbol.declModule = context.scopeChain.moduleDecl;
+            }
+            else {
+                alreadyInScope = true;
+                interfaceType = interfaceSymbol.type;
+            }
+    
+            if (!interfaceType) {
+                interfaceType = context.checker.anyType;
+            }
+    
+            ast.type = interfaceType;
+            getBases(interfaceType, interfaceDecl);
+    
+            if (isExported) {
+                interfaceSymbol.flags |= SymbolFlags.Exported;
+                                         ~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'SymbolFlags'.
+            }
+    
+            if (context.scopeChain.moduleDecl) {
+                interfaceSymbol.flags |= SymbolFlags.ModuleMember;
+                                         ~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'SymbolFlags'.
+            }
+    
+            if (!alreadyInScope) {
+                context.scopeChain.scope.enter(context.scopeChain.container, ast,
+                                                interfaceSymbol, context.checker.errorReporter, isGlobal || isExported, true, false); // REVIEW: Technically, interfaces should be ambient
+            }
+            pushTypeCollectionScope(interfaceSymbol, interfaceType.members, interfaceType.ambientMembers, null, null,
+            ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'pushTypeCollectionScope'.
+                                    context, interfaceType, null, null);
+            return true;
+        }
+    
+        export function preCollectArgDeclTypes(ast: AST, parent: AST, context: TypeCollectionContext) {
+                                                    ~~~
+!!! error TS2304: Cannot find name 'AST'.
+                                                                 ~~~
+!!! error TS2304: Cannot find name 'AST'.
+                                                                               ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'TypeCollectionContext'.
+            var scopeChain = context.scopeChain;
+            var argDecl = <ArgDecl>ast;
+                           ~~~~~~~
+!!! error TS2304: Cannot find name 'ArgDecl'.
+            if (hasFlag(argDecl.varFlags, VarFlags.Public | VarFlags.Private)) {
+                ~~~~~~~
+!!! error TS2304: Cannot find name 'hasFlag'.
+                                          ~~~~~~~~
+!!! error TS2304: Cannot find name 'VarFlags'.
+                                                            ~~~~~~~~
+!!! error TS2304: Cannot find name 'VarFlags'.
+                var field = new ValueLocation();
+                                ~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'ValueLocation'.
+                var isPrivate = hasFlag(argDecl.varFlags, VarFlags.Private);
+                                ~~~~~~~
+!!! error TS2304: Cannot find name 'hasFlag'.
+                                                          ~~~~~~~~
+!!! error TS2304: Cannot find name 'VarFlags'.
+                var fieldSymbol =
+                    new FieldSymbol(argDecl.id.text, argDecl.minChar,
+                        ~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'FieldSymbol'.
+                                    context.checker.locationInfo.unitIndex,
+                                    !hasFlag(argDecl.varFlags, VarFlags.Readonly),
+                                     ~~~~~~~
+!!! error TS2304: Cannot find name 'hasFlag'.
+                                                               ~~~~~~~~
+!!! error TS2304: Cannot find name 'VarFlags'.
+                                    field);
+                fieldSymbol.transferVarFlags(argDecl.varFlags);
+                field.symbol = fieldSymbol;
+                fieldSymbol.declAST = ast;
+                argDecl.parameterPropertySym = fieldSymbol;
+    
+                context.scopeChain.scope.enter(context.scopeChain.container, ast,
+                                                fieldSymbol, context.checker.errorReporter, !isPrivate, false, false);
+    
+                field.typeLink = getTypeLink(argDecl.typeExpr, context.checker, argDecl.init == null);
+                                 ~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'getTypeLink'.
+                argDecl.sym = fieldSymbol;
+            }
+            return false;
+        }
+    
+        export function preCollectVarDeclTypes(ast: AST, parent: AST, context: TypeCollectionContext) {
+                                                    ~~~
+!!! error TS2304: Cannot find name 'AST'.
+                                                                 ~~~
+!!! error TS2304: Cannot find name 'AST'.
+                                                                               ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'TypeCollectionContext'.
+            var scopeChain = context.scopeChain;
+            var varDecl = <VarDecl>ast;
+                           ~~~~~~~
+!!! error TS2304: Cannot find name 'VarDecl'.
+            var isAmbient = hasFlag(varDecl.varFlags, VarFlags.Ambient);
+                            ~~~~~~~
+!!! error TS2304: Cannot find name 'hasFlag'.
+                                                      ~~~~~~~~
+!!! error TS2304: Cannot find name 'VarFlags'.
+            var isExported = hasFlag(varDecl.varFlags, VarFlags.Exported);
+                             ~~~~~~~
+!!! error TS2304: Cannot find name 'hasFlag'.
+                                                       ~~~~~~~~
+!!! error TS2304: Cannot find name 'VarFlags'.
+            var isGlobal = context.scopeChain.container == context.checker.gloMod;
+            var isProperty = hasFlag(varDecl.varFlags, VarFlags.Property);
+                             ~~~~~~~
+!!! error TS2304: Cannot find name 'hasFlag'.
+                                                       ~~~~~~~~
+!!! error TS2304: Cannot find name 'VarFlags'.
+            var isStatic = hasFlag(varDecl.varFlags, VarFlags.Static);
+                           ~~~~~~~
+!!! error TS2304: Cannot find name 'hasFlag'.
+                                                     ~~~~~~~~
+!!! error TS2304: Cannot find name 'VarFlags'.
+            var isPrivate = hasFlag(varDecl.varFlags, VarFlags.Private);
+                            ~~~~~~~
+!!! error TS2304: Cannot find name 'hasFlag'.
+                                                      ~~~~~~~~
+!!! error TS2304: Cannot find name 'VarFlags'.
+            var isOptional = hasFlag(varDecl.id.flags, ASTFlags.OptionalName);
+                             ~~~~~~~
+!!! error TS2304: Cannot find name 'hasFlag'.
+                                                       ~~~~~~~~
+!!! error TS2304: Cannot find name 'ASTFlags'.
+    
+            if (context.scopeChain.moduleDecl) {
+                context.scopeChain.moduleDecl.recordNonInterface();
+            }
+            if (isProperty ||
+                isExported ||
+                (context.scopeChain.container == context.checker.gloMod) ||
+                context.scopeChain.moduleDecl) {
+                if (isAmbient) {
+                    var existingSym =
+                        <FieldSymbol>scopeChain.scope.findLocal(varDecl.id.text, false, false);
+                         ~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'FieldSymbol'.
+                    if (existingSym) {
+                        varDecl.sym = existingSym;
+                        return false;
+                    }
+                }
+    
+                // Defensive error detection...
+                if (varDecl.id == null) {
+                    context.checker.errorReporter.simpleError(varDecl, "Expected variable identifier at this location");
+                    return false;
+                }
+    
+                var field = new ValueLocation();
+                                ~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'ValueLocation'.
+                var fieldSymbol =
+                    new FieldSymbol(varDecl.id.text, varDecl.minChar,
+                        ~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'FieldSymbol'.
+                                    context.checker.locationInfo.unitIndex,
+                                    (varDecl.varFlags & VarFlags.Readonly) == VarFlags.None,
+                                                        ~~~~~~~~
+!!! error TS2304: Cannot find name 'VarFlags'.
+                                                                              ~~~~~~~~
+!!! error TS2304: Cannot find name 'VarFlags'.
+                                    field);
+                fieldSymbol.transferVarFlags(varDecl.varFlags);
+                if (isOptional) {
+                    fieldSymbol.flags |= SymbolFlags.Optional;
+                                         ~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'SymbolFlags'.
+                }
+                field.symbol = fieldSymbol;
+                fieldSymbol.declAST = ast;
+                if ((context.scopeChain.moduleDecl) ||
+                    (context.scopeChain.container == context.checker.gloMod)) {
+                    fieldSymbol.flags |= SymbolFlags.ModuleMember;
+                                         ~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'SymbolFlags'.
+                    fieldSymbol.declModule = context.scopeChain.moduleDecl;
+                }
+    
+                // if it's static, enter it into the class's member list directly
+                if (hasFlag(varDecl.varFlags, VarFlags.Property) && isStatic && context.scopeChain.classType) {
+                    ~~~~~~~
+!!! error TS2304: Cannot find name 'hasFlag'.
+                                              ~~~~~~~~
+!!! error TS2304: Cannot find name 'VarFlags'.
+                    if (!context.scopeChain.classType.members.publicMembers.add(varDecl.id.text, fieldSymbol)) {
+                        context.checker.errorReporter.duplicateIdentifier(ast, fieldSymbol.name);
+                    }
+                    fieldSymbol.container = context.scopeChain.classType.symbol;
+                }
+                else {
+                    context.scopeChain.scope.enter(context.scopeChain.container,
+                                                    ast,
+                                                    fieldSymbol,
+                                                    context.checker.errorReporter,
+                                                    !isPrivate && (isProperty || isExported || isGlobal || isStatic),
+                                                    false,
+                                                    isAmbient);
+                }
+    
+                if (hasFlag(varDecl.varFlags, VarFlags.Exported)) {
+                    ~~~~~~~
+!!! error TS2304: Cannot find name 'hasFlag'.
+                                              ~~~~~~~~
+!!! error TS2304: Cannot find name 'VarFlags'.
+                    fieldSymbol.flags |= SymbolFlags.Exported;
+                                         ~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'SymbolFlags'.
+                }
+    
+                field.typeLink = getTypeLink(varDecl.typeExpr, context.checker,
+                                 ~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'getTypeLink'.
+                                            varDecl.init == null);
+                varDecl.sym = fieldSymbol;
+            }
+            return false;
+        }
+    
+        export function preCollectFuncDeclTypes(ast: AST, parent: AST, context: TypeCollectionContext) {
+                                                     ~~~
+!!! error TS2304: Cannot find name 'AST'.
+                                                                  ~~~
+!!! error TS2304: Cannot find name 'AST'.
+                                                                                ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'TypeCollectionContext'.
+            var scopeChain = context.scopeChain;
+    
+            // REVIEW: This will have to change when we move to "export"
+            if (context.scopeChain.moduleDecl) {
+                context.scopeChain.moduleDecl.recordNonInterface();
+            }
+    
+            var funcDecl = <FuncDecl>ast;
+                            ~~~~~~~~
+!!! error TS2304: Cannot find name 'FuncDecl'.
+            var fgSym: TypeSymbol = null;
+                       ~~~~~~~~~~
+!!! error TS2304: Cannot find name 'TypeSymbol'.
+            var nameText = funcDecl.getNameText();
+            var isExported = hasFlag(funcDecl.fncFlags, FncFlags.Exported | FncFlags.ClassPropertyMethodExported);
+                             ~~~~~~~
+!!! error TS2304: Cannot find name 'hasFlag'.
+                                                        ~~~~~~~~
+!!! error TS2304: Cannot find name 'FncFlags'.
+                                                                            ~~~~~~~~
+!!! error TS2304: Cannot find name 'FncFlags'.
+            var isStatic = hasFlag(funcDecl.fncFlags, FncFlags.Static);
+                           ~~~~~~~
+!!! error TS2304: Cannot find name 'hasFlag'.
+                                                      ~~~~~~~~
+!!! error TS2304: Cannot find name 'FncFlags'.
+            var isPrivate = hasFlag(funcDecl.fncFlags, FncFlags.Private);
+                            ~~~~~~~
+!!! error TS2304: Cannot find name 'hasFlag'.
+                                                       ~~~~~~~~
+!!! error TS2304: Cannot find name 'FncFlags'.
+            var isConstructor = funcDecl.isConstructMember() || funcDecl.isConstructor;
+            var containerSym:TypeSymbol = <TypeSymbol> (((funcDecl.isMethod() && isStatic) || funcDecl.isAccessor()) && context.scopeChain.classType ? context.scopeChain.classType.symbol : context.scopeChain.container);
+                             ~~~~~~~~~~
+!!! error TS2304: Cannot find name 'TypeSymbol'.
+                                           ~~~~~~~~~~
+!!! error TS2304: Cannot find name 'TypeSymbol'.
+            var containerScope: SymbolScope = context.scopeChain.scope;
+                                ~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'SymbolScope'.
+            var isGlobal = containerSym == context.checker.gloMod;
+            var isOptional = funcDecl.name && hasFlag(funcDecl.name.flags, ASTFlags.OptionalName);
+                                              ~~~~~~~
+!!! error TS2304: Cannot find name 'hasFlag'.
+                                                                           ~~~~~~~~
+!!! error TS2304: Cannot find name 'ASTFlags'.
+            var go = false;
+            var foundSymbol = false; 
+    
+            // If this is a class constructor, the "container" is actually the class declaration
+            if (isConstructor && hasFlag(funcDecl.fncFlags, FncFlags.ClassMethod)) {
+                                 ~~~~~~~
+!!! error TS2304: Cannot find name 'hasFlag'.
+                                                            ~~~~~~~~
+!!! error TS2304: Cannot find name 'FncFlags'.
+                containerSym = <TypeSymbol>containerSym.container;
+                                ~~~~~~~~~~
+!!! error TS2304: Cannot find name 'TypeSymbol'.
+                containerScope = scopeChain.previous.scope;
+            }
+    
+            funcDecl.unitIndex = context.checker.locationInfo.unitIndex;
+            
+            // If the parent is the constructor, and this isn't an instance method, skip it.
+            // That way, we'll set the type during scope assignment, and can be sure that the
+            // function will be placed in the constructor-local scope
+            if (!funcDecl.isConstructor &&
+                containerSym &&
+                containerSym.declAST &&
+                containerSym.declAST.nodeType == NodeType.FuncDecl &&
+                                                 ~~~~~~~~
+!!! error TS2304: Cannot find name 'NodeType'.
+                (<FuncDecl>containerSym.declAST).isConstructor &&
+                  ~~~~~~~~
+!!! error TS2304: Cannot find name 'FuncDecl'.
+                !funcDecl.isMethod()) {
+                return go;
+            }        
+    
+            // Interfaces and overloads
+            if (hasFlag(funcDecl.fncFlags, FncFlags.Signature)) {
+                ~~~~~~~
+!!! error TS2304: Cannot find name 'hasFlag'.
+                                           ~~~~~~~~
+!!! error TS2304: Cannot find name 'FncFlags'.
+                var instType = context.scopeChain.thisType;                       
+    
+                // If the function is static, search in the class type's
+                if (nameText && nameText != "__missing") {
+                    if (isStatic) {
+                        fgSym = containerSym.type.members.allMembers.lookup(nameText);
+                    }
+                    else {
+                        // REVIEW: This logic should be symmetric with preCollectClassTypes
+                        fgSym = <TypeSymbol>containerScope.findLocal(nameText, false, false);
+                                 ~~~~~~~~~~
+!!! error TS2304: Cannot find name 'TypeSymbol'.
+                        
+                        // If we could not find the function symbol in the value context, look
+                        // in the type context.
+                        // This would be the case, for example, if a class constructor override
+                        // were declared before a call override for a given class
+                        if (fgSym == null) {
+                            fgSym = <TypeSymbol>containerScope.findLocal(nameText, false, true);
+                                     ~~~~~~~~~~
+!!! error TS2304: Cannot find name 'TypeSymbol'.
+                        }
+                    }
+                    
+                    if (fgSym) {
+                        foundSymbol = true;
+                        
+                        // We'll combine ambient and non-ambient funcdecls during typecheck (for contextual typing).,
+                        // So, if they don't agree, don't use the symbol we've found                    
+                        if (!funcDecl.isSignature() && (hasFlag(funcDecl.fncFlags, FncFlags.Ambient) != hasFlag(fgSym.flags, SymbolFlags.Ambient))) {
+                                                        ~~~~~~~
+!!! error TS2304: Cannot find name 'hasFlag'.
+                                                                                   ~~~~~~~~
+!!! error TS2304: Cannot find name 'FncFlags'.
+                                                                                                        ~~~~~~~
+!!! error TS2304: Cannot find name 'hasFlag'.
+                                                                                                                             ~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'SymbolFlags'.
+                           fgSym = null;
+                        }
+                    }                
+                }
+                
+                // a function with this symbol has not yet been declared in this scope
+                // REVIEW: In the code below, we need to ensure that only function overloads are considered
+                //  (E.g., if a vardecl has the same id as a function or class, we may use the vardecl symbol
+                //  as the overload.)  Defensively, however, the vardecl won't have a type yet, so it should
+                //  suffice to just check for a null type when considering the overload symbol in
+                //  createFunctionSignature
+                if (fgSym == null) {
+                    if (!(funcDecl.isSpecialFn())) {                    
+                        fgSym = context.checker.createFunctionSignature(funcDecl, containerSym, containerScope, null, !foundSymbol).declAST.type.symbol;
+                    }
+                    else {
+                        fgSym = context.checker.createFunctionSignature(funcDecl, containerSym, containerScope, containerSym, false).declAST.type.symbol;                                                                         
+                    }
+                    
+                    // set the symbol's declAST, which will point back to the first declaration (symbol or otherwise)
+                    // related to this symbol
+                    if (fgSym.declAST == null || !funcDecl.isSpecialFn()) {
+                        fgSym.declAST = ast;
+                    }
+                }
+                else { // there exists a symbol with this name
+                    
+                    if ((fgSym.kind() == SymbolKind.Type)) {
+                                         ~~~~~~~~~~
+!!! error TS2304: Cannot find name 'SymbolKind'.
+    
+                        fgSym = context.checker.createFunctionSignature(funcDecl, containerSym, containerScope, fgSym, false).declAST.type.symbol;
+                    }
+                    else {
+                        context.checker.errorReporter.simpleError(funcDecl, "Function or method '" + funcDecl.name.actualText + "' already declared as a property");
+                    }
+                }
+             
+                if (funcDecl.isSpecialFn() && !isStatic) {
+                    funcDecl.type = instType ? instType : fgSym.type; 
+                }
+                else {
+                    funcDecl.type = fgSym.type;
+                }            
+            }
+            else {
+                // declarations
+                
+                if (nameText) {
+                    if (isStatic) {
+                        fgSym = containerSym.type.members.allMembers.lookup(nameText);
+                    }
+                    else {
+                        // in the constructor case, we want to check the parent scope for overloads
+                        if (funcDecl.isConstructor && context.scopeChain.previous) {
+                            fgSym = <TypeSymbol>context.scopeChain.previous.scope.findLocal(nameText, false, false);
+                                     ~~~~~~~~~~
+!!! error TS2304: Cannot find name 'TypeSymbol'.
+                        }
+                        
+                        if (fgSym == null) {
+                            fgSym = <TypeSymbol>containerScope.findLocal(nameText, false, false);
+                                     ~~~~~~~~~~
+!!! error TS2304: Cannot find name 'TypeSymbol'.
+                        }
+                    }
+                    if (fgSym) {
+                        foundSymbol = true;
+                        
+                        if (!isConstructor && fgSym.declAST.nodeType == NodeType.FuncDecl && !(<FuncDecl>fgSym.declAST).isAccessor() && !(<FuncDecl>fgSym.declAST).isSignature()) {
+                                                                        ~~~~~~~~
+!!! error TS2304: Cannot find name 'NodeType'.
+                                                                                                ~~~~~~~~
+!!! error TS2304: Cannot find name 'FuncDecl'.
+                                                                                                                                           ~~~~~~~~
+!!! error TS2304: Cannot find name 'FuncDecl'.
+                            fgSym = null;
+                            foundSymbol = false;
+                        }
+                    }                
+                }
+    
+                // REVIEW: Move this check into the typecheck phase?  It's only being run over properties...
+                if (fgSym &&
+                    !fgSym.isAccessor() &&
+                    fgSym.type &&
+                    fgSym.type.construct &&
+                    fgSym.type.construct.signatures != [] &&
+                    (fgSym.type.construct.signatures[0].declAST == null ||
+                        !hasFlag(fgSym.type.construct.signatures[0].declAST.fncFlags, FncFlags.Ambient)) &&
+                         ~~~~~~~
+!!! error TS2304: Cannot find name 'hasFlag'.
+                                                                                      ~~~~~~~~
+!!! error TS2304: Cannot find name 'FncFlags'.
+                    !funcDecl.isConstructor) {
+                    context.checker.errorReporter.simpleError(funcDecl, "Functions may not have class overloads");
+                }
+    
+                if (fgSym && !(fgSym.kind() == SymbolKind.Type) && funcDecl.isMethod() && !funcDecl.isAccessor() && !funcDecl.isConstructor) {
+                                               ~~~~~~~~~~
+!!! error TS2304: Cannot find name 'SymbolKind'.
+                    context.checker.errorReporter.simpleError(funcDecl, "Function or method '" + funcDecl.name.actualText + "' already declared as a property");
+                    fgSym.type = context.checker.anyType;
+                }
+                var sig = context.checker.createFunctionSignature(funcDecl, containerSym, containerScope, fgSym, !foundSymbol);
+    
+                // it's a getter or setter function                                   
+                if (((!fgSym || fgSym.declAST.nodeType != NodeType.FuncDecl) && funcDecl.isAccessor()) || (fgSym && fgSym.isAccessor())) {
+                                                          ~~~~~~~~
+!!! error TS2304: Cannot find name 'NodeType'.
+                    funcDecl.accessorSymbol = context.checker.createAccessorSymbol(funcDecl, fgSym, containerSym.type, (funcDecl.isMethod() && isStatic), true, containerScope, containerSym);
+                }
+    
+                funcDecl.type.symbol.declAST = ast;
+                if (funcDecl.isConstructor) { // REVIEW: Remove when classes completely replace oldclass
+                    go = true;
+                };
+            }
+            if (isExported) {
+                if (funcDecl.type.call) {
+                    funcDecl.type.symbol.flags |= SymbolFlags.Exported;
+                                                  ~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'SymbolFlags'.
+                }
+                
+                // Accessors are set to 'exported' above
+                if (fgSym && !fgSym.isAccessor() && fgSym.kind() == SymbolKind.Type && fgSym.type.call) {
+                                                                    ~~~~~~~~~~
+!!! error TS2304: Cannot find name 'SymbolKind'.
+                    fgSym.flags |= SymbolFlags.Exported;
+                                   ~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'SymbolFlags'.
+                }
+            }
+            if (context.scopeChain.moduleDecl && !funcDecl.isSpecialFn()) {
+                funcDecl.type.symbol.flags |= SymbolFlags.ModuleMember;
+                                              ~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'SymbolFlags'.
+                funcDecl.type.symbol.declModule = context.scopeChain.moduleDecl;
+            }
+    
+            if (fgSym && isOptional) {
+                fgSym.flags |= SymbolFlags.Optional;
+                               ~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'SymbolFlags'.
+            }
+    
+            return go;
+        }
+    
+        export function preCollectTypes(ast: AST, parent: AST, walker: IAstWalker) {
+                                             ~~~
+!!! error TS2304: Cannot find name 'AST'.
+                                                          ~~~
+!!! error TS2304: Cannot find name 'AST'.
+                                                                       ~~~~~~~~~~
+!!! error TS2304: Cannot find name 'IAstWalker'.
+            var context: TypeCollectionContext = walker.state;
+                         ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'TypeCollectionContext'.
+            var go = false;
+            var scopeChain = context.scopeChain;
+    
+            if (ast.nodeType == NodeType.Script) {
+                                ~~~~~~~~
+!!! error TS2304: Cannot find name 'NodeType'.
+                var script: Script = <Script>ast;
+                            ~~~~~~
+!!! error TS2304: Cannot find name 'Script'.
+                                      ~~~~~~
+!!! error TS2304: Cannot find name 'Script'.
+                context.script = script;
+                go = true;
+            }
+            else if (ast.nodeType == NodeType.List) {
+                                     ~~~~~~~~
+!!! error TS2304: Cannot find name 'NodeType'.
+                go = true;
+            }
+            else if (ast.nodeType == NodeType.ImportDeclaration) {
+                                     ~~~~~~~~
+!!! error TS2304: Cannot find name 'NodeType'.
+                go = preCollectImportTypes(ast, parent, context);
+            }
+            else if (ast.nodeType == NodeType.With) {
+                                     ~~~~~~~~
+!!! error TS2304: Cannot find name 'NodeType'.
+                go = false;
+            }
+            else if (ast.nodeType == NodeType.ModuleDeclaration) {
+                                     ~~~~~~~~
+!!! error TS2304: Cannot find name 'NodeType'.
+                go = preCollectModuleTypes(ast, parent, context);
+            }
+            else if (ast.nodeType == NodeType.ClassDeclaration) {
+                                     ~~~~~~~~
+!!! error TS2304: Cannot find name 'NodeType'.
+                go = preCollectClassTypes(ast, parent, context);
+            }
+            else if (ast.nodeType == NodeType.Block) {
+                                     ~~~~~~~~
+!!! error TS2304: Cannot find name 'NodeType'.
+                go = true;
+            }
+            else if (ast.nodeType == NodeType.InterfaceDeclaration) {
+                                     ~~~~~~~~
+!!! error TS2304: Cannot find name 'NodeType'.
+                go = preCollectInterfaceTypes(ast, parent, context);
+            }
+            // This will be a constructor arg because this pass only traverses
+            // constructor arg lists
+            else if (ast.nodeType == NodeType.ArgDecl) {
+                                     ~~~~~~~~
+!!! error TS2304: Cannot find name 'NodeType'.
+                go = preCollectArgDeclTypes(ast, parent, context);
+            }
+            else if (ast.nodeType == NodeType.VarDecl) {
+                                     ~~~~~~~~
+!!! error TS2304: Cannot find name 'NodeType'.
+                go = preCollectVarDeclTypes(ast, parent, context);
+            }
+            else if (ast.nodeType == NodeType.FuncDecl) {
+                                     ~~~~~~~~
+!!! error TS2304: Cannot find name 'NodeType'.
+                go = preCollectFuncDeclTypes(ast, parent, context);
+            }
+            else {
+                if (ast.isStatementOrExpression() && context.scopeChain.moduleDecl) {
+                    context.scopeChain.moduleDecl.recordNonInterface();
+                }
+            }
+            walker.options.goChildren = go;
+            return ast;
+        }
+    
+        export function postCollectTypes(ast: AST, parent: AST, walker: IAstWalker) {
+                                              ~~~
+!!! error TS2304: Cannot find name 'AST'.
+                                                           ~~~
+!!! error TS2304: Cannot find name 'AST'.
+                                                                        ~~~~~~~~~~
+!!! error TS2304: Cannot find name 'IAstWalker'.
+            var context: TypeCollectionContext = walker.state;
+                         ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'TypeCollectionContext'.
+    
+            if (ast.nodeType == NodeType.ModuleDeclaration) {
+                                ~~~~~~~~
+!!! error TS2304: Cannot find name 'NodeType'.
+                popTypeCollectionScope(context);
+                ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'popTypeCollectionScope'.
+            }
+            else if (ast.nodeType == NodeType.ClassDeclaration) {
+                                     ~~~~~~~~
+!!! error TS2304: Cannot find name 'NodeType'.
+                popTypeCollectionScope(context);
+                ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'popTypeCollectionScope'.
+            }
+            else if (ast.nodeType == NodeType.InterfaceDeclaration) {
+                                     ~~~~~~~~
+!!! error TS2304: Cannot find name 'NodeType'.
+                popTypeCollectionScope(context);
+                ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'popTypeCollectionScope'.
+            }
+            return ast;
+        }
+    
+    }

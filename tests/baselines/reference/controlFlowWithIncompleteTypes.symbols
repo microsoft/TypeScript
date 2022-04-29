@@ -1,0 +1,55 @@
+=== tests/cases/compiler/controlFlowWithIncompleteTypes.ts ===
+// Repro from #11000
+
+declare var cond: boolean;
+>cond : Symbol(cond, Decl(controlFlowWithIncompleteTypes.ts, 2, 11))
+
+function foo1() {
+>foo1 : Symbol(foo1, Decl(controlFlowWithIncompleteTypes.ts, 2, 26))
+
+    let x: string | number | boolean = 0;
+>x : Symbol(x, Decl(controlFlowWithIncompleteTypes.ts, 5, 7))
+
+    while (cond) {
+>cond : Symbol(cond, Decl(controlFlowWithIncompleteTypes.ts, 2, 11))
+
+        if (typeof x === "string") {
+>x : Symbol(x, Decl(controlFlowWithIncompleteTypes.ts, 5, 7))
+
+            x = x.slice();
+>x : Symbol(x, Decl(controlFlowWithIncompleteTypes.ts, 5, 7))
+>x.slice : Symbol(String.slice, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(controlFlowWithIncompleteTypes.ts, 5, 7))
+>slice : Symbol(String.slice, Decl(lib.es5.d.ts, --, --))
+        }
+        else {
+            x = "abc";
+>x : Symbol(x, Decl(controlFlowWithIncompleteTypes.ts, 5, 7))
+        }
+    }
+}
+
+function foo2() {
+>foo2 : Symbol(foo2, Decl(controlFlowWithIncompleteTypes.ts, 14, 1))
+
+    let x: string | number | boolean = 0;
+>x : Symbol(x, Decl(controlFlowWithIncompleteTypes.ts, 17, 7))
+
+    while (cond) {
+>cond : Symbol(cond, Decl(controlFlowWithIncompleteTypes.ts, 2, 11))
+
+        if (typeof x === "number") {
+>x : Symbol(x, Decl(controlFlowWithIncompleteTypes.ts, 17, 7))
+
+            x = "abc";
+>x : Symbol(x, Decl(controlFlowWithIncompleteTypes.ts, 17, 7))
+        }
+        else {
+            x = x.slice();
+>x : Symbol(x, Decl(controlFlowWithIncompleteTypes.ts, 17, 7))
+>x.slice : Symbol(String.slice, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(controlFlowWithIncompleteTypes.ts, 17, 7))
+>slice : Symbol(String.slice, Decl(lib.es5.d.ts, --, --))
+        }
+    }
+}

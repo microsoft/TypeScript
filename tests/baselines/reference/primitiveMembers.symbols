@@ -1,0 +1,82 @@
+=== tests/cases/compiler/primitiveMembers.ts ===
+var x = 5;
+>x : Symbol(x, Decl(primitiveMembers.ts, 0, 3))
+
+var r = /yo/;
+>r : Symbol(r, Decl(primitiveMembers.ts, 1, 3))
+
+r.source;
+>r.source : Symbol(RegExp.source, Decl(lib.es5.d.ts, --, --))
+>r : Symbol(r, Decl(primitiveMembers.ts, 1, 3))
+>source : Symbol(RegExp.source, Decl(lib.es5.d.ts, --, --))
+
+x.toBAZ();
+>x : Symbol(x, Decl(primitiveMembers.ts, 0, 3))
+
+x.toString();
+>x.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(primitiveMembers.ts, 0, 3))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+
+var n = 0;
+>n : Symbol(n, Decl(primitiveMembers.ts, 7, 3))
+
+var N: Number;
+>N : Symbol(N, Decl(primitiveMembers.ts, 8, 3))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+n = N;  // should not work, as 'number' has a different brand
+>n : Symbol(n, Decl(primitiveMembers.ts, 7, 3))
+>N : Symbol(N, Decl(primitiveMembers.ts, 8, 3))
+
+N = n; // should work
+>N : Symbol(N, Decl(primitiveMembers.ts, 8, 3))
+>n : Symbol(n, Decl(primitiveMembers.ts, 7, 3))
+
+var o: Object = {}
+>o : Symbol(o, Decl(primitiveMembers.ts, 13, 3))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+var f: Function = (x: string) => x.length;
+>f : Symbol(f, Decl(primitiveMembers.ts, 14, 3))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(primitiveMembers.ts, 14, 19))
+>x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(primitiveMembers.ts, 14, 19))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+var r2: RegExp = /./g;
+>r2 : Symbol(r2, Decl(primitiveMembers.ts, 15, 3))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+var n2: Number = 34;
+>n2 : Symbol(n2, Decl(primitiveMembers.ts, 16, 3))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+var s: String = "yo";
+>s : Symbol(s, Decl(primitiveMembers.ts, 17, 3))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+var b: Boolean = true;
+>b : Symbol(b, Decl(primitiveMembers.ts, 18, 3))
+>Boolean : Symbol(Boolean, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+var n3 = 5 || {};
+>n3 : Symbol(n3, Decl(primitiveMembers.ts, 20, 3))
+
+
+class baz { public bar(): void { }; }
+>baz : Symbol(baz, Decl(primitiveMembers.ts, 20, 17))
+>bar : Symbol(baz.bar, Decl(primitiveMembers.ts, 23, 11))
+
+class foo extends baz { public bar(){ return undefined}; }
+>foo : Symbol(foo, Decl(primitiveMembers.ts, 23, 37))
+>baz : Symbol(baz, Decl(primitiveMembers.ts, 20, 17))
+>bar : Symbol(foo.bar, Decl(primitiveMembers.ts, 24, 23))
+>undefined : Symbol(undefined)
+
+
+
+ 
+
+

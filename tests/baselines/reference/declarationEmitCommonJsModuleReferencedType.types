@@ -1,0 +1,44 @@
+=== tests/cases/compiler/r/node_modules/foo/node_modules/nested/index.d.ts ===
+export interface NestedProps {}
+No type information for this code.=== tests/cases/compiler/r/node_modules/foo/other/index.d.ts ===
+export interface OtherIndexProps {}
+No type information for this code.=== tests/cases/compiler/r/node_modules/foo/other.d.ts ===
+export interface OtherProps {}
+No type information for this code.=== tests/cases/compiler/r/node_modules/foo/index.d.ts ===
+import { OtherProps } from "./other";
+>OtherProps : any
+
+import { OtherIndexProps } from "./other/index";
+>OtherIndexProps : any
+
+import { NestedProps } from "nested";
+>NestedProps : any
+
+export interface SomeProps {}
+
+export function foo(): [SomeProps, OtherProps, OtherIndexProps, NestedProps];
+>foo : () => [SomeProps, OtherProps, OtherIndexProps, NestedProps]
+
+=== tests/cases/compiler/node_modules/root/index.d.ts ===
+export interface RootProps {}
+
+export function bar(): RootProps;
+>bar : () => RootProps
+
+=== tests/cases/compiler/r/entry.ts ===
+import { foo } from "foo";
+>foo : () => [import("tests/cases/compiler/r/node_modules/foo/index").SomeProps, import("tests/cases/compiler/r/node_modules/foo/other").OtherProps, import("tests/cases/compiler/r/node_modules/foo/other/index").OtherIndexProps, import("tests/cases/compiler/r/node_modules/foo/node_modules/nested/index").NestedProps]
+
+import { bar } from "root";
+>bar : () => import("tests/cases/compiler/node_modules/root/index").RootProps
+
+export const x = foo();
+>x : [import("tests/cases/compiler/r/node_modules/foo/index").SomeProps, import("tests/cases/compiler/r/node_modules/foo/other").OtherProps, import("tests/cases/compiler/r/node_modules/foo/other/index").OtherIndexProps, import("tests/cases/compiler/r/node_modules/foo/node_modules/nested/index").NestedProps]
+>foo() : [import("tests/cases/compiler/r/node_modules/foo/index").SomeProps, import("tests/cases/compiler/r/node_modules/foo/other").OtherProps, import("tests/cases/compiler/r/node_modules/foo/other/index").OtherIndexProps, import("tests/cases/compiler/r/node_modules/foo/node_modules/nested/index").NestedProps]
+>foo : () => [import("tests/cases/compiler/r/node_modules/foo/index").SomeProps, import("tests/cases/compiler/r/node_modules/foo/other").OtherProps, import("tests/cases/compiler/r/node_modules/foo/other/index").OtherIndexProps, import("tests/cases/compiler/r/node_modules/foo/node_modules/nested/index").NestedProps]
+
+export const y = bar();
+>y : import("tests/cases/compiler/node_modules/root/index").RootProps
+>bar() : import("tests/cases/compiler/node_modules/root/index").RootProps
+>bar : () => import("tests/cases/compiler/node_modules/root/index").RootProps
+

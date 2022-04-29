@@ -1,0 +1,25 @@
+=== tests/cases/conformance/internalModules/moduleDeclarations/asiPreventsParsingAsNamespace05.ts ===
+let namespace = 10;
+>namespace : number
+>10 : 10
+
+namespace a.b {
+>a : typeof a
+>b : typeof b
+
+    export let c = 20;
+>c : number
+>20 : 20
+}
+
+namespace
+>namespace : number
+
+a.b.c
+>a.b.c : number
+>a.b : typeof a.b
+>a : typeof a
+>b : typeof a.b
+>c : number
+{
+}

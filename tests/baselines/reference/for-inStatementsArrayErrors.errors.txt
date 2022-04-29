@@ -1,0 +1,41 @@
+tests/cases/conformance/statements/for-inStatements/for-inStatementsArrayErrors.ts(4,16): error TS7015: Element implicitly has an 'any' type because index expression is not of type 'number'.
+tests/cases/conformance/statements/for-inStatements/for-inStatementsArrayErrors.ts(5,16): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/statements/for-inStatements/for-inStatementsArrayErrors.ts(6,9): error TS2367: This condition will always return 'false' since the types 'string' and 'number' have no overlap.
+tests/cases/conformance/statements/for-inStatements/for-inStatementsArrayErrors.ts(8,16): error TS2339: Property 'unknownProperty' does not exist on type 'string'.
+tests/cases/conformance/statements/for-inStatements/for-inStatementsArrayErrors.ts(12,10): error TS2403: Subsequent variable declarations must have the same type.  Variable 'i' must be of type 'number', but here has type 'string'.
+tests/cases/conformance/statements/for-inStatements/for-inStatementsArrayErrors.ts(16,10): error TS2403: Subsequent variable declarations must have the same type.  Variable 'j' must be of type 'any', but here has type 'string'.
+
+
+==== tests/cases/conformance/statements/for-inStatements/for-inStatementsArrayErrors.ts (6 errors) ====
+    let a: Date[];
+    
+    for (let x in a) {
+        let a1 = a[x + 1];
+                   ~~~~~
+!!! error TS7015: Element implicitly has an 'any' type because index expression is not of type 'number'.
+        let a2 = a[x - 1];
+                   ~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+        if (x === 1) {
+            ~~~~~~~
+!!! error TS2367: This condition will always return 'false' since the types 'string' and 'number' have no overlap.
+        }
+        let a3 = x.unknownProperty;
+                   ~~~~~~~~~~~~~~~
+!!! error TS2339: Property 'unknownProperty' does not exist on type 'string'.
+    }
+    
+    var i: number;
+    for (var i in a ) {
+             ~
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'i' must be of type 'number', but here has type 'string'.
+!!! related TS6203 tests/cases/conformance/statements/for-inStatements/for-inStatementsArrayErrors.ts:11:5: 'i' was also declared here.
+    }
+    
+    var j: any;
+    for (var j in a ) {
+             ~
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'j' must be of type 'any', but here has type 'string'.
+!!! related TS6203 tests/cases/conformance/statements/for-inStatements/for-inStatementsArrayErrors.ts:15:5: 'j' was also declared here.
+    }
+    

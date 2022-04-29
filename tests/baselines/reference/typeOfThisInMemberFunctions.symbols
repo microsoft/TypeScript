@@ -1,0 +1,71 @@
+=== tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclarations/typeOfThisInMemberFunctions.ts ===
+class C {
+>C : Symbol(C, Decl(typeOfThisInMemberFunctions.ts, 0, 0))
+
+    foo() {
+>foo : Symbol(C.foo, Decl(typeOfThisInMemberFunctions.ts, 0, 9))
+
+        var r = this;
+>r : Symbol(r, Decl(typeOfThisInMemberFunctions.ts, 2, 11))
+>this : Symbol(C, Decl(typeOfThisInMemberFunctions.ts, 0, 0))
+    }
+
+    static bar() {
+>bar : Symbol(C.bar, Decl(typeOfThisInMemberFunctions.ts, 3, 5))
+
+        var r2 = this;
+>r2 : Symbol(r2, Decl(typeOfThisInMemberFunctions.ts, 6, 11))
+>this : Symbol(C, Decl(typeOfThisInMemberFunctions.ts, 0, 0))
+    }
+}
+
+class D<T> {
+>D : Symbol(D, Decl(typeOfThisInMemberFunctions.ts, 8, 1))
+>T : Symbol(T, Decl(typeOfThisInMemberFunctions.ts, 10, 8))
+
+    x: T;
+>x : Symbol(D.x, Decl(typeOfThisInMemberFunctions.ts, 10, 12))
+>T : Symbol(T, Decl(typeOfThisInMemberFunctions.ts, 10, 8))
+
+    foo() {
+>foo : Symbol(D.foo, Decl(typeOfThisInMemberFunctions.ts, 11, 9))
+
+        var r = this;
+>r : Symbol(r, Decl(typeOfThisInMemberFunctions.ts, 13, 11))
+>this : Symbol(D, Decl(typeOfThisInMemberFunctions.ts, 8, 1))
+    }
+
+    static bar() {
+>bar : Symbol(D.bar, Decl(typeOfThisInMemberFunctions.ts, 14, 5))
+
+        var r2 = this;
+>r2 : Symbol(r2, Decl(typeOfThisInMemberFunctions.ts, 17, 11))
+>this : Symbol(D, Decl(typeOfThisInMemberFunctions.ts, 8, 1))
+    }
+}
+
+class E<T extends Date> {
+>E : Symbol(E, Decl(typeOfThisInMemberFunctions.ts, 19, 1))
+>T : Symbol(T, Decl(typeOfThisInMemberFunctions.ts, 21, 8))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+    x: T;
+>x : Symbol(E.x, Decl(typeOfThisInMemberFunctions.ts, 21, 25))
+>T : Symbol(T, Decl(typeOfThisInMemberFunctions.ts, 21, 8))
+
+    foo() {
+>foo : Symbol(E.foo, Decl(typeOfThisInMemberFunctions.ts, 22, 9))
+
+        var r = this;
+>r : Symbol(r, Decl(typeOfThisInMemberFunctions.ts, 24, 11))
+>this : Symbol(E, Decl(typeOfThisInMemberFunctions.ts, 19, 1))
+    }
+
+    static bar() {
+>bar : Symbol(E.bar, Decl(typeOfThisInMemberFunctions.ts, 25, 5))
+
+        var r2 = this;
+>r2 : Symbol(r2, Decl(typeOfThisInMemberFunctions.ts, 28, 11))
+>this : Symbol(E, Decl(typeOfThisInMemberFunctions.ts, 19, 1))
+    }
+}

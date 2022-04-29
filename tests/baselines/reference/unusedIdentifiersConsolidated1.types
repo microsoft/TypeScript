@@ -1,0 +1,184 @@
+=== tests/cases/compiler/unusedIdentifiersConsolidated1.ts ===
+function greeter(person: string) {
+>greeter : (person: string) => void
+>person : string
+
+    var unused = 20;
+>unused : number
+>20 : 20
+}
+
+class Dummy<usedtypeparameter, unusedtypeparameter> {
+>Dummy : Dummy<usedtypeparameter, unusedtypeparameter>
+
+    private unusedprivatevariable: string;
+>unusedprivatevariable : string
+
+    private greeting: string;
+>greeting : string
+
+    public unusedpublicvariable: string;
+>unusedpublicvariable : string
+
+    public typedvariable: usedtypeparameter;
+>typedvariable : usedtypeparameter
+
+    constructor(message: string) {
+>message : string
+
+        var unused2 = 22;
+>unused2 : number
+>22 : 22
+
+        this.greeting = "Dummy Message";
+>this.greeting = "Dummy Message" : "Dummy Message"
+>this.greeting : string
+>this : this
+>greeting : string
+>"Dummy Message" : "Dummy Message"
+    }
+
+    public greeter(person: string) {
+>greeter : (person: string) => void
+>person : string
+
+        var unused = 20;
+>unused : number
+>20 : 20
+
+        this.usedPrivateFunction();
+>this.usedPrivateFunction() : void
+>this.usedPrivateFunction : () => void
+>this : this
+>usedPrivateFunction : () => void
+    }
+
+    private usedPrivateFunction() {
+>usedPrivateFunction : () => void
+    }
+
+    private unUsedPrivateFunction() {
+>unUsedPrivateFunction : () => void
+    }
+}
+
+var user = "Jane User";
+>user : string
+>"Jane User" : "Jane User"
+
+var user2 = "Jane2 User2";
+>user2 : string
+>"Jane2 User2" : "Jane2 User2"
+
+namespace Validation {
+>Validation : typeof Validation
+
+    export interface StringValidator {
+        isAcceptable(s: string): boolean;
+>isAcceptable : (s: string) => boolean
+>s : string
+    }
+
+    const lettersRegexp = /^[A-Za-z]+$/;
+>lettersRegexp : RegExp
+>/^[A-Za-z]+$/ : RegExp
+
+    const numberRegexp = /^[0-9]+$/;
+>numberRegexp : RegExp
+>/^[0-9]+$/ : RegExp
+
+    export class LettersOnlyValidator implements StringValidator {
+>LettersOnlyValidator : LettersOnlyValidator
+
+        isAcceptable(s2: string) {
+>isAcceptable : (s2: string) => boolean
+>s2 : string
+
+            return lettersRegexp.test(s2);
+>lettersRegexp.test(s2) : boolean
+>lettersRegexp.test : (string: string) => boolean
+>lettersRegexp : RegExp
+>test : (string: string) => boolean
+>s2 : string
+        }
+
+        private unUsedPrivateFunction() {
+>unUsedPrivateFunction : () => void
+        }
+    }
+
+    export class ZipCodeValidator implements StringValidator {
+>ZipCodeValidator : ZipCodeValidator
+
+        isAcceptable(s3: string) {
+>isAcceptable : (s3: string) => boolean
+>s3 : string
+
+            return s3.length === 5;
+>s3.length === 5 : boolean
+>s3.length : number
+>s3 : string
+>length : number
+>5 : 5
+        }
+    }
+
+    interface usedLocallyInterface {
+    }
+
+    interface usedLocallyInterface2 {
+        someFunction(s1: string): void;
+>someFunction : (s1: string) => void
+>s1 : string
+    }
+
+    export interface exportedInterface {
+    }
+
+    class dummy implements usedLocallyInterface {
+>dummy : dummy
+    }
+
+    interface unusedInterface {
+    }
+}
+
+
+namespace Greeter {
+>Greeter : typeof Greeter
+
+    class class1 {
+>class1 : class1
+    }
+
+    export class class2 extends class1 {
+>class2 : class2
+>class1 : class1
+    }
+
+    class class3 {
+>class3 : class3
+    }
+
+    export class class4 {
+>class4 : class4
+    }
+
+    interface interface1 {
+    }
+
+    export interface interface2 extends interface1 {
+    }
+
+    interface interface3 {
+    }
+
+    export interface interface4 {
+    }
+
+    export let a: interface3;
+>a : interface3
+
+    interface interface5 {
+    }
+}

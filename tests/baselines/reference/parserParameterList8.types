@@ -1,0 +1,13 @@
+=== tests/cases/conformance/parser/ecmascript5/ParameterLists/parserParameterList8.ts ===
+declare class C2 {
+>C2 : C2
+
+ constructor(public p1:string); // ERROR
+>p1 : string
+
+ constructor(private p2:number); // ERROR
+>p2 : number
+
+ constructor(public p3:any); // ERROR
+>p3 : any
+}

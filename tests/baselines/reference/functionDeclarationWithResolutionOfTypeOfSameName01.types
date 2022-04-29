@@ -1,0 +1,11 @@
+=== tests/cases/compiler/functionDeclarationWithResolutionOfTypeOfSameName01.ts ===
+interface f {
+}
+
+function f() {
+>f : () => void
+
+    <f>f;
+><f>f : f
+>f : () => void
+}

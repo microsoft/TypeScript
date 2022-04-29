@@ -1,0 +1,22 @@
+=== tests/cases/conformance/externalModules/a.ts ===
+/// <reference path="foo.d.ts" />
+let y: number = Foo.fn();
+>y : number
+>Foo.fn() : number
+>Foo.fn : () => number
+>Foo : typeof Foo
+>fn : () => number
+
+=== tests/cases/conformance/externalModules/foo.d.ts ===
+declare namespace Thing {
+>Thing : typeof Thing
+
+	export function fn(): number;
+>fn : () => number
+}
+export = Thing;
+>Thing : typeof Thing
+
+export as namespace Foo;
+>Foo : typeof Thing
+

@@ -1,0 +1,46 @@
+=== tests/cases/conformance/expressions/unaryOperators/negateOperator/negateOperatorWithEnumType.ts ===
+// - operator on enum type
+
+enum ENUM { };
+>ENUM : Symbol(ENUM, Decl(negateOperatorWithEnumType.ts, 0, 0))
+
+enum ENUM1 { A, B, "" };
+>ENUM1 : Symbol(ENUM1, Decl(negateOperatorWithEnumType.ts, 2, 14))
+>A : Symbol(ENUM1.A, Decl(negateOperatorWithEnumType.ts, 3, 12))
+>B : Symbol(ENUM1.B, Decl(negateOperatorWithEnumType.ts, 3, 15))
+>"" : Symbol(ENUM1[""], Decl(negateOperatorWithEnumType.ts, 3, 18))
+
+// enum type var
+var ResultIsNumber1 = -ENUM;
+>ResultIsNumber1 : Symbol(ResultIsNumber1, Decl(negateOperatorWithEnumType.ts, 6, 3))
+>ENUM : Symbol(ENUM, Decl(negateOperatorWithEnumType.ts, 0, 0))
+
+// expressions
+var ResultIsNumber2 = -ENUM1["B"];
+>ResultIsNumber2 : Symbol(ResultIsNumber2, Decl(negateOperatorWithEnumType.ts, 9, 3))
+>ENUM1 : Symbol(ENUM1, Decl(negateOperatorWithEnumType.ts, 2, 14))
+>"B" : Symbol(ENUM1.B, Decl(negateOperatorWithEnumType.ts, 3, 15))
+
+var ResultIsNumber3 = -(ENUM1.B + ENUM1[""]);
+>ResultIsNumber3 : Symbol(ResultIsNumber3, Decl(negateOperatorWithEnumType.ts, 10, 3))
+>ENUM1.B : Symbol(ENUM1.B, Decl(negateOperatorWithEnumType.ts, 3, 15))
+>ENUM1 : Symbol(ENUM1, Decl(negateOperatorWithEnumType.ts, 2, 14))
+>B : Symbol(ENUM1.B, Decl(negateOperatorWithEnumType.ts, 3, 15))
+>ENUM1 : Symbol(ENUM1, Decl(negateOperatorWithEnumType.ts, 2, 14))
+>"" : Symbol(ENUM1[""], Decl(negateOperatorWithEnumType.ts, 3, 18))
+
+// miss assignment operators
+-ENUM;
+>ENUM : Symbol(ENUM, Decl(negateOperatorWithEnumType.ts, 0, 0))
+
+-ENUM1;
+>ENUM1 : Symbol(ENUM1, Decl(negateOperatorWithEnumType.ts, 2, 14))
+
+-ENUM1["B"];
+>ENUM1 : Symbol(ENUM1, Decl(negateOperatorWithEnumType.ts, 2, 14))
+>"B" : Symbol(ENUM1.B, Decl(negateOperatorWithEnumType.ts, 3, 15))
+
+-ENUM, ENUM1;
+>ENUM : Symbol(ENUM, Decl(negateOperatorWithEnumType.ts, 0, 0))
+>ENUM1 : Symbol(ENUM1, Decl(negateOperatorWithEnumType.ts, 2, 14))
+

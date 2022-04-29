@@ -1,0 +1,25 @@
+=== tests/cases/compiler/declFileImportedTypeUseInTypeArgPosition.ts ===
+class List<T> { }
+>List : List<T>
+
+declare module 'mod1' {
+>'mod1' : typeof import("mod1")
+
+    class Foo {
+>Foo : Foo
+    }
+}
+
+declare module 'moo' {
+>'moo' : typeof import("moo")
+
+    import x = require('mod1');
+>x : typeof x
+
+    export var p: List<x.Foo>;
+>p : List<x.Foo>
+>x : any
+}
+
+
+

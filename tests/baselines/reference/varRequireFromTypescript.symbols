@@ -1,0 +1,58 @@
+=== tests/cases/conformance/salsa/use.js ===
+var ex = require('./ex')
+>ex : Symbol(ex, Decl(use.js, 0, 3))
+>require : Symbol(require)
+>'./ex' : Symbol(ex, Decl(ex.d.ts, 0, 0))
+
+// values work
+var crunch = new ex.Crunch(1);
+>crunch : Symbol(crunch, Decl(use.js, 3, 3))
+>ex.Crunch : Symbol(ex.Crunch, Decl(ex.d.ts, 0, 33))
+>ex : Symbol(ex, Decl(use.js, 0, 3))
+>Crunch : Symbol(ex.Crunch, Decl(ex.d.ts, 0, 33))
+
+crunch.n
+>crunch.n : Symbol(ex.Crunch.n, Decl(ex.d.ts, 1, 21))
+>crunch : Symbol(crunch, Decl(use.js, 3, 3))
+>n : Symbol(ex.Crunch.n, Decl(ex.d.ts, 1, 21))
+
+
+// types work
+/**
+ * @param {ex.Greatest} greatest
+ * @param {ex.Crunch} wrap
+ */
+function f(greatest, wrap) {
+>f : Symbol(f, Decl(use.js, 4, 8))
+>greatest : Symbol(greatest, Decl(use.js, 12, 11))
+>wrap : Symbol(wrap, Decl(use.js, 12, 20))
+
+    greatest.day
+>greatest.day : Symbol(day, Decl(ex.d.ts, 0, 24))
+>greatest : Symbol(greatest, Decl(use.js, 12, 11))
+>day : Symbol(day, Decl(ex.d.ts, 0, 24))
+
+    wrap.n
+>wrap.n : Symbol(ex.Crunch.n, Decl(ex.d.ts, 1, 21))
+>wrap : Symbol(wrap, Decl(use.js, 12, 20))
+>n : Symbol(ex.Crunch.n, Decl(ex.d.ts, 1, 21))
+}
+
+=== tests/cases/conformance/salsa/ex.d.ts ===
+export type Greatest = { day: 1 }
+>Greatest : Symbol(Greatest, Decl(ex.d.ts, 0, 0))
+>day : Symbol(day, Decl(ex.d.ts, 0, 24))
+
+export class Crunch {
+>Crunch : Symbol(Crunch, Decl(ex.d.ts, 0, 33))
+
+    n: number
+>n : Symbol(Crunch.n, Decl(ex.d.ts, 1, 21))
+
+    m(): number
+>m : Symbol(Crunch.m, Decl(ex.d.ts, 2, 13))
+
+    constructor(n: number)
+>n : Symbol(n, Decl(ex.d.ts, 4, 16))
+}
+

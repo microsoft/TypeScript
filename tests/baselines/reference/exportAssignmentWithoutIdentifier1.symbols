@@ -1,0 +1,16 @@
+=== tests/cases/compiler/exportAssignmentWithoutIdentifier1.ts ===
+function Greeter() {
+>Greeter : Symbol(Greeter, Decl(exportAssignmentWithoutIdentifier1.ts, 0, 0))
+
+    //...
+}
+Greeter.prototype.greet = function () {
+>Greeter.prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+>Greeter : Symbol(Greeter, Decl(exportAssignmentWithoutIdentifier1.ts, 0, 0))
+>prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+
+    //...
+}
+export = new Greeter();
+>Greeter : Symbol(Greeter, Decl(exportAssignmentWithoutIdentifier1.ts, 0, 0))
+

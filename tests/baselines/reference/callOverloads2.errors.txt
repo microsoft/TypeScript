@@ -1,0 +1,46 @@
+tests/cases/compiler/callOverloads2.ts(1,7): error TS2813: Class declaration cannot implement overload list for 'Foo'.
+tests/cases/compiler/callOverloads2.ts(9,10): error TS2814: Function with bodies can only merge with classes that are ambient.
+tests/cases/compiler/callOverloads2.ts(11,10): error TS2389: Function implementation name must be 'Foo'.
+tests/cases/compiler/callOverloads2.ts(11,10): error TS2393: Duplicate function implementation.
+tests/cases/compiler/callOverloads2.ts(12,10): error TS2393: Duplicate function implementation.
+tests/cases/compiler/callOverloads2.ts(14,10): error TS2391: Function implementation is missing or not immediately following the declaration.
+
+
+==== tests/cases/compiler/callOverloads2.ts (6 errors) ====
+    class Foo { // error
+          ~~~
+!!! error TS2813: Class declaration cannot implement overload list for 'Foo'.
+!!! related TS6506 tests/cases/compiler/callOverloads2.ts:1:7: Consider adding a 'declare' modifier to this class.
+        bar1() { /*WScript.Echo("bar1");*/ }
+    
+        constructor(x: any) {
+            // WScript.Echo("Constructor function has executed");
+        }
+    }
+    
+    function Foo(); // error
+             ~~~
+!!! error TS2814: Function with bodies can only merge with classes that are ambient.
+!!! related TS6506 tests/cases/compiler/callOverloads2.ts:1:7: Consider adding a 'declare' modifier to this class.
+    
+    function F1(s:string) {return s;} // error
+             ~~
+!!! error TS2389: Function implementation name must be 'Foo'.
+             ~~
+!!! error TS2393: Duplicate function implementation.
+    function F1(a:any) { return a;} // error
+             ~~
+!!! error TS2393: Duplicate function implementation.
+    
+    function Goo(s:string); // error - no implementation
+             ~~~
+!!! error TS2391: Function implementation is missing or not immediately following the declaration.
+    
+    declare function Gar(s:String); // expect no error
+    
+    var f1 = new Foo("hey");
+    
+    
+    f1.bar1();
+    Foo();
+    

@@ -1,0 +1,76 @@
+=== tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithUndefinedValueAndInvalidOperands.ts ===
+// If one operand is the null or undefined value, it is treated as having the type of the other operand.
+
+function foo(): void { return undefined }
+>foo : Symbol(foo, Decl(additionOperatorWithUndefinedValueAndInvalidOperands.ts, 0, 0))
+>undefined : Symbol(undefined)
+
+var a: boolean;
+>a : Symbol(a, Decl(additionOperatorWithUndefinedValueAndInvalidOperands.ts, 4, 3))
+
+var b: Object;
+>b : Symbol(b, Decl(additionOperatorWithUndefinedValueAndInvalidOperands.ts, 5, 3))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+var c: void;
+>c : Symbol(c, Decl(additionOperatorWithUndefinedValueAndInvalidOperands.ts, 6, 3))
+
+var d: Number;
+>d : Symbol(d, Decl(additionOperatorWithUndefinedValueAndInvalidOperands.ts, 7, 3))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+// undefined + boolean/Object
+var r1 = undefined + a;
+>r1 : Symbol(r1, Decl(additionOperatorWithUndefinedValueAndInvalidOperands.ts, 10, 3))
+>undefined : Symbol(undefined)
+>a : Symbol(a, Decl(additionOperatorWithUndefinedValueAndInvalidOperands.ts, 4, 3))
+
+var r2 = undefined + b;
+>r2 : Symbol(r2, Decl(additionOperatorWithUndefinedValueAndInvalidOperands.ts, 11, 3))
+>undefined : Symbol(undefined)
+>b : Symbol(b, Decl(additionOperatorWithUndefinedValueAndInvalidOperands.ts, 5, 3))
+
+var r3 = undefined + c;
+>r3 : Symbol(r3, Decl(additionOperatorWithUndefinedValueAndInvalidOperands.ts, 12, 3))
+>undefined : Symbol(undefined)
+>c : Symbol(c, Decl(additionOperatorWithUndefinedValueAndInvalidOperands.ts, 6, 3))
+
+var r4 = a + undefined;
+>r4 : Symbol(r4, Decl(additionOperatorWithUndefinedValueAndInvalidOperands.ts, 13, 3))
+>a : Symbol(a, Decl(additionOperatorWithUndefinedValueAndInvalidOperands.ts, 4, 3))
+>undefined : Symbol(undefined)
+
+var r5 = b + undefined;
+>r5 : Symbol(r5, Decl(additionOperatorWithUndefinedValueAndInvalidOperands.ts, 14, 3))
+>b : Symbol(b, Decl(additionOperatorWithUndefinedValueAndInvalidOperands.ts, 5, 3))
+>undefined : Symbol(undefined)
+
+var r6 = undefined + c;
+>r6 : Symbol(r6, Decl(additionOperatorWithUndefinedValueAndInvalidOperands.ts, 15, 3))
+>undefined : Symbol(undefined)
+>c : Symbol(c, Decl(additionOperatorWithUndefinedValueAndInvalidOperands.ts, 6, 3))
+
+// other cases
+var r7 = undefined + d;
+>r7 : Symbol(r7, Decl(additionOperatorWithUndefinedValueAndInvalidOperands.ts, 18, 3))
+>undefined : Symbol(undefined)
+>d : Symbol(d, Decl(additionOperatorWithUndefinedValueAndInvalidOperands.ts, 7, 3))
+
+var r8 = undefined + true;
+>r8 : Symbol(r8, Decl(additionOperatorWithUndefinedValueAndInvalidOperands.ts, 19, 3))
+>undefined : Symbol(undefined)
+
+var r9 = undefined + { a: '' };
+>r9 : Symbol(r9, Decl(additionOperatorWithUndefinedValueAndInvalidOperands.ts, 20, 3))
+>undefined : Symbol(undefined)
+>a : Symbol(a, Decl(additionOperatorWithUndefinedValueAndInvalidOperands.ts, 20, 22))
+
+var r10 = undefined + foo();
+>r10 : Symbol(r10, Decl(additionOperatorWithUndefinedValueAndInvalidOperands.ts, 21, 3))
+>undefined : Symbol(undefined)
+>foo : Symbol(foo, Decl(additionOperatorWithUndefinedValueAndInvalidOperands.ts, 0, 0))
+
+var r11 = undefined + (() => { });
+>r11 : Symbol(r11, Decl(additionOperatorWithUndefinedValueAndInvalidOperands.ts, 22, 3))
+>undefined : Symbol(undefined)
+

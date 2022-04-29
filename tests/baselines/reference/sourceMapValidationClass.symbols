@@ -1,0 +1,49 @@
+=== tests/cases/compiler/sourceMapValidationClass.ts ===
+class Greeter {
+>Greeter : Symbol(Greeter, Decl(sourceMapValidationClass.ts, 0, 0))
+
+    constructor(public greeting: string, ...b: string[]) {
+>greeting : Symbol(Greeter.greeting, Decl(sourceMapValidationClass.ts, 1, 16))
+>b : Symbol(b, Decl(sourceMapValidationClass.ts, 1, 40))
+    }
+    greet() {
+>greet : Symbol(Greeter.greet, Decl(sourceMapValidationClass.ts, 2, 5))
+
+        return "<h1>" + this.greeting + "</h1>";
+>this.greeting : Symbol(Greeter.greeting, Decl(sourceMapValidationClass.ts, 1, 16))
+>this : Symbol(Greeter, Decl(sourceMapValidationClass.ts, 0, 0))
+>greeting : Symbol(Greeter.greeting, Decl(sourceMapValidationClass.ts, 1, 16))
+    }
+    private x: string;
+>x : Symbol(Greeter.x, Decl(sourceMapValidationClass.ts, 5, 5))
+
+    private x1: number = 10;
+>x1 : Symbol(Greeter.x1, Decl(sourceMapValidationClass.ts, 6, 22))
+
+    private fn() {
+>fn : Symbol(Greeter.fn, Decl(sourceMapValidationClass.ts, 7, 28))
+
+        return this.greeting;
+>this.greeting : Symbol(Greeter.greeting, Decl(sourceMapValidationClass.ts, 1, 16))
+>this : Symbol(Greeter, Decl(sourceMapValidationClass.ts, 0, 0))
+>greeting : Symbol(Greeter.greeting, Decl(sourceMapValidationClass.ts, 1, 16))
+    }
+    get greetings() {
+>greetings : Symbol(Greeter.greetings, Decl(sourceMapValidationClass.ts, 10, 5), Decl(sourceMapValidationClass.ts, 13, 5))
+
+        return this.greeting;
+>this.greeting : Symbol(Greeter.greeting, Decl(sourceMapValidationClass.ts, 1, 16))
+>this : Symbol(Greeter, Decl(sourceMapValidationClass.ts, 0, 0))
+>greeting : Symbol(Greeter.greeting, Decl(sourceMapValidationClass.ts, 1, 16))
+    }
+    set greetings(greetings: string) {
+>greetings : Symbol(Greeter.greetings, Decl(sourceMapValidationClass.ts, 10, 5), Decl(sourceMapValidationClass.ts, 13, 5))
+>greetings : Symbol(greetings, Decl(sourceMapValidationClass.ts, 14, 18))
+
+        this.greeting = greetings;
+>this.greeting : Symbol(Greeter.greeting, Decl(sourceMapValidationClass.ts, 1, 16))
+>this : Symbol(Greeter, Decl(sourceMapValidationClass.ts, 0, 0))
+>greeting : Symbol(Greeter.greeting, Decl(sourceMapValidationClass.ts, 1, 16))
+>greetings : Symbol(greetings, Decl(sourceMapValidationClass.ts, 14, 18))
+    }
+}

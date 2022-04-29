@@ -1,0 +1,88 @@
+=== tests/cases/compiler/asyncAwaitWithCapturedBlockScopeVar.ts ===
+async function fn1() {
+>fn1 : Symbol(fn1, Decl(asyncAwaitWithCapturedBlockScopeVar.ts, 0, 0))
+
+    let ar = [];
+>ar : Symbol(ar, Decl(asyncAwaitWithCapturedBlockScopeVar.ts, 1, 7))
+
+    for (let i = 0; i < 1; i++) {
+>i : Symbol(i, Decl(asyncAwaitWithCapturedBlockScopeVar.ts, 2, 12))
+>i : Symbol(i, Decl(asyncAwaitWithCapturedBlockScopeVar.ts, 2, 12))
+>i : Symbol(i, Decl(asyncAwaitWithCapturedBlockScopeVar.ts, 2, 12))
+
+        await 1;
+        ar.push(() => i);
+>ar.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>ar : Symbol(ar, Decl(asyncAwaitWithCapturedBlockScopeVar.ts, 1, 7))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>i : Symbol(i, Decl(asyncAwaitWithCapturedBlockScopeVar.ts, 2, 12))
+    }
+}
+
+async function fn2() {
+>fn2 : Symbol(fn2, Decl(asyncAwaitWithCapturedBlockScopeVar.ts, 6, 1))
+
+    let ar = [];
+>ar : Symbol(ar, Decl(asyncAwaitWithCapturedBlockScopeVar.ts, 9, 7))
+
+    for (let i = 0; i < 1; i++) {
+>i : Symbol(i, Decl(asyncAwaitWithCapturedBlockScopeVar.ts, 10, 12))
+>i : Symbol(i, Decl(asyncAwaitWithCapturedBlockScopeVar.ts, 10, 12))
+>i : Symbol(i, Decl(asyncAwaitWithCapturedBlockScopeVar.ts, 10, 12))
+
+        await 1;
+        ar.push(() => i);
+>ar.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>ar : Symbol(ar, Decl(asyncAwaitWithCapturedBlockScopeVar.ts, 9, 7))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>i : Symbol(i, Decl(asyncAwaitWithCapturedBlockScopeVar.ts, 10, 12))
+
+        break;
+    }
+}
+
+async function fn3() {
+>fn3 : Symbol(fn3, Decl(asyncAwaitWithCapturedBlockScopeVar.ts, 15, 1))
+
+    let ar = [];
+>ar : Symbol(ar, Decl(asyncAwaitWithCapturedBlockScopeVar.ts, 18, 7))
+
+    for (let i = 0; i < 1; i++) {
+>i : Symbol(i, Decl(asyncAwaitWithCapturedBlockScopeVar.ts, 19, 12))
+>i : Symbol(i, Decl(asyncAwaitWithCapturedBlockScopeVar.ts, 19, 12))
+>i : Symbol(i, Decl(asyncAwaitWithCapturedBlockScopeVar.ts, 19, 12))
+
+        await 1;
+        ar.push(() => i);
+>ar.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>ar : Symbol(ar, Decl(asyncAwaitWithCapturedBlockScopeVar.ts, 18, 7))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>i : Symbol(i, Decl(asyncAwaitWithCapturedBlockScopeVar.ts, 19, 12))
+
+        continue;
+    }
+}
+
+async function fn4(): Promise<number> {
+>fn4 : Symbol(fn4, Decl(asyncAwaitWithCapturedBlockScopeVar.ts, 24, 1))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+    let ar = [];
+>ar : Symbol(ar, Decl(asyncAwaitWithCapturedBlockScopeVar.ts, 27, 7))
+
+    for (let i = 0; i < 1; i++) {
+>i : Symbol(i, Decl(asyncAwaitWithCapturedBlockScopeVar.ts, 28, 12))
+>i : Symbol(i, Decl(asyncAwaitWithCapturedBlockScopeVar.ts, 28, 12))
+>i : Symbol(i, Decl(asyncAwaitWithCapturedBlockScopeVar.ts, 28, 12))
+
+        await 1;
+        ar.push(() => i);
+>ar.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>ar : Symbol(ar, Decl(asyncAwaitWithCapturedBlockScopeVar.ts, 27, 7))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>i : Symbol(i, Decl(asyncAwaitWithCapturedBlockScopeVar.ts, 28, 12))
+
+        return 1;
+    }
+}
+

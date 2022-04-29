@@ -1,0 +1,86 @@
+=== tests/cases/compiler/didYouMeanElaborationsForExpressionsWhichCouldBeCalled.ts ===
+class Bar {
+>Bar : Bar
+
+    x!: string;
+>x : string
+}
+
+declare function getNum(): number;
+>getNum : () => number
+
+declare function foo(arg: { x: Bar, y: Date }, item: number, items?: [number, number, number]): void;
+>foo : (arg: {    x: Bar;    y: Date;}, item: number, items?: [number, number, number]) => void
+>arg : { x: Bar; y: Date; }
+>x : Bar
+>y : Date
+>item : number
+>items : [number, number, number]
+
+foo({
+>foo({    x: Bar,    y: Date}, getNum()) : void
+>foo : (arg: { x: Bar; y: Date; }, item: number, items?: [number, number, number]) => void
+>{    x: Bar,    y: Date} : { x: typeof Bar; y: DateConstructor; }
+
+    x: Bar,
+>x : typeof Bar
+>Bar : typeof Bar
+
+    y: Date
+>y : DateConstructor
+>Date : DateConstructor
+
+}, getNum());
+>getNum() : number
+>getNum : () => number
+
+foo({
+>foo({    x: new Bar(),    y: new Date()}, getNum) : void
+>foo : (arg: { x: Bar; y: Date; }, item: number, items?: [number, number, number]) => void
+>{    x: new Bar(),    y: new Date()} : { x: Bar; y: Date; }
+
+    x: new Bar(),
+>x : Bar
+>new Bar() : Bar
+>Bar : typeof Bar
+
+    y: new Date()
+>y : Date
+>new Date() : Date
+>Date : DateConstructor
+
+}, getNum);
+>getNum : () => number
+
+
+foo({
+>foo({    x: new Bar(),    y: new Date()}, getNum(), [    1,    2,    getNum]) : void
+>foo : (arg: { x: Bar; y: Date; }, item: number, items?: [number, number, number]) => void
+>{    x: new Bar(),    y: new Date()} : { x: Bar; y: Date; }
+
+    x: new Bar(),
+>x : Bar
+>new Bar() : Bar
+>Bar : typeof Bar
+
+    y: new Date()
+>y : Date
+>new Date() : Date
+>Date : DateConstructor
+
+}, getNum(), [
+>getNum() : number
+>getNum : () => number
+>[    1,    2,    getNum] : [number, number, () => number]
+
+    1,
+>1 : 1
+
+    2,
+>2 : 2
+
+    getNum
+>getNum : () => number
+
+]);
+

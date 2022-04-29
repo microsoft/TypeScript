@@ -1,0 +1,55 @@
+=== tests/cases/compiler/b.ts ===
+export const zzz = 123;
+>zzz : 123
+>123 : 123
+
+=== tests/cases/compiler/a.ts ===
+import * as B from "./b";
+>B : typeof B
+
+interface B {
+    x: string;
+>x : string
+}
+
+const x: B = { x: "" };
+>x : B
+>{ x: "" } : { x: string; }
+>x : string
+>"" : ""
+
+B.zzz;
+>B.zzz : 123
+>B : typeof B
+>zzz : 123
+
+export { B };
+>B : any
+
+=== tests/cases/compiler/index.ts ===
+import { B } from "./a";
+>B : any
+
+const x: B = { x: "" };
+>x : B
+>{ x: "" } : { x: string; }
+>x : string
+>"" : ""
+
+B.zzz;
+>B.zzz : any
+>B : any
+>zzz : any
+
+import * as OriginalB from "./b";
+>OriginalB : typeof OriginalB
+
+OriginalB.zzz;
+>OriginalB.zzz : 123
+>OriginalB : typeof OriginalB
+>zzz : 123
+
+const y: OriginalB = x;
+>y : OriginalB
+>x : B
+

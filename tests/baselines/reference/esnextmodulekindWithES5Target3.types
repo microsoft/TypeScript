@@ -1,0 +1,22 @@
+=== tests/cases/conformance/externalModules/esnext/esnextmodulekindWithES5Target3.ts ===
+declare function foo(...args: any[]): any;
+>foo : (...args: any[]) => any
+>args : any[]
+
+@foo
+>foo : (...args: any[]) => any
+
+export default class D {
+>D : D
+
+    static s = 0;
+>s : number
+>0 : 0
+
+    p = 1;
+>p : number
+>1 : 1
+
+    method() { }
+>method : () => void
+}

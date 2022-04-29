@@ -1,0 +1,16 @@
+=== tests/cases/compiler/inOperatorWithGeneric.ts ===
+class C<T> {
+>C : Symbol(C, Decl(inOperatorWithGeneric.ts, 0, 0))
+>T : Symbol(T, Decl(inOperatorWithGeneric.ts, 0, 8))
+
+    foo(x:T) {
+>foo : Symbol(C.foo, Decl(inOperatorWithGeneric.ts, 0, 12))
+>x : Symbol(x, Decl(inOperatorWithGeneric.ts, 1, 8))
+>T : Symbol(T, Decl(inOperatorWithGeneric.ts, 0, 8))
+
+        for (var p in x) {
+>p : Symbol(p, Decl(inOperatorWithGeneric.ts, 2, 16))
+>x : Symbol(x, Decl(inOperatorWithGeneric.ts, 1, 8))
+        }
+    }
+}

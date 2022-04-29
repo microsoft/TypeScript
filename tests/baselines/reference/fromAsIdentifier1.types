@@ -1,0 +1,4 @@
+=== tests/cases/compiler/fromAsIdentifier1.ts ===
+var from;
+>from : any
+

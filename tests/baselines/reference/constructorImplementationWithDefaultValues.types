@@ -1,0 +1,48 @@
+=== tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorImplementationWithDefaultValues.ts ===
+class C {
+>C : C
+
+    constructor(x);
+>x : any
+
+    constructor(x = 1) {
+>x : number
+>1 : 1
+
+        var y = x;
+>y : number
+>x : number
+    }
+}
+
+class D<T> {
+>D : D<T>
+
+    constructor(x);
+>x : any
+
+    constructor(x:T = null) {
+>x : T
+>null : null
+
+        var y = x;
+>y : T
+>x : T
+    }
+}
+
+class E<T extends Date> {
+>E : E<T>
+
+    constructor(x);
+>x : any
+
+    constructor(x: T = null) {
+>x : T
+>null : null
+
+        var y = x;
+>y : T
+>x : T
+    }
+}

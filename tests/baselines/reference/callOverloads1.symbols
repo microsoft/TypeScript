@@ -1,0 +1,39 @@
+=== tests/cases/compiler/callOverloads1.ts ===
+class Foo { // error
+>Foo : Symbol(Foo, Decl(callOverloads1.ts, 6, 1), Decl(callOverloads1.ts, 0, 0))
+
+    bar1() { /*WScript.Echo("bar1");*/ }
+>bar1 : Symbol(Foo.bar1, Decl(callOverloads1.ts, 0, 11))
+
+    constructor(x: any) {
+>x : Symbol(x, Decl(callOverloads1.ts, 3, 16))
+
+        // WScript.Echo("Constructor function has executed");
+    }
+}
+
+function Foo(); // error
+>Foo : Symbol(Foo, Decl(callOverloads1.ts, 6, 1), Decl(callOverloads1.ts, 0, 0))
+
+function F1(s:string);
+>F1 : Symbol(F1, Decl(callOverloads1.ts, 8, 15), Decl(callOverloads1.ts, 9, 22))
+>s : Symbol(s, Decl(callOverloads1.ts, 9, 12))
+
+function F1(a:any) { return a;}
+>F1 : Symbol(F1, Decl(callOverloads1.ts, 8, 15), Decl(callOverloads1.ts, 9, 22))
+>a : Symbol(a, Decl(callOverloads1.ts, 10, 12))
+>a : Symbol(a, Decl(callOverloads1.ts, 10, 12))
+
+var f1 = new Foo("hey");
+>f1 : Symbol(f1, Decl(callOverloads1.ts, 12, 3))
+>Foo : Symbol(Foo, Decl(callOverloads1.ts, 6, 1), Decl(callOverloads1.ts, 0, 0))
+
+
+f1.bar1();
+>f1.bar1 : Symbol(Foo.bar1, Decl(callOverloads1.ts, 0, 11))
+>f1 : Symbol(f1, Decl(callOverloads1.ts, 12, 3))
+>bar1 : Symbol(Foo.bar1, Decl(callOverloads1.ts, 0, 11))
+
+Foo();
+>Foo : Symbol(Foo, Decl(callOverloads1.ts, 6, 1), Decl(callOverloads1.ts, 0, 0))
+

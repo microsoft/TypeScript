@@ -1,0 +1,14 @@
+=== tests/cases/compiler/asyncImportNestedYield.ts ===
+async function* foo() {
+>foo : () => AsyncGenerator<string, void, string>
+
+    import((await import(yield "foo")).default);
+>import((await import(yield "foo")).default) : Promise<any>
+>(await import(yield "foo")).default : any
+>(await import(yield "foo")) : any
+>await import(yield "foo") : any
+>import(yield "foo") : Promise<any>
+>yield "foo" : any
+>"foo" : "foo"
+>default : any
+}

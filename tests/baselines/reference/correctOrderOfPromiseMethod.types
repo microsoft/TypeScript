@@ -1,0 +1,84 @@
+=== tests/cases/compiler/correctOrderOfPromiseMethod.ts ===
+interface A {
+    id: string
+>id : string
+}
+
+interface B {
+    id: string
+>id : string
+
+    fieldB: string
+>fieldB : string
+}
+
+async function countEverything(): Promise<number> {
+>countEverything : () => Promise<number>
+
+    const providerA = async (): Promise<A[]> => { return [] }
+>providerA : () => Promise<A[]>
+>async (): Promise<A[]> => { return [] } : () => Promise<A[]>
+>[] : undefined[]
+
+    const providerB = async (): Promise<B[]> => { return [] }
+>providerB : () => Promise<B[]>
+>async (): Promise<B[]> => { return [] } : () => Promise<B[]>
+>[] : undefined[]
+
+    const [resultA, resultB] = await Promise.all([
+>resultA : A[]
+>resultB : B[]
+>await Promise.all([        providerA(),        providerB(),    ]) : [A[], B[]]
+>Promise.all([        providerA(),        providerB(),    ]) : Promise<[A[], B[]]>
+>Promise.all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
+>Promise : PromiseConstructor
+>all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
+>[        providerA(),        providerB(),    ] : [Promise<A[]>, Promise<B[]>]
+
+        providerA(),
+>providerA() : Promise<A[]>
+>providerA : () => Promise<A[]>
+
+        providerB(),
+>providerB() : Promise<B[]>
+>providerB : () => Promise<B[]>
+
+    ]);
+
+    const dataA: A[] = resultA;
+>dataA : A[]
+>resultA : A[]
+
+    const dataB: B[] = resultB;
+>dataB : B[]
+>resultB : B[]
+
+    if (dataA && dataB) {
+>dataA && dataB : B[]
+>dataA : A[]
+>dataB : B[]
+
+        return dataA.length + dataB.length;
+>dataA.length + dataB.length : number
+>dataA.length : number
+>dataA : A[]
+>length : number
+>dataB.length : number
+>dataB : B[]
+>length : number
+    }
+    return 0;
+>0 : 0
+}
+
+// #31179
+
+const expected: Promise<["a", "b", "c"]> = Promise.all(undefined as readonly ["a", "b", "c"]);
+>expected : Promise<["a", "b", "c"]>
+>Promise.all(undefined as readonly ["a", "b", "c"]) : Promise<["a", "b", "c"]>
+>Promise.all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
+>Promise : PromiseConstructor
+>all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
+>undefined as readonly ["a", "b", "c"] : readonly ["a", "b", "c"]
+>undefined : undefined
+

@@ -1,0 +1,75 @@
+=== tests/cases/compiler/declFilePrivateMethodOverloads.ts ===
+interface IContext {
+>IContext : Symbol(IContext, Decl(declFilePrivateMethodOverloads.ts, 0, 0))
+
+    someMethod();
+>someMethod : Symbol(IContext.someMethod, Decl(declFilePrivateMethodOverloads.ts, 0, 20))
+}
+class c1 {
+>c1 : Symbol(c1, Decl(declFilePrivateMethodOverloads.ts, 2, 1))
+
+    private _forEachBindingContext(bindingContext: IContext, fn: (bindingContext: IContext) => void);
+>_forEachBindingContext : Symbol(c1._forEachBindingContext, Decl(declFilePrivateMethodOverloads.ts, 3, 10), Decl(declFilePrivateMethodOverloads.ts, 4, 101), Decl(declFilePrivateMethodOverloads.ts, 5, 113))
+>bindingContext : Symbol(bindingContext, Decl(declFilePrivateMethodOverloads.ts, 4, 35))
+>IContext : Symbol(IContext, Decl(declFilePrivateMethodOverloads.ts, 0, 0))
+>fn : Symbol(fn, Decl(declFilePrivateMethodOverloads.ts, 4, 60))
+>bindingContext : Symbol(bindingContext, Decl(declFilePrivateMethodOverloads.ts, 4, 66))
+>IContext : Symbol(IContext, Decl(declFilePrivateMethodOverloads.ts, 0, 0))
+
+    private _forEachBindingContext(bindingContextArray: Array<IContext>, fn: (bindingContext: IContext) => void);
+>_forEachBindingContext : Symbol(c1._forEachBindingContext, Decl(declFilePrivateMethodOverloads.ts, 3, 10), Decl(declFilePrivateMethodOverloads.ts, 4, 101), Decl(declFilePrivateMethodOverloads.ts, 5, 113))
+>bindingContextArray : Symbol(bindingContextArray, Decl(declFilePrivateMethodOverloads.ts, 5, 35))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>IContext : Symbol(IContext, Decl(declFilePrivateMethodOverloads.ts, 0, 0))
+>fn : Symbol(fn, Decl(declFilePrivateMethodOverloads.ts, 5, 72))
+>bindingContext : Symbol(bindingContext, Decl(declFilePrivateMethodOverloads.ts, 5, 78))
+>IContext : Symbol(IContext, Decl(declFilePrivateMethodOverloads.ts, 0, 0))
+
+    private _forEachBindingContext(context, fn: (bindingContext: IContext) => void): void {
+>_forEachBindingContext : Symbol(c1._forEachBindingContext, Decl(declFilePrivateMethodOverloads.ts, 3, 10), Decl(declFilePrivateMethodOverloads.ts, 4, 101), Decl(declFilePrivateMethodOverloads.ts, 5, 113))
+>context : Symbol(context, Decl(declFilePrivateMethodOverloads.ts, 6, 35))
+>fn : Symbol(fn, Decl(declFilePrivateMethodOverloads.ts, 6, 43))
+>bindingContext : Symbol(bindingContext, Decl(declFilePrivateMethodOverloads.ts, 6, 49))
+>IContext : Symbol(IContext, Decl(declFilePrivateMethodOverloads.ts, 0, 0))
+
+        // Function here
+    }
+
+    private overloadWithArityDifference(bindingContext: IContext);
+>overloadWithArityDifference : Symbol(c1.overloadWithArityDifference, Decl(declFilePrivateMethodOverloads.ts, 8, 5), Decl(declFilePrivateMethodOverloads.ts, 10, 66), Decl(declFilePrivateMethodOverloads.ts, 11, 118))
+>bindingContext : Symbol(bindingContext, Decl(declFilePrivateMethodOverloads.ts, 10, 40))
+>IContext : Symbol(IContext, Decl(declFilePrivateMethodOverloads.ts, 0, 0))
+
+    private overloadWithArityDifference(bindingContextArray: Array<IContext>, fn: (bindingContext: IContext) => void);
+>overloadWithArityDifference : Symbol(c1.overloadWithArityDifference, Decl(declFilePrivateMethodOverloads.ts, 8, 5), Decl(declFilePrivateMethodOverloads.ts, 10, 66), Decl(declFilePrivateMethodOverloads.ts, 11, 118))
+>bindingContextArray : Symbol(bindingContextArray, Decl(declFilePrivateMethodOverloads.ts, 11, 40))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>IContext : Symbol(IContext, Decl(declFilePrivateMethodOverloads.ts, 0, 0))
+>fn : Symbol(fn, Decl(declFilePrivateMethodOverloads.ts, 11, 77))
+>bindingContext : Symbol(bindingContext, Decl(declFilePrivateMethodOverloads.ts, 11, 83))
+>IContext : Symbol(IContext, Decl(declFilePrivateMethodOverloads.ts, 0, 0))
+
+    private overloadWithArityDifference(context): void {
+>overloadWithArityDifference : Symbol(c1.overloadWithArityDifference, Decl(declFilePrivateMethodOverloads.ts, 8, 5), Decl(declFilePrivateMethodOverloads.ts, 10, 66), Decl(declFilePrivateMethodOverloads.ts, 11, 118))
+>context : Symbol(context, Decl(declFilePrivateMethodOverloads.ts, 12, 40))
+
+        // Function here
+    }
+}
+declare class c2 {
+>c2 : Symbol(c2, Decl(declFilePrivateMethodOverloads.ts, 15, 1))
+
+    private overload1(context, fn);
+>overload1 : Symbol(c2.overload1, Decl(declFilePrivateMethodOverloads.ts, 16, 18))
+>context : Symbol(context, Decl(declFilePrivateMethodOverloads.ts, 17, 22))
+>fn : Symbol(fn, Decl(declFilePrivateMethodOverloads.ts, 17, 30))
+
+    private overload2(context);
+>overload2 : Symbol(c2.overload2, Decl(declFilePrivateMethodOverloads.ts, 17, 35), Decl(declFilePrivateMethodOverloads.ts, 19, 31))
+>context : Symbol(context, Decl(declFilePrivateMethodOverloads.ts, 19, 22))
+
+    private overload2(context, fn);
+>overload2 : Symbol(c2.overload2, Decl(declFilePrivateMethodOverloads.ts, 17, 35), Decl(declFilePrivateMethodOverloads.ts, 19, 31))
+>context : Symbol(context, Decl(declFilePrivateMethodOverloads.ts, 20, 22))
+>fn : Symbol(fn, Decl(declFilePrivateMethodOverloads.ts, 20, 30))
+}

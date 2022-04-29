@@ -1,0 +1,8 @@
+tests/cases/conformance/es6/for-ofStatements/for-of7.ts(1,1): error TS2304: Cannot find name 'v'.
+
+
+==== tests/cases/conformance/es6/for-ofStatements/for-of7.ts (1 errors) ====
+    v;
+    ~
+!!! error TS2304: Cannot find name 'v'.
+    for (let v of [0]) { }

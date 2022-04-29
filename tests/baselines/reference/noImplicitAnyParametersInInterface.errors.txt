@@ -1,0 +1,134 @@
+tests/cases/compiler/noImplicitAnyParametersInInterface.ts(3,5): error TS7020: Call signature, which lacks return-type annotation, implicitly has an 'any' return type.
+tests/cases/compiler/noImplicitAnyParametersInInterface.ts(4,5): error TS7020: Call signature, which lacks return-type annotation, implicitly has an 'any' return type.
+tests/cases/compiler/noImplicitAnyParametersInInterface.ts(4,6): error TS7006: Parameter 'x1' implicitly has an 'any' type.
+tests/cases/compiler/noImplicitAnyParametersInInterface.ts(5,6): error TS7006: Parameter 'x2' implicitly has an 'any' type.
+tests/cases/compiler/noImplicitAnyParametersInInterface.ts(5,22): error TS7006: Parameter 'z2' implicitly has an 'any' type.
+tests/cases/compiler/noImplicitAnyParametersInInterface.ts(11,8): error TS7006: Parameter 'x' implicitly has an 'any' type.
+tests/cases/compiler/noImplicitAnyParametersInInterface.ts(17,8): error TS7006: Parameter 'x' implicitly has an 'any' type.
+tests/cases/compiler/noImplicitAnyParametersInInterface.ts(17,11): error TS7006: Parameter 'y' implicitly has an 'any' type.
+tests/cases/compiler/noImplicitAnyParametersInInterface.ts(17,14): error TS7006: Parameter 'z' implicitly has an 'any' type.
+tests/cases/compiler/noImplicitAnyParametersInInterface.ts(20,8): error TS7006: Parameter 'x' implicitly has an 'any' type.
+tests/cases/compiler/noImplicitAnyParametersInInterface.ts(20,19): error TS7006: Parameter 'z' implicitly has an 'any' type.
+tests/cases/compiler/noImplicitAnyParametersInInterface.ts(23,8): error TS7019: Rest parameter 'r' implicitly has an 'any[]' type.
+tests/cases/compiler/noImplicitAnyParametersInInterface.ts(26,8): error TS7006: Parameter 'x' implicitly has an 'any' type.
+tests/cases/compiler/noImplicitAnyParametersInInterface.ts(26,11): error TS7019: Rest parameter 'r' implicitly has an 'any[]' type.
+tests/cases/compiler/noImplicitAnyParametersInInterface.ts(29,8): error TS7006: Parameter 'x1' implicitly has an 'any' type.
+tests/cases/compiler/noImplicitAnyParametersInInterface.ts(30,20): error TS7006: Parameter 'y2' implicitly has an 'any' type.
+tests/cases/compiler/noImplicitAnyParametersInInterface.ts(31,8): error TS7006: Parameter 'x3' implicitly has an 'any' type.
+tests/cases/compiler/noImplicitAnyParametersInInterface.ts(31,12): error TS7006: Parameter 'y3' implicitly has an 'any' type.
+tests/cases/compiler/noImplicitAnyParametersInInterface.ts(37,11): error TS7006: Parameter 'x' implicitly has an 'any' type.
+tests/cases/compiler/noImplicitAnyParametersInInterface.ts(40,11): error TS7006: Parameter 'x' implicitly has an 'any' type.
+tests/cases/compiler/noImplicitAnyParametersInInterface.ts(40,14): error TS7006: Parameter 'y' implicitly has an 'any' type.
+tests/cases/compiler/noImplicitAnyParametersInInterface.ts(40,17): error TS7006: Parameter 'z' implicitly has an 'any' type.
+tests/cases/compiler/noImplicitAnyParametersInInterface.ts(43,11): error TS7006: Parameter 'x' implicitly has an 'any' type.
+tests/cases/compiler/noImplicitAnyParametersInInterface.ts(43,22): error TS7006: Parameter 'z' implicitly has an 'any' type.
+tests/cases/compiler/noImplicitAnyParametersInInterface.ts(46,11): error TS7019: Rest parameter 'r' implicitly has an 'any[]' type.
+tests/cases/compiler/noImplicitAnyParametersInInterface.ts(49,11): error TS7006: Parameter 'x' implicitly has an 'any' type.
+tests/cases/compiler/noImplicitAnyParametersInInterface.ts(49,14): error TS7019: Rest parameter 'r' implicitly has an 'any[]' type.
+
+
+==== tests/cases/compiler/noImplicitAnyParametersInInterface.ts (27 errors) ====
+    interface I {
+        // Implicit-'any' errors for first two call signatures, x1, x2, z2.
+        ();
+        ~~~
+!!! error TS7020: Call signature, which lacks return-type annotation, implicitly has an 'any' return type.
+        (x1);
+        ~~~~~
+!!! error TS7020: Call signature, which lacks return-type annotation, implicitly has an 'any' return type.
+         ~~
+!!! error TS7006: Parameter 'x1' implicitly has an 'any' type.
+        (x2, y2: string, z2): any;
+         ~~
+!!! error TS7006: Parameter 'x2' implicitly has an 'any' type.
+                         ~~
+!!! error TS7006: Parameter 'z2' implicitly has an 'any' type.
+    
+        // No implicit-'any' errors.
+        f1(): void;
+    
+        // Implicit-'any' errors for x.
+        f2(x): void;
+           ~
+!!! error TS7006: Parameter 'x' implicitly has an 'any' type.
+    
+        // No implicit-'any' errors.
+        f3(x: any): void;
+    
+        // Implicit-'any' errors for x, y, and z.
+        f4(x, y, z): void;
+           ~
+!!! error TS7006: Parameter 'x' implicitly has an 'any' type.
+              ~
+!!! error TS7006: Parameter 'y' implicitly has an 'any' type.
+                 ~
+!!! error TS7006: Parameter 'z' implicitly has an 'any' type.
+    
+        // Implicit-'any' errors for x, and z.
+        f5(x, y: any, z): void;
+           ~
+!!! error TS7006: Parameter 'x' implicitly has an 'any' type.
+                      ~
+!!! error TS7006: Parameter 'z' implicitly has an 'any' type.
+    
+        // Implicit-'any[]' errors for r.
+        f6(...r): void;
+           ~~~~
+!!! error TS7019: Rest parameter 'r' implicitly has an 'any[]' type.
+    
+        // Implicit-'any'/'any[]' errors for x, r.
+        f7(x, ...r): void;
+           ~
+!!! error TS7006: Parameter 'x' implicitly has an 'any' type.
+              ~~~~
+!!! error TS7019: Rest parameter 'r' implicitly has an 'any[]' type.
+    
+        // Implicit-'any' errors for x1, y2, x3, and y3.
+        f8(x1, y1: number): any;
+           ~~
+!!! error TS7006: Parameter 'x1' implicitly has an 'any' type.
+        f8(x2: string, y2): any;
+                       ~~
+!!! error TS7006: Parameter 'y2' implicitly has an 'any' type.
+        f8(x3, y3): any;
+           ~~
+!!! error TS7006: Parameter 'x3' implicitly has an 'any' type.
+               ~~
+!!! error TS7006: Parameter 'y3' implicitly has an 'any' type.
+    
+        // No implicit-'any' errors.
+        f9: () => string;
+    
+        // Implicit-'any' errors for x.
+        f10: (x) => string;
+              ~
+!!! error TS7006: Parameter 'x' implicitly has an 'any' type.
+    
+        // Implicit-'any' errors for x, y, and z.
+        f11: (x, y, z) => string;
+              ~
+!!! error TS7006: Parameter 'x' implicitly has an 'any' type.
+                 ~
+!!! error TS7006: Parameter 'y' implicitly has an 'any' type.
+                    ~
+!!! error TS7006: Parameter 'z' implicitly has an 'any' type.
+    
+        // Implicit-'any' errors for x and z.
+        f12: (x, y: any, z) => string;
+              ~
+!!! error TS7006: Parameter 'x' implicitly has an 'any' type.
+                         ~
+!!! error TS7006: Parameter 'z' implicitly has an 'any' type.
+    
+        // Implicit-'any[]' error for r.
+        f13: (...r) => string;
+              ~~~~
+!!! error TS7019: Rest parameter 'r' implicitly has an 'any[]' type.
+    
+        // Implicit-'any'/'any[]' errors for x, r.
+        f14: (x, ...r) => string;
+              ~
+!!! error TS7006: Parameter 'x' implicitly has an 'any' type.
+                 ~~~~
+!!! error TS7019: Rest parameter 'r' implicitly has an 'any[]' type.
+    }

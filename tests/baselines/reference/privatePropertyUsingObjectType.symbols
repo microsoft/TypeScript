@@ -1,0 +1,28 @@
+=== tests/cases/compiler/privatePropertyUsingObjectType.ts ===
+export class FilterManager {
+>FilterManager : Symbol(FilterManager, Decl(privatePropertyUsingObjectType.ts, 0, 0))
+
+    private _filterProviders: { index: IFilterProvider; };
+>_filterProviders : Symbol(FilterManager._filterProviders, Decl(privatePropertyUsingObjectType.ts, 0, 28))
+>index : Symbol(index, Decl(privatePropertyUsingObjectType.ts, 1, 31))
+>IFilterProvider : Symbol(IFilterProvider, Decl(privatePropertyUsingObjectType.ts, 5, 1))
+
+    private _filterProviders2: { [index: number]: IFilterProvider; };
+>_filterProviders2 : Symbol(FilterManager._filterProviders2, Decl(privatePropertyUsingObjectType.ts, 1, 58))
+>index : Symbol(index, Decl(privatePropertyUsingObjectType.ts, 2, 34))
+>IFilterProvider : Symbol(IFilterProvider, Decl(privatePropertyUsingObjectType.ts, 5, 1))
+
+    private _filterProviders3: { (index: number): IFilterProvider; };
+>_filterProviders3 : Symbol(FilterManager._filterProviders3, Decl(privatePropertyUsingObjectType.ts, 2, 69))
+>index : Symbol(index, Decl(privatePropertyUsingObjectType.ts, 3, 34))
+>IFilterProvider : Symbol(IFilterProvider, Decl(privatePropertyUsingObjectType.ts, 5, 1))
+
+    private _filterProviders4: (index: number) => IFilterProvider;
+>_filterProviders4 : Symbol(FilterManager._filterProviders4, Decl(privatePropertyUsingObjectType.ts, 3, 69))
+>index : Symbol(index, Decl(privatePropertyUsingObjectType.ts, 4, 32))
+>IFilterProvider : Symbol(IFilterProvider, Decl(privatePropertyUsingObjectType.ts, 5, 1))
+}
+export interface IFilterProvider {
+>IFilterProvider : Symbol(IFilterProvider, Decl(privatePropertyUsingObjectType.ts, 5, 1))
+}
+

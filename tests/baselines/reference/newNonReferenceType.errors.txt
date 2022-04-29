@@ -1,0 +1,12 @@
+tests/cases/compiler/newNonReferenceType.ts(1,13): error TS2693: 'any' only refers to a type, but is being used as a value here.
+tests/cases/compiler/newNonReferenceType.ts(2,13): error TS2693: 'boolean' only refers to a type, but is being used as a value here.
+
+
+==== tests/cases/compiler/newNonReferenceType.ts (2 errors) ====
+    var a = new any();
+                ~~~
+!!! error TS2693: 'any' only refers to a type, but is being used as a value here.
+    var b = new boolean(); // error
+                ~~~~~~~
+!!! error TS2693: 'boolean' only refers to a type, but is being used as a value here.
+    

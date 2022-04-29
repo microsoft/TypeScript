@@ -1,0 +1,106 @@
+=== tests/cases/conformance/es6/destructuring/destructuringParameterProperties2.ts ===
+class C1 {
+>C1 : Symbol(C1, Decl(destructuringParameterProperties2.ts, 0, 0))
+
+    constructor(private k: number, private [a, b, c]: [number, string, boolean]) {
+>k : Symbol(C1.k, Decl(destructuringParameterProperties2.ts, 1, 16))
+>a : Symbol(a, Decl(destructuringParameterProperties2.ts, 1, 44))
+>b : Symbol(b, Decl(destructuringParameterProperties2.ts, 1, 46))
+>c : Symbol(c, Decl(destructuringParameterProperties2.ts, 1, 49))
+
+        if ((b === undefined && c === undefined) || (this.b === undefined && this.c === undefined)) {
+>b : Symbol(b, Decl(destructuringParameterProperties2.ts, 1, 46))
+>undefined : Symbol(undefined)
+>c : Symbol(c, Decl(destructuringParameterProperties2.ts, 1, 49))
+>undefined : Symbol(undefined)
+>this : Symbol(C1, Decl(destructuringParameterProperties2.ts, 0, 0))
+>undefined : Symbol(undefined)
+>this : Symbol(C1, Decl(destructuringParameterProperties2.ts, 0, 0))
+>undefined : Symbol(undefined)
+
+            this.a = a || k;
+>this : Symbol(C1, Decl(destructuringParameterProperties2.ts, 0, 0))
+>a : Symbol(a, Decl(destructuringParameterProperties2.ts, 1, 44))
+>k : Symbol(k, Decl(destructuringParameterProperties2.ts, 1, 16))
+        }
+    }
+
+    public getA() {
+>getA : Symbol(C1.getA, Decl(destructuringParameterProperties2.ts, 5, 5))
+
+        return this.a
+>this : Symbol(C1, Decl(destructuringParameterProperties2.ts, 0, 0))
+    }
+
+    public getB() {
+>getB : Symbol(C1.getB, Decl(destructuringParameterProperties2.ts, 9, 5))
+
+        return this.b
+>this : Symbol(C1, Decl(destructuringParameterProperties2.ts, 0, 0))
+    }
+
+    public getC() {
+>getC : Symbol(C1.getC, Decl(destructuringParameterProperties2.ts, 13, 5))
+
+        return this.c;
+>this : Symbol(C1, Decl(destructuringParameterProperties2.ts, 0, 0))
+    }
+}
+
+var x = new C1(undefined, [0, undefined, ""]);
+>x : Symbol(x, Decl(destructuringParameterProperties2.ts, 20, 3))
+>C1 : Symbol(C1, Decl(destructuringParameterProperties2.ts, 0, 0))
+>undefined : Symbol(undefined)
+>undefined : Symbol(undefined)
+
+var [x_a, x_b, x_c] = [x.getA(), x.getB(), x.getC()];
+>x_a : Symbol(x_a, Decl(destructuringParameterProperties2.ts, 21, 5))
+>x_b : Symbol(x_b, Decl(destructuringParameterProperties2.ts, 21, 9))
+>x_c : Symbol(x_c, Decl(destructuringParameterProperties2.ts, 21, 14))
+>x.getA : Symbol(C1.getA, Decl(destructuringParameterProperties2.ts, 5, 5))
+>x : Symbol(x, Decl(destructuringParameterProperties2.ts, 20, 3))
+>getA : Symbol(C1.getA, Decl(destructuringParameterProperties2.ts, 5, 5))
+>x.getB : Symbol(C1.getB, Decl(destructuringParameterProperties2.ts, 9, 5))
+>x : Symbol(x, Decl(destructuringParameterProperties2.ts, 20, 3))
+>getB : Symbol(C1.getB, Decl(destructuringParameterProperties2.ts, 9, 5))
+>x.getC : Symbol(C1.getC, Decl(destructuringParameterProperties2.ts, 13, 5))
+>x : Symbol(x, Decl(destructuringParameterProperties2.ts, 20, 3))
+>getC : Symbol(C1.getC, Decl(destructuringParameterProperties2.ts, 13, 5))
+
+var y = new C1(10, [0, "", true]);
+>y : Symbol(y, Decl(destructuringParameterProperties2.ts, 23, 3))
+>C1 : Symbol(C1, Decl(destructuringParameterProperties2.ts, 0, 0))
+
+var [y_a, y_b, y_c] = [y.getA(), y.getB(), y.getC()];
+>y_a : Symbol(y_a, Decl(destructuringParameterProperties2.ts, 24, 5))
+>y_b : Symbol(y_b, Decl(destructuringParameterProperties2.ts, 24, 9))
+>y_c : Symbol(y_c, Decl(destructuringParameterProperties2.ts, 24, 14))
+>y.getA : Symbol(C1.getA, Decl(destructuringParameterProperties2.ts, 5, 5))
+>y : Symbol(y, Decl(destructuringParameterProperties2.ts, 23, 3))
+>getA : Symbol(C1.getA, Decl(destructuringParameterProperties2.ts, 5, 5))
+>y.getB : Symbol(C1.getB, Decl(destructuringParameterProperties2.ts, 9, 5))
+>y : Symbol(y, Decl(destructuringParameterProperties2.ts, 23, 3))
+>getB : Symbol(C1.getB, Decl(destructuringParameterProperties2.ts, 9, 5))
+>y.getC : Symbol(C1.getC, Decl(destructuringParameterProperties2.ts, 13, 5))
+>y : Symbol(y, Decl(destructuringParameterProperties2.ts, 23, 3))
+>getC : Symbol(C1.getC, Decl(destructuringParameterProperties2.ts, 13, 5))
+
+var z = new C1(10, [undefined, "", null]);
+>z : Symbol(z, Decl(destructuringParameterProperties2.ts, 26, 3))
+>C1 : Symbol(C1, Decl(destructuringParameterProperties2.ts, 0, 0))
+>undefined : Symbol(undefined)
+
+var [z_a, z_b, z_c] = [z.getA(), z.getB(), z.getC()];
+>z_a : Symbol(z_a, Decl(destructuringParameterProperties2.ts, 27, 5))
+>z_b : Symbol(z_b, Decl(destructuringParameterProperties2.ts, 27, 9))
+>z_c : Symbol(z_c, Decl(destructuringParameterProperties2.ts, 27, 14))
+>z.getA : Symbol(C1.getA, Decl(destructuringParameterProperties2.ts, 5, 5))
+>z : Symbol(z, Decl(destructuringParameterProperties2.ts, 26, 3))
+>getA : Symbol(C1.getA, Decl(destructuringParameterProperties2.ts, 5, 5))
+>z.getB : Symbol(C1.getB, Decl(destructuringParameterProperties2.ts, 9, 5))
+>z : Symbol(z, Decl(destructuringParameterProperties2.ts, 26, 3))
+>getB : Symbol(C1.getB, Decl(destructuringParameterProperties2.ts, 9, 5))
+>z.getC : Symbol(C1.getC, Decl(destructuringParameterProperties2.ts, 13, 5))
+>z : Symbol(z, Decl(destructuringParameterProperties2.ts, 26, 3))
+>getC : Symbol(C1.getC, Decl(destructuringParameterProperties2.ts, 13, 5))
+

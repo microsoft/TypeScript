@@ -1,0 +1,129 @@
+tests/cases/conformance/jsdoc/b.js(4,20): error TS2352: Conversion of type 'number' to type 'string' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+tests/cases/conformance/jsdoc/b.js(45,23): error TS2352: Conversion of type 'SomeOther' to type 'SomeBase' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Property 'p' is missing in type 'SomeOther' but required in type 'SomeBase'.
+tests/cases/conformance/jsdoc/b.js(49,26): error TS2352: Conversion of type 'SomeOther' to type 'SomeDerived' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Type 'SomeOther' is missing the following properties from type 'SomeDerived': x, p
+tests/cases/conformance/jsdoc/b.js(51,24): error TS2352: Conversion of type 'SomeDerived' to type 'SomeOther' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Property 'q' is missing in type 'SomeDerived' but required in type 'SomeOther'.
+tests/cases/conformance/jsdoc/b.js(52,24): error TS2352: Conversion of type 'SomeBase' to type 'SomeOther' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Property 'q' is missing in type 'SomeBase' but required in type 'SomeOther'.
+tests/cases/conformance/jsdoc/b.js(58,1): error TS2322: Type 'SomeFakeClass' is not assignable to type 'SomeBase'.
+  Types of property 'p' are incompatible.
+    Type 'string | number' is not assignable to type 'number'.
+      Type 'string' is not assignable to type 'number'.
+tests/cases/conformance/jsdoc/b.js(66,15): error TS1228: A type predicate is only allowed in return type position for functions and methods.
+tests/cases/conformance/jsdoc/b.js(66,38): error TS2454: Variable 'numOrStr' is used before being assigned.
+tests/cases/conformance/jsdoc/b.js(67,2): error TS2322: Type 'string | number' is not assignable to type 'string'.
+  Type 'number' is not assignable to type 'string'.
+tests/cases/conformance/jsdoc/b.js(67,8): error TS2454: Variable 'numOrStr' is used before being assigned.
+
+
+==== tests/cases/conformance/jsdoc/a.ts (0 errors) ====
+    var W: string;
+    
+==== tests/cases/conformance/jsdoc/b.js (10 errors) ====
+    // @ts-check
+    var W = /** @type {string} */(/** @type {*} */ (4));
+    
+    var W = /** @type {string} */(4); // Error
+                       ~~~~~~
+!!! error TS2352: Conversion of type 'number' to type 'string' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+    
+    /** @type {*} */
+    var a;
+    
+    /** @type {string} */
+    var s;
+    
+    var a = /** @type {*} */("" + 4);
+    var s = "" + /** @type {*} */(4);
+    
+    class SomeBase {
+        constructor() {
+            this.p = 42;
+        }
+    }
+    class SomeDerived extends SomeBase {
+        constructor() {
+            super();
+            this.x = 42;
+        }
+    }
+    class SomeOther {
+        constructor() {
+            this.q = 42;
+        }
+    }
+    
+    function SomeFakeClass() {
+        /** @type {string|number} */
+        this.p = "bar";
+    }
+    
+    // Type assertion should check for assignability in either direction
+    var someBase = new SomeBase();
+    var someDerived = new SomeDerived();
+    var someOther = new SomeOther();
+    var someFakeClass = new SomeFakeClass();
+    
+    someBase = /** @type {SomeBase} */(someDerived);
+    someBase = /** @type {SomeBase} */(someBase);
+    someBase = /** @type {SomeBase} */(someOther); // Error
+                          ~~~~~~~~
+!!! error TS2352: Conversion of type 'SomeOther' to type 'SomeBase' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+!!! error TS2352:   Property 'p' is missing in type 'SomeOther' but required in type 'SomeBase'.
+!!! related TS2728 tests/cases/conformance/jsdoc/b.js:17:9: 'p' is declared here.
+    
+    someDerived = /** @type {SomeDerived} */(someDerived);
+    someDerived = /** @type {SomeDerived} */(someBase);
+    someDerived = /** @type {SomeDerived} */(someOther); // Error
+                             ~~~~~~~~~~~
+!!! error TS2352: Conversion of type 'SomeOther' to type 'SomeDerived' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+!!! error TS2352:   Type 'SomeOther' is missing the following properties from type 'SomeDerived': x, p
+    
+    someOther = /** @type {SomeOther} */(someDerived); // Error
+                           ~~~~~~~~~
+!!! error TS2352: Conversion of type 'SomeDerived' to type 'SomeOther' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+!!! error TS2352:   Property 'q' is missing in type 'SomeDerived' but required in type 'SomeOther'.
+!!! related TS2728 tests/cases/conformance/jsdoc/b.js:28:9: 'q' is declared here.
+    someOther = /** @type {SomeOther} */(someBase); // Error
+                           ~~~~~~~~~
+!!! error TS2352: Conversion of type 'SomeBase' to type 'SomeOther' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+!!! error TS2352:   Property 'q' is missing in type 'SomeBase' but required in type 'SomeOther'.
+!!! related TS2728 tests/cases/conformance/jsdoc/b.js:28:9: 'q' is declared here.
+    someOther = /** @type {SomeOther} */(someOther);
+    
+    someFakeClass = someBase;
+    someFakeClass = someDerived;
+    
+    someBase = someFakeClass; // Error
+    ~~~~~~~~
+!!! error TS2322: Type 'SomeFakeClass' is not assignable to type 'SomeBase'.
+!!! error TS2322:   Types of property 'p' are incompatible.
+!!! error TS2322:     Type 'string | number' is not assignable to type 'number'.
+!!! error TS2322:       Type 'string' is not assignable to type 'number'.
+    someBase = /** @type {SomeBase} */(someFakeClass);
+    
+    // Type assertion cannot be a type-predicate type
+    /** @type {number | string} */
+    var numOrStr;
+    /** @type {string} */
+    var str;
+    if(/** @type {numOrStr is string} */(numOrStr === undefined)) { // Error
+                  ~~~~~~~~~~~~~~~~~~
+!!! error TS1228: A type predicate is only allowed in return type position for functions and methods.
+                                         ~~~~~~~~
+!!! error TS2454: Variable 'numOrStr' is used before being assigned.
+    	str = numOrStr; // Error, no narrowing occurred
+    	~~~
+!!! error TS2322: Type 'string | number' is not assignable to type 'string'.
+!!! error TS2322:   Type 'number' is not assignable to type 'string'.
+    	      ~~~~~~~~
+!!! error TS2454: Variable 'numOrStr' is used before being assigned.
+    }
+    
+    
+    var asConst1 = /** @type {const} */(1);
+    var asConst2 = /** @type {const} */({
+        x: 1
+    });

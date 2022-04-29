@@ -1,0 +1,10 @@
+tests/cases/compiler/indexIntoArraySubclass.ts(4,1): error TS2322: Type 'number' is not assignable to type 'string'.
+
+
+==== tests/cases/compiler/indexIntoArraySubclass.ts (1 errors) ====
+    interface Foo2<T> extends Array<T> { }
+    var x2: Foo2<string>;
+    var r = x2[0]; // string
+    r = 0; //error
+    ~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.

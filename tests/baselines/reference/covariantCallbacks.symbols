@@ -1,0 +1,207 @@
+=== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/covariantCallbacks.ts ===
+// Test that callback parameters are related covariantly
+
+interface P<T> {
+>P : Symbol(P, Decl(covariantCallbacks.ts, 0, 0))
+>T : Symbol(T, Decl(covariantCallbacks.ts, 2, 12))
+
+    then(cb: (value: T) => void): void;
+>then : Symbol(P.then, Decl(covariantCallbacks.ts, 2, 16))
+>cb : Symbol(cb, Decl(covariantCallbacks.ts, 3, 9))
+>value : Symbol(value, Decl(covariantCallbacks.ts, 3, 14))
+>T : Symbol(T, Decl(covariantCallbacks.ts, 2, 12))
+
+};
+
+interface A { a: string }
+>A : Symbol(A, Decl(covariantCallbacks.ts, 4, 2))
+>a : Symbol(A.a, Decl(covariantCallbacks.ts, 6, 13))
+
+interface B extends A { b: string }
+>B : Symbol(B, Decl(covariantCallbacks.ts, 6, 25))
+>A : Symbol(A, Decl(covariantCallbacks.ts, 4, 2))
+>b : Symbol(B.b, Decl(covariantCallbacks.ts, 7, 23))
+
+function f1(a: P<A>, b: P<B>) {
+>f1 : Symbol(f1, Decl(covariantCallbacks.ts, 7, 35))
+>a : Symbol(a, Decl(covariantCallbacks.ts, 9, 12))
+>P : Symbol(P, Decl(covariantCallbacks.ts, 0, 0))
+>A : Symbol(A, Decl(covariantCallbacks.ts, 4, 2))
+>b : Symbol(b, Decl(covariantCallbacks.ts, 9, 20))
+>P : Symbol(P, Decl(covariantCallbacks.ts, 0, 0))
+>B : Symbol(B, Decl(covariantCallbacks.ts, 6, 25))
+
+    a = b;
+>a : Symbol(a, Decl(covariantCallbacks.ts, 9, 12))
+>b : Symbol(b, Decl(covariantCallbacks.ts, 9, 20))
+
+    b = a;  // Error
+>b : Symbol(b, Decl(covariantCallbacks.ts, 9, 20))
+>a : Symbol(a, Decl(covariantCallbacks.ts, 9, 12))
+}
+
+function f2(a: Promise<A>, b: Promise<B>) {
+>f2 : Symbol(f2, Decl(covariantCallbacks.ts, 12, 1))
+>a : Symbol(a, Decl(covariantCallbacks.ts, 14, 12))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>A : Symbol(A, Decl(covariantCallbacks.ts, 4, 2))
+>b : Symbol(b, Decl(covariantCallbacks.ts, 14, 26))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>B : Symbol(B, Decl(covariantCallbacks.ts, 6, 25))
+
+    a = b;
+>a : Symbol(a, Decl(covariantCallbacks.ts, 14, 12))
+>b : Symbol(b, Decl(covariantCallbacks.ts, 14, 26))
+
+    b = a;  // Error
+>b : Symbol(b, Decl(covariantCallbacks.ts, 14, 26))
+>a : Symbol(a, Decl(covariantCallbacks.ts, 14, 12))
+}
+
+interface AList1 {
+>AList1 : Symbol(AList1, Decl(covariantCallbacks.ts, 17, 1))
+
+    forEach(cb: (item: A) => void): void;
+>forEach : Symbol(AList1.forEach, Decl(covariantCallbacks.ts, 19, 18))
+>cb : Symbol(cb, Decl(covariantCallbacks.ts, 20, 12))
+>item : Symbol(item, Decl(covariantCallbacks.ts, 20, 17))
+>A : Symbol(A, Decl(covariantCallbacks.ts, 4, 2))
+}
+
+interface BList1 {
+>BList1 : Symbol(BList1, Decl(covariantCallbacks.ts, 21, 1))
+
+    forEach(cb: (item: B) => void): void;
+>forEach : Symbol(BList1.forEach, Decl(covariantCallbacks.ts, 23, 18))
+>cb : Symbol(cb, Decl(covariantCallbacks.ts, 24, 12))
+>item : Symbol(item, Decl(covariantCallbacks.ts, 24, 17))
+>B : Symbol(B, Decl(covariantCallbacks.ts, 6, 25))
+}
+
+function f11(a: AList1, b: BList1) {
+>f11 : Symbol(f11, Decl(covariantCallbacks.ts, 25, 1))
+>a : Symbol(a, Decl(covariantCallbacks.ts, 27, 13))
+>AList1 : Symbol(AList1, Decl(covariantCallbacks.ts, 17, 1))
+>b : Symbol(b, Decl(covariantCallbacks.ts, 27, 23))
+>BList1 : Symbol(BList1, Decl(covariantCallbacks.ts, 21, 1))
+
+    a = b;
+>a : Symbol(a, Decl(covariantCallbacks.ts, 27, 13))
+>b : Symbol(b, Decl(covariantCallbacks.ts, 27, 23))
+
+    b = a;  // Error
+>b : Symbol(b, Decl(covariantCallbacks.ts, 27, 23))
+>a : Symbol(a, Decl(covariantCallbacks.ts, 27, 13))
+}
+
+interface AList2 {
+>AList2 : Symbol(AList2, Decl(covariantCallbacks.ts, 30, 1))
+
+    forEach(cb: (item: A) => boolean): void;
+>forEach : Symbol(AList2.forEach, Decl(covariantCallbacks.ts, 32, 18))
+>cb : Symbol(cb, Decl(covariantCallbacks.ts, 33, 12))
+>item : Symbol(item, Decl(covariantCallbacks.ts, 33, 17))
+>A : Symbol(A, Decl(covariantCallbacks.ts, 4, 2))
+}
+
+interface BList2 {
+>BList2 : Symbol(BList2, Decl(covariantCallbacks.ts, 34, 1))
+
+    forEach(cb: (item: A) => void): void;
+>forEach : Symbol(BList2.forEach, Decl(covariantCallbacks.ts, 36, 18))
+>cb : Symbol(cb, Decl(covariantCallbacks.ts, 37, 12))
+>item : Symbol(item, Decl(covariantCallbacks.ts, 37, 17))
+>A : Symbol(A, Decl(covariantCallbacks.ts, 4, 2))
+}
+
+function f12(a: AList2, b: BList2) {
+>f12 : Symbol(f12, Decl(covariantCallbacks.ts, 38, 1))
+>a : Symbol(a, Decl(covariantCallbacks.ts, 40, 13))
+>AList2 : Symbol(AList2, Decl(covariantCallbacks.ts, 30, 1))
+>b : Symbol(b, Decl(covariantCallbacks.ts, 40, 23))
+>BList2 : Symbol(BList2, Decl(covariantCallbacks.ts, 34, 1))
+
+    a = b;
+>a : Symbol(a, Decl(covariantCallbacks.ts, 40, 13))
+>b : Symbol(b, Decl(covariantCallbacks.ts, 40, 23))
+
+    b = a;  // Error
+>b : Symbol(b, Decl(covariantCallbacks.ts, 40, 23))
+>a : Symbol(a, Decl(covariantCallbacks.ts, 40, 13))
+}
+
+interface AList3 {
+>AList3 : Symbol(AList3, Decl(covariantCallbacks.ts, 43, 1))
+
+    forEach(cb: (item: A) => void): void;
+>forEach : Symbol(AList3.forEach, Decl(covariantCallbacks.ts, 45, 18))
+>cb : Symbol(cb, Decl(covariantCallbacks.ts, 46, 12))
+>item : Symbol(item, Decl(covariantCallbacks.ts, 46, 17))
+>A : Symbol(A, Decl(covariantCallbacks.ts, 4, 2))
+}
+
+interface BList3 {
+>BList3 : Symbol(BList3, Decl(covariantCallbacks.ts, 47, 1))
+
+    forEach(cb: (item: A, context: any) => void): void;
+>forEach : Symbol(BList3.forEach, Decl(covariantCallbacks.ts, 49, 18))
+>cb : Symbol(cb, Decl(covariantCallbacks.ts, 50, 12))
+>item : Symbol(item, Decl(covariantCallbacks.ts, 50, 17))
+>A : Symbol(A, Decl(covariantCallbacks.ts, 4, 2))
+>context : Symbol(context, Decl(covariantCallbacks.ts, 50, 25))
+}
+
+function f13(a: AList3, b: BList3) {
+>f13 : Symbol(f13, Decl(covariantCallbacks.ts, 51, 1))
+>a : Symbol(a, Decl(covariantCallbacks.ts, 53, 13))
+>AList3 : Symbol(AList3, Decl(covariantCallbacks.ts, 43, 1))
+>b : Symbol(b, Decl(covariantCallbacks.ts, 53, 23))
+>BList3 : Symbol(BList3, Decl(covariantCallbacks.ts, 47, 1))
+
+    a = b;
+>a : Symbol(a, Decl(covariantCallbacks.ts, 53, 13))
+>b : Symbol(b, Decl(covariantCallbacks.ts, 53, 23))
+
+    b = a;  // Error
+>b : Symbol(b, Decl(covariantCallbacks.ts, 53, 23))
+>a : Symbol(a, Decl(covariantCallbacks.ts, 53, 13))
+}
+
+interface AList4 {
+>AList4 : Symbol(AList4, Decl(covariantCallbacks.ts, 56, 1))
+
+    forEach(cb: (item: A) => A): void;
+>forEach : Symbol(AList4.forEach, Decl(covariantCallbacks.ts, 58, 18))
+>cb : Symbol(cb, Decl(covariantCallbacks.ts, 59, 12))
+>item : Symbol(item, Decl(covariantCallbacks.ts, 59, 17))
+>A : Symbol(A, Decl(covariantCallbacks.ts, 4, 2))
+>A : Symbol(A, Decl(covariantCallbacks.ts, 4, 2))
+}
+
+interface BList4 {
+>BList4 : Symbol(BList4, Decl(covariantCallbacks.ts, 60, 1))
+
+    forEach(cb: (item: B) => B): void;
+>forEach : Symbol(BList4.forEach, Decl(covariantCallbacks.ts, 62, 18))
+>cb : Symbol(cb, Decl(covariantCallbacks.ts, 63, 12))
+>item : Symbol(item, Decl(covariantCallbacks.ts, 63, 17))
+>B : Symbol(B, Decl(covariantCallbacks.ts, 6, 25))
+>B : Symbol(B, Decl(covariantCallbacks.ts, 6, 25))
+}
+
+function f14(a: AList4, b: BList4) {
+>f14 : Symbol(f14, Decl(covariantCallbacks.ts, 64, 1))
+>a : Symbol(a, Decl(covariantCallbacks.ts, 66, 13))
+>AList4 : Symbol(AList4, Decl(covariantCallbacks.ts, 56, 1))
+>b : Symbol(b, Decl(covariantCallbacks.ts, 66, 23))
+>BList4 : Symbol(BList4, Decl(covariantCallbacks.ts, 60, 1))
+
+    a = b;
+>a : Symbol(a, Decl(covariantCallbacks.ts, 66, 13))
+>b : Symbol(b, Decl(covariantCallbacks.ts, 66, 23))
+
+    b = a;  // Error
+>b : Symbol(b, Decl(covariantCallbacks.ts, 66, 23))
+>a : Symbol(a, Decl(covariantCallbacks.ts, 66, 13))
+}
+

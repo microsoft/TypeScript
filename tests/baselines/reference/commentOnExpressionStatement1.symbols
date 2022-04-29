@@ -1,0 +1,3 @@
+=== tests/cases/compiler/commentOnExpressionStatement1.ts ===
+1 + 1; // Comment.
+No type information for this code.

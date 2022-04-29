@@ -1,0 +1,47 @@
+=== tests/cases/compiler/stringIndexerAssignments2.ts ===
+class C1 {
+>C1 : C1
+
+    [index: string]: string
+>index : string
+
+    one: string;
+>one : string
+}
+
+class C2 {
+>C2 : C2
+
+    one: string;
+>one : string
+}
+
+class C3 {
+>C3 : C3
+
+    one: number;
+>one : number
+
+    two: string;
+>two : string
+}
+
+var x: C1;
+>x : C1
+
+var a: C2;
+>a : C2
+
+var b: C3;
+>b : C3
+
+x = a;
+>x = a : C2
+>x : C1
+>a : C2
+
+x = b;
+>x = b : C3
+>x : C1
+>b : C3
+

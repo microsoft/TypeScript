@@ -1,0 +1,10 @@
+{
+    "scenario": "referenceResolutionSameFileTwice",
+    "projectRoot": "tests/cases/projects/ReferenceResolution/",
+    "inputFiles": [
+        "test.ts",
+        "../ReferenceResolution/test.ts"
+    ],
+    "declaration": true,
+    "baselineCheck": true
+}

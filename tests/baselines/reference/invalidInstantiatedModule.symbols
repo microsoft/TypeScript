@@ -1,0 +1,36 @@
+=== tests/cases/conformance/internalModules/moduleDeclarations/invalidInstantiatedModule.ts ===
+module M {
+>M : Symbol(M, Decl(invalidInstantiatedModule.ts, 0, 0))
+
+    export class Point { x: number; y: number }
+>Point : Symbol(Point, Decl(invalidInstantiatedModule.ts, 0, 10))
+>x : Symbol(Point.x, Decl(invalidInstantiatedModule.ts, 1, 24))
+>y : Symbol(Point.y, Decl(invalidInstantiatedModule.ts, 1, 35))
+
+    export var Point = 1;  // Error
+>Point : Symbol(Point, Decl(invalidInstantiatedModule.ts, 2, 14))
+}
+
+module M2 {
+>M2 : Symbol(M2, Decl(invalidInstantiatedModule.ts, 3, 1))
+
+    export interface Point { x: number; y: number }
+>Point : Symbol(Point, Decl(invalidInstantiatedModule.ts, 5, 11), Decl(invalidInstantiatedModule.ts, 7, 14))
+>x : Symbol(Point.x, Decl(invalidInstantiatedModule.ts, 6, 28))
+>y : Symbol(Point.y, Decl(invalidInstantiatedModule.ts, 6, 39))
+
+    export var Point = 1;
+>Point : Symbol(Point, Decl(invalidInstantiatedModule.ts, 5, 11), Decl(invalidInstantiatedModule.ts, 7, 14))
+}
+
+var m = M2;
+>m : Symbol(m, Decl(invalidInstantiatedModule.ts, 10, 3))
+>M2 : Symbol(M2, Decl(invalidInstantiatedModule.ts, 3, 1))
+
+var p: m.Point; // Error
+>p : Symbol(p, Decl(invalidInstantiatedModule.ts, 11, 3))
+>m : Symbol(m)
+>Point : Symbol(m.Point)
+
+
+ 

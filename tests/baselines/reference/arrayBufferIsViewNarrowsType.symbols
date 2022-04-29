@@ -1,0 +1,17 @@
+=== tests/cases/compiler/arrayBufferIsViewNarrowsType.ts ===
+var obj: Object;
+>obj : Symbol(obj, Decl(arrayBufferIsViewNarrowsType.ts, 0, 3))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+if (ArrayBuffer.isView(obj)) {
+>ArrayBuffer.isView : Symbol(ArrayBufferConstructor.isView, Decl(lib.es5.d.ts, --, --))
+>ArrayBuffer : Symbol(ArrayBuffer, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>isView : Symbol(ArrayBufferConstructor.isView, Decl(lib.es5.d.ts, --, --))
+>obj : Symbol(obj, Decl(arrayBufferIsViewNarrowsType.ts, 0, 3))
+
+    // isView should be a guard that narrows type to ArrayBufferView.
+    var ab: ArrayBufferView = obj;
+>ab : Symbol(ab, Decl(arrayBufferIsViewNarrowsType.ts, 3, 7))
+>ArrayBufferView : Symbol(ArrayBufferView, Decl(lib.es5.d.ts, --, --))
+>obj : Symbol(obj, Decl(arrayBufferIsViewNarrowsType.ts, 0, 3))
+}

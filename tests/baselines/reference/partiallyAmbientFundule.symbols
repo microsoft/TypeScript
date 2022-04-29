@@ -1,0 +1,10 @@
+=== tests/cases/compiler/partiallyAmbientFundule.ts ===
+declare module foo {
+>foo : Symbol(foo, Decl(partiallyAmbientFundule.ts, 2, 1), Decl(partiallyAmbientFundule.ts, 0, 0))
+
+    export function x(): any;
+>x : Symbol(x, Decl(partiallyAmbientFundule.ts, 0, 20))
+}
+function foo () { } // Legal, because module is ambient
+>foo : Symbol(foo, Decl(partiallyAmbientFundule.ts, 2, 1), Decl(partiallyAmbientFundule.ts, 0, 0))
+

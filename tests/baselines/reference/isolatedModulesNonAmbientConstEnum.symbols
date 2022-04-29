@@ -1,0 +1,14 @@
+=== tests/cases/compiler/file1.ts ===
+const enum E { X = 100 };
+>E : Symbol(E, Decl(file1.ts, 0, 0))
+>X : Symbol(E.X, Decl(file1.ts, 0, 14))
+
+var e = E.X;
+>e : Symbol(e, Decl(file1.ts, 1, 3))
+>E.X : Symbol(E.X, Decl(file1.ts, 0, 14))
+>E : Symbol(E, Decl(file1.ts, 0, 0))
+>X : Symbol(E.X, Decl(file1.ts, 0, 14))
+
+export var x;
+>x : Symbol(x, Decl(file1.ts, 2, 10))
+

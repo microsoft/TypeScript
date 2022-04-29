@@ -1,0 +1,63 @@
+=== tests/cases/conformance/salsa/node.d.ts ===
+declare function require(id: string): any;
+>require : Symbol(require, Decl(node.d.ts, 0, 0))
+>id : Symbol(id, Decl(node.d.ts, 0, 25))
+
+declare var module: any, exports: any;
+>module : Symbol(module, Decl(node.d.ts, 1, 11))
+>exports : Symbol(exports, Decl(node.d.ts, 1, 24))
+
+=== tests/cases/conformance/salsa/index.js ===
+const A = require("./other");
+>A : Symbol(A, Decl(index.js, 0, 5))
+>require : Symbol(require, Decl(node.d.ts, 0, 0))
+>"./other" : Symbol("tests/cases/conformance/salsa/other", Decl(other.js, 0, 0))
+
+const a = new A().id;
+>a : Symbol(a, Decl(index.js, 1, 5))
+>new A().id : Symbol(A.id, Decl(other.js, 0, 14))
+>A : Symbol(A, Decl(index.js, 0, 5))
+>id : Symbol(A.id, Decl(other.js, 0, 14))
+
+const B = function() { this.id = 1; }
+>B : Symbol(B, Decl(index.js, 3, 5))
+>this.id : Symbol(B.id, Decl(index.js, 3, 22))
+>this : Symbol(B, Decl(index.js, 3, 9))
+>id : Symbol(B.id, Decl(index.js, 3, 22))
+
+B.prototype.m = function() { this.x = 2; }
+>B.prototype : Symbol(B.m, Decl(index.js, 3, 37))
+>B : Symbol(B, Decl(index.js, 3, 5))
+>prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+>m : Symbol(B.m, Decl(index.js, 3, 37))
+>this.x : Symbol(B.x, Decl(index.js, 4, 28))
+>this : Symbol(B, Decl(index.js, 3, 9))
+>x : Symbol(B.x, Decl(index.js, 4, 28))
+
+const b = new B();
+>b : Symbol(b, Decl(index.js, 5, 5))
+>B : Symbol(B, Decl(index.js, 3, 5))
+
+b.id;
+>b.id : Symbol(B.id, Decl(index.js, 3, 22))
+>b : Symbol(b, Decl(index.js, 5, 5))
+>id : Symbol(B.id, Decl(index.js, 3, 22))
+
+b.x;
+>b.x : Symbol(B.x, Decl(index.js, 4, 28))
+>b : Symbol(b, Decl(index.js, 5, 5))
+>x : Symbol(B.x, Decl(index.js, 4, 28))
+
+=== tests/cases/conformance/salsa/other.js ===
+function A() { this.id = 1; }
+>A : Symbol(A, Decl(other.js, 0, 0))
+>this.id : Symbol(A.id, Decl(other.js, 0, 14))
+>this : Symbol(A, Decl(other.js, 0, 0))
+>id : Symbol(A.id, Decl(other.js, 0, 14))
+
+module.exports = A;
+>module.exports : Symbol(module.exports, Decl(other.js, 0, 0))
+>module : Symbol(export=, Decl(other.js, 0, 29))
+>exports : Symbol(export=, Decl(other.js, 0, 29))
+>A : Symbol(A, Decl(other.js, 0, 0))
+

@@ -1,0 +1,6 @@
+=== tests/cases/compiler/useStrictLikePrologueString01.ts ===
+"hey!"
+" use strict "
+export function f() {   
+>f : Symbol(f, Decl(useStrictLikePrologueString01.ts, 1, 14))
+}

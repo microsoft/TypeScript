@@ -1,0 +1,33 @@
+tests/cases/compiler/genericCloneReturnTypes.ts(25,1): error TS2322: Type 'Bar<string>' is not assignable to type 'Bar<number>'.
+  Type 'string' is not assignable to type 'number'.
+
+
+==== tests/cases/compiler/genericCloneReturnTypes.ts (1 errors) ====
+    class Bar<T> {
+    
+        public size: number;
+        public t: T;
+    
+        constructor(x: number) {
+    
+            this.size = x;
+    
+        }
+    
+        public clone() {
+    
+            return new Bar<T>(this.size);
+    
+        }
+    
+    }
+    
+    var b: Bar<number>;
+    
+    var b2 = b.clone();
+    var b3: Bar<string>;
+    b = b2;
+    b = b3;
+    ~
+!!! error TS2322: Type 'Bar<string>' is not assignable to type 'Bar<number>'.
+!!! error TS2322:   Type 'string' is not assignable to type 'number'.

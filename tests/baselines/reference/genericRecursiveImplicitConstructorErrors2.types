@@ -1,0 +1,46 @@
+=== tests/cases/compiler/genericRecursiveImplicitConstructorErrors2.ts ===
+module TypeScript2 {
+>TypeScript2 : typeof TypeScript2
+
+  export interface DeclKind { };
+  export interface PullTypesymbol { };
+  export interface SymbolLinkKind { };
+  export enum PullSymbolVisibility {
+>PullSymbolVisibility : PullSymbolVisibility
+
+    Private,
+>Private : PullSymbolVisibility.Private
+
+    Public
+>Public : PullSymbolVisibility.Public
+  }
+　
+  export class PullSymbol {
+>PullSymbol : PullSymbol
+
+    constructor (name: string, declKind: DeclKind) {
+>name : string
+>declKind : DeclKind
+
+    }
+    // link methods
+    public addOutgoingLink<A,B,C>(linkTo: PullSymbol, kind: SymbolLinkKind) {
+>addOutgoingLink : <A, B, C>(linkTo: PullSymbol, kind: SymbolLinkKind) => void
+>linkTo : PullSymbol
+>kind : SymbolLinkKind
+
+    }
+
+    public getType<A,B,C>(): PullTypeSymbol<A,B,C> {
+>getType : <A, B, C>() => PullTypeSymbol<A, B, C>
+
+      return undefined;
+>undefined : undefined
+    }
+  }
+  export class PullTypeSymbol <A,B,C>extends PullSymbol {
+>PullTypeSymbol : PullTypeSymbol<A, B, C>
+>PullSymbol : PullSymbol
+  }
+}
+

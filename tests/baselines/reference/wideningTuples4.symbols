@@ -1,0 +1,12 @@
+=== tests/cases/conformance/types/tuple/wideningTuples4.ts ===
+var a: [any];
+>a : Symbol(a, Decl(wideningTuples4.ts, 0, 3))
+
+var b = a = [undefined, null];
+>b : Symbol(b, Decl(wideningTuples4.ts, 2, 3))
+>a : Symbol(a, Decl(wideningTuples4.ts, 0, 3))
+>undefined : Symbol(undefined)
+
+b = ["", ""];
+>b : Symbol(b, Decl(wideningTuples4.ts, 2, 3))
+

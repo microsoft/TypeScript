@@ -1,0 +1,40 @@
+=== tests/cases/conformance/es6/templates/taggedTemplateStringsWithTagsTypedAsAny.ts ===
+var f: any;
+>f : Symbol(f, Decl(taggedTemplateStringsWithTagsTypedAsAny.ts, 0, 3))
+
+f `abc`
+>f : Symbol(f, Decl(taggedTemplateStringsWithTagsTypedAsAny.ts, 0, 3))
+
+f `abc${1}def${2}ghi`;
+>f : Symbol(f, Decl(taggedTemplateStringsWithTagsTypedAsAny.ts, 0, 3))
+
+f.g.h `abc`
+>f : Symbol(f, Decl(taggedTemplateStringsWithTagsTypedAsAny.ts, 0, 3))
+
+f.g.h `abc${1}def${2}ghi`;
+>f : Symbol(f, Decl(taggedTemplateStringsWithTagsTypedAsAny.ts, 0, 3))
+
+f `abc`.member
+>f : Symbol(f, Decl(taggedTemplateStringsWithTagsTypedAsAny.ts, 0, 3))
+
+f `abc${1}def${2}ghi`.member;
+>f : Symbol(f, Decl(taggedTemplateStringsWithTagsTypedAsAny.ts, 0, 3))
+
+f `abc`["member"];
+>f : Symbol(f, Decl(taggedTemplateStringsWithTagsTypedAsAny.ts, 0, 3))
+
+f `abc${1}def${2}ghi`["member"];
+>f : Symbol(f, Decl(taggedTemplateStringsWithTagsTypedAsAny.ts, 0, 3))
+
+f `abc`["member"].someOtherTag `abc${1}def${2}ghi`;
+>f : Symbol(f, Decl(taggedTemplateStringsWithTagsTypedAsAny.ts, 0, 3))
+
+f `abc${1}def${2}ghi`["member"].someOtherTag `abc${1}def${2}ghi`;
+>f : Symbol(f, Decl(taggedTemplateStringsWithTagsTypedAsAny.ts, 0, 3))
+
+f.thisIsNotATag(`abc`);
+>f : Symbol(f, Decl(taggedTemplateStringsWithTagsTypedAsAny.ts, 0, 3))
+
+f.thisIsNotATag(`abc${1}def${2}ghi`);
+>f : Symbol(f, Decl(taggedTemplateStringsWithTagsTypedAsAny.ts, 0, 3))
+

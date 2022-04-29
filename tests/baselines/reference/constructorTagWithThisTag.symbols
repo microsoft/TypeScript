@@ -1,0 +1,18 @@
+=== tests/cases/conformance/jsdoc/classthisboth.js ===
+/**
+ * @class
+ * @this {{ e: number, m: number }}
+ * this-tag should win, both 'e' and 'm' should be defined.
+ */
+function C() {
+>C : Symbol(C, Decl(classthisboth.js, 0, 0))
+
+    this.e = this.m + 1
+>this.e : Symbol(e, Decl(classthisboth.js, 2, 11))
+>this : Symbol(__type, Decl(classthisboth.js, 2, 10))
+>e : Symbol(C.e, Decl(classthisboth.js, 5, 14))
+>this.m : Symbol(m, Decl(classthisboth.js, 2, 22))
+>this : Symbol(__type, Decl(classthisboth.js, 2, 10))
+>m : Symbol(m, Decl(classthisboth.js, 2, 22))
+}
+

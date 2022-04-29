@@ -1,0 +1,340 @@
+=== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameter.ts ===
+// checking whether other types are subtypes of type parameters
+
+class C3<T> {
+>C3 : Symbol(C3, Decl(subtypesOfTypeParameter.ts, 0, 0))
+>T : Symbol(T, Decl(subtypesOfTypeParameter.ts, 2, 9))
+
+    foo: T;
+>foo : Symbol(C3.foo, Decl(subtypesOfTypeParameter.ts, 2, 13))
+>T : Symbol(T, Decl(subtypesOfTypeParameter.ts, 2, 9))
+}
+
+class D1<T, U> extends C3<T> {
+>D1 : Symbol(D1, Decl(subtypesOfTypeParameter.ts, 4, 1))
+>T : Symbol(T, Decl(subtypesOfTypeParameter.ts, 6, 9))
+>U : Symbol(U, Decl(subtypesOfTypeParameter.ts, 6, 11))
+>C3 : Symbol(C3, Decl(subtypesOfTypeParameter.ts, 0, 0))
+>T : Symbol(T, Decl(subtypesOfTypeParameter.ts, 6, 9))
+
+    foo: U; // error
+>foo : Symbol(D1.foo, Decl(subtypesOfTypeParameter.ts, 6, 30))
+>U : Symbol(U, Decl(subtypesOfTypeParameter.ts, 6, 11))
+}
+
+function f1<T, U>(x: T, y: U) {
+>f1 : Symbol(f1, Decl(subtypesOfTypeParameter.ts, 8, 1))
+>T : Symbol(T, Decl(subtypesOfTypeParameter.ts, 10, 12))
+>U : Symbol(U, Decl(subtypesOfTypeParameter.ts, 10, 14))
+>x : Symbol(x, Decl(subtypesOfTypeParameter.ts, 10, 18))
+>T : Symbol(T, Decl(subtypesOfTypeParameter.ts, 10, 12))
+>y : Symbol(y, Decl(subtypesOfTypeParameter.ts, 10, 23))
+>U : Symbol(U, Decl(subtypesOfTypeParameter.ts, 10, 14))
+
+    var r = true ? x : y; // error
+>r : Symbol(r, Decl(subtypesOfTypeParameter.ts, 11, 7), Decl(subtypesOfTypeParameter.ts, 12, 7))
+>x : Symbol(x, Decl(subtypesOfTypeParameter.ts, 10, 18))
+>y : Symbol(y, Decl(subtypesOfTypeParameter.ts, 10, 23))
+
+    var r = true ? y : x; // error
+>r : Symbol(r, Decl(subtypesOfTypeParameter.ts, 11, 7), Decl(subtypesOfTypeParameter.ts, 12, 7))
+>y : Symbol(y, Decl(subtypesOfTypeParameter.ts, 10, 23))
+>x : Symbol(x, Decl(subtypesOfTypeParameter.ts, 10, 18))
+}
+
+interface I1 { foo: number; }
+>I1 : Symbol(I1, Decl(subtypesOfTypeParameter.ts, 13, 1))
+>foo : Symbol(I1.foo, Decl(subtypesOfTypeParameter.ts, 15, 14))
+
+class C1 { foo: number; }
+>C1 : Symbol(C1, Decl(subtypesOfTypeParameter.ts, 15, 29))
+>foo : Symbol(C1.foo, Decl(subtypesOfTypeParameter.ts, 16, 10))
+
+class C2<T> { foo: T; }
+>C2 : Symbol(C2, Decl(subtypesOfTypeParameter.ts, 16, 25))
+>T : Symbol(T, Decl(subtypesOfTypeParameter.ts, 17, 9))
+>foo : Symbol(C2.foo, Decl(subtypesOfTypeParameter.ts, 17, 13))
+>T : Symbol(T, Decl(subtypesOfTypeParameter.ts, 17, 9))
+
+enum E { A }
+>E : Symbol(E, Decl(subtypesOfTypeParameter.ts, 17, 23))
+>A : Symbol(E.A, Decl(subtypesOfTypeParameter.ts, 18, 8))
+
+function f() { }
+>f : Symbol(f, Decl(subtypesOfTypeParameter.ts, 18, 12), Decl(subtypesOfTypeParameter.ts, 19, 16))
+
+module f {
+>f : Symbol(f, Decl(subtypesOfTypeParameter.ts, 18, 12), Decl(subtypesOfTypeParameter.ts, 19, 16))
+
+    export var bar = 1;
+>bar : Symbol(bar, Decl(subtypesOfTypeParameter.ts, 21, 14))
+}
+class c { baz: string }
+>c : Symbol(c, Decl(subtypesOfTypeParameter.ts, 22, 1), Decl(subtypesOfTypeParameter.ts, 23, 23))
+>baz : Symbol(c.baz, Decl(subtypesOfTypeParameter.ts, 23, 9))
+
+module c {
+>c : Symbol(c, Decl(subtypesOfTypeParameter.ts, 22, 1), Decl(subtypesOfTypeParameter.ts, 23, 23))
+
+    export var bar = 1;
+>bar : Symbol(bar, Decl(subtypesOfTypeParameter.ts, 25, 14))
+}
+
+// errors throughout
+function f2<T, U>(x: T, y: U) {
+>f2 : Symbol(f2, Decl(subtypesOfTypeParameter.ts, 26, 1))
+>T : Symbol(T, Decl(subtypesOfTypeParameter.ts, 29, 12))
+>U : Symbol(U, Decl(subtypesOfTypeParameter.ts, 29, 14))
+>x : Symbol(x, Decl(subtypesOfTypeParameter.ts, 29, 18))
+>T : Symbol(T, Decl(subtypesOfTypeParameter.ts, 29, 12))
+>y : Symbol(y, Decl(subtypesOfTypeParameter.ts, 29, 23))
+>U : Symbol(U, Decl(subtypesOfTypeParameter.ts, 29, 14))
+
+    var r0 = true ? x : null;
+>r0 : Symbol(r0, Decl(subtypesOfTypeParameter.ts, 30, 7), Decl(subtypesOfTypeParameter.ts, 31, 7))
+>x : Symbol(x, Decl(subtypesOfTypeParameter.ts, 29, 18))
+
+    var r0 = true ? null : x;
+>r0 : Symbol(r0, Decl(subtypesOfTypeParameter.ts, 30, 7), Decl(subtypesOfTypeParameter.ts, 31, 7))
+>x : Symbol(x, Decl(subtypesOfTypeParameter.ts, 29, 18))
+
+    var u: typeof undefined;
+>u : Symbol(u, Decl(subtypesOfTypeParameter.ts, 33, 7))
+>undefined : Symbol(undefined)
+
+    var r0b = true ? u : x;
+>r0b : Symbol(r0b, Decl(subtypesOfTypeParameter.ts, 34, 7), Decl(subtypesOfTypeParameter.ts, 35, 7))
+>u : Symbol(u, Decl(subtypesOfTypeParameter.ts, 33, 7))
+>x : Symbol(x, Decl(subtypesOfTypeParameter.ts, 29, 18))
+
+    var r0b = true ? x : u;
+>r0b : Symbol(r0b, Decl(subtypesOfTypeParameter.ts, 34, 7), Decl(subtypesOfTypeParameter.ts, 35, 7))
+>x : Symbol(x, Decl(subtypesOfTypeParameter.ts, 29, 18))
+>u : Symbol(u, Decl(subtypesOfTypeParameter.ts, 33, 7))
+
+    var r1 = true ? 1 : x; 
+>r1 : Symbol(r1, Decl(subtypesOfTypeParameter.ts, 37, 7), Decl(subtypesOfTypeParameter.ts, 38, 7))
+>x : Symbol(x, Decl(subtypesOfTypeParameter.ts, 29, 18))
+
+    var r1 = true ? x : 1;
+>r1 : Symbol(r1, Decl(subtypesOfTypeParameter.ts, 37, 7), Decl(subtypesOfTypeParameter.ts, 38, 7))
+>x : Symbol(x, Decl(subtypesOfTypeParameter.ts, 29, 18))
+
+    var r2 = true ? '' : x;
+>r2 : Symbol(r2, Decl(subtypesOfTypeParameter.ts, 40, 7), Decl(subtypesOfTypeParameter.ts, 41, 7))
+>x : Symbol(x, Decl(subtypesOfTypeParameter.ts, 29, 18))
+
+    var r2 = true ? x : '';
+>r2 : Symbol(r2, Decl(subtypesOfTypeParameter.ts, 40, 7), Decl(subtypesOfTypeParameter.ts, 41, 7))
+>x : Symbol(x, Decl(subtypesOfTypeParameter.ts, 29, 18))
+
+    var r3 = true ? true : x;
+>r3 : Symbol(r3, Decl(subtypesOfTypeParameter.ts, 43, 7), Decl(subtypesOfTypeParameter.ts, 44, 7))
+>x : Symbol(x, Decl(subtypesOfTypeParameter.ts, 29, 18))
+
+    var r3 = true ? x : true;
+>r3 : Symbol(r3, Decl(subtypesOfTypeParameter.ts, 43, 7), Decl(subtypesOfTypeParameter.ts, 44, 7))
+>x : Symbol(x, Decl(subtypesOfTypeParameter.ts, 29, 18))
+
+    var r4 = true ? new Date() : x;
+>r4 : Symbol(r4, Decl(subtypesOfTypeParameter.ts, 46, 7), Decl(subtypesOfTypeParameter.ts, 47, 7))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>x : Symbol(x, Decl(subtypesOfTypeParameter.ts, 29, 18))
+
+    var r4 = true ? x : new Date();
+>r4 : Symbol(r4, Decl(subtypesOfTypeParameter.ts, 46, 7), Decl(subtypesOfTypeParameter.ts, 47, 7))
+>x : Symbol(x, Decl(subtypesOfTypeParameter.ts, 29, 18))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+    var r5 = true ? /1/ : x;
+>r5 : Symbol(r5, Decl(subtypesOfTypeParameter.ts, 49, 7), Decl(subtypesOfTypeParameter.ts, 50, 7))
+>x : Symbol(x, Decl(subtypesOfTypeParameter.ts, 29, 18))
+
+    var r5 = true ? x : /1/;
+>r5 : Symbol(r5, Decl(subtypesOfTypeParameter.ts, 49, 7), Decl(subtypesOfTypeParameter.ts, 50, 7))
+>x : Symbol(x, Decl(subtypesOfTypeParameter.ts, 29, 18))
+
+    var r6 = true ? { foo: 1 } : x;
+>r6 : Symbol(r6, Decl(subtypesOfTypeParameter.ts, 52, 7), Decl(subtypesOfTypeParameter.ts, 53, 7))
+>foo : Symbol(foo, Decl(subtypesOfTypeParameter.ts, 52, 21))
+>x : Symbol(x, Decl(subtypesOfTypeParameter.ts, 29, 18))
+
+    var r6 = true ? x : { foo: 1 };
+>r6 : Symbol(r6, Decl(subtypesOfTypeParameter.ts, 52, 7), Decl(subtypesOfTypeParameter.ts, 53, 7))
+>x : Symbol(x, Decl(subtypesOfTypeParameter.ts, 29, 18))
+>foo : Symbol(foo, Decl(subtypesOfTypeParameter.ts, 53, 25))
+
+    var r7 = true ? () => { } : x;
+>r7 : Symbol(r7, Decl(subtypesOfTypeParameter.ts, 55, 7), Decl(subtypesOfTypeParameter.ts, 56, 7))
+>x : Symbol(x, Decl(subtypesOfTypeParameter.ts, 29, 18))
+
+    var r7 = true ? x : () => { };
+>r7 : Symbol(r7, Decl(subtypesOfTypeParameter.ts, 55, 7), Decl(subtypesOfTypeParameter.ts, 56, 7))
+>x : Symbol(x, Decl(subtypesOfTypeParameter.ts, 29, 18))
+
+    var r8 = true ? <T>(x: T) => { return x } : x;
+>r8 : Symbol(r8, Decl(subtypesOfTypeParameter.ts, 58, 7))
+>T : Symbol(T, Decl(subtypesOfTypeParameter.ts, 58, 21))
+>x : Symbol(x, Decl(subtypesOfTypeParameter.ts, 58, 24))
+>T : Symbol(T, Decl(subtypesOfTypeParameter.ts, 58, 21))
+>x : Symbol(x, Decl(subtypesOfTypeParameter.ts, 58, 24))
+>x : Symbol(x, Decl(subtypesOfTypeParameter.ts, 29, 18))
+
+    var r8b = true ? x : <T>(x: T) => { return x }; // type parameters not identical across declarations
+>r8b : Symbol(r8b, Decl(subtypesOfTypeParameter.ts, 59, 7))
+>x : Symbol(x, Decl(subtypesOfTypeParameter.ts, 29, 18))
+>T : Symbol(T, Decl(subtypesOfTypeParameter.ts, 59, 26))
+>x : Symbol(x, Decl(subtypesOfTypeParameter.ts, 59, 29))
+>T : Symbol(T, Decl(subtypesOfTypeParameter.ts, 59, 26))
+>x : Symbol(x, Decl(subtypesOfTypeParameter.ts, 59, 29))
+
+    var i1: I1;
+>i1 : Symbol(i1, Decl(subtypesOfTypeParameter.ts, 61, 7))
+>I1 : Symbol(I1, Decl(subtypesOfTypeParameter.ts, 13, 1))
+
+    var r9 = true ? i1 : x;
+>r9 : Symbol(r9, Decl(subtypesOfTypeParameter.ts, 62, 7), Decl(subtypesOfTypeParameter.ts, 63, 7))
+>i1 : Symbol(i1, Decl(subtypesOfTypeParameter.ts, 61, 7))
+>x : Symbol(x, Decl(subtypesOfTypeParameter.ts, 29, 18))
+
+    var r9 = true ? x : i1;
+>r9 : Symbol(r9, Decl(subtypesOfTypeParameter.ts, 62, 7), Decl(subtypesOfTypeParameter.ts, 63, 7))
+>x : Symbol(x, Decl(subtypesOfTypeParameter.ts, 29, 18))
+>i1 : Symbol(i1, Decl(subtypesOfTypeParameter.ts, 61, 7))
+
+    var c1: C1;
+>c1 : Symbol(c1, Decl(subtypesOfTypeParameter.ts, 65, 7))
+>C1 : Symbol(C1, Decl(subtypesOfTypeParameter.ts, 15, 29))
+
+    var r10 = true ? c1 : x;
+>r10 : Symbol(r10, Decl(subtypesOfTypeParameter.ts, 66, 7), Decl(subtypesOfTypeParameter.ts, 67, 7))
+>c1 : Symbol(c1, Decl(subtypesOfTypeParameter.ts, 65, 7))
+>x : Symbol(x, Decl(subtypesOfTypeParameter.ts, 29, 18))
+
+    var r10 = true ? x : c1;
+>r10 : Symbol(r10, Decl(subtypesOfTypeParameter.ts, 66, 7), Decl(subtypesOfTypeParameter.ts, 67, 7))
+>x : Symbol(x, Decl(subtypesOfTypeParameter.ts, 29, 18))
+>c1 : Symbol(c1, Decl(subtypesOfTypeParameter.ts, 65, 7))
+
+
+    var c2: C2<number>;
+>c2 : Symbol(c2, Decl(subtypesOfTypeParameter.ts, 70, 7))
+>C2 : Symbol(C2, Decl(subtypesOfTypeParameter.ts, 16, 25))
+
+    var r12 = true ? c2 : x;
+>r12 : Symbol(r12, Decl(subtypesOfTypeParameter.ts, 71, 7), Decl(subtypesOfTypeParameter.ts, 72, 7))
+>c2 : Symbol(c2, Decl(subtypesOfTypeParameter.ts, 70, 7))
+>x : Symbol(x, Decl(subtypesOfTypeParameter.ts, 29, 18))
+
+    var r12 = true ? x : c2;
+>r12 : Symbol(r12, Decl(subtypesOfTypeParameter.ts, 71, 7), Decl(subtypesOfTypeParameter.ts, 72, 7))
+>x : Symbol(x, Decl(subtypesOfTypeParameter.ts, 29, 18))
+>c2 : Symbol(c2, Decl(subtypesOfTypeParameter.ts, 70, 7))
+
+
+    var r13 = true ? E : x;
+>r13 : Symbol(r13, Decl(subtypesOfTypeParameter.ts, 75, 7), Decl(subtypesOfTypeParameter.ts, 76, 7))
+>E : Symbol(E, Decl(subtypesOfTypeParameter.ts, 17, 23))
+>x : Symbol(x, Decl(subtypesOfTypeParameter.ts, 29, 18))
+
+    var r13 = true ? x : E;
+>r13 : Symbol(r13, Decl(subtypesOfTypeParameter.ts, 75, 7), Decl(subtypesOfTypeParameter.ts, 76, 7))
+>x : Symbol(x, Decl(subtypesOfTypeParameter.ts, 29, 18))
+>E : Symbol(E, Decl(subtypesOfTypeParameter.ts, 17, 23))
+
+    var r14 = true ? E.A : x;
+>r14 : Symbol(r14, Decl(subtypesOfTypeParameter.ts, 78, 7), Decl(subtypesOfTypeParameter.ts, 79, 7))
+>E.A : Symbol(E.A, Decl(subtypesOfTypeParameter.ts, 18, 8))
+>E : Symbol(E, Decl(subtypesOfTypeParameter.ts, 17, 23))
+>A : Symbol(E.A, Decl(subtypesOfTypeParameter.ts, 18, 8))
+>x : Symbol(x, Decl(subtypesOfTypeParameter.ts, 29, 18))
+
+    var r14 = true ? x : E.A;
+>r14 : Symbol(r14, Decl(subtypesOfTypeParameter.ts, 78, 7), Decl(subtypesOfTypeParameter.ts, 79, 7))
+>x : Symbol(x, Decl(subtypesOfTypeParameter.ts, 29, 18))
+>E.A : Symbol(E.A, Decl(subtypesOfTypeParameter.ts, 18, 8))
+>E : Symbol(E, Decl(subtypesOfTypeParameter.ts, 17, 23))
+>A : Symbol(E.A, Decl(subtypesOfTypeParameter.ts, 18, 8))
+
+    var af: typeof f;
+>af : Symbol(af, Decl(subtypesOfTypeParameter.ts, 81, 7))
+>f : Symbol(f, Decl(subtypesOfTypeParameter.ts, 18, 12), Decl(subtypesOfTypeParameter.ts, 19, 16))
+
+    var r15 = true ? af : x;
+>r15 : Symbol(r15, Decl(subtypesOfTypeParameter.ts, 82, 7), Decl(subtypesOfTypeParameter.ts, 83, 7))
+>af : Symbol(af, Decl(subtypesOfTypeParameter.ts, 81, 7))
+>x : Symbol(x, Decl(subtypesOfTypeParameter.ts, 29, 18))
+
+    var r15 = true ? x : af;
+>r15 : Symbol(r15, Decl(subtypesOfTypeParameter.ts, 82, 7), Decl(subtypesOfTypeParameter.ts, 83, 7))
+>x : Symbol(x, Decl(subtypesOfTypeParameter.ts, 29, 18))
+>af : Symbol(af, Decl(subtypesOfTypeParameter.ts, 81, 7))
+
+    var ac: typeof c;
+>ac : Symbol(ac, Decl(subtypesOfTypeParameter.ts, 85, 7))
+>c : Symbol(c, Decl(subtypesOfTypeParameter.ts, 22, 1), Decl(subtypesOfTypeParameter.ts, 23, 23))
+
+    var r16 = true ? ac : x;
+>r16 : Symbol(r16, Decl(subtypesOfTypeParameter.ts, 86, 7), Decl(subtypesOfTypeParameter.ts, 87, 7))
+>ac : Symbol(ac, Decl(subtypesOfTypeParameter.ts, 85, 7))
+>x : Symbol(x, Decl(subtypesOfTypeParameter.ts, 29, 18))
+
+    var r16 = true ? x : ac;
+>r16 : Symbol(r16, Decl(subtypesOfTypeParameter.ts, 86, 7), Decl(subtypesOfTypeParameter.ts, 87, 7))
+>x : Symbol(x, Decl(subtypesOfTypeParameter.ts, 29, 18))
+>ac : Symbol(ac, Decl(subtypesOfTypeParameter.ts, 85, 7))
+
+    function f17<T>(a: T) {
+>f17 : Symbol(f17, Decl(subtypesOfTypeParameter.ts, 87, 28))
+>T : Symbol(T, Decl(subtypesOfTypeParameter.ts, 89, 17))
+>a : Symbol(a, Decl(subtypesOfTypeParameter.ts, 89, 20))
+>T : Symbol(T, Decl(subtypesOfTypeParameter.ts, 89, 17))
+
+        var r17 = true ? x : a;
+>r17 : Symbol(r17, Decl(subtypesOfTypeParameter.ts, 90, 11), Decl(subtypesOfTypeParameter.ts, 91, 11))
+>x : Symbol(x, Decl(subtypesOfTypeParameter.ts, 29, 18))
+>a : Symbol(a, Decl(subtypesOfTypeParameter.ts, 89, 20))
+
+        var r17 = true ? a : x;
+>r17 : Symbol(r17, Decl(subtypesOfTypeParameter.ts, 90, 11), Decl(subtypesOfTypeParameter.ts, 91, 11))
+>a : Symbol(a, Decl(subtypesOfTypeParameter.ts, 89, 20))
+>x : Symbol(x, Decl(subtypesOfTypeParameter.ts, 29, 18))
+    }
+
+    function f18<T, U extends T>(a: U) {
+>f18 : Symbol(f18, Decl(subtypesOfTypeParameter.ts, 92, 5))
+>T : Symbol(T, Decl(subtypesOfTypeParameter.ts, 94, 17))
+>U : Symbol(U, Decl(subtypesOfTypeParameter.ts, 94, 19))
+>T : Symbol(T, Decl(subtypesOfTypeParameter.ts, 94, 17))
+>a : Symbol(a, Decl(subtypesOfTypeParameter.ts, 94, 33))
+>U : Symbol(U, Decl(subtypesOfTypeParameter.ts, 94, 19))
+
+        var r18 = true ? x : a;
+>r18 : Symbol(r18, Decl(subtypesOfTypeParameter.ts, 95, 11), Decl(subtypesOfTypeParameter.ts, 96, 11))
+>x : Symbol(x, Decl(subtypesOfTypeParameter.ts, 29, 18))
+>a : Symbol(a, Decl(subtypesOfTypeParameter.ts, 94, 33))
+
+        var r18 = true ? a : x;
+>r18 : Symbol(r18, Decl(subtypesOfTypeParameter.ts, 95, 11), Decl(subtypesOfTypeParameter.ts, 96, 11))
+>a : Symbol(a, Decl(subtypesOfTypeParameter.ts, 94, 33))
+>x : Symbol(x, Decl(subtypesOfTypeParameter.ts, 29, 18))
+    }
+
+    var r19 = true ? new Object() : x; // BCT is Object
+>r19 : Symbol(r19, Decl(subtypesOfTypeParameter.ts, 99, 7), Decl(subtypesOfTypeParameter.ts, 100, 7))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(subtypesOfTypeParameter.ts, 29, 18))
+
+    var r19 = true ? x : new Object(); // BCT is Object
+>r19 : Symbol(r19, Decl(subtypesOfTypeParameter.ts, 99, 7), Decl(subtypesOfTypeParameter.ts, 100, 7))
+>x : Symbol(x, Decl(subtypesOfTypeParameter.ts, 29, 18))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    var r20 = true ? {} : x; // ok
+>r20 : Symbol(r20, Decl(subtypesOfTypeParameter.ts, 102, 7), Decl(subtypesOfTypeParameter.ts, 103, 7))
+>x : Symbol(x, Decl(subtypesOfTypeParameter.ts, 29, 18))
+
+    var r20 = true ? x : {}; // ok
+>r20 : Symbol(r20, Decl(subtypesOfTypeParameter.ts, 102, 7), Decl(subtypesOfTypeParameter.ts, 103, 7))
+>x : Symbol(x, Decl(subtypesOfTypeParameter.ts, 29, 18))
+}

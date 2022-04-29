@@ -1,0 +1,13 @@
+=== tests/cases/compiler/augmentedTypesClass2a.ts ===
+//// class then function
+class c2 { public foo() { } } // error
+>c2 : c2
+>foo : () => void
+
+function c2() { } // error
+>c2 : typeof c2
+
+var c2 = () => { }
+>c2 : () => void
+>() => { } : () => void
+

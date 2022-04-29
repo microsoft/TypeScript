@@ -1,0 +1,80 @@
+=== tests/cases/compiler/noImplicitReturnsInAsync2.ts ===
+// Should be an error, Promise<number>, currently retorted correctly 
+async function test3(isError: boolean = true) {
+>test3 : (isError?: boolean) => Promise<number>
+>isError : boolean
+>true : true
+
+    if (isError === true) {
+>isError === true : boolean
+>isError : boolean
+>true : true
+
+        return 6;
+>6 : 6
+    }
+}
+
+// Should not be an error, Promise<any>, currently **not** working
+async function test4(isError: boolean = true) {  
+>test4 : (isError?: boolean) => Promise<any>
+>isError : boolean
+>true : true
+
+    if (isError === true) {
+>isError === true : boolean
+>isError : boolean
+>true : true
+
+        return undefined;
+>undefined : undefined
+    }
+}
+
+// should not be error, Promise<any> currently working correctly 
+async function test5(isError: boolean = true): Promise<any> { //should not be error
+>test5 : (isError?: boolean) => Promise<any>
+>isError : boolean
+>true : true
+
+    if (isError === true) {
+>isError === true : boolean
+>isError : boolean
+>true : true
+
+        return undefined;
+>undefined : undefined
+    }
+}
+
+
+// should be error, currently reported correctly 
+async function test6(isError: boolean = true): Promise<number> { 
+>test6 : (isError?: boolean) => Promise<number>
+>isError : boolean
+>true : true
+
+    if (isError === true) {
+>isError === true : boolean
+>isError : boolean
+>true : true
+
+        return undefined;
+>undefined : undefined
+    }
+}
+
+// infered to be Promise<void>, should not be an error, currently reported correctly 
+async function test7(isError: boolean = true) { 
+>test7 : (isError?: boolean) => Promise<void>
+>isError : boolean
+>true : true
+
+    if (isError === true) {
+>isError === true : boolean
+>isError : boolean
+>true : true
+
+        return;
+    }
+}

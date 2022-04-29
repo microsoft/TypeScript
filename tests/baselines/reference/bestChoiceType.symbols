@@ -1,0 +1,62 @@
+=== tests/cases/compiler/bestChoiceType.ts ===
+// Repro from #10041
+
+(''.match(/ /) || []).map(s => s.toLowerCase());
+>(''.match(/ /) || []).map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>''.match : Symbol(String.match, Decl(lib.es5.d.ts, --, --))
+>match : Symbol(String.match, Decl(lib.es5.d.ts, --, --))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>s : Symbol(s, Decl(bestChoiceType.ts, 2, 26))
+>s.toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
+>s : Symbol(s, Decl(bestChoiceType.ts, 2, 26))
+>toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
+
+// Similar cases
+
+function f1() {
+>f1 : Symbol(f1, Decl(bestChoiceType.ts, 2, 48))
+
+    let x = ''.match(/ /);
+>x : Symbol(x, Decl(bestChoiceType.ts, 7, 7))
+>''.match : Symbol(String.match, Decl(lib.es5.d.ts, --, --))
+>match : Symbol(String.match, Decl(lib.es5.d.ts, --, --))
+
+    let y = x || [];
+>y : Symbol(y, Decl(bestChoiceType.ts, 8, 7))
+>x : Symbol(x, Decl(bestChoiceType.ts, 7, 7))
+
+    let z = y.map(s => s.toLowerCase());
+>z : Symbol(z, Decl(bestChoiceType.ts, 9, 7))
+>y.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>y : Symbol(y, Decl(bestChoiceType.ts, 8, 7))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>s : Symbol(s, Decl(bestChoiceType.ts, 9, 18))
+>s.toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
+>s : Symbol(s, Decl(bestChoiceType.ts, 9, 18))
+>toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
+}
+
+function f2() {
+>f2 : Symbol(f2, Decl(bestChoiceType.ts, 10, 1))
+
+    let x = ''.match(/ /);
+>x : Symbol(x, Decl(bestChoiceType.ts, 13, 7))
+>''.match : Symbol(String.match, Decl(lib.es5.d.ts, --, --))
+>match : Symbol(String.match, Decl(lib.es5.d.ts, --, --))
+
+    let y = x ? x : [];
+>y : Symbol(y, Decl(bestChoiceType.ts, 14, 7))
+>x : Symbol(x, Decl(bestChoiceType.ts, 13, 7))
+>x : Symbol(x, Decl(bestChoiceType.ts, 13, 7))
+
+    let z = y.map(s => s.toLowerCase());
+>z : Symbol(z, Decl(bestChoiceType.ts, 15, 7))
+>y.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>y : Symbol(y, Decl(bestChoiceType.ts, 14, 7))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>s : Symbol(s, Decl(bestChoiceType.ts, 15, 18))
+>s.toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
+>s : Symbol(s, Decl(bestChoiceType.ts, 15, 18))
+>toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
+}
+

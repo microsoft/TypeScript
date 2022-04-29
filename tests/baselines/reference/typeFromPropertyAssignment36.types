@@ -1,0 +1,233 @@
+=== tests/cases/conformance/salsa/typeFromPropertyAssignment36.ts ===
+function f(b: boolean) {
+>f : (b: boolean) => { (): void; e: number; q: boolean; r: number; s: string; }
+>b : boolean
+
+    function d() {
+>d : { (): void; e: number; q: boolean; r: number; s: string; }
+    }
+    d.e = 12
+>d.e = 12 : 12
+>d.e : number
+>d : { (): void; e: number; q: boolean; r: number; s: string; }
+>e : number
+>12 : 12
+
+    d.e
+>d.e : number
+>d : { (): void; e: number; q: boolean; r: number; s: string; }
+>e : number
+
+    if (b) {
+>b : boolean
+
+        d.q = false
+>d.q = false : false
+>d.q : boolean
+>d : { (): void; e: number; q: boolean; r: number; s: string; }
+>q : boolean
+>false : false
+    }
+    // error d.q might not be assigned
+    d.q
+>d.q : boolean
+>d : { (): void; e: number; q: boolean; r: number; s: string; }
+>q : boolean
+
+    if (b) {
+>b : boolean
+
+        d.q = false
+>d.q = false : false
+>d.q : boolean
+>d : { (): void; e: number; q: boolean; r: number; s: string; }
+>q : boolean
+>false : false
+    }
+    else {
+        d.q = true
+>d.q = true : true
+>d.q : boolean
+>d : { (): void; e: number; q: boolean; r: number; s: string; }
+>q : boolean
+>true : true
+    }
+    d.q
+>d.q : boolean
+>d : { (): void; e: number; q: boolean; r: number; s: string; }
+>q : boolean
+
+    if (b) {
+>b : boolean
+
+        d.r = 1
+>d.r = 1 : 1
+>d.r : number
+>d : { (): void; e: number; q: boolean; r: number; s: string; }
+>r : number
+>1 : 1
+    }
+    else {
+        d.r = 2
+>d.r = 2 : 2
+>d.r : number
+>d : { (): void; e: number; q: boolean; r: number; s: string; }
+>r : number
+>2 : 2
+    }
+    d.r
+>d.r : number
+>d : { (): void; e: number; q: boolean; r: number; s: string; }
+>r : number
+
+    if (b) {
+>b : boolean
+
+        d.s = 'hi'
+>d.s = 'hi' : "hi"
+>d.s : string
+>d : { (): void; e: number; q: boolean; r: number; s: string; }
+>s : string
+>'hi' : "hi"
+    }
+    return d
+>d : { (): void; e: number; q: boolean; r: number; s: string; }
+}
+// OK to access possibly-unassigned properties outside the initialising scope
+var test = f(true).s
+>test : string
+>f(true).s : string
+>f(true) : { (): void; e: number; q: boolean; r: number; s: string; }
+>f : (b: boolean) => { (): void; e: number; q: boolean; r: number; s: string; }
+>true : true
+>s : string
+
+function d() {
+>d : typeof d
+}
+d.e = 12
+>d.e = 12 : 12
+>d.e : number
+>d : typeof d
+>e : number
+>12 : 12
+
+d.e
+>d.e : number
+>d : typeof d
+>e : number
+
+if (!!false) {
+>!!false : false
+>!false : true
+>false : false
+
+    d.q = false
+>d.q = false : false
+>d.q : boolean
+>d : typeof d
+>q : boolean
+>false : false
+}
+d.q
+>d.q : boolean
+>d : typeof d
+>q : boolean
+
+if (!!false) {
+>!!false : false
+>!false : true
+>false : false
+
+    d.q = false
+>d.q = false : false
+>d.q : boolean
+>d : typeof d
+>q : boolean
+>false : false
+}
+else {
+    d.q = true
+>d.q = true : true
+>d.q : boolean
+>d : typeof d
+>q : boolean
+>true : true
+}
+d.q
+>d.q : boolean
+>d : typeof d
+>q : boolean
+
+if (!!false) {
+>!!false : false
+>!false : true
+>false : false
+
+    d.r = 1
+>d.r = 1 : 1
+>d.r : number
+>d : typeof d
+>r : number
+>1 : 1
+}
+else {
+    d.r = 2
+>d.r = 2 : 2
+>d.r : number
+>d : typeof d
+>r : number
+>2 : 2
+}
+d.r
+>d.r : number
+>d : typeof d
+>r : number
+
+// test function expressions too
+const g = function() {
+>g : { (): void; expando: number; both: string | number; }
+>function() {} : { (): void; expando: number; both: string | number; }
+}
+if (!!false) {
+>!!false : false
+>!false : true
+>false : false
+
+    g.expando = 1
+>g.expando = 1 : 1
+>g.expando : number
+>g : { (): void; expando: number; both: string | number; }
+>expando : number
+>1 : 1
+}
+g.expando // error
+>g.expando : number
+>g : { (): void; expando: number; both: string | number; }
+>expando : number
+
+if (!!false) {
+>!!false : false
+>!false : true
+>false : false
+
+    g.both = 'hi'
+>g.both = 'hi' : "hi"
+>g.both : string | number
+>g : { (): void; expando: number; both: string | number; }
+>both : string | number
+>'hi' : "hi"
+}
+else {
+    g.both = 0
+>g.both = 0 : 0
+>g.both : string | number
+>g : { (): void; expando: number; both: string | number; }
+>both : string | number
+>0 : 0
+}
+g.both
+>g.both : string | number
+>g : { (): void; expando: number; both: string | number; }
+>both : string | number
+

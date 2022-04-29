@@ -1,0 +1,366 @@
+===================================================================
+JsFile: sourceMapValidationClass.js
+mapUrl: sourceMapValidationClass.js.map
+sourceRoot: 
+sources: sourceMapValidationClass.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:tests/cases/compiler/sourceMapValidationClass.js
+sourceFile:sourceMapValidationClass.ts
+-------------------------------------------------------------------
+>>>var Greeter = /** @class */ (function () {
+1 >
+2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+---
+>>>    function Greeter(greeting) {
+1->^^^^
+2 >    ^^^^^^^^^^^^^^^^^
+3 >                     ^^^^^^^^
+1->class Greeter {
+  >    
+2 >    constructor(public 
+3 >                     greeting: string
+1->Emitted(2, 5) Source(2, 5) + SourceIndex(0)
+2 >Emitted(2, 22) Source(2, 24) + SourceIndex(0)
+3 >Emitted(2, 30) Source(2, 40) + SourceIndex(0)
+---
+>>>        var b = [];
+1 >^^^^^^^^
+2 >        ^^^^^^^^^^^
+3 >                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >, 
+2 >        ...b: string[]
+1 >Emitted(3, 9) Source(2, 42) + SourceIndex(0)
+2 >Emitted(3, 20) Source(2, 56) + SourceIndex(0)
+---
+>>>        for (var _i = 1; _i < arguments.length; _i++) {
+1->^^^^^^^^^^^^^
+2 >             ^^^^^^^^^^
+3 >                       ^^
+4 >                         ^^^^^^^^^^^^^^^^^^^^^
+5 >                                              ^^
+6 >                                                ^^^^
+1->
+2 >             ...b: string[]
+3 >                       
+4 >                         ...b: string[]
+5 >                                              
+6 >                                                ...b: string[]
+1->Emitted(4, 14) Source(2, 42) + SourceIndex(0)
+2 >Emitted(4, 24) Source(2, 56) + SourceIndex(0)
+3 >Emitted(4, 26) Source(2, 42) + SourceIndex(0)
+4 >Emitted(4, 47) Source(2, 56) + SourceIndex(0)
+5 >Emitted(4, 49) Source(2, 42) + SourceIndex(0)
+6 >Emitted(4, 53) Source(2, 56) + SourceIndex(0)
+---
+>>>            b[_i - 1] = arguments[_i];
+1 >^^^^^^^^^^^^
+2 >            ^^^^^^^^^^^^^^^^^^^^^^^^^^
+1 >
+2 >            ...b: string[]
+1 >Emitted(5, 13) Source(2, 42) + SourceIndex(0)
+2 >Emitted(5, 39) Source(2, 56) + SourceIndex(0)
+---
+>>>        }
+>>>        this.greeting = greeting;
+1 >^^^^^^^^
+2 >        ^^^^^^^^^^^^^
+3 >                     ^^^
+4 >                        ^^^^^^^^
+5 >                                ^
+1 >
+2 >        greeting
+3 >                     
+4 >                        greeting
+5 >                                : string
+1 >Emitted(7, 9) Source(2, 24) + SourceIndex(0)
+2 >Emitted(7, 22) Source(2, 32) + SourceIndex(0)
+3 >Emitted(7, 25) Source(2, 24) + SourceIndex(0)
+4 >Emitted(7, 33) Source(2, 32) + SourceIndex(0)
+5 >Emitted(7, 34) Source(2, 40) + SourceIndex(0)
+---
+>>>        this.x1 = 10;
+1 >^^^^^^^^
+2 >        ^^^^^^^
+3 >               ^^^
+4 >                  ^^
+5 >                    ^
+1 >, ...b: string[]) {
+  >    }
+  >    greet() {
+  >        return "<h1>" + this.greeting + "</h1>";
+  >    }
+  >    private x: string;
+  >    private 
+2 >        x1
+3 >               : number = 
+4 >                  10
+5 >                    ;
+1 >Emitted(8, 9) Source(8, 13) + SourceIndex(0)
+2 >Emitted(8, 16) Source(8, 15) + SourceIndex(0)
+3 >Emitted(8, 19) Source(8, 26) + SourceIndex(0)
+4 >Emitted(8, 21) Source(8, 28) + SourceIndex(0)
+5 >Emitted(8, 22) Source(8, 29) + SourceIndex(0)
+---
+>>>    }
+1 >^^^^
+2 >    ^
+3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+2 >    }
+1 >Emitted(9, 5) Source(3, 5) + SourceIndex(0)
+2 >Emitted(9, 6) Source(3, 6) + SourceIndex(0)
+---
+>>>    Greeter.prototype.greet = function () {
+1->^^^^
+2 >    ^^^^^^^^^^^^^^^^^^^^^^^
+3 >                           ^^^
+4 >                              ^^^^^^^^^^^^^^^^^^^->
+1->
+  >    
+2 >    greet
+3 >                           
+1->Emitted(10, 5) Source(4, 5) + SourceIndex(0)
+2 >Emitted(10, 28) Source(4, 10) + SourceIndex(0)
+3 >Emitted(10, 31) Source(4, 5) + SourceIndex(0)
+---
+>>>        return "<h1>" + this.greeting + "</h1>";
+1->^^^^^^^^
+2 >        ^^^^^^^
+3 >               ^^^^^^
+4 >                     ^^^
+5 >                        ^^^^
+6 >                            ^
+7 >                             ^^^^^^^^
+8 >                                     ^^^
+9 >                                        ^^^^^^^
+10>                                               ^
+1->greet() {
+  >        
+2 >        return 
+3 >               "<h1>"
+4 >                      + 
+5 >                        this
+6 >                            .
+7 >                             greeting
+8 >                                      + 
+9 >                                        "</h1>"
+10>                                               ;
+1->Emitted(11, 9) Source(5, 9) + SourceIndex(0)
+2 >Emitted(11, 16) Source(5, 16) + SourceIndex(0)
+3 >Emitted(11, 22) Source(5, 22) + SourceIndex(0)
+4 >Emitted(11, 25) Source(5, 25) + SourceIndex(0)
+5 >Emitted(11, 29) Source(5, 29) + SourceIndex(0)
+6 >Emitted(11, 30) Source(5, 30) + SourceIndex(0)
+7 >Emitted(11, 38) Source(5, 38) + SourceIndex(0)
+8 >Emitted(11, 41) Source(5, 41) + SourceIndex(0)
+9 >Emitted(11, 48) Source(5, 48) + SourceIndex(0)
+10>Emitted(11, 49) Source(5, 49) + SourceIndex(0)
+---
+>>>    };
+1 >^^^^
+2 >    ^
+3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >    
+2 >    }
+1 >Emitted(12, 5) Source(6, 5) + SourceIndex(0)
+2 >Emitted(12, 6) Source(6, 6) + SourceIndex(0)
+---
+>>>    Greeter.prototype.fn = function () {
+1->^^^^
+2 >    ^^^^^^^^^^^^^^^^^^^^
+3 >                        ^^^
+4 >                           ^^^->
+1->
+  >    private x: string;
+  >    private x1: number = 10;
+  >    private 
+2 >    fn
+3 >                        
+1->Emitted(13, 5) Source(9, 13) + SourceIndex(0)
+2 >Emitted(13, 25) Source(9, 15) + SourceIndex(0)
+3 >Emitted(13, 28) Source(9, 5) + SourceIndex(0)
+---
+>>>        return this.greeting;
+1->^^^^^^^^
+2 >        ^^^^^^^
+3 >               ^^^^
+4 >                   ^
+5 >                    ^^^^^^^^
+6 >                            ^
+1->private fn() {
+  >        
+2 >        return 
+3 >               this
+4 >                   .
+5 >                    greeting
+6 >                            ;
+1->Emitted(14, 9) Source(10, 9) + SourceIndex(0)
+2 >Emitted(14, 16) Source(10, 16) + SourceIndex(0)
+3 >Emitted(14, 20) Source(10, 20) + SourceIndex(0)
+4 >Emitted(14, 21) Source(10, 21) + SourceIndex(0)
+5 >Emitted(14, 29) Source(10, 29) + SourceIndex(0)
+6 >Emitted(14, 30) Source(10, 30) + SourceIndex(0)
+---
+>>>    };
+1 >^^^^
+2 >    ^
+3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >    
+2 >    }
+1 >Emitted(15, 5) Source(11, 5) + SourceIndex(0)
+2 >Emitted(15, 6) Source(11, 6) + SourceIndex(0)
+---
+>>>    Object.defineProperty(Greeter.prototype, "greetings", {
+1->^^^^
+2 >    ^^^^^^^^^^^^^^^^^^^^^^
+3 >                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+1->
+  >    
+2 >    get 
+3 >                          greetings
+1->Emitted(16, 5) Source(12, 5) + SourceIndex(0)
+2 >Emitted(16, 27) Source(12, 9) + SourceIndex(0)
+3 >Emitted(16, 57) Source(12, 18) + SourceIndex(0)
+---
+>>>        get: function () {
+1 >^^^^^^^^^^^^^
+2 >             ^^^^^^^^^^^^^^^^^^^^^->
+1 >
+1 >Emitted(17, 14) Source(12, 5) + SourceIndex(0)
+---
+>>>            return this.greeting;
+1->^^^^^^^^^^^^
+2 >            ^^^^^^^
+3 >                   ^^^^
+4 >                       ^
+5 >                        ^^^^^^^^
+6 >                                ^
+1->get greetings() {
+  >        
+2 >            return 
+3 >                   this
+4 >                       .
+5 >                        greeting
+6 >                                ;
+1->Emitted(18, 13) Source(13, 9) + SourceIndex(0)
+2 >Emitted(18, 20) Source(13, 16) + SourceIndex(0)
+3 >Emitted(18, 24) Source(13, 20) + SourceIndex(0)
+4 >Emitted(18, 25) Source(13, 21) + SourceIndex(0)
+5 >Emitted(18, 33) Source(13, 29) + SourceIndex(0)
+6 >Emitted(18, 34) Source(13, 30) + SourceIndex(0)
+---
+>>>        },
+1 >^^^^^^^^
+2 >        ^
+3 >         ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >    
+2 >        }
+1 >Emitted(19, 9) Source(14, 5) + SourceIndex(0)
+2 >Emitted(19, 10) Source(14, 6) + SourceIndex(0)
+---
+>>>        set: function (greetings) {
+1->^^^^^^^^^^^^^
+2 >             ^^^^^^^^^^
+3 >                       ^^^^^^^^^
+4 >                                ^^^^^^^->
+1->
+  >    
+2 >             set greetings(
+3 >                       greetings: string
+1->Emitted(20, 14) Source(15, 5) + SourceIndex(0)
+2 >Emitted(20, 24) Source(15, 19) + SourceIndex(0)
+3 >Emitted(20, 33) Source(15, 36) + SourceIndex(0)
+---
+>>>            this.greeting = greetings;
+1->^^^^^^^^^^^^
+2 >            ^^^^
+3 >                ^
+4 >                 ^^^^^^^^
+5 >                         ^^^
+6 >                            ^^^^^^^^^
+7 >                                     ^
+1->) {
+  >        
+2 >            this
+3 >                .
+4 >                 greeting
+5 >                          = 
+6 >                            greetings
+7 >                                     ;
+1->Emitted(21, 13) Source(16, 9) + SourceIndex(0)
+2 >Emitted(21, 17) Source(16, 13) + SourceIndex(0)
+3 >Emitted(21, 18) Source(16, 14) + SourceIndex(0)
+4 >Emitted(21, 26) Source(16, 22) + SourceIndex(0)
+5 >Emitted(21, 29) Source(16, 25) + SourceIndex(0)
+6 >Emitted(21, 38) Source(16, 34) + SourceIndex(0)
+7 >Emitted(21, 39) Source(16, 35) + SourceIndex(0)
+---
+>>>        },
+1 >^^^^^^^^
+2 >        ^
+3 >         ^^^^^^^^^^^^^^^^^^->
+1 >
+  >    
+2 >        }
+1 >Emitted(22, 9) Source(17, 5) + SourceIndex(0)
+2 >Emitted(22, 10) Source(17, 6) + SourceIndex(0)
+---
+>>>        enumerable: false,
+>>>        configurable: true
+>>>    });
+1->^^^^^^^
+2 >       ^^^^^^^^^^^^^->
+1->
+1->Emitted(25, 8) Source(14, 6) + SourceIndex(0)
+---
+>>>    return Greeter;
+1->^^^^
+2 >    ^^^^^^^^^^^^^^
+1->
+  >    set greetings(greetings: string) {
+  >        this.greeting = greetings;
+  >    }
+  >
+2 >    }
+1->Emitted(26, 5) Source(18, 1) + SourceIndex(0)
+2 >Emitted(26, 19) Source(18, 2) + SourceIndex(0)
+---
+>>>}());
+1 >
+2 >^
+3 > 
+4 > ^^^^
+5 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+2 >}
+3 > 
+4 > class Greeter {
+  >     constructor(public greeting: string, ...b: string[]) {
+  >     }
+  >     greet() {
+  >         return "<h1>" + this.greeting + "</h1>";
+  >     }
+  >     private x: string;
+  >     private x1: number = 10;
+  >     private fn() {
+  >         return this.greeting;
+  >     }
+  >     get greetings() {
+  >         return this.greeting;
+  >     }
+  >     set greetings(greetings: string) {
+  >         this.greeting = greetings;
+  >     }
+  > }
+1 >Emitted(27, 1) Source(18, 1) + SourceIndex(0)
+2 >Emitted(27, 2) Source(18, 2) + SourceIndex(0)
+3 >Emitted(27, 2) Source(1, 1) + SourceIndex(0)
+4 >Emitted(27, 6) Source(18, 2) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=sourceMapValidationClass.js.map

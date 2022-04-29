@@ -1,0 +1,8 @@
+=== tests/cases/conformance/es6/templates/templateStringWithEmbeddedMultiplication.ts ===
+var x = `abc${ 7 * 6 }def`;
+>x : string
+>`abc${ 7 * 6 }def` : string
+>7 * 6 : number
+>7 : 7
+>6 : 6
+

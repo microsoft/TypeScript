@@ -1,0 +1,729 @@
+=== tests/cases/compiler/numberVsBigIntOperations.ts ===
+// Cannot mix bigints and numbers
+let bigInt = 1n, num = 2;
+>bigInt : bigint
+>1n : 1n
+>num : number
+>2 : 2
+
+bigInt = 1n; bigInt = 2; num = 1n; num = 2;
+>bigInt = 1n : 1n
+>bigInt : bigint
+>1n : 1n
+>bigInt = 2 : 2
+>bigInt : bigint
+>2 : 2
+>num = 1n : 1n
+>num : number
+>1n : 1n
+>num = 2 : 2
+>num : number
+>2 : 2
+
+bigInt += 1n; bigInt += 2; num += 1n; num += 2;
+>bigInt += 1n : bigint
+>bigInt : bigint
+>1n : 1n
+>bigInt += 2 : any
+>bigInt : bigint
+>2 : 2
+>num += 1n : any
+>num : number
+>1n : 1n
+>num += 2 : number
+>num : number
+>2 : 2
+
+bigInt -= 1n; bigInt -= 2; num -= 1n; num -= 2;
+>bigInt -= 1n : bigint
+>bigInt : bigint
+>1n : 1n
+>bigInt -= 2 : any
+>bigInt : bigint
+>2 : 2
+>num -= 1n : any
+>num : number
+>1n : 1n
+>num -= 2 : number
+>num : number
+>2 : 2
+
+bigInt *= 1n; bigInt *= 2; num *= 1n; num *= 2;
+>bigInt *= 1n : bigint
+>bigInt : bigint
+>1n : 1n
+>bigInt *= 2 : any
+>bigInt : bigint
+>2 : 2
+>num *= 1n : any
+>num : number
+>1n : 1n
+>num *= 2 : number
+>num : number
+>2 : 2
+
+bigInt /= 1n; bigInt /= 2; num /= 1n; num /= 2;
+>bigInt /= 1n : bigint
+>bigInt : bigint
+>1n : 1n
+>bigInt /= 2 : any
+>bigInt : bigint
+>2 : 2
+>num /= 1n : any
+>num : number
+>1n : 1n
+>num /= 2 : number
+>num : number
+>2 : 2
+
+bigInt %= 1n; bigInt %= 2; num %= 1n; num %= 2;
+>bigInt %= 1n : bigint
+>bigInt : bigint
+>1n : 1n
+>bigInt %= 2 : any
+>bigInt : bigint
+>2 : 2
+>num %= 1n : any
+>num : number
+>1n : 1n
+>num %= 2 : number
+>num : number
+>2 : 2
+
+bigInt **= 1n; bigInt **= 2; num **= 1n; num **= 2;
+>bigInt **= 1n : bigint
+>bigInt : bigint
+>1n : 1n
+>bigInt **= 2 : any
+>bigInt : bigint
+>2 : 2
+>num **= 1n : any
+>num : number
+>1n : 1n
+>num **= 2 : number
+>num : number
+>2 : 2
+
+bigInt <<= 1n; bigInt <<= 2; num <<= 1n; num <<= 2;
+>bigInt <<= 1n : bigint
+>bigInt : bigint
+>1n : 1n
+>bigInt <<= 2 : any
+>bigInt : bigint
+>2 : 2
+>num <<= 1n : any
+>num : number
+>1n : 1n
+>num <<= 2 : number
+>num : number
+>2 : 2
+
+bigInt >>= 1n; bigInt >>= 2; num >>= 1n; num >>= 2;
+>bigInt >>= 1n : bigint
+>bigInt : bigint
+>1n : 1n
+>bigInt >>= 2 : any
+>bigInt : bigint
+>2 : 2
+>num >>= 1n : any
+>num : number
+>1n : 1n
+>num >>= 2 : number
+>num : number
+>2 : 2
+
+bigInt &= 1n; bigInt &= 2; num &= 1n; num &= 2;
+>bigInt &= 1n : bigint
+>bigInt : bigint
+>1n : 1n
+>bigInt &= 2 : any
+>bigInt : bigint
+>2 : 2
+>num &= 1n : any
+>num : number
+>1n : 1n
+>num &= 2 : number
+>num : number
+>2 : 2
+
+bigInt ^= 1n; bigInt ^= 2; num ^= 1n; num ^= 2;
+>bigInt ^= 1n : bigint
+>bigInt : bigint
+>1n : 1n
+>bigInt ^= 2 : any
+>bigInt : bigint
+>2 : 2
+>num ^= 1n : any
+>num : number
+>1n : 1n
+>num ^= 2 : number
+>num : number
+>2 : 2
+
+bigInt |= 1n; bigInt |= 2; num |= 1n; num |= 2;
+>bigInt |= 1n : bigint
+>bigInt : bigint
+>1n : 1n
+>bigInt |= 2 : any
+>bigInt : bigint
+>2 : 2
+>num |= 1n : any
+>num : number
+>1n : 1n
+>num |= 2 : number
+>num : number
+>2 : 2
+
+bigInt = 1n + 2n; num = 1 + 2; 1 + 2n; 1n + 2;
+>bigInt = 1n + 2n : bigint
+>bigInt : bigint
+>1n + 2n : bigint
+>1n : 1n
+>2n : 2n
+>num = 1 + 2 : number
+>num : number
+>1 + 2 : number
+>1 : 1
+>2 : 2
+>1 + 2n : any
+>1 : 1
+>2n : 2n
+>1n + 2 : any
+>1n : 1n
+>2 : 2
+
+bigInt = 1n - 2n; num = 1 - 2; 1 - 2n; 1n - 2;
+>bigInt = 1n - 2n : bigint
+>bigInt : bigint
+>1n - 2n : bigint
+>1n : 1n
+>2n : 2n
+>num = 1 - 2 : number
+>num : number
+>1 - 2 : number
+>1 : 1
+>2 : 2
+>1 - 2n : any
+>1 : 1
+>2n : 2n
+>1n - 2 : any
+>1n : 1n
+>2 : 2
+
+bigInt = 1n * 2n; num = 1 * 2; 1 * 2n; 1n * 2;
+>bigInt = 1n * 2n : bigint
+>bigInt : bigint
+>1n * 2n : bigint
+>1n : 1n
+>2n : 2n
+>num = 1 * 2 : number
+>num : number
+>1 * 2 : number
+>1 : 1
+>2 : 2
+>1 * 2n : any
+>1 : 1
+>2n : 2n
+>1n * 2 : any
+>1n : 1n
+>2 : 2
+
+bigInt = 1n / 2n; num = 1 / 2; 1 / 2n; 1n / 2;
+>bigInt = 1n / 2n : bigint
+>bigInt : bigint
+>1n / 2n : bigint
+>1n : 1n
+>2n : 2n
+>num = 1 / 2 : number
+>num : number
+>1 / 2 : number
+>1 : 1
+>2 : 2
+>1 / 2n : any
+>1 : 1
+>2n : 2n
+>1n / 2 : any
+>1n : 1n
+>2 : 2
+
+bigInt = 1n % 2n; num = 1 % 2; 1 % 2n; 1n % 2;
+>bigInt = 1n % 2n : bigint
+>bigInt : bigint
+>1n % 2n : bigint
+>1n : 1n
+>2n : 2n
+>num = 1 % 2 : number
+>num : number
+>1 % 2 : number
+>1 : 1
+>2 : 2
+>1 % 2n : any
+>1 : 1
+>2n : 2n
+>1n % 2 : any
+>1n : 1n
+>2 : 2
+
+bigInt = 1n ** 2n; num = 1 ** 2; 1 ** 2n; 1n ** 2;
+>bigInt = 1n ** 2n : bigint
+>bigInt : bigint
+>1n ** 2n : bigint
+>1n : 1n
+>2n : 2n
+>num = 1 ** 2 : number
+>num : number
+>1 ** 2 : number
+>1 : 1
+>2 : 2
+>1 ** 2n : any
+>1 : 1
+>2n : 2n
+>1n ** 2 : any
+>1n : 1n
+>2 : 2
+
+bigInt = 1n & 2n; num = 1 & 2; 1 & 2n; 1n & 2;
+>bigInt = 1n & 2n : bigint
+>bigInt : bigint
+>1n & 2n : bigint
+>1n : 1n
+>2n : 2n
+>num = 1 & 2 : number
+>num : number
+>1 & 2 : number
+>1 : 1
+>2 : 2
+>1 & 2n : any
+>1 : 1
+>2n : 2n
+>1n & 2 : any
+>1n : 1n
+>2 : 2
+
+bigInt = 1n | 2n; num = 1 | 2; 1 | 2n; 1n | 2;
+>bigInt = 1n | 2n : bigint
+>bigInt : bigint
+>1n | 2n : bigint
+>1n : 1n
+>2n : 2n
+>num = 1 | 2 : number
+>num : number
+>1 | 2 : number
+>1 : 1
+>2 : 2
+>1 | 2n : any
+>1 : 1
+>2n : 2n
+>1n | 2 : any
+>1n : 1n
+>2 : 2
+
+bigInt = 1n ^ 2n; num = 1 ^ 2; 1 ^ 2n; 1n ^ 2;
+>bigInt = 1n ^ 2n : bigint
+>bigInt : bigint
+>1n ^ 2n : bigint
+>1n : 1n
+>2n : 2n
+>num = 1 ^ 2 : number
+>num : number
+>1 ^ 2 : number
+>1 : 1
+>2 : 2
+>1 ^ 2n : any
+>1 : 1
+>2n : 2n
+>1n ^ 2 : any
+>1n : 1n
+>2 : 2
+
+bigInt = 1n << 2n; num = 1 << 2; 1 << 2n; 1n << 2;
+>bigInt = 1n << 2n : bigint
+>bigInt : bigint
+>1n << 2n : bigint
+>1n : 1n
+>2n : 2n
+>num = 1 << 2 : number
+>num : number
+>1 << 2 : number
+>1 : 1
+>2 : 2
+>1 << 2n : any
+>1 : 1
+>2n : 2n
+>1n << 2 : any
+>1n : 1n
+>2 : 2
+
+bigInt = 1n >> 2n; num = 1 >> 2; 1 >> 2n; 1n >> 2;
+>bigInt = 1n >> 2n : bigint
+>bigInt : bigint
+>1n >> 2n : bigint
+>1n : 1n
+>2n : 2n
+>num = 1 >> 2 : number
+>num : number
+>1 >> 2 : number
+>1 : 1
+>2 : 2
+>1 >> 2n : any
+>1 : 1
+>2n : 2n
+>1n >> 2 : any
+>1n : 1n
+>2 : 2
+
+// Plus should still coerce to strings
+let str: string;
+>str : string
+
+str = "abc" + 123; str = "abc" + 123n; str = 123 + "abc"; str = 123n + "abc";
+>str = "abc" + 123 : string
+>str : string
+>"abc" + 123 : string
+>"abc" : "abc"
+>123 : 123
+>str = "abc" + 123n : string
+>str : string
+>"abc" + 123n : string
+>"abc" : "abc"
+>123n : 123n
+>str = 123 + "abc" : string
+>str : string
+>123 + "abc" : string
+>123 : 123
+>"abc" : "abc"
+>str = 123n + "abc" : string
+>str : string
+>123n + "abc" : string
+>123n : 123n
+>"abc" : "abc"
+
+// Unary operations allowed on bigints and numbers
+bigInt = bigInt++; bigInt = ++bigInt; num = num++; num = ++num;
+>bigInt = bigInt++ : bigint
+>bigInt : bigint
+>bigInt++ : bigint
+>bigInt : bigint
+>bigInt = ++bigInt : bigint
+>bigInt : bigint
+>++bigInt : bigint
+>bigInt : bigint
+>num = num++ : number
+>num : number
+>num++ : number
+>num : number
+>num = ++num : number
+>num : number
+>++num : number
+>num : number
+
+bigInt = bigInt--; bigInt = --bigInt; num = num--; num = --num;
+>bigInt = bigInt-- : bigint
+>bigInt : bigint
+>bigInt-- : bigint
+>bigInt : bigint
+>bigInt = --bigInt : bigint
+>bigInt : bigint
+>--bigInt : bigint
+>bigInt : bigint
+>num = num-- : number
+>num : number
+>num-- : number
+>num : number
+>num = --num : number
+>num : number
+>--num : number
+>num : number
+
+bigInt = -bigInt; num = -num;
+>bigInt = -bigInt : bigint
+>bigInt : bigint
+>-bigInt : bigint
+>bigInt : bigint
+>num = -num : number
+>num : number
+>-num : number
+>num : number
+
+bigInt = ~bigInt; num = ~num;
+>bigInt = ~bigInt : bigint
+>bigInt : bigint
+>~bigInt : bigint
+>bigInt : bigint
+>num = ~num : number
+>num : number
+>~num : number
+>num : number
+
+// Number-only operations
+bigInt >>>= 1n; num >>>= 2;
+>bigInt >>>= 1n : bigint
+>bigInt : bigint
+>1n : 1n
+>num >>>= 2 : number
+>num : number
+>2 : 2
+
+bigInt = bigInt >>> 1n; num = num >>> 2;
+>bigInt = bigInt >>> 1n : bigint
+>bigInt : bigint
+>bigInt >>> 1n : bigint
+>bigInt : bigint
+>1n : 1n
+>num = num >>> 2 : number
+>num : number
+>num >>> 2 : number
+>num : number
+>2 : 2
+
+num = +bigInt; num = +num; num = +"3";
+>num = +bigInt : number
+>num : number
+>+bigInt : number
+>bigInt : bigint
+>num = +num : number
+>num : number
+>+num : number
+>num : number
+>num = +"3" : number
+>num : number
+>+"3" : number
+>"3" : "3"
+
+// Comparisons can be mixed
+let result: boolean;
+>result : boolean
+
+result = bigInt > num;
+>result = bigInt > num : boolean
+>result : boolean
+>bigInt > num : boolean
+>bigInt : bigint
+>num : number
+
+result = bigInt >= num;
+>result = bigInt >= num : boolean
+>result : boolean
+>bigInt >= num : boolean
+>bigInt : bigint
+>num : number
+
+result = bigInt < num;
+>result = bigInt < num : boolean
+>result : boolean
+>bigInt < num : boolean
+>bigInt : bigint
+>num : number
+
+result = bigInt <= num;
+>result = bigInt <= num : boolean
+>result : boolean
+>bigInt <= num : boolean
+>bigInt : bigint
+>num : number
+
+// Trying to compare for equality is likely an error (since 1 == "1" is disallowed)
+result = bigInt == num;
+>result = bigInt == num : boolean
+>result : boolean
+>bigInt == num : boolean
+>bigInt : bigint
+>num : number
+
+result = bigInt != num;
+>result = bigInt != num : boolean
+>result : boolean
+>bigInt != num : boolean
+>bigInt : bigint
+>num : number
+
+result = bigInt === num;
+>result = bigInt === num : boolean
+>result : boolean
+>bigInt === num : boolean
+>bigInt : bigint
+>num : number
+
+result = bigInt !== num;
+>result = bigInt !== num : boolean
+>result : boolean
+>bigInt !== num : boolean
+>bigInt : bigint
+>num : number
+
+// Types of arithmetic operations on other types
+num = "3" & 5; num = 2 ** false; // should error, but infer number
+>num = "3" & 5 : number
+>num : number
+>"3" & 5 : number
+>"3" : "3"
+>5 : 5
+>num = 2 ** false : number
+>num : number
+>2 ** false : number
+>2 : 2
+>false : false
+
+"3" & 5n; 2n ** false; // should error, result in any
+>"3" & 5n : any
+>"3" : "3"
+>5n : 5n
+>2n ** false : any
+>2n : 2n
+>false : false
+
+num = ~"3"; num = -false; // should infer number
+>num = ~"3" : number
+>num : number
+>~"3" : number
+>"3" : "3"
+>num = -false : number
+>num : number
+>-false : number
+>false : false
+
+let bigIntOrNumber: bigint | number;
+>bigIntOrNumber : number | bigint
+
+bigIntOrNumber + bigIntOrNumber; // should error, result in any
+>bigIntOrNumber + bigIntOrNumber : any
+>bigIntOrNumber : number | bigint
+>bigIntOrNumber : number | bigint
+
+bigIntOrNumber << bigIntOrNumber; // should error, result in any
+>bigIntOrNumber << bigIntOrNumber : any
+>bigIntOrNumber : number | bigint
+>bigIntOrNumber : number | bigint
+
+if (typeof bigIntOrNumber === "bigint") {
+>typeof bigIntOrNumber === "bigint" : boolean
+>typeof bigIntOrNumber : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>bigIntOrNumber : number | bigint
+>"bigint" : "bigint"
+
+    // Allowed, as type is narrowed to bigint
+    bigIntOrNumber = bigIntOrNumber << bigIntOrNumber;
+>bigIntOrNumber = bigIntOrNumber << bigIntOrNumber : bigint
+>bigIntOrNumber : number | bigint
+>bigIntOrNumber << bigIntOrNumber : bigint
+>bigIntOrNumber : bigint
+>bigIntOrNumber : bigint
+}
+if (typeof bigIntOrNumber === "number") {
+>typeof bigIntOrNumber === "number" : boolean
+>typeof bigIntOrNumber : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>bigIntOrNumber : number | bigint
+>"number" : "number"
+
+    // Allowed, as type is narrowed to number
+    bigIntOrNumber = bigIntOrNumber << bigIntOrNumber;
+>bigIntOrNumber = bigIntOrNumber << bigIntOrNumber : number
+>bigIntOrNumber : number | bigint
+>bigIntOrNumber << bigIntOrNumber : number
+>bigIntOrNumber : number
+>bigIntOrNumber : number
+}
++bigIntOrNumber; // should error, result in number
+>+bigIntOrNumber : number
+>bigIntOrNumber : number | bigint
+
+~bigIntOrNumber; // should infer number | bigint
+>~bigIntOrNumber : number | bigint
+>bigIntOrNumber : number | bigint
+
+bigIntOrNumber++; // should infer number | bigint
+>bigIntOrNumber++ : number | bigint
+>bigIntOrNumber : number | bigint
+
+++bigIntOrNumber; // should infer number | bigint
+>++bigIntOrNumber : number | bigint
+>bigIntOrNumber : number | bigint
+
+let anyValue: any;
+>anyValue : any
+
+anyValue + anyValue; // should infer any
+>anyValue + anyValue : any
+>anyValue : any
+>anyValue : any
+
+anyValue >>> anyValue; // should infer number
+>anyValue >>> anyValue : number
+>anyValue : any
+>anyValue : any
+
+anyValue ^ anyValue; // should infer number
+>anyValue ^ anyValue : number
+>anyValue : any
+>anyValue : any
+
++anyValue; // should infer number
+>+anyValue : number
+>anyValue : any
+
+-anyValue; // should infer number
+>-anyValue : number
+>anyValue : any
+
+anyValue--; // should infer number
+>anyValue-- : number
+>anyValue : any
+
+--anyValue; // should infer number
+>--anyValue : number
+>anyValue : any
+
+// Distinguishing numbers from bigints with typeof
+const isBigInt: (x: 0n | 1n) => bigint = (x: 0n | 1n) => x;
+>isBigInt : (x: 0n | 1n) => bigint
+>x : 0n | 1n
+>(x: 0n | 1n) => x : (x: 0n | 1n) => 0n | 1n
+>x : 0n | 1n
+>x : 0n | 1n
+
+const isNumber: (x: 0 | 1) => number = (x: 0 | 1) => x;
+>isNumber : (x: 0 | 1) => number
+>x : 0 | 1
+>(x: 0 | 1) => x : (x: 0 | 1) => 0 | 1
+>x : 0 | 1
+>x : 0 | 1
+
+const zeroOrBigOne: 0 | 1n;
+>zeroOrBigOne : 0 | 1n
+
+if (typeof zeroOrBigOne === "bigint") isBigInt(zeroOrBigOne);
+>typeof zeroOrBigOne === "bigint" : boolean
+>typeof zeroOrBigOne : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>zeroOrBigOne : 0 | 1n
+>"bigint" : "bigint"
+>isBigInt(zeroOrBigOne) : bigint
+>isBigInt : (x: 0n | 1n) => bigint
+>zeroOrBigOne : 1n
+
+else isNumber(zeroOrBigOne);
+>isNumber(zeroOrBigOne) : number
+>isNumber : (x: 0 | 1) => number
+>zeroOrBigOne : 0
+
+// Distinguishing truthy from falsy
+const isOne = (x: 1 | 1n) => x;
+>isOne : (x: 1 | 1n) => 1n | 1
+>(x: 1 | 1n) => x : (x: 1 | 1n) => 1n | 1
+>x : 1n | 1
+>x : 1n | 1
+
+if (zeroOrBigOne) isOne(zeroOrBigOne);
+>zeroOrBigOne : 0 | 1n
+>isOne(zeroOrBigOne) : 1n | 1
+>isOne : (x: 1n | 1) => 1n | 1
+>zeroOrBigOne : 1n
+
+const bigZeroOrOne: 0n | 1;
+>bigZeroOrOne : 0n | 1
+
+if (bigZeroOrOne) isOne(bigZeroOrOne);
+>bigZeroOrOne : 0n | 1
+>isOne(bigZeroOrOne) : 1n | 1
+>isOne : (x: 1n | 1) => 1n | 1
+>bigZeroOrOne : 1
+

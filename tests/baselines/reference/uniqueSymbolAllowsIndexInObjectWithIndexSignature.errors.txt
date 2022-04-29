@@ -1,0 +1,18 @@
+tests/cases/compiler/uniqueSymbolAllowsIndexInObjectWithIndexSignature.ts(10,13): error TS2418: Type of computed property's value is '"str"', which is not assignable to type '"sym"'.
+
+
+==== tests/cases/compiler/uniqueSymbolAllowsIndexInObjectWithIndexSignature.ts (1 errors) ====
+    // https://github.com/Microsoft/TypeScript/issues/21962
+    export const SYM = Symbol('a unique symbol');
+    
+    export interface I {
+      [SYM]: 'sym';
+      [x: string]: 'str';
+    }
+    
+    let a: I = {[SYM]: 'sym'}; // Expect ok
+    let b: I = {[SYM]: 'str'}; // Expect error
+                ~~~~~
+!!! error TS2418: Type of computed property's value is '"str"', which is not assignable to type '"sym"'.
+!!! related TS6500 tests/cases/compiler/uniqueSymbolAllowsIndexInObjectWithIndexSignature.ts:5:3: The expected type comes from property 'unique symbol' which is declared here on type 'I'
+    

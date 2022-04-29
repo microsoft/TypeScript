@@ -1,0 +1,3 @@
+=== tests/cases/compiler/propertyAccess4.ts ===
+null.toBAZ();
+No type information for this code.

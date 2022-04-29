@@ -1,0 +1,36 @@
+=== tests/cases/conformance/parser/ecmascript5/Generics/parserGenericsInTypeContexts2.ts ===
+class C extends A<X<T>, Y<Z<T>>> implements B<X<T>, Y<Z<T>>> {
+>C : C
+>A : any
+}
+
+var v1: C<X<T>, Y<Z<T>>>;
+>v1 : any
+
+var v2: D<X<T>, Y<Z<T>>> = null;
+>v2 : D<X<T>, Y<Z<T>>>
+>null : null
+
+var v3: E.F<X<T>, Y<Z<T>>>;
+>v3 : E.F<X<T>, Y<Z<T>>>
+>E : any
+
+var v4: G.H.I<X<T>, Y<Z<T>>>;
+>v4 : G.H.I<X<T>, Y<Z<T>>>
+>G : any
+>H : any
+
+var v6: K<X<T>, Y<Z<T>>>[];
+>v6 : K<X<T>, Y<Z<T>>>[]
+
+
+function f1(a: E<X<T>, Y<Z<T>>>) {
+>f1 : (a: E<X<T>, Y<Z<T>>>) => void
+>a : E<X<T>, Y<Z<T>>>
+}
+
+function f2(): F<X<T>, Y<Z<T>>> {
+>f2 : () => F<X<T>, Y<Z<T>>>
+}
+
+

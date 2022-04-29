@@ -1,0 +1,154 @@
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithConstructSignatures6.ts(24,11): error TS2430: Interface 'I<T>' incorrectly extends interface 'A'.
+  Types of property 'a' are incompatible.
+    Type 'new (x: T) => T[]' is not assignable to type 'new <T>(x: T) => T[]'.
+      Types of parameters 'x' and 'x' are incompatible.
+        Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
+          'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithConstructSignatures6.ts(28,11): error TS2430: Interface 'I2<T>' incorrectly extends interface 'A'.
+  Types of property 'a2' are incompatible.
+    Type 'new (x: T) => string[]' is not assignable to type 'new <T>(x: T) => string[]'.
+      Types of parameters 'x' and 'x' are incompatible.
+        Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
+          'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithConstructSignatures6.ts(32,11): error TS2430: Interface 'I3<T>' incorrectly extends interface 'A'.
+  Types of property 'a3' are incompatible.
+    Type 'new (x: T) => T' is not assignable to type 'new <T>(x: T) => void'.
+      Types of parameters 'x' and 'x' are incompatible.
+        Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
+          'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithConstructSignatures6.ts(36,11): error TS2430: Interface 'I4<T>' incorrectly extends interface 'A'.
+  Types of property 'a4' are incompatible.
+    Type 'new <U>(x: T, y: U) => string' is not assignable to type 'new <T, U>(x: T, y: U) => string'.
+      Types of parameters 'x' and 'x' are incompatible.
+        Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
+          'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithConstructSignatures6.ts(40,11): error TS2430: Interface 'I5<T>' incorrectly extends interface 'A'.
+  Types of property 'a5' are incompatible.
+    Type 'new <U>(x: (arg: T) => U) => T' is not assignable to type 'new <T, U>(x: (arg: T) => U) => T'.
+      Types of parameters 'x' and 'x' are incompatible.
+        Types of parameters 'arg' and 'arg' are incompatible.
+          Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
+            'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithConstructSignatures6.ts(44,11): error TS2430: Interface 'I7<T>' incorrectly extends interface 'A'.
+  Types of property 'a11' are incompatible.
+    Type 'new <U>(x: { foo: T; }, y: { foo: U; bar: U; }) => Base' is not assignable to type 'new <T>(x: { foo: T; }, y: { foo: T; bar: T; }) => Base'.
+      Types of parameters 'x' and 'x' are incompatible.
+        Type '{ foo: T; }' is not assignable to type '{ foo: T; }'. Two different types with this name exist, but they are unrelated.
+          Types of property 'foo' are incompatible.
+            Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
+              'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithConstructSignatures6.ts(48,11): error TS2430: Interface 'I9<T>' incorrectly extends interface 'A'.
+  Types of property 'a16' are incompatible.
+    Type 'new (x: { a: T; b: T; }) => T[]' is not assignable to type 'new <T extends Base>(x: { a: T; b: T; }) => T[]'.
+      Types of parameters 'x' and 'x' are incompatible.
+        Type '{ a: T; b: T; }' is not assignable to type '{ a: T; b: T; }'. Two different types with this name exist, but they are unrelated.
+          Types of property 'a' are incompatible.
+            Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
+              'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
+
+
+==== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithConstructSignatures6.ts (7 errors) ====
+    // checking subtype relations for function types as it relates to contextual signature instantiation
+    // same as subtypingWithConstructSignatures4 but using class type parameters instead of generic signatures
+    // all are errors
+    
+    class Base { foo: string; }
+    class Derived extends Base { bar: string; }
+    class Derived2 extends Derived { baz: string; }
+    class OtherDerived extends Base { bing: string; }
+    
+    interface A { // T
+        // M's
+        a: new <T>(x: T) => T[];
+        a2: new <T>(x: T) => string[];
+        a3: new <T>(x: T) => void;
+        a4: new <T, U>(x: T, y: U) => string;
+        a5: new <T, U>(x: (arg: T) => U) => T;
+        a6: new <T extends Base>(x: (arg: T) => Derived) => T;
+        a11: new <T>(x: { foo: T }, y: { foo: T; bar: T }) => Base;
+        a15: new <T>(x: { a: T; b: T }) => T[];
+        a16: new <T extends Base>(x: { a: T; b: T }) => T[];
+    }
+    
+    // S's
+    interface I<T> extends A {
+              ~
+!!! error TS2430: Interface 'I<T>' incorrectly extends interface 'A'.
+!!! error TS2430:   Types of property 'a' are incompatible.
+!!! error TS2430:     Type 'new (x: T) => T[]' is not assignable to type 'new <T>(x: T) => T[]'.
+!!! error TS2430:       Types of parameters 'x' and 'x' are incompatible.
+!!! error TS2430:         Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
+!!! error TS2430:           'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
+        a: new (x: T) => T[]; 
+    }
+    
+    interface I2<T> extends A {
+              ~~
+!!! error TS2430: Interface 'I2<T>' incorrectly extends interface 'A'.
+!!! error TS2430:   Types of property 'a2' are incompatible.
+!!! error TS2430:     Type 'new (x: T) => string[]' is not assignable to type 'new <T>(x: T) => string[]'.
+!!! error TS2430:       Types of parameters 'x' and 'x' are incompatible.
+!!! error TS2430:         Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
+!!! error TS2430:           'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
+        a2: new (x: T) => string[]; 
+    }
+    
+    interface I3<T> extends A {
+              ~~
+!!! error TS2430: Interface 'I3<T>' incorrectly extends interface 'A'.
+!!! error TS2430:   Types of property 'a3' are incompatible.
+!!! error TS2430:     Type 'new (x: T) => T' is not assignable to type 'new <T>(x: T) => void'.
+!!! error TS2430:       Types of parameters 'x' and 'x' are incompatible.
+!!! error TS2430:         Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
+!!! error TS2430:           'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
+        a3: new (x: T) => T;
+    }
+    
+    interface I4<T> extends A {
+              ~~
+!!! error TS2430: Interface 'I4<T>' incorrectly extends interface 'A'.
+!!! error TS2430:   Types of property 'a4' are incompatible.
+!!! error TS2430:     Type 'new <U>(x: T, y: U) => string' is not assignable to type 'new <T, U>(x: T, y: U) => string'.
+!!! error TS2430:       Types of parameters 'x' and 'x' are incompatible.
+!!! error TS2430:         Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
+!!! error TS2430:           'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
+        a4: new <U>(x: T, y: U) => string; 
+    }
+    
+    interface I5<T> extends A {
+              ~~
+!!! error TS2430: Interface 'I5<T>' incorrectly extends interface 'A'.
+!!! error TS2430:   Types of property 'a5' are incompatible.
+!!! error TS2430:     Type 'new <U>(x: (arg: T) => U) => T' is not assignable to type 'new <T, U>(x: (arg: T) => U) => T'.
+!!! error TS2430:       Types of parameters 'x' and 'x' are incompatible.
+!!! error TS2430:         Types of parameters 'arg' and 'arg' are incompatible.
+!!! error TS2430:           Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
+!!! error TS2430:             'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
+        a5: new <U>(x: (arg: T) => U) => T; 
+    }
+    
+    interface I7<T> extends A {
+              ~~
+!!! error TS2430: Interface 'I7<T>' incorrectly extends interface 'A'.
+!!! error TS2430:   Types of property 'a11' are incompatible.
+!!! error TS2430:     Type 'new <U>(x: { foo: T; }, y: { foo: U; bar: U; }) => Base' is not assignable to type 'new <T>(x: { foo: T; }, y: { foo: T; bar: T; }) => Base'.
+!!! error TS2430:       Types of parameters 'x' and 'x' are incompatible.
+!!! error TS2430:         Type '{ foo: T; }' is not assignable to type '{ foo: T; }'. Two different types with this name exist, but they are unrelated.
+!!! error TS2430:           Types of property 'foo' are incompatible.
+!!! error TS2430:             Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
+!!! error TS2430:               'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
+        a11: new <U>(x: { foo: T }, y: { foo: U; bar: U }) => Base; 
+    }
+    
+    interface I9<T> extends A {
+              ~~
+!!! error TS2430: Interface 'I9<T>' incorrectly extends interface 'A'.
+!!! error TS2430:   Types of property 'a16' are incompatible.
+!!! error TS2430:     Type 'new (x: { a: T; b: T; }) => T[]' is not assignable to type 'new <T extends Base>(x: { a: T; b: T; }) => T[]'.
+!!! error TS2430:       Types of parameters 'x' and 'x' are incompatible.
+!!! error TS2430:         Type '{ a: T; b: T; }' is not assignable to type '{ a: T; b: T; }'. Two different types with this name exist, but they are unrelated.
+!!! error TS2430:           Types of property 'a' are incompatible.
+!!! error TS2430:             Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
+!!! error TS2430:               'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
+        a16: new (x: { a: T; b: T }) => T[]; 
+    }

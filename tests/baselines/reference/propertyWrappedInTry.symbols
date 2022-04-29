@@ -1,0 +1,23 @@
+=== tests/cases/compiler/propertyWrappedInTry.ts ===
+class Foo {
+>Foo : Symbol(Foo, Decl(propertyWrappedInTry.ts, 0, 0))
+
+    try {
+
+        public bar = someInitThatMightFail();
+
+    } catch(e) {}
+>e : Symbol(e, Decl(propertyWrappedInTry.ts, 6, 12))
+
+
+
+    public baz() {
+
+        return this.bar; // doesn't get rewritten to Foo.bar.
+>this : Symbol(globalThis)
+
+    }
+
+}
+
+

@@ -1,0 +1,49 @@
+=== tests/cases/compiler/defaultBestCommonTypesHaveDecls.ts ===
+var obj1: {};
+>obj1 : Symbol(obj1, Decl(defaultBestCommonTypesHaveDecls.ts, 0, 3))
+
+obj1.length;
+>obj1 : Symbol(obj1, Decl(defaultBestCommonTypesHaveDecls.ts, 0, 3))
+
+var obj2: Object;
+>obj2 : Symbol(obj2, Decl(defaultBestCommonTypesHaveDecls.ts, 3, 3))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+obj2.length;
+>obj2 : Symbol(obj2, Decl(defaultBestCommonTypesHaveDecls.ts, 3, 3))
+
+function concat<T>(x: T, y: T): T { return null; }
+>concat : Symbol(concat, Decl(defaultBestCommonTypesHaveDecls.ts, 4, 12))
+>T : Symbol(T, Decl(defaultBestCommonTypesHaveDecls.ts, 6, 16))
+>x : Symbol(x, Decl(defaultBestCommonTypesHaveDecls.ts, 6, 19))
+>T : Symbol(T, Decl(defaultBestCommonTypesHaveDecls.ts, 6, 16))
+>y : Symbol(y, Decl(defaultBestCommonTypesHaveDecls.ts, 6, 24))
+>T : Symbol(T, Decl(defaultBestCommonTypesHaveDecls.ts, 6, 16))
+>T : Symbol(T, Decl(defaultBestCommonTypesHaveDecls.ts, 6, 16))
+
+var result = concat(1, ""); // error
+>result : Symbol(result, Decl(defaultBestCommonTypesHaveDecls.ts, 7, 3))
+>concat : Symbol(concat, Decl(defaultBestCommonTypesHaveDecls.ts, 4, 12))
+
+var elementCount = result.length; 
+>elementCount : Symbol(elementCount, Decl(defaultBestCommonTypesHaveDecls.ts, 8, 3))
+>result : Symbol(result, Decl(defaultBestCommonTypesHaveDecls.ts, 7, 3))
+
+function concat2<T, U>(x: T, y: U) { return null; }
+>concat2 : Symbol(concat2, Decl(defaultBestCommonTypesHaveDecls.ts, 8, 33))
+>T : Symbol(T, Decl(defaultBestCommonTypesHaveDecls.ts, 10, 17))
+>U : Symbol(U, Decl(defaultBestCommonTypesHaveDecls.ts, 10, 19))
+>x : Symbol(x, Decl(defaultBestCommonTypesHaveDecls.ts, 10, 23))
+>T : Symbol(T, Decl(defaultBestCommonTypesHaveDecls.ts, 10, 17))
+>y : Symbol(y, Decl(defaultBestCommonTypesHaveDecls.ts, 10, 28))
+>U : Symbol(U, Decl(defaultBestCommonTypesHaveDecls.ts, 10, 19))
+
+var result2 = concat2(1, ""); // result2 will be number|string
+>result2 : Symbol(result2, Decl(defaultBestCommonTypesHaveDecls.ts, 11, 3))
+>concat2 : Symbol(concat2, Decl(defaultBestCommonTypesHaveDecls.ts, 8, 33))
+
+var elementCount2 = result.length; 
+>elementCount2 : Symbol(elementCount2, Decl(defaultBestCommonTypesHaveDecls.ts, 12, 3))
+>result : Symbol(result, Decl(defaultBestCommonTypesHaveDecls.ts, 7, 3))
+
+

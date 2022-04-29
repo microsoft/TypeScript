@@ -1,0 +1,13 @@
+=== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ClassElements/parserErrorRecovery_ClassElement3.ts ===
+module M {
+>M : Symbol(M, Decl(parserErrorRecovery_ClassElement3.ts, 0, 0))
+
+   ¬
+   class C {
+>C : Symbol(C, Decl(parserErrorRecovery_ClassElement3.ts, 1, 4))
+   }
+   @
+   enum E {
+>E : Symbol(E, Decl(parserErrorRecovery_ClassElement3.ts, 3, 4))
+
+   ¬

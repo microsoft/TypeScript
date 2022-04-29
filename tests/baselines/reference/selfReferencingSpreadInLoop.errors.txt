@@ -1,0 +1,14 @@
+tests/cases/compiler/selfReferencingSpreadInLoop.ts(1,5): error TS7034: Variable 'additional' implicitly has type 'any[]' in some locations where its type cannot be determined.
+tests/cases/compiler/selfReferencingSpreadInLoop.ts(3,22): error TS7005: Variable 'additional' implicitly has an 'any[]' type.
+
+
+==== tests/cases/compiler/selfReferencingSpreadInLoop.ts (2 errors) ====
+    let additional = [];
+        ~~~~~~~~~~
+!!! error TS7034: Variable 'additional' implicitly has type 'any[]' in some locations where its type cannot be determined.
+    for (const subcomponent of [1, 2, 3]) {
+        additional = [...additional, subcomponent];
+                         ~~~~~~~~~~
+!!! error TS7005: Variable 'additional' implicitly has an 'any[]' type.
+    }
+    

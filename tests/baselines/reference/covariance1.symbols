@@ -1,0 +1,43 @@
+=== tests/cases/compiler/covariance1.ts ===
+module M {
+>M : Symbol(M, Decl(covariance1.ts, 0, 0))
+
+    interface X { m1:number; }
+>X : Symbol(X, Decl(covariance1.ts, 0, 10))
+>m1 : Symbol(X.m1, Decl(covariance1.ts, 2, 17))
+
+    export class XX implements X { constructor(public m1:number) { } }
+>XX : Symbol(XX, Decl(covariance1.ts, 2, 30))
+>X : Symbol(X, Decl(covariance1.ts, 0, 10))
+>m1 : Symbol(XX.m1, Decl(covariance1.ts, 3, 47))
+
+    interface Y { x:X; }
+>Y : Symbol(Y, Decl(covariance1.ts, 3, 70))
+>x : Symbol(Y.x, Decl(covariance1.ts, 5, 17))
+>X : Symbol(X, Decl(covariance1.ts, 0, 10))
+
+    export function f(y:Y) { }
+>f : Symbol(f, Decl(covariance1.ts, 5, 24))
+>y : Symbol(y, Decl(covariance1.ts, 7, 22))
+>Y : Symbol(Y, Decl(covariance1.ts, 3, 70))
+
+    var a:X;
+>a : Symbol(a, Decl(covariance1.ts, 9, 7))
+>X : Symbol(X, Decl(covariance1.ts, 0, 10))
+
+    f({x:a}); // ok
+>f : Symbol(f, Decl(covariance1.ts, 5, 24))
+>x : Symbol(x, Decl(covariance1.ts, 10, 7))
+>a : Symbol(a, Decl(covariance1.ts, 9, 7))
+
+    var b:XX;
+>b : Symbol(b, Decl(covariance1.ts, 12, 7))
+>XX : Symbol(XX, Decl(covariance1.ts, 2, 30))
+
+    f({x:b}); // ok covariant subtype
+>f : Symbol(f, Decl(covariance1.ts, 5, 24))
+>x : Symbol(x, Decl(covariance1.ts, 13, 7))
+>b : Symbol(b, Decl(covariance1.ts, 12, 7))
+}
+
+

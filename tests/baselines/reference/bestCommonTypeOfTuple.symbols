@@ -1,0 +1,84 @@
+=== tests/cases/conformance/types/typeRelationships/bestCommonType/bestCommonTypeOfTuple.ts ===
+function f1(x: number): string { return "foo"; }
+>f1 : Symbol(f1, Decl(bestCommonTypeOfTuple.ts, 0, 0))
+>x : Symbol(x, Decl(bestCommonTypeOfTuple.ts, 0, 12))
+
+function f2(x: number): number { return 10; }
+>f2 : Symbol(f2, Decl(bestCommonTypeOfTuple.ts, 0, 48))
+>x : Symbol(x, Decl(bestCommonTypeOfTuple.ts, 2, 12))
+
+function f3(x: number): boolean { return true; }
+>f3 : Symbol(f3, Decl(bestCommonTypeOfTuple.ts, 2, 45))
+>x : Symbol(x, Decl(bestCommonTypeOfTuple.ts, 4, 12))
+
+enum E1 { one }
+>E1 : Symbol(E1, Decl(bestCommonTypeOfTuple.ts, 4, 48))
+>one : Symbol(E1.one, Decl(bestCommonTypeOfTuple.ts, 6, 9))
+
+enum E2 { two }
+>E2 : Symbol(E2, Decl(bestCommonTypeOfTuple.ts, 6, 15))
+>two : Symbol(E2.two, Decl(bestCommonTypeOfTuple.ts, 8, 9))
+
+
+var t1: [(x: number) => string, (x: number) => number];
+>t1 : Symbol(t1, Decl(bestCommonTypeOfTuple.ts, 11, 3))
+>x : Symbol(x, Decl(bestCommonTypeOfTuple.ts, 11, 10))
+>x : Symbol(x, Decl(bestCommonTypeOfTuple.ts, 11, 33))
+
+var t2: [E1, E2];
+>t2 : Symbol(t2, Decl(bestCommonTypeOfTuple.ts, 12, 3))
+>E1 : Symbol(E1, Decl(bestCommonTypeOfTuple.ts, 4, 48))
+>E2 : Symbol(E2, Decl(bestCommonTypeOfTuple.ts, 6, 15))
+
+var t3: [number, any];
+>t3 : Symbol(t3, Decl(bestCommonTypeOfTuple.ts, 13, 3))
+
+var t4: [E1, E2, number];
+>t4 : Symbol(t4, Decl(bestCommonTypeOfTuple.ts, 14, 3))
+>E1 : Symbol(E1, Decl(bestCommonTypeOfTuple.ts, 4, 48))
+>E2 : Symbol(E2, Decl(bestCommonTypeOfTuple.ts, 6, 15))
+
+// no error
+t1 = [f1, f2];
+>t1 : Symbol(t1, Decl(bestCommonTypeOfTuple.ts, 11, 3))
+>f1 : Symbol(f1, Decl(bestCommonTypeOfTuple.ts, 0, 0))
+>f2 : Symbol(f2, Decl(bestCommonTypeOfTuple.ts, 0, 48))
+
+t2 = [E1.one, E2.two];
+>t2 : Symbol(t2, Decl(bestCommonTypeOfTuple.ts, 12, 3))
+>E1.one : Symbol(E1.one, Decl(bestCommonTypeOfTuple.ts, 6, 9))
+>E1 : Symbol(E1, Decl(bestCommonTypeOfTuple.ts, 4, 48))
+>one : Symbol(E1.one, Decl(bestCommonTypeOfTuple.ts, 6, 9))
+>E2.two : Symbol(E2.two, Decl(bestCommonTypeOfTuple.ts, 8, 9))
+>E2 : Symbol(E2, Decl(bestCommonTypeOfTuple.ts, 6, 15))
+>two : Symbol(E2.two, Decl(bestCommonTypeOfTuple.ts, 8, 9))
+
+t3 = [5, undefined];
+>t3 : Symbol(t3, Decl(bestCommonTypeOfTuple.ts, 13, 3))
+>undefined : Symbol(undefined)
+
+t4 = [E1.one, E2.two, 20];
+>t4 : Symbol(t4, Decl(bestCommonTypeOfTuple.ts, 14, 3))
+>E1.one : Symbol(E1.one, Decl(bestCommonTypeOfTuple.ts, 6, 9))
+>E1 : Symbol(E1, Decl(bestCommonTypeOfTuple.ts, 4, 48))
+>one : Symbol(E1.one, Decl(bestCommonTypeOfTuple.ts, 6, 9))
+>E2.two : Symbol(E2.two, Decl(bestCommonTypeOfTuple.ts, 8, 9))
+>E2 : Symbol(E2, Decl(bestCommonTypeOfTuple.ts, 6, 15))
+>two : Symbol(E2.two, Decl(bestCommonTypeOfTuple.ts, 8, 9))
+
+var e1 = t1[2];  // {}
+>e1 : Symbol(e1, Decl(bestCommonTypeOfTuple.ts, 21, 3))
+>t1 : Symbol(t1, Decl(bestCommonTypeOfTuple.ts, 11, 3))
+
+var e2 = t2[2];  // {}
+>e2 : Symbol(e2, Decl(bestCommonTypeOfTuple.ts, 22, 3))
+>t2 : Symbol(t2, Decl(bestCommonTypeOfTuple.ts, 12, 3))
+
+var e3 = t3[2];  // any
+>e3 : Symbol(e3, Decl(bestCommonTypeOfTuple.ts, 23, 3))
+>t3 : Symbol(t3, Decl(bestCommonTypeOfTuple.ts, 13, 3))
+
+var e4 = t4[3];  // number
+>e4 : Symbol(e4, Decl(bestCommonTypeOfTuple.ts, 24, 3))
+>t4 : Symbol(t4, Decl(bestCommonTypeOfTuple.ts, 14, 3))
+

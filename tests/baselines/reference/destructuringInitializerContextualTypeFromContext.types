@@ -1,0 +1,73 @@
+=== tests/cases/compiler/destructuringInitializerContextualTypeFromContext.ts ===
+interface SFC<P = {}> {
+    (props: P & { children?: any }): any | null;
+>props : P & { children?: any; }
+>children : any
+>null : null
+}
+
+interface Props {
+    name: "Apollo" | "Artemis" | "Dionysus" | "Persephone";
+>name : "Apollo" | "Artemis" | "Dionysus" | "Persephone"
+}
+
+const Parent: SFC<Props> = ({
+>Parent : SFC<Props>
+>({    children,    name = "Artemis",    ...props}) => Child({name, ...props}) : ({ children, name, ...props }: Props & { children?: any; }) => any
+
+    children,
+>children : any
+
+    name = "Artemis",
+>name : "Apollo" | "Artemis" | "Dionysus" | "Persephone"
+>"Artemis" : "Artemis"
+
+    ...props
+>props : {}
+
+}) => Child({name, ...props});
+>Child({name, ...props}) : any
+>Child : SFC<Props>
+>{name, ...props} : { name: "Apollo" | "Artemis" | "Dionysus" | "Persephone"; }
+>name : "Apollo" | "Artemis" | "Dionysus" | "Persephone"
+>props : {}
+
+const Child: SFC<Props> = ({
+>Child : SFC<Props>
+>({    children,    name = "Artemis",    ...props}) => `name: ${name} props: ${JSON.stringify(props)}` : ({ children, name, ...props }: Props & { children?: any; }) => string
+
+    children,
+>children : any
+
+    name = "Artemis",
+>name : "Apollo" | "Artemis" | "Dionysus" | "Persephone"
+>"Artemis" : "Artemis"
+
+    ...props
+>props : {}
+
+}) => `name: ${name} props: ${JSON.stringify(props)}`;
+>`name: ${name} props: ${JSON.stringify(props)}` : string
+>name : "Apollo" | "Artemis" | "Dionysus" | "Persephone"
+>JSON.stringify(props) : string
+>JSON.stringify : { (value: any, replacer?: ((this: any, key: string, value: any) => any) | undefined, space?: string | number | undefined): string; (value: any, replacer?: (string | number)[] | null | undefined, space?: string | number | undefined): string; }
+>JSON : JSON
+>stringify : { (value: any, replacer?: ((this: any, key: string, value: any) => any) | undefined, space?: string | number | undefined): string; (value: any, replacer?: (string | number)[] | null | undefined, space?: string | number | undefined): string; }
+>props : {}
+
+// Repro from #29189
+
+declare function f(g: (as: string[]) => void): void
+>f : (g: (as: string[]) => void) => void
+>g : (as: string[]) => void
+>as : string[]
+
+f(([_1, _2 = undefined]) => undefined)
+>f(([_1, _2 = undefined]) => undefined) : void
+>f : (g: (as: string[]) => void) => void
+>([_1, _2 = undefined]) => undefined : ([_1, _2]: string[]) => undefined
+>_1 : string
+>_2 : string | undefined
+>undefined : undefined
+>undefined : undefined
+

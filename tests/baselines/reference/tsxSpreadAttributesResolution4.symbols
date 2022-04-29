@@ -1,0 +1,93 @@
+=== tests/cases/conformance/jsx/file.tsx ===
+import React = require('react');
+>React : Symbol(React, Decl(file.tsx, 0, 0))
+
+interface PoisonedProp {
+>PoisonedProp : Symbol(PoisonedProp, Decl(file.tsx, 0, 32))
+
+    x: string;
+>x : Symbol(PoisonedProp.x, Decl(file.tsx, 2, 24))
+
+    y: 2;
+>y : Symbol(PoisonedProp.y, Decl(file.tsx, 3, 14))
+}
+
+class Poisoned extends React.Component<PoisonedProp, {}> {
+>Poisoned : Symbol(Poisoned, Decl(file.tsx, 5, 1))
+>React.Component : Symbol(React.Component, Decl(react.d.ts, 158, 55), Decl(react.d.ts, 161, 66))
+>React : Symbol(React, Decl(file.tsx, 0, 0))
+>Component : Symbol(React.Component, Decl(react.d.ts, 158, 55), Decl(react.d.ts, 161, 66))
+>PoisonedProp : Symbol(PoisonedProp, Decl(file.tsx, 0, 32))
+
+    render() {
+>render : Symbol(Poisoned.render, Decl(file.tsx, 7, 58))
+
+        return <div>Hello</div>;
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
+    }
+}
+
+const obj: PoisonedProp = {
+>obj : Symbol(obj, Decl(file.tsx, 13, 5))
+>PoisonedProp : Symbol(PoisonedProp, Decl(file.tsx, 0, 32))
+
+    x: "hello world",
+>x : Symbol(x, Decl(file.tsx, 13, 27))
+
+    y: 2
+>y : Symbol(y, Decl(file.tsx, 14, 21))
+
+};
+
+// OK
+let p = <Poisoned {...obj} />;
+>p : Symbol(p, Decl(file.tsx, 19, 3))
+>Poisoned : Symbol(Poisoned, Decl(file.tsx, 5, 1))
+>obj : Symbol(obj, Decl(file.tsx, 13, 5))
+
+class EmptyProp extends React.Component<{}, {}> {
+>EmptyProp : Symbol(EmptyProp, Decl(file.tsx, 19, 30))
+>React.Component : Symbol(React.Component, Decl(react.d.ts, 158, 55), Decl(react.d.ts, 161, 66))
+>React : Symbol(React, Decl(file.tsx, 0, 0))
+>Component : Symbol(React.Component, Decl(react.d.ts, 158, 55), Decl(react.d.ts, 161, 66))
+
+    render() {
+>render : Symbol(EmptyProp.render, Decl(file.tsx, 21, 49))
+
+        return <div>Default hi</div>;
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
+    }
+}
+
+// OK
+let j: any;
+>j : Symbol(j, Decl(file.tsx, 28, 3))
+
+let e1 = <EmptyProp {...{}} />;
+>e1 : Symbol(e1, Decl(file.tsx, 29, 3))
+>EmptyProp : Symbol(EmptyProp, Decl(file.tsx, 19, 30))
+
+let e2 = <EmptyProp {...j} />
+>e2 : Symbol(e2, Decl(file.tsx, 30, 3))
+>EmptyProp : Symbol(EmptyProp, Decl(file.tsx, 19, 30))
+>j : Symbol(j, Decl(file.tsx, 28, 3))
+
+let e3 = <EmptyProp {...{ ref: (input) => { this.textInput = input; } }} />
+>e3 : Symbol(e3, Decl(file.tsx, 31, 3))
+>EmptyProp : Symbol(EmptyProp, Decl(file.tsx, 19, 30))
+>ref : Symbol(ref, Decl(file.tsx, 31, 25))
+>input : Symbol(input, Decl(file.tsx, 31, 32))
+>input : Symbol(input, Decl(file.tsx, 31, 32))
+
+let e4 = <EmptyProp data-prop />
+>e4 : Symbol(e4, Decl(file.tsx, 32, 3))
+>EmptyProp : Symbol(EmptyProp, Decl(file.tsx, 19, 30))
+>data-prop : Symbol(data-prop, Decl(file.tsx, 32, 19))
+
+let e5 = <EmptyProp {...{ "data-prop": true}} />
+>e5 : Symbol(e5, Decl(file.tsx, 33, 3))
+>EmptyProp : Symbol(EmptyProp, Decl(file.tsx, 19, 30))
+>"data-prop" : Symbol("data-prop", Decl(file.tsx, 33, 25))
+

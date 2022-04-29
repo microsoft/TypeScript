@@ -1,0 +1,37 @@
+=== tests/cases/conformance/types/rest/objectRestPropertyMustBeLast.ts ===
+var {...a, x } = { x: 1 };    // Error, rest must be last property
+>a : {}
+>x : number
+>{ x: 1 } : { x: number; }
+>x : number
+>1 : 1
+
+({...a, x } = { x: 1 });      // Error, rest must be last property
+>({...a, x } = { x: 1 }) : { x: number; }
+>{...a, x } = { x: 1 } : { x: number; }
+>{...a, x } : { x: number; }
+>a : {}
+>x : number
+>{ x: 1 } : { x: number; }
+>x : number
+>1 : 1
+
+var {...a, x, ...b } = { x: 1 };    // Error, rest must be last property
+>a : {}
+>x : number
+>b : {}
+>{ x: 1 } : { x: number; }
+>x : number
+>1 : 1
+
+({...a, x, ...b } = { x: 1 });      // Error, rest must be last property
+>({...a, x, ...b } = { x: 1 }) : { x: number; }
+>{...a, x, ...b } = { x: 1 } : { x: number; }
+>{...a, x, ...b } : { x: number; }
+>a : {}
+>x : number
+>b : {}
+>{ x: 1 } : { x: number; }
+>x : number
+>1 : 1
+

@@ -1,0 +1,9 @@
+=== tests/cases/compiler/genericInference1.ts ===
+['a', 'b', 'c'].map(x => x.length);
+>['a', 'b', 'c'].map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(genericInference1.ts, 0, 20))
+>x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(genericInference1.ts, 0, 20))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+

@@ -1,0 +1,33 @@
+=== tests/cases/compiler/overloadedStaticMethodSpecialization.ts ===
+class A<T> {
+>A : Symbol(A, Decl(overloadedStaticMethodSpecialization.ts, 0, 0))
+>T : Symbol(T, Decl(overloadedStaticMethodSpecialization.ts, 0, 8))
+
+    static B<S>(v: A<S>): A<S>;
+>B : Symbol(A.B, Decl(overloadedStaticMethodSpecialization.ts, 0, 12), Decl(overloadedStaticMethodSpecialization.ts, 1, 31), Decl(overloadedStaticMethodSpecialization.ts, 2, 28))
+>S : Symbol(S, Decl(overloadedStaticMethodSpecialization.ts, 1, 13))
+>v : Symbol(v, Decl(overloadedStaticMethodSpecialization.ts, 1, 16))
+>A : Symbol(A, Decl(overloadedStaticMethodSpecialization.ts, 0, 0))
+>S : Symbol(S, Decl(overloadedStaticMethodSpecialization.ts, 1, 13))
+>A : Symbol(A, Decl(overloadedStaticMethodSpecialization.ts, 0, 0))
+>S : Symbol(S, Decl(overloadedStaticMethodSpecialization.ts, 1, 13))
+
+    static B<S>(v: S): A<S>;
+>B : Symbol(A.B, Decl(overloadedStaticMethodSpecialization.ts, 0, 12), Decl(overloadedStaticMethodSpecialization.ts, 1, 31), Decl(overloadedStaticMethodSpecialization.ts, 2, 28))
+>S : Symbol(S, Decl(overloadedStaticMethodSpecialization.ts, 2, 13))
+>v : Symbol(v, Decl(overloadedStaticMethodSpecialization.ts, 2, 16))
+>S : Symbol(S, Decl(overloadedStaticMethodSpecialization.ts, 2, 13))
+>A : Symbol(A, Decl(overloadedStaticMethodSpecialization.ts, 0, 0))
+>S : Symbol(S, Decl(overloadedStaticMethodSpecialization.ts, 2, 13))
+
+    static B<S>(v: any): A<S> {
+>B : Symbol(A.B, Decl(overloadedStaticMethodSpecialization.ts, 0, 12), Decl(overloadedStaticMethodSpecialization.ts, 1, 31), Decl(overloadedStaticMethodSpecialization.ts, 2, 28))
+>S : Symbol(S, Decl(overloadedStaticMethodSpecialization.ts, 3, 13))
+>v : Symbol(v, Decl(overloadedStaticMethodSpecialization.ts, 3, 16))
+>A : Symbol(A, Decl(overloadedStaticMethodSpecialization.ts, 0, 0))
+>S : Symbol(S, Decl(overloadedStaticMethodSpecialization.ts, 3, 13))
+
+        return null;
+    }
+}
+

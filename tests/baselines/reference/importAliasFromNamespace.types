@@ -1,0 +1,55 @@
+=== tests/cases/compiler/usage.ts ===
+/// <reference path="./internal.ts" />
+namespace SomeOther.Thing {
+>SomeOther : typeof SomeOther
+>Thing : typeof Thing
+
+    import Internal = My.Internal;
+>Internal : typeof Internal
+>My : typeof My
+>Internal : typeof Internal
+
+    export class Foo {
+>Foo : Foo
+
+        private _which: Internal.WhichThing;
+>_which : Internal.WhichThing
+>Internal : any
+
+        constructor() {
+            Internal.getThing();
+>Internal.getThing() : void
+>Internal.getThing : () => void
+>Internal : typeof Internal
+>getThing : () => void
+
+            Internal.WhichThing.A ? "foo" : "bar";
+>Internal.WhichThing.A ? "foo" : "bar" : "foo" | "bar"
+>Internal.WhichThing.A : Internal.WhichThing.A
+>Internal.WhichThing : typeof Internal.WhichThing
+>Internal : typeof Internal
+>WhichThing : typeof Internal.WhichThing
+>A : Internal.WhichThing.A
+>"foo" : "foo"
+>"bar" : "bar"
+        }
+    }
+}
+=== tests/cases/compiler/internal.ts ===
+namespace My.Internal {
+>My : typeof My
+>Internal : typeof Internal
+
+    export function getThing(): void {}
+>getThing : () => void
+
+    export const enum WhichThing {
+>WhichThing : WhichThing
+
+        A, B, C
+>A : WhichThing.A
+>B : WhichThing.B
+>C : WhichThing.C
+    }
+}
+

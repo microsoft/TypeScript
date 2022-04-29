@@ -1,0 +1,31 @@
+=== tests/cases/conformance/types/typeAliases/classDoesNotDependOnBaseTypes.ts ===
+type StringTree = string | StringTreeCollection;
+>StringTree : Symbol(StringTree, Decl(classDoesNotDependOnBaseTypes.ts, 0, 0))
+>StringTreeCollection : Symbol(StringTreeCollection, Decl(classDoesNotDependOnBaseTypes.ts, 3, 1))
+
+class StringTreeCollectionBase {
+>StringTreeCollectionBase : Symbol(StringTreeCollectionBase, Decl(classDoesNotDependOnBaseTypes.ts, 0, 48))
+
+    [n: number]: StringTree;
+>n : Symbol(n, Decl(classDoesNotDependOnBaseTypes.ts, 2, 5))
+>StringTree : Symbol(StringTree, Decl(classDoesNotDependOnBaseTypes.ts, 0, 0))
+}
+
+class StringTreeCollection extends StringTreeCollectionBase { }
+>StringTreeCollection : Symbol(StringTreeCollection, Decl(classDoesNotDependOnBaseTypes.ts, 3, 1))
+>StringTreeCollectionBase : Symbol(StringTreeCollectionBase, Decl(classDoesNotDependOnBaseTypes.ts, 0, 48))
+
+var x: StringTree;
+>x : Symbol(x, Decl(classDoesNotDependOnBaseTypes.ts, 7, 3))
+>StringTree : Symbol(StringTree, Decl(classDoesNotDependOnBaseTypes.ts, 0, 0))
+
+if (typeof x !== "string") {
+>x : Symbol(x, Decl(classDoesNotDependOnBaseTypes.ts, 7, 3))
+
+    x[0] = "";
+>x : Symbol(x, Decl(classDoesNotDependOnBaseTypes.ts, 7, 3))
+
+    x[0] = new StringTreeCollection;
+>x : Symbol(x, Decl(classDoesNotDependOnBaseTypes.ts, 7, 3))
+>StringTreeCollection : Symbol(StringTreeCollection, Decl(classDoesNotDependOnBaseTypes.ts, 3, 1))
+}

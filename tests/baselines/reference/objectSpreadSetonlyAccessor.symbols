@@ -1,0 +1,16 @@
+=== tests/cases/conformance/types/spread/objectSpreadSetonlyAccessor.ts ===
+const o1: { foo: number, bar: undefined } = { foo: 1, ... { set bar(_v: number) { } } }
+>o1 : Symbol(o1, Decl(objectSpreadSetonlyAccessor.ts, 0, 5))
+>foo : Symbol(foo, Decl(objectSpreadSetonlyAccessor.ts, 0, 11))
+>bar : Symbol(bar, Decl(objectSpreadSetonlyAccessor.ts, 0, 24))
+>foo : Symbol(foo, Decl(objectSpreadSetonlyAccessor.ts, 0, 45))
+>bar : Symbol(bar, Decl(objectSpreadSetonlyAccessor.ts, 0, 59))
+>_v : Symbol(_v, Decl(objectSpreadSetonlyAccessor.ts, 0, 68))
+
+const o2: { foo: undefined } = { foo: 1, ... { set foo(_v: number) { } } }
+>o2 : Symbol(o2, Decl(objectSpreadSetonlyAccessor.ts, 1, 5))
+>foo : Symbol(foo, Decl(objectSpreadSetonlyAccessor.ts, 1, 11))
+>foo : Symbol(foo, Decl(objectSpreadSetonlyAccessor.ts, 1, 32))
+>foo : Symbol(foo, Decl(objectSpreadSetonlyAccessor.ts, 1, 46))
+>_v : Symbol(_v, Decl(objectSpreadSetonlyAccessor.ts, 1, 55))
+

@@ -1,0 +1,57 @@
+=== tests/cases/compiler/controlFlowPrivateClassField.ts ===
+class Example {
+>Example : Example
+
+    #test;
+>#test : number
+
+    constructor(test: number) {
+>test : number
+
+        this.#test = test;
+>this.#test = test : number
+>this.#test : number
+>this : this
+>test : number
+    }
+
+    get test() {
+>test : number
+
+        return this.#test
+>this.#test : number
+>this : this
+    }
+}
+
+class Example2 {
+>Example2 : Example2
+
+    #test;
+>#test : number | undefined
+
+    constructor(test: number | undefined) {
+>test : number | undefined
+
+        this.#test = test;
+>this.#test = test : number | undefined
+>this.#test : number | undefined
+>this : this
+>test : number | undefined
+    }
+
+    get test() {
+>test : number
+
+        if (this.#test) {
+>this.#test : number | undefined
+>this : this
+
+            return this.#test
+>this.#test : number
+>this : this
+        }
+        return 0;
+>0 : 0
+    }
+}

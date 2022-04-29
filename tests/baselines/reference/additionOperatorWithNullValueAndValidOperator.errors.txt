@@ -1,0 +1,63 @@
+tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithNullValueAndValidOperator.ts(15,10): error TS2365: Operator '+' cannot be applied to types 'null' and 'number'.
+tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithNullValueAndValidOperator.ts(16,10): error TS2365: Operator '+' cannot be applied to types 'null' and '1'.
+tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithNullValueAndValidOperator.ts(17,10): error TS2365: Operator '+' cannot be applied to types 'null' and 'E'.
+tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithNullValueAndValidOperator.ts(18,10): error TS2365: Operator '+' cannot be applied to types 'null' and 'E.a'.
+tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithNullValueAndValidOperator.ts(19,10): error TS2365: Operator '+' cannot be applied to types 'null' and 'E.a'.
+tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithNullValueAndValidOperator.ts(20,10): error TS2365: Operator '+' cannot be applied to types 'number' and 'null'.
+tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithNullValueAndValidOperator.ts(21,10): error TS2365: Operator '+' cannot be applied to types '1' and 'null'.
+tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithNullValueAndValidOperator.ts(22,11): error TS2365: Operator '+' cannot be applied to types 'E' and 'null'.
+tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithNullValueAndValidOperator.ts(23,11): error TS2365: Operator '+' cannot be applied to types 'E.a' and 'null'.
+tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithNullValueAndValidOperator.ts(24,11): error TS2365: Operator '+' cannot be applied to types 'E.a' and 'null'.
+
+
+==== tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithNullValueAndValidOperator.ts (10 errors) ====
+    // If one operand is the null or undefined value, it is treated as having the type of the other operand.
+    
+    enum E { a, b, c }
+    
+    var a: any;
+    var b: number;
+    var c: E;
+    var d: string;
+    
+    // null + any
+    var r1: any = null + a;
+    var r2: any = a + null;
+    
+    // null + number/enum
+    var r3 = null + b;
+             ~~~~~~~~
+!!! error TS2365: Operator '+' cannot be applied to types 'null' and 'number'.
+    var r4 = null + 1;
+             ~~~~~~~~
+!!! error TS2365: Operator '+' cannot be applied to types 'null' and '1'.
+    var r5 = null + c;
+             ~~~~~~~~
+!!! error TS2365: Operator '+' cannot be applied to types 'null' and 'E'.
+    var r6 = null + E.a;
+             ~~~~~~~~~~
+!!! error TS2365: Operator '+' cannot be applied to types 'null' and 'E.a'.
+    var r7 = null + E['a'];
+             ~~~~~~~~~~~~~
+!!! error TS2365: Operator '+' cannot be applied to types 'null' and 'E.a'.
+    var r8 = b + null;
+             ~~~~~~~~
+!!! error TS2365: Operator '+' cannot be applied to types 'number' and 'null'.
+    var r9 = 1 + null;
+             ~~~~~~~~
+!!! error TS2365: Operator '+' cannot be applied to types '1' and 'null'.
+    var r10 = c + null
+              ~~~~~~~~
+!!! error TS2365: Operator '+' cannot be applied to types 'E' and 'null'.
+    var r11 = E.a + null;
+              ~~~~~~~~~~
+!!! error TS2365: Operator '+' cannot be applied to types 'E.a' and 'null'.
+    var r12 = E['a'] + null;
+              ~~~~~~~~~~~~~
+!!! error TS2365: Operator '+' cannot be applied to types 'E.a' and 'null'.
+    
+    // null + string
+    var r13 = null + d;
+    var r14 = null + '';
+    var r15 = d + null;
+    var r16 = '' + null;

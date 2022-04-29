@@ -1,0 +1,91 @@
+=== tests/cases/conformance/expressions/typeGuards/typeGuardsWithInstanceOf.ts ===
+interface I { global: string; }
+>global : string
+
+var result!: I;
+>result : I
+
+var result2!: I;
+>result2 : I
+
+if (!(result instanceof RegExp)) {
+>!(result instanceof RegExp) : boolean
+>(result instanceof RegExp) : boolean
+>result instanceof RegExp : boolean
+>result : I
+>RegExp : RegExpConstructor
+
+    result = result2;
+>result = result2 : I
+>result : I
+>result2 : I
+
+} else if (!result.global) {
+>!result.global : boolean
+>result.global : any
+>result : never
+>global : any
+}
+
+// Repro from #31155
+
+interface OnChanges {
+    onChanges(changes: Record<string, unknown>): void
+>onChanges : (changes: Record<string, unknown>) => void
+>changes : Record<string, unknown>
+}
+interface Validator {
+    validate(): null | Record<string, unknown>;
+>validate : () => null | Record<string, unknown>
+>null : null
+}
+
+class C {
+>C : C
+
+    validate() {
+>validate : () => {}
+
+        return {}
+>{} : {}
+    }
+}
+
+function foo() {
+>foo : () => void
+
+    let v: Validator & Partial<OnChanges> = null as any;
+>v : Validator & Partial<OnChanges>
+>null as any : any
+>null : null
+
+    if (v instanceof C) {
+>v instanceof C : boolean
+>v : Validator & Partial<OnChanges>
+>C : typeof C
+
+        v // Validator & Partial<OnChanges> & C
+>v : C
+    }
+    v // Validator & Partial<OnChanges> via subtype reduction
+>v : C | (Validator & Partial<OnChanges>)
+
+    // In 4.1, we introduced a change which _fixed_ a bug with CFA
+    // correctly setting this to be the right object. With 4.2,
+    // we reverted that fix in #42231 which brought behavior back to
+    // before 4.1.
+    if (v.onChanges) {
+>v.onChanges : any
+>v : C | (Validator & Partial<OnChanges>)
+>onChanges : any
+
+        v.onChanges({});
+>v.onChanges({}) : any
+>v.onChanges : any
+>v : C | (Validator & Partial<OnChanges>)
+>onChanges : any
+>{} : {}
+    }
+}
+
+

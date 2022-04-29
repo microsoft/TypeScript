@@ -1,0 +1,21 @@
+=== tests/cases/compiler/privateAccessInSubclass1.ts ===
+class Base {
+>Base : Base
+
+  private options: any;
+>options : any
+}
+
+class D extends Base {
+>D : D
+>Base : Base
+
+  myMethod() {
+>myMethod : () => void
+
+    this.options;
+>this.options : any
+>this : this
+>options : any
+  }
+}

@@ -1,0 +1,27 @@
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/genericCallWithObjectTypeArgsAndInitializers.ts(5,33): error TS2322: Type 'number' is not assignable to type 'T'.
+  'number' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Number'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/genericCallWithObjectTypeArgsAndInitializers.ts(6,37): error TS2322: Type 'T' is not assignable to type 'U'.
+  'U' could be instantiated with an arbitrary type which could be unrelated to 'T'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/genericCallWithObjectTypeArgsAndInitializers.ts(8,56): error TS2322: Type 'U' is not assignable to type 'V'.
+  'V' could be instantiated with an arbitrary type which could be unrelated to 'U'.
+
+
+==== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/genericCallWithObjectTypeArgsAndInitializers.ts (3 errors) ====
+    // Generic typed parameters with initializers
+    
+    function foo<T>(x: T = null) { return x; } // ok
+    function foo2<T>(x: T = undefined) { return x; } // ok
+    function foo3<T extends Number>(x: T = 1) { } // error
+                                    ~~~~~~~~
+!!! error TS2322: Type 'number' is not assignable to type 'T'.
+!!! error TS2322:   'number' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Number'.
+    function foo4<T, U extends T>(x: T, y: U = x) { } // error
+                                        ~~~~~~~~
+!!! error TS2322: Type 'T' is not assignable to type 'U'.
+!!! error TS2322:   'U' could be instantiated with an arbitrary type which could be unrelated to 'T'.
+    function foo5<T, U extends T>(x: U, y: T = x) { } // ok
+    function foo6<T, U extends T, V extends U>(x: T, y: U, z: V = y) { } // error
+                                                           ~~~~~~~~
+!!! error TS2322: Type 'U' is not assignable to type 'V'.
+!!! error TS2322:   'V' could be instantiated with an arbitrary type which could be unrelated to 'U'.
+    function foo7<T, U extends T, V extends U>(x: V, y: U = x) { } // should be ok

@@ -1,0 +1,24 @@
+=== tests/cases/compiler/importDeclWithClassModifiers.ts ===
+module x {
+>x : Symbol(x, Decl(importDeclWithClassModifiers.ts, 0, 0))
+
+    interface c {
+>c : Symbol(c, Decl(importDeclWithClassModifiers.ts, 0, 10))
+    }
+}
+export public import a = x.c;
+>a : Symbol(a, Decl(importDeclWithClassModifiers.ts, 3, 1))
+>x : Symbol(x, Decl(importDeclWithClassModifiers.ts, 0, 0))
+
+export private import b = x.c;
+>b : Symbol(b, Decl(importDeclWithClassModifiers.ts, 4, 29))
+>x : Symbol(x, Decl(importDeclWithClassModifiers.ts, 0, 0))
+
+export static import c = x.c;
+>c : Symbol(c, Decl(importDeclWithClassModifiers.ts, 5, 30))
+>x : Symbol(x, Decl(importDeclWithClassModifiers.ts, 0, 0))
+
+var b: a;
+>b : Symbol(b, Decl(importDeclWithClassModifiers.ts, 7, 3))
+>a : Symbol(a, Decl(importDeclWithClassModifiers.ts, 3, 1))
+

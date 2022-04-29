@@ -1,0 +1,60 @@
+=== tests/cases/compiler/assignmentCompatability_checking-call-member-off-of-function-interface.ts ===
+// 3.8.4 Assignment Compatibility 
+
+interface Callable {
+>Callable : Symbol(Callable, Decl(assignmentCompatability_checking-call-member-off-of-function-interface.ts, 0, 0))
+
+    call(blah: any); // also works for 'apply'
+>call : Symbol(Callable.call, Decl(assignmentCompatability_checking-call-member-off-of-function-interface.ts, 2, 20))
+>blah : Symbol(blah, Decl(assignmentCompatability_checking-call-member-off-of-function-interface.ts, 3, 9))
+}
+
+var x: Callable;
+>x : Symbol(x, Decl(assignmentCompatability_checking-call-member-off-of-function-interface.ts, 6, 3))
+>Callable : Symbol(Callable, Decl(assignmentCompatability_checking-call-member-off-of-function-interface.ts, 0, 0))
+
+// Should fail
+x = '';
+>x : Symbol(x, Decl(assignmentCompatability_checking-call-member-off-of-function-interface.ts, 6, 3))
+
+x = [''];
+>x : Symbol(x, Decl(assignmentCompatability_checking-call-member-off-of-function-interface.ts, 6, 3))
+
+x = 4;
+>x : Symbol(x, Decl(assignmentCompatability_checking-call-member-off-of-function-interface.ts, 6, 3))
+
+x = {};
+>x : Symbol(x, Decl(assignmentCompatability_checking-call-member-off-of-function-interface.ts, 6, 3))
+
+// Should work
+function f() { };
+>f : Symbol(f, Decl(assignmentCompatability_checking-call-member-off-of-function-interface.ts, 12, 7))
+
+x = f;
+>x : Symbol(x, Decl(assignmentCompatability_checking-call-member-off-of-function-interface.ts, 6, 3))
+>f : Symbol(f, Decl(assignmentCompatability_checking-call-member-off-of-function-interface.ts, 12, 7))
+
+function fn(c: Callable) { }
+>fn : Symbol(fn, Decl(assignmentCompatability_checking-call-member-off-of-function-interface.ts, 16, 6))
+>c : Symbol(c, Decl(assignmentCompatability_checking-call-member-off-of-function-interface.ts, 18, 12))
+>Callable : Symbol(Callable, Decl(assignmentCompatability_checking-call-member-off-of-function-interface.ts, 0, 0))
+
+// Should Fail
+fn('');
+>fn : Symbol(fn, Decl(assignmentCompatability_checking-call-member-off-of-function-interface.ts, 16, 6))
+
+fn(['']);
+>fn : Symbol(fn, Decl(assignmentCompatability_checking-call-member-off-of-function-interface.ts, 16, 6))
+
+fn(4);
+>fn : Symbol(fn, Decl(assignmentCompatability_checking-call-member-off-of-function-interface.ts, 16, 6))
+
+fn({});
+>fn : Symbol(fn, Decl(assignmentCompatability_checking-call-member-off-of-function-interface.ts, 16, 6))
+
+
+// Should work
+fn(a => { });
+>fn : Symbol(fn, Decl(assignmentCompatability_checking-call-member-off-of-function-interface.ts, 16, 6))
+>a : Symbol(a, Decl(assignmentCompatability_checking-call-member-off-of-function-interface.ts, 28, 3))
+

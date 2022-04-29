@@ -1,0 +1,63 @@
+=== tests/cases/conformance/jsdoc/templateTagOnClasses.js ===
+/**
+ * @template T
+ * @typedef {(t: T) => T} Id
+ */
+/** @template T */
+class Foo {
+>Foo : Foo<T>
+
+    /** @typedef {(t: T) => T} Id2 */
+    /** @param {T} x */
+    constructor (x) {
+>x : T
+
+        this.a = x
+>this.a = x : T
+>this.a : any
+>this : this
+>a : any
+>x : T
+    }
+    /**
+     * 
+     * @param {T} x 
+     * @param {Id<T>} y
+     * @param {Id2} alpha
+     * @return {T}
+     */
+    foo(x, y, alpha) {
+>foo : (x: T, y: Id<T>, alpha: (t: T) => T) => T
+>x : T
+>y : Id<T>
+>alpha : (t: T) => T
+
+        return alpha(y(x))
+>alpha(y(x)) : T
+>alpha : (t: T) => T
+>y(x) : T
+>y : Id<T>
+>x : T
+    }
+}
+var f = new Foo(1)
+>f : Foo<number>
+>new Foo(1) : Foo<number>
+>Foo : typeof Foo
+>1 : 1
+
+var g = new Foo(false)
+>g : Foo<boolean>
+>new Foo(false) : Foo<boolean>
+>Foo : typeof Foo
+>false : false
+
+f.a = g.a
+>f.a = g.a : boolean
+>f.a : number
+>f : Foo<number>
+>a : number
+>g.a : boolean
+>g : Foo<boolean>
+>a : boolean
+

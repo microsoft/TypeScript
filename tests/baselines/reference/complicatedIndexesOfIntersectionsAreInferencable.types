@@ -1,0 +1,49 @@
+=== tests/cases/compiler/complicatedIndexesOfIntersectionsAreInferencable.ts ===
+interface FormikConfig<Values> {
+    initialValues: Values;
+>initialValues : Values
+
+    validate?: (props: Values) => void;
+>validate : ((props: Values) => void) | undefined
+>props : Values
+
+    validateOnChange?: boolean;
+>validateOnChange : boolean | undefined
+}
+
+declare function Func<Values = object, ExtraProps = {}>(
+>Func : <Values = object, ExtraProps = {}>(x: (string extends "validate" | "initialValues" | keyof ExtraProps ? Readonly<FormikConfig<Values> & ExtraProps> : Pick<Readonly<FormikConfig<Values> & ExtraProps>, "validate" | "initialValues" | Exclude<keyof ExtraProps, "validateOnChange">> & Partial<Pick<Readonly<FormikConfig<Values> & ExtraProps>, "validateOnChange" | Extract<keyof ExtraProps, "validateOnChange">>>)) => void
+
+    x: (string extends "validate" | "initialValues" | keyof ExtraProps
+>x : string extends "validate" | "initialValues" | keyof ExtraProps ? Readonly<FormikConfig<Values> & ExtraProps> : Pick<Readonly<FormikConfig<Values> & ExtraProps>, "validate" | "initialValues" | Exclude<keyof ExtraProps, "validateOnChange">> & Partial<Pick<Readonly<FormikConfig<Values> & ExtraProps>, "validateOnChange" | Extract<keyof ExtraProps, "validateOnChange">>>
+
+        ? Readonly<FormikConfig<Values> & ExtraProps>
+        : Pick<Readonly<FormikConfig<Values> & ExtraProps>, "validate" | "initialValues" | Exclude<keyof ExtraProps, "validateOnChange">>
+        & Partial<Pick<Readonly<FormikConfig<Values> & ExtraProps>, "validateOnChange" | Extract<keyof ExtraProps, "validateOnChange">>>)
+): void;
+
+Func({
+>Func({    initialValues: {        foo: ""    },    validate: props => {        props.foo;    }}) : void
+>Func : <Values = object, ExtraProps = {}>(x: string extends "validate" | "initialValues" | keyof ExtraProps ? Readonly<FormikConfig<Values> & ExtraProps> : Pick<Readonly<FormikConfig<Values> & ExtraProps>, "validate" | "initialValues" | Exclude<keyof ExtraProps, "validateOnChange">> & Partial<Pick<Readonly<FormikConfig<Values> & ExtraProps>, "validateOnChange" | Extract<keyof ExtraProps, "validateOnChange">>>) => void
+>{    initialValues: {        foo: ""    },    validate: props => {        props.foo;    }} : { initialValues: { foo: string; }; validate: (props: { foo: string; }) => void; }
+
+    initialValues: {
+>initialValues : { foo: string; }
+>{        foo: ""    } : { foo: string; }
+
+        foo: ""
+>foo : string
+>"" : ""
+
+    },
+    validate: props => {
+>validate : (props: { foo: string; }) => void
+>props => {        props.foo;    } : (props: { foo: string; }) => void
+>props : { foo: string; }
+
+        props.foo;
+>props.foo : string
+>props : { foo: string; }
+>foo : string
+    }
+});

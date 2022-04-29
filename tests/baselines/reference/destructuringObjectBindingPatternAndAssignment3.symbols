@@ -1,0 +1,27 @@
+=== tests/cases/conformance/es6/destructuring/destructuringObjectBindingPatternAndAssignment3.ts ===
+// Error
+var {h?} = { h?: 1 };
+>h : Symbol(h, Decl(destructuringObjectBindingPatternAndAssignment3.ts, 1, 5))
+>h : Symbol(h, Decl(destructuringObjectBindingPatternAndAssignment3.ts, 1, 12))
+
+var {i}: string | number = { i: 2 };
+>i : Symbol(i, Decl(destructuringObjectBindingPatternAndAssignment3.ts, 2, 5))
+>i : Symbol(i, Decl(destructuringObjectBindingPatternAndAssignment3.ts, 2, 28))
+
+var {i1}: string | number| {} = { i1: 2 };
+>i1 : Symbol(i1, Decl(destructuringObjectBindingPatternAndAssignment3.ts, 3, 5))
+>i1 : Symbol(i1, Decl(destructuringObjectBindingPatternAndAssignment3.ts, 3, 33))
+
+var { f2: {f21} = { f212: "string" } }: any = undefined;
+>f21 : Symbol(f21, Decl(destructuringObjectBindingPatternAndAssignment3.ts, 4, 11))
+>f212 : Symbol(f212, Decl(destructuringObjectBindingPatternAndAssignment3.ts, 4, 19))
+>undefined : Symbol(undefined)
+
+var {1} = { 1 };
+> : Symbol((Missing), Decl(destructuringObjectBindingPatternAndAssignment3.ts, 5, 5), Decl(destructuringObjectBindingPatternAndAssignment3.ts, 6, 5))
+>1 : Symbol(1, Decl(destructuringObjectBindingPatternAndAssignment3.ts, 5, 11))
+
+var {"prop"} = { "prop": 1 };
+> : Symbol((Missing), Decl(destructuringObjectBindingPatternAndAssignment3.ts, 5, 5), Decl(destructuringObjectBindingPatternAndAssignment3.ts, 6, 5))
+>"prop" : Symbol("prop", Decl(destructuringObjectBindingPatternAndAssignment3.ts, 6, 16))
+

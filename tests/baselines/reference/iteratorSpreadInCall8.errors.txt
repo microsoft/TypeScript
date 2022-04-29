@@ -1,0 +1,37 @@
+tests/cases/conformance/es6/spread/iteratorSpreadInCall8.ts(31,32): error TS2345: Argument of type 'string' is not assignable to parameter of type 'symbol'.
+
+
+==== tests/cases/conformance/es6/spread/iteratorSpreadInCall8.ts (1 errors) ====
+    class Foo<T> {
+        constructor(...s: T[]) { }
+    }
+    
+    class SymbolIterator {
+        next() {
+            return {
+                value: Symbol(),
+                done: false
+            };
+        }
+    
+        [Symbol.iterator]() {
+            return this;
+        }
+    }
+    
+    class _StringIterator {
+        next() {
+            return {
+                value: "",
+                done: false
+            };
+        }
+    
+        [Symbol.iterator]() {
+            return this;
+        }
+    }
+    
+    new Foo(...new SymbolIterator, ...new _StringIterator);
+                                   ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'symbol'.

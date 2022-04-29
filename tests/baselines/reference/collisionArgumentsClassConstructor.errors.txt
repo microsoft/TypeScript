@@ -1,0 +1,176 @@
+tests/cases/compiler/collisionArgumentsClassConstructor.ts(3,28): error TS2396: Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.
+tests/cases/compiler/collisionArgumentsClassConstructor.ts(3,31): error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
+tests/cases/compiler/collisionArgumentsClassConstructor.ts(4,13): error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
+tests/cases/compiler/collisionArgumentsClassConstructor.ts(8,17): error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
+tests/cases/compiler/collisionArgumentsClassConstructor.ts(8,17): error TS2396: Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.
+tests/cases/compiler/collisionArgumentsClassConstructor.ts(9,13): error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
+tests/cases/compiler/collisionArgumentsClassConstructor.ts(13,17): error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
+tests/cases/compiler/collisionArgumentsClassConstructor.ts(14,13): error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
+tests/cases/compiler/collisionArgumentsClassConstructor.ts(20,13): error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
+tests/cases/compiler/collisionArgumentsClassConstructor.ts(25,13): error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
+tests/cases/compiler/collisionArgumentsClassConstructor.ts(30,17): error TS2396: Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.
+tests/cases/compiler/collisionArgumentsClassConstructor.ts(30,24): error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
+tests/cases/compiler/collisionArgumentsClassConstructor.ts(31,13): error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
+tests/cases/compiler/collisionArgumentsClassConstructor.ts(35,24): error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
+tests/cases/compiler/collisionArgumentsClassConstructor.ts(36,13): error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
+tests/cases/compiler/collisionArgumentsClassConstructor.ts(51,31): error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
+tests/cases/compiler/collisionArgumentsClassConstructor.ts(52,31): error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
+tests/cases/compiler/collisionArgumentsClassConstructor.ts(53,25): error TS2396: Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.
+tests/cases/compiler/collisionArgumentsClassConstructor.ts(53,28): error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
+tests/cases/compiler/collisionArgumentsClassConstructor.ts(54,13): error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
+tests/cases/compiler/collisionArgumentsClassConstructor.ts(59,17): error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
+tests/cases/compiler/collisionArgumentsClassConstructor.ts(60,17): error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
+tests/cases/compiler/collisionArgumentsClassConstructor.ts(61,17): error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
+tests/cases/compiler/collisionArgumentsClassConstructor.ts(61,17): error TS2396: Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.
+tests/cases/compiler/collisionArgumentsClassConstructor.ts(62,13): error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
+tests/cases/compiler/collisionArgumentsClassConstructor.ts(67,17): error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
+tests/cases/compiler/collisionArgumentsClassConstructor.ts(68,17): error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
+tests/cases/compiler/collisionArgumentsClassConstructor.ts(69,17): error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
+tests/cases/compiler/collisionArgumentsClassConstructor.ts(70,13): error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
+
+
+==== tests/cases/compiler/collisionArgumentsClassConstructor.ts (29 errors) ====
+    // Constructors
+    class c1 {
+        constructor(i: number, ...arguments) { // error
+                               ~~~~~~~~~~~~
+!!! error TS2396: Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.
+                                  ~~~~~~~~~
+!!! error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
+            var arguments: any[]; // no error
+                ~~~~~~~~~
+!!! error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
+        }
+    }
+    class c12 {
+        constructor(arguments: number, ...rest) { // error
+                    ~~~~~~~~~
+!!! error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
+                    ~~~~~~~~~~~~~~~~~
+!!! error TS2396: Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.
+            var arguments = 10; // no error
+                ~~~~~~~~~
+!!! error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
+        }
+    }
+    class c1NoError {
+        constructor(arguments: number) { // no error
+                    ~~~~~~~~~
+!!! error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
+            var arguments = 10; // no error
+                ~~~~~~~~~
+!!! error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
+        }
+    }
+    
+    class c2 {
+        constructor(...restParameters) {
+            var arguments = 10; // no error
+                ~~~~~~~~~
+!!! error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
+        }
+    }
+    class c2NoError {
+        constructor() {
+            var arguments = 10; // no error
+                ~~~~~~~~~
+!!! error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
+        }
+    }
+    
+    class c3 {
+        constructor(public arguments: number, ...restParameters) { //arguments is error
+                    ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2396: Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.
+                           ~~~~~~~~~
+!!! error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
+            var arguments = 10; // no error
+                ~~~~~~~~~
+!!! error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
+        }
+    }
+    class c3NoError {
+        constructor(public arguments: number) { // no error
+                           ~~~~~~~~~
+!!! error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
+            var arguments = 10; // no error
+                ~~~~~~~~~
+!!! error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
+        }
+    }
+    
+    declare class c4 {
+        constructor(i: number, ...arguments); // No error - no code gen
+    }
+    declare class c42 {
+        constructor(arguments: number, ...rest); // No error - no code gen
+    }
+    declare class c4NoError {
+        constructor(arguments: number);  // no error
+    }
+    
+    class c5 {
+        constructor(i: number, ...arguments); // no codegen no error
+                                  ~~~~~~~~~
+!!! error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
+        constructor(i: string, ...arguments); // no codegen no error
+                                  ~~~~~~~~~
+!!! error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
+        constructor(i: any, ...arguments) { // error
+                            ~~~~~~~~~~~~
+!!! error TS2396: Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.
+                               ~~~~~~~~~
+!!! error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
+            var arguments: any[]; // no error
+                ~~~~~~~~~
+!!! error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
+        }
+    }
+    
+    class c52 {
+        constructor(arguments: number, ...rest); // no codegen no error
+                    ~~~~~~~~~
+!!! error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
+        constructor(arguments: string, ...rest); // no codegen no error
+                    ~~~~~~~~~
+!!! error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
+        constructor(arguments: any, ...rest) { // error
+                    ~~~~~~~~~
+!!! error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
+                    ~~~~~~~~~~~~~~
+!!! error TS2396: Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.
+            var arguments: any; // no error
+                ~~~~~~~~~
+!!! error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
+        }
+    }
+    
+    class c5NoError {
+        constructor(arguments: number); // no error
+                    ~~~~~~~~~
+!!! error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
+        constructor(arguments: string); // no error
+                    ~~~~~~~~~
+!!! error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
+        constructor(arguments: any) { // no error
+                    ~~~~~~~~~
+!!! error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
+            var arguments: any; // no error
+                ~~~~~~~~~
+!!! error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
+        }
+    }
+    
+    declare class c6 {
+        constructor(i: number, ...arguments); // no codegen no error
+        constructor(i: string, ...arguments); // no codegen no error
+    }
+    declare class c62 {
+        constructor(arguments: number, ...rest); // no codegen no error
+        constructor(arguments: string, ...rest); // no codegen no error
+    }
+    
+    declare class c6NoError {
+        constructor(arguments: number); // no error
+        constructor(arguments: string); // no error
+    }

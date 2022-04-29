@@ -1,0 +1,32 @@
+=== tests/cases/conformance/jsdoc/typeParameterExtendsUnionConstraintDistributed.ts ===
+type A = 1 | 2;
+>A : Symbol(A, Decl(typeParameterExtendsUnionConstraintDistributed.ts, 0, 0))
+
+function f<T extends A>(a: T): A & T { return a; } // Shouldn't error
+>f : Symbol(f, Decl(typeParameterExtendsUnionConstraintDistributed.ts, 0, 15))
+>T : Symbol(T, Decl(typeParameterExtendsUnionConstraintDistributed.ts, 1, 11))
+>A : Symbol(A, Decl(typeParameterExtendsUnionConstraintDistributed.ts, 0, 0))
+>a : Symbol(a, Decl(typeParameterExtendsUnionConstraintDistributed.ts, 1, 24))
+>T : Symbol(T, Decl(typeParameterExtendsUnionConstraintDistributed.ts, 1, 11))
+>A : Symbol(A, Decl(typeParameterExtendsUnionConstraintDistributed.ts, 0, 0))
+>T : Symbol(T, Decl(typeParameterExtendsUnionConstraintDistributed.ts, 1, 11))
+>a : Symbol(a, Decl(typeParameterExtendsUnionConstraintDistributed.ts, 1, 24))
+
+type B = 2 | 3;
+>B : Symbol(B, Decl(typeParameterExtendsUnionConstraintDistributed.ts, 1, 50))
+
+function f2<T extends A, U extends B>(ab: T & U): (A | B) & T & U { return ab; } // Also shouldn't error
+>f2 : Symbol(f2, Decl(typeParameterExtendsUnionConstraintDistributed.ts, 3, 15))
+>T : Symbol(T, Decl(typeParameterExtendsUnionConstraintDistributed.ts, 4, 12))
+>A : Symbol(A, Decl(typeParameterExtendsUnionConstraintDistributed.ts, 0, 0))
+>U : Symbol(U, Decl(typeParameterExtendsUnionConstraintDistributed.ts, 4, 24))
+>B : Symbol(B, Decl(typeParameterExtendsUnionConstraintDistributed.ts, 1, 50))
+>ab : Symbol(ab, Decl(typeParameterExtendsUnionConstraintDistributed.ts, 4, 38))
+>T : Symbol(T, Decl(typeParameterExtendsUnionConstraintDistributed.ts, 4, 12))
+>U : Symbol(U, Decl(typeParameterExtendsUnionConstraintDistributed.ts, 4, 24))
+>A : Symbol(A, Decl(typeParameterExtendsUnionConstraintDistributed.ts, 0, 0))
+>B : Symbol(B, Decl(typeParameterExtendsUnionConstraintDistributed.ts, 1, 50))
+>T : Symbol(T, Decl(typeParameterExtendsUnionConstraintDistributed.ts, 4, 12))
+>U : Symbol(U, Decl(typeParameterExtendsUnionConstraintDistributed.ts, 4, 24))
+>ab : Symbol(ab, Decl(typeParameterExtendsUnionConstraintDistributed.ts, 4, 38))
+

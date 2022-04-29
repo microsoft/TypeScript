@@ -1,0 +1,9 @@
+tests/cases/conformance/parser/ecmascript5/RegressionTests/parser509669.ts(2,17): error TS1005: '=>' expected.
+
+
+==== tests/cases/conformance/parser/ecmascript5/RegressionTests/parser509669.ts (1 errors) ====
+    function foo():any {
+     return ():void {};
+                    ~
+!!! error TS1005: '=>' expected.
+    }

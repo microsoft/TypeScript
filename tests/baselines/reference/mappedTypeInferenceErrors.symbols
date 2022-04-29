@@ -1,0 +1,54 @@
+=== tests/cases/conformance/types/mapped/mappedTypeInferenceErrors.ts ===
+// Repro from #19316
+
+type ComputedOf<T> = {
+>ComputedOf : Symbol(ComputedOf, Decl(mappedTypeInferenceErrors.ts, 0, 0))
+>T : Symbol(T, Decl(mappedTypeInferenceErrors.ts, 2, 16))
+
+    [K in keyof T]: () => T[K];
+>K : Symbol(K, Decl(mappedTypeInferenceErrors.ts, 3, 5))
+>T : Symbol(T, Decl(mappedTypeInferenceErrors.ts, 2, 16))
+>T : Symbol(T, Decl(mappedTypeInferenceErrors.ts, 2, 16))
+>K : Symbol(K, Decl(mappedTypeInferenceErrors.ts, 3, 5))
+}
+
+declare function foo<P, C>(options: { props: P, computed: ComputedOf<C> } & ThisType<P & C>): void;
+>foo : Symbol(foo, Decl(mappedTypeInferenceErrors.ts, 4, 1))
+>P : Symbol(P, Decl(mappedTypeInferenceErrors.ts, 6, 21))
+>C : Symbol(C, Decl(mappedTypeInferenceErrors.ts, 6, 23))
+>options : Symbol(options, Decl(mappedTypeInferenceErrors.ts, 6, 27))
+>props : Symbol(props, Decl(mappedTypeInferenceErrors.ts, 6, 37))
+>P : Symbol(P, Decl(mappedTypeInferenceErrors.ts, 6, 21))
+>computed : Symbol(computed, Decl(mappedTypeInferenceErrors.ts, 6, 47))
+>ComputedOf : Symbol(ComputedOf, Decl(mappedTypeInferenceErrors.ts, 0, 0))
+>C : Symbol(C, Decl(mappedTypeInferenceErrors.ts, 6, 23))
+>ThisType : Symbol(ThisType, Decl(lib.es5.d.ts, --, --))
+>P : Symbol(P, Decl(mappedTypeInferenceErrors.ts, 6, 21))
+>C : Symbol(C, Decl(mappedTypeInferenceErrors.ts, 6, 23))
+
+foo({
+>foo : Symbol(foo, Decl(mappedTypeInferenceErrors.ts, 4, 1))
+
+    props: { x: 10, y: 20 },
+>props : Symbol(props, Decl(mappedTypeInferenceErrors.ts, 8, 5))
+>x : Symbol(x, Decl(mappedTypeInferenceErrors.ts, 9, 12))
+>y : Symbol(y, Decl(mappedTypeInferenceErrors.ts, 9, 19))
+
+    computed: {
+>computed : Symbol(computed, Decl(mappedTypeInferenceErrors.ts, 9, 28))
+
+        bar(): number {
+>bar : Symbol(bar, Decl(mappedTypeInferenceErrors.ts, 10, 15))
+
+            let z = this.bar;
+>z : Symbol(z, Decl(mappedTypeInferenceErrors.ts, 12, 15))
+>this.bar : Symbol(bar, Decl(mappedTypeInferenceErrors.ts, 10, 15))
+>bar : Symbol(bar, Decl(mappedTypeInferenceErrors.ts, 10, 15))
+
+            return 42;
+        },
+        baz: 42
+>baz : Symbol(baz, Decl(mappedTypeInferenceErrors.ts, 14, 10))
+    }
+});
+

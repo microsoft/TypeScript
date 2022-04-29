@@ -1,0 +1,36 @@
+=== tests/cases/conformance/classes/propertyMemberDeclarations/accessorsOverrideProperty2.ts ===
+class Base {
+>Base : Symbol(Base, Decl(accessorsOverrideProperty2.ts, 0, 0))
+
+  x = 1;
+>x : Symbol(Base.x, Decl(accessorsOverrideProperty2.ts, 0, 12))
+}
+
+class Derived extends Base {
+>Derived : Symbol(Derived, Decl(accessorsOverrideProperty2.ts, 2, 1))
+>Base : Symbol(Base, Decl(accessorsOverrideProperty2.ts, 0, 0))
+
+  get x() { return 2; } // should be an error
+>x : Symbol(Derived.x, Decl(accessorsOverrideProperty2.ts, 4, 28), Decl(accessorsOverrideProperty2.ts, 5, 23))
+
+  set x(value) { console.log(`x was set to ${value}`); }
+>x : Symbol(Derived.x, Decl(accessorsOverrideProperty2.ts, 4, 28), Decl(accessorsOverrideProperty2.ts, 5, 23))
+>value : Symbol(value, Decl(accessorsOverrideProperty2.ts, 6, 8))
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>value : Symbol(value, Decl(accessorsOverrideProperty2.ts, 6, 8))
+}
+
+const obj = new Derived(); // nothing printed
+>obj : Symbol(obj, Decl(accessorsOverrideProperty2.ts, 9, 5))
+>Derived : Symbol(Derived, Decl(accessorsOverrideProperty2.ts, 2, 1))
+
+console.log(obj.x); // 1
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>obj.x : Symbol(Derived.x, Decl(accessorsOverrideProperty2.ts, 4, 28), Decl(accessorsOverrideProperty2.ts, 5, 23))
+>obj : Symbol(obj, Decl(accessorsOverrideProperty2.ts, 9, 5))
+>x : Symbol(Derived.x, Decl(accessorsOverrideProperty2.ts, 4, 28), Decl(accessorsOverrideProperty2.ts, 5, 23))
+

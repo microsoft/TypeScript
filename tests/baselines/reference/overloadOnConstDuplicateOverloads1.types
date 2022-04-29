@@ -1,0 +1,37 @@
+=== tests/cases/compiler/overloadOnConstDuplicateOverloads1.ts ===
+function foo(a: 'hi', x: string);
+>foo : { (a: 'hi', x: string): any; (a: "hi", x: string): any; }
+>a : "hi"
+>x : string
+
+function foo(a: 'hi', x: string);
+>foo : { (a: "hi", x: string): any; (a: 'hi', x: string): any; }
+>a : "hi"
+>x : string
+
+function foo(a: any, x: any) {
+>foo : { (a: "hi", x: string): any; (a: "hi", x: string): any; }
+>a : any
+>x : any
+}
+
+function foo2(a: 'hi', x: string);
+>foo2 : { (a: 'hi', x: string): any; (a: "hi", x: string): any; (a: string, x: string): any; }
+>a : "hi"
+>x : string
+
+function foo2(a: 'hi', x: string);
+>foo2 : { (a: "hi", x: string): any; (a: 'hi', x: string): any; (a: string, x: string): any; }
+>a : "hi"
+>x : string
+
+function foo2(a: string, x: string);
+>foo2 : { (a: "hi", x: string): any; (a: "hi", x: string): any; (a: string, x: string): any; }
+>a : string
+>x : string
+
+function foo2(a: any, x: any) {
+>foo2 : { (a: "hi", x: string): any; (a: "hi", x: string): any; (a: string, x: string): any; }
+>a : any
+>x : any
+}

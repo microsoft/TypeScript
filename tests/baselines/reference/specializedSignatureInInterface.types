@@ -1,0 +1,13 @@
+=== tests/cases/compiler/specializedSignatureInInterface.ts ===
+interface A {
+  (key:string):void;
+>key : string
+}
+
+interface B extends A {
+  (key:'foo'):string;
+>key : "foo"
+
+  (key:'bar'):string;
+>key : "bar"
+}

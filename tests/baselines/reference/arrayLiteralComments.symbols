@@ -1,0 +1,21 @@
+=== tests/cases/compiler/arrayLiteralComments.ts ===
+var testArrayWithFunc = [
+>testArrayWithFunc : Symbol(testArrayWithFunc, Decl(arrayLiteralComments.ts, 0, 3))
+
+    // Function comment
+    function() {
+        let x = 1;
+>x : Symbol(x, Decl(arrayLiteralComments.ts, 3, 11))
+
+    },
+    // String comment
+    '1',
+    // Numeric comment
+    2,
+    // Object comment
+    { a: 1 },
+>a : Symbol(a, Decl(arrayLiteralComments.ts, 10, 5))
+
+    // Array comment
+    [1, 2, 3]
+]

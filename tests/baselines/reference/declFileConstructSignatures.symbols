@@ -1,0 +1,120 @@
+=== tests/cases/compiler/declFileConstructSignatures_0.ts ===
+export interface IConstructSignature {
+>IConstructSignature : Symbol(IConstructSignature, Decl(declFileConstructSignatures_0.ts, 0, 0))
+
+    /** This comment should appear for foo*/
+    new (): string;
+}
+
+export interface IConstructSignatureWithParameters {
+>IConstructSignatureWithParameters : Symbol(IConstructSignatureWithParameters, Decl(declFileConstructSignatures_0.ts, 3, 1))
+
+    /** This is comment for function signature*/
+    new (/** this is comment about a*/a: string,
+>a : Symbol(a, Decl(declFileConstructSignatures_0.ts, 7, 9))
+
+        /** this is comment for b*/
+        b: number);
+>b : Symbol(b, Decl(declFileConstructSignatures_0.ts, 7, 48))
+}
+
+export interface IConstructSignatureWithRestParameters {
+>IConstructSignatureWithRestParameters : Symbol(IConstructSignatureWithRestParameters, Decl(declFileConstructSignatures_0.ts, 10, 1))
+
+    new (a: string, ...rests: string[]): string;
+>a : Symbol(a, Decl(declFileConstructSignatures_0.ts, 13, 9))
+>rests : Symbol(rests, Decl(declFileConstructSignatures_0.ts, 13, 19))
+}
+
+export interface IConstructSignatureWithOverloads {
+>IConstructSignatureWithOverloads : Symbol(IConstructSignatureWithOverloads, Decl(declFileConstructSignatures_0.ts, 14, 1))
+
+    new (a: string): string;
+>a : Symbol(a, Decl(declFileConstructSignatures_0.ts, 17, 9))
+
+    new (a: number): number;
+>a : Symbol(a, Decl(declFileConstructSignatures_0.ts, 18, 9))
+}
+
+export interface IConstructSignatureWithTypeParameters<T> {
+>IConstructSignatureWithTypeParameters : Symbol(IConstructSignatureWithTypeParameters, Decl(declFileConstructSignatures_0.ts, 19, 1))
+>T : Symbol(T, Decl(declFileConstructSignatures_0.ts, 21, 55))
+
+    /** This comment should appear for foo*/
+    new (a: T): T;
+>a : Symbol(a, Decl(declFileConstructSignatures_0.ts, 23, 9))
+>T : Symbol(T, Decl(declFileConstructSignatures_0.ts, 21, 55))
+>T : Symbol(T, Decl(declFileConstructSignatures_0.ts, 21, 55))
+}
+
+export interface IConstructSignatureWithOwnTypeParametes {
+>IConstructSignatureWithOwnTypeParametes : Symbol(IConstructSignatureWithOwnTypeParametes, Decl(declFileConstructSignatures_0.ts, 24, 1))
+
+    new <T extends IConstructSignature>(a: T): T;
+>T : Symbol(T, Decl(declFileConstructSignatures_0.ts, 27, 9))
+>IConstructSignature : Symbol(IConstructSignature, Decl(declFileConstructSignatures_0.ts, 0, 0))
+>a : Symbol(a, Decl(declFileConstructSignatures_0.ts, 27, 40))
+>T : Symbol(T, Decl(declFileConstructSignatures_0.ts, 27, 9))
+>T : Symbol(T, Decl(declFileConstructSignatures_0.ts, 27, 9))
+}
+
+=== tests/cases/compiler/declFileConstructSignatures_1.ts ===
+interface IGlobalConstructSignature {
+>IGlobalConstructSignature : Symbol(IGlobalConstructSignature, Decl(declFileConstructSignatures_1.ts, 0, 0))
+
+    /** This comment should appear for foo*/
+    new (): string;
+}
+
+interface IGlobalConstructSignatureWithParameters {
+>IGlobalConstructSignatureWithParameters : Symbol(IGlobalConstructSignatureWithParameters, Decl(declFileConstructSignatures_1.ts, 3, 1))
+
+    /** This is comment for function signature*/
+    new (/** this is comment about a*/a: string,
+>a : Symbol(a, Decl(declFileConstructSignatures_1.ts, 7, 9))
+
+        /** this is comment for b*/
+        b: number);
+>b : Symbol(b, Decl(declFileConstructSignatures_1.ts, 7, 48))
+}
+
+interface IGlobalConstructSignatureWithRestParameters {
+>IGlobalConstructSignatureWithRestParameters : Symbol(IGlobalConstructSignatureWithRestParameters, Decl(declFileConstructSignatures_1.ts, 10, 1))
+
+    new (a: string, ...rests: string[]): string;
+>a : Symbol(a, Decl(declFileConstructSignatures_1.ts, 14, 9))
+>rests : Symbol(rests, Decl(declFileConstructSignatures_1.ts, 14, 19))
+
+}
+
+interface IGlobalConstructSignatureWithOverloads {
+>IGlobalConstructSignatureWithOverloads : Symbol(IGlobalConstructSignatureWithOverloads, Decl(declFileConstructSignatures_1.ts, 16, 1))
+
+    new (a: string): string;
+>a : Symbol(a, Decl(declFileConstructSignatures_1.ts, 19, 9))
+
+    new (a: number): number;
+>a : Symbol(a, Decl(declFileConstructSignatures_1.ts, 20, 9))
+}
+
+interface IGlobalConstructSignatureWithTypeParameters<T> {
+>IGlobalConstructSignatureWithTypeParameters : Symbol(IGlobalConstructSignatureWithTypeParameters, Decl(declFileConstructSignatures_1.ts, 21, 1))
+>T : Symbol(T, Decl(declFileConstructSignatures_1.ts, 23, 54))
+
+    /** This comment should appear for foo*/
+    new (a: T): T;
+>a : Symbol(a, Decl(declFileConstructSignatures_1.ts, 25, 9))
+>T : Symbol(T, Decl(declFileConstructSignatures_1.ts, 23, 54))
+>T : Symbol(T, Decl(declFileConstructSignatures_1.ts, 23, 54))
+}
+
+interface IGlobalConstructSignatureWithOwnTypeParametes {
+>IGlobalConstructSignatureWithOwnTypeParametes : Symbol(IGlobalConstructSignatureWithOwnTypeParametes, Decl(declFileConstructSignatures_1.ts, 26, 1))
+
+    new <T extends IGlobalConstructSignature>(a: T): T;
+>T : Symbol(T, Decl(declFileConstructSignatures_1.ts, 29, 9))
+>IGlobalConstructSignature : Symbol(IGlobalConstructSignature, Decl(declFileConstructSignatures_1.ts, 0, 0))
+>a : Symbol(a, Decl(declFileConstructSignatures_1.ts, 29, 46))
+>T : Symbol(T, Decl(declFileConstructSignatures_1.ts, 29, 9))
+>T : Symbol(T, Decl(declFileConstructSignatures_1.ts, 29, 9))
+}

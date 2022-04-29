@@ -1,0 +1,16 @@
+/a.ts(1,22): error TS7016: Could not find a declaration file for module '@foo/bar'. '/node_modules/@foo/bar/index.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/foo__bar` if it exists or add a new declaration (.d.ts) file containing `declare module '@foo/bar';`
+
+
+==== /a.ts (1 errors) ====
+    import * as foo from "@foo/bar";
+                         ~~~~~~~~~~
+!!! error TS7016: Could not find a declaration file for module '@foo/bar'. '/node_modules/@foo/bar/index.js' implicitly has an 'any' type.
+!!! error TS7016:   Try `npm i --save-dev @types/foo__bar` if it exists or add a new declaration (.d.ts) file containing `declare module '@foo/bar';`
+    
+==== /node_modules/@foo/bar/package.json (0 errors) ====
+    { "name": "@foo/bar", "version": "1.2.3" }
+    
+==== /node_modules/@foo/bar/index.js (0 errors) ====
+    This file is not processed.
+    

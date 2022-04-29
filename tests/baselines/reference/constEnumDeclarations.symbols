@@ -1,0 +1,28 @@
+=== tests/cases/compiler/constEnumDeclarations.ts ===
+const enum E {
+>E : Symbol(E, Decl(constEnumDeclarations.ts, 0, 0))
+
+    A = 1,
+>A : Symbol(E.A, Decl(constEnumDeclarations.ts, 0, 14))
+
+    B = 2,
+>B : Symbol(E.B, Decl(constEnumDeclarations.ts, 1, 10))
+
+    C = A | B
+>C : Symbol(E.C, Decl(constEnumDeclarations.ts, 2, 10))
+>A : Symbol(E.A, Decl(constEnumDeclarations.ts, 0, 14))
+>B : Symbol(E.B, Decl(constEnumDeclarations.ts, 1, 10))
+}
+
+const enum E2 {
+>E2 : Symbol(E2, Decl(constEnumDeclarations.ts, 4, 1))
+
+    A = 1,
+>A : Symbol(E2.A, Decl(constEnumDeclarations.ts, 6, 15))
+
+    B,
+>B : Symbol(E2.B, Decl(constEnumDeclarations.ts, 7, 10))
+
+    C
+>C : Symbol(E2.C, Decl(constEnumDeclarations.ts, 8, 6))
+}

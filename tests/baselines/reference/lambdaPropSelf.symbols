@@ -1,0 +1,51 @@
+=== tests/cases/compiler/lambdaPropSelf.ts ===
+declare var ko: any;
+>ko : Symbol(ko, Decl(lambdaPropSelf.ts, 0, 11))
+
+class Person {
+>Person : Symbol(Person, Decl(lambdaPropSelf.ts, 0, 20))
+
+    children: string[];
+>children : Symbol(Person.children, Decl(lambdaPropSelf.ts, 2, 14))
+
+    constructor (public name: string, children: string[]) {
+>name : Symbol(Person.name, Decl(lambdaPropSelf.ts, 5, 17))
+>children : Symbol(children, Decl(lambdaPropSelf.ts, 5, 37))
+
+        this.children = ko.observableArray(children);
+>this.children : Symbol(Person.children, Decl(lambdaPropSelf.ts, 2, 14))
+>this : Symbol(Person, Decl(lambdaPropSelf.ts, 0, 20))
+>children : Symbol(Person.children, Decl(lambdaPropSelf.ts, 2, 14))
+>ko : Symbol(ko, Decl(lambdaPropSelf.ts, 0, 11))
+>children : Symbol(children, Decl(lambdaPropSelf.ts, 5, 37))
+    }
+
+    addChild = () => this.children.push("New child");
+>addChild : Symbol(Person.addChild, Decl(lambdaPropSelf.ts, 7, 5))
+>this.children.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>this.children : Symbol(Person.children, Decl(lambdaPropSelf.ts, 2, 14))
+>this : Symbol(Person, Decl(lambdaPropSelf.ts, 0, 20))
+>children : Symbol(Person.children, Decl(lambdaPropSelf.ts, 2, 14))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+}
+
+
+class T {
+>T : Symbol(T, Decl(lambdaPropSelf.ts, 10, 1))
+
+     fo() {
+>fo : Symbol(T.fo, Decl(lambdaPropSelf.ts, 13, 9))
+
+        var x = this;
+>x : Symbol(x, Decl(lambdaPropSelf.ts, 15, 11))
+>this : Symbol(T, Decl(lambdaPropSelf.ts, 10, 1))
+    }
+}
+
+module M {
+>M : Symbol(M, Decl(lambdaPropSelf.ts, 17, 1))
+
+    var x = this;
+>x : Symbol(x, Decl(lambdaPropSelf.ts, 20, 7))
+}
+

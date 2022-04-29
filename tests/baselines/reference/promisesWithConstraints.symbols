@@ -1,0 +1,80 @@
+=== tests/cases/compiler/promisesWithConstraints.ts ===
+interface Promise<T> {
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(promisesWithConstraints.ts, 0, 0))
+>T : Symbol(T, Decl(lib.es5.d.ts, --, --), Decl(promisesWithConstraints.ts, 0, 18))
+
+    then<U>(cb: (x: T) => Promise<U>): Promise<U>;
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisesWithConstraints.ts, 0, 22))
+>U : Symbol(U, Decl(promisesWithConstraints.ts, 1, 9))
+>cb : Symbol(cb, Decl(promisesWithConstraints.ts, 1, 12))
+>x : Symbol(x, Decl(promisesWithConstraints.ts, 1, 17))
+>T : Symbol(T, Decl(lib.es5.d.ts, --, --), Decl(promisesWithConstraints.ts, 0, 18))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(promisesWithConstraints.ts, 0, 0))
+>U : Symbol(U, Decl(promisesWithConstraints.ts, 1, 9))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(promisesWithConstraints.ts, 0, 0))
+>U : Symbol(U, Decl(promisesWithConstraints.ts, 1, 9))
+}
+
+interface CPromise<T extends { x: any; }> {
+>CPromise : Symbol(CPromise, Decl(promisesWithConstraints.ts, 2, 1))
+>T : Symbol(T, Decl(promisesWithConstraints.ts, 4, 19))
+>x : Symbol(x, Decl(promisesWithConstraints.ts, 4, 30))
+
+    then<U extends { x: any; }>(cb: (x: T) => Promise<U>): Promise<U>;
+>then : Symbol(CPromise.then, Decl(promisesWithConstraints.ts, 4, 43))
+>U : Symbol(U, Decl(promisesWithConstraints.ts, 5, 9))
+>x : Symbol(x, Decl(promisesWithConstraints.ts, 5, 20))
+>cb : Symbol(cb, Decl(promisesWithConstraints.ts, 5, 32))
+>x : Symbol(x, Decl(promisesWithConstraints.ts, 5, 37))
+>T : Symbol(T, Decl(promisesWithConstraints.ts, 4, 19))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(promisesWithConstraints.ts, 0, 0))
+>U : Symbol(U, Decl(promisesWithConstraints.ts, 5, 9))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(promisesWithConstraints.ts, 0, 0))
+>U : Symbol(U, Decl(promisesWithConstraints.ts, 5, 9))
+}
+
+interface Foo { x; }
+>Foo : Symbol(Foo, Decl(promisesWithConstraints.ts, 6, 1))
+>x : Symbol(Foo.x, Decl(promisesWithConstraints.ts, 8, 15))
+
+interface Bar { x; y; }
+>Bar : Symbol(Bar, Decl(promisesWithConstraints.ts, 8, 20))
+>x : Symbol(Bar.x, Decl(promisesWithConstraints.ts, 9, 15))
+>y : Symbol(Bar.y, Decl(promisesWithConstraints.ts, 9, 18))
+
+var a: Promise<Foo>;
+>a : Symbol(a, Decl(promisesWithConstraints.ts, 11, 3))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(promisesWithConstraints.ts, 0, 0))
+>Foo : Symbol(Foo, Decl(promisesWithConstraints.ts, 6, 1))
+
+var b: Promise<Bar>;
+>b : Symbol(b, Decl(promisesWithConstraints.ts, 12, 3))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(promisesWithConstraints.ts, 0, 0))
+>Bar : Symbol(Bar, Decl(promisesWithConstraints.ts, 8, 20))
+
+a = b; // ok
+>a : Symbol(a, Decl(promisesWithConstraints.ts, 11, 3))
+>b : Symbol(b, Decl(promisesWithConstraints.ts, 12, 3))
+
+b = a; // ok
+>b : Symbol(b, Decl(promisesWithConstraints.ts, 12, 3))
+>a : Symbol(a, Decl(promisesWithConstraints.ts, 11, 3))
+
+var a2: CPromise<Foo>;
+>a2 : Symbol(a2, Decl(promisesWithConstraints.ts, 16, 3))
+>CPromise : Symbol(CPromise, Decl(promisesWithConstraints.ts, 2, 1))
+>Foo : Symbol(Foo, Decl(promisesWithConstraints.ts, 6, 1))
+
+var b2: CPromise<Bar>;
+>b2 : Symbol(b2, Decl(promisesWithConstraints.ts, 17, 3))
+>CPromise : Symbol(CPromise, Decl(promisesWithConstraints.ts, 2, 1))
+>Bar : Symbol(Bar, Decl(promisesWithConstraints.ts, 8, 20))
+
+a2 = b2; // ok
+>a2 : Symbol(a2, Decl(promisesWithConstraints.ts, 16, 3))
+>b2 : Symbol(b2, Decl(promisesWithConstraints.ts, 17, 3))
+
+b2 = a2; // was error
+>b2 : Symbol(b2, Decl(promisesWithConstraints.ts, 17, 3))
+>a2 : Symbol(a2, Decl(promisesWithConstraints.ts, 16, 3))
+

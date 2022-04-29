@@ -1,0 +1,141 @@
+=== tests/cases/compiler/intersectionWithConflictingPrivates.ts ===
+class A { private x: unknown; y?: string; }
+>A : Symbol(A, Decl(intersectionWithConflictingPrivates.ts, 0, 0))
+>x : Symbol(A.x, Decl(intersectionWithConflictingPrivates.ts, 0, 9))
+>y : Symbol(A.y, Decl(intersectionWithConflictingPrivates.ts, 0, 29))
+
+class B { private x: unknown; y?: string; }
+>B : Symbol(B, Decl(intersectionWithConflictingPrivates.ts, 0, 43))
+>x : Symbol(B.x, Decl(intersectionWithConflictingPrivates.ts, 1, 9))
+>y : Symbol(B.y, Decl(intersectionWithConflictingPrivates.ts, 1, 29))
+
+declare let ab: A & B;
+>ab : Symbol(ab, Decl(intersectionWithConflictingPrivates.ts, 3, 11))
+>A : Symbol(A, Decl(intersectionWithConflictingPrivates.ts, 0, 0))
+>B : Symbol(B, Decl(intersectionWithConflictingPrivates.ts, 0, 43))
+
+ab.y = 'hello';
+>ab : Symbol(ab, Decl(intersectionWithConflictingPrivates.ts, 3, 11))
+
+ab = {};
+>ab : Symbol(ab, Decl(intersectionWithConflictingPrivates.ts, 3, 11))
+
+function f1(node: A | B) {
+>f1 : Symbol(f1, Decl(intersectionWithConflictingPrivates.ts, 5, 8))
+>node : Symbol(node, Decl(intersectionWithConflictingPrivates.ts, 7, 12))
+>A : Symbol(A, Decl(intersectionWithConflictingPrivates.ts, 0, 0))
+>B : Symbol(B, Decl(intersectionWithConflictingPrivates.ts, 0, 43))
+
+  if (node instanceof A || node instanceof A) {
+>node : Symbol(node, Decl(intersectionWithConflictingPrivates.ts, 7, 12))
+>A : Symbol(A, Decl(intersectionWithConflictingPrivates.ts, 0, 0))
+>node : Symbol(node, Decl(intersectionWithConflictingPrivates.ts, 7, 12))
+>A : Symbol(A, Decl(intersectionWithConflictingPrivates.ts, 0, 0))
+
+    node;  // A
+>node : Symbol(node, Decl(intersectionWithConflictingPrivates.ts, 7, 12))
+  }
+  else {
+    node;  // B
+>node : Symbol(node, Decl(intersectionWithConflictingPrivates.ts, 7, 12))
+  }
+  node;  // A | B
+>node : Symbol(node, Decl(intersectionWithConflictingPrivates.ts, 7, 12))
+}
+
+// Repro from #37659
+
+abstract class ViewNode { }
+>ViewNode : Symbol(ViewNode, Decl(intersectionWithConflictingPrivates.ts, 15, 1))
+
+abstract class ViewRefNode extends ViewNode { }
+>ViewRefNode : Symbol(ViewRefNode, Decl(intersectionWithConflictingPrivates.ts, 19, 27))
+>ViewNode : Symbol(ViewNode, Decl(intersectionWithConflictingPrivates.ts, 15, 1))
+
+abstract class ViewRefFileNode extends ViewRefNode { }
+>ViewRefFileNode : Symbol(ViewRefFileNode, Decl(intersectionWithConflictingPrivates.ts, 20, 47))
+>ViewRefNode : Symbol(ViewRefNode, Decl(intersectionWithConflictingPrivates.ts, 19, 27))
+
+class CommitFileNode extends ViewRefFileNode {
+>CommitFileNode : Symbol(CommitFileNode, Decl(intersectionWithConflictingPrivates.ts, 21, 54))
+>ViewRefFileNode : Symbol(ViewRefFileNode, Decl(intersectionWithConflictingPrivates.ts, 20, 47))
+
+  private _id: any;
+>_id : Symbol(CommitFileNode._id, Decl(intersectionWithConflictingPrivates.ts, 23, 46))
+}
+
+class ResultsFileNode extends ViewRefFileNode {
+>ResultsFileNode : Symbol(ResultsFileNode, Decl(intersectionWithConflictingPrivates.ts, 25, 1))
+>ViewRefFileNode : Symbol(ViewRefFileNode, Decl(intersectionWithConflictingPrivates.ts, 20, 47))
+
+  private _id: any;
+>_id : Symbol(ResultsFileNode._id, Decl(intersectionWithConflictingPrivates.ts, 27, 47))
+}
+
+class StashFileNode extends CommitFileNode { 
+>StashFileNode : Symbol(StashFileNode, Decl(intersectionWithConflictingPrivates.ts, 29, 1))
+>CommitFileNode : Symbol(CommitFileNode, Decl(intersectionWithConflictingPrivates.ts, 21, 54))
+
+  private _id2: any;
+>_id2 : Symbol(StashFileNode._id2, Decl(intersectionWithConflictingPrivates.ts, 31, 44))
+}
+
+class StatusFileNode extends ViewNode {
+>StatusFileNode : Symbol(StatusFileNode, Decl(intersectionWithConflictingPrivates.ts, 33, 1))
+>ViewNode : Symbol(ViewNode, Decl(intersectionWithConflictingPrivates.ts, 15, 1))
+
+  private _id: any;
+>_id : Symbol(StatusFileNode._id, Decl(intersectionWithConflictingPrivates.ts, 35, 39))
+}
+
+class Foo {
+>Foo : Symbol(Foo, Decl(intersectionWithConflictingPrivates.ts, 37, 1))
+
+  private async foo(node: CommitFileNode | ResultsFileNode | StashFileNode) {
+>foo : Symbol(Foo.foo, Decl(intersectionWithConflictingPrivates.ts, 39, 11))
+>node : Symbol(node, Decl(intersectionWithConflictingPrivates.ts, 40, 20))
+>CommitFileNode : Symbol(CommitFileNode, Decl(intersectionWithConflictingPrivates.ts, 21, 54))
+>ResultsFileNode : Symbol(ResultsFileNode, Decl(intersectionWithConflictingPrivates.ts, 25, 1))
+>StashFileNode : Symbol(StashFileNode, Decl(intersectionWithConflictingPrivates.ts, 29, 1))
+
+		if (
+			!(node instanceof CommitFileNode) &&
+>node : Symbol(node, Decl(intersectionWithConflictingPrivates.ts, 40, 20))
+>CommitFileNode : Symbol(CommitFileNode, Decl(intersectionWithConflictingPrivates.ts, 21, 54))
+
+			!(node instanceof StashFileNode) &&
+>node : Symbol(node, Decl(intersectionWithConflictingPrivates.ts, 40, 20))
+>StashFileNode : Symbol(StashFileNode, Decl(intersectionWithConflictingPrivates.ts, 29, 1))
+
+			!(node instanceof ResultsFileNode)
+>node : Symbol(node, Decl(intersectionWithConflictingPrivates.ts, 40, 20))
+>ResultsFileNode : Symbol(ResultsFileNode, Decl(intersectionWithConflictingPrivates.ts, 25, 1))
+
+		) {
+			return;
+		}
+
+		await this.bar(node);
+>this.bar : Symbol(Foo.bar, Decl(intersectionWithConflictingPrivates.ts, 50, 2))
+>this : Symbol(Foo, Decl(intersectionWithConflictingPrivates.ts, 37, 1))
+>bar : Symbol(Foo.bar, Decl(intersectionWithConflictingPrivates.ts, 50, 2))
+>node : Symbol(node, Decl(intersectionWithConflictingPrivates.ts, 40, 20))
+	}
+
+  private async bar(node: CommitFileNode | ResultsFileNode | StashFileNode | StatusFileNode, options?: {}) {
+>bar : Symbol(Foo.bar, Decl(intersectionWithConflictingPrivates.ts, 50, 2))
+>node : Symbol(node, Decl(intersectionWithConflictingPrivates.ts, 52, 20))
+>CommitFileNode : Symbol(CommitFileNode, Decl(intersectionWithConflictingPrivates.ts, 21, 54))
+>ResultsFileNode : Symbol(ResultsFileNode, Decl(intersectionWithConflictingPrivates.ts, 25, 1))
+>StashFileNode : Symbol(StashFileNode, Decl(intersectionWithConflictingPrivates.ts, 29, 1))
+>StatusFileNode : Symbol(StatusFileNode, Decl(intersectionWithConflictingPrivates.ts, 33, 1))
+>options : Symbol(options, Decl(intersectionWithConflictingPrivates.ts, 52, 92))
+
+    return Promise.resolve(undefined);
+>Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>undefined : Symbol(undefined)
+  }
+}
+

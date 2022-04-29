@@ -1,0 +1,9 @@
+=== tests/cases/compiler/sourceMapValidationVarInDownLevelGenerator.ts ===
+function * f() {
+>f : () => Generator<never, void, unknown>
+
+    var x = 1, y;
+>x : number
+>1 : 1
+>y : any
+}

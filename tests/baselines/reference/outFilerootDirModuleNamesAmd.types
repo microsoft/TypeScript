@@ -1,0 +1,25 @@
+=== tests/cases/conformance/es6/moduleExportsAmd/src/a.ts ===
+import foo from "./b";
+>foo : () => void
+
+export default class Foo {}
+>Foo : Foo
+
+foo();
+>foo() : void
+>foo : () => void
+
+=== tests/cases/conformance/es6/moduleExportsAmd/src/b.ts ===
+import Foo from "./a";
+>Foo : typeof Foo
+
+export default function foo() { new Foo(); }
+>foo : () => void
+>new Foo() : Foo
+>Foo : typeof Foo
+
+// https://github.com/microsoft/TypeScript/issues/37429
+import("./a");
+>import("./a") : Promise<typeof import("tests/cases/conformance/es6/moduleExportsAmd/src/a")>
+>"./a" : "./a"
+

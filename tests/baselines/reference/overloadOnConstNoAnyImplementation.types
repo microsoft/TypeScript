@@ -1,0 +1,78 @@
+=== tests/cases/compiler/overloadOnConstNoAnyImplementation.ts ===
+function x1(a: number, cb: (x: 'hi') => number);
+>x1 : { (a: number, cb: (x: 'hi') => number): any; (a: number, cb: (x: "bye") => number): any; }
+>a : number
+>cb : (x: 'hi') => number
+>x : "hi"
+
+function x1(a: number, cb: (x: 'bye') => number);
+>x1 : { (a: number, cb: (x: "hi") => number): any; (a: number, cb: (x: 'bye') => number): any; }
+>a : number
+>cb : (x: 'bye') => number
+>x : "bye"
+
+function x1(a: number, cb: (x: string) => number) {
+>x1 : { (a: number, cb: (x: "hi") => number): any; (a: number, cb: (x: "bye") => number): any; }
+>a : number
+>cb : (x: string) => number
+>x : string
+
+    cb('hi');
+>cb('hi') : number
+>cb : (x: string) => number
+>'hi' : "hi"
+
+    cb('bye');
+>cb('bye') : number
+>cb : (x: string) => number
+>'bye' : "bye"
+
+    var hm = 'hm';
+>hm : string
+>'hm' : "hm"
+
+    cb(hm);
+>cb(hm) : number
+>cb : (x: string) => number
+>hm : string
+
+    cb('uh');
+>cb('uh') : number
+>cb : (x: string) => number
+>'uh' : "uh"
+
+    cb(1); // error
+>cb(1) : number
+>cb : (x: string) => number
+>1 : 1
+}
+
+var cb: (number) => number = (x: number) => 1;
+>cb : (number: any) => number
+>number : any
+>(x: number) => 1 : (x: number) => number
+>x : number
+>1 : 1
+
+x1(1, cb);
+>x1(1, cb) : any
+>x1 : { (a: number, cb: (x: "hi") => number): any; (a: number, cb: (x: "bye") => number): any; }
+>1 : 1
+>cb : (number: any) => number
+
+x1(1, (x: 'hi') => 1); // error
+>x1(1, (x: 'hi') => 1) : any
+>x1 : { (a: number, cb: (x: "hi") => number): any; (a: number, cb: (x: "bye") => number): any; }
+>1 : 1
+>(x: 'hi') => 1 : (x: 'hi') => number
+>x : "hi"
+>1 : 1
+
+x1(1, (x: string) => 1);
+>x1(1, (x: string) => 1) : any
+>x1 : { (a: number, cb: (x: "hi") => number): any; (a: number, cb: (x: "bye") => number): any; }
+>1 : 1
+>(x: string) => 1 : (x: string) => number
+>x : string
+>1 : 1
+

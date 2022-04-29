@@ -1,0 +1,9 @@
+=== tests/cases/conformance/expressions/nullishCoalescingOperator/nullishCoalescingOperator6.ts ===
+function foo(foo: string, bar = foo ?? "bar") { }
+>foo : (foo: string, bar?: string) => void
+>foo : string
+>bar : string
+>foo ?? "bar" : string
+>foo : string
+>"bar" : "bar"
+

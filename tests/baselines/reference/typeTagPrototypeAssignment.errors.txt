@@ -1,0 +1,11 @@
+tests/cases/conformance/jsdoc/bug27327.js(4,1): error TS2322: Type 'number' is not assignable to type 'string'.
+
+
+==== tests/cases/conformance/jsdoc/bug27327.js (1 errors) ====
+    function C() {
+    }
+    /** @type {string} */
+    C.prototype = 12
+    ~~~~~~~~~~~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
+    

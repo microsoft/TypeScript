@@ -1,0 +1,16 @@
+tests/cases/conformance/types/any/anyAsConstructor.ts(10,9): error TS2347: Untyped function calls may not accept type arguments.
+
+
+==== tests/cases/conformance/types/any/anyAsConstructor.ts (1 errors) ====
+    // any is considered an untyped function call
+    // can be called except with type arguments which is an error
+    
+    var x: any;
+    var a = new x();
+    var b = new x('hello');
+    var c = new x(x);
+    
+    // grammar allows this for constructors
+    var d = new x<any>(x); // no error
+            ~~~~~~~~~~~~~
+!!! error TS2347: Untyped function calls may not accept type arguments.

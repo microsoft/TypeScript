@@ -1,0 +1,11 @@
+=== tests/cases/compiler/test.ts ===
+export interface T {
+    value: string
+>value : string
+}
+
+=== tests/cases/compiler/main.ts ===
+export const a: import("./test") = null;
+>a : any
+>null : null
+

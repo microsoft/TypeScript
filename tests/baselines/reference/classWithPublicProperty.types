@@ -1,0 +1,95 @@
+=== tests/cases/conformance/types/members/classWithPublicProperty.ts ===
+class C {
+>C : C
+
+    public x;
+>x : any
+
+    public a = '';
+>a : string
+>'' : ""
+
+    public b: string = '';
+>b : string
+>'' : ""
+
+    public c() { return '' }
+>c : () => string
+>'' : ""
+
+    public d = () => '';
+>d : () => string
+>() => '' : () => string
+>'' : ""
+
+    public static e;
+>e : any
+
+    public static f() { return '' }
+>f : () => string
+>'' : ""
+
+    public static g = () => '';
+>g : () => string
+>() => '' : () => string
+>'' : ""
+}
+
+// all of these are valid
+var c = new C();
+>c : C
+>new C() : C
+>C : typeof C
+
+var r1: string = c.x;
+>r1 : string
+>c.x : any
+>c : C
+>x : any
+
+var r2: string = c.a;
+>r2 : string
+>c.a : string
+>c : C
+>a : string
+
+var r3: string = c.b;
+>r3 : string
+>c.b : string
+>c : C
+>b : string
+
+var r4: string = c.c();
+>r4 : string
+>c.c() : string
+>c.c : () => string
+>c : C
+>c : () => string
+
+var r5: string = c.d();
+>r5 : string
+>c.d() : string
+>c.d : () => string
+>c : C
+>d : () => string
+
+var r6: string = C.e;
+>r6 : string
+>C.e : any
+>C : typeof C
+>e : any
+
+var r7: string = C.f();
+>r7 : string
+>C.f() : string
+>C.f : () => string
+>C : typeof C
+>f : () => string
+
+var r8: string = C.g();
+>r8 : string
+>C.g() : string
+>C.g : () => string
+>C : typeof C
+>g : () => string
+

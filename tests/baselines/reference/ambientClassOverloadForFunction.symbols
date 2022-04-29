@@ -1,0 +1,7 @@
+=== tests/cases/compiler/ambientClassOverloadForFunction.ts ===
+declare class foo{};
+>foo : Symbol(foo, Decl(ambientClassOverloadForFunction.ts, 0, 20), Decl(ambientClassOverloadForFunction.ts, 0, 0))
+
+function foo() { return null; }
+>foo : Symbol(foo, Decl(ambientClassOverloadForFunction.ts, 0, 20), Decl(ambientClassOverloadForFunction.ts, 0, 0))
+

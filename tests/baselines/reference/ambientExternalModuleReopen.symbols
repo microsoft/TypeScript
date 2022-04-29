@@ -1,0 +1,13 @@
+=== tests/cases/compiler/ambientExternalModuleReopen.ts ===
+declare module "fs" {
+>"fs" : Symbol("fs", Decl(ambientExternalModuleReopen.ts, 0, 0), Decl(ambientExternalModuleReopen.ts, 2, 1))
+
+    var x: string;
+>x : Symbol(x, Decl(ambientExternalModuleReopen.ts, 1, 7))
+}
+declare module 'fs' {
+>'fs' : Symbol("fs", Decl(ambientExternalModuleReopen.ts, 0, 0), Decl(ambientExternalModuleReopen.ts, 2, 1))
+
+    var y: number;
+>y : Symbol(y, Decl(ambientExternalModuleReopen.ts, 4, 7))
+}

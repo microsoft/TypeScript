@@ -1,0 +1,5 @@
+=== tests/cases/compiler/declarationEmitDefaultExport4.ts ===
+export default function () {
+    return 1;
+>1 : 1
+}

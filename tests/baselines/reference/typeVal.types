@@ -1,0 +1,20 @@
+=== tests/cases/compiler/typeVal.ts ===
+interface I {
+    I:number;
+>I : number
+}
+
+var I:I = { I: 3};
+>I : I
+>{ I: 3} : { I: number; }
+>I : number
+>3 : 3
+
+I.I=4;
+>I.I=4 : 4
+>I.I : number
+>I : I
+>I : number
+>4 : 4
+
+

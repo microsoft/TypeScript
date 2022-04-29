@@ -1,0 +1,71 @@
+=== tests/cases/compiler/destructureOfVariableSameAsShorthand.ts ===
+// https://github.com/microsoft/TypeScript/issues/38969
+interface AxiosResponse<T = never> {
+    data: T;
+>data : T
+}
+
+declare function get<T = never, R = AxiosResponse<T>>(): Promise<R>;
+>get : <T = never, R = AxiosResponse<T>>() => Promise<R>
+
+async function main() {
+>main : () => Promise<void>
+
+    // These work examples as expected
+    get().then((response) => {
+>get().then((response) => {        // body is never        const body = response.data;    }) : Promise<void>
+>get().then : <TResult1 = AxiosResponse<never>, TResult2 = never>(onfulfilled?: (value: AxiosResponse<never>) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+>get() : Promise<AxiosResponse<never>>
+>get : <T = never, R = AxiosResponse<T>>() => Promise<R>
+>then : <TResult1 = AxiosResponse<never>, TResult2 = never>(onfulfilled?: (value: AxiosResponse<never>) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+>(response) => {        // body is never        const body = response.data;    } : (response: AxiosResponse<never>) => void
+>response : AxiosResponse<never>
+
+        // body is never
+        const body = response.data;
+>body : never
+>response.data : never
+>response : AxiosResponse<never>
+>data : never
+
+    })
+    get().then(({ data }) => {
+>get().then(({ data }) => {        // data is never    }) : Promise<void>
+>get().then : <TResult1 = AxiosResponse<never>, TResult2 = never>(onfulfilled?: (value: AxiosResponse<never>) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+>get() : Promise<AxiosResponse<never>>
+>get : <T = never, R = AxiosResponse<T>>() => Promise<R>
+>then : <TResult1 = AxiosResponse<never>, TResult2 = never>(onfulfilled?: (value: AxiosResponse<never>) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+>({ data }) => {        // data is never    } : ({ data }: AxiosResponse<never>) => void
+>data : never
+
+        // data is never
+    })
+    const response = await get()
+>response : AxiosResponse<never>
+>await get() : AxiosResponse<never>
+>get() : Promise<AxiosResponse<never>>
+>get : <T = never, R = AxiosResponse<T>>() => Promise<R>
+
+    // body is never
+    const body = response.data;
+>body : never
+>response.data : never
+>response : AxiosResponse<never>
+>data : never
+
+    // data is never
+    const { data } = await get<never>();
+>data : never
+>await get<never>() : AxiosResponse<never>
+>get<never>() : Promise<AxiosResponse<never>>
+>get : <T = never, R = AxiosResponse<T>>() => Promise<R>
+
+    // The following did not work as expected.
+    // shouldBeNever should be never, but was any
+    const { data: shouldBeNever } = await get();
+>data : any
+>shouldBeNever : never
+>await get() : AxiosResponse<never>
+>get() : Promise<AxiosResponse<never>>
+>get : <T = never, R = AxiosResponse<T>>() => Promise<R>
+}

@@ -1,0 +1,118 @@
+=== tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument2.ts ===
+// it is an error to use a generic type without type arguments
+// all of these are errors 
+
+interface I<T> {
+>I : Symbol(I, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 0, 0))
+>T : Symbol(T, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 3, 12))
+
+    foo: T;
+>foo : Symbol(I.foo, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 3, 16))
+>T : Symbol(T, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 3, 12))
+}
+
+var c: I;
+>c : Symbol(c, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 7, 3))
+>I : Symbol(I, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 0, 0))
+
+var a: { x: I };
+>a : Symbol(a, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 9, 3))
+>x : Symbol(x, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 9, 8))
+>I : Symbol(I, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 0, 0))
+
+var b: { (x: I): I };
+>b : Symbol(b, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 10, 3))
+>x : Symbol(x, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 10, 10))
+>I : Symbol(I, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 0, 0))
+>I : Symbol(I, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 0, 0))
+
+var d: { [x: I]: I };
+>d : Symbol(d, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 11, 3))
+>x : Symbol(x, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 11, 10))
+>I : Symbol(I, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 0, 0))
+>I : Symbol(I, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 0, 0))
+
+var e = (x: I) => { var y: I; return y; }
+>e : Symbol(e, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 13, 3))
+>x : Symbol(x, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 13, 9))
+>I : Symbol(I, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 0, 0))
+>y : Symbol(y, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 13, 23))
+>I : Symbol(I, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 0, 0))
+>y : Symbol(y, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 13, 23))
+
+function f(x: I): I { var y: I; return y; }
+>f : Symbol(f, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 13, 41))
+>x : Symbol(x, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 15, 11))
+>I : Symbol(I, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 0, 0))
+>I : Symbol(I, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 0, 0))
+>y : Symbol(y, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 15, 25))
+>I : Symbol(I, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 0, 0))
+>y : Symbol(y, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 15, 25))
+
+var g = function f(x: I): I { var y: I; return y; }
+>g : Symbol(g, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 17, 3))
+>f : Symbol(f, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 17, 7))
+>x : Symbol(x, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 17, 19))
+>I : Symbol(I, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 0, 0))
+>I : Symbol(I, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 0, 0))
+>y : Symbol(y, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 17, 33))
+>I : Symbol(I, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 0, 0))
+>y : Symbol(y, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 17, 33))
+
+class D extends I {
+>D : Symbol(D, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 17, 51))
+>I : Symbol(I, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 0, 0))
+}
+
+interface U extends I {}
+>U : Symbol(U, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 20, 1))
+>I : Symbol(I, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 0, 0))
+
+module M {
+>M : Symbol(M, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 22, 24))
+
+    export interface E<T> { foo: T }
+>E : Symbol(E, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 24, 10))
+>T : Symbol(T, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 25, 23))
+>foo : Symbol(E.foo, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 25, 27))
+>T : Symbol(T, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 25, 23))
+}
+
+class D2 extends M.C { }
+>D2 : Symbol(D2, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 26, 1))
+>M : Symbol(M, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 22, 24))
+
+interface D3<T extends M.E> { }
+>D3 : Symbol(D3, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 28, 24))
+>T : Symbol(T, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 29, 13))
+>M : Symbol(M, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 22, 24))
+>E : Symbol(M.E, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 24, 10))
+
+interface I2 extends M.C { }
+>I2 : Symbol(I2, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 29, 31))
+>M : Symbol(M, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 22, 24))
+
+function h<T extends I>(x: T) { }
+>h : Symbol(h, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 30, 28))
+>T : Symbol(T, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 32, 11))
+>I : Symbol(I, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 0, 0))
+>x : Symbol(x, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 32, 24))
+>T : Symbol(T, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 32, 11))
+
+function i<T extends M.E>(x: T) { }
+>i : Symbol(i, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 32, 33))
+>T : Symbol(T, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 33, 11))
+>M : Symbol(M, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 22, 24))
+>E : Symbol(M.E, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 24, 10))
+>x : Symbol(x, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 33, 26))
+>T : Symbol(T, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 33, 11))
+
+var j = <C>null;
+>j : Symbol(j, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 35, 3))
+>C : Symbol(C)
+
+var k = <M.E>null;
+>k : Symbol(k, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 36, 3))
+>M : Symbol(M, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 22, 24))
+>E : Symbol(M.E, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 24, 10))
+

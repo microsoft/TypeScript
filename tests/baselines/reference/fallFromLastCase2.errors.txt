@@ -1,0 +1,35 @@
+tests/cases/compiler/fallFromLastCase2.ts(8,9): error TS7029: Fallthrough case in switch.
+tests/cases/compiler/fallFromLastCase2.ts(21,9): error TS7029: Fallthrough case in switch.
+
+
+==== tests/cases/compiler/fallFromLastCase2.ts (2 errors) ====
+    declare function use(a: string);
+    
+    function foo1(a: number) {
+        switch (a) {
+            case 1:
+                use("1");
+                break;
+            case 2:
+            ~~~~~~~
+!!! error TS7029: Fallthrough case in switch.
+                use("2");
+            case 3:
+                use("3");
+        }
+    }
+    
+    
+    function foo2(a: number) {
+        switch (a) {
+            case 1:
+                use("1");
+                break;
+            default:
+            ~~~~~~~~
+!!! error TS7029: Fallthrough case in switch.
+                use("2");
+            case 2:
+                use("3");
+        }
+    }

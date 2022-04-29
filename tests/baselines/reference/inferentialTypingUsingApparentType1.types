@@ -1,0 +1,19 @@
+=== tests/cases/compiler/inferentialTypingUsingApparentType1.ts ===
+function foo<T extends (p: string) => number>(x: T): T {
+>foo : <T extends (p: string) => number>(x: T) => T
+>p : string
+>x : T
+
+    return undefined;
+>undefined : undefined
+}
+
+foo(x => x.length);
+>foo(x => x.length) : (x: string) => number
+>foo : <T extends (p: string) => number>(x: T) => T
+>x => x.length : (x: string) => number
+>x : string
+>x.length : number
+>x : string
+>length : number
+

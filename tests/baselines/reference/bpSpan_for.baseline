@@ -1,0 +1,248 @@
+
+1  >for (var i = 0; i < 10; i++) {
+
+    ~~~~~~~~~~~~~~~                               => Pos: (0 to 14)  SpanInfo: {"start":5,"length":9}
+    >var i = 0
+    >:=> (line 1, col 5) to (line 1, col 14)
+1  >for (var i = 0; i < 10; i++) {
+
+                   ~~~~~~~~                       => Pos: (15 to 22)  SpanInfo: {"start":16,"length":6}
+    >i < 10
+    >:=> (line 1, col 16) to (line 1, col 22)
+1  >for (var i = 0; i < 10; i++) {
+
+                           ~~~~~~~~               => Pos: (23 to 30)  SpanInfo: {"start":24,"length":3}
+    >i++
+    >:=> (line 1, col 24) to (line 1, col 27)
+--------------------------------
+2  >    WScript.Echo("i: " + i);
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~                 => Pos: (31 to 59)  SpanInfo: {"start":35,"length":23}
+    >WScript.Echo("i: " + i)
+    >:=> (line 2, col 4) to (line 2, col 27)
+--------------------------------
+3  >}
+
+    ~~                                            => Pos: (60 to 61)  SpanInfo: {"start":35,"length":23}
+    >WScript.Echo("i: " + i)
+    >:=> (line 2, col 4) to (line 2, col 27)
+--------------------------------
+4  >for (i = 0; i < 10; i++)
+
+    ~~~~~~~~~~~                                   => Pos: (62 to 72)  SpanInfo: {"start":67,"length":5}
+    >i = 0
+    >:=> (line 4, col 5) to (line 4, col 10)
+4  >for (i = 0; i < 10; i++)
+
+               ~~~~~~~~                           => Pos: (73 to 80)  SpanInfo: {"start":74,"length":6}
+    >i < 10
+    >:=> (line 4, col 12) to (line 4, col 18)
+4  >for (i = 0; i < 10; i++)
+
+                       ~~~~~~                     => Pos: (81 to 86)  SpanInfo: {"start":82,"length":3}
+    >i++
+    >:=> (line 4, col 20) to (line 4, col 23)
+--------------------------------
+5  >{
+
+    ~~                                            => Pos: (87 to 88)  SpanInfo: {"start":93,"length":23}
+    >WScript.Echo("i: " + i)
+    >:=> (line 6, col 4) to (line 6, col 27)
+--------------------------------
+6  >    WScript.Echo("i: " + i);
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~                 => Pos: (89 to 117)  SpanInfo: {"start":93,"length":23}
+    >WScript.Echo("i: " + i)
+    >:=> (line 6, col 4) to (line 6, col 27)
+--------------------------------
+7  >}
+
+    ~~                                            => Pos: (118 to 119)  SpanInfo: {"start":93,"length":23}
+    >WScript.Echo("i: " + i)
+    >:=> (line 6, col 4) to (line 6, col 27)
+--------------------------------
+8  >for (var j = 0; j < 10; ) {
+
+    ~~~~~~~~~~~~~~~                               => Pos: (120 to 134)  SpanInfo: {"start":125,"length":9}
+    >var j = 0
+    >:=> (line 8, col 5) to (line 8, col 14)
+8  >for (var j = 0; j < 10; ) {
+
+                   ~~~~~~~~~~~~~                  => Pos: (135 to 147)  SpanInfo: {"start":136,"length":6}
+    >j < 10
+    >:=> (line 8, col 16) to (line 8, col 22)
+--------------------------------
+9  >    j++;
+
+    ~~~~~~~~~                                     => Pos: (148 to 156)  SpanInfo: {"start":152,"length":3}
+    >j++
+    >:=> (line 9, col 4) to (line 9, col 7)
+--------------------------------
+10 >    if (j == 1) {
+
+    ~~~~~~~~~~~~~~~~~~                            => Pos: (157 to 174)  SpanInfo: {"start":161,"length":11}
+    >if (j == 1)
+    >:=> (line 10, col 4) to (line 10, col 15)
+--------------------------------
+11 >        continue;
+
+    ~~~~~~~~~~~~~~~~~~                            => Pos: (175 to 192)  SpanInfo: {"start":183,"length":8}
+    >continue
+    >:=> (line 11, col 8) to (line 11, col 16)
+--------------------------------
+12 >    }
+
+    ~~~~~~                                        => Pos: (193 to 198)  SpanInfo: {"start":183,"length":8}
+    >continue
+    >:=> (line 11, col 8) to (line 11, col 16)
+--------------------------------
+13 >}
+
+    ~~                                            => Pos: (199 to 200)  SpanInfo: {"start":161,"length":11}
+    >if (j == 1)
+    >:=> (line 10, col 4) to (line 10, col 15)
+--------------------------------
+14 >for (j = 0; j < 10;)
+
+    ~~~~~~~~~~~                                   => Pos: (201 to 211)  SpanInfo: {"start":206,"length":5}
+    >j = 0
+    >:=> (line 14, col 5) to (line 14, col 10)
+14 >for (j = 0; j < 10;)
+
+               ~~~~~~~~~~                         => Pos: (212 to 221)  SpanInfo: {"start":213,"length":6}
+    >j < 10
+    >:=> (line 14, col 12) to (line 14, col 18)
+--------------------------------
+15 >{
+
+    ~~                                            => Pos: (222 to 223)  SpanInfo: {"start":228,"length":3}
+    >j++
+    >:=> (line 16, col 4) to (line 16, col 7)
+--------------------------------
+16 >    j++;
+
+    ~~~~~~~~~                                     => Pos: (224 to 232)  SpanInfo: {"start":228,"length":3}
+    >j++
+    >:=> (line 16, col 4) to (line 16, col 7)
+--------------------------------
+17 >}
+
+    ~~                                            => Pos: (233 to 234)  SpanInfo: {"start":228,"length":3}
+    >j++
+    >:=> (line 16, col 4) to (line 16, col 7)
+--------------------------------
+18 >for (var k = 0;; k++) {
+
+    ~~~~~~~~~~~~~~~~                              => Pos: (235 to 250)  SpanInfo: {"start":240,"length":9}
+    >var k = 0
+    >:=> (line 18, col 5) to (line 18, col 14)
+18 >for (var k = 0;; k++) {
+
+                    ~~~~~~~~                      => Pos: (251 to 258)  SpanInfo: {"start":252,"length":3}
+    >k++
+    >:=> (line 18, col 17) to (line 18, col 20)
+--------------------------------
+19 >}
+
+    ~~                                            => Pos: (259 to 260)  SpanInfo: undefined
+--------------------------------
+20 >for (k = 0;; k++)
+
+    ~~~~~~~~~~~~                                  => Pos: (261 to 272)  SpanInfo: {"start":266,"length":5}
+    >k = 0
+    >:=> (line 20, col 5) to (line 20, col 10)
+20 >for (k = 0;; k++)
+
+                ~~~~~~                            => Pos: (273 to 278)  SpanInfo: {"start":274,"length":3}
+    >k++
+    >:=> (line 20, col 13) to (line 20, col 16)
+--------------------------------
+21 >{
+
+    ~~                                            => Pos: (279 to 280)  SpanInfo: undefined
+--------------------------------
+22 >}
+
+    ~~                                            => Pos: (281 to 282)  SpanInfo: undefined
+--------------------------------
+23 >for (; k < 10; k++) {
+
+    ~~~~~~~~~~~~~~                                => Pos: (283 to 296)  SpanInfo: {"start":290,"length":6}
+    >k < 10
+    >:=> (line 23, col 7) to (line 23, col 13)
+23 >for (; k < 10; k++) {
+
+                  ~~~~~~~~                        => Pos: (297 to 304)  SpanInfo: {"start":298,"length":3}
+    >k++
+    >:=> (line 23, col 15) to (line 23, col 18)
+--------------------------------
+24 >}
+
+    ~~                                            => Pos: (305 to 306)  SpanInfo: undefined
+--------------------------------
+25 >for (;;) {
+
+    ~~~~~~~~~~~                                   => Pos: (307 to 317)  SpanInfo: undefined
+--------------------------------
+26 >    i++;
+
+    ~~~~~~~~~                                     => Pos: (318 to 326)  SpanInfo: {"start":322,"length":3}
+    >i++
+    >:=> (line 26, col 4) to (line 26, col 7)
+--------------------------------
+27 >}
+
+    ~~                                            => Pos: (327 to 328)  SpanInfo: {"start":322,"length":3}
+    >i++
+    >:=> (line 26, col 4) to (line 26, col 7)
+--------------------------------
+28 >for (;;)
+
+    ~~~~~~~~~                                     => Pos: (329 to 337)  SpanInfo: undefined
+--------------------------------
+29 >{
+
+    ~~                                            => Pos: (338 to 339)  SpanInfo: {"start":344,"length":3}
+    >i++
+    >:=> (line 30, col 4) to (line 30, col 7)
+--------------------------------
+30 >    i++;
+
+    ~~~~~~~~~                                     => Pos: (340 to 348)  SpanInfo: {"start":344,"length":3}
+    >i++
+    >:=> (line 30, col 4) to (line 30, col 7)
+--------------------------------
+31 >}
+
+    ~~                                            => Pos: (349 to 350)  SpanInfo: {"start":344,"length":3}
+    >i++
+    >:=> (line 30, col 4) to (line 30, col 7)
+--------------------------------
+32 >for (i = 0, j = 20; j < 20, i < 20; j++) {
+
+    ~~~~~~~~~~~                                   => Pos: (351 to 361)  SpanInfo: {"start":356,"length":5}
+    >i = 0
+    >:=> (line 32, col 5) to (line 32, col 10)
+32 >for (i = 0, j = 20; j < 20, i < 20; j++) {
+
+               ~~~~~~~~                           => Pos: (362 to 369)  SpanInfo: {"start":363,"length":6}
+    >j = 20
+    >:=> (line 32, col 12) to (line 32, col 18)
+32 >for (i = 0, j = 20; j < 20, i < 20; j++) {
+
+                       ~~~~~~~~                   => Pos: (370 to 377)  SpanInfo: {"start":371,"length":6}
+    >j < 20
+    >:=> (line 32, col 20) to (line 32, col 26)
+32 >for (i = 0, j = 20; j < 20, i < 20; j++) {
+
+                               ~~~~~~~~           => Pos: (378 to 385)  SpanInfo: {"start":379,"length":6}
+    >i < 20
+    >:=> (line 32, col 28) to (line 32, col 34)
+32 >for (i = 0, j = 20; j < 20, i < 20; j++) {
+
+                                       ~~~~~~~~   => Pos: (386 to 393)  SpanInfo: {"start":387,"length":3}
+    >j++
+    >:=> (line 32, col 36) to (line 32, col 39)
+--------------------------------
+33 >}
+    ~                                             => Pos: (394 to 394)  SpanInfo: undefined

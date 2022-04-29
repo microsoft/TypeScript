@@ -1,0 +1,16 @@
+=== tests/cases/conformance/jsx/file.tsx ===
+declare namespace JSX { interface Element { } }
+>JSX : Symbol(JSX, Decl(file.tsx, 0, 0))
+>Element : Symbol(Element, Decl(file.tsx, 0, 23))
+
+function foo() {
+>foo : Symbol(foo, Decl(file.tsx, 0, 47))
+
+	var x = <div>  { </div>
+>x : Symbol(x, Decl(file.tsx, 3, 4))
+}
+// Shouldn't see any errors down here
+var y = { a: 1 };
+>y : Symbol(y, Decl(file.tsx, 6, 3))
+>a : Symbol(a, Decl(file.tsx, 6, 9))
+

@@ -1,0 +1,82 @@
+=== tests/cases/compiler/extractInferenceImprovement.ts ===
+// repro mostly from https://github.com/Microsoft/TypeScript/issues/25065
+function getProperty2<T, K extends keyof T>(obj: T, key: Extract<K, string>): T[K] {
+>getProperty2 : <T, K extends keyof T>(obj: T, key: Extract<K, string>) => T[K]
+>obj : T
+>key : Extract<K, string>
+
+    return obj[key];
+>obj[key] : T[Extract<K, string>]
+>obj : T
+>key : Extract<K, string>
+}
+
+function getProperty3<T, K extends Extract<keyof T, string>>(obj: T, key: K): T[K] {
+>getProperty3 : <T, K extends Extract<keyof T, string>>(obj: T, key: K) => T[K]
+>obj : T
+>key : K
+
+    return obj[key];
+>obj[key] : T[K]
+>obj : T
+>key : K
+}
+
+const s = Symbol();
+>s : unique symbol
+>Symbol() : unique symbol
+>Symbol : SymbolConstructor
+
+interface StrNum {
+    first: string;
+>first : string
+
+    second: number;
+>second : number
+
+    [s]: string;
+>[s] : string
+>s : unique symbol
+}
+const obj: StrNum = {} as any;
+>obj : StrNum
+>{} as any : any
+>{} : {}
+
+let prop: string;
+>prop : string
+
+// should work
+prop = getProperty2(obj, 'first');
+>prop = getProperty2(obj, 'first') : string
+>prop : string
+>getProperty2(obj, 'first') : string
+>getProperty2 : <T, K extends keyof T>(obj: T, key: Extract<K, string>) => T[K]
+>obj : StrNum
+>'first' : "first"
+
+prop = getProperty3(obj, 'first');
+>prop = getProperty3(obj, 'first') : string
+>prop : string
+>getProperty3(obj, 'first') : string
+>getProperty3 : <T, K extends Extract<keyof T, string>>(obj: T, key: K) => T[K]
+>obj : StrNum
+>'first' : "first"
+
+// Should fail
+prop = getProperty2(obj, s);
+>prop = getProperty2(obj, s) : string
+>prop : string
+>getProperty2(obj, s) : string
+>getProperty2 : <T, K extends keyof T>(obj: T, key: Extract<K, string>) => T[K]
+>obj : StrNum
+>s : unique symbol
+
+prop = getProperty3(obj, s);
+>prop = getProperty3(obj, s) : string | number
+>prop : string
+>getProperty3(obj, s) : string | number
+>getProperty3 : <T, K extends Extract<keyof T, string>>(obj: T, key: K) => T[K]
+>obj : StrNum
+>s : unique symbol
+

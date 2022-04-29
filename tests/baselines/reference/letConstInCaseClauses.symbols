@@ -1,0 +1,63 @@
+=== tests/cases/compiler/letConstInCaseClauses.ts ===
+var x = 10;
+>x : Symbol(x, Decl(letConstInCaseClauses.ts, 0, 3))
+
+var y = 20;
+>y : Symbol(y, Decl(letConstInCaseClauses.ts, 1, 3))
+{
+    let x = 1;
+>x : Symbol(x, Decl(letConstInCaseClauses.ts, 3, 7))
+
+    let y = 2;
+>y : Symbol(y, Decl(letConstInCaseClauses.ts, 4, 7))
+
+    console.log(x)
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>x : Symbol(x, Decl(letConstInCaseClauses.ts, 3, 7))
+
+    switch (x) {
+>x : Symbol(x, Decl(letConstInCaseClauses.ts, 3, 7))
+
+        case 10:
+            let x = 20;
+>x : Symbol(x, Decl(letConstInCaseClauses.ts, 8, 15))
+    }
+    switch (y) {
+>y : Symbol(y, Decl(letConstInCaseClauses.ts, 4, 7))
+
+        case 10:
+            let y = 20;
+>y : Symbol(y, Decl(letConstInCaseClauses.ts, 12, 15))
+    }
+}
+
+{
+    const x = 1;
+>x : Symbol(x, Decl(letConstInCaseClauses.ts, 17, 9))
+
+    const y = 2;
+>y : Symbol(y, Decl(letConstInCaseClauses.ts, 18, 9))
+
+    console.log(x)
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>x : Symbol(x, Decl(letConstInCaseClauses.ts, 17, 9))
+
+    switch (x) {
+>x : Symbol(x, Decl(letConstInCaseClauses.ts, 17, 9))
+
+        case 10:
+            const x = 20;
+>x : Symbol(x, Decl(letConstInCaseClauses.ts, 22, 17))
+    }
+    switch (y) {
+>y : Symbol(y, Decl(letConstInCaseClauses.ts, 18, 9))
+
+        case 10:
+            const y = 20;
+>y : Symbol(y, Decl(letConstInCaseClauses.ts, 26, 17))
+    }
+}

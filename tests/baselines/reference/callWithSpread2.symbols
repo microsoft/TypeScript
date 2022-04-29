@@ -1,0 +1,123 @@
+=== tests/cases/conformance/expressions/functionCalls/callWithSpread2.ts ===
+declare function all(a?: number, b?: number): void;
+>all : Symbol(all, Decl(callWithSpread2.ts, 0, 0))
+>a : Symbol(a, Decl(callWithSpread2.ts, 0, 21))
+>b : Symbol(b, Decl(callWithSpread2.ts, 0, 32))
+
+declare function weird(a?: number | string, b?: number | string): void;
+>weird : Symbol(weird, Decl(callWithSpread2.ts, 0, 51))
+>a : Symbol(a, Decl(callWithSpread2.ts, 1, 23))
+>b : Symbol(b, Decl(callWithSpread2.ts, 1, 43))
+
+declare function prefix(s: string, a?: number, b?: number): void;
+>prefix : Symbol(prefix, Decl(callWithSpread2.ts, 1, 71))
+>s : Symbol(s, Decl(callWithSpread2.ts, 2, 24))
+>a : Symbol(a, Decl(callWithSpread2.ts, 2, 34))
+>b : Symbol(b, Decl(callWithSpread2.ts, 2, 46))
+
+declare function rest(s: string, a?: number, b?: number,  ...rest: number[]): void;
+>rest : Symbol(rest, Decl(callWithSpread2.ts, 2, 65))
+>s : Symbol(s, Decl(callWithSpread2.ts, 3, 22))
+>a : Symbol(a, Decl(callWithSpread2.ts, 3, 32))
+>b : Symbol(b, Decl(callWithSpread2.ts, 3, 44))
+>rest : Symbol(rest, Decl(callWithSpread2.ts, 3, 56))
+
+declare function normal(s: string): void;
+>normal : Symbol(normal, Decl(callWithSpread2.ts, 3, 83))
+>s : Symbol(s, Decl(callWithSpread2.ts, 4, 24))
+
+declare function thunk(): string;
+>thunk : Symbol(thunk, Decl(callWithSpread2.ts, 4, 41))
+
+declare function prefix2(s: string, n: number, a?: number, b?: number): void;
+>prefix2 : Symbol(prefix2, Decl(callWithSpread2.ts, 5, 33))
+>s : Symbol(s, Decl(callWithSpread2.ts, 6, 25))
+>n : Symbol(n, Decl(callWithSpread2.ts, 6, 35))
+>a : Symbol(a, Decl(callWithSpread2.ts, 6, 46))
+>b : Symbol(b, Decl(callWithSpread2.ts, 6, 58))
+
+declare var ns: number[];
+>ns : Symbol(ns, Decl(callWithSpread2.ts, 8, 11))
+
+declare var mixed: (number | string)[];
+>mixed : Symbol(mixed, Decl(callWithSpread2.ts, 9, 11))
+
+declare var tuple: [number, string];
+>tuple : Symbol(tuple, Decl(callWithSpread2.ts, 10, 11))
+
+// good
+all(...ns)
+>all : Symbol(all, Decl(callWithSpread2.ts, 0, 0))
+>ns : Symbol(ns, Decl(callWithSpread2.ts, 8, 11))
+
+weird(...ns)
+>weird : Symbol(weird, Decl(callWithSpread2.ts, 0, 51))
+>ns : Symbol(ns, Decl(callWithSpread2.ts, 8, 11))
+
+weird(...mixed)
+>weird : Symbol(weird, Decl(callWithSpread2.ts, 0, 51))
+>mixed : Symbol(mixed, Decl(callWithSpread2.ts, 9, 11))
+
+weird(...tuple)
+>weird : Symbol(weird, Decl(callWithSpread2.ts, 0, 51))
+>tuple : Symbol(tuple, Decl(callWithSpread2.ts, 10, 11))
+
+prefix("a", ...ns)
+>prefix : Symbol(prefix, Decl(callWithSpread2.ts, 1, 71))
+>ns : Symbol(ns, Decl(callWithSpread2.ts, 8, 11))
+
+rest("d", ...ns)
+>rest : Symbol(rest, Decl(callWithSpread2.ts, 2, 65))
+>ns : Symbol(ns, Decl(callWithSpread2.ts, 8, 11))
+
+
+// extra arguments
+normal("g", ...ns)
+>normal : Symbol(normal, Decl(callWithSpread2.ts, 3, 83))
+>ns : Symbol(ns, Decl(callWithSpread2.ts, 8, 11))
+
+thunk(...ns)
+>thunk : Symbol(thunk, Decl(callWithSpread2.ts, 4, 41))
+>ns : Symbol(ns, Decl(callWithSpread2.ts, 8, 11))
+
+// bad
+all(...mixed)
+>all : Symbol(all, Decl(callWithSpread2.ts, 0, 0))
+>mixed : Symbol(mixed, Decl(callWithSpread2.ts, 9, 11))
+
+all(...tuple)
+>all : Symbol(all, Decl(callWithSpread2.ts, 0, 0))
+>tuple : Symbol(tuple, Decl(callWithSpread2.ts, 10, 11))
+
+prefix("b", ...mixed)
+>prefix : Symbol(prefix, Decl(callWithSpread2.ts, 1, 71))
+>mixed : Symbol(mixed, Decl(callWithSpread2.ts, 9, 11))
+
+prefix("c", ...tuple)
+>prefix : Symbol(prefix, Decl(callWithSpread2.ts, 1, 71))
+>tuple : Symbol(tuple, Decl(callWithSpread2.ts, 10, 11))
+
+rest("e", ...mixed)
+>rest : Symbol(rest, Decl(callWithSpread2.ts, 2, 65))
+>mixed : Symbol(mixed, Decl(callWithSpread2.ts, 9, 11))
+
+rest("f", ...tuple)
+>rest : Symbol(rest, Decl(callWithSpread2.ts, 2, 65))
+>tuple : Symbol(tuple, Decl(callWithSpread2.ts, 10, 11))
+
+prefix(...ns) // required parameters are required
+>prefix : Symbol(prefix, Decl(callWithSpread2.ts, 1, 71))
+>ns : Symbol(ns, Decl(callWithSpread2.ts, 8, 11))
+
+prefix(...mixed)
+>prefix : Symbol(prefix, Decl(callWithSpread2.ts, 1, 71))
+>mixed : Symbol(mixed, Decl(callWithSpread2.ts, 9, 11))
+
+prefix(...tuple)
+>prefix : Symbol(prefix, Decl(callWithSpread2.ts, 1, 71))
+>tuple : Symbol(tuple, Decl(callWithSpread2.ts, 10, 11))
+
+prefix2("g", ...ns);
+>prefix2 : Symbol(prefix2, Decl(callWithSpread2.ts, 5, 33))
+>ns : Symbol(ns, Decl(callWithSpread2.ts, 8, 11))
+

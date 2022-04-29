@@ -1,0 +1,10 @@
+=== tests/cases/compiler/metadataImportType.ts ===
+export class A {
+>A : A
+
+    @test
+>test : any
+
+    b: import('./b').B
+>b : any
+}

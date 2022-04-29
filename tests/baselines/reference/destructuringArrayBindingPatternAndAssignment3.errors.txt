@@ -1,0 +1,28 @@
+tests/cases/conformance/es6/destructuring/destructuringArrayBindingPatternAndAssignment3.ts(2,22): error TS2448: Block-scoped variable 'e' used before its declaration.
+tests/cases/conformance/es6/destructuring/destructuringArrayBindingPatternAndAssignment3.ts(3,22): error TS2448: Block-scoped variable 'i' used before its declaration.
+tests/cases/conformance/es6/destructuring/destructuringArrayBindingPatternAndAssignment3.ts(7,27): error TS2372: Parameter 'e' cannot reference itself.
+tests/cases/conformance/es6/destructuring/destructuringArrayBindingPatternAndAssignment3.ts(9,27): error TS2373: Parameter 'h' cannot reference identifier 'i' declared after it.
+
+
+==== tests/cases/conformance/es6/destructuring/destructuringArrayBindingPatternAndAssignment3.ts (4 errors) ====
+    const [a, b = a] = [1]; // ok
+    const [c, d = c, e = e] = [1]; // error for e = e
+                         ~
+!!! error TS2448: Block-scoped variable 'e' used before its declaration.
+!!! related TS2728 tests/cases/conformance/es6/destructuring/destructuringArrayBindingPatternAndAssignment3.ts:2:18: 'e' is declared here.
+    const [f, g = f, h = i, i = f] = [1]; // error for h = i
+                         ~
+!!! error TS2448: Block-scoped variable 'i' used before its declaration.
+!!! related TS2728 tests/cases/conformance/es6/destructuring/destructuringArrayBindingPatternAndAssignment3.ts:3:25: 'i' is declared here.
+    
+    (function ([a, b = a]) { // ok
+    })([1]);
+    (function ([c, d = c, e = e]) { // error for e = e
+                              ~
+!!! error TS2372: Parameter 'e' cannot reference itself.
+    })([1]);
+    (function ([f, g = f, h = i, i = f]) { // error for h = i
+                              ~
+!!! error TS2373: Parameter 'h' cannot reference identifier 'i' declared after it.
+    })([1])
+    

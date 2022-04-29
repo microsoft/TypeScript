@@ -1,0 +1,80 @@
+=== tests/cases/conformance/constEnums/constEnumPropertyAccess1.ts ===
+// constant enum declarations are completely erased in the emitted JavaScript code.
+// it is an error to reference a constant enum object in any other context
+// than a property access that selects one of the enum's members
+
+const enum G {
+>G : Symbol(G, Decl(constEnumPropertyAccess1.ts, 0, 0))
+
+    A = 1,
+>A : Symbol(G.A, Decl(constEnumPropertyAccess1.ts, 4, 14))
+
+    B = 2,
+>B : Symbol(G.B, Decl(constEnumPropertyAccess1.ts, 5, 10))
+
+    C = A + B,
+>C : Symbol(G.C, Decl(constEnumPropertyAccess1.ts, 6, 10))
+>A : Symbol(G.A, Decl(constEnumPropertyAccess1.ts, 4, 14))
+>B : Symbol(G.B, Decl(constEnumPropertyAccess1.ts, 5, 10))
+
+    D = A * 2
+>D : Symbol(G.D, Decl(constEnumPropertyAccess1.ts, 7, 14))
+>A : Symbol(G.A, Decl(constEnumPropertyAccess1.ts, 4, 14))
+}
+
+var o: {
+>o : Symbol(o, Decl(constEnumPropertyAccess1.ts, 11, 3))
+
+    [idx: number]: boolean
+>idx : Symbol(idx, Decl(constEnumPropertyAccess1.ts, 12, 5))
+
+} = {
+        1: true
+>1 : Symbol(1, Decl(constEnumPropertyAccess1.ts, 13, 5))
+
+    };
+
+var a = G.A;
+>a : Symbol(a, Decl(constEnumPropertyAccess1.ts, 17, 3))
+>G.A : Symbol(G.A, Decl(constEnumPropertyAccess1.ts, 4, 14))
+>G : Symbol(G, Decl(constEnumPropertyAccess1.ts, 0, 0))
+>A : Symbol(G.A, Decl(constEnumPropertyAccess1.ts, 4, 14))
+
+var a1 = G["A"];
+>a1 : Symbol(a1, Decl(constEnumPropertyAccess1.ts, 18, 3))
+>G : Symbol(G, Decl(constEnumPropertyAccess1.ts, 0, 0))
+>"A" : Symbol(G.A, Decl(constEnumPropertyAccess1.ts, 4, 14))
+
+var g = o[G.A];
+>g : Symbol(g, Decl(constEnumPropertyAccess1.ts, 19, 3))
+>o : Symbol(o, Decl(constEnumPropertyAccess1.ts, 11, 3))
+>G.A : Symbol(G.A, Decl(constEnumPropertyAccess1.ts, 4, 14))
+>G : Symbol(G, Decl(constEnumPropertyAccess1.ts, 0, 0))
+>A : Symbol(G.A, Decl(constEnumPropertyAccess1.ts, 4, 14))
+
+class C {
+>C : Symbol(C, Decl(constEnumPropertyAccess1.ts, 19, 15))
+
+    [G.A]() { }
+>[G.A] : Symbol(C[G.A], Decl(constEnumPropertyAccess1.ts, 21, 9))
+>G.A : Symbol(G.A, Decl(constEnumPropertyAccess1.ts, 4, 14))
+>G : Symbol(G, Decl(constEnumPropertyAccess1.ts, 0, 0))
+>A : Symbol(G.A, Decl(constEnumPropertyAccess1.ts, 4, 14))
+
+    get [G.B]() {
+>[G.B] : Symbol(C[G.B], Decl(constEnumPropertyAccess1.ts, 22, 15))
+>G.B : Symbol(G.B, Decl(constEnumPropertyAccess1.ts, 5, 10))
+>G : Symbol(G, Decl(constEnumPropertyAccess1.ts, 0, 0))
+>B : Symbol(G.B, Decl(constEnumPropertyAccess1.ts, 5, 10))
+
+        return true;
+    }
+    set [G.B](x: number) { }
+>[G.B] : Symbol(C[G.B], Decl(constEnumPropertyAccess1.ts, 25, 5))
+>G.B : Symbol(G.B, Decl(constEnumPropertyAccess1.ts, 5, 10))
+>G : Symbol(G, Decl(constEnumPropertyAccess1.ts, 0, 0))
+>B : Symbol(G.B, Decl(constEnumPropertyAccess1.ts, 5, 10))
+>x : Symbol(x, Decl(constEnumPropertyAccess1.ts, 26, 14))
+}
+
+

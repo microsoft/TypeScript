@@ -1,0 +1,21 @@
+=== tests/cases/conformance/Symbols/ES5SymbolProperty4.ts ===
+var Symbol: { iterator: string };
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(ES5SymbolProperty4.ts, 0, 3))
+>iterator : Symbol(iterator, Decl(ES5SymbolProperty4.ts, 0, 13))
+
+class C {
+>C : Symbol(C, Decl(ES5SymbolProperty4.ts, 0, 33))
+
+    [Symbol.iterator]() { }
+>[Symbol.iterator] : Symbol(C[Symbol.iterator], Decl(ES5SymbolProperty4.ts, 2, 9))
+>Symbol.iterator : Symbol(iterator, Decl(ES5SymbolProperty4.ts, 0, 13))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(ES5SymbolProperty4.ts, 0, 3))
+>iterator : Symbol(iterator, Decl(ES5SymbolProperty4.ts, 0, 13))
+}
+
+(new C)[Symbol.iterator]
+>C : Symbol(C, Decl(ES5SymbolProperty4.ts, 0, 33))
+>Symbol.iterator : Symbol(iterator, Decl(ES5SymbolProperty4.ts, 0, 13))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(ES5SymbolProperty4.ts, 0, 3))
+>iterator : Symbol(iterator, Decl(ES5SymbolProperty4.ts, 0, 13))
+

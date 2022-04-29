@@ -1,0 +1,37 @@
+=== tests/cases/compiler/declareExternalModuleWithExportAssignedFundule.ts ===
+declare module "express" {
+>"express" : typeof import("express")
+
+    export = express;
+>express : typeof express
+
+    function express(): express.ExpressServer;
+>express : typeof express
+>express : any
+
+    module express {
+>express : typeof express
+
+        export interface ExpressServer {
+
+            enable(name: string): ExpressServer;
+>enable : (name: string) => ExpressServer
+>name : string
+
+            post(path: RegExp, handler: (req: Function) => void ): void;
+>post : (path: RegExp, handler: (req: Function) => void) => void
+>path : RegExp
+>handler : (req: Function) => void
+>req : Function
+
+        }
+
+        export class ExpressServerRequest {
+>ExpressServerRequest : ExpressServerRequest
+
+        }
+
+    }
+
+}
+

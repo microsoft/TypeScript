@@ -1,0 +1,53 @@
+=== tests/cases/compiler/constructorOverloads5.ts ===
+ interface IArguments {}
+>IArguments : Symbol(IArguments, Decl(lib.es5.d.ts, --, --), Decl(constructorOverloads5.ts, 0, 0))
+
+ declare module M {
+>M : Symbol(M, Decl(constructorOverloads5.ts, 0, 24))
+
+    export function RegExp(pattern: string): RegExp;
+>RegExp : Symbol(RegExp, Decl(constructorOverloads5.ts, 2, 19), Decl(constructorOverloads5.ts, 3, 52), Decl(constructorOverloads5.ts, 4, 67))
+>pattern : Symbol(pattern, Decl(constructorOverloads5.ts, 3, 27))
+>RegExp : Symbol(RegExp, Decl(constructorOverloads5.ts, 2, 19), Decl(constructorOverloads5.ts, 3, 52), Decl(constructorOverloads5.ts, 4, 67))
+
+    export function RegExp(pattern: string, flags: string): RegExp;
+>RegExp : Symbol(RegExp, Decl(constructorOverloads5.ts, 2, 19), Decl(constructorOverloads5.ts, 3, 52), Decl(constructorOverloads5.ts, 4, 67))
+>pattern : Symbol(pattern, Decl(constructorOverloads5.ts, 4, 27))
+>flags : Symbol(flags, Decl(constructorOverloads5.ts, 4, 43))
+>RegExp : Symbol(RegExp, Decl(constructorOverloads5.ts, 2, 19), Decl(constructorOverloads5.ts, 3, 52), Decl(constructorOverloads5.ts, 4, 67))
+
+    export class RegExp {
+>RegExp : Symbol(RegExp, Decl(constructorOverloads5.ts, 2, 19), Decl(constructorOverloads5.ts, 3, 52), Decl(constructorOverloads5.ts, 4, 67))
+
+        constructor(pattern: string);
+>pattern : Symbol(pattern, Decl(constructorOverloads5.ts, 6, 20))
+
+        constructor(pattern: string, flags: string);
+>pattern : Symbol(pattern, Decl(constructorOverloads5.ts, 7, 20))
+>flags : Symbol(flags, Decl(constructorOverloads5.ts, 7, 36))
+
+        exec(string: string): string[];
+>exec : Symbol(RegExp.exec, Decl(constructorOverloads5.ts, 7, 52))
+>string : Symbol(string, Decl(constructorOverloads5.ts, 8, 13))
+
+        test(string: string): boolean;
+>test : Symbol(RegExp.test, Decl(constructorOverloads5.ts, 8, 39))
+>string : Symbol(string, Decl(constructorOverloads5.ts, 9, 13))
+
+        source: string;
+>source : Symbol(RegExp.source, Decl(constructorOverloads5.ts, 9, 38))
+
+        global: boolean;
+>global : Symbol(RegExp.global, Decl(constructorOverloads5.ts, 10, 23))
+
+        ignoreCase: boolean;
+>ignoreCase : Symbol(RegExp.ignoreCase, Decl(constructorOverloads5.ts, 11, 24))
+
+        multiline: boolean;
+>multiline : Symbol(RegExp.multiline, Decl(constructorOverloads5.ts, 12, 28))
+
+        lastIndex: boolean;
+>lastIndex : Symbol(RegExp.lastIndex, Decl(constructorOverloads5.ts, 13, 27))
+    }
+}
+

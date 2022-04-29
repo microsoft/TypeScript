@@ -1,0 +1,26 @@
+=== tests/cases/compiler/paramPropertiesInSignatures.ts ===
+class C1 {
+>C1 : Symbol(C1, Decl(paramPropertiesInSignatures.ts, 0, 0))
+
+	constructor(public p1:string); // ERROR
+>p1 : Symbol(C1.p1, Decl(paramPropertiesInSignatures.ts, 1, 13))
+
+	constructor(private p2:number); // ERROR
+>p2 : Symbol(C1.p2, Decl(paramPropertiesInSignatures.ts, 2, 13))
+
+	constructor(public p3:any) {} // OK
+>p3 : Symbol(C1.p3, Decl(paramPropertiesInSignatures.ts, 3, 13))
+}
+
+declare class C2 {
+>C2 : Symbol(C2, Decl(paramPropertiesInSignatures.ts, 4, 1))
+
+	constructor(public p1:string); // ERROR
+>p1 : Symbol(C2.p1, Decl(paramPropertiesInSignatures.ts, 7, 13))
+
+	constructor(private p2:number); // ERROR
+>p2 : Symbol(C2.p2, Decl(paramPropertiesInSignatures.ts, 8, 13))
+
+	constructor(public p3:any); // ERROR
+>p3 : Symbol(C2.p3, Decl(paramPropertiesInSignatures.ts, 9, 13))
+}

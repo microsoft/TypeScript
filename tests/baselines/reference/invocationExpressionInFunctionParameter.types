@@ -1,0 +1,12 @@
+=== tests/cases/compiler/invocationExpressionInFunctionParameter.ts ===
+function foo1(val: string) {
+>foo1 : (val: string) => void
+>val : string
+}
+function foo3(x = foo1(123)) { //should error, 123 is not string
+>foo3 : (x?: void) => void
+>x : void
+>foo1(123) : void
+>foo1 : (val: string) => void
+>123 : 123
+}

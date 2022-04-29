@@ -1,0 +1,44 @@
+=== tests/cases/compiler/typeArgInferenceWithNull.ts ===
+// All legal
+
+function fn4<T extends string>(n: T) { }
+>fn4 : <T extends string>(n: T) => void
+>n : T
+
+fn4(null);
+>fn4(null) : void
+>fn4 : <T extends string>(n: T) => void
+>null : null
+
+function fn5<T extends { x: string }>(n: T) { }
+>fn5 : <T extends { x: string; }>(n: T) => void
+>x : string
+>n : T
+
+fn5({ x: null });
+>fn5({ x: null }) : void
+>fn5 : <T extends { x: string; }>(n: T) => void
+>{ x: null } : { x: null; }
+>x : null
+>null : null
+
+function fn6<T extends { x: string }>(n: T, fun: (x: T) => void, n2: T) { }
+>fn6 : <T extends { x: string; }>(n: T, fun: (x: T) => void, n2: T) => void
+>x : string
+>n : T
+>fun : (x: T) => void
+>x : T
+>n2 : T
+
+fn6({ x: null }, y => { }, { x: "" }); // y has type { x: any }, but ideally would have type { x: string }
+>fn6({ x: null }, y => { }, { x: "" }) : void
+>fn6 : <T extends { x: string; }>(n: T, fun: (x: T) => void, n2: T) => void
+>{ x: null } : { x: null; }
+>x : null
+>null : null
+>y => { } : (y: { x: string; }) => void
+>y : { x: string; }
+>{ x: "" } : { x: string; }
+>x : string
+>"" : ""
+

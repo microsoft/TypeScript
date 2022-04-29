@@ -1,0 +1,19 @@
+tests/cases/compiler/classExtendsClauseClassMergedWithModuleNotReferingConstructor.ts(10,21): error TS2507: Type 'number' is not a constructor function type.
+
+
+==== tests/cases/compiler/classExtendsClauseClassMergedWithModuleNotReferingConstructor.ts (1 errors) ====
+    class A {
+        a: number;
+    }
+    module A {
+        export var v: string;
+    }
+    
+    module Foo {
+        var A = 1;
+        class B extends A {
+                        ~
+!!! error TS2507: Type 'number' is not a constructor function type.
+            b: string;
+        }
+    }

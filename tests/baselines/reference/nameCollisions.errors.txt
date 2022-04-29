@@ -1,0 +1,93 @@
+tests/cases/compiler/nameCollisions.ts(2,9): error TS2300: Duplicate identifier 'x'.
+tests/cases/compiler/nameCollisions.ts(4,12): error TS2300: Duplicate identifier 'x'.
+tests/cases/compiler/nameCollisions.ts(10,12): error TS2300: Duplicate identifier 'z'.
+tests/cases/compiler/nameCollisions.ts(13,9): error TS2300: Duplicate identifier 'z'.
+tests/cases/compiler/nameCollisions.ts(15,12): error TS2434: A namespace declaration cannot be located prior to a class or function with which it is merged.
+tests/cases/compiler/nameCollisions.ts(24,9): error TS2300: Duplicate identifier 'f'.
+tests/cases/compiler/nameCollisions.ts(25,14): error TS2300: Duplicate identifier 'f'.
+tests/cases/compiler/nameCollisions.ts(27,14): error TS2300: Duplicate identifier 'f2'.
+tests/cases/compiler/nameCollisions.ts(28,9): error TS2300: Duplicate identifier 'f2'.
+tests/cases/compiler/nameCollisions.ts(33,11): error TS2813: Class declaration cannot implement overload list for 'C'.
+tests/cases/compiler/nameCollisions.ts(34,14): error TS2814: Function with bodies can only merge with classes that are ambient.
+tests/cases/compiler/nameCollisions.ts(36,14): error TS2814: Function with bodies can only merge with classes that are ambient.
+tests/cases/compiler/nameCollisions.ts(37,11): error TS2813: Class declaration cannot implement overload list for 'C2'.
+
+
+==== tests/cases/compiler/nameCollisions.ts (13 errors) ====
+    module T {
+        var x = 2;
+            ~
+!!! error TS2300: Duplicate identifier 'x'.
+    
+        module x { // error
+               ~
+!!! error TS2300: Duplicate identifier 'x'.
+            export class Bar {
+                test: number;
+            }
+        }
+    
+        module z {
+               ~
+!!! error TS2300: Duplicate identifier 'z'.
+            var t;
+        }
+        var z; // error
+            ~
+!!! error TS2300: Duplicate identifier 'z'.
+    
+        module y {
+               ~
+!!! error TS2434: A namespace declaration cannot be located prior to a class or function with which it is merged.
+            var b;
+        }
+    
+        class y { } // error
+    
+        var w;
+        module w { } //ok
+    
+        var f;
+            ~
+!!! error TS2300: Duplicate identifier 'f'.
+        function f() { } //error
+                 ~
+!!! error TS2300: Duplicate identifier 'f'.
+    
+        function f2() { }
+                 ~~
+!!! error TS2300: Duplicate identifier 'f2'.
+        var f2; // error
+            ~~
+!!! error TS2300: Duplicate identifier 'f2'.
+    
+        var i;
+        interface i { } //ok
+    
+        class C { }
+              ~
+!!! error TS2813: Class declaration cannot implement overload list for 'C'.
+!!! related TS6506 tests/cases/compiler/nameCollisions.ts:33:11: Consider adding a 'declare' modifier to this class.
+        function C() { } // error
+                 ~
+!!! error TS2814: Function with bodies can only merge with classes that are ambient.
+!!! related TS6506 tests/cases/compiler/nameCollisions.ts:33:11: Consider adding a 'declare' modifier to this class.
+    
+        function C2() { }
+                 ~~
+!!! error TS2814: Function with bodies can only merge with classes that are ambient.
+!!! related TS6506 tests/cases/compiler/nameCollisions.ts:37:11: Consider adding a 'declare' modifier to this class.
+        class C2 { } // error
+              ~~
+!!! error TS2813: Class declaration cannot implement overload list for 'C2'.
+!!! related TS6506 tests/cases/compiler/nameCollisions.ts:37:11: Consider adding a 'declare' modifier to this class.
+    
+        function fi() { }
+        interface fi { } // ok
+    
+        class cli { }
+        interface cli { }
+    
+        interface cli2 { }
+        class cli2 { }
+    }

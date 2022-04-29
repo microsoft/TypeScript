@@ -1,0 +1,56 @@
+=== tests/cases/compiler/genericConstructorFunction1.ts ===
+function f1<T>(args: T) {
+>f1 : <T>(args: T) => Date
+>args : T
+
+    var v1: { [index: string]: new (arg: T) => Date };
+>v1 : { [index: string]: new (arg: T) => Date; }
+>index : string
+>arg : T
+
+    var v2 = v1['test'];
+>v2 : new (arg: T) => Date
+>v1['test'] : new (arg: T) => Date
+>v1 : { [index: string]: new (arg: T) => Date; }
+>'test' : "test"
+
+    v2(args); 
+>v2(args) : any
+>v2 : new (arg: T) => Date
+>args : T
+
+    return new v2(args); // used to give error
+>new v2(args) : Date
+>v2 : new (arg: T) => Date
+>args : T
+}
+
+
+interface I1<T> { new (arg: T): Date };
+>arg : T
+
+function f2<T>(args: T) {
+>f2 : <T>(args: T) => Date
+>args : T
+
+    var v1: { [index: string]: I1<T> };
+>v1 : { [index: string]: I1<T>; }
+>index : string
+
+    var v2 = v1['test'];
+>v2 : I1<T>
+>v1['test'] : I1<T>
+>v1 : { [index: string]: I1<T>; }
+>'test' : "test"
+
+    var y = v2(args); 
+>y : any
+>v2(args) : any
+>v2 : I1<T>
+>args : T
+
+    return new v2(args); // used to give error
+>new v2(args) : Date
+>v2 : I1<T>
+>args : T
+}

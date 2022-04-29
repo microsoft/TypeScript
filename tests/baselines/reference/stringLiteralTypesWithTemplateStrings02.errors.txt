@@ -1,0 +1,9 @@
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesWithTemplateStrings02.ts(1,5): error TS2322: Type '"AB\nC"' is not assignable to type '"AB\r\nC"'.
+
+
+==== tests/cases/conformance/types/stringLiteral/stringLiteralTypesWithTemplateStrings02.ts (1 errors) ====
+    let abc: "AB\r\nC" = `AB
+        ~~~
+!!! error TS2322: Type '"AB\nC"' is not assignable to type '"AB\r\nC"'.
+    C`;
+    let de_NEWLINE_f: "DE\nF" = `DE${"\n"}F`;

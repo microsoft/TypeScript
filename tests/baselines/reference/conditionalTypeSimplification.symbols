@@ -1,0 +1,53 @@
+=== tests/cases/compiler/conditionalTypeSimplification.ts ===
+// Repro from #30794
+
+interface AbstractSchema<S, V> {
+>AbstractSchema : Symbol(AbstractSchema, Decl(conditionalTypeSimplification.ts, 0, 0))
+>S : Symbol(S, Decl(conditionalTypeSimplification.ts, 2, 25))
+>V : Symbol(V, Decl(conditionalTypeSimplification.ts, 2, 27))
+
+  m1<T> (v: T): SchemaType<S, Exclude<V, T>>;
+>m1 : Symbol(AbstractSchema.m1, Decl(conditionalTypeSimplification.ts, 2, 32))
+>T : Symbol(T, Decl(conditionalTypeSimplification.ts, 3, 5))
+>v : Symbol(v, Decl(conditionalTypeSimplification.ts, 3, 9))
+>T : Symbol(T, Decl(conditionalTypeSimplification.ts, 3, 5))
+>SchemaType : Symbol(SchemaType, Decl(conditionalTypeSimplification.ts, 5, 1))
+>S : Symbol(S, Decl(conditionalTypeSimplification.ts, 2, 25))
+>Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>V : Symbol(V, Decl(conditionalTypeSimplification.ts, 2, 27))
+>T : Symbol(T, Decl(conditionalTypeSimplification.ts, 3, 5))
+
+  m2<T> (v: T): SchemaType<S, T>;
+>m2 : Symbol(AbstractSchema.m2, Decl(conditionalTypeSimplification.ts, 3, 45))
+>T : Symbol(T, Decl(conditionalTypeSimplification.ts, 4, 5))
+>v : Symbol(v, Decl(conditionalTypeSimplification.ts, 4, 9))
+>T : Symbol(T, Decl(conditionalTypeSimplification.ts, 4, 5))
+>SchemaType : Symbol(SchemaType, Decl(conditionalTypeSimplification.ts, 5, 1))
+>S : Symbol(S, Decl(conditionalTypeSimplification.ts, 2, 25))
+>T : Symbol(T, Decl(conditionalTypeSimplification.ts, 4, 5))
+}
+
+type SchemaType<S, V> = S extends object ? AnySchema<V> : never;
+>SchemaType : Symbol(SchemaType, Decl(conditionalTypeSimplification.ts, 5, 1))
+>S : Symbol(S, Decl(conditionalTypeSimplification.ts, 7, 16))
+>V : Symbol(V, Decl(conditionalTypeSimplification.ts, 7, 18))
+>S : Symbol(S, Decl(conditionalTypeSimplification.ts, 7, 16))
+>AnySchema : Symbol(AnySchema, Decl(conditionalTypeSimplification.ts, 7, 64))
+>V : Symbol(V, Decl(conditionalTypeSimplification.ts, 7, 18))
+
+interface AnySchema<V> extends AnySchemaType<AnySchema<undefined>, V> { }
+>AnySchema : Symbol(AnySchema, Decl(conditionalTypeSimplification.ts, 7, 64))
+>V : Symbol(V, Decl(conditionalTypeSimplification.ts, 8, 20))
+>AnySchemaType : Symbol(AnySchemaType, Decl(conditionalTypeSimplification.ts, 8, 73))
+>AnySchema : Symbol(AnySchema, Decl(conditionalTypeSimplification.ts, 7, 64))
+>V : Symbol(V, Decl(conditionalTypeSimplification.ts, 8, 20))
+
+interface AnySchemaType<S extends AbstractSchema<any, any>, V> extends AbstractSchema<S, V> { }
+>AnySchemaType : Symbol(AnySchemaType, Decl(conditionalTypeSimplification.ts, 8, 73))
+>S : Symbol(S, Decl(conditionalTypeSimplification.ts, 9, 24))
+>AbstractSchema : Symbol(AbstractSchema, Decl(conditionalTypeSimplification.ts, 0, 0))
+>V : Symbol(V, Decl(conditionalTypeSimplification.ts, 9, 59))
+>AbstractSchema : Symbol(AbstractSchema, Decl(conditionalTypeSimplification.ts, 0, 0))
+>S : Symbol(S, Decl(conditionalTypeSimplification.ts, 9, 24))
+>V : Symbol(V, Decl(conditionalTypeSimplification.ts, 9, 59))
+

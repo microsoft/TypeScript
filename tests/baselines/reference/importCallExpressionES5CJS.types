@@ -1,0 +1,70 @@
+=== tests/cases/conformance/dynamicImport/0.ts ===
+export function foo() { return "foo"; }
+>foo : () => string
+>"foo" : "foo"
+
+=== tests/cases/conformance/dynamicImport/1.ts ===
+import("./0");
+>import("./0") : Promise<typeof import("tests/cases/conformance/dynamicImport/0")>
+>"./0" : "./0"
+
+var p1 = import("./0");
+>p1 : Promise<typeof import("tests/cases/conformance/dynamicImport/0")>
+>import("./0") : Promise<typeof import("tests/cases/conformance/dynamicImport/0")>
+>"./0" : "./0"
+
+p1.then(zero => {
+>p1.then(zero => {    return zero.foo();}) : Promise<string>
+>p1.then : <TResult1 = typeof import("tests/cases/conformance/dynamicImport/0"), TResult2 = never>(onfulfilled?: (value: typeof import("tests/cases/conformance/dynamicImport/0")) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+>p1 : Promise<typeof import("tests/cases/conformance/dynamicImport/0")>
+>then : <TResult1 = typeof import("tests/cases/conformance/dynamicImport/0"), TResult2 = never>(onfulfilled?: (value: typeof import("tests/cases/conformance/dynamicImport/0")) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+>zero => {    return zero.foo();} : (zero: typeof import("tests/cases/conformance/dynamicImport/0")) => string
+>zero : typeof import("tests/cases/conformance/dynamicImport/0")
+
+    return zero.foo();
+>zero.foo() : string
+>zero.foo : () => string
+>zero : typeof import("tests/cases/conformance/dynamicImport/0")
+>foo : () => string
+
+});
+
+export var p2 = import("./0");
+>p2 : Promise<typeof import("tests/cases/conformance/dynamicImport/0")>
+>import("./0") : Promise<typeof import("tests/cases/conformance/dynamicImport/0")>
+>"./0" : "./0"
+
+function foo() {
+>foo : () => void
+
+    const p2 = import("./0");
+>p2 : Promise<typeof import("tests/cases/conformance/dynamicImport/0")>
+>import("./0") : Promise<typeof import("tests/cases/conformance/dynamicImport/0")>
+>"./0" : "./0"
+}
+
+class C {
+>C : C
+
+    method() {
+>method : () => void
+
+        const loadAsync = import ("./0");
+>loadAsync : Promise<typeof import("tests/cases/conformance/dynamicImport/0")>
+>import ("./0") : Promise<typeof import("tests/cases/conformance/dynamicImport/0")>
+>"./0" : "./0"
+    }
+}
+
+export class D {
+>D : D
+
+    method() {
+>method : () => void
+
+        const loadAsync = import ("./0");
+>loadAsync : Promise<typeof import("tests/cases/conformance/dynamicImport/0")>
+>import ("./0") : Promise<typeof import("tests/cases/conformance/dynamicImport/0")>
+>"./0" : "./0"
+    }
+}

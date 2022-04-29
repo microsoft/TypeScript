@@ -1,0 +1,38 @@
+=== tests/cases/compiler/decoratorMetadataWithConstructorType.ts ===
+declare var console: {
+>console : Symbol(console, Decl(decoratorMetadataWithConstructorType.ts, 0, 11))
+
+    log(msg: string): void;
+>log : Symbol(log, Decl(decoratorMetadataWithConstructorType.ts, 0, 22))
+>msg : Symbol(msg, Decl(decoratorMetadataWithConstructorType.ts, 1, 8))
+
+};
+
+class A {
+>A : Symbol(A, Decl(decoratorMetadataWithConstructorType.ts, 2, 2))
+
+    constructor() { console.log('new A'); }
+>console.log : Symbol(log, Decl(decoratorMetadataWithConstructorType.ts, 0, 22))
+>console : Symbol(console, Decl(decoratorMetadataWithConstructorType.ts, 0, 11))
+>log : Symbol(log, Decl(decoratorMetadataWithConstructorType.ts, 0, 22))
+}
+
+function decorator(target: Object, propertyKey: string) {
+>decorator : Symbol(decorator, Decl(decoratorMetadataWithConstructorType.ts, 6, 1))
+>target : Symbol(target, Decl(decoratorMetadataWithConstructorType.ts, 8, 19))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>propertyKey : Symbol(propertyKey, Decl(decoratorMetadataWithConstructorType.ts, 8, 34))
+}
+
+export class B {
+>B : Symbol(B, Decl(decoratorMetadataWithConstructorType.ts, 9, 1))
+
+    @decorator
+>decorator : Symbol(decorator, Decl(decoratorMetadataWithConstructorType.ts, 6, 1))
+
+    x: A = new A();
+>x : Symbol(B.x, Decl(decoratorMetadataWithConstructorType.ts, 11, 16))
+>A : Symbol(A, Decl(decoratorMetadataWithConstructorType.ts, 2, 2))
+>A : Symbol(A, Decl(decoratorMetadataWithConstructorType.ts, 2, 2))
+}
+

@@ -1,0 +1,14 @@
+=== tests/cases/compiler/functionOverloadsOnGenericArity2.ts ===
+interface I {
+    then(p: string): string;
+>then : { (p: string): string; <U>(p: string): string; <U, T>(p: string): Date; }
+>p : string
+
+    then<U>(p: string): string;
+>then : { (p: string): string; <U>(p: string): string; <U, T>(p: string): Date; }
+>p : string
+
+    then<U, T>(p: string): Date;
+>then : { (p: string): string; <U>(p: string): string; <U, T>(p: string): Date; }
+>p : string
+}

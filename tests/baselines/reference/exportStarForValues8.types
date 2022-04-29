@@ -1,0 +1,38 @@
+=== tests/cases/compiler/file1.ts ===
+export interface Foo { x }
+>x : any
+
+=== tests/cases/compiler/file2.ts ===
+export interface A { x }
+>x : any
+
+export * from "file1"
+export var x = 1;
+>x : number
+>1 : 1
+
+=== tests/cases/compiler/file3.ts ===
+export interface B { x }
+>x : any
+
+export * from "file1"
+export var x = 1;
+>x : number
+>1 : 1
+
+=== tests/cases/compiler/file4.ts ===
+export interface C { x }
+>x : any
+
+export * from "file2"
+export * from "file3"
+export var x = 1;
+>x : number
+>1 : 1
+
+=== tests/cases/compiler/file5.ts ===
+export * from "file4"
+export var x = 1;
+>x : number
+>1 : 1
+

@@ -1,0 +1,16 @@
+=== tests/cases/compiler/es5-umd2.ts ===
+export class A
+>A : Symbol(A, Decl(es5-umd2.ts, 0, 0))
+{
+    constructor ()
+    {
+
+    }
+
+    public B()
+>B : Symbol(A.B, Decl(es5-umd2.ts, 5, 5))
+    {
+        return 42;
+    }
+}
+

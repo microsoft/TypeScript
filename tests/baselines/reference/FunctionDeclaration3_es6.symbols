@@ -1,0 +1,6 @@
+=== tests/cases/conformance/es6/functionDeclarations/FunctionDeclaration3_es6.ts ===
+function f(yield = yield) {
+>f : Symbol(f, Decl(FunctionDeclaration3_es6.ts, 0, 0))
+>yield : Symbol(yield, Decl(FunctionDeclaration3_es6.ts, 0, 11))
+>yield : Symbol(yield, Decl(FunctionDeclaration3_es6.ts, 0, 11))
+}

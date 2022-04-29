@@ -1,0 +1,19 @@
+=== tests/cases/compiler/genericMergedDeclarationUsingTypeParameter2.ts ===
+class foo<T> { constructor(x: T) { } }
+>foo : Symbol(foo, Decl(genericMergedDeclarationUsingTypeParameter2.ts, 0, 0), Decl(genericMergedDeclarationUsingTypeParameter2.ts, 0, 38))
+>T : Symbol(T, Decl(genericMergedDeclarationUsingTypeParameter2.ts, 0, 10))
+>x : Symbol(x, Decl(genericMergedDeclarationUsingTypeParameter2.ts, 0, 27))
+>T : Symbol(T, Decl(genericMergedDeclarationUsingTypeParameter2.ts, 0, 10))
+
+module foo {
+>foo : Symbol(foo, Decl(genericMergedDeclarationUsingTypeParameter2.ts, 0, 0), Decl(genericMergedDeclarationUsingTypeParameter2.ts, 0, 38))
+
+    export var x: T;
+>x : Symbol(x, Decl(genericMergedDeclarationUsingTypeParameter2.ts, 2, 14))
+>T : Symbol(T)
+
+    var y = <T>1;
+>y : Symbol(y, Decl(genericMergedDeclarationUsingTypeParameter2.ts, 3, 7))
+>T : Symbol(T)
+}
+

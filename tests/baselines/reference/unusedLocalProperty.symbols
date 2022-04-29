@@ -1,0 +1,29 @@
+=== tests/cases/compiler/unusedLocalProperty.ts ===
+declare var console: { log(msg: any): void; }
+>console : Symbol(console, Decl(unusedLocalProperty.ts, 0, 11))
+>log : Symbol(log, Decl(unusedLocalProperty.ts, 0, 22))
+>msg : Symbol(msg, Decl(unusedLocalProperty.ts, 0, 27))
+
+class Animal {
+>Animal : Symbol(Animal, Decl(unusedLocalProperty.ts, 0, 45))
+
+    constructor(private species: string) {
+>species : Symbol(Animal.species, Decl(unusedLocalProperty.ts, 2, 16))
+    }
+
+    printSpecies() {
+>printSpecies : Symbol(Animal.printSpecies, Decl(unusedLocalProperty.ts, 3, 5))
+
+        let { species } = this;
+>species : Symbol(species, Decl(unusedLocalProperty.ts, 6, 13))
+>this : Symbol(Animal, Decl(unusedLocalProperty.ts, 0, 45))
+
+        console.log(species);
+>console.log : Symbol(log, Decl(unusedLocalProperty.ts, 0, 22))
+>console : Symbol(console, Decl(unusedLocalProperty.ts, 0, 11))
+>log : Symbol(log, Decl(unusedLocalProperty.ts, 0, 22))
+>species : Symbol(species, Decl(unusedLocalProperty.ts, 6, 13))
+    }
+}
+
+

@@ -1,0 +1,69 @@
+=== tests/cases/compiler/reactSFCAndFunctionResolvable.tsx ===
+/// <reference path="react16.d.ts" />
+
+import * as React from 'react';
+>React : typeof React
+
+declare const Radio: (props: {}) => React.ReactElement<{}>;
+>Radio : (props: {}) => React.ReactElement<{}>
+>props : {}
+>React : any
+
+declare const OtherRadio: () => React.ReactElement<{}>;
+>OtherRadio : () => React.ReactElement<{}>
+>React : any
+
+declare const Checkbox: React.SFC;
+>Checkbox : React.SFC<{}>
+>React : any
+
+declare const condition1: boolean;
+>condition1 : boolean
+
+declare const condition2: boolean;
+>condition2 : boolean
+
+declare const condition3: boolean;
+>condition3 : boolean
+
+const RandomComponent: React.SFC = () => {
+>RandomComponent : React.SFC<{}>
+>React : any
+>() => {  const Component =    condition1      ? Radio      : Checkbox;  const OtherComponent =    condition2      ? OtherRadio      : Checkbox;  return condition1 ? <Component /> : <OtherComponent />;} : () => JSX.Element
+
+  const Component =
+>Component : ((props: {}) => React.ReactElement<{}>) | React.SFC<{}>
+
+    condition1
+>condition1      ? Radio      : Checkbox : ((props: {}) => React.ReactElement<{}>) | React.SFC<{}>
+>condition1 : boolean
+
+      ? Radio
+>Radio : (props: {}) => React.ReactElement<{}>
+
+      : Checkbox;
+>Checkbox : React.SFC<{}>
+
+  const OtherComponent =
+>OtherComponent : (() => React.ReactElement<{}>) | React.SFC<{}>
+
+    condition2
+>condition2      ? OtherRadio      : Checkbox : (() => React.ReactElement<{}>) | React.SFC<{}>
+>condition2 : boolean
+
+      ? OtherRadio
+>OtherRadio : () => React.ReactElement<{}>
+
+      : Checkbox;
+>Checkbox : React.SFC<{}>
+
+  return condition1 ? <Component /> : <OtherComponent />;
+>condition1 ? <Component /> : <OtherComponent /> : JSX.Element
+>condition1 : boolean
+><Component /> : JSX.Element
+>Component : ((props: {}) => React.ReactElement<{}>) | React.SFC<{}>
+><OtherComponent /> : JSX.Element
+>OtherComponent : (() => React.ReactElement<{}>) | React.SFC<{}>
+
+};
+

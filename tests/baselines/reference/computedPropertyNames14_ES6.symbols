@@ -1,0 +1,27 @@
+=== tests/cases/conformance/es6/computedProperties/computedPropertyNames14_ES6.ts ===
+var b: boolean;
+>b : Symbol(b, Decl(computedPropertyNames14_ES6.ts, 0, 3))
+
+class C {
+>C : Symbol(C, Decl(computedPropertyNames14_ES6.ts, 0, 15))
+
+    [b]() {}
+>[b] : Symbol(C[b], Decl(computedPropertyNames14_ES6.ts, 1, 9))
+>b : Symbol(b, Decl(computedPropertyNames14_ES6.ts, 0, 3))
+
+    static [true]() { }
+>[true] : Symbol(C[true], Decl(computedPropertyNames14_ES6.ts, 2, 12))
+
+    [[]]() { }
+>[[]] : Symbol(C[[]], Decl(computedPropertyNames14_ES6.ts, 3, 23))
+
+    static [{}]() { }
+>[{}] : Symbol(C[{}], Decl(computedPropertyNames14_ES6.ts, 4, 14))
+
+    [undefined]() { }
+>[undefined] : Symbol(C[undefined], Decl(computedPropertyNames14_ES6.ts, 5, 21))
+>undefined : Symbol(undefined)
+
+    static [null]() { }
+>[null] : Symbol(C[null], Decl(computedPropertyNames14_ES6.ts, 6, 21))
+}

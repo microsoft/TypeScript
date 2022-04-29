@@ -1,0 +1,12 @@
+tests/cases/compiler/constructorStaticParamName.ts(4,18): error TS1213: Identifier expected. 'static' is a reserved word in strict mode. Class definitions are automatically in strict mode.
+
+
+==== tests/cases/compiler/constructorStaticParamName.ts (1 errors) ====
+    // static as constructor parameter name should only give error if 'use strict'
+    
+    class test {
+        constructor (static) { }
+                     ~~~~~~
+!!! error TS1213: Identifier expected. 'static' is a reserved word in strict mode. Class definitions are automatically in strict mode.
+    }
+    

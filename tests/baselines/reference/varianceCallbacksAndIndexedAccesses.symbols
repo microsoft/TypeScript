@@ -1,0 +1,121 @@
+=== tests/cases/compiler/varianceCallbacksAndIndexedAccesses.ts ===
+type Source = {
+>Source : Symbol(Source, Decl(varianceCallbacksAndIndexedAccesses.ts, 0, 0))
+
+    <K extends keyof WindowEventMap>(type: K, listener: (this: Window, ev: WindowEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+>K : Symbol(K, Decl(varianceCallbacksAndIndexedAccesses.ts, 1, 5))
+>WindowEventMap : Symbol(WindowEventMap, Decl(lib.dom.d.ts, --, --))
+>type : Symbol(type, Decl(varianceCallbacksAndIndexedAccesses.ts, 1, 37))
+>K : Symbol(K, Decl(varianceCallbacksAndIndexedAccesses.ts, 1, 5))
+>listener : Symbol(listener, Decl(varianceCallbacksAndIndexedAccesses.ts, 1, 45))
+>this : Symbol(this, Decl(varianceCallbacksAndIndexedAccesses.ts, 1, 57))
+>Window : Symbol(Window, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>ev : Symbol(ev, Decl(varianceCallbacksAndIndexedAccesses.ts, 1, 70))
+>WindowEventMap : Symbol(WindowEventMap, Decl(lib.dom.d.ts, --, --))
+>K : Symbol(K, Decl(varianceCallbacksAndIndexedAccesses.ts, 1, 5))
+>options : Symbol(options, Decl(varianceCallbacksAndIndexedAccesses.ts, 1, 101))
+>AddEventListenerOptions : Symbol(AddEventListenerOptions, Decl(lib.dom.d.ts, --, --))
+
+  (type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+>type : Symbol(type, Decl(varianceCallbacksAndIndexedAccesses.ts, 2, 3))
+>listener : Symbol(listener, Decl(varianceCallbacksAndIndexedAccesses.ts, 2, 16))
+>EventListenerOrEventListenerObject : Symbol(EventListenerOrEventListenerObject, Decl(lib.dom.d.ts, --, --))
+>options : Symbol(options, Decl(varianceCallbacksAndIndexedAccesses.ts, 2, 62))
+>AddEventListenerOptions : Symbol(AddEventListenerOptions, Decl(lib.dom.d.ts, --, --))
+}
+
+interface Action1<T> {
+>Action1 : Symbol(Action1, Decl(varianceCallbacksAndIndexedAccesses.ts, 3, 1))
+>T : Symbol(T, Decl(varianceCallbacksAndIndexedAccesses.ts, 5, 18))
+
+    (arg: T): void;
+>arg : Symbol(arg, Decl(varianceCallbacksAndIndexedAccesses.ts, 6, 5))
+>T : Symbol(T, Decl(varianceCallbacksAndIndexedAccesses.ts, 5, 18))
+}
+interface MessageEventLike<T> {
+>MessageEventLike : Symbol(MessageEventLike, Decl(varianceCallbacksAndIndexedAccesses.ts, 7, 1))
+>T : Symbol(T, Decl(varianceCallbacksAndIndexedAccesses.ts, 8, 27))
+
+    source: WindowLike<T>;
+>source : Symbol(MessageEventLike.source, Decl(varianceCallbacksAndIndexedAccesses.ts, 8, 31))
+>WindowLike : Symbol(WindowLike, Decl(varianceCallbacksAndIndexedAccesses.ts, 15, 1))
+>T : Symbol(T, Decl(varianceCallbacksAndIndexedAccesses.ts, 8, 27))
+
+    origin: string;
+>origin : Symbol(MessageEventLike.origin, Decl(varianceCallbacksAndIndexedAccesses.ts, 9, 26))
+
+    data: T;
+>data : Symbol(MessageEventLike.data, Decl(varianceCallbacksAndIndexedAccesses.ts, 10, 19))
+>T : Symbol(T, Decl(varianceCallbacksAndIndexedAccesses.ts, 8, 27))
+}
+interface PostMessageObject<T> {
+>PostMessageObject : Symbol(PostMessageObject, Decl(varianceCallbacksAndIndexedAccesses.ts, 12, 1))
+>T : Symbol(T, Decl(varianceCallbacksAndIndexedAccesses.ts, 13, 28))
+
+    postMessage(message: T, host: string): void;
+>postMessage : Symbol(PostMessageObject.postMessage, Decl(varianceCallbacksAndIndexedAccesses.ts, 13, 32))
+>message : Symbol(message, Decl(varianceCallbacksAndIndexedAccesses.ts, 14, 16))
+>T : Symbol(T, Decl(varianceCallbacksAndIndexedAccesses.ts, 13, 28))
+>host : Symbol(host, Decl(varianceCallbacksAndIndexedAccesses.ts, 14, 27))
+}
+interface WindowLike<T> extends PostMessageObject<T> {
+>WindowLike : Symbol(WindowLike, Decl(varianceCallbacksAndIndexedAccesses.ts, 15, 1))
+>T : Symbol(T, Decl(varianceCallbacksAndIndexedAccesses.ts, 16, 21))
+>PostMessageObject : Symbol(PostMessageObject, Decl(varianceCallbacksAndIndexedAccesses.ts, 12, 1))
+>T : Symbol(T, Decl(varianceCallbacksAndIndexedAccesses.ts, 16, 21))
+
+    addEventListener(type: "message", handler: Action1<MessageEventLike<T>>): void;
+>addEventListener : Symbol(WindowLike.addEventListener, Decl(varianceCallbacksAndIndexedAccesses.ts, 16, 54), Decl(varianceCallbacksAndIndexedAccesses.ts, 17, 83))
+>type : Symbol(type, Decl(varianceCallbacksAndIndexedAccesses.ts, 17, 21))
+>handler : Symbol(handler, Decl(varianceCallbacksAndIndexedAccesses.ts, 17, 37))
+>Action1 : Symbol(Action1, Decl(varianceCallbacksAndIndexedAccesses.ts, 3, 1))
+>MessageEventLike : Symbol(MessageEventLike, Decl(varianceCallbacksAndIndexedAccesses.ts, 7, 1))
+>T : Symbol(T, Decl(varianceCallbacksAndIndexedAccesses.ts, 16, 21))
+
+    addEventListener(type: string, handler: Action1<any>): void;
+>addEventListener : Symbol(WindowLike.addEventListener, Decl(varianceCallbacksAndIndexedAccesses.ts, 16, 54), Decl(varianceCallbacksAndIndexedAccesses.ts, 17, 83))
+>type : Symbol(type, Decl(varianceCallbacksAndIndexedAccesses.ts, 18, 21))
+>handler : Symbol(handler, Decl(varianceCallbacksAndIndexedAccesses.ts, 18, 34))
+>Action1 : Symbol(Action1, Decl(varianceCallbacksAndIndexedAccesses.ts, 3, 1))
+
+    removeEventListener(type: "message", handler: Action1<MessageEventLike<T>>): void;
+>removeEventListener : Symbol(WindowLike.removeEventListener, Decl(varianceCallbacksAndIndexedAccesses.ts, 18, 64), Decl(varianceCallbacksAndIndexedAccesses.ts, 19, 86))
+>type : Symbol(type, Decl(varianceCallbacksAndIndexedAccesses.ts, 19, 24))
+>handler : Symbol(handler, Decl(varianceCallbacksAndIndexedAccesses.ts, 19, 40))
+>Action1 : Symbol(Action1, Decl(varianceCallbacksAndIndexedAccesses.ts, 3, 1))
+>MessageEventLike : Symbol(MessageEventLike, Decl(varianceCallbacksAndIndexedAccesses.ts, 7, 1))
+>T : Symbol(T, Decl(varianceCallbacksAndIndexedAccesses.ts, 16, 21))
+
+    removeEventListener(type: string, handler: Action1<any>): void;
+>removeEventListener : Symbol(WindowLike.removeEventListener, Decl(varianceCallbacksAndIndexedAccesses.ts, 18, 64), Decl(varianceCallbacksAndIndexedAccesses.ts, 19, 86))
+>type : Symbol(type, Decl(varianceCallbacksAndIndexedAccesses.ts, 20, 24))
+>handler : Symbol(handler, Decl(varianceCallbacksAndIndexedAccesses.ts, 20, 37))
+>Action1 : Symbol(Action1, Decl(varianceCallbacksAndIndexedAccesses.ts, 3, 1))
+}
+type Target = {
+>Target : Symbol(Target, Decl(varianceCallbacksAndIndexedAccesses.ts, 21, 1))
+
+    (type: "message", handler: Action1<MessageEventLike<any>>): void;
+>type : Symbol(type, Decl(varianceCallbacksAndIndexedAccesses.ts, 23, 5))
+>handler : Symbol(handler, Decl(varianceCallbacksAndIndexedAccesses.ts, 23, 21))
+>Action1 : Symbol(Action1, Decl(varianceCallbacksAndIndexedAccesses.ts, 3, 1))
+>MessageEventLike : Symbol(MessageEventLike, Decl(varianceCallbacksAndIndexedAccesses.ts, 7, 1))
+
+    (type: string, handler: Action1<any>): void;
+>type : Symbol(type, Decl(varianceCallbacksAndIndexedAccesses.ts, 24, 5))
+>handler : Symbol(handler, Decl(varianceCallbacksAndIndexedAccesses.ts, 24, 18))
+>Action1 : Symbol(Action1, Decl(varianceCallbacksAndIndexedAccesses.ts, 3, 1))
+
+};
+
+function f1(s: Source, t: Target) {
+>f1 : Symbol(f1, Decl(varianceCallbacksAndIndexedAccesses.ts, 25, 2))
+>s : Symbol(s, Decl(varianceCallbacksAndIndexedAccesses.ts, 27, 12))
+>Source : Symbol(Source, Decl(varianceCallbacksAndIndexedAccesses.ts, 0, 0))
+>t : Symbol(t, Decl(varianceCallbacksAndIndexedAccesses.ts, 27, 22))
+>Target : Symbol(Target, Decl(varianceCallbacksAndIndexedAccesses.ts, 21, 1))
+
+    t = s;
+>t : Symbol(t, Decl(varianceCallbacksAndIndexedAccesses.ts, 27, 22))
+>s : Symbol(s, Decl(varianceCallbacksAndIndexedAccesses.ts, 27, 12))
+}

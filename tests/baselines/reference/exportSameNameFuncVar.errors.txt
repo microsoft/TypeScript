@@ -1,0 +1,12 @@
+tests/cases/compiler/exportSameNameFuncVar.ts(1,12): error TS2300: Duplicate identifier 'a'.
+tests/cases/compiler/exportSameNameFuncVar.ts(2,17): error TS2300: Duplicate identifier 'a'.
+
+
+==== tests/cases/compiler/exportSameNameFuncVar.ts (2 errors) ====
+    export var a = 10;
+               ~
+!!! error TS2300: Duplicate identifier 'a'.
+    export function a() {
+                    ~
+!!! error TS2300: Duplicate identifier 'a'.
+    }

@@ -1,0 +1,325 @@
+=== tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration1ES6.ts ===
+// Conformance for emitting ES6
+
+// A parameter declaration may specify either an identifier or a binding pattern.
+// The identifiers specified in parameter declarations and binding patterns
+// in a parameter list must be unique within that parameter list.
+
+// If the declaration includes a type annotation, the parameter is of that type
+function a1([a, b, [[c]]]: [number, number, string[][]]) { }
+>a1 : Symbol(a1, Decl(destructuringParameterDeclaration1ES6.ts, 0, 0))
+>a : Symbol(a, Decl(destructuringParameterDeclaration1ES6.ts, 7, 13))
+>b : Symbol(b, Decl(destructuringParameterDeclaration1ES6.ts, 7, 15))
+>c : Symbol(c, Decl(destructuringParameterDeclaration1ES6.ts, 7, 21))
+
+function a2(o: { x: number, a: number }) { }
+>a2 : Symbol(a2, Decl(destructuringParameterDeclaration1ES6.ts, 7, 60))
+>o : Symbol(o, Decl(destructuringParameterDeclaration1ES6.ts, 8, 12))
+>x : Symbol(x, Decl(destructuringParameterDeclaration1ES6.ts, 8, 16))
+>a : Symbol(a, Decl(destructuringParameterDeclaration1ES6.ts, 8, 27))
+
+function a3({j, k, l: {m, n}, q: [a, b, c]}: { j: number, k: string, l: { m: boolean, n: number }, q: (number|string)[] }) { };
+>a3 : Symbol(a3, Decl(destructuringParameterDeclaration1ES6.ts, 8, 44))
+>j : Symbol(j, Decl(destructuringParameterDeclaration1ES6.ts, 9, 13))
+>k : Symbol(k, Decl(destructuringParameterDeclaration1ES6.ts, 9, 15))
+>l : Symbol(l, Decl(destructuringParameterDeclaration1ES6.ts, 9, 68))
+>m : Symbol(m, Decl(destructuringParameterDeclaration1ES6.ts, 9, 23))
+>n : Symbol(n, Decl(destructuringParameterDeclaration1ES6.ts, 9, 25))
+>q : Symbol(q, Decl(destructuringParameterDeclaration1ES6.ts, 9, 98))
+>a : Symbol(a, Decl(destructuringParameterDeclaration1ES6.ts, 9, 34))
+>b : Symbol(b, Decl(destructuringParameterDeclaration1ES6.ts, 9, 36))
+>c : Symbol(c, Decl(destructuringParameterDeclaration1ES6.ts, 9, 39))
+>j : Symbol(j, Decl(destructuringParameterDeclaration1ES6.ts, 9, 46))
+>k : Symbol(k, Decl(destructuringParameterDeclaration1ES6.ts, 9, 57))
+>l : Symbol(l, Decl(destructuringParameterDeclaration1ES6.ts, 9, 68))
+>m : Symbol(m, Decl(destructuringParameterDeclaration1ES6.ts, 9, 73))
+>n : Symbol(n, Decl(destructuringParameterDeclaration1ES6.ts, 9, 85))
+>q : Symbol(q, Decl(destructuringParameterDeclaration1ES6.ts, 9, 98))
+
+function a4({x, a}: { x: number, a: number }) { }
+>a4 : Symbol(a4, Decl(destructuringParameterDeclaration1ES6.ts, 9, 127))
+>x : Symbol(x, Decl(destructuringParameterDeclaration1ES6.ts, 10, 13))
+>a : Symbol(a, Decl(destructuringParameterDeclaration1ES6.ts, 10, 15))
+>x : Symbol(x, Decl(destructuringParameterDeclaration1ES6.ts, 10, 21))
+>a : Symbol(a, Decl(destructuringParameterDeclaration1ES6.ts, 10, 32))
+
+a1([1, 2, [["world"]]]);
+>a1 : Symbol(a1, Decl(destructuringParameterDeclaration1ES6.ts, 0, 0))
+
+a1([1, 2, [["world"]], 3]);
+>a1 : Symbol(a1, Decl(destructuringParameterDeclaration1ES6.ts, 0, 0))
+
+
+// If the declaration includes an initializer expression (which is permitted only
+// when the parameter list occurs in conjunction with a function body),
+// the parameter type is the widened form (section 3.11) of the type of the initializer expression.
+
+function b1(z = [undefined, null]) { };
+>b1 : Symbol(b1, Decl(destructuringParameterDeclaration1ES6.ts, 13, 27))
+>z : Symbol(z, Decl(destructuringParameterDeclaration1ES6.ts, 20, 12))
+>undefined : Symbol(undefined)
+
+function b2(z = null, o = { x: 0, y: undefined }) { }
+>b2 : Symbol(b2, Decl(destructuringParameterDeclaration1ES6.ts, 20, 39))
+>z : Symbol(z, Decl(destructuringParameterDeclaration1ES6.ts, 21, 12))
+>o : Symbol(o, Decl(destructuringParameterDeclaration1ES6.ts, 21, 21))
+>x : Symbol(x, Decl(destructuringParameterDeclaration1ES6.ts, 21, 27))
+>y : Symbol(y, Decl(destructuringParameterDeclaration1ES6.ts, 21, 33))
+>undefined : Symbol(undefined)
+
+function b3({z: {x, y: {j}}} = { z: { x: "hi", y: { j: 1 } } }) { }
+>b3 : Symbol(b3, Decl(destructuringParameterDeclaration1ES6.ts, 21, 53))
+>z : Symbol(z, Decl(destructuringParameterDeclaration1ES6.ts, 22, 32))
+>x : Symbol(x, Decl(destructuringParameterDeclaration1ES6.ts, 22, 17))
+>y : Symbol(y, Decl(destructuringParameterDeclaration1ES6.ts, 22, 46))
+>j : Symbol(j, Decl(destructuringParameterDeclaration1ES6.ts, 22, 24))
+>z : Symbol(z, Decl(destructuringParameterDeclaration1ES6.ts, 22, 32))
+>x : Symbol(x, Decl(destructuringParameterDeclaration1ES6.ts, 22, 37))
+>y : Symbol(y, Decl(destructuringParameterDeclaration1ES6.ts, 22, 46))
+>j : Symbol(j, Decl(destructuringParameterDeclaration1ES6.ts, 22, 51))
+
+interface F1 {
+>F1 : Symbol(F1, Decl(destructuringParameterDeclaration1ES6.ts, 22, 67))
+
+    b5(z, y, [, a, b], {p, m: { q, r}});
+>b5 : Symbol(F1.b5, Decl(destructuringParameterDeclaration1ES6.ts, 24, 14))
+>z : Symbol(z, Decl(destructuringParameterDeclaration1ES6.ts, 25, 7))
+>y : Symbol(y, Decl(destructuringParameterDeclaration1ES6.ts, 25, 9))
+>a : Symbol(a, Decl(destructuringParameterDeclaration1ES6.ts, 25, 15))
+>b : Symbol(b, Decl(destructuringParameterDeclaration1ES6.ts, 25, 18))
+>p : Symbol(p, Decl(destructuringParameterDeclaration1ES6.ts, 25, 24))
+>m : Symbol(m)
+>q : Symbol(q, Decl(destructuringParameterDeclaration1ES6.ts, 25, 31))
+>r : Symbol(r, Decl(destructuringParameterDeclaration1ES6.ts, 25, 34))
+}
+
+function b6([a, z, y] = [undefined, null, undefined]) { }
+>b6 : Symbol(b6, Decl(destructuringParameterDeclaration1ES6.ts, 26, 1))
+>a : Symbol(a, Decl(destructuringParameterDeclaration1ES6.ts, 28, 13))
+>z : Symbol(z, Decl(destructuringParameterDeclaration1ES6.ts, 28, 15))
+>y : Symbol(y, Decl(destructuringParameterDeclaration1ES6.ts, 28, 18))
+>undefined : Symbol(undefined)
+>undefined : Symbol(undefined)
+
+function b7([[a], b, [[c, d]]] = [[undefined], undefined, [[undefined, undefined]]]) { }
+>b7 : Symbol(b7, Decl(destructuringParameterDeclaration1ES6.ts, 28, 57))
+>a : Symbol(a, Decl(destructuringParameterDeclaration1ES6.ts, 29, 14))
+>b : Symbol(b, Decl(destructuringParameterDeclaration1ES6.ts, 29, 17))
+>c : Symbol(c, Decl(destructuringParameterDeclaration1ES6.ts, 29, 23))
+>d : Symbol(d, Decl(destructuringParameterDeclaration1ES6.ts, 29, 25))
+>undefined : Symbol(undefined)
+>undefined : Symbol(undefined)
+>undefined : Symbol(undefined)
+>undefined : Symbol(undefined)
+
+b1([1, 2, 3]);  // z is widen to the type any[]
+>b1 : Symbol(b1, Decl(destructuringParameterDeclaration1ES6.ts, 13, 27))
+
+b2("string", { x: 200, y: "string" });
+>b2 : Symbol(b2, Decl(destructuringParameterDeclaration1ES6.ts, 20, 39))
+>x : Symbol(x, Decl(destructuringParameterDeclaration1ES6.ts, 32, 14))
+>y : Symbol(y, Decl(destructuringParameterDeclaration1ES6.ts, 32, 22))
+
+b2("string", { x: 200, y: true });
+>b2 : Symbol(b2, Decl(destructuringParameterDeclaration1ES6.ts, 20, 39))
+>x : Symbol(x, Decl(destructuringParameterDeclaration1ES6.ts, 33, 14))
+>y : Symbol(y, Decl(destructuringParameterDeclaration1ES6.ts, 33, 22))
+
+
+// If the declaration specifies a binding pattern, the parameter type is the implied type of that binding pattern (section 5.1.3)
+enum Foo { a }
+>Foo : Symbol(Foo, Decl(destructuringParameterDeclaration1ES6.ts, 33, 34))
+>a : Symbol(Foo.a, Decl(destructuringParameterDeclaration1ES6.ts, 37, 10))
+
+function c0({z: {x, y: {j}}}) { }
+>c0 : Symbol(c0, Decl(destructuringParameterDeclaration1ES6.ts, 37, 14))
+>z : Symbol(z)
+>x : Symbol(x, Decl(destructuringParameterDeclaration1ES6.ts, 38, 17))
+>y : Symbol(y)
+>j : Symbol(j, Decl(destructuringParameterDeclaration1ES6.ts, 38, 24))
+
+function c1({z} = { z: 10 }) { }
+>c1 : Symbol(c1, Decl(destructuringParameterDeclaration1ES6.ts, 38, 33))
+>z : Symbol(z, Decl(destructuringParameterDeclaration1ES6.ts, 39, 13))
+>z : Symbol(z, Decl(destructuringParameterDeclaration1ES6.ts, 39, 19))
+
+function c2({z = 10}) { }
+>c2 : Symbol(c2, Decl(destructuringParameterDeclaration1ES6.ts, 39, 32))
+>z : Symbol(z, Decl(destructuringParameterDeclaration1ES6.ts, 40, 13))
+
+function c3({b}: { b: number|string} = { b: "hello" }) { }
+>c3 : Symbol(c3, Decl(destructuringParameterDeclaration1ES6.ts, 40, 25))
+>b : Symbol(b, Decl(destructuringParameterDeclaration1ES6.ts, 41, 13))
+>b : Symbol(b, Decl(destructuringParameterDeclaration1ES6.ts, 41, 18))
+>b : Symbol(b, Decl(destructuringParameterDeclaration1ES6.ts, 41, 40))
+
+function c5([a, b, [[c]]]) { }
+>c5 : Symbol(c5, Decl(destructuringParameterDeclaration1ES6.ts, 41, 58))
+>a : Symbol(a, Decl(destructuringParameterDeclaration1ES6.ts, 42, 13))
+>b : Symbol(b, Decl(destructuringParameterDeclaration1ES6.ts, 42, 15))
+>c : Symbol(c, Decl(destructuringParameterDeclaration1ES6.ts, 42, 21))
+
+function c6([a, b, [[c=1]]]) { }
+>c6 : Symbol(c6, Decl(destructuringParameterDeclaration1ES6.ts, 42, 30))
+>a : Symbol(a, Decl(destructuringParameterDeclaration1ES6.ts, 43, 13))
+>b : Symbol(b, Decl(destructuringParameterDeclaration1ES6.ts, 43, 15))
+>c : Symbol(c, Decl(destructuringParameterDeclaration1ES6.ts, 43, 21))
+
+c0({z : { x: 1, y: { j: "world" } }});      // Implied type is { z: {x: any, y: {j: any}} }
+>c0 : Symbol(c0, Decl(destructuringParameterDeclaration1ES6.ts, 37, 14))
+>z : Symbol(z, Decl(destructuringParameterDeclaration1ES6.ts, 45, 4))
+>x : Symbol(x, Decl(destructuringParameterDeclaration1ES6.ts, 45, 9))
+>y : Symbol(y, Decl(destructuringParameterDeclaration1ES6.ts, 45, 15))
+>j : Symbol(j, Decl(destructuringParameterDeclaration1ES6.ts, 45, 20))
+
+c0({z : { x: "string", y: { j: true } }});  // Implied type is { z: {x: any, y: {j: any}} }
+>c0 : Symbol(c0, Decl(destructuringParameterDeclaration1ES6.ts, 37, 14))
+>z : Symbol(z, Decl(destructuringParameterDeclaration1ES6.ts, 46, 4))
+>x : Symbol(x, Decl(destructuringParameterDeclaration1ES6.ts, 46, 9))
+>y : Symbol(y, Decl(destructuringParameterDeclaration1ES6.ts, 46, 22))
+>j : Symbol(j, Decl(destructuringParameterDeclaration1ES6.ts, 46, 27))
+
+c1();             // Implied type is {z:number}?
+>c1 : Symbol(c1, Decl(destructuringParameterDeclaration1ES6.ts, 38, 33))
+
+c1({ z: 1 })      // Implied type is {z:number}? 
+>c1 : Symbol(c1, Decl(destructuringParameterDeclaration1ES6.ts, 38, 33))
+>z : Symbol(z, Decl(destructuringParameterDeclaration1ES6.ts, 49, 4))
+
+c2({});         // Implied type is {z?: number}
+>c2 : Symbol(c2, Decl(destructuringParameterDeclaration1ES6.ts, 39, 32))
+
+c2({z:1});      // Implied type is {z?: number}
+>c2 : Symbol(c2, Decl(destructuringParameterDeclaration1ES6.ts, 39, 32))
+>z : Symbol(z, Decl(destructuringParameterDeclaration1ES6.ts, 52, 4))
+
+c3({ b: 1 });     // Implied type is { b: number|string }.
+>c3 : Symbol(c3, Decl(destructuringParameterDeclaration1ES6.ts, 40, 25))
+>b : Symbol(b, Decl(destructuringParameterDeclaration1ES6.ts, 54, 4))
+
+c5([1, 2, [["string"]]]);               // Implied type is is [any, any, [[any]]]
+>c5 : Symbol(c5, Decl(destructuringParameterDeclaration1ES6.ts, 41, 58))
+
+c5([1, 2, [["string"]], false, true]);  // Implied type is is [any, any, [[any]]]
+>c5 : Symbol(c5, Decl(destructuringParameterDeclaration1ES6.ts, 41, 58))
+
+
+// A parameter can be marked optional by following its name or binding pattern with a question mark (?)
+// or by including an initializer.
+
+interface F2 {
+>F2 : Symbol(F2, Decl(destructuringParameterDeclaration1ES6.ts, 57, 38))
+
+    d3([a, b, c]?);
+>d3 : Symbol(F2.d3, Decl(destructuringParameterDeclaration1ES6.ts, 63, 14))
+>a : Symbol(a, Decl(destructuringParameterDeclaration1ES6.ts, 64, 8))
+>b : Symbol(b, Decl(destructuringParameterDeclaration1ES6.ts, 64, 10))
+>c : Symbol(c, Decl(destructuringParameterDeclaration1ES6.ts, 64, 13))
+
+    d4({x, y, z}?);
+>d4 : Symbol(F2.d4, Decl(destructuringParameterDeclaration1ES6.ts, 64, 19))
+>x : Symbol(x, Decl(destructuringParameterDeclaration1ES6.ts, 65, 8))
+>y : Symbol(y, Decl(destructuringParameterDeclaration1ES6.ts, 65, 10))
+>z : Symbol(z, Decl(destructuringParameterDeclaration1ES6.ts, 65, 13))
+
+    e0([a, b, c]);
+>e0 : Symbol(F2.e0, Decl(destructuringParameterDeclaration1ES6.ts, 65, 19))
+>a : Symbol(a, Decl(destructuringParameterDeclaration1ES6.ts, 66, 8))
+>b : Symbol(b, Decl(destructuringParameterDeclaration1ES6.ts, 66, 10))
+>c : Symbol(c, Decl(destructuringParameterDeclaration1ES6.ts, 66, 13))
+}
+
+class C2 implements F2 {
+>C2 : Symbol(C2, Decl(destructuringParameterDeclaration1ES6.ts, 67, 1))
+>F2 : Symbol(F2, Decl(destructuringParameterDeclaration1ES6.ts, 57, 38))
+
+    constructor() { }
+    d3() { }
+>d3 : Symbol(C2.d3, Decl(destructuringParameterDeclaration1ES6.ts, 70, 21))
+
+    d4() { }
+>d4 : Symbol(C2.d4, Decl(destructuringParameterDeclaration1ES6.ts, 71, 12))
+
+    e0([a, b, c]) { }
+>e0 : Symbol(C2.e0, Decl(destructuringParameterDeclaration1ES6.ts, 72, 12))
+>a : Symbol(a, Decl(destructuringParameterDeclaration1ES6.ts, 73, 8))
+>b : Symbol(b, Decl(destructuringParameterDeclaration1ES6.ts, 73, 10))
+>c : Symbol(c, Decl(destructuringParameterDeclaration1ES6.ts, 73, 13))
+}
+
+class C3 implements F2 {
+>C3 : Symbol(C3, Decl(destructuringParameterDeclaration1ES6.ts, 74, 1))
+>F2 : Symbol(F2, Decl(destructuringParameterDeclaration1ES6.ts, 57, 38))
+
+    d3([a, b, c]) { }
+>d3 : Symbol(C3.d3, Decl(destructuringParameterDeclaration1ES6.ts, 76, 24))
+>a : Symbol(a, Decl(destructuringParameterDeclaration1ES6.ts, 77, 8))
+>b : Symbol(b, Decl(destructuringParameterDeclaration1ES6.ts, 77, 10))
+>c : Symbol(c, Decl(destructuringParameterDeclaration1ES6.ts, 77, 13))
+
+    d4({x, y, z}) { }
+>d4 : Symbol(C3.d4, Decl(destructuringParameterDeclaration1ES6.ts, 77, 21))
+>x : Symbol(x, Decl(destructuringParameterDeclaration1ES6.ts, 78, 8))
+>y : Symbol(y, Decl(destructuringParameterDeclaration1ES6.ts, 78, 10))
+>z : Symbol(z, Decl(destructuringParameterDeclaration1ES6.ts, 78, 13))
+
+    e0([a, b, c]) { }
+>e0 : Symbol(C3.e0, Decl(destructuringParameterDeclaration1ES6.ts, 78, 21))
+>a : Symbol(a, Decl(destructuringParameterDeclaration1ES6.ts, 79, 8))
+>b : Symbol(b, Decl(destructuringParameterDeclaration1ES6.ts, 79, 10))
+>c : Symbol(c, Decl(destructuringParameterDeclaration1ES6.ts, 79, 13))
+}
+
+function d5({x, y} = { x: 1, y: 2 }) { }
+>d5 : Symbol(d5, Decl(destructuringParameterDeclaration1ES6.ts, 80, 1))
+>x : Symbol(x, Decl(destructuringParameterDeclaration1ES6.ts, 82, 13))
+>y : Symbol(y, Decl(destructuringParameterDeclaration1ES6.ts, 82, 15))
+>x : Symbol(x, Decl(destructuringParameterDeclaration1ES6.ts, 82, 22))
+>y : Symbol(y, Decl(destructuringParameterDeclaration1ES6.ts, 82, 28))
+
+d5();  // Parameter is optional as its declaration included an initializer
+>d5 : Symbol(d5, Decl(destructuringParameterDeclaration1ES6.ts, 80, 1))
+
+// Destructuring parameter declarations do not permit type annotations on the individual binding patterns,
+// as such annotations would conflict with the already established meaning of colons in object literals.
+// Type annotations must instead be written on the top- level parameter declaration
+
+function e1({x: number}) { }  // x has type any NOT number
+>e1 : Symbol(e1, Decl(destructuringParameterDeclaration1ES6.ts, 83, 5))
+>x : Symbol(x)
+>number : Symbol(number, Decl(destructuringParameterDeclaration1ES6.ts, 89, 13))
+
+function e2({x}: { x: number }) { }  // x is type number
+>e2 : Symbol(e2, Decl(destructuringParameterDeclaration1ES6.ts, 89, 28))
+>x : Symbol(x, Decl(destructuringParameterDeclaration1ES6.ts, 90, 13))
+>x : Symbol(x, Decl(destructuringParameterDeclaration1ES6.ts, 90, 18))
+
+function e3({x}: { x?: number }) { }  // x is an optional with type number
+>e3 : Symbol(e3, Decl(destructuringParameterDeclaration1ES6.ts, 90, 35))
+>x : Symbol(x, Decl(destructuringParameterDeclaration1ES6.ts, 91, 13))
+>x : Symbol(x, Decl(destructuringParameterDeclaration1ES6.ts, 91, 18))
+
+function e4({x: [number,string,any] }) { }  // x has type [any, any, any]
+>e4 : Symbol(e4, Decl(destructuringParameterDeclaration1ES6.ts, 91, 36))
+>x : Symbol(x)
+>number : Symbol(number, Decl(destructuringParameterDeclaration1ES6.ts, 92, 17))
+>string : Symbol(string, Decl(destructuringParameterDeclaration1ES6.ts, 92, 24))
+>any : Symbol(any, Decl(destructuringParameterDeclaration1ES6.ts, 92, 31))
+
+function e5({x: [a, b, c]}: { x: [number, number, number] }) { }  // x has type [any, any, any]
+>e5 : Symbol(e5, Decl(destructuringParameterDeclaration1ES6.ts, 92, 42))
+>x : Symbol(x, Decl(destructuringParameterDeclaration1ES6.ts, 93, 29))
+>a : Symbol(a, Decl(destructuringParameterDeclaration1ES6.ts, 93, 17))
+>b : Symbol(b, Decl(destructuringParameterDeclaration1ES6.ts, 93, 19))
+>c : Symbol(c, Decl(destructuringParameterDeclaration1ES6.ts, 93, 22))
+>x : Symbol(x, Decl(destructuringParameterDeclaration1ES6.ts, 93, 29))
+
+function e6({x: [number, number, number]}) { }  // error, duplicate identifier;
+>e6 : Symbol(e6, Decl(destructuringParameterDeclaration1ES6.ts, 93, 64))
+>x : Symbol(x)
+>number : Symbol(number, Decl(destructuringParameterDeclaration1ES6.ts, 95, 17))
+>number : Symbol(number, Decl(destructuringParameterDeclaration1ES6.ts, 95, 24))
+>number : Symbol(number, Decl(destructuringParameterDeclaration1ES6.ts, 95, 32))
+
+
+

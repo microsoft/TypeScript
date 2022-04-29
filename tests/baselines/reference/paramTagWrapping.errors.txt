@@ -1,0 +1,58 @@
+tests/cases/conformance/jsdoc/bad.js(2,11): error TS1003: Identifier expected.
+tests/cases/conformance/jsdoc/bad.js(2,11): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+tests/cases/conformance/jsdoc/bad.js(5,4): error TS1003: Identifier expected.
+tests/cases/conformance/jsdoc/bad.js(5,4): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+tests/cases/conformance/jsdoc/bad.js(6,20): error TS1003: Identifier expected.
+tests/cases/conformance/jsdoc/bad.js(6,20): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+tests/cases/conformance/jsdoc/bad.js(9,14): error TS7006: Parameter 'x' implicitly has an 'any' type.
+tests/cases/conformance/jsdoc/bad.js(9,17): error TS7006: Parameter 'y' implicitly has an 'any' type.
+tests/cases/conformance/jsdoc/bad.js(9,20): error TS7006: Parameter 'z' implicitly has an 'any' type.
+
+
+==== tests/cases/conformance/jsdoc/good.js (0 errors) ====
+    /**
+     * @param
+     * {number} x Arg x.
+     * @param {number}
+     * y Arg y.
+     * @param {number} z
+     * Arg z.
+     */
+    function good(x, y, z) {
+    }
+    
+    good(1, 2, 3)
+    
+    
+==== tests/cases/conformance/jsdoc/bad.js (9 errors) ====
+    /**
+     * @param *
+              
+!!! error TS1003: Identifier expected.
+              
+!!! error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+     * {number} x Arg x.
+     * @param {number}
+     * * y Arg y.
+       
+!!! error TS1003: Identifier expected.
+       
+!!! error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+     * @param {number} * z
+                       
+!!! error TS1003: Identifier expected.
+                       
+!!! error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+     * Arg z.
+     */
+    function bad(x, y, z) {
+                 ~
+!!! error TS7006: Parameter 'x' implicitly has an 'any' type.
+                    ~
+!!! error TS7006: Parameter 'y' implicitly has an 'any' type.
+                       ~
+!!! error TS7006: Parameter 'z' implicitly has an 'any' type.
+    }
+    
+    bad(1, 2, 3)
+    

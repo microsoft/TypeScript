@@ -1,0 +1,112 @@
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures5.ts(40,1): error TS2322: Type '<T>(x: T) => void' is not assignable to type '<T>(x: T) => T'.
+  Type 'void' is not assignable to type 'T'.
+    'T' could be instantiated with an arbitrary type which could be unrelated to 'void'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures5.ts(52,1): error TS2322: Type '<T>(x: { foo: T; }, y: { foo: T; bar: T; }) => Base' is not assignable to type '<T, U>(x: { foo: T; }, y: { foo: U; bar: U; }) => Base'.
+  Types of parameters 'y' and 'y' are incompatible.
+    Type '{ foo: U; bar: U; }' is not assignable to type '{ foo: T; bar: T; }'.
+      Types of property 'foo' are incompatible.
+        Type 'U' is not assignable to type 'T'.
+          'T' could be instantiated with an arbitrary type which could be unrelated to 'U'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures5.ts(55,1): error TS2322: Type '<T>(x: { a: T; b: T; }) => T[]' is not assignable to type '<U, V>(x: { a: U; b: V; }) => U[]'.
+  Types of parameters 'x' and 'x' are incompatible.
+    Type '{ a: U; b: V; }' is not assignable to type '{ a: U; b: U; }'.
+      Types of property 'b' are incompatible.
+        Type 'V' is not assignable to type 'U'.
+          'U' could be instantiated with an arbitrary type which could be unrelated to 'V'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures5.ts(58,1): error TS2322: Type '<T extends Base>(x: { a: T; b: T; }) => T[]' is not assignable to type '<U, V>(x: { a: U; b: V; }) => U[]'.
+  Types of parameters 'x' and 'x' are incompatible.
+    Type '{ a: U; b: V; }' is not assignable to type '{ a: Base; b: Base; }'.
+      Types of property 'a' are incompatible.
+        Type 'U' is not assignable to type 'Base'.
+
+
+==== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures5.ts (4 errors) ====
+    // checking assignment compat for function types. No errors in this file
+    
+    class Base { foo: string; }
+    class Derived extends Base { bar: string; }
+    class Derived2 extends Derived { baz: string; }
+    class OtherDerived extends Base { bing: string; }
+    
+    var a: <T>(x: T) => T[];
+    var a2: <T>(x: T) => string[];
+    var a3: <T>(x: T) => void;
+    var a4: <T,U>(x: T, y: U) => string;
+    var a5: <T,U>(x: (arg: T) => U) => T;
+    var a6: <T extends Base>(x: (arg: T) => Derived) => T;
+    var a11: <T>(x: { foo: T }, y: { foo: T; bar: T }) => Base;
+    var a15: <T>(x: { a: T; b: T }) => T[];
+    var a16: <T extends Base>(x: { a: T; b: T }) => T[];
+    var a17: {
+        <T extends Derived>(x: (a: T) => T): T[];
+        <T extends Base>(x: (a: T) => T): T[];        
+    };
+    var a18: {
+        (x: {
+            <T extends Derived>(a: T): T;
+            <T extends Base>(a: T): T;
+        }): any[];
+        (x: {
+            <T extends Derived2>(a: T): T;
+            <T extends Base>(a: T): T;
+        }): any[];
+    };
+    
+    var b: <T>(x: T) => T[]; 
+    a = b; // ok
+    b = a; // ok
+    var b2: <T>(x: T) => string[]; 
+    a2 = b2; // ok
+    b2 = a2; // ok
+    var b3: <T>(x: T) => T; 
+    a3 = b3; // ok
+    b3 = a3; // ok
+    ~~
+!!! error TS2322: Type '<T>(x: T) => void' is not assignable to type '<T>(x: T) => T'.
+!!! error TS2322:   Type 'void' is not assignable to type 'T'.
+!!! error TS2322:     'T' could be instantiated with an arbitrary type which could be unrelated to 'void'.
+    var b4: <T, U>(x: T, y: U) => string; 
+    a4 = b4; // ok
+    b4 = a4; // ok
+    var b5: <T, U>(x: (arg: T) => U) => T; 
+    a5 = b5; // ok
+    b5 = a5; // ok
+    var b6: <T extends Base, U extends Derived>(x: (arg: T) => U) => T; 
+    a6 = b6; // ok
+    b6 = a6; // ok
+    var b11: <T, U>(x: { foo: T }, y: { foo: U; bar: U }) => Base; 
+    a11 = b11; // ok
+    b11 = a11; // ok
+    ~~~
+!!! error TS2322: Type '<T>(x: { foo: T; }, y: { foo: T; bar: T; }) => Base' is not assignable to type '<T, U>(x: { foo: T; }, y: { foo: U; bar: U; }) => Base'.
+!!! error TS2322:   Types of parameters 'y' and 'y' are incompatible.
+!!! error TS2322:     Type '{ foo: U; bar: U; }' is not assignable to type '{ foo: T; bar: T; }'.
+!!! error TS2322:       Types of property 'foo' are incompatible.
+!!! error TS2322:         Type 'U' is not assignable to type 'T'.
+!!! error TS2322:           'T' could be instantiated with an arbitrary type which could be unrelated to 'U'.
+    var b15: <U, V>(x: { a: U; b: V; }) => U[]; 
+    a15 = b15; // ok, T = U, T = V
+    b15 = a15; // ok
+    ~~~
+!!! error TS2322: Type '<T>(x: { a: T; b: T; }) => T[]' is not assignable to type '<U, V>(x: { a: U; b: V; }) => U[]'.
+!!! error TS2322:   Types of parameters 'x' and 'x' are incompatible.
+!!! error TS2322:     Type '{ a: U; b: V; }' is not assignable to type '{ a: U; b: U; }'.
+!!! error TS2322:       Types of property 'b' are incompatible.
+!!! error TS2322:         Type 'V' is not assignable to type 'U'.
+!!! error TS2322:           'U' could be instantiated with an arbitrary type which could be unrelated to 'V'.
+    var b16: <T>(x: { a: T; b: T }) => T[]; 
+    a15 = b16; // ok
+    b15 = a16; // ok
+    ~~~
+!!! error TS2322: Type '<T extends Base>(x: { a: T; b: T; }) => T[]' is not assignable to type '<U, V>(x: { a: U; b: V; }) => U[]'.
+!!! error TS2322:   Types of parameters 'x' and 'x' are incompatible.
+!!! error TS2322:     Type '{ a: U; b: V; }' is not assignable to type '{ a: Base; b: Base; }'.
+!!! error TS2322:       Types of property 'a' are incompatible.
+!!! error TS2322:         Type 'U' is not assignable to type 'Base'.
+    var b17: <T>(x: (a: T) => T) => T[]; 
+    a17 = b17; // ok
+    b17 = a17; // ok
+    var b18: (x: <T>(a: T) => T) => any[]; 
+    a18 = b18; // ok
+    b18 = a18; // ok
+    

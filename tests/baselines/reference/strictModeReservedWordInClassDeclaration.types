@@ -1,0 +1,77 @@
+=== tests/cases/compiler/strictModeReservedWordInClassDeclaration.ts ===
+interface public { }
+
+class Foo {
+>Foo : Foo
+
+    constructor(private, public, static) {
+>private : any
+>public : any
+>static : any
+
+        private = public = static;
+>private = public = static : any
+>private : any
+>public = static : any
+>public : any
+>static : any
+    }
+    public banana(x: public) { }
+>banana : (x: public) => void
+>x : public
+}
+
+class C {
+>C : C
+
+    constructor(public public, let) {
+>public : any
+>let : any
+    }
+    foo1(private, static, public) {
+>foo1 : (private: any, static: any, public: any) => void
+>private : any
+>static : any
+>public : any
+
+        function let() { }
+>let : () => void
+
+        var z = function let() { };
+>z : () => void
+>function let() { } : () => void
+>let : () => void
+    }
+
+    public pulbic() { } // No Error;
+>pulbic : () => void
+}
+
+class D<public, private>{ }
+>D : D<public, private>
+
+class E implements public { }
+>E : E
+
+class F implements public.private.B { }
+>F : F
+>public.private : any
+>public : any
+>private : any
+
+class F1 implements public.private.implements { }
+>F1 : F1
+>public.private : any
+>public : any
+>private : any
+
+class G extends package { }
+>G : G
+>package : any
+
+class H extends package.A { }
+>H : H
+>package.A : any
+>package : any
+>A : any
+

@@ -1,0 +1,52 @@
+=== tests/cases/compiler/callOverloads2.ts ===
+class Foo { // error
+>Foo : Foo
+
+    bar1() { /*WScript.Echo("bar1");*/ }
+>bar1 : () => void
+
+    constructor(x: any) {
+>x : any
+
+        // WScript.Echo("Constructor function has executed");
+    }
+}
+
+function Foo(); // error
+>Foo : typeof Foo
+
+function F1(s:string) {return s;} // error
+>F1 : (s: string) => string
+>s : string
+>s : string
+
+function F1(a:any) { return a;} // error
+>F1 : (s: string) => string
+>a : any
+>a : any
+
+function Goo(s:string); // error - no implementation
+>Goo : (s: string) => any
+>s : string
+
+declare function Gar(s:String); // expect no error
+>Gar : (s: String) => any
+>s : String
+
+var f1 = new Foo("hey");
+>f1 : Foo
+>new Foo("hey") : Foo
+>Foo : typeof Foo
+>"hey" : "hey"
+
+
+f1.bar1();
+>f1.bar1() : void
+>f1.bar1 : () => void
+>f1 : Foo
+>bar1 : () => void
+
+Foo();
+>Foo() : any
+>Foo : typeof Foo
+

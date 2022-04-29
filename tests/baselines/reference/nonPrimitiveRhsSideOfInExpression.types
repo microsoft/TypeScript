@@ -1,0 +1,25 @@
+=== tests/cases/conformance/types/nonPrimitive/nonPrimitiveRhsSideOfInExpression.ts ===
+let o: object = {};
+>o : object
+>{} : {}
+
+function f(): object {
+>f : () => object
+
+	return {};
+>{} : {}
+}
+
+const b1 = "foo" in o;
+>b1 : boolean
+>"foo" in o : boolean
+>"foo" : "foo"
+>o : object
+
+const b2 = "bar" in f();
+>b2 : boolean
+>"bar" in f() : boolean
+>"bar" : "bar"
+>f() : object
+>f : () => object
+

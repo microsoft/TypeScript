@@ -1,0 +1,143 @@
+=== tests/cases/conformance/salsa/propertiesOfGenericConstructorFunctions.js ===
+/**
+ * @template {string} K
+ * @template V
+ * @param {string} ik
+ * @param {V} iv
+ */
+function Multimap(ik, iv) {
+>Multimap : Symbol(Multimap, Decl(propertiesOfGenericConstructorFunctions.js, 0, 0))
+>ik : Symbol(ik, Decl(propertiesOfGenericConstructorFunctions.js, 6, 18))
+>iv : Symbol(iv, Decl(propertiesOfGenericConstructorFunctions.js, 6, 21))
+
+    /** @type {{ [s: string]: V }} */
+    this._map = {};
+>this._map : Symbol(Multimap._map, Decl(propertiesOfGenericConstructorFunctions.js, 6, 27))
+>this : Symbol(Multimap, Decl(propertiesOfGenericConstructorFunctions.js, 0, 0))
+>_map : Symbol(Multimap._map, Decl(propertiesOfGenericConstructorFunctions.js, 6, 27))
+
+    // without type annotation
+    this._map2 = { [ik]: iv };
+>this._map2 : Symbol(Multimap._map2, Decl(propertiesOfGenericConstructorFunctions.js, 8, 19))
+>this : Symbol(Multimap, Decl(propertiesOfGenericConstructorFunctions.js, 0, 0))
+>_map2 : Symbol(Multimap._map2, Decl(propertiesOfGenericConstructorFunctions.js, 8, 19))
+>[ik] : Symbol([ik], Decl(propertiesOfGenericConstructorFunctions.js, 10, 18))
+>ik : Symbol(ik, Decl(propertiesOfGenericConstructorFunctions.js, 6, 18))
+>iv : Symbol(iv, Decl(propertiesOfGenericConstructorFunctions.js, 6, 21))
+
+};
+
+/** @type {Multimap<"a" | "b", number>} with type annotation */
+const map = new Multimap("a", 1);
+>map : Symbol(map, Decl(propertiesOfGenericConstructorFunctions.js, 14, 5))
+>Multimap : Symbol(Multimap, Decl(propertiesOfGenericConstructorFunctions.js, 0, 0))
+
+// without type annotation
+const map2 = new Multimap("m", 2);
+>map2 : Symbol(map2, Decl(propertiesOfGenericConstructorFunctions.js, 16, 5))
+>Multimap : Symbol(Multimap, Decl(propertiesOfGenericConstructorFunctions.js, 0, 0))
+
+/** @type {number} */
+var n = map._map['hi']
+>n : Symbol(n, Decl(propertiesOfGenericConstructorFunctions.js, 19, 3), Decl(propertiesOfGenericConstructorFunctions.js, 21, 3), Decl(propertiesOfGenericConstructorFunctions.js, 23, 3), Decl(propertiesOfGenericConstructorFunctions.js, 25, 3), Decl(propertiesOfGenericConstructorFunctions.js, 43, 3) ... and 3 more)
+>map._map : Symbol(Multimap._map, Decl(propertiesOfGenericConstructorFunctions.js, 6, 27))
+>map : Symbol(map, Decl(propertiesOfGenericConstructorFunctions.js, 14, 5))
+>_map : Symbol(Multimap._map, Decl(propertiesOfGenericConstructorFunctions.js, 6, 27))
+
+/** @type {number} */
+var n = map._map2['hi']
+>n : Symbol(n, Decl(propertiesOfGenericConstructorFunctions.js, 19, 3), Decl(propertiesOfGenericConstructorFunctions.js, 21, 3), Decl(propertiesOfGenericConstructorFunctions.js, 23, 3), Decl(propertiesOfGenericConstructorFunctions.js, 25, 3), Decl(propertiesOfGenericConstructorFunctions.js, 43, 3) ... and 3 more)
+>map._map2 : Symbol(Multimap._map2, Decl(propertiesOfGenericConstructorFunctions.js, 8, 19))
+>map : Symbol(map, Decl(propertiesOfGenericConstructorFunctions.js, 14, 5))
+>_map2 : Symbol(Multimap._map2, Decl(propertiesOfGenericConstructorFunctions.js, 8, 19))
+
+/** @type {number} */
+var n = map2._map['hi']
+>n : Symbol(n, Decl(propertiesOfGenericConstructorFunctions.js, 19, 3), Decl(propertiesOfGenericConstructorFunctions.js, 21, 3), Decl(propertiesOfGenericConstructorFunctions.js, 23, 3), Decl(propertiesOfGenericConstructorFunctions.js, 25, 3), Decl(propertiesOfGenericConstructorFunctions.js, 43, 3) ... and 3 more)
+>map2._map : Symbol(Multimap._map, Decl(propertiesOfGenericConstructorFunctions.js, 6, 27))
+>map2 : Symbol(map2, Decl(propertiesOfGenericConstructorFunctions.js, 16, 5))
+>_map : Symbol(Multimap._map, Decl(propertiesOfGenericConstructorFunctions.js, 6, 27))
+
+/** @type {number} */
+var n = map._map2['hi']
+>n : Symbol(n, Decl(propertiesOfGenericConstructorFunctions.js, 19, 3), Decl(propertiesOfGenericConstructorFunctions.js, 21, 3), Decl(propertiesOfGenericConstructorFunctions.js, 23, 3), Decl(propertiesOfGenericConstructorFunctions.js, 25, 3), Decl(propertiesOfGenericConstructorFunctions.js, 43, 3) ... and 3 more)
+>map._map2 : Symbol(Multimap._map2, Decl(propertiesOfGenericConstructorFunctions.js, 8, 19))
+>map : Symbol(map, Decl(propertiesOfGenericConstructorFunctions.js, 14, 5))
+>_map2 : Symbol(Multimap._map2, Decl(propertiesOfGenericConstructorFunctions.js, 8, 19))
+
+/**
+ * @class
+ * @template T
+ * @param {T} t
+ */
+function Cp(t) {
+>Cp : Symbol(Cp, Decl(propertiesOfGenericConstructorFunctions.js, 25, 23), Decl(propertiesOfGenericConstructorFunctions.js, 35, 1))
+>t : Symbol(t, Decl(propertiesOfGenericConstructorFunctions.js, 32, 12))
+
+    this.x = 1
+>this.x : Symbol(Cp.x, Decl(propertiesOfGenericConstructorFunctions.js, 32, 16))
+>this : Symbol(Cp, Decl(propertiesOfGenericConstructorFunctions.js, 25, 23), Decl(propertiesOfGenericConstructorFunctions.js, 35, 1))
+>x : Symbol(Cp.x, Decl(propertiesOfGenericConstructorFunctions.js, 32, 16))
+
+    this.y = t
+>this.y : Symbol(Cp.y, Decl(propertiesOfGenericConstructorFunctions.js, 33, 14))
+>this : Symbol(Cp, Decl(propertiesOfGenericConstructorFunctions.js, 25, 23), Decl(propertiesOfGenericConstructorFunctions.js, 35, 1))
+>y : Symbol(Cp.y, Decl(propertiesOfGenericConstructorFunctions.js, 33, 14))
+>t : Symbol(t, Decl(propertiesOfGenericConstructorFunctions.js, 32, 12))
+}
+Cp.prototype = {
+>Cp.prototype : Symbol(Cp.prototype, Decl(propertiesOfGenericConstructorFunctions.js, 35, 1))
+>Cp : Symbol(Cp, Decl(propertiesOfGenericConstructorFunctions.js, 25, 23), Decl(propertiesOfGenericConstructorFunctions.js, 35, 1))
+>prototype : Symbol(Cp.prototype, Decl(propertiesOfGenericConstructorFunctions.js, 35, 1))
+
+    m1() { return this.x },
+>m1 : Symbol(m1, Decl(propertiesOfGenericConstructorFunctions.js, 36, 16))
+>this.x : Symbol(Cp.x, Decl(propertiesOfGenericConstructorFunctions.js, 32, 16))
+>this : Symbol(Cp, Decl(propertiesOfGenericConstructorFunctions.js, 25, 23), Decl(propertiesOfGenericConstructorFunctions.js, 35, 1))
+>x : Symbol(Cp.x, Decl(propertiesOfGenericConstructorFunctions.js, 32, 16))
+
+    m2() { this.z = this.x + 1; return this.y }
+>m2 : Symbol(m2, Decl(propertiesOfGenericConstructorFunctions.js, 37, 27))
+>this.z : Symbol(z, Decl(propertiesOfGenericConstructorFunctions.js, 38, 10))
+>this : Symbol(Cp, Decl(propertiesOfGenericConstructorFunctions.js, 25, 23), Decl(propertiesOfGenericConstructorFunctions.js, 35, 1))
+>z : Symbol(z, Decl(propertiesOfGenericConstructorFunctions.js, 38, 10))
+>this.x : Symbol(Cp.x, Decl(propertiesOfGenericConstructorFunctions.js, 32, 16))
+>this : Symbol(Cp, Decl(propertiesOfGenericConstructorFunctions.js, 25, 23), Decl(propertiesOfGenericConstructorFunctions.js, 35, 1))
+>x : Symbol(Cp.x, Decl(propertiesOfGenericConstructorFunctions.js, 32, 16))
+>this.y : Symbol(Cp.y, Decl(propertiesOfGenericConstructorFunctions.js, 33, 14))
+>this : Symbol(Cp, Decl(propertiesOfGenericConstructorFunctions.js, 25, 23), Decl(propertiesOfGenericConstructorFunctions.js, 35, 1))
+>y : Symbol(Cp.y, Decl(propertiesOfGenericConstructorFunctions.js, 33, 14))
+}
+var cp = new Cp(1)
+>cp : Symbol(cp, Decl(propertiesOfGenericConstructorFunctions.js, 40, 3))
+>Cp : Symbol(Cp, Decl(propertiesOfGenericConstructorFunctions.js, 25, 23), Decl(propertiesOfGenericConstructorFunctions.js, 35, 1))
+
+/** @type {number} */
+var n = cp.x
+>n : Symbol(n, Decl(propertiesOfGenericConstructorFunctions.js, 19, 3), Decl(propertiesOfGenericConstructorFunctions.js, 21, 3), Decl(propertiesOfGenericConstructorFunctions.js, 23, 3), Decl(propertiesOfGenericConstructorFunctions.js, 25, 3), Decl(propertiesOfGenericConstructorFunctions.js, 43, 3) ... and 3 more)
+>cp.x : Symbol(Cp.x, Decl(propertiesOfGenericConstructorFunctions.js, 32, 16))
+>cp : Symbol(cp, Decl(propertiesOfGenericConstructorFunctions.js, 40, 3))
+>x : Symbol(Cp.x, Decl(propertiesOfGenericConstructorFunctions.js, 32, 16))
+
+/** @type {number} */
+var n = cp.y
+>n : Symbol(n, Decl(propertiesOfGenericConstructorFunctions.js, 19, 3), Decl(propertiesOfGenericConstructorFunctions.js, 21, 3), Decl(propertiesOfGenericConstructorFunctions.js, 23, 3), Decl(propertiesOfGenericConstructorFunctions.js, 25, 3), Decl(propertiesOfGenericConstructorFunctions.js, 43, 3) ... and 3 more)
+>cp.y : Symbol(Cp.y, Decl(propertiesOfGenericConstructorFunctions.js, 33, 14))
+>cp : Symbol(cp, Decl(propertiesOfGenericConstructorFunctions.js, 40, 3))
+>y : Symbol(Cp.y, Decl(propertiesOfGenericConstructorFunctions.js, 33, 14))
+
+/** @type {number} */
+var n = cp.m1()
+>n : Symbol(n, Decl(propertiesOfGenericConstructorFunctions.js, 19, 3), Decl(propertiesOfGenericConstructorFunctions.js, 21, 3), Decl(propertiesOfGenericConstructorFunctions.js, 23, 3), Decl(propertiesOfGenericConstructorFunctions.js, 25, 3), Decl(propertiesOfGenericConstructorFunctions.js, 43, 3) ... and 3 more)
+>cp.m1 : Symbol(m1, Decl(propertiesOfGenericConstructorFunctions.js, 36, 16))
+>cp : Symbol(cp, Decl(propertiesOfGenericConstructorFunctions.js, 40, 3))
+>m1 : Symbol(m1, Decl(propertiesOfGenericConstructorFunctions.js, 36, 16))
+
+/** @type {number} */
+var n = cp.m2()
+>n : Symbol(n, Decl(propertiesOfGenericConstructorFunctions.js, 19, 3), Decl(propertiesOfGenericConstructorFunctions.js, 21, 3), Decl(propertiesOfGenericConstructorFunctions.js, 23, 3), Decl(propertiesOfGenericConstructorFunctions.js, 25, 3), Decl(propertiesOfGenericConstructorFunctions.js, 43, 3) ... and 3 more)
+>cp.m2 : Symbol(m2, Decl(propertiesOfGenericConstructorFunctions.js, 37, 27))
+>cp : Symbol(cp, Decl(propertiesOfGenericConstructorFunctions.js, 40, 3))
+>m2 : Symbol(m2, Decl(propertiesOfGenericConstructorFunctions.js, 37, 27))
+
+

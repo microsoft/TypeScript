@@ -1,0 +1,35 @@
+=== tests/cases/conformance/statements/for-ofStatements/ES5For-of37.ts ===
+// https://github.com/microsoft/TypeScript/issues/30083
+
+for (const i of [0, 1, 2, 3, 4]) {
+>i : Symbol(i, Decl(ES5For-of37.ts, 2, 10))
+
+    try {
+        // Ensure catch binding for the following loop is reset per iteration:
+        for (const j of [1, 2, 3]) {
+>j : Symbol(j, Decl(ES5For-of37.ts, 5, 18))
+
+            if (i === 2) {
+>i : Symbol(i, Decl(ES5For-of37.ts, 2, 10))
+
+                throw new Error('ERR');
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+            }
+        }
+        console.log(i);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>i : Symbol(i, Decl(ES5For-of37.ts, 2, 10))
+
+    } catch (err) {
+>err : Symbol(err, Decl(ES5For-of37.ts, 11, 13))
+
+        console.log('E %s %s', i, err);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>i : Symbol(i, Decl(ES5For-of37.ts, 2, 10))
+>err : Symbol(err, Decl(ES5For-of37.ts, 11, 13))
+    }
+}

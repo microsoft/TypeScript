@@ -1,0 +1,22 @@
+tests/cases/compiler/primaryExpressionMods.ts(7,8): error TS2709: Cannot use namespace 'M' as a type.
+tests/cases/compiler/primaryExpressionMods.ts(11,8): error TS2833: Cannot find namespace 'm'. Did you mean 'M'?
+
+
+==== tests/cases/compiler/primaryExpressionMods.ts (2 errors) ====
+    module M
+    {
+        export interface P { x: number; y: number; }
+        export var a = 1;
+    }
+    var p: M.P;             // Used as ModuleName
+    var m: M = M;           // Used as TypeName and PrimaryExpression (error on TypeName)
+           ~
+!!! error TS2709: Cannot use namespace 'M' as a type.
+    var m2: typeof M = M;   // Used as PrimaryExpression in TypeQuery
+    var x1 = M.a;           // Used as PrimaryExpression
+    var x2 = m.a;           // Same as M.a
+    var q: m.P;             // Error
+           ~
+!!! error TS2833: Cannot find namespace 'm'. Did you mean 'M'?
+!!! related TS2728 tests/cases/compiler/primaryExpressionMods.ts:1:8: 'M' is declared here.
+    

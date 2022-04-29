@@ -1,0 +1,52 @@
+=== tests/cases/compiler/asyncawait.ts ===
+export function async<T>(...args: any[]): any { }
+>async : Symbol(async, Decl(asyncawait.ts, 0, 0))
+>T : Symbol(T, Decl(asyncawait.ts, 0, 22))
+>args : Symbol(args, Decl(asyncawait.ts, 0, 25))
+
+export function await(...args: any[]): any { }
+>await : Symbol(await, Decl(asyncawait.ts, 0, 49))
+>args : Symbol(args, Decl(asyncawait.ts, 1, 22))
+
+=== tests/cases/compiler/a.ts ===
+import { async, await } from 'asyncawait';
+>async : Symbol(async, Decl(a.ts, 0, 8))
+>await : Symbol(await, Decl(a.ts, 0, 15))
+
+export default async(() => await(Promise.resolve(1)));
+>async : Symbol(async, Decl(a.ts, 0, 8))
+>await : Symbol(await, Decl(a.ts, 0, 15))
+>Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+
+=== tests/cases/compiler/b.ts ===
+export default async () => { return 0; };
+No type information for this code.
+No type information for this code.=== tests/cases/compiler/c.ts ===
+import { async, await } from 'asyncawait';
+>async : Symbol(async, Decl(c.ts, 0, 8))
+>await : Symbol(await, Decl(c.ts, 0, 15))
+
+export default async<number>();
+>async : Symbol(async, Decl(c.ts, 0, 8))
+
+=== tests/cases/compiler/d.ts ===
+import { async, await } from 'asyncawait';
+>async : Symbol(async, Decl(d.ts, 0, 8))
+>await : Symbol(await, Decl(d.ts, 0, 15))
+
+export default async;
+>async : Symbol(async, Decl(d.ts, 0, 8))
+
+=== tests/cases/compiler/e.ts ===
+import { async, await } from 'asyncawait';
+>async : Symbol(async, Decl(e.ts, 0, 8))
+>await : Symbol(await, Decl(e.ts, 0, 15))
+
+export default async
+>async : Symbol(async, Decl(e.ts, 0, 8))
+
+export function foo() { }
+>foo : Symbol(foo, Decl(e.ts, 2, 20))
+

@@ -1,0 +1,18 @@
+=== tests/cases/conformance/internalModules/moduleDeclarations/asiPreventsParsingAsNamespace03.ts ===
+var namespace: number;
+>namespace : number
+
+var n: string;
+>n : string
+
+namespace container {
+>container : typeof container
+
+    namespace    // this is the identifier 'namespace'
+>namespace : number
+
+    n            // this is the identifier 'n'
+>n : string
+
+    { }          // this is a block body
+}

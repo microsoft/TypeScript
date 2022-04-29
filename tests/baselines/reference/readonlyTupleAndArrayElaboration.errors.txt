@@ -1,0 +1,178 @@
+tests/cases/compiler/readonlyTupleAndArrayElaboration.ts(10,20): error TS2345: Argument of type 'readonly [3, 4]' is not assignable to parameter of type '[number, number]'.
+  The type 'readonly [3, 4]' is 'readonly' and cannot be assigned to the mutable type '[number, number]'.
+tests/cases/compiler/readonlyTupleAndArrayElaboration.ts(13,8): error TS2345: Argument of type 'readonly [3, 4]' is not assignable to parameter of type 'number[]'.
+  The type 'readonly [3, 4]' is 'readonly' and cannot be assigned to the mutable type 'number[]'.
+tests/cases/compiler/readonlyTupleAndArrayElaboration.ts(16,9): error TS2345: Argument of type 'readonly [3, 4]' is not assignable to parameter of type 'number[]'.
+  The type 'readonly [3, 4]' is 'readonly' and cannot be assigned to the mutable type 'number[]'.
+tests/cases/compiler/readonlyTupleAndArrayElaboration.ts(22,9): error TS2345: Argument of type 'readonly number[]' is not assignable to parameter of type 'number[]'.
+  The type 'readonly number[]' is 'readonly' and cannot be assigned to the mutable type 'number[]'.
+tests/cases/compiler/readonlyTupleAndArrayElaboration.ts(23,9): error TS2345: Argument of type 'readonly number[]' is not assignable to parameter of type 'number[]'.
+  The type 'readonly number[]' is 'readonly' and cannot be assigned to the mutable type 'number[]'.
+tests/cases/compiler/readonlyTupleAndArrayElaboration.ts(24,9): error TS2345: Argument of type 'readonly number[]' is not assignable to parameter of type 'number[]'.
+  The type 'readonly number[]' is 'readonly' and cannot be assigned to the mutable type 'number[]'.
+tests/cases/compiler/readonlyTupleAndArrayElaboration.ts(27,7): error TS2322: Type 'readonly [1]' is not assignable to type 'readonly []'.
+  Source has 1 element(s) but target allows only 0.
+tests/cases/compiler/readonlyTupleAndArrayElaboration.ts(30,7): error TS4104: The type 'readonly [1]' is 'readonly' and cannot be assigned to the mutable type '[]'.
+tests/cases/compiler/readonlyTupleAndArrayElaboration.ts(33,7): error TS2322: Type '[1]' is not assignable to type 'readonly []'.
+  Source has 1 element(s) but target allows only 0.
+tests/cases/compiler/readonlyTupleAndArrayElaboration.ts(36,7): error TS2322: Type '[1]' is not assignable to type '[]'.
+  Source has 1 element(s) but target allows only 0.
+tests/cases/compiler/readonlyTupleAndArrayElaboration.ts(39,7): error TS2322: Type 'readonly number[]' is not assignable to type 'readonly boolean[]'.
+  Type 'number' is not assignable to type 'boolean'.
+tests/cases/compiler/readonlyTupleAndArrayElaboration.ts(42,7): error TS4104: The type 'readonly number[]' is 'readonly' and cannot be assigned to the mutable type 'boolean[]'.
+tests/cases/compiler/readonlyTupleAndArrayElaboration.ts(45,7): error TS2322: Type 'number[]' is not assignable to type 'readonly boolean[]'.
+  Type 'number' is not assignable to type 'boolean'.
+tests/cases/compiler/readonlyTupleAndArrayElaboration.ts(48,7): error TS2322: Type 'number[]' is not assignable to type 'boolean[]'.
+  Type 'number' is not assignable to type 'boolean'.
+tests/cases/compiler/readonlyTupleAndArrayElaboration.ts(51,7): error TS2322: Type 'readonly [1]' is not assignable to type 'readonly boolean[]'.
+  Type 'number' is not assignable to type 'boolean'.
+tests/cases/compiler/readonlyTupleAndArrayElaboration.ts(54,7): error TS4104: The type 'readonly [1]' is 'readonly' and cannot be assigned to the mutable type 'number[]'.
+tests/cases/compiler/readonlyTupleAndArrayElaboration.ts(57,7): error TS2322: Type '[1]' is not assignable to type 'readonly boolean[]'.
+  Type 'number' is not assignable to type 'boolean'.
+tests/cases/compiler/readonlyTupleAndArrayElaboration.ts(60,7): error TS2322: Type '[1]' is not assignable to type 'boolean[]'.
+  Type 'number' is not assignable to type 'boolean'.
+tests/cases/compiler/readonlyTupleAndArrayElaboration.ts(63,7): error TS2322: Type 'readonly number[]' is not assignable to type 'readonly [1]'.
+  Target requires 1 element(s) but source may have fewer.
+tests/cases/compiler/readonlyTupleAndArrayElaboration.ts(66,7): error TS4104: The type 'readonly number[]' is 'readonly' and cannot be assigned to the mutable type '[1]'.
+tests/cases/compiler/readonlyTupleAndArrayElaboration.ts(69,7): error TS2322: Type 'number[]' is not assignable to type 'readonly [1]'.
+  Target requires 1 element(s) but source may have fewer.
+tests/cases/compiler/readonlyTupleAndArrayElaboration.ts(72,7): error TS2322: Type 'number[]' is not assignable to type '[1]'.
+  Target requires 1 element(s) but source may have fewer.
+
+
+==== tests/cases/compiler/readonlyTupleAndArrayElaboration.ts (22 errors) ====
+    // @strict
+    // #Repro from #30839
+    
+    let point = [3, 4] as const;
+    
+    function distanceFromOrigin([x, y]: [number, number]) {
+        return Math.sqrt(x ** 2 + y ** 2);
+    }
+    
+    distanceFromOrigin(point);
+                       ~~~~~
+!!! error TS2345: Argument of type 'readonly [3, 4]' is not assignable to parameter of type '[number, number]'.
+!!! error TS2345:   The type 'readonly [3, 4]' is 'readonly' and cannot be assigned to the mutable type '[number, number]'.
+    
+    declare function arryFn(x: number[]): void;
+    arryFn(point);
+           ~~~~~
+!!! error TS2345: Argument of type 'readonly [3, 4]' is not assignable to parameter of type 'number[]'.
+!!! error TS2345:   The type 'readonly [3, 4]' is 'readonly' and cannot be assigned to the mutable type 'number[]'.
+    
+    declare function arryFn2(x: Array<number>): void;
+    arryFn2(point);
+            ~~~~~
+!!! error TS2345: Argument of type 'readonly [3, 4]' is not assignable to parameter of type 'number[]'.
+!!! error TS2345:   The type 'readonly [3, 4]' is 'readonly' and cannot be assigned to the mutable type 'number[]'.
+    
+    declare const a: readonly number[];
+    declare const b: Readonly<number[]>;
+    declare const c: ReadonlyArray<number>;
+    
+    arryFn2(a);
+            ~
+!!! error TS2345: Argument of type 'readonly number[]' is not assignable to parameter of type 'number[]'.
+!!! error TS2345:   The type 'readonly number[]' is 'readonly' and cannot be assigned to the mutable type 'number[]'.
+    arryFn2(b);
+            ~
+!!! error TS2345: Argument of type 'readonly number[]' is not assignable to parameter of type 'number[]'.
+!!! error TS2345:   The type 'readonly number[]' is 'readonly' and cannot be assigned to the mutable type 'number[]'.
+    arryFn2(c);
+            ~
+!!! error TS2345: Argument of type 'readonly number[]' is not assignable to parameter of type 'number[]'.
+!!! error TS2345:   The type 'readonly number[]' is 'readonly' and cannot be assigned to the mutable type 'number[]'.
+    
+    const t1: readonly [1] = [1];
+    const t2: readonly [] = t1;
+          ~~
+!!! error TS2322: Type 'readonly [1]' is not assignable to type 'readonly []'.
+!!! error TS2322:   Source has 1 element(s) but target allows only 0.
+    
+    const t3: readonly [1] = [1];
+    const t4: [] = t3;
+          ~~
+!!! error TS4104: The type 'readonly [1]' is 'readonly' and cannot be assigned to the mutable type '[]'.
+    
+    const t5: [1] = [1];
+    const t6: readonly [] = t5;
+          ~~
+!!! error TS2322: Type '[1]' is not assignable to type 'readonly []'.
+!!! error TS2322:   Source has 1 element(s) but target allows only 0.
+    
+    const t7: [1] = [1];
+    const t8: [] = t7;
+          ~~
+!!! error TS2322: Type '[1]' is not assignable to type '[]'.
+!!! error TS2322:   Source has 1 element(s) but target allows only 0.
+    
+    const a1: readonly number[] = [1];
+    const a2: readonly boolean[] = a1;
+          ~~
+!!! error TS2322: Type 'readonly number[]' is not assignable to type 'readonly boolean[]'.
+!!! error TS2322:   Type 'number' is not assignable to type 'boolean'.
+    
+    const a3: readonly number[] = [1];
+    const a4: boolean[] = a3;
+          ~~
+!!! error TS4104: The type 'readonly number[]' is 'readonly' and cannot be assigned to the mutable type 'boolean[]'.
+    
+    const a5: number[] = [1];
+    const a6: readonly boolean [] = a5;
+          ~~
+!!! error TS2322: Type 'number[]' is not assignable to type 'readonly boolean[]'.
+!!! error TS2322:   Type 'number' is not assignable to type 'boolean'.
+    
+    const a7: number[] = [1];
+    const a8: boolean[] = a7;
+          ~~
+!!! error TS2322: Type 'number[]' is not assignable to type 'boolean[]'.
+!!! error TS2322:   Type 'number' is not assignable to type 'boolean'.
+    
+    const ta1: readonly [1] = [1];
+    const ta2: readonly boolean[] = ta1;
+          ~~~
+!!! error TS2322: Type 'readonly [1]' is not assignable to type 'readonly boolean[]'.
+!!! error TS2322:   Type 'number' is not assignable to type 'boolean'.
+    
+    const ta3: readonly [1] = [1];
+    const ta4: number[] = ta3;
+          ~~~
+!!! error TS4104: The type 'readonly [1]' is 'readonly' and cannot be assigned to the mutable type 'number[]'.
+    
+    const ta5: [1] = [1];
+    const ta6: readonly boolean[] = ta5;
+          ~~~
+!!! error TS2322: Type '[1]' is not assignable to type 'readonly boolean[]'.
+!!! error TS2322:   Type 'number' is not assignable to type 'boolean'.
+    
+    const ta7: [1] = [1];
+    const ta8: boolean[] = ta7;
+          ~~~
+!!! error TS2322: Type '[1]' is not assignable to type 'boolean[]'.
+!!! error TS2322:   Type 'number' is not assignable to type 'boolean'.
+    
+    const at1: readonly number[] = [1];
+    const at2: readonly [1] = at1;
+          ~~~
+!!! error TS2322: Type 'readonly number[]' is not assignable to type 'readonly [1]'.
+!!! error TS2322:   Target requires 1 element(s) but source may have fewer.
+    
+    const at3: readonly number[] = [1];
+    const at4: [1] = at3;
+          ~~~
+!!! error TS4104: The type 'readonly number[]' is 'readonly' and cannot be assigned to the mutable type '[1]'.
+    
+    const at5: number[] = [1];
+    const at6: readonly [1] = at5;
+          ~~~
+!!! error TS2322: Type 'number[]' is not assignable to type 'readonly [1]'.
+!!! error TS2322:   Target requires 1 element(s) but source may have fewer.
+    
+    const at7: number[] = [1];
+    const at8: [1] = at7;
+          ~~~
+!!! error TS2322: Type 'number[]' is not assignable to type '[1]'.
+!!! error TS2322:   Target requires 1 element(s) but source may have fewer.
+    

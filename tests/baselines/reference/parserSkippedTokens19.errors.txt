@@ -1,0 +1,7 @@
+tests/cases/conformance/parser/ecmascript5/SkippedTokens/parserSkippedTokens19.ts(1,1): error TS1127: Invalid character.
+
+
+==== tests/cases/conformance/parser/ecmascript5/SkippedTokens/parserSkippedTokens19.ts (1 errors) ====
+    \ declare var v;
+    
+!!! error TS1127: Invalid character.

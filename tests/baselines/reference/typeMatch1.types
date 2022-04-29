@@ -1,0 +1,82 @@
+=== tests/cases/compiler/typeMatch1.ts ===
+interface I { z; }
+>z : any
+
+interface I2 { z; }
+>z : any
+
+var x1: { z: number; f(n: number): string; f(s: string): number; }
+>x1 : { z: number; f(n: number): string; f(s: string): number; }
+>z : number
+>f : { (n: number): string; (s: string): number; }
+>n : number
+>f : { (n: number): string; (s: string): number; }
+>s : string
+
+var x2: { z:number;f:{(n:number):string;(s:string):number;}; } = x1;
+>x2 : { z: number; f: { (n: number): string; (s: string): number; }; }
+>z : number
+>f : { (n: number): string; (s: string): number; }
+>n : number
+>s : string
+>x1 : { z: number; f(n: number): string; f(s: string): number; }
+
+var i:I;
+>i : I
+
+var i2:I2;
+>i2 : I2
+
+var x3:{ z; }= i;
+>x3 : { z: any; }
+>z : any
+>i : I
+
+var x4:{ z; }= i2;
+>x4 : { z: any; }
+>z : any
+>i2 : I2
+
+var x5:I=i2;
+>x5 : I
+>i2 : I2
+
+class C { private x; }
+>C : C
+>x : any
+
+class D { private x; }
+>D : D
+>x : any
+
+var x6=new C();
+>x6 : C
+>new C() : C
+>C : typeof C
+
+var x7=new D();
+>x7 : D
+>new D() : D
+>D : typeof D
+
+x6 = x7;
+>x6 = x7 : D
+>x6 : C
+>x7 : D
+
+x6=C;
+>x6=C : typeof C
+>x6 : C
+>C : typeof C
+
+C==D;
+>C==D : boolean
+>C : typeof C
+>D : typeof D
+
+C==C;
+>C==C : boolean
+>C : typeof C
+>C : typeof C
+
+

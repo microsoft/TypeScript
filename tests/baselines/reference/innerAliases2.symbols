@@ -1,0 +1,44 @@
+=== tests/cases/compiler/innerAliases2.ts ===
+module _provider {
+>_provider : Symbol(_provider, Decl(innerAliases2.ts, 0, 0))
+
+                export class UsefulClass {
+>UsefulClass : Symbol(UsefulClass, Decl(innerAliases2.ts, 0, 18))
+
+                                public foo() {
+>foo : Symbol(UsefulClass.foo, Decl(innerAliases2.ts, 1, 42))
+                                }
+                }
+}
+
+module consumer {
+>consumer : Symbol(consumer, Decl(innerAliases2.ts, 5, 1))
+
+                import provider = _provider;
+>provider : Symbol(provider, Decl(innerAliases2.ts, 7, 17))
+>_provider : Symbol(provider, Decl(innerAliases2.ts, 0, 0))
+                
+                var g:provider.UsefulClass= null;
+>g : Symbol(g, Decl(innerAliases2.ts, 10, 19))
+>provider : Symbol(provider, Decl(innerAliases2.ts, 7, 17))
+>UsefulClass : Symbol(provider.UsefulClass, Decl(innerAliases2.ts, 0, 18))
+                
+                function use():provider.UsefulClass { 
+>use : Symbol(use, Decl(innerAliases2.ts, 10, 49))
+>provider : Symbol(provider, Decl(innerAliases2.ts, 7, 17))
+>UsefulClass : Symbol(provider.UsefulClass, Decl(innerAliases2.ts, 0, 18))
+
+                                var p2:provider.UsefulClass= new provider.UsefulClass();
+>p2 : Symbol(p2, Decl(innerAliases2.ts, 13, 35))
+>provider : Symbol(provider, Decl(innerAliases2.ts, 7, 17))
+>UsefulClass : Symbol(provider.UsefulClass, Decl(innerAliases2.ts, 0, 18))
+>provider.UsefulClass : Symbol(provider.UsefulClass, Decl(innerAliases2.ts, 0, 18))
+>provider : Symbol(provider, Decl(innerAliases2.ts, 7, 17))
+>UsefulClass : Symbol(provider.UsefulClass, Decl(innerAliases2.ts, 0, 18))
+
+                                return p2; 
+>p2 : Symbol(p2, Decl(innerAliases2.ts, 13, 35))
+                }
+}
+
+

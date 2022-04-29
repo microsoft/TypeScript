@@ -1,0 +1,49 @@
+=== tests/cases/conformance/expressions/unaryOperators/plusOperator/plusOperatorWithEnumType.ts ===
+// + operator on enum type
+
+enum ENUM { };
+>ENUM : Symbol(ENUM, Decl(plusOperatorWithEnumType.ts, 0, 0))
+
+enum ENUM1 { A, B, "" };
+>ENUM1 : Symbol(ENUM1, Decl(plusOperatorWithEnumType.ts, 2, 14))
+>A : Symbol(ENUM1.A, Decl(plusOperatorWithEnumType.ts, 3, 12))
+>B : Symbol(ENUM1.B, Decl(plusOperatorWithEnumType.ts, 3, 15))
+>"" : Symbol(ENUM1[""], Decl(plusOperatorWithEnumType.ts, 3, 18))
+
+// enum type var
+var ResultIsNumber1 = +ENUM;
+>ResultIsNumber1 : Symbol(ResultIsNumber1, Decl(plusOperatorWithEnumType.ts, 6, 3))
+>ENUM : Symbol(ENUM, Decl(plusOperatorWithEnumType.ts, 0, 0))
+
+var ResultIsNumber2 = +ENUM1;
+>ResultIsNumber2 : Symbol(ResultIsNumber2, Decl(plusOperatorWithEnumType.ts, 7, 3))
+>ENUM1 : Symbol(ENUM1, Decl(plusOperatorWithEnumType.ts, 2, 14))
+
+// enum type expressions
+var ResultIsNumber3 = +ENUM1["A"];
+>ResultIsNumber3 : Symbol(ResultIsNumber3, Decl(plusOperatorWithEnumType.ts, 10, 3))
+>ENUM1 : Symbol(ENUM1, Decl(plusOperatorWithEnumType.ts, 2, 14))
+>"A" : Symbol(ENUM1.A, Decl(plusOperatorWithEnumType.ts, 3, 12))
+
+var ResultIsNumber4 = +(ENUM[0] + ENUM1["B"]);
+>ResultIsNumber4 : Symbol(ResultIsNumber4, Decl(plusOperatorWithEnumType.ts, 11, 3))
+>ENUM : Symbol(ENUM, Decl(plusOperatorWithEnumType.ts, 0, 0))
+>ENUM1 : Symbol(ENUM1, Decl(plusOperatorWithEnumType.ts, 2, 14))
+>"B" : Symbol(ENUM1.B, Decl(plusOperatorWithEnumType.ts, 3, 15))
+
+// miss assignment operators
++ENUM;
+>ENUM : Symbol(ENUM, Decl(plusOperatorWithEnumType.ts, 0, 0))
+
++ENUM1;
+>ENUM1 : Symbol(ENUM1, Decl(plusOperatorWithEnumType.ts, 2, 14))
+
++ENUM1.B;
+>ENUM1.B : Symbol(ENUM1.B, Decl(plusOperatorWithEnumType.ts, 3, 15))
+>ENUM1 : Symbol(ENUM1, Decl(plusOperatorWithEnumType.ts, 2, 14))
+>B : Symbol(ENUM1.B, Decl(plusOperatorWithEnumType.ts, 3, 15))
+
++ENUM, ENUM1;
+>ENUM : Symbol(ENUM, Decl(plusOperatorWithEnumType.ts, 0, 0))
+>ENUM1 : Symbol(ENUM1, Decl(plusOperatorWithEnumType.ts, 2, 14))
+

@@ -1,0 +1,14 @@
+=== tests/cases/compiler/es6ImportNamedImportNoNamedExports_0.ts ===
+var a = 10;
+>a : Symbol(a, Decl(es6ImportNamedImportNoNamedExports_0.ts, 0, 3))
+
+export = a;
+>a : Symbol(a, Decl(es6ImportNamedImportNoNamedExports_0.ts, 0, 3))
+
+=== tests/cases/compiler/es6ImportNamedImportNoNamedExports_1.ts ===
+import { a } from "./es6ImportNamedImportNoNamedExports_0";
+>a : Symbol(a, Decl(es6ImportNamedImportNoNamedExports_1.ts, 0, 8))
+
+import { a as x } from "./es6ImportNamedImportNoNamedExports_0";
+>x : Symbol(x, Decl(es6ImportNamedImportNoNamedExports_1.ts, 1, 8))
+

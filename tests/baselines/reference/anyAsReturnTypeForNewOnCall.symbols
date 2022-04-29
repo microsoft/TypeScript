@@ -1,0 +1,24 @@
+=== tests/cases/compiler/anyAsReturnTypeForNewOnCall.ts ===
+function Point(x, y) {
+>Point : Symbol(Point, Decl(anyAsReturnTypeForNewOnCall.ts, 0, 0))
+>x : Symbol(x, Decl(anyAsReturnTypeForNewOnCall.ts, 0, 15))
+>y : Symbol(y, Decl(anyAsReturnTypeForNewOnCall.ts, 0, 17))
+
+ this.x = x;
+>x : Symbol(x, Decl(anyAsReturnTypeForNewOnCall.ts, 0, 15))
+
+ this.y = y;
+>y : Symbol(y, Decl(anyAsReturnTypeForNewOnCall.ts, 0, 17))
+
+}
+
+var o = new Point(3, 4);
+>o : Symbol(o, Decl(anyAsReturnTypeForNewOnCall.ts, 8, 3))
+>Point : Symbol(Point, Decl(anyAsReturnTypeForNewOnCall.ts, 0, 0))
+
+var xx = o.x;
+>xx : Symbol(xx, Decl(anyAsReturnTypeForNewOnCall.ts, 10, 3))
+>o : Symbol(o, Decl(anyAsReturnTypeForNewOnCall.ts, 8, 3))
+
+ 
+

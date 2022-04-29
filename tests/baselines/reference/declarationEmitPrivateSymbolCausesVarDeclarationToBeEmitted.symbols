@@ -1,0 +1,14 @@
+=== tests/cases/compiler/declarationEmitPrivateSymbolCausesVarDeclarationToBeEmitted.ts ===
+const _data = Symbol('data');
+>_data : Symbol(_data, Decl(declarationEmitPrivateSymbolCausesVarDeclarationToBeEmitted.ts, 0, 5))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+export class User {
+>User : Symbol(User, Decl(declarationEmitPrivateSymbolCausesVarDeclarationToBeEmitted.ts, 0, 29))
+
+    private [_data] : any;
+>[_data] : Symbol(User[_data], Decl(declarationEmitPrivateSymbolCausesVarDeclarationToBeEmitted.ts, 2, 19))
+>_data : Symbol(_data, Decl(declarationEmitPrivateSymbolCausesVarDeclarationToBeEmitted.ts, 0, 5))
+
+};
+

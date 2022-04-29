@@ -1,0 +1,15 @@
+=== tests/cases/compiler/unreachable.js ===
+function unreachable() {
+>unreachable : Symbol(unreachable, Decl(unreachable.js, 0, 0))
+
+    return f();
+>f : Symbol(f, Decl(unreachable.js, 3, 13))
+
+    return 2;
+    return 3;
+    function f() {}
+>f : Symbol(f, Decl(unreachable.js, 3, 13))
+
+    return 4;
+}
+

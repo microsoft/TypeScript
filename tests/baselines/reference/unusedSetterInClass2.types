@@ -1,0 +1,20 @@
+=== tests/cases/compiler/unusedSetterInClass2.ts ===
+// Unlike everything else, a setter without a getter is used by a write access.
+class Employee {
+>Employee : Employee
+
+    private set p(_: number) {}
+>p : number
+>_ : number
+
+    m() {
+>m : () => void
+
+        this.p = 0;
+>this.p = 0 : 0
+>this.p : number
+>this : this
+>p : number
+>0 : 0
+    }
+}

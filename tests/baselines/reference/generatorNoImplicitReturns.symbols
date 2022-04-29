@@ -1,0 +1,15 @@
+=== tests/cases/conformance/es6/yieldExpressions/generatorNoImplicitReturns.ts ===
+ 
+function* testGenerator () { 
+>testGenerator : Symbol(testGenerator, Decl(generatorNoImplicitReturns.ts, 0, 0))
+
+  if (Math.random() > 0.5) { 
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+
+      return; 
+  } 
+  yield 'hello'; 
+}
+

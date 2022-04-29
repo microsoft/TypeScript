@@ -1,0 +1,9 @@
+=== tests/cases/compiler/exportAsNamespace.d.ts ===
+// issue: https://github.com/Microsoft/TypeScript/issues/11545
+
+export var X;
+>X : Symbol(X, Decl(exportAsNamespace.d.ts, 2, 10))
+
+export as namespace N
+>N : Symbol(N, Decl(exportAsNamespace.d.ts, 2, 13))
+

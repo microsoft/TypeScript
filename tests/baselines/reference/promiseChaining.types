@@ -1,0 +1,53 @@
+=== tests/cases/compiler/promiseChaining.ts ===
+class Chain<T> {
+>Chain : Chain<T>
+
+    constructor(public value: T) { }
+>value : T
+
+    then<S>(cb: (x: T) => S): Chain<S> {
+>then : <S>(cb: (x: T) => S) => Chain<S>
+>cb : (x: T) => S
+>x : T
+
+        var result = cb(this.value);
+>result : S
+>cb(this.value) : S
+>cb : (x: T) => S
+>this.value : T
+>this : this
+>value : T
+
+        // should get a fresh type parameter which each then call
+        var z = this.then(x => result)/*S*/.then(x => "abc")/*string*/.then(x => x.length)/*number*/; // No error
+>z : Chain<number>
+>this.then(x => result)/*S*/.then(x => "abc")/*string*/.then(x => x.length) : Chain<number>
+>this.then(x => result)/*S*/.then(x => "abc")/*string*/.then : <S>(cb: (x: string) => S) => Chain<S>
+>this.then(x => result)/*S*/.then(x => "abc") : Chain<string>
+>this.then(x => result)/*S*/.then : <S>(cb: (x: S) => S) => Chain<S>
+>this.then(x => result) : Chain<S>
+>this.then : <S>(cb: (x: T) => S) => Chain<S>
+>this : this
+>then : <S>(cb: (x: T) => S) => Chain<S>
+>x => result : (x: T) => S
+>x : T
+>result : S
+>then : <S>(cb: (x: S) => S) => Chain<S>
+>x => "abc" : (x: S) => string
+>x : S
+>"abc" : "abc"
+>then : <S>(cb: (x: string) => S) => Chain<S>
+>x => x.length : (x: string) => number
+>x : string
+>x.length : number
+>x : string
+>length : number
+
+        return new Chain(result);
+>new Chain(result) : Chain<S>
+>Chain : typeof Chain
+>result : S
+    }
+}
+
+

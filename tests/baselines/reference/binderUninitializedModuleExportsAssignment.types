@@ -1,0 +1,16 @@
+=== tests/cases/conformance/salsa/loop.js ===
+var loop1 = loop2;
+>loop1 : any
+>loop2 : any
+
+var loop2 = loop1;
+>loop2 : any
+>loop1 : any
+
+module.exports = loop2;
+>module.exports = loop2 : any
+>module.exports : any
+>module : { exports: any; }
+>exports : any
+>loop2 : any
+

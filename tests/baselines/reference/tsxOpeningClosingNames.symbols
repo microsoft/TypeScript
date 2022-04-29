@@ -1,0 +1,33 @@
+=== tests/cases/conformance/jsx/file.tsx ===
+declare module JSX {
+>JSX : Symbol(JSX, Decl(file.tsx, 0, 0))
+
+	interface Element { }
+>Element : Symbol(Element, Decl(file.tsx, 0, 20))
+}
+
+declare module A.B.C {
+>A : Symbol(A, Decl(file.tsx, 2, 1))
+>B : Symbol(B, Decl(file.tsx, 4, 17))
+>C : Symbol(C, Decl(file.tsx, 4, 19))
+
+  var D: any;
+>D : Symbol(D, Decl(file.tsx, 5, 5))
+}
+
+<A.B.C.D>foo</A . B . C.D>
+>A.B.C.D : Symbol(A.B.C.D, Decl(file.tsx, 5, 5))
+>A.B.C : Symbol(A.B.C, Decl(file.tsx, 4, 19))
+>A.B : Symbol(A.B, Decl(file.tsx, 4, 17))
+>A : Symbol(A, Decl(file.tsx, 2, 1))
+>B : Symbol(A.B, Decl(file.tsx, 4, 17))
+>C : Symbol(A.B.C, Decl(file.tsx, 4, 19))
+>D : Symbol(A.B.C.D, Decl(file.tsx, 5, 5))
+>A . B . C.D : Symbol(A.B.C.D, Decl(file.tsx, 5, 5))
+>A . B . C : Symbol(A.B.C, Decl(file.tsx, 4, 19))
+>A . B : Symbol(A.B, Decl(file.tsx, 4, 17))
+>A : Symbol(A, Decl(file.tsx, 2, 1))
+>B : Symbol(A.B, Decl(file.tsx, 4, 17))
+>C : Symbol(A.B.C, Decl(file.tsx, 4, 19))
+>D : Symbol(A.B.C.D, Decl(file.tsx, 5, 5))
+

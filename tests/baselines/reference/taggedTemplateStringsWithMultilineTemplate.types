@@ -1,0 +1,14 @@
+=== tests/cases/compiler/taggedTemplateStringsWithMultilineTemplate.ts ===
+function f(...args: any[]): void {
+>f : (...args: any[]) => void
+>args : any[]
+}
+
+f `
+>f `\` : void
+>f : (...args: any[]) => void
+>`\` : "\n\n"
+
+\
+
+`;

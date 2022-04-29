@@ -1,0 +1,9 @@
+tests/cases/conformance/parser/ecmascript5/ConstructorDeclarations/parserConstructorDeclaration2.ts(2,3): error TS1089: 'static' modifier cannot appear on a constructor declaration.
+
+
+==== tests/cases/conformance/parser/ecmascript5/ConstructorDeclarations/parserConstructorDeclaration2.ts (1 errors) ====
+    class C {
+      static constructor() { }
+      ~~~~~~
+!!! error TS1089: 'static' modifier cannot appear on a constructor declaration.
+    }

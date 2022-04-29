@@ -1,0 +1,27 @@
+tests/cases/compiler/genericRestArgs.ts(2,26): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+tests/cases/compiler/genericRestArgs.ts(5,34): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+tests/cases/compiler/genericRestArgs.ts(10,29): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+tests/cases/compiler/genericRestArgs.ts(12,30): error TS2345: Argument of type 'number' is not assignable to parameter of type 'any[]'.
+
+
+==== tests/cases/compiler/genericRestArgs.ts (4 errors) ====
+    function makeArrayG<T>(...items: T[]): T[] { return items; }
+    var a1Ga = makeArrayG(1, ""); // no error
+                             ~~
+!!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+    var a1Gb = makeArrayG<any>(1, ""); 
+    var a1Gc = makeArrayG<Object>(1, ""); 
+    var a1Gd = makeArrayG<number>(1, ""); // error
+                                     ~~
+!!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+    
+    function makeArrayGOpt<T>(item1?: T, item2?: T, item3?: T) {
+        return [item1, item2, item3];
+    }
+    var a2Ga = makeArrayGOpt(1, ""); 
+                                ~~
+!!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+    var a2Gb = makeArrayG<any>(1, "");
+    var a2Gc = makeArrayG<any[]>(1, ""); // error
+                                 ~
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'any[]'.

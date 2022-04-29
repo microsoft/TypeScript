@@ -1,0 +1,5 @@
+=== tests/cases/compiler/ParameterList13.ts ===
+interface I {
+    new (public x);
+>x : any
+}

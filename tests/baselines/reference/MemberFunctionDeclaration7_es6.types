@@ -1,0 +1,7 @@
+=== tests/cases/conformance/es6/memberFunctionDeclarations/MemberFunctionDeclaration7_es6.ts ===
+class C {
+>C : C
+
+   *foo<T>() { }
+>foo : <T>() => Generator<never, void, unknown>
+}

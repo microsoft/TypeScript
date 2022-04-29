@@ -1,0 +1,54 @@
+=== tests/cases/compiler/file1.ts ===
+declare class Promise { }
+>Promise : Promise
+
+declare function Foo(): void;
+>Foo : () => void
+
+declare class C {}
+>C : C
+
+declare enum E {X = 1};
+>E : E
+>X : E.X
+>1 : 1
+
+export var promise = Promise;
+>promise : typeof Promise
+>Promise : typeof Promise
+
+export var foo = Foo;
+>foo : () => void
+>Foo : () => void
+
+export var c = C;
+>c : typeof C
+>C : typeof C
+
+export var e = E;
+>e : typeof E
+>E : typeof E
+
+=== tests/cases/compiler/file2.ts ===
+export declare function foo();
+>foo : () => any
+
+=== tests/cases/compiler/file3.ts ===
+export declare class C {}
+>C : C
+
+=== tests/cases/compiler/file4.ts ===
+export declare var v: number;
+>v : number
+
+=== tests/cases/compiler/file5.ts ===
+export declare enum E {X = 1}
+>E : E
+>X : E.X
+>1 : 1
+
+=== tests/cases/compiler/file6.ts ===
+export declare module M { var v: number; }
+>M : typeof M
+>v : number
+

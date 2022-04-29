@@ -1,0 +1,39 @@
+=== tests/cases/conformance/classes/constructorDeclarations/constructorWithExpressionLessReturn.ts ===
+class C {
+>C : C
+
+    constructor() {
+        return;
+    }
+}
+
+class D {
+>D : D
+
+    x: number;
+>x : number
+
+    constructor() {
+        return;
+    }
+}
+
+class E {
+>E : E
+
+    constructor(public x: number) {
+>x : number
+
+        return;
+    }
+}
+
+class F<T> {
+>F : F<T>
+
+    constructor(public x: T) {
+>x : T
+
+        return;
+    }
+}

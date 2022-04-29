@@ -1,0 +1,93 @@
+=== tests/cases/compiler/mergedDeclarations3.ts ===
+module M {
+>M : Symbol(M, Decl(mergedDeclarations3.ts, 0, 0), Decl(mergedDeclarations3.ts, 4, 1), Decl(mergedDeclarations3.ts, 10, 21), Decl(mergedDeclarations3.ts, 15, 1), Decl(mergedDeclarations3.ts, 21, 1) ... and 1 more)
+
+ export enum Color {
+>Color : Symbol(Color, Decl(mergedDeclarations3.ts, 0, 10), Decl(mergedDeclarations3.ts, 5, 10))
+
+   Red, Green
+>Red : Symbol(Color.Red, Decl(mergedDeclarations3.ts, 1, 20))
+>Green : Symbol(Color.Green, Decl(mergedDeclarations3.ts, 2, 7))
+ }
+}
+module M {
+>M : Symbol(M, Decl(mergedDeclarations3.ts, 0, 0), Decl(mergedDeclarations3.ts, 4, 1), Decl(mergedDeclarations3.ts, 10, 21), Decl(mergedDeclarations3.ts, 15, 1), Decl(mergedDeclarations3.ts, 21, 1) ... and 1 more)
+
+ export module Color {
+>Color : Symbol(Color, Decl(mergedDeclarations3.ts, 0, 10), Decl(mergedDeclarations3.ts, 5, 10))
+
+   export var Blue = 4;
+>Blue : Symbol(Blue, Decl(mergedDeclarations3.ts, 7, 13))
+  }
+}
+var p = M.Color.Blue; // ok
+>p : Symbol(p, Decl(mergedDeclarations3.ts, 10, 3))
+>M.Color.Blue : Symbol(M.Color.Blue, Decl(mergedDeclarations3.ts, 7, 13))
+>M.Color : Symbol(M.Color, Decl(mergedDeclarations3.ts, 0, 10), Decl(mergedDeclarations3.ts, 5, 10))
+>M : Symbol(M, Decl(mergedDeclarations3.ts, 0, 0), Decl(mergedDeclarations3.ts, 4, 1), Decl(mergedDeclarations3.ts, 10, 21), Decl(mergedDeclarations3.ts, 15, 1), Decl(mergedDeclarations3.ts, 21, 1) ... and 1 more)
+>Color : Symbol(M.Color, Decl(mergedDeclarations3.ts, 0, 10), Decl(mergedDeclarations3.ts, 5, 10))
+>Blue : Symbol(M.Color.Blue, Decl(mergedDeclarations3.ts, 7, 13))
+
+module M {
+>M : Symbol(M, Decl(mergedDeclarations3.ts, 0, 0), Decl(mergedDeclarations3.ts, 4, 1), Decl(mergedDeclarations3.ts, 10, 21), Decl(mergedDeclarations3.ts, 15, 1), Decl(mergedDeclarations3.ts, 21, 1) ... and 1 more)
+
+    export function foo() {
+>foo : Symbol(foo, Decl(mergedDeclarations3.ts, 12, 10), Decl(mergedDeclarations3.ts, 23, 10))
+    }
+}
+
+module M {
+>M : Symbol(M, Decl(mergedDeclarations3.ts, 0, 0), Decl(mergedDeclarations3.ts, 4, 1), Decl(mergedDeclarations3.ts, 10, 21), Decl(mergedDeclarations3.ts, 15, 1), Decl(mergedDeclarations3.ts, 21, 1) ... and 1 more)
+
+    module foo {
+>foo : Symbol(foo, Decl(mergedDeclarations3.ts, 17, 10))
+
+        export var x = 1;
+>x : Symbol(x, Decl(mergedDeclarations3.ts, 19, 18))
+    }
+}
+
+module M {
+>M : Symbol(M, Decl(mergedDeclarations3.ts, 0, 0), Decl(mergedDeclarations3.ts, 4, 1), Decl(mergedDeclarations3.ts, 10, 21), Decl(mergedDeclarations3.ts, 15, 1), Decl(mergedDeclarations3.ts, 21, 1) ... and 1 more)
+
+    export module foo {
+>foo : Symbol(foo, Decl(mergedDeclarations3.ts, 12, 10), Decl(mergedDeclarations3.ts, 23, 10))
+
+        export var y = 2
+>y : Symbol(y, Decl(mergedDeclarations3.ts, 25, 18))
+    }
+}
+
+module M {
+>M : Symbol(M, Decl(mergedDeclarations3.ts, 0, 0), Decl(mergedDeclarations3.ts, 4, 1), Decl(mergedDeclarations3.ts, 10, 21), Decl(mergedDeclarations3.ts, 15, 1), Decl(mergedDeclarations3.ts, 21, 1) ... and 1 more)
+
+    module foo {
+>foo : Symbol(foo, Decl(mergedDeclarations3.ts, 29, 10))
+
+        export var z = 1;
+>z : Symbol(z, Decl(mergedDeclarations3.ts, 31, 18))
+    }
+}
+
+M.foo() // ok
+>M.foo : Symbol(M.foo, Decl(mergedDeclarations3.ts, 12, 10), Decl(mergedDeclarations3.ts, 23, 10))
+>M : Symbol(M, Decl(mergedDeclarations3.ts, 0, 0), Decl(mergedDeclarations3.ts, 4, 1), Decl(mergedDeclarations3.ts, 10, 21), Decl(mergedDeclarations3.ts, 15, 1), Decl(mergedDeclarations3.ts, 21, 1) ... and 1 more)
+>foo : Symbol(M.foo, Decl(mergedDeclarations3.ts, 12, 10), Decl(mergedDeclarations3.ts, 23, 10))
+
+M.foo.x // error
+>M.foo : Symbol(M.foo, Decl(mergedDeclarations3.ts, 12, 10), Decl(mergedDeclarations3.ts, 23, 10))
+>M : Symbol(M, Decl(mergedDeclarations3.ts, 0, 0), Decl(mergedDeclarations3.ts, 4, 1), Decl(mergedDeclarations3.ts, 10, 21), Decl(mergedDeclarations3.ts, 15, 1), Decl(mergedDeclarations3.ts, 21, 1) ... and 1 more)
+>foo : Symbol(M.foo, Decl(mergedDeclarations3.ts, 12, 10), Decl(mergedDeclarations3.ts, 23, 10))
+
+M.foo.y // ok
+>M.foo.y : Symbol(M.foo.y, Decl(mergedDeclarations3.ts, 25, 18))
+>M.foo : Symbol(M.foo, Decl(mergedDeclarations3.ts, 12, 10), Decl(mergedDeclarations3.ts, 23, 10))
+>M : Symbol(M, Decl(mergedDeclarations3.ts, 0, 0), Decl(mergedDeclarations3.ts, 4, 1), Decl(mergedDeclarations3.ts, 10, 21), Decl(mergedDeclarations3.ts, 15, 1), Decl(mergedDeclarations3.ts, 21, 1) ... and 1 more)
+>foo : Symbol(M.foo, Decl(mergedDeclarations3.ts, 12, 10), Decl(mergedDeclarations3.ts, 23, 10))
+>y : Symbol(M.foo.y, Decl(mergedDeclarations3.ts, 25, 18))
+
+M.foo.z // error
+>M.foo : Symbol(M.foo, Decl(mergedDeclarations3.ts, 12, 10), Decl(mergedDeclarations3.ts, 23, 10))
+>M : Symbol(M, Decl(mergedDeclarations3.ts, 0, 0), Decl(mergedDeclarations3.ts, 4, 1), Decl(mergedDeclarations3.ts, 10, 21), Decl(mergedDeclarations3.ts, 15, 1), Decl(mergedDeclarations3.ts, 21, 1) ... and 1 more)
+>foo : Symbol(M.foo, Decl(mergedDeclarations3.ts, 12, 10), Decl(mergedDeclarations3.ts, 23, 10))
+

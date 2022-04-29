@@ -1,0 +1,8 @@
+=== tests/cases/compiler/topLevelLambda3.ts ===
+var f = () => {this.window;}
+>f : () => void
+>() => {this.window;} : () => void
+>this.window : Window & typeof globalThis
+>this : typeof globalThis
+>window : Window & typeof globalThis
+

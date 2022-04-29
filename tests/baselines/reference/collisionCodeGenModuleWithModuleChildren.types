@@ -1,0 +1,93 @@
+=== tests/cases/compiler/collisionCodeGenModuleWithModuleChildren.ts ===
+module M {
+>M : typeof M
+
+    export var x = 3;
+>x : number
+>3 : 3
+
+    module m1 {
+>m1 : typeof m1
+
+        var M = 10;
+>M : number
+>10 : 10
+
+        var p = x;
+>p : number
+>x : number
+    }
+}
+
+module M {
+>M : typeof M
+
+    module m2 {
+>m2 : typeof m2
+
+        class M {
+>M : M
+        }
+        var p = x;
+>p : number
+>x : number
+
+        var p2 = new M();
+>p2 : M
+>new M() : M
+>M : typeof M
+    }
+}
+
+module M {
+>M : typeof M
+
+    module m3 {
+>m3 : typeof m3
+
+        function M() {
+>M : () => void
+        }
+        var p = x;
+>p : number
+>x : number
+
+        var p2 = M();
+>p2 : void
+>M() : void
+>M : () => void
+    }
+}
+
+module M { // shouldnt be _M
+>M : typeof M
+
+    module m3 {
+>m3 : typeof m3
+
+        interface M {
+        }
+        var p = x;
+>p : number
+>x : number
+
+        var p2: M;
+>p2 : M
+    }
+}
+
+module M {
+>M : typeof M
+
+    module m4 {
+>m4 : typeof m4
+
+        module M {
+>M : typeof M
+
+            var p = x;
+>p : number
+>x : number
+        }
+    }
+}

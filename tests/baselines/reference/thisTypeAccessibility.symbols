@@ -1,0 +1,260 @@
+=== tests/cases/conformance/types/thisType/thisTypeAccessibility.ts ===
+class MyClass {
+>MyClass : Symbol(MyClass, Decl(thisTypeAccessibility.ts, 0, 0), Decl(thisTypeAccessibility.ts, 7, 1))
+
+    private p: number = 123;
+>p : Symbol(MyClass.p, Decl(thisTypeAccessibility.ts, 0, 15))
+
+    protected pp: number = 123;
+>pp : Symbol(MyClass.pp, Decl(thisTypeAccessibility.ts, 1, 28))
+
+    public ppp: number = 123;
+>ppp : Symbol(MyClass.ppp, Decl(thisTypeAccessibility.ts, 2, 31))
+
+    private static sp: number = 123;
+>sp : Symbol(MyClass.sp, Decl(thisTypeAccessibility.ts, 3, 29))
+
+    protected static spp: number = 123;
+>spp : Symbol(MyClass.spp, Decl(thisTypeAccessibility.ts, 4, 36))
+
+    public static sppp: number = 123;
+>sppp : Symbol(MyClass.sppp, Decl(thisTypeAccessibility.ts, 5, 39))
+}
+
+interface MyClass {
+>MyClass : Symbol(MyClass, Decl(thisTypeAccessibility.ts, 0, 0), Decl(thisTypeAccessibility.ts, 7, 1))
+
+    extension1(p: number): void;
+>extension1 : Symbol(MyClass.extension1, Decl(thisTypeAccessibility.ts, 9, 19))
+>p : Symbol(p, Decl(thisTypeAccessibility.ts, 10, 15))
+
+    extension2(p: number): void;
+>extension2 : Symbol(MyClass.extension2, Decl(thisTypeAccessibility.ts, 10, 32))
+>p : Symbol(p, Decl(thisTypeAccessibility.ts, 11, 15))
+
+    extension3(p: number): void;
+>extension3 : Symbol(MyClass.extension3, Decl(thisTypeAccessibility.ts, 11, 32))
+>p : Symbol(p, Decl(thisTypeAccessibility.ts, 12, 15))
+}
+
+class MyGenericClass<T> {
+>MyGenericClass : Symbol(MyGenericClass, Decl(thisTypeAccessibility.ts, 13, 1))
+>T : Symbol(T, Decl(thisTypeAccessibility.ts, 15, 21))
+
+    private p: T;
+>p : Symbol(MyGenericClass.p, Decl(thisTypeAccessibility.ts, 15, 25))
+>T : Symbol(T, Decl(thisTypeAccessibility.ts, 15, 21))
+
+    protected pp: T;
+>pp : Symbol(MyGenericClass.pp, Decl(thisTypeAccessibility.ts, 16, 17))
+>T : Symbol(T, Decl(thisTypeAccessibility.ts, 15, 21))
+
+    public ppp: T;
+>ppp : Symbol(MyGenericClass.ppp, Decl(thisTypeAccessibility.ts, 17, 20))
+>T : Symbol(T, Decl(thisTypeAccessibility.ts, 15, 21))
+
+    private static sp: number;
+>sp : Symbol(MyGenericClass.sp, Decl(thisTypeAccessibility.ts, 18, 18))
+
+    protected static spp: number;
+>spp : Symbol(MyGenericClass.spp, Decl(thisTypeAccessibility.ts, 19, 30))
+
+    public static sppp: number;
+>sppp : Symbol(MyGenericClass.sppp, Decl(thisTypeAccessibility.ts, 20, 33))
+}
+
+MyClass.prototype.extension1 = function (this: MyClass, p: number) { 
+>MyClass.prototype.extension1 : Symbol(MyClass.extension1, Decl(thisTypeAccessibility.ts, 9, 19))
+>MyClass.prototype : Symbol(MyClass.prototype)
+>MyClass : Symbol(MyClass, Decl(thisTypeAccessibility.ts, 0, 0), Decl(thisTypeAccessibility.ts, 7, 1))
+>prototype : Symbol(MyClass.prototype)
+>extension1 : Symbol(MyClass.extension1, Decl(thisTypeAccessibility.ts, 9, 19))
+>this : Symbol(this, Decl(thisTypeAccessibility.ts, 24, 41))
+>MyClass : Symbol(MyClass, Decl(thisTypeAccessibility.ts, 0, 0), Decl(thisTypeAccessibility.ts, 7, 1))
+>p : Symbol(p, Decl(thisTypeAccessibility.ts, 24, 55))
+
+    this.p = p;
+>this.p : Symbol(MyClass.p, Decl(thisTypeAccessibility.ts, 0, 15))
+>this : Symbol(this, Decl(thisTypeAccessibility.ts, 24, 41))
+>p : Symbol(MyClass.p, Decl(thisTypeAccessibility.ts, 0, 15))
+>p : Symbol(p, Decl(thisTypeAccessibility.ts, 24, 55))
+
+    this.pp = p;
+>this.pp : Symbol(MyClass.pp, Decl(thisTypeAccessibility.ts, 1, 28))
+>this : Symbol(this, Decl(thisTypeAccessibility.ts, 24, 41))
+>pp : Symbol(MyClass.pp, Decl(thisTypeAccessibility.ts, 1, 28))
+>p : Symbol(p, Decl(thisTypeAccessibility.ts, 24, 55))
+
+    this.ppp = p;
+>this.ppp : Symbol(MyClass.ppp, Decl(thisTypeAccessibility.ts, 2, 31))
+>this : Symbol(this, Decl(thisTypeAccessibility.ts, 24, 41))
+>ppp : Symbol(MyClass.ppp, Decl(thisTypeAccessibility.ts, 2, 31))
+>p : Symbol(p, Decl(thisTypeAccessibility.ts, 24, 55))
+
+    MyClass.sp = p;
+>MyClass.sp : Symbol(MyClass.sp, Decl(thisTypeAccessibility.ts, 3, 29))
+>MyClass : Symbol(MyClass, Decl(thisTypeAccessibility.ts, 0, 0), Decl(thisTypeAccessibility.ts, 7, 1))
+>sp : Symbol(MyClass.sp, Decl(thisTypeAccessibility.ts, 3, 29))
+>p : Symbol(p, Decl(thisTypeAccessibility.ts, 24, 55))
+
+    MyClass.spp = p;
+>MyClass.spp : Symbol(MyClass.spp, Decl(thisTypeAccessibility.ts, 4, 36))
+>MyClass : Symbol(MyClass, Decl(thisTypeAccessibility.ts, 0, 0), Decl(thisTypeAccessibility.ts, 7, 1))
+>spp : Symbol(MyClass.spp, Decl(thisTypeAccessibility.ts, 4, 36))
+>p : Symbol(p, Decl(thisTypeAccessibility.ts, 24, 55))
+
+    MyClass.sppp = p;
+>MyClass.sppp : Symbol(MyClass.sppp, Decl(thisTypeAccessibility.ts, 5, 39))
+>MyClass : Symbol(MyClass, Decl(thisTypeAccessibility.ts, 0, 0), Decl(thisTypeAccessibility.ts, 7, 1))
+>sppp : Symbol(MyClass.sppp, Decl(thisTypeAccessibility.ts, 5, 39))
+>p : Symbol(p, Decl(thisTypeAccessibility.ts, 24, 55))
+}
+
+MyClass.prototype.extension2 = function<T extends MyClass> (this: T, p: number) { 
+>MyClass.prototype.extension2 : Symbol(MyClass.extension2, Decl(thisTypeAccessibility.ts, 10, 32))
+>MyClass.prototype : Symbol(MyClass.prototype)
+>MyClass : Symbol(MyClass, Decl(thisTypeAccessibility.ts, 0, 0), Decl(thisTypeAccessibility.ts, 7, 1))
+>prototype : Symbol(MyClass.prototype)
+>extension2 : Symbol(MyClass.extension2, Decl(thisTypeAccessibility.ts, 10, 32))
+>T : Symbol(T, Decl(thisTypeAccessibility.ts, 33, 40))
+>MyClass : Symbol(MyClass, Decl(thisTypeAccessibility.ts, 0, 0), Decl(thisTypeAccessibility.ts, 7, 1))
+>this : Symbol(this, Decl(thisTypeAccessibility.ts, 33, 60))
+>T : Symbol(T, Decl(thisTypeAccessibility.ts, 33, 40))
+>p : Symbol(p, Decl(thisTypeAccessibility.ts, 33, 68))
+
+    this.p = p;
+>this.p : Symbol(MyClass.p, Decl(thisTypeAccessibility.ts, 0, 15))
+>this : Symbol(this, Decl(thisTypeAccessibility.ts, 33, 60))
+>p : Symbol(MyClass.p, Decl(thisTypeAccessibility.ts, 0, 15))
+>p : Symbol(p, Decl(thisTypeAccessibility.ts, 33, 68))
+
+    this.pp = p;
+>this.pp : Symbol(MyClass.pp, Decl(thisTypeAccessibility.ts, 1, 28))
+>this : Symbol(this, Decl(thisTypeAccessibility.ts, 33, 60))
+>pp : Symbol(MyClass.pp, Decl(thisTypeAccessibility.ts, 1, 28))
+>p : Symbol(p, Decl(thisTypeAccessibility.ts, 33, 68))
+
+    this.ppp = p;
+>this.ppp : Symbol(MyClass.ppp, Decl(thisTypeAccessibility.ts, 2, 31))
+>this : Symbol(this, Decl(thisTypeAccessibility.ts, 33, 60))
+>ppp : Symbol(MyClass.ppp, Decl(thisTypeAccessibility.ts, 2, 31))
+>p : Symbol(p, Decl(thisTypeAccessibility.ts, 33, 68))
+
+    MyClass.sp = p;
+>MyClass.sp : Symbol(MyClass.sp, Decl(thisTypeAccessibility.ts, 3, 29))
+>MyClass : Symbol(MyClass, Decl(thisTypeAccessibility.ts, 0, 0), Decl(thisTypeAccessibility.ts, 7, 1))
+>sp : Symbol(MyClass.sp, Decl(thisTypeAccessibility.ts, 3, 29))
+>p : Symbol(p, Decl(thisTypeAccessibility.ts, 33, 68))
+
+    MyClass.spp = p;
+>MyClass.spp : Symbol(MyClass.spp, Decl(thisTypeAccessibility.ts, 4, 36))
+>MyClass : Symbol(MyClass, Decl(thisTypeAccessibility.ts, 0, 0), Decl(thisTypeAccessibility.ts, 7, 1))
+>spp : Symbol(MyClass.spp, Decl(thisTypeAccessibility.ts, 4, 36))
+>p : Symbol(p, Decl(thisTypeAccessibility.ts, 33, 68))
+
+    MyClass.sppp = p;
+>MyClass.sppp : Symbol(MyClass.sppp, Decl(thisTypeAccessibility.ts, 5, 39))
+>MyClass : Symbol(MyClass, Decl(thisTypeAccessibility.ts, 0, 0), Decl(thisTypeAccessibility.ts, 7, 1))
+>sppp : Symbol(MyClass.sppp, Decl(thisTypeAccessibility.ts, 5, 39))
+>p : Symbol(p, Decl(thisTypeAccessibility.ts, 33, 68))
+}
+
+function extension3<T extends MyClass> (this: T, p: number) { 
+>extension3 : Symbol(extension3, Decl(thisTypeAccessibility.ts, 40, 1))
+>T : Symbol(T, Decl(thisTypeAccessibility.ts, 42, 20))
+>MyClass : Symbol(MyClass, Decl(thisTypeAccessibility.ts, 0, 0), Decl(thisTypeAccessibility.ts, 7, 1))
+>this : Symbol(this, Decl(thisTypeAccessibility.ts, 42, 40))
+>T : Symbol(T, Decl(thisTypeAccessibility.ts, 42, 20))
+>p : Symbol(p, Decl(thisTypeAccessibility.ts, 42, 48))
+
+    this.p = p;
+>this.p : Symbol(MyClass.p, Decl(thisTypeAccessibility.ts, 0, 15))
+>this : Symbol(this, Decl(thisTypeAccessibility.ts, 42, 40))
+>p : Symbol(MyClass.p, Decl(thisTypeAccessibility.ts, 0, 15))
+>p : Symbol(p, Decl(thisTypeAccessibility.ts, 42, 48))
+
+    this.pp = p;
+>this.pp : Symbol(MyClass.pp, Decl(thisTypeAccessibility.ts, 1, 28))
+>this : Symbol(this, Decl(thisTypeAccessibility.ts, 42, 40))
+>pp : Symbol(MyClass.pp, Decl(thisTypeAccessibility.ts, 1, 28))
+>p : Symbol(p, Decl(thisTypeAccessibility.ts, 42, 48))
+
+    this.ppp = p;
+>this.ppp : Symbol(MyClass.ppp, Decl(thisTypeAccessibility.ts, 2, 31))
+>this : Symbol(this, Decl(thisTypeAccessibility.ts, 42, 40))
+>ppp : Symbol(MyClass.ppp, Decl(thisTypeAccessibility.ts, 2, 31))
+>p : Symbol(p, Decl(thisTypeAccessibility.ts, 42, 48))
+
+    MyClass.sp = p;
+>MyClass.sp : Symbol(MyClass.sp, Decl(thisTypeAccessibility.ts, 3, 29))
+>MyClass : Symbol(MyClass, Decl(thisTypeAccessibility.ts, 0, 0), Decl(thisTypeAccessibility.ts, 7, 1))
+>sp : Symbol(MyClass.sp, Decl(thisTypeAccessibility.ts, 3, 29))
+>p : Symbol(p, Decl(thisTypeAccessibility.ts, 42, 48))
+
+    MyClass.spp = p;
+>MyClass.spp : Symbol(MyClass.spp, Decl(thisTypeAccessibility.ts, 4, 36))
+>MyClass : Symbol(MyClass, Decl(thisTypeAccessibility.ts, 0, 0), Decl(thisTypeAccessibility.ts, 7, 1))
+>spp : Symbol(MyClass.spp, Decl(thisTypeAccessibility.ts, 4, 36))
+>p : Symbol(p, Decl(thisTypeAccessibility.ts, 42, 48))
+
+    MyClass.sppp = p;
+>MyClass.sppp : Symbol(MyClass.sppp, Decl(thisTypeAccessibility.ts, 5, 39))
+>MyClass : Symbol(MyClass, Decl(thisTypeAccessibility.ts, 0, 0), Decl(thisTypeAccessibility.ts, 7, 1))
+>sppp : Symbol(MyClass.sppp, Decl(thisTypeAccessibility.ts, 5, 39))
+>p : Symbol(p, Decl(thisTypeAccessibility.ts, 42, 48))
+}
+
+MyClass.prototype.extension3 = extension3;
+>MyClass.prototype.extension3 : Symbol(MyClass.extension3, Decl(thisTypeAccessibility.ts, 11, 32))
+>MyClass.prototype : Symbol(MyClass.prototype)
+>MyClass : Symbol(MyClass, Decl(thisTypeAccessibility.ts, 0, 0), Decl(thisTypeAccessibility.ts, 7, 1))
+>prototype : Symbol(MyClass.prototype)
+>extension3 : Symbol(MyClass.extension3, Decl(thisTypeAccessibility.ts, 11, 32))
+>extension3 : Symbol(extension3, Decl(thisTypeAccessibility.ts, 40, 1))
+
+function extension4<T extends number>(this: MyGenericClass<T>, p: T) {
+>extension4 : Symbol(extension4, Decl(thisTypeAccessibility.ts, 51, 42))
+>T : Symbol(T, Decl(thisTypeAccessibility.ts, 53, 20))
+>this : Symbol(this, Decl(thisTypeAccessibility.ts, 53, 38))
+>MyGenericClass : Symbol(MyGenericClass, Decl(thisTypeAccessibility.ts, 13, 1))
+>T : Symbol(T, Decl(thisTypeAccessibility.ts, 53, 20))
+>p : Symbol(p, Decl(thisTypeAccessibility.ts, 53, 62))
+>T : Symbol(T, Decl(thisTypeAccessibility.ts, 53, 20))
+
+    this.p = p;
+>this.p : Symbol(MyGenericClass.p, Decl(thisTypeAccessibility.ts, 15, 25))
+>this : Symbol(this, Decl(thisTypeAccessibility.ts, 53, 38))
+>p : Symbol(MyGenericClass.p, Decl(thisTypeAccessibility.ts, 15, 25))
+>p : Symbol(p, Decl(thisTypeAccessibility.ts, 53, 62))
+
+    this.pp = p;
+>this.pp : Symbol(MyGenericClass.pp, Decl(thisTypeAccessibility.ts, 16, 17))
+>this : Symbol(this, Decl(thisTypeAccessibility.ts, 53, 38))
+>pp : Symbol(MyGenericClass.pp, Decl(thisTypeAccessibility.ts, 16, 17))
+>p : Symbol(p, Decl(thisTypeAccessibility.ts, 53, 62))
+
+    this.ppp = p;
+>this.ppp : Symbol(MyGenericClass.ppp, Decl(thisTypeAccessibility.ts, 17, 20))
+>this : Symbol(this, Decl(thisTypeAccessibility.ts, 53, 38))
+>ppp : Symbol(MyGenericClass.ppp, Decl(thisTypeAccessibility.ts, 17, 20))
+>p : Symbol(p, Decl(thisTypeAccessibility.ts, 53, 62))
+
+    MyGenericClass.sp = p;
+>MyGenericClass.sp : Symbol(MyGenericClass.sp, Decl(thisTypeAccessibility.ts, 18, 18))
+>MyGenericClass : Symbol(MyGenericClass, Decl(thisTypeAccessibility.ts, 13, 1))
+>sp : Symbol(MyGenericClass.sp, Decl(thisTypeAccessibility.ts, 18, 18))
+>p : Symbol(p, Decl(thisTypeAccessibility.ts, 53, 62))
+
+    MyGenericClass.spp = p;
+>MyGenericClass.spp : Symbol(MyGenericClass.spp, Decl(thisTypeAccessibility.ts, 19, 30))
+>MyGenericClass : Symbol(MyGenericClass, Decl(thisTypeAccessibility.ts, 13, 1))
+>spp : Symbol(MyGenericClass.spp, Decl(thisTypeAccessibility.ts, 19, 30))
+>p : Symbol(p, Decl(thisTypeAccessibility.ts, 53, 62))
+
+    MyGenericClass.sppp = p;
+>MyGenericClass.sppp : Symbol(MyGenericClass.sppp, Decl(thisTypeAccessibility.ts, 20, 33))
+>MyGenericClass : Symbol(MyGenericClass, Decl(thisTypeAccessibility.ts, 13, 1))
+>sppp : Symbol(MyGenericClass.sppp, Decl(thisTypeAccessibility.ts, 20, 33))
+>p : Symbol(p, Decl(thisTypeAccessibility.ts, 53, 62))
+}
+

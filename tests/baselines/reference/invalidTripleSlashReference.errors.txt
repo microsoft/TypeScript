@@ -1,0 +1,14 @@
+tests/cases/compiler/invalidTripleSlashReference.ts(1,22): error TS6053: File 'tests/cases/compiler/filedoesnotexist.ts' not found.
+tests/cases/compiler/invalidTripleSlashReference.ts(2,22): error TS6053: File 'tests/cases/compiler/otherdoesnotexist.d.ts' not found.
+
+
+==== tests/cases/compiler/invalidTripleSlashReference.ts (2 errors) ====
+    /// <reference path='filedoesnotexist.ts'/>
+                         ~~~~~~~~~~~~~~~~~~~
+!!! error TS6053: File 'tests/cases/compiler/filedoesnotexist.ts' not found.
+    /// <reference path='otherdoesnotexist.d.ts'/>
+                         ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS6053: File 'tests/cases/compiler/otherdoesnotexist.d.ts' not found.
+    
+    // this test doesn't actually give the errors you want due to the way the compiler reports errors
+    var x = 1;

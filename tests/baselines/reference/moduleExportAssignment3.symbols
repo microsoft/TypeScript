@@ -1,0 +1,21 @@
+=== tests/cases/conformance/salsa/npm.js ===
+var mod = require('./mod')
+>mod : Symbol(mod, Decl(npm.js, 0, 3))
+>require : Symbol(require)
+>'./mod' : Symbol("tests/cases/conformance/salsa/mod", Decl(mod.js, 0, 0))
+
+mod() // should be callable from here too
+>mod : Symbol(mod, Decl(npm.js, 0, 3))
+
+=== tests/cases/conformance/salsa/mod.js ===
+module.exports = function x() { }
+>module.exports : Symbol(module.exports, Decl(mod.js, 0, 0))
+>module : Symbol(export=, Decl(mod.js, 0, 0))
+>exports : Symbol(export=, Decl(mod.js, 0, 0))
+>x : Symbol(x, Decl(mod.js, 0, 16))
+
+module.exports() // should be callable
+>module.exports : Symbol(module.exports, Decl(mod.js, 0, 0))
+>module : Symbol(module, Decl(mod.js, 0, 0))
+>exports : Symbol(module.exports, Decl(mod.js, 0, 0))
+

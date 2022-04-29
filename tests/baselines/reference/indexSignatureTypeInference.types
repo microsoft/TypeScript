@@ -1,0 +1,52 @@
+=== tests/cases/conformance/types/typeRelationships/typeInference/indexSignatureTypeInference.ts ===
+interface NumberMap<T> {
+    [index: number]: T;
+>index : number
+}
+
+interface StringMap<T> {
+    [index: string]: T;
+>index : string
+}
+
+declare function numberMapToArray<T>(object: NumberMap<T>): T[];
+>numberMapToArray : <T>(object: NumberMap<T>) => T[]
+>object : NumberMap<T>
+
+declare function stringMapToArray<T>(object: StringMap<T>): T[];
+>stringMapToArray : <T>(object: StringMap<T>) => T[]
+>object : StringMap<T>
+
+var numberMap: NumberMap<Function>;
+>numberMap : NumberMap<Function>
+
+var stringMap: StringMap<Function>;
+>stringMap : StringMap<Function>
+
+var v1: Function[];
+>v1 : Function[]
+
+var v1 = numberMapToArray(numberMap);  // Ok
+>v1 : Function[]
+>numberMapToArray(numberMap) : Function[]
+>numberMapToArray : <T>(object: NumberMap<T>) => T[]
+>numberMap : NumberMap<Function>
+
+var v1 = numberMapToArray(stringMap);  // Ok
+>v1 : Function[]
+>numberMapToArray(stringMap) : Function[]
+>numberMapToArray : <T>(object: NumberMap<T>) => T[]
+>stringMap : StringMap<Function>
+
+var v1 = stringMapToArray(numberMap);  // Error expected here
+>v1 : Function[]
+>stringMapToArray(numberMap) : unknown[]
+>stringMapToArray : <T>(object: StringMap<T>) => T[]
+>numberMap : NumberMap<Function>
+
+var v1 = stringMapToArray(stringMap);  // Ok
+>v1 : Function[]
+>stringMapToArray(stringMap) : Function[]
+>stringMapToArray : <T>(object: StringMap<T>) => T[]
+>stringMap : StringMap<Function>
+

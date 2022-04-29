@@ -1,0 +1,30 @@
+=== tests/cases/compiler/input.ts ===
+export = exports;
+>exports : exports
+
+declare class exports {
+>exports : exports
+
+    constructor(p: number);
+>p : number
+
+    t: number;
+>t : number
+}
+export class Sub {
+>Sub : Sub
+
+    instance!: {
+>instance : { t: number; }
+
+        t: number;
+>t : number
+
+    };
+}
+declare namespace exports {
+>exports : typeof exports
+
+    export { Sub };
+>Sub : typeof import("tests/cases/compiler/input").Sub
+}

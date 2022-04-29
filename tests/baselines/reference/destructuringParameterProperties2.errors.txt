@@ -1,0 +1,56 @@
+tests/cases/conformance/es6/destructuring/destructuringParameterProperties2.ts(2,36): error TS1187: A parameter property may not be declared using a binding pattern.
+tests/cases/conformance/es6/destructuring/destructuringParameterProperties2.ts(3,59): error TS2339: Property 'b' does not exist on type 'C1'.
+tests/cases/conformance/es6/destructuring/destructuringParameterProperties2.ts(3,83): error TS2339: Property 'c' does not exist on type 'C1'.
+tests/cases/conformance/es6/destructuring/destructuringParameterProperties2.ts(4,18): error TS2339: Property 'a' does not exist on type 'C1'.
+tests/cases/conformance/es6/destructuring/destructuringParameterProperties2.ts(9,21): error TS2339: Property 'a' does not exist on type 'C1'.
+tests/cases/conformance/es6/destructuring/destructuringParameterProperties2.ts(13,21): error TS2339: Property 'b' does not exist on type 'C1'.
+tests/cases/conformance/es6/destructuring/destructuringParameterProperties2.ts(17,21): error TS2339: Property 'c' does not exist on type 'C1'.
+tests/cases/conformance/es6/destructuring/destructuringParameterProperties2.ts(21,42): error TS2322: Type 'string' is not assignable to type 'boolean'.
+
+
+==== tests/cases/conformance/es6/destructuring/destructuringParameterProperties2.ts (8 errors) ====
+    class C1 {
+        constructor(private k: number, private [a, b, c]: [number, string, boolean]) {
+                                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1187: A parameter property may not be declared using a binding pattern.
+            if ((b === undefined && c === undefined) || (this.b === undefined && this.c === undefined)) {
+                                                              ~
+!!! error TS2339: Property 'b' does not exist on type 'C1'.
+                                                                                      ~
+!!! error TS2339: Property 'c' does not exist on type 'C1'.
+                this.a = a || k;
+                     ~
+!!! error TS2339: Property 'a' does not exist on type 'C1'.
+            }
+        }
+    
+        public getA() {
+            return this.a
+                        ~
+!!! error TS2339: Property 'a' does not exist on type 'C1'.
+        }
+    
+        public getB() {
+            return this.b
+                        ~
+!!! error TS2339: Property 'b' does not exist on type 'C1'.
+        }
+    
+        public getC() {
+            return this.c;
+                        ~
+!!! error TS2339: Property 'c' does not exist on type 'C1'.
+        }
+    }
+    
+    var x = new C1(undefined, [0, undefined, ""]);
+                                             ~~
+!!! error TS2322: Type 'string' is not assignable to type 'boolean'.
+    var [x_a, x_b, x_c] = [x.getA(), x.getB(), x.getC()];
+    
+    var y = new C1(10, [0, "", true]);
+    var [y_a, y_b, y_c] = [y.getA(), y.getB(), y.getC()];
+    
+    var z = new C1(10, [undefined, "", null]);
+    var [z_a, z_b, z_c] = [z.getA(), z.getB(), z.getC()];
+    

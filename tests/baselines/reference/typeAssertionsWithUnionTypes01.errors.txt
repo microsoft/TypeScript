@@ -1,0 +1,23 @@
+tests/cases/conformance/types/typeRelationships/comparable/typeAssertionsWithUnionTypes01.ts(14,9): error TS2352: Conversion of type 'I1' to type 'number' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+
+
+==== tests/cases/conformance/types/typeRelationships/comparable/typeAssertionsWithUnionTypes01.ts (1 errors) ====
+    interface I1 {
+        p1: number
+    }
+    
+    interface I2 extends I1 {
+        p2: number;
+    }
+    
+    var x = { p1: 10, p2: 20 };
+    var y: number | I2 = x;
+    var z: I1 = x;
+    
+    var a = <number | I2>z;
+    var b = <number>z;
+            ~~~~~~~~~
+!!! error TS2352: Conversion of type 'I1' to type 'number' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+    var c = <I2>z;
+    var d = <I1>y;
+    

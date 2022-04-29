@@ -1,0 +1,12 @@
+=== tests/cases/compiler/inferredFunctionReturnTypeIsEmptyType.ts ===
+function foo() {
+>foo : Symbol(foo, Decl(inferredFunctionReturnTypeIsEmptyType.ts, 0, 0))
+
+    if (true) {
+        return 42;
+    }
+    else {
+        return "42";
+    }
+};
+

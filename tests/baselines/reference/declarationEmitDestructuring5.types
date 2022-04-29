@@ -1,0 +1,38 @@
+=== tests/cases/compiler/declarationEmitDestructuring5.ts ===
+function baz([, z, , ]) { }
+>baz : ([, z, ,]: [any, any, any?]) => void
+> : undefined
+>z : any
+> : undefined
+
+function foo([, b, ]: [any, any]): void { }
+>foo : ([, b,]: [any, any]) => void
+> : undefined
+>b : any
+
+function bar([z, , , ]) { }
+>bar : ([z, , ,]: [any, any?, any?]) => void
+>z : any
+> : undefined
+> : undefined
+
+function bar1([z, , , ] = [1, 3, 4, 6, 7]) { }
+>bar1 : ([z, , ,]?: [number, number, number, number, number]) => void
+>z : number
+> : undefined
+> : undefined
+>[1, 3, 4, 6, 7] : [number, number, number, number, number]
+>1 : 1
+>3 : 3
+>4 : 4
+>6 : 6
+>7 : 7
+
+function bar2([,,z, , , ]) { }
+>bar2 : ([, , z, , ,]: [any, any, any, any?, any?]) => void
+> : undefined
+> : undefined
+>z : any
+> : undefined
+> : undefined
+

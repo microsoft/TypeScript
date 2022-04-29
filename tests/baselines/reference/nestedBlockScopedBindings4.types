@@ -1,0 +1,129 @@
+=== tests/cases/compiler/nestedBlockScopedBindings4.ts ===
+function a0() {
+>a0 : () => void
+
+    for (let x; x < 1;) {
+>x : any
+>x < 1 : boolean
+>x : any
+>1 : 1
+
+        x = x + 1;
+>x = x + 1 : any
+>x : any
+>x + 1 : any
+>x : any
+>1 : 1
+    }
+    for (let x;;) {
+>x : any
+
+        x = x + 2;
+>x = x + 2 : any
+>x : any
+>x + 2 : any
+>x : any
+>2 : 2
+    }
+}
+
+function a1() {
+>a1 : () => void
+
+    for (let x; x < 1;) {
+>x : any
+>x < 1 : boolean
+>x : any
+>1 : 1
+
+        x = x + 1;
+>x = x + 1 : any
+>x : any
+>x + 1 : any
+>x : any
+>1 : 1
+
+        () => x;
+>() => x : () => any
+>x : any
+    }
+    for (let x;;) {
+>x : any
+
+        x = x + 2;
+>x = x + 2 : any
+>x : any
+>x + 2 : any
+>x : any
+>2 : 2
+    }
+}
+
+function a2() {
+>a2 : () => void
+
+    for (let x; x < 1;) {
+>x : any
+>x < 1 : boolean
+>x : any
+>1 : 1
+
+        x = x + 1;
+>x = x + 1 : any
+>x : any
+>x + 1 : any
+>x : any
+>1 : 1
+    }
+    for (let x;;) {
+>x : any
+
+        x = x + 2;
+>x = x + 2 : any
+>x : any
+>x + 2 : any
+>x : any
+>2 : 2
+
+        () => x;
+>() => x : () => any
+>x : any
+    }
+}
+
+
+function a3() {
+>a3 : () => void
+
+    for (let x; x < 1;) {
+>x : any
+>x < 1 : boolean
+>x : any
+>1 : 1
+
+        x = x + 1;
+>x = x + 1 : any
+>x : any
+>x + 1 : any
+>x : any
+>1 : 1
+
+        () => x;
+>() => x : () => any
+>x : any
+    }
+    for (let x;;) {
+>x : any
+
+        x = x + 2;
+>x = x + 2 : any
+>x : any
+>x + 2 : any
+>x : any
+>2 : 2
+
+        () => x;
+>() => x : () => any
+>x : any
+    }
+}

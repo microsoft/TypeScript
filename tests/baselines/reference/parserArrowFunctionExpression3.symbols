@@ -1,0 +1,3 @@
+=== tests/cases/conformance/parser/ecmascript5/ArrowFunctionExpressions/parserArrowFunctionExpression3.ts ===
+a = (() => { } || a)
+No type information for this code.

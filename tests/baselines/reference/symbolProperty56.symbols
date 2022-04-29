@@ -1,0 +1,24 @@
+=== tests/cases/conformance/es6/Symbols/symbolProperty56.ts ===
+var obj = {
+>obj : Symbol(obj, Decl(symbolProperty56.ts, 0, 3))
+
+    [Symbol.iterator]: 0
+>[Symbol.iterator] : Symbol([Symbol.iterator], Decl(symbolProperty56.ts, 0, 11))
+>Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+
+};
+
+module M {
+>M : Symbol(M, Decl(symbolProperty56.ts, 2, 2))
+
+    var Symbol: {};
+>Symbol : Symbol(Symbol, Decl(symbolProperty56.ts, 5, 7))
+
+    // The following should be of type 'any'. This is because even though obj has a property keyed by Symbol.iterator,
+    // the key passed in here is the *wrong* Symbol.iterator. It is not the iterator property of the global Symbol.
+    obj[Symbol["iterator"]];
+>obj : Symbol(obj, Decl(symbolProperty56.ts, 0, 3))
+>Symbol : Symbol(Symbol, Decl(symbolProperty56.ts, 5, 7))
+}

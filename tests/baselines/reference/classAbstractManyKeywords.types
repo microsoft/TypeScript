@@ -1,0 +1,15 @@
+=== tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractManyKeywords.ts ===
+export default abstract class A {}
+>A : A
+
+export abstract class B {}
+>B : B
+
+default abstract class C {}
+>C : C
+
+import abstract class D {}
+>abstract : any
+> : any
+>D : D
+

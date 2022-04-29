@@ -1,0 +1,139 @@
+=== tests/cases/compiler/file1.ts ===
+import b = require('./b.json');
+>b : { a: boolean; b: string; c: null; d: boolean; }
+
+import c = require('./c.json');
+>c : (string | null)[]
+
+import d = require('./d.json');
+>d : string
+
+import e = require('./e.json');
+>e : number
+
+import f = require('./f.json');
+>f : number[]
+
+import g = require('./g.json');
+>g : boolean[]
+
+let booleanLiteral: boolean, nullLiteral: null;
+>booleanLiteral : boolean
+>nullLiteral : null
+>null : null
+
+let stringLiteral: string;
+>stringLiteral : string
+
+let numberLiteral: number;
+>numberLiteral : number
+
+booleanLiteral = b.a;
+>booleanLiteral = b.a : boolean
+>booleanLiteral : boolean
+>b.a : boolean
+>b : { a: boolean; b: string; c: null; d: boolean; }
+>a : boolean
+
+stringLiteral = b.b;
+>stringLiteral = b.b : string
+>stringLiteral : string
+>b.b : string
+>b : { a: boolean; b: string; c: null; d: boolean; }
+>b : string
+
+nullLiteral = b.c;
+>nullLiteral = b.c : null
+>nullLiteral : null
+>b.c : null
+>b : { a: boolean; b: string; c: null; d: boolean; }
+>c : null
+
+booleanLiteral = b.d;
+>booleanLiteral = b.d : boolean
+>booleanLiteral : boolean
+>b.d : boolean
+>b : { a: boolean; b: string; c: null; d: boolean; }
+>d : boolean
+
+const stringOrNumberOrNull: string | number | null = c[0];
+>stringOrNumberOrNull : string | number | null
+>null : null
+>c[0] : string | null
+>c : (string | null)[]
+>0 : 0
+
+stringLiteral = d;
+>stringLiteral = d : string
+>stringLiteral : string
+>d : string
+
+numberLiteral = e;
+>numberLiteral = e : number
+>numberLiteral : number
+>e : number
+
+numberLiteral = f[0];
+>numberLiteral = f[0] : number
+>numberLiteral : number
+>f[0] : number
+>f : number[]
+>0 : 0
+
+booleanLiteral = g[0];
+>booleanLiteral = g[0] : boolean
+>booleanLiteral : boolean
+>g[0] : boolean
+>g : boolean[]
+>0 : 0
+
+=== tests/cases/compiler/b.json ===
+{
+>{    "a": true,    "b": "hello",    "c": null,    "d": false} : { a: boolean; b: string; c: null; d: boolean; }
+
+    "a": true,
+>"a" : boolean
+>true : true
+
+    "b": "hello",
+>"b" : string
+>"hello" : "hello"
+
+    "c": null,
+>"c" : null
+>null : null
+
+    "d": false
+>"d" : boolean
+>false : false
+}
+
+=== tests/cases/compiler/c.json ===
+["a", null, "string"]
+>["a", null, "string"] : (string | null)[]
+>"a" : "a"
+>null : null
+>"string" : "string"
+
+=== tests/cases/compiler/d.json ===
+"dConfig"
+>"dConfig" : "dConfig"
+
+=== tests/cases/compiler/e.json ===
+-10
+>-10 : -10
+>10 : 10
+
+=== tests/cases/compiler/f.json ===
+[-10, 30]
+>[-10, 30] : number[]
+>-10 : -10
+>10 : 10
+>30 : 30
+
+=== tests/cases/compiler/g.json ===
+[true, false]
+>[true, false] : boolean[]
+>true : true
+>false : false
+

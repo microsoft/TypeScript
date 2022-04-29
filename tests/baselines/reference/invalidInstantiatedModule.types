@@ -1,0 +1,36 @@
+=== tests/cases/conformance/internalModules/moduleDeclarations/invalidInstantiatedModule.ts ===
+module M {
+>M : typeof M
+
+    export class Point { x: number; y: number }
+>Point : Point
+>x : number
+>y : number
+
+    export var Point = 1;  // Error
+>Point : number
+>1 : 1
+}
+
+module M2 {
+>M2 : typeof M2
+
+    export interface Point { x: number; y: number }
+>x : number
+>y : number
+
+    export var Point = 1;
+>Point : number
+>1 : 1
+}
+
+var m = M2;
+>m : typeof M2
+>M2 : typeof M2
+
+var p: m.Point; // Error
+>p : m.Point
+>m : any
+
+
+ 

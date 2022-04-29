@@ -1,0 +1,23 @@
+=== tests/cases/compiler/primitiveConstraints1.ts ===
+function foo1<T extends U, U>(t: T, u: U) { }
+>foo1 : <T extends U, U>(t: T, u: U) => void
+>t : T
+>u : U
+
+foo1<string, number>('hm', 1); // no error
+>foo1<string, number>('hm', 1) : void
+>foo1 : <T extends U, U>(t: T, u: U) => void
+>'hm' : "hm"
+>1 : 1
+ 
+function foo2<T, U extends T>(t: T, u: U) { }
+>foo2 : <T, U extends T>(t: T, u: U) => void
+>t : T
+>u : U
+
+foo2<number, string>(1, 'hm'); // error
+>foo2<number, string>(1, 'hm') : void
+>foo2 : <T, U extends T>(t: T, u: U) => void
+>1 : 1
+>'hm' : "hm"
+

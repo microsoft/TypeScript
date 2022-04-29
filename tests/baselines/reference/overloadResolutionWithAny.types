@@ -1,0 +1,74 @@
+=== tests/cases/compiler/overloadResolutionWithAny.ts ===
+var func: {
+>func : { (s: string): number; (s: any): string; }
+
+    (s: string): number;
+>s : string
+
+    (s: any): string;
+>s : any
+
+};
+
+func(""); // number
+>func("") : number
+>func : { (s: string): number; (s: any): string; }
+>"" : ""
+
+func(3); // string
+>func(3) : string
+>func : { (s: string): number; (s: any): string; }
+>3 : 3
+
+var x: any;
+>x : any
+
+func(x); // string
+>func(x) : string
+>func : { (s: string): number; (s: any): string; }
+>x : any
+
+var func2: {
+>func2 : { (s: string, t: string): number; (s: any, t: string): boolean; (s: string, t: any): RegExp; (s: any, t: any): string; }
+
+    (s: string, t: string): number;
+>s : string
+>t : string
+
+    (s: any, t: string): boolean;
+>s : any
+>t : string
+
+    (s: string, t: any): RegExp;
+>s : string
+>t : any
+
+    (s: any, t: any): string;
+>s : any
+>t : any
+}
+
+func2(x, x); // string
+>func2(x, x) : string
+>func2 : { (s: string, t: string): number; (s: any, t: string): boolean; (s: string, t: any): RegExp; (s: any, t: any): string; }
+>x : any
+>x : any
+
+func2("", ""); // number
+>func2("", "") : number
+>func2 : { (s: string, t: string): number; (s: any, t: string): boolean; (s: string, t: any): RegExp; (s: any, t: any): string; }
+>"" : ""
+>"" : ""
+
+func2(x, ""); // boolean
+>func2(x, "") : boolean
+>func2 : { (s: string, t: string): number; (s: any, t: string): boolean; (s: string, t: any): RegExp; (s: any, t: any): string; }
+>x : any
+>"" : ""
+
+func2("", x); // RegExp
+>func2("", x) : RegExp
+>func2 : { (s: string, t: string): number; (s: any, t: string): boolean; (s: string, t: any): RegExp; (s: any, t: any): string; }
+>"" : ""
+>x : any
+

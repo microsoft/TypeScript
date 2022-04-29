@@ -1,0 +1,62 @@
+=== tests/cases/compiler/spyComparisonChecking.ts ===
+interface Spy {
+    (...params: any[]): any;
+>params : any[]
+
+    identity: string;
+>identity : string
+
+    and: Function;
+>and : Function
+
+    mostRecentCall: { args: any[]; };
+>mostRecentCall : { args: any[]; }
+>args : any[]
+
+    argsForCall: any[];
+>argsForCall : any[]
+}
+
+type SpyObj<T> = T & {
+>SpyObj : SpyObj<T>
+
+    [k in keyof T]: Spy;
+}
+
+declare function createSpyObj<T>(
+>createSpyObj : <T>(name: string, names: Array<keyof T>) => SpyObj<T>
+
+    name: string, names: Array<keyof T>): SpyObj<T>;
+>name : string
+>names : (keyof T)[]
+
+function mock<T>(spyName: string, methodNames: Array<keyof T>): SpyObj<T> {
+>mock : <T>(spyName: string, methodNames: Array<keyof T>) => SpyObj<T>
+>spyName : string
+>methodNames : (keyof T)[]
+
+    const spyObj = createSpyObj<T>(spyName, methodNames);
+>spyObj : SpyObj<T>
+>createSpyObj<T>(spyName, methodNames) : SpyObj<T>
+>createSpyObj : <T>(name: string, names: (keyof T)[]) => SpyObj<T>
+>spyName : string
+>methodNames : (keyof T)[]
+
+    for (const methodName of methodNames) {
+>methodName : keyof T
+>methodNames : (keyof T)[]
+
+        spyObj[methodName].and.returnValue(1);
+>spyObj[methodName].and.returnValue(1) : any
+>spyObj[methodName].and.returnValue : any
+>spyObj[methodName].and : Function
+>spyObj[methodName] : SpyObj<T>[keyof T]
+>spyObj : SpyObj<T>
+>methodName : keyof T
+>and : Function
+>returnValue : any
+>1 : 1
+    }
+    return spyObj;
+>spyObj : SpyObj<T>
+}

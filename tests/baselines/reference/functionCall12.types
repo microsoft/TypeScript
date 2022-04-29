@@ -1,0 +1,42 @@
+=== tests/cases/compiler/functionCall12.ts ===
+function foo(a:string, b?:number, c?:string){}
+>foo : (a: string, b?: number, c?: string) => void
+>a : string
+>b : number
+>c : string
+
+foo('foo', 1); 
+>foo('foo', 1) : void
+>foo : (a: string, b?: number, c?: string) => void
+>'foo' : "foo"
+>1 : 1
+
+foo('foo'); 
+>foo('foo') : void
+>foo : (a: string, b?: number, c?: string) => void
+>'foo' : "foo"
+
+foo();
+>foo() : void
+>foo : (a: string, b?: number, c?: string) => void
+
+foo(1, 'bar');
+>foo(1, 'bar') : void
+>foo : (a: string, b?: number, c?: string) => void
+>1 : 1
+>'bar' : "bar"
+
+foo('foo', 1, 'bar');
+>foo('foo', 1, 'bar') : void
+>foo : (a: string, b?: number, c?: string) => void
+>'foo' : "foo"
+>1 : 1
+>'bar' : "bar"
+
+foo('foo', 1, 3);
+>foo('foo', 1, 3) : void
+>foo : (a: string, b?: number, c?: string) => void
+>'foo' : "foo"
+>1 : 1
+>3 : 3
+

@@ -1,0 +1,9 @@
+=== tests/cases/compiler/arrayReferenceWithoutTypeArgs.ts ===
+class X {
+>X : Symbol(X, Decl(arrayReferenceWithoutTypeArgs.ts, 0, 0))
+
+    public f(a: Array) { }
+>f : Symbol(X.f, Decl(arrayReferenceWithoutTypeArgs.ts, 0, 9))
+>a : Symbol(a, Decl(arrayReferenceWithoutTypeArgs.ts, 1, 13))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+}

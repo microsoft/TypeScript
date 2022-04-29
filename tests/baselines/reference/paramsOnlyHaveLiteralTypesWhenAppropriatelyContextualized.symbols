@@ -1,0 +1,83 @@
+=== tests/cases/compiler/paramsOnlyHaveLiteralTypesWhenAppropriatelyContextualized.ts ===
+// Using a homomorphic mapped type over `T`
+// Produces a lower-priority inference for `T` than other
+// positions, allowing one to override the priority the argument
+// order would usually imply
+type Lower<T> = { [K in keyof T]: T[K] };
+>Lower : Symbol(Lower, Decl(paramsOnlyHaveLiteralTypesWhenAppropriatelyContextualized.ts, 0, 0))
+>T : Symbol(T, Decl(paramsOnlyHaveLiteralTypesWhenAppropriatelyContextualized.ts, 4, 11))
+>K : Symbol(K, Decl(paramsOnlyHaveLiteralTypesWhenAppropriatelyContextualized.ts, 4, 19))
+>T : Symbol(T, Decl(paramsOnlyHaveLiteralTypesWhenAppropriatelyContextualized.ts, 4, 11))
+>T : Symbol(T, Decl(paramsOnlyHaveLiteralTypesWhenAppropriatelyContextualized.ts, 4, 11))
+>K : Symbol(K, Decl(paramsOnlyHaveLiteralTypesWhenAppropriatelyContextualized.ts, 4, 19))
+
+export function appendToOptionalArray<
+>appendToOptionalArray : Symbol(appendToOptionalArray, Decl(paramsOnlyHaveLiteralTypesWhenAppropriatelyContextualized.ts, 4, 41))
+
+  K extends string | number | symbol,
+>K : Symbol(K, Decl(paramsOnlyHaveLiteralTypesWhenAppropriatelyContextualized.ts, 6, 38))
+
+  T
+>T : Symbol(T, Decl(paramsOnlyHaveLiteralTypesWhenAppropriatelyContextualized.ts, 7, 37))
+
+>(
+  object: { [x in K]?: Lower<T>[] },
+>object : Symbol(object, Decl(paramsOnlyHaveLiteralTypesWhenAppropriatelyContextualized.ts, 9, 2))
+>x : Symbol(x, Decl(paramsOnlyHaveLiteralTypesWhenAppropriatelyContextualized.ts, 10, 13))
+>K : Symbol(K, Decl(paramsOnlyHaveLiteralTypesWhenAppropriatelyContextualized.ts, 6, 38))
+>Lower : Symbol(Lower, Decl(paramsOnlyHaveLiteralTypesWhenAppropriatelyContextualized.ts, 0, 0))
+>T : Symbol(T, Decl(paramsOnlyHaveLiteralTypesWhenAppropriatelyContextualized.ts, 7, 37))
+
+  key: K,
+>key : Symbol(key, Decl(paramsOnlyHaveLiteralTypesWhenAppropriatelyContextualized.ts, 10, 36))
+>K : Symbol(K, Decl(paramsOnlyHaveLiteralTypesWhenAppropriatelyContextualized.ts, 6, 38))
+
+  value: T
+>value : Symbol(value, Decl(paramsOnlyHaveLiteralTypesWhenAppropriatelyContextualized.ts, 11, 9))
+>T : Symbol(T, Decl(paramsOnlyHaveLiteralTypesWhenAppropriatelyContextualized.ts, 7, 37))
+
+) {
+  const array = object[key];
+>array : Symbol(array, Decl(paramsOnlyHaveLiteralTypesWhenAppropriatelyContextualized.ts, 14, 7))
+>object : Symbol(object, Decl(paramsOnlyHaveLiteralTypesWhenAppropriatelyContextualized.ts, 9, 2))
+>key : Symbol(key, Decl(paramsOnlyHaveLiteralTypesWhenAppropriatelyContextualized.ts, 10, 36))
+
+  if (array) {
+>array : Symbol(array, Decl(paramsOnlyHaveLiteralTypesWhenAppropriatelyContextualized.ts, 14, 7))
+
+    array.push(value);
+>array.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>array : Symbol(array, Decl(paramsOnlyHaveLiteralTypesWhenAppropriatelyContextualized.ts, 14, 7))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>value : Symbol(value, Decl(paramsOnlyHaveLiteralTypesWhenAppropriatelyContextualized.ts, 11, 9))
+
+  } else {
+    object[key] = [value];
+>object : Symbol(object, Decl(paramsOnlyHaveLiteralTypesWhenAppropriatelyContextualized.ts, 9, 2))
+>key : Symbol(key, Decl(paramsOnlyHaveLiteralTypesWhenAppropriatelyContextualized.ts, 10, 36))
+>value : Symbol(value, Decl(paramsOnlyHaveLiteralTypesWhenAppropriatelyContextualized.ts, 11, 9))
+  }
+}
+
+// e.g.
+const foo: {x?: number[]; y?: string[]; } = {};
+>foo : Symbol(foo, Decl(paramsOnlyHaveLiteralTypesWhenAppropriatelyContextualized.ts, 23, 5))
+>x : Symbol(x, Decl(paramsOnlyHaveLiteralTypesWhenAppropriatelyContextualized.ts, 23, 12))
+>y : Symbol(y, Decl(paramsOnlyHaveLiteralTypesWhenAppropriatelyContextualized.ts, 23, 25))
+
+appendToOptionalArray(foo, 'x', 123);   // ok
+>appendToOptionalArray : Symbol(appendToOptionalArray, Decl(paramsOnlyHaveLiteralTypesWhenAppropriatelyContextualized.ts, 4, 41))
+>foo : Symbol(foo, Decl(paramsOnlyHaveLiteralTypesWhenAppropriatelyContextualized.ts, 23, 5))
+
+appendToOptionalArray(foo, 'y', 'bar'); // ok
+>appendToOptionalArray : Symbol(appendToOptionalArray, Decl(paramsOnlyHaveLiteralTypesWhenAppropriatelyContextualized.ts, 4, 41))
+>foo : Symbol(foo, Decl(paramsOnlyHaveLiteralTypesWhenAppropriatelyContextualized.ts, 23, 5))
+
+appendToOptionalArray(foo, 'y', 12);    // should fail
+>appendToOptionalArray : Symbol(appendToOptionalArray, Decl(paramsOnlyHaveLiteralTypesWhenAppropriatelyContextualized.ts, 4, 41))
+>foo : Symbol(foo, Decl(paramsOnlyHaveLiteralTypesWhenAppropriatelyContextualized.ts, 23, 5))
+
+appendToOptionalArray(foo, 'x', "no");  // should fail
+>appendToOptionalArray : Symbol(appendToOptionalArray, Decl(paramsOnlyHaveLiteralTypesWhenAppropriatelyContextualized.ts, 4, 41))
+>foo : Symbol(foo, Decl(paramsOnlyHaveLiteralTypesWhenAppropriatelyContextualized.ts, 23, 5))
+

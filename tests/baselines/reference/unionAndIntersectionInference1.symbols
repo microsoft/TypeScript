@@ -1,0 +1,286 @@
+=== tests/cases/conformance/types/typeRelationships/typeInference/unionAndIntersectionInference1.ts ===
+// Repro from #2264
+
+interface Y { 'i am a very certain type': Y }
+>Y : Symbol(Y, Decl(unionAndIntersectionInference1.ts, 0, 0))
+>'i am a very certain type' : Symbol(Y['i am a very certain type'], Decl(unionAndIntersectionInference1.ts, 2, 13))
+>Y : Symbol(Y, Decl(unionAndIntersectionInference1.ts, 0, 0))
+
+var y: Y = <Y>undefined;
+>y : Symbol(y, Decl(unionAndIntersectionInference1.ts, 3, 3))
+>Y : Symbol(Y, Decl(unionAndIntersectionInference1.ts, 0, 0))
+>Y : Symbol(Y, Decl(unionAndIntersectionInference1.ts, 0, 0))
+>undefined : Symbol(undefined)
+
+function destructure<a, r>(
+>destructure : Symbol(destructure, Decl(unionAndIntersectionInference1.ts, 3, 24))
+>a : Symbol(a, Decl(unionAndIntersectionInference1.ts, 4, 21))
+>r : Symbol(r, Decl(unionAndIntersectionInference1.ts, 4, 23))
+
+    something: a | Y,
+>something : Symbol(something, Decl(unionAndIntersectionInference1.ts, 4, 27))
+>a : Symbol(a, Decl(unionAndIntersectionInference1.ts, 4, 21))
+>Y : Symbol(Y, Decl(unionAndIntersectionInference1.ts, 0, 0))
+
+    haveValue: (value: a) => r,
+>haveValue : Symbol(haveValue, Decl(unionAndIntersectionInference1.ts, 5, 21))
+>value : Symbol(value, Decl(unionAndIntersectionInference1.ts, 6, 16))
+>a : Symbol(a, Decl(unionAndIntersectionInference1.ts, 4, 21))
+>r : Symbol(r, Decl(unionAndIntersectionInference1.ts, 4, 23))
+
+    haveY: (value: Y) => r
+>haveY : Symbol(haveY, Decl(unionAndIntersectionInference1.ts, 6, 31))
+>value : Symbol(value, Decl(unionAndIntersectionInference1.ts, 7, 12))
+>Y : Symbol(Y, Decl(unionAndIntersectionInference1.ts, 0, 0))
+>r : Symbol(r, Decl(unionAndIntersectionInference1.ts, 4, 23))
+
+): r {
+>r : Symbol(r, Decl(unionAndIntersectionInference1.ts, 4, 23))
+
+    return something === y ? haveY(y) : haveValue(<a>something);
+>something : Symbol(something, Decl(unionAndIntersectionInference1.ts, 4, 27))
+>y : Symbol(y, Decl(unionAndIntersectionInference1.ts, 3, 3))
+>haveY : Symbol(haveY, Decl(unionAndIntersectionInference1.ts, 6, 31))
+>y : Symbol(y, Decl(unionAndIntersectionInference1.ts, 3, 3))
+>haveValue : Symbol(haveValue, Decl(unionAndIntersectionInference1.ts, 5, 21))
+>a : Symbol(a, Decl(unionAndIntersectionInference1.ts, 4, 21))
+>something : Symbol(something, Decl(unionAndIntersectionInference1.ts, 4, 27))
+}
+
+var value = Math.random() > 0.5 ? 'hey!' : <Y>undefined;
+>value : Symbol(value, Decl(unionAndIntersectionInference1.ts, 12, 3))
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Y : Symbol(Y, Decl(unionAndIntersectionInference1.ts, 0, 0))
+>undefined : Symbol(undefined)
+
+var result = destructure(value, text => 'string', y => 'other one'); // text: string, y: Y
+>result : Symbol(result, Decl(unionAndIntersectionInference1.ts, 14, 3))
+>destructure : Symbol(destructure, Decl(unionAndIntersectionInference1.ts, 3, 24))
+>value : Symbol(value, Decl(unionAndIntersectionInference1.ts, 12, 3))
+>text : Symbol(text, Decl(unionAndIntersectionInference1.ts, 14, 31))
+>y : Symbol(y, Decl(unionAndIntersectionInference1.ts, 14, 49))
+
+// Repro from #4212
+
+function isVoid<a>(value: void | a): value is void {
+>isVoid : Symbol(isVoid, Decl(unionAndIntersectionInference1.ts, 14, 68))
+>a : Symbol(a, Decl(unionAndIntersectionInference1.ts, 18, 16))
+>value : Symbol(value, Decl(unionAndIntersectionInference1.ts, 18, 19))
+>a : Symbol(a, Decl(unionAndIntersectionInference1.ts, 18, 16))
+>value : Symbol(value, Decl(unionAndIntersectionInference1.ts, 18, 19))
+
+    return undefined;
+>undefined : Symbol(undefined)
+}
+
+function isNonVoid<a>(value: void | a) : value is a {
+>isNonVoid : Symbol(isNonVoid, Decl(unionAndIntersectionInference1.ts, 20, 1))
+>a : Symbol(a, Decl(unionAndIntersectionInference1.ts, 22, 19))
+>value : Symbol(value, Decl(unionAndIntersectionInference1.ts, 22, 22))
+>a : Symbol(a, Decl(unionAndIntersectionInference1.ts, 22, 19))
+>value : Symbol(value, Decl(unionAndIntersectionInference1.ts, 22, 22))
+>a : Symbol(a, Decl(unionAndIntersectionInference1.ts, 22, 19))
+
+    return undefined;
+>undefined : Symbol(undefined)
+}
+
+function foo1<a>(value: void|a): void {
+>foo1 : Symbol(foo1, Decl(unionAndIntersectionInference1.ts, 24, 1))
+>a : Symbol(a, Decl(unionAndIntersectionInference1.ts, 26, 14))
+>value : Symbol(value, Decl(unionAndIntersectionInference1.ts, 26, 17))
+>a : Symbol(a, Decl(unionAndIntersectionInference1.ts, 26, 14))
+
+    if (isVoid(value)) {
+>isVoid : Symbol(isVoid, Decl(unionAndIntersectionInference1.ts, 14, 68))
+>value : Symbol(value, Decl(unionAndIntersectionInference1.ts, 26, 17))
+
+        value; // value is void
+>value : Symbol(value, Decl(unionAndIntersectionInference1.ts, 26, 17))
+
+    } else {
+        value; // value is a
+>value : Symbol(value, Decl(unionAndIntersectionInference1.ts, 26, 17))
+    }
+}
+
+function baz1<a>(value: void|a): void {
+>baz1 : Symbol(baz1, Decl(unionAndIntersectionInference1.ts, 32, 1))
+>a : Symbol(a, Decl(unionAndIntersectionInference1.ts, 34, 14))
+>value : Symbol(value, Decl(unionAndIntersectionInference1.ts, 34, 17))
+>a : Symbol(a, Decl(unionAndIntersectionInference1.ts, 34, 14))
+
+      if (isNonVoid(value)) {
+>isNonVoid : Symbol(isNonVoid, Decl(unionAndIntersectionInference1.ts, 20, 1))
+>value : Symbol(value, Decl(unionAndIntersectionInference1.ts, 34, 17))
+
+          value; // value is a
+>value : Symbol(value, Decl(unionAndIntersectionInference1.ts, 34, 17))
+
+      } else {
+          value; // value is void
+>value : Symbol(value, Decl(unionAndIntersectionInference1.ts, 34, 17))
+      }
+}
+
+// Repro from #5417
+
+type Maybe<T> = T | void;
+>Maybe : Symbol(Maybe, Decl(unionAndIntersectionInference1.ts, 40, 1))
+>T : Symbol(T, Decl(unionAndIntersectionInference1.ts, 44, 11))
+>T : Symbol(T, Decl(unionAndIntersectionInference1.ts, 44, 11))
+
+function get<U>(x: U | void): U {
+>get : Symbol(get, Decl(unionAndIntersectionInference1.ts, 44, 25))
+>U : Symbol(U, Decl(unionAndIntersectionInference1.ts, 46, 13))
+>x : Symbol(x, Decl(unionAndIntersectionInference1.ts, 46, 16))
+>U : Symbol(U, Decl(unionAndIntersectionInference1.ts, 46, 13))
+>U : Symbol(U, Decl(unionAndIntersectionInference1.ts, 46, 13))
+
+   return null; // just an example
+}
+
+let foo: Maybe<string>;
+>foo : Symbol(foo, Decl(unionAndIntersectionInference1.ts, 50, 3))
+>Maybe : Symbol(Maybe, Decl(unionAndIntersectionInference1.ts, 40, 1))
+
+get(foo).toUpperCase(); // Ok
+>get(foo).toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+>get : Symbol(get, Decl(unionAndIntersectionInference1.ts, 44, 25))
+>foo : Symbol(foo, Decl(unionAndIntersectionInference1.ts, 50, 3))
+>toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+
+// Repro from #5456
+
+interface Man {
+>Man : Symbol(Man, Decl(unionAndIntersectionInference1.ts, 51, 23))
+
+    walks: boolean;
+>walks : Symbol(Man.walks, Decl(unionAndIntersectionInference1.ts, 55, 15))
+}
+
+interface Bear {
+>Bear : Symbol(Bear, Decl(unionAndIntersectionInference1.ts, 57, 1))
+
+    roars: boolean;
+>roars : Symbol(Bear.roars, Decl(unionAndIntersectionInference1.ts, 59, 16))
+}
+
+interface Pig {
+>Pig : Symbol(Pig, Decl(unionAndIntersectionInference1.ts, 61, 1))
+
+    oinks: boolean;
+>oinks : Symbol(Pig.oinks, Decl(unionAndIntersectionInference1.ts, 63, 15))
+}
+
+declare function pigify<T>(y: T & Bear): T & Pig;
+>pigify : Symbol(pigify, Decl(unionAndIntersectionInference1.ts, 65, 1))
+>T : Symbol(T, Decl(unionAndIntersectionInference1.ts, 67, 24))
+>y : Symbol(y, Decl(unionAndIntersectionInference1.ts, 67, 27))
+>T : Symbol(T, Decl(unionAndIntersectionInference1.ts, 67, 24))
+>Bear : Symbol(Bear, Decl(unionAndIntersectionInference1.ts, 57, 1))
+>T : Symbol(T, Decl(unionAndIntersectionInference1.ts, 67, 24))
+>Pig : Symbol(Pig, Decl(unionAndIntersectionInference1.ts, 61, 1))
+
+declare var mbp: Man & Bear;
+>mbp : Symbol(mbp, Decl(unionAndIntersectionInference1.ts, 68, 11))
+>Man : Symbol(Man, Decl(unionAndIntersectionInference1.ts, 51, 23))
+>Bear : Symbol(Bear, Decl(unionAndIntersectionInference1.ts, 57, 1))
+
+pigify(mbp).oinks; // OK, mbp is treated as Pig
+>pigify(mbp).oinks : Symbol(Pig.oinks, Decl(unionAndIntersectionInference1.ts, 63, 15))
+>pigify : Symbol(pigify, Decl(unionAndIntersectionInference1.ts, 65, 1))
+>mbp : Symbol(mbp, Decl(unionAndIntersectionInference1.ts, 68, 11))
+>oinks : Symbol(Pig.oinks, Decl(unionAndIntersectionInference1.ts, 63, 15))
+
+pigify(mbp).walks; // Ok, mbp is treated as Man
+>pigify(mbp).walks : Symbol(Man.walks, Decl(unionAndIntersectionInference1.ts, 55, 15))
+>pigify : Symbol(pigify, Decl(unionAndIntersectionInference1.ts, 65, 1))
+>mbp : Symbol(mbp, Decl(unionAndIntersectionInference1.ts, 68, 11))
+>walks : Symbol(Man.walks, Decl(unionAndIntersectionInference1.ts, 55, 15))
+
+// Repros from #29815
+
+interface ITest {
+>ITest : Symbol(ITest, Decl(unionAndIntersectionInference1.ts, 71, 18))
+
+  name: 'test'
+>name : Symbol(ITest.name, Decl(unionAndIntersectionInference1.ts, 75, 17))
+}
+
+const createTestAsync = (): Promise<ITest> => Promise.resolve().then(() => ({ name: 'test' }))
+>createTestAsync : Symbol(createTestAsync, Decl(unionAndIntersectionInference1.ts, 79, 5))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>ITest : Symbol(ITest, Decl(unionAndIntersectionInference1.ts, 71, 18))
+>Promise.resolve().then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>name : Symbol(name, Decl(unionAndIntersectionInference1.ts, 79, 77))
+
+const createTest = (): ITest => {
+>createTest : Symbol(createTest, Decl(unionAndIntersectionInference1.ts, 81, 5))
+>ITest : Symbol(ITest, Decl(unionAndIntersectionInference1.ts, 71, 18))
+
+  return { name: 'test' }
+>name : Symbol(name, Decl(unionAndIntersectionInference1.ts, 82, 10))
+}
+
+declare function f1<T, U>(x: T | U): T | U;
+>f1 : Symbol(f1, Decl(unionAndIntersectionInference1.ts, 83, 1))
+>T : Symbol(T, Decl(unionAndIntersectionInference1.ts, 85, 20))
+>U : Symbol(U, Decl(unionAndIntersectionInference1.ts, 85, 22))
+>x : Symbol(x, Decl(unionAndIntersectionInference1.ts, 85, 26))
+>T : Symbol(T, Decl(unionAndIntersectionInference1.ts, 85, 20))
+>U : Symbol(U, Decl(unionAndIntersectionInference1.ts, 85, 22))
+>T : Symbol(T, Decl(unionAndIntersectionInference1.ts, 85, 20))
+>U : Symbol(U, Decl(unionAndIntersectionInference1.ts, 85, 22))
+
+declare function f2<T, U>(x: T, y: U): T | U;
+>f2 : Symbol(f2, Decl(unionAndIntersectionInference1.ts, 85, 43))
+>T : Symbol(T, Decl(unionAndIntersectionInference1.ts, 86, 20))
+>U : Symbol(U, Decl(unionAndIntersectionInference1.ts, 86, 22))
+>x : Symbol(x, Decl(unionAndIntersectionInference1.ts, 86, 26))
+>T : Symbol(T, Decl(unionAndIntersectionInference1.ts, 86, 20))
+>y : Symbol(y, Decl(unionAndIntersectionInference1.ts, 86, 31))
+>U : Symbol(U, Decl(unionAndIntersectionInference1.ts, 86, 22))
+>T : Symbol(T, Decl(unionAndIntersectionInference1.ts, 86, 20))
+>U : Symbol(U, Decl(unionAndIntersectionInference1.ts, 86, 22))
+
+let x1: string = f1('a');
+>x1 : Symbol(x1, Decl(unionAndIntersectionInference1.ts, 88, 3))
+>f1 : Symbol(f1, Decl(unionAndIntersectionInference1.ts, 83, 1))
+
+let x2: string = f2('a', 'b');
+>x2 : Symbol(x2, Decl(unionAndIntersectionInference1.ts, 89, 3))
+>f2 : Symbol(f2, Decl(unionAndIntersectionInference1.ts, 85, 43))
+
+// Repro from #30442
+
+const func = <T>() => {};
+>func : Symbol(func, Decl(unionAndIntersectionInference1.ts, 93, 5))
+>T : Symbol(T, Decl(unionAndIntersectionInference1.ts, 93, 14))
+
+const assign = <T, U>(a: T, b: U) => Object.assign(a, b);
+>assign : Symbol(assign, Decl(unionAndIntersectionInference1.ts, 94, 5))
+>T : Symbol(T, Decl(unionAndIntersectionInference1.ts, 94, 16))
+>U : Symbol(U, Decl(unionAndIntersectionInference1.ts, 94, 18))
+>a : Symbol(a, Decl(unionAndIntersectionInference1.ts, 94, 22))
+>T : Symbol(T, Decl(unionAndIntersectionInference1.ts, 94, 16))
+>b : Symbol(b, Decl(unionAndIntersectionInference1.ts, 94, 27))
+>U : Symbol(U, Decl(unionAndIntersectionInference1.ts, 94, 18))
+>Object.assign : Symbol(ObjectConstructor.assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>assign : Symbol(ObjectConstructor.assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>a : Symbol(a, Decl(unionAndIntersectionInference1.ts, 94, 22))
+>b : Symbol(b, Decl(unionAndIntersectionInference1.ts, 94, 27))
+
+const res: (() => void) & { func: any } = assign(() => {}, { func });
+>res : Symbol(res, Decl(unionAndIntersectionInference1.ts, 95, 5))
+>func : Symbol(func, Decl(unionAndIntersectionInference1.ts, 95, 27))
+>assign : Symbol(assign, Decl(unionAndIntersectionInference1.ts, 94, 5))
+>func : Symbol(func, Decl(unionAndIntersectionInference1.ts, 95, 60))
+

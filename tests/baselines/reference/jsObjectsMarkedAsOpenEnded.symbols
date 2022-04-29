@@ -1,0 +1,79 @@
+=== tests/cases/conformance/salsa/a.js ===
+var variable = {};
+>variable : Symbol(variable, Decl(a.js, 0, 3), Decl(a.js, 0, 18))
+
+variable.a = 0;
+>variable.a : Symbol(variable.a, Decl(a.js, 0, 18))
+>variable : Symbol(variable, Decl(a.js, 0, 3), Decl(a.js, 0, 18))
+>a : Symbol(variable.a, Decl(a.js, 0, 18))
+
+class C {
+>C : Symbol(C, Decl(a.js, 1, 15))
+
+    initializedMember = {};
+>initializedMember : Symbol(C.initializedMember, Decl(a.js, 3, 9))
+
+    constructor() {
+        this.member = {};
+>this.member : Symbol(C.member, Decl(a.js, 5, 19))
+>this : Symbol(C, Decl(a.js, 1, 15))
+>member : Symbol(C.member, Decl(a.js, 5, 19))
+
+        this.member.a = 0;
+>this.member : Symbol(C.member, Decl(a.js, 5, 19))
+>this : Symbol(C, Decl(a.js, 1, 15))
+>member : Symbol(C.member, Decl(a.js, 5, 19))
+    }
+}
+
+var obj = {
+>obj : Symbol(obj, Decl(a.js, 11, 3), Decl(a.js, 13, 2))
+
+    property: {}
+>property : Symbol(property, Decl(a.js, 11, 11))
+
+};
+
+obj.property.a = 0;
+>obj.property : Symbol(property, Decl(a.js, 11, 11))
+>obj : Symbol(obj, Decl(a.js, 11, 3), Decl(a.js, 13, 2))
+>property : Symbol(property, Decl(a.js, 11, 11))
+
+var arr = [{}];
+>arr : Symbol(arr, Decl(a.js, 17, 3))
+
+function getObj() {
+>getObj : Symbol(getObj, Decl(a.js, 17, 15))
+
+    return {};
+}
+
+
+=== tests/cases/conformance/salsa/b.ts ===
+variable.a = 1;
+>variable.a : Symbol(variable.a, Decl(a.js, 0, 18))
+>variable : Symbol(variable, Decl(a.js, 0, 3), Decl(a.js, 0, 18))
+>a : Symbol(variable.a, Decl(a.js, 0, 18))
+
+(new C()).member.a = 1;
+>(new C()).member : Symbol(C.member, Decl(a.js, 5, 19))
+>C : Symbol(C, Decl(a.js, 1, 15))
+>member : Symbol(C.member, Decl(a.js, 5, 19))
+
+(new C()).initializedMember.a = 1;
+>(new C()).initializedMember : Symbol(C.initializedMember, Decl(a.js, 3, 9))
+>C : Symbol(C, Decl(a.js, 1, 15))
+>initializedMember : Symbol(C.initializedMember, Decl(a.js, 3, 9))
+
+obj.property.a = 1;
+>obj.property : Symbol(property, Decl(a.js, 11, 11))
+>obj : Symbol(obj, Decl(a.js, 11, 3), Decl(a.js, 13, 2))
+>property : Symbol(property, Decl(a.js, 11, 11))
+
+arr[0].a = 1;
+>arr : Symbol(arr, Decl(a.js, 17, 3))
+
+getObj().a = 1;
+>getObj : Symbol(getObj, Decl(a.js, 17, 15))
+
+

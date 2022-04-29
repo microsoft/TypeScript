@@ -1,0 +1,49 @@
+=== tests/cases/conformance/generators/generatorReturnContextualType.ts ===
+// #35995
+
+function* f1(): Generator<any, { x: 'x' }, any> {
+>f1 : Symbol(f1, Decl(generatorReturnContextualType.ts, 0, 0))
+>Generator : Symbol(Generator, Decl(lib.es2015.generator.d.ts, --, --))
+>x : Symbol(x, Decl(generatorReturnContextualType.ts, 2, 32))
+
+  return { x: 'x' };
+>x : Symbol(x, Decl(generatorReturnContextualType.ts, 3, 10))
+}
+
+async function* f2(): AsyncGenerator<any, { x: 'x' }, any> {
+>f2 : Symbol(f2, Decl(generatorReturnContextualType.ts, 4, 1))
+>AsyncGenerator : Symbol(AsyncGenerator, Decl(lib.es2018.asyncgenerator.d.ts, --, --))
+>x : Symbol(x, Decl(generatorReturnContextualType.ts, 6, 43))
+
+  return { x: 'x' };
+>x : Symbol(x, Decl(generatorReturnContextualType.ts, 7, 10))
+}
+
+async function* f3(): AsyncGenerator<any, { x: 'x' }, any> {
+>f3 : Symbol(f3, Decl(generatorReturnContextualType.ts, 8, 1))
+>AsyncGenerator : Symbol(AsyncGenerator, Decl(lib.es2018.asyncgenerator.d.ts, --, --))
+>x : Symbol(x, Decl(generatorReturnContextualType.ts, 10, 43))
+
+  return Promise.resolve({ x: 'x' });
+>Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>x : Symbol(x, Decl(generatorReturnContextualType.ts, 11, 26))
+}
+
+async function* f4(): AsyncGenerator<any, { x: 'x' }, any> {
+>f4 : Symbol(f4, Decl(generatorReturnContextualType.ts, 12, 1))
+>AsyncGenerator : Symbol(AsyncGenerator, Decl(lib.es2018.asyncgenerator.d.ts, --, --))
+>x : Symbol(x, Decl(generatorReturnContextualType.ts, 14, 43))
+
+  const ret = { x: 'x' };
+>ret : Symbol(ret, Decl(generatorReturnContextualType.ts, 15, 7))
+>x : Symbol(x, Decl(generatorReturnContextualType.ts, 15, 15))
+
+  return Promise.resolve(ret); // Error
+>Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>ret : Symbol(ret, Decl(generatorReturnContextualType.ts, 15, 7))
+}
+

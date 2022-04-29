@@ -1,0 +1,14 @@
+=== tests/cases/conformance/es6/yieldExpressions/YieldExpression8_es6.ts ===
+yield(foo);
+>yield(foo) : any
+>yield : any
+>foo : () => Generator<typeof foo, void, unknown>
+
+function* foo() {
+>foo : () => Generator<typeof foo, void, unknown>
+
+  yield(foo);
+>yield(foo) : any
+>(foo) : () => Generator<typeof foo, void, unknown>
+>foo : () => Generator<typeof foo, void, unknown>
+}

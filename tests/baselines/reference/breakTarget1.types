@@ -1,0 +1,7 @@
+=== tests/cases/compiler/breakTarget1.ts ===
+target:
+>target : any
+
+  break target;
+>target : any
+

@@ -1,0 +1,36 @@
+=== tests/cases/compiler/inferentialTypingWithFunctionTypeZip.ts ===
+var pair: <T, S>(x: T) => (y: S) => { x: T; y: S; }
+>pair : <T, S>(x: T) => (y: S) => { x: T; y: S; }
+>x : T
+>y : S
+>x : T
+>y : S
+
+var zipWith: <T, S, U>(a: T[], b: S[], f: (x: T) => (y: S) => U) => U[];
+>zipWith : <T, S, U>(a: T[], b: S[], f: (x: T) => (y: S) => U) => U[]
+>a : T[]
+>b : S[]
+>f : (x: T) => (y: S) => U
+>x : T
+>y : S
+
+var result = zipWith([1, 2], ['a', 'b'], pair);
+>result : { x: number; y: unknown; }[]
+>zipWith([1, 2], ['a', 'b'], pair) : { x: number; y: unknown; }[]
+>zipWith : <T, S, U>(a: T[], b: S[], f: (x: T) => (y: S) => U) => U[]
+>[1, 2] : number[]
+>1 : 1
+>2 : 2
+>['a', 'b'] : string[]
+>'a' : "a"
+>'b' : "b"
+>pair : <T, S>(x: T) => (y: S) => { x: T; y: S; }
+
+var i = result[0].x; // number
+>i : number
+>result[0].x : number
+>result[0] : { x: number; y: unknown; }
+>result : { x: number; y: unknown; }[]
+>0 : 0
+>x : number
+

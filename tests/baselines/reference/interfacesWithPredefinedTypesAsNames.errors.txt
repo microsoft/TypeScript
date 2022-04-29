@@ -1,0 +1,34 @@
+tests/cases/conformance/interfaces/interfaceDeclarations/interfacesWithPredefinedTypesAsNames.ts(1,11): error TS2427: Interface name cannot be 'any'.
+tests/cases/conformance/interfaces/interfaceDeclarations/interfacesWithPredefinedTypesAsNames.ts(2,11): error TS2427: Interface name cannot be 'number'.
+tests/cases/conformance/interfaces/interfaceDeclarations/interfacesWithPredefinedTypesAsNames.ts(3,11): error TS2427: Interface name cannot be 'string'.
+tests/cases/conformance/interfaces/interfaceDeclarations/interfacesWithPredefinedTypesAsNames.ts(4,11): error TS2427: Interface name cannot be 'boolean'.
+tests/cases/conformance/interfaces/interfaceDeclarations/interfacesWithPredefinedTypesAsNames.ts(5,1): error TS2304: Cannot find name 'interface'.
+tests/cases/conformance/interfaces/interfaceDeclarations/interfacesWithPredefinedTypesAsNames.ts(5,11): error TS2427: Interface name cannot be 'void'.
+tests/cases/conformance/interfaces/interfaceDeclarations/interfacesWithPredefinedTypesAsNames.ts(6,11): error TS2427: Interface name cannot be 'unknown'.
+tests/cases/conformance/interfaces/interfaceDeclarations/interfacesWithPredefinedTypesAsNames.ts(7,11): error TS2427: Interface name cannot be 'never'.
+
+
+==== tests/cases/conformance/interfaces/interfaceDeclarations/interfacesWithPredefinedTypesAsNames.ts (8 errors) ====
+    interface any { }
+              ~~~
+!!! error TS2427: Interface name cannot be 'any'.
+    interface number { }
+              ~~~~~~
+!!! error TS2427: Interface name cannot be 'number'.
+    interface string { }
+              ~~~~~~
+!!! error TS2427: Interface name cannot be 'string'.
+    interface boolean { }
+              ~~~~~~~
+!!! error TS2427: Interface name cannot be 'boolean'.
+    interface void {}
+    ~~~~~~~~~
+!!! error TS2304: Cannot find name 'interface'.
+              ~~~~
+!!! error TS2427: Interface name cannot be 'void'.
+    interface unknown {}
+              ~~~~~~~
+!!! error TS2427: Interface name cannot be 'unknown'.
+    interface never {}
+              ~~~~~
+!!! error TS2427: Interface name cannot be 'never'.

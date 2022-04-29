@@ -1,0 +1,22 @@
+=== tests/cases/compiler/metadataOfClassFromModule.ts ===
+module MyModule {
+>MyModule : Symbol(MyModule, Decl(metadataOfClassFromModule.ts, 0, 0))
+
+    export function inject(target: any, key: string): void { }
+>inject : Symbol(inject, Decl(metadataOfClassFromModule.ts, 0, 17))
+>target : Symbol(target, Decl(metadataOfClassFromModule.ts, 2, 27))
+>key : Symbol(key, Decl(metadataOfClassFromModule.ts, 2, 39))
+
+    export class Leg { }
+>Leg : Symbol(Leg, Decl(metadataOfClassFromModule.ts, 2, 62))
+
+    export class Person {
+>Person : Symbol(Person, Decl(metadataOfClassFromModule.ts, 4, 24))
+
+        @inject leftLeg: Leg;
+>inject : Symbol(inject, Decl(metadataOfClassFromModule.ts, 0, 17))
+>leftLeg : Symbol(Person.leftLeg, Decl(metadataOfClassFromModule.ts, 6, 25))
+>Leg : Symbol(Leg, Decl(metadataOfClassFromModule.ts, 2, 62))
+    }
+
+}

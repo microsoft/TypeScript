@@ -1,0 +1,138 @@
+=== tests/cases/conformance/controlFlow/controlFlowIfStatement.ts ===
+let x: string | number | boolean | RegExp;
+>x : Symbol(x, Decl(controlFlowIfStatement.ts, 0, 3))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+let cond: boolean;
+>cond : Symbol(cond, Decl(controlFlowIfStatement.ts, 1, 3))
+
+x = /a/;
+>x : Symbol(x, Decl(controlFlowIfStatement.ts, 0, 3))
+
+if (x /* RegExp */, (x = true)) {
+>x : Symbol(x, Decl(controlFlowIfStatement.ts, 0, 3))
+>x : Symbol(x, Decl(controlFlowIfStatement.ts, 0, 3))
+
+    x; // boolean
+>x : Symbol(x, Decl(controlFlowIfStatement.ts, 0, 3))
+
+    x = "";
+>x : Symbol(x, Decl(controlFlowIfStatement.ts, 0, 3))
+}
+else {
+    x; // boolean
+>x : Symbol(x, Decl(controlFlowIfStatement.ts, 0, 3))
+
+    x = 42;
+>x : Symbol(x, Decl(controlFlowIfStatement.ts, 0, 3))
+}
+x; // string | number
+>x : Symbol(x, Decl(controlFlowIfStatement.ts, 0, 3))
+
+function a() {
+>a : Symbol(a, Decl(controlFlowIfStatement.ts, 12, 2))
+
+    let x: string | number;
+>x : Symbol(x, Decl(controlFlowIfStatement.ts, 15, 7))
+
+    if (cond) {
+>cond : Symbol(cond, Decl(controlFlowIfStatement.ts, 1, 3))
+
+        x = 42;
+>x : Symbol(x, Decl(controlFlowIfStatement.ts, 15, 7))
+    }
+    else {
+        x = "";
+>x : Symbol(x, Decl(controlFlowIfStatement.ts, 15, 7))
+
+        return;
+    }
+    x; // number
+>x : Symbol(x, Decl(controlFlowIfStatement.ts, 15, 7))
+}
+function b() {
+>b : Symbol(b, Decl(controlFlowIfStatement.ts, 24, 1))
+
+    let x: string | number;
+>x : Symbol(x, Decl(controlFlowIfStatement.ts, 26, 7))
+
+    if (cond) {
+>cond : Symbol(cond, Decl(controlFlowIfStatement.ts, 1, 3))
+
+        x = 42;
+>x : Symbol(x, Decl(controlFlowIfStatement.ts, 26, 7))
+
+        throw "";
+    }
+    else {
+        x = "";
+>x : Symbol(x, Decl(controlFlowIfStatement.ts, 26, 7))
+    }
+    x; // string
+>x : Symbol(x, Decl(controlFlowIfStatement.ts, 26, 7))
+}
+function c<T>(data: string | T): T {
+>c : Symbol(c, Decl(controlFlowIfStatement.ts, 35, 1))
+>T : Symbol(T, Decl(controlFlowIfStatement.ts, 36, 11))
+>data : Symbol(data, Decl(controlFlowIfStatement.ts, 36, 14))
+>T : Symbol(T, Decl(controlFlowIfStatement.ts, 36, 11))
+>T : Symbol(T, Decl(controlFlowIfStatement.ts, 36, 11))
+
+    if (typeof data === 'string') {
+>data : Symbol(data, Decl(controlFlowIfStatement.ts, 36, 14))
+
+        return JSON.parse(data);
+>JSON.parse : Symbol(JSON.parse, Decl(lib.es5.d.ts, --, --))
+>JSON : Symbol(JSON, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>parse : Symbol(JSON.parse, Decl(lib.es5.d.ts, --, --))
+>data : Symbol(data, Decl(controlFlowIfStatement.ts, 36, 14))
+    }
+    else {
+        return data;
+>data : Symbol(data, Decl(controlFlowIfStatement.ts, 36, 14))
+    }
+}
+function d<T extends string>(data: string | T): never {
+>d : Symbol(d, Decl(controlFlowIfStatement.ts, 43, 1))
+>T : Symbol(T, Decl(controlFlowIfStatement.ts, 44, 11))
+>data : Symbol(data, Decl(controlFlowIfStatement.ts, 44, 29))
+>T : Symbol(T, Decl(controlFlowIfStatement.ts, 44, 11))
+
+    if (typeof data === 'string') {
+>data : Symbol(data, Decl(controlFlowIfStatement.ts, 44, 29))
+
+        throw new Error('will always happen');
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+    }
+    else {
+        return data;
+>data : Symbol(data, Decl(controlFlowIfStatement.ts, 44, 29))
+    }
+}
+
+interface I<T> {
+>I : Symbol(I, Decl(controlFlowIfStatement.ts, 51, 1))
+>T : Symbol(T, Decl(controlFlowIfStatement.ts, 53, 12))
+
+  p: T;
+>p : Symbol(I.p, Decl(controlFlowIfStatement.ts, 53, 16))
+>T : Symbol(T, Decl(controlFlowIfStatement.ts, 53, 12))
+}
+function e(x: I<"A" | "B">) {
+>e : Symbol(e, Decl(controlFlowIfStatement.ts, 55, 1))
+>x : Symbol(x, Decl(controlFlowIfStatement.ts, 56, 11))
+>I : Symbol(I, Decl(controlFlowIfStatement.ts, 51, 1))
+
+    if (x.p === "A") {
+>x.p : Symbol(I.p, Decl(controlFlowIfStatement.ts, 53, 16))
+>x : Symbol(x, Decl(controlFlowIfStatement.ts, 56, 11))
+>p : Symbol(I.p, Decl(controlFlowIfStatement.ts, 53, 16))
+
+        let a: "A" = (null as unknown as typeof x.p)
+>a : Symbol(a, Decl(controlFlowIfStatement.ts, 58, 11))
+>x.p : Symbol(I.p, Decl(controlFlowIfStatement.ts, 53, 16))
+>x : Symbol(x, Decl(controlFlowIfStatement.ts, 56, 11))
+>p : Symbol(I.p, Decl(controlFlowIfStatement.ts, 53, 16))
+    }
+}
+

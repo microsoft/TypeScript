@@ -1,0 +1,5 @@
+=== tests/cases/compiler/invalidUnicodeEscapeSequance2.ts ===
+var arg\uxxxx
+>arg : Symbol(arg, Decl(invalidUnicodeEscapeSequance2.ts, 0, 3))
+>uxxxx : Symbol(uxxxx, Decl(invalidUnicodeEscapeSequance2.ts, 0, 8))
+

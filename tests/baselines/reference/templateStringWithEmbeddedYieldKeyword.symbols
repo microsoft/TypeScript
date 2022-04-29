@@ -1,0 +1,9 @@
+=== tests/cases/conformance/es6/templates/templateStringWithEmbeddedYieldKeyword.ts ===
+function* gen {
+>gen : Symbol(gen, Decl(templateStringWithEmbeddedYieldKeyword.ts, 0, 0))
+
+    // Once this is supported, yield *must* be parenthesized.
+    var x = `abc${ yield 10 }def`;
+>x : Symbol(x, Decl(templateStringWithEmbeddedYieldKeyword.ts, 2, 7))
+}
+

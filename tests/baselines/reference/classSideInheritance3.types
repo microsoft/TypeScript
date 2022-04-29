@@ -1,0 +1,51 @@
+=== tests/cases/compiler/classSideInheritance3.ts ===
+class A {
+>A : A
+
+    constructor(public x: string) {
+>x : string
+    }
+}
+class B extends A {
+>B : B
+>A : A
+
+    constructor(x: string, public data: string) {
+>x : string
+>data : string
+
+        super(x);
+>super(x) : void
+>super : typeof A
+>x : string
+    }
+}
+class C extends A {
+>C : C
+>A : A
+
+    constructor(x: string) {
+>x : string
+
+        super(x);
+>super(x) : void
+>super : typeof A
+>x : string
+    }
+}
+
+var r1: typeof A = B; // error
+>r1 : typeof A
+>A : typeof A
+>B : typeof B
+
+var r2: new (x: string) => A = B; // error
+>r2 : new (x: string) => A
+>x : string
+>B : typeof B
+
+var r3: typeof A = C; // ok
+>r3 : typeof A
+>A : typeof A
+>C : typeof C
+

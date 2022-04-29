@@ -1,0 +1,26 @@
+=== tests/cases/compiler/a.ts ===
+export class A {
+>A : Symbol(A, Decl(a.ts, 0, 0), Decl(b.ts, 1, 22))
+
+    protected _f: number;
+>_f : Symbol(A._f, Decl(a.ts, 0, 16))
+
+    getF() { return this._f; }
+>getF : Symbol(A.getF, Decl(a.ts, 1, 25))
+>this._f : Symbol(A._f, Decl(a.ts, 0, 16))
+>this : Symbol(A, Decl(a.ts, 0, 0), Decl(b.ts, 1, 22))
+>_f : Symbol(A._f, Decl(a.ts, 0, 16))
+}
+
+=== tests/cases/compiler/b.ts ===
+export {}
+declare module "./a" {
+>"./a" : Symbol("tests/cases/compiler/a", Decl(a.ts, 0, 0), Decl(b.ts, 0, 9))
+
+    interface A {
+>A : Symbol(A, Decl(a.ts, 0, 0), Decl(b.ts, 1, 22))
+
+        run();
+>run : Symbol(A.run, Decl(b.ts, 2, 17))
+    }
+}

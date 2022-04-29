@@ -1,0 +1,9 @@
+tests/cases/conformance/parser/ecmascript5/IndexSignatures/parserIndexSignature7.ts(2,3): error TS1021: An index signature must have a type annotation.
+
+
+==== tests/cases/conformance/parser/ecmascript5/IndexSignatures/parserIndexSignature7.ts (1 errors) ====
+    interface I {
+      [a:string]
+      ~~~~~~~~~~
+!!! error TS1021: An index signature must have a type annotation.
+    }

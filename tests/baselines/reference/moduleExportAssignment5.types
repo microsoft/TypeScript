@@ -1,0 +1,37 @@
+=== tests/cases/conformance/salsa/axios.js ===
+class Axios {
+>Axios : Axios
+
+    constructor() {
+    }
+    m() { }
+>m : () => void
+}
+var axios = new Axios();
+>axios : Axios
+>new Axios() : Axios
+>Axios : typeof Axios
+
+// none of the 3 references should have a use-before-def error
+axios.m()
+>axios.m() : void
+>axios.m : () => void
+>axios : Axios
+>m : () => void
+
+module.exports = axios;
+>module.exports = axios : { m(): void; default: Axios; }
+>module.exports : { m(): void; default: Axios; }
+>module : { exports: { m(): void; default: Axios; }; }
+>exports : { m(): void; default: Axios; }
+>axios : Axios
+
+module.exports.default = axios;
+>module.exports.default = axios : Axios
+>module.exports.default : Axios
+>module.exports : { m(): void; default: Axios; }
+>module : { exports: { m(): void; default: Axios; }; }
+>exports : { m(): void; default: Axios; }
+>default : Axios
+>axios : Axios
+

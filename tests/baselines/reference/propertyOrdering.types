@@ -1,0 +1,56 @@
+=== tests/cases/compiler/propertyOrdering.ts ===
+class Foo {
+>Foo : Foo
+
+    constructor(store: string) { }
+>store : string
+
+      public foo() {
+>foo : () => any
+
+            return this._store.length;   // shouldn't be an error
+>this._store.length : any
+>this._store : any
+>this : this
+>_store : any
+>length : any
+      }
+      public _store = store; // no repro if this is first line in class body
+>_store : any
+>store : any
+
+
+      public bar() { return this.store; } // should be an error
+>bar : () => any
+>this.store : any
+>this : this
+>store : any
+
+}
+
+class Bar {
+>Bar : Bar
+
+      public foo() {
+>foo : () => any
+
+            return this._store.length;   // shouldn't be an error
+>this._store.length : any
+>this._store : any
+>this : this
+>_store : any
+>length : any
+
+      }
+    constructor(store: string) {
+>store : string
+
+        this._store = store;
+>this._store = store : string
+>this._store : any
+>this : this
+>_store : any
+>store : string
+    }
+}
+

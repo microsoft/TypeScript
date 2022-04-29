@@ -1,0 +1,105 @@
+=== tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck62.ts ===
+export interface StrategicState {
+>StrategicState : Symbol(StrategicState, Decl(generatorTypeCheck62.ts, 0, 0))
+
+    lastStrategyApplied?: string;
+>lastStrategyApplied : Symbol(StrategicState.lastStrategyApplied, Decl(generatorTypeCheck62.ts, 0, 33))
+}
+
+export function strategy<T extends StrategicState>(stratName: string, gen: (a: T) => IterableIterator<T | undefined>): (a: T) => IterableIterator<T | undefined> {
+>strategy : Symbol(strategy, Decl(generatorTypeCheck62.ts, 2, 1))
+>T : Symbol(T, Decl(generatorTypeCheck62.ts, 4, 25))
+>StrategicState : Symbol(StrategicState, Decl(generatorTypeCheck62.ts, 0, 0))
+>stratName : Symbol(stratName, Decl(generatorTypeCheck62.ts, 4, 51))
+>gen : Symbol(gen, Decl(generatorTypeCheck62.ts, 4, 69))
+>a : Symbol(a, Decl(generatorTypeCheck62.ts, 4, 76))
+>T : Symbol(T, Decl(generatorTypeCheck62.ts, 4, 25))
+>IterableIterator : Symbol(IterableIterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>T : Symbol(T, Decl(generatorTypeCheck62.ts, 4, 25))
+>a : Symbol(a, Decl(generatorTypeCheck62.ts, 4, 120))
+>T : Symbol(T, Decl(generatorTypeCheck62.ts, 4, 25))
+>IterableIterator : Symbol(IterableIterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>T : Symbol(T, Decl(generatorTypeCheck62.ts, 4, 25))
+
+    return function*(state) {
+>state : Symbol(state, Decl(generatorTypeCheck62.ts, 5, 21))
+
+        for (const next of gen(state)) {
+>next : Symbol(next, Decl(generatorTypeCheck62.ts, 6, 18))
+>gen : Symbol(gen, Decl(generatorTypeCheck62.ts, 4, 69))
+>state : Symbol(state, Decl(generatorTypeCheck62.ts, 5, 21))
+
+            if (next) {
+>next : Symbol(next, Decl(generatorTypeCheck62.ts, 6, 18))
+
+                next.lastStrategyApplied = stratName;
+>next.lastStrategyApplied : Symbol(StrategicState.lastStrategyApplied, Decl(generatorTypeCheck62.ts, 0, 33))
+>next : Symbol(next, Decl(generatorTypeCheck62.ts, 6, 18))
+>lastStrategyApplied : Symbol(StrategicState.lastStrategyApplied, Decl(generatorTypeCheck62.ts, 0, 33))
+>stratName : Symbol(stratName, Decl(generatorTypeCheck62.ts, 4, 51))
+            }
+            yield next;
+>next : Symbol(next, Decl(generatorTypeCheck62.ts, 6, 18))
+        }
+    }
+}
+
+export interface Strategy<T> {
+>Strategy : Symbol(Strategy, Decl(generatorTypeCheck62.ts, 13, 1))
+>T : Symbol(T, Decl(generatorTypeCheck62.ts, 15, 26))
+
+    (a: T): IterableIterator<T | undefined>;
+>a : Symbol(a, Decl(generatorTypeCheck62.ts, 16, 5))
+>T : Symbol(T, Decl(generatorTypeCheck62.ts, 15, 26))
+>IterableIterator : Symbol(IterableIterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>T : Symbol(T, Decl(generatorTypeCheck62.ts, 15, 26))
+}
+
+export interface State extends StrategicState {
+>State : Symbol(State, Decl(generatorTypeCheck62.ts, 17, 1))
+>StrategicState : Symbol(StrategicState, Decl(generatorTypeCheck62.ts, 0, 0))
+
+    foo: number;
+>foo : Symbol(State.foo, Decl(generatorTypeCheck62.ts, 19, 47))
+}
+
+export const Nothing1: Strategy<State> = strategy("Nothing", function*(state: State) {
+>Nothing1 : Symbol(Nothing1, Decl(generatorTypeCheck62.ts, 23, 12))
+>Strategy : Symbol(Strategy, Decl(generatorTypeCheck62.ts, 13, 1))
+>State : Symbol(State, Decl(generatorTypeCheck62.ts, 17, 1))
+>strategy : Symbol(strategy, Decl(generatorTypeCheck62.ts, 2, 1))
+>state : Symbol(state, Decl(generatorTypeCheck62.ts, 23, 71))
+>State : Symbol(State, Decl(generatorTypeCheck62.ts, 17, 1))
+
+    return state;
+>state : Symbol(state, Decl(generatorTypeCheck62.ts, 23, 71))
+
+});
+
+export const Nothing2: Strategy<State> = strategy("Nothing", function*(state: State) {
+>Nothing2 : Symbol(Nothing2, Decl(generatorTypeCheck62.ts, 27, 12))
+>Strategy : Symbol(Strategy, Decl(generatorTypeCheck62.ts, 13, 1))
+>State : Symbol(State, Decl(generatorTypeCheck62.ts, 17, 1))
+>strategy : Symbol(strategy, Decl(generatorTypeCheck62.ts, 2, 1))
+>state : Symbol(state, Decl(generatorTypeCheck62.ts, 27, 71))
+>State : Symbol(State, Decl(generatorTypeCheck62.ts, 17, 1))
+
+    yield state;
+>state : Symbol(state, Decl(generatorTypeCheck62.ts, 27, 71))
+
+});
+
+export const Nothing3: Strategy<State> = strategy("Nothing", function* (state: State) {
+>Nothing3 : Symbol(Nothing3, Decl(generatorTypeCheck62.ts, 31, 12))
+>Strategy : Symbol(Strategy, Decl(generatorTypeCheck62.ts, 13, 1))
+>State : Symbol(State, Decl(generatorTypeCheck62.ts, 17, 1))
+>strategy : Symbol(strategy, Decl(generatorTypeCheck62.ts, 2, 1))
+>state : Symbol(state, Decl(generatorTypeCheck62.ts, 31, 72))
+>State : Symbol(State, Decl(generatorTypeCheck62.ts, 17, 1))
+
+    yield ;
+    return state;
+>state : Symbol(state, Decl(generatorTypeCheck62.ts, 31, 72))
+
+});
+ 

@@ -1,0 +1,22 @@
+=== tests/cases/compiler/typeParametersAndParametersInComputedNames.ts ===
+function foo<T>(a: T) : string {
+>foo : Symbol(foo, Decl(typeParametersAndParametersInComputedNames.ts, 0, 0))
+>T : Symbol(T, Decl(typeParametersAndParametersInComputedNames.ts, 0, 13))
+>a : Symbol(a, Decl(typeParametersAndParametersInComputedNames.ts, 0, 16))
+>T : Symbol(T, Decl(typeParametersAndParametersInComputedNames.ts, 0, 13))
+
+    return "";
+}
+
+class A {
+>A : Symbol(A, Decl(typeParametersAndParametersInComputedNames.ts, 2, 1))
+
+    [foo<T>(a)]<T>(a: T) {  
+>[foo<T>(a)] : Symbol(A[foo<T>(a)], Decl(typeParametersAndParametersInComputedNames.ts, 4, 9))
+>foo : Symbol(foo, Decl(typeParametersAndParametersInComputedNames.ts, 0, 0))
+>T : Symbol(T)
+>T : Symbol(T, Decl(typeParametersAndParametersInComputedNames.ts, 5, 16))
+>a : Symbol(a, Decl(typeParametersAndParametersInComputedNames.ts, 5, 19))
+>T : Symbol(T, Decl(typeParametersAndParametersInComputedNames.ts, 5, 16))
+    }
+}

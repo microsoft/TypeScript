@@ -1,0 +1,150 @@
+=== tests/cases/compiler/literalFreshnessPropagationOnNarrowing.ts ===
+function f1() {
+>f1 : Symbol(f1, Decl(literalFreshnessPropagationOnNarrowing.ts, 0, 0))
+
+    let b = true;
+>b : Symbol(b, Decl(literalFreshnessPropagationOnNarrowing.ts, 1, 7))
+
+    let obj = { b };
+>obj : Symbol(obj, Decl(literalFreshnessPropagationOnNarrowing.ts, 2, 7))
+>b : Symbol(b, Decl(literalFreshnessPropagationOnNarrowing.ts, 2, 15))
+
+    // Desired: OK
+    // 3.0: OK
+    // 3.1 as-is: OK
+    // 3.1 minus widening propagation: error
+    obj.b = false;
+>obj.b : Symbol(b, Decl(literalFreshnessPropagationOnNarrowing.ts, 2, 15))
+>obj : Symbol(obj, Decl(literalFreshnessPropagationOnNarrowing.ts, 2, 7))
+>b : Symbol(b, Decl(literalFreshnessPropagationOnNarrowing.ts, 2, 15))
+}
+
+function f2() {
+>f2 : Symbol(f2, Decl(literalFreshnessPropagationOnNarrowing.ts, 8, 1))
+
+    type Element = (string | false);
+>Element : Symbol(Element, Decl(literalFreshnessPropagationOnNarrowing.ts, 10, 15))
+
+    type ElementOrArray = Element | Element[]; 
+>ElementOrArray : Symbol(ElementOrArray, Decl(literalFreshnessPropagationOnNarrowing.ts, 11, 36))
+>Element : Symbol(Element, Decl(literalFreshnessPropagationOnNarrowing.ts, 10, 15))
+>Element : Symbol(Element, Decl(literalFreshnessPropagationOnNarrowing.ts, 10, 15))
+
+    let el: Element = null as any;
+>el : Symbol(el, Decl(literalFreshnessPropagationOnNarrowing.ts, 13, 7))
+>Element : Symbol(Element, Decl(literalFreshnessPropagationOnNarrowing.ts, 10, 15))
+
+    let arr: Element[] = null as any;
+>arr : Symbol(arr, Decl(literalFreshnessPropagationOnNarrowing.ts, 14, 7))
+>Element : Symbol(Element, Decl(literalFreshnessPropagationOnNarrowing.ts, 10, 15))
+
+    let elOrA: ElementOrArray = null as any;
+>elOrA : Symbol(elOrA, Decl(literalFreshnessPropagationOnNarrowing.ts, 15, 7))
+>ElementOrArray : Symbol(ElementOrArray, Decl(literalFreshnessPropagationOnNarrowing.ts, 11, 36))
+
+    // Desired/actual: All OK
+    let a1: ElementOrArray = el;
+>a1 : Symbol(a1, Decl(literalFreshnessPropagationOnNarrowing.ts, 18, 7))
+>ElementOrArray : Symbol(ElementOrArray, Decl(literalFreshnessPropagationOnNarrowing.ts, 11, 36))
+>el : Symbol(el, Decl(literalFreshnessPropagationOnNarrowing.ts, 13, 7))
+
+    let a2: ElementOrArray = arr;
+>a2 : Symbol(a2, Decl(literalFreshnessPropagationOnNarrowing.ts, 19, 7))
+>ElementOrArray : Symbol(ElementOrArray, Decl(literalFreshnessPropagationOnNarrowing.ts, 11, 36))
+>arr : Symbol(arr, Decl(literalFreshnessPropagationOnNarrowing.ts, 14, 7))
+
+    let a3: ElementOrArray = [el];
+>a3 : Symbol(a3, Decl(literalFreshnessPropagationOnNarrowing.ts, 20, 7))
+>ElementOrArray : Symbol(ElementOrArray, Decl(literalFreshnessPropagationOnNarrowing.ts, 11, 36))
+>el : Symbol(el, Decl(literalFreshnessPropagationOnNarrowing.ts, 13, 7))
+
+    let a4: ElementOrArray = Array.isArray(elOrA) ? elOrA : [elOrA];
+>a4 : Symbol(a4, Decl(literalFreshnessPropagationOnNarrowing.ts, 21, 7))
+>ElementOrArray : Symbol(ElementOrArray, Decl(literalFreshnessPropagationOnNarrowing.ts, 11, 36))
+>Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>elOrA : Symbol(elOrA, Decl(literalFreshnessPropagationOnNarrowing.ts, 15, 7))
+>elOrA : Symbol(elOrA, Decl(literalFreshnessPropagationOnNarrowing.ts, 15, 7))
+>elOrA : Symbol(elOrA, Decl(literalFreshnessPropagationOnNarrowing.ts, 15, 7))
+
+    // Desired: OK
+    // 3.0: Error
+    // 3.1: OK
+    let a5: ElementOrArray = [...Array.isArray(elOrA) ? elOrA : [elOrA]];
+>a5 : Symbol(a5, Decl(literalFreshnessPropagationOnNarrowing.ts, 26, 7))
+>ElementOrArray : Symbol(ElementOrArray, Decl(literalFreshnessPropagationOnNarrowing.ts, 11, 36))
+>Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>elOrA : Symbol(elOrA, Decl(literalFreshnessPropagationOnNarrowing.ts, 15, 7))
+>elOrA : Symbol(elOrA, Decl(literalFreshnessPropagationOnNarrowing.ts, 15, 7))
+>elOrA : Symbol(elOrA, Decl(literalFreshnessPropagationOnNarrowing.ts, 15, 7))
+}
+
+function f3() {
+>f3 : Symbol(f3, Decl(literalFreshnessPropagationOnNarrowing.ts, 27, 1))
+
+    type XY = 'x' | 'y';
+>XY : Symbol(XY, Decl(literalFreshnessPropagationOnNarrowing.ts, 29, 15))
+
+    const x: XY = 'x';
+>x : Symbol(x, Decl(literalFreshnessPropagationOnNarrowing.ts, 31, 9))
+>XY : Symbol(XY, Decl(literalFreshnessPropagationOnNarrowing.ts, 29, 15))
+
+    let x2 = x;
+>x2 : Symbol(x2, Decl(literalFreshnessPropagationOnNarrowing.ts, 32, 7))
+>x : Symbol(x, Decl(literalFreshnessPropagationOnNarrowing.ts, 31, 9))
+
+    // Desired: OK (up for debate?)
+    // 3.0: Error
+    // 3.1 as-is: OK
+    x2 = 'y';
+>x2 : Symbol(x2, Decl(literalFreshnessPropagationOnNarrowing.ts, 32, 7))
+
+    // Desired/actual: All OK
+    let x3: XY = x;
+>x3 : Symbol(x3, Decl(literalFreshnessPropagationOnNarrowing.ts, 39, 7))
+>XY : Symbol(XY, Decl(literalFreshnessPropagationOnNarrowing.ts, 29, 15))
+>x : Symbol(x, Decl(literalFreshnessPropagationOnNarrowing.ts, 31, 9))
+
+    x3 = 'y';
+>x3 : Symbol(x3, Decl(literalFreshnessPropagationOnNarrowing.ts, 39, 7))
+}
+
+function f4() {
+>f4 : Symbol(f4, Decl(literalFreshnessPropagationOnNarrowing.ts, 41, 1))
+
+    const x: boolean = true;
+>x : Symbol(x, Decl(literalFreshnessPropagationOnNarrowing.ts, 44, 9))
+
+    let x1 = x;
+>x1 : Symbol(x1, Decl(literalFreshnessPropagationOnNarrowing.ts, 45, 7))
+>x : Symbol(x, Decl(literalFreshnessPropagationOnNarrowing.ts, 44, 9))
+
+    // Desired: OK
+    // 3.0: OK
+    // 3.1: OK
+    // 3.1 minus widening propagation: error
+    x1 = false;
+>x1 : Symbol(x1, Decl(literalFreshnessPropagationOnNarrowing.ts, 45, 7))
+}
+
+function f5() {
+>f5 : Symbol(f5, Decl(literalFreshnessPropagationOnNarrowing.ts, 51, 1))
+
+    type XY = 'x' | 'y';
+>XY : Symbol(XY, Decl(literalFreshnessPropagationOnNarrowing.ts, 53, 15))
+
+    let arr: XY[] = ['x'];
+>arr : Symbol(arr, Decl(literalFreshnessPropagationOnNarrowing.ts, 55, 7))
+>XY : Symbol(XY, Decl(literalFreshnessPropagationOnNarrowing.ts, 53, 15))
+
+    arr = ['y'];
+>arr : Symbol(arr, Decl(literalFreshnessPropagationOnNarrowing.ts, 55, 7))
+
+    // Desired: OK
+    // Error in all extant branches
+    arr = [...['y']];
+>arr : Symbol(arr, Decl(literalFreshnessPropagationOnNarrowing.ts, 55, 7))
+}

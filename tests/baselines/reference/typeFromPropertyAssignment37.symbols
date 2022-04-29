@@ -1,0 +1,34 @@
+=== tests/cases/conformance/salsa/use.js ===
+const util = require('./mod')
+>util : Symbol(util, Decl(use.js, 0, 5))
+>require : Symbol(require)
+>'./mod' : Symbol(util, Decl(mod.js, 0, 0))
+
+function n() {
+>n : Symbol(n, Decl(use.js, 0, 29))
+
+    util.existy // no error
+>util.existy : Symbol(util.existy, Decl(mod.js, 1, 14))
+>util : Symbol(util, Decl(use.js, 0, 5))
+>existy : Symbol(util.existy, Decl(mod.js, 1, 14))
+}
+util.existy // no error
+>util.existy : Symbol(util.existy, Decl(mod.js, 1, 14))
+>util : Symbol(util, Decl(use.js, 0, 5))
+>existy : Symbol(util.existy, Decl(mod.js, 1, 14))
+
+=== tests/cases/conformance/salsa/mod.js ===
+const util = exports = module.exports = {}
+>util : Symbol(util, Decl(mod.js, 0, 5))
+>exports : Symbol("tests/cases/conformance/salsa/mod", Decl(mod.js, 0, 0))
+>module.exports : Symbol(module.exports, Decl(mod.js, 0, 0))
+>module : Symbol(module, Decl(mod.js, 0, 22))
+>exports : Symbol(module.exports, Decl(mod.js, 0, 0))
+
+if (!!false) {
+    util.existy = function () { }
+>util.existy : Symbol(existy, Decl(mod.js, 1, 14))
+>util : Symbol(util, Decl(mod.js, 0, 5))
+>existy : Symbol(existy, Decl(mod.js, 1, 14))
+}
+

@@ -1,0 +1,39 @@
+=== tests/cases/compiler/functionSubtypingOfVarArgs.ts ===
+class EventBase {
+>EventBase : Symbol(EventBase, Decl(functionSubtypingOfVarArgs.ts, 0, 0))
+
+    private _listeners = [];
+>_listeners : Symbol(EventBase._listeners, Decl(functionSubtypingOfVarArgs.ts, 0, 17))
+
+    add(listener: (...args: any[]) => void): void {
+>add : Symbol(EventBase.add, Decl(functionSubtypingOfVarArgs.ts, 1, 28))
+>listener : Symbol(listener, Decl(functionSubtypingOfVarArgs.ts, 3, 8))
+>args : Symbol(args, Decl(functionSubtypingOfVarArgs.ts, 3, 19))
+
+        this._listeners.push(listener);
+>this._listeners.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>this._listeners : Symbol(EventBase._listeners, Decl(functionSubtypingOfVarArgs.ts, 0, 17))
+>this : Symbol(EventBase, Decl(functionSubtypingOfVarArgs.ts, 0, 0))
+>_listeners : Symbol(EventBase._listeners, Decl(functionSubtypingOfVarArgs.ts, 0, 17))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>listener : Symbol(listener, Decl(functionSubtypingOfVarArgs.ts, 3, 8))
+    }
+}
+
+class StringEvent extends EventBase { // should work
+>StringEvent : Symbol(StringEvent, Decl(functionSubtypingOfVarArgs.ts, 6, 1))
+>EventBase : Symbol(EventBase, Decl(functionSubtypingOfVarArgs.ts, 0, 0))
+
+    add(listener: (items: string) => void ) { // valid, items is subtype of args
+>add : Symbol(StringEvent.add, Decl(functionSubtypingOfVarArgs.ts, 8, 37))
+>listener : Symbol(listener, Decl(functionSubtypingOfVarArgs.ts, 9, 8))
+>items : Symbol(items, Decl(functionSubtypingOfVarArgs.ts, 9, 19))
+
+        super.add(listener);
+>super.add : Symbol(EventBase.add, Decl(functionSubtypingOfVarArgs.ts, 1, 28))
+>super : Symbol(EventBase, Decl(functionSubtypingOfVarArgs.ts, 0, 0))
+>add : Symbol(EventBase.add, Decl(functionSubtypingOfVarArgs.ts, 1, 28))
+>listener : Symbol(listener, Decl(functionSubtypingOfVarArgs.ts, 9, 8))
+    }
+}
+

@@ -1,0 +1,30 @@
+=== tests/cases/conformance/es6/computedProperties/computedPropertyNames17_ES5.ts ===
+var b: boolean;
+>b : Symbol(b, Decl(computedPropertyNames17_ES5.ts, 0, 3))
+
+class C {
+>C : Symbol(C, Decl(computedPropertyNames17_ES5.ts, 0, 15))
+
+    get [b]() { return 0;}
+>[b] : Symbol(C[b], Decl(computedPropertyNames17_ES5.ts, 1, 9))
+>b : Symbol(b, Decl(computedPropertyNames17_ES5.ts, 0, 3))
+
+    static set [true](v) { }
+>[true] : Symbol(C[true], Decl(computedPropertyNames17_ES5.ts, 2, 26))
+>v : Symbol(v, Decl(computedPropertyNames17_ES5.ts, 3, 22))
+
+    get [[]]() { return 0; }
+>[[]] : Symbol(C[[]], Decl(computedPropertyNames17_ES5.ts, 3, 28))
+
+    set [{}](v) { }
+>[{}] : Symbol(C[{}], Decl(computedPropertyNames17_ES5.ts, 4, 28))
+>v : Symbol(v, Decl(computedPropertyNames17_ES5.ts, 5, 13))
+
+    static get [undefined]() { return 0; }
+>[undefined] : Symbol(C[undefined], Decl(computedPropertyNames17_ES5.ts, 5, 19))
+>undefined : Symbol(undefined)
+
+    set [null](v) { }
+>[null] : Symbol(C[null], Decl(computedPropertyNames17_ES5.ts, 6, 42))
+>v : Symbol(v, Decl(computedPropertyNames17_ES5.ts, 7, 15))
+}

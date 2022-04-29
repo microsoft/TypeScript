@@ -1,0 +1,11 @@
+=== /src/projects/file1.ts ===
+import f = require("f"); // should work to f.ts
+>f : Symbol(f, Decl(file1.ts, 0, 0))
+
+let fnumber: number = f;
+>fnumber : Symbol(fnumber, Decl(file1.ts, 1, 3))
+>f : Symbol(f, Decl(file1.ts, 0, 0))
+
+=== /src/node_modules/f.ts ===
+export = 10;
+No type information for this code.

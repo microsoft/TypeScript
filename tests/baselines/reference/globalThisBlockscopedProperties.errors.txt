@@ -1,0 +1,38 @@
+tests/cases/conformance/es2019/globalThisBlockscopedProperties.ts(5,12): error TS2339: Property 'y' does not exist on type 'typeof globalThis'.
+tests/cases/conformance/es2019/globalThisBlockscopedProperties.ts(6,12): error TS2339: Property 'z' does not exist on type 'typeof globalThis'.
+tests/cases/conformance/es2019/globalThisBlockscopedProperties.ts(8,1): error TS2339: Property 'y' does not exist on type 'typeof globalThis'.
+tests/cases/conformance/es2019/globalThisBlockscopedProperties.ts(9,1): error TS2339: Property 'z' does not exist on type 'typeof globalThis'.
+tests/cases/conformance/es2019/globalThisBlockscopedProperties.ts(14,40): error TS2339: Property 'y' does not exist on type 'typeof globalThis'.
+tests/cases/conformance/es2019/globalThisBlockscopedProperties.ts(15,40): error TS2339: Property 'z' does not exist on type 'typeof globalThis'.
+
+
+==== tests/cases/conformance/es2019/globalThisBlockscopedProperties.ts (6 errors) ====
+    var x = 1
+    const y = 2
+    let z = 3
+    globalThis.x // ok
+    globalThis.y // should error, no property 'y'
+               ~
+!!! error TS2339: Property 'y' does not exist on type 'typeof globalThis'.
+    globalThis.z // should error, no property 'z'
+               ~
+!!! error TS2339: Property 'z' does not exist on type 'typeof globalThis'.
+    globalThis['x'] // ok
+    globalThis['y'] // should error, no property 'y'
+    ~~~~~~~~~~~~~~~
+!!! error TS2339: Property 'y' does not exist on type 'typeof globalThis'.
+    globalThis['z'] // should error, no property 'z'
+    ~~~~~~~~~~~~~~~
+!!! error TS2339: Property 'z' does not exist on type 'typeof globalThis'.
+    globalThis.Float64Array // ok
+    globalThis.Infinity // ok
+    
+    declare let test1: (typeof globalThis)['x'] // ok
+    declare let test2: (typeof globalThis)['y'] // error
+                                           ~~~
+!!! error TS2339: Property 'y' does not exist on type 'typeof globalThis'.
+    declare let test3: (typeof globalThis)['z'] // error
+                                           ~~~
+!!! error TS2339: Property 'z' does not exist on type 'typeof globalThis'.
+    declare let themAll: keyof typeof globalThis
+    

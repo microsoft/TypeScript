@@ -1,0 +1,5 @@
+=== tests/cases/compiler/recursiveGenericTypeHierarchy.ts ===
+// used to ICE
+No type information for this code.interface A<T extends A<T, S>, S extends A<T, S>> { }
+No type information for this code.interface B<T extends B<T, S>, S extends B<T, S>> extends A<B<T, S>, B<T, S>> { }
+No type information for this code.

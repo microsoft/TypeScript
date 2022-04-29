@@ -1,0 +1,87 @@
+tests/cases/compiler/moduleVisibilityTest2.ts(55,17): error TS2304: Cannot find name 'x'.
+tests/cases/compiler/moduleVisibilityTest2.ts(56,21): error TS2339: Property 'E' does not exist on type 'typeof M'.
+tests/cases/compiler/moduleVisibilityTest2.ts(59,16): error TS2694: Namespace 'M' has no exported member 'I'.
+tests/cases/compiler/moduleVisibilityTest2.ts(59,23): error TS2694: Namespace 'M' has no exported member 'I'.
+tests/cases/compiler/moduleVisibilityTest2.ts(62,11): error TS2339: Property 'x' does not exist on type 'typeof M'.
+tests/cases/compiler/moduleVisibilityTest2.ts(63,15): error TS2339: Property 'E' does not exist on type 'typeof M'.
+
+
+==== tests/cases/compiler/moduleVisibilityTest2.ts (6 errors) ====
+    module OuterMod {
+    	export function someExportedOuterFunc() { return -1; }
+    
+    	export module OuterInnerMod {
+    		export function someExportedOuterInnerFunc() { return "foo"; }
+    	}
+    }
+    
+    import OuterInnerAlias = OuterMod.OuterInnerMod;
+    
+    module M {
+    
+    	module InnerMod {
+    		export function someExportedInnerFunc() { return -2; }
+    	}
+    
+    	enum E {
+    		A,
+    		B,
+    		C,
+    	}
+    
+    	var x = 5;
+    	export declare var exported_var;
+    
+    	var y = x + x;
+    
+    
+    	interface I {
+    		someMethod():number;
+    	}
+    
+    	 class B {public b = 0;}
+    
+    	 export class C implements I {
+    		public someMethodThatCallsAnOuterMethod() {return OuterInnerAlias.someExportedOuterInnerFunc();}
+    		public someMethodThatCallsAnInnerMethod() {return InnerMod.someExportedInnerFunc();}
+    		public someMethodThatCallsAnOuterInnerMethod() {return OuterMod.someExportedOuterFunc();}
+    		public someMethod() { return 0; }
+    		public someProp = 1;
+    
+    		constructor() {
+    		    function someInnerFunc() { return 2; }
+                var someInnerVar = 3;
+    		}
+    		
+    	}
+    
+    	var someModuleVar = 4;
+    
+    	function someModuleFunction() { return 5;}
+    }
+    
+    module M {
+    	export var c = x;
+    	               ~
+!!! error TS2304: Cannot find name 'x'.
+    	export var meb = M.E.B;
+    	                   ~
+!!! error TS2339: Property 'E' does not exist on type 'typeof M'.
+    }
+    
+    var cprime : M.I = <M.I>null;
+                   ~
+!!! error TS2694: Namespace 'M' has no exported member 'I'.
+                          ~
+!!! error TS2694: Namespace 'M' has no exported member 'I'.
+    
+    var c = new M.C();
+    var z = M.x;
+              ~
+!!! error TS2339: Property 'x' does not exist on type 'typeof M'.
+    var alpha = M.E.A;
+                  ~
+!!! error TS2339: Property 'E' does not exist on type 'typeof M'.
+    var omega = M.exported_var;
+    c.someMethodThatCallsAnOuterMethod();
+    

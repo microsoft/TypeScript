@@ -1,0 +1,4 @@
+=== tests/cases/conformance/ambient/ambientShorthand_declarationEmit.ts ===
+declare module "foo";
+>"foo" : Symbol("foo", Decl(ambientShorthand_declarationEmit.ts, 0, 0))
+

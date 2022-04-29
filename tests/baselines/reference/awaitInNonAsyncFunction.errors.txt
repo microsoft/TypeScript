@@ -1,0 +1,103 @@
+tests/cases/compiler/awaitInNonAsyncFunction.ts(4,7): error TS1103: 'for await' loops are only allowed within async functions and at the top levels of modules.
+tests/cases/compiler/awaitInNonAsyncFunction.ts(5,10): error TS1308: 'await' expressions are only allowed within async functions and at the top levels of modules.
+tests/cases/compiler/awaitInNonAsyncFunction.ts(9,7): error TS1103: 'for await' loops are only allowed within async functions and at the top levels of modules.
+tests/cases/compiler/awaitInNonAsyncFunction.ts(10,10): error TS1308: 'await' expressions are only allowed within async functions and at the top levels of modules.
+tests/cases/compiler/awaitInNonAsyncFunction.ts(14,7): error TS1103: 'for await' loops are only allowed within async functions and at the top levels of modules.
+tests/cases/compiler/awaitInNonAsyncFunction.ts(15,3): error TS1308: 'await' expressions are only allowed within async functions and at the top levels of modules.
+tests/cases/compiler/awaitInNonAsyncFunction.ts(19,7): error TS1103: 'for await' loops are only allowed within async functions and at the top levels of modules.
+tests/cases/compiler/awaitInNonAsyncFunction.ts(20,10): error TS1308: 'await' expressions are only allowed within async functions and at the top levels of modules.
+tests/cases/compiler/awaitInNonAsyncFunction.ts(24,7): error TS1103: 'for await' loops are only allowed within async functions and at the top levels of modules.
+tests/cases/compiler/awaitInNonAsyncFunction.ts(25,9): error TS1308: 'await' expressions are only allowed within async functions and at the top levels of modules.
+tests/cases/compiler/awaitInNonAsyncFunction.ts(30,9): error TS1103: 'for await' loops are only allowed within async functions and at the top levels of modules.
+tests/cases/compiler/awaitInNonAsyncFunction.ts(31,5): error TS1308: 'await' expressions are only allowed within async functions and at the top levels of modules.
+tests/cases/compiler/awaitInNonAsyncFunction.ts(34,7): error TS1103: 'for await' loops are only allowed within async functions and at the top levels of modules.
+tests/cases/compiler/awaitInNonAsyncFunction.ts(35,5): error TS1308: 'await' expressions are only allowed within async functions and at the top levels of modules.
+tests/cases/compiler/awaitInNonAsyncFunction.ts(39,5): error TS1432: Top-level 'for await' loops are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', or 'nodenext', and the 'target' option is set to 'es2017' or higher.
+tests/cases/compiler/awaitInNonAsyncFunction.ts(40,1): error TS1378: Top-level 'await' expressions are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', or 'nodenext', and the 'target' option is set to 'es2017' or higher.
+
+
+==== tests/cases/compiler/awaitInNonAsyncFunction.ts (16 errors) ====
+    // https://github.com/Microsoft/TypeScript/issues/26586
+    
+    function normalFunc(p: Promise<number>) {
+      for await (const _ of []);
+          ~~~~~
+!!! error TS1103: 'for await' loops are only allowed within async functions and at the top levels of modules.
+!!! related TS1356 tests/cases/compiler/awaitInNonAsyncFunction.ts:3:10: Did you mean to mark this function as 'async'?
+      return await p;
+             ~~~~~
+!!! error TS1308: 'await' expressions are only allowed within async functions and at the top levels of modules.
+!!! related TS1356 tests/cases/compiler/awaitInNonAsyncFunction.ts:3:10: Did you mean to mark this function as 'async'?
+    }
+    
+    export function exportedFunc(p: Promise<number>) {
+      for await (const _ of []);
+          ~~~~~
+!!! error TS1103: 'for await' loops are only allowed within async functions and at the top levels of modules.
+!!! related TS1356 tests/cases/compiler/awaitInNonAsyncFunction.ts:8:17: Did you mean to mark this function as 'async'?
+      return await p;
+             ~~~~~
+!!! error TS1308: 'await' expressions are only allowed within async functions and at the top levels of modules.
+!!! related TS1356 tests/cases/compiler/awaitInNonAsyncFunction.ts:8:17: Did you mean to mark this function as 'async'?
+    }
+    
+    const functionExpression = function(p: Promise<number>) {
+      for await (const _ of []);
+          ~~~~~
+!!! error TS1103: 'for await' loops are only allowed within async functions and at the top levels of modules.
+!!! related TS1356 tests/cases/compiler/awaitInNonAsyncFunction.ts:13:28: Did you mean to mark this function as 'async'?
+      await p;
+      ~~~~~
+!!! error TS1308: 'await' expressions are only allowed within async functions and at the top levels of modules.
+!!! related TS1356 tests/cases/compiler/awaitInNonAsyncFunction.ts:13:28: Did you mean to mark this function as 'async'?
+    }
+    
+    const arrowFunc = (p: Promise<number>) => {
+      for await (const _ of []);
+          ~~~~~
+!!! error TS1103: 'for await' loops are only allowed within async functions and at the top levels of modules.
+!!! related TS1356 tests/cases/compiler/awaitInNonAsyncFunction.ts:18:19: Did you mean to mark this function as 'async'?
+      return await p;
+             ~~~~~
+!!! error TS1308: 'await' expressions are only allowed within async functions and at the top levels of modules.
+!!! related TS1356 tests/cases/compiler/awaitInNonAsyncFunction.ts:18:19: Did you mean to mark this function as 'async'?
+    };
+    
+    function* generatorFunc(p: Promise<number>) {
+      for await (const _ of []);
+          ~~~~~
+!!! error TS1103: 'for await' loops are only allowed within async functions and at the top levels of modules.
+!!! related TS1356 tests/cases/compiler/awaitInNonAsyncFunction.ts:23:11: Did you mean to mark this function as 'async'?
+      yield await p;
+            ~~~~~
+!!! error TS1308: 'await' expressions are only allowed within async functions and at the top levels of modules.
+!!! related TS1356 tests/cases/compiler/awaitInNonAsyncFunction.ts:23:11: Did you mean to mark this function as 'async'?
+    }
+    
+    class clazz {
+      constructor(p: Promise<number>) {
+        for await (const _ of []);
+            ~~~~~
+!!! error TS1103: 'for await' loops are only allowed within async functions and at the top levels of modules.
+        await p;
+        ~~~~~
+!!! error TS1308: 'await' expressions are only allowed within async functions and at the top levels of modules.
+      }
+      method(p: Promise<number>) {
+      for await (const _ of []);
+          ~~~~~
+!!! error TS1103: 'for await' loops are only allowed within async functions and at the top levels of modules.
+!!! related TS1356 tests/cases/compiler/awaitInNonAsyncFunction.ts:33:3: Did you mean to mark this function as 'async'?
+        await p;
+        ~~~~~
+!!! error TS1308: 'await' expressions are only allowed within async functions and at the top levels of modules.
+!!! related TS1356 tests/cases/compiler/awaitInNonAsyncFunction.ts:33:3: Did you mean to mark this function as 'async'?
+      }
+    }
+    
+    for await (const _ of []);
+        ~~~~~
+!!! error TS1432: Top-level 'for await' loops are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', or 'nodenext', and the 'target' option is set to 'es2017' or higher.
+    await null;
+    ~~~~~
+!!! error TS1378: Top-level 'await' expressions are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', or 'nodenext', and the 'target' option is set to 'es2017' or higher.

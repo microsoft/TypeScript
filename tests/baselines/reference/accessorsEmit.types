@@ -1,0 +1,33 @@
+=== tests/cases/compiler/accessorsEmit.ts ===
+class Result { }
+>Result : Result
+
+class Test {
+>Test : Test
+
+    get Property(): Result {
+>Property : Result
+
+        var x = 1;
+>x : number
+>1 : 1
+
+        return null;
+>null : null
+    }
+}
+
+class Test2 {
+>Test2 : Test2
+
+    get Property() {
+>Property : any
+
+        var x = 1;
+>x : number
+>1 : 1
+
+        return null;
+>null : null
+    }
+}

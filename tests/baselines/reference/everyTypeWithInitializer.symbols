@@ -1,0 +1,125 @@
+=== tests/cases/conformance/statements/VariableStatements/everyTypeWithInitializer.ts ===
+interface I {
+>I : Symbol(I, Decl(everyTypeWithInitializer.ts, 0, 0))
+
+    id: number;
+>id : Symbol(I.id, Decl(everyTypeWithInitializer.ts, 0, 13))
+}
+
+class C implements I {
+>C : Symbol(C, Decl(everyTypeWithInitializer.ts, 2, 1))
+>I : Symbol(I, Decl(everyTypeWithInitializer.ts, 0, 0))
+
+    id: number;
+>id : Symbol(C.id, Decl(everyTypeWithInitializer.ts, 4, 22))
+}
+
+class D<T>{
+>D : Symbol(D, Decl(everyTypeWithInitializer.ts, 6, 1))
+>T : Symbol(T, Decl(everyTypeWithInitializer.ts, 8, 8))
+
+    source: T;
+>source : Symbol(D.source, Decl(everyTypeWithInitializer.ts, 8, 11))
+>T : Symbol(T, Decl(everyTypeWithInitializer.ts, 8, 8))
+
+    recurse: D<T>;
+>recurse : Symbol(D.recurse, Decl(everyTypeWithInitializer.ts, 9, 14))
+>D : Symbol(D, Decl(everyTypeWithInitializer.ts, 6, 1))
+>T : Symbol(T, Decl(everyTypeWithInitializer.ts, 8, 8))
+
+    wrapped: D<D<T>>
+>wrapped : Symbol(D.wrapped, Decl(everyTypeWithInitializer.ts, 10, 18))
+>D : Symbol(D, Decl(everyTypeWithInitializer.ts, 6, 1))
+>D : Symbol(D, Decl(everyTypeWithInitializer.ts, 6, 1))
+>T : Symbol(T, Decl(everyTypeWithInitializer.ts, 8, 8))
+}
+
+function F(x: string): number { return 42; }
+>F : Symbol(F, Decl(everyTypeWithInitializer.ts, 12, 1))
+>x : Symbol(x, Decl(everyTypeWithInitializer.ts, 14, 11))
+
+module M {
+>M : Symbol(M, Decl(everyTypeWithInitializer.ts, 14, 44))
+
+    export class A {
+>A : Symbol(A, Decl(everyTypeWithInitializer.ts, 16, 10))
+
+        name: string;
+>name : Symbol(A.name, Decl(everyTypeWithInitializer.ts, 17, 20))
+    }
+
+    export function F2(x: number): string { return x.toString(); }
+>F2 : Symbol(F2, Decl(everyTypeWithInitializer.ts, 19, 5))
+>x : Symbol(x, Decl(everyTypeWithInitializer.ts, 21, 23))
+>x.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(everyTypeWithInitializer.ts, 21, 23))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+}
+
+var aNumber = 9.9;
+>aNumber : Symbol(aNumber, Decl(everyTypeWithInitializer.ts, 24, 3))
+
+var aString = 'this is a string';
+>aString : Symbol(aString, Decl(everyTypeWithInitializer.ts, 25, 3))
+
+var aDate = new Date(12);
+>aDate : Symbol(aDate, Decl(everyTypeWithInitializer.ts, 26, 3))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+var anObject = new Object();
+>anObject : Symbol(anObject, Decl(everyTypeWithInitializer.ts, 27, 3))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+var anAny = null;
+>anAny : Symbol(anAny, Decl(everyTypeWithInitializer.ts, 29, 3))
+
+var anOtherAny = <any> new C();
+>anOtherAny : Symbol(anOtherAny, Decl(everyTypeWithInitializer.ts, 30, 3))
+>C : Symbol(C, Decl(everyTypeWithInitializer.ts, 2, 1))
+
+var anUndefined = undefined;
+>anUndefined : Symbol(anUndefined, Decl(everyTypeWithInitializer.ts, 31, 3))
+>undefined : Symbol(undefined)
+
+
+var aClass = new C();
+>aClass : Symbol(aClass, Decl(everyTypeWithInitializer.ts, 34, 3))
+>C : Symbol(C, Decl(everyTypeWithInitializer.ts, 2, 1))
+
+var aGenericClass = new D<string>();
+>aGenericClass : Symbol(aGenericClass, Decl(everyTypeWithInitializer.ts, 35, 3))
+>D : Symbol(D, Decl(everyTypeWithInitializer.ts, 6, 1))
+
+var anObjectLiteral = { id: 12 };
+>anObjectLiteral : Symbol(anObjectLiteral, Decl(everyTypeWithInitializer.ts, 36, 3))
+>id : Symbol(id, Decl(everyTypeWithInitializer.ts, 36, 23))
+
+var aFunction = F;
+>aFunction : Symbol(aFunction, Decl(everyTypeWithInitializer.ts, 38, 3))
+>F : Symbol(F, Decl(everyTypeWithInitializer.ts, 12, 1))
+
+var aLambda = (x) => 2;
+>aLambda : Symbol(aLambda, Decl(everyTypeWithInitializer.ts, 39, 3))
+>x : Symbol(x, Decl(everyTypeWithInitializer.ts, 39, 15))
+
+var aModule = M;
+>aModule : Symbol(aModule, Decl(everyTypeWithInitializer.ts, 41, 3))
+>M : Symbol(M, Decl(everyTypeWithInitializer.ts, 14, 44))
+
+var aClassInModule = new M.A();
+>aClassInModule : Symbol(aClassInModule, Decl(everyTypeWithInitializer.ts, 42, 3))
+>M.A : Symbol(M.A, Decl(everyTypeWithInitializer.ts, 16, 10))
+>M : Symbol(M, Decl(everyTypeWithInitializer.ts, 14, 44))
+>A : Symbol(M.A, Decl(everyTypeWithInitializer.ts, 16, 10))
+
+var aFunctionInModule = M.F2;
+>aFunctionInModule : Symbol(aFunctionInModule, Decl(everyTypeWithInitializer.ts, 43, 3))
+>M.F2 : Symbol(M.F2, Decl(everyTypeWithInitializer.ts, 19, 5))
+>M : Symbol(M, Decl(everyTypeWithInitializer.ts, 14, 44))
+>F2 : Symbol(M.F2, Decl(everyTypeWithInitializer.ts, 19, 5))
+
+// no initializer or annotation, so this is an 'any'
+var x;
+>x : Symbol(x, Decl(everyTypeWithInitializer.ts, 46, 3))
+
+

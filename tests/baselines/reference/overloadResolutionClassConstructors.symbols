@@ -1,0 +1,229 @@
+=== tests/cases/conformance/expressions/functionCalls/overloadResolutionClassConstructors.ts ===
+class SomeBase {
+>SomeBase : Symbol(SomeBase, Decl(overloadResolutionClassConstructors.ts, 0, 0))
+
+    private n;
+>n : Symbol(SomeBase.n, Decl(overloadResolutionClassConstructors.ts, 0, 16))
+
+    public s: string;
+>s : Symbol(SomeBase.s, Decl(overloadResolutionClassConstructors.ts, 1, 14))
+}
+class SomeDerived1 extends SomeBase {
+>SomeDerived1 : Symbol(SomeDerived1, Decl(overloadResolutionClassConstructors.ts, 4, 1))
+>SomeBase : Symbol(SomeBase, Decl(overloadResolutionClassConstructors.ts, 0, 0))
+
+    private m;
+>m : Symbol(SomeDerived1.m, Decl(overloadResolutionClassConstructors.ts, 5, 37))
+}
+class SomeDerived2 extends SomeBase {
+>SomeDerived2 : Symbol(SomeDerived2, Decl(overloadResolutionClassConstructors.ts, 7, 1))
+>SomeBase : Symbol(SomeBase, Decl(overloadResolutionClassConstructors.ts, 0, 0))
+
+    private m;
+>m : Symbol(SomeDerived2.m, Decl(overloadResolutionClassConstructors.ts, 8, 37))
+}
+class SomeDerived3 extends SomeBase {
+>SomeDerived3 : Symbol(SomeDerived3, Decl(overloadResolutionClassConstructors.ts, 10, 1))
+>SomeBase : Symbol(SomeBase, Decl(overloadResolutionClassConstructors.ts, 0, 0))
+
+    private m;
+>m : Symbol(SomeDerived3.m, Decl(overloadResolutionClassConstructors.ts, 11, 37))
+}
+
+
+// Ambiguous call picks the first overload in declaration order
+class fn1 {
+>fn1 : Symbol(fn1, Decl(overloadResolutionClassConstructors.ts, 13, 1))
+
+    constructor(s: string);
+>s : Symbol(s, Decl(overloadResolutionClassConstructors.ts, 18, 16))
+
+    constructor(s: number);
+>s : Symbol(s, Decl(overloadResolutionClassConstructors.ts, 19, 16))
+
+    constructor() { }
+}
+
+new fn1(undefined);
+>fn1 : Symbol(fn1, Decl(overloadResolutionClassConstructors.ts, 13, 1))
+>undefined : Symbol(undefined)
+
+// No candidate overloads found
+new fn1({}); // Error
+>fn1 : Symbol(fn1, Decl(overloadResolutionClassConstructors.ts, 13, 1))
+
+// Generic and non - generic overload where generic overload is the only candidate when called with type arguments
+class fn2<T> {
+>fn2 : Symbol(fn2, Decl(overloadResolutionClassConstructors.ts, 26, 12))
+>T : Symbol(T, Decl(overloadResolutionClassConstructors.ts, 29, 10))
+
+    constructor(s: string, n: number);
+>s : Symbol(s, Decl(overloadResolutionClassConstructors.ts, 30, 16))
+>n : Symbol(n, Decl(overloadResolutionClassConstructors.ts, 30, 26))
+
+    constructor(n: number, t: T);
+>n : Symbol(n, Decl(overloadResolutionClassConstructors.ts, 31, 16))
+>t : Symbol(t, Decl(overloadResolutionClassConstructors.ts, 31, 26))
+>T : Symbol(T, Decl(overloadResolutionClassConstructors.ts, 29, 10))
+
+    constructor() { }
+}
+
+var d = new fn2<Date>(0, undefined);
+>d : Symbol(d, Decl(overloadResolutionClassConstructors.ts, 35, 3))
+>fn2 : Symbol(fn2, Decl(overloadResolutionClassConstructors.ts, 26, 12))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>undefined : Symbol(undefined)
+
+// Generic and non - generic overload where generic overload is the only candidate when called without type arguments
+var s = new fn2(0, '');
+>s : Symbol(s, Decl(overloadResolutionClassConstructors.ts, 38, 3))
+>fn2 : Symbol(fn2, Decl(overloadResolutionClassConstructors.ts, 26, 12))
+
+// Generic and non - generic overload where non - generic overload is the only candidate when called with type arguments
+new fn2<Date>('', 0); // OK
+>fn2 : Symbol(fn2, Decl(overloadResolutionClassConstructors.ts, 26, 12))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+// Generic and non - generic overload where non - generic overload is the only candidate when called without type arguments
+new fn2('', 0); // OK
+>fn2 : Symbol(fn2, Decl(overloadResolutionClassConstructors.ts, 26, 12))
+
+// Generic overloads with differing arity called without type arguments
+class fn3<T, U, V> {
+>fn3 : Symbol(fn3, Decl(overloadResolutionClassConstructors.ts, 44, 15))
+>T : Symbol(T, Decl(overloadResolutionClassConstructors.ts, 47, 10))
+>U : Symbol(U, Decl(overloadResolutionClassConstructors.ts, 47, 12))
+>V : Symbol(V, Decl(overloadResolutionClassConstructors.ts, 47, 15))
+
+    constructor(n: T);
+>n : Symbol(n, Decl(overloadResolutionClassConstructors.ts, 48, 16))
+>T : Symbol(T, Decl(overloadResolutionClassConstructors.ts, 47, 10))
+
+    constructor(s: string, t: T, u: U);
+>s : Symbol(s, Decl(overloadResolutionClassConstructors.ts, 49, 16))
+>t : Symbol(t, Decl(overloadResolutionClassConstructors.ts, 49, 26))
+>T : Symbol(T, Decl(overloadResolutionClassConstructors.ts, 47, 10))
+>u : Symbol(u, Decl(overloadResolutionClassConstructors.ts, 49, 32))
+>U : Symbol(U, Decl(overloadResolutionClassConstructors.ts, 47, 12))
+
+    constructor(v: V, u: U, t: T);
+>v : Symbol(v, Decl(overloadResolutionClassConstructors.ts, 50, 16))
+>V : Symbol(V, Decl(overloadResolutionClassConstructors.ts, 47, 15))
+>u : Symbol(u, Decl(overloadResolutionClassConstructors.ts, 50, 21))
+>U : Symbol(U, Decl(overloadResolutionClassConstructors.ts, 47, 12))
+>t : Symbol(t, Decl(overloadResolutionClassConstructors.ts, 50, 27))
+>T : Symbol(T, Decl(overloadResolutionClassConstructors.ts, 47, 10))
+
+    constructor() { }
+}
+
+new fn3(3);
+>fn3 : Symbol(fn3, Decl(overloadResolutionClassConstructors.ts, 44, 15))
+
+new fn3('', 3, '');
+>fn3 : Symbol(fn3, Decl(overloadResolutionClassConstructors.ts, 44, 15))
+
+new fn3(5, 5, 5);
+>fn3 : Symbol(fn3, Decl(overloadResolutionClassConstructors.ts, 44, 15))
+
+// Generic overloads with differing arity called with type arguments matching each overload type parameter count
+new fn3<number>(4); // Error
+>fn3 : Symbol(fn3, Decl(overloadResolutionClassConstructors.ts, 44, 15))
+
+new fn3<string, string>('', '', '');  // Error
+>fn3 : Symbol(fn3, Decl(overloadResolutionClassConstructors.ts, 44, 15))
+
+new fn3<number, string, string>('', '', 3);
+>fn3 : Symbol(fn3, Decl(overloadResolutionClassConstructors.ts, 44, 15))
+
+// Generic overloads with differing arity called with type argument count that doesn't match any overload
+new fn3<number, number, number, number>(); // Error
+>fn3 : Symbol(fn3, Decl(overloadResolutionClassConstructors.ts, 44, 15))
+
+// Generic overloads with constraints called with type arguments that satisfy the constraints
+class fn4<T extends string, U extends number> {
+>fn4 : Symbol(fn4, Decl(overloadResolutionClassConstructors.ts, 64, 42))
+>T : Symbol(T, Decl(overloadResolutionClassConstructors.ts, 67, 10))
+>U : Symbol(U, Decl(overloadResolutionClassConstructors.ts, 67, 27))
+
+    constructor(n: T, m: U);
+>n : Symbol(n, Decl(overloadResolutionClassConstructors.ts, 68, 16))
+>T : Symbol(T, Decl(overloadResolutionClassConstructors.ts, 67, 10))
+>m : Symbol(m, Decl(overloadResolutionClassConstructors.ts, 68, 21))
+>U : Symbol(U, Decl(overloadResolutionClassConstructors.ts, 67, 27))
+
+    constructor() { }
+}
+new fn4<string, number>('', 3);
+>fn4 : Symbol(fn4, Decl(overloadResolutionClassConstructors.ts, 64, 42))
+
+new fn4<string, number>(3, ''); // Error
+>fn4 : Symbol(fn4, Decl(overloadResolutionClassConstructors.ts, 64, 42))
+
+new fn4<number, string>('', 3); // Error
+>fn4 : Symbol(fn4, Decl(overloadResolutionClassConstructors.ts, 64, 42))
+
+new fn4<number, string>(3, ''); // Error
+>fn4 : Symbol(fn4, Decl(overloadResolutionClassConstructors.ts, 64, 42))
+
+// Generic overloads with constraints called without type arguments but with types that satisfy the constraints
+new fn4('', 3);
+>fn4 : Symbol(fn4, Decl(overloadResolutionClassConstructors.ts, 64, 42))
+
+new fn4(3, ''); // Error
+>fn4 : Symbol(fn4, Decl(overloadResolutionClassConstructors.ts, 64, 42))
+
+new fn4(3, undefined); // Error
+>fn4 : Symbol(fn4, Decl(overloadResolutionClassConstructors.ts, 64, 42))
+>undefined : Symbol(undefined)
+
+new fn4('', null);
+>fn4 : Symbol(fn4, Decl(overloadResolutionClassConstructors.ts, 64, 42))
+
+// Generic overloads with constraints called with type arguments that do not satisfy the constraints
+new fn4<boolean, Date>(null, null); // Error
+>fn4 : Symbol(fn4, Decl(overloadResolutionClassConstructors.ts, 64, 42))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+// Generic overloads with constraints called without type arguments but with types that do not satisfy the constraints
+new fn4(true, null); // Error
+>fn4 : Symbol(fn4, Decl(overloadResolutionClassConstructors.ts, 64, 42))
+
+new fn4(null, true); // Error
+>fn4 : Symbol(fn4, Decl(overloadResolutionClassConstructors.ts, 64, 42))
+
+// Non - generic overloads where contextual typing of function arguments has errors
+class fn5 {
+>fn5 : Symbol(fn5, Decl(overloadResolutionClassConstructors.ts, 87, 20))
+
+    constructor(f: (n: string) => void);
+>f : Symbol(f, Decl(overloadResolutionClassConstructors.ts, 91, 16))
+>n : Symbol(n, Decl(overloadResolutionClassConstructors.ts, 91, 20))
+
+    constructor(f: (n: number) => void);
+>f : Symbol(f, Decl(overloadResolutionClassConstructors.ts, 92, 16))
+>n : Symbol(n, Decl(overloadResolutionClassConstructors.ts, 92, 20))
+
+    constructor() { return undefined; }
+>undefined : Symbol(undefined)
+}
+new fn5((n) => n.toFixed());
+>fn5 : Symbol(fn5, Decl(overloadResolutionClassConstructors.ts, 87, 20))
+>n : Symbol(n, Decl(overloadResolutionClassConstructors.ts, 95, 9))
+>n : Symbol(n, Decl(overloadResolutionClassConstructors.ts, 95, 9))
+
+new fn5((n) => n.substr(0));
+>fn5 : Symbol(fn5, Decl(overloadResolutionClassConstructors.ts, 87, 20))
+>n : Symbol(n, Decl(overloadResolutionClassConstructors.ts, 96, 9))
+>n.substr : Symbol(String.substr, Decl(lib.es5.d.ts, --, --))
+>n : Symbol(n, Decl(overloadResolutionClassConstructors.ts, 96, 9))
+>substr : Symbol(String.substr, Decl(lib.es5.d.ts, --, --))
+
+new fn5((n) => n.blah); // Error
+>fn5 : Symbol(fn5, Decl(overloadResolutionClassConstructors.ts, 87, 20))
+>n : Symbol(n, Decl(overloadResolutionClassConstructors.ts, 97, 9))
+>n : Symbol(n, Decl(overloadResolutionClassConstructors.ts, 97, 9))
+
+
+

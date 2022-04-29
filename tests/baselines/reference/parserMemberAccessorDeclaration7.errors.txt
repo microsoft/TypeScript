@@ -1,0 +1,12 @@
+tests/cases/conformance/parser/ecmascript5/MemberAccessorDeclarations/parserMemberAccessorDeclaration7.ts(2,12): error TS1028: Accessibility modifier already seen.
+tests/cases/conformance/parser/ecmascript5/MemberAccessorDeclarations/parserMemberAccessorDeclaration7.ts(2,23): error TS2378: A 'get' accessor must return a value.
+
+
+==== tests/cases/conformance/parser/ecmascript5/MemberAccessorDeclarations/parserMemberAccessorDeclaration7.ts (2 errors) ====
+    class C {
+        public public get Foo() { }
+               ~~~~~~
+!!! error TS1028: Accessibility modifier already seen.
+                          ~~~
+!!! error TS2378: A 'get' accessor must return a value.
+    }

@@ -1,0 +1,96 @@
+=== tests/cases/conformance/jsx/file.tsx ===
+declare module JSX {
+	interface Element { }
+	interface IntrinsicElements {
+		test1: Attribs1;
+>test1 : Attribs1
+
+		test2: { reqd: string };
+>test2 : { reqd: string; }
+>reqd : string
+
+		var: { var: string };
+>var : { var: string; }
+>var : string
+	}
+}
+interface Attribs1 {
+	x?: number;
+>x : number
+
+	s?: string;
+>s : string
+}
+
+// OK
+<test1 x={0} />; // OK
+><test1 x={0} /> : JSX.Element
+>test1 : any
+>x : number
+>0 : 0
+
+<test1 />; // OK
+><test1 /> : JSX.Element
+>test1 : any
+
+<test1 data-x={true} />; // OK
+><test1 data-x={true} /> : JSX.Element
+>test1 : any
+>data-x : boolean
+>true : true
+
+<test2 reqd='true' />; // OK
+><test2 reqd='true' /> : JSX.Element
+>test2 : any
+>reqd : string
+
+<test2 reqd={'true'} />; // OK
+><test2 reqd={'true'} /> : JSX.Element
+>test2 : any
+>reqd : string
+>'true' : "true"
+
+// Errors
+<test1 x={'0'} />; // Error, '0' is not number
+><test1 x={'0'} /> : JSX.Element
+>test1 : any
+>x : string
+>'0' : "0"
+
+<test1 y={0} />; // Error, no property "y"
+><test1 y={0} /> : JSX.Element
+>test1 : any
+>y : number
+>0 : 0
+
+<test1 y="foo" />; // Error, no property "y"
+><test1 y="foo" /> : JSX.Element
+>test1 : any
+>y : string
+
+<test1 x="32" />; // Error, "32" is not number
+><test1 x="32" /> : JSX.Element
+>test1 : any
+>x : string
+
+<test1 var="10" />; // Error, no 'var' property
+><test1 var="10" /> : JSX.Element
+>test1 : any
+>var : string
+
+<test2 />; // Error, missing reqd
+><test2 /> : JSX.Element
+>test2 : any
+
+<test2 reqd={10} />; // Error, reqd is not string
+><test2 reqd={10} /> : JSX.Element
+>test2 : any
+>reqd : number
+>10 : 10
+
+// Should be OK
+<var var='var' />;
+><var var='var' /> : JSX.Element
+>var : any
+>var : string
+

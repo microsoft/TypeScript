@@ -1,0 +1,58 @@
+tests/cases/compiler/indexerConstraints.ts(17,5): error TS2413: 'number' index type 'A' is not assignable to 'string' index type 'B'.
+tests/cases/compiler/indexerConstraints.ts(25,5): error TS2413: 'number' index type 'A' is not assignable to 'string' index type 'B'.
+tests/cases/compiler/indexerConstraints.ts(33,5): error TS2413: 'number' index type 'A' is not assignable to 'string' index type 'B'.
+tests/cases/compiler/indexerConstraints.ts(41,5): error TS2413: 'number' index type 'A' is not assignable to 'string' index type 'B'.
+
+
+==== tests/cases/compiler/indexerConstraints.ts (4 errors) ====
+    interface A { a: number; }
+    interface B extends A { b: number; }
+    
+    // Good case
+    interface D {
+        [s: string]: A;
+    }
+    interface D {
+        [n: number]: B;
+    }
+    
+    // Bad case
+    interface E {
+        [s: string]: B;
+    }
+    interface E {
+        [n: number]: A;
+        ~~~~~~~~~~~~~~~
+!!! error TS2413: 'number' index type 'A' is not assignable to 'string' index type 'B'.
+    }
+    
+    // Inheritance
+    interface F {
+        [s: string]: B;
+    }
+    interface G extends F {
+        [n: number]: A;
+        ~~~~~~~~~~~~~~~
+!!! error TS2413: 'number' index type 'A' is not assignable to 'string' index type 'B'.
+    }
+    
+    // Other way
+    interface H {
+        [n: number]: A;
+    }
+    interface I extends H {
+        [s: string]: B;
+        ~~~~~~~~~~~~~~~
+!!! error TS2413: 'number' index type 'A' is not assignable to 'string' index type 'B'.
+    }
+    
+    // With hidden indexer
+    interface J {
+        [n: number]: {};
+    }
+    interface K extends J {
+        [n: number]: A;
+        ~~~~~~~~~~~~~~~
+!!! error TS2413: 'number' index type 'A' is not assignable to 'string' index type 'B'.
+        [s: string]: B;
+    }

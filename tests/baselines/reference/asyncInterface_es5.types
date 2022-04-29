@@ -1,0 +1,4 @@
+=== tests/cases/conformance/async/es5/asyncInterface_es5.ts ===
+async interface I {
+No type information for this code.}
+No type information for this code.

@@ -1,0 +1,27 @@
+tests/cases/compiler/getAndSetAsMemberNames.ts(19,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+
+
+==== tests/cases/compiler/getAndSetAsMemberNames.ts (1 errors) ====
+    class C1 {
+        set: boolean;
+        get = 1;
+    }
+    class C2 {
+        set;
+    }
+    class C3 {
+        set (x) {
+            return x + 1;
+        }
+    }
+    class C4 {
+        get: boolean = true;
+    }
+    class C5 {
+        public set: () => boolean = function () { return true; };
+        get (): boolean { return true; }
+        set t(x) { }
+            ~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+    }
+    

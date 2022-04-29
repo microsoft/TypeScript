@@ -1,0 +1,4 @@
+=== tests/cases/conformance/parser/ecmascript5/Statements/parserWhileStatement1.d.ts ===
+while (e) {
+No type information for this code.}
+No type information for this code.

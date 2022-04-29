@@ -1,0 +1,15 @@
+=== tests/cases/compiler/multipleBaseInterfaesWithIncompatibleProperties.ts ===
+interface A<T>
+>A : Symbol(A, Decl(multipleBaseInterfaesWithIncompatibleProperties.ts, 0, 0))
+>T : Symbol(T, Decl(multipleBaseInterfaesWithIncompatibleProperties.ts, 0, 12))
+{
+    x: T
+>x : Symbol(A.x, Decl(multipleBaseInterfaesWithIncompatibleProperties.ts, 1, 1))
+>T : Symbol(T, Decl(multipleBaseInterfaesWithIncompatibleProperties.ts, 0, 12))
+}
+
+interface C extends A<string>, A<number> { }
+>C : Symbol(C, Decl(multipleBaseInterfaesWithIncompatibleProperties.ts, 3, 1))
+>A : Symbol(A, Decl(multipleBaseInterfaesWithIncompatibleProperties.ts, 0, 0))
+>A : Symbol(A, Decl(multipleBaseInterfaesWithIncompatibleProperties.ts, 0, 0))
+

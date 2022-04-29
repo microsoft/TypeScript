@@ -1,0 +1,24 @@
+tests/cases/conformance/classes/members/privateNames/privateNamesInNestedClasses-2.ts(9,27): error TS18014: The property '#x' cannot be accessed on type 'typeof A' within this class because it is shadowed by another private identifier with the same spelling.
+
+
+==== tests/cases/conformance/classes/members/privateNames/privateNamesInNestedClasses-2.ts (1 errors) ====
+    class A {
+        static #x = 5;
+        constructor () {
+            class B {
+                #x = 5;
+                constructor() {
+                    class C {
+                        constructor() {
+                            A.#x // error
+                              ~~
+!!! error TS18014: The property '#x' cannot be accessed on type 'typeof A' within this class because it is shadowed by another private identifier with the same spelling.
+!!! related TS18017 tests/cases/conformance/classes/members/privateNames/privateNamesInNestedClasses-2.ts:5:13: The shadowing declaration of '#x' is defined here
+!!! related TS18018 tests/cases/conformance/classes/members/privateNames/privateNamesInNestedClasses-2.ts:2:12: The declaration of '#x' that you probably intended to use is defined here
+                        }
+                    }
+                }
+            }
+        }
+    }
+    

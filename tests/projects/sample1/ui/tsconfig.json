@@ -1,0 +1,8 @@
+{
+    "compilerOptions": {
+        "skipDefaultLibCheck": true
+    },
+    "references": [
+        { "path": "../logic/index" }
+    ]
+}

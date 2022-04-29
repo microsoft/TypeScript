@@ -1,0 +1,34 @@
+=== tests/cases/compiler/crashInsourcePropertyIsRelatableToTargetProperty.ts ===
+class C {
+>C : C
+
+    private x = 1;
+>x : number
+>1 : 1
+}
+class D extends C { }
+>D : D
+>C : C
+
+function foo(x: "hi", items: string[]): typeof foo;
+>foo : (x: "hi", items: string[]) => typeof foo
+>x : "hi"
+>items : string[]
+>foo : (x: "hi", items: string[]) => typeof foo
+
+function foo(x: string, items: string[]): typeof foo {
+>foo : (x: "hi", items: string[]) => typeof foo
+>x : string
+>items : string[]
+>foo : (x: "hi", items: string[]) => typeof foo
+
+    return null;
+>null : null
+}
+var a: D = foo("hi", []);
+>a : D
+>foo("hi", []) : (x: "hi", items: string[]) => typeof foo
+>foo : (x: "hi", items: string[]) => typeof foo
+>"hi" : "hi"
+>[] : undefined[]
+

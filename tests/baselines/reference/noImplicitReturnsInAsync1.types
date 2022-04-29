@@ -1,0 +1,22 @@
+=== tests/cases/compiler/noImplicitReturnsInAsync1.ts ===
+async function test(isError: boolean = false) {
+>test : (isError?: boolean) => Promise<void>
+>isError : boolean
+>false : false
+
+    if (isError === true) {
+>isError === true : boolean
+>isError : boolean
+>true : true
+
+        return;
+    }
+    let x = await Promise.resolve("The test is passed without an error.");
+>x : string
+>await Promise.resolve("The test is passed without an error.") : string
+>Promise.resolve("The test is passed without an error.") : Promise<string>
+>Promise.resolve : { (): Promise<void>; <T>(value: T | PromiseLike<T>): Promise<T>; }
+>Promise : PromiseConstructor
+>resolve : { (): Promise<void>; <T>(value: T | PromiseLike<T>): Promise<T>; }
+>"The test is passed without an error." : "The test is passed without an error."
+}

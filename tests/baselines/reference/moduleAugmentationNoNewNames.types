@@ -1,0 +1,73 @@
+=== tests/cases/compiler/map.ts ===
+import { Observable } from "./observable"
+>Observable : typeof Observable
+
+(<any>Observable.prototype).map = function() { }
+>(<any>Observable.prototype).map = function() { } : () => void
+>(<any>Observable.prototype).map : any
+>(<any>Observable.prototype) : any
+><any>Observable.prototype : any
+>Observable.prototype : Observable<any>
+>Observable : typeof Observable
+>prototype : Observable<any>
+>map : any
+>function() { } : () => void
+
+declare module "./observable" {
+>"./observable" : typeof import("tests/cases/compiler/observable")
+
+    interface Observable<T> {
+        map<U>(proj: (e:T) => U): Observable<U>
+>map : <U>(proj: (e: T) => U) => Observable<U>
+>proj : (e: T) => U
+>e : T
+    }
+    class Bar {}
+>Bar : Bar
+
+    let y: number, z: string;
+>y : number
+>z : string
+
+    let {a: x, b: x1}: {a: number, b: number};
+>a : any
+>x : number
+>b : any
+>x1 : number
+>a : number
+>b : number
+
+    module Z {}
+}
+
+=== tests/cases/compiler/observable.ts ===
+export declare class Observable<T> {
+>Observable : Observable<T>
+
+    filter(pred: (e:T) => boolean): Observable<T>;
+>filter : (pred: (e: T) => boolean) => Observable<T>
+>pred : (e: T) => boolean
+>e : T
+}
+
+=== tests/cases/compiler/main.ts ===
+import { Observable } from "./observable"
+>Observable : typeof Observable
+
+import "./map";
+
+let x: Observable<number>;
+>x : Observable<number>
+
+let y = x.map(x => x + 1);
+>y : Observable<number>
+>x.map(x => x + 1) : Observable<number>
+>x.map : <U>(proj: (e: number) => U) => Observable<U>
+>x : Observable<number>
+>map : <U>(proj: (e: number) => U) => Observable<U>
+>x => x + 1 : (x: number) => number
+>x : number
+>x + 1 : number
+>x : number
+>1 : 1
+

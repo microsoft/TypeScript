@@ -1,0 +1,23 @@
+=== tests/cases/compiler/inheritSameNamePropertiesWithDifferentVisibility.ts ===
+class C {
+>C : Symbol(C, Decl(inheritSameNamePropertiesWithDifferentVisibility.ts, 0, 0))
+
+    public x: number;
+>x : Symbol(C.x, Decl(inheritSameNamePropertiesWithDifferentVisibility.ts, 0, 9))
+}
+
+class C2 {
+>C2 : Symbol(C2, Decl(inheritSameNamePropertiesWithDifferentVisibility.ts, 2, 1))
+
+    private x: number;
+>x : Symbol(C2.x, Decl(inheritSameNamePropertiesWithDifferentVisibility.ts, 4, 10))
+}
+
+interface A extends C, C2 { // error
+>A : Symbol(A, Decl(inheritSameNamePropertiesWithDifferentVisibility.ts, 6, 1))
+>C : Symbol(C, Decl(inheritSameNamePropertiesWithDifferentVisibility.ts, 0, 0))
+>C2 : Symbol(C2, Decl(inheritSameNamePropertiesWithDifferentVisibility.ts, 2, 1))
+
+    y: string;
+>y : Symbol(A.y, Decl(inheritSameNamePropertiesWithDifferentVisibility.ts, 8, 27))
+}

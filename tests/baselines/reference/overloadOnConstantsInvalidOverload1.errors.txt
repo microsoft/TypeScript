@@ -1,0 +1,21 @@
+tests/cases/compiler/overloadOnConstantsInvalidOverload1.ts(6,10): error TS2394: This overload signature is not compatible with its implementation signature.
+tests/cases/compiler/overloadOnConstantsInvalidOverload1.ts(11,5): error TS2345: Argument of type '"HI"' is not assignable to parameter of type '"SPAN"'.
+
+
+==== tests/cases/compiler/overloadOnConstantsInvalidOverload1.ts (2 errors) ====
+    class Base { foo() { } }
+    class Derived1 extends Base { bar() { } }
+    class Derived2 extends Base { baz() { } }
+    class Derived3 extends Base { biz() { } }
+    
+    function foo(name: "SPAN"): Derived1;
+             ~~~
+!!! error TS2394: This overload signature is not compatible with its implementation signature.
+!!! related TS2750 tests/cases/compiler/overloadOnConstantsInvalidOverload1.ts:7:10: The implementation signature is declared here.
+    function foo(name: "DIV"): Derived2 {
+        return null;
+    }
+    
+    foo("HI");
+        ~~~~
+!!! error TS2345: Argument of type '"HI"' is not assignable to parameter of type '"SPAN"'.

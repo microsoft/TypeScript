@@ -1,0 +1,18 @@
+tests/cases/conformance/jsdoc/a.js(2,13): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
+
+
+==== tests/cases/conformance/jsdoc/a.js (1 errors) ====
+    // from bcryptjs
+    /** @param {function(...[*])} callback */
+                ~~~~~~~~~~~~~~~~
+!!! error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
+    function g(callback) {
+        callback([1], [2], [3])
+    }
+    
+    /**
+     * @type {!function(...number):string}
+     * @inner
+     */
+    var stringFromCharCode = String.fromCharCode;
+    

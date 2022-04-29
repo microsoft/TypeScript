@@ -1,0 +1,47 @@
+{
+    "kind": "JSDocFunctionType",
+    "pos": 1,
+    "end": 26,
+    "flags": "JSDoc",
+    "modifierFlagsCache": 0,
+    "transformFlags": 1,
+    "parameters": {
+        "0": {
+            "kind": "Parameter",
+            "pos": 10,
+            "end": 16,
+            "flags": "JSDoc",
+            "modifierFlagsCache": 0,
+            "transformFlags": 1,
+            "type": {
+                "kind": "StringKeyword",
+                "pos": 10,
+                "end": 16,
+                "flags": "JSDoc",
+                "modifierFlagsCache": 0,
+                "transformFlags": 1
+            }
+        },
+        "1": {
+            "kind": "Parameter",
+            "pos": 17,
+            "end": 25,
+            "flags": "JSDoc",
+            "modifierFlagsCache": 0,
+            "transformFlags": 1,
+            "type": {
+                "kind": "BooleanKeyword",
+                "pos": 17,
+                "end": 25,
+                "flags": "JSDoc",
+                "modifierFlagsCache": 0,
+                "transformFlags": 1
+            }
+        },
+        "length": 2,
+        "pos": 10,
+        "end": 25,
+        "hasTrailingComma": false,
+        "transformFlags": 1
+    }
+}

@@ -1,0 +1,8 @@
+tests/cases/compiler/invalidUnicodeEscapeSequance4.ts(2,5): error TS1127: Invalid character.
+
+
+==== tests/cases/compiler/invalidUnicodeEscapeSequance4.ts (1 errors) ====
+    var a\u0031; // a1 is a valid identifier
+    var \u0031a; // 1a is an invalid identifier
+        
+!!! error TS1127: Invalid character.

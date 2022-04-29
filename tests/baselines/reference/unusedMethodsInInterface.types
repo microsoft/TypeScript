@@ -1,0 +1,10 @@
+=== tests/cases/compiler/unusedMethodsInInterface.ts ===
+interface I1 {
+    f1();
+>f1 : () => any
+
+    f2(x: number, y: string);
+>f2 : (x: number, y: string) => any
+>x : number
+>y : string
+}

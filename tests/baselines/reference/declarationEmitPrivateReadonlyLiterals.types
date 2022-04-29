@@ -1,0 +1,21 @@
+=== tests/cases/compiler/declarationEmitPrivateReadonlyLiterals.ts ===
+class Foo {
+>Foo : Foo
+
+    private static readonly A = "a";
+>A : "a"
+>"a" : "a"
+
+    private readonly B = "b";
+>B : "b"
+>"b" : "b"
+
+    private static readonly C = 42;
+>C : 42
+>42 : 42
+
+    private readonly D = 42;
+>D : 42
+>42 : 42
+}
+

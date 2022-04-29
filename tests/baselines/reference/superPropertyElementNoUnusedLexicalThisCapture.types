@@ -1,0 +1,39 @@
+=== tests/cases/compiler/superPropertyElementNoUnusedLexicalThisCapture.ts ===
+class A { x() {} }
+>A : A
+>x : () => void
+
+class B extends A {
+>B : B
+>A : A
+
+    constructor() {
+        super();
+>super() : void
+>super : typeof A
+    }
+    foo() {
+>foo : () => () => void
+
+        return () => {
+>() => {            super.x;        } : () => void
+
+            super.x;
+>super.x : () => void
+>super : A
+>x : () => void
+        }
+    }
+    bar() {
+>bar : () => () => void
+
+        return () => {
+>() => {            super["x"];        } : () => void
+
+            super["x"];
+>super["x"] : () => void
+>super : A
+>"x" : "x"
+        }
+    }
+}

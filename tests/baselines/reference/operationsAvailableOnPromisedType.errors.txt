@@ -1,0 +1,108 @@
+error TS2468: Cannot find global value 'Promise'.
+tests/cases/compiler/operationsAvailableOnPromisedType.ts(1,16): error TS2705: An async function or method in ES5/ES3 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
+tests/cases/compiler/operationsAvailableOnPromisedType.ts(11,9): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/compiler/operationsAvailableOnPromisedType.ts(12,5): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/compiler/operationsAvailableOnPromisedType.ts(13,5): error TS2365: Operator '+' cannot be applied to types 'number' and 'Promise<number>'.
+tests/cases/compiler/operationsAvailableOnPromisedType.ts(14,5): error TS2365: Operator '>' cannot be applied to types 'number' and 'Promise<number>'.
+tests/cases/compiler/operationsAvailableOnPromisedType.ts(15,5): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/compiler/operationsAvailableOnPromisedType.ts(16,7): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/compiler/operationsAvailableOnPromisedType.ts(17,5): error TS2367: This condition will always return 'false' since the types 'number' and 'Promise<number>' have no overlap.
+tests/cases/compiler/operationsAvailableOnPromisedType.ts(18,9): error TS2461: Type 'Promise<string[]>' is not an array type.
+tests/cases/compiler/operationsAvailableOnPromisedType.ts(19,21): error TS2495: Type 'Promise<string[]>' is not an array type or a string type.
+tests/cases/compiler/operationsAvailableOnPromisedType.ts(20,12): error TS2345: Argument of type 'Promise<number>' is not assignable to parameter of type 'number'.
+tests/cases/compiler/operationsAvailableOnPromisedType.ts(21,11): error TS2339: Property 'prop' does not exist on type 'Promise<{ prop: string; }>'.
+tests/cases/compiler/operationsAvailableOnPromisedType.ts(23,27): error TS2495: Type 'Promise<string[]>' is not an array type or a string type.
+tests/cases/compiler/operationsAvailableOnPromisedType.ts(24,5): error TS2349: This expression is not callable.
+  Type 'Promise<() => void>' has no call signatures.
+tests/cases/compiler/operationsAvailableOnPromisedType.ts(25,5): error TS2349: This expression is not callable.
+  Not all constituents of type 'Promise<() => void> | (() => void)' are callable.
+    Type 'Promise<() => void>' has no call signatures.
+tests/cases/compiler/operationsAvailableOnPromisedType.ts(26,9): error TS2351: This expression is not constructable.
+  Type 'Promise<new () => any>' has no construct signatures.
+tests/cases/compiler/operationsAvailableOnPromisedType.ts(27,5): error TS2349: This expression is not callable.
+  Type 'Promise<number>' has no call signatures.
+
+
+!!! error TS2468: Cannot find global value 'Promise'.
+==== tests/cases/compiler/operationsAvailableOnPromisedType.ts (17 errors) ====
+    async function fn(
+                   ~~
+!!! error TS2705: An async function or method in ES5/ES3 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
+        a: number,
+        b: Promise<number>,
+        c: Promise<string[]>,
+        d: Promise<{ prop: string }>,
+        e: Promise<() => void>,
+        f: Promise<() => void> | (() => void),
+        g: Promise<{ new(): any }>
+    ) {
+        // All errors
+        a | b;
+            ~
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+!!! related TS2773 tests/cases/compiler/operationsAvailableOnPromisedType.ts:11:9: Did you forget to use 'await'?
+        b | a;
+        ~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+!!! related TS2773 tests/cases/compiler/operationsAvailableOnPromisedType.ts:12:5: Did you forget to use 'await'?
+        a + b;
+        ~~~~~
+!!! error TS2365: Operator '+' cannot be applied to types 'number' and 'Promise<number>'.
+!!! related TS2773 tests/cases/compiler/operationsAvailableOnPromisedType.ts:13:5: Did you forget to use 'await'?
+        a > b;
+        ~~~~~
+!!! error TS2365: Operator '>' cannot be applied to types 'number' and 'Promise<number>'.
+!!! related TS2773 tests/cases/compiler/operationsAvailableOnPromisedType.ts:14:5: Did you forget to use 'await'?
+        b++;
+        ~
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
+        --b;
+          ~
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
+        a === b;
+        ~~~~~~~
+!!! error TS2367: This condition will always return 'false' since the types 'number' and 'Promise<number>' have no overlap.
+!!! related TS2773 tests/cases/compiler/operationsAvailableOnPromisedType.ts:17:5: Did you forget to use 'await'?
+        [...c];
+            ~
+!!! error TS2461: Type 'Promise<string[]>' is not an array type.
+!!! related TS2773 tests/cases/compiler/operationsAvailableOnPromisedType.ts:18:9: Did you forget to use 'await'?
+        for (const s of c) {
+                        ~
+!!! error TS2495: Type 'Promise<string[]>' is not an array type or a string type.
+!!! related TS2773 tests/cases/compiler/operationsAvailableOnPromisedType.ts:19:21: Did you forget to use 'await'?
+            fn(b, b, c, d, e, f, g);
+               ~
+!!! error TS2345: Argument of type 'Promise<number>' is not assignable to parameter of type 'number'.
+!!! related TS2773 tests/cases/compiler/operationsAvailableOnPromisedType.ts:20:12: Did you forget to use 'await'?
+            d.prop;
+              ~~~~
+!!! error TS2339: Property 'prop' does not exist on type 'Promise<{ prop: string; }>'.
+!!! related TS2773 tests/cases/compiler/operationsAvailableOnPromisedType.ts:21:11: Did you forget to use 'await'?
+        }
+        for await (const s of c) {}
+                              ~
+!!! error TS2495: Type 'Promise<string[]>' is not an array type or a string type.
+!!! related TS2773 tests/cases/compiler/operationsAvailableOnPromisedType.ts:23:27: Did you forget to use 'await'?
+        e();
+        ~
+!!! error TS2349: This expression is not callable.
+!!! error TS2349:   Type 'Promise<() => void>' has no call signatures.
+!!! related TS2773 tests/cases/compiler/operationsAvailableOnPromisedType.ts:24:5: Did you forget to use 'await'?
+        f();
+        ~
+!!! error TS2349: This expression is not callable.
+!!! error TS2349:   Not all constituents of type 'Promise<() => void> | (() => void)' are callable.
+!!! error TS2349:     Type 'Promise<() => void>' has no call signatures.
+!!! related TS2773 tests/cases/compiler/operationsAvailableOnPromisedType.ts:25:5: Did you forget to use 'await'?
+        new g();
+            ~
+!!! error TS2351: This expression is not constructable.
+!!! error TS2351:   Type 'Promise<new () => any>' has no construct signatures.
+!!! related TS2773 tests/cases/compiler/operationsAvailableOnPromisedType.ts:26:9: Did you forget to use 'await'?
+        b();
+        ~
+!!! error TS2349: This expression is not callable.
+!!! error TS2349:   Type 'Promise<number>' has no call signatures.
+    }
+    

@@ -1,0 +1,19 @@
+=== tests/cases/compiler/overloadOnConstInBaseWithBadImplementationInDerived.ts ===
+interface I {
+    x1(a: number, callback: (x: 'hi') => number);
+>x1 : (a: number, callback: (x: 'hi') => number) => any
+>a : number
+>callback : (x: 'hi') => number
+>x : "hi"
+}
+
+class C implements I {
+>C : C
+
+    x1(a: number, callback: (x: 'hi') => number) { // error
+>x1 : (a: number, callback: (x: 'hi') => number) => void
+>a : number
+>callback : (x: 'hi') => number
+>x : "hi"
+    }
+}

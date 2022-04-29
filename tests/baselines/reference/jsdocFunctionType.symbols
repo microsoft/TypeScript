@@ -1,0 +1,162 @@
+=== tests/cases/conformance/jsdoc/functions.js ===
+/**
+ * @param {function(this: string, number): number} c is just passing on through
+ * @return {function(this: string, number): number}
+ */
+function id1(c) {
+>id1 : Symbol(id1, Decl(functions.js, 0, 0))
+>c : Symbol(c, Decl(functions.js, 4, 13))
+
+    return c
+>c : Symbol(c, Decl(functions.js, 4, 13))
+}
+
+var x = id1(function (n) { return this.length + n });
+>x : Symbol(x, Decl(functions.js, 8, 3))
+>id1 : Symbol(id1, Decl(functions.js, 0, 0))
+>n : Symbol(n, Decl(functions.js, 8, 22))
+>this.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>this : Symbol(this, Decl(functions.js, 1, 20))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>n : Symbol(n, Decl(functions.js, 8, 22))
+
+/**
+ * @param {function(new: { length: number }, number): number} c is just passing on through
+ * @return {function(new: { length: number }, number): number}
+ */
+function id2(c) {
+>id2 : Symbol(id2, Decl(functions.js, 8, 53))
+>c : Symbol(c, Decl(functions.js, 14, 13))
+
+    return c
+>c : Symbol(c, Decl(functions.js, 14, 13))
+}
+
+class C {
+>C : Symbol(C, Decl(functions.js, 16, 1))
+
+    /** @param {number} n */
+    constructor(n) {
+>n : Symbol(n, Decl(functions.js, 20, 16))
+
+        this.length = n;
+>this.length : Symbol(C.length, Decl(functions.js, 20, 20))
+>this : Symbol(C, Decl(functions.js, 16, 1))
+>length : Symbol(C.length, Decl(functions.js, 20, 20))
+>n : Symbol(n, Decl(functions.js, 20, 16))
+    }
+}
+
+var y = id2(C);
+>y : Symbol(y, Decl(functions.js, 25, 3))
+>id2 : Symbol(id2, Decl(functions.js, 8, 53))
+>C : Symbol(C, Decl(functions.js, 16, 1))
+
+var z = new y(12);
+>z : Symbol(z, Decl(functions.js, 26, 3))
+>y : Symbol(y, Decl(functions.js, 25, 3))
+
+z.length;
+>z.length : Symbol(length, Decl(functions.js, 12, 27))
+>z : Symbol(z, Decl(functions.js, 26, 3))
+>length : Symbol(length, Decl(functions.js, 12, 27))
+
+/** @type {function ("a" | "b", 1 | 2): 3 | 4} */
+var f = function (ab, onetwo) { return ab === "a" ? 3 : 4;  }
+>f : Symbol(f, Decl(functions.js, 30, 3))
+>ab : Symbol(ab, Decl(functions.js, 30, 18))
+>onetwo : Symbol(onetwo, Decl(functions.js, 30, 21))
+>ab : Symbol(ab, Decl(functions.js, 30, 18))
+
+
+/** 
+ * @constructor
+ * @param {number} n
+ */
+function D(n) {
+>D : Symbol(D, Decl(functions.js, 30, 61))
+>n : Symbol(n, Decl(functions.js, 37, 11))
+
+  this.length = n;
+>this.length : Symbol(D.length, Decl(functions.js, 37, 15))
+>this : Symbol(D, Decl(functions.js, 30, 61))
+>length : Symbol(D.length, Decl(functions.js, 37, 15))
+>n : Symbol(n, Decl(functions.js, 37, 11))
+}
+
+var y2 = id2(D);
+>y2 : Symbol(y2, Decl(functions.js, 41, 3))
+>id2 : Symbol(id2, Decl(functions.js, 8, 53))
+>D : Symbol(D, Decl(functions.js, 30, 61))
+
+var z2 = new y2(33);
+>z2 : Symbol(z2, Decl(functions.js, 42, 3))
+>y2 : Symbol(y2, Decl(functions.js, 41, 3))
+
+z2.length;
+>z2.length : Symbol(length, Decl(functions.js, 12, 27))
+>z2 : Symbol(z2, Decl(functions.js, 42, 3))
+>length : Symbol(length, Decl(functions.js, 12, 27))
+
+
+/** 
+ * @param {function(new: D, number)} dref
+ * @return {D}
+ */
+var construct = function(dref) { return new dref(33); }
+>construct : Symbol(construct, Decl(functions.js, 50, 3))
+>dref : Symbol(dref, Decl(functions.js, 50, 25))
+>dref : Symbol(dref, Decl(functions.js, 50, 25))
+
+var z3 = construct(D);
+>z3 : Symbol(z3, Decl(functions.js, 51, 3))
+>construct : Symbol(construct, Decl(functions.js, 50, 3))
+>D : Symbol(D, Decl(functions.js, 30, 61))
+
+z3.length;
+>z3.length : Symbol(D.length, Decl(functions.js, 37, 15))
+>z3 : Symbol(z3, Decl(functions.js, 51, 3))
+>length : Symbol(D.length, Decl(functions.js, 37, 15))
+
+
+/** 
+ * @constructor
+ * @param {number} n
+ */
+var E = function(n) {
+>E : Symbol(E, Decl(functions.js, 59, 3))
+>n : Symbol(n, Decl(functions.js, 59, 17))
+
+  this.not_length_on_purpose = n;
+>this.not_length_on_purpose : Symbol(E.not_length_on_purpose, Decl(functions.js, 59, 21))
+>this : Symbol(E, Decl(functions.js, 59, 7))
+>not_length_on_purpose : Symbol(E.not_length_on_purpose, Decl(functions.js, 59, 21))
+>n : Symbol(n, Decl(functions.js, 59, 17))
+
+};
+
+
+var y3 = id2(E);
+>y3 : Symbol(y3, Decl(functions.js, 64, 3))
+>id2 : Symbol(id2, Decl(functions.js, 8, 53))
+>E : Symbol(E, Decl(functions.js, 59, 3))
+
+// Repro from #39229
+
+/**
+ * @type {(...args: [string, string] | [number, string, string]) => void}
+ */
+function foo(...args) {
+>foo : Symbol(foo, Decl(functions.js, 64, 16))
+>args : Symbol(args, Decl(functions.js, 71, 13))
+
+  args;
+>args : Symbol(args, Decl(functions.js, 71, 13))
+}
+
+foo('abc', 'def');
+>foo : Symbol(foo, Decl(functions.js, 64, 16))
+
+foo(42, 'abc', 'def');
+>foo : Symbol(foo, Decl(functions.js, 64, 16))
+

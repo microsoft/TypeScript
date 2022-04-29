@@ -1,0 +1,18 @@
+=== tests/cases/conformance/es6/templates/templateStringWithEmbeddedComments.ts ===
+`head${ // single line comment
+>`head${ // single line comment10}middle${/* Multi- * line * comment */ 20 // closing comment}tail` : string
+
+10
+>10 : 10
+}
+middle${
+/* Multi-
+ * line
+ * comment
+ */
+ 20
+>20 : 20
+
+ // closing comment
+}
+tail`;

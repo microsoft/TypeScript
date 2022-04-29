@@ -1,0 +1,140 @@
+=== tests/cases/conformance/types/typeParameters/typeArgumentLists/functionConstraintSatisfaction2.ts ===
+// satisfaction of a constraint to Function, all of these invocations are errors unless otherwise noted
+
+function foo<T extends Function>(x: T): T { return x; }
+>foo : Symbol(foo, Decl(functionConstraintSatisfaction2.ts, 0, 0))
+>T : Symbol(T, Decl(functionConstraintSatisfaction2.ts, 2, 13))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(functionConstraintSatisfaction2.ts, 2, 33))
+>T : Symbol(T, Decl(functionConstraintSatisfaction2.ts, 2, 13))
+>T : Symbol(T, Decl(functionConstraintSatisfaction2.ts, 2, 13))
+>x : Symbol(x, Decl(functionConstraintSatisfaction2.ts, 2, 33))
+
+foo(1);
+>foo : Symbol(foo, Decl(functionConstraintSatisfaction2.ts, 0, 0))
+
+foo(() => { }, 1);
+>foo : Symbol(foo, Decl(functionConstraintSatisfaction2.ts, 0, 0))
+
+foo(1, () => { });
+>foo : Symbol(foo, Decl(functionConstraintSatisfaction2.ts, 0, 0))
+
+function foo2<T extends (x: string) => string>(x: T): T { return x; }
+>foo2 : Symbol(foo2, Decl(functionConstraintSatisfaction2.ts, 6, 18))
+>T : Symbol(T, Decl(functionConstraintSatisfaction2.ts, 8, 14))
+>x : Symbol(x, Decl(functionConstraintSatisfaction2.ts, 8, 25))
+>x : Symbol(x, Decl(functionConstraintSatisfaction2.ts, 8, 47))
+>T : Symbol(T, Decl(functionConstraintSatisfaction2.ts, 8, 14))
+>T : Symbol(T, Decl(functionConstraintSatisfaction2.ts, 8, 14))
+>x : Symbol(x, Decl(functionConstraintSatisfaction2.ts, 8, 47))
+
+class C {
+>C : Symbol(C, Decl(functionConstraintSatisfaction2.ts, 8, 69))
+
+    foo: string;
+>foo : Symbol(C.foo, Decl(functionConstraintSatisfaction2.ts, 10, 9))
+}
+
+var b: { new (x: string): string };
+>b : Symbol(b, Decl(functionConstraintSatisfaction2.ts, 14, 3))
+>x : Symbol(x, Decl(functionConstraintSatisfaction2.ts, 14, 14))
+
+class C2<T> {
+>C2 : Symbol(C2, Decl(functionConstraintSatisfaction2.ts, 14, 35))
+>T : Symbol(T, Decl(functionConstraintSatisfaction2.ts, 16, 9))
+
+    foo: T;
+>foo : Symbol(C2.foo, Decl(functionConstraintSatisfaction2.ts, 16, 13))
+>T : Symbol(T, Decl(functionConstraintSatisfaction2.ts, 16, 9))
+}
+
+var b2: { new <T>(x: T): T };
+>b2 : Symbol(b2, Decl(functionConstraintSatisfaction2.ts, 20, 3))
+>T : Symbol(T, Decl(functionConstraintSatisfaction2.ts, 20, 15))
+>x : Symbol(x, Decl(functionConstraintSatisfaction2.ts, 20, 18))
+>T : Symbol(T, Decl(functionConstraintSatisfaction2.ts, 20, 15))
+>T : Symbol(T, Decl(functionConstraintSatisfaction2.ts, 20, 15))
+
+var r = foo2(new Function());
+>r : Symbol(r, Decl(functionConstraintSatisfaction2.ts, 22, 3))
+>foo2 : Symbol(foo2, Decl(functionConstraintSatisfaction2.ts, 6, 18))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+var r2 = foo2((x: string[]) => x);
+>r2 : Symbol(r2, Decl(functionConstraintSatisfaction2.ts, 23, 3))
+>foo2 : Symbol(foo2, Decl(functionConstraintSatisfaction2.ts, 6, 18))
+>x : Symbol(x, Decl(functionConstraintSatisfaction2.ts, 23, 15))
+>x : Symbol(x, Decl(functionConstraintSatisfaction2.ts, 23, 15))
+
+var r6 = foo2(C);
+>r6 : Symbol(r6, Decl(functionConstraintSatisfaction2.ts, 24, 3))
+>foo2 : Symbol(foo2, Decl(functionConstraintSatisfaction2.ts, 6, 18))
+>C : Symbol(C, Decl(functionConstraintSatisfaction2.ts, 8, 69))
+
+var r7 = foo2(b);
+>r7 : Symbol(r7, Decl(functionConstraintSatisfaction2.ts, 25, 3))
+>foo2 : Symbol(foo2, Decl(functionConstraintSatisfaction2.ts, 6, 18))
+>b : Symbol(b, Decl(functionConstraintSatisfaction2.ts, 14, 3))
+
+var r8 = foo2(<U>(x: U) => x); // no error expected
+>r8 : Symbol(r8, Decl(functionConstraintSatisfaction2.ts, 26, 3))
+>foo2 : Symbol(foo2, Decl(functionConstraintSatisfaction2.ts, 6, 18))
+>U : Symbol(U, Decl(functionConstraintSatisfaction2.ts, 26, 15))
+>x : Symbol(x, Decl(functionConstraintSatisfaction2.ts, 26, 18))
+>U : Symbol(U, Decl(functionConstraintSatisfaction2.ts, 26, 15))
+>x : Symbol(x, Decl(functionConstraintSatisfaction2.ts, 26, 18))
+
+var r11 = foo2(<U, V>(x: U, y: V) => x);
+>r11 : Symbol(r11, Decl(functionConstraintSatisfaction2.ts, 27, 3))
+>foo2 : Symbol(foo2, Decl(functionConstraintSatisfaction2.ts, 6, 18))
+>U : Symbol(U, Decl(functionConstraintSatisfaction2.ts, 27, 16))
+>V : Symbol(V, Decl(functionConstraintSatisfaction2.ts, 27, 18))
+>x : Symbol(x, Decl(functionConstraintSatisfaction2.ts, 27, 22))
+>U : Symbol(U, Decl(functionConstraintSatisfaction2.ts, 27, 16))
+>y : Symbol(y, Decl(functionConstraintSatisfaction2.ts, 27, 27))
+>V : Symbol(V, Decl(functionConstraintSatisfaction2.ts, 27, 18))
+>x : Symbol(x, Decl(functionConstraintSatisfaction2.ts, 27, 22))
+
+var r13 = foo2(C2);
+>r13 : Symbol(r13, Decl(functionConstraintSatisfaction2.ts, 28, 3))
+>foo2 : Symbol(foo2, Decl(functionConstraintSatisfaction2.ts, 6, 18))
+>C2 : Symbol(C2, Decl(functionConstraintSatisfaction2.ts, 14, 35))
+
+var r14 = foo2(b2);
+>r14 : Symbol(r14, Decl(functionConstraintSatisfaction2.ts, 29, 3))
+>foo2 : Symbol(foo2, Decl(functionConstraintSatisfaction2.ts, 6, 18))
+>b2 : Symbol(b2, Decl(functionConstraintSatisfaction2.ts, 20, 3))
+
+interface F2 extends Function { foo: string; }
+>F2 : Symbol(F2, Decl(functionConstraintSatisfaction2.ts, 29, 19))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>foo : Symbol(F2.foo, Decl(functionConstraintSatisfaction2.ts, 31, 31))
+
+var f2: F2;
+>f2 : Symbol(f2, Decl(functionConstraintSatisfaction2.ts, 32, 3))
+>F2 : Symbol(F2, Decl(functionConstraintSatisfaction2.ts, 29, 19))
+
+var r16 = foo2(f2);
+>r16 : Symbol(r16, Decl(functionConstraintSatisfaction2.ts, 33, 3))
+>foo2 : Symbol(foo2, Decl(functionConstraintSatisfaction2.ts, 6, 18))
+>f2 : Symbol(f2, Decl(functionConstraintSatisfaction2.ts, 32, 3))
+
+function fff<T extends { (): void }, U extends T>(x: T, y: U) {
+>fff : Symbol(fff, Decl(functionConstraintSatisfaction2.ts, 33, 19))
+>T : Symbol(T, Decl(functionConstraintSatisfaction2.ts, 35, 13))
+>U : Symbol(U, Decl(functionConstraintSatisfaction2.ts, 35, 36))
+>T : Symbol(T, Decl(functionConstraintSatisfaction2.ts, 35, 13))
+>x : Symbol(x, Decl(functionConstraintSatisfaction2.ts, 35, 50))
+>T : Symbol(T, Decl(functionConstraintSatisfaction2.ts, 35, 13))
+>y : Symbol(y, Decl(functionConstraintSatisfaction2.ts, 35, 55))
+>U : Symbol(U, Decl(functionConstraintSatisfaction2.ts, 35, 36))
+
+    foo2(x);
+>foo2 : Symbol(foo2, Decl(functionConstraintSatisfaction2.ts, 6, 18))
+>x : Symbol(x, Decl(functionConstraintSatisfaction2.ts, 35, 50))
+
+    foo2(y);
+>foo2 : Symbol(foo2, Decl(functionConstraintSatisfaction2.ts, 6, 18))
+>y : Symbol(y, Decl(functionConstraintSatisfaction2.ts, 35, 55))
+}
+

@@ -1,0 +1,73 @@
+=== tests/cases/conformance/types/namedTypes/classWithOnlyPublicMembersEquivalentToInterface.ts ===
+// no errors expected
+
+class C {
+>C : Symbol(C, Decl(classWithOnlyPublicMembersEquivalentToInterface.ts, 0, 0))
+
+    public x: string;
+>x : Symbol(C.x, Decl(classWithOnlyPublicMembersEquivalentToInterface.ts, 2, 9))
+
+    public y(a: number): number { return null; }
+>y : Symbol(C.y, Decl(classWithOnlyPublicMembersEquivalentToInterface.ts, 3, 21))
+>a : Symbol(a, Decl(classWithOnlyPublicMembersEquivalentToInterface.ts, 4, 13))
+
+    public get z() { return 1; }
+>z : Symbol(C.z, Decl(classWithOnlyPublicMembersEquivalentToInterface.ts, 4, 48), Decl(classWithOnlyPublicMembersEquivalentToInterface.ts, 5, 32))
+
+    public set z(v) { }
+>z : Symbol(C.z, Decl(classWithOnlyPublicMembersEquivalentToInterface.ts, 4, 48), Decl(classWithOnlyPublicMembersEquivalentToInterface.ts, 5, 32))
+>v : Symbol(v, Decl(classWithOnlyPublicMembersEquivalentToInterface.ts, 6, 17))
+
+    [x: string]: Object;
+>x : Symbol(x, Decl(classWithOnlyPublicMembersEquivalentToInterface.ts, 7, 5))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    [x: number]: Object;
+>x : Symbol(x, Decl(classWithOnlyPublicMembersEquivalentToInterface.ts, 8, 5))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    0: number;
+>0 : Symbol(C[0], Decl(classWithOnlyPublicMembersEquivalentToInterface.ts, 8, 24))
+}
+
+interface I {
+>I : Symbol(I, Decl(classWithOnlyPublicMembersEquivalentToInterface.ts, 10, 1))
+
+    x: string;
+>x : Symbol(I.x, Decl(classWithOnlyPublicMembersEquivalentToInterface.ts, 12, 13))
+
+    y(b: number): number;
+>y : Symbol(I.y, Decl(classWithOnlyPublicMembersEquivalentToInterface.ts, 13, 14))
+>b : Symbol(b, Decl(classWithOnlyPublicMembersEquivalentToInterface.ts, 14, 6))
+
+    z: number;
+>z : Symbol(I.z, Decl(classWithOnlyPublicMembersEquivalentToInterface.ts, 14, 25))
+
+    [x: string]: Object;
+>x : Symbol(x, Decl(classWithOnlyPublicMembersEquivalentToInterface.ts, 16, 5))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    [x: number]: Object;
+>x : Symbol(x, Decl(classWithOnlyPublicMembersEquivalentToInterface.ts, 17, 5))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    0: number;
+>0 : Symbol(I[0], Decl(classWithOnlyPublicMembersEquivalentToInterface.ts, 17, 24))
+}
+
+var c: C;
+>c : Symbol(c, Decl(classWithOnlyPublicMembersEquivalentToInterface.ts, 21, 3))
+>C : Symbol(C, Decl(classWithOnlyPublicMembersEquivalentToInterface.ts, 0, 0))
+
+var i: I;
+>i : Symbol(i, Decl(classWithOnlyPublicMembersEquivalentToInterface.ts, 22, 3))
+>I : Symbol(I, Decl(classWithOnlyPublicMembersEquivalentToInterface.ts, 10, 1))
+
+c = i;
+>c : Symbol(c, Decl(classWithOnlyPublicMembersEquivalentToInterface.ts, 21, 3))
+>i : Symbol(i, Decl(classWithOnlyPublicMembersEquivalentToInterface.ts, 22, 3))
+
+i = c;
+>i : Symbol(i, Decl(classWithOnlyPublicMembersEquivalentToInterface.ts, 22, 3))
+>c : Symbol(c, Decl(classWithOnlyPublicMembersEquivalentToInterface.ts, 21, 3))
+

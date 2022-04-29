@@ -1,0 +1,12 @@
+tests/cases/compiler/mismatchedClassConstructorVariable.ts(1,5): error TS2300: Duplicate identifier 'baz'.
+tests/cases/compiler/mismatchedClassConstructorVariable.ts(2,7): error TS2300: Duplicate identifier 'baz'.
+
+
+==== tests/cases/compiler/mismatchedClassConstructorVariable.ts (2 errors) ====
+    var baz: foo;
+        ~~~
+!!! error TS2300: Duplicate identifier 'baz'.
+    class baz { }
+          ~~~
+!!! error TS2300: Duplicate identifier 'baz'.
+    class foo { }

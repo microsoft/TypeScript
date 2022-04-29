@@ -1,0 +1,7 @@
+=== tests/cases/compiler/propertyAccess4.ts ===
+null.toBAZ();
+>null.toBAZ() : any
+>null.toBAZ : any
+>null : null
+>toBAZ : any
+

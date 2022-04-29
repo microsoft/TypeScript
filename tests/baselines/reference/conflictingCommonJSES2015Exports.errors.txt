@@ -1,0 +1,12 @@
+tests/cases/conformance/salsa/bug24934.js(2,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+
+
+==== tests/cases/conformance/salsa/bug24934.js (1 errors) ====
+    export function abc(a, b, c) { return 5; }
+    module.exports = { abc };
+    ~~~~~~
+!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+==== tests/cases/conformance/salsa/use.js (0 errors) ====
+    import { abc } from './bug24934';
+    abc(1, 2, 3);
+    

@@ -1,0 +1,68 @@
+=== tests/cases/compiler/useBeforeDeclaration_superClass.ts ===
+class C {
+>C : Symbol(C, Decl(useBeforeDeclaration_superClass.ts, 0, 0))
+
+    x = 0;
+>x : Symbol(C.x, Decl(useBeforeDeclaration_superClass.ts, 0, 9))
+}
+class D extends C {
+>D : Symbol(D, Decl(useBeforeDeclaration_superClass.ts, 2, 1))
+>C : Symbol(C, Decl(useBeforeDeclaration_superClass.ts, 0, 0))
+
+    // Not an error -- this will access the parent's initialized value for `x`, not the one on the child.
+    old_x = this.x;
+>old_x : Symbol(D.old_x, Decl(useBeforeDeclaration_superClass.ts, 3, 19))
+>this.x : Symbol(D.x, Decl(useBeforeDeclaration_superClass.ts, 5, 19))
+>this : Symbol(D, Decl(useBeforeDeclaration_superClass.ts, 2, 1))
+>x : Symbol(D.x, Decl(useBeforeDeclaration_superClass.ts, 5, 19))
+
+    x = 1;
+>x : Symbol(D.x, Decl(useBeforeDeclaration_superClass.ts, 5, 19))
+}
+
+// Test that it works on chains of classes
+class X {
+>X : Symbol(X, Decl(useBeforeDeclaration_superClass.ts, 7, 1))
+
+    x = 0;
+>x : Symbol(X.x, Decl(useBeforeDeclaration_superClass.ts, 10, 9))
+}
+class Y extends X {}
+>Y : Symbol(Y, Decl(useBeforeDeclaration_superClass.ts, 12, 1))
+>X : Symbol(X, Decl(useBeforeDeclaration_superClass.ts, 7, 1))
+
+class Z extends Y {
+>Z : Symbol(Z, Decl(useBeforeDeclaration_superClass.ts, 13, 20))
+>Y : Symbol(Y, Decl(useBeforeDeclaration_superClass.ts, 12, 1))
+
+    old_x = this.x;
+>old_x : Symbol(Z.old_x, Decl(useBeforeDeclaration_superClass.ts, 14, 19))
+>this.x : Symbol(Z.x, Decl(useBeforeDeclaration_superClass.ts, 15, 19))
+>this : Symbol(Z, Decl(useBeforeDeclaration_superClass.ts, 13, 20))
+>x : Symbol(Z.x, Decl(useBeforeDeclaration_superClass.ts, 15, 19))
+
+    x = 1;
+>x : Symbol(Z.x, Decl(useBeforeDeclaration_superClass.ts, 15, 19))
+}
+
+// Interface doesn't count
+interface I {
+>I : Symbol(I, Decl(useBeforeDeclaration_superClass.ts, 17, 1))
+
+    x: number;
+>x : Symbol(I.x, Decl(useBeforeDeclaration_superClass.ts, 20, 13))
+}
+class J implements I {
+>J : Symbol(J, Decl(useBeforeDeclaration_superClass.ts, 22, 1))
+>I : Symbol(I, Decl(useBeforeDeclaration_superClass.ts, 17, 1))
+
+    old_x = this.x;
+>old_x : Symbol(J.old_x, Decl(useBeforeDeclaration_superClass.ts, 23, 22))
+>this.x : Symbol(J.x, Decl(useBeforeDeclaration_superClass.ts, 24, 19))
+>this : Symbol(J, Decl(useBeforeDeclaration_superClass.ts, 22, 1))
+>x : Symbol(J.x, Decl(useBeforeDeclaration_superClass.ts, 24, 19))
+
+    x = 1;
+>x : Symbol(J.x, Decl(useBeforeDeclaration_superClass.ts, 24, 19))
+}
+

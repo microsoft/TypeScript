@@ -1,0 +1,12 @@
+tests/cases/compiler/unusedSingleParameterInFunctionDeclaration.ts(1,18): error TS6133: 'person' is declared but its value is never read.
+tests/cases/compiler/unusedSingleParameterInFunctionDeclaration.ts(2,9): error TS6133: 'unused' is declared but its value is never read.
+
+
+==== tests/cases/compiler/unusedSingleParameterInFunctionDeclaration.ts (2 errors) ====
+    function greeter(person: string) {
+                     ~~~~~~
+!!! error TS6133: 'person' is declared but its value is never read.
+        var unused = 20;
+            ~~~~~~
+!!! error TS6133: 'unused' is declared but its value is never read.
+    }

@@ -1,0 +1,17 @@
+tests/cases/compiler/superPropertyAccessInSuperCall01.ts(9,9): error TS17011: 'super' must be called before accessing a property of 'super' in the constructor of a derived class.
+
+
+==== tests/cases/compiler/superPropertyAccessInSuperCall01.ts (1 errors) ====
+    class A {
+    	constructor(f: string) {
+    	}
+    	public blah(): string { return ""; }
+    }
+    
+    class B extends A {
+    	constructor() {
+    		super(super.blah())
+    		      ~~~~~
+!!! error TS17011: 'super' must be called before accessing a property of 'super' in the constructor of a derived class.
+    	}
+    }

@@ -1,0 +1,20 @@
+=== tests/cases/compiler/declarationEmitNoNonRequiredParens.ts ===
+export enum Test {
+>Test : Symbol(Test, Decl(declarationEmitNoNonRequiredParens.ts, 0, 0))
+
+    A, B, C
+>A : Symbol(Test.A, Decl(declarationEmitNoNonRequiredParens.ts, 0, 18))
+>B : Symbol(Test.B, Decl(declarationEmitNoNonRequiredParens.ts, 1, 6))
+>C : Symbol(Test.C, Decl(declarationEmitNoNonRequiredParens.ts, 1, 9))
+}
+
+export type TestType = typeof Test;
+>TestType : Symbol(TestType, Decl(declarationEmitNoNonRequiredParens.ts, 2, 1))
+>Test : Symbol(Test, Decl(declarationEmitNoNonRequiredParens.ts, 0, 0))
+
+export const bar = (null as TestType[Extract<keyof TestType, string>][]);
+>bar : Symbol(bar, Decl(declarationEmitNoNonRequiredParens.ts, 6, 12))
+>TestType : Symbol(TestType, Decl(declarationEmitNoNonRequiredParens.ts, 2, 1))
+>Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
+>TestType : Symbol(TestType, Decl(declarationEmitNoNonRequiredParens.ts, 2, 1))
+

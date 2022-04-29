@@ -1,0 +1,76 @@
+=== tests/cases/compiler/aux.ts ===
+export class SomeClass {
+>SomeClass : Symbol(SomeClass, Decl(aux.ts, 0, 0))
+
+    field: string;
+>field : Symbol(SomeClass.field, Decl(aux.ts, 0, 24))
+}
+
+=== tests/cases/compiler/aux1.ts ===
+export class SomeClass1 {
+>SomeClass1 : Symbol(SomeClass1, Decl(aux1.ts, 0, 0))
+
+    field: string;
+>field : Symbol(SomeClass1.field, Decl(aux1.ts, 0, 25))
+}
+
+=== tests/cases/compiler/aux2.ts ===
+export class SomeClass2 {
+>SomeClass2 : Symbol(SomeClass2, Decl(aux2.ts, 0, 0))
+
+    field: string;
+>field : Symbol(SomeClass2.field, Decl(aux2.ts, 0, 25))
+}
+=== tests/cases/compiler/main.ts ===
+import { SomeClass } from './aux';
+>SomeClass : Symbol(SomeClass, Decl(main.ts, 0, 8))
+
+import { SomeClass1 } from './aux1';
+>SomeClass1 : Symbol(SomeClass1, Decl(main.ts, 1, 8))
+
+function annotation(): ClassDecorator {
+>annotation : Symbol(annotation, Decl(main.ts, 1, 36))
+>ClassDecorator : Symbol(ClassDecorator, Decl(lib.es5.d.ts, --, --))
+
+    return (target: any): void => { };
+>target : Symbol(target, Decl(main.ts, 4, 12))
+}
+
+function annotation1(): MethodDecorator {
+>annotation1 : Symbol(annotation1, Decl(main.ts, 5, 1))
+>MethodDecorator : Symbol(MethodDecorator, Decl(lib.es5.d.ts, --, --))
+
+    return (target: any): void => { };
+>target : Symbol(target, Decl(main.ts, 8, 12))
+}
+
+@annotation()
+>annotation : Symbol(annotation, Decl(main.ts, 1, 36))
+
+export class ClassA {
+>ClassA : Symbol(ClassA, Decl(main.ts, 9, 1))
+
+    array: SomeClass[];
+>array : Symbol(ClassA.array, Decl(main.ts, 12, 21))
+>SomeClass : Symbol(SomeClass, Decl(main.ts, 0, 8))
+
+    constructor(...init: SomeClass[]) {
+>init : Symbol(init, Decl(main.ts, 15, 16))
+>SomeClass : Symbol(SomeClass, Decl(main.ts, 0, 8))
+
+        this.array = init;
+>this.array : Symbol(ClassA.array, Decl(main.ts, 12, 21))
+>this : Symbol(ClassA, Decl(main.ts, 9, 1))
+>array : Symbol(ClassA.array, Decl(main.ts, 12, 21))
+>init : Symbol(init, Decl(main.ts, 15, 16))
+    }
+
+    @annotation1()
+>annotation1 : Symbol(annotation1, Decl(main.ts, 5, 1))
+
+    foo(... args: SomeClass1[]) {
+>foo : Symbol(ClassA.foo, Decl(main.ts, 17, 5))
+>args : Symbol(args, Decl(main.ts, 20, 8))
+>SomeClass1 : Symbol(SomeClass1, Decl(main.ts, 1, 8))
+    }
+}

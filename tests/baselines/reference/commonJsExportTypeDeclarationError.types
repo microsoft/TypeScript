@@ -1,0 +1,34 @@
+=== tests/cases/compiler/test.js ===
+module.exports = {
+>module.exports = {   message: ""} : { message: string; }
+>module.exports : { message: string; }
+>module : { exports: { message: string; }; }
+>exports : { message: string; }
+>{   message: ""} : { message: string; }
+
+   message: ""
+>message : string
+>"" : ""
+}
+
+=== tests/cases/compiler/types1.ts ===
+import test from "./test";
+>test : { message: string; }
+
+export type test
+>test : any
+
+=== tests/cases/compiler/types2.ts ===
+import test from "./test";
+>test : { message: string; }
+
+export type test = 
+>test : any
+
+=== tests/cases/compiler/types3.ts ===
+import test from "./test";
+>test : { message: string; }
+
+export type test = test;
+>test : any
+

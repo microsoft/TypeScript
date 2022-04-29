@@ -1,0 +1,59 @@
+=== tests/cases/conformance/types/stringLiteral/stringLiteralTypesAsTypeParameterConstraint01.ts ===
+function foo<T extends "foo">(f: (x: T) => T) {
+>foo : Symbol(foo, Decl(stringLiteralTypesAsTypeParameterConstraint01.ts, 0, 0))
+>T : Symbol(T, Decl(stringLiteralTypesAsTypeParameterConstraint01.ts, 0, 13))
+>f : Symbol(f, Decl(stringLiteralTypesAsTypeParameterConstraint01.ts, 0, 30))
+>x : Symbol(x, Decl(stringLiteralTypesAsTypeParameterConstraint01.ts, 0, 34))
+>T : Symbol(T, Decl(stringLiteralTypesAsTypeParameterConstraint01.ts, 0, 13))
+>T : Symbol(T, Decl(stringLiteralTypesAsTypeParameterConstraint01.ts, 0, 13))
+
+    return f;
+>f : Symbol(f, Decl(stringLiteralTypesAsTypeParameterConstraint01.ts, 0, 30))
+}
+
+function bar<T extends "foo" | "bar">(f: (x: T) => T) {
+>bar : Symbol(bar, Decl(stringLiteralTypesAsTypeParameterConstraint01.ts, 2, 1))
+>T : Symbol(T, Decl(stringLiteralTypesAsTypeParameterConstraint01.ts, 4, 13))
+>f : Symbol(f, Decl(stringLiteralTypesAsTypeParameterConstraint01.ts, 4, 38))
+>x : Symbol(x, Decl(stringLiteralTypesAsTypeParameterConstraint01.ts, 4, 42))
+>T : Symbol(T, Decl(stringLiteralTypesAsTypeParameterConstraint01.ts, 4, 13))
+>T : Symbol(T, Decl(stringLiteralTypesAsTypeParameterConstraint01.ts, 4, 13))
+
+    return f;
+>f : Symbol(f, Decl(stringLiteralTypesAsTypeParameterConstraint01.ts, 4, 38))
+}
+
+let f = foo(x => x);
+>f : Symbol(f, Decl(stringLiteralTypesAsTypeParameterConstraint01.ts, 8, 3))
+>foo : Symbol(foo, Decl(stringLiteralTypesAsTypeParameterConstraint01.ts, 0, 0))
+>x : Symbol(x, Decl(stringLiteralTypesAsTypeParameterConstraint01.ts, 8, 12))
+>x : Symbol(x, Decl(stringLiteralTypesAsTypeParameterConstraint01.ts, 8, 12))
+
+let fResult = f("foo");
+>fResult : Symbol(fResult, Decl(stringLiteralTypesAsTypeParameterConstraint01.ts, 9, 3))
+>f : Symbol(f, Decl(stringLiteralTypesAsTypeParameterConstraint01.ts, 8, 3))
+
+let g = foo((x => x));
+>g : Symbol(g, Decl(stringLiteralTypesAsTypeParameterConstraint01.ts, 11, 3))
+>foo : Symbol(foo, Decl(stringLiteralTypesAsTypeParameterConstraint01.ts, 0, 0))
+>x : Symbol(x, Decl(stringLiteralTypesAsTypeParameterConstraint01.ts, 11, 13))
+>x : Symbol(x, Decl(stringLiteralTypesAsTypeParameterConstraint01.ts, 11, 13))
+
+let gResult = g("foo");
+>gResult : Symbol(gResult, Decl(stringLiteralTypesAsTypeParameterConstraint01.ts, 12, 3))
+>g : Symbol(g, Decl(stringLiteralTypesAsTypeParameterConstraint01.ts, 11, 3))
+
+let h = bar(x => x);
+>h : Symbol(h, Decl(stringLiteralTypesAsTypeParameterConstraint01.ts, 14, 3))
+>bar : Symbol(bar, Decl(stringLiteralTypesAsTypeParameterConstraint01.ts, 2, 1))
+>x : Symbol(x, Decl(stringLiteralTypesAsTypeParameterConstraint01.ts, 14, 12))
+>x : Symbol(x, Decl(stringLiteralTypesAsTypeParameterConstraint01.ts, 14, 12))
+
+let hResult = h("foo");
+>hResult : Symbol(hResult, Decl(stringLiteralTypesAsTypeParameterConstraint01.ts, 15, 3))
+>h : Symbol(h, Decl(stringLiteralTypesAsTypeParameterConstraint01.ts, 14, 3))
+
+hResult = h("bar");
+>hResult : Symbol(hResult, Decl(stringLiteralTypesAsTypeParameterConstraint01.ts, 15, 3))
+>h : Symbol(h, Decl(stringLiteralTypesAsTypeParameterConstraint01.ts, 14, 3))
+

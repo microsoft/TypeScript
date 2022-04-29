@@ -1,0 +1,86 @@
+=== tests/cases/conformance/jsx/file.tsx ===
+import React = require('react');
+>React : Symbol(React, Decl(file.tsx, 0, 0))
+
+interface Props {
+>Props : Symbol(Props, Decl(file.tsx, 0, 32))
+
+    a: number;
+>a : Symbol(Props.a, Decl(file.tsx, 2, 17))
+
+    b: number;
+>b : Symbol(Props.b, Decl(file.tsx, 3, 14))
+
+    c?: number;
+>c : Symbol(Props.c, Decl(file.tsx, 4, 14))
+
+    d?: number;
+>d : Symbol(Props.d, Decl(file.tsx, 5, 15))
+}
+
+
+const props: Props = { a: 1, b: 1 };
+>props : Symbol(props, Decl(file.tsx, 10, 5))
+>Props : Symbol(Props, Decl(file.tsx, 0, 32))
+>a : Symbol(a, Decl(file.tsx, 10, 22))
+>b : Symbol(b, Decl(file.tsx, 10, 28))
+
+const Foo = (props: Props) => <div>{ props.a }</div>;
+>Foo : Symbol(Foo, Decl(file.tsx, 11, 5))
+>props : Symbol(props, Decl(file.tsx, 11, 13))
+>Props : Symbol(Props, Decl(file.tsx, 0, 32))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
+>props.a : Symbol(Props.a, Decl(file.tsx, 2, 17))
+>props : Symbol(props, Decl(file.tsx, 11, 13))
+>a : Symbol(Props.a, Decl(file.tsx, 2, 17))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
+
+// ok
+const a1 = <Foo {...props}></Foo>;
+>a1 : Symbol(a1, Decl(file.tsx, 14, 5))
+>Foo : Symbol(Foo, Decl(file.tsx, 11, 5))
+>props : Symbol(props, Decl(file.tsx, 10, 5))
+>Foo : Symbol(Foo, Decl(file.tsx, 11, 5))
+
+const a2 = <Foo d={1} {...props}></Foo>;
+>a2 : Symbol(a2, Decl(file.tsx, 15, 5))
+>Foo : Symbol(Foo, Decl(file.tsx, 11, 5))
+>d : Symbol(d, Decl(file.tsx, 15, 15))
+>props : Symbol(props, Decl(file.tsx, 10, 5))
+>Foo : Symbol(Foo, Decl(file.tsx, 11, 5))
+
+// error
+const b1 = <Foo a={1} {...props}></Foo>;
+>b1 : Symbol(b1, Decl(file.tsx, 18, 5))
+>Foo : Symbol(Foo, Decl(file.tsx, 11, 5))
+>a : Symbol(a, Decl(file.tsx, 18, 15))
+>props : Symbol(props, Decl(file.tsx, 10, 5))
+>Foo : Symbol(Foo, Decl(file.tsx, 11, 5))
+
+const b2 = <Foo a={1} b={2} {...props}></Foo>;
+>b2 : Symbol(b2, Decl(file.tsx, 19, 5))
+>Foo : Symbol(Foo, Decl(file.tsx, 11, 5))
+>a : Symbol(a, Decl(file.tsx, 19, 15))
+>b : Symbol(b, Decl(file.tsx, 19, 21))
+>props : Symbol(props, Decl(file.tsx, 10, 5))
+>Foo : Symbol(Foo, Decl(file.tsx, 11, 5))
+
+const b3 = <Foo a={1} d={1} {...props} {...{ d: 1 }}></Foo>;
+>b3 : Symbol(b3, Decl(file.tsx, 20, 5))
+>Foo : Symbol(Foo, Decl(file.tsx, 11, 5))
+>a : Symbol(a, Decl(file.tsx, 20, 15))
+>d : Symbol(d, Decl(file.tsx, 20, 21))
+>props : Symbol(props, Decl(file.tsx, 10, 5))
+>d : Symbol(d, Decl(file.tsx, 20, 44))
+>Foo : Symbol(Foo, Decl(file.tsx, 11, 5))
+
+const b4 = <Foo a={1} d={1} {...props} {...{ a: 1, d: 1 }}></Foo>;
+>b4 : Symbol(b4, Decl(file.tsx, 21, 5))
+>Foo : Symbol(Foo, Decl(file.tsx, 11, 5))
+>a : Symbol(a, Decl(file.tsx, 21, 15))
+>d : Symbol(d, Decl(file.tsx, 21, 21))
+>props : Symbol(props, Decl(file.tsx, 10, 5))
+>a : Symbol(a, Decl(file.tsx, 21, 44))
+>d : Symbol(d, Decl(file.tsx, 21, 50))
+>Foo : Symbol(Foo, Decl(file.tsx, 11, 5))
+

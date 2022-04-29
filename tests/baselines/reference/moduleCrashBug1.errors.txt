@@ -1,0 +1,27 @@
+tests/cases/compiler/moduleCrashBug1.ts(18,9): error TS2709: Cannot use namespace '_modes' as a type.
+
+
+==== tests/cases/compiler/moduleCrashBug1.ts (1 errors) ====
+    module _modes {
+     export interface IMode {
+      
+     }
+     
+     class Mode {
+      
+     }
+    }
+    
+    //_modes. // produces an internal error - please implement in derived class
+    
+    module editor {
+     import modes = _modes;
+    
+    }
+    
+    var m : _modes;
+            ~~~~~~
+!!! error TS2709: Cannot use namespace '_modes' as a type.
+    
+    
+    

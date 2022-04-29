@@ -1,0 +1,14 @@
+tests/cases/conformance/async/es5/functionDeclarations/asyncFunctionDeclaration7_es5.ts(3,26): error TS2524: 'await' expressions cannot be used in a parameter initializer.
+tests/cases/conformance/async/es5/functionDeclarations/asyncFunctionDeclaration7_es5.ts(3,31): error TS1109: Expression expected.
+
+
+==== tests/cases/conformance/async/es5/functionDeclarations/asyncFunctionDeclaration7_es5.ts (2 errors) ====
+    async function bar(): Promise<void> {
+      // 'await' here is an identifier, and not a yield expression.
+      async function foo(a = await): Promise<void> {
+                             ~~~~~
+!!! error TS2524: 'await' expressions cannot be used in a parameter initializer.
+                                  ~
+!!! error TS1109: Expression expected.
+      }
+    }

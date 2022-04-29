@@ -1,0 +1,143 @@
+=== tests/cases/compiler/excessPropertyCheckWithMultipleDiscriminants.ts ===
+// Repro from #32657
+
+interface Base<T> {
+>Base : Symbol(Base, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 0, 0))
+>T : Symbol(T, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 2, 15))
+
+    value: T;
+>value : Symbol(Base.value, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 2, 19))
+>T : Symbol(T, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 2, 15))
+}
+
+interface Int extends Base<number> {
+>Int : Symbol(Int, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 4, 1))
+>Base : Symbol(Base, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 0, 0))
+
+    type: "integer";
+>type : Symbol(Int.type, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 6, 36))
+
+    multipleOf?: number;
+>multipleOf : Symbol(Int.multipleOf, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 7, 20))
+}
+
+interface Float extends Base<number> {
+>Float : Symbol(Float, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 9, 1))
+>Base : Symbol(Base, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 0, 0))
+
+    type: "number";
+>type : Symbol(Float.type, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 11, 38))
+}
+
+interface Str extends Base<string> {
+>Str : Symbol(Str, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 13, 1))
+>Base : Symbol(Base, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 0, 0))
+
+    type: "string";
+>type : Symbol(Str.type, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 15, 36))
+
+    format?: string;
+>format : Symbol(Str.format, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 16, 19))
+}
+
+interface Bool extends Base<boolean> {
+>Bool : Symbol(Bool, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 18, 1))
+>Base : Symbol(Base, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 0, 0))
+
+    type: "boolean";
+>type : Symbol(Bool.type, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 20, 38))
+}
+
+type Primitive = Int | Float | Str | Bool;
+>Primitive : Symbol(Primitive, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 22, 1))
+>Int : Symbol(Int, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 4, 1))
+>Float : Symbol(Float, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 9, 1))
+>Str : Symbol(Str, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 13, 1))
+>Bool : Symbol(Bool, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 18, 1))
+
+const foo: Primitive = {
+>foo : Symbol(foo, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 26, 5))
+>Primitive : Symbol(Primitive, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 22, 1))
+
+    type: "number",
+>type : Symbol(type, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 26, 24))
+
+    value: 10,
+>value : Symbol(value, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 27, 19))
+
+    multipleOf: 5, // excess property
+>multipleOf : Symbol(multipleOf, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 28, 14))
+
+    format: "what?"
+>format : Symbol(format, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 29, 18))
+}
+
+
+type DisjointDiscriminants = { p1: 'left'; p2: true; p3: number } | { p1: 'right'; p2: false; p4: string } | { p1: 'left'; p2: boolean };
+>DisjointDiscriminants : Symbol(DisjointDiscriminants, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 31, 1))
+>p1 : Symbol(p1, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 34, 30))
+>p2 : Symbol(p2, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 34, 42))
+>p3 : Symbol(p3, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 34, 52))
+>p1 : Symbol(p1, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 34, 69))
+>p2 : Symbol(p2, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 34, 82))
+>p4 : Symbol(p4, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 34, 93))
+>p1 : Symbol(p1, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 34, 110))
+>p2 : Symbol(p2, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 34, 122))
+
+// This has excess error because variant three is the only applicable case.
+const a: DisjointDiscriminants = {
+>a : Symbol(a, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 37, 5))
+>DisjointDiscriminants : Symbol(DisjointDiscriminants, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 31, 1))
+
+    p1: 'left',
+>p1 : Symbol(p1, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 37, 34))
+
+    p2: false,
+>p2 : Symbol(p2, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 38, 15))
+
+    p3: 42,
+>p3 : Symbol(p3, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 39, 14))
+
+    p4: "hello"
+>p4 : Symbol(p4, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 40, 11))
+
+};
+
+// This has no excess error because variant one and three are both applicable.
+const b: DisjointDiscriminants = {
+>b : Symbol(b, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 45, 5))
+>DisjointDiscriminants : Symbol(DisjointDiscriminants, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 31, 1))
+
+    p1: 'left',
+>p1 : Symbol(p1, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 45, 34))
+
+    p2: true,
+>p2 : Symbol(p2, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 46, 15))
+
+    p3: 42,
+>p3 : Symbol(p3, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 47, 13))
+
+    p4: "hello"
+>p4 : Symbol(p4, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 48, 11))
+
+};
+
+// This has excess error because variant two is the only applicable case
+const c: DisjointDiscriminants = {
+>c : Symbol(c, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 53, 5))
+>DisjointDiscriminants : Symbol(DisjointDiscriminants, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 31, 1))
+
+    p1: 'right',
+>p1 : Symbol(p1, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 53, 34))
+
+    p2: false,
+>p2 : Symbol(p2, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 54, 16))
+
+    p3: 42,
+>p3 : Symbol(p3, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 55, 14))
+
+    p4: "hello"
+>p4 : Symbol(p4, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 56, 11))
+
+};
+

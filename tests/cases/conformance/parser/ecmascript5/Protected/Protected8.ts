@@ -1,0 +1,4 @@
+interface I {
+   protected
+   p
+}

@@ -1,0 +1,47 @@
+=== tests/cases/compiler/incorrectNumberOfTypeArgumentsDuringErrorReporting.ts ===
+interface ObjA {
+  y?:string,
+>y : string
+}
+
+interface ObjB {[key:string]:any}
+>key : string
+
+interface Opts<A, B> {a:A, b:B}
+>a : A
+>b : B
+
+const fn = <
+>fn : <A extends ObjA, B extends ObjB = ObjB>(opts: Opts<A, B>) => string
+><  A extends ObjA,  B extends ObjB = ObjB>(opts:Opts<A, B>):string => 'Z' : <A extends ObjA, B extends ObjB = ObjB>(opts: Opts<A, B>) => string
+
+  A extends ObjA,
+  B extends ObjB = ObjB
+>(opts:Opts<A, B>):string => 'Z'
+>opts : Opts<A, B>
+>'Z' : "Z"
+
+interface MyObjA {
+  x:string,
+>x : string
+}
+
+fn<MyObjA>({
+>fn<MyObjA>({  a: {x: 'X', y: 'Y'},  b: {},}) : string
+>fn : <A extends ObjA, B extends ObjB = ObjB>(opts: Opts<A, B>) => string
+>{  a: {x: 'X', y: 'Y'},  b: {},} : { a: { x: string; y: string; }; b: {}; }
+
+  a: {x: 'X', y: 'Y'},
+>a : { x: string; y: string; }
+>{x: 'X', y: 'Y'} : { x: string; y: string; }
+>x : string
+>'X' : "X"
+>y : string
+>'Y' : "Y"
+
+  b: {},
+>b : {}
+>{} : {}
+
+})
+

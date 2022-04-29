@@ -1,0 +1,114 @@
+=== tests/cases/conformance/es6/templates/taggedTemplateStringsWithTypedTags.ts ===
+interface I {
+    (stringParts: TemplateStringsArray, ...rest: number[]): I;
+>stringParts : TemplateStringsArray
+>rest : number[]
+
+    g: I;
+>g : I
+
+    h: I;
+>h : I
+
+    member: I;
+>member : I
+
+    thisIsNotATag(x: string): void
+>thisIsNotATag : (x: string) => void
+>x : string
+
+    [x: number]: I;
+>x : number
+}
+
+var f: I;
+>f : I
+
+f `abc`
+>f `abc` : I
+>f : I
+>`abc` : "abc"
+
+f `abc${1}def${2}ghi`;
+>f `abc${1}def${2}ghi` : I
+>f : I
+>`abc${1}def${2}ghi` : string
+>1 : 1
+>2 : 2
+
+f `abc`.member
+>f `abc`.member : I
+>f `abc` : I
+>f : I
+>`abc` : "abc"
+>member : I
+
+f `abc${1}def${2}ghi`.member;
+>f `abc${1}def${2}ghi`.member : I
+>f `abc${1}def${2}ghi` : I
+>f : I
+>`abc${1}def${2}ghi` : string
+>1 : 1
+>2 : 2
+>member : I
+
+f `abc`["member"];
+>f `abc`["member"] : I
+>f `abc` : I
+>f : I
+>`abc` : "abc"
+>"member" : "member"
+
+f `abc${1}def${2}ghi`["member"];
+>f `abc${1}def${2}ghi`["member"] : I
+>f `abc${1}def${2}ghi` : I
+>f : I
+>`abc${1}def${2}ghi` : string
+>1 : 1
+>2 : 2
+>"member" : "member"
+
+f `abc`[0].member `abc${1}def${2}ghi`;
+>f `abc`[0].member `abc${1}def${2}ghi` : I
+>f `abc`[0].member : I
+>f `abc`[0] : I
+>f `abc` : I
+>f : I
+>`abc` : "abc"
+>0 : 0
+>member : I
+>`abc${1}def${2}ghi` : string
+>1 : 1
+>2 : 2
+
+f `abc${1}def${2}ghi`["member"].member `abc${1}def${2}ghi`;
+>f `abc${1}def${2}ghi`["member"].member `abc${1}def${2}ghi` : I
+>f `abc${1}def${2}ghi`["member"].member : I
+>f `abc${1}def${2}ghi`["member"] : I
+>f `abc${1}def${2}ghi` : I
+>f : I
+>`abc${1}def${2}ghi` : string
+>1 : 1
+>2 : 2
+>"member" : "member"
+>member : I
+>`abc${1}def${2}ghi` : string
+>1 : 1
+>2 : 2
+
+f.thisIsNotATag(`abc`);
+>f.thisIsNotATag(`abc`) : void
+>f.thisIsNotATag : (x: string) => void
+>f : I
+>thisIsNotATag : (x: string) => void
+>`abc` : "abc"
+
+f.thisIsNotATag(`abc${1}def${2}ghi`);
+>f.thisIsNotATag(`abc${1}def${2}ghi`) : void
+>f.thisIsNotATag : (x: string) => void
+>f : I
+>thisIsNotATag : (x: string) => void
+>`abc${1}def${2}ghi` : string
+>1 : 1
+>2 : 2
+

@@ -1,0 +1,36 @@
+tests/cases/compiler/indexSignatureMustHaveTypeAnnotation.ts(3,5): error TS1169: A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.
+tests/cases/compiler/indexSignatureMustHaveTypeAnnotation.ts(3,6): error TS2304: Cannot find name 'x'.
+tests/cases/compiler/indexSignatureMustHaveTypeAnnotation.ts(4,5): error TS1021: An index signature must have a type annotation.
+tests/cases/compiler/indexSignatureMustHaveTypeAnnotation.ts(9,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+tests/cases/compiler/indexSignatureMustHaveTypeAnnotation.ts(9,6): error TS2304: Cannot find name 'x'.
+tests/cases/compiler/indexSignatureMustHaveTypeAnnotation.ts(14,5): error TS1021: An index signature must have a type annotation.
+
+
+==== tests/cases/compiler/indexSignatureMustHaveTypeAnnotation.ts (6 errors) ====
+    interface I {
+        // Used to be indexer, now it is a computed property
+        [x]: string;
+        ~~~
+!!! error TS1169: A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.
+         ~
+!!! error TS2304: Cannot find name 'x'.
+        [x: string];
+        ~~~~~~~~~~~~
+!!! error TS1021: An index signature must have a type annotation.
+    }
+    
+    class C {
+        // Used to be indexer, now it is a computed property
+        [x]: string
+        ~~~
+!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+         ~
+!!! error TS2304: Cannot find name 'x'.
+        
+    }
+    
+    class C2 {
+        [x: string]
+        ~~~~~~~~~~~
+!!! error TS1021: An index signature must have a type annotation.
+    }

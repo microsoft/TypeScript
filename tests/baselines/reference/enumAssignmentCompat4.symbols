@@ -1,0 +1,59 @@
+=== tests/cases/compiler/enumAssignmentCompat4.ts ===
+namespace M {
+>M : Symbol(M, Decl(enumAssignmentCompat4.ts, 0, 0))
+
+    export enum MyEnum {
+>MyEnum : Symbol(MyEnum, Decl(enumAssignmentCompat4.ts, 0, 13))
+
+        BAR
+>BAR : Symbol(MyEnum.BAR, Decl(enumAssignmentCompat4.ts, 1, 24))
+    }
+    export var object2 = {
+>object2 : Symbol(object2, Decl(enumAssignmentCompat4.ts, 4, 14))
+
+        foo: MyEnum.BAR
+>foo : Symbol(foo, Decl(enumAssignmentCompat4.ts, 4, 26))
+>MyEnum.BAR : Symbol(MyEnum.BAR, Decl(enumAssignmentCompat4.ts, 1, 24))
+>MyEnum : Symbol(MyEnum, Decl(enumAssignmentCompat4.ts, 0, 13))
+>BAR : Symbol(MyEnum.BAR, Decl(enumAssignmentCompat4.ts, 1, 24))
+
+    };
+}
+
+namespace N {
+>N : Symbol(N, Decl(enumAssignmentCompat4.ts, 7, 1))
+
+    export enum MyEnum {
+>MyEnum : Symbol(MyEnum, Decl(enumAssignmentCompat4.ts, 9, 13))
+
+        FOO
+>FOO : Symbol(MyEnum.FOO, Decl(enumAssignmentCompat4.ts, 10, 24))
+
+    };
+    export var object1 = {
+>object1 : Symbol(object1, Decl(enumAssignmentCompat4.ts, 13, 14))
+
+        foo: MyEnum.FOO
+>foo : Symbol(foo, Decl(enumAssignmentCompat4.ts, 13, 26))
+>MyEnum.FOO : Symbol(MyEnum.FOO, Decl(enumAssignmentCompat4.ts, 10, 24))
+>MyEnum : Symbol(MyEnum, Decl(enumAssignmentCompat4.ts, 9, 13))
+>FOO : Symbol(MyEnum.FOO, Decl(enumAssignmentCompat4.ts, 10, 24))
+
+    };
+}
+
+let broken = [
+>broken : Symbol(broken, Decl(enumAssignmentCompat4.ts, 18, 3))
+
+    N.object1,
+>N.object1 : Symbol(N.object1, Decl(enumAssignmentCompat4.ts, 13, 14))
+>N : Symbol(N, Decl(enumAssignmentCompat4.ts, 7, 1))
+>object1 : Symbol(N.object1, Decl(enumAssignmentCompat4.ts, 13, 14))
+
+    M.object2
+>M.object2 : Symbol(M.object2, Decl(enumAssignmentCompat4.ts, 4, 14))
+>M : Symbol(M, Decl(enumAssignmentCompat4.ts, 0, 0))
+>object2 : Symbol(M.object2, Decl(enumAssignmentCompat4.ts, 4, 14))
+
+];
+

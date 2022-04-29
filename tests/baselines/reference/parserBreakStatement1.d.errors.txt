@@ -1,0 +1,7 @@
+tests/cases/conformance/parser/ecmascript5/Statements/parserBreakStatement1.d.ts(1,1): error TS1036: Statements are not allowed in ambient contexts.
+
+
+==== tests/cases/conformance/parser/ecmascript5/Statements/parserBreakStatement1.d.ts (1 errors) ====
+    break;
+    ~~~~~
+!!! error TS1036: Statements are not allowed in ambient contexts.

@@ -1,0 +1,7 @@
+=== tests/cases/compiler/assignToModule.ts ===
+module A {}
+A = undefined; // invalid LHS
+>A = undefined : undefined
+>A : any
+>undefined : undefined
+

@@ -1,0 +1,67 @@
+=== tests/cases/compiler/constructorOverloads2.ts ===
+class FooBase {
+>FooBase : Symbol(FooBase, Decl(constructorOverloads2.ts, 0, 0))
+
+    constructor(s: string);
+>s : Symbol(s, Decl(constructorOverloads2.ts, 1, 16))
+
+    constructor(n: number);
+>n : Symbol(n, Decl(constructorOverloads2.ts, 2, 16))
+
+    constructor(x: any) {
+>x : Symbol(x, Decl(constructorOverloads2.ts, 3, 16))
+    }
+    bar1() {  /*WScript.Echo("base bar1");*/ }
+>bar1 : Symbol(FooBase.bar1, Decl(constructorOverloads2.ts, 4, 5))
+}
+
+class Foo extends FooBase {
+>Foo : Symbol(Foo, Decl(constructorOverloads2.ts, 6, 1))
+>FooBase : Symbol(FooBase, Decl(constructorOverloads2.ts, 0, 0))
+
+    constructor(s: string);
+>s : Symbol(s, Decl(constructorOverloads2.ts, 9, 16))
+
+    constructor(n: number);
+>n : Symbol(n, Decl(constructorOverloads2.ts, 10, 16))
+
+    constructor(a:any);
+>a : Symbol(a, Decl(constructorOverloads2.ts, 11, 16))
+
+    constructor(x: any, y?: any) {
+>x : Symbol(x, Decl(constructorOverloads2.ts, 12, 16))
+>y : Symbol(y, Decl(constructorOverloads2.ts, 12, 23))
+
+        super(x);
+>super : Symbol(FooBase, Decl(constructorOverloads2.ts, 0, 0))
+>x : Symbol(x, Decl(constructorOverloads2.ts, 12, 16))
+    }
+    bar1() {  /*WScript.Echo("bar1");*/ }
+>bar1 : Symbol(Foo.bar1, Decl(constructorOverloads2.ts, 14, 5))
+}
+
+var f1 = new Foo("hey");
+>f1 : Symbol(f1, Decl(constructorOverloads2.ts, 18, 3))
+>Foo : Symbol(Foo, Decl(constructorOverloads2.ts, 6, 1))
+
+var f2 = new Foo(0);
+>f2 : Symbol(f2, Decl(constructorOverloads2.ts, 19, 3))
+>Foo : Symbol(Foo, Decl(constructorOverloads2.ts, 6, 1))
+
+var f3 = new Foo(f1);
+>f3 : Symbol(f3, Decl(constructorOverloads2.ts, 20, 3))
+>Foo : Symbol(Foo, Decl(constructorOverloads2.ts, 6, 1))
+>f1 : Symbol(f1, Decl(constructorOverloads2.ts, 18, 3))
+
+var f4 = new Foo([f1,f2,f3]);
+>f4 : Symbol(f4, Decl(constructorOverloads2.ts, 21, 3))
+>Foo : Symbol(Foo, Decl(constructorOverloads2.ts, 6, 1))
+>f1 : Symbol(f1, Decl(constructorOverloads2.ts, 18, 3))
+>f2 : Symbol(f2, Decl(constructorOverloads2.ts, 19, 3))
+>f3 : Symbol(f3, Decl(constructorOverloads2.ts, 20, 3))
+
+f1.bar1();
+>f1.bar1 : Symbol(Foo.bar1, Decl(constructorOverloads2.ts, 14, 5))
+>f1 : Symbol(f1, Decl(constructorOverloads2.ts, 18, 3))
+>bar1 : Symbol(Foo.bar1, Decl(constructorOverloads2.ts, 14, 5))
+

@@ -1,0 +1,27 @@
+=== tests/cases/compiler/testTypings.ts ===
+interface IComparable<T> {
+>IComparable : Symbol(IComparable, Decl(testTypings.ts, 0, 0))
+>T : Symbol(T, Decl(testTypings.ts, 0, 22))
+
+   compareTo(other: T);
+>compareTo : Symbol(IComparable.compareTo, Decl(testTypings.ts, 0, 26))
+>other : Symbol(other, Decl(testTypings.ts, 1, 13))
+>T : Symbol(T, Decl(testTypings.ts, 0, 22))
+}
+
+declare function sort<U extends IComparable<U>>(items: U[]): U[];
+>sort : Symbol(sort, Decl(testTypings.ts, 2, 1))
+>U : Symbol(U, Decl(testTypings.ts, 4, 22))
+>IComparable : Symbol(IComparable, Decl(testTypings.ts, 0, 0))
+>U : Symbol(U, Decl(testTypings.ts, 4, 22))
+>items : Symbol(items, Decl(testTypings.ts, 4, 48))
+>U : Symbol(U, Decl(testTypings.ts, 4, 22))
+>U : Symbol(U, Decl(testTypings.ts, 4, 22))
+
+
+
+
+
+
+
+

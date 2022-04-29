@@ -1,0 +1,12 @@
+tests/cases/conformance/parser/ecmascript5/Symbols/parserES5SymbolProperty9.ts(2,5): error TS1170: A computed property name in a type literal must refer to an expression whose type is a literal type or a 'unique symbol' type.
+tests/cases/conformance/parser/ecmascript5/Symbols/parserES5SymbolProperty9.ts(2,6): error TS2585: 'Symbol' only refers to a type, but is being used as a value here. Do you need to change your target library? Try changing the 'lib' compiler option to es2015 or later.
+
+
+==== tests/cases/conformance/parser/ecmascript5/Symbols/parserES5SymbolProperty9.ts (2 errors) ====
+    var x: {
+        [Symbol.toPrimitive]: string
+        ~~~~~~~~~~~~~~~~~~~~
+!!! error TS1170: A computed property name in a type literal must refer to an expression whose type is a literal type or a 'unique symbol' type.
+         ~~~~~~
+!!! error TS2585: 'Symbol' only refers to a type, but is being used as a value here. Do you need to change your target library? Try changing the 'lib' compiler option to es2015 or later.
+    }

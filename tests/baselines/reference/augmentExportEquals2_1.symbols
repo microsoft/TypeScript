@@ -1,0 +1,35 @@
+=== tests/cases/compiler/file3.ts ===
+import x = require("file1");
+>x : Symbol(x, Decl(file3.ts, 0, 0))
+
+import "file2";
+let a: x.A; // should not work
+>a : Symbol(a, Decl(file3.ts, 2, 3))
+>x : Symbol(x)
+>A : Symbol(x.A)
+
+=== tests/cases/compiler/file1.d.ts ===
+declare module "file1" {
+>"file1" : Symbol("file1", Decl(file1.d.ts, 0, 0))
+
+    function foo(): void;
+>foo : Symbol(foo, Decl(file1.d.ts, 0, 24))
+
+    export = foo;
+>foo : Symbol(foo, Decl(file1.d.ts, 0, 24))
+}
+
+=== tests/cases/compiler/file2.ts ===
+/// <reference path="file1.d.ts"/> 
+import x = require("file1"); 
+>x : Symbol(x, Decl(file2.ts, 0, 0))
+
+// should error since './file1' does not have namespace meaning
+declare module "file1" {
+>"file1" : Symbol("file1", Decl(file2.ts, 1, 28))
+
+    interface A { a }
+>A : Symbol(A, Decl(file2.ts, 4, 24))
+>a : Symbol(A.a, Decl(file2.ts, 5, 17))
+}
+

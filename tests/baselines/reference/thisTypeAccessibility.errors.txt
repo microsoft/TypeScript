@@ -1,0 +1,101 @@
+tests/cases/conformance/types/thisType/thisTypeAccessibility.ts(26,10): error TS2341: Property 'p' is private and only accessible within class 'MyClass'.
+tests/cases/conformance/types/thisType/thisTypeAccessibility.ts(29,13): error TS2341: Property 'sp' is private and only accessible within class 'MyClass'.
+tests/cases/conformance/types/thisType/thisTypeAccessibility.ts(30,13): error TS2445: Property 'spp' is protected and only accessible within class 'MyClass' and its subclasses.
+tests/cases/conformance/types/thisType/thisTypeAccessibility.ts(35,10): error TS2341: Property 'p' is private and only accessible within class 'MyClass'.
+tests/cases/conformance/types/thisType/thisTypeAccessibility.ts(38,13): error TS2341: Property 'sp' is private and only accessible within class 'MyClass'.
+tests/cases/conformance/types/thisType/thisTypeAccessibility.ts(39,13): error TS2445: Property 'spp' is protected and only accessible within class 'MyClass' and its subclasses.
+tests/cases/conformance/types/thisType/thisTypeAccessibility.ts(44,10): error TS2341: Property 'p' is private and only accessible within class 'MyClass'.
+tests/cases/conformance/types/thisType/thisTypeAccessibility.ts(47,13): error TS2341: Property 'sp' is private and only accessible within class 'MyClass'.
+tests/cases/conformance/types/thisType/thisTypeAccessibility.ts(48,13): error TS2445: Property 'spp' is protected and only accessible within class 'MyClass' and its subclasses.
+tests/cases/conformance/types/thisType/thisTypeAccessibility.ts(55,10): error TS2341: Property 'p' is private and only accessible within class 'MyGenericClass<T>'.
+tests/cases/conformance/types/thisType/thisTypeAccessibility.ts(58,20): error TS2341: Property 'sp' is private and only accessible within class 'MyGenericClass<T>'.
+tests/cases/conformance/types/thisType/thisTypeAccessibility.ts(59,20): error TS2445: Property 'spp' is protected and only accessible within class 'MyGenericClass<T>' and its subclasses.
+
+
+==== tests/cases/conformance/types/thisType/thisTypeAccessibility.ts (12 errors) ====
+    class MyClass {
+        private p: number = 123;
+        protected pp: number = 123;
+        public ppp: number = 123;
+        private static sp: number = 123;
+        protected static spp: number = 123;
+        public static sppp: number = 123;
+    }
+    
+    interface MyClass {
+        extension1(p: number): void;
+        extension2(p: number): void;
+        extension3(p: number): void;
+    }
+    
+    class MyGenericClass<T> {
+        private p: T;
+        protected pp: T;
+        public ppp: T;
+        private static sp: number;
+        protected static spp: number;
+        public static sppp: number;
+    }
+    
+    MyClass.prototype.extension1 = function (this: MyClass, p: number) { 
+        this.p = p;
+             ~
+!!! error TS2341: Property 'p' is private and only accessible within class 'MyClass'.
+        this.pp = p;
+        this.ppp = p;
+        MyClass.sp = p;
+                ~~
+!!! error TS2341: Property 'sp' is private and only accessible within class 'MyClass'.
+        MyClass.spp = p;
+                ~~~
+!!! error TS2445: Property 'spp' is protected and only accessible within class 'MyClass' and its subclasses.
+        MyClass.sppp = p;
+    }
+    
+    MyClass.prototype.extension2 = function<T extends MyClass> (this: T, p: number) { 
+        this.p = p;
+             ~
+!!! error TS2341: Property 'p' is private and only accessible within class 'MyClass'.
+        this.pp = p;
+        this.ppp = p;
+        MyClass.sp = p;
+                ~~
+!!! error TS2341: Property 'sp' is private and only accessible within class 'MyClass'.
+        MyClass.spp = p;
+                ~~~
+!!! error TS2445: Property 'spp' is protected and only accessible within class 'MyClass' and its subclasses.
+        MyClass.sppp = p;
+    }
+    
+    function extension3<T extends MyClass> (this: T, p: number) { 
+        this.p = p;
+             ~
+!!! error TS2341: Property 'p' is private and only accessible within class 'MyClass'.
+        this.pp = p;
+        this.ppp = p;
+        MyClass.sp = p;
+                ~~
+!!! error TS2341: Property 'sp' is private and only accessible within class 'MyClass'.
+        MyClass.spp = p;
+                ~~~
+!!! error TS2445: Property 'spp' is protected and only accessible within class 'MyClass' and its subclasses.
+        MyClass.sppp = p;
+    }
+    
+    MyClass.prototype.extension3 = extension3;
+    
+    function extension4<T extends number>(this: MyGenericClass<T>, p: T) {
+        this.p = p;
+             ~
+!!! error TS2341: Property 'p' is private and only accessible within class 'MyGenericClass<T>'.
+        this.pp = p;
+        this.ppp = p;
+        MyGenericClass.sp = p;
+                       ~~
+!!! error TS2341: Property 'sp' is private and only accessible within class 'MyGenericClass<T>'.
+        MyGenericClass.spp = p;
+                       ~~~
+!!! error TS2445: Property 'spp' is protected and only accessible within class 'MyGenericClass<T>' and its subclasses.
+        MyGenericClass.sppp = p;
+    }
+    

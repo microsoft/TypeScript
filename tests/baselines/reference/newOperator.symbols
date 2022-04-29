@@ -1,0 +1,115 @@
+=== tests/cases/compiler/newOperator.ts ===
+interface ifc { }
+>ifc : Symbol(ifc, Decl(newOperator.ts, 0, 0))
+
+// Attempting to 'new' an interface yields poor error
+var i = new ifc();
+>i : Symbol(i, Decl(newOperator.ts, 2, 3))
+
+// Parens are optional
+var x = new Date;
+>x : Symbol(x, Decl(newOperator.ts, 5, 3))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+var y = new Date();
+>y : Symbol(y, Decl(newOperator.ts, 6, 3))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+// Target is not a class or var, good error
+var t1 = new 53();
+>t1 : Symbol(t1, Decl(newOperator.ts, 9, 3))
+
+var t2 = new ''();
+>t2 : Symbol(t2, Decl(newOperator.ts, 10, 3))
+
+new string;
+
+// Use in LHS of expression?
+(new Date()).toString();
+>(new Date()).toString : Symbol(Date.toString, Decl(lib.es5.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>toString : Symbol(Date.toString, Decl(lib.es5.d.ts, --, --))
+
+// Various spacing
+var t3 = new string[]( );
+>t3 : Symbol(t3, Decl(newOperator.ts, 17, 3))
+
+var t4 =
+>t4 : Symbol(t4, Decl(newOperator.ts, 18, 3))
+
+new
+string
+[
+    ]
+    (
+        );
+
+// Unresolved symbol
+var f = new q();
+>f : Symbol(f, Decl(newOperator.ts, 27, 3))
+
+// not legal
+var t5 = new new Date;
+>t5 : Symbol(t5, Decl(newOperator.ts, 30, 3))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+// Can be an expression
+new String;
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+// Error on union
+declare const union: { a: string } | { b: string }
+>union : Symbol(union, Decl(newOperator.ts, 36, 13))
+>a : Symbol(a, Decl(newOperator.ts, 36, 22))
+>b : Symbol(b, Decl(newOperator.ts, 36, 38))
+
+new union;
+>union : Symbol(union, Decl(newOperator.ts, 36, 13))
+
+// Error on union with one constructor
+declare const ctorUnion: { a: string } | (new (a: string) => void)
+>ctorUnion : Symbol(ctorUnion, Decl(newOperator.ts, 40, 13))
+>a : Symbol(a, Decl(newOperator.ts, 40, 26))
+>a : Symbol(a, Decl(newOperator.ts, 40, 47))
+
+new ctorUnion("");
+>ctorUnion : Symbol(ctorUnion, Decl(newOperator.ts, 40, 13))
+
+// Error on union with incompatible constructors
+declare const ctorUnion2: (new <T extends number>(a: T) => void) | (new <T>(a: string) => void)
+>ctorUnion2 : Symbol(ctorUnion2, Decl(newOperator.ts, 44, 13))
+>T : Symbol(T, Decl(newOperator.ts, 44, 32))
+>a : Symbol(a, Decl(newOperator.ts, 44, 50))
+>T : Symbol(T, Decl(newOperator.ts, 44, 32))
+>T : Symbol(T, Decl(newOperator.ts, 44, 73))
+>a : Symbol(a, Decl(newOperator.ts, 44, 76))
+
+new ctorUnion2("");
+>ctorUnion2 : Symbol(ctorUnion2, Decl(newOperator.ts, 44, 13))
+
+module M {
+>M : Symbol(M, Decl(newOperator.ts, 45, 19))
+
+    export class T {
+>T : Symbol(T, Decl(newOperator.ts, 47, 10))
+
+        x: number;
+>x : Symbol(T.x, Decl(newOperator.ts, 48, 20))
+    }
+}
+
+class S {
+>S : Symbol(S, Decl(newOperator.ts, 51, 1))
+
+    public get xs(): M.T[] {
+>xs : Symbol(S.xs, Decl(newOperator.ts, 53, 9))
+>M : Symbol(M, Decl(newOperator.ts, 45, 19))
+>T : Symbol(M.T, Decl(newOperator.ts, 47, 10))
+
+        return new M.T[];
+>M.T : Symbol(M.T, Decl(newOperator.ts, 47, 10))
+>M : Symbol(M, Decl(newOperator.ts, 45, 19))
+>T : Symbol(M.T, Decl(newOperator.ts, 47, 10))
+    }
+}
+

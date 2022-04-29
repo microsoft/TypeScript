@@ -1,0 +1,8 @@
+tests/cases/conformance/es6/Symbols/symbolType2.ts(2,7): error TS2361: The right-hand side of an 'in' expression must not be a primitive.
+
+
+==== tests/cases/conformance/es6/Symbols/symbolType2.ts (1 errors) ====
+    Symbol.isConcatSpreadable in {};
+    "" in Symbol.toPrimitive;
+          ~~~~~~~~~~~~~~~~~~
+!!! error TS2361: The right-hand side of an 'in' expression must not be a primitive.

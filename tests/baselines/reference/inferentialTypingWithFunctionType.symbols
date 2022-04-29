@@ -1,0 +1,25 @@
+=== tests/cases/compiler/inferentialTypingWithFunctionType.ts ===
+declare function map<T, U>(x: T, f: (s: T) => U): U;
+>map : Symbol(map, Decl(inferentialTypingWithFunctionType.ts, 0, 0))
+>T : Symbol(T, Decl(inferentialTypingWithFunctionType.ts, 0, 21))
+>U : Symbol(U, Decl(inferentialTypingWithFunctionType.ts, 0, 23))
+>x : Symbol(x, Decl(inferentialTypingWithFunctionType.ts, 0, 27))
+>T : Symbol(T, Decl(inferentialTypingWithFunctionType.ts, 0, 21))
+>f : Symbol(f, Decl(inferentialTypingWithFunctionType.ts, 0, 32))
+>s : Symbol(s, Decl(inferentialTypingWithFunctionType.ts, 0, 37))
+>T : Symbol(T, Decl(inferentialTypingWithFunctionType.ts, 0, 21))
+>U : Symbol(U, Decl(inferentialTypingWithFunctionType.ts, 0, 23))
+>U : Symbol(U, Decl(inferentialTypingWithFunctionType.ts, 0, 23))
+
+declare function identity<V>(y: V): V;
+>identity : Symbol(identity, Decl(inferentialTypingWithFunctionType.ts, 0, 52))
+>V : Symbol(V, Decl(inferentialTypingWithFunctionType.ts, 1, 26))
+>y : Symbol(y, Decl(inferentialTypingWithFunctionType.ts, 1, 29))
+>V : Symbol(V, Decl(inferentialTypingWithFunctionType.ts, 1, 26))
+>V : Symbol(V, Decl(inferentialTypingWithFunctionType.ts, 1, 26))
+
+var s = map("", identity);
+>s : Symbol(s, Decl(inferentialTypingWithFunctionType.ts, 3, 3))
+>map : Symbol(map, Decl(inferentialTypingWithFunctionType.ts, 0, 0))
+>identity : Symbol(identity, Decl(inferentialTypingWithFunctionType.ts, 0, 52))
+

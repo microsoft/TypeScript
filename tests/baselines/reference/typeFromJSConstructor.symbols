@@ -1,0 +1,123 @@
+=== tests/cases/conformance/salsa/a.js ===
+function Installer () {
+>Installer : Symbol(Installer, Decl(a.js, 0, 0))
+
+    // arg: number
+    this.arg = 0
+>this.arg : Symbol(Installer.arg, Decl(a.js, 0, 23), Decl(a.js, 12, 41), Decl(a.js, 19, 42))
+>this : Symbol(Installer, Decl(a.js, 0, 0))
+>arg : Symbol(Installer.arg, Decl(a.js, 0, 23), Decl(a.js, 12, 41), Decl(a.js, 19, 42))
+
+    // unknown: string | boolean | null
+    this.unknown = null
+>this.unknown : Symbol(Installer.unknown, Decl(a.js, 2, 16), Decl(a.js, 13, 19), Decl(a.js, 20, 20))
+>this : Symbol(Installer, Decl(a.js, 0, 0))
+>unknown : Symbol(Installer.unknown, Decl(a.js, 2, 16), Decl(a.js, 13, 19), Decl(a.js, 20, 20))
+
+    // twice: string | undefined
+    this.twice = undefined
+>this.twice : Symbol(Installer.twice, Decl(a.js, 4, 23), Decl(a.js, 6, 26), Decl(a.js, 15, 24), Decl(a.js, 16, 26), Decl(a.js, 22, 28) ... and 1 more)
+>this : Symbol(Installer, Decl(a.js, 0, 0))
+>twice : Symbol(Installer.twice, Decl(a.js, 4, 23), Decl(a.js, 6, 26), Decl(a.js, 15, 24), Decl(a.js, 16, 26), Decl(a.js, 22, 28) ... and 1 more)
+>undefined : Symbol(undefined)
+
+    this.twice = 'hi'
+>this.twice : Symbol(Installer.twice, Decl(a.js, 4, 23), Decl(a.js, 6, 26), Decl(a.js, 15, 24), Decl(a.js, 16, 26), Decl(a.js, 22, 28) ... and 1 more)
+>this : Symbol(Installer, Decl(a.js, 0, 0))
+>twice : Symbol(Installer.twice, Decl(a.js, 4, 23), Decl(a.js, 6, 26), Decl(a.js, 15, 24), Decl(a.js, 16, 26), Decl(a.js, 22, 28) ... and 1 more)
+
+    // twices: any[] | null
+    this.twices = []
+>this.twices : Symbol(Installer.twices, Decl(a.js, 7, 21), Decl(a.js, 9, 20))
+>this : Symbol(Installer, Decl(a.js, 0, 0))
+>twices : Symbol(Installer.twices, Decl(a.js, 7, 21), Decl(a.js, 9, 20))
+
+    this.twices = null
+>this.twices : Symbol(Installer.twices, Decl(a.js, 7, 21), Decl(a.js, 9, 20))
+>this : Symbol(Installer, Decl(a.js, 0, 0))
+>twices : Symbol(Installer.twices, Decl(a.js, 7, 21), Decl(a.js, 9, 20))
+}
+Installer.prototype.first = function () {
+>Installer.prototype : Symbol(Installer.first, Decl(a.js, 11, 1))
+>Installer : Symbol(Installer, Decl(a.js, 0, 0))
+>prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+>first : Symbol(Installer.first, Decl(a.js, 11, 1))
+
+    this.arg = 'hi' // error
+>this.arg : Symbol(Installer.arg, Decl(a.js, 0, 23), Decl(a.js, 12, 41), Decl(a.js, 19, 42))
+>this : Symbol(Installer, Decl(a.js, 0, 0))
+>arg : Symbol(Installer.arg, Decl(a.js, 0, 23), Decl(a.js, 12, 41), Decl(a.js, 19, 42))
+
+    this.unknown = 'hi' // ok
+>this.unknown : Symbol(Installer.unknown, Decl(a.js, 2, 16), Decl(a.js, 13, 19), Decl(a.js, 20, 20))
+>this : Symbol(Installer, Decl(a.js, 0, 0))
+>unknown : Symbol(Installer.unknown, Decl(a.js, 2, 16), Decl(a.js, 13, 19), Decl(a.js, 20, 20))
+
+    this.newProperty = 1 // ok: number | boolean
+>this.newProperty : Symbol(Installer.newProperty, Decl(a.js, 14, 23), Decl(a.js, 21, 24))
+>this : Symbol(Installer, Decl(a.js, 0, 0))
+>newProperty : Symbol(Installer.newProperty, Decl(a.js, 14, 23), Decl(a.js, 21, 24))
+
+    this.twice = undefined // ok
+>this.twice : Symbol(Installer.twice, Decl(a.js, 4, 23), Decl(a.js, 6, 26), Decl(a.js, 15, 24), Decl(a.js, 16, 26), Decl(a.js, 22, 28) ... and 1 more)
+>this : Symbol(Installer, Decl(a.js, 0, 0))
+>twice : Symbol(Installer.twice, Decl(a.js, 4, 23), Decl(a.js, 6, 26), Decl(a.js, 15, 24), Decl(a.js, 16, 26), Decl(a.js, 22, 28) ... and 1 more)
+>undefined : Symbol(undefined)
+
+    this.twice = 'hi' // ok
+>this.twice : Symbol(Installer.twice, Decl(a.js, 4, 23), Decl(a.js, 6, 26), Decl(a.js, 15, 24), Decl(a.js, 16, 26), Decl(a.js, 22, 28) ... and 1 more)
+>this : Symbol(Installer, Decl(a.js, 0, 0))
+>twice : Symbol(Installer.twice, Decl(a.js, 4, 23), Decl(a.js, 6, 26), Decl(a.js, 15, 24), Decl(a.js, 16, 26), Decl(a.js, 22, 28) ... and 1 more)
+}
+Installer.prototype.second = function () {
+>Installer.prototype : Symbol(Installer.second, Decl(a.js, 18, 1))
+>Installer : Symbol(Installer, Decl(a.js, 0, 0))
+>prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+>second : Symbol(Installer.second, Decl(a.js, 18, 1))
+
+    this.arg = false // error
+>this.arg : Symbol(Installer.arg, Decl(a.js, 0, 23), Decl(a.js, 12, 41), Decl(a.js, 19, 42))
+>this : Symbol(Installer, Decl(a.js, 0, 0))
+>arg : Symbol(Installer.arg, Decl(a.js, 0, 23), Decl(a.js, 12, 41), Decl(a.js, 19, 42))
+
+    this.unknown = false // ok
+>this.unknown : Symbol(Installer.unknown, Decl(a.js, 2, 16), Decl(a.js, 13, 19), Decl(a.js, 20, 20))
+>this : Symbol(Installer, Decl(a.js, 0, 0))
+>unknown : Symbol(Installer.unknown, Decl(a.js, 2, 16), Decl(a.js, 13, 19), Decl(a.js, 20, 20))
+
+    this.newProperty = false // ok
+>this.newProperty : Symbol(Installer.newProperty, Decl(a.js, 14, 23), Decl(a.js, 21, 24))
+>this : Symbol(Installer, Decl(a.js, 0, 0))
+>newProperty : Symbol(Installer.newProperty, Decl(a.js, 14, 23), Decl(a.js, 21, 24))
+
+    this.twice = null // error
+>this.twice : Symbol(Installer.twice, Decl(a.js, 4, 23), Decl(a.js, 6, 26), Decl(a.js, 15, 24), Decl(a.js, 16, 26), Decl(a.js, 22, 28) ... and 1 more)
+>this : Symbol(Installer, Decl(a.js, 0, 0))
+>twice : Symbol(Installer.twice, Decl(a.js, 4, 23), Decl(a.js, 6, 26), Decl(a.js, 15, 24), Decl(a.js, 16, 26), Decl(a.js, 22, 28) ... and 1 more)
+
+    this.twice = false // error
+>this.twice : Symbol(Installer.twice, Decl(a.js, 4, 23), Decl(a.js, 6, 26), Decl(a.js, 15, 24), Decl(a.js, 16, 26), Decl(a.js, 22, 28) ... and 1 more)
+>this : Symbol(Installer, Decl(a.js, 0, 0))
+>twice : Symbol(Installer.twice, Decl(a.js, 4, 23), Decl(a.js, 6, 26), Decl(a.js, 15, 24), Decl(a.js, 16, 26), Decl(a.js, 22, 28) ... and 1 more)
+
+    this.twices.push(1) // error: Object is possibly null
+>this.twices.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>this.twices : Symbol(Installer.twices, Decl(a.js, 7, 21), Decl(a.js, 9, 20))
+>this : Symbol(Installer, Decl(a.js, 0, 0))
+>twices : Symbol(Installer.twices, Decl(a.js, 7, 21), Decl(a.js, 9, 20))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+
+    if (this.twices != null) {
+>this.twices : Symbol(Installer.twices, Decl(a.js, 7, 21), Decl(a.js, 9, 20))
+>this : Symbol(Installer, Decl(a.js, 0, 0))
+>twices : Symbol(Installer.twices, Decl(a.js, 7, 21), Decl(a.js, 9, 20))
+
+        this.twices.push('hi')
+>this.twices.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>this.twices : Symbol(Installer.twices, Decl(a.js, 7, 21), Decl(a.js, 9, 20))
+>this : Symbol(Installer, Decl(a.js, 0, 0))
+>twices : Symbol(Installer.twices, Decl(a.js, 7, 21), Decl(a.js, 9, 20))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+    }
+}
+

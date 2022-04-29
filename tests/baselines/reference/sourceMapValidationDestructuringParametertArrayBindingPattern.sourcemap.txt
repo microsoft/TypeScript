@@ -1,0 +1,603 @@
+===================================================================
+JsFile: sourceMapValidationDestructuringParametertArrayBindingPattern.js
+mapUrl: sourceMapValidationDestructuringParametertArrayBindingPattern.js.map
+sourceRoot: 
+sources: sourceMapValidationDestructuringParametertArrayBindingPattern.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:tests/cases/compiler/sourceMapValidationDestructuringParametertArrayBindingPattern.js
+sourceFile:sourceMapValidationDestructuringParametertArrayBindingPattern.ts
+-------------------------------------------------------------------
+>>>var robotA = [1, "mower", "mowing"];
+1 >
+2 >^^^^
+3 >    ^^^^^^
+4 >          ^^^
+5 >             ^
+6 >              ^
+7 >               ^^
+8 >                 ^^^^^^^
+9 >                        ^^
+10>                          ^^^^^^^^
+11>                                  ^
+12>                                   ^
+1 >declare var console: {
+  >    log(msg: any): void;
+  >}
+  >type Robot = [number, string, string];
+  >
+2 >var 
+3 >    robotA
+4 >          : Robot = 
+5 >             [
+6 >              1
+7 >               , 
+8 >                 "mower"
+9 >                        , 
+10>                          "mowing"
+11>                                  ]
+12>                                   ;
+1 >Emitted(1, 1) Source(5, 1) + SourceIndex(0)
+2 >Emitted(1, 5) Source(5, 5) + SourceIndex(0)
+3 >Emitted(1, 11) Source(5, 11) + SourceIndex(0)
+4 >Emitted(1, 14) Source(5, 21) + SourceIndex(0)
+5 >Emitted(1, 15) Source(5, 22) + SourceIndex(0)
+6 >Emitted(1, 16) Source(5, 23) + SourceIndex(0)
+7 >Emitted(1, 18) Source(5, 25) + SourceIndex(0)
+8 >Emitted(1, 25) Source(5, 32) + SourceIndex(0)
+9 >Emitted(1, 27) Source(5, 34) + SourceIndex(0)
+10>Emitted(1, 35) Source(5, 42) + SourceIndex(0)
+11>Emitted(1, 36) Source(5, 43) + SourceIndex(0)
+12>Emitted(1, 37) Source(5, 44) + SourceIndex(0)
+---
+>>>function foo1(_a) {
+1 >
+2 >^^^^^^^^^
+3 >         ^^^^
+4 >             ^
+5 >              ^^
+6 >                ^^^^^^^->
+1 >
+  >
+  >
+2 >function 
+3 >         foo1
+4 >             (
+5 >              [, nameA]: Robot
+1 >Emitted(2, 1) Source(7, 1) + SourceIndex(0)
+2 >Emitted(2, 10) Source(7, 10) + SourceIndex(0)
+3 >Emitted(2, 14) Source(7, 14) + SourceIndex(0)
+4 >Emitted(2, 15) Source(7, 15) + SourceIndex(0)
+5 >Emitted(2, 17) Source(7, 31) + SourceIndex(0)
+---
+>>>    var nameA = _a[1];
+1->^^^^^^^^
+2 >        ^^^^^
+3 >             ^^^^^^^^
+4 >                     ^^^->
+1->
+2 >        nameA
+3 >             
+1->Emitted(3, 9) Source(7, 18) + SourceIndex(0)
+2 >Emitted(3, 14) Source(7, 23) + SourceIndex(0)
+3 >Emitted(3, 22) Source(7, 23) + SourceIndex(0)
+---
+>>>    console.log(nameA);
+1->^^^^
+2 >    ^^^^^^^
+3 >           ^
+4 >            ^^^
+5 >               ^
+6 >                ^^^^^
+7 >                     ^
+8 >                      ^
+1->]: Robot) {
+  >    
+2 >    console
+3 >           .
+4 >            log
+5 >               (
+6 >                nameA
+7 >                     )
+8 >                      ;
+1->Emitted(4, 5) Source(8, 5) + SourceIndex(0)
+2 >Emitted(4, 12) Source(8, 12) + SourceIndex(0)
+3 >Emitted(4, 13) Source(8, 13) + SourceIndex(0)
+4 >Emitted(4, 16) Source(8, 16) + SourceIndex(0)
+5 >Emitted(4, 17) Source(8, 17) + SourceIndex(0)
+6 >Emitted(4, 22) Source(8, 22) + SourceIndex(0)
+7 >Emitted(4, 23) Source(8, 23) + SourceIndex(0)
+8 >Emitted(4, 24) Source(8, 24) + SourceIndex(0)
+---
+>>>}
+1 >
+2 >^
+3 > ^^^^^^^^^^^^^^^^^^^->
+1 >
+  >
+2 >}
+1 >Emitted(5, 1) Source(9, 1) + SourceIndex(0)
+2 >Emitted(5, 2) Source(9, 2) + SourceIndex(0)
+---
+>>>function foo2(_a) {
+1->
+2 >^^^^^^^^^
+3 >         ^^^^
+4 >             ^
+5 >              ^^
+6 >                ^^^^^^^^^->
+1->
+  >
+  >
+2 >function 
+3 >         foo2
+4 >             (
+5 >              [numberB]: Robot
+1->Emitted(6, 1) Source(11, 1) + SourceIndex(0)
+2 >Emitted(6, 10) Source(11, 10) + SourceIndex(0)
+3 >Emitted(6, 14) Source(11, 14) + SourceIndex(0)
+4 >Emitted(6, 15) Source(11, 15) + SourceIndex(0)
+5 >Emitted(6, 17) Source(11, 31) + SourceIndex(0)
+---
+>>>    var numberB = _a[0];
+1->^^^^^^^^
+2 >        ^^^^^^^
+3 >               ^^^^^^^^
+4 >                       ^^^->
+1->
+2 >        numberB
+3 >               
+1->Emitted(7, 9) Source(11, 16) + SourceIndex(0)
+2 >Emitted(7, 16) Source(11, 23) + SourceIndex(0)
+3 >Emitted(7, 24) Source(11, 23) + SourceIndex(0)
+---
+>>>    console.log(numberB);
+1->^^^^
+2 >    ^^^^^^^
+3 >           ^
+4 >            ^^^
+5 >               ^
+6 >                ^^^^^^^
+7 >                       ^
+8 >                        ^
+1->]: Robot) {
+  >    
+2 >    console
+3 >           .
+4 >            log
+5 >               (
+6 >                numberB
+7 >                       )
+8 >                        ;
+1->Emitted(8, 5) Source(12, 5) + SourceIndex(0)
+2 >Emitted(8, 12) Source(12, 12) + SourceIndex(0)
+3 >Emitted(8, 13) Source(12, 13) + SourceIndex(0)
+4 >Emitted(8, 16) Source(12, 16) + SourceIndex(0)
+5 >Emitted(8, 17) Source(12, 17) + SourceIndex(0)
+6 >Emitted(8, 24) Source(12, 24) + SourceIndex(0)
+7 >Emitted(8, 25) Source(12, 25) + SourceIndex(0)
+8 >Emitted(8, 26) Source(12, 26) + SourceIndex(0)
+---
+>>>}
+1 >
+2 >^
+3 > ^^^^^^^^^^^^^^^^^^^->
+1 >
+  >
+2 >}
+1 >Emitted(9, 1) Source(13, 1) + SourceIndex(0)
+2 >Emitted(9, 2) Source(13, 2) + SourceIndex(0)
+---
+>>>function foo3(_a) {
+1->
+2 >^^^^^^^^^
+3 >         ^^^^
+4 >             ^
+5 >              ^^
+6 >                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1->
+  >
+  >
+2 >function 
+3 >         foo3
+4 >             (
+5 >              [numberA2, nameA2, skillA2]: Robot
+1->Emitted(10, 1) Source(15, 1) + SourceIndex(0)
+2 >Emitted(10, 10) Source(15, 10) + SourceIndex(0)
+3 >Emitted(10, 14) Source(15, 14) + SourceIndex(0)
+4 >Emitted(10, 15) Source(15, 15) + SourceIndex(0)
+5 >Emitted(10, 17) Source(15, 49) + SourceIndex(0)
+---
+>>>    var numberA2 = _a[0], nameA2 = _a[1], skillA2 = _a[2];
+1->^^^^^^^^
+2 >        ^^^^^^^^
+3 >                ^^^^^^^^
+4 >                        ^^
+5 >                          ^^^^^^
+6 >                                ^^^^^^^^
+7 >                                        ^^
+8 >                                          ^^^^^^^
+9 >                                                 ^^^^^^^^
+1->
+2 >        numberA2
+3 >                
+4 >                        , 
+5 >                          nameA2
+6 >                                
+7 >                                        , 
+8 >                                          skillA2
+9 >                                                 
+1->Emitted(11, 9) Source(15, 16) + SourceIndex(0)
+2 >Emitted(11, 17) Source(15, 24) + SourceIndex(0)
+3 >Emitted(11, 25) Source(15, 24) + SourceIndex(0)
+4 >Emitted(11, 27) Source(15, 26) + SourceIndex(0)
+5 >Emitted(11, 33) Source(15, 32) + SourceIndex(0)
+6 >Emitted(11, 41) Source(15, 32) + SourceIndex(0)
+7 >Emitted(11, 43) Source(15, 34) + SourceIndex(0)
+8 >Emitted(11, 50) Source(15, 41) + SourceIndex(0)
+9 >Emitted(11, 58) Source(15, 41) + SourceIndex(0)
+---
+>>>    console.log(nameA2);
+1 >^^^^
+2 >    ^^^^^^^
+3 >           ^
+4 >            ^^^
+5 >               ^
+6 >                ^^^^^^
+7 >                      ^
+8 >                       ^
+1 >]: Robot) {
+  >    
+2 >    console
+3 >           .
+4 >            log
+5 >               (
+6 >                nameA2
+7 >                      )
+8 >                       ;
+1 >Emitted(12, 5) Source(16, 5) + SourceIndex(0)
+2 >Emitted(12, 12) Source(16, 12) + SourceIndex(0)
+3 >Emitted(12, 13) Source(16, 13) + SourceIndex(0)
+4 >Emitted(12, 16) Source(16, 16) + SourceIndex(0)
+5 >Emitted(12, 17) Source(16, 17) + SourceIndex(0)
+6 >Emitted(12, 23) Source(16, 23) + SourceIndex(0)
+7 >Emitted(12, 24) Source(16, 24) + SourceIndex(0)
+8 >Emitted(12, 25) Source(16, 25) + SourceIndex(0)
+---
+>>>}
+1 >
+2 >^
+3 > ^^^^^^^^^^^^^^^^^^^->
+1 >
+  >
+2 >}
+1 >Emitted(13, 1) Source(17, 1) + SourceIndex(0)
+2 >Emitted(13, 2) Source(17, 2) + SourceIndex(0)
+---
+>>>function foo4(_a) {
+1->
+2 >^^^^^^^^^
+3 >         ^^^^
+4 >             ^
+5 >              ^^
+6 >                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1->
+  >
+  >
+2 >function 
+3 >         foo4
+4 >             (
+5 >              [numberA3, ...robotAInfo]: Robot
+1->Emitted(14, 1) Source(19, 1) + SourceIndex(0)
+2 >Emitted(14, 10) Source(19, 10) + SourceIndex(0)
+3 >Emitted(14, 14) Source(19, 14) + SourceIndex(0)
+4 >Emitted(14, 15) Source(19, 15) + SourceIndex(0)
+5 >Emitted(14, 17) Source(19, 47) + SourceIndex(0)
+---
+>>>    var numberA3 = _a[0], robotAInfo = _a.slice(1);
+1->^^^^^^^^
+2 >        ^^^^^^^^
+3 >                ^^^^^^^^
+4 >                        ^^
+5 >                          ^^^^^^^^^^
+6 >                                    ^^^^^^^^^^^^^^
+1->
+2 >        numberA3
+3 >                
+4 >                        , ...
+5 >                          robotAInfo
+6 >                                    
+1->Emitted(15, 9) Source(19, 16) + SourceIndex(0)
+2 >Emitted(15, 17) Source(19, 24) + SourceIndex(0)
+3 >Emitted(15, 25) Source(19, 24) + SourceIndex(0)
+4 >Emitted(15, 27) Source(19, 29) + SourceIndex(0)
+5 >Emitted(15, 37) Source(19, 39) + SourceIndex(0)
+6 >Emitted(15, 51) Source(19, 39) + SourceIndex(0)
+---
+>>>    console.log(robotAInfo);
+1 >^^^^
+2 >    ^^^^^^^
+3 >           ^
+4 >            ^^^
+5 >               ^
+6 >                ^^^^^^^^^^
+7 >                          ^
+8 >                           ^
+1 >]: Robot) {
+  >    
+2 >    console
+3 >           .
+4 >            log
+5 >               (
+6 >                robotAInfo
+7 >                          )
+8 >                           ;
+1 >Emitted(16, 5) Source(20, 5) + SourceIndex(0)
+2 >Emitted(16, 12) Source(20, 12) + SourceIndex(0)
+3 >Emitted(16, 13) Source(20, 13) + SourceIndex(0)
+4 >Emitted(16, 16) Source(20, 16) + SourceIndex(0)
+5 >Emitted(16, 17) Source(20, 17) + SourceIndex(0)
+6 >Emitted(16, 27) Source(20, 27) + SourceIndex(0)
+7 >Emitted(16, 28) Source(20, 28) + SourceIndex(0)
+8 >Emitted(16, 29) Source(20, 29) + SourceIndex(0)
+---
+>>>}
+1 >
+2 >^
+3 > ^^^^^^^^^^^^^->
+1 >
+  >
+2 >}
+1 >Emitted(17, 1) Source(21, 1) + SourceIndex(0)
+2 >Emitted(17, 2) Source(21, 2) + SourceIndex(0)
+---
+>>>foo1(robotA);
+1->
+2 >^^^^
+3 >    ^
+4 >     ^^^^^^
+5 >           ^
+6 >            ^
+7 >             ^^^^^^^^^^^^^^^^^^^^^->
+1->
+  >
+  >
+2 >foo1
+3 >    (
+4 >     robotA
+5 >           )
+6 >            ;
+1->Emitted(18, 1) Source(23, 1) + SourceIndex(0)
+2 >Emitted(18, 5) Source(23, 5) + SourceIndex(0)
+3 >Emitted(18, 6) Source(23, 6) + SourceIndex(0)
+4 >Emitted(18, 12) Source(23, 12) + SourceIndex(0)
+5 >Emitted(18, 13) Source(23, 13) + SourceIndex(0)
+6 >Emitted(18, 14) Source(23, 14) + SourceIndex(0)
+---
+>>>foo1([2, "trimmer", "trimming"]);
+1->
+2 >^^^^
+3 >    ^
+4 >     ^
+5 >      ^
+6 >       ^^
+7 >         ^^^^^^^^^
+8 >                  ^^
+9 >                    ^^^^^^^^^^
+10>                              ^
+11>                               ^
+12>                                ^
+1->
+  >
+2 >foo1
+3 >    (
+4 >     [
+5 >      2
+6 >       , 
+7 >         "trimmer"
+8 >                  , 
+9 >                    "trimming"
+10>                              ]
+11>                               )
+12>                                ;
+1->Emitted(19, 1) Source(24, 1) + SourceIndex(0)
+2 >Emitted(19, 5) Source(24, 5) + SourceIndex(0)
+3 >Emitted(19, 6) Source(24, 6) + SourceIndex(0)
+4 >Emitted(19, 7) Source(24, 7) + SourceIndex(0)
+5 >Emitted(19, 8) Source(24, 8) + SourceIndex(0)
+6 >Emitted(19, 10) Source(24, 10) + SourceIndex(0)
+7 >Emitted(19, 19) Source(24, 19) + SourceIndex(0)
+8 >Emitted(19, 21) Source(24, 21) + SourceIndex(0)
+9 >Emitted(19, 31) Source(24, 31) + SourceIndex(0)
+10>Emitted(19, 32) Source(24, 32) + SourceIndex(0)
+11>Emitted(19, 33) Source(24, 33) + SourceIndex(0)
+12>Emitted(19, 34) Source(24, 34) + SourceIndex(0)
+---
+>>>foo2(robotA);
+1 >
+2 >^^^^
+3 >    ^
+4 >     ^^^^^^
+5 >           ^
+6 >            ^
+7 >             ^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >
+  >
+2 >foo2
+3 >    (
+4 >     robotA
+5 >           )
+6 >            ;
+1 >Emitted(20, 1) Source(26, 1) + SourceIndex(0)
+2 >Emitted(20, 5) Source(26, 5) + SourceIndex(0)
+3 >Emitted(20, 6) Source(26, 6) + SourceIndex(0)
+4 >Emitted(20, 12) Source(26, 12) + SourceIndex(0)
+5 >Emitted(20, 13) Source(26, 13) + SourceIndex(0)
+6 >Emitted(20, 14) Source(26, 14) + SourceIndex(0)
+---
+>>>foo2([2, "trimmer", "trimming"]);
+1->
+2 >^^^^
+3 >    ^
+4 >     ^
+5 >      ^
+6 >       ^^
+7 >         ^^^^^^^^^
+8 >                  ^^
+9 >                    ^^^^^^^^^^
+10>                              ^
+11>                               ^
+12>                                ^
+1->
+  >
+2 >foo2
+3 >    (
+4 >     [
+5 >      2
+6 >       , 
+7 >         "trimmer"
+8 >                  , 
+9 >                    "trimming"
+10>                              ]
+11>                               )
+12>                                ;
+1->Emitted(21, 1) Source(27, 1) + SourceIndex(0)
+2 >Emitted(21, 5) Source(27, 5) + SourceIndex(0)
+3 >Emitted(21, 6) Source(27, 6) + SourceIndex(0)
+4 >Emitted(21, 7) Source(27, 7) + SourceIndex(0)
+5 >Emitted(21, 8) Source(27, 8) + SourceIndex(0)
+6 >Emitted(21, 10) Source(27, 10) + SourceIndex(0)
+7 >Emitted(21, 19) Source(27, 19) + SourceIndex(0)
+8 >Emitted(21, 21) Source(27, 21) + SourceIndex(0)
+9 >Emitted(21, 31) Source(27, 31) + SourceIndex(0)
+10>Emitted(21, 32) Source(27, 32) + SourceIndex(0)
+11>Emitted(21, 33) Source(27, 33) + SourceIndex(0)
+12>Emitted(21, 34) Source(27, 34) + SourceIndex(0)
+---
+>>>foo3(robotA);
+1 >
+2 >^^^^
+3 >    ^
+4 >     ^^^^^^
+5 >           ^
+6 >            ^
+7 >             ^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >
+  >
+2 >foo3
+3 >    (
+4 >     robotA
+5 >           )
+6 >            ;
+1 >Emitted(22, 1) Source(29, 1) + SourceIndex(0)
+2 >Emitted(22, 5) Source(29, 5) + SourceIndex(0)
+3 >Emitted(22, 6) Source(29, 6) + SourceIndex(0)
+4 >Emitted(22, 12) Source(29, 12) + SourceIndex(0)
+5 >Emitted(22, 13) Source(29, 13) + SourceIndex(0)
+6 >Emitted(22, 14) Source(29, 14) + SourceIndex(0)
+---
+>>>foo3([2, "trimmer", "trimming"]);
+1->
+2 >^^^^
+3 >    ^
+4 >     ^
+5 >      ^
+6 >       ^^
+7 >         ^^^^^^^^^
+8 >                  ^^
+9 >                    ^^^^^^^^^^
+10>                              ^
+11>                               ^
+12>                                ^
+1->
+  >
+2 >foo3
+3 >    (
+4 >     [
+5 >      2
+6 >       , 
+7 >         "trimmer"
+8 >                  , 
+9 >                    "trimming"
+10>                              ]
+11>                               )
+12>                                ;
+1->Emitted(23, 1) Source(30, 1) + SourceIndex(0)
+2 >Emitted(23, 5) Source(30, 5) + SourceIndex(0)
+3 >Emitted(23, 6) Source(30, 6) + SourceIndex(0)
+4 >Emitted(23, 7) Source(30, 7) + SourceIndex(0)
+5 >Emitted(23, 8) Source(30, 8) + SourceIndex(0)
+6 >Emitted(23, 10) Source(30, 10) + SourceIndex(0)
+7 >Emitted(23, 19) Source(30, 19) + SourceIndex(0)
+8 >Emitted(23, 21) Source(30, 21) + SourceIndex(0)
+9 >Emitted(23, 31) Source(30, 31) + SourceIndex(0)
+10>Emitted(23, 32) Source(30, 32) + SourceIndex(0)
+11>Emitted(23, 33) Source(30, 33) + SourceIndex(0)
+12>Emitted(23, 34) Source(30, 34) + SourceIndex(0)
+---
+>>>foo4(robotA);
+1 >
+2 >^^^^
+3 >    ^
+4 >     ^^^^^^
+5 >           ^
+6 >            ^
+7 >             ^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >
+  >
+2 >foo4
+3 >    (
+4 >     robotA
+5 >           )
+6 >            ;
+1 >Emitted(24, 1) Source(32, 1) + SourceIndex(0)
+2 >Emitted(24, 5) Source(32, 5) + SourceIndex(0)
+3 >Emitted(24, 6) Source(32, 6) + SourceIndex(0)
+4 >Emitted(24, 12) Source(32, 12) + SourceIndex(0)
+5 >Emitted(24, 13) Source(32, 13) + SourceIndex(0)
+6 >Emitted(24, 14) Source(32, 14) + SourceIndex(0)
+---
+>>>foo4([2, "trimmer", "trimming"]);
+1->
+2 >^^^^
+3 >    ^
+4 >     ^
+5 >      ^
+6 >       ^^
+7 >         ^^^^^^^^^
+8 >                  ^^
+9 >                    ^^^^^^^^^^
+10>                              ^
+11>                               ^
+12>                                ^
+13>                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1->
+  >
+2 >foo4
+3 >    (
+4 >     [
+5 >      2
+6 >       , 
+7 >         "trimmer"
+8 >                  , 
+9 >                    "trimming"
+10>                              ]
+11>                               )
+12>                                ;
+1->Emitted(25, 1) Source(33, 1) + SourceIndex(0)
+2 >Emitted(25, 5) Source(33, 5) + SourceIndex(0)
+3 >Emitted(25, 6) Source(33, 6) + SourceIndex(0)
+4 >Emitted(25, 7) Source(33, 7) + SourceIndex(0)
+5 >Emitted(25, 8) Source(33, 8) + SourceIndex(0)
+6 >Emitted(25, 10) Source(33, 10) + SourceIndex(0)
+7 >Emitted(25, 19) Source(33, 19) + SourceIndex(0)
+8 >Emitted(25, 21) Source(33, 21) + SourceIndex(0)
+9 >Emitted(25, 31) Source(33, 31) + SourceIndex(0)
+10>Emitted(25, 32) Source(33, 32) + SourceIndex(0)
+11>Emitted(25, 33) Source(33, 33) + SourceIndex(0)
+12>Emitted(25, 34) Source(33, 34) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=sourceMapValidationDestructuringParametertArrayBindingPattern.js.map

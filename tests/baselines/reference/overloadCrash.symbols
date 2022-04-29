@@ -1,0 +1,39 @@
+=== tests/cases/compiler/overloadCrash.ts ===
+interface I1 {a:number; b:number;};
+>I1 : Symbol(I1, Decl(overloadCrash.ts, 0, 0))
+>a : Symbol(I1.a, Decl(overloadCrash.ts, 0, 14))
+>b : Symbol(I1.b, Decl(overloadCrash.ts, 0, 23))
+
+interface I2 {c:number; d:number;};
+>I2 : Symbol(I2, Decl(overloadCrash.ts, 0, 35))
+>c : Symbol(I2.c, Decl(overloadCrash.ts, 1, 14))
+>d : Symbol(I2.d, Decl(overloadCrash.ts, 1, 23))
+
+interface I3 {a:number; b:number; c:number; d:number;};
+>I3 : Symbol(I3, Decl(overloadCrash.ts, 1, 35))
+>a : Symbol(I3.a, Decl(overloadCrash.ts, 2, 14))
+>b : Symbol(I3.b, Decl(overloadCrash.ts, 2, 23))
+>c : Symbol(I3.c, Decl(overloadCrash.ts, 2, 33))
+>d : Symbol(I3.d, Decl(overloadCrash.ts, 2, 43))
+
+declare function foo(...n:I1[]);
+>foo : Symbol(foo, Decl(overloadCrash.ts, 2, 55), Decl(overloadCrash.ts, 4, 32))
+>n : Symbol(n, Decl(overloadCrash.ts, 4, 21))
+>I1 : Symbol(I1, Decl(overloadCrash.ts, 0, 0))
+
+declare function foo(n1:I2, n3:I2);
+>foo : Symbol(foo, Decl(overloadCrash.ts, 2, 55), Decl(overloadCrash.ts, 4, 32))
+>n1 : Symbol(n1, Decl(overloadCrash.ts, 5, 21))
+>I2 : Symbol(I2, Decl(overloadCrash.ts, 0, 35))
+>n3 : Symbol(n3, Decl(overloadCrash.ts, 5, 27))
+>I2 : Symbol(I2, Decl(overloadCrash.ts, 0, 35))
+
+var i3:I3;
+>i3 : Symbol(i3, Decl(overloadCrash.ts, 7, 3))
+>I3 : Symbol(I3, Decl(overloadCrash.ts, 1, 35))
+
+foo(i3, i3); // should not crash the compiler :)
+>foo : Symbol(foo, Decl(overloadCrash.ts, 2, 55), Decl(overloadCrash.ts, 4, 32))
+>i3 : Symbol(i3, Decl(overloadCrash.ts, 7, 3))
+>i3 : Symbol(i3, Decl(overloadCrash.ts, 7, 3))
+

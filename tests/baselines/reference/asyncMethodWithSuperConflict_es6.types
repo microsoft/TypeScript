@@ -1,0 +1,150 @@
+=== tests/cases/conformance/async/es2017/asyncMethodWithSuperConflict_es6.ts ===
+class A {
+>A : A
+
+    x() {
+>x : () => void
+    }
+    y() {
+>y : () => void
+    }
+}
+
+class B extends A {
+>B : B
+>A : A
+
+    // async method with only call/get on 'super' does not require a binding
+    async simple() {
+>simple : () => Promise<void>
+
+        const _super = null;
+>_super : any
+>null : null
+
+        const _superIndex = null;
+>_superIndex : any
+>null : null
+
+        // call with property access
+        super.x();
+>super.x() : void
+>super.x : () => void
+>super : A
+>x : () => void
+
+        // call additional property.
+        super.y();
+>super.y() : void
+>super.y : () => void
+>super : A
+>y : () => void
+
+        // call with element access
+        super["x"]();
+>super["x"]() : void
+>super["x"] : () => void
+>super : A
+>"x" : "x"
+
+        // property access (read)
+        const a = super.x;
+>a : () => void
+>super.x : () => void
+>super : A
+>x : () => void
+
+        // element access (read)
+        const b = super["x"];
+>b : () => void
+>super["x"] : () => void
+>super : A
+>"x" : "x"
+    }
+
+    // async method with assignment/destructuring on 'super' requires a binding
+    async advanced() {
+>advanced : () => Promise<void>
+
+        const _super = null;
+>_super : any
+>null : null
+
+        const _superIndex = null;
+>_superIndex : any
+>null : null
+
+        const f = () => {};
+>f : () => void
+>() => {} : () => void
+
+        // call with property access
+        super.x();
+>super.x() : void
+>super.x : () => void
+>super : A
+>x : () => void
+
+        // call with element access
+        super["x"]();
+>super["x"]() : void
+>super["x"] : () => void
+>super : A
+>"x" : "x"
+
+        // property access (read)
+        const a = super.x;
+>a : () => void
+>super.x : () => void
+>super : A
+>x : () => void
+
+        // element access (read)
+        const b = super["x"];
+>b : () => void
+>super["x"] : () => void
+>super : A
+>"x" : "x"
+
+        // property access (assign)
+        super.x = f;
+>super.x = f : () => void
+>super.x : () => void
+>super : A
+>x : () => void
+>f : () => void
+
+        // element access (assign)
+        super["x"] = f;
+>super["x"] = f : () => void
+>super["x"] : () => void
+>super : A
+>"x" : "x"
+>f : () => void
+
+        // destructuring assign with property access
+        ({ f: super.x } = { f });
+>({ f: super.x } = { f }) : { f: () => void; }
+>{ f: super.x } = { f } : { f: () => void; }
+>{ f: super.x } : { f: () => void; }
+>f : () => void
+>super.x : () => void
+>super : A
+>x : () => void
+>{ f } : { f: () => void; }
+>f : () => void
+
+        // destructuring assign with element access
+        ({ f: super["x"] } = { f });
+>({ f: super["x"] } = { f }) : { f: () => void; }
+>{ f: super["x"] } = { f } : { f: () => void; }
+>{ f: super["x"] } : { f: () => void; }
+>f : () => void
+>super["x"] : () => void
+>super : A
+>"x" : "x"
+>{ f } : { f: () => void; }
+>f : () => void
+    }
+}
+

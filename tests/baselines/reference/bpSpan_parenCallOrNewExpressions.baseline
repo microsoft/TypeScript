@@ -1,0 +1,210 @@
+
+1  >function foo(a: number) {
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~                    => Pos: (0 to 25)  SpanInfo: {"start":30,"length":8}
+    >return a
+    >:=> (line 2, col 4) to (line 2, col 12)
+--------------------------------
+2  >    return a;
+
+    ~~~~~~~~~~~~~~                                => Pos: (26 to 39)  SpanInfo: {"start":30,"length":8}
+    >return a
+    >:=> (line 2, col 4) to (line 2, col 12)
+--------------------------------
+3  >}
+
+    ~~                                            => Pos: (40 to 41)  SpanInfo: {"start":40,"length":1}
+    >}
+    >:=> (line 3, col 0) to (line 3, col 1)
+--------------------------------
+4  >foo((function bar() {
+
+    ~~~~                                          => Pos: (42 to 45)  SpanInfo: {"start":42,"length":47}
+    >foo((function bar() {
+    >    return foo(40);
+    >})())
+    >:=> (line 4, col 0) to (line 6, col 5)
+4  >foo((function bar() {
+
+        ~~~~~~~~~~~~~~~~~~                        => Pos: (46 to 63)  SpanInfo: {"start":68,"length":14}
+    >return foo(40)
+    >:=> (line 5, col 4) to (line 5, col 18)
+--------------------------------
+5  >    return foo(40);
+
+    ~~~~~~~~~~~~~~~~~~~~                          => Pos: (64 to 83)  SpanInfo: {"start":68,"length":14}
+    >return foo(40)
+    >:=> (line 5, col 4) to (line 5, col 18)
+--------------------------------
+6  >})());
+
+    ~~~~~~~                                       => Pos: (84 to 90)  SpanInfo: {"start":84,"length":1}
+    >}
+    >:=> (line 6, col 0) to (line 6, col 1)
+--------------------------------
+7  >var y = foo((function () {
+
+    ~~~~~~~~~~~~                                  => Pos: (91 to 102)  SpanInfo: {"start":91,"length":52}
+    >var y = foo((function () {
+    >    return foo(40);
+    >})())
+    >:=> (line 7, col 0) to (line 9, col 5)
+7  >var y = foo((function () {
+
+                ~~~~~~~~~~~~~~~                   => Pos: (103 to 117)  SpanInfo: {"start":122,"length":14}
+    >return foo(40)
+    >:=> (line 8, col 4) to (line 8, col 18)
+--------------------------------
+8  >    return foo(40);
+
+    ~~~~~~~~~~~~~~~~~~~~                          => Pos: (118 to 137)  SpanInfo: {"start":122,"length":14}
+    >return foo(40)
+    >:=> (line 8, col 4) to (line 8, col 18)
+--------------------------------
+9  >})());;
+
+    ~~~~~~~~                                      => Pos: (138 to 145)  SpanInfo: {"start":138,"length":1}
+    >}
+    >:=> (line 9, col 0) to (line 9, col 1)
+--------------------------------
+10 >class greeter {
+
+    ~~~~~~~~~~~~~~~~                              => Pos: (146 to 161)  SpanInfo: {"start":146,"length":52}
+    >class greeter {
+    >    constructor(a: number) {
+    >    }
+    >}
+    >:=> (line 10, col 0) to (line 13, col 1)
+--------------------------------
+11 >    constructor(a: number) {
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~                 => Pos: (162 to 190)  SpanInfo: {"start":195,"length":1}
+    >}
+    >:=> (line 12, col 4) to (line 12, col 5)
+--------------------------------
+12 >    }
+
+    ~~~~~~                                        => Pos: (191 to 196)  SpanInfo: {"start":195,"length":1}
+    >}
+    >:=> (line 12, col 4) to (line 12, col 5)
+--------------------------------
+13 >}
+
+    ~~                                            => Pos: (197 to 198)  SpanInfo: {"start":197,"length":1}
+    >}
+    >:=> (line 13, col 0) to (line 13, col 1)
+--------------------------------
+14 >foo(30);
+
+    ~~~~~~~~~                                     => Pos: (199 to 207)  SpanInfo: {"start":199,"length":7}
+    >foo(30)
+    >:=> (line 14, col 0) to (line 14, col 7)
+--------------------------------
+15 >foo(40 + y);
+
+    ~~~~~~~~~~~~~                                 => Pos: (208 to 220)  SpanInfo: {"start":208,"length":11}
+    >foo(40 + y)
+    >:=> (line 15, col 0) to (line 15, col 11)
+--------------------------------
+16 >y = foo(30);
+
+    ~~~~~~~~~~~~~                                 => Pos: (221 to 233)  SpanInfo: {"start":221,"length":11}
+    >y = foo(30)
+    >:=> (line 16, col 0) to (line 16, col 11)
+--------------------------------
+17 >y = foo(500 + y);
+
+    ~~~~~~~~~~~~~~~~~~                            => Pos: (234 to 251)  SpanInfo: {"start":234,"length":16}
+    >y = foo(500 + y)
+    >:=> (line 17, col 0) to (line 17, col 16)
+--------------------------------
+18 >new greeter((function bar() {
+
+    ~~~~~~~~~~~~                                  => Pos: (252 to 263)  SpanInfo: {"start":252,"length":55}
+    >new greeter((function bar() {
+    >    return foo(40);
+    >})())
+    >:=> (line 18, col 0) to (line 20, col 5)
+18 >new greeter((function bar() {
+
+                ~~~~~~~~~~~~~~~~~~                => Pos: (264 to 281)  SpanInfo: {"start":286,"length":14}
+    >return foo(40)
+    >:=> (line 19, col 4) to (line 19, col 18)
+--------------------------------
+19 >    return foo(40);
+
+    ~~~~~~~~~~~~~~~~~~~~                          => Pos: (282 to 301)  SpanInfo: {"start":286,"length":14}
+    >return foo(40)
+    >:=> (line 19, col 4) to (line 19, col 18)
+--------------------------------
+20 >})());
+
+    ~~~~~~~                                       => Pos: (302 to 308)  SpanInfo: {"start":302,"length":1}
+    >}
+    >:=> (line 20, col 0) to (line 20, col 1)
+--------------------------------
+21 >var anotherGreeter = new greeter((function bar() {
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~             => Pos: (309 to 341)  SpanInfo: {"start":309,"length":76}
+    >var anotherGreeter = new greeter((function bar() {
+    >    return foo(40);
+    >})())
+    >:=> (line 21, col 0) to (line 23, col 5)
+21 >var anotherGreeter = new greeter((function bar() {
+
+                                     ~~~~~~~~~~~~~~~~~~=> Pos: (342 to 359)  SpanInfo: {"start":364,"length":14}
+    >return foo(40)
+    >:=> (line 22, col 4) to (line 22, col 18)
+--------------------------------
+22 >    return foo(40);
+
+    ~~~~~~~~~~~~~~~~~~~~                          => Pos: (360 to 379)  SpanInfo: {"start":364,"length":14}
+    >return foo(40)
+    >:=> (line 22, col 4) to (line 22, col 18)
+--------------------------------
+23 >})());
+
+    ~~~~~~~                                       => Pos: (380 to 386)  SpanInfo: {"start":380,"length":1}
+    >}
+    >:=> (line 23, col 0) to (line 23, col 1)
+--------------------------------
+24 >anotherGreeter = new greeter(30);
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~            => Pos: (387 to 420)  SpanInfo: {"start":387,"length":32}
+    >anotherGreeter = new greeter(30)
+    >:=> (line 24, col 0) to (line 24, col 32)
+--------------------------------
+25 >anotherGreeter = new greeter(40 + y);
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~        => Pos: (421 to 458)  SpanInfo: {"start":421,"length":36}
+    >anotherGreeter = new greeter(40 + y)
+    >:=> (line 25, col 0) to (line 25, col 36)
+--------------------------------
+26 >new greeter(30);
+
+    ~~~~~~~~~~~~~~~~~                             => Pos: (459 to 475)  SpanInfo: {"start":459,"length":15}
+    >new greeter(30)
+    >:=> (line 26, col 0) to (line 26, col 15)
+--------------------------------
+27 >new greeter(40 + y);
+
+    ~~~~~~~~~~~~~~~~~~~~~                         => Pos: (476 to 496)  SpanInfo: {"start":476,"length":19}
+    >new greeter(40 + y)
+    >:=> (line 27, col 0) to (line 27, col 19)
+--------------------------------
+28 >function foo2(x: number, y: string) {
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~        => Pos: (497 to 534)  SpanInfo: {"start":535,"length":1}
+    >}
+    >:=> (line 29, col 0) to (line 29, col 1)
+--------------------------------
+29 >}
+
+    ~~                                            => Pos: (535 to 536)  SpanInfo: {"start":535,"length":1}
+    >}
+    >:=> (line 29, col 0) to (line 29, col 1)
+--------------------------------
+30 >foo2(foo(30), foo(40).toString());
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~            => Pos: (537 to 570)  SpanInfo: {"start":537,"length":33}
+    >foo2(foo(30), foo(40).toString())
+    >:=> (line 30, col 0) to (line 30, col 33)

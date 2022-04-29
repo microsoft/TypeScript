@@ -1,0 +1,27 @@
+=== tests/cases/compiler/file1.ts ===
+interface TopLevel {
+>TopLevel : Symbol(TopLevel, Decl(file1.ts, 0, 0), Decl(file2.ts, 0, 0))
+
+    duplicate1: () => string;
+>duplicate1 : Symbol(TopLevel.duplicate1, Decl(file1.ts, 0, 20))
+
+    duplicate2: () => string;
+>duplicate2 : Symbol(TopLevel.duplicate2, Decl(file1.ts, 1, 29))
+
+    duplicate3: () => string;
+>duplicate3 : Symbol(TopLevel.duplicate3, Decl(file1.ts, 2, 29))
+}
+=== tests/cases/compiler/file2.ts ===
+interface TopLevel {
+>TopLevel : Symbol(TopLevel, Decl(file1.ts, 0, 0), Decl(file2.ts, 0, 0))
+
+    duplicate1(): number;
+>duplicate1 : Symbol(TopLevel.duplicate1, Decl(file2.ts, 0, 20))
+
+    duplicate2(): number;
+>duplicate2 : Symbol(TopLevel.duplicate2, Decl(file2.ts, 1, 25))
+
+    duplicate3(): number;
+>duplicate3 : Symbol(TopLevel.duplicate3, Decl(file2.ts, 2, 25))
+}
+

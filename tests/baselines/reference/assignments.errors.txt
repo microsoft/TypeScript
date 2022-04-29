@@ -1,0 +1,52 @@
+tests/cases/conformance/expressions/valuesAndReferences/assignments.ts(11,1): error TS2708: Cannot use namespace 'M' as a value.
+tests/cases/conformance/expressions/valuesAndReferences/assignments.ts(14,1): error TS2629: Cannot assign to 'C' because it is a class.
+tests/cases/conformance/expressions/valuesAndReferences/assignments.ts(17,1): error TS2628: Cannot assign to 'E' because it is an enum.
+tests/cases/conformance/expressions/valuesAndReferences/assignments.ts(18,3): error TS2540: Cannot assign to 'A' because it is a read-only property.
+tests/cases/conformance/expressions/valuesAndReferences/assignments.ts(21,1): error TS2630: Cannot assign to 'fn' because it is a function.
+tests/cases/conformance/expressions/valuesAndReferences/assignments.ts(31,1): error TS2693: 'I' only refers to a type, but is being used as a value here.
+
+
+==== tests/cases/conformance/expressions/valuesAndReferences/assignments.ts (6 errors) ====
+    // In this file:
+    //  Assign to a module
+    //  Assign to a class
+    //  Assign to an enum
+    //  Assign to a function
+    //  Assign to a variable
+    //  Assign to a parameter
+    //  Assign to an interface
+    
+    module M { }
+    M = null; // Error
+    ~
+!!! error TS2708: Cannot use namespace 'M' as a value.
+    
+    class C { }
+    C = null; // Error
+    ~
+!!! error TS2629: Cannot assign to 'C' because it is a class.
+    
+    enum E { A }
+    E = null; // Error
+    ~
+!!! error TS2628: Cannot assign to 'E' because it is an enum.
+    E.A = null; // OK per spec, Error per implementation (509581)
+      ~
+!!! error TS2540: Cannot assign to 'A' because it is a read-only property.
+    
+    function fn() { }
+    fn = null; // Should be error
+    ~~
+!!! error TS2630: Cannot assign to 'fn' because it is a function.
+    
+    var v;
+    v = null; // OK
+    
+    function fn2(p) {
+        p = null; // OK
+    }
+    
+    interface I { }
+    I = null; // Error
+    ~
+!!! error TS2693: 'I' only refers to a type, but is being used as a value here.

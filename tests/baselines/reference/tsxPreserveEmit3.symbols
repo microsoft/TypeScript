@@ -1,0 +1,24 @@
+=== tests/cases/conformance/jsx/file.tsx ===
+declare module JSX {
+>JSX : Symbol(JSX, Decl(file.tsx, 0, 0))
+
+	interface Element { }
+>Element : Symbol(Element, Decl(file.tsx, 0, 20))
+
+	interface IntrinsicElements {
+>IntrinsicElements : Symbol(IntrinsicElements, Decl(file.tsx, 1, 22))
+
+		[s: string]: any;
+>s : Symbol(s, Decl(file.tsx, 3, 3))
+	}
+}
+
+=== tests/cases/conformance/jsx/test.d.ts ===
+export var React;
+>React : Symbol(React, Decl(test.d.ts, 0, 10))
+
+=== tests/cases/conformance/jsx/react-consumer.tsx ===
+// This import should be elided
+import {React} from "./test";
+>React : Symbol(React, Decl(react-consumer.tsx, 1, 8))
+

@@ -1,0 +1,7 @@
+=== tests/cases/compiler/es6ExportDefaultIdentifier.ts ===
+export function f() { }
+>f : Symbol(f, Decl(es6ExportDefaultIdentifier.ts, 0, 0))
+
+export default f;
+>f : Symbol(f, Decl(es6ExportDefaultIdentifier.ts, 0, 0))
+

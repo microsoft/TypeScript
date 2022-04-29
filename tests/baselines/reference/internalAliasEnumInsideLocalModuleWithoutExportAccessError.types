@@ -1,0 +1,41 @@
+=== tests/cases/compiler/internalAliasEnumInsideLocalModuleWithoutExportAccessError.ts ===
+export module a {
+>a : typeof a
+
+    export enum weekend {
+>weekend : weekend
+
+        Friday,
+>Friday : weekend.Friday
+
+        Saturday,
+>Saturday : weekend.Saturday
+
+        Sunday
+>Sunday : weekend.Sunday
+    }
+}
+
+export module c {
+>c : typeof c
+
+    import b = a.weekend;
+>b : typeof b
+>a : typeof a
+>weekend : b
+
+    export var bVal: b = b.Sunday;
+>bVal : b
+>b.Sunday : b.Sunday
+>b : typeof b
+>Sunday : b.Sunday
+}
+
+var happyFriday = c.b.Friday;
+>happyFriday : any
+>c.b.Friday : any
+>c.b : any
+>c : typeof c
+>b : any
+>Friday : any
+

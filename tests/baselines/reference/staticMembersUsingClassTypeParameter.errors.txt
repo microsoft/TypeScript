@@ -1,0 +1,36 @@
+tests/cases/conformance/types/typeParameters/typeParameterLists/staticMembersUsingClassTypeParameter.ts(3,15): error TS2302: Static members cannot reference class type parameters.
+tests/cases/conformance/types/typeParameters/typeParameterLists/staticMembersUsingClassTypeParameter.ts(4,17): error TS2302: Static members cannot reference class type parameters.
+tests/cases/conformance/types/typeParameters/typeParameterLists/staticMembersUsingClassTypeParameter.ts(8,15): error TS2302: Static members cannot reference class type parameters.
+tests/cases/conformance/types/typeParameters/typeParameterLists/staticMembersUsingClassTypeParameter.ts(9,17): error TS2302: Static members cannot reference class type parameters.
+tests/cases/conformance/types/typeParameters/typeParameterLists/staticMembersUsingClassTypeParameter.ts(13,15): error TS2302: Static members cannot reference class type parameters.
+tests/cases/conformance/types/typeParameters/typeParameterLists/staticMembersUsingClassTypeParameter.ts(14,17): error TS2302: Static members cannot reference class type parameters.
+
+
+==== tests/cases/conformance/types/typeParameters/typeParameterLists/staticMembersUsingClassTypeParameter.ts (6 errors) ====
+    // BUG 745747
+    class C<T> {
+        static x: T;
+                  ~
+!!! error TS2302: Static members cannot reference class type parameters.
+        static f(x: T) {}
+                    ~
+!!! error TS2302: Static members cannot reference class type parameters.
+    }
+    
+    class C2<T, U> {
+        static x: U;
+                  ~
+!!! error TS2302: Static members cannot reference class type parameters.
+        static f(x: U) { }
+                    ~
+!!! error TS2302: Static members cannot reference class type parameters.
+    }
+    
+    class C3<T extends Date> {
+        static x: T;
+                  ~
+!!! error TS2302: Static members cannot reference class type parameters.
+        static f(x: T) { }
+                    ~
+!!! error TS2302: Static members cannot reference class type parameters.
+    }

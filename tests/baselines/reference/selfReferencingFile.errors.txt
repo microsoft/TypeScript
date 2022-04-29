@@ -1,0 +1,11 @@
+tests/cases/compiler/selfReferencingFile.ts(1,21): error TS1006: A file cannot have a reference to itself.
+
+
+==== tests/cases/compiler/selfReferencingFile.ts (1 errors) ====
+    ///<reference path='selfReferencingFile.ts'/>
+                        ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1006: A file cannot have a reference to itself.
+    
+    class selfReferencingFile {
+    
+    }

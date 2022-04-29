@@ -1,0 +1,57 @@
+=== tests/cases/compiler/classImplementsClass6.ts ===
+class A {
+>A : A
+
+    static bar(): string {
+>bar : () => string
+
+        return "";
+>"" : ""
+    }
+    foo(): number { return 1; }
+>foo : () => number
+>1 : 1
+}
+class C implements A {
+>C : C
+    
+    foo() {
+>foo : () => number
+
+        return 1;
+>1 : 1
+    }
+}
+
+class C2 extends A {}
+>C2 : C2
+>A : A
+
+var c: C;
+>c : C
+
+var c2: C2;
+>c2 : C2
+
+c = c2;
+>c = c2 : C2
+>c : C
+>c2 : C2
+
+c2 = c;
+>c2 = c : C
+>c2 : C2
+>c : C
+
+c.bar(); // error
+>c.bar() : any
+>c.bar : any
+>c : C
+>bar : any
+
+c2.bar(); // should error
+>c2.bar() : any
+>c2.bar : any
+>c2 : C2
+>bar : any
+

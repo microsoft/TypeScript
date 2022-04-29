@@ -1,0 +1,143 @@
+tests/cases/conformance/salsa/first.js(23,9): error TS2554: Expected 1 arguments, but got 0.
+tests/cases/conformance/salsa/first.js(31,5): error TS2416: Property 'load' in type 'Sql' is not assignable to the same property in base type 'Wagon'.
+  Type '(files: string[], format: "csv" | "json" | "xmlolololol") => void' is not assignable to type '(supplies?: any[]) => void'.
+tests/cases/conformance/salsa/first.js(47,24): error TS2507: Type '(numberEaten: number) => void' is not a constructor function type.
+tests/cases/conformance/salsa/generic.js(19,19): error TS2554: Expected 1 arguments, but got 0.
+tests/cases/conformance/salsa/generic.js(20,32): error TS2345: Argument of type 'number' is not assignable to parameter of type '{ claim: "ignorant" | "malicious"; }'.
+tests/cases/conformance/salsa/second.ts(8,25): error TS2507: Type '(numberEaten: number) => void' is not a constructor function type.
+tests/cases/conformance/salsa/second.ts(14,7): error TS2417: Class static side 'typeof Conestoga' incorrectly extends base class static side 'typeof Wagon'.
+  Types of property 'circle' are incompatible.
+    Type '(others: (typeof Wagon)[]) => number' is not assignable to type '(wagons?: Wagon[]) => number'.
+      Types of parameters 'others' and 'wagons' are incompatible.
+        Type 'Wagon[]' is not assignable to type '(typeof Wagon)[]'.
+          Property 'circle' is missing in type 'Wagon' but required in type 'typeof Wagon'.
+tests/cases/conformance/salsa/second.ts(17,15): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+
+
+==== tests/cases/conformance/salsa/first.js (3 errors) ====
+    /**
+     * @constructor
+     * @param {number} numberOxen
+     */
+    function Wagon(numberOxen) {
+        this.numberOxen = numberOxen
+    }
+    /** @param {Wagon[]=} wagons */
+    Wagon.circle = function (wagons) {
+        return wagons ? wagons.length : 3.14;
+    }
+    /** @param {*[]=} supplies - *[]= is my favourite type */
+    Wagon.prototype.load = function (supplies) {
+    }
+    /** @param {*[]=} supplies - Yep, still a great type */
+    Wagon.prototype.weight = supplies => supplies ? supplies.length : -1
+    Wagon.prototype.speed = function () {
+        return this.numberOxen / this.weight()
+    }
+    // ok
+    class Sql extends Wagon {
+        constructor() {
+            super(); // error: not enough arguments
+            ~~~~~~~
+!!! error TS2554: Expected 1 arguments, but got 0.
+!!! related TS6210 tests/cases/conformance/salsa/first.js:5:16: An argument for 'numberOxen' was not provided.
+            this.foonly = 12
+        }
+        /**
+         * @param {Array.<string>} files
+         * @param {"csv" | "json" | "xmlolololol"} format
+         * This is not assignable, so should have a type error
+         */
+        load(files, format) {
+        ~~~~
+!!! error TS2416: Property 'load' in type 'Sql' is not assignable to the same property in base type 'Wagon'.
+!!! error TS2416:   Type '(files: string[], format: "csv" | "json" | "xmlolololol") => void' is not assignable to type '(supplies?: any[]) => void'.
+            if (format === "xmlolololol") {
+                throw new Error("please do not use XML. It was a joke.");
+            }
+            else {
+                super.speed() // run faster
+                if (super.weight() < 0) {
+                    // ????????????????????????
+                }
+            }
+        }
+    }
+    var db = new Sql();
+    db.numberOxen = db.foonly
+    
+    // error, can't extend a TS constructor function
+    class Drakkhen extends Dragon {
+                           ~~~~~~
+!!! error TS2507: Type '(numberEaten: number) => void' is not a constructor function type.
+    
+    }
+    
+==== tests/cases/conformance/salsa/second.ts (3 errors) ====
+    /**
+     * @constructor
+     */
+    function Dragon(numberEaten: number) {
+        this.numberEaten = numberEaten
+    }
+    // error!
+    class Firedrake extends Dragon {
+                            ~~~~~~
+!!! error TS2507: Type '(numberEaten: number) => void' is not a constructor function type.
+        constructor() {
+            super();
+        }
+    }
+    // ok
+    class Conestoga extends Wagon {
+          ~~~~~~~~~
+!!! error TS2417: Class static side 'typeof Conestoga' incorrectly extends base class static side 'typeof Wagon'.
+!!! error TS2417:   Types of property 'circle' are incompatible.
+!!! error TS2417:     Type '(others: (typeof Wagon)[]) => number' is not assignable to type '(wagons?: Wagon[]) => number'.
+!!! error TS2417:       Types of parameters 'others' and 'wagons' are incompatible.
+!!! error TS2417:         Type 'Wagon[]' is not assignable to type '(typeof Wagon)[]'.
+!!! error TS2417:           Property 'circle' is missing in type 'Wagon' but required in type 'typeof Wagon'.
+!!! related TS2728 tests/cases/conformance/salsa/first.js:9:1: 'circle' is declared here.
+        constructor(public drunkOO: true) {
+            // error: wrong type
+            super('nope');
+                  ~~~~~~
+!!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+        }
+        // should error since others is not optional
+        static circle(others: (typeof Wagon)[]) {
+            return others.length
+        }
+    }
+    var c = new Conestoga(true);
+    c.drunkOO
+    c.numberOxen
+    
+==== tests/cases/conformance/salsa/generic.js (2 errors) ====
+    /**
+     * @template T
+     * @param {T} flavour
+     */
+    function Soup(flavour) {
+        this.flavour = flavour
+    }
+    /** @extends {Soup<{ claim: "ignorant" | "malicious" }>} */
+    class Chowder extends Soup {
+        log() {
+            return this.flavour
+        }
+    }
+    
+    var soup = new Soup(1);
+    soup.flavour
+    var chowder = new Chowder({ claim: "ignorant" });
+    chowder.flavour.claim
+    var errorNoArgs = new Chowder();
+                      ~~~~~~~~~~~~~
+!!! error TS2554: Expected 1 arguments, but got 0.
+!!! related TS6210 tests/cases/conformance/salsa/generic.js:5:15: An argument for 'flavour' was not provided.
+    var errorArgType = new Chowder(0);
+                                   ~
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type '{ claim: "ignorant" | "malicious"; }'.
+    
+    

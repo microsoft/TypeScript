@@ -1,0 +1,110 @@
+tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclarations/memberFunctionsWithPublicPrivateOverloads.ts(3,12): error TS2385: Overload signatures must all be public, private or protected.
+tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclarations/memberFunctionsWithPublicPrivateOverloads.ts(7,12): error TS2385: Overload signatures must all be public, private or protected.
+tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclarations/memberFunctionsWithPublicPrivateOverloads.ts(12,19): error TS2385: Overload signatures must all be public, private or protected.
+tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclarations/memberFunctionsWithPublicPrivateOverloads.ts(15,15): error TS2385: Overload signatures must all be public, private or protected.
+tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclarations/memberFunctionsWithPublicPrivateOverloads.ts(16,15): error TS2385: Overload signatures must all be public, private or protected.
+tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclarations/memberFunctionsWithPublicPrivateOverloads.ts(20,19): error TS2385: Overload signatures must all be public, private or protected.
+tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclarations/memberFunctionsWithPublicPrivateOverloads.ts(25,19): error TS2385: Overload signatures must all be public, private or protected.
+tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclarations/memberFunctionsWithPublicPrivateOverloads.ts(32,12): error TS2385: Overload signatures must all be public, private or protected.
+tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclarations/memberFunctionsWithPublicPrivateOverloads.ts(36,12): error TS2385: Overload signatures must all be public, private or protected.
+tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclarations/memberFunctionsWithPublicPrivateOverloads.ts(41,15): error TS2385: Overload signatures must all be public, private or protected.
+tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclarations/memberFunctionsWithPublicPrivateOverloads.ts(45,19): error TS2385: Overload signatures must all be public, private or protected.
+tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclarations/memberFunctionsWithPublicPrivateOverloads.ts(49,19): error TS2385: Overload signatures must all be public, private or protected.
+tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclarations/memberFunctionsWithPublicPrivateOverloads.ts(53,19): error TS2385: Overload signatures must all be public, private or protected.
+tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclarations/memberFunctionsWithPublicPrivateOverloads.ts(59,11): error TS2341: Property 'foo' is private and only accessible within class 'C'.
+tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclarations/memberFunctionsWithPublicPrivateOverloads.ts(62,12): error TS2341: Property 'foo' is private and only accessible within class 'D<T>'.
+
+
+==== tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclarations/memberFunctionsWithPublicPrivateOverloads.ts (15 errors) ====
+    class C {
+        private foo(x: number);
+        public foo(x: number, y: string); // error
+               ~~~
+!!! error TS2385: Overload signatures must all be public, private or protected.
+        private foo(x: any, y?: any) { }
+    
+        private bar(x: 'hi');
+        public bar(x: string); // error
+               ~~~
+!!! error TS2385: Overload signatures must all be public, private or protected.
+        private bar(x: number, y: string);
+        private bar(x: any, y?: any) { }
+    
+        private static foo(x: number);
+        public static foo(x: number, y: string); // error
+                      ~~~
+!!! error TS2385: Overload signatures must all be public, private or protected.
+        private static foo(x: any, y?: any) { }
+    
+        protected baz(x: string); // error
+                  ~~~
+!!! error TS2385: Overload signatures must all be public, private or protected.
+        protected baz(x: number, y: string); // error
+                  ~~~
+!!! error TS2385: Overload signatures must all be public, private or protected.
+        private baz(x: any, y?: any) { }
+    
+        private static bar(x: 'hi');
+        public static bar(x: string); // error
+                      ~~~
+!!! error TS2385: Overload signatures must all be public, private or protected.
+        private static bar(x: number, y: string);
+        private static bar(x: any, y?: any) { }
+    
+        protected static baz(x: 'hi');
+        public static baz(x: string); // error
+                      ~~~
+!!! error TS2385: Overload signatures must all be public, private or protected.
+        protected static baz(x: number, y: string);
+        protected static baz(x: any, y?: any) { }
+    }
+    
+    class D<T> {
+        private foo(x: number); 
+        public foo(x: T, y: T); // error
+               ~~~
+!!! error TS2385: Overload signatures must all be public, private or protected.
+        private foo(x: any, y?: any) { }
+    
+        private bar(x: 'hi');
+        public bar(x: string); // error
+               ~~~
+!!! error TS2385: Overload signatures must all be public, private or protected.
+        private bar(x: T, y: T);
+        private bar(x: any, y?: any) { }
+    
+        private baz(x: string); 
+        protected baz(x: number, y: string); // error
+                  ~~~
+!!! error TS2385: Overload signatures must all be public, private or protected.
+        private baz(x: any, y?: any) { }
+    
+        private static foo(x: number);
+        public static foo(x: number, y: string); // error
+                      ~~~
+!!! error TS2385: Overload signatures must all be public, private or protected.
+        private static foo(x: any, y?: any) { }
+    
+        private static bar(x: 'hi');
+        public static bar(x: string); // error
+                      ~~~
+!!! error TS2385: Overload signatures must all be public, private or protected.
+        private static bar(x: number, y: string);
+        private static bar(x: any, y?: any) { }
+    
+        public static baz(x: string); // error
+                      ~~~
+!!! error TS2385: Overload signatures must all be public, private or protected.
+        protected static baz(x: number, y: string);
+        protected static baz(x: any, y?: any) { }
+    }
+    
+    var c: C;
+    var r = c.foo(1); // error
+              ~~~
+!!! error TS2341: Property 'foo' is private and only accessible within class 'C'.
+    
+    var d: D<number>;
+    var r2 = d.foo(2); // error
+               ~~~
+!!! error TS2341: Property 'foo' is private and only accessible within class 'D<T>'.

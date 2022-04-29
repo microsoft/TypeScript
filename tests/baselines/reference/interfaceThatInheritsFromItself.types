@@ -1,0 +1,15 @@
+=== tests/cases/conformance/interfaces/interfaceDeclarations/interfaceThatInheritsFromItself.ts ===
+interface Foo extends Foo { // error
+No type information for this code.}
+No type information for this code.
+No type information for this code.interface Foo2<T> extends Foo2<T> { // error
+No type information for this code.}
+No type information for this code.
+No type information for this code.interface Foo3<T> extends Foo3<string> { // error
+No type information for this code.}
+No type information for this code.
+No type information for this code.interface Bar implements Bar { // error
+No type information for this code.}
+No type information for this code.
+No type information for this code.
+No type information for this code.

@@ -1,0 +1,43 @@
+=== tests/cases/conformance/statements/for-inStatements/for-inStatementsArrayErrors.ts ===
+let a: Date[];
+>a : Symbol(a, Decl(for-inStatementsArrayErrors.ts, 0, 3))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+for (let x in a) {
+>x : Symbol(x, Decl(for-inStatementsArrayErrors.ts, 2, 8))
+>a : Symbol(a, Decl(for-inStatementsArrayErrors.ts, 0, 3))
+
+    let a1 = a[x + 1];
+>a1 : Symbol(a1, Decl(for-inStatementsArrayErrors.ts, 3, 7))
+>a : Symbol(a, Decl(for-inStatementsArrayErrors.ts, 0, 3))
+>x : Symbol(x, Decl(for-inStatementsArrayErrors.ts, 2, 8))
+
+    let a2 = a[x - 1];
+>a2 : Symbol(a2, Decl(for-inStatementsArrayErrors.ts, 4, 7))
+>a : Symbol(a, Decl(for-inStatementsArrayErrors.ts, 0, 3))
+>x : Symbol(x, Decl(for-inStatementsArrayErrors.ts, 2, 8))
+
+    if (x === 1) {
+>x : Symbol(x, Decl(for-inStatementsArrayErrors.ts, 2, 8))
+    }
+    let a3 = x.unknownProperty;
+>a3 : Symbol(a3, Decl(for-inStatementsArrayErrors.ts, 7, 7))
+>x : Symbol(x, Decl(for-inStatementsArrayErrors.ts, 2, 8))
+}
+
+var i: number;
+>i : Symbol(i, Decl(for-inStatementsArrayErrors.ts, 10, 3), Decl(for-inStatementsArrayErrors.ts, 11, 8))
+
+for (var i in a ) {
+>i : Symbol(i, Decl(for-inStatementsArrayErrors.ts, 10, 3), Decl(for-inStatementsArrayErrors.ts, 11, 8))
+>a : Symbol(a, Decl(for-inStatementsArrayErrors.ts, 0, 3))
+}
+
+var j: any;
+>j : Symbol(j, Decl(for-inStatementsArrayErrors.ts, 14, 3), Decl(for-inStatementsArrayErrors.ts, 15, 8))
+
+for (var j in a ) {
+>j : Symbol(j, Decl(for-inStatementsArrayErrors.ts, 14, 3), Decl(for-inStatementsArrayErrors.ts, 15, 8))
+>a : Symbol(a, Decl(for-inStatementsArrayErrors.ts, 0, 3))
+}
+

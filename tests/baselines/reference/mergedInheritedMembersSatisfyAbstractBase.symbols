@@ -1,0 +1,42 @@
+=== tests/cases/conformance/interfaces/declarationMerging/mergedInheritedMembersSatisfyAbstractBase.ts ===
+abstract class BaseClass {
+>BaseClass : Symbol(BaseClass, Decl(mergedInheritedMembersSatisfyAbstractBase.ts, 0, 0))
+
+  abstract bar: number;
+>bar : Symbol(BaseClass.bar, Decl(mergedInheritedMembersSatisfyAbstractBase.ts, 0, 26))
+}
+
+class Broken extends BaseClass {}
+>Broken : Symbol(Broken, Decl(mergedInheritedMembersSatisfyAbstractBase.ts, 2, 1), Decl(mergedInheritedMembersSatisfyAbstractBase.ts, 9, 1))
+>BaseClass : Symbol(BaseClass, Decl(mergedInheritedMembersSatisfyAbstractBase.ts, 0, 0))
+
+// declaration merging should satisfy abstract bar
+interface IGetters {
+>IGetters : Symbol(IGetters, Decl(mergedInheritedMembersSatisfyAbstractBase.ts, 4, 33))
+
+  bar: number;
+>bar : Symbol(IGetters.bar, Decl(mergedInheritedMembersSatisfyAbstractBase.ts, 7, 20))
+}
+interface Broken extends IGetters {}
+>Broken : Symbol(Broken, Decl(mergedInheritedMembersSatisfyAbstractBase.ts, 2, 1), Decl(mergedInheritedMembersSatisfyAbstractBase.ts, 9, 1))
+>IGetters : Symbol(IGetters, Decl(mergedInheritedMembersSatisfyAbstractBase.ts, 4, 33))
+
+new Broken().bar
+>new Broken().bar : Symbol(BaseClass.bar, Decl(mergedInheritedMembersSatisfyAbstractBase.ts, 0, 26))
+>Broken : Symbol(Broken, Decl(mergedInheritedMembersSatisfyAbstractBase.ts, 2, 1), Decl(mergedInheritedMembersSatisfyAbstractBase.ts, 9, 1))
+>bar : Symbol(BaseClass.bar, Decl(mergedInheritedMembersSatisfyAbstractBase.ts, 0, 26))
+
+class IncorrectlyExtends extends BaseClass {}
+>IncorrectlyExtends : Symbol(IncorrectlyExtends, Decl(mergedInheritedMembersSatisfyAbstractBase.ts, 12, 16), Decl(mergedInheritedMembersSatisfyAbstractBase.ts, 17, 1))
+>BaseClass : Symbol(BaseClass, Decl(mergedInheritedMembersSatisfyAbstractBase.ts, 0, 0))
+
+interface IncorrectGetters {
+>IncorrectGetters : Symbol(IncorrectGetters, Decl(mergedInheritedMembersSatisfyAbstractBase.ts, 14, 45))
+
+  bar: string;
+>bar : Symbol(IncorrectGetters.bar, Decl(mergedInheritedMembersSatisfyAbstractBase.ts, 15, 28))
+}
+interface IncorrectlyExtends extends IncorrectGetters {}
+>IncorrectlyExtends : Symbol(IncorrectlyExtends, Decl(mergedInheritedMembersSatisfyAbstractBase.ts, 12, 16), Decl(mergedInheritedMembersSatisfyAbstractBase.ts, 17, 1))
+>IncorrectGetters : Symbol(IncorrectGetters, Decl(mergedInheritedMembersSatisfyAbstractBase.ts, 14, 45))
+

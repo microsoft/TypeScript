@@ -1,0 +1,4 @@
+interface C {
+    foo;
+    new;
+}

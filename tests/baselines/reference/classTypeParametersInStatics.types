@@ -1,0 +1,105 @@
+=== tests/cases/compiler/classTypeParametersInStatics.ts ===
+module Editor {
+>Editor : typeof Editor
+
+
+    export class List<T> {
+>List : List<T>
+
+        public next: List<T>;
+>next : List<T>
+
+        public prev: List<T>;
+>prev : List<T>
+
+        constructor(public isHead: boolean, public data: T) {
+>isHead : boolean
+>data : T
+        
+        }
+
+        public static MakeHead(): List<T> { // should error
+>MakeHead : () => List<T>
+
+            var entry: List<T> = new List<T>(true, null);
+>entry : List<T>
+>new List<T>(true, null) : List<T>
+>List : typeof List
+>true : true
+>null : null
+
+            entry.prev = entry;
+>entry.prev = entry : List<T>
+>entry.prev : List<T>
+>entry : List<T>
+>prev : List<T>
+>entry : List<T>
+
+            entry.next = entry;
+>entry.next = entry : List<T>
+>entry.next : List<T>
+>entry : List<T>
+>next : List<T>
+>entry : List<T>
+
+            return entry;
+>entry : List<T>
+        }        
+
+        public static MakeHead2<T>(): List<T> { // should not error
+>MakeHead2 : <T>() => List<T>
+
+            var entry: List<T> = new List<T>(true, null);
+>entry : List<T>
+>new List<T>(true, null) : List<T>
+>List : typeof List
+>true : true
+>null : null
+
+            entry.prev = entry;
+>entry.prev = entry : List<T>
+>entry.prev : List<T>
+>entry : List<T>
+>prev : List<T>
+>entry : List<T>
+
+            entry.next = entry;
+>entry.next = entry : List<T>
+>entry.next : List<T>
+>entry : List<T>
+>next : List<T>
+>entry : List<T>
+
+            return entry;
+>entry : List<T>
+        }  
+
+        public static MakeHead3<U>(): List<U> { // should not error
+>MakeHead3 : <U>() => List<U>
+
+            var entry: List<U> = new List<U>(true, null);
+>entry : List<U>
+>new List<U>(true, null) : List<U>
+>List : typeof List
+>true : true
+>null : null
+
+            entry.prev = entry;
+>entry.prev = entry : List<U>
+>entry.prev : List<U>
+>entry : List<U>
+>prev : List<U>
+>entry : List<U>
+
+            entry.next = entry;
+>entry.next = entry : List<U>
+>entry.next : List<U>
+>entry : List<U>
+>next : List<U>
+>entry : List<U>
+
+            return entry;
+>entry : List<U>
+        }  
+    }
+}

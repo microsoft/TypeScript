@@ -1,0 +1,15 @@
+=== tests/cases/compiler/emptyTypeArgumentListWithNew.ts ===
+class foo<T> { }
+>foo : Symbol(foo, Decl(emptyTypeArgumentListWithNew.ts, 0, 0))
+>T : Symbol(T, Decl(emptyTypeArgumentListWithNew.ts, 0, 10))
+
+new foo<>();
+>foo : Symbol(foo, Decl(emptyTypeArgumentListWithNew.ts, 0, 0))
+
+// https://github.com/microsoft/TypeScript/issues/33041
+class noParams {}
+>noParams : Symbol(noParams, Decl(emptyTypeArgumentListWithNew.ts, 1, 12))
+
+new noParams<>();
+>noParams : Symbol(noParams, Decl(emptyTypeArgumentListWithNew.ts, 1, 12))
+

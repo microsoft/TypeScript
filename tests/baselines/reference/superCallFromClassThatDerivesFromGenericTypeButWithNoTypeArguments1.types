@@ -1,0 +1,24 @@
+=== tests/cases/compiler/superCallFromClassThatDerivesFromGenericTypeButWithNoTypeArguments1.ts ===
+class A<T1, T2> {
+>A : A<T1, T2>
+
+    constructor(private map: (value: T1) => T2) {
+>map : (value: T1) => T2
+>value : T1
+
+    }
+}
+
+class B extends A {
+>B : B
+>A : typeof A
+
+    constructor() { super(value => String(value)); }
+>super(value => String(value)) : void
+>super : any
+>value => String(value) : (value: any) => string
+>value : any
+>String(value) : string
+>String : StringConstructor
+>value : any
+}

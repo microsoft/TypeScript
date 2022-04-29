@@ -1,0 +1,13 @@
+=== tests/cases/conformance/types/primitives/string/stringPropertyAccessWithError.ts ===
+var x = '';
+>x : string
+>'' : ""
+
+var d = x['charAt']('invalid'); // error
+>d : string
+>x['charAt']('invalid') : string
+>x['charAt'] : (pos: number) => string
+>x : string
+>'charAt' : "charAt"
+>'invalid' : "invalid"
+

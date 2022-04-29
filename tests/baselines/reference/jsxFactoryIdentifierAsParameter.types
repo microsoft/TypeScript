@@ -1,0 +1,21 @@
+=== tests/cases/compiler/test.tsx ===
+declare module JSX {
+    interface IntrinsicElements {
+        [s: string]: any;
+>s : string
+    }
+}
+
+export class AppComponent {
+>AppComponent : AppComponent
+
+    render(createElement) {
+>render : (createElement: any) => any
+>createElement : any
+
+        return <div />;
+><div /> : error
+>div : any
+    }
+}
+

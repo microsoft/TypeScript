@@ -1,0 +1,18 @@
+=== tests/cases/conformance/declarationEmit/typePredicates/declarationEmitThisPredicatesWithPrivateName01.ts ===
+export class C {
+>C : C
+
+    m(): this is D {
+>m : () => this is D
+
+        return this instanceof D;
+>this instanceof D : boolean
+>this : this
+>D : typeof D
+    }
+}
+
+class D extends C {
+>D : D
+>C : C
+}

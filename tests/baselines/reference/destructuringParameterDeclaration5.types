@@ -1,0 +1,184 @@
+=== tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration5.ts ===
+// Parameter Declaration with generic
+
+interface F { }
+class Class implements F {
+>Class : Class
+
+    constructor() { }
+}
+
+class SubClass extends Class {
+>SubClass : SubClass
+>Class : Class
+
+    foo: boolean;
+>foo : boolean
+
+    constructor() { super(); }
+>super() : void
+>super : typeof Class
+}
+
+class D implements F {
+>D : D
+
+    foo: boolean
+>foo : boolean
+
+    constructor() { }
+}
+
+class SubD extends D {
+>SubD : SubD
+>D : D
+
+    bar: number
+>bar : number
+
+    constructor() {
+        super();
+>super() : void
+>super : typeof D
+    }
+}
+
+
+function d0<T extends Class>({x} = { x: new Class() }) { }
+>d0 : <T extends Class>({ x }?: { x: Class; }) => void
+>x : Class
+>{ x: new Class() } : { x: Class; }
+>x : Class
+>new Class() : Class
+>Class : typeof Class
+
+function d1<T extends F>({x}: { x: F }) { }
+>d1 : <T extends F>({ x }: {    x: F;}) => void
+>x : F
+>x : F
+
+function d2<T extends Class>({x}: { x: Class }) { }
+>d2 : <T extends Class>({ x }: {    x: Class;}) => void
+>x : Class
+>x : Class
+
+function d3<T extends D>({y}: { y: D }) { }
+>d3 : <T extends D>({ y }: {    y: D;}) => void
+>y : D
+>y : D
+
+function d4<T extends D>({y} = { y: new D() }) { }
+>d4 : <T extends D>({ y }?: { y: D; }) => void
+>y : D
+>{ y: new D() } : { y: D; }
+>y : D
+>new D() : D
+>D : typeof D
+
+var obj = new Class();
+>obj : Class
+>new Class() : Class
+>Class : typeof Class
+
+d0({ x: 1 });
+>d0({ x: 1 }) : void
+>d0 : <T extends Class>({ x }?: { x: Class; }) => void
+>{ x: 1 } : { x: number; }
+>x : number
+>1 : 1
+
+d0({ x: {} });
+>d0({ x: {} }) : void
+>d0 : <T extends Class>({ x }?: { x: Class; }) => void
+>{ x: {} } : { x: {}; }
+>x : {}
+>{} : {}
+
+d0({ x: "string" });
+>d0({ x: "string" }) : void
+>d0 : <T extends Class>({ x }?: { x: Class; }) => void
+>{ x: "string" } : { x: string; }
+>x : string
+>"string" : "string"
+
+d1({ x: new Class() });
+>d1({ x: new Class() }) : void
+>d1 : <T extends F>({ x }: { x: F; }) => void
+>{ x: new Class() } : { x: Class; }
+>x : Class
+>new Class() : Class
+>Class : typeof Class
+
+d1({ x: {} });
+>d1({ x: {} }) : void
+>d1 : <T extends F>({ x }: { x: F; }) => void
+>{ x: {} } : { x: {}; }
+>x : {}
+>{} : {}
+
+d1({ x: "string" });
+>d1({ x: "string" }) : void
+>d1 : <T extends F>({ x }: { x: F; }) => void
+>{ x: "string" } : { x: string; }
+>x : string
+>"string" : "string"
+
+d2({ x: new SubClass() });
+>d2({ x: new SubClass() }) : void
+>d2 : <T extends Class>({ x }: { x: Class; }) => void
+>{ x: new SubClass() } : { x: SubClass; }
+>x : SubClass
+>new SubClass() : SubClass
+>SubClass : typeof SubClass
+
+d2({ x: {} });
+>d2({ x: {} }) : void
+>d2 : <T extends Class>({ x }: { x: Class; }) => void
+>{ x: {} } : { x: {}; }
+>x : {}
+>{} : {}
+
+d3({ y: new SubD() });
+>d3({ y: new SubD() }) : void
+>d3 : <T extends D>({ y }: { y: D; }) => void
+>{ y: new SubD() } : { y: SubD; }
+>y : SubD
+>new SubD() : SubD
+>SubD : typeof SubD
+
+d3({ y: new SubClass() });
+>d3({ y: new SubClass() }) : void
+>d3 : <T extends D>({ y }: { y: D; }) => void
+>{ y: new SubClass() } : { y: SubClass; }
+>y : SubClass
+>new SubClass() : SubClass
+>SubClass : typeof SubClass
+
+// Error
+d3({ y: new Class() });
+>d3({ y: new Class() }) : void
+>d3 : <T extends D>({ y }: { y: D; }) => void
+>{ y: new Class() } : { y: Class; }
+>y : Class
+>new Class() : Class
+>Class : typeof Class
+
+d3({});
+>d3({}) : void
+>d3 : <T extends D>({ y }: { y: D; }) => void
+>{} : {}
+
+d3({ y: 1 });
+>d3({ y: 1 }) : void
+>d3 : <T extends D>({ y }: { y: D; }) => void
+>{ y: 1 } : { y: number; }
+>y : number
+>1 : 1
+
+d3({ y: "world" });
+>d3({ y: "world" }) : void
+>d3 : <T extends D>({ y }: { y: D; }) => void
+>{ y: "world" } : { y: string; }
+>y : string
+>"world" : "world"
+

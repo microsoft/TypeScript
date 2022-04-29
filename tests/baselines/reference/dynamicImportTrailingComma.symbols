@@ -1,0 +1,7 @@
+=== tests/cases/compiler/dynamicImportTrailingComma.ts ===
+const path = './foo';
+>path : Symbol(path, Decl(dynamicImportTrailingComma.ts, 0, 5))
+
+import(path,);
+>path : Symbol(path, Decl(dynamicImportTrailingComma.ts, 0, 5))
+

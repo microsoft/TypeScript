@@ -1,0 +1,18 @@
+{
+    "scenario": "outputdir_singleFile: specify outputDirectory",
+    "projectRoot": "tests/cases/projects/outputdir_singleFile",
+    "inputFiles": [
+        "test.ts"
+    ],
+    "outDir": "outdir/simple",
+    "declaration": true,
+    "baselineCheck": true,
+    "resolvedInputFiles": [
+        "lib.es5.d.ts",
+        "test.ts"
+    ],
+    "emittedFiles": [
+        "outdir/simple/test.js",
+        "outdir/simple/test.d.ts"
+    ]
+}

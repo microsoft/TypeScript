@@ -1,0 +1,42 @@
+=== tests/cases/compiler/asyncFunctionReturnExpressionErrorSpans.ts ===
+interface Foo {
+>Foo : Symbol(Foo, Decl(asyncFunctionReturnExpressionErrorSpans.ts, 0, 0))
+
+    bar: {
+>bar : Symbol(Foo.bar, Decl(asyncFunctionReturnExpressionErrorSpans.ts, 0, 15))
+
+        baz: {
+>baz : Symbol(baz, Decl(asyncFunctionReturnExpressionErrorSpans.ts, 1, 10))
+
+            inner: {
+>inner : Symbol(inner, Decl(asyncFunctionReturnExpressionErrorSpans.ts, 2, 14))
+
+                thing: string
+>thing : Symbol(thing, Decl(asyncFunctionReturnExpressionErrorSpans.ts, 3, 20))
+            }
+        }
+    }
+}
+
+async function asyncFoo(): Promise<Foo> {
+>asyncFoo : Symbol(asyncFoo, Decl(asyncFunctionReturnExpressionErrorSpans.ts, 8, 1))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+>Foo : Symbol(Foo, Decl(asyncFunctionReturnExpressionErrorSpans.ts, 0, 0))
+
+    return {
+        bar: {
+>bar : Symbol(bar, Decl(asyncFunctionReturnExpressionErrorSpans.ts, 11, 12))
+
+            baz: {
+>baz : Symbol(baz, Decl(asyncFunctionReturnExpressionErrorSpans.ts, 12, 14))
+
+                inner: {
+>inner : Symbol(inner, Decl(asyncFunctionReturnExpressionErrorSpans.ts, 13, 18))
+
+                    thing: 1
+>thing : Symbol(thing, Decl(asyncFunctionReturnExpressionErrorSpans.ts, 14, 24))
+                }
+            }
+        }
+    }
+}

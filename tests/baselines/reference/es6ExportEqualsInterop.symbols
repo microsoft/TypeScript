@@ -1,0 +1,496 @@
+=== tests/cases/compiler/main.ts ===
+/// <reference path="modules.d.ts"/>
+
+// import-equals
+import z1 = require("interface");
+>z1 : Symbol(z1, Decl(main.ts, 0, 0))
+
+import z2 = require("variable");
+>z2 : Symbol(z2, Decl(main.ts, 3, 33))
+
+import z3 = require("interface-variable");
+>z3 : Symbol(z3, Decl(main.ts, 4, 32))
+
+import z4 = require("module");
+>z4 : Symbol(z4, Decl(main.ts, 5, 42))
+
+import z5 = require("interface-module");
+>z5 : Symbol(z5, Decl(main.ts, 6, 30))
+
+import z6 = require("variable-module");
+>z6 : Symbol(z6, Decl(main.ts, 7, 40))
+
+import z7 = require("function");
+>z7 : Symbol(z7, Decl(main.ts, 8, 39))
+
+import z8 = require("function-module");
+>z8 : Symbol(z8, Decl(main.ts, 9, 32))
+
+import z9 = require("class");
+>z9 : Symbol(z9, Decl(main.ts, 10, 39))
+
+import z0 = require("class-module");
+>z0 : Symbol(z0, Decl(main.ts, 11, 29))
+
+z1.a;
+z2.a;
+>z2.a : Symbol(a2, Decl(modules.d.ts, 9, 14))
+>z2 : Symbol(z2, Decl(main.ts, 3, 33))
+>a : Symbol(a2, Decl(modules.d.ts, 9, 14))
+
+z3.a;
+>z3.a : Symbol(a3, Decl(modules.d.ts, 21, 14))
+>z3 : Symbol(z3, Decl(main.ts, 4, 32))
+>a : Symbol(a3, Decl(modules.d.ts, 21, 14))
+
+z4.a;
+>z4.a : Symbol(z4.a, Decl(modules.d.ts, 30, 18))
+>z4 : Symbol(z4, Decl(main.ts, 5, 42))
+>a : Symbol(z4.a, Decl(modules.d.ts, 30, 18))
+
+z5.a;
+>z5.a : Symbol(z5.a, Decl(modules.d.ts, 42, 18))
+>z5 : Symbol(z5, Decl(main.ts, 6, 30))
+>a : Symbol(z5.a, Decl(modules.d.ts, 42, 18))
+
+z6.a;
+>z6.a : Symbol(a6, Decl(modules.d.ts, 55, 14))
+>z6 : Symbol(z6, Decl(main.ts, 7, 40))
+>a : Symbol(a6, Decl(modules.d.ts, 55, 14))
+
+z7.a;
+>z7 : Symbol(z7, Decl(main.ts, 8, 39))
+
+z8.a;
+>z8.a : Symbol(z8.a, Decl(modules.d.ts, 70, 18))
+>z8 : Symbol(z8, Decl(main.ts, 9, 32))
+>a : Symbol(z8.a, Decl(modules.d.ts, 70, 18))
+
+z9.a;
+>z9 : Symbol(z9, Decl(main.ts, 10, 39))
+
+z0.a;
+>z0.a : Symbol(z0.a, Decl(modules.d.ts, 90, 18))
+>z0 : Symbol(z0, Decl(main.ts, 11, 29))
+>a : Symbol(z0.a, Decl(modules.d.ts, 90, 18))
+
+// default import
+import x1 from "interface";
+>x1 : Symbol(x1, Decl(main.ts, 26, 6))
+
+import x2 from "variable";
+>x2 : Symbol(x2, Decl(main.ts, 27, 6))
+
+import x3 from "interface-variable";
+>x3 : Symbol(x3, Decl(main.ts, 28, 6))
+
+import x4 from "module";
+>x4 : Symbol(x4, Decl(main.ts, 29, 6))
+
+import x5 from "interface-module";
+>x5 : Symbol(x5, Decl(main.ts, 30, 6))
+
+import x6 from "variable-module";
+>x6 : Symbol(x6, Decl(main.ts, 31, 6))
+
+import x7 from "function";
+>x7 : Symbol(x7, Decl(main.ts, 32, 6))
+
+import x8 from "function-module";
+>x8 : Symbol(x8, Decl(main.ts, 33, 6))
+
+import x9 from "class";
+>x9 : Symbol(x9, Decl(main.ts, 34, 6))
+
+import x0 from "class-module";
+>x0 : Symbol(x0, Decl(main.ts, 35, 6))
+
+// namespace import
+import * as y1 from "interface";
+>y1 : Symbol(y1, Decl(main.ts, 38, 6))
+
+import * as y2 from "variable";
+>y2 : Symbol(y2, Decl(main.ts, 39, 6))
+
+import * as y3 from "interface-variable";
+>y3 : Symbol(y3, Decl(main.ts, 40, 6))
+
+import * as y4 from "module";
+>y4 : Symbol(y4, Decl(main.ts, 41, 6))
+
+import * as y5 from "interface-module";
+>y5 : Symbol(y5, Decl(main.ts, 42, 6))
+
+import * as y6 from "variable-module";
+>y6 : Symbol(y6, Decl(main.ts, 43, 6))
+
+import * as y7 from "function";
+>y7 : Symbol(y7, Decl(main.ts, 44, 6))
+
+import * as y8 from "function-module";
+>y8 : Symbol(y8, Decl(main.ts, 45, 6))
+
+import * as y9 from "class";
+>y9 : Symbol(y9, Decl(main.ts, 46, 6))
+
+import * as y0 from "class-module";
+>y0 : Symbol(y0, Decl(main.ts, 47, 6))
+
+y1.a;
+y2.a;
+>y2.a : Symbol(a2, Decl(modules.d.ts, 9, 14))
+>y2 : Symbol(y2, Decl(main.ts, 39, 6))
+>a : Symbol(a2, Decl(modules.d.ts, 9, 14))
+
+y3.a;
+>y3.a : Symbol(a3, Decl(modules.d.ts, 21, 14))
+>y3 : Symbol(y3, Decl(main.ts, 40, 6))
+>a : Symbol(a3, Decl(modules.d.ts, 21, 14))
+
+y4.a;
+>y4.a : Symbol(z4.a, Decl(modules.d.ts, 30, 18))
+>y4 : Symbol(y4, Decl(main.ts, 41, 6))
+>a : Symbol(z4.a, Decl(modules.d.ts, 30, 18))
+
+y5.a;
+>y5.a : Symbol(z5.a, Decl(modules.d.ts, 42, 18))
+>y5 : Symbol(y5, Decl(main.ts, 42, 6))
+>a : Symbol(z5.a, Decl(modules.d.ts, 42, 18))
+
+y6.a;
+>y6.a : Symbol(a6, Decl(modules.d.ts, 55, 14))
+>y6 : Symbol(y6, Decl(main.ts, 43, 6))
+>a : Symbol(a6, Decl(modules.d.ts, 55, 14))
+
+y7.a;
+>y7 : Symbol(y7, Decl(main.ts, 44, 6))
+
+y8.a;
+>y8.a : Symbol(z8.a, Decl(modules.d.ts, 70, 18))
+>y8 : Symbol(y8, Decl(main.ts, 45, 6))
+>a : Symbol(z8.a, Decl(modules.d.ts, 70, 18))
+
+y9.a;
+>y9 : Symbol(y9, Decl(main.ts, 46, 6))
+
+y0.a;
+>y0.a : Symbol(z0.a, Decl(modules.d.ts, 90, 18))
+>y0 : Symbol(y0, Decl(main.ts, 47, 6))
+>a : Symbol(z0.a, Decl(modules.d.ts, 90, 18))
+
+// named import
+import { a as a1 } from "interface";
+>a1 : Symbol(a1, Decl(main.ts, 61, 8))
+
+import { a as a2 } from "variable";
+>a : Symbol(a2, Decl(modules.d.ts, 9, 14))
+>a2 : Symbol(a2, Decl(main.ts, 62, 8))
+
+import { a as a3 } from "interface-variable";
+>a : Symbol(a3, Decl(modules.d.ts, 21, 14))
+>a3 : Symbol(a3, Decl(main.ts, 63, 8))
+
+import { a as a4 } from "module";
+>a : Symbol(z4.a, Decl(modules.d.ts, 30, 18))
+>a4 : Symbol(a4, Decl(main.ts, 64, 8))
+
+import { a as a5 } from "interface-module";
+>a : Symbol(z5.a, Decl(modules.d.ts, 42, 18))
+>a5 : Symbol(a5, Decl(main.ts, 65, 8))
+
+import { a as a6 } from "variable-module";
+>a : Symbol(a6, Decl(modules.d.ts, 55, 14))
+>a6 : Symbol(a6, Decl(main.ts, 66, 8))
+
+import { a as a7 } from "function";
+>a7 : Symbol(a7, Decl(main.ts, 67, 8))
+
+import { a as a8 } from "function-module";
+>a : Symbol(z8.a, Decl(modules.d.ts, 70, 18))
+>a8 : Symbol(a8, Decl(main.ts, 68, 8))
+
+import { a as a9 } from "class";
+>a9 : Symbol(a9, Decl(main.ts, 69, 8))
+
+import { a as a0 } from "class-module";
+>a : Symbol(z0.a, Decl(modules.d.ts, 90, 18))
+>a0 : Symbol(a0, Decl(main.ts, 70, 8))
+
+a1;
+>a1 : Symbol(a1, Decl(main.ts, 61, 8))
+
+a2;
+>a2 : Symbol(a2, Decl(main.ts, 62, 8))
+
+a3;
+>a3 : Symbol(a3, Decl(main.ts, 63, 8))
+
+a4;
+>a4 : Symbol(a4, Decl(main.ts, 64, 8))
+
+a5;
+>a5 : Symbol(a5, Decl(main.ts, 65, 8))
+
+a6;
+>a6 : Symbol(a6, Decl(main.ts, 66, 8))
+
+a7;
+>a7 : Symbol(a7, Decl(main.ts, 67, 8))
+
+a8;
+>a8 : Symbol(a8, Decl(main.ts, 68, 8))
+
+a9;
+>a9 : Symbol(a9, Decl(main.ts, 69, 8))
+
+a0;
+>a0 : Symbol(a0, Decl(main.ts, 70, 8))
+
+// named export
+export { a as a1 } from "interface";
+>a1 : Symbol(a1, Decl(main.ts, 84, 8))
+
+export { a as a2 } from "variable";
+>a : Symbol(a2, Decl(modules.d.ts, 9, 14))
+>a2 : Symbol(a2, Decl(main.ts, 85, 8))
+
+export { a as a3 } from "interface-variable";
+>a : Symbol(a3, Decl(modules.d.ts, 21, 14))
+>a3 : Symbol(a3, Decl(main.ts, 86, 8))
+
+export { a as a4 } from "module";
+>a : Symbol(z4.a, Decl(modules.d.ts, 30, 18))
+>a4 : Symbol(a4, Decl(main.ts, 87, 8))
+
+export { a as a5 } from "interface-module";
+>a : Symbol(z5.a, Decl(modules.d.ts, 42, 18))
+>a5 : Symbol(a5, Decl(main.ts, 88, 8))
+
+export { a as a6 } from "variable-module";
+>a : Symbol(a6, Decl(modules.d.ts, 55, 14))
+>a6 : Symbol(a6, Decl(main.ts, 89, 8))
+
+export { a as a7 } from "function";
+>a7 : Symbol(a7, Decl(main.ts, 90, 8))
+
+export { a as a8 } from "function-module";
+>a : Symbol(z8.a, Decl(modules.d.ts, 70, 18))
+>a8 : Symbol(a8, Decl(main.ts, 91, 8))
+
+export { a as a9 } from "class";
+>a9 : Symbol(a9, Decl(main.ts, 92, 8))
+
+export { a as a0 } from "class-module";
+>a : Symbol(z0.a, Decl(modules.d.ts, 90, 18))
+>a0 : Symbol(a0, Decl(main.ts, 93, 8))
+
+// export-star
+export * from "interface";
+export * from "variable";
+export * from "interface-variable";
+export * from "module";
+export * from "interface-module";
+export * from "variable-module";
+export * from "function";
+export * from "function-module";
+export * from "class";
+export * from "class-module";
+
+=== tests/cases/compiler/modules.d.ts ===
+declare module "interface" {
+>"interface" : Symbol("interface", Decl(modules.d.ts, 0, 0))
+
+    interface Foo {
+>Foo : Symbol(Foo, Decl(modules.d.ts, 0, 28))
+
+        x: number;
+>x : Symbol(Foo.x, Decl(modules.d.ts, 1, 19))
+
+        y: number;
+>y : Symbol(Foo.y, Decl(modules.d.ts, 2, 18))
+    }
+    export = Foo;
+>Foo : Symbol(Foo, Decl(modules.d.ts, 0, 28))
+}
+
+declare module "variable" {
+>"variable" : Symbol("variable", Decl(modules.d.ts, 6, 1))
+
+    var Foo: {
+>Foo : Symbol(Foo, Decl(modules.d.ts, 9, 7))
+
+        a: number;
+>a : Symbol(a, Decl(modules.d.ts, 9, 14))
+
+        b: number;
+>b : Symbol(b, Decl(modules.d.ts, 10, 18))
+    }
+    export = Foo;
+>Foo : Symbol(Foo, Decl(modules.d.ts, 9, 7))
+}
+
+declare module "interface-variable" {
+>"interface-variable" : Symbol("interface-variable", Decl(modules.d.ts, 14, 1))
+
+    interface Foo {
+>Foo : Symbol(Foo, Decl(modules.d.ts, 16, 37), Decl(modules.d.ts, 21, 7))
+
+        x: number;
+>x : Symbol(Foo.x, Decl(modules.d.ts, 17, 19))
+
+        y: number;
+>y : Symbol(Foo.y, Decl(modules.d.ts, 18, 18))
+    }
+    var Foo: {
+>Foo : Symbol(Foo, Decl(modules.d.ts, 16, 37), Decl(modules.d.ts, 21, 7))
+
+        a: number;
+>a : Symbol(a, Decl(modules.d.ts, 21, 14))
+
+        b: number;
+>b : Symbol(b, Decl(modules.d.ts, 22, 18))
+    }
+    export = Foo;
+>Foo : Symbol(Foo, Decl(modules.d.ts, 16, 37), Decl(modules.d.ts, 21, 7))
+}
+
+declare module "module" {
+>"module" : Symbol("module", Decl(modules.d.ts, 26, 1))
+
+    module Foo {
+>Foo : Symbol(Foo, Decl(modules.d.ts, 28, 25))
+
+        export var a: number;
+>a : Symbol(a, Decl(modules.d.ts, 30, 18))
+
+        export var b: number;
+>b : Symbol(b, Decl(modules.d.ts, 31, 18))
+    }
+    export = Foo;
+>Foo : Symbol(Foo, Decl(modules.d.ts, 28, 25))
+}
+
+declare module "interface-module" {
+>"interface-module" : Symbol("interface-module", Decl(modules.d.ts, 34, 1))
+
+    interface Foo {
+>Foo : Symbol(Foo, Decl(modules.d.ts, 36, 35), Decl(modules.d.ts, 40, 5))
+
+        x: number;
+>x : Symbol(Foo.x, Decl(modules.d.ts, 37, 19))
+
+        y: number;
+>y : Symbol(Foo.y, Decl(modules.d.ts, 38, 18))
+    }
+    module Foo {
+>Foo : Symbol(Foo, Decl(modules.d.ts, 36, 35), Decl(modules.d.ts, 40, 5))
+
+        export var a: number;
+>a : Symbol(a, Decl(modules.d.ts, 42, 18))
+
+        export var b: number;
+>b : Symbol(b, Decl(modules.d.ts, 43, 18))
+    }
+    export = Foo;
+>Foo : Symbol(Foo, Decl(modules.d.ts, 36, 35), Decl(modules.d.ts, 40, 5))
+}
+
+declare module "variable-module" {
+>"variable-module" : Symbol("variable-module", Decl(modules.d.ts, 46, 1))
+
+    module Foo {
+>Foo : Symbol(Foo, Decl(modules.d.ts, 48, 34), Decl(modules.d.ts, 55, 7))
+
+        interface Bar {
+>Bar : Symbol(Bar, Decl(modules.d.ts, 49, 16))
+
+            x: number;
+>x : Symbol(Bar.x, Decl(modules.d.ts, 50, 23))
+
+            y: number;
+>y : Symbol(Bar.y, Decl(modules.d.ts, 51, 22))
+        }
+    }
+    var Foo: {
+>Foo : Symbol(Foo, Decl(modules.d.ts, 48, 34), Decl(modules.d.ts, 55, 7))
+
+        a: number;
+>a : Symbol(a, Decl(modules.d.ts, 55, 14))
+
+        b: number;
+>b : Symbol(b, Decl(modules.d.ts, 56, 18))
+    }
+    export = Foo;
+>Foo : Symbol(Foo, Decl(modules.d.ts, 48, 34), Decl(modules.d.ts, 55, 7))
+}
+
+declare module "function" {
+>"function" : Symbol("function", Decl(modules.d.ts, 60, 1))
+
+    function foo();
+>foo : Symbol(foo, Decl(modules.d.ts, 62, 27))
+
+    export = foo;
+>foo : Symbol(foo, Decl(modules.d.ts, 62, 27))
+}
+
+declare module "function-module" {
+>"function-module" : Symbol("function-module", Decl(modules.d.ts, 65, 1))
+
+    function foo();
+>foo : Symbol(foo, Decl(modules.d.ts, 67, 34), Decl(modules.d.ts, 68, 19))
+
+    module foo {
+>foo : Symbol(foo, Decl(modules.d.ts, 67, 34), Decl(modules.d.ts, 68, 19))
+
+        export var a: number;
+>a : Symbol(a, Decl(modules.d.ts, 70, 18))
+
+        export var b: number;
+>b : Symbol(b, Decl(modules.d.ts, 71, 18))
+    }
+    export = foo;
+>foo : Symbol(foo, Decl(modules.d.ts, 67, 34), Decl(modules.d.ts, 68, 19))
+}
+
+declare module "class" {
+>"class" : Symbol("class", Decl(modules.d.ts, 74, 1))
+
+    class Foo {
+>Foo : Symbol(Foo, Decl(modules.d.ts, 76, 24))
+
+        x: number;
+>x : Symbol(Foo.x, Decl(modules.d.ts, 77, 15))
+
+        y: number;
+>y : Symbol(Foo.y, Decl(modules.d.ts, 78, 18))
+    }
+    export = Foo;
+>Foo : Symbol(Foo, Decl(modules.d.ts, 76, 24))
+}
+
+declare module "class-module" {
+>"class-module" : Symbol("class-module", Decl(modules.d.ts, 82, 1))
+
+    class Foo {
+>Foo : Symbol(Foo, Decl(modules.d.ts, 84, 31), Decl(modules.d.ts, 88, 5))
+
+        x: number;
+>x : Symbol(Foo.x, Decl(modules.d.ts, 85, 15))
+
+        y: number;
+>y : Symbol(Foo.y, Decl(modules.d.ts, 86, 18))
+    }
+    module Foo {
+>Foo : Symbol(Foo, Decl(modules.d.ts, 84, 31), Decl(modules.d.ts, 88, 5))
+
+        export var a: number;
+>a : Symbol(a, Decl(modules.d.ts, 90, 18))
+
+        export var b: number;
+>b : Symbol(b, Decl(modules.d.ts, 91, 18))
+    }
+    export = Foo;
+>Foo : Symbol(Foo, Decl(modules.d.ts, 84, 31), Decl(modules.d.ts, 88, 5))
+}
+

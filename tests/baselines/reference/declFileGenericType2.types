@@ -1,0 +1,106 @@
+=== tests/cases/compiler/declFileGenericType2.ts ===
+declare module templa.mvc {
+    interface IModel {
+    }
+}
+declare module templa.mvc {
+    interface IController<ModelType extends templa.mvc.IModel> {
+>templa : any
+>mvc : any
+    }
+}
+declare module templa.mvc {
+>templa : typeof templa
+>mvc : typeof mvc
+
+    class AbstractController<ModelType extends templa.mvc.IModel> implements mvc.IController<ModelType> {
+>AbstractController : AbstractController<ModelType>
+>templa : any
+>mvc : any
+>mvc : typeof mvc
+    }
+}
+declare module templa.mvc.composite {
+    interface ICompositeControllerModel extends mvc.IModel {
+>mvc : typeof mvc
+
+        getControllers(): mvc.IController<mvc.IModel>[];
+>getControllers : () => mvc.IController<mvc.IModel>[]
+>mvc : any
+>mvc : any
+    }
+}
+module templa.dom.mvc {
+    export interface IElementController<ModelType extends templa.mvc.IModel> extends templa.mvc.IController<ModelType> {
+>templa : any
+>mvc : any
+>templa.mvc : typeof templa.mvc
+>templa : typeof templa
+>mvc : typeof templa.mvc
+    }
+}
+// Module
+module templa.dom.mvc {
+>templa : typeof templa
+>dom : typeof dom
+>mvc : typeof mvc
+
+    export class AbstractElementController<ModelType extends templa.mvc.IModel> extends templa.mvc.AbstractController<ModelType> implements IElementController<ModelType> {
+>AbstractElementController : AbstractElementController<ModelType>
+>templa : any
+>mvc : any
+>templa.mvc.AbstractController : templa.mvc.AbstractController<ModelType>
+>templa.mvc : typeof templa.mvc
+>templa : typeof templa
+>mvc : typeof templa.mvc
+>AbstractController : typeof templa.mvc.AbstractController
+
+        constructor() {
+            super();
+>super() : void
+>super : typeof templa.mvc.AbstractController
+        }
+    }
+}
+// Module
+module templa.dom.mvc.composite {
+>templa : typeof templa
+>dom : typeof dom
+>mvc : typeof mvc
+>composite : typeof composite
+
+    export class AbstractCompositeElementController<ModelType extends templa.mvc.composite.ICompositeControllerModel> extends templa.dom.mvc.AbstractElementController<ModelType> {
+>AbstractCompositeElementController : AbstractCompositeElementController<ModelType>
+>templa : any
+>mvc : any
+>composite : any
+>templa.dom.mvc.AbstractElementController : AbstractElementController<ModelType>
+>templa.dom.mvc : typeof mvc
+>templa.dom : typeof dom
+>templa : typeof templa
+>dom : typeof dom
+>mvc : typeof mvc
+>AbstractElementController : typeof AbstractElementController
+
+        public _controllers: templa.mvc.IController<templa.mvc.IModel>[];
+>_controllers : templa.mvc.IController<templa.mvc.IModel>[]
+>templa : any
+>mvc : any
+>templa : any
+>mvc : any
+
+        constructor() {
+            super();
+>super() : void
+>super : typeof AbstractElementController
+
+            this._controllers = [];
+>this._controllers = [] : undefined[]
+>this._controllers : templa.mvc.IController<templa.mvc.IModel>[]
+>this : this
+>_controllers : templa.mvc.IController<templa.mvc.IModel>[]
+>[] : undefined[]
+        }
+    }
+}
+

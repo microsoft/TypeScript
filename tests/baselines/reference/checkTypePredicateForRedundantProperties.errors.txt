@@ -1,0 +1,13 @@
+tests/cases/compiler/checkTypePredicateForRedundantProperties.ts(1,35): error TS2300: Duplicate identifier 'a'.
+tests/cases/compiler/checkTypePredicateForRedundantProperties.ts(1,46): error TS2300: Duplicate identifier 'a'.
+
+
+==== tests/cases/compiler/checkTypePredicateForRedundantProperties.ts (2 errors) ====
+    function addProp2(x: any): x is { a: string; a: string; } {
+                                      ~
+!!! error TS2300: Duplicate identifier 'a'.
+                                                 ~
+!!! error TS2300: Duplicate identifier 'a'.
+        return true;
+    }
+    

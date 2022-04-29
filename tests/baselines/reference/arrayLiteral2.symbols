@@ -1,0 +1,5 @@
+=== tests/cases/compiler/arrayLiteral2.ts ===
+var v30 = [1, 2], v31;
+>v30 : Symbol(v30, Decl(arrayLiteral2.ts, 0, 3))
+>v31 : Symbol(v31, Decl(arrayLiteral2.ts, 0, 17))
+

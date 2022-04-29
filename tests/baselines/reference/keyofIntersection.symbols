@@ -1,0 +1,105 @@
+=== tests/cases/conformance/types/keyof/keyofIntersection.ts ===
+type A = { a: string };
+>A : Symbol(A, Decl(keyofIntersection.ts, 0, 0))
+>a : Symbol(a, Decl(keyofIntersection.ts, 0, 10))
+
+type B = { b: string };
+>B : Symbol(B, Decl(keyofIntersection.ts, 0, 23))
+>b : Symbol(b, Decl(keyofIntersection.ts, 1, 10))
+
+type T01 = keyof (A & B);  // "a" | "b"
+>T01 : Symbol(T01, Decl(keyofIntersection.ts, 1, 23))
+>A : Symbol(A, Decl(keyofIntersection.ts, 0, 0))
+>B : Symbol(B, Decl(keyofIntersection.ts, 0, 23))
+
+type T02<T> = keyof (T & B);  // "b" | keyof T
+>T02 : Symbol(T02, Decl(keyofIntersection.ts, 3, 25))
+>T : Symbol(T, Decl(keyofIntersection.ts, 4, 9))
+>T : Symbol(T, Decl(keyofIntersection.ts, 4, 9))
+>B : Symbol(B, Decl(keyofIntersection.ts, 0, 23))
+
+type T03<U> = keyof (A & U);  // "a" | keyof U
+>T03 : Symbol(T03, Decl(keyofIntersection.ts, 4, 28))
+>U : Symbol(U, Decl(keyofIntersection.ts, 5, 9))
+>A : Symbol(A, Decl(keyofIntersection.ts, 0, 0))
+>U : Symbol(U, Decl(keyofIntersection.ts, 5, 9))
+
+type T04<T, U> = keyof (T & U);  // keyof T | keyof U
+>T04 : Symbol(T04, Decl(keyofIntersection.ts, 5, 28))
+>T : Symbol(T, Decl(keyofIntersection.ts, 6, 9))
+>U : Symbol(U, Decl(keyofIntersection.ts, 6, 11))
+>T : Symbol(T, Decl(keyofIntersection.ts, 6, 9))
+>U : Symbol(U, Decl(keyofIntersection.ts, 6, 11))
+
+type T05 = T02<A>;  // "a" | "b"
+>T05 : Symbol(T05, Decl(keyofIntersection.ts, 6, 31))
+>T02 : Symbol(T02, Decl(keyofIntersection.ts, 3, 25))
+>A : Symbol(A, Decl(keyofIntersection.ts, 0, 0))
+
+type T06 = T03<B>;  // "a" | "b"
+>T06 : Symbol(T06, Decl(keyofIntersection.ts, 7, 18))
+>T03 : Symbol(T03, Decl(keyofIntersection.ts, 4, 28))
+>B : Symbol(B, Decl(keyofIntersection.ts, 0, 23))
+
+type T07 = T04<A, B>;  // "a" | "b"
+>T07 : Symbol(T07, Decl(keyofIntersection.ts, 8, 18))
+>T04 : Symbol(T04, Decl(keyofIntersection.ts, 5, 28))
+>A : Symbol(A, Decl(keyofIntersection.ts, 0, 0))
+>B : Symbol(B, Decl(keyofIntersection.ts, 0, 23))
+
+// Repros from #22291
+
+type Example1<T extends string, U extends string> = keyof (Record<T, any> & Record<U, any>);
+>Example1 : Symbol(Example1, Decl(keyofIntersection.ts, 9, 21))
+>T : Symbol(T, Decl(keyofIntersection.ts, 13, 14))
+>U : Symbol(U, Decl(keyofIntersection.ts, 13, 31))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(keyofIntersection.ts, 13, 14))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>U : Symbol(U, Decl(keyofIntersection.ts, 13, 31))
+
+type Result1 = Example1<'x', 'y'>;  // "x" | "y"
+>Result1 : Symbol(Result1, Decl(keyofIntersection.ts, 13, 92))
+>Example1 : Symbol(Example1, Decl(keyofIntersection.ts, 9, 21))
+
+type Result2 = keyof (Record<'x', any> & Record<'y', any>);  // "x" | "y"
+>Result2 : Symbol(Result2, Decl(keyofIntersection.ts, 14, 34))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+type Example3<T extends string> = keyof (Record<T, any>);
+>Example3 : Symbol(Example3, Decl(keyofIntersection.ts, 16, 59))
+>T : Symbol(T, Decl(keyofIntersection.ts, 18, 14))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(keyofIntersection.ts, 18, 14))
+
+type Result3 = Example3<'x' | 'y'>;  // "x" | "y"
+>Result3 : Symbol(Result3, Decl(keyofIntersection.ts, 18, 57))
+>Example3 : Symbol(Example3, Decl(keyofIntersection.ts, 16, 59))
+
+type Example4<T extends string, U extends string> = (Record<T, any> & Record<U, any>);
+>Example4 : Symbol(Example4, Decl(keyofIntersection.ts, 19, 35))
+>T : Symbol(T, Decl(keyofIntersection.ts, 21, 14))
+>U : Symbol(U, Decl(keyofIntersection.ts, 21, 31))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(keyofIntersection.ts, 21, 14))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>U : Symbol(U, Decl(keyofIntersection.ts, 21, 31))
+
+type Result4 = keyof Example4<'x', 'y'>;  // "x" | "y"
+>Result4 : Symbol(Result4, Decl(keyofIntersection.ts, 21, 86))
+>Example4 : Symbol(Example4, Decl(keyofIntersection.ts, 19, 35))
+
+type Example5<T, U> = keyof (T & U);
+>Example5 : Symbol(Example5, Decl(keyofIntersection.ts, 22, 40))
+>T : Symbol(T, Decl(keyofIntersection.ts, 24, 14))
+>U : Symbol(U, Decl(keyofIntersection.ts, 24, 16))
+>T : Symbol(T, Decl(keyofIntersection.ts, 24, 14))
+>U : Symbol(U, Decl(keyofIntersection.ts, 24, 16))
+
+type Result5 = Example5<Record<'x', any>, Record<'y', any>>;  // "x" | "y"
+>Result5 : Symbol(Result5, Decl(keyofIntersection.ts, 24, 36))
+>Example5 : Symbol(Example5, Decl(keyofIntersection.ts, 22, 40))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+

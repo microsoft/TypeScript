@@ -1,0 +1,9 @@
+=== tests/cases/compiler/propertyAccess7.ts ===
+var foo: string;
+>foo : Symbol(foo, Decl(propertyAccess7.ts, 0, 3))
+
+foo.toUpperCase();
+>foo.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+>foo : Symbol(foo, Decl(propertyAccess7.ts, 0, 3))
+>toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+

@@ -1,0 +1,15 @@
+=== tests/cases/compiler/contextualTyping12.ts ===
+class foo { public bar:{id:number;}[] = [{id:1}, {id:2, name:"foo"}]; }
+>foo : foo
+>bar : { id: number; }[]
+>id : number
+>[{id:1}, {id:2, name:"foo"}] : ({ id: number; } | { id: number; name: string; })[]
+>{id:1} : { id: number; }
+>id : number
+>1 : 1
+>{id:2, name:"foo"} : { id: number; name: string; }
+>id : number
+>2 : 2
+>name : string
+>"foo" : "foo"
+

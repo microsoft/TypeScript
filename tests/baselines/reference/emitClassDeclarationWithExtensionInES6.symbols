@@ -1,0 +1,57 @@
+=== tests/cases/conformance/es6/classDeclaration/emitClassDeclarationWithExtensionInES6.ts ===
+class B {
+>B : Symbol(B, Decl(emitClassDeclarationWithExtensionInES6.ts, 0, 0))
+
+    baz(a: string, y = 10) { }
+>baz : Symbol(B.baz, Decl(emitClassDeclarationWithExtensionInES6.ts, 0, 9))
+>a : Symbol(a, Decl(emitClassDeclarationWithExtensionInES6.ts, 1, 8))
+>y : Symbol(y, Decl(emitClassDeclarationWithExtensionInES6.ts, 1, 18))
+}
+class C extends B {
+>C : Symbol(C, Decl(emitClassDeclarationWithExtensionInES6.ts, 2, 1))
+>B : Symbol(B, Decl(emitClassDeclarationWithExtensionInES6.ts, 0, 0))
+
+    foo() { }
+>foo : Symbol(C.foo, Decl(emitClassDeclarationWithExtensionInES6.ts, 3, 19))
+
+    baz(a: string, y:number) {
+>baz : Symbol(C.baz, Decl(emitClassDeclarationWithExtensionInES6.ts, 4, 13))
+>a : Symbol(a, Decl(emitClassDeclarationWithExtensionInES6.ts, 5, 8))
+>y : Symbol(y, Decl(emitClassDeclarationWithExtensionInES6.ts, 5, 18))
+
+        super.baz(a, y);
+>super.baz : Symbol(B.baz, Decl(emitClassDeclarationWithExtensionInES6.ts, 0, 9))
+>super : Symbol(B, Decl(emitClassDeclarationWithExtensionInES6.ts, 0, 0))
+>baz : Symbol(B.baz, Decl(emitClassDeclarationWithExtensionInES6.ts, 0, 9))
+>a : Symbol(a, Decl(emitClassDeclarationWithExtensionInES6.ts, 5, 8))
+>y : Symbol(y, Decl(emitClassDeclarationWithExtensionInES6.ts, 5, 18))
+    }
+}
+class D extends C {
+>D : Symbol(D, Decl(emitClassDeclarationWithExtensionInES6.ts, 8, 1))
+>C : Symbol(C, Decl(emitClassDeclarationWithExtensionInES6.ts, 2, 1))
+
+    constructor() {
+        super();
+>super : Symbol(C, Decl(emitClassDeclarationWithExtensionInES6.ts, 2, 1))
+    }
+
+    foo() {
+>foo : Symbol(D.foo, Decl(emitClassDeclarationWithExtensionInES6.ts, 12, 5))
+
+        super.foo();
+>super.foo : Symbol(C.foo, Decl(emitClassDeclarationWithExtensionInES6.ts, 3, 19))
+>super : Symbol(C, Decl(emitClassDeclarationWithExtensionInES6.ts, 2, 1))
+>foo : Symbol(C.foo, Decl(emitClassDeclarationWithExtensionInES6.ts, 3, 19))
+    }
+
+    baz() {
+>baz : Symbol(D.baz, Decl(emitClassDeclarationWithExtensionInES6.ts, 16, 5))
+
+        super.baz("hello", 10);
+>super.baz : Symbol(C.baz, Decl(emitClassDeclarationWithExtensionInES6.ts, 4, 13))
+>super : Symbol(C, Decl(emitClassDeclarationWithExtensionInES6.ts, 2, 1))
+>baz : Symbol(C.baz, Decl(emitClassDeclarationWithExtensionInES6.ts, 4, 13))
+    }
+}
+

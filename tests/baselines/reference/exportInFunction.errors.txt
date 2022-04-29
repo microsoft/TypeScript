@@ -1,0 +1,10 @@
+tests/cases/compiler/exportInFunction.ts(3,1): error TS1005: '}' expected.
+
+
+==== tests/cases/compiler/exportInFunction.ts (1 errors) ====
+    function f() {
+        export = 0;
+    
+    
+!!! error TS1005: '}' expected.
+!!! related TS1007 tests/cases/compiler/exportInFunction.ts:1:14: The parser expected to find a '}' to match the '{' token here.

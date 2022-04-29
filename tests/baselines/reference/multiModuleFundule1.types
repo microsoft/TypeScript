@@ -1,0 +1,38 @@
+=== tests/cases/compiler/multiModuleFundule1.ts ===
+function C(x: number) { }
+>C : typeof C
+>x : number
+
+module C {
+>C : typeof C
+
+    export var x = 1;
+>x : number
+>1 : 1
+}
+module C {
+>C : typeof C
+
+    export function foo() { }
+>foo : () => void
+}
+
+var r = C(2);
+>r : void
+>C(2) : void
+>C : typeof C
+>2 : 2
+
+var r2 = new C(2); // using void returning function as constructor
+>r2 : any
+>new C(2) : any
+>C : typeof C
+>2 : 2
+
+var r3 = C.foo();
+>r3 : void
+>C.foo() : void
+>C.foo : () => void
+>C : typeof C
+>foo : () => void
+

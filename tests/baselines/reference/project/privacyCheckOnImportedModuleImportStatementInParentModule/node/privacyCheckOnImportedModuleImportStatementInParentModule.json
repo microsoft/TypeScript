@@ -1,0 +1,14 @@
+{
+    "scenario": "privacy Check on imported module - import statement in parent module",
+    "projectRoot": "tests/cases/projects/privacyCheck-ImportInParent",
+    "inputFiles": [
+        "test.ts"
+    ],
+    "resolvedInputFiles": [
+        "lib.es5.d.ts",
+        "test.ts"
+    ],
+    "emittedFiles": [
+        "test.js"
+    ]
+}

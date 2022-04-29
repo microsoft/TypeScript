@@ -1,0 +1,361 @@
+=== tests/cases/compiler/reverseMappedPartiallyInferableTypes.ts ===
+// Repro from #30505
+
+export type Prop<T> = { (): T }
+>Prop : Symbol(Prop, Decl(reverseMappedPartiallyInferableTypes.ts, 0, 0))
+>T : Symbol(T, Decl(reverseMappedPartiallyInferableTypes.ts, 2, 17))
+>T : Symbol(T, Decl(reverseMappedPartiallyInferableTypes.ts, 2, 17))
+
+export type PropType<T> = Prop<T>;
+>PropType : Symbol(PropType, Decl(reverseMappedPartiallyInferableTypes.ts, 2, 31))
+>T : Symbol(T, Decl(reverseMappedPartiallyInferableTypes.ts, 3, 21))
+>Prop : Symbol(Prop, Decl(reverseMappedPartiallyInferableTypes.ts, 0, 0))
+>T : Symbol(T, Decl(reverseMappedPartiallyInferableTypes.ts, 3, 21))
+
+export type PropDefaultValue<T> = T;
+>PropDefaultValue : Symbol(PropDefaultValue, Decl(reverseMappedPartiallyInferableTypes.ts, 3, 34))
+>T : Symbol(T, Decl(reverseMappedPartiallyInferableTypes.ts, 4, 29))
+>T : Symbol(T, Decl(reverseMappedPartiallyInferableTypes.ts, 4, 29))
+
+
+export type PropValidatorFunction<T> = (value: T) => boolean;
+>PropValidatorFunction : Symbol(PropValidatorFunction, Decl(reverseMappedPartiallyInferableTypes.ts, 4, 36))
+>T : Symbol(T, Decl(reverseMappedPartiallyInferableTypes.ts, 7, 34))
+>value : Symbol(value, Decl(reverseMappedPartiallyInferableTypes.ts, 7, 40))
+>T : Symbol(T, Decl(reverseMappedPartiallyInferableTypes.ts, 7, 34))
+
+export type PropValidator<T> = PropOptions<T>;
+>PropValidator : Symbol(PropValidator, Decl(reverseMappedPartiallyInferableTypes.ts, 7, 61))
+>T : Symbol(T, Decl(reverseMappedPartiallyInferableTypes.ts, 8, 26))
+>PropOptions : Symbol(PropOptions, Decl(reverseMappedPartiallyInferableTypes.ts, 8, 46))
+>T : Symbol(T, Decl(reverseMappedPartiallyInferableTypes.ts, 8, 26))
+
+
+export type PropOptions<T> = {
+>PropOptions : Symbol(PropOptions, Decl(reverseMappedPartiallyInferableTypes.ts, 8, 46))
+>T : Symbol(T, Decl(reverseMappedPartiallyInferableTypes.ts, 11, 24))
+
+    type: PropType<T>;
+>type : Symbol(type, Decl(reverseMappedPartiallyInferableTypes.ts, 11, 30))
+>PropType : Symbol(PropType, Decl(reverseMappedPartiallyInferableTypes.ts, 2, 31))
+>T : Symbol(T, Decl(reverseMappedPartiallyInferableTypes.ts, 11, 24))
+
+    value?: PropDefaultValue<T>,
+>value : Symbol(value, Decl(reverseMappedPartiallyInferableTypes.ts, 12, 22))
+>PropDefaultValue : Symbol(PropDefaultValue, Decl(reverseMappedPartiallyInferableTypes.ts, 3, 34))
+>T : Symbol(T, Decl(reverseMappedPartiallyInferableTypes.ts, 11, 24))
+
+    required?: boolean;
+>required : Symbol(required, Decl(reverseMappedPartiallyInferableTypes.ts, 14, 32))
+
+    validator?: PropValidatorFunction<T>;
+>validator : Symbol(validator, Decl(reverseMappedPartiallyInferableTypes.ts, 15, 23))
+>PropValidatorFunction : Symbol(PropValidatorFunction, Decl(reverseMappedPartiallyInferableTypes.ts, 4, 36))
+>T : Symbol(T, Decl(reverseMappedPartiallyInferableTypes.ts, 11, 24))
+}
+
+export type RecordPropsDefinition<T> = {
+>RecordPropsDefinition : Symbol(RecordPropsDefinition, Decl(reverseMappedPartiallyInferableTypes.ts, 17, 1))
+>T : Symbol(T, Decl(reverseMappedPartiallyInferableTypes.ts, 19, 34))
+
+    [K in keyof T]: PropValidator<T[K]>
+>K : Symbol(K, Decl(reverseMappedPartiallyInferableTypes.ts, 20, 5))
+>T : Symbol(T, Decl(reverseMappedPartiallyInferableTypes.ts, 19, 34))
+>PropValidator : Symbol(PropValidator, Decl(reverseMappedPartiallyInferableTypes.ts, 7, 61))
+>T : Symbol(T, Decl(reverseMappedPartiallyInferableTypes.ts, 19, 34))
+>K : Symbol(K, Decl(reverseMappedPartiallyInferableTypes.ts, 20, 5))
+}
+export type PropsDefinition<T> = RecordPropsDefinition<T>;
+>PropsDefinition : Symbol(PropsDefinition, Decl(reverseMappedPartiallyInferableTypes.ts, 21, 1))
+>T : Symbol(T, Decl(reverseMappedPartiallyInferableTypes.ts, 22, 28))
+>RecordPropsDefinition : Symbol(RecordPropsDefinition, Decl(reverseMappedPartiallyInferableTypes.ts, 17, 1))
+>T : Symbol(T, Decl(reverseMappedPartiallyInferableTypes.ts, 22, 28))
+
+
+declare function extend<T>({ props }: { props: PropsDefinition<T> }):  PropsDefinition<T>;
+>extend : Symbol(extend, Decl(reverseMappedPartiallyInferableTypes.ts, 22, 58))
+>T : Symbol(T, Decl(reverseMappedPartiallyInferableTypes.ts, 25, 24))
+>props : Symbol(props, Decl(reverseMappedPartiallyInferableTypes.ts, 25, 28))
+>props : Symbol(props, Decl(reverseMappedPartiallyInferableTypes.ts, 25, 39))
+>PropsDefinition : Symbol(PropsDefinition, Decl(reverseMappedPartiallyInferableTypes.ts, 21, 1))
+>T : Symbol(T, Decl(reverseMappedPartiallyInferableTypes.ts, 25, 24))
+>PropsDefinition : Symbol(PropsDefinition, Decl(reverseMappedPartiallyInferableTypes.ts, 21, 1))
+>T : Symbol(T, Decl(reverseMappedPartiallyInferableTypes.ts, 25, 24))
+
+interface MyType {
+>MyType : Symbol(MyType, Decl(reverseMappedPartiallyInferableTypes.ts, 25, 90))
+
+    valid: boolean;
+>valid : Symbol(MyType.valid, Decl(reverseMappedPartiallyInferableTypes.ts, 27, 18))
+}
+
+const r = extend({
+>r : Symbol(r, Decl(reverseMappedPartiallyInferableTypes.ts, 31, 5))
+>extend : Symbol(extend, Decl(reverseMappedPartiallyInferableTypes.ts, 22, 58))
+
+    props: {
+>props : Symbol(props, Decl(reverseMappedPartiallyInferableTypes.ts, 31, 18))
+
+        notResolved: {
+>notResolved : Symbol(notResolved, Decl(reverseMappedPartiallyInferableTypes.ts, 32, 12))
+
+            type: Object as PropType<MyType>,
+>type : Symbol(type, Decl(reverseMappedPartiallyInferableTypes.ts, 33, 22))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>PropType : Symbol(PropType, Decl(reverseMappedPartiallyInferableTypes.ts, 2, 31))
+>MyType : Symbol(MyType, Decl(reverseMappedPartiallyInferableTypes.ts, 25, 90))
+
+            validator: x => {
+>validator : Symbol(validator, Decl(reverseMappedPartiallyInferableTypes.ts, 34, 45))
+>x : Symbol(x, Decl(reverseMappedPartiallyInferableTypes.ts, 35, 22))
+
+                return x.valid;
+>x.valid : Symbol(MyType.valid, Decl(reverseMappedPartiallyInferableTypes.ts, 27, 18))
+>x : Symbol(x, Decl(reverseMappedPartiallyInferableTypes.ts, 35, 22))
+>valid : Symbol(MyType.valid, Decl(reverseMappedPartiallyInferableTypes.ts, 27, 18))
+            }
+        },
+        explicit: {
+>explicit : Symbol(explicit, Decl(reverseMappedPartiallyInferableTypes.ts, 38, 10))
+
+            type: Object as PropType<MyType>,
+>type : Symbol(type, Decl(reverseMappedPartiallyInferableTypes.ts, 39, 19))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>PropType : Symbol(PropType, Decl(reverseMappedPartiallyInferableTypes.ts, 2, 31))
+>MyType : Symbol(MyType, Decl(reverseMappedPartiallyInferableTypes.ts, 25, 90))
+
+            validator: (x: MyType) => {
+>validator : Symbol(validator, Decl(reverseMappedPartiallyInferableTypes.ts, 40, 45))
+>x : Symbol(x, Decl(reverseMappedPartiallyInferableTypes.ts, 41, 24))
+>MyType : Symbol(MyType, Decl(reverseMappedPartiallyInferableTypes.ts, 25, 90))
+
+                return x.valid;
+>x.valid : Symbol(MyType.valid, Decl(reverseMappedPartiallyInferableTypes.ts, 27, 18))
+>x : Symbol(x, Decl(reverseMappedPartiallyInferableTypes.ts, 41, 24))
+>valid : Symbol(MyType.valid, Decl(reverseMappedPartiallyInferableTypes.ts, 27, 18))
+            }
+        }
+    }
+})
+
+r.explicit
+>r.explicit : Symbol(explicit, Decl(reverseMappedPartiallyInferableTypes.ts, 38, 10))
+>r : Symbol(r, Decl(reverseMappedPartiallyInferableTypes.ts, 31, 5))
+>explicit : Symbol(explicit, Decl(reverseMappedPartiallyInferableTypes.ts, 38, 10))
+
+r.notResolved
+>r.notResolved : Symbol(notResolved, Decl(reverseMappedPartiallyInferableTypes.ts, 32, 12))
+>r : Symbol(r, Decl(reverseMappedPartiallyInferableTypes.ts, 31, 5))
+>notResolved : Symbol(notResolved, Decl(reverseMappedPartiallyInferableTypes.ts, 32, 12))
+
+r.explicit.required
+>r.explicit.required : Symbol(required, Decl(reverseMappedPartiallyInferableTypes.ts, 14, 32))
+>r.explicit : Symbol(explicit, Decl(reverseMappedPartiallyInferableTypes.ts, 38, 10))
+>r : Symbol(r, Decl(reverseMappedPartiallyInferableTypes.ts, 31, 5))
+>explicit : Symbol(explicit, Decl(reverseMappedPartiallyInferableTypes.ts, 38, 10))
+>required : Symbol(required, Decl(reverseMappedPartiallyInferableTypes.ts, 14, 32))
+
+r.notResolved.required
+>r.notResolved.required : Symbol(required, Decl(reverseMappedPartiallyInferableTypes.ts, 14, 32))
+>r.notResolved : Symbol(notResolved, Decl(reverseMappedPartiallyInferableTypes.ts, 32, 12))
+>r : Symbol(r, Decl(reverseMappedPartiallyInferableTypes.ts, 31, 5))
+>notResolved : Symbol(notResolved, Decl(reverseMappedPartiallyInferableTypes.ts, 32, 12))
+>required : Symbol(required, Decl(reverseMappedPartiallyInferableTypes.ts, 14, 32))
+
+// Modified repro from #30505
+
+type Box<T> = {
+>Box : Symbol(Box, Decl(reverseMappedPartiallyInferableTypes.ts, 51, 22))
+>T : Symbol(T, Decl(reverseMappedPartiallyInferableTypes.ts, 55, 9))
+
+    contents?: T;
+>contents : Symbol(contents, Decl(reverseMappedPartiallyInferableTypes.ts, 55, 15))
+>T : Symbol(T, Decl(reverseMappedPartiallyInferableTypes.ts, 55, 9))
+
+    contains?(content: T): boolean;
+>contains : Symbol(contains, Decl(reverseMappedPartiallyInferableTypes.ts, 56, 17))
+>content : Symbol(content, Decl(reverseMappedPartiallyInferableTypes.ts, 57, 14))
+>T : Symbol(T, Decl(reverseMappedPartiallyInferableTypes.ts, 55, 9))
+
+};
+
+type Mapped<T> = {
+>Mapped : Symbol(Mapped, Decl(reverseMappedPartiallyInferableTypes.ts, 58, 2))
+>T : Symbol(T, Decl(reverseMappedPartiallyInferableTypes.ts, 60, 12))
+
+    [K in keyof T]: Box<T[K]>;
+>K : Symbol(K, Decl(reverseMappedPartiallyInferableTypes.ts, 61, 5))
+>T : Symbol(T, Decl(reverseMappedPartiallyInferableTypes.ts, 60, 12))
+>Box : Symbol(Box, Decl(reverseMappedPartiallyInferableTypes.ts, 51, 22))
+>T : Symbol(T, Decl(reverseMappedPartiallyInferableTypes.ts, 60, 12))
+>K : Symbol(K, Decl(reverseMappedPartiallyInferableTypes.ts, 61, 5))
+}
+
+declare function id<T>(arg: Mapped<T>): Mapped<T>;
+>id : Symbol(id, Decl(reverseMappedPartiallyInferableTypes.ts, 62, 1))
+>T : Symbol(T, Decl(reverseMappedPartiallyInferableTypes.ts, 64, 20))
+>arg : Symbol(arg, Decl(reverseMappedPartiallyInferableTypes.ts, 64, 23))
+>Mapped : Symbol(Mapped, Decl(reverseMappedPartiallyInferableTypes.ts, 58, 2))
+>T : Symbol(T, Decl(reverseMappedPartiallyInferableTypes.ts, 64, 20))
+>Mapped : Symbol(Mapped, Decl(reverseMappedPartiallyInferableTypes.ts, 58, 2))
+>T : Symbol(T, Decl(reverseMappedPartiallyInferableTypes.ts, 64, 20))
+
+// All properties have inferable types
+
+const obj1 = id({
+>obj1 : Symbol(obj1, Decl(reverseMappedPartiallyInferableTypes.ts, 68, 5))
+>id : Symbol(id, Decl(reverseMappedPartiallyInferableTypes.ts, 62, 1))
+
+    foo: {
+>foo : Symbol(foo, Decl(reverseMappedPartiallyInferableTypes.ts, 68, 17))
+
+        contents: ""
+>contents : Symbol(contents, Decl(reverseMappedPartiallyInferableTypes.ts, 69, 10))
+    }
+});
+
+// Some properties have inferable types
+
+const obj2 = id({
+>obj2 : Symbol(obj2, Decl(reverseMappedPartiallyInferableTypes.ts, 76, 5))
+>id : Symbol(id, Decl(reverseMappedPartiallyInferableTypes.ts, 62, 1))
+
+    foo: {
+>foo : Symbol(foo, Decl(reverseMappedPartiallyInferableTypes.ts, 76, 17))
+
+        contents: "",
+>contents : Symbol(contents, Decl(reverseMappedPartiallyInferableTypes.ts, 77, 10))
+
+        contains(k) {
+>contains : Symbol(contains, Decl(reverseMappedPartiallyInferableTypes.ts, 78, 21))
+>k : Symbol(k, Decl(reverseMappedPartiallyInferableTypes.ts, 79, 17))
+
+            return k.length > 0;
+>k.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>k : Symbol(k, Decl(reverseMappedPartiallyInferableTypes.ts, 79, 17))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+        }
+    }
+});
+
+// No properties have inferable types
+
+const obj3 = id({
+>obj3 : Symbol(obj3, Decl(reverseMappedPartiallyInferableTypes.ts, 87, 5))
+>id : Symbol(id, Decl(reverseMappedPartiallyInferableTypes.ts, 62, 1))
+
+    foo: {
+>foo : Symbol(foo, Decl(reverseMappedPartiallyInferableTypes.ts, 87, 17))
+
+        contains(k) {
+>contains : Symbol(contains, Decl(reverseMappedPartiallyInferableTypes.ts, 88, 10))
+>k : Symbol(k, Decl(reverseMappedPartiallyInferableTypes.ts, 89, 17))
+
+            return k.length > 0;
+>k : Symbol(k, Decl(reverseMappedPartiallyInferableTypes.ts, 89, 17))
+        }
+    }
+});
+
+// Repros from #40809
+
+type Mapped1<T> = {
+>Mapped1 : Symbol(Mapped1, Decl(reverseMappedPartiallyInferableTypes.ts, 93, 3))
+>T : Symbol(T, Decl(reverseMappedPartiallyInferableTypes.ts, 97, 13))
+
+    [K in keyof T]: [T[K], (arg: T) => boolean];
+>K : Symbol(K, Decl(reverseMappedPartiallyInferableTypes.ts, 98, 5))
+>T : Symbol(T, Decl(reverseMappedPartiallyInferableTypes.ts, 97, 13))
+>T : Symbol(T, Decl(reverseMappedPartiallyInferableTypes.ts, 97, 13))
+>K : Symbol(K, Decl(reverseMappedPartiallyInferableTypes.ts, 98, 5))
+>arg : Symbol(arg, Decl(reverseMappedPartiallyInferableTypes.ts, 98, 28))
+>T : Symbol(T, Decl(reverseMappedPartiallyInferableTypes.ts, 97, 13))
+
+};
+
+declare function inferMapped1<T>(arg: Mapped1<T>): void;
+>inferMapped1 : Symbol(inferMapped1, Decl(reverseMappedPartiallyInferableTypes.ts, 99, 2))
+>T : Symbol(T, Decl(reverseMappedPartiallyInferableTypes.ts, 101, 30))
+>arg : Symbol(arg, Decl(reverseMappedPartiallyInferableTypes.ts, 101, 33))
+>Mapped1 : Symbol(Mapped1, Decl(reverseMappedPartiallyInferableTypes.ts, 93, 3))
+>T : Symbol(T, Decl(reverseMappedPartiallyInferableTypes.ts, 101, 30))
+
+inferMapped1({
+>inferMapped1 : Symbol(inferMapped1, Decl(reverseMappedPartiallyInferableTypes.ts, 99, 2))
+
+    key: [3, arg => arg.key > 5]
+>key : Symbol(key, Decl(reverseMappedPartiallyInferableTypes.ts, 103, 14))
+>arg : Symbol(arg, Decl(reverseMappedPartiallyInferableTypes.ts, 104, 12))
+>arg.key : Symbol(key, Decl(reverseMappedPartiallyInferableTypes.ts, 103, 14))
+>arg : Symbol(arg, Decl(reverseMappedPartiallyInferableTypes.ts, 104, 12))
+>key : Symbol(key, Decl(reverseMappedPartiallyInferableTypes.ts, 103, 14))
+
+});
+
+type Mapped2<T> = {
+>Mapped2 : Symbol(Mapped2, Decl(reverseMappedPartiallyInferableTypes.ts, 105, 3))
+>T : Symbol(T, Decl(reverseMappedPartiallyInferableTypes.ts, 107, 13))
+
+    [K in keyof T]: [T[K], unknown extends T ? unknown : (arg: T) => boolean];
+>K : Symbol(K, Decl(reverseMappedPartiallyInferableTypes.ts, 108, 5))
+>T : Symbol(T, Decl(reverseMappedPartiallyInferableTypes.ts, 107, 13))
+>T : Symbol(T, Decl(reverseMappedPartiallyInferableTypes.ts, 107, 13))
+>K : Symbol(K, Decl(reverseMappedPartiallyInferableTypes.ts, 108, 5))
+>T : Symbol(T, Decl(reverseMappedPartiallyInferableTypes.ts, 107, 13))
+>arg : Symbol(arg, Decl(reverseMappedPartiallyInferableTypes.ts, 108, 58))
+>T : Symbol(T, Decl(reverseMappedPartiallyInferableTypes.ts, 107, 13))
+
+};
+
+declare function inferMapped2<T>(arg: Mapped2<T>): void;
+>inferMapped2 : Symbol(inferMapped2, Decl(reverseMappedPartiallyInferableTypes.ts, 109, 2))
+>T : Symbol(T, Decl(reverseMappedPartiallyInferableTypes.ts, 111, 30))
+>arg : Symbol(arg, Decl(reverseMappedPartiallyInferableTypes.ts, 111, 33))
+>Mapped2 : Symbol(Mapped2, Decl(reverseMappedPartiallyInferableTypes.ts, 105, 3))
+>T : Symbol(T, Decl(reverseMappedPartiallyInferableTypes.ts, 111, 30))
+
+inferMapped2({
+>inferMapped2 : Symbol(inferMapped2, Decl(reverseMappedPartiallyInferableTypes.ts, 109, 2))
+
+    key: [3, arg => arg.key > 5]
+>key : Symbol(key, Decl(reverseMappedPartiallyInferableTypes.ts, 113, 14))
+>arg : Symbol(arg, Decl(reverseMappedPartiallyInferableTypes.ts, 114, 12))
+>arg.key : Symbol(key, Decl(reverseMappedPartiallyInferableTypes.ts, 113, 14))
+>arg : Symbol(arg, Decl(reverseMappedPartiallyInferableTypes.ts, 114, 12))
+>key : Symbol(key, Decl(reverseMappedPartiallyInferableTypes.ts, 113, 14))
+
+});
+
+type MappedReadonly<T> = {
+>MappedReadonly : Symbol(MappedReadonly, Decl(reverseMappedPartiallyInferableTypes.ts, 115, 3))
+>T : Symbol(T, Decl(reverseMappedPartiallyInferableTypes.ts, 117, 20))
+
+    readonly [K in keyof T]: readonly [T[K], (arg: T) => boolean];
+>K : Symbol(K, Decl(reverseMappedPartiallyInferableTypes.ts, 118, 14))
+>T : Symbol(T, Decl(reverseMappedPartiallyInferableTypes.ts, 117, 20))
+>T : Symbol(T, Decl(reverseMappedPartiallyInferableTypes.ts, 117, 20))
+>K : Symbol(K, Decl(reverseMappedPartiallyInferableTypes.ts, 118, 14))
+>arg : Symbol(arg, Decl(reverseMappedPartiallyInferableTypes.ts, 118, 46))
+>T : Symbol(T, Decl(reverseMappedPartiallyInferableTypes.ts, 117, 20))
+
+};
+
+declare function inferMappedReadonly<T>(arg: MappedReadonly<T>): void;
+>inferMappedReadonly : Symbol(inferMappedReadonly, Decl(reverseMappedPartiallyInferableTypes.ts, 119, 2))
+>T : Symbol(T, Decl(reverseMappedPartiallyInferableTypes.ts, 121, 37))
+>arg : Symbol(arg, Decl(reverseMappedPartiallyInferableTypes.ts, 121, 40))
+>MappedReadonly : Symbol(MappedReadonly, Decl(reverseMappedPartiallyInferableTypes.ts, 115, 3))
+>T : Symbol(T, Decl(reverseMappedPartiallyInferableTypes.ts, 121, 37))
+
+inferMappedReadonly({
+>inferMappedReadonly : Symbol(inferMappedReadonly, Decl(reverseMappedPartiallyInferableTypes.ts, 119, 2))
+
+    key: [3, arg => arg.key > 5]
+>key : Symbol(key, Decl(reverseMappedPartiallyInferableTypes.ts, 123, 21))
+>arg : Symbol(arg, Decl(reverseMappedPartiallyInferableTypes.ts, 124, 12))
+>arg.key : Symbol(key, Decl(reverseMappedPartiallyInferableTypes.ts, 123, 21))
+>arg : Symbol(arg, Decl(reverseMappedPartiallyInferableTypes.ts, 124, 12))
+>key : Symbol(key, Decl(reverseMappedPartiallyInferableTypes.ts, 123, 21))
+
+});
+

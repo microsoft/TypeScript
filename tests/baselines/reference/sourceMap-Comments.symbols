@@ -1,0 +1,32 @@
+=== tests/cases/compiler/sourceMap-Comments.ts ===
+module sas.tools {
+>sas : Symbol(sas, Decl(sourceMap-Comments.ts, 0, 0))
+>tools : Symbol(tools, Decl(sourceMap-Comments.ts, 0, 11))
+
+    export class Test {
+>Test : Symbol(Test, Decl(sourceMap-Comments.ts, 0, 18))
+
+        public doX(): void {
+>doX : Symbol(Test.doX, Decl(sourceMap-Comments.ts, 1, 23))
+
+            let f: number = 2;
+>f : Symbol(f, Decl(sourceMap-Comments.ts, 3, 15))
+
+            switch (f) {
+>f : Symbol(f, Decl(sourceMap-Comments.ts, 3, 15))
+
+                case 1:
+                    break;
+                case 2:
+                    //line comment 1
+                    //line comment 2
+                    break;
+                case 3:
+                    //a comment
+                    break;
+            }
+        }
+    }
+
+}
+

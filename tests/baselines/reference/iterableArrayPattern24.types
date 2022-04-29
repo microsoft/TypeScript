@@ -1,0 +1,17 @@
+=== tests/cases/conformance/es6/destructuring/iterableArrayPattern24.ts ===
+var a: string, b: boolean[];
+>a : string
+>b : boolean[]
+
+[a, ...b] = { 0: "", 1: true };
+>[a, ...b] = { 0: "", 1: true } : { 0: string; 1: true; }
+>[a, ...b] : [string, ...boolean[]]
+>a : string
+>...b : boolean
+>b : boolean[]
+>{ 0: "", 1: true } : { 0: string; 1: true; }
+>0 : string
+>"" : ""
+>1 : true
+>true : true
+

@@ -1,0 +1,394 @@
+=== tests/cases/conformance/types/union/contextualTypeWithUnionTypeMembers.ts ===
+//When used as a contextual type, a union type U has those members that are present in any of 
+// its constituent types, with types that are unions of the respective members in the constituent types. 
+interface I1<T> {
+>I1 : Symbol(I1, Decl(contextualTypeWithUnionTypeMembers.ts, 0, 0))
+>T : Symbol(T, Decl(contextualTypeWithUnionTypeMembers.ts, 2, 13))
+
+    commonMethodType(a: string): string;
+>commonMethodType : Symbol(I1.commonMethodType, Decl(contextualTypeWithUnionTypeMembers.ts, 2, 17))
+>a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 3, 21))
+
+    commonPropertyType: string;
+>commonPropertyType : Symbol(I1.commonPropertyType, Decl(contextualTypeWithUnionTypeMembers.ts, 3, 40))
+
+    commonMethodWithTypeParameter(a: T): T;
+>commonMethodWithTypeParameter : Symbol(I1.commonMethodWithTypeParameter, Decl(contextualTypeWithUnionTypeMembers.ts, 4, 31))
+>a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 5, 34))
+>T : Symbol(T, Decl(contextualTypeWithUnionTypeMembers.ts, 2, 13))
+>T : Symbol(T, Decl(contextualTypeWithUnionTypeMembers.ts, 2, 13))
+
+    methodOnlyInI1(a: string): string;
+>methodOnlyInI1 : Symbol(I1.methodOnlyInI1, Decl(contextualTypeWithUnionTypeMembers.ts, 5, 43))
+>a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 7, 19))
+
+    propertyOnlyInI1: string;
+>propertyOnlyInI1 : Symbol(I1.propertyOnlyInI1, Decl(contextualTypeWithUnionTypeMembers.ts, 7, 38))
+}
+interface I2<T> {
+>I2 : Symbol(I2, Decl(contextualTypeWithUnionTypeMembers.ts, 9, 1))
+>T : Symbol(T, Decl(contextualTypeWithUnionTypeMembers.ts, 10, 13))
+
+    commonMethodType(a: string): string;
+>commonMethodType : Symbol(I2.commonMethodType, Decl(contextualTypeWithUnionTypeMembers.ts, 10, 17))
+>a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 11, 21))
+
+    commonPropertyType: string;
+>commonPropertyType : Symbol(I2.commonPropertyType, Decl(contextualTypeWithUnionTypeMembers.ts, 11, 40))
+
+    commonMethodWithTypeParameter(a: T): T;
+>commonMethodWithTypeParameter : Symbol(I2.commonMethodWithTypeParameter, Decl(contextualTypeWithUnionTypeMembers.ts, 12, 31))
+>a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 13, 34))
+>T : Symbol(T, Decl(contextualTypeWithUnionTypeMembers.ts, 10, 13))
+>T : Symbol(T, Decl(contextualTypeWithUnionTypeMembers.ts, 10, 13))
+
+    methodOnlyInI2(a: string): string;
+>methodOnlyInI2 : Symbol(I2.methodOnlyInI2, Decl(contextualTypeWithUnionTypeMembers.ts, 13, 43))
+>a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 15, 19))
+
+    propertyOnlyInI2: string;
+>propertyOnlyInI2 : Symbol(I2.propertyOnlyInI2, Decl(contextualTypeWithUnionTypeMembers.ts, 15, 38))
+}
+
+// Let S be the set of types in U that has a property P.
+// If S is not empty, U has a property P of a union type of the types of P from each type in S.
+var i1: I1<number>;
+>i1 : Symbol(i1, Decl(contextualTypeWithUnionTypeMembers.ts, 21, 3))
+>I1 : Symbol(I1, Decl(contextualTypeWithUnionTypeMembers.ts, 0, 0))
+
+var i2: I2<number>;
+>i2 : Symbol(i2, Decl(contextualTypeWithUnionTypeMembers.ts, 22, 3))
+>I2 : Symbol(I2, Decl(contextualTypeWithUnionTypeMembers.ts, 9, 1))
+
+var i1Ori2: I1<number> | I2<number> = i1;
+>i1Ori2 : Symbol(i1Ori2, Decl(contextualTypeWithUnionTypeMembers.ts, 23, 3), Decl(contextualTypeWithUnionTypeMembers.ts, 24, 3), Decl(contextualTypeWithUnionTypeMembers.ts, 25, 3), Decl(contextualTypeWithUnionTypeMembers.ts, 33, 3), Decl(contextualTypeWithUnionTypeMembers.ts, 41, 3))
+>I1 : Symbol(I1, Decl(contextualTypeWithUnionTypeMembers.ts, 0, 0))
+>I2 : Symbol(I2, Decl(contextualTypeWithUnionTypeMembers.ts, 9, 1))
+>i1 : Symbol(i1, Decl(contextualTypeWithUnionTypeMembers.ts, 21, 3))
+
+var i1Ori2: I1<number> | I2<number> = i2;
+>i1Ori2 : Symbol(i1Ori2, Decl(contextualTypeWithUnionTypeMembers.ts, 23, 3), Decl(contextualTypeWithUnionTypeMembers.ts, 24, 3), Decl(contextualTypeWithUnionTypeMembers.ts, 25, 3), Decl(contextualTypeWithUnionTypeMembers.ts, 33, 3), Decl(contextualTypeWithUnionTypeMembers.ts, 41, 3))
+>I1 : Symbol(I1, Decl(contextualTypeWithUnionTypeMembers.ts, 0, 0))
+>I2 : Symbol(I2, Decl(contextualTypeWithUnionTypeMembers.ts, 9, 1))
+>i2 : Symbol(i2, Decl(contextualTypeWithUnionTypeMembers.ts, 22, 3))
+
+var i1Ori2: I1<number> | I2<number> = { // Like i1
+>i1Ori2 : Symbol(i1Ori2, Decl(contextualTypeWithUnionTypeMembers.ts, 23, 3), Decl(contextualTypeWithUnionTypeMembers.ts, 24, 3), Decl(contextualTypeWithUnionTypeMembers.ts, 25, 3), Decl(contextualTypeWithUnionTypeMembers.ts, 33, 3), Decl(contextualTypeWithUnionTypeMembers.ts, 41, 3))
+>I1 : Symbol(I1, Decl(contextualTypeWithUnionTypeMembers.ts, 0, 0))
+>I2 : Symbol(I2, Decl(contextualTypeWithUnionTypeMembers.ts, 9, 1))
+
+    commonPropertyType: "hello",
+>commonPropertyType : Symbol(commonPropertyType, Decl(contextualTypeWithUnionTypeMembers.ts, 25, 39))
+
+    commonMethodType: a=> a,
+>commonMethodType : Symbol(commonMethodType, Decl(contextualTypeWithUnionTypeMembers.ts, 26, 32))
+>a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 27, 21))
+>a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 27, 21))
+
+    commonMethodWithTypeParameter: a => a,
+>commonMethodWithTypeParameter : Symbol(commonMethodWithTypeParameter, Decl(contextualTypeWithUnionTypeMembers.ts, 27, 28))
+>a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 28, 34))
+>a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 28, 34))
+
+    methodOnlyInI1: a => a,
+>methodOnlyInI1 : Symbol(methodOnlyInI1, Decl(contextualTypeWithUnionTypeMembers.ts, 28, 42))
+>a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 30, 19))
+>a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 30, 19))
+
+    propertyOnlyInI1: "Hello",
+>propertyOnlyInI1 : Symbol(propertyOnlyInI1, Decl(contextualTypeWithUnionTypeMembers.ts, 30, 27))
+
+};
+var i1Ori2: I1<number> | I2<number> = { // Like i2
+>i1Ori2 : Symbol(i1Ori2, Decl(contextualTypeWithUnionTypeMembers.ts, 23, 3), Decl(contextualTypeWithUnionTypeMembers.ts, 24, 3), Decl(contextualTypeWithUnionTypeMembers.ts, 25, 3), Decl(contextualTypeWithUnionTypeMembers.ts, 33, 3), Decl(contextualTypeWithUnionTypeMembers.ts, 41, 3))
+>I1 : Symbol(I1, Decl(contextualTypeWithUnionTypeMembers.ts, 0, 0))
+>I2 : Symbol(I2, Decl(contextualTypeWithUnionTypeMembers.ts, 9, 1))
+
+    commonPropertyType: "hello",
+>commonPropertyType : Symbol(commonPropertyType, Decl(contextualTypeWithUnionTypeMembers.ts, 33, 39))
+
+    commonMethodType: a=> a,
+>commonMethodType : Symbol(commonMethodType, Decl(contextualTypeWithUnionTypeMembers.ts, 34, 32))
+>a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 35, 21))
+>a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 35, 21))
+
+    commonMethodWithTypeParameter: a => a,
+>commonMethodWithTypeParameter : Symbol(commonMethodWithTypeParameter, Decl(contextualTypeWithUnionTypeMembers.ts, 35, 28))
+>a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 36, 34))
+>a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 36, 34))
+
+    methodOnlyInI2: a => a,
+>methodOnlyInI2 : Symbol(methodOnlyInI2, Decl(contextualTypeWithUnionTypeMembers.ts, 36, 42))
+>a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 38, 19))
+>a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 38, 19))
+
+    propertyOnlyInI2: "Hello",
+>propertyOnlyInI2 : Symbol(propertyOnlyInI2, Decl(contextualTypeWithUnionTypeMembers.ts, 38, 27))
+
+};
+var i1Ori2: I1<number> | I2<number> = { // Like i1 and i2 both
+>i1Ori2 : Symbol(i1Ori2, Decl(contextualTypeWithUnionTypeMembers.ts, 23, 3), Decl(contextualTypeWithUnionTypeMembers.ts, 24, 3), Decl(contextualTypeWithUnionTypeMembers.ts, 25, 3), Decl(contextualTypeWithUnionTypeMembers.ts, 33, 3), Decl(contextualTypeWithUnionTypeMembers.ts, 41, 3))
+>I1 : Symbol(I1, Decl(contextualTypeWithUnionTypeMembers.ts, 0, 0))
+>I2 : Symbol(I2, Decl(contextualTypeWithUnionTypeMembers.ts, 9, 1))
+
+    commonPropertyType: "hello",
+>commonPropertyType : Symbol(commonPropertyType, Decl(contextualTypeWithUnionTypeMembers.ts, 41, 39))
+
+    commonMethodType: a=> a,
+>commonMethodType : Symbol(commonMethodType, Decl(contextualTypeWithUnionTypeMembers.ts, 42, 32))
+>a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 43, 21))
+>a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 43, 21))
+
+    commonMethodWithTypeParameter: a => a,
+>commonMethodWithTypeParameter : Symbol(commonMethodWithTypeParameter, Decl(contextualTypeWithUnionTypeMembers.ts, 43, 28))
+>a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 44, 34))
+>a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 44, 34))
+
+    methodOnlyInI1: a => a,
+>methodOnlyInI1 : Symbol(methodOnlyInI1, Decl(contextualTypeWithUnionTypeMembers.ts, 44, 42))
+>a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 45, 19))
+>a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 45, 19))
+
+    propertyOnlyInI1: "Hello",
+>propertyOnlyInI1 : Symbol(propertyOnlyInI1, Decl(contextualTypeWithUnionTypeMembers.ts, 45, 27))
+
+    methodOnlyInI2: a => a,
+>methodOnlyInI2 : Symbol(methodOnlyInI2, Decl(contextualTypeWithUnionTypeMembers.ts, 46, 30))
+>a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 47, 19))
+>a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 47, 19))
+
+    propertyOnlyInI2: "Hello",
+>propertyOnlyInI2 : Symbol(propertyOnlyInI2, Decl(contextualTypeWithUnionTypeMembers.ts, 47, 27))
+
+};
+
+var arrayI1OrI2: Array<I1<number> | I2<number>> = [i1, i2, { // Like i1
+>arrayI1OrI2 : Symbol(arrayI1OrI2, Decl(contextualTypeWithUnionTypeMembers.ts, 51, 3))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>I1 : Symbol(I1, Decl(contextualTypeWithUnionTypeMembers.ts, 0, 0))
+>I2 : Symbol(I2, Decl(contextualTypeWithUnionTypeMembers.ts, 9, 1))
+>i1 : Symbol(i1, Decl(contextualTypeWithUnionTypeMembers.ts, 21, 3))
+>i2 : Symbol(i2, Decl(contextualTypeWithUnionTypeMembers.ts, 22, 3))
+
+        commonPropertyType: "hello",
+>commonPropertyType : Symbol(commonPropertyType, Decl(contextualTypeWithUnionTypeMembers.ts, 51, 60))
+
+        commonMethodType: a=> a,
+>commonMethodType : Symbol(commonMethodType, Decl(contextualTypeWithUnionTypeMembers.ts, 52, 36))
+>a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 53, 25))
+>a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 53, 25))
+
+        commonMethodWithTypeParameter: a => a,
+>commonMethodWithTypeParameter : Symbol(commonMethodWithTypeParameter, Decl(contextualTypeWithUnionTypeMembers.ts, 53, 32))
+>a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 54, 38))
+>a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 54, 38))
+
+        methodOnlyInI1: a => a,
+>methodOnlyInI1 : Symbol(methodOnlyInI1, Decl(contextualTypeWithUnionTypeMembers.ts, 54, 46))
+>a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 56, 23))
+>a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 56, 23))
+
+        propertyOnlyInI1: "Hello",
+>propertyOnlyInI1 : Symbol(propertyOnlyInI1, Decl(contextualTypeWithUnionTypeMembers.ts, 56, 31))
+
+    },
+    { // Like i2
+        commonPropertyType: "hello",
+>commonPropertyType : Symbol(commonPropertyType, Decl(contextualTypeWithUnionTypeMembers.ts, 59, 5))
+
+        commonMethodType: a=> a,
+>commonMethodType : Symbol(commonMethodType, Decl(contextualTypeWithUnionTypeMembers.ts, 60, 36))
+>a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 61, 25))
+>a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 61, 25))
+
+        commonMethodWithTypeParameter: a => a,
+>commonMethodWithTypeParameter : Symbol(commonMethodWithTypeParameter, Decl(contextualTypeWithUnionTypeMembers.ts, 61, 32))
+>a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 62, 38))
+>a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 62, 38))
+
+        methodOnlyInI2: a => a,
+>methodOnlyInI2 : Symbol(methodOnlyInI2, Decl(contextualTypeWithUnionTypeMembers.ts, 62, 46))
+>a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 64, 23))
+>a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 64, 23))
+
+        propertyOnlyInI2: "Hello",
+>propertyOnlyInI2 : Symbol(propertyOnlyInI2, Decl(contextualTypeWithUnionTypeMembers.ts, 64, 31))
+
+    }, { // Like i1 and i2 both
+        commonPropertyType: "hello",
+>commonPropertyType : Symbol(commonPropertyType, Decl(contextualTypeWithUnionTypeMembers.ts, 66, 8))
+
+        commonMethodType: a=> a,
+>commonMethodType : Symbol(commonMethodType, Decl(contextualTypeWithUnionTypeMembers.ts, 67, 36))
+>a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 68, 25))
+>a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 68, 25))
+
+        commonMethodWithTypeParameter: a => a,
+>commonMethodWithTypeParameter : Symbol(commonMethodWithTypeParameter, Decl(contextualTypeWithUnionTypeMembers.ts, 68, 32))
+>a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 69, 38))
+>a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 69, 38))
+
+        methodOnlyInI1: a => a,
+>methodOnlyInI1 : Symbol(methodOnlyInI1, Decl(contextualTypeWithUnionTypeMembers.ts, 69, 46))
+>a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 70, 23))
+>a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 70, 23))
+
+        propertyOnlyInI1: "Hello",
+>propertyOnlyInI1 : Symbol(propertyOnlyInI1, Decl(contextualTypeWithUnionTypeMembers.ts, 70, 31))
+
+        methodOnlyInI2: a => a,
+>methodOnlyInI2 : Symbol(methodOnlyInI2, Decl(contextualTypeWithUnionTypeMembers.ts, 71, 34))
+>a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 72, 23))
+>a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 72, 23))
+
+        propertyOnlyInI2: "Hello",
+>propertyOnlyInI2 : Symbol(propertyOnlyInI2, Decl(contextualTypeWithUnionTypeMembers.ts, 72, 31))
+
+    }];
+
+interface I11 {
+>I11 : Symbol(I11, Decl(contextualTypeWithUnionTypeMembers.ts, 74, 7))
+
+    commonMethodDifferentReturnType(a: string, b: number): string;
+>commonMethodDifferentReturnType : Symbol(I11.commonMethodDifferentReturnType, Decl(contextualTypeWithUnionTypeMembers.ts, 76, 15))
+>a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 77, 36))
+>b : Symbol(b, Decl(contextualTypeWithUnionTypeMembers.ts, 77, 46))
+
+    commonPropertyDifferentType: string;
+>commonPropertyDifferentType : Symbol(I11.commonPropertyDifferentType, Decl(contextualTypeWithUnionTypeMembers.ts, 77, 66))
+}
+interface I21 {
+>I21 : Symbol(I21, Decl(contextualTypeWithUnionTypeMembers.ts, 79, 1))
+
+    commonMethodDifferentReturnType(a: string, b: number): number;
+>commonMethodDifferentReturnType : Symbol(I21.commonMethodDifferentReturnType, Decl(contextualTypeWithUnionTypeMembers.ts, 80, 15))
+>a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 81, 36))
+>b : Symbol(b, Decl(contextualTypeWithUnionTypeMembers.ts, 81, 46))
+
+    commonPropertyDifferentType: number;
+>commonPropertyDifferentType : Symbol(I21.commonPropertyDifferentType, Decl(contextualTypeWithUnionTypeMembers.ts, 81, 66))
+}
+var i11: I11;
+>i11 : Symbol(i11, Decl(contextualTypeWithUnionTypeMembers.ts, 84, 3))
+>I11 : Symbol(I11, Decl(contextualTypeWithUnionTypeMembers.ts, 74, 7))
+
+var i21: I21;
+>i21 : Symbol(i21, Decl(contextualTypeWithUnionTypeMembers.ts, 85, 3))
+>I21 : Symbol(I21, Decl(contextualTypeWithUnionTypeMembers.ts, 79, 1))
+
+var i11Ori21: I11 | I21 = i11;
+>i11Ori21 : Symbol(i11Ori21, Decl(contextualTypeWithUnionTypeMembers.ts, 86, 3), Decl(contextualTypeWithUnionTypeMembers.ts, 87, 3), Decl(contextualTypeWithUnionTypeMembers.ts, 88, 3), Decl(contextualTypeWithUnionTypeMembers.ts, 96, 3))
+>I11 : Symbol(I11, Decl(contextualTypeWithUnionTypeMembers.ts, 74, 7))
+>I21 : Symbol(I21, Decl(contextualTypeWithUnionTypeMembers.ts, 79, 1))
+>i11 : Symbol(i11, Decl(contextualTypeWithUnionTypeMembers.ts, 84, 3))
+
+var i11Ori21: I11 | I21 = i21;
+>i11Ori21 : Symbol(i11Ori21, Decl(contextualTypeWithUnionTypeMembers.ts, 86, 3), Decl(contextualTypeWithUnionTypeMembers.ts, 87, 3), Decl(contextualTypeWithUnionTypeMembers.ts, 88, 3), Decl(contextualTypeWithUnionTypeMembers.ts, 96, 3))
+>I11 : Symbol(I11, Decl(contextualTypeWithUnionTypeMembers.ts, 74, 7))
+>I21 : Symbol(I21, Decl(contextualTypeWithUnionTypeMembers.ts, 79, 1))
+>i21 : Symbol(i21, Decl(contextualTypeWithUnionTypeMembers.ts, 85, 3))
+
+var i11Ori21: I11 | I21 = { 
+>i11Ori21 : Symbol(i11Ori21, Decl(contextualTypeWithUnionTypeMembers.ts, 86, 3), Decl(contextualTypeWithUnionTypeMembers.ts, 87, 3), Decl(contextualTypeWithUnionTypeMembers.ts, 88, 3), Decl(contextualTypeWithUnionTypeMembers.ts, 96, 3))
+>I11 : Symbol(I11, Decl(contextualTypeWithUnionTypeMembers.ts, 74, 7))
+>I21 : Symbol(I21, Decl(contextualTypeWithUnionTypeMembers.ts, 79, 1))
+
+    // Like i1
+    commonMethodDifferentReturnType: (a, b) => {
+>commonMethodDifferentReturnType : Symbol(commonMethodDifferentReturnType, Decl(contextualTypeWithUnionTypeMembers.ts, 88, 27))
+>a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 90, 38))
+>b : Symbol(b, Decl(contextualTypeWithUnionTypeMembers.ts, 90, 40))
+
+        var z = a.charAt(b);
+>z : Symbol(z, Decl(contextualTypeWithUnionTypeMembers.ts, 91, 11))
+>a.charAt : Symbol(String.charAt, Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 90, 38))
+>charAt : Symbol(String.charAt, Decl(lib.es5.d.ts, --, --))
+>b : Symbol(b, Decl(contextualTypeWithUnionTypeMembers.ts, 90, 40))
+
+        return z;  
+>z : Symbol(z, Decl(contextualTypeWithUnionTypeMembers.ts, 91, 11))
+
+    },
+    commonPropertyDifferentType: "hello",  
+>commonPropertyDifferentType : Symbol(commonPropertyDifferentType, Decl(contextualTypeWithUnionTypeMembers.ts, 93, 6))
+
+};
+var i11Ori21: I11 | I21 = { 
+>i11Ori21 : Symbol(i11Ori21, Decl(contextualTypeWithUnionTypeMembers.ts, 86, 3), Decl(contextualTypeWithUnionTypeMembers.ts, 87, 3), Decl(contextualTypeWithUnionTypeMembers.ts, 88, 3), Decl(contextualTypeWithUnionTypeMembers.ts, 96, 3))
+>I11 : Symbol(I11, Decl(contextualTypeWithUnionTypeMembers.ts, 74, 7))
+>I21 : Symbol(I21, Decl(contextualTypeWithUnionTypeMembers.ts, 79, 1))
+
+    // Like i2
+    commonMethodDifferentReturnType: (a, b) => {
+>commonMethodDifferentReturnType : Symbol(commonMethodDifferentReturnType, Decl(contextualTypeWithUnionTypeMembers.ts, 96, 27))
+>a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 98, 38))
+>b : Symbol(b, Decl(contextualTypeWithUnionTypeMembers.ts, 98, 40))
+
+        var z = a.charCodeAt(b);
+>z : Symbol(z, Decl(contextualTypeWithUnionTypeMembers.ts, 99, 11))
+>a.charCodeAt : Symbol(String.charCodeAt, Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 98, 38))
+>charCodeAt : Symbol(String.charCodeAt, Decl(lib.es5.d.ts, --, --))
+>b : Symbol(b, Decl(contextualTypeWithUnionTypeMembers.ts, 98, 40))
+
+        return z;
+>z : Symbol(z, Decl(contextualTypeWithUnionTypeMembers.ts, 99, 11))
+
+    },
+    commonPropertyDifferentType: 10,
+>commonPropertyDifferentType : Symbol(commonPropertyDifferentType, Decl(contextualTypeWithUnionTypeMembers.ts, 101, 6))
+
+};
+var arrayOrI11OrI21: Array<I11 | I21> = [i11, i21, i11 || i21, { 
+>arrayOrI11OrI21 : Symbol(arrayOrI11OrI21, Decl(contextualTypeWithUnionTypeMembers.ts, 104, 3))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>I11 : Symbol(I11, Decl(contextualTypeWithUnionTypeMembers.ts, 74, 7))
+>I21 : Symbol(I21, Decl(contextualTypeWithUnionTypeMembers.ts, 79, 1))
+>i11 : Symbol(i11, Decl(contextualTypeWithUnionTypeMembers.ts, 84, 3))
+>i21 : Symbol(i21, Decl(contextualTypeWithUnionTypeMembers.ts, 85, 3))
+>i11 : Symbol(i11, Decl(contextualTypeWithUnionTypeMembers.ts, 84, 3))
+>i21 : Symbol(i21, Decl(contextualTypeWithUnionTypeMembers.ts, 85, 3))
+
+        // Like i1
+        commonMethodDifferentReturnType: (a, b) => {
+>commonMethodDifferentReturnType : Symbol(commonMethodDifferentReturnType, Decl(contextualTypeWithUnionTypeMembers.ts, 104, 64))
+>a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 106, 42))
+>b : Symbol(b, Decl(contextualTypeWithUnionTypeMembers.ts, 106, 44))
+
+            var z = a.charAt(b);
+>z : Symbol(z, Decl(contextualTypeWithUnionTypeMembers.ts, 107, 15))
+>a.charAt : Symbol(String.charAt, Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 106, 42))
+>charAt : Symbol(String.charAt, Decl(lib.es5.d.ts, --, --))
+>b : Symbol(b, Decl(contextualTypeWithUnionTypeMembers.ts, 106, 44))
+
+            return z;
+>z : Symbol(z, Decl(contextualTypeWithUnionTypeMembers.ts, 107, 15))
+
+        },
+        commonPropertyDifferentType: "hello",
+>commonPropertyDifferentType : Symbol(commonPropertyDifferentType, Decl(contextualTypeWithUnionTypeMembers.ts, 109, 10))
+
+    }, { 
+        // Like i2
+        commonMethodDifferentReturnType: (a, b) => {
+>commonMethodDifferentReturnType : Symbol(commonMethodDifferentReturnType, Decl(contextualTypeWithUnionTypeMembers.ts, 111, 8))
+>a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 113, 42))
+>b : Symbol(b, Decl(contextualTypeWithUnionTypeMembers.ts, 113, 44))
+
+            var z = a.charCodeAt(b);
+>z : Symbol(z, Decl(contextualTypeWithUnionTypeMembers.ts, 114, 15))
+>a.charCodeAt : Symbol(String.charCodeAt, Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 113, 42))
+>charCodeAt : Symbol(String.charCodeAt, Decl(lib.es5.d.ts, --, --))
+>b : Symbol(b, Decl(contextualTypeWithUnionTypeMembers.ts, 113, 44))
+
+            return z;
+>z : Symbol(z, Decl(contextualTypeWithUnionTypeMembers.ts, 114, 15))
+
+        },
+        commonPropertyDifferentType: 10,
+>commonPropertyDifferentType : Symbol(commonPropertyDifferentType, Decl(contextualTypeWithUnionTypeMembers.ts, 116, 10))
+
+    }];

@@ -1,0 +1,48 @@
+=== tests/cases/conformance/es6/arrowFunction/emitArrowFunctionThisCapturing.ts ===
+var f1 = () => {
+>f1 : () => void
+>() => {    this.age = 10} : () => void
+
+    this.age = 10
+>this.age = 10 : 10
+>this.age : any
+>this : typeof globalThis
+>age : any
+>10 : 10
+
+};
+
+var f2 = (x: string) => {
+>f2 : (x: string) => void
+>(x: string) => {    this.name = x} : (x: string) => void
+>x : string
+
+    this.name = x
+>this.name = x : string
+>this.name : any
+>this : typeof globalThis
+>name : any
+>x : string
+}
+
+function foo(func: () => boolean) { }
+>foo : (func: () => boolean) => void
+>func : () => boolean
+
+foo(() => {
+>foo(() => {    this.age = 100;    return true;}) : void
+>foo : (func: () => boolean) => void
+>() => {    this.age = 100;    return true;} : () => true
+
+    this.age = 100;
+>this.age = 100 : 100
+>this.age : any
+>this : typeof globalThis
+>age : any
+>100 : 100
+
+    return true;
+>true : true
+
+});
+

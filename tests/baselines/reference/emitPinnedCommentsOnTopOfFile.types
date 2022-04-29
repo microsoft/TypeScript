@@ -1,0 +1,11 @@
+=== tests/cases/compiler/emitPinnedCommentsOnTopOfFile.ts ===
+/*!
+
+    multi line
+    comment
+*/
+
+var x = 10;
+>x : number
+>10 : 10
+

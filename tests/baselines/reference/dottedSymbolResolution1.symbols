@@ -1,0 +1,81 @@
+=== tests/cases/compiler/dottedSymbolResolution1.ts ===
+interface JQuery {
+>JQuery : Symbol(JQuery, Decl(dottedSymbolResolution1.ts, 0, 0))
+
+    find(selector: string): JQuery;
+>find : Symbol(JQuery.find, Decl(dottedSymbolResolution1.ts, 0, 18))
+>selector : Symbol(selector, Decl(dottedSymbolResolution1.ts, 1, 9))
+>JQuery : Symbol(JQuery, Decl(dottedSymbolResolution1.ts, 0, 0))
+}
+
+interface JQueryStatic {
+>JQueryStatic : Symbol(JQueryStatic, Decl(dottedSymbolResolution1.ts, 2, 1))
+    
+    (selector: string): JQuery;
+>selector : Symbol(selector, Decl(dottedSymbolResolution1.ts, 6, 5))
+>JQuery : Symbol(JQuery, Decl(dottedSymbolResolution1.ts, 0, 0))
+
+    (object: JQuery): JQuery;
+>object : Symbol(object, Decl(dottedSymbolResolution1.ts, 7, 5))
+>JQuery : Symbol(JQuery, Decl(dottedSymbolResolution1.ts, 0, 0))
+>JQuery : Symbol(JQuery, Decl(dottedSymbolResolution1.ts, 0, 0))
+}
+
+class Base { foo() { } }
+>Base : Symbol(Base, Decl(dottedSymbolResolution1.ts, 8, 1))
+>foo : Symbol(Base.foo, Decl(dottedSymbolResolution1.ts, 10, 12))
+
+function each(collection: string, callback: (indexInArray: any, valueOfElement: any) => any): any;
+>each : Symbol(each, Decl(dottedSymbolResolution1.ts, 10, 24), Decl(dottedSymbolResolution1.ts, 12, 98), Decl(dottedSymbolResolution1.ts, 13, 102))
+>collection : Symbol(collection, Decl(dottedSymbolResolution1.ts, 12, 14))
+>callback : Symbol(callback, Decl(dottedSymbolResolution1.ts, 12, 33))
+>indexInArray : Symbol(indexInArray, Decl(dottedSymbolResolution1.ts, 12, 45))
+>valueOfElement : Symbol(valueOfElement, Decl(dottedSymbolResolution1.ts, 12, 63))
+
+function each(collection: JQuery, callback: (indexInArray: number, valueOfElement: Base) => any): any;
+>each : Symbol(each, Decl(dottedSymbolResolution1.ts, 10, 24), Decl(dottedSymbolResolution1.ts, 12, 98), Decl(dottedSymbolResolution1.ts, 13, 102))
+>collection : Symbol(collection, Decl(dottedSymbolResolution1.ts, 13, 14))
+>JQuery : Symbol(JQuery, Decl(dottedSymbolResolution1.ts, 0, 0))
+>callback : Symbol(callback, Decl(dottedSymbolResolution1.ts, 13, 33))
+>indexInArray : Symbol(indexInArray, Decl(dottedSymbolResolution1.ts, 13, 45))
+>valueOfElement : Symbol(valueOfElement, Decl(dottedSymbolResolution1.ts, 13, 66))
+>Base : Symbol(Base, Decl(dottedSymbolResolution1.ts, 8, 1))
+
+function each(collection: any, callback: (indexInArray: any, valueOfElement: any) => any): any {
+>each : Symbol(each, Decl(dottedSymbolResolution1.ts, 10, 24), Decl(dottedSymbolResolution1.ts, 12, 98), Decl(dottedSymbolResolution1.ts, 13, 102))
+>collection : Symbol(collection, Decl(dottedSymbolResolution1.ts, 14, 14))
+>callback : Symbol(callback, Decl(dottedSymbolResolution1.ts, 14, 30))
+>indexInArray : Symbol(indexInArray, Decl(dottedSymbolResolution1.ts, 14, 42))
+>valueOfElement : Symbol(valueOfElement, Decl(dottedSymbolResolution1.ts, 14, 60))
+
+    return null;
+}
+
+function _setBarAndText(): void {
+>_setBarAndText : Symbol(_setBarAndText, Decl(dottedSymbolResolution1.ts, 16, 1))
+
+    var x: JQuery, $: JQueryStatic
+>x : Symbol(x, Decl(dottedSymbolResolution1.ts, 19, 7))
+>JQuery : Symbol(JQuery, Decl(dottedSymbolResolution1.ts, 0, 0))
+>$ : Symbol($, Decl(dottedSymbolResolution1.ts, 19, 18))
+>JQueryStatic : Symbol(JQueryStatic, Decl(dottedSymbolResolution1.ts, 2, 1))
+
+    each(x.find(" "), function () {
+>each : Symbol(each, Decl(dottedSymbolResolution1.ts, 10, 24), Decl(dottedSymbolResolution1.ts, 12, 98), Decl(dottedSymbolResolution1.ts, 13, 102))
+>x.find : Symbol(JQuery.find, Decl(dottedSymbolResolution1.ts, 0, 18))
+>x : Symbol(x, Decl(dottedSymbolResolution1.ts, 19, 7))
+>find : Symbol(JQuery.find, Decl(dottedSymbolResolution1.ts, 0, 18))
+
+        var $this: JQuery = $(''),
+>$this : Symbol($this, Decl(dottedSymbolResolution1.ts, 21, 11))
+>JQuery : Symbol(JQuery, Decl(dottedSymbolResolution1.ts, 0, 0))
+>$ : Symbol($, Decl(dottedSymbolResolution1.ts, 19, 18))
+
+            thisBar = $this.find(".fx-usagebars-calloutbar-this"); // bug lead to 'could not find dotted symbol' here
+>thisBar : Symbol(thisBar, Decl(dottedSymbolResolution1.ts, 21, 34))
+>$this.find : Symbol(JQuery.find, Decl(dottedSymbolResolution1.ts, 0, 18))
+>$this : Symbol($this, Decl(dottedSymbolResolution1.ts, 21, 11))
+>find : Symbol(JQuery.find, Decl(dottedSymbolResolution1.ts, 0, 18))
+
+    } );
+}

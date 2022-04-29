@@ -1,0 +1,34 @@
+=== tests/cases/compiler/bestCommonTypeReturnStatement.ts ===
+interface IPromise<T> {
+>IPromise : Symbol(IPromise, Decl(bestCommonTypeReturnStatement.ts, 0, 0))
+>T : Symbol(T, Decl(bestCommonTypeReturnStatement.ts, 0, 19))
+
+    then(successCallback: (promiseValue: T) => any, errorCallback?: (reason: any) => any): IPromise<any>;
+>then : Symbol(IPromise.then, Decl(bestCommonTypeReturnStatement.ts, 0, 23))
+>successCallback : Symbol(successCallback, Decl(bestCommonTypeReturnStatement.ts, 1, 9))
+>promiseValue : Symbol(promiseValue, Decl(bestCommonTypeReturnStatement.ts, 1, 27))
+>T : Symbol(T, Decl(bestCommonTypeReturnStatement.ts, 0, 19))
+>errorCallback : Symbol(errorCallback, Decl(bestCommonTypeReturnStatement.ts, 1, 51))
+>reason : Symbol(reason, Decl(bestCommonTypeReturnStatement.ts, 1, 69))
+>IPromise : Symbol(IPromise, Decl(bestCommonTypeReturnStatement.ts, 0, 0))
+}
+
+function f() {
+>f : Symbol(f, Decl(bestCommonTypeReturnStatement.ts, 2, 1))
+
+    if (true) return b();
+>b : Symbol(b, Decl(bestCommonTypeReturnStatement.ts, 7, 1))
+
+    return d();
+>d : Symbol(d, Decl(bestCommonTypeReturnStatement.ts, 10, 45))
+}
+
+
+function b(): IPromise<void> { return null; }
+>b : Symbol(b, Decl(bestCommonTypeReturnStatement.ts, 7, 1))
+>IPromise : Symbol(IPromise, Decl(bestCommonTypeReturnStatement.ts, 0, 0))
+
+function d(): IPromise<any> { return null; }
+>d : Symbol(d, Decl(bestCommonTypeReturnStatement.ts, 10, 45))
+>IPromise : Symbol(IPromise, Decl(bestCommonTypeReturnStatement.ts, 0, 0))
+

@@ -1,0 +1,20 @@
+=== tests/cases/compiler/errorForUsingPropertyOfTypeAsType02.ts ===
+namespace Test1 {
+>Test1 : Symbol(Test1, Decl(errorForUsingPropertyOfTypeAsType02.ts, 0, 0))
+
+    function foo<T extends { abc: number }>(x: T) {
+>foo : Symbol(foo, Decl(errorForUsingPropertyOfTypeAsType02.ts, 0, 17))
+>T : Symbol(T, Decl(errorForUsingPropertyOfTypeAsType02.ts, 1, 17))
+>abc : Symbol(abc, Decl(errorForUsingPropertyOfTypeAsType02.ts, 1, 28))
+>x : Symbol(x, Decl(errorForUsingPropertyOfTypeAsType02.ts, 1, 44))
+>T : Symbol(T, Decl(errorForUsingPropertyOfTypeAsType02.ts, 1, 17))
+
+        let a: T.abc = x.abc;
+>a : Symbol(a, Decl(errorForUsingPropertyOfTypeAsType02.ts, 2, 11))
+>T : Symbol(T)
+>abc : Symbol(T.abc)
+>x.abc : Symbol(abc, Decl(errorForUsingPropertyOfTypeAsType02.ts, 1, 28))
+>x : Symbol(x, Decl(errorForUsingPropertyOfTypeAsType02.ts, 1, 44))
+>abc : Symbol(abc, Decl(errorForUsingPropertyOfTypeAsType02.ts, 1, 28))
+    }
+}

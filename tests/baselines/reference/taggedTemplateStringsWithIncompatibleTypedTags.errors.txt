@@ -1,0 +1,57 @@
+tests/cases/conformance/es6/templates/taggedTemplateStringsWithIncompatibleTypedTags.ts(14,9): error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
+tests/cases/conformance/es6/templates/taggedTemplateStringsWithIncompatibleTypedTags.ts(18,9): error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
+tests/cases/conformance/es6/templates/taggedTemplateStringsWithIncompatibleTypedTags.ts(22,9): error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
+tests/cases/conformance/es6/templates/taggedTemplateStringsWithIncompatibleTypedTags.ts(24,25): error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
+tests/cases/conformance/es6/templates/taggedTemplateStringsWithIncompatibleTypedTags.ts(26,9): error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
+tests/cases/conformance/es6/templates/taggedTemplateStringsWithIncompatibleTypedTags.ts(26,46): error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
+tests/cases/conformance/es6/templates/taggedTemplateStringsWithIncompatibleTypedTags.ts(28,57): error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
+
+
+==== tests/cases/conformance/es6/templates/taggedTemplateStringsWithIncompatibleTypedTags.ts (7 errors) ====
+    interface I {
+        (stringParts: TemplateStringsArray, ...rest: boolean[]): I;
+        g: I;
+        h: I;
+        member: I;
+        thisIsNotATag(x: string): void
+        [x: number]: I;
+    }
+    
+    var f: I;
+    
+    f `abc`
+    
+    f `abc${1}def${2}ghi`;
+            ~
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
+    
+    f `abc`.member
+    
+    f `abc${1}def${2}ghi`.member;
+            ~
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
+    
+    f `abc`["member"];
+    
+    f `abc${1}def${2}ghi`["member"];
+            ~
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
+    
+    f `abc`[0].member `abc${1}def${2}ghi`;
+                            ~
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
+    
+    f `abc${1}def${2}ghi`["member"].member `abc${1}def${2}ghi`;
+            ~
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
+                                                 ~
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
+    
+    f `abc${ true }def${ true }ghi`["member"].member `abc${ 1 }def${ 2 }ghi`;
+                                                            ~
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
+    
+    f.thisIsNotATag(`abc`);
+    
+    f.thisIsNotATag(`abc${1}def${2}ghi`);
+    

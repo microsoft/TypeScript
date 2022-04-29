@@ -1,0 +1,11 @@
+=== tests/cases/conformance/declarationEmit/file1.ts ===
+/// <reference lib="dom" />
+export declare const elem: HTMLElement;
+>elem : HTMLElement
+
+=== tests/cases/conformance/declarationEmit/file2.ts ===
+/// <reference lib="dom" />
+export {}
+declare const elem: HTMLElement;
+>elem : HTMLElement
+

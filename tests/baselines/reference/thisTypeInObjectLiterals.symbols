@@ -1,0 +1,104 @@
+=== tests/cases/conformance/types/thisType/thisTypeInObjectLiterals.ts ===
+let o = {
+>o : Symbol(o, Decl(thisTypeInObjectLiterals.ts, 0, 3))
+
+    d: "bar",
+>d : Symbol(d, Decl(thisTypeInObjectLiterals.ts, 0, 9))
+
+    m() {
+>m : Symbol(m, Decl(thisTypeInObjectLiterals.ts, 1, 13))
+
+        return this.d.length;
+>this.d.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>this.d : Symbol(d, Decl(thisTypeInObjectLiterals.ts, 0, 9))
+>this : Symbol(o, Decl(thisTypeInObjectLiterals.ts, 0, 7))
+>d : Symbol(d, Decl(thisTypeInObjectLiterals.ts, 0, 9))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+    },
+    f: function() {
+>f : Symbol(f, Decl(thisTypeInObjectLiterals.ts, 4, 6))
+
+        return this.d.length;
+>this.d.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>this.d : Symbol(d, Decl(thisTypeInObjectLiterals.ts, 0, 9))
+>this : Symbol(o, Decl(thisTypeInObjectLiterals.ts, 0, 7))
+>d : Symbol(d, Decl(thisTypeInObjectLiterals.ts, 0, 9))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+    }
+}
+
+let mutuallyRecursive = {
+>mutuallyRecursive : Symbol(mutuallyRecursive, Decl(thisTypeInObjectLiterals.ts, 10, 3))
+
+    a: 100,
+>a : Symbol(a, Decl(thisTypeInObjectLiterals.ts, 10, 25))
+
+    start() {
+>start : Symbol(start, Decl(thisTypeInObjectLiterals.ts, 11, 11))
+
+        return this.passthrough(this.a);
+>this.passthrough : Symbol(passthrough, Decl(thisTypeInObjectLiterals.ts, 14, 6))
+>this : Symbol(mutuallyRecursive, Decl(thisTypeInObjectLiterals.ts, 10, 23))
+>passthrough : Symbol(passthrough, Decl(thisTypeInObjectLiterals.ts, 14, 6))
+>this.a : Symbol(a, Decl(thisTypeInObjectLiterals.ts, 10, 25))
+>this : Symbol(mutuallyRecursive, Decl(thisTypeInObjectLiterals.ts, 10, 23))
+>a : Symbol(a, Decl(thisTypeInObjectLiterals.ts, 10, 25))
+
+    },
+    passthrough(n: number) {
+>passthrough : Symbol(passthrough, Decl(thisTypeInObjectLiterals.ts, 14, 6))
+>n : Symbol(n, Decl(thisTypeInObjectLiterals.ts, 15, 16))
+
+        return this.sub1(n);
+>this.sub1 : Symbol(sub1, Decl(thisTypeInObjectLiterals.ts, 17, 6))
+>this : Symbol(mutuallyRecursive, Decl(thisTypeInObjectLiterals.ts, 10, 23))
+>sub1 : Symbol(sub1, Decl(thisTypeInObjectLiterals.ts, 17, 6))
+>n : Symbol(n, Decl(thisTypeInObjectLiterals.ts, 15, 16))
+
+    },
+    sub1(n: number): number {
+>sub1 : Symbol(sub1, Decl(thisTypeInObjectLiterals.ts, 17, 6))
+>n : Symbol(n, Decl(thisTypeInObjectLiterals.ts, 18, 9))
+
+        if (n > 0) {
+>n : Symbol(n, Decl(thisTypeInObjectLiterals.ts, 18, 9))
+
+            return this.passthrough(n - 1);
+>this.passthrough : Symbol(passthrough, Decl(thisTypeInObjectLiterals.ts, 14, 6))
+>this : Symbol(mutuallyRecursive, Decl(thisTypeInObjectLiterals.ts, 10, 23))
+>passthrough : Symbol(passthrough, Decl(thisTypeInObjectLiterals.ts, 14, 6))
+>n : Symbol(n, Decl(thisTypeInObjectLiterals.ts, 18, 9))
+        }
+        return n;
+>n : Symbol(n, Decl(thisTypeInObjectLiterals.ts, 18, 9))
+    }
+}
+var i: number = mutuallyRecursive.start();
+>i : Symbol(i, Decl(thisTypeInObjectLiterals.ts, 25, 3))
+>mutuallyRecursive.start : Symbol(start, Decl(thisTypeInObjectLiterals.ts, 11, 11))
+>mutuallyRecursive : Symbol(mutuallyRecursive, Decl(thisTypeInObjectLiterals.ts, 10, 3))
+>start : Symbol(start, Decl(thisTypeInObjectLiterals.ts, 11, 11))
+
+interface I {
+>I : Symbol(I, Decl(thisTypeInObjectLiterals.ts, 25, 42))
+
+    a: number;
+>a : Symbol(I.a, Decl(thisTypeInObjectLiterals.ts, 26, 13))
+
+    start(): number;
+>start : Symbol(I.start, Decl(thisTypeInObjectLiterals.ts, 27, 14))
+
+    passthrough(n: number): number;
+>passthrough : Symbol(I.passthrough, Decl(thisTypeInObjectLiterals.ts, 28, 20))
+>n : Symbol(n, Decl(thisTypeInObjectLiterals.ts, 29, 16))
+
+    sub1(n: number): number;
+>sub1 : Symbol(I.sub1, Decl(thisTypeInObjectLiterals.ts, 29, 35))
+>n : Symbol(n, Decl(thisTypeInObjectLiterals.ts, 30, 9))
+}
+var impl: I = mutuallyRecursive;
+>impl : Symbol(impl, Decl(thisTypeInObjectLiterals.ts, 32, 3))
+>I : Symbol(I, Decl(thisTypeInObjectLiterals.ts, 25, 42))
+>mutuallyRecursive : Symbol(mutuallyRecursive, Decl(thisTypeInObjectLiterals.ts, 10, 3))
+

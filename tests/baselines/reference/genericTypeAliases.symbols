@@ -1,0 +1,231 @@
+=== tests/cases/conformance/types/typeAliases/genericTypeAliases.ts ===
+type Tree<T> = T | { left: Tree<T>, right: Tree<T> };
+>Tree : Symbol(Tree, Decl(genericTypeAliases.ts, 0, 0))
+>T : Symbol(T, Decl(genericTypeAliases.ts, 0, 10))
+>T : Symbol(T, Decl(genericTypeAliases.ts, 0, 10))
+>left : Symbol(left, Decl(genericTypeAliases.ts, 0, 20))
+>Tree : Symbol(Tree, Decl(genericTypeAliases.ts, 0, 0))
+>T : Symbol(T, Decl(genericTypeAliases.ts, 0, 10))
+>right : Symbol(right, Decl(genericTypeAliases.ts, 0, 35))
+>Tree : Symbol(Tree, Decl(genericTypeAliases.ts, 0, 0))
+>T : Symbol(T, Decl(genericTypeAliases.ts, 0, 10))
+
+var tree: Tree<number> = {
+>tree : Symbol(tree, Decl(genericTypeAliases.ts, 2, 3))
+>Tree : Symbol(Tree, Decl(genericTypeAliases.ts, 0, 0))
+
+    left: {
+>left : Symbol(left, Decl(genericTypeAliases.ts, 2, 26))
+
+        left: 0,
+>left : Symbol(left, Decl(genericTypeAliases.ts, 3, 11))
+
+        right: {
+>right : Symbol(right, Decl(genericTypeAliases.ts, 4, 16))
+
+            left: 1,
+>left : Symbol(left, Decl(genericTypeAliases.ts, 5, 16))
+
+            right: 2
+>right : Symbol(right, Decl(genericTypeAliases.ts, 6, 20))
+
+        },
+    },
+    right: 3
+>right : Symbol(right, Decl(genericTypeAliases.ts, 9, 6))
+
+};
+
+type Lazy<T> = T | (() => T);
+>Lazy : Symbol(Lazy, Decl(genericTypeAliases.ts, 11, 2))
+>T : Symbol(T, Decl(genericTypeAliases.ts, 13, 10))
+>T : Symbol(T, Decl(genericTypeAliases.ts, 13, 10))
+>T : Symbol(T, Decl(genericTypeAliases.ts, 13, 10))
+
+var ls: Lazy<string>;
+>ls : Symbol(ls, Decl(genericTypeAliases.ts, 15, 3))
+>Lazy : Symbol(Lazy, Decl(genericTypeAliases.ts, 11, 2))
+
+ls = "eager";
+>ls : Symbol(ls, Decl(genericTypeAliases.ts, 15, 3))
+
+ls = () => "lazy";
+>ls : Symbol(ls, Decl(genericTypeAliases.ts, 15, 3))
+
+type Foo<T> = T | { x: Foo<T> };
+>Foo : Symbol(Foo, Decl(genericTypeAliases.ts, 17, 18))
+>T : Symbol(T, Decl(genericTypeAliases.ts, 19, 9))
+>T : Symbol(T, Decl(genericTypeAliases.ts, 19, 9))
+>x : Symbol(x, Decl(genericTypeAliases.ts, 19, 19))
+>Foo : Symbol(Foo, Decl(genericTypeAliases.ts, 17, 18))
+>T : Symbol(T, Decl(genericTypeAliases.ts, 19, 9))
+
+type Bar<U> = U | { x: Bar<U> };
+>Bar : Symbol(Bar, Decl(genericTypeAliases.ts, 19, 32))
+>U : Symbol(U, Decl(genericTypeAliases.ts, 20, 9))
+>U : Symbol(U, Decl(genericTypeAliases.ts, 20, 9))
+>x : Symbol(x, Decl(genericTypeAliases.ts, 20, 19))
+>Bar : Symbol(Bar, Decl(genericTypeAliases.ts, 19, 32))
+>U : Symbol(U, Decl(genericTypeAliases.ts, 20, 9))
+
+// Deeply instantiated generics
+var x: Foo<string>;
+>x : Symbol(x, Decl(genericTypeAliases.ts, 23, 3))
+>Foo : Symbol(Foo, Decl(genericTypeAliases.ts, 17, 18))
+
+var y: Bar<string>;
+>y : Symbol(y, Decl(genericTypeAliases.ts, 24, 3))
+>Bar : Symbol(Bar, Decl(genericTypeAliases.ts, 19, 32))
+
+x = y;
+>x : Symbol(x, Decl(genericTypeAliases.ts, 23, 3))
+>y : Symbol(y, Decl(genericTypeAliases.ts, 24, 3))
+
+y = x;
+>y : Symbol(y, Decl(genericTypeAliases.ts, 24, 3))
+>x : Symbol(x, Decl(genericTypeAliases.ts, 23, 3))
+
+x = "string";
+>x : Symbol(x, Decl(genericTypeAliases.ts, 23, 3))
+
+x = { x: "hello" };
+>x : Symbol(x, Decl(genericTypeAliases.ts, 23, 3))
+>x : Symbol(x, Decl(genericTypeAliases.ts, 29, 5))
+
+x = { x: { x: "world" } };
+>x : Symbol(x, Decl(genericTypeAliases.ts, 23, 3))
+>x : Symbol(x, Decl(genericTypeAliases.ts, 30, 5))
+>x : Symbol(x, Decl(genericTypeAliases.ts, 30, 10))
+
+var z: Foo<number>;
+>z : Symbol(z, Decl(genericTypeAliases.ts, 32, 3))
+>Foo : Symbol(Foo, Decl(genericTypeAliases.ts, 17, 18))
+
+z = 42;
+>z : Symbol(z, Decl(genericTypeAliases.ts, 32, 3))
+
+z = { x: 42 };
+>z : Symbol(z, Decl(genericTypeAliases.ts, 32, 3))
+>x : Symbol(x, Decl(genericTypeAliases.ts, 34, 5))
+
+z = { x: { x: 42 } };
+>z : Symbol(z, Decl(genericTypeAliases.ts, 32, 3))
+>x : Symbol(x, Decl(genericTypeAliases.ts, 35, 5))
+>x : Symbol(x, Decl(genericTypeAliases.ts, 35, 10))
+
+type Strange<T> = string;  // Type parameter not used
+>Strange : Symbol(Strange, Decl(genericTypeAliases.ts, 35, 21))
+>T : Symbol(T, Decl(genericTypeAliases.ts, 37, 13))
+
+var s: Strange<number>;
+>s : Symbol(s, Decl(genericTypeAliases.ts, 38, 3))
+>Strange : Symbol(Strange, Decl(genericTypeAliases.ts, 35, 21))
+
+s = "hello";
+>s : Symbol(s, Decl(genericTypeAliases.ts, 38, 3))
+
+interface AB<A, B> {
+>AB : Symbol(AB, Decl(genericTypeAliases.ts, 39, 12))
+>A : Symbol(A, Decl(genericTypeAliases.ts, 41, 13))
+>B : Symbol(B, Decl(genericTypeAliases.ts, 41, 15))
+
+    a: A;
+>a : Symbol(AB.a, Decl(genericTypeAliases.ts, 41, 20))
+>A : Symbol(A, Decl(genericTypeAliases.ts, 41, 13))
+
+    b: B;
+>b : Symbol(AB.b, Decl(genericTypeAliases.ts, 42, 9))
+>B : Symbol(B, Decl(genericTypeAliases.ts, 41, 15))
+}
+
+type Pair<T> = AB<T, T>;
+>Pair : Symbol(Pair, Decl(genericTypeAliases.ts, 44, 1))
+>T : Symbol(T, Decl(genericTypeAliases.ts, 46, 10))
+>AB : Symbol(AB, Decl(genericTypeAliases.ts, 39, 12))
+>T : Symbol(T, Decl(genericTypeAliases.ts, 46, 10))
+>T : Symbol(T, Decl(genericTypeAliases.ts, 46, 10))
+
+interface TaggedPair<T> extends Pair<T> {
+>TaggedPair : Symbol(TaggedPair, Decl(genericTypeAliases.ts, 46, 24))
+>T : Symbol(T, Decl(genericTypeAliases.ts, 48, 21))
+>Pair : Symbol(Pair, Decl(genericTypeAliases.ts, 44, 1))
+>T : Symbol(T, Decl(genericTypeAliases.ts, 48, 21))
+
+    tag: string;
+>tag : Symbol(TaggedPair.tag, Decl(genericTypeAliases.ts, 48, 41))
+}
+
+var p: TaggedPair<number>;
+>p : Symbol(p, Decl(genericTypeAliases.ts, 52, 3))
+>TaggedPair : Symbol(TaggedPair, Decl(genericTypeAliases.ts, 46, 24))
+
+p.a = 1;
+>p.a : Symbol(AB.a, Decl(genericTypeAliases.ts, 41, 20))
+>p : Symbol(p, Decl(genericTypeAliases.ts, 52, 3))
+>a : Symbol(AB.a, Decl(genericTypeAliases.ts, 41, 20))
+
+p.b = 2;
+>p.b : Symbol(AB.b, Decl(genericTypeAliases.ts, 42, 9))
+>p : Symbol(p, Decl(genericTypeAliases.ts, 52, 3))
+>b : Symbol(AB.b, Decl(genericTypeAliases.ts, 42, 9))
+
+p.tag = "test";
+>p.tag : Symbol(TaggedPair.tag, Decl(genericTypeAliases.ts, 48, 41))
+>p : Symbol(p, Decl(genericTypeAliases.ts, 52, 3))
+>tag : Symbol(TaggedPair.tag, Decl(genericTypeAliases.ts, 48, 41))
+
+function f<A>() {
+>f : Symbol(f, Decl(genericTypeAliases.ts, 55, 15))
+>A : Symbol(A, Decl(genericTypeAliases.ts, 57, 11))
+
+    type Foo<T> = T | { x: Foo<T> };
+>Foo : Symbol(Foo, Decl(genericTypeAliases.ts, 57, 17))
+>T : Symbol(T, Decl(genericTypeAliases.ts, 58, 13))
+>T : Symbol(T, Decl(genericTypeAliases.ts, 58, 13))
+>x : Symbol(x, Decl(genericTypeAliases.ts, 58, 23))
+>Foo : Symbol(Foo, Decl(genericTypeAliases.ts, 57, 17))
+>T : Symbol(T, Decl(genericTypeAliases.ts, 58, 13))
+
+    var x: Foo<A[]>;
+>x : Symbol(x, Decl(genericTypeAliases.ts, 59, 7))
+>Foo : Symbol(Foo, Decl(genericTypeAliases.ts, 57, 17))
+>A : Symbol(A, Decl(genericTypeAliases.ts, 57, 11))
+
+    return x;
+>x : Symbol(x, Decl(genericTypeAliases.ts, 59, 7))
+}
+
+function g<B>() {
+>g : Symbol(g, Decl(genericTypeAliases.ts, 61, 1))
+>B : Symbol(B, Decl(genericTypeAliases.ts, 63, 11))
+
+    type Bar<U> = U | { x: Bar<U> };
+>Bar : Symbol(Bar, Decl(genericTypeAliases.ts, 63, 17))
+>U : Symbol(U, Decl(genericTypeAliases.ts, 64, 13))
+>U : Symbol(U, Decl(genericTypeAliases.ts, 64, 13))
+>x : Symbol(x, Decl(genericTypeAliases.ts, 64, 23))
+>Bar : Symbol(Bar, Decl(genericTypeAliases.ts, 63, 17))
+>U : Symbol(U, Decl(genericTypeAliases.ts, 64, 13))
+
+    var x: Bar<B[]>;
+>x : Symbol(x, Decl(genericTypeAliases.ts, 65, 7))
+>Bar : Symbol(Bar, Decl(genericTypeAliases.ts, 63, 17))
+>B : Symbol(B, Decl(genericTypeAliases.ts, 63, 11))
+
+    return x;
+>x : Symbol(x, Decl(genericTypeAliases.ts, 65, 7))
+}
+
+// Deeply instantiated generics
+var a = f<string>();
+>a : Symbol(a, Decl(genericTypeAliases.ts, 70, 3))
+>f : Symbol(f, Decl(genericTypeAliases.ts, 55, 15))
+
+var b = g<string>();
+>b : Symbol(b, Decl(genericTypeAliases.ts, 71, 3))
+>g : Symbol(g, Decl(genericTypeAliases.ts, 61, 1))
+
+a = b;
+>a : Symbol(a, Decl(genericTypeAliases.ts, 70, 3))
+>b : Symbol(b, Decl(genericTypeAliases.ts, 71, 3))
+

@@ -1,0 +1,48 @@
+=== tests/cases/compiler/es5-asyncFunctionConditionals.ts ===
+declare var x, y, z, a, b, c;
+>x : any
+>y : any
+>z : any
+>a : any
+>b : any
+>c : any
+
+async function conditional0() {
+>conditional0 : () => Promise<void>
+
+    a = (await x) ? y : z;
+>a = (await x) ? y : z : any
+>a : any
+>(await x) ? y : z : any
+>(await x) : any
+>await x : any
+>x : any
+>y : any
+>z : any
+}
+
+async function conditional1() {
+>conditional1 : () => Promise<void>
+
+    a = x ? await y : z;
+>a = x ? await y : z : any
+>a : any
+>x ? await y : z : any
+>x : any
+>await y : any
+>y : any
+>z : any
+}
+
+async function conditional2() {
+>conditional2 : () => Promise<void>
+
+    a = x ? y : await z;
+>a = x ? y : await z : any
+>a : any
+>x ? y : await z : any
+>x : any
+>y : any
+>await z : any
+>z : any
+}

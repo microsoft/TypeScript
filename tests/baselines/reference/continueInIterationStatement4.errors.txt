@@ -1,0 +1,9 @@
+tests/cases/compiler/continueInIterationStatement4.ts(1,15): error TS2304: Cannot find name 'something'.
+
+
+==== tests/cases/compiler/continueInIterationStatement4.ts (1 errors) ====
+    for (var i in something) {
+                  ~~~~~~~~~
+!!! error TS2304: Cannot find name 'something'.
+      continue;
+    }

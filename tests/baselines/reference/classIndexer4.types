@@ -1,0 +1,18 @@
+=== tests/cases/compiler/classIndexer4.ts ===
+class C123 {
+>C123 : C123
+
+    [s: string]: number;
+>s : string
+
+    constructor() {
+    }
+}
+
+interface D123 extends C123 {
+    x: number;
+>x : number
+
+    y: string;
+>y : string
+}

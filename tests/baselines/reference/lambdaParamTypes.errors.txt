@@ -1,0 +1,44 @@
+tests/cases/compiler/lambdaParamTypes.ts(17,31): error TS2339: Property 'foo' does not exist on type '{ name: string; id: number; }'.
+tests/cases/compiler/lambdaParamTypes.ts(18,31): error TS2339: Property 'foo' does not exist on type '{ name: string; id: number; }'.
+tests/cases/compiler/lambdaParamTypes.ts(19,34): error TS2339: Property 'charAt' does not exist on type 'number'.
+tests/cases/compiler/lambdaParamTypes.ts(20,36): error TS2339: Property 'toExponential' does not exist on type 'string'.
+tests/cases/compiler/lambdaParamTypes.ts(21,34): error TS2339: Property 'charAt' does not exist on type 'number'.
+tests/cases/compiler/lambdaParamTypes.ts(22,36): error TS2339: Property 'toExponential' does not exist on type 'string'.
+
+
+==== tests/cases/compiler/lambdaParamTypes.ts (6 errors) ====
+    interface MyArrayWrapper<T> {
+        constructor(initialItems?: T[]);
+        doSomething(predicate: (x: T, y: T) => string): void;
+    }
+    
+    declare function create<T>(initialValues?: T[]): MyArrayWrapper<T>;
+    
+    var thing = create([{ name: "bob", id: 24 }, { name: "doug", id: 32 }]);
+    
+    // Below should all be OK
+    thing.doSomething((x, y) => x.name.charAt(0));      // x.name should be string, so should be OK
+    thing.doSomething((x, y) => x.id.toExponential(0)); // x.id should be string, so should be OK
+    thing.doSomething((x, y) => y.name.charAt(0));      // x.name should be string, so should be OK
+    thing.doSomething((x, y) => y.id.toExponential(0)); // x.id should be string, so should be OK
+    
+    // Below should all be in error
+    thing.doSomething((x, y) => x.foo); // no such property on x
+                                  ~~~
+!!! error TS2339: Property 'foo' does not exist on type '{ name: string; id: number; }'.
+    thing.doSomething((x, y) => y.foo); // no such property on y
+                                  ~~~
+!!! error TS2339: Property 'foo' does not exist on type '{ name: string; id: number; }'.
+    thing.doSomething((x, y) => x.id.charAt(0));      // x.id should be number, no charAt member
+                                     ~~~~~~
+!!! error TS2339: Property 'charAt' does not exist on type 'number'.
+    thing.doSomething((x, y) => x.name.toExponential(0)); // x.name should be string, no toExponential member
+                                       ~~~~~~~~~~~~~
+!!! error TS2339: Property 'toExponential' does not exist on type 'string'.
+    thing.doSomething((x, y) => y.id.charAt(0));
+                                     ~~~~~~
+!!! error TS2339: Property 'charAt' does not exist on type 'number'.
+    thing.doSomething((x, y) => y.name.toExponential(0));
+                                       ~~~~~~~~~~~~~
+!!! error TS2339: Property 'toExponential' does not exist on type 'string'.
+    

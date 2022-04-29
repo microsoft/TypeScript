@@ -1,0 +1,38 @@
+=== tests/cases/conformance/internalModules/DeclarationMerging/ClassAndModuleThatMergeWithModulesExportedGenericFunctionAndGenericClassStaticFunctionOfTheSameName.ts ===
+class clodule<T> {
+>clodule : Symbol(clodule, Decl(ClassAndModuleThatMergeWithModulesExportedGenericFunctionAndGenericClassStaticFunctionOfTheSameName.ts, 0, 0), Decl(ClassAndModuleThatMergeWithModulesExportedGenericFunctionAndGenericClassStaticFunctionOfTheSameName.ts, 5, 1))
+>T : Symbol(T, Decl(ClassAndModuleThatMergeWithModulesExportedGenericFunctionAndGenericClassStaticFunctionOfTheSameName.ts, 0, 14))
+
+    id: string;
+>id : Symbol(clodule.id, Decl(ClassAndModuleThatMergeWithModulesExportedGenericFunctionAndGenericClassStaticFunctionOfTheSameName.ts, 0, 18))
+
+    value: T;
+>value : Symbol(clodule.value, Decl(ClassAndModuleThatMergeWithModulesExportedGenericFunctionAndGenericClassStaticFunctionOfTheSameName.ts, 1, 15))
+>T : Symbol(T, Decl(ClassAndModuleThatMergeWithModulesExportedGenericFunctionAndGenericClassStaticFunctionOfTheSameName.ts, 0, 14))
+
+    static fn<U>(id: U) { }
+>fn : Symbol(clodule.fn, Decl(ClassAndModuleThatMergeWithModulesExportedGenericFunctionAndGenericClassStaticFunctionOfTheSameName.ts, 2, 13))
+>U : Symbol(U, Decl(ClassAndModuleThatMergeWithModulesExportedGenericFunctionAndGenericClassStaticFunctionOfTheSameName.ts, 4, 14))
+>id : Symbol(id, Decl(ClassAndModuleThatMergeWithModulesExportedGenericFunctionAndGenericClassStaticFunctionOfTheSameName.ts, 4, 17))
+>U : Symbol(U, Decl(ClassAndModuleThatMergeWithModulesExportedGenericFunctionAndGenericClassStaticFunctionOfTheSameName.ts, 4, 14))
+}
+
+module clodule {
+>clodule : Symbol(clodule, Decl(ClassAndModuleThatMergeWithModulesExportedGenericFunctionAndGenericClassStaticFunctionOfTheSameName.ts, 0, 0), Decl(ClassAndModuleThatMergeWithModulesExportedGenericFunctionAndGenericClassStaticFunctionOfTheSameName.ts, 5, 1))
+
+    // error: duplicate identifier expected
+    export function fn<T>(x: T, y: T): T {
+>fn : Symbol(fn, Decl(ClassAndModuleThatMergeWithModulesExportedGenericFunctionAndGenericClassStaticFunctionOfTheSameName.ts, 7, 16))
+>T : Symbol(T, Decl(ClassAndModuleThatMergeWithModulesExportedGenericFunctionAndGenericClassStaticFunctionOfTheSameName.ts, 9, 23))
+>x : Symbol(x, Decl(ClassAndModuleThatMergeWithModulesExportedGenericFunctionAndGenericClassStaticFunctionOfTheSameName.ts, 9, 26))
+>T : Symbol(T, Decl(ClassAndModuleThatMergeWithModulesExportedGenericFunctionAndGenericClassStaticFunctionOfTheSameName.ts, 9, 23))
+>y : Symbol(y, Decl(ClassAndModuleThatMergeWithModulesExportedGenericFunctionAndGenericClassStaticFunctionOfTheSameName.ts, 9, 31))
+>T : Symbol(T, Decl(ClassAndModuleThatMergeWithModulesExportedGenericFunctionAndGenericClassStaticFunctionOfTheSameName.ts, 9, 23))
+>T : Symbol(T, Decl(ClassAndModuleThatMergeWithModulesExportedGenericFunctionAndGenericClassStaticFunctionOfTheSameName.ts, 9, 23))
+
+        return x;
+>x : Symbol(x, Decl(ClassAndModuleThatMergeWithModulesExportedGenericFunctionAndGenericClassStaticFunctionOfTheSameName.ts, 9, 26))
+    }
+}
+
+

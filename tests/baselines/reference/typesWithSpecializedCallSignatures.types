@@ -1,0 +1,132 @@
+=== tests/cases/conformance/types/members/typesWithSpecializedCallSignatures.ts ===
+// basic uses of specialized signatures without errors
+
+class Base { foo: string }
+>Base : Base
+>foo : string
+
+class Derived1 extends Base { bar: string }
+>Derived1 : Derived1
+>Base : Base
+>bar : string
+
+class Derived2 extends Base { baz: string }
+>Derived2 : Derived2
+>Base : Base
+>baz : string
+
+class C {
+>C : C
+
+    foo(x: 'hi'): Derived1;
+>foo : { (x: 'hi'): Derived1; (x: "bye"): Derived2; (x: string): Base; }
+>x : "hi"
+
+    foo(x: 'bye'): Derived2;
+>foo : { (x: "hi"): Derived1; (x: 'bye'): Derived2; (x: string): Base; }
+>x : "bye"
+
+    foo(x: string): Base;
+>foo : { (x: "hi"): Derived1; (x: "bye"): Derived2; (x: string): Base; }
+>x : string
+
+    foo(x) {
+>foo : { (x: "hi"): Derived1; (x: "bye"): Derived2; (x: string): Base; }
+>x : any
+
+        return x;
+>x : any
+    }
+}
+var c = new C();
+>c : C
+>new C() : C
+>C : typeof C
+
+interface I {
+    foo(x: 'hi'): Derived1;
+>foo : { (x: 'hi'): Derived1; (x: "bye"): Derived2; (x: string): Base; }
+>x : "hi"
+
+    foo(x: 'bye'): Derived2;
+>foo : { (x: "hi"): Derived1; (x: 'bye'): Derived2; (x: string): Base; }
+>x : "bye"
+
+    foo(x: string): Base;
+>foo : { (x: "hi"): Derived1; (x: "bye"): Derived2; (x: string): Base; }
+>x : string
+}
+var i: I;
+>i : I
+
+var a: {
+>a : { foo(x: 'hi'): Derived1; foo(x: 'bye'): Derived2; foo(x: string): Base; }
+
+    foo(x: 'hi'): Derived1;
+>foo : { (x: 'hi'): Derived1; (x: "bye"): Derived2; (x: string): Base; }
+>x : "hi"
+
+    foo(x: 'bye'): Derived2;
+>foo : { (x: "hi"): Derived1; (x: 'bye'): Derived2; (x: string): Base; }
+>x : "bye"
+
+    foo(x: string): Base;
+>foo : { (x: "hi"): Derived1; (x: "bye"): Derived2; (x: string): Base; }
+>x : string
+
+};
+
+c = i;
+>c = i : I
+>c : C
+>i : I
+
+c = a;
+>c = a : { foo(x: "hi"): Derived1; foo(x: "bye"): Derived2; foo(x: string): Base; }
+>c : C
+>a : { foo(x: "hi"): Derived1; foo(x: "bye"): Derived2; foo(x: string): Base; }
+
+i = c;
+>i = c : C
+>i : I
+>c : C
+
+i = a;
+>i = a : { foo(x: "hi"): Derived1; foo(x: "bye"): Derived2; foo(x: string): Base; }
+>i : I
+>a : { foo(x: "hi"): Derived1; foo(x: "bye"): Derived2; foo(x: string): Base; }
+
+a = c;
+>a = c : C
+>a : { foo(x: "hi"): Derived1; foo(x: "bye"): Derived2; foo(x: string): Base; }
+>c : C
+
+a = i;
+>a = i : I
+>a : { foo(x: "hi"): Derived1; foo(x: "bye"): Derived2; foo(x: string): Base; }
+>i : I
+
+var r1: Derived1 = c.foo('hi');
+>r1 : Derived1
+>c.foo('hi') : Derived1
+>c.foo : { (x: "hi"): Derived1; (x: "bye"): Derived2; (x: string): Base; }
+>c : C
+>foo : { (x: "hi"): Derived1; (x: "bye"): Derived2; (x: string): Base; }
+>'hi' : "hi"
+
+var r2: Derived2 = c.foo('bye');
+>r2 : Derived2
+>c.foo('bye') : Derived2
+>c.foo : { (x: "hi"): Derived1; (x: "bye"): Derived2; (x: string): Base; }
+>c : C
+>foo : { (x: "hi"): Derived1; (x: "bye"): Derived2; (x: string): Base; }
+>'bye' : "bye"
+
+var r3: Base = c.foo('hm');
+>r3 : Base
+>c.foo('hm') : Base
+>c.foo : { (x: "hi"): Derived1; (x: "bye"): Derived2; (x: string): Base; }
+>c : C
+>foo : { (x: "hi"): Derived1; (x: "bye"): Derived2; (x: string): Base; }
+>'hm' : "hm"
+

@@ -1,0 +1,35 @@
+=== tests/cases/compiler/world.ts ===
+import HelloInterface = require("helloInterface");
+>HelloInterface : any
+
+import HelloNamespace = require("helloNamespace");
+>HelloNamespace : any
+
+HelloInterface.world;
+>HelloInterface.world : any
+>HelloInterface : any
+>world : any
+
+HelloNamespace.world;
+>HelloNamespace.world : any
+>HelloNamespace : any
+>world : any
+
+=== tests/cases/compiler/helloInterface.ts ===
+interface HelloInterface {
+    world: any;
+>world : any
+}
+
+export = HelloInterface;
+>HelloInterface : HelloInterface
+
+=== tests/cases/compiler/helloNamespace.ts ===
+namespace HelloNamespace {
+    export type world = any;
+>world : any
+}
+
+export = HelloNamespace;
+>HelloNamespace : any
+

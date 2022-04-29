@@ -1,0 +1,28 @@
+tests/cases/conformance/es7/trailingCommasInBindingPatterns.ts(1,12): error TS1013: A rest parameter or binding pattern may not have a trailing comma.
+tests/cases/conformance/es7/trailingCommasInBindingPatterns.ts(2,12): error TS1013: A rest parameter or binding pattern may not have a trailing comma.
+tests/cases/conformance/es7/trailingCommasInBindingPatterns.ts(4,7): error TS1013: A rest parameter or binding pattern may not have a trailing comma.
+tests/cases/conformance/es7/trailingCommasInBindingPatterns.ts(5,7): error TS1013: A rest parameter or binding pattern may not have a trailing comma.
+
+
+==== tests/cases/conformance/es7/trailingCommasInBindingPatterns.ts (4 errors) ====
+    const [...a,] = [];
+               ~
+!!! error TS1013: A rest parameter or binding pattern may not have a trailing comma.
+    const {...b,} = {};
+               ~
+!!! error TS1013: A rest parameter or binding pattern may not have a trailing comma.
+    let c, d;
+    ([...c,] = []);
+          ~
+!!! error TS1013: A rest parameter or binding pattern may not have a trailing comma.
+    ({...d,} = {});
+          ~
+!!! error TS1013: A rest parameter or binding pattern may not have a trailing comma.
+    
+    // Allowed for non-rest elements
+    const [e,] = <any>[];
+    const {f,} = <any>{};
+    let g, h;
+    ([g,] = <any>[]);
+    ({h,} = <any>{});
+    

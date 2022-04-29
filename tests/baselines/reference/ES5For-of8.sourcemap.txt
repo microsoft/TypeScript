@@ -1,0 +1,169 @@
+===================================================================
+JsFile: ES5For-of8.js
+mapUrl: ES5For-of8.js.map
+sourceRoot: 
+sources: ES5For-of8.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:tests/cases/conformance/statements/for-ofStatements/ES5For-of8.js
+sourceFile:ES5For-of8.ts
+-------------------------------------------------------------------
+>>>function foo() {
+1 >
+2 >^^^^^^^^^
+3 >         ^^^
+4 >            ^^^^^^^^^->
+1 >
+2 >function 
+3 >         foo
+1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(1, 10) Source(1, 10) + SourceIndex(0)
+3 >Emitted(1, 13) Source(1, 13) + SourceIndex(0)
+---
+>>>    return { x: 0 };
+1->^^^^
+2 >    ^^^^^^^
+3 >           ^^
+4 >             ^
+5 >              ^^
+6 >                ^
+7 >                 ^^
+8 >                   ^
+1->() {
+  >    
+2 >    return 
+3 >           { 
+4 >             x
+5 >              : 
+6 >                0
+7 >                  }
+8 >                   ;
+1->Emitted(2, 5) Source(2, 5) + SourceIndex(0)
+2 >Emitted(2, 12) Source(2, 12) + SourceIndex(0)
+3 >Emitted(2, 14) Source(2, 14) + SourceIndex(0)
+4 >Emitted(2, 15) Source(2, 15) + SourceIndex(0)
+5 >Emitted(2, 17) Source(2, 17) + SourceIndex(0)
+6 >Emitted(2, 18) Source(2, 18) + SourceIndex(0)
+7 >Emitted(2, 20) Source(2, 20) + SourceIndex(0)
+8 >Emitted(2, 21) Source(2, 21) + SourceIndex(0)
+---
+>>>}
+1 >
+2 >^
+3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >
+2 >}
+1 >Emitted(3, 1) Source(3, 1) + SourceIndex(0)
+2 >Emitted(3, 2) Source(3, 2) + SourceIndex(0)
+---
+>>>for (var _i = 0, _a = ['a', 'b', 'c']; _i < _a.length; _i++) {
+1->
+2 >^^^^^
+3 >     ^^^^^^^^^^
+4 >               ^^
+5 >                 ^^^^^^
+6 >                       ^^^
+7 >                          ^^
+8 >                            ^^^
+9 >                               ^^
+10>                                 ^^^
+11>                                    ^
+12>                                     ^^
+13>                                       ^^^^^^^^^^^^^^
+14>                                                     ^^
+15>                                                       ^^^^
+16>                                                           ^^
+1->
+  >
+2 >for (foo().x of 
+3 >     ['a', 'b', 'c']
+4 >               
+5 >                 [
+6 >                       'a'
+7 >                          , 
+8 >                            'b'
+9 >                               , 
+10>                                 'c'
+11>                                    ]
+12>                                     
+13>                                       ['a', 'b', 'c']
+14>                                                     
+15>                                                       ['a', 'b', 'c']
+16>                                                           ) 
+1->Emitted(4, 1) Source(4, 1) + SourceIndex(0)
+2 >Emitted(4, 6) Source(4, 17) + SourceIndex(0)
+3 >Emitted(4, 16) Source(4, 32) + SourceIndex(0)
+4 >Emitted(4, 18) Source(4, 17) + SourceIndex(0)
+5 >Emitted(4, 24) Source(4, 18) + SourceIndex(0)
+6 >Emitted(4, 27) Source(4, 21) + SourceIndex(0)
+7 >Emitted(4, 29) Source(4, 23) + SourceIndex(0)
+8 >Emitted(4, 32) Source(4, 26) + SourceIndex(0)
+9 >Emitted(4, 34) Source(4, 28) + SourceIndex(0)
+10>Emitted(4, 37) Source(4, 31) + SourceIndex(0)
+11>Emitted(4, 38) Source(4, 32) + SourceIndex(0)
+12>Emitted(4, 40) Source(4, 17) + SourceIndex(0)
+13>Emitted(4, 54) Source(4, 32) + SourceIndex(0)
+14>Emitted(4, 56) Source(4, 17) + SourceIndex(0)
+15>Emitted(4, 60) Source(4, 32) + SourceIndex(0)
+16>Emitted(4, 62) Source(4, 34) + SourceIndex(0)
+---
+>>>    foo().x = _a[_i];
+1 >^^^^
+2 >    ^^^
+3 >       ^^
+4 >         ^
+5 >          ^
+6 >           ^^^^^^^^^
+7 >                    ^->
+1 >
+2 >    foo
+3 >       ()
+4 >         .
+5 >          x
+6 >           
+1 >Emitted(5, 5) Source(4, 6) + SourceIndex(0)
+2 >Emitted(5, 8) Source(4, 9) + SourceIndex(0)
+3 >Emitted(5, 10) Source(4, 11) + SourceIndex(0)
+4 >Emitted(5, 11) Source(4, 12) + SourceIndex(0)
+5 >Emitted(5, 12) Source(4, 13) + SourceIndex(0)
+6 >Emitted(5, 21) Source(4, 13) + SourceIndex(0)
+---
+>>>    var p = foo().x;
+1->^^^^
+2 >    ^^^^
+3 >        ^
+4 >         ^^^
+5 >            ^^^
+6 >               ^^
+7 >                 ^
+8 >                  ^
+9 >                   ^
+1-> of ['a', 'b', 'c']) {
+  >    
+2 >    var 
+3 >        p
+4 >          = 
+5 >            foo
+6 >               ()
+7 >                 .
+8 >                  x
+9 >                   ;
+1->Emitted(6, 5) Source(5, 5) + SourceIndex(0)
+2 >Emitted(6, 9) Source(5, 9) + SourceIndex(0)
+3 >Emitted(6, 10) Source(5, 10) + SourceIndex(0)
+4 >Emitted(6, 13) Source(5, 13) + SourceIndex(0)
+5 >Emitted(6, 16) Source(5, 16) + SourceIndex(0)
+6 >Emitted(6, 18) Source(5, 18) + SourceIndex(0)
+7 >Emitted(6, 19) Source(5, 19) + SourceIndex(0)
+8 >Emitted(6, 20) Source(5, 20) + SourceIndex(0)
+9 >Emitted(6, 21) Source(5, 21) + SourceIndex(0)
+---
+>>>}
+1 >^
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >}
+1 >Emitted(7, 2) Source(6, 2) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=ES5For-of8.js.map

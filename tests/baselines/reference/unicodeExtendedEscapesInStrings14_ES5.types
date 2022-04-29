@@ -1,0 +1,6 @@
+=== tests/cases/conformance/es6/unicodeExtendedEscapes/unicodeExtendedEscapesInStrings14_ES5.ts ===
+// Shouldn't work, negatives are not allowed.
+var x = "\u{-DDDD}";
+>x : string
+>"\u{-DDDD}" : "-DDDD}"
+

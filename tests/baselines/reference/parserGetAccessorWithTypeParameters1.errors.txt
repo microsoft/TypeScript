@@ -1,0 +1,12 @@
+tests/cases/conformance/parser/ecmascript5/Accessors/parserGetAccessorWithTypeParameters1.ts(2,7): error TS1094: An accessor cannot have type parameters.
+tests/cases/conformance/parser/ecmascript5/Accessors/parserGetAccessorWithTypeParameters1.ts(2,7): error TS2378: A 'get' accessor must return a value.
+
+
+==== tests/cases/conformance/parser/ecmascript5/Accessors/parserGetAccessorWithTypeParameters1.ts (2 errors) ====
+    class C {
+      get foo<T>() { }
+          ~~~
+!!! error TS1094: An accessor cannot have type parameters.
+          ~~~
+!!! error TS2378: A 'get' accessor must return a value.
+    }

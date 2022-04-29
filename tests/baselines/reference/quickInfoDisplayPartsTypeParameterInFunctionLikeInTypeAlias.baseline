@@ -1,0 +1,224 @@
+[
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInFunctionLikeInTypeAlias.ts",
+      "position": 30,
+      "name": "0"
+    },
+    "quickInfo": {
+      "kind": "type parameter",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 30,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "type parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "A",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "in",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "type",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "MixinCtor",
+          "kind": "aliasName"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "A",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInFunctionLikeInTypeAlias.ts",
+      "position": 59,
+      "name": "1"
+    },
+    "quickInfo": {
+      "kind": "type parameter",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 59,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "type parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "A",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "in",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "type",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "MixinCtor",
+          "kind": "aliasName"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "A",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInFunctionLikeInTypeAlias.ts",
+      "position": 139,
+      "name": "2"
+    },
+    "quickInfo": {
+      "kind": "type parameter",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 139,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "type parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "A",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "in",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "type",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "MixinCtor",
+          "kind": "aliasName"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "A",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        }
+      ],
+      "documentation": []
+    }
+  }
+]

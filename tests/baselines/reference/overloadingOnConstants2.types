@@ -1,0 +1,100 @@
+=== tests/cases/compiler/overloadingOnConstants2.ts ===
+class C {
+>C : C
+
+   private x = 1;
+>x : number
+>1 : 1
+}
+class D extends C {}
+>D : D
+>C : C
+
+class E { 
+>E : E
+
+   private y = 1;
+>y : number
+>1 : 1
+}
+function foo(x: "hi", items: string[]): D;
+>foo : { (x: "hi", items: string[]): D; (x: "bye", items: string[]): E; }
+>x : "hi"
+>items : string[]
+
+function foo(x: "bye", items: string[]): E;
+>foo : { (x: "hi", items: string[]): D; (x: "bye", items: string[]): E; }
+>x : "bye"
+>items : string[]
+
+function foo(x: string, items: string[]): C {
+>foo : { (x: "hi", items: string[]): D; (x: "bye", items: string[]): E; }
+>x : string
+>items : string[]
+
+   return null;
+>null : null
+}
+var a: D = foo("hi", []); // D
+>a : D
+>foo("hi", []) : D
+>foo : { (x: "hi", items: string[]): D; (x: "bye", items: string[]): E; }
+>"hi" : "hi"
+>[] : undefined[]
+
+var b: E = foo("bye", []); // E 
+>b : E
+>foo("bye", []) : E
+>foo : { (x: "hi", items: string[]): D; (x: "bye", items: string[]): E; }
+>"bye" : "bye"
+>[] : undefined[]
+
+var c = foo("um", []); // error
+>c : D & E
+>foo("um", []) : D & E
+>foo : { (x: "hi", items: string[]): D; (x: "bye", items: string[]): E; }
+>"um" : "um"
+>[] : undefined[]
+
+
+//function bar(x: "hi", items: string[]): D;
+function bar(x: "bye", items: string[]): E;
+>bar : { (x: "bye", items: string[]): E; (x: string, items: string[]): C; }
+>x : "bye"
+>items : string[]
+
+function bar(x: string, items: string[]): C;
+>bar : { (x: "bye", items: string[]): E; (x: string, items: string[]): C; }
+>x : string
+>items : string[]
+
+function bar(x: string, items: string[]): C {
+>bar : { (x: "bye", items: string[]): E; (x: string, items: string[]): C; }
+>x : string
+>items : string[]
+
+   return null;
+>null : null
+}
+
+var d: D = bar("hi", []); // D
+>d : D
+>bar("hi", []) : C
+>bar : { (x: "bye", items: string[]): E; (x: string, items: string[]): C; }
+>"hi" : "hi"
+>[] : undefined[]
+
+var e: E = bar("bye", []); // E 
+>e : E
+>bar("bye", []) : E
+>bar : { (x: "bye", items: string[]): E; (x: string, items: string[]): C; }
+>"bye" : "bye"
+>[] : undefined[]
+
+var f: C = bar("um", []); // C
+>f : C
+>bar("um", []) : C
+>bar : { (x: "bye", items: string[]): E; (x: string, items: string[]): C; }
+>"um" : "um"
+>[] : undefined[]
+

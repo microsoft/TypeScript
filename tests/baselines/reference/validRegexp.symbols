@@ -1,0 +1,11 @@
+=== tests/cases/compiler/validRegexp.ts ===
+var x = / [a - z /]$ / i;
+>x : Symbol(x, Decl(validRegexp.ts, 0, 3))
+>i : Symbol(i, Decl(validRegexp.ts, 0, 22))
+
+var x1 = /[a-z/]$/i;
+>x1 : Symbol(x1, Decl(validRegexp.ts, 1, 3))
+
+var x2 = /[a-z/]$ /i;
+>x2 : Symbol(x2, Decl(validRegexp.ts, 2, 3))
+

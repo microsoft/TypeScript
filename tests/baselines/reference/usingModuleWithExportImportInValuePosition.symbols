@@ -1,0 +1,62 @@
+=== tests/cases/compiler/usingModuleWithExportImportInValuePosition.ts ===
+module A {
+>A : Symbol(A, Decl(usingModuleWithExportImportInValuePosition.ts, 0, 0))
+
+export var x = 'hello world'
+>x : Symbol(x, Decl(usingModuleWithExportImportInValuePosition.ts, 1, 10))
+
+export class Point {
+>Point : Symbol(Point, Decl(usingModuleWithExportImportInValuePosition.ts, 1, 28))
+
+        constructor(public x: number, public y: number) { }
+>x : Symbol(Point.x, Decl(usingModuleWithExportImportInValuePosition.ts, 3, 20))
+>y : Symbol(Point.y, Decl(usingModuleWithExportImportInValuePosition.ts, 3, 37))
+    }
+    export module B {
+>B : Symbol(B, Decl(usingModuleWithExportImportInValuePosition.ts, 4, 5))
+
+        export interface Id {
+>Id : Symbol(Id, Decl(usingModuleWithExportImportInValuePosition.ts, 5, 21))
+
+            name: string;
+>name : Symbol(Id.name, Decl(usingModuleWithExportImportInValuePosition.ts, 6, 29))
+        }
+    }
+}
+module C {
+>C : Symbol(C, Decl(usingModuleWithExportImportInValuePosition.ts, 10, 1))
+
+    export import a = A;
+>a : Symbol(a, Decl(usingModuleWithExportImportInValuePosition.ts, 11, 10))
+>A : Symbol(a, Decl(usingModuleWithExportImportInValuePosition.ts, 0, 0))
+}
+
+var a: string = C.a.x;
+>a : Symbol(a, Decl(usingModuleWithExportImportInValuePosition.ts, 15, 3))
+>C.a.x : Symbol(A.x, Decl(usingModuleWithExportImportInValuePosition.ts, 1, 10))
+>C.a : Symbol(C.a, Decl(usingModuleWithExportImportInValuePosition.ts, 11, 10))
+>C : Symbol(C, Decl(usingModuleWithExportImportInValuePosition.ts, 10, 1))
+>a : Symbol(C.a, Decl(usingModuleWithExportImportInValuePosition.ts, 11, 10))
+>x : Symbol(A.x, Decl(usingModuleWithExportImportInValuePosition.ts, 1, 10))
+
+var b: { x: number; y: number; } = new C.a.Point(0, 0);
+>b : Symbol(b, Decl(usingModuleWithExportImportInValuePosition.ts, 16, 3))
+>x : Symbol(x, Decl(usingModuleWithExportImportInValuePosition.ts, 16, 8))
+>y : Symbol(y, Decl(usingModuleWithExportImportInValuePosition.ts, 16, 19))
+>C.a.Point : Symbol(A.Point, Decl(usingModuleWithExportImportInValuePosition.ts, 1, 28))
+>C.a : Symbol(C.a, Decl(usingModuleWithExportImportInValuePosition.ts, 11, 10))
+>C : Symbol(C, Decl(usingModuleWithExportImportInValuePosition.ts, 10, 1))
+>a : Symbol(C.a, Decl(usingModuleWithExportImportInValuePosition.ts, 11, 10))
+>Point : Symbol(A.Point, Decl(usingModuleWithExportImportInValuePosition.ts, 1, 28))
+
+var c: { name: string };
+>c : Symbol(c, Decl(usingModuleWithExportImportInValuePosition.ts, 17, 3), Decl(usingModuleWithExportImportInValuePosition.ts, 18, 3))
+>name : Symbol(name, Decl(usingModuleWithExportImportInValuePosition.ts, 17, 8))
+
+var c: C.a.B.Id;
+>c : Symbol(c, Decl(usingModuleWithExportImportInValuePosition.ts, 17, 3), Decl(usingModuleWithExportImportInValuePosition.ts, 18, 3))
+>C : Symbol(C, Decl(usingModuleWithExportImportInValuePosition.ts, 10, 1))
+>a : Symbol(C.a, Decl(usingModuleWithExportImportInValuePosition.ts, 11, 10))
+>B : Symbol(A.B, Decl(usingModuleWithExportImportInValuePosition.ts, 4, 5))
+>Id : Symbol(A.B.Id, Decl(usingModuleWithExportImportInValuePosition.ts, 5, 21))
+

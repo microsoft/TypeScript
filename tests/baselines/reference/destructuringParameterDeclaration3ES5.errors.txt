@@ -1,0 +1,61 @@
+tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration3ES5.ts(26,4): error TS2345: Argument of type '[number, number, [[string]], boolean, boolean]' is not assignable to parameter of type '[any, any, [[any]]]'.
+  Source has 5 element(s) but target allows only 3.
+tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration3ES5.ts(29,12): error TS2322: Type 'number' is not assignable to type '[[any]]'.
+tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration3ES5.ts(30,5): error TS2345: Argument of type '[number, number]' is not assignable to parameter of type '[any, any, [[any]], ...any[]]'.
+  Source has 2 element(s) but target requires 3.
+
+
+==== tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration3ES5.ts (3 errors) ====
+    // If the parameter is a rest parameter, the parameter type is any[]
+    // A type annotation for a rest parameter must denote an array type.
+    
+    // RestParameter:
+    //     ...   Identifier   TypeAnnotation(opt)
+    
+    type arrayString = Array<String>
+    type someArray = Array<String> | number[];
+    type stringOrNumArray = Array<String|Number>;
+    
+    function a1(...x: (number|string)[]) { }
+    function a2(...a) { }
+    function a3(...a: Array<String>) { }
+    function a4(...a: arrayString) { }
+    function a5(...a: stringOrNumArray) { }
+    function a9([a, b, [[c]]]) { }
+    function a10([a, b, [[c]], ...x]) { }
+    function a11([a, b, c, ...x]: number[]) { }
+    
+    
+    var array = [1, 2, 3];
+    var array2 = [true, false, "hello"];
+    a2([...array]);
+    a1(...array);
+    
+    a9([1, 2, [["string"]], false, true]);   // Parameter type is [any, any, [[any]]]
+       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2345: Argument of type '[number, number, [[string]], boolean, boolean]' is not assignable to parameter of type '[any, any, [[any]]]'.
+!!! error TS2345:   Source has 5 element(s) but target allows only 3.
+    
+    a10([1, 2, [["string"]], false, true]);   // Parameter type is any[]
+    a10([1, 2, 3, false, true]);              // Parameter type is any[]
+               ~
+!!! error TS2322: Type 'number' is not assignable to type '[[any]]'.
+    a10([1, 2]);                              // Parameter type is any[]
+        ~~~~~~
+!!! error TS2345: Argument of type '[number, number]' is not assignable to parameter of type '[any, any, [[any]], ...any[]]'.
+!!! error TS2345:   Source has 2 element(s) but target requires 3.
+    a11([1, 2]);                              // Parameter type is number[]
+    
+    // Rest parameter with generic
+    function foo<T>(...a: T[]) { }
+    foo<number|string>("hello", 1, 2);
+    foo("hello", "world");
+    
+    enum E { a, b }
+    const enum E1 { a, b }
+    function foo1<T extends Number>(...a: T[]) { }
+    foo1(1, 2, 3, E.a);
+    foo1(1, 2, 3, E1.a, E.b);
+    
+    
+    

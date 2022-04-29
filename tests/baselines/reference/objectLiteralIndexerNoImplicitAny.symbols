@@ -1,0 +1,15 @@
+=== tests/cases/compiler/objectLiteralIndexerNoImplicitAny.ts ===
+interface I {
+>I : Symbol(I, Decl(objectLiteralIndexerNoImplicitAny.ts, 0, 0))
+
+    [s: string]: any;
+>s : Symbol(s, Decl(objectLiteralIndexerNoImplicitAny.ts, 1, 5))
+}
+
+var x: I = {
+>x : Symbol(x, Decl(objectLiteralIndexerNoImplicitAny.ts, 4, 3))
+>I : Symbol(I, Decl(objectLiteralIndexerNoImplicitAny.ts, 0, 0))
+
+    p: null
+>p : Symbol(p, Decl(objectLiteralIndexerNoImplicitAny.ts, 4, 12))
+}

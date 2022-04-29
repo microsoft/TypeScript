@@ -1,0 +1,69 @@
+=== tests/cases/compiler/strictModeReservedWordInClassDeclaration.ts ===
+interface public { }
+>public : Symbol(public, Decl(strictModeReservedWordInClassDeclaration.ts, 0, 0))
+
+class Foo {
+>Foo : Symbol(Foo, Decl(strictModeReservedWordInClassDeclaration.ts, 0, 20))
+
+    constructor(private, public, static) {
+>private : Symbol(private, Decl(strictModeReservedWordInClassDeclaration.ts, 3, 16))
+>public : Symbol(public, Decl(strictModeReservedWordInClassDeclaration.ts, 3, 24))
+>static : Symbol(static, Decl(strictModeReservedWordInClassDeclaration.ts, 3, 32))
+
+        private = public = static;
+>private : Symbol(private, Decl(strictModeReservedWordInClassDeclaration.ts, 3, 16))
+>public : Symbol(public, Decl(strictModeReservedWordInClassDeclaration.ts, 3, 24))
+>static : Symbol(static, Decl(strictModeReservedWordInClassDeclaration.ts, 3, 32))
+    }
+    public banana(x: public) { }
+>banana : Symbol(Foo.banana, Decl(strictModeReservedWordInClassDeclaration.ts, 5, 5))
+>x : Symbol(x, Decl(strictModeReservedWordInClassDeclaration.ts, 6, 18))
+>public : Symbol(public, Decl(strictModeReservedWordInClassDeclaration.ts, 0, 0))
+}
+
+class C {
+>C : Symbol(C, Decl(strictModeReservedWordInClassDeclaration.ts, 7, 1))
+
+    constructor(public public, let) {
+>public : Symbol(C.public, Decl(strictModeReservedWordInClassDeclaration.ts, 10, 16))
+>let : Symbol(let, Decl(strictModeReservedWordInClassDeclaration.ts, 10, 30))
+    }
+    foo1(private, static, public) {
+>foo1 : Symbol(C.foo1, Decl(strictModeReservedWordInClassDeclaration.ts, 11, 5))
+>private : Symbol(private, Decl(strictModeReservedWordInClassDeclaration.ts, 12, 9))
+>static : Symbol(static, Decl(strictModeReservedWordInClassDeclaration.ts, 12, 17))
+>public : Symbol(public, Decl(strictModeReservedWordInClassDeclaration.ts, 12, 25))
+
+        function let() { }
+>let : Symbol(let, Decl(strictModeReservedWordInClassDeclaration.ts, 12, 35))
+
+        var z = function let() { };
+>z : Symbol(z, Decl(strictModeReservedWordInClassDeclaration.ts, 14, 11))
+>let : Symbol(let, Decl(strictModeReservedWordInClassDeclaration.ts, 14, 15))
+    }
+
+    public pulbic() { } // No Error;
+>pulbic : Symbol(C.pulbic, Decl(strictModeReservedWordInClassDeclaration.ts, 15, 5))
+}
+
+class D<public, private>{ }
+>D : Symbol(D, Decl(strictModeReservedWordInClassDeclaration.ts, 18, 1))
+>public : Symbol(public, Decl(strictModeReservedWordInClassDeclaration.ts, 20, 8))
+>private : Symbol(private, Decl(strictModeReservedWordInClassDeclaration.ts, 20, 15))
+
+class E implements public { }
+>E : Symbol(E, Decl(strictModeReservedWordInClassDeclaration.ts, 20, 27))
+>public : Symbol(public, Decl(strictModeReservedWordInClassDeclaration.ts, 0, 0))
+
+class F implements public.private.B { }
+>F : Symbol(F, Decl(strictModeReservedWordInClassDeclaration.ts, 22, 29))
+
+class F1 implements public.private.implements { }
+>F1 : Symbol(F1, Decl(strictModeReservedWordInClassDeclaration.ts, 24, 39))
+
+class G extends package { }
+>G : Symbol(G, Decl(strictModeReservedWordInClassDeclaration.ts, 25, 49))
+
+class H extends package.A { }
+>H : Symbol(H, Decl(strictModeReservedWordInClassDeclaration.ts, 26, 27))
+

@@ -1,0 +1,56 @@
+=== tests/cases/conformance/interfaces/interfacesExtendingClasses/interfaceExtendingClassWithPrivates2.ts ===
+class Foo {
+>Foo : Foo
+
+    private x: string;
+>x : string
+}
+
+class Bar {
+>Bar : Bar
+
+    private x: string;
+>x : string
+}
+
+interface I3 extends Foo, Bar { // error
+}
+
+interface I4 extends Foo, Bar { // error
+    x: string;
+>x : string
+}
+
+class Baz {
+>Baz : Baz
+
+    private y: string;
+>y : string
+}
+
+interface I5 extends Foo, Baz {
+    z: string;
+>z : string
+}
+
+var i: I5;
+>i : I5
+
+var r: string = i.z;
+>r : string
+>i.z : string
+>i : I5
+>z : string
+
+var r2 = i.x; // error
+>r2 : string
+>i.x : string
+>i : I5
+>x : string
+
+var r3 = i.y; // error
+>r3 : string
+>i.y : string
+>i : I5
+>y : string
+

@@ -1,0 +1,8 @@
+=== tests/cases/compiler/typeofUndefined.ts ===
+var x: typeof undefined;
+>x : Symbol(x, Decl(typeofUndefined.ts, 0, 3), Decl(typeofUndefined.ts, 1, 3))
+>undefined : Symbol(undefined)
+
+var x: any; // shouldn't be an error since type is the same as the first declaration
+>x : Symbol(x, Decl(typeofUndefined.ts, 0, 3), Decl(typeofUndefined.ts, 1, 3))
+

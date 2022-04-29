@@ -1,0 +1,56 @@
+=== tests/cases/compiler/file1.ts ===
+class A { }
+>A : A
+
+class B { }
+>B : B
+
+class C { }
+>C : C
+
+class D { }
+>D : D
+
+class E { }
+>E : E
+
+class F { }
+>F : F
+
+class G { }
+>G : G
+
+class H { }
+>H : H
+
+class I { }
+>I : I
+
+=== tests/cases/compiler/file2.ts ===
+class A { }
+>A : A
+
+class B { }
+>B : B
+
+class C { }
+>C : C
+
+class D { }
+>D : D
+
+class E { }
+>E : E
+
+class F { }
+>F : F
+
+class G { }
+>G : G
+
+class H { }
+>H : H
+
+class I { }
+>I : I
+

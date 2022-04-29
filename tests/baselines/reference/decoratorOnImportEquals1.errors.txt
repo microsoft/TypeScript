@@ -1,0 +1,16 @@
+tests/cases/conformance/decorators/invalid/decoratorOnImportEquals1.ts(8,5): error TS1206: Decorators are not valid here.
+
+
+==== tests/cases/conformance/decorators/invalid/decoratorOnImportEquals1.ts (1 errors) ====
+    declare function dec<T>(target: T): T;
+    
+    module M1 {
+        export var X: number;
+    }
+    
+    module M2 {
+        @dec
+        ~
+!!! error TS1206: Decorators are not valid here.
+        import X = M1.X;
+    }

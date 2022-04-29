@@ -1,0 +1,16 @@
+=== tests/cases/conformance/es6/templates/templateStringInFunctionParameterType.ts ===
+function f(`hello`);
+>f : Symbol(f, Decl(templateStringInFunctionParameterType.ts, 0, 0), Decl(templateStringInFunctionParameterType.ts, 0, 20), Decl(templateStringInFunctionParameterType.ts, 1, 22))
+> : Symbol((Missing), Decl(templateStringInFunctionParameterType.ts, 0, 11))
+
+function f(x: string);
+>f : Symbol(f, Decl(templateStringInFunctionParameterType.ts, 0, 0), Decl(templateStringInFunctionParameterType.ts, 0, 20), Decl(templateStringInFunctionParameterType.ts, 1, 22))
+>x : Symbol(x, Decl(templateStringInFunctionParameterType.ts, 1, 11))
+
+function f(x: string) {
+>f : Symbol(f, Decl(templateStringInFunctionParameterType.ts, 0, 0), Decl(templateStringInFunctionParameterType.ts, 0, 20), Decl(templateStringInFunctionParameterType.ts, 1, 22))
+>x : Symbol(x, Decl(templateStringInFunctionParameterType.ts, 2, 11))
+
+    return x;
+>x : Symbol(x, Decl(templateStringInFunctionParameterType.ts, 2, 11))
+}

@@ -1,0 +1,4 @@
+=== tests/cases/conformance/parser/ecmascript5/ArrayLiteralExpressions/parserArrayLiteralExpression6.ts ===
+var v = [,1];
+>v : Symbol(v, Decl(parserArrayLiteralExpression6.ts, 0, 3))
+

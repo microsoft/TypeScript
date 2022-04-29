@@ -1,0 +1,40 @@
+=== tests/cases/conformance/types/stringLiteral/stringLiteralTypesAndTuples01.ts ===
+// Should all be strings.
+let [hello, brave, newish, world] = ["Hello", "Brave", "New", "World"];
+>hello : Symbol(hello, Decl(stringLiteralTypesAndTuples01.ts, 1, 5))
+>brave : Symbol(brave, Decl(stringLiteralTypesAndTuples01.ts, 1, 11))
+>newish : Symbol(newish, Decl(stringLiteralTypesAndTuples01.ts, 1, 18))
+>world : Symbol(world, Decl(stringLiteralTypesAndTuples01.ts, 1, 26))
+
+type RexOrRaptor = "t-rex" | "raptor"
+>RexOrRaptor : Symbol(RexOrRaptor, Decl(stringLiteralTypesAndTuples01.ts, 1, 71))
+
+let [im, a, dinosaur]: ["I'm", "a", RexOrRaptor] = ['I\'m', 'a', 't-rex'];
+>im : Symbol(im, Decl(stringLiteralTypesAndTuples01.ts, 4, 5))
+>a : Symbol(a, Decl(stringLiteralTypesAndTuples01.ts, 4, 8))
+>dinosaur : Symbol(dinosaur, Decl(stringLiteralTypesAndTuples01.ts, 4, 11))
+>RexOrRaptor : Symbol(RexOrRaptor, Decl(stringLiteralTypesAndTuples01.ts, 1, 71))
+
+rawr(dinosaur);
+>rawr : Symbol(rawr, Decl(stringLiteralTypesAndTuples01.ts, 6, 15))
+>dinosaur : Symbol(dinosaur, Decl(stringLiteralTypesAndTuples01.ts, 4, 11))
+
+function rawr(dino: RexOrRaptor) {
+>rawr : Symbol(rawr, Decl(stringLiteralTypesAndTuples01.ts, 6, 15))
+>dino : Symbol(dino, Decl(stringLiteralTypesAndTuples01.ts, 8, 14))
+>RexOrRaptor : Symbol(RexOrRaptor, Decl(stringLiteralTypesAndTuples01.ts, 1, 71))
+
+    if (dino === "t-rex") {
+>dino : Symbol(dino, Decl(stringLiteralTypesAndTuples01.ts, 8, 14))
+
+        return "ROAAAAR!";
+    }
+    if (dino === "raptor") {
+>dino : Symbol(dino, Decl(stringLiteralTypesAndTuples01.ts, 8, 14))
+
+        return "yip yip!";
+    }
+
+    throw "Unexpected " + dino;
+>dino : Symbol(dino, Decl(stringLiteralTypesAndTuples01.ts, 8, 14))
+}

@@ -1,0 +1,36 @@
+=== /packages/search/lib/index.d.ts ===
+export declare function test<T> (a: () => T): () => T;
+>test : Symbol(test, Decl(index.d.ts, 0, 0))
+>T : Symbol(T, Decl(index.d.ts, 0, 29))
+>a : Symbol(a, Decl(index.d.ts, 0, 33))
+>T : Symbol(T, Decl(index.d.ts, 0, 29))
+>T : Symbol(T, Decl(index.d.ts, 0, 29))
+
+=== /packages/search-prefix/src/API/NotificationAPIUtils.ts ===
+export type NotificationRequest = {};
+>NotificationRequest : Symbol(NotificationRequest, Decl(NotificationAPIUtils.ts, 0, 0))
+
+export type NotificationResponse = {};
+>NotificationResponse : Symbol(NotificationResponse, Decl(NotificationAPIUtils.ts, 0, 37))
+
+export function getNotification(): NotificationResponse {
+>getNotification : Symbol(getNotification, Decl(NotificationAPIUtils.ts, 1, 38))
+>NotificationResponse : Symbol(NotificationResponse, Decl(NotificationAPIUtils.ts, 0, 37))
+
+  return {};
+}
+=== /packages/search-prefix/src/Store/NotificationStore.ts ===
+import { test } from "search/lib/index";
+>test : Symbol(test, Decl(NotificationStore.ts, 0, 8))
+
+import { getNotification } from "../API/NotificationAPIUtils";
+>getNotification : Symbol(getNotification, Decl(NotificationStore.ts, 1, 8))
+
+export const NotificationScenario = test(
+>NotificationScenario : Symbol(NotificationScenario, Decl(NotificationStore.ts, 3, 12))
+>test : Symbol(test, Decl(NotificationStore.ts, 0, 8))
+
+  getNotification
+>getNotification : Symbol(getNotification, Decl(NotificationStore.ts, 1, 8))
+
+);

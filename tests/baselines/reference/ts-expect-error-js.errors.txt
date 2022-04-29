@@ -1,0 +1,11 @@
+tests/cases/conformance/directives/a.js(3,1): error TS2578: Unused '@ts-expect-error' directive.
+
+
+==== tests/cases/conformance/directives/a.js (1 errors) ====
+    // there should be a "Unused @ts-expect-error" error since js files are being checked
+    
+    // @ts-expect-error
+    ~~~~~~~~~~~~~~~~~~~
+!!! error TS2578: Unused '@ts-expect-error' directive.
+    const a = 1;
+    

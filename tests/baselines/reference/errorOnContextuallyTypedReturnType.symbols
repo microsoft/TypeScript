@@ -1,0 +1,7 @@
+=== tests/cases/compiler/errorOnContextuallyTypedReturnType.ts ===
+var n1: () => boolean = function () { }; // expect an error here
+>n1 : Symbol(n1, Decl(errorOnContextuallyTypedReturnType.ts, 0, 3))
+
+var n2: () => boolean = function ():boolean { }; // expect an error here
+>n2 : Symbol(n2, Decl(errorOnContextuallyTypedReturnType.ts, 1, 3))
+

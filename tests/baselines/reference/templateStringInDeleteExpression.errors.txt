@@ -1,0 +1,7 @@
+tests/cases/conformance/es6/templates/templateStringInDeleteExpression.ts(1,8): error TS2703: The operand of a 'delete' operator must be a property reference.
+
+
+==== tests/cases/conformance/es6/templates/templateStringInDeleteExpression.ts (1 errors) ====
+    delete `abc${0}abc`;
+           ~~~~~~~~~~~~
+!!! error TS2703: The operand of a 'delete' operator must be a property reference.

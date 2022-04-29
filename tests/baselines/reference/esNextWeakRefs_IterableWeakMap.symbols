@@ -1,0 +1,358 @@
+=== tests/cases/compiler/esNextWeakRefs_IterableWeakMap.ts ===
+/** `static #cleanup` */
+const IterableWeakMap_cleanup = ({ ref, set }: {
+>IterableWeakMap_cleanup : Symbol(IterableWeakMap_cleanup, Decl(esNextWeakRefs_IterableWeakMap.ts, 1, 5))
+>ref : Symbol(ref, Decl(esNextWeakRefs_IterableWeakMap.ts, 1, 34))
+>set : Symbol(set, Decl(esNextWeakRefs_IterableWeakMap.ts, 1, 39))
+
+    readonly ref: WeakRef<object>;
+>ref : Symbol(ref, Decl(esNextWeakRefs_IterableWeakMap.ts, 1, 48))
+>WeakRef : Symbol(WeakRef, Decl(lib.es2021.weakref.d.ts, --, --), Decl(lib.es2021.weakref.d.ts, --, --))
+
+    readonly set: Set<WeakRef<object>>;
+>set : Symbol(set, Decl(esNextWeakRefs_IterableWeakMap.ts, 2, 34))
+>Set : Symbol(Set, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>WeakRef : Symbol(WeakRef, Decl(lib.es2021.weakref.d.ts, --, --), Decl(lib.es2021.weakref.d.ts, --, --))
+
+}) => {
+    set.delete(ref);
+>set.delete : Symbol(Set.delete, Decl(lib.es2015.collection.d.ts, --, --))
+>set : Symbol(set, Decl(esNextWeakRefs_IterableWeakMap.ts, 1, 39))
+>delete : Symbol(Set.delete, Decl(lib.es2015.collection.d.ts, --, --))
+>ref : Symbol(ref, Decl(esNextWeakRefs_IterableWeakMap.ts, 1, 34))
+
+};
+
+// Based on: https://github.com/tc39/proposal-weakrefs/blob/master/README.md#iterable-weakmaps
+export class IterableWeakMap<K extends object, V> implements WeakMap<K, V> {
+>IterableWeakMap : Symbol(IterableWeakMap, Decl(esNextWeakRefs_IterableWeakMap.ts, 6, 2))
+>K : Symbol(K, Decl(esNextWeakRefs_IterableWeakMap.ts, 9, 29))
+>V : Symbol(V, Decl(esNextWeakRefs_IterableWeakMap.ts, 9, 46))
+>WeakMap : Symbol(WeakMap, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>K : Symbol(K, Decl(esNextWeakRefs_IterableWeakMap.ts, 9, 29))
+>V : Symbol(V, Decl(esNextWeakRefs_IterableWeakMap.ts, 9, 46))
+
+    declare readonly [Symbol.toStringTag]: "IterableWeakMap";
+>[Symbol.toStringTag] : Symbol(IterableWeakMap[Symbol.toStringTag], Decl(esNextWeakRefs_IterableWeakMap.ts, 9, 76))
+>Symbol.toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+    #weakMap = new WeakMap<K, { readonly ref: WeakRef<K>; value: V }>();
+>#weakMap : Symbol(IterableWeakMap.#weakMap, Decl(esNextWeakRefs_IterableWeakMap.ts, 10, 61))
+>WeakMap : Symbol(WeakMap, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>K : Symbol(K, Decl(esNextWeakRefs_IterableWeakMap.ts, 9, 29))
+>ref : Symbol(ref, Decl(esNextWeakRefs_IterableWeakMap.ts, 12, 31))
+>WeakRef : Symbol(WeakRef, Decl(lib.es2021.weakref.d.ts, --, --), Decl(lib.es2021.weakref.d.ts, --, --))
+>K : Symbol(K, Decl(esNextWeakRefs_IterableWeakMap.ts, 9, 29))
+>value : Symbol(value, Decl(esNextWeakRefs_IterableWeakMap.ts, 12, 57))
+>V : Symbol(V, Decl(esNextWeakRefs_IterableWeakMap.ts, 9, 46))
+
+    #refSet = new Set<WeakRef<K>>();
+>#refSet : Symbol(IterableWeakMap.#refSet, Decl(esNextWeakRefs_IterableWeakMap.ts, 12, 72))
+>Set : Symbol(Set, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>WeakRef : Symbol(WeakRef, Decl(lib.es2021.weakref.d.ts, --, --), Decl(lib.es2021.weakref.d.ts, --, --))
+>K : Symbol(K, Decl(esNextWeakRefs_IterableWeakMap.ts, 9, 29))
+
+    #finalizationGroup = new FinalizationRegistry(IterableWeakMap_cleanup);
+>#finalizationGroup : Symbol(IterableWeakMap.#finalizationGroup, Decl(esNextWeakRefs_IterableWeakMap.ts, 13, 36))
+>FinalizationRegistry : Symbol(FinalizationRegistry, Decl(lib.es2021.weakref.d.ts, --, --), Decl(lib.es2021.weakref.d.ts, --, --))
+>IterableWeakMap_cleanup : Symbol(IterableWeakMap_cleanup, Decl(esNextWeakRefs_IterableWeakMap.ts, 1, 5))
+
+    constructor(iterable: Iterable<[key: K, value: V]> | null = null) {
+>iterable : Symbol(iterable, Decl(esNextWeakRefs_IterableWeakMap.ts, 16, 16))
+>Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
+>K : Symbol(K, Decl(esNextWeakRefs_IterableWeakMap.ts, 9, 29))
+>V : Symbol(V, Decl(esNextWeakRefs_IterableWeakMap.ts, 9, 46))
+
+        if (iterable !== null) {
+>iterable : Symbol(iterable, Decl(esNextWeakRefs_IterableWeakMap.ts, 16, 16))
+
+            for (const { 0: key, 1: value } of iterable) {
+>key : Symbol(key, Decl(esNextWeakRefs_IterableWeakMap.ts, 18, 24))
+>value : Symbol(value, Decl(esNextWeakRefs_IterableWeakMap.ts, 18, 32))
+>iterable : Symbol(iterable, Decl(esNextWeakRefs_IterableWeakMap.ts, 16, 16))
+
+                this.set(key, value);
+>this.set : Symbol(IterableWeakMap.set, Decl(esNextWeakRefs_IterableWeakMap.ts, 22, 5))
+>this : Symbol(IterableWeakMap, Decl(esNextWeakRefs_IterableWeakMap.ts, 6, 2))
+>set : Symbol(IterableWeakMap.set, Decl(esNextWeakRefs_IterableWeakMap.ts, 22, 5))
+>key : Symbol(key, Decl(esNextWeakRefs_IterableWeakMap.ts, 18, 24))
+>value : Symbol(value, Decl(esNextWeakRefs_IterableWeakMap.ts, 18, 32))
+            }
+        }
+    }
+
+    set(key: K, value: V): this {
+>set : Symbol(IterableWeakMap.set, Decl(esNextWeakRefs_IterableWeakMap.ts, 22, 5))
+>key : Symbol(key, Decl(esNextWeakRefs_IterableWeakMap.ts, 24, 8))
+>K : Symbol(K, Decl(esNextWeakRefs_IterableWeakMap.ts, 9, 29))
+>value : Symbol(value, Decl(esNextWeakRefs_IterableWeakMap.ts, 24, 15))
+>V : Symbol(V, Decl(esNextWeakRefs_IterableWeakMap.ts, 9, 46))
+
+        const entry = this.#weakMap.get(key);
+>entry : Symbol(entry, Decl(esNextWeakRefs_IterableWeakMap.ts, 25, 13))
+>this.#weakMap.get : Symbol(WeakMap.get, Decl(lib.es2015.collection.d.ts, --, --))
+>this.#weakMap : Symbol(IterableWeakMap.#weakMap, Decl(esNextWeakRefs_IterableWeakMap.ts, 10, 61))
+>this : Symbol(IterableWeakMap, Decl(esNextWeakRefs_IterableWeakMap.ts, 6, 2))
+>get : Symbol(WeakMap.get, Decl(lib.es2015.collection.d.ts, --, --))
+>key : Symbol(key, Decl(esNextWeakRefs_IterableWeakMap.ts, 24, 8))
+
+        if (entry !== undefined) {
+>entry : Symbol(entry, Decl(esNextWeakRefs_IterableWeakMap.ts, 25, 13))
+>undefined : Symbol(undefined)
+
+            entry.value = value;
+>entry.value : Symbol(value, Decl(esNextWeakRefs_IterableWeakMap.ts, 12, 57))
+>entry : Symbol(entry, Decl(esNextWeakRefs_IterableWeakMap.ts, 25, 13))
+>value : Symbol(value, Decl(esNextWeakRefs_IterableWeakMap.ts, 12, 57))
+>value : Symbol(value, Decl(esNextWeakRefs_IterableWeakMap.ts, 24, 15))
+
+        } else {
+            const ref = new WeakRef(key);
+>ref : Symbol(ref, Decl(esNextWeakRefs_IterableWeakMap.ts, 29, 17))
+>WeakRef : Symbol(WeakRef, Decl(lib.es2021.weakref.d.ts, --, --), Decl(lib.es2021.weakref.d.ts, --, --))
+>key : Symbol(key, Decl(esNextWeakRefs_IterableWeakMap.ts, 24, 8))
+
+            this.#weakMap.set(key, { ref, value });
+>this.#weakMap.set : Symbol(WeakMap.set, Decl(lib.es2015.collection.d.ts, --, --))
+>this.#weakMap : Symbol(IterableWeakMap.#weakMap, Decl(esNextWeakRefs_IterableWeakMap.ts, 10, 61))
+>this : Symbol(IterableWeakMap, Decl(esNextWeakRefs_IterableWeakMap.ts, 6, 2))
+>set : Symbol(WeakMap.set, Decl(lib.es2015.collection.d.ts, --, --))
+>key : Symbol(key, Decl(esNextWeakRefs_IterableWeakMap.ts, 24, 8))
+>ref : Symbol(ref, Decl(esNextWeakRefs_IterableWeakMap.ts, 31, 36))
+>value : Symbol(value, Decl(esNextWeakRefs_IterableWeakMap.ts, 31, 41))
+
+            this.#refSet.add(ref);
+>this.#refSet.add : Symbol(Set.add, Decl(lib.es2015.collection.d.ts, --, --))
+>this.#refSet : Symbol(IterableWeakMap.#refSet, Decl(esNextWeakRefs_IterableWeakMap.ts, 12, 72))
+>this : Symbol(IterableWeakMap, Decl(esNextWeakRefs_IterableWeakMap.ts, 6, 2))
+>add : Symbol(Set.add, Decl(lib.es2015.collection.d.ts, --, --))
+>ref : Symbol(ref, Decl(esNextWeakRefs_IterableWeakMap.ts, 29, 17))
+
+            this.#finalizationGroup.register(key, {
+>this.#finalizationGroup.register : Symbol(FinalizationRegistry.register, Decl(lib.es2021.weakref.d.ts, --, --))
+>this.#finalizationGroup : Symbol(IterableWeakMap.#finalizationGroup, Decl(esNextWeakRefs_IterableWeakMap.ts, 13, 36))
+>this : Symbol(IterableWeakMap, Decl(esNextWeakRefs_IterableWeakMap.ts, 6, 2))
+>register : Symbol(FinalizationRegistry.register, Decl(lib.es2021.weakref.d.ts, --, --))
+>key : Symbol(key, Decl(esNextWeakRefs_IterableWeakMap.ts, 24, 8))
+
+                set: this.#refSet,
+>set : Symbol(set, Decl(esNextWeakRefs_IterableWeakMap.ts, 33, 51))
+>this.#refSet : Symbol(IterableWeakMap.#refSet, Decl(esNextWeakRefs_IterableWeakMap.ts, 12, 72))
+>this : Symbol(IterableWeakMap, Decl(esNextWeakRefs_IterableWeakMap.ts, 6, 2))
+
+                ref,
+>ref : Symbol(ref, Decl(esNextWeakRefs_IterableWeakMap.ts, 34, 34))
+
+            }, ref);
+>ref : Symbol(ref, Decl(esNextWeakRefs_IterableWeakMap.ts, 29, 17))
+        }
+        return this;
+>this : Symbol(IterableWeakMap, Decl(esNextWeakRefs_IterableWeakMap.ts, 6, 2))
+    }
+
+    has(key: K): boolean {
+>has : Symbol(IterableWeakMap.has, Decl(esNextWeakRefs_IterableWeakMap.ts, 39, 5))
+>key : Symbol(key, Decl(esNextWeakRefs_IterableWeakMap.ts, 41, 8))
+>K : Symbol(K, Decl(esNextWeakRefs_IterableWeakMap.ts, 9, 29))
+
+        return this.#weakMap.has(key);
+>this.#weakMap.has : Symbol(WeakMap.has, Decl(lib.es2015.collection.d.ts, --, --))
+>this.#weakMap : Symbol(IterableWeakMap.#weakMap, Decl(esNextWeakRefs_IterableWeakMap.ts, 10, 61))
+>this : Symbol(IterableWeakMap, Decl(esNextWeakRefs_IterableWeakMap.ts, 6, 2))
+>has : Symbol(WeakMap.has, Decl(lib.es2015.collection.d.ts, --, --))
+>key : Symbol(key, Decl(esNextWeakRefs_IterableWeakMap.ts, 41, 8))
+    }
+
+    get(key: K): V | undefined {
+>get : Symbol(IterableWeakMap.get, Decl(esNextWeakRefs_IterableWeakMap.ts, 43, 5))
+>key : Symbol(key, Decl(esNextWeakRefs_IterableWeakMap.ts, 45, 8))
+>K : Symbol(K, Decl(esNextWeakRefs_IterableWeakMap.ts, 9, 29))
+>V : Symbol(V, Decl(esNextWeakRefs_IterableWeakMap.ts, 9, 46))
+
+        return this.#weakMap.get(key)?.value;
+>this.#weakMap.get(key)?.value : Symbol(value, Decl(esNextWeakRefs_IterableWeakMap.ts, 12, 57))
+>this.#weakMap.get : Symbol(WeakMap.get, Decl(lib.es2015.collection.d.ts, --, --))
+>this.#weakMap : Symbol(IterableWeakMap.#weakMap, Decl(esNextWeakRefs_IterableWeakMap.ts, 10, 61))
+>this : Symbol(IterableWeakMap, Decl(esNextWeakRefs_IterableWeakMap.ts, 6, 2))
+>get : Symbol(WeakMap.get, Decl(lib.es2015.collection.d.ts, --, --))
+>key : Symbol(key, Decl(esNextWeakRefs_IterableWeakMap.ts, 45, 8))
+>value : Symbol(value, Decl(esNextWeakRefs_IterableWeakMap.ts, 12, 57))
+    }
+
+    delete(key: K): boolean {
+>delete : Symbol(IterableWeakMap.delete, Decl(esNextWeakRefs_IterableWeakMap.ts, 47, 5))
+>key : Symbol(key, Decl(esNextWeakRefs_IterableWeakMap.ts, 49, 11))
+>K : Symbol(K, Decl(esNextWeakRefs_IterableWeakMap.ts, 9, 29))
+
+        const entry = this.#weakMap.get(key);
+>entry : Symbol(entry, Decl(esNextWeakRefs_IterableWeakMap.ts, 50, 13))
+>this.#weakMap.get : Symbol(WeakMap.get, Decl(lib.es2015.collection.d.ts, --, --))
+>this.#weakMap : Symbol(IterableWeakMap.#weakMap, Decl(esNextWeakRefs_IterableWeakMap.ts, 10, 61))
+>this : Symbol(IterableWeakMap, Decl(esNextWeakRefs_IterableWeakMap.ts, 6, 2))
+>get : Symbol(WeakMap.get, Decl(lib.es2015.collection.d.ts, --, --))
+>key : Symbol(key, Decl(esNextWeakRefs_IterableWeakMap.ts, 49, 11))
+
+        if (entry === undefined) {
+>entry : Symbol(entry, Decl(esNextWeakRefs_IterableWeakMap.ts, 50, 13))
+>undefined : Symbol(undefined)
+
+            return false;
+        }
+
+        const { ref } = entry;
+>ref : Symbol(ref, Decl(esNextWeakRefs_IterableWeakMap.ts, 55, 15))
+>entry : Symbol(entry, Decl(esNextWeakRefs_IterableWeakMap.ts, 50, 13))
+
+        this.#weakMap.delete(key);
+>this.#weakMap.delete : Symbol(WeakMap.delete, Decl(lib.es2015.collection.d.ts, --, --))
+>this.#weakMap : Symbol(IterableWeakMap.#weakMap, Decl(esNextWeakRefs_IterableWeakMap.ts, 10, 61))
+>this : Symbol(IterableWeakMap, Decl(esNextWeakRefs_IterableWeakMap.ts, 6, 2))
+>delete : Symbol(WeakMap.delete, Decl(lib.es2015.collection.d.ts, --, --))
+>key : Symbol(key, Decl(esNextWeakRefs_IterableWeakMap.ts, 49, 11))
+
+        this.#refSet.delete(ref);
+>this.#refSet.delete : Symbol(Set.delete, Decl(lib.es2015.collection.d.ts, --, --))
+>this.#refSet : Symbol(IterableWeakMap.#refSet, Decl(esNextWeakRefs_IterableWeakMap.ts, 12, 72))
+>this : Symbol(IterableWeakMap, Decl(esNextWeakRefs_IterableWeakMap.ts, 6, 2))
+>delete : Symbol(Set.delete, Decl(lib.es2015.collection.d.ts, --, --))
+>ref : Symbol(ref, Decl(esNextWeakRefs_IterableWeakMap.ts, 55, 15))
+
+        this.#finalizationGroup.unregister(ref);
+>this.#finalizationGroup.unregister : Symbol(FinalizationRegistry.unregister, Decl(lib.es2021.weakref.d.ts, --, --))
+>this.#finalizationGroup : Symbol(IterableWeakMap.#finalizationGroup, Decl(esNextWeakRefs_IterableWeakMap.ts, 13, 36))
+>this : Symbol(IterableWeakMap, Decl(esNextWeakRefs_IterableWeakMap.ts, 6, 2))
+>unregister : Symbol(FinalizationRegistry.unregister, Decl(lib.es2021.weakref.d.ts, --, --))
+>ref : Symbol(ref, Decl(esNextWeakRefs_IterableWeakMap.ts, 55, 15))
+
+        return true;
+    }
+
+    declare [Symbol.iterator]: this["entries"];
+>[Symbol.iterator] : Symbol(IterableWeakMap[Symbol.iterator], Decl(esNextWeakRefs_IterableWeakMap.ts, 60, 5))
+>Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+
+    *entries(): Generator<[key: K, value: V], void> {
+>entries : Symbol(IterableWeakMap.entries, Decl(esNextWeakRefs_IterableWeakMap.ts, 62, 47))
+>Generator : Symbol(Generator, Decl(lib.es2015.generator.d.ts, --, --))
+>K : Symbol(K, Decl(esNextWeakRefs_IterableWeakMap.ts, 9, 29))
+>V : Symbol(V, Decl(esNextWeakRefs_IterableWeakMap.ts, 9, 46))
+
+        for (const ref of this.#refSet) {
+>ref : Symbol(ref, Decl(esNextWeakRefs_IterableWeakMap.ts, 64, 18))
+>this.#refSet : Symbol(IterableWeakMap.#refSet, Decl(esNextWeakRefs_IterableWeakMap.ts, 12, 72))
+>this : Symbol(IterableWeakMap, Decl(esNextWeakRefs_IterableWeakMap.ts, 6, 2))
+
+            const key = ref.deref();
+>key : Symbol(key, Decl(esNextWeakRefs_IterableWeakMap.ts, 65, 17))
+>ref.deref : Symbol(WeakRef.deref, Decl(lib.es2021.weakref.d.ts, --, --))
+>ref : Symbol(ref, Decl(esNextWeakRefs_IterableWeakMap.ts, 64, 18))
+>deref : Symbol(WeakRef.deref, Decl(lib.es2021.weakref.d.ts, --, --))
+
+            if (key === undefined) continue;
+>key : Symbol(key, Decl(esNextWeakRefs_IterableWeakMap.ts, 65, 17))
+>undefined : Symbol(undefined)
+
+            const { value } = this.#weakMap.get(key)!;
+>value : Symbol(value, Decl(esNextWeakRefs_IterableWeakMap.ts, 67, 19))
+>this.#weakMap.get : Symbol(WeakMap.get, Decl(lib.es2015.collection.d.ts, --, --))
+>this.#weakMap : Symbol(IterableWeakMap.#weakMap, Decl(esNextWeakRefs_IterableWeakMap.ts, 10, 61))
+>this : Symbol(IterableWeakMap, Decl(esNextWeakRefs_IterableWeakMap.ts, 6, 2))
+>get : Symbol(WeakMap.get, Decl(lib.es2015.collection.d.ts, --, --))
+>key : Symbol(key, Decl(esNextWeakRefs_IterableWeakMap.ts, 65, 17))
+
+            yield [key, value];
+>key : Symbol(key, Decl(esNextWeakRefs_IterableWeakMap.ts, 65, 17))
+>value : Symbol(value, Decl(esNextWeakRefs_IterableWeakMap.ts, 67, 19))
+        }
+    }
+
+    *keys() {
+>keys : Symbol(IterableWeakMap.keys, Decl(esNextWeakRefs_IterableWeakMap.ts, 70, 5))
+
+        for (const { 0: key } of this) {
+>key : Symbol(key, Decl(esNextWeakRefs_IterableWeakMap.ts, 73, 20))
+>this : Symbol(IterableWeakMap, Decl(esNextWeakRefs_IterableWeakMap.ts, 6, 2))
+
+            yield key;
+>key : Symbol(key, Decl(esNextWeakRefs_IterableWeakMap.ts, 73, 20))
+        }
+    }
+
+    *values() {
+>values : Symbol(IterableWeakMap.values, Decl(esNextWeakRefs_IterableWeakMap.ts, 76, 5))
+
+        for (const { 1: value } of this) {
+>value : Symbol(value, Decl(esNextWeakRefs_IterableWeakMap.ts, 79, 20))
+>this : Symbol(IterableWeakMap, Decl(esNextWeakRefs_IterableWeakMap.ts, 6, 2))
+
+            yield value;
+>value : Symbol(value, Decl(esNextWeakRefs_IterableWeakMap.ts, 79, 20))
+        }
+    }
+}
+
+Object.defineProperties(IterableWeakMap.prototype, {
+>Object.defineProperties : Symbol(ObjectConstructor.defineProperties, Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>defineProperties : Symbol(ObjectConstructor.defineProperties, Decl(lib.es5.d.ts, --, --))
+>IterableWeakMap.prototype : Symbol(IterableWeakMap.prototype)
+>IterableWeakMap : Symbol(IterableWeakMap, Decl(esNextWeakRefs_IterableWeakMap.ts, 6, 2))
+>prototype : Symbol(IterableWeakMap.prototype)
+
+    [Symbol.iterator]: {
+>[Symbol.iterator] : Symbol([Symbol.iterator], Decl(esNextWeakRefs_IterableWeakMap.ts, 85, 52))
+>Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+
+        configurable: true,
+>configurable : Symbol(configurable, Decl(esNextWeakRefs_IterableWeakMap.ts, 86, 24))
+
+        enumerable: false,
+>enumerable : Symbol(enumerable, Decl(esNextWeakRefs_IterableWeakMap.ts, 87, 27))
+
+        writable: true,
+>writable : Symbol(writable, Decl(esNextWeakRefs_IterableWeakMap.ts, 88, 26))
+
+        value: Object.getOwnPropertyDescriptor(
+>value : Symbol(value, Decl(esNextWeakRefs_IterableWeakMap.ts, 89, 23))
+>Object.getOwnPropertyDescriptor(            IterableWeakMap.prototype,            "entries",        )!.value : Symbol(PropertyDescriptor.value, Decl(lib.es5.d.ts, --, --))
+>Object.getOwnPropertyDescriptor : Symbol(ObjectConstructor.getOwnPropertyDescriptor, Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>getOwnPropertyDescriptor : Symbol(ObjectConstructor.getOwnPropertyDescriptor, Decl(lib.es5.d.ts, --, --))
+
+            IterableWeakMap.prototype,
+>IterableWeakMap.prototype : Symbol(IterableWeakMap.prototype)
+>IterableWeakMap : Symbol(IterableWeakMap, Decl(esNextWeakRefs_IterableWeakMap.ts, 6, 2))
+>prototype : Symbol(IterableWeakMap.prototype)
+
+            "entries",
+        )!.value,
+>value : Symbol(PropertyDescriptor.value, Decl(lib.es5.d.ts, --, --))
+
+    },
+    [Symbol.toStringTag]: {
+>[Symbol.toStringTag] : Symbol([Symbol.toStringTag], Decl(esNextWeakRefs_IterableWeakMap.ts, 94, 6))
+>Symbol.toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+        configurable: true,
+>configurable : Symbol(configurable, Decl(esNextWeakRefs_IterableWeakMap.ts, 95, 27))
+
+        enumerable: false,
+>enumerable : Symbol(enumerable, Decl(esNextWeakRefs_IterableWeakMap.ts, 96, 27))
+
+        writable: false,
+>writable : Symbol(writable, Decl(esNextWeakRefs_IterableWeakMap.ts, 97, 26))
+
+        value: "IterableWeakMap",
+>value : Symbol(value, Decl(esNextWeakRefs_IterableWeakMap.ts, 98, 24))
+
+    },
+});
+

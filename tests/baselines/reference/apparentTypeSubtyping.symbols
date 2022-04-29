@@ -1,0 +1,48 @@
+=== tests/cases/conformance/types/typeRelationships/apparentType/apparentTypeSubtyping.ts ===
+// subtype checks use the apparent type of the target type
+// S is a subtype of a type T, and T is a supertype of S, if one of the following is true, where S' denotes the apparent type (section 3.8.1) of S:
+
+class Base<U extends String> {
+>Base : Symbol(Base, Decl(apparentTypeSubtyping.ts, 0, 0))
+>U : Symbol(U, Decl(apparentTypeSubtyping.ts, 3, 11))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    x: U;
+>x : Symbol(Base.x, Decl(apparentTypeSubtyping.ts, 3, 30))
+>U : Symbol(U, Decl(apparentTypeSubtyping.ts, 3, 11))
+}
+
+// is String (S) a subtype of U extends String (T)? Would only be true if we used the apparent type of U (T)
+class Derived<U> extends Base<string> { // error
+>Derived : Symbol(Derived, Decl(apparentTypeSubtyping.ts, 5, 1))
+>U : Symbol(U, Decl(apparentTypeSubtyping.ts, 8, 14))
+>Base : Symbol(Base, Decl(apparentTypeSubtyping.ts, 0, 0))
+
+    x: String;
+>x : Symbol(Derived.x, Decl(apparentTypeSubtyping.ts, 8, 39))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+}
+
+class Base2 {
+>Base2 : Symbol(Base2, Decl(apparentTypeSubtyping.ts, 10, 1))
+
+    x: String;
+>x : Symbol(Base2.x, Decl(apparentTypeSubtyping.ts, 12, 13))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    static s: String;
+>s : Symbol(Base2.s, Decl(apparentTypeSubtyping.ts, 13, 14))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+}
+
+// is U extends String (S) a subtype of String (T)? Apparent type of U is String so it succeeds
+class Derived2<U extends String> extends Base2 { // error because of the prototype's not matching, not because of the instance side
+>Derived2 : Symbol(Derived2, Decl(apparentTypeSubtyping.ts, 15, 1))
+>U : Symbol(U, Decl(apparentTypeSubtyping.ts, 18, 15))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Base2 : Symbol(Base2, Decl(apparentTypeSubtyping.ts, 10, 1))
+
+    x: U;
+>x : Symbol(Derived2.x, Decl(apparentTypeSubtyping.ts, 18, 48))
+>U : Symbol(U, Decl(apparentTypeSubtyping.ts, 18, 15))
+}

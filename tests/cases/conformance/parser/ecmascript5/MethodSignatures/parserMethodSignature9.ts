@@ -1,0 +1,3 @@
+interface I {
+  0();
+}

@@ -1,0 +1,30 @@
+=== tests/cases/compiler/selfRef.ts ===
+module M
+>M : Symbol(M, Decl(selfRef.ts, 0, 0))
+{
+    export class Test
+>Test : Symbol(Test, Decl(selfRef.ts, 1, 1))
+    {
+      private name = "hello";
+>name : Symbol(Test.name, Decl(selfRef.ts, 3, 5))
+
+      public setName = function(value: string): void {
+>setName : Symbol(Test.setName, Decl(selfRef.ts, 4, 29))
+>value : Symbol(value, Decl(selfRef.ts, 5, 32))
+
+	  (function () {
+	      name=value;
+>value : Symbol(value, Decl(selfRef.ts, 5, 32))
+
+	  })();
+      }
+      public getName = function(): string {
+>getName : Symbol(Test.getName, Decl(selfRef.ts, 9, 7))
+
+          return name;
+      }
+    }
+}
+
+
+

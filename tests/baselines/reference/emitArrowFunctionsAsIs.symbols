@@ -1,0 +1,14 @@
+=== tests/cases/conformance/es6/arrowFunction/emitArrowFunctionsAsIs.ts ===
+var arrow1 = a => { };
+>arrow1 : Symbol(arrow1, Decl(emitArrowFunctionsAsIs.ts, 0, 3))
+>a : Symbol(a, Decl(emitArrowFunctionsAsIs.ts, 0, 12))
+
+var arrow2 = (a) => { };
+>arrow2 : Symbol(arrow2, Decl(emitArrowFunctionsAsIs.ts, 1, 3))
+>a : Symbol(a, Decl(emitArrowFunctionsAsIs.ts, 1, 14))
+
+var arrow3 = (a, b) => { };
+>arrow3 : Symbol(arrow3, Decl(emitArrowFunctionsAsIs.ts, 3, 3))
+>a : Symbol(a, Decl(emitArrowFunctionsAsIs.ts, 3, 14))
+>b : Symbol(b, Decl(emitArrowFunctionsAsIs.ts, 3, 16))
+

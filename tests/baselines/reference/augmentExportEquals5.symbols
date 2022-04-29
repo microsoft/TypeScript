@@ -1,0 +1,196 @@
+=== tests/cases/compiler/express.d.ts ===
+declare module Express {
+>Express : Symbol(Express, Decl(express.d.ts, 0, 0))
+
+    export interface Request { }
+>Request : Symbol(Request, Decl(express.d.ts, 0, 24))
+
+    export interface Response { }
+>Response : Symbol(Response, Decl(express.d.ts, 1, 32))
+
+    export interface Application { }
+>Application : Symbol(Application, Decl(express.d.ts, 2, 33))
+}
+
+declare module "express" {
+>"express" : Symbol("express", Decl(express.d.ts, 4, 1))
+
+    function e(): e.Express;
+>e : Symbol(e, Decl(express.d.ts, 6, 26), Decl(express.d.ts, 7, 28), Decl(augmentation.ts, 1, 29))
+>e : Symbol(e, Decl(express.d.ts, 6, 26), Decl(express.d.ts, 7, 28), Decl(augmentation.ts, 1, 29))
+>Express : Symbol(e.Express, Decl(express.d.ts, 52, 9))
+
+    namespace e {
+>e : Symbol(e, Decl(express.d.ts, 6, 26), Decl(express.d.ts, 7, 28), Decl(augmentation.ts, 1, 29))
+
+        interface IRoute {
+>IRoute : Symbol(IRoute, Decl(express.d.ts, 8, 17))
+
+            all(...handler: RequestHandler[]): IRoute;
+>all : Symbol(IRoute.all, Decl(express.d.ts, 9, 26))
+>handler : Symbol(handler, Decl(express.d.ts, 10, 16))
+>RequestHandler : Symbol(RequestHandler, Decl(express.d.ts, 38, 9))
+>IRoute : Symbol(IRoute, Decl(express.d.ts, 8, 17))
+        }
+
+        interface IRouterMatcher<T> {
+>IRouterMatcher : Symbol(IRouterMatcher, Decl(express.d.ts, 11, 9))
+>T : Symbol(T, Decl(express.d.ts, 13, 33))
+
+            (name: string|RegExp, ...handlers: RequestHandler[]): T;
+>name : Symbol(name, Decl(express.d.ts, 14, 13))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>handlers : Symbol(handlers, Decl(express.d.ts, 14, 33))
+>RequestHandler : Symbol(RequestHandler, Decl(express.d.ts, 38, 9))
+>T : Symbol(T, Decl(express.d.ts, 13, 33))
+        }
+
+        interface IRouter<T> extends RequestHandler {
+>IRouter : Symbol(IRouter, Decl(express.d.ts, 15, 9))
+>T : Symbol(T, Decl(express.d.ts, 17, 26))
+>RequestHandler : Symbol(RequestHandler, Decl(express.d.ts, 38, 9))
+
+            route(path: string): IRoute;
+>route : Symbol(IRouter.route, Decl(express.d.ts, 17, 53))
+>path : Symbol(path, Decl(express.d.ts, 18, 18))
+>IRoute : Symbol(IRoute, Decl(express.d.ts, 8, 17))
+        }
+
+        export function Router(options?: any): Router;
+>Router : Symbol(Router, Decl(express.d.ts, 19, 9), Decl(express.d.ts, 21, 54))
+>options : Symbol(options, Decl(express.d.ts, 21, 31))
+>Router : Symbol(Router, Decl(express.d.ts, 19, 9), Decl(express.d.ts, 21, 54))
+
+        export interface Router extends IRouter<Router> {}
+>Router : Symbol(Router, Decl(express.d.ts, 19, 9), Decl(express.d.ts, 21, 54))
+>IRouter : Symbol(IRouter, Decl(express.d.ts, 15, 9))
+>Router : Symbol(Router, Decl(express.d.ts, 19, 9), Decl(express.d.ts, 21, 54))
+
+        interface Errback { (err: Error): void; }
+>Errback : Symbol(Errback, Decl(express.d.ts, 23, 58))
+>err : Symbol(err, Decl(express.d.ts, 25, 29))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+        interface Request extends Express.Request {
+>Request : Symbol(Request, Decl(express.d.ts, 25, 49), Decl(augmentation.ts, 2, 26))
+>Express.Request : Symbol(Express.Request, Decl(express.d.ts, 0, 24))
+>Express : Symbol(Express, Decl(express.d.ts, 0, 0))
+>Request : Symbol(Express.Request, Decl(express.d.ts, 0, 24))
+
+            get (name: string): string;
+>get : Symbol(Request.get, Decl(express.d.ts, 27, 51))
+>name : Symbol(name, Decl(express.d.ts, 29, 17))
+        }
+
+        interface Response extends Express.Response {
+>Response : Symbol(Response, Decl(express.d.ts, 30, 9))
+>Express.Response : Symbol(Express.Response, Decl(express.d.ts, 1, 32))
+>Express : Symbol(Express, Decl(express.d.ts, 0, 0))
+>Response : Symbol(Express.Response, Decl(express.d.ts, 1, 32))
+
+            charset: string;
+>charset : Symbol(Response.charset, Decl(express.d.ts, 32, 53))
+        }
+
+        interface ErrorRequestHandler {
+>ErrorRequestHandler : Symbol(ErrorRequestHandler, Decl(express.d.ts, 34, 9))
+
+            (err: any, req: Request, res: Response, next: Function): any;
+>err : Symbol(err, Decl(express.d.ts, 37, 13))
+>req : Symbol(req, Decl(express.d.ts, 37, 22))
+>Request : Symbol(Request, Decl(express.d.ts, 25, 49), Decl(augmentation.ts, 2, 26))
+>res : Symbol(res, Decl(express.d.ts, 37, 36))
+>Response : Symbol(Response, Decl(express.d.ts, 30, 9))
+>next : Symbol(next, Decl(express.d.ts, 37, 51))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+        }
+
+        interface RequestHandler {
+>RequestHandler : Symbol(RequestHandler, Decl(express.d.ts, 38, 9))
+
+            (req: Request, res: Response, next: Function): any;
+>req : Symbol(req, Decl(express.d.ts, 41, 13))
+>Request : Symbol(Request, Decl(express.d.ts, 25, 49), Decl(augmentation.ts, 2, 26))
+>res : Symbol(res, Decl(express.d.ts, 41, 26))
+>Response : Symbol(Response, Decl(express.d.ts, 30, 9))
+>next : Symbol(next, Decl(express.d.ts, 41, 41))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+        }
+
+        interface Handler extends RequestHandler {}
+>Handler : Symbol(Handler, Decl(express.d.ts, 42, 9))
+>RequestHandler : Symbol(RequestHandler, Decl(express.d.ts, 38, 9))
+
+        interface RequestParamHandler {
+>RequestParamHandler : Symbol(RequestParamHandler, Decl(express.d.ts, 44, 51))
+
+            (req: Request, res: Response, next: Function, param: any): any;
+>req : Symbol(req, Decl(express.d.ts, 47, 13))
+>Request : Symbol(Request, Decl(express.d.ts, 25, 49), Decl(augmentation.ts, 2, 26))
+>res : Symbol(res, Decl(express.d.ts, 47, 26))
+>Response : Symbol(Response, Decl(express.d.ts, 30, 9))
+>next : Symbol(next, Decl(express.d.ts, 47, 41))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>param : Symbol(param, Decl(express.d.ts, 47, 57))
+        }
+
+        interface Application extends IRouter<Application>, Express.Application {
+>Application : Symbol(Application, Decl(express.d.ts, 48, 9))
+>IRouter : Symbol(IRouter, Decl(express.d.ts, 15, 9))
+>Application : Symbol(Application, Decl(express.d.ts, 48, 9))
+>Express.Application : Symbol(Express.Application, Decl(express.d.ts, 2, 33))
+>Express : Symbol(Express, Decl(express.d.ts, 0, 0))
+>Application : Symbol(Express.Application, Decl(express.d.ts, 2, 33))
+
+            routes: any;
+>routes : Symbol(Application.routes, Decl(express.d.ts, 50, 81))
+        }
+
+        interface Express extends Application {
+>Express : Symbol(Express, Decl(express.d.ts, 52, 9))
+>Application : Symbol(Application, Decl(express.d.ts, 48, 9))
+
+            createApplication(): Application;
+>createApplication : Symbol(Express.createApplication, Decl(express.d.ts, 54, 47))
+>Application : Symbol(Application, Decl(express.d.ts, 48, 9))
+        }
+
+        var static: any;
+>static : Symbol(static, Decl(express.d.ts, 58, 11))
+    }
+
+    export = e;
+>e : Symbol(e, Decl(express.d.ts, 6, 26), Decl(express.d.ts, 7, 28), Decl(augmentation.ts, 1, 29))
+}
+
+=== tests/cases/compiler/augmentation.ts ===
+/// <reference path="express.d.ts"/>
+import * as e from "express";
+>e : Symbol(e, Decl(augmentation.ts, 1, 6))
+
+declare module "express" {
+>"express" : Symbol(e, Decl(express.d.ts, 6, 26), Decl(express.d.ts, 7, 28), Decl(augmentation.ts, 1, 29))
+
+    interface Request {
+>Request : Symbol(Request, Decl(express.d.ts, 25, 49), Decl(augmentation.ts, 2, 26))
+
+        id: number;
+>id : Symbol(Request.id, Decl(augmentation.ts, 3, 23))
+    }
+}
+
+=== tests/cases/compiler/consumer.ts ===
+import { Request } from "express";
+>Request : Symbol(Request, Decl(consumer.ts, 0, 8))
+
+import "./augmentation";
+let x: Request;
+>x : Symbol(x, Decl(consumer.ts, 2, 3))
+>Request : Symbol(Request, Decl(consumer.ts, 0, 8))
+
+const y = x.id;
+>y : Symbol(y, Decl(consumer.ts, 3, 5))
+>x.id : Symbol(Request.id, Decl(augmentation.ts, 3, 23))
+>x : Symbol(x, Decl(consumer.ts, 2, 3))
+>id : Symbol(Request.id, Decl(augmentation.ts, 3, 23))
+

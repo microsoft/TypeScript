@@ -1,0 +1,7 @@
+=== tests/cases/compiler/generatorES6InAMDModule.ts ===
+export function* foo() {
+>foo : () => Generator<any, void, unknown>
+
+    yield
+>yield : any
+}

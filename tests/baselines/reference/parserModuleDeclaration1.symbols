@@ -1,0 +1,4 @@
+=== tests/cases/conformance/parser/ecmascript5/ModuleDeclarations/parserModuleDeclaration1.ts ===
+module "Foo" {
+>"Foo" : Symbol("Foo", Decl(parserModuleDeclaration1.ts, 0, 0))
+}

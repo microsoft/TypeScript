@@ -1,0 +1,170 @@
+tests/cases/conformance/types/literal/enumLiteralTypes3.ts(10,5): error TS2322: Type 'YesNo' is not assignable to type 'Choice.Yes'.
+  Type 'Choice.No' is not assignable to type 'Choice.Yes'.
+tests/cases/conformance/types/literal/enumLiteralTypes3.ts(11,5): error TS2322: Type 'UnknownYesNo' is not assignable to type 'Choice.Yes'.
+  Type 'Choice.Unknown' is not assignable to type 'Choice.Yes'.
+tests/cases/conformance/types/literal/enumLiteralTypes3.ts(12,5): error TS2322: Type 'Choice' is not assignable to type 'Choice.Yes'.
+tests/cases/conformance/types/literal/enumLiteralTypes3.ts(18,5): error TS2322: Type 'UnknownYesNo' is not assignable to type 'YesNo'.
+  Type 'Choice.Unknown' is not assignable to type 'YesNo'.
+tests/cases/conformance/types/literal/enumLiteralTypes3.ts(19,5): error TS2322: Type 'Choice' is not assignable to type 'YesNo'.
+tests/cases/conformance/types/literal/enumLiteralTypes3.ts(37,5): error TS2322: Type 'Choice.Unknown' is not assignable to type 'Choice.Yes'.
+tests/cases/conformance/types/literal/enumLiteralTypes3.ts(39,5): error TS2322: Type 'Choice.No' is not assignable to type 'Choice.Yes'.
+tests/cases/conformance/types/literal/enumLiteralTypes3.ts(40,5): error TS2322: Type 'Choice.Unknown' is not assignable to type 'YesNo'.
+tests/cases/conformance/types/literal/enumLiteralTypes3.ts(52,5): error TS2367: This condition will always return 'false' since the types 'Choice.Yes' and 'Choice.Unknown' have no overlap.
+tests/cases/conformance/types/literal/enumLiteralTypes3.ts(54,5): error TS2367: This condition will always return 'false' since the types 'Choice.Yes' and 'Choice.No' have no overlap.
+tests/cases/conformance/types/literal/enumLiteralTypes3.ts(55,5): error TS2367: This condition will always return 'false' since the types 'YesNo' and 'Choice.Unknown' have no overlap.
+tests/cases/conformance/types/literal/enumLiteralTypes3.ts(87,14): error TS2678: Type 'Choice.Unknown' is not comparable to type 'Choice.Yes'.
+tests/cases/conformance/types/literal/enumLiteralTypes3.ts(89,14): error TS2678: Type 'Choice.No' is not comparable to type 'Choice.Yes'.
+tests/cases/conformance/types/literal/enumLiteralTypes3.ts(96,14): error TS2678: Type 'Choice.Unknown' is not comparable to type 'YesNo'.
+
+
+==== tests/cases/conformance/types/literal/enumLiteralTypes3.ts (14 errors) ====
+    const enum Choice { Unknown, Yes, No };
+    
+    type Yes = Choice.Yes;
+    type YesNo = Choice.Yes | Choice.No;
+    type NoYes = Choice.No | Choice.Yes;
+    type UnknownYesNo = Choice.Unknown | Choice.Yes | Choice.No;
+    
+    function f1(a: Yes, b: YesNo, c: UnknownYesNo, d: Choice) {
+        a = a;
+        a = b;
+        ~
+!!! error TS2322: Type 'YesNo' is not assignable to type 'Choice.Yes'.
+!!! error TS2322:   Type 'Choice.No' is not assignable to type 'Choice.Yes'.
+        a = c;
+        ~
+!!! error TS2322: Type 'UnknownYesNo' is not assignable to type 'Choice.Yes'.
+!!! error TS2322:   Type 'Choice.Unknown' is not assignable to type 'Choice.Yes'.
+        a = d;
+        ~
+!!! error TS2322: Type 'Choice' is not assignable to type 'Choice.Yes'.
+    }
+    
+    function f2(a: Yes, b: YesNo, c: UnknownYesNo, d: Choice) {
+        b = a;
+        b = b;
+        b = c;
+        ~
+!!! error TS2322: Type 'UnknownYesNo' is not assignable to type 'YesNo'.
+!!! error TS2322:   Type 'Choice.Unknown' is not assignable to type 'YesNo'.
+        b = d;
+        ~
+!!! error TS2322: Type 'Choice' is not assignable to type 'YesNo'.
+    }
+    
+    function f3(a: Yes, b: YesNo, c: UnknownYesNo, d: Choice) {
+        c = a;
+        c = b;
+        c = c;
+        c = d;
+    }
+    
+    function f4(a: Yes, b: YesNo, c: UnknownYesNo, d: Choice) {
+        d = a;
+        d = b;
+        d = c;
+        d = d;
+    }
+    
+    function f5(a: Yes, b: YesNo, c: UnknownYesNo, d: Choice) {
+        a = Choice.Unknown;
+        ~
+!!! error TS2322: Type 'Choice.Unknown' is not assignable to type 'Choice.Yes'.
+        a = Choice.Yes;
+        a = Choice.No;
+        ~
+!!! error TS2322: Type 'Choice.No' is not assignable to type 'Choice.Yes'.
+        b = Choice.Unknown;
+        ~
+!!! error TS2322: Type 'Choice.Unknown' is not assignable to type 'YesNo'.
+        b = Choice.Yes;
+        b = Choice.No;
+        c = Choice.Unknown;
+        c = Choice.Yes;
+        c = Choice.No;
+        d = Choice.Unknown;
+        d = Choice.Yes;
+        d = Choice.No;
+    }
+    
+    function f6(a: Yes, b: YesNo, c: UnknownYesNo, d: Choice) {
+        a === Choice.Unknown;
+        ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2367: This condition will always return 'false' since the types 'Choice.Yes' and 'Choice.Unknown' have no overlap.
+        a === Choice.Yes;
+        a === Choice.No;
+        ~~~~~~~~~~~~~~~
+!!! error TS2367: This condition will always return 'false' since the types 'Choice.Yes' and 'Choice.No' have no overlap.
+        b === Choice.Unknown;
+        ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2367: This condition will always return 'false' since the types 'YesNo' and 'Choice.Unknown' have no overlap.
+        b === Choice.Yes;
+        b === Choice.No;
+        c === Choice.Unknown;
+        c === Choice.Yes;
+        c === Choice.No;
+        d === Choice.Unknown;
+        d === Choice.Yes;
+        d === Choice.No;
+    }
+    
+    function f7(a: Yes, b: YesNo, c: UnknownYesNo, d: Choice) {
+        a === a;
+        a === b;
+        a === c;
+        a === d;
+        b === a;
+        b === b;
+        b === c;
+        b === d;
+        c === a;
+        c === b;
+        c === c;
+        c === d;
+        d === a;
+        d === b;
+        d === c;
+        d === d;
+    }
+    
+    function f10(x: Yes): Yes {
+        switch (x) {
+            case Choice.Unknown: return x;
+                 ~~~~~~~~~~~~~~
+!!! error TS2678: Type 'Choice.Unknown' is not comparable to type 'Choice.Yes'.
+            case Choice.Yes: return x;
+            case Choice.No: return x;
+                 ~~~~~~~~~
+!!! error TS2678: Type 'Choice.No' is not comparable to type 'Choice.Yes'.
+        }
+        return x;
+    }
+    
+    function f11(x: YesNo): YesNo {
+        switch (x) {
+            case Choice.Unknown: return x;
+                 ~~~~~~~~~~~~~~
+!!! error TS2678: Type 'Choice.Unknown' is not comparable to type 'YesNo'.
+            case Choice.Yes: return x;
+            case Choice.No: return x;
+        }
+        return x;
+    }
+    
+    function f12(x: UnknownYesNo): UnknownYesNo {
+        switch (x) {
+            case Choice.Unknown: return x;
+            case Choice.Yes: return x;
+            case Choice.No: return x;
+        }
+        return x;
+    }
+    
+    function f13(x: Choice): Choice {
+        switch (x) {
+            case Choice.Unknown: return x;
+            case Choice.Yes: return x;
+            case Choice.No: return x;
+        }
+        return x;
+    }

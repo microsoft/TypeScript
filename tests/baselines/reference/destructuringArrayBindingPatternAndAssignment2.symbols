@@ -1,0 +1,79 @@
+=== tests/cases/conformance/es6/destructuring/destructuringArrayBindingPatternAndAssignment2.ts ===
+// V is an array assignment pattern, S is the type Any or an array-like type (section 3.3.2), and, for each assignment element E in V,
+//      S is the type Any, or
+var [[a0], [[a1]]] = []         // Error
+>a0 : Symbol(a0, Decl(destructuringArrayBindingPatternAndAssignment2.ts, 2, 6))
+>a1 : Symbol(a1, Decl(destructuringArrayBindingPatternAndAssignment2.ts, 2, 13))
+
+var [[a2], [[a3]]] = undefined  // Error
+>a2 : Symbol(a2, Decl(destructuringArrayBindingPatternAndAssignment2.ts, 3, 6))
+>a3 : Symbol(a3, Decl(destructuringArrayBindingPatternAndAssignment2.ts, 3, 13))
+>undefined : Symbol(undefined)
+
+// V is an array assignment pattern, S is the type Any or an array-like type (section 3.3.2), and, for each assignment element E in V,
+//      S is a tuple- like type (section 3.3.3) with a property named N of a type that is assignable to the target given in E,
+//        where N is the numeric index of E in the array assignment pattern, or
+var [b0, b1, b2]: [number, boolean, string] = [1, 2, "string"];  // Error
+>b0 : Symbol(b0, Decl(destructuringArrayBindingPatternAndAssignment2.ts, 8, 5))
+>b1 : Symbol(b1, Decl(destructuringArrayBindingPatternAndAssignment2.ts, 8, 8))
+>b2 : Symbol(b2, Decl(destructuringArrayBindingPatternAndAssignment2.ts, 8, 12))
+
+interface J extends Array<Number> {
+>J : Symbol(J, Decl(destructuringArrayBindingPatternAndAssignment2.ts, 8, 63))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    2: number;
+>2 : Symbol(J[2], Decl(destructuringArrayBindingPatternAndAssignment2.ts, 9, 35))
+}
+
+function bar(): J {
+>bar : Symbol(bar, Decl(destructuringArrayBindingPatternAndAssignment2.ts, 11, 1))
+>J : Symbol(J, Decl(destructuringArrayBindingPatternAndAssignment2.ts, 8, 63))
+
+    return <[number, number, number]>[1, 2, 3];
+}
+var [b3 = "string", b4, b5] = bar();  // Error
+>b3 : Symbol(b3, Decl(destructuringArrayBindingPatternAndAssignment2.ts, 16, 5))
+>b4 : Symbol(b4, Decl(destructuringArrayBindingPatternAndAssignment2.ts, 16, 19))
+>b5 : Symbol(b5, Decl(destructuringArrayBindingPatternAndAssignment2.ts, 16, 23))
+>bar : Symbol(bar, Decl(destructuringArrayBindingPatternAndAssignment2.ts, 11, 1))
+
+// V is an array assignment pattern, S is the type Any or an array-like type (section 3.3.2), and, for each assignment element E in V,
+//      S is not a tuple- like type and the numeric index signature type of S is assignable to the target given in E.
+var temp = [1, 2, 3]
+>temp : Symbol(temp, Decl(destructuringArrayBindingPatternAndAssignment2.ts, 20, 3))
+
+var [c0, c1]: [number, number] = [...temp];  // Error
+>c0 : Symbol(c0, Decl(destructuringArrayBindingPatternAndAssignment2.ts, 21, 5))
+>c1 : Symbol(c1, Decl(destructuringArrayBindingPatternAndAssignment2.ts, 21, 8))
+>temp : Symbol(temp, Decl(destructuringArrayBindingPatternAndAssignment2.ts, 20, 3))
+
+var [c2, c3]: [string, string] = [...temp];  // Error
+>c2 : Symbol(c2, Decl(destructuringArrayBindingPatternAndAssignment2.ts, 22, 5))
+>c3 : Symbol(c3, Decl(destructuringArrayBindingPatternAndAssignment2.ts, 22, 8))
+>temp : Symbol(temp, Decl(destructuringArrayBindingPatternAndAssignment2.ts, 20, 3))
+
+interface F {
+>F : Symbol(F, Decl(destructuringArrayBindingPatternAndAssignment2.ts, 22, 43))
+
+    [idx: number]: boolean
+>idx : Symbol(idx, Decl(destructuringArrayBindingPatternAndAssignment2.ts, 25, 5))
+}
+
+function foo(idx: number): F {
+>foo : Symbol(foo, Decl(destructuringArrayBindingPatternAndAssignment2.ts, 26, 1))
+>idx : Symbol(idx, Decl(destructuringArrayBindingPatternAndAssignment2.ts, 28, 13))
+>F : Symbol(F, Decl(destructuringArrayBindingPatternAndAssignment2.ts, 22, 43))
+
+    return {
+        2: true
+>2 : Symbol(2, Decl(destructuringArrayBindingPatternAndAssignment2.ts, 29, 12))
+    }
+}
+var [c4, c5, c6] = foo(1);  // Error
+>c4 : Symbol(c4, Decl(destructuringArrayBindingPatternAndAssignment2.ts, 33, 5))
+>c5 : Symbol(c5, Decl(destructuringArrayBindingPatternAndAssignment2.ts, 33, 8))
+>c6 : Symbol(c6, Decl(destructuringArrayBindingPatternAndAssignment2.ts, 33, 12))
+>foo : Symbol(foo, Decl(destructuringArrayBindingPatternAndAssignment2.ts, 26, 1))
+

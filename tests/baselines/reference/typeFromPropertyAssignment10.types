@@ -1,0 +1,174 @@
+=== tests/cases/conformance/salsa/module.js ===
+var Outer = Outer || {};
+>Outer : typeof Outer
+>Outer || {} : typeof Outer | {}
+>Outer : typeof Outer
+>{} : {}
+
+Outer.app = Outer.app || {};
+>Outer.app = Outer.app || {} : typeof Outer.app
+>Outer.app : typeof Outer.app
+>Outer : typeof Outer
+>app : typeof Outer.app
+>Outer.app || {} : {}
+>Outer.app : typeof Outer.app
+>Outer : typeof Outer
+>app : typeof Outer.app
+>{} : {}
+
+=== tests/cases/conformance/salsa/someview.js ===
+Outer.app.SomeView = (function () {
+>Outer.app.SomeView = (function () {    var SomeView = function() {        var me = this;    }    return SomeView;})() : () => void
+>Outer.app.SomeView : () => void
+>Outer.app : typeof Outer.app
+>Outer : typeof Outer
+>app : typeof Outer.app
+>SomeView : () => void
+>(function () {    var SomeView = function() {        var me = this;    }    return SomeView;})() : () => void
+>(function () {    var SomeView = function() {        var me = this;    }    return SomeView;}) : () => () => void
+>function () {    var SomeView = function() {        var me = this;    }    return SomeView;} : () => () => void
+
+    var SomeView = function() {
+>SomeView : () => void
+>function() {        var me = this;    } : () => void
+
+        var me = this;
+>me : any
+>this : any
+    }
+    return SomeView;
+>SomeView : () => void
+
+})();
+Outer.app.Inner = class {
+>Outer.app.Inner = class {    constructor() {        /** @type {number} */        this.y = 12;    }} : typeof Inner
+>Outer.app.Inner : typeof Inner
+>Outer.app : typeof Outer.app
+>Outer : typeof Outer
+>app : typeof Outer.app
+>Inner : typeof Inner
+>class {    constructor() {        /** @type {number} */        this.y = 12;    }} : typeof Inner
+
+    constructor() {
+        /** @type {number} */
+        this.y = 12;
+>this.y = 12 : 12
+>this.y : number
+>this : this
+>y : number
+>12 : 12
+    }
+}
+var example = new Outer.app.Inner();
+>example : Inner
+>new Outer.app.Inner() : Inner
+>Outer.app.Inner : typeof Inner
+>Outer.app : typeof Outer.app
+>Outer : typeof Outer
+>app : typeof Outer.app
+>Inner : typeof Inner
+
+example.y;
+>example.y : number
+>example : Inner
+>y : number
+
+/** @param {number} k */
+Outer.app.statische = function (k) {
+>Outer.app.statische = function (k) {    return k ** k;} : (k: number) => number
+>Outer.app.statische : (k: number) => number
+>Outer.app : typeof Outer.app
+>Outer : typeof Outer
+>app : typeof Outer.app
+>statische : (k: number) => number
+>function (k) {    return k ** k;} : (k: number) => number
+>k : number
+
+    return k ** k;
+>k ** k : number
+>k : number
+>k : number
+}
+=== tests/cases/conformance/salsa/application.js ===
+Outer.app.Application = (function () {
+>Outer.app.Application = (function () {    /**     * Application main class.     * Will be instantiated & initialized by HTML page     */    var Application = function () {        var me = this;        me.view = new Outer.app.SomeView();    };    return Application;})() : typeof Application
+>Outer.app.Application : typeof Application
+>Outer.app : typeof Outer.app
+>Outer : typeof Outer
+>app : typeof Outer.app
+>Application : typeof Application
+>(function () {    /**     * Application main class.     * Will be instantiated & initialized by HTML page     */    var Application = function () {        var me = this;        me.view = new Outer.app.SomeView();    };    return Application;})() : typeof Application
+>(function () {    /**     * Application main class.     * Will be instantiated & initialized by HTML page     */    var Application = function () {        var me = this;        me.view = new Outer.app.SomeView();    };    return Application;}) : () => typeof Application
+>function () {    /**     * Application main class.     * Will be instantiated & initialized by HTML page     */    var Application = function () {        var me = this;        me.view = new Outer.app.SomeView();    };    return Application;} : () => typeof Application
+
+    /**
+     * Application main class.
+     * Will be instantiated & initialized by HTML page
+     */
+    var Application = function () {
+>Application : typeof Application
+>function () {        var me = this;        me.view = new Outer.app.SomeView();    } : typeof Application
+
+        var me = this;
+>me : this
+>this : this
+
+        me.view = new Outer.app.SomeView();
+>me.view = new Outer.app.SomeView() : any
+>me.view : any
+>me : this
+>view : any
+>new Outer.app.SomeView() : any
+>Outer.app.SomeView : () => void
+>Outer.app : typeof Outer.app
+>Outer : typeof Outer
+>app : typeof Outer.app
+>SomeView : () => void
+
+    };
+    return Application;
+>Application : typeof Application
+
+})();
+=== tests/cases/conformance/salsa/main.js ===
+var app = new Outer.app.Application();
+>app : Application
+>new Outer.app.Application() : Application
+>Outer.app.Application : typeof Application
+>Outer.app : typeof Outer.app
+>Outer : typeof Outer
+>app : typeof Outer.app
+>Application : typeof Application
+
+var inner = new Outer.app.Inner();
+>inner : Inner
+>new Outer.app.Inner() : Inner
+>Outer.app.Inner : typeof Inner
+>Outer.app : typeof Outer.app
+>Outer : typeof Outer
+>app : typeof Outer.app
+>Inner : typeof Inner
+
+inner.y;
+>inner.y : number
+>inner : Inner
+>y : number
+
+/** @type {Outer.app.Inner} */
+var x;
+>x : Inner
+
+x.y;
+>x.y : number
+>x : Inner
+>y : number
+
+Outer.app.statische(101); // Infinity, duh
+>Outer.app.statische(101) : number
+>Outer.app.statische : (k: number) => number
+>Outer.app : typeof Outer.app
+>Outer : typeof Outer
+>app : typeof Outer.app
+>statische : (k: number) => number
+>101 : 101
+

@@ -1,0 +1,37 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNameDeclarationMerging.ts ===
+class D {};
+>D : Symbol(D, Decl(privateNameDeclarationMerging.ts, 0, 0))
+
+class C {
+>C : Symbol(C, Decl(privateNameDeclarationMerging.ts, 0, 11), Decl(privateNameDeclarationMerging.ts, 10, 1))
+
+    #x;
+>#x : Symbol(C.#x, Decl(privateNameDeclarationMerging.ts, 2, 9))
+
+    foo () {
+>foo : Symbol(C.foo, Decl(privateNameDeclarationMerging.ts, 3, 7))
+
+        const c = new C();
+>c : Symbol(c, Decl(privateNameDeclarationMerging.ts, 5, 13))
+>C : Symbol(C, Decl(privateNameDeclarationMerging.ts, 0, 11), Decl(privateNameDeclarationMerging.ts, 10, 1))
+
+        c.#x;     // OK
+>c.#x : Symbol(C.#x, Decl(privateNameDeclarationMerging.ts, 2, 9))
+>c : Symbol(c, Decl(privateNameDeclarationMerging.ts, 5, 13))
+
+        const d: D = new C();
+>d : Symbol(d, Decl(privateNameDeclarationMerging.ts, 7, 13))
+>D : Symbol(D, Decl(privateNameDeclarationMerging.ts, 0, 0))
+>C : Symbol(C, Decl(privateNameDeclarationMerging.ts, 0, 11), Decl(privateNameDeclarationMerging.ts, 10, 1))
+
+        d.#x;    // Error
+>d : Symbol(d, Decl(privateNameDeclarationMerging.ts, 7, 13))
+    }
+}
+interface C {
+>C : Symbol(C, Decl(privateNameDeclarationMerging.ts, 0, 11), Decl(privateNameDeclarationMerging.ts, 10, 1))
+
+    new (): D;
+>D : Symbol(D, Decl(privateNameDeclarationMerging.ts, 0, 0))
+}
+

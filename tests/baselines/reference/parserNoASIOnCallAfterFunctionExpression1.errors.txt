@@ -1,0 +1,12 @@
+tests/cases/conformance/parser/ecmascript5/parserNoASIOnCallAfterFunctionExpression1.ts(2,2): error TS2554: Expected 0 arguments, but got 1.
+tests/cases/conformance/parser/ecmascript5/parserNoASIOnCallAfterFunctionExpression1.ts(2,15): error TS2339: Property 'foo' does not exist on type 'void'.
+
+
+==== tests/cases/conformance/parser/ecmascript5/parserNoASIOnCallAfterFunctionExpression1.ts (2 errors) ====
+    var x = function () { }
+    (<any>window).foo;
+     ~~~~~~~~~~~
+!!! error TS2554: Expected 0 arguments, but got 1.
+                  ~~~
+!!! error TS2339: Property 'foo' does not exist on type 'void'.
+    

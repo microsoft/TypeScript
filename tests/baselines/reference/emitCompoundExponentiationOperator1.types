@@ -1,0 +1,170 @@
+=== tests/cases/conformance/es7/exponentiationOperator/emitCompoundExponentiationOperator1.ts ===
+var comp: number;
+>comp : number
+
+comp **= 1;
+>comp **= 1 : number
+>comp : number
+>1 : 1
+
+comp **= comp ** comp;
+>comp **= comp ** comp : number
+>comp : number
+>comp ** comp : number
+>comp : number
+>comp : number
+
+comp **= comp ** comp ** 2;
+>comp **= comp ** comp ** 2 : number
+>comp : number
+>comp ** comp ** 2 : number
+>comp : number
+>comp ** 2 : number
+>comp : number
+>2 : 2
+
+comp **= comp ** comp + 2;
+>comp **= comp ** comp + 2 : number
+>comp : number
+>comp ** comp + 2 : number
+>comp ** comp : number
+>comp : number
+>comp : number
+>2 : 2
+
+comp **= comp ** comp - 2;
+>comp **= comp ** comp - 2 : number
+>comp : number
+>comp ** comp - 2 : number
+>comp ** comp : number
+>comp : number
+>comp : number
+>2 : 2
+
+comp **= comp ** comp * 2;
+>comp **= comp ** comp * 2 : number
+>comp : number
+>comp ** comp * 2 : number
+>comp ** comp : number
+>comp : number
+>comp : number
+>2 : 2
+
+comp **= comp ** comp / 2;
+>comp **= comp ** comp / 2 : number
+>comp : number
+>comp ** comp / 2 : number
+>comp ** comp : number
+>comp : number
+>comp : number
+>2 : 2
+
+comp **= comp ** comp % 2;
+>comp **= comp ** comp % 2 : number
+>comp : number
+>comp ** comp % 2 : number
+>comp ** comp : number
+>comp : number
+>comp : number
+>2 : 2
+
+comp **= (comp - 2) ** 5;
+>comp **= (comp - 2) ** 5 : number
+>comp : number
+>(comp - 2) ** 5 : number
+>(comp - 2) : number
+>comp - 2 : number
+>comp : number
+>2 : 2
+>5 : 5
+
+comp **= (comp + 2) ** 5;
+>comp **= (comp + 2) ** 5 : number
+>comp : number
+>(comp + 2) ** 5 : number
+>(comp + 2) : number
+>comp + 2 : number
+>comp : number
+>2 : 2
+>5 : 5
+
+comp **= (comp * 2) ** 5;
+>comp **= (comp * 2) ** 5 : number
+>comp : number
+>(comp * 2) ** 5 : number
+>(comp * 2) : number
+>comp * 2 : number
+>comp : number
+>2 : 2
+>5 : 5
+
+comp **= (comp / 2) ** 5;
+>comp **= (comp / 2) ** 5 : number
+>comp : number
+>(comp / 2) ** 5 : number
+>(comp / 2) : number
+>comp / 2 : number
+>comp : number
+>2 : 2
+>5 : 5
+
+comp **= (comp % 2) ** 5;
+>comp **= (comp % 2) ** 5 : number
+>comp : number
+>(comp % 2) ** 5 : number
+>(comp % 2) : number
+>comp % 2 : number
+>comp : number
+>2 : 2
+>5 : 5
+
+comp **= comp ** (5 + 2);
+>comp **= comp ** (5 + 2) : number
+>comp : number
+>comp ** (5 + 2) : number
+>comp : number
+>(5 + 2) : number
+>5 + 2 : number
+>5 : 5
+>2 : 2
+
+comp **= comp ** (5 - 2);
+>comp **= comp ** (5 - 2) : number
+>comp : number
+>comp ** (5 - 2) : number
+>comp : number
+>(5 - 2) : number
+>5 - 2 : number
+>5 : 5
+>2 : 2
+
+comp **= comp ** (5 * 2);
+>comp **= comp ** (5 * 2) : number
+>comp : number
+>comp ** (5 * 2) : number
+>comp : number
+>(5 * 2) : number
+>5 * 2 : number
+>5 : 5
+>2 : 2
+
+comp **= comp ** (5 / 2);
+>comp **= comp ** (5 / 2) : number
+>comp : number
+>comp ** (5 / 2) : number
+>comp : number
+>(5 / 2) : number
+>5 / 2 : number
+>5 : 5
+>2 : 2
+
+comp **= comp ** (5 % 2);
+>comp **= comp ** (5 % 2) : number
+>comp : number
+>comp ** (5 % 2) : number
+>comp : number
+>(5 % 2) : number
+>5 % 2 : number
+>5 : 5
+>2 : 2
+

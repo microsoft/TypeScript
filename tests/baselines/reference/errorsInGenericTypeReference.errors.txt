@@ -1,0 +1,140 @@
+tests/cases/compiler/errorsInGenericTypeReference.ts(11,17): error TS2304: Cannot find name 'V'.
+tests/cases/compiler/errorsInGenericTypeReference.ts(17,31): error TS2304: Cannot find name 'V'.
+tests/cases/compiler/errorsInGenericTypeReference.ts(22,29): error TS2304: Cannot find name 'V'.
+tests/cases/compiler/errorsInGenericTypeReference.ts(23,36): error TS2304: Cannot find name 'V'.
+tests/cases/compiler/errorsInGenericTypeReference.ts(24,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/errorsInGenericTypeReference.ts(24,27): error TS2304: Cannot find name 'V'.
+tests/cases/compiler/errorsInGenericTypeReference.ts(25,24): error TS2304: Cannot find name 'V'.
+tests/cases/compiler/errorsInGenericTypeReference.ts(30,36): error TS2304: Cannot find name 'V'.
+tests/cases/compiler/errorsInGenericTypeReference.ts(34,36): error TS2304: Cannot find name 'V'.
+tests/cases/compiler/errorsInGenericTypeReference.ts(38,17): error TS2304: Cannot find name 'V'.
+tests/cases/compiler/errorsInGenericTypeReference.ts(42,33): error TS2304: Cannot find name 'V'.
+tests/cases/compiler/errorsInGenericTypeReference.ts(44,41): error TS2304: Cannot find name 'V'.
+tests/cases/compiler/errorsInGenericTypeReference.ts(47,27): error TS2304: Cannot find name 'V'.
+tests/cases/compiler/errorsInGenericTypeReference.ts(51,25): error TS2304: Cannot find name 'V'.
+tests/cases/compiler/errorsInGenericTypeReference.ts(56,35): error TS2304: Cannot find name 'V'.
+tests/cases/compiler/errorsInGenericTypeReference.ts(60,39): error TS2304: Cannot find name 'V'.
+tests/cases/compiler/errorsInGenericTypeReference.ts(65,22): error TS2304: Cannot find name 'V'.
+tests/cases/compiler/errorsInGenericTypeReference.ts(65,38): error TS2304: Cannot find name 'V'.
+tests/cases/compiler/errorsInGenericTypeReference.ts(66,27): error TS2304: Cannot find name 'V'.
+tests/cases/compiler/errorsInGenericTypeReference.ts(67,24): error TS2304: Cannot find name 'V'.
+tests/cases/compiler/errorsInGenericTypeReference.ts(67,40): error TS2304: Cannot find name 'V'.
+tests/cases/compiler/errorsInGenericTypeReference.ts(68,24): error TS2304: Cannot find name 'V'.
+
+
+==== tests/cases/compiler/errorsInGenericTypeReference.ts (22 errors) ====
+    interface IFoo<T> { }
+    
+    class Foo<T> { }
+    
+    
+    // in call type arguments
+    class testClass1 {
+        method<T>(): void { }
+    }
+    var tc1 = new testClass1();
+    tc1.method<{ x: V }>(); // error: could not find symbol V
+                    ~
+!!! error TS2304: Cannot find name 'V'.
+    
+    
+    // in constructor type arguments
+    class testClass2<T> {
+    }
+    var tc2 = new testClass2<{ x: V }>(); // error: could not find symbol V
+                                  ~
+!!! error TS2304: Cannot find name 'V'.
+    
+    
+    // in method return type annotation
+    class testClass3 {
+        testMethod1(): Foo<{ x: V }> { return null; } // error: could not find symbol V
+                                ~
+!!! error TS2304: Cannot find name 'V'.
+        static testMethod2(): Foo<{ x: V }> { return null } // error: could not find symbol V
+                                       ~
+!!! error TS2304: Cannot find name 'V'.
+        set a(value: Foo<{ x: V }>) { } // error: could not find symbol V
+            ~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+                              ~
+!!! error TS2304: Cannot find name 'V'.
+        property: Foo<{ x: V }>; // error: could not find symbol V
+                           ~
+!!! error TS2304: Cannot find name 'V'.
+    }
+    
+    
+    // in function return type annotation
+    function testFunction1(): Foo<{ x: V }> { return null; } // error: could not find symbol V
+                                       ~
+!!! error TS2304: Cannot find name 'V'.
+    
+    
+    // in paramter types
+    function testFunction2(p: Foo<{ x: V }>) { }// error: could not find symbol V
+                                       ~
+!!! error TS2304: Cannot find name 'V'.
+    
+    
+    // in var type annotation
+    var f: Foo<{ x: V }>; // error: could not find symbol V
+                    ~
+!!! error TS2304: Cannot find name 'V'.
+    
+    
+    // in constraints
+    class testClass4<T extends { x: V }> { } // error: could not find symbol V
+                                    ~
+!!! error TS2304: Cannot find name 'V'.
+    
+    interface testClass5<T extends Foo<{ x: V }>> { } // error: could not find symbol V
+                                            ~
+!!! error TS2304: Cannot find name 'V'.
+    
+    class testClass6<T> {
+        method<M extends { x: V }>(): void { } // error: could not find symbol V
+                              ~
+!!! error TS2304: Cannot find name 'V'.
+    }
+    
+    interface testInterface1 {
+        new <M extends { x: V }>(a: M); // error: could not find symbol V
+                            ~
+!!! error TS2304: Cannot find name 'V'.
+    }
+    
+    
+    // in extends clause
+    class testClass7 extends Foo<{ x: V }> { } // error: could not find symbol V
+                                      ~
+!!! error TS2304: Cannot find name 'V'.
+    
+    
+    // in implements clause
+    class testClass8 implements IFoo<{ x: V }> { } // error: could not find symbol V
+                                          ~
+!!! error TS2304: Cannot find name 'V'.
+    
+    
+    // in signatures
+    interface testInterface2 {
+        new (a: Foo<{ x: V }>): Foo<{ x: V }>; //2x: error: could not find symbol V
+                         ~
+!!! error TS2304: Cannot find name 'V'.
+                                         ~
+!!! error TS2304: Cannot find name 'V'.
+        [x: string]: Foo<{ x: V }>; // error: could not find symbol V
+                              ~
+!!! error TS2304: Cannot find name 'V'.
+        method(a: Foo<{ x: V }>): Foo<{ x: V }>; //2x: error: could not find symbol V
+                           ~
+!!! error TS2304: Cannot find name 'V'.
+                                           ~
+!!! error TS2304: Cannot find name 'V'.
+        property: Foo<{ x: V }>; // error: could not find symbol V
+                           ~
+!!! error TS2304: Cannot find name 'V'.
+    }
+    
+    

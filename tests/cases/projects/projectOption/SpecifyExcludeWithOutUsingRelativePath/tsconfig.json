@@ -1,0 +1,10 @@
+{ 
+    "compilerOptions": {
+        "outDir": "OutDir",
+        "declaration": true
+    },
+    "exclude": [
+        "node_modules",
+        "OutDir"
+    ]
+}

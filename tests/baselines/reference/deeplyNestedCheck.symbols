@@ -1,0 +1,119 @@
+=== tests/cases/compiler/deeplyNestedCheck.ts ===
+// Repro from #14794
+
+interface DataSnapshot<X = {}> {
+>DataSnapshot : Symbol(DataSnapshot, Decl(deeplyNestedCheck.ts, 0, 0))
+>X : Symbol(X, Decl(deeplyNestedCheck.ts, 2, 23))
+
+  child(path: string): DataSnapshot;
+>child : Symbol(DataSnapshot.child, Decl(deeplyNestedCheck.ts, 2, 32))
+>path : Symbol(path, Decl(deeplyNestedCheck.ts, 3, 8))
+>DataSnapshot : Symbol(DataSnapshot, Decl(deeplyNestedCheck.ts, 0, 0))
+}
+
+interface Snapshot<T> extends DataSnapshot {
+>Snapshot : Symbol(Snapshot, Decl(deeplyNestedCheck.ts, 4, 1))
+>T : Symbol(T, Decl(deeplyNestedCheck.ts, 6, 19))
+>DataSnapshot : Symbol(DataSnapshot, Decl(deeplyNestedCheck.ts, 0, 0))
+
+  child<U extends Extract<keyof T, string>>(path: U): Snapshot<T[U]>;
+>child : Symbol(Snapshot.child, Decl(deeplyNestedCheck.ts, 6, 44))
+>U : Symbol(U, Decl(deeplyNestedCheck.ts, 7, 8))
+>Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(deeplyNestedCheck.ts, 6, 19))
+>path : Symbol(path, Decl(deeplyNestedCheck.ts, 7, 44))
+>U : Symbol(U, Decl(deeplyNestedCheck.ts, 7, 8))
+>Snapshot : Symbol(Snapshot, Decl(deeplyNestedCheck.ts, 4, 1))
+>T : Symbol(T, Decl(deeplyNestedCheck.ts, 6, 19))
+>U : Symbol(U, Decl(deeplyNestedCheck.ts, 7, 8))
+}
+
+// Repro from 34619
+
+interface A { b: B[] }
+>A : Symbol(A, Decl(deeplyNestedCheck.ts, 8, 1))
+>b : Symbol(A.b, Decl(deeplyNestedCheck.ts, 12, 13))
+>B : Symbol(B, Decl(deeplyNestedCheck.ts, 12, 22))
+
+interface B { c: C }
+>B : Symbol(B, Decl(deeplyNestedCheck.ts, 12, 22))
+>c : Symbol(B.c, Decl(deeplyNestedCheck.ts, 13, 13))
+>C : Symbol(C, Decl(deeplyNestedCheck.ts, 13, 20))
+
+interface C { d: D[] }
+>C : Symbol(C, Decl(deeplyNestedCheck.ts, 13, 20))
+>d : Symbol(C.d, Decl(deeplyNestedCheck.ts, 14, 13))
+>D : Symbol(D, Decl(deeplyNestedCheck.ts, 14, 22))
+
+interface D { e: E[] }
+>D : Symbol(D, Decl(deeplyNestedCheck.ts, 14, 22))
+>e : Symbol(D.e, Decl(deeplyNestedCheck.ts, 15, 13))
+>E : Symbol(E, Decl(deeplyNestedCheck.ts, 15, 22))
+
+interface E { f: F[] }
+>E : Symbol(E, Decl(deeplyNestedCheck.ts, 15, 22))
+>f : Symbol(E.f, Decl(deeplyNestedCheck.ts, 16, 13))
+>F : Symbol(F, Decl(deeplyNestedCheck.ts, 16, 22))
+
+interface F { g: G }
+>F : Symbol(F, Decl(deeplyNestedCheck.ts, 16, 22))
+>g : Symbol(F.g, Decl(deeplyNestedCheck.ts, 17, 13))
+>G : Symbol(G, Decl(deeplyNestedCheck.ts, 17, 20))
+
+interface G { h: H[] }
+>G : Symbol(G, Decl(deeplyNestedCheck.ts, 17, 20))
+>h : Symbol(G.h, Decl(deeplyNestedCheck.ts, 18, 13))
+>H : Symbol(H, Decl(deeplyNestedCheck.ts, 18, 22))
+
+interface H { i: string }
+>H : Symbol(H, Decl(deeplyNestedCheck.ts, 18, 22))
+>i : Symbol(H.i, Decl(deeplyNestedCheck.ts, 19, 13))
+
+const x: A = {
+>x : Symbol(x, Decl(deeplyNestedCheck.ts, 21, 5))
+>A : Symbol(A, Decl(deeplyNestedCheck.ts, 8, 1))
+
+  b: [
+>b : Symbol(b, Decl(deeplyNestedCheck.ts, 21, 14))
+    {
+      c: {
+>c : Symbol(c, Decl(deeplyNestedCheck.ts, 23, 5))
+
+        d: [
+>d : Symbol(d, Decl(deeplyNestedCheck.ts, 24, 10))
+          {
+            e: [
+>e : Symbol(e, Decl(deeplyNestedCheck.ts, 26, 11))
+              {
+                f: [
+>f : Symbol(f, Decl(deeplyNestedCheck.ts, 28, 15))
+                  {
+                    g: {
+>g : Symbol(g, Decl(deeplyNestedCheck.ts, 30, 19))
+
+                      h: [
+>h : Symbol(h, Decl(deeplyNestedCheck.ts, 31, 24))
+                        {
+                          // i: '',
+                        },
+                      ],
+                    },
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+    },
+  ],
+};
+
+// Repro from 34619
+
+const a1: string[][][][][] = [[[[[42]]]]];
+>a1 : Symbol(a1, Decl(deeplyNestedCheck.ts, 51, 5))
+
+const a2: string[][][][][][][][][][] = [[[[[[[[[[42]]]]]]]]]];
+>a2 : Symbol(a2, Decl(deeplyNestedCheck.ts, 52, 5))
+

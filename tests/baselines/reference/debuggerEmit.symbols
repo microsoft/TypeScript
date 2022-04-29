@@ -1,0 +1,7 @@
+=== tests/cases/compiler/debuggerEmit.ts ===
+var x = function () { debugger; }
+>x : Symbol(x, Decl(debuggerEmit.ts, 0, 3))
+
+x();
+>x : Symbol(x, Decl(debuggerEmit.ts, 0, 3))
+

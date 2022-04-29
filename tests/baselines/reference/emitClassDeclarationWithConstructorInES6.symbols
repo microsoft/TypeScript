@@ -1,0 +1,58 @@
+=== tests/cases/conformance/es6/classDeclaration/emitClassDeclarationWithConstructorInES6.ts ===
+class A {
+>A : Symbol(A, Decl(emitClassDeclarationWithConstructorInES6.ts, 0, 0))
+
+    y: number;
+>y : Symbol(A.y, Decl(emitClassDeclarationWithConstructorInES6.ts, 0, 9))
+
+    constructor(x: number) {
+>x : Symbol(x, Decl(emitClassDeclarationWithConstructorInES6.ts, 2, 16))
+    }
+    foo(a: any);
+>foo : Symbol(A.foo, Decl(emitClassDeclarationWithConstructorInES6.ts, 3, 5), Decl(emitClassDeclarationWithConstructorInES6.ts, 4, 16))
+>a : Symbol(a, Decl(emitClassDeclarationWithConstructorInES6.ts, 4, 8))
+
+    foo() { }
+>foo : Symbol(A.foo, Decl(emitClassDeclarationWithConstructorInES6.ts, 3, 5), Decl(emitClassDeclarationWithConstructorInES6.ts, 4, 16))
+}
+
+class B {
+>B : Symbol(B, Decl(emitClassDeclarationWithConstructorInES6.ts, 6, 1))
+
+    y: number;
+>y : Symbol(B.y, Decl(emitClassDeclarationWithConstructorInES6.ts, 8, 9))
+
+    x: string = "hello";
+>x : Symbol(B.x, Decl(emitClassDeclarationWithConstructorInES6.ts, 9, 14))
+
+    _bar: string;
+>_bar : Symbol(B._bar, Decl(emitClassDeclarationWithConstructorInES6.ts, 10, 24))
+
+    constructor(x: number, z = "hello", ...args) {
+>x : Symbol(x, Decl(emitClassDeclarationWithConstructorInES6.ts, 13, 16))
+>z : Symbol(z, Decl(emitClassDeclarationWithConstructorInES6.ts, 13, 26))
+>args : Symbol(args, Decl(emitClassDeclarationWithConstructorInES6.ts, 13, 39))
+
+        this.y = 10;
+>this.y : Symbol(B.y, Decl(emitClassDeclarationWithConstructorInES6.ts, 8, 9))
+>this : Symbol(B, Decl(emitClassDeclarationWithConstructorInES6.ts, 6, 1))
+>y : Symbol(B.y, Decl(emitClassDeclarationWithConstructorInES6.ts, 8, 9))
+    }
+    baz(...args): string;
+>baz : Symbol(B.baz, Decl(emitClassDeclarationWithConstructorInES6.ts, 15, 5), Decl(emitClassDeclarationWithConstructorInES6.ts, 16, 25))
+>args : Symbol(args, Decl(emitClassDeclarationWithConstructorInES6.ts, 16, 8))
+
+    baz(z: string, v: number): string {
+>baz : Symbol(B.baz, Decl(emitClassDeclarationWithConstructorInES6.ts, 15, 5), Decl(emitClassDeclarationWithConstructorInES6.ts, 16, 25))
+>z : Symbol(z, Decl(emitClassDeclarationWithConstructorInES6.ts, 17, 8))
+>v : Symbol(v, Decl(emitClassDeclarationWithConstructorInES6.ts, 17, 18))
+
+        return this._bar;
+>this._bar : Symbol(B._bar, Decl(emitClassDeclarationWithConstructorInES6.ts, 10, 24))
+>this : Symbol(B, Decl(emitClassDeclarationWithConstructorInES6.ts, 6, 1))
+>_bar : Symbol(B._bar, Decl(emitClassDeclarationWithConstructorInES6.ts, 10, 24))
+    } 
+}
+
+
+

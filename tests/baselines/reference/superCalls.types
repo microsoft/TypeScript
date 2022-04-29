@@ -1,0 +1,64 @@
+=== tests/cases/conformance/expressions/superCalls/superCalls.ts ===
+class Base {
+>Base : Base
+
+    x = 43;
+>x : number
+>43 : 43
+
+    constructor(n: string) {
+>n : string
+
+    }
+}
+
+function v(): void { }
+>v : () => void
+
+class Derived extends Base {
+>Derived : Derived
+>Base : Base
+
+    //super call in class constructor of derived type
+    constructor(public q: number) {
+>q : number
+
+        super('');
+>super('') : void
+>super : typeof Base
+>'' : ""
+
+        //type of super call expression is void
+        var p = super('');
+>p : void
+>super('') : void
+>super : typeof Base
+>'' : ""
+
+        var p = v();
+>p : void
+>v() : void
+>v : () => void
+    }
+}
+
+class OtherBase {
+>OtherBase : OtherBase
+
+}
+
+class OtherDerived extends OtherBase {
+>OtherDerived : OtherDerived
+>OtherBase : OtherBase
+
+    constructor() {
+        var p = '';
+>p : string
+>'' : ""
+
+        super();
+>super() : void
+>super : typeof OtherBase
+    }
+}
+

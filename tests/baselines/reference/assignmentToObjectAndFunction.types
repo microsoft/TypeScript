@@ -1,0 +1,70 @@
+=== tests/cases/compiler/assignmentToObjectAndFunction.ts ===
+var errObj: Object = { toString: 0 }; // Error, incompatible toString
+>errObj : Object
+>{ toString: 0 } : { toString: number; }
+>toString : number
+>0 : 0
+
+var goodObj: Object = {
+>goodObj : Object
+>{    toString(x?) {        return "";    }} : { toString(x?: any): string; }
+
+    toString(x?) {
+>toString : (x?: any) => string
+>x : any
+
+        return "";
+>"" : ""
+    }
+}; // Ok, because toString is a subtype of Object's toString
+
+var errFun: Function = {}; // Error for no call signature
+>errFun : Function
+>{} : {}
+
+function foo() { }
+>foo : typeof foo
+
+module foo {
+>foo : typeof foo
+
+    export var boom = 0;
+>boom : number
+>0 : 0
+}
+
+var goodFundule: Function = foo; // ok
+>goodFundule : Function
+>foo : typeof foo
+
+function bar() { }
+>bar : typeof bar
+
+module bar {
+>bar : typeof bar
+
+    export function apply(thisArg: string, argArray?: string) { }
+>apply : (thisArg: string, argArray?: string) => void
+>thisArg : string
+>argArray : string
+}
+
+var goodFundule2: Function = bar; // ok
+>goodFundule2 : Function
+>bar : typeof bar
+
+function bad() { }
+>bad : typeof bad
+
+module bad {
+>bad : typeof bad
+
+    export var apply = 0;
+>apply : number
+>0 : 0
+}
+
+var badFundule: Function = bad; // error
+>badFundule : Function
+>bad : typeof bad
+

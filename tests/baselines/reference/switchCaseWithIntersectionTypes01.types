@@ -1,0 +1,46 @@
+=== tests/cases/conformance/types/typeRelationships/comparable/switchCaseWithIntersectionTypes01.ts ===
+var strAndNum: string & number;
+>strAndNum : never
+
+var numAndBool: number & boolean;
+>numAndBool : never
+
+var str: string;
+>str : string
+
+var num: number;
+>num : number
+
+var bool: boolean;
+>bool : boolean
+
+switch (strAndNum) {
+>strAndNum : never
+
+    // Identical
+    case strAndNum:
+>strAndNum : never
+
+        break;
+
+    // Constituents
+    case str:
+>str : string
+
+    case num:
+>num : number
+
+        break;
+
+    // Overlap in constituents
+    case numAndBool:
+>numAndBool : never
+
+        break;
+
+    // No relation
+    case bool:
+>bool : boolean
+
+        break;
+}

@@ -1,0 +1,19 @@
+=== tests/cases/compiler/a.js ===
+const Obj = {};
+>Obj : {}
+>{} : {}
+
+export default Obj;
+>Obj : {}
+
+=== tests/cases/compiler/b.js ===
+import Obj from './a';
+>Obj : {}
+
+Obj.fn = function() {};
+>Obj.fn = function() {} : () => void
+>Obj.fn : error
+>Obj : {}
+>fn : any
+>function() {} : () => void
+

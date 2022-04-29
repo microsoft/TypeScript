@@ -1,0 +1,53 @@
+tests/cases/conformance/functions/parameterInitializersForwardReferencing1_es6.ts(13,20): error TS2373: Parameter 'bar' cannot reference identifier 'foo' declared after it.
+tests/cases/conformance/functions/parameterInitializersForwardReferencing1_es6.ts(21,18): error TS2372: Parameter 'a' cannot reference itself.
+tests/cases/conformance/functions/parameterInitializersForwardReferencing1_es6.ts(25,22): error TS2372: Parameter 'async' cannot reference itself.
+tests/cases/conformance/functions/parameterInitializersForwardReferencing1_es6.ts(29,15): error TS2537: Type 'any[]' has no matching index signature for type 'string'.
+
+
+==== tests/cases/conformance/functions/parameterInitializersForwardReferencing1_es6.ts (4 errors) ====
+    let foo: string = "";
+    
+    function f1 (bar = foo) { // unexpected compiler error; works at runtime
+        var foo: number = 2;
+        return bar; // returns 1
+    }
+    
+    function f2 (bar = (baz = foo) => baz) { // unexpected compiler error; works at runtime
+        var foo: number = 2;
+        return bar(); // returns 1
+    }
+    
+    function f3 (bar = foo, foo = 2) { // correct compiler error, error at runtime
+                       ~~~
+!!! error TS2373: Parameter 'bar' cannot reference identifier 'foo' declared after it.
+        return bar;
+    }
+    
+    function f4 (foo, bar = foo) {
+        return bar
+    }
+    
+    function f5 (a = a) {
+                     ~
+!!! error TS2372: Parameter 'a' cannot reference itself.
+        return a
+    }
+    
+    function f6 (async = async) {
+                         ~~~~~
+!!! error TS2372: Parameter 'async' cannot reference itself.
+        return async
+    }
+    
+    function f7({[foo]: bar}: any[]) {
+                  ~~~
+!!! error TS2537: Type 'any[]' has no matching index signature for type 'string'.
+        let foo: number = 2;
+    }
+    
+    class Foo {
+        constructor(public x = 12, public y = x) {}
+    }
+    
+    function f8(foo1: string, bar = foo1) { }
+    

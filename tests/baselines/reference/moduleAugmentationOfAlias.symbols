@@ -1,0 +1,32 @@
+=== /a.ts ===
+interface I {}
+>I : Symbol(I, Decl(a.ts, 0, 0), Decl(b.ts, 1, 22))
+
+export default I;
+>I : Symbol(I, Decl(a.ts, 0, 0), Decl(b.ts, 1, 22))
+
+=== /b.ts ===
+export {};
+declare module './a' {
+>'./a' : Symbol("/a", Decl(a.ts, 0, 0), Decl(b.ts, 0, 10))
+
+    export default interface I { x: number; }
+>I : Symbol(I, Decl(a.ts, 0, 0), Decl(b.ts, 1, 22))
+>x : Symbol(I.x, Decl(b.ts, 2, 32))
+}
+
+=== /c.ts ===
+import I from "./a";
+>I : Symbol(I, Decl(c.ts, 0, 6))
+
+function f(i: I) {
+>f : Symbol(f, Decl(c.ts, 0, 20))
+>i : Symbol(i, Decl(c.ts, 1, 11))
+>I : Symbol(I, Decl(c.ts, 0, 6))
+
+    i.x;
+>i.x : Symbol(I.x, Decl(b.ts, 2, 32))
+>i : Symbol(i, Decl(c.ts, 1, 11))
+>x : Symbol(I.x, Decl(b.ts, 2, 32))
+}
+

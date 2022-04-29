@@ -1,0 +1,15 @@
+=== tests/cases/compiler/sourceMapValidationClassWithDefaultConstructorAndCapturedThisStatement.ts ===
+class Greeter {
+>Greeter : Greeter
+
+    public a = 10;
+>a : number
+>10 : 10
+
+    public returnA = () => this.a;
+>returnA : () => number
+>() => this.a : () => number
+>this.a : number
+>this : this
+>a : number
+}

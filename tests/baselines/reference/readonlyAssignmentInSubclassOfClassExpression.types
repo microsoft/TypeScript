@@ -1,0 +1,22 @@
+=== tests/cases/compiler/readonlyAssignmentInSubclassOfClassExpression.ts ===
+class C extends (class {} as new () => Readonly<{ attrib: number }>) {
+>C : C
+>(class {} as new () => Readonly<{ attrib: number }>) : Readonly<{ attrib: number; }>
+>class {} as new () => Readonly<{ attrib: number }> : new () => Readonly<{    attrib: number;}>
+>class {} : typeof (Anonymous class)
+>attrib : number
+
+    constructor() {
+        super()
+>super() : void
+>super : new () => Readonly<{ attrib: number; }>
+
+        this.attrib = 2
+>this.attrib = 2 : 2
+>this.attrib : any
+>this : this
+>attrib : any
+>2 : 2
+    }
+}
+

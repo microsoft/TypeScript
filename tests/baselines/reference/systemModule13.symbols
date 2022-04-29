@@ -1,0 +1,19 @@
+=== tests/cases/compiler/systemModule13.ts ===
+export let [x,y,z] = [1, 2, 3];
+>x : Symbol(x, Decl(systemModule13.ts, 0, 12))
+>y : Symbol(y, Decl(systemModule13.ts, 0, 14))
+>z : Symbol(z, Decl(systemModule13.ts, 0, 16))
+
+export const {a: z0, b: {c: z1}} = {a: true, b: {c: "123"}};
+>a : Symbol(a, Decl(systemModule13.ts, 1, 36))
+>z0 : Symbol(z0, Decl(systemModule13.ts, 1, 14))
+>b : Symbol(b, Decl(systemModule13.ts, 1, 44))
+>c : Symbol(c, Decl(systemModule13.ts, 1, 49))
+>z1 : Symbol(z1, Decl(systemModule13.ts, 1, 25))
+>a : Symbol(a, Decl(systemModule13.ts, 1, 36))
+>b : Symbol(b, Decl(systemModule13.ts, 1, 44))
+>c : Symbol(c, Decl(systemModule13.ts, 1, 49))
+
+for ([x] of [[1]]) {}
+>x : Symbol(x, Decl(systemModule13.ts, 0, 12))
+

@@ -1,0 +1,18 @@
+=== tests/cases/compiler/reverseInferenceInContextualInstantiation.ts ===
+function compare<T>(a: T, b: T): number { return 0; }
+>compare : Symbol(compare, Decl(reverseInferenceInContextualInstantiation.ts, 0, 0))
+>T : Symbol(T, Decl(reverseInferenceInContextualInstantiation.ts, 0, 17))
+>a : Symbol(a, Decl(reverseInferenceInContextualInstantiation.ts, 0, 20))
+>T : Symbol(T, Decl(reverseInferenceInContextualInstantiation.ts, 0, 17))
+>b : Symbol(b, Decl(reverseInferenceInContextualInstantiation.ts, 0, 25))
+>T : Symbol(T, Decl(reverseInferenceInContextualInstantiation.ts, 0, 17))
+
+var x: number[];
+>x : Symbol(x, Decl(reverseInferenceInContextualInstantiation.ts, 1, 3))
+
+x.sort(compare); // Error, but shouldn't be
+>x.sort : Symbol(Array.sort, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(reverseInferenceInContextualInstantiation.ts, 1, 3))
+>sort : Symbol(Array.sort, Decl(lib.es5.d.ts, --, --))
+>compare : Symbol(compare, Decl(reverseInferenceInContextualInstantiation.ts, 0, 0))
+

@@ -1,0 +1,273 @@
+tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsErrors.ts(2,41): error TS1005: 'symbol' expected.
+tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsErrors.ts(3,19): error TS1333: 'unique symbol' types may not be used on a variable declaration with a binding name.
+tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsErrors.ts(4,13): error TS1332: A variable whose type is a 'unique symbol' type must be 'const'.
+tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsErrors.ts(5,13): error TS1332: A variable whose type is a 'unique symbol' type must be 'const'.
+tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsErrors.ts(8,38): error TS1335: 'unique symbol' types are not allowed here.
+tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsErrors.ts(9,46): error TS1335: 'unique symbol' types are not allowed here.
+tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsErrors.ts(10,39): error TS1335: 'unique symbol' types are not allowed here.
+tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsErrors.ts(11,40): error TS1335: 'unique symbol' types are not allowed here.
+tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsErrors.ts(12,53): error TS1335: 'unique symbol' types are not allowed here.
+tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsErrors.ts(13,59): error TS1335: 'unique symbol' types are not allowed here.
+tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsErrors.ts(14,50): error TS1335: 'unique symbol' types are not allowed here.
+tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsErrors.ts(18,44): error TS1335: 'unique symbol' types are not allowed here.
+tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsErrors.ts(20,14): error TS1331: A property of a class whose type is a 'unique symbol' type must be both 'static' and 'readonly'.
+tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsErrors.ts(21,5): error TS1331: A property of a class whose type is a 'unique symbol' type must be both 'static' and 'readonly'.
+tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsErrors.ts(22,25): error TS1335: 'unique symbol' types are not allowed here.
+tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsErrors.ts(23,34): error TS1335: 'unique symbol' types are not allowed here.
+tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsErrors.ts(24,26): error TS1335: 'unique symbol' types are not allowed here.
+tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsErrors.ts(25,27): error TS1335: 'unique symbol' types are not allowed here.
+tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsErrors.ts(26,40): error TS1335: 'unique symbol' types are not allowed here.
+tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsErrors.ts(27,46): error TS1335: 'unique symbol' types are not allowed here.
+tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsErrors.ts(28,37): error TS1335: 'unique symbol' types are not allowed here.
+tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsErrors.ts(29,26): error TS1335: 'unique symbol' types are not allowed here.
+tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsErrors.ts(30,28): error TS1335: 'unique symbol' types are not allowed here.
+tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsErrors.ts(32,12): error TS1331: A property of a class whose type is a 'unique symbol' type must be both 'static' and 'readonly'.
+tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsErrors.ts(33,38): error TS1335: 'unique symbol' types are not allowed here.
+tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsErrors.ts(34,47): error TS1335: 'unique symbol' types are not allowed here.
+tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsErrors.ts(35,39): error TS1335: 'unique symbol' types are not allowed here.
+tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsErrors.ts(36,40): error TS1335: 'unique symbol' types are not allowed here.
+tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsErrors.ts(37,53): error TS1335: 'unique symbol' types are not allowed here.
+tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsErrors.ts(38,59): error TS1335: 'unique symbol' types are not allowed here.
+tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsErrors.ts(39,50): error TS1335: 'unique symbol' types are not allowed here.
+tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsErrors.ts(40,39): error TS1335: 'unique symbol' types are not allowed here.
+tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsErrors.ts(41,41): error TS1335: 'unique symbol' types are not allowed here.
+tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsErrors.ts(46,5): error TS1330: A property of an interface or type literal whose type is a 'unique symbol' type must be 'readonly'.
+tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsErrors.ts(47,25): error TS1335: 'unique symbol' types are not allowed here.
+tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsErrors.ts(48,34): error TS1335: 'unique symbol' types are not allowed here.
+tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsErrors.ts(49,26): error TS1335: 'unique symbol' types are not allowed here.
+tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsErrors.ts(50,27): error TS1335: 'unique symbol' types are not allowed here.
+tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsErrors.ts(51,40): error TS1335: 'unique symbol' types are not allowed here.
+tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsErrors.ts(52,46): error TS1335: 'unique symbol' types are not allowed here.
+tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsErrors.ts(53,37): error TS1335: 'unique symbol' types are not allowed here.
+tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsErrors.ts(58,5): error TS1330: A property of an interface or type literal whose type is a 'unique symbol' type must be 'readonly'.
+tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsErrors.ts(59,25): error TS1335: 'unique symbol' types are not allowed here.
+tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsErrors.ts(60,34): error TS1335: 'unique symbol' types are not allowed here.
+tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsErrors.ts(61,26): error TS1335: 'unique symbol' types are not allowed here.
+tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsErrors.ts(62,27): error TS1335: 'unique symbol' types are not allowed here.
+tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsErrors.ts(63,40): error TS1335: 'unique symbol' types are not allowed here.
+tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsErrors.ts(64,46): error TS1335: 'unique symbol' types are not allowed here.
+tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsErrors.ts(65,37): error TS1335: 'unique symbol' types are not allowed here.
+tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsErrors.ts(69,21): error TS1335: 'unique symbol' types are not allowed here.
+tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsErrors.ts(70,52): error TS1335: 'unique symbol' types are not allowed here.
+tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsErrors.ts(71,49): error TS1335: 'unique symbol' types are not allowed here.
+tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsErrors.ts(74,44): error TS1335: 'unique symbol' types are not allowed here.
+tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsErrors.ts(75,34): error TS1335: 'unique symbol' types are not allowed here.
+tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsErrors.ts(76,34): error TS1335: 'unique symbol' types are not allowed here.
+tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsErrors.ts(79,51): error TS1335: 'unique symbol' types are not allowed here.
+tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsErrors.ts(82,29): error TS1335: 'unique symbol' types are not allowed here.
+tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsErrors.ts(82,45): error TS1335: 'unique symbol' types are not allowed here.
+tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsErrors.ts(83,36): error TS1335: 'unique symbol' types are not allowed here.
+tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsErrors.ts(83,52): error TS1335: 'unique symbol' types are not allowed here.
+tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsErrors.ts(87,7): error TS2322: Type 'typeof shouldNotBeAssignable' is not assignable to type 'string'.
+
+
+==== tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsErrors.ts (61 errors) ====
+    // declarations
+    declare const invalidUniqueType: unique number;
+                                            ~~~~~~
+!!! error TS1005: 'symbol' expected.
+    declare const {}: unique symbol;
+                      ~~~~~~~~~~~~~
+!!! error TS1333: 'unique symbol' types may not be used on a variable declaration with a binding name.
+    declare let invalidLetType: unique symbol;
+                ~~~~~~~~~~~~~~
+!!! error TS1332: A variable whose type is a 'unique symbol' type must be 'const'.
+    declare var invalidVarType: unique symbol;
+                ~~~~~~~~~~~~~~
+!!! error TS1332: A variable whose type is a 'unique symbol' type must be 'const'.
+    
+    // function arguments and return types
+    declare function invalidArgType(arg: unique symbol): void;
+                                         ~~~~~~~~~~~~~
+!!! error TS1335: 'unique symbol' types are not allowed here.
+    declare function invalidRestArgType(...arg: (unique symbol)[]): void;
+                                                 ~~~~~~~~~~~~~
+!!! error TS1335: 'unique symbol' types are not allowed here.
+    declare function invalidReturnType(): unique symbol;
+                                          ~~~~~~~~~~~~~
+!!! error TS1335: 'unique symbol' types are not allowed here.
+    declare function invalidThisType(this: unique symbol): void;
+                                           ~~~~~~~~~~~~~
+!!! error TS1335: 'unique symbol' types are not allowed here.
+    declare function invalidTypePredicate(n: any): n is unique symbol;
+                                                        ~~~~~~~~~~~~~
+!!! error TS1335: 'unique symbol' types are not allowed here.
+    declare function invalidTypeParameterConstraint<T extends unique symbol>(): void;
+                                                              ~~~~~~~~~~~~~
+!!! error TS1335: 'unique symbol' types are not allowed here.
+    declare function invalidTypeParameterDefault<T = unique symbol>(): void;
+                                                     ~~~~~~~~~~~~~
+!!! error TS1335: 'unique symbol' types are not allowed here.
+    
+    // classes
+    class InvalidClass {
+        constructor(invalidConstructorArgType: unique symbol) {}
+                                               ~~~~~~~~~~~~~
+!!! error TS1335: 'unique symbol' types are not allowed here.
+    
+        readonly invalidReadonlyPropertyType: unique symbol;
+                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1331: A property of a class whose type is a 'unique symbol' type must be both 'static' and 'readonly'.
+        invalidPropertyType: unique symbol;
+        ~~~~~~~~~~~~~~~~~~~
+!!! error TS1331: A property of a class whose type is a 'unique symbol' type must be both 'static' and 'readonly'.
+        invalidArgType(arg: unique symbol): void { return; }
+                            ~~~~~~~~~~~~~
+!!! error TS1335: 'unique symbol' types are not allowed here.
+        invalidRestArgType(...args: (unique symbol)[]): void { return; }
+                                     ~~~~~~~~~~~~~
+!!! error TS1335: 'unique symbol' types are not allowed here.
+        invalidReturnType(): unique symbol { return; }
+                             ~~~~~~~~~~~~~
+!!! error TS1335: 'unique symbol' types are not allowed here.
+        invalidThisType(this: unique symbol): void { return; }
+                              ~~~~~~~~~~~~~
+!!! error TS1335: 'unique symbol' types are not allowed here.
+        invalidTypePredicate(n: any): n is unique symbol { return; }
+                                           ~~~~~~~~~~~~~
+!!! error TS1335: 'unique symbol' types are not allowed here.
+        invalidTypeParameterConstraint<T extends unique symbol>(): void { return; }
+                                                 ~~~~~~~~~~~~~
+!!! error TS1335: 'unique symbol' types are not allowed here.
+        invalidTypeParameterDefault<T = unique symbol>(): void { return; }
+                                        ~~~~~~~~~~~~~
+!!! error TS1335: 'unique symbol' types are not allowed here.
+        get invalidGetter(): unique symbol { return; }
+                             ~~~~~~~~~~~~~
+!!! error TS1335: 'unique symbol' types are not allowed here.
+        set invalidSetter(arg: unique symbol) { return; }
+                               ~~~~~~~~~~~~~
+!!! error TS1335: 'unique symbol' types are not allowed here.
+    
+        static invalidStaticPropertyType: unique symbol;
+               ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1331: A property of a class whose type is a 'unique symbol' type must be both 'static' and 'readonly'.
+        static invalidStaticArgType(arg: unique symbol): void { return; }
+                                         ~~~~~~~~~~~~~
+!!! error TS1335: 'unique symbol' types are not allowed here.
+        static invalidStaticRestArgType(...args: (unique symbol)[]): void { return; }
+                                                  ~~~~~~~~~~~~~
+!!! error TS1335: 'unique symbol' types are not allowed here.
+        static invalidStaticReturnType(): unique symbol { return; }
+                                          ~~~~~~~~~~~~~
+!!! error TS1335: 'unique symbol' types are not allowed here.
+        static invalidStaticThisType(this: unique symbol): void { return; }
+                                           ~~~~~~~~~~~~~
+!!! error TS1335: 'unique symbol' types are not allowed here.
+        static invalidStaticTypePredicate(n: any): n is unique symbol { return; }
+                                                        ~~~~~~~~~~~~~
+!!! error TS1335: 'unique symbol' types are not allowed here.
+        static invalidStaticTypeParameterConstraint<T extends unique symbol>(): void { return; }
+                                                              ~~~~~~~~~~~~~
+!!! error TS1335: 'unique symbol' types are not allowed here.
+        static invalidStaticTypeParameterDefault<T = unique symbol>(): void { return; }
+                                                     ~~~~~~~~~~~~~
+!!! error TS1335: 'unique symbol' types are not allowed here.
+        static get invalidStaticGetter(): unique symbol { return; }
+                                          ~~~~~~~~~~~~~
+!!! error TS1335: 'unique symbol' types are not allowed here.
+        static set invalidStaticSetter(arg: unique symbol) { return; }
+                                            ~~~~~~~~~~~~~
+!!! error TS1335: 'unique symbol' types are not allowed here.
+    }
+    
+    // interfaces
+    interface InvalidInterface {
+        invalidPropertyType: unique symbol;
+        ~~~~~~~~~~~~~~~~~~~
+!!! error TS1330: A property of an interface or type literal whose type is a 'unique symbol' type must be 'readonly'.
+        invalidArgType(arg: unique symbol): void;
+                            ~~~~~~~~~~~~~
+!!! error TS1335: 'unique symbol' types are not allowed here.
+        invalidRestArgType(...args: (unique symbol)[]): void;
+                                     ~~~~~~~~~~~~~
+!!! error TS1335: 'unique symbol' types are not allowed here.
+        invalidReturnType(): unique symbol;
+                             ~~~~~~~~~~~~~
+!!! error TS1335: 'unique symbol' types are not allowed here.
+        invalidThisType(this: unique symbol);
+                              ~~~~~~~~~~~~~
+!!! error TS1335: 'unique symbol' types are not allowed here.
+        invalidTypePredicate(n: any): n is unique symbol
+                                           ~~~~~~~~~~~~~
+!!! error TS1335: 'unique symbol' types are not allowed here.
+        invalidTypeParameterConstraint<T extends unique symbol>(): void;
+                                                 ~~~~~~~~~~~~~
+!!! error TS1335: 'unique symbol' types are not allowed here.
+        invalidTypeParameterDefault<T = unique symbol>(): void;
+                                        ~~~~~~~~~~~~~
+!!! error TS1335: 'unique symbol' types are not allowed here.
+    }
+    
+    // type literals
+    type InvalidTypeLiteral = {
+        invalidPropertyType: unique symbol;
+        ~~~~~~~~~~~~~~~~~~~
+!!! error TS1330: A property of an interface or type literal whose type is a 'unique symbol' type must be 'readonly'.
+        invalidArgType(arg: unique symbol): void;
+                            ~~~~~~~~~~~~~
+!!! error TS1335: 'unique symbol' types are not allowed here.
+        invalidRestArgType(...args: (unique symbol)[]): void;
+                                     ~~~~~~~~~~~~~
+!!! error TS1335: 'unique symbol' types are not allowed here.
+        invalidReturnType(): unique symbol;
+                             ~~~~~~~~~~~~~
+!!! error TS1335: 'unique symbol' types are not allowed here.
+        invalidThisType(this: unique symbol);
+                              ~~~~~~~~~~~~~
+!!! error TS1335: 'unique symbol' types are not allowed here.
+        invalidTypePredicate(n: any): n is unique symbol
+                                           ~~~~~~~~~~~~~
+!!! error TS1335: 'unique symbol' types are not allowed here.
+        invalidTypeParameterConstraint<T extends unique symbol>(): void;
+                                                 ~~~~~~~~~~~~~
+!!! error TS1335: 'unique symbol' types are not allowed here.
+        invalidTypeParameterDefault<T = unique symbol>(): void;
+                                        ~~~~~~~~~~~~~
+!!! error TS1335: 'unique symbol' types are not allowed here.
+    };
+    
+    // type alias
+    type InvalidAlias = unique symbol;
+                        ~~~~~~~~~~~~~
+!!! error TS1335: 'unique symbol' types are not allowed here.
+    type InvalidAliasTypeParameterConstraint<T extends unique symbol> = never;
+                                                       ~~~~~~~~~~~~~
+!!! error TS1335: 'unique symbol' types are not allowed here.
+    type InvalidAliasTypeParameterDefault<T extends unique symbol> = never;
+                                                    ~~~~~~~~~~~~~
+!!! error TS1335: 'unique symbol' types are not allowed here.
+    
+    // type references
+    declare const invalidTypeArgument: Promise<unique symbol>;
+                                               ~~~~~~~~~~~~~
+!!! error TS1335: 'unique symbol' types are not allowed here.
+    declare const invalidArrayType: (unique symbol)[];
+                                     ~~~~~~~~~~~~~
+!!! error TS1335: 'unique symbol' types are not allowed here.
+    declare const invalidTupleType: [unique symbol];
+                                     ~~~~~~~~~~~~~
+!!! error TS1335: 'unique symbol' types are not allowed here.
+    
+    // mapped types
+    declare const invalidMappedType: { [P in string]: unique symbol };
+                                                      ~~~~~~~~~~~~~
+!!! error TS1335: 'unique symbol' types are not allowed here.
+    
+    // unions/intersection
+    declare const invalidUnion: unique symbol | unique symbol;
+                                ~~~~~~~~~~~~~
+!!! error TS1335: 'unique symbol' types are not allowed here.
+                                                ~~~~~~~~~~~~~
+!!! error TS1335: 'unique symbol' types are not allowed here.
+    declare const invalidIntersection: unique symbol | unique symbol;
+                                       ~~~~~~~~~~~~~
+!!! error TS1335: 'unique symbol' types are not allowed here.
+                                                       ~~~~~~~~~~~~~
+!!! error TS1335: 'unique symbol' types are not allowed here.
+    
+    // initializer assignability
+    // https://github.com/Microsoft/TypeScript/issues/21584
+    const shouldNotBeAssignable: string = Symbol();
+          ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type 'typeof shouldNotBeAssignable' is not assignable to type 'string'.

@@ -1,0 +1,21 @@
+tests/cases/compiler/typeArgumentsOnFunctionsWithNoTypeParameters.ts(2,15): error TS2558: Expected 0 type arguments, but got 1.
+tests/cases/compiler/typeArgumentsOnFunctionsWithNoTypeParameters.ts(3,15): error TS2345: Argument of type 'number' is not assignable to parameter of type 'T'.
+  'T' could be instantiated with an arbitrary type which could be unrelated to 'number'.
+tests/cases/compiler/typeArgumentsOnFunctionsWithNoTypeParameters.ts(4,15): error TS2558: Expected 0 type arguments, but got 1.
+
+
+==== tests/cases/compiler/typeArgumentsOnFunctionsWithNoTypeParameters.ts (3 errors) ====
+    function foo<T, U>(f: (v: T) => U) {
+       var r1 = f<number>(1);
+                  ~~~~~~
+!!! error TS2558: Expected 0 type arguments, but got 1.
+       var r2 = f(1);
+                  ~
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'T'.
+!!! error TS2345:   'T' could be instantiated with an arbitrary type which could be unrelated to 'number'.
+       var r3 = f<any>(null);
+                  ~~~
+!!! error TS2558: Expected 0 type arguments, but got 1.
+       var r4 = f(null);
+    }
+    

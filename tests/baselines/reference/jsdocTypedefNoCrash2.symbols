@@ -1,0 +1,11 @@
+=== tests/cases/compiler/export.js ===
+export type foo = 5;
+>foo : Symbol(foo, Decl(export.js, 0, 0), Decl(export.js, 5, 12))
+
+/**
+ * @typedef {{
+ * }}
+ */
+export const foo = 5;
+>foo : Symbol(foo, Decl(export.js, 0, 0), Decl(export.js, 5, 12))
+

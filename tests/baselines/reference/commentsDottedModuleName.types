@@ -1,0 +1,11 @@
+=== tests/cases/compiler/commentsDottedModuleName.ts ===
+/** this is multi declare module*/
+export module outerModule.InnerModule {
+>outerModule : typeof outerModule
+>InnerModule : typeof InnerModule
+
+    /// class b comment
+    export class b {
+>b : b
+    }
+}

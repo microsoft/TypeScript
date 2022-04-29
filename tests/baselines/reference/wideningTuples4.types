@@ -1,0 +1,19 @@
+=== tests/cases/conformance/types/tuple/wideningTuples4.ts ===
+var a: [any];
+>a : [any]
+
+var b = a = [undefined, null];
+>b : [any, any]
+>a = [undefined, null] : [undefined, null]
+>a : [any]
+>[undefined, null] : [undefined, null]
+>undefined : undefined
+>null : null
+
+b = ["", ""];
+>b = ["", ""] : [string, string]
+>b : [any, any]
+>["", ""] : [string, string]
+>"" : ""
+>"" : ""
+

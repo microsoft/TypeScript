@@ -1,0 +1,13 @@
+=== tests/cases/compiler/unusedMultipleParameter2InFunctionExpression.ts ===
+var func = function(person: string, person2: string, person3: string) {
+>func : Symbol(func, Decl(unusedMultipleParameter2InFunctionExpression.ts, 0, 3))
+>person : Symbol(person, Decl(unusedMultipleParameter2InFunctionExpression.ts, 0, 20))
+>person2 : Symbol(person2, Decl(unusedMultipleParameter2InFunctionExpression.ts, 0, 35))
+>person3 : Symbol(person3, Decl(unusedMultipleParameter2InFunctionExpression.ts, 0, 52))
+
+    var unused = 20;
+>unused : Symbol(unused, Decl(unusedMultipleParameter2InFunctionExpression.ts, 1, 7))
+
+    person2 = "Dummy value";
+>person2 : Symbol(person2, Decl(unusedMultipleParameter2InFunctionExpression.ts, 0, 35))
+}

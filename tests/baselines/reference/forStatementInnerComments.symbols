@@ -1,0 +1,25 @@
+=== tests/cases/compiler/forStatementInnerComments.ts ===
+declare var a;
+>a : Symbol(a, Decl(forStatementInnerComments.ts, 0, 11))
+
+/*0*/ for /*1*/ ( /*2*/ var /*3*/ x /*4*/ in /*5*/ a /*6*/) /*7*/ {}
+>x : Symbol(x, Decl(forStatementInnerComments.ts, 1, 27))
+>a : Symbol(a, Decl(forStatementInnerComments.ts, 0, 11))
+
+/*0*/ for /*1*/ ( /*2*/ var /*3*/ y /*4*/ of /*5*/ a /*6*/) /*7*/ {}
+>y : Symbol(y, Decl(forStatementInnerComments.ts, 2, 27))
+>a : Symbol(a, Decl(forStatementInnerComments.ts, 0, 11))
+
+/*0*/ for /*1*/ ( /*2*/ x /*3*/ in /*4*/ a /*5*/) /*6*/ {}
+>x : Symbol(x, Decl(forStatementInnerComments.ts, 1, 27))
+>a : Symbol(a, Decl(forStatementInnerComments.ts, 0, 11))
+
+/*0*/ for /*1*/ ( /*2*/ y /*3*/ of /*4*/ a /*5*/) /*6*/ {}
+>y : Symbol(y, Decl(forStatementInnerComments.ts, 2, 27))
+>a : Symbol(a, Decl(forStatementInnerComments.ts, 0, 11))
+
+/*0*/ for /*1*/ ( /*2*/ a /*3*/ ; /*4*/ a  /*5*/ ; /*6*/ a /*7*/) /*8*/ {}
+>a : Symbol(a, Decl(forStatementInnerComments.ts, 0, 11))
+>a : Symbol(a, Decl(forStatementInnerComments.ts, 0, 11))
+>a : Symbol(a, Decl(forStatementInnerComments.ts, 0, 11))
+

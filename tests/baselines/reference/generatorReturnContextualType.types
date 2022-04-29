@@ -1,0 +1,55 @@
+=== tests/cases/conformance/generators/generatorReturnContextualType.ts ===
+// #35995
+
+function* f1(): Generator<any, { x: 'x' }, any> {
+>f1 : () => Generator<any, {    x: 'x';}, any>
+>x : "x"
+
+  return { x: 'x' };
+>{ x: 'x' } : { x: "x"; }
+>x : "x"
+>'x' : "x"
+}
+
+async function* f2(): AsyncGenerator<any, { x: 'x' }, any> {
+>f2 : () => AsyncGenerator<any, {    x: 'x';}, any>
+>x : "x"
+
+  return { x: 'x' };
+>{ x: 'x' } : { x: "x"; }
+>x : "x"
+>'x' : "x"
+}
+
+async function* f3(): AsyncGenerator<any, { x: 'x' }, any> {
+>f3 : () => AsyncGenerator<any, {    x: 'x';}, any>
+>x : "x"
+
+  return Promise.resolve({ x: 'x' });
+>Promise.resolve({ x: 'x' }) : Promise<{ x: "x"; }>
+>Promise.resolve : { (): Promise<void>; <T>(value: T | PromiseLike<T>): Promise<T>; }
+>Promise : PromiseConstructor
+>resolve : { (): Promise<void>; <T>(value: T | PromiseLike<T>): Promise<T>; }
+>{ x: 'x' } : { x: "x"; }
+>x : "x"
+>'x' : "x"
+}
+
+async function* f4(): AsyncGenerator<any, { x: 'x' }, any> {
+>f4 : () => AsyncGenerator<any, {    x: 'x';}, any>
+>x : "x"
+
+  const ret = { x: 'x' };
+>ret : { x: string; }
+>{ x: 'x' } : { x: string; }
+>x : string
+>'x' : "x"
+
+  return Promise.resolve(ret); // Error
+>Promise.resolve(ret) : Promise<{ x: string; }>
+>Promise.resolve : { (): Promise<void>; <T>(value: T | PromiseLike<T>): Promise<T>; }
+>Promise : PromiseConstructor
+>resolve : { (): Promise<void>; <T>(value: T | PromiseLike<T>): Promise<T>; }
+>ret : { x: string; }
+}
+

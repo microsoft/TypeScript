@@ -1,0 +1,21 @@
+=== tests/cases/compiler/superWithTypeArgument2.ts ===
+class C<T> {
+>C : C<T>
+
+    foo: T;
+>foo : T
+}
+
+class D<T> extends C<T> {
+>D : D<T>
+>C : C<T>
+
+    constructor(x) {
+>x : any
+
+        super<T>(x);
+>super<T>(x) : void
+>super : typeof C
+>x : any
+    }
+}

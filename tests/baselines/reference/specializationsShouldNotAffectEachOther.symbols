@@ -1,0 +1,43 @@
+=== tests/cases/compiler/specializationsShouldNotAffectEachOther.ts ===
+interface Series  {
+>Series : Symbol(Series, Decl(specializationsShouldNotAffectEachOther.ts, 0, 0))
+
+    data: string[];
+>data : Symbol(Series.data, Decl(specializationsShouldNotAffectEachOther.ts, 0, 19))
+}
+
+var series: Series;
+>series : Symbol(series, Decl(specializationsShouldNotAffectEachOther.ts, 4, 3))
+>Series : Symbol(Series, Decl(specializationsShouldNotAffectEachOther.ts, 0, 0))
+
+
+function foo() {
+>foo : Symbol(foo, Decl(specializationsShouldNotAffectEachOther.ts, 4, 19))
+
+    var seriesExtent = (series) => null;
+>seriesExtent : Symbol(seriesExtent, Decl(specializationsShouldNotAffectEachOther.ts, 9, 7))
+>series : Symbol(series, Decl(specializationsShouldNotAffectEachOther.ts, 9, 24))
+
+    var series2: number[];
+>series2 : Symbol(series2, Decl(specializationsShouldNotAffectEachOther.ts, 11, 7))
+
+    series2.map(seriesExtent);
+>series2.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>series2 : Symbol(series2, Decl(specializationsShouldNotAffectEachOther.ts, 11, 7))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>seriesExtent : Symbol(seriesExtent, Decl(specializationsShouldNotAffectEachOther.ts, 9, 7))
+
+    return null;
+}
+
+
+var keyExtent2: any[] = series.data.map(function (d: string) { return d; });
+>keyExtent2 : Symbol(keyExtent2, Decl(specializationsShouldNotAffectEachOther.ts, 18, 3))
+>series.data.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>series.data : Symbol(Series.data, Decl(specializationsShouldNotAffectEachOther.ts, 0, 19))
+>series : Symbol(series, Decl(specializationsShouldNotAffectEachOther.ts, 4, 3))
+>data : Symbol(Series.data, Decl(specializationsShouldNotAffectEachOther.ts, 0, 19))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>d : Symbol(d, Decl(specializationsShouldNotAffectEachOther.ts, 18, 50))
+>d : Symbol(d, Decl(specializationsShouldNotAffectEachOther.ts, 18, 50))
+

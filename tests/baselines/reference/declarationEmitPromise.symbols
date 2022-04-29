@@ -1,0 +1,154 @@
+=== tests/cases/compiler/declarationEmitPromise.ts ===
+export class bluebird<T> {
+>bluebird : Symbol(bluebird, Decl(declarationEmitPromise.ts, 0, 0))
+>T : Symbol(T, Decl(declarationEmitPromise.ts, 0, 22))
+
+    static all: Array<bluebird<any>>;
+>all : Symbol(bluebird.all, Decl(declarationEmitPromise.ts, 0, 26))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>bluebird : Symbol(bluebird, Decl(declarationEmitPromise.ts, 0, 0))
+}
+
+export async function runSampleWorks<A, B, C, D, E>(
+>runSampleWorks : Symbol(runSampleWorks, Decl(declarationEmitPromise.ts, 2, 1))
+>A : Symbol(A, Decl(declarationEmitPromise.ts, 4, 37))
+>B : Symbol(B, Decl(declarationEmitPromise.ts, 4, 39))
+>C : Symbol(C, Decl(declarationEmitPromise.ts, 4, 42))
+>D : Symbol(D, Decl(declarationEmitPromise.ts, 4, 45))
+>E : Symbol(E, Decl(declarationEmitPromise.ts, 4, 48))
+
+    a: bluebird<A>, b?: bluebird<B>, c?: bluebird<C>, d?: bluebird<D>, e?: bluebird<E>) {
+>a : Symbol(a, Decl(declarationEmitPromise.ts, 4, 52))
+>bluebird : Symbol(bluebird, Decl(declarationEmitPromise.ts, 0, 0))
+>A : Symbol(A, Decl(declarationEmitPromise.ts, 4, 37))
+>b : Symbol(b, Decl(declarationEmitPromise.ts, 5, 19))
+>bluebird : Symbol(bluebird, Decl(declarationEmitPromise.ts, 0, 0))
+>B : Symbol(B, Decl(declarationEmitPromise.ts, 4, 39))
+>c : Symbol(c, Decl(declarationEmitPromise.ts, 5, 36))
+>bluebird : Symbol(bluebird, Decl(declarationEmitPromise.ts, 0, 0))
+>C : Symbol(C, Decl(declarationEmitPromise.ts, 4, 42))
+>d : Symbol(d, Decl(declarationEmitPromise.ts, 5, 53))
+>bluebird : Symbol(bluebird, Decl(declarationEmitPromise.ts, 0, 0))
+>D : Symbol(D, Decl(declarationEmitPromise.ts, 4, 45))
+>e : Symbol(e, Decl(declarationEmitPromise.ts, 5, 70))
+>bluebird : Symbol(bluebird, Decl(declarationEmitPromise.ts, 0, 0))
+>E : Symbol(E, Decl(declarationEmitPromise.ts, 4, 48))
+
+    let result = await (bluebird.all as any)([a, b, c, d, e].filter(el => !!el));
+>result : Symbol(result, Decl(declarationEmitPromise.ts, 6, 7))
+>bluebird.all : Symbol(bluebird.all, Decl(declarationEmitPromise.ts, 0, 26))
+>bluebird : Symbol(bluebird, Decl(declarationEmitPromise.ts, 0, 0))
+>all : Symbol(bluebird.all, Decl(declarationEmitPromise.ts, 0, 26))
+>[a, b, c, d, e].filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(declarationEmitPromise.ts, 4, 52))
+>b : Symbol(b, Decl(declarationEmitPromise.ts, 5, 19))
+>c : Symbol(c, Decl(declarationEmitPromise.ts, 5, 36))
+>d : Symbol(d, Decl(declarationEmitPromise.ts, 5, 53))
+>e : Symbol(e, Decl(declarationEmitPromise.ts, 5, 70))
+>filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>el : Symbol(el, Decl(declarationEmitPromise.ts, 6, 68))
+>el : Symbol(el, Decl(declarationEmitPromise.ts, 6, 68))
+
+    let func = <T>(f: (a: A, b?: B, c?: C, d?: D, e?: E) => T): T =>
+>func : Symbol(func, Decl(declarationEmitPromise.ts, 7, 7))
+>T : Symbol(T, Decl(declarationEmitPromise.ts, 7, 16))
+>f : Symbol(f, Decl(declarationEmitPromise.ts, 7, 19))
+>a : Symbol(a, Decl(declarationEmitPromise.ts, 7, 23))
+>A : Symbol(A, Decl(declarationEmitPromise.ts, 4, 37))
+>b : Symbol(b, Decl(declarationEmitPromise.ts, 7, 28))
+>B : Symbol(B, Decl(declarationEmitPromise.ts, 4, 39))
+>c : Symbol(c, Decl(declarationEmitPromise.ts, 7, 35))
+>C : Symbol(C, Decl(declarationEmitPromise.ts, 4, 42))
+>d : Symbol(d, Decl(declarationEmitPromise.ts, 7, 42))
+>D : Symbol(D, Decl(declarationEmitPromise.ts, 4, 45))
+>e : Symbol(e, Decl(declarationEmitPromise.ts, 7, 49))
+>E : Symbol(E, Decl(declarationEmitPromise.ts, 4, 48))
+>T : Symbol(T, Decl(declarationEmitPromise.ts, 7, 16))
+>T : Symbol(T, Decl(declarationEmitPromise.ts, 7, 16))
+
+        f.apply(this, result);
+>f.apply : Symbol(Function.apply, Decl(lib.es5.d.ts, --, --))
+>f : Symbol(f, Decl(declarationEmitPromise.ts, 7, 19))
+>apply : Symbol(Function.apply, Decl(lib.es5.d.ts, --, --))
+>result : Symbol(result, Decl(declarationEmitPromise.ts, 6, 7))
+
+    let rfunc: typeof func & {} = func as any; // <- This is the only difference
+>rfunc : Symbol(rfunc, Decl(declarationEmitPromise.ts, 9, 7))
+>func : Symbol(func, Decl(declarationEmitPromise.ts, 7, 7))
+>func : Symbol(func, Decl(declarationEmitPromise.ts, 7, 7))
+
+    return rfunc
+>rfunc : Symbol(rfunc, Decl(declarationEmitPromise.ts, 9, 7))
+}
+
+export async function runSampleBreaks<A, B, C, D, E>(
+>runSampleBreaks : Symbol(runSampleBreaks, Decl(declarationEmitPromise.ts, 11, 1))
+>A : Symbol(A, Decl(declarationEmitPromise.ts, 13, 38))
+>B : Symbol(B, Decl(declarationEmitPromise.ts, 13, 40))
+>C : Symbol(C, Decl(declarationEmitPromise.ts, 13, 43))
+>D : Symbol(D, Decl(declarationEmitPromise.ts, 13, 46))
+>E : Symbol(E, Decl(declarationEmitPromise.ts, 13, 49))
+
+    a: bluebird<A>, b?: bluebird<B>, c?: bluebird<C>, d?: bluebird<D>, e?: bluebird<E>) {
+>a : Symbol(a, Decl(declarationEmitPromise.ts, 13, 53))
+>bluebird : Symbol(bluebird, Decl(declarationEmitPromise.ts, 0, 0))
+>A : Symbol(A, Decl(declarationEmitPromise.ts, 13, 38))
+>b : Symbol(b, Decl(declarationEmitPromise.ts, 14, 19))
+>bluebird : Symbol(bluebird, Decl(declarationEmitPromise.ts, 0, 0))
+>B : Symbol(B, Decl(declarationEmitPromise.ts, 13, 40))
+>c : Symbol(c, Decl(declarationEmitPromise.ts, 14, 36))
+>bluebird : Symbol(bluebird, Decl(declarationEmitPromise.ts, 0, 0))
+>C : Symbol(C, Decl(declarationEmitPromise.ts, 13, 43))
+>d : Symbol(d, Decl(declarationEmitPromise.ts, 14, 53))
+>bluebird : Symbol(bluebird, Decl(declarationEmitPromise.ts, 0, 0))
+>D : Symbol(D, Decl(declarationEmitPromise.ts, 13, 46))
+>e : Symbol(e, Decl(declarationEmitPromise.ts, 14, 70))
+>bluebird : Symbol(bluebird, Decl(declarationEmitPromise.ts, 0, 0))
+>E : Symbol(E, Decl(declarationEmitPromise.ts, 13, 49))
+
+    let result = await (bluebird.all as any)([a, b, c, d, e].filter(el => !!el));
+>result : Symbol(result, Decl(declarationEmitPromise.ts, 15, 7))
+>bluebird.all : Symbol(bluebird.all, Decl(declarationEmitPromise.ts, 0, 26))
+>bluebird : Symbol(bluebird, Decl(declarationEmitPromise.ts, 0, 0))
+>all : Symbol(bluebird.all, Decl(declarationEmitPromise.ts, 0, 26))
+>[a, b, c, d, e].filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(declarationEmitPromise.ts, 13, 53))
+>b : Symbol(b, Decl(declarationEmitPromise.ts, 14, 19))
+>c : Symbol(c, Decl(declarationEmitPromise.ts, 14, 36))
+>d : Symbol(d, Decl(declarationEmitPromise.ts, 14, 53))
+>e : Symbol(e, Decl(declarationEmitPromise.ts, 14, 70))
+>filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>el : Symbol(el, Decl(declarationEmitPromise.ts, 15, 68))
+>el : Symbol(el, Decl(declarationEmitPromise.ts, 15, 68))
+
+    let func = <T>(f: (a: A, b?: B, c?: C, d?: D, e?: E) => T): T =>
+>func : Symbol(func, Decl(declarationEmitPromise.ts, 16, 7))
+>T : Symbol(T, Decl(declarationEmitPromise.ts, 16, 16))
+>f : Symbol(f, Decl(declarationEmitPromise.ts, 16, 19))
+>a : Symbol(a, Decl(declarationEmitPromise.ts, 16, 23))
+>A : Symbol(A, Decl(declarationEmitPromise.ts, 13, 38))
+>b : Symbol(b, Decl(declarationEmitPromise.ts, 16, 28))
+>B : Symbol(B, Decl(declarationEmitPromise.ts, 13, 40))
+>c : Symbol(c, Decl(declarationEmitPromise.ts, 16, 35))
+>C : Symbol(C, Decl(declarationEmitPromise.ts, 13, 43))
+>d : Symbol(d, Decl(declarationEmitPromise.ts, 16, 42))
+>D : Symbol(D, Decl(declarationEmitPromise.ts, 13, 46))
+>e : Symbol(e, Decl(declarationEmitPromise.ts, 16, 49))
+>E : Symbol(E, Decl(declarationEmitPromise.ts, 13, 49))
+>T : Symbol(T, Decl(declarationEmitPromise.ts, 16, 16))
+>T : Symbol(T, Decl(declarationEmitPromise.ts, 16, 16))
+
+        f.apply(this, result);
+>f.apply : Symbol(Function.apply, Decl(lib.es5.d.ts, --, --))
+>f : Symbol(f, Decl(declarationEmitPromise.ts, 16, 19))
+>apply : Symbol(Function.apply, Decl(lib.es5.d.ts, --, --))
+>result : Symbol(result, Decl(declarationEmitPromise.ts, 15, 7))
+
+    let rfunc: typeof func = func as any; // <- This is the only difference
+>rfunc : Symbol(rfunc, Decl(declarationEmitPromise.ts, 18, 7))
+>func : Symbol(func, Decl(declarationEmitPromise.ts, 16, 7))
+>func : Symbol(func, Decl(declarationEmitPromise.ts, 16, 7))
+
+    return rfunc
+>rfunc : Symbol(rfunc, Decl(declarationEmitPromise.ts, 18, 7))
+}

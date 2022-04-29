@@ -1,0 +1,8 @@
+=== tests/cases/compiler/index.js ===
+function Foo() {}
+>Foo : Symbol(Foo, Decl(index.js, 0, 0))
+
+const a = /* @type string */(Foo);
+>a : Symbol(a, Decl(index.js, 1, 5))
+>Foo : Symbol(Foo, Decl(index.js, 0, 0))
+

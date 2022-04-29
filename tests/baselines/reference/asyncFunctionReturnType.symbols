@@ -1,0 +1,287 @@
+=== tests/cases/compiler/asyncFunctionReturnType.ts ===
+async function fAsync() {
+>fAsync : Symbol(fAsync, Decl(asyncFunctionReturnType.ts, 0, 0))
+
+    // Without explicit type annotation, this is just an array.
+    return [1, true];
+}
+
+async function fAsyncExplicit(): Promise<[number, boolean]> {
+>fAsyncExplicit : Symbol(fAsyncExplicit, Decl(asyncFunctionReturnType.ts, 3, 1))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+    // This is contextually typed as a tuple.
+    return [1, true];
+}
+
+// https://github.com/Microsoft/TypeScript/issues/13128
+interface Obj {
+>Obj : Symbol(Obj, Decl(asyncFunctionReturnType.ts, 8, 1))
+
+    stringProp: string;
+>stringProp : Symbol(Obj.stringProp, Decl(asyncFunctionReturnType.ts, 11, 15))
+
+    anyProp: any;
+>anyProp : Symbol(Obj.anyProp, Decl(asyncFunctionReturnType.ts, 12, 23))
+}
+
+async function fIndexedTypeForStringProp(obj: Obj): Promise<Obj["stringProp"]> {
+>fIndexedTypeForStringProp : Symbol(fIndexedTypeForStringProp, Decl(asyncFunctionReturnType.ts, 14, 1))
+>obj : Symbol(obj, Decl(asyncFunctionReturnType.ts, 16, 41))
+>Obj : Symbol(Obj, Decl(asyncFunctionReturnType.ts, 8, 1))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Obj : Symbol(Obj, Decl(asyncFunctionReturnType.ts, 8, 1))
+
+    return obj.stringProp;
+>obj.stringProp : Symbol(Obj.stringProp, Decl(asyncFunctionReturnType.ts, 11, 15))
+>obj : Symbol(obj, Decl(asyncFunctionReturnType.ts, 16, 41))
+>stringProp : Symbol(Obj.stringProp, Decl(asyncFunctionReturnType.ts, 11, 15))
+}
+
+async function fIndexedTypeForPromiseOfStringProp(obj: Obj): Promise<Obj["stringProp"]> {
+>fIndexedTypeForPromiseOfStringProp : Symbol(fIndexedTypeForPromiseOfStringProp, Decl(asyncFunctionReturnType.ts, 18, 1))
+>obj : Symbol(obj, Decl(asyncFunctionReturnType.ts, 20, 50))
+>Obj : Symbol(Obj, Decl(asyncFunctionReturnType.ts, 8, 1))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Obj : Symbol(Obj, Decl(asyncFunctionReturnType.ts, 8, 1))
+
+    return Promise.resolve(obj.stringProp);
+>Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>obj.stringProp : Symbol(Obj.stringProp, Decl(asyncFunctionReturnType.ts, 11, 15))
+>obj : Symbol(obj, Decl(asyncFunctionReturnType.ts, 20, 50))
+>stringProp : Symbol(Obj.stringProp, Decl(asyncFunctionReturnType.ts, 11, 15))
+}
+
+async function fIndexedTypeForExplicitPromiseOfStringProp(obj: Obj): Promise<Obj["stringProp"]> {
+>fIndexedTypeForExplicitPromiseOfStringProp : Symbol(fIndexedTypeForExplicitPromiseOfStringProp, Decl(asyncFunctionReturnType.ts, 22, 1))
+>obj : Symbol(obj, Decl(asyncFunctionReturnType.ts, 24, 58))
+>Obj : Symbol(Obj, Decl(asyncFunctionReturnType.ts, 8, 1))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Obj : Symbol(Obj, Decl(asyncFunctionReturnType.ts, 8, 1))
+
+    return Promise.resolve<Obj["stringProp"]>(obj.stringProp);
+>Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Obj : Symbol(Obj, Decl(asyncFunctionReturnType.ts, 8, 1))
+>obj.stringProp : Symbol(Obj.stringProp, Decl(asyncFunctionReturnType.ts, 11, 15))
+>obj : Symbol(obj, Decl(asyncFunctionReturnType.ts, 24, 58))
+>stringProp : Symbol(Obj.stringProp, Decl(asyncFunctionReturnType.ts, 11, 15))
+}
+
+async function fIndexedTypeForAnyProp(obj: Obj): Promise<Obj["anyProp"]> {
+>fIndexedTypeForAnyProp : Symbol(fIndexedTypeForAnyProp, Decl(asyncFunctionReturnType.ts, 26, 1))
+>obj : Symbol(obj, Decl(asyncFunctionReturnType.ts, 28, 38))
+>Obj : Symbol(Obj, Decl(asyncFunctionReturnType.ts, 8, 1))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Obj : Symbol(Obj, Decl(asyncFunctionReturnType.ts, 8, 1))
+
+    return obj.anyProp;
+>obj.anyProp : Symbol(Obj.anyProp, Decl(asyncFunctionReturnType.ts, 12, 23))
+>obj : Symbol(obj, Decl(asyncFunctionReturnType.ts, 28, 38))
+>anyProp : Symbol(Obj.anyProp, Decl(asyncFunctionReturnType.ts, 12, 23))
+}
+
+async function fIndexedTypeForPromiseOfAnyProp(obj: Obj): Promise<Obj["anyProp"]> {
+>fIndexedTypeForPromiseOfAnyProp : Symbol(fIndexedTypeForPromiseOfAnyProp, Decl(asyncFunctionReturnType.ts, 30, 1))
+>obj : Symbol(obj, Decl(asyncFunctionReturnType.ts, 32, 47))
+>Obj : Symbol(Obj, Decl(asyncFunctionReturnType.ts, 8, 1))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Obj : Symbol(Obj, Decl(asyncFunctionReturnType.ts, 8, 1))
+
+    return Promise.resolve(obj.anyProp);
+>Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>obj.anyProp : Symbol(Obj.anyProp, Decl(asyncFunctionReturnType.ts, 12, 23))
+>obj : Symbol(obj, Decl(asyncFunctionReturnType.ts, 32, 47))
+>anyProp : Symbol(Obj.anyProp, Decl(asyncFunctionReturnType.ts, 12, 23))
+}
+
+async function fIndexedTypeForExplicitPromiseOfAnyProp(obj: Obj): Promise<Obj["anyProp"]> {
+>fIndexedTypeForExplicitPromiseOfAnyProp : Symbol(fIndexedTypeForExplicitPromiseOfAnyProp, Decl(asyncFunctionReturnType.ts, 34, 1))
+>obj : Symbol(obj, Decl(asyncFunctionReturnType.ts, 36, 55))
+>Obj : Symbol(Obj, Decl(asyncFunctionReturnType.ts, 8, 1))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Obj : Symbol(Obj, Decl(asyncFunctionReturnType.ts, 8, 1))
+
+    return Promise.resolve<Obj["anyProp"]>(obj.anyProp);
+>Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Obj : Symbol(Obj, Decl(asyncFunctionReturnType.ts, 8, 1))
+>obj.anyProp : Symbol(Obj.anyProp, Decl(asyncFunctionReturnType.ts, 12, 23))
+>obj : Symbol(obj, Decl(asyncFunctionReturnType.ts, 36, 55))
+>anyProp : Symbol(Obj.anyProp, Decl(asyncFunctionReturnType.ts, 12, 23))
+}
+
+async function fGenericIndexedTypeForStringProp<TObj extends Obj>(obj: TObj): Promise<TObj["stringProp"]> {
+>fGenericIndexedTypeForStringProp : Symbol(fGenericIndexedTypeForStringProp, Decl(asyncFunctionReturnType.ts, 38, 1))
+>TObj : Symbol(TObj, Decl(asyncFunctionReturnType.ts, 40, 48))
+>Obj : Symbol(Obj, Decl(asyncFunctionReturnType.ts, 8, 1))
+>obj : Symbol(obj, Decl(asyncFunctionReturnType.ts, 40, 66))
+>TObj : Symbol(TObj, Decl(asyncFunctionReturnType.ts, 40, 48))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>TObj : Symbol(TObj, Decl(asyncFunctionReturnType.ts, 40, 48))
+
+    return obj.stringProp;
+>obj.stringProp : Symbol(Obj.stringProp, Decl(asyncFunctionReturnType.ts, 11, 15))
+>obj : Symbol(obj, Decl(asyncFunctionReturnType.ts, 40, 66))
+>stringProp : Symbol(Obj.stringProp, Decl(asyncFunctionReturnType.ts, 11, 15))
+}
+
+async function fGenericIndexedTypeForPromiseOfStringProp<TObj extends Obj>(obj: TObj): Promise<TObj["stringProp"]> {
+>fGenericIndexedTypeForPromiseOfStringProp : Symbol(fGenericIndexedTypeForPromiseOfStringProp, Decl(asyncFunctionReturnType.ts, 42, 1))
+>TObj : Symbol(TObj, Decl(asyncFunctionReturnType.ts, 44, 57))
+>Obj : Symbol(Obj, Decl(asyncFunctionReturnType.ts, 8, 1))
+>obj : Symbol(obj, Decl(asyncFunctionReturnType.ts, 44, 75))
+>TObj : Symbol(TObj, Decl(asyncFunctionReturnType.ts, 44, 57))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>TObj : Symbol(TObj, Decl(asyncFunctionReturnType.ts, 44, 57))
+
+    return Promise.resolve(obj.stringProp);
+>Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>obj.stringProp : Symbol(Obj.stringProp, Decl(asyncFunctionReturnType.ts, 11, 15))
+>obj : Symbol(obj, Decl(asyncFunctionReturnType.ts, 44, 75))
+>stringProp : Symbol(Obj.stringProp, Decl(asyncFunctionReturnType.ts, 11, 15))
+}
+
+async function fGenericIndexedTypeForExplicitPromiseOfStringProp<TObj extends Obj>(obj: TObj): Promise<TObj["stringProp"]> {
+>fGenericIndexedTypeForExplicitPromiseOfStringProp : Symbol(fGenericIndexedTypeForExplicitPromiseOfStringProp, Decl(asyncFunctionReturnType.ts, 46, 1))
+>TObj : Symbol(TObj, Decl(asyncFunctionReturnType.ts, 48, 65))
+>Obj : Symbol(Obj, Decl(asyncFunctionReturnType.ts, 8, 1))
+>obj : Symbol(obj, Decl(asyncFunctionReturnType.ts, 48, 83))
+>TObj : Symbol(TObj, Decl(asyncFunctionReturnType.ts, 48, 65))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>TObj : Symbol(TObj, Decl(asyncFunctionReturnType.ts, 48, 65))
+
+    return Promise.resolve<TObj["stringProp"]>(obj.stringProp);
+>Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>TObj : Symbol(TObj, Decl(asyncFunctionReturnType.ts, 48, 65))
+>obj.stringProp : Symbol(Obj.stringProp, Decl(asyncFunctionReturnType.ts, 11, 15))
+>obj : Symbol(obj, Decl(asyncFunctionReturnType.ts, 48, 83))
+>stringProp : Symbol(Obj.stringProp, Decl(asyncFunctionReturnType.ts, 11, 15))
+}
+
+async function fGenericIndexedTypeForAnyProp<TObj extends Obj>(obj: TObj): Promise<TObj["anyProp"]> {
+>fGenericIndexedTypeForAnyProp : Symbol(fGenericIndexedTypeForAnyProp, Decl(asyncFunctionReturnType.ts, 50, 1))
+>TObj : Symbol(TObj, Decl(asyncFunctionReturnType.ts, 52, 45))
+>Obj : Symbol(Obj, Decl(asyncFunctionReturnType.ts, 8, 1))
+>obj : Symbol(obj, Decl(asyncFunctionReturnType.ts, 52, 63))
+>TObj : Symbol(TObj, Decl(asyncFunctionReturnType.ts, 52, 45))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>TObj : Symbol(TObj, Decl(asyncFunctionReturnType.ts, 52, 45))
+
+    return obj.anyProp;
+>obj.anyProp : Symbol(Obj.anyProp, Decl(asyncFunctionReturnType.ts, 12, 23))
+>obj : Symbol(obj, Decl(asyncFunctionReturnType.ts, 52, 63))
+>anyProp : Symbol(Obj.anyProp, Decl(asyncFunctionReturnType.ts, 12, 23))
+}
+
+async function fGenericIndexedTypeForPromiseOfAnyProp<TObj extends Obj>(obj: TObj): Promise<TObj["anyProp"]> {
+>fGenericIndexedTypeForPromiseOfAnyProp : Symbol(fGenericIndexedTypeForPromiseOfAnyProp, Decl(asyncFunctionReturnType.ts, 54, 1))
+>TObj : Symbol(TObj, Decl(asyncFunctionReturnType.ts, 56, 54))
+>Obj : Symbol(Obj, Decl(asyncFunctionReturnType.ts, 8, 1))
+>obj : Symbol(obj, Decl(asyncFunctionReturnType.ts, 56, 72))
+>TObj : Symbol(TObj, Decl(asyncFunctionReturnType.ts, 56, 54))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>TObj : Symbol(TObj, Decl(asyncFunctionReturnType.ts, 56, 54))
+
+    return Promise.resolve(obj.anyProp);
+>Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>obj.anyProp : Symbol(Obj.anyProp, Decl(asyncFunctionReturnType.ts, 12, 23))
+>obj : Symbol(obj, Decl(asyncFunctionReturnType.ts, 56, 72))
+>anyProp : Symbol(Obj.anyProp, Decl(asyncFunctionReturnType.ts, 12, 23))
+}
+
+async function fGenericIndexedTypeForExplicitPromiseOfAnyProp<TObj extends Obj>(obj: TObj): Promise<TObj["anyProp"]> {
+>fGenericIndexedTypeForExplicitPromiseOfAnyProp : Symbol(fGenericIndexedTypeForExplicitPromiseOfAnyProp, Decl(asyncFunctionReturnType.ts, 58, 1))
+>TObj : Symbol(TObj, Decl(asyncFunctionReturnType.ts, 60, 62))
+>Obj : Symbol(Obj, Decl(asyncFunctionReturnType.ts, 8, 1))
+>obj : Symbol(obj, Decl(asyncFunctionReturnType.ts, 60, 80))
+>TObj : Symbol(TObj, Decl(asyncFunctionReturnType.ts, 60, 62))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>TObj : Symbol(TObj, Decl(asyncFunctionReturnType.ts, 60, 62))
+
+    return Promise.resolve<TObj["anyProp"]>(obj.anyProp);
+>Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>TObj : Symbol(TObj, Decl(asyncFunctionReturnType.ts, 60, 62))
+>obj.anyProp : Symbol(Obj.anyProp, Decl(asyncFunctionReturnType.ts, 12, 23))
+>obj : Symbol(obj, Decl(asyncFunctionReturnType.ts, 60, 80))
+>anyProp : Symbol(Obj.anyProp, Decl(asyncFunctionReturnType.ts, 12, 23))
+}
+
+async function fGenericIndexedTypeForKProp<TObj extends Obj, K extends keyof TObj>(obj: TObj, key: K): Promise<TObj[K]> {
+>fGenericIndexedTypeForKProp : Symbol(fGenericIndexedTypeForKProp, Decl(asyncFunctionReturnType.ts, 62, 1))
+>TObj : Symbol(TObj, Decl(asyncFunctionReturnType.ts, 64, 43))
+>Obj : Symbol(Obj, Decl(asyncFunctionReturnType.ts, 8, 1))
+>K : Symbol(K, Decl(asyncFunctionReturnType.ts, 64, 60))
+>TObj : Symbol(TObj, Decl(asyncFunctionReturnType.ts, 64, 43))
+>obj : Symbol(obj, Decl(asyncFunctionReturnType.ts, 64, 83))
+>TObj : Symbol(TObj, Decl(asyncFunctionReturnType.ts, 64, 43))
+>key : Symbol(key, Decl(asyncFunctionReturnType.ts, 64, 93))
+>K : Symbol(K, Decl(asyncFunctionReturnType.ts, 64, 60))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>TObj : Symbol(TObj, Decl(asyncFunctionReturnType.ts, 64, 43))
+>K : Symbol(K, Decl(asyncFunctionReturnType.ts, 64, 60))
+
+    return obj[key];
+>obj : Symbol(obj, Decl(asyncFunctionReturnType.ts, 64, 83))
+>key : Symbol(key, Decl(asyncFunctionReturnType.ts, 64, 93))
+}
+
+async function fGenericIndexedTypeForPromiseOfKProp<TObj extends Obj, K extends keyof TObj>(obj: TObj, key: K): Promise<TObj[K]> {
+>fGenericIndexedTypeForPromiseOfKProp : Symbol(fGenericIndexedTypeForPromiseOfKProp, Decl(asyncFunctionReturnType.ts, 66, 1))
+>TObj : Symbol(TObj, Decl(asyncFunctionReturnType.ts, 68, 52))
+>Obj : Symbol(Obj, Decl(asyncFunctionReturnType.ts, 8, 1))
+>K : Symbol(K, Decl(asyncFunctionReturnType.ts, 68, 69))
+>TObj : Symbol(TObj, Decl(asyncFunctionReturnType.ts, 68, 52))
+>obj : Symbol(obj, Decl(asyncFunctionReturnType.ts, 68, 92))
+>TObj : Symbol(TObj, Decl(asyncFunctionReturnType.ts, 68, 52))
+>key : Symbol(key, Decl(asyncFunctionReturnType.ts, 68, 102))
+>K : Symbol(K, Decl(asyncFunctionReturnType.ts, 68, 69))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>TObj : Symbol(TObj, Decl(asyncFunctionReturnType.ts, 68, 52))
+>K : Symbol(K, Decl(asyncFunctionReturnType.ts, 68, 69))
+
+    return Promise.resolve(obj[key]);
+>Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>obj : Symbol(obj, Decl(asyncFunctionReturnType.ts, 68, 92))
+>key : Symbol(key, Decl(asyncFunctionReturnType.ts, 68, 102))
+}
+
+async function fGenericIndexedTypeForExplicitPromiseOfKProp<TObj extends Obj, K extends keyof TObj>(obj: TObj, key: K): Promise<TObj[K]> {
+>fGenericIndexedTypeForExplicitPromiseOfKProp : Symbol(fGenericIndexedTypeForExplicitPromiseOfKProp, Decl(asyncFunctionReturnType.ts, 70, 1))
+>TObj : Symbol(TObj, Decl(asyncFunctionReturnType.ts, 72, 60))
+>Obj : Symbol(Obj, Decl(asyncFunctionReturnType.ts, 8, 1))
+>K : Symbol(K, Decl(asyncFunctionReturnType.ts, 72, 77))
+>TObj : Symbol(TObj, Decl(asyncFunctionReturnType.ts, 72, 60))
+>obj : Symbol(obj, Decl(asyncFunctionReturnType.ts, 72, 100))
+>TObj : Symbol(TObj, Decl(asyncFunctionReturnType.ts, 72, 60))
+>key : Symbol(key, Decl(asyncFunctionReturnType.ts, 72, 110))
+>K : Symbol(K, Decl(asyncFunctionReturnType.ts, 72, 77))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>TObj : Symbol(TObj, Decl(asyncFunctionReturnType.ts, 72, 60))
+>K : Symbol(K, Decl(asyncFunctionReturnType.ts, 72, 77))
+
+    return Promise.resolve<TObj[K]>(obj[key]);
+>Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>TObj : Symbol(TObj, Decl(asyncFunctionReturnType.ts, 72, 60))
+>K : Symbol(K, Decl(asyncFunctionReturnType.ts, 72, 77))
+>obj : Symbol(obj, Decl(asyncFunctionReturnType.ts, 72, 100))
+>key : Symbol(key, Decl(asyncFunctionReturnType.ts, 72, 110))
+}

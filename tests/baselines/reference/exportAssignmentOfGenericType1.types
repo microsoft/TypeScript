@@ -1,0 +1,26 @@
+=== tests/cases/compiler/exportAssignmentOfGenericType1_1.ts ===
+///<reference path='exportAssignmentOfGenericType1_0.ts'/>
+import q = require("exportAssignmentOfGenericType1_0");
+>q : typeof q
+
+class M extends q<string> { }
+>M : M
+>q : q<string>
+
+var m: M;
+>m : M
+
+var r: string = m.foo;
+>r : string
+>m.foo : string
+>m : M
+>foo : string
+
+=== tests/cases/compiler/exportAssignmentOfGenericType1_0.ts ===
+export = T;
+>T : T<X>
+
+class T<X> { foo: X; }
+>T : T<X>
+>foo : X
+

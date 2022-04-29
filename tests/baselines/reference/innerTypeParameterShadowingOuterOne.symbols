@@ -1,0 +1,73 @@
+=== tests/cases/conformance/types/typeParameters/typeParameterLists/innerTypeParameterShadowingOuterOne.ts ===
+// inner type parameters shadow outer ones of the same name
+// no errors expected
+
+function f<T extends Date>() {
+>f : Symbol(f, Decl(innerTypeParameterShadowingOuterOne.ts, 0, 0))
+>T : Symbol(T, Decl(innerTypeParameterShadowingOuterOne.ts, 3, 11))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+    function g<T extends Number>() {
+>g : Symbol(g, Decl(innerTypeParameterShadowingOuterOne.ts, 3, 30))
+>T : Symbol(T, Decl(innerTypeParameterShadowingOuterOne.ts, 4, 15))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+        var x: T;
+>x : Symbol(x, Decl(innerTypeParameterShadowingOuterOne.ts, 5, 11))
+>T : Symbol(T, Decl(innerTypeParameterShadowingOuterOne.ts, 4, 15))
+
+        x.toFixed();
+>x.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(innerTypeParameterShadowingOuterOne.ts, 5, 11))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+    }
+    var x: T;
+>x : Symbol(x, Decl(innerTypeParameterShadowingOuterOne.ts, 8, 7))
+>T : Symbol(T, Decl(innerTypeParameterShadowingOuterOne.ts, 3, 11))
+
+    x.getDate();
+>x.getDate : Symbol(Date.getDate, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(innerTypeParameterShadowingOuterOne.ts, 8, 7))
+>getDate : Symbol(Date.getDate, Decl(lib.es5.d.ts, --, --))
+}
+
+function f2<T extends Date, U extends Date>() {
+>f2 : Symbol(f2, Decl(innerTypeParameterShadowingOuterOne.ts, 10, 1))
+>T : Symbol(T, Decl(innerTypeParameterShadowingOuterOne.ts, 12, 12))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>U : Symbol(U, Decl(innerTypeParameterShadowingOuterOne.ts, 12, 27))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+    function g<T extends Number, U extends Number>() {
+>g : Symbol(g, Decl(innerTypeParameterShadowingOuterOne.ts, 12, 47))
+>T : Symbol(T, Decl(innerTypeParameterShadowingOuterOne.ts, 13, 15))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>U : Symbol(U, Decl(innerTypeParameterShadowingOuterOne.ts, 13, 32))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+        var x: U;
+>x : Symbol(x, Decl(innerTypeParameterShadowingOuterOne.ts, 14, 11))
+>U : Symbol(U, Decl(innerTypeParameterShadowingOuterOne.ts, 13, 32))
+
+        x.toFixed();
+>x.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(innerTypeParameterShadowingOuterOne.ts, 14, 11))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+    }
+    var x: U;
+>x : Symbol(x, Decl(innerTypeParameterShadowingOuterOne.ts, 17, 7))
+>U : Symbol(U, Decl(innerTypeParameterShadowingOuterOne.ts, 12, 27))
+
+    x.getDate();
+>x.getDate : Symbol(Date.getDate, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(innerTypeParameterShadowingOuterOne.ts, 17, 7))
+>getDate : Symbol(Date.getDate, Decl(lib.es5.d.ts, --, --))
+}
+//function f2<T extends Date, U extends T>() {
+//    function g<T extends Number, U extends T>() {
+//        var x: U;
+//        x.toFixed();
+//    }
+//    var x: U;
+//    x.getDate();
+//}

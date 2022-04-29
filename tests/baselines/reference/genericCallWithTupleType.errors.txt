@@ -1,0 +1,62 @@
+tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithTupleType.ts(12,1): error TS2322: Type '[string, number, boolean, boolean]' is not assignable to type '[string, number]'.
+  Source has 4 element(s) but target allows only 2.
+tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithTupleType.ts(13,20): error TS2493: Tuple type '[string, number]' of length '2' has no element at index '2'.
+tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithTupleType.ts(14,1): error TS2322: Type '{ a: string; }' is not assignable to type 'undefined'.
+tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithTupleType.ts(14,11): error TS2493: Tuple type '[string, number]' of length '2' has no element at index '3'.
+tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithTupleType.ts(15,20): error TS2493: Tuple type '[string, number]' of length '2' has no element at index '3'.
+tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithTupleType.ts(22,14): error TS2322: Type 'number' is not assignable to type 'string'.
+tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithTupleType.ts(22,17): error TS2322: Type 'string' is not assignable to type 'number'.
+tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithTupleType.ts(23,14): error TS2322: Type '{}' is not assignable to type 'string'.
+tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithTupleType.ts(23,18): error TS2322: Type '{}' is not assignable to type 'number'.
+tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithTupleType.ts(24,1): error TS2322: Type '[{}]' is not assignable to type '[{}, {}]'.
+  Source has 1 element(s) but target requires 2.
+
+
+==== tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithTupleType.ts (10 errors) ====
+    interface I<T, U> {
+        tuple1: [T, U];
+    } 
+    
+    var i1: I<string, number>;
+    var i2: I<{}, {}>;
+    
+    // no error
+    i1.tuple1 = ["foo", 5];
+    var e1 = i1.tuple1[0];  // string
+    var e2 = i1.tuple1[1];  // number
+    i1.tuple1 = ["foo", 5, false, true];
+    ~~~~~~~~~
+!!! error TS2322: Type '[string, number, boolean, boolean]' is not assignable to type '[string, number]'.
+!!! error TS2322:   Source has 4 element(s) but target allows only 2.
+    var e3 = i1.tuple1[2];  // {}
+                       ~
+!!! error TS2493: Tuple type '[string, number]' of length '2' has no element at index '2'.
+    i1.tuple1[3] = { a: "string" };
+    ~~~~~~~~~~~~
+!!! error TS2322: Type '{ a: string; }' is not assignable to type 'undefined'.
+              ~
+!!! error TS2493: Tuple type '[string, number]' of length '2' has no element at index '3'.
+    var e4 = i1.tuple1[3];  // {}
+                       ~
+!!! error TS2493: Tuple type '[string, number]' of length '2' has no element at index '3'.
+    i2.tuple1 = ["foo", 5];
+    i2.tuple1 = ["foo", "bar"];
+    i2.tuple1 = [5, "bar"];
+    i2.tuple1 = [{}, {}];
+    
+    // error
+    i1.tuple1 = [5, "foo"];
+                 ~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
+                    ~~~~~
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
+    i1.tuple1 = [{}, {}];
+                 ~~
+!!! error TS2322: Type '{}' is not assignable to type 'string'.
+                     ~~
+!!! error TS2322: Type '{}' is not assignable to type 'number'.
+    i2.tuple1 = [{}];
+    ~~~~~~~~~
+!!! error TS2322: Type '[{}]' is not assignable to type '[{}, {}]'.
+!!! error TS2322:   Source has 1 element(s) but target requires 2.
+    

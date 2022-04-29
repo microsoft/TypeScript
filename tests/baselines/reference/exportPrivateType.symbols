@@ -1,0 +1,70 @@
+=== tests/cases/compiler/exportPrivateType.ts ===
+module foo {
+>foo : Symbol(foo, Decl(exportPrivateType.ts, 0, 0))
+
+    class C1 {
+>C1 : Symbol(C1, Decl(exportPrivateType.ts, 0, 12))
+
+        x: string;
+>x : Symbol(C1.x, Decl(exportPrivateType.ts, 1, 14))
+
+        y: C1;
+>y : Symbol(C1.y, Decl(exportPrivateType.ts, 2, 18))
+>C1 : Symbol(C1, Decl(exportPrivateType.ts, 0, 12))
+    }
+ 
+    class C2 {
+>C2 : Symbol(C2, Decl(exportPrivateType.ts, 4, 5))
+
+        test() { return true; }
+>test : Symbol(C2.test, Decl(exportPrivateType.ts, 6, 14))
+    }
+ 
+    interface I1 {
+>I1 : Symbol(I1, Decl(exportPrivateType.ts, 8, 5))
+
+        (a: string, b: string): string;
+>a : Symbol(a, Decl(exportPrivateType.ts, 11, 9))
+>b : Symbol(b, Decl(exportPrivateType.ts, 11, 19))
+
+        (x: number, y: number): I1;
+>x : Symbol(x, Decl(exportPrivateType.ts, 12, 9))
+>y : Symbol(y, Decl(exportPrivateType.ts, 12, 19))
+>I1 : Symbol(I1, Decl(exportPrivateType.ts, 8, 5))
+    }
+ 
+    interface I2 {
+>I2 : Symbol(I2, Decl(exportPrivateType.ts, 13, 5))
+
+        x: string;
+>x : Symbol(I2.x, Decl(exportPrivateType.ts, 15, 18))
+
+        y: number;
+>y : Symbol(I2.y, Decl(exportPrivateType.ts, 16, 18))
+    }
+ 
+    // None of the types are exported, so per section 10.3, should all be errors
+    export var e: C1;
+>e : Symbol(e, Decl(exportPrivateType.ts, 21, 14))
+>C1 : Symbol(C1, Decl(exportPrivateType.ts, 0, 12))
+
+    export var f: I1;
+>f : Symbol(f, Decl(exportPrivateType.ts, 22, 14))
+>I1 : Symbol(I1, Decl(exportPrivateType.ts, 8, 5))
+
+    export var g: C2;
+>g : Symbol(g, Decl(exportPrivateType.ts, 23, 14))
+>C2 : Symbol(C2, Decl(exportPrivateType.ts, 4, 5))
+
+    export var h: I2;
+>h : Symbol(h, Decl(exportPrivateType.ts, 24, 14))
+>I2 : Symbol(I2, Decl(exportPrivateType.ts, 13, 5))
+}
+ 
+var y = foo.g; // Exported variable 'y' has or is using private type 'foo.C2'.
+>y : Symbol(y, Decl(exportPrivateType.ts, 27, 3))
+>foo.g : Symbol(foo.g, Decl(exportPrivateType.ts, 23, 14))
+>foo : Symbol(foo, Decl(exportPrivateType.ts, 0, 0))
+>g : Symbol(foo.g, Decl(exportPrivateType.ts, 23, 14))
+
+

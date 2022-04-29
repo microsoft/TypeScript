@@ -1,0 +1,141 @@
+=== tests/cases/conformance/types/typeRelationships/bestCommonType/functionWithMultipleReturnStatements2.ts ===
+// return type of a function with multiple returns is the BCT of each return statement
+// no errors expected here
+
+function f1() {
+>f1 : Symbol(f1, Decl(functionWithMultipleReturnStatements2.ts, 0, 0))
+
+    if (true) {
+        return 1;
+    } else {
+        return null;
+    }
+}
+
+function f2() {
+>f2 : Symbol(f2, Decl(functionWithMultipleReturnStatements2.ts, 9, 1))
+
+    if (true) {
+        return 1;
+    } else if (false) {
+        return null;
+    } else {
+        return 2;
+    }
+}
+
+function f4() {
+>f4 : Symbol(f4, Decl(functionWithMultipleReturnStatements2.ts, 19, 1))
+
+    try {
+        return 1;
+    }
+    catch (e) {
+>e : Symbol(e, Decl(functionWithMultipleReturnStatements2.ts, 25, 11))
+
+        return undefined;
+>undefined : Symbol(undefined)
+    }
+    finally {
+        return 1;
+    }
+}
+
+function f5() {
+>f5 : Symbol(f5, Decl(functionWithMultipleReturnStatements2.ts, 31, 1))
+
+    return 1;
+    return new Object();
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+}
+
+function f6<T>(x: T) {
+>f6 : Symbol(f6, Decl(functionWithMultipleReturnStatements2.ts, 36, 1))
+>T : Symbol(T, Decl(functionWithMultipleReturnStatements2.ts, 38, 12))
+>x : Symbol(x, Decl(functionWithMultipleReturnStatements2.ts, 38, 15))
+>T : Symbol(T, Decl(functionWithMultipleReturnStatements2.ts, 38, 12))
+
+    if (true) {
+        return x;
+>x : Symbol(x, Decl(functionWithMultipleReturnStatements2.ts, 38, 15))
+
+    } else {
+        return null;
+    }
+}
+
+//function f7<T extends U, U>(x: T, y: U) {
+//    if (true) {
+//        return x;
+//    } else {
+//        return y;
+//    }
+//}
+
+var a: { x: number; y?: number };
+>a : Symbol(a, Decl(functionWithMultipleReturnStatements2.ts, 54, 3))
+>x : Symbol(x, Decl(functionWithMultipleReturnStatements2.ts, 54, 8))
+>y : Symbol(y, Decl(functionWithMultipleReturnStatements2.ts, 54, 19))
+
+var b: { x: number; z?: number };
+>b : Symbol(b, Decl(functionWithMultipleReturnStatements2.ts, 55, 3))
+>x : Symbol(x, Decl(functionWithMultipleReturnStatements2.ts, 55, 8))
+>z : Symbol(z, Decl(functionWithMultipleReturnStatements2.ts, 55, 19))
+
+// returns typeof a
+function f9() {
+>f9 : Symbol(f9, Decl(functionWithMultipleReturnStatements2.ts, 55, 33))
+
+    if (true) {
+        return a;
+>a : Symbol(a, Decl(functionWithMultipleReturnStatements2.ts, 54, 3))
+
+    } else {
+        return b;
+>b : Symbol(b, Decl(functionWithMultipleReturnStatements2.ts, 55, 3))
+    }
+}
+
+// returns typeof b
+function f10() {
+>f10 : Symbol(f10, Decl(functionWithMultipleReturnStatements2.ts, 63, 1))
+
+    if (true) {
+        return b;
+>b : Symbol(b, Decl(functionWithMultipleReturnStatements2.ts, 55, 3))
+
+    } else {
+        return a;
+>a : Symbol(a, Decl(functionWithMultipleReturnStatements2.ts, 54, 3))
+    }
+}
+
+// returns number => void
+function f11() {
+>f11 : Symbol(f11, Decl(functionWithMultipleReturnStatements2.ts, 72, 1))
+
+    if (true) {
+        return (x: number) => { }
+>x : Symbol(x, Decl(functionWithMultipleReturnStatements2.ts, 77, 16))
+
+    } else {
+        return (x: Object) => { }
+>x : Symbol(x, Decl(functionWithMultipleReturnStatements2.ts, 79, 16))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+    }
+}
+
+// returns Object => void
+function f12() {
+>f12 : Symbol(f12, Decl(functionWithMultipleReturnStatements2.ts, 81, 1))
+
+    if (true) {
+        return (x: Object) => { }
+>x : Symbol(x, Decl(functionWithMultipleReturnStatements2.ts, 86, 16))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    } else {
+        return (x: number) => { }        
+>x : Symbol(x, Decl(functionWithMultipleReturnStatements2.ts, 88, 16))
+    }
+}

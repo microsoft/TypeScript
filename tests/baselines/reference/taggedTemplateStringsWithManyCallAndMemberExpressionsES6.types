@@ -1,0 +1,40 @@
+=== tests/cases/conformance/es6/templates/taggedTemplateStringsWithManyCallAndMemberExpressionsES6.ts ===
+interface I {
+    (strs: TemplateStringsArray, ...subs: number[]): I;
+>strs : TemplateStringsArray
+>subs : number[]
+
+    member: {
+>member : new (s: string) => new (n: number) => {    new (): boolean;}
+
+        new (s: string): {
+>s : string
+
+            new (n: number): {
+>n : number
+
+                new (): boolean;
+            }
+        }
+    };
+}
+var f: I;
+>f : I
+
+var x = new new new f `abc${ 0 }def`.member("hello")(42) === true;
+>x : boolean
+>new new new f `abc${ 0 }def`.member("hello")(42) === true : boolean
+>new new new f `abc${ 0 }def`.member("hello")(42) : boolean
+>new new f `abc${ 0 }def`.member("hello")(42) : new () => boolean
+>new f `abc${ 0 }def`.member("hello") : new (n: number) => new () => boolean
+>f `abc${ 0 }def`.member : new (s: string) => new (n: number) => new () => boolean
+>f `abc${ 0 }def` : I
+>f : I
+>`abc${ 0 }def` : string
+>0 : 0
+>member : new (s: string) => new (n: number) => new () => boolean
+>"hello" : "hello"
+>42 : 42
+>true : true
+
+

@@ -1,0 +1,23 @@
+/a.ts(1,20): error TS2732: Cannot find module 'foo/bar/foobar.json'. Consider using '--resolveJsonModule' to import module with '.json' extension.
+
+
+==== /tsconfig.json (0 errors) ====
+    {
+        "compilerOptions": {
+            "baseUrl": ".",
+            "paths": {
+                "*": ["node_modules/*", "src/types"]
+            },
+            "allowJs": true,
+            "outDir": "bin"
+        }
+    }
+    
+==== /a.ts (1 errors) ====
+    import foobar from "foo/bar/foobar.json";
+                       ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2732: Cannot find module 'foo/bar/foobar.json'. Consider using '--resolveJsonModule' to import module with '.json' extension.
+    
+==== /node_modules/foo/bar/foobar.json (0 errors) ====
+    { "a": 10 }
+    

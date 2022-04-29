@@ -1,0 +1,7 @@
+=== tests/cases/compiler/commentEmitWithCommentOnLastLine.ts ===
+var x: any;
+>x : Symbol(x, Decl(commentEmitWithCommentOnLastLine.ts, 0, 3))
+
+/*
+var bar;
+*/

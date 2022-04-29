@@ -1,0 +1,64 @@
+=== tests/cases/conformance/types/objectTypeLiteral/propertySignatures/stringNamedPropertyAccess.ts ===
+class C {
+>C : C
+
+    "a b": number;
+>"a b" : number
+
+    static "c d": number;
+>"c d" : number
+}
+var c: C;
+>c : C
+
+var r1 = c["a b"];
+>r1 : number
+>c["a b"] : number
+>c : C
+>"a b" : "a b"
+
+var r1b = C['c d'];
+>r1b : number
+>C['c d'] : number
+>C : typeof C
+>'c d' : "c d"
+
+interface I {
+    "a b": number;
+>"a b" : number
+}
+var i: I;
+>i : I
+
+var r2 = i["a b"];
+>r2 : number
+>i["a b"] : number
+>i : I
+>"a b" : "a b"
+
+var a: {
+>a : { "a b": number; }
+
+    "a b": number;
+>"a b" : number
+}
+var r3 = a["a b"];
+>r3 : number
+>a["a b"] : number
+>a : { "a b": number; }
+>"a b" : "a b"
+
+var b = {
+>b : { "a b": number; }
+>{    "a b": 1} : { "a b": number; }
+
+    "a b": 1
+>"a b" : number
+>1 : 1
+}
+var r4 = b["a b"];
+>r4 : number
+>b["a b"] : number
+>b : { "a b": number; }
+>"a b" : "a b"
+

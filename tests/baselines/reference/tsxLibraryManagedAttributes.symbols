@@ -1,0 +1,486 @@
+=== tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx ===
+type Defaultize<TProps, TDefaults> =
+>Defaultize : Symbol(Defaultize, Decl(tsxLibraryManagedAttributes.tsx, 0, 0))
+>TProps : Symbol(TProps, Decl(tsxLibraryManagedAttributes.tsx, 0, 16))
+>TDefaults : Symbol(TDefaults, Decl(tsxLibraryManagedAttributes.tsx, 0, 23))
+
+    & {[K in Extract<keyof TProps, keyof TDefaults>]?: TProps[K]}
+>K : Symbol(K, Decl(tsxLibraryManagedAttributes.tsx, 1, 8))
+>Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
+>TProps : Symbol(TProps, Decl(tsxLibraryManagedAttributes.tsx, 0, 16))
+>TDefaults : Symbol(TDefaults, Decl(tsxLibraryManagedAttributes.tsx, 0, 23))
+>TProps : Symbol(TProps, Decl(tsxLibraryManagedAttributes.tsx, 0, 16))
+>K : Symbol(K, Decl(tsxLibraryManagedAttributes.tsx, 1, 8))
+
+    & {[K in Exclude<keyof TProps, keyof TDefaults>]: TProps[K]}
+>K : Symbol(K, Decl(tsxLibraryManagedAttributes.tsx, 2, 8))
+>Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>TProps : Symbol(TProps, Decl(tsxLibraryManagedAttributes.tsx, 0, 16))
+>TDefaults : Symbol(TDefaults, Decl(tsxLibraryManagedAttributes.tsx, 0, 23))
+>TProps : Symbol(TProps, Decl(tsxLibraryManagedAttributes.tsx, 0, 16))
+>K : Symbol(K, Decl(tsxLibraryManagedAttributes.tsx, 2, 8))
+
+    & Partial<TDefaults>;
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>TDefaults : Symbol(TDefaults, Decl(tsxLibraryManagedAttributes.tsx, 0, 23))
+
+type InferredPropTypes<P> = {[K in keyof P]: P[K] extends PropTypeChecker<infer T, infer U> ? PropTypeChecker<T, U>[typeof checkedType] : {}};
+>InferredPropTypes : Symbol(InferredPropTypes, Decl(tsxLibraryManagedAttributes.tsx, 3, 25))
+>P : Symbol(P, Decl(tsxLibraryManagedAttributes.tsx, 5, 23))
+>K : Symbol(K, Decl(tsxLibraryManagedAttributes.tsx, 5, 30))
+>P : Symbol(P, Decl(tsxLibraryManagedAttributes.tsx, 5, 23))
+>P : Symbol(P, Decl(tsxLibraryManagedAttributes.tsx, 5, 23))
+>K : Symbol(K, Decl(tsxLibraryManagedAttributes.tsx, 5, 30))
+>PropTypeChecker : Symbol(PropTypeChecker, Decl(tsxLibraryManagedAttributes.tsx, 7, 41))
+>T : Symbol(T, Decl(tsxLibraryManagedAttributes.tsx, 5, 79))
+>U : Symbol(U, Decl(tsxLibraryManagedAttributes.tsx, 5, 88))
+>PropTypeChecker : Symbol(PropTypeChecker, Decl(tsxLibraryManagedAttributes.tsx, 7, 41))
+>T : Symbol(T, Decl(tsxLibraryManagedAttributes.tsx, 5, 79))
+>U : Symbol(U, Decl(tsxLibraryManagedAttributes.tsx, 5, 88))
+>checkedType : Symbol(checkedType, Decl(tsxLibraryManagedAttributes.tsx, 7, 13))
+
+declare const checkedType: unique symbol;
+>checkedType : Symbol(checkedType, Decl(tsxLibraryManagedAttributes.tsx, 7, 13))
+
+interface PropTypeChecker<U, TRequired = false> {
+>PropTypeChecker : Symbol(PropTypeChecker, Decl(tsxLibraryManagedAttributes.tsx, 7, 41))
+>U : Symbol(U, Decl(tsxLibraryManagedAttributes.tsx, 8, 26))
+>TRequired : Symbol(TRequired, Decl(tsxLibraryManagedAttributes.tsx, 8, 28))
+
+    (props: any, propName: string, componentName: string, location: any, propFullName: string): boolean;
+>props : Symbol(props, Decl(tsxLibraryManagedAttributes.tsx, 9, 5))
+>propName : Symbol(propName, Decl(tsxLibraryManagedAttributes.tsx, 9, 16))
+>componentName : Symbol(componentName, Decl(tsxLibraryManagedAttributes.tsx, 9, 34))
+>location : Symbol(location, Decl(tsxLibraryManagedAttributes.tsx, 9, 57))
+>propFullName : Symbol(propFullName, Decl(tsxLibraryManagedAttributes.tsx, 9, 72))
+
+    isRequired: PropTypeChecker<U, true>;
+>isRequired : Symbol(PropTypeChecker.isRequired, Decl(tsxLibraryManagedAttributes.tsx, 9, 104))
+>PropTypeChecker : Symbol(PropTypeChecker, Decl(tsxLibraryManagedAttributes.tsx, 7, 41))
+>U : Symbol(U, Decl(tsxLibraryManagedAttributes.tsx, 8, 26))
+
+    [checkedType]: TRequired extends true ? U : U | null | undefined;
+>[checkedType] : Symbol(PropTypeChecker[checkedType], Decl(tsxLibraryManagedAttributes.tsx, 10, 41))
+>checkedType : Symbol(checkedType, Decl(tsxLibraryManagedAttributes.tsx, 7, 13))
+>TRequired : Symbol(TRequired, Decl(tsxLibraryManagedAttributes.tsx, 8, 28))
+>U : Symbol(U, Decl(tsxLibraryManagedAttributes.tsx, 8, 26))
+>U : Symbol(U, Decl(tsxLibraryManagedAttributes.tsx, 8, 26))
+}
+
+declare namespace PropTypes {
+>PropTypes : Symbol(PropTypes, Decl(tsxLibraryManagedAttributes.tsx, 12, 1))
+
+    export const number: PropTypeChecker<number>;
+>number : Symbol(number, Decl(tsxLibraryManagedAttributes.tsx, 15, 16))
+>PropTypeChecker : Symbol(PropTypeChecker, Decl(tsxLibraryManagedAttributes.tsx, 7, 41))
+
+    export const string: PropTypeChecker<string>;
+>string : Symbol(string, Decl(tsxLibraryManagedAttributes.tsx, 16, 16))
+>PropTypeChecker : Symbol(PropTypeChecker, Decl(tsxLibraryManagedAttributes.tsx, 7, 41))
+
+    export const node: PropTypeChecker<ReactNode>;
+>node : Symbol(node, Decl(tsxLibraryManagedAttributes.tsx, 17, 16))
+>PropTypeChecker : Symbol(PropTypeChecker, Decl(tsxLibraryManagedAttributes.tsx, 7, 41))
+>ReactNode : Symbol(ReactNode, Decl(tsxLibraryManagedAttributes.tsx, 18, 1))
+}
+
+type ReactNode = string | number | ReactComponent<{}, {}>;
+>ReactNode : Symbol(ReactNode, Decl(tsxLibraryManagedAttributes.tsx, 18, 1))
+>ReactComponent : Symbol(ReactComponent, Decl(tsxLibraryManagedAttributes.tsx, 20, 58))
+
+declare class ReactComponent<P={}, S={}> {
+>ReactComponent : Symbol(ReactComponent, Decl(tsxLibraryManagedAttributes.tsx, 20, 58))
+>P : Symbol(P, Decl(tsxLibraryManagedAttributes.tsx, 22, 29))
+>S : Symbol(S, Decl(tsxLibraryManagedAttributes.tsx, 22, 34))
+
+    constructor(props: P);
+>props : Symbol(props, Decl(tsxLibraryManagedAttributes.tsx, 23, 16))
+>P : Symbol(P, Decl(tsxLibraryManagedAttributes.tsx, 22, 29))
+
+    props: P & Readonly<{children: ReactNode[]}>;
+>props : Symbol(ReactComponent.props, Decl(tsxLibraryManagedAttributes.tsx, 23, 26))
+>P : Symbol(P, Decl(tsxLibraryManagedAttributes.tsx, 22, 29))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>children : Symbol(children, Decl(tsxLibraryManagedAttributes.tsx, 24, 25))
+>ReactNode : Symbol(ReactNode, Decl(tsxLibraryManagedAttributes.tsx, 18, 1))
+
+    setState(s: Partial<S>): S;
+>setState : Symbol(ReactComponent.setState, Decl(tsxLibraryManagedAttributes.tsx, 24, 49))
+>s : Symbol(s, Decl(tsxLibraryManagedAttributes.tsx, 25, 13))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>S : Symbol(S, Decl(tsxLibraryManagedAttributes.tsx, 22, 34))
+>S : Symbol(S, Decl(tsxLibraryManagedAttributes.tsx, 22, 34))
+
+    render(): ReactNode;
+>render : Symbol(ReactComponent.render, Decl(tsxLibraryManagedAttributes.tsx, 25, 31))
+>ReactNode : Symbol(ReactNode, Decl(tsxLibraryManagedAttributes.tsx, 18, 1))
+}
+
+declare namespace JSX {
+>JSX : Symbol(JSX, Decl(tsxLibraryManagedAttributes.tsx, 27, 1))
+
+    interface Element extends ReactComponent {}
+>Element : Symbol(Element, Decl(tsxLibraryManagedAttributes.tsx, 29, 23))
+>ReactComponent : Symbol(ReactComponent, Decl(tsxLibraryManagedAttributes.tsx, 20, 58))
+
+    interface IntrinsicElements {}
+>IntrinsicElements : Symbol(IntrinsicElements, Decl(tsxLibraryManagedAttributes.tsx, 30, 47))
+
+    type LibraryManagedAttributes<TComponent, TProps> =
+>LibraryManagedAttributes : Symbol(LibraryManagedAttributes, Decl(tsxLibraryManagedAttributes.tsx, 31, 34))
+>TComponent : Symbol(TComponent, Decl(tsxLibraryManagedAttributes.tsx, 32, 34))
+>TProps : Symbol(TProps, Decl(tsxLibraryManagedAttributes.tsx, 32, 45))
+
+        TComponent extends { defaultProps: infer D; propTypes: infer P; }
+>TComponent : Symbol(TComponent, Decl(tsxLibraryManagedAttributes.tsx, 32, 34))
+>defaultProps : Symbol(defaultProps, Decl(tsxLibraryManagedAttributes.tsx, 33, 28))
+>D : Symbol(D, Decl(tsxLibraryManagedAttributes.tsx, 33, 48))
+>propTypes : Symbol(propTypes, Decl(tsxLibraryManagedAttributes.tsx, 33, 51))
+>P : Symbol(P, Decl(tsxLibraryManagedAttributes.tsx, 33, 68))
+
+            ? Defaultize<TProps & InferredPropTypes<P>, D>
+>Defaultize : Symbol(Defaultize, Decl(tsxLibraryManagedAttributes.tsx, 0, 0))
+>TProps : Symbol(TProps, Decl(tsxLibraryManagedAttributes.tsx, 32, 45))
+>InferredPropTypes : Symbol(InferredPropTypes, Decl(tsxLibraryManagedAttributes.tsx, 3, 25))
+>P : Symbol(P, Decl(tsxLibraryManagedAttributes.tsx, 33, 68))
+>D : Symbol(D, Decl(tsxLibraryManagedAttributes.tsx, 33, 48))
+
+            : TComponent extends { defaultProps: infer D }
+>TComponent : Symbol(TComponent, Decl(tsxLibraryManagedAttributes.tsx, 32, 34))
+>defaultProps : Symbol(defaultProps, Decl(tsxLibraryManagedAttributes.tsx, 35, 34))
+>D : Symbol(D, Decl(tsxLibraryManagedAttributes.tsx, 35, 54))
+
+                ? Defaultize<TProps, D>
+>Defaultize : Symbol(Defaultize, Decl(tsxLibraryManagedAttributes.tsx, 0, 0))
+>TProps : Symbol(TProps, Decl(tsxLibraryManagedAttributes.tsx, 32, 45))
+>D : Symbol(D, Decl(tsxLibraryManagedAttributes.tsx, 35, 54))
+
+                : TComponent extends { propTypes: infer P }
+>TComponent : Symbol(TComponent, Decl(tsxLibraryManagedAttributes.tsx, 32, 34))
+>propTypes : Symbol(propTypes, Decl(tsxLibraryManagedAttributes.tsx, 37, 38))
+>P : Symbol(P, Decl(tsxLibraryManagedAttributes.tsx, 37, 55))
+
+                    ? TProps & InferredPropTypes<P>
+>TProps : Symbol(TProps, Decl(tsxLibraryManagedAttributes.tsx, 32, 45))
+>InferredPropTypes : Symbol(InferredPropTypes, Decl(tsxLibraryManagedAttributes.tsx, 3, 25))
+>P : Symbol(P, Decl(tsxLibraryManagedAttributes.tsx, 37, 55))
+
+                    : TProps;
+>TProps : Symbol(TProps, Decl(tsxLibraryManagedAttributes.tsx, 32, 45))
+}
+
+class Component extends ReactComponent {
+>Component : Symbol(Component, Decl(tsxLibraryManagedAttributes.tsx, 40, 1))
+>ReactComponent : Symbol(ReactComponent, Decl(tsxLibraryManagedAttributes.tsx, 20, 58))
+
+    static propTypes = {
+>propTypes : Symbol(Component.propTypes, Decl(tsxLibraryManagedAttributes.tsx, 42, 40))
+
+        foo: PropTypes.number,
+>foo : Symbol(foo, Decl(tsxLibraryManagedAttributes.tsx, 43, 24))
+>PropTypes.number : Symbol(PropTypes.number, Decl(tsxLibraryManagedAttributes.tsx, 15, 16))
+>PropTypes : Symbol(PropTypes, Decl(tsxLibraryManagedAttributes.tsx, 12, 1))
+>number : Symbol(PropTypes.number, Decl(tsxLibraryManagedAttributes.tsx, 15, 16))
+
+        bar: PropTypes.node,
+>bar : Symbol(bar, Decl(tsxLibraryManagedAttributes.tsx, 44, 30))
+>PropTypes.node : Symbol(PropTypes.node, Decl(tsxLibraryManagedAttributes.tsx, 17, 16))
+>PropTypes : Symbol(PropTypes, Decl(tsxLibraryManagedAttributes.tsx, 12, 1))
+>node : Symbol(PropTypes.node, Decl(tsxLibraryManagedAttributes.tsx, 17, 16))
+
+        baz: PropTypes.string.isRequired,
+>baz : Symbol(baz, Decl(tsxLibraryManagedAttributes.tsx, 45, 28))
+>PropTypes.string.isRequired : Symbol(PropTypeChecker.isRequired, Decl(tsxLibraryManagedAttributes.tsx, 9, 104))
+>PropTypes.string : Symbol(PropTypes.string, Decl(tsxLibraryManagedAttributes.tsx, 16, 16))
+>PropTypes : Symbol(PropTypes, Decl(tsxLibraryManagedAttributes.tsx, 12, 1))
+>string : Symbol(PropTypes.string, Decl(tsxLibraryManagedAttributes.tsx, 16, 16))
+>isRequired : Symbol(PropTypeChecker.isRequired, Decl(tsxLibraryManagedAttributes.tsx, 9, 104))
+
+    };
+    static defaultProps = {
+>defaultProps : Symbol(Component.defaultProps, Decl(tsxLibraryManagedAttributes.tsx, 47, 6))
+
+        foo: 42,
+>foo : Symbol(foo, Decl(tsxLibraryManagedAttributes.tsx, 48, 27))
+    }
+}
+
+const a = <Component foo={12} bar="yes" baz="yeah" />;
+>a : Symbol(a, Decl(tsxLibraryManagedAttributes.tsx, 53, 5))
+>Component : Symbol(Component, Decl(tsxLibraryManagedAttributes.tsx, 40, 1))
+>foo : Symbol(foo, Decl(tsxLibraryManagedAttributes.tsx, 53, 20))
+>bar : Symbol(bar, Decl(tsxLibraryManagedAttributes.tsx, 53, 29))
+>baz : Symbol(baz, Decl(tsxLibraryManagedAttributes.tsx, 53, 39))
+
+const b = <Component foo={12} />; // Error, missing required prop bar
+>b : Symbol(b, Decl(tsxLibraryManagedAttributes.tsx, 54, 5))
+>Component : Symbol(Component, Decl(tsxLibraryManagedAttributes.tsx, 40, 1))
+>foo : Symbol(foo, Decl(tsxLibraryManagedAttributes.tsx, 54, 20))
+
+const c = <Component bar="yes" baz="yeah" />;
+>c : Symbol(c, Decl(tsxLibraryManagedAttributes.tsx, 55, 5))
+>Component : Symbol(Component, Decl(tsxLibraryManagedAttributes.tsx, 40, 1))
+>bar : Symbol(bar, Decl(tsxLibraryManagedAttributes.tsx, 55, 20))
+>baz : Symbol(baz, Decl(tsxLibraryManagedAttributes.tsx, 55, 30))
+
+const d = <Component bar="yes" baz="yo" bat="ohno" />; // Error, baz not a valid prop
+>d : Symbol(d, Decl(tsxLibraryManagedAttributes.tsx, 56, 5))
+>Component : Symbol(Component, Decl(tsxLibraryManagedAttributes.tsx, 40, 1))
+>bar : Symbol(bar, Decl(tsxLibraryManagedAttributes.tsx, 56, 20))
+>baz : Symbol(baz, Decl(tsxLibraryManagedAttributes.tsx, 56, 30))
+>bat : Symbol(bat, Decl(tsxLibraryManagedAttributes.tsx, 56, 39))
+
+const e = <Component foo={12} bar={null} baz="cool" />; // bar is nullable/undefinable since it's not marked `isRequired`
+>e : Symbol(e, Decl(tsxLibraryManagedAttributes.tsx, 57, 5))
+>Component : Symbol(Component, Decl(tsxLibraryManagedAttributes.tsx, 40, 1))
+>foo : Symbol(foo, Decl(tsxLibraryManagedAttributes.tsx, 57, 20))
+>bar : Symbol(bar, Decl(tsxLibraryManagedAttributes.tsx, 57, 29))
+>baz : Symbol(baz, Decl(tsxLibraryManagedAttributes.tsx, 57, 40))
+
+const f = <Component foo={12} bar="yeah" baz={null} />; // Error, baz is _not_ nullable/undefinable since it's marked `isRequired`
+>f : Symbol(f, Decl(tsxLibraryManagedAttributes.tsx, 58, 5))
+>Component : Symbol(Component, Decl(tsxLibraryManagedAttributes.tsx, 40, 1))
+>foo : Symbol(foo, Decl(tsxLibraryManagedAttributes.tsx, 58, 20))
+>bar : Symbol(bar, Decl(tsxLibraryManagedAttributes.tsx, 58, 29))
+>baz : Symbol(baz, Decl(tsxLibraryManagedAttributes.tsx, 58, 40))
+
+class JustPropTypes extends ReactComponent {
+>JustPropTypes : Symbol(JustPropTypes, Decl(tsxLibraryManagedAttributes.tsx, 58, 55))
+>ReactComponent : Symbol(ReactComponent, Decl(tsxLibraryManagedAttributes.tsx, 20, 58))
+
+    static propTypes = {
+>propTypes : Symbol(JustPropTypes.propTypes, Decl(tsxLibraryManagedAttributes.tsx, 60, 44))
+
+        foo: PropTypes.number,
+>foo : Symbol(foo, Decl(tsxLibraryManagedAttributes.tsx, 61, 24))
+>PropTypes.number : Symbol(PropTypes.number, Decl(tsxLibraryManagedAttributes.tsx, 15, 16))
+>PropTypes : Symbol(PropTypes, Decl(tsxLibraryManagedAttributes.tsx, 12, 1))
+>number : Symbol(PropTypes.number, Decl(tsxLibraryManagedAttributes.tsx, 15, 16))
+
+        bar: PropTypes.node.isRequired,
+>bar : Symbol(bar, Decl(tsxLibraryManagedAttributes.tsx, 62, 30))
+>PropTypes.node.isRequired : Symbol(PropTypeChecker.isRequired, Decl(tsxLibraryManagedAttributes.tsx, 9, 104))
+>PropTypes.node : Symbol(PropTypes.node, Decl(tsxLibraryManagedAttributes.tsx, 17, 16))
+>PropTypes : Symbol(PropTypes, Decl(tsxLibraryManagedAttributes.tsx, 12, 1))
+>node : Symbol(PropTypes.node, Decl(tsxLibraryManagedAttributes.tsx, 17, 16))
+>isRequired : Symbol(PropTypeChecker.isRequired, Decl(tsxLibraryManagedAttributes.tsx, 9, 104))
+
+    };
+}
+
+const g = <JustPropTypes foo={12} bar="ok" />;
+>g : Symbol(g, Decl(tsxLibraryManagedAttributes.tsx, 67, 5))
+>JustPropTypes : Symbol(JustPropTypes, Decl(tsxLibraryManagedAttributes.tsx, 58, 55))
+>foo : Symbol(foo, Decl(tsxLibraryManagedAttributes.tsx, 67, 24))
+>bar : Symbol(bar, Decl(tsxLibraryManagedAttributes.tsx, 67, 33))
+
+const h = <JustPropTypes foo="no" />; // error, wrong type
+>h : Symbol(h, Decl(tsxLibraryManagedAttributes.tsx, 68, 5))
+>JustPropTypes : Symbol(JustPropTypes, Decl(tsxLibraryManagedAttributes.tsx, 58, 55))
+>foo : Symbol(foo, Decl(tsxLibraryManagedAttributes.tsx, 68, 24))
+
+const i = <JustPropTypes foo={null} bar="ok" />;
+>i : Symbol(i, Decl(tsxLibraryManagedAttributes.tsx, 69, 5))
+>JustPropTypes : Symbol(JustPropTypes, Decl(tsxLibraryManagedAttributes.tsx, 58, 55))
+>foo : Symbol(foo, Decl(tsxLibraryManagedAttributes.tsx, 69, 24))
+>bar : Symbol(bar, Decl(tsxLibraryManagedAttributes.tsx, 69, 35))
+
+const j = <JustPropTypes foo={12} bar={null} />; // error, bar is required
+>j : Symbol(j, Decl(tsxLibraryManagedAttributes.tsx, 70, 5))
+>JustPropTypes : Symbol(JustPropTypes, Decl(tsxLibraryManagedAttributes.tsx, 58, 55))
+>foo : Symbol(foo, Decl(tsxLibraryManagedAttributes.tsx, 70, 24))
+>bar : Symbol(bar, Decl(tsxLibraryManagedAttributes.tsx, 70, 33))
+
+class JustDefaultProps extends ReactComponent {
+>JustDefaultProps : Symbol(JustDefaultProps, Decl(tsxLibraryManagedAttributes.tsx, 70, 48))
+>ReactComponent : Symbol(ReactComponent, Decl(tsxLibraryManagedAttributes.tsx, 20, 58))
+
+    static defaultProps = {
+>defaultProps : Symbol(JustDefaultProps.defaultProps, Decl(tsxLibraryManagedAttributes.tsx, 72, 47))
+
+        foo: 42,
+>foo : Symbol(foo, Decl(tsxLibraryManagedAttributes.tsx, 73, 27))
+
+    };
+}
+
+const k = <JustDefaultProps foo={12} />;
+>k : Symbol(k, Decl(tsxLibraryManagedAttributes.tsx, 78, 5))
+>JustDefaultProps : Symbol(JustDefaultProps, Decl(tsxLibraryManagedAttributes.tsx, 70, 48))
+>foo : Symbol(foo, Decl(tsxLibraryManagedAttributes.tsx, 78, 27))
+
+const l = <JustDefaultProps foo={12} bar="ok" />; // error, no prop named bar
+>l : Symbol(l, Decl(tsxLibraryManagedAttributes.tsx, 79, 5))
+>JustDefaultProps : Symbol(JustDefaultProps, Decl(tsxLibraryManagedAttributes.tsx, 70, 48))
+>foo : Symbol(foo, Decl(tsxLibraryManagedAttributes.tsx, 79, 27))
+>bar : Symbol(bar, Decl(tsxLibraryManagedAttributes.tsx, 79, 36))
+
+const m = <JustDefaultProps foo="no" />; // error, wrong type
+>m : Symbol(m, Decl(tsxLibraryManagedAttributes.tsx, 80, 5))
+>JustDefaultProps : Symbol(JustDefaultProps, Decl(tsxLibraryManagedAttributes.tsx, 70, 48))
+>foo : Symbol(foo, Decl(tsxLibraryManagedAttributes.tsx, 80, 27))
+
+interface FooProps {
+>FooProps : Symbol(FooProps, Decl(tsxLibraryManagedAttributes.tsx, 80, 40))
+
+    foo: string;
+>foo : Symbol(FooProps.foo, Decl(tsxLibraryManagedAttributes.tsx, 82, 20))
+}
+
+class BothWithSpecifiedGeneric extends ReactComponent<FooProps> {
+>BothWithSpecifiedGeneric : Symbol(BothWithSpecifiedGeneric, Decl(tsxLibraryManagedAttributes.tsx, 84, 1))
+>ReactComponent : Symbol(ReactComponent, Decl(tsxLibraryManagedAttributes.tsx, 20, 58))
+>FooProps : Symbol(FooProps, Decl(tsxLibraryManagedAttributes.tsx, 80, 40))
+
+    static propTypes = {
+>propTypes : Symbol(BothWithSpecifiedGeneric.propTypes, Decl(tsxLibraryManagedAttributes.tsx, 86, 65))
+
+        foo: PropTypes.string,
+>foo : Symbol(foo, Decl(tsxLibraryManagedAttributes.tsx, 87, 24))
+>PropTypes.string : Symbol(PropTypes.string, Decl(tsxLibraryManagedAttributes.tsx, 16, 16))
+>PropTypes : Symbol(PropTypes, Decl(tsxLibraryManagedAttributes.tsx, 12, 1))
+>string : Symbol(PropTypes.string, Decl(tsxLibraryManagedAttributes.tsx, 16, 16))
+
+        bar: PropTypes.node,
+>bar : Symbol(bar, Decl(tsxLibraryManagedAttributes.tsx, 88, 30))
+>PropTypes.node : Symbol(PropTypes.node, Decl(tsxLibraryManagedAttributes.tsx, 17, 16))
+>PropTypes : Symbol(PropTypes, Decl(tsxLibraryManagedAttributes.tsx, 12, 1))
+>node : Symbol(PropTypes.node, Decl(tsxLibraryManagedAttributes.tsx, 17, 16))
+
+        baz: PropTypes.number.isRequired,
+>baz : Symbol(baz, Decl(tsxLibraryManagedAttributes.tsx, 89, 28))
+>PropTypes.number.isRequired : Symbol(PropTypeChecker.isRequired, Decl(tsxLibraryManagedAttributes.tsx, 9, 104))
+>PropTypes.number : Symbol(PropTypes.number, Decl(tsxLibraryManagedAttributes.tsx, 15, 16))
+>PropTypes : Symbol(PropTypes, Decl(tsxLibraryManagedAttributes.tsx, 12, 1))
+>number : Symbol(PropTypes.number, Decl(tsxLibraryManagedAttributes.tsx, 15, 16))
+>isRequired : Symbol(PropTypeChecker.isRequired, Decl(tsxLibraryManagedAttributes.tsx, 9, 104))
+
+    };
+    static defaultProps = {
+>defaultProps : Symbol(BothWithSpecifiedGeneric.defaultProps, Decl(tsxLibraryManagedAttributes.tsx, 91, 6))
+
+        foo: "yo",
+>foo : Symbol(foo, Decl(tsxLibraryManagedAttributes.tsx, 92, 27))
+
+    };
+}
+const n = <BothWithSpecifiedGeneric foo="fine" bar="yes" baz={12} />;
+>n : Symbol(n, Decl(tsxLibraryManagedAttributes.tsx, 96, 5))
+>BothWithSpecifiedGeneric : Symbol(BothWithSpecifiedGeneric, Decl(tsxLibraryManagedAttributes.tsx, 84, 1))
+>foo : Symbol(foo, Decl(tsxLibraryManagedAttributes.tsx, 96, 35))
+>bar : Symbol(bar, Decl(tsxLibraryManagedAttributes.tsx, 96, 46))
+>baz : Symbol(baz, Decl(tsxLibraryManagedAttributes.tsx, 96, 56))
+
+const o = <BothWithSpecifiedGeneric foo="no" />; // Error, missing required prop bar
+>o : Symbol(o, Decl(tsxLibraryManagedAttributes.tsx, 97, 5))
+>BothWithSpecifiedGeneric : Symbol(BothWithSpecifiedGeneric, Decl(tsxLibraryManagedAttributes.tsx, 84, 1))
+>foo : Symbol(foo, Decl(tsxLibraryManagedAttributes.tsx, 97, 35))
+
+const p = <BothWithSpecifiedGeneric bar="yes" baz={12} />;
+>p : Symbol(p, Decl(tsxLibraryManagedAttributes.tsx, 98, 5))
+>BothWithSpecifiedGeneric : Symbol(BothWithSpecifiedGeneric, Decl(tsxLibraryManagedAttributes.tsx, 84, 1))
+>bar : Symbol(bar, Decl(tsxLibraryManagedAttributes.tsx, 98, 35))
+>baz : Symbol(baz, Decl(tsxLibraryManagedAttributes.tsx, 98, 45))
+
+const q = <BothWithSpecifiedGeneric bar="yes" baz={12} bat="ohno" />; // Error, baz not a valid prop
+>q : Symbol(q, Decl(tsxLibraryManagedAttributes.tsx, 99, 5))
+>BothWithSpecifiedGeneric : Symbol(BothWithSpecifiedGeneric, Decl(tsxLibraryManagedAttributes.tsx, 84, 1))
+>bar : Symbol(bar, Decl(tsxLibraryManagedAttributes.tsx, 99, 35))
+>baz : Symbol(baz, Decl(tsxLibraryManagedAttributes.tsx, 99, 45))
+>bat : Symbol(bat, Decl(tsxLibraryManagedAttributes.tsx, 99, 54))
+
+const r = <BothWithSpecifiedGeneric foo="no" bar={null} baz={0} />; // bar is nullable/undefinable since it's not marked `isRequired`
+>r : Symbol(r, Decl(tsxLibraryManagedAttributes.tsx, 100, 5))
+>BothWithSpecifiedGeneric : Symbol(BothWithSpecifiedGeneric, Decl(tsxLibraryManagedAttributes.tsx, 84, 1))
+>foo : Symbol(foo, Decl(tsxLibraryManagedAttributes.tsx, 100, 35))
+>bar : Symbol(bar, Decl(tsxLibraryManagedAttributes.tsx, 100, 44))
+>baz : Symbol(baz, Decl(tsxLibraryManagedAttributes.tsx, 100, 55))
+
+const s = <BothWithSpecifiedGeneric foo="eh" bar="yeah" baz={null} />; // Error, baz is _not_ nullable/undefinable since it's marked `isRequired`
+>s : Symbol(s, Decl(tsxLibraryManagedAttributes.tsx, 101, 5))
+>BothWithSpecifiedGeneric : Symbol(BothWithSpecifiedGeneric, Decl(tsxLibraryManagedAttributes.tsx, 84, 1))
+>foo : Symbol(foo, Decl(tsxLibraryManagedAttributes.tsx, 101, 35))
+>bar : Symbol(bar, Decl(tsxLibraryManagedAttributes.tsx, 101, 44))
+>baz : Symbol(baz, Decl(tsxLibraryManagedAttributes.tsx, 101, 55))
+
+class JustPropTypesWithSpecifiedGeneric extends ReactComponent<FooProps> {
+>JustPropTypesWithSpecifiedGeneric : Symbol(JustPropTypesWithSpecifiedGeneric, Decl(tsxLibraryManagedAttributes.tsx, 101, 70))
+>ReactComponent : Symbol(ReactComponent, Decl(tsxLibraryManagedAttributes.tsx, 20, 58))
+>FooProps : Symbol(FooProps, Decl(tsxLibraryManagedAttributes.tsx, 80, 40))
+
+    static propTypes = {
+>propTypes : Symbol(JustPropTypesWithSpecifiedGeneric.propTypes, Decl(tsxLibraryManagedAttributes.tsx, 103, 74))
+
+        foo: PropTypes.string,
+>foo : Symbol(foo, Decl(tsxLibraryManagedAttributes.tsx, 104, 24))
+>PropTypes.string : Symbol(PropTypes.string, Decl(tsxLibraryManagedAttributes.tsx, 16, 16))
+>PropTypes : Symbol(PropTypes, Decl(tsxLibraryManagedAttributes.tsx, 12, 1))
+>string : Symbol(PropTypes.string, Decl(tsxLibraryManagedAttributes.tsx, 16, 16))
+
+        bar: PropTypes.node.isRequired,
+>bar : Symbol(bar, Decl(tsxLibraryManagedAttributes.tsx, 105, 30))
+>PropTypes.node.isRequired : Symbol(PropTypeChecker.isRequired, Decl(tsxLibraryManagedAttributes.tsx, 9, 104))
+>PropTypes.node : Symbol(PropTypes.node, Decl(tsxLibraryManagedAttributes.tsx, 17, 16))
+>PropTypes : Symbol(PropTypes, Decl(tsxLibraryManagedAttributes.tsx, 12, 1))
+>node : Symbol(PropTypes.node, Decl(tsxLibraryManagedAttributes.tsx, 17, 16))
+>isRequired : Symbol(PropTypeChecker.isRequired, Decl(tsxLibraryManagedAttributes.tsx, 9, 104))
+
+    };
+}
+const t = <JustPropTypesWithSpecifiedGeneric foo="nice" bar="ok" />;
+>t : Symbol(t, Decl(tsxLibraryManagedAttributes.tsx, 109, 5))
+>JustPropTypesWithSpecifiedGeneric : Symbol(JustPropTypesWithSpecifiedGeneric, Decl(tsxLibraryManagedAttributes.tsx, 101, 70))
+>foo : Symbol(foo, Decl(tsxLibraryManagedAttributes.tsx, 109, 44))
+>bar : Symbol(bar, Decl(tsxLibraryManagedAttributes.tsx, 109, 55))
+
+const u = <JustPropTypesWithSpecifiedGeneric foo={12} />; // error, wrong type
+>u : Symbol(u, Decl(tsxLibraryManagedAttributes.tsx, 110, 5))
+>JustPropTypesWithSpecifiedGeneric : Symbol(JustPropTypesWithSpecifiedGeneric, Decl(tsxLibraryManagedAttributes.tsx, 101, 70))
+>foo : Symbol(foo, Decl(tsxLibraryManagedAttributes.tsx, 110, 44))
+
+const v = <JustPropTypesWithSpecifiedGeneric foo={null} bar="ok" />; // generic overrides propTypes required-ness, null isn't valid
+>v : Symbol(v, Decl(tsxLibraryManagedAttributes.tsx, 111, 5))
+>JustPropTypesWithSpecifiedGeneric : Symbol(JustPropTypesWithSpecifiedGeneric, Decl(tsxLibraryManagedAttributes.tsx, 101, 70))
+>foo : Symbol(foo, Decl(tsxLibraryManagedAttributes.tsx, 111, 44))
+>bar : Symbol(bar, Decl(tsxLibraryManagedAttributes.tsx, 111, 55))
+
+const w = <JustPropTypesWithSpecifiedGeneric foo="cool" bar={null} />; // error, bar is required
+>w : Symbol(w, Decl(tsxLibraryManagedAttributes.tsx, 112, 5))
+>JustPropTypesWithSpecifiedGeneric : Symbol(JustPropTypesWithSpecifiedGeneric, Decl(tsxLibraryManagedAttributes.tsx, 101, 70))
+>foo : Symbol(foo, Decl(tsxLibraryManagedAttributes.tsx, 112, 44))
+>bar : Symbol(bar, Decl(tsxLibraryManagedAttributes.tsx, 112, 55))
+
+class JustDefaultPropsWithSpecifiedGeneric extends ReactComponent<FooProps> {
+>JustDefaultPropsWithSpecifiedGeneric : Symbol(JustDefaultPropsWithSpecifiedGeneric, Decl(tsxLibraryManagedAttributes.tsx, 112, 70))
+>ReactComponent : Symbol(ReactComponent, Decl(tsxLibraryManagedAttributes.tsx, 20, 58))
+>FooProps : Symbol(FooProps, Decl(tsxLibraryManagedAttributes.tsx, 80, 40))
+
+    static defaultProps = {
+>defaultProps : Symbol(JustDefaultPropsWithSpecifiedGeneric.defaultProps, Decl(tsxLibraryManagedAttributes.tsx, 114, 77))
+
+        foo: "no",
+>foo : Symbol(foo, Decl(tsxLibraryManagedAttributes.tsx, 115, 27))
+
+    };
+}
+
+const x = <JustDefaultPropsWithSpecifiedGeneric foo="eh" />;
+>x : Symbol(x, Decl(tsxLibraryManagedAttributes.tsx, 120, 5))
+>JustDefaultPropsWithSpecifiedGeneric : Symbol(JustDefaultPropsWithSpecifiedGeneric, Decl(tsxLibraryManagedAttributes.tsx, 112, 70))
+>foo : Symbol(foo, Decl(tsxLibraryManagedAttributes.tsx, 120, 47))
+
+const y = <JustDefaultPropsWithSpecifiedGeneric foo="no" bar="ok" />; // error, no prop named bar
+>y : Symbol(y, Decl(tsxLibraryManagedAttributes.tsx, 121, 5))
+>JustDefaultPropsWithSpecifiedGeneric : Symbol(JustDefaultPropsWithSpecifiedGeneric, Decl(tsxLibraryManagedAttributes.tsx, 112, 70))
+>foo : Symbol(foo, Decl(tsxLibraryManagedAttributes.tsx, 121, 47))
+>bar : Symbol(bar, Decl(tsxLibraryManagedAttributes.tsx, 121, 56))
+
+const z = <JustDefaultPropsWithSpecifiedGeneric foo={12} />; // error, wrong type
+>z : Symbol(z, Decl(tsxLibraryManagedAttributes.tsx, 122, 5))
+>JustDefaultPropsWithSpecifiedGeneric : Symbol(JustDefaultPropsWithSpecifiedGeneric, Decl(tsxLibraryManagedAttributes.tsx, 112, 70))
+>foo : Symbol(foo, Decl(tsxLibraryManagedAttributes.tsx, 122, 47))
+
+const aa = <JustDefaultPropsWithSpecifiedGeneric />;
+>aa : Symbol(aa, Decl(tsxLibraryManagedAttributes.tsx, 123, 5))
+>JustDefaultPropsWithSpecifiedGeneric : Symbol(JustDefaultPropsWithSpecifiedGeneric, Decl(tsxLibraryManagedAttributes.tsx, 112, 70))
+

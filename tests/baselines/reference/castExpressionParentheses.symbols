@@ -1,0 +1,84 @@
+=== tests/cases/compiler/castExpressionParentheses.ts ===
+declare var a;
+>a : Symbol(a, Decl(castExpressionParentheses.ts, 0, 11))
+
+// parentheses should be omitted
+// literals
+(<any>{a:0});  
+>a : Symbol(a, Decl(castExpressionParentheses.ts, 4, 7))
+
+(<any>[1,3,]); 
+(<any>"string"); 
+(<any>23.0); 
+(<any>1); 
+(<any>1.);
+(<any>1.0);
+(<any>12e+34);
+(<any>0xff);
+(<any>/regexp/g); 
+(<any>false); 
+(<any>true); 
+(<any>null); 
+// names and dotted names
+(<any>this); 
+>this : Symbol(globalThis)
+
+(<any>this.x); 
+>this : Symbol(globalThis)
+
+(<any>(<any>a).x);
+>a : Symbol(a, Decl(castExpressionParentheses.ts, 0, 11))
+
+(<any><any>a);
+>a : Symbol(a, Decl(castExpressionParentheses.ts, 0, 11))
+
+(<any>a[0]);
+>a : Symbol(a, Decl(castExpressionParentheses.ts, 0, 11))
+
+(<any>a.b["0"]);
+>a : Symbol(a, Decl(castExpressionParentheses.ts, 0, 11))
+
+(<any>a()).x;
+>a : Symbol(a, Decl(castExpressionParentheses.ts, 0, 11))
+
+(<any>1).foo;
+(<any>1.).foo;
+(<any>1.0).foo;
+(<any>12e+34).foo;
+(<any>0xff).foo;
+
+declare var A;
+>A : Symbol(A, Decl(castExpressionParentheses.ts, 31, 11))
+
+// should keep the parentheses in emit
+(<any>(1.0)); 
+(<any>new A).foo; 
+>A : Symbol(A, Decl(castExpressionParentheses.ts, 31, 11))
+
+(<any>typeof A).x; 
+>A : Symbol(A, Decl(castExpressionParentheses.ts, 31, 11))
+
+(<any>-A).x; 
+>A : Symbol(A, Decl(castExpressionParentheses.ts, 31, 11))
+
+new (<any>A());
+>A : Symbol(A, Decl(castExpressionParentheses.ts, 31, 11))
+
+(<Tany>()=> {})();
+>Tany : Symbol(Tany, Decl(castExpressionParentheses.ts, 39, 2))
+
+(<any>function foo() { })();
+>foo : Symbol(foo, Decl(castExpressionParentheses.ts, 40, 6))
+
+(<any><number><any>-A).x; 
+>A : Symbol(A, Decl(castExpressionParentheses.ts, 31, 11))
+
+// nested cast, should keep one pair of parenthese
+(<any><number>(<any>-A)).x; 
+>A : Symbol(A, Decl(castExpressionParentheses.ts, 31, 11))
+
+// nested parenthesized expression, should keep one pair of parenthese
+(<any>(A)) 
+>A : Symbol(A, Decl(castExpressionParentheses.ts, 31, 11))
+
+

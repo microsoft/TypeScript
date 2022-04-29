@@ -1,0 +1,24 @@
+=== tests/cases/compiler/declarationEmitFBoundedTypeParams.ts ===
+// Repro from #6040
+
+function append<a, b extends a>(result: a[], value: b): a[] {
+>append : Symbol(append, Decl(declarationEmitFBoundedTypeParams.ts, 0, 0))
+>a : Symbol(a, Decl(declarationEmitFBoundedTypeParams.ts, 2, 16))
+>b : Symbol(b, Decl(declarationEmitFBoundedTypeParams.ts, 2, 18))
+>a : Symbol(a, Decl(declarationEmitFBoundedTypeParams.ts, 2, 16))
+>result : Symbol(result, Decl(declarationEmitFBoundedTypeParams.ts, 2, 32))
+>a : Symbol(a, Decl(declarationEmitFBoundedTypeParams.ts, 2, 16))
+>value : Symbol(value, Decl(declarationEmitFBoundedTypeParams.ts, 2, 44))
+>b : Symbol(b, Decl(declarationEmitFBoundedTypeParams.ts, 2, 18))
+>a : Symbol(a, Decl(declarationEmitFBoundedTypeParams.ts, 2, 16))
+
+    result.push(value);
+>result.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>result : Symbol(result, Decl(declarationEmitFBoundedTypeParams.ts, 2, 32))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>value : Symbol(value, Decl(declarationEmitFBoundedTypeParams.ts, 2, 44))
+
+    return result;
+>result : Symbol(result, Decl(declarationEmitFBoundedTypeParams.ts, 2, 32))
+}
+

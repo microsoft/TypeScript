@@ -1,0 +1,55 @@
+=== tests/cases/compiler/inferParameterWithMethodCallInitializer.ts ===
+function getNumber(): number {
+>getNumber : Symbol(getNumber, Decl(inferParameterWithMethodCallInitializer.ts, 0, 0))
+
+    return 1;
+}
+class Example {
+>Example : Symbol(Example, Decl(inferParameterWithMethodCallInitializer.ts, 2, 1))
+
+    getNumber(): number {
+>getNumber : Symbol(Example.getNumber, Decl(inferParameterWithMethodCallInitializer.ts, 3, 15))
+
+        return 1;
+    }
+    doSomething(a = this.getNumber()): typeof a {
+>doSomething : Symbol(Example.doSomething, Decl(inferParameterWithMethodCallInitializer.ts, 6, 5))
+>a : Symbol(a, Decl(inferParameterWithMethodCallInitializer.ts, 7, 16))
+>this.getNumber : Symbol(Example.getNumber, Decl(inferParameterWithMethodCallInitializer.ts, 3, 15))
+>this : Symbol(Example, Decl(inferParameterWithMethodCallInitializer.ts, 2, 1))
+>getNumber : Symbol(Example.getNumber, Decl(inferParameterWithMethodCallInitializer.ts, 3, 15))
+>a : Symbol(a, Decl(inferParameterWithMethodCallInitializer.ts, 7, 16))
+
+        return a;
+>a : Symbol(a, Decl(inferParameterWithMethodCallInitializer.ts, 7, 16))
+    }
+}
+function weird(this: Example, a = this.getNumber()) {
+>weird : Symbol(weird, Decl(inferParameterWithMethodCallInitializer.ts, 10, 1))
+>this : Symbol(this, Decl(inferParameterWithMethodCallInitializer.ts, 11, 15))
+>Example : Symbol(Example, Decl(inferParameterWithMethodCallInitializer.ts, 2, 1))
+>a : Symbol(a, Decl(inferParameterWithMethodCallInitializer.ts, 11, 29))
+>this.getNumber : Symbol(Example.getNumber, Decl(inferParameterWithMethodCallInitializer.ts, 3, 15))
+>this : Symbol(this, Decl(inferParameterWithMethodCallInitializer.ts, 11, 15))
+>getNumber : Symbol(Example.getNumber, Decl(inferParameterWithMethodCallInitializer.ts, 3, 15))
+
+    return a;
+>a : Symbol(a, Decl(inferParameterWithMethodCallInitializer.ts, 11, 29))
+}
+class Weird {
+>Weird : Symbol(Weird, Decl(inferParameterWithMethodCallInitializer.ts, 13, 1))
+
+    doSomething(this: Example, a = this.getNumber()) {
+>doSomething : Symbol(Weird.doSomething, Decl(inferParameterWithMethodCallInitializer.ts, 14, 13))
+>this : Symbol(this, Decl(inferParameterWithMethodCallInitializer.ts, 15, 16))
+>Example : Symbol(Example, Decl(inferParameterWithMethodCallInitializer.ts, 2, 1))
+>a : Symbol(a, Decl(inferParameterWithMethodCallInitializer.ts, 15, 30))
+>this.getNumber : Symbol(Example.getNumber, Decl(inferParameterWithMethodCallInitializer.ts, 3, 15))
+>this : Symbol(this, Decl(inferParameterWithMethodCallInitializer.ts, 15, 16))
+>getNumber : Symbol(Example.getNumber, Decl(inferParameterWithMethodCallInitializer.ts, 3, 15))
+
+        return a;
+>a : Symbol(a, Decl(inferParameterWithMethodCallInitializer.ts, 15, 30))
+    }
+}
+

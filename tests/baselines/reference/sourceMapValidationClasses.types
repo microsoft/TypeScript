@@ -1,0 +1,127 @@
+=== tests/cases/compiler/sourceMapValidationClasses.ts ===
+module Foo.Bar {
+>Foo : typeof Foo
+>Bar : typeof Bar
+
+    "use strict";
+>"use strict" : "use strict"
+
+    class Greeter {
+>Greeter : Greeter
+
+        constructor(public greeting: string) {
+>greeting : string
+        }
+
+        greet() {
+>greet : () => string
+
+            return "<h1>" + this.greeting + "</h1>";
+>"<h1>" + this.greeting + "</h1>" : string
+>"<h1>" + this.greeting : string
+>"<h1>" : "<h1>"
+>this.greeting : string
+>this : this
+>greeting : string
+>"</h1>" : "</h1>"
+        }
+    }
+
+
+    function foo(greeting: string): Greeter {
+>foo : (greeting: string) => Greeter
+>greeting : string
+
+        return new Greeter(greeting);
+>new Greeter(greeting) : Greeter
+>Greeter : typeof Greeter
+>greeting : string
+    }
+
+    var greeter = new Greeter("Hello, world!");
+>greeter : Greeter
+>new Greeter("Hello, world!") : Greeter
+>Greeter : typeof Greeter
+>"Hello, world!" : "Hello, world!"
+
+    var str = greeter.greet();
+>str : string
+>greeter.greet() : string
+>greeter.greet : () => string
+>greeter : Greeter
+>greet : () => string
+
+    function foo2(greeting: string, ...restGreetings /* more greeting */: string[]) {
+>foo2 : (greeting: string, ...restGreetings: string[]) => Greeter[]
+>greeting : string
+>restGreetings : string[]
+
+        var greeters: Greeter[] = []; /* inline block comment */
+>greeters : Greeter[]
+>[] : undefined[]
+
+        greeters[0] = new Greeter(greeting);
+>greeters[0] = new Greeter(greeting) : Greeter
+>greeters[0] : Greeter
+>greeters : Greeter[]
+>0 : 0
+>new Greeter(greeting) : Greeter
+>Greeter : typeof Greeter
+>greeting : string
+
+        for (var i = 0; i < restGreetings.length; i++) {
+>i : number
+>0 : 0
+>i < restGreetings.length : boolean
+>i : number
+>restGreetings.length : number
+>restGreetings : string[]
+>length : number
+>i++ : number
+>i : number
+
+            greeters.push(new Greeter(restGreetings[i]));
+>greeters.push(new Greeter(restGreetings[i])) : number
+>greeters.push : (...items: Greeter[]) => number
+>greeters : Greeter[]
+>push : (...items: Greeter[]) => number
+>new Greeter(restGreetings[i]) : Greeter
+>Greeter : typeof Greeter
+>restGreetings[i] : string
+>restGreetings : string[]
+>i : number
+        }
+
+        return greeters;
+>greeters : Greeter[]
+    }
+
+    var b = foo2("Hello", "World", "!");
+>b : Greeter[]
+>foo2("Hello", "World", "!") : Greeter[]
+>foo2 : (greeting: string, ...restGreetings: string[]) => Greeter[]
+>"Hello" : "Hello"
+>"World" : "World"
+>"!" : "!"
+
+    // This is simple signle line comment
+    for (var j = 0; j < b.length; j++) {
+>j : number
+>0 : 0
+>j < b.length : boolean
+>j : number
+>b.length : number
+>b : Greeter[]
+>length : number
+>j++ : number
+>j : number
+
+        b[j].greet();
+>b[j].greet() : string
+>b[j].greet : () => string
+>b[j] : Greeter
+>b : Greeter[]
+>j : number
+>greet : () => string
+    }
+}

@@ -1,0 +1,78 @@
+=== tests/cases/conformance/types/intersection/recursiveIntersectionTypes.ts ===
+type LinkedList<T> = T & { next: LinkedList<T> };
+>LinkedList : Symbol(LinkedList, Decl(recursiveIntersectionTypes.ts, 0, 0))
+>T : Symbol(T, Decl(recursiveIntersectionTypes.ts, 0, 16))
+>T : Symbol(T, Decl(recursiveIntersectionTypes.ts, 0, 16))
+>next : Symbol(next, Decl(recursiveIntersectionTypes.ts, 0, 26))
+>LinkedList : Symbol(LinkedList, Decl(recursiveIntersectionTypes.ts, 0, 0))
+>T : Symbol(T, Decl(recursiveIntersectionTypes.ts, 0, 16))
+
+interface Entity {
+>Entity : Symbol(Entity, Decl(recursiveIntersectionTypes.ts, 0, 49))
+
+    name: string;
+>name : Symbol(Entity.name, Decl(recursiveIntersectionTypes.ts, 2, 18))
+}
+
+interface Product extends Entity {
+>Product : Symbol(Product, Decl(recursiveIntersectionTypes.ts, 4, 1))
+>Entity : Symbol(Entity, Decl(recursiveIntersectionTypes.ts, 0, 49))
+
+    price: number;
+>price : Symbol(Product.price, Decl(recursiveIntersectionTypes.ts, 6, 34))
+}
+
+var entityList: LinkedList<Entity>;
+>entityList : Symbol(entityList, Decl(recursiveIntersectionTypes.ts, 10, 3))
+>LinkedList : Symbol(LinkedList, Decl(recursiveIntersectionTypes.ts, 0, 0))
+>Entity : Symbol(Entity, Decl(recursiveIntersectionTypes.ts, 0, 49))
+
+var s = entityList.name;
+>s : Symbol(s, Decl(recursiveIntersectionTypes.ts, 11, 3), Decl(recursiveIntersectionTypes.ts, 12, 3), Decl(recursiveIntersectionTypes.ts, 13, 3), Decl(recursiveIntersectionTypes.ts, 14, 3))
+>entityList.name : Symbol(Entity.name, Decl(recursiveIntersectionTypes.ts, 2, 18))
+>entityList : Symbol(entityList, Decl(recursiveIntersectionTypes.ts, 10, 3))
+>name : Symbol(Entity.name, Decl(recursiveIntersectionTypes.ts, 2, 18))
+
+var s = entityList.next.name;
+>s : Symbol(s, Decl(recursiveIntersectionTypes.ts, 11, 3), Decl(recursiveIntersectionTypes.ts, 12, 3), Decl(recursiveIntersectionTypes.ts, 13, 3), Decl(recursiveIntersectionTypes.ts, 14, 3))
+>entityList.next.name : Symbol(Entity.name, Decl(recursiveIntersectionTypes.ts, 2, 18))
+>entityList.next : Symbol(next, Decl(recursiveIntersectionTypes.ts, 0, 26))
+>entityList : Symbol(entityList, Decl(recursiveIntersectionTypes.ts, 10, 3))
+>next : Symbol(next, Decl(recursiveIntersectionTypes.ts, 0, 26))
+>name : Symbol(Entity.name, Decl(recursiveIntersectionTypes.ts, 2, 18))
+
+var s = entityList.next.next.name;
+>s : Symbol(s, Decl(recursiveIntersectionTypes.ts, 11, 3), Decl(recursiveIntersectionTypes.ts, 12, 3), Decl(recursiveIntersectionTypes.ts, 13, 3), Decl(recursiveIntersectionTypes.ts, 14, 3))
+>entityList.next.next.name : Symbol(Entity.name, Decl(recursiveIntersectionTypes.ts, 2, 18))
+>entityList.next.next : Symbol(next, Decl(recursiveIntersectionTypes.ts, 0, 26))
+>entityList.next : Symbol(next, Decl(recursiveIntersectionTypes.ts, 0, 26))
+>entityList : Symbol(entityList, Decl(recursiveIntersectionTypes.ts, 10, 3))
+>next : Symbol(next, Decl(recursiveIntersectionTypes.ts, 0, 26))
+>next : Symbol(next, Decl(recursiveIntersectionTypes.ts, 0, 26))
+>name : Symbol(Entity.name, Decl(recursiveIntersectionTypes.ts, 2, 18))
+
+var s = entityList.next.next.next.name;
+>s : Symbol(s, Decl(recursiveIntersectionTypes.ts, 11, 3), Decl(recursiveIntersectionTypes.ts, 12, 3), Decl(recursiveIntersectionTypes.ts, 13, 3), Decl(recursiveIntersectionTypes.ts, 14, 3))
+>entityList.next.next.next.name : Symbol(Entity.name, Decl(recursiveIntersectionTypes.ts, 2, 18))
+>entityList.next.next.next : Symbol(next, Decl(recursiveIntersectionTypes.ts, 0, 26))
+>entityList.next.next : Symbol(next, Decl(recursiveIntersectionTypes.ts, 0, 26))
+>entityList.next : Symbol(next, Decl(recursiveIntersectionTypes.ts, 0, 26))
+>entityList : Symbol(entityList, Decl(recursiveIntersectionTypes.ts, 10, 3))
+>next : Symbol(next, Decl(recursiveIntersectionTypes.ts, 0, 26))
+>next : Symbol(next, Decl(recursiveIntersectionTypes.ts, 0, 26))
+>next : Symbol(next, Decl(recursiveIntersectionTypes.ts, 0, 26))
+>name : Symbol(Entity.name, Decl(recursiveIntersectionTypes.ts, 2, 18))
+
+var productList: LinkedList<Product>;
+>productList : Symbol(productList, Decl(recursiveIntersectionTypes.ts, 16, 3))
+>LinkedList : Symbol(LinkedList, Decl(recursiveIntersectionTypes.ts, 0, 0))
+>Product : Symbol(Product, Decl(recursiveIntersectionTypes.ts, 4, 1))
+
+entityList = productList;
+>entityList : Symbol(entityList, Decl(recursiveIntersectionTypes.ts, 10, 3))
+>productList : Symbol(productList, Decl(recursiveIntersectionTypes.ts, 16, 3))
+
+productList = entityList;  // Error
+>productList : Symbol(productList, Decl(recursiveIntersectionTypes.ts, 16, 3))
+>entityList : Symbol(entityList, Decl(recursiveIntersectionTypes.ts, 10, 3))
+

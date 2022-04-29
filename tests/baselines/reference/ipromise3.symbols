@@ -1,0 +1,97 @@
+=== tests/cases/compiler/ipromise3.ts ===
+interface IPromise3<T> {
+>IPromise3 : Symbol(IPromise3, Decl(ipromise3.ts, 0, 0))
+>T : Symbol(T, Decl(ipromise3.ts, 0, 20))
+
+    then<U>(success?: (value: T) => IPromise3<U>, error?: (error: any) => IPromise3<U>, progress?: (progress: any) => void ): IPromise3<U>;
+>then : Symbol(IPromise3.then, Decl(ipromise3.ts, 0, 24), Decl(ipromise3.ts, 1, 139), Decl(ipromise3.ts, 2, 128), Decl(ipromise3.ts, 3, 128))
+>U : Symbol(U, Decl(ipromise3.ts, 1, 9))
+>success : Symbol(success, Decl(ipromise3.ts, 1, 12))
+>value : Symbol(value, Decl(ipromise3.ts, 1, 23))
+>T : Symbol(T, Decl(ipromise3.ts, 0, 20))
+>IPromise3 : Symbol(IPromise3, Decl(ipromise3.ts, 0, 0))
+>U : Symbol(U, Decl(ipromise3.ts, 1, 9))
+>error : Symbol(error, Decl(ipromise3.ts, 1, 49))
+>error : Symbol(error, Decl(ipromise3.ts, 1, 59))
+>IPromise3 : Symbol(IPromise3, Decl(ipromise3.ts, 0, 0))
+>U : Symbol(U, Decl(ipromise3.ts, 1, 9))
+>progress : Symbol(progress, Decl(ipromise3.ts, 1, 87))
+>progress : Symbol(progress, Decl(ipromise3.ts, 1, 100))
+>IPromise3 : Symbol(IPromise3, Decl(ipromise3.ts, 0, 0))
+>U : Symbol(U, Decl(ipromise3.ts, 1, 9))
+
+    then<U>(success?: (value: T) => IPromise3<U>, error?: (error: any) => U, progress?: (progress: any) => void ): IPromise3<U>;
+>then : Symbol(IPromise3.then, Decl(ipromise3.ts, 0, 24), Decl(ipromise3.ts, 1, 139), Decl(ipromise3.ts, 2, 128), Decl(ipromise3.ts, 3, 128))
+>U : Symbol(U, Decl(ipromise3.ts, 2, 9))
+>success : Symbol(success, Decl(ipromise3.ts, 2, 12))
+>value : Symbol(value, Decl(ipromise3.ts, 2, 23))
+>T : Symbol(T, Decl(ipromise3.ts, 0, 20))
+>IPromise3 : Symbol(IPromise3, Decl(ipromise3.ts, 0, 0))
+>U : Symbol(U, Decl(ipromise3.ts, 2, 9))
+>error : Symbol(error, Decl(ipromise3.ts, 2, 49))
+>error : Symbol(error, Decl(ipromise3.ts, 2, 59))
+>U : Symbol(U, Decl(ipromise3.ts, 2, 9))
+>progress : Symbol(progress, Decl(ipromise3.ts, 2, 76))
+>progress : Symbol(progress, Decl(ipromise3.ts, 2, 89))
+>IPromise3 : Symbol(IPromise3, Decl(ipromise3.ts, 0, 0))
+>U : Symbol(U, Decl(ipromise3.ts, 2, 9))
+
+    then<U>(success?: (value: T) => U, error?: (error: any) => IPromise3<U>, progress?: (progress: any) => void ): IPromise3<U>;
+>then : Symbol(IPromise3.then, Decl(ipromise3.ts, 0, 24), Decl(ipromise3.ts, 1, 139), Decl(ipromise3.ts, 2, 128), Decl(ipromise3.ts, 3, 128))
+>U : Symbol(U, Decl(ipromise3.ts, 3, 9))
+>success : Symbol(success, Decl(ipromise3.ts, 3, 12))
+>value : Symbol(value, Decl(ipromise3.ts, 3, 23))
+>T : Symbol(T, Decl(ipromise3.ts, 0, 20))
+>U : Symbol(U, Decl(ipromise3.ts, 3, 9))
+>error : Symbol(error, Decl(ipromise3.ts, 3, 38))
+>error : Symbol(error, Decl(ipromise3.ts, 3, 48))
+>IPromise3 : Symbol(IPromise3, Decl(ipromise3.ts, 0, 0))
+>U : Symbol(U, Decl(ipromise3.ts, 3, 9))
+>progress : Symbol(progress, Decl(ipromise3.ts, 3, 76))
+>progress : Symbol(progress, Decl(ipromise3.ts, 3, 89))
+>IPromise3 : Symbol(IPromise3, Decl(ipromise3.ts, 0, 0))
+>U : Symbol(U, Decl(ipromise3.ts, 3, 9))
+
+    then<U>(success?: (value: T) => U, error?: (error: any) => U, progress?: (progress: any) => void ): IPromise3<U>;
+>then : Symbol(IPromise3.then, Decl(ipromise3.ts, 0, 24), Decl(ipromise3.ts, 1, 139), Decl(ipromise3.ts, 2, 128), Decl(ipromise3.ts, 3, 128))
+>U : Symbol(U, Decl(ipromise3.ts, 4, 9))
+>success : Symbol(success, Decl(ipromise3.ts, 4, 12))
+>value : Symbol(value, Decl(ipromise3.ts, 4, 23))
+>T : Symbol(T, Decl(ipromise3.ts, 0, 20))
+>U : Symbol(U, Decl(ipromise3.ts, 4, 9))
+>error : Symbol(error, Decl(ipromise3.ts, 4, 38))
+>error : Symbol(error, Decl(ipromise3.ts, 4, 48))
+>U : Symbol(U, Decl(ipromise3.ts, 4, 9))
+>progress : Symbol(progress, Decl(ipromise3.ts, 4, 65))
+>progress : Symbol(progress, Decl(ipromise3.ts, 4, 78))
+>IPromise3 : Symbol(IPromise3, Decl(ipromise3.ts, 0, 0))
+>U : Symbol(U, Decl(ipromise3.ts, 4, 9))
+
+    done? <U>(success?: (value: T) => any, error?: (error: any) => any, progress?: (progress: any) => void ): void;
+>done : Symbol(IPromise3.done, Decl(ipromise3.ts, 4, 117))
+>U : Symbol(U, Decl(ipromise3.ts, 5, 11))
+>success : Symbol(success, Decl(ipromise3.ts, 5, 14))
+>value : Symbol(value, Decl(ipromise3.ts, 5, 25))
+>T : Symbol(T, Decl(ipromise3.ts, 0, 20))
+>error : Symbol(error, Decl(ipromise3.ts, 5, 42))
+>error : Symbol(error, Decl(ipromise3.ts, 5, 52))
+>progress : Symbol(progress, Decl(ipromise3.ts, 5, 71))
+>progress : Symbol(progress, Decl(ipromise3.ts, 5, 84))
+}
+var p1: IPromise3<string>;
+>p1 : Symbol(p1, Decl(ipromise3.ts, 7, 3))
+>IPromise3 : Symbol(IPromise3, Decl(ipromise3.ts, 0, 0))
+
+var p2: IPromise3<string> = p1.then(function (x) {
+>p2 : Symbol(p2, Decl(ipromise3.ts, 8, 3))
+>IPromise3 : Symbol(IPromise3, Decl(ipromise3.ts, 0, 0))
+>p1.then : Symbol(IPromise3.then, Decl(ipromise3.ts, 0, 24), Decl(ipromise3.ts, 1, 139), Decl(ipromise3.ts, 2, 128), Decl(ipromise3.ts, 3, 128))
+>p1 : Symbol(p1, Decl(ipromise3.ts, 7, 3))
+>then : Symbol(IPromise3.then, Decl(ipromise3.ts, 0, 24), Decl(ipromise3.ts, 1, 139), Decl(ipromise3.ts, 2, 128), Decl(ipromise3.ts, 3, 128))
+>x : Symbol(x, Decl(ipromise3.ts, 8, 46))
+
+    return x;
+>x : Symbol(x, Decl(ipromise3.ts, 8, 46))
+
+});
+

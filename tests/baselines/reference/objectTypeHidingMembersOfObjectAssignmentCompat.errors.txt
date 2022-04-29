@@ -1,0 +1,45 @@
+tests/cases/conformance/types/members/objectTypeHidingMembersOfObjectAssignmentCompat.ts(7,1): error TS2322: Type 'I' is not assignable to type 'Object'.
+  The types returned by 'toString()' are incompatible between these types.
+    Type 'void' is not assignable to type 'string'.
+tests/cases/conformance/types/members/objectTypeHidingMembersOfObjectAssignmentCompat.ts(14,1): error TS2322: Type 'C' is not assignable to type 'Object'.
+  The types returned by 'toString()' are incompatible between these types.
+    Type 'void' is not assignable to type 'string'.
+tests/cases/conformance/types/members/objectTypeHidingMembersOfObjectAssignmentCompat.ts(20,1): error TS2322: Type '{ toString: () => void; }' is not assignable to type 'Object'.
+  The types returned by 'toString()' are incompatible between these types.
+    Type 'void' is not assignable to type 'string'.
+
+
+==== tests/cases/conformance/types/members/objectTypeHidingMembersOfObjectAssignmentCompat.ts (3 errors) ====
+    interface I {
+        toString(): void;
+    }
+    
+    var i: I;
+    var o: Object;
+    o = i; // error
+    ~
+!!! error TS2322: Type 'I' is not assignable to type 'Object'.
+!!! error TS2322:   The types returned by 'toString()' are incompatible between these types.
+!!! error TS2322:     Type 'void' is not assignable to type 'string'.
+    i = o; // ok
+    
+    class C {
+        toString(): void { }
+    }
+    var c: C;
+    o = c; // error
+    ~
+!!! error TS2322: Type 'C' is not assignable to type 'Object'.
+!!! error TS2322:   The types returned by 'toString()' are incompatible between these types.
+!!! error TS2322:     Type 'void' is not assignable to type 'string'.
+    c = o; // ok
+    
+    var a = {
+        toString: () => { }
+    }
+    o = a; // error
+    ~
+!!! error TS2322: Type '{ toString: () => void; }' is not assignable to type 'Object'.
+!!! error TS2322:   The types returned by 'toString()' are incompatible between these types.
+!!! error TS2322:     Type 'void' is not assignable to type 'string'.
+    a = o; // ok

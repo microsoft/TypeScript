@@ -1,0 +1,19 @@
+tests/cases/conformance/externalModules/1.ts(1,10): error TS1005: 'as' expected.
+tests/cases/conformance/externalModules/1.ts(1,15): error TS1005: 'from' expected.
+tests/cases/conformance/externalModules/1.ts(1,15): error TS1141: String literal expected.
+tests/cases/conformance/externalModules/1.ts(1,20): error TS1005: ';' expected.
+
+
+==== tests/cases/conformance/externalModules/0.ts (0 errors) ====
+    export class C { }
+    
+==== tests/cases/conformance/externalModules/1.ts (4 errors) ====
+    import * from Zero from "./0"
+             ~~~~
+!!! error TS1005: 'as' expected.
+                  ~~~~
+!!! error TS1005: 'from' expected.
+                  ~~~~
+!!! error TS1141: String literal expected.
+                       ~~~~
+!!! error TS1005: ';' expected.

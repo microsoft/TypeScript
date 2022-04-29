@@ -1,0 +1,24 @@
+=== tests/cases/compiler/arrayFilter.ts ===
+var foo = [
+>foo : Symbol(foo, Decl(arrayFilter.ts, 0, 3))
+
+    { name: 'bar' },
+>name : Symbol(name, Decl(arrayFilter.ts, 1, 5))
+
+    { name: null },
+>name : Symbol(name, Decl(arrayFilter.ts, 2, 5))
+
+    { name: 'baz' }
+>name : Symbol(name, Decl(arrayFilter.ts, 3, 5))
+
+]
+
+foo.filter(x => x.name); //should accepted all possible types not only boolean! 
+>foo.filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>foo : Symbol(foo, Decl(arrayFilter.ts, 0, 3))
+>filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(arrayFilter.ts, 6, 11))
+>x.name : Symbol(name, Decl(arrayFilter.ts, 1, 5))
+>x : Symbol(x, Decl(arrayFilter.ts, 6, 11))
+>name : Symbol(name, Decl(arrayFilter.ts, 1, 5))
+

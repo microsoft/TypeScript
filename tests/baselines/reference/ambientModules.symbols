@@ -1,0 +1,13 @@
+=== tests/cases/compiler/ambientModules.ts ===
+declare module Foo.Bar { export var foo; };
+>Foo : Symbol(Foo, Decl(ambientModules.ts, 0, 0))
+>Bar : Symbol(Bar, Decl(ambientModules.ts, 0, 19))
+>foo : Symbol(foo, Decl(ambientModules.ts, 0, 35))
+
+Foo.Bar.foo = 5; 
+>Foo.Bar.foo : Symbol(Foo.Bar.foo, Decl(ambientModules.ts, 0, 35))
+>Foo.Bar : Symbol(Foo.Bar, Decl(ambientModules.ts, 0, 19))
+>Foo : Symbol(Foo, Decl(ambientModules.ts, 0, 0))
+>Bar : Symbol(Foo.Bar, Decl(ambientModules.ts, 0, 19))
+>foo : Symbol(Foo.Bar.foo, Decl(ambientModules.ts, 0, 35))
+

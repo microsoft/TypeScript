@@ -1,0 +1,224 @@
+=== tests/cases/conformance/controlFlow/controlFlowIterationErrors.ts ===
+let cond: boolean;
+>cond : Symbol(cond, Decl(controlFlowIterationErrors.ts, 0, 3))
+
+function len(s: string) {
+>len : Symbol(len, Decl(controlFlowIterationErrors.ts, 0, 18))
+>s : Symbol(s, Decl(controlFlowIterationErrors.ts, 2, 13))
+
+    return s.length;
+>s.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>s : Symbol(s, Decl(controlFlowIterationErrors.ts, 2, 13))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+}
+
+function f1() {
+>f1 : Symbol(f1, Decl(controlFlowIterationErrors.ts, 4, 1))
+
+    let x: string | number | boolean;
+>x : Symbol(x, Decl(controlFlowIterationErrors.ts, 7, 7))
+
+    x = "";
+>x : Symbol(x, Decl(controlFlowIterationErrors.ts, 7, 7))
+
+    while (cond) {
+>cond : Symbol(cond, Decl(controlFlowIterationErrors.ts, 0, 3))
+
+        x = len(x);
+>x : Symbol(x, Decl(controlFlowIterationErrors.ts, 7, 7))
+>len : Symbol(len, Decl(controlFlowIterationErrors.ts, 0, 18))
+>x : Symbol(x, Decl(controlFlowIterationErrors.ts, 7, 7))
+
+        x;
+>x : Symbol(x, Decl(controlFlowIterationErrors.ts, 7, 7))
+    }
+    x;
+>x : Symbol(x, Decl(controlFlowIterationErrors.ts, 7, 7))
+}
+
+function f2() {
+>f2 : Symbol(f2, Decl(controlFlowIterationErrors.ts, 14, 1))
+
+    let x: string | number | boolean;
+>x : Symbol(x, Decl(controlFlowIterationErrors.ts, 17, 7))
+
+    x = "";
+>x : Symbol(x, Decl(controlFlowIterationErrors.ts, 17, 7))
+
+    while (cond) {
+>cond : Symbol(cond, Decl(controlFlowIterationErrors.ts, 0, 3))
+
+        x;
+>x : Symbol(x, Decl(controlFlowIterationErrors.ts, 17, 7))
+
+        x = len(x);
+>x : Symbol(x, Decl(controlFlowIterationErrors.ts, 17, 7))
+>len : Symbol(len, Decl(controlFlowIterationErrors.ts, 0, 18))
+>x : Symbol(x, Decl(controlFlowIterationErrors.ts, 17, 7))
+    }
+    x;
+>x : Symbol(x, Decl(controlFlowIterationErrors.ts, 17, 7))
+}
+
+declare function foo(x: string): number;
+>foo : Symbol(foo, Decl(controlFlowIterationErrors.ts, 24, 1), Decl(controlFlowIterationErrors.ts, 26, 40))
+>x : Symbol(x, Decl(controlFlowIterationErrors.ts, 26, 21))
+
+declare function foo(x: number): string;
+>foo : Symbol(foo, Decl(controlFlowIterationErrors.ts, 24, 1), Decl(controlFlowIterationErrors.ts, 26, 40))
+>x : Symbol(x, Decl(controlFlowIterationErrors.ts, 27, 21))
+
+function g1() {
+>g1 : Symbol(g1, Decl(controlFlowIterationErrors.ts, 27, 40))
+
+    let x: string | number | boolean;
+>x : Symbol(x, Decl(controlFlowIterationErrors.ts, 30, 7))
+
+    x = "";
+>x : Symbol(x, Decl(controlFlowIterationErrors.ts, 30, 7))
+
+    while (cond) {
+>cond : Symbol(cond, Decl(controlFlowIterationErrors.ts, 0, 3))
+
+        x = foo(x);
+>x : Symbol(x, Decl(controlFlowIterationErrors.ts, 30, 7))
+>foo : Symbol(foo, Decl(controlFlowIterationErrors.ts, 24, 1), Decl(controlFlowIterationErrors.ts, 26, 40))
+>x : Symbol(x, Decl(controlFlowIterationErrors.ts, 30, 7))
+
+        x;
+>x : Symbol(x, Decl(controlFlowIterationErrors.ts, 30, 7))
+    }
+    x;
+>x : Symbol(x, Decl(controlFlowIterationErrors.ts, 30, 7))
+}
+
+function g2() {
+>g2 : Symbol(g2, Decl(controlFlowIterationErrors.ts, 37, 1))
+
+    let x: string | number | boolean;
+>x : Symbol(x, Decl(controlFlowIterationErrors.ts, 40, 7))
+
+    x = "";
+>x : Symbol(x, Decl(controlFlowIterationErrors.ts, 40, 7))
+
+    while (cond) {
+>cond : Symbol(cond, Decl(controlFlowIterationErrors.ts, 0, 3))
+
+        x;
+>x : Symbol(x, Decl(controlFlowIterationErrors.ts, 40, 7))
+
+        x = foo(x);
+>x : Symbol(x, Decl(controlFlowIterationErrors.ts, 40, 7))
+>foo : Symbol(foo, Decl(controlFlowIterationErrors.ts, 24, 1), Decl(controlFlowIterationErrors.ts, 26, 40))
+>x : Symbol(x, Decl(controlFlowIterationErrors.ts, 40, 7))
+    }
+    x;
+>x : Symbol(x, Decl(controlFlowIterationErrors.ts, 40, 7))
+}
+
+function asNumber(x: string | number): number {
+>asNumber : Symbol(asNumber, Decl(controlFlowIterationErrors.ts, 47, 1))
+>x : Symbol(x, Decl(controlFlowIterationErrors.ts, 49, 18))
+
+    return +x;
+>x : Symbol(x, Decl(controlFlowIterationErrors.ts, 49, 18))
+}
+
+function h1() {
+>h1 : Symbol(h1, Decl(controlFlowIterationErrors.ts, 51, 1))
+
+    let x: string | number | boolean;
+>x : Symbol(x, Decl(controlFlowIterationErrors.ts, 54, 7))
+
+    x = "0";
+>x : Symbol(x, Decl(controlFlowIterationErrors.ts, 54, 7))
+
+    while (cond) {
+>cond : Symbol(cond, Decl(controlFlowIterationErrors.ts, 0, 3))
+
+        x = +x + 1;
+>x : Symbol(x, Decl(controlFlowIterationErrors.ts, 54, 7))
+>x : Symbol(x, Decl(controlFlowIterationErrors.ts, 54, 7))
+
+        x;
+>x : Symbol(x, Decl(controlFlowIterationErrors.ts, 54, 7))
+    }
+}
+
+function h2() {
+>h2 : Symbol(h2, Decl(controlFlowIterationErrors.ts, 60, 1))
+
+    let x: string | number | boolean;
+>x : Symbol(x, Decl(controlFlowIterationErrors.ts, 63, 7))
+
+    x = "0";
+>x : Symbol(x, Decl(controlFlowIterationErrors.ts, 63, 7))
+
+    while (cond) {
+>cond : Symbol(cond, Decl(controlFlowIterationErrors.ts, 0, 3))
+
+        x = asNumber(x) + 1;
+>x : Symbol(x, Decl(controlFlowIterationErrors.ts, 63, 7))
+>asNumber : Symbol(asNumber, Decl(controlFlowIterationErrors.ts, 47, 1))
+>x : Symbol(x, Decl(controlFlowIterationErrors.ts, 63, 7))
+
+        x;
+>x : Symbol(x, Decl(controlFlowIterationErrors.ts, 63, 7))
+    }
+}
+
+function h3() {
+>h3 : Symbol(h3, Decl(controlFlowIterationErrors.ts, 69, 1))
+
+    let x: string | number | boolean;
+>x : Symbol(x, Decl(controlFlowIterationErrors.ts, 72, 7))
+
+    x = "0";
+>x : Symbol(x, Decl(controlFlowIterationErrors.ts, 72, 7))
+
+    while (cond) {
+>cond : Symbol(cond, Decl(controlFlowIterationErrors.ts, 0, 3))
+
+        let y = asNumber(x);
+>y : Symbol(y, Decl(controlFlowIterationErrors.ts, 75, 11))
+>asNumber : Symbol(asNumber, Decl(controlFlowIterationErrors.ts, 47, 1))
+>x : Symbol(x, Decl(controlFlowIterationErrors.ts, 72, 7))
+
+        x = y + 1;
+>x : Symbol(x, Decl(controlFlowIterationErrors.ts, 72, 7))
+>y : Symbol(y, Decl(controlFlowIterationErrors.ts, 75, 11))
+
+        x;
+>x : Symbol(x, Decl(controlFlowIterationErrors.ts, 72, 7))
+    }
+}
+
+function h4() {
+>h4 : Symbol(h4, Decl(controlFlowIterationErrors.ts, 79, 1))
+
+    let x: string | number | boolean;
+>x : Symbol(x, Decl(controlFlowIterationErrors.ts, 82, 7))
+
+    x = "0";
+>x : Symbol(x, Decl(controlFlowIterationErrors.ts, 82, 7))
+
+    while (cond) {
+>cond : Symbol(cond, Decl(controlFlowIterationErrors.ts, 0, 3))
+
+        x;
+>x : Symbol(x, Decl(controlFlowIterationErrors.ts, 82, 7))
+
+        let y = asNumber(x);
+>y : Symbol(y, Decl(controlFlowIterationErrors.ts, 86, 11))
+>asNumber : Symbol(asNumber, Decl(controlFlowIterationErrors.ts, 47, 1))
+>x : Symbol(x, Decl(controlFlowIterationErrors.ts, 82, 7))
+
+        x = y + 1;
+>x : Symbol(x, Decl(controlFlowIterationErrors.ts, 82, 7))
+>y : Symbol(y, Decl(controlFlowIterationErrors.ts, 86, 11))
+
+        x;
+>x : Symbol(x, Decl(controlFlowIterationErrors.ts, 82, 7))
+    }
+}
+

@@ -1,0 +1,32 @@
+tests/cases/compiler/strictModeReservedWordInDestructuring.ts(2,6): error TS1212: Identifier expected. 'public' is a reserved word in strict mode.
+tests/cases/compiler/strictModeReservedWordInDestructuring.ts(3,10): error TS1212: Identifier expected. 'public' is a reserved word in strict mode.
+tests/cases/compiler/strictModeReservedWordInDestructuring.ts(4,7): error TS1212: Identifier expected. 'private' is a reserved word in strict mode.
+tests/cases/compiler/strictModeReservedWordInDestructuring.ts(5,15): error TS1212: Identifier expected. 'static' is a reserved word in strict mode.
+tests/cases/compiler/strictModeReservedWordInDestructuring.ts(5,38): error TS1212: Identifier expected. 'package' is a reserved word in strict mode.
+tests/cases/compiler/strictModeReservedWordInDestructuring.ts(6,7): error TS1212: Identifier expected. 'public' is a reserved word in strict mode.
+tests/cases/compiler/strictModeReservedWordInDestructuring.ts(6,15): error TS1212: Identifier expected. 'protected' is a reserved word in strict mode.
+
+
+==== tests/cases/compiler/strictModeReservedWordInDestructuring.ts (7 errors) ====
+    "use strict"
+    var [public] = [1];
+         ~~~~~~
+!!! error TS1212: Identifier expected. 'public' is a reserved word in strict mode.
+    var { x: public } = { x: 1 };
+             ~~~~~~
+!!! error TS1212: Identifier expected. 'public' is a reserved word in strict mode.
+    var [[private]] = [["hello"]];
+          ~~~~~~~
+!!! error TS1212: Identifier expected. 'private' is a reserved word in strict mode.
+    var { y: { s: static }, z: { o: { p: package } }} = { y: { s: 1 }, z: { o: { p: 'h' } } };
+                  ~~~~~~
+!!! error TS1212: Identifier expected. 'static' is a reserved word in strict mode.
+                                         ~~~~~~~
+!!! error TS1212: Identifier expected. 'package' is a reserved word in strict mode.
+    var { public, protected } = { public: 1, protected: 2 };
+          ~~~~~~
+!!! error TS1212: Identifier expected. 'public' is a reserved word in strict mode.
+                  ~~~~~~~~~
+!!! error TS1212: Identifier expected. 'protected' is a reserved word in strict mode.
+    var { public: a, protected: b } = { public: 1, protected: 2 };
+    

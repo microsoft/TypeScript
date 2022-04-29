@@ -1,0 +1,33 @@
+=== tests/cases/compiler/interfacePropertiesWithSameName1.ts ===
+interface Mover {
+>Mover : Symbol(Mover, Decl(interfacePropertiesWithSameName1.ts, 0, 0))
+
+    move(): void;
+>move : Symbol(Mover.move, Decl(interfacePropertiesWithSameName1.ts, 0, 17))
+
+    getStatus(): { speed: number; };
+>getStatus : Symbol(Mover.getStatus, Decl(interfacePropertiesWithSameName1.ts, 1, 17))
+>speed : Symbol(speed, Decl(interfacePropertiesWithSameName1.ts, 2, 18))
+}
+interface Shaker {
+>Shaker : Symbol(Shaker, Decl(interfacePropertiesWithSameName1.ts, 3, 1))
+
+    shake(): void;
+>shake : Symbol(Shaker.shake, Decl(interfacePropertiesWithSameName1.ts, 4, 18))
+
+    getStatus(): { frequency: number; };
+>getStatus : Symbol(Shaker.getStatus, Decl(interfacePropertiesWithSameName1.ts, 5, 18))
+>frequency : Symbol(frequency, Decl(interfacePropertiesWithSameName1.ts, 6, 18))
+}
+
+interface MoverShaker extends Mover, Shaker {
+>MoverShaker : Symbol(MoverShaker, Decl(interfacePropertiesWithSameName1.ts, 7, 1))
+>Mover : Symbol(Mover, Decl(interfacePropertiesWithSameName1.ts, 0, 0))
+>Shaker : Symbol(Shaker, Decl(interfacePropertiesWithSameName1.ts, 3, 1))
+
+    getStatus(): { speed: number; frequency: number; };
+>getStatus : Symbol(MoverShaker.getStatus, Decl(interfacePropertiesWithSameName1.ts, 9, 45))
+>speed : Symbol(speed, Decl(interfacePropertiesWithSameName1.ts, 10, 18))
+>frequency : Symbol(frequency, Decl(interfacePropertiesWithSameName1.ts, 10, 33))
+}
+

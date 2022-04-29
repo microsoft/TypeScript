@@ -1,0 +1,242 @@
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures3.ts(47,1): error TS2322: Type 'new (x: number) => number[]' is not assignable to type 'new <T>(x: T) => T[]'.
+  Types of parameters 'x' and 'x' are incompatible.
+    Type 'T' is not assignable to type 'number'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures3.ts(50,1): error TS2322: Type 'new (x: number) => string[]' is not assignable to type 'new <T>(x: T) => string[]'.
+  Types of parameters 'x' and 'x' are incompatible.
+    Type 'T' is not assignable to type 'number'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures3.ts(53,1): error TS2322: Type 'new (x: number) => void' is not assignable to type 'new <T>(x: T) => T'.
+  Types of parameters 'x' and 'x' are incompatible.
+    Type 'T' is not assignable to type 'number'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures3.ts(56,1): error TS2322: Type 'new (x: string, y: number) => string' is not assignable to type 'new <T, U>(x: T, y: U) => T'.
+  Types of parameters 'x' and 'x' are incompatible.
+    Type 'T' is not assignable to type 'string'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures3.ts(59,1): error TS2322: Type 'new (x: (arg: string) => number) => string' is not assignable to type 'new <T, U>(x: (arg: T) => U) => T'.
+  Types of parameters 'x' and 'x' are incompatible.
+    Types of parameters 'arg' and 'arg' are incompatible.
+      Type 'string' is not assignable to type 'T'.
+        'T' could be instantiated with an arbitrary type which could be unrelated to 'string'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures3.ts(62,1): error TS2322: Type 'new (x: (arg: Base) => Derived) => Base' is not assignable to type 'new <T extends Base, U extends Derived>(x: (arg: T) => U) => T'.
+  Types of parameters 'x' and 'x' are incompatible.
+    Types of parameters 'arg' and 'arg' are incompatible.
+      Type 'Base' is not assignable to type 'T'.
+        'Base' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Base'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures3.ts(65,1): error TS2322: Type 'new (x: (arg: Base) => Derived) => (r: Base) => Derived' is not assignable to type 'new <T extends Base, U extends Derived>(x: (arg: T) => U) => (r: T) => U'.
+  Types of parameters 'x' and 'x' are incompatible.
+    Types of parameters 'arg' and 'arg' are incompatible.
+      Type 'Base' is not assignable to type 'T'.
+        'Base' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Base'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures3.ts(68,1): error TS2322: Type 'new (x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived' is not assignable to type 'new <T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: T) => U) => (r: T) => U'.
+  Types of parameters 'x' and 'x' are incompatible.
+    Types of parameters 'arg' and 'arg' are incompatible.
+      Type 'Base' is not assignable to type 'T'.
+        'Base' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Base'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures3.ts(71,1): error TS2322: Type 'new (x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived' is not assignable to type 'new <T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: { foo: string; bing: number; }) => U) => (r: T) => U'.
+  Types of parameters 'x' and 'x' are incompatible.
+    Types of parameters 'arg' and 'arg' are incompatible.
+      Type 'Base' is not assignable to type 'T'.
+        'Base' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Base'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures3.ts(74,1): error TS2322: Type 'new (...x: Derived[]) => Derived' is not assignable to type 'new <T extends Derived>(...x: T[]) => T'.
+  Type 'Derived' is not assignable to type 'T'.
+    'Derived' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Derived'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures3.ts(77,1): error TS2322: Type 'new (x: { foo: string; }, y: { foo: string; bar: string; }) => Base' is not assignable to type 'new <T extends Base>(x: T, y: T) => T'.
+  Types of parameters 'y' and 'y' are incompatible.
+    Type 'T' is not assignable to type '{ foo: string; bar: string; }'.
+      Property 'bar' is missing in type 'Base' but required in type '{ foo: string; bar: string; }'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures3.ts(80,1): error TS2322: Type 'new (x: Base[], y: Derived2[]) => Derived[]' is not assignable to type 'new <T extends Base[]>(x: Base[], y: T) => Derived[]'.
+  Types of parameters 'y' and 'y' are incompatible.
+    Type 'T' is not assignable to type 'Derived2[]'.
+      Type 'Base[]' is not assignable to type 'Derived2[]'.
+        Type 'Base' is missing the following properties from type 'Derived2': baz, bar
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures3.ts(83,1): error TS2322: Type 'new (x: Base[], y: Derived[]) => Derived[]' is not assignable to type 'new <T extends Derived[]>(x: Base[], y: T) => T'.
+  Type 'Derived[]' is not assignable to type 'T'.
+    'Derived[]' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Derived[]'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures3.ts(85,1): error TS2322: Type 'new <T>(x: { a: T; b: T; }) => T' is not assignable to type 'new (x: { a: string; b: number; }) => Object'.
+  Types of parameters 'x' and 'x' are incompatible.
+    Type '{ a: string; b: number; }' is not assignable to type '{ a: string; b: string; }'.
+      Types of property 'b' are incompatible.
+        Type 'number' is not assignable to type 'string'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures3.ts(86,1): error TS2322: Type 'new (x: { a: string; b: number; }) => Object' is not assignable to type 'new <T>(x: { a: T; b: T; }) => T'.
+  Types of parameters 'x' and 'x' are incompatible.
+    Type '{ a: T; b: T; }' is not assignable to type '{ a: string; b: number; }'.
+      Types of property 'a' are incompatible.
+        Type 'T' is not assignable to type 'string'.
+
+
+==== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures3.ts (15 errors) ====
+    // checking assignment compatibility relations for function types. All of these are valid.
+    
+    class Base { foo: string; }
+    class Derived extends Base { bar: string; }
+    class Derived2 extends Derived { baz: string; }
+    class OtherDerived extends Base { bing: string; }
+    
+    var a: new (x: number) => number[];
+    var a2: new (x: number) => string[];
+    var a3: new (x: number) => void;
+    var a4: new (x: string, y: number) => string;
+    var a5: new (x: (arg: string) => number) => string;
+    var a6: new (x: (arg: Base) => Derived) => Base;
+    var a7: new (x: (arg: Base) => Derived) => (r: Base) => Derived;
+    var a8: new (x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived;
+    var a9: new (x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived;
+    var a10: new (...x: Derived[]) => Derived;
+    var a11: new (x: { foo: string }, y: { foo: string; bar: string }) => Base;
+    var a12: new (x: Array<Base>, y: Array<Derived2>) => Array<Derived>;
+    var a13: new (x: Array<Base>, y: Array<Derived>) => Array<Derived>;
+    var a14: new (x: { a: string; b: number }) => Object;
+    var a15: {
+        new (x: number): number[];
+        new (x: string): string[];
+    }
+    var a16: {
+        new <T extends Derived>(x: T): number[];
+        new <U extends Base>(x: U): number[];
+    }
+    var a17: {
+        new (x: new (a: number) => number): number[];
+        new (x: new (a: string) => string): string[];
+    };
+    var a18: {
+        new (x: {
+            new (a: number): number;
+            new (a: string): string;
+        }): any[];
+        new (x: {
+            new (a: boolean): boolean;
+            new (a: Date): Date;
+        }): any[];
+    }
+    
+    var b: new <T>(x: T) => T[]; 
+    a = b; // ok
+    b = a; // ok
+    ~
+!!! error TS2322: Type 'new (x: number) => number[]' is not assignable to type 'new <T>(x: T) => T[]'.
+!!! error TS2322:   Types of parameters 'x' and 'x' are incompatible.
+!!! error TS2322:     Type 'T' is not assignable to type 'number'.
+    var b2: new <T>(x: T) => string[]; 
+    a2 = b2; // ok 
+    b2 = a2; // ok
+    ~~
+!!! error TS2322: Type 'new (x: number) => string[]' is not assignable to type 'new <T>(x: T) => string[]'.
+!!! error TS2322:   Types of parameters 'x' and 'x' are incompatible.
+!!! error TS2322:     Type 'T' is not assignable to type 'number'.
+    var b3: new <T>(x: T) => T; 
+    a3 = b3; // ok
+    b3 = a3; // ok
+    ~~
+!!! error TS2322: Type 'new (x: number) => void' is not assignable to type 'new <T>(x: T) => T'.
+!!! error TS2322:   Types of parameters 'x' and 'x' are incompatible.
+!!! error TS2322:     Type 'T' is not assignable to type 'number'.
+    var b4: new <T, U>(x: T, y: U) => T; 
+    a4 = b4; // ok
+    b4 = a4; // ok
+    ~~
+!!! error TS2322: Type 'new (x: string, y: number) => string' is not assignable to type 'new <T, U>(x: T, y: U) => T'.
+!!! error TS2322:   Types of parameters 'x' and 'x' are incompatible.
+!!! error TS2322:     Type 'T' is not assignable to type 'string'.
+    var b5: new <T, U>(x: (arg: T) => U) => T; 
+    a5 = b5; // ok
+    b5 = a5; // ok
+    ~~
+!!! error TS2322: Type 'new (x: (arg: string) => number) => string' is not assignable to type 'new <T, U>(x: (arg: T) => U) => T'.
+!!! error TS2322:   Types of parameters 'x' and 'x' are incompatible.
+!!! error TS2322:     Types of parameters 'arg' and 'arg' are incompatible.
+!!! error TS2322:       Type 'string' is not assignable to type 'T'.
+!!! error TS2322:         'T' could be instantiated with an arbitrary type which could be unrelated to 'string'.
+    var b6: new <T extends Base, U extends Derived>(x: (arg: T) => U) => T; 
+    a6 = b6; // ok
+    b6 = a6; // ok
+    ~~
+!!! error TS2322: Type 'new (x: (arg: Base) => Derived) => Base' is not assignable to type 'new <T extends Base, U extends Derived>(x: (arg: T) => U) => T'.
+!!! error TS2322:   Types of parameters 'x' and 'x' are incompatible.
+!!! error TS2322:     Types of parameters 'arg' and 'arg' are incompatible.
+!!! error TS2322:       Type 'Base' is not assignable to type 'T'.
+!!! error TS2322:         'Base' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Base'.
+    var b7: new <T extends Base, U extends Derived>(x: (arg: T) => U) => (r: T) => U; 
+    a7 = b7; // ok
+    b7 = a7; // ok
+    ~~
+!!! error TS2322: Type 'new (x: (arg: Base) => Derived) => (r: Base) => Derived' is not assignable to type 'new <T extends Base, U extends Derived>(x: (arg: T) => U) => (r: T) => U'.
+!!! error TS2322:   Types of parameters 'x' and 'x' are incompatible.
+!!! error TS2322:     Types of parameters 'arg' and 'arg' are incompatible.
+!!! error TS2322:       Type 'Base' is not assignable to type 'T'.
+!!! error TS2322:         'Base' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Base'.
+    var b8: new <T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: T) => U) => (r: T) => U;
+    a8 = b8; // ok
+    b8 = a8; // ok
+    ~~
+!!! error TS2322: Type 'new (x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived' is not assignable to type 'new <T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: T) => U) => (r: T) => U'.
+!!! error TS2322:   Types of parameters 'x' and 'x' are incompatible.
+!!! error TS2322:     Types of parameters 'arg' and 'arg' are incompatible.
+!!! error TS2322:       Type 'Base' is not assignable to type 'T'.
+!!! error TS2322:         'Base' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Base'.
+    var b9: new <T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: { foo: string; bing: number }) => U) => (r: T) => U; 
+    a9 = b9; // ok
+    b9 = a9; // ok
+    ~~
+!!! error TS2322: Type 'new (x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived' is not assignable to type 'new <T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: { foo: string; bing: number; }) => U) => (r: T) => U'.
+!!! error TS2322:   Types of parameters 'x' and 'x' are incompatible.
+!!! error TS2322:     Types of parameters 'arg' and 'arg' are incompatible.
+!!! error TS2322:       Type 'Base' is not assignable to type 'T'.
+!!! error TS2322:         'Base' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Base'.
+    var b10: new <T extends Derived>(...x: T[]) => T; 
+    a10 = b10; // ok
+    b10 = a10; // ok
+    ~~~
+!!! error TS2322: Type 'new (...x: Derived[]) => Derived' is not assignable to type 'new <T extends Derived>(...x: T[]) => T'.
+!!! error TS2322:   Type 'Derived' is not assignable to type 'T'.
+!!! error TS2322:     'Derived' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Derived'.
+    var b11: new <T extends Base>(x: T, y: T) => T; 
+    a11 = b11; // ok
+    b11 = a11; // ok
+    ~~~
+!!! error TS2322: Type 'new (x: { foo: string; }, y: { foo: string; bar: string; }) => Base' is not assignable to type 'new <T extends Base>(x: T, y: T) => T'.
+!!! error TS2322:   Types of parameters 'y' and 'y' are incompatible.
+!!! error TS2322:     Type 'T' is not assignable to type '{ foo: string; bar: string; }'.
+!!! error TS2322:       Property 'bar' is missing in type 'Base' but required in type '{ foo: string; bar: string; }'.
+!!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures3.ts:18:53: 'bar' is declared here.
+    var b12: new <T extends Array<Base>>(x: Array<Base>, y: T) => Array<Derived>; 
+    a12 = b12; // ok
+    b12 = a12; // ok
+    ~~~
+!!! error TS2322: Type 'new (x: Base[], y: Derived2[]) => Derived[]' is not assignable to type 'new <T extends Base[]>(x: Base[], y: T) => Derived[]'.
+!!! error TS2322:   Types of parameters 'y' and 'y' are incompatible.
+!!! error TS2322:     Type 'T' is not assignable to type 'Derived2[]'.
+!!! error TS2322:       Type 'Base[]' is not assignable to type 'Derived2[]'.
+!!! error TS2322:         Type 'Base' is missing the following properties from type 'Derived2': baz, bar
+    var b13: new <T extends Array<Derived>>(x: Array<Base>, y: T) => T; 
+    a13 = b13; // ok
+    b13 = a13; // ok
+    ~~~
+!!! error TS2322: Type 'new (x: Base[], y: Derived[]) => Derived[]' is not assignable to type 'new <T extends Derived[]>(x: Base[], y: T) => T'.
+!!! error TS2322:   Type 'Derived[]' is not assignable to type 'T'.
+!!! error TS2322:     'Derived[]' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Derived[]'.
+    var b14: new <T>(x: { a: T; b: T }) => T; 
+    a14 = b14; // ok
+    ~~~
+!!! error TS2322: Type 'new <T>(x: { a: T; b: T; }) => T' is not assignable to type 'new (x: { a: string; b: number; }) => Object'.
+!!! error TS2322:   Types of parameters 'x' and 'x' are incompatible.
+!!! error TS2322:     Type '{ a: string; b: number; }' is not assignable to type '{ a: string; b: string; }'.
+!!! error TS2322:       Types of property 'b' are incompatible.
+!!! error TS2322:         Type 'number' is not assignable to type 'string'.
+    b14 = a14; // ok
+    ~~~
+!!! error TS2322: Type 'new (x: { a: string; b: number; }) => Object' is not assignable to type 'new <T>(x: { a: T; b: T; }) => T'.
+!!! error TS2322:   Types of parameters 'x' and 'x' are incompatible.
+!!! error TS2322:     Type '{ a: T; b: T; }' is not assignable to type '{ a: string; b: number; }'.
+!!! error TS2322:       Types of property 'a' are incompatible.
+!!! error TS2322:         Type 'T' is not assignable to type 'string'.
+    var b15: new <T>(x: T) => T[]; 
+    a15 = b15; // ok
+    b15 = a15; // ok
+    var b16: new <T extends Base>(x: T) => number[];
+    a16 = b16; // ok
+    b16 = a16; // ok
+    var b17: new <T>(x: new (a: T) => T) => T[]; // ok
+    a17 = b17; // ok
+    b17 = a17; // ok
+    var b18: new <T>(x: new (a: T) => T) => T[]; 
+    a18 = b18; // ok
+    b18 = a18; // ok
+    

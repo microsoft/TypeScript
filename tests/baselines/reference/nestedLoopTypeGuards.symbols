@@ -1,0 +1,66 @@
+=== tests/cases/compiler/nestedLoopTypeGuards.ts ===
+// Repros from #10378
+
+function f1() {
+>f1 : Symbol(f1, Decl(nestedLoopTypeGuards.ts, 0, 0))
+
+    var a: boolean | number | string;
+>a : Symbol(a, Decl(nestedLoopTypeGuards.ts, 3, 7))
+
+    if (typeof a !== 'boolean') {
+>a : Symbol(a, Decl(nestedLoopTypeGuards.ts, 3, 7))
+
+        // a is narrowed to "number | string"
+        for (var i = 0; i < 1; i++) {
+>i : Symbol(i, Decl(nestedLoopTypeGuards.ts, 6, 16))
+>i : Symbol(i, Decl(nestedLoopTypeGuards.ts, 6, 16))
+>i : Symbol(i, Decl(nestedLoopTypeGuards.ts, 6, 16))
+
+            for (var j = 0; j < 1; j++) {}
+>j : Symbol(j, Decl(nestedLoopTypeGuards.ts, 7, 20), Decl(nestedLoopTypeGuards.ts, 10, 24))
+>j : Symbol(j, Decl(nestedLoopTypeGuards.ts, 7, 20), Decl(nestedLoopTypeGuards.ts, 10, 24))
+>j : Symbol(j, Decl(nestedLoopTypeGuards.ts, 7, 20), Decl(nestedLoopTypeGuards.ts, 10, 24))
+
+            if (typeof a === 'string') {
+>a : Symbol(a, Decl(nestedLoopTypeGuards.ts, 3, 7))
+
+                // a is narrowed to "string'
+                for (var j = 0; j < 1; j++) {
+>j : Symbol(j, Decl(nestedLoopTypeGuards.ts, 7, 20), Decl(nestedLoopTypeGuards.ts, 10, 24))
+>j : Symbol(j, Decl(nestedLoopTypeGuards.ts, 7, 20), Decl(nestedLoopTypeGuards.ts, 10, 24))
+>j : Symbol(j, Decl(nestedLoopTypeGuards.ts, 7, 20), Decl(nestedLoopTypeGuards.ts, 10, 24))
+
+                    a.length; // Should not error here
+>a.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(nestedLoopTypeGuards.ts, 3, 7))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+                }
+            }
+        }
+    }
+}
+
+function f2() {
+>f2 : Symbol(f2, Decl(nestedLoopTypeGuards.ts, 16, 1))
+
+    var a: string | number;
+>a : Symbol(a, Decl(nestedLoopTypeGuards.ts, 19, 7))
+
+    if (typeof a === 'string') {
+>a : Symbol(a, Decl(nestedLoopTypeGuards.ts, 19, 7))
+
+        while (1) {
+            while (1) {}
+            if (typeof a === 'string') {
+>a : Symbol(a, Decl(nestedLoopTypeGuards.ts, 19, 7))
+
+                while (1) {
+                    a.length; // Should not error here
+>a.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(nestedLoopTypeGuards.ts, 19, 7))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+                }
+            }
+        }
+    }
+}

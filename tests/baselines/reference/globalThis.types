@@ -1,0 +1,7 @@
+=== tests/cases/compiler/globalThis.ts ===
+var __e = Math.E;  // should not generate 'this.Math.E'
+>__e : number
+>Math.E : number
+>Math : Math
+>E : number
+

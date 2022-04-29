@@ -1,0 +1,65 @@
+tests/cases/compiler/vararg.ts(12,31): error TS2370: A rest parameter must be of an array type.
+tests/cases/compiler/vararg.ts(17,13): error TS2304: Cannot find name 'builder'.
+tests/cases/compiler/vararg.ts(19,17): error TS2304: Cannot find name 'builder'.
+tests/cases/compiler/vararg.ts(21,20): error TS2304: Cannot find name 'builder'.
+tests/cases/compiler/vararg.ts(28,13): error TS2345: Argument of type 'C' is not assignable to parameter of type 'string'.
+tests/cases/compiler/vararg.ts(29,13): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+tests/cases/compiler/vararg.ts(32,17): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+tests/cases/compiler/vararg.ts(33,17): error TS2345: Argument of type 'C' is not assignable to parameter of type 'string'.
+
+
+==== tests/cases/compiler/vararg.ts (8 errors) ====
+    module M {
+        export class C {
+            public f(x:string,...rest:number[]) {
+                var sum=0;
+                for (var i=0;i<rest.length;i++) {
+                    sum+=rest[i];
+                }
+                result+=(x+": "+sum);
+                return result;
+            }
+    
+            public fnope(x:string,...rest:number) {
+                                  ~~~~~~~~~~~~~~
+!!! error TS2370: A rest parameter must be of an array type.
+        
+            }
+    
+            public fonly(...rest:string[]) {
+                builder="";
+                ~~~~~~~
+!!! error TS2304: Cannot find name 'builder'.
+                for (var i=0;i<rest.length;i++) {
+                    builder+=rest[i];
+                    ~~~~~~~
+!!! error TS2304: Cannot find name 'builder'.
+                }
+                return builder;
+                       ~~~~~~~
+!!! error TS2304: Cannot find name 'builder'.
+            }
+        }
+    }
+    
+    var x=new M.C();
+    var result="";
+    result+=x.f(x,3,3); // bad first param
+                ~
+!!! error TS2345: Argument of type 'C' is not assignable to parameter of type 'string'.
+    result+=x.f(3,"hello",3); // bad second param
+                ~
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+    result+=x.f("hello",3,3,3,3,3); // ok
+    result+=x.f("hello"); // ok varargs length 0
+    result+=x.fonly(3); // ok conversion
+                    ~
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+    result+=x.fonly(x); // bad param
+                    ~
+!!! error TS2345: Argument of type 'C' is not assignable to parameter of type 'string'.
+    result+=x.fonly("a"); // ok 
+    result+=x.fonly("a","b","c","d"); //ok 
+    
+    
+    

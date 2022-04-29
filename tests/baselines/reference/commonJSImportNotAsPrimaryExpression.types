@@ -1,0 +1,78 @@
+=== tests/cases/conformance/externalModules/foo_1.ts ===
+import foo = require("./foo_0");
+>foo : typeof foo
+
+// None of the below should cause a runtime dependency on foo_0
+import f = foo.M1;
+>f : any
+>foo : typeof foo
+>M1 : any
+
+var i: f.I2;
+>i : f.I2
+>f : any
+
+var x: foo.C1 = <{m1: number}>{};
+>x : foo.C1
+>foo : any
+><{m1: number}>{} : { m1: number; }
+>m1 : number
+>{} : {}
+
+var y: typeof foo.C1.s1 = false;
+>y : boolean
+>foo.C1.s1 : boolean
+>foo.C1 : typeof foo.C1
+>foo : typeof foo
+>C1 : typeof foo.C1
+>s1 : boolean
+>false : false
+
+var z: foo.M1.I2;
+>z : f.I2
+>foo : any
+>M1 : any
+
+var e: number = <foo.E1>0;
+>e : number
+><foo.E1>0 : foo.E1
+>foo : any
+>0 : 0
+
+=== tests/cases/conformance/externalModules/foo_0.ts ===
+export class C1 {
+>C1 : C1
+
+	m1 = 42;
+>m1 : number
+>42 : 42
+
+	static s1 = true;
+>s1 : boolean
+>true : true
+}
+
+export interface I1 {
+	name: string;
+>name : string
+
+	age: number;
+>age : number
+}
+
+export module M1 {
+	export interface I2 {
+		foo: string;
+>foo : string
+	}
+}
+
+export enum E1 {
+>E1 : E1
+
+	A,B,C
+>A : E1.A
+>B : E1.B
+>C : E1.C
+}
+

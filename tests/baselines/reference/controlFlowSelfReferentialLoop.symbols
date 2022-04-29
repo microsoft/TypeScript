@@ -1,0 +1,875 @@
+=== tests/cases/compiler/controlFlowSelfReferentialLoop.ts ===
+// Repro from #12319
+
+function md5(string:string): void {
+>md5 : Symbol(md5, Decl(controlFlowSelfReferentialLoop.ts, 0, 0))
+>string : Symbol(string, Decl(controlFlowSelfReferentialLoop.ts, 2, 13))
+
+    function FF(a,b,c,d,x,s,ac) {
+>FF : Symbol(FF, Decl(controlFlowSelfReferentialLoop.ts, 2, 35))
+>a : Symbol(a, Decl(controlFlowSelfReferentialLoop.ts, 4, 16))
+>b : Symbol(b, Decl(controlFlowSelfReferentialLoop.ts, 4, 18))
+>c : Symbol(c, Decl(controlFlowSelfReferentialLoop.ts, 4, 20))
+>d : Symbol(d, Decl(controlFlowSelfReferentialLoop.ts, 4, 22))
+>x : Symbol(x, Decl(controlFlowSelfReferentialLoop.ts, 4, 24))
+>s : Symbol(s, Decl(controlFlowSelfReferentialLoop.ts, 4, 26))
+>ac : Symbol(ac, Decl(controlFlowSelfReferentialLoop.ts, 4, 28))
+
+        return 0;
+    };
+
+    function GG(a,b,c,d,x,s,ac) {
+>GG : Symbol(GG, Decl(controlFlowSelfReferentialLoop.ts, 6, 6))
+>a : Symbol(a, Decl(controlFlowSelfReferentialLoop.ts, 8, 16))
+>b : Symbol(b, Decl(controlFlowSelfReferentialLoop.ts, 8, 18))
+>c : Symbol(c, Decl(controlFlowSelfReferentialLoop.ts, 8, 20))
+>d : Symbol(d, Decl(controlFlowSelfReferentialLoop.ts, 8, 22))
+>x : Symbol(x, Decl(controlFlowSelfReferentialLoop.ts, 8, 24))
+>s : Symbol(s, Decl(controlFlowSelfReferentialLoop.ts, 8, 26))
+>ac : Symbol(ac, Decl(controlFlowSelfReferentialLoop.ts, 8, 28))
+
+        return 0;
+    };
+
+    function HH(a,b,c,d,x,s,ac) {
+>HH : Symbol(HH, Decl(controlFlowSelfReferentialLoop.ts, 10, 6))
+>a : Symbol(a, Decl(controlFlowSelfReferentialLoop.ts, 12, 16))
+>b : Symbol(b, Decl(controlFlowSelfReferentialLoop.ts, 12, 18))
+>c : Symbol(c, Decl(controlFlowSelfReferentialLoop.ts, 12, 20))
+>d : Symbol(d, Decl(controlFlowSelfReferentialLoop.ts, 12, 22))
+>x : Symbol(x, Decl(controlFlowSelfReferentialLoop.ts, 12, 24))
+>s : Symbol(s, Decl(controlFlowSelfReferentialLoop.ts, 12, 26))
+>ac : Symbol(ac, Decl(controlFlowSelfReferentialLoop.ts, 12, 28))
+
+        return 0;
+    };
+
+    function II(a,b,c,d,x,s,ac) {
+>II : Symbol(II, Decl(controlFlowSelfReferentialLoop.ts, 14, 6))
+>a : Symbol(a, Decl(controlFlowSelfReferentialLoop.ts, 16, 16))
+>b : Symbol(b, Decl(controlFlowSelfReferentialLoop.ts, 16, 18))
+>c : Symbol(c, Decl(controlFlowSelfReferentialLoop.ts, 16, 20))
+>d : Symbol(d, Decl(controlFlowSelfReferentialLoop.ts, 16, 22))
+>x : Symbol(x, Decl(controlFlowSelfReferentialLoop.ts, 16, 24))
+>s : Symbol(s, Decl(controlFlowSelfReferentialLoop.ts, 16, 26))
+>ac : Symbol(ac, Decl(controlFlowSelfReferentialLoop.ts, 16, 28))
+
+        return 0;
+    };
+
+    var x=Array();
+>x : Symbol(x, Decl(controlFlowSelfReferentialLoop.ts, 20, 7))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    var k,AA,BB,CC,DD,a,b,c,d;
+>k : Symbol(k, Decl(controlFlowSelfReferentialLoop.ts, 21, 7))
+>AA : Symbol(AA, Decl(controlFlowSelfReferentialLoop.ts, 21, 10))
+>BB : Symbol(BB, Decl(controlFlowSelfReferentialLoop.ts, 21, 13))
+>CC : Symbol(CC, Decl(controlFlowSelfReferentialLoop.ts, 21, 16))
+>DD : Symbol(DD, Decl(controlFlowSelfReferentialLoop.ts, 21, 19))
+>a : Symbol(a, Decl(controlFlowSelfReferentialLoop.ts, 21, 22))
+>b : Symbol(b, Decl(controlFlowSelfReferentialLoop.ts, 21, 24))
+>c : Symbol(c, Decl(controlFlowSelfReferentialLoop.ts, 21, 26))
+>d : Symbol(d, Decl(controlFlowSelfReferentialLoop.ts, 21, 28))
+
+    var S11=7, S12=12, S13=17, S14=22;
+>S11 : Symbol(S11, Decl(controlFlowSelfReferentialLoop.ts, 22, 7))
+>S12 : Symbol(S12, Decl(controlFlowSelfReferentialLoop.ts, 22, 14))
+>S13 : Symbol(S13, Decl(controlFlowSelfReferentialLoop.ts, 22, 22))
+>S14 : Symbol(S14, Decl(controlFlowSelfReferentialLoop.ts, 22, 30))
+
+    var S21=5, S22=9 , S23=14, S24=20;
+>S21 : Symbol(S21, Decl(controlFlowSelfReferentialLoop.ts, 23, 7))
+>S22 : Symbol(S22, Decl(controlFlowSelfReferentialLoop.ts, 23, 14))
+>S23 : Symbol(S23, Decl(controlFlowSelfReferentialLoop.ts, 23, 22))
+>S24 : Symbol(S24, Decl(controlFlowSelfReferentialLoop.ts, 23, 30))
+
+    var S31=4, S32=11, S33=16, S34=23;
+>S31 : Symbol(S31, Decl(controlFlowSelfReferentialLoop.ts, 24, 7))
+>S32 : Symbol(S32, Decl(controlFlowSelfReferentialLoop.ts, 24, 14))
+>S33 : Symbol(S33, Decl(controlFlowSelfReferentialLoop.ts, 24, 22))
+>S34 : Symbol(S34, Decl(controlFlowSelfReferentialLoop.ts, 24, 30))
+
+    var S41=6, S42=10, S43=15, S44=21;
+>S41 : Symbol(S41, Decl(controlFlowSelfReferentialLoop.ts, 25, 7))
+>S42 : Symbol(S42, Decl(controlFlowSelfReferentialLoop.ts, 25, 14))
+>S43 : Symbol(S43, Decl(controlFlowSelfReferentialLoop.ts, 25, 22))
+>S44 : Symbol(S44, Decl(controlFlowSelfReferentialLoop.ts, 25, 30))
+
+    x = [1];
+>x : Symbol(x, Decl(controlFlowSelfReferentialLoop.ts, 20, 7))
+
+    a = 0x67452301; b = 0xEFCDAB89; c = 0x98BADCFE; d = 0x10325476;
+>a : Symbol(a, Decl(controlFlowSelfReferentialLoop.ts, 21, 22))
+>b : Symbol(b, Decl(controlFlowSelfReferentialLoop.ts, 21, 24))
+>c : Symbol(c, Decl(controlFlowSelfReferentialLoop.ts, 21, 26))
+>d : Symbol(d, Decl(controlFlowSelfReferentialLoop.ts, 21, 28))
+
+    for (k=0;k<x.length;k+=16) {
+>k : Symbol(k, Decl(controlFlowSelfReferentialLoop.ts, 21, 7))
+>k : Symbol(k, Decl(controlFlowSelfReferentialLoop.ts, 21, 7))
+>x.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(controlFlowSelfReferentialLoop.ts, 20, 7))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>k : Symbol(k, Decl(controlFlowSelfReferentialLoop.ts, 21, 7))
+
+        AA=a; BB=b; CC=c; DD=d;
+>AA : Symbol(AA, Decl(controlFlowSelfReferentialLoop.ts, 21, 10))
+>a : Symbol(a, Decl(controlFlowSelfReferentialLoop.ts, 21, 22))
+>BB : Symbol(BB, Decl(controlFlowSelfReferentialLoop.ts, 21, 13))
+>b : Symbol(b, Decl(controlFlowSelfReferentialLoop.ts, 21, 24))
+>CC : Symbol(CC, Decl(controlFlowSelfReferentialLoop.ts, 21, 16))
+>c : Symbol(c, Decl(controlFlowSelfReferentialLoop.ts, 21, 26))
+>DD : Symbol(DD, Decl(controlFlowSelfReferentialLoop.ts, 21, 19))
+>d : Symbol(d, Decl(controlFlowSelfReferentialLoop.ts, 21, 28))
+
+        a=FF(a,b,c,d,x[k+0], S11,0xD76AA478);
+>a : Symbol(a, Decl(controlFlowSelfReferentialLoop.ts, 21, 22))
+>FF : Symbol(FF, Decl(controlFlowSelfReferentialLoop.ts, 2, 35))
+>a : Symbol(a, Decl(controlFlowSelfReferentialLoop.ts, 21, 22))
+>b : Symbol(b, Decl(controlFlowSelfReferentialLoop.ts, 21, 24))
+>c : Symbol(c, Decl(controlFlowSelfReferentialLoop.ts, 21, 26))
+>d : Symbol(d, Decl(controlFlowSelfReferentialLoop.ts, 21, 28))
+>x : Symbol(x, Decl(controlFlowSelfReferentialLoop.ts, 20, 7))
+>k : Symbol(k, Decl(controlFlowSelfReferentialLoop.ts, 21, 7))
+>S11 : Symbol(S11, Decl(controlFlowSelfReferentialLoop.ts, 22, 7))
+
+        d=FF(d,a,b,c,x[k+1], S12,0xE8C7B756);
+>d : Symbol(d, Decl(controlFlowSelfReferentialLoop.ts, 21, 28))
+>FF : Symbol(FF, Decl(controlFlowSelfReferentialLoop.ts, 2, 35))
+>d : Symbol(d, Decl(controlFlowSelfReferentialLoop.ts, 21, 28))
+>a : Symbol(a, Decl(controlFlowSelfReferentialLoop.ts, 21, 22))
+>b : Symbol(b, Decl(controlFlowSelfReferentialLoop.ts, 21, 24))
+>c : Symbol(c, Decl(controlFlowSelfReferentialLoop.ts, 21, 26))
+>x : Symbol(x, Decl(controlFlowSelfReferentialLoop.ts, 20, 7))
+>k : Symbol(k, Decl(controlFlowSelfReferentialLoop.ts, 21, 7))
+>S12 : Symbol(S12, Decl(controlFlowSelfReferentialLoop.ts, 22, 14))
+
+        c=FF(c,d,a,b,x[k+2], S13,0x242070DB);
+>c : Symbol(c, Decl(controlFlowSelfReferentialLoop.ts, 21, 26))
+>FF : Symbol(FF, Decl(controlFlowSelfReferentialLoop.ts, 2, 35))
+>c : Symbol(c, Decl(controlFlowSelfReferentialLoop.ts, 21, 26))
+>d : Symbol(d, Decl(controlFlowSelfReferentialLoop.ts, 21, 28))
+>a : Symbol(a, Decl(controlFlowSelfReferentialLoop.ts, 21, 22))
+>b : Symbol(b, Decl(controlFlowSelfReferentialLoop.ts, 21, 24))
+>x : Symbol(x, Decl(controlFlowSelfReferentialLoop.ts, 20, 7))
+>k : Symbol(k, Decl(controlFlowSelfReferentialLoop.ts, 21, 7))
+>S13 : Symbol(S13, Decl(controlFlowSelfReferentialLoop.ts, 22, 22))
+
+        b=FF(b,c,d,a,x[k+3], S14,0xC1BDCEEE);
+>b : Symbol(b, Decl(controlFlowSelfReferentialLoop.ts, 21, 24))
+>FF : Symbol(FF, Decl(controlFlowSelfReferentialLoop.ts, 2, 35))
+>b : Symbol(b, Decl(controlFlowSelfReferentialLoop.ts, 21, 24))
+>c : Symbol(c, Decl(controlFlowSelfReferentialLoop.ts, 21, 26))
+>d : Symbol(d, Decl(controlFlowSelfReferentialLoop.ts, 21, 28))
+>a : Symbol(a, Decl(controlFlowSelfReferentialLoop.ts, 21, 22))
+>x : Symbol(x, Decl(controlFlowSelfReferentialLoop.ts, 20, 7))
+>k : Symbol(k, Decl(controlFlowSelfReferentialLoop.ts, 21, 7))
+>S14 : Symbol(S14, Decl(controlFlowSelfReferentialLoop.ts, 22, 30))
+
+        a=FF(a,b,c,d,x[k+4], S11,0xF57C0FAF);
+>a : Symbol(a, Decl(controlFlowSelfReferentialLoop.ts, 21, 22))
+>FF : Symbol(FF, Decl(controlFlowSelfReferentialLoop.ts, 2, 35))
+>a : Symbol(a, Decl(controlFlowSelfReferentialLoop.ts, 21, 22))
+>b : Symbol(b, Decl(controlFlowSelfReferentialLoop.ts, 21, 24))
+>c : Symbol(c, Decl(controlFlowSelfReferentialLoop.ts, 21, 26))
+>d : Symbol(d, Decl(controlFlowSelfReferentialLoop.ts, 21, 28))
+>x : Symbol(x, Decl(controlFlowSelfReferentialLoop.ts, 20, 7))
+>k : Symbol(k, Decl(controlFlowSelfReferentialLoop.ts, 21, 7))
+>S11 : Symbol(S11, Decl(controlFlowSelfReferentialLoop.ts, 22, 7))
+
+        d=FF(d,a,b,c,x[k+5], S12,0x4787C62A);
+>d : Symbol(d, Decl(controlFlowSelfReferentialLoop.ts, 21, 28))
+>FF : Symbol(FF, Decl(controlFlowSelfReferentialLoop.ts, 2, 35))
+>d : Symbol(d, Decl(controlFlowSelfReferentialLoop.ts, 21, 28))
+>a : Symbol(a, Decl(controlFlowSelfReferentialLoop.ts, 21, 22))
+>b : Symbol(b, Decl(controlFlowSelfReferentialLoop.ts, 21, 24))
+>c : Symbol(c, Decl(controlFlowSelfReferentialLoop.ts, 21, 26))
+>x : Symbol(x, Decl(controlFlowSelfReferentialLoop.ts, 20, 7))
+>k : Symbol(k, Decl(controlFlowSelfReferentialLoop.ts, 21, 7))
+>S12 : Symbol(S12, Decl(controlFlowSelfReferentialLoop.ts, 22, 14))
+
+        c=FF(c,d,a,b,x[k+6], S13,0xA8304613);
+>c : Symbol(c, Decl(controlFlowSelfReferentialLoop.ts, 21, 26))
+>FF : Symbol(FF, Decl(controlFlowSelfReferentialLoop.ts, 2, 35))
+>c : Symbol(c, Decl(controlFlowSelfReferentialLoop.ts, 21, 26))
+>d : Symbol(d, Decl(controlFlowSelfReferentialLoop.ts, 21, 28))
+>a : Symbol(a, Decl(controlFlowSelfReferentialLoop.ts, 21, 22))
+>b : Symbol(b, Decl(controlFlowSelfReferentialLoop.ts, 21, 24))
+>x : Symbol(x, Decl(controlFlowSelfReferentialLoop.ts, 20, 7))
+>k : Symbol(k, Decl(controlFlowSelfReferentialLoop.ts, 21, 7))
+>S13 : Symbol(S13, Decl(controlFlowSelfReferentialLoop.ts, 22, 22))
+
+        b=FF(b,c,d,a,x[k+7], S14,0xFD469501);
+>b : Symbol(b, Decl(controlFlowSelfReferentialLoop.ts, 21, 24))
+>FF : Symbol(FF, Decl(controlFlowSelfReferentialLoop.ts, 2, 35))
+>b : Symbol(b, Decl(controlFlowSelfReferentialLoop.ts, 21, 24))
+>c : Symbol(c, Decl(controlFlowSelfReferentialLoop.ts, 21, 26))
+>d : Symbol(d, Decl(controlFlowSelfReferentialLoop.ts, 21, 28))
+>a : Symbol(a, Decl(controlFlowSelfReferentialLoop.ts, 21, 22))
+>x : Symbol(x, Decl(controlFlowSelfReferentialLoop.ts, 20, 7))
+>k : Symbol(k, Decl(controlFlowSelfReferentialLoop.ts, 21, 7))
+>S14 : Symbol(S14, Decl(controlFlowSelfReferentialLoop.ts, 22, 30))
+
+        a=FF(a,b,c,d,x[k+8], S11,0x698098D8);
+>a : Symbol(a, Decl(controlFlowSelfReferentialLoop.ts, 21, 22))
+>FF : Symbol(FF, Decl(controlFlowSelfReferentialLoop.ts, 2, 35))
+>a : Symbol(a, Decl(controlFlowSelfReferentialLoop.ts, 21, 22))
+>b : Symbol(b, Decl(controlFlowSelfReferentialLoop.ts, 21, 24))
+>c : Symbol(c, Decl(controlFlowSelfReferentialLoop.ts, 21, 26))
+>d : Symbol(d, Decl(controlFlowSelfReferentialLoop.ts, 21, 28))
+>x : Symbol(x, Decl(controlFlowSelfReferentialLoop.ts, 20, 7))
+>k : Symbol(k, Decl(controlFlowSelfReferentialLoop.ts, 21, 7))
+>S11 : Symbol(S11, Decl(controlFlowSelfReferentialLoop.ts, 22, 7))
+
+        d=FF(d,a,b,c,x[k+9], S12,0x8B44F7AF);
+>d : Symbol(d, Decl(controlFlowSelfReferentialLoop.ts, 21, 28))
+>FF : Symbol(FF, Decl(controlFlowSelfReferentialLoop.ts, 2, 35))
+>d : Symbol(d, Decl(controlFlowSelfReferentialLoop.ts, 21, 28))
+>a : Symbol(a, Decl(controlFlowSelfReferentialLoop.ts, 21, 22))
+>b : Symbol(b, Decl(controlFlowSelfReferentialLoop.ts, 21, 24))
+>c : Symbol(c, Decl(controlFlowSelfReferentialLoop.ts, 21, 26))
+>x : Symbol(x, Decl(controlFlowSelfReferentialLoop.ts, 20, 7))
+>k : Symbol(k, Decl(controlFlowSelfReferentialLoop.ts, 21, 7))
+>S12 : Symbol(S12, Decl(controlFlowSelfReferentialLoop.ts, 22, 14))
+
+        c=FF(c,d,a,b,x[k+10],S13,0xFFFF5BB1);
+>c : Symbol(c, Decl(controlFlowSelfReferentialLoop.ts, 21, 26))
+>FF : Symbol(FF, Decl(controlFlowSelfReferentialLoop.ts, 2, 35))
+>c : Symbol(c, Decl(controlFlowSelfReferentialLoop.ts, 21, 26))
+>d : Symbol(d, Decl(controlFlowSelfReferentialLoop.ts, 21, 28))
+>a : Symbol(a, Decl(controlFlowSelfReferentialLoop.ts, 21, 22))
+>b : Symbol(b, Decl(controlFlowSelfReferentialLoop.ts, 21, 24))
+>x : Symbol(x, Decl(controlFlowSelfReferentialLoop.ts, 20, 7))
+>k : Symbol(k, Decl(controlFlowSelfReferentialLoop.ts, 21, 7))
+>S13 : Symbol(S13, Decl(controlFlowSelfReferentialLoop.ts, 22, 22))
+
+        b=FF(b,c,d,a,x[k+11],S14,0x895CD7BE);
+>b : Symbol(b, Decl(controlFlowSelfReferentialLoop.ts, 21, 24))
+>FF : Symbol(FF, Decl(controlFlowSelfReferentialLoop.ts, 2, 35))
+>b : Symbol(b, Decl(controlFlowSelfReferentialLoop.ts, 21, 24))
+>c : Symbol(c, Decl(controlFlowSelfReferentialLoop.ts, 21, 26))
+>d : Symbol(d, Decl(controlFlowSelfReferentialLoop.ts, 21, 28))
+>a : Symbol(a, Decl(controlFlowSelfReferentialLoop.ts, 21, 22))
+>x : Symbol(x, Decl(controlFlowSelfReferentialLoop.ts, 20, 7))
+>k : Symbol(k, Decl(controlFlowSelfReferentialLoop.ts, 21, 7))
+>S14 : Symbol(S14, Decl(controlFlowSelfReferentialLoop.ts, 22, 30))
+
+        a=FF(a,b,c,d,x[k+12],S11,0x6B901122);
+>a : Symbol(a, Decl(controlFlowSelfReferentialLoop.ts, 21, 22))
+>FF : Symbol(FF, Decl(controlFlowSelfReferentialLoop.ts, 2, 35))
+>a : Symbol(a, Decl(controlFlowSelfReferentialLoop.ts, 21, 22))
+>b : Symbol(b, Decl(controlFlowSelfReferentialLoop.ts, 21, 24))
+>c : Symbol(c, Decl(controlFlowSelfReferentialLoop.ts, 21, 26))
+>d : Symbol(d, Decl(controlFlowSelfReferentialLoop.ts, 21, 28))
+>x : Symbol(x, Decl(controlFlowSelfReferentialLoop.ts, 20, 7))
+>k : Symbol(k, Decl(controlFlowSelfReferentialLoop.ts, 21, 7))
+>S11 : Symbol(S11, Decl(controlFlowSelfReferentialLoop.ts, 22, 7))
+
+        d=FF(d,a,b,c,x[k+13],S12,0xFD987193);
+>d : Symbol(d, Decl(controlFlowSelfReferentialLoop.ts, 21, 28))
+>FF : Symbol(FF, Decl(controlFlowSelfReferentialLoop.ts, 2, 35))
+>d : Symbol(d, Decl(controlFlowSelfReferentialLoop.ts, 21, 28))
+>a : Symbol(a, Decl(controlFlowSelfReferentialLoop.ts, 21, 22))
+>b : Symbol(b, Decl(controlFlowSelfReferentialLoop.ts, 21, 24))
+>c : Symbol(c, Decl(controlFlowSelfReferentialLoop.ts, 21, 26))
+>x : Symbol(x, Decl(controlFlowSelfReferentialLoop.ts, 20, 7))
+>k : Symbol(k, Decl(controlFlowSelfReferentialLoop.ts, 21, 7))
+>S12 : Symbol(S12, Decl(controlFlowSelfReferentialLoop.ts, 22, 14))
+
+        c=FF(c,d,a,b,x[k+14],S13,0xA679438E);
+>c : Symbol(c, Decl(controlFlowSelfReferentialLoop.ts, 21, 26))
+>FF : Symbol(FF, Decl(controlFlowSelfReferentialLoop.ts, 2, 35))
+>c : Symbol(c, Decl(controlFlowSelfReferentialLoop.ts, 21, 26))
+>d : Symbol(d, Decl(controlFlowSelfReferentialLoop.ts, 21, 28))
+>a : Symbol(a, Decl(controlFlowSelfReferentialLoop.ts, 21, 22))
+>b : Symbol(b, Decl(controlFlowSelfReferentialLoop.ts, 21, 24))
+>x : Symbol(x, Decl(controlFlowSelfReferentialLoop.ts, 20, 7))
+>k : Symbol(k, Decl(controlFlowSelfReferentialLoop.ts, 21, 7))
+>S13 : Symbol(S13, Decl(controlFlowSelfReferentialLoop.ts, 22, 22))
+
+        b=FF(b,c,d,a,x[k+15],S14,0x49B40821);
+>b : Symbol(b, Decl(controlFlowSelfReferentialLoop.ts, 21, 24))
+>FF : Symbol(FF, Decl(controlFlowSelfReferentialLoop.ts, 2, 35))
+>b : Symbol(b, Decl(controlFlowSelfReferentialLoop.ts, 21, 24))
+>c : Symbol(c, Decl(controlFlowSelfReferentialLoop.ts, 21, 26))
+>d : Symbol(d, Decl(controlFlowSelfReferentialLoop.ts, 21, 28))
+>a : Symbol(a, Decl(controlFlowSelfReferentialLoop.ts, 21, 22))
+>x : Symbol(x, Decl(controlFlowSelfReferentialLoop.ts, 20, 7))
+>k : Symbol(k, Decl(controlFlowSelfReferentialLoop.ts, 21, 7))
+>S14 : Symbol(S14, Decl(controlFlowSelfReferentialLoop.ts, 22, 30))
+
+        a=GG(a,b,c,d,x[k+1], S21,0xF61E2562);
+>a : Symbol(a, Decl(controlFlowSelfReferentialLoop.ts, 21, 22))
+>GG : Symbol(GG, Decl(controlFlowSelfReferentialLoop.ts, 6, 6))
+>a : Symbol(a, Decl(controlFlowSelfReferentialLoop.ts, 21, 22))
+>b : Symbol(b, Decl(controlFlowSelfReferentialLoop.ts, 21, 24))
+>c : Symbol(c, Decl(controlFlowSelfReferentialLoop.ts, 21, 26))
+>d : Symbol(d, Decl(controlFlowSelfReferentialLoop.ts, 21, 28))
+>x : Symbol(x, Decl(controlFlowSelfReferentialLoop.ts, 20, 7))
+>k : Symbol(k, Decl(controlFlowSelfReferentialLoop.ts, 21, 7))
+>S21 : Symbol(S21, Decl(controlFlowSelfReferentialLoop.ts, 23, 7))
+
+        d=GG(d,a,b,c,x[k+6], S22,0xC040B340);
+>d : Symbol(d, Decl(controlFlowSelfReferentialLoop.ts, 21, 28))
+>GG : Symbol(GG, Decl(controlFlowSelfReferentialLoop.ts, 6, 6))
+>d : Symbol(d, Decl(controlFlowSelfReferentialLoop.ts, 21, 28))
+>a : Symbol(a, Decl(controlFlowSelfReferentialLoop.ts, 21, 22))
+>b : Symbol(b, Decl(controlFlowSelfReferentialLoop.ts, 21, 24))
+>c : Symbol(c, Decl(controlFlowSelfReferentialLoop.ts, 21, 26))
+>x : Symbol(x, Decl(controlFlowSelfReferentialLoop.ts, 20, 7))
+>k : Symbol(k, Decl(controlFlowSelfReferentialLoop.ts, 21, 7))
+>S22 : Symbol(S22, Decl(controlFlowSelfReferentialLoop.ts, 23, 14))
+
+        c=GG(c,d,a,b,x[k+11],S23,0x265E5A51);
+>c : Symbol(c, Decl(controlFlowSelfReferentialLoop.ts, 21, 26))
+>GG : Symbol(GG, Decl(controlFlowSelfReferentialLoop.ts, 6, 6))
+>c : Symbol(c, Decl(controlFlowSelfReferentialLoop.ts, 21, 26))
+>d : Symbol(d, Decl(controlFlowSelfReferentialLoop.ts, 21, 28))
+>a : Symbol(a, Decl(controlFlowSelfReferentialLoop.ts, 21, 22))
+>b : Symbol(b, Decl(controlFlowSelfReferentialLoop.ts, 21, 24))
+>x : Symbol(x, Decl(controlFlowSelfReferentialLoop.ts, 20, 7))
+>k : Symbol(k, Decl(controlFlowSelfReferentialLoop.ts, 21, 7))
+>S23 : Symbol(S23, Decl(controlFlowSelfReferentialLoop.ts, 23, 22))
+
+        b=GG(b,c,d,a,x[k+0], S24,0xE9B6C7AA);
+>b : Symbol(b, Decl(controlFlowSelfReferentialLoop.ts, 21, 24))
+>GG : Symbol(GG, Decl(controlFlowSelfReferentialLoop.ts, 6, 6))
+>b : Symbol(b, Decl(controlFlowSelfReferentialLoop.ts, 21, 24))
+>c : Symbol(c, Decl(controlFlowSelfReferentialLoop.ts, 21, 26))
+>d : Symbol(d, Decl(controlFlowSelfReferentialLoop.ts, 21, 28))
+>a : Symbol(a, Decl(controlFlowSelfReferentialLoop.ts, 21, 22))
+>x : Symbol(x, Decl(controlFlowSelfReferentialLoop.ts, 20, 7))
+>k : Symbol(k, Decl(controlFlowSelfReferentialLoop.ts, 21, 7))
+>S24 : Symbol(S24, Decl(controlFlowSelfReferentialLoop.ts, 23, 30))
+
+        a=GG(a,b,c,d,x[k+5], S21,0xD62F105D);
+>a : Symbol(a, Decl(controlFlowSelfReferentialLoop.ts, 21, 22))
+>GG : Symbol(GG, Decl(controlFlowSelfReferentialLoop.ts, 6, 6))
+>a : Symbol(a, Decl(controlFlowSelfReferentialLoop.ts, 21, 22))
+>b : Symbol(b, Decl(controlFlowSelfReferentialLoop.ts, 21, 24))
+>c : Symbol(c, Decl(controlFlowSelfReferentialLoop.ts, 21, 26))
+>d : Symbol(d, Decl(controlFlowSelfReferentialLoop.ts, 21, 28))
+>x : Symbol(x, Decl(controlFlowSelfReferentialLoop.ts, 20, 7))
+>k : Symbol(k, Decl(controlFlowSelfReferentialLoop.ts, 21, 7))
+>S21 : Symbol(S21, Decl(controlFlowSelfReferentialLoop.ts, 23, 7))
+
+        d=GG(d,a,b,c,x[k+10],S22,0x2441453);
+>d : Symbol(d, Decl(controlFlowSelfReferentialLoop.ts, 21, 28))
+>GG : Symbol(GG, Decl(controlFlowSelfReferentialLoop.ts, 6, 6))
+>d : Symbol(d, Decl(controlFlowSelfReferentialLoop.ts, 21, 28))
+>a : Symbol(a, Decl(controlFlowSelfReferentialLoop.ts, 21, 22))
+>b : Symbol(b, Decl(controlFlowSelfReferentialLoop.ts, 21, 24))
+>c : Symbol(c, Decl(controlFlowSelfReferentialLoop.ts, 21, 26))
+>x : Symbol(x, Decl(controlFlowSelfReferentialLoop.ts, 20, 7))
+>k : Symbol(k, Decl(controlFlowSelfReferentialLoop.ts, 21, 7))
+>S22 : Symbol(S22, Decl(controlFlowSelfReferentialLoop.ts, 23, 14))
+
+        c=GG(c,d,a,b,x[k+15],S23,0xD8A1E681);
+>c : Symbol(c, Decl(controlFlowSelfReferentialLoop.ts, 21, 26))
+>GG : Symbol(GG, Decl(controlFlowSelfReferentialLoop.ts, 6, 6))
+>c : Symbol(c, Decl(controlFlowSelfReferentialLoop.ts, 21, 26))
+>d : Symbol(d, Decl(controlFlowSelfReferentialLoop.ts, 21, 28))
+>a : Symbol(a, Decl(controlFlowSelfReferentialLoop.ts, 21, 22))
+>b : Symbol(b, Decl(controlFlowSelfReferentialLoop.ts, 21, 24))
+>x : Symbol(x, Decl(controlFlowSelfReferentialLoop.ts, 20, 7))
+>k : Symbol(k, Decl(controlFlowSelfReferentialLoop.ts, 21, 7))
+>S23 : Symbol(S23, Decl(controlFlowSelfReferentialLoop.ts, 23, 22))
+
+        b=GG(b,c,d,a,x[k+4], S24,0xE7D3FBC8);
+>b : Symbol(b, Decl(controlFlowSelfReferentialLoop.ts, 21, 24))
+>GG : Symbol(GG, Decl(controlFlowSelfReferentialLoop.ts, 6, 6))
+>b : Symbol(b, Decl(controlFlowSelfReferentialLoop.ts, 21, 24))
+>c : Symbol(c, Decl(controlFlowSelfReferentialLoop.ts, 21, 26))
+>d : Symbol(d, Decl(controlFlowSelfReferentialLoop.ts, 21, 28))
+>a : Symbol(a, Decl(controlFlowSelfReferentialLoop.ts, 21, 22))
+>x : Symbol(x, Decl(controlFlowSelfReferentialLoop.ts, 20, 7))
+>k : Symbol(k, Decl(controlFlowSelfReferentialLoop.ts, 21, 7))
+>S24 : Symbol(S24, Decl(controlFlowSelfReferentialLoop.ts, 23, 30))
+
+        a=GG(a,b,c,d,x[k+9], S21,0x21E1CDE6);
+>a : Symbol(a, Decl(controlFlowSelfReferentialLoop.ts, 21, 22))
+>GG : Symbol(GG, Decl(controlFlowSelfReferentialLoop.ts, 6, 6))
+>a : Symbol(a, Decl(controlFlowSelfReferentialLoop.ts, 21, 22))
+>b : Symbol(b, Decl(controlFlowSelfReferentialLoop.ts, 21, 24))
+>c : Symbol(c, Decl(controlFlowSelfReferentialLoop.ts, 21, 26))
+>d : Symbol(d, Decl(controlFlowSelfReferentialLoop.ts, 21, 28))
+>x : Symbol(x, Decl(controlFlowSelfReferentialLoop.ts, 20, 7))
+>k : Symbol(k, Decl(controlFlowSelfReferentialLoop.ts, 21, 7))
+>S21 : Symbol(S21, Decl(controlFlowSelfReferentialLoop.ts, 23, 7))
+
+        d=GG(d,a,b,c,x[k+14],S22,0xC33707D6);
+>d : Symbol(d, Decl(controlFlowSelfReferentialLoop.ts, 21, 28))
+>GG : Symbol(GG, Decl(controlFlowSelfReferentialLoop.ts, 6, 6))
+>d : Symbol(d, Decl(controlFlowSelfReferentialLoop.ts, 21, 28))
+>a : Symbol(a, Decl(controlFlowSelfReferentialLoop.ts, 21, 22))
+>b : Symbol(b, Decl(controlFlowSelfReferentialLoop.ts, 21, 24))
+>c : Symbol(c, Decl(controlFlowSelfReferentialLoop.ts, 21, 26))
+>x : Symbol(x, Decl(controlFlowSelfReferentialLoop.ts, 20, 7))
+>k : Symbol(k, Decl(controlFlowSelfReferentialLoop.ts, 21, 7))
+>S22 : Symbol(S22, Decl(controlFlowSelfReferentialLoop.ts, 23, 14))
+
+        c=GG(c,d,a,b,x[k+3], S23,0xF4D50D87);
+>c : Symbol(c, Decl(controlFlowSelfReferentialLoop.ts, 21, 26))
+>GG : Symbol(GG, Decl(controlFlowSelfReferentialLoop.ts, 6, 6))
+>c : Symbol(c, Decl(controlFlowSelfReferentialLoop.ts, 21, 26))
+>d : Symbol(d, Decl(controlFlowSelfReferentialLoop.ts, 21, 28))
+>a : Symbol(a, Decl(controlFlowSelfReferentialLoop.ts, 21, 22))
+>b : Symbol(b, Decl(controlFlowSelfReferentialLoop.ts, 21, 24))
+>x : Symbol(x, Decl(controlFlowSelfReferentialLoop.ts, 20, 7))
+>k : Symbol(k, Decl(controlFlowSelfReferentialLoop.ts, 21, 7))
+>S23 : Symbol(S23, Decl(controlFlowSelfReferentialLoop.ts, 23, 22))
+
+        b=GG(b,c,d,a,x[k+8], S24,0x455A14ED);
+>b : Symbol(b, Decl(controlFlowSelfReferentialLoop.ts, 21, 24))
+>GG : Symbol(GG, Decl(controlFlowSelfReferentialLoop.ts, 6, 6))
+>b : Symbol(b, Decl(controlFlowSelfReferentialLoop.ts, 21, 24))
+>c : Symbol(c, Decl(controlFlowSelfReferentialLoop.ts, 21, 26))
+>d : Symbol(d, Decl(controlFlowSelfReferentialLoop.ts, 21, 28))
+>a : Symbol(a, Decl(controlFlowSelfReferentialLoop.ts, 21, 22))
+>x : Symbol(x, Decl(controlFlowSelfReferentialLoop.ts, 20, 7))
+>k : Symbol(k, Decl(controlFlowSelfReferentialLoop.ts, 21, 7))
+>S24 : Symbol(S24, Decl(controlFlowSelfReferentialLoop.ts, 23, 30))
+
+        a=GG(a,b,c,d,x[k+13],S21,0xA9E3E905);
+>a : Symbol(a, Decl(controlFlowSelfReferentialLoop.ts, 21, 22))
+>GG : Symbol(GG, Decl(controlFlowSelfReferentialLoop.ts, 6, 6))
+>a : Symbol(a, Decl(controlFlowSelfReferentialLoop.ts, 21, 22))
+>b : Symbol(b, Decl(controlFlowSelfReferentialLoop.ts, 21, 24))
+>c : Symbol(c, Decl(controlFlowSelfReferentialLoop.ts, 21, 26))
+>d : Symbol(d, Decl(controlFlowSelfReferentialLoop.ts, 21, 28))
+>x : Symbol(x, Decl(controlFlowSelfReferentialLoop.ts, 20, 7))
+>k : Symbol(k, Decl(controlFlowSelfReferentialLoop.ts, 21, 7))
+>S21 : Symbol(S21, Decl(controlFlowSelfReferentialLoop.ts, 23, 7))
+
+        d=GG(d,a,b,c,x[k+2], S22,0xFCEFA3F8);
+>d : Symbol(d, Decl(controlFlowSelfReferentialLoop.ts, 21, 28))
+>GG : Symbol(GG, Decl(controlFlowSelfReferentialLoop.ts, 6, 6))
+>d : Symbol(d, Decl(controlFlowSelfReferentialLoop.ts, 21, 28))
+>a : Symbol(a, Decl(controlFlowSelfReferentialLoop.ts, 21, 22))
+>b : Symbol(b, Decl(controlFlowSelfReferentialLoop.ts, 21, 24))
+>c : Symbol(c, Decl(controlFlowSelfReferentialLoop.ts, 21, 26))
+>x : Symbol(x, Decl(controlFlowSelfReferentialLoop.ts, 20, 7))
+>k : Symbol(k, Decl(controlFlowSelfReferentialLoop.ts, 21, 7))
+>S22 : Symbol(S22, Decl(controlFlowSelfReferentialLoop.ts, 23, 14))
+
+        c=GG(c,d,a,b,x[k+7], S23,0x676F02D9);
+>c : Symbol(c, Decl(controlFlowSelfReferentialLoop.ts, 21, 26))
+>GG : Symbol(GG, Decl(controlFlowSelfReferentialLoop.ts, 6, 6))
+>c : Symbol(c, Decl(controlFlowSelfReferentialLoop.ts, 21, 26))
+>d : Symbol(d, Decl(controlFlowSelfReferentialLoop.ts, 21, 28))
+>a : Symbol(a, Decl(controlFlowSelfReferentialLoop.ts, 21, 22))
+>b : Symbol(b, Decl(controlFlowSelfReferentialLoop.ts, 21, 24))
+>x : Symbol(x, Decl(controlFlowSelfReferentialLoop.ts, 20, 7))
+>k : Symbol(k, Decl(controlFlowSelfReferentialLoop.ts, 21, 7))
+>S23 : Symbol(S23, Decl(controlFlowSelfReferentialLoop.ts, 23, 22))
+
+        b=GG(b,c,d,a,x[k+12],S24,0x8D2A4C8A);
+>b : Symbol(b, Decl(controlFlowSelfReferentialLoop.ts, 21, 24))
+>GG : Symbol(GG, Decl(controlFlowSelfReferentialLoop.ts, 6, 6))
+>b : Symbol(b, Decl(controlFlowSelfReferentialLoop.ts, 21, 24))
+>c : Symbol(c, Decl(controlFlowSelfReferentialLoop.ts, 21, 26))
+>d : Symbol(d, Decl(controlFlowSelfReferentialLoop.ts, 21, 28))
+>a : Symbol(a, Decl(controlFlowSelfReferentialLoop.ts, 21, 22))
+>x : Symbol(x, Decl(controlFlowSelfReferentialLoop.ts, 20, 7))
+>k : Symbol(k, Decl(controlFlowSelfReferentialLoop.ts, 21, 7))
+>S24 : Symbol(S24, Decl(controlFlowSelfReferentialLoop.ts, 23, 30))
+
+        a=HH(a,b,c,d,x[k+5], S31,0xFFFA3942);
+>a : Symbol(a, Decl(controlFlowSelfReferentialLoop.ts, 21, 22))
+>HH : Symbol(HH, Decl(controlFlowSelfReferentialLoop.ts, 10, 6))
+>a : Symbol(a, Decl(controlFlowSelfReferentialLoop.ts, 21, 22))
+>b : Symbol(b, Decl(controlFlowSelfReferentialLoop.ts, 21, 24))
+>c : Symbol(c, Decl(controlFlowSelfReferentialLoop.ts, 21, 26))
+>d : Symbol(d, Decl(controlFlowSelfReferentialLoop.ts, 21, 28))
+>x : Symbol(x, Decl(controlFlowSelfReferentialLoop.ts, 20, 7))
+>k : Symbol(k, Decl(controlFlowSelfReferentialLoop.ts, 21, 7))
+>S31 : Symbol(S31, Decl(controlFlowSelfReferentialLoop.ts, 24, 7))
+
+        d=HH(d,a,b,c,x[k+8], S32,0x8771F681);
+>d : Symbol(d, Decl(controlFlowSelfReferentialLoop.ts, 21, 28))
+>HH : Symbol(HH, Decl(controlFlowSelfReferentialLoop.ts, 10, 6))
+>d : Symbol(d, Decl(controlFlowSelfReferentialLoop.ts, 21, 28))
+>a : Symbol(a, Decl(controlFlowSelfReferentialLoop.ts, 21, 22))
+>b : Symbol(b, Decl(controlFlowSelfReferentialLoop.ts, 21, 24))
+>c : Symbol(c, Decl(controlFlowSelfReferentialLoop.ts, 21, 26))
+>x : Symbol(x, Decl(controlFlowSelfReferentialLoop.ts, 20, 7))
+>k : Symbol(k, Decl(controlFlowSelfReferentialLoop.ts, 21, 7))
+>S32 : Symbol(S32, Decl(controlFlowSelfReferentialLoop.ts, 24, 14))
+
+        c=HH(c,d,a,b,x[k+11],S33,0x6D9D6122);
+>c : Symbol(c, Decl(controlFlowSelfReferentialLoop.ts, 21, 26))
+>HH : Symbol(HH, Decl(controlFlowSelfReferentialLoop.ts, 10, 6))
+>c : Symbol(c, Decl(controlFlowSelfReferentialLoop.ts, 21, 26))
+>d : Symbol(d, Decl(controlFlowSelfReferentialLoop.ts, 21, 28))
+>a : Symbol(a, Decl(controlFlowSelfReferentialLoop.ts, 21, 22))
+>b : Symbol(b, Decl(controlFlowSelfReferentialLoop.ts, 21, 24))
+>x : Symbol(x, Decl(controlFlowSelfReferentialLoop.ts, 20, 7))
+>k : Symbol(k, Decl(controlFlowSelfReferentialLoop.ts, 21, 7))
+>S33 : Symbol(S33, Decl(controlFlowSelfReferentialLoop.ts, 24, 22))
+
+        b=HH(b,c,d,a,x[k+14],S34,0xFDE5380C);
+>b : Symbol(b, Decl(controlFlowSelfReferentialLoop.ts, 21, 24))
+>HH : Symbol(HH, Decl(controlFlowSelfReferentialLoop.ts, 10, 6))
+>b : Symbol(b, Decl(controlFlowSelfReferentialLoop.ts, 21, 24))
+>c : Symbol(c, Decl(controlFlowSelfReferentialLoop.ts, 21, 26))
+>d : Symbol(d, Decl(controlFlowSelfReferentialLoop.ts, 21, 28))
+>a : Symbol(a, Decl(controlFlowSelfReferentialLoop.ts, 21, 22))
+>x : Symbol(x, Decl(controlFlowSelfReferentialLoop.ts, 20, 7))
+>k : Symbol(k, Decl(controlFlowSelfReferentialLoop.ts, 21, 7))
+>S34 : Symbol(S34, Decl(controlFlowSelfReferentialLoop.ts, 24, 30))
+
+        a=HH(a,b,c,d,x[k+1], S31,0xA4BEEA44);
+>a : Symbol(a, Decl(controlFlowSelfReferentialLoop.ts, 21, 22))
+>HH : Symbol(HH, Decl(controlFlowSelfReferentialLoop.ts, 10, 6))
+>a : Symbol(a, Decl(controlFlowSelfReferentialLoop.ts, 21, 22))
+>b : Symbol(b, Decl(controlFlowSelfReferentialLoop.ts, 21, 24))
+>c : Symbol(c, Decl(controlFlowSelfReferentialLoop.ts, 21, 26))
+>d : Symbol(d, Decl(controlFlowSelfReferentialLoop.ts, 21, 28))
+>x : Symbol(x, Decl(controlFlowSelfReferentialLoop.ts, 20, 7))
+>k : Symbol(k, Decl(controlFlowSelfReferentialLoop.ts, 21, 7))
+>S31 : Symbol(S31, Decl(controlFlowSelfReferentialLoop.ts, 24, 7))
+
+        d=HH(d,a,b,c,x[k+4], S32,0x4BDECFA9);
+>d : Symbol(d, Decl(controlFlowSelfReferentialLoop.ts, 21, 28))
+>HH : Symbol(HH, Decl(controlFlowSelfReferentialLoop.ts, 10, 6))
+>d : Symbol(d, Decl(controlFlowSelfReferentialLoop.ts, 21, 28))
+>a : Symbol(a, Decl(controlFlowSelfReferentialLoop.ts, 21, 22))
+>b : Symbol(b, Decl(controlFlowSelfReferentialLoop.ts, 21, 24))
+>c : Symbol(c, Decl(controlFlowSelfReferentialLoop.ts, 21, 26))
+>x : Symbol(x, Decl(controlFlowSelfReferentialLoop.ts, 20, 7))
+>k : Symbol(k, Decl(controlFlowSelfReferentialLoop.ts, 21, 7))
+>S32 : Symbol(S32, Decl(controlFlowSelfReferentialLoop.ts, 24, 14))
+
+        c=HH(c,d,a,b,x[k+7], S33,0xF6BB4B60);
+>c : Symbol(c, Decl(controlFlowSelfReferentialLoop.ts, 21, 26))
+>HH : Symbol(HH, Decl(controlFlowSelfReferentialLoop.ts, 10, 6))
+>c : Symbol(c, Decl(controlFlowSelfReferentialLoop.ts, 21, 26))
+>d : Symbol(d, Decl(controlFlowSelfReferentialLoop.ts, 21, 28))
+>a : Symbol(a, Decl(controlFlowSelfReferentialLoop.ts, 21, 22))
+>b : Symbol(b, Decl(controlFlowSelfReferentialLoop.ts, 21, 24))
+>x : Symbol(x, Decl(controlFlowSelfReferentialLoop.ts, 20, 7))
+>k : Symbol(k, Decl(controlFlowSelfReferentialLoop.ts, 21, 7))
+>S33 : Symbol(S33, Decl(controlFlowSelfReferentialLoop.ts, 24, 22))
+
+        b=HH(b,c,d,a,x[k+10],S34,0xBEBFBC70);
+>b : Symbol(b, Decl(controlFlowSelfReferentialLoop.ts, 21, 24))
+>HH : Symbol(HH, Decl(controlFlowSelfReferentialLoop.ts, 10, 6))
+>b : Symbol(b, Decl(controlFlowSelfReferentialLoop.ts, 21, 24))
+>c : Symbol(c, Decl(controlFlowSelfReferentialLoop.ts, 21, 26))
+>d : Symbol(d, Decl(controlFlowSelfReferentialLoop.ts, 21, 28))
+>a : Symbol(a, Decl(controlFlowSelfReferentialLoop.ts, 21, 22))
+>x : Symbol(x, Decl(controlFlowSelfReferentialLoop.ts, 20, 7))
+>k : Symbol(k, Decl(controlFlowSelfReferentialLoop.ts, 21, 7))
+>S34 : Symbol(S34, Decl(controlFlowSelfReferentialLoop.ts, 24, 30))
+
+        a=HH(a,b,c,d,x[k+13],S31,0x289B7EC6);
+>a : Symbol(a, Decl(controlFlowSelfReferentialLoop.ts, 21, 22))
+>HH : Symbol(HH, Decl(controlFlowSelfReferentialLoop.ts, 10, 6))
+>a : Symbol(a, Decl(controlFlowSelfReferentialLoop.ts, 21, 22))
+>b : Symbol(b, Decl(controlFlowSelfReferentialLoop.ts, 21, 24))
+>c : Symbol(c, Decl(controlFlowSelfReferentialLoop.ts, 21, 26))
+>d : Symbol(d, Decl(controlFlowSelfReferentialLoop.ts, 21, 28))
+>x : Symbol(x, Decl(controlFlowSelfReferentialLoop.ts, 20, 7))
+>k : Symbol(k, Decl(controlFlowSelfReferentialLoop.ts, 21, 7))
+>S31 : Symbol(S31, Decl(controlFlowSelfReferentialLoop.ts, 24, 7))
+
+        d=HH(d,a,b,c,x[k+0], S32,0xEAA127FA);
+>d : Symbol(d, Decl(controlFlowSelfReferentialLoop.ts, 21, 28))
+>HH : Symbol(HH, Decl(controlFlowSelfReferentialLoop.ts, 10, 6))
+>d : Symbol(d, Decl(controlFlowSelfReferentialLoop.ts, 21, 28))
+>a : Symbol(a, Decl(controlFlowSelfReferentialLoop.ts, 21, 22))
+>b : Symbol(b, Decl(controlFlowSelfReferentialLoop.ts, 21, 24))
+>c : Symbol(c, Decl(controlFlowSelfReferentialLoop.ts, 21, 26))
+>x : Symbol(x, Decl(controlFlowSelfReferentialLoop.ts, 20, 7))
+>k : Symbol(k, Decl(controlFlowSelfReferentialLoop.ts, 21, 7))
+>S32 : Symbol(S32, Decl(controlFlowSelfReferentialLoop.ts, 24, 14))
+
+        c=HH(c,d,a,b,x[k+3], S33,0xD4EF3085);
+>c : Symbol(c, Decl(controlFlowSelfReferentialLoop.ts, 21, 26))
+>HH : Symbol(HH, Decl(controlFlowSelfReferentialLoop.ts, 10, 6))
+>c : Symbol(c, Decl(controlFlowSelfReferentialLoop.ts, 21, 26))
+>d : Symbol(d, Decl(controlFlowSelfReferentialLoop.ts, 21, 28))
+>a : Symbol(a, Decl(controlFlowSelfReferentialLoop.ts, 21, 22))
+>b : Symbol(b, Decl(controlFlowSelfReferentialLoop.ts, 21, 24))
+>x : Symbol(x, Decl(controlFlowSelfReferentialLoop.ts, 20, 7))
+>k : Symbol(k, Decl(controlFlowSelfReferentialLoop.ts, 21, 7))
+>S33 : Symbol(S33, Decl(controlFlowSelfReferentialLoop.ts, 24, 22))
+
+        b=HH(b,c,d,a,x[k+6], S34,0x4881D05);
+>b : Symbol(b, Decl(controlFlowSelfReferentialLoop.ts, 21, 24))
+>HH : Symbol(HH, Decl(controlFlowSelfReferentialLoop.ts, 10, 6))
+>b : Symbol(b, Decl(controlFlowSelfReferentialLoop.ts, 21, 24))
+>c : Symbol(c, Decl(controlFlowSelfReferentialLoop.ts, 21, 26))
+>d : Symbol(d, Decl(controlFlowSelfReferentialLoop.ts, 21, 28))
+>a : Symbol(a, Decl(controlFlowSelfReferentialLoop.ts, 21, 22))
+>x : Symbol(x, Decl(controlFlowSelfReferentialLoop.ts, 20, 7))
+>k : Symbol(k, Decl(controlFlowSelfReferentialLoop.ts, 21, 7))
+>S34 : Symbol(S34, Decl(controlFlowSelfReferentialLoop.ts, 24, 30))
+
+        a=HH(a,b,c,d,x[k+9], S31,0xD9D4D039);
+>a : Symbol(a, Decl(controlFlowSelfReferentialLoop.ts, 21, 22))
+>HH : Symbol(HH, Decl(controlFlowSelfReferentialLoop.ts, 10, 6))
+>a : Symbol(a, Decl(controlFlowSelfReferentialLoop.ts, 21, 22))
+>b : Symbol(b, Decl(controlFlowSelfReferentialLoop.ts, 21, 24))
+>c : Symbol(c, Decl(controlFlowSelfReferentialLoop.ts, 21, 26))
+>d : Symbol(d, Decl(controlFlowSelfReferentialLoop.ts, 21, 28))
+>x : Symbol(x, Decl(controlFlowSelfReferentialLoop.ts, 20, 7))
+>k : Symbol(k, Decl(controlFlowSelfReferentialLoop.ts, 21, 7))
+>S31 : Symbol(S31, Decl(controlFlowSelfReferentialLoop.ts, 24, 7))
+
+        d=HH(d,a,b,c,x[k+12],S32,0xE6DB99E5);
+>d : Symbol(d, Decl(controlFlowSelfReferentialLoop.ts, 21, 28))
+>HH : Symbol(HH, Decl(controlFlowSelfReferentialLoop.ts, 10, 6))
+>d : Symbol(d, Decl(controlFlowSelfReferentialLoop.ts, 21, 28))
+>a : Symbol(a, Decl(controlFlowSelfReferentialLoop.ts, 21, 22))
+>b : Symbol(b, Decl(controlFlowSelfReferentialLoop.ts, 21, 24))
+>c : Symbol(c, Decl(controlFlowSelfReferentialLoop.ts, 21, 26))
+>x : Symbol(x, Decl(controlFlowSelfReferentialLoop.ts, 20, 7))
+>k : Symbol(k, Decl(controlFlowSelfReferentialLoop.ts, 21, 7))
+>S32 : Symbol(S32, Decl(controlFlowSelfReferentialLoop.ts, 24, 14))
+
+        c=HH(c,d,a,b,x[k+15],S33,0x1FA27CF8);
+>c : Symbol(c, Decl(controlFlowSelfReferentialLoop.ts, 21, 26))
+>HH : Symbol(HH, Decl(controlFlowSelfReferentialLoop.ts, 10, 6))
+>c : Symbol(c, Decl(controlFlowSelfReferentialLoop.ts, 21, 26))
+>d : Symbol(d, Decl(controlFlowSelfReferentialLoop.ts, 21, 28))
+>a : Symbol(a, Decl(controlFlowSelfReferentialLoop.ts, 21, 22))
+>b : Symbol(b, Decl(controlFlowSelfReferentialLoop.ts, 21, 24))
+>x : Symbol(x, Decl(controlFlowSelfReferentialLoop.ts, 20, 7))
+>k : Symbol(k, Decl(controlFlowSelfReferentialLoop.ts, 21, 7))
+>S33 : Symbol(S33, Decl(controlFlowSelfReferentialLoop.ts, 24, 22))
+
+        b=HH(b,c,d,a,x[k+2], S34,0xC4AC5665);
+>b : Symbol(b, Decl(controlFlowSelfReferentialLoop.ts, 21, 24))
+>HH : Symbol(HH, Decl(controlFlowSelfReferentialLoop.ts, 10, 6))
+>b : Symbol(b, Decl(controlFlowSelfReferentialLoop.ts, 21, 24))
+>c : Symbol(c, Decl(controlFlowSelfReferentialLoop.ts, 21, 26))
+>d : Symbol(d, Decl(controlFlowSelfReferentialLoop.ts, 21, 28))
+>a : Symbol(a, Decl(controlFlowSelfReferentialLoop.ts, 21, 22))
+>x : Symbol(x, Decl(controlFlowSelfReferentialLoop.ts, 20, 7))
+>k : Symbol(k, Decl(controlFlowSelfReferentialLoop.ts, 21, 7))
+>S34 : Symbol(S34, Decl(controlFlowSelfReferentialLoop.ts, 24, 30))
+
+        a=II(a,b,c,d,x[k+0], S41,0xF4292244);
+>a : Symbol(a, Decl(controlFlowSelfReferentialLoop.ts, 21, 22))
+>II : Symbol(II, Decl(controlFlowSelfReferentialLoop.ts, 14, 6))
+>a : Symbol(a, Decl(controlFlowSelfReferentialLoop.ts, 21, 22))
+>b : Symbol(b, Decl(controlFlowSelfReferentialLoop.ts, 21, 24))
+>c : Symbol(c, Decl(controlFlowSelfReferentialLoop.ts, 21, 26))
+>d : Symbol(d, Decl(controlFlowSelfReferentialLoop.ts, 21, 28))
+>x : Symbol(x, Decl(controlFlowSelfReferentialLoop.ts, 20, 7))
+>k : Symbol(k, Decl(controlFlowSelfReferentialLoop.ts, 21, 7))
+>S41 : Symbol(S41, Decl(controlFlowSelfReferentialLoop.ts, 25, 7))
+
+        d=II(d,a,b,c,x[k+7], S42,0x432AFF97);
+>d : Symbol(d, Decl(controlFlowSelfReferentialLoop.ts, 21, 28))
+>II : Symbol(II, Decl(controlFlowSelfReferentialLoop.ts, 14, 6))
+>d : Symbol(d, Decl(controlFlowSelfReferentialLoop.ts, 21, 28))
+>a : Symbol(a, Decl(controlFlowSelfReferentialLoop.ts, 21, 22))
+>b : Symbol(b, Decl(controlFlowSelfReferentialLoop.ts, 21, 24))
+>c : Symbol(c, Decl(controlFlowSelfReferentialLoop.ts, 21, 26))
+>x : Symbol(x, Decl(controlFlowSelfReferentialLoop.ts, 20, 7))
+>k : Symbol(k, Decl(controlFlowSelfReferentialLoop.ts, 21, 7))
+>S42 : Symbol(S42, Decl(controlFlowSelfReferentialLoop.ts, 25, 14))
+
+        c=II(c,d,a,b,x[k+14],S43,0xAB9423A7);
+>c : Symbol(c, Decl(controlFlowSelfReferentialLoop.ts, 21, 26))
+>II : Symbol(II, Decl(controlFlowSelfReferentialLoop.ts, 14, 6))
+>c : Symbol(c, Decl(controlFlowSelfReferentialLoop.ts, 21, 26))
+>d : Symbol(d, Decl(controlFlowSelfReferentialLoop.ts, 21, 28))
+>a : Symbol(a, Decl(controlFlowSelfReferentialLoop.ts, 21, 22))
+>b : Symbol(b, Decl(controlFlowSelfReferentialLoop.ts, 21, 24))
+>x : Symbol(x, Decl(controlFlowSelfReferentialLoop.ts, 20, 7))
+>k : Symbol(k, Decl(controlFlowSelfReferentialLoop.ts, 21, 7))
+>S43 : Symbol(S43, Decl(controlFlowSelfReferentialLoop.ts, 25, 22))
+
+        b=II(b,c,d,a,x[k+5], S44,0xFC93A039);
+>b : Symbol(b, Decl(controlFlowSelfReferentialLoop.ts, 21, 24))
+>II : Symbol(II, Decl(controlFlowSelfReferentialLoop.ts, 14, 6))
+>b : Symbol(b, Decl(controlFlowSelfReferentialLoop.ts, 21, 24))
+>c : Symbol(c, Decl(controlFlowSelfReferentialLoop.ts, 21, 26))
+>d : Symbol(d, Decl(controlFlowSelfReferentialLoop.ts, 21, 28))
+>a : Symbol(a, Decl(controlFlowSelfReferentialLoop.ts, 21, 22))
+>x : Symbol(x, Decl(controlFlowSelfReferentialLoop.ts, 20, 7))
+>k : Symbol(k, Decl(controlFlowSelfReferentialLoop.ts, 21, 7))
+>S44 : Symbol(S44, Decl(controlFlowSelfReferentialLoop.ts, 25, 30))
+
+        a=II(a,b,c,d,x[k+12],S41,0x655B59C3);
+>a : Symbol(a, Decl(controlFlowSelfReferentialLoop.ts, 21, 22))
+>II : Symbol(II, Decl(controlFlowSelfReferentialLoop.ts, 14, 6))
+>a : Symbol(a, Decl(controlFlowSelfReferentialLoop.ts, 21, 22))
+>b : Symbol(b, Decl(controlFlowSelfReferentialLoop.ts, 21, 24))
+>c : Symbol(c, Decl(controlFlowSelfReferentialLoop.ts, 21, 26))
+>d : Symbol(d, Decl(controlFlowSelfReferentialLoop.ts, 21, 28))
+>x : Symbol(x, Decl(controlFlowSelfReferentialLoop.ts, 20, 7))
+>k : Symbol(k, Decl(controlFlowSelfReferentialLoop.ts, 21, 7))
+>S41 : Symbol(S41, Decl(controlFlowSelfReferentialLoop.ts, 25, 7))
+
+        d=II(d,a,b,c,x[k+3], S42,0x8F0CCC92);
+>d : Symbol(d, Decl(controlFlowSelfReferentialLoop.ts, 21, 28))
+>II : Symbol(II, Decl(controlFlowSelfReferentialLoop.ts, 14, 6))
+>d : Symbol(d, Decl(controlFlowSelfReferentialLoop.ts, 21, 28))
+>a : Symbol(a, Decl(controlFlowSelfReferentialLoop.ts, 21, 22))
+>b : Symbol(b, Decl(controlFlowSelfReferentialLoop.ts, 21, 24))
+>c : Symbol(c, Decl(controlFlowSelfReferentialLoop.ts, 21, 26))
+>x : Symbol(x, Decl(controlFlowSelfReferentialLoop.ts, 20, 7))
+>k : Symbol(k, Decl(controlFlowSelfReferentialLoop.ts, 21, 7))
+>S42 : Symbol(S42, Decl(controlFlowSelfReferentialLoop.ts, 25, 14))
+
+        c=II(c,d,a,b,x[k+10],S43,0xFFEFF47D);
+>c : Symbol(c, Decl(controlFlowSelfReferentialLoop.ts, 21, 26))
+>II : Symbol(II, Decl(controlFlowSelfReferentialLoop.ts, 14, 6))
+>c : Symbol(c, Decl(controlFlowSelfReferentialLoop.ts, 21, 26))
+>d : Symbol(d, Decl(controlFlowSelfReferentialLoop.ts, 21, 28))
+>a : Symbol(a, Decl(controlFlowSelfReferentialLoop.ts, 21, 22))
+>b : Symbol(b, Decl(controlFlowSelfReferentialLoop.ts, 21, 24))
+>x : Symbol(x, Decl(controlFlowSelfReferentialLoop.ts, 20, 7))
+>k : Symbol(k, Decl(controlFlowSelfReferentialLoop.ts, 21, 7))
+>S43 : Symbol(S43, Decl(controlFlowSelfReferentialLoop.ts, 25, 22))
+
+        b=II(b,c,d,a,x[k+1], S44,0x85845DD1);
+>b : Symbol(b, Decl(controlFlowSelfReferentialLoop.ts, 21, 24))
+>II : Symbol(II, Decl(controlFlowSelfReferentialLoop.ts, 14, 6))
+>b : Symbol(b, Decl(controlFlowSelfReferentialLoop.ts, 21, 24))
+>c : Symbol(c, Decl(controlFlowSelfReferentialLoop.ts, 21, 26))
+>d : Symbol(d, Decl(controlFlowSelfReferentialLoop.ts, 21, 28))
+>a : Symbol(a, Decl(controlFlowSelfReferentialLoop.ts, 21, 22))
+>x : Symbol(x, Decl(controlFlowSelfReferentialLoop.ts, 20, 7))
+>k : Symbol(k, Decl(controlFlowSelfReferentialLoop.ts, 21, 7))
+>S44 : Symbol(S44, Decl(controlFlowSelfReferentialLoop.ts, 25, 30))
+
+        a=II(a,b,c,d,x[k+8], S41,0x6FA87E4F);
+>a : Symbol(a, Decl(controlFlowSelfReferentialLoop.ts, 21, 22))
+>II : Symbol(II, Decl(controlFlowSelfReferentialLoop.ts, 14, 6))
+>a : Symbol(a, Decl(controlFlowSelfReferentialLoop.ts, 21, 22))
+>b : Symbol(b, Decl(controlFlowSelfReferentialLoop.ts, 21, 24))
+>c : Symbol(c, Decl(controlFlowSelfReferentialLoop.ts, 21, 26))
+>d : Symbol(d, Decl(controlFlowSelfReferentialLoop.ts, 21, 28))
+>x : Symbol(x, Decl(controlFlowSelfReferentialLoop.ts, 20, 7))
+>k : Symbol(k, Decl(controlFlowSelfReferentialLoop.ts, 21, 7))
+>S41 : Symbol(S41, Decl(controlFlowSelfReferentialLoop.ts, 25, 7))
+
+        d=II(d,a,b,c,x[k+15],S42,0xFE2CE6E0);
+>d : Symbol(d, Decl(controlFlowSelfReferentialLoop.ts, 21, 28))
+>II : Symbol(II, Decl(controlFlowSelfReferentialLoop.ts, 14, 6))
+>d : Symbol(d, Decl(controlFlowSelfReferentialLoop.ts, 21, 28))
+>a : Symbol(a, Decl(controlFlowSelfReferentialLoop.ts, 21, 22))
+>b : Symbol(b, Decl(controlFlowSelfReferentialLoop.ts, 21, 24))
+>c : Symbol(c, Decl(controlFlowSelfReferentialLoop.ts, 21, 26))
+>x : Symbol(x, Decl(controlFlowSelfReferentialLoop.ts, 20, 7))
+>k : Symbol(k, Decl(controlFlowSelfReferentialLoop.ts, 21, 7))
+>S42 : Symbol(S42, Decl(controlFlowSelfReferentialLoop.ts, 25, 14))
+
+        c=II(c,d,a,b,x[k+6], S43,0xA3014314);
+>c : Symbol(c, Decl(controlFlowSelfReferentialLoop.ts, 21, 26))
+>II : Symbol(II, Decl(controlFlowSelfReferentialLoop.ts, 14, 6))
+>c : Symbol(c, Decl(controlFlowSelfReferentialLoop.ts, 21, 26))
+>d : Symbol(d, Decl(controlFlowSelfReferentialLoop.ts, 21, 28))
+>a : Symbol(a, Decl(controlFlowSelfReferentialLoop.ts, 21, 22))
+>b : Symbol(b, Decl(controlFlowSelfReferentialLoop.ts, 21, 24))
+>x : Symbol(x, Decl(controlFlowSelfReferentialLoop.ts, 20, 7))
+>k : Symbol(k, Decl(controlFlowSelfReferentialLoop.ts, 21, 7))
+>S43 : Symbol(S43, Decl(controlFlowSelfReferentialLoop.ts, 25, 22))
+
+        b=II(b,c,d,a,x[k+13],S44,0x4E0811A1);
+>b : Symbol(b, Decl(controlFlowSelfReferentialLoop.ts, 21, 24))
+>II : Symbol(II, Decl(controlFlowSelfReferentialLoop.ts, 14, 6))
+>b : Symbol(b, Decl(controlFlowSelfReferentialLoop.ts, 21, 24))
+>c : Symbol(c, Decl(controlFlowSelfReferentialLoop.ts, 21, 26))
+>d : Symbol(d, Decl(controlFlowSelfReferentialLoop.ts, 21, 28))
+>a : Symbol(a, Decl(controlFlowSelfReferentialLoop.ts, 21, 22))
+>x : Symbol(x, Decl(controlFlowSelfReferentialLoop.ts, 20, 7))
+>k : Symbol(k, Decl(controlFlowSelfReferentialLoop.ts, 21, 7))
+>S44 : Symbol(S44, Decl(controlFlowSelfReferentialLoop.ts, 25, 30))
+
+        a=II(a,b,c,d,x[k+4], S41,0xF7537E82);
+>a : Symbol(a, Decl(controlFlowSelfReferentialLoop.ts, 21, 22))
+>II : Symbol(II, Decl(controlFlowSelfReferentialLoop.ts, 14, 6))
+>a : Symbol(a, Decl(controlFlowSelfReferentialLoop.ts, 21, 22))
+>b : Symbol(b, Decl(controlFlowSelfReferentialLoop.ts, 21, 24))
+>c : Symbol(c, Decl(controlFlowSelfReferentialLoop.ts, 21, 26))
+>d : Symbol(d, Decl(controlFlowSelfReferentialLoop.ts, 21, 28))
+>x : Symbol(x, Decl(controlFlowSelfReferentialLoop.ts, 20, 7))
+>k : Symbol(k, Decl(controlFlowSelfReferentialLoop.ts, 21, 7))
+>S41 : Symbol(S41, Decl(controlFlowSelfReferentialLoop.ts, 25, 7))
+
+        d=II(d,a,b,c,x[k+11],S42,0xBD3AF235);
+>d : Symbol(d, Decl(controlFlowSelfReferentialLoop.ts, 21, 28))
+>II : Symbol(II, Decl(controlFlowSelfReferentialLoop.ts, 14, 6))
+>d : Symbol(d, Decl(controlFlowSelfReferentialLoop.ts, 21, 28))
+>a : Symbol(a, Decl(controlFlowSelfReferentialLoop.ts, 21, 22))
+>b : Symbol(b, Decl(controlFlowSelfReferentialLoop.ts, 21, 24))
+>c : Symbol(c, Decl(controlFlowSelfReferentialLoop.ts, 21, 26))
+>x : Symbol(x, Decl(controlFlowSelfReferentialLoop.ts, 20, 7))
+>k : Symbol(k, Decl(controlFlowSelfReferentialLoop.ts, 21, 7))
+>S42 : Symbol(S42, Decl(controlFlowSelfReferentialLoop.ts, 25, 14))
+
+        c=II(c,d,a,b,x[k+2], S43,0x2AD7D2BB);
+>c : Symbol(c, Decl(controlFlowSelfReferentialLoop.ts, 21, 26))
+>II : Symbol(II, Decl(controlFlowSelfReferentialLoop.ts, 14, 6))
+>c : Symbol(c, Decl(controlFlowSelfReferentialLoop.ts, 21, 26))
+>d : Symbol(d, Decl(controlFlowSelfReferentialLoop.ts, 21, 28))
+>a : Symbol(a, Decl(controlFlowSelfReferentialLoop.ts, 21, 22))
+>b : Symbol(b, Decl(controlFlowSelfReferentialLoop.ts, 21, 24))
+>x : Symbol(x, Decl(controlFlowSelfReferentialLoop.ts, 20, 7))
+>k : Symbol(k, Decl(controlFlowSelfReferentialLoop.ts, 21, 7))
+>S43 : Symbol(S43, Decl(controlFlowSelfReferentialLoop.ts, 25, 22))
+
+        b=II(b,c,d,a,x[k+9], S44,0xEB86D391);
+>b : Symbol(b, Decl(controlFlowSelfReferentialLoop.ts, 21, 24))
+>II : Symbol(II, Decl(controlFlowSelfReferentialLoop.ts, 14, 6))
+>b : Symbol(b, Decl(controlFlowSelfReferentialLoop.ts, 21, 24))
+>c : Symbol(c, Decl(controlFlowSelfReferentialLoop.ts, 21, 26))
+>d : Symbol(d, Decl(controlFlowSelfReferentialLoop.ts, 21, 28))
+>a : Symbol(a, Decl(controlFlowSelfReferentialLoop.ts, 21, 22))
+>x : Symbol(x, Decl(controlFlowSelfReferentialLoop.ts, 20, 7))
+>k : Symbol(k, Decl(controlFlowSelfReferentialLoop.ts, 21, 7))
+>S44 : Symbol(S44, Decl(controlFlowSelfReferentialLoop.ts, 25, 30))
+    }
+}
+export default md5;
+>md5 : Symbol(md5, Decl(controlFlowSelfReferentialLoop.ts, 0, 0))
+
+// Repro from #26655
+
+interface DataShape {
+>DataShape : Symbol(DataShape, Decl(controlFlowSelfReferentialLoop.ts, 99, 19))
+
+  message: { id: string }
+>message : Symbol(DataShape.message, Decl(controlFlowSelfReferentialLoop.ts, 103, 21))
+>id : Symbol(id, Decl(controlFlowSelfReferentialLoop.ts, 104, 12))
+}
+
+function getObject(id: string | number) {
+>getObject : Symbol(getObject, Decl(controlFlowSelfReferentialLoop.ts, 105, 1))
+>id : Symbol(id, Decl(controlFlowSelfReferentialLoop.ts, 107, 19))
+
+  return {} as any
+}
+
+;(() => {
+  let id: string | number = 'a'
+>id : Symbol(id, Decl(controlFlowSelfReferentialLoop.ts, 112, 5))
+
+  while (1) {
+    const data = getObject(id) as DataShape
+>data : Symbol(data, Decl(controlFlowSelfReferentialLoop.ts, 114, 9))
+>getObject : Symbol(getObject, Decl(controlFlowSelfReferentialLoop.ts, 105, 1))
+>id : Symbol(id, Decl(controlFlowSelfReferentialLoop.ts, 112, 5))
+>DataShape : Symbol(DataShape, Decl(controlFlowSelfReferentialLoop.ts, 99, 19))
+
+    const message = data.message
+>message : Symbol(message, Decl(controlFlowSelfReferentialLoop.ts, 115, 9))
+>data.message : Symbol(DataShape.message, Decl(controlFlowSelfReferentialLoop.ts, 103, 21))
+>data : Symbol(data, Decl(controlFlowSelfReferentialLoop.ts, 114, 9))
+>message : Symbol(DataShape.message, Decl(controlFlowSelfReferentialLoop.ts, 103, 21))
+
+    id = message.id
+>id : Symbol(id, Decl(controlFlowSelfReferentialLoop.ts, 112, 5))
+>message.id : Symbol(id, Decl(controlFlowSelfReferentialLoop.ts, 104, 12))
+>message : Symbol(message, Decl(controlFlowSelfReferentialLoop.ts, 115, 9))
+>id : Symbol(id, Decl(controlFlowSelfReferentialLoop.ts, 104, 12))
+  }
+})()
+

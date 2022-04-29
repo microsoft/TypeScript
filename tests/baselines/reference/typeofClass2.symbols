@@ -1,0 +1,55 @@
+=== tests/cases/conformance/types/specifyingTypes/typeQueries/typeofClass2.ts ===
+class C {
+>C : Symbol(C, Decl(typeofClass2.ts, 0, 0))
+
+    constructor(x: number);
+>x : Symbol(x, Decl(typeofClass2.ts, 1, 16))
+
+    constructor(x: string);
+>x : Symbol(x, Decl(typeofClass2.ts, 2, 16))
+
+    constructor(x) { }
+>x : Symbol(x, Decl(typeofClass2.ts, 3, 16))
+
+    static foo(x: number);
+>foo : Symbol(C.foo, Decl(typeofClass2.ts, 3, 22), Decl(typeofClass2.ts, 5, 26), Decl(typeofClass2.ts, 6, 21))
+>x : Symbol(x, Decl(typeofClass2.ts, 5, 15))
+
+    static foo(x: C);
+>foo : Symbol(C.foo, Decl(typeofClass2.ts, 3, 22), Decl(typeofClass2.ts, 5, 26), Decl(typeofClass2.ts, 6, 21))
+>x : Symbol(x, Decl(typeofClass2.ts, 6, 15))
+>C : Symbol(C, Decl(typeofClass2.ts, 0, 0))
+
+    static foo(x) { }
+>foo : Symbol(C.foo, Decl(typeofClass2.ts, 3, 22), Decl(typeofClass2.ts, 5, 26), Decl(typeofClass2.ts, 6, 21))
+>x : Symbol(x, Decl(typeofClass2.ts, 7, 15))
+
+    static bar(x) { }
+>bar : Symbol(C.bar, Decl(typeofClass2.ts, 7, 21))
+>x : Symbol(x, Decl(typeofClass2.ts, 9, 15))
+}
+
+class D extends C {
+>D : Symbol(D, Decl(typeofClass2.ts, 10, 1))
+>C : Symbol(C, Decl(typeofClass2.ts, 0, 0))
+
+    static baz(x: number) { }
+>baz : Symbol(D.baz, Decl(typeofClass2.ts, 12, 19))
+>x : Symbol(x, Decl(typeofClass2.ts, 13, 15))
+
+    foo() { }
+>foo : Symbol(D.foo, Decl(typeofClass2.ts, 13, 29))
+}
+
+var d: D;
+>d : Symbol(d, Decl(typeofClass2.ts, 17, 3))
+>D : Symbol(D, Decl(typeofClass2.ts, 10, 1))
+
+var r1: typeof D;
+>r1 : Symbol(r1, Decl(typeofClass2.ts, 19, 3))
+>D : Symbol(D, Decl(typeofClass2.ts, 10, 1))
+
+var r2: typeof d;
+>r2 : Symbol(r2, Decl(typeofClass2.ts, 20, 3))
+>d : Symbol(d, Decl(typeofClass2.ts, 17, 3))
+

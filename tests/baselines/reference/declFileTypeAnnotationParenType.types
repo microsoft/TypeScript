@@ -1,0 +1,40 @@
+=== tests/cases/compiler/declFileTypeAnnotationParenType.ts ===
+class c {
+>c : c
+
+    private p: string;
+>p : string
+}
+
+var x: (() => c)[] = [() => new c()];
+>x : (() => c)[]
+>[() => new c()] : (() => c)[]
+>() => new c() : () => c
+>new c() : c
+>c : typeof c
+
+var y = [() => new c()];
+>y : (() => c)[]
+>[() => new c()] : (() => c)[]
+>() => new c() : () => c
+>new c() : c
+>c : typeof c
+
+var k: (() => c) | string = (() => new c()) || "";
+>k : string | (() => c)
+>(() => new c()) || "" : "" | (() => c)
+>(() => new c()) : () => c
+>() => new c() : () => c
+>new c() : c
+>c : typeof c
+>"" : ""
+
+var l = (() => new c()) || "";
+>l : string | (() => c)
+>(() => new c()) || "" : "" | (() => c)
+>(() => new c()) : () => c
+>() => new c() : () => c
+>new c() : c
+>c : typeof c
+>"" : ""
+

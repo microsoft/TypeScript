@@ -1,0 +1,9 @@
+tests/cases/conformance/parser/ecmascript5/IndexSignatures/parserIndexSignature1.ts(2,4): error TS1017: An index signature cannot have a rest parameter.
+
+
+==== tests/cases/conformance/parser/ecmascript5/IndexSignatures/parserIndexSignature1.ts (1 errors) ====
+    interface I {
+      [...a]
+       ~~~
+!!! error TS1017: An index signature cannot have a rest parameter.
+    }

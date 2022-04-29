@@ -1,0 +1,73 @@
+=== tests/cases/conformance/expressions/binaryOperators/logicalAndOperator/logicalAndOperatorWithTypeParameters.ts ===
+// The && operator permits the operands to be of any type and produces a result of the same
+// type as the second operand.
+
+function foo<T, U, V/* extends T*/>(t: T, u: U, v: V) {
+>foo : <T, U, V>(t: T, u: U, v: V) => void
+>t : T
+>u : U
+>v : V
+
+    var r1 = t && t;
+>r1 : T
+>t && t : T
+>t : T
+>t : T
+
+    var r2 = u && t;
+>r2 : T
+>u && t : T
+>u : U
+>t : T
+
+    var r3 = v && t;
+>r3 : T
+>v && t : T
+>v : V
+>t : T
+
+    var r4 = t && u;
+>r4 : U
+>t && u : U
+>t : T
+>u : U
+
+    var r5 = u && u;
+>r5 : U
+>u && u : U
+>u : U
+>u : U
+
+    var r6 = v && u;
+>r6 : U
+>v && u : U
+>v : V
+>u : U
+
+    var r7 = t && v;
+>r7 : V
+>t && v : V
+>t : T
+>v : V
+
+    var r8 = u && v;
+>r8 : V
+>u && v : V
+>u : U
+>v : V
+
+    var r9 = v && v;
+>r9 : V
+>v && v : V
+>v : V
+>v : V
+
+    var a: number;
+>a : number
+
+    var r10 = t && a;
+>r10 : number
+>t && a : number
+>t : T
+>a : number
+}

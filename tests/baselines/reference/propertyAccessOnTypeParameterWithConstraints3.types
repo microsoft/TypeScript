@@ -1,0 +1,196 @@
+=== tests/cases/conformance/types/typeParameters/typeParameterLists/propertyAccessOnTypeParameterWithConstraints3.ts ===
+// generic types should behave as if they have properties of their constraint type
+
+class A {
+>A : A
+
+    foo(): string { return ''; }
+>foo : () => string
+>'' : ""
+}
+
+class B extends A {
+>B : B
+>A : A
+
+    bar(): string {
+>bar : () => string
+
+        return '';
+>'' : ""
+    }
+}
+
+class C<U extends A, T extends U> {
+>C : C<U, T>
+
+    f() {
+>f : () => string
+
+        var x: T;
+>x : T
+
+        // BUG 823818
+        var a = x['foo'](); // should be string
+>a : string
+>x['foo']() : string
+>x['foo'] : () => string
+>x : T
+>'foo' : "foo"
+
+        return a + x.foo();
+>a + x.foo() : string
+>a : string
+>x.foo() : string
+>x.foo : () => string
+>x : T
+>foo : () => string
+    }
+
+    g(x: U) {
+>g : (x: U) => string
+>x : U
+
+        // BUG 823818
+        var a = x['foo'](); // should be string
+>a : string
+>x['foo']() : string
+>x['foo'] : () => string
+>x : U
+>'foo' : "foo"
+
+        return a + x.foo();
+>a + x.foo() : string
+>a : string
+>x.foo() : string
+>x.foo : () => string
+>x : U
+>foo : () => string
+    }
+}
+
+var r1a = (new C<A, B>()).f();
+>r1a : string
+>(new C<A, B>()).f() : string
+>(new C<A, B>()).f : () => string
+>(new C<A, B>()) : C<A, B>
+>new C<A, B>() : C<A, B>
+>C : typeof C
+>f : () => string
+
+var r1b = (new C<A, B>()).g(new B());
+>r1b : string
+>(new C<A, B>()).g(new B()) : string
+>(new C<A, B>()).g : (x: A) => string
+>(new C<A, B>()) : C<A, B>
+>new C<A, B>() : C<A, B>
+>C : typeof C
+>g : (x: A) => string
+>new B() : B
+>B : typeof B
+
+interface I<U extends A, T extends U> {
+    foo: T;
+>foo : T
+}
+var i: I<A, B>;
+>i : I<A, B>
+
+var r2 = i.foo.foo();
+>r2 : string
+>i.foo.foo() : string
+>i.foo.foo : () => string
+>i.foo : B
+>i : I<A, B>
+>foo : B
+>foo : () => string
+
+var r2b = i.foo['foo']();
+>r2b : string
+>i.foo['foo']() : string
+>i.foo['foo'] : () => string
+>i.foo : B
+>i : I<A, B>
+>foo : B
+>'foo' : "foo"
+
+var a: {
+>a : { <U extends A, T extends U>(): T; <U extends T, T extends A>(x: U): U; }
+
+    <U extends A, T extends U>(): T;
+    <U extends T, T extends A>(x: U): U;
+>x : U
+}
+var r3 = a().foo(); // error, no inferences for U so it doesn't satisfy constraint
+>r3 : string
+>a().foo() : string
+>a().foo : () => string
+>a() : A
+>a : { <U extends A, T extends U>(): T; <U extends T, T extends A>(x: U): U; }
+>foo : () => string
+
+var r3b = a()['foo']();
+>r3b : string
+>a()['foo']() : string
+>a()['foo'] : () => string
+>a() : A
+>a : { <U extends A, T extends U>(): T; <U extends T, T extends A>(x: U): U; }
+>'foo' : "foo"
+
+// parameter supplied for type argument inference for U
+var r3c = a(new B()).foo(); // valid call to an invalid function, U is inferred as B, which has a foo
+>r3c : string
+>a(new B()).foo() : string
+>a(new B()).foo : () => string
+>a(new B()) : B
+>a : { <U extends A, T extends U>(): T; <U extends T, T extends A>(x: U): U; }
+>new B() : B
+>B : typeof B
+>foo : () => string
+
+var r3d = a(new B())['foo'](); // valid call to an invalid function, U is inferred as B, which has a foo
+>r3d : string
+>a(new B())['foo']() : string
+>a(new B())['foo'] : () => string
+>a(new B()) : B
+>a : { <U extends A, T extends U>(): T; <U extends T, T extends A>(x: U): U; }
+>new B() : B
+>B : typeof B
+>'foo' : "foo"
+
+var b = {
+>b : { foo: <U extends A, T extends U>(x: T) => string; }
+>{    foo: <U extends A, T extends U>(x: T) => {        // BUG 823818        var a = x['foo'](); // should be string        return a + x.foo();    }} : { foo: <U extends A, T extends U>(x: T) => string; }
+
+    foo: <U extends A, T extends U>(x: T) => {
+>foo : <U extends A, T extends U>(x: T) => string
+><U extends A, T extends U>(x: T) => {        // BUG 823818        var a = x['foo'](); // should be string        return a + x.foo();    } : <U extends A, T extends U>(x: T) => string
+>x : T
+
+        // BUG 823818
+        var a = x['foo'](); // should be string
+>a : string
+>x['foo']() : string
+>x['foo'] : () => string
+>x : T
+>'foo' : "foo"
+
+        return a + x.foo();
+>a + x.foo() : string
+>a : string
+>x.foo() : string
+>x.foo : () => string
+>x : T
+>foo : () => string
+    }
+}
+
+var r4 = b.foo(new B()); // valid call to an invalid function
+>r4 : string
+>b.foo(new B()) : string
+>b.foo : <U extends A, T extends U>(x: T) => string
+>b : { foo: <U extends A, T extends U>(x: T) => string; }
+>foo : <U extends A, T extends U>(x: T) => string
+>new B() : B
+>B : typeof B
+

@@ -1,0 +1,50 @@
+=== tests/cases/conformance/parser/ecmascript5/Generics/parserGenericsInTypeContexts1.ts ===
+class C extends A<T> implements B<T> {
+>C : Symbol(C, Decl(parserGenericsInTypeContexts1.ts, 0, 0))
+>T : Symbol(T)
+>T : Symbol(T)
+}
+
+var v1: C<T>;
+>v1 : Symbol(v1, Decl(parserGenericsInTypeContexts1.ts, 3, 3))
+>C : Symbol(C, Decl(parserGenericsInTypeContexts1.ts, 0, 0))
+>T : Symbol(T)
+
+var v2: D<T> = null;
+>v2 : Symbol(v2, Decl(parserGenericsInTypeContexts1.ts, 4, 3))
+>D : Symbol(D)
+>T : Symbol(T)
+
+var v3: E.F<T>;
+>v3 : Symbol(v3, Decl(parserGenericsInTypeContexts1.ts, 5, 3), Decl(parserGenericsInTypeContexts1.ts, 6, 3))
+>E : Symbol(E)
+>F : Symbol(E.F)
+>T : Symbol(T)
+
+var v3: G.H.I<T>;
+>v3 : Symbol(v3, Decl(parserGenericsInTypeContexts1.ts, 5, 3), Decl(parserGenericsInTypeContexts1.ts, 6, 3))
+>G : Symbol(G)
+>H : Symbol(G.H)
+>I : Symbol(G.H.I)
+>T : Symbol(T)
+
+var v6: K<T>[];
+>v6 : Symbol(v6, Decl(parserGenericsInTypeContexts1.ts, 7, 3))
+>K : Symbol(K)
+>T : Symbol(T)
+
+
+function f1(a: E<T>) {
+>f1 : Symbol(f1, Decl(parserGenericsInTypeContexts1.ts, 7, 15))
+>a : Symbol(a, Decl(parserGenericsInTypeContexts1.ts, 10, 12))
+>E : Symbol(E)
+>T : Symbol(T)
+}
+
+function f2(): F<T> {
+>f2 : Symbol(f2, Decl(parserGenericsInTypeContexts1.ts, 11, 1))
+>F : Symbol(F)
+>T : Symbol(T)
+}
+
+

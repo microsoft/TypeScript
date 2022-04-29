@@ -1,0 +1,29 @@
+=== tests/cases/compiler/overloadWithCallbacksWithDifferingOptionalityOnArgs.ts ===
+function x2(callback: (x?: number) => number);
+>x2 : { (callback: (x?: number) => number): any; (callback: (x: string) => number): any; }
+>callback : (x?: number) => number
+>x : number
+
+function x2(callback: (x: string) => number);
+>x2 : { (callback: (x?: number) => number): any; (callback: (x: string) => number): any; }
+>callback : (x: string) => number
+>x : string
+
+function x2(callback: (x: any) => number) { }
+>x2 : { (callback: (x?: number) => number): any; (callback: (x: string) => number): any; }
+>callback : (x: any) => number
+>x : any
+
+x2(() => 1);
+>x2(() => 1) : any
+>x2 : { (callback: (x?: number) => number): any; (callback: (x: string) => number): any; }
+>() => 1 : () => number
+>1 : 1
+
+x2((x) => 1 );
+>x2((x) => 1 ) : any
+>x2 : { (callback: (x?: number) => number): any; (callback: (x: string) => number): any; }
+>(x) => 1 : (x: number) => number
+>x : number
+>1 : 1
+

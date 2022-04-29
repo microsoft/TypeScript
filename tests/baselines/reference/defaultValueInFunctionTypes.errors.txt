@@ -1,0 +1,11 @@
+tests/cases/compiler/defaultValueInFunctionTypes.ts(1,9): error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
+tests/cases/compiler/defaultValueInFunctionTypes.ts(2,11): error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
+
+
+==== tests/cases/compiler/defaultValueInFunctionTypes.ts (2 errors) ====
+    var x: (a: number = 1) => number;
+            ~~~~~~~~~~~~~
+!!! error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
+    var y = <(a : string = "") => any>(undefined)
+              ~~~~~~~~~~~~~~~
+!!! error TS2371: A parameter initializer is only allowed in a function or constructor implementation.

@@ -1,0 +1,21 @@
+tests/cases/conformance/es6/computedProperties/computedPropertyNames45_ES5.ts(5,9): error TS2411: Property '["get1"]' of type 'Foo' is not assignable to 'string' index type 'Foo2'.
+tests/cases/conformance/es6/computedProperties/computedPropertyNames45_ES5.ts(11,9): error TS2411: Property '["set1"]' of type 'Foo' is not assignable to 'string' index type 'Foo2'.
+
+
+==== tests/cases/conformance/es6/computedProperties/computedPropertyNames45_ES5.ts (2 errors) ====
+    class Foo { x }
+    class Foo2 { x; y }
+    
+    class C {
+        get ["get1"]() { return new Foo }
+            ~~~~~~~~
+!!! error TS2411: Property '["get1"]' of type 'Foo' is not assignable to 'string' index type 'Foo2'.
+    }
+    
+    class D extends C {
+        // No error when the indexer is in a class more derived than the computed property
+        [s: string]: Foo2;
+        set ["set1"](p: Foo) { }
+            ~~~~~~~~
+!!! error TS2411: Property '["set1"]' of type 'Foo' is not assignable to 'string' index type 'Foo2'.
+    }

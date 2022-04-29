@@ -1,0 +1,43 @@
+tests/cases/conformance/types/primitives/enum/invalidEnumAssignments.ts(14,1): error TS2322: Type 'E2.A' is not assignable to type 'E'.
+tests/cases/conformance/types/primitives/enum/invalidEnumAssignments.ts(15,1): error TS2322: Type 'E.A' is not assignable to type 'E2'.
+tests/cases/conformance/types/primitives/enum/invalidEnumAssignments.ts(16,1): error TS2322: Type 'void' is not assignable to type 'E'.
+tests/cases/conformance/types/primitives/enum/invalidEnumAssignments.ts(17,1): error TS2322: Type '{}' is not assignable to type 'E'.
+tests/cases/conformance/types/primitives/enum/invalidEnumAssignments.ts(18,1): error TS2322: Type '""' is not assignable to type 'E'.
+tests/cases/conformance/types/primitives/enum/invalidEnumAssignments.ts(21,5): error TS2322: Type 'T' is not assignable to type 'E'.
+
+
+==== tests/cases/conformance/types/primitives/enum/invalidEnumAssignments.ts (6 errors) ====
+    enum E {
+        A,
+        B
+    }
+    
+    enum E2 {
+        A,
+        B
+    }
+    
+    var e: E;
+    var e2: E2;
+    
+    e = E2.A;
+    ~
+!!! error TS2322: Type 'E2.A' is not assignable to type 'E'.
+    e2 = E.A;
+    ~~
+!!! error TS2322: Type 'E.A' is not assignable to type 'E2'.
+    e = <void>null;
+    ~
+!!! error TS2322: Type 'void' is not assignable to type 'E'.
+    e = {};
+    ~
+!!! error TS2322: Type '{}' is not assignable to type 'E'.
+    e = '';
+    ~
+!!! error TS2322: Type '""' is not assignable to type 'E'.
+    
+    function f<T>(a: T) {
+        e = a;
+        ~
+!!! error TS2322: Type 'T' is not assignable to type 'E'.
+    }

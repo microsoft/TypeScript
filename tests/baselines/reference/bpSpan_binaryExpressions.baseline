@@ -1,0 +1,92 @@
+
+1  >var x = 10;
+
+    ~~~~~~~~~~~~                                  => Pos: (0 to 11)  SpanInfo: {"start":0,"length":10}
+    >var x = 10
+    >:=> (line 1, col 0) to (line 1, col 10)
+--------------------------------
+2  >var y = 20;
+
+    ~~~~~~~~~~~~                                  => Pos: (12 to 23)  SpanInfo: {"start":12,"length":10}
+    >var y = 20
+    >:=> (line 2, col 0) to (line 2, col 10)
+--------------------------------
+3  >x += 30;
+
+    ~~~~~~~~~                                     => Pos: (24 to 32)  SpanInfo: {"start":24,"length":7}
+    >x += 30
+    >:=> (line 3, col 0) to (line 3, col 7)
+--------------------------------
+4  >x *= 0;
+
+    ~~~~~~~~                                      => Pos: (33 to 40)  SpanInfo: {"start":33,"length":6}
+    >x *= 0
+    >:=> (line 4, col 0) to (line 4, col 6)
+--------------------------------
+5  >x = x + 1;
+
+    ~~~~~~~~~~~                                   => Pos: (41 to 51)  SpanInfo: {"start":41,"length":9}
+    >x = x + 1
+    >:=> (line 5, col 0) to (line 5, col 9)
+--------------------------------
+6  >x = (function foo() {
+
+    ~~~                                           => Pos: (52 to 54)  SpanInfo: {"start":52,"length":44}
+    >x = (function foo() {
+    >    return y;
+    >})() + y
+    >:=> (line 6, col 0) to (line 8, col 8)
+6  >x = (function foo() {
+
+       ~~~~~~~~~~~~~~~~~~~                        => Pos: (55 to 73)  SpanInfo: {"start":78,"length":8}
+    >return y
+    >:=> (line 7, col 4) to (line 7, col 12)
+--------------------------------
+7  >    return y;
+
+    ~~~~~~~~~~~~~~                                => Pos: (74 to 87)  SpanInfo: {"start":78,"length":8}
+    >return y
+    >:=> (line 7, col 4) to (line 7, col 12)
+--------------------------------
+8  >})() + y;
+
+    ~~~~                                          => Pos: (88 to 91)  SpanInfo: {"start":88,"length":1}
+    >}
+    >:=> (line 8, col 0) to (line 8, col 1)
+8  >})() + y;
+
+        ~~~~~~                                    => Pos: (92 to 97)  SpanInfo: {"start":52,"length":44}
+    >x = (function foo() {
+    >    return y;
+    >})() + y
+    >:=> (line 6, col 0) to (line 8, col 8)
+--------------------------------
+9  >x = y + 30 + (function foo() {
+
+    ~~~~~~~~~~~~                                  => Pos: (98 to 109)  SpanInfo: {"start":98,"length":54}
+    >x = y + 30 + (function foo() {
+    >    return y;
+    >})() * 40
+    >:=> (line 9, col 0) to (line 11, col 9)
+9  >x = y + 30 + (function foo() {
+
+                ~~~~~~~~~~~~~~~~~~~               => Pos: (110 to 128)  SpanInfo: {"start":133,"length":8}
+    >return y
+    >:=> (line 10, col 4) to (line 10, col 12)
+--------------------------------
+10 >    return y;
+
+    ~~~~~~~~~~~~~~                                => Pos: (129 to 142)  SpanInfo: {"start":133,"length":8}
+    >return y
+    >:=> (line 10, col 4) to (line 10, col 12)
+--------------------------------
+11 >})() * 40;
+    ~~~~                                          => Pos: (143 to 146)  SpanInfo: {"start":143,"length":1}
+    >}
+    >:=> (line 11, col 0) to (line 11, col 1)
+11 >})() * 40;
+        ~~~~~~                                    => Pos: (147 to 152)  SpanInfo: {"start":98,"length":54}
+    >x = y + 30 + (function foo() {
+    >    return y;
+    >})() * 40
+    >:=> (line 9, col 0) to (line 11, col 9)

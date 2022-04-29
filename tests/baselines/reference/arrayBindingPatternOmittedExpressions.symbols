@@ -1,0 +1,37 @@
+=== tests/cases/compiler/arrayBindingPatternOmittedExpressions.ts ===
+var results: string[];
+>results : Symbol(results, Decl(arrayBindingPatternOmittedExpressions.ts, 0, 3))
+
+{
+    let [, b, , a] = results;
+>b : Symbol(b, Decl(arrayBindingPatternOmittedExpressions.ts, 3, 10))
+>a : Symbol(a, Decl(arrayBindingPatternOmittedExpressions.ts, 3, 15))
+>results : Symbol(results, Decl(arrayBindingPatternOmittedExpressions.ts, 0, 3))
+
+    let x = {
+>x : Symbol(x, Decl(arrayBindingPatternOmittedExpressions.ts, 4, 7))
+
+        a,
+>a : Symbol(a, Decl(arrayBindingPatternOmittedExpressions.ts, 4, 13))
+
+        b
+>b : Symbol(b, Decl(arrayBindingPatternOmittedExpressions.ts, 5, 10))
+    }
+}
+
+
+function f([, a, , b, , , , s, , , ] = results) {
+>f : Symbol(f, Decl(arrayBindingPatternOmittedExpressions.ts, 8, 1))
+>a : Symbol(a, Decl(arrayBindingPatternOmittedExpressions.ts, 11, 13))
+>b : Symbol(b, Decl(arrayBindingPatternOmittedExpressions.ts, 11, 18))
+>s : Symbol(s, Decl(arrayBindingPatternOmittedExpressions.ts, 11, 27))
+>results : Symbol(results, Decl(arrayBindingPatternOmittedExpressions.ts, 0, 3))
+
+    a = s[1];
+>a : Symbol(a, Decl(arrayBindingPatternOmittedExpressions.ts, 11, 13))
+>s : Symbol(s, Decl(arrayBindingPatternOmittedExpressions.ts, 11, 27))
+
+    b = s[2];
+>b : Symbol(b, Decl(arrayBindingPatternOmittedExpressions.ts, 11, 18))
+>s : Symbol(s, Decl(arrayBindingPatternOmittedExpressions.ts, 11, 27))
+}

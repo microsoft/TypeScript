@@ -1,0 +1,97 @@
+=== tests/cases/compiler/propertiesAndIndexersForNumericNames.ts ===
+class C {
+>C : Symbol(C, Decl(propertiesAndIndexersForNumericNames.ts, 0, 0))
+
+    [i: number]: number;
+>i : Symbol(i, Decl(propertiesAndIndexersForNumericNames.ts, 1, 5))
+
+    // These all have numeric names; they should error
+    // because their types are not compatible with the numeric indexer.
+    public "1": string = "number"; // Error
+>"1" : Symbol(C["1"], Decl(propertiesAndIndexersForNumericNames.ts, 1, 24))
+
+    public "-1": string = "negative number"; // Error
+>"-1" : Symbol(C["-1"], Decl(propertiesAndIndexersForNumericNames.ts, 5, 34))
+
+    public "-2.5": string = "negative number"; // Error
+>"-2.5" : Symbol(C["-2.5"], Decl(propertiesAndIndexersForNumericNames.ts, 6, 44))
+
+    public "3.141592": string = "pi-sitive number"; // Error
+>"3.141592" : Symbol(C["3.141592"], Decl(propertiesAndIndexersForNumericNames.ts, 7, 46))
+
+    public "1.2e-20": string = "really small number"; // Error
+>"1.2e-20" : Symbol(C["1.2e-20"], Decl(propertiesAndIndexersForNumericNames.ts, 8, 51))
+
+    public "Infinity": string = "A gillion"; // Error
+>"Infinity" : Symbol(C["Infinity"], Decl(propertiesAndIndexersForNumericNames.ts, 9, 53))
+
+    public "-Infinity": string = "Negative-a-gillion"; // Error
+>"-Infinity" : Symbol(C["-Infinity"], Decl(propertiesAndIndexersForNumericNames.ts, 10, 44))
+
+    public "NaN": string = "not a number"; // Error
+>"NaN" : Symbol(C["NaN"], Decl(propertiesAndIndexersForNumericNames.ts, 11, 54))
+    
+    // These all have *partially* numeric names,
+    // but should really be treated as plain string literals.
+    public " 1": string = "leading space"; // No error
+>" 1" : Symbol(C[" 1"], Decl(propertiesAndIndexersForNumericNames.ts, 12, 42))
+
+    public "1    ": string = "trailing space"; // No error
+>"1    " : Symbol(C["1    "], Decl(propertiesAndIndexersForNumericNames.ts, 16, 42))
+
+    public "": string = "no nothing"; // No error
+>"" : Symbol(C[""], Decl(propertiesAndIndexersForNumericNames.ts, 17, 46))
+
+    public "    ": string = "just space"; // No error
+>"    " : Symbol(C["    "], Decl(propertiesAndIndexersForNumericNames.ts, 18, 37))
+
+    public "1 0 1": string = "several numbers and spaces"; // No error
+>"1 0 1" : Symbol(C["1 0 1"], Decl(propertiesAndIndexersForNumericNames.ts, 19, 41))
+
+    public "hunter2": string = "not a password"; // No error
+>"hunter2" : Symbol(C["hunter2"], Decl(propertiesAndIndexersForNumericNames.ts, 20, 58))
+
+    public "+Infinity": string = "A gillion"; // No error
+>"+Infinity" : Symbol(C["+Infinity"], Decl(propertiesAndIndexersForNumericNames.ts, 21, 48))
+
+    public "+NaN": string = "not a positive number"; // No error
+>"+NaN" : Symbol(C["+NaN"], Decl(propertiesAndIndexersForNumericNames.ts, 22, 45))
+
+    public "-NaN": string = "not a negative number"; // No error
+>"-NaN" : Symbol(C["-NaN"], Decl(propertiesAndIndexersForNumericNames.ts, 23, 52))
+    
+
+    // These fall into the above category, however, they are "trickier";
+    // these all are *scanned* as numeric literals, but they are not written in
+    // "canonical" numeric representations.
+    public "+1": string = "positive number (for the paranoid)"; // No error
+>"+1" : Symbol(C["+1"], Decl(propertiesAndIndexersForNumericNames.ts, 24, 52))
+
+    public "1e0": string = "just one"; // No error
+>"1e0" : Symbol(C["1e0"], Decl(propertiesAndIndexersForNumericNames.ts, 30, 63))
+
+    public "-0": string = "just zero"; // No error
+>"-0" : Symbol(C["-0"], Decl(propertiesAndIndexersForNumericNames.ts, 31, 38))
+
+    public "-0e0": string = "just zero"; // No error
+>"-0e0" : Symbol(C["-0e0"], Decl(propertiesAndIndexersForNumericNames.ts, 32, 38))
+
+    public "0xF00D": string = "hex food"; // No error
+>"0xF00D" : Symbol(C["0xF00D"], Decl(propertiesAndIndexersForNumericNames.ts, 33, 40))
+
+    public "0xBEEF": string = "hex beef"; // No error
+>"0xBEEF" : Symbol(C["0xBEEF"], Decl(propertiesAndIndexersForNumericNames.ts, 34, 41))
+
+    public "0123": string = "oct 83"; // No error
+>"0123" : Symbol(C["0123"], Decl(propertiesAndIndexersForNumericNames.ts, 35, 41))
+
+    public "0o123": string = "explicit oct 83"; // No error
+>"0o123" : Symbol(C["0o123"], Decl(propertiesAndIndexersForNumericNames.ts, 36, 37))
+
+    public "0b101101001010": string = "explicit binary"; // No error
+>"0b101101001010" : Symbol(C["0b101101001010"], Decl(propertiesAndIndexersForNumericNames.ts, 37, 47))
+
+    public "0.000000000000000000012": string = "should've been in exponential form"; // No error
+>"0.000000000000000000012" : Symbol(C["0.000000000000000000012"], Decl(propertiesAndIndexersForNumericNames.ts, 38, 56))
+}
+

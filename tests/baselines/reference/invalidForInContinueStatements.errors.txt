@@ -1,0 +1,59 @@
+tests/cases/conformance/statements/continueStatements/invalidForInContinueStatements.ts(4,1): error TS1104: A 'continue' statement can only be used within an enclosing iteration statement.
+tests/cases/conformance/statements/continueStatements/invalidForInContinueStatements.ts(8,19): error TS1115: A 'continue' statement can only jump to a label of an enclosing iteration statement.
+tests/cases/conformance/statements/continueStatements/invalidForInContinueStatements.ts(14,9): error TS1107: Jump target cannot cross function boundary.
+tests/cases/conformance/statements/continueStatements/invalidForInContinueStatements.ts(21,9): error TS1107: Jump target cannot cross function boundary.
+tests/cases/conformance/statements/continueStatements/invalidForInContinueStatements.ts(27,5): error TS1115: A 'continue' statement can only jump to a label of an enclosing iteration statement.
+tests/cases/conformance/statements/continueStatements/invalidForInContinueStatements.ts(37,5): error TS1115: A 'continue' statement can only jump to a label of an enclosing iteration statement.
+
+
+==== tests/cases/conformance/statements/continueStatements/invalidForInContinueStatements.ts (6 errors) ====
+    // All errors
+    
+    // naked continue not allowed
+    continue;
+    ~~~~~~~~~
+!!! error TS1104: A 'continue' statement can only be used within an enclosing iteration statement.
+    
+    // non-existent label
+    ONE:
+    for (var x in {}) continue TWO;
+                      ~~~~~~~~~~~~~
+!!! error TS1115: A 'continue' statement can only jump to a label of an enclosing iteration statement.
+    
+    // continue from inside function
+    TWO:
+    for (var x in {}) {
+        var fn = () => {
+            continue TWO;
+            ~~~~~~~~~~~~~
+!!! error TS1107: Jump target cannot cross function boundary.
+        }
+    }
+    
+    THREE:
+    for (var x in {}) {
+        var fn = function () {
+            continue THREE;
+            ~~~~~~~~~~~~~~~
+!!! error TS1107: Jump target cannot cross function boundary.
+        }
+    }
+    
+    // continue forward
+    for (var x in {}) {
+        continue FIVE;
+        ~~~~~~~~~~~~~~
+!!! error TS1115: A 'continue' statement can only jump to a label of an enclosing iteration statement.
+        FIVE:
+        for (var x in {}) { }
+    }
+    
+    // label on non-loop statement
+    NINE:
+    var y = 12;
+    
+    for (var x in {}) {
+        continue NINE;
+        ~~~~~~~~~~~~~~
+!!! error TS1115: A 'continue' statement can only jump to a label of an enclosing iteration statement.
+    }

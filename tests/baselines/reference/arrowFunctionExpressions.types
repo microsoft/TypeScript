@@ -1,0 +1,354 @@
+=== tests/cases/conformance/expressions/functions/arrowFunctionExpressions.ts ===
+// ArrowFormalParameters => AssignmentExpression is equivalent to ArrowFormalParameters => { return AssignmentExpression; }
+var a = (p: string) => p.length;
+>a : (p: string) => number
+>(p: string) => p.length : (p: string) => number
+>p : string
+>p.length : number
+>p : string
+>length : number
+
+var a = (p: string) => { return p.length; }
+>a : (p: string) => number
+>(p: string) => { return p.length; } : (p: string) => number
+>p : string
+>p.length : number
+>p : string
+>length : number
+
+// Identifier => Block is equivalent to(Identifier) => Block
+var b = j => { return 0; }
+>b : (j: any) => number
+>j => { return 0; } : (j: any) => number
+>j : any
+>0 : 0
+
+var b = (j) => { return 0; }
+>b : (j: any) => number
+>(j) => { return 0; } : (j: any) => number
+>j : any
+>0 : 0
+
+// Identifier => AssignmentExpression is equivalent to(Identifier) => AssignmentExpression
+var c: number;
+>c : number
+
+var d = n => c = n;
+>d : (n: any) => any
+>n => c = n : (n: any) => any
+>n : any
+>c = n : any
+>c : number
+>n : any
+
+var d = (n) => c = n;
+>d : (n: any) => any
+>(n) => c = n : (n: any) => any
+>n : any
+>c = n : any
+>c : number
+>n : any
+
+var d: (n: any) => any;
+>d : (n: any) => any
+>n : any
+
+// Binding patterns in arrow functions
+var p1 = ([a]) => { };
+>p1 : ([a]: [any]) => void
+>([a]) => { } : ([a]: [any]) => void
+>a : any
+
+var p2 = ([...a]) => { };
+>p2 : ([...a]: any[]) => void
+>([...a]) => { } : ([...a]: any[]) => void
+>a : any[]
+
+var p3 = ([, a]) => { };
+>p3 : ([, a]: [any, any]) => void
+>([, a]) => { } : ([, a]: [any, any]) => void
+> : undefined
+>a : any
+
+var p4 = ([, ...a]) => { };
+>p4 : ([, ...a]: [any?, ...any[]]) => void
+>([, ...a]) => { } : ([, ...a]: [any?, ...any[]]) => void
+> : undefined
+>a : any[]
+
+var p5 = ([a = 1]) => { };
+>p5 : ([a]: [number?]) => void
+>([a = 1]) => { } : ([a]: [number?]) => void
+>a : number
+>1 : 1
+
+var p6 = ({ a }) => { };
+>p6 : ({ a }: { a: any; }) => void
+>({ a }) => { } : ({ a }: { a: any; }) => void
+>a : any
+
+var p7 = ({ a: { b } }) => { };
+>p7 : ({ a: { b } }: { a: { b: any; }; }) => void
+>({ a: { b } }) => { } : ({ a: { b } }: { a: { b: any; }; }) => void
+>a : any
+>b : any
+
+var p8 = ({ a = 1 }) => { };
+>p8 : ({ a }: { a?: number; }) => void
+>({ a = 1 }) => { } : ({ a }: { a?: number; }) => void
+>a : number
+>1 : 1
+
+var p9 = ({ a: { b = 1 } = { b: 1 } }) => { };
+>p9 : ({ a: { b } }: { a?: { b?: number; }; }) => void
+>({ a: { b = 1 } = { b: 1 } }) => { } : ({ a: { b } }: { a?: { b?: number; }; }) => void
+>a : any
+>b : number
+>1 : 1
+>{ b: 1 } : { b?: number; }
+>b : number
+>1 : 1
+
+var p10 = ([{ value, done }]) => { };
+>p10 : ([{ value, done }]: [{ value: any; done: any; }]) => void
+>([{ value, done }]) => { } : ([{ value, done }]: [{ value: any; done: any; }]) => void
+>value : any
+>done : any
+
+// Arrow function used in class member initializer
+// Arrow function used in class member function
+class MyClass {
+>MyClass : MyClass
+
+    m = (n) => n + 1;
+>m : (n: any) => any
+>(n) => n + 1 : (n: any) => any
+>n : any
+>n + 1 : any
+>n : any
+>1 : 1
+
+    p = (n) => n && this;
+>p : (n: any) => this
+>(n) => n && this : (n: any) => this
+>n : any
+>n && this : this
+>n : any
+>this : this
+
+    fn() {
+>fn : () => void
+
+        var m = (n) => n + 1;
+>m : (n: any) => any
+>(n) => n + 1 : (n: any) => any
+>n : any
+>n + 1 : any
+>n : any
+>1 : 1
+
+        var p = (n) => n && this;
+>p : (n: any) => this
+>(n) => n && this : (n: any) => this
+>n : any
+>n && this : this
+>n : any
+>this : this
+    }
+}
+
+// Arrow function used in arrow function
+var arrrr = () => (m: number) => () => (n: number) => m + n;
+>arrrr : () => (m: number) => () => (n: number) => number
+>() => (m: number) => () => (n: number) => m + n : () => (m: number) => () => (n: number) => number
+>(m: number) => () => (n: number) => m + n : (m: number) => () => (n: number) => number
+>m : number
+>() => (n: number) => m + n : () => (n: number) => number
+>(n: number) => m + n : (n: number) => number
+>n : number
+>m + n : number
+>m : number
+>n : number
+
+var e = arrrr()(3)()(4);
+>e : number
+>arrrr()(3)()(4) : number
+>arrrr()(3)() : (n: number) => number
+>arrrr()(3) : () => (n: number) => number
+>arrrr() : (m: number) => () => (n: number) => number
+>arrrr : () => (m: number) => () => (n: number) => number
+>3 : 3
+>4 : 4
+
+var e: number;
+>e : number
+
+// Arrow function used in arrow function used in function
+function someFn() {
+>someFn : () => void
+
+    var arr = (n: number) => (p: number) => p * n;
+>arr : (n: number) => (p: number) => number
+>(n: number) => (p: number) => p * n : (n: number) => (p: number) => number
+>n : number
+>(p: number) => p * n : (p: number) => number
+>p : number
+>p * n : number
+>p : number
+>n : number
+
+    arr(3)(4).toExponential();
+>arr(3)(4).toExponential() : string
+>arr(3)(4).toExponential : (fractionDigits?: number) => string
+>arr(3)(4) : number
+>arr(3) : (p: number) => number
+>arr : (n: number) => (p: number) => number
+>3 : 3
+>4 : 4
+>toExponential : (fractionDigits?: number) => string
+}
+
+// Arrow function used in function
+function someOtherFn() {
+>someOtherFn : () => void
+
+    var arr = (n: number) => '' + n;
+>arr : (n: number) => string
+>(n: number) => '' + n : (n: number) => string
+>n : number
+>'' + n : string
+>'' : ""
+>n : number
+
+    arr(4).charAt(0);
+>arr(4).charAt(0) : string
+>arr(4).charAt : (pos: number) => string
+>arr(4) : string
+>arr : (n: number) => string
+>4 : 4
+>charAt : (pos: number) => string
+>0 : 0
+}
+
+// Arrow function used in nested function in function
+function outerFn() {
+>outerFn : () => void
+
+    function innerFn() {
+>innerFn : () => void
+
+        var arrowFn = () => { };
+>arrowFn : () => void
+>() => { } : () => void
+
+        var p = arrowFn();
+>p : void
+>arrowFn() : void
+>arrowFn : () => void
+
+        var p: void;
+>p : void
+    }
+}
+
+// Arrow function used in nested function in arrow function
+var f = (n: string) => {
+>f : (n: string) => () => string
+>(n: string) => {    function fn(x: number) {        return () => n + x;    }    return fn(4);} : (n: string) => () => string
+>n : string
+
+    function fn(x: number) {
+>fn : (x: number) => () => string
+>x : number
+
+        return () => n + x;
+>() => n + x : () => string
+>n + x : string
+>n : string
+>x : number
+    }
+    return fn(4);
+>fn(4) : () => string
+>fn : (x: number) => () => string
+>4 : 4
+}
+var g = f('')();
+>g : string
+>f('')() : string
+>f('') : () => string
+>f : (n: string) => () => string
+>'' : ""
+
+var g: string;
+>g : string
+
+
+// Arrow function used in nested function in arrow function in nested function
+function someOuterFn() {
+>someOuterFn : () => (n: string) => () => () => number
+
+    var arr = (n: string) => {
+>arr : (n: string) => () => () => number
+>(n: string) => {        function innerFn() {            return () => n.length;        }        return innerFn;    } : (n: string) => () => () => number
+>n : string
+
+        function innerFn() {
+>innerFn : () => () => number
+
+            return () => n.length;
+>() => n.length : () => number
+>n.length : number
+>n : string
+>length : number
+        }
+        return innerFn;
+>innerFn : () => () => number
+    }
+    return arr;
+>arr : (n: string) => () => () => number
+}
+var h = someOuterFn()('')()();
+>h : number
+>someOuterFn()('')()() : number
+>someOuterFn()('')() : () => number
+>someOuterFn()('') : () => () => number
+>someOuterFn() : (n: string) => () => () => number
+>someOuterFn : () => (n: string) => () => () => number
+>'' : ""
+
+h.toExponential();
+>h.toExponential() : string
+>h.toExponential : (fractionDigits?: number) => string
+>h : number
+>toExponential : (fractionDigits?: number) => string
+
+// Arrow function used in try/catch/finally in function
+function tryCatchFn() {
+>tryCatchFn : () => void
+
+    try {
+        var x = () => this;
+>x : () => any
+>() => this : () => any
+>this : any
+
+    } catch (e) {
+>e : any
+
+        var t = () => e + this;
+>t : () => any
+>() => e + this : () => any
+>e + this : any
+>e : any
+>this : any
+
+    } finally {
+        var m = () => this + '';
+>m : () => string
+>() => this + '' : () => string
+>this + '' : string
+>this : any
+>'' : ""
+    }
+}
+

@@ -1,0 +1,66 @@
+=== tests/cases/compiler/varArgsOnConstructorTypes.ts ===
+export class A {
+>A : A
+
+    constructor(ctor) { }
+>ctor : any
+}
+
+export class B extends A {
+>B : B
+>A : A
+
+    private p1: number;
+>p1 : number
+
+    private p2: string;
+>p2 : string
+
+    constructor(element: any, url: string) {
+>element : any
+>url : string
+
+       super(element);
+>super(element) : void
+>super : typeof A
+>element : any
+
+        this.p1 = element;
+>this.p1 = element : any
+>this.p1 : number
+>this : this
+>p1 : number
+>element : any
+
+        this.p2 = url;
+>this.p2 = url : string
+>this.p2 : string
+>this : this
+>p2 : string
+>url : string
+    }
+}
+
+export interface I1 {
+    register(inputClass: new(...params: any[]) => A);
+>register : { (inputClass: new (...params: any[]) => A): any; (inputClass: (new (...params: any[]) => A)[]): any; }
+>inputClass : new (...params: any[]) => A
+>params : any[]
+
+    register(inputClass: { new (...params: any[]): A; }[]);
+>register : { (inputClass: new (...params: any[]) => A): any; (inputClass: (new (...params: any[]) => A)[]): any; }
+>inputClass : (new (...params: any[]) => A)[]
+>params : any[]
+}
+
+
+var reg: I1;
+>reg : I1
+
+reg.register(B);
+>reg.register(B) : any
+>reg.register : { (inputClass: new (...params: any[]) => A): any; (inputClass: (new (...params: any[]) => A)[]): any; }
+>reg : I1
+>register : { (inputClass: new (...params: any[]) => A): any; (inputClass: (new (...params: any[]) => A)[]): any; }
+>B : typeof B
+

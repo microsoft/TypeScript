@@ -1,0 +1,12 @@
+tests/cases/compiler/extendsClauseAlreadySeen2.ts(4,30): error TS1172: 'extends' clause already seen.
+
+
+==== tests/cases/compiler/extendsClauseAlreadySeen2.ts (1 errors) ====
+    class C<T> {
+    
+    }
+    class D<T> extends C<number> extends C<string> {
+                                 ~~~~~~~
+!!! error TS1172: 'extends' clause already seen.
+        baz() { }
+    }

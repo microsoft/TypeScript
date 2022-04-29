@@ -1,0 +1,320 @@
+=== tests/cases/compiler/privacyCannotNameAccessorDeclFile_consumer.ts ===
+import exporter = require("./privacyCannotNameAccessorDeclFile_exporter");
+>exporter : Symbol(exporter, Decl(privacyCannotNameAccessorDeclFile_consumer.ts, 0, 0))
+
+export class publicClassWithWithPrivateGetAccessorTypes {
+>publicClassWithWithPrivateGetAccessorTypes : Symbol(publicClassWithWithPrivateGetAccessorTypes, Decl(privacyCannotNameAccessorDeclFile_consumer.ts, 0, 74))
+
+    static get myPublicStaticMethod() { // Error
+>myPublicStaticMethod : Symbol(publicClassWithWithPrivateGetAccessorTypes.myPublicStaticMethod, Decl(privacyCannotNameAccessorDeclFile_consumer.ts, 1, 57))
+
+        return exporter.createExportedWidget1();
+>exporter.createExportedWidget1 : Symbol(exporter.createExportedWidget1, Decl(privacyCannotNameAccessorDeclFile_exporter.ts, 2, 43))
+>exporter : Symbol(exporter, Decl(privacyCannotNameAccessorDeclFile_consumer.ts, 0, 0))
+>createExportedWidget1 : Symbol(exporter.createExportedWidget1, Decl(privacyCannotNameAccessorDeclFile_exporter.ts, 2, 43))
+    }
+    private static get myPrivateStaticMethod() {
+>myPrivateStaticMethod : Symbol(publicClassWithWithPrivateGetAccessorTypes.myPrivateStaticMethod, Decl(privacyCannotNameAccessorDeclFile_consumer.ts, 4, 5))
+
+        return exporter.createExportedWidget1();
+>exporter.createExportedWidget1 : Symbol(exporter.createExportedWidget1, Decl(privacyCannotNameAccessorDeclFile_exporter.ts, 2, 43))
+>exporter : Symbol(exporter, Decl(privacyCannotNameAccessorDeclFile_consumer.ts, 0, 0))
+>createExportedWidget1 : Symbol(exporter.createExportedWidget1, Decl(privacyCannotNameAccessorDeclFile_exporter.ts, 2, 43))
+    }
+    get myPublicMethod() { // Error
+>myPublicMethod : Symbol(publicClassWithWithPrivateGetAccessorTypes.myPublicMethod, Decl(privacyCannotNameAccessorDeclFile_consumer.ts, 7, 5))
+
+        return exporter.createExportedWidget1();
+>exporter.createExportedWidget1 : Symbol(exporter.createExportedWidget1, Decl(privacyCannotNameAccessorDeclFile_exporter.ts, 2, 43))
+>exporter : Symbol(exporter, Decl(privacyCannotNameAccessorDeclFile_consumer.ts, 0, 0))
+>createExportedWidget1 : Symbol(exporter.createExportedWidget1, Decl(privacyCannotNameAccessorDeclFile_exporter.ts, 2, 43))
+    }
+    private get myPrivateMethod() {
+>myPrivateMethod : Symbol(publicClassWithWithPrivateGetAccessorTypes.myPrivateMethod, Decl(privacyCannotNameAccessorDeclFile_consumer.ts, 10, 5))
+
+        return exporter.createExportedWidget1();
+>exporter.createExportedWidget1 : Symbol(exporter.createExportedWidget1, Decl(privacyCannotNameAccessorDeclFile_exporter.ts, 2, 43))
+>exporter : Symbol(exporter, Decl(privacyCannotNameAccessorDeclFile_consumer.ts, 0, 0))
+>createExportedWidget1 : Symbol(exporter.createExportedWidget1, Decl(privacyCannotNameAccessorDeclFile_exporter.ts, 2, 43))
+    }
+    static get myPublicStaticMethod1() { // Error
+>myPublicStaticMethod1 : Symbol(publicClassWithWithPrivateGetAccessorTypes.myPublicStaticMethod1, Decl(privacyCannotNameAccessorDeclFile_consumer.ts, 13, 5))
+
+        return exporter.createExportedWidget3();
+>exporter.createExportedWidget3 : Symbol(exporter.createExportedWidget3, Decl(privacyCannotNameAccessorDeclFile_exporter.ts, 8, 1))
+>exporter : Symbol(exporter, Decl(privacyCannotNameAccessorDeclFile_consumer.ts, 0, 0))
+>createExportedWidget3 : Symbol(exporter.createExportedWidget3, Decl(privacyCannotNameAccessorDeclFile_exporter.ts, 8, 1))
+    }
+    private static get myPrivateStaticMethod1() {
+>myPrivateStaticMethod1 : Symbol(publicClassWithWithPrivateGetAccessorTypes.myPrivateStaticMethod1, Decl(privacyCannotNameAccessorDeclFile_consumer.ts, 16, 5))
+
+        return exporter.createExportedWidget3();
+>exporter.createExportedWidget3 : Symbol(exporter.createExportedWidget3, Decl(privacyCannotNameAccessorDeclFile_exporter.ts, 8, 1))
+>exporter : Symbol(exporter, Decl(privacyCannotNameAccessorDeclFile_consumer.ts, 0, 0))
+>createExportedWidget3 : Symbol(exporter.createExportedWidget3, Decl(privacyCannotNameAccessorDeclFile_exporter.ts, 8, 1))
+    }
+    get myPublicMethod1() { // Error
+>myPublicMethod1 : Symbol(publicClassWithWithPrivateGetAccessorTypes.myPublicMethod1, Decl(privacyCannotNameAccessorDeclFile_consumer.ts, 19, 5))
+
+        return exporter.createExportedWidget3();
+>exporter.createExportedWidget3 : Symbol(exporter.createExportedWidget3, Decl(privacyCannotNameAccessorDeclFile_exporter.ts, 8, 1))
+>exporter : Symbol(exporter, Decl(privacyCannotNameAccessorDeclFile_consumer.ts, 0, 0))
+>createExportedWidget3 : Symbol(exporter.createExportedWidget3, Decl(privacyCannotNameAccessorDeclFile_exporter.ts, 8, 1))
+    }
+    private get myPrivateMethod1() {
+>myPrivateMethod1 : Symbol(publicClassWithWithPrivateGetAccessorTypes.myPrivateMethod1, Decl(privacyCannotNameAccessorDeclFile_consumer.ts, 22, 5))
+
+        return exporter.createExportedWidget3();
+>exporter.createExportedWidget3 : Symbol(exporter.createExportedWidget3, Decl(privacyCannotNameAccessorDeclFile_exporter.ts, 8, 1))
+>exporter : Symbol(exporter, Decl(privacyCannotNameAccessorDeclFile_consumer.ts, 0, 0))
+>createExportedWidget3 : Symbol(exporter.createExportedWidget3, Decl(privacyCannotNameAccessorDeclFile_exporter.ts, 8, 1))
+    }
+}
+
+class privateClassWithWithPrivateGetAccessorTypes {
+>privateClassWithWithPrivateGetAccessorTypes : Symbol(privateClassWithWithPrivateGetAccessorTypes, Decl(privacyCannotNameAccessorDeclFile_consumer.ts, 26, 1))
+
+    static get myPublicStaticMethod() { 
+>myPublicStaticMethod : Symbol(privateClassWithWithPrivateGetAccessorTypes.myPublicStaticMethod, Decl(privacyCannotNameAccessorDeclFile_consumer.ts, 28, 51))
+
+        return exporter.createExportedWidget1();
+>exporter.createExportedWidget1 : Symbol(exporter.createExportedWidget1, Decl(privacyCannotNameAccessorDeclFile_exporter.ts, 2, 43))
+>exporter : Symbol(exporter, Decl(privacyCannotNameAccessorDeclFile_consumer.ts, 0, 0))
+>createExportedWidget1 : Symbol(exporter.createExportedWidget1, Decl(privacyCannotNameAccessorDeclFile_exporter.ts, 2, 43))
+    }
+    private static get myPrivateStaticMethod() {
+>myPrivateStaticMethod : Symbol(privateClassWithWithPrivateGetAccessorTypes.myPrivateStaticMethod, Decl(privacyCannotNameAccessorDeclFile_consumer.ts, 31, 5))
+
+        return exporter.createExportedWidget1();
+>exporter.createExportedWidget1 : Symbol(exporter.createExportedWidget1, Decl(privacyCannotNameAccessorDeclFile_exporter.ts, 2, 43))
+>exporter : Symbol(exporter, Decl(privacyCannotNameAccessorDeclFile_consumer.ts, 0, 0))
+>createExportedWidget1 : Symbol(exporter.createExportedWidget1, Decl(privacyCannotNameAccessorDeclFile_exporter.ts, 2, 43))
+    }
+    get myPublicMethod() { 
+>myPublicMethod : Symbol(privateClassWithWithPrivateGetAccessorTypes.myPublicMethod, Decl(privacyCannotNameAccessorDeclFile_consumer.ts, 34, 5))
+
+        return exporter.createExportedWidget1();
+>exporter.createExportedWidget1 : Symbol(exporter.createExportedWidget1, Decl(privacyCannotNameAccessorDeclFile_exporter.ts, 2, 43))
+>exporter : Symbol(exporter, Decl(privacyCannotNameAccessorDeclFile_consumer.ts, 0, 0))
+>createExportedWidget1 : Symbol(exporter.createExportedWidget1, Decl(privacyCannotNameAccessorDeclFile_exporter.ts, 2, 43))
+    }
+    private get myPrivateMethod() {
+>myPrivateMethod : Symbol(privateClassWithWithPrivateGetAccessorTypes.myPrivateMethod, Decl(privacyCannotNameAccessorDeclFile_consumer.ts, 37, 5))
+
+        return exporter.createExportedWidget1();
+>exporter.createExportedWidget1 : Symbol(exporter.createExportedWidget1, Decl(privacyCannotNameAccessorDeclFile_exporter.ts, 2, 43))
+>exporter : Symbol(exporter, Decl(privacyCannotNameAccessorDeclFile_consumer.ts, 0, 0))
+>createExportedWidget1 : Symbol(exporter.createExportedWidget1, Decl(privacyCannotNameAccessorDeclFile_exporter.ts, 2, 43))
+    }
+    static get myPublicStaticMethod1() { 
+>myPublicStaticMethod1 : Symbol(privateClassWithWithPrivateGetAccessorTypes.myPublicStaticMethod1, Decl(privacyCannotNameAccessorDeclFile_consumer.ts, 40, 5))
+
+        return exporter.createExportedWidget3();
+>exporter.createExportedWidget3 : Symbol(exporter.createExportedWidget3, Decl(privacyCannotNameAccessorDeclFile_exporter.ts, 8, 1))
+>exporter : Symbol(exporter, Decl(privacyCannotNameAccessorDeclFile_consumer.ts, 0, 0))
+>createExportedWidget3 : Symbol(exporter.createExportedWidget3, Decl(privacyCannotNameAccessorDeclFile_exporter.ts, 8, 1))
+    }
+    private static get myPrivateStaticMethod1() {
+>myPrivateStaticMethod1 : Symbol(privateClassWithWithPrivateGetAccessorTypes.myPrivateStaticMethod1, Decl(privacyCannotNameAccessorDeclFile_consumer.ts, 43, 5))
+
+        return exporter.createExportedWidget3();
+>exporter.createExportedWidget3 : Symbol(exporter.createExportedWidget3, Decl(privacyCannotNameAccessorDeclFile_exporter.ts, 8, 1))
+>exporter : Symbol(exporter, Decl(privacyCannotNameAccessorDeclFile_consumer.ts, 0, 0))
+>createExportedWidget3 : Symbol(exporter.createExportedWidget3, Decl(privacyCannotNameAccessorDeclFile_exporter.ts, 8, 1))
+    }
+    get myPublicMethod1() { 
+>myPublicMethod1 : Symbol(privateClassWithWithPrivateGetAccessorTypes.myPublicMethod1, Decl(privacyCannotNameAccessorDeclFile_consumer.ts, 46, 5))
+
+        return exporter.createExportedWidget3();
+>exporter.createExportedWidget3 : Symbol(exporter.createExportedWidget3, Decl(privacyCannotNameAccessorDeclFile_exporter.ts, 8, 1))
+>exporter : Symbol(exporter, Decl(privacyCannotNameAccessorDeclFile_consumer.ts, 0, 0))
+>createExportedWidget3 : Symbol(exporter.createExportedWidget3, Decl(privacyCannotNameAccessorDeclFile_exporter.ts, 8, 1))
+    }
+    private get myPrivateMethod1() {
+>myPrivateMethod1 : Symbol(privateClassWithWithPrivateGetAccessorTypes.myPrivateMethod1, Decl(privacyCannotNameAccessorDeclFile_consumer.ts, 49, 5))
+
+        return exporter.createExportedWidget3();
+>exporter.createExportedWidget3 : Symbol(exporter.createExportedWidget3, Decl(privacyCannotNameAccessorDeclFile_exporter.ts, 8, 1))
+>exporter : Symbol(exporter, Decl(privacyCannotNameAccessorDeclFile_consumer.ts, 0, 0))
+>createExportedWidget3 : Symbol(exporter.createExportedWidget3, Decl(privacyCannotNameAccessorDeclFile_exporter.ts, 8, 1))
+    }
+}
+
+export class publicClassWithPrivateModuleGetAccessorTypes {
+>publicClassWithPrivateModuleGetAccessorTypes : Symbol(publicClassWithPrivateModuleGetAccessorTypes, Decl(privacyCannotNameAccessorDeclFile_consumer.ts, 53, 1))
+
+    static get myPublicStaticMethod() { // Error
+>myPublicStaticMethod : Symbol(publicClassWithPrivateModuleGetAccessorTypes.myPublicStaticMethod, Decl(privacyCannotNameAccessorDeclFile_consumer.ts, 55, 59))
+
+        return exporter.createExportedWidget2();
+>exporter.createExportedWidget2 : Symbol(exporter.createExportedWidget2, Decl(privacyCannotNameAccessorDeclFile_exporter.ts, 5, 1))
+>exporter : Symbol(exporter, Decl(privacyCannotNameAccessorDeclFile_consumer.ts, 0, 0))
+>createExportedWidget2 : Symbol(exporter.createExportedWidget2, Decl(privacyCannotNameAccessorDeclFile_exporter.ts, 5, 1))
+    }
+    get myPublicMethod() { // Error
+>myPublicMethod : Symbol(publicClassWithPrivateModuleGetAccessorTypes.myPublicMethod, Decl(privacyCannotNameAccessorDeclFile_consumer.ts, 58, 5))
+
+        return exporter.createExportedWidget2();
+>exporter.createExportedWidget2 : Symbol(exporter.createExportedWidget2, Decl(privacyCannotNameAccessorDeclFile_exporter.ts, 5, 1))
+>exporter : Symbol(exporter, Decl(privacyCannotNameAccessorDeclFile_consumer.ts, 0, 0))
+>createExportedWidget2 : Symbol(exporter.createExportedWidget2, Decl(privacyCannotNameAccessorDeclFile_exporter.ts, 5, 1))
+    }
+    static get myPublicStaticMethod1() { // Error
+>myPublicStaticMethod1 : Symbol(publicClassWithPrivateModuleGetAccessorTypes.myPublicStaticMethod1, Decl(privacyCannotNameAccessorDeclFile_consumer.ts, 61, 5))
+
+        return exporter.createExportedWidget4();
+>exporter.createExportedWidget4 : Symbol(exporter.createExportedWidget4, Decl(privacyCannotNameAccessorDeclFile_exporter.ts, 11, 1))
+>exporter : Symbol(exporter, Decl(privacyCannotNameAccessorDeclFile_consumer.ts, 0, 0))
+>createExportedWidget4 : Symbol(exporter.createExportedWidget4, Decl(privacyCannotNameAccessorDeclFile_exporter.ts, 11, 1))
+    }
+    get myPublicMethod1() { // Error
+>myPublicMethod1 : Symbol(publicClassWithPrivateModuleGetAccessorTypes.myPublicMethod1, Decl(privacyCannotNameAccessorDeclFile_consumer.ts, 64, 5))
+
+        return exporter.createExportedWidget4();
+>exporter.createExportedWidget4 : Symbol(exporter.createExportedWidget4, Decl(privacyCannotNameAccessorDeclFile_exporter.ts, 11, 1))
+>exporter : Symbol(exporter, Decl(privacyCannotNameAccessorDeclFile_consumer.ts, 0, 0))
+>createExportedWidget4 : Symbol(exporter.createExportedWidget4, Decl(privacyCannotNameAccessorDeclFile_exporter.ts, 11, 1))
+    }
+}
+
+class privateClassWithPrivateModuleGetAccessorTypes {
+>privateClassWithPrivateModuleGetAccessorTypes : Symbol(privateClassWithPrivateModuleGetAccessorTypes, Decl(privacyCannotNameAccessorDeclFile_consumer.ts, 68, 1))
+
+    static get myPublicStaticMethod() { 
+>myPublicStaticMethod : Symbol(privateClassWithPrivateModuleGetAccessorTypes.myPublicStaticMethod, Decl(privacyCannotNameAccessorDeclFile_consumer.ts, 70, 53))
+
+        return exporter.createExportedWidget2();
+>exporter.createExportedWidget2 : Symbol(exporter.createExportedWidget2, Decl(privacyCannotNameAccessorDeclFile_exporter.ts, 5, 1))
+>exporter : Symbol(exporter, Decl(privacyCannotNameAccessorDeclFile_consumer.ts, 0, 0))
+>createExportedWidget2 : Symbol(exporter.createExportedWidget2, Decl(privacyCannotNameAccessorDeclFile_exporter.ts, 5, 1))
+    }
+    get myPublicMethod() { 
+>myPublicMethod : Symbol(privateClassWithPrivateModuleGetAccessorTypes.myPublicMethod, Decl(privacyCannotNameAccessorDeclFile_consumer.ts, 73, 5))
+
+        return exporter.createExportedWidget2();
+>exporter.createExportedWidget2 : Symbol(exporter.createExportedWidget2, Decl(privacyCannotNameAccessorDeclFile_exporter.ts, 5, 1))
+>exporter : Symbol(exporter, Decl(privacyCannotNameAccessorDeclFile_consumer.ts, 0, 0))
+>createExportedWidget2 : Symbol(exporter.createExportedWidget2, Decl(privacyCannotNameAccessorDeclFile_exporter.ts, 5, 1))
+    }
+    static get myPublicStaticMethod1() { 
+>myPublicStaticMethod1 : Symbol(privateClassWithPrivateModuleGetAccessorTypes.myPublicStaticMethod1, Decl(privacyCannotNameAccessorDeclFile_consumer.ts, 76, 5))
+
+        return exporter.createExportedWidget4();
+>exporter.createExportedWidget4 : Symbol(exporter.createExportedWidget4, Decl(privacyCannotNameAccessorDeclFile_exporter.ts, 11, 1))
+>exporter : Symbol(exporter, Decl(privacyCannotNameAccessorDeclFile_consumer.ts, 0, 0))
+>createExportedWidget4 : Symbol(exporter.createExportedWidget4, Decl(privacyCannotNameAccessorDeclFile_exporter.ts, 11, 1))
+    }
+    get myPublicMethod1() { 
+>myPublicMethod1 : Symbol(privateClassWithPrivateModuleGetAccessorTypes.myPublicMethod1, Decl(privacyCannotNameAccessorDeclFile_consumer.ts, 79, 5))
+
+        return exporter.createExportedWidget4();
+>exporter.createExportedWidget4 : Symbol(exporter.createExportedWidget4, Decl(privacyCannotNameAccessorDeclFile_exporter.ts, 11, 1))
+>exporter : Symbol(exporter, Decl(privacyCannotNameAccessorDeclFile_consumer.ts, 0, 0))
+>createExportedWidget4 : Symbol(exporter.createExportedWidget4, Decl(privacyCannotNameAccessorDeclFile_exporter.ts, 11, 1))
+    }
+}
+=== tests/cases/compiler/privacyCannotNameAccessorDeclFile_GlobalWidgets.ts ===
+declare module "GlobalWidgets" {
+>"GlobalWidgets" : Symbol("GlobalWidgets", Decl(privacyCannotNameAccessorDeclFile_GlobalWidgets.ts, 0, 0))
+
+    export class Widget3 {
+>Widget3 : Symbol(Widget3, Decl(privacyCannotNameAccessorDeclFile_GlobalWidgets.ts, 0, 32))
+
+        name: string;
+>name : Symbol(Widget3.name, Decl(privacyCannotNameAccessorDeclFile_GlobalWidgets.ts, 1, 26))
+    }
+    export function createWidget3(): Widget3;
+>createWidget3 : Symbol(createWidget3, Decl(privacyCannotNameAccessorDeclFile_GlobalWidgets.ts, 3, 5))
+>Widget3 : Symbol(Widget3, Decl(privacyCannotNameAccessorDeclFile_GlobalWidgets.ts, 0, 32))
+
+    export module SpecializedGlobalWidget {
+>SpecializedGlobalWidget : Symbol(SpecializedGlobalWidget, Decl(privacyCannotNameAccessorDeclFile_GlobalWidgets.ts, 4, 45))
+
+        export class Widget4 {
+>Widget4 : Symbol(Widget4, Decl(privacyCannotNameAccessorDeclFile_GlobalWidgets.ts, 6, 43))
+
+            name: string;
+>name : Symbol(Widget4.name, Decl(privacyCannotNameAccessorDeclFile_GlobalWidgets.ts, 7, 30))
+        }
+        function createWidget4(): Widget4;
+>createWidget4 : Symbol(createWidget4, Decl(privacyCannotNameAccessorDeclFile_GlobalWidgets.ts, 9, 9))
+>Widget4 : Symbol(Widget4, Decl(privacyCannotNameAccessorDeclFile_GlobalWidgets.ts, 6, 43))
+    }
+}
+
+=== tests/cases/compiler/privacyCannotNameAccessorDeclFile_Widgets.ts ===
+export class Widget1 {
+>Widget1 : Symbol(Widget1, Decl(privacyCannotNameAccessorDeclFile_Widgets.ts, 0, 0))
+
+    name = 'one';
+>name : Symbol(Widget1.name, Decl(privacyCannotNameAccessorDeclFile_Widgets.ts, 0, 22))
+}
+export function createWidget1() {
+>createWidget1 : Symbol(createWidget1, Decl(privacyCannotNameAccessorDeclFile_Widgets.ts, 2, 1))
+
+    return new Widget1();
+>Widget1 : Symbol(Widget1, Decl(privacyCannotNameAccessorDeclFile_Widgets.ts, 0, 0))
+}
+
+export module SpecializedWidget {
+>SpecializedWidget : Symbol(SpecializedWidget, Decl(privacyCannotNameAccessorDeclFile_Widgets.ts, 5, 1))
+
+    export class Widget2 {
+>Widget2 : Symbol(Widget2, Decl(privacyCannotNameAccessorDeclFile_Widgets.ts, 7, 33))
+
+        name = 'one';
+>name : Symbol(Widget2.name, Decl(privacyCannotNameAccessorDeclFile_Widgets.ts, 8, 26))
+    }
+    export function createWidget2() {
+>createWidget2 : Symbol(createWidget2, Decl(privacyCannotNameAccessorDeclFile_Widgets.ts, 10, 5))
+
+        return new Widget2();
+>Widget2 : Symbol(Widget2, Decl(privacyCannotNameAccessorDeclFile_Widgets.ts, 7, 33))
+    }
+}
+
+=== tests/cases/compiler/privacyCannotNameAccessorDeclFile_exporter.ts ===
+///<reference path='privacyCannotNameAccessorDeclFile_GlobalWidgets.ts'/>
+import Widgets = require("./privacyCannotNameAccessorDeclFile_Widgets");
+>Widgets : Symbol(Widgets, Decl(privacyCannotNameAccessorDeclFile_exporter.ts, 0, 0))
+
+import Widgets1 = require("GlobalWidgets");
+>Widgets1 : Symbol(Widgets1, Decl(privacyCannotNameAccessorDeclFile_exporter.ts, 1, 72))
+
+export function createExportedWidget1() {
+>createExportedWidget1 : Symbol(createExportedWidget1, Decl(privacyCannotNameAccessorDeclFile_exporter.ts, 2, 43))
+
+    return Widgets.createWidget1();
+>Widgets.createWidget1 : Symbol(Widgets.createWidget1, Decl(privacyCannotNameAccessorDeclFile_Widgets.ts, 2, 1))
+>Widgets : Symbol(Widgets, Decl(privacyCannotNameAccessorDeclFile_exporter.ts, 0, 0))
+>createWidget1 : Symbol(Widgets.createWidget1, Decl(privacyCannotNameAccessorDeclFile_Widgets.ts, 2, 1))
+}
+export function createExportedWidget2() {
+>createExportedWidget2 : Symbol(createExportedWidget2, Decl(privacyCannotNameAccessorDeclFile_exporter.ts, 5, 1))
+
+    return Widgets.SpecializedWidget.createWidget2();
+>Widgets.SpecializedWidget.createWidget2 : Symbol(Widgets.SpecializedWidget.createWidget2, Decl(privacyCannotNameAccessorDeclFile_Widgets.ts, 10, 5))
+>Widgets.SpecializedWidget : Symbol(Widgets.SpecializedWidget, Decl(privacyCannotNameAccessorDeclFile_Widgets.ts, 5, 1))
+>Widgets : Symbol(Widgets, Decl(privacyCannotNameAccessorDeclFile_exporter.ts, 0, 0))
+>SpecializedWidget : Symbol(Widgets.SpecializedWidget, Decl(privacyCannotNameAccessorDeclFile_Widgets.ts, 5, 1))
+>createWidget2 : Symbol(Widgets.SpecializedWidget.createWidget2, Decl(privacyCannotNameAccessorDeclFile_Widgets.ts, 10, 5))
+}
+export function createExportedWidget3() {
+>createExportedWidget3 : Symbol(createExportedWidget3, Decl(privacyCannotNameAccessorDeclFile_exporter.ts, 8, 1))
+
+    return Widgets1.createWidget3();
+>Widgets1.createWidget3 : Symbol(Widgets1.createWidget3, Decl(privacyCannotNameAccessorDeclFile_GlobalWidgets.ts, 3, 5))
+>Widgets1 : Symbol(Widgets1, Decl(privacyCannotNameAccessorDeclFile_exporter.ts, 1, 72))
+>createWidget3 : Symbol(Widgets1.createWidget3, Decl(privacyCannotNameAccessorDeclFile_GlobalWidgets.ts, 3, 5))
+}
+export function createExportedWidget4() {
+>createExportedWidget4 : Symbol(createExportedWidget4, Decl(privacyCannotNameAccessorDeclFile_exporter.ts, 11, 1))
+
+    return Widgets1.SpecializedGlobalWidget.createWidget4();
+>Widgets1.SpecializedGlobalWidget.createWidget4 : Symbol(Widgets1.SpecializedGlobalWidget.createWidget4, Decl(privacyCannotNameAccessorDeclFile_GlobalWidgets.ts, 9, 9))
+>Widgets1.SpecializedGlobalWidget : Symbol(Widgets1.SpecializedGlobalWidget, Decl(privacyCannotNameAccessorDeclFile_GlobalWidgets.ts, 4, 45))
+>Widgets1 : Symbol(Widgets1, Decl(privacyCannotNameAccessorDeclFile_exporter.ts, 1, 72))
+>SpecializedGlobalWidget : Symbol(Widgets1.SpecializedGlobalWidget, Decl(privacyCannotNameAccessorDeclFile_GlobalWidgets.ts, 4, 45))
+>createWidget4 : Symbol(Widgets1.SpecializedGlobalWidget.createWidget4, Decl(privacyCannotNameAccessorDeclFile_GlobalWidgets.ts, 9, 9))
+}
+

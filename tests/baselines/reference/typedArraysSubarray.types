@@ -1,0 +1,280 @@
+=== tests/cases/compiler/typedArraysSubarray.ts ===
+function int8ArraySubarray() {
+>int8ArraySubarray : () => void
+
+    var arr = new Int8Array(10);
+>arr : Int8Array
+>new Int8Array(10) : Int8Array
+>Int8Array : Int8ArrayConstructor
+>10 : 10
+
+    arr.subarray();
+>arr.subarray() : Int8Array
+>arr.subarray : (begin?: number, end?: number) => Int8Array
+>arr : Int8Array
+>subarray : (begin?: number, end?: number) => Int8Array
+
+    arr.subarray(0);
+>arr.subarray(0) : Int8Array
+>arr.subarray : (begin?: number, end?: number) => Int8Array
+>arr : Int8Array
+>subarray : (begin?: number, end?: number) => Int8Array
+>0 : 0
+
+    arr.subarray(0, 10);
+>arr.subarray(0, 10) : Int8Array
+>arr.subarray : (begin?: number, end?: number) => Int8Array
+>arr : Int8Array
+>subarray : (begin?: number, end?: number) => Int8Array
+>0 : 0
+>10 : 10
+}
+
+function uint8ArraySubarray() {
+>uint8ArraySubarray : () => void
+
+    var arr = new Uint8Array(10);
+>arr : Uint8Array
+>new Uint8Array(10) : Uint8Array
+>Uint8Array : Uint8ArrayConstructor
+>10 : 10
+
+    arr.subarray();
+>arr.subarray() : Uint8Array
+>arr.subarray : (begin?: number, end?: number) => Uint8Array
+>arr : Uint8Array
+>subarray : (begin?: number, end?: number) => Uint8Array
+
+    arr.subarray(0);
+>arr.subarray(0) : Uint8Array
+>arr.subarray : (begin?: number, end?: number) => Uint8Array
+>arr : Uint8Array
+>subarray : (begin?: number, end?: number) => Uint8Array
+>0 : 0
+
+    arr.subarray(0, 10);
+>arr.subarray(0, 10) : Uint8Array
+>arr.subarray : (begin?: number, end?: number) => Uint8Array
+>arr : Uint8Array
+>subarray : (begin?: number, end?: number) => Uint8Array
+>0 : 0
+>10 : 10
+}
+
+function uint8ClampedArraySubarray() {
+>uint8ClampedArraySubarray : () => void
+
+    var arr = new Uint8ClampedArray(10);
+>arr : Uint8ClampedArray
+>new Uint8ClampedArray(10) : Uint8ClampedArray
+>Uint8ClampedArray : Uint8ClampedArrayConstructor
+>10 : 10
+
+    arr.subarray();
+>arr.subarray() : Uint8ClampedArray
+>arr.subarray : (begin?: number, end?: number) => Uint8ClampedArray
+>arr : Uint8ClampedArray
+>subarray : (begin?: number, end?: number) => Uint8ClampedArray
+
+    arr.subarray(0);
+>arr.subarray(0) : Uint8ClampedArray
+>arr.subarray : (begin?: number, end?: number) => Uint8ClampedArray
+>arr : Uint8ClampedArray
+>subarray : (begin?: number, end?: number) => Uint8ClampedArray
+>0 : 0
+
+    arr.subarray(0, 10);
+>arr.subarray(0, 10) : Uint8ClampedArray
+>arr.subarray : (begin?: number, end?: number) => Uint8ClampedArray
+>arr : Uint8ClampedArray
+>subarray : (begin?: number, end?: number) => Uint8ClampedArray
+>0 : 0
+>10 : 10
+}
+
+function int16ArraySubarray() {
+>int16ArraySubarray : () => void
+
+    var arr = new Int16Array(10);
+>arr : Int16Array
+>new Int16Array(10) : Int16Array
+>Int16Array : Int16ArrayConstructor
+>10 : 10
+
+    arr.subarray();
+>arr.subarray() : Int16Array
+>arr.subarray : (begin?: number, end?: number) => Int16Array
+>arr : Int16Array
+>subarray : (begin?: number, end?: number) => Int16Array
+
+    arr.subarray(0);
+>arr.subarray(0) : Int16Array
+>arr.subarray : (begin?: number, end?: number) => Int16Array
+>arr : Int16Array
+>subarray : (begin?: number, end?: number) => Int16Array
+>0 : 0
+
+    arr.subarray(0, 10);
+>arr.subarray(0, 10) : Int16Array
+>arr.subarray : (begin?: number, end?: number) => Int16Array
+>arr : Int16Array
+>subarray : (begin?: number, end?: number) => Int16Array
+>0 : 0
+>10 : 10
+}
+
+function uint16ArraySubarray() {
+>uint16ArraySubarray : () => void
+
+    var arr = new Uint16Array(10);
+>arr : Uint16Array
+>new Uint16Array(10) : Uint16Array
+>Uint16Array : Uint16ArrayConstructor
+>10 : 10
+
+    arr.subarray();
+>arr.subarray() : Uint16Array
+>arr.subarray : (begin?: number, end?: number) => Uint16Array
+>arr : Uint16Array
+>subarray : (begin?: number, end?: number) => Uint16Array
+
+    arr.subarray(0);
+>arr.subarray(0) : Uint16Array
+>arr.subarray : (begin?: number, end?: number) => Uint16Array
+>arr : Uint16Array
+>subarray : (begin?: number, end?: number) => Uint16Array
+>0 : 0
+
+    arr.subarray(0, 10);
+>arr.subarray(0, 10) : Uint16Array
+>arr.subarray : (begin?: number, end?: number) => Uint16Array
+>arr : Uint16Array
+>subarray : (begin?: number, end?: number) => Uint16Array
+>0 : 0
+>10 : 10
+}
+
+function int32ArraySubarray() {
+>int32ArraySubarray : () => void
+
+    var arr = new Int32Array(10);
+>arr : Int32Array
+>new Int32Array(10) : Int32Array
+>Int32Array : Int32ArrayConstructor
+>10 : 10
+
+    arr.subarray();
+>arr.subarray() : Int32Array
+>arr.subarray : (begin?: number, end?: number) => Int32Array
+>arr : Int32Array
+>subarray : (begin?: number, end?: number) => Int32Array
+
+    arr.subarray(0);
+>arr.subarray(0) : Int32Array
+>arr.subarray : (begin?: number, end?: number) => Int32Array
+>arr : Int32Array
+>subarray : (begin?: number, end?: number) => Int32Array
+>0 : 0
+
+    arr.subarray(0, 10);
+>arr.subarray(0, 10) : Int32Array
+>arr.subarray : (begin?: number, end?: number) => Int32Array
+>arr : Int32Array
+>subarray : (begin?: number, end?: number) => Int32Array
+>0 : 0
+>10 : 10
+}
+
+function uint32ArraySubarray() {
+>uint32ArraySubarray : () => void
+
+    var arr = new Uint32Array(10);
+>arr : Uint32Array
+>new Uint32Array(10) : Uint32Array
+>Uint32Array : Uint32ArrayConstructor
+>10 : 10
+
+    arr.subarray();
+>arr.subarray() : Uint32Array
+>arr.subarray : (begin?: number, end?: number) => Uint32Array
+>arr : Uint32Array
+>subarray : (begin?: number, end?: number) => Uint32Array
+
+    arr.subarray(0);
+>arr.subarray(0) : Uint32Array
+>arr.subarray : (begin?: number, end?: number) => Uint32Array
+>arr : Uint32Array
+>subarray : (begin?: number, end?: number) => Uint32Array
+>0 : 0
+
+    arr.subarray(0, 10);
+>arr.subarray(0, 10) : Uint32Array
+>arr.subarray : (begin?: number, end?: number) => Uint32Array
+>arr : Uint32Array
+>subarray : (begin?: number, end?: number) => Uint32Array
+>0 : 0
+>10 : 10
+}
+
+function float32ArraySubarray() {
+>float32ArraySubarray : () => void
+
+    var arr = new Float32Array(10);
+>arr : Float32Array
+>new Float32Array(10) : Float32Array
+>Float32Array : Float32ArrayConstructor
+>10 : 10
+
+    arr.subarray();
+>arr.subarray() : Float32Array
+>arr.subarray : (begin?: number, end?: number) => Float32Array
+>arr : Float32Array
+>subarray : (begin?: number, end?: number) => Float32Array
+
+    arr.subarray(0);
+>arr.subarray(0) : Float32Array
+>arr.subarray : (begin?: number, end?: number) => Float32Array
+>arr : Float32Array
+>subarray : (begin?: number, end?: number) => Float32Array
+>0 : 0
+
+    arr.subarray(0, 10);
+>arr.subarray(0, 10) : Float32Array
+>arr.subarray : (begin?: number, end?: number) => Float32Array
+>arr : Float32Array
+>subarray : (begin?: number, end?: number) => Float32Array
+>0 : 0
+>10 : 10
+}
+
+function float64ArraySubarray() {
+>float64ArraySubarray : () => void
+
+    var arr = new Float64Array(10);
+>arr : Float64Array
+>new Float64Array(10) : Float64Array
+>Float64Array : Float64ArrayConstructor
+>10 : 10
+
+    arr.subarray();
+>arr.subarray() : Float64Array
+>arr.subarray : (begin?: number, end?: number) => Float64Array
+>arr : Float64Array
+>subarray : (begin?: number, end?: number) => Float64Array
+
+    arr.subarray(0);
+>arr.subarray(0) : Float64Array
+>arr.subarray : (begin?: number, end?: number) => Float64Array
+>arr : Float64Array
+>subarray : (begin?: number, end?: number) => Float64Array
+>0 : 0
+
+    arr.subarray(0, 10);
+>arr.subarray(0, 10) : Float64Array
+>arr.subarray : (begin?: number, end?: number) => Float64Array
+>arr : Float64Array
+>subarray : (begin?: number, end?: number) => Float64Array
+>0 : 0
+>10 : 10
+}
+

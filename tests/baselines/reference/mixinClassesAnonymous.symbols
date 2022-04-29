@@ -1,0 +1,188 @@
+=== tests/cases/conformance/classes/mixinClassesAnonymous.ts ===
+type Constructor<T> = new(...args: any[]) => T;
+>Constructor : Symbol(Constructor, Decl(mixinClassesAnonymous.ts, 0, 0))
+>T : Symbol(T, Decl(mixinClassesAnonymous.ts, 0, 17))
+>args : Symbol(args, Decl(mixinClassesAnonymous.ts, 0, 26))
+>T : Symbol(T, Decl(mixinClassesAnonymous.ts, 0, 17))
+
+class Base {
+>Base : Symbol(Base, Decl(mixinClassesAnonymous.ts, 0, 47))
+
+    constructor(public x: number, public y: number) {}
+>x : Symbol(Base.x, Decl(mixinClassesAnonymous.ts, 3, 16))
+>y : Symbol(Base.y, Decl(mixinClassesAnonymous.ts, 3, 33))
+}
+
+class Derived extends Base {
+>Derived : Symbol(Derived, Decl(mixinClassesAnonymous.ts, 4, 1))
+>Base : Symbol(Base, Decl(mixinClassesAnonymous.ts, 0, 47))
+
+    constructor(x: number, y: number, public z: number) {
+>x : Symbol(x, Decl(mixinClassesAnonymous.ts, 7, 16))
+>y : Symbol(y, Decl(mixinClassesAnonymous.ts, 7, 26))
+>z : Symbol(Derived.z, Decl(mixinClassesAnonymous.ts, 7, 37))
+
+        super(x, y);
+>super : Symbol(Base, Decl(mixinClassesAnonymous.ts, 0, 47))
+>x : Symbol(x, Decl(mixinClassesAnonymous.ts, 7, 16))
+>y : Symbol(y, Decl(mixinClassesAnonymous.ts, 7, 26))
+    }
+}
+
+const Printable = <T extends Constructor<Base>>(superClass: T) => class extends superClass {
+>Printable : Symbol(Printable, Decl(mixinClassesAnonymous.ts, 12, 5))
+>T : Symbol(T, Decl(mixinClassesAnonymous.ts, 12, 19))
+>Constructor : Symbol(Constructor, Decl(mixinClassesAnonymous.ts, 0, 0))
+>Base : Symbol(Base, Decl(mixinClassesAnonymous.ts, 0, 47))
+>superClass : Symbol(superClass, Decl(mixinClassesAnonymous.ts, 12, 48))
+>T : Symbol(T, Decl(mixinClassesAnonymous.ts, 12, 19))
+>superClass : Symbol(superClass, Decl(mixinClassesAnonymous.ts, 12, 48))
+
+    static message = "hello";
+>message : Symbol((Anonymous class).message, Decl(mixinClassesAnonymous.ts, 12, 92))
+
+    print() {
+>print : Symbol((Anonymous class).print, Decl(mixinClassesAnonymous.ts, 13, 29))
+
+        const output = this.x + "," + this.y;
+>output : Symbol(output, Decl(mixinClassesAnonymous.ts, 15, 13))
+>this.x : Symbol(Base.x, Decl(mixinClassesAnonymous.ts, 3, 16))
+>this : Symbol((Anonymous class), Decl(mixinClassesAnonymous.ts, 12, 65))
+>x : Symbol(Base.x, Decl(mixinClassesAnonymous.ts, 3, 16))
+>this.y : Symbol(Base.y, Decl(mixinClassesAnonymous.ts, 3, 33))
+>this : Symbol((Anonymous class), Decl(mixinClassesAnonymous.ts, 12, 65))
+>y : Symbol(Base.y, Decl(mixinClassesAnonymous.ts, 3, 33))
+    }
+}
+
+function Tagged<T extends Constructor<{}>>(superClass: T) {
+>Tagged : Symbol(Tagged, Decl(mixinClassesAnonymous.ts, 17, 1))
+>T : Symbol(T, Decl(mixinClassesAnonymous.ts, 19, 16))
+>Constructor : Symbol(Constructor, Decl(mixinClassesAnonymous.ts, 0, 0))
+>superClass : Symbol(superClass, Decl(mixinClassesAnonymous.ts, 19, 43))
+>T : Symbol(T, Decl(mixinClassesAnonymous.ts, 19, 16))
+
+    class C extends superClass {
+>C : Symbol(C, Decl(mixinClassesAnonymous.ts, 19, 59))
+>superClass : Symbol(superClass, Decl(mixinClassesAnonymous.ts, 19, 43))
+
+        _tag: string;
+>_tag : Symbol(C._tag, Decl(mixinClassesAnonymous.ts, 20, 32))
+
+        constructor(...args: any[]) {
+>args : Symbol(args, Decl(mixinClassesAnonymous.ts, 22, 20))
+
+            super(...args);
+>super : Symbol(T, Decl(mixinClassesAnonymous.ts, 19, 16))
+>args : Symbol(args, Decl(mixinClassesAnonymous.ts, 22, 20))
+
+            this._tag = "hello";
+>this._tag : Symbol(C._tag, Decl(mixinClassesAnonymous.ts, 20, 32))
+>this : Symbol(C, Decl(mixinClassesAnonymous.ts, 19, 59))
+>_tag : Symbol(C._tag, Decl(mixinClassesAnonymous.ts, 20, 32))
+        }
+    }
+    return C;
+>C : Symbol(C, Decl(mixinClassesAnonymous.ts, 19, 59))
+}
+
+const Thing1 = Tagged(Derived);
+>Thing1 : Symbol(Thing1, Decl(mixinClassesAnonymous.ts, 30, 5))
+>Tagged : Symbol(Tagged, Decl(mixinClassesAnonymous.ts, 17, 1))
+>Derived : Symbol(Derived, Decl(mixinClassesAnonymous.ts, 4, 1))
+
+const Thing2 = Tagged(Printable(Derived));
+>Thing2 : Symbol(Thing2, Decl(mixinClassesAnonymous.ts, 31, 5))
+>Tagged : Symbol(Tagged, Decl(mixinClassesAnonymous.ts, 17, 1))
+>Printable : Symbol(Printable, Decl(mixinClassesAnonymous.ts, 12, 5))
+>Derived : Symbol(Derived, Decl(mixinClassesAnonymous.ts, 4, 1))
+
+Thing2.message;
+>Thing2.message : Symbol((Anonymous class).message, Decl(mixinClassesAnonymous.ts, 12, 92))
+>Thing2 : Symbol(Thing2, Decl(mixinClassesAnonymous.ts, 31, 5))
+>message : Symbol((Anonymous class).message, Decl(mixinClassesAnonymous.ts, 12, 92))
+
+function f1() {
+>f1 : Symbol(f1, Decl(mixinClassesAnonymous.ts, 32, 15))
+
+    const thing = new Thing1(1, 2, 3);
+>thing : Symbol(thing, Decl(mixinClassesAnonymous.ts, 35, 9))
+>Thing1 : Symbol(Thing1, Decl(mixinClassesAnonymous.ts, 30, 5))
+
+    thing.x;
+>thing.x : Symbol(Base.x, Decl(mixinClassesAnonymous.ts, 3, 16))
+>thing : Symbol(thing, Decl(mixinClassesAnonymous.ts, 35, 9))
+>x : Symbol(Base.x, Decl(mixinClassesAnonymous.ts, 3, 16))
+
+    thing._tag;
+>thing._tag : Symbol(C._tag, Decl(mixinClassesAnonymous.ts, 20, 32))
+>thing : Symbol(thing, Decl(mixinClassesAnonymous.ts, 35, 9))
+>_tag : Symbol(C._tag, Decl(mixinClassesAnonymous.ts, 20, 32))
+}
+
+function f2() {
+>f2 : Symbol(f2, Decl(mixinClassesAnonymous.ts, 38, 1))
+
+    const thing = new Thing2(1, 2, 3);
+>thing : Symbol(thing, Decl(mixinClassesAnonymous.ts, 41, 9))
+>Thing2 : Symbol(Thing2, Decl(mixinClassesAnonymous.ts, 31, 5))
+
+    thing.x;
+>thing.x : Symbol(Base.x, Decl(mixinClassesAnonymous.ts, 3, 16))
+>thing : Symbol(thing, Decl(mixinClassesAnonymous.ts, 41, 9))
+>x : Symbol(Base.x, Decl(mixinClassesAnonymous.ts, 3, 16))
+
+    thing._tag;
+>thing._tag : Symbol(C._tag, Decl(mixinClassesAnonymous.ts, 20, 32))
+>thing : Symbol(thing, Decl(mixinClassesAnonymous.ts, 41, 9))
+>_tag : Symbol(C._tag, Decl(mixinClassesAnonymous.ts, 20, 32))
+
+    thing.print();
+>thing.print : Symbol((Anonymous class).print, Decl(mixinClassesAnonymous.ts, 13, 29))
+>thing : Symbol(thing, Decl(mixinClassesAnonymous.ts, 41, 9))
+>print : Symbol((Anonymous class).print, Decl(mixinClassesAnonymous.ts, 13, 29))
+}
+
+class Thing3 extends Thing2 {
+>Thing3 : Symbol(Thing3, Decl(mixinClassesAnonymous.ts, 45, 1))
+>Thing2 : Symbol(Thing2, Decl(mixinClassesAnonymous.ts, 31, 5))
+
+    constructor(tag: string) {
+>tag : Symbol(tag, Decl(mixinClassesAnonymous.ts, 48, 16))
+
+        super(10, 20, 30);
+        this._tag = tag;
+>this._tag : Symbol(C._tag, Decl(mixinClassesAnonymous.ts, 20, 32))
+>this : Symbol(Thing3, Decl(mixinClassesAnonymous.ts, 45, 1))
+>_tag : Symbol(C._tag, Decl(mixinClassesAnonymous.ts, 20, 32))
+>tag : Symbol(tag, Decl(mixinClassesAnonymous.ts, 48, 16))
+    }
+    test() {
+>test : Symbol(Thing3.test, Decl(mixinClassesAnonymous.ts, 51, 5))
+
+        this.print();
+>this.print : Symbol((Anonymous class).print, Decl(mixinClassesAnonymous.ts, 13, 29))
+>this : Symbol(Thing3, Decl(mixinClassesAnonymous.ts, 45, 1))
+>print : Symbol((Anonymous class).print, Decl(mixinClassesAnonymous.ts, 13, 29))
+    }
+}
+
+// Repro from #13805
+
+const Timestamped = <CT extends Constructor<object>>(Base: CT) => {
+>Timestamped : Symbol(Timestamped, Decl(mixinClassesAnonymous.ts, 59, 5))
+>CT : Symbol(CT, Decl(mixinClassesAnonymous.ts, 59, 21))
+>Constructor : Symbol(Constructor, Decl(mixinClassesAnonymous.ts, 0, 0))
+>Base : Symbol(Base, Decl(mixinClassesAnonymous.ts, 59, 53))
+>CT : Symbol(CT, Decl(mixinClassesAnonymous.ts, 59, 21))
+
+    return class extends Base {
+>Base : Symbol(Base, Decl(mixinClassesAnonymous.ts, 59, 53))
+
+        timestamp = new Date();
+>timestamp : Symbol((Anonymous class).timestamp, Decl(mixinClassesAnonymous.ts, 60, 31))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+    };
+}
+

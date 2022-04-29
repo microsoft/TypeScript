@@ -1,0 +1,7 @@
+=== tests/cases/compiler/typeAliasDeclarationEmit.ts ===
+export type callback<T> = () => T;
+>callback : callback<T>
+
+export type CallbackArray<T extends callback> = () => T;
+>CallbackArray : CallbackArray<T>
+

@@ -1,0 +1,10 @@
+tests/cases/conformance/parser/ecmascript5/RegularExpressions/parserRegularExpressionDivideAmbiguity2.ts(1,6): error TS2304: Cannot find name 'notregexp'.
+tests/cases/conformance/parser/ecmascript5/RegularExpressions/parserRegularExpressionDivideAmbiguity2.ts(1,16): error TS2304: Cannot find name 'a'.
+
+
+==== tests/cases/conformance/parser/ecmascript5/RegularExpressions/parserRegularExpressionDivideAmbiguity2.ts (2 errors) ====
+    (1) /notregexp/a.foo();
+         ~~~~~~~~~
+!!! error TS2304: Cannot find name 'notregexp'.
+                   ~
+!!! error TS2304: Cannot find name 'a'.

@@ -1,0 +1,15 @@
+tests/cases/conformance/es6/Symbols/symbolProperty33.ts(1,18): error TS2449: Class 'C2' used before its declaration.
+
+
+==== tests/cases/conformance/es6/Symbols/symbolProperty33.ts (1 errors) ====
+    class C1 extends C2 {
+                     ~~
+!!! error TS2449: Class 'C2' used before its declaration.
+!!! related TS2728 tests/cases/conformance/es6/Symbols/symbolProperty33.ts:6:7: 'C2' is declared here.
+        [Symbol.toStringTag]() {
+            return { x: "" };
+        }
+    }
+    class C2 {
+        [s: symbol]: () => { x: string };
+    }

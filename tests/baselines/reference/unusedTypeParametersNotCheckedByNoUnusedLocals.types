@@ -1,0 +1,21 @@
+=== tests/cases/compiler/unusedTypeParametersNotCheckedByNoUnusedLocals.ts ===
+function f<T>() { }
+>f : <T>() => void
+
+type T<T> = { };
+>T : globalThis.T<T>
+
+interface I<T> { };
+
+class C<T> {
+>C : C<T>
+
+    public m<V>() { }
+>m : <V>() => void
+
+};
+
+let l = <T>() => { };
+>l : <T>() => void
+><T>() => { } : <T>() => void
+

@@ -1,0 +1,22 @@
+=== tests/cases/compiler/superCallFromClassThatDerivesFromGenericType1.ts ===
+declare class B<T> {
+>B : B<T>
+
+    m<U>(): B<U>;
+>m : <U>() => B<U>
+
+    static g(): B<any>;
+>g : () => B<any>
+}
+
+class D extends B<any> {
+>D : D
+>B : B<any>
+
+    constructor() {
+        super();
+>super() : void
+>super : typeof B
+    }
+}
+

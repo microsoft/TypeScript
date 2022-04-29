@@ -1,0 +1,30 @@
+=== tests/cases/conformance/es6/computedProperties/computedPropertyNames3_ES6.ts ===
+var id;
+>id : Symbol(id, Decl(computedPropertyNames3_ES6.ts, 0, 3))
+
+class C {
+>C : Symbol(C, Decl(computedPropertyNames3_ES6.ts, 0, 7))
+
+    [0 + 1]() { }
+>[0 + 1] : Symbol(C[0 + 1], Decl(computedPropertyNames3_ES6.ts, 1, 9))
+
+    static [() => { }]() { }
+>[() => { }] : Symbol(C[() => { }], Decl(computedPropertyNames3_ES6.ts, 2, 17))
+
+    get [delete id]() { }
+>[delete id] : Symbol(C[delete id], Decl(computedPropertyNames3_ES6.ts, 3, 28))
+>id : Symbol(id, Decl(computedPropertyNames3_ES6.ts, 0, 3))
+
+    set [[0, 1]](v) { }
+>[[0, 1]] : Symbol(C[[0, 1]], Decl(computedPropertyNames3_ES6.ts, 4, 25))
+>v : Symbol(v, Decl(computedPropertyNames3_ES6.ts, 5, 17))
+
+    static get [<String>""]() { }
+>[<String>""] : Symbol(C[<String>""], Decl(computedPropertyNames3_ES6.ts, 5, 23))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --) ... and 1 more)
+
+    static set [id.toString()](v) { }
+>[id.toString()] : Symbol(C[id.toString()], Decl(computedPropertyNames3_ES6.ts, 6, 33))
+>id : Symbol(id, Decl(computedPropertyNames3_ES6.ts, 0, 3))
+>v : Symbol(v, Decl(computedPropertyNames3_ES6.ts, 7, 31))
+}

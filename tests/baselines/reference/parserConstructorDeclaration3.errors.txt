@@ -1,0 +1,9 @@
+tests/cases/conformance/parser/ecmascript5/ConstructorDeclarations/parserConstructorDeclaration3.ts(2,3): error TS1031: 'export' modifier cannot appear on class elements of this kind.
+
+
+==== tests/cases/conformance/parser/ecmascript5/ConstructorDeclarations/parserConstructorDeclaration3.ts (1 errors) ====
+    class C {
+      export constructor() { }
+      ~~~~~~
+!!! error TS1031: 'export' modifier cannot appear on class elements of this kind.
+    }

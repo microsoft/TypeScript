@@ -1,0 +1,46 @@
+=== tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclarations/instanceMemberAssignsToClassPrototype.ts ===
+class C {
+>C : Symbol(C, Decl(instanceMemberAssignsToClassPrototype.ts, 0, 0))
+
+    foo() {
+>foo : Symbol(C.foo, Decl(instanceMemberAssignsToClassPrototype.ts, 0, 9))
+
+        C.prototype.foo = () => { }
+>C.prototype.foo : Symbol(C.foo, Decl(instanceMemberAssignsToClassPrototype.ts, 0, 9))
+>C.prototype : Symbol(C.prototype)
+>C : Symbol(C, Decl(instanceMemberAssignsToClassPrototype.ts, 0, 0))
+>prototype : Symbol(C.prototype)
+>foo : Symbol(C.foo, Decl(instanceMemberAssignsToClassPrototype.ts, 0, 9))
+    }
+
+    bar(x: number): number {
+>bar : Symbol(C.bar, Decl(instanceMemberAssignsToClassPrototype.ts, 3, 5))
+>x : Symbol(x, Decl(instanceMemberAssignsToClassPrototype.ts, 5, 8))
+
+        C.prototype.bar = () => { } // error
+>C.prototype.bar : Symbol(C.bar, Decl(instanceMemberAssignsToClassPrototype.ts, 3, 5))
+>C.prototype : Symbol(C.prototype)
+>C : Symbol(C, Decl(instanceMemberAssignsToClassPrototype.ts, 0, 0))
+>prototype : Symbol(C.prototype)
+>bar : Symbol(C.bar, Decl(instanceMemberAssignsToClassPrototype.ts, 3, 5))
+
+        C.prototype.bar = (x) => x; // ok
+>C.prototype.bar : Symbol(C.bar, Decl(instanceMemberAssignsToClassPrototype.ts, 3, 5))
+>C.prototype : Symbol(C.prototype)
+>C : Symbol(C, Decl(instanceMemberAssignsToClassPrototype.ts, 0, 0))
+>prototype : Symbol(C.prototype)
+>bar : Symbol(C.bar, Decl(instanceMemberAssignsToClassPrototype.ts, 3, 5))
+>x : Symbol(x, Decl(instanceMemberAssignsToClassPrototype.ts, 7, 27))
+>x : Symbol(x, Decl(instanceMemberAssignsToClassPrototype.ts, 7, 27))
+
+        C.prototype.bar = (x: number) => 1; // ok
+>C.prototype.bar : Symbol(C.bar, Decl(instanceMemberAssignsToClassPrototype.ts, 3, 5))
+>C.prototype : Symbol(C.prototype)
+>C : Symbol(C, Decl(instanceMemberAssignsToClassPrototype.ts, 0, 0))
+>prototype : Symbol(C.prototype)
+>bar : Symbol(C.bar, Decl(instanceMemberAssignsToClassPrototype.ts, 3, 5))
+>x : Symbol(x, Decl(instanceMemberAssignsToClassPrototype.ts, 8, 27))
+
+        return 1;
+    }
+}

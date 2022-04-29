@@ -1,0 +1,117 @@
+=== tests/cases/conformance/internalModules/importDeclarations/importAliasIdentifiers.ts ===
+module moduleA {
+>moduleA : typeof moduleA
+
+    export class Point {
+>Point : Point
+
+        constructor(public x: number, public y: number) { }
+>x : number
+>y : number
+    }
+}
+
+import alias = moduleA;
+>alias : typeof moduleA
+>moduleA : typeof moduleA
+
+var p: alias.Point;
+>p : alias.Point
+>alias : any
+
+var p: moduleA.Point;
+>p : alias.Point
+>moduleA : any
+
+var p: { x: number; y: number; };
+>p : alias.Point
+>x : number
+>y : number
+
+class clodule {
+>clodule : clodule
+
+    name: string;
+>name : string
+}
+
+module clodule {
+>clodule : typeof clodule
+
+    export interface Point {
+        x: number; y: number;
+>x : number
+>y : number
+    }
+    var Point: Point = { x: 0, y: 0 };
+>Point : Point
+>{ x: 0, y: 0 } : { x: number; y: number; }
+>x : number
+>0 : 0
+>y : number
+>0 : 0
+}
+
+import clolias = clodule;
+>clolias : typeof clodule
+>clodule : clodule
+
+var p: clolias.Point;
+>p : alias.Point
+>clolias : any
+
+var p: clodule.Point;
+>p : alias.Point
+>clodule : any
+
+var p: { x: number; y: number; };
+>p : alias.Point
+>x : number
+>y : number
+
+
+function fundule() {
+>fundule : typeof fundule
+
+    return { x: 0, y: 0 };
+>{ x: 0, y: 0 } : { x: number; y: number; }
+>x : number
+>0 : 0
+>y : number
+>0 : 0
+}
+
+module fundule {
+>fundule : typeof fundule
+
+    export interface Point {
+        x: number; y: number;
+>x : number
+>y : number
+    }
+    var Point: Point = { x: 0, y: 0 };
+>Point : Point
+>{ x: 0, y: 0 } : { x: number; y: number; }
+>x : number
+>0 : 0
+>y : number
+>0 : 0
+}
+
+import funlias = fundule;
+>funlias : typeof fundule
+>fundule : typeof fundule
+
+var p: funlias.Point;
+>p : alias.Point
+>funlias : any
+
+var p: fundule.Point;
+>p : alias.Point
+>fundule : any
+
+var p: { x: number; y: number; };
+>p : alias.Point
+>x : number
+>y : number
+

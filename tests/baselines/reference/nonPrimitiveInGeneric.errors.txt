@@ -1,0 +1,71 @@
+tests/cases/conformance/types/nonPrimitive/nonPrimitiveInGeneric.ts(2,9): error TS2322: Type 'T' is not assignable to type 'object'.
+tests/cases/conformance/types/nonPrimitive/nonPrimitiveInGeneric.ts(9,17): error TS2345: Argument of type 'number' is not assignable to parameter of type 'object'.
+tests/cases/conformance/types/nonPrimitive/nonPrimitiveInGeneric.ts(10,17): error TS2345: Argument of type 'string' is not assignable to parameter of type 'object'.
+tests/cases/conformance/types/nonPrimitive/nonPrimitiveInGeneric.ts(18,7): error TS2345: Argument of type 'number' is not assignable to parameter of type 'object'.
+tests/cases/conformance/types/nonPrimitive/nonPrimitiveInGeneric.ts(19,7): error TS2345: Argument of type 'string' is not assignable to parameter of type 'object'.
+tests/cases/conformance/types/nonPrimitive/nonPrimitiveInGeneric.ts(25,8): error TS2344: Type 'number' does not satisfy the constraint 'object'.
+tests/cases/conformance/types/nonPrimitive/nonPrimitiveInGeneric.ts(26,8): error TS2344: Type 'string' does not satisfy the constraint 'object'.
+tests/cases/conformance/types/nonPrimitive/nonPrimitiveInGeneric.ts(34,14): error TS2344: Type 'number' does not satisfy the constraint 'object'.
+
+
+==== tests/cases/conformance/types/nonPrimitive/nonPrimitiveInGeneric.ts (8 errors) ====
+    function generic<T>(t: T) {
+        var o: object = t; // expect error
+            ~
+!!! error TS2322: Type 'T' is not assignable to type 'object'.
+    }
+    var a = {};
+    var b = "42";
+    
+    generic<object>({});
+    generic<object>(a);
+    generic<object>(123); // expect error
+                    ~~~
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'object'.
+    generic<object>(b); // expect error
+                    ~
+!!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'object'.
+    
+    function bound<T extends object>(t: T) {
+        var o: object = t; // ok
+    }
+    
+    bound({});
+    bound(a);
+    bound(123); // expect error
+          ~~~
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'object'.
+    bound(b); // expect error
+          ~
+!!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'object'.
+    
+    function bound2<T extends object>() {}
+    
+    bound2<{}>();
+    bound2<Object>();
+    bound2<number>(); // expect error
+           ~~~~~~
+!!! error TS2344: Type 'number' does not satisfy the constraint 'object'.
+    bound2<string>(); // expect error
+           ~~~~~~
+!!! error TS2344: Type 'string' does not satisfy the constraint 'object'.
+    
+    function bound3<T extends {}>(t: T) {
+        var o: object = t; // ok
+    }
+    
+    interface Proxy<T extends object> {}
+    
+    var x: Proxy<number>; // error
+                 ~~~~~~
+!!! error TS2344: Type 'number' does not satisfy the constraint 'object'.
+    var y: Proxy<null>; // ok
+    var z: Proxy<undefined> ; // ok
+    
+    
+    interface Blah {
+        foo: number;
+    }
+    
+    var u: Proxy<Blah>; // ok
+    

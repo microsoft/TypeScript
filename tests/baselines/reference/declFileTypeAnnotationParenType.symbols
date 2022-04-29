@@ -1,0 +1,26 @@
+=== tests/cases/compiler/declFileTypeAnnotationParenType.ts ===
+class c {
+>c : Symbol(c, Decl(declFileTypeAnnotationParenType.ts, 0, 0))
+
+    private p: string;
+>p : Symbol(c.p, Decl(declFileTypeAnnotationParenType.ts, 0, 9))
+}
+
+var x: (() => c)[] = [() => new c()];
+>x : Symbol(x, Decl(declFileTypeAnnotationParenType.ts, 4, 3))
+>c : Symbol(c, Decl(declFileTypeAnnotationParenType.ts, 0, 0))
+>c : Symbol(c, Decl(declFileTypeAnnotationParenType.ts, 0, 0))
+
+var y = [() => new c()];
+>y : Symbol(y, Decl(declFileTypeAnnotationParenType.ts, 5, 3))
+>c : Symbol(c, Decl(declFileTypeAnnotationParenType.ts, 0, 0))
+
+var k: (() => c) | string = (() => new c()) || "";
+>k : Symbol(k, Decl(declFileTypeAnnotationParenType.ts, 7, 3))
+>c : Symbol(c, Decl(declFileTypeAnnotationParenType.ts, 0, 0))
+>c : Symbol(c, Decl(declFileTypeAnnotationParenType.ts, 0, 0))
+
+var l = (() => new c()) || "";
+>l : Symbol(l, Decl(declFileTypeAnnotationParenType.ts, 8, 3))
+>c : Symbol(c, Decl(declFileTypeAnnotationParenType.ts, 0, 0))
+

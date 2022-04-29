@@ -1,0 +1,118 @@
+=== tests/cases/conformance/types/any/narrowFromAnyWithTypePredicate.ts ===
+declare var x: any;
+>x : any
+
+declare function isFunction(x): x is Function;
+>isFunction : (x: any) => x is Function
+>x : any
+
+declare function isObject(x): x is Object;
+>isObject : (x: any) => x is Object
+>x : any
+
+declare function isAnything(x): x is {};
+>isAnything : (x: any) => x is {}
+>x : any
+
+declare function isError(x): x is Error;
+>isError : (x: any) => x is Error
+>x : any
+
+declare function isDate(x): x is Date;
+>isDate : (x: any) => x is Date
+>x : any
+
+
+if (isFunction(x)) { // 'any' is not narrowed when target type is 'Function'
+>isFunction(x) : boolean
+>isFunction : (x: any) => x is Function
+>x : any
+
+    x();
+>x() : any
+>x : any
+
+    x(1, 2, 3);
+>x(1, 2, 3) : any
+>x : any
+>1 : 1
+>2 : 2
+>3 : 3
+
+    x("hello!");
+>x("hello!") : any
+>x : any
+>"hello!" : "hello!"
+
+    x.prop;
+>x.prop : any
+>x : any
+>prop : any
+}
+
+if (isObject(x)) { // 'any' is not narrowed when target type is 'Object'
+>isObject(x) : boolean
+>isObject : (x: any) => x is Object
+>x : any
+
+    x.method();
+>x.method() : any
+>x.method : any
+>x : any
+>method : any
+
+    x();
+>x() : any
+>x : any
+}
+
+if (isAnything(x)) { // 'any' is narrowed to types other than 'Function'/'Object' (including {})
+>isAnything(x) : boolean
+>isAnything : (x: any) => x is {}
+>x : any
+
+    x.method();
+>x.method() : any
+>x.method : any
+>x : {}
+>method : any
+
+    x();
+>x() : any
+>x : {}
+}
+
+if (isError(x)) { 
+>isError(x) : boolean
+>isError : (x: any) => x is Error
+>x : any
+
+    x.message;
+>x.message : string
+>x : Error
+>message : string
+
+    x.mesage;
+>x.mesage : any
+>x : Error
+>mesage : any
+}
+
+if (isDate(x)) {
+>isDate(x) : boolean
+>isDate : (x: any) => x is Date
+>x : any
+
+    x.getDate();
+>x.getDate() : number
+>x.getDate : () => number
+>x : Date
+>getDate : () => number
+
+    x.getHuors();
+>x.getHuors() : any
+>x.getHuors : any
+>x : Date
+>getHuors : any
+}
+

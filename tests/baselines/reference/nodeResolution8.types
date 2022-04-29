@@ -1,0 +1,15 @@
+=== tests/cases/compiler/b.ts ===
+import y = require("a");
+>y : typeof y
+
+=== tests/cases/compiler/node_modules/a/ref.ts ===
+var x = 1;
+>x : number
+>1 : 1
+
+=== tests/cases/compiler/node_modules/a/index.d.ts ===
+/// <reference path="ref.ts"/>
+export declare var y;
+>y : any
+
+

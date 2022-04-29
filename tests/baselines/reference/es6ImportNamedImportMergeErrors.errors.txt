@@ -1,0 +1,32 @@
+tests/cases/compiler/es6ImportNamedImportMergeErrors_1.ts(5,10): error TS2440: Import declaration conflicts with local declaration of 'x'.
+tests/cases/compiler/es6ImportNamedImportMergeErrors_1.ts(7,10): error TS2440: Import declaration conflicts with local declaration of 'x44'.
+tests/cases/compiler/es6ImportNamedImportMergeErrors_1.ts(9,10): error TS2300: Duplicate identifier 'z'.
+tests/cases/compiler/es6ImportNamedImportMergeErrors_1.ts(10,16): error TS2300: Duplicate identifier 'z'.
+
+
+==== tests/cases/compiler/es6ImportNamedImportMergeErrors_0.ts (0 errors) ====
+    export var a = 10;
+    export var x = a;
+    export var z = a;
+    export var z1 = a;
+    
+==== tests/cases/compiler/es6ImportNamedImportMergeErrors_1.ts (4 errors) ====
+    import { a } from "./es6ImportNamedImportMergeErrors_0";
+    interface a { } // shouldnt be error
+    import { x as x1 } from "./es6ImportNamedImportMergeErrors_0";
+    interface x1 { } // shouldnt be error
+    import { x } from "./es6ImportNamedImportMergeErrors_0"; // should be error
+             ~
+!!! error TS2440: Import declaration conflicts with local declaration of 'x'.
+    var x = 10; 
+    import { x as x44 } from "./es6ImportNamedImportMergeErrors_0"; // should be error
+             ~~~~~~~~
+!!! error TS2440: Import declaration conflicts with local declaration of 'x44'.
+    var x44 = 10; 
+    import { z } from "./es6ImportNamedImportMergeErrors_0"; // should be error
+             ~
+!!! error TS2300: Duplicate identifier 'z'.
+    import { z1 as z } from "./es6ImportNamedImportMergeErrors_0"; // should be error
+                   ~
+!!! error TS2300: Duplicate identifier 'z'.
+    

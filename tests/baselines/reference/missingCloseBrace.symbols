@@ -1,0 +1,12 @@
+=== tests/cases/compiler/missingCloseBrace.ts ===
+function base_init() {
+>base_init : Symbol(base_init, Decl(missingCloseBrace.ts, 0, 0))
+    {
+
+    }
+
+    function me() {
+>me : Symbol(me, Decl(missingCloseBrace.ts, 3, 5))
+
+    }
+

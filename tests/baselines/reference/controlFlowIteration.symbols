@@ -1,0 +1,38 @@
+=== tests/cases/conformance/controlFlow/controlFlowIteration.ts ===
+let cond: boolean;
+>cond : Symbol(cond, Decl(controlFlowIteration.ts, 0, 3))
+
+function ff() {
+>ff : Symbol(ff, Decl(controlFlowIteration.ts, 0, 18))
+
+    let x: string | undefined;
+>x : Symbol(x, Decl(controlFlowIteration.ts, 3, 7))
+
+    while (true) {
+        if (cond) {
+>cond : Symbol(cond, Decl(controlFlowIteration.ts, 0, 3))
+
+            x = "";
+>x : Symbol(x, Decl(controlFlowIteration.ts, 3, 7))
+        }
+        else {
+            if (x) {
+>x : Symbol(x, Decl(controlFlowIteration.ts, 3, 7))
+
+                x.length;
+>x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(controlFlowIteration.ts, 3, 7))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+            }
+            if (x) {
+>x : Symbol(x, Decl(controlFlowIteration.ts, 3, 7))
+
+                x.length;
+>x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(controlFlowIteration.ts, 3, 7))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+            }
+        }
+    }
+}
+

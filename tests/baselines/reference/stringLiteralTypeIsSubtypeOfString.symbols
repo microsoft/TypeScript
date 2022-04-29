@@ -1,0 +1,343 @@
+=== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/stringLiteralTypeIsSubtypeOfString.ts ===
+// string literal types are subtypes of string, any
+
+// ok
+function f1(x: 'a');
+>f1 : Symbol(f1, Decl(stringLiteralTypeIsSubtypeOfString.ts, 0, 0), Decl(stringLiteralTypeIsSubtypeOfString.ts, 3, 20), Decl(stringLiteralTypeIsSubtypeOfString.ts, 4, 23))
+>x : Symbol(x, Decl(stringLiteralTypeIsSubtypeOfString.ts, 3, 12))
+
+function f1(x: string);
+>f1 : Symbol(f1, Decl(stringLiteralTypeIsSubtypeOfString.ts, 0, 0), Decl(stringLiteralTypeIsSubtypeOfString.ts, 3, 20), Decl(stringLiteralTypeIsSubtypeOfString.ts, 4, 23))
+>x : Symbol(x, Decl(stringLiteralTypeIsSubtypeOfString.ts, 4, 12))
+
+function f1(x: string) { }
+>f1 : Symbol(f1, Decl(stringLiteralTypeIsSubtypeOfString.ts, 0, 0), Decl(stringLiteralTypeIsSubtypeOfString.ts, 3, 20), Decl(stringLiteralTypeIsSubtypeOfString.ts, 4, 23))
+>x : Symbol(x, Decl(stringLiteralTypeIsSubtypeOfString.ts, 5, 12))
+
+// ok
+function f2(x: 'a');
+>f2 : Symbol(f2, Decl(stringLiteralTypeIsSubtypeOfString.ts, 5, 26), Decl(stringLiteralTypeIsSubtypeOfString.ts, 8, 20), Decl(stringLiteralTypeIsSubtypeOfString.ts, 9, 20))
+>x : Symbol(x, Decl(stringLiteralTypeIsSubtypeOfString.ts, 8, 12))
+
+function f2(x: any);
+>f2 : Symbol(f2, Decl(stringLiteralTypeIsSubtypeOfString.ts, 5, 26), Decl(stringLiteralTypeIsSubtypeOfString.ts, 8, 20), Decl(stringLiteralTypeIsSubtypeOfString.ts, 9, 20))
+>x : Symbol(x, Decl(stringLiteralTypeIsSubtypeOfString.ts, 9, 12))
+
+function f2(x: any) { }
+>f2 : Symbol(f2, Decl(stringLiteralTypeIsSubtypeOfString.ts, 5, 26), Decl(stringLiteralTypeIsSubtypeOfString.ts, 8, 20), Decl(stringLiteralTypeIsSubtypeOfString.ts, 9, 20))
+>x : Symbol(x, Decl(stringLiteralTypeIsSubtypeOfString.ts, 10, 12))
+
+// errors
+function f3(x: 'a');
+>f3 : Symbol(f3, Decl(stringLiteralTypeIsSubtypeOfString.ts, 10, 23), Decl(stringLiteralTypeIsSubtypeOfString.ts, 13, 20), Decl(stringLiteralTypeIsSubtypeOfString.ts, 14, 23))
+>x : Symbol(x, Decl(stringLiteralTypeIsSubtypeOfString.ts, 13, 12))
+
+function f3(x: Object);
+>f3 : Symbol(f3, Decl(stringLiteralTypeIsSubtypeOfString.ts, 10, 23), Decl(stringLiteralTypeIsSubtypeOfString.ts, 13, 20), Decl(stringLiteralTypeIsSubtypeOfString.ts, 14, 23))
+>x : Symbol(x, Decl(stringLiteralTypeIsSubtypeOfString.ts, 14, 12))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+function f3(x: any) { }
+>f3 : Symbol(f3, Decl(stringLiteralTypeIsSubtypeOfString.ts, 10, 23), Decl(stringLiteralTypeIsSubtypeOfString.ts, 13, 20), Decl(stringLiteralTypeIsSubtypeOfString.ts, 14, 23))
+>x : Symbol(x, Decl(stringLiteralTypeIsSubtypeOfString.ts, 15, 12))
+
+function f4(x: 'a');
+>f4 : Symbol(f4, Decl(stringLiteralTypeIsSubtypeOfString.ts, 15, 23), Decl(stringLiteralTypeIsSubtypeOfString.ts, 17, 20), Decl(stringLiteralTypeIsSubtypeOfString.ts, 18, 19))
+>x : Symbol(x, Decl(stringLiteralTypeIsSubtypeOfString.ts, 17, 12))
+
+function f4(x: {});
+>f4 : Symbol(f4, Decl(stringLiteralTypeIsSubtypeOfString.ts, 15, 23), Decl(stringLiteralTypeIsSubtypeOfString.ts, 17, 20), Decl(stringLiteralTypeIsSubtypeOfString.ts, 18, 19))
+>x : Symbol(x, Decl(stringLiteralTypeIsSubtypeOfString.ts, 18, 12))
+
+function f4(x: any) { }
+>f4 : Symbol(f4, Decl(stringLiteralTypeIsSubtypeOfString.ts, 15, 23), Decl(stringLiteralTypeIsSubtypeOfString.ts, 17, 20), Decl(stringLiteralTypeIsSubtypeOfString.ts, 18, 19))
+>x : Symbol(x, Decl(stringLiteralTypeIsSubtypeOfString.ts, 19, 12))
+
+function f5(x: 'a');
+>f5 : Symbol(f5, Decl(stringLiteralTypeIsSubtypeOfString.ts, 19, 23), Decl(stringLiteralTypeIsSubtypeOfString.ts, 21, 20), Decl(stringLiteralTypeIsSubtypeOfString.ts, 22, 23))
+>x : Symbol(x, Decl(stringLiteralTypeIsSubtypeOfString.ts, 21, 12))
+
+function f5(x: number);
+>f5 : Symbol(f5, Decl(stringLiteralTypeIsSubtypeOfString.ts, 19, 23), Decl(stringLiteralTypeIsSubtypeOfString.ts, 21, 20), Decl(stringLiteralTypeIsSubtypeOfString.ts, 22, 23))
+>x : Symbol(x, Decl(stringLiteralTypeIsSubtypeOfString.ts, 22, 12))
+
+function f5(x: any) { }
+>f5 : Symbol(f5, Decl(stringLiteralTypeIsSubtypeOfString.ts, 19, 23), Decl(stringLiteralTypeIsSubtypeOfString.ts, 21, 20), Decl(stringLiteralTypeIsSubtypeOfString.ts, 22, 23))
+>x : Symbol(x, Decl(stringLiteralTypeIsSubtypeOfString.ts, 23, 12))
+
+function f6(x: 'a');
+>f6 : Symbol(f6, Decl(stringLiteralTypeIsSubtypeOfString.ts, 23, 23), Decl(stringLiteralTypeIsSubtypeOfString.ts, 25, 20), Decl(stringLiteralTypeIsSubtypeOfString.ts, 26, 24))
+>x : Symbol(x, Decl(stringLiteralTypeIsSubtypeOfString.ts, 25, 12))
+
+function f6(x: boolean);
+>f6 : Symbol(f6, Decl(stringLiteralTypeIsSubtypeOfString.ts, 23, 23), Decl(stringLiteralTypeIsSubtypeOfString.ts, 25, 20), Decl(stringLiteralTypeIsSubtypeOfString.ts, 26, 24))
+>x : Symbol(x, Decl(stringLiteralTypeIsSubtypeOfString.ts, 26, 12))
+
+function f6(x: any) { }
+>f6 : Symbol(f6, Decl(stringLiteralTypeIsSubtypeOfString.ts, 23, 23), Decl(stringLiteralTypeIsSubtypeOfString.ts, 25, 20), Decl(stringLiteralTypeIsSubtypeOfString.ts, 26, 24))
+>x : Symbol(x, Decl(stringLiteralTypeIsSubtypeOfString.ts, 27, 12))
+
+function f7(x: 'a');
+>f7 : Symbol(f7, Decl(stringLiteralTypeIsSubtypeOfString.ts, 27, 23), Decl(stringLiteralTypeIsSubtypeOfString.ts, 29, 20), Decl(stringLiteralTypeIsSubtypeOfString.ts, 30, 21))
+>x : Symbol(x, Decl(stringLiteralTypeIsSubtypeOfString.ts, 29, 12))
+
+function f7(x: Date);
+>f7 : Symbol(f7, Decl(stringLiteralTypeIsSubtypeOfString.ts, 27, 23), Decl(stringLiteralTypeIsSubtypeOfString.ts, 29, 20), Decl(stringLiteralTypeIsSubtypeOfString.ts, 30, 21))
+>x : Symbol(x, Decl(stringLiteralTypeIsSubtypeOfString.ts, 30, 12))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+function f7(x: any) { }
+>f7 : Symbol(f7, Decl(stringLiteralTypeIsSubtypeOfString.ts, 27, 23), Decl(stringLiteralTypeIsSubtypeOfString.ts, 29, 20), Decl(stringLiteralTypeIsSubtypeOfString.ts, 30, 21))
+>x : Symbol(x, Decl(stringLiteralTypeIsSubtypeOfString.ts, 31, 12))
+
+function f8(x: 'a');
+>f8 : Symbol(f8, Decl(stringLiteralTypeIsSubtypeOfString.ts, 31, 23), Decl(stringLiteralTypeIsSubtypeOfString.ts, 33, 20), Decl(stringLiteralTypeIsSubtypeOfString.ts, 34, 23))
+>x : Symbol(x, Decl(stringLiteralTypeIsSubtypeOfString.ts, 33, 12))
+
+function f8(x: RegExp);
+>f8 : Symbol(f8, Decl(stringLiteralTypeIsSubtypeOfString.ts, 31, 23), Decl(stringLiteralTypeIsSubtypeOfString.ts, 33, 20), Decl(stringLiteralTypeIsSubtypeOfString.ts, 34, 23))
+>x : Symbol(x, Decl(stringLiteralTypeIsSubtypeOfString.ts, 34, 12))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+function f8(x: any) { }
+>f8 : Symbol(f8, Decl(stringLiteralTypeIsSubtypeOfString.ts, 31, 23), Decl(stringLiteralTypeIsSubtypeOfString.ts, 33, 20), Decl(stringLiteralTypeIsSubtypeOfString.ts, 34, 23))
+>x : Symbol(x, Decl(stringLiteralTypeIsSubtypeOfString.ts, 35, 12))
+
+function f9(x: 'a');
+>f9 : Symbol(f9, Decl(stringLiteralTypeIsSubtypeOfString.ts, 35, 23), Decl(stringLiteralTypeIsSubtypeOfString.ts, 37, 20), Decl(stringLiteralTypeIsSubtypeOfString.ts, 38, 25))
+>x : Symbol(x, Decl(stringLiteralTypeIsSubtypeOfString.ts, 37, 12))
+
+function f9(x: () => {});
+>f9 : Symbol(f9, Decl(stringLiteralTypeIsSubtypeOfString.ts, 35, 23), Decl(stringLiteralTypeIsSubtypeOfString.ts, 37, 20), Decl(stringLiteralTypeIsSubtypeOfString.ts, 38, 25))
+>x : Symbol(x, Decl(stringLiteralTypeIsSubtypeOfString.ts, 38, 12))
+
+function f9(x: any) { }
+>f9 : Symbol(f9, Decl(stringLiteralTypeIsSubtypeOfString.ts, 35, 23), Decl(stringLiteralTypeIsSubtypeOfString.ts, 37, 20), Decl(stringLiteralTypeIsSubtypeOfString.ts, 38, 25))
+>x : Symbol(x, Decl(stringLiteralTypeIsSubtypeOfString.ts, 39, 12))
+
+class C implements String {
+>C : Symbol(C, Decl(stringLiteralTypeIsSubtypeOfString.ts, 39, 23))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    toString(): string { return null; }
+>toString : Symbol(C.toString, Decl(stringLiteralTypeIsSubtypeOfString.ts, 41, 27))
+
+    charAt(pos: number): string { return null; }
+>charAt : Symbol(C.charAt, Decl(stringLiteralTypeIsSubtypeOfString.ts, 42, 39))
+>pos : Symbol(pos, Decl(stringLiteralTypeIsSubtypeOfString.ts, 43, 11))
+
+    charCodeAt(index: number): number { return null; }
+>charCodeAt : Symbol(C.charCodeAt, Decl(stringLiteralTypeIsSubtypeOfString.ts, 43, 48))
+>index : Symbol(index, Decl(stringLiteralTypeIsSubtypeOfString.ts, 44, 15))
+
+    concat(...strings: string[]): string { return null; }
+>concat : Symbol(C.concat, Decl(stringLiteralTypeIsSubtypeOfString.ts, 44, 54))
+>strings : Symbol(strings, Decl(stringLiteralTypeIsSubtypeOfString.ts, 45, 11))
+
+    indexOf(searchString: string, position?: number): number { return null; }
+>indexOf : Symbol(C.indexOf, Decl(stringLiteralTypeIsSubtypeOfString.ts, 45, 57))
+>searchString : Symbol(searchString, Decl(stringLiteralTypeIsSubtypeOfString.ts, 46, 12))
+>position : Symbol(position, Decl(stringLiteralTypeIsSubtypeOfString.ts, 46, 33))
+
+    lastIndexOf(searchString: string, position?: number): number { return null; }
+>lastIndexOf : Symbol(C.lastIndexOf, Decl(stringLiteralTypeIsSubtypeOfString.ts, 46, 77))
+>searchString : Symbol(searchString, Decl(stringLiteralTypeIsSubtypeOfString.ts, 47, 16))
+>position : Symbol(position, Decl(stringLiteralTypeIsSubtypeOfString.ts, 47, 37))
+
+    localeCompare(that: string): number { return null; }
+>localeCompare : Symbol(C.localeCompare, Decl(stringLiteralTypeIsSubtypeOfString.ts, 47, 81))
+>that : Symbol(that, Decl(stringLiteralTypeIsSubtypeOfString.ts, 48, 18))
+
+    match(regexp: any): string[] { return null; }
+>match : Symbol(C.match, Decl(stringLiteralTypeIsSubtypeOfString.ts, 48, 56))
+>regexp : Symbol(regexp, Decl(stringLiteralTypeIsSubtypeOfString.ts, 49, 10))
+
+    replace(searchValue: any, replaceValue: any): string { return null; }
+>replace : Symbol(C.replace, Decl(stringLiteralTypeIsSubtypeOfString.ts, 49, 49))
+>searchValue : Symbol(searchValue, Decl(stringLiteralTypeIsSubtypeOfString.ts, 50, 12))
+>replaceValue : Symbol(replaceValue, Decl(stringLiteralTypeIsSubtypeOfString.ts, 50, 29))
+
+    search(regexp: any): number { return null; }
+>search : Symbol(C.search, Decl(stringLiteralTypeIsSubtypeOfString.ts, 50, 73))
+>regexp : Symbol(regexp, Decl(stringLiteralTypeIsSubtypeOfString.ts, 51, 11))
+
+    slice(start?: number, end?: number): string { return null; }
+>slice : Symbol(C.slice, Decl(stringLiteralTypeIsSubtypeOfString.ts, 51, 48))
+>start : Symbol(start, Decl(stringLiteralTypeIsSubtypeOfString.ts, 52, 10))
+>end : Symbol(end, Decl(stringLiteralTypeIsSubtypeOfString.ts, 52, 25))
+
+    split(separator: any, limit?: number): string[] { return null; }
+>split : Symbol(C.split, Decl(stringLiteralTypeIsSubtypeOfString.ts, 52, 64))
+>separator : Symbol(separator, Decl(stringLiteralTypeIsSubtypeOfString.ts, 53, 10))
+>limit : Symbol(limit, Decl(stringLiteralTypeIsSubtypeOfString.ts, 53, 25))
+
+    substring(start: number, end?: number): string { return null; }
+>substring : Symbol(C.substring, Decl(stringLiteralTypeIsSubtypeOfString.ts, 53, 68))
+>start : Symbol(start, Decl(stringLiteralTypeIsSubtypeOfString.ts, 54, 14))
+>end : Symbol(end, Decl(stringLiteralTypeIsSubtypeOfString.ts, 54, 28))
+
+    toLowerCase(): string { return null; }
+>toLowerCase : Symbol(C.toLowerCase, Decl(stringLiteralTypeIsSubtypeOfString.ts, 54, 67))
+
+    toLocaleLowerCase(): string { return null; }
+>toLocaleLowerCase : Symbol(C.toLocaleLowerCase, Decl(stringLiteralTypeIsSubtypeOfString.ts, 55, 42))
+
+    toUpperCase(): string { return null; }
+>toUpperCase : Symbol(C.toUpperCase, Decl(stringLiteralTypeIsSubtypeOfString.ts, 56, 48))
+
+    toLocaleUpperCase(): string { return null; }
+>toLocaleUpperCase : Symbol(C.toLocaleUpperCase, Decl(stringLiteralTypeIsSubtypeOfString.ts, 57, 42))
+
+    trim(): string { return null; }
+>trim : Symbol(C.trim, Decl(stringLiteralTypeIsSubtypeOfString.ts, 58, 48))
+
+    length: number;
+>length : Symbol(C.length, Decl(stringLiteralTypeIsSubtypeOfString.ts, 59, 35))
+
+    substr(from: number, length?: number): string { return null; }
+>substr : Symbol(C.substr, Decl(stringLiteralTypeIsSubtypeOfString.ts, 60, 19))
+>from : Symbol(from, Decl(stringLiteralTypeIsSubtypeOfString.ts, 61, 11))
+>length : Symbol(length, Decl(stringLiteralTypeIsSubtypeOfString.ts, 61, 24))
+
+    valueOf(): string { return null; }
+>valueOf : Symbol(C.valueOf, Decl(stringLiteralTypeIsSubtypeOfString.ts, 61, 66))
+
+    [index: number]: string;
+>index : Symbol(index, Decl(stringLiteralTypeIsSubtypeOfString.ts, 63, 5))
+}
+ 
+// BUG 831846
+function f10(x: 'a');
+>f10 : Symbol(f10, Decl(stringLiteralTypeIsSubtypeOfString.ts, 64, 1), Decl(stringLiteralTypeIsSubtypeOfString.ts, 67, 21), Decl(stringLiteralTypeIsSubtypeOfString.ts, 68, 19))
+>x : Symbol(x, Decl(stringLiteralTypeIsSubtypeOfString.ts, 67, 13))
+
+function f10(x: C);
+>f10 : Symbol(f10, Decl(stringLiteralTypeIsSubtypeOfString.ts, 64, 1), Decl(stringLiteralTypeIsSubtypeOfString.ts, 67, 21), Decl(stringLiteralTypeIsSubtypeOfString.ts, 68, 19))
+>x : Symbol(x, Decl(stringLiteralTypeIsSubtypeOfString.ts, 68, 13))
+>C : Symbol(C, Decl(stringLiteralTypeIsSubtypeOfString.ts, 39, 23))
+
+function f10(x: any) { }
+>f10 : Symbol(f10, Decl(stringLiteralTypeIsSubtypeOfString.ts, 64, 1), Decl(stringLiteralTypeIsSubtypeOfString.ts, 67, 21), Decl(stringLiteralTypeIsSubtypeOfString.ts, 68, 19))
+>x : Symbol(x, Decl(stringLiteralTypeIsSubtypeOfString.ts, 69, 13))
+
+interface I extends String {
+>I : Symbol(I, Decl(stringLiteralTypeIsSubtypeOfString.ts, 69, 24))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    foo: string;
+>foo : Symbol(I.foo, Decl(stringLiteralTypeIsSubtypeOfString.ts, 71, 28))
+}
+
+// BUG 831846
+function f11(x: 'a');
+>f11 : Symbol(f11, Decl(stringLiteralTypeIsSubtypeOfString.ts, 73, 1), Decl(stringLiteralTypeIsSubtypeOfString.ts, 76, 21), Decl(stringLiteralTypeIsSubtypeOfString.ts, 77, 19))
+>x : Symbol(x, Decl(stringLiteralTypeIsSubtypeOfString.ts, 76, 13))
+
+function f11(x: I);
+>f11 : Symbol(f11, Decl(stringLiteralTypeIsSubtypeOfString.ts, 73, 1), Decl(stringLiteralTypeIsSubtypeOfString.ts, 76, 21), Decl(stringLiteralTypeIsSubtypeOfString.ts, 77, 19))
+>x : Symbol(x, Decl(stringLiteralTypeIsSubtypeOfString.ts, 77, 13))
+>I : Symbol(I, Decl(stringLiteralTypeIsSubtypeOfString.ts, 69, 24))
+
+function f11(x: any) { }
+>f11 : Symbol(f11, Decl(stringLiteralTypeIsSubtypeOfString.ts, 73, 1), Decl(stringLiteralTypeIsSubtypeOfString.ts, 76, 21), Decl(stringLiteralTypeIsSubtypeOfString.ts, 77, 19))
+>x : Symbol(x, Decl(stringLiteralTypeIsSubtypeOfString.ts, 78, 13))
+
+function f12<T>(x: 'a');
+>f12 : Symbol(f12, Decl(stringLiteralTypeIsSubtypeOfString.ts, 78, 24), Decl(stringLiteralTypeIsSubtypeOfString.ts, 80, 24), Decl(stringLiteralTypeIsSubtypeOfString.ts, 81, 22))
+>T : Symbol(T, Decl(stringLiteralTypeIsSubtypeOfString.ts, 80, 13))
+>x : Symbol(x, Decl(stringLiteralTypeIsSubtypeOfString.ts, 80, 16))
+
+function f12<T>(x: T);
+>f12 : Symbol(f12, Decl(stringLiteralTypeIsSubtypeOfString.ts, 78, 24), Decl(stringLiteralTypeIsSubtypeOfString.ts, 80, 24), Decl(stringLiteralTypeIsSubtypeOfString.ts, 81, 22))
+>T : Symbol(T, Decl(stringLiteralTypeIsSubtypeOfString.ts, 81, 13))
+>x : Symbol(x, Decl(stringLiteralTypeIsSubtypeOfString.ts, 81, 16))
+>T : Symbol(T, Decl(stringLiteralTypeIsSubtypeOfString.ts, 81, 13))
+
+function f12<T>(x: any) { }
+>f12 : Symbol(f12, Decl(stringLiteralTypeIsSubtypeOfString.ts, 78, 24), Decl(stringLiteralTypeIsSubtypeOfString.ts, 80, 24), Decl(stringLiteralTypeIsSubtypeOfString.ts, 81, 22))
+>T : Symbol(T, Decl(stringLiteralTypeIsSubtypeOfString.ts, 82, 13))
+>x : Symbol(x, Decl(stringLiteralTypeIsSubtypeOfString.ts, 82, 16))
+
+function f13<T extends String>(x: 'a');
+>f13 : Symbol(f13, Decl(stringLiteralTypeIsSubtypeOfString.ts, 82, 27), Decl(stringLiteralTypeIsSubtypeOfString.ts, 84, 39), Decl(stringLiteralTypeIsSubtypeOfString.ts, 85, 37))
+>T : Symbol(T, Decl(stringLiteralTypeIsSubtypeOfString.ts, 84, 13))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(stringLiteralTypeIsSubtypeOfString.ts, 84, 31))
+
+function f13<T extends String>(x: T);
+>f13 : Symbol(f13, Decl(stringLiteralTypeIsSubtypeOfString.ts, 82, 27), Decl(stringLiteralTypeIsSubtypeOfString.ts, 84, 39), Decl(stringLiteralTypeIsSubtypeOfString.ts, 85, 37))
+>T : Symbol(T, Decl(stringLiteralTypeIsSubtypeOfString.ts, 85, 13))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(stringLiteralTypeIsSubtypeOfString.ts, 85, 31))
+>T : Symbol(T, Decl(stringLiteralTypeIsSubtypeOfString.ts, 85, 13))
+
+function f13<T extends String>(x: any) { }
+>f13 : Symbol(f13, Decl(stringLiteralTypeIsSubtypeOfString.ts, 82, 27), Decl(stringLiteralTypeIsSubtypeOfString.ts, 84, 39), Decl(stringLiteralTypeIsSubtypeOfString.ts, 85, 37))
+>T : Symbol(T, Decl(stringLiteralTypeIsSubtypeOfString.ts, 86, 13))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(stringLiteralTypeIsSubtypeOfString.ts, 86, 31))
+
+enum E { A }
+>E : Symbol(E, Decl(stringLiteralTypeIsSubtypeOfString.ts, 86, 42))
+>A : Symbol(E.A, Decl(stringLiteralTypeIsSubtypeOfString.ts, 88, 8))
+
+function f14(x: 'a');
+>f14 : Symbol(f14, Decl(stringLiteralTypeIsSubtypeOfString.ts, 88, 12), Decl(stringLiteralTypeIsSubtypeOfString.ts, 89, 21), Decl(stringLiteralTypeIsSubtypeOfString.ts, 90, 19))
+>x : Symbol(x, Decl(stringLiteralTypeIsSubtypeOfString.ts, 89, 13))
+
+function f14(x: E);
+>f14 : Symbol(f14, Decl(stringLiteralTypeIsSubtypeOfString.ts, 88, 12), Decl(stringLiteralTypeIsSubtypeOfString.ts, 89, 21), Decl(stringLiteralTypeIsSubtypeOfString.ts, 90, 19))
+>x : Symbol(x, Decl(stringLiteralTypeIsSubtypeOfString.ts, 90, 13))
+>E : Symbol(E, Decl(stringLiteralTypeIsSubtypeOfString.ts, 86, 42))
+
+function f14(x: any) { }
+>f14 : Symbol(f14, Decl(stringLiteralTypeIsSubtypeOfString.ts, 88, 12), Decl(stringLiteralTypeIsSubtypeOfString.ts, 89, 21), Decl(stringLiteralTypeIsSubtypeOfString.ts, 90, 19))
+>x : Symbol(x, Decl(stringLiteralTypeIsSubtypeOfString.ts, 91, 13))
+
+function f15<T, U extends T>(x: 'a');
+>f15 : Symbol(f15, Decl(stringLiteralTypeIsSubtypeOfString.ts, 91, 24), Decl(stringLiteralTypeIsSubtypeOfString.ts, 93, 37), Decl(stringLiteralTypeIsSubtypeOfString.ts, 94, 35))
+>T : Symbol(T, Decl(stringLiteralTypeIsSubtypeOfString.ts, 93, 13))
+>U : Symbol(U, Decl(stringLiteralTypeIsSubtypeOfString.ts, 93, 15))
+>T : Symbol(T, Decl(stringLiteralTypeIsSubtypeOfString.ts, 93, 13))
+>x : Symbol(x, Decl(stringLiteralTypeIsSubtypeOfString.ts, 93, 29))
+
+function f15<T, U extends T>(x: U);
+>f15 : Symbol(f15, Decl(stringLiteralTypeIsSubtypeOfString.ts, 91, 24), Decl(stringLiteralTypeIsSubtypeOfString.ts, 93, 37), Decl(stringLiteralTypeIsSubtypeOfString.ts, 94, 35))
+>T : Symbol(T, Decl(stringLiteralTypeIsSubtypeOfString.ts, 94, 13))
+>U : Symbol(U, Decl(stringLiteralTypeIsSubtypeOfString.ts, 94, 15))
+>T : Symbol(T, Decl(stringLiteralTypeIsSubtypeOfString.ts, 94, 13))
+>x : Symbol(x, Decl(stringLiteralTypeIsSubtypeOfString.ts, 94, 29))
+>U : Symbol(U, Decl(stringLiteralTypeIsSubtypeOfString.ts, 94, 15))
+
+function f15<T, U extends T>(x: any) { }
+>f15 : Symbol(f15, Decl(stringLiteralTypeIsSubtypeOfString.ts, 91, 24), Decl(stringLiteralTypeIsSubtypeOfString.ts, 93, 37), Decl(stringLiteralTypeIsSubtypeOfString.ts, 94, 35))
+>T : Symbol(T, Decl(stringLiteralTypeIsSubtypeOfString.ts, 95, 13))
+>U : Symbol(U, Decl(stringLiteralTypeIsSubtypeOfString.ts, 95, 15))
+>T : Symbol(T, Decl(stringLiteralTypeIsSubtypeOfString.ts, 95, 13))
+>x : Symbol(x, Decl(stringLiteralTypeIsSubtypeOfString.ts, 95, 29))
+
+function f16<T extends String, U extends T>(x: 'a');
+>f16 : Symbol(f16, Decl(stringLiteralTypeIsSubtypeOfString.ts, 95, 40), Decl(stringLiteralTypeIsSubtypeOfString.ts, 97, 52), Decl(stringLiteralTypeIsSubtypeOfString.ts, 98, 50))
+>T : Symbol(T, Decl(stringLiteralTypeIsSubtypeOfString.ts, 97, 13))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>U : Symbol(U, Decl(stringLiteralTypeIsSubtypeOfString.ts, 97, 30))
+>T : Symbol(T, Decl(stringLiteralTypeIsSubtypeOfString.ts, 97, 13))
+>x : Symbol(x, Decl(stringLiteralTypeIsSubtypeOfString.ts, 97, 44))
+
+function f16<T extends String, U extends T>(x: U);
+>f16 : Symbol(f16, Decl(stringLiteralTypeIsSubtypeOfString.ts, 95, 40), Decl(stringLiteralTypeIsSubtypeOfString.ts, 97, 52), Decl(stringLiteralTypeIsSubtypeOfString.ts, 98, 50))
+>T : Symbol(T, Decl(stringLiteralTypeIsSubtypeOfString.ts, 98, 13))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>U : Symbol(U, Decl(stringLiteralTypeIsSubtypeOfString.ts, 98, 30))
+>T : Symbol(T, Decl(stringLiteralTypeIsSubtypeOfString.ts, 98, 13))
+>x : Symbol(x, Decl(stringLiteralTypeIsSubtypeOfString.ts, 98, 44))
+>U : Symbol(U, Decl(stringLiteralTypeIsSubtypeOfString.ts, 98, 30))
+
+function f16<T extends String, U extends T>(x: any) { }
+>f16 : Symbol(f16, Decl(stringLiteralTypeIsSubtypeOfString.ts, 95, 40), Decl(stringLiteralTypeIsSubtypeOfString.ts, 97, 52), Decl(stringLiteralTypeIsSubtypeOfString.ts, 98, 50))
+>T : Symbol(T, Decl(stringLiteralTypeIsSubtypeOfString.ts, 99, 13))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>U : Symbol(U, Decl(stringLiteralTypeIsSubtypeOfString.ts, 99, 30))
+>T : Symbol(T, Decl(stringLiteralTypeIsSubtypeOfString.ts, 99, 13))
+>x : Symbol(x, Decl(stringLiteralTypeIsSubtypeOfString.ts, 99, 44))
+

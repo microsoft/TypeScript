@@ -1,0 +1,115 @@
+tests/cases/conformance/parser/ecmascript2018/forAwait/forAwaitInWithDeclIsError.ts(1,20): error TS1005: 'of' expected.
+tests/cases/conformance/parser/ecmascript2018/forAwait/forAwaitInWithDeclIsError.ts(1,23): error TS2304: Cannot find name 'y'.
+tests/cases/conformance/parser/ecmascript2018/forAwait/forAwaitInWithExprIsError.ts(1,12): error TS2304: Cannot find name 'x'.
+tests/cases/conformance/parser/ecmascript2018/forAwait/forAwaitInWithExprIsError.ts(1,14): error TS1005: 'of' expected.
+tests/cases/conformance/parser/ecmascript2018/forAwait/forAwaitInWithExprIsError.ts(1,17): error TS2304: Cannot find name 'y'.
+tests/cases/conformance/parser/ecmascript2018/forAwait/inFunctionDeclWithDeclIsError.ts(3,9): error TS1103: 'for await' loops are only allowed within async functions and at the top levels of modules.
+tests/cases/conformance/parser/ecmascript2018/forAwait/inFunctionDeclWithExprIsError.ts(3,9): error TS1103: 'for await' loops are only allowed within async functions and at the top levels of modules.
+tests/cases/conformance/parser/ecmascript2018/forAwait/inGeneratorWithDeclIsError.ts(3,9): error TS1103: 'for await' loops are only allowed within async functions and at the top levels of modules.
+tests/cases/conformance/parser/ecmascript2018/forAwait/inGeneratorWithExprIsError.ts(3,9): error TS1103: 'for await' loops are only allowed within async functions and at the top levels of modules.
+tests/cases/conformance/parser/ecmascript2018/forAwait/topLevelWithDeclIsError.ts(1,5): error TS1431: 'for await' loops are only allowed at the top level of a file when that file is a module, but this file has no imports or exports. Consider adding an empty 'export {}' to make this file a module.
+tests/cases/conformance/parser/ecmascript2018/forAwait/topLevelWithDeclIsError.ts(1,5): error TS1432: Top-level 'for await' loops are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', or 'nodenext', and the 'target' option is set to 'es2017' or higher.
+tests/cases/conformance/parser/ecmascript2018/forAwait/topLevelWithDeclIsError.ts(1,23): error TS2304: Cannot find name 'y'.
+tests/cases/conformance/parser/ecmascript2018/forAwait/topLevelWithExprIsError.ts(1,5): error TS1431: 'for await' loops are only allowed at the top level of a file when that file is a module, but this file has no imports or exports. Consider adding an empty 'export {}' to make this file a module.
+tests/cases/conformance/parser/ecmascript2018/forAwait/topLevelWithExprIsError.ts(1,5): error TS1432: Top-level 'for await' loops are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', or 'nodenext', and the 'target' option is set to 'es2017' or higher.
+tests/cases/conformance/parser/ecmascript2018/forAwait/topLevelWithExprIsError.ts(1,12): error TS2304: Cannot find name 'x'.
+tests/cases/conformance/parser/ecmascript2018/forAwait/topLevelWithExprIsError.ts(1,17): error TS2304: Cannot find name 'y'.
+
+
+==== tests/cases/conformance/parser/ecmascript2018/forAwait/topLevelWithDeclIsError.ts (3 errors) ====
+    for await (const x of y) {
+        ~~~~~
+!!! error TS1431: 'for await' loops are only allowed at the top level of a file when that file is a module, but this file has no imports or exports. Consider adding an empty 'export {}' to make this file a module.
+        ~~~~~
+!!! error TS1432: Top-level 'for await' loops are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', or 'nodenext', and the 'target' option is set to 'es2017' or higher.
+                          ~
+!!! error TS2304: Cannot find name 'y'.
+    }
+==== tests/cases/conformance/parser/ecmascript2018/forAwait/topLevelWithExprIsError.ts (4 errors) ====
+    for await (x of y) {
+        ~~~~~
+!!! error TS1431: 'for await' loops are only allowed at the top level of a file when that file is a module, but this file has no imports or exports. Consider adding an empty 'export {}' to make this file a module.
+        ~~~~~
+!!! error TS1432: Top-level 'for await' loops are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', or 'nodenext', and the 'target' option is set to 'es2017' or higher.
+               ~
+!!! error TS2304: Cannot find name 'x'.
+                    ~
+!!! error TS2304: Cannot find name 'y'.
+    }
+==== tests/cases/conformance/parser/ecmascript2018/forAwait/forAwaitInWithDeclIsError.ts (2 errors) ====
+    for await (const x in y) {
+                       ~~
+!!! error TS1005: 'of' expected.
+                          ~
+!!! error TS2304: Cannot find name 'y'.
+    }
+==== tests/cases/conformance/parser/ecmascript2018/forAwait/forAwaitInWithExprIsError.ts (3 errors) ====
+    for await (x in y) {
+               ~
+!!! error TS2304: Cannot find name 'x'.
+                 ~~
+!!! error TS1005: 'of' expected.
+                    ~
+!!! error TS2304: Cannot find name 'y'.
+    }
+==== tests/cases/conformance/parser/ecmascript2018/forAwait/inFunctionDeclWithDeclIsError.ts (1 errors) ====
+    function f5() {
+        let y: any;
+        for await (const x of y) {
+            ~~~~~
+!!! error TS1103: 'for await' loops are only allowed within async functions and at the top levels of modules.
+!!! related TS1356 tests/cases/conformance/parser/ecmascript2018/forAwait/inFunctionDeclWithDeclIsError.ts:1:10: Did you mean to mark this function as 'async'?
+        }
+    }
+==== tests/cases/conformance/parser/ecmascript2018/forAwait/inFunctionDeclWithExprIsError.ts (1 errors) ====
+    function f6() {
+        let x: any, y: any;
+        for await (x of y) {
+            ~~~~~
+!!! error TS1103: 'for await' loops are only allowed within async functions and at the top levels of modules.
+!!! related TS1356 tests/cases/conformance/parser/ecmascript2018/forAwait/inFunctionDeclWithExprIsError.ts:1:10: Did you mean to mark this function as 'async'?
+        }
+    }
+==== tests/cases/conformance/parser/ecmascript2018/forAwait/inAsyncFunctionWithDeclIsOk.ts (0 errors) ====
+    async function f7() {
+        let y: any;
+        for await (const x of y) {
+        }
+    }
+==== tests/cases/conformance/parser/ecmascript2018/forAwait/inAsyncFunctionWithExprIsOk.ts (0 errors) ====
+    async function f8() {
+        let x: any, y: any;
+        for await (x of y) {
+        }
+    }
+==== tests/cases/conformance/parser/ecmascript2018/forAwait/inAsyncGeneratorWithDeclIsOk.ts (0 errors) ====
+    async function* f9() {
+        let y: any;
+        for await (const x of y) {
+        }
+    }
+==== tests/cases/conformance/parser/ecmascript2018/forAwait/inAsyncGeneratorWithExpressionIsOk.ts (0 errors) ====
+    async function* f10() {
+        let x: any, y: any;
+        for await (x of y) {
+        }
+    }
+==== tests/cases/conformance/parser/ecmascript2018/forAwait/inGeneratorWithDeclIsError.ts (1 errors) ====
+    function* f11() {
+        let y: any;
+        for await (const x of y) {
+            ~~~~~
+!!! error TS1103: 'for await' loops are only allowed within async functions and at the top levels of modules.
+!!! related TS1356 tests/cases/conformance/parser/ecmascript2018/forAwait/inGeneratorWithDeclIsError.ts:1:11: Did you mean to mark this function as 'async'?
+        }
+    }
+==== tests/cases/conformance/parser/ecmascript2018/forAwait/inGeneratorWithExprIsError.ts (1 errors) ====
+    function* f12() {
+        let x: any, y: any;
+        for await (x of y) {
+            ~~~~~
+!!! error TS1103: 'for await' loops are only allowed within async functions and at the top levels of modules.
+!!! related TS1356 tests/cases/conformance/parser/ecmascript2018/forAwait/inGeneratorWithExprIsError.ts:1:11: Did you mean to mark this function as 'async'?
+        }
+    }
+    

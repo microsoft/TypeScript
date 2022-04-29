@@ -1,0 +1,51 @@
+=== tests/cases/conformance/es6/Symbols/symbolProperty13.ts ===
+class C {
+>C : C
+
+    [Symbol.iterator]: { x; y };
+>[Symbol.iterator] : { x: any; y: any; }
+>Symbol.iterator : unique symbol
+>Symbol : SymbolConstructor
+>iterator : unique symbol
+>x : any
+>y : any
+}
+interface I {
+    [Symbol.iterator]: { x };
+>[Symbol.iterator] : { x: any; }
+>Symbol.iterator : unique symbol
+>Symbol : SymbolConstructor
+>iterator : unique symbol
+>x : any
+}
+
+declare function foo(i: I): I;
+>foo : { (i: I): I; (a: any): any; }
+>i : I
+
+declare function foo(a: any): any;
+>foo : { (i: I): I; (a: any): any; }
+>a : any
+
+declare function bar(i: C): C;
+>bar : { (i: C): C; (a: any): any; }
+>i : C
+
+declare function bar(a: any): any;
+>bar : { (i: C): C; (a: any): any; }
+>a : any
+
+foo(new C);
+>foo(new C) : I
+>foo : { (i: I): I; (a: any): any; }
+>new C : C
+>C : typeof C
+
+var i: I;
+>i : I
+
+bar(i);
+>bar(i) : any
+>bar : { (i: C): C; (a: any): any; }
+>i : I
+

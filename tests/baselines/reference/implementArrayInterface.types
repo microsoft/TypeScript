@@ -1,0 +1,153 @@
+=== tests/cases/compiler/implementArrayInterface.ts ===
+declare class MyArray<T> implements Array<T> {
+>MyArray : MyArray<T>
+
+    toString(): string;
+>toString : () => string
+
+    toLocaleString(): string;
+>toLocaleString : () => string
+
+    concat<U extends T[]>(...items: U[]): T[];
+>concat : { <U extends T[]>(...items: U[]): T[]; (...items: T[]): T[]; }
+>items : U[]
+
+    concat(...items: T[]): T[];
+>concat : { <U extends T[]>(...items: U[]): T[]; (...items: T[]): T[]; }
+>items : T[]
+
+    join(separator?: string): string;
+>join : (separator?: string) => string
+>separator : string
+
+    pop(): T;
+>pop : () => T
+
+    push(...items: T[]): number;
+>push : (...items: T[]) => number
+>items : T[]
+
+    reverse(): T[];
+>reverse : () => T[]
+
+    shift(): T;
+>shift : () => T
+
+    slice(start?: number, end?: number): T[];
+>slice : (start?: number, end?: number) => T[]
+>start : number
+>end : number
+
+    sort(compareFn?: (a: T, b: T) => number): this;
+>sort : (compareFn?: (a: T, b: T) => number) => this
+>compareFn : (a: T, b: T) => number
+>a : T
+>b : T
+
+    splice(start: number): T[];
+>splice : { (start: number): T[]; (start: number, deleteCount: number, ...items: T[]): T[]; }
+>start : number
+
+    splice(start: number, deleteCount: number, ...items: T[]): T[];
+>splice : { (start: number): T[]; (start: number, deleteCount: number, ...items: T[]): T[]; }
+>start : number
+>deleteCount : number
+>items : T[]
+
+    unshift(...items: T[]): number;
+>unshift : (...items: T[]) => number
+>items : T[]
+
+    indexOf(searchElement: T, fromIndex?: number): number;
+>indexOf : (searchElement: T, fromIndex?: number) => number
+>searchElement : T
+>fromIndex : number
+
+    lastIndexOf(searchElement: T, fromIndex?: number): number;
+>lastIndexOf : (searchElement: T, fromIndex?: number) => number
+>searchElement : T
+>fromIndex : number
+
+    every(callbackfn: (value: T, index: number, array: T[]) => boolean, thisArg?: any): boolean;
+>every : (callbackfn: (value: T, index: number, array: T[]) => boolean, thisArg?: any) => boolean
+>callbackfn : (value: T, index: number, array: T[]) => boolean
+>value : T
+>index : number
+>array : T[]
+>thisArg : any
+
+    some(callbackfn: (value: T, index: number, array: T[]) => boolean, thisArg?: any): boolean;
+>some : (callbackfn: (value: T, index: number, array: T[]) => boolean, thisArg?: any) => boolean
+>callbackfn : (value: T, index: number, array: T[]) => boolean
+>value : T
+>index : number
+>array : T[]
+>thisArg : any
+
+    forEach(callbackfn: (value: T, index: number, array: T[]) => void, thisArg?: any): void;
+>forEach : (callbackfn: (value: T, index: number, array: T[]) => void, thisArg?: any) => void
+>callbackfn : (value: T, index: number, array: T[]) => void
+>value : T
+>index : number
+>array : T[]
+>thisArg : any
+
+    map<U>(callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any): U[];
+>map : <U>(callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any) => U[]
+>callbackfn : (value: T, index: number, array: T[]) => U
+>value : T
+>index : number
+>array : T[]
+>thisArg : any
+
+    filter(callbackfn: (value: T, index: number, array: T[]) => boolean, thisArg?: any): T[];
+>filter : (callbackfn: (value: T, index: number, array: T[]) => boolean, thisArg?: any) => T[]
+>callbackfn : (value: T, index: number, array: T[]) => boolean
+>value : T
+>index : number
+>array : T[]
+>thisArg : any
+
+    reduce(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T, initialValue?: T): T;
+>reduce : { (callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T, initialValue?: T): T; <U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U, initialValue: U): U; }
+>callbackfn : (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T
+>previousValue : T
+>currentValue : T
+>currentIndex : number
+>array : T[]
+>initialValue : T
+
+    reduce<U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U, initialValue: U): U;
+>reduce : { (callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T, initialValue?: T): T; <U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U, initialValue: U): U; }
+>callbackfn : (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U
+>previousValue : U
+>currentValue : T
+>currentIndex : number
+>array : T[]
+>initialValue : U
+
+    reduceRight(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T, initialValue?: T): T;
+>reduceRight : { (callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T, initialValue?: T): T; <U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U, initialValue: U): U; }
+>callbackfn : (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T
+>previousValue : T
+>currentValue : T
+>currentIndex : number
+>array : T[]
+>initialValue : T
+
+    reduceRight<U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U, initialValue: U): U;
+>reduceRight : { (callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T, initialValue?: T): T; <U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U, initialValue: U): U; }
+>callbackfn : (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U
+>previousValue : U
+>currentValue : T
+>currentIndex : number
+>array : T[]
+>initialValue : U
+
+    length: number;
+>length : number
+
+    [n: number]: T;
+>n : number
+}
+

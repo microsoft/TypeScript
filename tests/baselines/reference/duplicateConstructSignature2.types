@@ -1,0 +1,8 @@
+=== tests/cases/compiler/duplicateConstructSignature2.ts ===
+interface I<T> {
+    (x: T): number;
+>x : T
+
+    (x: T): string;
+>x : T
+}

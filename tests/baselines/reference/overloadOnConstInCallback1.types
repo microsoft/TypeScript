@@ -1,0 +1,36 @@
+=== tests/cases/compiler/overloadOnConstInCallback1.ts ===
+class C {
+>C : C
+
+    x1(a: number, callback: (x: 'hi') => number); // error
+>x1 : (a: number, callback: (x: 'hi') => number) => any
+>a : number
+>callback : (x: 'hi') => number
+>x : "hi"
+
+    x1(a: number, callback: (x: any) => number) {
+>x1 : (a: number, callback: (x: "hi") => number) => any
+>a : number
+>callback : (x: any) => number
+>x : any
+
+        callback('hi');
+>callback('hi') : number
+>callback : (x: any) => number
+>'hi' : "hi"
+
+        callback('bye');
+>callback('bye') : number
+>callback : (x: any) => number
+>'bye' : "bye"
+
+        var hm = "hm";
+>hm : string
+>"hm" : "hm"
+
+        callback(hm);
+>callback(hm) : number
+>callback : (x: any) => number
+>hm : string
+    }
+}

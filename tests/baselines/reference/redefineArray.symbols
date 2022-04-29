@@ -1,0 +1,7 @@
+=== tests/cases/compiler/redefineArray.ts ===
+Array = function (n:number, s:string) {return n;};
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>n : Symbol(n, Decl(redefineArray.ts, 0, 18))
+>s : Symbol(s, Decl(redefineArray.ts, 0, 27))
+>n : Symbol(n, Decl(redefineArray.ts, 0, 18))
+

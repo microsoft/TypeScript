@@ -1,0 +1,57 @@
+===================================================================
+JsFile: a.js
+mapUrl: data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiYS5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbImEudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7SUFBQTtJQUNBLENBQUM7SUFBRCxRQUFDO0FBQUQsQ0FBQyxBQURELElBQ0MifQ==
+sourceRoot: 
+sources: a.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:tests/cases/compiler/a.js
+sourceFile:a.ts
+-------------------------------------------------------------------
+>>>var c = /** @class */ (function () {
+1 >
+2 >^^^^^^^^^^^^^^^^^^^->
+1 >
+1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+---
+>>>    function c() {
+1->^^^^
+2 >    ^^->
+1->
+1->Emitted(2, 5) Source(1, 1) + SourceIndex(0)
+---
+>>>    }
+1->^^^^
+2 >    ^
+3 >     ^^^^^^^^^->
+1->class c {
+  >
+2 >    }
+1->Emitted(3, 5) Source(2, 1) + SourceIndex(0)
+2 >Emitted(3, 6) Source(2, 2) + SourceIndex(0)
+---
+>>>    return c;
+1->^^^^
+2 >    ^^^^^^^^
+1->
+2 >    }
+1->Emitted(4, 5) Source(2, 1) + SourceIndex(0)
+2 >Emitted(4, 13) Source(2, 2) + SourceIndex(0)
+---
+>>>}());
+1 >
+2 >^
+3 > 
+4 > ^^^^
+5 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+2 >}
+3 > 
+4 > class c {
+  > }
+1 >Emitted(5, 1) Source(2, 1) + SourceIndex(0)
+2 >Emitted(5, 2) Source(2, 2) + SourceIndex(0)
+3 >Emitted(5, 2) Source(1, 1) + SourceIndex(0)
+4 >Emitted(5, 6) Source(2, 2) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiYS5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbImEudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7SUFBQTtJQUNBLENBQUM7SUFBRCxRQUFDO0FBQUQsQ0FBQyxBQURELElBQ0MifQ==

@@ -1,0 +1,36 @@
+tests/cases/compiler/genericSpecializations1.ts(6,5): error TS2416: Property 'foo' in type 'IntFooBad' is not assignable to the same property in base type 'IFoo<number>'.
+  Type '(x: string) => string' is not assignable to type '<T>(x: T) => T'.
+    Types of parameters 'x' and 'x' are incompatible.
+      Type 'T' is not assignable to type 'string'.
+tests/cases/compiler/genericSpecializations1.ts(10,5): error TS2416: Property 'foo' in type 'StringFoo2' is not assignable to the same property in base type 'IFoo<string>'.
+  Type '(x: string) => string' is not assignable to type '<T>(x: T) => T'.
+    Types of parameters 'x' and 'x' are incompatible.
+      Type 'T' is not assignable to type 'string'.
+
+
+==== tests/cases/compiler/genericSpecializations1.ts (2 errors) ====
+    interface IFoo<T> {
+        foo<T>(x: T): T; // no error on implementors because IFoo's T is different from foo's T
+    }
+    
+    class IntFooBad implements IFoo<number> {
+        foo(x: string): string { return null; }
+        ~~~
+!!! error TS2416: Property 'foo' in type 'IntFooBad' is not assignable to the same property in base type 'IFoo<number>'.
+!!! error TS2416:   Type '(x: string) => string' is not assignable to type '<T>(x: T) => T'.
+!!! error TS2416:     Types of parameters 'x' and 'x' are incompatible.
+!!! error TS2416:       Type 'T' is not assignable to type 'string'.
+    }
+    
+    class StringFoo2 implements IFoo<string> {
+        foo(x: string): string { return null; }
+        ~~~
+!!! error TS2416: Property 'foo' in type 'StringFoo2' is not assignable to the same property in base type 'IFoo<string>'.
+!!! error TS2416:   Type '(x: string) => string' is not assignable to type '<T>(x: T) => T'.
+!!! error TS2416:     Types of parameters 'x' and 'x' are incompatible.
+!!! error TS2416:       Type 'T' is not assignable to type 'string'.
+    }
+    
+    class StringFoo3 implements IFoo<string> {
+        foo<T>(x: T): T { return null; }
+    }

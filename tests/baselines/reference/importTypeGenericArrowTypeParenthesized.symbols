@@ -1,0 +1,62 @@
+=== tests/cases/compiler/module.d.ts ===
+declare module "module" {
+>"module" : Symbol("module", Decl(module.d.ts, 0, 0))
+
+    export interface Modifier<T> { }
+>Modifier : Symbol(Modifier, Decl(module.d.ts, 0, 25))
+>T : Symbol(T, Decl(module.d.ts, 1, 30))
+
+    export function fn<T>(x: T): Modifier<T>;
+>fn : Symbol(fn, Decl(module.d.ts, 1, 36))
+>T : Symbol(T, Decl(module.d.ts, 3, 23))
+>x : Symbol(x, Decl(module.d.ts, 3, 26))
+>T : Symbol(T, Decl(module.d.ts, 3, 23))
+>Modifier : Symbol(Modifier, Decl(module.d.ts, 0, 25))
+>T : Symbol(T, Decl(module.d.ts, 3, 23))
+}
+=== tests/cases/compiler/index.ts ===
+import { fn } from "module";
+>fn : Symbol(fn, Decl(index.ts, 0, 8))
+
+export const fail1 = fn(<T>(x: T): T => x);
+>fail1 : Symbol(fail1, Decl(index.ts, 2, 12))
+>fn : Symbol(fn, Decl(index.ts, 0, 8))
+>T : Symbol(T, Decl(index.ts, 2, 25))
+>x : Symbol(x, Decl(index.ts, 2, 28))
+>T : Symbol(T, Decl(index.ts, 2, 25))
+>T : Symbol(T, Decl(index.ts, 2, 25))
+>x : Symbol(x, Decl(index.ts, 2, 28))
+
+export const fail2 = fn(function<T>(x: T): T {
+>fail2 : Symbol(fail2, Decl(index.ts, 3, 12))
+>fn : Symbol(fn, Decl(index.ts, 0, 8))
+>T : Symbol(T, Decl(index.ts, 3, 33))
+>x : Symbol(x, Decl(index.ts, 3, 36))
+>T : Symbol(T, Decl(index.ts, 3, 33))
+>T : Symbol(T, Decl(index.ts, 3, 33))
+
+  return x;
+>x : Symbol(x, Decl(index.ts, 3, 36))
+
+});
+
+export const works1 = fn((x: number) => x);
+>works1 : Symbol(works1, Decl(index.ts, 7, 12))
+>fn : Symbol(fn, Decl(index.ts, 0, 8))
+>x : Symbol(x, Decl(index.ts, 7, 26))
+>x : Symbol(x, Decl(index.ts, 7, 26))
+
+type MakeItWork = <T>(x: T) => T;
+>MakeItWork : Symbol(MakeItWork, Decl(index.ts, 7, 43))
+>T : Symbol(T, Decl(index.ts, 8, 19))
+>x : Symbol(x, Decl(index.ts, 8, 22))
+>T : Symbol(T, Decl(index.ts, 8, 19))
+>T : Symbol(T, Decl(index.ts, 8, 19))
+
+export const works2 = fn<MakeItWork>(x => x);
+>works2 : Symbol(works2, Decl(index.ts, 9, 12))
+>fn : Symbol(fn, Decl(index.ts, 0, 8))
+>MakeItWork : Symbol(MakeItWork, Decl(index.ts, 7, 43))
+>x : Symbol(x, Decl(index.ts, 9, 37))
+>x : Symbol(x, Decl(index.ts, 9, 37))
+

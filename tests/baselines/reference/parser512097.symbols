@@ -1,0 +1,7 @@
+=== tests/cases/conformance/parser/ecmascript5/RegressionTests/parser512097.ts ===
+var tt = { aa; }
+>tt : Symbol(tt, Decl(parser512097.ts, 0, 3))
+>aa : Symbol(aa, Decl(parser512097.ts, 0, 10))
+
+if (true) {
+}

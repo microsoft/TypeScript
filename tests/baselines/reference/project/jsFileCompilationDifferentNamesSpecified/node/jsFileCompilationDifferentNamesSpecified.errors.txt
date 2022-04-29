@@ -1,0 +1,19 @@
+error TS6504: File 'DifferentNamesSpecified/b.js' is a JavaScript file. Did you mean to enable the 'allowJs' option?
+  The file is in the program because:
+    Part of 'files' list in tsconfig.json
+DifferentNamesSpecified/tsconfig.json(2,24): error TS6082: Only 'amd' and 'system' modules are supported alongside --out.
+
+
+!!! error TS6504: File 'DifferentNamesSpecified/b.js' is a JavaScript file. Did you mean to enable the 'allowJs' option?
+!!! error TS6504:   The file is in the program because:
+!!! error TS6504:     Part of 'files' list in tsconfig.json
+!!! related TS1410 DifferentNamesSpecified/tsconfig.json:3:22: File is matched by 'files' list specified here.
+==== DifferentNamesSpecified/tsconfig.json (1 errors) ====
+    {
+      "compilerOptions": { "out": "test.js" },
+                           ~~~~~
+!!! error TS6082: Only 'amd' and 'system' modules are supported alongside --out.
+      "files": [ "a.ts", "b.js" ]
+    }
+==== DifferentNamesSpecified/a.ts (0 errors) ====
+    var test = 10;

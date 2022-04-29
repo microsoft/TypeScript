@@ -1,0 +1,23 @@
+=== tests/cases/conformance/es6/destructuring/restElementWithAssignmentPattern4.ts ===
+var a: string, b: number;
+>a : string
+>b : number
+
+var tuple: [string, number] = ["", 1];
+>tuple : [string, number]
+>["", 1] : [string, number]
+>"" : ""
+>1 : 1
+
+[...{ 0: a = "", b }] = tuple;
+>[...{ 0: a = "", b }] = tuple : [string, number]
+>[...{ 0: a = "", b }] : unknown[]
+>...{ 0: a = "", b } : any
+>{ 0: a = "", b } : { 0?: string; b: number; }
+>0 : string
+>a = "" : ""
+>a : string
+>"" : ""
+>b : number
+>tuple : [string, number]
+

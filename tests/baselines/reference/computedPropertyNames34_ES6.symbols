@@ -1,0 +1,24 @@
+=== tests/cases/conformance/es6/computedProperties/computedPropertyNames34_ES6.ts ===
+function foo<T>() { return '' }
+>foo : Symbol(foo, Decl(computedPropertyNames34_ES6.ts, 0, 0))
+>T : Symbol(T, Decl(computedPropertyNames34_ES6.ts, 0, 13))
+
+class C<T> {
+>C : Symbol(C, Decl(computedPropertyNames34_ES6.ts, 0, 31))
+>T : Symbol(T, Decl(computedPropertyNames34_ES6.ts, 1, 8))
+
+    static bar() {
+>bar : Symbol(C.bar, Decl(computedPropertyNames34_ES6.ts, 1, 12))
+
+        var obj = {
+>obj : Symbol(obj, Decl(computedPropertyNames34_ES6.ts, 3, 11))
+
+            [foo<T>()]() { }
+>[foo<T>()] : Symbol([foo<T>()], Decl(computedPropertyNames34_ES6.ts, 3, 19))
+>foo : Symbol(foo, Decl(computedPropertyNames34_ES6.ts, 0, 0))
+>T : Symbol(T)
+
+        };
+        return 0;
+    }
+}

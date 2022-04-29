@@ -1,0 +1,49 @@
+
+1  >class Greeter {
+
+    ~~~~~~~~~~~~~~~~                              => Pos: (0 to 15)  SpanInfo: {"start":0,"length":17}
+    >class Greeter {
+    >}
+    >:=> (line 1, col 0) to (line 2, col 1)
+--------------------------------
+2  >}
+
+    ~~                                            => Pos: (16 to 17)  SpanInfo: {"start":16,"length":1}
+    >}
+    >:=> (line 2, col 0) to (line 2, col 1)
+--------------------------------
+3  >var a = <Greeter>new Greeter();
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~              => Pos: (18 to 49)  SpanInfo: {"start":18,"length":30}
+    >var a = <Greeter>new Greeter()
+    >:=> (line 3, col 0) to (line 3, col 30)
+--------------------------------
+4  >a = (<Greeter> new Greeter());
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~               => Pos: (50 to 80)  SpanInfo: {"start":50,"length":29}
+    >a = (<Greeter> new Greeter())
+    >:=> (line 4, col 0) to (line 4, col 29)
+--------------------------------
+5  >a = <Greeter>(function foo() {
+
+    ~~~                                           => Pos: (81 to 83)  SpanInfo: {"start":81,"length":61}
+    >a = <Greeter>(function foo() {
+    >    return new Greeter();
+    >})()
+    >:=> (line 5, col 0) to (line 7, col 4)
+5  >a = <Greeter>(function foo() {
+
+       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~               => Pos: (84 to 111)  SpanInfo: {"start":116,"length":20}
+    >return new Greeter()
+    >:=> (line 6, col 4) to (line 6, col 24)
+--------------------------------
+6  >    return new Greeter();
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~                    => Pos: (112 to 137)  SpanInfo: {"start":116,"length":20}
+    >return new Greeter()
+    >:=> (line 6, col 4) to (line 6, col 24)
+--------------------------------
+7  >})();
+    ~~~~~                                         => Pos: (138 to 142)  SpanInfo: {"start":138,"length":1}
+    >}
+    >:=> (line 7, col 0) to (line 7, col 1)

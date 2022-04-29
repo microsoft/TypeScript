@@ -1,0 +1,3459 @@
+===================================================================
+JsFile: contextualTyping.js
+mapUrl: contextualTyping.js.map
+sourceRoot: 
+sources: contextualTyping.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:tests/cases/compiler/contextualTyping.js
+sourceFile:contextualTyping.ts
+-------------------------------------------------------------------
+>>>// CONTEXT: Class property declaration
+1 >
+2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+3 >                                      ^^->
+1 >// DEFAULT INTERFACES
+  >interface IFoo {
+  >    n: number;
+  >    s: string;
+  >    f(i: number, s: string): string;
+  >    a: number[];
+  >}
+  >
+  >interface IBar {
+  >    foo: IFoo;
+  >}
+  >
+  >
+2 >// CONTEXT: Class property declaration
+1 >Emitted(1, 1) Source(13, 1) + SourceIndex(0)
+2 >Emitted(1, 39) Source(13, 39) + SourceIndex(0)
+---
+>>>var C1T5 = /** @class */ (function () {
+1->
+2 >^^^^^^^^^^^^^^^^^^^^^^->
+1->
+  >
+1->Emitted(2, 1) Source(14, 1) + SourceIndex(0)
+---
+>>>    function C1T5() {
+1->^^^^
+2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1->
+1->Emitted(3, 5) Source(14, 1) + SourceIndex(0)
+---
+>>>        this.foo = function (i) {
+1->^^^^^^^^
+2 >        ^^^^^^^^
+3 >                ^^^
+4 >                   ^^^^^^^^^^
+5 >                             ^
+1->class C1T5 {
+  >    
+2 >        foo
+3 >                : (i: number, s: string) => number = 
+4 >                   function(
+5 >                             i
+1->Emitted(4, 9) Source(15, 5) + SourceIndex(0)
+2 >Emitted(4, 17) Source(15, 8) + SourceIndex(0)
+3 >Emitted(4, 20) Source(15, 45) + SourceIndex(0)
+4 >Emitted(4, 30) Source(15, 54) + SourceIndex(0)
+5 >Emitted(4, 31) Source(15, 55) + SourceIndex(0)
+---
+>>>            return i;
+1 >^^^^^^^^^^^^
+2 >            ^^^^^^^
+3 >                   ^
+4 >                    ^
+1 >) {
+  >        
+2 >            return 
+3 >                   i
+4 >                    ;
+1 >Emitted(5, 13) Source(16, 9) + SourceIndex(0)
+2 >Emitted(5, 20) Source(16, 16) + SourceIndex(0)
+3 >Emitted(5, 21) Source(16, 17) + SourceIndex(0)
+4 >Emitted(5, 22) Source(16, 18) + SourceIndex(0)
+---
+>>>        };
+1 >^^^^^^^^
+2 >        ^
+3 >         ^
+1 >
+  >    
+2 >        }
+3 >         
+1 >Emitted(6, 9) Source(17, 5) + SourceIndex(0)
+2 >Emitted(6, 10) Source(17, 6) + SourceIndex(0)
+3 >Emitted(6, 11) Source(17, 6) + SourceIndex(0)
+---
+>>>    }
+1 >^^^^
+2 >    ^
+3 >     ^^^^^^^^^^^^->
+1 >
+  >
+2 >    }
+1 >Emitted(7, 5) Source(18, 1) + SourceIndex(0)
+2 >Emitted(7, 6) Source(18, 2) + SourceIndex(0)
+---
+>>>    return C1T5;
+1->^^^^
+2 >    ^^^^^^^^^^^
+1->
+2 >    }
+1->Emitted(8, 5) Source(18, 1) + SourceIndex(0)
+2 >Emitted(8, 16) Source(18, 2) + SourceIndex(0)
+---
+>>>}());
+1 >
+2 >^
+3 > 
+4 > ^^^^
+5 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+2 >}
+3 > 
+4 > class C1T5 {
+  >     foo: (i: number, s: string) => number = function(i) {
+  >         return i;
+  >     }
+  > }
+1 >Emitted(9, 1) Source(18, 1) + SourceIndex(0)
+2 >Emitted(9, 2) Source(18, 2) + SourceIndex(0)
+3 >Emitted(9, 2) Source(14, 1) + SourceIndex(0)
+4 >Emitted(9, 6) Source(18, 2) + SourceIndex(0)
+---
+>>>// CONTEXT: Module property declaration
+1->
+2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+1->
+  >
+  >
+2 >// CONTEXT: Module property declaration
+1->Emitted(10, 1) Source(20, 1) + SourceIndex(0)
+2 >Emitted(10, 40) Source(20, 40) + SourceIndex(0)
+---
+>>>var C2T5;
+1 >
+2 >^^^^
+3 >    ^^^^
+4 >        ^
+5 >         ^^^^^^^^^^->
+1 >
+  >
+2 >module 
+3 >    C2T5
+4 >         {
+  >            export var foo: (i: number, s: string) => number = function(i) {
+  >                return i;
+  >            }
+  >        }
+1 >Emitted(11, 1) Source(21, 1) + SourceIndex(0)
+2 >Emitted(11, 5) Source(21, 8) + SourceIndex(0)
+3 >Emitted(11, 9) Source(21, 12) + SourceIndex(0)
+4 >Emitted(11, 10) Source(25, 2) + SourceIndex(0)
+---
+>>>(function (C2T5) {
+1->
+2 >^^^^^^^^^^^
+3 >           ^^^^
+4 >               ^^^^^^^^^^^^^^^->
+1->
+2 >module 
+3 >           C2T5
+1->Emitted(12, 1) Source(21, 1) + SourceIndex(0)
+2 >Emitted(12, 12) Source(21, 8) + SourceIndex(0)
+3 >Emitted(12, 16) Source(21, 12) + SourceIndex(0)
+---
+>>>    C2T5.foo = function (i) {
+1->^^^^
+2 >    ^^^^^^^^
+3 >            ^^^
+4 >               ^^^^^^^^^^
+5 >                         ^
+1-> {
+  >    export var 
+2 >    foo
+3 >            : (i: number, s: string) => number = 
+4 >               function(
+5 >                         i
+1->Emitted(13, 5) Source(22, 16) + SourceIndex(0)
+2 >Emitted(13, 13) Source(22, 19) + SourceIndex(0)
+3 >Emitted(13, 16) Source(22, 56) + SourceIndex(0)
+4 >Emitted(13, 26) Source(22, 65) + SourceIndex(0)
+5 >Emitted(13, 27) Source(22, 66) + SourceIndex(0)
+---
+>>>        return i;
+1 >^^^^^^^^
+2 >        ^^^^^^^
+3 >               ^
+4 >                ^
+1 >) {
+  >        
+2 >        return 
+3 >               i
+4 >                ;
+1 >Emitted(14, 9) Source(23, 9) + SourceIndex(0)
+2 >Emitted(14, 16) Source(23, 16) + SourceIndex(0)
+3 >Emitted(14, 17) Source(23, 17) + SourceIndex(0)
+4 >Emitted(14, 18) Source(23, 18) + SourceIndex(0)
+---
+>>>    };
+1 >^^^^
+2 >    ^
+3 >     ^
+4 >      ^^^^^^^^^^^^^^^^^^^->
+1 >
+  >    
+2 >    }
+3 >     
+1 >Emitted(15, 5) Source(24, 5) + SourceIndex(0)
+2 >Emitted(15, 6) Source(24, 6) + SourceIndex(0)
+3 >Emitted(15, 7) Source(24, 6) + SourceIndex(0)
+---
+>>>})(C2T5 || (C2T5 = {}));
+1->
+2 >^
+3 > ^^
+4 >   ^^^^
+5 >       ^^^^^
+6 >            ^^^^
+7 >                ^^^^^^^^
+8 >                        ^^^^^^^^^->
+1->
+  >
+2 >}
+3 > 
+4 >   C2T5
+5 >       
+6 >            C2T5
+7 >                 {
+  >                    export var foo: (i: number, s: string) => number = function(i) {
+  >                        return i;
+  >                    }
+  >                }
+1->Emitted(16, 1) Source(25, 1) + SourceIndex(0)
+2 >Emitted(16, 2) Source(25, 2) + SourceIndex(0)
+3 >Emitted(16, 4) Source(21, 8) + SourceIndex(0)
+4 >Emitted(16, 8) Source(21, 12) + SourceIndex(0)
+5 >Emitted(16, 13) Source(21, 8) + SourceIndex(0)
+6 >Emitted(16, 17) Source(21, 12) + SourceIndex(0)
+7 >Emitted(16, 25) Source(25, 2) + SourceIndex(0)
+---
+>>>// CONTEXT: Variable declaration
+1->
+2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+3 >                                ^^^^^^^^^->
+1->
+  >
+  >
+2 >// CONTEXT: Variable declaration
+1->Emitted(17, 1) Source(27, 1) + SourceIndex(0)
+2 >Emitted(17, 33) Source(27, 33) + SourceIndex(0)
+---
+>>>var c3t1 = (function (s) { return s; });
+1->
+2 >^^^^
+3 >    ^^^^
+4 >        ^^^
+5 >           ^
+6 >            ^^^^^^^^^^
+7 >                      ^
+8 >                       ^^^^
+9 >                           ^^^^^^^
+10>                                  ^
+11>                                   ^
+12>                                    ^
+13>                                     ^
+14>                                      ^
+15>                                       ^
+1->
+  >
+2 >var 
+3 >    c3t1
+4 >        : (s: string) => string = 
+5 >           (
+6 >            function(
+7 >                      s
+8 >                       ) { 
+9 >                           return 
+10>                                  s
+11>                                   
+12>                                     
+13>                                     }
+14>                                      )
+15>                                       ;
+1->Emitted(18, 1) Source(28, 1) + SourceIndex(0)
+2 >Emitted(18, 5) Source(28, 5) + SourceIndex(0)
+3 >Emitted(18, 9) Source(28, 9) + SourceIndex(0)
+4 >Emitted(18, 12) Source(28, 35) + SourceIndex(0)
+5 >Emitted(18, 13) Source(28, 36) + SourceIndex(0)
+6 >Emitted(18, 23) Source(28, 45) + SourceIndex(0)
+7 >Emitted(18, 24) Source(28, 46) + SourceIndex(0)
+8 >Emitted(18, 28) Source(28, 50) + SourceIndex(0)
+9 >Emitted(18, 35) Source(28, 57) + SourceIndex(0)
+10>Emitted(18, 36) Source(28, 58) + SourceIndex(0)
+11>Emitted(18, 37) Source(28, 58) + SourceIndex(0)
+12>Emitted(18, 38) Source(28, 59) + SourceIndex(0)
+13>Emitted(18, 39) Source(28, 60) + SourceIndex(0)
+14>Emitted(18, 40) Source(28, 61) + SourceIndex(0)
+15>Emitted(18, 41) Source(28, 62) + SourceIndex(0)
+---
+>>>var c3t2 = ({
+1 >
+2 >^^^^
+3 >    ^^^^
+4 >        ^^^
+5 >           ^
+1 >
+  >
+2 >var 
+3 >    c3t2
+4 >         = <IFoo>
+5 >           (
+1 >Emitted(19, 1) Source(29, 1) + SourceIndex(0)
+2 >Emitted(19, 5) Source(29, 5) + SourceIndex(0)
+3 >Emitted(19, 9) Source(29, 9) + SourceIndex(0)
+4 >Emitted(19, 12) Source(29, 18) + SourceIndex(0)
+5 >Emitted(19, 13) Source(29, 19) + SourceIndex(0)
+---
+>>>    n: 1
+1 >^^^^
+2 >    ^
+3 >     ^^
+4 >       ^
+1 >{
+  >    
+2 >    n
+3 >     : 
+4 >       1
+1 >Emitted(20, 5) Source(30, 5) + SourceIndex(0)
+2 >Emitted(20, 6) Source(30, 6) + SourceIndex(0)
+3 >Emitted(20, 8) Source(30, 8) + SourceIndex(0)
+4 >Emitted(20, 9) Source(30, 9) + SourceIndex(0)
+---
+>>>});
+1 >^
+2 > ^
+3 >  ^
+4 >   ^^^^^^^^^^^^->
+1 >
+  >}
+2 > )
+3 >  
+1 >Emitted(21, 2) Source(31, 2) + SourceIndex(0)
+2 >Emitted(21, 3) Source(31, 3) + SourceIndex(0)
+3 >Emitted(21, 4) Source(31, 3) + SourceIndex(0)
+---
+>>>var c3t3 = [];
+1->
+2 >^^^^
+3 >    ^^^^
+4 >        ^^^
+5 >           ^^
+6 >             ^
+7 >              ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1->
+  >
+2 >var 
+3 >    c3t3
+4 >        : number[] = 
+5 >           []
+6 >             ;
+1->Emitted(22, 1) Source(32, 1) + SourceIndex(0)
+2 >Emitted(22, 5) Source(32, 5) + SourceIndex(0)
+3 >Emitted(22, 9) Source(32, 9) + SourceIndex(0)
+4 >Emitted(22, 12) Source(32, 22) + SourceIndex(0)
+5 >Emitted(22, 14) Source(32, 24) + SourceIndex(0)
+6 >Emitted(22, 15) Source(32, 25) + SourceIndex(0)
+---
+>>>var c3t4 = function () { return ({}); };
+1->
+2 >^^^^
+3 >    ^^^^
+4 >        ^^^
+5 >           ^^^^^^^^^^^^^^
+6 >                         ^^^^^^^
+7 >                                ^
+8 >                                 ^^
+9 >                                   ^
+10>                                    ^
+11>                                     ^
+12>                                      ^
+13>                                       ^
+14>                                        ^^->
+1->
+  >
+2 >var 
+3 >    c3t4
+4 >        : () => IFoo = 
+5 >           function() { 
+6 >                         return <IFoo>
+7 >                                (
+8 >                                 {}
+9 >                                   )
+10>                                    
+11>                                      
+12>                                      }
+13>                                       ;
+1->Emitted(23, 1) Source(33, 1) + SourceIndex(0)
+2 >Emitted(23, 5) Source(33, 5) + SourceIndex(0)
+3 >Emitted(23, 9) Source(33, 9) + SourceIndex(0)
+4 >Emitted(23, 12) Source(33, 24) + SourceIndex(0)
+5 >Emitted(23, 26) Source(33, 37) + SourceIndex(0)
+6 >Emitted(23, 33) Source(33, 50) + SourceIndex(0)
+7 >Emitted(23, 34) Source(33, 51) + SourceIndex(0)
+8 >Emitted(23, 36) Source(33, 53) + SourceIndex(0)
+9 >Emitted(23, 37) Source(33, 54) + SourceIndex(0)
+10>Emitted(23, 38) Source(33, 54) + SourceIndex(0)
+11>Emitted(23, 39) Source(33, 55) + SourceIndex(0)
+12>Emitted(23, 40) Source(33, 56) + SourceIndex(0)
+13>Emitted(23, 41) Source(33, 57) + SourceIndex(0)
+---
+>>>var c3t5 = function (n) { return ({}); };
+1->
+2 >^^^^
+3 >    ^^^^
+4 >        ^^^
+5 >           ^^^^^^^^^^
+6 >                     ^
+7 >                      ^^^^
+8 >                          ^^^^^^^
+9 >                                 ^
+10>                                  ^^
+11>                                    ^
+12>                                     ^
+13>                                      ^
+14>                                       ^
+15>                                        ^
+16>                                         ^^^^->
+1->
+  >
+2 >var 
+3 >    c3t5
+4 >        : (n: number) => IFoo = 
+5 >           function(
+6 >                     n
+7 >                      ) { 
+8 >                          return <IFoo>
+9 >                                 (
+10>                                  {}
+11>                                    )
+12>                                     
+13>                                       
+14>                                       }
+15>                                        ;
+1->Emitted(24, 1) Source(34, 1) + SourceIndex(0)
+2 >Emitted(24, 5) Source(34, 5) + SourceIndex(0)
+3 >Emitted(24, 9) Source(34, 9) + SourceIndex(0)
+4 >Emitted(24, 12) Source(34, 33) + SourceIndex(0)
+5 >Emitted(24, 22) Source(34, 42) + SourceIndex(0)
+6 >Emitted(24, 23) Source(34, 43) + SourceIndex(0)
+7 >Emitted(24, 27) Source(34, 47) + SourceIndex(0)
+8 >Emitted(24, 34) Source(34, 60) + SourceIndex(0)
+9 >Emitted(24, 35) Source(34, 61) + SourceIndex(0)
+10>Emitted(24, 37) Source(34, 63) + SourceIndex(0)
+11>Emitted(24, 38) Source(34, 64) + SourceIndex(0)
+12>Emitted(24, 39) Source(34, 64) + SourceIndex(0)
+13>Emitted(24, 40) Source(34, 65) + SourceIndex(0)
+14>Emitted(24, 41) Source(34, 66) + SourceIndex(0)
+15>Emitted(24, 42) Source(34, 67) + SourceIndex(0)
+---
+>>>var c3t6 = function (n, s) { return ({}); };
+1->
+2 >^^^^
+3 >    ^^^^
+4 >        ^^^
+5 >           ^^^^^^^^^^
+6 >                     ^
+7 >                      ^^
+8 >                        ^
+9 >                         ^^^^
+10>                             ^^^^^^^
+11>                                    ^
+12>                                     ^^
+13>                                       ^
+14>                                        ^
+15>                                         ^
+16>                                          ^
+17>                                           ^
+1->
+  >
+2 >var 
+3 >    c3t6
+4 >        : (n: number, s: string) => IFoo = 
+5 >           function(
+6 >                     n
+7 >                      , 
+8 >                        s
+9 >                         ) { 
+10>                             return <IFoo>
+11>                                    (
+12>                                     {}
+13>                                       )
+14>                                        
+15>                                          
+16>                                          }
+17>                                           ;
+1->Emitted(25, 1) Source(35, 1) + SourceIndex(0)
+2 >Emitted(25, 5) Source(35, 5) + SourceIndex(0)
+3 >Emitted(25, 9) Source(35, 9) + SourceIndex(0)
+4 >Emitted(25, 12) Source(35, 44) + SourceIndex(0)
+5 >Emitted(25, 22) Source(35, 53) + SourceIndex(0)
+6 >Emitted(25, 23) Source(35, 54) + SourceIndex(0)
+7 >Emitted(25, 25) Source(35, 56) + SourceIndex(0)
+8 >Emitted(25, 26) Source(35, 57) + SourceIndex(0)
+9 >Emitted(25, 30) Source(35, 61) + SourceIndex(0)
+10>Emitted(25, 37) Source(35, 74) + SourceIndex(0)
+11>Emitted(25, 38) Source(35, 75) + SourceIndex(0)
+12>Emitted(25, 40) Source(35, 77) + SourceIndex(0)
+13>Emitted(25, 41) Source(35, 78) + SourceIndex(0)
+14>Emitted(25, 42) Source(35, 78) + SourceIndex(0)
+15>Emitted(25, 43) Source(35, 79) + SourceIndex(0)
+16>Emitted(25, 44) Source(35, 80) + SourceIndex(0)
+17>Emitted(25, 45) Source(35, 81) + SourceIndex(0)
+---
+>>>var c3t7 = function (n) { return n; };
+1 >
+2 >^^^^
+3 >    ^^^^
+4 >        ^^^
+5 >           ^^^^^^^^^^
+6 >                     ^
+7 >                      ^^^^
+8 >                          ^^^^^^^
+9 >                                 ^
+10>                                  ^
+11>                                   ^
+12>                                    ^
+13>                                     ^
+14>                                      ^->
+1 >
+  >
+2 >var 
+3 >    c3t7
+4 >        : {
+  >            (n: number): number;    
+  >            (s1: string): number;
+  >        } = 
+5 >           function(
+6 >                     n
+7 >                      ) { 
+8 >                          return 
+9 >                                 n
+10>                                  ;
+11>                                    
+12>                                    }
+13>                                     ;
+1 >Emitted(26, 1) Source(36, 1) + SourceIndex(0)
+2 >Emitted(26, 5) Source(36, 5) + SourceIndex(0)
+3 >Emitted(26, 9) Source(36, 9) + SourceIndex(0)
+4 >Emitted(26, 12) Source(39, 5) + SourceIndex(0)
+5 >Emitted(26, 22) Source(39, 14) + SourceIndex(0)
+6 >Emitted(26, 23) Source(39, 15) + SourceIndex(0)
+7 >Emitted(26, 27) Source(39, 19) + SourceIndex(0)
+8 >Emitted(26, 34) Source(39, 26) + SourceIndex(0)
+9 >Emitted(26, 35) Source(39, 27) + SourceIndex(0)
+10>Emitted(26, 36) Source(39, 28) + SourceIndex(0)
+11>Emitted(26, 37) Source(39, 29) + SourceIndex(0)
+12>Emitted(26, 38) Source(39, 30) + SourceIndex(0)
+13>Emitted(26, 39) Source(39, 31) + SourceIndex(0)
+---
+>>>var c3t8 = function (n) { return n; };
+1->
+2 >^^^^
+3 >    ^^^^
+4 >        ^^^
+5 >           ^^^^^^^^^^
+6 >                     ^
+7 >                      ^^^^
+8 >                          ^^^^^^^
+9 >                                 ^
+10>                                  ^
+11>                                   ^
+12>                                    ^
+13>                                     ^
+1->
+  >
+  >
+2 >var 
+3 >    c3t8
+4 >        : (n: number, s: string) => number = 
+5 >           function(
+6 >                     n
+7 >                      ) { 
+8 >                          return 
+9 >                                 n
+10>                                  ;
+11>                                    
+12>                                    }
+13>                                     ;
+1->Emitted(27, 1) Source(41, 1) + SourceIndex(0)
+2 >Emitted(27, 5) Source(41, 5) + SourceIndex(0)
+3 >Emitted(27, 9) Source(41, 9) + SourceIndex(0)
+4 >Emitted(27, 12) Source(41, 46) + SourceIndex(0)
+5 >Emitted(27, 22) Source(41, 55) + SourceIndex(0)
+6 >Emitted(27, 23) Source(41, 56) + SourceIndex(0)
+7 >Emitted(27, 27) Source(41, 60) + SourceIndex(0)
+8 >Emitted(27, 34) Source(41, 67) + SourceIndex(0)
+9 >Emitted(27, 35) Source(41, 68) + SourceIndex(0)
+10>Emitted(27, 36) Source(41, 69) + SourceIndex(0)
+11>Emitted(27, 37) Source(41, 70) + SourceIndex(0)
+12>Emitted(27, 38) Source(41, 71) + SourceIndex(0)
+13>Emitted(27, 39) Source(41, 72) + SourceIndex(0)
+---
+>>>var c3t9 = [[], []];
+1 >
+2 >^^^^
+3 >    ^^^^
+4 >        ^^^
+5 >           ^
+6 >            ^^
+7 >              ^^
+8 >                ^^
+9 >                  ^
+10>                   ^
+11>                    ^^^^^^->
+1 >
+  >
+2 >var 
+3 >    c3t9
+4 >        : number[][] = 
+5 >           [
+6 >            []
+7 >              ,
+8 >                []
+9 >                  ]
+10>                   ;
+1 >Emitted(28, 1) Source(42, 1) + SourceIndex(0)
+2 >Emitted(28, 5) Source(42, 5) + SourceIndex(0)
+3 >Emitted(28, 9) Source(42, 9) + SourceIndex(0)
+4 >Emitted(28, 12) Source(42, 24) + SourceIndex(0)
+5 >Emitted(28, 13) Source(42, 25) + SourceIndex(0)
+6 >Emitted(28, 15) Source(42, 27) + SourceIndex(0)
+7 >Emitted(28, 17) Source(42, 28) + SourceIndex(0)
+8 >Emitted(28, 19) Source(42, 30) + SourceIndex(0)
+9 >Emitted(28, 20) Source(42, 31) + SourceIndex(0)
+10>Emitted(28, 21) Source(42, 32) + SourceIndex(0)
+---
+>>>var c3t10 = [({}), ({})];
+1->
+2 >^^^^
+3 >    ^^^^^
+4 >         ^^^
+5 >            ^
+6 >             ^
+7 >              ^^
+8 >                ^
+9 >                 ^^
+10>                   ^
+11>                    ^^
+12>                      ^
+13>                       ^
+14>                        ^
+15>                         ^^^^^^^^^^^^^^^^^^^^->
+1->
+  >
+2 >var 
+3 >    c3t10
+4 >         : IFoo[] = 
+5 >            [<IFoo>
+6 >             (
+7 >              {}
+8 >                )
+9 >                 ,<IFoo>
+10>                   (
+11>                    {}
+12>                      )
+13>                       ]
+14>                        ;
+1->Emitted(29, 1) Source(43, 1) + SourceIndex(0)
+2 >Emitted(29, 5) Source(43, 5) + SourceIndex(0)
+3 >Emitted(29, 10) Source(43, 10) + SourceIndex(0)
+4 >Emitted(29, 13) Source(43, 21) + SourceIndex(0)
+5 >Emitted(29, 14) Source(43, 28) + SourceIndex(0)
+6 >Emitted(29, 15) Source(43, 29) + SourceIndex(0)
+7 >Emitted(29, 17) Source(43, 31) + SourceIndex(0)
+8 >Emitted(29, 18) Source(43, 32) + SourceIndex(0)
+9 >Emitted(29, 20) Source(43, 39) + SourceIndex(0)
+10>Emitted(29, 21) Source(43, 40) + SourceIndex(0)
+11>Emitted(29, 23) Source(43, 42) + SourceIndex(0)
+12>Emitted(29, 24) Source(43, 43) + SourceIndex(0)
+13>Emitted(29, 25) Source(43, 44) + SourceIndex(0)
+14>Emitted(29, 26) Source(43, 45) + SourceIndex(0)
+---
+>>>var c3t11 = [function (n, s) { return s; }];
+1->
+2 >^^^^
+3 >    ^^^^^
+4 >         ^^^
+5 >            ^
+6 >             ^^^^^^^^^^
+7 >                       ^
+8 >                        ^^
+9 >                          ^
+10>                           ^^^^
+11>                               ^^^^^^^
+12>                                      ^
+13>                                       ^
+14>                                        ^
+15>                                         ^
+16>                                          ^
+17>                                           ^
+1->
+  >
+2 >var 
+3 >    c3t11
+4 >         : {(n: number, s: string): string;}[] = 
+5 >            [
+6 >             function(
+7 >                       n
+8 >                        , 
+9 >                          s
+10>                           ) { 
+11>                               return 
+12>                                      s
+13>                                       ;
+14>                                         
+15>                                         }
+16>                                          ]
+17>                                           ;
+1->Emitted(30, 1) Source(44, 1) + SourceIndex(0)
+2 >Emitted(30, 5) Source(44, 5) + SourceIndex(0)
+3 >Emitted(30, 10) Source(44, 10) + SourceIndex(0)
+4 >Emitted(30, 13) Source(44, 50) + SourceIndex(0)
+5 >Emitted(30, 14) Source(44, 51) + SourceIndex(0)
+6 >Emitted(30, 24) Source(44, 60) + SourceIndex(0)
+7 >Emitted(30, 25) Source(44, 61) + SourceIndex(0)
+8 >Emitted(30, 27) Source(44, 63) + SourceIndex(0)
+9 >Emitted(30, 28) Source(44, 64) + SourceIndex(0)
+10>Emitted(30, 32) Source(44, 68) + SourceIndex(0)
+11>Emitted(30, 39) Source(44, 75) + SourceIndex(0)
+12>Emitted(30, 40) Source(44, 76) + SourceIndex(0)
+13>Emitted(30, 41) Source(44, 77) + SourceIndex(0)
+14>Emitted(30, 42) Source(44, 78) + SourceIndex(0)
+15>Emitted(30, 43) Source(44, 79) + SourceIndex(0)
+16>Emitted(30, 44) Source(44, 80) + SourceIndex(0)
+17>Emitted(30, 45) Source(44, 81) + SourceIndex(0)
+---
+>>>var c3t12 = {
+1 >
+2 >^^^^
+3 >    ^^^^^
+4 >         ^^^
+5 >            ^^->
+1 >
+  >
+2 >var 
+3 >    c3t12
+4 >         : IBar = 
+1 >Emitted(31, 1) Source(45, 1) + SourceIndex(0)
+2 >Emitted(31, 5) Source(45, 5) + SourceIndex(0)
+3 >Emitted(31, 10) Source(45, 10) + SourceIndex(0)
+4 >Emitted(31, 13) Source(45, 19) + SourceIndex(0)
+---
+>>>    foo: ({})
+1->^^^^
+2 >    ^^^
+3 >       ^^
+4 >         ^
+5 >          ^^
+6 >            ^
+1->{
+  >    
+2 >    foo
+3 >       : <IFoo>
+4 >         (
+5 >          {}
+6 >            )
+1->Emitted(32, 5) Source(46, 5) + SourceIndex(0)
+2 >Emitted(32, 8) Source(46, 8) + SourceIndex(0)
+3 >Emitted(32, 10) Source(46, 16) + SourceIndex(0)
+4 >Emitted(32, 11) Source(46, 17) + SourceIndex(0)
+5 >Emitted(32, 13) Source(46, 19) + SourceIndex(0)
+6 >Emitted(32, 14) Source(46, 20) + SourceIndex(0)
+---
+>>>};
+1 >^
+2 > ^
+3 >  ^^^^^^^^^^^^^->
+1 >
+  >}
+2 > 
+1 >Emitted(33, 2) Source(47, 2) + SourceIndex(0)
+2 >Emitted(33, 3) Source(47, 2) + SourceIndex(0)
+---
+>>>var c3t13 = ({
+1->
+2 >^^^^
+3 >    ^^^^^
+4 >         ^^^
+5 >            ^
+6 >             ^^^^^^^^^^^^^^^^^^^^^^^^->
+1->
+  >
+2 >var 
+3 >    c3t13
+4 >          = <IFoo>
+5 >            (
+1->Emitted(34, 1) Source(48, 1) + SourceIndex(0)
+2 >Emitted(34, 5) Source(48, 5) + SourceIndex(0)
+3 >Emitted(34, 10) Source(48, 10) + SourceIndex(0)
+4 >Emitted(34, 13) Source(48, 19) + SourceIndex(0)
+5 >Emitted(34, 14) Source(48, 20) + SourceIndex(0)
+---
+>>>    f: function (i, s) { return s; }
+1->^^^^
+2 >    ^
+3 >     ^^
+4 >       ^^^^^^^^^^
+5 >                 ^
+6 >                  ^^
+7 >                    ^
+8 >                     ^^^^
+9 >                         ^^^^^^^
+10>                                ^
+11>                                 ^
+12>                                  ^
+13>                                   ^
+1->{
+  >    
+2 >    f
+3 >     : 
+4 >       function(
+5 >                 i
+6 >                  , 
+7 >                    s
+8 >                     ) { 
+9 >                         return 
+10>                                s
+11>                                 ;
+12>                                   
+13>                                   }
+1->Emitted(35, 5) Source(49, 5) + SourceIndex(0)
+2 >Emitted(35, 6) Source(49, 6) + SourceIndex(0)
+3 >Emitted(35, 8) Source(49, 8) + SourceIndex(0)
+4 >Emitted(35, 18) Source(49, 17) + SourceIndex(0)
+5 >Emitted(35, 19) Source(49, 18) + SourceIndex(0)
+6 >Emitted(35, 21) Source(49, 20) + SourceIndex(0)
+7 >Emitted(35, 22) Source(49, 21) + SourceIndex(0)
+8 >Emitted(35, 26) Source(49, 25) + SourceIndex(0)
+9 >Emitted(35, 33) Source(49, 32) + SourceIndex(0)
+10>Emitted(35, 34) Source(49, 33) + SourceIndex(0)
+11>Emitted(35, 35) Source(49, 34) + SourceIndex(0)
+12>Emitted(35, 36) Source(49, 35) + SourceIndex(0)
+13>Emitted(35, 37) Source(49, 36) + SourceIndex(0)
+---
+>>>});
+1 >^
+2 > ^
+3 >  ^
+4 >   ^^^^^^^^^^^^->
+1 >
+  >}
+2 > )
+3 >  
+1 >Emitted(36, 2) Source(50, 2) + SourceIndex(0)
+2 >Emitted(36, 3) Source(50, 3) + SourceIndex(0)
+3 >Emitted(36, 4) Source(50, 3) + SourceIndex(0)
+---
+>>>var c3t14 = ({
+1->
+2 >^^^^
+3 >    ^^^^^
+4 >         ^^^
+5 >            ^
+1->
+  >
+2 >var 
+3 >    c3t14
+4 >          = <IFoo>
+5 >            (
+1->Emitted(37, 1) Source(51, 1) + SourceIndex(0)
+2 >Emitted(37, 5) Source(51, 5) + SourceIndex(0)
+3 >Emitted(37, 10) Source(51, 10) + SourceIndex(0)
+4 >Emitted(37, 13) Source(51, 19) + SourceIndex(0)
+5 >Emitted(37, 14) Source(51, 20) + SourceIndex(0)
+---
+>>>    a: []
+1 >^^^^
+2 >    ^
+3 >     ^^
+4 >       ^^
+1 >{
+  >    
+2 >    a
+3 >     : 
+4 >       []
+1 >Emitted(38, 5) Source(52, 5) + SourceIndex(0)
+2 >Emitted(38, 6) Source(52, 6) + SourceIndex(0)
+3 >Emitted(38, 8) Source(52, 8) + SourceIndex(0)
+4 >Emitted(38, 10) Source(52, 10) + SourceIndex(0)
+---
+>>>});
+1 >^
+2 > ^
+3 >  ^
+4 >   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >}
+2 > )
+3 >  
+1 >Emitted(39, 2) Source(53, 2) + SourceIndex(0)
+2 >Emitted(39, 3) Source(53, 3) + SourceIndex(0)
+3 >Emitted(39, 4) Source(53, 3) + SourceIndex(0)
+---
+>>>// CONTEXT: Class property assignment
+1->
+2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+3 >                                     ^^^->
+1->
+  >
+  >
+2 >// CONTEXT: Class property assignment
+1->Emitted(40, 1) Source(55, 1) + SourceIndex(0)
+2 >Emitted(40, 38) Source(55, 38) + SourceIndex(0)
+---
+>>>var C4T5 = /** @class */ (function () {
+1->
+2 >^^^^^^^^^^^^^^^^^^^^^^->
+1->
+  >
+1->Emitted(41, 1) Source(56, 1) + SourceIndex(0)
+---
+>>>    function C4T5() {
+1->^^^^
+2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1->class C4T5 {
+  >    foo: (i: number, s: string) => string;
+  >    
+1->Emitted(42, 5) Source(58, 5) + SourceIndex(0)
+---
+>>>        this.foo = function (i, s) {
+1->^^^^^^^^
+2 >        ^^^^
+3 >            ^
+4 >             ^^^
+5 >                ^^^
+6 >                   ^^^^^^^^^^
+7 >                             ^
+8 >                              ^^
+9 >                                ^
+1->constructor() {
+  >        
+2 >        this
+3 >            .
+4 >             foo
+5 >                 = 
+6 >                   function(
+7 >                             i
+8 >                              , 
+9 >                                s
+1->Emitted(43, 9) Source(59, 9) + SourceIndex(0)
+2 >Emitted(43, 13) Source(59, 13) + SourceIndex(0)
+3 >Emitted(43, 14) Source(59, 14) + SourceIndex(0)
+4 >Emitted(43, 17) Source(59, 17) + SourceIndex(0)
+5 >Emitted(43, 20) Source(59, 20) + SourceIndex(0)
+6 >Emitted(43, 30) Source(59, 29) + SourceIndex(0)
+7 >Emitted(43, 31) Source(59, 30) + SourceIndex(0)
+8 >Emitted(43, 33) Source(59, 32) + SourceIndex(0)
+9 >Emitted(43, 34) Source(59, 33) + SourceIndex(0)
+---
+>>>            return s;
+1 >^^^^^^^^^^^^
+2 >            ^^^^^^^
+3 >                   ^
+4 >                    ^
+1 >) {
+  >            
+2 >            return 
+3 >                   s
+4 >                    ;
+1 >Emitted(44, 13) Source(60, 13) + SourceIndex(0)
+2 >Emitted(44, 20) Source(60, 20) + SourceIndex(0)
+3 >Emitted(44, 21) Source(60, 21) + SourceIndex(0)
+4 >Emitted(44, 22) Source(60, 22) + SourceIndex(0)
+---
+>>>        };
+1 >^^^^^^^^
+2 >        ^
+3 >         ^
+1 >
+  >        
+2 >        }
+3 >         
+1 >Emitted(45, 9) Source(61, 9) + SourceIndex(0)
+2 >Emitted(45, 10) Source(61, 10) + SourceIndex(0)
+3 >Emitted(45, 11) Source(61, 10) + SourceIndex(0)
+---
+>>>    }
+1 >^^^^
+2 >    ^
+3 >     ^^^^^^^^^^^^->
+1 >
+  >    
+2 >    }
+1 >Emitted(46, 5) Source(62, 5) + SourceIndex(0)
+2 >Emitted(46, 6) Source(62, 6) + SourceIndex(0)
+---
+>>>    return C4T5;
+1->^^^^
+2 >    ^^^^^^^^^^^
+1->
+  >
+2 >    }
+1->Emitted(47, 5) Source(63, 1) + SourceIndex(0)
+2 >Emitted(47, 16) Source(63, 2) + SourceIndex(0)
+---
+>>>}());
+1 >
+2 >^
+3 > 
+4 > ^^^^
+5 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+2 >}
+3 > 
+4 > class C4T5 {
+  >     foo: (i: number, s: string) => string;
+  >     constructor() {
+  >         this.foo = function(i, s) {
+  >             return s;
+  >         }
+  >     }
+  > }
+1 >Emitted(48, 1) Source(63, 1) + SourceIndex(0)
+2 >Emitted(48, 2) Source(63, 2) + SourceIndex(0)
+3 >Emitted(48, 2) Source(56, 1) + SourceIndex(0)
+4 >Emitted(48, 6) Source(63, 2) + SourceIndex(0)
+---
+>>>// CONTEXT: Module property assignment
+1->
+2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+1->
+  >
+  >
+2 >// CONTEXT: Module property assignment
+1->Emitted(49, 1) Source(65, 1) + SourceIndex(0)
+2 >Emitted(49, 39) Source(65, 39) + SourceIndex(0)
+---
+>>>var C5T5;
+1 >
+2 >^^^^
+3 >    ^^^^
+4 >        ^
+5 >         ^^^^^^^^^^->
+1 >
+  >
+2 >module 
+3 >    C5T5
+4 >         {
+  >            export var foo: (i: number, s: string) => string;
+  >            foo = function(i, s) {
+  >                return s;
+  >            }
+  >        }
+1 >Emitted(50, 1) Source(66, 1) + SourceIndex(0)
+2 >Emitted(50, 5) Source(66, 8) + SourceIndex(0)
+3 >Emitted(50, 9) Source(66, 12) + SourceIndex(0)
+4 >Emitted(50, 10) Source(71, 2) + SourceIndex(0)
+---
+>>>(function (C5T5) {
+1->
+2 >^^^^^^^^^^^
+3 >           ^^^^
+4 >               ^^^^^^^^^^^^^^^^^^->
+1->
+2 >module 
+3 >           C5T5
+1->Emitted(51, 1) Source(66, 1) + SourceIndex(0)
+2 >Emitted(51, 12) Source(66, 8) + SourceIndex(0)
+3 >Emitted(51, 16) Source(66, 12) + SourceIndex(0)
+---
+>>>    C5T5.foo = function (i, s) {
+1->^^^^
+2 >    ^^^^^
+3 >         ^^^
+4 >            ^^^
+5 >               ^^^^^^^^^^
+6 >                         ^
+7 >                          ^^
+8 >                            ^
+1-> {
+  >    export var foo: (i: number, s: string) => string;
+  >    
+2 >    
+3 >         foo
+4 >             = 
+5 >               function(
+6 >                         i
+7 >                          , 
+8 >                            s
+1->Emitted(52, 5) Source(68, 5) + SourceIndex(0)
+2 >Emitted(52, 10) Source(68, 5) + SourceIndex(0)
+3 >Emitted(52, 13) Source(68, 8) + SourceIndex(0)
+4 >Emitted(52, 16) Source(68, 11) + SourceIndex(0)
+5 >Emitted(52, 26) Source(68, 20) + SourceIndex(0)
+6 >Emitted(52, 27) Source(68, 21) + SourceIndex(0)
+7 >Emitted(52, 29) Source(68, 23) + SourceIndex(0)
+8 >Emitted(52, 30) Source(68, 24) + SourceIndex(0)
+---
+>>>        return s;
+1 >^^^^^^^^
+2 >        ^^^^^^^
+3 >               ^
+4 >                ^
+1 >) {
+  >        
+2 >        return 
+3 >               s
+4 >                ;
+1 >Emitted(53, 9) Source(69, 9) + SourceIndex(0)
+2 >Emitted(53, 16) Source(69, 16) + SourceIndex(0)
+3 >Emitted(53, 17) Source(69, 17) + SourceIndex(0)
+4 >Emitted(53, 18) Source(69, 18) + SourceIndex(0)
+---
+>>>    };
+1 >^^^^
+2 >    ^
+3 >     ^
+4 >      ^^^^^^^^^^^^^^^^^^^->
+1 >
+  >    
+2 >    }
+3 >     
+1 >Emitted(54, 5) Source(70, 5) + SourceIndex(0)
+2 >Emitted(54, 6) Source(70, 6) + SourceIndex(0)
+3 >Emitted(54, 7) Source(70, 6) + SourceIndex(0)
+---
+>>>})(C5T5 || (C5T5 = {}));
+1->
+2 >^
+3 > ^^
+4 >   ^^^^
+5 >       ^^^^^
+6 >            ^^^^
+7 >                ^^^^^^^^
+8 >                        ^^^^^^^^->
+1->
+  >
+2 >}
+3 > 
+4 >   C5T5
+5 >       
+6 >            C5T5
+7 >                 {
+  >                    export var foo: (i: number, s: string) => string;
+  >                    foo = function(i, s) {
+  >                        return s;
+  >                    }
+  >                }
+1->Emitted(55, 1) Source(71, 1) + SourceIndex(0)
+2 >Emitted(55, 2) Source(71, 2) + SourceIndex(0)
+3 >Emitted(55, 4) Source(66, 8) + SourceIndex(0)
+4 >Emitted(55, 8) Source(66, 12) + SourceIndex(0)
+5 >Emitted(55, 13) Source(66, 8) + SourceIndex(0)
+6 >Emitted(55, 17) Source(66, 12) + SourceIndex(0)
+7 >Emitted(55, 25) Source(71, 2) + SourceIndex(0)
+---
+>>>// CONTEXT: Variable assignment
+1->
+2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+1->
+  >
+  >
+2 >// CONTEXT: Variable assignment
+1->Emitted(56, 1) Source(73, 1) + SourceIndex(0)
+2 >Emitted(56, 32) Source(73, 32) + SourceIndex(0)
+---
+>>>var c6t5;
+1 >
+2 >^^^^
+3 >    ^^^^
+4 >        ^
+5 >         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >
+2 >var 
+3 >    c6t5: (n: number) => IFoo
+4 >        ;
+1 >Emitted(57, 1) Source(74, 1) + SourceIndex(0)
+2 >Emitted(57, 5) Source(74, 5) + SourceIndex(0)
+3 >Emitted(57, 9) Source(74, 30) + SourceIndex(0)
+4 >Emitted(57, 10) Source(74, 31) + SourceIndex(0)
+---
+>>>c6t5 = function (n) { return ({}); };
+1->
+2 >^^^^
+3 >    ^^^
+4 >       ^^^^^^^^^^
+5 >                 ^
+6 >                  ^^^^
+7 >                      ^^^^^^^
+8 >                             ^
+9 >                              ^^
+10>                                ^
+11>                                 ^
+12>                                  ^
+13>                                   ^
+14>                                    ^
+1->
+  >
+2 >c6t5
+3 >     = <(n: number) => IFoo>
+4 >       function(
+5 >                 n
+6 >                  ) { 
+7 >                      return <IFoo>
+8 >                             (
+9 >                              {}
+10>                                )
+11>                                 
+12>                                   
+13>                                   }
+14>                                    ;
+1->Emitted(58, 1) Source(75, 1) + SourceIndex(0)
+2 >Emitted(58, 5) Source(75, 5) + SourceIndex(0)
+3 >Emitted(58, 8) Source(75, 29) + SourceIndex(0)
+4 >Emitted(58, 18) Source(75, 38) + SourceIndex(0)
+5 >Emitted(58, 19) Source(75, 39) + SourceIndex(0)
+6 >Emitted(58, 23) Source(75, 43) + SourceIndex(0)
+7 >Emitted(58, 30) Source(75, 56) + SourceIndex(0)
+8 >Emitted(58, 31) Source(75, 57) + SourceIndex(0)
+9 >Emitted(58, 33) Source(75, 59) + SourceIndex(0)
+10>Emitted(58, 34) Source(75, 60) + SourceIndex(0)
+11>Emitted(58, 35) Source(75, 60) + SourceIndex(0)
+12>Emitted(58, 36) Source(75, 61) + SourceIndex(0)
+13>Emitted(58, 37) Source(75, 62) + SourceIndex(0)
+14>Emitted(58, 38) Source(75, 63) + SourceIndex(0)
+---
+>>>// CONTEXT: Array index assignment
+1 >
+2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+1 >
+  >
+  >
+2 >// CONTEXT: Array index assignment
+1 >Emitted(59, 1) Source(77, 1) + SourceIndex(0)
+2 >Emitted(59, 35) Source(77, 35) + SourceIndex(0)
+---
+>>>var c7t2;
+1 >
+2 >^^^^
+3 >    ^^^^
+4 >        ^
+5 >         ^^^^^^^^^^^^^->
+1 >
+  >
+2 >var 
+3 >    c7t2: IFoo[]
+4 >        ;
+1 >Emitted(60, 1) Source(78, 1) + SourceIndex(0)
+2 >Emitted(60, 5) Source(78, 5) + SourceIndex(0)
+3 >Emitted(60, 9) Source(78, 17) + SourceIndex(0)
+4 >Emitted(60, 10) Source(78, 18) + SourceIndex(0)
+---
+>>>c7t2[0] = ({ n: 1 });
+1->
+2 >^^^^
+3 >    ^
+4 >     ^
+5 >      ^
+6 >       ^^^
+7 >          ^
+8 >           ^^
+9 >             ^
+10>              ^^
+11>                ^
+12>                 ^^
+13>                   ^
+14>                    ^
+1->
+  >
+2 >c7t2
+3 >    [
+4 >     0
+5 >      ]
+6 >        = <IFoo>
+7 >          (
+8 >           {
+9 >             n
+10>              : 
+11>                1
+12>                 }
+13>                   )
+14>                    ;
+1->Emitted(61, 1) Source(79, 1) + SourceIndex(0)
+2 >Emitted(61, 5) Source(79, 5) + SourceIndex(0)
+3 >Emitted(61, 6) Source(79, 6) + SourceIndex(0)
+4 >Emitted(61, 7) Source(79, 7) + SourceIndex(0)
+5 >Emitted(61, 8) Source(79, 8) + SourceIndex(0)
+6 >Emitted(61, 11) Source(79, 17) + SourceIndex(0)
+7 >Emitted(61, 12) Source(79, 18) + SourceIndex(0)
+8 >Emitted(61, 14) Source(79, 19) + SourceIndex(0)
+9 >Emitted(61, 15) Source(79, 20) + SourceIndex(0)
+10>Emitted(61, 17) Source(79, 22) + SourceIndex(0)
+11>Emitted(61, 18) Source(79, 23) + SourceIndex(0)
+12>Emitted(61, 20) Source(79, 24) + SourceIndex(0)
+13>Emitted(61, 21) Source(79, 25) + SourceIndex(0)
+14>Emitted(61, 22) Source(79, 26) + SourceIndex(0)
+---
+>>>var objc8 = ({});
+1 >
+2 >^^^^
+3 >    ^^^^^
+4 >         ^^^
+5 >            ^
+6 >             ^^
+7 >               ^
+8 >                ^
+9 >                 ^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >
+  >// CONTEXT: Object property assignment
+  >interface IPlaceHolder {
+  >    t1: (s: string) => string;
+  >    t2: IFoo;
+  >    t3: number[];
+  >    t4: () => IFoo;
+  >    t5: (n: number) => IFoo;
+  >    t6: (n: number, s: string) => IFoo;
+  >    t7: {
+  >            (n: number, s: string): number;    
+  >            //(s1: string, s2: string): number;
+  >        };
+  >    t8: (n: number, s: string) => number;
+  >    t9: number[][];
+  >    t10: IFoo[];
+  >    t11: {(n: number, s: string): string;}[];
+  >    t12: IBar;
+  >    t13: IFoo;
+  >    t14: IFoo;
+  >    }
+  >
+  >
+2 >var 
+3 >    objc8
+4 >         : {
+  >             t1: (s: string) => string;
+  >             t2: IFoo;
+  >             t3: number[];
+  >             t4: () => IFoo;
+  >             t5: (n: number) => IFoo;
+  >             t6: (n: number, s: string) => IFoo;
+  >             t7: {
+  >                     (n: number, s: string): number;    
+  >                     //(s1: string, s2: string): number;
+  >                 };
+  >             t8: (n: number, s: string) => number;
+  >             t9: number[][];
+  >             t10: IFoo[];
+  >             t11: {(n: number, s: string): string;}[];
+  >             t12: IBar;
+  >             t13: IFoo;
+  >             t14: IFoo;
+  >         } = <IPlaceHolder>
+5 >            (
+6 >             {}
+7 >               )
+8 >                ;
+1 >Emitted(62, 1) Source(102, 1) + SourceIndex(0)
+2 >Emitted(62, 5) Source(102, 5) + SourceIndex(0)
+3 >Emitted(62, 10) Source(102, 10) + SourceIndex(0)
+4 >Emitted(62, 13) Source(120, 19) + SourceIndex(0)
+5 >Emitted(62, 14) Source(120, 20) + SourceIndex(0)
+6 >Emitted(62, 16) Source(120, 22) + SourceIndex(0)
+7 >Emitted(62, 17) Source(120, 23) + SourceIndex(0)
+8 >Emitted(62, 18) Source(120, 24) + SourceIndex(0)
+---
+>>>objc8.t1 = (function (s) { return s; });
+1->
+2 >^^^^^
+3 >     ^
+4 >      ^^
+5 >        ^^^
+6 >           ^
+7 >            ^^^^^^^^^^
+8 >                      ^
+9 >                       ^^^^
+10>                           ^^^^^^^
+11>                                  ^
+12>                                   ^
+13>                                    ^
+14>                                     ^
+15>                                      ^
+16>                                       ^
+1->
+  >
+  >
+2 >objc8
+3 >     .
+4 >      t1
+5 >         = 
+6 >           (
+7 >            function(
+8 >                      s
+9 >                       ) { 
+10>                           return 
+11>                                  s
+12>                                   
+13>                                     
+14>                                     }
+15>                                      )
+16>                                       ;
+1->Emitted(63, 1) Source(122, 1) + SourceIndex(0)
+2 >Emitted(63, 6) Source(122, 6) + SourceIndex(0)
+3 >Emitted(63, 7) Source(122, 7) + SourceIndex(0)
+4 >Emitted(63, 9) Source(122, 9) + SourceIndex(0)
+5 >Emitted(63, 12) Source(122, 12) + SourceIndex(0)
+6 >Emitted(63, 13) Source(122, 13) + SourceIndex(0)
+7 >Emitted(63, 23) Source(122, 22) + SourceIndex(0)
+8 >Emitted(63, 24) Source(122, 23) + SourceIndex(0)
+9 >Emitted(63, 28) Source(122, 27) + SourceIndex(0)
+10>Emitted(63, 35) Source(122, 34) + SourceIndex(0)
+11>Emitted(63, 36) Source(122, 35) + SourceIndex(0)
+12>Emitted(63, 37) Source(122, 35) + SourceIndex(0)
+13>Emitted(63, 38) Source(122, 36) + SourceIndex(0)
+14>Emitted(63, 39) Source(122, 37) + SourceIndex(0)
+15>Emitted(63, 40) Source(122, 38) + SourceIndex(0)
+16>Emitted(63, 41) Source(122, 39) + SourceIndex(0)
+---
+>>>objc8.t2 = ({
+1 >
+2 >^^^^^
+3 >     ^
+4 >      ^^
+5 >        ^^^
+6 >           ^
+1 >
+  >
+2 >objc8
+3 >     .
+4 >      t2
+5 >         = <IFoo>
+6 >           (
+1 >Emitted(64, 1) Source(123, 1) + SourceIndex(0)
+2 >Emitted(64, 6) Source(123, 6) + SourceIndex(0)
+3 >Emitted(64, 7) Source(123, 7) + SourceIndex(0)
+4 >Emitted(64, 9) Source(123, 9) + SourceIndex(0)
+5 >Emitted(64, 12) Source(123, 18) + SourceIndex(0)
+6 >Emitted(64, 13) Source(123, 19) + SourceIndex(0)
+---
+>>>    n: 1
+1 >^^^^
+2 >    ^
+3 >     ^^
+4 >       ^
+1 >{
+  >    
+2 >    n
+3 >     : 
+4 >       1
+1 >Emitted(65, 5) Source(124, 5) + SourceIndex(0)
+2 >Emitted(65, 6) Source(124, 6) + SourceIndex(0)
+3 >Emitted(65, 8) Source(124, 8) + SourceIndex(0)
+4 >Emitted(65, 9) Source(124, 9) + SourceIndex(0)
+---
+>>>});
+1 >^
+2 > ^
+3 >  ^
+4 >   ^^^^^^^^^^^^->
+1 >
+  >}
+2 > )
+3 >  ;
+1 >Emitted(66, 2) Source(125, 2) + SourceIndex(0)
+2 >Emitted(66, 3) Source(125, 3) + SourceIndex(0)
+3 >Emitted(66, 4) Source(125, 4) + SourceIndex(0)
+---
+>>>objc8.t3 = [];
+1->
+2 >^^^^^
+3 >     ^
+4 >      ^^
+5 >        ^^^
+6 >           ^^
+7 >             ^
+8 >              ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1->
+  >
+2 >objc8
+3 >     .
+4 >      t3
+5 >         = 
+6 >           []
+7 >             ;
+1->Emitted(67, 1) Source(126, 1) + SourceIndex(0)
+2 >Emitted(67, 6) Source(126, 6) + SourceIndex(0)
+3 >Emitted(67, 7) Source(126, 7) + SourceIndex(0)
+4 >Emitted(67, 9) Source(126, 9) + SourceIndex(0)
+5 >Emitted(67, 12) Source(126, 12) + SourceIndex(0)
+6 >Emitted(67, 14) Source(126, 14) + SourceIndex(0)
+7 >Emitted(67, 15) Source(126, 15) + SourceIndex(0)
+---
+>>>objc8.t4 = function () { return ({}); };
+1->
+2 >^^^^^
+3 >     ^
+4 >      ^^
+5 >        ^^^
+6 >           ^^^^^^^^^^^^^^
+7 >                         ^^^^^^^
+8 >                                ^
+9 >                                 ^^
+10>                                   ^
+11>                                    ^
+12>                                     ^
+13>                                      ^
+14>                                       ^
+15>                                        ^^->
+1->
+  >
+2 >objc8
+3 >     .
+4 >      t4
+5 >         = 
+6 >           function() { 
+7 >                         return <IFoo>
+8 >                                (
+9 >                                 {}
+10>                                   )
+11>                                    
+12>                                      
+13>                                      }
+14>                                       ;
+1->Emitted(68, 1) Source(127, 1) + SourceIndex(0)
+2 >Emitted(68, 6) Source(127, 6) + SourceIndex(0)
+3 >Emitted(68, 7) Source(127, 7) + SourceIndex(0)
+4 >Emitted(68, 9) Source(127, 9) + SourceIndex(0)
+5 >Emitted(68, 12) Source(127, 12) + SourceIndex(0)
+6 >Emitted(68, 26) Source(127, 25) + SourceIndex(0)
+7 >Emitted(68, 33) Source(127, 38) + SourceIndex(0)
+8 >Emitted(68, 34) Source(127, 39) + SourceIndex(0)
+9 >Emitted(68, 36) Source(127, 41) + SourceIndex(0)
+10>Emitted(68, 37) Source(127, 42) + SourceIndex(0)
+11>Emitted(68, 38) Source(127, 42) + SourceIndex(0)
+12>Emitted(68, 39) Source(127, 43) + SourceIndex(0)
+13>Emitted(68, 40) Source(127, 44) + SourceIndex(0)
+14>Emitted(68, 41) Source(127, 45) + SourceIndex(0)
+---
+>>>objc8.t5 = function (n) { return ({}); };
+1->
+2 >^^^^^
+3 >     ^
+4 >      ^^
+5 >        ^^^
+6 >           ^^^^^^^^^^
+7 >                     ^
+8 >                      ^^^^
+9 >                          ^^^^^^^
+10>                                 ^
+11>                                  ^^
+12>                                    ^
+13>                                     ^
+14>                                      ^
+15>                                       ^
+16>                                        ^
+17>                                         ^^^^->
+1->
+  >
+2 >objc8
+3 >     .
+4 >      t5
+5 >         = 
+6 >           function(
+7 >                     n
+8 >                      ) { 
+9 >                          return <IFoo>
+10>                                 (
+11>                                  {}
+12>                                    )
+13>                                     
+14>                                       
+15>                                       }
+16>                                        ;
+1->Emitted(69, 1) Source(128, 1) + SourceIndex(0)
+2 >Emitted(69, 6) Source(128, 6) + SourceIndex(0)
+3 >Emitted(69, 7) Source(128, 7) + SourceIndex(0)
+4 >Emitted(69, 9) Source(128, 9) + SourceIndex(0)
+5 >Emitted(69, 12) Source(128, 12) + SourceIndex(0)
+6 >Emitted(69, 22) Source(128, 21) + SourceIndex(0)
+7 >Emitted(69, 23) Source(128, 22) + SourceIndex(0)
+8 >Emitted(69, 27) Source(128, 26) + SourceIndex(0)
+9 >Emitted(69, 34) Source(128, 39) + SourceIndex(0)
+10>Emitted(69, 35) Source(128, 40) + SourceIndex(0)
+11>Emitted(69, 37) Source(128, 42) + SourceIndex(0)
+12>Emitted(69, 38) Source(128, 43) + SourceIndex(0)
+13>Emitted(69, 39) Source(128, 43) + SourceIndex(0)
+14>Emitted(69, 40) Source(128, 44) + SourceIndex(0)
+15>Emitted(69, 41) Source(128, 45) + SourceIndex(0)
+16>Emitted(69, 42) Source(128, 46) + SourceIndex(0)
+---
+>>>objc8.t6 = function (n, s) { return ({}); };
+1->
+2 >^^^^^
+3 >     ^
+4 >      ^^
+5 >        ^^^
+6 >           ^^^^^^^^^^
+7 >                     ^
+8 >                      ^^
+9 >                        ^
+10>                         ^^^^
+11>                             ^^^^^^^
+12>                                    ^
+13>                                     ^^
+14>                                       ^
+15>                                        ^
+16>                                         ^
+17>                                          ^
+18>                                           ^
+1->
+  >
+2 >objc8
+3 >     .
+4 >      t6
+5 >         = 
+6 >           function(
+7 >                     n
+8 >                      , 
+9 >                        s
+10>                         ) { 
+11>                             return <IFoo>
+12>                                    (
+13>                                     {}
+14>                                       )
+15>                                        
+16>                                          
+17>                                          }
+18>                                           ;
+1->Emitted(70, 1) Source(129, 1) + SourceIndex(0)
+2 >Emitted(70, 6) Source(129, 6) + SourceIndex(0)
+3 >Emitted(70, 7) Source(129, 7) + SourceIndex(0)
+4 >Emitted(70, 9) Source(129, 9) + SourceIndex(0)
+5 >Emitted(70, 12) Source(129, 12) + SourceIndex(0)
+6 >Emitted(70, 22) Source(129, 21) + SourceIndex(0)
+7 >Emitted(70, 23) Source(129, 22) + SourceIndex(0)
+8 >Emitted(70, 25) Source(129, 24) + SourceIndex(0)
+9 >Emitted(70, 26) Source(129, 25) + SourceIndex(0)
+10>Emitted(70, 30) Source(129, 29) + SourceIndex(0)
+11>Emitted(70, 37) Source(129, 42) + SourceIndex(0)
+12>Emitted(70, 38) Source(129, 43) + SourceIndex(0)
+13>Emitted(70, 40) Source(129, 45) + SourceIndex(0)
+14>Emitted(70, 41) Source(129, 46) + SourceIndex(0)
+15>Emitted(70, 42) Source(129, 46) + SourceIndex(0)
+16>Emitted(70, 43) Source(129, 47) + SourceIndex(0)
+17>Emitted(70, 44) Source(129, 48) + SourceIndex(0)
+18>Emitted(70, 45) Source(129, 49) + SourceIndex(0)
+---
+>>>objc8.t7 = function (n) { return n; };
+1 >
+2 >^^^^^
+3 >     ^
+4 >      ^^
+5 >        ^^^
+6 >           ^^^^^^^^^^
+7 >                     ^
+8 >                      ^^^^
+9 >                          ^^^^^^^
+10>                                 ^
+11>                                  ^
+12>                                   ^
+13>                                    ^
+14>                                     ^
+15>                                      ^->
+1 >
+  >
+2 >objc8
+3 >     .
+4 >      t7
+5 >         = 
+6 >           function(
+7 >                     n: number
+8 >                      ) { 
+9 >                          return 
+10>                                 n
+11>                                  
+12>                                    
+13>                                    }
+14>                                     ;
+1 >Emitted(71, 1) Source(130, 1) + SourceIndex(0)
+2 >Emitted(71, 6) Source(130, 6) + SourceIndex(0)
+3 >Emitted(71, 7) Source(130, 7) + SourceIndex(0)
+4 >Emitted(71, 9) Source(130, 9) + SourceIndex(0)
+5 >Emitted(71, 12) Source(130, 12) + SourceIndex(0)
+6 >Emitted(71, 22) Source(130, 21) + SourceIndex(0)
+7 >Emitted(71, 23) Source(130, 30) + SourceIndex(0)
+8 >Emitted(71, 27) Source(130, 34) + SourceIndex(0)
+9 >Emitted(71, 34) Source(130, 41) + SourceIndex(0)
+10>Emitted(71, 35) Source(130, 42) + SourceIndex(0)
+11>Emitted(71, 36) Source(130, 42) + SourceIndex(0)
+12>Emitted(71, 37) Source(130, 43) + SourceIndex(0)
+13>Emitted(71, 38) Source(130, 44) + SourceIndex(0)
+14>Emitted(71, 39) Source(130, 45) + SourceIndex(0)
+---
+>>>objc8.t8 = function (n) { return n; };
+1->
+2 >^^^^^
+3 >     ^
+4 >      ^^
+5 >        ^^^
+6 >           ^^^^^^^^^^
+7 >                     ^
+8 >                      ^^^^
+9 >                          ^^^^^^^
+10>                                 ^
+11>                                  ^
+12>                                   ^
+13>                                    ^
+14>                                     ^
+1->
+  >
+  >
+2 >objc8
+3 >     .
+4 >      t8
+5 >         = 
+6 >           function(
+7 >                     n
+8 >                      ) { 
+9 >                          return 
+10>                                 n
+11>                                  ;
+12>                                    
+13>                                    }
+14>                                     ;
+1->Emitted(72, 1) Source(132, 1) + SourceIndex(0)
+2 >Emitted(72, 6) Source(132, 6) + SourceIndex(0)
+3 >Emitted(72, 7) Source(132, 7) + SourceIndex(0)
+4 >Emitted(72, 9) Source(132, 9) + SourceIndex(0)
+5 >Emitted(72, 12) Source(132, 12) + SourceIndex(0)
+6 >Emitted(72, 22) Source(132, 21) + SourceIndex(0)
+7 >Emitted(72, 23) Source(132, 22) + SourceIndex(0)
+8 >Emitted(72, 27) Source(132, 26) + SourceIndex(0)
+9 >Emitted(72, 34) Source(132, 33) + SourceIndex(0)
+10>Emitted(72, 35) Source(132, 34) + SourceIndex(0)
+11>Emitted(72, 36) Source(132, 35) + SourceIndex(0)
+12>Emitted(72, 37) Source(132, 36) + SourceIndex(0)
+13>Emitted(72, 38) Source(132, 37) + SourceIndex(0)
+14>Emitted(72, 39) Source(132, 38) + SourceIndex(0)
+---
+>>>objc8.t9 = [[], []];
+1 >
+2 >^^^^^
+3 >     ^
+4 >      ^^
+5 >        ^^^
+6 >           ^
+7 >            ^^
+8 >              ^^
+9 >                ^^
+10>                  ^
+11>                   ^
+12>                    ^^^^^^->
+1 >
+  >
+2 >objc8
+3 >     .
+4 >      t9
+5 >         = 
+6 >           [
+7 >            []
+8 >              ,
+9 >                []
+10>                  ]
+11>                   ;
+1 >Emitted(73, 1) Source(133, 1) + SourceIndex(0)
+2 >Emitted(73, 6) Source(133, 6) + SourceIndex(0)
+3 >Emitted(73, 7) Source(133, 7) + SourceIndex(0)
+4 >Emitted(73, 9) Source(133, 9) + SourceIndex(0)
+5 >Emitted(73, 12) Source(133, 12) + SourceIndex(0)
+6 >Emitted(73, 13) Source(133, 13) + SourceIndex(0)
+7 >Emitted(73, 15) Source(133, 15) + SourceIndex(0)
+8 >Emitted(73, 17) Source(133, 16) + SourceIndex(0)
+9 >Emitted(73, 19) Source(133, 18) + SourceIndex(0)
+10>Emitted(73, 20) Source(133, 19) + SourceIndex(0)
+11>Emitted(73, 21) Source(133, 20) + SourceIndex(0)
+---
+>>>objc8.t10 = [({}), ({})];
+1->
+2 >^^^^^
+3 >     ^
+4 >      ^^^
+5 >         ^^^
+6 >            ^
+7 >             ^
+8 >              ^^
+9 >                ^
+10>                 ^^
+11>                   ^
+12>                    ^^
+13>                      ^
+14>                       ^
+15>                        ^
+16>                         ^^^^^^^^^^^^^^^^^^^^->
+1->
+  >
+2 >objc8
+3 >     .
+4 >      t10
+5 >          = 
+6 >            [<IFoo>
+7 >             (
+8 >              {}
+9 >                )
+10>                 ,<IFoo>
+11>                   (
+12>                    {}
+13>                      )
+14>                       ]
+15>                        ;
+1->Emitted(74, 1) Source(134, 1) + SourceIndex(0)
+2 >Emitted(74, 6) Source(134, 6) + SourceIndex(0)
+3 >Emitted(74, 7) Source(134, 7) + SourceIndex(0)
+4 >Emitted(74, 10) Source(134, 10) + SourceIndex(0)
+5 >Emitted(74, 13) Source(134, 13) + SourceIndex(0)
+6 >Emitted(74, 14) Source(134, 20) + SourceIndex(0)
+7 >Emitted(74, 15) Source(134, 21) + SourceIndex(0)
+8 >Emitted(74, 17) Source(134, 23) + SourceIndex(0)
+9 >Emitted(74, 18) Source(134, 24) + SourceIndex(0)
+10>Emitted(74, 20) Source(134, 31) + SourceIndex(0)
+11>Emitted(74, 21) Source(134, 32) + SourceIndex(0)
+12>Emitted(74, 23) Source(134, 34) + SourceIndex(0)
+13>Emitted(74, 24) Source(134, 35) + SourceIndex(0)
+14>Emitted(74, 25) Source(134, 36) + SourceIndex(0)
+15>Emitted(74, 26) Source(134, 37) + SourceIndex(0)
+---
+>>>objc8.t11 = [function (n, s) { return s; }];
+1->
+2 >^^^^^
+3 >     ^
+4 >      ^^^
+5 >         ^^^
+6 >            ^
+7 >             ^^^^^^^^^^
+8 >                       ^
+9 >                        ^^
+10>                          ^
+11>                           ^^^^
+12>                               ^^^^^^^
+13>                                      ^
+14>                                       ^
+15>                                        ^
+16>                                         ^
+17>                                          ^
+18>                                           ^
+1->
+  >
+2 >objc8
+3 >     .
+4 >      t11
+5 >          = 
+6 >            [
+7 >             function(
+8 >                       n
+9 >                        , 
+10>                          s
+11>                           ) { 
+12>                               return 
+13>                                      s
+14>                                       ;
+15>                                         
+16>                                         }
+17>                                          ]
+18>                                           ;
+1->Emitted(75, 1) Source(135, 1) + SourceIndex(0)
+2 >Emitted(75, 6) Source(135, 6) + SourceIndex(0)
+3 >Emitted(75, 7) Source(135, 7) + SourceIndex(0)
+4 >Emitted(75, 10) Source(135, 10) + SourceIndex(0)
+5 >Emitted(75, 13) Source(135, 13) + SourceIndex(0)
+6 >Emitted(75, 14) Source(135, 14) + SourceIndex(0)
+7 >Emitted(75, 24) Source(135, 23) + SourceIndex(0)
+8 >Emitted(75, 25) Source(135, 24) + SourceIndex(0)
+9 >Emitted(75, 27) Source(135, 26) + SourceIndex(0)
+10>Emitted(75, 28) Source(135, 27) + SourceIndex(0)
+11>Emitted(75, 32) Source(135, 31) + SourceIndex(0)
+12>Emitted(75, 39) Source(135, 38) + SourceIndex(0)
+13>Emitted(75, 40) Source(135, 39) + SourceIndex(0)
+14>Emitted(75, 41) Source(135, 40) + SourceIndex(0)
+15>Emitted(75, 42) Source(135, 41) + SourceIndex(0)
+16>Emitted(75, 43) Source(135, 42) + SourceIndex(0)
+17>Emitted(75, 44) Source(135, 43) + SourceIndex(0)
+18>Emitted(75, 45) Source(135, 44) + SourceIndex(0)
+---
+>>>objc8.t12 = {
+1 >
+2 >^^^^^
+3 >     ^
+4 >      ^^^
+5 >         ^^^
+6 >            ^^->
+1 >
+  >
+2 >objc8
+3 >     .
+4 >      t12
+5 >          = 
+1 >Emitted(76, 1) Source(136, 1) + SourceIndex(0)
+2 >Emitted(76, 6) Source(136, 6) + SourceIndex(0)
+3 >Emitted(76, 7) Source(136, 7) + SourceIndex(0)
+4 >Emitted(76, 10) Source(136, 10) + SourceIndex(0)
+5 >Emitted(76, 13) Source(136, 13) + SourceIndex(0)
+---
+>>>    foo: ({})
+1->^^^^
+2 >    ^^^
+3 >       ^^
+4 >         ^
+5 >          ^^
+6 >            ^
+1->{
+  >    
+2 >    foo
+3 >       : <IFoo>
+4 >         (
+5 >          {}
+6 >            )
+1->Emitted(77, 5) Source(137, 5) + SourceIndex(0)
+2 >Emitted(77, 8) Source(137, 8) + SourceIndex(0)
+3 >Emitted(77, 10) Source(137, 16) + SourceIndex(0)
+4 >Emitted(77, 11) Source(137, 17) + SourceIndex(0)
+5 >Emitted(77, 13) Source(137, 19) + SourceIndex(0)
+6 >Emitted(77, 14) Source(137, 20) + SourceIndex(0)
+---
+>>>};
+1 >^
+2 > ^
+3 >  ^^^^^^^^^^^^^->
+1 >
+  >}
+2 > 
+1 >Emitted(78, 2) Source(138, 2) + SourceIndex(0)
+2 >Emitted(78, 3) Source(138, 2) + SourceIndex(0)
+---
+>>>objc8.t13 = ({
+1->
+2 >^^^^^
+3 >     ^
+4 >      ^^^
+5 >         ^^^
+6 >            ^
+7 >             ^^^^^^^^^^^^^^^^^^^^^^^^->
+1->
+  >
+2 >objc8
+3 >     .
+4 >      t13
+5 >          = <IFoo>
+6 >            (
+1->Emitted(79, 1) Source(139, 1) + SourceIndex(0)
+2 >Emitted(79, 6) Source(139, 6) + SourceIndex(0)
+3 >Emitted(79, 7) Source(139, 7) + SourceIndex(0)
+4 >Emitted(79, 10) Source(139, 10) + SourceIndex(0)
+5 >Emitted(79, 13) Source(139, 19) + SourceIndex(0)
+6 >Emitted(79, 14) Source(139, 20) + SourceIndex(0)
+---
+>>>    f: function (i, s) { return s; }
+1->^^^^
+2 >    ^
+3 >     ^^
+4 >       ^^^^^^^^^^
+5 >                 ^
+6 >                  ^^
+7 >                    ^
+8 >                     ^^^^
+9 >                         ^^^^^^^
+10>                                ^
+11>                                 ^
+12>                                  ^
+13>                                   ^
+1->{
+  >    
+2 >    f
+3 >     : 
+4 >       function(
+5 >                 i
+6 >                  , 
+7 >                    s
+8 >                     ) { 
+9 >                         return 
+10>                                s
+11>                                 ;
+12>                                   
+13>                                   }
+1->Emitted(80, 5) Source(140, 5) + SourceIndex(0)
+2 >Emitted(80, 6) Source(140, 6) + SourceIndex(0)
+3 >Emitted(80, 8) Source(140, 8) + SourceIndex(0)
+4 >Emitted(80, 18) Source(140, 17) + SourceIndex(0)
+5 >Emitted(80, 19) Source(140, 18) + SourceIndex(0)
+6 >Emitted(80, 21) Source(140, 20) + SourceIndex(0)
+7 >Emitted(80, 22) Source(140, 21) + SourceIndex(0)
+8 >Emitted(80, 26) Source(140, 25) + SourceIndex(0)
+9 >Emitted(80, 33) Source(140, 32) + SourceIndex(0)
+10>Emitted(80, 34) Source(140, 33) + SourceIndex(0)
+11>Emitted(80, 35) Source(140, 34) + SourceIndex(0)
+12>Emitted(80, 36) Source(140, 35) + SourceIndex(0)
+13>Emitted(80, 37) Source(140, 36) + SourceIndex(0)
+---
+>>>});
+1 >^
+2 > ^
+3 >  ^
+4 >   ^^^^^^^^^^^^->
+1 >
+  >}
+2 > )
+3 >  
+1 >Emitted(81, 2) Source(141, 2) + SourceIndex(0)
+2 >Emitted(81, 3) Source(141, 3) + SourceIndex(0)
+3 >Emitted(81, 4) Source(141, 3) + SourceIndex(0)
+---
+>>>objc8.t14 = ({
+1->
+2 >^^^^^
+3 >     ^
+4 >      ^^^
+5 >         ^^^
+6 >            ^
+1->
+  >
+2 >objc8
+3 >     .
+4 >      t14
+5 >          = <IFoo>
+6 >            (
+1->Emitted(82, 1) Source(142, 1) + SourceIndex(0)
+2 >Emitted(82, 6) Source(142, 6) + SourceIndex(0)
+3 >Emitted(82, 7) Source(142, 7) + SourceIndex(0)
+4 >Emitted(82, 10) Source(142, 10) + SourceIndex(0)
+5 >Emitted(82, 13) Source(142, 19) + SourceIndex(0)
+6 >Emitted(82, 14) Source(142, 20) + SourceIndex(0)
+---
+>>>    a: []
+1 >^^^^
+2 >    ^
+3 >     ^^
+4 >       ^^
+1 >{
+  >    
+2 >    a
+3 >     : 
+4 >       []
+1 >Emitted(83, 5) Source(143, 5) + SourceIndex(0)
+2 >Emitted(83, 6) Source(143, 6) + SourceIndex(0)
+3 >Emitted(83, 8) Source(143, 8) + SourceIndex(0)
+4 >Emitted(83, 10) Source(143, 10) + SourceIndex(0)
+---
+>>>});
+1 >^
+2 > ^
+3 >  ^
+4 >   ^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >}
+2 > )
+3 >  
+1 >Emitted(84, 2) Source(144, 2) + SourceIndex(0)
+2 >Emitted(84, 3) Source(144, 3) + SourceIndex(0)
+3 >Emitted(84, 4) Source(144, 3) + SourceIndex(0)
+---
+>>>// CONTEXT: Function call
+1->
+2 >^^^^^^^^^^^^^^^^^^^^^^^^^
+1->
+  >
+2 >// CONTEXT: Function call
+1->Emitted(85, 1) Source(145, 1) + SourceIndex(0)
+2 >Emitted(85, 26) Source(145, 26) + SourceIndex(0)
+---
+>>>function c9t5(f) { }
+1 >
+2 >^^^^^^^^^
+3 >         ^^^^
+4 >             ^
+5 >              ^
+6 >               ^^^^
+7 >                   ^
+1 >
+  >
+2 >function 
+3 >         c9t5
+4 >             (
+5 >              f: (n: number) => IFoo
+6 >               ) {
+7 >                   }
+1 >Emitted(86, 1) Source(146, 1) + SourceIndex(0)
+2 >Emitted(86, 10) Source(146, 10) + SourceIndex(0)
+3 >Emitted(86, 14) Source(146, 14) + SourceIndex(0)
+4 >Emitted(86, 15) Source(146, 15) + SourceIndex(0)
+5 >Emitted(86, 16) Source(146, 37) + SourceIndex(0)
+6 >Emitted(86, 20) Source(146, 40) + SourceIndex(0)
+7 >Emitted(86, 21) Source(146, 41) + SourceIndex(0)
+---
+>>>;
+1 >
+2 >^
+3 > ^^^^^^^^^^^^^^^^^^^->
+1 >
+2 >;
+1 >Emitted(87, 1) Source(146, 41) + SourceIndex(0)
+2 >Emitted(87, 2) Source(146, 42) + SourceIndex(0)
+---
+>>>c9t5(function (n) {
+1->
+2 >^^^^
+3 >    ^
+4 >     ^^^^^^^^^^
+5 >               ^
+6 >                ^->
+1->
+  >
+2 >c9t5
+3 >    (
+4 >     function(
+5 >               n
+1->Emitted(88, 1) Source(147, 1) + SourceIndex(0)
+2 >Emitted(88, 5) Source(147, 5) + SourceIndex(0)
+3 >Emitted(88, 6) Source(147, 6) + SourceIndex(0)
+4 >Emitted(88, 16) Source(147, 15) + SourceIndex(0)
+5 >Emitted(88, 17) Source(147, 16) + SourceIndex(0)
+---
+>>>    return ({});
+1->^^^^
+2 >    ^^^^^^^
+3 >           ^
+4 >            ^^
+5 >              ^
+6 >               ^
+1->) {
+  >    
+2 >    return <IFoo>
+3 >           (
+4 >            {}
+5 >              )
+6 >               ;
+1->Emitted(89, 5) Source(148, 5) + SourceIndex(0)
+2 >Emitted(89, 12) Source(148, 18) + SourceIndex(0)
+3 >Emitted(89, 13) Source(148, 19) + SourceIndex(0)
+4 >Emitted(89, 15) Source(148, 21) + SourceIndex(0)
+5 >Emitted(89, 16) Source(148, 22) + SourceIndex(0)
+6 >Emitted(89, 17) Source(148, 23) + SourceIndex(0)
+---
+>>>});
+1 >
+2 >^
+3 > ^
+4 >  ^
+5 >   ^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >
+2 >}
+3 > )
+4 >  ;
+1 >Emitted(90, 1) Source(149, 1) + SourceIndex(0)
+2 >Emitted(90, 2) Source(149, 2) + SourceIndex(0)
+3 >Emitted(90, 3) Source(149, 3) + SourceIndex(0)
+4 >Emitted(90, 4) Source(149, 4) + SourceIndex(0)
+---
+>>>// CONTEXT: Return statement
+1->
+2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+3 >                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1->
+  >
+  >
+2 >// CONTEXT: Return statement
+1->Emitted(91, 1) Source(151, 1) + SourceIndex(0)
+2 >Emitted(91, 29) Source(151, 29) + SourceIndex(0)
+---
+>>>var c10t5 = function () { return function (n) { return ({}); }; };
+1->
+2 >^^^^
+3 >    ^^^^^
+4 >         ^^^
+5 >            ^^^^^^^^^^^^^^
+6 >                          ^^^^^^^
+7 >                                 ^^^^^^^^^^
+8 >                                           ^
+9 >                                            ^^^^
+10>                                                ^^^^^^^
+11>                                                       ^
+12>                                                        ^^
+13>                                                          ^
+14>                                                           ^
+15>                                                            ^
+16>                                                             ^
+17>                                                              ^
+18>                                                               ^
+19>                                                                ^
+20>                                                                 ^
+1->
+  >
+2 >var 
+3 >    c10t5
+4 >         : () => (n: number) => IFoo = 
+5 >            function() { 
+6 >                          return 
+7 >                                 function(
+8 >                                           n
+9 >                                            ) { 
+10>                                                return <IFoo>
+11>                                                       (
+12>                                                        {}
+13>                                                          )
+14>                                                           
+15>                                                             
+16>                                                             }
+17>                                                              
+18>                                                                
+19>                                                                }
+20>                                                                 ;
+1->Emitted(92, 1) Source(152, 1) + SourceIndex(0)
+2 >Emitted(92, 5) Source(152, 5) + SourceIndex(0)
+3 >Emitted(92, 10) Source(152, 10) + SourceIndex(0)
+4 >Emitted(92, 13) Source(152, 40) + SourceIndex(0)
+5 >Emitted(92, 27) Source(152, 53) + SourceIndex(0)
+6 >Emitted(92, 34) Source(152, 60) + SourceIndex(0)
+7 >Emitted(92, 44) Source(152, 69) + SourceIndex(0)
+8 >Emitted(92, 45) Source(152, 70) + SourceIndex(0)
+9 >Emitted(92, 49) Source(152, 74) + SourceIndex(0)
+10>Emitted(92, 56) Source(152, 87) + SourceIndex(0)
+11>Emitted(92, 57) Source(152, 88) + SourceIndex(0)
+12>Emitted(92, 59) Source(152, 90) + SourceIndex(0)
+13>Emitted(92, 60) Source(152, 91) + SourceIndex(0)
+14>Emitted(92, 61) Source(152, 91) + SourceIndex(0)
+15>Emitted(92, 62) Source(152, 92) + SourceIndex(0)
+16>Emitted(92, 63) Source(152, 93) + SourceIndex(0)
+17>Emitted(92, 64) Source(152, 93) + SourceIndex(0)
+18>Emitted(92, 65) Source(152, 94) + SourceIndex(0)
+19>Emitted(92, 66) Source(152, 95) + SourceIndex(0)
+20>Emitted(92, 67) Source(152, 96) + SourceIndex(0)
+---
+>>>// CONTEXT: Newing a class
+1 >
+2 >^^^^^^^^^^^^^^^^^^^^^^^^^^
+3 >                          ^^^^^^^^^^^^^^^->
+1 >
+  >
+  >
+2 >// CONTEXT: Newing a class
+1 >Emitted(93, 1) Source(154, 1) + SourceIndex(0)
+2 >Emitted(93, 27) Source(154, 27) + SourceIndex(0)
+---
+>>>var C11t5 = /** @class */ (function () {
+1->
+2 >^^^^^^^^^^^^^^^^^^^^^^^^->
+1->
+  >
+1->Emitted(94, 1) Source(155, 1) + SourceIndex(0)
+---
+>>>    function C11t5(f) {
+1->^^^^
+2 >    ^^^^^^^^^^^^^^^
+3 >                   ^
+1->class C11t5 { 
+2 >    constructor(
+3 >                   f: (n: number) => IFoo
+1->Emitted(95, 5) Source(155, 15) + SourceIndex(0)
+2 >Emitted(95, 20) Source(155, 27) + SourceIndex(0)
+3 >Emitted(95, 21) Source(155, 49) + SourceIndex(0)
+---
+>>>    }
+1 >^^^^
+2 >    ^
+3 >     ^^^^^^^^^^^^^->
+1 >) { 
+2 >    }
+1 >Emitted(96, 5) Source(155, 53) + SourceIndex(0)
+2 >Emitted(96, 6) Source(155, 54) + SourceIndex(0)
+---
+>>>    return C11t5;
+1->^^^^
+2 >    ^^^^^^^^^^^^
+1-> 
+2 >    }
+1->Emitted(97, 5) Source(155, 55) + SourceIndex(0)
+2 >Emitted(97, 17) Source(155, 56) + SourceIndex(0)
+---
+>>>}());
+1 >
+2 >^
+3 > 
+4 > ^^^^
+1 >
+2 >}
+3 > 
+4 > class C11t5 { constructor(f: (n: number) => IFoo) { } }
+1 >Emitted(98, 1) Source(155, 55) + SourceIndex(0)
+2 >Emitted(98, 2) Source(155, 56) + SourceIndex(0)
+3 >Emitted(98, 2) Source(155, 1) + SourceIndex(0)
+4 >Emitted(98, 6) Source(155, 56) + SourceIndex(0)
+---
+>>>;
+1 >
+2 >^
+3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+2 >;
+1 >Emitted(99, 1) Source(155, 56) + SourceIndex(0)
+2 >Emitted(99, 2) Source(155, 57) + SourceIndex(0)
+---
+>>>var i = new C11t5(function (n) { return ({}); });
+1->
+2 >^^^^
+3 >    ^
+4 >     ^^^
+5 >        ^^^^
+6 >            ^^^^^
+7 >                 ^
+8 >                  ^^^^^^^^^^
+9 >                            ^
+10>                             ^^^^
+11>                                 ^^^^^^^
+12>                                        ^
+13>                                         ^^
+14>                                           ^
+15>                                            ^
+16>                                             ^
+17>                                              ^
+18>                                               ^
+19>                                                ^
+1->
+  >
+2 >var 
+3 >    i
+4 >      = 
+5 >        new 
+6 >            C11t5
+7 >                 (
+8 >                  function(
+9 >                            n
+10>                             ) { 
+11>                                 return <IFoo>
+12>                                        (
+13>                                         {}
+14>                                           )
+15>                                            
+16>                                              
+17>                                              }
+18>                                               )
+19>                                                ;
+1->Emitted(100, 1) Source(156, 1) + SourceIndex(0)
+2 >Emitted(100, 5) Source(156, 5) + SourceIndex(0)
+3 >Emitted(100, 6) Source(156, 6) + SourceIndex(0)
+4 >Emitted(100, 9) Source(156, 9) + SourceIndex(0)
+5 >Emitted(100, 13) Source(156, 13) + SourceIndex(0)
+6 >Emitted(100, 18) Source(156, 18) + SourceIndex(0)
+7 >Emitted(100, 19) Source(156, 19) + SourceIndex(0)
+8 >Emitted(100, 29) Source(156, 28) + SourceIndex(0)
+9 >Emitted(100, 30) Source(156, 29) + SourceIndex(0)
+10>Emitted(100, 34) Source(156, 33) + SourceIndex(0)
+11>Emitted(100, 41) Source(156, 46) + SourceIndex(0)
+12>Emitted(100, 42) Source(156, 47) + SourceIndex(0)
+13>Emitted(100, 44) Source(156, 49) + SourceIndex(0)
+14>Emitted(100, 45) Source(156, 50) + SourceIndex(0)
+15>Emitted(100, 46) Source(156, 50) + SourceIndex(0)
+16>Emitted(100, 47) Source(156, 51) + SourceIndex(0)
+17>Emitted(100, 48) Source(156, 52) + SourceIndex(0)
+18>Emitted(100, 49) Source(156, 53) + SourceIndex(0)
+19>Emitted(100, 50) Source(156, 54) + SourceIndex(0)
+---
+>>>// CONTEXT: Type annotated expression
+1 >
+2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+3 >                                     ^^^^^->
+1 >
+  >
+  >
+2 >// CONTEXT: Type annotated expression
+1 >Emitted(101, 1) Source(158, 1) + SourceIndex(0)
+2 >Emitted(101, 38) Source(158, 38) + SourceIndex(0)
+---
+>>>var c12t1 = (function (s) { return s; });
+1->
+2 >^^^^
+3 >    ^^^^^
+4 >         ^^^
+5 >            ^
+6 >             ^^^^^^^^^^
+7 >                       ^
+8 >                        ^^^^
+9 >                            ^^^^^^^
+10>                                   ^
+11>                                    ^
+12>                                     ^
+13>                                      ^
+14>                                       ^
+15>                                        ^
+1->
+  >
+2 >var 
+3 >    c12t1
+4 >          = <(s: string) => string> 
+5 >            (
+6 >             function(
+7 >                       s
+8 >                        ) { 
+9 >                            return 
+10>                                   s
+11>                                    
+12>                                      
+13>                                      }
+14>                                       )
+15>                                        ;
+1->Emitted(102, 1) Source(159, 1) + SourceIndex(0)
+2 >Emitted(102, 5) Source(159, 5) + SourceIndex(0)
+3 >Emitted(102, 10) Source(159, 10) + SourceIndex(0)
+4 >Emitted(102, 13) Source(159, 37) + SourceIndex(0)
+5 >Emitted(102, 14) Source(159, 38) + SourceIndex(0)
+6 >Emitted(102, 24) Source(159, 47) + SourceIndex(0)
+7 >Emitted(102, 25) Source(159, 48) + SourceIndex(0)
+8 >Emitted(102, 29) Source(159, 52) + SourceIndex(0)
+9 >Emitted(102, 36) Source(159, 59) + SourceIndex(0)
+10>Emitted(102, 37) Source(159, 60) + SourceIndex(0)
+11>Emitted(102, 38) Source(159, 60) + SourceIndex(0)
+12>Emitted(102, 39) Source(159, 61) + SourceIndex(0)
+13>Emitted(102, 40) Source(159, 62) + SourceIndex(0)
+14>Emitted(102, 41) Source(159, 63) + SourceIndex(0)
+15>Emitted(102, 42) Source(159, 64) + SourceIndex(0)
+---
+>>>var c12t2 = ({
+1 >
+2 >^^^^
+3 >    ^^^^^
+4 >         ^^^
+5 >            ^
+1 >
+  >
+2 >var 
+3 >    c12t2
+4 >          = <IFoo> 
+5 >            (
+1 >Emitted(103, 1) Source(160, 1) + SourceIndex(0)
+2 >Emitted(103, 5) Source(160, 5) + SourceIndex(0)
+3 >Emitted(103, 10) Source(160, 10) + SourceIndex(0)
+4 >Emitted(103, 13) Source(160, 20) + SourceIndex(0)
+5 >Emitted(103, 14) Source(160, 21) + SourceIndex(0)
+---
+>>>    n: 1
+1 >^^^^
+2 >    ^
+3 >     ^^
+4 >       ^
+1 >{
+  >    
+2 >    n
+3 >     : 
+4 >       1
+1 >Emitted(104, 5) Source(161, 5) + SourceIndex(0)
+2 >Emitted(104, 6) Source(161, 6) + SourceIndex(0)
+3 >Emitted(104, 8) Source(161, 8) + SourceIndex(0)
+4 >Emitted(104, 9) Source(161, 9) + SourceIndex(0)
+---
+>>>});
+1 >^
+2 > ^
+3 >  ^
+4 >   ^^^^^^^^^^^^^->
+1 >
+  >}
+2 > )
+3 >  ;
+1 >Emitted(105, 2) Source(162, 2) + SourceIndex(0)
+2 >Emitted(105, 3) Source(162, 3) + SourceIndex(0)
+3 >Emitted(105, 4) Source(162, 4) + SourceIndex(0)
+---
+>>>var c12t3 = [];
+1->
+2 >^^^^
+3 >    ^^^^^
+4 >         ^^^
+5 >            ^^
+6 >              ^
+7 >               ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1->
+  >
+2 >var 
+3 >    c12t3
+4 >          = <number[]> 
+5 >            []
+6 >              ;
+1->Emitted(106, 1) Source(163, 1) + SourceIndex(0)
+2 >Emitted(106, 5) Source(163, 5) + SourceIndex(0)
+3 >Emitted(106, 10) Source(163, 10) + SourceIndex(0)
+4 >Emitted(106, 13) Source(163, 24) + SourceIndex(0)
+5 >Emitted(106, 15) Source(163, 26) + SourceIndex(0)
+6 >Emitted(106, 16) Source(163, 27) + SourceIndex(0)
+---
+>>>var c12t4 = function () { return ({}); };
+1->
+2 >^^^^
+3 >    ^^^^^
+4 >         ^^^
+5 >            ^^^^^^^^^^^^^^
+6 >                          ^^^^^^^
+7 >                                 ^
+8 >                                  ^^
+9 >                                    ^
+10>                                     ^
+11>                                      ^
+12>                                       ^
+13>                                        ^
+14>                                         ^^->
+1->
+  >
+2 >var 
+3 >    c12t4
+4 >          = <() => IFoo> 
+5 >            function() { 
+6 >                          return <IFoo>
+7 >                                 (
+8 >                                  {}
+9 >                                    )
+10>                                     
+11>                                       
+12>                                       }
+13>                                        ;
+1->Emitted(107, 1) Source(164, 1) + SourceIndex(0)
+2 >Emitted(107, 5) Source(164, 5) + SourceIndex(0)
+3 >Emitted(107, 10) Source(164, 10) + SourceIndex(0)
+4 >Emitted(107, 13) Source(164, 26) + SourceIndex(0)
+5 >Emitted(107, 27) Source(164, 39) + SourceIndex(0)
+6 >Emitted(107, 34) Source(164, 52) + SourceIndex(0)
+7 >Emitted(107, 35) Source(164, 53) + SourceIndex(0)
+8 >Emitted(107, 37) Source(164, 55) + SourceIndex(0)
+9 >Emitted(107, 38) Source(164, 56) + SourceIndex(0)
+10>Emitted(107, 39) Source(164, 56) + SourceIndex(0)
+11>Emitted(107, 40) Source(164, 57) + SourceIndex(0)
+12>Emitted(107, 41) Source(164, 58) + SourceIndex(0)
+13>Emitted(107, 42) Source(164, 59) + SourceIndex(0)
+---
+>>>var c12t5 = function (n) { return ({}); };
+1->
+2 >^^^^
+3 >    ^^^^^
+4 >         ^^^
+5 >            ^^^^^^^^^^
+6 >                      ^
+7 >                       ^^^^
+8 >                           ^^^^^^^
+9 >                                  ^
+10>                                   ^^
+11>                                     ^
+12>                                      ^
+13>                                       ^
+14>                                        ^
+15>                                         ^
+16>                                          ^^^^->
+1->
+  >
+2 >var 
+3 >    c12t5
+4 >          = <(n: number) => IFoo> 
+5 >            function(
+6 >                      n
+7 >                       ) { 
+8 >                           return <IFoo>
+9 >                                  (
+10>                                   {}
+11>                                     )
+12>                                      
+13>                                        
+14>                                        }
+15>                                         ;
+1->Emitted(108, 1) Source(165, 1) + SourceIndex(0)
+2 >Emitted(108, 5) Source(165, 5) + SourceIndex(0)
+3 >Emitted(108, 10) Source(165, 10) + SourceIndex(0)
+4 >Emitted(108, 13) Source(165, 35) + SourceIndex(0)
+5 >Emitted(108, 23) Source(165, 44) + SourceIndex(0)
+6 >Emitted(108, 24) Source(165, 45) + SourceIndex(0)
+7 >Emitted(108, 28) Source(165, 49) + SourceIndex(0)
+8 >Emitted(108, 35) Source(165, 62) + SourceIndex(0)
+9 >Emitted(108, 36) Source(165, 63) + SourceIndex(0)
+10>Emitted(108, 38) Source(165, 65) + SourceIndex(0)
+11>Emitted(108, 39) Source(165, 66) + SourceIndex(0)
+12>Emitted(108, 40) Source(165, 66) + SourceIndex(0)
+13>Emitted(108, 41) Source(165, 67) + SourceIndex(0)
+14>Emitted(108, 42) Source(165, 68) + SourceIndex(0)
+15>Emitted(108, 43) Source(165, 69) + SourceIndex(0)
+---
+>>>var c12t6 = function (n, s) { return ({}); };
+1->
+2 >^^^^
+3 >    ^^^^^
+4 >         ^^^
+5 >            ^^^^^^^^^^
+6 >                      ^
+7 >                       ^^
+8 >                         ^
+9 >                          ^^^^
+10>                              ^^^^^^^
+11>                                     ^
+12>                                      ^^
+13>                                        ^
+14>                                         ^
+15>                                          ^
+16>                                           ^
+17>                                            ^
+1->
+  >
+2 >var 
+3 >    c12t6
+4 >          = <(n: number, s: string) => IFoo> 
+5 >            function(
+6 >                      n
+7 >                       , 
+8 >                         s
+9 >                          ) { 
+10>                              return <IFoo>
+11>                                     (
+12>                                      {}
+13>                                        )
+14>                                         
+15>                                           
+16>                                           }
+17>                                            ;
+1->Emitted(109, 1) Source(166, 1) + SourceIndex(0)
+2 >Emitted(109, 5) Source(166, 5) + SourceIndex(0)
+3 >Emitted(109, 10) Source(166, 10) + SourceIndex(0)
+4 >Emitted(109, 13) Source(166, 46) + SourceIndex(0)
+5 >Emitted(109, 23) Source(166, 55) + SourceIndex(0)
+6 >Emitted(109, 24) Source(166, 56) + SourceIndex(0)
+7 >Emitted(109, 26) Source(166, 58) + SourceIndex(0)
+8 >Emitted(109, 27) Source(166, 59) + SourceIndex(0)
+9 >Emitted(109, 31) Source(166, 63) + SourceIndex(0)
+10>Emitted(109, 38) Source(166, 76) + SourceIndex(0)
+11>Emitted(109, 39) Source(166, 77) + SourceIndex(0)
+12>Emitted(109, 41) Source(166, 79) + SourceIndex(0)
+13>Emitted(109, 42) Source(166, 80) + SourceIndex(0)
+14>Emitted(109, 43) Source(166, 80) + SourceIndex(0)
+15>Emitted(109, 44) Source(166, 81) + SourceIndex(0)
+16>Emitted(109, 45) Source(166, 82) + SourceIndex(0)
+17>Emitted(109, 46) Source(166, 83) + SourceIndex(0)
+---
+>>>var c12t7 = function (n) { return n; };
+1 >
+2 >^^^^
+3 >    ^^^^^
+4 >         ^^^
+5 >            ^^^^^^^^^^
+6 >                      ^
+7 >                       ^^^^
+8 >                           ^^^^^^^
+9 >                                  ^
+10>                                   ^
+11>                                    ^
+12>                                     ^
+13>                                      ^
+14>                                       ^->
+1 >
+  >
+2 >var 
+3 >    c12t7
+4 >          = <{
+  >             (n: number, s: string): number;    
+  >             //(s1: string, s2: string): number;
+  >         }> 
+5 >            function(
+6 >                      n:number
+7 >                       ) { 
+8 >                           return 
+9 >                                  n
+10>                                   
+11>                                     
+12>                                     }
+13>                                      ;
+1 >Emitted(110, 1) Source(167, 1) + SourceIndex(0)
+2 >Emitted(110, 5) Source(167, 5) + SourceIndex(0)
+3 >Emitted(110, 10) Source(167, 10) + SourceIndex(0)
+4 >Emitted(110, 13) Source(170, 4) + SourceIndex(0)
+5 >Emitted(110, 23) Source(170, 13) + SourceIndex(0)
+6 >Emitted(110, 24) Source(170, 21) + SourceIndex(0)
+7 >Emitted(110, 28) Source(170, 25) + SourceIndex(0)
+8 >Emitted(110, 35) Source(170, 32) + SourceIndex(0)
+9 >Emitted(110, 36) Source(170, 33) + SourceIndex(0)
+10>Emitted(110, 37) Source(170, 33) + SourceIndex(0)
+11>Emitted(110, 38) Source(170, 34) + SourceIndex(0)
+12>Emitted(110, 39) Source(170, 35) + SourceIndex(0)
+13>Emitted(110, 40) Source(170, 36) + SourceIndex(0)
+---
+>>>var c12t8 = function (n) { return n; };
+1->
+2 >^^^^
+3 >    ^^^^^
+4 >         ^^^
+5 >            ^^^^^^^^^^
+6 >                      ^
+7 >                       ^^^^
+8 >                           ^^^^^^^
+9 >                                  ^
+10>                                   ^
+11>                                    ^
+12>                                     ^
+13>                                      ^
+1->
+  >
+  >
+2 >var 
+3 >    c12t8
+4 >          = <(n: number, s: string) => number> 
+5 >            function(
+6 >                      n
+7 >                       ) { 
+8 >                           return 
+9 >                                  n
+10>                                   ;
+11>                                     
+12>                                     }
+13>                                      ;
+1->Emitted(111, 1) Source(172, 1) + SourceIndex(0)
+2 >Emitted(111, 5) Source(172, 5) + SourceIndex(0)
+3 >Emitted(111, 10) Source(172, 10) + SourceIndex(0)
+4 >Emitted(111, 13) Source(172, 48) + SourceIndex(0)
+5 >Emitted(111, 23) Source(172, 57) + SourceIndex(0)
+6 >Emitted(111, 24) Source(172, 58) + SourceIndex(0)
+7 >Emitted(111, 28) Source(172, 62) + SourceIndex(0)
+8 >Emitted(111, 35) Source(172, 69) + SourceIndex(0)
+9 >Emitted(111, 36) Source(172, 70) + SourceIndex(0)
+10>Emitted(111, 37) Source(172, 71) + SourceIndex(0)
+11>Emitted(111, 38) Source(172, 72) + SourceIndex(0)
+12>Emitted(111, 39) Source(172, 73) + SourceIndex(0)
+13>Emitted(111, 40) Source(172, 74) + SourceIndex(0)
+---
+>>>var c12t9 = [[], []];
+1 >
+2 >^^^^
+3 >    ^^^^^
+4 >         ^^^
+5 >            ^
+6 >             ^^
+7 >               ^^
+8 >                 ^^
+9 >                   ^
+10>                    ^
+11>                     ^^^^^^->
+1 >
+  >
+2 >var 
+3 >    c12t9
+4 >          = <number[][]> 
+5 >            [
+6 >             []
+7 >               ,
+8 >                 []
+9 >                   ]
+10>                    ;
+1 >Emitted(112, 1) Source(173, 1) + SourceIndex(0)
+2 >Emitted(112, 5) Source(173, 5) + SourceIndex(0)
+3 >Emitted(112, 10) Source(173, 10) + SourceIndex(0)
+4 >Emitted(112, 13) Source(173, 26) + SourceIndex(0)
+5 >Emitted(112, 14) Source(173, 27) + SourceIndex(0)
+6 >Emitted(112, 16) Source(173, 29) + SourceIndex(0)
+7 >Emitted(112, 18) Source(173, 30) + SourceIndex(0)
+8 >Emitted(112, 20) Source(173, 32) + SourceIndex(0)
+9 >Emitted(112, 21) Source(173, 33) + SourceIndex(0)
+10>Emitted(112, 22) Source(173, 34) + SourceIndex(0)
+---
+>>>var c12t10 = [({}), ({})];
+1->
+2 >^^^^
+3 >    ^^^^^^
+4 >          ^^^
+5 >             ^
+6 >              ^
+7 >               ^^
+8 >                 ^
+9 >                  ^^
+10>                    ^
+11>                     ^^
+12>                       ^
+13>                        ^
+14>                         ^
+15>                          ^^^^^^^^^^^^^^^^^^^^->
+1->
+  >
+2 >var 
+3 >    c12t10
+4 >           = <IFoo[]> 
+5 >             [<IFoo>
+6 >              (
+7 >               {}
+8 >                 )
+9 >                  ,<IFoo>
+10>                    (
+11>                     {}
+12>                       )
+13>                        ]
+14>                         ;
+1->Emitted(113, 1) Source(174, 1) + SourceIndex(0)
+2 >Emitted(113, 5) Source(174, 5) + SourceIndex(0)
+3 >Emitted(113, 11) Source(174, 11) + SourceIndex(0)
+4 >Emitted(113, 14) Source(174, 23) + SourceIndex(0)
+5 >Emitted(113, 15) Source(174, 30) + SourceIndex(0)
+6 >Emitted(113, 16) Source(174, 31) + SourceIndex(0)
+7 >Emitted(113, 18) Source(174, 33) + SourceIndex(0)
+8 >Emitted(113, 19) Source(174, 34) + SourceIndex(0)
+9 >Emitted(113, 21) Source(174, 41) + SourceIndex(0)
+10>Emitted(113, 22) Source(174, 42) + SourceIndex(0)
+11>Emitted(113, 24) Source(174, 44) + SourceIndex(0)
+12>Emitted(113, 25) Source(174, 45) + SourceIndex(0)
+13>Emitted(113, 26) Source(174, 46) + SourceIndex(0)
+14>Emitted(113, 27) Source(174, 47) + SourceIndex(0)
+---
+>>>var c12t11 = [function (n, s) { return s; }];
+1->
+2 >^^^^
+3 >    ^^^^^^
+4 >          ^^^
+5 >             ^
+6 >              ^^^^^^^^^^
+7 >                        ^
+8 >                         ^^
+9 >                           ^
+10>                            ^^^^
+11>                                ^^^^^^^
+12>                                       ^
+13>                                        ^
+14>                                         ^
+15>                                          ^
+16>                                           ^
+17>                                            ^
+1->
+  >
+2 >var 
+3 >    c12t11
+4 >           = <{(n: number, s: string): string;}[]> 
+5 >             [
+6 >              function(
+7 >                        n
+8 >                         , 
+9 >                           s
+10>                            ) { 
+11>                                return 
+12>                                       s
+13>                                        ;
+14>                                          
+15>                                          }
+16>                                           ]
+17>                                            ;
+1->Emitted(114, 1) Source(175, 1) + SourceIndex(0)
+2 >Emitted(114, 5) Source(175, 5) + SourceIndex(0)
+3 >Emitted(114, 11) Source(175, 11) + SourceIndex(0)
+4 >Emitted(114, 14) Source(175, 52) + SourceIndex(0)
+5 >Emitted(114, 15) Source(175, 53) + SourceIndex(0)
+6 >Emitted(114, 25) Source(175, 62) + SourceIndex(0)
+7 >Emitted(114, 26) Source(175, 63) + SourceIndex(0)
+8 >Emitted(114, 28) Source(175, 65) + SourceIndex(0)
+9 >Emitted(114, 29) Source(175, 66) + SourceIndex(0)
+10>Emitted(114, 33) Source(175, 70) + SourceIndex(0)
+11>Emitted(114, 40) Source(175, 77) + SourceIndex(0)
+12>Emitted(114, 41) Source(175, 78) + SourceIndex(0)
+13>Emitted(114, 42) Source(175, 79) + SourceIndex(0)
+14>Emitted(114, 43) Source(175, 80) + SourceIndex(0)
+15>Emitted(114, 44) Source(175, 81) + SourceIndex(0)
+16>Emitted(114, 45) Source(175, 82) + SourceIndex(0)
+17>Emitted(114, 46) Source(175, 83) + SourceIndex(0)
+---
+>>>var c12t12 = {
+1 >
+2 >^^^^
+3 >    ^^^^^^
+4 >          ^^^
+5 >             ^->
+1 >
+  >
+2 >var 
+3 >    c12t12
+4 >           = <IBar> 
+1 >Emitted(115, 1) Source(176, 1) + SourceIndex(0)
+2 >Emitted(115, 5) Source(176, 5) + SourceIndex(0)
+3 >Emitted(115, 11) Source(176, 11) + SourceIndex(0)
+4 >Emitted(115, 14) Source(176, 21) + SourceIndex(0)
+---
+>>>    foo: ({})
+1->^^^^
+2 >    ^^^
+3 >       ^^
+4 >         ^
+5 >          ^^
+6 >            ^
+1->{
+  >    
+2 >    foo
+3 >       : <IFoo>
+4 >         (
+5 >          {}
+6 >            )
+1->Emitted(116, 5) Source(177, 5) + SourceIndex(0)
+2 >Emitted(116, 8) Source(177, 8) + SourceIndex(0)
+3 >Emitted(116, 10) Source(177, 16) + SourceIndex(0)
+4 >Emitted(116, 11) Source(177, 17) + SourceIndex(0)
+5 >Emitted(116, 13) Source(177, 19) + SourceIndex(0)
+6 >Emitted(116, 14) Source(177, 20) + SourceIndex(0)
+---
+>>>};
+1 >^
+2 > ^
+3 >  ^^^^^^^^^^^^^^->
+1 >
+  >}
+2 > 
+1 >Emitted(117, 2) Source(178, 2) + SourceIndex(0)
+2 >Emitted(117, 3) Source(178, 2) + SourceIndex(0)
+---
+>>>var c12t13 = ({
+1->
+2 >^^^^
+3 >    ^^^^^^
+4 >          ^^^
+5 >             ^
+6 >              ^^^^^^^^^^^^^^^^^^^^^^^->
+1->
+  >
+2 >var 
+3 >    c12t13
+4 >           = <IFoo> 
+5 >             (
+1->Emitted(118, 1) Source(179, 1) + SourceIndex(0)
+2 >Emitted(118, 5) Source(179, 5) + SourceIndex(0)
+3 >Emitted(118, 11) Source(179, 11) + SourceIndex(0)
+4 >Emitted(118, 14) Source(179, 21) + SourceIndex(0)
+5 >Emitted(118, 15) Source(179, 22) + SourceIndex(0)
+---
+>>>    f: function (i, s) { return s; }
+1->^^^^
+2 >    ^
+3 >     ^^
+4 >       ^^^^^^^^^^
+5 >                 ^
+6 >                  ^^
+7 >                    ^
+8 >                     ^^^^
+9 >                         ^^^^^^^
+10>                                ^
+11>                                 ^
+12>                                  ^
+13>                                   ^
+1->{
+  >    
+2 >    f
+3 >     : 
+4 >       function(
+5 >                 i
+6 >                  , 
+7 >                    s
+8 >                     ) { 
+9 >                         return 
+10>                                s
+11>                                 ;
+12>                                   
+13>                                   }
+1->Emitted(119, 5) Source(180, 5) + SourceIndex(0)
+2 >Emitted(119, 6) Source(180, 6) + SourceIndex(0)
+3 >Emitted(119, 8) Source(180, 8) + SourceIndex(0)
+4 >Emitted(119, 18) Source(180, 17) + SourceIndex(0)
+5 >Emitted(119, 19) Source(180, 18) + SourceIndex(0)
+6 >Emitted(119, 21) Source(180, 20) + SourceIndex(0)
+7 >Emitted(119, 22) Source(180, 21) + SourceIndex(0)
+8 >Emitted(119, 26) Source(180, 25) + SourceIndex(0)
+9 >Emitted(119, 33) Source(180, 32) + SourceIndex(0)
+10>Emitted(119, 34) Source(180, 33) + SourceIndex(0)
+11>Emitted(119, 35) Source(180, 34) + SourceIndex(0)
+12>Emitted(119, 36) Source(180, 35) + SourceIndex(0)
+13>Emitted(119, 37) Source(180, 36) + SourceIndex(0)
+---
+>>>});
+1 >^
+2 > ^
+3 >  ^
+4 >   ^^^^^^^^^^^^^->
+1 >
+  >}
+2 > )
+3 >  
+1 >Emitted(120, 2) Source(181, 2) + SourceIndex(0)
+2 >Emitted(120, 3) Source(181, 3) + SourceIndex(0)
+3 >Emitted(120, 4) Source(181, 3) + SourceIndex(0)
+---
+>>>var c12t14 = ({
+1->
+2 >^^^^
+3 >    ^^^^^^
+4 >          ^^^
+5 >             ^
+1->
+  >
+2 >var 
+3 >    c12t14
+4 >           = <IFoo> 
+5 >             (
+1->Emitted(121, 1) Source(182, 1) + SourceIndex(0)
+2 >Emitted(121, 5) Source(182, 5) + SourceIndex(0)
+3 >Emitted(121, 11) Source(182, 11) + SourceIndex(0)
+4 >Emitted(121, 14) Source(182, 21) + SourceIndex(0)
+5 >Emitted(121, 15) Source(182, 22) + SourceIndex(0)
+---
+>>>    a: []
+1 >^^^^
+2 >    ^
+3 >     ^^
+4 >       ^^
+1 >{
+  >    
+2 >    a
+3 >     : 
+4 >       []
+1 >Emitted(122, 5) Source(183, 5) + SourceIndex(0)
+2 >Emitted(122, 6) Source(183, 6) + SourceIndex(0)
+3 >Emitted(122, 8) Source(183, 8) + SourceIndex(0)
+4 >Emitted(122, 10) Source(183, 10) + SourceIndex(0)
+---
+>>>});
+1 >^
+2 > ^
+3 >  ^
+4 >   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >}
+2 > )
+3 >  
+1 >Emitted(123, 2) Source(184, 2) + SourceIndex(0)
+2 >Emitted(123, 3) Source(184, 3) + SourceIndex(0)
+3 >Emitted(123, 4) Source(184, 3) + SourceIndex(0)
+---
+>>>function EF1(a, b) { return a + b; }
+1->
+2 >^^^^^^^^^
+3 >         ^^^
+4 >            ^
+5 >             ^
+6 >              ^^
+7 >                ^
+8 >                 ^^^^
+9 >                     ^^^^^^^
+10>                            ^
+11>                             ^^^
+12>                                ^
+13>                                 ^
+14>                                  ^
+15>                                   ^
+1->
+  >
+  >// CONTEXT: Contextual typing declarations
+  >
+  >// contextually typing function declarations
+  >declare function EF1(a:number, b:number):number;
+  >
+  >
+2 >function 
+3 >         EF1
+4 >            (
+5 >             a
+6 >              ,
+7 >                b
+8 >                 ) { 
+9 >                     return 
+10>                            a
+11>                             +
+12>                                b
+13>                                 ;
+14>                                   
+15>                                   }
+1->Emitted(124, 1) Source(191, 1) + SourceIndex(0)
+2 >Emitted(124, 10) Source(191, 10) + SourceIndex(0)
+3 >Emitted(124, 13) Source(191, 13) + SourceIndex(0)
+4 >Emitted(124, 14) Source(191, 14) + SourceIndex(0)
+5 >Emitted(124, 15) Source(191, 15) + SourceIndex(0)
+6 >Emitted(124, 17) Source(191, 16) + SourceIndex(0)
+7 >Emitted(124, 18) Source(191, 17) + SourceIndex(0)
+8 >Emitted(124, 22) Source(191, 21) + SourceIndex(0)
+9 >Emitted(124, 29) Source(191, 28) + SourceIndex(0)
+10>Emitted(124, 30) Source(191, 29) + SourceIndex(0)
+11>Emitted(124, 33) Source(191, 30) + SourceIndex(0)
+12>Emitted(124, 34) Source(191, 31) + SourceIndex(0)
+13>Emitted(124, 35) Source(191, 32) + SourceIndex(0)
+14>Emitted(124, 36) Source(191, 33) + SourceIndex(0)
+15>Emitted(124, 37) Source(191, 34) + SourceIndex(0)
+---
+>>>var efv = EF1(1, 2);
+1 >
+2 >^^^^
+3 >    ^^^
+4 >       ^^^
+5 >          ^^^
+6 >             ^
+7 >              ^
+8 >               ^^
+9 >                 ^
+10>                  ^
+11>                   ^
+12>                    ^^^^^^^^^^^^->
+1 >
+  >
+  >
+2 >var 
+3 >    efv
+4 >        = 
+5 >          EF1
+6 >             (
+7 >              1
+8 >               ,
+9 >                 2
+10>                  )
+11>                   ;
+1 >Emitted(125, 1) Source(193, 1) + SourceIndex(0)
+2 >Emitted(125, 5) Source(193, 5) + SourceIndex(0)
+3 >Emitted(125, 8) Source(193, 8) + SourceIndex(0)
+4 >Emitted(125, 11) Source(193, 11) + SourceIndex(0)
+5 >Emitted(125, 14) Source(193, 14) + SourceIndex(0)
+6 >Emitted(125, 15) Source(193, 15) + SourceIndex(0)
+7 >Emitted(125, 16) Source(193, 16) + SourceIndex(0)
+8 >Emitted(125, 18) Source(193, 17) + SourceIndex(0)
+9 >Emitted(125, 19) Source(193, 18) + SourceIndex(0)
+10>Emitted(125, 20) Source(193, 19) + SourceIndex(0)
+11>Emitted(125, 21) Source(193, 20) + SourceIndex(0)
+---
+>>>Point.origin = new Point(0, 0);
+1->
+2 >^^^^^
+3 >     ^
+4 >      ^^^^^^
+5 >            ^^^
+6 >               ^^^^
+7 >                   ^^^^^
+8 >                        ^
+9 >                         ^
+10>                          ^^
+11>                            ^
+12>                             ^
+13>                              ^
+14>                               ^^^^^^^^^^^->
+1->
+  >
+  >
+  >// contextually typing from ambient class declarations
+  >declare class Point
+  >{
+  >      constructor(x: number, y: number);
+  >      x: number;
+  >      y: number;
+  >      add(dx: number, dy: number): Point;
+  >      static origin: Point;
+  >
+  >}
+  >
+  >
+2 >Point
+3 >     .
+4 >      origin
+5 >             = 
+6 >               new 
+7 >                   Point
+8 >                        (
+9 >                         0
+10>                          , 
+11>                            0
+12>                             )
+13>                              ;
+1->Emitted(126, 1) Source(207, 1) + SourceIndex(0)
+2 >Emitted(126, 6) Source(207, 6) + SourceIndex(0)
+3 >Emitted(126, 7) Source(207, 7) + SourceIndex(0)
+4 >Emitted(126, 13) Source(207, 13) + SourceIndex(0)
+5 >Emitted(126, 16) Source(207, 16) + SourceIndex(0)
+6 >Emitted(126, 20) Source(207, 20) + SourceIndex(0)
+7 >Emitted(126, 25) Source(207, 25) + SourceIndex(0)
+8 >Emitted(126, 26) Source(207, 26) + SourceIndex(0)
+9 >Emitted(126, 27) Source(207, 27) + SourceIndex(0)
+10>Emitted(126, 29) Source(207, 29) + SourceIndex(0)
+11>Emitted(126, 30) Source(207, 30) + SourceIndex(0)
+12>Emitted(126, 31) Source(207, 31) + SourceIndex(0)
+13>Emitted(126, 32) Source(207, 32) + SourceIndex(0)
+---
+>>>Point.prototype.add = function (dx, dy) {
+1->
+2 >^^^^^
+3 >     ^
+4 >      ^^^^^^^^^
+5 >               ^
+6 >                ^^^
+7 >                   ^^^
+8 >                      ^^^^^^^^^^
+9 >                                ^^
+10>                                  ^^
+11>                                    ^^
+12>                                      ^^^^^^^^^^->
+1->
+  >
+  >
+2 >Point
+3 >     .
+4 >      prototype
+5 >               .
+6 >                add
+7 >                    = 
+8 >                      function(
+9 >                                dx
+10>                                  , 
+11>                                    dy
+1->Emitted(127, 1) Source(209, 1) + SourceIndex(0)
+2 >Emitted(127, 6) Source(209, 6) + SourceIndex(0)
+3 >Emitted(127, 7) Source(209, 7) + SourceIndex(0)
+4 >Emitted(127, 16) Source(209, 16) + SourceIndex(0)
+5 >Emitted(127, 17) Source(209, 17) + SourceIndex(0)
+6 >Emitted(127, 20) Source(209, 20) + SourceIndex(0)
+7 >Emitted(127, 23) Source(209, 23) + SourceIndex(0)
+8 >Emitted(127, 33) Source(209, 32) + SourceIndex(0)
+9 >Emitted(127, 35) Source(209, 34) + SourceIndex(0)
+10>Emitted(127, 37) Source(209, 36) + SourceIndex(0)
+11>Emitted(127, 39) Source(209, 38) + SourceIndex(0)
+---
+>>>    return new Point(this.x + dx, this.y + dy);
+1->^^^^
+2 >    ^^^^^^^
+3 >           ^^^^
+4 >               ^^^^^
+5 >                    ^
+6 >                     ^^^^
+7 >                         ^
+8 >                          ^
+9 >                           ^^^
+10>                              ^^
+11>                                ^^
+12>                                  ^^^^
+13>                                      ^
+14>                                       ^
+15>                                        ^^^
+16>                                           ^^
+17>                                             ^
+18>                                              ^
+1->) {
+  >    
+2 >    return 
+3 >           new 
+4 >               Point
+5 >                    (
+6 >                     this
+7 >                         .
+8 >                          x
+9 >                            + 
+10>                              dx
+11>                                , 
+12>                                  this
+13>                                      .
+14>                                       y
+15>                                         + 
+16>                                           dy
+17>                                             )
+18>                                              ;
+1->Emitted(128, 5) Source(210, 5) + SourceIndex(0)
+2 >Emitted(128, 12) Source(210, 12) + SourceIndex(0)
+3 >Emitted(128, 16) Source(210, 16) + SourceIndex(0)
+4 >Emitted(128, 21) Source(210, 21) + SourceIndex(0)
+5 >Emitted(128, 22) Source(210, 22) + SourceIndex(0)
+6 >Emitted(128, 26) Source(210, 26) + SourceIndex(0)
+7 >Emitted(128, 27) Source(210, 27) + SourceIndex(0)
+8 >Emitted(128, 28) Source(210, 28) + SourceIndex(0)
+9 >Emitted(128, 31) Source(210, 31) + SourceIndex(0)
+10>Emitted(128, 33) Source(210, 33) + SourceIndex(0)
+11>Emitted(128, 35) Source(210, 35) + SourceIndex(0)
+12>Emitted(128, 39) Source(210, 39) + SourceIndex(0)
+13>Emitted(128, 40) Source(210, 40) + SourceIndex(0)
+14>Emitted(128, 41) Source(210, 41) + SourceIndex(0)
+15>Emitted(128, 44) Source(210, 44) + SourceIndex(0)
+16>Emitted(128, 46) Source(210, 46) + SourceIndex(0)
+17>Emitted(128, 47) Source(210, 47) + SourceIndex(0)
+18>Emitted(128, 48) Source(210, 48) + SourceIndex(0)
+---
+>>>};
+1 >
+2 >^
+3 > ^
+4 >  ^^^^^^^^^^^^^^^^^^->
+1 >
+  >
+2 >}
+3 > ;
+1 >Emitted(129, 1) Source(211, 1) + SourceIndex(0)
+2 >Emitted(129, 2) Source(211, 2) + SourceIndex(0)
+3 >Emitted(129, 3) Source(211, 3) + SourceIndex(0)
+---
+>>>Point.prototype = {
+1->
+2 >^^^^^
+3 >     ^
+4 >      ^^^^^^^^^
+5 >               ^^^
+1->
+  >
+  >
+2 >Point
+3 >     .
+4 >      prototype
+5 >                = 
+1->Emitted(130, 1) Source(213, 1) + SourceIndex(0)
+2 >Emitted(130, 6) Source(213, 6) + SourceIndex(0)
+3 >Emitted(130, 7) Source(213, 7) + SourceIndex(0)
+4 >Emitted(130, 16) Source(213, 16) + SourceIndex(0)
+5 >Emitted(130, 19) Source(213, 19) + SourceIndex(0)
+---
+>>>    x: 0,
+1 >^^^^
+2 >    ^
+3 >     ^^
+4 >       ^
+5 >        ^^->
+1 >{
+  >    
+2 >    x
+3 >     : 
+4 >       0
+1 >Emitted(131, 5) Source(214, 5) + SourceIndex(0)
+2 >Emitted(131, 6) Source(214, 6) + SourceIndex(0)
+3 >Emitted(131, 8) Source(214, 8) + SourceIndex(0)
+4 >Emitted(131, 9) Source(214, 9) + SourceIndex(0)
+---
+>>>    y: 0,
+1->^^^^
+2 >    ^
+3 >     ^^
+4 >       ^
+5 >        ^^^^^^^^^^^^^^^^^^^^^->
+1->,
+  >    
+2 >    y
+3 >     : 
+4 >       0
+1->Emitted(132, 5) Source(215, 5) + SourceIndex(0)
+2 >Emitted(132, 6) Source(215, 6) + SourceIndex(0)
+3 >Emitted(132, 8) Source(215, 8) + SourceIndex(0)
+4 >Emitted(132, 9) Source(215, 9) + SourceIndex(0)
+---
+>>>    add: function (dx, dy) {
+1->^^^^
+2 >    ^^^
+3 >       ^^
+4 >         ^^^^^^^^^^
+5 >                   ^^
+6 >                     ^^
+7 >                       ^^
+8 >                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1->,
+  >    
+2 >    add
+3 >       : 
+4 >         function(
+5 >                   dx
+6 >                     , 
+7 >                       dy
+1->Emitted(133, 5) Source(216, 5) + SourceIndex(0)
+2 >Emitted(133, 8) Source(216, 8) + SourceIndex(0)
+3 >Emitted(133, 10) Source(216, 10) + SourceIndex(0)
+4 >Emitted(133, 20) Source(216, 19) + SourceIndex(0)
+5 >Emitted(133, 22) Source(216, 21) + SourceIndex(0)
+6 >Emitted(133, 24) Source(216, 23) + SourceIndex(0)
+7 >Emitted(133, 26) Source(216, 25) + SourceIndex(0)
+---
+>>>        return new Point(this.x + dx, this.y + dy);
+1->^^^^^^^^
+2 >        ^^^^^^^
+3 >               ^^^^
+4 >                   ^^^^^
+5 >                        ^
+6 >                         ^^^^
+7 >                             ^
+8 >                              ^
+9 >                               ^^^
+10>                                  ^^
+11>                                    ^^
+12>                                      ^^^^
+13>                                          ^
+14>                                           ^
+15>                                            ^^^
+16>                                               ^^
+17>                                                 ^
+18>                                                  ^
+1->) {
+  >        
+2 >        return 
+3 >               new 
+4 >                   Point
+5 >                        (
+6 >                         this
+7 >                             .
+8 >                              x
+9 >                                + 
+10>                                  dx
+11>                                    , 
+12>                                      this
+13>                                          .
+14>                                           y
+15>                                             + 
+16>                                               dy
+17>                                                 )
+18>                                                  ;
+1->Emitted(134, 9) Source(217, 9) + SourceIndex(0)
+2 >Emitted(134, 16) Source(217, 16) + SourceIndex(0)
+3 >Emitted(134, 20) Source(217, 20) + SourceIndex(0)
+4 >Emitted(134, 25) Source(217, 25) + SourceIndex(0)
+5 >Emitted(134, 26) Source(217, 26) + SourceIndex(0)
+6 >Emitted(134, 30) Source(217, 30) + SourceIndex(0)
+7 >Emitted(134, 31) Source(217, 31) + SourceIndex(0)
+8 >Emitted(134, 32) Source(217, 32) + SourceIndex(0)
+9 >Emitted(134, 35) Source(217, 35) + SourceIndex(0)
+10>Emitted(134, 37) Source(217, 37) + SourceIndex(0)
+11>Emitted(134, 39) Source(217, 39) + SourceIndex(0)
+12>Emitted(134, 43) Source(217, 43) + SourceIndex(0)
+13>Emitted(134, 44) Source(217, 44) + SourceIndex(0)
+14>Emitted(134, 45) Source(217, 45) + SourceIndex(0)
+15>Emitted(134, 48) Source(217, 48) + SourceIndex(0)
+16>Emitted(134, 50) Source(217, 50) + SourceIndex(0)
+17>Emitted(134, 51) Source(217, 51) + SourceIndex(0)
+18>Emitted(134, 52) Source(217, 52) + SourceIndex(0)
+---
+>>>    }
+1 >^^^^
+2 >    ^
+1 >
+  >    
+2 >    }
+1 >Emitted(135, 5) Source(218, 5) + SourceIndex(0)
+2 >Emitted(135, 6) Source(218, 6) + SourceIndex(0)
+---
+>>>};
+1 >^
+2 > ^
+3 >  ^^^^^^^^^^->
+1 >
+  >}
+2 > ;
+1 >Emitted(136, 2) Source(219, 2) + SourceIndex(0)
+2 >Emitted(136, 3) Source(219, 3) + SourceIndex(0)
+---
+>>>var x = {};
+1->
+2 >^^^^
+3 >    ^
+4 >     ^^^
+5 >        ^^
+6 >          ^
+7 >           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1->
+  >
+  >interface A { x: string; }
+  >interface B extends A { }
+  >
+2 >var 
+3 >    x
+4 >     : B = 
+5 >        { }
+6 >          ;
+1->Emitted(137, 1) Source(223, 1) + SourceIndex(0)
+2 >Emitted(137, 5) Source(223, 5) + SourceIndex(0)
+3 >Emitted(137, 6) Source(223, 6) + SourceIndex(0)
+4 >Emitted(137, 9) Source(223, 12) + SourceIndex(0)
+5 >Emitted(137, 11) Source(223, 15) + SourceIndex(0)
+6 >Emitted(137, 12) Source(223, 16) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=contextualTyping.js.map

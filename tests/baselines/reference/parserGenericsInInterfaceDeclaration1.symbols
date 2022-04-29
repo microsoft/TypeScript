@@ -1,0 +1,26 @@
+=== tests/cases/conformance/parser/ecmascript5/Generics/parserGenericsInInterfaceDeclaration1.ts ===
+interface I<T> {
+>I : Symbol(I, Decl(parserGenericsInInterfaceDeclaration1.ts, 0, 0))
+>T : Symbol(T, Decl(parserGenericsInInterfaceDeclaration1.ts, 0, 12))
+
+   v: A<T>;
+>v : Symbol(I.v, Decl(parserGenericsInInterfaceDeclaration1.ts, 0, 16))
+>A : Symbol(A)
+>T : Symbol(T, Decl(parserGenericsInInterfaceDeclaration1.ts, 0, 12))
+
+   f1<T>(): T;
+>f1 : Symbol(I.f1, Decl(parserGenericsInInterfaceDeclaration1.ts, 1, 11))
+>T : Symbol(T, Decl(parserGenericsInInterfaceDeclaration1.ts, 2, 6))
+>T : Symbol(T, Decl(parserGenericsInInterfaceDeclaration1.ts, 2, 6))
+
+   f2?<T>(): T;
+>f2 : Symbol(I.f2, Decl(parserGenericsInInterfaceDeclaration1.ts, 2, 14))
+>T : Symbol(T, Decl(parserGenericsInInterfaceDeclaration1.ts, 3, 7))
+>T : Symbol(T, Decl(parserGenericsInInterfaceDeclaration1.ts, 3, 7))
+
+   <T>(): void;
+>T : Symbol(T, Decl(parserGenericsInInterfaceDeclaration1.ts, 4, 4))
+
+   new <T>(): void;
+>T : Symbol(T, Decl(parserGenericsInInterfaceDeclaration1.ts, 5, 8))
+}

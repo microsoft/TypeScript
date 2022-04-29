@@ -1,0 +1,141 @@
+=== tests/cases/conformance/es6/Symbols/symbolType12.ts ===
+var s = Symbol.for("assign");
+>s : symbol
+>Symbol.for("assign") : symbol
+>Symbol.for : (key: string) => symbol
+>Symbol : SymbolConstructor
+>for : (key: string) => symbol
+>"assign" : "assign"
+
+var str = "";
+>str : string
+>"" : ""
+
+s *= s;
+>s *= s : number
+>s : symbol
+>s : symbol
+
+s *= 0;
+>s *= 0 : number
+>s : symbol
+>0 : 0
+
+s /= s;
+>s /= s : number
+>s : symbol
+>s : symbol
+
+s /= 0;
+>s /= 0 : number
+>s : symbol
+>0 : 0
+
+s %= s;
+>s %= s : number
+>s : symbol
+>s : symbol
+
+s %= 0;
+>s %= 0 : number
+>s : symbol
+>0 : 0
+
+s += s;
+>s += s : any
+>s : symbol
+>s : symbol
+
+s += 0;
+>s += 0 : any
+>s : symbol
+>0 : 0
+
+s += "";
+>s += "" : string
+>s : symbol
+>"" : ""
+
+str += s;
+>str += s : string
+>str : string
+>s : symbol
+
+s -= s;
+>s -= s : number
+>s : symbol
+>s : symbol
+
+s -= 0;
+>s -= 0 : number
+>s : symbol
+>0 : 0
+
+s <<= s;
+>s <<= s : number
+>s : symbol
+>s : symbol
+
+s <<= 0;
+>s <<= 0 : number
+>s : symbol
+>0 : 0
+
+s >>= s;
+>s >>= s : number
+>s : symbol
+>s : symbol
+
+s >>= 0;
+>s >>= 0 : number
+>s : symbol
+>0 : 0
+
+s >>>= s;
+>s >>>= s : number
+>s : symbol
+>s : symbol
+
+s >>>= 0;
+>s >>>= 0 : number
+>s : symbol
+>0 : 0
+
+s &= s;
+>s &= s : number
+>s : symbol
+>s : symbol
+
+s &= 0;
+>s &= 0 : number
+>s : symbol
+>0 : 0
+
+s ^= s;
+>s ^= s : number
+>s : symbol
+>s : symbol
+
+s ^= 0;
+>s ^= 0 : number
+>s : symbol
+>0 : 0
+
+s |= s;
+>s |= s : number
+>s : symbol
+>s : symbol
+
+s |= 0;
+>s |= 0 : number
+>s : symbol
+>0 : 0
+
+str += (s || str);
+>str += (s || str) : string
+>str : string
+>(s || str) : string | symbol
+>s || str : string | symbol
+>s : symbol
+>str : string
+

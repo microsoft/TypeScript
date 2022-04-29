@@ -1,0 +1,522 @@
+
+1  >module Foo.Bar {
+
+    ~~~~~~~                                       => Pos: (0 to 6)  SpanInfo: undefined
+1  >module Foo.Bar {
+
+           ~~~~                                   => Pos: (7 to 10)  SpanInfo: {"start":7,"length":3}
+    >Foo
+    >:=> (line 1, col 7) to (line 1, col 10)
+1  >module Foo.Bar {
+
+               ~~~~                               => Pos: (11 to 14)  SpanInfo: {"start":7,"length":7}
+    >Foo.Bar
+    >:=> (line 1, col 7) to (line 1, col 14)
+1  >module Foo.Bar {
+
+                   ~~                             => Pos: (15 to 16)  SpanInfo: undefined
+--------------------------------
+2  >    "use strict";
+
+    ~~~~                                          => Pos: (17 to 20)  SpanInfo: undefined
+2  >    "use strict";
+
+        ~~~~~~~~~~~~~                             => Pos: (21 to 33)  SpanInfo: {"start":21,"length":12}
+    >"use strict"
+    >:=> (line 2, col 4) to (line 2, col 16)
+2  >    "use strict";
+
+                     ~                            => Pos: (34 to 34)  SpanInfo: undefined
+--------------------------------
+3  >
+
+    ~                                             => Pos: (35 to 35)  SpanInfo: undefined
+--------------------------------
+4  >    class Greeter {
+
+    ~~~~~~~~~~                                    => Pos: (36 to 45)  SpanInfo: undefined
+4  >    class Greeter {
+
+              ~~~~~~~~                            => Pos: (46 to 53)  SpanInfo: {"start":46,"length":7}
+    >Greeter
+    >:=> (line 4, col 10) to (line 4, col 17)
+4  >    class Greeter {
+
+                      ~~                          => Pos: (54 to 55)  SpanInfo: undefined
+--------------------------------
+5  >        constructor(public greeting: string) {
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~                   => Pos: (56 to 82)  SpanInfo: undefined
+5  >        constructor(public greeting: string) {
+
+                               ~~~~~~~~~          => Pos: (83 to 91)  SpanInfo: {"start":83,"length":8}
+    >greeting
+    >:=> (line 5, col 27) to (line 5, col 35)
+5  >        constructor(public greeting: string) {
+
+                                        ~~~~~~~~~~~=> Pos: (92 to 102)  SpanInfo: undefined
+--------------------------------
+6  >        }
+
+    ~~~~~~~~~~                                    => Pos: (103 to 112)  SpanInfo: undefined
+--------------------------------
+7  >
+
+    ~                                             => Pos: (113 to 113)  SpanInfo: undefined
+--------------------------------
+8  >        greet() {
+
+    ~~~~~~~~                                      => Pos: (114 to 121)  SpanInfo: undefined
+8  >        greet() {
+
+            ~~~~~~                                => Pos: (122 to 127)  SpanInfo: {"start":122,"length":5}
+    >greet
+    >:=> (line 8, col 8) to (line 8, col 13)
+8  >        greet() {
+
+                  ~~~~                            => Pos: (128 to 131)  SpanInfo: undefined
+--------------------------------
+9  >            return "<h1>" + this.greeting + "</h1>";
+
+    ~~~~~~~~~~~~~~~~~~~                           => Pos: (132 to 150)  SpanInfo: undefined
+9  >            return "<h1>" + this.greeting + "</h1>";
+
+                       ~~~~~~~                    => Pos: (151 to 157)  SpanInfo: {"start":151,"length":6}
+    >"<h1>"
+    >:=> (line 9, col 19) to (line 9, col 25)
+9  >            return "<h1>" + this.greeting + "</h1>";
+
+                              ~~                  => Pos: (158 to 159)  SpanInfo: undefined
+9  >            return "<h1>" + this.greeting + "</h1>";
+
+                                ~~~~~             => Pos: (160 to 164)  SpanInfo: {"start":160,"length":4}
+    >this
+    >:=> (line 9, col 28) to (line 9, col 32)
+9  >            return "<h1>" + this.greeting + "</h1>";
+
+                                     ~~~~~~~~~    => Pos: (165 to 173)  SpanInfo: {"start":160,"length":13}
+    >this.greeting
+    >:=> (line 9, col 28) to (line 9, col 41)
+9  >            return "<h1>" + this.greeting + "</h1>";
+
+                                              ~~  => Pos: (174 to 175)  SpanInfo: undefined
+9  >            return "<h1>" + this.greeting + "</h1>";
+
+                                                ~~~~~~~~=> Pos: (176 to 183)  SpanInfo: {"start":176,"length":7}
+    >"</h1>"
+    >:=> (line 9, col 44) to (line 9, col 51)
+9  >            return "<h1>" + this.greeting + "</h1>";
+
+                                                        ~=> Pos: (184 to 184)  SpanInfo: undefined
+--------------------------------
+10 >        }
+
+    ~~~~~~~~~~                                    => Pos: (185 to 194)  SpanInfo: undefined
+--------------------------------
+11 >    }
+
+    ~~~~~~                                        => Pos: (195 to 200)  SpanInfo: undefined
+--------------------------------
+12 >
+
+    ~                                             => Pos: (201 to 201)  SpanInfo: undefined
+--------------------------------
+13 >
+
+    ~                                             => Pos: (202 to 202)  SpanInfo: undefined
+--------------------------------
+14 >    function foo(greeting: string): Greeter {
+
+    ~~~~~~~~~~~~~                                 => Pos: (203 to 215)  SpanInfo: undefined
+14 >    function foo(greeting: string): Greeter {
+
+                 ~~~~                             => Pos: (216 to 219)  SpanInfo: {"start":216,"length":3}
+    >foo
+    >:=> (line 14, col 13) to (line 14, col 16)
+14 >    function foo(greeting: string): Greeter {
+
+                     ~~~~~~~~~                    => Pos: (220 to 228)  SpanInfo: {"start":220,"length":8}
+    >greeting
+    >:=> (line 14, col 17) to (line 14, col 25)
+14 >    function foo(greeting: string): Greeter {
+
+                              ~~~~~~~~~~          => Pos: (229 to 238)  SpanInfo: undefined
+14 >    function foo(greeting: string): Greeter {
+
+                                        ~~~~~~~~  => Pos: (239 to 246)  SpanInfo: {"start":239,"length":7}
+    >Greeter
+    >:=> (line 14, col 36) to (line 14, col 43)
+14 >    function foo(greeting: string): Greeter {
+
+                                                ~~=> Pos: (247 to 248)  SpanInfo: undefined
+--------------------------------
+15 >        return new Greeter(greeting);
+
+    ~~~~~~~~~~~~~~~~~~~                           => Pos: (249 to 267)  SpanInfo: undefined
+15 >        return new Greeter(greeting);
+
+                       ~~~~~~~~                   => Pos: (268 to 275)  SpanInfo: {"start":268,"length":7}
+    >Greeter
+    >:=> (line 15, col 19) to (line 15, col 26)
+15 >        return new Greeter(greeting);
+
+                               ~~~~~~~~~          => Pos: (276 to 284)  SpanInfo: {"start":276,"length":8}
+    >greeting
+    >:=> (line 15, col 27) to (line 15, col 35)
+15 >        return new Greeter(greeting);
+
+                                        ~~        => Pos: (285 to 286)  SpanInfo: undefined
+--------------------------------
+16 >    }
+
+    ~~~~~~                                        => Pos: (287 to 292)  SpanInfo: undefined
+--------------------------------
+17 >
+
+    ~                                             => Pos: (293 to 293)  SpanInfo: undefined
+--------------------------------
+18 >    var greeter = new Greeter("Hello, world!");
+
+    ~~~~~~~~                                      => Pos: (294 to 301)  SpanInfo: undefined
+18 >    var greeter = new Greeter("Hello, world!");
+
+            ~~~~~~~~                              => Pos: (302 to 309)  SpanInfo: {"start":302,"length":7}
+    >greeter
+    >:=> (line 18, col 8) to (line 18, col 15)
+18 >    var greeter = new Greeter("Hello, world!");
+
+                    ~~~~~~                        => Pos: (310 to 315)  SpanInfo: undefined
+18 >    var greeter = new Greeter("Hello, world!");
+
+                          ~~~~~~~~                => Pos: (316 to 323)  SpanInfo: {"start":316,"length":7}
+    >Greeter
+    >:=> (line 18, col 22) to (line 18, col 29)
+18 >    var greeter = new Greeter("Hello, world!");
+
+                                  ~~~~~~~~~~~~~~~~=> Pos: (324 to 339)  SpanInfo: {"start":324,"length":15}
+    >"Hello, world!"
+    >:=> (line 18, col 30) to (line 18, col 45)
+18 >    var greeter = new Greeter("Hello, world!");
+
+                                                  ~~=> Pos: (340 to 341)  SpanInfo: undefined
+--------------------------------
+19 >    var str = greeter.greet();
+
+    ~~~~~~~~                                      => Pos: (342 to 349)  SpanInfo: undefined
+19 >    var str = greeter.greet();
+
+            ~~~~                                  => Pos: (350 to 353)  SpanInfo: {"start":350,"length":3}
+    >str
+    >:=> (line 19, col 8) to (line 19, col 11)
+19 >    var str = greeter.greet();
+
+                ~~                                => Pos: (354 to 355)  SpanInfo: undefined
+19 >    var str = greeter.greet();
+
+                  ~~~~~~~~                        => Pos: (356 to 363)  SpanInfo: {"start":356,"length":7}
+    >greeter
+    >:=> (line 19, col 14) to (line 19, col 21)
+19 >    var str = greeter.greet();
+
+                          ~~~~~~                  => Pos: (364 to 369)  SpanInfo: {"start":356,"length":13}
+    >greeter.greet
+    >:=> (line 19, col 14) to (line 19, col 27)
+19 >    var str = greeter.greet();
+
+                                ~~~               => Pos: (370 to 372)  SpanInfo: undefined
+--------------------------------
+20 >
+
+    ~                                             => Pos: (373 to 373)  SpanInfo: undefined
+--------------------------------
+21 >    function foo2(greeting: string, ...restGreetings /* more greeting */: string[]) {
+
+    ~~~~~~~~~~~~~                                 => Pos: (374 to 386)  SpanInfo: undefined
+21 >    function foo2(greeting: string, ...restGreetings /* more greeting */: string[]) {
+
+                 ~~~~~                            => Pos: (387 to 391)  SpanInfo: {"start":387,"length":4}
+    >foo2
+    >:=> (line 21, col 13) to (line 21, col 17)
+21 >    function foo2(greeting: string, ...restGreetings /* more greeting */: string[]) {
+
+                      ~~~~~~~~~                   => Pos: (392 to 400)  SpanInfo: {"start":392,"length":8}
+    >greeting
+    >:=> (line 21, col 18) to (line 21, col 26)
+21 >    function foo2(greeting: string, ...restGreetings /* more greeting */: string[]) {
+
+                               ~~~~~~~~~~~~       => Pos: (401 to 412)  SpanInfo: undefined
+21 >    function foo2(greeting: string, ...restGreetings /* more greeting */: string[]) {
+
+                                           ~~~~~~~~~~~~~~=> Pos: (413 to 426)  SpanInfo: {"start":413,"length":13}
+    >restGreetings
+    >:=> (line 21, col 39) to (line 21, col 52)
+21 >    function foo2(greeting: string, ...restGreetings /* more greeting */: string[]) {
+
+                                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (427 to 459)  SpanInfo: undefined
+--------------------------------
+22 >        var greeters: Greeter[] = []; /* inline block comment */
+
+    ~~~~~~~~~~~~                                  => Pos: (460 to 471)  SpanInfo: undefined
+22 >        var greeters: Greeter[] = []; /* inline block comment */
+
+                ~~~~~~~~~                         => Pos: (472 to 480)  SpanInfo: {"start":472,"length":8}
+    >greeters
+    >:=> (line 22, col 12) to (line 22, col 20)
+22 >        var greeters: Greeter[] = []; /* inline block comment */
+
+                         ~                        => Pos: (481 to 481)  SpanInfo: undefined
+22 >        var greeters: Greeter[] = []; /* inline block comment */
+
+                          ~~~~~~~~                => Pos: (482 to 489)  SpanInfo: {"start":482,"length":7}
+    >Greeter
+    >:=> (line 22, col 22) to (line 22, col 29)
+22 >        var greeters: Greeter[] = []; /* inline block comment */
+
+                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (490 to 524)  SpanInfo: undefined
+--------------------------------
+23 >        greeters[0] = new Greeter(greeting);
+
+    ~~~~~~~~                                      => Pos: (525 to 532)  SpanInfo: undefined
+23 >        greeters[0] = new Greeter(greeting);
+
+            ~~~~~~~~~                             => Pos: (533 to 541)  SpanInfo: {"start":533,"length":8}
+    >greeters
+    >:=> (line 23, col 8) to (line 23, col 16)
+23 >        greeters[0] = new Greeter(greeting);
+
+                     ~~~~~~~~~                    => Pos: (542 to 550)  SpanInfo: undefined
+23 >        greeters[0] = new Greeter(greeting);
+
+                              ~~~~~~~~            => Pos: (551 to 558)  SpanInfo: {"start":551,"length":7}
+    >Greeter
+    >:=> (line 23, col 26) to (line 23, col 33)
+23 >        greeters[0] = new Greeter(greeting);
+
+                                      ~~~~~~~~~   => Pos: (559 to 567)  SpanInfo: {"start":559,"length":8}
+    >greeting
+    >:=> (line 23, col 34) to (line 23, col 42)
+23 >        greeters[0] = new Greeter(greeting);
+
+                                               ~~ => Pos: (568 to 569)  SpanInfo: undefined
+--------------------------------
+24 >        for (var i = 0; i < restGreetings.length; i++) {
+
+    ~~~~~~~~~~~~~~~~~                             => Pos: (570 to 586)  SpanInfo: undefined
+24 >        for (var i = 0; i < restGreetings.length; i++) {
+
+                     ~~                           => Pos: (587 to 588)  SpanInfo: {"start":587,"length":1}
+    >i
+    >:=> (line 24, col 17) to (line 24, col 18)
+24 >        for (var i = 0; i < restGreetings.length; i++) {
+
+                       ~~~~~                      => Pos: (589 to 593)  SpanInfo: undefined
+24 >        for (var i = 0; i < restGreetings.length; i++) {
+
+                            ~~                    => Pos: (594 to 595)  SpanInfo: {"start":594,"length":1}
+    >i
+    >:=> (line 24, col 24) to (line 24, col 25)
+24 >        for (var i = 0; i < restGreetings.length; i++) {
+
+                              ~~                  => Pos: (596 to 597)  SpanInfo: undefined
+24 >        for (var i = 0; i < restGreetings.length; i++) {
+
+                                ~~~~~~~~~~~~~~    => Pos: (598 to 611)  SpanInfo: {"start":598,"length":13}
+    >restGreetings
+    >:=> (line 24, col 28) to (line 24, col 41)
+24 >        for (var i = 0; i < restGreetings.length; i++) {
+
+                                              ~~~~~~~=> Pos: (612 to 618)  SpanInfo: {"start":598,"length":20}
+    >restGreetings.length
+    >:=> (line 24, col 28) to (line 24, col 48)
+24 >        for (var i = 0; i < restGreetings.length; i++) {
+
+                                                     ~=> Pos: (619 to 619)  SpanInfo: undefined
+24 >        for (var i = 0; i < restGreetings.length; i++) {
+
+                                                      ~~=> Pos: (620 to 621)  SpanInfo: {"start":620,"length":1}
+    >i
+    >:=> (line 24, col 50) to (line 24, col 51)
+24 >        for (var i = 0; i < restGreetings.length; i++) {
+
+                                                        ~~~~~=> Pos: (622 to 626)  SpanInfo: undefined
+--------------------------------
+25 >            greeters.push(new Greeter(restGreetings[i]));
+
+    ~~~~~~~~~~~~                                  => Pos: (627 to 638)  SpanInfo: undefined
+25 >            greeters.push(new Greeter(restGreetings[i]));
+
+                ~~~~~~~~~                         => Pos: (639 to 647)  SpanInfo: {"start":639,"length":8}
+    >greeters
+    >:=> (line 25, col 12) to (line 25, col 20)
+25 >            greeters.push(new Greeter(restGreetings[i]));
+
+                         ~~~~~                    => Pos: (648 to 652)  SpanInfo: {"start":639,"length":13}
+    >greeters.push
+    >:=> (line 25, col 12) to (line 25, col 25)
+25 >            greeters.push(new Greeter(restGreetings[i]));
+
+                              ~~~~                => Pos: (653 to 656)  SpanInfo: undefined
+25 >            greeters.push(new Greeter(restGreetings[i]));
+
+                                  ~~~~~~~~        => Pos: (657 to 664)  SpanInfo: {"start":657,"length":7}
+    >Greeter
+    >:=> (line 25, col 30) to (line 25, col 37)
+25 >            greeters.push(new Greeter(restGreetings[i]));
+
+                                          ~~~~~~~~~~~~~~=> Pos: (665 to 678)  SpanInfo: {"start":665,"length":13}
+    >restGreetings
+    >:=> (line 25, col 38) to (line 25, col 51)
+25 >            greeters.push(new Greeter(restGreetings[i]));
+
+                                                        ~~=> Pos: (679 to 680)  SpanInfo: {"start":679,"length":1}
+    >i
+    >:=> (line 25, col 52) to (line 25, col 53)
+25 >            greeters.push(new Greeter(restGreetings[i]));
+
+                                                          ~~~~=> Pos: (681 to 684)  SpanInfo: undefined
+--------------------------------
+26 >        }
+
+    ~~~~~~~~~~                                    => Pos: (685 to 694)  SpanInfo: undefined
+--------------------------------
+27 >
+
+    ~                                             => Pos: (695 to 695)  SpanInfo: undefined
+--------------------------------
+28 >        return greeters;
+
+    ~~~~~~~~~~~~~~~                               => Pos: (696 to 710)  SpanInfo: undefined
+28 >        return greeters;
+
+                   ~~~~~~~~~                      => Pos: (711 to 719)  SpanInfo: {"start":711,"length":8}
+    >greeters
+    >:=> (line 28, col 15) to (line 28, col 23)
+28 >        return greeters;
+
+                            ~                     => Pos: (720 to 720)  SpanInfo: undefined
+--------------------------------
+29 >    }
+
+    ~~~~~~                                        => Pos: (721 to 726)  SpanInfo: undefined
+--------------------------------
+30 >
+
+    ~                                             => Pos: (727 to 727)  SpanInfo: undefined
+--------------------------------
+31 >    var b = foo2("Hello", "World", "!");
+
+    ~~~~~~~~                                      => Pos: (728 to 735)  SpanInfo: undefined
+31 >    var b = foo2("Hello", "World", "!");
+
+            ~~                                    => Pos: (736 to 737)  SpanInfo: {"start":736,"length":1}
+    >b
+    >:=> (line 31, col 8) to (line 31, col 9)
+31 >    var b = foo2("Hello", "World", "!");
+
+              ~~                                  => Pos: (738 to 739)  SpanInfo: undefined
+31 >    var b = foo2("Hello", "World", "!");
+
+                ~~~~~                             => Pos: (740 to 744)  SpanInfo: {"start":740,"length":4}
+    >foo2
+    >:=> (line 31, col 12) to (line 31, col 16)
+31 >    var b = foo2("Hello", "World", "!");
+
+                     ~~~~~~~~                     => Pos: (745 to 752)  SpanInfo: {"start":745,"length":7}
+    >"Hello"
+    >:=> (line 31, col 17) to (line 31, col 24)
+31 >    var b = foo2("Hello", "World", "!");
+
+                             ~                    => Pos: (753 to 753)  SpanInfo: undefined
+31 >    var b = foo2("Hello", "World", "!");
+
+                              ~~~~~~~~            => Pos: (754 to 761)  SpanInfo: {"start":754,"length":7}
+    >"World"
+    >:=> (line 31, col 26) to (line 31, col 33)
+31 >    var b = foo2("Hello", "World", "!");
+
+                                      ~           => Pos: (762 to 762)  SpanInfo: undefined
+31 >    var b = foo2("Hello", "World", "!");
+
+                                       ~~~~       => Pos: (763 to 766)  SpanInfo: {"start":763,"length":3}
+    >"!"
+    >:=> (line 31, col 35) to (line 31, col 38)
+31 >    var b = foo2("Hello", "World", "!");
+
+                                           ~~     => Pos: (767 to 768)  SpanInfo: undefined
+--------------------------------
+32 >    // This is simple signle line comment
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~    => Pos: (769 to 810)  SpanInfo: undefined
+--------------------------------
+33 >    for (var j = 0; j < b.length; j++) {
+
+    ~~~~~~~~~~~~~                                 => Pos: (811 to 823)  SpanInfo: undefined
+33 >    for (var j = 0; j < b.length; j++) {
+
+                 ~~                               => Pos: (824 to 825)  SpanInfo: {"start":824,"length":1}
+    >j
+    >:=> (line 33, col 13) to (line 33, col 14)
+33 >    for (var j = 0; j < b.length; j++) {
+
+                   ~~~~~                          => Pos: (826 to 830)  SpanInfo: undefined
+33 >    for (var j = 0; j < b.length; j++) {
+
+                        ~~                        => Pos: (831 to 832)  SpanInfo: {"start":831,"length":1}
+    >j
+    >:=> (line 33, col 20) to (line 33, col 21)
+33 >    for (var j = 0; j < b.length; j++) {
+
+                          ~~                      => Pos: (833 to 834)  SpanInfo: undefined
+33 >    for (var j = 0; j < b.length; j++) {
+
+                            ~~                    => Pos: (835 to 836)  SpanInfo: {"start":835,"length":1}
+    >b
+    >:=> (line 33, col 24) to (line 33, col 25)
+33 >    for (var j = 0; j < b.length; j++) {
+
+                              ~~~~~~~             => Pos: (837 to 843)  SpanInfo: {"start":835,"length":8}
+    >b.length
+    >:=> (line 33, col 24) to (line 33, col 32)
+33 >    for (var j = 0; j < b.length; j++) {
+
+                                     ~            => Pos: (844 to 844)  SpanInfo: undefined
+33 >    for (var j = 0; j < b.length; j++) {
+
+                                      ~~          => Pos: (845 to 846)  SpanInfo: {"start":845,"length":1}
+    >j
+    >:=> (line 33, col 34) to (line 33, col 35)
+33 >    for (var j = 0; j < b.length; j++) {
+
+                                        ~~~~~     => Pos: (847 to 851)  SpanInfo: undefined
+--------------------------------
+34 >        b[j].greet();
+
+    ~~~~~~~~                                      => Pos: (852 to 859)  SpanInfo: undefined
+34 >        b[j].greet();
+
+            ~~                                    => Pos: (860 to 861)  SpanInfo: {"start":860,"length":1}
+    >b
+    >:=> (line 34, col 8) to (line 34, col 9)
+34 >        b[j].greet();
+
+              ~~                                  => Pos: (862 to 863)  SpanInfo: {"start":862,"length":1}
+    >j
+    >:=> (line 34, col 10) to (line 34, col 11)
+34 >        b[j].greet();
+
+                ~                                 => Pos: (864 to 864)  SpanInfo: undefined
+34 >        b[j].greet();
+
+                 ~~~~~~                           => Pos: (865 to 870)  SpanInfo: {"start":860,"length":10}
+    >b[j].greet
+    >:=> (line 34, col 8) to (line 34, col 18)
+34 >        b[j].greet();
+
+                       ~~~                        => Pos: (871 to 873)  SpanInfo: undefined
+--------------------------------
+35 >    }
+
+    ~~~~~~                                        => Pos: (874 to 879)  SpanInfo: undefined
+--------------------------------
+36 >}
+    ~                                             => Pos: (880 to 880)  SpanInfo: undefined

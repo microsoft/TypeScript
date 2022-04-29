@@ -1,0 +1,15 @@
+tests/cases/compiler/file1.ts(1,5): error TS2451: Cannot redeclare block-scoped variable 'var1'.
+tests/cases/compiler/file2.ts(1,7): error TS2451: Cannot redeclare block-scoped variable 'var1'.
+
+
+==== tests/cases/compiler/file1.ts (1 errors) ====
+    let var1 = 0;
+        ~~~~
+!!! error TS2451: Cannot redeclare block-scoped variable 'var1'.
+!!! related TS6203 tests/cases/compiler/file2.ts:1:7: 'var1' was also declared here.
+    
+==== tests/cases/compiler/file2.ts (1 errors) ====
+    const var1 = 0;
+          ~~~~
+!!! error TS2451: Cannot redeclare block-scoped variable 'var1'.
+!!! related TS6203 tests/cases/compiler/file1.ts:1:5: 'var1' was also declared here.

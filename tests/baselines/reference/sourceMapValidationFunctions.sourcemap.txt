@@ -1,0 +1,318 @@
+===================================================================
+JsFile: sourceMapValidationFunctions.js
+mapUrl: sourceMapValidationFunctions.js.map
+sourceRoot: 
+sources: sourceMapValidationFunctions.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:tests/cases/compiler/sourceMapValidationFunctions.js
+sourceFile:sourceMapValidationFunctions.ts
+-------------------------------------------------------------------
+>>>var greetings = 0;
+1 >
+2 >^^^^
+3 >    ^^^^^^^^^
+4 >             ^^^
+5 >                ^
+6 >                 ^
+7 >                  ^^^^^^^^^->
+1 >
+2 >var 
+3 >    greetings
+4 >              = 
+5 >                0
+6 >                 ;
+1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(1, 5) Source(1, 5) + SourceIndex(0)
+3 >Emitted(1, 14) Source(1, 14) + SourceIndex(0)
+4 >Emitted(1, 17) Source(1, 17) + SourceIndex(0)
+5 >Emitted(1, 18) Source(1, 18) + SourceIndex(0)
+6 >Emitted(1, 19) Source(1, 19) + SourceIndex(0)
+---
+>>>function greet(greeting) {
+1->
+2 >^^^^^^^^^
+3 >         ^^^^^
+4 >              ^
+5 >               ^^^^^^^^
+1->
+  >
+2 >function 
+3 >         greet
+4 >              (
+5 >               greeting: string
+1->Emitted(2, 1) Source(2, 1) + SourceIndex(0)
+2 >Emitted(2, 10) Source(2, 10) + SourceIndex(0)
+3 >Emitted(2, 15) Source(2, 15) + SourceIndex(0)
+4 >Emitted(2, 16) Source(2, 16) + SourceIndex(0)
+5 >Emitted(2, 24) Source(2, 32) + SourceIndex(0)
+---
+>>>    greetings++;
+1 >^^^^
+2 >    ^^^^^^^^^
+3 >             ^^
+4 >               ^
+5 >                ^^^^^^->
+1 >): number {
+  >    
+2 >    greetings
+3 >             ++
+4 >               ;
+1 >Emitted(3, 5) Source(3, 5) + SourceIndex(0)
+2 >Emitted(3, 14) Source(3, 14) + SourceIndex(0)
+3 >Emitted(3, 16) Source(3, 16) + SourceIndex(0)
+4 >Emitted(3, 17) Source(3, 17) + SourceIndex(0)
+---
+>>>    return greetings;
+1->^^^^
+2 >    ^^^^^^^
+3 >           ^^^^^^^^^
+4 >                    ^
+1->
+  >    
+2 >    return 
+3 >           greetings
+4 >                    ;
+1->Emitted(4, 5) Source(4, 5) + SourceIndex(0)
+2 >Emitted(4, 12) Source(4, 12) + SourceIndex(0)
+3 >Emitted(4, 21) Source(4, 21) + SourceIndex(0)
+4 >Emitted(4, 22) Source(4, 22) + SourceIndex(0)
+---
+>>>}
+1 >
+2 >^
+3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >
+2 >}
+1 >Emitted(5, 1) Source(5, 1) + SourceIndex(0)
+2 >Emitted(5, 2) Source(5, 2) + SourceIndex(0)
+---
+>>>function greet2(greeting, n, x) {
+1->
+2 >^^^^^^^^^
+3 >         ^^^^^^
+4 >               ^
+5 >                ^^^^^^^^
+6 >                        ^^
+7 >                          ^
+8 >                           ^^
+9 >                             ^
+10>                              ^^^^->
+1->
+  >
+2 >function 
+3 >         greet2
+4 >               (
+5 >                greeting: string
+6 >                        , 
+7 >                          n = 10
+8 >                           , 
+9 >                             x?: string
+1->Emitted(6, 1) Source(6, 1) + SourceIndex(0)
+2 >Emitted(6, 10) Source(6, 10) + SourceIndex(0)
+3 >Emitted(6, 16) Source(6, 16) + SourceIndex(0)
+4 >Emitted(6, 17) Source(6, 17) + SourceIndex(0)
+5 >Emitted(6, 25) Source(6, 33) + SourceIndex(0)
+6 >Emitted(6, 27) Source(6, 35) + SourceIndex(0)
+7 >Emitted(6, 28) Source(6, 41) + SourceIndex(0)
+8 >Emitted(6, 30) Source(6, 43) + SourceIndex(0)
+9 >Emitted(6, 31) Source(6, 53) + SourceIndex(0)
+---
+>>>    if (n === void 0) { n = 10; }
+1->^^^^
+2 >    ^^^^^^^^^^^^^^^^^^
+3 >                      ^^
+4 >                        ^^^^^^
+1->
+2 >    
+3 >                      
+4 >                        n = 10
+1->Emitted(7, 5) Source(6, 35) + SourceIndex(0)
+2 >Emitted(7, 23) Source(6, 35) + SourceIndex(0)
+3 >Emitted(7, 25) Source(6, 35) + SourceIndex(0)
+4 >Emitted(7, 31) Source(6, 41) + SourceIndex(0)
+---
+>>>    var restParams = [];
+1 >^^^^
+2 >    ^^^^^^^^^^^^^^^^^^^^
+3 >                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >, x?: string, 
+2 >    ...restParams: string[]
+1 >Emitted(8, 5) Source(6, 55) + SourceIndex(0)
+2 >Emitted(8, 25) Source(6, 78) + SourceIndex(0)
+---
+>>>    for (var _i = 3; _i < arguments.length; _i++) {
+1->^^^^^^^^^
+2 >         ^^^^^^^^^^
+3 >                   ^^
+4 >                     ^^^^^^^^^^^^^^^^^^^^^
+5 >                                          ^^
+6 >                                            ^^^^
+1->
+2 >         ...restParams: string[]
+3 >                   
+4 >                     ...restParams: string[]
+5 >                                          
+6 >                                            ...restParams: string[]
+1->Emitted(9, 10) Source(6, 55) + SourceIndex(0)
+2 >Emitted(9, 20) Source(6, 78) + SourceIndex(0)
+3 >Emitted(9, 22) Source(6, 55) + SourceIndex(0)
+4 >Emitted(9, 43) Source(6, 78) + SourceIndex(0)
+5 >Emitted(9, 45) Source(6, 55) + SourceIndex(0)
+6 >Emitted(9, 49) Source(6, 78) + SourceIndex(0)
+---
+>>>        restParams[_i - 3] = arguments[_i];
+1 >^^^^^^^^
+2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+1 >
+2 >        ...restParams: string[]
+1 >Emitted(10, 9) Source(6, 55) + SourceIndex(0)
+2 >Emitted(10, 44) Source(6, 78) + SourceIndex(0)
+---
+>>>    }
+>>>    greetings++;
+1 >^^^^
+2 >    ^^^^^^^^^
+3 >             ^^
+4 >               ^
+5 >                ^^^^^^->
+1 >): number {
+  >    
+2 >    greetings
+3 >             ++
+4 >               ;
+1 >Emitted(12, 5) Source(7, 5) + SourceIndex(0)
+2 >Emitted(12, 14) Source(7, 14) + SourceIndex(0)
+3 >Emitted(12, 16) Source(7, 16) + SourceIndex(0)
+4 >Emitted(12, 17) Source(7, 17) + SourceIndex(0)
+---
+>>>    return greetings;
+1->^^^^
+2 >    ^^^^^^^
+3 >           ^^^^^^^^^
+4 >                    ^
+1->
+  >    
+2 >    return 
+3 >           greetings
+4 >                    ;
+1->Emitted(13, 5) Source(8, 5) + SourceIndex(0)
+2 >Emitted(13, 12) Source(8, 12) + SourceIndex(0)
+3 >Emitted(13, 21) Source(8, 21) + SourceIndex(0)
+4 >Emitted(13, 22) Source(8, 22) + SourceIndex(0)
+---
+>>>}
+1 >
+2 >^
+3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >
+2 >}
+1 >Emitted(14, 1) Source(9, 1) + SourceIndex(0)
+2 >Emitted(14, 2) Source(9, 2) + SourceIndex(0)
+---
+>>>function foo(greeting, n, x) {
+1->
+2 >^^^^^^^^^
+3 >         ^^^
+4 >            ^
+5 >             ^^^^^^^^
+6 >                     ^^
+7 >                       ^
+8 >                        ^^
+9 >                          ^
+10>                           ^^^^^^^->
+1->
+  >
+2 >function 
+3 >         foo
+4 >            (
+5 >             greeting: string
+6 >                     , 
+7 >                       n = 10
+8 >                        , 
+9 >                          x?: string
+1->Emitted(15, 1) Source(10, 1) + SourceIndex(0)
+2 >Emitted(15, 10) Source(10, 10) + SourceIndex(0)
+3 >Emitted(15, 13) Source(10, 13) + SourceIndex(0)
+4 >Emitted(15, 14) Source(10, 14) + SourceIndex(0)
+5 >Emitted(15, 22) Source(10, 30) + SourceIndex(0)
+6 >Emitted(15, 24) Source(10, 32) + SourceIndex(0)
+7 >Emitted(15, 25) Source(10, 38) + SourceIndex(0)
+8 >Emitted(15, 27) Source(10, 40) + SourceIndex(0)
+9 >Emitted(15, 28) Source(10, 50) + SourceIndex(0)
+---
+>>>    if (n === void 0) { n = 10; }
+1->^^^^
+2 >    ^^^^^^^^^^^^^^^^^^
+3 >                      ^^
+4 >                        ^^^^^^
+1->
+2 >    
+3 >                      
+4 >                        n = 10
+1->Emitted(16, 5) Source(10, 32) + SourceIndex(0)
+2 >Emitted(16, 23) Source(10, 32) + SourceIndex(0)
+3 >Emitted(16, 25) Source(10, 32) + SourceIndex(0)
+4 >Emitted(16, 31) Source(10, 38) + SourceIndex(0)
+---
+>>>    var restParams = [];
+1 >^^^^
+2 >    ^^^^^^^^^^^^^^^^^^^^
+3 >                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >, x?: string, 
+2 >    ...restParams: string[]
+1 >Emitted(17, 5) Source(10, 52) + SourceIndex(0)
+2 >Emitted(17, 25) Source(10, 75) + SourceIndex(0)
+---
+>>>    for (var _i = 3; _i < arguments.length; _i++) {
+1->^^^^^^^^^
+2 >         ^^^^^^^^^^
+3 >                   ^^
+4 >                     ^^^^^^^^^^^^^^^^^^^^^
+5 >                                          ^^
+6 >                                            ^^^^
+1->
+2 >         ...restParams: string[]
+3 >                   
+4 >                     ...restParams: string[]
+5 >                                          
+6 >                                            ...restParams: string[]
+1->Emitted(18, 10) Source(10, 52) + SourceIndex(0)
+2 >Emitted(18, 20) Source(10, 75) + SourceIndex(0)
+3 >Emitted(18, 22) Source(10, 52) + SourceIndex(0)
+4 >Emitted(18, 43) Source(10, 75) + SourceIndex(0)
+5 >Emitted(18, 45) Source(10, 52) + SourceIndex(0)
+6 >Emitted(18, 49) Source(10, 75) + SourceIndex(0)
+---
+>>>        restParams[_i - 3] = arguments[_i];
+1 >^^^^^^^^
+2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+1 >
+2 >        ...restParams: string[]
+1 >Emitted(19, 9) Source(10, 52) + SourceIndex(0)
+2 >Emitted(19, 44) Source(10, 75) + SourceIndex(0)
+---
+>>>    }
+>>>    return;
+1 >^^^^
+2 >    ^^^^^^^
+1 >)
+  >{
+  >    
+2 >    return;
+1 >Emitted(21, 5) Source(12, 5) + SourceIndex(0)
+2 >Emitted(21, 12) Source(12, 12) + SourceIndex(0)
+---
+>>>}
+1 >
+2 >^
+3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >
+2 >}
+1 >Emitted(22, 1) Source(13, 1) + SourceIndex(0)
+2 >Emitted(22, 2) Source(13, 2) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=sourceMapValidationFunctions.js.map

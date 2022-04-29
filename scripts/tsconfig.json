@@ -1,0 +1,23 @@
+{
+    "compilerOptions": {
+        "strictNullChecks": true,
+        "removeComments": false,
+        "declaration": false,
+        "sourceMap": true,
+        "newLine": "lf",
+        "target": "es6",
+        "module": "commonjs",
+        "types": ["node"],
+        "lib": ["es6", "scripthost"],
+    },
+
+    "include": [
+        "generateLocalizedDiagnosticMessages.ts",
+        "processDiagnosticMessages.ts",
+        "configurePrerelease.ts",
+        "buildProtocol.ts",
+        "produceLKG.ts",
+        "word2md.ts",
+        "request-pr-review.ts"
+    ]
+}

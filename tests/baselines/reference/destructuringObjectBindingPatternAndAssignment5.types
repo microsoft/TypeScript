@@ -1,0 +1,21 @@
+=== tests/cases/conformance/es6/destructuring/destructuringObjectBindingPatternAndAssignment5.ts ===
+function a () {
+>a : () => void
+
+    let x: number;
+>x : number
+
+    let y: any
+>y : any
+
+    ({ x, ...y } = ({ } as any));
+>({ x, ...y } = ({ } as any)) : any
+>{ x, ...y } = ({ } as any) : any
+>{ x, ...y } : any
+>x : number
+>y : any
+>({ } as any) : any
+>{ } as any : any
+>{ } : {}
+}
+

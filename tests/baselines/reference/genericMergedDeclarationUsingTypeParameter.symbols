@@ -1,0 +1,24 @@
+=== tests/cases/compiler/genericMergedDeclarationUsingTypeParameter.ts ===
+function foo<T extends U, U>(y: T, z: U) { return y; }
+>foo : Symbol(foo, Decl(genericMergedDeclarationUsingTypeParameter.ts, 0, 0), Decl(genericMergedDeclarationUsingTypeParameter.ts, 0, 54))
+>T : Symbol(T, Decl(genericMergedDeclarationUsingTypeParameter.ts, 0, 13))
+>U : Symbol(U, Decl(genericMergedDeclarationUsingTypeParameter.ts, 0, 25))
+>U : Symbol(U, Decl(genericMergedDeclarationUsingTypeParameter.ts, 0, 25))
+>y : Symbol(y, Decl(genericMergedDeclarationUsingTypeParameter.ts, 0, 29))
+>T : Symbol(T, Decl(genericMergedDeclarationUsingTypeParameter.ts, 0, 13))
+>z : Symbol(z, Decl(genericMergedDeclarationUsingTypeParameter.ts, 0, 34))
+>U : Symbol(U, Decl(genericMergedDeclarationUsingTypeParameter.ts, 0, 25))
+>y : Symbol(y, Decl(genericMergedDeclarationUsingTypeParameter.ts, 0, 29))
+
+module foo {
+>foo : Symbol(foo, Decl(genericMergedDeclarationUsingTypeParameter.ts, 0, 0), Decl(genericMergedDeclarationUsingTypeParameter.ts, 0, 54))
+
+    export var x: T;
+>x : Symbol(x, Decl(genericMergedDeclarationUsingTypeParameter.ts, 2, 14))
+>T : Symbol(T)
+
+    var y = <T>1;
+>y : Symbol(y, Decl(genericMergedDeclarationUsingTypeParameter.ts, 3, 7))
+>T : Symbol(T)
+}
+

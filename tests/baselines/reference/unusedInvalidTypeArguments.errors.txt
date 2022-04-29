@@ -1,0 +1,78 @@
+/call.ts(1,21): error TS2307: Cannot find module 'unknown' or its corresponding type declarations.
+/callAny.ts(3,1): error TS2347: Untyped function calls may not accept type arguments.
+/callAny.ts(4,1): error TS2347: Untyped function calls may not accept type arguments.
+/callAny.ts(4,3): error TS2304: Cannot find name 'InvalidReference'.
+/classReference.ts(4,24): error TS2315: Type 'C' is not generic.
+/interface.ts(1,21): error TS2307: Cannot find module 'unknown' or its corresponding type declarations.
+/new.ts(1,21): error TS2307: Cannot find module 'unkown' or its corresponding type declarations.
+/super.ts(1,22): error TS2307: Cannot find module 'unknown' or its corresponding type declarations.
+/super.ts(8,17): error TS2304: Cannot find name 'InvalidReference'.
+/typeReference.ts(6,17): error TS2315: Type 'U' is not generic.
+
+
+==== /typeReference.ts (1 errors) ====
+    // Tests that types are marked as used, even if used in places that don't accept type arguments.
+    
+    
+    type N = number;
+    type U = number;
+    export type Z = U<N>;
+                    ~~~~
+!!! error TS2315: Type 'U' is not generic.
+    
+==== /classReference.ts (1 errors) ====
+    type N = number;
+    class C { }
+    // This uses getTypeFromClassOrInterfaceReference instead of getTypeFromTypeAliasReference.
+    export class D extends C<N> {}
+                           ~~~~
+!!! error TS2315: Type 'C' is not generic.
+    
+==== /interface.ts (1 errors) ====
+    import { Foo } from "unknown";
+                        ~~~~~~~~~
+!!! error TS2307: Cannot find module 'unknown' or its corresponding type declarations.
+    export interface I<T> { x: Foo<T>; }
+    
+==== /call.ts (1 errors) ====
+    import { foo } from "unknown";
+                        ~~~~~~~~~
+!!! error TS2307: Cannot find module 'unknown' or its corresponding type declarations.
+    type T = number;
+    foo<T>();
+    
+==== /new.ts (1 errors) ====
+    import { Foo } from "unkown";
+                        ~~~~~~~~
+!!! error TS2307: Cannot find module 'unkown' or its corresponding type declarations.
+    type T = number;
+    new Foo<T>();
+    
+==== /callAny.ts (3 errors) ====
+    declare var g: any;
+    type U = number;
+    g<U>();
+    ~~~~~~
+!!! error TS2347: Untyped function calls may not accept type arguments.
+    g<InvalidReference>(); // Should get error for type argument
+    ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2347: Untyped function calls may not accept type arguments.
+      ~~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'InvalidReference'.
+    
+==== /super.ts (2 errors) ====
+    import { A, B } from "unknown";
+                         ~~~~~~~~~
+!!! error TS2307: Cannot find module 'unknown' or its corresponding type declarations.
+    
+    type T = number;
+    
+    export class C extends A<B> {
+        m() {
+            super.m<T>(1);
+            super.m<InvalidReference>(); // Should get error for type argument
+                    ~~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'InvalidReference'.
+        }
+    }
+    

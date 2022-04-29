@@ -1,0 +1,150 @@
+=== tests/cases/conformance/expressions/arrayLiterals/arrayLiterals.ts ===
+// Empty array literal with no contextual type has type Undefined[]
+
+var arr1= [[], [1], ['']];
+>arr1 : (number[] | string[])[]
+>[[], [1], ['']] : (number[] | string[])[]
+>[] : undefined[]
+>[1] : number[]
+>1 : 1
+>[''] : string[]
+>'' : ""
+
+var arr2 = [[null], [1], ['']];
+>arr2 : (number[] | string[])[]
+>[[null], [1], ['']] : (number[] | string[])[]
+>[null] : null[]
+>null : null
+>[1] : number[]
+>1 : 1
+>[''] : string[]
+>'' : ""
+
+
+// Array literal with elements of only EveryType E has type E[]
+var stringArrArr = [[''], [""]];
+>stringArrArr : string[][]
+>[[''], [""]] : string[][]
+>[''] : string[]
+>'' : ""
+>[""] : string[]
+>"" : ""
+
+var stringArr = ['', ""];
+>stringArr : string[]
+>['', ""] : string[]
+>'' : ""
+>"" : ""
+
+var numberArr = [0, 0.0, 0x00, 1e1];
+>numberArr : number[]
+>[0, 0.0, 0x00, 1e1] : number[]
+>0 : 0
+>0.0 : 0
+>0x00 : 0
+>1e1 : 10
+
+var boolArr = [false, true, false, true];
+>boolArr : boolean[]
+>[false, true, false, true] : boolean[]
+>false : false
+>true : true
+>false : false
+>true : true
+
+class C { private p; }
+>C : C
+>p : any
+
+var classArr = [new C(), new C()];
+>classArr : C[]
+>[new C(), new C()] : C[]
+>new C() : C
+>C : typeof C
+>new C() : C
+>C : typeof C
+
+var classTypeArray = [C, C, C];
+>classTypeArray : (typeof C)[]
+>[C, C, C] : (typeof C)[]
+>C : typeof C
+>C : typeof C
+>C : typeof C
+
+var classTypeArray: Array<typeof C>; // Should OK, not be a parse error
+>classTypeArray : (typeof C)[]
+>C : typeof C
+
+// Contextual type C with numeric index signature makes array literal of EveryType E of type BCT(E,C)[]
+var context1: { [n: number]: { a: string; b: number; }; } = [{ a: '', b: 0, c: '' }, { a: "", b: 3, c: 0 }];
+>context1 : { [n: number]: { a: string; b: number; }; }
+>n : number
+>a : string
+>b : number
+>[{ a: '', b: 0, c: '' }, { a: "", b: 3, c: 0 }] : ({ a: string; b: number; c: string; } | { a: string; b: number; c: number; })[]
+>{ a: '', b: 0, c: '' } : { a: string; b: number; c: string; }
+>a : string
+>'' : ""
+>b : number
+>0 : 0
+>c : string
+>'' : ""
+>{ a: "", b: 3, c: 0 } : { a: string; b: number; c: number; }
+>a : string
+>"" : ""
+>b : number
+>3 : 3
+>c : number
+>0 : 0
+
+var context2 = [{ a: '', b: 0, c: '' }, { a: "", b: 3, c: 0 }];
+>context2 : ({ a: string; b: number; c: string; } | { a: string; b: number; c: number; })[]
+>[{ a: '', b: 0, c: '' }, { a: "", b: 3, c: 0 }] : ({ a: string; b: number; c: string; } | { a: string; b: number; c: number; })[]
+>{ a: '', b: 0, c: '' } : { a: string; b: number; c: string; }
+>a : string
+>'' : ""
+>b : number
+>0 : 0
+>c : string
+>'' : ""
+>{ a: "", b: 3, c: 0 } : { a: string; b: number; c: number; }
+>a : string
+>"" : ""
+>b : number
+>3 : 3
+>c : number
+>0 : 0
+
+// Contextual type C with numeric index signature of type Base makes array literal of Derived have type Base[]
+class Base { private p; }
+>Base : Base
+>p : any
+
+class Derived1 extends Base { private m };
+>Derived1 : Derived1
+>Base : Base
+>m : any
+
+class Derived2 extends Base { private n };
+>Derived2 : Derived2
+>Base : Base
+>n : any
+
+var context3: Base[] = [new Derived1(), new Derived2()];
+>context3 : Base[]
+>[new Derived1(), new Derived2()] : (Derived1 | Derived2)[]
+>new Derived1() : Derived1
+>Derived1 : typeof Derived1
+>new Derived2() : Derived2
+>Derived2 : typeof Derived2
+
+// Contextual type C with numeric index signature of type Base makes array literal of Derived1 and Derived2 have type Base[]
+var context4: Base[] = [new Derived1(), new Derived1()];
+>context4 : Base[]
+>[new Derived1(), new Derived1()] : Derived1[]
+>new Derived1() : Derived1
+>Derived1 : typeof Derived1
+>new Derived1() : Derived1
+>Derived1 : typeof Derived1
+
+

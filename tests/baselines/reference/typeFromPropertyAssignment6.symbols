@@ -1,0 +1,35 @@
+=== tests/cases/conformance/salsa/def.js ===
+class Outer {}
+>Outer : Symbol(Outer, Decl(def.js, 0, 0), Decl(a.js, 0, 0), Decl(a.js, 2, 1))
+
+=== tests/cases/conformance/salsa/a.js ===
+Outer.Inner = class I {
+>Outer.Inner : Symbol(Outer.Inner, Decl(a.js, 0, 0))
+>Outer : Symbol(Outer, Decl(def.js, 0, 0), Decl(a.js, 0, 0), Decl(a.js, 2, 1))
+>Inner : Symbol(Outer.Inner, Decl(a.js, 0, 0))
+>I : Symbol(I, Decl(a.js, 0, 13))
+
+    messages() { return [] }
+>messages : Symbol(I.messages, Decl(a.js, 0, 23))
+}
+/** @type {!Outer.Inner} */
+Outer.i
+>Outer.i : Symbol(Outer.i, Decl(a.js, 2, 1))
+>Outer : Symbol(Outer, Decl(def.js, 0, 0), Decl(a.js, 0, 0), Decl(a.js, 2, 1))
+>i : Symbol(Outer.i, Decl(a.js, 2, 1))
+
+=== tests/cases/conformance/salsa/b.js ===
+var msgs = Outer.i.messages()
+>msgs : Symbol(msgs, Decl(b.js, 0, 3))
+>Outer.i.messages : Symbol(I.messages, Decl(a.js, 0, 23))
+>Outer.i : Symbol(Outer.i, Decl(a.js, 2, 1))
+>Outer : Symbol(Outer, Decl(def.js, 0, 0), Decl(a.js, 0, 0), Decl(a.js, 2, 1))
+>i : Symbol(Outer.i, Decl(a.js, 2, 1))
+>messages : Symbol(I.messages, Decl(a.js, 0, 23))
+
+/** @param {Outer.Inner} inner */
+function x(inner) {
+>x : Symbol(x, Decl(b.js, 0, 29))
+>inner : Symbol(inner, Decl(b.js, 3, 11))
+}
+

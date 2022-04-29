@@ -1,0 +1,16 @@
+=== tests/cases/compiler/contextualTyping21.ts ===
+var foo:{id:number;}[] = [{id:1}]; foo = [{id:1}, 1];
+>foo : { id: number; }[]
+>id : number
+>[{id:1}] : { id: number; }[]
+>{id:1} : { id: number; }
+>id : number
+>1 : 1
+>foo = [{id:1}, 1] : (number | { id: number; })[]
+>foo : { id: number; }[]
+>[{id:1}, 1] : (number | { id: number; })[]
+>{id:1} : { id: number; }
+>id : number
+>1 : 1
+>1 : 1
+

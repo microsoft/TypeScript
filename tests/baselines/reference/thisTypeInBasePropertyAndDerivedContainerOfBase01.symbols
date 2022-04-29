@@ -1,0 +1,26 @@
+=== tests/cases/conformance/types/thisType/thisTypeInBasePropertyAndDerivedContainerOfBase01.ts ===
+interface BoxOfFoo<T extends Foo> {
+>BoxOfFoo : Symbol(BoxOfFoo, Decl(thisTypeInBasePropertyAndDerivedContainerOfBase01.ts, 0, 0))
+>T : Symbol(T, Decl(thisTypeInBasePropertyAndDerivedContainerOfBase01.ts, 0, 19))
+>Foo : Symbol(Foo, Decl(thisTypeInBasePropertyAndDerivedContainerOfBase01.ts, 2, 1))
+
+    item: T
+>item : Symbol(BoxOfFoo.item, Decl(thisTypeInBasePropertyAndDerivedContainerOfBase01.ts, 0, 35))
+>T : Symbol(T, Decl(thisTypeInBasePropertyAndDerivedContainerOfBase01.ts, 0, 19))
+}
+
+interface Foo {
+>Foo : Symbol(Foo, Decl(thisTypeInBasePropertyAndDerivedContainerOfBase01.ts, 2, 1))
+
+    self: this;
+>self : Symbol(Foo.self, Decl(thisTypeInBasePropertyAndDerivedContainerOfBase01.ts, 4, 15))
+}
+
+interface Bar extends Foo {
+>Bar : Symbol(Bar, Decl(thisTypeInBasePropertyAndDerivedContainerOfBase01.ts, 6, 1))
+>Foo : Symbol(Foo, Decl(thisTypeInBasePropertyAndDerivedContainerOfBase01.ts, 2, 1))
+
+    other: BoxOfFoo<this>;
+>other : Symbol(Bar.other, Decl(thisTypeInBasePropertyAndDerivedContainerOfBase01.ts, 8, 27))
+>BoxOfFoo : Symbol(BoxOfFoo, Decl(thisTypeInBasePropertyAndDerivedContainerOfBase01.ts, 0, 0))
+}

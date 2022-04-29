@@ -1,0 +1,55 @@
+=== tests/cases/conformance/types/specifyingTypes/typeLiterals/arrayLiteral.ts ===
+// valid uses of array literals
+
+var x = [];
+>x : any[]
+>[] : undefined[]
+
+var x = new Array(1);
+>x : any[]
+>new Array(1) : any[]
+>Array : ArrayConstructor
+>1 : 1
+
+var y = [1];
+>y : number[]
+>[1] : number[]
+>1 : 1
+
+var y = [1, 2];
+>y : number[]
+>[1, 2] : number[]
+>1 : 1
+>2 : 2
+
+var y = new Array<number>();
+>y : number[]
+>new Array<number>() : number[]
+>Array : ArrayConstructor
+
+var x2: number[] = [];
+>x2 : number[]
+>[] : undefined[]
+
+var x2: number[] = new Array(1);
+>x2 : number[]
+>new Array(1) : any[]
+>Array : ArrayConstructor
+>1 : 1
+
+var y2: number[] = [1];
+>y2 : number[]
+>[1] : number[]
+>1 : 1
+
+var y2: number[] = [1, 2];
+>y2 : number[]
+>[1, 2] : number[]
+>1 : 1
+>2 : 2
+
+var y2: number[] = new Array<number>();
+>y2 : number[]
+>new Array<number>() : number[]
+>Array : ArrayConstructor
+

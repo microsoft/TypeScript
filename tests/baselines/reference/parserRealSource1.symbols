@@ -1,0 +1,443 @@
+=== tests/cases/conformance/parser/ecmascript5/parserRealSource1.ts ===
+// Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
+// See LICENSE.txt in the project root for complete license information.
+
+///<reference path='typescript.ts' />
+
+module TypeScript {
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource1.ts, 0, 0))
+
+    export module CompilerDiagnostics {
+>CompilerDiagnostics : Symbol(CompilerDiagnostics, Decl(parserRealSource1.ts, 5, 19))
+
+        export var debug = false;
+>debug : Symbol(debug, Decl(parserRealSource1.ts, 7, 18))
+
+        export interface IDiagnosticWriter {
+>IDiagnosticWriter : Symbol(IDiagnosticWriter, Decl(parserRealSource1.ts, 7, 33))
+
+            Alert(output: string): void;
+>Alert : Symbol(IDiagnosticWriter.Alert, Decl(parserRealSource1.ts, 8, 44))
+>output : Symbol(output, Decl(parserRealSource1.ts, 9, 18))
+        }
+
+        export var diagnosticWriter: IDiagnosticWriter = null;
+>diagnosticWriter : Symbol(diagnosticWriter, Decl(parserRealSource1.ts, 12, 18))
+>IDiagnosticWriter : Symbol(IDiagnosticWriter, Decl(parserRealSource1.ts, 7, 33))
+
+        export var analysisPass: number = 0;
+>analysisPass : Symbol(analysisPass, Decl(parserRealSource1.ts, 14, 18))
+
+        export function Alert(output: string) {
+>Alert : Symbol(Alert, Decl(parserRealSource1.ts, 14, 44))
+>output : Symbol(output, Decl(parserRealSource1.ts, 16, 30))
+
+            if (diagnosticWriter) {
+>diagnosticWriter : Symbol(diagnosticWriter, Decl(parserRealSource1.ts, 12, 18))
+
+                diagnosticWriter.Alert(output);
+>diagnosticWriter.Alert : Symbol(IDiagnosticWriter.Alert, Decl(parserRealSource1.ts, 8, 44))
+>diagnosticWriter : Symbol(diagnosticWriter, Decl(parserRealSource1.ts, 12, 18))
+>Alert : Symbol(IDiagnosticWriter.Alert, Decl(parserRealSource1.ts, 8, 44))
+>output : Symbol(output, Decl(parserRealSource1.ts, 16, 30))
+            }
+        }
+
+        export function debugPrint(s: string) {
+>debugPrint : Symbol(debugPrint, Decl(parserRealSource1.ts, 20, 9))
+>s : Symbol(s, Decl(parserRealSource1.ts, 22, 35))
+
+            if (debug) {
+>debug : Symbol(debug, Decl(parserRealSource1.ts, 7, 18))
+
+                Alert(s);
+>Alert : Symbol(Alert, Decl(parserRealSource1.ts, 14, 44))
+>s : Symbol(s, Decl(parserRealSource1.ts, 22, 35))
+            }
+        }
+
+        export function assert(condition: boolean, s: string) {
+>assert : Symbol(assert, Decl(parserRealSource1.ts, 26, 9))
+>condition : Symbol(condition, Decl(parserRealSource1.ts, 28, 31))
+>s : Symbol(s, Decl(parserRealSource1.ts, 28, 50))
+
+            if (debug) {
+>debug : Symbol(debug, Decl(parserRealSource1.ts, 7, 18))
+
+                if (!condition) {
+>condition : Symbol(condition, Decl(parserRealSource1.ts, 28, 31))
+
+                    Alert(s);
+>Alert : Symbol(Alert, Decl(parserRealSource1.ts, 14, 44))
+>s : Symbol(s, Decl(parserRealSource1.ts, 28, 50))
+                }
+            }
+        }
+
+    }
+
+    export interface ILogger {
+>ILogger : Symbol(ILogger, Decl(parserRealSource1.ts, 36, 5))
+
+        information(): boolean;
+>information : Symbol(ILogger.information, Decl(parserRealSource1.ts, 38, 30))
+
+        debug(): boolean;
+>debug : Symbol(ILogger.debug, Decl(parserRealSource1.ts, 39, 31))
+
+        warning(): boolean;
+>warning : Symbol(ILogger.warning, Decl(parserRealSource1.ts, 40, 25))
+
+        error(): boolean;
+>error : Symbol(ILogger.error, Decl(parserRealSource1.ts, 41, 27))
+
+        fatal(): boolean;
+>fatal : Symbol(ILogger.fatal, Decl(parserRealSource1.ts, 42, 25))
+
+        log(s: string): void;
+>log : Symbol(ILogger.log, Decl(parserRealSource1.ts, 43, 25))
+>s : Symbol(s, Decl(parserRealSource1.ts, 44, 12))
+    }
+
+    export class NullLogger implements ILogger {
+>NullLogger : Symbol(NullLogger, Decl(parserRealSource1.ts, 45, 5))
+>ILogger : Symbol(ILogger, Decl(parserRealSource1.ts, 36, 5))
+
+        public information(): boolean { return false; }
+>information : Symbol(NullLogger.information, Decl(parserRealSource1.ts, 47, 48))
+
+        public debug(): boolean { return false; }
+>debug : Symbol(NullLogger.debug, Decl(parserRealSource1.ts, 48, 55))
+
+        public warning(): boolean { return false; }
+>warning : Symbol(NullLogger.warning, Decl(parserRealSource1.ts, 49, 49))
+
+        public error(): boolean { return false; }
+>error : Symbol(NullLogger.error, Decl(parserRealSource1.ts, 50, 51))
+
+        public fatal(): boolean { return false; }
+>fatal : Symbol(NullLogger.fatal, Decl(parserRealSource1.ts, 51, 49))
+
+        public log(s: string): void {
+>log : Symbol(NullLogger.log, Decl(parserRealSource1.ts, 52, 49))
+>s : Symbol(s, Decl(parserRealSource1.ts, 53, 19))
+        }
+    }
+
+    export class LoggerAdapter implements ILogger {
+>LoggerAdapter : Symbol(LoggerAdapter, Decl(parserRealSource1.ts, 55, 5))
+>ILogger : Symbol(ILogger, Decl(parserRealSource1.ts, 36, 5))
+
+        private _information: boolean;
+>_information : Symbol(LoggerAdapter._information, Decl(parserRealSource1.ts, 57, 51))
+
+        private _debug: boolean;
+>_debug : Symbol(LoggerAdapter._debug, Decl(parserRealSource1.ts, 58, 38))
+
+        private _warning: boolean;
+>_warning : Symbol(LoggerAdapter._warning, Decl(parserRealSource1.ts, 59, 32))
+
+        private _error: boolean;
+>_error : Symbol(LoggerAdapter._error, Decl(parserRealSource1.ts, 60, 34))
+
+        private _fatal: boolean;
+>_fatal : Symbol(LoggerAdapter._fatal, Decl(parserRealSource1.ts, 61, 32))
+
+        constructor (public logger: ILogger) { 
+>logger : Symbol(LoggerAdapter.logger, Decl(parserRealSource1.ts, 64, 21))
+>ILogger : Symbol(ILogger, Decl(parserRealSource1.ts, 36, 5))
+
+            this._information = this.logger.information();
+>this._information : Symbol(LoggerAdapter._information, Decl(parserRealSource1.ts, 57, 51))
+>this : Symbol(LoggerAdapter, Decl(parserRealSource1.ts, 55, 5))
+>_information : Symbol(LoggerAdapter._information, Decl(parserRealSource1.ts, 57, 51))
+>this.logger.information : Symbol(ILogger.information, Decl(parserRealSource1.ts, 38, 30))
+>this.logger : Symbol(LoggerAdapter.logger, Decl(parserRealSource1.ts, 64, 21))
+>this : Symbol(LoggerAdapter, Decl(parserRealSource1.ts, 55, 5))
+>logger : Symbol(LoggerAdapter.logger, Decl(parserRealSource1.ts, 64, 21))
+>information : Symbol(ILogger.information, Decl(parserRealSource1.ts, 38, 30))
+
+            this._debug = this.logger.debug();
+>this._debug : Symbol(LoggerAdapter._debug, Decl(parserRealSource1.ts, 58, 38))
+>this : Symbol(LoggerAdapter, Decl(parserRealSource1.ts, 55, 5))
+>_debug : Symbol(LoggerAdapter._debug, Decl(parserRealSource1.ts, 58, 38))
+>this.logger.debug : Symbol(ILogger.debug, Decl(parserRealSource1.ts, 39, 31))
+>this.logger : Symbol(LoggerAdapter.logger, Decl(parserRealSource1.ts, 64, 21))
+>this : Symbol(LoggerAdapter, Decl(parserRealSource1.ts, 55, 5))
+>logger : Symbol(LoggerAdapter.logger, Decl(parserRealSource1.ts, 64, 21))
+>debug : Symbol(ILogger.debug, Decl(parserRealSource1.ts, 39, 31))
+
+            this._warning = this.logger.warning();
+>this._warning : Symbol(LoggerAdapter._warning, Decl(parserRealSource1.ts, 59, 32))
+>this : Symbol(LoggerAdapter, Decl(parserRealSource1.ts, 55, 5))
+>_warning : Symbol(LoggerAdapter._warning, Decl(parserRealSource1.ts, 59, 32))
+>this.logger.warning : Symbol(ILogger.warning, Decl(parserRealSource1.ts, 40, 25))
+>this.logger : Symbol(LoggerAdapter.logger, Decl(parserRealSource1.ts, 64, 21))
+>this : Symbol(LoggerAdapter, Decl(parserRealSource1.ts, 55, 5))
+>logger : Symbol(LoggerAdapter.logger, Decl(parserRealSource1.ts, 64, 21))
+>warning : Symbol(ILogger.warning, Decl(parserRealSource1.ts, 40, 25))
+
+            this._error = this.logger.error();
+>this._error : Symbol(LoggerAdapter._error, Decl(parserRealSource1.ts, 60, 34))
+>this : Symbol(LoggerAdapter, Decl(parserRealSource1.ts, 55, 5))
+>_error : Symbol(LoggerAdapter._error, Decl(parserRealSource1.ts, 60, 34))
+>this.logger.error : Symbol(ILogger.error, Decl(parserRealSource1.ts, 41, 27))
+>this.logger : Symbol(LoggerAdapter.logger, Decl(parserRealSource1.ts, 64, 21))
+>this : Symbol(LoggerAdapter, Decl(parserRealSource1.ts, 55, 5))
+>logger : Symbol(LoggerAdapter.logger, Decl(parserRealSource1.ts, 64, 21))
+>error : Symbol(ILogger.error, Decl(parserRealSource1.ts, 41, 27))
+
+            this._fatal = this.logger.fatal();
+>this._fatal : Symbol(LoggerAdapter._fatal, Decl(parserRealSource1.ts, 61, 32))
+>this : Symbol(LoggerAdapter, Decl(parserRealSource1.ts, 55, 5))
+>_fatal : Symbol(LoggerAdapter._fatal, Decl(parserRealSource1.ts, 61, 32))
+>this.logger.fatal : Symbol(ILogger.fatal, Decl(parserRealSource1.ts, 42, 25))
+>this.logger : Symbol(LoggerAdapter.logger, Decl(parserRealSource1.ts, 64, 21))
+>this : Symbol(LoggerAdapter, Decl(parserRealSource1.ts, 55, 5))
+>logger : Symbol(LoggerAdapter.logger, Decl(parserRealSource1.ts, 64, 21))
+>fatal : Symbol(ILogger.fatal, Decl(parserRealSource1.ts, 42, 25))
+        }
+
+
+        public information(): boolean { return this._information; }
+>information : Symbol(LoggerAdapter.information, Decl(parserRealSource1.ts, 70, 9))
+>this._information : Symbol(LoggerAdapter._information, Decl(parserRealSource1.ts, 57, 51))
+>this : Symbol(LoggerAdapter, Decl(parserRealSource1.ts, 55, 5))
+>_information : Symbol(LoggerAdapter._information, Decl(parserRealSource1.ts, 57, 51))
+
+        public debug(): boolean { return this._debug; }
+>debug : Symbol(LoggerAdapter.debug, Decl(parserRealSource1.ts, 73, 67))
+>this._debug : Symbol(LoggerAdapter._debug, Decl(parserRealSource1.ts, 58, 38))
+>this : Symbol(LoggerAdapter, Decl(parserRealSource1.ts, 55, 5))
+>_debug : Symbol(LoggerAdapter._debug, Decl(parserRealSource1.ts, 58, 38))
+
+        public warning(): boolean { return this._warning; }
+>warning : Symbol(LoggerAdapter.warning, Decl(parserRealSource1.ts, 74, 55))
+>this._warning : Symbol(LoggerAdapter._warning, Decl(parserRealSource1.ts, 59, 32))
+>this : Symbol(LoggerAdapter, Decl(parserRealSource1.ts, 55, 5))
+>_warning : Symbol(LoggerAdapter._warning, Decl(parserRealSource1.ts, 59, 32))
+
+        public error(): boolean { return this._error; }
+>error : Symbol(LoggerAdapter.error, Decl(parserRealSource1.ts, 75, 59))
+>this._error : Symbol(LoggerAdapter._error, Decl(parserRealSource1.ts, 60, 34))
+>this : Symbol(LoggerAdapter, Decl(parserRealSource1.ts, 55, 5))
+>_error : Symbol(LoggerAdapter._error, Decl(parserRealSource1.ts, 60, 34))
+
+        public fatal(): boolean { return this._fatal; }
+>fatal : Symbol(LoggerAdapter.fatal, Decl(parserRealSource1.ts, 76, 55))
+>this._fatal : Symbol(LoggerAdapter._fatal, Decl(parserRealSource1.ts, 61, 32))
+>this : Symbol(LoggerAdapter, Decl(parserRealSource1.ts, 55, 5))
+>_fatal : Symbol(LoggerAdapter._fatal, Decl(parserRealSource1.ts, 61, 32))
+
+        public log(s: string): void {
+>log : Symbol(LoggerAdapter.log, Decl(parserRealSource1.ts, 77, 55))
+>s : Symbol(s, Decl(parserRealSource1.ts, 78, 19))
+
+            this.logger.log(s);
+>this.logger.log : Symbol(ILogger.log, Decl(parserRealSource1.ts, 43, 25))
+>this.logger : Symbol(LoggerAdapter.logger, Decl(parserRealSource1.ts, 64, 21))
+>this : Symbol(LoggerAdapter, Decl(parserRealSource1.ts, 55, 5))
+>logger : Symbol(LoggerAdapter.logger, Decl(parserRealSource1.ts, 64, 21))
+>log : Symbol(ILogger.log, Decl(parserRealSource1.ts, 43, 25))
+>s : Symbol(s, Decl(parserRealSource1.ts, 78, 19))
+        }
+    }
+
+    export class BufferedLogger implements ILogger {
+>BufferedLogger : Symbol(BufferedLogger, Decl(parserRealSource1.ts, 81, 5))
+>ILogger : Symbol(ILogger, Decl(parserRealSource1.ts, 36, 5))
+
+        public logContents = [];
+>logContents : Symbol(BufferedLogger.logContents, Decl(parserRealSource1.ts, 83, 52))
+
+        public information(): boolean { return false; }
+>information : Symbol(BufferedLogger.information, Decl(parserRealSource1.ts, 84, 32))
+
+        public debug(): boolean { return false; }
+>debug : Symbol(BufferedLogger.debug, Decl(parserRealSource1.ts, 86, 55))
+
+        public warning(): boolean { return false; }
+>warning : Symbol(BufferedLogger.warning, Decl(parserRealSource1.ts, 87, 49))
+
+        public error(): boolean { return false; }
+>error : Symbol(BufferedLogger.error, Decl(parserRealSource1.ts, 88, 51))
+
+        public fatal(): boolean { return false; }
+>fatal : Symbol(BufferedLogger.fatal, Decl(parserRealSource1.ts, 89, 49))
+
+        public log(s: string): void {
+>log : Symbol(BufferedLogger.log, Decl(parserRealSource1.ts, 90, 49))
+>s : Symbol(s, Decl(parserRealSource1.ts, 91, 19))
+
+            this.logContents.push(s);
+>this.logContents.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>this.logContents : Symbol(BufferedLogger.logContents, Decl(parserRealSource1.ts, 83, 52))
+>this : Symbol(BufferedLogger, Decl(parserRealSource1.ts, 81, 5))
+>logContents : Symbol(BufferedLogger.logContents, Decl(parserRealSource1.ts, 83, 52))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>s : Symbol(s, Decl(parserRealSource1.ts, 91, 19))
+        }
+    }
+
+    export function timeFunction(logger: ILogger, funcDescription: string, func: () =>any): any {
+>timeFunction : Symbol(timeFunction, Decl(parserRealSource1.ts, 94, 5))
+>logger : Symbol(logger, Decl(parserRealSource1.ts, 96, 33))
+>ILogger : Symbol(ILogger, Decl(parserRealSource1.ts, 36, 5))
+>funcDescription : Symbol(funcDescription, Decl(parserRealSource1.ts, 96, 49))
+>func : Symbol(func, Decl(parserRealSource1.ts, 96, 74))
+
+        var start = +new Date();
+>start : Symbol(start, Decl(parserRealSource1.ts, 97, 11))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+        var result = func();
+>result : Symbol(result, Decl(parserRealSource1.ts, 98, 11))
+>func : Symbol(func, Decl(parserRealSource1.ts, 96, 74))
+
+        var end = +new Date();
+>end : Symbol(end, Decl(parserRealSource1.ts, 99, 11))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+        logger.log(funcDescription + " completed in " + (end - start) + " msec");
+>logger.log : Symbol(ILogger.log, Decl(parserRealSource1.ts, 43, 25))
+>logger : Symbol(logger, Decl(parserRealSource1.ts, 96, 33))
+>log : Symbol(ILogger.log, Decl(parserRealSource1.ts, 43, 25))
+>funcDescription : Symbol(funcDescription, Decl(parserRealSource1.ts, 96, 49))
+>end : Symbol(end, Decl(parserRealSource1.ts, 99, 11))
+>start : Symbol(start, Decl(parserRealSource1.ts, 97, 11))
+
+        return result;
+>result : Symbol(result, Decl(parserRealSource1.ts, 98, 11))
+    }
+
+    export function stringToLiteral(value: string, length: number): string {
+>stringToLiteral : Symbol(stringToLiteral, Decl(parserRealSource1.ts, 102, 5))
+>value : Symbol(value, Decl(parserRealSource1.ts, 104, 36))
+>length : Symbol(length, Decl(parserRealSource1.ts, 104, 50))
+
+        var result = "";
+>result : Symbol(result, Decl(parserRealSource1.ts, 105, 11))
+
+        var addChar = (index: number) => {
+>addChar : Symbol(addChar, Decl(parserRealSource1.ts, 107, 11))
+>index : Symbol(index, Decl(parserRealSource1.ts, 107, 23))
+
+            var ch = value.charCodeAt(index);
+>ch : Symbol(ch, Decl(parserRealSource1.ts, 108, 15))
+>value.charCodeAt : Symbol(String.charCodeAt, Decl(lib.es5.d.ts, --, --))
+>value : Symbol(value, Decl(parserRealSource1.ts, 104, 36))
+>charCodeAt : Symbol(String.charCodeAt, Decl(lib.es5.d.ts, --, --))
+>index : Symbol(index, Decl(parserRealSource1.ts, 107, 23))
+
+            switch (ch) {
+>ch : Symbol(ch, Decl(parserRealSource1.ts, 108, 15))
+
+                case 0x09: // tab
+                    result += "\\t";
+>result : Symbol(result, Decl(parserRealSource1.ts, 105, 11))
+
+                    break;
+                case 0x0a: // line feed
+                    result += "\\n";
+>result : Symbol(result, Decl(parserRealSource1.ts, 105, 11))
+
+                    break;
+                case 0x0b: // vertical tab
+                    result += "\\v";
+>result : Symbol(result, Decl(parserRealSource1.ts, 105, 11))
+
+                    break;
+                case 0x0c: // form feed
+                    result += "\\f";
+>result : Symbol(result, Decl(parserRealSource1.ts, 105, 11))
+
+                    break;
+                case 0x0d: // carriage return
+                    result += "\\r";
+>result : Symbol(result, Decl(parserRealSource1.ts, 105, 11))
+
+                    break;
+                case 0x22:  // double quote
+                    result += "\\\"";
+>result : Symbol(result, Decl(parserRealSource1.ts, 105, 11))
+
+                    break;
+                case 0x27: // single quote
+                    result += "\\\'";
+>result : Symbol(result, Decl(parserRealSource1.ts, 105, 11))
+
+                    break;
+                case 0x5c: // Backslash
+                    result += "\\";
+>result : Symbol(result, Decl(parserRealSource1.ts, 105, 11))
+
+                    break;
+                default:
+                    result += value.charAt(index);
+>result : Symbol(result, Decl(parserRealSource1.ts, 105, 11))
+>value.charAt : Symbol(String.charAt, Decl(lib.es5.d.ts, --, --))
+>value : Symbol(value, Decl(parserRealSource1.ts, 104, 36))
+>charAt : Symbol(String.charAt, Decl(lib.es5.d.ts, --, --))
+>index : Symbol(index, Decl(parserRealSource1.ts, 107, 23))
+            }
+        }
+
+        var tooLong = (value.length > length);
+>tooLong : Symbol(tooLong, Decl(parserRealSource1.ts, 139, 11))
+>value.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>value : Symbol(value, Decl(parserRealSource1.ts, 104, 36))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(length, Decl(parserRealSource1.ts, 104, 50))
+
+        if (tooLong) {
+>tooLong : Symbol(tooLong, Decl(parserRealSource1.ts, 139, 11))
+
+            var mid = length >> 1;
+>mid : Symbol(mid, Decl(parserRealSource1.ts, 141, 15))
+>length : Symbol(length, Decl(parserRealSource1.ts, 104, 50))
+
+            for (var i = 0; i < mid; i++) addChar(i);
+>i : Symbol(i, Decl(parserRealSource1.ts, 142, 20), Decl(parserRealSource1.ts, 144, 20), Decl(parserRealSource1.ts, 148, 20))
+>i : Symbol(i, Decl(parserRealSource1.ts, 142, 20), Decl(parserRealSource1.ts, 144, 20), Decl(parserRealSource1.ts, 148, 20))
+>mid : Symbol(mid, Decl(parserRealSource1.ts, 141, 15))
+>i : Symbol(i, Decl(parserRealSource1.ts, 142, 20), Decl(parserRealSource1.ts, 144, 20), Decl(parserRealSource1.ts, 148, 20))
+>addChar : Symbol(addChar, Decl(parserRealSource1.ts, 107, 11))
+>i : Symbol(i, Decl(parserRealSource1.ts, 142, 20), Decl(parserRealSource1.ts, 144, 20), Decl(parserRealSource1.ts, 148, 20))
+
+            result += "(...)";
+>result : Symbol(result, Decl(parserRealSource1.ts, 105, 11))
+
+            for (var i = value.length - mid; i < value.length; i++) addChar(i);
+>i : Symbol(i, Decl(parserRealSource1.ts, 142, 20), Decl(parserRealSource1.ts, 144, 20), Decl(parserRealSource1.ts, 148, 20))
+>value.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>value : Symbol(value, Decl(parserRealSource1.ts, 104, 36))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>mid : Symbol(mid, Decl(parserRealSource1.ts, 141, 15))
+>i : Symbol(i, Decl(parserRealSource1.ts, 142, 20), Decl(parserRealSource1.ts, 144, 20), Decl(parserRealSource1.ts, 148, 20))
+>value.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>value : Symbol(value, Decl(parserRealSource1.ts, 104, 36))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>i : Symbol(i, Decl(parserRealSource1.ts, 142, 20), Decl(parserRealSource1.ts, 144, 20), Decl(parserRealSource1.ts, 148, 20))
+>addChar : Symbol(addChar, Decl(parserRealSource1.ts, 107, 11))
+>i : Symbol(i, Decl(parserRealSource1.ts, 142, 20), Decl(parserRealSource1.ts, 144, 20), Decl(parserRealSource1.ts, 148, 20))
+        }
+        else {
+            length = value.length;
+>length : Symbol(length, Decl(parserRealSource1.ts, 104, 50))
+>value.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>value : Symbol(value, Decl(parserRealSource1.ts, 104, 36))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+            for (var i = 0; i < length; i++) addChar(i);
+>i : Symbol(i, Decl(parserRealSource1.ts, 142, 20), Decl(parserRealSource1.ts, 144, 20), Decl(parserRealSource1.ts, 148, 20))
+>i : Symbol(i, Decl(parserRealSource1.ts, 142, 20), Decl(parserRealSource1.ts, 144, 20), Decl(parserRealSource1.ts, 148, 20))
+>length : Symbol(length, Decl(parserRealSource1.ts, 104, 50))
+>i : Symbol(i, Decl(parserRealSource1.ts, 142, 20), Decl(parserRealSource1.ts, 144, 20), Decl(parserRealSource1.ts, 148, 20))
+>addChar : Symbol(addChar, Decl(parserRealSource1.ts, 107, 11))
+>i : Symbol(i, Decl(parserRealSource1.ts, 142, 20), Decl(parserRealSource1.ts, 144, 20), Decl(parserRealSource1.ts, 148, 20))
+        }
+        return result;
+>result : Symbol(result, Decl(parserRealSource1.ts, 105, 11))
+    }
+}
+

@@ -1,0 +1,42 @@
+=== tests/cases/conformance/constEnums/constEnum3.ts ===
+const enum TestType { foo, bar }
+>TestType : TestType
+>foo : TestType.foo
+>bar : TestType.bar
+
+type TestTypeStr = keyof typeof TestType;
+>TestTypeStr : "foo" | "bar"
+>TestType : typeof TestType
+
+function f1(f: TestType) { }
+>f1 : (f: TestType) => void
+>f : TestType
+
+function f2(f: TestTypeStr) { }
+>f2 : (f: TestTypeStr) => void
+>f : "foo" | "bar"
+
+f1(TestType.foo)
+>f1(TestType.foo) : void
+>f1 : (f: TestType) => void
+>TestType.foo : TestType.foo
+>TestType : typeof TestType
+>foo : TestType.foo
+
+f1(TestType.bar)
+>f1(TestType.bar) : void
+>f1 : (f: TestType) => void
+>TestType.bar : TestType.bar
+>TestType : typeof TestType
+>bar : TestType.bar
+
+f2('foo')
+>f2('foo') : void
+>f2 : (f: "foo" | "bar") => void
+>'foo' : "foo"
+
+f2('bar')
+>f2('bar') : void
+>f2 : (f: "foo" | "bar") => void
+>'bar' : "bar"
+

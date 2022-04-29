@@ -1,0 +1,12 @@
+=== tests/cases/compiler/collisionThisExpressionAndFunctionInGlobal.ts ===
+function _this() { //Error
+>_this : () => number
+
+    return 10;
+>10 : 10
+}
+var f = () => this;
+>f : () => typeof globalThis
+>() => this : () => typeof globalThis
+>this : typeof globalThis
+

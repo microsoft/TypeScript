@@ -1,0 +1,70 @@
+=== tests/cases/conformance/types/primitives/number/assignFromNumberInterface2.ts ===
+interface Number {
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(assignFromNumberInterface2.ts, 0, 0))
+
+    doStuff(): string;
+>doStuff : Symbol(Number.doStuff, Decl(assignFromNumberInterface2.ts, 0, 18))
+}
+
+interface NotNumber {
+>NotNumber : Symbol(NotNumber, Decl(assignFromNumberInterface2.ts, 2, 1))
+
+    toString(radix?: number): string;
+>toString : Symbol(NotNumber.toString, Decl(assignFromNumberInterface2.ts, 4, 21))
+>radix : Symbol(radix, Decl(assignFromNumberInterface2.ts, 5, 13))
+
+    toFixed(fractionDigits?: number): string;
+>toFixed : Symbol(NotNumber.toFixed, Decl(assignFromNumberInterface2.ts, 5, 37))
+>fractionDigits : Symbol(fractionDigits, Decl(assignFromNumberInterface2.ts, 6, 12))
+
+    toExponential(fractionDigits?: number): string;
+>toExponential : Symbol(NotNumber.toExponential, Decl(assignFromNumberInterface2.ts, 6, 45))
+>fractionDigits : Symbol(fractionDigits, Decl(assignFromNumberInterface2.ts, 7, 18))
+
+    toPrecision(precision?: number): string;
+>toPrecision : Symbol(NotNumber.toPrecision, Decl(assignFromNumberInterface2.ts, 7, 51))
+>precision : Symbol(precision, Decl(assignFromNumberInterface2.ts, 8, 16))
+
+    valueOf(): number;
+>valueOf : Symbol(NotNumber.valueOf, Decl(assignFromNumberInterface2.ts, 8, 44))
+
+    doStuff(): string;
+>doStuff : Symbol(NotNumber.doStuff, Decl(assignFromNumberInterface2.ts, 9, 22))
+}
+
+var x = 1;
+>x : Symbol(x, Decl(assignFromNumberInterface2.ts, 13, 3))
+
+var a: Number;
+>a : Symbol(a, Decl(assignFromNumberInterface2.ts, 14, 3))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(assignFromNumberInterface2.ts, 0, 0))
+
+var b: NotNumber;
+>b : Symbol(b, Decl(assignFromNumberInterface2.ts, 15, 3))
+>NotNumber : Symbol(NotNumber, Decl(assignFromNumberInterface2.ts, 2, 1))
+
+a = x; 
+>a : Symbol(a, Decl(assignFromNumberInterface2.ts, 14, 3))
+>x : Symbol(x, Decl(assignFromNumberInterface2.ts, 13, 3))
+
+a = b; 
+>a : Symbol(a, Decl(assignFromNumberInterface2.ts, 14, 3))
+>b : Symbol(b, Decl(assignFromNumberInterface2.ts, 15, 3))
+
+b = a; 
+>b : Symbol(b, Decl(assignFromNumberInterface2.ts, 15, 3))
+>a : Symbol(a, Decl(assignFromNumberInterface2.ts, 14, 3))
+
+b = x; 
+>b : Symbol(b, Decl(assignFromNumberInterface2.ts, 15, 3))
+>x : Symbol(x, Decl(assignFromNumberInterface2.ts, 13, 3))
+
+x = a; // expected error
+>x : Symbol(x, Decl(assignFromNumberInterface2.ts, 13, 3))
+>a : Symbol(a, Decl(assignFromNumberInterface2.ts, 14, 3))
+
+x = b; // expected error
+>x : Symbol(x, Decl(assignFromNumberInterface2.ts, 13, 3))
+>b : Symbol(b, Decl(assignFromNumberInterface2.ts, 15, 3))
+
+

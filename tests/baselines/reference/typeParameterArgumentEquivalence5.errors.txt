@@ -1,0 +1,28 @@
+tests/cases/compiler/typeParameterArgumentEquivalence5.ts(4,5): error TS2322: Type '() => (item: any) => T' is not assignable to type '() => (item: any) => U'.
+  Call signature return types '(item: any) => T' and '(item: any) => U' are incompatible.
+    Type 'T' is not assignable to type 'U'.
+      'U' could be instantiated with an arbitrary type which could be unrelated to 'T'.
+tests/cases/compiler/typeParameterArgumentEquivalence5.ts(5,5): error TS2322: Type '() => (item: any) => U' is not assignable to type '() => (item: any) => T'.
+  Call signature return types '(item: any) => U' and '(item: any) => T' are incompatible.
+    Type 'U' is not assignable to type 'T'.
+      'T' could be instantiated with an arbitrary type which could be unrelated to 'U'.
+
+
+==== tests/cases/compiler/typeParameterArgumentEquivalence5.ts (2 errors) ====
+    function foo<T,U>() {
+        var x: () => (item) => U;
+        var y: () => (item) => T;
+        x = y;  // Should be an error
+        ~
+!!! error TS2322: Type '() => (item: any) => T' is not assignable to type '() => (item: any) => U'.
+!!! error TS2322:   Call signature return types '(item: any) => T' and '(item: any) => U' are incompatible.
+!!! error TS2322:     Type 'T' is not assignable to type 'U'.
+!!! error TS2322:       'U' could be instantiated with an arbitrary type which could be unrelated to 'T'.
+        y = x;  // Shound be an error
+        ~
+!!! error TS2322: Type '() => (item: any) => U' is not assignable to type '() => (item: any) => T'.
+!!! error TS2322:   Call signature return types '(item: any) => U' and '(item: any) => T' are incompatible.
+!!! error TS2322:     Type 'U' is not assignable to type 'T'.
+!!! error TS2322:       'T' could be instantiated with an arbitrary type which could be unrelated to 'U'.
+    }
+    

@@ -1,0 +1,18 @@
+=== tests/cases/conformance/es6/classExpressions/typeArgumentInferenceWithClassExpression2.ts ===
+function foo<T>(x = class { prop: T }): T {
+>foo : Symbol(foo, Decl(typeArgumentInferenceWithClassExpression2.ts, 0, 0))
+>T : Symbol(T, Decl(typeArgumentInferenceWithClassExpression2.ts, 0, 13))
+>x : Symbol(x, Decl(typeArgumentInferenceWithClassExpression2.ts, 0, 16))
+>prop : Symbol((Anonymous class).prop, Decl(typeArgumentInferenceWithClassExpression2.ts, 0, 27))
+>T : Symbol(T, Decl(typeArgumentInferenceWithClassExpression2.ts, 0, 13))
+>T : Symbol(T, Decl(typeArgumentInferenceWithClassExpression2.ts, 0, 13))
+
+    return undefined;
+>undefined : Symbol(undefined)
+}
+
+// Should not infer string because it is a static property
+foo(class { static prop = "hello" }).length;
+>foo : Symbol(foo, Decl(typeArgumentInferenceWithClassExpression2.ts, 0, 0))
+>prop : Symbol((Anonymous class).prop, Decl(typeArgumentInferenceWithClassExpression2.ts, 5, 11))
+

@@ -1,0 +1,49 @@
+=== tests/cases/conformance/types/specifyingTypes/typeLiterals/arrayTypeOfFunctionTypes2.ts ===
+// valid uses of arrays of function types
+
+var x: new () => string[];
+>x : Symbol(x, Decl(arrayTypeOfFunctionTypes2.ts, 2, 3))
+
+var r = x[1];
+>r : Symbol(r, Decl(arrayTypeOfFunctionTypes2.ts, 3, 3))
+>x : Symbol(x, Decl(arrayTypeOfFunctionTypes2.ts, 2, 3))
+
+var r2 = new r();
+>r2 : Symbol(r2, Decl(arrayTypeOfFunctionTypes2.ts, 4, 3))
+>r : Symbol(r, Decl(arrayTypeOfFunctionTypes2.ts, 3, 3))
+
+var r2b = r();
+>r2b : Symbol(r2b, Decl(arrayTypeOfFunctionTypes2.ts, 5, 3))
+>r : Symbol(r, Decl(arrayTypeOfFunctionTypes2.ts, 3, 3))
+
+var x2: { new(): string }[];
+>x2 : Symbol(x2, Decl(arrayTypeOfFunctionTypes2.ts, 7, 3))
+
+var r3 = x[1];
+>r3 : Symbol(r3, Decl(arrayTypeOfFunctionTypes2.ts, 8, 3))
+>x : Symbol(x, Decl(arrayTypeOfFunctionTypes2.ts, 2, 3))
+
+var r4 = new r3();
+>r4 : Symbol(r4, Decl(arrayTypeOfFunctionTypes2.ts, 9, 3))
+>r3 : Symbol(r3, Decl(arrayTypeOfFunctionTypes2.ts, 8, 3))
+
+var r4b = new r3();
+>r4b : Symbol(r4b, Decl(arrayTypeOfFunctionTypes2.ts, 10, 3))
+>r3 : Symbol(r3, Decl(arrayTypeOfFunctionTypes2.ts, 8, 3))
+
+var x3: Array<new () => string>;
+>x3 : Symbol(x3, Decl(arrayTypeOfFunctionTypes2.ts, 12, 3))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+var r5 = x2[1];
+>r5 : Symbol(r5, Decl(arrayTypeOfFunctionTypes2.ts, 13, 3))
+>x2 : Symbol(x2, Decl(arrayTypeOfFunctionTypes2.ts, 7, 3))
+
+var r6 = new r5();
+>r6 : Symbol(r6, Decl(arrayTypeOfFunctionTypes2.ts, 14, 3))
+>r5 : Symbol(r5, Decl(arrayTypeOfFunctionTypes2.ts, 13, 3))
+
+var r6b = r5();
+>r6b : Symbol(r6b, Decl(arrayTypeOfFunctionTypes2.ts, 15, 3))
+>r5 : Symbol(r5, Decl(arrayTypeOfFunctionTypes2.ts, 13, 3))
+

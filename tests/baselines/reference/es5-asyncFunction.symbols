@@ -1,0 +1,14 @@
+=== tests/cases/compiler/es5-asyncFunction.ts ===
+declare var x;
+>x : Symbol(x, Decl(es5-asyncFunction.ts, 0, 11))
+
+async function empty() {
+>empty : Symbol(empty, Decl(es5-asyncFunction.ts, 0, 14))
+}
+
+async function singleAwait() {
+>singleAwait : Symbol(singleAwait, Decl(es5-asyncFunction.ts, 3, 1))
+
+    await x;
+>x : Symbol(x, Decl(es5-asyncFunction.ts, 0, 11))
+}

@@ -1,0 +1,16 @@
+=== tests/cases/compiler/internalAliasWithDottedNameEmit.ts ===
+module a.b.c {
+>a : typeof a
+>b : typeof b
+>c : typeof c
+
+      export var d;
+>d : any
+}
+module a.e.f {
+      import g = b.c;
+>g : typeof g
+>b : typeof b
+>c : typeof g
+}
+

@@ -1,0 +1,97 @@
+=== tests/cases/compiler/operationsAvailableOnPromisedType.ts ===
+async function fn(
+>fn : Symbol(fn, Decl(operationsAvailableOnPromisedType.ts, 0, 0))
+
+    a: number,
+>a : Symbol(a, Decl(operationsAvailableOnPromisedType.ts, 0, 18))
+
+    b: Promise<number>,
+>b : Symbol(b, Decl(operationsAvailableOnPromisedType.ts, 1, 14))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+
+    c: Promise<string[]>,
+>c : Symbol(c, Decl(operationsAvailableOnPromisedType.ts, 2, 23))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+
+    d: Promise<{ prop: string }>,
+>d : Symbol(d, Decl(operationsAvailableOnPromisedType.ts, 3, 25))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+>prop : Symbol(prop, Decl(operationsAvailableOnPromisedType.ts, 4, 16))
+
+    e: Promise<() => void>,
+>e : Symbol(e, Decl(operationsAvailableOnPromisedType.ts, 4, 33))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+
+    f: Promise<() => void> | (() => void),
+>f : Symbol(f, Decl(operationsAvailableOnPromisedType.ts, 5, 27))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+
+    g: Promise<{ new(): any }>
+>g : Symbol(g, Decl(operationsAvailableOnPromisedType.ts, 6, 42))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+
+) {
+    // All errors
+    a | b;
+>a : Symbol(a, Decl(operationsAvailableOnPromisedType.ts, 0, 18))
+>b : Symbol(b, Decl(operationsAvailableOnPromisedType.ts, 1, 14))
+
+    b | a;
+>b : Symbol(b, Decl(operationsAvailableOnPromisedType.ts, 1, 14))
+>a : Symbol(a, Decl(operationsAvailableOnPromisedType.ts, 0, 18))
+
+    a + b;
+>a : Symbol(a, Decl(operationsAvailableOnPromisedType.ts, 0, 18))
+>b : Symbol(b, Decl(operationsAvailableOnPromisedType.ts, 1, 14))
+
+    a > b;
+>a : Symbol(a, Decl(operationsAvailableOnPromisedType.ts, 0, 18))
+>b : Symbol(b, Decl(operationsAvailableOnPromisedType.ts, 1, 14))
+
+    b++;
+>b : Symbol(b, Decl(operationsAvailableOnPromisedType.ts, 1, 14))
+
+    --b;
+>b : Symbol(b, Decl(operationsAvailableOnPromisedType.ts, 1, 14))
+
+    a === b;
+>a : Symbol(a, Decl(operationsAvailableOnPromisedType.ts, 0, 18))
+>b : Symbol(b, Decl(operationsAvailableOnPromisedType.ts, 1, 14))
+
+    [...c];
+>c : Symbol(c, Decl(operationsAvailableOnPromisedType.ts, 2, 23))
+
+    for (const s of c) {
+>s : Symbol(s, Decl(operationsAvailableOnPromisedType.ts, 18, 14))
+>c : Symbol(c, Decl(operationsAvailableOnPromisedType.ts, 2, 23))
+
+        fn(b, b, c, d, e, f, g);
+>fn : Symbol(fn, Decl(operationsAvailableOnPromisedType.ts, 0, 0))
+>b : Symbol(b, Decl(operationsAvailableOnPromisedType.ts, 1, 14))
+>b : Symbol(b, Decl(operationsAvailableOnPromisedType.ts, 1, 14))
+>c : Symbol(c, Decl(operationsAvailableOnPromisedType.ts, 2, 23))
+>d : Symbol(d, Decl(operationsAvailableOnPromisedType.ts, 3, 25))
+>e : Symbol(e, Decl(operationsAvailableOnPromisedType.ts, 4, 33))
+>f : Symbol(f, Decl(operationsAvailableOnPromisedType.ts, 5, 27))
+>g : Symbol(g, Decl(operationsAvailableOnPromisedType.ts, 6, 42))
+
+        d.prop;
+>d : Symbol(d, Decl(operationsAvailableOnPromisedType.ts, 3, 25))
+    }
+    for await (const s of c) {}
+>s : Symbol(s, Decl(operationsAvailableOnPromisedType.ts, 22, 20))
+>c : Symbol(c, Decl(operationsAvailableOnPromisedType.ts, 2, 23))
+
+    e();
+>e : Symbol(e, Decl(operationsAvailableOnPromisedType.ts, 4, 33))
+
+    f();
+>f : Symbol(f, Decl(operationsAvailableOnPromisedType.ts, 5, 27))
+
+    new g();
+>g : Symbol(g, Decl(operationsAvailableOnPromisedType.ts, 6, 42))
+
+    b();
+>b : Symbol(b, Decl(operationsAvailableOnPromisedType.ts, 1, 14))
+}
+

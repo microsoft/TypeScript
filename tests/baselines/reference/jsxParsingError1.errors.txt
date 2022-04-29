@@ -1,0 +1,21 @@
+tests/cases/conformance/jsx/file.tsx(11,30): error TS2695: Left side of comma operator is unused and has no side effects.
+tests/cases/conformance/jsx/file.tsx(11,30): error TS18007: JSX expressions may not use the comma operator. Did you mean to write an array?
+
+
+==== tests/cases/conformance/jsx/file.tsx (2 errors) ====
+    declare module JSX {
+    	interface Element { }
+    	interface IntrinsicElements {
+    		[s: string]: any;
+    	}
+    }
+    
+    // This should be a parse error
+    const class1 = "foo";
+    const class2 = "bar";
+    const elem = <div className={class1, class2}/>;
+                                 ~~~~~~
+!!! error TS2695: Left side of comma operator is unused and has no side effects.
+                                 ~~~~~~~~~~~~~~
+!!! error TS18007: JSX expressions may not use the comma operator. Did you mean to write an array?
+    

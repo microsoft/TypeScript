@@ -1,0 +1,69 @@
+=== tests/cases/compiler/contextualTypingOfGenericFunctionTypedArguments1.ts ===
+interface Collection<T> {
+>Collection : Symbol(Collection, Decl(contextualTypingOfGenericFunctionTypedArguments1.ts, 0, 0))
+>T : Symbol(T, Decl(contextualTypingOfGenericFunctionTypedArguments1.ts, 0, 21))
+
+    length: number;
+>length : Symbol(Collection.length, Decl(contextualTypingOfGenericFunctionTypedArguments1.ts, 0, 25))
+
+    add(x: T): void;
+>add : Symbol(Collection.add, Decl(contextualTypingOfGenericFunctionTypedArguments1.ts, 1, 19))
+>x : Symbol(x, Decl(contextualTypingOfGenericFunctionTypedArguments1.ts, 2, 8))
+>T : Symbol(T, Decl(contextualTypingOfGenericFunctionTypedArguments1.ts, 0, 21))
+
+    remove(x: T): boolean;
+>remove : Symbol(Collection.remove, Decl(contextualTypingOfGenericFunctionTypedArguments1.ts, 2, 20))
+>x : Symbol(x, Decl(contextualTypingOfGenericFunctionTypedArguments1.ts, 3, 11))
+>T : Symbol(T, Decl(contextualTypingOfGenericFunctionTypedArguments1.ts, 0, 21))
+}
+
+interface Combinators {
+>Combinators : Symbol(Combinators, Decl(contextualTypingOfGenericFunctionTypedArguments1.ts, 4, 1))
+
+    forEach<T>(c: Collection<T>, f: (x: T) => Date): void;
+>forEach : Symbol(Combinators.forEach, Decl(contextualTypingOfGenericFunctionTypedArguments1.ts, 6, 23))
+>T : Symbol(T, Decl(contextualTypingOfGenericFunctionTypedArguments1.ts, 7, 12))
+>c : Symbol(c, Decl(contextualTypingOfGenericFunctionTypedArguments1.ts, 7, 15))
+>Collection : Symbol(Collection, Decl(contextualTypingOfGenericFunctionTypedArguments1.ts, 0, 0))
+>T : Symbol(T, Decl(contextualTypingOfGenericFunctionTypedArguments1.ts, 7, 12))
+>f : Symbol(f, Decl(contextualTypingOfGenericFunctionTypedArguments1.ts, 7, 32))
+>x : Symbol(x, Decl(contextualTypingOfGenericFunctionTypedArguments1.ts, 7, 37))
+>T : Symbol(T, Decl(contextualTypingOfGenericFunctionTypedArguments1.ts, 7, 12))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+}
+
+var c2: Collection<number>;
+>c2 : Symbol(c2, Decl(contextualTypingOfGenericFunctionTypedArguments1.ts, 10, 3))
+>Collection : Symbol(Collection, Decl(contextualTypingOfGenericFunctionTypedArguments1.ts, 0, 0))
+
+var _: Combinators;
+>_ : Symbol(_, Decl(contextualTypingOfGenericFunctionTypedArguments1.ts, 11, 3))
+>Combinators : Symbol(Combinators, Decl(contextualTypingOfGenericFunctionTypedArguments1.ts, 4, 1))
+
+// errors on all 3 lines, bug was that r5 was the only line with errors
+var f = (x: number) => { return x.toFixed() };
+>f : Symbol(f, Decl(contextualTypingOfGenericFunctionTypedArguments1.ts, 14, 3))
+>x : Symbol(x, Decl(contextualTypingOfGenericFunctionTypedArguments1.ts, 14, 9))
+>x.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(contextualTypingOfGenericFunctionTypedArguments1.ts, 14, 9))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+
+var r5 = _.forEach<number>(c2, f); 
+>r5 : Symbol(r5, Decl(contextualTypingOfGenericFunctionTypedArguments1.ts, 15, 3))
+>_.forEach : Symbol(Combinators.forEach, Decl(contextualTypingOfGenericFunctionTypedArguments1.ts, 6, 23))
+>_ : Symbol(_, Decl(contextualTypingOfGenericFunctionTypedArguments1.ts, 11, 3))
+>forEach : Symbol(Combinators.forEach, Decl(contextualTypingOfGenericFunctionTypedArguments1.ts, 6, 23))
+>c2 : Symbol(c2, Decl(contextualTypingOfGenericFunctionTypedArguments1.ts, 10, 3))
+>f : Symbol(f, Decl(contextualTypingOfGenericFunctionTypedArguments1.ts, 14, 3))
+
+var r6 = _.forEach<number>(c2, (x) => { return x.toFixed() }); 
+>r6 : Symbol(r6, Decl(contextualTypingOfGenericFunctionTypedArguments1.ts, 16, 3))
+>_.forEach : Symbol(Combinators.forEach, Decl(contextualTypingOfGenericFunctionTypedArguments1.ts, 6, 23))
+>_ : Symbol(_, Decl(contextualTypingOfGenericFunctionTypedArguments1.ts, 11, 3))
+>forEach : Symbol(Combinators.forEach, Decl(contextualTypingOfGenericFunctionTypedArguments1.ts, 6, 23))
+>c2 : Symbol(c2, Decl(contextualTypingOfGenericFunctionTypedArguments1.ts, 10, 3))
+>x : Symbol(x, Decl(contextualTypingOfGenericFunctionTypedArguments1.ts, 16, 32))
+>x.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(contextualTypingOfGenericFunctionTypedArguments1.ts, 16, 32))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+

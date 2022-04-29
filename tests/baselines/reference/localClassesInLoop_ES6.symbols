@@ -1,0 +1,29 @@
+=== tests/cases/compiler/localClassesInLoop_ES6.ts ===
+declare function use(a: any);
+>use : Symbol(use, Decl(localClassesInLoop_ES6.ts, 0, 0))
+>a : Symbol(a, Decl(localClassesInLoop_ES6.ts, 0, 21))
+
+"use strict"
+var data = [];
+>data : Symbol(data, Decl(localClassesInLoop_ES6.ts, 3, 3))
+
+for (let x = 0; x < 2; ++x) {
+>x : Symbol(x, Decl(localClassesInLoop_ES6.ts, 4, 8))
+>x : Symbol(x, Decl(localClassesInLoop_ES6.ts, 4, 8))
+>x : Symbol(x, Decl(localClassesInLoop_ES6.ts, 4, 8))
+
+    class C { }
+>C : Symbol(C, Decl(localClassesInLoop_ES6.ts, 4, 29))
+
+    data.push(() => C);
+>data.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>data : Symbol(data, Decl(localClassesInLoop_ES6.ts, 3, 3))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>C : Symbol(C, Decl(localClassesInLoop_ES6.ts, 4, 29))
+}
+
+use(data[0]() === data[1]());
+>use : Symbol(use, Decl(localClassesInLoop_ES6.ts, 0, 0))
+>data : Symbol(data, Decl(localClassesInLoop_ES6.ts, 3, 3))
+>data : Symbol(data, Decl(localClassesInLoop_ES6.ts, 3, 3))
+

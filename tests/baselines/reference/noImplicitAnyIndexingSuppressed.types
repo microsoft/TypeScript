@@ -1,0 +1,128 @@
+=== tests/cases/compiler/noImplicitAnyIndexingSuppressed.ts ===
+enum MyEmusEnum {
+>MyEmusEnum : MyEmusEnum
+
+    emu
+>emu : MyEmusEnum.emu
+}
+
+// Should be okay; should be a string.
+var strRepresentation1 = MyEmusEnum[0]
+>strRepresentation1 : string
+>MyEmusEnum[0] : string
+>MyEmusEnum : typeof MyEmusEnum
+>0 : 0
+
+// Should be okay; should be a string.
+var strRepresentation2 = MyEmusEnum[MyEmusEnum.emu]
+>strRepresentation2 : string
+>MyEmusEnum[MyEmusEnum.emu] : string
+>MyEmusEnum : typeof MyEmusEnum
+>MyEmusEnum.emu : MyEmusEnum
+>MyEmusEnum : typeof MyEmusEnum
+>emu : MyEmusEnum
+
+// Should be okay, as we suppress implicit 'any' property access checks
+var strRepresentation3 = MyEmusEnum["monehh"];
+>strRepresentation3 : any
+>MyEmusEnum["monehh"] : any
+>MyEmusEnum : typeof MyEmusEnum
+>"monehh" : "monehh"
+
+// Should be okay; should be a MyEmusEnum
+var strRepresentation4 = MyEmusEnum["emu"];
+>strRepresentation4 : MyEmusEnum
+>MyEmusEnum["emu"] : MyEmusEnum
+>MyEmusEnum : typeof MyEmusEnum
+>"emu" : "emu"
+
+
+// Should be okay, as we suppress implicit 'any' property access checks
+var x = {}["hi"];
+>x : undefined
+>{}["hi"] : undefined
+>{} : {}
+>"hi" : "hi"
+
+// Should be okay, as we suppress implicit 'any' property access checks
+var y = {}[10];
+>y : undefined
+>{}[10] : undefined
+>{} : {}
+>10 : 10
+
+var hi: any = "hi";
+>hi : any
+>"hi" : "hi"
+
+var emptyObj = {};
+>emptyObj : {}
+>{} : {}
+
+// Should be okay, as we suppress implicit 'any' property access checks
+var z1 = emptyObj[hi];
+>z1 : any
+>emptyObj[hi] : any
+>emptyObj : {}
+>hi : any
+
+var z2 = (<any>emptyObj)[hi];
+>z2 : any
+>(<any>emptyObj)[hi] : any
+>(<any>emptyObj) : any
+><any>emptyObj : any
+>emptyObj : {}
+>hi : any
+
+interface MyMap<T> {
+    [key: string]: T;
+>key : string
+}
+
+var m: MyMap<number> = {
+>m : MyMap<number>
+>{    "0": 0,    "1": 1,    "2": 2,    "Okay that's enough for today.": NaN} : { "0": number; "1": number; "2": number; "Okay that's enough for today.": number; }
+
+    "0": 0,
+>"0" : number
+>0 : 0
+
+    "1": 1,
+>"1" : number
+>1 : 1
+
+    "2": 2,
+>"2" : number
+>2 : 2
+
+    "Okay that's enough for today.": NaN
+>"Okay that's enough for today." : number
+>NaN : number
+
+};
+
+var mResult1 = m[MyEmusEnum.emu];
+>mResult1 : number
+>m[MyEmusEnum.emu] : number
+>m : MyMap<number>
+>MyEmusEnum.emu : MyEmusEnum
+>MyEmusEnum : typeof MyEmusEnum
+>emu : MyEmusEnum
+
+var mResult2 = m[MyEmusEnum[MyEmusEnum.emu]];
+>mResult2 : number
+>m[MyEmusEnum[MyEmusEnum.emu]] : number
+>m : MyMap<number>
+>MyEmusEnum[MyEmusEnum.emu] : string
+>MyEmusEnum : typeof MyEmusEnum
+>MyEmusEnum.emu : MyEmusEnum
+>MyEmusEnum : typeof MyEmusEnum
+>emu : MyEmusEnum
+
+var mResult3 = m[hi];
+>mResult3 : number
+>m[hi] : number
+>m : MyMap<number>
+>hi : any
+
+

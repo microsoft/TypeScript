@@ -1,0 +1,38 @@
+tests/cases/conformance/jsx/file.tsx(13,28): error TS2322: Type 'number' is not assignable to type 'string'.
+tests/cases/conformance/jsx/file.tsx(15,28): error TS2322: Type 'boolean' is not assignable to type 'string | number'.
+
+
+==== tests/cases/conformance/jsx/react.d.ts (0 errors) ====
+    declare module JSX {
+    	interface Element { }
+    	interface IntrinsicElements {
+            div: any;
+    	}
+        interface ElementAttributesProperty { prop: any }
+    }
+    
+==== tests/cases/conformance/jsx/file.tsx (2 errors) ====
+    interface IProps {
+      primaryText: string,
+      [propName: string]: string | number
+    }
+    
+    function VerticalNavMenuItem(prop: IProps) {
+      return <div>props.primaryText</div>
+    }
+    
+    function VerticalNav() {
+      return (
+        <div>
+          <VerticalNavMenuItem primaryText={2} />  // error
+                               ~~~~~~~~~~~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
+!!! related TS6500 tests/cases/conformance/jsx/file.tsx:2:3: The expected type comes from property 'primaryText' which is declared here on type 'IProps'
+          <VerticalNavMenuItem justRandomProp={2} primaryText={"hello"} />  // ok
+          <VerticalNavMenuItem justRandomProp1={true} primaryText={"hello"} />  // error
+                               ~~~~~~~~~~~~~~~
+!!! error TS2322: Type 'boolean' is not assignable to type 'string | number'.
+!!! related TS6501 tests/cases/conformance/jsx/file.tsx:3:3: The expected type comes from this index signature.
+        </div>
+      )
+    } 

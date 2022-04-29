@@ -1,0 +1,40 @@
+=== tests/cases/compiler/covariance1.ts ===
+module M {
+>M : typeof M
+
+    interface X { m1:number; }
+>m1 : number
+
+    export class XX implements X { constructor(public m1:number) { } }
+>XX : XX
+>m1 : number
+
+    interface Y { x:X; }
+>x : X
+
+    export function f(y:Y) { }
+>f : (y: Y) => void
+>y : Y
+
+    var a:X;
+>a : X
+
+    f({x:a}); // ok
+>f({x:a}) : void
+>f : (y: Y) => void
+>{x:a} : { x: X; }
+>x : X
+>a : X
+
+    var b:XX;
+>b : XX
+
+    f({x:b}); // ok covariant subtype
+>f({x:b}) : void
+>f : (y: Y) => void
+>{x:b} : { x: XX; }
+>x : XX
+>b : XX
+}
+
+

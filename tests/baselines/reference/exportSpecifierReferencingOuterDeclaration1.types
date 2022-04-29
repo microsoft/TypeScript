@@ -1,0 +1,12 @@
+=== tests/cases/compiler/exportSpecifierReferencingOuterDeclaration1.ts ===
+declare module X { export interface bar { } }
+declare module "m" {
+>"m" : typeof import("m")
+
+    export { X };
+>X : any
+
+    export function foo(): X.bar;
+>foo : () => X.bar
+>X : any
+}

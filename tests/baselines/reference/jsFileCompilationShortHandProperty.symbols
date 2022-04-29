@@ -1,0 +1,19 @@
+=== tests/cases/compiler/a.js ===
+function foo() {
+>foo : Symbol(foo, Decl(a.js, 0, 0))
+
+    var a = 10;
+>a : Symbol(a, Decl(a.js, 1, 7))
+
+    var b = "Hello";
+>b : Symbol(b, Decl(a.js, 2, 7))
+
+    return {
+        a,
+>a : Symbol(a, Decl(a.js, 3, 12))
+
+        b
+>b : Symbol(b, Decl(a.js, 4, 10))
+
+    };
+}

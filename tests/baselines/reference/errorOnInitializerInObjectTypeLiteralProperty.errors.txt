@@ -1,0 +1,17 @@
+tests/cases/compiler/errorOnInitializerInObjectTypeLiteralProperty.ts(2,19): error TS1247: A type literal property cannot have an initializer.
+tests/cases/compiler/errorOnInitializerInObjectTypeLiteralProperty.ts(6,19): error TS1247: A type literal property cannot have an initializer.
+
+
+==== tests/cases/compiler/errorOnInitializerInObjectTypeLiteralProperty.ts (2 errors) ====
+    var Foo: {
+        bar: number = 5;
+                      ~
+!!! error TS1247: A type literal property cannot have an initializer.
+    };
+    
+    let Bar: {
+        bar: number = 5;
+                      ~
+!!! error TS1247: A type literal property cannot have an initializer.
+    };
+    

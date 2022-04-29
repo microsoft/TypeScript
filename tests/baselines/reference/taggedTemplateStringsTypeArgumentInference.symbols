@@ -1,0 +1,345 @@
+=== tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInference.ts ===
+// Generic tag with one parameter
+function noParams<T>(n: T) { }
+>noParams : Symbol(noParams, Decl(taggedTemplateStringsTypeArgumentInference.ts, 0, 0))
+>T : Symbol(T, Decl(taggedTemplateStringsTypeArgumentInference.ts, 1, 18))
+>n : Symbol(n, Decl(taggedTemplateStringsTypeArgumentInference.ts, 1, 21))
+>T : Symbol(T, Decl(taggedTemplateStringsTypeArgumentInference.ts, 1, 18))
+
+noParams ``;
+>noParams : Symbol(noParams, Decl(taggedTemplateStringsTypeArgumentInference.ts, 0, 0))
+
+// Generic tag with parameter which does not use type parameter
+function noGenericParams<T>(n: TemplateStringsArray) { }
+>noGenericParams : Symbol(noGenericParams, Decl(taggedTemplateStringsTypeArgumentInference.ts, 2, 12))
+>T : Symbol(T, Decl(taggedTemplateStringsTypeArgumentInference.ts, 5, 25))
+>n : Symbol(n, Decl(taggedTemplateStringsTypeArgumentInference.ts, 5, 28))
+>TemplateStringsArray : Symbol(TemplateStringsArray, Decl(lib.es5.d.ts, --, --))
+
+noGenericParams ``;
+>noGenericParams : Symbol(noGenericParams, Decl(taggedTemplateStringsTypeArgumentInference.ts, 2, 12))
+
+// Generic tag with multiple type parameters and only one used in parameter type annotation
+function someGenerics1a<T, U>(n: T, m: number) { }
+>someGenerics1a : Symbol(someGenerics1a, Decl(taggedTemplateStringsTypeArgumentInference.ts, 6, 19))
+>T : Symbol(T, Decl(taggedTemplateStringsTypeArgumentInference.ts, 9, 24))
+>U : Symbol(U, Decl(taggedTemplateStringsTypeArgumentInference.ts, 9, 26))
+>n : Symbol(n, Decl(taggedTemplateStringsTypeArgumentInference.ts, 9, 30))
+>T : Symbol(T, Decl(taggedTemplateStringsTypeArgumentInference.ts, 9, 24))
+>m : Symbol(m, Decl(taggedTemplateStringsTypeArgumentInference.ts, 9, 35))
+
+someGenerics1a `${3}`;
+>someGenerics1a : Symbol(someGenerics1a, Decl(taggedTemplateStringsTypeArgumentInference.ts, 6, 19))
+
+function someGenerics1b<T, U>(n: TemplateStringsArray, m: U) { }
+>someGenerics1b : Symbol(someGenerics1b, Decl(taggedTemplateStringsTypeArgumentInference.ts, 10, 22))
+>T : Symbol(T, Decl(taggedTemplateStringsTypeArgumentInference.ts, 12, 24))
+>U : Symbol(U, Decl(taggedTemplateStringsTypeArgumentInference.ts, 12, 26))
+>n : Symbol(n, Decl(taggedTemplateStringsTypeArgumentInference.ts, 12, 30))
+>TemplateStringsArray : Symbol(TemplateStringsArray, Decl(lib.es5.d.ts, --, --))
+>m : Symbol(m, Decl(taggedTemplateStringsTypeArgumentInference.ts, 12, 54))
+>U : Symbol(U, Decl(taggedTemplateStringsTypeArgumentInference.ts, 12, 26))
+
+someGenerics1b `${3}`;
+>someGenerics1b : Symbol(someGenerics1b, Decl(taggedTemplateStringsTypeArgumentInference.ts, 10, 22))
+
+// Generic tag with argument of function type whose parameter is of type parameter type
+function someGenerics2a<T>(strs: TemplateStringsArray, n: (x: T) => void) { }
+>someGenerics2a : Symbol(someGenerics2a, Decl(taggedTemplateStringsTypeArgumentInference.ts, 13, 22))
+>T : Symbol(T, Decl(taggedTemplateStringsTypeArgumentInference.ts, 16, 24))
+>strs : Symbol(strs, Decl(taggedTemplateStringsTypeArgumentInference.ts, 16, 27))
+>TemplateStringsArray : Symbol(TemplateStringsArray, Decl(lib.es5.d.ts, --, --))
+>n : Symbol(n, Decl(taggedTemplateStringsTypeArgumentInference.ts, 16, 54))
+>x : Symbol(x, Decl(taggedTemplateStringsTypeArgumentInference.ts, 16, 59))
+>T : Symbol(T, Decl(taggedTemplateStringsTypeArgumentInference.ts, 16, 24))
+
+someGenerics2a `${(n: string) => n}`;
+>someGenerics2a : Symbol(someGenerics2a, Decl(taggedTemplateStringsTypeArgumentInference.ts, 13, 22))
+>n : Symbol(n, Decl(taggedTemplateStringsTypeArgumentInference.ts, 17, 19))
+>n : Symbol(n, Decl(taggedTemplateStringsTypeArgumentInference.ts, 17, 19))
+
+function someGenerics2b<T, U>(strs: TemplateStringsArray, n: (x: T, y: U) => void) { }
+>someGenerics2b : Symbol(someGenerics2b, Decl(taggedTemplateStringsTypeArgumentInference.ts, 17, 37))
+>T : Symbol(T, Decl(taggedTemplateStringsTypeArgumentInference.ts, 19, 24))
+>U : Symbol(U, Decl(taggedTemplateStringsTypeArgumentInference.ts, 19, 26))
+>strs : Symbol(strs, Decl(taggedTemplateStringsTypeArgumentInference.ts, 19, 30))
+>TemplateStringsArray : Symbol(TemplateStringsArray, Decl(lib.es5.d.ts, --, --))
+>n : Symbol(n, Decl(taggedTemplateStringsTypeArgumentInference.ts, 19, 57))
+>x : Symbol(x, Decl(taggedTemplateStringsTypeArgumentInference.ts, 19, 62))
+>T : Symbol(T, Decl(taggedTemplateStringsTypeArgumentInference.ts, 19, 24))
+>y : Symbol(y, Decl(taggedTemplateStringsTypeArgumentInference.ts, 19, 67))
+>U : Symbol(U, Decl(taggedTemplateStringsTypeArgumentInference.ts, 19, 26))
+
+someGenerics2b `${ (n: string, x: number) => n }`;
+>someGenerics2b : Symbol(someGenerics2b, Decl(taggedTemplateStringsTypeArgumentInference.ts, 17, 37))
+>n : Symbol(n, Decl(taggedTemplateStringsTypeArgumentInference.ts, 20, 20))
+>x : Symbol(x, Decl(taggedTemplateStringsTypeArgumentInference.ts, 20, 30))
+>n : Symbol(n, Decl(taggedTemplateStringsTypeArgumentInference.ts, 20, 20))
+
+// Generic tag with argument of function type whose parameter is not of type parameter type but body/return type uses type parameter
+function someGenerics3<T>(strs: TemplateStringsArray, producer: () => T) { }
+>someGenerics3 : Symbol(someGenerics3, Decl(taggedTemplateStringsTypeArgumentInference.ts, 20, 50))
+>T : Symbol(T, Decl(taggedTemplateStringsTypeArgumentInference.ts, 23, 23))
+>strs : Symbol(strs, Decl(taggedTemplateStringsTypeArgumentInference.ts, 23, 26))
+>TemplateStringsArray : Symbol(TemplateStringsArray, Decl(lib.es5.d.ts, --, --))
+>producer : Symbol(producer, Decl(taggedTemplateStringsTypeArgumentInference.ts, 23, 53))
+>T : Symbol(T, Decl(taggedTemplateStringsTypeArgumentInference.ts, 23, 23))
+
+someGenerics3 `${() => ''}`;
+>someGenerics3 : Symbol(someGenerics3, Decl(taggedTemplateStringsTypeArgumentInference.ts, 20, 50))
+
+someGenerics3 `${() => undefined}`;
+>someGenerics3 : Symbol(someGenerics3, Decl(taggedTemplateStringsTypeArgumentInference.ts, 20, 50))
+>undefined : Symbol(undefined)
+
+someGenerics3 `${() => 3}`;
+>someGenerics3 : Symbol(someGenerics3, Decl(taggedTemplateStringsTypeArgumentInference.ts, 20, 50))
+
+// 2 parameter generic tag with argument 1 of type parameter type and argument 2 of function type whose parameter is of type parameter type
+function someGenerics4<T, U>(strs: TemplateStringsArray, n: T, f: (x: U) => void) { }
+>someGenerics4 : Symbol(someGenerics4, Decl(taggedTemplateStringsTypeArgumentInference.ts, 26, 27))
+>T : Symbol(T, Decl(taggedTemplateStringsTypeArgumentInference.ts, 29, 23))
+>U : Symbol(U, Decl(taggedTemplateStringsTypeArgumentInference.ts, 29, 25))
+>strs : Symbol(strs, Decl(taggedTemplateStringsTypeArgumentInference.ts, 29, 29))
+>TemplateStringsArray : Symbol(TemplateStringsArray, Decl(lib.es5.d.ts, --, --))
+>n : Symbol(n, Decl(taggedTemplateStringsTypeArgumentInference.ts, 29, 56))
+>T : Symbol(T, Decl(taggedTemplateStringsTypeArgumentInference.ts, 29, 23))
+>f : Symbol(f, Decl(taggedTemplateStringsTypeArgumentInference.ts, 29, 62))
+>x : Symbol(x, Decl(taggedTemplateStringsTypeArgumentInference.ts, 29, 67))
+>U : Symbol(U, Decl(taggedTemplateStringsTypeArgumentInference.ts, 29, 25))
+
+someGenerics4 `${4}${ () => null }`;
+>someGenerics4 : Symbol(someGenerics4, Decl(taggedTemplateStringsTypeArgumentInference.ts, 26, 27))
+
+someGenerics4 `${''}${ () => 3 }`;
+>someGenerics4 : Symbol(someGenerics4, Decl(taggedTemplateStringsTypeArgumentInference.ts, 26, 27))
+
+someGenerics4 `${ null }${ null }`;
+>someGenerics4 : Symbol(someGenerics4, Decl(taggedTemplateStringsTypeArgumentInference.ts, 26, 27))
+
+// 2 parameter generic tag with argument 2 of type parameter type and argument 1 of function type whose parameter is of type parameter type
+function someGenerics5<U, T>(strs: TemplateStringsArray, n: T, f: (x: U) => void) { }
+>someGenerics5 : Symbol(someGenerics5, Decl(taggedTemplateStringsTypeArgumentInference.ts, 32, 35))
+>U : Symbol(U, Decl(taggedTemplateStringsTypeArgumentInference.ts, 35, 23))
+>T : Symbol(T, Decl(taggedTemplateStringsTypeArgumentInference.ts, 35, 25))
+>strs : Symbol(strs, Decl(taggedTemplateStringsTypeArgumentInference.ts, 35, 29))
+>TemplateStringsArray : Symbol(TemplateStringsArray, Decl(lib.es5.d.ts, --, --))
+>n : Symbol(n, Decl(taggedTemplateStringsTypeArgumentInference.ts, 35, 56))
+>T : Symbol(T, Decl(taggedTemplateStringsTypeArgumentInference.ts, 35, 25))
+>f : Symbol(f, Decl(taggedTemplateStringsTypeArgumentInference.ts, 35, 62))
+>x : Symbol(x, Decl(taggedTemplateStringsTypeArgumentInference.ts, 35, 67))
+>U : Symbol(U, Decl(taggedTemplateStringsTypeArgumentInference.ts, 35, 23))
+
+someGenerics5 `${ 4 } ${ () => null }`;
+>someGenerics5 : Symbol(someGenerics5, Decl(taggedTemplateStringsTypeArgumentInference.ts, 32, 35))
+
+someGenerics5 `${ '' }${ () => 3 }`;
+>someGenerics5 : Symbol(someGenerics5, Decl(taggedTemplateStringsTypeArgumentInference.ts, 32, 35))
+
+someGenerics5 `${null}${null}`;
+>someGenerics5 : Symbol(someGenerics5, Decl(taggedTemplateStringsTypeArgumentInference.ts, 32, 35))
+
+// Generic tag with multiple arguments of function types that each have parameters of the same generic type
+function someGenerics6<A>(strs: TemplateStringsArray, a: (a: A) => A, b: (b: A) => A, c: (c: A) => A) { }
+>someGenerics6 : Symbol(someGenerics6, Decl(taggedTemplateStringsTypeArgumentInference.ts, 38, 31))
+>A : Symbol(A, Decl(taggedTemplateStringsTypeArgumentInference.ts, 41, 23))
+>strs : Symbol(strs, Decl(taggedTemplateStringsTypeArgumentInference.ts, 41, 26))
+>TemplateStringsArray : Symbol(TemplateStringsArray, Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(taggedTemplateStringsTypeArgumentInference.ts, 41, 53))
+>a : Symbol(a, Decl(taggedTemplateStringsTypeArgumentInference.ts, 41, 58))
+>A : Symbol(A, Decl(taggedTemplateStringsTypeArgumentInference.ts, 41, 23))
+>A : Symbol(A, Decl(taggedTemplateStringsTypeArgumentInference.ts, 41, 23))
+>b : Symbol(b, Decl(taggedTemplateStringsTypeArgumentInference.ts, 41, 69))
+>b : Symbol(b, Decl(taggedTemplateStringsTypeArgumentInference.ts, 41, 74))
+>A : Symbol(A, Decl(taggedTemplateStringsTypeArgumentInference.ts, 41, 23))
+>A : Symbol(A, Decl(taggedTemplateStringsTypeArgumentInference.ts, 41, 23))
+>c : Symbol(c, Decl(taggedTemplateStringsTypeArgumentInference.ts, 41, 85))
+>c : Symbol(c, Decl(taggedTemplateStringsTypeArgumentInference.ts, 41, 90))
+>A : Symbol(A, Decl(taggedTemplateStringsTypeArgumentInference.ts, 41, 23))
+>A : Symbol(A, Decl(taggedTemplateStringsTypeArgumentInference.ts, 41, 23))
+
+someGenerics6 `${ n => n }${ n => n}${ n => n}`;
+>someGenerics6 : Symbol(someGenerics6, Decl(taggedTemplateStringsTypeArgumentInference.ts, 38, 31))
+>n : Symbol(n, Decl(taggedTemplateStringsTypeArgumentInference.ts, 42, 17))
+>n : Symbol(n, Decl(taggedTemplateStringsTypeArgumentInference.ts, 42, 17))
+>n : Symbol(n, Decl(taggedTemplateStringsTypeArgumentInference.ts, 42, 28))
+>n : Symbol(n, Decl(taggedTemplateStringsTypeArgumentInference.ts, 42, 28))
+>n : Symbol(n, Decl(taggedTemplateStringsTypeArgumentInference.ts, 42, 38))
+>n : Symbol(n, Decl(taggedTemplateStringsTypeArgumentInference.ts, 42, 38))
+
+someGenerics6 `${ n => n }${ n => n}${ n => n}`;
+>someGenerics6 : Symbol(someGenerics6, Decl(taggedTemplateStringsTypeArgumentInference.ts, 38, 31))
+>n : Symbol(n, Decl(taggedTemplateStringsTypeArgumentInference.ts, 43, 17))
+>n : Symbol(n, Decl(taggedTemplateStringsTypeArgumentInference.ts, 43, 17))
+>n : Symbol(n, Decl(taggedTemplateStringsTypeArgumentInference.ts, 43, 28))
+>n : Symbol(n, Decl(taggedTemplateStringsTypeArgumentInference.ts, 43, 28))
+>n : Symbol(n, Decl(taggedTemplateStringsTypeArgumentInference.ts, 43, 38))
+>n : Symbol(n, Decl(taggedTemplateStringsTypeArgumentInference.ts, 43, 38))
+
+someGenerics6 `${ (n: number) => n }${ (n: number) => n }${ (n: number) => n }`;
+>someGenerics6 : Symbol(someGenerics6, Decl(taggedTemplateStringsTypeArgumentInference.ts, 38, 31))
+>n : Symbol(n, Decl(taggedTemplateStringsTypeArgumentInference.ts, 44, 19))
+>n : Symbol(n, Decl(taggedTemplateStringsTypeArgumentInference.ts, 44, 19))
+>n : Symbol(n, Decl(taggedTemplateStringsTypeArgumentInference.ts, 44, 40))
+>n : Symbol(n, Decl(taggedTemplateStringsTypeArgumentInference.ts, 44, 40))
+>n : Symbol(n, Decl(taggedTemplateStringsTypeArgumentInference.ts, 44, 61))
+>n : Symbol(n, Decl(taggedTemplateStringsTypeArgumentInference.ts, 44, 61))
+
+// Generic tag with multiple arguments of function types that each have parameters of different generic type
+function someGenerics7<A, B, C>(strs: TemplateStringsArray, a: (a: A) => A, b: (b: B) => B, c: (c: C) => C) { }
+>someGenerics7 : Symbol(someGenerics7, Decl(taggedTemplateStringsTypeArgumentInference.ts, 44, 80))
+>A : Symbol(A, Decl(taggedTemplateStringsTypeArgumentInference.ts, 47, 23))
+>B : Symbol(B, Decl(taggedTemplateStringsTypeArgumentInference.ts, 47, 25))
+>C : Symbol(C, Decl(taggedTemplateStringsTypeArgumentInference.ts, 47, 28))
+>strs : Symbol(strs, Decl(taggedTemplateStringsTypeArgumentInference.ts, 47, 32))
+>TemplateStringsArray : Symbol(TemplateStringsArray, Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(taggedTemplateStringsTypeArgumentInference.ts, 47, 59))
+>a : Symbol(a, Decl(taggedTemplateStringsTypeArgumentInference.ts, 47, 64))
+>A : Symbol(A, Decl(taggedTemplateStringsTypeArgumentInference.ts, 47, 23))
+>A : Symbol(A, Decl(taggedTemplateStringsTypeArgumentInference.ts, 47, 23))
+>b : Symbol(b, Decl(taggedTemplateStringsTypeArgumentInference.ts, 47, 75))
+>b : Symbol(b, Decl(taggedTemplateStringsTypeArgumentInference.ts, 47, 80))
+>B : Symbol(B, Decl(taggedTemplateStringsTypeArgumentInference.ts, 47, 25))
+>B : Symbol(B, Decl(taggedTemplateStringsTypeArgumentInference.ts, 47, 25))
+>c : Symbol(c, Decl(taggedTemplateStringsTypeArgumentInference.ts, 47, 91))
+>c : Symbol(c, Decl(taggedTemplateStringsTypeArgumentInference.ts, 47, 96))
+>C : Symbol(C, Decl(taggedTemplateStringsTypeArgumentInference.ts, 47, 28))
+>C : Symbol(C, Decl(taggedTemplateStringsTypeArgumentInference.ts, 47, 28))
+
+someGenerics7 `${ n => n }${ n => n }${ n => n }`;
+>someGenerics7 : Symbol(someGenerics7, Decl(taggedTemplateStringsTypeArgumentInference.ts, 44, 80))
+>n : Symbol(n, Decl(taggedTemplateStringsTypeArgumentInference.ts, 48, 17))
+>n : Symbol(n, Decl(taggedTemplateStringsTypeArgumentInference.ts, 48, 17))
+>n : Symbol(n, Decl(taggedTemplateStringsTypeArgumentInference.ts, 48, 28))
+>n : Symbol(n, Decl(taggedTemplateStringsTypeArgumentInference.ts, 48, 28))
+>n : Symbol(n, Decl(taggedTemplateStringsTypeArgumentInference.ts, 48, 39))
+>n : Symbol(n, Decl(taggedTemplateStringsTypeArgumentInference.ts, 48, 39))
+
+someGenerics7 `${ n => n }${ n => n }${ n => n }`;
+>someGenerics7 : Symbol(someGenerics7, Decl(taggedTemplateStringsTypeArgumentInference.ts, 44, 80))
+>n : Symbol(n, Decl(taggedTemplateStringsTypeArgumentInference.ts, 49, 17))
+>n : Symbol(n, Decl(taggedTemplateStringsTypeArgumentInference.ts, 49, 17))
+>n : Symbol(n, Decl(taggedTemplateStringsTypeArgumentInference.ts, 49, 28))
+>n : Symbol(n, Decl(taggedTemplateStringsTypeArgumentInference.ts, 49, 28))
+>n : Symbol(n, Decl(taggedTemplateStringsTypeArgumentInference.ts, 49, 39))
+>n : Symbol(n, Decl(taggedTemplateStringsTypeArgumentInference.ts, 49, 39))
+
+someGenerics7 `${(n: number) => n}${ (n: string) => n}${ (n: number) => n}`;
+>someGenerics7 : Symbol(someGenerics7, Decl(taggedTemplateStringsTypeArgumentInference.ts, 44, 80))
+>n : Symbol(n, Decl(taggedTemplateStringsTypeArgumentInference.ts, 50, 18))
+>n : Symbol(n, Decl(taggedTemplateStringsTypeArgumentInference.ts, 50, 18))
+>n : Symbol(n, Decl(taggedTemplateStringsTypeArgumentInference.ts, 50, 38))
+>n : Symbol(n, Decl(taggedTemplateStringsTypeArgumentInference.ts, 50, 38))
+>n : Symbol(n, Decl(taggedTemplateStringsTypeArgumentInference.ts, 50, 58))
+>n : Symbol(n, Decl(taggedTemplateStringsTypeArgumentInference.ts, 50, 58))
+
+// Generic tag with argument of generic function type
+function someGenerics8<T>(strs: TemplateStringsArray, n: T): T { return n; }
+>someGenerics8 : Symbol(someGenerics8, Decl(taggedTemplateStringsTypeArgumentInference.ts, 50, 76))
+>T : Symbol(T, Decl(taggedTemplateStringsTypeArgumentInference.ts, 53, 23))
+>strs : Symbol(strs, Decl(taggedTemplateStringsTypeArgumentInference.ts, 53, 26))
+>TemplateStringsArray : Symbol(TemplateStringsArray, Decl(lib.es5.d.ts, --, --))
+>n : Symbol(n, Decl(taggedTemplateStringsTypeArgumentInference.ts, 53, 53))
+>T : Symbol(T, Decl(taggedTemplateStringsTypeArgumentInference.ts, 53, 23))
+>T : Symbol(T, Decl(taggedTemplateStringsTypeArgumentInference.ts, 53, 23))
+>n : Symbol(n, Decl(taggedTemplateStringsTypeArgumentInference.ts, 53, 53))
+
+var x = someGenerics8 `${ someGenerics7 }`;
+>x : Symbol(x, Decl(taggedTemplateStringsTypeArgumentInference.ts, 54, 3))
+>someGenerics8 : Symbol(someGenerics8, Decl(taggedTemplateStringsTypeArgumentInference.ts, 50, 76))
+>someGenerics7 : Symbol(someGenerics7, Decl(taggedTemplateStringsTypeArgumentInference.ts, 44, 80))
+
+x `${null}${null}${null}`;
+>x : Symbol(x, Decl(taggedTemplateStringsTypeArgumentInference.ts, 54, 3))
+
+// Generic tag with multiple parameters of generic type passed arguments with no best common type
+function someGenerics9<T>(strs: TemplateStringsArray, a: T, b: T, c: T): T {
+>someGenerics9 : Symbol(someGenerics9, Decl(taggedTemplateStringsTypeArgumentInference.ts, 55, 26))
+>T : Symbol(T, Decl(taggedTemplateStringsTypeArgumentInference.ts, 58, 23))
+>strs : Symbol(strs, Decl(taggedTemplateStringsTypeArgumentInference.ts, 58, 26))
+>TemplateStringsArray : Symbol(TemplateStringsArray, Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(taggedTemplateStringsTypeArgumentInference.ts, 58, 53))
+>T : Symbol(T, Decl(taggedTemplateStringsTypeArgumentInference.ts, 58, 23))
+>b : Symbol(b, Decl(taggedTemplateStringsTypeArgumentInference.ts, 58, 59))
+>T : Symbol(T, Decl(taggedTemplateStringsTypeArgumentInference.ts, 58, 23))
+>c : Symbol(c, Decl(taggedTemplateStringsTypeArgumentInference.ts, 58, 65))
+>T : Symbol(T, Decl(taggedTemplateStringsTypeArgumentInference.ts, 58, 23))
+>T : Symbol(T, Decl(taggedTemplateStringsTypeArgumentInference.ts, 58, 23))
+
+    return null;
+}
+var a9a = someGenerics9 `${ '' }${ 0 }${ [] }`;
+>a9a : Symbol(a9a, Decl(taggedTemplateStringsTypeArgumentInference.ts, 61, 3), Decl(taggedTemplateStringsTypeArgumentInference.ts, 62, 3))
+>someGenerics9 : Symbol(someGenerics9, Decl(taggedTemplateStringsTypeArgumentInference.ts, 55, 26))
+
+var a9a: {};
+>a9a : Symbol(a9a, Decl(taggedTemplateStringsTypeArgumentInference.ts, 61, 3), Decl(taggedTemplateStringsTypeArgumentInference.ts, 62, 3))
+
+// Generic tag with multiple parameters of generic type passed arguments with multiple best common types
+interface A91 {
+>A91 : Symbol(A91, Decl(taggedTemplateStringsTypeArgumentInference.ts, 62, 12))
+
+    x: number;
+>x : Symbol(A91.x, Decl(taggedTemplateStringsTypeArgumentInference.ts, 65, 15))
+
+    y?: string;
+>y : Symbol(A91.y, Decl(taggedTemplateStringsTypeArgumentInference.ts, 66, 14))
+}
+interface A92 {
+>A92 : Symbol(A92, Decl(taggedTemplateStringsTypeArgumentInference.ts, 68, 1))
+
+    x: number;
+>x : Symbol(A92.x, Decl(taggedTemplateStringsTypeArgumentInference.ts, 69, 15))
+
+    z?: Date;
+>z : Symbol(A92.z, Decl(taggedTemplateStringsTypeArgumentInference.ts, 70, 14))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+}
+
+var a9e = someGenerics9 `${ undefined }${ { x: 6, z: new Date() } }${ { x: 6, y: '' } }`;
+>a9e : Symbol(a9e, Decl(taggedTemplateStringsTypeArgumentInference.ts, 74, 3), Decl(taggedTemplateStringsTypeArgumentInference.ts, 75, 3))
+>someGenerics9 : Symbol(someGenerics9, Decl(taggedTemplateStringsTypeArgumentInference.ts, 55, 26))
+>undefined : Symbol(undefined)
+>x : Symbol(x, Decl(taggedTemplateStringsTypeArgumentInference.ts, 74, 43))
+>z : Symbol(z, Decl(taggedTemplateStringsTypeArgumentInference.ts, 74, 49))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>x : Symbol(x, Decl(taggedTemplateStringsTypeArgumentInference.ts, 74, 71))
+>y : Symbol(y, Decl(taggedTemplateStringsTypeArgumentInference.ts, 74, 77))
+
+var a9e: {};
+>a9e : Symbol(a9e, Decl(taggedTemplateStringsTypeArgumentInference.ts, 74, 3), Decl(taggedTemplateStringsTypeArgumentInference.ts, 75, 3))
+
+// Generic tag with multiple parameters of generic type passed arguments with a single best common type
+var a9d = someGenerics9 `${ { x: 3 }}${ { x: 6 }}${ { x: 6 } }`;
+>a9d : Symbol(a9d, Decl(taggedTemplateStringsTypeArgumentInference.ts, 78, 3), Decl(taggedTemplateStringsTypeArgumentInference.ts, 79, 3))
+>someGenerics9 : Symbol(someGenerics9, Decl(taggedTemplateStringsTypeArgumentInference.ts, 55, 26))
+>x : Symbol(x, Decl(taggedTemplateStringsTypeArgumentInference.ts, 78, 29))
+>x : Symbol(x, Decl(taggedTemplateStringsTypeArgumentInference.ts, 78, 41))
+>x : Symbol(x, Decl(taggedTemplateStringsTypeArgumentInference.ts, 78, 53))
+
+var a9d: { x: number; };
+>a9d : Symbol(a9d, Decl(taggedTemplateStringsTypeArgumentInference.ts, 78, 3), Decl(taggedTemplateStringsTypeArgumentInference.ts, 79, 3))
+>x : Symbol(x, Decl(taggedTemplateStringsTypeArgumentInference.ts, 79, 10))
+
+// Generic tag with multiple parameters of generic type where one argument is of type 'any'
+var anyVar: any;
+>anyVar : Symbol(anyVar, Decl(taggedTemplateStringsTypeArgumentInference.ts, 82, 3))
+
+var a = someGenerics9 `${ 7 }${ anyVar }${ 4 }`;
+>a : Symbol(a, Decl(taggedTemplateStringsTypeArgumentInference.ts, 83, 3), Decl(taggedTemplateStringsTypeArgumentInference.ts, 84, 3))
+>someGenerics9 : Symbol(someGenerics9, Decl(taggedTemplateStringsTypeArgumentInference.ts, 55, 26))
+>anyVar : Symbol(anyVar, Decl(taggedTemplateStringsTypeArgumentInference.ts, 82, 3))
+
+var a: any;
+>a : Symbol(a, Decl(taggedTemplateStringsTypeArgumentInference.ts, 83, 3), Decl(taggedTemplateStringsTypeArgumentInference.ts, 84, 3))
+
+// Generic tag with multiple parameters of generic type where one argument is [] and the other is not 'any'
+var arr = someGenerics9 `${ [] }${ null }${ undefined }`;
+>arr : Symbol(arr, Decl(taggedTemplateStringsTypeArgumentInference.ts, 87, 3), Decl(taggedTemplateStringsTypeArgumentInference.ts, 88, 3))
+>someGenerics9 : Symbol(someGenerics9, Decl(taggedTemplateStringsTypeArgumentInference.ts, 55, 26))
+>undefined : Symbol(undefined)
+
+var arr: any[];
+>arr : Symbol(arr, Decl(taggedTemplateStringsTypeArgumentInference.ts, 87, 3), Decl(taggedTemplateStringsTypeArgumentInference.ts, 88, 3))
+
+

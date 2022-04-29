@@ -1,0 +1,5 @@
+=== tests/cases/conformance/parser/ecmascript5/Statements/ReturnStatements/parserReturnStatement2.ts ===
+{
+No type information for this code.   return;
+No type information for this code.}
+No type information for this code.

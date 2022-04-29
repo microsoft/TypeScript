@@ -1,0 +1,4 @@
+=== tests/cases/compiler/declarationEmitArrayTypesFromGenericArrayUsage.ts ===
+interface A extends Array<string> { }
+No type information for this code.
+No type information for this code.

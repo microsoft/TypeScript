@@ -1,0 +1,193 @@
+=== tests/cases/conformance/jsdoc/functions.js ===
+/**
+ * @param {function(this: string, number): number} c is just passing on through
+ * @return {function(this: string, number): number}
+ */
+function id1(c) {
+>id1 : (c: (this: string, arg1: number) => number) => (this: string, arg1: number) => number
+>c : (this: string, arg1: number) => number
+
+    return c
+>c : (this: string, arg1: number) => number
+}
+
+var x = id1(function (n) { return this.length + n });
+>x : (this: string, arg1: number) => number
+>id1(function (n) { return this.length + n }) : (this: string, arg1: number) => number
+>id1 : (c: (this: string, arg1: number) => number) => (this: string, arg1: number) => number
+>function (n) { return this.length + n } : (this: string, n: number) => number
+>n : number
+>this.length + n : number
+>this.length : number
+>this : string
+>length : number
+>n : number
+
+/**
+ * @param {function(new: { length: number }, number): number} c is just passing on through
+ * @return {function(new: { length: number }, number): number}
+ */
+function id2(c) {
+>id2 : (c: new (arg1: number) => {    length: number;}) => new (arg1: number) => {    length: number;}
+>c : new (arg1: number) => { length: number; }
+
+    return c
+>c : new (arg1: number) => { length: number; }
+}
+
+class C {
+>C : C
+
+    /** @param {number} n */
+    constructor(n) {
+>n : number
+
+        this.length = n;
+>this.length = n : number
+>this.length : any
+>this : this
+>length : any
+>n : number
+    }
+}
+
+var y = id2(C);
+>y : new (arg1: number) => { length: number; }
+>id2(C) : new (arg1: number) => { length: number; }
+>id2 : (c: new (arg1: number) => { length: number; }) => new (arg1: number) => { length: number; }
+>C : typeof C
+
+var z = new y(12);
+>z : { length: number; }
+>new y(12) : { length: number; }
+>y : new (arg1: number) => { length: number; }
+>12 : 12
+
+z.length;
+>z.length : number
+>z : { length: number; }
+>length : number
+
+/** @type {function ("a" | "b", 1 | 2): 3 | 4} */
+var f = function (ab, onetwo) { return ab === "a" ? 3 : 4;  }
+>f : (arg0: "a" | "b", arg1: 1 | 2) => 3 | 4
+>function (ab, onetwo) { return ab === "a" ? 3 : 4;  } : (ab: "a" | "b", onetwo: 1 | 2) => 3 | 4
+>ab : "a" | "b"
+>onetwo : 1 | 2
+>ab === "a" ? 3 : 4 : 3 | 4
+>ab === "a" : boolean
+>ab : "a" | "b"
+>"a" : "a"
+>3 : 3
+>4 : 4
+
+
+/** 
+ * @constructor
+ * @param {number} n
+ */
+function D(n) {
+>D : typeof D
+>n : number
+
+  this.length = n;
+>this.length = n : number
+>this.length : any
+>this : this
+>length : any
+>n : number
+}
+
+var y2 = id2(D);
+>y2 : new (arg1: number) => { length: number; }
+>id2(D) : new (arg1: number) => { length: number; }
+>id2 : (c: new (arg1: number) => { length: number; }) => new (arg1: number) => { length: number; }
+>D : typeof D
+
+var z2 = new y2(33);
+>z2 : { length: number; }
+>new y2(33) : { length: number; }
+>y2 : new (arg1: number) => { length: number; }
+>33 : 33
+
+z2.length;
+>z2.length : number
+>z2 : { length: number; }
+>length : number
+
+
+/** 
+ * @param {function(new: D, number)} dref
+ * @return {D}
+ */
+var construct = function(dref) { return new dref(33); }
+>construct : (dref: new (arg1: number) => D) => D
+>function(dref) { return new dref(33); } : (dref: new (arg1: number) => D) => D
+>dref : new (arg1: number) => D
+>new dref(33) : D
+>dref : new (arg1: number) => D
+>33 : 33
+
+var z3 = construct(D);
+>z3 : D
+>construct(D) : D
+>construct : (dref: new (arg1: number) => D) => D
+>D : typeof D
+
+z3.length;
+>z3.length : number
+>z3 : D
+>length : number
+
+
+/** 
+ * @constructor
+ * @param {number} n
+ */
+var E = function(n) {
+>E : typeof E
+>function(n) {  this.not_length_on_purpose = n;} : typeof E
+>n : number
+
+  this.not_length_on_purpose = n;
+>this.not_length_on_purpose = n : number
+>this.not_length_on_purpose : any
+>this : this
+>not_length_on_purpose : any
+>n : number
+
+};
+
+
+var y3 = id2(E);
+>y3 : new (arg1: number) => { length: number; }
+>id2(E) : new (arg1: number) => { length: number; }
+>id2 : (c: new (arg1: number) => { length: number; }) => new (arg1: number) => { length: number; }
+>E : typeof E
+
+// Repro from #39229
+
+/**
+ * @type {(...args: [string, string] | [number, string, string]) => void}
+ */
+function foo(...args) {
+>foo : (...args: [string, string] | [number, string, string]) => void
+>args : [string, string] | [number, string, string]
+
+  args;
+>args : [string, string] | [number, string, string]
+}
+
+foo('abc', 'def');
+>foo('abc', 'def') : void
+>foo : (...args: [string, string] | [number, string, string]) => void
+>'abc' : "abc"
+>'def' : "def"
+
+foo(42, 'abc', 'def');
+>foo(42, 'abc', 'def') : void
+>foo : (...args: [string, string] | [number, string, string]) => void
+>42 : 42
+>'abc' : "abc"
+>'def' : "def"
+

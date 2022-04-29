@@ -1,0 +1,86 @@
+=== tests/cases/compiler/extractInferenceImprovement.ts ===
+// repro mostly from https://github.com/Microsoft/TypeScript/issues/25065
+function getProperty2<T, K extends keyof T>(obj: T, key: Extract<K, string>): T[K] {
+>getProperty2 : Symbol(getProperty2, Decl(extractInferenceImprovement.ts, 0, 0))
+>T : Symbol(T, Decl(extractInferenceImprovement.ts, 1, 22))
+>K : Symbol(K, Decl(extractInferenceImprovement.ts, 1, 24))
+>T : Symbol(T, Decl(extractInferenceImprovement.ts, 1, 22))
+>obj : Symbol(obj, Decl(extractInferenceImprovement.ts, 1, 44))
+>T : Symbol(T, Decl(extractInferenceImprovement.ts, 1, 22))
+>key : Symbol(key, Decl(extractInferenceImprovement.ts, 1, 51))
+>Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
+>K : Symbol(K, Decl(extractInferenceImprovement.ts, 1, 24))
+>T : Symbol(T, Decl(extractInferenceImprovement.ts, 1, 22))
+>K : Symbol(K, Decl(extractInferenceImprovement.ts, 1, 24))
+
+    return obj[key];
+>obj : Symbol(obj, Decl(extractInferenceImprovement.ts, 1, 44))
+>key : Symbol(key, Decl(extractInferenceImprovement.ts, 1, 51))
+}
+
+function getProperty3<T, K extends Extract<keyof T, string>>(obj: T, key: K): T[K] {
+>getProperty3 : Symbol(getProperty3, Decl(extractInferenceImprovement.ts, 3, 1))
+>T : Symbol(T, Decl(extractInferenceImprovement.ts, 5, 22))
+>K : Symbol(K, Decl(extractInferenceImprovement.ts, 5, 24))
+>Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(extractInferenceImprovement.ts, 5, 22))
+>obj : Symbol(obj, Decl(extractInferenceImprovement.ts, 5, 61))
+>T : Symbol(T, Decl(extractInferenceImprovement.ts, 5, 22))
+>key : Symbol(key, Decl(extractInferenceImprovement.ts, 5, 68))
+>K : Symbol(K, Decl(extractInferenceImprovement.ts, 5, 24))
+>T : Symbol(T, Decl(extractInferenceImprovement.ts, 5, 22))
+>K : Symbol(K, Decl(extractInferenceImprovement.ts, 5, 24))
+
+    return obj[key];
+>obj : Symbol(obj, Decl(extractInferenceImprovement.ts, 5, 61))
+>key : Symbol(key, Decl(extractInferenceImprovement.ts, 5, 68))
+}
+
+const s = Symbol();
+>s : Symbol(s, Decl(extractInferenceImprovement.ts, 9, 5))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+interface StrNum {
+>StrNum : Symbol(StrNum, Decl(extractInferenceImprovement.ts, 9, 19))
+
+    first: string;
+>first : Symbol(StrNum.first, Decl(extractInferenceImprovement.ts, 10, 18))
+
+    second: number;
+>second : Symbol(StrNum.second, Decl(extractInferenceImprovement.ts, 11, 18))
+
+    [s]: string;
+>[s] : Symbol(StrNum[s], Decl(extractInferenceImprovement.ts, 12, 19))
+>s : Symbol(s, Decl(extractInferenceImprovement.ts, 9, 5))
+}
+const obj: StrNum = {} as any;
+>obj : Symbol(obj, Decl(extractInferenceImprovement.ts, 15, 5))
+>StrNum : Symbol(StrNum, Decl(extractInferenceImprovement.ts, 9, 19))
+
+let prop: string;
+>prop : Symbol(prop, Decl(extractInferenceImprovement.ts, 17, 3))
+
+// should work
+prop = getProperty2(obj, 'first');
+>prop : Symbol(prop, Decl(extractInferenceImprovement.ts, 17, 3))
+>getProperty2 : Symbol(getProperty2, Decl(extractInferenceImprovement.ts, 0, 0))
+>obj : Symbol(obj, Decl(extractInferenceImprovement.ts, 15, 5))
+
+prop = getProperty3(obj, 'first');
+>prop : Symbol(prop, Decl(extractInferenceImprovement.ts, 17, 3))
+>getProperty3 : Symbol(getProperty3, Decl(extractInferenceImprovement.ts, 3, 1))
+>obj : Symbol(obj, Decl(extractInferenceImprovement.ts, 15, 5))
+
+// Should fail
+prop = getProperty2(obj, s);
+>prop : Symbol(prop, Decl(extractInferenceImprovement.ts, 17, 3))
+>getProperty2 : Symbol(getProperty2, Decl(extractInferenceImprovement.ts, 0, 0))
+>obj : Symbol(obj, Decl(extractInferenceImprovement.ts, 15, 5))
+>s : Symbol(s, Decl(extractInferenceImprovement.ts, 9, 5))
+
+prop = getProperty3(obj, s);
+>prop : Symbol(prop, Decl(extractInferenceImprovement.ts, 17, 3))
+>getProperty3 : Symbol(getProperty3, Decl(extractInferenceImprovement.ts, 3, 1))
+>obj : Symbol(obj, Decl(extractInferenceImprovement.ts, 15, 5))
+>s : Symbol(s, Decl(extractInferenceImprovement.ts, 9, 5))
+

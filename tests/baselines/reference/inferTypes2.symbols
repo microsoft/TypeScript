@@ -1,0 +1,75 @@
+=== tests/cases/conformance/types/conditional/inferTypes2.ts ===
+// Repros from #22755
+
+export declare function foo<T>(obj: T): T extends () => infer P ? P : never;
+>foo : Symbol(foo, Decl(inferTypes2.ts, 0, 0))
+>T : Symbol(T, Decl(inferTypes2.ts, 2, 28))
+>obj : Symbol(obj, Decl(inferTypes2.ts, 2, 31))
+>T : Symbol(T, Decl(inferTypes2.ts, 2, 28))
+>T : Symbol(T, Decl(inferTypes2.ts, 2, 28))
+>P : Symbol(P, Decl(inferTypes2.ts, 2, 61))
+>P : Symbol(P, Decl(inferTypes2.ts, 2, 61))
+
+export function bar<T>(obj: T) {
+>bar : Symbol(bar, Decl(inferTypes2.ts, 2, 76))
+>T : Symbol(T, Decl(inferTypes2.ts, 3, 20))
+>obj : Symbol(obj, Decl(inferTypes2.ts, 3, 23))
+>T : Symbol(T, Decl(inferTypes2.ts, 3, 20))
+
+    return foo(obj);
+>foo : Symbol(foo, Decl(inferTypes2.ts, 0, 0))
+>obj : Symbol(obj, Decl(inferTypes2.ts, 3, 23))
+}
+
+export type BadNested<T> = { x: T extends number ? T : string };
+>BadNested : Symbol(BadNested, Decl(inferTypes2.ts, 5, 1))
+>T : Symbol(T, Decl(inferTypes2.ts, 7, 22))
+>x : Symbol(x, Decl(inferTypes2.ts, 7, 28))
+>T : Symbol(T, Decl(inferTypes2.ts, 7, 22))
+>T : Symbol(T, Decl(inferTypes2.ts, 7, 22))
+
+export declare function foo2<T>(obj: T): T extends { [K in keyof BadNested<infer P>]: BadNested<infer P>[K] } ? P : never;
+>foo2 : Symbol(foo2, Decl(inferTypes2.ts, 7, 64))
+>T : Symbol(T, Decl(inferTypes2.ts, 9, 29))
+>obj : Symbol(obj, Decl(inferTypes2.ts, 9, 32))
+>T : Symbol(T, Decl(inferTypes2.ts, 9, 29))
+>T : Symbol(T, Decl(inferTypes2.ts, 9, 29))
+>K : Symbol(K, Decl(inferTypes2.ts, 9, 54))
+>BadNested : Symbol(BadNested, Decl(inferTypes2.ts, 5, 1))
+>P : Symbol(P, Decl(inferTypes2.ts, 9, 80), Decl(inferTypes2.ts, 9, 101))
+>BadNested : Symbol(BadNested, Decl(inferTypes2.ts, 5, 1))
+>P : Symbol(P, Decl(inferTypes2.ts, 9, 80), Decl(inferTypes2.ts, 9, 101))
+>K : Symbol(K, Decl(inferTypes2.ts, 9, 54))
+>P : Symbol(P, Decl(inferTypes2.ts, 9, 80), Decl(inferTypes2.ts, 9, 101))
+
+export function bar2<T>(obj: T) {
+>bar2 : Symbol(bar2, Decl(inferTypes2.ts, 9, 122))
+>T : Symbol(T, Decl(inferTypes2.ts, 10, 21))
+>obj : Symbol(obj, Decl(inferTypes2.ts, 10, 24))
+>T : Symbol(T, Decl(inferTypes2.ts, 10, 21))
+
+    return foo2(obj);
+>foo2 : Symbol(foo2, Decl(inferTypes2.ts, 7, 64))
+>obj : Symbol(obj, Decl(inferTypes2.ts, 10, 24))
+}
+
+// Repros from #31099
+
+type Weird = any extends infer U ? U : never;
+>Weird : Symbol(Weird, Decl(inferTypes2.ts, 12, 1))
+>U : Symbol(U, Decl(inferTypes2.ts, 16, 30))
+>U : Symbol(U, Decl(inferTypes2.ts, 16, 30))
+
+type AlsoWeird = unknown extends infer U ? U : never;
+>AlsoWeird : Symbol(AlsoWeird, Decl(inferTypes2.ts, 16, 45))
+>U : Symbol(U, Decl(inferTypes2.ts, 17, 38))
+>U : Symbol(U, Decl(inferTypes2.ts, 17, 38))
+
+const a: Weird = null;
+>a : Symbol(a, Decl(inferTypes2.ts, 19, 5))
+>Weird : Symbol(Weird, Decl(inferTypes2.ts, 12, 1))
+
+const b: string = a;
+>b : Symbol(b, Decl(inferTypes2.ts, 20, 5))
+>a : Symbol(a, Decl(inferTypes2.ts, 19, 5))
+

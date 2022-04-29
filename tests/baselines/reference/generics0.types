@@ -1,0 +1,15 @@
+=== tests/cases/compiler/generics0.ts ===
+interface G<T> {
+    x: T;
+>x : T
+}
+
+var v2: G<string>;
+>v2 : G<string>
+
+var z = v2.x; // 'y' should be of type 'string'
+>z : string
+>v2.x : string
+>v2 : G<string>
+>x : string
+

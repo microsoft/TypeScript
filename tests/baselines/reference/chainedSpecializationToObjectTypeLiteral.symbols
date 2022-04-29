@@ -1,0 +1,67 @@
+=== tests/cases/compiler/chainedSpecializationToObjectTypeLiteral.ts ===
+interface Sequence<T> {
+>Sequence : Symbol(Sequence, Decl(chainedSpecializationToObjectTypeLiteral.ts, 0, 0))
+>T : Symbol(T, Decl(chainedSpecializationToObjectTypeLiteral.ts, 0, 19))
+
+    each(iterator: (value: T) => void): void;
+>each : Symbol(Sequence.each, Decl(chainedSpecializationToObjectTypeLiteral.ts, 0, 23))
+>iterator : Symbol(iterator, Decl(chainedSpecializationToObjectTypeLiteral.ts, 1, 9))
+>value : Symbol(value, Decl(chainedSpecializationToObjectTypeLiteral.ts, 1, 20))
+>T : Symbol(T, Decl(chainedSpecializationToObjectTypeLiteral.ts, 0, 19))
+
+    map<U>(iterator: (value: T) => U): Sequence<U>;
+>map : Symbol(Sequence.map, Decl(chainedSpecializationToObjectTypeLiteral.ts, 1, 45))
+>U : Symbol(U, Decl(chainedSpecializationToObjectTypeLiteral.ts, 2, 8))
+>iterator : Symbol(iterator, Decl(chainedSpecializationToObjectTypeLiteral.ts, 2, 11))
+>value : Symbol(value, Decl(chainedSpecializationToObjectTypeLiteral.ts, 2, 22))
+>T : Symbol(T, Decl(chainedSpecializationToObjectTypeLiteral.ts, 0, 19))
+>U : Symbol(U, Decl(chainedSpecializationToObjectTypeLiteral.ts, 2, 8))
+>Sequence : Symbol(Sequence, Decl(chainedSpecializationToObjectTypeLiteral.ts, 0, 0))
+>U : Symbol(U, Decl(chainedSpecializationToObjectTypeLiteral.ts, 2, 8))
+
+    filter(iterator: (value: T) => boolean): Sequence<T>;
+>filter : Symbol(Sequence.filter, Decl(chainedSpecializationToObjectTypeLiteral.ts, 2, 51))
+>iterator : Symbol(iterator, Decl(chainedSpecializationToObjectTypeLiteral.ts, 3, 11))
+>value : Symbol(value, Decl(chainedSpecializationToObjectTypeLiteral.ts, 3, 22))
+>T : Symbol(T, Decl(chainedSpecializationToObjectTypeLiteral.ts, 0, 19))
+>Sequence : Symbol(Sequence, Decl(chainedSpecializationToObjectTypeLiteral.ts, 0, 0))
+>T : Symbol(T, Decl(chainedSpecializationToObjectTypeLiteral.ts, 0, 19))
+
+    groupBy<K>(keySelector: (value: T) => K): Sequence<{ key: K; items: T[]; }>;
+>groupBy : Symbol(Sequence.groupBy, Decl(chainedSpecializationToObjectTypeLiteral.ts, 3, 57))
+>K : Symbol(K, Decl(chainedSpecializationToObjectTypeLiteral.ts, 4, 12))
+>keySelector : Symbol(keySelector, Decl(chainedSpecializationToObjectTypeLiteral.ts, 4, 15))
+>value : Symbol(value, Decl(chainedSpecializationToObjectTypeLiteral.ts, 4, 29))
+>T : Symbol(T, Decl(chainedSpecializationToObjectTypeLiteral.ts, 0, 19))
+>K : Symbol(K, Decl(chainedSpecializationToObjectTypeLiteral.ts, 4, 12))
+>Sequence : Symbol(Sequence, Decl(chainedSpecializationToObjectTypeLiteral.ts, 0, 0))
+>key : Symbol(key, Decl(chainedSpecializationToObjectTypeLiteral.ts, 4, 56))
+>K : Symbol(K, Decl(chainedSpecializationToObjectTypeLiteral.ts, 4, 12))
+>items : Symbol(items, Decl(chainedSpecializationToObjectTypeLiteral.ts, 4, 64))
+>T : Symbol(T, Decl(chainedSpecializationToObjectTypeLiteral.ts, 0, 19))
+}
+
+var s: Sequence<string>;
+>s : Symbol(s, Decl(chainedSpecializationToObjectTypeLiteral.ts, 7, 3))
+>Sequence : Symbol(Sequence, Decl(chainedSpecializationToObjectTypeLiteral.ts, 0, 0))
+
+var s2 = s.groupBy(s => s.length);
+>s2 : Symbol(s2, Decl(chainedSpecializationToObjectTypeLiteral.ts, 8, 3))
+>s.groupBy : Symbol(Sequence.groupBy, Decl(chainedSpecializationToObjectTypeLiteral.ts, 3, 57))
+>s : Symbol(s, Decl(chainedSpecializationToObjectTypeLiteral.ts, 7, 3))
+>groupBy : Symbol(Sequence.groupBy, Decl(chainedSpecializationToObjectTypeLiteral.ts, 3, 57))
+>s : Symbol(s, Decl(chainedSpecializationToObjectTypeLiteral.ts, 8, 19))
+>s.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>s : Symbol(s, Decl(chainedSpecializationToObjectTypeLiteral.ts, 8, 19))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+var s3 = s2.each(x => { x.key /* Type is K, should be number */ });
+>s3 : Symbol(s3, Decl(chainedSpecializationToObjectTypeLiteral.ts, 9, 3))
+>s2.each : Symbol(Sequence.each, Decl(chainedSpecializationToObjectTypeLiteral.ts, 0, 23))
+>s2 : Symbol(s2, Decl(chainedSpecializationToObjectTypeLiteral.ts, 8, 3))
+>each : Symbol(Sequence.each, Decl(chainedSpecializationToObjectTypeLiteral.ts, 0, 23))
+>x : Symbol(x, Decl(chainedSpecializationToObjectTypeLiteral.ts, 9, 17))
+>x.key : Symbol(key, Decl(chainedSpecializationToObjectTypeLiteral.ts, 4, 56))
+>x : Symbol(x, Decl(chainedSpecializationToObjectTypeLiteral.ts, 9, 17))
+>key : Symbol(key, Decl(chainedSpecializationToObjectTypeLiteral.ts, 4, 56))
+

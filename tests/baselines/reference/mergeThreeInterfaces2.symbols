@@ -1,0 +1,176 @@
+=== tests/cases/conformance/interfaces/declarationMerging/mergeThreeInterfaces2.ts ===
+// two interfaces with the same root module should merge
+
+// root module now multiple module declarations
+module M2 {
+>M2 : Symbol(M2, Decl(mergeThreeInterfaces2.ts, 0, 0), Decl(mergeThreeInterfaces2.ts, 11, 1), Decl(mergeThreeInterfaces2.ts, 26, 1), Decl(mergeThreeInterfaces2.ts, 39, 1), Decl(mergeThreeInterfaces2.ts, 53, 1))
+
+    export interface A {
+>A : Symbol(A, Decl(mergeThreeInterfaces2.ts, 3, 11), Decl(mergeThreeInterfaces2.ts, 13, 11), Decl(mergeThreeInterfaces2.ts, 16, 5))
+
+        foo: string;
+>foo : Symbol(A.foo, Decl(mergeThreeInterfaces2.ts, 4, 24))
+    }
+
+    var a: A;
+>a : Symbol(a, Decl(mergeThreeInterfaces2.ts, 8, 7))
+>A : Symbol(A, Decl(mergeThreeInterfaces2.ts, 3, 11), Decl(mergeThreeInterfaces2.ts, 13, 11), Decl(mergeThreeInterfaces2.ts, 16, 5))
+
+    var r1 = a.foo;
+>r1 : Symbol(r1, Decl(mergeThreeInterfaces2.ts, 9, 7))
+>a.foo : Symbol(A.foo, Decl(mergeThreeInterfaces2.ts, 4, 24))
+>a : Symbol(a, Decl(mergeThreeInterfaces2.ts, 8, 7))
+>foo : Symbol(A.foo, Decl(mergeThreeInterfaces2.ts, 4, 24))
+
+    var r2 = a.bar;
+>r2 : Symbol(r2, Decl(mergeThreeInterfaces2.ts, 10, 7))
+>a.bar : Symbol(A.bar, Decl(mergeThreeInterfaces2.ts, 14, 24))
+>a : Symbol(a, Decl(mergeThreeInterfaces2.ts, 8, 7))
+>bar : Symbol(A.bar, Decl(mergeThreeInterfaces2.ts, 14, 24))
+}
+
+module M2 {
+>M2 : Symbol(M2, Decl(mergeThreeInterfaces2.ts, 0, 0), Decl(mergeThreeInterfaces2.ts, 11, 1), Decl(mergeThreeInterfaces2.ts, 26, 1), Decl(mergeThreeInterfaces2.ts, 39, 1), Decl(mergeThreeInterfaces2.ts, 53, 1))
+
+    export interface A {
+>A : Symbol(A, Decl(mergeThreeInterfaces2.ts, 3, 11), Decl(mergeThreeInterfaces2.ts, 13, 11), Decl(mergeThreeInterfaces2.ts, 16, 5))
+
+        bar: number;
+>bar : Symbol(A.bar, Decl(mergeThreeInterfaces2.ts, 14, 24))
+    }
+
+    export interface A {
+>A : Symbol(A, Decl(mergeThreeInterfaces2.ts, 3, 11), Decl(mergeThreeInterfaces2.ts, 13, 11), Decl(mergeThreeInterfaces2.ts, 16, 5))
+
+        baz: boolean;
+>baz : Symbol(A.baz, Decl(mergeThreeInterfaces2.ts, 18, 24))
+    }
+
+    var a: A;
+>a : Symbol(a, Decl(mergeThreeInterfaces2.ts, 22, 7))
+>A : Symbol(A, Decl(mergeThreeInterfaces2.ts, 3, 11), Decl(mergeThreeInterfaces2.ts, 13, 11), Decl(mergeThreeInterfaces2.ts, 16, 5))
+
+    var r1 = a.foo;
+>r1 : Symbol(r1, Decl(mergeThreeInterfaces2.ts, 23, 7))
+>a.foo : Symbol(A.foo, Decl(mergeThreeInterfaces2.ts, 4, 24))
+>a : Symbol(a, Decl(mergeThreeInterfaces2.ts, 22, 7))
+>foo : Symbol(A.foo, Decl(mergeThreeInterfaces2.ts, 4, 24))
+
+    var r2 = a.bar;
+>r2 : Symbol(r2, Decl(mergeThreeInterfaces2.ts, 24, 7))
+>a.bar : Symbol(A.bar, Decl(mergeThreeInterfaces2.ts, 14, 24))
+>a : Symbol(a, Decl(mergeThreeInterfaces2.ts, 22, 7))
+>bar : Symbol(A.bar, Decl(mergeThreeInterfaces2.ts, 14, 24))
+
+    var r3 = a.baz; 
+>r3 : Symbol(r3, Decl(mergeThreeInterfaces2.ts, 25, 7))
+>a.baz : Symbol(A.baz, Decl(mergeThreeInterfaces2.ts, 18, 24))
+>a : Symbol(a, Decl(mergeThreeInterfaces2.ts, 22, 7))
+>baz : Symbol(A.baz, Decl(mergeThreeInterfaces2.ts, 18, 24))
+}
+
+// same as above but with an additional level of nesting and third module declaration
+module M2 {
+>M2 : Symbol(M2, Decl(mergeThreeInterfaces2.ts, 0, 0), Decl(mergeThreeInterfaces2.ts, 11, 1), Decl(mergeThreeInterfaces2.ts, 26, 1), Decl(mergeThreeInterfaces2.ts, 39, 1), Decl(mergeThreeInterfaces2.ts, 53, 1))
+
+    export module M3 {
+>M3 : Symbol(M3, Decl(mergeThreeInterfaces2.ts, 29, 11), Decl(mergeThreeInterfaces2.ts, 41, 11), Decl(mergeThreeInterfaces2.ts, 55, 11))
+
+        export interface A {
+>A : Symbol(A, Decl(mergeThreeInterfaces2.ts, 30, 22), Decl(mergeThreeInterfaces2.ts, 42, 22), Decl(mergeThreeInterfaces2.ts, 56, 22))
+
+            foo: string;
+>foo : Symbol(A.foo, Decl(mergeThreeInterfaces2.ts, 31, 28))
+        }
+
+        var a: A;
+>a : Symbol(a, Decl(mergeThreeInterfaces2.ts, 35, 11))
+>A : Symbol(A, Decl(mergeThreeInterfaces2.ts, 30, 22), Decl(mergeThreeInterfaces2.ts, 42, 22), Decl(mergeThreeInterfaces2.ts, 56, 22))
+
+        var r1 = a.foo;
+>r1 : Symbol(r1, Decl(mergeThreeInterfaces2.ts, 36, 11))
+>a.foo : Symbol(A.foo, Decl(mergeThreeInterfaces2.ts, 31, 28))
+>a : Symbol(a, Decl(mergeThreeInterfaces2.ts, 35, 11))
+>foo : Symbol(A.foo, Decl(mergeThreeInterfaces2.ts, 31, 28))
+
+        var r2 = a.bar;
+>r2 : Symbol(r2, Decl(mergeThreeInterfaces2.ts, 37, 11))
+>a.bar : Symbol(A.bar, Decl(mergeThreeInterfaces2.ts, 43, 28))
+>a : Symbol(a, Decl(mergeThreeInterfaces2.ts, 35, 11))
+>bar : Symbol(A.bar, Decl(mergeThreeInterfaces2.ts, 43, 28))
+    }
+}
+
+module M2 {
+>M2 : Symbol(M2, Decl(mergeThreeInterfaces2.ts, 0, 0), Decl(mergeThreeInterfaces2.ts, 11, 1), Decl(mergeThreeInterfaces2.ts, 26, 1), Decl(mergeThreeInterfaces2.ts, 39, 1), Decl(mergeThreeInterfaces2.ts, 53, 1))
+
+    export module M3 {
+>M3 : Symbol(M3, Decl(mergeThreeInterfaces2.ts, 29, 11), Decl(mergeThreeInterfaces2.ts, 41, 11), Decl(mergeThreeInterfaces2.ts, 55, 11))
+
+        export interface A {
+>A : Symbol(A, Decl(mergeThreeInterfaces2.ts, 30, 22), Decl(mergeThreeInterfaces2.ts, 42, 22), Decl(mergeThreeInterfaces2.ts, 56, 22))
+
+            bar: number;
+>bar : Symbol(A.bar, Decl(mergeThreeInterfaces2.ts, 43, 28))
+        }
+
+        var a: A;
+>a : Symbol(a, Decl(mergeThreeInterfaces2.ts, 47, 11))
+>A : Symbol(A, Decl(mergeThreeInterfaces2.ts, 30, 22), Decl(mergeThreeInterfaces2.ts, 42, 22), Decl(mergeThreeInterfaces2.ts, 56, 22))
+
+        var r1 = a.foo
+>r1 : Symbol(r1, Decl(mergeThreeInterfaces2.ts, 49, 11))
+>a.foo : Symbol(A.foo, Decl(mergeThreeInterfaces2.ts, 31, 28))
+>a : Symbol(a, Decl(mergeThreeInterfaces2.ts, 47, 11))
+>foo : Symbol(A.foo, Decl(mergeThreeInterfaces2.ts, 31, 28))
+
+        var r2 = a.bar;
+>r2 : Symbol(r2, Decl(mergeThreeInterfaces2.ts, 50, 11))
+>a.bar : Symbol(A.bar, Decl(mergeThreeInterfaces2.ts, 43, 28))
+>a : Symbol(a, Decl(mergeThreeInterfaces2.ts, 47, 11))
+>bar : Symbol(A.bar, Decl(mergeThreeInterfaces2.ts, 43, 28))
+
+        var r3 = a.baz;
+>r3 : Symbol(r3, Decl(mergeThreeInterfaces2.ts, 51, 11))
+>a.baz : Symbol(A.baz, Decl(mergeThreeInterfaces2.ts, 57, 28))
+>a : Symbol(a, Decl(mergeThreeInterfaces2.ts, 47, 11))
+>baz : Symbol(A.baz, Decl(mergeThreeInterfaces2.ts, 57, 28))
+    }
+}
+
+module M2 {
+>M2 : Symbol(M2, Decl(mergeThreeInterfaces2.ts, 0, 0), Decl(mergeThreeInterfaces2.ts, 11, 1), Decl(mergeThreeInterfaces2.ts, 26, 1), Decl(mergeThreeInterfaces2.ts, 39, 1), Decl(mergeThreeInterfaces2.ts, 53, 1))
+
+    export module M3 {
+>M3 : Symbol(M3, Decl(mergeThreeInterfaces2.ts, 29, 11), Decl(mergeThreeInterfaces2.ts, 41, 11), Decl(mergeThreeInterfaces2.ts, 55, 11))
+
+        export interface A {
+>A : Symbol(A, Decl(mergeThreeInterfaces2.ts, 30, 22), Decl(mergeThreeInterfaces2.ts, 42, 22), Decl(mergeThreeInterfaces2.ts, 56, 22))
+
+            baz: boolean;
+>baz : Symbol(A.baz, Decl(mergeThreeInterfaces2.ts, 57, 28))
+        }
+
+        var a: A;
+>a : Symbol(a, Decl(mergeThreeInterfaces2.ts, 61, 11))
+>A : Symbol(A, Decl(mergeThreeInterfaces2.ts, 30, 22), Decl(mergeThreeInterfaces2.ts, 42, 22), Decl(mergeThreeInterfaces2.ts, 56, 22))
+
+        var r1 = a.foo
+>r1 : Symbol(r1, Decl(mergeThreeInterfaces2.ts, 62, 11))
+>a.foo : Symbol(A.foo, Decl(mergeThreeInterfaces2.ts, 31, 28))
+>a : Symbol(a, Decl(mergeThreeInterfaces2.ts, 61, 11))
+>foo : Symbol(A.foo, Decl(mergeThreeInterfaces2.ts, 31, 28))
+
+        var r2 = a.bar;
+>r2 : Symbol(r2, Decl(mergeThreeInterfaces2.ts, 63, 11))
+>a.bar : Symbol(A.bar, Decl(mergeThreeInterfaces2.ts, 43, 28))
+>a : Symbol(a, Decl(mergeThreeInterfaces2.ts, 61, 11))
+>bar : Symbol(A.bar, Decl(mergeThreeInterfaces2.ts, 43, 28))
+
+        var r3 = a.baz;
+>r3 : Symbol(r3, Decl(mergeThreeInterfaces2.ts, 64, 11))
+>a.baz : Symbol(A.baz, Decl(mergeThreeInterfaces2.ts, 57, 28))
+>a : Symbol(a, Decl(mergeThreeInterfaces2.ts, 61, 11))
+>baz : Symbol(A.baz, Decl(mergeThreeInterfaces2.ts, 57, 28))
+    }
+}

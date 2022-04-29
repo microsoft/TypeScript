@@ -1,0 +1,10 @@
+=== tests/cases/conformance/parser/ecmascript5/RegressionTests/parser630933.ts ===
+var a = "Hello";
+>a : Symbol(a, Decl(parser630933.ts, 0, 3))
+
+var b = a.match(/\/ver=([^/]+)/);
+>b : Symbol(b, Decl(parser630933.ts, 1, 3))
+>a.match : Symbol(String.match, Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(parser630933.ts, 0, 3))
+>match : Symbol(String.match, Decl(lib.es5.d.ts, --, --))
+

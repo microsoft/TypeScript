@@ -1,0 +1,156 @@
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality2.ts(33,5): error TS2559: Type 'D' has no properties in common with type 'C'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality2.ts(34,5): error TS2559: Type 'E' has no properties in common with type 'C'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality2.ts(35,5): error TS2559: Type 'F' has no properties in common with type 'C'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality2.ts(36,5): error TS2559: Type 'D' has no properties in common with type '{ opt?: Base; }'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality2.ts(37,5): error TS2559: Type 'E' has no properties in common with type '{ opt?: Base; }'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality2.ts(38,5): error TS2559: Type 'F' has no properties in common with type '{ opt?: Base; }'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality2.ts(39,5): error TS2559: Type 'D' has no properties in common with type '{ opt?: Base; }'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality2.ts(40,5): error TS2559: Type 'E' has no properties in common with type '{ opt?: Base; }'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality2.ts(41,5): error TS2559: Type 'F' has no properties in common with type '{ opt?: Base; }'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality2.ts(74,5): error TS2741: Property 'opt' is missing in type 'D' but required in type 'C'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality2.ts(75,5): error TS2741: Property 'opt' is missing in type 'E' but required in type 'C'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality2.ts(76,5): error TS2741: Property 'opt' is missing in type 'F' but required in type 'C'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality2.ts(79,5): error TS2741: Property 'opt' is missing in type 'D' but required in type '{ opt: Base; }'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality2.ts(80,5): error TS2741: Property 'opt' is missing in type 'E' but required in type '{ opt: Base; }'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality2.ts(81,5): error TS2741: Property 'opt' is missing in type 'F' but required in type '{ opt: Base; }'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality2.ts(84,5): error TS2741: Property 'opt' is missing in type 'D' but required in type '{ opt: Base; }'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality2.ts(85,5): error TS2741: Property 'opt' is missing in type 'E' but required in type '{ opt: Base; }'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality2.ts(86,5): error TS2741: Property 'opt' is missing in type 'F' but required in type '{ opt: Base; }'.
+
+
+==== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality2.ts (18 errors) ====
+    // M is optional and S contains no property with the same name as M
+    // N is optional and T contains no property with the same name as N
+    
+    class Base { foo: string; }
+    class Derived extends Base { bar: string; }
+    class Derived2 extends Derived { baz: string; }
+    
+    module TargetHasOptional {
+        // targets
+        interface C {
+            opt?: Base
+        }
+        var c: C;
+    
+        var a: { opt?: Base; }
+        var b: typeof a = { opt: new Base() }
+    
+        // sources
+        interface D {
+            other: Base;
+        }
+        interface E {
+            other: Derived;
+        }
+        interface F {
+            other?: Derived;
+        }
+        var d: D;
+        var e: E;
+        var f: F;
+    
+        // disallowed by weak type checking
+        c = d;
+        ~
+!!! error TS2559: Type 'D' has no properties in common with type 'C'.
+        c = e;
+        ~
+!!! error TS2559: Type 'E' has no properties in common with type 'C'.
+        c = f;
+        ~
+!!! error TS2559: Type 'F' has no properties in common with type 'C'.
+        a = d;
+        ~
+!!! error TS2559: Type 'D' has no properties in common with type '{ opt?: Base; }'.
+        a = e;
+        ~
+!!! error TS2559: Type 'E' has no properties in common with type '{ opt?: Base; }'.
+        a = f;
+        ~
+!!! error TS2559: Type 'F' has no properties in common with type '{ opt?: Base; }'.
+        b = d;
+        ~
+!!! error TS2559: Type 'D' has no properties in common with type '{ opt?: Base; }'.
+        b = e;
+        ~
+!!! error TS2559: Type 'E' has no properties in common with type '{ opt?: Base; }'.
+        b = f;
+        ~
+!!! error TS2559: Type 'F' has no properties in common with type '{ opt?: Base; }'.
+    
+        // ok
+        c = a;
+        a = c;
+        b = a;
+        b = c;
+    }
+    
+    module SourceHasOptional {
+        // targets
+        interface C {
+            opt: Base
+        }
+        var c: C;
+    
+        var a: { opt: Base; }
+        var b = { opt: new Base() }
+    
+        // sources
+        interface D {
+            other?: Base;
+        }
+        interface E {
+            other?: Derived;
+        }
+        interface F {
+            other: Derived;
+        }
+        var d: D;
+        var e: E;
+        var f: F;
+    
+        c = d; // error
+        ~
+!!! error TS2741: Property 'opt' is missing in type 'D' but required in type 'C'.
+!!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality2.ts:53:9: 'opt' is declared here.
+        c = e; // error
+        ~
+!!! error TS2741: Property 'opt' is missing in type 'E' but required in type 'C'.
+!!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality2.ts:53:9: 'opt' is declared here.
+        c = f; // error
+        ~
+!!! error TS2741: Property 'opt' is missing in type 'F' but required in type 'C'.
+!!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality2.ts:53:9: 'opt' is declared here.
+        c = a; // ok
+    
+        a = d; // error
+        ~
+!!! error TS2741: Property 'opt' is missing in type 'D' but required in type '{ opt: Base; }'.
+!!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality2.ts:57:14: 'opt' is declared here.
+        a = e; // error
+        ~
+!!! error TS2741: Property 'opt' is missing in type 'E' but required in type '{ opt: Base; }'.
+!!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality2.ts:57:14: 'opt' is declared here.
+        a = f; // error
+        ~
+!!! error TS2741: Property 'opt' is missing in type 'F' but required in type '{ opt: Base; }'.
+!!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality2.ts:57:14: 'opt' is declared here.
+        a = c; // ok
+    
+        b = d; // error
+        ~
+!!! error TS2741: Property 'opt' is missing in type 'D' but required in type '{ opt: Base; }'.
+!!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality2.ts:58:15: 'opt' is declared here.
+        b = e; // error
+        ~
+!!! error TS2741: Property 'opt' is missing in type 'E' but required in type '{ opt: Base; }'.
+!!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality2.ts:58:15: 'opt' is declared here.
+        b = f; // error
+        ~
+!!! error TS2741: Property 'opt' is missing in type 'F' but required in type '{ opt: Base; }'.
+!!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality2.ts:58:15: 'opt' is declared here.
+        b = a; // ok
+        b = c; // ok
+    }
+    

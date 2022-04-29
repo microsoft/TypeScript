@@ -1,0 +1,20 @@
+tests/cases/compiler/multipleExports.ts(9,5): error TS1194: Export declarations are not permitted in a namespace.
+tests/cases/compiler/multipleExports.ts(9,13): error TS2484: Export declaration conflicts with exported declaration of 'x'.
+
+
+==== tests/cases/compiler/multipleExports.ts (2 errors) ====
+    export module M {
+        export var v = 0;
+        export let x;
+    }
+    
+    const x = 0;
+    export module M {
+        v;
+        export {x};
+        ~~~~~~~~~~~
+!!! error TS1194: Export declarations are not permitted in a namespace.
+                ~
+!!! error TS2484: Export declaration conflicts with exported declaration of 'x'.
+    }
+    

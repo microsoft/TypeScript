@@ -1,0 +1,96 @@
+=== tests/cases/compiler/index.ts ===
+/// <reference path="declarations.d.ts" />
+import fooBar from "foobar";
+>fooBar : Symbol(fooBar, Decl(index.ts, 1, 6))
+
+import X = fooBar.X;
+>X : Symbol(X, Decl(index.ts, 1, 28))
+>fooBar : Symbol(fooBar, Decl(index.ts, 1, 6))
+>X : Symbol(fooBar.X, Decl(declarations.d.ts, 2, 27), Decl(declarations.d.ts, 4, 16))
+
+import X2 from "foobarx";
+>X2 : Symbol(X2, Decl(index.ts, 3, 6))
+
+const x: X = X;
+>x : Symbol(x, Decl(index.ts, 4, 5))
+>X : Symbol(X, Decl(index.ts, 1, 28))
+>X : Symbol(X, Decl(index.ts, 1, 28))
+
+const x2: X2 = X2;
+>x2 : Symbol(x2, Decl(index.ts, 5, 5))
+>X2 : Symbol(X2, Decl(index.ts, 3, 6))
+>X2 : Symbol(X2, Decl(index.ts, 3, 6))
+
+import B from "./a";
+>B : Symbol(B, Decl(index.ts, 7, 6))
+
+const b: B = new B(B.b);
+>b : Symbol(b, Decl(index.ts, 8, 5))
+>B : Symbol(B, Decl(index.ts, 7, 6))
+>B : Symbol(B, Decl(index.ts, 7, 6))
+>B.b : Symbol(B.b, Decl(a.ts, 2, 37))
+>B : Symbol(B, Decl(index.ts, 7, 6))
+>b : Symbol(B.b, Decl(a.ts, 2, 37))
+
+import fooLength from "./b";
+>fooLength : Symbol(fooLength, Decl(index.ts, 10, 6))
+
+fooLength + 1;
+>fooLength : Symbol(fooLength, Decl(index.ts, 10, 6))
+
+=== tests/cases/compiler/declarations.d.ts ===
+// This test is just like exportEqualsProperty, but with `export default`.
+
+declare namespace foo.bar {
+>foo : Symbol(foo, Decl(declarations.d.ts, 0, 0))
+>bar : Symbol(bar, Decl(declarations.d.ts, 2, 22))
+
+    export type X = number;
+>X : Symbol(X, Decl(declarations.d.ts, 2, 27), Decl(declarations.d.ts, 4, 16))
+
+    export const X: number;
+>X : Symbol(X, Decl(declarations.d.ts, 2, 27), Decl(declarations.d.ts, 4, 16))
+}
+
+declare module "foobar" {
+>"foobar" : Symbol("foobar", Decl(declarations.d.ts, 5, 1))
+
+    export default foo.bar;
+>foo.bar : Symbol(foo.bar, Decl(declarations.d.ts, 2, 22))
+>foo : Symbol(foo, Decl(declarations.d.ts, 0, 0))
+>bar : Symbol(foo.bar, Decl(declarations.d.ts, 2, 22))
+}
+
+declare module "foobarx" {
+>"foobarx" : Symbol("foobarx", Decl(declarations.d.ts, 9, 1))
+
+    export default foo.bar.X;
+>foo.bar.X : Symbol(foo.bar.X, Decl(declarations.d.ts, 2, 27), Decl(declarations.d.ts, 4, 16))
+>foo.bar : Symbol(foo.bar, Decl(declarations.d.ts, 2, 22))
+>foo : Symbol(foo, Decl(declarations.d.ts, 0, 0))
+>bar : Symbol(foo.bar, Decl(declarations.d.ts, 2, 22))
+>X : Symbol(foo.bar.X, Decl(declarations.d.ts, 2, 27), Decl(declarations.d.ts, 4, 16))
+}
+
+=== tests/cases/compiler/a.ts ===
+namespace A {
+>A : Symbol(A, Decl(a.ts, 0, 0))
+
+    export class B { constructor(b: number) {} }
+>B : Symbol(B, Decl(a.ts, 0, 13), Decl(a.ts, 1, 48))
+>b : Symbol(b, Decl(a.ts, 1, 33))
+
+    export namespace B { export const b: number = 0; }
+>B : Symbol(B, Decl(a.ts, 0, 13), Decl(a.ts, 1, 48))
+>b : Symbol(b, Decl(a.ts, 2, 37))
+}
+export default A.B;
+>A.B : Symbol(A.B, Decl(a.ts, 0, 13), Decl(a.ts, 1, 48))
+>A : Symbol(A, Decl(a.ts, 0, 0))
+>B : Symbol(A.B, Decl(a.ts, 0, 13), Decl(a.ts, 1, 48))
+
+=== tests/cases/compiler/b.ts ===
+export default "foo".length;
+>"foo".length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+

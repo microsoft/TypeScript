@@ -1,0 +1,29 @@
+=== tests/cases/compiler/systemModule10_ES5.ts ===
+import n, {x} from 'file1'
+>n : Symbol(n, Decl(systemModule10_ES5.ts, 0, 6))
+>x : Symbol(x, Decl(systemModule10_ES5.ts, 0, 11))
+
+import n2 = require('file2');
+>n2 : Symbol(n2, Decl(systemModule10_ES5.ts, 0, 26))
+
+export {x}
+>x : Symbol(x, Decl(systemModule10_ES5.ts, 2, 8))
+
+export {x as y}
+>x : Symbol(x, Decl(systemModule10_ES5.ts, 0, 11))
+>y : Symbol(y, Decl(systemModule10_ES5.ts, 3, 8))
+
+export {n}
+>n : Symbol(n, Decl(systemModule10_ES5.ts, 4, 8))
+
+export {n as n1}
+>n : Symbol(n, Decl(systemModule10_ES5.ts, 0, 6))
+>n1 : Symbol(n1, Decl(systemModule10_ES5.ts, 5, 8))
+
+export {n2}
+>n2 : Symbol(n2, Decl(systemModule10_ES5.ts, 6, 8))
+
+export {n2 as n3}
+>n2 : Symbol(n2, Decl(systemModule10_ES5.ts, 0, 26))
+>n3 : Symbol(n3, Decl(systemModule10_ES5.ts, 7, 8))
+

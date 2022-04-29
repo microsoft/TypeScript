@@ -1,0 +1,14 @@
+=== /a.ts ===
+import type { B } from './b';
+>B : any
+
+export type A = B;
+>A : any
+
+=== /b.ts ===
+import type { A } from './a';
+>A : any
+
+export type B = A;
+>B : any
+

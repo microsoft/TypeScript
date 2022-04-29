@@ -1,0 +1,19 @@
+=== tests/cases/compiler/stradac.ts ===
+var x = 10;
+>x : number
+>10 : 10
+
+// C++-style comment
+
+/*
+    C-Style comment
+    */
+    
+    
+function foo() {
+>foo : () => void
+
+    x++;
+>x++ : number
+>x : number
+}

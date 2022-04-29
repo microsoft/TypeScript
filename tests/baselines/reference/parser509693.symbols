@@ -1,0 +1,3 @@
+=== tests/cases/conformance/parser/ecmascript5/RegressionTests/parser509693.ts ===
+if (!module.exports) module.exports = "";
+No type information for this code.

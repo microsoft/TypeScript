@@ -1,0 +1,15 @@
+=== tests/cases/conformance/parser/ecmascript5/Generics/parserAmbiguityWithBinaryOperator4.ts ===
+function g() {
+>g : Symbol(g, Decl(parserAmbiguityWithBinaryOperator4.ts, 0, 0))
+
+    var a, b, c;
+>a : Symbol(a, Decl(parserAmbiguityWithBinaryOperator4.ts, 1, 7))
+>b : Symbol(b, Decl(parserAmbiguityWithBinaryOperator4.ts, 1, 10))
+>c : Symbol(c, Decl(parserAmbiguityWithBinaryOperator4.ts, 1, 13))
+
+    if (a<b, b>(c + 1)) { }
+>a : Symbol(a, Decl(parserAmbiguityWithBinaryOperator4.ts, 1, 7))
+>b : Symbol(b)
+>b : Symbol(b)
+>c : Symbol(c, Decl(parserAmbiguityWithBinaryOperator4.ts, 1, 13))
+}

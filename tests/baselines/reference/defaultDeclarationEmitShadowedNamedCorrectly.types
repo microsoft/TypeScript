@@ -1,0 +1,45 @@
+=== tests/cases/compiler/this.ts ===
+import * as me from "./this";
+>me : typeof me
+
+export interface Things<P, T> {
+    p: P;
+>p : P
+
+    t: T;
+>t : T
+}
+export function make<P, CTor>(x: { new (): CTor & {props: P} }): Things<P, CTor> {
+>make : <P, CTor>(x: {    new (): CTor & {        props: P;    };}) => Things<P, CTor>
+>x : new () => CTor & {    props: P;}
+>props : P
+
+    return null as any;
+>null as any : any
+>null : null
+}
+
+export interface Props {
+}
+
+export default class MyComponent {
+>MyComponent : me.default
+
+    props: Props;
+>props : me.Props
+}
+export namespace Something {
+>Something : typeof me.Something
+
+    let MyComponent = 2; // Shadow declaration, so symbol is only usable via the self-import
+>MyComponent : number
+>2 : 2
+
+    export const create = make(me.default);
+>create : me.Things<me.Props, me.default>
+>make(me.default) : me.Things<me.Props, me.default>
+>make : <P, CTor>(x: new () => CTor & { props: P; }) => me.Things<P, CTor>
+>me.default : typeof me.default
+>me : typeof me
+>default : typeof me.default
+}

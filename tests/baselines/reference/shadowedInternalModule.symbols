@@ -1,0 +1,71 @@
+=== tests/cases/conformance/internalModules/importDeclarations/shadowedInternalModule.ts ===
+// all errors imported modules conflict with local variables
+
+module A {
+>A : Symbol(A, Decl(shadowedInternalModule.ts, 0, 0))
+
+    export var Point = { x: 0, y: 0 }
+>Point : Symbol(Point, Decl(shadowedInternalModule.ts, 3, 14), Decl(shadowedInternalModule.ts, 3, 37))
+>x : Symbol(x, Decl(shadowedInternalModule.ts, 3, 24))
+>y : Symbol(y, Decl(shadowedInternalModule.ts, 3, 30))
+
+    export interface Point {
+>Point : Symbol(Point, Decl(shadowedInternalModule.ts, 3, 14), Decl(shadowedInternalModule.ts, 3, 37))
+
+        x: number;
+>x : Symbol(Point.x, Decl(shadowedInternalModule.ts, 4, 28))
+
+        y: number;
+>y : Symbol(Point.y, Decl(shadowedInternalModule.ts, 5, 18))
+    }
+} 
+
+module B {
+>B : Symbol(B, Decl(shadowedInternalModule.ts, 8, 1))
+
+    var A = { x: 0, y: 0 };
+>A : Symbol(A, Decl(shadowedInternalModule.ts, 11, 7))
+>x : Symbol(x, Decl(shadowedInternalModule.ts, 11, 13))
+>y : Symbol(y, Decl(shadowedInternalModule.ts, 11, 19))
+
+    import Point = A;
+>Point : Symbol(Point, Decl(shadowedInternalModule.ts, 11, 27))
+>A : Symbol(Point, Decl(shadowedInternalModule.ts, 0, 0))
+}
+
+module X {
+>X : Symbol(X, Decl(shadowedInternalModule.ts, 13, 1))
+
+    export module Y {
+>Y : Symbol(Y, Decl(shadowedInternalModule.ts, 15, 10), Decl(shadowedInternalModule.ts, 21, 5))
+
+        export interface Point{
+>Point : Symbol(Point, Decl(shadowedInternalModule.ts, 16, 21))
+
+            x: number;
+>x : Symbol(Point.x, Decl(shadowedInternalModule.ts, 17, 31))
+
+            y: number
+>y : Symbol(Point.y, Decl(shadowedInternalModule.ts, 18, 22))
+        }
+    }
+
+    export class Y {
+>Y : Symbol(Y, Decl(shadowedInternalModule.ts, 15, 10), Decl(shadowedInternalModule.ts, 21, 5))
+
+        name: string;
+>name : Symbol(Y.name, Decl(shadowedInternalModule.ts, 23, 20))
+    }
+}
+
+module Z {
+>Z : Symbol(Z, Decl(shadowedInternalModule.ts, 26, 1))
+
+    import Y = X.Y;
+>Y : Symbol(Y, Decl(shadowedInternalModule.ts, 28, 10), Decl(shadowedInternalModule.ts, 31, 7))
+>X : Symbol(X, Decl(shadowedInternalModule.ts, 13, 1))
+>Y : Symbol(Y, Decl(shadowedInternalModule.ts, 15, 10), Decl(shadowedInternalModule.ts, 21, 5))
+
+    var Y = 12;
+>Y : Symbol(Y, Decl(shadowedInternalModule.ts, 28, 10), Decl(shadowedInternalModule.ts, 31, 7))
+}

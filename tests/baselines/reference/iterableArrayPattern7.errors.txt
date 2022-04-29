@@ -1,0 +1,23 @@
+tests/cases/conformance/es6/destructuring/iterableArrayPattern7.ts(17,5): error TS2740: Type 'Foo' is missing the following properties from type 'string[]': length, pop, push, concat, and 25 more.
+
+
+==== tests/cases/conformance/es6/destructuring/iterableArrayPattern7.ts (1 errors) ====
+    class Bar { x }
+    class Foo extends Bar { y }
+    class FooIterator {
+        next() {
+            return {
+                value: new Foo,
+                done: false
+            };
+        }
+    
+        [Symbol.iterator]() {
+            return this;
+        }
+    }
+    
+    var a: Bar, b: string[];
+    [a, b] = new FooIterator;
+        ~
+!!! error TS2740: Type 'Foo' is missing the following properties from type 'string[]': length, pop, push, concat, and 25 more.

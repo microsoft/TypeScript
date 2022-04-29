@@ -1,0 +1,7 @@
+tests/cases/compiler/propertyAccess5.ts(1,1): error TS2532: Object is possibly 'undefined'.
+
+
+==== tests/cases/compiler/propertyAccess5.ts (1 errors) ====
+    undefined.toBAZ();
+    ~~~~~~~~~
+!!! error TS2532: Object is possibly 'undefined'.

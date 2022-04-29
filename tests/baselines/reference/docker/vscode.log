@@ -1,0 +1,24 @@
+Exit Code: 1
+Standard output:
+yarn run vX.X.X
+$ node --max_old_space_size=4095 ./node_modules/gulp/bin/gulp.js compile
+[XX:XX:XX] Using gulpfile /vscode/gulpfile.js
+[XX:XX:XX] Error: /vscode/extensions/html-language-features/server/src/modes/javascriptMode.ts(130,4): Unused '@ts-expect-error' directive.
+info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this command.
+
+
+
+Standard error:
+(node:18) [DEP0097] DeprecationWarning: Using a domain property in MakeCallback is deprecated. Use the async_context variant of MakeCallback or the AsyncResource class instead.
+[XX:XX:XX] 'compile' errored after 
+[XX:XX:XX] Error: Found 1 errors
+    at Stream.<anonymous> (/vscode/build/lib/reporter.js:91:29)
+    at _end (/vscode/node_modules/through/index.js:65:9)
+    at Stream.stream.end (/vscode/node_modules/through/index.js:74:5)
+    at StreamFilter.onend (/vscode/node_modules/readable-stream/lib/_stream_readable.js:577:10)
+    at Object.onceWrapper (events.js:286:20)
+    at StreamFilter.emit (events.js:203:15)
+    at StreamFilter.EventEmitter.emit (domain.js:466:23)
+    at endReadableNT (/vscode/node_modules/readable-stream/lib/_stream_readable.js:1010:12)
+    at process._tickCallback (internal/process/next_tick.js:63:19)
+error Command failed with exit code 1.

@@ -1,0 +1,15 @@
+=== tests/cases/conformance/expressions/binaryOperators/instanceofOperator/instanceofOperatorWithLHSIsTypeParameter.ts ===
+function foo<T>(t: T) {
+>foo : Symbol(foo, Decl(instanceofOperatorWithLHSIsTypeParameter.ts, 0, 0))
+>T : Symbol(T, Decl(instanceofOperatorWithLHSIsTypeParameter.ts, 0, 13))
+>t : Symbol(t, Decl(instanceofOperatorWithLHSIsTypeParameter.ts, 0, 16))
+>T : Symbol(T, Decl(instanceofOperatorWithLHSIsTypeParameter.ts, 0, 13))
+
+    var x: any;
+>x : Symbol(x, Decl(instanceofOperatorWithLHSIsTypeParameter.ts, 1, 7))
+
+    var r = t instanceof x;
+>r : Symbol(r, Decl(instanceofOperatorWithLHSIsTypeParameter.ts, 2, 7))
+>t : Symbol(t, Decl(instanceofOperatorWithLHSIsTypeParameter.ts, 0, 16))
+>x : Symbol(x, Decl(instanceofOperatorWithLHSIsTypeParameter.ts, 1, 7))
+}

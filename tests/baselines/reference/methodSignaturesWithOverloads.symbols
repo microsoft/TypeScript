@@ -1,0 +1,56 @@
+=== tests/cases/conformance/types/objectTypeLiteral/methodSignatures/methodSignaturesWithOverloads.ts ===
+// Object type literals permit overloads with optionality but they must match
+
+var c: {
+>c : Symbol(c, Decl(methodSignaturesWithOverloads.ts, 2, 3))
+
+    func4?(x: number): number;
+>func4 : Symbol(func4, Decl(methodSignaturesWithOverloads.ts, 2, 8), Decl(methodSignaturesWithOverloads.ts, 3, 30))
+>x : Symbol(x, Decl(methodSignaturesWithOverloads.ts, 3, 11))
+
+    func4(s: string): string; // error, mismatched optionality
+>func4 : Symbol(func4, Decl(methodSignaturesWithOverloads.ts, 2, 8), Decl(methodSignaturesWithOverloads.ts, 3, 30))
+>s : Symbol(s, Decl(methodSignaturesWithOverloads.ts, 4, 10))
+
+    func5?: {
+>func5 : Symbol(func5, Decl(methodSignaturesWithOverloads.ts, 4, 29))
+
+        (x: number): number;
+>x : Symbol(x, Decl(methodSignaturesWithOverloads.ts, 6, 9))
+
+        (s: string): string;
+>s : Symbol(s, Decl(methodSignaturesWithOverloads.ts, 7, 9))
+
+    };
+};
+
+var c2: {
+>c2 : Symbol(c2, Decl(methodSignaturesWithOverloads.ts, 11, 3))
+
+    func4<T>(x: T): number;
+>func4 : Symbol(func4, Decl(methodSignaturesWithOverloads.ts, 11, 9), Decl(methodSignaturesWithOverloads.ts, 12, 27))
+>T : Symbol(T, Decl(methodSignaturesWithOverloads.ts, 12, 10))
+>x : Symbol(x, Decl(methodSignaturesWithOverloads.ts, 12, 13))
+>T : Symbol(T, Decl(methodSignaturesWithOverloads.ts, 12, 10))
+
+    func4? <T>(s: T): string; // error, mismatched optionality
+>func4 : Symbol(func4, Decl(methodSignaturesWithOverloads.ts, 11, 9), Decl(methodSignaturesWithOverloads.ts, 12, 27))
+>T : Symbol(T, Decl(methodSignaturesWithOverloads.ts, 13, 12))
+>s : Symbol(s, Decl(methodSignaturesWithOverloads.ts, 13, 15))
+>T : Symbol(T, Decl(methodSignaturesWithOverloads.ts, 13, 12))
+
+    func5?: {
+>func5 : Symbol(func5, Decl(methodSignaturesWithOverloads.ts, 13, 29))
+
+        <T>(x: T): number;
+>T : Symbol(T, Decl(methodSignaturesWithOverloads.ts, 15, 9))
+>x : Symbol(x, Decl(methodSignaturesWithOverloads.ts, 15, 12))
+>T : Symbol(T, Decl(methodSignaturesWithOverloads.ts, 15, 9))
+
+        <T>(s: T): string;
+>T : Symbol(T, Decl(methodSignaturesWithOverloads.ts, 16, 9))
+>s : Symbol(s, Decl(methodSignaturesWithOverloads.ts, 16, 12))
+>T : Symbol(T, Decl(methodSignaturesWithOverloads.ts, 16, 9))
+
+    };
+};

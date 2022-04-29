@@ -1,0 +1,234 @@
+=== tests/cases/conformance/expressions/conditonalOperator/conditionalOperatorConditionIsNumberType.ts ===
+//Cond ? Expr1 : Expr2,  Cond is of number type, Expr1 and Expr2 have the same type
+var condNumber: number;
+>condNumber : Symbol(condNumber, Decl(conditionalOperatorConditionIsNumberType.ts, 1, 3))
+
+var exprAny1: any;
+>exprAny1 : Symbol(exprAny1, Decl(conditionalOperatorConditionIsNumberType.ts, 3, 3))
+
+var exprBoolean1: boolean;
+>exprBoolean1 : Symbol(exprBoolean1, Decl(conditionalOperatorConditionIsNumberType.ts, 4, 3))
+
+var exprNumber1: number;
+>exprNumber1 : Symbol(exprNumber1, Decl(conditionalOperatorConditionIsNumberType.ts, 5, 3))
+
+var exprString1: string;
+>exprString1 : Symbol(exprString1, Decl(conditionalOperatorConditionIsNumberType.ts, 6, 3))
+
+var exprIsObject1: Object;
+>exprIsObject1 : Symbol(exprIsObject1, Decl(conditionalOperatorConditionIsNumberType.ts, 7, 3))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+var exprAny2: any;
+>exprAny2 : Symbol(exprAny2, Decl(conditionalOperatorConditionIsNumberType.ts, 9, 3))
+
+var exprBoolean2: boolean;
+>exprBoolean2 : Symbol(exprBoolean2, Decl(conditionalOperatorConditionIsNumberType.ts, 10, 3))
+
+var exprNumber2: number;
+>exprNumber2 : Symbol(exprNumber2, Decl(conditionalOperatorConditionIsNumberType.ts, 11, 3))
+
+var exprString2: string;
+>exprString2 : Symbol(exprString2, Decl(conditionalOperatorConditionIsNumberType.ts, 12, 3))
+
+var exprIsObject2: Object;
+>exprIsObject2 : Symbol(exprIsObject2, Decl(conditionalOperatorConditionIsNumberType.ts, 13, 3))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+//Cond is a number type variable
+condNumber ? exprAny1 : exprAny2;
+>condNumber : Symbol(condNumber, Decl(conditionalOperatorConditionIsNumberType.ts, 1, 3))
+>exprAny1 : Symbol(exprAny1, Decl(conditionalOperatorConditionIsNumberType.ts, 3, 3))
+>exprAny2 : Symbol(exprAny2, Decl(conditionalOperatorConditionIsNumberType.ts, 9, 3))
+
+condNumber ? exprBoolean1 : exprBoolean2;
+>condNumber : Symbol(condNumber, Decl(conditionalOperatorConditionIsNumberType.ts, 1, 3))
+>exprBoolean1 : Symbol(exprBoolean1, Decl(conditionalOperatorConditionIsNumberType.ts, 4, 3))
+>exprBoolean2 : Symbol(exprBoolean2, Decl(conditionalOperatorConditionIsNumberType.ts, 10, 3))
+
+condNumber ? exprNumber1 : exprNumber2;
+>condNumber : Symbol(condNumber, Decl(conditionalOperatorConditionIsNumberType.ts, 1, 3))
+>exprNumber1 : Symbol(exprNumber1, Decl(conditionalOperatorConditionIsNumberType.ts, 5, 3))
+>exprNumber2 : Symbol(exprNumber2, Decl(conditionalOperatorConditionIsNumberType.ts, 11, 3))
+
+condNumber ? exprString1 : exprString2;
+>condNumber : Symbol(condNumber, Decl(conditionalOperatorConditionIsNumberType.ts, 1, 3))
+>exprString1 : Symbol(exprString1, Decl(conditionalOperatorConditionIsNumberType.ts, 6, 3))
+>exprString2 : Symbol(exprString2, Decl(conditionalOperatorConditionIsNumberType.ts, 12, 3))
+
+condNumber ? exprIsObject1 : exprIsObject2;
+>condNumber : Symbol(condNumber, Decl(conditionalOperatorConditionIsNumberType.ts, 1, 3))
+>exprIsObject1 : Symbol(exprIsObject1, Decl(conditionalOperatorConditionIsNumberType.ts, 7, 3))
+>exprIsObject2 : Symbol(exprIsObject2, Decl(conditionalOperatorConditionIsNumberType.ts, 13, 3))
+
+condNumber ? exprString1 : exprBoolean1; // Union
+>condNumber : Symbol(condNumber, Decl(conditionalOperatorConditionIsNumberType.ts, 1, 3))
+>exprString1 : Symbol(exprString1, Decl(conditionalOperatorConditionIsNumberType.ts, 6, 3))
+>exprBoolean1 : Symbol(exprBoolean1, Decl(conditionalOperatorConditionIsNumberType.ts, 4, 3))
+
+//Cond is a number type literal
+1 ? exprAny1 : exprAny2;
+>exprAny1 : Symbol(exprAny1, Decl(conditionalOperatorConditionIsNumberType.ts, 3, 3))
+>exprAny2 : Symbol(exprAny2, Decl(conditionalOperatorConditionIsNumberType.ts, 9, 3))
+
+0 ? exprBoolean1 : exprBoolean2;
+>exprBoolean1 : Symbol(exprBoolean1, Decl(conditionalOperatorConditionIsNumberType.ts, 4, 3))
+>exprBoolean2 : Symbol(exprBoolean2, Decl(conditionalOperatorConditionIsNumberType.ts, 10, 3))
+
+0.123456789 ? exprNumber1 : exprNumber2;
+>exprNumber1 : Symbol(exprNumber1, Decl(conditionalOperatorConditionIsNumberType.ts, 5, 3))
+>exprNumber2 : Symbol(exprNumber2, Decl(conditionalOperatorConditionIsNumberType.ts, 11, 3))
+
+- 10000000000000 ? exprString1 : exprString2;
+>exprString1 : Symbol(exprString1, Decl(conditionalOperatorConditionIsNumberType.ts, 6, 3))
+>exprString2 : Symbol(exprString2, Decl(conditionalOperatorConditionIsNumberType.ts, 12, 3))
+
+1000000000000 ? exprIsObject1 : exprIsObject2;
+>exprIsObject1 : Symbol(exprIsObject1, Decl(conditionalOperatorConditionIsNumberType.ts, 7, 3))
+>exprIsObject2 : Symbol(exprIsObject2, Decl(conditionalOperatorConditionIsNumberType.ts, 13, 3))
+
+10000 ? exprString1 : exprBoolean1; // Union
+>exprString1 : Symbol(exprString1, Decl(conditionalOperatorConditionIsNumberType.ts, 6, 3))
+>exprBoolean1 : Symbol(exprBoolean1, Decl(conditionalOperatorConditionIsNumberType.ts, 4, 3))
+
+//Cond is a number type expression
+function foo() { return 1 };
+>foo : Symbol(foo, Decl(conditionalOperatorConditionIsNumberType.ts, 29, 35))
+
+var array = [1, 2, 3];
+>array : Symbol(array, Decl(conditionalOperatorConditionIsNumberType.ts, 33, 3))
+
+1 * 0 ? exprAny1 : exprAny2;
+>exprAny1 : Symbol(exprAny1, Decl(conditionalOperatorConditionIsNumberType.ts, 3, 3))
+>exprAny2 : Symbol(exprAny2, Decl(conditionalOperatorConditionIsNumberType.ts, 9, 3))
+
+1 + 1 ? exprBoolean1 : exprBoolean2;
+>exprBoolean1 : Symbol(exprBoolean1, Decl(conditionalOperatorConditionIsNumberType.ts, 4, 3))
+>exprBoolean2 : Symbol(exprBoolean2, Decl(conditionalOperatorConditionIsNumberType.ts, 10, 3))
+
+"string".length ? exprNumber1 : exprNumber2;
+>"string".length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>exprNumber1 : Symbol(exprNumber1, Decl(conditionalOperatorConditionIsNumberType.ts, 5, 3))
+>exprNumber2 : Symbol(exprNumber2, Decl(conditionalOperatorConditionIsNumberType.ts, 11, 3))
+
+foo() ? exprString1 : exprString2;
+>foo : Symbol(foo, Decl(conditionalOperatorConditionIsNumberType.ts, 29, 35))
+>exprString1 : Symbol(exprString1, Decl(conditionalOperatorConditionIsNumberType.ts, 6, 3))
+>exprString2 : Symbol(exprString2, Decl(conditionalOperatorConditionIsNumberType.ts, 12, 3))
+
+foo() / array[1] ? exprIsObject1 : exprIsObject2;
+>foo : Symbol(foo, Decl(conditionalOperatorConditionIsNumberType.ts, 29, 35))
+>array : Symbol(array, Decl(conditionalOperatorConditionIsNumberType.ts, 33, 3))
+>exprIsObject1 : Symbol(exprIsObject1, Decl(conditionalOperatorConditionIsNumberType.ts, 7, 3))
+>exprIsObject2 : Symbol(exprIsObject2, Decl(conditionalOperatorConditionIsNumberType.ts, 13, 3))
+
+foo() ? exprString1 : exprBoolean1; // Union
+>foo : Symbol(foo, Decl(conditionalOperatorConditionIsNumberType.ts, 29, 35))
+>exprString1 : Symbol(exprString1, Decl(conditionalOperatorConditionIsNumberType.ts, 6, 3))
+>exprBoolean1 : Symbol(exprBoolean1, Decl(conditionalOperatorConditionIsNumberType.ts, 4, 3))
+
+//Results shoud be same as Expr1 and Expr2
+var resultIsAny1 = condNumber ? exprAny1 : exprAny2;
+>resultIsAny1 : Symbol(resultIsAny1, Decl(conditionalOperatorConditionIsNumberType.ts, 43, 3))
+>condNumber : Symbol(condNumber, Decl(conditionalOperatorConditionIsNumberType.ts, 1, 3))
+>exprAny1 : Symbol(exprAny1, Decl(conditionalOperatorConditionIsNumberType.ts, 3, 3))
+>exprAny2 : Symbol(exprAny2, Decl(conditionalOperatorConditionIsNumberType.ts, 9, 3))
+
+var resultIsBoolean1 = condNumber ? exprBoolean1 : exprBoolean2;
+>resultIsBoolean1 : Symbol(resultIsBoolean1, Decl(conditionalOperatorConditionIsNumberType.ts, 44, 3))
+>condNumber : Symbol(condNumber, Decl(conditionalOperatorConditionIsNumberType.ts, 1, 3))
+>exprBoolean1 : Symbol(exprBoolean1, Decl(conditionalOperatorConditionIsNumberType.ts, 4, 3))
+>exprBoolean2 : Symbol(exprBoolean2, Decl(conditionalOperatorConditionIsNumberType.ts, 10, 3))
+
+var resultIsNumber1 = condNumber ? exprNumber1 : exprNumber2;
+>resultIsNumber1 : Symbol(resultIsNumber1, Decl(conditionalOperatorConditionIsNumberType.ts, 45, 3))
+>condNumber : Symbol(condNumber, Decl(conditionalOperatorConditionIsNumberType.ts, 1, 3))
+>exprNumber1 : Symbol(exprNumber1, Decl(conditionalOperatorConditionIsNumberType.ts, 5, 3))
+>exprNumber2 : Symbol(exprNumber2, Decl(conditionalOperatorConditionIsNumberType.ts, 11, 3))
+
+var resultIsString1 = condNumber ? exprString1 : exprString2;
+>resultIsString1 : Symbol(resultIsString1, Decl(conditionalOperatorConditionIsNumberType.ts, 46, 3))
+>condNumber : Symbol(condNumber, Decl(conditionalOperatorConditionIsNumberType.ts, 1, 3))
+>exprString1 : Symbol(exprString1, Decl(conditionalOperatorConditionIsNumberType.ts, 6, 3))
+>exprString2 : Symbol(exprString2, Decl(conditionalOperatorConditionIsNumberType.ts, 12, 3))
+
+var resultIsObject1 = condNumber ? exprIsObject1 : exprIsObject2;
+>resultIsObject1 : Symbol(resultIsObject1, Decl(conditionalOperatorConditionIsNumberType.ts, 47, 3))
+>condNumber : Symbol(condNumber, Decl(conditionalOperatorConditionIsNumberType.ts, 1, 3))
+>exprIsObject1 : Symbol(exprIsObject1, Decl(conditionalOperatorConditionIsNumberType.ts, 7, 3))
+>exprIsObject2 : Symbol(exprIsObject2, Decl(conditionalOperatorConditionIsNumberType.ts, 13, 3))
+
+var resultIsStringOrBoolean1 = condNumber ? exprString1 : exprBoolean1; // Union
+>resultIsStringOrBoolean1 : Symbol(resultIsStringOrBoolean1, Decl(conditionalOperatorConditionIsNumberType.ts, 48, 3))
+>condNumber : Symbol(condNumber, Decl(conditionalOperatorConditionIsNumberType.ts, 1, 3))
+>exprString1 : Symbol(exprString1, Decl(conditionalOperatorConditionIsNumberType.ts, 6, 3))
+>exprBoolean1 : Symbol(exprBoolean1, Decl(conditionalOperatorConditionIsNumberType.ts, 4, 3))
+
+var resultIsAny2 = 1 ? exprAny1 : exprAny2;
+>resultIsAny2 : Symbol(resultIsAny2, Decl(conditionalOperatorConditionIsNumberType.ts, 50, 3))
+>exprAny1 : Symbol(exprAny1, Decl(conditionalOperatorConditionIsNumberType.ts, 3, 3))
+>exprAny2 : Symbol(exprAny2, Decl(conditionalOperatorConditionIsNumberType.ts, 9, 3))
+
+var resultIsBoolean2 = 0 ? exprBoolean1 : exprBoolean2;
+>resultIsBoolean2 : Symbol(resultIsBoolean2, Decl(conditionalOperatorConditionIsNumberType.ts, 51, 3))
+>exprBoolean1 : Symbol(exprBoolean1, Decl(conditionalOperatorConditionIsNumberType.ts, 4, 3))
+>exprBoolean2 : Symbol(exprBoolean2, Decl(conditionalOperatorConditionIsNumberType.ts, 10, 3))
+
+var resultIsNumber2 = 0.123456789 ? exprNumber1 : exprNumber2;
+>resultIsNumber2 : Symbol(resultIsNumber2, Decl(conditionalOperatorConditionIsNumberType.ts, 52, 3))
+>exprNumber1 : Symbol(exprNumber1, Decl(conditionalOperatorConditionIsNumberType.ts, 5, 3))
+>exprNumber2 : Symbol(exprNumber2, Decl(conditionalOperatorConditionIsNumberType.ts, 11, 3))
+
+var resultIsString2 = - 10000000000000 ? exprString1 : exprString2;
+>resultIsString2 : Symbol(resultIsString2, Decl(conditionalOperatorConditionIsNumberType.ts, 53, 3))
+>exprString1 : Symbol(exprString1, Decl(conditionalOperatorConditionIsNumberType.ts, 6, 3))
+>exprString2 : Symbol(exprString2, Decl(conditionalOperatorConditionIsNumberType.ts, 12, 3))
+
+var resultIsObject2 = 1000000000000 ? exprIsObject1 : exprIsObject2;
+>resultIsObject2 : Symbol(resultIsObject2, Decl(conditionalOperatorConditionIsNumberType.ts, 54, 3))
+>exprIsObject1 : Symbol(exprIsObject1, Decl(conditionalOperatorConditionIsNumberType.ts, 7, 3))
+>exprIsObject2 : Symbol(exprIsObject2, Decl(conditionalOperatorConditionIsNumberType.ts, 13, 3))
+
+var resultIsStringOrBoolean2 = 10000 ? exprString1 : exprBoolean1; // Union
+>resultIsStringOrBoolean2 : Symbol(resultIsStringOrBoolean2, Decl(conditionalOperatorConditionIsNumberType.ts, 55, 3))
+>exprString1 : Symbol(exprString1, Decl(conditionalOperatorConditionIsNumberType.ts, 6, 3))
+>exprBoolean1 : Symbol(exprBoolean1, Decl(conditionalOperatorConditionIsNumberType.ts, 4, 3))
+
+var resultIsAny3 = 1 * 0 ? exprAny1 : exprAny2;
+>resultIsAny3 : Symbol(resultIsAny3, Decl(conditionalOperatorConditionIsNumberType.ts, 57, 3))
+>exprAny1 : Symbol(exprAny1, Decl(conditionalOperatorConditionIsNumberType.ts, 3, 3))
+>exprAny2 : Symbol(exprAny2, Decl(conditionalOperatorConditionIsNumberType.ts, 9, 3))
+
+var resultIsBoolean3 = 1 + 1 ? exprBoolean1 : exprBoolean2;
+>resultIsBoolean3 : Symbol(resultIsBoolean3, Decl(conditionalOperatorConditionIsNumberType.ts, 58, 3))
+>exprBoolean1 : Symbol(exprBoolean1, Decl(conditionalOperatorConditionIsNumberType.ts, 4, 3))
+>exprBoolean2 : Symbol(exprBoolean2, Decl(conditionalOperatorConditionIsNumberType.ts, 10, 3))
+
+var resultIsNumber3 = "string".length ? exprNumber1 : exprNumber2;
+>resultIsNumber3 : Symbol(resultIsNumber3, Decl(conditionalOperatorConditionIsNumberType.ts, 59, 3))
+>"string".length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>exprNumber1 : Symbol(exprNumber1, Decl(conditionalOperatorConditionIsNumberType.ts, 5, 3))
+>exprNumber2 : Symbol(exprNumber2, Decl(conditionalOperatorConditionIsNumberType.ts, 11, 3))
+
+var resultIsString3 = foo() ? exprString1 : exprString2;
+>resultIsString3 : Symbol(resultIsString3, Decl(conditionalOperatorConditionIsNumberType.ts, 60, 3))
+>foo : Symbol(foo, Decl(conditionalOperatorConditionIsNumberType.ts, 29, 35))
+>exprString1 : Symbol(exprString1, Decl(conditionalOperatorConditionIsNumberType.ts, 6, 3))
+>exprString2 : Symbol(exprString2, Decl(conditionalOperatorConditionIsNumberType.ts, 12, 3))
+
+var resultIsObject3 = foo() / array[1] ? exprIsObject1 : exprIsObject2;
+>resultIsObject3 : Symbol(resultIsObject3, Decl(conditionalOperatorConditionIsNumberType.ts, 61, 3))
+>foo : Symbol(foo, Decl(conditionalOperatorConditionIsNumberType.ts, 29, 35))
+>array : Symbol(array, Decl(conditionalOperatorConditionIsNumberType.ts, 33, 3))
+>exprIsObject1 : Symbol(exprIsObject1, Decl(conditionalOperatorConditionIsNumberType.ts, 7, 3))
+>exprIsObject2 : Symbol(exprIsObject2, Decl(conditionalOperatorConditionIsNumberType.ts, 13, 3))
+
+var resultIsStringOrBoolean3 = foo() / array[1] ? exprString1 : exprBoolean1; // Union
+>resultIsStringOrBoolean3 : Symbol(resultIsStringOrBoolean3, Decl(conditionalOperatorConditionIsNumberType.ts, 62, 3))
+>foo : Symbol(foo, Decl(conditionalOperatorConditionIsNumberType.ts, 29, 35))
+>array : Symbol(array, Decl(conditionalOperatorConditionIsNumberType.ts, 33, 3))
+>exprString1 : Symbol(exprString1, Decl(conditionalOperatorConditionIsNumberType.ts, 6, 3))
+>exprBoolean1 : Symbol(exprBoolean1, Decl(conditionalOperatorConditionIsNumberType.ts, 4, 3))
+

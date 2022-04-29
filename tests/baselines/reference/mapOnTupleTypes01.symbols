@@ -1,0 +1,118 @@
+=== tests/cases/compiler/mapOnTupleTypes01.ts ===
+export let mapOnLooseArrayLiteral = [1, 2, 3, 4].map(n => n * n);
+>mapOnLooseArrayLiteral : Symbol(mapOnLooseArrayLiteral, Decl(mapOnTupleTypes01.ts, 0, 10))
+>[1, 2, 3, 4].map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>n : Symbol(n, Decl(mapOnTupleTypes01.ts, 0, 53))
+>n : Symbol(n, Decl(mapOnTupleTypes01.ts, 0, 53))
+>n : Symbol(n, Decl(mapOnTupleTypes01.ts, 0, 53))
+
+// Length 1
+
+let numTuple: [number] = [1];
+>numTuple : Symbol(numTuple, Decl(mapOnTupleTypes01.ts, 4, 3))
+
+export let a = numTuple.map(x => x * x);
+>a : Symbol(a, Decl(mapOnTupleTypes01.ts, 5, 10))
+>numTuple.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>numTuple : Symbol(numTuple, Decl(mapOnTupleTypes01.ts, 4, 3))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(mapOnTupleTypes01.ts, 5, 28))
+>x : Symbol(x, Decl(mapOnTupleTypes01.ts, 5, 28))
+>x : Symbol(x, Decl(mapOnTupleTypes01.ts, 5, 28))
+
+// Length 2
+
+let numNum: [number, number] = [    100,     100];
+>numNum : Symbol(numNum, Decl(mapOnTupleTypes01.ts, 9, 3))
+
+let strStr: [string, string] = ["hello", "hello"];
+>strStr : Symbol(strStr, Decl(mapOnTupleTypes01.ts, 10, 3))
+
+let numStr: [number, string] = [    100, "hello"];
+>numStr : Symbol(numStr, Decl(mapOnTupleTypes01.ts, 11, 3))
+
+export let b = numNum.map(n => n * n);
+>b : Symbol(b, Decl(mapOnTupleTypes01.ts, 13, 10))
+>numNum.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>numNum : Symbol(numNum, Decl(mapOnTupleTypes01.ts, 9, 3))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>n : Symbol(n, Decl(mapOnTupleTypes01.ts, 13, 26))
+>n : Symbol(n, Decl(mapOnTupleTypes01.ts, 13, 26))
+>n : Symbol(n, Decl(mapOnTupleTypes01.ts, 13, 26))
+
+export let c = strStr.map(s => s.charCodeAt(0));
+>c : Symbol(c, Decl(mapOnTupleTypes01.ts, 14, 10))
+>strStr.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>strStr : Symbol(strStr, Decl(mapOnTupleTypes01.ts, 10, 3))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>s : Symbol(s, Decl(mapOnTupleTypes01.ts, 14, 26))
+>s.charCodeAt : Symbol(String.charCodeAt, Decl(lib.es5.d.ts, --, --))
+>s : Symbol(s, Decl(mapOnTupleTypes01.ts, 14, 26))
+>charCodeAt : Symbol(String.charCodeAt, Decl(lib.es5.d.ts, --, --))
+
+export let d = numStr.map(x => x);
+>d : Symbol(d, Decl(mapOnTupleTypes01.ts, 15, 10))
+>numStr.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>numStr : Symbol(numStr, Decl(mapOnTupleTypes01.ts, 11, 3))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(mapOnTupleTypes01.ts, 15, 26))
+>x : Symbol(x, Decl(mapOnTupleTypes01.ts, 15, 26))
+
+// Length 3
+
+let numNumNum: [number, number, number] = [1, 2, 3];
+>numNumNum : Symbol(numNumNum, Decl(mapOnTupleTypes01.ts, 19, 3))
+
+export let e = numNumNum.map(n => n * n);
+>e : Symbol(e, Decl(mapOnTupleTypes01.ts, 21, 10))
+>numNumNum.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>numNumNum : Symbol(numNumNum, Decl(mapOnTupleTypes01.ts, 19, 3))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>n : Symbol(n, Decl(mapOnTupleTypes01.ts, 21, 29))
+>n : Symbol(n, Decl(mapOnTupleTypes01.ts, 21, 29))
+>n : Symbol(n, Decl(mapOnTupleTypes01.ts, 21, 29))
+
+// Length 4
+
+let numNumNumNum: [number, number, number, number] = [1, 2, 3, 4];
+>numNumNumNum : Symbol(numNumNumNum, Decl(mapOnTupleTypes01.ts, 25, 3))
+
+export let f = numNumNumNum.map(n => n * n);
+>f : Symbol(f, Decl(mapOnTupleTypes01.ts, 27, 10))
+>numNumNumNum.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>numNumNumNum : Symbol(numNumNumNum, Decl(mapOnTupleTypes01.ts, 25, 3))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>n : Symbol(n, Decl(mapOnTupleTypes01.ts, 27, 32))
+>n : Symbol(n, Decl(mapOnTupleTypes01.ts, 27, 32))
+>n : Symbol(n, Decl(mapOnTupleTypes01.ts, 27, 32))
+
+// Length 5
+
+let numNumNumNumNum: [number, number, number, number, number] = [1, 2, 3, 4, 5];
+>numNumNumNumNum : Symbol(numNumNumNumNum, Decl(mapOnTupleTypes01.ts, 31, 3))
+
+export let g = numNumNumNumNum.map(n => n * n);
+>g : Symbol(g, Decl(mapOnTupleTypes01.ts, 33, 10))
+>numNumNumNumNum.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>numNumNumNumNum : Symbol(numNumNumNumNum, Decl(mapOnTupleTypes01.ts, 31, 3))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>n : Symbol(n, Decl(mapOnTupleTypes01.ts, 33, 35))
+>n : Symbol(n, Decl(mapOnTupleTypes01.ts, 33, 35))
+>n : Symbol(n, Decl(mapOnTupleTypes01.ts, 33, 35))
+
+
+// Length 6
+
+let numNumNumNumNumNum: [number, number, number, number, number, number] = [1, 2, 3, 4, 5, 6];
+>numNumNumNumNumNum : Symbol(numNumNumNumNumNum, Decl(mapOnTupleTypes01.ts, 38, 3))
+
+export let h = numNumNumNumNum.map(n => n * n);
+>h : Symbol(h, Decl(mapOnTupleTypes01.ts, 40, 10))
+>numNumNumNumNum.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>numNumNumNumNum : Symbol(numNumNumNumNum, Decl(mapOnTupleTypes01.ts, 31, 3))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>n : Symbol(n, Decl(mapOnTupleTypes01.ts, 40, 35))
+>n : Symbol(n, Decl(mapOnTupleTypes01.ts, 40, 35))
+>n : Symbol(n, Decl(mapOnTupleTypes01.ts, 40, 35))
+

@@ -1,0 +1,127 @@
+=== tests/cases/compiler/server.ts ===
+export var a = 10;
+>a : number
+>10 : 10
+
+export var x = a;
+>x : number
+>a : number
+
+export var m = a;
+>m : number
+>a : number
+
+export var a1 = 10;
+>a1 : number
+>10 : 10
+
+export var x1 = 10;
+>x1 : number
+>10 : 10
+
+export var z1 = 10;
+>z1 : number
+>10 : 10
+
+export var z2 = 10;
+>z2 : number
+>10 : 10
+
+export var aaaa = 10;
+>aaaa : number
+>10 : 10
+
+=== tests/cases/compiler/client.ts ===
+export import { } from "./server";
+export import { a } from "./server";
+>a : number
+
+export var xxxx = a;
+>xxxx : number
+>a : number
+
+export import { a as b } from "./server";
+>a : number
+>b : number
+
+export var xxxx = b;
+>xxxx : number
+>b : number
+
+export import { x, a as y } from "./server";
+>x : number
+>a : number
+>y : number
+
+export var xxxx = x;
+>xxxx : number
+>x : number
+
+export var xxxx = y;
+>xxxx : number
+>y : number
+
+export import { x as z,  } from "./server";
+>x : number
+>z : number
+
+export var xxxx = z;
+>xxxx : number
+>z : number
+
+export import { m,  } from "./server";
+>m : number
+
+export var xxxx = m;
+>xxxx : number
+>m : number
+
+export import { a1, x1 } from "./server";
+>a1 : number
+>x1 : number
+
+export var xxxx = a1;
+>xxxx : number
+>a1 : number
+
+export var xxxx = x1;
+>xxxx : number
+>x1 : number
+
+export import { a1 as a11, x1 as x11 } from "./server";
+>a1 : number
+>a11 : number
+>x1 : number
+>x11 : number
+
+export var xxxx = a11;
+>xxxx : number
+>a11 : number
+
+export var xxxx = x11;
+>xxxx : number
+>x11 : number
+
+export import { z1 } from "./server";
+>z1 : number
+
+export var z111 = z1;
+>z111 : number
+>z1 : number
+
+export import { z2 as z3 } from "./server";
+>z2 : number
+>z3 : number
+
+export var z2 = z3; // z2 shouldn't give redeclare error
+>z2 : number
+>z3 : number
+
+// Non referenced imports
+export import { aaaa } from "./server";
+>aaaa : number
+
+export import { aaaa as bbbb } from "./server";
+>aaaa : number
+>bbbb : number
+

@@ -1,0 +1,55 @@
+tests/cases/conformance/es6/destructuring/destructuringWithLiteralInitializers2.ts(1,15): error TS7031: Binding element 'x' implicitly has an 'any' type.
+tests/cases/conformance/es6/destructuring/destructuringWithLiteralInitializers2.ts(1,18): error TS7031: Binding element 'y' implicitly has an 'any' type.
+tests/cases/conformance/es6/destructuring/destructuringWithLiteralInitializers2.ts(2,15): error TS7031: Binding element 'x' implicitly has an 'any' type.
+tests/cases/conformance/es6/destructuring/destructuringWithLiteralInitializers2.ts(2,18): error TS7031: Binding element 'y' implicitly has an 'any' type.
+tests/cases/conformance/es6/destructuring/destructuringWithLiteralInitializers2.ts(3,18): error TS7031: Binding element 'y' implicitly has an 'any' type.
+tests/cases/conformance/es6/destructuring/destructuringWithLiteralInitializers2.ts(6,22): error TS7031: Binding element 'y' implicitly has an 'any' type.
+tests/cases/conformance/es6/destructuring/destructuringWithLiteralInitializers2.ts(7,22): error TS7031: Binding element 'y' implicitly has an 'any' type.
+tests/cases/conformance/es6/destructuring/destructuringWithLiteralInitializers2.ts(8,22): error TS7031: Binding element 'y' implicitly has an 'any' type.
+
+
+==== tests/cases/conformance/es6/destructuring/destructuringWithLiteralInitializers2.ts (8 errors) ====
+    function f00([x, y]) {}
+                  ~
+!!! error TS7031: Binding element 'x' implicitly has an 'any' type.
+                     ~
+!!! error TS7031: Binding element 'y' implicitly has an 'any' type.
+    function f01([x, y] = []) {}
+                  ~
+!!! error TS7031: Binding element 'x' implicitly has an 'any' type.
+                     ~
+!!! error TS7031: Binding element 'y' implicitly has an 'any' type.
+    function f02([x, y] = [1]) {}
+                     ~
+!!! error TS7031: Binding element 'y' implicitly has an 'any' type.
+    function f03([x, y] = [1, 'foo']) {}
+    
+    function f10([x = 0, y]) {}
+                         ~
+!!! error TS7031: Binding element 'y' implicitly has an 'any' type.
+    function f11([x = 0, y] = []) {}
+                         ~
+!!! error TS7031: Binding element 'y' implicitly has an 'any' type.
+    function f12([x = 0, y] = [1]) {}
+                         ~
+!!! error TS7031: Binding element 'y' implicitly has an 'any' type.
+    function f13([x = 0, y] = [1, 'foo']) {}
+    
+    function f20([x = 0, y = 'bar']) {}
+    function f21([x = 0, y = 'bar'] = []) {}
+    function f22([x = 0, y = 'bar'] = [1]) {}
+    function f23([x = 0, y = 'bar'] = [1, 'foo']) {}
+    
+    declare const nx: number | undefined;
+    declare const sx: string | undefined;
+    
+    function f30([x = 0, y = 'bar']) {}
+    function f31([x = 0, y = 'bar'] = []) {}
+    function f32([x = 0, y = 'bar'] = [nx]) {}
+    function f33([x = 0, y = 'bar'] = [nx, sx]) {}
+    
+    function f40([x = 0, y = 'bar']) {}
+    function f41([x = 0, y = 'bar'] = []) {}
+    function f42([x = 0, y = 'bar'] = [sx]) {}
+    function f43([x = 0, y = 'bar'] = [sx, nx]) {}
+    

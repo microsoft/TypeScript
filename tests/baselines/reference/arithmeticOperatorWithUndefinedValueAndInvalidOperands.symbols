@@ -1,0 +1,564 @@
+=== tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts ===
+// If one operand is the undefined or undefined value, it is treated as having the type of the
+// other operand.
+
+var a: boolean;
+>a : Symbol(a, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 3, 3))
+
+var b: string;
+>b : Symbol(b, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 4, 3))
+
+var c: Object;
+>c : Symbol(c, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 5, 3))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+// operator *
+var r1a1 = undefined * a;
+>r1a1 : Symbol(r1a1, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 8, 3))
+>undefined : Symbol(undefined)
+>a : Symbol(a, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 3, 3))
+
+var r1a2 = undefined * b;
+>r1a2 : Symbol(r1a2, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 9, 3))
+>undefined : Symbol(undefined)
+>b : Symbol(b, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 4, 3))
+
+var r1a3 = undefined * c;
+>r1a3 : Symbol(r1a3, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 10, 3))
+>undefined : Symbol(undefined)
+>c : Symbol(c, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 5, 3))
+
+var r1b1 = a * undefined;
+>r1b1 : Symbol(r1b1, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 12, 3))
+>a : Symbol(a, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 3, 3))
+>undefined : Symbol(undefined)
+
+var r1b2 = b * undefined;
+>r1b2 : Symbol(r1b2, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 13, 3))
+>b : Symbol(b, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 4, 3))
+>undefined : Symbol(undefined)
+
+var r1b3 = c * undefined;
+>r1b3 : Symbol(r1b3, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 14, 3))
+>c : Symbol(c, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 5, 3))
+>undefined : Symbol(undefined)
+
+var r1c1 = undefined * true;
+>r1c1 : Symbol(r1c1, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 16, 3))
+>undefined : Symbol(undefined)
+
+var r1c2 = undefined * '';
+>r1c2 : Symbol(r1c2, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 17, 3))
+>undefined : Symbol(undefined)
+
+var r1c3 = undefined * {};
+>r1c3 : Symbol(r1c3, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 18, 3))
+>undefined : Symbol(undefined)
+
+var r1d1 = true * undefined;
+>r1d1 : Symbol(r1d1, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 20, 3))
+>undefined : Symbol(undefined)
+
+var r1d2 = '' * undefined;
+>r1d2 : Symbol(r1d2, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 21, 3))
+>undefined : Symbol(undefined)
+
+var r1d3 = {} * undefined;
+>r1d3 : Symbol(r1d3, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 22, 3))
+>undefined : Symbol(undefined)
+
+// operator /
+var r2a1 = undefined / a;
+>r2a1 : Symbol(r2a1, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 25, 3))
+>undefined : Symbol(undefined)
+>a : Symbol(a, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 3, 3))
+
+var r2a2 = undefined / b;
+>r2a2 : Symbol(r2a2, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 26, 3))
+>undefined : Symbol(undefined)
+>b : Symbol(b, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 4, 3))
+
+var r2a3 = undefined / c;
+>r2a3 : Symbol(r2a3, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 27, 3))
+>undefined : Symbol(undefined)
+>c : Symbol(c, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 5, 3))
+
+var r2b1 = a / undefined;
+>r2b1 : Symbol(r2b1, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 29, 3))
+>a : Symbol(a, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 3, 3))
+>undefined : Symbol(undefined)
+
+var r2b2 = b / undefined;
+>r2b2 : Symbol(r2b2, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 30, 3))
+>b : Symbol(b, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 4, 3))
+>undefined : Symbol(undefined)
+
+var r2b3 = c / undefined;
+>r2b3 : Symbol(r2b3, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 31, 3))
+>c : Symbol(c, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 5, 3))
+>undefined : Symbol(undefined)
+
+var r2c1 = undefined / true;
+>r2c1 : Symbol(r2c1, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 33, 3))
+>undefined : Symbol(undefined)
+
+var r2c2 = undefined / '';
+>r2c2 : Symbol(r2c2, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 34, 3))
+>undefined : Symbol(undefined)
+
+var r2c3 = undefined / {};
+>r2c3 : Symbol(r2c3, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 35, 3))
+>undefined : Symbol(undefined)
+
+var r2d1 = true / undefined;
+>r2d1 : Symbol(r2d1, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 37, 3))
+>undefined : Symbol(undefined)
+
+var r2d2 = '' / undefined;
+>r2d2 : Symbol(r2d2, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 38, 3))
+>undefined : Symbol(undefined)
+
+var r2d3 = {} / undefined;
+>r2d3 : Symbol(r2d3, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 39, 3))
+>undefined : Symbol(undefined)
+
+// operator %
+var r3a1 = undefined % a;
+>r3a1 : Symbol(r3a1, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 42, 3))
+>undefined : Symbol(undefined)
+>a : Symbol(a, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 3, 3))
+
+var r3a2 = undefined % b;
+>r3a2 : Symbol(r3a2, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 43, 3))
+>undefined : Symbol(undefined)
+>b : Symbol(b, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 4, 3))
+
+var r3a3 = undefined % c;
+>r3a3 : Symbol(r3a3, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 44, 3))
+>undefined : Symbol(undefined)
+>c : Symbol(c, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 5, 3))
+
+var r3b1 = a % undefined;
+>r3b1 : Symbol(r3b1, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 46, 3))
+>a : Symbol(a, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 3, 3))
+>undefined : Symbol(undefined)
+
+var r3b2 = b % undefined;
+>r3b2 : Symbol(r3b2, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 47, 3))
+>b : Symbol(b, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 4, 3))
+>undefined : Symbol(undefined)
+
+var r3b3 = c % undefined;
+>r3b3 : Symbol(r3b3, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 48, 3))
+>c : Symbol(c, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 5, 3))
+>undefined : Symbol(undefined)
+
+var r3c1 = undefined % true;
+>r3c1 : Symbol(r3c1, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 50, 3))
+>undefined : Symbol(undefined)
+
+var r3c2 = undefined % '';
+>r3c2 : Symbol(r3c2, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 51, 3))
+>undefined : Symbol(undefined)
+
+var r3c3 = undefined % {};
+>r3c3 : Symbol(r3c3, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 52, 3))
+>undefined : Symbol(undefined)
+
+var r3d1 = true % undefined;
+>r3d1 : Symbol(r3d1, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 54, 3))
+>undefined : Symbol(undefined)
+
+var r3d2 = '' % undefined;
+>r3d2 : Symbol(r3d2, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 55, 3))
+>undefined : Symbol(undefined)
+
+var r3d3 = {} % undefined;
+>r3d3 : Symbol(r3d3, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 56, 3))
+>undefined : Symbol(undefined)
+
+// operator -
+var r4a1 = undefined - a;
+>r4a1 : Symbol(r4a1, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 59, 3))
+>undefined : Symbol(undefined)
+>a : Symbol(a, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 3, 3))
+
+var r4a2 = undefined - b;
+>r4a2 : Symbol(r4a2, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 60, 3))
+>undefined : Symbol(undefined)
+>b : Symbol(b, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 4, 3))
+
+var r4a3 = undefined - c;
+>r4a3 : Symbol(r4a3, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 61, 3))
+>undefined : Symbol(undefined)
+>c : Symbol(c, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 5, 3))
+
+var r4b1 = a - undefined;
+>r4b1 : Symbol(r4b1, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 63, 3))
+>a : Symbol(a, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 3, 3))
+>undefined : Symbol(undefined)
+
+var r4b2 = b - undefined;
+>r4b2 : Symbol(r4b2, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 64, 3))
+>b : Symbol(b, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 4, 3))
+>undefined : Symbol(undefined)
+
+var r4b3 = c - undefined;
+>r4b3 : Symbol(r4b3, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 65, 3))
+>c : Symbol(c, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 5, 3))
+>undefined : Symbol(undefined)
+
+var r4c1 = undefined - true;
+>r4c1 : Symbol(r4c1, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 67, 3))
+>undefined : Symbol(undefined)
+
+var r4c2 = undefined - '';
+>r4c2 : Symbol(r4c2, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 68, 3))
+>undefined : Symbol(undefined)
+
+var r4c3 = undefined - {};
+>r4c3 : Symbol(r4c3, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 69, 3))
+>undefined : Symbol(undefined)
+
+var r4d1 = true - undefined;
+>r4d1 : Symbol(r4d1, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 71, 3))
+>undefined : Symbol(undefined)
+
+var r4d2 = '' - undefined;
+>r4d2 : Symbol(r4d2, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 72, 3))
+>undefined : Symbol(undefined)
+
+var r4d3 = {} - undefined;
+>r4d3 : Symbol(r4d3, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 73, 3))
+>undefined : Symbol(undefined)
+
+// operator <<
+var r5a1 = undefined << a;
+>r5a1 : Symbol(r5a1, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 76, 3))
+>undefined : Symbol(undefined)
+>a : Symbol(a, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 3, 3))
+
+var r5a2 = undefined << b;
+>r5a2 : Symbol(r5a2, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 77, 3))
+>undefined : Symbol(undefined)
+>b : Symbol(b, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 4, 3))
+
+var r5a3 = undefined << c;
+>r5a3 : Symbol(r5a3, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 78, 3))
+>undefined : Symbol(undefined)
+>c : Symbol(c, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 5, 3))
+
+var r5b1 = a << undefined;
+>r5b1 : Symbol(r5b1, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 80, 3))
+>a : Symbol(a, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 3, 3))
+>undefined : Symbol(undefined)
+
+var r5b2 = b << undefined;
+>r5b2 : Symbol(r5b2, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 81, 3))
+>b : Symbol(b, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 4, 3))
+>undefined : Symbol(undefined)
+
+var r5b3 = c << undefined;
+>r5b3 : Symbol(r5b3, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 82, 3))
+>c : Symbol(c, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 5, 3))
+>undefined : Symbol(undefined)
+
+var r5c1 = undefined << true;
+>r5c1 : Symbol(r5c1, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 84, 3))
+>undefined : Symbol(undefined)
+
+var r5c2 = undefined << '';
+>r5c2 : Symbol(r5c2, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 85, 3))
+>undefined : Symbol(undefined)
+
+var r5c3 = undefined << {};
+>r5c3 : Symbol(r5c3, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 86, 3))
+>undefined : Symbol(undefined)
+
+var r5d1 = true << undefined;
+>r5d1 : Symbol(r5d1, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 88, 3))
+>undefined : Symbol(undefined)
+
+var r5d2 = '' << undefined;
+>r5d2 : Symbol(r5d2, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 89, 3))
+>undefined : Symbol(undefined)
+
+var r5d3 = {} << undefined;
+>r5d3 : Symbol(r5d3, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 90, 3))
+>undefined : Symbol(undefined)
+
+// operator >>
+var r6a1 = undefined >> a;
+>r6a1 : Symbol(r6a1, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 93, 3))
+>undefined : Symbol(undefined)
+>a : Symbol(a, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 3, 3))
+
+var r6a2 = undefined >> b;
+>r6a2 : Symbol(r6a2, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 94, 3))
+>undefined : Symbol(undefined)
+>b : Symbol(b, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 4, 3))
+
+var r6a3 = undefined >> c;
+>r6a3 : Symbol(r6a3, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 95, 3))
+>undefined : Symbol(undefined)
+>c : Symbol(c, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 5, 3))
+
+var r6b1 = a >> undefined;
+>r6b1 : Symbol(r6b1, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 97, 3))
+>a : Symbol(a, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 3, 3))
+>undefined : Symbol(undefined)
+
+var r6b2 = b >> undefined;
+>r6b2 : Symbol(r6b2, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 98, 3))
+>b : Symbol(b, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 4, 3))
+>undefined : Symbol(undefined)
+
+var r6b3 = c >> undefined;
+>r6b3 : Symbol(r6b3, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 99, 3))
+>c : Symbol(c, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 5, 3))
+>undefined : Symbol(undefined)
+
+var r6c1 = undefined >> true;
+>r6c1 : Symbol(r6c1, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 101, 3))
+>undefined : Symbol(undefined)
+
+var r6c2 = undefined >> '';
+>r6c2 : Symbol(r6c2, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 102, 3))
+>undefined : Symbol(undefined)
+
+var r6c3 = undefined >> {};
+>r6c3 : Symbol(r6c3, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 103, 3))
+>undefined : Symbol(undefined)
+
+var r6d1 = true >> undefined;
+>r6d1 : Symbol(r6d1, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 105, 3))
+>undefined : Symbol(undefined)
+
+var r6d2 = '' >> undefined;
+>r6d2 : Symbol(r6d2, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 106, 3))
+>undefined : Symbol(undefined)
+
+var r6d3 = {} >> undefined;
+>r6d3 : Symbol(r6d3, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 107, 3))
+>undefined : Symbol(undefined)
+
+// operator >>>
+var r7a1 = undefined >>> a;
+>r7a1 : Symbol(r7a1, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 110, 3))
+>undefined : Symbol(undefined)
+>a : Symbol(a, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 3, 3))
+
+var r7a2 = undefined >>> b;
+>r7a2 : Symbol(r7a2, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 111, 3))
+>undefined : Symbol(undefined)
+>b : Symbol(b, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 4, 3))
+
+var r7a3 = undefined >>> c;
+>r7a3 : Symbol(r7a3, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 112, 3))
+>undefined : Symbol(undefined)
+>c : Symbol(c, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 5, 3))
+
+var r7b1 = a >>> undefined;
+>r7b1 : Symbol(r7b1, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 114, 3))
+>a : Symbol(a, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 3, 3))
+>undefined : Symbol(undefined)
+
+var r7b2 = b >>> undefined;
+>r7b2 : Symbol(r7b2, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 115, 3))
+>b : Symbol(b, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 4, 3))
+>undefined : Symbol(undefined)
+
+var r7b3 = c >>> undefined;
+>r7b3 : Symbol(r7b3, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 116, 3))
+>c : Symbol(c, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 5, 3))
+>undefined : Symbol(undefined)
+
+var r7c1 = undefined >>> true;
+>r7c1 : Symbol(r7c1, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 118, 3))
+>undefined : Symbol(undefined)
+
+var r7c2 = undefined >>> '';
+>r7c2 : Symbol(r7c2, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 119, 3))
+>undefined : Symbol(undefined)
+
+var r7c3 = undefined >>> {};
+>r7c3 : Symbol(r7c3, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 120, 3))
+>undefined : Symbol(undefined)
+
+var r7d1 = true >>> undefined;
+>r7d1 : Symbol(r7d1, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 122, 3))
+>undefined : Symbol(undefined)
+
+var r7d2 = '' >>> undefined;
+>r7d2 : Symbol(r7d2, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 123, 3))
+>undefined : Symbol(undefined)
+
+var r7d3 = {} >>> undefined;
+>r7d3 : Symbol(r7d3, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 124, 3))
+>undefined : Symbol(undefined)
+
+// operator &
+var r8a1 = undefined & a;
+>r8a1 : Symbol(r8a1, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 127, 3))
+>undefined : Symbol(undefined)
+>a : Symbol(a, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 3, 3))
+
+var r8a2 = undefined & b;
+>r8a2 : Symbol(r8a2, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 128, 3))
+>undefined : Symbol(undefined)
+>b : Symbol(b, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 4, 3))
+
+var r8a3 = undefined & c;
+>r8a3 : Symbol(r8a3, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 129, 3))
+>undefined : Symbol(undefined)
+>c : Symbol(c, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 5, 3))
+
+var r8b1 = a & undefined;
+>r8b1 : Symbol(r8b1, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 131, 3))
+>a : Symbol(a, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 3, 3))
+>undefined : Symbol(undefined)
+
+var r8b2 = b & undefined;
+>r8b2 : Symbol(r8b2, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 132, 3))
+>b : Symbol(b, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 4, 3))
+>undefined : Symbol(undefined)
+
+var r8b3 = c & undefined;
+>r8b3 : Symbol(r8b3, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 133, 3))
+>c : Symbol(c, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 5, 3))
+>undefined : Symbol(undefined)
+
+var r8c1 = undefined & true;
+>r8c1 : Symbol(r8c1, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 135, 3))
+>undefined : Symbol(undefined)
+
+var r8c2 = undefined & '';
+>r8c2 : Symbol(r8c2, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 136, 3))
+>undefined : Symbol(undefined)
+
+var r8c3 = undefined & {};
+>r8c3 : Symbol(r8c3, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 137, 3))
+>undefined : Symbol(undefined)
+
+var r8d1 = true & undefined;
+>r8d1 : Symbol(r8d1, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 139, 3))
+>undefined : Symbol(undefined)
+
+var r8d2 = '' & undefined;
+>r8d2 : Symbol(r8d2, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 140, 3))
+>undefined : Symbol(undefined)
+
+var r8d3 = {} & undefined;
+>r8d3 : Symbol(r8d3, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 141, 3))
+>undefined : Symbol(undefined)
+
+// operator ^
+var r9a1 = undefined ^ a;
+>r9a1 : Symbol(r9a1, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 144, 3))
+>undefined : Symbol(undefined)
+>a : Symbol(a, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 3, 3))
+
+var r9a2 = undefined ^ b;
+>r9a2 : Symbol(r9a2, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 145, 3))
+>undefined : Symbol(undefined)
+>b : Symbol(b, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 4, 3))
+
+var r9a3 = undefined ^ c;
+>r9a3 : Symbol(r9a3, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 146, 3))
+>undefined : Symbol(undefined)
+>c : Symbol(c, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 5, 3))
+
+var r9b1 = a ^ undefined;
+>r9b1 : Symbol(r9b1, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 148, 3))
+>a : Symbol(a, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 3, 3))
+>undefined : Symbol(undefined)
+
+var r9b2 = b ^ undefined;
+>r9b2 : Symbol(r9b2, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 149, 3))
+>b : Symbol(b, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 4, 3))
+>undefined : Symbol(undefined)
+
+var r9b3 = c ^ undefined;
+>r9b3 : Symbol(r9b3, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 150, 3))
+>c : Symbol(c, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 5, 3))
+>undefined : Symbol(undefined)
+
+var r9c1 = undefined ^ true;
+>r9c1 : Symbol(r9c1, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 152, 3))
+>undefined : Symbol(undefined)
+
+var r9c2 = undefined ^ '';
+>r9c2 : Symbol(r9c2, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 153, 3))
+>undefined : Symbol(undefined)
+
+var r9c3 = undefined ^ {};
+>r9c3 : Symbol(r9c3, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 154, 3))
+>undefined : Symbol(undefined)
+
+var r9d1 = true ^ undefined;
+>r9d1 : Symbol(r9d1, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 156, 3))
+>undefined : Symbol(undefined)
+
+var r9d2 = '' ^ undefined;
+>r9d2 : Symbol(r9d2, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 157, 3))
+>undefined : Symbol(undefined)
+
+var r9d3 = {} ^ undefined;
+>r9d3 : Symbol(r9d3, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 158, 3))
+>undefined : Symbol(undefined)
+
+// operator |
+var r10a1 = undefined | a;
+>r10a1 : Symbol(r10a1, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 161, 3))
+>undefined : Symbol(undefined)
+>a : Symbol(a, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 3, 3))
+
+var r10a2 = undefined | b;
+>r10a2 : Symbol(r10a2, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 162, 3))
+>undefined : Symbol(undefined)
+>b : Symbol(b, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 4, 3))
+
+var r10a3 = undefined | c;
+>r10a3 : Symbol(r10a3, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 163, 3))
+>undefined : Symbol(undefined)
+>c : Symbol(c, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 5, 3))
+
+var r10b1 = a | undefined;
+>r10b1 : Symbol(r10b1, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 165, 3))
+>a : Symbol(a, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 3, 3))
+>undefined : Symbol(undefined)
+
+var r10b2 = b | undefined;
+>r10b2 : Symbol(r10b2, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 166, 3))
+>b : Symbol(b, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 4, 3))
+>undefined : Symbol(undefined)
+
+var r10b3 = c | undefined;
+>r10b3 : Symbol(r10b3, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 167, 3))
+>c : Symbol(c, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 5, 3))
+>undefined : Symbol(undefined)
+
+var r10c1 = undefined | true;
+>r10c1 : Symbol(r10c1, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 169, 3))
+>undefined : Symbol(undefined)
+
+var r10c2 = undefined | '';
+>r10c2 : Symbol(r10c2, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 170, 3))
+>undefined : Symbol(undefined)
+
+var r10c3 = undefined | {};
+>r10c3 : Symbol(r10c3, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 171, 3))
+>undefined : Symbol(undefined)
+
+var r10d1 = true | undefined;
+>r10d1 : Symbol(r10d1, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 173, 3))
+>undefined : Symbol(undefined)
+
+var r10d2 = '' | undefined;
+>r10d2 : Symbol(r10d2, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 174, 3))
+>undefined : Symbol(undefined)
+
+var r10d3 = {} | undefined;
+>r10d3 : Symbol(r10d3, Decl(arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts, 175, 3))
+>undefined : Symbol(undefined)
+

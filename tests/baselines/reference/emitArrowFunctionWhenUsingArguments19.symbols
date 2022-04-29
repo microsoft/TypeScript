@@ -1,0 +1,30 @@
+=== tests/cases/conformance/es6/arrowFunction/emitArrowFunctionWhenUsingArguments19.ts ===
+function f() {
+>f : Symbol(f, Decl(emitArrowFunctionWhenUsingArguments19.ts, 0, 0))
+
+    function g() {
+>g : Symbol(g, Decl(emitArrowFunctionWhenUsingArguments19.ts, 0, 14))
+
+        var _arguments = 10;                // No capture in 'g', so no conflict.
+>_arguments : Symbol(_arguments, Decl(emitArrowFunctionWhenUsingArguments19.ts, 2, 11))
+
+        function h() {
+>h : Symbol(h, Decl(emitArrowFunctionWhenUsingArguments19.ts, 2, 28))
+
+            var capture = () => arguments;  // Should trigger an '_arguments' capture into function 'h'
+>capture : Symbol(capture, Decl(emitArrowFunctionWhenUsingArguments19.ts, 4, 15))
+>arguments : Symbol(arguments)
+
+            foo(_arguments);                // Error as this does not resolve to the user defined '_arguments'
+>foo : Symbol(foo, Decl(emitArrowFunctionWhenUsingArguments19.ts, 7, 5))
+>_arguments : Symbol(_arguments, Decl(emitArrowFunctionWhenUsingArguments19.ts, 2, 11))
+        }
+    }
+
+    function foo(x: any) {
+>foo : Symbol(foo, Decl(emitArrowFunctionWhenUsingArguments19.ts, 7, 5))
+>x : Symbol(x, Decl(emitArrowFunctionWhenUsingArguments19.ts, 9, 17))
+
+        return 100;
+    }
+}

@@ -1,0 +1,121 @@
+=== tests/cases/compiler/a.ts ===
+interface BigIntIndex<E> {
+    [index: bigint]: E; // should error
+>index : bigint
+}
+
+const arr: number[] = [1, 2, 3];
+>arr : number[]
+>[1, 2, 3] : number[]
+>1 : 1
+>2 : 2
+>3 : 3
+
+let num: number = arr[1];
+>num : number
+>arr[1] : number
+>arr : number[]
+>1 : 1
+
+num = arr["1"];
+>num = arr["1"] : number
+>num : number
+>arr["1"] : number
+>arr : number[]
+>"1" : "1"
+
+num = arr[1n]; // should error
+>num = arr[1n] : any
+>num : number
+>arr[1n] : any
+>arr : number[]
+>1n : 1n
+
+let key: keyof any; // should be type "string | number | symbol"
+>key : string | number | symbol
+
+key = 123;
+>key = 123 : 123
+>key : string | number | symbol
+>123 : 123
+
+key = "abc";
+>key = "abc" : "abc"
+>key : string | number | symbol
+>"abc" : "abc"
+
+key = Symbol();
+>key = Symbol() : symbol
+>key : string | number | symbol
+>Symbol() : symbol
+>Symbol : SymbolConstructor
+
+key = 123n; // should error
+>key = 123n : 123n
+>key : string | number | symbol
+>123n : 123n
+
+// Show correct usage of bigint index: explicitly convert to string
+const bigNum: bigint = 0n;
+>bigNum : bigint
+>0n : 0n
+
+const typedArray = new Uint8Array(3);
+>typedArray : Uint8Array
+>new Uint8Array(3) : Uint8Array
+>Uint8Array : Uint8ArrayConstructor
+>3 : 3
+
+typedArray[bigNum] = 0xAA; // should error
+>typedArray[bigNum] = 0xAA : 170
+>typedArray[bigNum] : any
+>typedArray : Uint8Array
+>bigNum : bigint
+>0xAA : 170
+
+typedArray[String(bigNum)] = 0xAA;
+>typedArray[String(bigNum)] = 0xAA : 170
+>typedArray[String(bigNum)] : any
+>typedArray : Uint8Array
+>String(bigNum) : string
+>String : StringConstructor
+>bigNum : bigint
+>0xAA : 170
+
+typedArray["1"] = 0xBB;
+>typedArray["1"] = 0xBB : 187
+>typedArray["1"] : number
+>typedArray : Uint8Array
+>"1" : "1"
+>0xBB : 187
+
+typedArray[2] = 0xCC;
+>typedArray[2] = 0xCC : 204
+>typedArray[2] : number
+>typedArray : Uint8Array
+>2 : 2
+>0xCC : 204
+
+// {1n: 123} is a syntax error; must go in separate file so BigIntIndex error is shown
+=== tests/cases/compiler/b.ts ===
+// BigInt cannot be used as an object literal property
+const a = {1n: 123};
+>a : {}
+>{ : {}
+>1n : 1n
+>123 : 123
+
+const b = {[1n]: 456};
+>b : {}
+>{[1n]: 456} : {}
+>[1n] : number
+>1n : 1n
+>456 : 456
+
+const c = {[bigNum]: 789};
+>c : {}
+>{[bigNum]: 789} : {}
+>[bigNum] : number
+>bigNum : bigint
+>789 : 789
+

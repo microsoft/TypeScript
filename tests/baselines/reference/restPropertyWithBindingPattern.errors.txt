@@ -1,0 +1,28 @@
+tests/cases/conformance/es6/destructuring/restPropertyWithBindingPattern.ts(1,6): error TS2501: A rest element cannot contain a binding pattern.
+tests/cases/conformance/es6/destructuring/restPropertyWithBindingPattern.ts(2,6): error TS2501: A rest element cannot contain a binding pattern.
+tests/cases/conformance/es6/destructuring/restPropertyWithBindingPattern.ts(2,6): error TS2701: The target of an object rest assignment must be a variable or a property access.
+tests/cases/conformance/es6/destructuring/restPropertyWithBindingPattern.ts(3,6): error TS2461: Type '{}' is not an array type.
+tests/cases/conformance/es6/destructuring/restPropertyWithBindingPattern.ts(3,6): error TS2501: A rest element cannot contain a binding pattern.
+tests/cases/conformance/es6/destructuring/restPropertyWithBindingPattern.ts(4,6): error TS2501: A rest element cannot contain a binding pattern.
+tests/cases/conformance/es6/destructuring/restPropertyWithBindingPattern.ts(4,6): error TS2701: The target of an object rest assignment must be a variable or a property access.
+
+
+==== tests/cases/conformance/es6/destructuring/restPropertyWithBindingPattern.ts (7 errors) ====
+    ({...{}} = {});
+         ~~
+!!! error TS2501: A rest element cannot contain a binding pattern.
+    ({...({})} = {});
+         ~~~~
+!!! error TS2501: A rest element cannot contain a binding pattern.
+         ~~~~
+!!! error TS2701: The target of an object rest assignment must be a variable or a property access.
+    ({...[]} = {});
+         ~~
+!!! error TS2461: Type '{}' is not an array type.
+         ~~
+!!! error TS2501: A rest element cannot contain a binding pattern.
+    ({...([])} = {});
+         ~~~~
+!!! error TS2501: A rest element cannot contain a binding pattern.
+         ~~~~
+!!! error TS2701: The target of an object rest assignment must be a variable or a property access.

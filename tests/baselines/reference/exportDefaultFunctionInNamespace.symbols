@@ -1,0 +1,13 @@
+=== tests/cases/compiler/exportDefaultFunctionInNamespace.ts ===
+namespace ns_function {
+>ns_function : Symbol(ns_function, Decl(exportDefaultFunctionInNamespace.ts, 0, 0))
+
+    export default function () {}
+}
+
+namespace ns_async_function {
+>ns_async_function : Symbol(ns_async_function, Decl(exportDefaultFunctionInNamespace.ts, 2, 1))
+
+    export default async function () {}
+}
+

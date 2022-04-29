@@ -1,0 +1,22 @@
+=== tests/cases/compiler/db.d.ts ===
+declare namespace Db {
+>Db : Symbol(Types, Decl(db.d.ts, 0, 0))
+
+    export import Types = Db;
+>Types : Symbol(Types, Decl(db.d.ts, 0, 22))
+>Db : Symbol(Types, Decl(db.d.ts, 0, 0))
+}
+
+export = Db;
+>Db : Symbol(Db, Decl(db.d.ts, 0, 0))
+
+=== tests/cases/compiler/app.ts ===
+import * as Db from "./db"
+>Db : Symbol(Db, Decl(app.ts, 0, 6))
+
+export function foo() {
+>foo : Symbol(foo, Decl(app.ts, 0, 26))
+
+    return new Object()
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+}

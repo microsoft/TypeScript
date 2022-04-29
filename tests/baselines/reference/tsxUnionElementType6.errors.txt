@@ -1,0 +1,43 @@
+tests/cases/conformance/jsx/file.tsx(18,23): error TS2322: Type '{ x: true; }' is not assignable to type 'IntrinsicAttributes'.
+  Property 'x' does not exist on type 'IntrinsicAttributes'.
+tests/cases/conformance/jsx/file.tsx(19,27): error TS2322: Type 'string' is not assignable to type 'boolean'.
+tests/cases/conformance/jsx/file.tsx(20,10): error TS2741: Property 'x' is missing in type '{}' but required in type '{ x: boolean; }'.
+tests/cases/conformance/jsx/file.tsx(21,10): error TS2741: Property 'x' is missing in type '{ "data-prop": true; }' but required in type '{ x: boolean; }'.
+
+
+==== tests/cases/conformance/jsx/file.tsx (4 errors) ====
+    import React = require('react');
+    
+    function EmptySFC1() {
+        return <div>Hi</div>
+    }
+    
+    function EmptySFC2() {
+        return <div>Hello</div>
+    }
+    
+    function SFC2(prop: { x: boolean }) {
+        return <h1>World</h1>;
+    }
+    
+    var EmptySFCComp = EmptySFC1 || EmptySFC2;
+    var SFC2AndEmptyComp = SFC2 || EmptySFC1;
+    // Error
+    let a = <EmptySFCComp x />;
+                          ~
+!!! error TS2322: Type '{ x: true; }' is not assignable to type 'IntrinsicAttributes'.
+!!! error TS2322:   Property 'x' does not exist on type 'IntrinsicAttributes'.
+    let b = <SFC2AndEmptyComp x="hi" />;
+                              ~
+!!! error TS2322: Type 'string' is not assignable to type 'boolean'.
+!!! related TS6500 tests/cases/conformance/jsx/file.tsx:11:23: The expected type comes from property 'x' which is declared here on type 'IntrinsicAttributes & { x: boolean; }'
+    let c = <SFC2AndEmptyComp />;
+             ~~~~~~~~~~~~~~~~
+!!! error TS2741: Property 'x' is missing in type '{}' but required in type '{ x: boolean; }'.
+!!! related TS2728 tests/cases/conformance/jsx/file.tsx:11:23: 'x' is declared here.
+    let d = <SFC2AndEmptyComp data-prop />;
+             ~~~~~~~~~~~~~~~~
+!!! error TS2741: Property 'x' is missing in type '{ "data-prop": true; }' but required in type '{ x: boolean; }'.
+!!! related TS2728 tests/cases/conformance/jsx/file.tsx:11:23: 'x' is declared here.
+    
+    

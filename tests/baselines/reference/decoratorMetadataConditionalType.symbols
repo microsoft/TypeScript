@@ -1,0 +1,28 @@
+=== tests/cases/compiler/decoratorMetadataConditionalType.ts ===
+declare function d(): PropertyDecorator;
+>d : Symbol(d, Decl(decoratorMetadataConditionalType.ts, 0, 0))
+>PropertyDecorator : Symbol(PropertyDecorator, Decl(lib.es5.d.ts, --, --))
+
+abstract class BaseEntity<T> {
+>BaseEntity : Symbol(BaseEntity, Decl(decoratorMetadataConditionalType.ts, 0, 40))
+>T : Symbol(T, Decl(decoratorMetadataConditionalType.ts, 1, 26))
+
+    @d()
+>d : Symbol(d, Decl(decoratorMetadataConditionalType.ts, 0, 0))
+
+    public attributes: T extends { attributes: infer A } ? A : undefined;
+>attributes : Symbol(BaseEntity.attributes, Decl(decoratorMetadataConditionalType.ts, 1, 30))
+>T : Symbol(T, Decl(decoratorMetadataConditionalType.ts, 1, 26))
+>attributes : Symbol(attributes, Decl(decoratorMetadataConditionalType.ts, 3, 34))
+>A : Symbol(A, Decl(decoratorMetadataConditionalType.ts, 3, 52))
+>A : Symbol(A, Decl(decoratorMetadataConditionalType.ts, 3, 52))
+}
+class C {
+>C : Symbol(C, Decl(decoratorMetadataConditionalType.ts, 4, 1))
+
+    @d()
+>d : Symbol(d, Decl(decoratorMetadataConditionalType.ts, 0, 0))
+
+    x: number extends string ? false : true;
+>x : Symbol(C.x, Decl(decoratorMetadataConditionalType.ts, 5, 9))
+}

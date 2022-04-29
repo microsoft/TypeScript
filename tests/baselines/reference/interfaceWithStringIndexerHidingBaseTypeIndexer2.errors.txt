@@ -1,0 +1,26 @@
+tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithStringIndexerHidingBaseTypeIndexer2.ts(17,5): error TS2411: Property '1' of type '{ a: number; }' is not assignable to 'number' index type '{ a: number; b: number; }'.
+
+
+==== tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithStringIndexerHidingBaseTypeIndexer2.ts (1 errors) ====
+    interface Base {
+        [x: number]: { a: number; b: number }
+        x: {
+            a: number; b: number;
+        }
+    }
+    
+    interface Derived extends Base {
+        [x: string]: {
+            a: number
+        };
+    
+        y: {
+            a: number;
+        }
+        // error
+        1: {
+        ~
+!!! error TS2411: Property '1' of type '{ a: number; }' is not assignable to 'number' index type '{ a: number; b: number; }'.
+            a: number;
+        }
+    }

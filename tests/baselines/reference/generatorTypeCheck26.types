@@ -1,0 +1,29 @@
+=== tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck26.ts ===
+function* g(): IterableIterator<(x: string) => number> {
+>g : () => IterableIterator<(x: string) => number>
+>x : string
+
+    yield x => x.length;
+>yield x => x.length : undefined
+>x => x.length : (x: string) => number
+>x : string
+>x.length : number
+>x : string
+>length : number
+
+    yield *[x => x.length];
+>yield *[x => x.length] : any
+>[x => x.length] : ((x: string) => number)[]
+>x => x.length : (x: string) => number
+>x : string
+>x.length : number
+>x : string
+>length : number
+
+    return x => x.length;
+>x => x.length : (x: any) => any
+>x : any
+>x.length : any
+>x : any
+>length : any
+}

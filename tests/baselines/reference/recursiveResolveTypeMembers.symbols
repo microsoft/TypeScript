@@ -1,0 +1,25 @@
+=== tests/cases/compiler/recursiveResolveTypeMembers.ts ===
+// Repro from #25291
+
+type PromisedTuple<L extends any[], U = (...args: L) => void> =
+>PromisedTuple : Symbol(PromisedTuple, Decl(recursiveResolveTypeMembers.ts, 0, 0))
+>L : Symbol(L, Decl(recursiveResolveTypeMembers.ts, 2, 19))
+>U : Symbol(U, Decl(recursiveResolveTypeMembers.ts, 2, 35))
+>args : Symbol(args, Decl(recursiveResolveTypeMembers.ts, 2, 41))
+>L : Symbol(L, Decl(recursiveResolveTypeMembers.ts, 2, 19))
+
+    U extends (h: infer H, ...args: infer R) => [Promise<H>, ...PromisedTuple<R>] ? [] : []
+>U : Symbol(U, Decl(recursiveResolveTypeMembers.ts, 2, 35))
+>h : Symbol(h, Decl(recursiveResolveTypeMembers.ts, 3, 15))
+>H : Symbol(H, Decl(recursiveResolveTypeMembers.ts, 3, 23))
+>args : Symbol(args, Decl(recursiveResolveTypeMembers.ts, 3, 26))
+>R : Symbol(R, Decl(recursiveResolveTypeMembers.ts, 3, 41))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+>H : Symbol(H)
+>PromisedTuple : Symbol(PromisedTuple, Decl(recursiveResolveTypeMembers.ts, 0, 0))
+>R : Symbol(R)
+
+type Promised = PromisedTuple<[1, 2, 3]> 
+>Promised : Symbol(Promised, Decl(recursiveResolveTypeMembers.ts, 3, 91))
+>PromisedTuple : Symbol(PromisedTuple, Decl(recursiveResolveTypeMembers.ts, 0, 0))
+

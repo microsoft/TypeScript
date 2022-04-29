@@ -1,0 +1,27 @@
+=== tests/cases/conformance/types/typeParameters/typeArgumentLists/constraintSatisfactionWithAny2.ts ===
+// errors expected for type parameter cannot be referenced in the constraints of the same list
+// any is not a valid type argument unless there is no constraint, or the constraint is any
+
+declare function foo<Z, T extends <U>(x: U) => Z>(y: T): Z;
+>foo : Symbol(foo, Decl(constraintSatisfactionWithAny2.ts, 0, 0))
+>Z : Symbol(Z, Decl(constraintSatisfactionWithAny2.ts, 3, 21))
+>T : Symbol(T, Decl(constraintSatisfactionWithAny2.ts, 3, 23))
+>U : Symbol(U, Decl(constraintSatisfactionWithAny2.ts, 3, 35))
+>x : Symbol(x, Decl(constraintSatisfactionWithAny2.ts, 3, 38))
+>U : Symbol(U, Decl(constraintSatisfactionWithAny2.ts, 3, 35))
+>Z : Symbol(Z, Decl(constraintSatisfactionWithAny2.ts, 3, 21))
+>y : Symbol(y, Decl(constraintSatisfactionWithAny2.ts, 3, 50))
+>T : Symbol(T, Decl(constraintSatisfactionWithAny2.ts, 3, 23))
+>Z : Symbol(Z, Decl(constraintSatisfactionWithAny2.ts, 3, 21))
+
+var a: any;
+>a : Symbol(a, Decl(constraintSatisfactionWithAny2.ts, 4, 3))
+
+foo(a);
+>foo : Symbol(foo, Decl(constraintSatisfactionWithAny2.ts, 0, 0))
+>a : Symbol(a, Decl(constraintSatisfactionWithAny2.ts, 4, 3))
+
+foo<any, any>(a);
+>foo : Symbol(foo, Decl(constraintSatisfactionWithAny2.ts, 0, 0))
+>a : Symbol(a, Decl(constraintSatisfactionWithAny2.ts, 4, 3))
+

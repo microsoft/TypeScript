@@ -1,0 +1,39 @@
+=== tests/cases/compiler/moduleSharesNameWithImportDeclarationInsideIt5.ts ===
+module Z {
+>Z : typeof Z
+
+    export module M {
+>M : typeof M
+
+        export function bar() {
+>bar : () => string
+
+            return "";
+>"" : ""
+        }
+    }
+    export interface I { }
+}
+module A.M {
+>A : typeof A
+>M : typeof M
+
+    import M = Z.I;
+>M : any
+>Z : typeof Z
+>I : M
+
+    import M = Z.M;
+>M : typeof Z.M
+>Z : typeof Z
+>M : typeof Z.M
+
+    export function bar() {
+>bar : () => void
+    }
+    M.bar(); // Should call Z.M.bar
+>M.bar() : void
+>M.bar : () => void
+>M : typeof M
+>bar : () => void
+}

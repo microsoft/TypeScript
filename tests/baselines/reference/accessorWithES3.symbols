@@ -1,0 +1,36 @@
+=== tests/cases/conformance/classes/propertyMemberDeclarations/memberAccessorDeclarations/accessorWithES3.ts ===
+// error to use accessors in ES3 mode
+
+class C {
+>C : Symbol(C, Decl(accessorWithES3.ts, 0, 0))
+
+    get x() {
+>x : Symbol(C.x, Decl(accessorWithES3.ts, 2, 9))
+
+        return 1;
+    }
+}
+
+class D {
+>D : Symbol(D, Decl(accessorWithES3.ts, 6, 1))
+
+    set x(v) {
+>x : Symbol(D.x, Decl(accessorWithES3.ts, 8, 9))
+>v : Symbol(v, Decl(accessorWithES3.ts, 9, 10))
+    }
+}
+
+var x = {
+>x : Symbol(x, Decl(accessorWithES3.ts, 13, 3))
+
+    get a() { return 1 }
+>a : Symbol(a, Decl(accessorWithES3.ts, 13, 9))
+}
+
+var y = {
+>y : Symbol(y, Decl(accessorWithES3.ts, 17, 3))
+
+    set b(v) { }
+>b : Symbol(b, Decl(accessorWithES3.ts, 17, 9))
+>v : Symbol(v, Decl(accessorWithES3.ts, 18, 10))
+}

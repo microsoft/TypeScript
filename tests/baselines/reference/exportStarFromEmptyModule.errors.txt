@@ -1,0 +1,29 @@
+tests/cases/compiler/exportStarFromEmptyModule_module3.ts(1,15): error TS2306: File 'tests/cases/compiler/exportStarFromEmptyModule_module2.ts' is not a module.
+tests/cases/compiler/exportStarFromEmptyModule_module4.ts(4,5): error TS2339: Property 'r' does not exist on type 'typeof A'.
+
+
+==== tests/cases/compiler/exportStarFromEmptyModule_module1.ts (0 errors) ====
+    export class A {
+        static r;
+    }
+    
+==== tests/cases/compiler/exportStarFromEmptyModule_module2.ts (0 errors) ====
+    // empty
+    
+==== tests/cases/compiler/exportStarFromEmptyModule_module3.ts (1 errors) ====
+    export * from "./exportStarFromEmptyModule_module2";
+                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2306: File 'tests/cases/compiler/exportStarFromEmptyModule_module2.ts' is not a module.
+    export * from "./exportStarFromEmptyModule_module1";
+    
+    export class A {
+        static q;
+    }
+    
+==== tests/cases/compiler/exportStarFromEmptyModule_module4.ts (1 errors) ====
+    import * as X from "./exportStarFromEmptyModule_module3";
+    var s: X.A;
+    X.A.q;
+    X.A.r; // Error
+        ~
+!!! error TS2339: Property 'r' does not exist on type 'typeof A'.

@@ -1,0 +1,32 @@
+=== tests/cases/conformance/types/specifyingTypes/typeQueries/typeofClassWithPrivates.ts ===
+class C<T> {
+>C : Symbol(C, Decl(typeofClassWithPrivates.ts, 0, 0))
+>T : Symbol(T, Decl(typeofClassWithPrivates.ts, 0, 8))
+
+    private a: number;
+>a : Symbol(C.a, Decl(typeofClassWithPrivates.ts, 0, 12))
+
+    private static b: number;
+>b : Symbol(C.b, Decl(typeofClassWithPrivates.ts, 1, 22))
+
+    x: T;
+>x : Symbol(C.x, Decl(typeofClassWithPrivates.ts, 2, 29))
+>T : Symbol(T, Decl(typeofClassWithPrivates.ts, 0, 8))
+
+    static y: T;
+>y : Symbol(C.y, Decl(typeofClassWithPrivates.ts, 3, 9))
+>T : Symbol(T)
+}
+
+var c: C<string>;
+>c : Symbol(c, Decl(typeofClassWithPrivates.ts, 7, 3))
+>C : Symbol(C, Decl(typeofClassWithPrivates.ts, 0, 0))
+
+var r: typeof C;
+>r : Symbol(r, Decl(typeofClassWithPrivates.ts, 8, 3))
+>C : Symbol(C, Decl(typeofClassWithPrivates.ts, 0, 0))
+
+var r2: typeof c;
+>r2 : Symbol(r2, Decl(typeofClassWithPrivates.ts, 9, 3))
+>c : Symbol(c, Decl(typeofClassWithPrivates.ts, 7, 3))
+

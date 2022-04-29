@@ -1,0 +1,26 @@
+=== tests/cases/compiler/systemNamespaceAliasEmit.ts ===
+namespace ns {
+>ns : Symbol(ns, Decl(systemNamespaceAliasEmit.ts, 0, 0))
+
+    const value = 1;
+>value : Symbol(value, Decl(systemNamespaceAliasEmit.ts, 1, 9))
+}
+
+enum AnEnum {
+>AnEnum : Symbol(AnEnum, Decl(systemNamespaceAliasEmit.ts, 2, 1))
+
+    ONE,
+>ONE : Symbol(AnEnum.ONE, Decl(systemNamespaceAliasEmit.ts, 4, 13))
+
+    TWO
+>TWO : Symbol(AnEnum.TWO, Decl(systemNamespaceAliasEmit.ts, 5, 8))
+}
+
+export {ns, AnEnum, ns as FooBar, AnEnum as BarEnum};
+>ns : Symbol(ns, Decl(systemNamespaceAliasEmit.ts, 9, 8))
+>AnEnum : Symbol(AnEnum, Decl(systemNamespaceAliasEmit.ts, 9, 11))
+>ns : Symbol(ns, Decl(systemNamespaceAliasEmit.ts, 0, 0))
+>FooBar : Symbol(FooBar, Decl(systemNamespaceAliasEmit.ts, 9, 19))
+>AnEnum : Symbol(AnEnum, Decl(systemNamespaceAliasEmit.ts, 2, 1))
+>BarEnum : Symbol(BarEnum, Decl(systemNamespaceAliasEmit.ts, 9, 33))
+

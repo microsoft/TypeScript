@@ -1,0 +1,5 @@
+=== tests/cases/conformance/es6/unicodeExtendedEscapes/unicodeExtendedEscapesInRegularExpressions17_ES6.ts ===
+var x = /\u{r}\u{n}\u{t}/g;
+>x : RegExp
+>/\u{r}\u{n}\u{t}/g : RegExp
+

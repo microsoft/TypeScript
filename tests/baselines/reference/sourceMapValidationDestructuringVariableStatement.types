@@ -1,0 +1,78 @@
+=== tests/cases/compiler/sourceMapValidationDestructuringVariableStatement.ts ===
+interface Robot {
+    name: string;
+>name : string
+
+    skill: string;
+>skill : string
+}
+declare var console: {
+>console : { log(msg: string): void; }
+
+    log(msg: string): void;
+>log : (msg: string) => void
+>msg : string
+}
+var hello = "hello";
+>hello : string
+>"hello" : "hello"
+
+var robotA: Robot = { name: "mower", skill: "mowing" };
+>robotA : Robot
+>{ name: "mower", skill: "mowing" } : { name: string; skill: string; }
+>name : string
+>"mower" : "mower"
+>skill : string
+>"mowing" : "mowing"
+
+var robotB: Robot = { name: "trimmer", skill: "trimming" };
+>robotB : Robot
+>{ name: "trimmer", skill: "trimming" } : { name: string; skill: string; }
+>name : string
+>"trimmer" : "trimmer"
+>skill : string
+>"trimming" : "trimming"
+
+var { name: nameA } = robotA;
+>name : any
+>nameA : string
+>robotA : Robot
+
+var { name: nameB, skill: skillB } = robotB;
+>name : any
+>nameB : string
+>skill : any
+>skillB : string
+>robotB : Robot
+
+var { name: nameC, skill: skillC } = { name: "Edger", skill: "cutting edges" };
+>name : any
+>nameC : string
+>skill : any
+>skillC : string
+>{ name: "Edger", skill: "cutting edges" } : { name: string; skill: string; }
+>name : string
+>"Edger" : "Edger"
+>skill : string
+>"cutting edges" : "cutting edges"
+
+if (nameA == nameB) {
+>nameA == nameB : boolean
+>nameA : string
+>nameB : string
+
+    console.log(skillB);
+>console.log(skillB) : void
+>console.log : (msg: string) => void
+>console : { log(msg: string): void; }
+>log : (msg: string) => void
+>skillB : string
+}
+else {
+    console.log(nameC);
+>console.log(nameC) : void
+>console.log : (msg: string) => void
+>console : { log(msg: string): void; }
+>log : (msg: string) => void
+>nameC : string
+}

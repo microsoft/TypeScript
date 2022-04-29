@@ -1,0 +1,28 @@
+=== tests/cases/conformance/expressions/unaryOperators/bitwiseNotOperator/bitwiseNotOperatorInvalidOperations.ts ===
+// Unary operator ~
+var q;
+>q : any
+
+// operand before ~
+var a = q~;  //expect error
+>a : any
+>q : any
+>~ : number
+> : any
+
+// multiple operands after ~
+var mul = ~[1, 2, "abc"], "";  //expect error
+>mul : number
+>~[1, 2, "abc"] : number
+>[1, 2, "abc"] : (string | number)[]
+>1 : 1
+>2 : 2
+>"abc" : "abc"
+>"" : ""
+
+// miss an operand
+var b =~;
+>b : number
+>~ : number
+> : any
+

@@ -1,0 +1,2 @@
+//@target: ES5
+for (var of of of) { }

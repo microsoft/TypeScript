@@ -1,0 +1,60 @@
+=== tests/cases/conformance/jsdoc/use.js ===
+/// <reference path='./types.d.ts'/>
+/** @typedef {import("./mod1")} C
+ * @type {C} */
+var c;
+>c : D
+
+c.chunk;
+>c.chunk : number
+>c : D
+>chunk : number
+
+const D = require("./mod1");
+>D : typeof D
+>require("./mod1") : typeof D
+>require : (name: string) => any
+>"./mod1" : "./mod1"
+
+/** @type {D} */
+var d;
+>d : D
+
+d.chunk;
+>d.chunk : number
+>d : D
+>chunk : number
+
+=== tests/cases/conformance/jsdoc/types.d.ts ===
+declare function require(name: string): any;
+>require : (name: string) => any
+>name : string
+
+declare var exports: any;
+>exports : any
+
+declare var module: { exports: any };
+>module : { exports: any; }
+>exports : any
+
+=== tests/cases/conformance/jsdoc/mod1.js ===
+/// <reference path='./types.d.ts'/>
+class Chunk {
+>Chunk : Chunk
+
+    constructor() {
+        this.chunk = 1;
+>this.chunk = 1 : 1
+>this.chunk : any
+>this : this
+>chunk : any
+>1 : 1
+    }
+}
+module.exports = Chunk;
+>module.exports = Chunk : typeof Chunk
+>module.exports : typeof Chunk
+>module : { exports: typeof Chunk; }
+>exports : typeof Chunk
+>Chunk : typeof Chunk
+

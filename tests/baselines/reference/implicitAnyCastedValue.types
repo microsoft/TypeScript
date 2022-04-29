@@ -1,0 +1,180 @@
+=== tests/cases/compiler/implicitAnyCastedValue.ts ===
+var x = function () {
+>x : () => any
+>function () {    return <any>0;  // this should not be an error} : () => any
+
+    return <any>0;  // this should not be an error
+><any>0 : any
+>0 : 0
+}
+
+function foo() {
+>foo : () => any
+
+    return <any>"hello world";  // this should not be an error
+><any>"hello world" : any
+>"hello world" : "hello world"
+}
+
+class C {
+>C : C
+
+    bar = null;  // this should be an error
+>bar : any
+>null : null
+
+    foo = undefined;  // this should be an error
+>foo : any
+>undefined : undefined
+
+    public get tempVar() {
+>tempVar : any
+
+        return <any>0;  // this should not be an error
+><any>0 : any
+>0 : 0
+    }
+
+    public returnBarWithCase() {    // this should not be an error
+>returnBarWithCase : () => any
+
+        return <any>this.bar;
+><any>this.bar : any
+>this.bar : any
+>this : this
+>bar : any
+    }
+
+    public returnFooWithCase() {
+>returnFooWithCase : () => any
+
+        return <any>this.foo;  // this should not be an error
+><any>this.foo : any
+>this.foo : any
+>this : this
+>foo : any
+    }
+}
+
+class C1 {
+>C1 : C1
+
+    getValue = null;  // this should be an error
+>getValue : any
+>null : null
+
+    public get castedGet() {
+>castedGet : any
+
+        return <any>this.getValue;  // this should not be an error
+><any>this.getValue : any
+>this.getValue : any
+>this : this
+>getValue : any
+    }
+
+    public get notCastedGet() {
+>notCastedGet : any
+
+        return this.getValue;  // this should not be an error
+>this.getValue : any
+>this : this
+>getValue : any
+    }
+}
+
+function castedNull() {
+>castedNull : () => any
+
+    return <any>null;  // this should not be an error
+><any>null : any
+>null : null
+}
+
+function notCastedNull() {
+>notCastedNull : () => any
+
+    return null;  // this should be an error
+>null : null
+}
+
+function returnTypeBar(): any {
+>returnTypeBar : () => any
+
+    return null;  // this should not be an error
+>null : null
+}
+
+function undefinedBar() {
+>undefinedBar : () => any
+
+    return <any>undefined;  // this should not be an error
+><any>undefined : any
+>undefined : undefined
+}
+
+function multipleRets1(x) {    // this should not be an error
+>multipleRets1 : (x: any) => any
+>x : any
+
+    if (x) {
+>x : any
+
+        return <any>0;
+><any>0 : any
+>0 : 0
+    }
+    else {
+        return null;
+>null : null
+    }
+}
+
+function multipleRets2(x) {    // this should not be an error
+>multipleRets2 : (x: any) => any
+>x : any
+
+    if (x) {
+>x : any
+
+        return null;
+>null : null
+    }
+    else if (x == 1) {
+>x == 1 : boolean
+>x : any
+>1 : 1
+
+        return <any>0;
+><any>0 : any
+>0 : 0
+    }
+    else {
+        return undefined;
+>undefined : undefined
+    }
+}
+
+// this should not be an error
+var bar1 = <any>null;
+>bar1 : any
+><any>null : any
+>null : null
+
+var bar2 = <any>undefined;
+>bar2 : any
+><any>undefined : any
+>undefined : undefined
+
+var bar3 = <any>0;
+>bar3 : any
+><any>0 : any
+>0 : 0
+
+var array = <any>[null, undefined];
+>array : any
+><any>[null, undefined] : any
+>[null, undefined] : null[]
+>null : null
+>undefined : undefined
+

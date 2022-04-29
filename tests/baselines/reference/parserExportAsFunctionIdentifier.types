@@ -1,0 +1,16 @@
+=== tests/cases/conformance/parser/ecmascript5/parserExportAsFunctionIdentifier.ts ===
+interface Foo {
+       export(): string;
+>export : () => string
+}
+
+var f: Foo;
+>f : Foo
+
+var x = f.export();
+>x : string
+>f.export() : string
+>f.export : () => string
+>f : Foo
+>export : () => string
+

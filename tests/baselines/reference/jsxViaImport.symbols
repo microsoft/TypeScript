@@ -1,0 +1,47 @@
+=== tests/cases/compiler/consumer.tsx ===
+/// <reference path="component.d.ts" />
+import BaseComponent = require('BaseComponent');
+>BaseComponent : Symbol(BaseComponent, Decl(consumer.tsx, 0, 0))
+
+class TestComponent extends React.Component<any, {}> {
+>TestComponent : Symbol(TestComponent, Decl(consumer.tsx, 1, 48))
+>React.Component : Symbol(React.Component, Decl(component.d.ts, 3, 22))
+>React : Symbol(React, Decl(component.d.ts, 2, 1))
+>Component : Symbol(React.Component, Decl(component.d.ts, 3, 22))
+
+    render() {
+>render : Symbol(TestComponent.render, Decl(consumer.tsx, 2, 54))
+
+        return <BaseComponent />;
+>BaseComponent : Symbol(BaseComponent, Decl(consumer.tsx, 0, 0))
+    }
+}
+
+=== tests/cases/compiler/component.d.ts ===
+declare module JSX {
+>JSX : Symbol(JSX, Decl(component.d.ts, 0, 0))
+
+  interface ElementAttributesProperty { props; }
+>ElementAttributesProperty : Symbol(ElementAttributesProperty, Decl(component.d.ts, 0, 20))
+>props : Symbol(ElementAttributesProperty.props, Decl(component.d.ts, 1, 39))
+}
+declare module React {
+>React : Symbol(React, Decl(component.d.ts, 2, 1))
+
+  class Component<T, U> { }
+>Component : Symbol(Component, Decl(component.d.ts, 3, 22))
+>T : Symbol(T, Decl(component.d.ts, 4, 18))
+>U : Symbol(U, Decl(component.d.ts, 4, 20))
+}
+declare module "BaseComponent" {
+>"BaseComponent" : Symbol("BaseComponent", Decl(component.d.ts, 5, 1))
+
+    var base: React.Component<any, {}>;
+>base : Symbol(base, Decl(component.d.ts, 7, 7))
+>React : Symbol(React, Decl(component.d.ts, 2, 1))
+>Component : Symbol(React.Component, Decl(component.d.ts, 3, 22))
+
+    export = base;
+>base : Symbol(base, Decl(component.d.ts, 7, 7))
+}
+

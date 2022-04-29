@@ -1,0 +1,16 @@
+=== tests/cases/compiler/typeOfSuperCall.ts ===
+class C {
+>C : C
+}
+
+class D extends C {
+>D : D
+>C : C
+
+    constructor() {
+        var x: void = super();
+>x : void
+>super() : void
+>super : typeof C
+    }
+}

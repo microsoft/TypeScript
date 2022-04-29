@@ -1,0 +1,22 @@
+=== tests/cases/conformance/async/es5/asyncArrowFunction/asyncArrowFunction11_es5.ts ===
+// https://github.com/Microsoft/TypeScript/issues/24722
+class A {
+>A : Symbol(A, Decl(asyncArrowFunction11_es5.ts, 0, 0))
+
+    b = async (...args: any[]) => {
+>b : Symbol(A.b, Decl(asyncArrowFunction11_es5.ts, 1, 9))
+>args : Symbol(args, Decl(asyncArrowFunction11_es5.ts, 2, 15))
+
+        await Promise.resolve();
+>Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+
+        const obj = { ["a"]: () => this }; // computed property name after `await` triggers case
+>obj : Symbol(obj, Decl(asyncArrowFunction11_es5.ts, 4, 13))
+>["a"] : Symbol(["a"], Decl(asyncArrowFunction11_es5.ts, 4, 21))
+>"a" : Symbol(["a"], Decl(asyncArrowFunction11_es5.ts, 4, 21))
+>this : Symbol(A, Decl(asyncArrowFunction11_es5.ts, 0, 0))
+
+    };
+}

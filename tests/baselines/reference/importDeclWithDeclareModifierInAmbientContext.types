@@ -1,0 +1,17 @@
+=== tests/cases/compiler/importDeclWithDeclareModifierInAmbientContext.ts ===
+declare module "m" {
+>"m" : typeof import("m")
+
+    module x {
+        interface c {
+        }
+    }
+    declare export import a = x.c;
+>a : any
+>x : any
+>c : a
+
+    var b: a;
+>b : a
+}
+

@@ -1,0 +1,12 @@
+tests/cases/compiler/es6ClassTest9.ts(1,18): error TS1005: '{' expected.
+tests/cases/compiler/es6ClassTest9.ts(1,19): error TS1109: Expression expected.
+
+
+==== tests/cases/compiler/es6ClassTest9.ts (2 errors) ====
+    declare class foo();
+                     ~
+!!! error TS1005: '{' expected.
+                      ~
+!!! error TS1109: Expression expected.
+    function foo() {}
+    

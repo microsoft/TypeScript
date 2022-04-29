@@ -1,0 +1,40 @@
+=== tests/cases/compiler/constraintCheckInGenericBaseTypeReference.ts ===
+// No errors
+class Constraint {
+>Constraint : Constraint
+
+    public method() { }
+>method : () => void
+}
+class GenericBase<T extends Constraint> {
+>GenericBase : GenericBase<T>
+
+    public items: any;
+>items : any
+}
+class Derived extends GenericBase<TypeArg> {
+>Derived : Derived
+>GenericBase : GenericBase<TypeArg>
+
+}
+class TypeArg {
+>TypeArg : TypeArg
+
+    public method() {
+>method : () => void
+
+        Container.People.items;
+>Container.People.items : any
+>Container.People : Derived
+>Container : typeof Container
+>People : Derived
+>items : any
+    }
+}
+
+class Container {
+>Container : Container
+
+    public static People: Derived
+>People : Derived
+}

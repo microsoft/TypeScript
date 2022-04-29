@@ -1,0 +1,25 @@
+=== tests/cases/compiler/numericIndexerConstraint3.ts ===
+class A {
+>A : A
+
+    foo: number;
+>foo : number
+}
+
+class B extends A {
+>B : B
+>A : A
+
+    bar: string;
+>bar : string
+}
+
+class C {
+>C : C
+
+    0: B;
+>0 : B
+
+    [x: number]: A;
+>x : number
+}

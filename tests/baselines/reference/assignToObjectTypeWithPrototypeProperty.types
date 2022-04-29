@@ -1,0 +1,15 @@
+=== tests/cases/compiler/assignToObjectTypeWithPrototypeProperty.ts ===
+class XEvent {}
+>XEvent : XEvent
+
+var p: XEvent = XEvent.prototype;
+>p : XEvent
+>XEvent.prototype : XEvent
+>XEvent : typeof XEvent
+>prototype : XEvent
+
+var x: {prototype: XEvent} = XEvent;
+>x : { prototype: XEvent; }
+>prototype : XEvent
+>XEvent : typeof XEvent
+

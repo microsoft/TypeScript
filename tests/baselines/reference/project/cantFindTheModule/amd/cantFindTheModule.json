@@ -1,0 +1,14 @@
+{
+    "scenario": "can't find the module",
+    "projectRoot": "tests/cases/projects/NoModule",
+    "inputFiles": [
+        "decl.ts"
+    ],
+    "resolvedInputFiles": [
+        "lib.es5.d.ts",
+        "decl.ts"
+    ],
+    "emittedFiles": [
+        "decl.js"
+    ]
+}

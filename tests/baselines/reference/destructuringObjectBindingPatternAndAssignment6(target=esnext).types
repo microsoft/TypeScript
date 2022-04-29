@@ -1,0 +1,36 @@
+=== tests/cases/conformance/es6/destructuring/destructuringObjectBindingPatternAndAssignment6.ts ===
+const a = "a";
+>a : "a"
+>"a" : "a"
+
+const b = "b";
+>b : "b"
+>"b" : "b"
+
+const { [a]: aVal, [b]: bVal } = (() => {
+>a : "a"
+>aVal : number
+>b : "b"
+>bVal : number
+>(() => {	return { [a]: 1, [b]: 1 };})() : { a: number; b: number; }
+>(() => {	return { [a]: 1, [b]: 1 };}) : () => { a: number; b: number; }
+>() => {	return { [a]: 1, [b]: 1 };} : () => { a: number; b: number; }
+
+	return { [a]: 1, [b]: 1 };
+>{ [a]: 1, [b]: 1 } : { a: number; b: number; }
+>[a] : number
+>a : "a"
+>1 : 1
+>[b] : number
+>b : "b"
+>1 : 1
+
+})();
+console.log(aVal, bVal);
+>console.log(aVal, bVal) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>aVal : number
+>bVal : number
+

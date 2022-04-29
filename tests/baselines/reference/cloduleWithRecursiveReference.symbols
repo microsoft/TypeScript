@@ -1,0 +1,17 @@
+=== tests/cases/compiler/cloduleWithRecursiveReference.ts ===
+module M
+>M : Symbol(M, Decl(cloduleWithRecursiveReference.ts, 0, 0))
+{
+  export class C {  }
+>C : Symbol(C, Decl(cloduleWithRecursiveReference.ts, 1, 1), Decl(cloduleWithRecursiveReference.ts, 2, 21))
+
+  export module C {
+>C : Symbol(C, Decl(cloduleWithRecursiveReference.ts, 1, 1), Decl(cloduleWithRecursiveReference.ts, 2, 21))
+
+    export var C = M.C
+>C : Symbol(C, Decl(cloduleWithRecursiveReference.ts, 4, 14))
+>M.C : Symbol(C, Decl(cloduleWithRecursiveReference.ts, 1, 1), Decl(cloduleWithRecursiveReference.ts, 2, 21))
+>M : Symbol(M, Decl(cloduleWithRecursiveReference.ts, 0, 0))
+>C : Symbol(C, Decl(cloduleWithRecursiveReference.ts, 1, 1), Decl(cloduleWithRecursiveReference.ts, 2, 21))
+  }
+}

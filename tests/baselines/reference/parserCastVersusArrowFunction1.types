@@ -1,0 +1,59 @@
+=== tests/cases/conformance/parser/ecmascript5/Generics/parserCastVersusArrowFunction1.ts ===
+var v = <T>() => 1;
+>v : <T>() => number
+><T>() => 1 : <T>() => number
+>1 : 1
+
+var v = <T>a;
+>v : <T>() => number
+><T>a : T
+>a : any
+
+var v = <T>(a) => 1;
+>v : <T>() => number
+><T>(a) => 1 : <T>(a: any) => number
+>a : any
+>1 : 1
+
+var v = <T>(a, b) => 1;
+>v : <T>() => number
+><T>(a, b) => 1 : <T>(a: any, b: any) => number
+>a : any
+>b : any
+>1 : 1
+
+var v = <T>(a = 1, b = 2) => 1;
+>v : <T>() => number
+><T>(a = 1, b = 2) => 1 : <T>(a?: number, b?: number) => number
+>a : number
+>1 : 1
+>b : number
+>2 : 2
+>1 : 1
+
+var v = <T>(a);
+>v : <T>() => number
+><T>(a) : T
+>(a) : any
+>a : any
+
+var v = <T>(a, b);
+>v : <T>() => number
+><T>(a, b) : T
+>(a, b) : any
+>a, b : any
+>a : any
+>b : any
+
+var v = <T>(a = 1, b = 2);
+>v : <T>() => number
+><T>(a = 1, b = 2) : T
+>(a = 1, b = 2) : 2
+>a = 1, b = 2 : 2
+>a = 1 : 1
+>a : any
+>1 : 1
+>b = 2 : 2
+>b : any
+>2 : 2
+

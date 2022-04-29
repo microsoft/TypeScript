@@ -1,0 +1,34 @@
+=== tests/cases/compiler/externalModuleExportingGenericClass_file1.ts ===
+import a = require('./externalModuleExportingGenericClass_file0');
+>a : typeof a
+
+var v: a; // this should report error
+>v : any
+
+var v2: any = (new a()).foo;
+>v2 : any
+>(new a()).foo : unknown
+>(new a()) : a<unknown>
+>new a() : a<unknown>
+>a : typeof a
+>foo : unknown
+
+var v3: number = (new a<number>()).foo;
+>v3 : number
+>(new a<number>()).foo : number
+>(new a<number>()) : a<number>
+>new a<number>() : a<number>
+>a : typeof a
+>foo : number
+
+=== tests/cases/compiler/externalModuleExportingGenericClass_file0.ts ===
+class C<T> {
+>C : C<T>
+
+    foo: T;
+>foo : T
+}
+export = C;
+>C : C<T>
+
+

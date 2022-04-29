@@ -1,0 +1,33 @@
+tests/cases/compiler/propertyAssignment.ts(4,13): error TS1170: A computed property name in a type literal must refer to an expression whose type is a literal type or a 'unique symbol' type.
+tests/cases/compiler/propertyAssignment.ts(4,14): error TS2304: Cannot find name 'index'.
+tests/cases/compiler/propertyAssignment.ts(12,1): error TS2322: Type '{ x: number; }' is not assignable to type 'new () => any'.
+  Type '{ x: number; }' provides no match for the signature 'new (): any'.
+tests/cases/compiler/propertyAssignment.ts(14,1): error TS2322: Type '{ x: number; }' is not assignable to type '() => void'.
+  Type '{ x: number; }' provides no match for the signature '(): void'.
+
+
+==== tests/cases/compiler/propertyAssignment.ts (4 errors) ====
+    var foo1: { new ():any; }   
+    var bar1: { x : number; }
+    
+    var foo2: { [index]; } // should be an error, used to be indexer, now it is a computed property
+                ~~~~~~~
+!!! error TS1170: A computed property name in a type literal must refer to an expression whose type is a literal type or a 'unique symbol' type.
+                 ~~~~~
+!!! error TS2304: Cannot find name 'index'.
+    var bar2: { x : number; }
+    
+    var foo3: { ():void; }
+    var bar3: { x : number; }
+    
+    
+    
+    foo1 = bar1; // should be an error
+    ~~~~
+!!! error TS2322: Type '{ x: number; }' is not assignable to type 'new () => any'.
+!!! error TS2322:   Type '{ x: number; }' provides no match for the signature 'new (): any'.
+    foo2 = bar2; 
+    foo3 = bar3; // should be an error
+    ~~~~
+!!! error TS2322: Type '{ x: number; }' is not assignable to type '() => void'.
+!!! error TS2322:   Type '{ x: number; }' provides no match for the signature '(): void'.

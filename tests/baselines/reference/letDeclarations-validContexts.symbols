@@ -1,0 +1,225 @@
+=== tests/cases/compiler/letDeclarations-validContexts.ts ===
+// Control flow statements with blocks
+if (true) { 
+    let l1 = 0;
+>l1 : Symbol(l1, Decl(letDeclarations-validContexts.ts, 2, 7))
+}
+else { 
+    let l2 = 0;
+>l2 : Symbol(l2, Decl(letDeclarations-validContexts.ts, 5, 7))
+}
+
+while (true) { 
+    let l3 = 0;
+>l3 : Symbol(l3, Decl(letDeclarations-validContexts.ts, 9, 7))
+}
+
+do { 
+    let l4 = 0;
+>l4 : Symbol(l4, Decl(letDeclarations-validContexts.ts, 13, 7))
+
+} while (true);
+
+var obj;
+>obj : Symbol(obj, Decl(letDeclarations-validContexts.ts, 16, 3))
+
+with (obj) {
+>obj : Symbol(obj, Decl(letDeclarations-validContexts.ts, 16, 3))
+
+    let l5 = 0;
+}
+
+for (var i = 0; i < 10; i++) {
+>i : Symbol(i, Decl(letDeclarations-validContexts.ts, 21, 8))
+>i : Symbol(i, Decl(letDeclarations-validContexts.ts, 21, 8))
+>i : Symbol(i, Decl(letDeclarations-validContexts.ts, 21, 8))
+
+    let l6 = 0;
+>l6 : Symbol(l6, Decl(letDeclarations-validContexts.ts, 22, 7))
+}
+
+for (var i2 in {}) {
+>i2 : Symbol(i2, Decl(letDeclarations-validContexts.ts, 25, 8))
+
+    let l7 = 0;
+>l7 : Symbol(l7, Decl(letDeclarations-validContexts.ts, 26, 7))
+}
+
+if (true) {
+    label: let l8 = 0;
+>l8 : Symbol(l8, Decl(letDeclarations-validContexts.ts, 30, 14))
+}
+
+while (false) {
+    label2: label3: label4: let l9 = 0;
+>l9 : Symbol(l9, Decl(letDeclarations-validContexts.ts, 34, 31))
+}
+
+// Try/catch/finally
+try {
+    let l10 = 0;
+>l10 : Symbol(l10, Decl(letDeclarations-validContexts.ts, 39, 7))
+}
+catch (e) {
+>e : Symbol(e, Decl(letDeclarations-validContexts.ts, 41, 7))
+
+    let l11 = 0;
+>l11 : Symbol(l11, Decl(letDeclarations-validContexts.ts, 42, 7))
+}
+finally {
+    let l12 = 0;
+>l12 : Symbol(l12, Decl(letDeclarations-validContexts.ts, 45, 7))
+}
+
+// Switch
+switch (0) {
+    case 0:
+        let l13 = 0;
+>l13 : Symbol(l13, Decl(letDeclarations-validContexts.ts, 51, 11))
+
+        break;
+    default:
+        let l14 = 0;
+>l14 : Symbol(l14, Decl(letDeclarations-validContexts.ts, 54, 11))
+
+        break;
+}
+
+// blocks
+{
+    let l15 = 0;
+>l15 : Symbol(l15, Decl(letDeclarations-validContexts.ts, 60, 7))
+    {
+        let l16 = 0
+>l16 : Symbol(l16, Decl(letDeclarations-validContexts.ts, 62, 11))
+
+        label17: let l17 = 0;
+>l17 : Symbol(l17, Decl(letDeclarations-validContexts.ts, 63, 20))
+    }
+}
+
+// global
+let l18 = 0;
+>l18 : Symbol(l18, Decl(letDeclarations-validContexts.ts, 68, 3))
+
+// functions
+function F() {
+>F : Symbol(F, Decl(letDeclarations-validContexts.ts, 68, 12))
+
+    let l19 = 0;
+>l19 : Symbol(l19, Decl(letDeclarations-validContexts.ts, 72, 7))
+}
+
+var F2 = () => {
+>F2 : Symbol(F2, Decl(letDeclarations-validContexts.ts, 75, 3))
+
+    let l20 = 0;
+>l20 : Symbol(l20, Decl(letDeclarations-validContexts.ts, 76, 7))
+
+};
+
+var F3 = function () {
+>F3 : Symbol(F3, Decl(letDeclarations-validContexts.ts, 79, 3))
+
+    let l21 = 0;
+>l21 : Symbol(l21, Decl(letDeclarations-validContexts.ts, 80, 7))
+
+};
+
+// modules
+module m {
+>m : Symbol(m, Decl(letDeclarations-validContexts.ts, 81, 2))
+
+    let l22 = 0;
+>l22 : Symbol(l22, Decl(letDeclarations-validContexts.ts, 85, 7))
+
+    {
+          let l23 = 0;
+>l23 : Symbol(l23, Decl(letDeclarations-validContexts.ts, 88, 13))
+    }
+}
+
+// methods
+class C {
+>C : Symbol(C, Decl(letDeclarations-validContexts.ts, 90, 1))
+
+    constructor() {
+        let l24 = 0;
+>l24 : Symbol(l24, Decl(letDeclarations-validContexts.ts, 95, 11))
+    }
+
+    method() {
+>method : Symbol(C.method, Decl(letDeclarations-validContexts.ts, 96, 5))
+
+        let l25 = 0;
+>l25 : Symbol(l25, Decl(letDeclarations-validContexts.ts, 99, 11))
+    }
+
+    get v() {
+>v : Symbol(C.v, Decl(letDeclarations-validContexts.ts, 100, 5), Decl(letDeclarations-validContexts.ts, 105, 5))
+
+        let l26 = 0;
+>l26 : Symbol(l26, Decl(letDeclarations-validContexts.ts, 103, 11))
+
+        return l26; 
+>l26 : Symbol(l26, Decl(letDeclarations-validContexts.ts, 103, 11))
+    }
+
+    set v(value) {
+>v : Symbol(C.v, Decl(letDeclarations-validContexts.ts, 100, 5), Decl(letDeclarations-validContexts.ts, 105, 5))
+>value : Symbol(value, Decl(letDeclarations-validContexts.ts, 107, 10))
+
+        let l27 = value;
+>l27 : Symbol(l27, Decl(letDeclarations-validContexts.ts, 108, 11))
+>value : Symbol(value, Decl(letDeclarations-validContexts.ts, 107, 10))
+    }
+}
+
+// object literals
+var o = {
+>o : Symbol(o, Decl(letDeclarations-validContexts.ts, 113, 3))
+
+    f() {
+>f : Symbol(f, Decl(letDeclarations-validContexts.ts, 113, 9))
+
+        let l28 = 0;
+>l28 : Symbol(l28, Decl(letDeclarations-validContexts.ts, 115, 11))
+
+    },
+    f2: () => {
+>f2 : Symbol(f2, Decl(letDeclarations-validContexts.ts, 116, 6))
+
+        let l29 = 0;
+>l29 : Symbol(l29, Decl(letDeclarations-validContexts.ts, 118, 11))
+    }
+}
+
+// labels
+label: let l30 = 0;
+>l30 : Symbol(l30, Decl(letDeclarations-validContexts.ts, 123, 10))
+{
+    label2: let l31 = 0;
+>l31 : Symbol(l31, Decl(letDeclarations-validContexts.ts, 125, 15))
+}
+
+function f3() {
+>f3 : Symbol(f3, Decl(letDeclarations-validContexts.ts, 126, 1))
+
+    label: let l32 = 0;
+>l32 : Symbol(l32, Decl(letDeclarations-validContexts.ts, 129, 14))
+    {
+        label2: let l33 = 0;
+>l33 : Symbol(l33, Decl(letDeclarations-validContexts.ts, 131, 19))
+    }
+}
+
+module m3 {
+>m3 : Symbol(m3, Decl(letDeclarations-validContexts.ts, 133, 1))
+
+    label: let l34 = 0;
+>l34 : Symbol(l34, Decl(letDeclarations-validContexts.ts, 136, 14))
+    {
+        label2: let l35 = 0;
+>l35 : Symbol(l35, Decl(letDeclarations-validContexts.ts, 138, 19))
+    }
+}

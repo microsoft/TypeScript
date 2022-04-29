@@ -1,0 +1,24 @@
+tests/cases/conformance/async/es6/asyncArrowFunction/asyncArrowFunction9_es6.ts(1,11): error TS2304: Cannot find name 'async'.
+tests/cases/conformance/async/es6/asyncArrowFunction/asyncArrowFunction9_es6.ts(1,18): error TS2304: Cannot find name 'a'.
+tests/cases/conformance/async/es6/asyncArrowFunction/asyncArrowFunction9_es6.ts(1,37): error TS1005: ',' expected.
+tests/cases/conformance/async/es6/asyncArrowFunction/asyncArrowFunction9_es6.ts(1,39): error TS2403: Subsequent variable declarations must have the same type.  Variable 'Promise' must be of type 'PromiseConstructor', but here has type 'any'.
+tests/cases/conformance/async/es6/asyncArrowFunction/asyncArrowFunction9_es6.ts(1,46): error TS1005: ',' expected.
+tests/cases/conformance/async/es6/asyncArrowFunction/asyncArrowFunction9_es6.ts(1,53): error TS1109: Expression expected.
+
+
+==== tests/cases/conformance/async/es6/asyncArrowFunction/asyncArrowFunction9_es6.ts (6 errors) ====
+    var foo = async (a = await => await): Promise<void> => {
+              ~~~~~
+!!! error TS2304: Cannot find name 'async'.
+                     ~
+!!! error TS2304: Cannot find name 'a'.
+                                        ~
+!!! error TS1005: ',' expected.
+                                          ~~~~~~~
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'Promise' must be of type 'PromiseConstructor', but here has type 'any'.
+!!! related TS6203 /.ts/lib.es2015.promise.d.ts:78:13: 'Promise' was also declared here.
+                                                 ~
+!!! error TS1005: ',' expected.
+                                                        ~~
+!!! error TS1109: Expression expected.
+    }

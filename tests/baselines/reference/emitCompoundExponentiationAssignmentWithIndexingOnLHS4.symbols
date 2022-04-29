@@ -1,0 +1,59 @@
+=== tests/cases/conformance/es7/exponentiationOperator/emitCompoundExponentiationAssignmentWithIndexingOnLHS4.ts ===
+var globalCounter = 0;
+>globalCounter : Symbol(globalCounter, Decl(emitCompoundExponentiationAssignmentWithIndexingOnLHS4.ts, 0, 3))
+
+function incrementIdx(max: number) {
+>incrementIdx : Symbol(incrementIdx, Decl(emitCompoundExponentiationAssignmentWithIndexingOnLHS4.ts, 0, 22))
+>max : Symbol(max, Decl(emitCompoundExponentiationAssignmentWithIndexingOnLHS4.ts, 1, 22))
+
+    globalCounter += 1;
+>globalCounter : Symbol(globalCounter, Decl(emitCompoundExponentiationAssignmentWithIndexingOnLHS4.ts, 0, 3))
+
+    let idx = Math.floor(Math.random() * max);
+>idx : Symbol(idx, Decl(emitCompoundExponentiationAssignmentWithIndexingOnLHS4.ts, 3, 7))
+>Math.floor : Symbol(Math.floor, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>floor : Symbol(Math.floor, Decl(lib.es5.d.ts, --, --))
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>max : Symbol(max, Decl(emitCompoundExponentiationAssignmentWithIndexingOnLHS4.ts, 1, 22))
+
+    return idx;
+>idx : Symbol(idx, Decl(emitCompoundExponentiationAssignmentWithIndexingOnLHS4.ts, 3, 7))
+}
+
+var array1 = [1, 2, 3, 4, 5];
+>array1 : Symbol(array1, Decl(emitCompoundExponentiationAssignmentWithIndexingOnLHS4.ts, 7, 3))
+
+array1[incrementIdx(array1.length)] **= 3;
+>array1 : Symbol(array1, Decl(emitCompoundExponentiationAssignmentWithIndexingOnLHS4.ts, 7, 3))
+>incrementIdx : Symbol(incrementIdx, Decl(emitCompoundExponentiationAssignmentWithIndexingOnLHS4.ts, 0, 22))
+>array1.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>array1 : Symbol(array1, Decl(emitCompoundExponentiationAssignmentWithIndexingOnLHS4.ts, 7, 3))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+
+array1[incrementIdx(array1.length)] **= array1[incrementIdx(array1.length)] **= 2;
+>array1 : Symbol(array1, Decl(emitCompoundExponentiationAssignmentWithIndexingOnLHS4.ts, 7, 3))
+>incrementIdx : Symbol(incrementIdx, Decl(emitCompoundExponentiationAssignmentWithIndexingOnLHS4.ts, 0, 22))
+>array1.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>array1 : Symbol(array1, Decl(emitCompoundExponentiationAssignmentWithIndexingOnLHS4.ts, 7, 3))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>array1 : Symbol(array1, Decl(emitCompoundExponentiationAssignmentWithIndexingOnLHS4.ts, 7, 3))
+>incrementIdx : Symbol(incrementIdx, Decl(emitCompoundExponentiationAssignmentWithIndexingOnLHS4.ts, 0, 22))
+>array1.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>array1 : Symbol(array1, Decl(emitCompoundExponentiationAssignmentWithIndexingOnLHS4.ts, 7, 3))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+
+array1[incrementIdx(array1.length)] **= array1[incrementIdx(array1.length)] ** 2;
+>array1 : Symbol(array1, Decl(emitCompoundExponentiationAssignmentWithIndexingOnLHS4.ts, 7, 3))
+>incrementIdx : Symbol(incrementIdx, Decl(emitCompoundExponentiationAssignmentWithIndexingOnLHS4.ts, 0, 22))
+>array1.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>array1 : Symbol(array1, Decl(emitCompoundExponentiationAssignmentWithIndexingOnLHS4.ts, 7, 3))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>array1 : Symbol(array1, Decl(emitCompoundExponentiationAssignmentWithIndexingOnLHS4.ts, 7, 3))
+>incrementIdx : Symbol(incrementIdx, Decl(emitCompoundExponentiationAssignmentWithIndexingOnLHS4.ts, 0, 22))
+>array1.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>array1 : Symbol(array1, Decl(emitCompoundExponentiationAssignmentWithIndexingOnLHS4.ts, 7, 3))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+

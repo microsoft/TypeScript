@@ -1,0 +1,23 @@
+tests/cases/compiler/namespacer.js(2,1): error TS2323: Cannot redeclare exported variable 'NS'.
+tests/cases/compiler/namespacer.js(3,1): error TS2323: Cannot redeclare exported variable 'NS'.
+
+
+==== tests/cases/compiler/index.js (0 errors) ====
+    const _item = require("./namespacer");
+    module.exports = 12;
+    Object.defineProperty(module, "exports", { value: "oh no" });
+    
+==== tests/cases/compiler/namespacey.js (0 errors) ====
+    const A = {}
+    A.bar = class Q {}
+    module.exports = A;
+==== tests/cases/compiler/namespacer.js (2 errors) ====
+    const B = {}
+    B.NS = require("./namespacey");
+    ~~~~
+!!! error TS2323: Cannot redeclare exported variable 'NS'.
+    Object.defineProperty(B, "NS", { value: "why though", writable: true });
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2323: Cannot redeclare exported variable 'NS'.
+    module.exports = B;
+    

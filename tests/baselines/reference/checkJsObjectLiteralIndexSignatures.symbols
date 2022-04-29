@@ -1,0 +1,36 @@
+=== tests/cases/compiler/file.js ===
+// @ts-check
+
+let n = Math.random();
+>n : Symbol(n, Decl(file.js, 2, 3))
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+
+let s = `${n}`;
+>s : Symbol(s, Decl(file.js, 3, 3))
+>n : Symbol(n, Decl(file.js, 2, 3))
+
+const numericIndex = { [n]: 1 };
+>numericIndex : Symbol(numericIndex, Decl(file.js, 5, 5))
+>[n] : Symbol([n], Decl(file.js, 5, 22))
+>n : Symbol(n, Decl(file.js, 2, 3))
+
+numericIndex[n].toFixed();
+>numericIndex[n].toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>numericIndex : Symbol(numericIndex, Decl(file.js, 5, 5))
+>n : Symbol(n, Decl(file.js, 2, 3))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+
+const stringIndex = { [s]: 1 };
+>stringIndex : Symbol(stringIndex, Decl(file.js, 8, 5))
+>[s] : Symbol([s], Decl(file.js, 8, 21))
+>s : Symbol(s, Decl(file.js, 3, 3))
+
+stringIndex[s].toFixed();
+>stringIndex[s].toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>stringIndex : Symbol(stringIndex, Decl(file.js, 8, 5))
+>s : Symbol(s, Decl(file.js, 3, 3))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+
+

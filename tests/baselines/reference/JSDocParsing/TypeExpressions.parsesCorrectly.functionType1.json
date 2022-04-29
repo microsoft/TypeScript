@@ -1,0 +1,15 @@
+{
+    "kind": "JSDocFunctionType",
+    "pos": 1,
+    "end": 11,
+    "flags": "JSDoc",
+    "modifierFlagsCache": 0,
+    "transformFlags": 0,
+    "parameters": {
+        "length": 0,
+        "pos": 10,
+        "end": 10,
+        "hasTrailingComma": false,
+        "transformFlags": 0
+    }
+}

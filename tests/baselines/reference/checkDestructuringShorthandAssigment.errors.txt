@@ -1,0 +1,11 @@
+tests/cases/compiler/bug25434.js(4,9): error TS18004: No value exists in scope for the shorthand property 'b'. Either declare one or provide an initializer.
+
+
+==== tests/cases/compiler/bug25434.js (1 errors) ====
+    // should not crash while checking
+    function Test({ b = '' } = {}) {}
+    
+    Test(({ b = '5' } = {}));
+            ~
+!!! error TS18004: No value exists in scope for the shorthand property 'b'. Either declare one or provide an initializer.
+    

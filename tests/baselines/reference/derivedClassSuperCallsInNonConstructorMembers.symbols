@@ -1,0 +1,58 @@
+=== tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperCallsInNonConstructorMembers.ts ===
+// error to use super calls outside a constructor
+
+class Base {
+>Base : Symbol(Base, Decl(derivedClassSuperCallsInNonConstructorMembers.ts, 0, 0))
+
+    x: string;
+>x : Symbol(Base.x, Decl(derivedClassSuperCallsInNonConstructorMembers.ts, 2, 12))
+}
+
+class Derived extends Base {
+>Derived : Symbol(Derived, Decl(derivedClassSuperCallsInNonConstructorMembers.ts, 4, 1))
+>Base : Symbol(Base, Decl(derivedClassSuperCallsInNonConstructorMembers.ts, 0, 0))
+
+    a: super();
+>a : Symbol(Derived.a, Decl(derivedClassSuperCallsInNonConstructorMembers.ts, 6, 28))
+>super : Symbol(super)
+
+    b() {
+>b : Symbol(Derived.b, Decl(derivedClassSuperCallsInNonConstructorMembers.ts, 7, 15))
+
+        super();
+    }
+    get C() {
+>C : Symbol(Derived.C, Decl(derivedClassSuperCallsInNonConstructorMembers.ts, 10, 5), Decl(derivedClassSuperCallsInNonConstructorMembers.ts, 14, 5))
+
+        super();
+        return 1;
+    }
+    set C(v) {
+>C : Symbol(Derived.C, Decl(derivedClassSuperCallsInNonConstructorMembers.ts, 10, 5), Decl(derivedClassSuperCallsInNonConstructorMembers.ts, 14, 5))
+>v : Symbol(v, Decl(derivedClassSuperCallsInNonConstructorMembers.ts, 15, 10))
+
+        super();
+    }
+
+    static a: super();
+>a : Symbol(Derived.a, Decl(derivedClassSuperCallsInNonConstructorMembers.ts, 17, 5))
+>super : Symbol(super)
+
+    static b() {
+>b : Symbol(Derived.b, Decl(derivedClassSuperCallsInNonConstructorMembers.ts, 19, 22))
+
+        super();
+    }
+    static get C() {
+>C : Symbol(Derived.C, Decl(derivedClassSuperCallsInNonConstructorMembers.ts, 22, 5), Decl(derivedClassSuperCallsInNonConstructorMembers.ts, 26, 5))
+
+        super();
+        return 1;
+    }
+    static set C(v) {
+>C : Symbol(Derived.C, Decl(derivedClassSuperCallsInNonConstructorMembers.ts, 22, 5), Decl(derivedClassSuperCallsInNonConstructorMembers.ts, 26, 5))
+>v : Symbol(v, Decl(derivedClassSuperCallsInNonConstructorMembers.ts, 27, 17))
+
+        super();
+    }
+}

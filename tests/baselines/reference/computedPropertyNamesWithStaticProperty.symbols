@@ -1,0 +1,32 @@
+=== tests/cases/conformance/es6/computedProperties/computedPropertyNamesWithStaticProperty.ts ===
+class C {
+>C : Symbol(C, Decl(computedPropertyNamesWithStaticProperty.ts, 0, 0))
+
+    static staticProp = 10;
+>staticProp : Symbol(C.staticProp, Decl(computedPropertyNamesWithStaticProperty.ts, 0, 9))
+
+    get [C.staticProp]() {
+>[C.staticProp] : Symbol(C[C.staticProp], Decl(computedPropertyNamesWithStaticProperty.ts, 1, 27))
+>C.staticProp : Symbol(C.staticProp, Decl(computedPropertyNamesWithStaticProperty.ts, 0, 9))
+>C : Symbol(C, Decl(computedPropertyNamesWithStaticProperty.ts, 0, 0))
+>staticProp : Symbol(C.staticProp, Decl(computedPropertyNamesWithStaticProperty.ts, 0, 9))
+
+        return "hello";
+    }
+    set [C.staticProp](x: string) {
+>[C.staticProp] : Symbol(C[C.staticProp], Decl(computedPropertyNamesWithStaticProperty.ts, 4, 5))
+>C.staticProp : Symbol(C.staticProp, Decl(computedPropertyNamesWithStaticProperty.ts, 0, 9))
+>C : Symbol(C, Decl(computedPropertyNamesWithStaticProperty.ts, 0, 0))
+>staticProp : Symbol(C.staticProp, Decl(computedPropertyNamesWithStaticProperty.ts, 0, 9))
+>x : Symbol(x, Decl(computedPropertyNamesWithStaticProperty.ts, 5, 23))
+
+        var y = x;
+>y : Symbol(y, Decl(computedPropertyNamesWithStaticProperty.ts, 6, 11))
+>x : Symbol(x, Decl(computedPropertyNamesWithStaticProperty.ts, 5, 23))
+    }
+    [C.staticProp]() { }
+>[C.staticProp] : Symbol(C[C.staticProp], Decl(computedPropertyNamesWithStaticProperty.ts, 7, 5))
+>C.staticProp : Symbol(C.staticProp, Decl(computedPropertyNamesWithStaticProperty.ts, 0, 9))
+>C : Symbol(C, Decl(computedPropertyNamesWithStaticProperty.ts, 0, 0))
+>staticProp : Symbol(C.staticProp, Decl(computedPropertyNamesWithStaticProperty.ts, 0, 9))
+}

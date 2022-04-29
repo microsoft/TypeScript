@@ -1,0 +1,16 @@
+=== tests/cases/compiler/expando.ts ===
+// #27032
+function ExpandoMerge(n: number) {
+>ExpandoMerge : Symbol(ExpandoMerge, Decl(expando.ts, 0, 0), Decl(expando.ts, 3, 1))
+>n : Symbol(n, Decl(expando.ts, 1, 22))
+
+    return n;
+>n : Symbol(n, Decl(expando.ts, 1, 22))
+}
+namespace ExpandoMerge {
+>ExpandoMerge : Symbol(ExpandoMerge, Decl(expando.ts, 0, 0), Decl(expando.ts, 3, 1))
+
+    export interface I { }
+>I : Symbol(I, Decl(expando.ts, 4, 24))
+}
+

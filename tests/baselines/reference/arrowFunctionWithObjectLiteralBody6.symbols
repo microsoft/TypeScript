@@ -1,0 +1,24 @@
+=== tests/cases/compiler/arrowFunctionWithObjectLiteralBody6.ts ===
+var a = () => <Error>{ name: "foo", message: "bar" };      
+>a : Symbol(a, Decl(arrowFunctionWithObjectLiteralBody6.ts, 0, 3))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>name : Symbol(name, Decl(arrowFunctionWithObjectLiteralBody6.ts, 0, 22))
+>message : Symbol(message, Decl(arrowFunctionWithObjectLiteralBody6.ts, 0, 35))
+
+var b = () => (<Error>{ name: "foo", message: "bar" });    
+>b : Symbol(b, Decl(arrowFunctionWithObjectLiteralBody6.ts, 2, 3))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>name : Symbol(name, Decl(arrowFunctionWithObjectLiteralBody6.ts, 2, 23))
+>message : Symbol(message, Decl(arrowFunctionWithObjectLiteralBody6.ts, 2, 36))
+
+var c = () => ({ name: "foo", message: "bar" });           
+>c : Symbol(c, Decl(arrowFunctionWithObjectLiteralBody6.ts, 4, 3))
+>name : Symbol(name, Decl(arrowFunctionWithObjectLiteralBody6.ts, 4, 16))
+>message : Symbol(message, Decl(arrowFunctionWithObjectLiteralBody6.ts, 4, 29))
+
+var d = () => ((<Error>({ name: "foo", message: "bar" })));
+>d : Symbol(d, Decl(arrowFunctionWithObjectLiteralBody6.ts, 6, 3))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>name : Symbol(name, Decl(arrowFunctionWithObjectLiteralBody6.ts, 6, 25))
+>message : Symbol(message, Decl(arrowFunctionWithObjectLiteralBody6.ts, 6, 38))
+

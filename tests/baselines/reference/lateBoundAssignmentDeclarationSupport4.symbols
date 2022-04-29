@@ -1,0 +1,77 @@
+=== tests/cases/conformance/salsa/usage.js ===
+const x = require("./lateBoundAssignmentDeclarationSupport4.js");
+>x : Symbol(x, Decl(usage.js, 0, 5))
+>require : Symbol(require)
+>"./lateBoundAssignmentDeclarationSupport4.js" : Symbol(x, Decl(lateBoundAssignmentDeclarationSupport4.js, 0, 0))
+
+const inst =  new x.F();
+>inst : Symbol(inst, Decl(usage.js, 1, 5))
+>x.F : Symbol(x.F, Decl(lateBoundAssignmentDeclarationSupport4.js, 10, 22))
+>x : Symbol(x, Decl(usage.js, 0, 5))
+>F : Symbol(x.F, Decl(lateBoundAssignmentDeclarationSupport4.js, 10, 22))
+
+const y = inst["my-fake-sym"];
+>y : Symbol(y, Decl(usage.js, 2, 5))
+>inst : Symbol(inst, Decl(usage.js, 1, 5))
+
+const z = inst[x.S];
+>z : Symbol(z, Decl(usage.js, 3, 5))
+>inst : Symbol(inst, Decl(usage.js, 1, 5))
+>x.S : Symbol(x.S, Decl(lateBoundAssignmentDeclarationSupport4.js, 11, 21))
+>x : Symbol(x, Decl(usage.js, 0, 5))
+>S : Symbol(x.S, Decl(lateBoundAssignmentDeclarationSupport4.js, 11, 21))
+
+=== tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport4.js ===
+// currently unsupported
+const _sym = Symbol();
+>_sym : Symbol(_sym, Decl(lateBoundAssignmentDeclarationSupport4.js, 1, 5))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+const _str = "my-fake-sym";
+>_str : Symbol(_str, Decl(lateBoundAssignmentDeclarationSupport4.js, 2, 5))
+
+function F() {
+>F : Symbol(F, Decl(lateBoundAssignmentDeclarationSupport4.js, 2, 27))
+}
+F.prototype[_sym] = "ok";
+>F.prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+>F : Symbol(F, Decl(lateBoundAssignmentDeclarationSupport4.js, 2, 27))
+>prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+>_sym : Symbol(_sym, Decl(lateBoundAssignmentDeclarationSupport4.js, 1, 5))
+
+F.prototype[_str] = "ok";
+>F.prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+>F : Symbol(F, Decl(lateBoundAssignmentDeclarationSupport4.js, 2, 27))
+>prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+>_str : Symbol(_str, Decl(lateBoundAssignmentDeclarationSupport4.js, 2, 5))
+
+const inst =  new F();
+>inst : Symbol(inst, Decl(lateBoundAssignmentDeclarationSupport4.js, 8, 5))
+>F : Symbol(F, Decl(lateBoundAssignmentDeclarationSupport4.js, 2, 27))
+
+const _y = inst[_str];
+>_y : Symbol(_y, Decl(lateBoundAssignmentDeclarationSupport4.js, 9, 5))
+>inst : Symbol(inst, Decl(lateBoundAssignmentDeclarationSupport4.js, 8, 5))
+>_str : Symbol(_str, Decl(lateBoundAssignmentDeclarationSupport4.js, 2, 5))
+
+const _z = inst[_sym];
+>_z : Symbol(_z, Decl(lateBoundAssignmentDeclarationSupport4.js, 10, 5))
+>inst : Symbol(inst, Decl(lateBoundAssignmentDeclarationSupport4.js, 8, 5))
+>_sym : Symbol(_sym, Decl(lateBoundAssignmentDeclarationSupport4.js, 1, 5))
+
+module.exports.F = F;
+>module.exports.F : Symbol(F, Decl(lateBoundAssignmentDeclarationSupport4.js, 10, 22))
+>module.exports : Symbol(F, Decl(lateBoundAssignmentDeclarationSupport4.js, 10, 22))
+>module : Symbol(module, Decl(lateBoundAssignmentDeclarationSupport4.js, 10, 22))
+>exports : Symbol(module.exports, Decl(lateBoundAssignmentDeclarationSupport4.js, 0, 0))
+>F : Symbol(F, Decl(lateBoundAssignmentDeclarationSupport4.js, 10, 22))
+>F : Symbol(F, Decl(lateBoundAssignmentDeclarationSupport4.js, 2, 27))
+
+module.exports.S = _sym;
+>module.exports.S : Symbol(S, Decl(lateBoundAssignmentDeclarationSupport4.js, 11, 21))
+>module.exports : Symbol(S, Decl(lateBoundAssignmentDeclarationSupport4.js, 11, 21))
+>module : Symbol(module, Decl(lateBoundAssignmentDeclarationSupport4.js, 10, 22))
+>exports : Symbol(module.exports, Decl(lateBoundAssignmentDeclarationSupport4.js, 0, 0))
+>S : Symbol(S, Decl(lateBoundAssignmentDeclarationSupport4.js, 11, 21))
+>_sym : Symbol(_sym, Decl(lateBoundAssignmentDeclarationSupport4.js, 1, 5))
+

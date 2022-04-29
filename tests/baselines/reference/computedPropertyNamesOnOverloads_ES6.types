@@ -1,0 +1,26 @@
+=== tests/cases/conformance/es6/computedProperties/computedPropertyNamesOnOverloads_ES6.ts ===
+var methodName = "method";
+>methodName : string
+>"method" : "method"
+
+var accessorName = "accessor";
+>accessorName : string
+>"accessor" : "accessor"
+
+class C {
+>C : C
+
+    [methodName](v: string);
+>[methodName] : (v: string) => any
+>methodName : string
+>v : string
+
+    [methodName]();
+>[methodName] : () => any
+>methodName : string
+
+    [methodName](v?: string) { }
+>[methodName] : (v?: string) => void
+>methodName : string
+>v : string
+}

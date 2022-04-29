@@ -1,0 +1,19 @@
+=== tests/cases/compiler/unreachableFlowAfterFinally.ts ===
+function f() {
+>f : Symbol(f, Decl(unreachableFlowAfterFinally.ts, 0, 0))
+
+    let x = 100;
+>x : Symbol(x, Decl(unreachableFlowAfterFinally.ts, 1, 7))
+
+    try {
+        throw "WAT"
+    }
+    catch (e) {
+>e : Symbol(e, Decl(unreachableFlowAfterFinally.ts, 5, 11))
+
+    }
+    finally {
+        return x;
+>x : Symbol(x, Decl(unreachableFlowAfterFinally.ts, 1, 7))
+    }
+}

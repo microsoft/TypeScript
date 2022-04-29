@@ -1,0 +1,50 @@
+tests/cases/conformance/jsx/inline/index.tsx(5,1): error TS2741: Property '__predomBrand' is missing in type 'JSX.Element' but required in type 'import("tests/cases/conformance/jsx/inline/renderer2").predom.JSX.Element'.
+
+
+==== tests/cases/conformance/jsx/inline/renderer.d.ts (0 errors) ====
+    declare global {
+        namespace JSX {
+            interface IntrinsicElements {
+                [e: string]: {};
+            }
+            interface Element {
+                __domBrand: void;
+                children: Element[];
+                props: {};
+            }
+            interface ElementAttributesProperty { props: any; }
+            interface ElementChildrenAttribute { children: any; }
+        }
+    }
+    export function dom(): JSX.Element;
+==== tests/cases/conformance/jsx/inline/renderer2.d.ts (0 errors) ====
+    export namespace predom {
+        namespace JSX {
+            interface IntrinsicElements {
+                [e: string]: {};
+            }
+            interface Element {
+                __predomBrand: void;
+                children: Element[];
+                props: {};
+            }
+            interface ElementAttributesProperty { props: any; }
+            interface ElementChildrenAttribute { children: any; }
+        }
+    }
+    export function predom(): predom.JSX.Element;
+==== tests/cases/conformance/jsx/inline/component.tsx (0 errors) ====
+    /** @jsx predom */
+    import { predom } from "./renderer2"
+    export default <h></h>
+    
+==== tests/cases/conformance/jsx/inline/index.tsx (1 errors) ====
+    /** @jsx dom */
+    import { dom } from "./renderer"
+    import prerendered from "./component";
+    let elem = prerendered;
+    elem = <h></h>; // Expect assignability error here
+    ~~~~
+!!! error TS2741: Property '__predomBrand' is missing in type 'JSX.Element' but required in type 'import("tests/cases/conformance/jsx/inline/renderer2").predom.JSX.Element'.
+!!! related TS2728 tests/cases/conformance/jsx/inline/renderer2.d.ts:7:13: '__predomBrand' is declared here.
+    

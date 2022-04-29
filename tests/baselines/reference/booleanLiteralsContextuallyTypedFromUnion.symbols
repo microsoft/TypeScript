@@ -1,0 +1,97 @@
+=== tests/cases/compiler/booleanLiteralsContextuallyTypedFromUnion.tsx ===
+interface A { isIt: true; text: string; }
+>A : Symbol(A, Decl(booleanLiteralsContextuallyTypedFromUnion.tsx, 0, 0))
+>isIt : Symbol(A.isIt, Decl(booleanLiteralsContextuallyTypedFromUnion.tsx, 0, 13))
+>text : Symbol(A.text, Decl(booleanLiteralsContextuallyTypedFromUnion.tsx, 0, 25))
+
+interface B { isIt: false; value: number; }
+>B : Symbol(B, Decl(booleanLiteralsContextuallyTypedFromUnion.tsx, 0, 41))
+>isIt : Symbol(B.isIt, Decl(booleanLiteralsContextuallyTypedFromUnion.tsx, 1, 13))
+>value : Symbol(B.value, Decl(booleanLiteralsContextuallyTypedFromUnion.tsx, 1, 26))
+
+type C = A | B;
+>C : Symbol(C, Decl(booleanLiteralsContextuallyTypedFromUnion.tsx, 1, 43))
+>A : Symbol(A, Decl(booleanLiteralsContextuallyTypedFromUnion.tsx, 0, 0))
+>B : Symbol(B, Decl(booleanLiteralsContextuallyTypedFromUnion.tsx, 0, 41))
+
+const isIt = Math.random() > 0.5;
+>isIt : Symbol(isIt, Decl(booleanLiteralsContextuallyTypedFromUnion.tsx, 3, 5))
+>Math.random : Symbol(Math.random, Decl(lib.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.d.ts, --, --))
+
+const c: C = isIt ? { isIt, text: 'hey' } : { isIt, value: 123 };
+>c : Symbol(c, Decl(booleanLiteralsContextuallyTypedFromUnion.tsx, 4, 5))
+>C : Symbol(C, Decl(booleanLiteralsContextuallyTypedFromUnion.tsx, 1, 43))
+>isIt : Symbol(isIt, Decl(booleanLiteralsContextuallyTypedFromUnion.tsx, 3, 5))
+>isIt : Symbol(isIt, Decl(booleanLiteralsContextuallyTypedFromUnion.tsx, 4, 21))
+>text : Symbol(text, Decl(booleanLiteralsContextuallyTypedFromUnion.tsx, 4, 27))
+>isIt : Symbol(isIt, Decl(booleanLiteralsContextuallyTypedFromUnion.tsx, 4, 45))
+>value : Symbol(value, Decl(booleanLiteralsContextuallyTypedFromUnion.tsx, 4, 51))
+
+const cc: C = isIt ? { isIt: isIt, text: 'hey' } : { isIt: isIt, value: 123 };
+>cc : Symbol(cc, Decl(booleanLiteralsContextuallyTypedFromUnion.tsx, 5, 5))
+>C : Symbol(C, Decl(booleanLiteralsContextuallyTypedFromUnion.tsx, 1, 43))
+>isIt : Symbol(isIt, Decl(booleanLiteralsContextuallyTypedFromUnion.tsx, 3, 5))
+>isIt : Symbol(isIt, Decl(booleanLiteralsContextuallyTypedFromUnion.tsx, 5, 22))
+>isIt : Symbol(isIt, Decl(booleanLiteralsContextuallyTypedFromUnion.tsx, 3, 5))
+>text : Symbol(text, Decl(booleanLiteralsContextuallyTypedFromUnion.tsx, 5, 34))
+>isIt : Symbol(isIt, Decl(booleanLiteralsContextuallyTypedFromUnion.tsx, 5, 52))
+>isIt : Symbol(isIt, Decl(booleanLiteralsContextuallyTypedFromUnion.tsx, 3, 5))
+>value : Symbol(value, Decl(booleanLiteralsContextuallyTypedFromUnion.tsx, 5, 64))
+
+type ComponentProps =
+>ComponentProps : Symbol(ComponentProps, Decl(booleanLiteralsContextuallyTypedFromUnion.tsx, 5, 78))
+
+    | {
+        optionalBool: true;
+>optionalBool : Symbol(optionalBool, Decl(booleanLiteralsContextuallyTypedFromUnion.tsx, 8, 7))
+
+        mandatoryFn: () => void;
+>mandatoryFn : Symbol(mandatoryFn, Decl(booleanLiteralsContextuallyTypedFromUnion.tsx, 9, 27))
+    }
+    | {
+        optionalBool: false;
+>optionalBool : Symbol(optionalBool, Decl(booleanLiteralsContextuallyTypedFromUnion.tsx, 12, 7))
+
+    };
+
+let Funk = (_props: ComponentProps) => <div>Hello</div>;
+>Funk : Symbol(Funk, Decl(booleanLiteralsContextuallyTypedFromUnion.tsx, 16, 3))
+>_props : Symbol(_props, Decl(booleanLiteralsContextuallyTypedFromUnion.tsx, 16, 12))
+>ComponentProps : Symbol(ComponentProps, Decl(booleanLiteralsContextuallyTypedFromUnion.tsx, 5, 78))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
+
+let Fail1 = () => <Funk mandatoryFn={() => { }} optionalBool={true} />
+>Fail1 : Symbol(Fail1, Decl(booleanLiteralsContextuallyTypedFromUnion.tsx, 18, 3))
+>Funk : Symbol(Funk, Decl(booleanLiteralsContextuallyTypedFromUnion.tsx, 16, 3))
+>mandatoryFn : Symbol(mandatoryFn, Decl(booleanLiteralsContextuallyTypedFromUnion.tsx, 18, 23))
+>optionalBool : Symbol(optionalBool, Decl(booleanLiteralsContextuallyTypedFromUnion.tsx, 18, 47))
+
+let Fail2 = () => <Funk mandatoryFn={() => { }} optionalBool={true as true} />
+>Fail2 : Symbol(Fail2, Decl(booleanLiteralsContextuallyTypedFromUnion.tsx, 19, 3))
+>Funk : Symbol(Funk, Decl(booleanLiteralsContextuallyTypedFromUnion.tsx, 16, 3))
+>mandatoryFn : Symbol(mandatoryFn, Decl(booleanLiteralsContextuallyTypedFromUnion.tsx, 19, 23))
+>optionalBool : Symbol(optionalBool, Decl(booleanLiteralsContextuallyTypedFromUnion.tsx, 19, 47))
+
+let True = true as true;
+>True : Symbol(True, Decl(booleanLiteralsContextuallyTypedFromUnion.tsx, 20, 3))
+
+let Fail3 = () => <Funk mandatoryFn={() => { }} optionalBool={True} />
+>Fail3 : Symbol(Fail3, Decl(booleanLiteralsContextuallyTypedFromUnion.tsx, 21, 3))
+>Funk : Symbol(Funk, Decl(booleanLiteralsContextuallyTypedFromUnion.tsx, 16, 3))
+>mandatoryFn : Symbol(mandatoryFn, Decl(booleanLiteralsContextuallyTypedFromUnion.tsx, 21, 23))
+>optionalBool : Symbol(optionalBool, Decl(booleanLiteralsContextuallyTypedFromUnion.tsx, 21, 47))
+>True : Symbol(True, Decl(booleanLiteralsContextuallyTypedFromUnion.tsx, 20, 3))
+
+let attrs2 = { optionalBool: true as true, mandatoryFn: () => { } }
+>attrs2 : Symbol(attrs2, Decl(booleanLiteralsContextuallyTypedFromUnion.tsx, 22, 3))
+>optionalBool : Symbol(optionalBool, Decl(booleanLiteralsContextuallyTypedFromUnion.tsx, 22, 14))
+>mandatoryFn : Symbol(mandatoryFn, Decl(booleanLiteralsContextuallyTypedFromUnion.tsx, 22, 42))
+
+let Success = () => <Funk {...attrs2} />
+>Success : Symbol(Success, Decl(booleanLiteralsContextuallyTypedFromUnion.tsx, 23, 3))
+>Funk : Symbol(Funk, Decl(booleanLiteralsContextuallyTypedFromUnion.tsx, 16, 3))
+>attrs2 : Symbol(attrs2, Decl(booleanLiteralsContextuallyTypedFromUnion.tsx, 22, 3))
+

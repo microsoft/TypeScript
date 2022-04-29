@@ -1,0 +1,81 @@
+=== tests/cases/conformance/classes/members/accessibility/privateProtectedMembersAreNotAccessibleDestructuring.ts ===
+class K {
+>K : Symbol(K, Decl(privateProtectedMembersAreNotAccessibleDestructuring.ts, 0, 0))
+
+    private priv;
+>priv : Symbol(K.priv, Decl(privateProtectedMembersAreNotAccessibleDestructuring.ts, 0, 9))
+
+    protected prot;
+>prot : Symbol(K.prot, Decl(privateProtectedMembersAreNotAccessibleDestructuring.ts, 1, 17))
+
+    private privateMethod() { }
+>privateMethod : Symbol(K.privateMethod, Decl(privateProtectedMembersAreNotAccessibleDestructuring.ts, 2, 19))
+
+    m() {
+>m : Symbol(K.m, Decl(privateProtectedMembersAreNotAccessibleDestructuring.ts, 3, 31))
+
+        let { priv: a, prot: b } = this; // ok
+>priv : Symbol(K.priv, Decl(privateProtectedMembersAreNotAccessibleDestructuring.ts, 0, 9))
+>a : Symbol(a, Decl(privateProtectedMembersAreNotAccessibleDestructuring.ts, 5, 13))
+>prot : Symbol(K.prot, Decl(privateProtectedMembersAreNotAccessibleDestructuring.ts, 1, 17))
+>b : Symbol(b, Decl(privateProtectedMembersAreNotAccessibleDestructuring.ts, 5, 22))
+>this : Symbol(K, Decl(privateProtectedMembersAreNotAccessibleDestructuring.ts, 0, 0))
+
+        let { priv, prot } = new K(); // ok
+>priv : Symbol(priv, Decl(privateProtectedMembersAreNotAccessibleDestructuring.ts, 6, 13))
+>prot : Symbol(prot, Decl(privateProtectedMembersAreNotAccessibleDestructuring.ts, 6, 19))
+>K : Symbol(K, Decl(privateProtectedMembersAreNotAccessibleDestructuring.ts, 0, 0))
+    }
+}
+class C extends K {
+>C : Symbol(C, Decl(privateProtectedMembersAreNotAccessibleDestructuring.ts, 8, 1))
+>K : Symbol(K, Decl(privateProtectedMembersAreNotAccessibleDestructuring.ts, 0, 0))
+
+    m2() {
+>m2 : Symbol(C.m2, Decl(privateProtectedMembersAreNotAccessibleDestructuring.ts, 9, 19))
+
+        let { priv: a } = this; // error
+>priv : Symbol(K.priv, Decl(privateProtectedMembersAreNotAccessibleDestructuring.ts, 0, 9))
+>a : Symbol(a, Decl(privateProtectedMembersAreNotAccessibleDestructuring.ts, 11, 13))
+>this : Symbol(C, Decl(privateProtectedMembersAreNotAccessibleDestructuring.ts, 8, 1))
+
+        let { prot: b } = this; // ok
+>prot : Symbol(K.prot, Decl(privateProtectedMembersAreNotAccessibleDestructuring.ts, 1, 17))
+>b : Symbol(b, Decl(privateProtectedMembersAreNotAccessibleDestructuring.ts, 12, 13))
+>this : Symbol(C, Decl(privateProtectedMembersAreNotAccessibleDestructuring.ts, 8, 1))
+    }
+}
+let k = new K();
+>k : Symbol(k, Decl(privateProtectedMembersAreNotAccessibleDestructuring.ts, 15, 3))
+>K : Symbol(K, Decl(privateProtectedMembersAreNotAccessibleDestructuring.ts, 0, 0))
+
+let { priv } = k; // error
+>priv : Symbol(priv, Decl(privateProtectedMembersAreNotAccessibleDestructuring.ts, 16, 5))
+>k : Symbol(k, Decl(privateProtectedMembersAreNotAccessibleDestructuring.ts, 15, 3))
+
+let { prot } = k; // error
+>prot : Symbol(prot, Decl(privateProtectedMembersAreNotAccessibleDestructuring.ts, 17, 5))
+>k : Symbol(k, Decl(privateProtectedMembersAreNotAccessibleDestructuring.ts, 15, 3))
+
+let { privateMethod } = k; // error
+>privateMethod : Symbol(privateMethod, Decl(privateProtectedMembersAreNotAccessibleDestructuring.ts, 18, 5))
+>k : Symbol(k, Decl(privateProtectedMembersAreNotAccessibleDestructuring.ts, 15, 3))
+
+let { priv: a, prot: b, privateMethod: pm } = k; // error
+>priv : Symbol(K.priv, Decl(privateProtectedMembersAreNotAccessibleDestructuring.ts, 0, 9))
+>a : Symbol(a, Decl(privateProtectedMembersAreNotAccessibleDestructuring.ts, 19, 5))
+>prot : Symbol(K.prot, Decl(privateProtectedMembersAreNotAccessibleDestructuring.ts, 1, 17))
+>b : Symbol(b, Decl(privateProtectedMembersAreNotAccessibleDestructuring.ts, 19, 14))
+>privateMethod : Symbol(K.privateMethod, Decl(privateProtectedMembersAreNotAccessibleDestructuring.ts, 2, 19))
+>pm : Symbol(pm, Decl(privateProtectedMembersAreNotAccessibleDestructuring.ts, 19, 23))
+>k : Symbol(k, Decl(privateProtectedMembersAreNotAccessibleDestructuring.ts, 15, 3))
+
+function f({ priv, prot, privateMethod }: K) {
+>f : Symbol(f, Decl(privateProtectedMembersAreNotAccessibleDestructuring.ts, 19, 48))
+>priv : Symbol(priv, Decl(privateProtectedMembersAreNotAccessibleDestructuring.ts, 20, 12))
+>prot : Symbol(prot, Decl(privateProtectedMembersAreNotAccessibleDestructuring.ts, 20, 18))
+>privateMethod : Symbol(privateMethod, Decl(privateProtectedMembersAreNotAccessibleDestructuring.ts, 20, 24))
+>K : Symbol(K, Decl(privateProtectedMembersAreNotAccessibleDestructuring.ts, 0, 0))
+
+}
+

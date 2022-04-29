@@ -1,0 +1,4 @@
+=== tests/cases/conformance/parser/ecmascript5/ModuleDeclarations/parserModuleDeclaration1.ts ===
+module "Foo" {
+>"Foo" : typeof import("Foo")
+}

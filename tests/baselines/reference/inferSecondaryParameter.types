@@ -1,0 +1,30 @@
+=== tests/cases/compiler/inferSecondaryParameter.ts ===
+// type inference on 'bug' should give 'any'
+
+interface Ib { m(test: string, fn: Function); }
+>m : (test: string, fn: Function) => any
+>test : string
+>fn : Function
+
+var b: Ib = { m: function (test: string, fn: Function) { } };
+>b : Ib
+>{ m: function (test: string, fn: Function) { } } : { m: (test: string, fn: Function) => void; }
+>m : (test: string, fn: Function) => void
+>function (test: string, fn: Function) { } : (test: string, fn: Function) => void
+>test : string
+>fn : Function
+
+b.m("test", function (bug) {
+>b.m("test", function (bug) {    var a: number = bug;}) : any
+>b.m : (test: string, fn: Function) => any
+>b : Ib
+>m : (test: string, fn: Function) => any
+>"test" : "test"
+>function (bug) {    var a: number = bug;} : (bug: any) => void
+>bug : any
+
+    var a: number = bug;
+>a : number
+>bug : any
+
+});

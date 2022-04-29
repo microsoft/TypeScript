@@ -1,0 +1,66 @@
+=== /a.d.ts ===
+export as namespace a;
+>a : Symbol(a, Decl(a.d.ts, 0, 0))
+
+export const x = 0;
+>x : Symbol(x, Decl(a.d.ts, 1, 12))
+
+export const conflict = 0;
+>conflict : Symbol(conflict, Decl(a.d.ts, 2, 12))
+
+=== /b.ts ===
+import * as a2 from "./a";
+>a2 : Symbol(a2, Decl(b.ts, 0, 6))
+
+declare global {
+>global : Symbol(global, Decl(b.ts, 0, 26))
+
+    namespace a {
+>a : Symbol(a2, Decl(a.d.ts, 0, 0), Decl(b.ts, 2, 16), Decl(b.ts, 7, 1))
+
+        export const y = 0;
+>y : Symbol(y, Decl(b.ts, 4, 20))
+
+        export const conflict = 0;
+>conflict : Symbol(conflict, Decl(b.ts, 5, 20))
+    }
+}
+
+declare module "./a" {
+>"./a" : Symbol(a2, Decl(a.d.ts, 0, 0), Decl(b.ts, 2, 16), Decl(b.ts, 7, 1))
+
+    export const z = 0;
+>z : Symbol(z, Decl(b.ts, 10, 16))
+
+    export const conflict = 0;
+>conflict : Symbol(conflict, Decl(b.ts, 11, 16))
+}
+
+a.x + a.y + a.z + a.conflict;
+>a.x : Symbol(a2.x, Decl(a.d.ts, 1, 12))
+>a : Symbol(a2, Decl(a.d.ts, 0, 0), Decl(b.ts, 2, 16), Decl(b.ts, 7, 1))
+>x : Symbol(a2.x, Decl(a.d.ts, 1, 12))
+>a.y : Symbol(a2.y, Decl(b.ts, 4, 20))
+>a : Symbol(a2, Decl(a.d.ts, 0, 0), Decl(b.ts, 2, 16), Decl(b.ts, 7, 1))
+>y : Symbol(a2.y, Decl(b.ts, 4, 20))
+>a.z : Symbol(a2.z, Decl(b.ts, 10, 16))
+>a : Symbol(a2, Decl(a.d.ts, 0, 0), Decl(b.ts, 2, 16), Decl(b.ts, 7, 1))
+>z : Symbol(a2.z, Decl(b.ts, 10, 16))
+>a.conflict : Symbol(a2.conflict, Decl(a.d.ts, 2, 12))
+>a : Symbol(a2, Decl(a.d.ts, 0, 0), Decl(b.ts, 2, 16), Decl(b.ts, 7, 1))
+>conflict : Symbol(a2.conflict, Decl(a.d.ts, 2, 12))
+
+a2.x + a2.y + a2.z + a2.conflict;
+>a2.x : Symbol(a2.x, Decl(a.d.ts, 1, 12))
+>a2 : Symbol(a2, Decl(b.ts, 0, 6))
+>x : Symbol(a2.x, Decl(a.d.ts, 1, 12))
+>a2.y : Symbol(a2.y, Decl(b.ts, 4, 20))
+>a2 : Symbol(a2, Decl(b.ts, 0, 6))
+>y : Symbol(a2.y, Decl(b.ts, 4, 20))
+>a2.z : Symbol(a2.z, Decl(b.ts, 10, 16))
+>a2 : Symbol(a2, Decl(b.ts, 0, 6))
+>z : Symbol(a2.z, Decl(b.ts, 10, 16))
+>a2.conflict : Symbol(a2.conflict, Decl(a.d.ts, 2, 12))
+>a2 : Symbol(a2, Decl(b.ts, 0, 6))
+>conflict : Symbol(a2.conflict, Decl(a.d.ts, 2, 12))
+

@@ -1,0 +1,67 @@
+=== tests/cases/compiler/moduleElementsInWrongContext3.ts ===
+module P {
+>P : Symbol(P, Decl(moduleElementsInWrongContext3.ts, 0, 0))
+    {
+        module M { }
+>M : Symbol(M, Decl(moduleElementsInWrongContext3.ts, 1, 5))
+
+        export namespace N {
+>N : Symbol(N, Decl(moduleElementsInWrongContext3.ts, 2, 20))
+
+            export interface I { }
+>I : Symbol(I, Decl(moduleElementsInWrongContext3.ts, 3, 28))
+        }
+
+        namespace Q.K { }
+>Q : Symbol(Q, Decl(moduleElementsInWrongContext3.ts, 5, 9))
+>K : Symbol(K, Decl(moduleElementsInWrongContext3.ts, 7, 20))
+
+        declare module "ambient" {
+>"ambient" : Symbol("ambient", Decl(moduleElementsInWrongContext3.ts, 7, 25))
+
+        }
+
+        export = M;
+>M : Symbol(M, Decl(moduleElementsInWrongContext3.ts, 1, 5))
+
+        var v;
+>v : Symbol(v, Decl(moduleElementsInWrongContext3.ts, 15, 11))
+
+        function foo() { }
+>foo : Symbol(foo, Decl(moduleElementsInWrongContext3.ts, 15, 14))
+
+        export * from "ambient";
+        export { foo };
+>foo : Symbol(foo, Decl(moduleElementsInWrongContext3.ts, 18, 16))
+
+        export { baz as b } from "ambient";
+>b : Symbol(b, Decl(moduleElementsInWrongContext3.ts, 19, 16))
+
+        export default v;
+>v : Symbol(v, Decl(moduleElementsInWrongContext3.ts, 15, 11))
+
+        export default class C { }
+>C : Symbol(C, Decl(moduleElementsInWrongContext3.ts, 20, 25))
+
+        export function bee() { }
+>bee : Symbol(bee, Decl(moduleElementsInWrongContext3.ts, 21, 34))
+
+        import I = M;
+>I : Symbol(I, Decl(moduleElementsInWrongContext3.ts, 22, 33))
+>M : Symbol(M, Decl(moduleElementsInWrongContext3.ts, 1, 5))
+
+        import I2 = require("foo");
+>I2 : Symbol(I2, Decl(moduleElementsInWrongContext3.ts, 23, 21))
+
+        import * as Foo from "ambient";
+>Foo : Symbol(Foo, Decl(moduleElementsInWrongContext3.ts, 25, 14))
+
+        import bar from "ambient";
+>bar : Symbol(bar, Decl(moduleElementsInWrongContext3.ts, 26, 14))
+
+        import { baz } from "ambient";
+>baz : Symbol(baz, Decl(moduleElementsInWrongContext3.ts, 27, 16))
+
+        import "ambient";
+    }
+}

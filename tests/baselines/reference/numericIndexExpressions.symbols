@@ -1,0 +1,39 @@
+=== tests/cases/compiler/numericIndexExpressions.ts ===
+interface Numbers1 {
+>Numbers1 : Symbol(Numbers1, Decl(numericIndexExpressions.ts, 0, 0))
+
+    1: string;
+>1 : Symbol(Numbers1[1], Decl(numericIndexExpressions.ts, 0, 20))
+}
+interface Strings1 {
+>Strings1 : Symbol(Strings1, Decl(numericIndexExpressions.ts, 2, 1))
+
+    '1': string;
+>'1' : Symbol(Strings1['1'], Decl(numericIndexExpressions.ts, 3, 20))
+}
+ 
+ 
+var x: Numbers1;
+>x : Symbol(x, Decl(numericIndexExpressions.ts, 8, 3))
+>Numbers1 : Symbol(Numbers1, Decl(numericIndexExpressions.ts, 0, 0))
+
+x[1] = 4; // error
+>x : Symbol(x, Decl(numericIndexExpressions.ts, 8, 3))
+>1 : Symbol(Numbers1[1], Decl(numericIndexExpressions.ts, 0, 20))
+
+x['1'] = 4; // error
+>x : Symbol(x, Decl(numericIndexExpressions.ts, 8, 3))
+>'1' : Symbol(Numbers1[1], Decl(numericIndexExpressions.ts, 0, 20))
+
+var y: Strings1;
+>y : Symbol(y, Decl(numericIndexExpressions.ts, 12, 3))
+>Strings1 : Symbol(Strings1, Decl(numericIndexExpressions.ts, 2, 1))
+
+y['1'] = 4; // should be error
+>y : Symbol(y, Decl(numericIndexExpressions.ts, 12, 3))
+>'1' : Symbol(Strings1['1'], Decl(numericIndexExpressions.ts, 3, 20))
+
+y[1] = 4; // should be error
+>y : Symbol(y, Decl(numericIndexExpressions.ts, 12, 3))
+>1 : Symbol(Strings1['1'], Decl(numericIndexExpressions.ts, 3, 20))
+

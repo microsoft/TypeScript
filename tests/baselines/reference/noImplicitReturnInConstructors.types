@@ -1,0 +1,8 @@
+=== tests/cases/compiler/noImplicitReturnInConstructors.ts ===
+class C {
+>C : C
+
+  constructor() {
+    return;
+  }
+}

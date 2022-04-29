@@ -1,0 +1,79 @@
+=== tests/cases/compiler/interfaceClassMerging2.ts ===
+interface Foo {
+    interfaceFooMethod(): this;
+>interfaceFooMethod : () => this
+
+    interfaceFooProperty: this;
+>interfaceFooProperty : this
+}
+
+class Foo {
+>Foo : Foo
+
+    classFooProperty: this;
+>classFooProperty : this
+
+    classFooMethod(): this {
+>classFooMethod : () => this
+
+        return this;
+>this : this
+    }
+}
+
+
+interface Bar {
+    interfaceBarMethod(): this;
+>interfaceBarMethod : () => this
+
+    interfaceBarProperty: this;
+>interfaceBarProperty : this
+}
+
+class Bar extends Foo {
+>Bar : Bar
+>Foo : Foo
+
+    classBarProperty: this;
+>classBarProperty : this
+
+    classBarMethod(): this {
+>classBarMethod : () => this
+
+        return this;
+>this : this
+    }
+}
+
+
+var bar = new Bar();
+>bar : Bar
+>new Bar() : Bar
+>Bar : typeof Bar
+
+bar.interfaceBarMethod().interfaceFooMethod().classBarMethod().classFooMethod();
+>bar.interfaceBarMethod().interfaceFooMethod().classBarMethod().classFooMethod() : Bar
+>bar.interfaceBarMethod().interfaceFooMethod().classBarMethod().classFooMethod : () => Bar
+>bar.interfaceBarMethod().interfaceFooMethod().classBarMethod() : Bar
+>bar.interfaceBarMethod().interfaceFooMethod().classBarMethod : () => Bar
+>bar.interfaceBarMethod().interfaceFooMethod() : Bar
+>bar.interfaceBarMethod().interfaceFooMethod : () => Bar
+>bar.interfaceBarMethod() : Bar
+>bar.interfaceBarMethod : () => Bar
+>bar : Bar
+>interfaceBarMethod : () => Bar
+>interfaceFooMethod : () => Bar
+>classBarMethod : () => Bar
+>classFooMethod : () => Bar
+
+
+var foo = new Foo();
+>foo : Foo
+>new Foo() : Foo
+>Foo : typeof Foo
+
+foo = bar;
+>foo = bar : Bar
+>foo : Foo
+>bar : Bar
+

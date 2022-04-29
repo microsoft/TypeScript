@@ -1,0 +1,166 @@
+=== tests/cases/conformance/types/typeRelationships/recursiveTypes/objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts ===
+// Types with infinitely expanding recursive types are type checked nominally
+
+class List<T> {
+>List : Symbol(List, Decl(objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts, 0, 0))
+>T : Symbol(T, Decl(objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts, 2, 11))
+
+    data: T;
+>data : Symbol(List.data, Decl(objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts, 2, 15))
+>T : Symbol(T, Decl(objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts, 2, 11))
+
+    next: List<List<T>>;
+>next : Symbol(List.next, Decl(objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts, 3, 12))
+>List : Symbol(List, Decl(objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts, 0, 0))
+>List : Symbol(List, Decl(objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts, 0, 0))
+>T : Symbol(T, Decl(objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts, 2, 11))
+}
+
+class MyList<T> {
+>MyList : Symbol(MyList, Decl(objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts, 5, 1))
+>T : Symbol(T, Decl(objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts, 7, 13))
+
+    data: T;
+>data : Symbol(MyList.data, Decl(objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts, 7, 17))
+>T : Symbol(T, Decl(objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts, 7, 13))
+
+    next: MyList<MyList<T>>;
+>next : Symbol(MyList.next, Decl(objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts, 8, 12))
+>MyList : Symbol(MyList, Decl(objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts, 5, 1))
+>MyList : Symbol(MyList, Decl(objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts, 5, 1))
+>T : Symbol(T, Decl(objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts, 7, 13))
+}
+
+var list1 = new List<number>();
+>list1 : Symbol(list1, Decl(objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts, 12, 3))
+>List : Symbol(List, Decl(objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts, 0, 0))
+
+var list2 = new List<string>();
+>list2 : Symbol(list2, Decl(objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts, 13, 3))
+>List : Symbol(List, Decl(objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts, 0, 0))
+
+var myList1 = new MyList<number>();
+>myList1 : Symbol(myList1, Decl(objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts, 15, 3))
+>MyList : Symbol(MyList, Decl(objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts, 5, 1))
+
+var myList2 = new MyList<string>();
+>myList2 : Symbol(myList2, Decl(objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts, 16, 3))
+>MyList : Symbol(MyList, Decl(objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts, 5, 1))
+
+list1 = myList1; // error, not nominally equal
+>list1 : Symbol(list1, Decl(objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts, 12, 3))
+>myList1 : Symbol(myList1, Decl(objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts, 15, 3))
+
+list1 = myList2; // error, type mismatch
+>list1 : Symbol(list1, Decl(objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts, 12, 3))
+>myList2 : Symbol(myList2, Decl(objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts, 16, 3))
+
+list2 = myList1; // error, not nominally equal
+>list2 : Symbol(list2, Decl(objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts, 13, 3))
+>myList1 : Symbol(myList1, Decl(objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts, 15, 3))
+
+list2 = myList2; // error, type mismatch
+>list2 : Symbol(list2, Decl(objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts, 13, 3))
+>myList2 : Symbol(myList2, Decl(objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts, 16, 3))
+
+var rList1 = new List<List<number>>();
+>rList1 : Symbol(rList1, Decl(objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts, 24, 3))
+>List : Symbol(List, Decl(objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts, 0, 0))
+>List : Symbol(List, Decl(objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts, 0, 0))
+
+var rMyList1 = new List<MyList<number>>();
+>rMyList1 : Symbol(rMyList1, Decl(objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts, 25, 3))
+>List : Symbol(List, Decl(objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts, 0, 0))
+>MyList : Symbol(MyList, Decl(objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts, 5, 1))
+
+rList1 = rMyList1; // error, not nominally equal
+>rList1 : Symbol(rList1, Decl(objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts, 24, 3))
+>rMyList1 : Symbol(rMyList1, Decl(objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts, 25, 3))
+
+function foo<T extends List<number>, U extends MyList<number>>(t: T, u: U) {
+>foo : Symbol(foo, Decl(objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts, 26, 18))
+>T : Symbol(T, Decl(objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts, 28, 13))
+>List : Symbol(List, Decl(objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts, 0, 0))
+>U : Symbol(U, Decl(objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts, 28, 36))
+>MyList : Symbol(MyList, Decl(objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts, 5, 1))
+>t : Symbol(t, Decl(objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts, 28, 63))
+>T : Symbol(T, Decl(objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts, 28, 13))
+>u : Symbol(u, Decl(objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts, 28, 68))
+>U : Symbol(U, Decl(objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts, 28, 36))
+
+    t = u; // error
+>t : Symbol(t, Decl(objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts, 28, 63))
+>u : Symbol(u, Decl(objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts, 28, 68))
+
+    u = t; // error
+>u : Symbol(u, Decl(objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts, 28, 68))
+>t : Symbol(t, Decl(objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts, 28, 63))
+
+    var a: List<number>;
+>a : Symbol(a, Decl(objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts, 32, 7))
+>List : Symbol(List, Decl(objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts, 0, 0))
+
+    var b: MyList<number>;
+>b : Symbol(b, Decl(objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts, 33, 7))
+>MyList : Symbol(MyList, Decl(objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts, 5, 1))
+
+    a = t; // ok
+>a : Symbol(a, Decl(objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts, 32, 7))
+>t : Symbol(t, Decl(objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts, 28, 63))
+
+    a = u; // error
+>a : Symbol(a, Decl(objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts, 32, 7))
+>u : Symbol(u, Decl(objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts, 28, 68))
+
+    b = t; // error
+>b : Symbol(b, Decl(objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts, 33, 7))
+>t : Symbol(t, Decl(objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts, 28, 63))
+
+    b = u; // ok
+>b : Symbol(b, Decl(objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts, 33, 7))
+>u : Symbol(u, Decl(objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts, 28, 68))
+}
+
+function foo2<T extends U, U extends MyList<number>>(t: T, u: U) {
+>foo2 : Symbol(foo2, Decl(objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts, 38, 1))
+>T : Symbol(T, Decl(objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts, 40, 14))
+>U : Symbol(U, Decl(objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts, 40, 26))
+>U : Symbol(U, Decl(objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts, 40, 26))
+>MyList : Symbol(MyList, Decl(objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts, 5, 1))
+>t : Symbol(t, Decl(objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts, 40, 53))
+>T : Symbol(T, Decl(objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts, 40, 14))
+>u : Symbol(u, Decl(objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts, 40, 58))
+>U : Symbol(U, Decl(objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts, 40, 26))
+
+    t = u; // error
+>t : Symbol(t, Decl(objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts, 40, 53))
+>u : Symbol(u, Decl(objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts, 40, 58))
+
+    u = t; // was error, ok after constraint made illegal, doesn't matter
+>u : Symbol(u, Decl(objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts, 40, 58))
+>t : Symbol(t, Decl(objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts, 40, 53))
+
+    var a: List<number>;
+>a : Symbol(a, Decl(objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts, 44, 7))
+>List : Symbol(List, Decl(objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts, 0, 0))
+
+    var b: MyList<number>;
+>b : Symbol(b, Decl(objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts, 45, 7))
+>MyList : Symbol(MyList, Decl(objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts, 5, 1))
+
+    a = t; // error
+>a : Symbol(a, Decl(objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts, 44, 7))
+>t : Symbol(t, Decl(objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts, 40, 53))
+
+    a = u; // error
+>a : Symbol(a, Decl(objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts, 44, 7))
+>u : Symbol(u, Decl(objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts, 40, 58))
+
+    b = t; // ok
+>b : Symbol(b, Decl(objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts, 45, 7))
+>t : Symbol(t, Decl(objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts, 40, 53))
+
+    b = u; // ok
+>b : Symbol(b, Decl(objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts, 45, 7))
+>u : Symbol(u, Decl(objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts, 40, 58))
+}

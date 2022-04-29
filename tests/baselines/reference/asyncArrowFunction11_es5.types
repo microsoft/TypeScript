@@ -1,0 +1,27 @@
+=== tests/cases/conformance/async/es5/asyncArrowFunction/asyncArrowFunction11_es5.ts ===
+// https://github.com/Microsoft/TypeScript/issues/24722
+class A {
+>A : A
+
+    b = async (...args: any[]) => {
+>b : (...args: any[]) => Promise<void>
+>async (...args: any[]) => {        await Promise.resolve();        const obj = { ["a"]: () => this }; // computed property name after `await` triggers case    } : (...args: any[]) => Promise<void>
+>args : any[]
+
+        await Promise.resolve();
+>await Promise.resolve() : void
+>Promise.resolve() : Promise<void>
+>Promise.resolve : { (): Promise<void>; <T>(value: T | PromiseLike<T>): Promise<T>; }
+>Promise : PromiseConstructor
+>resolve : { (): Promise<void>; <T>(value: T | PromiseLike<T>): Promise<T>; }
+
+        const obj = { ["a"]: () => this }; // computed property name after `await` triggers case
+>obj : { a: () => this; }
+>{ ["a"]: () => this } : { a: () => this; }
+>["a"] : () => this
+>"a" : "a"
+>() => this : () => this
+>this : this
+
+    };
+}

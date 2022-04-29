@@ -1,0 +1,3 @@
+=== tests/cases/conformance/parser/ecmascript5/Expressions/parserMemberAccessAfterPostfixExpression1.ts ===
+a--.toString()
+No type information for this code.

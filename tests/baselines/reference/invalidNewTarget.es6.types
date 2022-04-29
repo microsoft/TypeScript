@@ -1,0 +1,108 @@
+=== tests/cases/conformance/es6/newTarget/invalidNewTarget.es6.ts ===
+const a = new.target;
+>a : any
+>new.target : any
+>target : any
+
+const b = () => new.target;
+>b : () => any
+>() => new.target : () => any
+>new.target : any
+>target : any
+
+class C {
+>C : C
+
+    [new.target]() { }
+>[new.target] : () => void
+>new.target : any
+>target : any
+
+    c() { return new.target; }
+>c : () => any
+>new.target : any
+>target : any
+
+    get d() { return new.target; }
+>d : any
+>new.target : any
+>target : any
+
+    set e(_) { _ = new.target; }
+>e : any
+>_ : any
+>_ = new.target : any
+>_ : any
+>new.target : any
+>target : any
+
+    f = () => new.target;
+>f : () => any
+>() => new.target : () => any
+>new.target : any
+>target : any
+
+    static [new.target]() { }
+>[new.target] : () => void
+>new.target : any
+>target : any
+
+    static g() { return new.target; }
+>g : () => any
+>new.target : any
+>target : any
+
+    static get h() { return new.target; }
+>h : any
+>new.target : any
+>target : any
+
+    static set i(_) { _ = new.target; }
+>i : any
+>_ : any
+>_ = new.target : any
+>_ : any
+>new.target : any
+>target : any
+
+    static j = () => new.target;
+>j : () => any
+>() => new.target : () => any
+>new.target : any
+>target : any
+}
+
+const O = {
+>O : { [x: number]: any; k(): any; readonly l: any; m: any; n: any; }
+>{    [new.target]: undefined,    k() { return new.target; },    get l() { return new.target; },    set m(_) { _ = new.target; },    n: new.target,} : { [x: number]: undefined; k(): any; readonly l: any; m: any; n: any; }
+
+    [new.target]: undefined,
+>[new.target] : undefined
+>new.target : any
+>target : any
+>undefined : undefined
+
+    k() { return new.target; },
+>k : () => any
+>new.target : any
+>target : any
+
+    get l() { return new.target; },
+>l : any
+>new.target : any
+>target : any
+
+    set m(_) { _ = new.target; },
+>m : any
+>_ : any
+>_ = new.target : any
+>_ : any
+>new.target : any
+>target : any
+
+    n: new.target,
+>n : any
+>new.target : any
+>target : any
+
+};

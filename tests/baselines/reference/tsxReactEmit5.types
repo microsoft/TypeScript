@@ -1,0 +1,30 @@
+=== tests/cases/conformance/jsx/file.tsx ===
+declare module JSX {
+	interface Element { }
+	interface IntrinsicElements {
+		[s: string]: any;
+>s : string
+	}
+}
+
+=== tests/cases/conformance/jsx/test.d.ts ===
+export var React;
+>React : any
+
+=== tests/cases/conformance/jsx/react-consumer.tsx ===
+import {React} from "./test";
+>React : any
+
+// Should emit test_1.React.createElement
+//  and React.__spread
+var foo: any;
+>foo : any
+
+var spread1 = <div x='' {...foo} y='' />;
+>spread1 : JSX.Element
+><div x='' {...foo} y='' /> : JSX.Element
+>div : any
+>x : string
+>foo : any
+>y : string
+

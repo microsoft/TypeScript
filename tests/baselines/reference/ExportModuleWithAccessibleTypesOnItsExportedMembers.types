@@ -1,0 +1,48 @@
+=== tests/cases/conformance/internalModules/exportDeclarations/ExportModuleWithAccessibleTypesOnItsExportedMembers.ts ===
+module A {
+>A : typeof A
+
+    export class Point {
+>Point : Point
+
+        constructor(public x: number, public y: number) { }
+>x : number
+>y : number
+    }
+
+    export module B {
+>B : typeof B
+
+        export var Origin: Point = new Point(0, 0);
+>Origin : Point
+>new Point(0, 0) : Point
+>Point : typeof Point
+>0 : 0
+>0 : 0
+
+        export class Line {
+>Line : Line
+
+            constructor(start: Point, end: Point) {
+>start : Point
+>end : Point
+
+            }
+
+            static fromOrigin(p: Point) {
+>fromOrigin : (p: Point) => Line
+>p : Point
+
+                return new Line({ x: 0, y: 0 }, p);
+>new Line({ x: 0, y: 0 }, p) : Line
+>Line : typeof Line
+>{ x: 0, y: 0 } : { x: number; y: number; }
+>x : number
+>0 : 0
+>y : number
+>0 : 0
+>p : Point
+            }
+        }
+    }
+}

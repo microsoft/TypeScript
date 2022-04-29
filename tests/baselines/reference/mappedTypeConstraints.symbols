@@ -1,0 +1,140 @@
+=== tests/cases/conformance/types/mapped/mappedTypeConstraints.ts ===
+function f0<T extends { a: string, b: string }>(obj: Pick<T, Extract<keyof T, 'b'>>) {
+>f0 : Symbol(f0, Decl(mappedTypeConstraints.ts, 0, 0))
+>T : Symbol(T, Decl(mappedTypeConstraints.ts, 0, 12))
+>a : Symbol(a, Decl(mappedTypeConstraints.ts, 0, 23))
+>b : Symbol(b, Decl(mappedTypeConstraints.ts, 0, 34))
+>obj : Symbol(obj, Decl(mappedTypeConstraints.ts, 0, 48))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(mappedTypeConstraints.ts, 0, 12))
+>Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(mappedTypeConstraints.ts, 0, 12))
+
+    obj.b;
+>obj.b : Symbol(b, Decl(mappedTypeConstraints.ts, 0, 34))
+>obj : Symbol(obj, Decl(mappedTypeConstraints.ts, 0, 48))
+>b : Symbol(b, Decl(mappedTypeConstraints.ts, 0, 34))
+}
+
+function f1<T extends { a: string, b: string }>(obj: Pick<T, Exclude<keyof T, 'a'>>) {
+>f1 : Symbol(f1, Decl(mappedTypeConstraints.ts, 2, 1))
+>T : Symbol(T, Decl(mappedTypeConstraints.ts, 4, 12))
+>a : Symbol(a, Decl(mappedTypeConstraints.ts, 4, 23))
+>b : Symbol(b, Decl(mappedTypeConstraints.ts, 4, 34))
+>obj : Symbol(obj, Decl(mappedTypeConstraints.ts, 4, 48))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(mappedTypeConstraints.ts, 4, 12))
+>Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(mappedTypeConstraints.ts, 4, 12))
+
+    obj.b;
+>obj.b : Symbol(b, Decl(mappedTypeConstraints.ts, 4, 34))
+>obj : Symbol(obj, Decl(mappedTypeConstraints.ts, 4, 48))
+>b : Symbol(b, Decl(mappedTypeConstraints.ts, 4, 34))
+}
+
+function f2<T extends { a: string, b: string }, U extends { b: string, c: string }>(obj: Pick<T | U, keyof (T | U)>) {
+>f2 : Symbol(f2, Decl(mappedTypeConstraints.ts, 6, 1))
+>T : Symbol(T, Decl(mappedTypeConstraints.ts, 8, 12))
+>a : Symbol(a, Decl(mappedTypeConstraints.ts, 8, 23))
+>b : Symbol(b, Decl(mappedTypeConstraints.ts, 8, 34))
+>U : Symbol(U, Decl(mappedTypeConstraints.ts, 8, 47))
+>b : Symbol(b, Decl(mappedTypeConstraints.ts, 8, 59))
+>c : Symbol(c, Decl(mappedTypeConstraints.ts, 8, 70))
+>obj : Symbol(obj, Decl(mappedTypeConstraints.ts, 8, 84))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(mappedTypeConstraints.ts, 8, 12))
+>U : Symbol(U, Decl(mappedTypeConstraints.ts, 8, 47))
+>T : Symbol(T, Decl(mappedTypeConstraints.ts, 8, 12))
+>U : Symbol(U, Decl(mappedTypeConstraints.ts, 8, 47))
+
+    obj.b;
+>obj.b : Symbol(b, Decl(mappedTypeConstraints.ts, 8, 34), Decl(mappedTypeConstraints.ts, 8, 59))
+>obj : Symbol(obj, Decl(mappedTypeConstraints.ts, 8, 84))
+>b : Symbol(b, Decl(mappedTypeConstraints.ts, 8, 34), Decl(mappedTypeConstraints.ts, 8, 59))
+}
+
+function f3<T extends { a: string, b: string }, U extends { b: string, c: string }>(obj: Pick<T & U, keyof (T & U)>) {
+>f3 : Symbol(f3, Decl(mappedTypeConstraints.ts, 10, 1))
+>T : Symbol(T, Decl(mappedTypeConstraints.ts, 12, 12))
+>a : Symbol(a, Decl(mappedTypeConstraints.ts, 12, 23))
+>b : Symbol(b, Decl(mappedTypeConstraints.ts, 12, 34))
+>U : Symbol(U, Decl(mappedTypeConstraints.ts, 12, 47))
+>b : Symbol(b, Decl(mappedTypeConstraints.ts, 12, 59))
+>c : Symbol(c, Decl(mappedTypeConstraints.ts, 12, 70))
+>obj : Symbol(obj, Decl(mappedTypeConstraints.ts, 12, 84))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(mappedTypeConstraints.ts, 12, 12))
+>U : Symbol(U, Decl(mappedTypeConstraints.ts, 12, 47))
+>T : Symbol(T, Decl(mappedTypeConstraints.ts, 12, 12))
+>U : Symbol(U, Decl(mappedTypeConstraints.ts, 12, 47))
+
+    obj.a;
+>obj.a : Symbol(a, Decl(mappedTypeConstraints.ts, 12, 23))
+>obj : Symbol(obj, Decl(mappedTypeConstraints.ts, 12, 84))
+>a : Symbol(a, Decl(mappedTypeConstraints.ts, 12, 23))
+
+    obj.b;
+>obj.b : Symbol(b, Decl(mappedTypeConstraints.ts, 12, 34), Decl(mappedTypeConstraints.ts, 12, 59))
+>obj : Symbol(obj, Decl(mappedTypeConstraints.ts, 12, 84))
+>b : Symbol(b, Decl(mappedTypeConstraints.ts, 12, 34), Decl(mappedTypeConstraints.ts, 12, 59))
+
+    obj.c;
+>obj.c : Symbol(c, Decl(mappedTypeConstraints.ts, 12, 70))
+>obj : Symbol(obj, Decl(mappedTypeConstraints.ts, 12, 84))
+>c : Symbol(c, Decl(mappedTypeConstraints.ts, 12, 70))
+}
+
+function f4<T extends { a: string, b: string }>(obj: Record<Exclude<keyof T, 'b'> | 'c', string>) {
+>f4 : Symbol(f4, Decl(mappedTypeConstraints.ts, 16, 1))
+>T : Symbol(T, Decl(mappedTypeConstraints.ts, 18, 12))
+>a : Symbol(a, Decl(mappedTypeConstraints.ts, 18, 23))
+>b : Symbol(b, Decl(mappedTypeConstraints.ts, 18, 34))
+>obj : Symbol(obj, Decl(mappedTypeConstraints.ts, 18, 48))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(mappedTypeConstraints.ts, 18, 12))
+
+    obj.a;
+>obj.a : Symbol(a)
+>obj : Symbol(obj, Decl(mappedTypeConstraints.ts, 18, 48))
+>a : Symbol(a)
+
+    obj.c;
+>obj.c : Symbol(c)
+>obj : Symbol(obj, Decl(mappedTypeConstraints.ts, 18, 48))
+>c : Symbol(c)
+}
+
+// Repro from #28821
+
+type TargetProps = {
+>TargetProps : Symbol(TargetProps, Decl(mappedTypeConstraints.ts, 21, 1))
+
+    foo: string,
+>foo : Symbol(foo, Decl(mappedTypeConstraints.ts, 25, 20))
+
+    bar: string
+>bar : Symbol(bar, Decl(mappedTypeConstraints.ts, 26, 16))
+
+};
+
+const modifier = <T extends TargetProps>(targetProps: T) => {
+>modifier : Symbol(modifier, Decl(mappedTypeConstraints.ts, 30, 5))
+>T : Symbol(T, Decl(mappedTypeConstraints.ts, 30, 18))
+>TargetProps : Symbol(TargetProps, Decl(mappedTypeConstraints.ts, 21, 1))
+>targetProps : Symbol(targetProps, Decl(mappedTypeConstraints.ts, 30, 41))
+>T : Symbol(T, Decl(mappedTypeConstraints.ts, 30, 18))
+
+    let {bar, ...rest} = targetProps;
+>bar : Symbol(bar, Decl(mappedTypeConstraints.ts, 31, 9))
+>rest : Symbol(rest, Decl(mappedTypeConstraints.ts, 31, 13))
+>targetProps : Symbol(targetProps, Decl(mappedTypeConstraints.ts, 30, 41))
+
+    rest.foo;
+>rest.foo : Symbol(foo, Decl(mappedTypeConstraints.ts, 25, 20))
+>rest : Symbol(rest, Decl(mappedTypeConstraints.ts, 31, 13))
+>foo : Symbol(foo, Decl(mappedTypeConstraints.ts, 25, 20))
+
+};
+

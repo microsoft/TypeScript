@@ -1,0 +1,7 @@
+=== tests/cases/conformance/parser/ecmascript5/Protected/Protected9.ts ===
+class C {
+>C : Symbol(C, Decl(Protected9.ts, 0, 0))
+
+   constructor(protected p) { }
+>p : Symbol(C.p, Decl(Protected9.ts, 1, 15))
+}

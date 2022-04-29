@@ -1,0 +1,13 @@
+=== tests/cases/compiler/missingReturnStatement.ts ===
+module Test {
+>Test : Symbol(Test, Decl(missingReturnStatement.ts, 0, 0))
+
+    export class Bug {
+>Bug : Symbol(Bug, Decl(missingReturnStatement.ts, 0, 13))
+
+        public foo():string {
+>foo : Symbol(Bug.foo, Decl(missingReturnStatement.ts, 1, 22))
+        }
+    }    
+}
+

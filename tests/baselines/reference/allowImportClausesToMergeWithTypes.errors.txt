@@ -1,0 +1,34 @@
+tests/cases/compiler/index.ts(4,1): error TS2693: 'zzz' only refers to a type, but is being used as a value here.
+tests/cases/compiler/index.ts(9,10): error TS2749: 'originalZZZ' refers to a value, but is being used as a type here. Did you mean 'typeof originalZZZ'?
+
+
+==== tests/cases/compiler/b.ts (0 errors) ====
+    export const zzz = 123;
+    export default zzz;
+    
+==== tests/cases/compiler/a.ts (0 errors) ====
+    export default interface zzz {
+        x: string;
+    }
+    
+    import zzz from "./b";
+    
+    const x: zzz = { x: "" };
+    zzz;
+    
+    export { zzz as default };
+    
+==== tests/cases/compiler/index.ts (2 errors) ====
+    import zzz from "./a";
+    
+    const x: zzz = { x: "" };
+    zzz;
+    ~~~
+!!! error TS2693: 'zzz' only refers to a type, but is being used as a value here.
+    
+    import originalZZZ from "./b";
+    originalZZZ;
+    
+    const y: originalZZZ = x;
+             ~~~~~~~~~~~
+!!! error TS2749: 'originalZZZ' refers to a value, but is being used as a type here. Did you mean 'typeof originalZZZ'?

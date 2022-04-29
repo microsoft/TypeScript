@@ -1,0 +1,23 @@
+tests/cases/conformance/statements/for-ofStatements/ES5For-ofTypeCheck10.ts(9,6): error TS2585: 'Symbol' only refers to a type, but is being used as a value here. Do you need to change your target library? Try changing the 'lib' compiler option to es2015 or later.
+tests/cases/conformance/statements/for-ofStatements/ES5For-ofTypeCheck10.ts(14,15): error TS2495: Type 'StringIterator' is not an array type or a string type.
+
+
+==== tests/cases/conformance/statements/for-ofStatements/ES5For-ofTypeCheck10.ts (2 errors) ====
+    // In ES3/5, you cannot for...of over an arbitrary iterable.
+    class StringIterator {
+        next() {
+            return {
+                done: true,
+                value: ""
+            };
+        }
+        [Symbol.iterator]() {
+         ~~~~~~
+!!! error TS2585: 'Symbol' only refers to a type, but is being used as a value here. Do you need to change your target library? Try changing the 'lib' compiler option to es2015 or later.
+            return this;
+        }
+    }
+    
+    for (var v of new StringIterator) { }
+                  ~~~~~~~~~~~~~~~~~~
+!!! error TS2495: Type 'StringIterator' is not an array type or a string type.

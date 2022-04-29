@@ -1,0 +1,68 @@
+=== tests/cases/conformance/salsa/use.js ===
+var npmlog = require('./npmlog')
+>npmlog : Symbol(npmlog, Decl(use.js, 0, 3))
+>require : Symbol(require)
+>'./npmlog' : Symbol("tests/cases/conformance/salsa/npmlog", Decl(npmlog.js, 0, 0))
+
+npmlog.x
+>npmlog.x : Symbol(npmlog.x, Decl(npmlog.js, 7, 23))
+>npmlog : Symbol(npmlog, Decl(use.js, 0, 3))
+>x : Symbol(npmlog.x, Decl(npmlog.js, 7, 23))
+
+npmlog.on
+>npmlog.on : Symbol(EE.on, Decl(npmlog.js, 0, 10))
+>npmlog : Symbol(npmlog, Decl(use.js, 0, 3))
+>on : Symbol(EE.on, Decl(npmlog.js, 0, 10))
+
+=== tests/cases/conformance/salsa/npmlog.js ===
+class EE {
+>EE : Symbol(EE, Decl(npmlog.js, 0, 0))
+
+    /** @param {string} s */
+    on(s) { }
+>on : Symbol(EE.on, Decl(npmlog.js, 0, 10))
+>s : Symbol(s, Decl(npmlog.js, 2, 7))
+}
+var npmlog = module.exports = new EE()
+>npmlog : Symbol(npmlog, Decl(npmlog.js, 4, 3))
+>module.exports : Symbol(module.exports, Decl(npmlog.js, 0, 0))
+>module : Symbol(npmlog, Decl(npmlog.js, 4, 12))
+>exports : Symbol(npmlog, Decl(npmlog.js, 4, 12))
+>EE : Symbol(EE, Decl(npmlog.js, 0, 0))
+
+npmlog.on('hi') // both references should see EE.on
+>npmlog.on : Symbol(EE.on, Decl(npmlog.js, 0, 10))
+>npmlog : Symbol(npmlog, Decl(npmlog.js, 4, 3))
+>on : Symbol(EE.on, Decl(npmlog.js, 0, 10))
+
+module.exports.on('hi') // here too
+>module.exports.on : Symbol(EE.on, Decl(npmlog.js, 0, 10))
+>module.exports : Symbol(module.exports, Decl(npmlog.js, 0, 0))
+>module : Symbol(module, Decl(npmlog.js, 4, 12))
+>exports : Symbol(module.exports, Decl(npmlog.js, 0, 0))
+>on : Symbol(EE.on, Decl(npmlog.js, 0, 10))
+
+npmlog.x = 1
+>npmlog.x : Symbol(x, Decl(npmlog.js, 7, 23))
+>npmlog : Symbol(npmlog, Decl(npmlog.js, 4, 3))
+>x : Symbol(x, Decl(npmlog.js, 7, 23))
+
+module.exports.y = 2
+>module.exports.y : Symbol(y, Decl(npmlog.js, 9, 12))
+>module.exports : Symbol(y, Decl(npmlog.js, 9, 12))
+>module : Symbol(module, Decl(npmlog.js, 4, 12))
+>exports : Symbol(module.exports, Decl(npmlog.js, 0, 0))
+>y : Symbol(y, Decl(npmlog.js, 9, 12))
+
+npmlog.y
+>npmlog.y : Symbol(y, Decl(npmlog.js, 9, 12))
+>npmlog : Symbol(npmlog, Decl(npmlog.js, 4, 3))
+>y : Symbol(y, Decl(npmlog.js, 9, 12))
+
+module.exports.x
+>module.exports.x : Symbol(x, Decl(npmlog.js, 7, 23))
+>module.exports : Symbol(module.exports, Decl(npmlog.js, 0, 0))
+>module : Symbol(module, Decl(npmlog.js, 4, 12))
+>exports : Symbol(module.exports, Decl(npmlog.js, 0, 0))
+>x : Symbol(x, Decl(npmlog.js, 7, 23))
+

@@ -1,0 +1,8 @@
+=== tests/cases/compiler/parserIsClassMemberStart.ts ===
+class C {
+>C : C
+
+    type!: number;
+>type : number
+}
+

@@ -1,0 +1,88 @@
+=== tests/cases/conformance/types/objectTypeLiteral/methodSignatures/methodSignaturesWithOverloads2.ts ===
+// Object type literals permit overloads with optionality but they must match
+
+var c: {
+>c : { func4?(x: number): number; func4?(s: string): string; func5?: { (x: number): number; (s: string): string; }; }
+
+    func4?(x: number): number;
+>func4 : { (x: number): number; (s: string): string; }
+>x : number
+
+    func4?(s: string): string;
+>func4 : { (x: number): number; (s: string): string; }
+>s : string
+
+    func5?: {
+>func5 : { (x: number): number; (s: string): string; }
+
+        (x: number): number;
+>x : number
+
+        (s: string): string;
+>s : string
+
+    };
+};
+
+// no errors
+c.func4 = c.func5;
+>c.func4 = c.func5 : { (x: number): number; (s: string): string; }
+>c.func4 : { (x: number): number; (s: string): string; }
+>c : { func4?(x: number): number; func4?(s: string): string; func5?: { (x: number): number; (s: string): string; }; }
+>func4 : { (x: number): number; (s: string): string; }
+>c.func5 : { (x: number): number; (s: string): string; }
+>c : { func4?(x: number): number; func4?(s: string): string; func5?: { (x: number): number; (s: string): string; }; }
+>func5 : { (x: number): number; (s: string): string; }
+
+c.func5 = c.func4;
+>c.func5 = c.func4 : { (x: number): number; (s: string): string; }
+>c.func5 : { (x: number): number; (s: string): string; }
+>c : { func4?(x: number): number; func4?(s: string): string; func5?: { (x: number): number; (s: string): string; }; }
+>func5 : { (x: number): number; (s: string): string; }
+>c.func4 : { (x: number): number; (s: string): string; }
+>c : { func4?(x: number): number; func4?(s: string): string; func5?: { (x: number): number; (s: string): string; }; }
+>func4 : { (x: number): number; (s: string): string; }
+
+
+var c2: {
+>c2 : { func4?<T>(x: T): number; func4?<T>(s: T): string; func5?: { <T>(x: T): number; <T>(s: T): string; }; }
+
+    func4?<T>(x: T): number;
+>func4 : { <T>(x: T): number; <T>(s: T): string; }
+>x : T
+
+    func4? <T>(s: T): string;
+>func4 : { <T>(x: T): number; <T>(s: T): string; }
+>s : T
+
+    func5?: {
+>func5 : { <T>(x: T): number; <T>(s: T): string; }
+
+        <T>(x: T): number;
+>x : T
+
+        <T>(s: T): string;
+>s : T
+
+    };
+};
+
+// no errors
+c2.func4 = c2.func5;
+>c2.func4 = c2.func5 : { <T>(x: T): number; <T>(s: T): string; }
+>c2.func4 : { <T>(x: T): number; <T>(s: T): string; }
+>c2 : { func4?<T>(x: T): number; func4?<T>(s: T): string; func5?: { <T>(x: T): number; <T>(s: T): string; }; }
+>func4 : { <T>(x: T): number; <T>(s: T): string; }
+>c2.func5 : { <T>(x: T): number; <T>(s: T): string; }
+>c2 : { func4?<T>(x: T): number; func4?<T>(s: T): string; func5?: { <T>(x: T): number; <T>(s: T): string; }; }
+>func5 : { <T>(x: T): number; <T>(s: T): string; }
+
+c2.func5 = c2.func4;
+>c2.func5 = c2.func4 : { <T>(x: T): number; <T>(s: T): string; }
+>c2.func5 : { <T>(x: T): number; <T>(s: T): string; }
+>c2 : { func4?<T>(x: T): number; func4?<T>(s: T): string; func5?: { <T>(x: T): number; <T>(s: T): string; }; }
+>func5 : { <T>(x: T): number; <T>(s: T): string; }
+>c2.func4 : { <T>(x: T): number; <T>(s: T): string; }
+>c2 : { func4?<T>(x: T): number; func4?<T>(s: T): string; func5?: { <T>(x: T): number; <T>(s: T): string; }; }
+>func4 : { <T>(x: T): number; <T>(s: T): string; }
+

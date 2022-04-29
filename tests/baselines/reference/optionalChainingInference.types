@@ -1,0 +1,140 @@
+=== tests/cases/conformance/expressions/optionalChaining/optionalChainingInference.ts ===
+// https://github.com/microsoft/TypeScript/issues/34579
+declare function unbox<T>(box: { value: T | undefined }): T;
+>unbox : <T>(box: {    value: T | undefined;}) => T
+>box : { value: T | undefined; }
+>value : T
+
+declare const su: string | undefined;
+>su : string
+
+declare const fnu: (() => number) | undefined;
+>fnu : () => number
+
+declare const osu: { prop: string } | undefined;
+>osu : { prop: string; }
+>prop : string
+
+declare const ofnu: { prop: () => number } | undefined;
+>ofnu : { prop: () => number; }
+>prop : () => number
+
+const b1 = { value: su?.length };
+>b1 : { value: number; }
+>{ value: su?.length } : { value: number; }
+>value : number
+>su?.length : number
+>su : string
+>length : number
+
+const v1: number = unbox(b1);
+>v1 : number
+>unbox(b1) : number
+>unbox : <T>(box: { value: T; }) => T
+>b1 : { value: number; }
+
+const b2 = { value: su?.length as number | undefined };
+>b2 : { value: number; }
+>{ value: su?.length as number | undefined } : { value: number; }
+>value : number
+>su?.length as number | undefined : number
+>su?.length : number
+>su : string
+>length : number
+
+const v2: number = unbox(b2);
+>v2 : number
+>unbox(b2) : number
+>unbox : <T>(box: { value: T; }) => T
+>b2 : { value: number; }
+
+const b3: { value: number | undefined } = { value: su?.length };
+>b3 : { value: number | undefined; }
+>value : number
+>{ value: su?.length } : { value: number; }
+>value : number
+>su?.length : number
+>su : string
+>length : number
+
+const v3: number = unbox(b3);
+>v3 : number
+>unbox(b3) : number
+>unbox : <T>(box: { value: T; }) => T
+>b3 : { value: number; }
+
+const b4 = { value: fnu?.() };
+>b4 : { value: number; }
+>{ value: fnu?.() } : { value: number; }
+>value : number
+>fnu?.() : number
+>fnu : () => number
+
+const v4: number = unbox(b4);
+>v4 : number
+>unbox(b4) : number
+>unbox : <T>(box: { value: T; }) => T
+>b4 : { value: number; }
+
+const b5 = { value: su?.["length"] };
+>b5 : { value: number; }
+>{ value: su?.["length"] } : { value: number; }
+>value : number
+>su?.["length"] : number
+>su : string
+>"length" : "length"
+
+const v5: number = unbox(b5);
+>v5 : number
+>unbox(b5) : number
+>unbox : <T>(box: { value: T; }) => T
+>b5 : { value: number; }
+
+const b6 = { value: osu?.prop.length };
+>b6 : { value: number; }
+>{ value: osu?.prop.length } : { value: number; }
+>value : number
+>osu?.prop.length : number
+>osu?.prop : string
+>osu : { prop: string; }
+>prop : string
+>length : number
+
+const v6: number = unbox(b6);
+>v6 : number
+>unbox(b6) : number
+>unbox : <T>(box: { value: T; }) => T
+>b6 : { value: number; }
+
+const b7 = { value: osu?.prop["length"] };
+>b7 : { value: number; }
+>{ value: osu?.prop["length"] } : { value: number; }
+>value : number
+>osu?.prop["length"] : number
+>osu?.prop : string
+>osu : { prop: string; }
+>prop : string
+>"length" : "length"
+
+const v7: number = unbox(b7);
+>v7 : number
+>unbox(b7) : number
+>unbox : <T>(box: { value: T; }) => T
+>b7 : { value: number; }
+
+const b8 = { value: ofnu?.prop() };
+>b8 : { value: number; }
+>{ value: ofnu?.prop() } : { value: number; }
+>value : number
+>ofnu?.prop() : number
+>ofnu?.prop : () => number
+>ofnu : { prop: () => number; }
+>prop : () => number
+
+const v8: number = unbox(b8);
+>v8 : number
+>unbox(b8) : number
+>unbox : <T>(box: { value: T; }) => T
+>b8 : { value: number; }
+
+

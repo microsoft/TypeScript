@@ -1,0 +1,20 @@
+=== tests/cases/compiler/typeParameterConstrainedToOuterTypeParameter2.ts ===
+interface A<T> {
+    foo<U extends T>(x: A<A<U>>)
+>foo : <U extends T>(x: A<A<U>>) => any
+>x : A<A<U>>
+}
+
+interface B<T> {
+    foo<U extends T>(x: B<B<U>>)
+>foo : <U extends T>(x: B<B<U>>) => any
+>x : B<B<U>>
+}
+
+var a: A<string>
+>a : A<string>
+
+var b: B<string> = a;
+>b : B<string>
+>a : A<string>
+

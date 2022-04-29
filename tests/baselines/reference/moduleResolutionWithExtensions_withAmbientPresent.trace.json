@@ -1,0 +1,20 @@
+[
+    "======== Resolving module 'js' from '/a.ts'. ========",
+    "Module resolution kind is not specified, using 'NodeJs'.",
+    "Loading module 'js' from 'node_modules' folder, target file type 'TypeScript'.",
+    "File '/node_modules/js/package.json' does not exist.",
+    "File '/node_modules/js.ts' does not exist.",
+    "File '/node_modules/js.tsx' does not exist.",
+    "File '/node_modules/js.d.ts' does not exist.",
+    "File '/node_modules/js/index.ts' does not exist.",
+    "File '/node_modules/js/index.tsx' does not exist.",
+    "File '/node_modules/js/index.d.ts' does not exist.",
+    "Directory '/node_modules/@types' does not exist, skipping all lookups in it.",
+    "Loading module 'js' from 'node_modules' folder, target file type 'JavaScript'.",
+    "File '/node_modules/js/package.json' does not exist according to earlier cached lookups.",
+    "File '/node_modules/js.js' does not exist.",
+    "File '/node_modules/js.jsx' does not exist.",
+    "File '/node_modules/js/index.js' exist - use it as a name resolution result.",
+    "Resolving real path for '/node_modules/js/index.js', result '/node_modules/js/index.js'.",
+    "======== Module name 'js' was successfully resolved to '/node_modules/js/index.js'. ========"
+]

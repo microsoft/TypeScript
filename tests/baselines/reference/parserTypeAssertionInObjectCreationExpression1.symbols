@@ -1,0 +1,3 @@
+=== tests/cases/conformance/parser/ecmascript5/Expressions/parserTypeAssertionInObjectCreationExpression1.ts ===
+new <T>Foo()
+No type information for this code.

@@ -1,0 +1,17 @@
+tests/cases/compiler/importDeclRefereingExternalModuleWithNoResolve.ts(1,20): error TS2307: Cannot find module 'externalModule' or its corresponding type declarations.
+tests/cases/compiler/importDeclRefereingExternalModuleWithNoResolve.ts(2,16): error TS2664: Invalid module name in augmentation, module 'm1' cannot be found.
+tests/cases/compiler/importDeclRefereingExternalModuleWithNoResolve.ts(3,26): error TS2307: Cannot find module 'externalModule' or its corresponding type declarations.
+
+
+==== tests/cases/compiler/importDeclRefereingExternalModuleWithNoResolve.ts (3 errors) ====
+    import b = require("externalModule");
+                       ~~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'externalModule' or its corresponding type declarations.
+    declare module "m1" {
+                   ~~~~
+!!! error TS2664: Invalid module name in augmentation, module 'm1' cannot be found.
+        import im2 = require("externalModule");
+                             ~~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'externalModule' or its corresponding type declarations.
+    }
+    

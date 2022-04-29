@@ -1,0 +1,13 @@
+=== C:/a/b/d.ts ===
+/// <reference path="C:\a\b\c.ts" />
+const y = x + 3;
+>y : number
+>x + 3 : number
+>x : 5
+>3 : 3
+
+=== C:/a/b/c.ts ===
+const x = 5;
+>x : 5
+>5 : 5
+

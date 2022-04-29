@@ -1,0 +1,87 @@
+=== tests/cases/compiler/typeParameterExplicitlyExtendsAny.ts ===
+function fee<T>() {
+>fee : <T>() => void
+
+    var t: T;
+>t : T
+
+    t.blah; // Error
+>t.blah : any
+>t : T
+>blah : any
+
+    t.toString; // ok
+>t.toString : () => string
+>t : T
+>toString : () => string
+}
+
+function fee2<T extends any>() {
+>fee2 : <T extends unknown>() => void
+
+    var t: T;
+>t : T
+
+    t.blah; // ok
+>t.blah : any
+>t : T
+>blah : any
+
+    t.toString; // ok
+>t.toString : () => string
+>t : T
+>toString : () => string
+}
+
+function f<T extends any>(x: T) {
+>f : <T extends unknown>(x: T) => void
+>x : T
+
+    x.children;
+>x.children : any
+>x : T
+>children : any
+
+    x();
+>x() : any
+>x : T
+
+    new x();
+>new x() : any
+>x : T
+
+    x[100];
+>x[100] : any
+>x : T
+>100 : 100
+
+    x['hello'];
+>x['hello'] : any
+>x : T
+>'hello' : "hello"
+}
+
+
+// Generic Tree structure
+type Tree<T> = T & {
+>Tree : Tree<T>
+
+    children?: Tree<T>[];
+>children : Tree<T>[]
+}
+
+class MyClass {
+>MyClass : MyClass
+
+    public static displayTree1<T extends Tree<any>>(tree: T) {
+>displayTree1 : <T extends unknown>(tree: T) => void
+>tree : T
+
+        // error "Property 'children' does not exist on type 'T'"
+        tree.children;
+>tree.children : any
+>tree : T
+>children : any
+    }
+}
+

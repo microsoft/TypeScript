@@ -1,0 +1,23 @@
+tests/cases/compiler/genericChainedCalls.ts(8,29): error TS2339: Property 'length' does not exist on type 'number'.
+tests/cases/compiler/genericChainedCalls.ts(12,29): error TS2339: Property 'length' does not exist on type 'number'.
+
+
+==== tests/cases/compiler/genericChainedCalls.ts (2 errors) ====
+    interface I1<T> {
+        func<U>(callback: (value: T) => U): I1<T>;
+    }
+     
+    declare var v1: I1<number>;
+     
+    var r1 = v1.func(num => num.toString()) 
+               .func(str => str.length) // error, number doesn't have a length
+                                ~~~~~~
+!!! error TS2339: Property 'length' does not exist on type 'number'.
+               .func(num => num.toString())
+     
+    var s1 = v1.func(num => num.toString()) 
+    var s2 = s1.func(str => str.length) // should also error
+                                ~~~~~~
+!!! error TS2339: Property 'length' does not exist on type 'number'.
+    var s3 = s2.func(num => num.toString())
+    

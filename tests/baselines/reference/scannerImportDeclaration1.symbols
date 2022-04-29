@@ -1,0 +1,4 @@
+=== tests/cases/conformance/scanner/ecmascript5/scannerImportDeclaration1.ts ===
+import TypeScript = TypeScriptServices.TypeScript;
+>TypeScript : Symbol(TypeScript, Decl(scannerImportDeclaration1.ts, 0, 0))
+

@@ -1,0 +1,14 @@
+=== tests/cases/compiler/a.js ===
+const Obj = {};
+>Obj : Symbol(Obj, Decl(a.js, 0, 5))
+
+export default Obj;
+>Obj : Symbol(Obj, Decl(a.js, 0, 5))
+
+=== tests/cases/compiler/b.js ===
+import Obj from './a';
+>Obj : Symbol(Obj, Decl(b.js, 0, 6))
+
+Obj.fn = function() {};
+>Obj : Symbol(Obj, Decl(b.js, 0, 6))
+

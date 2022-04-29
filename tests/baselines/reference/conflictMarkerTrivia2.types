@@ -1,0 +1,21 @@
+=== tests/cases/compiler/conflictMarkerTrivia2.ts ===
+class C {
+>C : C
+
+  foo() {
+>foo : () => void
+
+<<<<<<< B
+     a();
+>a() : any
+>a : any
+  }
+=======
+     b();
+  }
+>>>>>>> A
+
+  public bar() { }
+>bar : () => void
+}
+

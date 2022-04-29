@@ -1,0 +1,38 @@
+=== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignatures4.ts ===
+// some complex cases of assignment compat of generic signatures.
+
+interface I2<T> {
+>I2 : Symbol(I2, Decl(assignmentCompatWithGenericCallSignatures4.ts, 0, 0))
+>T : Symbol(T, Decl(assignmentCompatWithGenericCallSignatures4.ts, 2, 13))
+
+    p: T
+>p : Symbol(I2.p, Decl(assignmentCompatWithGenericCallSignatures4.ts, 2, 17))
+>T : Symbol(T, Decl(assignmentCompatWithGenericCallSignatures4.ts, 2, 13))
+}
+
+var x: <T extends I2<T>>(z: T) => void
+>x : Symbol(x, Decl(assignmentCompatWithGenericCallSignatures4.ts, 6, 3))
+>T : Symbol(T, Decl(assignmentCompatWithGenericCallSignatures4.ts, 6, 8))
+>I2 : Symbol(I2, Decl(assignmentCompatWithGenericCallSignatures4.ts, 0, 0))
+>T : Symbol(T, Decl(assignmentCompatWithGenericCallSignatures4.ts, 6, 8))
+>z : Symbol(z, Decl(assignmentCompatWithGenericCallSignatures4.ts, 6, 25))
+>T : Symbol(T, Decl(assignmentCompatWithGenericCallSignatures4.ts, 6, 8))
+
+var y: <T extends I2<I2<T>>>(z: T) => void
+>y : Symbol(y, Decl(assignmentCompatWithGenericCallSignatures4.ts, 7, 3))
+>T : Symbol(T, Decl(assignmentCompatWithGenericCallSignatures4.ts, 7, 8))
+>I2 : Symbol(I2, Decl(assignmentCompatWithGenericCallSignatures4.ts, 0, 0))
+>I2 : Symbol(I2, Decl(assignmentCompatWithGenericCallSignatures4.ts, 0, 0))
+>T : Symbol(T, Decl(assignmentCompatWithGenericCallSignatures4.ts, 7, 8))
+>z : Symbol(z, Decl(assignmentCompatWithGenericCallSignatures4.ts, 7, 29))
+>T : Symbol(T, Decl(assignmentCompatWithGenericCallSignatures4.ts, 7, 8))
+
+// These both do not make sense as we would eventually be comparing I2<T> to I2<I2<T>>, and they are self referencing anyway
+x = y 
+>x : Symbol(x, Decl(assignmentCompatWithGenericCallSignatures4.ts, 6, 3))
+>y : Symbol(y, Decl(assignmentCompatWithGenericCallSignatures4.ts, 7, 3))
+
+y = x 
+>y : Symbol(y, Decl(assignmentCompatWithGenericCallSignatures4.ts, 7, 3))
+>x : Symbol(x, Decl(assignmentCompatWithGenericCallSignatures4.ts, 6, 3))
+

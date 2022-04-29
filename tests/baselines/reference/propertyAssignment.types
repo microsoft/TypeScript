@@ -1,0 +1,41 @@
+=== tests/cases/compiler/propertyAssignment.ts ===
+var foo1: { new ():any; }   
+>foo1 : new () => any
+
+var bar1: { x : number; }
+>bar1 : { x: number; }
+>x : number
+
+var foo2: { [index]; } // should be an error, used to be indexer, now it is a computed property
+>foo2 : {}
+>[index] : any
+>index : any
+
+var bar2: { x : number; }
+>bar2 : { x: number; }
+>x : number
+
+var foo3: { ():void; }
+>foo3 : () => void
+
+var bar3: { x : number; }
+>bar3 : { x: number; }
+>x : number
+
+
+
+foo1 = bar1; // should be an error
+>foo1 = bar1 : { x: number; }
+>foo1 : new () => any
+>bar1 : { x: number; }
+
+foo2 = bar2; 
+>foo2 = bar2 : { x: number; }
+>foo2 : {}
+>bar2 : { x: number; }
+
+foo3 = bar3; // should be an error
+>foo3 = bar3 : { x: number; }
+>foo3 : () => void
+>bar3 : { x: number; }
+

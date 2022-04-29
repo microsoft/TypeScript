@@ -1,0 +1,22 @@
+=== tests/cases/conformance/types/contextualTypes/partiallyAnnotatedFunction/partiallyAnnotatedFunctionWitoutTypeParameter.ts ===
+// simple case
+declare function simple(f: (a: number, b: number) => void): {}
+>simple : (f: (a: number, b: number) => void) => {}
+>f : (a: number, b: number) => void
+>a : number
+>b : number
+
+simple((a: number, b) => {})
+>simple((a: number, b) => {}) : {}
+>simple : (f: (a: number, b: number) => void) => {}
+>(a: number, b) => {} : (a: number, b: number) => void
+>a : number
+>b : number
+
+simple((a, b: number) => {})
+>simple((a, b: number) => {}) : {}
+>simple : (f: (a: number, b: number) => void) => {}
+>(a, b: number) => {} : (a: number, b: number) => void
+>a : number
+>b : number
+

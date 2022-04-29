@@ -1,0 +1,19 @@
+=== tests/cases/compiler/checkSuperCallBeforeThisAccessing7.ts ===
+class Base {
+>Base : Symbol(Base, Decl(checkSuperCallBeforeThisAccessing7.ts, 0, 0))
+
+    constructor(func: ()=>Base) {
+>func : Symbol(func, Decl(checkSuperCallBeforeThisAccessing7.ts, 1, 16))
+>Base : Symbol(Base, Decl(checkSuperCallBeforeThisAccessing7.ts, 0, 0))
+    }
+}
+class Super extends Base {
+>Super : Symbol(Super, Decl(checkSuperCallBeforeThisAccessing7.ts, 3, 1))
+>Base : Symbol(Base, Decl(checkSuperCallBeforeThisAccessing7.ts, 0, 0))
+
+    constructor() {
+        super((() => this)); // No error
+>super : Symbol(Base, Decl(checkSuperCallBeforeThisAccessing7.ts, 0, 0))
+>this : Symbol(Super, Decl(checkSuperCallBeforeThisAccessing7.ts, 3, 1))
+    }
+}

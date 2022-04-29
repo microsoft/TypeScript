@@ -1,0 +1,45 @@
+=== tests/cases/compiler/arrowFunctionWithObjectLiteralBody5.ts ===
+var a = () => <Error>{ name: "foo", message: "bar" };      
+>a : () => Error
+>() => <Error>{ name: "foo", message: "bar" } : () => Error
+><Error>{ name: "foo", message: "bar" } : Error
+>{ name: "foo", message: "bar" } : { name: string; message: string; }
+>name : string
+>"foo" : "foo"
+>message : string
+>"bar" : "bar"
+
+var b = () => (<Error>{ name: "foo", message: "bar" });    
+>b : () => Error
+>() => (<Error>{ name: "foo", message: "bar" }) : () => Error
+>(<Error>{ name: "foo", message: "bar" }) : Error
+><Error>{ name: "foo", message: "bar" } : Error
+>{ name: "foo", message: "bar" } : { name: string; message: string; }
+>name : string
+>"foo" : "foo"
+>message : string
+>"bar" : "bar"
+
+var c = () => ({ name: "foo", message: "bar" });           
+>c : () => { name: string; message: string; }
+>() => ({ name: "foo", message: "bar" }) : () => { name: string; message: string; }
+>({ name: "foo", message: "bar" }) : { name: string; message: string; }
+>{ name: "foo", message: "bar" } : { name: string; message: string; }
+>name : string
+>"foo" : "foo"
+>message : string
+>"bar" : "bar"
+
+var d = () => ((<Error>({ name: "foo", message: "bar" })));
+>d : () => Error
+>() => ((<Error>({ name: "foo", message: "bar" }))) : () => Error
+>((<Error>({ name: "foo", message: "bar" }))) : Error
+>(<Error>({ name: "foo", message: "bar" })) : Error
+><Error>({ name: "foo", message: "bar" }) : Error
+>({ name: "foo", message: "bar" }) : { name: string; message: string; }
+>{ name: "foo", message: "bar" } : { name: string; message: string; }
+>name : string
+>"foo" : "foo"
+>message : string
+>"bar" : "bar"
+

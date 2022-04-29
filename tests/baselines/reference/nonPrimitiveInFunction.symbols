@@ -1,0 +1,43 @@
+=== tests/cases/conformance/types/nonPrimitive/nonPrimitiveInFunction.ts ===
+function takeObject(o: object) {}
+>takeObject : Symbol(takeObject, Decl(nonPrimitiveInFunction.ts, 0, 0))
+>o : Symbol(o, Decl(nonPrimitiveInFunction.ts, 0, 20))
+
+function returnObject(): object {
+>returnObject : Symbol(returnObject, Decl(nonPrimitiveInFunction.ts, 0, 33))
+
+    return {};
+}
+
+var nonPrimitive: object;
+>nonPrimitive : Symbol(nonPrimitive, Decl(nonPrimitiveInFunction.ts, 5, 3))
+
+var primitive: boolean;
+>primitive : Symbol(primitive, Decl(nonPrimitiveInFunction.ts, 6, 3))
+
+takeObject(nonPrimitive);
+>takeObject : Symbol(takeObject, Decl(nonPrimitiveInFunction.ts, 0, 0))
+>nonPrimitive : Symbol(nonPrimitive, Decl(nonPrimitiveInFunction.ts, 5, 3))
+
+nonPrimitive = returnObject();
+>nonPrimitive : Symbol(nonPrimitive, Decl(nonPrimitiveInFunction.ts, 5, 3))
+>returnObject : Symbol(returnObject, Decl(nonPrimitiveInFunction.ts, 0, 33))
+
+takeObject(primitive); // expect error
+>takeObject : Symbol(takeObject, Decl(nonPrimitiveInFunction.ts, 0, 0))
+>primitive : Symbol(primitive, Decl(nonPrimitiveInFunction.ts, 6, 3))
+
+primitive = returnObject(); // expect error
+>primitive : Symbol(primitive, Decl(nonPrimitiveInFunction.ts, 6, 3))
+>returnObject : Symbol(returnObject, Decl(nonPrimitiveInFunction.ts, 0, 33))
+
+function returnError(): object {
+>returnError : Symbol(returnError, Decl(nonPrimitiveInFunction.ts, 12, 27))
+
+    var ret = 123;
+>ret : Symbol(ret, Decl(nonPrimitiveInFunction.ts, 15, 7))
+
+    return ret; // expect error
+>ret : Symbol(ret, Decl(nonPrimitiveInFunction.ts, 15, 7))
+}
+

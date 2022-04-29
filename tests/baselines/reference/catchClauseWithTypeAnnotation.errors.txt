@@ -1,0 +1,69 @@
+tests/cases/conformance/statements/tryStatements/catchClauseWithTypeAnnotation.ts(17,36): error TS2339: Property 'foo' does not exist on type 'unknown'.
+tests/cases/conformance/statements/tryStatements/catchClauseWithTypeAnnotation.ts(18,37): error TS2339: Property 'foo' does not exist on type 'unknown'.
+tests/cases/conformance/statements/tryStatements/catchClauseWithTypeAnnotation.ts(19,23): error TS1196: Catch clause variable type annotation must be 'any' or 'unknown' if specified.
+tests/cases/conformance/statements/tryStatements/catchClauseWithTypeAnnotation.ts(20,23): error TS1196: Catch clause variable type annotation must be 'any' or 'unknown' if specified.
+tests/cases/conformance/statements/tryStatements/catchClauseWithTypeAnnotation.ts(29,29): error TS2492: Cannot redeclare identifier 'x' in catch clause.
+tests/cases/conformance/statements/tryStatements/catchClauseWithTypeAnnotation.ts(30,29): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type 'boolean', but here has type 'string'.
+tests/cases/conformance/statements/tryStatements/catchClauseWithTypeAnnotation.ts(38,27): error TS1196: Catch clause variable type annotation must be 'any' or 'unknown' if specified.
+tests/cases/conformance/statements/tryStatements/catchClauseWithTypeAnnotation.ts(39,27): error TS1196: Catch clause variable type annotation must be 'any' or 'unknown' if specified.
+
+
+==== tests/cases/conformance/statements/tryStatements/catchClauseWithTypeAnnotation.ts (8 errors) ====
+    type any1 = any;
+    type unknown1 = unknown;
+    
+    function fn(x: boolean) {
+    
+        // no type annotation allowed other than `any` and `unknown`
+        try { } catch (x) { } // should be OK
+        try { } catch (x: any) { } // should be OK
+        try { } catch (x: any1) { } // should be OK
+        try { } catch (x: unknown) { } // should be OK
+        try { } catch (x: unknown1) { } // should be OK
+        try { } catch (x) { x.foo; } // should be OK
+        try { } catch (x: any) { x.foo; } // should be OK
+        try { } catch (x: any1) { x.foo; } // should be OK
+        try { } catch (x: unknown) { console.log(x); } // should be OK
+        try { } catch (x: unknown1) { console.log(x); } // should be OK
+        try { } catch (x: unknown) { x.foo; } // error in the body
+                                       ~~~
+!!! error TS2339: Property 'foo' does not exist on type 'unknown'.
+        try { } catch (x: unknown1) { x.foo; } // error in the body
+                                        ~~~
+!!! error TS2339: Property 'foo' does not exist on type 'unknown'.
+        try { } catch (x: Error) { } // error in the type
+                          ~~~~~
+!!! error TS1196: Catch clause variable type annotation must be 'any' or 'unknown' if specified.
+        try { } catch (x: object) { } // error in the type
+                          ~~~~~~
+!!! error TS1196: Catch clause variable type annotation must be 'any' or 'unknown' if specified.
+    
+        try { console.log(); }
+        // @ts-ignore
+        catch (e: number) { // e should not be a `number`
+            console.log(e.toLowerCase());
+        }
+    
+        // minor bug: shows that the `catch` argument is skipped when checking scope
+        try { } catch (x) { let x: string; }
+                                ~
+!!! error TS2492: Cannot redeclare identifier 'x' in catch clause.
+        try { } catch (x) { var x: string; }
+                                ~
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type 'boolean', but here has type 'string'.
+!!! related TS6203 tests/cases/conformance/statements/tryStatements/catchClauseWithTypeAnnotation.ts:4:13: 'x' was also declared here.
+        try { } catch (x) { var x: boolean; }
+    
+        try { } catch ({ x }) { } // should be OK
+        try { } catch ({ x }: any) { x.foo; } // should be OK
+        try { } catch ({ x }: any1) { x.foo;} // should be OK
+        try { } catch ({ x }: unknown) { console.log(x); } // should be OK
+        try { } catch ({ x }: unknown1) { console.log(x); } // should be OK
+        try { } catch ({ x }: object) { } // error in the type
+                              ~~~~~~
+!!! error TS1196: Catch clause variable type annotation must be 'any' or 'unknown' if specified.
+        try { } catch ({ x }: Error) { } // error in the type
+                              ~~~~~
+!!! error TS1196: Catch clause variable type annotation must be 'any' or 'unknown' if specified.
+    }
+    

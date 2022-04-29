@@ -1,0 +1,22 @@
+=== tests/cases/compiler/systemModuleDeclarationMerging.ts ===
+export function F() {}
+>F : Symbol(F, Decl(systemModuleDeclarationMerging.ts, 0, 0), Decl(systemModuleDeclarationMerging.ts, 0, 22))
+
+export module F { var x; }
+>F : Symbol(F, Decl(systemModuleDeclarationMerging.ts, 0, 0), Decl(systemModuleDeclarationMerging.ts, 0, 22))
+>x : Symbol(x, Decl(systemModuleDeclarationMerging.ts, 1, 21))
+
+export class C {}
+>C : Symbol(C, Decl(systemModuleDeclarationMerging.ts, 1, 26), Decl(systemModuleDeclarationMerging.ts, 3, 17))
+
+export module C { var x; }
+>C : Symbol(C, Decl(systemModuleDeclarationMerging.ts, 1, 26), Decl(systemModuleDeclarationMerging.ts, 3, 17))
+>x : Symbol(x, Decl(systemModuleDeclarationMerging.ts, 4, 21))
+
+export enum E {}
+>E : Symbol(E, Decl(systemModuleDeclarationMerging.ts, 4, 26), Decl(systemModuleDeclarationMerging.ts, 6, 16))
+
+export module E { var x; }
+>E : Symbol(E, Decl(systemModuleDeclarationMerging.ts, 4, 26), Decl(systemModuleDeclarationMerging.ts, 6, 16))
+>x : Symbol(x, Decl(systemModuleDeclarationMerging.ts, 7, 21))
+

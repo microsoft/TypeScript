@@ -1,0 +1,8 @@
+=== tests/cases/conformance/parser/ecmascript5/RegressionTests/parser509668.ts ===
+class Foo3 {
+>Foo3 : Symbol(Foo3, Decl(parser509668.ts, 0, 0))
+
+  // Doesn't work, but should
+  constructor (public ...args: string[]) { }
+>args : Symbol(Foo3.args, Decl(parser509668.ts, 2, 15))
+}

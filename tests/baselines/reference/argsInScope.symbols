@@ -1,0 +1,32 @@
+=== tests/cases/compiler/argsInScope.ts ===
+class C {
+>C : Symbol(C, Decl(argsInScope.ts, 0, 0))
+
+    P(ii:number, j:number, k:number) {
+>P : Symbol(C.P, Decl(argsInScope.ts, 0, 9))
+>ii : Symbol(ii, Decl(argsInScope.ts, 1, 6))
+>j : Symbol(j, Decl(argsInScope.ts, 1, 16))
+>k : Symbol(k, Decl(argsInScope.ts, 1, 26))
+
+       for (var i = 0; i < arguments.length; i++) {
+>i : Symbol(i, Decl(argsInScope.ts, 2, 15))
+>i : Symbol(i, Decl(argsInScope.ts, 2, 15))
+>arguments.length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
+>arguments : Symbol(arguments)
+>length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
+>i : Symbol(i, Decl(argsInScope.ts, 2, 15))
+
+           // WScript.Echo("param: " + arguments[i]);
+       }
+    }
+}
+
+var c = new C();
+>c : Symbol(c, Decl(argsInScope.ts, 8, 3))
+>C : Symbol(C, Decl(argsInScope.ts, 0, 0))
+
+c.P(1,2,3);
+>c.P : Symbol(C.P, Decl(argsInScope.ts, 0, 9))
+>c : Symbol(c, Decl(argsInScope.ts, 8, 3))
+>P : Symbol(C.P, Decl(argsInScope.ts, 0, 9))
+

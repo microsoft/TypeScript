@@ -1,0 +1,16 @@
+=== tests/cases/compiler/cloduleSplitAcrossFiles_class.ts ===
+class D { }
+>D : Symbol(D, Decl(cloduleSplitAcrossFiles_class.ts, 0, 0), Decl(cloduleSplitAcrossFiles_module.ts, 0, 0))
+
+=== tests/cases/compiler/cloduleSplitAcrossFiles_module.ts ===
+module D {
+>D : Symbol(D, Decl(cloduleSplitAcrossFiles_class.ts, 0, 0), Decl(cloduleSplitAcrossFiles_module.ts, 0, 0))
+
+    export var y = "hi";
+>y : Symbol(y, Decl(cloduleSplitAcrossFiles_module.ts, 1, 14))
+}
+D.y;
+>D.y : Symbol(D.y, Decl(cloduleSplitAcrossFiles_module.ts, 1, 14))
+>D : Symbol(D, Decl(cloduleSplitAcrossFiles_class.ts, 0, 0), Decl(cloduleSplitAcrossFiles_module.ts, 0, 0))
+>y : Symbol(D.y, Decl(cloduleSplitAcrossFiles_module.ts, 1, 14))
+

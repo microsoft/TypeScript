@@ -1,0 +1,8 @@
+=== tests/cases/conformance/jsdoc/bug27142.js ===
+/** @enum {E} */
+const E = { x: 0 };
+>E : { x: number; }
+>{ x: 0 } : { x: number; }
+>x : number
+>0 : 0
+

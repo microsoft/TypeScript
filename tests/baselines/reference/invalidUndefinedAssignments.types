@@ -1,0 +1,69 @@
+=== tests/cases/conformance/types/primitives/undefined/invalidUndefinedAssignments.ts ===
+var x: typeof undefined;
+>x : any
+>undefined : undefined
+
+enum E { A }
+>E : E
+>A : E.A
+
+E = x;
+>E = x : any
+>E : any
+>x : any
+
+E.A = x;
+>E.A = x : any
+>E.A : any
+>E : typeof E
+>A : any
+>x : any
+
+class C { foo: string }
+>C : C
+>foo : string
+
+var f: C;
+>f : C
+
+C = x;
+>C = x : any
+>C : any
+>x : any
+
+interface I { foo: string }
+>foo : string
+
+var g: I;
+>g : I
+
+g = x;
+>g = x : any
+>g : I
+>x : any
+
+I = x;
+>I = x : any
+>I : any
+>x : any
+
+module M { export var x = 1; }
+>M : typeof M
+>x : number
+>1 : 1
+
+M = x;
+>M = x : any
+>M : any
+>x : any
+
+function i<T>(a: T) { }
+>i : <T>(a: T) => void
+>a : T
+
+// BUG 767030
+i = x; 
+>i = x : any
+>i : any
+>x : any
+

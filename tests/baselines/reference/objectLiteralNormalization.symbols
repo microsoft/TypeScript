@@ -1,0 +1,213 @@
+=== tests/cases/conformance/expressions/objectLiterals/objectLiteralNormalization.ts ===
+// Object literals in unions are normalized upon widening
+let a1 = [{ a: 0 }, { a: 1, b: "x" }, { a: 2, b: "y", c: true }][0];
+>a1 : Symbol(a1, Decl(objectLiteralNormalization.ts, 1, 3))
+>a : Symbol(a, Decl(objectLiteralNormalization.ts, 1, 11))
+>a : Symbol(a, Decl(objectLiteralNormalization.ts, 1, 21))
+>b : Symbol(b, Decl(objectLiteralNormalization.ts, 1, 27))
+>a : Symbol(a, Decl(objectLiteralNormalization.ts, 1, 39))
+>b : Symbol(b, Decl(objectLiteralNormalization.ts, 1, 45))
+>c : Symbol(c, Decl(objectLiteralNormalization.ts, 1, 53))
+
+a1.a;  // number
+>a1.a : Symbol(a, Decl(objectLiteralNormalization.ts, 1, 11), Decl(objectLiteralNormalization.ts, 1, 21), Decl(objectLiteralNormalization.ts, 1, 39))
+>a1 : Symbol(a1, Decl(objectLiteralNormalization.ts, 1, 3))
+>a : Symbol(a, Decl(objectLiteralNormalization.ts, 1, 11), Decl(objectLiteralNormalization.ts, 1, 21), Decl(objectLiteralNormalization.ts, 1, 39))
+
+a1.b;  // string | undefined
+>a1.b : Symbol(b, Decl(objectLiteralNormalization.ts, 1, 45), Decl(objectLiteralNormalization.ts, 1, 27), Decl(objectLiteralNormalization.ts, 1, 45))
+>a1 : Symbol(a1, Decl(objectLiteralNormalization.ts, 1, 3))
+>b : Symbol(b, Decl(objectLiteralNormalization.ts, 1, 45), Decl(objectLiteralNormalization.ts, 1, 27), Decl(objectLiteralNormalization.ts, 1, 45))
+
+a1.c;  // boolean | undefined
+>a1.c : Symbol(c, Decl(objectLiteralNormalization.ts, 1, 53), Decl(objectLiteralNormalization.ts, 1, 53))
+>a1 : Symbol(a1, Decl(objectLiteralNormalization.ts, 1, 3))
+>c : Symbol(c, Decl(objectLiteralNormalization.ts, 1, 53), Decl(objectLiteralNormalization.ts, 1, 53))
+
+a1 = { a: 1 };
+>a1 : Symbol(a1, Decl(objectLiteralNormalization.ts, 1, 3))
+>a : Symbol(a, Decl(objectLiteralNormalization.ts, 5, 6))
+
+a1 = { a: 0, b: 0 };  // Error
+>a1 : Symbol(a1, Decl(objectLiteralNormalization.ts, 1, 3))
+>a : Symbol(a, Decl(objectLiteralNormalization.ts, 6, 6))
+>b : Symbol(b, Decl(objectLiteralNormalization.ts, 6, 12))
+
+a1 = { b: "y" };  // Error
+>a1 : Symbol(a1, Decl(objectLiteralNormalization.ts, 1, 3))
+>b : Symbol(b, Decl(objectLiteralNormalization.ts, 7, 6))
+
+a1 = { c: true };  // Error
+>a1 : Symbol(a1, Decl(objectLiteralNormalization.ts, 1, 3))
+>c : Symbol(c, Decl(objectLiteralNormalization.ts, 8, 6))
+
+let a2 = [{ a: 1, b: 2 }, { a: "abc" }, {}][0];
+>a2 : Symbol(a2, Decl(objectLiteralNormalization.ts, 10, 3))
+>a : Symbol(a, Decl(objectLiteralNormalization.ts, 10, 11))
+>b : Symbol(b, Decl(objectLiteralNormalization.ts, 10, 17))
+>a : Symbol(a, Decl(objectLiteralNormalization.ts, 10, 27))
+
+a2.a;  // string | number | undefined
+>a2.a : Symbol(a, Decl(objectLiteralNormalization.ts, 10, 11), Decl(objectLiteralNormalization.ts, 10, 27), Decl(objectLiteralNormalization.ts, 10, 27))
+>a2 : Symbol(a2, Decl(objectLiteralNormalization.ts, 10, 3))
+>a : Symbol(a, Decl(objectLiteralNormalization.ts, 10, 11), Decl(objectLiteralNormalization.ts, 10, 27), Decl(objectLiteralNormalization.ts, 10, 27))
+
+a2.b;  // number | undefined
+>a2.b : Symbol(b, Decl(objectLiteralNormalization.ts, 10, 17), Decl(objectLiteralNormalization.ts, 1, 45))
+>a2 : Symbol(a2, Decl(objectLiteralNormalization.ts, 10, 3))
+>b : Symbol(b, Decl(objectLiteralNormalization.ts, 10, 17), Decl(objectLiteralNormalization.ts, 1, 45))
+
+a2 = { a: 10, b: 20 };
+>a2 : Symbol(a2, Decl(objectLiteralNormalization.ts, 10, 3))
+>a : Symbol(a, Decl(objectLiteralNormalization.ts, 13, 6))
+>b : Symbol(b, Decl(objectLiteralNormalization.ts, 13, 13))
+
+a2 = { a: "def" };
+>a2 : Symbol(a2, Decl(objectLiteralNormalization.ts, 10, 3))
+>a : Symbol(a, Decl(objectLiteralNormalization.ts, 14, 6))
+
+a2 = {};
+>a2 : Symbol(a2, Decl(objectLiteralNormalization.ts, 10, 3))
+
+a2 = { a: "def", b: 20 };  // Error
+>a2 : Symbol(a2, Decl(objectLiteralNormalization.ts, 10, 3))
+>a : Symbol(a, Decl(objectLiteralNormalization.ts, 16, 6))
+>b : Symbol(b, Decl(objectLiteralNormalization.ts, 16, 16))
+
+a2 = { a: 1 };  // Error
+>a2 : Symbol(a2, Decl(objectLiteralNormalization.ts, 10, 3))
+>a : Symbol(a, Decl(objectLiteralNormalization.ts, 17, 6))
+
+// Object literals containing spreads are not normalized
+declare let b1: { a: string, b: string } | { b: string, c: string };
+>b1 : Symbol(b1, Decl(objectLiteralNormalization.ts, 20, 11))
+>a : Symbol(a, Decl(objectLiteralNormalization.ts, 20, 17))
+>b : Symbol(b, Decl(objectLiteralNormalization.ts, 20, 28))
+>b : Symbol(b, Decl(objectLiteralNormalization.ts, 20, 44))
+>c : Symbol(c, Decl(objectLiteralNormalization.ts, 20, 55))
+
+let b2 = { ...b1, z: 55 };
+>b2 : Symbol(b2, Decl(objectLiteralNormalization.ts, 21, 3))
+>b1 : Symbol(b1, Decl(objectLiteralNormalization.ts, 20, 11))
+>z : Symbol(z, Decl(objectLiteralNormalization.ts, 21, 17))
+
+let b3 = { ...b2 };
+>b3 : Symbol(b3, Decl(objectLiteralNormalization.ts, 22, 3))
+>b2 : Symbol(b2, Decl(objectLiteralNormalization.ts, 21, 3))
+
+// Before widening {} acts like { [x: string]: undefined }, which is a
+// subtype of types with all optional properties
+declare let opts: { foo?: string, bar?: string, baz?: boolean };
+>opts : Symbol(opts, Decl(objectLiteralNormalization.ts, 26, 11))
+>foo : Symbol(foo, Decl(objectLiteralNormalization.ts, 26, 19))
+>bar : Symbol(bar, Decl(objectLiteralNormalization.ts, 26, 33))
+>baz : Symbol(baz, Decl(objectLiteralNormalization.ts, 26, 47))
+
+let c1 = !true ? {} : opts;
+>c1 : Symbol(c1, Decl(objectLiteralNormalization.ts, 27, 3))
+>opts : Symbol(opts, Decl(objectLiteralNormalization.ts, 26, 11))
+
+let c2 = !true ? opts : {};
+>c2 : Symbol(c2, Decl(objectLiteralNormalization.ts, 28, 3))
+>opts : Symbol(opts, Decl(objectLiteralNormalization.ts, 26, 11))
+
+let c3 = !true ? { a: 0, b: 0 } : {};
+>c3 : Symbol(c3, Decl(objectLiteralNormalization.ts, 29, 3))
+>a : Symbol(a, Decl(objectLiteralNormalization.ts, 29, 18))
+>b : Symbol(b, Decl(objectLiteralNormalization.ts, 29, 24))
+
+let c4 = !true ? {} : { a: 0, b: 0 };
+>c4 : Symbol(c4, Decl(objectLiteralNormalization.ts, 30, 3))
+>a : Symbol(a, Decl(objectLiteralNormalization.ts, 30, 23))
+>b : Symbol(b, Decl(objectLiteralNormalization.ts, 30, 29))
+
+// Normalization applies to nested properties
+let d1 = [{ kind: 'a', pos: { x: 0, y: 0 } }, { kind: 'b', pos: !true ? { a: "x" } : { b: 0 } }][0];
+>d1 : Symbol(d1, Decl(objectLiteralNormalization.ts, 33, 3))
+>kind : Symbol(kind, Decl(objectLiteralNormalization.ts, 33, 11))
+>pos : Symbol(pos, Decl(objectLiteralNormalization.ts, 33, 22))
+>x : Symbol(x, Decl(objectLiteralNormalization.ts, 33, 29))
+>y : Symbol(y, Decl(objectLiteralNormalization.ts, 33, 35))
+>kind : Symbol(kind, Decl(objectLiteralNormalization.ts, 33, 47))
+>pos : Symbol(pos, Decl(objectLiteralNormalization.ts, 33, 58))
+>a : Symbol(a, Decl(objectLiteralNormalization.ts, 33, 73))
+>b : Symbol(b, Decl(objectLiteralNormalization.ts, 33, 86))
+
+d1.kind;
+>d1.kind : Symbol(kind, Decl(objectLiteralNormalization.ts, 33, 11), Decl(objectLiteralNormalization.ts, 33, 47))
+>d1 : Symbol(d1, Decl(objectLiteralNormalization.ts, 33, 3))
+>kind : Symbol(kind, Decl(objectLiteralNormalization.ts, 33, 11), Decl(objectLiteralNormalization.ts, 33, 47))
+
+d1.pos;
+>d1.pos : Symbol(pos, Decl(objectLiteralNormalization.ts, 33, 22), Decl(objectLiteralNormalization.ts, 33, 58))
+>d1 : Symbol(d1, Decl(objectLiteralNormalization.ts, 33, 3))
+>pos : Symbol(pos, Decl(objectLiteralNormalization.ts, 33, 22), Decl(objectLiteralNormalization.ts, 33, 58))
+
+d1.pos.x;
+>d1.pos.x : Symbol(x, Decl(objectLiteralNormalization.ts, 33, 29), Decl(objectLiteralNormalization.ts, 33, 29))
+>d1.pos : Symbol(pos, Decl(objectLiteralNormalization.ts, 33, 22), Decl(objectLiteralNormalization.ts, 33, 58))
+>d1 : Symbol(d1, Decl(objectLiteralNormalization.ts, 33, 3))
+>pos : Symbol(pos, Decl(objectLiteralNormalization.ts, 33, 22), Decl(objectLiteralNormalization.ts, 33, 58))
+>x : Symbol(x, Decl(objectLiteralNormalization.ts, 33, 29), Decl(objectLiteralNormalization.ts, 33, 29))
+
+d1.pos.y;
+>d1.pos.y : Symbol(y, Decl(objectLiteralNormalization.ts, 33, 35), Decl(objectLiteralNormalization.ts, 33, 35))
+>d1.pos : Symbol(pos, Decl(objectLiteralNormalization.ts, 33, 22), Decl(objectLiteralNormalization.ts, 33, 58))
+>d1 : Symbol(d1, Decl(objectLiteralNormalization.ts, 33, 3))
+>pos : Symbol(pos, Decl(objectLiteralNormalization.ts, 33, 22), Decl(objectLiteralNormalization.ts, 33, 58))
+>y : Symbol(y, Decl(objectLiteralNormalization.ts, 33, 35), Decl(objectLiteralNormalization.ts, 33, 35))
+
+d1.pos.a;
+>d1.pos.a : Symbol(a, Decl(objectLiteralNormalization.ts, 10, 27), Decl(objectLiteralNormalization.ts, 33, 73))
+>d1.pos : Symbol(pos, Decl(objectLiteralNormalization.ts, 33, 22), Decl(objectLiteralNormalization.ts, 33, 58))
+>d1 : Symbol(d1, Decl(objectLiteralNormalization.ts, 33, 3))
+>pos : Symbol(pos, Decl(objectLiteralNormalization.ts, 33, 22), Decl(objectLiteralNormalization.ts, 33, 58))
+>a : Symbol(a, Decl(objectLiteralNormalization.ts, 10, 27), Decl(objectLiteralNormalization.ts, 33, 73))
+
+d1.pos.b;
+>d1.pos.b : Symbol(b, Decl(objectLiteralNormalization.ts, 1, 45), Decl(objectLiteralNormalization.ts, 33, 86))
+>d1.pos : Symbol(pos, Decl(objectLiteralNormalization.ts, 33, 22), Decl(objectLiteralNormalization.ts, 33, 58))
+>d1 : Symbol(d1, Decl(objectLiteralNormalization.ts, 33, 3))
+>pos : Symbol(pos, Decl(objectLiteralNormalization.ts, 33, 22), Decl(objectLiteralNormalization.ts, 33, 58))
+>b : Symbol(b, Decl(objectLiteralNormalization.ts, 1, 45), Decl(objectLiteralNormalization.ts, 33, 86))
+
+declare function f<T>(...items: T[]): T;
+>f : Symbol(f, Decl(objectLiteralNormalization.ts, 39, 9))
+>T : Symbol(T, Decl(objectLiteralNormalization.ts, 41, 19))
+>items : Symbol(items, Decl(objectLiteralNormalization.ts, 41, 22))
+>T : Symbol(T, Decl(objectLiteralNormalization.ts, 41, 19))
+>T : Symbol(T, Decl(objectLiteralNormalization.ts, 41, 19))
+
+declare let data: { a: 1, b: "abc", c: true };
+>data : Symbol(data, Decl(objectLiteralNormalization.ts, 42, 11))
+>a : Symbol(a, Decl(objectLiteralNormalization.ts, 42, 19))
+>b : Symbol(b, Decl(objectLiteralNormalization.ts, 42, 25))
+>c : Symbol(c, Decl(objectLiteralNormalization.ts, 42, 35))
+
+// Object literals are inferred as a single normalized union type
+let e1 = f({ a: 1, b: 2 }, { a: "abc" }, {});
+>e1 : Symbol(e1, Decl(objectLiteralNormalization.ts, 45, 3))
+>f : Symbol(f, Decl(objectLiteralNormalization.ts, 39, 9))
+>a : Symbol(a, Decl(objectLiteralNormalization.ts, 45, 12))
+>b : Symbol(b, Decl(objectLiteralNormalization.ts, 45, 18))
+>a : Symbol(a, Decl(objectLiteralNormalization.ts, 45, 28))
+
+let e2 = f({}, { a: "abc" }, { a: 1, b: 2 });
+>e2 : Symbol(e2, Decl(objectLiteralNormalization.ts, 46, 3))
+>f : Symbol(f, Decl(objectLiteralNormalization.ts, 39, 9))
+>a : Symbol(a, Decl(objectLiteralNormalization.ts, 46, 16))
+>a : Symbol(a, Decl(objectLiteralNormalization.ts, 46, 30))
+>b : Symbol(b, Decl(objectLiteralNormalization.ts, 46, 36))
+
+let e3 = f(data, { a: 2 });
+>e3 : Symbol(e3, Decl(objectLiteralNormalization.ts, 47, 3))
+>f : Symbol(f, Decl(objectLiteralNormalization.ts, 39, 9))
+>data : Symbol(data, Decl(objectLiteralNormalization.ts, 42, 11))
+>a : Symbol(a, Decl(objectLiteralNormalization.ts, 47, 18))
+
+let e4 = f({ a: 2 }, data);
+>e4 : Symbol(e4, Decl(objectLiteralNormalization.ts, 48, 3))
+>f : Symbol(f, Decl(objectLiteralNormalization.ts, 39, 9))
+>a : Symbol(a, Decl(objectLiteralNormalization.ts, 48, 12))
+>data : Symbol(data, Decl(objectLiteralNormalization.ts, 42, 11))
+

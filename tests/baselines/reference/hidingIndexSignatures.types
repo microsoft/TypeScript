@@ -1,0 +1,27 @@
+=== tests/cases/compiler/hidingIndexSignatures.ts ===
+interface A {
+    [a: string]: {};
+>a : string
+}
+
+interface B extends A {
+    [a: string]: number; // Number is not a subtype of string.  Should error.
+>a : string
+}
+
+var b: B;
+>b : B
+
+b[""]; // Should be number
+>b[""] : number
+>b : B
+>"" : ""
+
+var a: A;
+>a : A
+
+a[""]; // Should be {}
+>a[""] : {}
+>a : A
+>"" : ""
+

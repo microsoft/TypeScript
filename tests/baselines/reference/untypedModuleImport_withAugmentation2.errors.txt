@@ -1,0 +1,19 @@
+/node_modules/augmenter/index.d.ts(3,16): error TS2665: Invalid module name in augmentation. Module 'js' resolves to an untyped module at '/node_modules/js/index.js', which cannot be augmented.
+
+
+==== /a.ts (0 errors) ====
+    import { } from "augmenter";
+    
+==== /node_modules/augmenter/index.d.ts (1 errors) ====
+    // This tests that augmenting an untyped module is forbidden even in an ambient context. Contrast with `moduleAugmentationInDependency.ts`.
+    
+    declare module "js" {
+                   ~~~~
+!!! error TS2665: Invalid module name in augmentation. Module 'js' resolves to an untyped module at '/node_modules/js/index.js', which cannot be augmented.
+        export const j: number;
+    }
+    export {};
+    
+==== /node_modules/js/index.js (0 errors) ====
+    This file is not processed.
+    

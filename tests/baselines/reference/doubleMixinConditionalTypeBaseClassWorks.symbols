@@ -1,0 +1,36 @@
+=== tests/cases/compiler/doubleMixinConditionalTypeBaseClassWorks.ts ===
+type Constructor = new (...args: any[]) => {};
+>Constructor : Symbol(Constructor, Decl(doubleMixinConditionalTypeBaseClassWorks.ts, 0, 0))
+>args : Symbol(args, Decl(doubleMixinConditionalTypeBaseClassWorks.ts, 0, 24))
+
+const Mixin1 = <C extends Constructor>(Base: C) => class extends Base { private _fooPrivate: {}; }
+>Mixin1 : Symbol(Mixin1, Decl(doubleMixinConditionalTypeBaseClassWorks.ts, 2, 5))
+>C : Symbol(C, Decl(doubleMixinConditionalTypeBaseClassWorks.ts, 2, 16))
+>Constructor : Symbol(Constructor, Decl(doubleMixinConditionalTypeBaseClassWorks.ts, 0, 0))
+>Base : Symbol(Base, Decl(doubleMixinConditionalTypeBaseClassWorks.ts, 2, 39))
+>C : Symbol(C, Decl(doubleMixinConditionalTypeBaseClassWorks.ts, 2, 16))
+>Base : Symbol(Base, Decl(doubleMixinConditionalTypeBaseClassWorks.ts, 2, 39))
+>_fooPrivate : Symbol((Anonymous class)._fooPrivate, Decl(doubleMixinConditionalTypeBaseClassWorks.ts, 2, 71))
+
+type FooConstructor = typeof Mixin1 extends (a: Constructor) => infer Cls ? Cls : never;
+>FooConstructor : Symbol(FooConstructor, Decl(doubleMixinConditionalTypeBaseClassWorks.ts, 2, 98))
+>Mixin1 : Symbol(Mixin1, Decl(doubleMixinConditionalTypeBaseClassWorks.ts, 2, 5))
+>a : Symbol(a, Decl(doubleMixinConditionalTypeBaseClassWorks.ts, 4, 45))
+>Constructor : Symbol(Constructor, Decl(doubleMixinConditionalTypeBaseClassWorks.ts, 0, 0))
+>Cls : Symbol(Cls, Decl(doubleMixinConditionalTypeBaseClassWorks.ts, 4, 69))
+>Cls : Symbol(Cls, Decl(doubleMixinConditionalTypeBaseClassWorks.ts, 4, 69))
+
+const Mixin2 = <C extends FooConstructor>(Base: C) => class extends Base {};
+>Mixin2 : Symbol(Mixin2, Decl(doubleMixinConditionalTypeBaseClassWorks.ts, 5, 5))
+>C : Symbol(C, Decl(doubleMixinConditionalTypeBaseClassWorks.ts, 5, 16))
+>FooConstructor : Symbol(FooConstructor, Decl(doubleMixinConditionalTypeBaseClassWorks.ts, 2, 98))
+>Base : Symbol(Base, Decl(doubleMixinConditionalTypeBaseClassWorks.ts, 5, 42))
+>C : Symbol(C, Decl(doubleMixinConditionalTypeBaseClassWorks.ts, 5, 16))
+>Base : Symbol(Base, Decl(doubleMixinConditionalTypeBaseClassWorks.ts, 5, 42))
+
+class C extends Mixin2(Mixin1(Object)) {}
+>C : Symbol(C, Decl(doubleMixinConditionalTypeBaseClassWorks.ts, 5, 76))
+>Mixin2 : Symbol(Mixin2, Decl(doubleMixinConditionalTypeBaseClassWorks.ts, 5, 5))
+>Mixin1 : Symbol(Mixin1, Decl(doubleMixinConditionalTypeBaseClassWorks.ts, 2, 5))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+

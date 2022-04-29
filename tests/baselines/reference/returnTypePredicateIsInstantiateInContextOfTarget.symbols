@@ -1,0 +1,42 @@
+=== tests/cases/compiler/returnTypePredicateIsInstantiateInContextOfTarget.tsx ===
+/// <reference path="react16.d.ts" />
+import * as React from "react";
+>React : Symbol(React, Decl(returnTypePredicateIsInstantiateInContextOfTarget.tsx, 1, 6))
+
+class TestComponent extends React.Component<{ isAny: <T>(obj: any) => obj is T }> {
+>TestComponent : Symbol(TestComponent, Decl(returnTypePredicateIsInstantiateInContextOfTarget.tsx, 1, 31))
+>React.Component : Symbol(React.Component, Decl(react16.d.ts, 345, 54), Decl(react16.d.ts, 349, 94))
+>React : Symbol(React, Decl(returnTypePredicateIsInstantiateInContextOfTarget.tsx, 1, 6))
+>Component : Symbol(React.Component, Decl(react16.d.ts, 345, 54), Decl(react16.d.ts, 349, 94))
+>isAny : Symbol(isAny, Decl(returnTypePredicateIsInstantiateInContextOfTarget.tsx, 2, 45))
+>T : Symbol(T, Decl(returnTypePredicateIsInstantiateInContextOfTarget.tsx, 2, 54))
+>obj : Symbol(obj, Decl(returnTypePredicateIsInstantiateInContextOfTarget.tsx, 2, 57))
+>obj : Symbol(obj, Decl(returnTypePredicateIsInstantiateInContextOfTarget.tsx, 2, 57))
+>T : Symbol(T, Decl(returnTypePredicateIsInstantiateInContextOfTarget.tsx, 2, 54))
+
+    static defaultProps = {
+>defaultProps : Symbol(TestComponent.defaultProps, Decl(returnTypePredicateIsInstantiateInContextOfTarget.tsx, 2, 83))
+
+        isAny: TestComponent.isAny
+>isAny : Symbol(isAny, Decl(returnTypePredicateIsInstantiateInContextOfTarget.tsx, 3, 27))
+>TestComponent.isAny : Symbol(TestComponent.isAny, Decl(returnTypePredicateIsInstantiateInContextOfTarget.tsx, 5, 5))
+>TestComponent : Symbol(TestComponent, Decl(returnTypePredicateIsInstantiateInContextOfTarget.tsx, 1, 31))
+>isAny : Symbol(TestComponent.isAny, Decl(returnTypePredicateIsInstantiateInContextOfTarget.tsx, 5, 5))
+    }
+
+    // Type guard is defined as a static class property
+    static isAny<T>(obj: any): obj is T {
+>isAny : Symbol(TestComponent.isAny, Decl(returnTypePredicateIsInstantiateInContextOfTarget.tsx, 5, 5))
+>T : Symbol(T, Decl(returnTypePredicateIsInstantiateInContextOfTarget.tsx, 8, 17))
+>obj : Symbol(obj, Decl(returnTypePredicateIsInstantiateInContextOfTarget.tsx, 8, 20))
+>obj : Symbol(obj, Decl(returnTypePredicateIsInstantiateInContextOfTarget.tsx, 8, 20))
+>T : Symbol(T, Decl(returnTypePredicateIsInstantiateInContextOfTarget.tsx, 8, 17))
+
+        return true;
+    }
+}
+
+const TestRender = () => <TestComponent />;
+>TestRender : Symbol(TestRender, Decl(returnTypePredicateIsInstantiateInContextOfTarget.tsx, 13, 5))
+>TestComponent : Symbol(TestComponent, Decl(returnTypePredicateIsInstantiateInContextOfTarget.tsx, 1, 31))
+

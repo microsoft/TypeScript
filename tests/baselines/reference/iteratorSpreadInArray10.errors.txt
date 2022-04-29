@@ -1,0 +1,13 @@
+tests/cases/conformance/es6/spread/iteratorSpreadInArray10.ts(7,17): error TS2489: An iterator must have a 'next()' method.
+
+
+==== tests/cases/conformance/es6/spread/iteratorSpreadInArray10.ts (1 errors) ====
+    class SymbolIterator {
+        [Symbol.iterator]() {
+            return this;
+        }
+    }
+    
+    var array = [...new SymbolIterator];
+                    ~~~~~~~~~~~~~~~~~~
+!!! error TS2489: An iterator must have a 'next()' method.

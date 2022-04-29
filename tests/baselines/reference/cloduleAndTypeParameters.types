@@ -1,0 +1,21 @@
+=== tests/cases/compiler/cloduleAndTypeParameters.ts ===
+class Foo<T extends Foo.Bar> {
+>Foo : Foo<T>
+>Foo : any
+
+  constructor() {
+  }
+}
+
+module Foo {
+>Foo : typeof Foo
+
+  export interface Bar {
+    bar(): void;
+>bar : () => void
+  }
+
+  export class Baz {
+>Baz : Baz
+  }
+}

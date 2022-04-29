@@ -1,0 +1,136 @@
+=== tests/cases/compiler/m1.ts ===
+export class Cls {
+>Cls : Symbol(Cls, Decl(m1.ts, 0, 0), Decl(m2.ts, 4, 23), Decl(m2.ts, 10, 23), Decl(m4.ts, 5, 23), Decl(m4.ts, 11, 23))
+}
+
+=== tests/cases/compiler/m2.ts ===
+import {Cls} from "./m1";
+>Cls : Symbol(Cls, Decl(m2.ts, 0, 8))
+
+(<any>Cls.prototype).foo = function() { return 1; };
+>Cls.prototype : Symbol(Cls.prototype)
+>Cls : Symbol(Cls, Decl(m2.ts, 0, 8))
+>prototype : Symbol(Cls.prototype)
+
+(<any>Cls.prototype).bar = function() { return "1"; };
+>Cls.prototype : Symbol(Cls.prototype)
+>Cls : Symbol(Cls, Decl(m2.ts, 0, 8))
+>prototype : Symbol(Cls.prototype)
+
+declare module "./m1" {
+>"./m1" : Symbol("tests/cases/compiler/m1", Decl(m1.ts, 0, 0), Decl(m2.ts, 2, 54), Decl(m2.ts, 8, 1), Decl(m4.ts, 3, 60), Decl(m4.ts, 9, 1))
+
+    interface Cls {
+>Cls : Symbol(Cls, Decl(m1.ts, 0, 0), Decl(m2.ts, 4, 23), Decl(m2.ts, 10, 23), Decl(m4.ts, 5, 23), Decl(m4.ts, 11, 23))
+
+        foo(): number;
+>foo : Symbol(Cls.foo, Decl(m2.ts, 5, 19))
+    }
+}
+
+declare module "./m1" {
+>"./m1" : Symbol("tests/cases/compiler/m1", Decl(m1.ts, 0, 0), Decl(m2.ts, 2, 54), Decl(m2.ts, 8, 1), Decl(m4.ts, 3, 60), Decl(m4.ts, 9, 1))
+
+    interface Cls {
+>Cls : Symbol(Cls, Decl(m1.ts, 0, 0), Decl(m2.ts, 4, 23), Decl(m2.ts, 10, 23), Decl(m4.ts, 5, 23), Decl(m4.ts, 11, 23))
+
+        bar(): string;
+>bar : Symbol(Cls.bar, Decl(m2.ts, 11, 19))
+    }
+}
+
+=== tests/cases/compiler/m3.ts ===
+export class C1 { x: number }
+>C1 : Symbol(C1, Decl(m3.ts, 0, 0))
+>x : Symbol(C1.x, Decl(m3.ts, 0, 17))
+
+export class C2 { x: string }
+>C2 : Symbol(C2, Decl(m3.ts, 0, 29))
+>x : Symbol(C2.x, Decl(m3.ts, 1, 17))
+
+=== tests/cases/compiler/m4.ts ===
+import {Cls} from "./m1";
+>Cls : Symbol(Cls, Decl(m4.ts, 0, 8))
+
+import {C1, C2} from "./m3";
+>C1 : Symbol(C1, Decl(m4.ts, 1, 8))
+>C2 : Symbol(C2, Decl(m4.ts, 1, 11))
+
+(<any>Cls.prototype).baz1 = function() { return undefined };
+>Cls.prototype : Symbol(Cls.prototype)
+>Cls : Symbol(Cls, Decl(m4.ts, 0, 8))
+>prototype : Symbol(Cls.prototype)
+>undefined : Symbol(undefined)
+
+(<any>Cls.prototype).baz2 = function() { return undefined };
+>Cls.prototype : Symbol(Cls.prototype)
+>Cls : Symbol(Cls, Decl(m4.ts, 0, 8))
+>prototype : Symbol(Cls.prototype)
+>undefined : Symbol(undefined)
+
+declare module "./m1" {
+>"./m1" : Symbol("tests/cases/compiler/m1", Decl(m1.ts, 0, 0), Decl(m2.ts, 2, 54), Decl(m2.ts, 8, 1), Decl(m4.ts, 3, 60), Decl(m4.ts, 9, 1))
+
+    interface Cls {
+>Cls : Symbol(Cls, Decl(m1.ts, 0, 0), Decl(m2.ts, 4, 23), Decl(m2.ts, 10, 23), Decl(m4.ts, 5, 23), Decl(m4.ts, 11, 23))
+
+        baz1(): C1;
+>baz1 : Symbol(Cls.baz1, Decl(m4.ts, 6, 19))
+>C1 : Symbol(C1, Decl(m4.ts, 1, 8))
+    }
+}
+
+declare module "./m1" {
+>"./m1" : Symbol("tests/cases/compiler/m1", Decl(m1.ts, 0, 0), Decl(m2.ts, 2, 54), Decl(m2.ts, 8, 1), Decl(m4.ts, 3, 60), Decl(m4.ts, 9, 1))
+
+    interface Cls {
+>Cls : Symbol(Cls, Decl(m1.ts, 0, 0), Decl(m2.ts, 4, 23), Decl(m2.ts, 10, 23), Decl(m4.ts, 5, 23), Decl(m4.ts, 11, 23))
+
+        baz2(): C2;
+>baz2 : Symbol(Cls.baz2, Decl(m4.ts, 12, 19))
+>C2 : Symbol(C2, Decl(m4.ts, 1, 11))
+    }
+}
+
+=== tests/cases/compiler/test.ts ===
+import { Cls } from "./m1";
+>Cls : Symbol(Cls, Decl(test.ts, 0, 8))
+
+import "m2";
+import "m4";
+let c: Cls;
+>c : Symbol(c, Decl(test.ts, 3, 3))
+>Cls : Symbol(Cls, Decl(test.ts, 0, 8))
+
+c.foo().toExponential();
+>c.foo().toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
+>c.foo : Symbol(Cls.foo, Decl(m2.ts, 5, 19))
+>c : Symbol(c, Decl(test.ts, 3, 3))
+>foo : Symbol(Cls.foo, Decl(m2.ts, 5, 19))
+>toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
+
+c.bar().toLowerCase();
+>c.bar().toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
+>c.bar : Symbol(Cls.bar, Decl(m2.ts, 11, 19))
+>c : Symbol(c, Decl(test.ts, 3, 3))
+>bar : Symbol(Cls.bar, Decl(m2.ts, 11, 19))
+>toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
+
+c.baz1().x.toExponential();
+>c.baz1().x.toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
+>c.baz1().x : Symbol(C1.x, Decl(m3.ts, 0, 17))
+>c.baz1 : Symbol(Cls.baz1, Decl(m4.ts, 6, 19))
+>c : Symbol(c, Decl(test.ts, 3, 3))
+>baz1 : Symbol(Cls.baz1, Decl(m4.ts, 6, 19))
+>x : Symbol(C1.x, Decl(m3.ts, 0, 17))
+>toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
+
+c.baz2().x.toLowerCase();
+>c.baz2().x.toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
+>c.baz2().x : Symbol(C2.x, Decl(m3.ts, 1, 17))
+>c.baz2 : Symbol(Cls.baz2, Decl(m4.ts, 12, 19))
+>c : Symbol(c, Decl(test.ts, 3, 3))
+>baz2 : Symbol(Cls.baz2, Decl(m4.ts, 12, 19))
+>x : Symbol(C2.x, Decl(m3.ts, 1, 17))
+>toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
+

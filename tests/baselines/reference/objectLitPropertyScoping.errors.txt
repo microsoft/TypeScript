@@ -1,0 +1,24 @@
+tests/cases/compiler/objectLitPropertyScoping.ts(5,13): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/objectLitPropertyScoping.ts(8,13): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+
+
+==== tests/cases/compiler/objectLitPropertyScoping.ts (2 errors) ====
+    // Should compile, x and y should not be picked up from the properties
+    
+    function makePoint(x: number, y: number) {
+        return {
+            get x() {
+                ~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+                return x;
+            },
+            get y() {
+                ~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+                return y;
+            },
+            dist: function () {
+                return Math.sqrt(x * x + y * y);
+            }
+        }
+    };

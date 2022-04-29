@@ -1,0 +1,78 @@
+=== tests/cases/conformance/salsa/module.js ===
+var Outer = {}
+>Outer : typeof Outer
+>{} : {}
+
+Outer.Inner = function() {}
+>Outer.Inner = function() {} : typeof Inner
+>Outer.Inner : typeof Inner
+>Outer : typeof Outer
+>Inner : typeof Inner
+>function() {} : typeof Inner
+
+Outer.Inner.prototype = {
+>Outer.Inner.prototype = {    m() { },    i: 1} : { m(): void; i: number; }
+>Outer.Inner.prototype : { m(): void; i: number; }
+>Outer.Inner : typeof Inner
+>Outer : typeof Outer
+>Inner : typeof Inner
+>prototype : { m(): void; i: number; }
+>{    m() { },    i: 1} : { m(): void; i: number; }
+
+    m() { },
+>m : () => void
+
+    i: 1
+>i : number
+>1 : 1
+}
+// incremental assignments still work
+Outer.Inner.prototype.j = 2
+>Outer.Inner.prototype.j = 2 : 2
+>Outer.Inner.prototype.j : any
+>Outer.Inner.prototype : { m(): void; i: number; }
+>Outer.Inner : typeof Inner
+>Outer : typeof Outer
+>Inner : typeof Inner
+>prototype : { m(): void; i: number; }
+>j : any
+>2 : 2
+
+/** @type {string} */
+Outer.Inner.prototype.k;
+>Outer.Inner.prototype.k : any
+>Outer.Inner.prototype : { m(): void; i: number; }
+>Outer.Inner : typeof Inner
+>Outer : typeof Outer
+>Inner : typeof Inner
+>prototype : { m(): void; i: number; }
+>k : any
+
+var inner = new Outer.Inner()
+>inner : Inner
+>new Outer.Inner() : Inner
+>Outer.Inner : typeof Inner
+>Outer : typeof Outer
+>Inner : typeof Inner
+
+inner.m()
+>inner.m() : void
+>inner.m : () => void
+>inner : Inner
+>m : () => void
+
+inner.i
+>inner.i : number
+>inner : Inner
+>i : number
+
+inner.j
+>inner.j : number
+>inner : Inner
+>j : number
+
+inner.k
+>inner.k : string
+>inner : Inner
+>k : string
+

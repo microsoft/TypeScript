@@ -1,0 +1,236 @@
+tests/cases/conformance/parser/ecmascript2021/numericSeparators/1.ts(1,7): error TS1199: Unterminated Unicode escape sequence.
+tests/cases/conformance/parser/ecmascript2021/numericSeparators/10.ts(1,5): error TS1125: Hexadecimal digit expected.
+tests/cases/conformance/parser/ecmascript2021/numericSeparators/11.ts(1,5): error TS1125: Hexadecimal digit expected.
+tests/cases/conformance/parser/ecmascript2021/numericSeparators/13.ts(1,5): error TS1125: Hexadecimal digit expected.
+tests/cases/conformance/parser/ecmascript2021/numericSeparators/14.ts(1,5): error TS1125: Hexadecimal digit expected.
+tests/cases/conformance/parser/ecmascript2021/numericSeparators/15.ts(1,5): error TS1125: Hexadecimal digit expected.
+tests/cases/conformance/parser/ecmascript2021/numericSeparators/17.ts(1,4): error TS1125: Hexadecimal digit expected.
+tests/cases/conformance/parser/ecmascript2021/numericSeparators/18.ts(1,4): error TS1125: Hexadecimal digit expected.
+tests/cases/conformance/parser/ecmascript2021/numericSeparators/19.ts(1,4): error TS1125: Hexadecimal digit expected.
+tests/cases/conformance/parser/ecmascript2021/numericSeparators/2.ts(1,7): error TS1199: Unterminated Unicode escape sequence.
+tests/cases/conformance/parser/ecmascript2021/numericSeparators/21.ts(1,4): error TS1125: Hexadecimal digit expected.
+tests/cases/conformance/parser/ecmascript2021/numericSeparators/22.ts(1,4): error TS1125: Hexadecimal digit expected.
+tests/cases/conformance/parser/ecmascript2021/numericSeparators/23.ts(1,4): error TS1125: Hexadecimal digit expected.
+tests/cases/conformance/parser/ecmascript2021/numericSeparators/25.ts(1,11): error TS1199: Unterminated Unicode escape sequence.
+tests/cases/conformance/parser/ecmascript2021/numericSeparators/26.ts(1,11): error TS1199: Unterminated Unicode escape sequence.
+tests/cases/conformance/parser/ecmascript2021/numericSeparators/27.ts(1,11): error TS1199: Unterminated Unicode escape sequence.
+tests/cases/conformance/parser/ecmascript2021/numericSeparators/3.ts(1,7): error TS1199: Unterminated Unicode escape sequence.
+tests/cases/conformance/parser/ecmascript2021/numericSeparators/37.ts(1,7): error TS1199: Unterminated Unicode escape sequence.
+tests/cases/conformance/parser/ecmascript2021/numericSeparators/38.ts(1,7): error TS1199: Unterminated Unicode escape sequence.
+tests/cases/conformance/parser/ecmascript2021/numericSeparators/39.ts(1,7): error TS1199: Unterminated Unicode escape sequence.
+tests/cases/conformance/parser/ecmascript2021/numericSeparators/41.ts(1,6): error TS1125: Hexadecimal digit expected.
+tests/cases/conformance/parser/ecmascript2021/numericSeparators/42.ts(1,6): error TS1125: Hexadecimal digit expected.
+tests/cases/conformance/parser/ecmascript2021/numericSeparators/43.ts(1,6): error TS1125: Hexadecimal digit expected.
+tests/cases/conformance/parser/ecmascript2021/numericSeparators/45.ts(1,5): error TS1125: Hexadecimal digit expected.
+tests/cases/conformance/parser/ecmascript2021/numericSeparators/46.ts(1,5): error TS1125: Hexadecimal digit expected.
+tests/cases/conformance/parser/ecmascript2021/numericSeparators/47.ts(1,5): error TS1125: Hexadecimal digit expected.
+tests/cases/conformance/parser/ecmascript2021/numericSeparators/5.ts(1,6): error TS1125: Hexadecimal digit expected.
+tests/cases/conformance/parser/ecmascript2021/numericSeparators/6.ts(1,6): error TS1125: Hexadecimal digit expected.
+tests/cases/conformance/parser/ecmascript2021/numericSeparators/7.ts(1,6): error TS1125: Hexadecimal digit expected.
+tests/cases/conformance/parser/ecmascript2021/numericSeparators/9.ts(1,5): error TS1125: Hexadecimal digit expected.
+
+
+==== tests/cases/conformance/parser/ecmascript2021/numericSeparators/1.ts (1 errors) ====
+    "\u{10_ffff}"
+          
+!!! error TS1199: Unterminated Unicode escape sequence.
+    
+==== tests/cases/conformance/parser/ecmascript2021/numericSeparators/2.ts (1 errors) ====
+    '\u{10_ffff}'
+          
+!!! error TS1199: Unterminated Unicode escape sequence.
+    
+==== tests/cases/conformance/parser/ecmascript2021/numericSeparators/3.ts (1 errors) ====
+    `\u{10_ffff}`
+          
+!!! error TS1199: Unterminated Unicode escape sequence.
+    
+==== tests/cases/conformance/parser/ecmascript2021/numericSeparators/4.ts (0 errors) ====
+    /\u{10_ffff}/u
+    
+==== tests/cases/conformance/parser/ecmascript2021/numericSeparators/5.ts (1 errors) ====
+    "\uff_ff"
+         
+!!! error TS1125: Hexadecimal digit expected.
+    
+==== tests/cases/conformance/parser/ecmascript2021/numericSeparators/6.ts (1 errors) ====
+    '\uff_ff'
+         
+!!! error TS1125: Hexadecimal digit expected.
+    
+==== tests/cases/conformance/parser/ecmascript2021/numericSeparators/7.ts (1 errors) ====
+    `\uff_ff`
+         
+!!! error TS1125: Hexadecimal digit expected.
+    
+==== tests/cases/conformance/parser/ecmascript2021/numericSeparators/8.ts (0 errors) ====
+    /\uff_ff/u
+    
+==== tests/cases/conformance/parser/ecmascript2021/numericSeparators/9.ts (1 errors) ====
+    "\xf_f"
+        
+!!! error TS1125: Hexadecimal digit expected.
+    
+==== tests/cases/conformance/parser/ecmascript2021/numericSeparators/10.ts (1 errors) ====
+    '\xf_f'
+        
+!!! error TS1125: Hexadecimal digit expected.
+    
+==== tests/cases/conformance/parser/ecmascript2021/numericSeparators/11.ts (1 errors) ====
+    `\xf_f`
+        
+!!! error TS1125: Hexadecimal digit expected.
+    
+==== tests/cases/conformance/parser/ecmascript2021/numericSeparators/12.ts (0 errors) ====
+    /\xf_f/u
+    
+==== tests/cases/conformance/parser/ecmascript2021/numericSeparators/13.ts (1 errors) ====
+    "\u{_10ffff}"
+        
+!!! error TS1125: Hexadecimal digit expected.
+    
+==== tests/cases/conformance/parser/ecmascript2021/numericSeparators/14.ts (1 errors) ====
+    '\u{_10ffff}'
+        
+!!! error TS1125: Hexadecimal digit expected.
+    
+==== tests/cases/conformance/parser/ecmascript2021/numericSeparators/15.ts (1 errors) ====
+    `\u{_10ffff}`
+        
+!!! error TS1125: Hexadecimal digit expected.
+    
+==== tests/cases/conformance/parser/ecmascript2021/numericSeparators/16.ts (0 errors) ====
+    /\u{_10ffff}/u
+    
+==== tests/cases/conformance/parser/ecmascript2021/numericSeparators/17.ts (1 errors) ====
+    "\u_ffff"
+       
+!!! error TS1125: Hexadecimal digit expected.
+    
+==== tests/cases/conformance/parser/ecmascript2021/numericSeparators/18.ts (1 errors) ====
+    '\u_ffff'
+       
+!!! error TS1125: Hexadecimal digit expected.
+    
+==== tests/cases/conformance/parser/ecmascript2021/numericSeparators/19.ts (1 errors) ====
+    `\u_ffff`
+       
+!!! error TS1125: Hexadecimal digit expected.
+    
+==== tests/cases/conformance/parser/ecmascript2021/numericSeparators/20.ts (0 errors) ====
+    /\u_ffff/u
+    
+==== tests/cases/conformance/parser/ecmascript2021/numericSeparators/21.ts (1 errors) ====
+    "\x_ff"
+       
+!!! error TS1125: Hexadecimal digit expected.
+    
+==== tests/cases/conformance/parser/ecmascript2021/numericSeparators/22.ts (1 errors) ====
+    '\x_ff'
+       
+!!! error TS1125: Hexadecimal digit expected.
+    
+==== tests/cases/conformance/parser/ecmascript2021/numericSeparators/23.ts (1 errors) ====
+    `\x_ff`
+       
+!!! error TS1125: Hexadecimal digit expected.
+    
+==== tests/cases/conformance/parser/ecmascript2021/numericSeparators/24.ts (0 errors) ====
+    /\x_ff/u
+    
+==== tests/cases/conformance/parser/ecmascript2021/numericSeparators/25.ts (1 errors) ====
+    "\u{10ffff_}"
+              
+!!! error TS1199: Unterminated Unicode escape sequence.
+    
+==== tests/cases/conformance/parser/ecmascript2021/numericSeparators/26.ts (1 errors) ====
+    '\u{10ffff_}'
+              
+!!! error TS1199: Unterminated Unicode escape sequence.
+    
+==== tests/cases/conformance/parser/ecmascript2021/numericSeparators/27.ts (1 errors) ====
+    `\u{10ffff_}`
+              
+!!! error TS1199: Unterminated Unicode escape sequence.
+    
+==== tests/cases/conformance/parser/ecmascript2021/numericSeparators/28.ts (0 errors) ====
+    /\u{10ffff_}/u
+    
+==== tests/cases/conformance/parser/ecmascript2021/numericSeparators/29.ts (0 errors) ====
+    "\uffff_"
+    
+==== tests/cases/conformance/parser/ecmascript2021/numericSeparators/30.ts (0 errors) ====
+    '\uffff_'
+    
+==== tests/cases/conformance/parser/ecmascript2021/numericSeparators/31.ts (0 errors) ====
+    `\uffff_`
+    
+==== tests/cases/conformance/parser/ecmascript2021/numericSeparators/32.ts (0 errors) ====
+    /\uffff_/u
+    
+==== tests/cases/conformance/parser/ecmascript2021/numericSeparators/33.ts (0 errors) ====
+    "\xff_"
+    
+==== tests/cases/conformance/parser/ecmascript2021/numericSeparators/34.ts (0 errors) ====
+    '\xff_'
+    
+==== tests/cases/conformance/parser/ecmascript2021/numericSeparators/35.ts (0 errors) ====
+    `\xff_`
+    
+==== tests/cases/conformance/parser/ecmascript2021/numericSeparators/36.ts (0 errors) ====
+    /\xff_/u
+    
+==== tests/cases/conformance/parser/ecmascript2021/numericSeparators/37.ts (1 errors) ====
+    "\u{10__ffff}"
+          
+!!! error TS1199: Unterminated Unicode escape sequence.
+    
+==== tests/cases/conformance/parser/ecmascript2021/numericSeparators/38.ts (1 errors) ====
+    '\u{10__ffff}'
+          
+!!! error TS1199: Unterminated Unicode escape sequence.
+    
+==== tests/cases/conformance/parser/ecmascript2021/numericSeparators/39.ts (1 errors) ====
+    `\u{10__ffff}`
+          
+!!! error TS1199: Unterminated Unicode escape sequence.
+    
+==== tests/cases/conformance/parser/ecmascript2021/numericSeparators/40.ts (0 errors) ====
+    /\u{10__ffff}/u
+    
+==== tests/cases/conformance/parser/ecmascript2021/numericSeparators/41.ts (1 errors) ====
+    "\uff__ff"
+         
+!!! error TS1125: Hexadecimal digit expected.
+    
+==== tests/cases/conformance/parser/ecmascript2021/numericSeparators/42.ts (1 errors) ====
+    '\uff__ff'
+         
+!!! error TS1125: Hexadecimal digit expected.
+    
+==== tests/cases/conformance/parser/ecmascript2021/numericSeparators/43.ts (1 errors) ====
+    `\uff__ff`
+         
+!!! error TS1125: Hexadecimal digit expected.
+    
+==== tests/cases/conformance/parser/ecmascript2021/numericSeparators/44.ts (0 errors) ====
+    /\uff__ff/u
+    
+==== tests/cases/conformance/parser/ecmascript2021/numericSeparators/45.ts (1 errors) ====
+    "\xf__f"
+        
+!!! error TS1125: Hexadecimal digit expected.
+    
+==== tests/cases/conformance/parser/ecmascript2021/numericSeparators/46.ts (1 errors) ====
+    '\xf__f'
+        
+!!! error TS1125: Hexadecimal digit expected.
+    
+==== tests/cases/conformance/parser/ecmascript2021/numericSeparators/47.ts (1 errors) ====
+    `\xf__f`
+        
+!!! error TS1125: Hexadecimal digit expected.
+    
+==== tests/cases/conformance/parser/ecmascript2021/numericSeparators/48.ts (0 errors) ====
+    /\xf__f/u
+    

@@ -1,0 +1,36 @@
+tests/cases/compiler/inferSetterParamType.ts(3,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/inferSetterParamType.ts(6,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/inferSetterParamType.ts(12,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/inferSetterParamType.ts(13,9): error TS2322: Type 'number' is not assignable to type 'string'.
+tests/cases/compiler/inferSetterParamType.ts(15,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+
+
+==== tests/cases/compiler/inferSetterParamType.ts (5 errors) ====
+    class Foo {
+    
+        get bar() {
+            ~~~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+            return 0;
+        }
+        set bar(n) { // should not be an error - infer number
+            ~~~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+        }
+    }
+    
+    class Foo2 {
+    
+        get bar() {
+            ~~~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+            return 0; // should be an error - can't coerce infered return type to match setter annotated type
+            ~~~~~~~~~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
+        }
+        set bar(n:string) {
+            ~~~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+        }
+    }
+    

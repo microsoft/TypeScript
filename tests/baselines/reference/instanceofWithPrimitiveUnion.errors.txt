@@ -1,0 +1,21 @@
+tests/cases/compiler/instanceofWithPrimitiveUnion.ts(2,9): error TS2358: The left-hand side of an 'instanceof' expression must be of type 'any', an object type or a type parameter.
+tests/cases/compiler/instanceofWithPrimitiveUnion.ts(8,9): error TS2358: The left-hand side of an 'instanceof' expression must be of type 'any', an object type or a type parameter.
+
+
+==== tests/cases/compiler/instanceofWithPrimitiveUnion.ts (2 errors) ====
+    function test1(x: number | string) {
+        if (x instanceof Object) {
+            ~
+!!! error TS2358: The left-hand side of an 'instanceof' expression must be of type 'any', an object type or a type parameter.
+            x;
+        }
+    }
+    
+    function test2(x: (number | string) | number) {
+        if (x instanceof Object) {
+            ~
+!!! error TS2358: The left-hand side of an 'instanceof' expression must be of type 'any', an object type or a type parameter.
+            x;
+        }
+    }
+    

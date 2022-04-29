@@ -1,0 +1,18 @@
+=== tests/cases/compiler/moduleInTypePosition1_1.ts ===
+///<reference path='moduleInTypePosition1_0.ts'/>
+import WinJS = require('./moduleInTypePosition1_0');
+>WinJS : typeof WinJS
+
+var x = (w1: WinJS) => { };
+>x : (w1: WinJS) => void
+>(w1: WinJS) => { } : (w1: WinJS) => void
+>w1 : WinJS
+
+=== tests/cases/compiler/moduleInTypePosition1_0.ts ===
+export class Promise {
+>Promise : Promise
+
+    foo: string;
+>foo : string
+}
+

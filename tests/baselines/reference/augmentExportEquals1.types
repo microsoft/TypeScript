@@ -1,0 +1,30 @@
+=== tests/cases/compiler/file3.ts ===
+import x = require("./file1");
+>x : number
+
+import "./file2";
+let a: x.A; // should not work
+>a : x.A
+>x : any
+
+=== tests/cases/compiler/file1.ts ===
+var x = 1;
+>x : number
+>1 : 1
+
+export = x;
+>x : number
+
+=== tests/cases/compiler/file2.ts ===
+import x = require("./file1"); 
+>x : number
+
+// augmentation for './file1'
+// should error since './file1' does not have namespace meaning
+declare module "./file1" {
+>"./file1" : any
+
+    interface A { a }
+>a : any
+}
+

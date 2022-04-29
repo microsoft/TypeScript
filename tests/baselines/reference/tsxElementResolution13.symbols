@@ -1,0 +1,26 @@
+=== tests/cases/conformance/jsx/file.tsx ===
+declare module JSX {
+>JSX : Symbol(JSX, Decl(file.tsx, 0, 0))
+
+	interface Element { }
+>Element : Symbol(Element, Decl(file.tsx, 0, 20))
+
+	interface ElementAttributesProperty { pr1: any; pr2: any; }
+>ElementAttributesProperty : Symbol(ElementAttributesProperty, Decl(file.tsx, 1, 22))
+>pr1 : Symbol(ElementAttributesProperty.pr1, Decl(file.tsx, 2, 38))
+>pr2 : Symbol(ElementAttributesProperty.pr2, Decl(file.tsx, 2, 48))
+}
+
+interface Obj1 {
+>Obj1 : Symbol(Obj1, Decl(file.tsx, 3, 1))
+
+	new(n: string): any;
+>n : Symbol(n, Decl(file.tsx, 6, 5))
+}
+var obj1: Obj1;
+>obj1 : Symbol(obj1, Decl(file.tsx, 8, 3))
+>Obj1 : Symbol(Obj1, Decl(file.tsx, 3, 1))
+
+<obj1 x={10} />; // Error
+>x : Symbol(x, Decl(file.tsx, 9, 5))
+

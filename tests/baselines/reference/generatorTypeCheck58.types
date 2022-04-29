@@ -1,0 +1,14 @@
+=== tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck58.ts ===
+function* g() {
+>g : () => Generator<number, void, unknown>
+
+    class C {
+>C : C
+
+        static x = yield 0;
+>x : any
+>yield 0 : any
+>0 : 0
+
+    };
+}

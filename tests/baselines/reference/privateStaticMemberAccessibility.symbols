@@ -1,0 +1,24 @@
+=== tests/cases/conformance/classes/members/accessibility/privateStaticMemberAccessibility.ts ===
+class Base {
+>Base : Symbol(Base, Decl(privateStaticMemberAccessibility.ts, 0, 0))
+
+    private static foo: string;
+>foo : Symbol(Base.foo, Decl(privateStaticMemberAccessibility.ts, 0, 12))
+}
+
+class Derived extends Base {
+>Derived : Symbol(Derived, Decl(privateStaticMemberAccessibility.ts, 2, 1))
+>Base : Symbol(Base, Decl(privateStaticMemberAccessibility.ts, 0, 0))
+
+    static bar = Base.foo; // error
+>bar : Symbol(Derived.bar, Decl(privateStaticMemberAccessibility.ts, 4, 28))
+>Base.foo : Symbol(Base.foo, Decl(privateStaticMemberAccessibility.ts, 0, 12))
+>Base : Symbol(Base, Decl(privateStaticMemberAccessibility.ts, 0, 0))
+>foo : Symbol(Base.foo, Decl(privateStaticMemberAccessibility.ts, 0, 12))
+
+    bing = () => Base.foo; // error
+>bing : Symbol(Derived.bing, Decl(privateStaticMemberAccessibility.ts, 5, 26))
+>Base.foo : Symbol(Base.foo, Decl(privateStaticMemberAccessibility.ts, 0, 12))
+>Base : Symbol(Base, Decl(privateStaticMemberAccessibility.ts, 0, 0))
+>foo : Symbol(Base.foo, Decl(privateStaticMemberAccessibility.ts, 0, 12))
+}

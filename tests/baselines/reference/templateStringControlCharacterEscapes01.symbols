@@ -1,0 +1,4 @@
+=== tests/cases/conformance/es6/templates/templateStringControlCharacterEscapes01.ts ===
+var x = `\0\x00\u0000 0 00 0000`;
+>x : Symbol(x, Decl(templateStringControlCharacterEscapes01.ts, 0, 3))
+

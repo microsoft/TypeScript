@@ -1,0 +1,15 @@
+tests/cases/conformance/parser/ecmascript5/EnumDeclarations/parserEnum7.ts(2,3): error TS2452: An enum member cannot have a numeric name.
+tests/cases/conformance/parser/ecmascript5/EnumDeclarations/parserEnum7.ts(2,6): error TS2452: An enum member cannot have a numeric name.
+tests/cases/conformance/parser/ecmascript5/EnumDeclarations/parserEnum7.ts(2,9): error TS2452: An enum member cannot have a numeric name.
+
+
+==== tests/cases/conformance/parser/ecmascript5/EnumDeclarations/parserEnum7.ts (3 errors) ====
+    enum E {
+      1, 2, 3
+      ~
+!!! error TS2452: An enum member cannot have a numeric name.
+         ~
+!!! error TS2452: An enum member cannot have a numeric name.
+            ~
+!!! error TS2452: An enum member cannot have a numeric name.
+    }

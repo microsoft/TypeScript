@@ -1,0 +1,213 @@
+=== tests/cases/conformance/expressions/typeGuards/typeGuardOfFormTypeOfNumber.ts ===
+class C { private p: string };
+>C : C
+>p : string
+
+var str: string;
+>str : string
+
+var bool: boolean;
+>bool : boolean
+
+var num: number;
+>num : number
+
+var strOrNum: string | number;
+>strOrNum : string | number
+
+var strOrBool: string | boolean;
+>strOrBool : string | boolean
+
+var numOrBool: number | boolean
+>numOrBool : number | boolean
+
+var strOrNumOrBool: string | number | boolean;
+>strOrNumOrBool : string | number | boolean
+
+var strOrC: string | C;
+>strOrC : string | C
+
+var numOrC: number | C;
+>numOrC : number | C
+
+var boolOrC: boolean | C;
+>boolOrC : boolean | C
+
+var c: C;
+>c : C
+
+//	A type guard of the form typeof x === s, 
+//  where s is a string literal with the value 'string', 'number', or 'boolean',
+//  - when true, narrows the type of x to the given primitive type, or
+//  - when false, removes the primitive type from the type of x.
+if (typeof strOrNum === "number") {
+>typeof strOrNum === "number" : boolean
+>typeof strOrNum : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>strOrNum : string | number
+>"number" : "number"
+
+    num = strOrNum; // number
+>num = strOrNum : number
+>num : number
+>strOrNum : number
+}
+else {
+    str === strOrNum; // string
+>str === strOrNum : boolean
+>str : string
+>strOrNum : string
+}
+if (typeof numOrBool === "number") {
+>typeof numOrBool === "number" : boolean
+>typeof numOrBool : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>numOrBool : number | boolean
+>"number" : "number"
+
+    num = numOrBool; // number
+>num = numOrBool : number
+>num : number
+>numOrBool : number
+}
+else {
+    var x: number | boolean = numOrBool; // number | boolean
+>x : number | boolean
+>numOrBool : boolean
+}
+if (typeof strOrNumOrBool === "number") {
+>typeof strOrNumOrBool === "number" : boolean
+>typeof strOrNumOrBool : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>strOrNumOrBool : string | number | boolean
+>"number" : "number"
+
+    num = strOrNumOrBool; // number
+>num = strOrNumOrBool : number
+>num : number
+>strOrNumOrBool : number
+}
+else {
+    strOrBool = strOrNumOrBool; // string | boolean
+>strOrBool = strOrNumOrBool : string | boolean
+>strOrBool : string | boolean
+>strOrNumOrBool : string | boolean
+}
+if (typeof numOrC === "number") {
+>typeof numOrC === "number" : boolean
+>typeof numOrC : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>numOrC : number | C
+>"number" : "number"
+
+    num = numOrC; // number
+>num = numOrC : number
+>num : number
+>numOrC : number
+}
+else {
+    c = numOrC; // C
+>c = numOrC : C
+>c : C
+>numOrC : C
+}
+
+if (typeof strOrBool === "number") {
+>typeof strOrBool === "number" : boolean
+>typeof strOrBool : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>strOrBool : string | boolean
+>"number" : "number"
+
+    let y1: {} = strOrBool; // {}
+>y1 : {}
+>strOrBool : never
+}
+else {
+    let y2: string | boolean = strOrBool; // string | boolean
+>y2 : string | boolean
+>strOrBool : string | boolean
+}
+
+// A type guard of the form typeof x !== s, where s is a string literal,
+//  - when true, narrows the type of x by typeof x === s when false, or
+//  - when false, narrows the type of x by typeof x === s when true.
+if (typeof strOrNum !== "number") {
+>typeof strOrNum !== "number" : boolean
+>typeof strOrNum : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>strOrNum : string | number
+>"number" : "number"
+
+    str === strOrNum; // string
+>str === strOrNum : boolean
+>str : string
+>strOrNum : string
+}
+else {
+    num = strOrNum; // number
+>num = strOrNum : number
+>num : number
+>strOrNum : number
+}
+if (typeof numOrBool !== "number") {
+>typeof numOrBool !== "number" : boolean
+>typeof numOrBool : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>numOrBool : number | boolean
+>"number" : "number"
+
+    var x: number | boolean = numOrBool; // number | boolean
+>x : number | boolean
+>numOrBool : boolean
+}
+else {
+    num = numOrBool; // number
+>num = numOrBool : number
+>num : number
+>numOrBool : number
+}
+if (typeof strOrNumOrBool !== "number") {
+>typeof strOrNumOrBool !== "number" : boolean
+>typeof strOrNumOrBool : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>strOrNumOrBool : string | number | boolean
+>"number" : "number"
+
+    strOrBool = strOrNumOrBool; // string | boolean
+>strOrBool = strOrNumOrBool : string | boolean
+>strOrBool : string | boolean
+>strOrNumOrBool : string | boolean
+}
+else {
+    num = strOrNumOrBool; // number
+>num = strOrNumOrBool : number
+>num : number
+>strOrNumOrBool : number
+}
+if (typeof numOrC !== "number") {
+>typeof numOrC !== "number" : boolean
+>typeof numOrC : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>numOrC : number | C
+>"number" : "number"
+
+    c = numOrC; // C
+>c = numOrC : C
+>c : C
+>numOrC : C
+}
+else {
+    num = numOrC; // number
+>num = numOrC : number
+>num : number
+>numOrC : number
+}
+
+if (typeof strOrBool !== "number") {
+>typeof strOrBool !== "number" : boolean
+>typeof strOrBool : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>strOrBool : string | boolean
+>"number" : "number"
+
+    let y1: string | boolean = strOrBool; // string | boolean
+>y1 : string | boolean
+>strOrBool : string | boolean
+}
+else {
+    let y2: {} = strOrBool; // {}
+>y2 : {}
+>strOrBool : never
+}
+

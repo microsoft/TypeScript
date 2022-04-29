@@ -1,0 +1,238 @@
+=== tests/cases/conformance/types/typeParameters/typeParameterLists/propertyAccessOnTypeParameterWithConstraints2.ts ===
+// generic types should behave as if they have properties of their constraint type
+
+class A {
+>A : Symbol(A, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 0, 0))
+
+    foo(): string { return ''; }
+>foo : Symbol(A.foo, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 2, 9))
+}
+
+class B extends A {
+>B : Symbol(B, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 4, 1))
+>A : Symbol(A, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 0, 0))
+
+    bar(): string {
+>bar : Symbol(B.bar, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 6, 19))
+
+        return '';
+    }
+}
+
+class C<U extends A, T extends A> {
+>C : Symbol(C, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 10, 1))
+>U : Symbol(U, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 12, 8))
+>A : Symbol(A, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 0, 0))
+>T : Symbol(T, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 12, 20))
+>A : Symbol(A, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 0, 0))
+
+    f() {
+>f : Symbol(C.f, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 12, 35))
+
+        var x: U;
+>x : Symbol(x, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 14, 11))
+>U : Symbol(U, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 12, 8))
+
+        var a = x['foo'](); // should be string
+>a : Symbol(a, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 15, 11))
+>x : Symbol(x, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 14, 11))
+>'foo' : Symbol(A.foo, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 2, 9))
+
+        return a + x.foo();
+>a : Symbol(a, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 15, 11))
+>x.foo : Symbol(A.foo, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 2, 9))
+>x : Symbol(x, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 14, 11))
+>foo : Symbol(A.foo, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 2, 9))
+    }
+
+    g(x: U) {
+>g : Symbol(C.g, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 17, 5))
+>x : Symbol(x, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 19, 6))
+>U : Symbol(U, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 12, 8))
+
+        var a = x['foo'](); // should be string
+>a : Symbol(a, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 20, 11))
+>x : Symbol(x, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 19, 6))
+>'foo' : Symbol(A.foo, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 2, 9))
+
+        return a + x.foo();
+>a : Symbol(a, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 20, 11))
+>x.foo : Symbol(A.foo, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 2, 9))
+>x : Symbol(x, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 19, 6))
+>foo : Symbol(A.foo, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 2, 9))
+    }
+}
+//class C<U extends T, T extends A> {
+//    f() {
+//        var x: U;
+//        var a = x['foo'](); // should be string
+//        return a + x.foo();
+//    }
+
+//    g(x: U) {
+//        var a = x['foo'](); // should be string
+//        return a + x.foo();
+//    }
+//}
+
+var r1 = (new C<B, A>()).f();
+>r1 : Symbol(r1, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 37, 3))
+>(new C<B, A>()).f : Symbol(C.f, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 12, 35))
+>C : Symbol(C, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 10, 1))
+>B : Symbol(B, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 4, 1))
+>A : Symbol(A, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 0, 0))
+>f : Symbol(C.f, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 12, 35))
+
+var r1b = (new C<B, A>()).g(new B());
+>r1b : Symbol(r1b, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 38, 3))
+>(new C<B, A>()).g : Symbol(C.g, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 17, 5))
+>C : Symbol(C, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 10, 1))
+>B : Symbol(B, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 4, 1))
+>A : Symbol(A, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 0, 0))
+>g : Symbol(C.g, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 17, 5))
+>B : Symbol(B, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 4, 1))
+
+interface I<U extends A, T extends A> {
+>I : Symbol(I, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 38, 37))
+>U : Symbol(U, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 40, 12))
+>A : Symbol(A, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 0, 0))
+>T : Symbol(T, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 40, 24))
+>A : Symbol(A, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 0, 0))
+
+    foo: U;
+>foo : Symbol(I.foo, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 40, 39))
+>U : Symbol(U, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 40, 12))
+}
+//interface I<U extends T, T extends A> {
+//    foo: U;
+//}
+var i: I<B, A>;
+>i : Symbol(i, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 46, 3))
+>I : Symbol(I, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 38, 37))
+>B : Symbol(B, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 4, 1))
+>A : Symbol(A, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 0, 0))
+
+var r2 = i.foo.foo();
+>r2 : Symbol(r2, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 47, 3))
+>i.foo.foo : Symbol(A.foo, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 2, 9))
+>i.foo : Symbol(I.foo, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 40, 39))
+>i : Symbol(i, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 46, 3))
+>foo : Symbol(I.foo, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 40, 39))
+>foo : Symbol(A.foo, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 2, 9))
+
+var r2b = i.foo['foo']();
+>r2b : Symbol(r2b, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 48, 3))
+>i.foo : Symbol(I.foo, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 40, 39))
+>i : Symbol(i, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 46, 3))
+>foo : Symbol(I.foo, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 40, 39))
+>'foo' : Symbol(A.foo, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 2, 9))
+
+var a: {
+>a : Symbol(a, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 50, 3))
+
+    <U extends A, T extends A>(): U;
+>U : Symbol(U, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 51, 5))
+>A : Symbol(A, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 0, 0))
+>T : Symbol(T, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 51, 17))
+>A : Symbol(A, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 0, 0))
+>U : Symbol(U, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 51, 5))
+
+    <U extends A, T extends A>(x: U): U;
+>U : Symbol(U, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 52, 5))
+>A : Symbol(A, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 0, 0))
+>T : Symbol(T, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 52, 17))
+>A : Symbol(A, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 0, 0))
+>x : Symbol(x, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 52, 31))
+>U : Symbol(U, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 52, 5))
+>U : Symbol(U, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 52, 5))
+
+    <U extends A, T extends A>(x: U, y: T): U;
+>U : Symbol(U, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 53, 5))
+>A : Symbol(A, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 0, 0))
+>T : Symbol(T, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 53, 17))
+>A : Symbol(A, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 0, 0))
+>x : Symbol(x, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 53, 31))
+>U : Symbol(U, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 53, 5))
+>y : Symbol(y, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 53, 36))
+>T : Symbol(T, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 53, 17))
+>U : Symbol(U, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 53, 5))
+}
+//var a: {
+//    <U extends T, T extends A>(): U;
+//    <U extends T, T extends A>(x: U): U;
+//    <U extends T, T extends A>(x: U, y: T): U;
+//}
+var r3 = a<A, A>().foo(); 
+>r3 : Symbol(r3, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 60, 3))
+>a<A, A>().foo : Symbol(A.foo, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 2, 9))
+>a : Symbol(a, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 50, 3))
+>A : Symbol(A, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 0, 0))
+>A : Symbol(A, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 0, 0))
+>foo : Symbol(A.foo, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 2, 9))
+
+var r3b = a()['foo']();
+>r3b : Symbol(r3b, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 61, 3))
+>a : Symbol(a, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 50, 3))
+>'foo' : Symbol(A.foo, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 2, 9))
+
+// parameter supplied for type argument inference to succeed
+var aB = new B();
+>aB : Symbol(aB, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 63, 3))
+>B : Symbol(B, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 4, 1))
+
+var r3c = a(aB, aB).foo(); 
+>r3c : Symbol(r3c, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 64, 3))
+>a(aB, aB).foo : Symbol(A.foo, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 2, 9))
+>a : Symbol(a, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 50, 3))
+>aB : Symbol(aB, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 63, 3))
+>aB : Symbol(aB, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 63, 3))
+>foo : Symbol(A.foo, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 2, 9))
+
+var r3d = a(aB, aB)['foo']();
+>r3d : Symbol(r3d, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 65, 3))
+>a : Symbol(a, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 50, 3))
+>aB : Symbol(aB, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 63, 3))
+>aB : Symbol(aB, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 63, 3))
+>'foo' : Symbol(A.foo, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 2, 9))
+
+var b = {
+>b : Symbol(b, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 67, 3))
+
+    foo: <U extends A, T extends A>(x: U, y: T) => {
+>foo : Symbol(foo, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 67, 9))
+>U : Symbol(U, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 68, 10))
+>A : Symbol(A, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 0, 0))
+>T : Symbol(T, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 68, 22))
+>A : Symbol(A, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 0, 0))
+>x : Symbol(x, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 68, 36))
+>U : Symbol(U, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 68, 10))
+>y : Symbol(y, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 68, 41))
+>T : Symbol(T, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 68, 22))
+
+        var a = x['foo'](); // should be string
+>a : Symbol(a, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 69, 11))
+>x : Symbol(x, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 68, 36))
+>'foo' : Symbol(A.foo, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 2, 9))
+
+        return a + x.foo();
+>a : Symbol(a, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 69, 11))
+>x.foo : Symbol(A.foo, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 2, 9))
+>x : Symbol(x, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 68, 36))
+>foo : Symbol(A.foo, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 2, 9))
+    }
+}
+//var b = {
+//    foo: <U extends T, T extends A>(x: U, y: T) => {
+//        var a = x['foo'](); // should be string
+//        return a + x.foo();
+//    }
+//}
+
+var r4 = b.foo(aB, aB); // no inferences for T so constraint isn't satisfied, error
+>r4 : Symbol(r4, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 80, 3))
+>b.foo : Symbol(foo, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 67, 9))
+>b : Symbol(b, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 67, 3))
+>foo : Symbol(foo, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 67, 9))
+>aB : Symbol(aB, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 63, 3))
+>aB : Symbol(aB, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 63, 3))
+

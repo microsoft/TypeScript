@@ -1,0 +1,64 @@
+tests/cases/conformance/enums/enumConstantMembers.ts(32,9): error TS2477: 'const' enum member initializer was evaluated to a non-finite value.
+tests/cases/conformance/enums/enumConstantMembers.ts(33,9): error TS2477: 'const' enum member initializer was evaluated to a non-finite value.
+tests/cases/conformance/enums/enumConstantMembers.ts(34,9): error TS2477: 'const' enum member initializer was evaluated to a non-finite value.
+tests/cases/conformance/enums/enumConstantMembers.ts(35,9): error TS2478: 'const' enum member initializer was evaluated to disallowed value 'NaN'.
+tests/cases/conformance/enums/enumConstantMembers.ts(36,9): error TS2478: 'const' enum member initializer was evaluated to disallowed value 'NaN'.
+tests/cases/conformance/enums/enumConstantMembers.ts(37,9): error TS2477: 'const' enum member initializer was evaluated to a non-finite value.
+tests/cases/conformance/enums/enumConstantMembers.ts(38,9): error TS2477: 'const' enum member initializer was evaluated to a non-finite value.
+
+
+==== tests/cases/conformance/enums/enumConstantMembers.ts (7 errors) ====
+    // Constant members allow negatives, but not decimals. Also hex literals are allowed
+    enum E1 {
+        a = 1,
+        b
+    }
+    enum E2 {
+        a = - 1,
+        b
+    }
+    enum E3 {
+        a = 0.1,
+        b // Error because 0.1 is not a constant
+    }
+    
+    declare enum E4 {
+        a = 1,
+        b = -1,
+        c = 0.1 // Not a constant
+    }
+    
+    enum E5 {
+        a = 1 / 0,
+        b = 2 / 0.0,
+        c = 1.0 / 0.0,
+        d = 0.0 / 0.0,
+        e = NaN,
+        f = Infinity,
+        g = -Infinity
+    }
+    
+    const enum E6 {
+        a = 1 / 0,
+            ~~~~~
+!!! error TS2477: 'const' enum member initializer was evaluated to a non-finite value.
+        b = 2 / 0.0,
+            ~~~~~~~
+!!! error TS2477: 'const' enum member initializer was evaluated to a non-finite value.
+        c = 1.0 / 0.0,
+            ~~~~~~~~~
+!!! error TS2477: 'const' enum member initializer was evaluated to a non-finite value.
+        d = 0.0 / 0.0,
+            ~~~~~~~~~
+!!! error TS2478: 'const' enum member initializer was evaluated to disallowed value 'NaN'.
+        e = NaN,
+            ~~~
+!!! error TS2478: 'const' enum member initializer was evaluated to disallowed value 'NaN'.
+        f = Infinity,
+            ~~~~~~~~
+!!! error TS2477: 'const' enum member initializer was evaluated to a non-finite value.
+        g = -Infinity
+            ~~~~~~~~~
+!!! error TS2477: 'const' enum member initializer was evaluated to a non-finite value.
+    }
+    

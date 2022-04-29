@@ -1,0 +1,17 @@
+=== tests/cases/compiler/declarationEmitPrivateReadonlyLiterals.ts ===
+class Foo {
+>Foo : Symbol(Foo, Decl(declarationEmitPrivateReadonlyLiterals.ts, 0, 0))
+
+    private static readonly A = "a";
+>A : Symbol(Foo.A, Decl(declarationEmitPrivateReadonlyLiterals.ts, 0, 11))
+
+    private readonly B = "b";
+>B : Symbol(Foo.B, Decl(declarationEmitPrivateReadonlyLiterals.ts, 1, 36))
+
+    private static readonly C = 42;
+>C : Symbol(Foo.C, Decl(declarationEmitPrivateReadonlyLiterals.ts, 2, 29))
+
+    private readonly D = 42;
+>D : Symbol(Foo.D, Decl(declarationEmitPrivateReadonlyLiterals.ts, 3, 35))
+}
+

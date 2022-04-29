@@ -1,0 +1,11 @@
+tests/cases/conformance/parser/ecmascript5/Statements/parserForInStatement5.ts(1,10): error TS2404: The left-hand side of a 'for...in' statement cannot use a type annotation.
+tests/cases/conformance/parser/ecmascript5/Statements/parserForInStatement5.ts(1,23): error TS2304: Cannot find name 'X'.
+
+
+==== tests/cases/conformance/parser/ecmascript5/Statements/parserForInStatement5.ts (2 errors) ====
+    for (var a: number in X) {
+             ~
+!!! error TS2404: The left-hand side of a 'for...in' statement cannot use a type annotation.
+                          ~
+!!! error TS2304: Cannot find name 'X'.
+    }

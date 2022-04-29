@@ -1,0 +1,29 @@
+=== tests/cases/compiler/emitCommentsOnlyFile.ts ===
+/**
+No type information for this code.* @name Foo
+No type information for this code.* @class
+No type information for this code.*/
+No type information for this code./**#@+
+No type information for this code.* @memberOf Foo#
+No type information for this code.* @field
+No type information for this code.*/
+No type information for this code./**
+No type information for this code.* @name bar
+No type information for this code.* @type Object[]
+No type information for this code.*/
+No type information for this code./**#@-*/
+No type information for this code./**
+No type information for this code.* @name Foo2
+No type information for this code.* @class
+No type information for this code.*/
+No type information for this code./**#@+
+No type information for this code.* @memberOf Foo2#
+No type information for this code.* @field
+No type information for this code.*/
+No type information for this code./**
+No type information for this code.* @name bar
+No type information for this code.* @type Object[]
+No type information for this code.*/
+No type information for this code./**#@-*/
+No type information for this code.
+No type information for this code.

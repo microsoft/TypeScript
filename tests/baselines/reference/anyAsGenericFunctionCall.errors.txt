@@ -1,0 +1,25 @@
+tests/cases/conformance/types/any/anyAsGenericFunctionCall.ts(5,9): error TS2347: Untyped function calls may not accept type arguments.
+tests/cases/conformance/types/any/anyAsGenericFunctionCall.ts(6,9): error TS2347: Untyped function calls may not accept type arguments.
+tests/cases/conformance/types/any/anyAsGenericFunctionCall.ts(9,9): error TS2347: Untyped function calls may not accept type arguments.
+tests/cases/conformance/types/any/anyAsGenericFunctionCall.ts(10,9): error TS2347: Untyped function calls may not accept type arguments.
+
+
+==== tests/cases/conformance/types/any/anyAsGenericFunctionCall.ts (4 errors) ====
+    // any is considered an untyped function call
+    // can be called except with type arguments which is an error
+    
+    var x: any;
+    var a = x<number>();
+            ~~~~~~~~~~~
+!!! error TS2347: Untyped function calls may not accept type arguments.
+    var b = x<string>('hello');
+            ~~~~~~~~~~~~~~~~~~
+!!! error TS2347: Untyped function calls may not accept type arguments.
+    
+    class C { foo: string; }
+    var c = x<C>(x);
+            ~~~~~~~
+!!! error TS2347: Untyped function calls may not accept type arguments.
+    var d = x<any>(x);
+            ~~~~~~~~~
+!!! error TS2347: Untyped function calls may not accept type arguments.

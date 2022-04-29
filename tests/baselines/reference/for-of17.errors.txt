@@ -1,0 +1,20 @@
+tests/cases/conformance/es6/for-ofStatements/for-of17.ts(14,6): error TS2322: Type 'number' is not assignable to type 'string'.
+
+
+==== tests/cases/conformance/es6/for-ofStatements/for-of17.ts (1 errors) ====
+    class NumberIterator {
+        next() {
+            return {
+                value: 0,
+                done: false
+            };
+        }
+        [Symbol.iterator]() {
+            return this;
+        }
+    }
+    
+    var v: string;
+    for (v of new NumberIterator) { } // Should succeed
+         ~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.

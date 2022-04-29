@@ -1,0 +1,62 @@
+=== tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsReference.ts ===
+var value: any;
+>value : Symbol(value, Decl(assignmentLHSIsReference.ts, 0, 3))
+
+// identifiers: variable and parameter
+var x1: number;
+>x1 : Symbol(x1, Decl(assignmentLHSIsReference.ts, 3, 3))
+
+x1 = value;
+>x1 : Symbol(x1, Decl(assignmentLHSIsReference.ts, 3, 3))
+>value : Symbol(value, Decl(assignmentLHSIsReference.ts, 0, 3))
+
+function fn1(x2: number) {
+>fn1 : Symbol(fn1, Decl(assignmentLHSIsReference.ts, 4, 11))
+>x2 : Symbol(x2, Decl(assignmentLHSIsReference.ts, 6, 13))
+
+    x2 = value;
+>x2 : Symbol(x2, Decl(assignmentLHSIsReference.ts, 6, 13))
+>value : Symbol(value, Decl(assignmentLHSIsReference.ts, 0, 3))
+}
+
+// property accesses
+var x3: { a: string  };
+>x3 : Symbol(x3, Decl(assignmentLHSIsReference.ts, 11, 3))
+>a : Symbol(a, Decl(assignmentLHSIsReference.ts, 11, 9))
+
+x3.a = value;
+>x3.a : Symbol(a, Decl(assignmentLHSIsReference.ts, 11, 9))
+>x3 : Symbol(x3, Decl(assignmentLHSIsReference.ts, 11, 3))
+>a : Symbol(a, Decl(assignmentLHSIsReference.ts, 11, 9))
+>value : Symbol(value, Decl(assignmentLHSIsReference.ts, 0, 3))
+
+x3['a'] = value;
+>x3 : Symbol(x3, Decl(assignmentLHSIsReference.ts, 11, 3))
+>'a' : Symbol(a, Decl(assignmentLHSIsReference.ts, 11, 9))
+>value : Symbol(value, Decl(assignmentLHSIsReference.ts, 0, 3))
+
+// parentheses, the contained expression is reference
+(x1) = value;
+>x1 : Symbol(x1, Decl(assignmentLHSIsReference.ts, 3, 3))
+>value : Symbol(value, Decl(assignmentLHSIsReference.ts, 0, 3))
+
+function fn2(x4: number) {
+>fn2 : Symbol(fn2, Decl(assignmentLHSIsReference.ts, 16, 13))
+>x4 : Symbol(x4, Decl(assignmentLHSIsReference.ts, 18, 13))
+
+    (x4) = value;
+>x4 : Symbol(x4, Decl(assignmentLHSIsReference.ts, 18, 13))
+>value : Symbol(value, Decl(assignmentLHSIsReference.ts, 0, 3))
+}
+
+(x3.a) = value;
+>x3.a : Symbol(a, Decl(assignmentLHSIsReference.ts, 11, 9))
+>x3 : Symbol(x3, Decl(assignmentLHSIsReference.ts, 11, 3))
+>a : Symbol(a, Decl(assignmentLHSIsReference.ts, 11, 9))
+>value : Symbol(value, Decl(assignmentLHSIsReference.ts, 0, 3))
+
+(x3['a']) = value;
+>x3 : Symbol(x3, Decl(assignmentLHSIsReference.ts, 11, 3))
+>'a' : Symbol(a, Decl(assignmentLHSIsReference.ts, 11, 9))
+>value : Symbol(value, Decl(assignmentLHSIsReference.ts, 0, 3))
+

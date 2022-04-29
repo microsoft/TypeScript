@@ -1,0 +1,110 @@
+=== tests/cases/conformance/jsx/file.tsx ===
+declare module JSX {
+>JSX : Symbol(JSX, Decl(file.tsx, 0, 0))
+
+	interface Element { }
+>Element : Symbol(Element, Decl(file.tsx, 0, 20))
+
+	interface IntrinsicElements {
+>IntrinsicElements : Symbol(IntrinsicElements, Decl(file.tsx, 1, 22))
+
+		[s: string]: any;
+>s : Symbol(s, Decl(file.tsx, 3, 3))
+	}
+}
+declare var React: any;
+>React : Symbol(React, Decl(file.tsx, 6, 11))
+
+// THIS FILE HAS TEST-SIGNIFICANT LEADING/TRAILING
+// WHITESPACE, DO NOT RUN 'FORMAT DOCUMENT' ON IT
+
+var p = 0;
+>p : Symbol(p, Decl(file.tsx, 11, 3))
+
+// Emit "   "
+<div>   </div>;
+>div : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 1, 22))
+>div : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 1, 22))
+
+// Emit "  ", p, "   "
+<div>  {p}    </div>;
+>div : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 1, 22))
+>p : Symbol(p, Decl(file.tsx, 11, 3))
+>div : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 1, 22))
+
+// Emit only p
+<div>  
+>div : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 1, 22))
+
+      {p}    
+>p : Symbol(p, Decl(file.tsx, 11, 3))
+
+      </div>;
+>div : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 1, 22))
+
+// Emit only p
+<div>
+>div : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 1, 22))
+
+  {p}
+>p : Symbol(p, Decl(file.tsx, 11, 3))
+
+    </div>;
+>div : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 1, 22))
+
+// Emit "  3"
+<div>  3  
+>div : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 1, 22))
+
+  </div>;
+>div : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 1, 22))
+
+// Emit "  3  "
+<div>  3  </div>;
+>div : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 1, 22))
+>div : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 1, 22))
+
+// Emit "3"
+<div>   
+>div : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 1, 22))
+
+   3    
+   </div>;
+>div : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 1, 22))
+
+// Emit no args
+<div>   
+>div : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 1, 22))
+
+   </div>;
+>div : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 1, 22))
+
+// Emit "foo bar"
+<div>  
+>div : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 1, 22))
+
+   foo
+
+ bar   
+
+  </div>;
+>div : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 1, 22))
+
+// Emit "hello\\ world"
+<div>
+>div : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 1, 22))
+
+    hello\
+
+world
+</div>;
+>div : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 1, 22))
+
+// Emit "  a b  c d  "
+<div>  a
+>div : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 1, 22))
+
+    b  c
+    d  </div>;
+>div : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 1, 22))
+

@@ -1,0 +1,14 @@
+=== tests/cases/conformance/jsdoc/bug27134.js ===
+/**
+ * @enum {number}
+ */
+var foo = { };
+>foo : {}
+>{ } : {}
+
+/**
+ * @type {foo}
+ */
+var s;
+>s : number
+

@@ -1,0 +1,232 @@
+=== tests/cases/compiler/es5-asyncFunctionTryStatements.ts ===
+declare var x: any, y: any, z: any, a: any, b: any, c: any;
+>x : Symbol(x, Decl(es5-asyncFunctionTryStatements.ts, 0, 11))
+>y : Symbol(y, Decl(es5-asyncFunctionTryStatements.ts, 0, 19))
+>z : Symbol(z, Decl(es5-asyncFunctionTryStatements.ts, 0, 27))
+>a : Symbol(a, Decl(es5-asyncFunctionTryStatements.ts, 0, 35))
+>b : Symbol(b, Decl(es5-asyncFunctionTryStatements.ts, 0, 43))
+>c : Symbol(c, Decl(es5-asyncFunctionTryStatements.ts, 0, 51))
+
+async function tryCatch0() {
+>tryCatch0 : Symbol(tryCatch0, Decl(es5-asyncFunctionTryStatements.ts, 0, 59))
+
+    var x: any, y: any;
+>x : Symbol(x, Decl(es5-asyncFunctionTryStatements.ts, 3, 7))
+>y : Symbol(y, Decl(es5-asyncFunctionTryStatements.ts, 3, 15))
+
+    try {
+        x;
+>x : Symbol(x, Decl(es5-asyncFunctionTryStatements.ts, 3, 7))
+    }
+    catch (e) {
+>e : Symbol(e, Decl(es5-asyncFunctionTryStatements.ts, 7, 11))
+
+        y;
+>y : Symbol(y, Decl(es5-asyncFunctionTryStatements.ts, 3, 15))
+    }
+}
+
+async function tryCatch1() {
+>tryCatch1 : Symbol(tryCatch1, Decl(es5-asyncFunctionTryStatements.ts, 10, 1))
+
+    var x: any, y: any;
+>x : Symbol(x, Decl(es5-asyncFunctionTryStatements.ts, 13, 7))
+>y : Symbol(y, Decl(es5-asyncFunctionTryStatements.ts, 13, 15))
+
+    try {
+        await x;
+>x : Symbol(x, Decl(es5-asyncFunctionTryStatements.ts, 13, 7))
+    }
+    catch (e) {
+>e : Symbol(e, Decl(es5-asyncFunctionTryStatements.ts, 17, 11))
+
+        y;
+>y : Symbol(y, Decl(es5-asyncFunctionTryStatements.ts, 13, 15))
+    }
+}
+
+async function tryCatch2() {
+>tryCatch2 : Symbol(tryCatch2, Decl(es5-asyncFunctionTryStatements.ts, 20, 1))
+
+    var x: any, y: any;
+>x : Symbol(x, Decl(es5-asyncFunctionTryStatements.ts, 23, 7))
+>y : Symbol(y, Decl(es5-asyncFunctionTryStatements.ts, 23, 15))
+
+    try {
+        x;
+>x : Symbol(x, Decl(es5-asyncFunctionTryStatements.ts, 23, 7))
+    }
+    catch (e) {
+>e : Symbol(e, Decl(es5-asyncFunctionTryStatements.ts, 27, 11))
+
+        await y;
+>y : Symbol(y, Decl(es5-asyncFunctionTryStatements.ts, 23, 15))
+    }
+}
+
+async function tryCatch3(): Promise<Function> {
+>tryCatch3 : Symbol(tryCatch3, Decl(es5-asyncFunctionTryStatements.ts, 30, 1))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    var x: any, y: any;
+>x : Symbol(x, Decl(es5-asyncFunctionTryStatements.ts, 33, 7))
+>y : Symbol(y, Decl(es5-asyncFunctionTryStatements.ts, 33, 15))
+
+    try {
+        await x;
+>x : Symbol(x, Decl(es5-asyncFunctionTryStatements.ts, 33, 7))
+    }
+    catch (e) {
+>e : Symbol(e, Decl(es5-asyncFunctionTryStatements.ts, 37, 11))
+
+        return () => e;
+>e : Symbol(e, Decl(es5-asyncFunctionTryStatements.ts, 37, 11))
+    }
+}
+async function tryFinally0() {
+>tryFinally0 : Symbol(tryFinally0, Decl(es5-asyncFunctionTryStatements.ts, 40, 1))
+
+    var x: any, y: any;
+>x : Symbol(x, Decl(es5-asyncFunctionTryStatements.ts, 42, 7))
+>y : Symbol(y, Decl(es5-asyncFunctionTryStatements.ts, 42, 15))
+
+    try {
+        x;
+>x : Symbol(x, Decl(es5-asyncFunctionTryStatements.ts, 42, 7))
+    }
+    finally {
+        y;
+>y : Symbol(y, Decl(es5-asyncFunctionTryStatements.ts, 42, 15))
+    }
+}
+
+async function tryFinally1() {
+>tryFinally1 : Symbol(tryFinally1, Decl(es5-asyncFunctionTryStatements.ts, 49, 1))
+
+    var x: any, y: any;
+>x : Symbol(x, Decl(es5-asyncFunctionTryStatements.ts, 52, 7))
+>y : Symbol(y, Decl(es5-asyncFunctionTryStatements.ts, 52, 15))
+
+    try {
+        await x;
+>x : Symbol(x, Decl(es5-asyncFunctionTryStatements.ts, 52, 7))
+    }
+    finally {
+        y;
+>y : Symbol(y, Decl(es5-asyncFunctionTryStatements.ts, 52, 15))
+    }
+}
+
+async function tryFinally2() {
+>tryFinally2 : Symbol(tryFinally2, Decl(es5-asyncFunctionTryStatements.ts, 59, 1))
+
+    var x: any, y: any;
+>x : Symbol(x, Decl(es5-asyncFunctionTryStatements.ts, 62, 7))
+>y : Symbol(y, Decl(es5-asyncFunctionTryStatements.ts, 62, 15))
+
+    try {
+        x;
+>x : Symbol(x, Decl(es5-asyncFunctionTryStatements.ts, 62, 7))
+    }
+    finally {
+        await y;
+>y : Symbol(y, Decl(es5-asyncFunctionTryStatements.ts, 62, 15))
+    }
+}
+
+async function tryCatchFinally0() {
+>tryCatchFinally0 : Symbol(tryCatchFinally0, Decl(es5-asyncFunctionTryStatements.ts, 69, 1))
+
+    var x: any, y: any, z: any;
+>x : Symbol(x, Decl(es5-asyncFunctionTryStatements.ts, 72, 7))
+>y : Symbol(y, Decl(es5-asyncFunctionTryStatements.ts, 72, 15))
+>z : Symbol(z, Decl(es5-asyncFunctionTryStatements.ts, 72, 23))
+
+    try {
+        x;
+>x : Symbol(x, Decl(es5-asyncFunctionTryStatements.ts, 72, 7))
+    }
+    catch (e) {
+>e : Symbol(e, Decl(es5-asyncFunctionTryStatements.ts, 76, 11))
+
+        y;
+>y : Symbol(y, Decl(es5-asyncFunctionTryStatements.ts, 72, 15))
+    }
+    finally {
+        z;
+>z : Symbol(z, Decl(es5-asyncFunctionTryStatements.ts, 72, 23))
+    }
+}
+
+async function tryCatchFinally1() {
+>tryCatchFinally1 : Symbol(tryCatchFinally1, Decl(es5-asyncFunctionTryStatements.ts, 82, 1))
+
+    var x: any, y: any, z: any;
+>x : Symbol(x, Decl(es5-asyncFunctionTryStatements.ts, 85, 7))
+>y : Symbol(y, Decl(es5-asyncFunctionTryStatements.ts, 85, 15))
+>z : Symbol(z, Decl(es5-asyncFunctionTryStatements.ts, 85, 23))
+
+    try {
+        await x;
+>x : Symbol(x, Decl(es5-asyncFunctionTryStatements.ts, 85, 7))
+    }
+    catch (e) {
+>e : Symbol(e, Decl(es5-asyncFunctionTryStatements.ts, 89, 11))
+
+        y;
+>y : Symbol(y, Decl(es5-asyncFunctionTryStatements.ts, 85, 15))
+    }
+    finally {
+        z;
+>z : Symbol(z, Decl(es5-asyncFunctionTryStatements.ts, 85, 23))
+    }
+}
+
+async function tryCatchFinally2() {
+>tryCatchFinally2 : Symbol(tryCatchFinally2, Decl(es5-asyncFunctionTryStatements.ts, 95, 1))
+
+    var x: any, y: any, z: any;
+>x : Symbol(x, Decl(es5-asyncFunctionTryStatements.ts, 98, 7))
+>y : Symbol(y, Decl(es5-asyncFunctionTryStatements.ts, 98, 15))
+>z : Symbol(z, Decl(es5-asyncFunctionTryStatements.ts, 98, 23))
+
+    try {
+        x;
+>x : Symbol(x, Decl(es5-asyncFunctionTryStatements.ts, 98, 7))
+    }
+    catch (e) {
+>e : Symbol(e, Decl(es5-asyncFunctionTryStatements.ts, 102, 11))
+
+        await y;
+>y : Symbol(y, Decl(es5-asyncFunctionTryStatements.ts, 98, 15))
+    }
+    finally {
+        z;
+>z : Symbol(z, Decl(es5-asyncFunctionTryStatements.ts, 98, 23))
+    }
+}
+
+async function tryCatchFinally3() {
+>tryCatchFinally3 : Symbol(tryCatchFinally3, Decl(es5-asyncFunctionTryStatements.ts, 108, 1))
+
+    var x: any, y: any, z: any;
+>x : Symbol(x, Decl(es5-asyncFunctionTryStatements.ts, 111, 7))
+>y : Symbol(y, Decl(es5-asyncFunctionTryStatements.ts, 111, 15))
+>z : Symbol(z, Decl(es5-asyncFunctionTryStatements.ts, 111, 23))
+
+    try {
+        x;
+>x : Symbol(x, Decl(es5-asyncFunctionTryStatements.ts, 111, 7))
+    }
+    catch (e) {
+>e : Symbol(e, Decl(es5-asyncFunctionTryStatements.ts, 115, 11))
+
+        y;
+>y : Symbol(y, Decl(es5-asyncFunctionTryStatements.ts, 111, 15))
+    }
+    finally {
+        await z;
+>z : Symbol(z, Decl(es5-asyncFunctionTryStatements.ts, 111, 23))
+    }
+}

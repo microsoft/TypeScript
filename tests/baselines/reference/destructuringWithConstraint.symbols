@@ -1,0 +1,26 @@
+=== tests/cases/compiler/destructuringWithConstraint.ts ===
+// Repro from #22823
+
+interface Props {
+>Props : Symbol(Props, Decl(destructuringWithConstraint.ts, 0, 0))
+
+    foo?: boolean;
+>foo : Symbol(Props.foo, Decl(destructuringWithConstraint.ts, 2, 17))
+}
+
+function foo<P extends Props>(props: Readonly<P>) {
+>foo : Symbol(foo, Decl(destructuringWithConstraint.ts, 4, 1))
+>P : Symbol(P, Decl(destructuringWithConstraint.ts, 6, 13))
+>Props : Symbol(Props, Decl(destructuringWithConstraint.ts, 0, 0))
+>props : Symbol(props, Decl(destructuringWithConstraint.ts, 6, 30))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>P : Symbol(P, Decl(destructuringWithConstraint.ts, 6, 13))
+
+    let { foo = false } = props;
+>foo : Symbol(foo, Decl(destructuringWithConstraint.ts, 7, 9))
+>props : Symbol(props, Decl(destructuringWithConstraint.ts, 6, 30))
+
+    if (foo === true) { }
+>foo : Symbol(foo, Decl(destructuringWithConstraint.ts, 7, 9))
+}
+

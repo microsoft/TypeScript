@@ -1,0 +1,27 @@
+=== tests/cases/compiler/interfacePropertiesWithSameName3.ts ===
+interface D { a: number; }
+>D : Symbol(D, Decl(interfacePropertiesWithSameName3.ts, 0, 0))
+>a : Symbol(D.a, Decl(interfacePropertiesWithSameName3.ts, 0, 13))
+
+interface E { a: string; }
+>E : Symbol(E, Decl(interfacePropertiesWithSameName3.ts, 0, 26))
+>a : Symbol(E.a, Decl(interfacePropertiesWithSameName3.ts, 1, 13))
+
+interface F extends E, D { } // error
+>F : Symbol(F, Decl(interfacePropertiesWithSameName3.ts, 1, 26))
+>E : Symbol(E, Decl(interfacePropertiesWithSameName3.ts, 0, 26))
+>D : Symbol(D, Decl(interfacePropertiesWithSameName3.ts, 0, 0))
+
+class D2 { a: number; }
+>D2 : Symbol(D2, Decl(interfacePropertiesWithSameName3.ts, 2, 28))
+>a : Symbol(D2.a, Decl(interfacePropertiesWithSameName3.ts, 4, 10))
+
+class E2 { a: string; }
+>E2 : Symbol(E2, Decl(interfacePropertiesWithSameName3.ts, 4, 23))
+>a : Symbol(E2.a, Decl(interfacePropertiesWithSameName3.ts, 5, 10))
+
+interface F2 extends E2, D2 { } // error
+>F2 : Symbol(F2, Decl(interfacePropertiesWithSameName3.ts, 5, 23))
+>E2 : Symbol(E2, Decl(interfacePropertiesWithSameName3.ts, 4, 23))
+>D2 : Symbol(D2, Decl(interfacePropertiesWithSameName3.ts, 2, 28))
+

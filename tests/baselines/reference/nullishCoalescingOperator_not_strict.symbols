@@ -1,0 +1,65 @@
+=== tests/cases/conformance/expressions/nullishCoalescingOperator/nullishCoalescingOperator_not_strict.ts ===
+declare const a1: 'literal' | undefined | null
+>a1 : Symbol(a1, Decl(nullishCoalescingOperator_not_strict.ts, 0, 13))
+
+declare const a2: '' | undefined | null
+>a2 : Symbol(a2, Decl(nullishCoalescingOperator_not_strict.ts, 1, 13))
+
+declare const a3: 1 | undefined | null
+>a3 : Symbol(a3, Decl(nullishCoalescingOperator_not_strict.ts, 2, 13))
+
+declare const a4: 0 | undefined | null
+>a4 : Symbol(a4, Decl(nullishCoalescingOperator_not_strict.ts, 3, 13))
+
+declare const a5: true | undefined | null
+>a5 : Symbol(a5, Decl(nullishCoalescingOperator_not_strict.ts, 4, 13))
+
+declare const a6: false | undefined | null
+>a6 : Symbol(a6, Decl(nullishCoalescingOperator_not_strict.ts, 5, 13))
+
+declare const a7: unknown | null
+>a7 : Symbol(a7, Decl(nullishCoalescingOperator_not_strict.ts, 6, 13))
+
+declare const a8: never | null
+>a8 : Symbol(a8, Decl(nullishCoalescingOperator_not_strict.ts, 7, 13))
+
+declare const a9: any | null
+>a9 : Symbol(a9, Decl(nullishCoalescingOperator_not_strict.ts, 8, 13))
+
+
+const aa1 = a1 ?? 'whatever'
+>aa1 : Symbol(aa1, Decl(nullishCoalescingOperator_not_strict.ts, 11, 5))
+>a1 : Symbol(a1, Decl(nullishCoalescingOperator_not_strict.ts, 0, 13))
+
+const aa2 = a2 ?? 'whatever'
+>aa2 : Symbol(aa2, Decl(nullishCoalescingOperator_not_strict.ts, 12, 5))
+>a2 : Symbol(a2, Decl(nullishCoalescingOperator_not_strict.ts, 1, 13))
+
+const aa3 = a3 ?? 'whatever'
+>aa3 : Symbol(aa3, Decl(nullishCoalescingOperator_not_strict.ts, 13, 5))
+>a3 : Symbol(a3, Decl(nullishCoalescingOperator_not_strict.ts, 2, 13))
+
+const aa4 = a4 ?? 'whatever'
+>aa4 : Symbol(aa4, Decl(nullishCoalescingOperator_not_strict.ts, 14, 5))
+>a4 : Symbol(a4, Decl(nullishCoalescingOperator_not_strict.ts, 3, 13))
+
+const aa5 = a5 ?? 'whatever'
+>aa5 : Symbol(aa5, Decl(nullishCoalescingOperator_not_strict.ts, 15, 5))
+>a5 : Symbol(a5, Decl(nullishCoalescingOperator_not_strict.ts, 4, 13))
+
+const aa6 = a6 ?? 'whatever'
+>aa6 : Symbol(aa6, Decl(nullishCoalescingOperator_not_strict.ts, 16, 5))
+>a6 : Symbol(a6, Decl(nullishCoalescingOperator_not_strict.ts, 5, 13))
+
+const aa7 = a7 ?? 'whatever'
+>aa7 : Symbol(aa7, Decl(nullishCoalescingOperator_not_strict.ts, 17, 5))
+>a7 : Symbol(a7, Decl(nullishCoalescingOperator_not_strict.ts, 6, 13))
+
+const aa8 = a8 ?? 'whatever'
+>aa8 : Symbol(aa8, Decl(nullishCoalescingOperator_not_strict.ts, 18, 5))
+>a8 : Symbol(a8, Decl(nullishCoalescingOperator_not_strict.ts, 7, 13))
+
+const aa9 = a9 ?? 'whatever'
+>aa9 : Symbol(aa9, Decl(nullishCoalescingOperator_not_strict.ts, 19, 5))
+>a9 : Symbol(a9, Decl(nullishCoalescingOperator_not_strict.ts, 8, 13))
+

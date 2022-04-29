@@ -1,0 +1,30 @@
+=== tests/cases/compiler/spreadBooleanRespectsFreshness.ts ===
+type Foo = FooBase | FooArray;
+>Foo : Symbol(Foo, Decl(spreadBooleanRespectsFreshness.ts, 0, 0))
+>FooBase : Symbol(FooBase, Decl(spreadBooleanRespectsFreshness.ts, 0, 30))
+>FooArray : Symbol(FooArray, Decl(spreadBooleanRespectsFreshness.ts, 1, 30))
+
+type FooBase = string | false;
+>FooBase : Symbol(FooBase, Decl(spreadBooleanRespectsFreshness.ts, 0, 30))
+
+type FooArray = FooBase[];
+>FooArray : Symbol(FooArray, Decl(spreadBooleanRespectsFreshness.ts, 1, 30))
+>FooBase : Symbol(FooBase, Decl(spreadBooleanRespectsFreshness.ts, 0, 30))
+
+declare let foo1: Foo;
+>foo1 : Symbol(foo1, Decl(spreadBooleanRespectsFreshness.ts, 4, 11))
+>Foo : Symbol(Foo, Decl(spreadBooleanRespectsFreshness.ts, 0, 0))
+
+declare let foo2: Foo;
+>foo2 : Symbol(foo2, Decl(spreadBooleanRespectsFreshness.ts, 5, 11))
+>Foo : Symbol(Foo, Decl(spreadBooleanRespectsFreshness.ts, 0, 0))
+
+foo1 = [...Array.isArray(foo2) ? foo2 : [foo2]];
+>foo1 : Symbol(foo1, Decl(spreadBooleanRespectsFreshness.ts, 4, 11))
+>Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>foo2 : Symbol(foo2, Decl(spreadBooleanRespectsFreshness.ts, 5, 11))
+>foo2 : Symbol(foo2, Decl(spreadBooleanRespectsFreshness.ts, 5, 11))
+>foo2 : Symbol(foo2, Decl(spreadBooleanRespectsFreshness.ts, 5, 11))
+

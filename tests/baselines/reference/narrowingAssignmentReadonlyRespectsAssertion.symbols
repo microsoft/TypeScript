@@ -1,0 +1,123 @@
+=== tests/cases/compiler/narrowingAssignmentReadonlyRespectsAssertion.ts ===
+// https://github.com/microsoft/TypeScript/issues/41984
+
+interface TestCase<T extends string | number> {
+>TestCase : Symbol(TestCase, Decl(narrowingAssignmentReadonlyRespectsAssertion.ts, 0, 0))
+>T : Symbol(T, Decl(narrowingAssignmentReadonlyRespectsAssertion.ts, 2, 19))
+
+  readonly val1: T | ReadonlyArray<T>;
+>val1 : Symbol(TestCase.val1, Decl(narrowingAssignmentReadonlyRespectsAssertion.ts, 2, 47))
+>T : Symbol(T, Decl(narrowingAssignmentReadonlyRespectsAssertion.ts, 2, 19))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(narrowingAssignmentReadonlyRespectsAssertion.ts, 2, 19))
+
+  readonly val2: ReadonlyArray<T>;
+>val2 : Symbol(TestCase.val2, Decl(narrowingAssignmentReadonlyRespectsAssertion.ts, 3, 38))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(narrowingAssignmentReadonlyRespectsAssertion.ts, 2, 19))
+}
+
+interface MultiCaseFixture<T> {
+>MultiCaseFixture : Symbol(MultiCaseFixture, Decl(narrowingAssignmentReadonlyRespectsAssertion.ts, 5, 1))
+>T : Symbol(T, Decl(narrowingAssignmentReadonlyRespectsAssertion.ts, 7, 27))
+
+  cases: T[];
+>cases : Symbol(MultiCaseFixture.cases, Decl(narrowingAssignmentReadonlyRespectsAssertion.ts, 7, 31))
+>T : Symbol(T, Decl(narrowingAssignmentReadonlyRespectsAssertion.ts, 7, 27))
+}
+
+function subDataFunc(): TestCase<string | number>[] {
+>subDataFunc : Symbol(subDataFunc, Decl(narrowingAssignmentReadonlyRespectsAssertion.ts, 9, 1))
+>TestCase : Symbol(TestCase, Decl(narrowingAssignmentReadonlyRespectsAssertion.ts, 0, 0))
+
+  return [
+      { val1: "a", val2: ["a", "b", "c"] },
+>val1 : Symbol(val1, Decl(narrowingAssignmentReadonlyRespectsAssertion.ts, 13, 7))
+>val2 : Symbol(val2, Decl(narrowingAssignmentReadonlyRespectsAssertion.ts, 13, 18))
+
+      { val1: 2, val2: [1, 2, 3] },
+>val1 : Symbol(val1, Decl(narrowingAssignmentReadonlyRespectsAssertion.ts, 14, 7))
+>val2 : Symbol(val2, Decl(narrowingAssignmentReadonlyRespectsAssertion.ts, 14, 16))
+
+      { val1: ["a", "z"], val2: ["x", "y", "z"] },
+>val1 : Symbol(val1, Decl(narrowingAssignmentReadonlyRespectsAssertion.ts, 15, 7))
+>val2 : Symbol(val2, Decl(narrowingAssignmentReadonlyRespectsAssertion.ts, 15, 25))
+
+      { val1: [5, 10], val2: [10, 100, 1000] },
+>val1 : Symbol(val1, Decl(narrowingAssignmentReadonlyRespectsAssertion.ts, 16, 7))
+>val2 : Symbol(val2, Decl(narrowingAssignmentReadonlyRespectsAssertion.ts, 16, 22))
+
+  ];
+}
+
+function dataFunc<T>(subFunc: () => T[]): MultiCaseFixture<T> {
+>dataFunc : Symbol(dataFunc, Decl(narrowingAssignmentReadonlyRespectsAssertion.ts, 18, 1))
+>T : Symbol(T, Decl(narrowingAssignmentReadonlyRespectsAssertion.ts, 20, 18))
+>subFunc : Symbol(subFunc, Decl(narrowingAssignmentReadonlyRespectsAssertion.ts, 20, 21))
+>T : Symbol(T, Decl(narrowingAssignmentReadonlyRespectsAssertion.ts, 20, 18))
+>MultiCaseFixture : Symbol(MultiCaseFixture, Decl(narrowingAssignmentReadonlyRespectsAssertion.ts, 5, 1))
+>T : Symbol(T, Decl(narrowingAssignmentReadonlyRespectsAssertion.ts, 20, 18))
+
+  return { cases: subFunc() };
+>cases : Symbol(cases, Decl(narrowingAssignmentReadonlyRespectsAssertion.ts, 21, 10))
+>subFunc : Symbol(subFunc, Decl(narrowingAssignmentReadonlyRespectsAssertion.ts, 20, 21))
+}
+
+function testFunc() {
+>testFunc : Symbol(testFunc, Decl(narrowingAssignmentReadonlyRespectsAssertion.ts, 22, 1))
+
+  const fixture = dataFunc<TestCase<string | number>>(subDataFunc);
+>fixture : Symbol(fixture, Decl(narrowingAssignmentReadonlyRespectsAssertion.ts, 25, 7))
+>dataFunc : Symbol(dataFunc, Decl(narrowingAssignmentReadonlyRespectsAssertion.ts, 18, 1))
+>TestCase : Symbol(TestCase, Decl(narrowingAssignmentReadonlyRespectsAssertion.ts, 0, 0))
+>subDataFunc : Symbol(subDataFunc, Decl(narrowingAssignmentReadonlyRespectsAssertion.ts, 9, 1))
+
+  fixture.cases.forEach(({ val1, val2 }) => {
+>fixture.cases.forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>fixture.cases : Symbol(MultiCaseFixture.cases, Decl(narrowingAssignmentReadonlyRespectsAssertion.ts, 7, 31))
+>fixture : Symbol(fixture, Decl(narrowingAssignmentReadonlyRespectsAssertion.ts, 25, 7))
+>cases : Symbol(MultiCaseFixture.cases, Decl(narrowingAssignmentReadonlyRespectsAssertion.ts, 7, 31))
+>forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>val1 : Symbol(val1, Decl(narrowingAssignmentReadonlyRespectsAssertion.ts, 26, 26))
+>val2 : Symbol(val2, Decl(narrowingAssignmentReadonlyRespectsAssertion.ts, 26, 32))
+
+      if (Array.isArray(val1)) {
+>Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>val1 : Symbol(val1, Decl(narrowingAssignmentReadonlyRespectsAssertion.ts, 26, 26))
+
+          // This should retain val1 as being an array
+          const reversedVal1 = val1.slice().reverse();
+>reversedVal1 : Symbol(reversedVal1, Decl(narrowingAssignmentReadonlyRespectsAssertion.ts, 29, 15))
+>val1.slice().reverse : Symbol(Array.reverse, Decl(lib.es5.d.ts, --, --))
+>val1.slice : Symbol(Array.slice, Decl(lib.es5.d.ts, --, --))
+>val1 : Symbol(val1, Decl(narrowingAssignmentReadonlyRespectsAssertion.ts, 26, 26))
+>slice : Symbol(Array.slice, Decl(lib.es5.d.ts, --, --))
+>reverse : Symbol(Array.reverse, Decl(lib.es5.d.ts, --, --))
+
+          console.log(reversedVal1);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>reversedVal1 : Symbol(reversedVal1, Decl(narrowingAssignmentReadonlyRespectsAssertion.ts, 29, 15))
+
+      } else {
+          console.log(val1);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>val1 : Symbol(val1, Decl(narrowingAssignmentReadonlyRespectsAssertion.ts, 26, 26))
+      }
+      console.log(val2);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>val2 : Symbol(val2, Decl(narrowingAssignmentReadonlyRespectsAssertion.ts, 26, 32))
+
+  });
+}
+
+testFunc();
+>testFunc : Symbol(testFunc, Decl(narrowingAssignmentReadonlyRespectsAssertion.ts, 22, 1))
+

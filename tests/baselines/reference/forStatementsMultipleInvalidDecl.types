@@ -1,0 +1,152 @@
+=== tests/cases/conformance/statements/forStatements/forStatementsMultipleInvalidDecl.ts ===
+interface I {
+    id: number;
+>id : number
+}
+
+class C implements I {
+>C : C
+
+    id: number;
+>id : number
+
+    valid: boolean;
+>valid : boolean
+}
+
+class C2 extends C {
+>C2 : C2
+>C : C
+
+    name: string;
+>name : string
+}
+
+class D<T>{
+>D : D<T>
+
+    source: T;
+>source : T
+
+    recurse: D<T>;
+>recurse : D<T>
+
+    wrapped: D<D<T>>
+>wrapped : D<D<T>>
+}
+
+function F(x: string): number { return 42; }
+>F : (x: string) => number
+>x : string
+>42 : 42
+
+module M {
+>M : typeof M
+
+    export class A {
+>A : A
+
+        name: string;
+>name : string
+    }
+
+    export function F2(x: number): string { return x.toString(); }
+>F2 : (x: number) => string
+>x : number
+>x.toString() : string
+>x.toString : (radix?: number) => string
+>x : number
+>toString : (radix?: number) => string
+}
+
+// all of these are errors
+for( var a: any;;){}
+>a : any
+
+for( var a = 1;;){}
+>a : any
+>1 : 1
+
+for( var a = 'a string';;){}
+>a : any
+>'a string' : "a string"
+
+for( var a = new C();;){}
+>a : any
+>new C() : C
+>C : typeof C
+
+for( var a = new D<string>();;){}
+>a : any
+>new D<string>() : D<string>
+>D : typeof D
+
+for( var a = M;;){}
+>a : any
+>M : typeof M
+
+for( var b: I;;){}
+>b : I
+
+for( var b = new C();;){}
+>b : I
+>new C() : C
+>C : typeof C
+
+for( var b = new C2();;){}
+>b : I
+>new C2() : C2
+>C2 : typeof C2
+
+for(var f = F;;){}
+>f : (x: string) => number
+>F : (x: string) => number
+
+for( var f = (x: number) => '';;){}
+>f : (x: string) => number
+>(x: number) => '' : (x: number) => string
+>x : number
+>'' : ""
+
+for(var arr: string[];;){}
+>arr : string[]
+
+for( var arr = [1, 2, 3, 4];;){}
+>arr : string[]
+>[1, 2, 3, 4] : number[]
+>1 : 1
+>2 : 2
+>3 : 3
+>4 : 4
+
+for( var arr = [new C(), new C2(), new D<string>()];;){}
+>arr : string[]
+>[new C(), new C2(), new D<string>()] : (C | D<string>)[]
+>new C() : C
+>C : typeof C
+>new C2() : C2
+>C2 : typeof C2
+>new D<string>() : D<string>
+>D : typeof D
+
+for(var arr2 = [new D<string>()];;){}
+>arr2 : D<string>[]
+>[new D<string>()] : D<string>[]
+>new D<string>() : D<string>
+>D : typeof D
+
+for( var arr2 = new Array<D<number>>();;){}
+>arr2 : D<string>[]
+>new Array<D<number>>() : D<number>[]
+>Array : ArrayConstructor
+
+for(var m: typeof M;;){}
+>m : typeof M
+>M : typeof M
+
+for( var m = M.A;;){}
+>m : typeof M
+>M.A : typeof M.A
+>M : typeof M
+>A : typeof M.A
+

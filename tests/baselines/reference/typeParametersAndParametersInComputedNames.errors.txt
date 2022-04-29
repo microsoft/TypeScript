@@ -1,0 +1,18 @@
+tests/cases/compiler/typeParametersAndParametersInComputedNames.ts(6,10): error TS2304: Cannot find name 'T'.
+tests/cases/compiler/typeParametersAndParametersInComputedNames.ts(6,13): error TS2552: Cannot find name 'a'. Did you mean 'A'?
+
+
+==== tests/cases/compiler/typeParametersAndParametersInComputedNames.ts (2 errors) ====
+    function foo<T>(a: T) : string {
+        return "";
+    }
+    
+    class A {
+        [foo<T>(a)]<T>(a: T) {  
+             ~
+!!! error TS2304: Cannot find name 'T'.
+                ~
+!!! error TS2552: Cannot find name 'a'. Did you mean 'A'?
+!!! related TS2728 tests/cases/compiler/typeParametersAndParametersInComputedNames.ts:5:7: 'A' is declared here.
+        }
+    }

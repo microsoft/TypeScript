@@ -1,0 +1,8 @@
+tests/cases/compiler/propertyAccess2.ts(2,5): error TS2339: Property 'toBAZ' does not exist on type 'number'.
+
+
+==== tests/cases/compiler/propertyAccess2.ts (1 errors) ====
+    var foo: number;
+    foo.toBAZ();
+        ~~~~~
+!!! error TS2339: Property 'toBAZ' does not exist on type 'number'.

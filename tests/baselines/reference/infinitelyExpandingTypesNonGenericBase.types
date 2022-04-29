@@ -1,0 +1,39 @@
+=== tests/cases/compiler/infinitelyExpandingTypesNonGenericBase.ts ===
+class Functionality<V> {
+>Functionality : Functionality<V>
+
+    property: Options<V>;
+>property : Options<V>
+}
+
+class Base {
+>Base : Base
+}
+
+class A<T> extends Base {
+>A : A<T>
+>Base : Base
+
+    options: Options<Functionality<T>[]>;
+>options : Options<Functionality<T>[]>
+}
+
+interface OptionsBase<T> {
+    Options: Options<T>;
+>Options : Options<T>
+}
+
+interface Options<T> extends OptionsBase<T> {
+}
+
+
+function o(type: new () => Base) {
+>o : (type: new () => Base) => void
+>type : new () => Base
+}
+
+o(A);
+>o(A) : void
+>o : (type: new () => Base) => void
+>A : typeof A
+

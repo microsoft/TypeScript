@@ -1,0 +1,10 @@
+=== tests/cases/compiler/declareModifierOnTypeAlias.ts ===
+declare type Foo = string;
+>Foo : string
+
+type Bar = number;
+>Bar : number
+
+declare type Baz = Bar;
+>Baz : number
+

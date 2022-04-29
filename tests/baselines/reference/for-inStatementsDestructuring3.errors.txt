@@ -1,0 +1,8 @@
+tests/cases/conformance/statements/for-inStatements/for-inStatementsDestructuring3.ts(2,6): error TS2491: The left-hand side of a 'for...in' statement cannot be a destructuring pattern.
+
+
+==== tests/cases/conformance/statements/for-inStatements/for-inStatementsDestructuring3.ts (1 errors) ====
+    var a, b;
+    for ([a, b] in []) { }
+         ~~~~~~
+!!! error TS2491: The left-hand side of a 'for...in' statement cannot be a destructuring pattern.

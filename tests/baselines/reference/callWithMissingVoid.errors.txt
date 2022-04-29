@@ -1,0 +1,131 @@
+tests/cases/conformance/expressions/functionCalls/callWithMissingVoid.ts(16,6): error TS2554: Expected 1 arguments, but got 0.
+tests/cases/conformance/expressions/functionCalls/callWithMissingVoid.ts(19,10): error TS2554: Expected 1 arguments, but got 0.
+tests/cases/conformance/expressions/functionCalls/callWithMissingVoid.ts(22,8): error TS2554: Expected 1 arguments, but got 0.
+tests/cases/conformance/expressions/functionCalls/callWithMissingVoid.ts(35,31): error TS2554: Expected 1 arguments, but got 0.
+tests/cases/conformance/expressions/functionCalls/callWithMissingVoid.ts(36,35): error TS2554: Expected 1 arguments, but got 0.
+tests/cases/conformance/expressions/functionCalls/callWithMissingVoid.ts(37,33): error TS2554: Expected 1 arguments, but got 0.
+tests/cases/conformance/expressions/functionCalls/callWithMissingVoid.ts(48,1): error TS2554: Expected 2-3 arguments, but got 1.
+tests/cases/conformance/expressions/functionCalls/callWithMissingVoid.ts(55,1): error TS2554: Expected 4 arguments, but got 2.
+tests/cases/conformance/expressions/functionCalls/callWithMissingVoid.ts(56,1): error TS2554: Expected 4 arguments, but got 3.
+tests/cases/conformance/expressions/functionCalls/callWithMissingVoid.ts(57,1): error TS2554: Expected 4 arguments, but got 1.
+tests/cases/conformance/expressions/functionCalls/callWithMissingVoid.ts(75,1): error TS2554: Expected 3 arguments, but got 1.
+
+
+==== tests/cases/conformance/expressions/functionCalls/callWithMissingVoid.ts (11 errors) ====
+    // From #4260
+    class X<T> {
+        f(t: T) {
+            return { a: t };
+        }
+    }
+    
+    declare const x: X<void>;
+    x.f() // no error because f expects void
+    
+    declare const xUnion: X<void | number>;
+    xUnion.f(42) // no error because f accepts number
+    xUnion.f() // no error because f accepts void
+    
+    declare const xAny: X<any>;
+    xAny.f() // error, any still expects an argument
+         ~~~
+!!! error TS2554: Expected 1 arguments, but got 0.
+!!! related TS6210 tests/cases/conformance/expressions/functionCalls/callWithMissingVoid.ts:3:7: An argument for 't' was not provided.
+    
+    declare const xUnknown: X<unknown>;
+    xUnknown.f() // error, unknown still expects an argument
+             ~~~
+!!! error TS2554: Expected 1 arguments, but got 0.
+!!! related TS6210 tests/cases/conformance/expressions/functionCalls/callWithMissingVoid.ts:3:7: An argument for 't' was not provided.
+    
+    declare const xNever: X<never>;
+    xNever.f() // error, never still expects an argument
+           ~~~
+!!! error TS2554: Expected 1 arguments, but got 0.
+!!! related TS6210 tests/cases/conformance/expressions/functionCalls/callWithMissingVoid.ts:3:7: An argument for 't' was not provided.
+    
+    
+    // Promise has previously been updated to work without arguments, but to show this fixes the issue too.
+    
+    class MyPromise<X> {
+        constructor(executor: (resolve: (value: X) => void) => void) {
+    
+        }
+    }
+    
+    new MyPromise<void>(resolve => resolve()); // no error
+    new MyPromise<void | number>(resolve => resolve()); // no error
+    new MyPromise<any>(resolve => resolve()); // error, `any` arguments cannot be omitted
+                                  ~~~~~~~~~
+!!! error TS2554: Expected 1 arguments, but got 0.
+!!! related TS6210 tests/cases/conformance/expressions/functionCalls/callWithMissingVoid.ts:28:38: An argument for 'value' was not provided.
+    new MyPromise<unknown>(resolve => resolve()); // error, `unknown` arguments cannot be omitted
+                                      ~~~~~~~~~
+!!! error TS2554: Expected 1 arguments, but got 0.
+!!! related TS6210 tests/cases/conformance/expressions/functionCalls/callWithMissingVoid.ts:28:38: An argument for 'value' was not provided.
+    new MyPromise<never>(resolve => resolve()); // error, `never` arguments cannot be omitted
+                                    ~~~~~~~~~
+!!! error TS2554: Expected 1 arguments, but got 0.
+!!! related TS6210 tests/cases/conformance/expressions/functionCalls/callWithMissingVoid.ts:28:38: An argument for 'value' was not provided.
+    
+    
+    // Multiple parameters
+    
+    function a(x: number, y: string, z: void): void  {
+        
+    }
+    
+    a(4, "hello"); // ok
+    a(4, "hello", void 0); // ok
+    a(4); // not ok
+    ~~~~
+!!! error TS2554: Expected 2-3 arguments, but got 1.
+!!! related TS6210 tests/cases/conformance/expressions/functionCalls/callWithMissingVoid.ts:42:23: An argument for 'y' was not provided.
+    
+    function b(x: number, y: string, z: void, what: number): void  {
+        
+    }
+    
+    b(4, "hello", void 0, 2); // ok
+    b(4, "hello"); // not ok
+    ~~~~~~~~~~~~~
+!!! error TS2554: Expected 4 arguments, but got 2.
+!!! related TS6210 tests/cases/conformance/expressions/functionCalls/callWithMissingVoid.ts:50:34: An argument for 'z' was not provided.
+    b(4, "hello", void 0); // not ok
+    ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2554: Expected 4 arguments, but got 3.
+!!! related TS6210 tests/cases/conformance/expressions/functionCalls/callWithMissingVoid.ts:50:43: An argument for 'what' was not provided.
+    b(4); // not ok
+    ~~~~
+!!! error TS2554: Expected 4 arguments, but got 1.
+!!! related TS6210 tests/cases/conformance/expressions/functionCalls/callWithMissingVoid.ts:50:23: An argument for 'y' was not provided.
+    
+    function c(x: number | void, y: void, z: void | string | number): void  {
+        
+    }
+    
+    c(3, void 0, void 0); // ok
+    c(3, void 0); // ok
+    c(3); // ok
+    c(); // ok
+    
+    
+    // Spread Parameters
+    
+    declare function call<TS extends unknown[]>(
+        handler: (...args: TS) => unknown,
+        ...args: TS): void;
+    
+    call((x: number, y: number) => x + y) // error
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2554: Expected 3 arguments, but got 1.
+!!! related TS6236 tests/cases/conformance/expressions/functionCalls/callWithMissingVoid.ts:73:5: Arguments for the rest parameter 'args' were not provided.
+    call((x: number, y: number) => x + y, 4, 2) // ok
+    
+    call((x: number, y: void) => x, 4, void 0) // ok
+    call((x: number, y: void) => x, 4) // ok
+    call((x: void, y: void) => 42) // ok
+    call((x: number | void, y: number | void) => 42) // ok
+    call((x: number | void, y: number | void) => 42, 4) // ok
+    call((x: number | void, y: number | void) => 42, 4, 2) // ok
+    

@@ -1,0 +1,188 @@
+=== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithConstructSignatures5.ts ===
+// checking subtype relations for function types as it relates to contextual signature instantiation
+// same as subtypingWithConstructSignatures2 just with an extra level of indirection in the inheritance chain
+
+class Base { foo: string; }
+>Base : Base
+>foo : string
+
+class Derived extends Base { bar: string; }
+>Derived : Derived
+>Base : Base
+>bar : string
+
+class Derived2 extends Derived { baz: string; }
+>Derived2 : Derived2
+>Derived : Derived
+>baz : string
+
+class OtherDerived extends Base { bing: string; }
+>OtherDerived : OtherDerived
+>Base : Base
+>bing : string
+
+interface A { // T
+    // M's
+    a: new (x: number) => number[];
+>a : new (x: number) => number[]
+>x : number
+
+    a2: new (x: number) => string[];
+>a2 : new (x: number) => string[]
+>x : number
+
+    a3: new (x: number) => void;
+>a3 : new (x: number) => void
+>x : number
+
+    a4: new (x: string, y: number) => string;
+>a4 : new (x: string, y: number) => string
+>x : string
+>y : number
+
+    a5: new (x: (arg: string) => number) => string;
+>a5 : new (x: (arg: string) => number) => string
+>x : (arg: string) => number
+>arg : string
+
+    a6: new (x: (arg: Base) => Derived) => Base;
+>a6 : new (x: (arg: Base) => Derived) => Base
+>x : (arg: Base) => Derived
+>arg : Base
+
+    a7: new (x: (arg: Base) => Derived) => (r: Base) => Derived;
+>a7 : new (x: (arg: Base) => Derived) => (r: Base) => Derived
+>x : (arg: Base) => Derived
+>arg : Base
+>r : Base
+
+    a8: new (x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived;
+>a8 : new (x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived
+>x : (arg: Base) => Derived
+>arg : Base
+>y : (arg2: Base) => Derived
+>arg2 : Base
+>r : Base
+
+    a9: new (x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived;
+>a9 : new (x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived
+>x : (arg: Base) => Derived
+>arg : Base
+>y : (arg2: Base) => Derived
+>arg2 : Base
+>r : Base
+
+    a10: new (...x: Derived[]) => Derived;
+>a10 : new (...x: Derived[]) => Derived
+>x : Derived[]
+
+    a11: new (x: { foo: string }, y: { foo: string; bar: string }) => Base;
+>a11 : new (x: {    foo: string;}, y: {    foo: string;    bar: string;}) => Base
+>x : { foo: string; }
+>foo : string
+>y : { foo: string; bar: string; }
+>foo : string
+>bar : string
+
+    a12: new (x: Array<Base>, y: Array<Derived2>) => Array<Derived>;
+>a12 : new (x: Array<Base>, y: Array<Derived2>) => Array<Derived>
+>x : Base[]
+>y : Derived2[]
+
+    a13: new (x: Array<Base>, y: Array<Derived>) => Array<Derived>;
+>a13 : new (x: Array<Base>, y: Array<Derived>) => Array<Derived>
+>x : Base[]
+>y : Derived[]
+
+    a14: new (x: { a: string; b: number }) => Object;
+>a14 : new (x: {    a: string;    b: number;}) => Object
+>x : { a: string; b: number; }
+>a : string
+>b : number
+}
+
+interface B extends A {
+    a: new <T>(x: T) => T[];
+>a : new <T>(x: T) => T[]
+>x : T
+}
+
+// S's
+interface I extends B {
+    // N's
+    a: new <T>(x: T) => T[]; // ok, instantiation of N is a subtype of M, T is number
+>a : new <T>(x: T) => T[]
+>x : T
+
+    a2: new <T>(x: T) => string[]; // ok
+>a2 : new <T>(x: T) => string[]
+>x : T
+
+    a3: new <T>(x: T) => T; // ok since Base returns void
+>a3 : new <T>(x: T) => T
+>x : T
+
+    a4: new <T, U>(x: T, y: U) => T; // ok, instantiation of N is a subtype of M, T is string, U is number
+>a4 : new <T, U>(x: T, y: U) => T
+>x : T
+>y : U
+
+    a5: new <T, U>(x: (arg: T) => U) => T; // ok, U is in a parameter position so inferences can be made
+>a5 : new <T, U>(x: (arg: T) => U) => T
+>x : (arg: T) => U
+>arg : T
+
+    a6: new <T extends Base, U extends Derived>(x: (arg: T) => U) => T; // ok, same as a5 but with object type hierarchy
+>a6 : new <T extends Base, U extends Derived>(x: (arg: T) => U) => T
+>x : (arg: T) => U
+>arg : T
+
+    a7: new <T extends Base, U extends Derived>(x: (arg: T) => U) => (r: T) => U; // ok
+>a7 : new <T extends Base, U extends Derived>(x: (arg: T) => U) => (r: T) => U
+>x : (arg: T) => U
+>arg : T
+>r : T
+
+    a8: new <T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: T) => U) => (r: T) => U; // ok
+>a8 : new <T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: T) => U) => (r: T) => U
+>x : (arg: T) => U
+>arg : T
+>y : (arg2: T) => U
+>arg2 : T
+>r : T
+
+    a9: new <T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: { foo: string; bing: number }) => U) => (r: T) => U; // ok, same as a8 with compatible object literal
+>a9 : new <T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: {    foo: string;    bing: number;}) => U) => (r: T) => U
+>x : (arg: T) => U
+>arg : T
+>y : (arg2: {    foo: string;    bing: number;}) => U
+>arg2 : { foo: string; bing: number; }
+>foo : string
+>bing : number
+>r : T
+
+    a10: new <T extends Derived>(...x: T[]) => T; // ok
+>a10 : new <T extends Derived>(...x: T[]) => T
+>x : T[]
+
+    a11: new <T extends Base>(x: T, y: T) => T; // ok
+>a11 : new <T extends Base>(x: T, y: T) => T
+>x : T
+>y : T
+
+    a12: new <T extends Array<Base>>(x: Array<Base>, y: T) => Array<Derived>; // ok, less specific parameter type
+>a12 : new <T extends Base[]>(x: Array<Base>, y: T) => Array<Derived>
+>x : Base[]
+>y : T
+
+    a13: new <T extends Array<Derived>>(x: Array<Base>, y: T) => T; // ok, T = Array<Derived>, satisfies constraint, contextual signature instantiation succeeds
+>a13 : new <T extends Derived[]>(x: Array<Base>, y: T) => T
+>x : Base[]
+>y : T
+
+    a14: new <T, U>(x: { a: T; b: U }) => T; // ok
+>a14 : new <T, U>(x: { a: T; b: U; }) => T
+>x : { a: T; b: U; }
+>a : T
+>b : U
+}

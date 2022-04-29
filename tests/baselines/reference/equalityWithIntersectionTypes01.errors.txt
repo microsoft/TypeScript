@@ -1,0 +1,36 @@
+tests/cases/conformance/types/typeRelationships/comparable/equalityWithIntersectionTypes01.ts(17,5): error TS2367: This condition will always return 'false' since the types 'I1 & I3' and 'I2' have no overlap.
+tests/cases/conformance/types/typeRelationships/comparable/equalityWithIntersectionTypes01.ts(17,16): error TS2367: This condition will always return 'false' since the types 'I2' and 'I1 & I3' have no overlap.
+tests/cases/conformance/types/typeRelationships/comparable/equalityWithIntersectionTypes01.ts(19,10): error TS2367: This condition will always return 'true' since the types 'I1 & I3' and 'I2' have no overlap.
+
+
+==== tests/cases/conformance/types/typeRelationships/comparable/equalityWithIntersectionTypes01.ts (3 errors) ====
+    interface I1 {
+        p1: number
+    }
+    
+    interface I2 extends I1 {
+        p2: number;
+    }
+    
+    interface I3 {
+        p3: number;
+    }
+    
+    var x = { p1: 10, p2: 20, p3: 30 };
+    var y: I1 & I3 = x;
+    var z: I2 = x;
+    
+    if (y === z || z === y) {
+        ~~~~~~~
+!!! error TS2367: This condition will always return 'false' since the types 'I1 & I3' and 'I2' have no overlap.
+                   ~~~~~~~
+!!! error TS2367: This condition will always return 'false' since the types 'I2' and 'I1 & I3' have no overlap.
+    }
+    else if (y !== z || z !== y) {
+             ~~~~~~~
+!!! error TS2367: This condition will always return 'true' since the types 'I1 & I3' and 'I2' have no overlap.
+    }
+    else if (y == z || z == y) {
+    }
+    else if (y != z || z != y) {
+    }

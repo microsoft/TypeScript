@@ -1,0 +1,17 @@
+=== tests/cases/conformance/async/es5/asyncQualifiedReturnType_es5.ts ===
+namespace X {
+>X : Symbol(X, Decl(asyncQualifiedReturnType_es5.ts, 0, 0))
+
+    export class MyPromise<T> extends Promise<T> {
+>MyPromise : Symbol(MyPromise, Decl(asyncQualifiedReturnType_es5.ts, 0, 13))
+>T : Symbol(T, Decl(asyncQualifiedReturnType_es5.ts, 1, 27))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>T : Symbol(T, Decl(asyncQualifiedReturnType_es5.ts, 1, 27))
+    }
+}
+
+async function f(): X.MyPromise<void> {
+>f : Symbol(f, Decl(asyncQualifiedReturnType_es5.ts, 3, 1))
+>X : Symbol(X, Decl(asyncQualifiedReturnType_es5.ts, 0, 0))
+>MyPromise : Symbol(X.MyPromise, Decl(asyncQualifiedReturnType_es5.ts, 0, 13))
+}

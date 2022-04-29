@@ -1,0 +1,15 @@
+tests/cases/compiler/typeParameterFixingWithContextSensitiveArguments3.ts(7,35): error TS2741: Property 'b' is missing in type 'A' but required in type 'B'.
+
+
+==== tests/cases/compiler/typeParameterFixingWithContextSensitiveArguments3.ts (1 errors) ====
+    function f<T, U>(t1: T, u1: U, pf1: (u2: U) => T, pf2: (t2: T) => U): [T, U] { return [t1, pf2(t1)]; }
+    interface A { a: A; }
+    interface B extends A { b: B; }
+    
+    var a: A, b: B;
+    
+    var d = f(a, b, u2 => u2.b, t2 => t2);
+                                      ~~
+!!! error TS2741: Property 'b' is missing in type 'A' but required in type 'B'.
+!!! related TS2728 tests/cases/compiler/typeParameterFixingWithContextSensitiveArguments3.ts:3:25: 'b' is declared here.
+!!! related TS6502 tests/cases/compiler/typeParameterFixingWithContextSensitiveArguments3.ts:1:56: The expected type comes from the return type of this signature.

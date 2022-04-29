@@ -1,0 +1,62 @@
+=== tests/cases/compiler/staticAsIdentifier.ts ===
+class C1 {
+>C1 : Symbol(C1, Decl(staticAsIdentifier.ts, 0, 0))
+
+    static static
+>static : Symbol(C1.static, Decl(staticAsIdentifier.ts, 0, 10))
+
+    [x: string]: string;
+>x : Symbol(x, Decl(staticAsIdentifier.ts, 2, 5))
+}
+
+class C2 {
+>C2 : Symbol(C2, Decl(staticAsIdentifier.ts, 3, 1))
+
+    static static
+>static : Symbol(C2.static, Decl(staticAsIdentifier.ts, 5, 10))
+
+    m() {}
+>m : Symbol(C2.m, Decl(staticAsIdentifier.ts, 6, 17))
+}
+
+class C3 {
+>C3 : Symbol(C3, Decl(staticAsIdentifier.ts, 8, 1))
+
+    static static p: string;
+>static : Symbol(C3.static, Decl(staticAsIdentifier.ts, 10, 10))
+>p : Symbol(C3.p, Decl(staticAsIdentifier.ts, 11, 17))
+}
+
+class C4 {
+>C4 : Symbol(C4, Decl(staticAsIdentifier.ts, 12, 1))
+
+    static static foo() {}
+>static : Symbol(C4.static, Decl(staticAsIdentifier.ts, 14, 10))
+>foo : Symbol(C4.foo, Decl(staticAsIdentifier.ts, 15, 17))
+}
+
+class C5 {
+>C5 : Symbol(C5, Decl(staticAsIdentifier.ts, 16, 1))
+
+    static static
+>static : Symbol(C5.static, Decl(staticAsIdentifier.ts, 18, 10))
+}
+
+class C6 {
+>C6 : Symbol(C6, Decl(staticAsIdentifier.ts, 20, 1))
+
+    static 
+    static
+>static : Symbol(C6.static, Decl(staticAsIdentifier.ts, 22, 10))
+}
+
+class C7 extends C6 {
+>C7 : Symbol(C7, Decl(staticAsIdentifier.ts, 25, 1))
+>C6 : Symbol(C6, Decl(staticAsIdentifier.ts, 20, 1))
+
+    static override static
+>static : Symbol(C7.static, Decl(staticAsIdentifier.ts, 27, 21))
+}
+
+
+

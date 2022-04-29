@@ -1,0 +1,115 @@
+=== tests/cases/conformance/parser/ecmascript2018/forAwait/topLevelWithDeclIsError.ts ===
+for await (const x of y) {
+>x : Symbol(x, Decl(topLevelWithDeclIsError.ts, 0, 16))
+}
+=== tests/cases/conformance/parser/ecmascript2018/forAwait/topLevelWithExprIsError.ts ===
+for await (x of y) {
+No type information for this code.}
+No type information for this code.=== tests/cases/conformance/parser/ecmascript2018/forAwait/forAwaitInWithDeclIsError.ts ===
+for await (const x in y) {
+>x : Symbol(x, Decl(forAwaitInWithDeclIsError.ts, 0, 16))
+}
+=== tests/cases/conformance/parser/ecmascript2018/forAwait/forAwaitInWithExprIsError.ts ===
+for await (x in y) {
+No type information for this code.}
+No type information for this code.=== tests/cases/conformance/parser/ecmascript2018/forAwait/inFunctionDeclWithDeclIsError.ts ===
+function f5() {
+>f5 : Symbol(f5, Decl(inFunctionDeclWithDeclIsError.ts, 0, 0))
+
+    let y: any;
+>y : Symbol(y, Decl(inFunctionDeclWithDeclIsError.ts, 1, 7))
+
+    for await (const x of y) {
+>x : Symbol(x, Decl(inFunctionDeclWithDeclIsError.ts, 2, 20))
+>y : Symbol(y, Decl(inFunctionDeclWithDeclIsError.ts, 1, 7))
+    }
+}
+=== tests/cases/conformance/parser/ecmascript2018/forAwait/inFunctionDeclWithExprIsError.ts ===
+function f6() {
+>f6 : Symbol(f6, Decl(inFunctionDeclWithExprIsError.ts, 0, 0))
+
+    let x: any, y: any;
+>x : Symbol(x, Decl(inFunctionDeclWithExprIsError.ts, 1, 7))
+>y : Symbol(y, Decl(inFunctionDeclWithExprIsError.ts, 1, 15))
+
+    for await (x of y) {
+>x : Symbol(x, Decl(inFunctionDeclWithExprIsError.ts, 1, 7))
+>y : Symbol(y, Decl(inFunctionDeclWithExprIsError.ts, 1, 15))
+    }
+}
+=== tests/cases/conformance/parser/ecmascript2018/forAwait/inAsyncFunctionWithDeclIsOk.ts ===
+async function f7() {
+>f7 : Symbol(f7, Decl(inAsyncFunctionWithDeclIsOk.ts, 0, 0))
+
+    let y: any;
+>y : Symbol(y, Decl(inAsyncFunctionWithDeclIsOk.ts, 1, 7))
+
+    for await (const x of y) {
+>x : Symbol(x, Decl(inAsyncFunctionWithDeclIsOk.ts, 2, 20))
+>y : Symbol(y, Decl(inAsyncFunctionWithDeclIsOk.ts, 1, 7))
+    }
+}
+=== tests/cases/conformance/parser/ecmascript2018/forAwait/inAsyncFunctionWithExprIsOk.ts ===
+async function f8() {
+>f8 : Symbol(f8, Decl(inAsyncFunctionWithExprIsOk.ts, 0, 0))
+
+    let x: any, y: any;
+>x : Symbol(x, Decl(inAsyncFunctionWithExprIsOk.ts, 1, 7))
+>y : Symbol(y, Decl(inAsyncFunctionWithExprIsOk.ts, 1, 15))
+
+    for await (x of y) {
+>x : Symbol(x, Decl(inAsyncFunctionWithExprIsOk.ts, 1, 7))
+>y : Symbol(y, Decl(inAsyncFunctionWithExprIsOk.ts, 1, 15))
+    }
+}
+=== tests/cases/conformance/parser/ecmascript2018/forAwait/inAsyncGeneratorWithDeclIsOk.ts ===
+async function* f9() {
+>f9 : Symbol(f9, Decl(inAsyncGeneratorWithDeclIsOk.ts, 0, 0))
+
+    let y: any;
+>y : Symbol(y, Decl(inAsyncGeneratorWithDeclIsOk.ts, 1, 7))
+
+    for await (const x of y) {
+>x : Symbol(x, Decl(inAsyncGeneratorWithDeclIsOk.ts, 2, 20))
+>y : Symbol(y, Decl(inAsyncGeneratorWithDeclIsOk.ts, 1, 7))
+    }
+}
+=== tests/cases/conformance/parser/ecmascript2018/forAwait/inAsyncGeneratorWithExpressionIsOk.ts ===
+async function* f10() {
+>f10 : Symbol(f10, Decl(inAsyncGeneratorWithExpressionIsOk.ts, 0, 0))
+
+    let x: any, y: any;
+>x : Symbol(x, Decl(inAsyncGeneratorWithExpressionIsOk.ts, 1, 7))
+>y : Symbol(y, Decl(inAsyncGeneratorWithExpressionIsOk.ts, 1, 15))
+
+    for await (x of y) {
+>x : Symbol(x, Decl(inAsyncGeneratorWithExpressionIsOk.ts, 1, 7))
+>y : Symbol(y, Decl(inAsyncGeneratorWithExpressionIsOk.ts, 1, 15))
+    }
+}
+=== tests/cases/conformance/parser/ecmascript2018/forAwait/inGeneratorWithDeclIsError.ts ===
+function* f11() {
+>f11 : Symbol(f11, Decl(inGeneratorWithDeclIsError.ts, 0, 0))
+
+    let y: any;
+>y : Symbol(y, Decl(inGeneratorWithDeclIsError.ts, 1, 7))
+
+    for await (const x of y) {
+>x : Symbol(x, Decl(inGeneratorWithDeclIsError.ts, 2, 20))
+>y : Symbol(y, Decl(inGeneratorWithDeclIsError.ts, 1, 7))
+    }
+}
+=== tests/cases/conformance/parser/ecmascript2018/forAwait/inGeneratorWithExprIsError.ts ===
+function* f12() {
+>f12 : Symbol(f12, Decl(inGeneratorWithExprIsError.ts, 0, 0))
+
+    let x: any, y: any;
+>x : Symbol(x, Decl(inGeneratorWithExprIsError.ts, 1, 7))
+>y : Symbol(y, Decl(inGeneratorWithExprIsError.ts, 1, 15))
+
+    for await (x of y) {
+>x : Symbol(x, Decl(inGeneratorWithExprIsError.ts, 1, 7))
+>y : Symbol(y, Decl(inGeneratorWithExprIsError.ts, 1, 15))
+    }
+}
+

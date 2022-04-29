@@ -1,0 +1,59 @@
+tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithUndefinedValueAndInvalidOperands.ts(11,10): error TS2365: Operator '+' cannot be applied to types 'undefined' and 'boolean'.
+tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithUndefinedValueAndInvalidOperands.ts(12,10): error TS2365: Operator '+' cannot be applied to types 'undefined' and 'Object'.
+tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithUndefinedValueAndInvalidOperands.ts(13,10): error TS2365: Operator '+' cannot be applied to types 'undefined' and 'void'.
+tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithUndefinedValueAndInvalidOperands.ts(14,10): error TS2365: Operator '+' cannot be applied to types 'boolean' and 'undefined'.
+tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithUndefinedValueAndInvalidOperands.ts(15,10): error TS2365: Operator '+' cannot be applied to types 'Object' and 'undefined'.
+tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithUndefinedValueAndInvalidOperands.ts(16,10): error TS2365: Operator '+' cannot be applied to types 'undefined' and 'void'.
+tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithUndefinedValueAndInvalidOperands.ts(19,10): error TS2365: Operator '+' cannot be applied to types 'undefined' and 'Number'.
+tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithUndefinedValueAndInvalidOperands.ts(20,10): error TS2365: Operator '+' cannot be applied to types 'undefined' and 'boolean'.
+tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithUndefinedValueAndInvalidOperands.ts(21,10): error TS2365: Operator '+' cannot be applied to types 'undefined' and '{ a: string; }'.
+tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithUndefinedValueAndInvalidOperands.ts(22,11): error TS2365: Operator '+' cannot be applied to types 'undefined' and 'void'.
+tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithUndefinedValueAndInvalidOperands.ts(23,11): error TS2365: Operator '+' cannot be applied to types 'undefined' and '() => void'.
+
+
+==== tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithUndefinedValueAndInvalidOperands.ts (11 errors) ====
+    // If one operand is the null or undefined value, it is treated as having the type of the other operand.
+    
+    function foo(): void { return undefined }
+    
+    var a: boolean;
+    var b: Object;
+    var c: void;
+    var d: Number;
+    
+    // undefined + boolean/Object
+    var r1 = undefined + a;
+             ~~~~~~~~~~~~~
+!!! error TS2365: Operator '+' cannot be applied to types 'undefined' and 'boolean'.
+    var r2 = undefined + b;
+             ~~~~~~~~~~~~~
+!!! error TS2365: Operator '+' cannot be applied to types 'undefined' and 'Object'.
+    var r3 = undefined + c;
+             ~~~~~~~~~~~~~
+!!! error TS2365: Operator '+' cannot be applied to types 'undefined' and 'void'.
+    var r4 = a + undefined;
+             ~~~~~~~~~~~~~
+!!! error TS2365: Operator '+' cannot be applied to types 'boolean' and 'undefined'.
+    var r5 = b + undefined;
+             ~~~~~~~~~~~~~
+!!! error TS2365: Operator '+' cannot be applied to types 'Object' and 'undefined'.
+    var r6 = undefined + c;
+             ~~~~~~~~~~~~~
+!!! error TS2365: Operator '+' cannot be applied to types 'undefined' and 'void'.
+    
+    // other cases
+    var r7 = undefined + d;
+             ~~~~~~~~~~~~~
+!!! error TS2365: Operator '+' cannot be applied to types 'undefined' and 'Number'.
+    var r8 = undefined + true;
+             ~~~~~~~~~~~~~~~~
+!!! error TS2365: Operator '+' cannot be applied to types 'undefined' and 'boolean'.
+    var r9 = undefined + { a: '' };
+             ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2365: Operator '+' cannot be applied to types 'undefined' and '{ a: string; }'.
+    var r10 = undefined + foo();
+              ~~~~~~~~~~~~~~~~~
+!!! error TS2365: Operator '+' cannot be applied to types 'undefined' and 'void'.
+    var r11 = undefined + (() => { });
+              ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2365: Operator '+' cannot be applied to types 'undefined' and '() => void'.

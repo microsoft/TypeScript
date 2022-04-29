@@ -1,0 +1,35 @@
+=== tests/cases/compiler/f1.ts ===
+export class A {};
+>A : Symbol(A, Decl(f1.ts, 0, 0))
+
+=== tests/cases/compiler/f2.ts ===
+// change the shape of Array<T>
+import {A} from "./f1";
+>A : Symbol(A, Decl(f2.ts, 1, 8))
+
+declare global {
+>global : Symbol(global, Decl(f2.ts, 1, 23))
+
+    interface Array<T> {
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(f2.ts, 3, 16))
+>T : Symbol(T, Decl(lib.es5.d.ts, --, --), Decl(f2.ts, 4, 20))
+
+        getCountAsString(): string;
+>getCountAsString : Symbol(Array.getCountAsString, Decl(f2.ts, 4, 24))
+    }
+}
+
+=== tests/cases/compiler/f3.ts ===
+import "./f2";
+
+let x = [1];
+>x : Symbol(x, Decl(f3.ts, 2, 3))
+
+let y = x.getCountAsString().toLowerCase();
+>y : Symbol(y, Decl(f3.ts, 3, 3))
+>x.getCountAsString().toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
+>x.getCountAsString : Symbol(Array.getCountAsString, Decl(f2.ts, 4, 24))
+>x : Symbol(x, Decl(f3.ts, 2, 3))
+>getCountAsString : Symbol(Array.getCountAsString, Decl(f2.ts, 4, 24))
+>toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
+

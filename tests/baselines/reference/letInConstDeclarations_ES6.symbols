@@ -1,0 +1,11 @@
+=== tests/cases/compiler/letInConstDeclarations_ES6.ts ===
+// All use of let in const declaration should be an error
+const x = 50, let = 5;
+>x : Symbol(x, Decl(letInConstDeclarations_ES6.ts, 1, 5))
+>let : Symbol(let, Decl(letInConstDeclarations_ES6.ts, 1, 13))
+
+{
+    const x = 10, let = 20;
+>x : Symbol(x, Decl(letInConstDeclarations_ES6.ts, 4, 9))
+>let : Symbol(let, Decl(letInConstDeclarations_ES6.ts, 4, 17))
+}

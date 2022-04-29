@@ -1,0 +1,12 @@
+=== tests/cases/compiler/genericArrayAssignment1.ts ===
+var s: string[];
+>s : string[]
+
+var n: number[];
+>n : number[]
+
+s = n;
+>s = n : number[]
+>s : string[]
+>n : number[]
+

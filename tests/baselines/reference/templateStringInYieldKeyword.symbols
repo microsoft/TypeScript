@@ -1,0 +1,10 @@
+=== tests/cases/conformance/es6/templates/templateStringInYieldKeyword.ts ===
+function* gen() {
+>gen : Symbol(gen, Decl(templateStringInYieldKeyword.ts, 0, 0))
+
+    // Once this is supported, the inner expression does not need to be parenthesized.
+    var x = yield `abc${ x }def`;
+>x : Symbol(x, Decl(templateStringInYieldKeyword.ts, 2, 7))
+>x : Symbol(x, Decl(templateStringInYieldKeyword.ts, 2, 7))
+}
+

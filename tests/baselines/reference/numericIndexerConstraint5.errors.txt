@@ -1,0 +1,12 @@
+tests/cases/compiler/numericIndexerConstraint5.ts(2,5): error TS2322: Type '{ name: string; 0: Date; }' is not assignable to type '{ [name: number]: string; }'.
+  Property '0' is incompatible with index signature.
+    Type 'Date' is not assignable to type 'string'.
+
+
+==== tests/cases/compiler/numericIndexerConstraint5.ts (1 errors) ====
+    var x = { name: "x", 0: new Date() };
+    var z: { [name: number]: string } = x;
+        ~
+!!! error TS2322: Type '{ name: string; 0: Date; }' is not assignable to type '{ [name: number]: string; }'.
+!!! error TS2322:   Property '0' is incompatible with index signature.
+!!! error TS2322:     Type 'Date' is not assignable to type 'string'.

@@ -1,0 +1,31 @@
+=== tests/cases/conformance/dynamicImport/0.ts ===
+export function foo() { return "foo"; }
+>foo : Symbol(foo, Decl(0.ts, 0, 0))
+
+=== tests/cases/conformance/dynamicImport/1.ts ===
+declare function getPath(): string;
+>getPath : Symbol(getPath, Decl(1.ts, 0, 0))
+
+import * as Zero from "./0";
+>Zero : Symbol(Zero, Decl(1.ts, 1, 6))
+
+import("./0");
+>"./0" : Symbol(Zero, Decl(0.ts, 0, 0))
+
+export var p0: Promise<typeof Zero> = import(getPath());
+>p0 : Symbol(p0, Decl(1.ts, 4, 10))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>Zero : Symbol(Zero, Decl(1.ts, 1, 6))
+>getPath : Symbol(getPath, Decl(1.ts, 0, 0))
+
+export var p1: Promise<typeof Zero> = import("./0");
+>p1 : Symbol(p1, Decl(1.ts, 5, 10))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>Zero : Symbol(Zero, Decl(1.ts, 1, 6))
+>"./0" : Symbol(Zero, Decl(0.ts, 0, 0))
+
+export var p2: Promise<any> = import("./0");
+>p2 : Symbol(p2, Decl(1.ts, 6, 10))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>"./0" : Symbol(Zero, Decl(0.ts, 0, 0))
+

@@ -1,0 +1,19 @@
+=== tests/cases/conformance/classes/propertyMemberDeclarations/propertyOverridesAccessors4.ts ===
+declare class Animal {
+>Animal : Symbol(Animal, Decl(propertyOverridesAccessors4.ts, 0, 0))
+
+    get sound(): string
+>sound : Symbol(Animal.sound, Decl(propertyOverridesAccessors4.ts, 0, 22), Decl(propertyOverridesAccessors4.ts, 1, 23))
+
+    set sound(val: string)
+>sound : Symbol(Animal.sound, Decl(propertyOverridesAccessors4.ts, 0, 22), Decl(propertyOverridesAccessors4.ts, 1, 23))
+>val : Symbol(val, Decl(propertyOverridesAccessors4.ts, 2, 14))
+}
+class Lion extends Animal {
+>Lion : Symbol(Lion, Decl(propertyOverridesAccessors4.ts, 3, 1))
+>Animal : Symbol(Animal, Decl(propertyOverridesAccessors4.ts, 0, 0))
+
+    sound = 'RAWR!' // error here
+>sound : Symbol(Lion.sound, Decl(propertyOverridesAccessors4.ts, 4, 27))
+}
+

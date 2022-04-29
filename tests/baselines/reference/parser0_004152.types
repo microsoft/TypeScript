@@ -1,0 +1,28 @@
+=== tests/cases/conformance/parser/ecmascript5/Fuzz/parser0_004152.ts ===
+export class Game {
+>Game : Game
+
+    private position = new DisplayPosition([), 3, 3, 3, 3, 3, 0, 3, 3, 3, 3, 3, 3, 0], NoMove, 0);
+>position : any
+>new DisplayPosition([) : any
+>DisplayPosition : any
+>[ : undefined[]
+>3 : any
+>3 : any
+>3 : any
+>3 : any
+>3 : any
+>0 : any
+>3 : any
+>3 : any
+>3 : any
+>3 : any
+>3 : any
+>3 : any
+>0 : any
+>NoMove : any
+>0 : any
+
+    private prevConfig: SeedCoords[][];
+>prevConfig : SeedCoords[][]
+}

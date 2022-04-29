@@ -1,0 +1,38 @@
+=== tests/cases/compiler/declFileGenericClassWithGenericExtendedClass.ts ===
+interface IFoo {
+>IFoo : Symbol(IFoo, Decl(declFileGenericClassWithGenericExtendedClass.ts, 0, 0))
+
+    baz: Baz;
+>baz : Symbol(IFoo.baz, Decl(declFileGenericClassWithGenericExtendedClass.ts, 0, 16))
+>Baz : Symbol(Baz, Decl(declFileGenericClassWithGenericExtendedClass.ts, 7, 1))
+}
+class Base<T> { }
+>Base : Symbol(Base, Decl(declFileGenericClassWithGenericExtendedClass.ts, 2, 1))
+>T : Symbol(T, Decl(declFileGenericClassWithGenericExtendedClass.ts, 3, 11))
+
+class Derived<T> extends Base<T> { }
+>Derived : Symbol(Derived, Decl(declFileGenericClassWithGenericExtendedClass.ts, 3, 17))
+>T : Symbol(T, Decl(declFileGenericClassWithGenericExtendedClass.ts, 4, 14))
+>Base : Symbol(Base, Decl(declFileGenericClassWithGenericExtendedClass.ts, 2, 1))
+>T : Symbol(T, Decl(declFileGenericClassWithGenericExtendedClass.ts, 4, 14))
+
+interface IBar<T> {
+>IBar : Symbol(IBar, Decl(declFileGenericClassWithGenericExtendedClass.ts, 4, 36))
+>T : Symbol(T, Decl(declFileGenericClassWithGenericExtendedClass.ts, 5, 15))
+
+    derived: Derived<T>;
+>derived : Symbol(IBar.derived, Decl(declFileGenericClassWithGenericExtendedClass.ts, 5, 19))
+>Derived : Symbol(Derived, Decl(declFileGenericClassWithGenericExtendedClass.ts, 3, 17))
+>T : Symbol(T, Decl(declFileGenericClassWithGenericExtendedClass.ts, 5, 15))
+}
+class Baz implements IBar<Baz> {
+>Baz : Symbol(Baz, Decl(declFileGenericClassWithGenericExtendedClass.ts, 7, 1))
+>IBar : Symbol(IBar, Decl(declFileGenericClassWithGenericExtendedClass.ts, 4, 36))
+>Baz : Symbol(Baz, Decl(declFileGenericClassWithGenericExtendedClass.ts, 7, 1))
+
+    derived: Derived<Baz>;
+>derived : Symbol(Baz.derived, Decl(declFileGenericClassWithGenericExtendedClass.ts, 8, 32))
+>Derived : Symbol(Derived, Decl(declFileGenericClassWithGenericExtendedClass.ts, 3, 17))
+>Baz : Symbol(Baz, Decl(declFileGenericClassWithGenericExtendedClass.ts, 7, 1))
+}
+

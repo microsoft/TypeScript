@@ -1,0 +1,321 @@
+=== tests/cases/conformance/salsa/a.ts ===
+import b = require("./b.js");
+>b : Symbol(b, Decl(a.ts, 0, 0))
+
+b.func1;
+>b.func1 : Symbol(b.func1, Decl(b.js, 0, 27))
+>b : Symbol(b, Decl(a.ts, 0, 0))
+>func1 : Symbol(b.func1, Decl(b.js, 0, 27))
+
+b.func2;
+>b.func2 : Symbol(b.func2, Decl(b.js, 1, 37))
+>b : Symbol(b, Decl(a.ts, 0, 0))
+>func2 : Symbol(b.func2, Decl(b.js, 1, 37))
+
+b.func3;
+>b.func3 : Symbol(b.func3, Decl(b.js, 4, 40))
+>b : Symbol(b, Decl(a.ts, 0, 0))
+>func3 : Symbol(b.func3, Decl(b.js, 4, 40))
+
+b.func4;
+>b.func4 : Symbol(b.func4, Decl(b.js, 5, 43))
+>b : Symbol(b, Decl(a.ts, 0, 0))
+>func4 : Symbol(b.func4, Decl(b.js, 5, 43))
+
+b.func5;
+>b.func5 : Symbol(b.func5, Decl(b.js, 8, 57))
+>b : Symbol(b, Decl(a.ts, 0, 0))
+>func5 : Symbol(b.func5, Decl(b.js, 8, 57))
+
+b.func6;
+>b.func6 : Symbol(b.func6, Decl(b.js, 11, 57))
+>b : Symbol(b, Decl(a.ts, 0, 0))
+>func6 : Symbol(b.func6, Decl(b.js, 11, 57))
+
+b.func7;
+>b.func7 : Symbol(b.func7, Decl(b.js, 15, 60))
+>b : Symbol(b, Decl(a.ts, 0, 0))
+>func7 : Symbol(b.func7, Decl(b.js, 15, 60))
+
+b.func8;
+>b.func8 : Symbol(b.func8, Decl(b.js, 18, 67))
+>b : Symbol(b, Decl(a.ts, 0, 0))
+>func8 : Symbol(b.func8, Decl(b.js, 18, 67))
+
+b.func9;
+>b.func9 : Symbol(b.func9, Decl(b.js, 21, 62))
+>b : Symbol(b, Decl(a.ts, 0, 0))
+>func9 : Symbol(b.func9, Decl(b.js, 21, 62))
+
+b.func10;
+>b.func10 : Symbol(b.func10, Decl(b.js, 24, 62))
+>b : Symbol(b, Decl(a.ts, 0, 0))
+>func10 : Symbol(b.func10, Decl(b.js, 24, 62))
+
+b.func11;
+>b.func11 : Symbol(b.func11, Decl(b.js, 27, 50), Decl(b.js, 31, 50))
+>b : Symbol(b, Decl(a.ts, 0, 0))
+>func11 : Symbol(b.func11, Decl(b.js, 27, 50), Decl(b.js, 31, 50))
+
+b.func12;
+>b.func12 : Symbol(b.func12, Decl(b.js, 28, 33), Decl(b.js, 32, 33))
+>b : Symbol(b, Decl(a.ts, 0, 0))
+>func12 : Symbol(b.func12, Decl(b.js, 28, 33), Decl(b.js, 32, 33))
+
+b.func13;
+>b.func13 : Symbol(b.func13, Decl(b.js, 35, 30))
+>b : Symbol(b, Decl(a.ts, 0, 0))
+>func13 : Symbol(b.func13, Decl(b.js, 35, 30))
+
+b.func14;
+>b.func14 : Symbol(b.func14, Decl(b.js, 36, 33))
+>b : Symbol(b, Decl(a.ts, 0, 0))
+>func14 : Symbol(b.func14, Decl(b.js, 36, 33))
+
+b.func15;
+>b.func15 : Symbol(b.func15, Decl(b.js, 39, 30))
+>b : Symbol(b, Decl(a.ts, 0, 0))
+>func15 : Symbol(b.func15, Decl(b.js, 39, 30))
+
+b.func16;
+>b.func16 : Symbol(b.func16, Decl(b.js, 40, 33))
+>b : Symbol(b, Decl(a.ts, 0, 0))
+>func16 : Symbol(b.func16, Decl(b.js, 40, 33))
+
+b.func17;
+>b.func17 : Symbol(b.func17, Decl(b.js, 43, 30))
+>b : Symbol(b, Decl(a.ts, 0, 0))
+>func17 : Symbol(b.func17, Decl(b.js, 43, 30))
+
+b.func18;
+>b.func18 : Symbol(b.func18, Decl(b.js, 44, 33))
+>b : Symbol(b, Decl(a.ts, 0, 0))
+>func18 : Symbol(b.func18, Decl(b.js, 44, 33))
+
+b.func19;
+>b.func19 : Symbol(b.func19, Decl(b.js, 47, 20))
+>b : Symbol(b, Decl(a.ts, 0, 0))
+>func19 : Symbol(b.func19, Decl(b.js, 47, 20))
+
+b.func20;
+>b.func20 : Symbol(b.func20, Decl(b.js, 48, 33))
+>b : Symbol(b, Decl(a.ts, 0, 0))
+>func20 : Symbol(b.func20, Decl(b.js, 48, 33))
+
+
+=== tests/cases/conformance/salsa/b.js ===
+var exportsAlias = exports;
+>exportsAlias : Symbol(exportsAlias, Decl(b.js, 0, 3))
+>exports : Symbol("tests/cases/conformance/salsa/b", Decl(b.js, 0, 0))
+
+exportsAlias.func1 = function () { };
+>exportsAlias.func1 : Symbol(func1, Decl(b.js, 0, 27))
+>exportsAlias : Symbol(exportsAlias, Decl(b.js, 0, 3))
+>func1 : Symbol(func1, Decl(b.js, 0, 27))
+
+exports.func2 = function () { };
+>exports.func2 : Symbol(func2, Decl(b.js, 1, 37))
+>exports : Symbol(func2, Decl(b.js, 1, 37))
+>func2 : Symbol(func2, Decl(b.js, 1, 37))
+
+var moduleExportsAlias = module.exports;
+>moduleExportsAlias : Symbol(moduleExportsAlias, Decl(b.js, 4, 3))
+>module.exports : Symbol(module.exports, Decl(b.js, 0, 0))
+>module : Symbol(module, Decl(b.js, 4, 24))
+>exports : Symbol(module.exports, Decl(b.js, 0, 0))
+
+moduleExportsAlias.func3 = function () { };
+>moduleExportsAlias.func3 : Symbol(func3, Decl(b.js, 4, 40))
+>moduleExportsAlias : Symbol(moduleExportsAlias, Decl(b.js, 4, 3))
+>func3 : Symbol(func3, Decl(b.js, 4, 40))
+
+module.exports.func4 = function () { };
+>module.exports.func4 : Symbol(func4, Decl(b.js, 5, 43))
+>module.exports : Symbol(func4, Decl(b.js, 5, 43))
+>module : Symbol(module, Decl(b.js, 4, 24))
+>exports : Symbol(module.exports, Decl(b.js, 0, 0))
+>func4 : Symbol(func4, Decl(b.js, 5, 43))
+
+var multipleDeclarationAlias1 = exports = module.exports;
+>multipleDeclarationAlias1 : Symbol(multipleDeclarationAlias1, Decl(b.js, 8, 3))
+>exports : Symbol("tests/cases/conformance/salsa/b", Decl(b.js, 0, 0))
+>module.exports : Symbol(module.exports, Decl(b.js, 0, 0))
+>module : Symbol(module, Decl(b.js, 4, 24))
+>exports : Symbol(module.exports, Decl(b.js, 0, 0))
+
+multipleDeclarationAlias1.func5 = function () { };
+>multipleDeclarationAlias1.func5 : Symbol(func5, Decl(b.js, 8, 57))
+>multipleDeclarationAlias1 : Symbol(multipleDeclarationAlias1, Decl(b.js, 8, 3))
+>func5 : Symbol(func5, Decl(b.js, 8, 57))
+
+var multipleDeclarationAlias2 = module.exports = exports;
+>multipleDeclarationAlias2 : Symbol(multipleDeclarationAlias2, Decl(b.js, 11, 3))
+>module.exports : Symbol(module.exports, Decl(b.js, 0, 0))
+>module : Symbol(module, Decl(b.js, 4, 24))
+>exports : Symbol(module.exports, Decl(b.js, 0, 0))
+>exports : Symbol("tests/cases/conformance/salsa/b", Decl(b.js, 0, 0))
+
+multipleDeclarationAlias2.func6 = function () { };
+>multipleDeclarationAlias2.func6 : Symbol(func6, Decl(b.js, 11, 57))
+>multipleDeclarationAlias2 : Symbol(multipleDeclarationAlias2, Decl(b.js, 11, 3))
+>func6 : Symbol(func6, Decl(b.js, 11, 57))
+
+var someOtherVariable;
+>someOtherVariable : Symbol(someOtherVariable, Decl(b.js, 14, 3))
+
+var multipleDeclarationAlias3 = someOtherVariable = exports;
+>multipleDeclarationAlias3 : Symbol(multipleDeclarationAlias3, Decl(b.js, 15, 3))
+>someOtherVariable : Symbol(someOtherVariable, Decl(b.js, 14, 3))
+>exports : Symbol("tests/cases/conformance/salsa/b", Decl(b.js, 0, 0))
+
+multipleDeclarationAlias3.func7 = function () { };
+>multipleDeclarationAlias3.func7 : Symbol(func7, Decl(b.js, 15, 60))
+>multipleDeclarationAlias3 : Symbol(multipleDeclarationAlias3, Decl(b.js, 15, 3))
+>func7 : Symbol(func7, Decl(b.js, 15, 60))
+
+var multipleDeclarationAlias4 = someOtherVariable = module.exports;
+>multipleDeclarationAlias4 : Symbol(multipleDeclarationAlias4, Decl(b.js, 18, 3))
+>someOtherVariable : Symbol(someOtherVariable, Decl(b.js, 14, 3))
+>module.exports : Symbol(module.exports, Decl(b.js, 0, 0))
+>module : Symbol(module, Decl(b.js, 4, 24))
+>exports : Symbol(module.exports, Decl(b.js, 0, 0))
+
+multipleDeclarationAlias4.func8 = function () { };
+>multipleDeclarationAlias4.func8 : Symbol(func8, Decl(b.js, 18, 67))
+>multipleDeclarationAlias4 : Symbol(multipleDeclarationAlias4, Decl(b.js, 18, 3))
+>func8 : Symbol(func8, Decl(b.js, 18, 67))
+
+var multipleDeclarationAlias5 = module.exports = exports = {};
+>multipleDeclarationAlias5 : Symbol(multipleDeclarationAlias5, Decl(b.js, 21, 3))
+>module.exports : Symbol(module.exports, Decl(b.js, 0, 0))
+>module : Symbol(module, Decl(b.js, 4, 24))
+>exports : Symbol(module.exports, Decl(b.js, 0, 0))
+>exports : Symbol("tests/cases/conformance/salsa/b", Decl(b.js, 0, 0))
+
+multipleDeclarationAlias5.func9 = function () { };
+>multipleDeclarationAlias5.func9 : Symbol(func9, Decl(b.js, 21, 62))
+>multipleDeclarationAlias5 : Symbol(multipleDeclarationAlias5, Decl(b.js, 21, 3))
+>func9 : Symbol(func9, Decl(b.js, 21, 62))
+
+var multipleDeclarationAlias6 = exports = module.exports = {};
+>multipleDeclarationAlias6 : Symbol(multipleDeclarationAlias6, Decl(b.js, 24, 3))
+>exports : Symbol("tests/cases/conformance/salsa/b", Decl(b.js, 0, 0))
+>module.exports : Symbol(module.exports, Decl(b.js, 0, 0))
+>module : Symbol(module, Decl(b.js, 4, 24))
+>exports : Symbol(module.exports, Decl(b.js, 0, 0))
+
+multipleDeclarationAlias6.func10 = function () { };
+>multipleDeclarationAlias6.func10 : Symbol(func10, Decl(b.js, 24, 62))
+>multipleDeclarationAlias6 : Symbol(multipleDeclarationAlias6, Decl(b.js, 24, 3))
+>func10 : Symbol(func10, Decl(b.js, 24, 62))
+
+exports = module.exports = someOtherVariable = {};
+>exports : Symbol("tests/cases/conformance/salsa/b", Decl(b.js, 0, 0))
+>module.exports : Symbol(module.exports, Decl(b.js, 0, 0))
+>module : Symbol(module, Decl(b.js, 4, 24))
+>exports : Symbol(module.exports, Decl(b.js, 0, 0))
+>someOtherVariable : Symbol(someOtherVariable, Decl(b.js, 14, 3))
+
+exports.func11 = function () { };
+>exports.func11 : Symbol(func11, Decl(b.js, 27, 50), Decl(b.js, 31, 50))
+>exports : Symbol(func11, Decl(b.js, 27, 50), Decl(b.js, 31, 50))
+>func11 : Symbol(func11, Decl(b.js, 27, 50), Decl(b.js, 31, 50))
+
+module.exports.func12 = function () { };
+>module.exports.func12 : Symbol(func12, Decl(b.js, 28, 33), Decl(b.js, 32, 33))
+>module.exports : Symbol(func12, Decl(b.js, 28, 33), Decl(b.js, 32, 33))
+>module : Symbol(module, Decl(b.js, 4, 24))
+>exports : Symbol(module.exports, Decl(b.js, 0, 0))
+>func12 : Symbol(func12, Decl(b.js, 28, 33), Decl(b.js, 32, 33))
+
+exports = module.exports = someOtherVariable = {};
+>exports : Symbol("tests/cases/conformance/salsa/b", Decl(b.js, 0, 0))
+>module.exports : Symbol(module.exports, Decl(b.js, 0, 0))
+>module : Symbol(module, Decl(b.js, 4, 24))
+>exports : Symbol(module.exports, Decl(b.js, 0, 0))
+>someOtherVariable : Symbol(someOtherVariable, Decl(b.js, 14, 3))
+
+exports.func11 = function () { };
+>exports.func11 : Symbol(func11, Decl(b.js, 27, 50), Decl(b.js, 31, 50))
+>exports : Symbol(func11, Decl(b.js, 27, 50), Decl(b.js, 31, 50))
+>func11 : Symbol(func11, Decl(b.js, 27, 50), Decl(b.js, 31, 50))
+
+module.exports.func12 = function () { };
+>module.exports.func12 : Symbol(func12, Decl(b.js, 28, 33), Decl(b.js, 32, 33))
+>module.exports : Symbol(func12, Decl(b.js, 28, 33), Decl(b.js, 32, 33))
+>module : Symbol(module, Decl(b.js, 4, 24))
+>exports : Symbol(module.exports, Decl(b.js, 0, 0))
+>func12 : Symbol(func12, Decl(b.js, 28, 33), Decl(b.js, 32, 33))
+
+exports = module.exports = {};
+>exports : Symbol("tests/cases/conformance/salsa/b", Decl(b.js, 0, 0))
+>module.exports : Symbol(module.exports, Decl(b.js, 0, 0))
+>module : Symbol(module, Decl(b.js, 4, 24))
+>exports : Symbol(module.exports, Decl(b.js, 0, 0))
+
+exports.func13 = function () { };
+>exports.func13 : Symbol(func13, Decl(b.js, 35, 30))
+>exports : Symbol(func13, Decl(b.js, 35, 30))
+>func13 : Symbol(func13, Decl(b.js, 35, 30))
+
+module.exports.func14 = function () { };
+>module.exports.func14 : Symbol(func14, Decl(b.js, 36, 33))
+>module.exports : Symbol(func14, Decl(b.js, 36, 33))
+>module : Symbol(module, Decl(b.js, 4, 24))
+>exports : Symbol(module.exports, Decl(b.js, 0, 0))
+>func14 : Symbol(func14, Decl(b.js, 36, 33))
+
+exports = module.exports = {};
+>exports : Symbol("tests/cases/conformance/salsa/b", Decl(b.js, 0, 0))
+>module.exports : Symbol(module.exports, Decl(b.js, 0, 0))
+>module : Symbol(module, Decl(b.js, 4, 24))
+>exports : Symbol(module.exports, Decl(b.js, 0, 0))
+
+exports.func15 = function () { };
+>exports.func15 : Symbol(func15, Decl(b.js, 39, 30))
+>exports : Symbol(func15, Decl(b.js, 39, 30))
+>func15 : Symbol(func15, Decl(b.js, 39, 30))
+
+module.exports.func16 = function () { };
+>module.exports.func16 : Symbol(func16, Decl(b.js, 40, 33))
+>module.exports : Symbol(func16, Decl(b.js, 40, 33))
+>module : Symbol(module, Decl(b.js, 4, 24))
+>exports : Symbol(module.exports, Decl(b.js, 0, 0))
+>func16 : Symbol(func16, Decl(b.js, 40, 33))
+
+module.exports = exports = {};
+>module.exports : Symbol(module.exports, Decl(b.js, 0, 0))
+>module : Symbol(module, Decl(b.js, 4, 24))
+>exports : Symbol(module.exports, Decl(b.js, 0, 0))
+>exports : Symbol("tests/cases/conformance/salsa/b", Decl(b.js, 0, 0))
+
+exports.func17 = function () { };
+>exports.func17 : Symbol(func17, Decl(b.js, 43, 30))
+>exports : Symbol(func17, Decl(b.js, 43, 30))
+>func17 : Symbol(func17, Decl(b.js, 43, 30))
+
+module.exports.func18 = function () { };
+>module.exports.func18 : Symbol(func18, Decl(b.js, 44, 33))
+>module.exports : Symbol(func18, Decl(b.js, 44, 33))
+>module : Symbol(module, Decl(b.js, 4, 24))
+>exports : Symbol(module.exports, Decl(b.js, 0, 0))
+>func18 : Symbol(func18, Decl(b.js, 44, 33))
+
+module.exports = {};
+>module.exports : Symbol(module.exports, Decl(b.js, 0, 0))
+>module : Symbol(module, Decl(b.js, 4, 24))
+>exports : Symbol(module.exports, Decl(b.js, 0, 0))
+
+exports.func19 = function () { };
+>exports.func19 : Symbol(func19, Decl(b.js, 47, 20))
+>exports : Symbol(func19, Decl(b.js, 47, 20))
+>func19 : Symbol(func19, Decl(b.js, 47, 20))
+
+module.exports.func20 = function () { };
+>module.exports.func20 : Symbol(func20, Decl(b.js, 48, 33))
+>module.exports : Symbol(func20, Decl(b.js, 48, 33))
+>module : Symbol(module, Decl(b.js, 4, 24))
+>exports : Symbol(module.exports, Decl(b.js, 0, 0))
+>func20 : Symbol(func20, Decl(b.js, 48, 33))
+
+

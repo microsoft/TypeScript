@@ -1,0 +1,10 @@
+tests/cases/conformance/types/contextualTypes/logicalAnd/contextuallyTypeLogicalAnd03.ts(4,6): error TS7006: Parameter 'a' implicitly has an 'any' type.
+
+
+==== tests/cases/conformance/types/contextualTypes/logicalAnd/contextuallyTypeLogicalAnd03.ts (1 errors) ====
+    let x: (a: string) => string;
+    let y = true;
+    
+    x = (a => a) && (b => b);
+         ~
+!!! error TS7006: Parameter 'a' implicitly has an 'any' type.

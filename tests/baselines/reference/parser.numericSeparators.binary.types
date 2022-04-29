@@ -1,0 +1,13 @@
+=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/parser.numericSeparators.binary.ts ===
+0b00_11;
+>0b00_11 : 3
+
+0B0_1;
+>0B0_1 : 1
+
+0b1100_0011;
+>0b1100_0011 : 195
+
+0B0_11_0101;
+>0B0_11_0101 : 53
+

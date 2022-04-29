@@ -1,0 +1,84 @@
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithNumericIndexer2.ts(11,11): error TS2430: Interface 'B' incorrectly extends interface 'A'.
+  'number' index signatures are incompatible.
+    Property 'bar' is missing in type 'Base' but required in type 'Derived'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithNumericIndexer2.ts(24,27): error TS2344: Type 'Base' does not satisfy the constraint 'Derived'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithNumericIndexer2.ts(32,15): error TS2430: Interface 'B3<T>' incorrectly extends interface 'A<T>'.
+  'number' index signatures are incompatible.
+    Type 'Base' is not assignable to type 'T'.
+      'T' could be instantiated with an arbitrary type which could be unrelated to 'Base'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithNumericIndexer2.ts(36,15): error TS2430: Interface 'B4<T>' incorrectly extends interface 'A<T>'.
+  'number' index signatures are incompatible.
+    Type 'Derived' is not assignable to type 'T'.
+      'Derived' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Derived'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithNumericIndexer2.ts(40,15): error TS2430: Interface 'B5<T>' incorrectly extends interface 'A<T>'.
+  'number' index signatures are incompatible.
+    Type 'Derived2' is not assignable to type 'T'.
+      'Derived2' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Derived2'.
+
+
+==== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithNumericIndexer2.ts (5 errors) ====
+    // Derived type indexer must be subtype of base type indexer
+    
+    interface Base { foo: string; }
+    interface Derived extends Base { bar: string; }
+    interface Derived2 extends Derived { baz: string; }
+    
+    interface A {
+        [x: number]: Derived;
+    }
+    
+    interface B extends A {
+              ~
+!!! error TS2430: Interface 'B' incorrectly extends interface 'A'.
+!!! error TS2430:   'number' index signatures are incompatible.
+!!! error TS2430:     Property 'bar' is missing in type 'Base' but required in type 'Derived'.
+!!! related TS2728 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithNumericIndexer2.ts:4:34: 'bar' is declared here.
+        [x: number]: Base; // error
+    }
+    
+    interface B2 extends A {
+        [x: number]: Derived2; // ok
+    }
+    
+    module Generics {
+        interface A<T extends Derived> {
+            [x: number]: T;
+        }
+    
+        interface B extends A<Base> {
+                              ~~~~
+!!! error TS2344: Type 'Base' does not satisfy the constraint 'Derived'.
+            [x: number]: Derived; // error
+        }
+    
+        interface B2 extends A<Derived> {
+            [x: number]: Derived2; // ok
+        }
+    
+        interface B3<T extends Derived> extends A<T> {
+                  ~~
+!!! error TS2430: Interface 'B3<T>' incorrectly extends interface 'A<T>'.
+!!! error TS2430:   'number' index signatures are incompatible.
+!!! error TS2430:     Type 'Base' is not assignable to type 'T'.
+!!! error TS2430:       'T' could be instantiated with an arbitrary type which could be unrelated to 'Base'.
+            [x: number]: Base; // error
+        }
+    
+        interface B4<T extends Derived> extends A<T> {
+                  ~~
+!!! error TS2430: Interface 'B4<T>' incorrectly extends interface 'A<T>'.
+!!! error TS2430:   'number' index signatures are incompatible.
+!!! error TS2430:     Type 'Derived' is not assignable to type 'T'.
+!!! error TS2430:       'Derived' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Derived'.
+            [x: number]: Derived; // error
+        }
+    
+        interface B5<T extends Derived2> extends A<T> {
+                  ~~
+!!! error TS2430: Interface 'B5<T>' incorrectly extends interface 'A<T>'.
+!!! error TS2430:   'number' index signatures are incompatible.
+!!! error TS2430:     Type 'Derived2' is not assignable to type 'T'.
+!!! error TS2430:       'Derived2' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Derived2'.
+            [x: number]: Derived2; // error
+        }
+    }

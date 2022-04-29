@@ -1,0 +1,20 @@
+=== tests/cases/conformance/types/specifyingTypes/predefinedTypes/objectTypesWithPredefinedTypesAsName.ts ===
+// it is an error to use a predefined type as a type name
+
+class any { }
+>any : any
+
+class number { }
+>number : number
+
+class boolean { }
+>boolean : boolean
+
+class bool { } // not a predefined type anymore
+>bool : bool
+
+class string { }
+>string : string
+
+
+

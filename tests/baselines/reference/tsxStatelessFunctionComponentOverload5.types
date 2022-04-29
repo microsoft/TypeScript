@@ -1,0 +1,193 @@
+=== tests/cases/conformance/jsx/file.tsx ===
+import React = require('react')
+>React : typeof React
+
+export interface ClickableProps {
+    children?: string;
+>children : string
+
+    className?: string;
+>className : string
+}
+
+export interface ButtonProps extends ClickableProps {
+    onClick: React.MouseEventHandler<any>;
+>onClick : React.MouseEventHandler<any>
+>React : any
+}
+
+export interface LinkProps extends ClickableProps {
+    to: string;
+>to : string
+}
+
+export interface HyphenProps extends ClickableProps {
+    "data-format": string;
+>"data-format" : string
+}
+
+let obj0 = {
+>obj0 : { to: string; }
+>{    to: "world"} : { to: string; }
+
+    to: "world"
+>to : string
+>"world" : "world"
+
+};
+
+let obj1 = {
+>obj1 : { children: string; to: string; }
+>{    children: "hi",    to: "boo"} : { children: string; to: string; }
+
+    children: "hi",
+>children : string
+>"hi" : "hi"
+
+    to: "boo"
+>to : string
+>"boo" : "boo"
+}
+
+let obj2 = {
+>obj2 : { onClick: () => void; }
+>{    onClick: ()=>{}} : { onClick: () => void; }
+
+    onClick: ()=>{}
+>onClick : () => void
+>()=>{} : () => void
+}
+
+let obj3: any;
+>obj3 : any
+
+export function MainButton(buttonProps: ButtonProps): JSX.Element;
+>MainButton : { (buttonProps: ButtonProps): JSX.Element; (linkProps: LinkProps): JSX.Element; (hyphenProps: HyphenProps): JSX.Element; }
+>buttonProps : ButtonProps
+>JSX : any
+
+export function MainButton(linkProps: LinkProps): JSX.Element;
+>MainButton : { (buttonProps: ButtonProps): JSX.Element; (linkProps: LinkProps): JSX.Element; (hyphenProps: HyphenProps): JSX.Element; }
+>linkProps : LinkProps
+>JSX : any
+
+export function MainButton(hyphenProps: HyphenProps): JSX.Element;
+>MainButton : { (buttonProps: ButtonProps): JSX.Element; (linkProps: LinkProps): JSX.Element; (hyphenProps: HyphenProps): JSX.Element; }
+>hyphenProps : HyphenProps
+>JSX : any
+
+export function MainButton(props: ButtonProps | LinkProps | HyphenProps): JSX.Element {
+>MainButton : { (buttonProps: ButtonProps): JSX.Element; (linkProps: LinkProps): JSX.Element; (hyphenProps: HyphenProps): JSX.Element; }
+>props : ButtonProps | LinkProps | HyphenProps
+>JSX : any
+
+    const linkProps = props as LinkProps;
+>linkProps : LinkProps
+>props as LinkProps : LinkProps
+>props : ButtonProps | LinkProps | HyphenProps
+
+    if(linkProps.to) {
+>linkProps.to : string
+>linkProps : LinkProps
+>to : string
+
+        return this._buildMainLink(props);
+>this._buildMainLink(props) : any
+>this._buildMainLink : any
+>this : any
+>_buildMainLink : any
+>props : ButtonProps | LinkProps | HyphenProps
+    }
+
+    return this._buildMainButton(props);
+>this._buildMainButton(props) : any
+>this._buildMainButton : any
+>this : any
+>_buildMainButton : any
+>props : ButtonProps | LinkProps | HyphenProps
+}
+
+// Error
+const b0 = <MainButton to='/some/path' onClick={(e)=>{}}>GO</MainButton>;  // extra property;
+>b0 : JSX.Element
+><MainButton to='/some/path' onClick={(e)=>{}}>GO</MainButton> : JSX.Element
+>MainButton : { (buttonProps: ButtonProps): JSX.Element; (linkProps: LinkProps): JSX.Element; (hyphenProps: HyphenProps): JSX.Element; }
+>to : string
+>onClick : (e: React.MouseEvent<any>) => void
+>(e)=>{} : (e: React.MouseEvent<any>) => void
+>e : React.MouseEvent<any>
+>MainButton : { (buttonProps: ButtonProps): JSX.Element; (linkProps: LinkProps): JSX.Element; (hyphenProps: HyphenProps): JSX.Element; }
+
+const b1 = <MainButton onClick={(e: any)=> {}} {...obj0}>Hello world</MainButton>;  // extra property;
+>b1 : JSX.Element
+><MainButton onClick={(e: any)=> {}} {...obj0}>Hello world</MainButton> : JSX.Element
+>MainButton : { (buttonProps: ButtonProps): JSX.Element; (linkProps: LinkProps): JSX.Element; (hyphenProps: HyphenProps): JSX.Element; }
+>onClick : (e: any) => void
+>(e: any)=> {} : (e: any) => void
+>e : any
+>obj0 : { to: string; }
+>MainButton : { (buttonProps: ButtonProps): JSX.Element; (linkProps: LinkProps): JSX.Element; (hyphenProps: HyphenProps): JSX.Element; }
+
+const b2 = <MainButton {...{to: "10000"}} {...obj2} />;  // extra property
+>b2 : JSX.Element
+><MainButton {...{to: "10000"}} {...obj2} /> : JSX.Element
+>MainButton : { (buttonProps: ButtonProps): JSX.Element; (linkProps: LinkProps): JSX.Element; (hyphenProps: HyphenProps): JSX.Element; }
+>{to: "10000"} : { to: string; }
+>to : string
+>"10000" : "10000"
+>obj2 : { onClick: () => void; }
+
+const b3 = <MainButton {...{to: "10000"}} {...{onClick: (k) => {}}} />;  // extra property
+>b3 : JSX.Element
+><MainButton {...{to: "10000"}} {...{onClick: (k) => {}}} /> : JSX.Element
+>MainButton : { (buttonProps: ButtonProps): JSX.Element; (linkProps: LinkProps): JSX.Element; (hyphenProps: HyphenProps): JSX.Element; }
+>{to: "10000"} : { to: string; }
+>to : string
+>"10000" : "10000"
+>{onClick: (k) => {}} : { onClick: (k: React.MouseEvent<any>) => void; }
+>onClick : (k: React.MouseEvent<any>) => void
+>(k) => {} : (k: React.MouseEvent<any>) => void
+>k : React.MouseEvent<any>
+
+const b4 = <MainButton {...obj3} to />;  // Should error because Incorrect type; but attributes are any so everything is allowed
+>b4 : JSX.Element
+><MainButton {...obj3} to /> : JSX.Element
+>MainButton : { (buttonProps: ButtonProps): JSX.Element; (linkProps: LinkProps): JSX.Element; (hyphenProps: HyphenProps): JSX.Element; }
+>obj3 : any
+>to : true
+
+const b5 = <MainButton {...{ onClick(e: any) { } }} {...obj0} />;  // Spread retain method declaration (see GitHub #13365), so now there is an extra attributes
+>b5 : JSX.Element
+><MainButton {...{ onClick(e: any) { } }} {...obj0} /> : JSX.Element
+>MainButton : { (buttonProps: ButtonProps): JSX.Element; (linkProps: LinkProps): JSX.Element; (hyphenProps: HyphenProps): JSX.Element; }
+>{ onClick(e: any) { } } : { onClick(e: any): void; }
+>onClick : (e: any) => void
+>e : any
+>obj0 : { to: string; }
+
+const b6 = <MainButton {...{ onClick(e: any){} }} children={10} />;  // incorrect type for optional attribute
+>b6 : JSX.Element
+><MainButton {...{ onClick(e: any){} }} children={10} /> : JSX.Element
+>MainButton : { (buttonProps: ButtonProps): JSX.Element; (linkProps: LinkProps): JSX.Element; (hyphenProps: HyphenProps): JSX.Element; }
+>{ onClick(e: any){} } : { onClick(e: any): void; }
+>onClick : (e: any) => void
+>e : any
+>children : number
+>10 : 10
+
+const b7 = <MainButton {...{ onClick(e: any){} }} children="hello" className />;  // incorrect type for optional attribute
+>b7 : JSX.Element
+><MainButton {...{ onClick(e: any){} }} children="hello" className /> : JSX.Element
+>MainButton : { (buttonProps: ButtonProps): JSX.Element; (linkProps: LinkProps): JSX.Element; (hyphenProps: HyphenProps): JSX.Element; }
+>{ onClick(e: any){} } : { onClick(e: any): void; }
+>onClick : (e: any) => void
+>e : any
+>children : string
+>className : true
+
+const b8 = <MainButton data-format />;  // incorrect type for specified hyphanated name
+>b8 : JSX.Element
+><MainButton data-format /> : JSX.Element
+>MainButton : { (buttonProps: ButtonProps): JSX.Element; (linkProps: LinkProps): JSX.Element; (hyphenProps: HyphenProps): JSX.Element; }
+>data-format : true
+

@@ -1,0 +1,19 @@
+=== tests/cases/compiler/server.ts ===
+class c { }
+>c : c
+
+export default c;
+>c : c
+
+=== tests/cases/compiler/client.ts ===
+import defaultBinding from "./server";
+>defaultBinding : typeof defaultBinding
+
+export var x = new defaultBinding();
+>x : defaultBinding
+>new defaultBinding() : defaultBinding
+>defaultBinding : typeof defaultBinding
+
+import defaultBinding2 from "./server"; // elide this import since defaultBinding2 is not used
+>defaultBinding2 : typeof defaultBinding
+

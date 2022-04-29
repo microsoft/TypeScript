@@ -1,0 +1,20 @@
+=== tests/cases/conformance/types/specifyingTypes/typeQueries/typeofModuleWithoutExports.ts ===
+module M {
+>M : typeof M
+
+    var x = 1;
+>x : number
+>1 : 1
+
+    class C {
+>C : C
+
+        foo: number;
+>foo : number
+    }
+}
+
+var r: typeof M;
+>r : typeof M
+>M : typeof M
+

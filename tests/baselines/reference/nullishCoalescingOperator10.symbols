@@ -1,0 +1,9 @@
+=== tests/cases/conformance/expressions/nullishCoalescingOperator/nullishCoalescingOperator10.ts ===
+declare function f(): string | undefined;
+>f : Symbol(f, Decl(nullishCoalescingOperator10.ts, 0, 0))
+
+let gg = f() ?? 'foo'
+>gg : Symbol(gg, Decl(nullishCoalescingOperator10.ts, 2, 3))
+>f : Symbol(f, Decl(nullishCoalescingOperator10.ts, 0, 0))
+
+

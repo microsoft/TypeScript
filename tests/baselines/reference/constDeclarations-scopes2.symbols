@@ -1,0 +1,28 @@
+=== tests/cases/compiler/constDeclarations-scopes2.ts ===
+// global
+const c = "string";
+>c : Symbol(c, Decl(constDeclarations-scopes2.ts, 1, 5))
+
+var n: number;
+>n : Symbol(n, Decl(constDeclarations-scopes2.ts, 3, 3))
+
+var b: boolean;
+>b : Symbol(b, Decl(constDeclarations-scopes2.ts, 4, 3))
+
+// for scope
+for (const c = 0; c < 10; n = c ) {
+>c : Symbol(c, Decl(constDeclarations-scopes2.ts, 7, 10))
+>c : Symbol(c, Decl(constDeclarations-scopes2.ts, 7, 10))
+>n : Symbol(n, Decl(constDeclarations-scopes2.ts, 3, 3))
+>c : Symbol(c, Decl(constDeclarations-scopes2.ts, 7, 10))
+
+    // for block
+    const c = false;
+>c : Symbol(c, Decl(constDeclarations-scopes2.ts, 9, 9))
+
+    b = c;
+>b : Symbol(b, Decl(constDeclarations-scopes2.ts, 4, 3))
+>c : Symbol(c, Decl(constDeclarations-scopes2.ts, 9, 9))
+}
+
+

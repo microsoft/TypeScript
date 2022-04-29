@@ -1,0 +1,15 @@
+=== tests/cases/compiler/thisExpressionOfGenericObject.ts ===
+class MyClass1<T> {
+>MyClass1 : Symbol(MyClass1, Decl(thisExpressionOfGenericObject.ts, 0, 0))
+>T : Symbol(T, Decl(thisExpressionOfGenericObject.ts, 0, 15))
+
+    private obj: MyClass1<string>;
+>obj : Symbol(MyClass1.obj, Decl(thisExpressionOfGenericObject.ts, 0, 19))
+>MyClass1 : Symbol(MyClass1, Decl(thisExpressionOfGenericObject.ts, 0, 0))
+
+    constructor() {
+        () => this;
+>this : Symbol(MyClass1, Decl(thisExpressionOfGenericObject.ts, 0, 0))
+    }
+}
+

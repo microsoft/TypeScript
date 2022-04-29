@@ -1,0 +1,18 @@
+//// [indexClassByNumber.ts]
+// Shouldn't be able to index a class instance by a number (unless it has declared a number index signature)
+
+class foo { }
+
+var f = new foo();
+
+f[0] = 4; // Shouldn't be allowed
+
+//// [indexClassByNumber.js]
+// Shouldn't be able to index a class instance by a number (unless it has declared a number index signature)
+var foo = /** @class */ (function () {
+    function foo() {
+    }
+    return foo;
+}());
+var f = new foo();
+f[0] = 4; // Shouldn't be allowed

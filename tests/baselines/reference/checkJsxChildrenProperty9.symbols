@@ -1,0 +1,30 @@
+=== tests/cases/conformance/jsx/file.tsx ===
+import React = require('react');
+>React : Symbol(React, Decl(file.tsx, 0, 0))
+
+// OK
+let k1 = <div> <h2> Hello </h2> <h1> world </h1></div>;
+>k1 : Symbol(k1, Decl(file.tsx, 3, 3))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
+>h2 : Symbol(JSX.IntrinsicElements.h2, Decl(react.d.ts, 2411, 48))
+>h2 : Symbol(JSX.IntrinsicElements.h2, Decl(react.d.ts, 2411, 48))
+>h1 : Symbol(JSX.IntrinsicElements.h1, Decl(react.d.ts, 2410, 47))
+>h1 : Symbol(JSX.IntrinsicElements.h1, Decl(react.d.ts, 2410, 47))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
+
+let k2 = <div> <h2> Hello </h2> {(user: any) => <h2>{user.name}</h2>}</div>;
+>k2 : Symbol(k2, Decl(file.tsx, 4, 3))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
+>h2 : Symbol(JSX.IntrinsicElements.h2, Decl(react.d.ts, 2411, 48))
+>h2 : Symbol(JSX.IntrinsicElements.h2, Decl(react.d.ts, 2411, 48))
+>user : Symbol(user, Decl(file.tsx, 4, 34))
+>h2 : Symbol(JSX.IntrinsicElements.h2, Decl(react.d.ts, 2411, 48))
+>user : Symbol(user, Decl(file.tsx, 4, 34))
+>h2 : Symbol(JSX.IntrinsicElements.h2, Decl(react.d.ts, 2411, 48))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
+
+let k3 = <div> {1} {"That is a number"} </div>;
+>k3 : Symbol(k3, Decl(file.tsx, 5, 3))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
+

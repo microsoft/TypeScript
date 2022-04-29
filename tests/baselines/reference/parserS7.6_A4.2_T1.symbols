@@ -1,0 +1,278 @@
+=== tests/cases/conformance/parser/ecmascript5/parserS7.6_A4.2_T1.ts ===
+// Copyright 2009 the Sputnik authors.  All rights reserved.
+// This code is governed by the BSD license found in the LICENSE file.
+
+/**
+ * Correct interpretation of RUSSIAN ALPHABET
+ *
+ * @path ch07/7.6/S7.6_A4.2_T1.js
+ * @description Check RUSSIAN CAPITAL ALPHABET
+ */
+
+//CHECK#А-Я
+var \u0410 = 1;
+>\u0410 : Symbol(\u0410, Decl(parserS7.6_A4.2_T1.ts, 11, 3))
+
+if (А !== 1) {
+>А : Symbol(\u0410, Decl(parserS7.6_A4.2_T1.ts, 11, 3))
+
+  $ERROR('#А');
+}
+var \u0411 = 1;
+>\u0411 : Symbol(\u0411, Decl(parserS7.6_A4.2_T1.ts, 15, 3))
+
+if (Б !== 1) {
+>Б : Symbol(\u0411, Decl(parserS7.6_A4.2_T1.ts, 15, 3))
+
+  $ERROR('#Б');
+}
+var \u0412 = 1;
+>\u0412 : Symbol(\u0412, Decl(parserS7.6_A4.2_T1.ts, 19, 3))
+
+if (В !== 1) {
+>В : Symbol(\u0412, Decl(parserS7.6_A4.2_T1.ts, 19, 3))
+
+  $ERROR('#В');
+}
+var \u0413 = 1;
+>\u0413 : Symbol(\u0413, Decl(parserS7.6_A4.2_T1.ts, 23, 3))
+
+if (Г !== 1) {
+>Г : Symbol(\u0413, Decl(parserS7.6_A4.2_T1.ts, 23, 3))
+
+  $ERROR('#Г');
+}
+var \u0414 = 1;
+>\u0414 : Symbol(\u0414, Decl(parserS7.6_A4.2_T1.ts, 27, 3))
+
+if (Д !== 1) {
+>Д : Symbol(\u0414, Decl(parserS7.6_A4.2_T1.ts, 27, 3))
+
+  $ERROR('#Д');
+}
+var \u0415 = 1;
+>\u0415 : Symbol(\u0415, Decl(parserS7.6_A4.2_T1.ts, 31, 3))
+
+if (Е !== 1) {
+>Е : Symbol(\u0415, Decl(parserS7.6_A4.2_T1.ts, 31, 3))
+
+  $ERROR('#Е');
+}
+var \u0416 = 1;
+>\u0416 : Symbol(\u0416, Decl(parserS7.6_A4.2_T1.ts, 35, 3))
+
+if (Ж !== 1) {
+>Ж : Symbol(\u0416, Decl(parserS7.6_A4.2_T1.ts, 35, 3))
+
+  $ERROR('#Ж');
+}
+var \u0417 = 1;
+>\u0417 : Symbol(\u0417, Decl(parserS7.6_A4.2_T1.ts, 39, 3))
+
+if (З !== 1) {
+>З : Symbol(\u0417, Decl(parserS7.6_A4.2_T1.ts, 39, 3))
+
+  $ERROR('#З');
+}
+var \u0418 = 1;
+>\u0418 : Symbol(\u0418, Decl(parserS7.6_A4.2_T1.ts, 43, 3))
+
+if (И !== 1) {
+>И : Symbol(\u0418, Decl(parserS7.6_A4.2_T1.ts, 43, 3))
+
+  $ERROR('#И');
+}
+var \u0419 = 1;
+>\u0419 : Symbol(\u0419, Decl(parserS7.6_A4.2_T1.ts, 47, 3))
+
+if (Й !== 1) {
+>Й : Symbol(\u0419, Decl(parserS7.6_A4.2_T1.ts, 47, 3))
+
+  $ERROR('#Й');
+}
+var \u041A = 1;
+>\u041A : Symbol(\u041A, Decl(parserS7.6_A4.2_T1.ts, 51, 3))
+
+if (К !== 1) {
+>К : Symbol(\u041A, Decl(parserS7.6_A4.2_T1.ts, 51, 3))
+
+  $ERROR('#К');
+}
+var \u041B = 1;
+>\u041B : Symbol(\u041B, Decl(parserS7.6_A4.2_T1.ts, 55, 3))
+
+if (Л !== 1) {
+>Л : Symbol(\u041B, Decl(parserS7.6_A4.2_T1.ts, 55, 3))
+
+  $ERROR('#Л');
+}
+var \u041C = 1;
+>\u041C : Symbol(\u041C, Decl(parserS7.6_A4.2_T1.ts, 59, 3))
+
+if (М !== 1) {
+>М : Symbol(\u041C, Decl(parserS7.6_A4.2_T1.ts, 59, 3))
+
+  $ERROR('#М');
+}
+var \u041D = 1;
+>\u041D : Symbol(\u041D, Decl(parserS7.6_A4.2_T1.ts, 63, 3))
+
+if (Н !== 1) {
+>Н : Symbol(\u041D, Decl(parserS7.6_A4.2_T1.ts, 63, 3))
+
+  $ERROR('#Н');
+}
+var \u041E = 1;
+>\u041E : Symbol(\u041E, Decl(parserS7.6_A4.2_T1.ts, 67, 3))
+
+if (О !== 1) {
+>О : Symbol(\u041E, Decl(parserS7.6_A4.2_T1.ts, 67, 3))
+
+  $ERROR('#О');
+}
+var \u041F = 1;
+>\u041F : Symbol(\u041F, Decl(parserS7.6_A4.2_T1.ts, 71, 3))
+
+if (П !== 1) {
+>П : Symbol(\u041F, Decl(parserS7.6_A4.2_T1.ts, 71, 3))
+
+  $ERROR('#П');
+}
+var \u0420 = 1;
+>\u0420 : Symbol(\u0420, Decl(parserS7.6_A4.2_T1.ts, 75, 3))
+
+if (Р !== 1) {
+>Р : Symbol(\u0420, Decl(parserS7.6_A4.2_T1.ts, 75, 3))
+
+  $ERROR('#Р');
+}
+var \u0421 = 1;
+>\u0421 : Symbol(\u0421, Decl(parserS7.6_A4.2_T1.ts, 79, 3))
+
+if (С !== 1) {
+>С : Symbol(\u0421, Decl(parserS7.6_A4.2_T1.ts, 79, 3))
+
+  $ERROR('#С');
+}
+var \u0422 = 1;
+>\u0422 : Symbol(\u0422, Decl(parserS7.6_A4.2_T1.ts, 83, 3))
+
+if (Т !== 1) {
+>Т : Symbol(\u0422, Decl(parserS7.6_A4.2_T1.ts, 83, 3))
+
+  $ERROR('#Т');
+}
+var \u0423 = 1;
+>\u0423 : Symbol(\u0423, Decl(parserS7.6_A4.2_T1.ts, 87, 3))
+
+if (У !== 1) {
+>У : Symbol(\u0423, Decl(parserS7.6_A4.2_T1.ts, 87, 3))
+
+  $ERROR('#У');
+}
+var \u0424 = 1;
+>\u0424 : Symbol(\u0424, Decl(parserS7.6_A4.2_T1.ts, 91, 3))
+
+if (Ф !== 1) {
+>Ф : Symbol(\u0424, Decl(parserS7.6_A4.2_T1.ts, 91, 3))
+
+  $ERROR('#Ф');
+}
+var \u0425 = 1;
+>\u0425 : Symbol(\u0425, Decl(parserS7.6_A4.2_T1.ts, 95, 3))
+
+if (Х !== 1) {
+>Х : Symbol(\u0425, Decl(parserS7.6_A4.2_T1.ts, 95, 3))
+
+  $ERROR('#Х');
+}
+var \u0426 = 1;
+>\u0426 : Symbol(\u0426, Decl(parserS7.6_A4.2_T1.ts, 99, 3))
+
+if (Ц !== 1) {
+>Ц : Symbol(\u0426, Decl(parserS7.6_A4.2_T1.ts, 99, 3))
+
+  $ERROR('#Ц');
+}
+var \u0427 = 1;
+>\u0427 : Symbol(\u0427, Decl(parserS7.6_A4.2_T1.ts, 103, 3))
+
+if (Ч !== 1) {
+>Ч : Symbol(\u0427, Decl(parserS7.6_A4.2_T1.ts, 103, 3))
+
+  $ERROR('#Ч');
+}
+var \u0428 = 1;
+>\u0428 : Symbol(\u0428, Decl(parserS7.6_A4.2_T1.ts, 107, 3))
+
+if (Ш !== 1) {
+>Ш : Symbol(\u0428, Decl(parserS7.6_A4.2_T1.ts, 107, 3))
+
+  $ERROR('#Ш');
+}
+var \u0429 = 1;
+>\u0429 : Symbol(\u0429, Decl(parserS7.6_A4.2_T1.ts, 111, 3))
+
+if (Щ !== 1) {
+>Щ : Symbol(\u0429, Decl(parserS7.6_A4.2_T1.ts, 111, 3))
+
+  $ERROR('#Щ');
+}
+var \u042A = 1;
+>\u042A : Symbol(\u042A, Decl(parserS7.6_A4.2_T1.ts, 115, 3))
+
+if (Ъ !== 1) {
+>Ъ : Symbol(\u042A, Decl(parserS7.6_A4.2_T1.ts, 115, 3))
+
+  $ERROR('#Ъ');
+}
+var \u042B = 1;
+>\u042B : Symbol(\u042B, Decl(parserS7.6_A4.2_T1.ts, 119, 3))
+
+if (Ы !== 1) {
+>Ы : Symbol(\u042B, Decl(parserS7.6_A4.2_T1.ts, 119, 3))
+
+  $ERROR('#Ы');
+}
+var \u042C = 1;
+>\u042C : Symbol(\u042C, Decl(parserS7.6_A4.2_T1.ts, 123, 3))
+
+if (Ь !== 1) {
+>Ь : Symbol(\u042C, Decl(parserS7.6_A4.2_T1.ts, 123, 3))
+
+  $ERROR('#Ь');
+}
+var \u042D = 1;
+>\u042D : Symbol(\u042D, Decl(parserS7.6_A4.2_T1.ts, 127, 3))
+
+if (Э !== 1) {
+>Э : Symbol(\u042D, Decl(parserS7.6_A4.2_T1.ts, 127, 3))
+
+  $ERROR('#Э');
+}
+var \u042E = 1;
+>\u042E : Symbol(\u042E, Decl(parserS7.6_A4.2_T1.ts, 131, 3))
+
+if (Ю !== 1) {
+>Ю : Symbol(\u042E, Decl(parserS7.6_A4.2_T1.ts, 131, 3))
+
+  $ERROR('#Ю');
+}
+var \u042F = 1;
+>\u042F : Symbol(\u042F, Decl(parserS7.6_A4.2_T1.ts, 135, 3))
+
+if (Я !== 1) {
+>Я : Symbol(\u042F, Decl(parserS7.6_A4.2_T1.ts, 135, 3))
+
+  $ERROR('#Я');
+}
+var \u0401 = 1;
+>\u0401 : Symbol(\u0401, Decl(parserS7.6_A4.2_T1.ts, 139, 3))
+
+if (Ё !== 1) {
+>Ё : Symbol(\u0401, Decl(parserS7.6_A4.2_T1.ts, 139, 3))
+
+  $ERROR('#Ё');
+}
+
+

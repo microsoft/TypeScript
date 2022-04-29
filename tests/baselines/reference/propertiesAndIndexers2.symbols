@@ -1,0 +1,38 @@
+=== tests/cases/compiler/propertiesAndIndexers2.ts ===
+interface A {
+>A : Symbol(A, Decl(propertiesAndIndexers2.ts, 0, 0))
+
+    [n: number]: string;
+>n : Symbol(n, Decl(propertiesAndIndexers2.ts, 1, 5))
+
+    [s: string]: number;
+>s : Symbol(s, Decl(propertiesAndIndexers2.ts, 2, 5))
+}
+
+// All of these should fail.
+interface B extends A {
+>B : Symbol(B, Decl(propertiesAndIndexers2.ts, 3, 1))
+>A : Symbol(A, Decl(propertiesAndIndexers2.ts, 0, 0))
+
+    c: string;
+>c : Symbol(B.c, Decl(propertiesAndIndexers2.ts, 6, 23))
+
+    3: string;
+>3 : Symbol(B[3], Decl(propertiesAndIndexers2.ts, 7, 14))
+
+    Infinity: string;
+>Infinity : Symbol(B.Infinity, Decl(propertiesAndIndexers2.ts, 8, 14))
+
+    "-Infinity": string;
+>"-Infinity" : Symbol(B["-Infinity"], Decl(propertiesAndIndexers2.ts, 9, 21))
+
+    NaN: string;
+>NaN : Symbol(B.NaN, Decl(propertiesAndIndexers2.ts, 10, 24))
+
+    "-NaN": string;
+>"-NaN" : Symbol(B["-NaN"], Decl(propertiesAndIndexers2.ts, 11, 16))
+
+    6(): string;
+>6 : Symbol(B[6], Decl(propertiesAndIndexers2.ts, 12, 19))
+}
+

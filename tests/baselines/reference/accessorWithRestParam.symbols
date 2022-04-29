@@ -1,0 +1,12 @@
+=== tests/cases/compiler/accessorWithRestParam.ts ===
+class C {
+>C : Symbol(C, Decl(accessorWithRestParam.ts, 0, 0))
+
+    set X(...v) { }
+>X : Symbol(C.X, Decl(accessorWithRestParam.ts, 0, 9))
+>v : Symbol(v, Decl(accessorWithRestParam.ts, 1, 10))
+
+    static set X(...v2) { }
+>X : Symbol(C.X, Decl(accessorWithRestParam.ts, 1, 19))
+>v2 : Symbol(v2, Decl(accessorWithRestParam.ts, 2, 17))
+}

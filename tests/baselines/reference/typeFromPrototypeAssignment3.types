@@ -1,0 +1,53 @@
+=== tests/cases/conformance/salsa/bug26885.js ===
+function Multimap3() {
+>Multimap3 : typeof Multimap3
+
+    this._map = {};
+>this._map = {} : {}
+>this._map : any
+>this : this
+>_map : any
+>{} : {}
+
+};
+
+Multimap3.prototype = {
+>Multimap3.prototype = {    /**     * @param {string} key     * @returns {number} the value ok     */    get(key) {        return this._map[key + ''];    }} : { get(key: string): number; }
+>Multimap3.prototype : { get(key: string): number; }
+>Multimap3 : typeof Multimap3
+>prototype : { get(key: string): number; }
+>{    /**     * @param {string} key     * @returns {number} the value ok     */    get(key) {        return this._map[key + ''];    }} : { get(key: string): number; }
+
+    /**
+     * @param {string} key
+     * @returns {number} the value ok
+     */
+    get(key) {
+>get : (key: string) => number
+>key : string
+
+        return this._map[key + ''];
+>this._map[key + ''] : any
+>this._map : {}
+>this : this
+>_map : {}
+>key + '' : string
+>key : string
+>'' : ""
+    }
+}
+
+/** @type {Multimap3} */
+const map = new Multimap3();
+>map : Multimap3
+>new Multimap3() : Multimap3
+>Multimap3 : typeof Multimap3
+
+const n = map.get('hi')
+>n : number
+>map.get('hi') : number
+>map.get : (key: string) => number
+>map : Multimap3
+>get : (key: string) => number
+>'hi' : "hi"
+

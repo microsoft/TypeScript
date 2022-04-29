@@ -1,0 +1,682 @@
+[
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsLiteralLikeNames01.ts",
+      "position": 21,
+      "name": "1"
+    },
+    "quickInfo": {
+      "kind": "method",
+      "kindModifiers": "public",
+      "textSpan": {
+        "start": 21,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "method",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "C",
+          "kind": "className"
+        },
+        {
+          "text": "[",
+          "kind": "punctuation"
+        },
+        {
+          "text": "1",
+          "kind": "stringLiteral"
+        },
+        {
+          "text": "]",
+          "kind": "punctuation"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsLiteralLikeNames01.ts",
+      "position": 41,
+      "name": "2"
+    },
+    "quickInfo": {
+      "kind": "method",
+      "kindModifiers": "private",
+      "textSpan": {
+        "start": 41,
+        "length": 8
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "method",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "C",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "Infinity",
+          "kind": "methodName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsLiteralLikeNames01.ts",
+      "position": 70,
+      "name": "3"
+    },
+    "quickInfo": {
+      "kind": "method",
+      "kindModifiers": "protected",
+      "textSpan": {
+        "start": 70,
+        "length": 3
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "method",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "C",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "NaN",
+          "kind": "methodName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsLiteralLikeNames01.ts",
+      "position": 91,
+      "name": "4"
+    },
+    "quickInfo": {
+      "kind": "method",
+      "kindModifiers": "static",
+      "textSpan": {
+        "start": 91,
+        "length": 19
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "method",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "C",
+          "kind": "className"
+        },
+        {
+          "text": "[",
+          "kind": "punctuation"
+        },
+        {
+          "text": "\"stringLiteralName\"",
+          "kind": "stringLiteral"
+        },
+        {
+          "text": "]",
+          "kind": "punctuation"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsLiteralLikeNames01.ts",
+      "position": 145,
+      "name": "5"
+    },
+    "quickInfo": {
+      "kind": "method",
+      "kindModifiers": "public",
+      "textSpan": {
+        "start": 145,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "method",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "C",
+          "kind": "className"
+        },
+        {
+          "text": "[",
+          "kind": "punctuation"
+        },
+        {
+          "text": "1",
+          "kind": "stringLiteral"
+        },
+        {
+          "text": "]",
+          "kind": "punctuation"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsLiteralLikeNames01.ts",
+      "position": 164,
+      "name": "6"
+    },
+    "quickInfo": {
+      "kind": "method",
+      "kindModifiers": "public",
+      "textSpan": {
+        "start": 164,
+        "length": 3
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "method",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "C",
+          "kind": "className"
+        },
+        {
+          "text": "[",
+          "kind": "punctuation"
+        },
+        {
+          "text": "1",
+          "kind": "stringLiteral"
+        },
+        {
+          "text": "]",
+          "kind": "punctuation"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsLiteralLikeNames01.ts",
+      "position": 185,
+      "name": "7"
+    },
+    "quickInfo": {
+      "kind": "method",
+      "kindModifiers": "private",
+      "textSpan": {
+        "start": 185,
+        "length": 8
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "method",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "C",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "Infinity",
+          "kind": "methodName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsLiteralLikeNames01.ts",
+      "position": 210,
+      "name": "8"
+    },
+    "quickInfo": {
+      "kind": "method",
+      "kindModifiers": "private",
+      "textSpan": {
+        "start": 210,
+        "length": 10
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "method",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "C",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "Infinity",
+          "kind": "methodName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsLiteralLikeNames01.ts",
+      "position": 238,
+      "name": "9"
+    },
+    "quickInfo": {
+      "kind": "method",
+      "kindModifiers": "protected",
+      "textSpan": {
+        "start": 238,
+        "length": 3
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "method",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "C",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "NaN",
+          "kind": "methodName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsLiteralLikeNames01.ts",
+      "position": 255,
+      "name": "10"
+    },
+    "quickInfo": {
+      "kind": "method",
+      "kindModifiers": "static",
+      "textSpan": {
+        "start": 255,
+        "length": 17
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "method",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "C",
+          "kind": "className"
+        },
+        {
+          "text": "[",
+          "kind": "punctuation"
+        },
+        {
+          "text": "\"stringLiteralName\"",
+          "kind": "stringLiteral"
+        },
+        {
+          "text": "]",
+          "kind": "punctuation"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": []
+    }
+  }
+]

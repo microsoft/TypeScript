@@ -1,0 +1,5 @@
+=== tests/cases/conformance/parser/ecmascript5/StrictMode/parserStrictMode3.ts ===
+"use strict";
+eval = 1;
+>eval : Symbol(eval, Decl(lib.es5.d.ts, --, --))
+

@@ -1,0 +1,10 @@
+=== tests/cases/conformance/parser/ecmascript5/Statements/ContinueStatements/parser_continueNotInIterationStatement2.ts ===
+while (true) {
+>true : true
+
+  function f() {
+>f : () => void
+
+    continue;
+  }
+}

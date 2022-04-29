@@ -1,0 +1,125 @@
+=== tests/cases/conformance/classes/classStaticBlock/classStaticBlock6.ts ===
+class B {
+>B : B
+
+    static a = 1;
+>a : number
+>1 : 1
+}
+
+class C extends B {
+>C : C
+>B : B
+
+    static {
+        let await = 1;
+>await : number
+>1 : 1
+
+        let arguments = 1;
+>arguments : number
+>1 : 1
+
+        let eval = 1;
+>eval : number
+>1 : 1
+    }
+
+    static {
+        await: if (true) {
+>await : any
+> : any
+>true : true
+
+        }
+
+        arguments;
+>arguments : any
+
+        await;
+>await : any
+> : any
+
+        super();
+>super() : void
+>super : any
+    }
+}
+
+class CC {
+>CC : CC
+
+    constructor () {
+        class C extends B {
+>C : C
+>B : B
+
+            static {
+                class CC extends B {
+>CC : CC
+>B : B
+
+                    constructor () {
+                        super();
+>super() : void
+>super : typeof B
+                    }
+                }
+                super();
+>super() : void
+>super : any
+            }
+        }
+    }
+}
+
+async function foo () {
+>foo : () => Promise<void>
+
+    class C extends B {
+>C : C
+>B : B
+
+        static {
+            arguments;
+>arguments : any
+
+            await;
+>await : any
+> : any
+
+            async function ff () {
+>ff : () => Promise<void>
+
+                arguments;
+>arguments : IArguments
+
+                await;
+>await : any
+> : any
+            }
+        }
+    }
+}
+
+function foo1 () {
+>foo1 : () => void
+
+    class C extends B {
+>C : C
+>B : B
+
+        static {
+            arguments;
+>arguments : any
+
+            function ff () {
+>ff : () => void
+
+                arguments;
+>arguments : IArguments
+            }
+        }
+    }
+}
+

@@ -1,0 +1,39 @@
+tests/cases/compiler/cloduleWithDuplicateMember1.ts(2,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/cloduleWithDuplicateMember1.ts(3,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/cloduleWithDuplicateMember1.ts(3,16): error TS2300: Duplicate identifier 'x'.
+tests/cases/compiler/cloduleWithDuplicateMember1.ts(6,12): error TS2300: Duplicate identifier 'foo'.
+tests/cases/compiler/cloduleWithDuplicateMember1.ts(10,16): error TS2300: Duplicate identifier 'x'.
+tests/cases/compiler/cloduleWithDuplicateMember1.ts(13,21): error TS2300: Duplicate identifier 'foo'.
+tests/cases/compiler/cloduleWithDuplicateMember1.ts(14,21): error TS2300: Duplicate identifier 'x'.
+
+
+==== tests/cases/compiler/cloduleWithDuplicateMember1.ts (7 errors) ====
+    class C {
+        get x() { return 1; }
+            ~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+        static get x() {
+                   ~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+                   ~
+!!! error TS2300: Duplicate identifier 'x'.
+            return '';
+        }
+        static foo() { }
+               ~~~
+!!! error TS2300: Duplicate identifier 'foo'.
+    }
+    
+    module C {
+        export var x = 1;
+                   ~
+!!! error TS2300: Duplicate identifier 'x'.
+    }
+    module C {
+        export function foo() { }
+                        ~~~
+!!! error TS2300: Duplicate identifier 'foo'.
+        export function x() { }
+                        ~
+!!! error TS2300: Duplicate identifier 'x'.
+    }

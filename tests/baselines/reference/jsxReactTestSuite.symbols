@@ -1,0 +1,213 @@
+=== tests/cases/conformance/jsx/jsxReactTestSuite.tsx ===
+declare var React: any;
+>React : Symbol(React, Decl(jsxReactTestSuite.tsx, 0, 11))
+
+declare var Component:any;
+>Component : Symbol(Component, Decl(jsxReactTestSuite.tsx, 1, 11))
+
+declare var Composite:any;
+>Composite : Symbol(Composite, Decl(jsxReactTestSuite.tsx, 2, 11))
+
+declare var Composite2:any;
+>Composite2 : Symbol(Composite2, Decl(jsxReactTestSuite.tsx, 3, 11))
+
+declare var Child:any;
+>Child : Symbol(Child, Decl(jsxReactTestSuite.tsx, 4, 11))
+
+declare var Namespace:any;
+>Namespace : Symbol(Namespace, Decl(jsxReactTestSuite.tsx, 5, 11))
+
+declare var foo: any;
+>foo : Symbol(foo, Decl(jsxReactTestSuite.tsx, 6, 11))
+
+declare var bar: any;
+>bar : Symbol(bar, Decl(jsxReactTestSuite.tsx, 7, 11))
+
+declare var y:any;
+>y : Symbol(y, Decl(jsxReactTestSuite.tsx, 8, 11))
+
+declare var x:any;
+>x : Symbol(x, Decl(jsxReactTestSuite.tsx, 9, 11), Decl(jsxReactTestSuite.tsx, 34, 3))
+
+declare var z:any;
+>z : Symbol(z, Decl(jsxReactTestSuite.tsx, 10, 11))
+
+declare var hasOwnProperty:any;
+>hasOwnProperty : Symbol(hasOwnProperty, Decl(jsxReactTestSuite.tsx, 11, 11))
+
+<div>text</div>;
+
+<div>
+  {this.props.children}
+>this : Symbol(globalThis)
+
+</div>;
+
+<div>
+  <div><br /></div>
+  <Component>{foo}<br />{bar}</Component>
+>Component : Symbol(Component, Decl(jsxReactTestSuite.tsx, 1, 11))
+>foo : Symbol(foo, Decl(jsxReactTestSuite.tsx, 6, 11))
+>bar : Symbol(bar, Decl(jsxReactTestSuite.tsx, 7, 11))
+>Component : Symbol(Component, Decl(jsxReactTestSuite.tsx, 1, 11))
+
+  <br />
+</div>;
+
+
+<Composite>
+>Composite : Symbol(Composite, Decl(jsxReactTestSuite.tsx, 2, 11))
+
+    {this.props.children}
+>this : Symbol(globalThis)
+
+</Composite>;
+>Composite : Symbol(Composite, Decl(jsxReactTestSuite.tsx, 2, 11))
+
+<Composite>
+>Composite : Symbol(Composite, Decl(jsxReactTestSuite.tsx, 2, 11))
+
+    <Composite2 />
+>Composite2 : Symbol(Composite2, Decl(jsxReactTestSuite.tsx, 3, 11))
+
+</Composite>;
+>Composite : Symbol(Composite, Decl(jsxReactTestSuite.tsx, 2, 11))
+
+var x =
+>x : Symbol(x, Decl(jsxReactTestSuite.tsx, 9, 11), Decl(jsxReactTestSuite.tsx, 34, 3))
+
+  <div
+    attr1={
+>attr1 : Symbol(attr1, Decl(jsxReactTestSuite.tsx, 35, 6))
+
+      "foo" + "bar"
+    }
+    attr2={
+>attr2 : Symbol(attr2, Decl(jsxReactTestSuite.tsx, 38, 5))
+
+      "foo" + "bar" +
+      
+      "baz" + "bug"
+    }
+    attr3={
+>attr3 : Symbol(attr3, Decl(jsxReactTestSuite.tsx, 43, 5))
+
+      "foo" + "bar" +
+      "baz" + "bug"
+      // Extra line here.
+    }
+    attr4="baz">
+>attr4 : Symbol(attr4, Decl(jsxReactTestSuite.tsx, 48, 5))
+
+  </div>;
+
+(
+  <div>
+    {/* A comment at the beginning */}
+    {/* A second comment at the beginning */}
+    <span>
+      {/* A nested comment */}
+    </span>
+    {/* A sandwiched comment */}
+    <br />
+    {/* A comment at the end */}
+    {/* A second comment at the end */}
+  </div>
+);
+
+(
+  <div
+    /* a multi-line
+       comment */
+    attr1="foo">
+>attr1 : Symbol(attr1, Decl(jsxReactTestSuite.tsx, 67, 6))
+
+    <span // a double-slash comment
+      attr2="bar"
+>attr2 : Symbol(attr2, Decl(jsxReactTestSuite.tsx, 71, 9))
+
+    />
+  </div>
+);
+
+<div>&nbsp;</div>;
+
+<div>&nbsp; </div>;
+
+<hasOwnProperty>testing</hasOwnProperty>;
+
+<Component constructor="foo" />;
+>Component : Symbol(Component, Decl(jsxReactTestSuite.tsx, 1, 11))
+>constructor : Symbol(constructor, Decl(jsxReactTestSuite.tsx, 83, 10))
+
+<Namespace.Component />;
+>Namespace : Symbol(Namespace, Decl(jsxReactTestSuite.tsx, 5, 11))
+
+<Namespace.DeepNamespace.Component />;
+>Namespace : Symbol(Namespace, Decl(jsxReactTestSuite.tsx, 5, 11))
+
+<Component { ... x } y
+>Component : Symbol(Component, Decl(jsxReactTestSuite.tsx, 1, 11))
+>x : Symbol(x, Decl(jsxReactTestSuite.tsx, 9, 11), Decl(jsxReactTestSuite.tsx, 34, 3))
+>y : Symbol(y, Decl(jsxReactTestSuite.tsx, 89, 20))
+
+={2 } z />;
+>z : Symbol(z, Decl(jsxReactTestSuite.tsx, 90, 5))
+
+<Component
+>Component : Symbol(Component, Decl(jsxReactTestSuite.tsx, 1, 11))
+
+    {...this.props} sound="moo" />;
+>this : Symbol(globalThis)
+>sound : Symbol(sound, Decl(jsxReactTestSuite.tsx, 93, 19))
+
+<font-face />;
+
+<Component x={y} />;
+>Component : Symbol(Component, Decl(jsxReactTestSuite.tsx, 1, 11))
+>x : Symbol(x, Decl(jsxReactTestSuite.tsx, 97, 10))
+>y : Symbol(y, Decl(jsxReactTestSuite.tsx, 8, 11))
+
+<x-component />;
+
+<Component {...x} />;
+>Component : Symbol(Component, Decl(jsxReactTestSuite.tsx, 1, 11))
+>x : Symbol(x, Decl(jsxReactTestSuite.tsx, 9, 11), Decl(jsxReactTestSuite.tsx, 34, 3))
+
+<Component { ...x } y={2} />;
+>Component : Symbol(Component, Decl(jsxReactTestSuite.tsx, 1, 11))
+>x : Symbol(x, Decl(jsxReactTestSuite.tsx, 9, 11), Decl(jsxReactTestSuite.tsx, 34, 3))
+>y : Symbol(y, Decl(jsxReactTestSuite.tsx, 103, 19))
+
+<Component { ... x } y={2} z />;
+>Component : Symbol(Component, Decl(jsxReactTestSuite.tsx, 1, 11))
+>x : Symbol(x, Decl(jsxReactTestSuite.tsx, 9, 11), Decl(jsxReactTestSuite.tsx, 34, 3))
+>y : Symbol(y, Decl(jsxReactTestSuite.tsx, 105, 20))
+>z : Symbol(z, Decl(jsxReactTestSuite.tsx, 105, 26))
+
+<Component x={1} {...y} />;
+>Component : Symbol(Component, Decl(jsxReactTestSuite.tsx, 1, 11))
+>x : Symbol(x, Decl(jsxReactTestSuite.tsx, 107, 10))
+>y : Symbol(y, Decl(jsxReactTestSuite.tsx, 8, 11))
+
+
+<Component x={1} y="2" {...z} {...z}><Child /></Component>;
+>Component : Symbol(Component, Decl(jsxReactTestSuite.tsx, 1, 11))
+>x : Symbol(x, Decl(jsxReactTestSuite.tsx, 110, 10))
+>y : Symbol(y, Decl(jsxReactTestSuite.tsx, 110, 16))
+>z : Symbol(z, Decl(jsxReactTestSuite.tsx, 10, 11))
+>z : Symbol(z, Decl(jsxReactTestSuite.tsx, 10, 11))
+>Child : Symbol(Child, Decl(jsxReactTestSuite.tsx, 4, 11))
+>Component : Symbol(Component, Decl(jsxReactTestSuite.tsx, 1, 11))
+
+<Component x="1" {...(z = { y: 2 }, z)} z={3}>Text</Component>;
+>Component : Symbol(Component, Decl(jsxReactTestSuite.tsx, 1, 11))
+>x : Symbol(x, Decl(jsxReactTestSuite.tsx, 112, 10))
+>z : Symbol(z, Decl(jsxReactTestSuite.tsx, 10, 11))
+>y : Symbol(y, Decl(jsxReactTestSuite.tsx, 112, 27))
+>z : Symbol(z, Decl(jsxReactTestSuite.tsx, 10, 11))
+>z : Symbol(z, Decl(jsxReactTestSuite.tsx, 112, 39))
+>Component : Symbol(Component, Decl(jsxReactTestSuite.tsx, 1, 11))
+
+
+

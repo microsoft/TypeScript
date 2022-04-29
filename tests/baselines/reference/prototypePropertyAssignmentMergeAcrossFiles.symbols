@@ -1,0 +1,19 @@
+=== tests/cases/conformance/salsa/prototypePropertyAssignmentMergeAcrossFiles.js ===
+function C() {
+>C : Symbol(C, Decl(prototypePropertyAssignmentMergeAcrossFiles.js, 0, 0))
+
+    this.a = 1
+>this.a : Symbol(C.a, Decl(prototypePropertyAssignmentMergeAcrossFiles.js, 0, 14))
+>this : Symbol(C, Decl(prototypePropertyAssignmentMergeAcrossFiles.js, 0, 0))
+>a : Symbol(C.a, Decl(prototypePropertyAssignmentMergeAcrossFiles.js, 0, 14))
+}
+
+=== tests/cases/conformance/salsa/other.js ===
+C.prototype.foo = function() { return this.a }
+>C.prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+>C : Symbol(C, Decl(prototypePropertyAssignmentMergeAcrossFiles.js, 0, 0))
+>prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+>this.a : Symbol(C.a, Decl(prototypePropertyAssignmentMergeAcrossFiles.js, 0, 14))
+>this : Symbol(C, Decl(prototypePropertyAssignmentMergeAcrossFiles.js, 0, 0))
+>a : Symbol(C.a, Decl(prototypePropertyAssignmentMergeAcrossFiles.js, 0, 14))
+

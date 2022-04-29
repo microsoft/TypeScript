@@ -1,0 +1,1 @@
+import protobufjs = require("protobufjs");

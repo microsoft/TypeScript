@@ -1,0 +1,37 @@
+tests/cases/compiler/moduleAndInterfaceWithSameName.ts(21,15): error TS2339: Property 'Bar' does not exist on type 'typeof Foo2'.
+
+
+==== tests/cases/compiler/moduleAndInterfaceWithSameName.ts (1 errors) ====
+    module Foo1 {
+        export module Bar {
+            export var x = 42;
+        }
+    
+        export interface Bar { 
+            y: string;
+        }
+    }
+    
+    module Foo2 {
+        module Bar {
+            export var x = 42;
+        }
+    
+        export interface Bar {
+            y: string;
+        }
+    }
+    
+    var z2 = Foo2.Bar.y; // Error for using interface name as a value.
+                  ~~~
+!!! error TS2339: Property 'Bar' does not exist on type 'typeof Foo2'.
+    
+    module Foo3 {
+        export module Bar {
+            export var x = 42;
+        }
+    
+        interface Bar { 
+            y: string;
+        }
+    }

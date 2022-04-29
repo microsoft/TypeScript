@@ -1,0 +1,31 @@
+tests/cases/conformance/dynamicImport/importCallExpressionSpecifierNotStringTypeError.ts(5,8): error TS7036: Dynamic import's specifier must be of type 'string', but here has type 'boolean'.
+tests/cases/conformance/dynamicImport/importCallExpressionSpecifierNotStringTypeError.ts(6,17): error TS7036: Dynamic import's specifier must be of type 'string', but here has type 'boolean'.
+tests/cases/conformance/dynamicImport/importCallExpressionSpecifierNotStringTypeError.ts(7,19): error TS7036: Dynamic import's specifier must be of type 'string', but here has type 'boolean | "defaulPath"'.
+tests/cases/conformance/dynamicImport/importCallExpressionSpecifierNotStringTypeError.ts(12,17): error TS7036: Dynamic import's specifier must be of type 'string', but here has type 'string[]'.
+tests/cases/conformance/dynamicImport/importCallExpressionSpecifierNotStringTypeError.ts(13,17): error TS7036: Dynamic import's specifier must be of type 'string', but here has type '() => string'.
+
+
+==== tests/cases/conformance/dynamicImport/importCallExpressionSpecifierNotStringTypeError.ts (5 errors) ====
+    declare function getSpecifier(): boolean;
+    declare var whatToLoad: boolean;
+    
+    // Error specifier is not assignable to string
+    import(getSpecifier());
+           ~~~~~~~~~~~~~~
+!!! error TS7036: Dynamic import's specifier must be of type 'string', but here has type 'boolean'.
+    var p1 = import(getSpecifier());
+                    ~~~~~~~~~~~~~~
+!!! error TS7036: Dynamic import's specifier must be of type 'string', but here has type 'boolean'.
+    const p2 = import(whatToLoad ? getSpecifier() : "defaulPath")
+                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS7036: Dynamic import's specifier must be of type 'string', but here has type 'boolean | "defaulPath"'.
+    p1.then(zero => {
+        return zero.foo();  // ok, zero is any
+    });
+    
+    var p3 = import(["path1", "path2"]);
+                    ~~~~~~~~~~~~~~~~~~
+!!! error TS7036: Dynamic import's specifier must be of type 'string', but here has type 'string[]'.
+    var p4 = import(()=>"PathToModule");
+                    ~~~~~~~~~~~~~~~~~~
+!!! error TS7036: Dynamic import's specifier must be of type 'string', but here has type '() => string'.

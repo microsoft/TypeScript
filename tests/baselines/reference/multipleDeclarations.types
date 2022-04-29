@@ -1,0 +1,139 @@
+=== tests/cases/conformance/salsa/input.js ===
+function C() {
+>C : typeof C
+
+    this.m = null;
+>this.m = null : null
+>this.m : any
+>this : this
+>m : any
+>null : null
+}
+C.prototype.m = function() {
+>C.prototype.m = function() {    this.nothing();} : () => void
+>C.prototype.m : any
+>C.prototype : any
+>C : typeof C
+>prototype : any
+>m : any
+>function() {    this.nothing();} : () => void
+
+    this.nothing();
+>this.nothing() : error
+>this.nothing : error
+>this : this
+>nothing : any
+}
+class X {
+>X : X
+
+    constructor() {
+        this.m = this.m.bind(this);
+>this.m = this.m.bind(this) : any
+>this.m : () => void
+>this : this
+>m : () => void
+>this.m.bind(this) : any
+>this.m.bind : (this: Function, thisArg: any, ...argArray: any[]) => any
+>this.m : () => void
+>this : this
+>m : () => void
+>bind : (this: Function, thisArg: any, ...argArray: any[]) => any
+>this : this
+
+        this.mistake = 'frankly, complete nonsense';
+>this.mistake = 'frankly, complete nonsense' : "frankly, complete nonsense"
+>this.mistake : () => void
+>this : this
+>mistake : () => void
+>'frankly, complete nonsense' : "frankly, complete nonsense"
+    }
+    m() {
+>m : () => void
+    }
+    mistake() {
+>mistake : () => void
+    }
+}
+let x = new X();
+>x : X
+>new X() : X
+>X : typeof X
+
+X.prototype.mistake = false;
+>X.prototype.mistake = false : false
+>X.prototype.mistake : () => void
+>X.prototype : X
+>X : typeof X
+>prototype : X
+>mistake : () => void
+>false : false
+
+x.m();
+>x.m() : void
+>x.m : () => void
+>x : X
+>m : () => void
+
+x.mistake;
+>x.mistake : () => void
+>x : X
+>mistake : () => void
+
+class Y {
+>Y : Y
+
+    mistake() {
+>mistake : () => void
+    }
+    m() {
+>m : () => void
+    }
+    constructor() {
+        this.m = this.m.bind(this);
+>this.m = this.m.bind(this) : any
+>this.m : () => void
+>this : this
+>m : () => void
+>this.m.bind(this) : any
+>this.m.bind : (this: Function, thisArg: any, ...argArray: any[]) => any
+>this.m : () => void
+>this : this
+>m : () => void
+>bind : (this: Function, thisArg: any, ...argArray: any[]) => any
+>this : this
+
+        this.mistake = 'even more nonsense';
+>this.mistake = 'even more nonsense' : "even more nonsense"
+>this.mistake : () => void
+>this : this
+>mistake : () => void
+>'even more nonsense' : "even more nonsense"
+    }
+}
+Y.prototype.mistake = true;
+>Y.prototype.mistake = true : true
+>Y.prototype.mistake : () => void
+>Y.prototype : Y
+>Y : typeof Y
+>prototype : Y
+>mistake : () => void
+>true : true
+
+let y = new Y();
+>y : Y
+>new Y() : Y
+>Y : typeof Y
+
+y.m();
+>y.m() : void
+>y.m : () => void
+>y : Y
+>m : () => void
+
+y.mistake();
+>y.mistake() : void
+>y.mistake : () => void
+>y : Y
+>mistake : () => void
+

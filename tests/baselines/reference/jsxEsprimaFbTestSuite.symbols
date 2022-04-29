@@ -1,0 +1,105 @@
+=== tests/cases/conformance/jsx/jsxEsprimaFbTestSuite.tsx ===
+declare var React: any;
+>React : Symbol(React, Decl(jsxEsprimaFbTestSuite.tsx, 0, 11))
+
+declare var 日本語;
+>日本語 : Symbol(日本語, Decl(jsxEsprimaFbTestSuite.tsx, 1, 11))
+
+declare var AbC_def;
+>AbC_def : Symbol(AbC_def, Decl(jsxEsprimaFbTestSuite.tsx, 2, 11))
+
+declare var LeftRight;
+>LeftRight : Symbol(LeftRight, Decl(jsxEsprimaFbTestSuite.tsx, 3, 11))
+
+declare var x;
+>x : Symbol(x, Decl(jsxEsprimaFbTestSuite.tsx, 4, 11))
+
+declare var a;
+>a : Symbol(a, Decl(jsxEsprimaFbTestSuite.tsx, 5, 11))
+
+declare var props;
+>props : Symbol(props, Decl(jsxEsprimaFbTestSuite.tsx, 6, 11))
+
+declare var value;
+>value : Symbol(value, Decl(jsxEsprimaFbTestSuite.tsx, 7, 11))
+
+<a />;
+
+<n:a n:v />;
+>n:v : Symbol(n:v, Decl(jsxEsprimaFbTestSuite.tsx, 11, 4))
+
+<a n:foo="bar"> {value} <b><c /></b></a>;
+>n:foo : Symbol(n:foo, Decl(jsxEsprimaFbTestSuite.tsx, 13, 2))
+>value : Symbol(value, Decl(jsxEsprimaFbTestSuite.tsx, 7, 11))
+
+<a b={" "} c=" " d="&amp;" e="id=1&group=2" f="&#123456789" g="&#123*;" h="&#x;" />;
+>b : Symbol(b, Decl(jsxEsprimaFbTestSuite.tsx, 15, 2))
+>c : Symbol(c, Decl(jsxEsprimaFbTestSuite.tsx, 15, 10))
+>d : Symbol(d, Decl(jsxEsprimaFbTestSuite.tsx, 15, 16))
+>e : Symbol(e, Decl(jsxEsprimaFbTestSuite.tsx, 15, 26))
+>f : Symbol(f, Decl(jsxEsprimaFbTestSuite.tsx, 15, 43))
+>g : Symbol(g, Decl(jsxEsprimaFbTestSuite.tsx, 15, 59))
+>h : Symbol(h, Decl(jsxEsprimaFbTestSuite.tsx, 15, 71))
+
+<a b="&notanentity;" />;
+>b : Symbol(b, Decl(jsxEsprimaFbTestSuite.tsx, 17, 2))
+
+<a
+/>;
+
+<日本語></日本語>;
+>日本語 : Symbol(日本語, Decl(jsxEsprimaFbTestSuite.tsx, 1, 11))
+>日本語 : Symbol(日本語, Decl(jsxEsprimaFbTestSuite.tsx, 1, 11))
+
+<AbC_def
+>AbC_def : Symbol(AbC_def, Decl(jsxEsprimaFbTestSuite.tsx, 2, 11))
+
+  test="&#x0026;&#38;">
+>test : Symbol(test, Decl(jsxEsprimaFbTestSuite.tsx, 23, 8))
+
+bar
+baz
+</AbC_def>;
+>AbC_def : Symbol(AbC_def, Decl(jsxEsprimaFbTestSuite.tsx, 2, 11))
+
+<a b={x ? <c /> : <d />} />;
+>b : Symbol(b, Decl(jsxEsprimaFbTestSuite.tsx, 29, 2))
+>x : Symbol(x, Decl(jsxEsprimaFbTestSuite.tsx, 4, 11))
+
+<a>{}</a>;
+
+<a>{/* this is a comment */}</a>;
+
+<div>@test content</div>;
+
+<div><br />7x invalid-js-identifier</div>;
+
+<LeftRight left=<a /> right=<b>monkeys /> gorillas</b> />;
+>LeftRight : Symbol(LeftRight, Decl(jsxEsprimaFbTestSuite.tsx, 3, 11))
+>left : Symbol(left, Decl(jsxEsprimaFbTestSuite.tsx, 39, 10))
+
+<a.b></a.b>;
+>a : Symbol(a, Decl(jsxEsprimaFbTestSuite.tsx, 5, 11))
+>a : Symbol(a, Decl(jsxEsprimaFbTestSuite.tsx, 5, 11))
+
+<a.b.c></a.b.c>;
+>a : Symbol(a, Decl(jsxEsprimaFbTestSuite.tsx, 5, 11))
+>a : Symbol(a, Decl(jsxEsprimaFbTestSuite.tsx, 5, 11))
+
+(<div />) < x;
+>x : Symbol(x, Decl(jsxEsprimaFbTestSuite.tsx, 4, 11))
+
+<div {...props} />;
+>props : Symbol(props, Decl(jsxEsprimaFbTestSuite.tsx, 6, 11))
+
+<div {...props} post="attribute" />;
+>props : Symbol(props, Decl(jsxEsprimaFbTestSuite.tsx, 6, 11))
+>post : Symbol(post, Decl(jsxEsprimaFbTestSuite.tsx, 49, 15))
+
+<div pre="leading" pre2="attribute" {...props}></div>;
+>pre : Symbol(pre, Decl(jsxEsprimaFbTestSuite.tsx, 51, 4))
+>pre2 : Symbol(pre2, Decl(jsxEsprimaFbTestSuite.tsx, 51, 18))
+>props : Symbol(props, Decl(jsxEsprimaFbTestSuite.tsx, 6, 11))
+
+<a>    </a>;
+

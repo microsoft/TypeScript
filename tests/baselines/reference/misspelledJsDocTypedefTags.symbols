@@ -1,0 +1,9 @@
+=== tests/cases/compiler/a.js ===
+/** @typedef {{ endTime: number, screenshots: number}} A.<b>*/
+Animation.AnimationModel.ScreenshotCapture.Request;
+>Animation : Symbol(Animation, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(a.js, 1, 51))
+
+/** @typedef {{ endTime: number, screenshots: !B.<string>}} */
+Animation.AnimationModel.ScreenshotCapture.Request;
+>Animation : Symbol(Animation, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(a.js, 1, 51))
+

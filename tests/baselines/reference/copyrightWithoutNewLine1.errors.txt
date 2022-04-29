@@ -1,0 +1,14 @@
+tests/cases/compiler/copyrightWithoutNewLine1.ts(4,24): error TS2792: Cannot find module './greeter'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+
+
+==== tests/cases/compiler/copyrightWithoutNewLine1.ts (1 errors) ====
+    /*****************************
+    * (c) Copyright - Important
+    ****************************/
+    import model = require("./greeter")
+                           ~~~~~~~~~~~
+!!! error TS2792: Cannot find module './greeter'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+    var el = document.getElementById('content');
+    var greeter = new model.Greeter(el);
+    /** things */
+    greeter.start();

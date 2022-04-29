@@ -1,0 +1,63 @@
+=== tests/cases/conformance/jsdoc/use.js ===
+var mod = require('./mod1.js');
+>mod : Symbol(mod, Decl(use.js, 0, 3))
+>require : Symbol(require)
+>'./mod1.js' : Symbol("tests/cases/conformance/jsdoc/mod1", Decl(mod1.js, 0, 0))
+
+/** @type {import("./mod1.js").Baz} */
+var b;
+>b : Symbol(b, Decl(use.js, 2, 3))
+
+/** @type {mod.Baz} */
+var bb;
+>bb : Symbol(bb, Decl(use.js, 4, 3))
+
+var bbb = new mod.Baz();
+>bbb : Symbol(bbb, Decl(use.js, 5, 3))
+>mod : Symbol(mod, Decl(use.js, 0, 3))
+
+=== tests/cases/conformance/jsdoc/mod1.js ===
+// error
+
+/** @typedef {number} Foo */
+class Foo { } // should error
+>Foo : Symbol(Foo, Decl(mod1.js, 0, 0))
+
+/** @typedef {number} Bar */
+exports.Bar = class { }
+>exports.Bar : Symbol(Bar, Decl(mod1.js, 3, 13), Decl(mod1.js, 5, 4))
+>exports : Symbol(Bar, Decl(mod1.js, 3, 13), Decl(mod1.js, 5, 4))
+>Bar : Symbol(Bar, Decl(mod1.js, 3, 13), Decl(mod1.js, 5, 4))
+
+/** @typedef {number} Baz */
+module.exports = {
+>module.exports : Symbol(module.exports, Decl(mod1.js, 0, 0))
+>module : Symbol(export=, Decl(mod1.js, 6, 23), Decl(mod1.js, 19, 17))
+>exports : Symbol(export=, Decl(mod1.js, 6, 23), Decl(mod1.js, 19, 17))
+
+    Baz: class { }
+>Baz : Symbol(Baz, Decl(mod1.js, 9, 18))
+}
+
+// ok
+
+/** @typedef {number} Qux */
+var Qux = 2;
+>Qux : Symbol(Qux, Decl(mod1.js, 16, 3), Decl(mod1.js, 15, 4))
+
+/** @typedef {number} Quid */
+exports.Quid = 2;
+>exports.Quid : Symbol(Quid, Decl(mod1.js, 16, 12), Decl(mod1.js, 18, 4))
+>exports : Symbol(Quid, Decl(mod1.js, 16, 12), Decl(mod1.js, 18, 4))
+>Quid : Symbol(Quid, Decl(mod1.js, 16, 12), Decl(mod1.js, 18, 4))
+
+/** @typedef {number} Quack */
+module.exports = {
+>module.exports : Symbol(module.exports, Decl(mod1.js, 0, 0))
+>module : Symbol(export=, Decl(mod1.js, 6, 23), Decl(mod1.js, 19, 17))
+>exports : Symbol(export=, Decl(mod1.js, 6, 23), Decl(mod1.js, 19, 17))
+
+    Quack: 2
+>Quack : Symbol(Quack, Decl(mod1.js, 22, 18))
+}
+

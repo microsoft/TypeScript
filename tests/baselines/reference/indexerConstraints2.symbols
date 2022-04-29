@@ -1,0 +1,169 @@
+=== tests/cases/compiler/indexerConstraints2.ts ===
+class A { a: number; }
+>A : Symbol(A, Decl(indexerConstraints2.ts, 0, 0))
+>a : Symbol(A.a, Decl(indexerConstraints2.ts, 0, 9))
+
+class B extends A { b: number; }
+>B : Symbol(B, Decl(indexerConstraints2.ts, 0, 22))
+>A : Symbol(A, Decl(indexerConstraints2.ts, 0, 0))
+>b : Symbol(B.b, Decl(indexerConstraints2.ts, 1, 19))
+
+// Inheritance
+class F {
+>F : Symbol(F, Decl(indexerConstraints2.ts, 1, 32))
+
+    [s: string]: B
+>s : Symbol(s, Decl(indexerConstraints2.ts, 5, 5))
+>B : Symbol(B, Decl(indexerConstraints2.ts, 0, 22))
+}
+class G extends F {
+>G : Symbol(G, Decl(indexerConstraints2.ts, 6, 1))
+>F : Symbol(F, Decl(indexerConstraints2.ts, 1, 32))
+
+    [n: number]: A
+>n : Symbol(n, Decl(indexerConstraints2.ts, 8, 5))
+>A : Symbol(A, Decl(indexerConstraints2.ts, 0, 0))
+}
+
+// Other way
+class H {
+>H : Symbol(H, Decl(indexerConstraints2.ts, 9, 1))
+
+    [n: number]: A
+>n : Symbol(n, Decl(indexerConstraints2.ts, 13, 5))
+>A : Symbol(A, Decl(indexerConstraints2.ts, 0, 0))
+}
+class I extends H {
+>I : Symbol(I, Decl(indexerConstraints2.ts, 14, 1))
+>H : Symbol(H, Decl(indexerConstraints2.ts, 9, 1))
+
+    [s: string]: B
+>s : Symbol(s, Decl(indexerConstraints2.ts, 16, 5))
+>B : Symbol(B, Decl(indexerConstraints2.ts, 0, 22))
+}
+
+// With hidden indexer
+class J {
+>J : Symbol(J, Decl(indexerConstraints2.ts, 17, 1))
+
+    [n: number]: {}
+>n : Symbol(n, Decl(indexerConstraints2.ts, 21, 5))
+}
+
+class K extends J {
+>K : Symbol(K, Decl(indexerConstraints2.ts, 22, 1))
+>J : Symbol(J, Decl(indexerConstraints2.ts, 17, 1))
+
+    [n: number]: A;
+>n : Symbol(n, Decl(indexerConstraints2.ts, 25, 5))
+>A : Symbol(A, Decl(indexerConstraints2.ts, 0, 0))
+
+    [s: string]: B;
+>s : Symbol(s, Decl(indexerConstraints2.ts, 26, 5))
+>B : Symbol(B, Decl(indexerConstraints2.ts, 0, 22))
+}
+
+
+type AliasedNumber = number;
+>AliasedNumber : Symbol(AliasedNumber, Decl(indexerConstraints2.ts, 27, 1))
+
+interface L {
+>L : Symbol(L, Decl(indexerConstraints2.ts, 30, 28))
+
+    [n: AliasedNumber]: A;
+>n : Symbol(n, Decl(indexerConstraints2.ts, 33, 5))
+>AliasedNumber : Symbol(AliasedNumber, Decl(indexerConstraints2.ts, 27, 1))
+>A : Symbol(A, Decl(indexerConstraints2.ts, 0, 0))
+}
+
+type AliasedString = string;
+>AliasedString : Symbol(AliasedString, Decl(indexerConstraints2.ts, 34, 1))
+
+interface M {
+>M : Symbol(M, Decl(indexerConstraints2.ts, 36, 28))
+
+    [s: AliasedString]: A;
+>s : Symbol(s, Decl(indexerConstraints2.ts, 39, 5))
+>AliasedString : Symbol(AliasedString, Decl(indexerConstraints2.ts, 34, 1))
+>A : Symbol(A, Decl(indexerConstraints2.ts, 0, 0))
+}
+
+type AliasedBoolean = boolean;
+>AliasedBoolean : Symbol(AliasedBoolean, Decl(indexerConstraints2.ts, 40, 1))
+
+interface N {
+>N : Symbol(N, Decl(indexerConstraints2.ts, 42, 30))
+
+    [b: AliasedBoolean]: A;
+>b : Symbol(b, Decl(indexerConstraints2.ts, 45, 5))
+>AliasedBoolean : Symbol(AliasedBoolean, Decl(indexerConstraints2.ts, 40, 1))
+>A : Symbol(A, Decl(indexerConstraints2.ts, 0, 0))
+}
+
+type IndexableUnion = "foo" | "bar";
+>IndexableUnion : Symbol(IndexableUnion, Decl(indexerConstraints2.ts, 46, 1))
+
+interface O {
+>O : Symbol(O, Decl(indexerConstraints2.ts, 48, 36))
+
+    [u: IndexableUnion]: A;
+>u : Symbol(u, Decl(indexerConstraints2.ts, 51, 5))
+>IndexableUnion : Symbol(IndexableUnion, Decl(indexerConstraints2.ts, 46, 1))
+>A : Symbol(A, Decl(indexerConstraints2.ts, 0, 0))
+}
+
+type NonIndexableUnion = boolean | {};
+>NonIndexableUnion : Symbol(NonIndexableUnion, Decl(indexerConstraints2.ts, 52, 1))
+
+interface P {
+>P : Symbol(P, Decl(indexerConstraints2.ts, 54, 38))
+
+    [u: NonIndexableUnion]: A;
+>u : Symbol(u, Decl(indexerConstraints2.ts, 57, 5))
+>NonIndexableUnion : Symbol(NonIndexableUnion, Decl(indexerConstraints2.ts, 52, 1))
+>A : Symbol(A, Decl(indexerConstraints2.ts, 0, 0))
+}
+
+type NonIndexableUnion2 = string | number;
+>NonIndexableUnion2 : Symbol(NonIndexableUnion2, Decl(indexerConstraints2.ts, 58, 1))
+
+interface Q {
+>Q : Symbol(Q, Decl(indexerConstraints2.ts, 60, 42))
+
+    [u: NonIndexableUnion2]: A;
+>u : Symbol(u, Decl(indexerConstraints2.ts, 63, 5))
+>NonIndexableUnion2 : Symbol(NonIndexableUnion2, Decl(indexerConstraints2.ts, 58, 1))
+>A : Symbol(A, Decl(indexerConstraints2.ts, 0, 0))
+}
+
+type NonIndexableUnion3 = "foo" | 42;
+>NonIndexableUnion3 : Symbol(NonIndexableUnion3, Decl(indexerConstraints2.ts, 64, 1))
+
+interface R {
+>R : Symbol(R, Decl(indexerConstraints2.ts, 66, 37))
+
+    [u: NonIndexableUnion3]: A;
+>u : Symbol(u, Decl(indexerConstraints2.ts, 69, 5))
+>NonIndexableUnion3 : Symbol(NonIndexableUnion3, Decl(indexerConstraints2.ts, 64, 1))
+>A : Symbol(A, Decl(indexerConstraints2.ts, 0, 0))
+}
+
+interface S {
+>S : Symbol(S, Decl(indexerConstraints2.ts, 70, 1))
+
+    [u: "foo" | "bar"]: A;
+>u : Symbol(u, Decl(indexerConstraints2.ts, 73, 5))
+>A : Symbol(A, Decl(indexerConstraints2.ts, 0, 0))
+}
+
+type Key = string;
+>Key : Symbol(Key, Decl(indexerConstraints2.ts, 74, 1))
+
+interface T {
+>T : Symbol(T, Decl(indexerConstraints2.ts, 76, 18))
+
+    [key: Key]
+>key : Symbol(key, Decl(indexerConstraints2.ts, 78, 5))
+>Key : Symbol(Key, Decl(indexerConstraints2.ts, 74, 1))
+}
+

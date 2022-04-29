@@ -1,0 +1,69 @@
+=== tests/cases/conformance/jsdoc/declarations/index.js ===
+export {}; // flag file as module
+No type information for this code./**
+No type information for this code. * @typedef {string | number | symbol} PropName 
+No type information for this code. */
+No type information for this code.
+No type information for this code./**
+No type information for this code. * Callback
+No type information for this code. *
+No type information for this code. * @callback NumberToStringCb
+No type information for this code. * @param {number} a
+No type information for this code. * @returns {string}
+No type information for this code. */
+No type information for this code.
+No type information for this code./**
+No type information for this code. * @template T
+No type information for this code. * @typedef {T & {name: string}} MixinName 
+No type information for this code. */
+No type information for this code.
+No type information for this code./**
+No type information for this code. * Identity function
+No type information for this code. *
+No type information for this code. * @template T
+No type information for this code. * @callback Identity
+No type information for this code. * @param {T} x
+No type information for this code. * @returns {T}
+No type information for this code. */
+No type information for this code.
+No type information for this code.=== tests/cases/conformance/jsdoc/declarations/mixed.js ===
+/**
+ * @typedef {{x: string} | number | LocalThing | ExportedThing} SomeType
+ */
+/**
+ * @param {number} x
+ * @returns {SomeType}
+ */
+function doTheThing(x) {
+>doTheThing : Symbol(doTheThing, Decl(mixed.js, 0, 0))
+>x : Symbol(x, Decl(mixed.js, 7, 20))
+
+    return {x: ""+x};
+>x : Symbol(x, Decl(mixed.js, 8, 12))
+>x : Symbol(x, Decl(mixed.js, 7, 20))
+}
+class ExportedThing {
+>ExportedThing : Symbol(ExportedThing, Decl(mixed.js, 9, 1))
+
+    z = "ok"
+>z : Symbol(ExportedThing.z, Decl(mixed.js, 10, 21))
+}
+module.exports = {
+>module.exports : Symbol(module.exports, Decl(mixed.js, 0, 0))
+>module : Symbol(module, Decl(mixed.js, 12, 1))
+>exports : Symbol(module.exports, Decl(mixed.js, 0, 0))
+
+    doTheThing,
+>doTheThing : Symbol(doTheThing, Decl(mixed.js, 13, 18))
+
+    ExportedThing,
+>ExportedThing : Symbol(ExportedThing, Decl(mixed.js, 14, 15))
+
+};
+class LocalThing {
+>LocalThing : Symbol(LocalThing, Decl(mixed.js, 16, 2))
+
+    y = "ok"
+>y : Symbol(LocalThing.y, Decl(mixed.js, 17, 18))
+}
+

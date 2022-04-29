@@ -1,0 +1,17 @@
+=== tests/cases/compiler/declarationEmitDestructuringPrivacyError.ts ===
+module m {
+>m : typeof m
+
+    class c {
+>c : c
+    }
+    export var [x, y, z] = [10, new c(), 30];
+>x : number
+>y : c
+>z : number
+>[10, new c(), 30] : [number, c, number]
+>10 : 10
+>new c() : c
+>c : typeof c
+>30 : 30
+}

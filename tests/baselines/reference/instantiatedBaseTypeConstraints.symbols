@@ -1,0 +1,28 @@
+=== tests/cases/compiler/instantiatedBaseTypeConstraints.ts ===
+interface Foo<T extends Foo<T, C>, C> {
+>Foo : Symbol(Foo, Decl(instantiatedBaseTypeConstraints.ts, 0, 0))
+>T : Symbol(T, Decl(instantiatedBaseTypeConstraints.ts, 0, 14))
+>Foo : Symbol(Foo, Decl(instantiatedBaseTypeConstraints.ts, 0, 0))
+>T : Symbol(T, Decl(instantiatedBaseTypeConstraints.ts, 0, 14))
+>C : Symbol(C, Decl(instantiatedBaseTypeConstraints.ts, 0, 34))
+>C : Symbol(C, Decl(instantiatedBaseTypeConstraints.ts, 0, 34))
+
+  foo(bar: C): void;
+>foo : Symbol(Foo.foo, Decl(instantiatedBaseTypeConstraints.ts, 0, 39))
+>bar : Symbol(bar, Decl(instantiatedBaseTypeConstraints.ts, 1, 6))
+>C : Symbol(C, Decl(instantiatedBaseTypeConstraints.ts, 0, 34))
+}
+
+class Bar implements Foo<Bar, string> {
+>Bar : Symbol(Bar, Decl(instantiatedBaseTypeConstraints.ts, 2, 1))
+>Foo : Symbol(Foo, Decl(instantiatedBaseTypeConstraints.ts, 0, 0))
+>Bar : Symbol(Bar, Decl(instantiatedBaseTypeConstraints.ts, 2, 1))
+
+  foo(bar: string): void {
+>foo : Symbol(Bar.foo, Decl(instantiatedBaseTypeConstraints.ts, 4, 39))
+>bar : Symbol(bar, Decl(instantiatedBaseTypeConstraints.ts, 5, 6))
+  }
+}
+
+ 
+

@@ -1,0 +1,40 @@
+=== tests/cases/compiler/inheritedConstructorWithRestParams.ts ===
+class Base {
+>Base : Base
+
+    constructor(...a: string[]) { }
+>a : string[]
+}
+
+class Derived extends Base { }
+>Derived : Derived
+>Base : Base
+
+// Ok
+new Derived("", "");
+>new Derived("", "") : Derived
+>Derived : typeof Derived
+>"" : ""
+>"" : ""
+
+new Derived("");
+>new Derived("") : Derived
+>Derived : typeof Derived
+>"" : ""
+
+new Derived();
+>new Derived() : Derived
+>Derived : typeof Derived
+
+// Errors
+new Derived("", 3);
+>new Derived("", 3) : Derived
+>Derived : typeof Derived
+>"" : ""
+>3 : 3
+
+new Derived(3);
+>new Derived(3) : Derived
+>Derived : typeof Derived
+>3 : 3
+

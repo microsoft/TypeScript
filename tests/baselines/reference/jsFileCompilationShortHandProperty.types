@@ -1,0 +1,23 @@
+=== tests/cases/compiler/a.js ===
+function foo() {
+>foo : () => { a: number; b: string; }
+
+    var a = 10;
+>a : number
+>10 : 10
+
+    var b = "Hello";
+>b : string
+>"Hello" : "Hello"
+
+    return {
+>{        a,        b    } : { a: number; b: string; }
+
+        a,
+>a : number
+
+        b
+>b : string
+
+    };
+}

@@ -1,0 +1,11 @@
+tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserModifierOnStatementInBlock4.ts(2,4): error TS1184: Modifiers cannot appear here.
+
+
+==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserModifierOnStatementInBlock4.ts (1 errors) ====
+    {
+       export function bar() {
+       ~~~~~~
+!!! error TS1184: Modifiers cannot appear here.
+       }
+    }
+    

@@ -1,0 +1,41 @@
+tests/cases/compiler/getAndSetNotIdenticalType2.ts(5,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/getAndSetNotIdenticalType2.ts(5,9): error TS2380: The return type of a 'get' accessor must be assignable to its 'set' accessor type
+  Type 'T' is not assignable to type 'string'.
+tests/cases/compiler/getAndSetNotIdenticalType2.ts(8,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/getAndSetNotIdenticalType2.ts(9,9): error TS2322: Type 'A<string>' is not assignable to type 'A<T>'.
+  Type 'string' is not assignable to type 'T'.
+    'T' could be instantiated with an arbitrary type which could be unrelated to 'string'.
+tests/cases/compiler/getAndSetNotIdenticalType2.ts(15,1): error TS2322: Type 'A<unknown>' is not assignable to type 'A<string>'.
+  Type 'unknown' is not assignable to type 'string'.
+
+
+==== tests/cases/compiler/getAndSetNotIdenticalType2.ts (5 errors) ====
+    class A<T> { foo: T; }
+    
+    class C<T> {
+        data: A<T>;
+        get x(): A<T> {
+            ~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+            ~
+!!! error TS2380: The return type of a 'get' accessor must be assignable to its 'set' accessor type
+!!! error TS2380:   Type 'T' is not assignable to type 'string'.
+            return this.data;
+        }
+        set x(v: A<string>) {
+            ~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+            this.data = v;
+            ~~~~~~~~~
+!!! error TS2322: Type 'A<string>' is not assignable to type 'A<T>'.
+!!! error TS2322:   Type 'string' is not assignable to type 'T'.
+!!! error TS2322:     'T' could be instantiated with an arbitrary type which could be unrelated to 'string'.
+        }
+    }
+    
+    var x = new C();
+    var r = x.x;
+    x.x = r;
+    ~~~
+!!! error TS2322: Type 'A<unknown>' is not assignable to type 'A<string>'.
+!!! error TS2322:   Type 'unknown' is not assignable to type 'string'.

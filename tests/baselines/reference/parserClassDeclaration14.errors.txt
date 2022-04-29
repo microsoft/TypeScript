@@ -1,0 +1,13 @@
+tests/cases/conformance/parser/ecmascript5/ClassDeclarations/parserClassDeclaration14.ts(2,4): error TS2391: Function implementation is missing or not immediately following the declaration.
+tests/cases/conformance/parser/ecmascript5/ClassDeclarations/parserClassDeclaration14.ts(3,4): error TS2390: Constructor implementation is missing.
+
+
+==== tests/cases/conformance/parser/ecmascript5/ClassDeclarations/parserClassDeclaration14.ts (2 errors) ====
+    class C {
+       foo();
+       ~~~
+!!! error TS2391: Function implementation is missing or not immediately following the declaration.
+       constructor();
+       ~~~~~~~~~~~~~~
+!!! error TS2390: Constructor implementation is missing.
+    }

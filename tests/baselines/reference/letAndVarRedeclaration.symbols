@@ -1,0 +1,94 @@
+=== tests/cases/compiler/letAndVarRedeclaration.ts ===
+let e0
+>e0 : Symbol(e0, Decl(letAndVarRedeclaration.ts, 0, 3))
+
+var e0;
+>e0 : Symbol(e0, Decl(letAndVarRedeclaration.ts, 1, 3))
+
+function e0() { }
+>e0 : Symbol(e0, Decl(letAndVarRedeclaration.ts, 1, 7))
+
+function f0() {
+>f0 : Symbol(f0, Decl(letAndVarRedeclaration.ts, 2, 17))
+
+    let x1;
+>x1 : Symbol(x1, Decl(letAndVarRedeclaration.ts, 5, 7))
+
+    var x1;
+>x1 : Symbol(x1, Decl(letAndVarRedeclaration.ts, 6, 7))
+
+    function x1() { }
+>x1 : Symbol(x1, Decl(letAndVarRedeclaration.ts, 6, 11))
+}
+
+function f1() {
+>f1 : Symbol(f1, Decl(letAndVarRedeclaration.ts, 8, 1))
+
+    let x;
+>x : Symbol(x, Decl(letAndVarRedeclaration.ts, 11, 7))
+    {
+        var x;
+>x : Symbol(x, Decl(letAndVarRedeclaration.ts, 13, 11))
+    }
+    {
+        function x() { }
+>x : Symbol(x, Decl(letAndVarRedeclaration.ts, 15, 5))
+    }
+}
+
+module M0 {
+>M0 : Symbol(M0, Decl(letAndVarRedeclaration.ts, 18, 1))
+
+    let x2;
+>x2 : Symbol(x2, Decl(letAndVarRedeclaration.ts, 21, 7))
+
+    var x2;
+>x2 : Symbol(x2, Decl(letAndVarRedeclaration.ts, 22, 7))
+
+    function x2() { }
+>x2 : Symbol(x2, Decl(letAndVarRedeclaration.ts, 22, 11))
+}
+
+module M1 {
+>M1 : Symbol(M1, Decl(letAndVarRedeclaration.ts, 24, 1))
+
+    let x2;
+>x2 : Symbol(x2, Decl(letAndVarRedeclaration.ts, 27, 7))
+    {
+        var x2;
+>x2 : Symbol(x2, Decl(letAndVarRedeclaration.ts, 29, 11))
+    }
+    {
+        function x2() { }
+>x2 : Symbol(x2, Decl(letAndVarRedeclaration.ts, 31, 5))
+    }
+}
+
+let x11;
+>x11 : Symbol(x11, Decl(letAndVarRedeclaration.ts, 36, 3))
+
+for (var x11; ;) {
+>x11 : Symbol(x11, Decl(letAndVarRedeclaration.ts, 37, 8))
+}
+
+function f2() {
+>f2 : Symbol(f2, Decl(letAndVarRedeclaration.ts, 38, 1))
+
+    let x11;
+>x11 : Symbol(x11, Decl(letAndVarRedeclaration.ts, 41, 7))
+
+    for (var x11; ;) {
+>x11 : Symbol(x11, Decl(letAndVarRedeclaration.ts, 42, 12))
+    }
+}
+
+module M2 {
+>M2 : Symbol(M2, Decl(letAndVarRedeclaration.ts, 44, 1))
+
+    let x11;
+>x11 : Symbol(x11, Decl(letAndVarRedeclaration.ts, 47, 7))
+
+    for (var x11; ;) {
+>x11 : Symbol(x11, Decl(letAndVarRedeclaration.ts, 48, 12))
+    }
+}

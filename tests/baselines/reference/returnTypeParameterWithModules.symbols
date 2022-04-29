@@ -1,0 +1,72 @@
+=== tests/cases/compiler/returnTypeParameterWithModules.ts ===
+module M1 {
+>M1 : Symbol(M1, Decl(returnTypeParameterWithModules.ts, 0, 0))
+
+    export function reduce<A>(ar, f, e?): Array<A> {
+>reduce : Symbol(reduce, Decl(returnTypeParameterWithModules.ts, 0, 11))
+>A : Symbol(A, Decl(returnTypeParameterWithModules.ts, 1, 27))
+>ar : Symbol(ar, Decl(returnTypeParameterWithModules.ts, 1, 30))
+>f : Symbol(f, Decl(returnTypeParameterWithModules.ts, 1, 33))
+>e : Symbol(e, Decl(returnTypeParameterWithModules.ts, 1, 36))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>A : Symbol(A, Decl(returnTypeParameterWithModules.ts, 1, 27))
+
+        return Array.prototype.reduce.apply(ar, e ? [f, e] : [f]);
+>Array.prototype.reduce.apply : Symbol(Function.apply, Decl(lib.es5.d.ts, --, --))
+>Array.prototype.reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array.prototype : Symbol(ArrayConstructor.prototype, Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>prototype : Symbol(ArrayConstructor.prototype, Decl(lib.es5.d.ts, --, --))
+>reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>apply : Symbol(Function.apply, Decl(lib.es5.d.ts, --, --))
+>ar : Symbol(ar, Decl(returnTypeParameterWithModules.ts, 1, 30))
+>e : Symbol(e, Decl(returnTypeParameterWithModules.ts, 1, 36))
+>f : Symbol(f, Decl(returnTypeParameterWithModules.ts, 1, 33))
+>e : Symbol(e, Decl(returnTypeParameterWithModules.ts, 1, 36))
+>f : Symbol(f, Decl(returnTypeParameterWithModules.ts, 1, 33))
+
+    };
+};
+module M2 {
+>M2 : Symbol(M2, Decl(returnTypeParameterWithModules.ts, 4, 2))
+
+  import A = M1
+>A : Symbol(A, Decl(returnTypeParameterWithModules.ts, 5, 11))
+>M1 : Symbol(A, Decl(returnTypeParameterWithModules.ts, 0, 0))
+
+  export function compose() {
+>compose : Symbol(compose, Decl(returnTypeParameterWithModules.ts, 6, 15))
+
+        A.reduce(arguments, compose2);
+>A.reduce : Symbol(A.reduce, Decl(returnTypeParameterWithModules.ts, 0, 11))
+>A : Symbol(A, Decl(returnTypeParameterWithModules.ts, 5, 11))
+>reduce : Symbol(A.reduce, Decl(returnTypeParameterWithModules.ts, 0, 11))
+>arguments : Symbol(arguments)
+>compose2 : Symbol(compose2, Decl(returnTypeParameterWithModules.ts, 9, 6))
+
+    };
+    export function compose2<B, C, D>(g: (x: B) => C, f: (x: D) => B): (x: D) => C {
+>compose2 : Symbol(compose2, Decl(returnTypeParameterWithModules.ts, 9, 6))
+>B : Symbol(B, Decl(returnTypeParameterWithModules.ts, 10, 29))
+>C : Symbol(C, Decl(returnTypeParameterWithModules.ts, 10, 31))
+>D : Symbol(D, Decl(returnTypeParameterWithModules.ts, 10, 34))
+>g : Symbol(g, Decl(returnTypeParameterWithModules.ts, 10, 38))
+>x : Symbol(x, Decl(returnTypeParameterWithModules.ts, 10, 42))
+>B : Symbol(B, Decl(returnTypeParameterWithModules.ts, 10, 29))
+>C : Symbol(C, Decl(returnTypeParameterWithModules.ts, 10, 31))
+>f : Symbol(f, Decl(returnTypeParameterWithModules.ts, 10, 53))
+>x : Symbol(x, Decl(returnTypeParameterWithModules.ts, 10, 58))
+>D : Symbol(D, Decl(returnTypeParameterWithModules.ts, 10, 34))
+>B : Symbol(B, Decl(returnTypeParameterWithModules.ts, 10, 29))
+>x : Symbol(x, Decl(returnTypeParameterWithModules.ts, 10, 72))
+>D : Symbol(D, Decl(returnTypeParameterWithModules.ts, 10, 34))
+>C : Symbol(C, Decl(returnTypeParameterWithModules.ts, 10, 31))
+
+    return function (x) { return g(f(x)); }
+>x : Symbol(x, Decl(returnTypeParameterWithModules.ts, 11, 21))
+>g : Symbol(g, Decl(returnTypeParameterWithModules.ts, 10, 38))
+>f : Symbol(f, Decl(returnTypeParameterWithModules.ts, 10, 53))
+>x : Symbol(x, Decl(returnTypeParameterWithModules.ts, 11, 21))
+
+  };
+};

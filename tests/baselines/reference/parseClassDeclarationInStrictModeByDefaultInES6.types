@@ -1,0 +1,25 @@
+=== tests/cases/conformance/es6/classDeclaration/parseClassDeclarationInStrictModeByDefaultInES6.ts ===
+class C {
+>C : C
+
+    interface = 10;
+>interface : number
+>10 : 10
+
+    public implements() { }
+>implements : () => void
+
+    public foo(arguments: any) { }
+>foo : (arguments: any) => void
+>arguments : any
+
+    private bar(eval:any) {
+>bar : (eval: any) => void
+>eval : any
+
+        arguments = "hello";
+>arguments = "hello" : "hello"
+>arguments : IArguments
+>"hello" : "hello"
+    }
+}

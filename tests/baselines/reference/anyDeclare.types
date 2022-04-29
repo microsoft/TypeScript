@@ -1,0 +1,14 @@
+=== tests/cases/compiler/anyDeclare.ts ===
+declare var x: any;
+>x : any
+
+module myMod {
+>myMod : typeof myMod
+
+    var myFn;
+>myFn : any
+
+    function myFn() {  }
+>myFn : () => void
+}
+

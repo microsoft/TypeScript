@@ -1,0 +1,17 @@
+=== tests/cases/conformance/expressions/objectLiterals/objectLiteralErrorsES3.ts ===
+var e1 = { get a() { return 4; } };
+>e1 : Symbol(e1, Decl(objectLiteralErrorsES3.ts, 0, 3))
+>a : Symbol(a, Decl(objectLiteralErrorsES3.ts, 0, 10))
+
+var e2 = { set a(n) { } };
+>e2 : Symbol(e2, Decl(objectLiteralErrorsES3.ts, 1, 3))
+>a : Symbol(a, Decl(objectLiteralErrorsES3.ts, 1, 10))
+>n : Symbol(n, Decl(objectLiteralErrorsES3.ts, 1, 17))
+
+var e3 = { get a() { return ''; }, set a(n) { } };
+>e3 : Symbol(e3, Decl(objectLiteralErrorsES3.ts, 2, 3))
+>a : Symbol(a, Decl(objectLiteralErrorsES3.ts, 2, 10), Decl(objectLiteralErrorsES3.ts, 2, 34))
+>a : Symbol(a, Decl(objectLiteralErrorsES3.ts, 2, 10), Decl(objectLiteralErrorsES3.ts, 2, 34))
+>n : Symbol(n, Decl(objectLiteralErrorsES3.ts, 2, 41))
+
+

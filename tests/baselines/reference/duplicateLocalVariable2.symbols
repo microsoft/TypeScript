@@ -1,0 +1,94 @@
+=== tests/cases/compiler/duplicateLocalVariable2.ts ===
+export class TestCase {
+>TestCase : Symbol(TestCase, Decl(duplicateLocalVariable2.ts, 0, 0))
+
+    constructor (public name: string, public test: ()=>boolean, public errorMessageRegEx?: string) {
+>name : Symbol(TestCase.name, Decl(duplicateLocalVariable2.ts, 1, 17))
+>test : Symbol(TestCase.test, Decl(duplicateLocalVariable2.ts, 1, 37))
+>errorMessageRegEx : Symbol(TestCase.errorMessageRegEx, Decl(duplicateLocalVariable2.ts, 1, 63))
+    }
+}
+export class TestRunner { 
+>TestRunner : Symbol(TestRunner, Decl(duplicateLocalVariable2.ts, 3, 1))
+
+    static arrayCompare(arg1: any[], arg2: any[]): boolean {
+>arrayCompare : Symbol(TestRunner.arrayCompare, Decl(duplicateLocalVariable2.ts, 4, 25))
+>arg1 : Symbol(arg1, Decl(duplicateLocalVariable2.ts, 5, 24))
+>arg2 : Symbol(arg2, Decl(duplicateLocalVariable2.ts, 5, 36))
+
+        return false;
+    }
+
+    public addTest(test: TestCase) {
+>addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable2.ts, 7, 5))
+>test : Symbol(test, Decl(duplicateLocalVariable2.ts, 9, 19))
+>TestCase : Symbol(TestCase, Decl(duplicateLocalVariable2.ts, 0, 0))
+    }
+}
+
+export var tests: TestRunner = (function () {
+>tests : Symbol(tests, Decl(duplicateLocalVariable2.ts, 13, 10))
+>TestRunner : Symbol(TestRunner, Decl(duplicateLocalVariable2.ts, 3, 1))
+
+    var testRunner = new TestRunner();
+>testRunner : Symbol(testRunner, Decl(duplicateLocalVariable2.ts, 14, 7))
+>TestRunner : Symbol(TestRunner, Decl(duplicateLocalVariable2.ts, 3, 1))
+
+    testRunner.addTest(new TestCase("Check UTF8 encoding",
+>testRunner.addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable2.ts, 7, 5))
+>testRunner : Symbol(testRunner, Decl(duplicateLocalVariable2.ts, 14, 7))
+>addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable2.ts, 7, 5))
+>TestCase : Symbol(TestCase, Decl(duplicateLocalVariable2.ts, 0, 0))
+
+        function () {
+            var fb: any;
+>fb : Symbol(fb, Decl(duplicateLocalVariable2.ts, 18, 15))
+
+            fb.writeUtf8Bom();
+>fb : Symbol(fb, Decl(duplicateLocalVariable2.ts, 18, 15))
+
+            var chars = [0x0054];
+>chars : Symbol(chars, Decl(duplicateLocalVariable2.ts, 20, 15))
+
+            for (var i in chars) {
+>i : Symbol(i, Decl(duplicateLocalVariable2.ts, 21, 20), Decl(duplicateLocalVariable2.ts, 26, 20))
+>chars : Symbol(chars, Decl(duplicateLocalVariable2.ts, 20, 15))
+
+                fb.writeUtf8CodePoint(chars[i]);
+>fb : Symbol(fb, Decl(duplicateLocalVariable2.ts, 18, 15))
+>chars : Symbol(chars, Decl(duplicateLocalVariable2.ts, 20, 15))
+>i : Symbol(i, Decl(duplicateLocalVariable2.ts, 21, 20), Decl(duplicateLocalVariable2.ts, 26, 20))
+            }
+            fb.index = 0;
+>fb : Symbol(fb, Decl(duplicateLocalVariable2.ts, 18, 15))
+
+            var bytes = [];
+>bytes : Symbol(bytes, Decl(duplicateLocalVariable2.ts, 25, 15))
+
+            for (var i = 0; i < 14; i++) {
+>i : Symbol(i, Decl(duplicateLocalVariable2.ts, 21, 20), Decl(duplicateLocalVariable2.ts, 26, 20))
+>i : Symbol(i, Decl(duplicateLocalVariable2.ts, 21, 20), Decl(duplicateLocalVariable2.ts, 26, 20))
+>i : Symbol(i, Decl(duplicateLocalVariable2.ts, 21, 20), Decl(duplicateLocalVariable2.ts, 26, 20))
+
+                bytes.push(fb.readByte());
+>bytes.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>bytes : Symbol(bytes, Decl(duplicateLocalVariable2.ts, 25, 15))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>fb : Symbol(fb, Decl(duplicateLocalVariable2.ts, 18, 15))
+            }
+            var expected = [0xEF];
+>expected : Symbol(expected, Decl(duplicateLocalVariable2.ts, 29, 15))
+
+            return TestRunner.arrayCompare(bytes, expected);
+>TestRunner.arrayCompare : Symbol(TestRunner.arrayCompare, Decl(duplicateLocalVariable2.ts, 4, 25))
+>TestRunner : Symbol(TestRunner, Decl(duplicateLocalVariable2.ts, 3, 1))
+>arrayCompare : Symbol(TestRunner.arrayCompare, Decl(duplicateLocalVariable2.ts, 4, 25))
+>bytes : Symbol(bytes, Decl(duplicateLocalVariable2.ts, 25, 15))
+>expected : Symbol(expected, Decl(duplicateLocalVariable2.ts, 29, 15))
+
+        }));
+
+    return testRunner;
+>testRunner : Symbol(testRunner, Decl(duplicateLocalVariable2.ts, 14, 7))
+
+})();

@@ -1,0 +1,27 @@
+=== tests/cases/compiler/memberAccessMustUseModuleInstances_1.ts ===
+///<reference path='memberAccessMustUseModuleInstances_0.ts'/>
+import WinJS = require('memberAccessMustUseModuleInstances_0');
+>WinJS : typeof WinJS
+
+WinJS.Promise.timeout(10);
+>WinJS.Promise.timeout(10) : WinJS.Promise
+>WinJS.Promise.timeout : (delay: number) => WinJS.Promise
+>WinJS.Promise : typeof WinJS.Promise
+>WinJS : typeof WinJS
+>Promise : typeof WinJS.Promise
+>timeout : (delay: number) => WinJS.Promise
+>10 : 10
+
+=== tests/cases/compiler/memberAccessMustUseModuleInstances_0.ts ===
+export class Promise {
+>Promise : Promise
+
+    static timeout(delay: number): Promise {
+>timeout : (delay: number) => Promise
+>delay : number
+
+        return null;
+>null : null
+    }
+}
+

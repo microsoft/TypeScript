@@ -1,0 +1,31 @@
+=== tests/cases/conformance/types/members/augmentedTypeBracketAccessIndexSignature.ts ===
+interface Foo { a }
+>Foo : Symbol(Foo, Decl(augmentedTypeBracketAccessIndexSignature.ts, 0, 0))
+>a : Symbol(Foo.a, Decl(augmentedTypeBracketAccessIndexSignature.ts, 0, 15))
+
+interface Bar { b }
+>Bar : Symbol(Bar, Decl(augmentedTypeBracketAccessIndexSignature.ts, 0, 19))
+>b : Symbol(Bar.b, Decl(augmentedTypeBracketAccessIndexSignature.ts, 1, 15))
+
+interface Object {
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(augmentedTypeBracketAccessIndexSignature.ts, 1, 19))
+
+    [n: number]: Foo;
+>n : Symbol(n, Decl(augmentedTypeBracketAccessIndexSignature.ts, 4, 5))
+>Foo : Symbol(Foo, Decl(augmentedTypeBracketAccessIndexSignature.ts, 0, 0))
+}
+
+interface Function {
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(augmentedTypeBracketAccessIndexSignature.ts, 5, 1))
+
+    [n: number]: Bar;
+>n : Symbol(n, Decl(augmentedTypeBracketAccessIndexSignature.ts, 8, 5))
+>Bar : Symbol(Bar, Decl(augmentedTypeBracketAccessIndexSignature.ts, 0, 19))
+}
+
+var a = {}[0]; // Should be Foo
+>a : Symbol(a, Decl(augmentedTypeBracketAccessIndexSignature.ts, 11, 3))
+
+var b = (() => { })[0]; // Should be Bar
+>b : Symbol(b, Decl(augmentedTypeBracketAccessIndexSignature.ts, 12, 3))
+

@@ -1,0 +1,30 @@
+=== tests/cases/conformance/parser/ecmascript5/RegressionTests/parser536727.ts ===
+function foo(f: (x: string) => string) {
+>foo : Symbol(foo, Decl(parser536727.ts, 0, 0))
+>f : Symbol(f, Decl(parser536727.ts, 0, 13))
+>x : Symbol(x, Decl(parser536727.ts, 0, 17))
+
+    return f("");
+>f : Symbol(f, Decl(parser536727.ts, 0, 13))
+}
+var g = (x: string) => x + "blah";
+>g : Symbol(g, Decl(parser536727.ts, 3, 3))
+>x : Symbol(x, Decl(parser536727.ts, 3, 9))
+>x : Symbol(x, Decl(parser536727.ts, 3, 9))
+
+var x = () => g;
+>x : Symbol(x, Decl(parser536727.ts, 4, 3))
+>g : Symbol(g, Decl(parser536727.ts, 3, 3))
+
+foo(g);
+>foo : Symbol(foo, Decl(parser536727.ts, 0, 0))
+>g : Symbol(g, Decl(parser536727.ts, 3, 3))
+
+foo(() => g);
+>foo : Symbol(foo, Decl(parser536727.ts, 0, 0))
+>g : Symbol(g, Decl(parser536727.ts, 3, 3))
+
+foo(x);
+>foo : Symbol(foo, Decl(parser536727.ts, 0, 0))
+>x : Symbol(x, Decl(parser536727.ts, 4, 3))
+

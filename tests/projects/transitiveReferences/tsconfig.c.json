@@ -1,0 +1,10 @@
+{
+    "files": [ "c.ts" ],
+    "compilerOptions": {
+        "baseUrl": "./",
+        "paths": {
+            "@ref/*": [ "./refs/*" ]
+        }
+    },
+    "references": [ { "path": "tsconfig.b.json" } ]
+}

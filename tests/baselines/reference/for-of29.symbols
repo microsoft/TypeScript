@@ -1,0 +1,17 @@
+=== tests/cases/conformance/es6/for-ofStatements/for-of29.ts ===
+var iterableWithOptionalIterator: {
+>iterableWithOptionalIterator : Symbol(iterableWithOptionalIterator, Decl(for-of29.ts, 0, 3))
+
+    [Symbol.iterator]?(): Iterator<string>
+>[Symbol.iterator] : Symbol([Symbol.iterator], Decl(for-of29.ts, 0, 35))
+>Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Iterator : Symbol(Iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+
+};
+
+for (var v of iterableWithOptionalIterator) { }
+>v : Symbol(v, Decl(for-of29.ts, 4, 8))
+>iterableWithOptionalIterator : Symbol(iterableWithOptionalIterator, Decl(for-of29.ts, 0, 3))
+

@@ -1,0 +1,330 @@
+=== tests/cases/compiler/capturedLetConstInLoop1.ts ===
+declare function use(x: any): any;
+>use : Symbol(use, Decl(capturedLetConstInLoop1.ts, 0, 0))
+>x : Symbol(x, Decl(capturedLetConstInLoop1.ts, 0, 21))
+
+//==== let
+for (let x in {}) {
+>x : Symbol(x, Decl(capturedLetConstInLoop1.ts, 3, 8))
+
+    (function() { return x});
+>x : Symbol(x, Decl(capturedLetConstInLoop1.ts, 3, 8))
+
+    (() => x);
+>x : Symbol(x, Decl(capturedLetConstInLoop1.ts, 3, 8))
+}
+
+for (let x of []) {
+>x : Symbol(x, Decl(capturedLetConstInLoop1.ts, 8, 8))
+
+    (function() { return x});
+>x : Symbol(x, Decl(capturedLetConstInLoop1.ts, 8, 8))
+
+    (() => x);
+>x : Symbol(x, Decl(capturedLetConstInLoop1.ts, 8, 8))
+}
+
+for (let x = 0; x < 1; ++x) {
+>x : Symbol(x, Decl(capturedLetConstInLoop1.ts, 13, 8))
+>x : Symbol(x, Decl(capturedLetConstInLoop1.ts, 13, 8))
+>x : Symbol(x, Decl(capturedLetConstInLoop1.ts, 13, 8))
+
+    (function() { return x});
+>x : Symbol(x, Decl(capturedLetConstInLoop1.ts, 13, 8))
+
+    (() => x);
+>x : Symbol(x, Decl(capturedLetConstInLoop1.ts, 13, 8))
+}
+
+while (1 === 1) {
+    let x;
+>x : Symbol(x, Decl(capturedLetConstInLoop1.ts, 19, 7))
+
+    (function() { return x});
+>x : Symbol(x, Decl(capturedLetConstInLoop1.ts, 19, 7))
+
+    (() => x);
+>x : Symbol(x, Decl(capturedLetConstInLoop1.ts, 19, 7))
+}
+
+do {
+    let x;
+>x : Symbol(x, Decl(capturedLetConstInLoop1.ts, 25, 7))
+
+    (function() { return x});
+>x : Symbol(x, Decl(capturedLetConstInLoop1.ts, 25, 7))
+
+    (() => x);
+>x : Symbol(x, Decl(capturedLetConstInLoop1.ts, 25, 7))
+
+} while (1 === 1)
+
+for (let y = 0; y < 1; ++y) {
+>y : Symbol(y, Decl(capturedLetConstInLoop1.ts, 30, 8))
+>y : Symbol(y, Decl(capturedLetConstInLoop1.ts, 30, 8))
+>y : Symbol(y, Decl(capturedLetConstInLoop1.ts, 30, 8))
+
+    let x = 1;
+>x : Symbol(x, Decl(capturedLetConstInLoop1.ts, 31, 7))
+
+    (function() { return x});
+>x : Symbol(x, Decl(capturedLetConstInLoop1.ts, 31, 7))
+
+    (() => x);
+>x : Symbol(x, Decl(capturedLetConstInLoop1.ts, 31, 7))
+}
+
+for (let x = 0, y = 1; x < 1; ++x) {
+>x : Symbol(x, Decl(capturedLetConstInLoop1.ts, 36, 8))
+>y : Symbol(y, Decl(capturedLetConstInLoop1.ts, 36, 15))
+>x : Symbol(x, Decl(capturedLetConstInLoop1.ts, 36, 8))
+>x : Symbol(x, Decl(capturedLetConstInLoop1.ts, 36, 8))
+
+    (function() { return x + y});
+>x : Symbol(x, Decl(capturedLetConstInLoop1.ts, 36, 8))
+>y : Symbol(y, Decl(capturedLetConstInLoop1.ts, 36, 15))
+
+    (() => x + y);
+>x : Symbol(x, Decl(capturedLetConstInLoop1.ts, 36, 8))
+>y : Symbol(y, Decl(capturedLetConstInLoop1.ts, 36, 15))
+}
+
+while (1 === 1) {
+    let x, y;
+>x : Symbol(x, Decl(capturedLetConstInLoop1.ts, 42, 7))
+>y : Symbol(y, Decl(capturedLetConstInLoop1.ts, 42, 10))
+
+    (function() { return x + y});
+>x : Symbol(x, Decl(capturedLetConstInLoop1.ts, 42, 7))
+>y : Symbol(y, Decl(capturedLetConstInLoop1.ts, 42, 10))
+
+    (() => x + y);
+>x : Symbol(x, Decl(capturedLetConstInLoop1.ts, 42, 7))
+>y : Symbol(y, Decl(capturedLetConstInLoop1.ts, 42, 10))
+}
+
+do {
+    let x, y;
+>x : Symbol(x, Decl(capturedLetConstInLoop1.ts, 48, 7))
+>y : Symbol(y, Decl(capturedLetConstInLoop1.ts, 48, 10))
+
+    (function() { return x + y});
+>x : Symbol(x, Decl(capturedLetConstInLoop1.ts, 48, 7))
+>y : Symbol(y, Decl(capturedLetConstInLoop1.ts, 48, 10))
+
+    (() => x + y);
+>x : Symbol(x, Decl(capturedLetConstInLoop1.ts, 48, 7))
+>y : Symbol(y, Decl(capturedLetConstInLoop1.ts, 48, 10))
+
+} while (1 === 1)
+
+for (let y = 0; y < 1; ++y) {
+>y : Symbol(y, Decl(capturedLetConstInLoop1.ts, 53, 8))
+>y : Symbol(y, Decl(capturedLetConstInLoop1.ts, 53, 8))
+>y : Symbol(y, Decl(capturedLetConstInLoop1.ts, 53, 8))
+
+    let x = 1;
+>x : Symbol(x, Decl(capturedLetConstInLoop1.ts, 54, 7))
+
+    (function() { return x + y});
+>x : Symbol(x, Decl(capturedLetConstInLoop1.ts, 54, 7))
+>y : Symbol(y, Decl(capturedLetConstInLoop1.ts, 53, 8))
+
+    (() => x + y);
+>x : Symbol(x, Decl(capturedLetConstInLoop1.ts, 54, 7))
+>y : Symbol(y, Decl(capturedLetConstInLoop1.ts, 53, 8))
+}
+
+for (let y = (use(() => y), 0); y < 1; ++y) {
+>y : Symbol(y, Decl(capturedLetConstInLoop1.ts, 59, 8))
+>use : Symbol(use, Decl(capturedLetConstInLoop1.ts, 0, 0))
+>y : Symbol(y, Decl(capturedLetConstInLoop1.ts, 59, 8))
+>y : Symbol(y, Decl(capturedLetConstInLoop1.ts, 59, 8))
+>y : Symbol(y, Decl(capturedLetConstInLoop1.ts, 59, 8))
+}
+
+for (let y = 0; use(() => y), y < 1; ++y) {
+>y : Symbol(y, Decl(capturedLetConstInLoop1.ts, 62, 8))
+>use : Symbol(use, Decl(capturedLetConstInLoop1.ts, 0, 0))
+>y : Symbol(y, Decl(capturedLetConstInLoop1.ts, 62, 8))
+>y : Symbol(y, Decl(capturedLetConstInLoop1.ts, 62, 8))
+>y : Symbol(y, Decl(capturedLetConstInLoop1.ts, 62, 8))
+}
+
+for (let y = 0; y < 1; use(() => y), ++y) {
+>y : Symbol(y, Decl(capturedLetConstInLoop1.ts, 65, 8))
+>y : Symbol(y, Decl(capturedLetConstInLoop1.ts, 65, 8))
+>use : Symbol(use, Decl(capturedLetConstInLoop1.ts, 0, 0))
+>y : Symbol(y, Decl(capturedLetConstInLoop1.ts, 65, 8))
+>y : Symbol(y, Decl(capturedLetConstInLoop1.ts, 65, 8))
+}
+
+for (let y = (use(() => y), 0); use(() => y), y < 1; use(() => y), ++y) {
+>y : Symbol(y, Decl(capturedLetConstInLoop1.ts, 68, 8))
+>use : Symbol(use, Decl(capturedLetConstInLoop1.ts, 0, 0))
+>y : Symbol(y, Decl(capturedLetConstInLoop1.ts, 68, 8))
+>use : Symbol(use, Decl(capturedLetConstInLoop1.ts, 0, 0))
+>y : Symbol(y, Decl(capturedLetConstInLoop1.ts, 68, 8))
+>y : Symbol(y, Decl(capturedLetConstInLoop1.ts, 68, 8))
+>use : Symbol(use, Decl(capturedLetConstInLoop1.ts, 0, 0))
+>y : Symbol(y, Decl(capturedLetConstInLoop1.ts, 68, 8))
+>y : Symbol(y, Decl(capturedLetConstInLoop1.ts, 68, 8))
+
+    use(() => y);
+>use : Symbol(use, Decl(capturedLetConstInLoop1.ts, 0, 0))
+>y : Symbol(y, Decl(capturedLetConstInLoop1.ts, 68, 8))
+}
+
+//=========const
+for (const x in {}) {
+>x : Symbol(x, Decl(capturedLetConstInLoop1.ts, 73, 10))
+
+    (function() { return x});
+>x : Symbol(x, Decl(capturedLetConstInLoop1.ts, 73, 10))
+
+    (() => x);
+>x : Symbol(x, Decl(capturedLetConstInLoop1.ts, 73, 10))
+}
+
+for (const x of []) {
+>x : Symbol(x, Decl(capturedLetConstInLoop1.ts, 78, 10))
+
+    (function() { return x});
+>x : Symbol(x, Decl(capturedLetConstInLoop1.ts, 78, 10))
+
+    (() => x);
+>x : Symbol(x, Decl(capturedLetConstInLoop1.ts, 78, 10))
+}
+
+for (const x = 0; x < 1;) {
+>x : Symbol(x, Decl(capturedLetConstInLoop1.ts, 83, 10))
+>x : Symbol(x, Decl(capturedLetConstInLoop1.ts, 83, 10))
+
+    (function() { return x});
+>x : Symbol(x, Decl(capturedLetConstInLoop1.ts, 83, 10))
+
+    (() => x);
+>x : Symbol(x, Decl(capturedLetConstInLoop1.ts, 83, 10))
+}
+
+while (1 === 1) {
+    const x = 1;
+>x : Symbol(x, Decl(capturedLetConstInLoop1.ts, 89, 9))
+
+    (function() { return x});
+>x : Symbol(x, Decl(capturedLetConstInLoop1.ts, 89, 9))
+
+    (() => x);
+>x : Symbol(x, Decl(capturedLetConstInLoop1.ts, 89, 9))
+}
+
+do {
+    const x = 1;
+>x : Symbol(x, Decl(capturedLetConstInLoop1.ts, 95, 9))
+
+    (function() { return x});
+>x : Symbol(x, Decl(capturedLetConstInLoop1.ts, 95, 9))
+
+    (() => x);
+>x : Symbol(x, Decl(capturedLetConstInLoop1.ts, 95, 9))
+
+} while (1 === 1)
+
+for (const y = 0; y < 1;) {
+>y : Symbol(y, Decl(capturedLetConstInLoop1.ts, 100, 10))
+>y : Symbol(y, Decl(capturedLetConstInLoop1.ts, 100, 10))
+
+    const x = 1;
+>x : Symbol(x, Decl(capturedLetConstInLoop1.ts, 101, 9))
+
+    (function() { return x});
+>x : Symbol(x, Decl(capturedLetConstInLoop1.ts, 101, 9))
+
+    (() => x);
+>x : Symbol(x, Decl(capturedLetConstInLoop1.ts, 101, 9))
+}
+
+for (const x = 0, y = 1; x < 1;) {
+>x : Symbol(x, Decl(capturedLetConstInLoop1.ts, 106, 10))
+>y : Symbol(y, Decl(capturedLetConstInLoop1.ts, 106, 17))
+>x : Symbol(x, Decl(capturedLetConstInLoop1.ts, 106, 10))
+
+    (function() { return x + y});
+>x : Symbol(x, Decl(capturedLetConstInLoop1.ts, 106, 10))
+>y : Symbol(y, Decl(capturedLetConstInLoop1.ts, 106, 17))
+
+    (() => x + y);
+>x : Symbol(x, Decl(capturedLetConstInLoop1.ts, 106, 10))
+>y : Symbol(y, Decl(capturedLetConstInLoop1.ts, 106, 17))
+}
+
+while (1 === 1) {
+    const x = 1, y = 1;
+>x : Symbol(x, Decl(capturedLetConstInLoop1.ts, 112, 9))
+>y : Symbol(y, Decl(capturedLetConstInLoop1.ts, 112, 16))
+
+    (function() { return x + y});
+>x : Symbol(x, Decl(capturedLetConstInLoop1.ts, 112, 9))
+>y : Symbol(y, Decl(capturedLetConstInLoop1.ts, 112, 16))
+
+    (() => x + y);
+>x : Symbol(x, Decl(capturedLetConstInLoop1.ts, 112, 9))
+>y : Symbol(y, Decl(capturedLetConstInLoop1.ts, 112, 16))
+}
+
+do {
+    const x = 1, y = 1;
+>x : Symbol(x, Decl(capturedLetConstInLoop1.ts, 118, 9))
+>y : Symbol(y, Decl(capturedLetConstInLoop1.ts, 118, 16))
+
+    (function() { return x + y});
+>x : Symbol(x, Decl(capturedLetConstInLoop1.ts, 118, 9))
+>y : Symbol(y, Decl(capturedLetConstInLoop1.ts, 118, 16))
+
+    (() => x + y);
+>x : Symbol(x, Decl(capturedLetConstInLoop1.ts, 118, 9))
+>y : Symbol(y, Decl(capturedLetConstInLoop1.ts, 118, 16))
+
+} while (1 === 1)
+
+for (const y = 0; y < 1;) {
+>y : Symbol(y, Decl(capturedLetConstInLoop1.ts, 123, 10))
+>y : Symbol(y, Decl(capturedLetConstInLoop1.ts, 123, 10))
+
+    const x = 1;
+>x : Symbol(x, Decl(capturedLetConstInLoop1.ts, 124, 9))
+
+    (function() { return x + y});
+>x : Symbol(x, Decl(capturedLetConstInLoop1.ts, 124, 9))
+>y : Symbol(y, Decl(capturedLetConstInLoop1.ts, 123, 10))
+
+    (() => x + y);
+>x : Symbol(x, Decl(capturedLetConstInLoop1.ts, 124, 9))
+>y : Symbol(y, Decl(capturedLetConstInLoop1.ts, 123, 10))
+}
+
+// https://github.com/Microsoft/TypeScript/issues/20594
+declare const sobj: { [x: string]: any };
+>sobj : Symbol(sobj, Decl(capturedLetConstInLoop1.ts, 130, 13))
+>x : Symbol(x, Decl(capturedLetConstInLoop1.ts, 130, 23))
+
+for (let sx in sobj) {
+>sx : Symbol(sx, Decl(capturedLetConstInLoop1.ts, 131, 8))
+>sobj : Symbol(sobj, Decl(capturedLetConstInLoop1.ts, 130, 13))
+
+    (() => sobj[sx]);
+>sobj : Symbol(sobj, Decl(capturedLetConstInLoop1.ts, 130, 13))
+>sx : Symbol(sx, Decl(capturedLetConstInLoop1.ts, 131, 8))
+}
+declare const iobj: { [x: number]: any };
+>iobj : Symbol(iobj, Decl(capturedLetConstInLoop1.ts, 134, 13))
+>x : Symbol(x, Decl(capturedLetConstInLoop1.ts, 134, 23))
+
+for (let ix in iobj) {
+>ix : Symbol(ix, Decl(capturedLetConstInLoop1.ts, 135, 8))
+>iobj : Symbol(iobj, Decl(capturedLetConstInLoop1.ts, 134, 13))
+
+    (() => iobj[ix]);
+>iobj : Symbol(iobj, Decl(capturedLetConstInLoop1.ts, 134, 13))
+>ix : Symbol(ix, Decl(capturedLetConstInLoop1.ts, 135, 8))
+}

@@ -1,0 +1,389 @@
+=== tests/cases/conformance/expressions/typeAssertions/constAssertions.ts ===
+let v1 = 'abc' as const;
+>v1 : Symbol(v1, Decl(constAssertions.ts, 0, 3))
+>const : Symbol(const)
+
+let v2 = `abc` as const;
+>v2 : Symbol(v2, Decl(constAssertions.ts, 1, 3))
+>const : Symbol(const)
+
+let v3 = 10 as const;
+>v3 : Symbol(v3, Decl(constAssertions.ts, 2, 3))
+>const : Symbol(const)
+
+let v4 = -10 as const;
+>v4 : Symbol(v4, Decl(constAssertions.ts, 3, 3))
+>const : Symbol(const)
+
+let v5 = +10 as const;
+>v5 : Symbol(v5, Decl(constAssertions.ts, 4, 3))
+>const : Symbol(const)
+
+let v6 = 10n as const;
+>v6 : Symbol(v6, Decl(constAssertions.ts, 5, 3))
+>const : Symbol(const)
+
+let v7 = -10n as const;
+>v7 : Symbol(v7, Decl(constAssertions.ts, 6, 3))
+>const : Symbol(const)
+
+let v8 = true as const;
+>v8 : Symbol(v8, Decl(constAssertions.ts, 7, 3))
+>const : Symbol(const)
+
+let v9 = false as const;
+>v9 : Symbol(v9, Decl(constAssertions.ts, 8, 3))
+>const : Symbol(const)
+
+let c1 = 'abc' as const;
+>c1 : Symbol(c1, Decl(constAssertions.ts, 10, 3))
+>const : Symbol(const)
+
+let c2 = `abc` as const;
+>c2 : Symbol(c2, Decl(constAssertions.ts, 11, 3))
+>const : Symbol(const)
+
+let c3 = 10 as const;
+>c3 : Symbol(c3, Decl(constAssertions.ts, 12, 3))
+>const : Symbol(const)
+
+let c4 = -10 as const;
+>c4 : Symbol(c4, Decl(constAssertions.ts, 13, 3))
+>const : Symbol(const)
+
+let c5 = +10 as const;
+>c5 : Symbol(c5, Decl(constAssertions.ts, 14, 3))
+>const : Symbol(const)
+
+let c6 = 10n as const;
+>c6 : Symbol(c6, Decl(constAssertions.ts, 15, 3))
+>const : Symbol(const)
+
+let c7 = -10n as const;
+>c7 : Symbol(c7, Decl(constAssertions.ts, 16, 3))
+>const : Symbol(const)
+
+let c8 = true as const;
+>c8 : Symbol(c8, Decl(constAssertions.ts, 17, 3))
+>const : Symbol(const)
+
+let c9 = false as const;
+>c9 : Symbol(c9, Decl(constAssertions.ts, 18, 3))
+>const : Symbol(const)
+
+let vv1 = v1;
+>vv1 : Symbol(vv1, Decl(constAssertions.ts, 20, 3))
+>v1 : Symbol(v1, Decl(constAssertions.ts, 0, 3))
+
+let vc1 = c1;
+>vc1 : Symbol(vc1, Decl(constAssertions.ts, 21, 3))
+>c1 : Symbol(c1, Decl(constAssertions.ts, 10, 3))
+
+let a1 = [] as const;
+>a1 : Symbol(a1, Decl(constAssertions.ts, 23, 3))
+>const : Symbol(const)
+
+let a2 = [1, 2, 3] as const;
+>a2 : Symbol(a2, Decl(constAssertions.ts, 24, 3))
+>const : Symbol(const)
+
+let a3 = [10, 'hello', true] as const;
+>a3 : Symbol(a3, Decl(constAssertions.ts, 25, 3))
+>const : Symbol(const)
+
+let a4 = [...[1, 2, 3]] as const;
+>a4 : Symbol(a4, Decl(constAssertions.ts, 26, 3))
+>const : Symbol(const)
+
+let a5 = [1, 2, 3];
+>a5 : Symbol(a5, Decl(constAssertions.ts, 27, 3))
+
+let a6 = [...a5] as const;
+>a6 : Symbol(a6, Decl(constAssertions.ts, 28, 3))
+>a5 : Symbol(a5, Decl(constAssertions.ts, 27, 3))
+>const : Symbol(const)
+
+let a7 = [...a6];
+>a7 : Symbol(a7, Decl(constAssertions.ts, 29, 3))
+>a6 : Symbol(a6, Decl(constAssertions.ts, 28, 3))
+
+let a8 = ['abc', ...a7] as const;
+>a8 : Symbol(a8, Decl(constAssertions.ts, 30, 3))
+>a7 : Symbol(a7, Decl(constAssertions.ts, 29, 3))
+>const : Symbol(const)
+
+let a9 = [...a8];
+>a9 : Symbol(a9, Decl(constAssertions.ts, 31, 3))
+>a8 : Symbol(a8, Decl(constAssertions.ts, 30, 3))
+
+declare let d: { [x: string]: string };
+>d : Symbol(d, Decl(constAssertions.ts, 33, 11))
+>x : Symbol(x, Decl(constAssertions.ts, 33, 18))
+
+let o1 = { x: 10, y: 20 } as const;
+>o1 : Symbol(o1, Decl(constAssertions.ts, 35, 3))
+>x : Symbol(x, Decl(constAssertions.ts, 35, 10))
+>y : Symbol(y, Decl(constAssertions.ts, 35, 17))
+>const : Symbol(const)
+
+let o2 = { a: 1, 'b': 2, ['c']: 3, d() {}, ['e' + '']: 4 } as const;
+>o2 : Symbol(o2, Decl(constAssertions.ts, 36, 3))
+>a : Symbol(a, Decl(constAssertions.ts, 36, 10))
+>'b' : Symbol('b', Decl(constAssertions.ts, 36, 16))
+>['c'] : Symbol(['c'], Decl(constAssertions.ts, 36, 24))
+>'c' : Symbol(['c'], Decl(constAssertions.ts, 36, 24))
+>d : Symbol(d, Decl(constAssertions.ts, 36, 34))
+>['e' + ''] : Symbol(['e' + ''], Decl(constAssertions.ts, 36, 42))
+>const : Symbol(const)
+
+let o3 = { ...o1, ...o2 } as const;
+>o3 : Symbol(o3, Decl(constAssertions.ts, 37, 3))
+>o1 : Symbol(o1, Decl(constAssertions.ts, 35, 3))
+>o2 : Symbol(o2, Decl(constAssertions.ts, 36, 3))
+>const : Symbol(const)
+
+let o4 = { a: 1, b: 2 };
+>o4 : Symbol(o4, Decl(constAssertions.ts, 38, 3))
+>a : Symbol(a, Decl(constAssertions.ts, 38, 10))
+>b : Symbol(b, Decl(constAssertions.ts, 38, 16))
+
+let o5 = { ...o4 } as const;
+>o5 : Symbol(o5, Decl(constAssertions.ts, 39, 3))
+>o4 : Symbol(o4, Decl(constAssertions.ts, 38, 3))
+>const : Symbol(const)
+
+let o6 = { ...o5 };
+>o6 : Symbol(o6, Decl(constAssertions.ts, 40, 3))
+>o5 : Symbol(o5, Decl(constAssertions.ts, 39, 3))
+
+let o7 = { ...d } as const;
+>o7 : Symbol(o7, Decl(constAssertions.ts, 41, 3))
+>d : Symbol(d, Decl(constAssertions.ts, 33, 11))
+>const : Symbol(const)
+
+let o8 = { ...o7 };
+>o8 : Symbol(o8, Decl(constAssertions.ts, 42, 3))
+>o7 : Symbol(o7, Decl(constAssertions.ts, 41, 3))
+
+let o9 = { x: 10, foo() { this.x = 20 } } as const;  // Error
+>o9 : Symbol(o9, Decl(constAssertions.ts, 43, 3))
+>x : Symbol(x, Decl(constAssertions.ts, 43, 10))
+>foo : Symbol(foo, Decl(constAssertions.ts, 43, 17))
+>this.x : Symbol(x, Decl(constAssertions.ts, 43, 10))
+>this : Symbol(__object, Decl(constAssertions.ts, 43, 8))
+>x : Symbol(x, Decl(constAssertions.ts, 43, 10))
+>const : Symbol(const)
+
+let p1 = (10) as const;
+>p1 : Symbol(p1, Decl(constAssertions.ts, 45, 3))
+>const : Symbol(const)
+
+let p2 = ((-10)) as const;
+>p2 : Symbol(p2, Decl(constAssertions.ts, 46, 3))
+>const : Symbol(const)
+
+let p3 = ([(10)]) as const;
+>p3 : Symbol(p3, Decl(constAssertions.ts, 47, 3))
+>const : Symbol(const)
+
+let p4 = [[[[10]]]] as const;
+>p4 : Symbol(p4, Decl(constAssertions.ts, 48, 3))
+>const : Symbol(const)
+
+let x1 = { x: 10, y: [20, 30], z: { a: { b: 42 } } } as const;
+>x1 : Symbol(x1, Decl(constAssertions.ts, 50, 3))
+>x : Symbol(x, Decl(constAssertions.ts, 50, 10))
+>y : Symbol(y, Decl(constAssertions.ts, 50, 17))
+>z : Symbol(z, Decl(constAssertions.ts, 50, 30))
+>a : Symbol(a, Decl(constAssertions.ts, 50, 35))
+>b : Symbol(b, Decl(constAssertions.ts, 50, 40))
+>const : Symbol(const)
+
+let q1 = <const> 10;
+>q1 : Symbol(q1, Decl(constAssertions.ts, 52, 3))
+>const : Symbol(const)
+
+let q2 = <const> 'abc';
+>q2 : Symbol(q2, Decl(constAssertions.ts, 53, 3))
+>const : Symbol(const)
+
+let q3 = <const> true;
+>q3 : Symbol(q3, Decl(constAssertions.ts, 54, 3))
+>const : Symbol(const)
+
+let q4 = <const> [1, 2, 3];
+>q4 : Symbol(q4, Decl(constAssertions.ts, 55, 3))
+>const : Symbol(const)
+
+let q5 = <const> { x: 10, y: 20 };
+>q5 : Symbol(q5, Decl(constAssertions.ts, 56, 3))
+>const : Symbol(const)
+>x : Symbol(x, Decl(constAssertions.ts, 56, 18))
+>y : Symbol(y, Decl(constAssertions.ts, 56, 25))
+
+declare function id<T>(x: T): T;
+>id : Symbol(id, Decl(constAssertions.ts, 56, 34))
+>T : Symbol(T, Decl(constAssertions.ts, 58, 20))
+>x : Symbol(x, Decl(constAssertions.ts, 58, 23))
+>T : Symbol(T, Decl(constAssertions.ts, 58, 20))
+>T : Symbol(T, Decl(constAssertions.ts, 58, 20))
+
+let e1 = v1 as const;  // Error
+>e1 : Symbol(e1, Decl(constAssertions.ts, 60, 3))
+>v1 : Symbol(v1, Decl(constAssertions.ts, 0, 3))
+>const : Symbol(const)
+
+let e2 = (true ? 1 : 0) as const;  // Error
+>e2 : Symbol(e2, Decl(constAssertions.ts, 61, 3))
+>const : Symbol(const)
+
+let e3 = id(1) as const;  // Error
+>e3 : Symbol(e3, Decl(constAssertions.ts, 62, 3))
+>id : Symbol(id, Decl(constAssertions.ts, 56, 34))
+>const : Symbol(const)
+
+let t1 = 'foo' as const;
+>t1 : Symbol(t1, Decl(constAssertions.ts, 64, 3))
+>const : Symbol(const)
+
+let t2 = 'bar' as const;
+>t2 : Symbol(t2, Decl(constAssertions.ts, 65, 3))
+>const : Symbol(const)
+
+let t3 = `${t1}-${t2}` as const;
+>t3 : Symbol(t3, Decl(constAssertions.ts, 66, 3))
+>t1 : Symbol(t1, Decl(constAssertions.ts, 64, 3))
+>t2 : Symbol(t2, Decl(constAssertions.ts, 65, 3))
+>const : Symbol(const)
+
+let t4 = `${`(${t1})`}-${`(${t2})`}` as const;
+>t4 : Symbol(t4, Decl(constAssertions.ts, 67, 3))
+>t1 : Symbol(t1, Decl(constAssertions.ts, 64, 3))
+>t2 : Symbol(t2, Decl(constAssertions.ts, 65, 3))
+>const : Symbol(const)
+
+function ff1(x: 'foo' | 'bar', y: 1 | 2) {
+>ff1 : Symbol(ff1, Decl(constAssertions.ts, 67, 46))
+>x : Symbol(x, Decl(constAssertions.ts, 69, 13))
+>y : Symbol(y, Decl(constAssertions.ts, 69, 30))
+
+    return `${x}-${y}` as const;
+>x : Symbol(x, Decl(constAssertions.ts, 69, 13))
+>y : Symbol(y, Decl(constAssertions.ts, 69, 30))
+>const : Symbol(const)
+}
+
+function ff2<T extends string, U extends string>(x: T, y: U) {
+>ff2 : Symbol(ff2, Decl(constAssertions.ts, 71, 1))
+>T : Symbol(T, Decl(constAssertions.ts, 73, 13))
+>U : Symbol(U, Decl(constAssertions.ts, 73, 30))
+>x : Symbol(x, Decl(constAssertions.ts, 73, 49))
+>T : Symbol(T, Decl(constAssertions.ts, 73, 13))
+>y : Symbol(y, Decl(constAssertions.ts, 73, 54))
+>U : Symbol(U, Decl(constAssertions.ts, 73, 30))
+
+    return `${x}-${y}` as const;
+>x : Symbol(x, Decl(constAssertions.ts, 73, 49))
+>y : Symbol(y, Decl(constAssertions.ts, 73, 54))
+>const : Symbol(const)
+}
+
+const ts1 = ff2('foo', 'bar');
+>ts1 : Symbol(ts1, Decl(constAssertions.ts, 77, 5))
+>ff2 : Symbol(ff2, Decl(constAssertions.ts, 71, 1))
+
+const ts2 = ff2('foo', !!true ? '0' : '1');
+>ts2 : Symbol(ts2, Decl(constAssertions.ts, 78, 5))
+>ff2 : Symbol(ff2, Decl(constAssertions.ts, 71, 1))
+
+const ts3 = ff2(!!true ? 'top' : 'bottom', !!true ? 'left' : 'right');
+>ts3 : Symbol(ts3, Decl(constAssertions.ts, 79, 5))
+>ff2 : Symbol(ff2, Decl(constAssertions.ts, 71, 1))
+
+function ff3(x: 'foo' | 'bar', y: object) {
+>ff3 : Symbol(ff3, Decl(constAssertions.ts, 79, 70))
+>x : Symbol(x, Decl(constAssertions.ts, 81, 13))
+>y : Symbol(y, Decl(constAssertions.ts, 81, 30))
+
+    return `${x}${y}` as const;
+>x : Symbol(x, Decl(constAssertions.ts, 81, 13))
+>y : Symbol(y, Decl(constAssertions.ts, 81, 30))
+>const : Symbol(const)
+}
+
+type Action = "verify" | "write";
+>Action : Symbol(Action, Decl(constAssertions.ts, 83, 1))
+
+type ContentMatch = "match" | "nonMatch";
+>ContentMatch : Symbol(ContentMatch, Decl(constAssertions.ts, 85, 33))
+
+type Outcome = `${Action}_${ContentMatch}`;
+>Outcome : Symbol(Outcome, Decl(constAssertions.ts, 86, 41))
+>Action : Symbol(Action, Decl(constAssertions.ts, 83, 1))
+>ContentMatch : Symbol(ContentMatch, Decl(constAssertions.ts, 85, 33))
+
+function ff4(verify: boolean, contentMatches: boolean) {
+>ff4 : Symbol(ff4, Decl(constAssertions.ts, 87, 43))
+>verify : Symbol(verify, Decl(constAssertions.ts, 89, 13))
+>contentMatches : Symbol(contentMatches, Decl(constAssertions.ts, 89, 29))
+
+    const action : Action = verify ? `verify` : `write`;
+>action : Symbol(action, Decl(constAssertions.ts, 90, 9))
+>Action : Symbol(Action, Decl(constAssertions.ts, 83, 1))
+>verify : Symbol(verify, Decl(constAssertions.ts, 89, 13))
+
+    const contentMatch: ContentMatch = contentMatches ? `match` : `nonMatch`;
+>contentMatch : Symbol(contentMatch, Decl(constAssertions.ts, 91, 9))
+>ContentMatch : Symbol(ContentMatch, Decl(constAssertions.ts, 85, 33))
+>contentMatches : Symbol(contentMatches, Decl(constAssertions.ts, 89, 29))
+
+    const outcome: Outcome = `${action}_${contentMatch}` as const;
+>outcome : Symbol(outcome, Decl(constAssertions.ts, 92, 9))
+>Outcome : Symbol(Outcome, Decl(constAssertions.ts, 86, 41))
+>action : Symbol(action, Decl(constAssertions.ts, 90, 9))
+>contentMatch : Symbol(contentMatch, Decl(constAssertions.ts, 91, 9))
+>const : Symbol(const)
+
+    return outcome;
+>outcome : Symbol(outcome, Decl(constAssertions.ts, 92, 9))
+}
+
+function ff5(verify: boolean, contentMatches: boolean) {
+>ff5 : Symbol(ff5, Decl(constAssertions.ts, 94, 1))
+>verify : Symbol(verify, Decl(constAssertions.ts, 96, 13))
+>contentMatches : Symbol(contentMatches, Decl(constAssertions.ts, 96, 29))
+
+    const action = verify ? `verify` : `write`;
+>action : Symbol(action, Decl(constAssertions.ts, 97, 9))
+>verify : Symbol(verify, Decl(constAssertions.ts, 96, 13))
+
+    const contentMatch = contentMatches ? `match` : `nonMatch`;
+>contentMatch : Symbol(contentMatch, Decl(constAssertions.ts, 98, 9))
+>contentMatches : Symbol(contentMatches, Decl(constAssertions.ts, 96, 29))
+
+    const outcome = `${action}_${contentMatch}` as const;
+>outcome : Symbol(outcome, Decl(constAssertions.ts, 99, 9))
+>action : Symbol(action, Decl(constAssertions.ts, 97, 9))
+>contentMatch : Symbol(contentMatch, Decl(constAssertions.ts, 98, 9))
+>const : Symbol(const)
+
+    return outcome;
+>outcome : Symbol(outcome, Decl(constAssertions.ts, 99, 9))
+}
+
+function accessorNames<S extends string>(propName: S) {
+>accessorNames : Symbol(accessorNames, Decl(constAssertions.ts, 101, 1))
+>S : Symbol(S, Decl(constAssertions.ts, 103, 23))
+>propName : Symbol(propName, Decl(constAssertions.ts, 103, 41))
+>S : Symbol(S, Decl(constAssertions.ts, 103, 23))
+
+    return [`get-${propName}`, `set-${propName}`] as const;
+>propName : Symbol(propName, Decl(constAssertions.ts, 103, 41))
+>propName : Symbol(propName, Decl(constAssertions.ts, 103, 41))
+>const : Symbol(const)
+}
+
+const ns1 = accessorNames('foo');
+>ns1 : Symbol(ns1, Decl(constAssertions.ts, 107, 5))
+>accessorNames : Symbol(accessorNames, Decl(constAssertions.ts, 101, 1))
+

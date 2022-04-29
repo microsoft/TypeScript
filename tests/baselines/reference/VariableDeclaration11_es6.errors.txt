@@ -1,0 +1,11 @@
+tests/cases/conformance/es6/variableDeclarations/VariableDeclaration11_es6.ts(2,1): error TS1212: Identifier expected. 'let' is a reserved word in strict mode.
+tests/cases/conformance/es6/variableDeclarations/VariableDeclaration11_es6.ts(2,1): error TS2304: Cannot find name 'let'.
+
+
+==== tests/cases/conformance/es6/variableDeclarations/VariableDeclaration11_es6.ts (2 errors) ====
+    "use strict";
+    let
+    ~~~
+!!! error TS1212: Identifier expected. 'let' is a reserved word in strict mode.
+    ~~~
+!!! error TS2304: Cannot find name 'let'.

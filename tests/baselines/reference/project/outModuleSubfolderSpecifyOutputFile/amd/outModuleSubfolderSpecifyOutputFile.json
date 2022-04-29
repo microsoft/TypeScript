@@ -1,0 +1,19 @@
+{
+    "scenario": "outputdir_module_subfolder: specify outputFile",
+    "projectRoot": "tests/cases/projects/outputdir_module_subfolder",
+    "inputFiles": [
+        "test.ts"
+    ],
+    "out": "bin/test.js",
+    "declaration": true,
+    "baselineCheck": true,
+    "resolvedInputFiles": [
+        "lib.es5.d.ts",
+        "ref/m1.ts",
+        "test.ts"
+    ],
+    "emittedFiles": [
+        "bin/test.js",
+        "bin/test.d.ts"
+    ]
+}

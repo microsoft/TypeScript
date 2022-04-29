@@ -1,0 +1,168 @@
+=== tests/cases/conformance/expressions/unaryOperators/bitwiseNotOperator/bitwiseNotOperatorWithStringType.ts ===
+// ~ operator on string type
+var STRING: string;
+>STRING : string
+
+var STRING1: string[] = ["", "abc"];
+>STRING1 : string[]
+>["", "abc"] : string[]
+>"" : ""
+>"abc" : "abc"
+
+function foo(): string { return "abc"; }
+>foo : () => string
+>"abc" : "abc"
+
+class A {
+>A : A
+
+    public a: string;
+>a : string
+
+    static foo() { return ""; }
+>foo : () => string
+>"" : ""
+}
+module M {
+>M : typeof M
+
+    export var n: string;
+>n : string
+}
+
+var objA = new A();
+>objA : A
+>new A() : A
+>A : typeof A
+
+// string type var
+var ResultIsNumber1 = ~STRING;
+>ResultIsNumber1 : number
+>~STRING : number
+>STRING : string
+
+var ResultIsNumber2 = ~STRING1;
+>ResultIsNumber2 : number
+>~STRING1 : number
+>STRING1 : string[]
+
+// string type literal
+var ResultIsNumber3 = ~"";
+>ResultIsNumber3 : number
+>~"" : number
+>"" : ""
+
+var ResultIsNumber4 = ~{ x: "", y: "" };
+>ResultIsNumber4 : number
+>~{ x: "", y: "" } : number
+>{ x: "", y: "" } : { x: string; y: string; }
+>x : string
+>"" : ""
+>y : string
+>"" : ""
+
+var ResultIsNumber5 = ~{ x: "", y: (s: string) => { return s; } };
+>ResultIsNumber5 : number
+>~{ x: "", y: (s: string) => { return s; } } : number
+>{ x: "", y: (s: string) => { return s; } } : { x: string; y: (s: string) => string; }
+>x : string
+>"" : ""
+>y : (s: string) => string
+>(s: string) => { return s; } : (s: string) => string
+>s : string
+>s : string
+
+// string type expressions
+var ResultIsNumber6 = ~objA.a;
+>ResultIsNumber6 : number
+>~objA.a : number
+>objA.a : string
+>objA : A
+>a : string
+
+var ResultIsNumber7 = ~M.n;
+>ResultIsNumber7 : number
+>~M.n : number
+>M.n : string
+>M : typeof M
+>n : string
+
+var ResultIsNumber8 = ~STRING1[0];
+>ResultIsNumber8 : number
+>~STRING1[0] : number
+>STRING1[0] : string
+>STRING1 : string[]
+>0 : 0
+
+var ResultIsNumber9 = ~foo();
+>ResultIsNumber9 : number
+>~foo() : number
+>foo() : string
+>foo : () => string
+
+var ResultIsNumber10 = ~A.foo();
+>ResultIsNumber10 : number
+>~A.foo() : number
+>A.foo() : string
+>A.foo : () => string
+>A : typeof A
+>foo : () => string
+
+var ResultIsNumber11 = ~(STRING + STRING);
+>ResultIsNumber11 : number
+>~(STRING + STRING) : number
+>(STRING + STRING) : string
+>STRING + STRING : string
+>STRING : string
+>STRING : string
+
+var ResultIsNumber12 = ~STRING.charAt(0);
+>ResultIsNumber12 : number
+>~STRING.charAt(0) : number
+>STRING.charAt(0) : string
+>STRING.charAt : (pos: number) => string
+>STRING : string
+>charAt : (pos: number) => string
+>0 : 0
+
+// multiple ~ operators
+var ResultIsNumber13 = ~~STRING;
+>ResultIsNumber13 : number
+>~~STRING : number
+>~STRING : number
+>STRING : string
+
+var ResultIsNumber14 = ~~~(STRING + STRING);
+>ResultIsNumber14 : number
+>~~~(STRING + STRING) : number
+>~~(STRING + STRING) : number
+>~(STRING + STRING) : number
+>(STRING + STRING) : string
+>STRING + STRING : string
+>STRING : string
+>STRING : string
+
+//miss assignment operators
+~STRING;
+>~STRING : number
+>STRING : string
+
+~STRING1;
+>~STRING1 : number
+>STRING1 : string[]
+
+~foo();
+>~foo() : number
+>foo() : string
+>foo : () => string
+
+~objA.a,M.n;
+>~objA.a,M.n : string
+>~objA.a : number
+>objA.a : string
+>objA : A
+>a : string
+>M.n : string
+>M : typeof M
+>n : string
+

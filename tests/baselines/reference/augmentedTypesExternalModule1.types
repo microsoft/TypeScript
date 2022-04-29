@@ -1,0 +1,10 @@
+=== tests/cases/compiler/augmentedTypesExternalModule1.ts ===
+export var a = 1;
+>a : number
+>1 : 1
+
+class c5 { public foo() { } }
+>c5 : c5
+>foo : () => void
+
+module c5 { } // should be ok everywhere

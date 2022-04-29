@@ -1,0 +1,13 @@
+tests/cases/conformance/parser/ecmascript5/SkippedTokens/parserSkippedTokens15.ts(2,1): error TS1127: Invalid character.
+tests/cases/conformance/parser/ecmascript5/SkippedTokens/parserSkippedTokens15.ts(3,1): error TS1127: Invalid character.
+
+
+==== tests/cases/conformance/parser/ecmascript5/SkippedTokens/parserSkippedTokens15.ts (2 errors) ====
+    /*existing trivia*/
+    \
+    
+!!! error TS1127: Invalid character.
+    \
+    
+!!! error TS1127: Invalid character.
+    ;

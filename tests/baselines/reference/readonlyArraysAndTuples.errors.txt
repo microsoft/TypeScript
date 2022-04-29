@@ -1,0 +1,100 @@
+tests/cases/conformance/types/tuple/readonlyArraysAndTuples.ts(9,12): error TS1354: 'readonly' type modifier is only permitted on array and tuple literal types.
+tests/cases/conformance/types/tuple/readonlyArraysAndTuples.ts(10,15): error TS1354: 'readonly' type modifier is only permitted on array and tuple literal types.
+tests/cases/conformance/types/tuple/readonlyArraysAndTuples.ts(11,12): error TS1354: 'readonly' type modifier is only permitted on array and tuple literal types.
+tests/cases/conformance/types/tuple/readonlyArraysAndTuples.ts(12,12): error TS1354: 'readonly' type modifier is only permitted on array and tuple literal types.
+tests/cases/conformance/types/tuple/readonlyArraysAndTuples.ts(15,5): error TS4104: The type 'readonly string[]' is 'readonly' and cannot be assigned to the mutable type 'string[]'.
+tests/cases/conformance/types/tuple/readonlyArraysAndTuples.ts(17,5): error TS4104: The type 'readonly [string, string]' is 'readonly' and cannot be assigned to the mutable type 'string[]'.
+tests/cases/conformance/types/tuple/readonlyArraysAndTuples.ts(21,5): error TS2322: Type 'string[]' is not assignable to type '[string, string]'.
+  Target requires 2 element(s) but source may have fewer.
+tests/cases/conformance/types/tuple/readonlyArraysAndTuples.ts(22,5): error TS4104: The type 'readonly string[]' is 'readonly' and cannot be assigned to the mutable type '[string, string]'.
+tests/cases/conformance/types/tuple/readonlyArraysAndTuples.ts(23,5): error TS4104: The type 'readonly [string, string]' is 'readonly' and cannot be assigned to the mutable type '[string, string]'.
+tests/cases/conformance/types/tuple/readonlyArraysAndTuples.ts(24,5): error TS2322: Type 'string[]' is not assignable to type 'readonly [string, string]'.
+  Target requires 2 element(s) but source may have fewer.
+tests/cases/conformance/types/tuple/readonlyArraysAndTuples.ts(25,5): error TS2322: Type 'readonly string[]' is not assignable to type 'readonly [string, string]'.
+  Target requires 2 element(s) but source may have fewer.
+tests/cases/conformance/types/tuple/readonlyArraysAndTuples.ts(30,3): error TS2540: Cannot assign to '0' because it is a read-only property.
+tests/cases/conformance/types/tuple/readonlyArraysAndTuples.ts(31,3): error TS2540: Cannot assign to '1' because it is a read-only property.
+tests/cases/conformance/types/tuple/readonlyArraysAndTuples.ts(32,1): error TS2542: Index signature in type 'readonly [number, number, ...number[]]' only permits reading.
+tests/cases/conformance/types/tuple/readonlyArraysAndTuples.ts(33,8): error TS2542: Index signature in type 'readonly [number, number, ...number[]]' only permits reading.
+tests/cases/conformance/types/tuple/readonlyArraysAndTuples.ts(34,1): error TS2542: Index signature in type 'readonly [number, number, ...number[]]' only permits reading.
+tests/cases/conformance/types/tuple/readonlyArraysAndTuples.ts(35,1): error TS2542: Index signature in type 'readonly [number, number, ...number[]]' only permits reading.
+tests/cases/conformance/types/tuple/readonlyArraysAndTuples.ts(36,8): error TS2542: Index signature in type 'readonly [number, number, ...number[]]' only permits reading.
+
+
+==== tests/cases/conformance/types/tuple/readonlyArraysAndTuples.ts (18 errors) ====
+    type T10 = string[];
+    type T11 = Array<string>;
+    type T12 = readonly string[];
+    type T13 = ReadonlyArray<string>;
+    
+    type T20 = [number, number];
+    type T21 = readonly [number, number];
+    
+    type T30 = readonly string;  // Error
+               ~~~~~~~~
+!!! error TS1354: 'readonly' type modifier is only permitted on array and tuple literal types.
+    type T31<T> = readonly T;  // Error
+                  ~~~~~~~~
+!!! error TS1354: 'readonly' type modifier is only permitted on array and tuple literal types.
+    type T32 = readonly readonly string[];  // Error
+               ~~~~~~~~
+!!! error TS1354: 'readonly' type modifier is only permitted on array and tuple literal types.
+    type T33 = readonly Array<string>;  // Error
+               ~~~~~~~~
+!!! error TS1354: 'readonly' type modifier is only permitted on array and tuple literal types.
+    
+    function f1(ma: string[], ra: readonly string[], mt: [string, string], rt: readonly [string, string]) {
+        ma = ra;  // Error
+        ~~
+!!! error TS4104: The type 'readonly string[]' is 'readonly' and cannot be assigned to the mutable type 'string[]'.
+        ma = mt;
+        ma = rt;  // Error
+        ~~
+!!! error TS4104: The type 'readonly [string, string]' is 'readonly' and cannot be assigned to the mutable type 'string[]'.
+        ra = ma;
+        ra = mt;
+        ra = rt;
+        mt = ma;  // Error
+        ~~
+!!! error TS2322: Type 'string[]' is not assignable to type '[string, string]'.
+!!! error TS2322:   Target requires 2 element(s) but source may have fewer.
+        mt = ra;  // Error
+        ~~
+!!! error TS4104: The type 'readonly string[]' is 'readonly' and cannot be assigned to the mutable type '[string, string]'.
+        mt = rt;  // Error
+        ~~
+!!! error TS4104: The type 'readonly [string, string]' is 'readonly' and cannot be assigned to the mutable type '[string, string]'.
+        rt = ma;  // Error
+        ~~
+!!! error TS2322: Type 'string[]' is not assignable to type 'readonly [string, string]'.
+!!! error TS2322:   Target requires 2 element(s) but source may have fewer.
+        rt = ra;  // Error
+        ~~
+!!! error TS2322: Type 'readonly string[]' is not assignable to type 'readonly [string, string]'.
+!!! error TS2322:   Target requires 2 element(s) but source may have fewer.
+        rt = mt;
+    }
+    
+    declare var v: readonly[number, number, ...number[]];
+    v[0] = 1;        // Error
+      ~
+!!! error TS2540: Cannot assign to '0' because it is a read-only property.
+    v[1] = 1;        // Error
+      ~
+!!! error TS2540: Cannot assign to '1' because it is a read-only property.
+    v[2] = 1;        // Error
+    ~~~~
+!!! error TS2542: Index signature in type 'readonly [number, number, ...number[]]' only permits reading.
+    delete v[2];     // Error
+           ~~~~
+!!! error TS2542: Index signature in type 'readonly [number, number, ...number[]]' only permits reading.
+    v[0 + 1] = 1;    // Error
+    ~~~~~~~~
+!!! error TS2542: Index signature in type 'readonly [number, number, ...number[]]' only permits reading.
+    v[0 + 2] = 1;    // Error
+    ~~~~~~~~
+!!! error TS2542: Index signature in type 'readonly [number, number, ...number[]]' only permits reading.
+    delete v[0 + 1]; // Error
+           ~~~~~~~~
+!!! error TS2542: Index signature in type 'readonly [number, number, ...number[]]' only permits reading.
+    

@@ -1,0 +1,182 @@
+=== tests/cases/compiler/excessivelyLargeTupleSpread.ts ===
+// #41771
+
+type BuildTuple<L extends number, T extends any[] = [any]> = 
+>BuildTuple : Symbol(BuildTuple, Decl(excessivelyLargeTupleSpread.ts, 0, 0))
+>L : Symbol(L, Decl(excessivelyLargeTupleSpread.ts, 2, 16))
+>T : Symbol(T, Decl(excessivelyLargeTupleSpread.ts, 2, 33))
+
+    T['length'] extends L ? T : BuildTuple<L, [...T, ...T]>;
+>T : Symbol(T, Decl(excessivelyLargeTupleSpread.ts, 2, 33))
+>L : Symbol(L, Decl(excessivelyLargeTupleSpread.ts, 2, 16))
+>T : Symbol(T, Decl(excessivelyLargeTupleSpread.ts, 2, 33))
+>BuildTuple : Symbol(BuildTuple, Decl(excessivelyLargeTupleSpread.ts, 0, 0))
+>L : Symbol(L, Decl(excessivelyLargeTupleSpread.ts, 2, 16))
+>T : Symbol(T, Decl(excessivelyLargeTupleSpread.ts, 2, 33))
+>T : Symbol(T, Decl(excessivelyLargeTupleSpread.ts, 2, 33))
+
+type A = BuildTuple<3>
+>A : Symbol(A, Decl(excessivelyLargeTupleSpread.ts, 3, 60))
+>BuildTuple : Symbol(BuildTuple, Decl(excessivelyLargeTupleSpread.ts, 0, 0))
+
+type T0 = [any];
+>T0 : Symbol(T0, Decl(excessivelyLargeTupleSpread.ts, 5, 22))
+
+type T1 = [...T0, ...T0];
+>T1 : Symbol(T1, Decl(excessivelyLargeTupleSpread.ts, 7, 16))
+>T0 : Symbol(T0, Decl(excessivelyLargeTupleSpread.ts, 5, 22))
+>T0 : Symbol(T0, Decl(excessivelyLargeTupleSpread.ts, 5, 22))
+
+type T2 = [...T1, ...T1];
+>T2 : Symbol(T2, Decl(excessivelyLargeTupleSpread.ts, 8, 25))
+>T1 : Symbol(T1, Decl(excessivelyLargeTupleSpread.ts, 7, 16))
+>T1 : Symbol(T1, Decl(excessivelyLargeTupleSpread.ts, 7, 16))
+
+type T3 = [...T2, ...T2];
+>T3 : Symbol(T3, Decl(excessivelyLargeTupleSpread.ts, 9, 25))
+>T2 : Symbol(T2, Decl(excessivelyLargeTupleSpread.ts, 8, 25))
+>T2 : Symbol(T2, Decl(excessivelyLargeTupleSpread.ts, 8, 25))
+
+type T4 = [...T3, ...T3];
+>T4 : Symbol(T4, Decl(excessivelyLargeTupleSpread.ts, 10, 25))
+>T3 : Symbol(T3, Decl(excessivelyLargeTupleSpread.ts, 9, 25))
+>T3 : Symbol(T3, Decl(excessivelyLargeTupleSpread.ts, 9, 25))
+
+type T5 = [...T4, ...T4];
+>T5 : Symbol(T5, Decl(excessivelyLargeTupleSpread.ts, 11, 25))
+>T4 : Symbol(T4, Decl(excessivelyLargeTupleSpread.ts, 10, 25))
+>T4 : Symbol(T4, Decl(excessivelyLargeTupleSpread.ts, 10, 25))
+
+type T6 = [...T5, ...T5];
+>T6 : Symbol(T6, Decl(excessivelyLargeTupleSpread.ts, 12, 25))
+>T5 : Symbol(T5, Decl(excessivelyLargeTupleSpread.ts, 11, 25))
+>T5 : Symbol(T5, Decl(excessivelyLargeTupleSpread.ts, 11, 25))
+
+type T7 = [...T6, ...T6];
+>T7 : Symbol(T7, Decl(excessivelyLargeTupleSpread.ts, 13, 25))
+>T6 : Symbol(T6, Decl(excessivelyLargeTupleSpread.ts, 12, 25))
+>T6 : Symbol(T6, Decl(excessivelyLargeTupleSpread.ts, 12, 25))
+
+type T8 = [...T7, ...T7];
+>T8 : Symbol(T8, Decl(excessivelyLargeTupleSpread.ts, 14, 25))
+>T7 : Symbol(T7, Decl(excessivelyLargeTupleSpread.ts, 13, 25))
+>T7 : Symbol(T7, Decl(excessivelyLargeTupleSpread.ts, 13, 25))
+
+type T9 = [...T8, ...T8];
+>T9 : Symbol(T9, Decl(excessivelyLargeTupleSpread.ts, 15, 25))
+>T8 : Symbol(T8, Decl(excessivelyLargeTupleSpread.ts, 14, 25))
+>T8 : Symbol(T8, Decl(excessivelyLargeTupleSpread.ts, 14, 25))
+
+type T10 = [...T9, ...T9];
+>T10 : Symbol(T10, Decl(excessivelyLargeTupleSpread.ts, 16, 25))
+>T9 : Symbol(T9, Decl(excessivelyLargeTupleSpread.ts, 15, 25))
+>T9 : Symbol(T9, Decl(excessivelyLargeTupleSpread.ts, 15, 25))
+
+type T11 = [...T10, ...T10];
+>T11 : Symbol(T11, Decl(excessivelyLargeTupleSpread.ts, 17, 26))
+>T10 : Symbol(T10, Decl(excessivelyLargeTupleSpread.ts, 16, 25))
+>T10 : Symbol(T10, Decl(excessivelyLargeTupleSpread.ts, 16, 25))
+
+type T12 = [...T11, ...T11];
+>T12 : Symbol(T12, Decl(excessivelyLargeTupleSpread.ts, 18, 28))
+>T11 : Symbol(T11, Decl(excessivelyLargeTupleSpread.ts, 17, 26))
+>T11 : Symbol(T11, Decl(excessivelyLargeTupleSpread.ts, 17, 26))
+
+type T13 = [...T12, ...T12];
+>T13 : Symbol(T13, Decl(excessivelyLargeTupleSpread.ts, 19, 28))
+>T12 : Symbol(T12, Decl(excessivelyLargeTupleSpread.ts, 18, 28))
+>T12 : Symbol(T12, Decl(excessivelyLargeTupleSpread.ts, 18, 28))
+
+type T14 = [...T13, ...T13]; // 2^14 > 10,000
+>T14 : Symbol(T14, Decl(excessivelyLargeTupleSpread.ts, 20, 28))
+>T13 : Symbol(T13, Decl(excessivelyLargeTupleSpread.ts, 19, 28))
+>T13 : Symbol(T13, Decl(excessivelyLargeTupleSpread.ts, 19, 28))
+
+const a0 = [0] as const;
+>a0 : Symbol(a0, Decl(excessivelyLargeTupleSpread.ts, 23, 5))
+>const : Symbol(const)
+
+const a1 = [...a0, ...a0] as const;
+>a1 : Symbol(a1, Decl(excessivelyLargeTupleSpread.ts, 24, 5))
+>a0 : Symbol(a0, Decl(excessivelyLargeTupleSpread.ts, 23, 5))
+>a0 : Symbol(a0, Decl(excessivelyLargeTupleSpread.ts, 23, 5))
+>const : Symbol(const)
+
+const a2 = [...a1, ...a1] as const;
+>a2 : Symbol(a2, Decl(excessivelyLargeTupleSpread.ts, 25, 5))
+>a1 : Symbol(a1, Decl(excessivelyLargeTupleSpread.ts, 24, 5))
+>a1 : Symbol(a1, Decl(excessivelyLargeTupleSpread.ts, 24, 5))
+>const : Symbol(const)
+
+const a3 = [...a2, ...a2] as const;
+>a3 : Symbol(a3, Decl(excessivelyLargeTupleSpread.ts, 26, 5))
+>a2 : Symbol(a2, Decl(excessivelyLargeTupleSpread.ts, 25, 5))
+>a2 : Symbol(a2, Decl(excessivelyLargeTupleSpread.ts, 25, 5))
+>const : Symbol(const)
+
+const a4 = [...a3, ...a3] as const;
+>a4 : Symbol(a4, Decl(excessivelyLargeTupleSpread.ts, 27, 5))
+>a3 : Symbol(a3, Decl(excessivelyLargeTupleSpread.ts, 26, 5))
+>a3 : Symbol(a3, Decl(excessivelyLargeTupleSpread.ts, 26, 5))
+>const : Symbol(const)
+
+const a5 = [...a4, ...a4] as const;
+>a5 : Symbol(a5, Decl(excessivelyLargeTupleSpread.ts, 28, 5))
+>a4 : Symbol(a4, Decl(excessivelyLargeTupleSpread.ts, 27, 5))
+>a4 : Symbol(a4, Decl(excessivelyLargeTupleSpread.ts, 27, 5))
+>const : Symbol(const)
+
+const a6 = [...a5, ...a5] as const;
+>a6 : Symbol(a6, Decl(excessivelyLargeTupleSpread.ts, 29, 5))
+>a5 : Symbol(a5, Decl(excessivelyLargeTupleSpread.ts, 28, 5))
+>a5 : Symbol(a5, Decl(excessivelyLargeTupleSpread.ts, 28, 5))
+>const : Symbol(const)
+
+const a7 = [...a6, ...a6] as const;
+>a7 : Symbol(a7, Decl(excessivelyLargeTupleSpread.ts, 30, 5))
+>a6 : Symbol(a6, Decl(excessivelyLargeTupleSpread.ts, 29, 5))
+>a6 : Symbol(a6, Decl(excessivelyLargeTupleSpread.ts, 29, 5))
+>const : Symbol(const)
+
+const a8 = [...a7, ...a7] as const;
+>a8 : Symbol(a8, Decl(excessivelyLargeTupleSpread.ts, 31, 5))
+>a7 : Symbol(a7, Decl(excessivelyLargeTupleSpread.ts, 30, 5))
+>a7 : Symbol(a7, Decl(excessivelyLargeTupleSpread.ts, 30, 5))
+>const : Symbol(const)
+
+const a9 = [...a8, ...a8] as const;
+>a9 : Symbol(a9, Decl(excessivelyLargeTupleSpread.ts, 32, 5))
+>a8 : Symbol(a8, Decl(excessivelyLargeTupleSpread.ts, 31, 5))
+>a8 : Symbol(a8, Decl(excessivelyLargeTupleSpread.ts, 31, 5))
+>const : Symbol(const)
+
+const a10 = [...a9, ...a9] as const;
+>a10 : Symbol(a10, Decl(excessivelyLargeTupleSpread.ts, 33, 5))
+>a9 : Symbol(a9, Decl(excessivelyLargeTupleSpread.ts, 32, 5))
+>a9 : Symbol(a9, Decl(excessivelyLargeTupleSpread.ts, 32, 5))
+>const : Symbol(const)
+
+const a11 = [...a10, ...a10] as const;
+>a11 : Symbol(a11, Decl(excessivelyLargeTupleSpread.ts, 34, 5))
+>a10 : Symbol(a10, Decl(excessivelyLargeTupleSpread.ts, 33, 5))
+>a10 : Symbol(a10, Decl(excessivelyLargeTupleSpread.ts, 33, 5))
+>const : Symbol(const)
+
+const a12 = [...a11, ...a11] as const;
+>a12 : Symbol(a12, Decl(excessivelyLargeTupleSpread.ts, 35, 5))
+>a11 : Symbol(a11, Decl(excessivelyLargeTupleSpread.ts, 34, 5))
+>a11 : Symbol(a11, Decl(excessivelyLargeTupleSpread.ts, 34, 5))
+>const : Symbol(const)
+
+const a13 = [...a12, ...a12] as const;
+>a13 : Symbol(a13, Decl(excessivelyLargeTupleSpread.ts, 36, 5))
+>a12 : Symbol(a12, Decl(excessivelyLargeTupleSpread.ts, 35, 5))
+>a12 : Symbol(a12, Decl(excessivelyLargeTupleSpread.ts, 35, 5))
+>const : Symbol(const)
+
+const a14 = [...a13, ...a13] as const; // 2^14 > 10,000
+>a14 : Symbol(a14, Decl(excessivelyLargeTupleSpread.ts, 37, 5))
+>a13 : Symbol(a13, Decl(excessivelyLargeTupleSpread.ts, 36, 5))
+>a13 : Symbol(a13, Decl(excessivelyLargeTupleSpread.ts, 36, 5))
+>const : Symbol(const)
+

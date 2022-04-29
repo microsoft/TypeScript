@@ -1,0 +1,50 @@
+=== tests/cases/compiler/hidingConstructSignatures.ts ===
+interface C {
+    (a: string): string;
+>a : string
+}
+
+interface D extends C {
+    new (a: string): number; // Should be ok
+>a : string
+}
+
+interface E {
+    new (a: string): {};
+>a : string
+}
+
+interface F extends E {
+    new (a: string): string;
+>a : string
+}
+
+var d: D;
+>d : D
+
+d(""); // string
+>d("") : string
+>d : D
+>"" : ""
+
+new d(""); // should be number
+>new d("") : number
+>d : D
+>"" : ""
+
+var f: F;
+>f : F
+
+new f(""); // string
+>new f("") : string
+>f : F
+>"" : ""
+
+var e: E;
+>e : E
+
+new e(""); // {}
+>new e("") : {}
+>e : E
+>"" : ""
+

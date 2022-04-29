@@ -1,0 +1,39 @@
+tests/cases/conformance/es6/destructuring/iterableArrayPattern16.ts(2,5): error TS2345: Argument of type 'FooIterator' is not assignable to parameter of type '[Bar, Bar]'.
+tests/cases/conformance/es6/destructuring/iterableArrayPattern16.ts(2,12): error TS2449: Class 'FooIteratorIterator' used before its declaration.
+
+
+==== tests/cases/conformance/es6/destructuring/iterableArrayPattern16.ts (2 errors) ====
+    function fun(...[a, b]: [Bar, Bar][]) { }
+    fun(...new FooIteratorIterator);
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2345: Argument of type 'FooIterator' is not assignable to parameter of type '[Bar, Bar]'.
+               ~~~~~~~~~~~~~~~~~~~
+!!! error TS2449: Class 'FooIteratorIterator' used before its declaration.
+!!! related TS2728 tests/cases/conformance/es6/destructuring/iterableArrayPattern16.ts:18:7: 'FooIteratorIterator' is declared here.
+    class Bar { x }
+    class Foo extends Bar { y }
+    class FooIterator {
+        next() {
+            return {
+                value: new Foo,
+                done: false
+            };
+        }
+    
+        [Symbol.iterator]() {
+            return this;
+        }
+    }
+    
+    class FooIteratorIterator {
+        next() {
+            return {
+                value: new FooIterator,
+                done: false
+            };
+        }
+    
+        [Symbol.iterator]() {
+            return this;
+        }
+    }

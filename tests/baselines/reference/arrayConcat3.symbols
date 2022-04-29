@@ -1,0 +1,32 @@
+=== tests/cases/compiler/arrayConcat3.ts ===
+// TODO: remove lib hack when https://github.com/Microsoft/TypeScript/issues/20454 is fixed
+type Fn<T extends object> = <U extends T>(subj: U) => U
+>Fn : Symbol(Fn, Decl(arrayConcat3.ts, 0, 0))
+>T : Symbol(T, Decl(arrayConcat3.ts, 1, 8))
+>U : Symbol(U, Decl(arrayConcat3.ts, 1, 29))
+>T : Symbol(T, Decl(arrayConcat3.ts, 1, 8))
+>subj : Symbol(subj, Decl(arrayConcat3.ts, 1, 42))
+>U : Symbol(U, Decl(arrayConcat3.ts, 1, 29))
+>U : Symbol(U, Decl(arrayConcat3.ts, 1, 29))
+
+function doStuff<T extends object, T1 extends T>(a: Array<Fn<T>>, b: Array<Fn<T1>>) {
+>doStuff : Symbol(doStuff, Decl(arrayConcat3.ts, 1, 55))
+>T : Symbol(T, Decl(arrayConcat3.ts, 2, 17))
+>T1 : Symbol(T1, Decl(arrayConcat3.ts, 2, 34))
+>T : Symbol(T, Decl(arrayConcat3.ts, 2, 17))
+>a : Symbol(a, Decl(arrayConcat3.ts, 2, 49))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Fn : Symbol(Fn, Decl(arrayConcat3.ts, 0, 0))
+>T : Symbol(T, Decl(arrayConcat3.ts, 2, 17))
+>b : Symbol(b, Decl(arrayConcat3.ts, 2, 65))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Fn : Symbol(Fn, Decl(arrayConcat3.ts, 0, 0))
+>T1 : Symbol(T1, Decl(arrayConcat3.ts, 2, 34))
+
+    b.concat(a);
+>b.concat : Symbol(Array.concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>b : Symbol(b, Decl(arrayConcat3.ts, 2, 65))
+>concat : Symbol(Array.concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(arrayConcat3.ts, 2, 49))
+}
+

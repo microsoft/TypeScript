@@ -1,0 +1,63 @@
+=== tests/cases/compiler/propertyAccessExpressionInnerComments.ts ===
+/*1*/Array/*2*/./*3*/toString/*4*/
+>Array/*2*/./*3*/toString : () => string
+>Array : ArrayConstructor
+>toString : () => string
+
+/*1*/Array
+>Array/*2*/./*3*/    // Single-line comment    toString : () => string
+>Array : ArrayConstructor
+
+/*2*/./*3*/
+    // Single-line comment
+    toString/*4*/
+>toString : () => string
+
+/*1*/Array/*2*/./*3*/
+>Array/*2*/./*3*/    // Single-line comment    toString : () => string
+>Array : ArrayConstructor
+
+    // Single-line comment
+    toString/*4*/
+>toString : () => string
+
+/*1*/Array
+>Array    // Single-line comment    /*2*/./*3*/toString : () => string
+>Array : ArrayConstructor
+
+    // Single-line comment
+    /*2*/./*3*/toString/*4*/
+>toString : () => string
+
+/* Existing issue: the "2" comments below are duplicated and "3"s are missing */
+
+/*1*/Array/*2*/?./*3*/toString/*4*/
+>Array/*2*/?./*3*/toString : () => string
+>Array : ArrayConstructor
+>toString : () => string
+
+/*1*/Array
+>Array/*2*/?./*3*/    // Single-line comment    toString : () => string
+>Array : ArrayConstructor
+
+/*2*/?./*3*/
+    // Single-line comment
+    toString/*4*/
+>toString : () => string
+
+/*1*/Array/*2*/?./*3*/
+>Array/*2*/?./*3*/    // Single-line comment    toString : () => string
+>Array : ArrayConstructor
+
+    // Single-line comment
+    toString/*4*/
+>toString : () => string
+
+/*1*/Array
+>Array    // Single-line comment    /*2*/?./*3*/toString : () => string
+>Array : ArrayConstructor
+
+    // Single-line comment
+    /*2*/?./*3*/toString/*4*/
+>toString : () => string
+

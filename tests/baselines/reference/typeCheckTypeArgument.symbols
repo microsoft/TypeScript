@@ -1,0 +1,35 @@
+=== tests/cases/compiler/typeCheckTypeArgument.ts ===
+var f: <T extends UNKNOWN>() => void;
+>f : Symbol(f, Decl(typeCheckTypeArgument.ts, 0, 3))
+>T : Symbol(T, Decl(typeCheckTypeArgument.ts, 0, 8))
+>UNKNOWN : Symbol(UNKNOWN)
+
+interface IFoo<T extends UNKNOWN> { }
+>IFoo : Symbol(IFoo, Decl(typeCheckTypeArgument.ts, 0, 37))
+>T : Symbol(T, Decl(typeCheckTypeArgument.ts, 2, 15))
+>UNKNOWN : Symbol(UNKNOWN)
+
+class Foo<T extends UNKNOWN> { }
+>Foo : Symbol(Foo, Decl(typeCheckTypeArgument.ts, 2, 37))
+>T : Symbol(T, Decl(typeCheckTypeArgument.ts, 4, 10))
+>UNKNOWN : Symbol(UNKNOWN)
+
+function bar<T extends UNKNOWN>() { }
+>bar : Symbol(bar, Decl(typeCheckTypeArgument.ts, 4, 32))
+>T : Symbol(T, Decl(typeCheckTypeArgument.ts, 6, 13))
+>UNKNOWN : Symbol(UNKNOWN)
+
+class Foo2 {
+>Foo2 : Symbol(Foo2, Decl(typeCheckTypeArgument.ts, 6, 37))
+
+    method<T extends UNKNOWN>() { }
+>method : Symbol(Foo2.method, Decl(typeCheckTypeArgument.ts, 8, 12))
+>T : Symbol(T, Decl(typeCheckTypeArgument.ts, 9, 11))
+>UNKNOWN : Symbol(UNKNOWN)
+}
+
+(<T extends UNKNOWN>(a) => { });
+>T : Symbol(T, Decl(typeCheckTypeArgument.ts, 12, 2))
+>UNKNOWN : Symbol(UNKNOWN)
+>a : Symbol(a, Decl(typeCheckTypeArgument.ts, 12, 21))
+

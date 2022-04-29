@@ -1,0 +1,43 @@
+=== tests/cases/compiler/booleanAssignment.ts ===
+var b = new Boolean();
+>b : Boolean
+>new Boolean() : Boolean
+>Boolean : BooleanConstructor
+
+b = 1; // Error
+>b = 1 : 1
+>b : Boolean
+>1 : 1
+
+b = "a"; // Error
+>b = "a" : "a"
+>b : Boolean
+>"a" : "a"
+
+b = {}; // Error
+>b = {} : {}
+>b : Boolean
+>{} : {}
+
+var o = {};
+>o : {}
+>{} : {}
+
+o = b; // OK
+>o = b : Boolean
+>o : {}
+>b : Boolean
+
+b = true; // OK
+>b = true : true
+>b : Boolean
+>true : true
+
+var b2:boolean;
+>b2 : boolean
+
+b = b2; // OK
+>b = b2 : boolean
+>b : Boolean
+>b2 : boolean
+

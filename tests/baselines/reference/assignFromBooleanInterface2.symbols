@@ -1,0 +1,51 @@
+=== tests/cases/conformance/types/primitives/boolean/assignFromBooleanInterface2.ts ===
+interface Boolean {
+>Boolean : Symbol(Boolean, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(assignFromBooleanInterface2.ts, 0, 0))
+
+    doStuff(): string;
+>doStuff : Symbol(Boolean.doStuff, Decl(assignFromBooleanInterface2.ts, 0, 19))
+}
+
+interface NotBoolean {
+>NotBoolean : Symbol(NotBoolean, Decl(assignFromBooleanInterface2.ts, 2, 1))
+
+    doStuff(): string;
+>doStuff : Symbol(NotBoolean.doStuff, Decl(assignFromBooleanInterface2.ts, 4, 22))
+}
+
+var x = true;
+>x : Symbol(x, Decl(assignFromBooleanInterface2.ts, 8, 3))
+
+var a: Boolean;
+>a : Symbol(a, Decl(assignFromBooleanInterface2.ts, 9, 3))
+>Boolean : Symbol(Boolean, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(assignFromBooleanInterface2.ts, 0, 0))
+
+var b: NotBoolean;
+>b : Symbol(b, Decl(assignFromBooleanInterface2.ts, 10, 3))
+>NotBoolean : Symbol(NotBoolean, Decl(assignFromBooleanInterface2.ts, 2, 1))
+
+a = x;
+>a : Symbol(a, Decl(assignFromBooleanInterface2.ts, 9, 3))
+>x : Symbol(x, Decl(assignFromBooleanInterface2.ts, 8, 3))
+
+a = b;
+>a : Symbol(a, Decl(assignFromBooleanInterface2.ts, 9, 3))
+>b : Symbol(b, Decl(assignFromBooleanInterface2.ts, 10, 3))
+
+b = a;
+>b : Symbol(b, Decl(assignFromBooleanInterface2.ts, 10, 3))
+>a : Symbol(a, Decl(assignFromBooleanInterface2.ts, 9, 3))
+
+b = x;
+>b : Symbol(b, Decl(assignFromBooleanInterface2.ts, 10, 3))
+>x : Symbol(x, Decl(assignFromBooleanInterface2.ts, 8, 3))
+
+x = a; // expected error
+>x : Symbol(x, Decl(assignFromBooleanInterface2.ts, 8, 3))
+>a : Symbol(a, Decl(assignFromBooleanInterface2.ts, 9, 3))
+
+x = b; // expected error
+>x : Symbol(x, Decl(assignFromBooleanInterface2.ts, 8, 3))
+>b : Symbol(b, Decl(assignFromBooleanInterface2.ts, 10, 3))
+
+

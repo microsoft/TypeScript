@@ -1,0 +1,49 @@
+=== tests/cases/compiler/inheritedGenericCallSignature.ts ===
+interface I1<T> {
+>I1 : Symbol(I1, Decl(inheritedGenericCallSignature.ts, 0, 0))
+>T : Symbol(T, Decl(inheritedGenericCallSignature.ts, 0, 13))
+
+    (a: T): T;
+>a : Symbol(a, Decl(inheritedGenericCallSignature.ts, 2, 5))
+>T : Symbol(T, Decl(inheritedGenericCallSignature.ts, 0, 13))
+>T : Symbol(T, Decl(inheritedGenericCallSignature.ts, 0, 13))
+
+}
+
+
+interface Object {}
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(inheritedGenericCallSignature.ts, 4, 1))
+
+ 
+
+interface I2<T> extends I1<T[]> {
+>I2 : Symbol(I2, Decl(inheritedGenericCallSignature.ts, 7, 19))
+>T : Symbol(T, Decl(inheritedGenericCallSignature.ts, 11, 13))
+>I1 : Symbol(I1, Decl(inheritedGenericCallSignature.ts, 0, 0))
+>T : Symbol(T, Decl(inheritedGenericCallSignature.ts, 11, 13))
+
+    b: T;
+>b : Symbol(I2.b, Decl(inheritedGenericCallSignature.ts, 11, 33))
+>T : Symbol(T, Decl(inheritedGenericCallSignature.ts, 11, 13))
+
+}
+
+ 
+
+var x: I2<Date>;
+>x : Symbol(x, Decl(inheritedGenericCallSignature.ts, 19, 3))
+>I2 : Symbol(I2, Decl(inheritedGenericCallSignature.ts, 7, 19))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+ 
+
+var y = x(undefined);
+>y : Symbol(y, Decl(inheritedGenericCallSignature.ts, 23, 3))
+>x : Symbol(x, Decl(inheritedGenericCallSignature.ts, 19, 3))
+>undefined : Symbol(undefined)
+
+y.length;  // should not error
+>y.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>y : Symbol(y, Decl(inheritedGenericCallSignature.ts, 23, 3))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+

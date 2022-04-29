@@ -1,0 +1,19 @@
+=== tests/cases/compiler/inferringAnyFunctionType4.ts ===
+function f<T extends (p1: number) => number>(p: T): T {
+>f : Symbol(f, Decl(inferringAnyFunctionType4.ts, 0, 0))
+>T : Symbol(T, Decl(inferringAnyFunctionType4.ts, 0, 11))
+>p1 : Symbol(p1, Decl(inferringAnyFunctionType4.ts, 0, 22))
+>p : Symbol(p, Decl(inferringAnyFunctionType4.ts, 0, 45))
+>T : Symbol(T, Decl(inferringAnyFunctionType4.ts, 0, 11))
+>T : Symbol(T, Decl(inferringAnyFunctionType4.ts, 0, 11))
+
+    return p;
+>p : Symbol(p, Decl(inferringAnyFunctionType4.ts, 0, 45))
+}
+
+var v = f(x => x);
+>v : Symbol(v, Decl(inferringAnyFunctionType4.ts, 4, 3))
+>f : Symbol(f, Decl(inferringAnyFunctionType4.ts, 0, 0))
+>x : Symbol(x, Decl(inferringAnyFunctionType4.ts, 4, 10))
+>x : Symbol(x, Decl(inferringAnyFunctionType4.ts, 4, 10))
+

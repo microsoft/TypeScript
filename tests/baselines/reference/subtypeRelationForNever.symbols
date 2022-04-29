@@ -1,0 +1,44 @@
+=== tests/cases/compiler/subtypeRelationForNever.ts ===
+function fail(message: string) : never { throw new Error(message); }
+>fail : Symbol(fail, Decl(subtypeRelationForNever.ts, 0, 0))
+>message : Symbol(message, Decl(subtypeRelationForNever.ts, 0, 14))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>message : Symbol(message, Decl(subtypeRelationForNever.ts, 0, 14))
+
+function withFew<a, r>(values: a[], haveFew: (values: a[]) => r, haveNone: (reason: string) => r): r {
+>withFew : Symbol(withFew, Decl(subtypeRelationForNever.ts, 0, 68))
+>a : Symbol(a, Decl(subtypeRelationForNever.ts, 1, 17))
+>r : Symbol(r, Decl(subtypeRelationForNever.ts, 1, 19))
+>values : Symbol(values, Decl(subtypeRelationForNever.ts, 1, 23))
+>a : Symbol(a, Decl(subtypeRelationForNever.ts, 1, 17))
+>haveFew : Symbol(haveFew, Decl(subtypeRelationForNever.ts, 1, 35))
+>values : Symbol(values, Decl(subtypeRelationForNever.ts, 1, 46))
+>a : Symbol(a, Decl(subtypeRelationForNever.ts, 1, 17))
+>r : Symbol(r, Decl(subtypeRelationForNever.ts, 1, 19))
+>haveNone : Symbol(haveNone, Decl(subtypeRelationForNever.ts, 1, 64))
+>reason : Symbol(reason, Decl(subtypeRelationForNever.ts, 1, 76))
+>r : Symbol(r, Decl(subtypeRelationForNever.ts, 1, 19))
+>r : Symbol(r, Decl(subtypeRelationForNever.ts, 1, 19))
+
+    return values.length > 0 ? haveFew(values) : haveNone('No values.');
+>values.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>values : Symbol(values, Decl(subtypeRelationForNever.ts, 1, 23))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>haveFew : Symbol(haveFew, Decl(subtypeRelationForNever.ts, 1, 35))
+>values : Symbol(values, Decl(subtypeRelationForNever.ts, 1, 23))
+>haveNone : Symbol(haveNone, Decl(subtypeRelationForNever.ts, 1, 64))
+}
+function id<a>(value: a) : a { return value; }
+>id : Symbol(id, Decl(subtypeRelationForNever.ts, 3, 1))
+>a : Symbol(a, Decl(subtypeRelationForNever.ts, 4, 12))
+>value : Symbol(value, Decl(subtypeRelationForNever.ts, 4, 15))
+>a : Symbol(a, Decl(subtypeRelationForNever.ts, 4, 12))
+>a : Symbol(a, Decl(subtypeRelationForNever.ts, 4, 12))
+>value : Symbol(value, Decl(subtypeRelationForNever.ts, 4, 15))
+
+const result = withFew([1, 2, 3], id, fail); // expected result is number[]
+>result : Symbol(result, Decl(subtypeRelationForNever.ts, 5, 5))
+>withFew : Symbol(withFew, Decl(subtypeRelationForNever.ts, 0, 68))
+>id : Symbol(id, Decl(subtypeRelationForNever.ts, 3, 1))
+>fail : Symbol(fail, Decl(subtypeRelationForNever.ts, 0, 0))
+

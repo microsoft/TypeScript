@@ -1,0 +1,280 @@
+=== tests/cases/compiler/mixinPrivateAndProtected.ts ===
+// Repro from #13830
+
+type Constructor<T> = new(...args: any[]) => T;
+>Constructor : Constructor<T>
+>args : any[]
+
+class A {
+>A : A
+
+    public pb: number = 2;
+>pb : number
+>2 : 2
+
+    protected ptd: number = 1;
+>ptd : number
+>1 : 1
+
+    private pvt: number = 0;
+>pvt : number
+>0 : 0
+}
+
+function mixB<T extends Constructor<{}>>(Cls: T) {
+>mixB : <T extends Constructor<{}>>(Cls: T) => { new (...args: any[]): (Anonymous class); prototype: mixB<any>.(Anonymous class); } & T
+>Cls : T
+
+    return class extends Cls {
+>class extends Cls {        protected ptd: number = 10;        private pvt: number = 0;    } : { new (...args: any[]): (Anonymous class); prototype: mixB<any>.(Anonymous class); } & T
+>Cls : {}
+
+        protected ptd: number = 10;
+>ptd : number
+>10 : 10
+
+        private pvt: number = 0;
+>pvt : number
+>0 : 0
+
+    };
+}
+
+function mixB2<T extends Constructor<A>>(Cls: T) {
+>mixB2 : <T extends Constructor<A>>(Cls: T) => { new (...args: any[]): (Anonymous class); prototype: mixB2<any>.(Anonymous class); } & T
+>Cls : T
+
+    return class extends Cls {
+>class extends Cls {        protected ptd: number = 10;    } : { new (...args: any[]): (Anonymous class); prototype: mixB2<any>.(Anonymous class); } & T
+>Cls : A
+
+        protected ptd: number = 10;
+>ptd : number
+>10 : 10
+
+    };
+}
+
+const
+    AB = mixB(A),
+>AB : { new (...args: any[]): mixB<typeof A>.(Anonymous class); prototype: mixB<any>.(Anonymous class); } & typeof A
+>mixB(A) : { new (...args: any[]): mixB<typeof A>.(Anonymous class); prototype: mixB<any>.(Anonymous class); } & typeof A
+>mixB : <T extends Constructor<{}>>(Cls: T) => { new (...args: any[]): (Anonymous class); prototype: mixB<any>.(Anonymous class); } & T
+>A : typeof A
+
+    AB2 = mixB2(A);
+>AB2 : { new (...args: any[]): mixB2<typeof A>.(Anonymous class); prototype: mixB2<any>.(Anonymous class); } & typeof A
+>mixB2(A) : { new (...args: any[]): mixB2<typeof A>.(Anonymous class); prototype: mixB2<any>.(Anonymous class); } & typeof A
+>mixB2 : <T extends Constructor<A>>(Cls: T) => { new (...args: any[]): (Anonymous class); prototype: mixB2<any>.(Anonymous class); } & T
+>A : typeof A
+
+function mixC<T extends Constructor<{}>>(Cls: T) {
+>mixC : <T extends Constructor<{}>>(Cls: T) => { new (...args: any[]): (Anonymous class); prototype: mixC<any>.(Anonymous class); } & T
+>Cls : T
+
+    return class extends Cls {
+>class extends Cls {        protected ptd: number = 100;        private pvt: number = 0;    } : { new (...args: any[]): (Anonymous class); prototype: mixC<any>.(Anonymous class); } & T
+>Cls : {}
+
+        protected ptd: number = 100;
+>ptd : number
+>100 : 100
+
+        private pvt: number = 0;
+>pvt : number
+>0 : 0
+
+    };
+}
+
+const
+    AB2C = mixC(AB2),
+>AB2C : { new (...args: any[]): mixC<{ new (...args: any[]): mixB2<typeof A>.(Anonymous class); prototype: mixB2<any>.(Anonymous class); } & typeof A>.(Anonymous class); prototype: mixC<any>.(Anonymous class); } & { new (...args: any[]): mixB2<typeof A>.(Anonymous class); prototype: mixB2<any>.(Anonymous class); } & typeof A
+>mixC(AB2) : { new (...args: any[]): mixC<{ new (...args: any[]): mixB2<typeof A>.(Anonymous class); prototype: mixB2<any>.(Anonymous class); } & typeof A>.(Anonymous class); prototype: mixC<any>.(Anonymous class); } & { new (...args: any[]): mixB2<typeof A>.(Anonymous class); prototype: mixB2<any>.(Anonymous class); } & typeof A
+>mixC : <T extends Constructor<{}>>(Cls: T) => { new (...args: any[]): (Anonymous class); prototype: mixC<any>.(Anonymous class); } & T
+>AB2 : { new (...args: any[]): mixB2<typeof A>.(Anonymous class); prototype: mixB2<any>.(Anonymous class); } & typeof A
+
+    ABC = mixC(AB);
+>ABC : { new (...args: any[]): mixC<{ new (...args: any[]): mixB<typeof A>.(Anonymous class); prototype: mixB<any>.(Anonymous class); } & typeof A>.(Anonymous class); prototype: mixC<any>.(Anonymous class); } & { new (...args: any[]): mixB<typeof A>.(Anonymous class); prototype: mixB<any>.(Anonymous class); } & typeof A
+>mixC(AB) : { new (...args: any[]): mixC<{ new (...args: any[]): mixB<typeof A>.(Anonymous class); prototype: mixB<any>.(Anonymous class); } & typeof A>.(Anonymous class); prototype: mixC<any>.(Anonymous class); } & { new (...args: any[]): mixB<typeof A>.(Anonymous class); prototype: mixB<any>.(Anonymous class); } & typeof A
+>mixC : <T extends Constructor<{}>>(Cls: T) => { new (...args: any[]): (Anonymous class); prototype: mixC<any>.(Anonymous class); } & T
+>AB : { new (...args: any[]): mixB<typeof A>.(Anonymous class); prototype: mixB<any>.(Anonymous class); } & typeof A
+
+const
+    a = new A(),
+>a : A
+>new A() : A
+>A : typeof A
+
+    ab = new AB(),
+>ab : never
+>new AB() : never
+>AB : { new (...args: any[]): mixB<typeof A>.(Anonymous class); prototype: mixB<any>.(Anonymous class); } & typeof A
+
+    abc = new ABC(),
+>abc : never
+>new ABC() : never
+>ABC : { new (...args: any[]): mixC<{ new (...args: any[]): mixB<typeof A>.(Anonymous class); prototype: mixB<any>.(Anonymous class); } & typeof A>.(Anonymous class); prototype: mixC<any>.(Anonymous class); } & { new (...args: any[]): mixB<typeof A>.(Anonymous class); prototype: mixB<any>.(Anonymous class); } & typeof A
+
+    ab2c = new AB2C();
+>ab2c : never
+>new AB2C() : never
+>AB2C : { new (...args: any[]): mixC<{ new (...args: any[]): mixB2<typeof A>.(Anonymous class); prototype: mixB2<any>.(Anonymous class); } & typeof A>.(Anonymous class); prototype: mixC<any>.(Anonymous class); } & { new (...args: any[]): mixB2<typeof A>.(Anonymous class); prototype: mixB2<any>.(Anonymous class); } & typeof A
+
+a.pb.toFixed();
+>a.pb.toFixed() : string
+>a.pb.toFixed : (fractionDigits?: number) => string
+>a.pb : number
+>a : A
+>pb : number
+>toFixed : (fractionDigits?: number) => string
+
+a.ptd.toFixed();    // Error
+>a.ptd.toFixed() : string
+>a.ptd.toFixed : (fractionDigits?: number) => string
+>a.ptd : number
+>a : A
+>ptd : number
+>toFixed : (fractionDigits?: number) => string
+
+a.pvt.toFixed();    // Error
+>a.pvt.toFixed() : string
+>a.pvt.toFixed : (fractionDigits?: number) => string
+>a.pvt : number
+>a : A
+>pvt : number
+>toFixed : (fractionDigits?: number) => string
+
+ab.pb.toFixed();
+>ab.pb.toFixed() : any
+>ab.pb.toFixed : any
+>ab.pb : any
+>ab : never
+>pb : any
+>toFixed : any
+
+ab.ptd.toFixed();   // Error
+>ab.ptd.toFixed() : any
+>ab.ptd.toFixed : any
+>ab.ptd : any
+>ab : never
+>ptd : any
+>toFixed : any
+
+ab.pvt.toFixed();   // Error
+>ab.pvt.toFixed() : any
+>ab.pvt.toFixed : any
+>ab.pvt : any
+>ab : never
+>pvt : any
+>toFixed : any
+
+abc.pb.toFixed();
+>abc.pb.toFixed() : any
+>abc.pb.toFixed : any
+>abc.pb : any
+>abc : never
+>pb : any
+>toFixed : any
+
+abc.ptd.toFixed();  // Error
+>abc.ptd.toFixed() : any
+>abc.ptd.toFixed : any
+>abc.ptd : any
+>abc : never
+>ptd : any
+>toFixed : any
+
+abc.pvt.toFixed();  // Error
+>abc.pvt.toFixed() : any
+>abc.pvt.toFixed : any
+>abc.pvt : any
+>abc : never
+>pvt : any
+>toFixed : any
+
+ab2c.pb.toFixed();
+>ab2c.pb.toFixed() : any
+>ab2c.pb.toFixed : any
+>ab2c.pb : any
+>ab2c : never
+>pb : any
+>toFixed : any
+
+ab2c.ptd.toFixed(); // Error
+>ab2c.ptd.toFixed() : any
+>ab2c.ptd.toFixed : any
+>ab2c.ptd : any
+>ab2c : never
+>ptd : any
+>toFixed : any
+
+ab2c.pvt.toFixed(); // Error
+>ab2c.pvt.toFixed() : any
+>ab2c.pvt.toFixed : any
+>ab2c.pvt : any
+>ab2c : never
+>pvt : any
+>toFixed : any
+
+// Repro from #13924
+
+class Person {
+>Person : Person
+
+	constructor(public name: string) {}
+>name : string
+
+	protected myProtectedFunction() {
+>myProtectedFunction : () => void
+
+		// do something
+	}
+}
+
+function PersonMixin<T extends Constructor<Person>>(Base: T) {
+>PersonMixin : <T extends Constructor<Person>>(Base: T) => { new (...args: any[]): (Anonymous class); prototype: PersonMixin<any>.(Anonymous class); } & T
+>Base : T
+
+	return class extends Base {
+>class extends Base {		constructor(...args: any[]) {			super(...args);		}		myProtectedFunction() {			super.myProtectedFunction();			// do more things		}	} : { new (...args: any[]): (Anonymous class); prototype: PersonMixin<any>.(Anonymous class); } & T
+>Base : Person
+
+		constructor(...args: any[]) {
+>args : any[]
+
+			super(...args);
+>super(...args) : void
+>super : T
+>...args : any
+>args : any[]
+		}
+
+		myProtectedFunction() {
+>myProtectedFunction : () => void
+
+			super.myProtectedFunction();
+>super.myProtectedFunction() : void
+>super.myProtectedFunction : () => void
+>super : Person
+>myProtectedFunction : () => void
+
+			// do more things
+		}
+	};
+}
+
+class Customer extends PersonMixin(Person) {
+>Customer : Customer
+>PersonMixin(Person) : PersonMixin<typeof Person>.(Anonymous class) & Person
+>PersonMixin : <T extends Constructor<Person>>(Base: T) => { new (...args: any[]): (Anonymous class); prototype: PersonMixin<any>.(Anonymous class); } & T
+>Person : typeof Person
+
+	accountBalance: number;
+>accountBalance : number
+
+    f() {
+>f : () => void
+    }
+}
+

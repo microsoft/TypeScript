@@ -1,0 +1,33 @@
+=== tests/cases/compiler/anonymousClassExpression2.ts ===
+// Fixes #14860
+// note: repros with `while (0);` too
+// but it's less inscrutable and more obvious to put it *inside* the loop
+while (0) {
+    class A {
+>A : Symbol(A, Decl(anonymousClassExpression2.ts, 3, 11))
+
+        methodA() {
+>methodA : Symbol(A.methodA, Decl(anonymousClassExpression2.ts, 4, 13))
+
+            this; //note: a this reference of some kind is required to trigger the bug
+>this : Symbol(A, Decl(anonymousClassExpression2.ts, 3, 11))
+        }
+    }
+
+    class B {
+>B : Symbol(B, Decl(anonymousClassExpression2.ts, 8, 5))
+
+        methodB() {
+>methodB : Symbol(B.methodB, Decl(anonymousClassExpression2.ts, 10, 13))
+
+            this.methodA; // error
+>this : Symbol(B, Decl(anonymousClassExpression2.ts, 8, 5))
+
+            this.methodB; // ok
+>this.methodB : Symbol(B.methodB, Decl(anonymousClassExpression2.ts, 10, 13))
+>this : Symbol(B, Decl(anonymousClassExpression2.ts, 8, 5))
+>methodB : Symbol(B.methodB, Decl(anonymousClassExpression2.ts, 10, 13))
+        }
+    }
+}
+

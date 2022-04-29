@@ -1,0 +1,27 @@
+=== tests/cases/compiler/privacyCheckExternalModuleExportAssignmentOfGenericClass_1.ts ===
+import Foo = require("./privacyCheckExternalModuleExportAssignmentOfGenericClass_0");
+>Foo : Symbol(Foo, Decl(privacyCheckExternalModuleExportAssignmentOfGenericClass_1.ts, 0, 0))
+
+export = Bar;
+>Bar : Symbol(Bar, Decl(privacyCheckExternalModuleExportAssignmentOfGenericClass_1.ts, 1, 13))
+
+interface Bar {
+>Bar : Symbol(Bar, Decl(privacyCheckExternalModuleExportAssignmentOfGenericClass_1.ts, 1, 13))
+
+    foo: Foo<number>;
+>foo : Symbol(Bar.foo, Decl(privacyCheckExternalModuleExportAssignmentOfGenericClass_1.ts, 2, 15))
+>Foo : Symbol(Foo, Decl(privacyCheckExternalModuleExportAssignmentOfGenericClass_1.ts, 0, 0))
+}
+=== tests/cases/compiler/privacyCheckExternalModuleExportAssignmentOfGenericClass_0.ts ===
+export = Foo;
+>Foo : Symbol(Foo, Decl(privacyCheckExternalModuleExportAssignmentOfGenericClass_0.ts, 0, 13))
+
+class Foo<A> {
+>Foo : Symbol(Foo, Decl(privacyCheckExternalModuleExportAssignmentOfGenericClass_0.ts, 0, 13))
+>A : Symbol(A, Decl(privacyCheckExternalModuleExportAssignmentOfGenericClass_0.ts, 1, 10))
+
+    constructor(public a: A) { }
+>a : Symbol(Foo.a, Decl(privacyCheckExternalModuleExportAssignmentOfGenericClass_0.ts, 2, 16))
+>A : Symbol(A, Decl(privacyCheckExternalModuleExportAssignmentOfGenericClass_0.ts, 1, 10))
+}
+

@@ -1,0 +1,19 @@
+=== tests/cases/compiler/foo.ts ===
+export class Foo {
+>Foo : Symbol(Foo, Decl(foo.ts, 0, 0))
+
+    a: string;
+>a : Symbol(Foo.a, Decl(foo.ts, 0, 18))
+}
+
+=== tests/cases/compiler/bar.ts ===
+import {Foo} from './foo';
+>Foo : Symbol(Foo, Decl(bar.ts, 0, 8))
+
+export class Bar extends Foo {
+>Bar : Symbol(Bar, Decl(bar.ts, 0, 26))
+>Foo : Symbol(Foo, Decl(bar.ts, 0, 8))
+
+    b: string;
+>b : Symbol(Bar.b, Decl(bar.ts, 1, 30))
+}

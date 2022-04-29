@@ -1,0 +1,248 @@
+
+1  >enum e {
+
+    ~~~~~~~~~                                     => Pos: (0 to 8)  SpanInfo: {"start":0,"length":30}
+    >enum e {
+    >    x,
+    >    y,
+    >    x
+    >}
+    >:=> (line 1, col 0) to (line 5, col 1)
+--------------------------------
+2  >    x,
+
+    ~~~~~~~                                       => Pos: (9 to 15)  SpanInfo: {"start":13,"length":1}
+    >x
+    >:=> (line 2, col 4) to (line 2, col 5)
+--------------------------------
+3  >    y,
+
+    ~~~~~~~                                       => Pos: (16 to 22)  SpanInfo: {"start":20,"length":1}
+    >y
+    >:=> (line 3, col 4) to (line 3, col 5)
+--------------------------------
+4  >    x
+
+    ~~~~~~                                        => Pos: (23 to 28)  SpanInfo: {"start":27,"length":1}
+    >x
+    >:=> (line 4, col 4) to (line 4, col 5)
+--------------------------------
+5  >}
+
+    ~~                                            => Pos: (29 to 30)  SpanInfo: {"start":29,"length":1}
+    >}
+    >:=> (line 5, col 0) to (line 5, col 1)
+--------------------------------
+6  >enum e2 {
+
+    ~~~~~~~~~~                                    => Pos: (31 to 40)  SpanInfo: {"start":31,"length":49}
+    >enum e2 {
+    >    x = 10,
+    >    y = 10,
+    >    z,
+    >    x2
+    >}
+    >:=> (line 6, col 0) to (line 11, col 1)
+--------------------------------
+7  >    x = 10,
+
+    ~~~~~~~~~~~~                                  => Pos: (41 to 52)  SpanInfo: {"start":45,"length":6}
+    >x = 10
+    >:=> (line 7, col 4) to (line 7, col 10)
+--------------------------------
+8  >    y = 10,
+
+    ~~~~~~~~~~~~                                  => Pos: (53 to 64)  SpanInfo: {"start":57,"length":6}
+    >y = 10
+    >:=> (line 8, col 4) to (line 8, col 10)
+--------------------------------
+9  >    z,
+
+    ~~~~~~~                                       => Pos: (65 to 71)  SpanInfo: {"start":69,"length":1}
+    >z
+    >:=> (line 9, col 4) to (line 9, col 5)
+--------------------------------
+10 >    x2
+
+    ~~~~~~~                                       => Pos: (72 to 78)  SpanInfo: {"start":76,"length":2}
+    >x2
+    >:=> (line 10, col 4) to (line 10, col 6)
+--------------------------------
+11 >}
+
+    ~~                                            => Pos: (79 to 80)  SpanInfo: {"start":79,"length":1}
+    >}
+    >:=> (line 11, col 0) to (line 11, col 1)
+--------------------------------
+12 >enum e3 {
+
+    ~~~~~~~~~~                                    => Pos: (81 to 90)  SpanInfo: {"start":81,"length":11}
+    >enum e3 {
+    >}
+    >:=> (line 12, col 0) to (line 13, col 1)
+--------------------------------
+13 >}
+
+    ~~                                            => Pos: (91 to 92)  SpanInfo: {"start":91,"length":1}
+    >}
+    >:=> (line 13, col 0) to (line 13, col 1)
+--------------------------------
+14 >declare enum e4 {
+
+    ~~~~~~~~~~~~~~~~~~                            => Pos: (93 to 110)  SpanInfo: undefined
+--------------------------------
+15 >    x,
+
+    ~~~~~~~                                       => Pos: (111 to 117)  SpanInfo: undefined
+--------------------------------
+16 >    y,
+
+    ~~~~~~~                                       => Pos: (118 to 124)  SpanInfo: undefined
+--------------------------------
+17 >    z,
+
+    ~~~~~~~                                       => Pos: (125 to 131)  SpanInfo: undefined
+--------------------------------
+18 >    x2
+
+    ~~~~~~~                                       => Pos: (132 to 138)  SpanInfo: undefined
+--------------------------------
+19 >}
+
+    ~~                                            => Pos: (139 to 140)  SpanInfo: undefined
+--------------------------------
+20 >enum e11 
+
+    ~~~~~~~~~~                                    => Pos: (141 to 150)  SpanInfo: {"start":141,"length":33}
+    >enum e11 
+    >{
+    >    x,
+    >    y,
+    >    x
+    >}
+    >:=> (line 20, col 0) to (line 25, col 1)
+--------------------------------
+21 >{
+
+    ~~                                            => Pos: (151 to 152)  SpanInfo: {"start":157,"length":1}
+    >x
+    >:=> (line 22, col 4) to (line 22, col 5)
+--------------------------------
+22 >    x,
+
+    ~~~~~~~                                       => Pos: (153 to 159)  SpanInfo: {"start":157,"length":1}
+    >x
+    >:=> (line 22, col 4) to (line 22, col 5)
+--------------------------------
+23 >    y,
+
+    ~~~~~~~                                       => Pos: (160 to 166)  SpanInfo: {"start":164,"length":1}
+    >y
+    >:=> (line 23, col 4) to (line 23, col 5)
+--------------------------------
+24 >    x
+
+    ~~~~~~                                        => Pos: (167 to 172)  SpanInfo: {"start":171,"length":1}
+    >x
+    >:=> (line 24, col 4) to (line 24, col 5)
+--------------------------------
+25 >}
+
+    ~~                                            => Pos: (173 to 174)  SpanInfo: {"start":173,"length":1}
+    >}
+    >:=> (line 25, col 0) to (line 25, col 1)
+--------------------------------
+26 >enum e12
+
+    ~~~~~~~~~                                     => Pos: (175 to 183)  SpanInfo: {"start":175,"length":50}
+    >enum e12
+    >{
+    >    x = 10,
+    >    y = 10,
+    >    z,
+    >    x2
+    >}
+    >:=> (line 26, col 0) to (line 32, col 1)
+--------------------------------
+27 >{
+
+    ~~                                            => Pos: (184 to 185)  SpanInfo: {"start":190,"length":6}
+    >x = 10
+    >:=> (line 28, col 4) to (line 28, col 10)
+--------------------------------
+28 >    x = 10,
+
+    ~~~~~~~~~~~~                                  => Pos: (186 to 197)  SpanInfo: {"start":190,"length":6}
+    >x = 10
+    >:=> (line 28, col 4) to (line 28, col 10)
+--------------------------------
+29 >    y = 10,
+
+    ~~~~~~~~~~~~                                  => Pos: (198 to 209)  SpanInfo: {"start":202,"length":6}
+    >y = 10
+    >:=> (line 29, col 4) to (line 29, col 10)
+--------------------------------
+30 >    z,
+
+    ~~~~~~~                                       => Pos: (210 to 216)  SpanInfo: {"start":214,"length":1}
+    >z
+    >:=> (line 30, col 4) to (line 30, col 5)
+--------------------------------
+31 >    x2
+
+    ~~~~~~~                                       => Pos: (217 to 223)  SpanInfo: {"start":221,"length":2}
+    >x2
+    >:=> (line 31, col 4) to (line 31, col 6)
+--------------------------------
+32 >}
+
+    ~~                                            => Pos: (224 to 225)  SpanInfo: {"start":224,"length":1}
+    >}
+    >:=> (line 32, col 0) to (line 32, col 1)
+--------------------------------
+33 >enum e13
+
+    ~~~~~~~~~                                     => Pos: (226 to 234)  SpanInfo: {"start":226,"length":12}
+    >enum e13
+    >{
+    >}
+    >:=> (line 33, col 0) to (line 35, col 1)
+--------------------------------
+34 >{
+
+    ~~                                            => Pos: (235 to 236)  SpanInfo: {"start":237,"length":1}
+    >}
+    >:=> (line 35, col 0) to (line 35, col 1)
+--------------------------------
+35 >}
+
+    ~~                                            => Pos: (237 to 238)  SpanInfo: {"start":237,"length":1}
+    >}
+    >:=> (line 35, col 0) to (line 35, col 1)
+--------------------------------
+36 >declare enum e14
+
+    ~~~~~~~~~~~~~~~~~                             => Pos: (239 to 255)  SpanInfo: undefined
+--------------------------------
+37 >{
+
+    ~~                                            => Pos: (256 to 257)  SpanInfo: undefined
+--------------------------------
+38 >    x,
+
+    ~~~~~~~                                       => Pos: (258 to 264)  SpanInfo: undefined
+--------------------------------
+39 >    y,
+
+    ~~~~~~~                                       => Pos: (265 to 271)  SpanInfo: undefined
+--------------------------------
+40 >    z,
+
+    ~~~~~~~                                       => Pos: (272 to 278)  SpanInfo: undefined
+--------------------------------
+41 >    x2
+
+    ~~~~~~~                                       => Pos: (279 to 285)  SpanInfo: undefined
+--------------------------------
+42 >}
+    ~                                             => Pos: (286 to 286)  SpanInfo: undefined

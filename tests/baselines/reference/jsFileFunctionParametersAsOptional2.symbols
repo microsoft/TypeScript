@@ -1,0 +1,26 @@
+=== tests/cases/compiler/foo.js ===
+/**
+ * @param a
+ * @param b
+ * @param c
+ */
+function f(a, b, c) { }
+>f : Symbol(f, Decl(foo.js, 0, 0))
+>a : Symbol(a, Decl(foo.js, 5, 11))
+>b : Symbol(b, Decl(foo.js, 5, 13))
+>c : Symbol(c, Decl(foo.js, 5, 16))
+
+
+=== tests/cases/compiler/bar.ts ===
+f(); // Error
+>f : Symbol(f, Decl(foo.js, 0, 0))
+
+f(1); // Error
+>f : Symbol(f, Decl(foo.js, 0, 0))
+
+f(1, 2); // Error
+>f : Symbol(f, Decl(foo.js, 0, 0))
+
+f(1, 2, 3); // OK
+>f : Symbol(f, Decl(foo.js, 0, 0))
+

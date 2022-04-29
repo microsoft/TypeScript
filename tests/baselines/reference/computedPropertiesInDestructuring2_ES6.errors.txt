@@ -1,0 +1,8 @@
+tests/cases/compiler/computedPropertiesInDestructuring2_ES6.ts(2,7): error TS2537: Type '{}' has no matching index signature for type 'string'.
+
+
+==== tests/cases/compiler/computedPropertiesInDestructuring2_ES6.ts (1 errors) ====
+    let foo2 = () => "bar";
+    let {[foo2()]: bar3} = {};
+          ~~~~~~
+!!! error TS2537: Type '{}' has no matching index signature for type 'string'.

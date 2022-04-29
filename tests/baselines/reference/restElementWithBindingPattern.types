@@ -1,0 +1,8 @@
+=== tests/cases/conformance/es6/destructuring/restElementWithBindingPattern.ts ===
+var [...[a, b]] = [0, 1];
+>a : number
+>b : number
+>[0, 1] : number[]
+>0 : 0
+>1 : 1
+

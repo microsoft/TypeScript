@@ -1,0 +1,114 @@
+=== tests/cases/conformance/types/typeParameters/typeArgumentLists/callGenericFunctionWithZeroTypeArguments.ts ===
+// valid invocations of generic functions with no explicit type arguments provided 
+
+function f<T>(x: T): T { return null; }
+>f : Symbol(f, Decl(callGenericFunctionWithZeroTypeArguments.ts, 0, 0))
+>T : Symbol(T, Decl(callGenericFunctionWithZeroTypeArguments.ts, 2, 11))
+>x : Symbol(x, Decl(callGenericFunctionWithZeroTypeArguments.ts, 2, 14))
+>T : Symbol(T, Decl(callGenericFunctionWithZeroTypeArguments.ts, 2, 11))
+>T : Symbol(T, Decl(callGenericFunctionWithZeroTypeArguments.ts, 2, 11))
+
+var r = f(1);
+>r : Symbol(r, Decl(callGenericFunctionWithZeroTypeArguments.ts, 3, 3))
+>f : Symbol(f, Decl(callGenericFunctionWithZeroTypeArguments.ts, 0, 0))
+
+var f2 = <T>(x: T): T => { return null; }
+>f2 : Symbol(f2, Decl(callGenericFunctionWithZeroTypeArguments.ts, 5, 3))
+>T : Symbol(T, Decl(callGenericFunctionWithZeroTypeArguments.ts, 5, 10))
+>x : Symbol(x, Decl(callGenericFunctionWithZeroTypeArguments.ts, 5, 13))
+>T : Symbol(T, Decl(callGenericFunctionWithZeroTypeArguments.ts, 5, 10))
+>T : Symbol(T, Decl(callGenericFunctionWithZeroTypeArguments.ts, 5, 10))
+
+var r2 = f2(1);
+>r2 : Symbol(r2, Decl(callGenericFunctionWithZeroTypeArguments.ts, 6, 3))
+>f2 : Symbol(f2, Decl(callGenericFunctionWithZeroTypeArguments.ts, 5, 3))
+
+var f3: { <T>(x: T): T; }
+>f3 : Symbol(f3, Decl(callGenericFunctionWithZeroTypeArguments.ts, 8, 3))
+>T : Symbol(T, Decl(callGenericFunctionWithZeroTypeArguments.ts, 8, 11))
+>x : Symbol(x, Decl(callGenericFunctionWithZeroTypeArguments.ts, 8, 14))
+>T : Symbol(T, Decl(callGenericFunctionWithZeroTypeArguments.ts, 8, 11))
+>T : Symbol(T, Decl(callGenericFunctionWithZeroTypeArguments.ts, 8, 11))
+
+var r3 = f3(1);
+>r3 : Symbol(r3, Decl(callGenericFunctionWithZeroTypeArguments.ts, 9, 3))
+>f3 : Symbol(f3, Decl(callGenericFunctionWithZeroTypeArguments.ts, 8, 3))
+
+class C {
+>C : Symbol(C, Decl(callGenericFunctionWithZeroTypeArguments.ts, 9, 15))
+
+    f<T>(x: T): T {
+>f : Symbol(C.f, Decl(callGenericFunctionWithZeroTypeArguments.ts, 11, 9))
+>T : Symbol(T, Decl(callGenericFunctionWithZeroTypeArguments.ts, 12, 6))
+>x : Symbol(x, Decl(callGenericFunctionWithZeroTypeArguments.ts, 12, 9))
+>T : Symbol(T, Decl(callGenericFunctionWithZeroTypeArguments.ts, 12, 6))
+>T : Symbol(T, Decl(callGenericFunctionWithZeroTypeArguments.ts, 12, 6))
+
+        return null;
+    }
+}
+var r4 = (new C()).f(1);
+>r4 : Symbol(r4, Decl(callGenericFunctionWithZeroTypeArguments.ts, 16, 3))
+>(new C()).f : Symbol(C.f, Decl(callGenericFunctionWithZeroTypeArguments.ts, 11, 9))
+>C : Symbol(C, Decl(callGenericFunctionWithZeroTypeArguments.ts, 9, 15))
+>f : Symbol(C.f, Decl(callGenericFunctionWithZeroTypeArguments.ts, 11, 9))
+
+interface I {
+>I : Symbol(I, Decl(callGenericFunctionWithZeroTypeArguments.ts, 16, 24))
+
+    f<T>(x: T): T;
+>f : Symbol(I.f, Decl(callGenericFunctionWithZeroTypeArguments.ts, 18, 13))
+>T : Symbol(T, Decl(callGenericFunctionWithZeroTypeArguments.ts, 19, 6))
+>x : Symbol(x, Decl(callGenericFunctionWithZeroTypeArguments.ts, 19, 9))
+>T : Symbol(T, Decl(callGenericFunctionWithZeroTypeArguments.ts, 19, 6))
+>T : Symbol(T, Decl(callGenericFunctionWithZeroTypeArguments.ts, 19, 6))
+}
+var i: I;
+>i : Symbol(i, Decl(callGenericFunctionWithZeroTypeArguments.ts, 21, 3))
+>I : Symbol(I, Decl(callGenericFunctionWithZeroTypeArguments.ts, 16, 24))
+
+var r5 = i.f(1);
+>r5 : Symbol(r5, Decl(callGenericFunctionWithZeroTypeArguments.ts, 22, 3))
+>i.f : Symbol(I.f, Decl(callGenericFunctionWithZeroTypeArguments.ts, 18, 13))
+>i : Symbol(i, Decl(callGenericFunctionWithZeroTypeArguments.ts, 21, 3))
+>f : Symbol(I.f, Decl(callGenericFunctionWithZeroTypeArguments.ts, 18, 13))
+
+class C2<T> {
+>C2 : Symbol(C2, Decl(callGenericFunctionWithZeroTypeArguments.ts, 22, 16))
+>T : Symbol(T, Decl(callGenericFunctionWithZeroTypeArguments.ts, 24, 9))
+
+    f(x: T): T {
+>f : Symbol(C2.f, Decl(callGenericFunctionWithZeroTypeArguments.ts, 24, 13))
+>x : Symbol(x, Decl(callGenericFunctionWithZeroTypeArguments.ts, 25, 6))
+>T : Symbol(T, Decl(callGenericFunctionWithZeroTypeArguments.ts, 24, 9))
+>T : Symbol(T, Decl(callGenericFunctionWithZeroTypeArguments.ts, 24, 9))
+
+        return null;
+    }
+}
+var r6 = (new C2()).f(1);
+>r6 : Symbol(r6, Decl(callGenericFunctionWithZeroTypeArguments.ts, 29, 3))
+>(new C2()).f : Symbol(C2.f, Decl(callGenericFunctionWithZeroTypeArguments.ts, 24, 13))
+>C2 : Symbol(C2, Decl(callGenericFunctionWithZeroTypeArguments.ts, 22, 16))
+>f : Symbol(C2.f, Decl(callGenericFunctionWithZeroTypeArguments.ts, 24, 13))
+
+interface I2<T> {
+>I2 : Symbol(I2, Decl(callGenericFunctionWithZeroTypeArguments.ts, 29, 25))
+>T : Symbol(T, Decl(callGenericFunctionWithZeroTypeArguments.ts, 31, 13))
+
+    f(x: T): T;
+>f : Symbol(I2.f, Decl(callGenericFunctionWithZeroTypeArguments.ts, 31, 17))
+>x : Symbol(x, Decl(callGenericFunctionWithZeroTypeArguments.ts, 32, 6))
+>T : Symbol(T, Decl(callGenericFunctionWithZeroTypeArguments.ts, 31, 13))
+>T : Symbol(T, Decl(callGenericFunctionWithZeroTypeArguments.ts, 31, 13))
+}
+var i2: I2<number>;
+>i2 : Symbol(i2, Decl(callGenericFunctionWithZeroTypeArguments.ts, 34, 3))
+>I2 : Symbol(I2, Decl(callGenericFunctionWithZeroTypeArguments.ts, 29, 25))
+
+var r7 = i2.f(1);
+>r7 : Symbol(r7, Decl(callGenericFunctionWithZeroTypeArguments.ts, 35, 3))
+>i2.f : Symbol(I2.f, Decl(callGenericFunctionWithZeroTypeArguments.ts, 31, 17))
+>i2 : Symbol(i2, Decl(callGenericFunctionWithZeroTypeArguments.ts, 34, 3))
+>f : Symbol(I2.f, Decl(callGenericFunctionWithZeroTypeArguments.ts, 31, 17))
+

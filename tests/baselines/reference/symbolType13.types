@@ -1,0 +1,21 @@
+=== tests/cases/conformance/es6/Symbols/symbolType13.ts ===
+var s = Symbol();
+>s : symbol
+>Symbol() : symbol
+>Symbol : SymbolConstructor
+
+var x: any;
+>x : any
+
+for (s in {}) { }
+>s : symbol
+>{} : {}
+
+for (x in s) { }
+>x : any
+>s : symbol
+
+for (var y in s) { }
+>y : string
+>s : symbol
+

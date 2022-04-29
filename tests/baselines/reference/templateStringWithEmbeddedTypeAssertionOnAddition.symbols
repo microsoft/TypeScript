@@ -1,0 +1,4 @@
+=== tests/cases/conformance/es6/templates/templateStringWithEmbeddedTypeAssertionOnAddition.ts ===
+var x = `abc${ <any>(10 + 10) }def`;
+>x : Symbol(x, Decl(templateStringWithEmbeddedTypeAssertionOnAddition.ts, 0, 3))
+

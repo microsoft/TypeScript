@@ -1,0 +1,140 @@
+=== tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithValidOperands.ts ===
+var x: any;
+>x : any
+
+// valid left operands
+// the left operand is required to be of type Any, the String primitive type, or the Number primitive type
+var a1: string;
+>a1 : string
+
+var a2: number;
+>a2 : number
+
+var a3: string | number | symbol;
+>a3 : string | number | symbol
+
+var a4: any;
+>a4 : any
+
+var ra1 = x in x;
+>ra1 : boolean
+>x in x : boolean
+>x : any
+>x : any
+
+var ra2 = a1 in x;
+>ra2 : boolean
+>a1 in x : boolean
+>a1 : string
+>x : any
+
+var ra3 = a2 in x;
+>ra3 : boolean
+>a2 in x : boolean
+>a2 : number
+>x : any
+
+var ra4 = '' in x;
+>ra4 : boolean
+>'' in x : boolean
+>'' : ""
+>x : any
+
+var ra5 = 0 in x;
+>ra5 : boolean
+>0 in x : boolean
+>0 : 0
+>x : any
+
+var ra6 = a3 in x;
+>ra6 : boolean
+>a3 in x : boolean
+>a3 : string | number | symbol
+>x : any
+
+var ra7 = a4 in x;
+>ra7 : boolean
+>a4 in x : boolean
+>a4 : any
+>x : any
+
+// valid right operands
+// the right operand is required to be of type Any, an object type, or a type parameter type
+var b1: {};
+>b1 : {}
+
+var rb1 = x in b1;
+>rb1 : boolean
+>x in b1 : boolean
+>x : any
+>b1 : {}
+
+var rb2 = x in {};
+>rb2 : boolean
+>x in {} : boolean
+>x : any
+>{} : {}
+
+function foo<T>(t: T) {
+>foo : <T>(t: T) => void
+>t : T
+
+    var rb3 = x in t;
+>rb3 : boolean
+>x in t : boolean
+>x : any
+>t : T
+}
+
+function unionCase<T, U>(t: T | U) {
+>unionCase : <T, U>(t: T | U) => void
+>t : T | U
+
+    var rb4 = x in t;
+>rb4 : boolean
+>x in t : boolean
+>x : any
+>t : T | U
+}
+
+function unionCase2<T>(t: T | object) {
+>unionCase2 : <T>(t: T | object) => void
+>t : object | T
+
+    var rb5 = x in t;
+>rb5 : boolean
+>x in t : boolean
+>x : any
+>t : object | T
+}
+
+interface X { x: number }
+>x : number
+
+interface Y { y: number }
+>y : number
+
+var c1: X | Y;
+>c1 : X | Y
+
+var c2: X;
+>c2 : X
+
+var c3: Y;
+>c3 : Y
+
+var rc1 = x in c1;
+>rc1 : boolean
+>x in c1 : boolean
+>x : any
+>c1 : X | Y
+
+var rc2 = x in (c2 || c3);
+>rc2 : boolean
+>x in (c2 || c3) : boolean
+>x : any
+>(c2 || c3) : X | Y
+>c2 || c3 : X | Y
+>c2 : X
+>c3 : Y
+

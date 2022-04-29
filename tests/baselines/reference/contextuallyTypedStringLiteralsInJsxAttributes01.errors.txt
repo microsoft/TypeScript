@@ -1,0 +1,27 @@
+tests/cases/conformance/types/contextualTypes/jsxAttributes/contextuallyTypedStringLiteralsInJsxAttributes01.tsx(15,15): error TS2322: Type '"f"' is not assignable to type '"A" | "B" | "C"'.
+tests/cases/conformance/types/contextualTypes/jsxAttributes/contextuallyTypedStringLiteralsInJsxAttributes01.tsx(16,15): error TS2322: Type '"f"' is not assignable to type '"A" | "B" | "C"'.
+
+
+==== tests/cases/conformance/types/contextualTypes/jsxAttributes/contextuallyTypedStringLiteralsInJsxAttributes01.tsx (2 errors) ====
+    namespace JSX {
+        export interface IntrinsicElements {
+            span: {};
+        }
+        export interface Element {
+    		something?: any;
+        }
+    }
+    
+    const FooComponent = (props: { foo: "A" | "B" | "C" }) => <span>{props.foo}</span>;
+    
+    <FooComponent foo={"A"} />;
+    <FooComponent foo="A"   />;
+    
+    <FooComponent foo={"f"} />;
+                  ~~~
+!!! error TS2322: Type '"f"' is not assignable to type '"A" | "B" | "C"'.
+!!! related TS6500 tests/cases/conformance/types/contextualTypes/jsxAttributes/contextuallyTypedStringLiteralsInJsxAttributes01.tsx:10:32: The expected type comes from property 'foo' which is declared here on type '{ foo: "A" | "B" | "C"; }'
+    <FooComponent foo="f"   />;
+                  ~~~
+!!! error TS2322: Type '"f"' is not assignable to type '"A" | "B" | "C"'.
+!!! related TS6500 tests/cases/conformance/types/contextualTypes/jsxAttributes/contextuallyTypedStringLiteralsInJsxAttributes01.tsx:10:32: The expected type comes from property 'foo' which is declared here on type '{ foo: "A" | "B" | "C"; }'

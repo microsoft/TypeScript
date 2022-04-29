@@ -1,0 +1,206 @@
+=== tests/cases/compiler/declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts ===
+// Note that both of the following have an `any` in their return type from where we bottom out the type printout
+// for having too many instances of the same symbol nesting.
+
+// Slightly simplified repro from https://github.com/microsoft/TypeScript/issues/30732 so it's easier to read and debug
+export type Key<U> = keyof U;
+>Key : Symbol(Key, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 0, 0))
+>U : Symbol(U, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 4, 16))
+>U : Symbol(U, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 4, 16))
+
+export type Value<K extends Key<U>, U> = U[K];
+>Value : Symbol(Value, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 4, 29))
+>K : Symbol(K, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 5, 18))
+>Key : Symbol(Key, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 0, 0))
+>U : Symbol(U, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 5, 35))
+>U : Symbol(U, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 5, 35))
+>U : Symbol(U, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 5, 35))
+>K : Symbol(K, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 5, 18))
+
+export const updateIfChanged = <T>(t: T) => {
+>updateIfChanged : Symbol(updateIfChanged, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 6, 12))
+>T : Symbol(T, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 6, 32))
+>t : Symbol(t, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 6, 35))
+>T : Symbol(T, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 6, 32))
+
+    const reduce = <U>(u: U, update: (u: U) => T) => {
+>reduce : Symbol(reduce, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 7, 9))
+>U : Symbol(U, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 7, 20))
+>u : Symbol(u, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 7, 23))
+>U : Symbol(U, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 7, 20))
+>update : Symbol(update, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 7, 28))
+>u : Symbol(u, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 7, 38))
+>U : Symbol(U, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 7, 20))
+>T : Symbol(T, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 6, 32))
+
+        const set = (newU: U) => Object.is(u, newU) ? t : update(newU);
+>set : Symbol(set, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 8, 13))
+>newU : Symbol(newU, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 8, 21))
+>U : Symbol(U, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 7, 20))
+>Object.is : Symbol(ObjectConstructor.is, Decl(lib.es2015.core.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>is : Symbol(ObjectConstructor.is, Decl(lib.es2015.core.d.ts, --, --))
+>u : Symbol(u, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 7, 23))
+>newU : Symbol(newU, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 8, 21))
+>t : Symbol(t, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 6, 35))
+>update : Symbol(update, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 7, 28))
+>newU : Symbol(newU, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 8, 21))
+
+        return Object.assign(
+>Object.assign : Symbol(ObjectConstructor.assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>assign : Symbol(ObjectConstructor.assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+
+            <K extends Key<U>>(key: K) =>
+>K : Symbol(K, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 10, 13))
+>Key : Symbol(Key, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 0, 0))
+>U : Symbol(U, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 7, 20))
+>key : Symbol(key, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 10, 31))
+>K : Symbol(K, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 10, 13))
+
+                reduce<Value<K, U>>(u[key as keyof U] as Value<K, U>, (v: Value<K, U>) => {
+>reduce : Symbol(reduce, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 7, 9))
+>Value : Symbol(Value, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 4, 29))
+>K : Symbol(K, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 10, 13))
+>U : Symbol(U, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 7, 20))
+>u : Symbol(u, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 7, 23))
+>key : Symbol(key, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 10, 31))
+>U : Symbol(U, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 7, 20))
+>Value : Symbol(Value, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 4, 29))
+>K : Symbol(K, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 10, 13))
+>U : Symbol(U, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 7, 20))
+>v : Symbol(v, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 11, 71))
+>Value : Symbol(Value, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 4, 29))
+>K : Symbol(K, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 10, 13))
+>U : Symbol(U, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 7, 20))
+
+                    return update(Object.assign(Array.isArray(u) ? [] : {}, u, { [key]: v }));
+>update : Symbol(update, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 7, 28))
+>Object.assign : Symbol(ObjectConstructor.assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>assign : Symbol(ObjectConstructor.assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>u : Symbol(u, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 7, 23))
+>u : Symbol(u, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 7, 23))
+>[key] : Symbol([key], Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 12, 80))
+>key : Symbol(key, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 10, 31))
+>v : Symbol(v, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 11, 71))
+
+                }),
+            { map: (updater: (u: U) => U) => set(updater(u)), set });
+>map : Symbol(map, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 14, 13))
+>updater : Symbol(updater, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 14, 20))
+>u : Symbol(u, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 14, 30))
+>U : Symbol(U, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 7, 20))
+>U : Symbol(U, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 7, 20))
+>set : Symbol(set, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 8, 13))
+>updater : Symbol(updater, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 14, 20))
+>u : Symbol(u, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 7, 23))
+>set : Symbol(set, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 14, 61))
+
+    };
+    return reduce<T>(t, (t: T) => t);
+>reduce : Symbol(reduce, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 7, 9))
+>T : Symbol(T, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 6, 32))
+>t : Symbol(t, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 6, 35))
+>t : Symbol(t, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 16, 25))
+>T : Symbol(T, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 6, 32))
+>t : Symbol(t, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 16, 25))
+
+};
+
+// example from https://github.com/microsoft/TypeScript/issues/31605
+
+export const testRecFun = <T extends Object>(parent: T) => {
+>testRecFun : Symbol(testRecFun, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 21, 12))
+>T : Symbol(T, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 21, 27))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>parent : Symbol(parent, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 21, 45))
+>T : Symbol(T, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 21, 27))
+
+    return {
+        result: parent,
+>result : Symbol(result, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 22, 12))
+>parent : Symbol(parent, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 21, 45))
+
+        deeper: <U extends Object>(child: U) =>
+>deeper : Symbol(deeper, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 23, 23))
+>U : Symbol(U, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 24, 17))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>child : Symbol(child, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 24, 35))
+>U : Symbol(U, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 24, 17))
+
+            testRecFun<T & U>({ ...parent, ...child })
+>testRecFun : Symbol(testRecFun, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 21, 12))
+>T : Symbol(T, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 21, 27))
+>U : Symbol(U, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 24, 17))
+>parent : Symbol(parent, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 21, 45))
+>child : Symbol(child, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 24, 35))
+
+    };
+}
+
+
+let p1 = testRecFun({ one: '1' })
+>p1 : Symbol(p1, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 30, 3))
+>testRecFun : Symbol(testRecFun, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 21, 12))
+>one : Symbol(one, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 30, 21))
+
+void p1.result.one;
+>p1.result.one : Symbol(one, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 30, 21))
+>p1.result : Symbol(result, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 22, 12))
+>p1 : Symbol(p1, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 30, 3))
+>result : Symbol(result, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 22, 12))
+>one : Symbol(one, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 30, 21))
+
+let p2 = p1.deeper({ two: '2' })
+>p2 : Symbol(p2, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 32, 3))
+>p1.deeper : Symbol(deeper, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 23, 23))
+>p1 : Symbol(p1, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 30, 3))
+>deeper : Symbol(deeper, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 23, 23))
+>two : Symbol(two, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 32, 20))
+
+void p2.result.one;
+>p2.result.one : Symbol(one, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 30, 21))
+>p2.result : Symbol(result, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 22, 12))
+>p2 : Symbol(p2, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 32, 3))
+>result : Symbol(result, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 22, 12))
+>one : Symbol(one, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 30, 21))
+
+void p2.result.two;
+>p2.result.two : Symbol(two, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 32, 20))
+>p2.result : Symbol(result, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 22, 12))
+>p2 : Symbol(p2, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 32, 3))
+>result : Symbol(result, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 22, 12))
+>two : Symbol(two, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 32, 20))
+
+let p3 = p2.deeper({ three: '3' })
+>p3 : Symbol(p3, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 35, 3))
+>p2.deeper : Symbol(deeper, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 23, 23))
+>p2 : Symbol(p2, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 32, 3))
+>deeper : Symbol(deeper, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 23, 23))
+>three : Symbol(three, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 35, 20))
+
+void p3.result.one;
+>p3.result.one : Symbol(one, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 30, 21))
+>p3.result : Symbol(result, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 22, 12))
+>p3 : Symbol(p3, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 35, 3))
+>result : Symbol(result, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 22, 12))
+>one : Symbol(one, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 30, 21))
+
+void p3.result.two;
+>p3.result.two : Symbol(two, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 32, 20))
+>p3.result : Symbol(result, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 22, 12))
+>p3 : Symbol(p3, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 35, 3))
+>result : Symbol(result, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 22, 12))
+>two : Symbol(two, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 32, 20))
+
+void p3.result.three;
+>p3.result.three : Symbol(three, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 35, 20))
+>p3.result : Symbol(result, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 22, 12))
+>p3 : Symbol(p3, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 35, 3))
+>result : Symbol(result, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 22, 12))
+>three : Symbol(three, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 35, 20))
+

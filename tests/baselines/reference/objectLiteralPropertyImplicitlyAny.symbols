@@ -1,0 +1,13 @@
+=== tests/cases/compiler/objectLiteralPropertyImplicitlyAny.ts ===
+const foo = Symbol.for("foo");
+>foo : Symbol(foo, Decl(objectLiteralPropertyImplicitlyAny.ts, 0, 5))
+>Symbol.for : Symbol(SymbolConstructor.for, Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>for : Symbol(SymbolConstructor.for, Decl(lib.es2015.symbol.d.ts, --, --))
+
+const o = { [foo]: undefined };
+>o : Symbol(o, Decl(objectLiteralPropertyImplicitlyAny.ts, 1, 5))
+>[foo] : Symbol([foo], Decl(objectLiteralPropertyImplicitlyAny.ts, 1, 11))
+>foo : Symbol(foo, Decl(objectLiteralPropertyImplicitlyAny.ts, 0, 5))
+>undefined : Symbol(undefined)
+

@@ -1,0 +1,149 @@
+=== tests/cases/compiler/classUsedBeforeInitializedVariables.ts ===
+class Test {
+>Test : Test
+
+    p1 = 0;
+>p1 : number
+>0 : 0
+
+    p2 = this.p1;
+>p2 : number
+>this.p1 : number
+>this : this
+>p1 : number
+
+    p3 = this.p4;
+>p3 : number
+>this.p4 : number
+>this : this
+>p4 : number
+
+    p4 = 0;
+>p4 : number
+>0 : 0
+
+    p5?: number;
+>p5 : number
+
+    p6?: string;
+>p6 : string
+
+    p7 = {
+>p7 : { hello: string; }
+>{        hello: (this.p6 = "string"),    } : { hello: string; }
+
+        hello: (this.p6 = "string"),
+>hello : string
+>(this.p6 = "string") : "string"
+>this.p6 = "string" : "string"
+>this.p6 : string
+>this : this
+>p6 : string
+>"string" : "string"
+
+    };
+
+    directlyAssigned: any = this.directlyAssigned;
+>directlyAssigned : any
+>this.directlyAssigned : any
+>this : this
+>directlyAssigned : any
+
+    withinArrowFunction: any = () => this.withinArrowFunction;
+>withinArrowFunction : any
+>() => this.withinArrowFunction : () => any
+>this.withinArrowFunction : any
+>this : this
+>withinArrowFunction : any
+
+    withinFunction: any = function () {
+>withinFunction : any
+>function () {        return this.withinFunction;    } : () => any
+
+        return this.withinFunction;
+>this.withinFunction : any
+>this : any
+>withinFunction : any
+
+    };
+
+    withinObjectLiteral: any = {
+>withinObjectLiteral : any
+>{        [this.withinObjectLiteral]: true,    } : { [x: number]: boolean; }
+
+        [this.withinObjectLiteral]: true,
+>[this.withinObjectLiteral] : boolean
+>this.withinObjectLiteral : any
+>this : this
+>withinObjectLiteral : any
+>true : true
+
+    };
+
+    withinObjectLiteralGetterName: any = {
+>withinObjectLiteralGetterName : any
+>{        get [this.withinObjectLiteralGetterName]() {            return true;        }    } : { [x: number]: boolean; }
+
+        get [this.withinObjectLiteralGetterName]() {
+>[this.withinObjectLiteralGetterName] : boolean
+>this.withinObjectLiteralGetterName : any
+>this : this
+>withinObjectLiteralGetterName : any
+
+            return true;
+>true : true
+        }
+    };
+
+    withinObjectLiteralSetterName: any = {
+>withinObjectLiteralSetterName : any
+>{        set [this.withinObjectLiteralSetterName](_: any) {}    } : { [x: number]: any; }
+
+        set [this.withinObjectLiteralSetterName](_: any) {}
+>[this.withinObjectLiteralSetterName] : any
+>this.withinObjectLiteralSetterName : any
+>this : this
+>withinObjectLiteralSetterName : any
+>_ : any
+
+    };
+
+    withinClassDeclarationExtension: any = (class extends this.withinClassDeclarationExtension { });
+>withinClassDeclarationExtension : any
+>(class extends this.withinClassDeclarationExtension { }) : typeof (Anonymous class)
+>class extends this.withinClassDeclarationExtension { } : typeof (Anonymous class)
+>this.withinClassDeclarationExtension : any
+>this : this
+>withinClassDeclarationExtension : any
+
+    fromOptional = this.p5;
+>fromOptional : number
+>this.p5 : number
+>this : this
+>p5 : number
+
+    // These error cases are ignored (not checked by control flow analysis)
+
+    assignedByArrowFunction: any = (() => this.assignedByFunction)();
+>assignedByArrowFunction : any
+>(() => this.assignedByFunction)() : any
+>(() => this.assignedByFunction) : () => any
+>() => this.assignedByFunction : () => any
+>this.assignedByFunction : any
+>this : this
+>assignedByFunction : any
+
+    assignedByFunction: any = (function () {
+>assignedByFunction : any
+>(function () {        return this.assignedByFunction;    })() : any
+>(function () {        return this.assignedByFunction;    }) : () => any
+>function () {        return this.assignedByFunction;    } : () => any
+
+        return this.assignedByFunction;
+>this.assignedByFunction : any
+>this : any
+>assignedByFunction : any
+
+    })();
+}
+

@@ -1,0 +1,11 @@
+=== tests/cases/conformance/async/es6/asyncArrowFunction/asyncArrowFunction10_es6.ts ===
+var foo = async (): Promise<void> => {
+>foo : Symbol(foo, Decl(asyncArrowFunction10_es6.ts, 0, 3))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+   // Legal to use 'await' in a type context.
+   var v: await;
+>v : Symbol(v, Decl(asyncArrowFunction10_es6.ts, 2, 6))
+>await : Symbol(await)
+}
+

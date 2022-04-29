@@ -1,0 +1,38 @@
+=== tests/cases/compiler/noUnusedLocals_destructuringAssignment.ts ===
+class C {
+>C : Symbol(C, Decl(noUnusedLocals_destructuringAssignment.ts, 0, 0))
+
+    private x = 0;
+>x : Symbol(C.x, Decl(noUnusedLocals_destructuringAssignment.ts, 0, 9))
+
+    m(): number {
+>m : Symbol(C.m, Decl(noUnusedLocals_destructuringAssignment.ts, 1, 18))
+
+        let x: number;
+>x : Symbol(x, Decl(noUnusedLocals_destructuringAssignment.ts, 4, 11))
+
+        ({ x } = this);
+>x : Symbol(x, Decl(noUnusedLocals_destructuringAssignment.ts, 5, 10))
+>this : Symbol(C, Decl(noUnusedLocals_destructuringAssignment.ts, 0, 0))
+
+        return x;
+>x : Symbol(x, Decl(noUnusedLocals_destructuringAssignment.ts, 4, 11))
+    }
+
+    private f(): Function {
+>f : Symbol(C.f, Decl(noUnusedLocals_destructuringAssignment.ts, 7, 5))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+        let f: Function;
+>f : Symbol(f, Decl(noUnusedLocals_destructuringAssignment.ts, 10, 11))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+        ({ f } = this);
+>f : Symbol(f, Decl(noUnusedLocals_destructuringAssignment.ts, 11, 10))
+>this : Symbol(C, Decl(noUnusedLocals_destructuringAssignment.ts, 0, 0))
+
+        return f;
+>f : Symbol(f, Decl(noUnusedLocals_destructuringAssignment.ts, 10, 11))
+    }
+}
+

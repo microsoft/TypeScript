@@ -1,0 +1,38 @@
+=== tests/cases/compiler/superCallArgsMustMatch.ts ===
+class T5<T>{
+>T5 : T5<T>
+
+    public foo: T;
+>foo : T
+
+    constructor(public bar: T) { }
+>bar : T
+
+}
+
+ 
+
+class T6 extends T5<number>{
+>T6 : T6
+>T5 : T5<number>
+
+    constructor() {
+
+        // Should error; base constructor has type T for first arg,
+        // which is instantiated with 'number' in the extends clause
+        super("hi");
+>super("hi") : void
+>super : typeof T5
+>"hi" : "hi"
+
+        var x: number = this.foo;
+>x : number
+>this.foo : number
+>this : this
+>foo : number
+
+    }
+
+}
+
+

@@ -1,0 +1,31 @@
+tests/cases/compiler/asyncFunctionReturnExpressionErrorSpans.ts(11,28): error TS2705: An async function or method in ES5/ES3 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
+tests/cases/compiler/asyncFunctionReturnExpressionErrorSpans.ts(16,21): error TS2322: Type 'number' is not assignable to type 'string'.
+
+
+==== tests/cases/compiler/asyncFunctionReturnExpressionErrorSpans.ts (2 errors) ====
+    interface Foo {
+        bar: {
+            baz: {
+                inner: {
+                    thing: string
+                }
+            }
+        }
+    }
+    
+    async function asyncFoo(): Promise<Foo> {
+                               ~~~~~~~~~~~~
+!!! error TS2705: An async function or method in ES5/ES3 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
+        return {
+            bar: {
+                baz: {
+                    inner: {
+                        thing: 1
+                        ~~~~~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
+!!! related TS6500 tests/cases/compiler/asyncFunctionReturnExpressionErrorSpans.ts:5:17: The expected type comes from property 'thing' which is declared here on type '{ thing: string; }'
+                    }
+                }
+            }
+        }
+    }

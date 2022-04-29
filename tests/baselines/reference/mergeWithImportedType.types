@@ -1,0 +1,12 @@
+=== tests/cases/compiler/f1.ts ===
+export enum E {X}
+>E : E
+>X : E.X
+
+=== tests/cases/compiler/f2.ts ===
+import {E} from "./f1";
+>E : typeof E
+
+export type E = E;
+>E : E
+

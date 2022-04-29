@@ -1,0 +1,14 @@
+=== tests/cases/conformance/es6/for-ofStatements/for-of36.ts ===
+var tuple: [string, boolean] = ["", true];
+>tuple : [string, boolean]
+>["", true] : [string, true]
+>"" : ""
+>true : true
+
+for (var v of tuple) {
+>v : string | boolean
+>tuple : [string, boolean]
+
+    v;
+>v : string | boolean
+}

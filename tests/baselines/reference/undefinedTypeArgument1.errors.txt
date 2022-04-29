@@ -1,0 +1,7 @@
+tests/cases/compiler/undefinedTypeArgument1.ts(1,22): error TS2304: Cannot find name 'WAWA'.
+
+
+==== tests/cases/compiler/undefinedTypeArgument1.ts (1 errors) ====
+    var cats = new Array<WAWA>();
+                         ~~~~
+!!! error TS2304: Cannot find name 'WAWA'.

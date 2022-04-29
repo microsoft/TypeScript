@@ -1,0 +1,44 @@
+=== tests/cases/conformance/async/es6/awaitUnion_es6.ts ===
+declare let a: number | string;
+>a : string | number
+
+declare let b: PromiseLike<number> | PromiseLike<string>;
+>b : PromiseLike<number> | PromiseLike<string>
+
+declare let c: PromiseLike<number | string>;
+>c : PromiseLike<string | number>
+
+declare let d: number | PromiseLike<string>;
+>d : number | PromiseLike<string>
+
+declare let e: number | PromiseLike<number | string>;
+>e : number | PromiseLike<string | number>
+
+async function f() {
+>f : () => Promise<void>
+
+	let await_a = await a;
+>await_a : string | number
+>await a : string | number
+>a : string | number
+
+	let await_b = await b;
+>await_b : string | number
+>await b : string | number
+>b : PromiseLike<number> | PromiseLike<string>
+
+	let await_c = await c;
+>await_c : string | number
+>await c : string | number
+>c : PromiseLike<string | number>
+
+	let await_d = await d;
+>await_d : string | number
+>await d : string | number
+>d : number | PromiseLike<string>
+
+	let await_e = await e;
+>await_e : string | number
+>await e : string | number
+>e : number | PromiseLike<string | number>
+}

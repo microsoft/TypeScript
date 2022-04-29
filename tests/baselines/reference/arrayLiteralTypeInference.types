@@ -1,0 +1,141 @@
+=== tests/cases/compiler/arrayLiteralTypeInference.ts ===
+class Action {
+>Action : Action
+
+    id: number;
+>id : number
+}
+
+class ActionA extends Action {
+>ActionA : ActionA
+>Action : Action
+
+    value: string;
+>value : string
+}
+
+class ActionB extends Action {
+>ActionB : ActionB
+>Action : Action
+
+    trueNess: boolean;
+>trueNess : boolean
+}
+
+var x1: Action[] = [
+>x1 : Action[]
+>[    { id: 2, trueness: false },    { id: 3, name: "three" }] : ({ id: number; trueness: boolean; } | { id: number; name: string; })[]
+
+    { id: 2, trueness: false },
+>{ id: 2, trueness: false } : { id: number; trueness: boolean; }
+>id : number
+>2 : 2
+>trueness : boolean
+>false : false
+
+    { id: 3, name: "three" }
+>{ id: 3, name: "three" } : { id: number; name: string; }
+>id : number
+>3 : 3
+>name : string
+>"three" : "three"
+
+]
+
+var x2: Action[] = [
+>x2 : Action[]
+>[    new ActionA(),    new ActionB()] : (ActionA | ActionB)[]
+
+    new ActionA(),
+>new ActionA() : ActionA
+>ActionA : typeof ActionA
+
+    new ActionB()
+>new ActionB() : ActionB
+>ActionB : typeof ActionB
+
+]
+
+var x3: Action[] = [
+>x3 : Action[]
+>[    new Action(),    new ActionA(),    new ActionB()] : Action[]
+
+    new Action(),
+>new Action() : Action
+>Action : typeof Action
+
+    new ActionA(),
+>new ActionA() : ActionA
+>ActionA : typeof ActionA
+
+    new ActionB()
+>new ActionB() : ActionB
+>ActionB : typeof ActionB
+
+]
+
+var z1: { id: number }[] =
+>z1 : { id: number; }[]
+>id : number
+
+    [
+>[        { id: 2, trueness: false },        { id: 3, name: "three" }    ] : ({ id: number; trueness: boolean; } | { id: number; name: string; })[]
+
+        { id: 2, trueness: false },
+>{ id: 2, trueness: false } : { id: number; trueness: boolean; }
+>id : number
+>2 : 2
+>trueness : boolean
+>false : false
+
+        { id: 3, name: "three" }
+>{ id: 3, name: "three" } : { id: number; name: string; }
+>id : number
+>3 : 3
+>name : string
+>"three" : "three"
+
+    ]
+
+var z2: { id: number }[] =
+>z2 : { id: number; }[]
+>id : number
+
+    [
+>[        new ActionA(),        new ActionB()    ] : (ActionA | ActionB)[]
+
+        new ActionA(),
+>new ActionA() : ActionA
+>ActionA : typeof ActionA
+
+        new ActionB()
+>new ActionB() : ActionB
+>ActionB : typeof ActionB
+
+    ]
+
+var z3: { id: number }[] =
+>z3 : { id: number; }[]
+>id : number
+
+    [
+>[        new Action(),        new ActionA(),        new ActionB()    ] : Action[]
+
+        new Action(),
+>new Action() : Action
+>Action : typeof Action
+
+        new ActionA(),
+>new ActionA() : ActionA
+>ActionA : typeof ActionA
+
+        new ActionB()
+>new ActionB() : ActionB
+>ActionB : typeof ActionB
+
+    ]
+
+
+
+
+

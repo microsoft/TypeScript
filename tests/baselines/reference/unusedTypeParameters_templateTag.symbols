@@ -1,0 +1,5 @@
+=== /a.js ===
+/** @template T */
+function f() {}
+>f : Symbol(f, Decl(a.js, 0, 0))
+

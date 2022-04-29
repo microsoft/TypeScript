@@ -1,0 +1,103 @@
+=== tests/cases/conformance/es2019/b.js ===
+var a = 10;
+>a : Symbol(a, Decl(b.js, 0, 3))
+
+this.a;
+>this.a : Symbol(a, Decl(b.js, 0, 3))
+>this : Symbol(globalThis)
+>a : Symbol(a, Decl(b.js, 0, 3))
+
+this.b;
+>this.b : Symbol(b, Decl(actual.ts, 0, 3))
+>this : Symbol(globalThis)
+>b : Symbol(b, Decl(actual.ts, 0, 3))
+
+globalThis.a;
+>globalThis.a : Symbol(a, Decl(b.js, 0, 3))
+>globalThis : Symbol(globalThis)
+>a : Symbol(a, Decl(b.js, 0, 3))
+
+globalThis.b;
+>globalThis.b : Symbol(b, Decl(actual.ts, 0, 3))
+>globalThis : Symbol(globalThis)
+>b : Symbol(b, Decl(actual.ts, 0, 3))
+
+// DOM access is not supported until the index signature is handled more strictly
+self.a;
+>self.a : Symbol(a, Decl(b.js, 0, 3))
+>self : Symbol(self, Decl(lib.dom.d.ts, --, --))
+>a : Symbol(a, Decl(b.js, 0, 3))
+
+self.b;
+>self.b : Symbol(b, Decl(actual.ts, 0, 3))
+>self : Symbol(self, Decl(lib.dom.d.ts, --, --))
+>b : Symbol(b, Decl(actual.ts, 0, 3))
+
+window.a;
+>window.a : Symbol(a, Decl(b.js, 0, 3))
+>window : Symbol(window, Decl(lib.dom.d.ts, --, --))
+>a : Symbol(a, Decl(b.js, 0, 3))
+
+window.b;
+>window.b : Symbol(b, Decl(actual.ts, 0, 3))
+>window : Symbol(window, Decl(lib.dom.d.ts, --, --))
+>b : Symbol(b, Decl(actual.ts, 0, 3))
+
+top.a;
+>top : Symbol(top, Decl(lib.dom.d.ts, --, --))
+
+top.b;
+>top : Symbol(top, Decl(lib.dom.d.ts, --, --))
+
+=== tests/cases/conformance/es2019/actual.ts ===
+var b = 10;
+>b : Symbol(b, Decl(actual.ts, 0, 3))
+
+this.a;
+>this.a : Symbol(a, Decl(b.js, 0, 3))
+>this : Symbol(globalThis)
+>a : Symbol(a, Decl(b.js, 0, 3))
+
+this.b;
+>this.b : Symbol(b, Decl(actual.ts, 0, 3))
+>this : Symbol(globalThis)
+>b : Symbol(b, Decl(actual.ts, 0, 3))
+
+globalThis.a;
+>globalThis.a : Symbol(a, Decl(b.js, 0, 3))
+>globalThis : Symbol(globalThis)
+>a : Symbol(a, Decl(b.js, 0, 3))
+
+globalThis.b;
+>globalThis.b : Symbol(b, Decl(actual.ts, 0, 3))
+>globalThis : Symbol(globalThis)
+>b : Symbol(b, Decl(actual.ts, 0, 3))
+
+// same here -- no DOM access to globalThis yet
+self.a;
+>self.a : Symbol(a, Decl(b.js, 0, 3))
+>self : Symbol(self, Decl(lib.dom.d.ts, --, --))
+>a : Symbol(a, Decl(b.js, 0, 3))
+
+self.b;
+>self.b : Symbol(b, Decl(actual.ts, 0, 3))
+>self : Symbol(self, Decl(lib.dom.d.ts, --, --))
+>b : Symbol(b, Decl(actual.ts, 0, 3))
+
+window.a;
+>window.a : Symbol(a, Decl(b.js, 0, 3))
+>window : Symbol(window, Decl(lib.dom.d.ts, --, --))
+>a : Symbol(a, Decl(b.js, 0, 3))
+
+window.b;
+>window.b : Symbol(b, Decl(actual.ts, 0, 3))
+>window : Symbol(window, Decl(lib.dom.d.ts, --, --))
+>b : Symbol(b, Decl(actual.ts, 0, 3))
+
+top.a;
+>top : Symbol(top, Decl(lib.dom.d.ts, --, --))
+
+top.b;
+>top : Symbol(top, Decl(lib.dom.d.ts, --, --))
+
+

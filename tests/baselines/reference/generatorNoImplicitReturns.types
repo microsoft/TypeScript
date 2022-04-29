@@ -1,0 +1,20 @@
+=== tests/cases/conformance/es6/yieldExpressions/generatorNoImplicitReturns.ts ===
+ 
+function* testGenerator () { 
+>testGenerator : () => Generator<string, void, unknown>
+
+  if (Math.random() > 0.5) { 
+>Math.random() > 0.5 : boolean
+>Math.random() : number
+>Math.random : () => number
+>Math : Math
+>random : () => number
+>0.5 : 0.5
+
+      return; 
+  } 
+  yield 'hello'; 
+>yield 'hello' : any
+>'hello' : "hello"
+}
+

@@ -1,0 +1,150 @@
+=== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/anyAssignableToEveryType.ts ===
+var a: any;
+>a : Symbol(a, Decl(anyAssignableToEveryType.ts, 0, 3))
+
+class C {
+>C : Symbol(C, Decl(anyAssignableToEveryType.ts, 0, 11))
+
+    foo: string;
+>foo : Symbol(C.foo, Decl(anyAssignableToEveryType.ts, 2, 9))
+}
+var ac: C;
+>ac : Symbol(ac, Decl(anyAssignableToEveryType.ts, 5, 3))
+>C : Symbol(C, Decl(anyAssignableToEveryType.ts, 0, 11))
+
+interface I {
+>I : Symbol(I, Decl(anyAssignableToEveryType.ts, 5, 10))
+
+    foo: string;
+>foo : Symbol(I.foo, Decl(anyAssignableToEveryType.ts, 6, 13))
+}
+var ai: I;
+>ai : Symbol(ai, Decl(anyAssignableToEveryType.ts, 9, 3))
+>I : Symbol(I, Decl(anyAssignableToEveryType.ts, 5, 10))
+
+enum E { A }
+>E : Symbol(E, Decl(anyAssignableToEveryType.ts, 9, 10))
+>A : Symbol(E.A, Decl(anyAssignableToEveryType.ts, 11, 8))
+
+var ae: E;
+>ae : Symbol(ae, Decl(anyAssignableToEveryType.ts, 12, 3))
+>E : Symbol(E, Decl(anyAssignableToEveryType.ts, 9, 10))
+
+var b: number = a;
+>b : Symbol(b, Decl(anyAssignableToEveryType.ts, 14, 3))
+>a : Symbol(a, Decl(anyAssignableToEveryType.ts, 0, 3))
+
+var c: string = a;
+>c : Symbol(c, Decl(anyAssignableToEveryType.ts, 15, 3))
+>a : Symbol(a, Decl(anyAssignableToEveryType.ts, 0, 3))
+
+var d: boolean = a;
+>d : Symbol(d, Decl(anyAssignableToEveryType.ts, 16, 3))
+>a : Symbol(a, Decl(anyAssignableToEveryType.ts, 0, 3))
+
+var e: Date = a;
+>e : Symbol(e, Decl(anyAssignableToEveryType.ts, 17, 3))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>a : Symbol(a, Decl(anyAssignableToEveryType.ts, 0, 3))
+
+var f: any = a;
+>f : Symbol(f, Decl(anyAssignableToEveryType.ts, 18, 3))
+>a : Symbol(a, Decl(anyAssignableToEveryType.ts, 0, 3))
+
+var g: void = a;
+>g : Symbol(g, Decl(anyAssignableToEveryType.ts, 19, 3))
+>a : Symbol(a, Decl(anyAssignableToEveryType.ts, 0, 3))
+
+var h: Object = a;
+>h : Symbol(h, Decl(anyAssignableToEveryType.ts, 20, 3))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(anyAssignableToEveryType.ts, 0, 3))
+
+var i: {} = a;
+>i : Symbol(i, Decl(anyAssignableToEveryType.ts, 21, 3))
+>a : Symbol(a, Decl(anyAssignableToEveryType.ts, 0, 3))
+
+var j: () => {} = a;
+>j : Symbol(j, Decl(anyAssignableToEveryType.ts, 22, 3))
+>a : Symbol(a, Decl(anyAssignableToEveryType.ts, 0, 3))
+
+var k: Function = a;
+>k : Symbol(k, Decl(anyAssignableToEveryType.ts, 23, 3))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(anyAssignableToEveryType.ts, 0, 3))
+
+var l: (x: number) => string = a;
+>l : Symbol(l, Decl(anyAssignableToEveryType.ts, 24, 3))
+>x : Symbol(x, Decl(anyAssignableToEveryType.ts, 24, 8))
+>a : Symbol(a, Decl(anyAssignableToEveryType.ts, 0, 3))
+
+ac = a;
+>ac : Symbol(ac, Decl(anyAssignableToEveryType.ts, 5, 3))
+>a : Symbol(a, Decl(anyAssignableToEveryType.ts, 0, 3))
+
+ai = a;
+>ai : Symbol(ai, Decl(anyAssignableToEveryType.ts, 9, 3))
+>a : Symbol(a, Decl(anyAssignableToEveryType.ts, 0, 3))
+
+ae = a;
+>ae : Symbol(ae, Decl(anyAssignableToEveryType.ts, 12, 3))
+>a : Symbol(a, Decl(anyAssignableToEveryType.ts, 0, 3))
+
+var m: number[] = a;
+>m : Symbol(m, Decl(anyAssignableToEveryType.ts, 28, 3))
+>a : Symbol(a, Decl(anyAssignableToEveryType.ts, 0, 3))
+
+var n: { foo: string } = a;
+>n : Symbol(n, Decl(anyAssignableToEveryType.ts, 29, 3))
+>foo : Symbol(foo, Decl(anyAssignableToEveryType.ts, 29, 8))
+>a : Symbol(a, Decl(anyAssignableToEveryType.ts, 0, 3))
+
+var o: <T>(x: T) => T = a;
+>o : Symbol(o, Decl(anyAssignableToEveryType.ts, 30, 3))
+>T : Symbol(T, Decl(anyAssignableToEveryType.ts, 30, 8))
+>x : Symbol(x, Decl(anyAssignableToEveryType.ts, 30, 11))
+>T : Symbol(T, Decl(anyAssignableToEveryType.ts, 30, 8))
+>T : Symbol(T, Decl(anyAssignableToEveryType.ts, 30, 8))
+>a : Symbol(a, Decl(anyAssignableToEveryType.ts, 0, 3))
+
+var p: Number = a;
+>p : Symbol(p, Decl(anyAssignableToEveryType.ts, 31, 3))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(anyAssignableToEveryType.ts, 0, 3))
+
+var q: String = a;
+>q : Symbol(q, Decl(anyAssignableToEveryType.ts, 32, 3))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(anyAssignableToEveryType.ts, 0, 3))
+
+function foo<T, U /*extends T*/, V extends Date>(x: T, y: U, z: V) {
+>foo : Symbol(foo, Decl(anyAssignableToEveryType.ts, 32, 18))
+>T : Symbol(T, Decl(anyAssignableToEveryType.ts, 34, 13))
+>U : Symbol(U, Decl(anyAssignableToEveryType.ts, 34, 15))
+>V : Symbol(V, Decl(anyAssignableToEveryType.ts, 34, 32))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>x : Symbol(x, Decl(anyAssignableToEveryType.ts, 34, 49))
+>T : Symbol(T, Decl(anyAssignableToEveryType.ts, 34, 13))
+>y : Symbol(y, Decl(anyAssignableToEveryType.ts, 34, 54))
+>U : Symbol(U, Decl(anyAssignableToEveryType.ts, 34, 15))
+>z : Symbol(z, Decl(anyAssignableToEveryType.ts, 34, 60))
+>V : Symbol(V, Decl(anyAssignableToEveryType.ts, 34, 32))
+
+    x = a;
+>x : Symbol(x, Decl(anyAssignableToEveryType.ts, 34, 49))
+>a : Symbol(a, Decl(anyAssignableToEveryType.ts, 0, 3))
+
+    y = a;
+>y : Symbol(y, Decl(anyAssignableToEveryType.ts, 34, 54))
+>a : Symbol(a, Decl(anyAssignableToEveryType.ts, 0, 3))
+
+    z = a;
+>z : Symbol(z, Decl(anyAssignableToEveryType.ts, 34, 60))
+>a : Symbol(a, Decl(anyAssignableToEveryType.ts, 0, 3))
+}
+
+//function foo<T, U extends T, V extends Date>(x: T, y: U, z: V) {
+//    x = a;
+//    y = a;
+//    z = a;
+//}

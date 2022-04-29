@@ -1,0 +1,289 @@
+tests/cases/compiler/numberVsBigIntOperations.ts(3,14): error TS2322: Type 'number' is not assignable to type 'bigint'.
+tests/cases/compiler/numberVsBigIntOperations.ts(3,26): error TS2322: Type 'bigint' is not assignable to type 'number'.
+tests/cases/compiler/numberVsBigIntOperations.ts(4,15): error TS2365: Operator '+=' cannot be applied to types 'bigint' and '2'.
+tests/cases/compiler/numberVsBigIntOperations.ts(4,28): error TS2365: Operator '+=' cannot be applied to types 'number' and '1n'.
+tests/cases/compiler/numberVsBigIntOperations.ts(5,15): error TS2365: Operator '-=' cannot be applied to types 'bigint' and 'number'.
+tests/cases/compiler/numberVsBigIntOperations.ts(5,28): error TS2365: Operator '-=' cannot be applied to types 'number' and 'bigint'.
+tests/cases/compiler/numberVsBigIntOperations.ts(6,15): error TS2365: Operator '*=' cannot be applied to types 'bigint' and 'number'.
+tests/cases/compiler/numberVsBigIntOperations.ts(6,28): error TS2365: Operator '*=' cannot be applied to types 'number' and 'bigint'.
+tests/cases/compiler/numberVsBigIntOperations.ts(7,15): error TS2365: Operator '/=' cannot be applied to types 'bigint' and 'number'.
+tests/cases/compiler/numberVsBigIntOperations.ts(7,28): error TS2365: Operator '/=' cannot be applied to types 'number' and 'bigint'.
+tests/cases/compiler/numberVsBigIntOperations.ts(8,15): error TS2365: Operator '%=' cannot be applied to types 'bigint' and 'number'.
+tests/cases/compiler/numberVsBigIntOperations.ts(8,28): error TS2365: Operator '%=' cannot be applied to types 'number' and 'bigint'.
+tests/cases/compiler/numberVsBigIntOperations.ts(9,16): error TS2365: Operator '**=' cannot be applied to types 'bigint' and 'number'.
+tests/cases/compiler/numberVsBigIntOperations.ts(9,30): error TS2365: Operator '**=' cannot be applied to types 'number' and 'bigint'.
+tests/cases/compiler/numberVsBigIntOperations.ts(10,16): error TS2365: Operator '<<=' cannot be applied to types 'bigint' and 'number'.
+tests/cases/compiler/numberVsBigIntOperations.ts(10,30): error TS2365: Operator '<<=' cannot be applied to types 'number' and 'bigint'.
+tests/cases/compiler/numberVsBigIntOperations.ts(11,16): error TS2365: Operator '>>=' cannot be applied to types 'bigint' and 'number'.
+tests/cases/compiler/numberVsBigIntOperations.ts(11,30): error TS2365: Operator '>>=' cannot be applied to types 'number' and 'bigint'.
+tests/cases/compiler/numberVsBigIntOperations.ts(12,15): error TS2365: Operator '&=' cannot be applied to types 'bigint' and 'number'.
+tests/cases/compiler/numberVsBigIntOperations.ts(12,28): error TS2365: Operator '&=' cannot be applied to types 'number' and 'bigint'.
+tests/cases/compiler/numberVsBigIntOperations.ts(13,15): error TS2365: Operator '^=' cannot be applied to types 'bigint' and 'number'.
+tests/cases/compiler/numberVsBigIntOperations.ts(13,28): error TS2365: Operator '^=' cannot be applied to types 'number' and 'bigint'.
+tests/cases/compiler/numberVsBigIntOperations.ts(14,15): error TS2365: Operator '|=' cannot be applied to types 'bigint' and 'number'.
+tests/cases/compiler/numberVsBigIntOperations.ts(14,28): error TS2365: Operator '|=' cannot be applied to types 'number' and 'bigint'.
+tests/cases/compiler/numberVsBigIntOperations.ts(15,32): error TS2365: Operator '+' cannot be applied to types '1' and '2n'.
+tests/cases/compiler/numberVsBigIntOperations.ts(15,40): error TS2365: Operator '+' cannot be applied to types '1n' and '2'.
+tests/cases/compiler/numberVsBigIntOperations.ts(16,32): error TS2365: Operator '-' cannot be applied to types 'number' and 'bigint'.
+tests/cases/compiler/numberVsBigIntOperations.ts(16,40): error TS2365: Operator '-' cannot be applied to types 'bigint' and 'number'.
+tests/cases/compiler/numberVsBigIntOperations.ts(17,32): error TS2365: Operator '*' cannot be applied to types 'number' and 'bigint'.
+tests/cases/compiler/numberVsBigIntOperations.ts(17,40): error TS2365: Operator '*' cannot be applied to types 'bigint' and 'number'.
+tests/cases/compiler/numberVsBigIntOperations.ts(18,32): error TS2365: Operator '/' cannot be applied to types 'number' and 'bigint'.
+tests/cases/compiler/numberVsBigIntOperations.ts(18,40): error TS2365: Operator '/' cannot be applied to types 'bigint' and 'number'.
+tests/cases/compiler/numberVsBigIntOperations.ts(19,32): error TS2365: Operator '%' cannot be applied to types 'number' and 'bigint'.
+tests/cases/compiler/numberVsBigIntOperations.ts(19,40): error TS2365: Operator '%' cannot be applied to types 'bigint' and 'number'.
+tests/cases/compiler/numberVsBigIntOperations.ts(20,34): error TS2365: Operator '**' cannot be applied to types 'number' and 'bigint'.
+tests/cases/compiler/numberVsBigIntOperations.ts(20,43): error TS2365: Operator '**' cannot be applied to types 'bigint' and 'number'.
+tests/cases/compiler/numberVsBigIntOperations.ts(21,32): error TS2365: Operator '&' cannot be applied to types 'number' and 'bigint'.
+tests/cases/compiler/numberVsBigIntOperations.ts(21,40): error TS2365: Operator '&' cannot be applied to types 'bigint' and 'number'.
+tests/cases/compiler/numberVsBigIntOperations.ts(22,32): error TS2365: Operator '|' cannot be applied to types 'number' and 'bigint'.
+tests/cases/compiler/numberVsBigIntOperations.ts(22,40): error TS2365: Operator '|' cannot be applied to types 'bigint' and 'number'.
+tests/cases/compiler/numberVsBigIntOperations.ts(23,32): error TS2365: Operator '^' cannot be applied to types 'number' and 'bigint'.
+tests/cases/compiler/numberVsBigIntOperations.ts(23,40): error TS2365: Operator '^' cannot be applied to types 'bigint' and 'number'.
+tests/cases/compiler/numberVsBigIntOperations.ts(24,34): error TS2365: Operator '<<' cannot be applied to types 'number' and 'bigint'.
+tests/cases/compiler/numberVsBigIntOperations.ts(24,43): error TS2365: Operator '<<' cannot be applied to types 'bigint' and 'number'.
+tests/cases/compiler/numberVsBigIntOperations.ts(25,34): error TS2365: Operator '>>' cannot be applied to types 'number' and 'bigint'.
+tests/cases/compiler/numberVsBigIntOperations.ts(25,43): error TS2365: Operator '>>' cannot be applied to types 'bigint' and 'number'.
+tests/cases/compiler/numberVsBigIntOperations.ts(38,1): error TS2365: Operator '>>>=' cannot be applied to types 'bigint' and '1n'.
+tests/cases/compiler/numberVsBigIntOperations.ts(39,10): error TS2365: Operator '>>>' cannot be applied to types 'bigint' and '1n'.
+tests/cases/compiler/numberVsBigIntOperations.ts(40,8): error TS2736: Operator '+' cannot be applied to type 'bigint'.
+tests/cases/compiler/numberVsBigIntOperations.ts(50,10): error TS2367: This condition will always return 'false' since the types 'bigint' and 'number' have no overlap.
+tests/cases/compiler/numberVsBigIntOperations.ts(51,10): error TS2367: This condition will always return 'true' since the types 'bigint' and 'number' have no overlap.
+tests/cases/compiler/numberVsBigIntOperations.ts(52,10): error TS2367: This condition will always return 'false' since the types 'bigint' and 'number' have no overlap.
+tests/cases/compiler/numberVsBigIntOperations.ts(53,10): error TS2367: This condition will always return 'true' since the types 'bigint' and 'number' have no overlap.
+tests/cases/compiler/numberVsBigIntOperations.ts(56,7): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/compiler/numberVsBigIntOperations.ts(56,27): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/compiler/numberVsBigIntOperations.ts(57,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/compiler/numberVsBigIntOperations.ts(57,1): error TS2365: Operator '&' cannot be applied to types 'string' and 'bigint'.
+tests/cases/compiler/numberVsBigIntOperations.ts(57,11): error TS2365: Operator '**' cannot be applied to types 'bigint' and 'boolean'.
+tests/cases/compiler/numberVsBigIntOperations.ts(57,17): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/compiler/numberVsBigIntOperations.ts(60,1): error TS2365: Operator '+' cannot be applied to types 'number | bigint' and 'number | bigint'.
+tests/cases/compiler/numberVsBigIntOperations.ts(61,1): error TS2365: Operator '<<' cannot be applied to types 'number | bigint' and 'number | bigint'.
+tests/cases/compiler/numberVsBigIntOperations.ts(70,2): error TS2736: Operator '+' cannot be applied to type 'number | bigint'.
+tests/cases/compiler/numberVsBigIntOperations.ts(86,7): error TS1155: 'const' declarations must be initialized.
+tests/cases/compiler/numberVsBigIntOperations.ts(93,7): error TS1155: 'const' declarations must be initialized.
+
+
+==== tests/cases/compiler/numberVsBigIntOperations.ts (64 errors) ====
+    // Cannot mix bigints and numbers
+    let bigInt = 1n, num = 2;
+    bigInt = 1n; bigInt = 2; num = 1n; num = 2;
+                 ~~~~~~
+!!! error TS2322: Type 'number' is not assignable to type 'bigint'.
+                             ~~~
+!!! error TS2322: Type 'bigint' is not assignable to type 'number'.
+    bigInt += 1n; bigInt += 2; num += 1n; num += 2;
+                  ~~~~~~~~~~~
+!!! error TS2365: Operator '+=' cannot be applied to types 'bigint' and '2'.
+                               ~~~~~~~~~
+!!! error TS2365: Operator '+=' cannot be applied to types 'number' and '1n'.
+    bigInt -= 1n; bigInt -= 2; num -= 1n; num -= 2;
+                  ~~~~~~~~~~~
+!!! error TS2365: Operator '-=' cannot be applied to types 'bigint' and 'number'.
+                               ~~~~~~~~~
+!!! error TS2365: Operator '-=' cannot be applied to types 'number' and 'bigint'.
+    bigInt *= 1n; bigInt *= 2; num *= 1n; num *= 2;
+                  ~~~~~~~~~~~
+!!! error TS2365: Operator '*=' cannot be applied to types 'bigint' and 'number'.
+                               ~~~~~~~~~
+!!! error TS2365: Operator '*=' cannot be applied to types 'number' and 'bigint'.
+    bigInt /= 1n; bigInt /= 2; num /= 1n; num /= 2;
+                  ~~~~~~~~~~~
+!!! error TS2365: Operator '/=' cannot be applied to types 'bigint' and 'number'.
+                               ~~~~~~~~~
+!!! error TS2365: Operator '/=' cannot be applied to types 'number' and 'bigint'.
+    bigInt %= 1n; bigInt %= 2; num %= 1n; num %= 2;
+                  ~~~~~~~~~~~
+!!! error TS2365: Operator '%=' cannot be applied to types 'bigint' and 'number'.
+                               ~~~~~~~~~
+!!! error TS2365: Operator '%=' cannot be applied to types 'number' and 'bigint'.
+    bigInt **= 1n; bigInt **= 2; num **= 1n; num **= 2;
+                   ~~~~~~~~~~~~
+!!! error TS2365: Operator '**=' cannot be applied to types 'bigint' and 'number'.
+                                 ~~~~~~~~~~
+!!! error TS2365: Operator '**=' cannot be applied to types 'number' and 'bigint'.
+    bigInt <<= 1n; bigInt <<= 2; num <<= 1n; num <<= 2;
+                   ~~~~~~~~~~~~
+!!! error TS2365: Operator '<<=' cannot be applied to types 'bigint' and 'number'.
+                                 ~~~~~~~~~~
+!!! error TS2365: Operator '<<=' cannot be applied to types 'number' and 'bigint'.
+    bigInt >>= 1n; bigInt >>= 2; num >>= 1n; num >>= 2;
+                   ~~~~~~~~~~~~
+!!! error TS2365: Operator '>>=' cannot be applied to types 'bigint' and 'number'.
+                                 ~~~~~~~~~~
+!!! error TS2365: Operator '>>=' cannot be applied to types 'number' and 'bigint'.
+    bigInt &= 1n; bigInt &= 2; num &= 1n; num &= 2;
+                  ~~~~~~~~~~~
+!!! error TS2365: Operator '&=' cannot be applied to types 'bigint' and 'number'.
+                               ~~~~~~~~~
+!!! error TS2365: Operator '&=' cannot be applied to types 'number' and 'bigint'.
+    bigInt ^= 1n; bigInt ^= 2; num ^= 1n; num ^= 2;
+                  ~~~~~~~~~~~
+!!! error TS2365: Operator '^=' cannot be applied to types 'bigint' and 'number'.
+                               ~~~~~~~~~
+!!! error TS2365: Operator '^=' cannot be applied to types 'number' and 'bigint'.
+    bigInt |= 1n; bigInt |= 2; num |= 1n; num |= 2;
+                  ~~~~~~~~~~~
+!!! error TS2365: Operator '|=' cannot be applied to types 'bigint' and 'number'.
+                               ~~~~~~~~~
+!!! error TS2365: Operator '|=' cannot be applied to types 'number' and 'bigint'.
+    bigInt = 1n + 2n; num = 1 + 2; 1 + 2n; 1n + 2;
+                                   ~~~~~~
+!!! error TS2365: Operator '+' cannot be applied to types '1' and '2n'.
+                                           ~~~~~~
+!!! error TS2365: Operator '+' cannot be applied to types '1n' and '2'.
+    bigInt = 1n - 2n; num = 1 - 2; 1 - 2n; 1n - 2;
+                                   ~~~~~~
+!!! error TS2365: Operator '-' cannot be applied to types 'number' and 'bigint'.
+                                           ~~~~~~
+!!! error TS2365: Operator '-' cannot be applied to types 'bigint' and 'number'.
+    bigInt = 1n * 2n; num = 1 * 2; 1 * 2n; 1n * 2;
+                                   ~~~~~~
+!!! error TS2365: Operator '*' cannot be applied to types 'number' and 'bigint'.
+                                           ~~~~~~
+!!! error TS2365: Operator '*' cannot be applied to types 'bigint' and 'number'.
+    bigInt = 1n / 2n; num = 1 / 2; 1 / 2n; 1n / 2;
+                                   ~~~~~~
+!!! error TS2365: Operator '/' cannot be applied to types 'number' and 'bigint'.
+                                           ~~~~~~
+!!! error TS2365: Operator '/' cannot be applied to types 'bigint' and 'number'.
+    bigInt = 1n % 2n; num = 1 % 2; 1 % 2n; 1n % 2;
+                                   ~~~~~~
+!!! error TS2365: Operator '%' cannot be applied to types 'number' and 'bigint'.
+                                           ~~~~~~
+!!! error TS2365: Operator '%' cannot be applied to types 'bigint' and 'number'.
+    bigInt = 1n ** 2n; num = 1 ** 2; 1 ** 2n; 1n ** 2;
+                                     ~~~~~~~
+!!! error TS2365: Operator '**' cannot be applied to types 'number' and 'bigint'.
+                                              ~~~~~~~
+!!! error TS2365: Operator '**' cannot be applied to types 'bigint' and 'number'.
+    bigInt = 1n & 2n; num = 1 & 2; 1 & 2n; 1n & 2;
+                                   ~~~~~~
+!!! error TS2365: Operator '&' cannot be applied to types 'number' and 'bigint'.
+                                           ~~~~~~
+!!! error TS2365: Operator '&' cannot be applied to types 'bigint' and 'number'.
+    bigInt = 1n | 2n; num = 1 | 2; 1 | 2n; 1n | 2;
+                                   ~~~~~~
+!!! error TS2365: Operator '|' cannot be applied to types 'number' and 'bigint'.
+                                           ~~~~~~
+!!! error TS2365: Operator '|' cannot be applied to types 'bigint' and 'number'.
+    bigInt = 1n ^ 2n; num = 1 ^ 2; 1 ^ 2n; 1n ^ 2;
+                                   ~~~~~~
+!!! error TS2365: Operator '^' cannot be applied to types 'number' and 'bigint'.
+                                           ~~~~~~
+!!! error TS2365: Operator '^' cannot be applied to types 'bigint' and 'number'.
+    bigInt = 1n << 2n; num = 1 << 2; 1 << 2n; 1n << 2;
+                                     ~~~~~~~
+!!! error TS2365: Operator '<<' cannot be applied to types 'number' and 'bigint'.
+                                              ~~~~~~~
+!!! error TS2365: Operator '<<' cannot be applied to types 'bigint' and 'number'.
+    bigInt = 1n >> 2n; num = 1 >> 2; 1 >> 2n; 1n >> 2;
+                                     ~~~~~~~
+!!! error TS2365: Operator '>>' cannot be applied to types 'number' and 'bigint'.
+                                              ~~~~~~~
+!!! error TS2365: Operator '>>' cannot be applied to types 'bigint' and 'number'.
+    
+    // Plus should still coerce to strings
+    let str: string;
+    str = "abc" + 123; str = "abc" + 123n; str = 123 + "abc"; str = 123n + "abc";
+    
+    // Unary operations allowed on bigints and numbers
+    bigInt = bigInt++; bigInt = ++bigInt; num = num++; num = ++num;
+    bigInt = bigInt--; bigInt = --bigInt; num = num--; num = --num;
+    bigInt = -bigInt; num = -num;
+    bigInt = ~bigInt; num = ~num;
+    
+    // Number-only operations
+    bigInt >>>= 1n; num >>>= 2;
+    ~~~~~~~~~~~~~~
+!!! error TS2365: Operator '>>>=' cannot be applied to types 'bigint' and '1n'.
+    bigInt = bigInt >>> 1n; num = num >>> 2;
+             ~~~~~~~~~~~~~
+!!! error TS2365: Operator '>>>' cannot be applied to types 'bigint' and '1n'.
+    num = +bigInt; num = +num; num = +"3";
+           ~~~~~~
+!!! error TS2736: Operator '+' cannot be applied to type 'bigint'.
+    
+    // Comparisons can be mixed
+    let result: boolean;
+    result = bigInt > num;
+    result = bigInt >= num;
+    result = bigInt < num;
+    result = bigInt <= num;
+    
+    // Trying to compare for equality is likely an error (since 1 == "1" is disallowed)
+    result = bigInt == num;
+             ~~~~~~~~~~~~~
+!!! error TS2367: This condition will always return 'false' since the types 'bigint' and 'number' have no overlap.
+    result = bigInt != num;
+             ~~~~~~~~~~~~~
+!!! error TS2367: This condition will always return 'true' since the types 'bigint' and 'number' have no overlap.
+    result = bigInt === num;
+             ~~~~~~~~~~~~~~
+!!! error TS2367: This condition will always return 'false' since the types 'bigint' and 'number' have no overlap.
+    result = bigInt !== num;
+             ~~~~~~~~~~~~~~
+!!! error TS2367: This condition will always return 'true' since the types 'bigint' and 'number' have no overlap.
+    
+    // Types of arithmetic operations on other types
+    num = "3" & 5; num = 2 ** false; // should error, but infer number
+          ~~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+                              ~~~~~
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+    "3" & 5n; 2n ** false; // should error, result in any
+    ~~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+    ~~~~~~~~
+!!! error TS2365: Operator '&' cannot be applied to types 'string' and 'bigint'.
+              ~~~~~~~~~~~
+!!! error TS2365: Operator '**' cannot be applied to types 'bigint' and 'boolean'.
+                    ~~~~~
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+    num = ~"3"; num = -false; // should infer number
+    let bigIntOrNumber: bigint | number;
+    bigIntOrNumber + bigIntOrNumber; // should error, result in any
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2365: Operator '+' cannot be applied to types 'number | bigint' and 'number | bigint'.
+    bigIntOrNumber << bigIntOrNumber; // should error, result in any
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2365: Operator '<<' cannot be applied to types 'number | bigint' and 'number | bigint'.
+    if (typeof bigIntOrNumber === "bigint") {
+        // Allowed, as type is narrowed to bigint
+        bigIntOrNumber = bigIntOrNumber << bigIntOrNumber;
+    }
+    if (typeof bigIntOrNumber === "number") {
+        // Allowed, as type is narrowed to number
+        bigIntOrNumber = bigIntOrNumber << bigIntOrNumber;
+    }
+    +bigIntOrNumber; // should error, result in number
+     ~~~~~~~~~~~~~~
+!!! error TS2736: Operator '+' cannot be applied to type 'number | bigint'.
+    ~bigIntOrNumber; // should infer number | bigint
+    bigIntOrNumber++; // should infer number | bigint
+    ++bigIntOrNumber; // should infer number | bigint
+    let anyValue: any;
+    anyValue + anyValue; // should infer any
+    anyValue >>> anyValue; // should infer number
+    anyValue ^ anyValue; // should infer number
+    +anyValue; // should infer number
+    -anyValue; // should infer number
+    anyValue--; // should infer number
+    --anyValue; // should infer number
+    
+    // Distinguishing numbers from bigints with typeof
+    const isBigInt: (x: 0n | 1n) => bigint = (x: 0n | 1n) => x;
+    const isNumber: (x: 0 | 1) => number = (x: 0 | 1) => x;
+    const zeroOrBigOne: 0 | 1n;
+          ~~~~~~~~~~~~
+!!! error TS1155: 'const' declarations must be initialized.
+    if (typeof zeroOrBigOne === "bigint") isBigInt(zeroOrBigOne);
+    else isNumber(zeroOrBigOne);
+    
+    // Distinguishing truthy from falsy
+    const isOne = (x: 1 | 1n) => x;
+    if (zeroOrBigOne) isOne(zeroOrBigOne);
+    const bigZeroOrOne: 0n | 1;
+          ~~~~~~~~~~~~
+!!! error TS1155: 'const' declarations must be initialized.
+    if (bigZeroOrOne) isOne(bigZeroOrOne);

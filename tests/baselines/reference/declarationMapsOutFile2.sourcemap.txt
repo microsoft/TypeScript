@@ -1,0 +1,141 @@
+===================================================================
+JsFile: bundle.d.ts
+mapUrl: bundle.d.ts.map
+sourceRoot: 
+sources: tests/cases/compiler/a.ts,tests/cases/compiler/index.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:bundle.d.ts
+sourceFile:tests/cases/compiler/a.ts
+-------------------------------------------------------------------
+>>>declare class Foo {
+1 >
+2 >^^^^^^^^^^^^^^
+3 >              ^^^
+1 >
+2 >class 
+3 >              Foo
+1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(1, 15) Source(1, 7) + SourceIndex(0)
+3 >Emitted(1, 18) Source(1, 10) + SourceIndex(0)
+---
+>>>    doThing(x: {
+1 >^^^^
+2 >    ^^^^^^^
+3 >           ^
+4 >            ^^^
+5 >               ^^^^->
+1 > {
+  >    
+2 >    doThing
+3 >           (
+4 >            x: 
+1 >Emitted(2, 5) Source(2, 5) + SourceIndex(0)
+2 >Emitted(2, 12) Source(2, 12) + SourceIndex(0)
+3 >Emitted(2, 13) Source(2, 13) + SourceIndex(0)
+4 >Emitted(2, 16) Source(2, 16) + SourceIndex(0)
+---
+>>>        a: number;
+1->^^^^^^^^
+2 >        ^
+3 >         ^^
+4 >           ^^^^^^
+5 >                 ^
+1->{
+2 >        a
+3 >         : 
+4 >           number
+5 >                 
+1->Emitted(3, 9) Source(2, 17) + SourceIndex(0)
+2 >Emitted(3, 10) Source(2, 18) + SourceIndex(0)
+3 >Emitted(3, 12) Source(2, 20) + SourceIndex(0)
+4 >Emitted(3, 18) Source(2, 26) + SourceIndex(0)
+5 >Emitted(3, 19) Source(2, 26) + SourceIndex(0)
+---
+>>>    }): {
+1 >^^^^^
+2 >     ^^^^^^^^^^^^^^->
+1 >}
+1 >Emitted(4, 6) Source(2, 27) + SourceIndex(0)
+---
+>>>        b: number;
+>>>    };
+>>>    static make(): Foo;
+1->^^^^
+2 >    ^^^^^^
+3 >          ^
+4 >           ^^^^
+1->) {
+  >        return {b: x.a};
+  >    }
+  >    
+2 >    static
+3 >           
+4 >           make
+1->Emitted(7, 5) Source(5, 5) + SourceIndex(0)
+2 >Emitted(7, 11) Source(5, 11) + SourceIndex(0)
+3 >Emitted(7, 12) Source(5, 12) + SourceIndex(0)
+4 >Emitted(7, 16) Source(5, 16) + SourceIndex(0)
+---
+>>>}
+1 >^
+2 > ^^^^^^^^^^^^^^^^^^^^^->
+1 >() {
+  >        return new Foo();
+  >    }
+  >}
+1 >Emitted(8, 2) Source(8, 2) + SourceIndex(0)
+---
+-------------------------------------------------------------------
+emittedFile:bundle.d.ts
+sourceFile:tests/cases/compiler/index.ts
+-------------------------------------------------------------------
+>>>declare const c: Foo;
+1->
+2 >^^^^^^^^
+3 >        ^^^^^^
+4 >              ^
+5 >               ^^^^^
+6 >                    ^
+1->
+2 >
+3 >        const 
+4 >              c
+5 >                = new Foo()
+6 >                    ;
+1->Emitted(9, 1) Source(1, 1) + SourceIndex(1)
+2 >Emitted(9, 9) Source(1, 1) + SourceIndex(1)
+3 >Emitted(9, 15) Source(1, 7) + SourceIndex(1)
+4 >Emitted(9, 16) Source(1, 8) + SourceIndex(1)
+5 >Emitted(9, 21) Source(1, 20) + SourceIndex(1)
+6 >Emitted(9, 22) Source(1, 21) + SourceIndex(1)
+---
+>>>declare let x: {
+1 >
+2 >^^^^^^^^
+3 >        ^^^^
+4 >            ^
+5 >             ^^->
+1 >
+  >c.doThing({a: 42});
+  >
+  >
+2 >
+3 >        let 
+4 >            x
+1 >Emitted(10, 1) Source(4, 1) + SourceIndex(1)
+2 >Emitted(10, 9) Source(4, 1) + SourceIndex(1)
+3 >Emitted(10, 13) Source(4, 5) + SourceIndex(1)
+4 >Emitted(10, 14) Source(4, 6) + SourceIndex(1)
+---
+>>>    b: number;
+>>>};
+1->^
+2 > ^
+3 >  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1-> = c.doThing({a: 12})
+2 > ;
+1->Emitted(12, 2) Source(4, 27) + SourceIndex(1)
+2 >Emitted(12, 3) Source(4, 28) + SourceIndex(1)
+---
+>>>//# sourceMappingURL=bundle.d.ts.map

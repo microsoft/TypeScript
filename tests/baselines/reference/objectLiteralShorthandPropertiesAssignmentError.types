@@ -1,0 +1,46 @@
+=== tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesAssignmentError.ts ===
+var id: number = 10000;
+>id : number
+>10000 : 10000
+
+var name: string = "my name";
+>name : string
+>"my name" : "my name"
+
+var person: { b: string; id: number } = { name, id };  // error
+>person : { b: string; id: number; }
+>b : string
+>id : number
+>{ name, id } : { name: string; id: number; }
+>name : string
+>id : number
+
+var person1: { name, id };  // ok
+>person1 : { name: any; id: any; }
+>name : any
+>id : any
+
+function foo(name: string, id: number): { id: string, name: number } { return { name, id }; }  // error
+>foo : (name: string, id: number) => {    id: string;    name: number;}
+>name : string
+>id : number
+>id : string
+>name : number
+>{ name, id } : { name: string; id: number; }
+>name : string
+>id : number
+
+function bar(obj: { name: string; id: boolean }) { }
+>bar : (obj: {    name: string;    id: boolean;}) => void
+>obj : { name: string; id: boolean; }
+>name : string
+>id : boolean
+
+bar({ name, id });  // error
+>bar({ name, id }) : void
+>bar : (obj: { name: string; id: boolean; }) => void
+>{ name, id } : { name: string; id: number; }
+>name : string
+>id : number
+
+

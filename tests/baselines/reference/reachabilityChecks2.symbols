@@ -1,0 +1,20 @@
+=== tests/cases/compiler/reachabilityChecks2.ts ===
+while (true) { }
+const enum E { X }
+>E : Symbol(E, Decl(reachabilityChecks2.ts, 0, 16))
+>X : Symbol(E.X, Decl(reachabilityChecks2.ts, 1, 14))
+
+module A4 {
+>A4 : Symbol(A4, Decl(reachabilityChecks2.ts, 1, 18))
+
+    while (true);
+    module A {
+>A : Symbol(A, Decl(reachabilityChecks2.ts, 4, 17))
+
+        const enum E { X }
+>E : Symbol(E, Decl(reachabilityChecks2.ts, 5, 14))
+>X : Symbol(E.X, Decl(reachabilityChecks2.ts, 6, 22))
+    }
+}
+
+

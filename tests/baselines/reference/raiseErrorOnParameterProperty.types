@@ -1,0 +1,15 @@
+=== tests/cases/compiler/raiseErrorOnParameterProperty.ts ===
+class C1 {
+>C1 : C1
+
+  constructor(public x: X) {
+>x : X
+  }
+}
+var c1 = new C1(0);
+>c1 : C1
+>new C1(0) : C1
+>C1 : typeof C1
+>0 : 0
+ 
+

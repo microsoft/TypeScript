@@ -1,0 +1,43 @@
+=== tests/cases/conformance/es6/for-ofStatements/for-of21.ts ===
+class Foo { }
+>Foo : Foo
+
+class FooIterator {
+>FooIterator : FooIterator
+
+    next() {
+>next : () => { value: Foo; done: boolean; }
+
+        return {
+>{            value: new Foo,            done: false        } : { value: Foo; done: boolean; }
+
+            value: new Foo,
+>value : Foo
+>new Foo : Foo
+>Foo : typeof Foo
+
+            done: false
+>done : boolean
+>false : false
+
+        };
+    }
+    [Symbol.iterator]() {
+>[Symbol.iterator] : () => this
+>Symbol.iterator : unique symbol
+>Symbol : SymbolConstructor
+>iterator : unique symbol
+
+        return this;
+>this : this
+    }
+}
+
+for (const v of new FooIterator) {
+>v : Foo
+>new FooIterator : FooIterator
+>FooIterator : typeof FooIterator
+
+    v;
+>v : Foo
+}

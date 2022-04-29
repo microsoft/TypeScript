@@ -1,0 +1,9 @@
+tests/cases/conformance/types/primitives/boolean/boolInsteadOfBoolean.ts(1,8): error TS2304: Cannot find name 'bool'.
+
+
+==== tests/cases/conformance/types/primitives/boolean/boolInsteadOfBoolean.ts (1 errors) ====
+    var x: bool;
+           ~~~~
+!!! error TS2304: Cannot find name 'bool'.
+    var a: boolean = x;
+    x = a;

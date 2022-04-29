@@ -1,0 +1,10 @@
+tests/cases/compiler/client.ts(1,1): error TS1191: An import declaration cannot have modifiers.
+
+
+==== tests/cases/compiler/server.ts (0 errors) ====
+    export var a = 10;
+    
+==== tests/cases/compiler/client.ts (1 errors) ====
+    export import "server";
+    ~~~~~~
+!!! error TS1191: An import declaration cannot have modifiers.

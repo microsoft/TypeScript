@@ -1,0 +1,29 @@
+tests/cases/conformance/jsx/inline/index.tsx(3,1): error TS2304: Cannot find name 'React'.
+tests/cases/conformance/jsx/inline/index.tsx(3,1): error TS17017: An @jsxFrag pragma is required when using an @jsx pragma with JSX fragments.
+tests/cases/conformance/jsx/inline/reacty.tsx(3,1): error TS17017: An @jsxFrag pragma is required when using an @jsx pragma with JSX fragments.
+
+
+==== tests/cases/conformance/jsx/inline/renderer.d.ts (0 errors) ====
+    declare global {
+        namespace JSX {
+            interface IntrinsicElements {
+                [e: string]: any;
+            }
+        }
+    }
+    export function dom(): void;
+    export function createElement(): void;
+==== tests/cases/conformance/jsx/inline/reacty.tsx (1 errors) ====
+    /** @jsx React.createElement */
+    import * as React from "./renderer";
+    <><h></h></>
+    ~~~~~~~~~~~~
+!!! error TS17017: An @jsxFrag pragma is required when using an @jsx pragma with JSX fragments.
+==== tests/cases/conformance/jsx/inline/index.tsx (2 errors) ====
+    /** @jsx dom */
+    import { dom } from "./renderer";
+    <><h></h></>
+    ~~
+!!! error TS2304: Cannot find name 'React'.
+    ~~~~~~~~~~~~
+!!! error TS17017: An @jsxFrag pragma is required when using an @jsx pragma with JSX fragments.

@@ -1,0 +1,17 @@
+=== tests/cases/conformance/es6/computedProperties/computedPropertyNames24_ES5.ts ===
+class Base {
+>Base : Symbol(Base, Decl(computedPropertyNames24_ES5.ts, 0, 0))
+
+    bar() {
+>bar : Symbol(Base.bar, Decl(computedPropertyNames24_ES5.ts, 0, 12))
+
+        return 0;
+    }
+}
+class C extends Base {
+>C : Symbol(C, Decl(computedPropertyNames24_ES5.ts, 4, 1))
+>Base : Symbol(Base, Decl(computedPropertyNames24_ES5.ts, 0, 0))
+
+    [super.bar()]() { }
+>[super.bar()] : Symbol(C[super.bar()], Decl(computedPropertyNames24_ES5.ts, 5, 22))
+}

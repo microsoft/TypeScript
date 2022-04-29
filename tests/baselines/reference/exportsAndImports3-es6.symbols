@@ -1,0 +1,130 @@
+=== tests/cases/conformance/es6/modules/t1.ts ===
+export var v = 1;
+>v : Symbol(v, Decl(t1.ts, 0, 10))
+
+export function f() { }
+>f : Symbol(f, Decl(t1.ts, 0, 17))
+
+export class C {
+>C : Symbol(C, Decl(t1.ts, 1, 23))
+}
+export interface I {
+>I : Symbol(I, Decl(t1.ts, 3, 1))
+}
+export enum E {
+>E : Symbol(E, Decl(t1.ts, 5, 1))
+
+    A, B, C
+>A : Symbol(E.A, Decl(t1.ts, 6, 15))
+>B : Symbol(E.B, Decl(t1.ts, 7, 6))
+>C : Symbol(E.C, Decl(t1.ts, 7, 9))
+}
+export const enum D {
+>D : Symbol(D, Decl(t1.ts, 8, 1))
+
+    A, B, C
+>A : Symbol(D.A, Decl(t1.ts, 9, 21))
+>B : Symbol(D.B, Decl(t1.ts, 10, 6))
+>C : Symbol(D.C, Decl(t1.ts, 10, 9))
+}
+export module M {
+>M : Symbol(M, Decl(t1.ts, 11, 1))
+
+    export var x;
+>x : Symbol(x, Decl(t1.ts, 13, 14))
+}
+export module N {
+>N : Symbol(N, Decl(t1.ts, 14, 1))
+
+    export interface I {
+>I : Symbol(I, Decl(t1.ts, 15, 17))
+    }
+}
+export type T = number;
+>T : Symbol(T, Decl(t1.ts, 18, 1))
+
+export import a = M.x;
+>a : Symbol(a, Decl(t1.ts, 19, 23))
+>M : Symbol(M, Decl(t1.ts, 11, 1))
+>x : Symbol(a, Decl(t1.ts, 13, 14))
+
+export { v as v1, f as f1, C as C1, I as I1, E as E1, D as D1, M as M1, N as N1, T as T1, a as a1 };
+>v : Symbol(v, Decl(t1.ts, 0, 10))
+>v1 : Symbol(v1, Decl(t1.ts, 22, 8))
+>f : Symbol(f, Decl(t1.ts, 0, 17))
+>f1 : Symbol(f1, Decl(t1.ts, 22, 17))
+>C : Symbol(C, Decl(t1.ts, 1, 23))
+>C1 : Symbol(C1, Decl(t1.ts, 22, 26))
+>I : Symbol(I, Decl(t1.ts, 3, 1))
+>I1 : Symbol(I1, Decl(t1.ts, 22, 35))
+>E : Symbol(E, Decl(t1.ts, 5, 1))
+>E1 : Symbol(E1, Decl(t1.ts, 22, 44))
+>D : Symbol(D, Decl(t1.ts, 8, 1))
+>D1 : Symbol(D1, Decl(t1.ts, 22, 53))
+>M : Symbol(M, Decl(t1.ts, 11, 1))
+>M1 : Symbol(M1, Decl(t1.ts, 22, 62))
+>N : Symbol(N, Decl(t1.ts, 14, 1))
+>N1 : Symbol(N1, Decl(t1.ts, 22, 71))
+>T : Symbol(T, Decl(t1.ts, 18, 1))
+>T1 : Symbol(T1, Decl(t1.ts, 22, 80))
+>a : Symbol(a, Decl(t1.ts, 19, 23))
+>a1 : Symbol(a1, Decl(t1.ts, 22, 89))
+
+=== tests/cases/conformance/es6/modules/t2.ts ===
+export { v1 as v, f1 as f, C1 as C, I1 as I, E1 as E, D1 as D, M1 as M, N1 as N, T1 as T, a1 as a } from "./t1";
+>v1 : Symbol(v1, Decl(t1.ts, 22, 8))
+>v : Symbol(v, Decl(t2.ts, 0, 8))
+>f1 : Symbol(f1, Decl(t1.ts, 22, 17))
+>f : Symbol(f, Decl(t2.ts, 0, 17))
+>C1 : Symbol(C1, Decl(t1.ts, 22, 26))
+>C : Symbol(C, Decl(t2.ts, 0, 26))
+>I1 : Symbol(I1, Decl(t1.ts, 22, 35))
+>I : Symbol(I, Decl(t2.ts, 0, 35))
+>E1 : Symbol(E1, Decl(t1.ts, 22, 44))
+>E : Symbol(E, Decl(t2.ts, 0, 44))
+>D1 : Symbol(D1, Decl(t1.ts, 22, 53))
+>D : Symbol(D, Decl(t2.ts, 0, 53))
+>M1 : Symbol(M1, Decl(t1.ts, 22, 62))
+>M : Symbol(M, Decl(t2.ts, 0, 62))
+>N1 : Symbol(N1, Decl(t1.ts, 22, 71))
+>N : Symbol(N, Decl(t2.ts, 0, 71))
+>T1 : Symbol(T1, Decl(t1.ts, 22, 80))
+>T : Symbol(T, Decl(t2.ts, 0, 80))
+>a1 : Symbol(a1, Decl(t1.ts, 22, 89))
+>a : Symbol(a, Decl(t2.ts, 0, 89))
+
+=== tests/cases/conformance/es6/modules/t3.ts ===
+import { v1 as v, f1 as f, C1 as C, I1 as I, E1 as E, D1 as D, M1 as M, N1 as N, T1 as T, a1 as a } from "./t1";
+>v1 : Symbol(v1, Decl(t1.ts, 22, 8))
+>v : Symbol(v, Decl(t3.ts, 0, 8))
+>f1 : Symbol(f1, Decl(t1.ts, 22, 17))
+>f : Symbol(f, Decl(t3.ts, 0, 17))
+>C1 : Symbol(C1, Decl(t1.ts, 22, 26))
+>C : Symbol(C, Decl(t3.ts, 0, 26))
+>I1 : Symbol(I1, Decl(t1.ts, 22, 35))
+>I : Symbol(I, Decl(t3.ts, 0, 35))
+>E1 : Symbol(E1, Decl(t1.ts, 22, 44))
+>E : Symbol(E, Decl(t3.ts, 0, 44))
+>D1 : Symbol(D1, Decl(t1.ts, 22, 53))
+>D : Symbol(D, Decl(t3.ts, 0, 53))
+>M1 : Symbol(M1, Decl(t1.ts, 22, 62))
+>M : Symbol(M, Decl(t3.ts, 0, 62))
+>N1 : Symbol(N1, Decl(t1.ts, 22, 71))
+>N : Symbol(N, Decl(t3.ts, 0, 71))
+>T1 : Symbol(T1, Decl(t1.ts, 22, 80))
+>T : Symbol(T, Decl(t3.ts, 0, 80))
+>a1 : Symbol(a1, Decl(t1.ts, 22, 89))
+>a : Symbol(a, Decl(t3.ts, 0, 89))
+
+export { v, f, C, I, E, D, M, N, T, a };
+>v : Symbol(v, Decl(t3.ts, 1, 8))
+>f : Symbol(f, Decl(t3.ts, 1, 11))
+>C : Symbol(C, Decl(t3.ts, 1, 14))
+>I : Symbol(I, Decl(t3.ts, 1, 17))
+>E : Symbol(E, Decl(t3.ts, 1, 20))
+>D : Symbol(D, Decl(t3.ts, 1, 23))
+>M : Symbol(M, Decl(t3.ts, 1, 26))
+>N : Symbol(N, Decl(t3.ts, 1, 29))
+>T : Symbol(T, Decl(t3.ts, 1, 32))
+>a : Symbol(a, Decl(t3.ts, 1, 35))
+

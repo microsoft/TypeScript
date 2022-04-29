@@ -1,0 +1,304 @@
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(68,9): error TS2411: Property 'foo' of type 'U' is not assignable to 'string' index type 'T'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(68,9): error TS2416: Property 'foo' in type 'D2<T, U, V>' is not assignable to the same property in base type 'Base<T>'.
+  Type 'U' is not assignable to type 'T'.
+    'T' could be instantiated with an arbitrary type which could be unrelated to 'U'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(73,9): error TS2411: Property 'foo' of type 'V' is not assignable to 'string' index type 'T'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(73,9): error TS2416: Property 'foo' in type 'D3<T, U, V>' is not assignable to the same property in base type 'Base<T>'.
+  Type 'V' is not assignable to type 'T'.
+    'T' could be instantiated with an arbitrary type which could be unrelated to 'V'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(78,9): error TS2411: Property 'foo' of type 'T' is not assignable to 'string' index type 'U'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(78,9): error TS2416: Property 'foo' in type 'D4<T, U, V>' is not assignable to the same property in base type 'Base<U>'.
+  Type 'T' is not assignable to type 'U'.
+    'U' could be instantiated with an arbitrary type which could be unrelated to 'T'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(88,9): error TS2411: Property 'foo' of type 'V' is not assignable to 'string' index type 'U'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(88,9): error TS2416: Property 'foo' in type 'D6<T, U, V>' is not assignable to the same property in base type 'Base<U>'.
+  Type 'V' is not assignable to type 'U'.
+    'U' could be instantiated with an arbitrary type which could be unrelated to 'V'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(93,9): error TS2411: Property 'foo' of type 'T' is not assignable to 'string' index type 'V'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(93,9): error TS2416: Property 'foo' in type 'D7<T, U, V>' is not assignable to the same property in base type 'Base<V>'.
+  Type 'T' is not assignable to type 'V'.
+    'V' could be instantiated with an arbitrary type which could be unrelated to 'T'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(98,9): error TS2411: Property 'foo' of type 'U' is not assignable to 'string' index type 'V'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(98,9): error TS2416: Property 'foo' in type 'D8<T, U, V>' is not assignable to the same property in base type 'Base<V>'.
+  Type 'U' is not assignable to type 'V'.
+    'V' could be instantiated with an arbitrary type which could be unrelated to 'U'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(115,9): error TS2416: Property 'foo' in type 'D1<T, U, V>' is not assignable to the same property in base type 'Base2<T>'.
+  Type 'T' is not assignable to type 'Foo<T>'.
+    Type 'Foo<U>' is not assignable to type 'Foo<T>'.
+      Type 'U' is not assignable to type 'T'.
+        'T' could be instantiated with an arbitrary type which could be unrelated to 'U'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(120,9): error TS2411: Property 'foo' of type 'U' is not assignable to 'string' index type 'T'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(125,9): error TS2411: Property 'foo' of type 'V' is not assignable to 'string' index type 'T'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(125,9): error TS2416: Property 'foo' in type 'D3<T, U, V>' is not assignable to the same property in base type 'Base2<T>'.
+  Type 'V' is not assignable to type 'Foo<T>'.
+    Type 'Foo<V>' is not assignable to type 'Foo<T>'.
+      Type 'V' is not assignable to type 'T'.
+        'T' could be instantiated with an arbitrary type which could be unrelated to 'V'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(130,9): error TS2411: Property 'foo' of type 'T' is not assignable to 'string' index type 'U'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(135,9): error TS2416: Property 'foo' in type 'D5<T, U, V>' is not assignable to the same property in base type 'Base2<U>'.
+  Type 'U' is not assignable to type 'Foo<U>'.
+    Type 'Foo<T>' is not assignable to type 'Foo<U>'.
+      Type 'T' is not assignable to type 'U'.
+        'U' could be instantiated with an arbitrary type which could be unrelated to 'T'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(140,9): error TS2411: Property 'foo' of type 'V' is not assignable to 'string' index type 'U'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(140,9): error TS2416: Property 'foo' in type 'D6<T, U, V>' is not assignable to the same property in base type 'Base2<U>'.
+  Type 'V' is not assignable to type 'Foo<U>'.
+    Type 'Foo<V>' is not assignable to type 'Foo<U>'.
+      Type 'V' is not assignable to type 'U'.
+        'U' could be instantiated with an arbitrary type which could be unrelated to 'V'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(145,9): error TS2411: Property 'foo' of type 'T' is not assignable to 'string' index type 'V'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(145,9): error TS2416: Property 'foo' in type 'D7<T, U, V>' is not assignable to the same property in base type 'Base2<V>'.
+  Type 'T' is not assignable to type 'Foo<V>'.
+    Type 'Foo<U>' is not assignable to type 'Foo<V>'.
+      Type 'U' is not assignable to type 'V'.
+        'V' could be instantiated with an arbitrary type which could be unrelated to 'U'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(150,9): error TS2411: Property 'foo' of type 'U' is not assignable to 'string' index type 'V'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(150,9): error TS2416: Property 'foo' in type 'D8<T, U, V>' is not assignable to the same property in base type 'Base2<V>'.
+  Type 'U' is not assignable to type 'Foo<V>'.
+    Type 'Foo<T>' is not assignable to type 'Foo<V>'.
+      Type 'T' is not assignable to type 'V'.
+        'V' could be instantiated with an arbitrary type which could be unrelated to 'T'.
+
+
+==== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts (24 errors) ====
+    // checking whether other types are subtypes of type parameters with constraints
+    
+    class Foo<T> { foo: T; }
+    function f<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>>(t: T, u: U, v: V) {
+        // ok
+        var r1 = true ? t : u;
+        var r1 = true ? u : t;
+    
+        // ok
+        var r2 = true ? t : v;
+        var r2 = true ? v : t;
+    
+        // ok
+        var r3 = true ? v : u;
+        var r3 = true ? u : v;
+    
+        // ok
+        var r4 = true ? t : new Foo<T>();
+        var r4 = true ? new Foo<T>() : t;
+    
+        // ok
+        var r5 = true ? u : new Foo<T>();
+        var r5 = true ? new Foo<T>() : u;
+    
+        // ok
+        var r6 = true ? v : new Foo<T>();
+        var r6 = true ? new Foo<T>() : v;
+    
+    
+        // ok
+        var r7 = true ? t : new Foo<U>();
+        var r7 = true ? new Foo<U>() : t;
+    
+        // ok
+        var r8 = true ? u : new Foo<U>();
+        var r8 = true ? new Foo<U>() : u;
+    
+        // ok
+        var r9 = true ? v : new Foo<U>();
+        var r9 = true ? new Foo<U>() : v;
+    
+    
+        // ok
+        var r10 = true ? t : new Foo<V>();
+        var r10 = true ? new Foo<V>() : t;
+    
+        // ok
+        var r11 = true ? u : new Foo<V>();
+        var r11 = true ? new Foo<V>() : u;
+    
+        // ok
+        var r12 = true ? v : new Foo<V>();
+        var r12 = true ? new Foo<V>() : v;
+    }
+    
+    module M1 {
+        class Base<T> {
+            foo: T;
+        }
+    
+        class D1<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base<T> {
+            [x: string]: T;
+            foo: T
+        }
+    
+        class D2<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base<T> {
+            [x: string]: T;
+            foo: U
+            ~~~
+!!! error TS2411: Property 'foo' of type 'U' is not assignable to 'string' index type 'T'.
+            ~~~
+!!! error TS2416: Property 'foo' in type 'D2<T, U, V>' is not assignable to the same property in base type 'Base<T>'.
+!!! error TS2416:   Type 'U' is not assignable to type 'T'.
+!!! error TS2416:     'T' could be instantiated with an arbitrary type which could be unrelated to 'U'.
+        }
+    
+        class D3<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base<T> {
+            [x: string]: T;
+            foo: V
+            ~~~
+!!! error TS2411: Property 'foo' of type 'V' is not assignable to 'string' index type 'T'.
+            ~~~
+!!! error TS2416: Property 'foo' in type 'D3<T, U, V>' is not assignable to the same property in base type 'Base<T>'.
+!!! error TS2416:   Type 'V' is not assignable to type 'T'.
+!!! error TS2416:     'T' could be instantiated with an arbitrary type which could be unrelated to 'V'.
+        }
+    
+        class D4<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base<U> {
+            [x: string]: U;
+            foo: T
+            ~~~
+!!! error TS2411: Property 'foo' of type 'T' is not assignable to 'string' index type 'U'.
+            ~~~
+!!! error TS2416: Property 'foo' in type 'D4<T, U, V>' is not assignable to the same property in base type 'Base<U>'.
+!!! error TS2416:   Type 'T' is not assignable to type 'U'.
+!!! error TS2416:     'U' could be instantiated with an arbitrary type which could be unrelated to 'T'.
+        }
+    
+        class D5<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base<U> {
+            [x: string]: U;
+            foo: U
+        }
+    
+        class D6<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base<U> {
+            [x: string]: U;
+            foo: V
+            ~~~
+!!! error TS2411: Property 'foo' of type 'V' is not assignable to 'string' index type 'U'.
+            ~~~
+!!! error TS2416: Property 'foo' in type 'D6<T, U, V>' is not assignable to the same property in base type 'Base<U>'.
+!!! error TS2416:   Type 'V' is not assignable to type 'U'.
+!!! error TS2416:     'U' could be instantiated with an arbitrary type which could be unrelated to 'V'.
+        }
+    
+        class D7<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base<V> {
+            [x: string]: V;
+            foo: T
+            ~~~
+!!! error TS2411: Property 'foo' of type 'T' is not assignable to 'string' index type 'V'.
+            ~~~
+!!! error TS2416: Property 'foo' in type 'D7<T, U, V>' is not assignable to the same property in base type 'Base<V>'.
+!!! error TS2416:   Type 'T' is not assignable to type 'V'.
+!!! error TS2416:     'V' could be instantiated with an arbitrary type which could be unrelated to 'T'.
+        }
+    
+        class D8<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base<V> {
+            [x: string]: V;
+            foo: U
+            ~~~
+!!! error TS2411: Property 'foo' of type 'U' is not assignable to 'string' index type 'V'.
+            ~~~
+!!! error TS2416: Property 'foo' in type 'D8<T, U, V>' is not assignable to the same property in base type 'Base<V>'.
+!!! error TS2416:   Type 'U' is not assignable to type 'V'.
+!!! error TS2416:     'V' could be instantiated with an arbitrary type which could be unrelated to 'U'.
+        }
+    
+        class D9<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base<V> {
+            [x: string]: V;
+            foo: V
+        }
+    }
+    
+    
+    module M2 {
+        class Base2<T> {
+            foo: Foo<T>;
+        }
+    
+        class D1<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base2<T> {
+            [x: string]: T;
+            foo: T
+            ~~~
+!!! error TS2416: Property 'foo' in type 'D1<T, U, V>' is not assignable to the same property in base type 'Base2<T>'.
+!!! error TS2416:   Type 'T' is not assignable to type 'Foo<T>'.
+!!! error TS2416:     Type 'Foo<U>' is not assignable to type 'Foo<T>'.
+!!! error TS2416:       Type 'U' is not assignable to type 'T'.
+!!! error TS2416:         'T' could be instantiated with an arbitrary type which could be unrelated to 'U'.
+        }
+    
+        class D2<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base2<T> {
+            [x: string]: T;
+            foo: U
+            ~~~
+!!! error TS2411: Property 'foo' of type 'U' is not assignable to 'string' index type 'T'.
+        }
+    
+        class D3<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base2<T> {
+            [x: string]: T;
+            foo: V
+            ~~~
+!!! error TS2411: Property 'foo' of type 'V' is not assignable to 'string' index type 'T'.
+            ~~~
+!!! error TS2416: Property 'foo' in type 'D3<T, U, V>' is not assignable to the same property in base type 'Base2<T>'.
+!!! error TS2416:   Type 'V' is not assignable to type 'Foo<T>'.
+!!! error TS2416:     Type 'Foo<V>' is not assignable to type 'Foo<T>'.
+!!! error TS2416:       Type 'V' is not assignable to type 'T'.
+!!! error TS2416:         'T' could be instantiated with an arbitrary type which could be unrelated to 'V'.
+        }
+    
+        class D4<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base2<U> {
+            [x: string]: U;
+            foo: T
+            ~~~
+!!! error TS2411: Property 'foo' of type 'T' is not assignable to 'string' index type 'U'.
+        }
+    
+        class D5<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base2<U> {
+            [x: string]: U;
+            foo: U
+            ~~~
+!!! error TS2416: Property 'foo' in type 'D5<T, U, V>' is not assignable to the same property in base type 'Base2<U>'.
+!!! error TS2416:   Type 'U' is not assignable to type 'Foo<U>'.
+!!! error TS2416:     Type 'Foo<T>' is not assignable to type 'Foo<U>'.
+!!! error TS2416:       Type 'T' is not assignable to type 'U'.
+!!! error TS2416:         'U' could be instantiated with an arbitrary type which could be unrelated to 'T'.
+        }
+    
+        class D6<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base2<U> {
+            [x: string]: U;
+            foo: V
+            ~~~
+!!! error TS2411: Property 'foo' of type 'V' is not assignable to 'string' index type 'U'.
+            ~~~
+!!! error TS2416: Property 'foo' in type 'D6<T, U, V>' is not assignable to the same property in base type 'Base2<U>'.
+!!! error TS2416:   Type 'V' is not assignable to type 'Foo<U>'.
+!!! error TS2416:     Type 'Foo<V>' is not assignable to type 'Foo<U>'.
+!!! error TS2416:       Type 'V' is not assignable to type 'U'.
+!!! error TS2416:         'U' could be instantiated with an arbitrary type which could be unrelated to 'V'.
+        }
+    
+        class D7<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base2<V> {
+            [x: string]: V;
+            foo: T
+            ~~~
+!!! error TS2411: Property 'foo' of type 'T' is not assignable to 'string' index type 'V'.
+            ~~~
+!!! error TS2416: Property 'foo' in type 'D7<T, U, V>' is not assignable to the same property in base type 'Base2<V>'.
+!!! error TS2416:   Type 'T' is not assignable to type 'Foo<V>'.
+!!! error TS2416:     Type 'Foo<U>' is not assignable to type 'Foo<V>'.
+!!! error TS2416:       Type 'U' is not assignable to type 'V'.
+!!! error TS2416:         'V' could be instantiated with an arbitrary type which could be unrelated to 'U'.
+        }
+    
+        class D8<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base2<V> {
+            [x: string]: V;
+            foo: U
+            ~~~
+!!! error TS2411: Property 'foo' of type 'U' is not assignable to 'string' index type 'V'.
+            ~~~
+!!! error TS2416: Property 'foo' in type 'D8<T, U, V>' is not assignable to the same property in base type 'Base2<V>'.
+!!! error TS2416:   Type 'U' is not assignable to type 'Foo<V>'.
+!!! error TS2416:     Type 'Foo<T>' is not assignable to type 'Foo<V>'.
+!!! error TS2416:       Type 'T' is not assignable to type 'V'.
+!!! error TS2416:         'V' could be instantiated with an arbitrary type which could be unrelated to 'T'.
+        }
+    
+        class D9<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base2<V> {
+            [x: string]: V;
+            foo: V
+        }
+    }

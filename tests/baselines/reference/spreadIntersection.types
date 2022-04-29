@@ -1,0 +1,29 @@
+=== tests/cases/compiler/spreadIntersection.ts ===
+var intersection: { a: number } & { b: string };
+>intersection : { a: number; } & { b: string; }
+>a : number
+>b : string
+
+var o1: { a: number, b: string };
+>o1 : { a: number; b: string; }
+>a : number
+>b : string
+
+var o1 = { ...intersection };
+>o1 : { a: number; b: string; }
+>{ ...intersection } : { a: number; b: string; }
+>intersection : { a: number; } & { b: string; }
+
+var o2: { a: number, b: string, c: boolean };
+>o2 : { a: number; b: string; c: boolean; }
+>a : number
+>b : string
+>c : boolean
+
+var o2 = { ...intersection, c: false };
+>o2 : { a: number; b: string; c: boolean; }
+>{ ...intersection, c: false } : { c: boolean; a: number; b: string; }
+>intersection : { a: number; } & { b: string; }
+>c : boolean
+>false : false
+

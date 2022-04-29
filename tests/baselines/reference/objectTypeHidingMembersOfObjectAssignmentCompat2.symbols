@@ -1,0 +1,56 @@
+=== tests/cases/conformance/types/members/objectTypeHidingMembersOfObjectAssignmentCompat2.ts ===
+interface I {
+>I : Symbol(I, Decl(objectTypeHidingMembersOfObjectAssignmentCompat2.ts, 0, 0))
+
+    toString(): number;
+>toString : Symbol(I.toString, Decl(objectTypeHidingMembersOfObjectAssignmentCompat2.ts, 0, 13))
+}
+
+var i: I;
+>i : Symbol(i, Decl(objectTypeHidingMembersOfObjectAssignmentCompat2.ts, 4, 3))
+>I : Symbol(I, Decl(objectTypeHidingMembersOfObjectAssignmentCompat2.ts, 0, 0))
+
+var o: Object;
+>o : Symbol(o, Decl(objectTypeHidingMembersOfObjectAssignmentCompat2.ts, 5, 3))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+o = i; // error
+>o : Symbol(o, Decl(objectTypeHidingMembersOfObjectAssignmentCompat2.ts, 5, 3))
+>i : Symbol(i, Decl(objectTypeHidingMembersOfObjectAssignmentCompat2.ts, 4, 3))
+
+i = o; // error
+>i : Symbol(i, Decl(objectTypeHidingMembersOfObjectAssignmentCompat2.ts, 4, 3))
+>o : Symbol(o, Decl(objectTypeHidingMembersOfObjectAssignmentCompat2.ts, 5, 3))
+
+class C {
+>C : Symbol(C, Decl(objectTypeHidingMembersOfObjectAssignmentCompat2.ts, 7, 6))
+
+    toString(): number { return 1; }
+>toString : Symbol(C.toString, Decl(objectTypeHidingMembersOfObjectAssignmentCompat2.ts, 9, 9))
+}
+var c: C;
+>c : Symbol(c, Decl(objectTypeHidingMembersOfObjectAssignmentCompat2.ts, 12, 3))
+>C : Symbol(C, Decl(objectTypeHidingMembersOfObjectAssignmentCompat2.ts, 7, 6))
+
+o = c; // error
+>o : Symbol(o, Decl(objectTypeHidingMembersOfObjectAssignmentCompat2.ts, 5, 3))
+>c : Symbol(c, Decl(objectTypeHidingMembersOfObjectAssignmentCompat2.ts, 12, 3))
+
+c = o; // error
+>c : Symbol(c, Decl(objectTypeHidingMembersOfObjectAssignmentCompat2.ts, 12, 3))
+>o : Symbol(o, Decl(objectTypeHidingMembersOfObjectAssignmentCompat2.ts, 5, 3))
+
+var a = {
+>a : Symbol(a, Decl(objectTypeHidingMembersOfObjectAssignmentCompat2.ts, 16, 3))
+
+    toString: () => { }
+>toString : Symbol(toString, Decl(objectTypeHidingMembersOfObjectAssignmentCompat2.ts, 16, 9))
+}
+o = a; // error
+>o : Symbol(o, Decl(objectTypeHidingMembersOfObjectAssignmentCompat2.ts, 5, 3))
+>a : Symbol(a, Decl(objectTypeHidingMembersOfObjectAssignmentCompat2.ts, 16, 3))
+
+a = o; // ok
+>a : Symbol(a, Decl(objectTypeHidingMembersOfObjectAssignmentCompat2.ts, 16, 3))
+>o : Symbol(o, Decl(objectTypeHidingMembersOfObjectAssignmentCompat2.ts, 5, 3))
+

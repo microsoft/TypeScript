@@ -1,0 +1,118 @@
+=== tests/cases/conformance/statements/VariableStatements/validMultipleVariableDeclarations.ts ===
+// all expected to be valid
+
+var x: number;
+>x : Symbol(x, Decl(validMultipleVariableDeclarations.ts, 2, 3), Decl(validMultipleVariableDeclarations.ts, 3, 3), Decl(validMultipleVariableDeclarations.ts, 5, 7), Decl(validMultipleVariableDeclarations.ts, 6, 12), Decl(validMultipleVariableDeclarations.ts, 8, 3))
+
+var x = 2;
+>x : Symbol(x, Decl(validMultipleVariableDeclarations.ts, 2, 3), Decl(validMultipleVariableDeclarations.ts, 3, 3), Decl(validMultipleVariableDeclarations.ts, 5, 7), Decl(validMultipleVariableDeclarations.ts, 6, 12), Decl(validMultipleVariableDeclarations.ts, 8, 3))
+
+if (true) {
+    var x = 3;
+>x : Symbol(x, Decl(validMultipleVariableDeclarations.ts, 2, 3), Decl(validMultipleVariableDeclarations.ts, 3, 3), Decl(validMultipleVariableDeclarations.ts, 5, 7), Decl(validMultipleVariableDeclarations.ts, 6, 12), Decl(validMultipleVariableDeclarations.ts, 8, 3))
+
+    for (var x = 0; ;) { }
+>x : Symbol(x, Decl(validMultipleVariableDeclarations.ts, 2, 3), Decl(validMultipleVariableDeclarations.ts, 3, 3), Decl(validMultipleVariableDeclarations.ts, 5, 7), Decl(validMultipleVariableDeclarations.ts, 6, 12), Decl(validMultipleVariableDeclarations.ts, 8, 3))
+}
+var x = <number>undefined;
+>x : Symbol(x, Decl(validMultipleVariableDeclarations.ts, 2, 3), Decl(validMultipleVariableDeclarations.ts, 3, 3), Decl(validMultipleVariableDeclarations.ts, 5, 7), Decl(validMultipleVariableDeclarations.ts, 6, 12), Decl(validMultipleVariableDeclarations.ts, 8, 3))
+>undefined : Symbol(undefined)
+
+// new declaration space, making redeclaring x as a string valid
+function declSpace() {
+>declSpace : Symbol(declSpace, Decl(validMultipleVariableDeclarations.ts, 8, 26))
+
+    var x = 'this is a string';
+>x : Symbol(x, Decl(validMultipleVariableDeclarations.ts, 12, 7))
+}
+
+interface Point { x: number; y: number; }
+>Point : Symbol(Point, Decl(validMultipleVariableDeclarations.ts, 13, 1))
+>x : Symbol(Point.x, Decl(validMultipleVariableDeclarations.ts, 15, 17))
+>y : Symbol(Point.y, Decl(validMultipleVariableDeclarations.ts, 15, 28))
+
+var p: Point;
+>p : Symbol(p, Decl(validMultipleVariableDeclarations.ts, 17, 3), Decl(validMultipleVariableDeclarations.ts, 18, 3), Decl(validMultipleVariableDeclarations.ts, 19, 3), Decl(validMultipleVariableDeclarations.ts, 20, 3), Decl(validMultipleVariableDeclarations.ts, 21, 3) ... and 2 more)
+>Point : Symbol(Point, Decl(validMultipleVariableDeclarations.ts, 13, 1))
+
+var p = { x: 1, y: 2 };
+>p : Symbol(p, Decl(validMultipleVariableDeclarations.ts, 17, 3), Decl(validMultipleVariableDeclarations.ts, 18, 3), Decl(validMultipleVariableDeclarations.ts, 19, 3), Decl(validMultipleVariableDeclarations.ts, 20, 3), Decl(validMultipleVariableDeclarations.ts, 21, 3) ... and 2 more)
+>x : Symbol(x, Decl(validMultipleVariableDeclarations.ts, 18, 9))
+>y : Symbol(y, Decl(validMultipleVariableDeclarations.ts, 18, 15))
+
+var p: Point = { x: 0, y: undefined };
+>p : Symbol(p, Decl(validMultipleVariableDeclarations.ts, 17, 3), Decl(validMultipleVariableDeclarations.ts, 18, 3), Decl(validMultipleVariableDeclarations.ts, 19, 3), Decl(validMultipleVariableDeclarations.ts, 20, 3), Decl(validMultipleVariableDeclarations.ts, 21, 3) ... and 2 more)
+>Point : Symbol(Point, Decl(validMultipleVariableDeclarations.ts, 13, 1))
+>x : Symbol(x, Decl(validMultipleVariableDeclarations.ts, 19, 16))
+>y : Symbol(y, Decl(validMultipleVariableDeclarations.ts, 19, 22))
+>undefined : Symbol(undefined)
+
+var p = { x: 1, y: <number>undefined };
+>p : Symbol(p, Decl(validMultipleVariableDeclarations.ts, 17, 3), Decl(validMultipleVariableDeclarations.ts, 18, 3), Decl(validMultipleVariableDeclarations.ts, 19, 3), Decl(validMultipleVariableDeclarations.ts, 20, 3), Decl(validMultipleVariableDeclarations.ts, 21, 3) ... and 2 more)
+>x : Symbol(x, Decl(validMultipleVariableDeclarations.ts, 20, 9))
+>y : Symbol(y, Decl(validMultipleVariableDeclarations.ts, 20, 15))
+>undefined : Symbol(undefined)
+
+var p: { x: number; y: number; } = { x: 1, y: 2 };
+>p : Symbol(p, Decl(validMultipleVariableDeclarations.ts, 17, 3), Decl(validMultipleVariableDeclarations.ts, 18, 3), Decl(validMultipleVariableDeclarations.ts, 19, 3), Decl(validMultipleVariableDeclarations.ts, 20, 3), Decl(validMultipleVariableDeclarations.ts, 21, 3) ... and 2 more)
+>x : Symbol(x, Decl(validMultipleVariableDeclarations.ts, 21, 8))
+>y : Symbol(y, Decl(validMultipleVariableDeclarations.ts, 21, 19))
+>x : Symbol(x, Decl(validMultipleVariableDeclarations.ts, 21, 36))
+>y : Symbol(y, Decl(validMultipleVariableDeclarations.ts, 21, 42))
+
+var p = <{ x: number; y: number; }>{ x: 0, y: undefined };
+>p : Symbol(p, Decl(validMultipleVariableDeclarations.ts, 17, 3), Decl(validMultipleVariableDeclarations.ts, 18, 3), Decl(validMultipleVariableDeclarations.ts, 19, 3), Decl(validMultipleVariableDeclarations.ts, 20, 3), Decl(validMultipleVariableDeclarations.ts, 21, 3) ... and 2 more)
+>x : Symbol(x, Decl(validMultipleVariableDeclarations.ts, 22, 10))
+>y : Symbol(y, Decl(validMultipleVariableDeclarations.ts, 22, 21))
+>x : Symbol(x, Decl(validMultipleVariableDeclarations.ts, 22, 36))
+>y : Symbol(y, Decl(validMultipleVariableDeclarations.ts, 22, 42))
+>undefined : Symbol(undefined)
+
+var p: typeof p;
+>p : Symbol(p, Decl(validMultipleVariableDeclarations.ts, 17, 3), Decl(validMultipleVariableDeclarations.ts, 18, 3), Decl(validMultipleVariableDeclarations.ts, 19, 3), Decl(validMultipleVariableDeclarations.ts, 20, 3), Decl(validMultipleVariableDeclarations.ts, 21, 3) ... and 2 more)
+>p : Symbol(p, Decl(validMultipleVariableDeclarations.ts, 17, 3), Decl(validMultipleVariableDeclarations.ts, 18, 3), Decl(validMultipleVariableDeclarations.ts, 19, 3), Decl(validMultipleVariableDeclarations.ts, 20, 3), Decl(validMultipleVariableDeclarations.ts, 21, 3) ... and 2 more)
+
+var fn = function (s: string) { return 42; }
+>fn : Symbol(fn, Decl(validMultipleVariableDeclarations.ts, 25, 3), Decl(validMultipleVariableDeclarations.ts, 26, 3), Decl(validMultipleVariableDeclarations.ts, 27, 3), Decl(validMultipleVariableDeclarations.ts, 28, 3), Decl(validMultipleVariableDeclarations.ts, 29, 3) ... and 1 more)
+>s : Symbol(s, Decl(validMultipleVariableDeclarations.ts, 25, 19))
+
+var fn = (s: string) => 3;
+>fn : Symbol(fn, Decl(validMultipleVariableDeclarations.ts, 25, 3), Decl(validMultipleVariableDeclarations.ts, 26, 3), Decl(validMultipleVariableDeclarations.ts, 27, 3), Decl(validMultipleVariableDeclarations.ts, 28, 3), Decl(validMultipleVariableDeclarations.ts, 29, 3) ... and 1 more)
+>s : Symbol(s, Decl(validMultipleVariableDeclarations.ts, 26, 10))
+
+var fn: (s: string) => number;
+>fn : Symbol(fn, Decl(validMultipleVariableDeclarations.ts, 25, 3), Decl(validMultipleVariableDeclarations.ts, 26, 3), Decl(validMultipleVariableDeclarations.ts, 27, 3), Decl(validMultipleVariableDeclarations.ts, 28, 3), Decl(validMultipleVariableDeclarations.ts, 29, 3) ... and 1 more)
+>s : Symbol(s, Decl(validMultipleVariableDeclarations.ts, 27, 9))
+
+var fn: { (s: string): number };
+>fn : Symbol(fn, Decl(validMultipleVariableDeclarations.ts, 25, 3), Decl(validMultipleVariableDeclarations.ts, 26, 3), Decl(validMultipleVariableDeclarations.ts, 27, 3), Decl(validMultipleVariableDeclarations.ts, 28, 3), Decl(validMultipleVariableDeclarations.ts, 29, 3) ... and 1 more)
+>s : Symbol(s, Decl(validMultipleVariableDeclarations.ts, 28, 11))
+
+var fn = <(s: string) => number> null;
+>fn : Symbol(fn, Decl(validMultipleVariableDeclarations.ts, 25, 3), Decl(validMultipleVariableDeclarations.ts, 26, 3), Decl(validMultipleVariableDeclarations.ts, 27, 3), Decl(validMultipleVariableDeclarations.ts, 28, 3), Decl(validMultipleVariableDeclarations.ts, 29, 3) ... and 1 more)
+>s : Symbol(s, Decl(validMultipleVariableDeclarations.ts, 29, 11))
+
+var fn: typeof fn;
+>fn : Symbol(fn, Decl(validMultipleVariableDeclarations.ts, 25, 3), Decl(validMultipleVariableDeclarations.ts, 26, 3), Decl(validMultipleVariableDeclarations.ts, 27, 3), Decl(validMultipleVariableDeclarations.ts, 28, 3), Decl(validMultipleVariableDeclarations.ts, 29, 3) ... and 1 more)
+>fn : Symbol(fn, Decl(validMultipleVariableDeclarations.ts, 25, 3), Decl(validMultipleVariableDeclarations.ts, 26, 3), Decl(validMultipleVariableDeclarations.ts, 27, 3), Decl(validMultipleVariableDeclarations.ts, 28, 3), Decl(validMultipleVariableDeclarations.ts, 29, 3) ... and 1 more)
+
+var a: string[]; 
+>a : Symbol(a, Decl(validMultipleVariableDeclarations.ts, 32, 3), Decl(validMultipleVariableDeclarations.ts, 33, 3), Decl(validMultipleVariableDeclarations.ts, 34, 3), Decl(validMultipleVariableDeclarations.ts, 35, 3), Decl(validMultipleVariableDeclarations.ts, 36, 3) ... and 1 more)
+
+var a = ['a', 'b']
+>a : Symbol(a, Decl(validMultipleVariableDeclarations.ts, 32, 3), Decl(validMultipleVariableDeclarations.ts, 33, 3), Decl(validMultipleVariableDeclarations.ts, 34, 3), Decl(validMultipleVariableDeclarations.ts, 35, 3), Decl(validMultipleVariableDeclarations.ts, 36, 3) ... and 1 more)
+
+var a = <string[]>[];
+>a : Symbol(a, Decl(validMultipleVariableDeclarations.ts, 32, 3), Decl(validMultipleVariableDeclarations.ts, 33, 3), Decl(validMultipleVariableDeclarations.ts, 34, 3), Decl(validMultipleVariableDeclarations.ts, 35, 3), Decl(validMultipleVariableDeclarations.ts, 36, 3) ... and 1 more)
+
+var a: string[] = [];
+>a : Symbol(a, Decl(validMultipleVariableDeclarations.ts, 32, 3), Decl(validMultipleVariableDeclarations.ts, 33, 3), Decl(validMultipleVariableDeclarations.ts, 34, 3), Decl(validMultipleVariableDeclarations.ts, 35, 3), Decl(validMultipleVariableDeclarations.ts, 36, 3) ... and 1 more)
+
+var a = new Array<string>();
+>a : Symbol(a, Decl(validMultipleVariableDeclarations.ts, 32, 3), Decl(validMultipleVariableDeclarations.ts, 33, 3), Decl(validMultipleVariableDeclarations.ts, 34, 3), Decl(validMultipleVariableDeclarations.ts, 35, 3), Decl(validMultipleVariableDeclarations.ts, 36, 3) ... and 1 more)
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+var a: typeof a;
+>a : Symbol(a, Decl(validMultipleVariableDeclarations.ts, 32, 3), Decl(validMultipleVariableDeclarations.ts, 33, 3), Decl(validMultipleVariableDeclarations.ts, 34, 3), Decl(validMultipleVariableDeclarations.ts, 35, 3), Decl(validMultipleVariableDeclarations.ts, 36, 3) ... and 1 more)
+>a : Symbol(a, Decl(validMultipleVariableDeclarations.ts, 32, 3), Decl(validMultipleVariableDeclarations.ts, 33, 3), Decl(validMultipleVariableDeclarations.ts, 34, 3), Decl(validMultipleVariableDeclarations.ts, 35, 3), Decl(validMultipleVariableDeclarations.ts, 36, 3) ... and 1 more)
+

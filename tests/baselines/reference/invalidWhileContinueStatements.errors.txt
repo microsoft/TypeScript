@@ -1,0 +1,59 @@
+tests/cases/conformance/statements/continueStatements/invalidWhileContinueStatements.ts(4,1): error TS1104: A 'continue' statement can only be used within an enclosing iteration statement.
+tests/cases/conformance/statements/continueStatements/invalidWhileContinueStatements.ts(8,14): error TS1115: A 'continue' statement can only jump to a label of an enclosing iteration statement.
+tests/cases/conformance/statements/continueStatements/invalidWhileContinueStatements.ts(14,9): error TS1107: Jump target cannot cross function boundary.
+tests/cases/conformance/statements/continueStatements/invalidWhileContinueStatements.ts(21,9): error TS1107: Jump target cannot cross function boundary.
+tests/cases/conformance/statements/continueStatements/invalidWhileContinueStatements.ts(27,5): error TS1115: A 'continue' statement can only jump to a label of an enclosing iteration statement.
+tests/cases/conformance/statements/continueStatements/invalidWhileContinueStatements.ts(37,5): error TS1115: A 'continue' statement can only jump to a label of an enclosing iteration statement.
+
+
+==== tests/cases/conformance/statements/continueStatements/invalidWhileContinueStatements.ts (6 errors) ====
+    // All errors
+    
+    // naked continue not allowed
+    continue;
+    ~~~~~~~~~
+!!! error TS1104: A 'continue' statement can only be used within an enclosing iteration statement.
+    
+    // non-existent label
+    ONE:
+    while (true) continue TWO;
+                 ~~~~~~~~~~~~~
+!!! error TS1115: A 'continue' statement can only jump to a label of an enclosing iteration statement.
+    
+    // continue from inside function
+    TWO:
+    while (true){
+        var x = () => {
+            continue TWO;
+            ~~~~~~~~~~~~~
+!!! error TS1107: Jump target cannot cross function boundary.
+        }
+    }
+    
+    THREE:
+    while (true) {
+        var fn = function () {
+            continue THREE;
+            ~~~~~~~~~~~~~~~
+!!! error TS1107: Jump target cannot cross function boundary.
+        }
+    }
+    
+    // continue forward
+    while (true) {
+        continue FIVE;
+        ~~~~~~~~~~~~~~
+!!! error TS1115: A 'continue' statement can only jump to a label of an enclosing iteration statement.
+        FIVE:
+        while (true) { }
+    }
+    
+    // label on non-loop statement
+    NINE:
+    var y = 12;
+    
+    while (true) {
+        continue NINE;
+        ~~~~~~~~~~~~~~
+!!! error TS1115: A 'continue' statement can only jump to a label of an enclosing iteration statement.
+    }

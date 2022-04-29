@@ -1,0 +1,599 @@
+=== tests/cases/compiler/capturedLetConstInLoop4_ES6.ts ===
+//======let
+export function exportedFoo() {
+>exportedFoo : () => string
+
+    return v0 + v00 + v1 + v2 + v3 + v4 + v5 + v6 + v7 + v8;
+>v0 + v00 + v1 + v2 + v3 + v4 + v5 + v6 + v7 + v8 : string
+>v0 + v00 + v1 + v2 + v3 + v4 + v5 + v6 + v7 : string
+>v0 + v00 + v1 + v2 + v3 + v4 + v5 + v6 : string
+>v0 + v00 + v1 + v2 + v3 + v4 + v5 : string
+>v0 + v00 + v1 + v2 + v3 + v4 : string
+>v0 + v00 + v1 + v2 + v3 : string
+>v0 + v00 + v1 + v2 : string
+>v0 + v00 + v1 : string
+>v0 + v00 : string
+>v0 : any
+>v00 : string
+>v1 : number
+>v2 : any
+>v3 : any
+>v4 : number
+>v5 : number
+>v6 : any
+>v7 : any
+>v8 : number
+}
+
+for (let x of []) {
+>x : any
+>[] : undefined[]
+
+    var v0 = x;
+>v0 : any
+>x : any
+
+    (function() { return x + v0});
+>(function() { return x + v0}) : () => any
+>function() { return x + v0} : () => any
+>x + v0 : any
+>x : any
+>v0 : any
+
+    (() => x);    
+>(() => x) : () => any
+>() => x : () => any
+>x : any
+}
+
+for (let x in []) {
+>x : string
+>[] : undefined[]
+
+    var v00 = x;
+>v00 : string
+>x : string
+
+    (function() { return x + v00});
+>(function() { return x + v00}) : () => string
+>function() { return x + v00} : () => string
+>x + v00 : string
+>x : string
+>v00 : string
+
+    (() => x);    
+>(() => x) : () => string
+>() => x : () => string
+>x : string
+}
+
+for (let x = 0; x < 1; ++x) {
+>x : number
+>0 : 0
+>x < 1 : boolean
+>x : number
+>1 : 1
+>++x : number
+>x : number
+
+    var v1 = x;
+>v1 : number
+>x : number
+
+    (function() { return x + v1});
+>(function() { return x + v1}) : () => number
+>function() { return x + v1} : () => number
+>x + v1 : number
+>x : number
+>v1 : number
+
+    (() => x);
+>(() => x) : () => number
+>() => x : () => number
+>x : number
+}
+
+while (1 === 1) {
+>1 === 1 : boolean
+>1 : 1
+>1 : 1
+
+    let x;
+>x : any
+
+    var v2 = x;
+>v2 : any
+>x : any
+
+    (function() { return x + v2});
+>(function() { return x + v2}) : () => any
+>function() { return x + v2} : () => any
+>x + v2 : any
+>x : any
+>v2 : any
+
+    (() => x);
+>(() => x) : () => any
+>() => x : () => any
+>x : any
+}
+
+do {
+    let x;
+>x : any
+
+    var v3 = x;
+>v3 : any
+>x : any
+
+    (function() { return x + v3});
+>(function() { return x + v3}) : () => any
+>function() { return x + v3} : () => any
+>x + v3 : any
+>x : any
+>v3 : any
+
+    (() => x);
+>(() => x) : () => any
+>() => x : () => any
+>x : any
+
+} while (1 === 1)
+>1 === 1 : boolean
+>1 : 1
+>1 : 1
+
+for (let y = 0; y < 1; ++y) {
+>y : number
+>0 : 0
+>y < 1 : boolean
+>y : number
+>1 : 1
+>++y : number
+>y : number
+
+    let x = 1;
+>x : number
+>1 : 1
+
+    var v4 = x;
+>v4 : number
+>x : number
+
+    (function() { return x + v4});
+>(function() { return x + v4}) : () => number
+>function() { return x + v4} : () => number
+>x + v4 : number
+>x : number
+>v4 : number
+
+    (() => x);
+>(() => x) : () => number
+>() => x : () => number
+>x : number
+}
+
+for (let x = 0, y = 1; x < 1; ++x) {
+>x : number
+>0 : 0
+>y : number
+>1 : 1
+>x < 1 : boolean
+>x : number
+>1 : 1
+>++x : number
+>x : number
+
+    var v5 = x;
+>v5 : number
+>x : number
+
+    (function() { return x + y + v5});
+>(function() { return x + y + v5}) : () => number
+>function() { return x + y + v5} : () => number
+>x + y + v5 : number
+>x + y : number
+>x : number
+>y : number
+>v5 : number
+
+    (() => x + y);
+>(() => x + y) : () => number
+>() => x + y : () => number
+>x + y : number
+>x : number
+>y : number
+}
+
+while (1 === 1) {
+>1 === 1 : boolean
+>1 : 1
+>1 : 1
+
+    let x, y;
+>x : any
+>y : any
+
+    var v6 = x;
+>v6 : any
+>x : any
+
+    (function() { return x + y + v6});
+>(function() { return x + y + v6}) : () => any
+>function() { return x + y + v6} : () => any
+>x + y + v6 : any
+>x + y : any
+>x : any
+>y : any
+>v6 : any
+
+    (() => x + y);
+>(() => x + y) : () => any
+>() => x + y : () => any
+>x + y : any
+>x : any
+>y : any
+}
+
+do {
+    let x, y;
+>x : any
+>y : any
+
+    var v7 = x;
+>v7 : any
+>x : any
+
+    (function() { return x + y + v7});
+>(function() { return x + y + v7}) : () => any
+>function() { return x + y + v7} : () => any
+>x + y + v7 : any
+>x + y : any
+>x : any
+>y : any
+>v7 : any
+
+    (() => x + y);
+>(() => x + y) : () => any
+>() => x + y : () => any
+>x + y : any
+>x : any
+>y : any
+
+} while (1 === 1)
+>1 === 1 : boolean
+>1 : 1
+>1 : 1
+
+for (let y = 0; y < 1; ++y) {
+>y : number
+>0 : 0
+>y < 1 : boolean
+>y : number
+>1 : 1
+>++y : number
+>y : number
+
+    let x = 1;
+>x : number
+>1 : 1
+
+    var v8 = x;
+>v8 : number
+>x : number
+
+    (function() { return x + y + v8});
+>(function() { return x + y + v8}) : () => number
+>function() { return x + y + v8} : () => number
+>x + y + v8 : number
+>x + y : number
+>x : number
+>y : number
+>v8 : number
+
+    (() => x + y);
+>(() => x + y) : () => number
+>() => x + y : () => number
+>x + y : number
+>x : number
+>y : number
+}
+
+//======const
+export function exportedFoo2() {
+>exportedFoo2 : () => string
+
+    return v0_c + v00_c + v1_c + v2_c + v3_c + v4_c + v5_c + v6_c + v7_c + v8_c;
+>v0_c + v00_c + v1_c + v2_c + v3_c + v4_c + v5_c + v6_c + v7_c + v8_c : string
+>v0_c + v00_c + v1_c + v2_c + v3_c + v4_c + v5_c + v6_c + v7_c : string
+>v0_c + v00_c + v1_c + v2_c + v3_c + v4_c + v5_c + v6_c : string
+>v0_c + v00_c + v1_c + v2_c + v3_c + v4_c + v5_c : string
+>v0_c + v00_c + v1_c + v2_c + v3_c + v4_c : string
+>v0_c + v00_c + v1_c + v2_c + v3_c : string
+>v0_c + v00_c + v1_c + v2_c : string
+>v0_c + v00_c + v1_c : string
+>v0_c + v00_c : string
+>v0_c : any
+>v00_c : string
+>v1_c : number
+>v2_c : number
+>v3_c : number
+>v4_c : number
+>v5_c : number
+>v6_c : number
+>v7_c : number
+>v8_c : number
+}
+
+for (const x of []) {
+>x : any
+>[] : undefined[]
+
+    var v0_c = x;
+>v0_c : any
+>x : any
+
+    (function() { return x + v0_c});
+>(function() { return x + v0_c}) : () => any
+>function() { return x + v0_c} : () => any
+>x + v0_c : any
+>x : any
+>v0_c : any
+
+    (() => x);    
+>(() => x) : () => any
+>() => x : () => any
+>x : any
+}
+
+for (const x in []) {
+>x : string
+>[] : undefined[]
+
+    var v00_c = x;
+>v00_c : string
+>x : string
+
+    (function() { return x + v00});
+>(function() { return x + v00}) : () => string
+>function() { return x + v00} : () => string
+>x + v00 : string
+>x : string
+>v00 : string
+
+    (() => x);    
+>(() => x) : () => string
+>() => x : () => string
+>x : string
+}
+
+for (const x = 0; x < 1;) {
+>x : 0
+>0 : 0
+>x < 1 : boolean
+>x : 0
+>1 : 1
+
+    var v1_c = x;
+>v1_c : number
+>x : 0
+
+    (function() { return x + v1_c});
+>(function() { return x + v1_c}) : () => number
+>function() { return x + v1_c} : () => number
+>x + v1_c : number
+>x : 0
+>v1_c : number
+
+    (() => x);
+>(() => x) : () => number
+>() => x : () => number
+>x : 0
+}
+
+while (1 === 1) {
+>1 === 1 : boolean
+>1 : 1
+>1 : 1
+
+    const x =1;
+>x : 1
+>1 : 1
+
+    var v2_c = x;
+>v2_c : number
+>x : 1
+
+    (function() { return x + v2_c});
+>(function() { return x + v2_c}) : () => number
+>function() { return x + v2_c} : () => number
+>x + v2_c : number
+>x : 1
+>v2_c : number
+
+    (() => x);
+>(() => x) : () => number
+>() => x : () => number
+>x : 1
+}
+
+do {
+    const x = 1;
+>x : 1
+>1 : 1
+
+    var v3_c = x;
+>v3_c : number
+>x : 1
+
+    (function() { return x + v3_c});
+>(function() { return x + v3_c}) : () => number
+>function() { return x + v3_c} : () => number
+>x + v3_c : number
+>x : 1
+>v3_c : number
+
+    (() => x);
+>(() => x) : () => number
+>() => x : () => number
+>x : 1
+
+} while (1 === 1)
+>1 === 1 : boolean
+>1 : 1
+>1 : 1
+
+for (const y = 0; y < 1;) {
+>y : 0
+>0 : 0
+>y < 1 : boolean
+>y : 0
+>1 : 1
+
+    const x = 1;
+>x : 1
+>1 : 1
+
+    var v4_c = x;
+>v4_c : number
+>x : 1
+
+    (function() { return x + v4_c});
+>(function() { return x + v4_c}) : () => number
+>function() { return x + v4_c} : () => number
+>x + v4_c : number
+>x : 1
+>v4_c : number
+
+    (() => x);
+>(() => x) : () => number
+>() => x : () => number
+>x : 1
+}
+
+for (const x = 0, y = 1; x < 1;) {
+>x : 0
+>0 : 0
+>y : 1
+>1 : 1
+>x < 1 : boolean
+>x : 0
+>1 : 1
+
+    var v5_c = x;
+>v5_c : number
+>x : 0
+
+    (function() { return x + y + v5_c});
+>(function() { return x + y + v5_c}) : () => number
+>function() { return x + y + v5_c} : () => number
+>x + y + v5_c : number
+>x + y : number
+>x : 0
+>y : 1
+>v5_c : number
+
+    (() => x + y);
+>(() => x + y) : () => number
+>() => x + y : () => number
+>x + y : number
+>x : 0
+>y : 1
+}
+
+while (1 === 1) {
+>1 === 1 : boolean
+>1 : 1
+>1 : 1
+
+    const x = 1, y = 1;
+>x : 1
+>1 : 1
+>y : 1
+>1 : 1
+
+    var v6_c = x;
+>v6_c : number
+>x : 1
+
+    (function() { return x + y + v6_c});
+>(function() { return x + y + v6_c}) : () => number
+>function() { return x + y + v6_c} : () => number
+>x + y + v6_c : number
+>x + y : number
+>x : 1
+>y : 1
+>v6_c : number
+
+    (() => x + y);
+>(() => x + y) : () => number
+>() => x + y : () => number
+>x + y : number
+>x : 1
+>y : 1
+}
+
+do {
+    const x = 1, y = 1;
+>x : 1
+>1 : 1
+>y : 1
+>1 : 1
+
+    var v7_c = x;
+>v7_c : number
+>x : 1
+
+    (function() { return x + y + v7_c});
+>(function() { return x + y + v7_c}) : () => number
+>function() { return x + y + v7_c} : () => number
+>x + y + v7_c : number
+>x + y : number
+>x : 1
+>y : 1
+>v7_c : number
+
+    (() => x + y);
+>(() => x + y) : () => number
+>() => x + y : () => number
+>x + y : number
+>x : 1
+>y : 1
+
+} while (1 === 1)
+>1 === 1 : boolean
+>1 : 1
+>1 : 1
+
+for (const y = 0; y < 1;) {
+>y : 0
+>0 : 0
+>y < 1 : boolean
+>y : 0
+>1 : 1
+
+    const x = 1;
+>x : 1
+>1 : 1
+
+    var v8_c = x;
+>v8_c : number
+>x : 1
+
+    (function() { return x + y + v8_c});
+>(function() { return x + y + v8_c}) : () => number
+>function() { return x + y + v8_c} : () => number
+>x + y + v8_c : number
+>x + y : number
+>x : 1
+>y : 0
+>v8_c : number
+
+    (() => x + y);
+>(() => x + y) : () => number
+>() => x + y : () => number
+>x + y : number
+>x : 1
+>y : 0
+}
+

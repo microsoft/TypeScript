@@ -1,0 +1,12 @@
+=== tests/cases/compiler/staticsInConstructorBodies.ts ===
+class C {
+>C : Symbol(C, Decl(staticsInConstructorBodies.ts, 0, 0))
+
+	constructor() {
+		static p1 = 0; // ERROR
+>p1 : Symbol(C.p1, Decl(staticsInConstructorBodies.ts, 1, 16))
+
+		static m1() {} // ERROR
+>m1 : Symbol(C.m1, Decl(staticsInConstructorBodies.ts, 2, 16))
+	}
+}

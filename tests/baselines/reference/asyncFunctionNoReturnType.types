@@ -1,0 +1,10 @@
+=== tests/cases/compiler/asyncFunctionNoReturnType.ts ===
+async () => {
+>async () => {    if (window)        return;} : () => Promise<void>
+
+    if (window)
+>window : Window & typeof globalThis
+
+        return;
+}
+

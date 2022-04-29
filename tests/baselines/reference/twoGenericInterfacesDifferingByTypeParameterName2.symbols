@@ -1,0 +1,104 @@
+=== tests/cases/conformance/interfaces/declarationMerging/twoGenericInterfacesDifferingByTypeParameterName2.ts ===
+// type parameter names are relevant when choosing whether to merge interface declarations
+
+interface B<T, U> {
+>B : Symbol(B, Decl(twoGenericInterfacesDifferingByTypeParameterName2.ts, 0, 0), Decl(twoGenericInterfacesDifferingByTypeParameterName2.ts, 4, 1))
+>T : Symbol(T, Decl(twoGenericInterfacesDifferingByTypeParameterName2.ts, 2, 12), Decl(twoGenericInterfacesDifferingByTypeParameterName2.ts, 6, 14))
+>U : Symbol(U, Decl(twoGenericInterfacesDifferingByTypeParameterName2.ts, 2, 14), Decl(twoGenericInterfacesDifferingByTypeParameterName2.ts, 6, 12))
+
+    x: U;
+>x : Symbol(B.x, Decl(twoGenericInterfacesDifferingByTypeParameterName2.ts, 2, 19))
+>U : Symbol(U, Decl(twoGenericInterfacesDifferingByTypeParameterName2.ts, 2, 14), Decl(twoGenericInterfacesDifferingByTypeParameterName2.ts, 6, 12))
+}
+
+interface B<U, T> { // error
+>B : Symbol(B, Decl(twoGenericInterfacesDifferingByTypeParameterName2.ts, 0, 0), Decl(twoGenericInterfacesDifferingByTypeParameterName2.ts, 4, 1))
+>U : Symbol(U, Decl(twoGenericInterfacesDifferingByTypeParameterName2.ts, 2, 14), Decl(twoGenericInterfacesDifferingByTypeParameterName2.ts, 6, 12))
+>T : Symbol(T, Decl(twoGenericInterfacesDifferingByTypeParameterName2.ts, 2, 12), Decl(twoGenericInterfacesDifferingByTypeParameterName2.ts, 6, 14))
+
+    y: V;
+>y : Symbol(B.y, Decl(twoGenericInterfacesDifferingByTypeParameterName2.ts, 6, 19))
+>V : Symbol(V)
+}
+
+module M {
+>M : Symbol(M, Decl(twoGenericInterfacesDifferingByTypeParameterName2.ts, 8, 1))
+
+    interface B<T, U> {
+>B : Symbol(B, Decl(twoGenericInterfacesDifferingByTypeParameterName2.ts, 10, 10), Decl(twoGenericInterfacesDifferingByTypeParameterName2.ts, 13, 5))
+>T : Symbol(T, Decl(twoGenericInterfacesDifferingByTypeParameterName2.ts, 11, 16), Decl(twoGenericInterfacesDifferingByTypeParameterName2.ts, 15, 18))
+>U : Symbol(U, Decl(twoGenericInterfacesDifferingByTypeParameterName2.ts, 11, 18), Decl(twoGenericInterfacesDifferingByTypeParameterName2.ts, 15, 16))
+
+        x: U;
+>x : Symbol(B.x, Decl(twoGenericInterfacesDifferingByTypeParameterName2.ts, 11, 23))
+>U : Symbol(U, Decl(twoGenericInterfacesDifferingByTypeParameterName2.ts, 11, 18), Decl(twoGenericInterfacesDifferingByTypeParameterName2.ts, 15, 16))
+    }
+
+    interface B<U, T> { // error
+>B : Symbol(B, Decl(twoGenericInterfacesDifferingByTypeParameterName2.ts, 10, 10), Decl(twoGenericInterfacesDifferingByTypeParameterName2.ts, 13, 5))
+>U : Symbol(U, Decl(twoGenericInterfacesDifferingByTypeParameterName2.ts, 11, 18), Decl(twoGenericInterfacesDifferingByTypeParameterName2.ts, 15, 16))
+>T : Symbol(T, Decl(twoGenericInterfacesDifferingByTypeParameterName2.ts, 11, 16), Decl(twoGenericInterfacesDifferingByTypeParameterName2.ts, 15, 18))
+
+        y: T;
+>y : Symbol(B.y, Decl(twoGenericInterfacesDifferingByTypeParameterName2.ts, 15, 23))
+>T : Symbol(T, Decl(twoGenericInterfacesDifferingByTypeParameterName2.ts, 11, 16), Decl(twoGenericInterfacesDifferingByTypeParameterName2.ts, 15, 18))
+    }
+}
+
+module M2 {
+>M2 : Symbol(M2, Decl(twoGenericInterfacesDifferingByTypeParameterName2.ts, 18, 1), Decl(twoGenericInterfacesDifferingByTypeParameterName2.ts, 24, 1))
+
+    interface B<T, U> {
+>B : Symbol(B, Decl(twoGenericInterfacesDifferingByTypeParameterName2.ts, 20, 11))
+>T : Symbol(T, Decl(twoGenericInterfacesDifferingByTypeParameterName2.ts, 21, 16))
+>U : Symbol(U, Decl(twoGenericInterfacesDifferingByTypeParameterName2.ts, 21, 18))
+
+        x: U;
+>x : Symbol(B.x, Decl(twoGenericInterfacesDifferingByTypeParameterName2.ts, 21, 23))
+>U : Symbol(U, Decl(twoGenericInterfacesDifferingByTypeParameterName2.ts, 21, 18))
+    }
+}
+
+module M2 {
+>M2 : Symbol(M2, Decl(twoGenericInterfacesDifferingByTypeParameterName2.ts, 18, 1), Decl(twoGenericInterfacesDifferingByTypeParameterName2.ts, 24, 1))
+
+    interface B<U, T> { // ok, different declaration space than other M2
+>B : Symbol(B, Decl(twoGenericInterfacesDifferingByTypeParameterName2.ts, 26, 11))
+>U : Symbol(U, Decl(twoGenericInterfacesDifferingByTypeParameterName2.ts, 27, 16))
+>T : Symbol(T, Decl(twoGenericInterfacesDifferingByTypeParameterName2.ts, 27, 18))
+
+        y: T;
+>y : Symbol(B.y, Decl(twoGenericInterfacesDifferingByTypeParameterName2.ts, 27, 23))
+>T : Symbol(T, Decl(twoGenericInterfacesDifferingByTypeParameterName2.ts, 27, 18))
+    }
+}
+
+module M3 {
+>M3 : Symbol(M3, Decl(twoGenericInterfacesDifferingByTypeParameterName2.ts, 30, 1), Decl(twoGenericInterfacesDifferingByTypeParameterName2.ts, 36, 1))
+
+    export interface B<T, U> {
+>B : Symbol(B, Decl(twoGenericInterfacesDifferingByTypeParameterName2.ts, 32, 11), Decl(twoGenericInterfacesDifferingByTypeParameterName2.ts, 38, 11))
+>T : Symbol(T, Decl(twoGenericInterfacesDifferingByTypeParameterName2.ts, 33, 23), Decl(twoGenericInterfacesDifferingByTypeParameterName2.ts, 39, 25))
+>U : Symbol(U, Decl(twoGenericInterfacesDifferingByTypeParameterName2.ts, 33, 25), Decl(twoGenericInterfacesDifferingByTypeParameterName2.ts, 39, 23))
+
+        x: U;
+>x : Symbol(B.x, Decl(twoGenericInterfacesDifferingByTypeParameterName2.ts, 33, 30))
+>U : Symbol(U, Decl(twoGenericInterfacesDifferingByTypeParameterName2.ts, 33, 25), Decl(twoGenericInterfacesDifferingByTypeParameterName2.ts, 39, 23))
+    }
+}
+
+module M3 {
+>M3 : Symbol(M3, Decl(twoGenericInterfacesDifferingByTypeParameterName2.ts, 30, 1), Decl(twoGenericInterfacesDifferingByTypeParameterName2.ts, 36, 1))
+
+    export interface B<U, T> { // error
+>B : Symbol(B, Decl(twoGenericInterfacesDifferingByTypeParameterName2.ts, 32, 11), Decl(twoGenericInterfacesDifferingByTypeParameterName2.ts, 38, 11))
+>U : Symbol(U, Decl(twoGenericInterfacesDifferingByTypeParameterName2.ts, 33, 25), Decl(twoGenericInterfacesDifferingByTypeParameterName2.ts, 39, 23))
+>T : Symbol(T, Decl(twoGenericInterfacesDifferingByTypeParameterName2.ts, 33, 23), Decl(twoGenericInterfacesDifferingByTypeParameterName2.ts, 39, 25))
+
+        y: T;
+>y : Symbol(B.y, Decl(twoGenericInterfacesDifferingByTypeParameterName2.ts, 39, 30))
+>T : Symbol(T, Decl(twoGenericInterfacesDifferingByTypeParameterName2.ts, 33, 23), Decl(twoGenericInterfacesDifferingByTypeParameterName2.ts, 39, 25))
+    }
+}
+
+

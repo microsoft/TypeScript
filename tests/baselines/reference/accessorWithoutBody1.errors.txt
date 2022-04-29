@@ -1,0 +1,7 @@
+tests/cases/compiler/accessorWithoutBody1.ts(1,19): error TS1005: '{' expected.
+
+
+==== tests/cases/compiler/accessorWithoutBody1.ts (1 errors) ====
+    var v = { get foo() }
+                      ~
+!!! error TS1005: '{' expected.

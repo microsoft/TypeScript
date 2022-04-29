@@ -1,0 +1,43 @@
+=== tests/cases/compiler/a.ts ===
+export interface F {
+>F : Symbol(F, Decl(a.ts, 0, 0))
+
+    foo1: number
+>foo1 : Symbol(F.foo1, Decl(a.ts, 0, 20))
+}
+
+=== tests/cases/compiler/b.ts ===
+export interface F {
+>F : Symbol(F, Decl(b.ts, 0, 0))
+
+    foo2: number
+>foo2 : Symbol(F.foo2, Decl(b.ts, 0, 20))
+}
+
+=== tests/cases/compiler/c.ts ===
+import * as A from './a'
+>A : Symbol(A, Decl(c.ts, 0, 6))
+
+import * as B from './b'
+>B : Symbol(B, Decl(c.ts, 1, 6))
+
+let a: A.F
+>a : Symbol(a, Decl(c.ts, 3, 3))
+>A : Symbol(A, Decl(c.ts, 0, 6))
+>F : Symbol(A.F, Decl(a.ts, 0, 0))
+
+let b: B.F
+>b : Symbol(b, Decl(c.ts, 4, 3))
+>B : Symbol(B, Decl(c.ts, 1, 6))
+>F : Symbol(B.F, Decl(b.ts, 0, 0))
+
+if (a === b) {
+>a : Symbol(a, Decl(c.ts, 3, 3))
+>b : Symbol(b, Decl(c.ts, 4, 3))
+
+}
+
+a = b
+>a : Symbol(a, Decl(c.ts, 3, 3))
+>b : Symbol(b, Decl(c.ts, 4, 3))
+

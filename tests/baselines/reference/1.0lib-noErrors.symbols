@@ -1,0 +1,2087 @@
+=== tests/cases/conformance/decorators/1.0lib-noErrors.ts ===
+/* *****************************************************************************
+Copyright (c) Microsoft Corporation. All rights reserved. 
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use
+this file except in compliance with the License. You may obtain a copy of the
+License at http://www.apache.org/licenses/LICENSE-2.0  
+ 
+THIS CODE IS PROVIDED ON AN *AS IS* BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION ANY IMPLIED
+WARRANTIES OR CONDITIONS OF TITLE, FITNESS FOR A PARTICULAR PURPOSE, 
+MERCHANTABLITY OR NON-INFRINGEMENT. 
+ 
+See the Apache Version 2.0 License for specific language governing permissions
+and limitations under the License.
+***************************************************************************** */
+
+/// <reference no-default-lib="true"/>
+
+/////////////////////////////
+/// ECMAScript APIs
+/////////////////////////////
+
+declare var NaN: number;
+>NaN : Symbol(NaN, Decl(1.0lib-noErrors.ts, 21, 11))
+
+declare var Infinity: number;
+>Infinity : Symbol(Infinity, Decl(1.0lib-noErrors.ts, 22, 11))
+
+/**
+  * Evaluates JavaScript code and executes it. 
+  * @param x A String value that contains valid JavaScript code.
+  */
+declare function eval(x: string): any;
+>eval : Symbol(eval, Decl(1.0lib-noErrors.ts, 22, 29))
+>x : Symbol(x, Decl(1.0lib-noErrors.ts, 28, 22))
+
+/**
+  * Converts A string to an integer.
+  * @param s A string to convert into a number.
+  * @param radix A value between 2 and 36 that specifies the base of the number in numString. 
+  * If this argument is not supplied, strings with a prefix of '0x' are considered hexadecimal.
+  * All other strings are considered decimal.
+  */
+declare function parseInt(s: string, radix?: number): number;
+>parseInt : Symbol(parseInt, Decl(1.0lib-noErrors.ts, 28, 38))
+>s : Symbol(s, Decl(1.0lib-noErrors.ts, 37, 26))
+>radix : Symbol(radix, Decl(1.0lib-noErrors.ts, 37, 36))
+
+/**
+  * Converts a string to a floating-point number. 
+  * @param string A string that contains a floating-point number. 
+  */
+declare function parseFloat(string: string): number;
+>parseFloat : Symbol(parseFloat, Decl(1.0lib-noErrors.ts, 37, 61))
+>string : Symbol(string, Decl(1.0lib-noErrors.ts, 43, 28))
+
+/**
+  * Returns a Boolean value that indicates whether a value is the reserved value NaN (not a number). 
+  * @param number A numeric value.
+  */
+declare function isNaN(number: number): boolean;
+>isNaN : Symbol(isNaN, Decl(1.0lib-noErrors.ts, 43, 52))
+>number : Symbol(number, Decl(1.0lib-noErrors.ts, 49, 23))
+
+/** 
+  * Determines whether a supplied number is finite.
+  * @param number Any numeric value.
+  */
+declare function isFinite(number: number): boolean;
+>isFinite : Symbol(isFinite, Decl(1.0lib-noErrors.ts, 49, 48))
+>number : Symbol(number, Decl(1.0lib-noErrors.ts, 55, 26))
+
+/**
+  * Gets the unencoded version of an encoded Uniform Resource Identifier (URI).
+  * @param encodedURI A value representing an encoded URI.
+  */
+declare function decodeURI(encodedURI: string): string;
+>decodeURI : Symbol(decodeURI, Decl(1.0lib-noErrors.ts, 55, 51))
+>encodedURI : Symbol(encodedURI, Decl(1.0lib-noErrors.ts, 61, 27))
+
+/**
+  * Gets the unencoded version of an encoded component of a Uniform Resource Identifier (URI).
+  * @param encodedURIComponent A value representing an encoded URI component.
+  */
+declare function decodeURIComponent(encodedURIComponent: string): string;
+>decodeURIComponent : Symbol(decodeURIComponent, Decl(1.0lib-noErrors.ts, 61, 55))
+>encodedURIComponent : Symbol(encodedURIComponent, Decl(1.0lib-noErrors.ts, 67, 36))
+
+/** 
+  * Encodes a text string as a valid Uniform Resource Identifier (URI)
+  * @param uri A value representing an encoded URI.
+  */
+declare function encodeURI(uri: string): string;
+>encodeURI : Symbol(encodeURI, Decl(1.0lib-noErrors.ts, 67, 73))
+>uri : Symbol(uri, Decl(1.0lib-noErrors.ts, 73, 27))
+
+/**
+  * Encodes a text string as a valid component of a Uniform Resource Identifier (URI).
+  * @param uriComponent A value representing an encoded URI component.
+  */
+declare function encodeURIComponent(uriComponent: string | number | boolean): string;
+>encodeURIComponent : Symbol(encodeURIComponent, Decl(1.0lib-noErrors.ts, 73, 48))
+>uriComponent : Symbol(uriComponent, Decl(1.0lib-noErrors.ts, 79, 36))
+
+interface PropertyDescriptor {
+>PropertyDescriptor : Symbol(PropertyDescriptor, Decl(1.0lib-noErrors.ts, 79, 85))
+
+    configurable?: boolean;
+>configurable : Symbol(PropertyDescriptor.configurable, Decl(1.0lib-noErrors.ts, 81, 30))
+
+    enumerable?: boolean;
+>enumerable : Symbol(PropertyDescriptor.enumerable, Decl(1.0lib-noErrors.ts, 82, 27))
+
+    value?: any;
+>value : Symbol(PropertyDescriptor.value, Decl(1.0lib-noErrors.ts, 83, 25))
+
+    writable?: boolean;
+>writable : Symbol(PropertyDescriptor.writable, Decl(1.0lib-noErrors.ts, 84, 16))
+
+    get?(): any;
+>get : Symbol(PropertyDescriptor.get, Decl(1.0lib-noErrors.ts, 85, 23))
+
+    set?(v: any): void;
+>set : Symbol(PropertyDescriptor.set, Decl(1.0lib-noErrors.ts, 86, 16))
+>v : Symbol(v, Decl(1.0lib-noErrors.ts, 87, 9))
+}
+
+interface PropertyDescriptorMap {
+>PropertyDescriptorMap : Symbol(PropertyDescriptorMap, Decl(1.0lib-noErrors.ts, 88, 1))
+
+    [s: string]: PropertyDescriptor;
+>s : Symbol(s, Decl(1.0lib-noErrors.ts, 91, 5))
+>PropertyDescriptor : Symbol(PropertyDescriptor, Decl(1.0lib-noErrors.ts, 79, 85))
+}
+
+interface Object {
+>Object : Symbol(Object, Decl(1.0lib-noErrors.ts, 92, 1), Decl(1.0lib-noErrors.ts, 129, 11))
+
+    /** The initial value of Object.prototype.constructor is the standard built-in Object constructor. */
+    constructor: Function;
+>constructor : Symbol(Object.constructor, Decl(1.0lib-noErrors.ts, 94, 18))
+>Function : Symbol(Function, Decl(1.0lib-noErrors.ts, 221, 1), Decl(1.0lib-noErrors.ts, 257, 11))
+
+    /** Returns a string representation of an object. */
+    toString(): string;
+>toString : Symbol(Object.toString, Decl(1.0lib-noErrors.ts, 96, 26))
+
+    /** Returns a date converted to a string using the current locale. */
+    toLocaleString(): string;
+>toLocaleString : Symbol(Object.toLocaleString, Decl(1.0lib-noErrors.ts, 99, 23))
+
+    /** Returns the primitive value of the specified object. */
+    valueOf(): Object;
+>valueOf : Symbol(Object.valueOf, Decl(1.0lib-noErrors.ts, 102, 29))
+>Object : Symbol(Object, Decl(1.0lib-noErrors.ts, 92, 1), Decl(1.0lib-noErrors.ts, 129, 11))
+
+    /**
+      * Determines whether an object has a property with the specified name. 
+      * @param v A property name.
+      */
+    hasOwnProperty(v: string): boolean;
+>hasOwnProperty : Symbol(Object.hasOwnProperty, Decl(1.0lib-noErrors.ts, 105, 22))
+>v : Symbol(v, Decl(1.0lib-noErrors.ts, 111, 19))
+
+    /**
+      * Determines whether an object exists in another object's prototype chain. 
+      * @param v Another object whose prototype chain is to be checked.
+      */
+    isPrototypeOf(v: Object): boolean;
+>isPrototypeOf : Symbol(Object.isPrototypeOf, Decl(1.0lib-noErrors.ts, 111, 39))
+>v : Symbol(v, Decl(1.0lib-noErrors.ts, 117, 18))
+>Object : Symbol(Object, Decl(1.0lib-noErrors.ts, 92, 1), Decl(1.0lib-noErrors.ts, 129, 11))
+
+    /** 
+      * Determines whether a specified property is enumerable.
+      * @param v A property name.
+      */
+    propertyIsEnumerable(v: string): boolean;
+>propertyIsEnumerable : Symbol(Object.propertyIsEnumerable, Decl(1.0lib-noErrors.ts, 117, 38))
+>v : Symbol(v, Decl(1.0lib-noErrors.ts, 123, 25))
+}
+
+/**
+  * Provides functionality common to all JavaScript objects.
+  */
+declare var Object: {
+>Object : Symbol(Object, Decl(1.0lib-noErrors.ts, 92, 1), Decl(1.0lib-noErrors.ts, 129, 11))
+
+    new (value?: any): Object;
+>value : Symbol(value, Decl(1.0lib-noErrors.ts, 130, 9))
+>Object : Symbol(Object, Decl(1.0lib-noErrors.ts, 92, 1), Decl(1.0lib-noErrors.ts, 129, 11))
+
+    (): any;
+    (value: any): any;
+>value : Symbol(value, Decl(1.0lib-noErrors.ts, 132, 5))
+
+    /** A reference to the prototype for a class of objects. */
+    prototype: Object;
+>prototype : Symbol(prototype, Decl(1.0lib-noErrors.ts, 132, 22))
+>Object : Symbol(Object, Decl(1.0lib-noErrors.ts, 92, 1), Decl(1.0lib-noErrors.ts, 129, 11))
+
+    /** 
+      * Returns the prototype of an object. 
+      * @param o The object that references the prototype.
+      */
+    getPrototypeOf(o: any): any;
+>getPrototypeOf : Symbol(getPrototypeOf, Decl(1.0lib-noErrors.ts, 135, 22))
+>o : Symbol(o, Decl(1.0lib-noErrors.ts, 141, 19))
+
+    /**
+      * Gets the own property descriptor of the specified object. 
+      * An own property descriptor is one that is defined directly on the object and is not inherited from the object's prototype. 
+      * @param o Object that contains the property.
+      * @param p Name of the property.
+    */
+    getOwnPropertyDescriptor(o: any, p: string): PropertyDescriptor;
+>getOwnPropertyDescriptor : Symbol(getOwnPropertyDescriptor, Decl(1.0lib-noErrors.ts, 141, 32))
+>o : Symbol(o, Decl(1.0lib-noErrors.ts, 149, 29))
+>p : Symbol(p, Decl(1.0lib-noErrors.ts, 149, 36))
+>PropertyDescriptor : Symbol(PropertyDescriptor, Decl(1.0lib-noErrors.ts, 79, 85))
+
+    /** 
+      * Returns the names of the own properties of an object. The own properties of an object are those that are defined directly 
+      * on that object, and are not inherited from the object's prototype. The properties of an object include both fields (objects) and functions.
+      * @param o Object that contains the own properties.
+      */
+    getOwnPropertyNames(o: any): string[];
+>getOwnPropertyNames : Symbol(getOwnPropertyNames, Decl(1.0lib-noErrors.ts, 149, 68))
+>o : Symbol(o, Decl(1.0lib-noErrors.ts, 156, 24))
+
+    /** 
+      * Creates an object that has the specified prototype, and that optionally contains specified properties.
+      * @param o Object to use as a prototype. May be null
+      * @param properties JavaScript object that contains one or more property descriptors. 
+      */
+    create(o: any, properties?: PropertyDescriptorMap): any;
+>create : Symbol(create, Decl(1.0lib-noErrors.ts, 156, 42))
+>o : Symbol(o, Decl(1.0lib-noErrors.ts, 163, 11))
+>properties : Symbol(properties, Decl(1.0lib-noErrors.ts, 163, 18))
+>PropertyDescriptorMap : Symbol(PropertyDescriptorMap, Decl(1.0lib-noErrors.ts, 88, 1))
+
+    /**
+      * Adds a property to an object, or modifies attributes of an existing property. 
+      * @param o Object on which to add or modify the property. This can be a native JavaScript object (that is, a user-defined object or a built in object) or a DOM object.
+      * @param p The property name.
+      * @param attributes Descriptor for the property. It can be for a data property or an accessor property.
+      */
+    defineProperty(o: any, p: string, attributes: PropertyDescriptor): any;
+>defineProperty : Symbol(defineProperty, Decl(1.0lib-noErrors.ts, 163, 60))
+>o : Symbol(o, Decl(1.0lib-noErrors.ts, 171, 19))
+>p : Symbol(p, Decl(1.0lib-noErrors.ts, 171, 26))
+>attributes : Symbol(attributes, Decl(1.0lib-noErrors.ts, 171, 37))
+>PropertyDescriptor : Symbol(PropertyDescriptor, Decl(1.0lib-noErrors.ts, 79, 85))
+
+    /**
+      * Adds one or more properties to an object, and/or modifies attributes of existing properties. 
+      * @param o Object on which to add or modify the properties. This can be a native JavaScript object or a DOM object.
+      * @param properties JavaScript object that contains one or more descriptor objects. Each descriptor object describes a data property or an accessor property.
+      */
+    defineProperties(o: any, properties: PropertyDescriptorMap): any;
+>defineProperties : Symbol(defineProperties, Decl(1.0lib-noErrors.ts, 171, 75))
+>o : Symbol(o, Decl(1.0lib-noErrors.ts, 178, 21))
+>properties : Symbol(properties, Decl(1.0lib-noErrors.ts, 178, 28))
+>PropertyDescriptorMap : Symbol(PropertyDescriptorMap, Decl(1.0lib-noErrors.ts, 88, 1))
+
+    /**
+      * Prevents the modification of attributes of existing properties, and prevents the addition of new properties.
+      * @param o Object on which to lock the attributes. 
+      */
+    seal(o: any): any;
+>seal : Symbol(seal, Decl(1.0lib-noErrors.ts, 178, 69))
+>o : Symbol(o, Decl(1.0lib-noErrors.ts, 184, 9))
+
+    /**
+      * Prevents the modification of existing property attributes and values, and prevents the addition of new properties.
+      * @param o Object on which to lock the attributes.
+      */
+    freeze(o: any): any;
+>freeze : Symbol(freeze, Decl(1.0lib-noErrors.ts, 184, 22))
+>o : Symbol(o, Decl(1.0lib-noErrors.ts, 190, 11))
+
+    /**
+      * Prevents the addition of new properties to an object.
+      * @param o Object to make non-extensible. 
+      */
+    preventExtensions(o: any): any;
+>preventExtensions : Symbol(preventExtensions, Decl(1.0lib-noErrors.ts, 190, 24))
+>o : Symbol(o, Decl(1.0lib-noErrors.ts, 196, 22))
+
+    /**
+      * Returns true if existing property attributes cannot be modified in an object and new properties cannot be added to the object.
+      * @param o Object to test. 
+      */
+    isSealed(o: any): boolean;
+>isSealed : Symbol(isSealed, Decl(1.0lib-noErrors.ts, 196, 35))
+>o : Symbol(o, Decl(1.0lib-noErrors.ts, 202, 13))
+
+    /**
+      * Returns true if existing property attributes and values cannot be modified in an object, and new properties cannot be added to the object.
+      * @param o Object to test.  
+      */
+    isFrozen(o: any): boolean;
+>isFrozen : Symbol(isFrozen, Decl(1.0lib-noErrors.ts, 202, 30))
+>o : Symbol(o, Decl(1.0lib-noErrors.ts, 208, 13))
+
+    /**
+      * Returns a value that indicates whether new properties can be added to an object.
+      * @param o Object to test. 
+      */
+    isExtensible(o: any): boolean;
+>isExtensible : Symbol(isExtensible, Decl(1.0lib-noErrors.ts, 208, 30))
+>o : Symbol(o, Decl(1.0lib-noErrors.ts, 214, 17))
+
+    /**
+      * Returns the names of the enumerable properties and methods of an object.
+      * @param o Object that contains the properties and methods. This can be an object that you created or an existing Document Object Model (DOM) object.
+      */
+    keys(o: any): string[];
+>keys : Symbol(keys, Decl(1.0lib-noErrors.ts, 214, 34))
+>o : Symbol(o, Decl(1.0lib-noErrors.ts, 220, 9))
+}
+
+/**
+  * Creates a new function.
+  */
+interface Function {
+>Function : Symbol(Function, Decl(1.0lib-noErrors.ts, 221, 1), Decl(1.0lib-noErrors.ts, 257, 11))
+
+    /**
+      * Calls the function, substituting the specified object for the this value of the function, and the specified array for the arguments of the function.
+      * @param thisArg The object to be used as the this object.
+      * @param argArray A set of arguments to be passed to the function.
+      */
+    apply(thisArg: any, argArray?: any): any;
+>apply : Symbol(Function.apply, Decl(1.0lib-noErrors.ts, 226, 20))
+>thisArg : Symbol(thisArg, Decl(1.0lib-noErrors.ts, 232, 10))
+>argArray : Symbol(argArray, Decl(1.0lib-noErrors.ts, 232, 23))
+
+    /**
+      * Calls a method of an object, substituting another object for the current object.
+      * @param thisArg The object to be used as the current object.
+      * @param argArray A list of arguments to be passed to the method.
+      */
+    call(thisArg: any, ...argArray: any[]): any;
+>call : Symbol(Function.call, Decl(1.0lib-noErrors.ts, 232, 45))
+>thisArg : Symbol(thisArg, Decl(1.0lib-noErrors.ts, 239, 9))
+>argArray : Symbol(argArray, Decl(1.0lib-noErrors.ts, 239, 22))
+
+    /**
+      * For a given function, creates a bound function that has the same body as the original function. 
+      * The this object of the bound function is associated with the specified object, and has the specified initial parameters.
+      * @param thisArg An object to which the this keyword can refer inside the new function.
+      * @param argArray A list of arguments to be passed to the new function.
+      */
+    bind(thisArg: any, ...argArray: any[]): any;
+>bind : Symbol(Function.bind, Decl(1.0lib-noErrors.ts, 239, 48))
+>thisArg : Symbol(thisArg, Decl(1.0lib-noErrors.ts, 247, 9))
+>argArray : Symbol(argArray, Decl(1.0lib-noErrors.ts, 247, 22))
+
+    prototype: any;
+>prototype : Symbol(Function.prototype, Decl(1.0lib-noErrors.ts, 247, 48))
+
+    length: number;
+>length : Symbol(Function.length, Decl(1.0lib-noErrors.ts, 249, 19))
+
+    // Non-standard extensions
+    arguments: any;
+>arguments : Symbol(Function.arguments, Decl(1.0lib-noErrors.ts, 250, 19))
+
+    caller: Function;
+>caller : Symbol(Function.caller, Decl(1.0lib-noErrors.ts, 253, 19))
+>Function : Symbol(Function, Decl(1.0lib-noErrors.ts, 221, 1), Decl(1.0lib-noErrors.ts, 257, 11))
+}
+
+declare var Function: {
+>Function : Symbol(Function, Decl(1.0lib-noErrors.ts, 221, 1), Decl(1.0lib-noErrors.ts, 257, 11))
+
+    /** 
+      * Creates a new function.
+      * @param args A list of arguments the function accepts.
+      */
+    new (...args: string[]): Function;
+>args : Symbol(args, Decl(1.0lib-noErrors.ts, 262, 9))
+>Function : Symbol(Function, Decl(1.0lib-noErrors.ts, 221, 1), Decl(1.0lib-noErrors.ts, 257, 11))
+
+    (...args: string[]): Function;
+>args : Symbol(args, Decl(1.0lib-noErrors.ts, 263, 5))
+>Function : Symbol(Function, Decl(1.0lib-noErrors.ts, 221, 1), Decl(1.0lib-noErrors.ts, 257, 11))
+
+    prototype: Function;
+>prototype : Symbol(prototype, Decl(1.0lib-noErrors.ts, 263, 34))
+>Function : Symbol(Function, Decl(1.0lib-noErrors.ts, 221, 1), Decl(1.0lib-noErrors.ts, 257, 11))
+}
+
+interface IArguments {
+>IArguments : Symbol(IArguments, Decl(1.0lib-noErrors.ts, 265, 1))
+
+    [index: number]: any;
+>index : Symbol(index, Decl(1.0lib-noErrors.ts, 268, 5))
+
+    length: number;
+>length : Symbol(IArguments.length, Decl(1.0lib-noErrors.ts, 268, 25))
+
+    callee: Function;
+>callee : Symbol(IArguments.callee, Decl(1.0lib-noErrors.ts, 269, 19))
+>Function : Symbol(Function, Decl(1.0lib-noErrors.ts, 221, 1), Decl(1.0lib-noErrors.ts, 257, 11))
+}
+
+interface String {
+>String : Symbol(String, Decl(1.0lib-noErrors.ts, 271, 1), Decl(1.0lib-noErrors.ts, 429, 11))
+
+    /** Returns a string representation of a string. */
+    toString(): string;
+>toString : Symbol(String.toString, Decl(1.0lib-noErrors.ts, 273, 18))
+
+    /**
+      * Returns the character at the specified index.
+      * @param pos The zero-based index of the desired character.
+      */
+    charAt(pos: number): string;
+>charAt : Symbol(String.charAt, Decl(1.0lib-noErrors.ts, 275, 23))
+>pos : Symbol(pos, Decl(1.0lib-noErrors.ts, 281, 11))
+
+    /** 
+      * Returns the Unicode value of the character at the specified location.
+      * @param index The zero-based index of the desired character. If there is no character at the specified index, NaN is returned.
+      */
+    charCodeAt(index: number): number;
+>charCodeAt : Symbol(String.charCodeAt, Decl(1.0lib-noErrors.ts, 281, 32))
+>index : Symbol(index, Decl(1.0lib-noErrors.ts, 287, 15))
+
+    /**
+      * Returns a string that contains the concatenation of two or more strings.
+      * @param strings The strings to append to the end of the string.  
+      */
+    concat(...strings: string[]): string;
+>concat : Symbol(String.concat, Decl(1.0lib-noErrors.ts, 287, 38))
+>strings : Symbol(strings, Decl(1.0lib-noErrors.ts, 293, 11))
+
+    /**
+      * Returns the position of the first occurrence of a substring. 
+      * @param searchString The substring to search for in the string
+      * @param position The index at which to begin searching the String object. If omitted, search starts at the beginning of the string.
+      */
+    indexOf(searchString: string, position?: number): number;
+>indexOf : Symbol(String.indexOf, Decl(1.0lib-noErrors.ts, 293, 41))
+>searchString : Symbol(searchString, Decl(1.0lib-noErrors.ts, 300, 12))
+>position : Symbol(position, Decl(1.0lib-noErrors.ts, 300, 33))
+
+    /**
+      * Returns the last occurrence of a substring in the string.
+      * @param searchString The substring to search for.
+      * @param position The index at which to begin searching. If omitted, the search begins at the end of the string.
+      */
+    lastIndexOf(searchString: string, position?: number): number;
+>lastIndexOf : Symbol(String.lastIndexOf, Decl(1.0lib-noErrors.ts, 300, 61))
+>searchString : Symbol(searchString, Decl(1.0lib-noErrors.ts, 307, 16))
+>position : Symbol(position, Decl(1.0lib-noErrors.ts, 307, 37))
+
+    /**
+      * Determines whether two strings are equivalent in the current locale.
+      * @param that String to compare to target string
+      */
+    localeCompare(that: string): number;
+>localeCompare : Symbol(String.localeCompare, Decl(1.0lib-noErrors.ts, 307, 65))
+>that : Symbol(that, Decl(1.0lib-noErrors.ts, 313, 18))
+
+    /** 
+      * Matches a string with a regular expression, and returns an array containing the results of that search.
+      * @param regexp A variable name or string literal containing the regular expression pattern and flags.
+      */
+    match(regexp: string): string[];
+>match : Symbol(String.match, Decl(1.0lib-noErrors.ts, 313, 40), Decl(1.0lib-noErrors.ts, 319, 36))
+>regexp : Symbol(regexp, Decl(1.0lib-noErrors.ts, 319, 10))
+
+    /** 
+      * Matches a string with a regular expression, and returns an array containing the results of that search.
+      * @param regexp A regular expression object that contains the regular expression pattern and applicable flags. 
+      */
+    match(regexp: RegExp): string[];
+>match : Symbol(String.match, Decl(1.0lib-noErrors.ts, 313, 40), Decl(1.0lib-noErrors.ts, 319, 36))
+>regexp : Symbol(regexp, Decl(1.0lib-noErrors.ts, 325, 10))
+>RegExp : Symbol(RegExp, Decl(1.0lib-noErrors.ts, 822, 1), Decl(1.0lib-noErrors.ts, 855, 11))
+
+    /**
+      * Replaces text in a string, using a regular expression or search string.
+      * @param searchValue A String object or string literal that represents the regular expression
+      * @param replaceValue A String object or string literal containing the text to replace for every successful match of rgExp in stringObj.
+      */
+    replace(searchValue: string, replaceValue: string): string;
+>replace : Symbol(String.replace, Decl(1.0lib-noErrors.ts, 325, 36), Decl(1.0lib-noErrors.ts, 332, 63), Decl(1.0lib-noErrors.ts, 339, 102), Decl(1.0lib-noErrors.ts, 346, 63))
+>searchValue : Symbol(searchValue, Decl(1.0lib-noErrors.ts, 332, 12))
+>replaceValue : Symbol(replaceValue, Decl(1.0lib-noErrors.ts, 332, 32))
+
+    /**
+      * Replaces text in a string, using a regular expression or search string.
+      * @param searchValue A String object or string literal that represents the regular expression
+      * @param replaceValue A function that returns the replacement text.
+      */
+    replace(searchValue: string, replaceValue: (substring: string, ...args: any[]) => string): string;
+>replace : Symbol(String.replace, Decl(1.0lib-noErrors.ts, 325, 36), Decl(1.0lib-noErrors.ts, 332, 63), Decl(1.0lib-noErrors.ts, 339, 102), Decl(1.0lib-noErrors.ts, 346, 63))
+>searchValue : Symbol(searchValue, Decl(1.0lib-noErrors.ts, 339, 12))
+>replaceValue : Symbol(replaceValue, Decl(1.0lib-noErrors.ts, 339, 32))
+>substring : Symbol(substring, Decl(1.0lib-noErrors.ts, 339, 48))
+>args : Symbol(args, Decl(1.0lib-noErrors.ts, 339, 66))
+
+    /**
+      * Replaces text in a string, using a regular expression or search string.
+      * @param searchValue A Regular Expression object containing the regular expression pattern and applicable flags
+      * @param replaceValue A String object or string literal containing the text to replace for every successful match of rgExp in stringObj.
+      */
+    replace(searchValue: RegExp, replaceValue: string): string;
+>replace : Symbol(String.replace, Decl(1.0lib-noErrors.ts, 325, 36), Decl(1.0lib-noErrors.ts, 332, 63), Decl(1.0lib-noErrors.ts, 339, 102), Decl(1.0lib-noErrors.ts, 346, 63))
+>searchValue : Symbol(searchValue, Decl(1.0lib-noErrors.ts, 346, 12))
+>RegExp : Symbol(RegExp, Decl(1.0lib-noErrors.ts, 822, 1), Decl(1.0lib-noErrors.ts, 855, 11))
+>replaceValue : Symbol(replaceValue, Decl(1.0lib-noErrors.ts, 346, 32))
+
+    /**
+      * Replaces text in a string, using a regular expression or search string.
+      * @param searchValue A Regular Expression object containing the regular expression pattern and applicable flags
+      * @param replaceValue A function that returns the replacement text.
+      */
+    replace(searchValue: RegExp, replaceValue: (substring: string, ...args: any[]) => string): string;
+>replace : Symbol(String.replace, Decl(1.0lib-noErrors.ts, 325, 36), Decl(1.0lib-noErrors.ts, 332, 63), Decl(1.0lib-noErrors.ts, 339, 102), Decl(1.0lib-noErrors.ts, 346, 63))
+>searchValue : Symbol(searchValue, Decl(1.0lib-noErrors.ts, 353, 12))
+>RegExp : Symbol(RegExp, Decl(1.0lib-noErrors.ts, 822, 1), Decl(1.0lib-noErrors.ts, 855, 11))
+>replaceValue : Symbol(replaceValue, Decl(1.0lib-noErrors.ts, 353, 32))
+>substring : Symbol(substring, Decl(1.0lib-noErrors.ts, 353, 48))
+>args : Symbol(args, Decl(1.0lib-noErrors.ts, 353, 66))
+
+    /**
+      * Finds the first substring match in a regular expression search.
+      * @param regexp The regular expression pattern and applicable flags. 
+      */
+    search(regexp: string): number;
+>search : Symbol(String.search, Decl(1.0lib-noErrors.ts, 353, 102), Decl(1.0lib-noErrors.ts, 359, 35))
+>regexp : Symbol(regexp, Decl(1.0lib-noErrors.ts, 359, 11))
+
+    /**
+      * Finds the first substring match in a regular expression search.
+      * @param regexp The regular expression pattern and applicable flags. 
+      */
+    search(regexp: RegExp): number;
+>search : Symbol(String.search, Decl(1.0lib-noErrors.ts, 353, 102), Decl(1.0lib-noErrors.ts, 359, 35))
+>regexp : Symbol(regexp, Decl(1.0lib-noErrors.ts, 365, 11))
+>RegExp : Symbol(RegExp, Decl(1.0lib-noErrors.ts, 822, 1), Decl(1.0lib-noErrors.ts, 855, 11))
+
+    /**
+      * Returns a section of a string.
+      * @param start The index to the beginning of the specified portion of stringObj. 
+      * @param end The index to the end of the specified portion of stringObj. The substring includes the characters up to, but not including, the character indicated by end. 
+      * If this value is not specified, the substring continues to the end of stringObj.
+      */
+    slice(start?: number, end?: number): string;
+>slice : Symbol(String.slice, Decl(1.0lib-noErrors.ts, 365, 35))
+>start : Symbol(start, Decl(1.0lib-noErrors.ts, 373, 10))
+>end : Symbol(end, Decl(1.0lib-noErrors.ts, 373, 25))
+
+    /**
+      * Split a string into substrings using the specified separator and return them as an array.
+      * @param separator A string that identifies character or characters to use in separating the string. If omitted, a single-element array containing the entire string is returned. 
+      * @param limit A value used to limit the number of elements returned in the array.
+      */
+    split(separator: string, limit?: number): string[];
+>split : Symbol(String.split, Decl(1.0lib-noErrors.ts, 373, 48), Decl(1.0lib-noErrors.ts, 380, 55))
+>separator : Symbol(separator, Decl(1.0lib-noErrors.ts, 380, 10))
+>limit : Symbol(limit, Decl(1.0lib-noErrors.ts, 380, 28))
+
+    /**
+      * Split a string into substrings using the specified separator and return them as an array.
+      * @param separator A Regular Express that identifies character or characters to use in separating the string. If omitted, a single-element array containing the entire string is returned. 
+      * @param limit A value used to limit the number of elements returned in the array.
+      */
+    split(separator: RegExp, limit?: number): string[];
+>split : Symbol(String.split, Decl(1.0lib-noErrors.ts, 373, 48), Decl(1.0lib-noErrors.ts, 380, 55))
+>separator : Symbol(separator, Decl(1.0lib-noErrors.ts, 387, 10))
+>RegExp : Symbol(RegExp, Decl(1.0lib-noErrors.ts, 822, 1), Decl(1.0lib-noErrors.ts, 855, 11))
+>limit : Symbol(limit, Decl(1.0lib-noErrors.ts, 387, 28))
+
+    /**
+      * Returns the substring at the specified location within a String object. 
+      * @param start The zero-based index number indicating the beginning of the substring.
+      * @param end Zero-based index number indicating the end of the substring. The substring includes the characters up to, but not including, the character indicated by end.
+      * If end is omitted, the characters from start through the end of the original string are returned.
+      */
+    substring(start: number, end?: number): string;
+>substring : Symbol(String.substring, Decl(1.0lib-noErrors.ts, 387, 55))
+>start : Symbol(start, Decl(1.0lib-noErrors.ts, 395, 14))
+>end : Symbol(end, Decl(1.0lib-noErrors.ts, 395, 28))
+
+    /** Converts all the alphabetic characters in a string to lowercase. */
+    toLowerCase(): string;
+>toLowerCase : Symbol(String.toLowerCase, Decl(1.0lib-noErrors.ts, 395, 51))
+
+    /** Converts all alphabetic characters to lowercase, taking into account the host environment's current locale. */
+    toLocaleLowerCase(): string;
+>toLocaleLowerCase : Symbol(String.toLocaleLowerCase, Decl(1.0lib-noErrors.ts, 398, 26))
+
+    /** Converts all the alphabetic characters in a string to uppercase. */
+    toUpperCase(): string;
+>toUpperCase : Symbol(String.toUpperCase, Decl(1.0lib-noErrors.ts, 401, 32))
+
+    /** Returns a string where all alphabetic characters have been converted to uppercase, taking into account the host environment's current locale. */
+    toLocaleUpperCase(): string;
+>toLocaleUpperCase : Symbol(String.toLocaleUpperCase, Decl(1.0lib-noErrors.ts, 404, 26))
+
+    /** Removes the leading and trailing white space and line terminator characters from a string. */
+    trim(): string;
+>trim : Symbol(String.trim, Decl(1.0lib-noErrors.ts, 407, 32))
+
+    /** Returns the length of a String object. */
+    length: number;
+>length : Symbol(String.length, Decl(1.0lib-noErrors.ts, 410, 19))
+
+    // IE extensions
+    /**
+      * Gets a substring beginning at the specified location and having the specified length.
+      * @param from The starting position of the desired substring. The index of the first character in the string is zero.
+      * @param length The number of characters to include in the returned substring.
+      */
+    substr(from: number, length?: number): string;
+>substr : Symbol(String.substr, Decl(1.0lib-noErrors.ts, 413, 19))
+>from : Symbol(from, Decl(1.0lib-noErrors.ts, 421, 11))
+>length : Symbol(length, Decl(1.0lib-noErrors.ts, 421, 24))
+
+    [index: number]: string;
+>index : Symbol(index, Decl(1.0lib-noErrors.ts, 423, 5))
+}
+
+/** 
+  * Allows manipulation and formatting of text strings and determination and location of substrings within strings. 
+  */
+declare var String: {
+>String : Symbol(String, Decl(1.0lib-noErrors.ts, 271, 1), Decl(1.0lib-noErrors.ts, 429, 11))
+
+    new (value?: any): String;
+>value : Symbol(value, Decl(1.0lib-noErrors.ts, 430, 9))
+>String : Symbol(String, Decl(1.0lib-noErrors.ts, 271, 1), Decl(1.0lib-noErrors.ts, 429, 11))
+
+    (value?: any): string;
+>value : Symbol(value, Decl(1.0lib-noErrors.ts, 431, 5))
+
+    prototype: String;
+>prototype : Symbol(prototype, Decl(1.0lib-noErrors.ts, 431, 26))
+>String : Symbol(String, Decl(1.0lib-noErrors.ts, 271, 1), Decl(1.0lib-noErrors.ts, 429, 11))
+
+    fromCharCode(...codes: number[]): string;
+>fromCharCode : Symbol(fromCharCode, Decl(1.0lib-noErrors.ts, 432, 22))
+>codes : Symbol(codes, Decl(1.0lib-noErrors.ts, 433, 17))
+}
+
+interface Boolean {
+>Boolean : Symbol(Boolean, Decl(1.0lib-noErrors.ts, 434, 1), Decl(1.0lib-noErrors.ts, 438, 11))
+}
+declare var Boolean: {
+>Boolean : Symbol(Boolean, Decl(1.0lib-noErrors.ts, 434, 1), Decl(1.0lib-noErrors.ts, 438, 11))
+
+    new (value?: any): Boolean;
+>value : Symbol(value, Decl(1.0lib-noErrors.ts, 439, 9))
+>Boolean : Symbol(Boolean, Decl(1.0lib-noErrors.ts, 434, 1), Decl(1.0lib-noErrors.ts, 438, 11))
+
+    (value?: any): boolean;
+>value : Symbol(value, Decl(1.0lib-noErrors.ts, 440, 5))
+
+    prototype: Boolean;
+>prototype : Symbol(prototype, Decl(1.0lib-noErrors.ts, 440, 27))
+>Boolean : Symbol(Boolean, Decl(1.0lib-noErrors.ts, 434, 1), Decl(1.0lib-noErrors.ts, 438, 11))
+}
+
+interface Number {
+>Number : Symbol(Number, Decl(1.0lib-noErrors.ts, 442, 1), Decl(1.0lib-noErrors.ts, 471, 11))
+
+    /**
+      * Returns a string representation of an object.
+      * @param radix Specifies a radix for converting numeric values to strings. This value is only used for numbers.
+      */
+    toString(radix?: number): string;
+>toString : Symbol(Number.toString, Decl(1.0lib-noErrors.ts, 444, 18))
+>radix : Symbol(radix, Decl(1.0lib-noErrors.ts, 449, 13))
+
+    /** 
+      * Returns a string representing a number in fixed-point notation.
+      * @param fractionDigits Number of digits after the decimal point. Must be in the range 0 - 20, inclusive.
+      */
+    toFixed(fractionDigits?: number): string;
+>toFixed : Symbol(Number.toFixed, Decl(1.0lib-noErrors.ts, 449, 37))
+>fractionDigits : Symbol(fractionDigits, Decl(1.0lib-noErrors.ts, 455, 12))
+
+    /**
+      * Returns a string containing a number represented in exponential notation.
+      * @param fractionDigits Number of digits after the decimal point. Must be in the range 0 - 20, inclusive.
+      */
+    toExponential(fractionDigits?: number): string;
+>toExponential : Symbol(Number.toExponential, Decl(1.0lib-noErrors.ts, 455, 45))
+>fractionDigits : Symbol(fractionDigits, Decl(1.0lib-noErrors.ts, 461, 18))
+
+    /**
+      * Returns a string containing a number represented either in exponential or fixed-point notation with a specified number of digits.
+      * @param precision Number of significant digits. Must be in the range 1 - 21, inclusive.
+      */
+    toPrecision(precision?: number): string;
+>toPrecision : Symbol(Number.toPrecision, Decl(1.0lib-noErrors.ts, 461, 51))
+>precision : Symbol(precision, Decl(1.0lib-noErrors.ts, 467, 16))
+}
+
+/** An object that represents a number of any kind. All JavaScript numbers are 64-bit floating-point numbers. */
+declare var Number: {
+>Number : Symbol(Number, Decl(1.0lib-noErrors.ts, 442, 1), Decl(1.0lib-noErrors.ts, 471, 11))
+
+    new (value?: any): Number;
+>value : Symbol(value, Decl(1.0lib-noErrors.ts, 472, 9))
+>Number : Symbol(Number, Decl(1.0lib-noErrors.ts, 442, 1), Decl(1.0lib-noErrors.ts, 471, 11))
+
+    (value?: any): number;
+>value : Symbol(value, Decl(1.0lib-noErrors.ts, 473, 5))
+
+    prototype: Number;
+>prototype : Symbol(prototype, Decl(1.0lib-noErrors.ts, 473, 26))
+>Number : Symbol(Number, Decl(1.0lib-noErrors.ts, 442, 1), Decl(1.0lib-noErrors.ts, 471, 11))
+
+    /** The largest number that can be represented in JavaScript. Equal to approximately 1.79E+308. */
+    MAX_VALUE: number;
+>MAX_VALUE : Symbol(MAX_VALUE, Decl(1.0lib-noErrors.ts, 474, 22))
+
+    /** The closest number to zero that can be represented in JavaScript. Equal to approximately 5.00E-324. */
+    MIN_VALUE: number;
+>MIN_VALUE : Symbol(MIN_VALUE, Decl(1.0lib-noErrors.ts, 477, 22))
+
+    /** 
+      * A value that is not a number.
+      * In equality comparisons, NaN does not equal any value, including itself. To test whether a value is equivalent to NaN, use the isNaN function.
+      */
+    NaN: number;
+>NaN : Symbol(NaN, Decl(1.0lib-noErrors.ts, 480, 22))
+
+    /** 
+      * A value that is less than the largest negative number that can be represented in JavaScript.
+      * JavaScript displays NEGATIVE_INFINITY values as -infinity. 
+      */
+    NEGATIVE_INFINITY: number;
+>NEGATIVE_INFINITY : Symbol(NEGATIVE_INFINITY, Decl(1.0lib-noErrors.ts, 486, 16))
+
+    /**
+      * A value greater than the largest number that can be represented in JavaScript. 
+      * JavaScript displays POSITIVE_INFINITY values as infinity. 
+      */
+    POSITIVE_INFINITY: number;
+>POSITIVE_INFINITY : Symbol(POSITIVE_INFINITY, Decl(1.0lib-noErrors.ts, 492, 30))
+}
+
+interface Math {
+>Math : Symbol(Math, Decl(1.0lib-noErrors.ts, 499, 1), Decl(1.0lib-noErrors.ts, 610, 11))
+
+    /** The mathematical constant e. This is Euler's number, the base of natural logarithms. */
+    E: number;
+>E : Symbol(Math.E, Decl(1.0lib-noErrors.ts, 501, 16))
+
+    /** The natural logarithm of 10. */
+    LN10: number;
+>LN10 : Symbol(Math.LN10, Decl(1.0lib-noErrors.ts, 503, 14))
+
+    /** The natural logarithm of 2. */
+    LN2: number;
+>LN2 : Symbol(Math.LN2, Decl(1.0lib-noErrors.ts, 505, 17))
+
+    /** The base-2 logarithm of e. */
+    LOG2E: number;
+>LOG2E : Symbol(Math.LOG2E, Decl(1.0lib-noErrors.ts, 507, 16))
+
+    /** The base-10 logarithm of e. */
+    LOG10E: number;
+>LOG10E : Symbol(Math.LOG10E, Decl(1.0lib-noErrors.ts, 509, 18))
+
+    /** Pi. This is the ratio of the circumference of a circle to its diameter. */
+    PI: number;
+>PI : Symbol(Math.PI, Decl(1.0lib-noErrors.ts, 511, 19))
+
+    /** The square root of 0.5, or, equivalently, one divided by the square root of 2. */
+    SQRT1_2: number;
+>SQRT1_2 : Symbol(Math.SQRT1_2, Decl(1.0lib-noErrors.ts, 513, 15))
+
+    /** The square root of 2. */
+    SQRT2: number;
+>SQRT2 : Symbol(Math.SQRT2, Decl(1.0lib-noErrors.ts, 515, 20))
+
+    /**
+      * Returns the absolute value of a number (the value without regard to whether it is positive or negative). 
+      * For example, the absolute value of -5 is the same as the absolute value of 5.
+      * @param x A numeric expression for which the absolute value is needed.
+      */
+    abs(x: number): number;
+>abs : Symbol(Math.abs, Decl(1.0lib-noErrors.ts, 517, 18))
+>x : Symbol(x, Decl(1.0lib-noErrors.ts, 523, 8))
+
+    /**
+      * Returns the arc cosine (or inverse cosine) of a number. 
+      * @param x A numeric expression.
+      */
+    acos(x: number): number;
+>acos : Symbol(Math.acos, Decl(1.0lib-noErrors.ts, 523, 27))
+>x : Symbol(x, Decl(1.0lib-noErrors.ts, 528, 9))
+
+    /** 
+      * Returns the arcsine of a number. 
+      * @param x A numeric expression.
+      */
+    asin(x: number): number;
+>asin : Symbol(Math.asin, Decl(1.0lib-noErrors.ts, 528, 28))
+>x : Symbol(x, Decl(1.0lib-noErrors.ts, 533, 9))
+
+    /**
+      * Returns the arctangent of a number. 
+      * @param x A numeric expression for which the arctangent is needed.
+      */
+    atan(x: number): number;
+>atan : Symbol(Math.atan, Decl(1.0lib-noErrors.ts, 533, 28))
+>x : Symbol(x, Decl(1.0lib-noErrors.ts, 538, 9))
+
+    /**
+      * Returns the angle (in radians) from the X axis to a point (y,x).
+      * @param y A numeric expression representing the cartesian y-coordinate.
+      * @param x A numeric expression representing the cartesian x-coordinate.
+      */
+    atan2(y: number, x: number): number;
+>atan2 : Symbol(Math.atan2, Decl(1.0lib-noErrors.ts, 538, 28))
+>y : Symbol(y, Decl(1.0lib-noErrors.ts, 544, 10))
+>x : Symbol(x, Decl(1.0lib-noErrors.ts, 544, 20))
+
+    /**
+      * Returns the smallest number greater than or equal to its numeric argument. 
+      * @param x A numeric expression.
+      */
+    ceil(x: number): number;
+>ceil : Symbol(Math.ceil, Decl(1.0lib-noErrors.ts, 544, 40))
+>x : Symbol(x, Decl(1.0lib-noErrors.ts, 549, 9))
+
+    /**
+      * Returns the cosine of a number. 
+      * @param x A numeric expression that contains an angle measured in radians.
+      */
+    cos(x: number): number;
+>cos : Symbol(Math.cos, Decl(1.0lib-noErrors.ts, 549, 28))
+>x : Symbol(x, Decl(1.0lib-noErrors.ts, 554, 8))
+
+    /**
+      * Returns e (the base of natural logarithms) raised to a power. 
+      * @param x A numeric expression representing the power of e.
+      */
+    exp(x: number): number;
+>exp : Symbol(Math.exp, Decl(1.0lib-noErrors.ts, 554, 27))
+>x : Symbol(x, Decl(1.0lib-noErrors.ts, 559, 8))
+
+    /**
+      * Returns the greatest number less than or equal to its numeric argument. 
+      * @param x A numeric expression.
+      */
+    floor(x: number): number;
+>floor : Symbol(Math.floor, Decl(1.0lib-noErrors.ts, 559, 27))
+>x : Symbol(x, Decl(1.0lib-noErrors.ts, 564, 10))
+
+    /**
+      * Returns the natural logarithm (base e) of a number. 
+      * @param x A numeric expression.
+      */
+    log(x: number): number;
+>log : Symbol(Math.log, Decl(1.0lib-noErrors.ts, 564, 29))
+>x : Symbol(x, Decl(1.0lib-noErrors.ts, 569, 8))
+
+    /**
+      * Returns the larger of a set of supplied numeric expressions. 
+      * @param values Numeric expressions to be evaluated.
+      */
+    max(...values: number[]): number;
+>max : Symbol(Math.max, Decl(1.0lib-noErrors.ts, 569, 27))
+>values : Symbol(values, Decl(1.0lib-noErrors.ts, 574, 8))
+
+    /**
+      * Returns the smaller of a set of supplied numeric expressions. 
+      * @param values Numeric expressions to be evaluated.
+      */
+    min(...values: number[]): number;
+>min : Symbol(Math.min, Decl(1.0lib-noErrors.ts, 574, 37))
+>values : Symbol(values, Decl(1.0lib-noErrors.ts, 579, 8))
+
+    /**
+      * Returns the value of a base expression taken to a specified power. 
+      * @param x The base value of the expression.
+      * @param y The exponent value of the expression.
+      */
+    pow(x: number, y: number): number;
+>pow : Symbol(Math.pow, Decl(1.0lib-noErrors.ts, 579, 37))
+>x : Symbol(x, Decl(1.0lib-noErrors.ts, 585, 8))
+>y : Symbol(y, Decl(1.0lib-noErrors.ts, 585, 18))
+
+    /** Returns a pseudorandom number between 0 and 1. */
+    random(): number;
+>random : Symbol(Math.random, Decl(1.0lib-noErrors.ts, 585, 38))
+
+    /** 
+      * Returns a supplied numeric expression rounded to the nearest number.
+      * @param x The value to be rounded to the nearest number.
+      */
+    round(x: number): number;
+>round : Symbol(Math.round, Decl(1.0lib-noErrors.ts, 587, 21))
+>x : Symbol(x, Decl(1.0lib-noErrors.ts, 592, 10))
+
+    /**
+      * Returns the sine of a number.
+      * @param x A numeric expression that contains an angle measured in radians.
+      */
+    sin(x: number): number;
+>sin : Symbol(Math.sin, Decl(1.0lib-noErrors.ts, 592, 29))
+>x : Symbol(x, Decl(1.0lib-noErrors.ts, 597, 8))
+
+    /**
+      * Returns the square root of a number.
+      * @param x A numeric expression.
+      */
+    sqrt(x: number): number;
+>sqrt : Symbol(Math.sqrt, Decl(1.0lib-noErrors.ts, 597, 27))
+>x : Symbol(x, Decl(1.0lib-noErrors.ts, 602, 9))
+
+    /**
+      * Returns the tangent of a number.
+      * @param x A numeric expression that contains an angle measured in radians.
+      */
+    tan(x: number): number;
+>tan : Symbol(Math.tan, Decl(1.0lib-noErrors.ts, 602, 28))
+>x : Symbol(x, Decl(1.0lib-noErrors.ts, 607, 8))
+}
+/** An intrinsic object that provides basic mathematics functionality and constants. */
+declare var Math: Math;
+>Math : Symbol(Math, Decl(1.0lib-noErrors.ts, 499, 1), Decl(1.0lib-noErrors.ts, 610, 11))
+>Math : Symbol(Math, Decl(1.0lib-noErrors.ts, 499, 1), Decl(1.0lib-noErrors.ts, 610, 11))
+
+/** Enables basic storage and retrieval of dates and times. */
+interface Date {
+>Date : Symbol(Date, Decl(1.0lib-noErrors.ts, 610, 23), Decl(1.0lib-noErrors.ts, 766, 11))
+
+    /** Returns a string representation of a date. The format of the string depends on the locale. */
+    toString(): string;
+>toString : Symbol(Date.toString, Decl(1.0lib-noErrors.ts, 613, 16))
+
+    /** Returns a date as a string value. */
+    toDateString(): string;
+>toDateString : Symbol(Date.toDateString, Decl(1.0lib-noErrors.ts, 615, 23))
+
+    /** Returns a time as a string value. */
+    toTimeString(): string;
+>toTimeString : Symbol(Date.toTimeString, Decl(1.0lib-noErrors.ts, 617, 27))
+
+    /** Returns a value as a string value appropriate to the host environment's current locale. */
+    toLocaleString(): string;
+>toLocaleString : Symbol(Date.toLocaleString, Decl(1.0lib-noErrors.ts, 619, 27))
+
+    /** Returns a date as a string value appropriate to the host environment's current locale. */
+    toLocaleDateString(): string;
+>toLocaleDateString : Symbol(Date.toLocaleDateString, Decl(1.0lib-noErrors.ts, 621, 29))
+
+    /** Returns a time as a string value appropriate to the host environment's current locale. */
+    toLocaleTimeString(): string;
+>toLocaleTimeString : Symbol(Date.toLocaleTimeString, Decl(1.0lib-noErrors.ts, 623, 33))
+
+    /** Returns the stored time value in milliseconds since midnight, January 1, 1970 UTC. */
+    valueOf(): number;
+>valueOf : Symbol(Date.valueOf, Decl(1.0lib-noErrors.ts, 625, 33))
+
+    /** Gets the time value in milliseconds. */
+    getTime(): number;
+>getTime : Symbol(Date.getTime, Decl(1.0lib-noErrors.ts, 627, 22))
+
+    /** Gets the year, using local time. */
+    getFullYear(): number;
+>getFullYear : Symbol(Date.getFullYear, Decl(1.0lib-noErrors.ts, 629, 22))
+
+    /** Gets the year using Universal Coordinated Time (UTC). */
+    getUTCFullYear(): number;
+>getUTCFullYear : Symbol(Date.getUTCFullYear, Decl(1.0lib-noErrors.ts, 631, 26))
+
+    /** Gets the month, using local time. */
+    getMonth(): number;
+>getMonth : Symbol(Date.getMonth, Decl(1.0lib-noErrors.ts, 633, 29))
+
+    /** Gets the month of a Date object using Universal Coordinated Time (UTC). */
+    getUTCMonth(): number;
+>getUTCMonth : Symbol(Date.getUTCMonth, Decl(1.0lib-noErrors.ts, 635, 23))
+
+    /** Gets the day-of-the-month, using local time. */
+    getDate(): number;
+>getDate : Symbol(Date.getDate, Decl(1.0lib-noErrors.ts, 637, 26))
+
+    /** Gets the day-of-the-month, using Universal Coordinated Time (UTC). */
+    getUTCDate(): number;
+>getUTCDate : Symbol(Date.getUTCDate, Decl(1.0lib-noErrors.ts, 639, 22))
+
+    /** Gets the day of the week, using local time. */
+    getDay(): number;
+>getDay : Symbol(Date.getDay, Decl(1.0lib-noErrors.ts, 641, 25))
+
+    /** Gets the day of the week using Universal Coordinated Time (UTC). */
+    getUTCDay(): number;
+>getUTCDay : Symbol(Date.getUTCDay, Decl(1.0lib-noErrors.ts, 643, 21))
+
+    /** Gets the hours in a date, using local time. */
+    getHours(): number;
+>getHours : Symbol(Date.getHours, Decl(1.0lib-noErrors.ts, 645, 24))
+
+    /** Gets the hours value in a Date object using Universal Coordinated Time (UTC). */
+    getUTCHours(): number;
+>getUTCHours : Symbol(Date.getUTCHours, Decl(1.0lib-noErrors.ts, 647, 23))
+
+    /** Gets the minutes of a Date object, using local time. */
+    getMinutes(): number;
+>getMinutes : Symbol(Date.getMinutes, Decl(1.0lib-noErrors.ts, 649, 26))
+
+    /** Gets the minutes of a Date object using Universal Coordinated Time (UTC). */
+    getUTCMinutes(): number;
+>getUTCMinutes : Symbol(Date.getUTCMinutes, Decl(1.0lib-noErrors.ts, 651, 25))
+
+    /** Gets the seconds of a Date object, using local time. */
+    getSeconds(): number;
+>getSeconds : Symbol(Date.getSeconds, Decl(1.0lib-noErrors.ts, 653, 28))
+
+    /** Gets the seconds of a Date object using Universal Coordinated Time (UTC). */
+    getUTCSeconds(): number;
+>getUTCSeconds : Symbol(Date.getUTCSeconds, Decl(1.0lib-noErrors.ts, 655, 25))
+
+    /** Gets the milliseconds of a Date, using local time. */
+    getMilliseconds(): number;
+>getMilliseconds : Symbol(Date.getMilliseconds, Decl(1.0lib-noErrors.ts, 657, 28))
+
+    /** Gets the milliseconds of a Date object using Universal Coordinated Time (UTC). */
+    getUTCMilliseconds(): number;
+>getUTCMilliseconds : Symbol(Date.getUTCMilliseconds, Decl(1.0lib-noErrors.ts, 659, 30))
+
+    /** Gets the difference in minutes between the time on the local computer and Universal Coordinated Time (UTC). */
+    getTimezoneOffset(): number;
+>getTimezoneOffset : Symbol(Date.getTimezoneOffset, Decl(1.0lib-noErrors.ts, 661, 33))
+
+    /** 
+      * Sets the date and time value in the Date object.
+      * @param time A numeric value representing the number of elapsed milliseconds since midnight, January 1, 1970 GMT. 
+      */
+    setTime(time: number): number;
+>setTime : Symbol(Date.setTime, Decl(1.0lib-noErrors.ts, 663, 32))
+>time : Symbol(time, Decl(1.0lib-noErrors.ts, 668, 12))
+
+    /**
+      * Sets the milliseconds value in the Date object using local time. 
+      * @param ms A numeric value equal to the millisecond value.
+      */
+    setMilliseconds(ms: number): number;
+>setMilliseconds : Symbol(Date.setMilliseconds, Decl(1.0lib-noErrors.ts, 668, 34))
+>ms : Symbol(ms, Decl(1.0lib-noErrors.ts, 673, 20))
+
+    /** 
+      * Sets the milliseconds value in the Date object using Universal Coordinated Time (UTC).
+      * @param ms A numeric value equal to the millisecond value. 
+      */
+    setUTCMilliseconds(ms: number): number;
+>setUTCMilliseconds : Symbol(Date.setUTCMilliseconds, Decl(1.0lib-noErrors.ts, 673, 40))
+>ms : Symbol(ms, Decl(1.0lib-noErrors.ts, 678, 23))
+
+    /**
+      * Sets the seconds value in the Date object using local time. 
+      * @param sec A numeric value equal to the seconds value.
+      * @param ms A numeric value equal to the milliseconds value.
+      */
+    setSeconds(sec: number, ms?: number): number;
+>setSeconds : Symbol(Date.setSeconds, Decl(1.0lib-noErrors.ts, 678, 43))
+>sec : Symbol(sec, Decl(1.0lib-noErrors.ts, 685, 15))
+>ms : Symbol(ms, Decl(1.0lib-noErrors.ts, 685, 27))
+
+    /**
+      * Sets the seconds value in the Date object using Universal Coordinated Time (UTC).
+      * @param sec A numeric value equal to the seconds value.
+      * @param ms A numeric value equal to the milliseconds value.
+      */
+    setUTCSeconds(sec: number, ms?: number): number;
+>setUTCSeconds : Symbol(Date.setUTCSeconds, Decl(1.0lib-noErrors.ts, 685, 49))
+>sec : Symbol(sec, Decl(1.0lib-noErrors.ts, 691, 18))
+>ms : Symbol(ms, Decl(1.0lib-noErrors.ts, 691, 30))
+
+    /**
+      * Sets the minutes value in the Date object using local time. 
+      * @param min A numeric value equal to the minutes value. 
+      * @param sec A numeric value equal to the seconds value. 
+      * @param ms A numeric value equal to the milliseconds value.
+      */
+    setMinutes(min: number, sec?: number, ms?: number): number;
+>setMinutes : Symbol(Date.setMinutes, Decl(1.0lib-noErrors.ts, 691, 52))
+>min : Symbol(min, Decl(1.0lib-noErrors.ts, 698, 15))
+>sec : Symbol(sec, Decl(1.0lib-noErrors.ts, 698, 27))
+>ms : Symbol(ms, Decl(1.0lib-noErrors.ts, 698, 41))
+
+    /**
+      * Sets the minutes value in the Date object using Universal Coordinated Time (UTC).
+      * @param min A numeric value equal to the minutes value. 
+      * @param sec A numeric value equal to the seconds value. 
+      * @param ms A numeric value equal to the milliseconds value.
+      */
+    setUTCMinutes(min: number, sec?: number, ms?: number): number;
+>setUTCMinutes : Symbol(Date.setUTCMinutes, Decl(1.0lib-noErrors.ts, 698, 63))
+>min : Symbol(min, Decl(1.0lib-noErrors.ts, 705, 18))
+>sec : Symbol(sec, Decl(1.0lib-noErrors.ts, 705, 30))
+>ms : Symbol(ms, Decl(1.0lib-noErrors.ts, 705, 44))
+
+    /**
+      * Sets the hour value in the Date object using local time.
+      * @param hours A numeric value equal to the hours value.
+      * @param min A numeric value equal to the minutes value.
+      * @param sec A numeric value equal to the seconds value. 
+      * @param ms A numeric value equal to the milliseconds value.
+      */
+    setHours(hours: number, min?: number, sec?: number, ms?: number): number;
+>setHours : Symbol(Date.setHours, Decl(1.0lib-noErrors.ts, 705, 66))
+>hours : Symbol(hours, Decl(1.0lib-noErrors.ts, 713, 13))
+>min : Symbol(min, Decl(1.0lib-noErrors.ts, 713, 27))
+>sec : Symbol(sec, Decl(1.0lib-noErrors.ts, 713, 41))
+>ms : Symbol(ms, Decl(1.0lib-noErrors.ts, 713, 55))
+
+    /**
+      * Sets the hours value in the Date object using Universal Coordinated Time (UTC).
+      * @param hours A numeric value equal to the hours value.
+      * @param min A numeric value equal to the minutes value.
+      * @param sec A numeric value equal to the seconds value. 
+      * @param ms A numeric value equal to the milliseconds value.
+      */
+    setUTCHours(hours: number, min?: number, sec?: number, ms?: number): number;
+>setUTCHours : Symbol(Date.setUTCHours, Decl(1.0lib-noErrors.ts, 713, 77))
+>hours : Symbol(hours, Decl(1.0lib-noErrors.ts, 721, 16))
+>min : Symbol(min, Decl(1.0lib-noErrors.ts, 721, 30))
+>sec : Symbol(sec, Decl(1.0lib-noErrors.ts, 721, 44))
+>ms : Symbol(ms, Decl(1.0lib-noErrors.ts, 721, 58))
+
+    /**
+      * Sets the numeric day-of-the-month value of the Date object using local time. 
+      * @param date A numeric value equal to the day of the month.
+      */
+    setDate(date: number): number;
+>setDate : Symbol(Date.setDate, Decl(1.0lib-noErrors.ts, 721, 80))
+>date : Symbol(date, Decl(1.0lib-noErrors.ts, 726, 12))
+
+    /** 
+      * Sets the numeric day of the month in the Date object using Universal Coordinated Time (UTC).
+      * @param date A numeric value equal to the day of the month. 
+      */
+    setUTCDate(date: number): number;
+>setUTCDate : Symbol(Date.setUTCDate, Decl(1.0lib-noErrors.ts, 726, 34))
+>date : Symbol(date, Decl(1.0lib-noErrors.ts, 731, 15))
+
+    /** 
+      * Sets the month value in the Date object using local time. 
+      * @param month A numeric value equal to the month. The value for January is 0, and other month values follow consecutively. 
+      * @param date A numeric value representing the day of the month. If this value is not supplied, the value from a call to the getDate method is used.
+      */
+    setMonth(month: number, date?: number): number;
+>setMonth : Symbol(Date.setMonth, Decl(1.0lib-noErrors.ts, 731, 37))
+>month : Symbol(month, Decl(1.0lib-noErrors.ts, 737, 13))
+>date : Symbol(date, Decl(1.0lib-noErrors.ts, 737, 27))
+
+    /**
+      * Sets the month value in the Date object using Universal Coordinated Time (UTC).
+      * @param month A numeric value equal to the month. The value for January is 0, and other month values follow consecutively.
+      * @param date A numeric value representing the day of the month. If it is not supplied, the value from a call to the getUTCDate method is used.
+      */
+    setUTCMonth(month: number, date?: number): number;
+>setUTCMonth : Symbol(Date.setUTCMonth, Decl(1.0lib-noErrors.ts, 737, 51))
+>month : Symbol(month, Decl(1.0lib-noErrors.ts, 743, 16))
+>date : Symbol(date, Decl(1.0lib-noErrors.ts, 743, 30))
+
+    /**
+      * Sets the year of the Date object using local time.
+      * @param year A numeric value for the year.
+      * @param month A zero-based numeric value for the month (0 for January, 11 for December). Must be specified if numDate is specified.
+      * @param date A numeric value equal for the day of the month.
+      */
+    setFullYear(year: number, month?: number, date?: number): number;
+>setFullYear : Symbol(Date.setFullYear, Decl(1.0lib-noErrors.ts, 743, 54))
+>year : Symbol(year, Decl(1.0lib-noErrors.ts, 750, 16))
+>month : Symbol(month, Decl(1.0lib-noErrors.ts, 750, 29))
+>date : Symbol(date, Decl(1.0lib-noErrors.ts, 750, 45))
+
+    /**
+      * Sets the year value in the Date object using Universal Coordinated Time (UTC).
+      * @param year A numeric value equal to the year.
+      * @param month A numeric value equal to the month. The value for January is 0, and other month values follow consecutively. Must be supplied if numDate is supplied.
+      * @param date A numeric value equal to the day of the month.
+      */
+    setUTCFullYear(year: number, month?: number, date?: number): number;
+>setUTCFullYear : Symbol(Date.setUTCFullYear, Decl(1.0lib-noErrors.ts, 750, 69))
+>year : Symbol(year, Decl(1.0lib-noErrors.ts, 757, 19))
+>month : Symbol(month, Decl(1.0lib-noErrors.ts, 757, 32))
+>date : Symbol(date, Decl(1.0lib-noErrors.ts, 757, 48))
+
+    /** Returns a date converted to a string using Universal Coordinated Time (UTC). */
+    toUTCString(): string;
+>toUTCString : Symbol(Date.toUTCString, Decl(1.0lib-noErrors.ts, 757, 72))
+
+    /** Returns a date as a string value in ISO format. */
+    toISOString(): string;
+>toISOString : Symbol(Date.toISOString, Decl(1.0lib-noErrors.ts, 759, 26))
+
+    /** Used by the JSON.stringify method to enable the transformation of an object's data for JavaScript Object Notation (JSON) serialization. */
+    toJSON(key?: any): string;
+>toJSON : Symbol(Date.toJSON, Decl(1.0lib-noErrors.ts, 761, 26))
+>key : Symbol(key, Decl(1.0lib-noErrors.ts, 763, 11))
+}
+
+declare var Date: {
+>Date : Symbol(Date, Decl(1.0lib-noErrors.ts, 610, 23), Decl(1.0lib-noErrors.ts, 766, 11))
+
+    new (): Date;
+>Date : Symbol(Date, Decl(1.0lib-noErrors.ts, 610, 23), Decl(1.0lib-noErrors.ts, 766, 11))
+
+    new (value: number): Date;
+>value : Symbol(value, Decl(1.0lib-noErrors.ts, 768, 9))
+>Date : Symbol(Date, Decl(1.0lib-noErrors.ts, 610, 23), Decl(1.0lib-noErrors.ts, 766, 11))
+
+    new (value: string): Date;
+>value : Symbol(value, Decl(1.0lib-noErrors.ts, 769, 9))
+>Date : Symbol(Date, Decl(1.0lib-noErrors.ts, 610, 23), Decl(1.0lib-noErrors.ts, 766, 11))
+
+    new (year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): Date;
+>year : Symbol(year, Decl(1.0lib-noErrors.ts, 770, 9))
+>month : Symbol(month, Decl(1.0lib-noErrors.ts, 770, 22))
+>date : Symbol(date, Decl(1.0lib-noErrors.ts, 770, 37))
+>hours : Symbol(hours, Decl(1.0lib-noErrors.ts, 770, 52))
+>minutes : Symbol(minutes, Decl(1.0lib-noErrors.ts, 770, 68))
+>seconds : Symbol(seconds, Decl(1.0lib-noErrors.ts, 770, 86))
+>ms : Symbol(ms, Decl(1.0lib-noErrors.ts, 770, 104))
+>Date : Symbol(Date, Decl(1.0lib-noErrors.ts, 610, 23), Decl(1.0lib-noErrors.ts, 766, 11))
+
+    (): string;
+    prototype: Date;
+>prototype : Symbol(prototype, Decl(1.0lib-noErrors.ts, 771, 15))
+>Date : Symbol(Date, Decl(1.0lib-noErrors.ts, 610, 23), Decl(1.0lib-noErrors.ts, 766, 11))
+
+    /**
+      * Parses a string containing a date, and returns the number of milliseconds between that date and midnight, January 1, 1970.
+      * @param s A date string
+      */
+    parse(s: string): number;
+>parse : Symbol(parse, Decl(1.0lib-noErrors.ts, 772, 20))
+>s : Symbol(s, Decl(1.0lib-noErrors.ts, 777, 10))
+
+    /**
+      * Returns the number of milliseconds between midnight, January 1, 1970 Universal Coordinated Time (UTC) (or GMT) and the specified date. 
+      * @param year The full year designation is required for cross-century date accuracy. If year is between 0 and 99 is used, then year is assumed to be 1900 + year.
+      * @param month The month as an number between 0 and 11 (January to December).
+      * @param date The date as an number between 1 and 31.
+      * @param hours Must be supplied if minutes is supplied. An number from 0 to 23 (midnight to 11pm) that specifies the hour.
+      * @param minutes Must be supplied if seconds is supplied. An number from 0 to 59 that specifies the minutes.
+      * @param seconds Must be supplied if milliseconds is supplied. An number from 0 to 59 that specifies the seconds.
+      * @param ms An number from 0 to 999 that specifies the milliseconds.
+      */
+    UTC(year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): number;
+>UTC : Symbol(UTC, Decl(1.0lib-noErrors.ts, 777, 29))
+>year : Symbol(year, Decl(1.0lib-noErrors.ts, 788, 8))
+>month : Symbol(month, Decl(1.0lib-noErrors.ts, 788, 21))
+>date : Symbol(date, Decl(1.0lib-noErrors.ts, 788, 36))
+>hours : Symbol(hours, Decl(1.0lib-noErrors.ts, 788, 51))
+>minutes : Symbol(minutes, Decl(1.0lib-noErrors.ts, 788, 67))
+>seconds : Symbol(seconds, Decl(1.0lib-noErrors.ts, 788, 85))
+>ms : Symbol(ms, Decl(1.0lib-noErrors.ts, 788, 103))
+
+    now(): number;
+>now : Symbol(now, Decl(1.0lib-noErrors.ts, 788, 125))
+}
+
+interface RegExpExecArray {
+>RegExpExecArray : Symbol(RegExpExecArray, Decl(1.0lib-noErrors.ts, 790, 1))
+
+    [index: number]: string;
+>index : Symbol(index, Decl(1.0lib-noErrors.ts, 793, 5))
+
+    length: number;
+>length : Symbol(RegExpExecArray.length, Decl(1.0lib-noErrors.ts, 793, 28))
+
+    index: number;
+>index : Symbol(RegExpExecArray.index, Decl(1.0lib-noErrors.ts, 794, 19))
+
+    input: string;
+>input : Symbol(RegExpExecArray.input, Decl(1.0lib-noErrors.ts, 796, 18))
+
+    toString(): string;
+>toString : Symbol(RegExpExecArray.toString, Decl(1.0lib-noErrors.ts, 797, 18))
+
+    toLocaleString(): string;
+>toLocaleString : Symbol(RegExpExecArray.toLocaleString, Decl(1.0lib-noErrors.ts, 799, 23))
+
+    concat(...items: string[][]): string[];
+>concat : Symbol(RegExpExecArray.concat, Decl(1.0lib-noErrors.ts, 800, 29))
+>items : Symbol(items, Decl(1.0lib-noErrors.ts, 801, 11))
+
+    join(separator?: string): string;
+>join : Symbol(RegExpExecArray.join, Decl(1.0lib-noErrors.ts, 801, 43))
+>separator : Symbol(separator, Decl(1.0lib-noErrors.ts, 802, 9))
+
+    pop(): string;
+>pop : Symbol(RegExpExecArray.pop, Decl(1.0lib-noErrors.ts, 802, 37))
+
+    push(...items: string[]): number;
+>push : Symbol(RegExpExecArray.push, Decl(1.0lib-noErrors.ts, 803, 18))
+>items : Symbol(items, Decl(1.0lib-noErrors.ts, 804, 9))
+
+    reverse(): string[];
+>reverse : Symbol(RegExpExecArray.reverse, Decl(1.0lib-noErrors.ts, 804, 37))
+
+    shift(): string;
+>shift : Symbol(RegExpExecArray.shift, Decl(1.0lib-noErrors.ts, 805, 24))
+
+    slice(start?: number, end?: number): string[];
+>slice : Symbol(RegExpExecArray.slice, Decl(1.0lib-noErrors.ts, 806, 20))
+>start : Symbol(start, Decl(1.0lib-noErrors.ts, 807, 10))
+>end : Symbol(end, Decl(1.0lib-noErrors.ts, 807, 25))
+
+    sort(compareFn?: (a: string, b: string) => number): string[];
+>sort : Symbol(RegExpExecArray.sort, Decl(1.0lib-noErrors.ts, 807, 50))
+>compareFn : Symbol(compareFn, Decl(1.0lib-noErrors.ts, 808, 9))
+>a : Symbol(a, Decl(1.0lib-noErrors.ts, 808, 22))
+>b : Symbol(b, Decl(1.0lib-noErrors.ts, 808, 32))
+
+    splice(start: number): string[];
+>splice : Symbol(RegExpExecArray.splice, Decl(1.0lib-noErrors.ts, 808, 65), Decl(1.0lib-noErrors.ts, 809, 36))
+>start : Symbol(start, Decl(1.0lib-noErrors.ts, 809, 11))
+
+    splice(start: number, deleteCount: number, ...items: string[]): string[];
+>splice : Symbol(RegExpExecArray.splice, Decl(1.0lib-noErrors.ts, 808, 65), Decl(1.0lib-noErrors.ts, 809, 36))
+>start : Symbol(start, Decl(1.0lib-noErrors.ts, 810, 11))
+>deleteCount : Symbol(deleteCount, Decl(1.0lib-noErrors.ts, 810, 25))
+>items : Symbol(items, Decl(1.0lib-noErrors.ts, 810, 46))
+
+    unshift(...items: string[]): number;
+>unshift : Symbol(RegExpExecArray.unshift, Decl(1.0lib-noErrors.ts, 810, 77))
+>items : Symbol(items, Decl(1.0lib-noErrors.ts, 811, 12))
+
+    indexOf(searchElement: string, fromIndex?: number): number;
+>indexOf : Symbol(RegExpExecArray.indexOf, Decl(1.0lib-noErrors.ts, 811, 40))
+>searchElement : Symbol(searchElement, Decl(1.0lib-noErrors.ts, 813, 12))
+>fromIndex : Symbol(fromIndex, Decl(1.0lib-noErrors.ts, 813, 34))
+
+    lastIndexOf(searchElement: string, fromIndex?: number): number;
+>lastIndexOf : Symbol(RegExpExecArray.lastIndexOf, Decl(1.0lib-noErrors.ts, 813, 63))
+>searchElement : Symbol(searchElement, Decl(1.0lib-noErrors.ts, 814, 16))
+>fromIndex : Symbol(fromIndex, Decl(1.0lib-noErrors.ts, 814, 38))
+
+    every(callbackfn: (value: string, index: number, array: string[]) => boolean, thisArg?: any): boolean;
+>every : Symbol(RegExpExecArray.every, Decl(1.0lib-noErrors.ts, 814, 67))
+>callbackfn : Symbol(callbackfn, Decl(1.0lib-noErrors.ts, 815, 10))
+>value : Symbol(value, Decl(1.0lib-noErrors.ts, 815, 23))
+>index : Symbol(index, Decl(1.0lib-noErrors.ts, 815, 37))
+>array : Symbol(array, Decl(1.0lib-noErrors.ts, 815, 52))
+>thisArg : Symbol(thisArg, Decl(1.0lib-noErrors.ts, 815, 81))
+
+    some(callbackfn: (value: string, index: number, array: string[]) => boolean, thisArg?: any): boolean;
+>some : Symbol(RegExpExecArray.some, Decl(1.0lib-noErrors.ts, 815, 106))
+>callbackfn : Symbol(callbackfn, Decl(1.0lib-noErrors.ts, 816, 9))
+>value : Symbol(value, Decl(1.0lib-noErrors.ts, 816, 22))
+>index : Symbol(index, Decl(1.0lib-noErrors.ts, 816, 36))
+>array : Symbol(array, Decl(1.0lib-noErrors.ts, 816, 51))
+>thisArg : Symbol(thisArg, Decl(1.0lib-noErrors.ts, 816, 80))
+
+    forEach(callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any): void;
+>forEach : Symbol(RegExpExecArray.forEach, Decl(1.0lib-noErrors.ts, 816, 105))
+>callbackfn : Symbol(callbackfn, Decl(1.0lib-noErrors.ts, 817, 12))
+>value : Symbol(value, Decl(1.0lib-noErrors.ts, 817, 25))
+>index : Symbol(index, Decl(1.0lib-noErrors.ts, 817, 39))
+>array : Symbol(array, Decl(1.0lib-noErrors.ts, 817, 54))
+>thisArg : Symbol(thisArg, Decl(1.0lib-noErrors.ts, 817, 80))
+
+    map(callbackfn: (value: string, index: number, array: string[]) => any, thisArg?: any): any[];
+>map : Symbol(RegExpExecArray.map, Decl(1.0lib-noErrors.ts, 817, 102))
+>callbackfn : Symbol(callbackfn, Decl(1.0lib-noErrors.ts, 818, 8))
+>value : Symbol(value, Decl(1.0lib-noErrors.ts, 818, 21))
+>index : Symbol(index, Decl(1.0lib-noErrors.ts, 818, 35))
+>array : Symbol(array, Decl(1.0lib-noErrors.ts, 818, 50))
+>thisArg : Symbol(thisArg, Decl(1.0lib-noErrors.ts, 818, 75))
+
+    filter(callbackfn: (value: string, index: number, array: string[]) => boolean, thisArg?: any): string[];
+>filter : Symbol(RegExpExecArray.filter, Decl(1.0lib-noErrors.ts, 818, 98))
+>callbackfn : Symbol(callbackfn, Decl(1.0lib-noErrors.ts, 819, 11))
+>value : Symbol(value, Decl(1.0lib-noErrors.ts, 819, 24))
+>index : Symbol(index, Decl(1.0lib-noErrors.ts, 819, 38))
+>array : Symbol(array, Decl(1.0lib-noErrors.ts, 819, 53))
+>thisArg : Symbol(thisArg, Decl(1.0lib-noErrors.ts, 819, 82))
+
+    reduce(callbackfn: (previousValue: any, currentValue: any, currentIndex: number, array: string[]) => any, initialValue?: any): any;
+>reduce : Symbol(RegExpExecArray.reduce, Decl(1.0lib-noErrors.ts, 819, 108))
+>callbackfn : Symbol(callbackfn, Decl(1.0lib-noErrors.ts, 820, 11))
+>previousValue : Symbol(previousValue, Decl(1.0lib-noErrors.ts, 820, 24))
+>currentValue : Symbol(currentValue, Decl(1.0lib-noErrors.ts, 820, 43))
+>currentIndex : Symbol(currentIndex, Decl(1.0lib-noErrors.ts, 820, 62))
+>array : Symbol(array, Decl(1.0lib-noErrors.ts, 820, 84))
+>initialValue : Symbol(initialValue, Decl(1.0lib-noErrors.ts, 820, 109))
+
+    reduceRight(callbackfn: (previousValue: any, currentValue: any, currentIndex: number, array: string[]) => any, initialValue?: any): any;
+>reduceRight : Symbol(RegExpExecArray.reduceRight, Decl(1.0lib-noErrors.ts, 820, 135))
+>callbackfn : Symbol(callbackfn, Decl(1.0lib-noErrors.ts, 821, 16))
+>previousValue : Symbol(previousValue, Decl(1.0lib-noErrors.ts, 821, 29))
+>currentValue : Symbol(currentValue, Decl(1.0lib-noErrors.ts, 821, 48))
+>currentIndex : Symbol(currentIndex, Decl(1.0lib-noErrors.ts, 821, 67))
+>array : Symbol(array, Decl(1.0lib-noErrors.ts, 821, 89))
+>initialValue : Symbol(initialValue, Decl(1.0lib-noErrors.ts, 821, 114))
+}
+
+
+interface RegExp {
+>RegExp : Symbol(RegExp, Decl(1.0lib-noErrors.ts, 822, 1), Decl(1.0lib-noErrors.ts, 855, 11))
+
+    /** 
+      * Executes a search on a string using a regular expression pattern, and returns an array containing the results of that search.
+      * @param string The String object or string literal on which to perform the search.
+      */
+    exec(string: string): RegExpExecArray;
+>exec : Symbol(RegExp.exec, Decl(1.0lib-noErrors.ts, 825, 18))
+>string : Symbol(string, Decl(1.0lib-noErrors.ts, 830, 9))
+>RegExpExecArray : Symbol(RegExpExecArray, Decl(1.0lib-noErrors.ts, 790, 1))
+
+    /** 
+      * Returns a Boolean value that indicates whether or not a pattern exists in a searched string.
+      * @param string String on which to perform the search.
+      */
+    test(string: string): boolean;
+>test : Symbol(RegExp.test, Decl(1.0lib-noErrors.ts, 830, 42))
+>string : Symbol(string, Decl(1.0lib-noErrors.ts, 836, 9))
+
+    /** Returns a copy of the text of the regular expression pattern. Read-only. The rgExp argument is a Regular expression object. It can be a variable name or a literal. */
+    source: string;
+>source : Symbol(RegExp.source, Decl(1.0lib-noErrors.ts, 836, 34))
+
+    /** Returns a Boolean value indicating the state of the global flag (g) used with a regular expression. Default is false. Read-only. */
+    global: boolean;
+>global : Symbol(RegExp.global, Decl(1.0lib-noErrors.ts, 839, 19))
+
+    /** Returns a Boolean value indicating the state of the ignoreCase flag (i) used with a regular expression. Default is false. Read-only. */
+    ignoreCase: boolean;
+>ignoreCase : Symbol(RegExp.ignoreCase, Decl(1.0lib-noErrors.ts, 842, 20))
+
+    /** Returns a Boolean value indicating the state of the multiline flag (m) used with a regular expression. Default is false. Read-only. */
+    multiline: boolean;
+>multiline : Symbol(RegExp.multiline, Decl(1.0lib-noErrors.ts, 845, 24))
+
+    lastIndex: number;
+>lastIndex : Symbol(RegExp.lastIndex, Decl(1.0lib-noErrors.ts, 848, 23))
+
+    // Non-standard extensions
+    compile(): RegExp;
+>compile : Symbol(RegExp.compile, Decl(1.0lib-noErrors.ts, 850, 22))
+>RegExp : Symbol(RegExp, Decl(1.0lib-noErrors.ts, 822, 1), Decl(1.0lib-noErrors.ts, 855, 11))
+}
+declare var RegExp: {
+>RegExp : Symbol(RegExp, Decl(1.0lib-noErrors.ts, 822, 1), Decl(1.0lib-noErrors.ts, 855, 11))
+
+    new (pattern: string, flags?: string): RegExp;
+>pattern : Symbol(pattern, Decl(1.0lib-noErrors.ts, 856, 9))
+>flags : Symbol(flags, Decl(1.0lib-noErrors.ts, 856, 25))
+>RegExp : Symbol(RegExp, Decl(1.0lib-noErrors.ts, 822, 1), Decl(1.0lib-noErrors.ts, 855, 11))
+
+    (pattern: string, flags?: string): RegExp;
+>pattern : Symbol(pattern, Decl(1.0lib-noErrors.ts, 857, 5))
+>flags : Symbol(flags, Decl(1.0lib-noErrors.ts, 857, 21))
+>RegExp : Symbol(RegExp, Decl(1.0lib-noErrors.ts, 822, 1), Decl(1.0lib-noErrors.ts, 855, 11))
+
+    // Non-standard extensions
+    $1: string;
+>$1 : Symbol($1, Decl(1.0lib-noErrors.ts, 857, 46))
+
+    $2: string;
+>$2 : Symbol($2, Decl(1.0lib-noErrors.ts, 860, 15))
+
+    $3: string;
+>$3 : Symbol($3, Decl(1.0lib-noErrors.ts, 861, 15))
+
+    $4: string;
+>$4 : Symbol($4, Decl(1.0lib-noErrors.ts, 862, 15))
+
+    $5: string;
+>$5 : Symbol($5, Decl(1.0lib-noErrors.ts, 863, 15))
+
+    $6: string;
+>$6 : Symbol($6, Decl(1.0lib-noErrors.ts, 864, 15))
+
+    $7: string;
+>$7 : Symbol($7, Decl(1.0lib-noErrors.ts, 865, 15))
+
+    $8: string;
+>$8 : Symbol($8, Decl(1.0lib-noErrors.ts, 866, 15))
+
+    $9: string;
+>$9 : Symbol($9, Decl(1.0lib-noErrors.ts, 867, 15))
+
+    lastMatch: string;
+>lastMatch : Symbol(lastMatch, Decl(1.0lib-noErrors.ts, 868, 15))
+}
+
+interface Error {
+>Error : Symbol(Error, Decl(1.0lib-noErrors.ts, 870, 1), Decl(1.0lib-noErrors.ts, 876, 11))
+
+    name: string;
+>name : Symbol(Error.name, Decl(1.0lib-noErrors.ts, 872, 17))
+
+    message: string;
+>message : Symbol(Error.message, Decl(1.0lib-noErrors.ts, 873, 17))
+}
+declare var Error: {
+>Error : Symbol(Error, Decl(1.0lib-noErrors.ts, 870, 1), Decl(1.0lib-noErrors.ts, 876, 11))
+
+    new (message?: string): Error;
+>message : Symbol(message, Decl(1.0lib-noErrors.ts, 877, 9))
+>Error : Symbol(Error, Decl(1.0lib-noErrors.ts, 870, 1), Decl(1.0lib-noErrors.ts, 876, 11))
+
+    (message?: string): Error;
+>message : Symbol(message, Decl(1.0lib-noErrors.ts, 878, 5))
+>Error : Symbol(Error, Decl(1.0lib-noErrors.ts, 870, 1), Decl(1.0lib-noErrors.ts, 876, 11))
+
+    prototype: Error;
+>prototype : Symbol(prototype, Decl(1.0lib-noErrors.ts, 878, 30))
+>Error : Symbol(Error, Decl(1.0lib-noErrors.ts, 870, 1), Decl(1.0lib-noErrors.ts, 876, 11))
+}
+
+interface EvalError extends Error {
+>EvalError : Symbol(EvalError, Decl(1.0lib-noErrors.ts, 880, 1), Decl(1.0lib-noErrors.ts, 884, 11))
+>Error : Symbol(Error, Decl(1.0lib-noErrors.ts, 870, 1), Decl(1.0lib-noErrors.ts, 876, 11))
+}
+declare var EvalError: {
+>EvalError : Symbol(EvalError, Decl(1.0lib-noErrors.ts, 880, 1), Decl(1.0lib-noErrors.ts, 884, 11))
+
+    new (message?: string): EvalError;
+>message : Symbol(message, Decl(1.0lib-noErrors.ts, 885, 9))
+>EvalError : Symbol(EvalError, Decl(1.0lib-noErrors.ts, 880, 1), Decl(1.0lib-noErrors.ts, 884, 11))
+
+    (message?: string): EvalError;
+>message : Symbol(message, Decl(1.0lib-noErrors.ts, 886, 5))
+>EvalError : Symbol(EvalError, Decl(1.0lib-noErrors.ts, 880, 1), Decl(1.0lib-noErrors.ts, 884, 11))
+
+    prototype: EvalError;
+>prototype : Symbol(prototype, Decl(1.0lib-noErrors.ts, 886, 34))
+>EvalError : Symbol(EvalError, Decl(1.0lib-noErrors.ts, 880, 1), Decl(1.0lib-noErrors.ts, 884, 11))
+}
+
+interface RangeError extends Error {
+>RangeError : Symbol(RangeError, Decl(1.0lib-noErrors.ts, 888, 1), Decl(1.0lib-noErrors.ts, 892, 11))
+>Error : Symbol(Error, Decl(1.0lib-noErrors.ts, 870, 1), Decl(1.0lib-noErrors.ts, 876, 11))
+}
+declare var RangeError: {
+>RangeError : Symbol(RangeError, Decl(1.0lib-noErrors.ts, 888, 1), Decl(1.0lib-noErrors.ts, 892, 11))
+
+    new (message?: string): RangeError;
+>message : Symbol(message, Decl(1.0lib-noErrors.ts, 893, 9))
+>RangeError : Symbol(RangeError, Decl(1.0lib-noErrors.ts, 888, 1), Decl(1.0lib-noErrors.ts, 892, 11))
+
+    (message?: string): RangeError;
+>message : Symbol(message, Decl(1.0lib-noErrors.ts, 894, 5))
+>RangeError : Symbol(RangeError, Decl(1.0lib-noErrors.ts, 888, 1), Decl(1.0lib-noErrors.ts, 892, 11))
+
+    prototype: RangeError;
+>prototype : Symbol(prototype, Decl(1.0lib-noErrors.ts, 894, 35))
+>RangeError : Symbol(RangeError, Decl(1.0lib-noErrors.ts, 888, 1), Decl(1.0lib-noErrors.ts, 892, 11))
+}
+
+interface ReferenceError extends Error {
+>ReferenceError : Symbol(ReferenceError, Decl(1.0lib-noErrors.ts, 896, 1), Decl(1.0lib-noErrors.ts, 900, 11))
+>Error : Symbol(Error, Decl(1.0lib-noErrors.ts, 870, 1), Decl(1.0lib-noErrors.ts, 876, 11))
+}
+declare var ReferenceError: {
+>ReferenceError : Symbol(ReferenceError, Decl(1.0lib-noErrors.ts, 896, 1), Decl(1.0lib-noErrors.ts, 900, 11))
+
+    new (message?: string): ReferenceError;
+>message : Symbol(message, Decl(1.0lib-noErrors.ts, 901, 9))
+>ReferenceError : Symbol(ReferenceError, Decl(1.0lib-noErrors.ts, 896, 1), Decl(1.0lib-noErrors.ts, 900, 11))
+
+    (message?: string): ReferenceError;
+>message : Symbol(message, Decl(1.0lib-noErrors.ts, 902, 5))
+>ReferenceError : Symbol(ReferenceError, Decl(1.0lib-noErrors.ts, 896, 1), Decl(1.0lib-noErrors.ts, 900, 11))
+
+    prototype: ReferenceError;
+>prototype : Symbol(prototype, Decl(1.0lib-noErrors.ts, 902, 39))
+>ReferenceError : Symbol(ReferenceError, Decl(1.0lib-noErrors.ts, 896, 1), Decl(1.0lib-noErrors.ts, 900, 11))
+}
+
+interface SyntaxError extends Error {
+>SyntaxError : Symbol(SyntaxError, Decl(1.0lib-noErrors.ts, 904, 1), Decl(1.0lib-noErrors.ts, 908, 11))
+>Error : Symbol(Error, Decl(1.0lib-noErrors.ts, 870, 1), Decl(1.0lib-noErrors.ts, 876, 11))
+}
+declare var SyntaxError: {
+>SyntaxError : Symbol(SyntaxError, Decl(1.0lib-noErrors.ts, 904, 1), Decl(1.0lib-noErrors.ts, 908, 11))
+
+    new (message?: string): SyntaxError;
+>message : Symbol(message, Decl(1.0lib-noErrors.ts, 909, 9))
+>SyntaxError : Symbol(SyntaxError, Decl(1.0lib-noErrors.ts, 904, 1), Decl(1.0lib-noErrors.ts, 908, 11))
+
+    (message?: string): SyntaxError;
+>message : Symbol(message, Decl(1.0lib-noErrors.ts, 910, 5))
+>SyntaxError : Symbol(SyntaxError, Decl(1.0lib-noErrors.ts, 904, 1), Decl(1.0lib-noErrors.ts, 908, 11))
+
+    prototype: SyntaxError;
+>prototype : Symbol(prototype, Decl(1.0lib-noErrors.ts, 910, 36))
+>SyntaxError : Symbol(SyntaxError, Decl(1.0lib-noErrors.ts, 904, 1), Decl(1.0lib-noErrors.ts, 908, 11))
+}
+
+interface TypeError extends Error {
+>TypeError : Symbol(TypeError, Decl(1.0lib-noErrors.ts, 912, 1), Decl(1.0lib-noErrors.ts, 916, 11))
+>Error : Symbol(Error, Decl(1.0lib-noErrors.ts, 870, 1), Decl(1.0lib-noErrors.ts, 876, 11))
+}
+declare var TypeError: {
+>TypeError : Symbol(TypeError, Decl(1.0lib-noErrors.ts, 912, 1), Decl(1.0lib-noErrors.ts, 916, 11))
+
+    new (message?: string): TypeError;
+>message : Symbol(message, Decl(1.0lib-noErrors.ts, 917, 9))
+>TypeError : Symbol(TypeError, Decl(1.0lib-noErrors.ts, 912, 1), Decl(1.0lib-noErrors.ts, 916, 11))
+
+    (message?: string): TypeError;
+>message : Symbol(message, Decl(1.0lib-noErrors.ts, 918, 5))
+>TypeError : Symbol(TypeError, Decl(1.0lib-noErrors.ts, 912, 1), Decl(1.0lib-noErrors.ts, 916, 11))
+
+    prototype: TypeError;
+>prototype : Symbol(prototype, Decl(1.0lib-noErrors.ts, 918, 34))
+>TypeError : Symbol(TypeError, Decl(1.0lib-noErrors.ts, 912, 1), Decl(1.0lib-noErrors.ts, 916, 11))
+}
+
+interface URIError extends Error {
+>URIError : Symbol(URIError, Decl(1.0lib-noErrors.ts, 920, 1), Decl(1.0lib-noErrors.ts, 924, 11))
+>Error : Symbol(Error, Decl(1.0lib-noErrors.ts, 870, 1), Decl(1.0lib-noErrors.ts, 876, 11))
+}
+declare var URIError: {
+>URIError : Symbol(URIError, Decl(1.0lib-noErrors.ts, 920, 1), Decl(1.0lib-noErrors.ts, 924, 11))
+
+    new (message?: string): URIError;
+>message : Symbol(message, Decl(1.0lib-noErrors.ts, 925, 9))
+>URIError : Symbol(URIError, Decl(1.0lib-noErrors.ts, 920, 1), Decl(1.0lib-noErrors.ts, 924, 11))
+
+    (message?: string): URIError;
+>message : Symbol(message, Decl(1.0lib-noErrors.ts, 926, 5))
+>URIError : Symbol(URIError, Decl(1.0lib-noErrors.ts, 920, 1), Decl(1.0lib-noErrors.ts, 924, 11))
+
+    prototype: URIError;
+>prototype : Symbol(prototype, Decl(1.0lib-noErrors.ts, 926, 33))
+>URIError : Symbol(URIError, Decl(1.0lib-noErrors.ts, 920, 1), Decl(1.0lib-noErrors.ts, 924, 11))
+}
+
+interface JSON {
+>JSON : Symbol(JSON, Decl(1.0lib-noErrors.ts, 928, 1), Decl(1.0lib-noErrors.ts, 973, 11))
+
+    /**
+      * Converts a JavaScript Object Notation (JSON) string into an object.
+      * @param text A valid JSON string.
+      * @param reviver A function that transforms the results. This function is called for each member of the object. 
+      * If a member contains nested objects, the nested objects are transformed before the parent object is. 
+      */
+    parse(text: string, reviver?: (key: any, value: any) => any): any;
+>parse : Symbol(JSON.parse, Decl(1.0lib-noErrors.ts, 930, 16))
+>text : Symbol(text, Decl(1.0lib-noErrors.ts, 937, 10))
+>reviver : Symbol(reviver, Decl(1.0lib-noErrors.ts, 937, 23))
+>key : Symbol(key, Decl(1.0lib-noErrors.ts, 937, 35))
+>value : Symbol(value, Decl(1.0lib-noErrors.ts, 937, 44))
+
+    /**
+      * Converts a JavaScript value to a JavaScript Object Notation (JSON) string.
+      * @param value A JavaScript value, usually an object or array, to be converted.
+      */
+    stringify(value: any): string;
+>stringify : Symbol(JSON.stringify, Decl(1.0lib-noErrors.ts, 937, 70), Decl(1.0lib-noErrors.ts, 942, 34), Decl(1.0lib-noErrors.ts, 948, 78), Decl(1.0lib-noErrors.ts, 954, 51), Decl(1.0lib-noErrors.ts, 961, 90))
+>value : Symbol(value, Decl(1.0lib-noErrors.ts, 942, 14))
+
+    /**
+      * Converts a JavaScript value to a JavaScript Object Notation (JSON) string.
+      * @param value A JavaScript value, usually an object or array, to be converted.
+      * @param replacer A function that transforms the results.
+      */
+    stringify(value: any, replacer: (key: string, value: any) => any): string;
+>stringify : Symbol(JSON.stringify, Decl(1.0lib-noErrors.ts, 937, 70), Decl(1.0lib-noErrors.ts, 942, 34), Decl(1.0lib-noErrors.ts, 948, 78), Decl(1.0lib-noErrors.ts, 954, 51), Decl(1.0lib-noErrors.ts, 961, 90))
+>value : Symbol(value, Decl(1.0lib-noErrors.ts, 948, 14))
+>replacer : Symbol(replacer, Decl(1.0lib-noErrors.ts, 948, 25))
+>key : Symbol(key, Decl(1.0lib-noErrors.ts, 948, 37))
+>value : Symbol(value, Decl(1.0lib-noErrors.ts, 948, 49))
+
+    /**
+      * Converts a JavaScript value to a JavaScript Object Notation (JSON) string.
+      * @param value A JavaScript value, usually an object or array, to be converted.
+      * @param replacer Array that transforms the results.
+      */
+    stringify(value: any, replacer: any[]): string;
+>stringify : Symbol(JSON.stringify, Decl(1.0lib-noErrors.ts, 937, 70), Decl(1.0lib-noErrors.ts, 942, 34), Decl(1.0lib-noErrors.ts, 948, 78), Decl(1.0lib-noErrors.ts, 954, 51), Decl(1.0lib-noErrors.ts, 961, 90))
+>value : Symbol(value, Decl(1.0lib-noErrors.ts, 954, 14))
+>replacer : Symbol(replacer, Decl(1.0lib-noErrors.ts, 954, 25))
+
+    /**
+      * Converts a JavaScript value to a JavaScript Object Notation (JSON) string.
+      * @param value A JavaScript value, usually an object or array, to be converted.
+      * @param replacer A function that transforms the results.
+      * @param space Adds indentation, white space, and line break characters to the return-value JSON text to make it easier to read.
+      */
+    stringify(value: any, replacer: (key: string, value: any) => any, space: any): string;
+>stringify : Symbol(JSON.stringify, Decl(1.0lib-noErrors.ts, 937, 70), Decl(1.0lib-noErrors.ts, 942, 34), Decl(1.0lib-noErrors.ts, 948, 78), Decl(1.0lib-noErrors.ts, 954, 51), Decl(1.0lib-noErrors.ts, 961, 90))
+>value : Symbol(value, Decl(1.0lib-noErrors.ts, 961, 14))
+>replacer : Symbol(replacer, Decl(1.0lib-noErrors.ts, 961, 25))
+>key : Symbol(key, Decl(1.0lib-noErrors.ts, 961, 37))
+>value : Symbol(value, Decl(1.0lib-noErrors.ts, 961, 49))
+>space : Symbol(space, Decl(1.0lib-noErrors.ts, 961, 69))
+
+    /**
+      * Converts a JavaScript value to a JavaScript Object Notation (JSON) string.
+      * @param value A JavaScript value, usually an object or array, to be converted.
+      * @param replacer Array that transforms the results.
+      * @param space Adds indentation, white space, and line break characters to the return-value JSON text to make it easier to read.
+      */
+    stringify(value: any, replacer: any[], space: any): string;
+>stringify : Symbol(JSON.stringify, Decl(1.0lib-noErrors.ts, 937, 70), Decl(1.0lib-noErrors.ts, 942, 34), Decl(1.0lib-noErrors.ts, 948, 78), Decl(1.0lib-noErrors.ts, 954, 51), Decl(1.0lib-noErrors.ts, 961, 90))
+>value : Symbol(value, Decl(1.0lib-noErrors.ts, 968, 14))
+>replacer : Symbol(replacer, Decl(1.0lib-noErrors.ts, 968, 25))
+>space : Symbol(space, Decl(1.0lib-noErrors.ts, 968, 42))
+}
+/**
+  * An intrinsic object that provides functions to convert JavaScript values to and from the JavaScript Object Notation (JSON) format.
+  */
+declare var JSON: JSON;
+>JSON : Symbol(JSON, Decl(1.0lib-noErrors.ts, 928, 1), Decl(1.0lib-noErrors.ts, 973, 11))
+>JSON : Symbol(JSON, Decl(1.0lib-noErrors.ts, 928, 1), Decl(1.0lib-noErrors.ts, 973, 11))
+
+
+/////////////////////////////
+/// ECMAScript Array API (specially handled by compiler)
+/////////////////////////////
+
+interface Array<T> {
+>Array : Symbol(Array, Decl(1.0lib-noErrors.ts, 973, 23), Decl(1.0lib-noErrors.ts, 1133, 11))
+>T : Symbol(T, Decl(1.0lib-noErrors.ts, 980, 16))
+
+    /**
+      * Returns a string representation of an array.
+      */
+    toString(): string;
+>toString : Symbol(Array.toString, Decl(1.0lib-noErrors.ts, 980, 20))
+
+    toLocaleString(): string;
+>toLocaleString : Symbol(Array.toLocaleString, Decl(1.0lib-noErrors.ts, 984, 23))
+
+    /**
+      * Combines two or more arrays.
+      * @param items Additional items to add to the end of array1.
+      */
+    concat<U extends T[]>(...items: U[]): T[];
+>concat : Symbol(Array.concat, Decl(1.0lib-noErrors.ts, 985, 29), Decl(1.0lib-noErrors.ts, 990, 46))
+>U : Symbol(U, Decl(1.0lib-noErrors.ts, 990, 11))
+>T : Symbol(T, Decl(1.0lib-noErrors.ts, 980, 16))
+>items : Symbol(items, Decl(1.0lib-noErrors.ts, 990, 26))
+>U : Symbol(U, Decl(1.0lib-noErrors.ts, 990, 11))
+>T : Symbol(T, Decl(1.0lib-noErrors.ts, 980, 16))
+
+    /**
+      * Combines two or more arrays.
+      * @param items Additional items to add to the end of array1.
+      */
+    concat(...items: T[]): T[];
+>concat : Symbol(Array.concat, Decl(1.0lib-noErrors.ts, 985, 29), Decl(1.0lib-noErrors.ts, 990, 46))
+>items : Symbol(items, Decl(1.0lib-noErrors.ts, 995, 11))
+>T : Symbol(T, Decl(1.0lib-noErrors.ts, 980, 16))
+>T : Symbol(T, Decl(1.0lib-noErrors.ts, 980, 16))
+
+    /**
+      * Adds all the elements of an array separated by the specified separator string.
+      * @param separator A string used to separate one element of an array from the next in the resulting String. If omitted, the array elements are separated with a comma.
+      */
+    join(separator?: string): string;
+>join : Symbol(Array.join, Decl(1.0lib-noErrors.ts, 995, 31))
+>separator : Symbol(separator, Decl(1.0lib-noErrors.ts, 1000, 9))
+
+    /**
+      * Removes the last element from an array and returns it.
+      */
+    pop(): T;
+>pop : Symbol(Array.pop, Decl(1.0lib-noErrors.ts, 1000, 37))
+>T : Symbol(T, Decl(1.0lib-noErrors.ts, 980, 16))
+
+    /**
+      * Appends new elements to an array, and returns the new length of the array.
+      * @param items New elements of the Array.
+      */
+    push(...items: T[]): number;
+>push : Symbol(Array.push, Decl(1.0lib-noErrors.ts, 1004, 13))
+>items : Symbol(items, Decl(1.0lib-noErrors.ts, 1009, 9))
+>T : Symbol(T, Decl(1.0lib-noErrors.ts, 980, 16))
+
+    /**
+      * Reverses the elements in an Array. 
+      */
+    reverse(): T[];
+>reverse : Symbol(Array.reverse, Decl(1.0lib-noErrors.ts, 1009, 32))
+>T : Symbol(T, Decl(1.0lib-noErrors.ts, 980, 16))
+
+    /**
+      * Removes the first element from an array and returns it.
+      */
+    shift(): T;
+>shift : Symbol(Array.shift, Decl(1.0lib-noErrors.ts, 1013, 19))
+>T : Symbol(T, Decl(1.0lib-noErrors.ts, 980, 16))
+
+    /** 
+      * Returns a section of an array.
+      * @param start The beginning of the specified portion of the array.
+      * @param end The end of the specified portion of the array.
+      */
+    slice(start?: number, end?: number): T[];
+>slice : Symbol(Array.slice, Decl(1.0lib-noErrors.ts, 1017, 15))
+>start : Symbol(start, Decl(1.0lib-noErrors.ts, 1023, 10))
+>end : Symbol(end, Decl(1.0lib-noErrors.ts, 1023, 25))
+>T : Symbol(T, Decl(1.0lib-noErrors.ts, 980, 16))
+
+    /**
+      * Sorts an array.
+      * @param compareFn The name of the function used to determine the order of the elements. If omitted, the elements are sorted in ascending, ASCII character order.
+      */
+    sort(compareFn?: (a: T, b: T) => number): T[];
+>sort : Symbol(Array.sort, Decl(1.0lib-noErrors.ts, 1023, 45))
+>compareFn : Symbol(compareFn, Decl(1.0lib-noErrors.ts, 1029, 9))
+>a : Symbol(a, Decl(1.0lib-noErrors.ts, 1029, 22))
+>T : Symbol(T, Decl(1.0lib-noErrors.ts, 980, 16))
+>b : Symbol(b, Decl(1.0lib-noErrors.ts, 1029, 27))
+>T : Symbol(T, Decl(1.0lib-noErrors.ts, 980, 16))
+>T : Symbol(T, Decl(1.0lib-noErrors.ts, 980, 16))
+
+    /**
+      * Removes elements from an array and, if necessary, inserts new elements in their place, returning the deleted elements.
+      * @param start The zero-based location in the array from which to start removing elements.
+      */
+    splice(start: number): T[];
+>splice : Symbol(Array.splice, Decl(1.0lib-noErrors.ts, 1029, 50), Decl(1.0lib-noErrors.ts, 1035, 31))
+>start : Symbol(start, Decl(1.0lib-noErrors.ts, 1035, 11))
+>T : Symbol(T, Decl(1.0lib-noErrors.ts, 980, 16))
+
+    /**
+      * Removes elements from an array and, if necessary, inserts new elements in their place, returning the deleted elements.
+      * @param start The zero-based location in the array from which to start removing elements.
+      * @param deleteCount The number of elements to remove.
+      * @param items Elements to insert into the array in place of the deleted elements.
+      */
+    splice(start: number, deleteCount: number, ...items: T[]): T[];
+>splice : Symbol(Array.splice, Decl(1.0lib-noErrors.ts, 1029, 50), Decl(1.0lib-noErrors.ts, 1035, 31))
+>start : Symbol(start, Decl(1.0lib-noErrors.ts, 1043, 11))
+>deleteCount : Symbol(deleteCount, Decl(1.0lib-noErrors.ts, 1043, 25))
+>items : Symbol(items, Decl(1.0lib-noErrors.ts, 1043, 46))
+>T : Symbol(T, Decl(1.0lib-noErrors.ts, 980, 16))
+>T : Symbol(T, Decl(1.0lib-noErrors.ts, 980, 16))
+
+    /**
+      * Inserts new elements at the start of an array.
+      * @param items  Elements to insert at the start of the Array.
+      */
+    unshift(...items: T[]): number;
+>unshift : Symbol(Array.unshift, Decl(1.0lib-noErrors.ts, 1043, 67))
+>items : Symbol(items, Decl(1.0lib-noErrors.ts, 1049, 12))
+>T : Symbol(T, Decl(1.0lib-noErrors.ts, 980, 16))
+
+    /**
+      * Returns the index of the first occurrence of a value in an array.
+      * @param searchElement The value to locate in the array.
+      * @param fromIndex The array index at which to begin the search. If fromIndex is omitted, the search starts at index 0.
+      */
+    indexOf(searchElement: T, fromIndex?: number): number;
+>indexOf : Symbol(Array.indexOf, Decl(1.0lib-noErrors.ts, 1049, 35))
+>searchElement : Symbol(searchElement, Decl(1.0lib-noErrors.ts, 1056, 12))
+>T : Symbol(T, Decl(1.0lib-noErrors.ts, 980, 16))
+>fromIndex : Symbol(fromIndex, Decl(1.0lib-noErrors.ts, 1056, 29))
+
+    /**
+      * Returns the index of the last occurrence of a specified value in an array.
+      * @param searchElement The value to locate in the array.
+      * @param fromIndex The array index at which to begin the search. If fromIndex is omitted, the search starts at the last index in the array.
+      */
+    lastIndexOf(searchElement: T, fromIndex?: number): number;
+>lastIndexOf : Symbol(Array.lastIndexOf, Decl(1.0lib-noErrors.ts, 1056, 58))
+>searchElement : Symbol(searchElement, Decl(1.0lib-noErrors.ts, 1063, 16))
+>T : Symbol(T, Decl(1.0lib-noErrors.ts, 980, 16))
+>fromIndex : Symbol(fromIndex, Decl(1.0lib-noErrors.ts, 1063, 33))
+
+    /**
+      * Determines whether all the members of an array satisfy the specified test.
+      * @param callbackfn A function that accepts up to three arguments. The every method calls the callbackfn function for each element in array1 until the callbackfn returns false, or until the end of the array.
+      * @param thisArg An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
+      */
+    every(callbackfn: (value: T, index: number, array: T[]) => boolean, thisArg?: any): boolean;
+>every : Symbol(Array.every, Decl(1.0lib-noErrors.ts, 1063, 62))
+>callbackfn : Symbol(callbackfn, Decl(1.0lib-noErrors.ts, 1070, 10))
+>value : Symbol(value, Decl(1.0lib-noErrors.ts, 1070, 23))
+>T : Symbol(T, Decl(1.0lib-noErrors.ts, 980, 16))
+>index : Symbol(index, Decl(1.0lib-noErrors.ts, 1070, 32))
+>array : Symbol(array, Decl(1.0lib-noErrors.ts, 1070, 47))
+>T : Symbol(T, Decl(1.0lib-noErrors.ts, 980, 16))
+>thisArg : Symbol(thisArg, Decl(1.0lib-noErrors.ts, 1070, 71))
+
+    /**
+      * Determines whether the specified callback function returns true for any element of an array.
+      * @param callbackfn A function that accepts up to three arguments. The some method calls the callbackfn function for each element in array1 until the callbackfn returns true, or until the end of the array.
+      * @param thisArg An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
+      */
+    some(callbackfn: (value: T, index: number, array: T[]) => boolean, thisArg?: any): boolean;
+>some : Symbol(Array.some, Decl(1.0lib-noErrors.ts, 1070, 96))
+>callbackfn : Symbol(callbackfn, Decl(1.0lib-noErrors.ts, 1077, 9))
+>value : Symbol(value, Decl(1.0lib-noErrors.ts, 1077, 22))
+>T : Symbol(T, Decl(1.0lib-noErrors.ts, 980, 16))
+>index : Symbol(index, Decl(1.0lib-noErrors.ts, 1077, 31))
+>array : Symbol(array, Decl(1.0lib-noErrors.ts, 1077, 46))
+>T : Symbol(T, Decl(1.0lib-noErrors.ts, 980, 16))
+>thisArg : Symbol(thisArg, Decl(1.0lib-noErrors.ts, 1077, 70))
+
+    /**
+      * Performs the specified action for each element in an array.
+      * @param callbackfn  A function that accepts up to three arguments. forEach calls the callbackfn function one time for each element in the array. 
+      * @param thisArg  An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
+      */
+    forEach(callbackfn: (value: T, index: number, array: T[]) => void, thisArg?: any): void;
+>forEach : Symbol(Array.forEach, Decl(1.0lib-noErrors.ts, 1077, 95))
+>callbackfn : Symbol(callbackfn, Decl(1.0lib-noErrors.ts, 1084, 12))
+>value : Symbol(value, Decl(1.0lib-noErrors.ts, 1084, 25))
+>T : Symbol(T, Decl(1.0lib-noErrors.ts, 980, 16))
+>index : Symbol(index, Decl(1.0lib-noErrors.ts, 1084, 34))
+>array : Symbol(array, Decl(1.0lib-noErrors.ts, 1084, 49))
+>T : Symbol(T, Decl(1.0lib-noErrors.ts, 980, 16))
+>thisArg : Symbol(thisArg, Decl(1.0lib-noErrors.ts, 1084, 70))
+
+    /**
+      * Calls a defined callback function on each element of an array, and returns an array that contains the results.
+      * @param callbackfn A function that accepts up to three arguments. The map method calls the callbackfn function one time for each element in the array. 
+      * @param thisArg An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
+      */
+    map<U>(callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any): U[];
+>map : Symbol(Array.map, Decl(1.0lib-noErrors.ts, 1084, 92))
+>U : Symbol(U, Decl(1.0lib-noErrors.ts, 1091, 8))
+>callbackfn : Symbol(callbackfn, Decl(1.0lib-noErrors.ts, 1091, 11))
+>value : Symbol(value, Decl(1.0lib-noErrors.ts, 1091, 24))
+>T : Symbol(T, Decl(1.0lib-noErrors.ts, 980, 16))
+>index : Symbol(index, Decl(1.0lib-noErrors.ts, 1091, 33))
+>array : Symbol(array, Decl(1.0lib-noErrors.ts, 1091, 48))
+>T : Symbol(T, Decl(1.0lib-noErrors.ts, 980, 16))
+>U : Symbol(U, Decl(1.0lib-noErrors.ts, 1091, 8))
+>thisArg : Symbol(thisArg, Decl(1.0lib-noErrors.ts, 1091, 66))
+>U : Symbol(U, Decl(1.0lib-noErrors.ts, 1091, 8))
+
+    /**
+      * Returns the elements of an array that meet the condition specified in a callback function. 
+      * @param callbackfn A function that accepts up to three arguments. The filter method calls the callbackfn function one time for each element in the array. 
+      * @param thisArg An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
+      */
+    filter(callbackfn: (value: T, index: number, array: T[]) => boolean, thisArg?: any): T[];
+>filter : Symbol(Array.filter, Decl(1.0lib-noErrors.ts, 1091, 87))
+>callbackfn : Symbol(callbackfn, Decl(1.0lib-noErrors.ts, 1098, 11))
+>value : Symbol(value, Decl(1.0lib-noErrors.ts, 1098, 24))
+>T : Symbol(T, Decl(1.0lib-noErrors.ts, 980, 16))
+>index : Symbol(index, Decl(1.0lib-noErrors.ts, 1098, 33))
+>array : Symbol(array, Decl(1.0lib-noErrors.ts, 1098, 48))
+>T : Symbol(T, Decl(1.0lib-noErrors.ts, 980, 16))
+>thisArg : Symbol(thisArg, Decl(1.0lib-noErrors.ts, 1098, 72))
+>T : Symbol(T, Decl(1.0lib-noErrors.ts, 980, 16))
+
+    /**
+      * Calls the specified callback function for all the elements in an array. The return value of the callback function is the accumulated result, and is provided as an argument in the next call to the callback function.
+      * @param callbackfn A function that accepts up to four arguments. The reduce method calls the callbackfn function one time for each element in the array.
+      * @param initialValue If initialValue is specified, it is used as the initial value to start the accumulation. The first call to the callbackfn function provides this value as an argument instead of an array value.
+      */
+    reduce(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T, initialValue?: T): T;
+>reduce : Symbol(Array.reduce, Decl(1.0lib-noErrors.ts, 1098, 93), Decl(1.0lib-noErrors.ts, 1105, 120))
+>callbackfn : Symbol(callbackfn, Decl(1.0lib-noErrors.ts, 1105, 11))
+>previousValue : Symbol(previousValue, Decl(1.0lib-noErrors.ts, 1105, 24))
+>T : Symbol(T, Decl(1.0lib-noErrors.ts, 980, 16))
+>currentValue : Symbol(currentValue, Decl(1.0lib-noErrors.ts, 1105, 41))
+>T : Symbol(T, Decl(1.0lib-noErrors.ts, 980, 16))
+>currentIndex : Symbol(currentIndex, Decl(1.0lib-noErrors.ts, 1105, 58))
+>array : Symbol(array, Decl(1.0lib-noErrors.ts, 1105, 80))
+>T : Symbol(T, Decl(1.0lib-noErrors.ts, 980, 16))
+>T : Symbol(T, Decl(1.0lib-noErrors.ts, 980, 16))
+>initialValue : Symbol(initialValue, Decl(1.0lib-noErrors.ts, 1105, 98))
+>T : Symbol(T, Decl(1.0lib-noErrors.ts, 980, 16))
+>T : Symbol(T, Decl(1.0lib-noErrors.ts, 980, 16))
+
+    /**
+      * Calls the specified callback function for all the elements in an array. The return value of the callback function is the accumulated result, and is provided as an argument in the next call to the callback function.
+      * @param callbackfn A function that accepts up to four arguments. The reduce method calls the callbackfn function one time for each element in the array.
+      * @param initialValue If initialValue is specified, it is used as the initial value to start the accumulation. The first call to the callbackfn function provides this value as an argument instead of an array value.
+      */
+    reduce<U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U, initialValue: U): U;
+>reduce : Symbol(Array.reduce, Decl(1.0lib-noErrors.ts, 1098, 93), Decl(1.0lib-noErrors.ts, 1105, 120))
+>U : Symbol(U, Decl(1.0lib-noErrors.ts, 1111, 11))
+>callbackfn : Symbol(callbackfn, Decl(1.0lib-noErrors.ts, 1111, 14))
+>previousValue : Symbol(previousValue, Decl(1.0lib-noErrors.ts, 1111, 27))
+>U : Symbol(U, Decl(1.0lib-noErrors.ts, 1111, 11))
+>currentValue : Symbol(currentValue, Decl(1.0lib-noErrors.ts, 1111, 44))
+>T : Symbol(T, Decl(1.0lib-noErrors.ts, 980, 16))
+>currentIndex : Symbol(currentIndex, Decl(1.0lib-noErrors.ts, 1111, 61))
+>array : Symbol(array, Decl(1.0lib-noErrors.ts, 1111, 83))
+>T : Symbol(T, Decl(1.0lib-noErrors.ts, 980, 16))
+>U : Symbol(U, Decl(1.0lib-noErrors.ts, 1111, 11))
+>initialValue : Symbol(initialValue, Decl(1.0lib-noErrors.ts, 1111, 101))
+>U : Symbol(U, Decl(1.0lib-noErrors.ts, 1111, 11))
+>U : Symbol(U, Decl(1.0lib-noErrors.ts, 1111, 11))
+
+    /** 
+      * Calls the specified callback function for all the elements in an array, in descending order. The return value of the callback function is the accumulated result, and is provided as an argument in the next call to the callback function.
+      * @param callbackfn A function that accepts up to four arguments. The reduceRight method calls the callbackfn function one time for each element in the array. 
+      * @param initialValue If initialValue is specified, it is used as the initial value to start the accumulation. The first call to the callbackfn function provides this value as an argument instead of an array value.
+      */
+    reduceRight(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T, initialValue?: T): T;
+>reduceRight : Symbol(Array.reduceRight, Decl(1.0lib-noErrors.ts, 1111, 122), Decl(1.0lib-noErrors.ts, 1118, 125))
+>callbackfn : Symbol(callbackfn, Decl(1.0lib-noErrors.ts, 1118, 16))
+>previousValue : Symbol(previousValue, Decl(1.0lib-noErrors.ts, 1118, 29))
+>T : Symbol(T, Decl(1.0lib-noErrors.ts, 980, 16))
+>currentValue : Symbol(currentValue, Decl(1.0lib-noErrors.ts, 1118, 46))
+>T : Symbol(T, Decl(1.0lib-noErrors.ts, 980, 16))
+>currentIndex : Symbol(currentIndex, Decl(1.0lib-noErrors.ts, 1118, 63))
+>array : Symbol(array, Decl(1.0lib-noErrors.ts, 1118, 85))
+>T : Symbol(T, Decl(1.0lib-noErrors.ts, 980, 16))
+>T : Symbol(T, Decl(1.0lib-noErrors.ts, 980, 16))
+>initialValue : Symbol(initialValue, Decl(1.0lib-noErrors.ts, 1118, 103))
+>T : Symbol(T, Decl(1.0lib-noErrors.ts, 980, 16))
+>T : Symbol(T, Decl(1.0lib-noErrors.ts, 980, 16))
+
+    /** 
+      * Calls the specified callback function for all the elements in an array, in descending order. The return value of the callback function is the accumulated result, and is provided as an argument in the next call to the callback function.
+      * @param callbackfn A function that accepts up to four arguments. The reduceRight method calls the callbackfn function one time for each element in the array. 
+      * @param initialValue If initialValue is specified, it is used as the initial value to start the accumulation. The first call to the callbackfn function provides this value as an argument instead of an array value.
+      */
+    reduceRight<U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U, initialValue: U): U;
+>reduceRight : Symbol(Array.reduceRight, Decl(1.0lib-noErrors.ts, 1111, 122), Decl(1.0lib-noErrors.ts, 1118, 125))
+>U : Symbol(U, Decl(1.0lib-noErrors.ts, 1124, 16))
+>callbackfn : Symbol(callbackfn, Decl(1.0lib-noErrors.ts, 1124, 19))
+>previousValue : Symbol(previousValue, Decl(1.0lib-noErrors.ts, 1124, 32))
+>U : Symbol(U, Decl(1.0lib-noErrors.ts, 1124, 16))
+>currentValue : Symbol(currentValue, Decl(1.0lib-noErrors.ts, 1124, 49))
+>T : Symbol(T, Decl(1.0lib-noErrors.ts, 980, 16))
+>currentIndex : Symbol(currentIndex, Decl(1.0lib-noErrors.ts, 1124, 66))
+>array : Symbol(array, Decl(1.0lib-noErrors.ts, 1124, 88))
+>T : Symbol(T, Decl(1.0lib-noErrors.ts, 980, 16))
+>U : Symbol(U, Decl(1.0lib-noErrors.ts, 1124, 16))
+>initialValue : Symbol(initialValue, Decl(1.0lib-noErrors.ts, 1124, 106))
+>U : Symbol(U, Decl(1.0lib-noErrors.ts, 1124, 16))
+>U : Symbol(U, Decl(1.0lib-noErrors.ts, 1124, 16))
+
+    /**
+      * Gets or sets the length of the array. This is a number one higher than the highest element defined in an array.
+      */
+    length: number;
+>length : Symbol(Array.length, Decl(1.0lib-noErrors.ts, 1124, 127))
+
+    [n: number]: T;
+>n : Symbol(n, Decl(1.0lib-noErrors.ts, 1131, 5))
+>T : Symbol(T, Decl(1.0lib-noErrors.ts, 980, 16))
+}
+declare var Array: {
+>Array : Symbol(Array, Decl(1.0lib-noErrors.ts, 973, 23), Decl(1.0lib-noErrors.ts, 1133, 11))
+
+    new (arrayLength?: number): any[];
+>arrayLength : Symbol(arrayLength, Decl(1.0lib-noErrors.ts, 1134, 9))
+
+    new <T>(arrayLength: number): T[];
+>T : Symbol(T, Decl(1.0lib-noErrors.ts, 1135, 9))
+>arrayLength : Symbol(arrayLength, Decl(1.0lib-noErrors.ts, 1135, 12))
+>T : Symbol(T, Decl(1.0lib-noErrors.ts, 1135, 9))
+
+    new <T>(...items: T[]): T[];
+>T : Symbol(T, Decl(1.0lib-noErrors.ts, 1136, 9))
+>items : Symbol(items, Decl(1.0lib-noErrors.ts, 1136, 12))
+>T : Symbol(T, Decl(1.0lib-noErrors.ts, 1136, 9))
+>T : Symbol(T, Decl(1.0lib-noErrors.ts, 1136, 9))
+
+    (arrayLength?: number): any[];
+>arrayLength : Symbol(arrayLength, Decl(1.0lib-noErrors.ts, 1137, 5))
+
+    <T>(arrayLength: number): T[];
+>T : Symbol(T, Decl(1.0lib-noErrors.ts, 1138, 5))
+>arrayLength : Symbol(arrayLength, Decl(1.0lib-noErrors.ts, 1138, 8))
+>T : Symbol(T, Decl(1.0lib-noErrors.ts, 1138, 5))
+
+    <T>(...items: T[]): T[];
+>T : Symbol(T, Decl(1.0lib-noErrors.ts, 1139, 5))
+>items : Symbol(items, Decl(1.0lib-noErrors.ts, 1139, 8))
+>T : Symbol(T, Decl(1.0lib-noErrors.ts, 1139, 5))
+>T : Symbol(T, Decl(1.0lib-noErrors.ts, 1139, 5))
+
+    isArray(arg: any): boolean;
+>isArray : Symbol(isArray, Decl(1.0lib-noErrors.ts, 1139, 28))
+>arg : Symbol(arg, Decl(1.0lib-noErrors.ts, 1140, 12))
+
+    prototype: Array<any>;
+>prototype : Symbol(prototype, Decl(1.0lib-noErrors.ts, 1140, 31))
+>Array : Symbol(Array, Decl(1.0lib-noErrors.ts, 973, 23), Decl(1.0lib-noErrors.ts, 1133, 11))
+}
+

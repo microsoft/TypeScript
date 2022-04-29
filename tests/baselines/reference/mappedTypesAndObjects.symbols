@@ -1,0 +1,123 @@
+=== tests/cases/conformance/types/mapped/mappedTypesAndObjects.ts ===
+function f1<T>(x: Partial<T>, y: Readonly<T>) {
+>f1 : Symbol(f1, Decl(mappedTypesAndObjects.ts, 0, 0))
+>T : Symbol(T, Decl(mappedTypesAndObjects.ts, 0, 12))
+>x : Symbol(x, Decl(mappedTypesAndObjects.ts, 0, 15))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(mappedTypesAndObjects.ts, 0, 12))
+>y : Symbol(y, Decl(mappedTypesAndObjects.ts, 0, 29))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(mappedTypesAndObjects.ts, 0, 12))
+
+    let obj: {};
+>obj : Symbol(obj, Decl(mappedTypesAndObjects.ts, 1, 7))
+
+    obj = x;
+>obj : Symbol(obj, Decl(mappedTypesAndObjects.ts, 1, 7))
+>x : Symbol(x, Decl(mappedTypesAndObjects.ts, 0, 15))
+
+    obj = y;
+>obj : Symbol(obj, Decl(mappedTypesAndObjects.ts, 1, 7))
+>y : Symbol(y, Decl(mappedTypesAndObjects.ts, 0, 29))
+}
+
+function f2<T>(x: Partial<T>, y: Readonly<T>) {
+>f2 : Symbol(f2, Decl(mappedTypesAndObjects.ts, 4, 1))
+>T : Symbol(T, Decl(mappedTypesAndObjects.ts, 6, 12))
+>x : Symbol(x, Decl(mappedTypesAndObjects.ts, 6, 15))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(mappedTypesAndObjects.ts, 6, 12))
+>y : Symbol(y, Decl(mappedTypesAndObjects.ts, 6, 29))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(mappedTypesAndObjects.ts, 6, 12))
+
+    let obj: { [x: string]: any };
+>obj : Symbol(obj, Decl(mappedTypesAndObjects.ts, 7, 7))
+>x : Symbol(x, Decl(mappedTypesAndObjects.ts, 7, 16))
+
+    obj = x;
+>obj : Symbol(obj, Decl(mappedTypesAndObjects.ts, 7, 7))
+>x : Symbol(x, Decl(mappedTypesAndObjects.ts, 6, 15))
+
+    obj = y;
+>obj : Symbol(obj, Decl(mappedTypesAndObjects.ts, 7, 7))
+>y : Symbol(y, Decl(mappedTypesAndObjects.ts, 6, 29))
+}
+
+function f3<T>(x: Partial<T>) {
+>f3 : Symbol(f3, Decl(mappedTypesAndObjects.ts, 10, 1))
+>T : Symbol(T, Decl(mappedTypesAndObjects.ts, 12, 12))
+>x : Symbol(x, Decl(mappedTypesAndObjects.ts, 12, 15))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(mappedTypesAndObjects.ts, 12, 12))
+
+    x = {};
+>x : Symbol(x, Decl(mappedTypesAndObjects.ts, 12, 15))
+}
+
+// Repro from #12900
+
+interface Base {
+>Base : Symbol(Base, Decl(mappedTypesAndObjects.ts, 14, 1))
+
+    foo: { [key: string]: any };
+>foo : Symbol(Base.foo, Decl(mappedTypesAndObjects.ts, 18, 16))
+>key : Symbol(key, Decl(mappedTypesAndObjects.ts, 19, 12))
+
+    bar: any;
+>bar : Symbol(Base.bar, Decl(mappedTypesAndObjects.ts, 19, 32))
+
+    baz: any;
+>baz : Symbol(Base.baz, Decl(mappedTypesAndObjects.ts, 20, 13))
+}
+
+interface E1<T> extends Base {
+>E1 : Symbol(E1, Decl(mappedTypesAndObjects.ts, 22, 1))
+>T : Symbol(T, Decl(mappedTypesAndObjects.ts, 24, 13))
+>Base : Symbol(Base, Decl(mappedTypesAndObjects.ts, 14, 1))
+
+    foo: T;
+>foo : Symbol(E1.foo, Decl(mappedTypesAndObjects.ts, 24, 30))
+>T : Symbol(T, Decl(mappedTypesAndObjects.ts, 24, 13))
+}
+
+interface Something { name: string, value: string };
+>Something : Symbol(Something, Decl(mappedTypesAndObjects.ts, 26, 1))
+>name : Symbol(Something.name, Decl(mappedTypesAndObjects.ts, 28, 21))
+>value : Symbol(Something.value, Decl(mappedTypesAndObjects.ts, 28, 35))
+
+interface E2 extends Base {
+>E2 : Symbol(E2, Decl(mappedTypesAndObjects.ts, 28, 52))
+>Base : Symbol(Base, Decl(mappedTypesAndObjects.ts, 14, 1))
+
+    foo: Partial<Something>;  // or other mapped type
+>foo : Symbol(E2.foo, Decl(mappedTypesAndObjects.ts, 29, 27))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>Something : Symbol(Something, Decl(mappedTypesAndObjects.ts, 26, 1))
+}
+
+interface E3<T> extends Base {
+>E3 : Symbol(E3, Decl(mappedTypesAndObjects.ts, 31, 1))
+>T : Symbol(T, Decl(mappedTypesAndObjects.ts, 33, 13))
+>Base : Symbol(Base, Decl(mappedTypesAndObjects.ts, 14, 1))
+
+    foo: Partial<T>; // or other mapped type
+>foo : Symbol(E3.foo, Decl(mappedTypesAndObjects.ts, 33, 30))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(mappedTypesAndObjects.ts, 33, 13))
+}
+
+// Repro from #13747
+
+class Form<T> {
+>Form : Symbol(Form, Decl(mappedTypesAndObjects.ts, 35, 1))
+>T : Symbol(T, Decl(mappedTypesAndObjects.ts, 39, 11))
+
+    private values: {[P in keyof T]?: T[P]} = {}
+>values : Symbol(Form.values, Decl(mappedTypesAndObjects.ts, 39, 15))
+>P : Symbol(P, Decl(mappedTypesAndObjects.ts, 40, 22))
+>T : Symbol(T, Decl(mappedTypesAndObjects.ts, 39, 11))
+>T : Symbol(T, Decl(mappedTypesAndObjects.ts, 39, 11))
+>P : Symbol(P, Decl(mappedTypesAndObjects.ts, 40, 22))
+}
+

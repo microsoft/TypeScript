@@ -1,0 +1,22 @@
+=== tests/cases/compiler/b.ts ===
+///<reference path="a.ts"/>
+declare function foobar(a: typeof foo): typeof bar;
+>foobar : (a: typeof foo) => typeof bar
+>a : () => any
+>foo : () => any
+>bar : () => any
+
+=== tests/cases/compiler/a.ts ===
+/*!=========
+    Keep this pinned comment
+   =========
+*/
+
+/*! Don't keep this pinned comment */
+declare function foo();
+>foo : () => any
+
+// Don't keep this comment.
+declare function bar();
+>bar : () => any
+

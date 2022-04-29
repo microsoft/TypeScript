@@ -1,0 +1,96 @@
+=== tests/cases/compiler/constructorWithCapturedSuper.ts ===
+let oneA: A;
+>oneA : Symbol(oneA, Decl(constructorWithCapturedSuper.ts, 0, 3))
+>A : Symbol(A, Decl(constructorWithCapturedSuper.ts, 0, 12))
+
+class A {
+>A : Symbol(A, Decl(constructorWithCapturedSuper.ts, 0, 12))
+
+    constructor() {
+        return oneA;
+>oneA : Symbol(oneA, Decl(constructorWithCapturedSuper.ts, 0, 3))
+    }
+}
+
+class B extends A {
+>B : Symbol(B, Decl(constructorWithCapturedSuper.ts, 6, 1))
+>A : Symbol(A, Decl(constructorWithCapturedSuper.ts, 0, 12))
+
+    constructor(x: number) {
+>x : Symbol(x, Decl(constructorWithCapturedSuper.ts, 9, 16))
+
+        super();
+>super : Symbol(A, Decl(constructorWithCapturedSuper.ts, 0, 12))
+
+        if (x === 1) {
+>x : Symbol(x, Decl(constructorWithCapturedSuper.ts, 9, 16))
+
+            return;
+        }
+        while (x < 2) {
+>x : Symbol(x, Decl(constructorWithCapturedSuper.ts, 9, 16))
+
+            return;
+        }
+        try {
+            return
+        }
+        catch (e) {
+>e : Symbol(e, Decl(constructorWithCapturedSuper.ts, 20, 15))
+
+            return;
+        }
+        finally {
+            return;
+        }
+    }
+}
+
+class C extends A {
+>C : Symbol(C, Decl(constructorWithCapturedSuper.ts, 27, 1))
+>A : Symbol(A, Decl(constructorWithCapturedSuper.ts, 0, 12))
+
+    constructor(x: number) {
+>x : Symbol(x, Decl(constructorWithCapturedSuper.ts, 30, 16))
+
+        super();
+>super : Symbol(A, Decl(constructorWithCapturedSuper.ts, 0, 12))
+
+        for (let i = 0; i < 10; ++i) {
+>i : Symbol(i, Decl(constructorWithCapturedSuper.ts, 32, 16))
+>i : Symbol(i, Decl(constructorWithCapturedSuper.ts, 32, 16))
+>i : Symbol(i, Decl(constructorWithCapturedSuper.ts, 32, 16))
+
+            () => i + x;
+>i : Symbol(i, Decl(constructorWithCapturedSuper.ts, 32, 16))
+>x : Symbol(x, Decl(constructorWithCapturedSuper.ts, 30, 16))
+
+            if (x === 1) {
+>x : Symbol(x, Decl(constructorWithCapturedSuper.ts, 30, 16))
+
+                return;
+            } 
+        }
+    }
+}
+
+class D extends A {
+>D : Symbol(D, Decl(constructorWithCapturedSuper.ts, 39, 1))
+>A : Symbol(A, Decl(constructorWithCapturedSuper.ts, 0, 12))
+
+    constructor(x: number) {
+>x : Symbol(x, Decl(constructorWithCapturedSuper.ts, 42, 16))
+
+        super();
+>super : Symbol(A, Decl(constructorWithCapturedSuper.ts, 0, 12))
+
+        () => {
+            return;
+        }
+        function foo() {
+>foo : Symbol(foo, Decl(constructorWithCapturedSuper.ts, 46, 9))
+
+            return;
+        }
+    }
+}

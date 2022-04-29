@@ -1,0 +1,59 @@
+tests/cases/conformance/classes/members/constructorFunctionTypes/classWithBaseClassButNoConstructor.ts(10,9): error TS2554: Expected 1 arguments, but got 0.
+tests/cases/conformance/classes/members/constructorFunctionTypes/classWithBaseClassButNoConstructor.ts(22,9): error TS2554: Expected 1 arguments, but got 0.
+tests/cases/conformance/classes/members/constructorFunctionTypes/classWithBaseClassButNoConstructor.ts(31,10): error TS2554: Expected 1 arguments, but got 0.
+tests/cases/conformance/classes/members/constructorFunctionTypes/classWithBaseClassButNoConstructor.ts(39,10): error TS2554: Expected 1 arguments, but got 0.
+
+
+==== tests/cases/conformance/classes/members/constructorFunctionTypes/classWithBaseClassButNoConstructor.ts (4 errors) ====
+    class Base {
+        constructor(x: number) { }
+    }
+    
+    class C extends Base {
+        foo: string;
+    }
+    
+    var r = C;
+    var c = new C(); // error
+            ~~~~~~~
+!!! error TS2554: Expected 1 arguments, but got 0.
+!!! related TS6210 tests/cases/conformance/classes/members/constructorFunctionTypes/classWithBaseClassButNoConstructor.ts:2:17: An argument for 'x' was not provided.
+    var c2 = new C(1); // ok
+    
+    class Base2<T,U> {
+        constructor(x: T) { }
+    }
+    
+    class D<T,U> extends Base2<T,U> {
+        foo: U;
+    }
+    
+    var r2 = D;
+    var d = new D(); // error
+            ~~~~~~~
+!!! error TS2554: Expected 1 arguments, but got 0.
+!!! related TS6210 tests/cases/conformance/classes/members/constructorFunctionTypes/classWithBaseClassButNoConstructor.ts:14:17: An argument for 'x' was not provided.
+    var d2 = new D(1); // ok
+    
+    // specialized base class
+    class D2<T, U> extends Base2<string, number> {
+        foo: U;
+    }
+    
+    var r3 = D2;
+    var d3 = new D(); // error
+             ~~~~~~~
+!!! error TS2554: Expected 1 arguments, but got 0.
+!!! related TS6210 tests/cases/conformance/classes/members/constructorFunctionTypes/classWithBaseClassButNoConstructor.ts:14:17: An argument for 'x' was not provided.
+    var d4 = new D(1); // ok
+    
+    class D3 extends Base2<string, number> {
+        foo: string;
+    }
+    
+    var r4 = D3;
+    var d5 = new D(); // error
+             ~~~~~~~
+!!! error TS2554: Expected 1 arguments, but got 0.
+!!! related TS6210 tests/cases/conformance/classes/members/constructorFunctionTypes/classWithBaseClassButNoConstructor.ts:14:17: An argument for 'x' was not provided.
+    var d6 = new D(1); // ok

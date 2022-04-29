@@ -1,0 +1,46 @@
+=== tests/cases/conformance/expressions/binaryOperators/instanceofOperator/instanceofOperatorWithLHSIsObject.ts ===
+class C { }
+>C : Symbol(C, Decl(instanceofOperatorWithLHSIsObject.ts, 0, 0))
+
+var x1: any;
+>x1 : Symbol(x1, Decl(instanceofOperatorWithLHSIsObject.ts, 2, 3))
+
+var x2: Function;
+>x2 : Symbol(x2, Decl(instanceofOperatorWithLHSIsObject.ts, 3, 3))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+var a: {};
+>a : Symbol(a, Decl(instanceofOperatorWithLHSIsObject.ts, 5, 3))
+
+var b: Object;
+>b : Symbol(b, Decl(instanceofOperatorWithLHSIsObject.ts, 6, 3))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+var c: C;
+>c : Symbol(c, Decl(instanceofOperatorWithLHSIsObject.ts, 7, 3))
+>C : Symbol(C, Decl(instanceofOperatorWithLHSIsObject.ts, 0, 0))
+
+var d: string | C;
+>d : Symbol(d, Decl(instanceofOperatorWithLHSIsObject.ts, 8, 3))
+>C : Symbol(C, Decl(instanceofOperatorWithLHSIsObject.ts, 0, 0))
+
+var r1 = a instanceof x1;
+>r1 : Symbol(r1, Decl(instanceofOperatorWithLHSIsObject.ts, 10, 3))
+>a : Symbol(a, Decl(instanceofOperatorWithLHSIsObject.ts, 5, 3))
+>x1 : Symbol(x1, Decl(instanceofOperatorWithLHSIsObject.ts, 2, 3))
+
+var r2 = b instanceof x2;
+>r2 : Symbol(r2, Decl(instanceofOperatorWithLHSIsObject.ts, 11, 3))
+>b : Symbol(b, Decl(instanceofOperatorWithLHSIsObject.ts, 6, 3))
+>x2 : Symbol(x2, Decl(instanceofOperatorWithLHSIsObject.ts, 3, 3))
+
+var r3 = c instanceof x1;
+>r3 : Symbol(r3, Decl(instanceofOperatorWithLHSIsObject.ts, 12, 3))
+>c : Symbol(c, Decl(instanceofOperatorWithLHSIsObject.ts, 7, 3))
+>x1 : Symbol(x1, Decl(instanceofOperatorWithLHSIsObject.ts, 2, 3))
+
+var r4 = d instanceof x1;
+>r4 : Symbol(r4, Decl(instanceofOperatorWithLHSIsObject.ts, 13, 3))
+>d : Symbol(d, Decl(instanceofOperatorWithLHSIsObject.ts, 8, 3))
+>x1 : Symbol(x1, Decl(instanceofOperatorWithLHSIsObject.ts, 2, 3))
+

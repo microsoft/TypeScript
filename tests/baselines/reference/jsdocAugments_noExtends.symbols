@@ -1,0 +1,19 @@
+=== /b.js ===
+class A { constructor() { this.x = 0; } }
+>A : Symbol(A, Decl(b.js, 0, 0))
+>this.x : Symbol(A.x, Decl(b.js, 0, 25))
+>this : Symbol(A, Decl(b.js, 0, 0))
+>x : Symbol(A.x, Decl(b.js, 0, 25))
+
+/** @augments A */
+class B {
+>B : Symbol(B, Decl(b.js, 0, 41))
+
+    m() {
+>m : Symbol(B.m, Decl(b.js, 3, 9))
+
+        return this.x;
+>this : Symbol(B, Decl(b.js, 0, 41))
+    }
+}
+

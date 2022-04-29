@@ -1,0 +1,10 @@
+=== tests/cases/compiler/commentsPropertySignature1.ts ===
+var a = {
+>a : Symbol(a, Decl(commentsPropertySignature1.ts, 0, 3))
+
+    /** own x*/
+    x: 0
+>x : Symbol(x, Decl(commentsPropertySignature1.ts, 0, 9))
+
+};
+

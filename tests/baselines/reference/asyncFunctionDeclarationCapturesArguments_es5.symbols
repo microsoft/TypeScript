@@ -1,0 +1,22 @@
+=== tests/cases/conformance/async/es5/functionDeclarations/asyncFunctionDeclarationCapturesArguments_es5.ts ===
+class C {
+>C : Symbol(C, Decl(asyncFunctionDeclarationCapturesArguments_es5.ts, 0, 0))
+
+   method() {
+>method : Symbol(C.method, Decl(asyncFunctionDeclarationCapturesArguments_es5.ts, 0, 9))
+
+      function other() {}
+>other : Symbol(other, Decl(asyncFunctionDeclarationCapturesArguments_es5.ts, 1, 13))
+
+      async function fn () {
+>fn : Symbol(fn, Decl(asyncFunctionDeclarationCapturesArguments_es5.ts, 2, 25))
+
+           await other.apply(this, arguments);
+>other.apply : Symbol(Function.apply, Decl(lib.es5.d.ts, --, --))
+>other : Symbol(other, Decl(asyncFunctionDeclarationCapturesArguments_es5.ts, 1, 13))
+>apply : Symbol(Function.apply, Decl(lib.es5.d.ts, --, --))
+>arguments : Symbol(arguments)
+      }
+   }
+}
+

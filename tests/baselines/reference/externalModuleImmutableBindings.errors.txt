@@ -1,0 +1,117 @@
+tests/cases/compiler/f2.ts(6,7): error TS2540: Cannot assign to 'x' because it is a read-only property.
+tests/cases/compiler/f2.ts(7,7): error TS2540: Cannot assign to 'x' because it is a read-only property.
+tests/cases/compiler/f2.ts(8,7): error TS2339: Property 'blah' does not exist on type 'typeof import("tests/cases/compiler/f1")'.
+tests/cases/compiler/f2.ts(11,7): error TS2540: Cannot assign to 'x' because it is a read-only property.
+tests/cases/compiler/f2.ts(12,7): error TS2540: Cannot assign to 'x' because it is a read-only property.
+tests/cases/compiler/f2.ts(16,8): error TS2540: Cannot assign to 'x' because it is a read-only property.
+tests/cases/compiler/f2.ts(17,8): error TS2540: Cannot assign to 'x' because it is a read-only property.
+tests/cases/compiler/f2.ts(18,8): error TS2339: Property 'blah' does not exist on type 'typeof import("tests/cases/compiler/f1")'.
+tests/cases/compiler/f2.ts(21,8): error TS2540: Cannot assign to 'x' because it is a read-only property.
+tests/cases/compiler/f2.ts(22,8): error TS2540: Cannot assign to 'x' because it is a read-only property.
+tests/cases/compiler/f2.ts(26,12): error TS2540: Cannot assign to 'x' because it is a read-only property.
+tests/cases/compiler/f2.ts(27,12): error TS2540: Cannot assign to 'x' because it is a read-only property.
+tests/cases/compiler/f2.ts(28,12): error TS2540: Cannot assign to 'x' because it is a read-only property.
+tests/cases/compiler/f2.ts(29,12): error TS2540: Cannot assign to 'x' because it is a read-only property.
+tests/cases/compiler/f2.ts(30,12): error TS2339: Property 'blah' does not exist on type 'typeof import("tests/cases/compiler/f1")'.
+tests/cases/compiler/f2.ts(31,12): error TS2339: Property 'blah' does not exist on type 'typeof import("tests/cases/compiler/f1")'.
+tests/cases/compiler/f2.ts(35,13): error TS2540: Cannot assign to 'x' because it is a read-only property.
+tests/cases/compiler/f2.ts(36,13): error TS2540: Cannot assign to 'x' because it is a read-only property.
+tests/cases/compiler/f2.ts(37,13): error TS2540: Cannot assign to 'x' because it is a read-only property.
+tests/cases/compiler/f2.ts(38,13): error TS2540: Cannot assign to 'x' because it is a read-only property.
+tests/cases/compiler/f2.ts(39,13): error TS2339: Property 'blah' does not exist on type 'typeof import("tests/cases/compiler/f1")'.
+tests/cases/compiler/f2.ts(40,13): error TS2339: Property 'blah' does not exist on type 'typeof import("tests/cases/compiler/f1")'.
+
+
+==== tests/cases/compiler/f1.ts (0 errors) ====
+    export var x = 1;
+    
+==== tests/cases/compiler/f2.ts (22 errors) ====
+    // all mutations below are illegal and should be fixed
+    import * as stuff from './f1';
+    
+    var n = 'baz';
+    
+    stuff.x = 0;
+          ~
+!!! error TS2540: Cannot assign to 'x' because it is a read-only property.
+    stuff['x'] = 1;
+          ~~~
+!!! error TS2540: Cannot assign to 'x' because it is a read-only property.
+    stuff.blah = 2;
+          ~~~~
+!!! error TS2339: Property 'blah' does not exist on type 'typeof import("tests/cases/compiler/f1")'.
+    stuff[n] = 3;
+    
+    stuff.x++;
+          ~
+!!! error TS2540: Cannot assign to 'x' because it is a read-only property.
+    stuff['x']++;
+          ~~~
+!!! error TS2540: Cannot assign to 'x' because it is a read-only property.
+    stuff['blah']++;
+    stuff[n]++;
+    
+    (stuff.x) = 0;
+           ~
+!!! error TS2540: Cannot assign to 'x' because it is a read-only property.
+    (stuff['x']) = 1;
+           ~~~
+!!! error TS2540: Cannot assign to 'x' because it is a read-only property.
+    (stuff.blah) = 2;
+           ~~~~
+!!! error TS2339: Property 'blah' does not exist on type 'typeof import("tests/cases/compiler/f1")'.
+    (stuff[n]) = 3;
+    
+    (stuff.x)++;
+           ~
+!!! error TS2540: Cannot assign to 'x' because it is a read-only property.
+    (stuff['x'])++;
+           ~~~
+!!! error TS2540: Cannot assign to 'x' because it is a read-only property.
+    (stuff['blah'])++;
+    (stuff[n])++;
+    
+    for (stuff.x in []) {}
+               ~
+!!! error TS2540: Cannot assign to 'x' because it is a read-only property.
+    for (stuff.x of []) {}
+               ~
+!!! error TS2540: Cannot assign to 'x' because it is a read-only property.
+    for (stuff['x'] in []) {}
+               ~~~
+!!! error TS2540: Cannot assign to 'x' because it is a read-only property.
+    for (stuff['x'] of []) {}
+               ~~~
+!!! error TS2540: Cannot assign to 'x' because it is a read-only property.
+    for (stuff.blah in []) {}
+               ~~~~
+!!! error TS2339: Property 'blah' does not exist on type 'typeof import("tests/cases/compiler/f1")'.
+    for (stuff.blah of []) {}
+               ~~~~
+!!! error TS2339: Property 'blah' does not exist on type 'typeof import("tests/cases/compiler/f1")'.
+    for (stuff[n] in []) {}
+    for (stuff[n] of []) {}
+    
+    for ((stuff.x) in []) {}
+                ~
+!!! error TS2540: Cannot assign to 'x' because it is a read-only property.
+    for ((stuff.x) of []) {}
+                ~
+!!! error TS2540: Cannot assign to 'x' because it is a read-only property.
+    for ((stuff['x']) in []) {}
+                ~~~
+!!! error TS2540: Cannot assign to 'x' because it is a read-only property.
+    for ((stuff['x']) of []) {}
+                ~~~
+!!! error TS2540: Cannot assign to 'x' because it is a read-only property.
+    for ((stuff.blah) in []) {}
+                ~~~~
+!!! error TS2339: Property 'blah' does not exist on type 'typeof import("tests/cases/compiler/f1")'.
+    for ((stuff.blah) of []) {}
+                ~~~~
+!!! error TS2339: Property 'blah' does not exist on type 'typeof import("tests/cases/compiler/f1")'.
+    for ((stuff[n]) in []) {}
+    for ((stuff[n]) of []) {}
+    
+    
+    

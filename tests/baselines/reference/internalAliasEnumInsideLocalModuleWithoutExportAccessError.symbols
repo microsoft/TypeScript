@@ -1,0 +1,38 @@
+=== tests/cases/compiler/internalAliasEnumInsideLocalModuleWithoutExportAccessError.ts ===
+export module a {
+>a : Symbol(a, Decl(internalAliasEnumInsideLocalModuleWithoutExportAccessError.ts, 0, 0))
+
+    export enum weekend {
+>weekend : Symbol(weekend, Decl(internalAliasEnumInsideLocalModuleWithoutExportAccessError.ts, 0, 17))
+
+        Friday,
+>Friday : Symbol(weekend.Friday, Decl(internalAliasEnumInsideLocalModuleWithoutExportAccessError.ts, 1, 25))
+
+        Saturday,
+>Saturday : Symbol(weekend.Saturday, Decl(internalAliasEnumInsideLocalModuleWithoutExportAccessError.ts, 2, 15))
+
+        Sunday
+>Sunday : Symbol(weekend.Sunday, Decl(internalAliasEnumInsideLocalModuleWithoutExportAccessError.ts, 3, 17))
+    }
+}
+
+export module c {
+>c : Symbol(c, Decl(internalAliasEnumInsideLocalModuleWithoutExportAccessError.ts, 6, 1))
+
+    import b = a.weekend;
+>b : Symbol(b, Decl(internalAliasEnumInsideLocalModuleWithoutExportAccessError.ts, 8, 17))
+>a : Symbol(a, Decl(internalAliasEnumInsideLocalModuleWithoutExportAccessError.ts, 0, 0))
+>weekend : Symbol(b, Decl(internalAliasEnumInsideLocalModuleWithoutExportAccessError.ts, 0, 17))
+
+    export var bVal: b = b.Sunday;
+>bVal : Symbol(bVal, Decl(internalAliasEnumInsideLocalModuleWithoutExportAccessError.ts, 10, 14))
+>b : Symbol(b, Decl(internalAliasEnumInsideLocalModuleWithoutExportAccessError.ts, 8, 17))
+>b.Sunday : Symbol(b.Sunday, Decl(internalAliasEnumInsideLocalModuleWithoutExportAccessError.ts, 3, 17))
+>b : Symbol(b, Decl(internalAliasEnumInsideLocalModuleWithoutExportAccessError.ts, 8, 17))
+>Sunday : Symbol(b.Sunday, Decl(internalAliasEnumInsideLocalModuleWithoutExportAccessError.ts, 3, 17))
+}
+
+var happyFriday = c.b.Friday;
+>happyFriday : Symbol(happyFriday, Decl(internalAliasEnumInsideLocalModuleWithoutExportAccessError.ts, 13, 3))
+>c : Symbol(c, Decl(internalAliasEnumInsideLocalModuleWithoutExportAccessError.ts, 6, 1))
+

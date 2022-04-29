@@ -1,0 +1,108 @@
+=== tests/cases/compiler/functionAssignment.ts ===
+function f(n: Function) { }
+>f : (n: Function) => void
+>n : Function
+
+f(function () { });
+>f(function () { }) : void
+>f : (n: Function) => void
+>function () { } : () => void
+
+interface foo {
+    get(handler: (bar: number)=>void): void;
+>get : (handler: (bar: number) => void) => void
+>handler : (bar: number) => void
+>bar : number
+}
+
+interface baz {
+    get(callback: Function): number;
+>get : (callback: Function) => number
+>callback : Function
+}
+
+var barbaz: baz;
+>barbaz : baz
+
+var test: foo;
+>test : foo
+
+test.get(function (param) {
+>test.get(function (param) {    var x = barbaz.get(function () { });}) : void
+>test.get : (handler: (bar: number) => void) => void
+>test : foo
+>get : (handler: (bar: number) => void) => void
+>function (param) {    var x = barbaz.get(function () { });} : (param: number) => void
+>param : number
+
+    var x = barbaz.get(function () { });
+>x : number
+>barbaz.get(function () { }) : number
+>barbaz.get : (callback: Function) => number
+>barbaz : baz
+>get : (callback: Function) => number
+>function () { } : () => void
+
+});
+
+function f2(n: () => void) { }
+>f2 : (n: () => void) => void
+>n : () => void
+
+f2(() => {
+>f2(() => {    var n = '';    n = 4;}) : void
+>f2 : (n: () => void) => void
+>() => {    var n = '';    n = 4;} : () => void
+
+    var n = '';
+>n : string
+>'' : ""
+
+    n = 4;
+>n = 4 : 4
+>n : string
+>4 : 4
+
+});
+
+function f3(a: { a: number; b: number; }) { }
+>f3 : (a: {    a: number;    b: number;}) => void
+>a : { a: number; b: number; }
+>a : number
+>b : number
+
+f3({ a: 0, b: 0 });
+>f3({ a: 0, b: 0 }) : void
+>f3 : (a: { a: number; b: number; }) => void
+>{ a: 0, b: 0 } : { a: number; b: number; }
+>a : number
+>0 : 0
+>b : number
+>0 : 0
+
+
+function callb(lam:(l: number) => void );
+>callb : { (lam: (l: number) => void): any; (lam: (n: string) => void): any; }
+>lam : (l: number) => void
+>l : number
+
+function callb(lam:(n: string)=>void);
+>callb : { (lam: (l: number) => void): any; (lam: (n: string) => void): any; }
+>lam : (n: string) => void
+>n : string
+
+function callb(a) { }
+>callb : { (lam: (l: number) => void): any; (lam: (n: string) => void): any; }
+>a : any
+
+callb((a) =>{ a.length; });
+>callb((a) =>{ a.length; }) : any
+>callb : { (lam: (l: number) => void): any; (lam: (n: string) => void): any; }
+>(a) =>{ a.length; } : (a: number) => void
+>a : number
+>a.length : any
+>a : number
+>length : any
+
+
+

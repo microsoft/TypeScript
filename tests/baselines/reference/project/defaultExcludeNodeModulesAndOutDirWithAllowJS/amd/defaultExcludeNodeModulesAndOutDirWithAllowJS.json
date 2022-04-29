@@ -1,0 +1,12 @@
+{
+    "scenario": "Verify default exclude property in project option",
+    "projectRoot": "tests/cases/projects/projectOption/DefaultExcludeNodeModulesAndOutDirWithAllowJS",
+    "baselineCheck": true,
+    "resolvedInputFiles": [
+        "lib.es5.d.ts",
+        "a.ts"
+    ],
+    "emittedFiles": [
+        "OutDir/a.js"
+    ]
+}

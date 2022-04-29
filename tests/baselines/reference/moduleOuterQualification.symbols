@@ -1,0 +1,19 @@
+=== tests/cases/compiler/moduleOuterQualification.ts ===
+declare module outer {
+>outer : Symbol(outer, Decl(moduleOuterQualification.ts, 0, 0))
+
+  interface Beta { }
+>Beta : Symbol(Beta, Decl(moduleOuterQualification.ts, 0, 22))
+
+  module inner {
+>inner : Symbol(inner, Decl(moduleOuterQualification.ts, 1, 20))
+
+    // .d.ts emit: should be 'extends outer.Beta'
+    export interface Beta extends outer.Beta { }
+>Beta : Symbol(Beta, Decl(moduleOuterQualification.ts, 2, 16))
+>outer.Beta : Symbol(Beta, Decl(moduleOuterQualification.ts, 0, 22))
+>outer : Symbol(outer, Decl(moduleOuterQualification.ts, 0, 0))
+>Beta : Symbol(Beta, Decl(moduleOuterQualification.ts, 0, 22))
+  }
+}
+

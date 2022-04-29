@@ -1,0 +1,25 @@
+=== tests/cases/compiler/typePredicatesInUnion2.ts ===
+declare function isString(x: any): x is string;
+>isString : (x: any) => x is string
+>x : any
+
+declare function isNumber(x: any): x is number;
+>isNumber : (x: any) => x is number
+>x : any
+
+declare function f(p: typeof isString | typeof isNumber): void;
+>f : (p: typeof isString | typeof isNumber) => void
+>p : ((x: any) => x is string) | ((x: any) => x is number)
+>isString : (x: any) => x is string
+>isNumber : (x: any) => x is number
+
+f(isString);
+>f(isString) : void
+>f : (p: ((x: any) => x is string) | ((x: any) => x is number)) => void
+>isString : (x: any) => x is string
+
+f(isNumber);
+>f(isNumber) : void
+>f : (p: ((x: any) => x is string) | ((x: any) => x is number)) => void
+>isNumber : (x: any) => x is number
+

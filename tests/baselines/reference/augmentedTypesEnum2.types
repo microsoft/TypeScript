@@ -1,0 +1,31 @@
+=== tests/cases/compiler/augmentedTypesEnum2.ts ===
+// enum then interface
+enum e1 { One } // error
+>e1 : e1
+>One : e1.One
+
+interface e1 { // error
+    foo(): void;
+>foo : () => void
+}
+
+// interface then enum works
+
+// enum then class
+enum e2 { One }; // error
+>e2 : e2
+>One : e2.One
+
+class e2 { // error
+>e2 : e2
+
+    foo() {
+>foo : () => number
+
+        return 1;
+>1 : 1
+    }
+}
+
+//enum then enum - covered
+//enum then import - covered

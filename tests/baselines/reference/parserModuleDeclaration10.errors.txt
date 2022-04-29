@@ -1,0 +1,12 @@
+tests/cases/conformance/parser/ecmascript5/ModuleDeclarations/parserModuleDeclaration10.ts(1,10): error TS2391: Function implementation is missing or not immediately following the declaration.
+tests/cases/conformance/parser/ecmascript5/ModuleDeclarations/parserModuleDeclaration10.ts(2,10): error TS2391: Function implementation is missing or not immediately following the declaration.
+
+
+==== tests/cases/conformance/parser/ecmascript5/ModuleDeclarations/parserModuleDeclaration10.ts (2 errors) ====
+    function data(): string;
+             ~~~~
+!!! error TS2391: Function implementation is missing or not immediately following the declaration.
+    function next(): string;
+             ~~~~
+!!! error TS2391: Function implementation is missing or not immediately following the declaration.
+    

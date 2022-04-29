@@ -1,0 +1,44 @@
+=== tests/cases/compiler/specializedOverloadWithRestParameters.ts ===
+class Base { foo() { } }
+>Base : Base
+>foo : () => void
+
+class Derived1 extends Base { bar() { } }
+>Derived1 : Derived1
+>Base : Base
+>bar : () => void
+
+function f(tagName: 'span', ...args): Derived1;   // error
+>f : { (tagName: 'span', ...args: any[]): Derived1; (tagName: number, ...args: any[]): Base; }
+>tagName : "span"
+>args : any[]
+
+function f(tagName: number, ...args): Base;
+>f : { (tagName: "span", ...args: any[]): Derived1; (tagName: number, ...args: any[]): Base; }
+>tagName : number
+>args : any[]
+
+function f(tagName: any): Base {
+>f : { (tagName: "span", ...args: any[]): Derived1; (tagName: number, ...args: any[]): Base; }
+>tagName : any
+
+    return null;
+>null : null
+}
+function g(tagName: 'span', arg): Derived1;    // error
+>g : { (tagName: 'span', arg: any): Derived1; (tagName: number, arg: any): Base; }
+>tagName : "span"
+>arg : any
+
+function g(tagName: number, arg): Base;
+>g : { (tagName: "span", arg: any): Derived1; (tagName: number, arg: any): Base; }
+>tagName : number
+>arg : any
+
+function g(tagName: any): Base {
+>g : { (tagName: "span", arg: any): Derived1; (tagName: number, arg: any): Base; }
+>tagName : any
+
+    return null;
+>null : null
+}

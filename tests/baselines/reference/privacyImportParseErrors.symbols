@@ -1,0 +1,1074 @@
+=== tests/cases/compiler/privacyImportParseErrors.ts ===
+export module m1 {
+>m1 : Symbol(m1, Decl(privacyImportParseErrors.ts, 0, 0))
+
+    export module m1_M1_public {
+>m1_M1_public : Symbol(m1_M1_public, Decl(privacyImportParseErrors.ts, 0, 18))
+
+        export class c1 {
+>c1 : Symbol(c1, Decl(privacyImportParseErrors.ts, 1, 32))
+        }
+        export function f1() {
+>f1 : Symbol(f1, Decl(privacyImportParseErrors.ts, 3, 9))
+
+            return new c1;
+>c1 : Symbol(c1, Decl(privacyImportParseErrors.ts, 1, 32))
+        }
+        export var v1 = c1;
+>v1 : Symbol(v1, Decl(privacyImportParseErrors.ts, 7, 18))
+>c1 : Symbol(c1, Decl(privacyImportParseErrors.ts, 1, 32))
+
+        export var v2: c1;
+>v2 : Symbol(v2, Decl(privacyImportParseErrors.ts, 8, 18))
+>c1 : Symbol(c1, Decl(privacyImportParseErrors.ts, 1, 32))
+    }
+
+    module m1_M2_private {
+>m1_M2_private : Symbol(m1_M2_private, Decl(privacyImportParseErrors.ts, 9, 5))
+
+        export class c1 {
+>c1 : Symbol(c1, Decl(privacyImportParseErrors.ts, 11, 26))
+        }
+        export function f1() {
+>f1 : Symbol(f1, Decl(privacyImportParseErrors.ts, 13, 9))
+
+            return new c1;
+>c1 : Symbol(c1, Decl(privacyImportParseErrors.ts, 11, 26))
+        }
+        export var v1 = c1;
+>v1 : Symbol(v1, Decl(privacyImportParseErrors.ts, 17, 18))
+>c1 : Symbol(c1, Decl(privacyImportParseErrors.ts, 11, 26))
+
+        export var v2: c1;
+>v2 : Symbol(v2, Decl(privacyImportParseErrors.ts, 18, 18))
+>c1 : Symbol(c1, Decl(privacyImportParseErrors.ts, 11, 26))
+    }
+
+    export declare module "m1_M3_public" {
+>"m1_M3_public" : Symbol("m1_M3_public", Decl(privacyImportParseErrors.ts, 19, 5))
+
+        export function f1();
+>f1 : Symbol(f1, Decl(privacyImportParseErrors.ts, 21, 42))
+
+        export class c1 {
+>c1 : Symbol(c1, Decl(privacyImportParseErrors.ts, 22, 29))
+        }
+        export var v1: { new (): c1; };
+>v1 : Symbol(v1, Decl(privacyImportParseErrors.ts, 25, 18))
+>c1 : Symbol(c1, Decl(privacyImportParseErrors.ts, 22, 29))
+
+        export var v2: c1;
+>v2 : Symbol(v2, Decl(privacyImportParseErrors.ts, 26, 18))
+>c1 : Symbol(c1, Decl(privacyImportParseErrors.ts, 22, 29))
+    }
+
+    declare module "m1_M4_private" {
+>"m1_M4_private" : Symbol("m1_M4_private", Decl(privacyImportParseErrors.ts, 27, 5))
+
+        export function f1();
+>f1 : Symbol(f1, Decl(privacyImportParseErrors.ts, 29, 36))
+
+        export class c1 {
+>c1 : Symbol(c1, Decl(privacyImportParseErrors.ts, 30, 29))
+        }
+        export var v1: { new (): c1; };
+>v1 : Symbol(v1, Decl(privacyImportParseErrors.ts, 33, 18))
+>c1 : Symbol(c1, Decl(privacyImportParseErrors.ts, 30, 29))
+
+        export var v2: c1;
+>v2 : Symbol(v2, Decl(privacyImportParseErrors.ts, 34, 18))
+>c1 : Symbol(c1, Decl(privacyImportParseErrors.ts, 30, 29))
+    }
+
+    import m1_im1_private = m1_M1_public;
+>m1_im1_private : Symbol(m1_im1_private, Decl(privacyImportParseErrors.ts, 35, 5))
+>m1_M1_public : Symbol(m1_M1_public, Decl(privacyImportParseErrors.ts, 0, 18))
+
+    export var m1_im1_private_v1_public = m1_im1_private.c1;
+>m1_im1_private_v1_public : Symbol(m1_im1_private_v1_public, Decl(privacyImportParseErrors.ts, 38, 14))
+>m1_im1_private.c1 : Symbol(m1_im1_private.c1, Decl(privacyImportParseErrors.ts, 1, 32))
+>m1_im1_private : Symbol(m1_im1_private, Decl(privacyImportParseErrors.ts, 35, 5))
+>c1 : Symbol(m1_im1_private.c1, Decl(privacyImportParseErrors.ts, 1, 32))
+
+    export var m1_im1_private_v2_public = new m1_im1_private.c1();
+>m1_im1_private_v2_public : Symbol(m1_im1_private_v2_public, Decl(privacyImportParseErrors.ts, 39, 14))
+>m1_im1_private.c1 : Symbol(m1_im1_private.c1, Decl(privacyImportParseErrors.ts, 1, 32))
+>m1_im1_private : Symbol(m1_im1_private, Decl(privacyImportParseErrors.ts, 35, 5))
+>c1 : Symbol(m1_im1_private.c1, Decl(privacyImportParseErrors.ts, 1, 32))
+
+    export var m1_im1_private_v3_public = m1_im1_private.f1;
+>m1_im1_private_v3_public : Symbol(m1_im1_private_v3_public, Decl(privacyImportParseErrors.ts, 40, 14))
+>m1_im1_private.f1 : Symbol(m1_im1_private.f1, Decl(privacyImportParseErrors.ts, 3, 9))
+>m1_im1_private : Symbol(m1_im1_private, Decl(privacyImportParseErrors.ts, 35, 5))
+>f1 : Symbol(m1_im1_private.f1, Decl(privacyImportParseErrors.ts, 3, 9))
+
+    export var m1_im1_private_v4_public = m1_im1_private.f1();
+>m1_im1_private_v4_public : Symbol(m1_im1_private_v4_public, Decl(privacyImportParseErrors.ts, 41, 14))
+>m1_im1_private.f1 : Symbol(m1_im1_private.f1, Decl(privacyImportParseErrors.ts, 3, 9))
+>m1_im1_private : Symbol(m1_im1_private, Decl(privacyImportParseErrors.ts, 35, 5))
+>f1 : Symbol(m1_im1_private.f1, Decl(privacyImportParseErrors.ts, 3, 9))
+
+    var m1_im1_private_v1_private = m1_im1_private.c1;
+>m1_im1_private_v1_private : Symbol(m1_im1_private_v1_private, Decl(privacyImportParseErrors.ts, 42, 7))
+>m1_im1_private.c1 : Symbol(m1_im1_private.c1, Decl(privacyImportParseErrors.ts, 1, 32))
+>m1_im1_private : Symbol(m1_im1_private, Decl(privacyImportParseErrors.ts, 35, 5))
+>c1 : Symbol(m1_im1_private.c1, Decl(privacyImportParseErrors.ts, 1, 32))
+
+    var m1_im1_private_v2_private = new m1_im1_private.c1();
+>m1_im1_private_v2_private : Symbol(m1_im1_private_v2_private, Decl(privacyImportParseErrors.ts, 43, 7))
+>m1_im1_private.c1 : Symbol(m1_im1_private.c1, Decl(privacyImportParseErrors.ts, 1, 32))
+>m1_im1_private : Symbol(m1_im1_private, Decl(privacyImportParseErrors.ts, 35, 5))
+>c1 : Symbol(m1_im1_private.c1, Decl(privacyImportParseErrors.ts, 1, 32))
+
+    var m1_im1_private_v3_private = m1_im1_private.f1;
+>m1_im1_private_v3_private : Symbol(m1_im1_private_v3_private, Decl(privacyImportParseErrors.ts, 44, 7))
+>m1_im1_private.f1 : Symbol(m1_im1_private.f1, Decl(privacyImportParseErrors.ts, 3, 9))
+>m1_im1_private : Symbol(m1_im1_private, Decl(privacyImportParseErrors.ts, 35, 5))
+>f1 : Symbol(m1_im1_private.f1, Decl(privacyImportParseErrors.ts, 3, 9))
+
+    var m1_im1_private_v4_private = m1_im1_private.f1();
+>m1_im1_private_v4_private : Symbol(m1_im1_private_v4_private, Decl(privacyImportParseErrors.ts, 45, 7))
+>m1_im1_private.f1 : Symbol(m1_im1_private.f1, Decl(privacyImportParseErrors.ts, 3, 9))
+>m1_im1_private : Symbol(m1_im1_private, Decl(privacyImportParseErrors.ts, 35, 5))
+>f1 : Symbol(m1_im1_private.f1, Decl(privacyImportParseErrors.ts, 3, 9))
+
+
+    import m1_im2_private = m1_M2_private;
+>m1_im2_private : Symbol(m1_im2_private, Decl(privacyImportParseErrors.ts, 45, 56))
+>m1_M2_private : Symbol(m1_M2_private, Decl(privacyImportParseErrors.ts, 9, 5))
+
+    export var m1_im2_private_v1_public = m1_im2_private.c1;
+>m1_im2_private_v1_public : Symbol(m1_im2_private_v1_public, Decl(privacyImportParseErrors.ts, 49, 14))
+>m1_im2_private.c1 : Symbol(m1_im2_private.c1, Decl(privacyImportParseErrors.ts, 11, 26))
+>m1_im2_private : Symbol(m1_im2_private, Decl(privacyImportParseErrors.ts, 45, 56))
+>c1 : Symbol(m1_im2_private.c1, Decl(privacyImportParseErrors.ts, 11, 26))
+
+    export var m1_im2_private_v2_public = new m1_im2_private.c1();
+>m1_im2_private_v2_public : Symbol(m1_im2_private_v2_public, Decl(privacyImportParseErrors.ts, 50, 14))
+>m1_im2_private.c1 : Symbol(m1_im2_private.c1, Decl(privacyImportParseErrors.ts, 11, 26))
+>m1_im2_private : Symbol(m1_im2_private, Decl(privacyImportParseErrors.ts, 45, 56))
+>c1 : Symbol(m1_im2_private.c1, Decl(privacyImportParseErrors.ts, 11, 26))
+
+    export var m1_im2_private_v3_public = m1_im2_private.f1;
+>m1_im2_private_v3_public : Symbol(m1_im2_private_v3_public, Decl(privacyImportParseErrors.ts, 51, 14))
+>m1_im2_private.f1 : Symbol(m1_im2_private.f1, Decl(privacyImportParseErrors.ts, 13, 9))
+>m1_im2_private : Symbol(m1_im2_private, Decl(privacyImportParseErrors.ts, 45, 56))
+>f1 : Symbol(m1_im2_private.f1, Decl(privacyImportParseErrors.ts, 13, 9))
+
+    export var m1_im2_private_v4_public = m1_im2_private.f1();
+>m1_im2_private_v4_public : Symbol(m1_im2_private_v4_public, Decl(privacyImportParseErrors.ts, 52, 14))
+>m1_im2_private.f1 : Symbol(m1_im2_private.f1, Decl(privacyImportParseErrors.ts, 13, 9))
+>m1_im2_private : Symbol(m1_im2_private, Decl(privacyImportParseErrors.ts, 45, 56))
+>f1 : Symbol(m1_im2_private.f1, Decl(privacyImportParseErrors.ts, 13, 9))
+
+    var m1_im2_private_v1_private = m1_im2_private.c1;
+>m1_im2_private_v1_private : Symbol(m1_im2_private_v1_private, Decl(privacyImportParseErrors.ts, 53, 7))
+>m1_im2_private.c1 : Symbol(m1_im2_private.c1, Decl(privacyImportParseErrors.ts, 11, 26))
+>m1_im2_private : Symbol(m1_im2_private, Decl(privacyImportParseErrors.ts, 45, 56))
+>c1 : Symbol(m1_im2_private.c1, Decl(privacyImportParseErrors.ts, 11, 26))
+
+    var m1_im2_private_v2_private = new m1_im2_private.c1();
+>m1_im2_private_v2_private : Symbol(m1_im2_private_v2_private, Decl(privacyImportParseErrors.ts, 54, 7))
+>m1_im2_private.c1 : Symbol(m1_im2_private.c1, Decl(privacyImportParseErrors.ts, 11, 26))
+>m1_im2_private : Symbol(m1_im2_private, Decl(privacyImportParseErrors.ts, 45, 56))
+>c1 : Symbol(m1_im2_private.c1, Decl(privacyImportParseErrors.ts, 11, 26))
+
+    var m1_im2_private_v3_private = m1_im2_private.f1;
+>m1_im2_private_v3_private : Symbol(m1_im2_private_v3_private, Decl(privacyImportParseErrors.ts, 55, 7))
+>m1_im2_private.f1 : Symbol(m1_im2_private.f1, Decl(privacyImportParseErrors.ts, 13, 9))
+>m1_im2_private : Symbol(m1_im2_private, Decl(privacyImportParseErrors.ts, 45, 56))
+>f1 : Symbol(m1_im2_private.f1, Decl(privacyImportParseErrors.ts, 13, 9))
+
+    var m1_im2_private_v4_private = m1_im2_private.f1();
+>m1_im2_private_v4_private : Symbol(m1_im2_private_v4_private, Decl(privacyImportParseErrors.ts, 56, 7))
+>m1_im2_private.f1 : Symbol(m1_im2_private.f1, Decl(privacyImportParseErrors.ts, 13, 9))
+>m1_im2_private : Symbol(m1_im2_private, Decl(privacyImportParseErrors.ts, 45, 56))
+>f1 : Symbol(m1_im2_private.f1, Decl(privacyImportParseErrors.ts, 13, 9))
+
+    import m1_im3_private = require("m1_M3_public");
+>m1_im3_private : Symbol(m1_im3_private, Decl(privacyImportParseErrors.ts, 56, 56))
+
+    export var m1_im3_private_v1_public = m1_im3_private.c1;
+>m1_im3_private_v1_public : Symbol(m1_im3_private_v1_public, Decl(privacyImportParseErrors.ts, 59, 14))
+>m1_im3_private : Symbol(m1_im3_private, Decl(privacyImportParseErrors.ts, 56, 56))
+
+    export var m1_im3_private_v2_public = new m1_im3_private.c1();
+>m1_im3_private_v2_public : Symbol(m1_im3_private_v2_public, Decl(privacyImportParseErrors.ts, 60, 14))
+>m1_im3_private : Symbol(m1_im3_private, Decl(privacyImportParseErrors.ts, 56, 56))
+
+    export var m1_im3_private_v3_public = m1_im3_private.f1;
+>m1_im3_private_v3_public : Symbol(m1_im3_private_v3_public, Decl(privacyImportParseErrors.ts, 61, 14))
+>m1_im3_private : Symbol(m1_im3_private, Decl(privacyImportParseErrors.ts, 56, 56))
+
+    export var m1_im3_private_v4_public = m1_im3_private.f1();
+>m1_im3_private_v4_public : Symbol(m1_im3_private_v4_public, Decl(privacyImportParseErrors.ts, 62, 14))
+>m1_im3_private : Symbol(m1_im3_private, Decl(privacyImportParseErrors.ts, 56, 56))
+
+    var m1_im3_private_v1_private = m1_im3_private.c1;
+>m1_im3_private_v1_private : Symbol(m1_im3_private_v1_private, Decl(privacyImportParseErrors.ts, 63, 7))
+>m1_im3_private : Symbol(m1_im3_private, Decl(privacyImportParseErrors.ts, 56, 56))
+
+    var m1_im3_private_v2_private = new m1_im3_private.c1();
+>m1_im3_private_v2_private : Symbol(m1_im3_private_v2_private, Decl(privacyImportParseErrors.ts, 64, 7))
+>m1_im3_private : Symbol(m1_im3_private, Decl(privacyImportParseErrors.ts, 56, 56))
+
+    var m1_im3_private_v3_private = m1_im3_private.f1;
+>m1_im3_private_v3_private : Symbol(m1_im3_private_v3_private, Decl(privacyImportParseErrors.ts, 65, 7))
+>m1_im3_private : Symbol(m1_im3_private, Decl(privacyImportParseErrors.ts, 56, 56))
+
+    var m1_im3_private_v4_private = m1_im3_private.f1();
+>m1_im3_private_v4_private : Symbol(m1_im3_private_v4_private, Decl(privacyImportParseErrors.ts, 66, 7))
+>m1_im3_private : Symbol(m1_im3_private, Decl(privacyImportParseErrors.ts, 56, 56))
+
+    import m1_im4_private = require("m1_M4_private");
+>m1_im4_private : Symbol(m1_im4_private, Decl(privacyImportParseErrors.ts, 66, 56))
+
+    export var m1_im4_private_v1_public = m1_im4_private.c1;
+>m1_im4_private_v1_public : Symbol(m1_im4_private_v1_public, Decl(privacyImportParseErrors.ts, 69, 14))
+>m1_im4_private : Symbol(m1_im4_private, Decl(privacyImportParseErrors.ts, 66, 56))
+
+    export var m1_im4_private_v2_public = new m1_im4_private.c1();
+>m1_im4_private_v2_public : Symbol(m1_im4_private_v2_public, Decl(privacyImportParseErrors.ts, 70, 14))
+>m1_im4_private : Symbol(m1_im4_private, Decl(privacyImportParseErrors.ts, 66, 56))
+
+    export var m1_im4_private_v3_public = m1_im4_private.f1;
+>m1_im4_private_v3_public : Symbol(m1_im4_private_v3_public, Decl(privacyImportParseErrors.ts, 71, 14))
+>m1_im4_private : Symbol(m1_im4_private, Decl(privacyImportParseErrors.ts, 66, 56))
+
+    export var m1_im4_private_v4_public = m1_im4_private.f1();
+>m1_im4_private_v4_public : Symbol(m1_im4_private_v4_public, Decl(privacyImportParseErrors.ts, 72, 14))
+>m1_im4_private : Symbol(m1_im4_private, Decl(privacyImportParseErrors.ts, 66, 56))
+
+    var m1_im4_private_v1_private = m1_im4_private.c1;
+>m1_im4_private_v1_private : Symbol(m1_im4_private_v1_private, Decl(privacyImportParseErrors.ts, 73, 7))
+>m1_im4_private : Symbol(m1_im4_private, Decl(privacyImportParseErrors.ts, 66, 56))
+
+    var m1_im4_private_v2_private = new m1_im4_private.c1();
+>m1_im4_private_v2_private : Symbol(m1_im4_private_v2_private, Decl(privacyImportParseErrors.ts, 74, 7))
+>m1_im4_private : Symbol(m1_im4_private, Decl(privacyImportParseErrors.ts, 66, 56))
+
+    var m1_im4_private_v3_private = m1_im4_private.f1;
+>m1_im4_private_v3_private : Symbol(m1_im4_private_v3_private, Decl(privacyImportParseErrors.ts, 75, 7))
+>m1_im4_private : Symbol(m1_im4_private, Decl(privacyImportParseErrors.ts, 66, 56))
+
+    var m1_im4_private_v4_private = m1_im4_private.f1();
+>m1_im4_private_v4_private : Symbol(m1_im4_private_v4_private, Decl(privacyImportParseErrors.ts, 76, 7))
+>m1_im4_private : Symbol(m1_im4_private, Decl(privacyImportParseErrors.ts, 66, 56))
+
+    export import m1_im1_public = m1_M1_public;
+>m1_im1_public : Symbol(m1_im1_public, Decl(privacyImportParseErrors.ts, 76, 56))
+>m1_M1_public : Symbol(m1_M1_public, Decl(privacyImportParseErrors.ts, 0, 18))
+
+    export import m1_im2_public = m1_M2_private;
+>m1_im2_public : Symbol(m1_im2_public, Decl(privacyImportParseErrors.ts, 78, 47))
+>m1_M2_private : Symbol(m1_M2_private, Decl(privacyImportParseErrors.ts, 9, 5))
+
+    export import m1_im3_public = require("m1_M3_public");
+>m1_im3_public : Symbol(m1_im3_public, Decl(privacyImportParseErrors.ts, 79, 48))
+
+    export import m1_im4_public = require("m1_M4_private");
+>m1_im4_public : Symbol(m1_im4_public, Decl(privacyImportParseErrors.ts, 80, 58))
+}
+
+module m2 {
+>m2 : Symbol(m2, Decl(privacyImportParseErrors.ts, 82, 1), Decl(privacyImportParseErrors.ts, 337, 1))
+
+    export module m2_M1_public {
+>m2_M1_public : Symbol(m2_M1_public, Decl(privacyImportParseErrors.ts, 84, 11))
+
+        export class c1 {
+>c1 : Symbol(c1, Decl(privacyImportParseErrors.ts, 85, 32))
+        }
+        export function f1() {
+>f1 : Symbol(f1, Decl(privacyImportParseErrors.ts, 87, 9))
+
+            return new c1;
+>c1 : Symbol(c1, Decl(privacyImportParseErrors.ts, 85, 32))
+        }
+        export var v1 = c1;
+>v1 : Symbol(v1, Decl(privacyImportParseErrors.ts, 91, 18))
+>c1 : Symbol(c1, Decl(privacyImportParseErrors.ts, 85, 32))
+
+        export var v2: c1;
+>v2 : Symbol(v2, Decl(privacyImportParseErrors.ts, 92, 18))
+>c1 : Symbol(c1, Decl(privacyImportParseErrors.ts, 85, 32))
+    }
+
+    module m2_M2_private {
+>m2_M2_private : Symbol(m2_M2_private, Decl(privacyImportParseErrors.ts, 93, 5))
+
+        export class c1 {
+>c1 : Symbol(c1, Decl(privacyImportParseErrors.ts, 95, 26))
+        }
+        export function f1() {
+>f1 : Symbol(f1, Decl(privacyImportParseErrors.ts, 97, 9))
+
+            return new c1;
+>c1 : Symbol(c1, Decl(privacyImportParseErrors.ts, 95, 26))
+        }
+        export var v1 = c1;
+>v1 : Symbol(v1, Decl(privacyImportParseErrors.ts, 101, 18))
+>c1 : Symbol(c1, Decl(privacyImportParseErrors.ts, 95, 26))
+
+        export var v2: c1;
+>v2 : Symbol(v2, Decl(privacyImportParseErrors.ts, 102, 18))
+>c1 : Symbol(c1, Decl(privacyImportParseErrors.ts, 95, 26))
+    }
+
+    export declare module "m2_M3_public" {
+>"m2_M3_public" : Symbol("m2_M3_public", Decl(privacyImportParseErrors.ts, 103, 5))
+
+        export function f1();
+>f1 : Symbol(f1, Decl(privacyImportParseErrors.ts, 105, 42))
+
+        export class c1 {
+>c1 : Symbol(c1, Decl(privacyImportParseErrors.ts, 106, 29))
+        }
+        export var v1: { new (): c1; };
+>v1 : Symbol(v1, Decl(privacyImportParseErrors.ts, 109, 18))
+>c1 : Symbol(c1, Decl(privacyImportParseErrors.ts, 106, 29))
+
+        export var v2: c1;
+>v2 : Symbol(v2, Decl(privacyImportParseErrors.ts, 110, 18))
+>c1 : Symbol(c1, Decl(privacyImportParseErrors.ts, 106, 29))
+    }
+
+    declare module "m2_M4_private" {
+>"m2_M4_private" : Symbol("m2_M4_private", Decl(privacyImportParseErrors.ts, 111, 5))
+
+        export function f1();
+>f1 : Symbol(f1, Decl(privacyImportParseErrors.ts, 113, 36))
+
+        export class c1 {
+>c1 : Symbol(c1, Decl(privacyImportParseErrors.ts, 114, 29))
+        }
+        export var v1: { new (): c1; };
+>v1 : Symbol(v1, Decl(privacyImportParseErrors.ts, 117, 18))
+>c1 : Symbol(c1, Decl(privacyImportParseErrors.ts, 114, 29))
+
+        export var v2: c1;
+>v2 : Symbol(v2, Decl(privacyImportParseErrors.ts, 118, 18))
+>c1 : Symbol(c1, Decl(privacyImportParseErrors.ts, 114, 29))
+    }
+
+    import m1_im1_private = m2_M1_public;
+>m1_im1_private : Symbol(m1_im1_private, Decl(privacyImportParseErrors.ts, 119, 5))
+>m2_M1_public : Symbol(m2_M1_public, Decl(privacyImportParseErrors.ts, 84, 11))
+
+    export var m1_im1_private_v1_public = m1_im1_private.c1;
+>m1_im1_private_v1_public : Symbol(m1_im1_private_v1_public, Decl(privacyImportParseErrors.ts, 122, 14))
+>m1_im1_private.c1 : Symbol(m1_im1_private.c1, Decl(privacyImportParseErrors.ts, 85, 32))
+>m1_im1_private : Symbol(m1_im1_private, Decl(privacyImportParseErrors.ts, 119, 5))
+>c1 : Symbol(m1_im1_private.c1, Decl(privacyImportParseErrors.ts, 85, 32))
+
+    export var m1_im1_private_v2_public = new m1_im1_private.c1();
+>m1_im1_private_v2_public : Symbol(m1_im1_private_v2_public, Decl(privacyImportParseErrors.ts, 123, 14))
+>m1_im1_private.c1 : Symbol(m1_im1_private.c1, Decl(privacyImportParseErrors.ts, 85, 32))
+>m1_im1_private : Symbol(m1_im1_private, Decl(privacyImportParseErrors.ts, 119, 5))
+>c1 : Symbol(m1_im1_private.c1, Decl(privacyImportParseErrors.ts, 85, 32))
+
+    export var m1_im1_private_v3_public = m1_im1_private.f1;
+>m1_im1_private_v3_public : Symbol(m1_im1_private_v3_public, Decl(privacyImportParseErrors.ts, 124, 14))
+>m1_im1_private.f1 : Symbol(m1_im1_private.f1, Decl(privacyImportParseErrors.ts, 87, 9))
+>m1_im1_private : Symbol(m1_im1_private, Decl(privacyImportParseErrors.ts, 119, 5))
+>f1 : Symbol(m1_im1_private.f1, Decl(privacyImportParseErrors.ts, 87, 9))
+
+    export var m1_im1_private_v4_public = m1_im1_private.f1();
+>m1_im1_private_v4_public : Symbol(m1_im1_private_v4_public, Decl(privacyImportParseErrors.ts, 125, 14))
+>m1_im1_private.f1 : Symbol(m1_im1_private.f1, Decl(privacyImportParseErrors.ts, 87, 9))
+>m1_im1_private : Symbol(m1_im1_private, Decl(privacyImportParseErrors.ts, 119, 5))
+>f1 : Symbol(m1_im1_private.f1, Decl(privacyImportParseErrors.ts, 87, 9))
+
+    var m1_im1_private_v1_private = m1_im1_private.c1;
+>m1_im1_private_v1_private : Symbol(m1_im1_private_v1_private, Decl(privacyImportParseErrors.ts, 126, 7))
+>m1_im1_private.c1 : Symbol(m1_im1_private.c1, Decl(privacyImportParseErrors.ts, 85, 32))
+>m1_im1_private : Symbol(m1_im1_private, Decl(privacyImportParseErrors.ts, 119, 5))
+>c1 : Symbol(m1_im1_private.c1, Decl(privacyImportParseErrors.ts, 85, 32))
+
+    var m1_im1_private_v2_private = new m1_im1_private.c1();
+>m1_im1_private_v2_private : Symbol(m1_im1_private_v2_private, Decl(privacyImportParseErrors.ts, 127, 7))
+>m1_im1_private.c1 : Symbol(m1_im1_private.c1, Decl(privacyImportParseErrors.ts, 85, 32))
+>m1_im1_private : Symbol(m1_im1_private, Decl(privacyImportParseErrors.ts, 119, 5))
+>c1 : Symbol(m1_im1_private.c1, Decl(privacyImportParseErrors.ts, 85, 32))
+
+    var m1_im1_private_v3_private = m1_im1_private.f1;
+>m1_im1_private_v3_private : Symbol(m1_im1_private_v3_private, Decl(privacyImportParseErrors.ts, 128, 7))
+>m1_im1_private.f1 : Symbol(m1_im1_private.f1, Decl(privacyImportParseErrors.ts, 87, 9))
+>m1_im1_private : Symbol(m1_im1_private, Decl(privacyImportParseErrors.ts, 119, 5))
+>f1 : Symbol(m1_im1_private.f1, Decl(privacyImportParseErrors.ts, 87, 9))
+
+    var m1_im1_private_v4_private = m1_im1_private.f1();
+>m1_im1_private_v4_private : Symbol(m1_im1_private_v4_private, Decl(privacyImportParseErrors.ts, 129, 7))
+>m1_im1_private.f1 : Symbol(m1_im1_private.f1, Decl(privacyImportParseErrors.ts, 87, 9))
+>m1_im1_private : Symbol(m1_im1_private, Decl(privacyImportParseErrors.ts, 119, 5))
+>f1 : Symbol(m1_im1_private.f1, Decl(privacyImportParseErrors.ts, 87, 9))
+
+
+    import m1_im2_private = m2_M2_private;
+>m1_im2_private : Symbol(m1_im2_private, Decl(privacyImportParseErrors.ts, 129, 56))
+>m2_M2_private : Symbol(m2_M2_private, Decl(privacyImportParseErrors.ts, 93, 5))
+
+    export var m1_im2_private_v1_public = m1_im2_private.c1;
+>m1_im2_private_v1_public : Symbol(m1_im2_private_v1_public, Decl(privacyImportParseErrors.ts, 133, 14))
+>m1_im2_private.c1 : Symbol(m1_im2_private.c1, Decl(privacyImportParseErrors.ts, 95, 26))
+>m1_im2_private : Symbol(m1_im2_private, Decl(privacyImportParseErrors.ts, 129, 56))
+>c1 : Symbol(m1_im2_private.c1, Decl(privacyImportParseErrors.ts, 95, 26))
+
+    export var m1_im2_private_v2_public = new m1_im2_private.c1();
+>m1_im2_private_v2_public : Symbol(m1_im2_private_v2_public, Decl(privacyImportParseErrors.ts, 134, 14))
+>m1_im2_private.c1 : Symbol(m1_im2_private.c1, Decl(privacyImportParseErrors.ts, 95, 26))
+>m1_im2_private : Symbol(m1_im2_private, Decl(privacyImportParseErrors.ts, 129, 56))
+>c1 : Symbol(m1_im2_private.c1, Decl(privacyImportParseErrors.ts, 95, 26))
+
+    export var m1_im2_private_v3_public = m1_im2_private.f1;
+>m1_im2_private_v3_public : Symbol(m1_im2_private_v3_public, Decl(privacyImportParseErrors.ts, 135, 14))
+>m1_im2_private.f1 : Symbol(m1_im2_private.f1, Decl(privacyImportParseErrors.ts, 97, 9))
+>m1_im2_private : Symbol(m1_im2_private, Decl(privacyImportParseErrors.ts, 129, 56))
+>f1 : Symbol(m1_im2_private.f1, Decl(privacyImportParseErrors.ts, 97, 9))
+
+    export var m1_im2_private_v4_public = m1_im2_private.f1();
+>m1_im2_private_v4_public : Symbol(m1_im2_private_v4_public, Decl(privacyImportParseErrors.ts, 136, 14))
+>m1_im2_private.f1 : Symbol(m1_im2_private.f1, Decl(privacyImportParseErrors.ts, 97, 9))
+>m1_im2_private : Symbol(m1_im2_private, Decl(privacyImportParseErrors.ts, 129, 56))
+>f1 : Symbol(m1_im2_private.f1, Decl(privacyImportParseErrors.ts, 97, 9))
+
+    var m1_im2_private_v1_private = m1_im2_private.c1;
+>m1_im2_private_v1_private : Symbol(m1_im2_private_v1_private, Decl(privacyImportParseErrors.ts, 137, 7))
+>m1_im2_private.c1 : Symbol(m1_im2_private.c1, Decl(privacyImportParseErrors.ts, 95, 26))
+>m1_im2_private : Symbol(m1_im2_private, Decl(privacyImportParseErrors.ts, 129, 56))
+>c1 : Symbol(m1_im2_private.c1, Decl(privacyImportParseErrors.ts, 95, 26))
+
+    var m1_im2_private_v2_private = new m1_im2_private.c1();
+>m1_im2_private_v2_private : Symbol(m1_im2_private_v2_private, Decl(privacyImportParseErrors.ts, 138, 7))
+>m1_im2_private.c1 : Symbol(m1_im2_private.c1, Decl(privacyImportParseErrors.ts, 95, 26))
+>m1_im2_private : Symbol(m1_im2_private, Decl(privacyImportParseErrors.ts, 129, 56))
+>c1 : Symbol(m1_im2_private.c1, Decl(privacyImportParseErrors.ts, 95, 26))
+
+    var m1_im2_private_v3_private = m1_im2_private.f1;
+>m1_im2_private_v3_private : Symbol(m1_im2_private_v3_private, Decl(privacyImportParseErrors.ts, 139, 7))
+>m1_im2_private.f1 : Symbol(m1_im2_private.f1, Decl(privacyImportParseErrors.ts, 97, 9))
+>m1_im2_private : Symbol(m1_im2_private, Decl(privacyImportParseErrors.ts, 129, 56))
+>f1 : Symbol(m1_im2_private.f1, Decl(privacyImportParseErrors.ts, 97, 9))
+
+    var m1_im2_private_v4_private = m1_im2_private.f1();
+>m1_im2_private_v4_private : Symbol(m1_im2_private_v4_private, Decl(privacyImportParseErrors.ts, 140, 7))
+>m1_im2_private.f1 : Symbol(m1_im2_private.f1, Decl(privacyImportParseErrors.ts, 97, 9))
+>m1_im2_private : Symbol(m1_im2_private, Decl(privacyImportParseErrors.ts, 129, 56))
+>f1 : Symbol(m1_im2_private.f1, Decl(privacyImportParseErrors.ts, 97, 9))
+
+    import m1_im3_private = require("m2_M3_public");
+>m1_im3_private : Symbol(m1_im3_private, Decl(privacyImportParseErrors.ts, 140, 56))
+
+    export var m1_im3_private_v1_public = m1_im3_private.c1;
+>m1_im3_private_v1_public : Symbol(m1_im3_private_v1_public, Decl(privacyImportParseErrors.ts, 143, 14))
+>m1_im3_private : Symbol(m1_im3_private, Decl(privacyImportParseErrors.ts, 140, 56))
+
+    export var m1_im3_private_v2_public = new m1_im3_private.c1();
+>m1_im3_private_v2_public : Symbol(m1_im3_private_v2_public, Decl(privacyImportParseErrors.ts, 144, 14))
+>m1_im3_private : Symbol(m1_im3_private, Decl(privacyImportParseErrors.ts, 140, 56))
+
+    export var m1_im3_private_v3_public = m1_im3_private.f1;
+>m1_im3_private_v3_public : Symbol(m1_im3_private_v3_public, Decl(privacyImportParseErrors.ts, 145, 14))
+>m1_im3_private : Symbol(m1_im3_private, Decl(privacyImportParseErrors.ts, 140, 56))
+
+    export var m1_im3_private_v4_public = m1_im3_private.f1();
+>m1_im3_private_v4_public : Symbol(m1_im3_private_v4_public, Decl(privacyImportParseErrors.ts, 146, 14))
+>m1_im3_private : Symbol(m1_im3_private, Decl(privacyImportParseErrors.ts, 140, 56))
+
+    var m1_im3_private_v1_private = m1_im3_private.c1;
+>m1_im3_private_v1_private : Symbol(m1_im3_private_v1_private, Decl(privacyImportParseErrors.ts, 147, 7))
+>m1_im3_private : Symbol(m1_im3_private, Decl(privacyImportParseErrors.ts, 140, 56))
+
+    var m1_im3_private_v2_private = new m1_im3_private.c1();
+>m1_im3_private_v2_private : Symbol(m1_im3_private_v2_private, Decl(privacyImportParseErrors.ts, 148, 7))
+>m1_im3_private : Symbol(m1_im3_private, Decl(privacyImportParseErrors.ts, 140, 56))
+
+    var m1_im3_private_v3_private = m1_im3_private.f1;
+>m1_im3_private_v3_private : Symbol(m1_im3_private_v3_private, Decl(privacyImportParseErrors.ts, 149, 7))
+>m1_im3_private : Symbol(m1_im3_private, Decl(privacyImportParseErrors.ts, 140, 56))
+
+    var m1_im3_private_v4_private = m1_im3_private.f1();
+>m1_im3_private_v4_private : Symbol(m1_im3_private_v4_private, Decl(privacyImportParseErrors.ts, 150, 7))
+>m1_im3_private : Symbol(m1_im3_private, Decl(privacyImportParseErrors.ts, 140, 56))
+
+    import m1_im4_private = require("m2_M4_private");
+>m1_im4_private : Symbol(m1_im4_private, Decl(privacyImportParseErrors.ts, 150, 56))
+
+    export var m1_im4_private_v1_public = m1_im4_private.c1;
+>m1_im4_private_v1_public : Symbol(m1_im4_private_v1_public, Decl(privacyImportParseErrors.ts, 153, 14))
+>m1_im4_private : Symbol(m1_im4_private, Decl(privacyImportParseErrors.ts, 150, 56))
+
+    export var m1_im4_private_v2_public = new m1_im4_private.c1();
+>m1_im4_private_v2_public : Symbol(m1_im4_private_v2_public, Decl(privacyImportParseErrors.ts, 154, 14))
+>m1_im4_private : Symbol(m1_im4_private, Decl(privacyImportParseErrors.ts, 150, 56))
+
+    export var m1_im4_private_v3_public = m1_im4_private.f1;
+>m1_im4_private_v3_public : Symbol(m1_im4_private_v3_public, Decl(privacyImportParseErrors.ts, 155, 14))
+>m1_im4_private : Symbol(m1_im4_private, Decl(privacyImportParseErrors.ts, 150, 56))
+
+    export var m1_im4_private_v4_public = m1_im4_private.f1();
+>m1_im4_private_v4_public : Symbol(m1_im4_private_v4_public, Decl(privacyImportParseErrors.ts, 156, 14))
+>m1_im4_private : Symbol(m1_im4_private, Decl(privacyImportParseErrors.ts, 150, 56))
+
+    var m1_im4_private_v1_private = m1_im4_private.c1;
+>m1_im4_private_v1_private : Symbol(m1_im4_private_v1_private, Decl(privacyImportParseErrors.ts, 157, 7))
+>m1_im4_private : Symbol(m1_im4_private, Decl(privacyImportParseErrors.ts, 150, 56))
+
+    var m1_im4_private_v2_private = new m1_im4_private.c1();
+>m1_im4_private_v2_private : Symbol(m1_im4_private_v2_private, Decl(privacyImportParseErrors.ts, 158, 7))
+>m1_im4_private : Symbol(m1_im4_private, Decl(privacyImportParseErrors.ts, 150, 56))
+
+    var m1_im4_private_v3_private = m1_im4_private.f1;
+>m1_im4_private_v3_private : Symbol(m1_im4_private_v3_private, Decl(privacyImportParseErrors.ts, 159, 7))
+>m1_im4_private : Symbol(m1_im4_private, Decl(privacyImportParseErrors.ts, 150, 56))
+
+    var m1_im4_private_v4_private = m1_im4_private.f1();
+>m1_im4_private_v4_private : Symbol(m1_im4_private_v4_private, Decl(privacyImportParseErrors.ts, 160, 7))
+>m1_im4_private : Symbol(m1_im4_private, Decl(privacyImportParseErrors.ts, 150, 56))
+
+    // Parse error to export module
+    export import m1_im1_public = m2_M1_public;
+>m1_im1_public : Symbol(m1_im1_public, Decl(privacyImportParseErrors.ts, 160, 56))
+>m2_M1_public : Symbol(m2_M1_public, Decl(privacyImportParseErrors.ts, 84, 11))
+
+    export import m1_im2_public = m2_M2_private;
+>m1_im2_public : Symbol(m1_im2_public, Decl(privacyImportParseErrors.ts, 163, 47))
+>m2_M2_private : Symbol(m2_M2_private, Decl(privacyImportParseErrors.ts, 93, 5))
+
+    export import m1_im3_public = require("m2_M3_public");
+>m1_im3_public : Symbol(m1_im3_public, Decl(privacyImportParseErrors.ts, 164, 48))
+
+    export import m1_im4_public = require("m2_M4_private");
+>m1_im4_public : Symbol(m1_im4_public, Decl(privacyImportParseErrors.ts, 165, 58))
+}
+
+export module glo_M1_public {
+>glo_M1_public : Symbol(glo_M1_public, Decl(privacyImportParseErrors.ts, 167, 1))
+
+    export class c1 {
+>c1 : Symbol(c1, Decl(privacyImportParseErrors.ts, 169, 29))
+    }
+    export function f1() {
+>f1 : Symbol(f1, Decl(privacyImportParseErrors.ts, 171, 5))
+
+        return new c1;
+>c1 : Symbol(c1, Decl(privacyImportParseErrors.ts, 169, 29))
+    }
+    export var v1 = c1;
+>v1 : Symbol(v1, Decl(privacyImportParseErrors.ts, 175, 14))
+>c1 : Symbol(c1, Decl(privacyImportParseErrors.ts, 169, 29))
+
+    export var v2: c1;
+>v2 : Symbol(v2, Decl(privacyImportParseErrors.ts, 176, 14))
+>c1 : Symbol(c1, Decl(privacyImportParseErrors.ts, 169, 29))
+}
+
+export declare module "glo_M2_public" {
+>"glo_M2_public" : Symbol("glo_M2_public", Decl(privacyImportParseErrors.ts, 177, 1))
+
+    export function f1();
+>f1 : Symbol(f1, Decl(privacyImportParseErrors.ts, 179, 39))
+
+    export class c1 {
+>c1 : Symbol(c1, Decl(privacyImportParseErrors.ts, 180, 25))
+    }
+    export var v1: { new (): c1; };
+>v1 : Symbol(v1, Decl(privacyImportParseErrors.ts, 183, 14))
+>c1 : Symbol(c1, Decl(privacyImportParseErrors.ts, 180, 25))
+
+    export var v2: c1;
+>v2 : Symbol(v2, Decl(privacyImportParseErrors.ts, 184, 14))
+>c1 : Symbol(c1, Decl(privacyImportParseErrors.ts, 180, 25))
+}
+
+export module glo_M3_private {
+>glo_M3_private : Symbol(glo_M3_private, Decl(privacyImportParseErrors.ts, 185, 1))
+
+    export class c1 {
+>c1 : Symbol(c1, Decl(privacyImportParseErrors.ts, 187, 30))
+    }
+    export function f1() {
+>f1 : Symbol(f1, Decl(privacyImportParseErrors.ts, 189, 5))
+
+        return new c1;
+>c1 : Symbol(c1, Decl(privacyImportParseErrors.ts, 187, 30))
+    }
+    export var v1 = c1;
+>v1 : Symbol(v1, Decl(privacyImportParseErrors.ts, 193, 14))
+>c1 : Symbol(c1, Decl(privacyImportParseErrors.ts, 187, 30))
+
+    export var v2: c1;
+>v2 : Symbol(v2, Decl(privacyImportParseErrors.ts, 194, 14))
+>c1 : Symbol(c1, Decl(privacyImportParseErrors.ts, 187, 30))
+}
+
+export declare module "glo_M4_private" {
+>"glo_M4_private" : Symbol("glo_M4_private", Decl(privacyImportParseErrors.ts, 195, 1))
+
+    export function f1();
+>f1 : Symbol(f1, Decl(privacyImportParseErrors.ts, 197, 40))
+
+    export class c1 {
+>c1 : Symbol(c1, Decl(privacyImportParseErrors.ts, 198, 25))
+    }
+    export var v1: { new (): c1; };
+>v1 : Symbol(v1, Decl(privacyImportParseErrors.ts, 201, 14))
+>c1 : Symbol(c1, Decl(privacyImportParseErrors.ts, 198, 25))
+
+    export var v2: c1;
+>v2 : Symbol(v2, Decl(privacyImportParseErrors.ts, 202, 14))
+>c1 : Symbol(c1, Decl(privacyImportParseErrors.ts, 198, 25))
+}
+
+
+import glo_im1_private = glo_M1_public;
+>glo_im1_private : Symbol(glo_im1_private, Decl(privacyImportParseErrors.ts, 203, 1))
+>glo_M1_public : Symbol(glo_M1_public, Decl(privacyImportParseErrors.ts, 167, 1))
+
+export var glo_im1_private_v1_public = glo_im1_private.c1;
+>glo_im1_private_v1_public : Symbol(glo_im1_private_v1_public, Decl(privacyImportParseErrors.ts, 207, 10))
+>glo_im1_private.c1 : Symbol(glo_im1_private.c1, Decl(privacyImportParseErrors.ts, 169, 29))
+>glo_im1_private : Symbol(glo_im1_private, Decl(privacyImportParseErrors.ts, 203, 1))
+>c1 : Symbol(glo_im1_private.c1, Decl(privacyImportParseErrors.ts, 169, 29))
+
+export var glo_im1_private_v2_public = new glo_im1_private.c1();
+>glo_im1_private_v2_public : Symbol(glo_im1_private_v2_public, Decl(privacyImportParseErrors.ts, 208, 10))
+>glo_im1_private.c1 : Symbol(glo_im1_private.c1, Decl(privacyImportParseErrors.ts, 169, 29))
+>glo_im1_private : Symbol(glo_im1_private, Decl(privacyImportParseErrors.ts, 203, 1))
+>c1 : Symbol(glo_im1_private.c1, Decl(privacyImportParseErrors.ts, 169, 29))
+
+export var glo_im1_private_v3_public = glo_im1_private.f1;
+>glo_im1_private_v3_public : Symbol(glo_im1_private_v3_public, Decl(privacyImportParseErrors.ts, 209, 10))
+>glo_im1_private.f1 : Symbol(glo_im1_private.f1, Decl(privacyImportParseErrors.ts, 171, 5))
+>glo_im1_private : Symbol(glo_im1_private, Decl(privacyImportParseErrors.ts, 203, 1))
+>f1 : Symbol(glo_im1_private.f1, Decl(privacyImportParseErrors.ts, 171, 5))
+
+export var glo_im1_private_v4_public = glo_im1_private.f1();
+>glo_im1_private_v4_public : Symbol(glo_im1_private_v4_public, Decl(privacyImportParseErrors.ts, 210, 10))
+>glo_im1_private.f1 : Symbol(glo_im1_private.f1, Decl(privacyImportParseErrors.ts, 171, 5))
+>glo_im1_private : Symbol(glo_im1_private, Decl(privacyImportParseErrors.ts, 203, 1))
+>f1 : Symbol(glo_im1_private.f1, Decl(privacyImportParseErrors.ts, 171, 5))
+
+var glo_im1_private_v1_private = glo_im1_private.c1;
+>glo_im1_private_v1_private : Symbol(glo_im1_private_v1_private, Decl(privacyImportParseErrors.ts, 211, 3))
+>glo_im1_private.c1 : Symbol(glo_im1_private.c1, Decl(privacyImportParseErrors.ts, 169, 29))
+>glo_im1_private : Symbol(glo_im1_private, Decl(privacyImportParseErrors.ts, 203, 1))
+>c1 : Symbol(glo_im1_private.c1, Decl(privacyImportParseErrors.ts, 169, 29))
+
+var glo_im1_private_v2_private = new glo_im1_private.c1();
+>glo_im1_private_v2_private : Symbol(glo_im1_private_v2_private, Decl(privacyImportParseErrors.ts, 212, 3))
+>glo_im1_private.c1 : Symbol(glo_im1_private.c1, Decl(privacyImportParseErrors.ts, 169, 29))
+>glo_im1_private : Symbol(glo_im1_private, Decl(privacyImportParseErrors.ts, 203, 1))
+>c1 : Symbol(glo_im1_private.c1, Decl(privacyImportParseErrors.ts, 169, 29))
+
+var glo_im1_private_v3_private = glo_im1_private.f1;
+>glo_im1_private_v3_private : Symbol(glo_im1_private_v3_private, Decl(privacyImportParseErrors.ts, 213, 3))
+>glo_im1_private.f1 : Symbol(glo_im1_private.f1, Decl(privacyImportParseErrors.ts, 171, 5))
+>glo_im1_private : Symbol(glo_im1_private, Decl(privacyImportParseErrors.ts, 203, 1))
+>f1 : Symbol(glo_im1_private.f1, Decl(privacyImportParseErrors.ts, 171, 5))
+
+var glo_im1_private_v4_private = glo_im1_private.f1();
+>glo_im1_private_v4_private : Symbol(glo_im1_private_v4_private, Decl(privacyImportParseErrors.ts, 214, 3))
+>glo_im1_private.f1 : Symbol(glo_im1_private.f1, Decl(privacyImportParseErrors.ts, 171, 5))
+>glo_im1_private : Symbol(glo_im1_private, Decl(privacyImportParseErrors.ts, 203, 1))
+>f1 : Symbol(glo_im1_private.f1, Decl(privacyImportParseErrors.ts, 171, 5))
+
+
+import glo_im2_private = require("glo_M2_public");
+>glo_im2_private : Symbol(glo_im2_private, Decl(privacyImportParseErrors.ts, 214, 54))
+
+export var glo_im2_private_v1_public = glo_im2_private.c1;
+>glo_im2_private_v1_public : Symbol(glo_im2_private_v1_public, Decl(privacyImportParseErrors.ts, 218, 10))
+>glo_im2_private : Symbol(glo_im2_private, Decl(privacyImportParseErrors.ts, 214, 54))
+
+export var glo_im2_private_v2_public = new glo_im2_private.c1();
+>glo_im2_private_v2_public : Symbol(glo_im2_private_v2_public, Decl(privacyImportParseErrors.ts, 219, 10))
+>glo_im2_private : Symbol(glo_im2_private, Decl(privacyImportParseErrors.ts, 214, 54))
+
+export var glo_im2_private_v3_public = glo_im2_private.f1;
+>glo_im2_private_v3_public : Symbol(glo_im2_private_v3_public, Decl(privacyImportParseErrors.ts, 220, 10))
+>glo_im2_private : Symbol(glo_im2_private, Decl(privacyImportParseErrors.ts, 214, 54))
+
+export var glo_im2_private_v4_public = glo_im2_private.f1();
+>glo_im2_private_v4_public : Symbol(glo_im2_private_v4_public, Decl(privacyImportParseErrors.ts, 221, 10))
+>glo_im2_private : Symbol(glo_im2_private, Decl(privacyImportParseErrors.ts, 214, 54))
+
+var glo_im2_private_v1_private = glo_im2_private.c1;
+>glo_im2_private_v1_private : Symbol(glo_im2_private_v1_private, Decl(privacyImportParseErrors.ts, 222, 3))
+>glo_im2_private : Symbol(glo_im2_private, Decl(privacyImportParseErrors.ts, 214, 54))
+
+var glo_im2_private_v2_private = new glo_im2_private.c1();
+>glo_im2_private_v2_private : Symbol(glo_im2_private_v2_private, Decl(privacyImportParseErrors.ts, 223, 3))
+>glo_im2_private : Symbol(glo_im2_private, Decl(privacyImportParseErrors.ts, 214, 54))
+
+var glo_im2_private_v3_private = glo_im2_private.f1;
+>glo_im2_private_v3_private : Symbol(glo_im2_private_v3_private, Decl(privacyImportParseErrors.ts, 224, 3))
+>glo_im2_private : Symbol(glo_im2_private, Decl(privacyImportParseErrors.ts, 214, 54))
+
+var glo_im2_private_v4_private = glo_im2_private.f1();
+>glo_im2_private_v4_private : Symbol(glo_im2_private_v4_private, Decl(privacyImportParseErrors.ts, 225, 3))
+>glo_im2_private : Symbol(glo_im2_private, Decl(privacyImportParseErrors.ts, 214, 54))
+
+import glo_im3_private = glo_M3_private;
+>glo_im3_private : Symbol(glo_im3_private, Decl(privacyImportParseErrors.ts, 225, 54))
+>glo_M3_private : Symbol(glo_M3_private, Decl(privacyImportParseErrors.ts, 185, 1))
+
+export var glo_im3_private_v1_public = glo_im3_private.c1;
+>glo_im3_private_v1_public : Symbol(glo_im3_private_v1_public, Decl(privacyImportParseErrors.ts, 228, 10))
+>glo_im3_private.c1 : Symbol(glo_im3_private.c1, Decl(privacyImportParseErrors.ts, 187, 30))
+>glo_im3_private : Symbol(glo_im3_private, Decl(privacyImportParseErrors.ts, 225, 54))
+>c1 : Symbol(glo_im3_private.c1, Decl(privacyImportParseErrors.ts, 187, 30))
+
+export var glo_im3_private_v2_public = new glo_im3_private.c1();
+>glo_im3_private_v2_public : Symbol(glo_im3_private_v2_public, Decl(privacyImportParseErrors.ts, 229, 10))
+>glo_im3_private.c1 : Symbol(glo_im3_private.c1, Decl(privacyImportParseErrors.ts, 187, 30))
+>glo_im3_private : Symbol(glo_im3_private, Decl(privacyImportParseErrors.ts, 225, 54))
+>c1 : Symbol(glo_im3_private.c1, Decl(privacyImportParseErrors.ts, 187, 30))
+
+export var glo_im3_private_v3_public = glo_im3_private.f1;
+>glo_im3_private_v3_public : Symbol(glo_im3_private_v3_public, Decl(privacyImportParseErrors.ts, 230, 10))
+>glo_im3_private.f1 : Symbol(glo_im3_private.f1, Decl(privacyImportParseErrors.ts, 189, 5))
+>glo_im3_private : Symbol(glo_im3_private, Decl(privacyImportParseErrors.ts, 225, 54))
+>f1 : Symbol(glo_im3_private.f1, Decl(privacyImportParseErrors.ts, 189, 5))
+
+export var glo_im3_private_v4_public = glo_im3_private.f1();
+>glo_im3_private_v4_public : Symbol(glo_im3_private_v4_public, Decl(privacyImportParseErrors.ts, 231, 10))
+>glo_im3_private.f1 : Symbol(glo_im3_private.f1, Decl(privacyImportParseErrors.ts, 189, 5))
+>glo_im3_private : Symbol(glo_im3_private, Decl(privacyImportParseErrors.ts, 225, 54))
+>f1 : Symbol(glo_im3_private.f1, Decl(privacyImportParseErrors.ts, 189, 5))
+
+var glo_im3_private_v1_private = glo_im3_private.c1;
+>glo_im3_private_v1_private : Symbol(glo_im3_private_v1_private, Decl(privacyImportParseErrors.ts, 232, 3))
+>glo_im3_private.c1 : Symbol(glo_im3_private.c1, Decl(privacyImportParseErrors.ts, 187, 30))
+>glo_im3_private : Symbol(glo_im3_private, Decl(privacyImportParseErrors.ts, 225, 54))
+>c1 : Symbol(glo_im3_private.c1, Decl(privacyImportParseErrors.ts, 187, 30))
+
+var glo_im3_private_v2_private = new glo_im3_private.c1();
+>glo_im3_private_v2_private : Symbol(glo_im3_private_v2_private, Decl(privacyImportParseErrors.ts, 233, 3))
+>glo_im3_private.c1 : Symbol(glo_im3_private.c1, Decl(privacyImportParseErrors.ts, 187, 30))
+>glo_im3_private : Symbol(glo_im3_private, Decl(privacyImportParseErrors.ts, 225, 54))
+>c1 : Symbol(glo_im3_private.c1, Decl(privacyImportParseErrors.ts, 187, 30))
+
+var glo_im3_private_v3_private = glo_im3_private.f1;
+>glo_im3_private_v3_private : Symbol(glo_im3_private_v3_private, Decl(privacyImportParseErrors.ts, 234, 3))
+>glo_im3_private.f1 : Symbol(glo_im3_private.f1, Decl(privacyImportParseErrors.ts, 189, 5))
+>glo_im3_private : Symbol(glo_im3_private, Decl(privacyImportParseErrors.ts, 225, 54))
+>f1 : Symbol(glo_im3_private.f1, Decl(privacyImportParseErrors.ts, 189, 5))
+
+var glo_im3_private_v4_private = glo_im3_private.f1();
+>glo_im3_private_v4_private : Symbol(glo_im3_private_v4_private, Decl(privacyImportParseErrors.ts, 235, 3))
+>glo_im3_private.f1 : Symbol(glo_im3_private.f1, Decl(privacyImportParseErrors.ts, 189, 5))
+>glo_im3_private : Symbol(glo_im3_private, Decl(privacyImportParseErrors.ts, 225, 54))
+>f1 : Symbol(glo_im3_private.f1, Decl(privacyImportParseErrors.ts, 189, 5))
+
+import glo_im4_private = require("glo_M4_private");
+>glo_im4_private : Symbol(glo_im4_private, Decl(privacyImportParseErrors.ts, 235, 54))
+
+export var glo_im4_private_v1_public = glo_im4_private.c1;
+>glo_im4_private_v1_public : Symbol(glo_im4_private_v1_public, Decl(privacyImportParseErrors.ts, 238, 10))
+>glo_im4_private : Symbol(glo_im4_private, Decl(privacyImportParseErrors.ts, 235, 54))
+
+export var glo_im4_private_v2_public = new glo_im4_private.c1();
+>glo_im4_private_v2_public : Symbol(glo_im4_private_v2_public, Decl(privacyImportParseErrors.ts, 239, 10))
+>glo_im4_private : Symbol(glo_im4_private, Decl(privacyImportParseErrors.ts, 235, 54))
+
+export var glo_im4_private_v3_public = glo_im4_private.f1;
+>glo_im4_private_v3_public : Symbol(glo_im4_private_v3_public, Decl(privacyImportParseErrors.ts, 240, 10))
+>glo_im4_private : Symbol(glo_im4_private, Decl(privacyImportParseErrors.ts, 235, 54))
+
+export var glo_im4_private_v4_public = glo_im4_private.f1();
+>glo_im4_private_v4_public : Symbol(glo_im4_private_v4_public, Decl(privacyImportParseErrors.ts, 241, 10))
+>glo_im4_private : Symbol(glo_im4_private, Decl(privacyImportParseErrors.ts, 235, 54))
+
+var glo_im4_private_v1_private = glo_im4_private.c1;
+>glo_im4_private_v1_private : Symbol(glo_im4_private_v1_private, Decl(privacyImportParseErrors.ts, 242, 3))
+>glo_im4_private : Symbol(glo_im4_private, Decl(privacyImportParseErrors.ts, 235, 54))
+
+var glo_im4_private_v2_private = new glo_im4_private.c1();
+>glo_im4_private_v2_private : Symbol(glo_im4_private_v2_private, Decl(privacyImportParseErrors.ts, 243, 3))
+>glo_im4_private : Symbol(glo_im4_private, Decl(privacyImportParseErrors.ts, 235, 54))
+
+var glo_im4_private_v3_private = glo_im4_private.f1;
+>glo_im4_private_v3_private : Symbol(glo_im4_private_v3_private, Decl(privacyImportParseErrors.ts, 244, 3))
+>glo_im4_private : Symbol(glo_im4_private, Decl(privacyImportParseErrors.ts, 235, 54))
+
+var glo_im4_private_v4_private = glo_im4_private.f1();
+>glo_im4_private_v4_private : Symbol(glo_im4_private_v4_private, Decl(privacyImportParseErrors.ts, 245, 3))
+>glo_im4_private : Symbol(glo_im4_private, Decl(privacyImportParseErrors.ts, 235, 54))
+
+// Parse error to export module
+export import glo_im1_public = glo_M1_public;
+>glo_im1_public : Symbol(glo_im1_public, Decl(privacyImportParseErrors.ts, 245, 54))
+>glo_M1_public : Symbol(glo_M1_public, Decl(privacyImportParseErrors.ts, 167, 1))
+
+export import glo_im2_public = glo_M3_private;
+>glo_im2_public : Symbol(glo_im2_public, Decl(privacyImportParseErrors.ts, 248, 45))
+>glo_M3_private : Symbol(glo_M3_private, Decl(privacyImportParseErrors.ts, 185, 1))
+
+export import glo_im3_public = require("glo_M2_public");
+>glo_im3_public : Symbol(glo_im3_public, Decl(privacyImportParseErrors.ts, 249, 46))
+
+export import glo_im4_public = require("glo_M4_private");
+>glo_im4_public : Symbol(glo_im4_public, Decl(privacyImportParseErrors.ts, 250, 56))
+
+
+export declare module "use_glo_M1_public" {
+>"use_glo_M1_public" : Symbol("use_glo_M1_public", Decl(privacyImportParseErrors.ts, 251, 57))
+
+    import use_glo_M1_public = glo_M1_public;
+>use_glo_M1_public : Symbol(use_glo_M1_public, Decl(privacyImportParseErrors.ts, 254, 43))
+>glo_M1_public : Symbol(use_glo_M1_public, Decl(privacyImportParseErrors.ts, 167, 1))
+
+    export var use_glo_M1_public_v1_public: { new (): use_glo_M1_public.c1; };
+>use_glo_M1_public_v1_public : Symbol(use_glo_M1_public_v1_public, Decl(privacyImportParseErrors.ts, 256, 14))
+>use_glo_M1_public : Symbol(use_glo_M1_public, Decl(privacyImportParseErrors.ts, 254, 43))
+>c1 : Symbol(use_glo_M1_public.c1, Decl(privacyImportParseErrors.ts, 169, 29))
+
+    export var use_glo_M1_public_v2_public: use_glo_M1_public;
+>use_glo_M1_public_v2_public : Symbol(use_glo_M1_public_v2_public, Decl(privacyImportParseErrors.ts, 257, 14))
+>use_glo_M1_public : Symbol(use_glo_M1_public)
+
+    export var use_glo_M1_public_v3_public: () => use_glo_M1_public.c1;
+>use_glo_M1_public_v3_public : Symbol(use_glo_M1_public_v3_public, Decl(privacyImportParseErrors.ts, 258, 14))
+>use_glo_M1_public : Symbol(use_glo_M1_public, Decl(privacyImportParseErrors.ts, 254, 43))
+>c1 : Symbol(use_glo_M1_public.c1, Decl(privacyImportParseErrors.ts, 169, 29))
+
+    var use_glo_M1_public_v1_private: { new (): use_glo_M1_public.c1; };
+>use_glo_M1_public_v1_private : Symbol(use_glo_M1_public_v1_private, Decl(privacyImportParseErrors.ts, 259, 7))
+>use_glo_M1_public : Symbol(use_glo_M1_public, Decl(privacyImportParseErrors.ts, 254, 43))
+>c1 : Symbol(use_glo_M1_public.c1, Decl(privacyImportParseErrors.ts, 169, 29))
+
+    var use_glo_M1_public_v2_private: use_glo_M1_public;
+>use_glo_M1_public_v2_private : Symbol(use_glo_M1_public_v2_private, Decl(privacyImportParseErrors.ts, 260, 7))
+>use_glo_M1_public : Symbol(use_glo_M1_public)
+
+    var use_glo_M1_public_v3_private: () => use_glo_M1_public.c1;
+>use_glo_M1_public_v3_private : Symbol(use_glo_M1_public_v3_private, Decl(privacyImportParseErrors.ts, 261, 7))
+>use_glo_M1_public : Symbol(use_glo_M1_public, Decl(privacyImportParseErrors.ts, 254, 43))
+>c1 : Symbol(use_glo_M1_public.c1, Decl(privacyImportParseErrors.ts, 169, 29))
+
+    import use_glo_M2_public = require("glo_M2_public");
+>use_glo_M2_public : Symbol(use_glo_M2_public, Decl(privacyImportParseErrors.ts, 261, 65))
+
+    export var use_glo_M2_public_v1_public: { new (): use_glo_M2_public.c1; };
+>use_glo_M2_public_v1_public : Symbol(use_glo_M2_public_v1_public, Decl(privacyImportParseErrors.ts, 264, 14))
+>use_glo_M2_public : Symbol(use_glo_M2_public, Decl(privacyImportParseErrors.ts, 261, 65))
+>c1 : Symbol(use_glo_M2_public.c1)
+
+    export var use_glo_M2_public_v2_public: use_glo_M2_public;
+>use_glo_M2_public_v2_public : Symbol(use_glo_M2_public_v2_public, Decl(privacyImportParseErrors.ts, 265, 14))
+>use_glo_M2_public : Symbol(use_glo_M2_public, Decl(privacyImportParseErrors.ts, 261, 65))
+
+    export var use_glo_M2_public_v3_public: () => use_glo_M2_public.c1;
+>use_glo_M2_public_v3_public : Symbol(use_glo_M2_public_v3_public, Decl(privacyImportParseErrors.ts, 266, 14))
+>use_glo_M2_public : Symbol(use_glo_M2_public, Decl(privacyImportParseErrors.ts, 261, 65))
+>c1 : Symbol(use_glo_M2_public.c1)
+
+    var use_glo_M2_public_v1_private: { new (): use_glo_M2_public.c1; };
+>use_glo_M2_public_v1_private : Symbol(use_glo_M2_public_v1_private, Decl(privacyImportParseErrors.ts, 267, 7))
+>use_glo_M2_public : Symbol(use_glo_M2_public, Decl(privacyImportParseErrors.ts, 261, 65))
+>c1 : Symbol(use_glo_M2_public.c1)
+
+    var use_glo_M2_public_v2_private: use_glo_M2_public;
+>use_glo_M2_public_v2_private : Symbol(use_glo_M2_public_v2_private, Decl(privacyImportParseErrors.ts, 268, 7))
+>use_glo_M2_public : Symbol(use_glo_M2_public, Decl(privacyImportParseErrors.ts, 261, 65))
+
+    var use_glo_M2_public_v3_private: () => use_glo_M2_public.c1;
+>use_glo_M2_public_v3_private : Symbol(use_glo_M2_public_v3_private, Decl(privacyImportParseErrors.ts, 269, 7))
+>use_glo_M2_public : Symbol(use_glo_M2_public, Decl(privacyImportParseErrors.ts, 261, 65))
+>c1 : Symbol(use_glo_M2_public.c1)
+
+    module m2 {
+>m2 : Symbol(m2, Decl(privacyImportParseErrors.ts, 269, 65))
+
+        import errorImport = require("glo_M2_public");
+>errorImport : Symbol(errorImport, Decl(privacyImportParseErrors.ts, 271, 15))
+
+        import nonerrorImport = glo_M1_public;
+>nonerrorImport : Symbol(nonerrorImport, Decl(privacyImportParseErrors.ts, 272, 54))
+>glo_M1_public : Symbol(nonerrorImport, Decl(privacyImportParseErrors.ts, 167, 1))
+
+        module m5 {
+>m5 : Symbol(m5, Decl(privacyImportParseErrors.ts, 273, 46))
+
+            import m5_errorImport = require("glo_M2_public");
+>m5_errorImport : Symbol(m5_errorImport, Decl(privacyImportParseErrors.ts, 275, 19))
+
+            import m5_nonerrorImport = glo_M1_public;
+>m5_nonerrorImport : Symbol(m5_nonerrorImport, Decl(privacyImportParseErrors.ts, 276, 61))
+>glo_M1_public : Symbol(m5_nonerrorImport, Decl(privacyImportParseErrors.ts, 167, 1))
+        }
+    }
+}
+
+
+declare module "use_glo_M3_private" {
+>"use_glo_M3_private" : Symbol("use_glo_M3_private", Decl(privacyImportParseErrors.ts, 280, 1))
+
+    import use_glo_M3_private = glo_M3_private;
+>use_glo_M3_private : Symbol(use_glo_M3_private, Decl(privacyImportParseErrors.ts, 283, 37))
+>glo_M3_private : Symbol(use_glo_M3_private, Decl(privacyImportParseErrors.ts, 185, 1))
+
+    export var use_glo_M3_private_v1_public: { new (): use_glo_M3_private.c1; };
+>use_glo_M3_private_v1_public : Symbol(use_glo_M3_private_v1_public, Decl(privacyImportParseErrors.ts, 285, 14))
+>use_glo_M3_private : Symbol(use_glo_M3_private, Decl(privacyImportParseErrors.ts, 283, 37))
+>c1 : Symbol(use_glo_M3_private.c1, Decl(privacyImportParseErrors.ts, 187, 30))
+
+    export var use_glo_M3_private_v2_public: use_glo_M3_private;
+>use_glo_M3_private_v2_public : Symbol(use_glo_M3_private_v2_public, Decl(privacyImportParseErrors.ts, 286, 14))
+>use_glo_M3_private : Symbol(use_glo_M3_private)
+
+    export var use_glo_M3_private_v3_public: () => use_glo_M3_private.c1;
+>use_glo_M3_private_v3_public : Symbol(use_glo_M3_private_v3_public, Decl(privacyImportParseErrors.ts, 287, 14))
+>use_glo_M3_private : Symbol(use_glo_M3_private, Decl(privacyImportParseErrors.ts, 283, 37))
+>c1 : Symbol(use_glo_M3_private.c1, Decl(privacyImportParseErrors.ts, 187, 30))
+
+    var use_glo_M3_private_v1_private: { new (): use_glo_M3_private.c1; };
+>use_glo_M3_private_v1_private : Symbol(use_glo_M3_private_v1_private, Decl(privacyImportParseErrors.ts, 288, 7))
+>use_glo_M3_private : Symbol(use_glo_M3_private, Decl(privacyImportParseErrors.ts, 283, 37))
+>c1 : Symbol(use_glo_M3_private.c1, Decl(privacyImportParseErrors.ts, 187, 30))
+
+    var use_glo_M3_private_v2_private: use_glo_M3_private;
+>use_glo_M3_private_v2_private : Symbol(use_glo_M3_private_v2_private, Decl(privacyImportParseErrors.ts, 289, 7))
+>use_glo_M3_private : Symbol(use_glo_M3_private)
+
+    var use_glo_M3_private_v3_private: () => use_glo_M3_private.c1;
+>use_glo_M3_private_v3_private : Symbol(use_glo_M3_private_v3_private, Decl(privacyImportParseErrors.ts, 290, 7))
+>use_glo_M3_private : Symbol(use_glo_M3_private, Decl(privacyImportParseErrors.ts, 283, 37))
+>c1 : Symbol(use_glo_M3_private.c1, Decl(privacyImportParseErrors.ts, 187, 30))
+
+    import use_glo_M4_private = require("glo_M4_private");
+>use_glo_M4_private : Symbol(use_glo_M4_private, Decl(privacyImportParseErrors.ts, 290, 67))
+
+    export var use_glo_M4_private_v1_public: { new (): use_glo_M4_private.c1; };
+>use_glo_M4_private_v1_public : Symbol(use_glo_M4_private_v1_public, Decl(privacyImportParseErrors.ts, 293, 14))
+>use_glo_M4_private : Symbol(use_glo_M4_private, Decl(privacyImportParseErrors.ts, 290, 67))
+>c1 : Symbol(use_glo_M4_private.c1)
+
+    export var use_glo_M4_private_v2_public: use_glo_M4_private;
+>use_glo_M4_private_v2_public : Symbol(use_glo_M4_private_v2_public, Decl(privacyImportParseErrors.ts, 294, 14))
+>use_glo_M4_private : Symbol(use_glo_M4_private, Decl(privacyImportParseErrors.ts, 290, 67))
+
+    export var use_glo_M4_private_v3_public: () => use_glo_M4_private.c1;
+>use_glo_M4_private_v3_public : Symbol(use_glo_M4_private_v3_public, Decl(privacyImportParseErrors.ts, 295, 14))
+>use_glo_M4_private : Symbol(use_glo_M4_private, Decl(privacyImportParseErrors.ts, 290, 67))
+>c1 : Symbol(use_glo_M4_private.c1)
+
+    var use_glo_M4_private_v1_private: { new (): use_glo_M4_private.c1; };
+>use_glo_M4_private_v1_private : Symbol(use_glo_M4_private_v1_private, Decl(privacyImportParseErrors.ts, 296, 7))
+>use_glo_M4_private : Symbol(use_glo_M4_private, Decl(privacyImportParseErrors.ts, 290, 67))
+>c1 : Symbol(use_glo_M4_private.c1)
+
+    var use_glo_M4_private_v2_private: use_glo_M4_private;
+>use_glo_M4_private_v2_private : Symbol(use_glo_M4_private_v2_private, Decl(privacyImportParseErrors.ts, 297, 7))
+>use_glo_M4_private : Symbol(use_glo_M4_private, Decl(privacyImportParseErrors.ts, 290, 67))
+
+    var use_glo_M4_private_v3_private: () => use_glo_M4_private.c1;
+>use_glo_M4_private_v3_private : Symbol(use_glo_M4_private_v3_private, Decl(privacyImportParseErrors.ts, 298, 7))
+>use_glo_M4_private : Symbol(use_glo_M4_private, Decl(privacyImportParseErrors.ts, 290, 67))
+>c1 : Symbol(use_glo_M4_private.c1)
+
+    module m2 {
+>m2 : Symbol(m2, Decl(privacyImportParseErrors.ts, 298, 67))
+
+        import errorImport = require("glo_M4_private");
+>errorImport : Symbol(errorImport, Decl(privacyImportParseErrors.ts, 300, 15))
+
+        import nonerrorImport = glo_M3_private;
+>nonerrorImport : Symbol(nonerrorImport, Decl(privacyImportParseErrors.ts, 301, 55))
+>glo_M3_private : Symbol(nonerrorImport, Decl(privacyImportParseErrors.ts, 185, 1))
+
+        module m5 {
+>m5 : Symbol(m5, Decl(privacyImportParseErrors.ts, 302, 47))
+
+            import m5_errorImport = require("glo_M4_private");
+>m5_errorImport : Symbol(m5_errorImport, Decl(privacyImportParseErrors.ts, 304, 19))
+
+            import m5_nonerrorImport = glo_M3_private;
+>m5_nonerrorImport : Symbol(m5_nonerrorImport, Decl(privacyImportParseErrors.ts, 305, 62))
+>glo_M3_private : Symbol(m5_nonerrorImport, Decl(privacyImportParseErrors.ts, 185, 1))
+        }
+    }
+}
+
+declare module "anotherParseError" {
+>"anotherParseError" : Symbol("anotherParseError", Decl(privacyImportParseErrors.ts, 309, 1))
+
+    module m2 {
+>m2 : Symbol(m2, Decl(privacyImportParseErrors.ts, 311, 36), Decl(privacyImportParseErrors.ts, 315, 5))
+
+        declare module "abc" {
+>"abc" : Symbol("abc", Decl(privacyImportParseErrors.ts, 312, 15))
+        }
+    }
+
+    module m2 {
+>m2 : Symbol(m2, Decl(privacyImportParseErrors.ts, 311, 36), Decl(privacyImportParseErrors.ts, 315, 5))
+
+        module "abc2" {
+>"abc2" : Symbol("abc2", Decl(privacyImportParseErrors.ts, 317, 15))
+        }
+    }
+    module "abc3" {
+>"abc3" : Symbol("abc3", Decl(privacyImportParseErrors.ts, 320, 5))
+    }
+}
+
+declare export module "anotherParseError2" {
+>"anotherParseError2" : Symbol("anotherParseError2", Decl(privacyImportParseErrors.ts, 323, 1))
+
+    module m2 {
+>m2 : Symbol(m2, Decl(privacyImportParseErrors.ts, 325, 44), Decl(privacyImportParseErrors.ts, 329, 5))
+
+        declare module "abc" {
+>"abc" : Symbol("abc", Decl(privacyImportParseErrors.ts, 326, 15))
+        }
+    }
+
+    module m2 {
+>m2 : Symbol(m2, Decl(privacyImportParseErrors.ts, 325, 44), Decl(privacyImportParseErrors.ts, 329, 5))
+
+        module "abc2" {
+>"abc2" : Symbol("abc2", Decl(privacyImportParseErrors.ts, 331, 15))
+        }
+    }
+    module "abc3" {
+>"abc3" : Symbol("abc3", Decl(privacyImportParseErrors.ts, 334, 5))
+    }
+}
+
+module m2 {
+>m2 : Symbol(m2, Decl(privacyImportParseErrors.ts, 82, 1), Decl(privacyImportParseErrors.ts, 337, 1))
+
+    import m3 = require("use_glo_M1_public");
+>m3 : Symbol(m3, Decl(privacyImportParseErrors.ts, 339, 11))
+
+    module m4 {
+>m4 : Symbol(m4, Decl(privacyImportParseErrors.ts, 340, 45))
+
+        var a = 10;
+>a : Symbol(a, Decl(privacyImportParseErrors.ts, 342, 11))
+
+        import m2 = require("use_glo_M1_public");
+>m2 : Symbol(m2, Decl(privacyImportParseErrors.ts, 342, 19))
+    }
+
+}
+
+export module m3 {
+>m3 : Symbol(m3, Decl(privacyImportParseErrors.ts, 346, 1))
+
+    import m3 = require("use_glo_M1_public");
+>m3 : Symbol(m3, Decl(privacyImportParseErrors.ts, 348, 18))
+
+    module m4 {
+>m4 : Symbol(m4, Decl(privacyImportParseErrors.ts, 349, 45))
+
+        var a = 10;
+>a : Symbol(a, Decl(privacyImportParseErrors.ts, 351, 11))
+
+        import m2 = require("use_glo_M1_public");
+>m2 : Symbol(m2, Decl(privacyImportParseErrors.ts, 351, 19))
+    }
+
+}

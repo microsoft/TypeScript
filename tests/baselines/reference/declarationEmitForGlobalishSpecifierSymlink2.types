@@ -1,0 +1,29 @@
+=== /cache/typescript-fsa/src/impl.d.ts ===
+export function getA(): A;
+>getA : () => A
+
+export enum A {
+>A : A
+
+    Val
+>Val : A
+}
+=== /cache/typescript-fsa/index.d.ts ===
+export * from "./src/impl";
+No type information for this code.=== /p1/index.ts ===
+import * as _whatever from "p2";
+>_whatever : typeof _whatever
+
+import { getA } from "typescript-fsa";
+>getA : () => import("/cache/typescript-fsa/index").A
+
+export const a = getA();
+>a : import("/cache/typescript-fsa/index").A
+>getA() : import("/cache/typescript-fsa/index").A
+>getA : () => import("/cache/typescript-fsa/index").A
+
+=== /p2/index.d.ts ===
+export const a: import("typescript-fsa").A;
+>a : import("/cache/typescript-fsa/index").A
+
+

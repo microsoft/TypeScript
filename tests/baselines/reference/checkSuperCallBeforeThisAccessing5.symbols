@@ -1,0 +1,20 @@
+=== tests/cases/compiler/checkSuperCallBeforeThisAccessing5.ts ===
+class Based { constructor(...arg) { } }
+>Based : Symbol(Based, Decl(checkSuperCallBeforeThisAccessing5.ts, 0, 0))
+>arg : Symbol(arg, Decl(checkSuperCallBeforeThisAccessing5.ts, 0, 26))
+
+class Derived extends Based {
+>Derived : Symbol(Derived, Decl(checkSuperCallBeforeThisAccessing5.ts, 0, 39))
+>Based : Symbol(Based, Decl(checkSuperCallBeforeThisAccessing5.ts, 0, 0))
+
+    public x: number;
+>x : Symbol(Derived.x, Decl(checkSuperCallBeforeThisAccessing5.ts, 1, 29))
+
+    constructor() {
+        super(this.x);
+>super : Symbol(Based, Decl(checkSuperCallBeforeThisAccessing5.ts, 0, 0))
+>this.x : Symbol(Derived.x, Decl(checkSuperCallBeforeThisAccessing5.ts, 1, 29))
+>this : Symbol(Derived, Decl(checkSuperCallBeforeThisAccessing5.ts, 0, 39))
+>x : Symbol(Derived.x, Decl(checkSuperCallBeforeThisAccessing5.ts, 1, 29))
+    }
+}

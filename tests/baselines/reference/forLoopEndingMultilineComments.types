@@ -1,0 +1,33 @@
+=== tests/cases/compiler/forLoopEndingMultilineComments.ts ===
+declare var a: any;
+>a : any
+
+export function consoleTestResultHandler(testResult: any): boolean {
+>consoleTestResultHandler : (testResult: any) => boolean
+>testResult : any
+
+    // needed to get colors to show up when passing through Grunt
+    void a;
+>void a : undefined
+>a : any
+
+    for (const q of a) {
+>q : any
+>a : any
+
+        void a;
+>void a : undefined
+>a : any
+
+        /* eslint-disable no-console */
+        if (a) {
+>a : any
+
+        } else {
+        }
+        /* eslint-enable no-console */
+    }
+
+    return true;
+>true : true
+}

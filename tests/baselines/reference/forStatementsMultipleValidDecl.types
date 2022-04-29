@@ -1,0 +1,137 @@
+=== tests/cases/conformance/statements/forStatements/forStatementsMultipleValidDecl.ts ===
+// all expected to be valid
+
+for (var x: number; ;) { }
+>x : number
+
+for (var x = 2; ;) { }
+>x : number
+>2 : 2
+
+for (var x = <number>undefined; ;) { }
+>x : number
+><number>undefined : number
+>undefined : undefined
+
+// new declaration space, making redeclaring x as a string valid
+function declSpace() {
+>declSpace : () => void
+
+    for (var x = 'this is a string'; ;) { }
+>x : string
+>'this is a string' : "this is a string"
+}
+interface Point { x: number; y: number; }
+>x : number
+>y : number
+
+for (var p: Point; ;) { }
+>p : Point
+
+for (var p = { x: 1, y: 2 }; ;) { }
+>p : Point
+>{ x: 1, y: 2 } : { x: number; y: number; }
+>x : number
+>1 : 1
+>y : number
+>2 : 2
+
+for (var p: Point = { x: 0, y: undefined }; ;) { }
+>p : Point
+>{ x: 0, y: undefined } : { x: number; y: undefined; }
+>x : number
+>0 : 0
+>y : undefined
+>undefined : undefined
+
+for (var p = { x: 1, y: <number>undefined }; ;) { }
+>p : Point
+>{ x: 1, y: <number>undefined } : { x: number; y: number; }
+>x : number
+>1 : 1
+>y : number
+><number>undefined : number
+>undefined : undefined
+
+for (var p: { x: number; y: number; } = { x: 1, y: 2 }; ;) { }
+>p : Point
+>x : number
+>y : number
+>{ x: 1, y: 2 } : { x: number; y: number; }
+>x : number
+>1 : 1
+>y : number
+>2 : 2
+
+for (var p = <{ x: number; y: number; }>{ x: 0, y: undefined }; ;) { }
+>p : Point
+><{ x: number; y: number; }>{ x: 0, y: undefined } : { x: number; y: number; }
+>x : number
+>y : number
+>{ x: 0, y: undefined } : { x: number; y: undefined; }
+>x : number
+>0 : 0
+>y : undefined
+>undefined : undefined
+
+for (var p: typeof p; ;) { }
+>p : Point
+>p : Point
+
+for (var fn = function (s: string) { return 42; }; ;) { }
+>fn : (s: string) => number
+>function (s: string) { return 42; } : (s: string) => number
+>s : string
+>42 : 42
+
+for (var fn = (s: string) => 3; ;) { }
+>fn : (s: string) => number
+>(s: string) => 3 : (s: string) => number
+>s : string
+>3 : 3
+
+for (var fn: (s: string) => number; ;) { }
+>fn : (s: string) => number
+>s : string
+
+for (var fn: { (s: string): number }; ;) { }
+>fn : (s: string) => number
+>s : string
+
+for (var fn = <(s: string) => number> null; ;) { }
+>fn : (s: string) => number
+><(s: string) => number> null : (s: string) => number
+>s : string
+>null : null
+
+for (var fn: typeof fn; ;) { }
+>fn : (s: string) => number
+>fn : (s: string) => number
+
+for (var a: string[]; ;) { }
+>a : string[]
+
+for (var a = ['a', 'b']; ;) { }
+>a : string[]
+>['a', 'b'] : string[]
+>'a' : "a"
+>'b' : "b"
+
+for (var a = <string[]>[]; ;) { }
+>a : string[]
+><string[]>[] : string[]
+>[] : undefined[]
+
+for (var a: string[] = []; ;) { }
+>a : string[]
+>[] : undefined[]
+
+for (var a = new Array<string>(); ;) { }
+>a : string[]
+>new Array<string>() : string[]
+>Array : ArrayConstructor
+
+for (var a: typeof a; ;) { }
+>a : string[]
+>a : string[]
+

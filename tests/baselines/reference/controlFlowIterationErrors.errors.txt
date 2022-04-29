@@ -1,0 +1,135 @@
+tests/cases/conformance/controlFlow/controlFlowIterationErrors.ts(11,17): error TS2345: Argument of type 'string | number' is not assignable to parameter of type 'string'.
+  Type 'number' is not assignable to type 'string'.
+tests/cases/conformance/controlFlow/controlFlowIterationErrors.ts(22,17): error TS2345: Argument of type 'string | number' is not assignable to parameter of type 'string'.
+  Type 'number' is not assignable to type 'string'.
+tests/cases/conformance/controlFlow/controlFlowIterationErrors.ts(34,17): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(x: string): number', gave the following error.
+    Argument of type 'string | number' is not assignable to parameter of type 'string'.
+      Type 'number' is not assignable to type 'string'.
+  Overload 2 of 2, '(x: number): string', gave the following error.
+    Argument of type 'string | number' is not assignable to parameter of type 'number'.
+      Type 'string' is not assignable to type 'number'.
+tests/cases/conformance/controlFlow/controlFlowIterationErrors.ts(45,17): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(x: string): number', gave the following error.
+    Argument of type 'string | number' is not assignable to parameter of type 'string'.
+      Type 'number' is not assignable to type 'string'.
+  Overload 2 of 2, '(x: number): string', gave the following error.
+    Argument of type 'string | number' is not assignable to parameter of type 'number'.
+      Type 'string' is not assignable to type 'number'.
+
+
+==== tests/cases/conformance/controlFlow/controlFlowIterationErrors.ts (4 errors) ====
+    let cond: boolean;
+    
+    function len(s: string) {
+        return s.length;
+    }
+    
+    function f1() {
+        let x: string | number | boolean;
+        x = "";
+        while (cond) {
+            x = len(x);
+                    ~
+!!! error TS2345: Argument of type 'string | number' is not assignable to parameter of type 'string'.
+!!! error TS2345:   Type 'number' is not assignable to type 'string'.
+            x;
+        }
+        x;
+    }
+    
+    function f2() {
+        let x: string | number | boolean;
+        x = "";
+        while (cond) {
+            x;
+            x = len(x);
+                    ~
+!!! error TS2345: Argument of type 'string | number' is not assignable to parameter of type 'string'.
+!!! error TS2345:   Type 'number' is not assignable to type 'string'.
+        }
+        x;
+    }
+    
+    declare function foo(x: string): number;
+    declare function foo(x: number): string;
+    
+    function g1() {
+        let x: string | number | boolean;
+        x = "";
+        while (cond) {
+            x = foo(x);
+                    ~
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   Overload 1 of 2, '(x: string): number', gave the following error.
+!!! error TS2769:     Argument of type 'string | number' is not assignable to parameter of type 'string'.
+!!! error TS2769:       Type 'number' is not assignable to type 'string'.
+!!! error TS2769:   Overload 2 of 2, '(x: number): string', gave the following error.
+!!! error TS2769:     Argument of type 'string | number' is not assignable to parameter of type 'number'.
+!!! error TS2769:       Type 'string' is not assignable to type 'number'.
+            x;
+        }
+        x;
+    }
+    
+    function g2() {
+        let x: string | number | boolean;
+        x = "";
+        while (cond) {
+            x;
+            x = foo(x);
+                    ~
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   Overload 1 of 2, '(x: string): number', gave the following error.
+!!! error TS2769:     Argument of type 'string | number' is not assignable to parameter of type 'string'.
+!!! error TS2769:       Type 'number' is not assignable to type 'string'.
+!!! error TS2769:   Overload 2 of 2, '(x: number): string', gave the following error.
+!!! error TS2769:     Argument of type 'string | number' is not assignable to parameter of type 'number'.
+!!! error TS2769:       Type 'string' is not assignable to type 'number'.
+        }
+        x;
+    }
+    
+    function asNumber(x: string | number): number {
+        return +x;
+    }
+    
+    function h1() {
+        let x: string | number | boolean;
+        x = "0";
+        while (cond) {
+            x = +x + 1;
+            x;
+        }
+    }
+    
+    function h2() {
+        let x: string | number | boolean;
+        x = "0";
+        while (cond) {
+            x = asNumber(x) + 1;
+            x;
+        }
+    }
+    
+    function h3() {
+        let x: string | number | boolean;
+        x = "0";
+        while (cond) {
+            let y = asNumber(x);
+            x = y + 1;
+            x;
+        }
+    }
+    
+    function h4() {
+        let x: string | number | boolean;
+        x = "0";
+        while (cond) {
+            x;
+            let y = asNumber(x);
+            x = y + 1;
+            x;
+        }
+    }
+    

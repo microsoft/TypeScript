@@ -1,0 +1,28 @@
+=== tests/cases/compiler/homomorphicMappedTypeIntersectionAssignability.ts ===
+function f<TType>(
+>f : <TType>(a: {    weak?: string;} & Readonly<TType> & {    name: "ok";}, b: Readonly<TType & {    name: string;}>, c: Readonly<TType> & {    name: string;}) => void
+
+    a: { weak?: string } & Readonly<TType> & { name: "ok" },
+>a : { weak?: string | undefined; } & Readonly<TType> & { name: "ok"; }
+>weak : string | undefined
+>name : "ok"
+
+    b: Readonly<TType & { name: string }>,
+>b : Readonly<TType & { name: string; }>
+>name : string
+
+    c: Readonly<TType> & { name: string }) {
+>c : Readonly<TType> & { name: string; }
+>name : string
+
+    c = a; // Works
+>c = a : { weak?: string | undefined; } & Readonly<TType> & { name: "ok"; }
+>c : Readonly<TType> & { name: string; }
+>a : { weak?: string | undefined; } & Readonly<TType> & { name: "ok"; }
+
+    b = a; // Should also work
+>b = a : { weak?: string | undefined; } & Readonly<TType> & { name: "ok"; }
+>b : Readonly<TType & { name: string; }>
+>a : { weak?: string | undefined; } & Readonly<TType> & { name: "ok"; }
+}
+

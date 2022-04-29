@@ -1,0 +1,17 @@
+tests/cases/compiler/classExtendsInterface.ts(2,17): error TS2689: Cannot extend an interface 'Comparable'. Did you mean 'implements'?
+tests/cases/compiler/classExtendsInterface.ts(6,21): error TS2689: Cannot extend an interface 'Comparable2'. Did you mean 'implements'?
+
+
+==== tests/cases/compiler/classExtendsInterface.ts (2 errors) ====
+    interface Comparable {}
+    class A extends Comparable {}
+                    ~~~~~~~~~~
+!!! error TS2689: Cannot extend an interface 'Comparable'. Did you mean 'implements'?
+    class B implements Comparable {}
+    
+    interface Comparable2<T> {}
+    class A2<T> extends Comparable2<T> {}
+                        ~~~~~~~~~~~
+!!! error TS2689: Cannot extend an interface 'Comparable2'. Did you mean 'implements'?
+    class B2<T> implements Comparable2<T> {}
+    

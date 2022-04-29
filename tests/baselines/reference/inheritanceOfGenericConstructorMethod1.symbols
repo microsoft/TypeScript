@@ -1,0 +1,32 @@
+=== tests/cases/compiler/inheritanceOfGenericConstructorMethod1.ts ===
+class A<T> { }
+>A : Symbol(A, Decl(inheritanceOfGenericConstructorMethod1.ts, 0, 0))
+>T : Symbol(T, Decl(inheritanceOfGenericConstructorMethod1.ts, 0, 8))
+
+class B<T> extends A<T> {}
+>B : Symbol(B, Decl(inheritanceOfGenericConstructorMethod1.ts, 0, 14))
+>T : Symbol(T, Decl(inheritanceOfGenericConstructorMethod1.ts, 1, 8))
+>A : Symbol(A, Decl(inheritanceOfGenericConstructorMethod1.ts, 0, 0))
+>T : Symbol(T, Decl(inheritanceOfGenericConstructorMethod1.ts, 1, 8))
+
+var a = new A<Date>();
+>a : Symbol(a, Decl(inheritanceOfGenericConstructorMethod1.ts, 2, 3))
+>A : Symbol(A, Decl(inheritanceOfGenericConstructorMethod1.ts, 0, 0))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+var b1 = new B(); // no error
+>b1 : Symbol(b1, Decl(inheritanceOfGenericConstructorMethod1.ts, 3, 3))
+>B : Symbol(B, Decl(inheritanceOfGenericConstructorMethod1.ts, 0, 14))
+
+var b2: B<Date> = new B<Date>(); // no error
+>b2 : Symbol(b2, Decl(inheritanceOfGenericConstructorMethod1.ts, 4, 3))
+>B : Symbol(B, Decl(inheritanceOfGenericConstructorMethod1.ts, 0, 14))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>B : Symbol(B, Decl(inheritanceOfGenericConstructorMethod1.ts, 0, 14))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+var b3 = new B<Date>(); // error, could not select overload for 'new' expression
+>b3 : Symbol(b3, Decl(inheritanceOfGenericConstructorMethod1.ts, 5, 3))
+>B : Symbol(B, Decl(inheritanceOfGenericConstructorMethod1.ts, 0, 14))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+

@@ -1,0 +1,56 @@
+=== tests/cases/compiler/inheritedStringIndexersFromDifferentBaseTypes2.ts ===
+// indexer in B is a subtype of indexer in A
+interface A {
+>A : Symbol(A, Decl(inheritedStringIndexersFromDifferentBaseTypes2.ts, 0, 0))
+
+    [s: string]: {
+>s : Symbol(s, Decl(inheritedStringIndexersFromDifferentBaseTypes2.ts, 2, 5))
+
+        a;
+>a : Symbol(a, Decl(inheritedStringIndexersFromDifferentBaseTypes2.ts, 2, 18))
+
+    };
+}
+interface B {
+>B : Symbol(B, Decl(inheritedStringIndexersFromDifferentBaseTypes2.ts, 5, 1))
+
+    [s: number]: {
+>s : Symbol(s, Decl(inheritedStringIndexersFromDifferentBaseTypes2.ts, 7, 5))
+
+        a;
+>a : Symbol(a, Decl(inheritedStringIndexersFromDifferentBaseTypes2.ts, 7, 18))
+
+        b;
+>b : Symbol(b, Decl(inheritedStringIndexersFromDifferentBaseTypes2.ts, 8, 10))
+
+    };
+}
+interface C extends A, B { } // ok
+>C : Symbol(C, Decl(inheritedStringIndexersFromDifferentBaseTypes2.ts, 11, 1))
+>A : Symbol(A, Decl(inheritedStringIndexersFromDifferentBaseTypes2.ts, 0, 0))
+>B : Symbol(B, Decl(inheritedStringIndexersFromDifferentBaseTypes2.ts, 5, 1))
+
+interface D {
+>D : Symbol(D, Decl(inheritedStringIndexersFromDifferentBaseTypes2.ts, 12, 28))
+
+    [s: number]: {};
+>s : Symbol(s, Decl(inheritedStringIndexersFromDifferentBaseTypes2.ts, 15, 5))
+}
+interface E extends A, D { } // error
+>E : Symbol(E, Decl(inheritedStringIndexersFromDifferentBaseTypes2.ts, 16, 1))
+>A : Symbol(A, Decl(inheritedStringIndexersFromDifferentBaseTypes2.ts, 0, 0))
+>D : Symbol(D, Decl(inheritedStringIndexersFromDifferentBaseTypes2.ts, 12, 28))
+
+interface F extends A, D {
+>F : Symbol(F, Decl(inheritedStringIndexersFromDifferentBaseTypes2.ts, 17, 28))
+>A : Symbol(A, Decl(inheritedStringIndexersFromDifferentBaseTypes2.ts, 0, 0))
+>D : Symbol(D, Decl(inheritedStringIndexersFromDifferentBaseTypes2.ts, 12, 28))
+
+    [s: number]: {
+>s : Symbol(s, Decl(inheritedStringIndexersFromDifferentBaseTypes2.ts, 20, 5))
+
+        a;
+>a : Symbol(a, Decl(inheritedStringIndexersFromDifferentBaseTypes2.ts, 20, 18))
+
+    };
+} // ok because we overrode D's number index signature

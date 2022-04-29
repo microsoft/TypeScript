@@ -1,0 +1,44 @@
+=== tests/cases/compiler/genericImplements.ts ===
+class A { a; };
+>A : A
+>a : any
+
+class B { b; };
+>B : B
+>b : any
+
+interface I {
+    f<T extends A>(): T;
+>f : <T extends A>() => T
+
+} // { f: () => { a; } }
+
+// OK
+class X implements I {  
+>X : X
+
+    f<T extends B>(): T { return undefined; }
+>f : <T extends B>() => T
+>undefined : undefined
+
+} // { f: () => { b; } }
+
+// OK
+class Y implements I {
+>Y : Y
+
+    f<T extends A>(): T { return undefined; }
+>f : <T extends A>() => T
+>undefined : undefined
+
+} // { f: () => { a; } }
+
+// OK
+class Z implements I {
+>Z : Z
+
+    f<T>(): T { return undefined; }
+>f : <T>() => T
+>undefined : undefined
+
+} // { f: <T>() => T } 

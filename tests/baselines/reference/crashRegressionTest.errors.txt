@@ -1,0 +1,31 @@
+tests/cases/compiler/crashRegressionTest.ts(16,56): error TS2339: Property '_name' does not exist on type 'StringTemplate'.
+
+
+==== tests/cases/compiler/crashRegressionTest.ts (1 errors) ====
+    module MsPortal.Util.TemplateEngine {
+        "use strict";
+     
+        interface TemplateKeyValue {
+            [name: string]: string;
+        }
+     
+        class StringTemplate {
+            private _templateStorage: TemplateStorage;
+     
+            constructor(templateStorage: TemplateStorage) {
+                this._templateStorage = templateStorage;
+            }
+     
+            public text(value?: string): any {
+                this._templateStorage.templateSources[this._name] = value;
+                                                           ~~~~~
+!!! error TS2339: Property '_name' does not exist on type 'StringTemplate'.
+            }
+        }
+     
+        export class TemplateStorage {
+            public templateSources: TemplateKeyValue = {};
+            public templateData: TemplateKeyValue = {};
+        }
+    }
+    

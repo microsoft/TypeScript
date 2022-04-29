@@ -1,0 +1,4 @@
+=== tests/cases/conformance/es6/templates/templateStringTermination2.ts ===
+`\\`
+>`\\` : "\\"
+

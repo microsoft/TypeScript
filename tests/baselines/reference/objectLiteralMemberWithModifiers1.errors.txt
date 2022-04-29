@@ -1,0 +1,10 @@
+tests/cases/compiler/objectLiteralMemberWithModifiers1.ts(1,11): error TS1042: 'public' modifier cannot be used here.
+tests/cases/compiler/objectLiteralMemberWithModifiers1.ts(1,11): error TS1184: Modifiers cannot appear here.
+
+
+==== tests/cases/compiler/objectLiteralMemberWithModifiers1.ts (2 errors) ====
+    var v = { public foo() { } }
+              ~~~~~~
+!!! error TS1042: 'public' modifier cannot be used here.
+              ~~~~~~
+!!! error TS1184: Modifiers cannot appear here.

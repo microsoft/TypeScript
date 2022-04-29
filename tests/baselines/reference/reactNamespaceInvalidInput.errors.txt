@@ -1,0 +1,10 @@
+error TS5059: Invalid value for '--reactNamespace'. 'my-React-Lib' is not a valid identifier.
+tests/cases/compiler/reactNamespaceInvalidInput.tsx(1,2): error TS2304: Cannot find name 'my-React-Lib'.
+
+
+!!! error TS5059: Invalid value for '--reactNamespace'. 'my-React-Lib' is not a valid identifier.
+==== tests/cases/compiler/reactNamespaceInvalidInput.tsx (1 errors) ====
+    <foo data/>;
+     ~~~
+!!! error TS2304: Cannot find name 'my-React-Lib'.
+    

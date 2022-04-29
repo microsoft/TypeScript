@@ -1,0 +1,19 @@
+=== tests/cases/conformance/jsdoc/github17339.js ===
+var obj = {
+>obj : Symbol(obj, Decl(github17339.js, 0, 3))
+
+	/**
+	 * @template T
+	 * @param {T} a
+	 * @returns {T}
+	 */
+	x: function (a) {
+>x : Symbol(x, Decl(github17339.js, 0, 11))
+>a : Symbol(a, Decl(github17339.js, 6, 14))
+
+		return a;
+>a : Symbol(a, Decl(github17339.js, 6, 14))
+
+	},
+};
+

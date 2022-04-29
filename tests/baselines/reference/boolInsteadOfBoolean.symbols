@@ -1,0 +1,13 @@
+=== tests/cases/conformance/types/primitives/boolean/boolInsteadOfBoolean.ts ===
+var x: bool;
+>x : Symbol(x, Decl(boolInsteadOfBoolean.ts, 0, 3))
+>bool : Symbol(bool)
+
+var a: boolean = x;
+>a : Symbol(a, Decl(boolInsteadOfBoolean.ts, 1, 3))
+>x : Symbol(x, Decl(boolInsteadOfBoolean.ts, 0, 3))
+
+x = a;
+>x : Symbol(x, Decl(boolInsteadOfBoolean.ts, 0, 3))
+>a : Symbol(a, Decl(boolInsteadOfBoolean.ts, 1, 3))
+

@@ -1,0 +1,17 @@
+=== tests/cases/conformance/es2017/useSharedArrayBuffer1.ts ===
+var foge = new SharedArrayBuffer(1024);
+>foge : Symbol(foge, Decl(useSharedArrayBuffer1.ts, 0, 3))
+>SharedArrayBuffer : Symbol(SharedArrayBuffer, Decl(lib.es2017.sharedmemory.d.ts, --, --), Decl(lib.es2017.sharedmemory.d.ts, --, --))
+
+var bar = foge.slice(1, 10);
+>bar : Symbol(bar, Decl(useSharedArrayBuffer1.ts, 1, 3))
+>foge.slice : Symbol(SharedArrayBuffer.slice, Decl(lib.es2017.sharedmemory.d.ts, --, --))
+>foge : Symbol(foge, Decl(useSharedArrayBuffer1.ts, 0, 3))
+>slice : Symbol(SharedArrayBuffer.slice, Decl(lib.es2017.sharedmemory.d.ts, --, --))
+
+var len = foge.byteLength;
+>len : Symbol(len, Decl(useSharedArrayBuffer1.ts, 2, 3))
+>foge.byteLength : Symbol(SharedArrayBuffer.byteLength, Decl(lib.es2017.sharedmemory.d.ts, --, --))
+>foge : Symbol(foge, Decl(useSharedArrayBuffer1.ts, 0, 3))
+>byteLength : Symbol(SharedArrayBuffer.byteLength, Decl(lib.es2017.sharedmemory.d.ts, --, --))
+

@@ -1,0 +1,127 @@
+===================================================================
+JsFile: sourceMapValidationDo.js
+mapUrl: sourceMapValidationDo.js.map
+sourceRoot: 
+sources: sourceMapValidationDo.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:tests/cases/compiler/sourceMapValidationDo.js
+sourceFile:sourceMapValidationDo.ts
+-------------------------------------------------------------------
+>>>var i = 0;
+1 >
+2 >^^^^
+3 >    ^
+4 >     ^^^
+5 >        ^
+6 >         ^
+1 >
+2 >var 
+3 >    i
+4 >      = 
+5 >        0
+6 >         ;
+1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(1, 5) Source(1, 5) + SourceIndex(0)
+3 >Emitted(1, 6) Source(1, 6) + SourceIndex(0)
+4 >Emitted(1, 9) Source(1, 9) + SourceIndex(0)
+5 >Emitted(1, 10) Source(1, 10) + SourceIndex(0)
+6 >Emitted(1, 11) Source(1, 11) + SourceIndex(0)
+---
+>>>do {
+1 >
+2 >^^^
+3 >   ^^^^^^->
+1 >
+  >
+2 >do
+  >
+1 >Emitted(2, 1) Source(2, 1) + SourceIndex(0)
+2 >Emitted(2, 4) Source(3, 1) + SourceIndex(0)
+---
+>>>    i++;
+1->^^^^
+2 >    ^
+3 >     ^^
+4 >       ^
+5 >        ^^^^^^^^^^->
+1->{
+  >    
+2 >    i
+3 >     ++
+4 >       ;
+1->Emitted(3, 5) Source(4, 5) + SourceIndex(0)
+2 >Emitted(3, 6) Source(4, 6) + SourceIndex(0)
+3 >Emitted(3, 8) Source(4, 8) + SourceIndex(0)
+4 >Emitted(3, 9) Source(4, 9) + SourceIndex(0)
+---
+>>>} while (i < 10);
+1->^
+2 > ^^^^^^^^
+3 >         ^
+4 >          ^^^
+5 >             ^^
+6 >               ^^
+1->
+  >}
+2 >  while (
+3 >         i
+4 >           < 
+5 >             10
+6 >               );
+1->Emitted(4, 2) Source(5, 2) + SourceIndex(0)
+2 >Emitted(4, 10) Source(5, 10) + SourceIndex(0)
+3 >Emitted(4, 11) Source(5, 11) + SourceIndex(0)
+4 >Emitted(4, 14) Source(5, 14) + SourceIndex(0)
+5 >Emitted(4, 16) Source(5, 16) + SourceIndex(0)
+6 >Emitted(4, 18) Source(5, 18) + SourceIndex(0)
+---
+>>>do {
+1 >
+2 >^^^
+3 >   ^^^^^^->
+1 >
+  >
+2 >do 
+1 >Emitted(5, 1) Source(6, 1) + SourceIndex(0)
+2 >Emitted(5, 4) Source(6, 4) + SourceIndex(0)
+---
+>>>    i++;
+1->^^^^
+2 >    ^
+3 >     ^^
+4 >       ^
+5 >        ^^^^^^^^^^->
+1->{
+  >    
+2 >    i
+3 >     ++
+4 >       ;
+1->Emitted(6, 5) Source(7, 5) + SourceIndex(0)
+2 >Emitted(6, 6) Source(7, 6) + SourceIndex(0)
+3 >Emitted(6, 8) Source(7, 8) + SourceIndex(0)
+4 >Emitted(6, 9) Source(7, 9) + SourceIndex(0)
+---
+>>>} while (i < 20);
+1->^
+2 > ^^^^^^^^
+3 >         ^
+4 >          ^^^
+5 >             ^^
+6 >               ^^
+7 >                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1->
+  >}
+2 >  while (
+3 >         i
+4 >           < 
+5 >             20
+6 >               );
+1->Emitted(7, 2) Source(8, 2) + SourceIndex(0)
+2 >Emitted(7, 10) Source(8, 10) + SourceIndex(0)
+3 >Emitted(7, 11) Source(8, 11) + SourceIndex(0)
+4 >Emitted(7, 14) Source(8, 14) + SourceIndex(0)
+5 >Emitted(7, 16) Source(8, 16) + SourceIndex(0)
+6 >Emitted(7, 18) Source(8, 18) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=sourceMapValidationDo.js.map

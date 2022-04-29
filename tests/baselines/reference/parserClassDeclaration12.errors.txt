@@ -1,0 +1,11 @@
+tests/cases/conformance/parser/ecmascript5/ClassDeclarations/parserClassDeclaration12.ts(2,4): error TS2394: This overload signature is not compatible with its implementation signature.
+
+
+==== tests/cases/conformance/parser/ecmascript5/ClassDeclarations/parserClassDeclaration12.ts (1 errors) ====
+    class C {
+       constructor();
+       ~~~~~~~~~~~~~~
+!!! error TS2394: This overload signature is not compatible with its implementation signature.
+!!! related TS2750 tests/cases/conformance/parser/ecmascript5/ClassDeclarations/parserClassDeclaration12.ts:3:4: The implementation signature is declared here.
+       constructor(a) { }
+    }

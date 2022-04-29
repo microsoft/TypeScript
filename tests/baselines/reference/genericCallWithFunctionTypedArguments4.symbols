@@ -1,0 +1,64 @@
+=== tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithFunctionTypedArguments4.ts ===
+// No inference is made from function typed arguments which have multiple call signatures
+
+class C { foo: string }
+>C : Symbol(C, Decl(genericCallWithFunctionTypedArguments4.ts, 0, 0))
+>foo : Symbol(C.foo, Decl(genericCallWithFunctionTypedArguments4.ts, 2, 9))
+
+class D { bar: string }
+>D : Symbol(D, Decl(genericCallWithFunctionTypedArguments4.ts, 2, 23))
+>bar : Symbol(D.bar, Decl(genericCallWithFunctionTypedArguments4.ts, 3, 9))
+
+var a: {
+>a : Symbol(a, Decl(genericCallWithFunctionTypedArguments4.ts, 4, 3))
+
+    new(x: boolean): C;
+>x : Symbol(x, Decl(genericCallWithFunctionTypedArguments4.ts, 5, 8))
+>C : Symbol(C, Decl(genericCallWithFunctionTypedArguments4.ts, 0, 0))
+
+    new(x: string): D;
+>x : Symbol(x, Decl(genericCallWithFunctionTypedArguments4.ts, 6, 8))
+>D : Symbol(D, Decl(genericCallWithFunctionTypedArguments4.ts, 2, 23))
+}
+
+function foo4<T, U>(cb: new(x: T) => U) {
+>foo4 : Symbol(foo4, Decl(genericCallWithFunctionTypedArguments4.ts, 7, 1))
+>T : Symbol(T, Decl(genericCallWithFunctionTypedArguments4.ts, 9, 14))
+>U : Symbol(U, Decl(genericCallWithFunctionTypedArguments4.ts, 9, 16))
+>cb : Symbol(cb, Decl(genericCallWithFunctionTypedArguments4.ts, 9, 20))
+>x : Symbol(x, Decl(genericCallWithFunctionTypedArguments4.ts, 9, 28))
+>T : Symbol(T, Decl(genericCallWithFunctionTypedArguments4.ts, 9, 14))
+>U : Symbol(U, Decl(genericCallWithFunctionTypedArguments4.ts, 9, 16))
+
+    var u: U;
+>u : Symbol(u, Decl(genericCallWithFunctionTypedArguments4.ts, 10, 7))
+>U : Symbol(U, Decl(genericCallWithFunctionTypedArguments4.ts, 9, 16))
+
+    return u;
+>u : Symbol(u, Decl(genericCallWithFunctionTypedArguments4.ts, 10, 7))
+}
+
+var r = foo4(a); // T is {} (candidates boolean and string), U is {} (candidates C and D)
+>r : Symbol(r, Decl(genericCallWithFunctionTypedArguments4.ts, 14, 3))
+>foo4 : Symbol(foo4, Decl(genericCallWithFunctionTypedArguments4.ts, 7, 1))
+>a : Symbol(a, Decl(genericCallWithFunctionTypedArguments4.ts, 4, 3))
+
+var b: {
+>b : Symbol(b, Decl(genericCallWithFunctionTypedArguments4.ts, 16, 3))
+
+    new<T>(x: boolean): T;
+>T : Symbol(T, Decl(genericCallWithFunctionTypedArguments4.ts, 17, 8))
+>x : Symbol(x, Decl(genericCallWithFunctionTypedArguments4.ts, 17, 11))
+>T : Symbol(T, Decl(genericCallWithFunctionTypedArguments4.ts, 17, 8))
+
+    new<T>(x: T): any;
+>T : Symbol(T, Decl(genericCallWithFunctionTypedArguments4.ts, 18, 8))
+>x : Symbol(x, Decl(genericCallWithFunctionTypedArguments4.ts, 18, 11))
+>T : Symbol(T, Decl(genericCallWithFunctionTypedArguments4.ts, 18, 8))
+}
+
+var r2 = foo4(b); // T is {} (candidates boolean and {}), U is any (candidates any and {})
+>r2 : Symbol(r2, Decl(genericCallWithFunctionTypedArguments4.ts, 21, 3))
+>foo4 : Symbol(foo4, Decl(genericCallWithFunctionTypedArguments4.ts, 7, 1))
+>b : Symbol(b, Decl(genericCallWithFunctionTypedArguments4.ts, 16, 3))
+

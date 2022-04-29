@@ -1,0 +1,13 @@
+=== tests/cases/compiler/ParameterList7.ts ===
+class C1 {
+>C1 : Symbol(C1, Decl(ParameterList7.ts, 0, 0))
+
+ constructor(public p1:string); // ERROR
+>p1 : Symbol(C1.p1, Decl(ParameterList7.ts, 1, 13))
+
+ constructor(private p2:number); // ERROR
+>p2 : Symbol(C1.p2, Decl(ParameterList7.ts, 2, 13))
+
+ constructor(public p3:any) {} // OK
+>p3 : Symbol(C1.p3, Decl(ParameterList7.ts, 3, 13))
+}

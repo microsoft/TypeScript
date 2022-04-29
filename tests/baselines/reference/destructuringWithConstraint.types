@@ -1,0 +1,23 @@
+=== tests/cases/compiler/destructuringWithConstraint.ts ===
+// Repro from #22823
+
+interface Props {
+    foo?: boolean;
+>foo : boolean | undefined
+}
+
+function foo<P extends Props>(props: Readonly<P>) {
+>foo : <P extends Props>(props: Readonly<P>) => void
+>props : Readonly<P>
+
+    let { foo = false } = props;
+>foo : boolean
+>false : false
+>props : Readonly<P>
+
+    if (foo === true) { }
+>foo === true : boolean
+>foo : boolean
+>true : true
+}
+

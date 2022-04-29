@@ -1,0 +1,120 @@
+Exit Code: 2
+Standard output:
+lib/grunt.js(10,11): error TS2307: Cannot find module 'coffeescript/register' or its corresponding type declarations.
+lib/grunt.js(91,13): error TS2551: Property 'task' does not exist on type 'typeof import("/grunt/grunt/lib/grunt.js")'. Did you mean 'tasks'?
+lib/grunt.js(96,34): error TS2551: Property 'task' does not exist on type 'typeof import("/grunt/grunt/lib/grunt.js")'. Did you mean 'tasks'?
+lib/grunt.js(101,25): error TS2339: Property 'cli' does not exist on type 'typeof import("/grunt/grunt/lib/grunt.js")'.
+lib/grunt.js(102,23): error TS2339: Property 'cli' does not exist on type 'typeof import("/grunt/grunt/lib/grunt.js")'.
+lib/grunt/config.js(66,18): error TS2339: Property 'template' does not exist on type 'typeof import("/grunt/grunt/lib/grunt")'.
+lib/grunt/fail.js(22,14): error TS2339: Property 'option' does not exist on type 'typeof import("/grunt/grunt/lib/grunt")'.
+lib/grunt/fail.js(25,19): error TS2339: Property 'option' does not exist on type 'typeof import("/grunt/grunt/lib/grunt")'.
+lib/grunt/fail.js(25,65): error TS2339: Property 'underline' does not exist on type '"Used --force, continuing."'.
+lib/grunt/fail.js(26,15): error TS2339: Property 'yellow' does not exist on type 'string'.
+lib/grunt/fail.js(28,35): error TS2339: Property 'red' does not exist on type 'string'.
+lib/grunt/fail.js(35,13): error TS2339: Property 'option' does not exist on type 'typeof import("/grunt/grunt/lib/grunt")'.
+lib/grunt/fail.js(61,14): error TS2339: Property 'option' does not exist on type 'typeof import("/grunt/grunt/lib/grunt")'.
+lib/grunt/file.js(35,39): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type 'string[]'.
+  Type 'IArguments' is missing the following properties from type 'string[]': pop, push, concat, join, and 26 more.
+lib/grunt/file.js(87,33): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type '[options?: any, patterns?: any, filepaths?: any]'.
+lib/grunt/file.js(182,13): error TS2339: Property 'option' does not exist on type 'typeof import("/grunt/grunt/lib/grunt")'.
+lib/grunt/file.js(234,25): error TS2345: Argument of type 'string | Buffer' is not assignable to parameter of type 'string'.
+  Type 'Buffer' is not assignable to type 'string'.
+lib/grunt/file.js(270,23): error TS2339: Property 'option' does not exist on type 'typeof import("/grunt/grunt/lib/grunt")'.
+lib/grunt/file.js(333,7): error TS2367: This condition will always return 'false' since the types 'string | Buffer' and 'boolean' have no overlap.
+lib/grunt/file.js(344,23): error TS2339: Property 'option' does not exist on type 'typeof import("/grunt/grunt/lib/grunt")'.
+lib/grunt/file.js(346,29): error TS2339: Property 'option' does not exist on type 'typeof import("/grunt/grunt/lib/grunt")'.
+lib/grunt/file.js(361,13): error TS2339: Property 'fail' does not exist on type 'typeof import("/grunt/grunt/lib/grunt")'.
+lib/grunt/file.js(365,13): error TS2339: Property 'fail' does not exist on type 'typeof import("/grunt/grunt/lib/grunt")'.
+lib/grunt/file.js(385,40): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type 'string[]'.
+lib/grunt/file.js(391,40): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type 'string[]'.
+lib/grunt/file.js(405,40): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type 'string[]'.
+lib/grunt/file.js(411,40): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type 'string[]'.
+lib/grunt/file.js(417,40): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type 'string[]'.
+lib/grunt/file.js(444,40): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type 'string[]'.
+lib/grunt/file.js(454,40): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type 'string[]'.
+lib/grunt/help.js(58,40): error TS2339: Property 'cli' does not exist on type 'typeof import("/grunt/grunt/lib/grunt")'.
+lib/grunt/help.js(59,19): error TS2339: Property 'cli' does not exist on type 'typeof import("/grunt/grunt/lib/grunt")'.
+lib/grunt/help.js(81,9): error TS2551: Property 'task' does not exist on type 'typeof import("/grunt/grunt/lib/grunt")'. Did you mean 'tasks'?
+lib/grunt/help.js(85,21): error TS2551: Property 'task' does not exist on type 'typeof import("/grunt/grunt/lib/grunt")'. Did you mean 'tasks'?
+lib/grunt/help.js(87,22): error TS2551: Property 'task' does not exist on type 'typeof import("/grunt/grunt/lib/grunt")'. Did you mean 'tasks'?
+lib/grunt/task.js(26,23): error TS2345: Argument of type 'any' is not assignable to parameter of type 'never'.
+lib/grunt/task.js(39,24): error TS2339: Property 'fail' does not exist on type 'typeof import("/grunt/grunt/lib/grunt")'.
+lib/grunt/task.js(44,22): error TS2339: Property 'fail' does not exist on type 'typeof import("/grunt/grunt/lib/grunt")'.
+lib/grunt/task.js(50,33): error TS2339: Property 'config' does not exist on type 'typeof import("/grunt/grunt/lib/grunt")'.
+lib/grunt/task.js(55,15): error TS2339: Property 'config' does not exist on type 'typeof import("/grunt/grunt/lib/grunt")'.
+lib/grunt/task.js(65,45): error TS2339: Property 'nameArgs' does not exist on type 'fn'.
+lib/grunt/task.js(66,13): error TS2339: Property 'name' does not exist on type 'fn'.
+lib/grunt/task.js(66,27): error TS2339: Property 'nameArgs' does not exist on type 'fn'.
+lib/grunt/task.js(66,50): error TS2339: Property 'name' does not exist on type 'fn'.
+lib/grunt/task.js(95,56): error TS2339: Property 'config' does not exist on type 'typeof import("/grunt/grunt/lib/grunt")'.
+lib/grunt/task.js(104,53): error TS2339: Property 'config' does not exist on type 'typeof import("/grunt/grunt/lib/grunt")'.
+lib/grunt/task.js(110,40): error TS2339: Property 'config' does not exist on type 'typeof import("/grunt/grunt/lib/grunt")'.
+lib/grunt/task.js(115,51): error TS2339: Property 'yellow' does not exist on type '"[no files]"'.
+lib/grunt/task.js(136,20): error TS2339: Property 'file' does not exist on type 'typeof import("/grunt/grunt/lib/grunt")'.
+lib/grunt/task.js(142,28): error TS2339: Property 'config' does not exist on type 'typeof import("/grunt/grunt/lib/grunt")'.
+lib/grunt/task.js(143,29): error TS2339: Property 'config' does not exist on type 'typeof import("/grunt/grunt/lib/grunt")'.
+lib/grunt/task.js(168,16): error TS2339: Property 'result' does not exist on type '() => any'.
+lib/grunt/task.js(168,31): error TS2339: Property 'file' does not exist on type 'typeof import("/grunt/grunt/lib/grunt")'.
+lib/grunt/task.js(170,21): error TS2339: Property 'result' does not exist on type '() => any'.
+lib/grunt/task.js(183,13): error TS2339: Property 'option' does not exist on type 'typeof import("/grunt/grunt/lib/grunt")'.
+lib/grunt/task.js(187,83): error TS2339: Property 'yellow' does not exist on type '"[no src]"'.
+lib/grunt/task.js(190,58): error TS2339: Property 'cyan' does not exist on type 'string'.
+lib/grunt/task.js(190,77): error TS2339: Property 'yellow' does not exist on type '"[no dest]"'.
+lib/grunt/task.js(222,10): error TS2339: Property 'requiresConfig' does not exist on type '(Anonymous function)'.
+lib/grunt/task.js(226,29): error TS2339: Property 'config' does not exist on type 'typeof import("/grunt/grunt/lib/grunt")'.
+lib/grunt/task.js(228,15): error TS2339: Property 'config' does not exist on type 'typeof import("/grunt/grunt/lib/grunt")'.
+lib/grunt/task.js(239,39): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+lib/grunt/task.js(241,23): error TS2339: Property 'config' does not exist on type 'typeof import("/grunt/grunt/lib/grunt")'.
+lib/grunt/task.js(248,29): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+lib/grunt/task.js(273,27): error TS2345: Argument of type 'any' is not assignable to parameter of type 'never'.
+lib/grunt/task.js(274,25): error TS2345: Argument of type 'any' is not assignable to parameter of type 'never'.
+lib/grunt/task.js(285,35): error TS2339: Property 'config' does not exist on type 'typeof import("/grunt/grunt/lib/grunt")'.
+lib/grunt/task.js(348,23): error TS2339: Property 'file' does not exist on type 'typeof import("/grunt/grunt/lib/grunt")'.
+lib/grunt/task.js(361,13): error TS2339: Property 'file' does not exist on type 'typeof import("/grunt/grunt/lib/grunt")'.
+lib/grunt/task.js(377,14): error TS2339: Property 'file' does not exist on type 'typeof import("/grunt/grunt/lib/grunt")'.
+lib/grunt/task.js(390,19): error TS2339: Property 'file' does not exist on type 'typeof import("/grunt/grunt/lib/grunt")'.
+lib/grunt/task.js(390,48): error TS2339: Property 'file' does not exist on type 'typeof import("/grunt/grunt/lib/grunt")'.
+lib/grunt/task.js(398,28): error TS2339: Property 'file' does not exist on type 'typeof import("/grunt/grunt/lib/grunt")'.
+lib/grunt/task.js(413,13): error TS2339: Property 'file' does not exist on type 'typeof import("/grunt/grunt/lib/grunt")'.
+lib/grunt/task.js(436,23): error TS2339: Property 'option' does not exist on type 'typeof import("/grunt/grunt/lib/grunt")'.
+lib/grunt/task.js(437,13): error TS2339: Property 'file' does not exist on type 'typeof import("/grunt/grunt/lib/grunt")'.
+lib/grunt/task.js(443,33): error TS2339: Property 'file' does not exist on type 'typeof import("/grunt/grunt/lib/grunt")'.
+lib/grunt/task.js(447,25): error TS2339: Property 'option' does not exist on type 'typeof import("/grunt/grunt/lib/grunt")'.
+lib/grunt/task.js(453,20): error TS2339: Property 'option' does not exist on type 'typeof import("/grunt/grunt/lib/grunt")'.
+lib/grunt/task.js(456,11): error TS2339: Property 'fatal' does not exist on type 'typeof import("/grunt/grunt/lib/grunt")'.
+lib/grunt/task.js(456,72): error TS2339: Property 'fail' does not exist on type 'typeof import("/grunt/grunt/lib/grunt")'.
+lib/grunt/task.js(457,21): error TS2339: Property 'option' does not exist on type 'typeof import("/grunt/grunt/lib/grunt")'.
+lib/grunt/task.js(464,11): error TS2339: Property 'fatal' does not exist on type 'typeof import("/grunt/grunt/lib/grunt")'.
+lib/grunt/task.js(464,52): error TS2339: Property 'fail' does not exist on type 'typeof import("/grunt/grunt/lib/grunt")'.
+lib/grunt/task.js(468,10): error TS2339: Property 'option' does not exist on type 'typeof import("/grunt/grunt/lib/grunt")'.
+lib/grunt/task.js(470,10): error TS2339: Property 'option' does not exist on type 'typeof import("/grunt/grunt/lib/grunt")'.
+lib/grunt/template.js(15,21): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+lib/grunt/template.js(27,14): error TS2339: Property 'opener' does not exist on type '{}'.
+lib/grunt/template.js(28,14): error TS2339: Property 'closer' does not exist on type '{}'.
+lib/grunt/template.js(30,22): error TS2339: Property 'opener' does not exist on type '{}'.
+lib/grunt/template.js(31,39): error TS2339: Property 'closer' does not exist on type '{}'.
+lib/grunt/template.js(33,14): error TS2339: Property 'lodash' does not exist on type '{}'.
+lib/grunt/template.js(60,50): error TS2339: Property 'config' does not exist on type 'typeof import("/grunt/grunt/lib/grunt")'.
+lib/grunt/template.js(86,11): error TS2339: Property 'warn' does not exist on type 'typeof import("/grunt/grunt/lib/grunt")'.
+lib/grunt/template.js(86,25): error TS2339: Property 'fail' does not exist on type 'typeof import("/grunt/grunt/lib/grunt")'.
+lib/util/task.js(161,36): error TS2345: Argument of type 'number[]' is not assignable to parameter of type '[start: number, deleteCount: number, ...items: never[]]'.
+  Source provides no match for required element at position 0 in target.
+lib/util/task.js(211,12): error TS2339: Property '_success' does not exist on type '(Anonymous function)'.
+lib/util/task.js(213,28): error TS2339: Property '_options' does not exist on type '(Anonymous function)'.
+lib/util/task.js(214,14): error TS2339: Property '_options' does not exist on type '(Anonymous function)'.
+lib/util/task.js(267,22): error TS2339: Property '_queue' does not exist on type '(Anonymous function)'.
+lib/util/task.js(268,31): error TS2339: Property '_placeholder' does not exist on type '(Anonymous function)'.
+lib/util/task.js(268,62): error TS2339: Property '_marker' does not exist on type '(Anonymous function)'.
+lib/util/task.js(272,18): error TS2339: Property '_options' does not exist on type '(Anonymous function)'.
+lib/util/task.js(273,16): error TS2339: Property '_options' does not exist on type '(Anonymous function)'.
+lib/util/task.js(278,12): error TS2339: Property '_queue' does not exist on type '(Anonymous function)'.
+lib/util/task.js(278,32): error TS2339: Property '_placeholder' does not exist on type '(Anonymous function)'.
+lib/util/task.js(293,12): error TS2339: Property 'runTaskFn' does not exist on type '(Anonymous function)'.
+lib/util/task.js(294,36): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+lib/util/task.js(294,42): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+lib/util/task.js(320,21): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+lib/util/task.js(331,7): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+
+
+
+Standard error:

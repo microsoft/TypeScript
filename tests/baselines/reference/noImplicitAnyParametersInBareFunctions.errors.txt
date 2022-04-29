@@ -1,0 +1,112 @@
+tests/cases/compiler/noImplicitAnyParametersInBareFunctions.ts(5,13): error TS7006: Parameter 'x' implicitly has an 'any' type.
+tests/cases/compiler/noImplicitAnyParametersInBareFunctions.ts(11,13): error TS7006: Parameter 'x' implicitly has an 'any' type.
+tests/cases/compiler/noImplicitAnyParametersInBareFunctions.ts(11,16): error TS7006: Parameter 'y' implicitly has an 'any' type.
+tests/cases/compiler/noImplicitAnyParametersInBareFunctions.ts(11,19): error TS7006: Parameter 'z' implicitly has an 'any' type.
+tests/cases/compiler/noImplicitAnyParametersInBareFunctions.ts(14,13): error TS7006: Parameter 'x' implicitly has an 'any' type.
+tests/cases/compiler/noImplicitAnyParametersInBareFunctions.ts(14,24): error TS7006: Parameter 'z' implicitly has an 'any' type.
+tests/cases/compiler/noImplicitAnyParametersInBareFunctions.ts(17,13): error TS7019: Rest parameter 'r' implicitly has an 'any[]' type.
+tests/cases/compiler/noImplicitAnyParametersInBareFunctions.ts(20,13): error TS7006: Parameter 'x' implicitly has an 'any' type.
+tests/cases/compiler/noImplicitAnyParametersInBareFunctions.ts(20,16): error TS7019: Rest parameter 'r' implicitly has an 'any[]' type.
+tests/cases/compiler/noImplicitAnyParametersInBareFunctions.ts(23,13): error TS7006: Parameter 'x1' implicitly has an 'any' type.
+tests/cases/compiler/noImplicitAnyParametersInBareFunctions.ts(24,25): error TS7006: Parameter 'y2' implicitly has an 'any' type.
+tests/cases/compiler/noImplicitAnyParametersInBareFunctions.ts(25,13): error TS7006: Parameter 'x3' implicitly has an 'any' type.
+tests/cases/compiler/noImplicitAnyParametersInBareFunctions.ts(25,17): error TS7006: Parameter 'y3' implicitly has an 'any' type.
+tests/cases/compiler/noImplicitAnyParametersInBareFunctions.ts(31,12): error TS7006: Parameter 'x' implicitly has an 'any' type.
+tests/cases/compiler/noImplicitAnyParametersInBareFunctions.ts(34,12): error TS7006: Parameter 'x' implicitly has an 'any' type.
+tests/cases/compiler/noImplicitAnyParametersInBareFunctions.ts(34,15): error TS7006: Parameter 'y' implicitly has an 'any' type.
+tests/cases/compiler/noImplicitAnyParametersInBareFunctions.ts(34,18): error TS7006: Parameter 'z' implicitly has an 'any' type.
+tests/cases/compiler/noImplicitAnyParametersInBareFunctions.ts(37,12): error TS7006: Parameter 'x' implicitly has an 'any' type.
+tests/cases/compiler/noImplicitAnyParametersInBareFunctions.ts(37,23): error TS7006: Parameter 'z' implicitly has an 'any' type.
+tests/cases/compiler/noImplicitAnyParametersInBareFunctions.ts(40,12): error TS7019: Rest parameter 'r' implicitly has an 'any[]' type.
+tests/cases/compiler/noImplicitAnyParametersInBareFunctions.ts(43,12): error TS7006: Parameter 'x' implicitly has an 'any' type.
+tests/cases/compiler/noImplicitAnyParametersInBareFunctions.ts(43,15): error TS7019: Rest parameter 'r' implicitly has an 'any[]' type.
+
+
+==== tests/cases/compiler/noImplicitAnyParametersInBareFunctions.ts (22 errors) ====
+    // No implicit-'any' errors.
+    function f1(): void { }
+    
+    // Implicit-'any' error for x.
+    function f2(x): void { }
+                ~
+!!! error TS7006: Parameter 'x' implicitly has an 'any' type.
+    
+    // No implicit-'any' errors.
+    function f3(x: any): void { }
+    
+    // Implicit-'any' errors for x, y, and z.
+    function f4(x, y, z): void { }
+                ~
+!!! error TS7006: Parameter 'x' implicitly has an 'any' type.
+                   ~
+!!! error TS7006: Parameter 'y' implicitly has an 'any' type.
+                      ~
+!!! error TS7006: Parameter 'z' implicitly has an 'any' type.
+    
+    // Implicit-'any' errors for x, and z.
+    function f5(x, y: any, z): void { }
+                ~
+!!! error TS7006: Parameter 'x' implicitly has an 'any' type.
+                           ~
+!!! error TS7006: Parameter 'z' implicitly has an 'any' type.
+    
+    // Implicit-'any[]' error for r.
+    function f6(...r): void { }
+                ~~~~
+!!! error TS7019: Rest parameter 'r' implicitly has an 'any[]' type.
+    
+    // Implicit-'any'/'any[]' errors for x, r.
+    function f7(x, ...r): void { }
+                ~
+!!! error TS7006: Parameter 'x' implicitly has an 'any' type.
+                   ~~~~
+!!! error TS7019: Rest parameter 'r' implicitly has an 'any[]' type.
+    
+    // Implicit-'any' errors for x1, y2, x3, and y3.
+    function f8(x1, y1: number): any;
+                ~~
+!!! error TS7006: Parameter 'x1' implicitly has an 'any' type.
+    function f8(x2: string, y2): any;
+                            ~~
+!!! error TS7006: Parameter 'y2' implicitly has an 'any' type.
+    function f8(x3, y3): any { } 
+                ~~
+!!! error TS7006: Parameter 'x3' implicitly has an 'any' type.
+                    ~~
+!!! error TS7006: Parameter 'y3' implicitly has an 'any' type.
+    
+    // No implicit-'any' errors.
+    var f9 = () => "";
+    
+    // Implicit-'any' errors for x.
+    var f10 = (x) => "";
+               ~
+!!! error TS7006: Parameter 'x' implicitly has an 'any' type.
+    
+    // Implicit-'any' errors for x, y, and z.
+    var f11 = (x, y, z) => "";
+               ~
+!!! error TS7006: Parameter 'x' implicitly has an 'any' type.
+                  ~
+!!! error TS7006: Parameter 'y' implicitly has an 'any' type.
+                     ~
+!!! error TS7006: Parameter 'z' implicitly has an 'any' type.
+    
+    // Implicit-'any' errors for x and z.
+    var f12 = (x, y: any, z) => "";
+               ~
+!!! error TS7006: Parameter 'x' implicitly has an 'any' type.
+                          ~
+!!! error TS7006: Parameter 'z' implicitly has an 'any' type.
+    
+    // Implicit-'any[]' error for r.
+    var f13 = (...r) => "";
+               ~~~~
+!!! error TS7019: Rest parameter 'r' implicitly has an 'any[]' type.
+    
+    // Implicit-'any'/'any[]' errors for x, r.
+    var f14 = (x, ...r) => "";
+               ~
+!!! error TS7006: Parameter 'x' implicitly has an 'any' type.
+                  ~~~~
+!!! error TS7019: Rest parameter 'r' implicitly has an 'any[]' type.

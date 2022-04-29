@@ -1,0 +1,15 @@
+tests/cases/conformance/parser/ecmascript5/StrictMode/parserStrictMode14.ts(2,1): error TS1101: 'with' statements are not allowed in strict mode.
+tests/cases/conformance/parser/ecmascript5/StrictMode/parserStrictMode14.ts(2,1): error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
+tests/cases/conformance/parser/ecmascript5/StrictMode/parserStrictMode14.ts(2,7): error TS2304: Cannot find name 'a'.
+
+
+==== tests/cases/conformance/parser/ecmascript5/StrictMode/parserStrictMode14.ts (3 errors) ====
+    "use strict";
+    with (a) {
+    ~~~~
+!!! error TS1101: 'with' statements are not allowed in strict mode.
+    ~~~~~~~~
+!!! error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
+          ~
+!!! error TS2304: Cannot find name 'a'.
+    }

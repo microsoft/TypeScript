@@ -1,0 +1,34 @@
+=== tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithOverloadedCallAndConstructSignatures.ts ===
+interface Foo {
+>Foo : Symbol(Foo, Decl(interfaceWithOverloadedCallAndConstructSignatures.ts, 0, 0))
+
+    (): number;
+    (x: string): number;
+>x : Symbol(x, Decl(interfaceWithOverloadedCallAndConstructSignatures.ts, 2, 5))
+
+    new (): any;
+    new (x: string): Object;
+>x : Symbol(x, Decl(interfaceWithOverloadedCallAndConstructSignatures.ts, 5, 9))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+}
+
+var f: Foo;
+>f : Symbol(f, Decl(interfaceWithOverloadedCallAndConstructSignatures.ts, 8, 3))
+>Foo : Symbol(Foo, Decl(interfaceWithOverloadedCallAndConstructSignatures.ts, 0, 0))
+
+var r1 = f();
+>r1 : Symbol(r1, Decl(interfaceWithOverloadedCallAndConstructSignatures.ts, 9, 3))
+>f : Symbol(f, Decl(interfaceWithOverloadedCallAndConstructSignatures.ts, 8, 3))
+
+var r2 = f('');
+>r2 : Symbol(r2, Decl(interfaceWithOverloadedCallAndConstructSignatures.ts, 10, 3))
+>f : Symbol(f, Decl(interfaceWithOverloadedCallAndConstructSignatures.ts, 8, 3))
+
+var r3 = new f();
+>r3 : Symbol(r3, Decl(interfaceWithOverloadedCallAndConstructSignatures.ts, 11, 3))
+>f : Symbol(f, Decl(interfaceWithOverloadedCallAndConstructSignatures.ts, 8, 3))
+
+var r4 = new f('');
+>r4 : Symbol(r4, Decl(interfaceWithOverloadedCallAndConstructSignatures.ts, 12, 3))
+>f : Symbol(f, Decl(interfaceWithOverloadedCallAndConstructSignatures.ts, 8, 3))
+

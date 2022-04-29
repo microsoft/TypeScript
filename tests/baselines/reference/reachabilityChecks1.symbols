@@ -1,0 +1,122 @@
+=== tests/cases/compiler/reachabilityChecks1.ts ===
+while (true);
+var x = 1;
+>x : Symbol(x, Decl(reachabilityChecks1.ts, 1, 3))
+
+module A {
+>A : Symbol(A, Decl(reachabilityChecks1.ts, 1, 10))
+
+    while (true);
+    let x;
+>x : Symbol(x, Decl(reachabilityChecks1.ts, 5, 7))
+}
+
+module A1 {
+>A1 : Symbol(A1, Decl(reachabilityChecks1.ts, 6, 1))
+
+    do {} while(true);
+    module A {
+>A : Symbol(A, Decl(reachabilityChecks1.ts, 9, 22))
+
+        interface F {}
+>F : Symbol(F, Decl(reachabilityChecks1.ts, 10, 14))
+    }
+}
+
+module A2 {
+>A2 : Symbol(A2, Decl(reachabilityChecks1.ts, 13, 1))
+
+    while (true);
+    module A {
+>A : Symbol(A, Decl(reachabilityChecks1.ts, 16, 17))
+
+        var x = 1;
+>x : Symbol(x, Decl(reachabilityChecks1.ts, 18, 11))
+    }
+}
+
+module A3 {
+>A3 : Symbol(A3, Decl(reachabilityChecks1.ts, 20, 1))
+
+    while (true);
+    type T = string;
+>T : Symbol(T, Decl(reachabilityChecks1.ts, 23, 17))
+}
+
+module A4 {
+>A4 : Symbol(A4, Decl(reachabilityChecks1.ts, 25, 1))
+
+    while (true);
+    module A {
+>A : Symbol(A, Decl(reachabilityChecks1.ts, 28, 17))
+
+        const enum E { X }
+>E : Symbol(E, Decl(reachabilityChecks1.ts, 29, 14))
+>X : Symbol(E.X, Decl(reachabilityChecks1.ts, 30, 22))
+    }
+}
+
+function f1(x) {
+>f1 : Symbol(f1, Decl(reachabilityChecks1.ts, 32, 1))
+>x : Symbol(x, Decl(reachabilityChecks1.ts, 34, 12), Decl(reachabilityChecks1.ts, 41, 7))
+
+    if (x) {
+>x : Symbol(x, Decl(reachabilityChecks1.ts, 34, 12), Decl(reachabilityChecks1.ts, 41, 7))
+
+        return;
+    }
+    else {
+        throw new Error("123");
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+    }
+    var x;
+>x : Symbol(x, Decl(reachabilityChecks1.ts, 34, 12), Decl(reachabilityChecks1.ts, 41, 7))
+}
+
+function f2() {
+>f2 : Symbol(f2, Decl(reachabilityChecks1.ts, 42, 1))
+
+    return;
+    class A {
+>A : Symbol(A, Decl(reachabilityChecks1.ts, 45, 11))
+    }
+}
+
+module B {
+>B : Symbol(B, Decl(reachabilityChecks1.ts, 48, 1))
+
+    for (; ;);
+    module C {
+>C : Symbol(C, Decl(reachabilityChecks1.ts, 51, 14))
+    }
+}
+
+function f3() {
+>f3 : Symbol(f3, Decl(reachabilityChecks1.ts, 54, 1))
+
+    do {
+    } while (true);
+    enum E {
+>E : Symbol(E, Decl(reachabilityChecks1.ts, 58, 19))
+
+        X = 1
+>X : Symbol(E.X, Decl(reachabilityChecks1.ts, 59, 12))
+    }
+}
+
+function f4() {
+>f4 : Symbol(f4, Decl(reachabilityChecks1.ts, 62, 1))
+
+    if (true) {
+        throw new Error();
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+    }
+    const enum E {
+>E : Symbol(E, Decl(reachabilityChecks1.ts, 67, 5))
+
+        X = 1
+>X : Symbol(E.X, Decl(reachabilityChecks1.ts, 68, 18))
+    }
+}
+
+

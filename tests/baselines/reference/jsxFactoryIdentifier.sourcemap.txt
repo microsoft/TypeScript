@@ -1,0 +1,534 @@
+===================================================================
+JsFile: Element.js
+mapUrl: Element.js.map
+sourceRoot: 
+sources: Element.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:tests/cases/compiler/Element.js
+sourceFile:Element.ts
+-------------------------------------------------------------------
+>>>"use strict";
+>>>Object.defineProperty(exports, "__esModule", { value: true });
+>>>exports.createElement = exports.Element = void 0;
+>>>var Element;
+1 >
+2 >^^^^
+3 >    ^^^^^^^
+4 >           ^
+5 >            ^^^^^^^^^^->
+1 >declare namespace JSX {
+  >    interface Element {
+  >        name: string;
+  >        isIntrinsic: boolean;
+  >        isCustomElement: boolean;
+  >        toString(renderId?: number): string;
+  >        bindDOM(renderId?: number): number;
+  >        resetComponent(): void;
+  >        instantiateComponents(renderId?: number): number;
+  >        props: any;
+  >    }
+  >}
+  >
+2 >export namespace 
+3 >    Element
+4 >            {
+  >               export function isElement(el: any): el is JSX.Element {
+  >                   return el.markAsChildOfRootElement !== undefined;
+  >               }
+  >           
+  >               export function createElement(args: any[]) {
+  >           
+  >                   return {
+  >                   }
+  >               }
+  >           }
+1 >Emitted(4, 1) Source(13, 1) + SourceIndex(0)
+2 >Emitted(4, 5) Source(13, 18) + SourceIndex(0)
+3 >Emitted(4, 12) Source(13, 25) + SourceIndex(0)
+4 >Emitted(4, 13) Source(23, 2) + SourceIndex(0)
+---
+>>>(function (Element) {
+1->
+2 >^^^^^^^^^^^
+3 >           ^^^^^^^
+4 >                  ^^^^^^^^^^^->
+1->
+2 >export namespace 
+3 >           Element
+1->Emitted(5, 1) Source(13, 1) + SourceIndex(0)
+2 >Emitted(5, 12) Source(13, 18) + SourceIndex(0)
+3 >Emitted(5, 19) Source(13, 25) + SourceIndex(0)
+---
+>>>    function isElement(el) {
+1->^^^^
+2 >    ^^^^^^^^^
+3 >             ^^^^^^^^^
+4 >                      ^
+5 >                       ^^
+6 >                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1-> {
+  >    
+2 >    export function 
+3 >             isElement
+4 >                      (
+5 >                       el: any
+1->Emitted(6, 5) Source(14, 5) + SourceIndex(0)
+2 >Emitted(6, 14) Source(14, 21) + SourceIndex(0)
+3 >Emitted(6, 23) Source(14, 30) + SourceIndex(0)
+4 >Emitted(6, 24) Source(14, 31) + SourceIndex(0)
+5 >Emitted(6, 26) Source(14, 38) + SourceIndex(0)
+---
+>>>        return el.markAsChildOfRootElement !== undefined;
+1->^^^^^^^^
+2 >        ^^^^^^^
+3 >               ^^
+4 >                 ^
+5 >                  ^^^^^^^^^^^^^^^^^^^^^^^^
+6 >                                          ^^^^^
+7 >                                               ^^^^^^^^^
+8 >                                                        ^
+1->): el is JSX.Element {
+  >        
+2 >        return 
+3 >               el
+4 >                 .
+5 >                  markAsChildOfRootElement
+6 >                                           !== 
+7 >                                               undefined
+8 >                                                        ;
+1->Emitted(7, 9) Source(15, 9) + SourceIndex(0)
+2 >Emitted(7, 16) Source(15, 16) + SourceIndex(0)
+3 >Emitted(7, 18) Source(15, 18) + SourceIndex(0)
+4 >Emitted(7, 19) Source(15, 19) + SourceIndex(0)
+5 >Emitted(7, 43) Source(15, 43) + SourceIndex(0)
+6 >Emitted(7, 48) Source(15, 48) + SourceIndex(0)
+7 >Emitted(7, 57) Source(15, 57) + SourceIndex(0)
+8 >Emitted(7, 58) Source(15, 58) + SourceIndex(0)
+---
+>>>    }
+1 >^^^^
+2 >    ^
+3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >    
+2 >    }
+1 >Emitted(8, 5) Source(16, 5) + SourceIndex(0)
+2 >Emitted(8, 6) Source(16, 6) + SourceIndex(0)
+---
+>>>    Element.isElement = isElement;
+1->^^^^
+2 >    ^^^^^^^^^^^^^^^^^
+3 >                     ^^^^^^^^^^^^
+4 >                                 ^
+5 >                                  ^->
+1->
+2 >    isElement
+3 >                     (el: any): el is JSX.Element {
+  >                             return el.markAsChildOfRootElement !== undefined;
+  >                         }
+4 >                                 
+1->Emitted(9, 5) Source(14, 21) + SourceIndex(0)
+2 >Emitted(9, 22) Source(14, 30) + SourceIndex(0)
+3 >Emitted(9, 34) Source(16, 6) + SourceIndex(0)
+4 >Emitted(9, 35) Source(16, 6) + SourceIndex(0)
+---
+>>>    function createElement(args) {
+1->^^^^
+2 >    ^^^^^^^^^
+3 >             ^^^^^^^^^^^^^
+4 >                          ^
+5 >                           ^^^^
+1->
+  >
+  >    
+2 >    export function 
+3 >             createElement
+4 >                          (
+5 >                           args: any[]
+1->Emitted(10, 5) Source(18, 5) + SourceIndex(0)
+2 >Emitted(10, 14) Source(18, 21) + SourceIndex(0)
+3 >Emitted(10, 27) Source(18, 34) + SourceIndex(0)
+4 >Emitted(10, 28) Source(18, 35) + SourceIndex(0)
+5 >Emitted(10, 32) Source(18, 46) + SourceIndex(0)
+---
+>>>        return {};
+1 >^^^^^^^^
+2 >        ^^^^^^^
+3 >               ^^
+4 >                 ^
+1 >) {
+  >
+  >        
+2 >        return 
+3 >               {
+  >                       }
+4 >                 
+1 >Emitted(11, 9) Source(20, 9) + SourceIndex(0)
+2 >Emitted(11, 16) Source(20, 16) + SourceIndex(0)
+3 >Emitted(11, 18) Source(21, 10) + SourceIndex(0)
+4 >Emitted(11, 19) Source(21, 10) + SourceIndex(0)
+---
+>>>    }
+1 >^^^^
+2 >    ^
+3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >    
+2 >    }
+1 >Emitted(12, 5) Source(22, 5) + SourceIndex(0)
+2 >Emitted(12, 6) Source(22, 6) + SourceIndex(0)
+---
+>>>    Element.createElement = createElement;
+1->^^^^
+2 >    ^^^^^^^^^^^^^^^^^^^^^
+3 >                         ^^^^^^^^^^^^^^^^
+4 >                                         ^
+5 >                                          ^^^^^^^^^^^^^^^->
+1->
+2 >    createElement
+3 >                         (args: any[]) {
+  >                         
+  >                                 return {
+  >                                 }
+  >                             }
+4 >                                         
+1->Emitted(13, 5) Source(18, 21) + SourceIndex(0)
+2 >Emitted(13, 26) Source(18, 34) + SourceIndex(0)
+3 >Emitted(13, 42) Source(22, 6) + SourceIndex(0)
+4 >Emitted(13, 43) Source(22, 6) + SourceIndex(0)
+---
+>>>})(Element = exports.Element || (exports.Element = {}));
+1->
+2 >^
+3 > ^^
+4 >   ^^^^^^^
+5 >          ^^^
+6 >             ^^^^^^^^^^^^^^^
+7 >                            ^^^^^
+8 >                                 ^^^^^^^^^^^^^^^
+9 >                                                ^^^^^^^^
+1->
+  >
+2 >}
+3 > 
+4 >   Element
+5 >          
+6 >             Element
+7 >                            
+8 >                                 Element
+9 >                                                 {
+  >                                                    export function isElement(el: any): el is JSX.Element {
+  >                                                        return el.markAsChildOfRootElement !== undefined;
+  >                                                    }
+  >                                                
+  >                                                    export function createElement(args: any[]) {
+  >                                                
+  >                                                        return {
+  >                                                        }
+  >                                                    }
+  >                                                }
+1->Emitted(14, 1) Source(23, 1) + SourceIndex(0)
+2 >Emitted(14, 2) Source(23, 2) + SourceIndex(0)
+3 >Emitted(14, 4) Source(13, 18) + SourceIndex(0)
+4 >Emitted(14, 11) Source(13, 25) + SourceIndex(0)
+5 >Emitted(14, 14) Source(13, 18) + SourceIndex(0)
+6 >Emitted(14, 29) Source(13, 25) + SourceIndex(0)
+7 >Emitted(14, 34) Source(13, 18) + SourceIndex(0)
+8 >Emitted(14, 49) Source(13, 25) + SourceIndex(0)
+9 >Emitted(14, 57) Source(23, 2) + SourceIndex(0)
+---
+>>>exports.createElement = Element.createElement;
+1 >
+2 >^^^^^^^^
+3 >        ^^^^^^^^^^^^^
+4 >                     ^^^
+5 >                        ^^^^^^^
+6 >                               ^
+7 >                                ^^^^^^^^^^^^^
+8 >                                             ^
+1 >
+  >
+  >export let 
+2 >
+3 >        createElement
+4 >                      = 
+5 >                        Element
+6 >                               .
+7 >                                createElement
+8 >                                             ;
+1 >Emitted(15, 1) Source(25, 12) + SourceIndex(0)
+2 >Emitted(15, 9) Source(25, 12) + SourceIndex(0)
+3 >Emitted(15, 22) Source(25, 25) + SourceIndex(0)
+4 >Emitted(15, 25) Source(25, 28) + SourceIndex(0)
+5 >Emitted(15, 32) Source(25, 35) + SourceIndex(0)
+6 >Emitted(15, 33) Source(25, 36) + SourceIndex(0)
+7 >Emitted(15, 46) Source(25, 49) + SourceIndex(0)
+8 >Emitted(15, 47) Source(25, 50) + SourceIndex(0)
+---
+>>>function toCamelCase(text) {
+1 >
+2 >^^^^^^^^^
+3 >         ^^^^^^^^^^^
+4 >                    ^
+5 >                     ^^^^
+6 >                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >
+  >
+2 >function 
+3 >         toCamelCase
+4 >                    (
+5 >                     text: string
+1 >Emitted(16, 1) Source(27, 1) + SourceIndex(0)
+2 >Emitted(16, 10) Source(27, 10) + SourceIndex(0)
+3 >Emitted(16, 21) Source(27, 21) + SourceIndex(0)
+4 >Emitted(16, 22) Source(27, 22) + SourceIndex(0)
+5 >Emitted(16, 26) Source(27, 34) + SourceIndex(0)
+---
+>>>    return text[0].toLowerCase() + text.substring(1);
+1->^^^^
+2 >    ^^^^^^^
+3 >           ^^^^
+4 >               ^
+5 >                ^
+6 >                 ^
+7 >                  ^
+8 >                   ^^^^^^^^^^^
+9 >                              ^^
+10>                                ^^^
+11>                                   ^^^^
+12>                                       ^
+13>                                        ^^^^^^^^^
+14>                                                 ^
+15>                                                  ^
+16>                                                   ^
+17>                                                    ^
+1->): string {
+  >    
+2 >    return 
+3 >           text
+4 >               [
+5 >                0
+6 >                 ]
+7 >                  .
+8 >                   toLowerCase
+9 >                              ()
+10>                                 + 
+11>                                   text
+12>                                       .
+13>                                        substring
+14>                                                 (
+15>                                                  1
+16>                                                   )
+17>                                                    ;
+1->Emitted(17, 5) Source(28, 5) + SourceIndex(0)
+2 >Emitted(17, 12) Source(28, 12) + SourceIndex(0)
+3 >Emitted(17, 16) Source(28, 16) + SourceIndex(0)
+4 >Emitted(17, 17) Source(28, 17) + SourceIndex(0)
+5 >Emitted(17, 18) Source(28, 18) + SourceIndex(0)
+6 >Emitted(17, 19) Source(28, 19) + SourceIndex(0)
+7 >Emitted(17, 20) Source(28, 20) + SourceIndex(0)
+8 >Emitted(17, 31) Source(28, 31) + SourceIndex(0)
+9 >Emitted(17, 33) Source(28, 33) + SourceIndex(0)
+10>Emitted(17, 36) Source(28, 36) + SourceIndex(0)
+11>Emitted(17, 40) Source(28, 40) + SourceIndex(0)
+12>Emitted(17, 41) Source(28, 41) + SourceIndex(0)
+13>Emitted(17, 50) Source(28, 50) + SourceIndex(0)
+14>Emitted(17, 51) Source(28, 51) + SourceIndex(0)
+15>Emitted(17, 52) Source(28, 52) + SourceIndex(0)
+16>Emitted(17, 53) Source(28, 53) + SourceIndex(0)
+17>Emitted(17, 54) Source(28, 54) + SourceIndex(0)
+---
+>>>}
+1 >
+2 >^
+3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >
+2 >}
+1 >Emitted(18, 1) Source(29, 1) + SourceIndex(0)
+2 >Emitted(18, 2) Source(29, 2) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=Element.js.map===================================================================
+JsFile: test.js
+mapUrl: test.js.map
+sourceRoot: 
+sources: test.tsx
+===================================================================
+-------------------------------------------------------------------
+emittedFile:tests/cases/compiler/test.js
+sourceFile:test.tsx
+-------------------------------------------------------------------
+>>>"use strict";
+>>>Object.defineProperty(exports, "__esModule", { value: true });
+>>>const Element_1 = require("./Element");
+1 >
+2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+3 >                                       ^^^^^^^^^^^^^^->
+1 >
+2 >import { Element} from './Element';
+1 >Emitted(3, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(3, 40) Source(1, 36) + SourceIndex(0)
+---
+>>>let createElement = Element_1.Element.createElement;
+1->
+2 >^^^^
+3 >    ^^^^^^^^^^^^^
+4 >                 ^^^
+5 >                    ^^^^^^^^^^^^^^^^^
+6 >                                     ^
+7 >                                      ^^^^^^^^^^^^^
+8 >                                                   ^
+1->
+  >
+2 >let 
+3 >    createElement
+4 >                  = 
+5 >                    Element
+6 >                                     .
+7 >                                      createElement
+8 >                                                   ;
+1->Emitted(4, 1) Source(2, 1) + SourceIndex(0)
+2 >Emitted(4, 5) Source(2, 5) + SourceIndex(0)
+3 >Emitted(4, 18) Source(2, 18) + SourceIndex(0)
+4 >Emitted(4, 21) Source(2, 21) + SourceIndex(0)
+5 >Emitted(4, 38) Source(2, 28) + SourceIndex(0)
+6 >Emitted(4, 39) Source(2, 29) + SourceIndex(0)
+7 >Emitted(4, 52) Source(2, 42) + SourceIndex(0)
+8 >Emitted(4, 53) Source(2, 43) + SourceIndex(0)
+---
+>>>let c;
+1 >
+2 >^^^^
+3 >    ^
+4 >     ^
+5 >      ^^^^->
+1 >
+  >
+2 >let 
+3 >    c: {
+  >    	a?: {
+  >    		b: string
+  >    	}
+  >    }
+4 >     ;
+1 >Emitted(5, 1) Source(3, 1) + SourceIndex(0)
+2 >Emitted(5, 5) Source(3, 5) + SourceIndex(0)
+3 >Emitted(5, 6) Source(7, 2) + SourceIndex(0)
+4 >Emitted(5, 7) Source(7, 3) + SourceIndex(0)
+---
+>>>class A {
+1->
+2 >^^^^^^
+3 >      ^
+4 >       ^^^^^^->
+1->
+  >
+  >
+2 >class 
+3 >      A
+1->Emitted(6, 1) Source(9, 1) + SourceIndex(0)
+2 >Emitted(6, 7) Source(9, 7) + SourceIndex(0)
+3 >Emitted(6, 8) Source(9, 8) + SourceIndex(0)
+---
+>>>    view() {
+1->^^^^
+2 >    ^^^^
+3 >        ^^^^^^^^^->
+1-> {
+  >	
+2 >    view
+1->Emitted(7, 5) Source(10, 2) + SourceIndex(0)
+2 >Emitted(7, 9) Source(10, 6) + SourceIndex(0)
+---
+>>>        return [
+1->^^^^^^^^
+2 >        ^^^^^^^
+3 >               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1->() {
+  >		
+2 >        return 
+1->Emitted(8, 9) Source(11, 3) + SourceIndex(0)
+2 >Emitted(8, 16) Source(11, 10) + SourceIndex(0)
+---
+>>>            createElement("meta", { content: "helloworld" }),
+1->^^^^^^^^^^^^
+2 >            ^^^^^^^^^^^^^^^^^^^^^^^^
+3 >                                    ^^^^^^^
+4 >                                           ^^
+5 >                                             ^^^^^^^^^^^^
+6 >                                                         ^^^
+1->[
+  >			
+2 >            <meta 
+3 >                                    content
+4 >                                           =
+5 >                                             "helloworld"
+6 >                                                         ></meta>
+1->Emitted(9, 13) Source(12, 4) + SourceIndex(0)
+2 >Emitted(9, 37) Source(12, 10) + SourceIndex(0)
+3 >Emitted(9, 44) Source(12, 17) + SourceIndex(0)
+4 >Emitted(9, 46) Source(12, 18) + SourceIndex(0)
+5 >Emitted(9, 58) Source(12, 30) + SourceIndex(0)
+6 >Emitted(9, 61) Source(12, 38) + SourceIndex(0)
+---
+>>>            createElement("meta", { content: c.a.b })
+1 >^^^^^^^^^^^^
+2 >            ^^^^^^^^^^^^^^^^^^^^^^^^
+3 >                                    ^^^^^^^
+4 >                                           ^^
+5 >                                             ^
+6 >                                              ^
+7 >                                               ^
+8 >                                                ^
+9 >                                                 ^
+10>                                                  ^^^
+1 >,
+  >			
+2 >            <meta 
+3 >                                    content
+4 >                                           ={
+5 >                                             c
+6 >                                              .
+7 >                                               a!
+8 >                                                .
+9 >                                                 b
+10>                                                  }></meta>
+1 >Emitted(10, 13) Source(13, 4) + SourceIndex(0)
+2 >Emitted(10, 37) Source(13, 10) + SourceIndex(0)
+3 >Emitted(10, 44) Source(13, 17) + SourceIndex(0)
+4 >Emitted(10, 46) Source(13, 19) + SourceIndex(0)
+5 >Emitted(10, 47) Source(13, 20) + SourceIndex(0)
+6 >Emitted(10, 48) Source(13, 21) + SourceIndex(0)
+7 >Emitted(10, 49) Source(13, 23) + SourceIndex(0)
+8 >Emitted(10, 50) Source(13, 24) + SourceIndex(0)
+9 >Emitted(10, 51) Source(13, 25) + SourceIndex(0)
+10>Emitted(10, 54) Source(13, 34) + SourceIndex(0)
+---
+>>>        ];
+1 >^^^^^^^^^
+2 >         ^
+1 >
+  >		]
+2 >         ;
+1 >Emitted(11, 10) Source(14, 4) + SourceIndex(0)
+2 >Emitted(11, 11) Source(14, 5) + SourceIndex(0)
+---
+>>>    }
+1 >^^^^
+2 >    ^
+1 >
+  >	
+2 >    }
+1 >Emitted(12, 5) Source(15, 2) + SourceIndex(0)
+2 >Emitted(12, 6) Source(15, 3) + SourceIndex(0)
+---
+>>>}
+1 >^
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >}
+1 >Emitted(13, 2) Source(16, 2) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=test.js.map

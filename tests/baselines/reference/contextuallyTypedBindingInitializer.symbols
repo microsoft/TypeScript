@@ -1,0 +1,94 @@
+=== tests/cases/conformance/types/contextualTypes/methodDeclarations/contextuallyTypedBindingInitializer.ts ===
+interface Show {
+>Show : Symbol(Show, Decl(contextuallyTypedBindingInitializer.ts, 0, 0))
+
+    show: (x: number) => string;
+>show : Symbol(Show.show, Decl(contextuallyTypedBindingInitializer.ts, 0, 16))
+>x : Symbol(x, Decl(contextuallyTypedBindingInitializer.ts, 1, 11))
+}
+function f({ show = v => v.toString() }: Show) {}
+>f : Symbol(f, Decl(contextuallyTypedBindingInitializer.ts, 2, 1))
+>show : Symbol(show, Decl(contextuallyTypedBindingInitializer.ts, 3, 12))
+>v : Symbol(v, Decl(contextuallyTypedBindingInitializer.ts, 3, 19))
+>v.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>v : Symbol(v, Decl(contextuallyTypedBindingInitializer.ts, 3, 19))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>Show : Symbol(Show, Decl(contextuallyTypedBindingInitializer.ts, 0, 0))
+
+function f2({ "show": showRename = v => v.toString() }: Show) {}
+>f2 : Symbol(f2, Decl(contextuallyTypedBindingInitializer.ts, 3, 49))
+>showRename : Symbol(showRename, Decl(contextuallyTypedBindingInitializer.ts, 4, 13))
+>v : Symbol(v, Decl(contextuallyTypedBindingInitializer.ts, 4, 34))
+>v.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>v : Symbol(v, Decl(contextuallyTypedBindingInitializer.ts, 4, 34))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>Show : Symbol(Show, Decl(contextuallyTypedBindingInitializer.ts, 0, 0))
+
+function f3({ ["show"]: showRename = v => v.toString() }: Show) {}
+>f3 : Symbol(f3, Decl(contextuallyTypedBindingInitializer.ts, 4, 64))
+>"show" : Symbol(showRename, Decl(contextuallyTypedBindingInitializer.ts, 5, 13))
+>showRename : Symbol(showRename, Decl(contextuallyTypedBindingInitializer.ts, 5, 13))
+>v : Symbol(v, Decl(contextuallyTypedBindingInitializer.ts, 5, 36))
+>v.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>v : Symbol(v, Decl(contextuallyTypedBindingInitializer.ts, 5, 36))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>Show : Symbol(Show, Decl(contextuallyTypedBindingInitializer.ts, 0, 0))
+
+interface Nested {
+>Nested : Symbol(Nested, Decl(contextuallyTypedBindingInitializer.ts, 5, 66))
+
+    nested: Show
+>nested : Symbol(Nested.nested, Decl(contextuallyTypedBindingInitializer.ts, 7, 18))
+>Show : Symbol(Show, Decl(contextuallyTypedBindingInitializer.ts, 0, 0))
+}
+function ff({ nested = { show: v => v.toString() } }: Nested) {}
+>ff : Symbol(ff, Decl(contextuallyTypedBindingInitializer.ts, 9, 1))
+>nested : Symbol(nested, Decl(contextuallyTypedBindingInitializer.ts, 10, 13))
+>show : Symbol(show, Decl(contextuallyTypedBindingInitializer.ts, 10, 24))
+>v : Symbol(v, Decl(contextuallyTypedBindingInitializer.ts, 10, 30))
+>v.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>v : Symbol(v, Decl(contextuallyTypedBindingInitializer.ts, 10, 30))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>Nested : Symbol(Nested, Decl(contextuallyTypedBindingInitializer.ts, 5, 66))
+
+interface Tuples {
+>Tuples : Symbol(Tuples, Decl(contextuallyTypedBindingInitializer.ts, 10, 64))
+
+    prop: [string, number];
+>prop : Symbol(Tuples.prop, Decl(contextuallyTypedBindingInitializer.ts, 12, 18))
+}
+function g({ prop = ["hello", 1234] }: Tuples) {}
+>g : Symbol(g, Decl(contextuallyTypedBindingInitializer.ts, 14, 1))
+>prop : Symbol(prop, Decl(contextuallyTypedBindingInitializer.ts, 15, 12))
+>Tuples : Symbol(Tuples, Decl(contextuallyTypedBindingInitializer.ts, 10, 64))
+
+interface StringUnion {
+>StringUnion : Symbol(StringUnion, Decl(contextuallyTypedBindingInitializer.ts, 15, 49))
+
+    prop: "foo" | "bar";
+>prop : Symbol(StringUnion.prop, Decl(contextuallyTypedBindingInitializer.ts, 17, 23))
+}
+function h({ prop = "foo" }: StringUnion) {}
+>h : Symbol(h, Decl(contextuallyTypedBindingInitializer.ts, 19, 1))
+>prop : Symbol(prop, Decl(contextuallyTypedBindingInitializer.ts, 20, 12))
+>StringUnion : Symbol(StringUnion, Decl(contextuallyTypedBindingInitializer.ts, 15, 49))
+
+interface StringIdentity {
+>StringIdentity : Symbol(StringIdentity, Decl(contextuallyTypedBindingInitializer.ts, 20, 44))
+
+    stringIdentity(s: string): string;
+>stringIdentity : Symbol(StringIdentity.stringIdentity, Decl(contextuallyTypedBindingInitializer.ts, 22, 26))
+>s : Symbol(s, Decl(contextuallyTypedBindingInitializer.ts, 23, 19))
+}
+let { stringIdentity: id = arg => arg }: StringIdentity = { stringIdentity: x => x};
+>stringIdentity : Symbol(StringIdentity.stringIdentity, Decl(contextuallyTypedBindingInitializer.ts, 22, 26))
+>id : Symbol(id, Decl(contextuallyTypedBindingInitializer.ts, 25, 5))
+>arg : Symbol(arg, Decl(contextuallyTypedBindingInitializer.ts, 25, 26))
+>arg : Symbol(arg, Decl(contextuallyTypedBindingInitializer.ts, 25, 26))
+>StringIdentity : Symbol(StringIdentity, Decl(contextuallyTypedBindingInitializer.ts, 20, 44))
+>stringIdentity : Symbol(stringIdentity, Decl(contextuallyTypedBindingInitializer.ts, 25, 59))
+>x : Symbol(x, Decl(contextuallyTypedBindingInitializer.ts, 25, 75))
+>x : Symbol(x, Decl(contextuallyTypedBindingInitializer.ts, 25, 75))
+
+
+

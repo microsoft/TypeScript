@@ -1,0 +1,9 @@
+=== tests/cases/conformance/jsx/test.tsx ===
+function Test() { }
+>Test : () => void
+
+<Test></Test>
+><Test></Test> : error
+>Test : () => void
+>Test : () => void
+

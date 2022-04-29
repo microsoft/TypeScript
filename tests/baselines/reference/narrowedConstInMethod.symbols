@@ -1,0 +1,42 @@
+=== tests/cases/compiler/narrowedConstInMethod.ts ===
+// Fixes #10501, possibly null 'x'
+function f() {
+>f : Symbol(f, Decl(narrowedConstInMethod.ts, 0, 0))
+
+    const x: string | null = <any>{};
+>x : Symbol(x, Decl(narrowedConstInMethod.ts, 2, 9))
+
+    if (x !== null) {
+>x : Symbol(x, Decl(narrowedConstInMethod.ts, 2, 9))
+
+        return {
+            bar() { return x.length; }  // ok
+>bar : Symbol(bar, Decl(narrowedConstInMethod.ts, 4, 16))
+>x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(narrowedConstInMethod.ts, 2, 9))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+        };
+    }
+}
+
+function f2() {
+>f2 : Symbol(f2, Decl(narrowedConstInMethod.ts, 8, 1))
+
+    const x: string | null = <any>{};
+>x : Symbol(x, Decl(narrowedConstInMethod.ts, 11, 9))
+
+    if (x !== null) {
+>x : Symbol(x, Decl(narrowedConstInMethod.ts, 11, 9))
+
+        return class {
+            bar() { return x.length; }  // ok
+>bar : Symbol((Anonymous class).bar, Decl(narrowedConstInMethod.ts, 13, 22))
+>x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(narrowedConstInMethod.ts, 11, 9))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+        };
+    }
+}
+

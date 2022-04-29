@@ -1,0 +1,16 @@
+tests/cases/compiler/unusedTypeParameters3.ts(1,15): error TS6133: 'typeparameter1' is declared but its value is never read.
+tests/cases/compiler/unusedTypeParameters3.ts(1,47): error TS6133: 'typeparameter3' is declared but its value is never read.
+
+
+==== tests/cases/compiler/unusedTypeParameters3.ts (2 errors) ====
+    class greeter<typeparameter1, typeparameter2, typeparameter3> {
+                  ~~~~~~~~~~~~~~
+!!! error TS6133: 'typeparameter1' is declared but its value is never read.
+                                                  ~~~~~~~~~~~~~~
+!!! error TS6133: 'typeparameter3' is declared but its value is never read.
+        private x: typeparameter2;
+    
+        public function1() {
+            this.x;
+        }
+    }

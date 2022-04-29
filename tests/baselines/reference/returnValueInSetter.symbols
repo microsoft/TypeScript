@@ -1,0 +1,13 @@
+=== tests/cases/compiler/returnValueInSetter.ts ===
+class f {
+>f : Symbol(f, Decl(returnValueInSetter.ts, 0, 0))
+
+    set x(value) {
+>x : Symbol(f.x, Decl(returnValueInSetter.ts, 0, 9))
+>value : Symbol(value, Decl(returnValueInSetter.ts, 1, 10))
+
+        return null; // Should be an error
+    }
+}
+
+

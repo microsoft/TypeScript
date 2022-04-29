@@ -1,0 +1,19 @@
+tests/cases/compiler/inheritSameNamePropertiesWithDifferentOptionality.ts(9,11): error TS2320: Interface 'A' cannot simultaneously extend types 'C' and 'C2'.
+  Named property 'x' of types 'C' and 'C2' are not identical.
+
+
+==== tests/cases/compiler/inheritSameNamePropertiesWithDifferentOptionality.ts (1 errors) ====
+    interface C {
+        x?: number;
+    }
+    
+    interface C2 {
+        x: number;
+    }
+    
+    interface A extends C, C2 { // error
+              ~
+!!! error TS2320: Interface 'A' cannot simultaneously extend types 'C' and 'C2'.
+!!! error TS2320:   Named property 'x' of types 'C' and 'C2' are not identical.
+        y: string;
+    }

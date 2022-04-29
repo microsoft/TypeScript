@@ -1,0 +1,84 @@
+tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractInstantiations2.ts(10,1): error TS2511: Cannot create an instance of an abstract class.
+tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractInstantiations2.ts(13,5): error TS2322: Type 'typeof B' is not assignable to type 'typeof A'.
+  Cannot assign an abstract constructor type to a non-abstract constructor type.
+tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractInstantiations2.ts(17,5): error TS2511: Cannot create an instance of an abstract class.
+tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractInstantiations2.ts(21,1): error TS2511: Cannot create an instance of an abstract class.
+tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractInstantiations2.ts(23,15): error TS2449: Class 'C' used before its declaration.
+tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractInstantiations2.ts(26,7): error TS2515: Non-abstract class 'C' does not implement inherited abstract member 'bar' from class 'B'.
+tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractInstantiations2.ts(46,5): error TS2391: Function implementation is missing or not immediately following the declaration.
+tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractInstantiations2.ts(46,5): error TS2512: Overload signatures must all be abstract or non-abstract.
+tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractInstantiations2.ts(50,5): error TS1244: Abstract methods can only appear within an abstract class.
+
+
+==== tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractInstantiations2.ts (9 errors) ====
+    class A {
+        // ...
+    }
+    
+    abstract class B {
+        foo(): number { return this.bar(); }
+        abstract bar() : number;
+    }
+    
+    new B; // error
+    ~~~~~
+!!! error TS2511: Cannot create an instance of an abstract class.
+    
+    var BB: typeof B = B;
+    var AA: typeof A = BB; // error, AA is not of abstract type.
+        ~~
+!!! error TS2322: Type 'typeof B' is not assignable to type 'typeof A'.
+!!! error TS2322:   Cannot assign an abstract constructor type to a non-abstract constructor type.
+    new AA;
+    
+    function constructB(Factory : typeof B) {
+        new Factory; // error -- Factory is of type typeof B.
+        ~~~~~~~~~~~
+!!! error TS2511: Cannot create an instance of an abstract class.
+    }
+    
+    var BB = B;
+    new BB; // error -- BB is of type typeof B.
+    ~~~~~~
+!!! error TS2511: Cannot create an instance of an abstract class.
+    
+    var x : any = C;
+                  ~
+!!! error TS2449: Class 'C' used before its declaration.
+!!! related TS2728 tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractInstantiations2.ts:26:7: 'C' is declared here.
+    new x; // okay -- undefined behavior at runtime
+    
+    class C extends B { } // error -- not declared abstract
+          ~
+!!! error TS2515: Non-abstract class 'C' does not implement inherited abstract member 'bar' from class 'B'.
+    
+    abstract class D extends B { } // okay
+    
+    class E extends B { // okay -- implements abstract method
+        bar() { return 1; }
+    }
+    
+    abstract class F extends B {
+        abstract foo() : number;
+        bar() { return 2; }
+    }
+    
+    abstract class G {
+        abstract qux(x : number) : string;
+        abstract qux() : number;
+        y : number;
+        abstract quz(x : number, y : string) : boolean; // error -- declarations must be adjacent
+    
+        abstract nom(): boolean;
+        nom(x : number): boolean; // error -- use of modifier abstract must match on all overloads.
+        ~~~
+!!! error TS2391: Function implementation is missing or not immediately following the declaration.
+        ~~~
+!!! error TS2512: Overload signatures must all be abstract or non-abstract.
+    }
+    
+    class H { // error -- not declared abstract
+        abstract baz() : number;
+        ~~~~~~~~
+!!! error TS1244: Abstract methods can only appear within an abstract class.
+    }

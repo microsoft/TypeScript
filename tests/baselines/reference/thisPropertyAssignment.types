@@ -1,0 +1,92 @@
+=== tests/cases/conformance/salsa/a.js ===
+// This test is asserting that a single property/element access
+// on `this` is a special assignment declaration, but chaining
+// off that does not create additional declarations. I’m not sure
+// if it needs to be that way in JavaScript; the test simply
+// ensures no accidental changes were introduced while allowing
+// element access assignments to create declarations.
+
+this.x = {};
+>this.x = {} : {}
+>this.x : {} | undefined
+>this : typeof globalThis
+>x : {} | undefined
+>{} : {}
+
+this.x.y = {};
+>this.x.y = {} : {}
+>this.x.y : any
+>this.x : {}
+>this : typeof globalThis
+>x : {}
+>y : any
+>{} : {}
+
+this["y"] = {};
+>this["y"] = {} : {}
+>this["y"] : {} | undefined
+>this : typeof globalThis
+>"y" : "y"
+>{} : {}
+
+this["y"]["z"] = {};
+>this["y"]["z"] = {} : {}
+>this["y"]["z"] : any
+>this["y"] : {}
+>this : typeof globalThis
+>"y" : "y"
+>"z" : "z"
+>{} : {}
+
+/** @constructor */
+function F() {
+>F : typeof F
+
+  this.a = {};
+>this.a = {} : {}
+>this.a : any
+>this : this
+>a : any
+>{} : {}
+
+  this.a.b = {};
+>this.a.b = {} : {}
+>this.a.b : any
+>this.a : {}
+>this : this
+>a : {}
+>b : any
+>{} : {}
+
+  this["b"] = {};
+>this["b"] = {} : {}
+>this["b"] : any
+>this : this
+>"b" : "b"
+>{} : {}
+
+  this["b"]["c"] = {};
+>this["b"]["c"] = {} : {}
+>this["b"]["c"] : any
+>this["b"] : {}
+>this : this
+>"b" : "b"
+>"c" : "c"
+>{} : {}
+}
+
+const f = new F();
+>f : F
+>new F() : F
+>F : typeof F
+
+f.a;
+>f.a : {}
+>f : F
+>a : {}
+
+f.b;
+>f.b : {}
+>f : F
+>b : {}
+

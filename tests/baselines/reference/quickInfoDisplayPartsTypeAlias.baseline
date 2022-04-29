@@ -1,0 +1,246 @@
+[
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeAlias.ts",
+      "position": 6,
+      "name": "1"
+    },
+    "quickInfo": {
+      "kind": "class",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 6,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "class",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "c",
+          "kind": "className"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeAlias.ts",
+      "position": 17,
+      "name": "2"
+    },
+    "quickInfo": {
+      "kind": "type",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 17,
+        "length": 2
+      },
+      "displayParts": [
+        {
+          "text": "type",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "t1",
+          "kind": "aliasName"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "=",
+          "kind": "operator"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "c",
+          "kind": "className"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeAlias.ts",
+      "position": 22,
+      "name": "3"
+    },
+    "quickInfo": {
+      "kind": "class",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 22,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "class",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "c",
+          "kind": "className"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeAlias.ts",
+      "position": 29,
+      "name": "4"
+    },
+    "quickInfo": {
+      "kind": "var",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 29,
+        "length": 9
+      },
+      "displayParts": [
+        {
+          "text": "var",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "cInstance",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "c",
+          "kind": "className"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeAlias.ts",
+      "position": 40,
+      "name": "5"
+    },
+    "quickInfo": {
+      "kind": "type",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 40,
+        "length": 2
+      },
+      "displayParts": [
+        {
+          "text": "type",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "t1",
+          "kind": "aliasName"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "=",
+          "kind": "operator"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "c",
+          "kind": "className"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeAlias.ts",
+      "position": 49,
+      "name": "6"
+    },
+    "quickInfo": {
+      "kind": "constructor",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 49,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "constructor",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "c",
+          "kind": "className"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "c",
+          "kind": "className"
+        }
+      ],
+      "documentation": []
+    }
+  }
+]

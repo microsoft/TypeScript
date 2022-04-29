@@ -1,0 +1,95 @@
+=== tests/cases/conformance/jsx/file.tsx ===
+import React = require('react')
+>React : typeof React
+
+declare function ComponentSpecific1<U>(l: {prop: U, "ignore-prop": string}): JSX.Element;
+>ComponentSpecific1 : <U>(l: {    prop: U;    "ignore-prop": string;}) => JSX.Element
+>l : { prop: U; "ignore-prop": string; }
+>prop : U
+>"ignore-prop" : string
+>JSX : any
+
+declare function ComponentSpecific2<U>(l: {prop: U}): JSX.Element;
+>ComponentSpecific2 : <U>(l: {    prop: U;}) => JSX.Element
+>l : { prop: U; }
+>prop : U
+>JSX : any
+
+// Error
+function Bar<T extends {prop: number}>(arg: T) {
+>Bar : <T extends { prop: number; }>(arg: T) => void
+>prop : number
+>arg : T
+
+    let a1 = <ComponentSpecific1 {...arg} ignore-prop={10} />;
+>a1 : JSX.Element
+><ComponentSpecific1 {...arg} ignore-prop={10} /> : JSX.Element
+>ComponentSpecific1 : <U>(l: { prop: U; "ignore-prop": string; }) => JSX.Element
+>arg : T
+>ignore-prop : number
+>10 : 10
+ }
+
+// Error
+function Baz<T>(arg: T) {
+>Baz : <T>(arg: T) => void
+>arg : T
+
+    let a0 = <ComponentSpecific1 {...arg} />
+>a0 : JSX.Element
+><ComponentSpecific1 {...arg} /> : JSX.Element
+>ComponentSpecific1 : <U>(l: { prop: U; "ignore-prop": string; }) => JSX.Element
+>arg : T
+}
+
+declare function Link<U>(l: {func: (arg: U)=>void}): JSX.Element;
+>Link : <U>(l: { func: (arg: U) => void; }) => JSX.Element
+>l : { func: (arg: U) => void; }
+>func : (arg: U) => void
+>arg : U
+>JSX : any
+
+// Error
+function createLink(func: (a: number, b: string)=>void) {
+>createLink : (func: (a: number, b: string) => void) => void
+>func : (a: number, b: string) => void
+>a : number
+>b : string
+
+    let o = <Link func={func} />
+>o : JSX.Element
+><Link func={func} /> : JSX.Element
+>Link : <U>(l: { func: (arg: U) => void; }) => JSX.Element
+>func : (a: number, b: string) => void
+>func : (a: number, b: string) => void
+}
+
+interface InferParamProp<T> {
+    values: Array<T>;
+>values : T[]
+
+    selectHandler: (selectedVal: T) => void;
+>selectHandler : (selectedVal: T) => void
+>selectedVal : T
+}
+
+declare function InferParamComponent<T>(attr: InferParamProp<T>): JSX.Element;
+>InferParamComponent : <T>(attr: InferParamProp<T>) => JSX.Element
+>attr : InferParamProp<T>
+>JSX : any
+
+// Error
+let i = <InferParamComponent values={[1, 2, 3, 4]} selectHandler={(val: string) => { }} />;
+>i : JSX.Element
+><InferParamComponent values={[1, 2, 3, 4]} selectHandler={(val: string) => { }} /> : JSX.Element
+>InferParamComponent : <T>(attr: InferParamProp<T>) => JSX.Element
+>values : number[]
+>[1, 2, 3, 4] : number[]
+>1 : 1
+>2 : 2
+>3 : 3
+>4 : 4
+>selectHandler : (val: string) => void
+>(val: string) => { } : (val: string) => void
+>val : string
+

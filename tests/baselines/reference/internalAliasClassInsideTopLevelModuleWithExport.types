@@ -1,0 +1,35 @@
+=== tests/cases/compiler/internalAliasClassInsideTopLevelModuleWithExport.ts ===
+export module x {
+>x : typeof x
+
+    export class c {
+>c : c
+
+        foo(a: number) {
+>foo : (a: number) => number
+>a : number
+
+            return a;
+>a : number
+        }
+    }
+}
+
+export import xc = x.c;
+>xc : typeof xc
+>x : typeof x
+>c : xc
+
+export var cProp = new xc();
+>cProp : xc
+>new xc() : xc
+>xc : typeof xc
+
+var cReturnVal = cProp.foo(10);
+>cReturnVal : number
+>cProp.foo(10) : number
+>cProp.foo : (a: number) => number
+>cProp : xc
+>foo : (a: number) => number
+>10 : 10
+

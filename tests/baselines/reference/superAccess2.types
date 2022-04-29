@@ -1,0 +1,88 @@
+=== tests/cases/compiler/superAccess2.ts ===
+class P {
+>P : P
+
+    x() { }
+>x : () => void
+
+    static y() { }
+>y : () => void
+}
+
+class Q extends P {
+>Q : Q
+>P : P
+
+    xx = super;
+>xx : any
+>super : any
+>super : P
+> : any
+
+    static yy = super; // error for static initializer accessing super
+>yy : any
+>super : any
+>super : typeof P
+> : any
+
+    // Super is not allowed in constructor args
+    constructor(public z = super, zz = super, zzz = () => super) {
+>z : any
+>super : any
+>super : any
+> : any
+>zz : any
+>super : any
+>super : any
+> : any
+>zzz : () => any
+>() => super : () => any
+>super : any
+>super : P
+> : any
+
+        super();
+>super() : void
+>super : typeof P
+    }
+
+    foo(zz = super) {
+>foo : (zz?: any) => void
+>zz : any
+>super : any
+>super : P
+> : any
+
+        super.x();
+>super.x() : void
+>super.x : () => void
+>super : P
+>x : () => void
+
+        super.y(); // error
+>super.y() : any
+>super.y : any
+>super : P
+>y : any
+    }
+
+    static bar(zz = super) {
+>bar : (zz?: any) => void
+>zz : any
+>super : any
+>super : typeof P
+> : any
+
+        super.x(); // error
+>super.x() : any
+>super.x : any
+>super : typeof P
+>x : any
+
+        super.y();
+>super.y() : void
+>super.y : () => void
+>super : typeof P
+>y : () => void
+    }
+}

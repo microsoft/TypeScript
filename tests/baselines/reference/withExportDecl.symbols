@@ -1,0 +1,129 @@
+=== tests/cases/compiler/withExportDecl.ts ===
+var simpleVar;
+>simpleVar : Symbol(simpleVar, Decl(withExportDecl.ts, 0, 3))
+
+export var exportedSimpleVar;
+>exportedSimpleVar : Symbol(exportedSimpleVar, Decl(withExportDecl.ts, 1, 10))
+
+var anotherVar: any;
+>anotherVar : Symbol(anotherVar, Decl(withExportDecl.ts, 3, 3))
+
+var varWithSimpleType: number;
+>varWithSimpleType : Symbol(varWithSimpleType, Decl(withExportDecl.ts, 4, 3))
+
+var varWithArrayType: number[];
+>varWithArrayType : Symbol(varWithArrayType, Decl(withExportDecl.ts, 5, 3))
+
+var varWithInitialValue = 30;
+>varWithInitialValue : Symbol(varWithInitialValue, Decl(withExportDecl.ts, 7, 3))
+
+export var exportedVarWithInitialValue = 70;
+>exportedVarWithInitialValue : Symbol(exportedVarWithInitialValue, Decl(withExportDecl.ts, 8, 10))
+
+var withComplicatedValue = { x: 30, y: 70, desc: "position" };
+>withComplicatedValue : Symbol(withComplicatedValue, Decl(withExportDecl.ts, 10, 3))
+>x : Symbol(x, Decl(withExportDecl.ts, 10, 28))
+>y : Symbol(y, Decl(withExportDecl.ts, 10, 35))
+>desc : Symbol(desc, Decl(withExportDecl.ts, 10, 42))
+
+export var exportedWithComplicatedValue = { x: 30, y: 70, desc: "position" };
+>exportedWithComplicatedValue : Symbol(exportedWithComplicatedValue, Decl(withExportDecl.ts, 11, 10))
+>x : Symbol(x, Decl(withExportDecl.ts, 11, 43))
+>y : Symbol(y, Decl(withExportDecl.ts, 11, 50))
+>desc : Symbol(desc, Decl(withExportDecl.ts, 11, 57))
+
+declare var declaredVar;
+>declaredVar : Symbol(declaredVar, Decl(withExportDecl.ts, 13, 11), Decl(withExportDecl.ts, 16, 11))
+
+declare var declareVar2
+>declareVar2 : Symbol(declareVar2, Decl(withExportDecl.ts, 14, 11))
+
+declare var declaredVar;
+>declaredVar : Symbol(declaredVar, Decl(withExportDecl.ts, 13, 11), Decl(withExportDecl.ts, 16, 11))
+
+declare var deckareVarWithType: number;
+>deckareVarWithType : Symbol(deckareVarWithType, Decl(withExportDecl.ts, 17, 11))
+
+export declare var exportedDeclaredVar: number;
+>exportedDeclaredVar : Symbol(exportedDeclaredVar, Decl(withExportDecl.ts, 18, 18))
+
+var arrayVar: string[] = ['a', 'b'];
+>arrayVar : Symbol(arrayVar, Decl(withExportDecl.ts, 20, 3))
+
+export var exportedArrayVar: { x: number; y: string; }[] ;
+>exportedArrayVar : Symbol(exportedArrayVar, Decl(withExportDecl.ts, 22, 10))
+>x : Symbol(x, Decl(withExportDecl.ts, 22, 30))
+>y : Symbol(y, Decl(withExportDecl.ts, 22, 41))
+
+exportedArrayVar.push({ x: 30, y : 'hello world' });
+>exportedArrayVar.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>exportedArrayVar : Symbol(exportedArrayVar, Decl(withExportDecl.ts, 22, 10))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(withExportDecl.ts, 23, 23))
+>y : Symbol(y, Decl(withExportDecl.ts, 23, 30))
+
+function simpleFunction() {
+>simpleFunction : Symbol(simpleFunction, Decl(withExportDecl.ts, 23, 52))
+
+    return {
+        x: "Hello",
+>x : Symbol(x, Decl(withExportDecl.ts, 26, 12))
+
+        y: "word",
+>y : Symbol(y, Decl(withExportDecl.ts, 27, 19))
+
+        n: 2
+>n : Symbol(n, Decl(withExportDecl.ts, 28, 18))
+
+    };
+}
+
+export function exportedFunction() {
+>exportedFunction : Symbol(exportedFunction, Decl(withExportDecl.ts, 31, 1))
+
+    return simpleFunction();
+>simpleFunction : Symbol(simpleFunction, Decl(withExportDecl.ts, 23, 52))
+}
+
+module m1 {
+>m1 : Symbol(m1, Decl(withExportDecl.ts, 35, 1))
+
+    export function foo() {
+>foo : Symbol(foo, Decl(withExportDecl.ts, 37, 11))
+
+        return "Hello";
+    }
+}
+export declare module m2 {
+>m2 : Symbol(m2, Decl(withExportDecl.ts, 41, 1))
+
+    export var a: number;
+>a : Symbol(a, Decl(withExportDecl.ts, 44, 14))
+}
+
+
+export module m3 {
+>m3 : Symbol(m3, Decl(withExportDecl.ts, 45, 1))
+
+    export function foo() {
+>foo : Symbol(foo, Decl(withExportDecl.ts, 48, 18))
+
+        return m1.foo();
+>m1.foo : Symbol(m1.foo, Decl(withExportDecl.ts, 37, 11))
+>m1 : Symbol(m1, Decl(withExportDecl.ts, 35, 1))
+>foo : Symbol(m1.foo, Decl(withExportDecl.ts, 37, 11))
+    }
+}
+
+export var eVar1, eVar2 = 10;
+>eVar1 : Symbol(eVar1, Decl(withExportDecl.ts, 55, 10))
+>eVar2 : Symbol(eVar2, Decl(withExportDecl.ts, 55, 17))
+
+var eVar22;
+>eVar22 : Symbol(eVar22, Decl(withExportDecl.ts, 56, 3))
+
+export var eVar3 = 10, eVar4, eVar5;
+>eVar3 : Symbol(eVar3, Decl(withExportDecl.ts, 57, 10))
+>eVar4 : Symbol(eVar4, Decl(withExportDecl.ts, 57, 22))
+>eVar5 : Symbol(eVar5, Decl(withExportDecl.ts, 57, 29))
+

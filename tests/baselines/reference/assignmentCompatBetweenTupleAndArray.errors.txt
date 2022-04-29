@@ -1,0 +1,34 @@
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatBetweenTupleAndArray.ts(17,1): error TS2322: Type '[number, string]' is not assignable to type 'number[]'.
+  Type 'string | number' is not assignable to type 'number'.
+    Type 'string' is not assignable to type 'number'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatBetweenTupleAndArray.ts(18,1): error TS2322: Type '{}[]' is not assignable to type '[{}]'.
+  Target requires 1 element(s) but source may have fewer.
+
+
+==== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatBetweenTupleAndArray.ts (2 errors) ====
+    var numStrTuple: [number, string];
+    var numNumTuple: [number, number];
+    var numEmptyObjTuple: [number, {}];
+    var emptyObjTuple: [{}];
+    
+    var numArray: number[];
+    var emptyObjArray: {}[];
+    
+    // no error
+    numArray = numNumTuple;
+    emptyObjArray = emptyObjTuple;
+    emptyObjArray = numStrTuple;
+    emptyObjArray = numNumTuple;
+    emptyObjArray = numEmptyObjTuple;
+    
+    // error
+    numArray = numStrTuple;
+    ~~~~~~~~
+!!! error TS2322: Type '[number, string]' is not assignable to type 'number[]'.
+!!! error TS2322:   Type 'string | number' is not assignable to type 'number'.
+!!! error TS2322:     Type 'string' is not assignable to type 'number'.
+    emptyObjTuple = emptyObjArray;
+    ~~~~~~~~~~~~~
+!!! error TS2322: Type '{}[]' is not assignable to type '[{}]'.
+!!! error TS2322:   Target requires 1 element(s) but source may have fewer.
+    

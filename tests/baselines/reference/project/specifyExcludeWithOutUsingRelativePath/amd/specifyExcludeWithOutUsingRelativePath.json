@@ -1,0 +1,14 @@
+{
+    "scenario": "Verify exclude property without using relative path",
+    "projectRoot": "tests/cases/projects/projectOption/SpecifyExcludeWithOutUsingRelativePath",
+    "baselineCheck": true,
+    "declaration": true,
+    "resolvedInputFiles": [
+        "lib.es5.d.ts",
+        "a.ts"
+    ],
+    "emittedFiles": [
+        "OutDir/a.js",
+        "OutDir/a.d.ts"
+    ]
+}

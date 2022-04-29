@@ -1,0 +1,83 @@
+=== tests/cases/compiler/computedTypesKeyofNoIndexSignatureType.ts ===
+type Compute<A> = { [K in keyof A]: Compute<A[K]>; } & {};
+>Compute : Symbol(Compute, Decl(computedTypesKeyofNoIndexSignatureType.ts, 0, 0))
+>A : Symbol(A, Decl(computedTypesKeyofNoIndexSignatureType.ts, 0, 13))
+>K : Symbol(K, Decl(computedTypesKeyofNoIndexSignatureType.ts, 0, 21))
+>A : Symbol(A, Decl(computedTypesKeyofNoIndexSignatureType.ts, 0, 13))
+>Compute : Symbol(Compute, Decl(computedTypesKeyofNoIndexSignatureType.ts, 0, 0))
+>A : Symbol(A, Decl(computedTypesKeyofNoIndexSignatureType.ts, 0, 13))
+>K : Symbol(K, Decl(computedTypesKeyofNoIndexSignatureType.ts, 0, 21))
+
+type EqualsTest<T> = <A>() => A extends T ? 1 : 0;
+>EqualsTest : Symbol(EqualsTest, Decl(computedTypesKeyofNoIndexSignatureType.ts, 0, 58))
+>T : Symbol(T, Decl(computedTypesKeyofNoIndexSignatureType.ts, 2, 16))
+>A : Symbol(A, Decl(computedTypesKeyofNoIndexSignatureType.ts, 2, 22))
+>A : Symbol(A, Decl(computedTypesKeyofNoIndexSignatureType.ts, 2, 22))
+>T : Symbol(T, Decl(computedTypesKeyofNoIndexSignatureType.ts, 2, 16))
+
+type Equals<A1, A2> = EqualsTest<A2> extends EqualsTest<A1> ? 1 : 0;
+>Equals : Symbol(Equals, Decl(computedTypesKeyofNoIndexSignatureType.ts, 2, 50))
+>A1 : Symbol(A1, Decl(computedTypesKeyofNoIndexSignatureType.ts, 3, 12))
+>A2 : Symbol(A2, Decl(computedTypesKeyofNoIndexSignatureType.ts, 3, 15))
+>EqualsTest : Symbol(EqualsTest, Decl(computedTypesKeyofNoIndexSignatureType.ts, 0, 58))
+>A2 : Symbol(A2, Decl(computedTypesKeyofNoIndexSignatureType.ts, 3, 15))
+>EqualsTest : Symbol(EqualsTest, Decl(computedTypesKeyofNoIndexSignatureType.ts, 0, 58))
+>A1 : Symbol(A1, Decl(computedTypesKeyofNoIndexSignatureType.ts, 3, 12))
+
+type Filter<K, I> = Equals<K, I> extends 1 ? never : K;
+>Filter : Symbol(Filter, Decl(computedTypesKeyofNoIndexSignatureType.ts, 3, 68))
+>K : Symbol(K, Decl(computedTypesKeyofNoIndexSignatureType.ts, 5, 12))
+>I : Symbol(I, Decl(computedTypesKeyofNoIndexSignatureType.ts, 5, 14))
+>Equals : Symbol(Equals, Decl(computedTypesKeyofNoIndexSignatureType.ts, 2, 50))
+>K : Symbol(K, Decl(computedTypesKeyofNoIndexSignatureType.ts, 5, 12))
+>I : Symbol(I, Decl(computedTypesKeyofNoIndexSignatureType.ts, 5, 14))
+>K : Symbol(K, Decl(computedTypesKeyofNoIndexSignatureType.ts, 5, 12))
+
+type OmitIndex<T, I extends string | number> = {
+>OmitIndex : Symbol(OmitIndex, Decl(computedTypesKeyofNoIndexSignatureType.ts, 5, 55))
+>T : Symbol(T, Decl(computedTypesKeyofNoIndexSignatureType.ts, 7, 15))
+>I : Symbol(I, Decl(computedTypesKeyofNoIndexSignatureType.ts, 7, 17))
+
+  [K in keyof T as Filter<K, I>]: T[K];
+>K : Symbol(K, Decl(computedTypesKeyofNoIndexSignatureType.ts, 8, 3))
+>T : Symbol(T, Decl(computedTypesKeyofNoIndexSignatureType.ts, 7, 15))
+>Filter : Symbol(Filter, Decl(computedTypesKeyofNoIndexSignatureType.ts, 3, 68))
+>K : Symbol(K, Decl(computedTypesKeyofNoIndexSignatureType.ts, 8, 3))
+>I : Symbol(I, Decl(computedTypesKeyofNoIndexSignatureType.ts, 7, 17))
+>T : Symbol(T, Decl(computedTypesKeyofNoIndexSignatureType.ts, 7, 15))
+>K : Symbol(K, Decl(computedTypesKeyofNoIndexSignatureType.ts, 8, 3))
+
+};
+
+type IndexObject = { [key: string]: unknown; };
+>IndexObject : Symbol(IndexObject, Decl(computedTypesKeyofNoIndexSignatureType.ts, 9, 2))
+>key : Symbol(key, Decl(computedTypesKeyofNoIndexSignatureType.ts, 11, 22))
+
+type FooBar = { foo: "hello"; bar: "world"; };
+>FooBar : Symbol(FooBar, Decl(computedTypesKeyofNoIndexSignatureType.ts, 11, 47))
+>foo : Symbol(foo, Decl(computedTypesKeyofNoIndexSignatureType.ts, 12, 15))
+>bar : Symbol(bar, Decl(computedTypesKeyofNoIndexSignatureType.ts, 12, 29))
+
+type WithIndex = Compute<FooBar & IndexObject>;   // { [x: string]: {}; foo: "hello"; bar: "world"; } <-- OK
+>WithIndex : Symbol(WithIndex, Decl(computedTypesKeyofNoIndexSignatureType.ts, 12, 46))
+>Compute : Symbol(Compute, Decl(computedTypesKeyofNoIndexSignatureType.ts, 0, 0))
+>FooBar : Symbol(FooBar, Decl(computedTypesKeyofNoIndexSignatureType.ts, 11, 47))
+>IndexObject : Symbol(IndexObject, Decl(computedTypesKeyofNoIndexSignatureType.ts, 9, 2))
+
+type WithoutIndex = OmitIndex<WithIndex, string>; // { foo: "hello"; bar: "world"; }                  <-- OK
+>WithoutIndex : Symbol(WithoutIndex, Decl(computedTypesKeyofNoIndexSignatureType.ts, 14, 47))
+>OmitIndex : Symbol(OmitIndex, Decl(computedTypesKeyofNoIndexSignatureType.ts, 5, 55))
+>WithIndex : Symbol(WithIndex, Decl(computedTypesKeyofNoIndexSignatureType.ts, 12, 46))
+
+type FooBarKey = keyof FooBar;             // "foo" | "bar"   <-- OK
+>FooBarKey : Symbol(FooBarKey, Decl(computedTypesKeyofNoIndexSignatureType.ts, 15, 49))
+>FooBar : Symbol(FooBar, Decl(computedTypesKeyofNoIndexSignatureType.ts, 11, 47))
+
+type WithIndexKey = keyof WithIndex;       // string | number <-- Expected: string 
+>WithIndexKey : Symbol(WithIndexKey, Decl(computedTypesKeyofNoIndexSignatureType.ts, 17, 30))
+>WithIndex : Symbol(WithIndex, Decl(computedTypesKeyofNoIndexSignatureType.ts, 12, 46))
+
+type WithoutIndexKey = keyof WithoutIndex; // number          <-- Expected: "foo" | "bar"
+>WithoutIndexKey : Symbol(WithoutIndexKey, Decl(computedTypesKeyofNoIndexSignatureType.ts, 18, 36))
+>WithoutIndex : Symbol(WithoutIndex, Decl(computedTypesKeyofNoIndexSignatureType.ts, 14, 47))
+

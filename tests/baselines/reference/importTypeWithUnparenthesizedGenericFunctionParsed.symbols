@@ -1,0 +1,8 @@
+=== tests/cases/compiler/importTypeWithUnparenthesizedGenericFunctionParsed.ts ===
+export declare const fail1: import("module").Modifier<<T>(x: T) => T>; // shouldn't be a parse error
+>fail1 : Symbol(fail1, Decl(importTypeWithUnparenthesizedGenericFunctionParsed.ts, 0, 20))
+>T : Symbol(T, Decl(importTypeWithUnparenthesizedGenericFunctionParsed.ts, 0, 55))
+>x : Symbol(x, Decl(importTypeWithUnparenthesizedGenericFunctionParsed.ts, 0, 58))
+>T : Symbol(T, Decl(importTypeWithUnparenthesizedGenericFunctionParsed.ts, 0, 55))
+>T : Symbol(T, Decl(importTypeWithUnparenthesizedGenericFunctionParsed.ts, 0, 55))
+

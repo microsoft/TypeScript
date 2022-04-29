@@ -1,0 +1,48 @@
+=== tests/cases/conformance/internalModules/exportDeclarations/ExportInterfaceWithInaccessibleTypeInTypeParameterConstraint.ts ===
+module A {
+>A : typeof A
+
+    interface Point {
+        x: number;
+>x : number
+
+        y: number;
+>y : number
+    }
+
+    export var Origin: Point = { x: 0, y: 0 };
+>Origin : Point
+>{ x: 0, y: 0 } : { x: number; y: number; }
+>x : number
+>0 : 0
+>y : number
+>0 : 0
+
+    export interface Point3d extends Point {
+        z: number;
+>z : number
+    }
+
+    export var Origin3d: Point3d = { x: 0, y: 0, z: 0 };
+>Origin3d : Point3d
+>{ x: 0, y: 0, z: 0 } : { x: number; y: number; z: number; }
+>x : number
+>0 : 0
+>y : number
+>0 : 0
+>z : number
+>0 : 0
+
+    export interface Line<TPoint extends Point>{
+        new (start: TPoint, end: TPoint);
+>start : TPoint
+>end : TPoint
+
+        start: TPoint;
+>start : TPoint
+
+        end: TPoint;
+>end : TPoint
+    }
+}
+

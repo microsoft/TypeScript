@@ -1,0 +1,65 @@
+=== tests/cases/compiler/undeclaredModuleError.ts ===
+import fs = require('fs');
+>fs : any
+
+function readdir(path: string, accept: (stat: fs.Stats, name: string) => boolean, callback: (error: Error, results: { name: string; stat: fs.Stats; }[]) => void ) {}
+>readdir : (path: string, accept: (stat: fs.Stats, name: string) => boolean, callback: (error: Error, results: {    name: string;    stat: fs.Stats;}[]) => void) => void
+>path : string
+>accept : (stat: fs.Stats, name: string) => boolean
+>stat : fs.Stats
+>fs : any
+>name : string
+>callback : (error: Error, results: {    name: string;    stat: fs.Stats;}[]) => void
+>error : Error
+>results : { name: string; stat: fs.Stats; }[]
+>name : string
+>stat : fs.Stats
+>fs : any
+
+function join(...paths: string[]) {}
+>join : (...paths: string[]) => void
+>paths : string[]
+
+function instrumentFile(covFileDir: string, covFileName: string, originalFilePath: string) {
+>instrumentFile : (covFileDir: string, covFileName: string, originalFilePath: string) => void
+>covFileDir : string
+>covFileName : string
+>originalFilePath : string
+
+    fs.readFile(originalFilePath, () => {       
+>fs.readFile(originalFilePath, () => {               readdir(covFileDir, () => {        } , (error: Error, files: {}[]) => {                files.forEach((file) => {                    var fullPath = join(IDoNotExist);                } );            } );    } ) : any
+>fs.readFile : any
+>fs : any
+>readFile : any
+>originalFilePath : string
+>() => {               readdir(covFileDir, () => {        } , (error: Error, files: {}[]) => {                files.forEach((file) => {                    var fullPath = join(IDoNotExist);                } );            } );    } : () => void
+
+        readdir(covFileDir, () => {
+>readdir(covFileDir, () => {        } , (error: Error, files: {}[]) => {                files.forEach((file) => {                    var fullPath = join(IDoNotExist);                } );            } ) : void
+>readdir : (path: string, accept: (stat: fs.Stats, name: string) => boolean, callback: (error: Error, results: { name: string; stat: fs.Stats; }[]) => void) => void
+>covFileDir : string
+>() => {        } : () => void
+
+        } , (error: Error, files: {}[]) => {
+>(error: Error, files: {}[]) => {                files.forEach((file) => {                    var fullPath = join(IDoNotExist);                } );            } : (error: Error, files: {}[]) => void
+>error : Error
+>files : {}[]
+
+                files.forEach((file) => {
+>files.forEach((file) => {                    var fullPath = join(IDoNotExist);                } ) : void
+>files.forEach : (callbackfn: (value: {}, index: number, array: {}[]) => void, thisArg?: any) => void
+>files : {}[]
+>forEach : (callbackfn: (value: {}, index: number, array: {}[]) => void, thisArg?: any) => void
+>(file) => {                    var fullPath = join(IDoNotExist);                } : (file: {}) => void
+>file : {}
+
+                    var fullPath = join(IDoNotExist);
+>fullPath : void
+>join(IDoNotExist) : void
+>join : (...paths: string[]) => void
+>IDoNotExist : any
+
+                } );
+            } );
+    } );
+}

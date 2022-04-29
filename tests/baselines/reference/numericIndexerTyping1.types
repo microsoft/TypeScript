@@ -1,0 +1,27 @@
+=== tests/cases/compiler/numericIndexerTyping1.ts ===
+interface I {
+    [x: string]: Date;
+>x : string
+}
+
+interface I2 extends I {
+}
+
+var i: I;
+>i : I
+
+var r: string = i[1]; // error: numeric indexer returns the type of the string indexer
+>r : string
+>i[1] : Date
+>i : I
+>1 : 1
+
+var i2: I2;
+>i2 : I2
+
+var r2: string = i2[1]; // error: numeric indexer returns the type of the string indexer
+>r2 : string
+>i2[1] : Date
+>i2 : I2
+>1 : 1
+

@@ -1,0 +1,27 @@
+=== tests/cases/compiler/moduleNewExportBug.ts ===
+module mod1 {
+>mod1 : Symbol(mod1, Decl(moduleNewExportBug.ts, 0, 0))
+
+	interface mInt {
+>mInt : Symbol(mInt, Decl(moduleNewExportBug.ts, 0, 13))
+
+		new (bar:any):any;
+>bar : Symbol(bar, Decl(moduleNewExportBug.ts, 2, 7))
+
+        foo (bar:any):any;
+>foo : Symbol(mInt.foo, Decl(moduleNewExportBug.ts, 2, 20))
+>bar : Symbol(bar, Decl(moduleNewExportBug.ts, 3, 13))
+	}
+ 
+    class C { public moo() {}}
+>C : Symbol(C, Decl(moduleNewExportBug.ts, 4, 2))
+>moo : Symbol(C.moo, Decl(moduleNewExportBug.ts, 6, 13))
+}
+
+var c : mod1.C; // ERROR: C should not be visible
+>c : Symbol(c, Decl(moduleNewExportBug.ts, 9, 3))
+>mod1 : Symbol(mod1, Decl(moduleNewExportBug.ts, 0, 0))
+>C : Symbol(mod1.C)
+
+
+

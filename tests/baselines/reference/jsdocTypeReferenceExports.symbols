@@ -1,0 +1,13 @@
+=== tests/cases/conformance/jsdoc/bug27342.js ===
+module.exports = {}
+>module.exports : Symbol(module.exports, Decl(bug27342.js, 0, 0))
+>module : Symbol(module, Decl(bug27342.js, 0, 0))
+>exports : Symbol(module.exports, Decl(bug27342.js, 0, 0))
+
+/**
+ * @type {exports}
+ */
+var x
+>x : Symbol(x, Decl(bug27342.js, 4, 3))
+
+

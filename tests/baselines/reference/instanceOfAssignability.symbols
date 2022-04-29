@@ -1,0 +1,208 @@
+=== tests/cases/compiler/instanceOfAssignability.ts ===
+interface Base {
+>Base : Symbol(Base, Decl(instanceOfAssignability.ts, 0, 0))
+
+	foo: string|number;
+>foo : Symbol(Base.foo, Decl(instanceOfAssignability.ts, 0, 16))
+
+	optional?: number;
+>optional : Symbol(Base.optional, Decl(instanceOfAssignability.ts, 1, 20))
+}
+
+// Derived1 is assignable to, but not a subtype of, Base
+class Derived1 implements Base {
+>Derived1 : Symbol(Derived1, Decl(instanceOfAssignability.ts, 3, 1))
+>Base : Symbol(Base, Decl(instanceOfAssignability.ts, 0, 0))
+
+	foo: string;
+>foo : Symbol(Derived1.foo, Decl(instanceOfAssignability.ts, 6, 32))
+}
+// Derived2 is a subtype of Base that is not assignable to Derived1
+class Derived2 implements Base {
+>Derived2 : Symbol(Derived2, Decl(instanceOfAssignability.ts, 8, 1))
+>Base : Symbol(Base, Decl(instanceOfAssignability.ts, 0, 0))
+
+	foo: number;
+>foo : Symbol(Derived2.foo, Decl(instanceOfAssignability.ts, 10, 32))
+
+	optional: number;
+>optional : Symbol(Derived2.optional, Decl(instanceOfAssignability.ts, 11, 13))
+}
+
+class Animal {
+>Animal : Symbol(Animal, Decl(instanceOfAssignability.ts, 13, 1))
+
+	move;
+>move : Symbol(Animal.move, Decl(instanceOfAssignability.ts, 15, 14))
+}
+class Mammal extends Animal { milk; }
+>Mammal : Symbol(Mammal, Decl(instanceOfAssignability.ts, 17, 1))
+>Animal : Symbol(Animal, Decl(instanceOfAssignability.ts, 13, 1))
+>milk : Symbol(Mammal.milk, Decl(instanceOfAssignability.ts, 18, 29))
+
+class Giraffe extends Mammal { neck; }
+>Giraffe : Symbol(Giraffe, Decl(instanceOfAssignability.ts, 18, 37))
+>Mammal : Symbol(Mammal, Decl(instanceOfAssignability.ts, 17, 1))
+>neck : Symbol(Giraffe.neck, Decl(instanceOfAssignability.ts, 19, 30))
+
+function fn1(x: Array<number>|Array<string>|boolean) {
+>fn1 : Symbol(fn1, Decl(instanceOfAssignability.ts, 19, 38))
+>x : Symbol(x, Decl(instanceOfAssignability.ts, 21, 13))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+	if(x instanceof Array) {
+>x : Symbol(x, Decl(instanceOfAssignability.ts, 21, 13))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+		// 1.5: y: Array<number>|Array<string>
+		// Want: y: Array<number>|Array<string>
+		let y = x;
+>y : Symbol(y, Decl(instanceOfAssignability.ts, 25, 5))
+>x : Symbol(x, Decl(instanceOfAssignability.ts, 21, 13))
+	}
+}
+
+function fn2(x: Base) {
+>fn2 : Symbol(fn2, Decl(instanceOfAssignability.ts, 27, 1))
+>x : Symbol(x, Decl(instanceOfAssignability.ts, 29, 13))
+>Base : Symbol(Base, Decl(instanceOfAssignability.ts, 0, 0))
+
+	if(x instanceof Derived1) {
+>x : Symbol(x, Decl(instanceOfAssignability.ts, 29, 13))
+>Derived1 : Symbol(Derived1, Decl(instanceOfAssignability.ts, 3, 1))
+
+		// 1.5: y: Base
+		// Want: y: Derived1
+		let y = x;
+>y : Symbol(y, Decl(instanceOfAssignability.ts, 33, 5))
+>x : Symbol(x, Decl(instanceOfAssignability.ts, 29, 13))
+	}
+}
+
+function fn3(x: Base|Derived1) {
+>fn3 : Symbol(fn3, Decl(instanceOfAssignability.ts, 35, 1))
+>x : Symbol(x, Decl(instanceOfAssignability.ts, 37, 13))
+>Base : Symbol(Base, Decl(instanceOfAssignability.ts, 0, 0))
+>Derived1 : Symbol(Derived1, Decl(instanceOfAssignability.ts, 3, 1))
+
+	if(x instanceof Derived2) {
+>x : Symbol(x, Decl(instanceOfAssignability.ts, 37, 13))
+>Derived2 : Symbol(Derived2, Decl(instanceOfAssignability.ts, 8, 1))
+
+		// 1.5: y: Derived2
+		// Want: Derived2
+		let y = x;
+>y : Symbol(y, Decl(instanceOfAssignability.ts, 41, 5))
+>x : Symbol(x, Decl(instanceOfAssignability.ts, 37, 13))
+	}
+}
+
+function fn4(x: Base|Derived2) {
+>fn4 : Symbol(fn4, Decl(instanceOfAssignability.ts, 43, 1))
+>x : Symbol(x, Decl(instanceOfAssignability.ts, 45, 13))
+>Base : Symbol(Base, Decl(instanceOfAssignability.ts, 0, 0))
+>Derived2 : Symbol(Derived2, Decl(instanceOfAssignability.ts, 8, 1))
+
+	if(x instanceof Derived1) {
+>x : Symbol(x, Decl(instanceOfAssignability.ts, 45, 13))
+>Derived1 : Symbol(Derived1, Decl(instanceOfAssignability.ts, 3, 1))
+
+		// 1.5: y: {}
+		// Want: Derived1
+		let y = x;
+>y : Symbol(y, Decl(instanceOfAssignability.ts, 49, 5))
+>x : Symbol(x, Decl(instanceOfAssignability.ts, 45, 13))
+	}
+}
+
+function fn5(x: Derived1) {
+>fn5 : Symbol(fn5, Decl(instanceOfAssignability.ts, 51, 1))
+>x : Symbol(x, Decl(instanceOfAssignability.ts, 53, 13))
+>Derived1 : Symbol(Derived1, Decl(instanceOfAssignability.ts, 3, 1))
+
+	if(x instanceof Derived2) {
+>x : Symbol(x, Decl(instanceOfAssignability.ts, 53, 13))
+>Derived2 : Symbol(Derived2, Decl(instanceOfAssignability.ts, 8, 1))
+
+		// 1.5: y: Derived1
+		// Want: ???
+		let y = x;
+>y : Symbol(y, Decl(instanceOfAssignability.ts, 57, 5))
+>x : Symbol(x, Decl(instanceOfAssignability.ts, 53, 13))
+	}
+}
+
+function fn6(x: Animal|Mammal) {
+>fn6 : Symbol(fn6, Decl(instanceOfAssignability.ts, 59, 1))
+>x : Symbol(x, Decl(instanceOfAssignability.ts, 61, 13))
+>Animal : Symbol(Animal, Decl(instanceOfAssignability.ts, 13, 1))
+>Mammal : Symbol(Mammal, Decl(instanceOfAssignability.ts, 17, 1))
+
+	if(x instanceof Giraffe) {
+>x : Symbol(x, Decl(instanceOfAssignability.ts, 61, 13))
+>Giraffe : Symbol(Giraffe, Decl(instanceOfAssignability.ts, 18, 37))
+
+		// 1.5: y: Derived1
+		// Want: ???
+		let y = x;
+>y : Symbol(y, Decl(instanceOfAssignability.ts, 65, 5))
+>x : Symbol(x, Decl(instanceOfAssignability.ts, 61, 13))
+	}
+}
+
+function fn7(x: Array<number>|Array<string>) {
+>fn7 : Symbol(fn7, Decl(instanceOfAssignability.ts, 67, 1))
+>x : Symbol(x, Decl(instanceOfAssignability.ts, 69, 13))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+	if(x instanceof Array) {
+>x : Symbol(x, Decl(instanceOfAssignability.ts, 69, 13))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+		// 1.5: y: Array<number>|Array<string>
+		// Want: y: Array<number>|Array<string>
+		let y = x;
+>y : Symbol(y, Decl(instanceOfAssignability.ts, 73, 5))
+>x : Symbol(x, Decl(instanceOfAssignability.ts, 69, 13))
+	}
+}
+
+interface Alpha { a }
+>Alpha : Symbol(Alpha, Decl(instanceOfAssignability.ts, 75, 1))
+>a : Symbol(Alpha.a, Decl(instanceOfAssignability.ts, 77, 17))
+
+interface Beta { b }
+>Beta : Symbol(Beta, Decl(instanceOfAssignability.ts, 77, 21))
+>b : Symbol(Beta.b, Decl(instanceOfAssignability.ts, 78, 16))
+
+interface Gamma { c }
+>Gamma : Symbol(Gamma, Decl(instanceOfAssignability.ts, 78, 20))
+>c : Symbol(Gamma.c, Decl(instanceOfAssignability.ts, 79, 17))
+
+class ABC { a; b; c; }
+>ABC : Symbol(ABC, Decl(instanceOfAssignability.ts, 79, 21))
+>a : Symbol(ABC.a, Decl(instanceOfAssignability.ts, 80, 11))
+>b : Symbol(ABC.b, Decl(instanceOfAssignability.ts, 80, 14))
+>c : Symbol(ABC.c, Decl(instanceOfAssignability.ts, 80, 17))
+
+function fn8(x: Alpha|Beta|Gamma) {
+>fn8 : Symbol(fn8, Decl(instanceOfAssignability.ts, 80, 22))
+>x : Symbol(x, Decl(instanceOfAssignability.ts, 81, 13))
+>Alpha : Symbol(Alpha, Decl(instanceOfAssignability.ts, 75, 1))
+>Beta : Symbol(Beta, Decl(instanceOfAssignability.ts, 77, 21))
+>Gamma : Symbol(Gamma, Decl(instanceOfAssignability.ts, 78, 20))
+
+	if(x instanceof ABC) {
+>x : Symbol(x, Decl(instanceOfAssignability.ts, 81, 13))
+>ABC : Symbol(ABC, Decl(instanceOfAssignability.ts, 79, 21))
+
+		let y = x;
+>y : Symbol(y, Decl(instanceOfAssignability.ts, 83, 5))
+>x : Symbol(x, Decl(instanceOfAssignability.ts, 81, 13))
+	}
+}
+
+
+

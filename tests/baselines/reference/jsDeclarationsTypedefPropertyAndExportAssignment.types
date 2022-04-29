@@ -1,0 +1,101 @@
+=== tests/cases/conformance/jsdoc/declarations/index.js ===
+const {taskGroups, taskNameToGroup} = require('./module.js');
+>taskGroups : { parseHTML: { id: "parseHTML"; label: string; }; styleLayout: { id: "styleLayout"; label: string; }; }
+>taskNameToGroup : { [x: string]: import("tests/cases/conformance/jsdoc/declarations/module").TaskGroup; }
+>require('./module.js') : typeof import("tests/cases/conformance/jsdoc/declarations/module")
+>require : any
+>'./module.js' : "./module.js"
+
+/** @typedef {import('./module.js').TaskGroup} TaskGroup */
+
+/**
+ * @typedef TaskNode
+ * @prop {TaskNode[]} children
+ * @prop {TaskNode|undefined} parent
+ * @prop {TaskGroup} group
+ */
+
+/** @typedef {{timers: Map<string, TaskNode>}} PriorTaskData */
+class MainThreadTasks {
+>MainThreadTasks : MainThreadTasks
+
+    /**
+     * @param {TaskGroup} x
+     * @param {TaskNode} y
+     */
+    constructor(x, y){}
+>x : import("tests/cases/conformance/jsdoc/declarations/module").TaskGroup
+>y : TaskNode
+}
+
+module.exports = MainThreadTasks;
+>module.exports = MainThreadTasks : typeof MainThreadTasks
+>module.exports : typeof MainThreadTasks
+>module : { exports: typeof MainThreadTasks; }
+>exports : typeof MainThreadTasks
+>MainThreadTasks : typeof MainThreadTasks
+
+=== tests/cases/conformance/jsdoc/declarations/module.js ===
+/** @typedef {'parseHTML'|'styleLayout'} TaskGroupIds */
+
+/**
+ * @typedef TaskGroup
+ * @property {TaskGroupIds} id
+ * @property {string} label
+ * @property {string[]} traceEventNames
+ */
+
+/**
+ * @type {{[P in TaskGroupIds]: {id: P, label: string}}}
+ */
+const taskGroups = {
+>taskGroups : { parseHTML: { id: "parseHTML"; label: string; }; styleLayout: { id: "styleLayout"; label: string; }; }
+>{    parseHTML: {        id: 'parseHTML',        label: 'Parse HTML & CSS'    },    styleLayout: {        id: 'styleLayout',        label: 'Style & Layout'    },} : { parseHTML: { id: "parseHTML"; label: string; }; styleLayout: { id: "styleLayout"; label: string; }; }
+
+    parseHTML: {
+>parseHTML : { id: "parseHTML"; label: string; }
+>{        id: 'parseHTML',        label: 'Parse HTML & CSS'    } : { id: "parseHTML"; label: string; }
+
+        id: 'parseHTML',
+>id : "parseHTML"
+>'parseHTML' : "parseHTML"
+
+        label: 'Parse HTML & CSS'
+>label : string
+>'Parse HTML & CSS' : "Parse HTML & CSS"
+
+    },
+    styleLayout: {
+>styleLayout : { id: "styleLayout"; label: string; }
+>{        id: 'styleLayout',        label: 'Style & Layout'    } : { id: "styleLayout"; label: string; }
+
+        id: 'styleLayout',
+>id : "styleLayout"
+>'styleLayout' : "styleLayout"
+
+        label: 'Style & Layout'
+>label : string
+>'Style & Layout' : "Style & Layout"
+
+    },
+}
+
+/** @type {Object<string, TaskGroup>} */
+const taskNameToGroup = {};
+>taskNameToGroup : { [x: string]: TaskGroup; }
+>{} : {}
+
+module.exports = {
+>module.exports = {    taskGroups,    taskNameToGroup,} : typeof module.exports
+>module.exports : typeof module.exports
+>module : { exports: typeof module.exports; }
+>exports : typeof module.exports
+>{    taskGroups,    taskNameToGroup,} : { taskGroups: { parseHTML: { id: "parseHTML"; label: string; }; styleLayout: { id: "styleLayout"; label: string; }; }; taskNameToGroup: { [x: string]: TaskGroup; }; }
+
+    taskGroups,
+>taskGroups : { parseHTML: { id: "parseHTML"; label: string; }; styleLayout: { id: "styleLayout"; label: string; }; }
+
+    taskNameToGroup,
+>taskNameToGroup : { [x: string]: TaskGroup; }
+
+};

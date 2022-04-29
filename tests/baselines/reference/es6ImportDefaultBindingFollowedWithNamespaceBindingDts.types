@@ -1,0 +1,16 @@
+=== tests/cases/compiler/server.ts ===
+export class a { }
+>a : a
+
+=== tests/cases/compiler/client.ts ===
+import defaultBinding, * as nameSpaceBinding  from "./server";
+>defaultBinding : any
+>nameSpaceBinding : typeof nameSpaceBinding
+
+export var x = new nameSpaceBinding.a();
+>x : nameSpaceBinding.a
+>new nameSpaceBinding.a() : nameSpaceBinding.a
+>nameSpaceBinding.a : typeof nameSpaceBinding.a
+>nameSpaceBinding : typeof nameSpaceBinding
+>a : typeof nameSpaceBinding.a
+

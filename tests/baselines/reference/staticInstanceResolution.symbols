@@ -1,0 +1,30 @@
+=== tests/cases/compiler/staticInstanceResolution.ts ===
+class Comment {
+>Comment : Symbol(Comment, Decl(staticInstanceResolution.ts, 0, 0))
+
+    public getDocCommentText()
+>getDocCommentText : Symbol(Comment.getDocCommentText, Decl(staticInstanceResolution.ts, 0, 15))
+    {
+
+    }
+
+    static getDocCommentText(comments: Comment[])
+>getDocCommentText : Symbol(Comment.getDocCommentText, Decl(staticInstanceResolution.ts, 5, 5))
+>comments : Symbol(comments, Decl(staticInstanceResolution.ts, 7, 29))
+>Comment : Symbol(Comment, Decl(staticInstanceResolution.ts, 0, 0))
+    {
+        comments[0].getDocCommentText();
+>comments[0].getDocCommentText : Symbol(Comment.getDocCommentText, Decl(staticInstanceResolution.ts, 0, 15))
+>comments : Symbol(comments, Decl(staticInstanceResolution.ts, 7, 29))
+>getDocCommentText : Symbol(Comment.getDocCommentText, Decl(staticInstanceResolution.ts, 0, 15))
+
+        var c: Comment;
+>c : Symbol(c, Decl(staticInstanceResolution.ts, 10, 11))
+>Comment : Symbol(Comment, Decl(staticInstanceResolution.ts, 0, 0))
+
+        c.getDocCommentText();
+>c.getDocCommentText : Symbol(Comment.getDocCommentText, Decl(staticInstanceResolution.ts, 0, 15))
+>c : Symbol(c, Decl(staticInstanceResolution.ts, 10, 11))
+>getDocCommentText : Symbol(Comment.getDocCommentText, Decl(staticInstanceResolution.ts, 0, 15))
+    }
+}

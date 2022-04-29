@@ -1,0 +1,125 @@
+=== tests/cases/conformance/jsdoc/importer.js ===
+const mod = require("./mod1");
+>mod : Symbol(mod, Decl(importer.js, 0, 5))
+>require : Symbol(require)
+>"./mod1" : Symbol(mod, Decl(mod1.js, 0, 0))
+
+mod.thing;
+>mod.thing : Symbol(mod.thing, Decl(mod1.js, 0, 42))
+>mod : Symbol(mod, Decl(importer.js, 0, 5))
+>thing : Symbol(mod.thing, Decl(mod1.js, 0, 42))
+
+mod.other;
+>mod : Symbol(mod, Decl(importer.js, 0, 5))
+
+mod.prop;
+>mod : Symbol(mod, Decl(importer.js, 0, 5))
+
+mod.bad1;
+>mod.bad1 : Symbol(mod.bad1, Decl(mod1.js, 10, 72))
+>mod : Symbol(mod, Decl(importer.js, 0, 5))
+>bad1 : Symbol(mod.bad1, Decl(mod1.js, 10, 72))
+
+mod.bad2;
+>mod.bad2 : Symbol(mod.bad2, Decl(mod1.js, 13, 44))
+>mod : Symbol(mod, Decl(importer.js, 0, 5))
+>bad2 : Symbol(mod.bad2, Decl(mod1.js, 13, 44))
+
+mod.bad3;
+>mod.bad3 : Symbol(mod.bad3, Decl(mod1.js, 14, 77))
+>mod : Symbol(mod, Decl(importer.js, 0, 5))
+>bad3 : Symbol(mod.bad3, Decl(mod1.js, 14, 77))
+
+
+mod.thing = 0;
+>mod.thing : Symbol(mod.thing, Decl(mod1.js, 0, 42))
+>mod : Symbol(mod, Decl(importer.js, 0, 5))
+>thing : Symbol(mod.thing, Decl(mod1.js, 0, 42))
+
+mod.other = 0;
+>mod : Symbol(mod, Decl(importer.js, 0, 5))
+
+mod.prop = 0;
+>mod : Symbol(mod, Decl(importer.js, 0, 5))
+
+mod.bad1 = 0;
+>mod.bad1 : Symbol(mod.bad1, Decl(mod1.js, 10, 72))
+>mod : Symbol(mod, Decl(importer.js, 0, 5))
+>bad1 : Symbol(mod.bad1, Decl(mod1.js, 10, 72))
+
+mod.bad2 = 0;
+>mod.bad2 : Symbol(mod.bad2, Decl(mod1.js, 13, 44))
+>mod : Symbol(mod, Decl(importer.js, 0, 5))
+>bad2 : Symbol(mod.bad2, Decl(mod1.js, 13, 44))
+
+mod.bad3 = 0;
+>mod.bad3 : Symbol(mod.bad3, Decl(mod1.js, 14, 77))
+>mod : Symbol(mod, Decl(importer.js, 0, 5))
+>bad3 : Symbol(mod.bad3, Decl(mod1.js, 14, 77))
+
+=== tests/cases/conformance/jsdoc/mod1.js ===
+const obj = { value: 42, writable: true };
+>obj : Symbol(obj, Decl(mod1.js, 0, 5))
+>value : Symbol(value, Decl(mod1.js, 0, 13))
+>writable : Symbol(writable, Decl(mod1.js, 0, 24))
+
+Object.defineProperty(exports, "thing", obj);
+>Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>exports : Symbol("tests/cases/conformance/jsdoc/mod1", Decl(mod1.js, 0, 0))
+>"thing" : Symbol(thing, Decl(mod1.js, 0, 42))
+>obj : Symbol(obj, Decl(mod1.js, 0, 5))
+
+/**
+ * @type {string}
+ */
+let str = /** @type {string} */("other");
+>str : Symbol(str, Decl(mod1.js, 6, 3))
+
+Object.defineProperty(exports, str, { value: 42, writable: true });
+>Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>exports : Symbol("tests/cases/conformance/jsdoc/mod1", Decl(mod1.js, 0, 0))
+>str : Symbol(str, Decl(mod1.js, 6, 3))
+>value : Symbol(value, Decl(mod1.js, 7, 37))
+>writable : Symbol(writable, Decl(mod1.js, 7, 48))
+
+const propName = "prop"
+>propName : Symbol(propName, Decl(mod1.js, 9, 5))
+
+Object.defineProperty(exports, propName, { value: 42, writable: true });
+>Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>exports : Symbol("tests/cases/conformance/jsdoc/mod1", Decl(mod1.js, 0, 0))
+>propName : Symbol(propName, Decl(mod1.js, 9, 5))
+>value : Symbol(value, Decl(mod1.js, 10, 42))
+>writable : Symbol(writable, Decl(mod1.js, 10, 53))
+
+
+Object.defineProperty(exports, "bad1", { });
+>Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>exports : Symbol("tests/cases/conformance/jsdoc/mod1", Decl(mod1.js, 0, 0))
+>"bad1" : Symbol(bad1, Decl(mod1.js, 10, 72))
+
+Object.defineProperty(exports, "bad2", { get() { return 12 }, value: "no" });
+>Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>exports : Symbol("tests/cases/conformance/jsdoc/mod1", Decl(mod1.js, 0, 0))
+>"bad2" : Symbol(bad2, Decl(mod1.js, 13, 44))
+>get : Symbol(get, Decl(mod1.js, 14, 40))
+>value : Symbol(value, Decl(mod1.js, 14, 61))
+
+Object.defineProperty(exports, "bad3", { writable: true });
+>Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>exports : Symbol("tests/cases/conformance/jsdoc/mod1", Decl(mod1.js, 0, 0))
+>"bad3" : Symbol(bad3, Decl(mod1.js, 14, 77))
+>writable : Symbol(writable, Decl(mod1.js, 15, 40))
+

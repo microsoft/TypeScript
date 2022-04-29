@@ -1,0 +1,13 @@
+tests/cases/compiler/unusedPrivateVariableInClass2.ts(2,13): error TS6133: 'x' is declared but its value is never read.
+tests/cases/compiler/unusedPrivateVariableInClass2.ts(3,13): error TS6133: 'y' is declared but its value is never read.
+
+
+==== tests/cases/compiler/unusedPrivateVariableInClass2.ts (2 errors) ====
+    class greeter {
+        private x: string;
+                ~
+!!! error TS6133: 'x' is declared but its value is never read.
+        private y: string;
+                ~
+!!! error TS6133: 'y' is declared but its value is never read.
+    }

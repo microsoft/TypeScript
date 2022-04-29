@@ -1,0 +1,66 @@
+tests/cases/compiler/superAccess2.ts(7,15): error TS1034: 'super' must be followed by an argument list or member access.
+tests/cases/compiler/superAccess2.ts(8,22): error TS1034: 'super' must be followed by an argument list or member access.
+tests/cases/compiler/superAccess2.ts(11,28): error TS2336: 'super' cannot be referenced in constructor arguments.
+tests/cases/compiler/superAccess2.ts(11,28): error TS17011: 'super' must be called before accessing a property of 'super' in the constructor of a derived class.
+tests/cases/compiler/superAccess2.ts(11,33): error TS1034: 'super' must be followed by an argument list or member access.
+tests/cases/compiler/superAccess2.ts(11,40): error TS2336: 'super' cannot be referenced in constructor arguments.
+tests/cases/compiler/superAccess2.ts(11,40): error TS17011: 'super' must be called before accessing a property of 'super' in the constructor of a derived class.
+tests/cases/compiler/superAccess2.ts(11,45): error TS1034: 'super' must be followed by an argument list or member access.
+tests/cases/compiler/superAccess2.ts(11,64): error TS1034: 'super' must be followed by an argument list or member access.
+tests/cases/compiler/superAccess2.ts(15,19): error TS1034: 'super' must be followed by an argument list or member access.
+tests/cases/compiler/superAccess2.ts(17,15): error TS2576: Property 'y' does not exist on type 'P'. Did you mean to access the static member 'P.y' instead?
+tests/cases/compiler/superAccess2.ts(20,26): error TS1034: 'super' must be followed by an argument list or member access.
+tests/cases/compiler/superAccess2.ts(21,15): error TS2339: Property 'x' does not exist on type 'typeof P'.
+
+
+==== tests/cases/compiler/superAccess2.ts (13 errors) ====
+    class P {
+        x() { }
+        static y() { }
+    }
+    
+    class Q extends P {
+        xx = super;
+                  ~
+!!! error TS1034: 'super' must be followed by an argument list or member access.
+        static yy = super; // error for static initializer accessing super
+                         ~
+!!! error TS1034: 'super' must be followed by an argument list or member access.
+    
+        // Super is not allowed in constructor args
+        constructor(public z = super, zz = super, zzz = () => super) {
+                               ~~~~~
+!!! error TS2336: 'super' cannot be referenced in constructor arguments.
+                               ~~~~~
+!!! error TS17011: 'super' must be called before accessing a property of 'super' in the constructor of a derived class.
+                                    ~
+!!! error TS1034: 'super' must be followed by an argument list or member access.
+                                           ~~~~~
+!!! error TS2336: 'super' cannot be referenced in constructor arguments.
+                                           ~~~~~
+!!! error TS17011: 'super' must be called before accessing a property of 'super' in the constructor of a derived class.
+                                                ~
+!!! error TS1034: 'super' must be followed by an argument list or member access.
+                                                                   ~
+!!! error TS1034: 'super' must be followed by an argument list or member access.
+            super();
+        }
+    
+        foo(zz = super) {
+                      ~
+!!! error TS1034: 'super' must be followed by an argument list or member access.
+            super.x();
+            super.y(); // error
+                  ~
+!!! error TS2576: Property 'y' does not exist on type 'P'. Did you mean to access the static member 'P.y' instead?
+        }
+    
+        static bar(zz = super) {
+                             ~
+!!! error TS1034: 'super' must be followed by an argument list or member access.
+            super.x(); // error
+                  ~
+!!! error TS2339: Property 'x' does not exist on type 'typeof P'.
+            super.y();
+        }
+    }

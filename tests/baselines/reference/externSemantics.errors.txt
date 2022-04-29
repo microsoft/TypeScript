@@ -1,0 +1,13 @@
+tests/cases/compiler/externSemantics.ts(1,15): error TS1039: Initializers are not allowed in ambient contexts.
+tests/cases/compiler/externSemantics.ts(3,22): error TS1039: Initializers are not allowed in ambient contexts.
+
+
+==== tests/cases/compiler/externSemantics.ts (2 errors) ====
+    declare var x=10;
+                  ~~
+!!! error TS1039: Initializers are not allowed in ambient contexts.
+    declare var v;
+    declare var y:number=3;
+                         ~
+!!! error TS1039: Initializers are not allowed in ambient contexts.
+    

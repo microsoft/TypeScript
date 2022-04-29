@@ -1,0 +1,15 @@
+tests/cases/compiler/emptyTypeArgumentListWithNew.ts(2,8): error TS1099: Type argument list cannot be empty.
+tests/cases/compiler/emptyTypeArgumentListWithNew.ts(6,13): error TS1099: Type argument list cannot be empty.
+
+
+==== tests/cases/compiler/emptyTypeArgumentListWithNew.ts (2 errors) ====
+    class foo<T> { }
+    new foo<>();
+           ~~
+!!! error TS1099: Type argument list cannot be empty.
+    
+    // https://github.com/microsoft/TypeScript/issues/33041
+    class noParams {}
+    new noParams<>();
+                ~~
+!!! error TS1099: Type argument list cannot be empty.

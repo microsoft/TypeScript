@@ -1,0 +1,34 @@
+=== tests/cases/conformance/types/thisType/inferThisType.ts ===
+declare function f<T>(g: (this: T) => void): T
+>f : <T>(g: (this: T) => void) => T
+>g : (this: T) => void
+>this : T
+
+declare function h(this: number): void;
+>h : (this: number) => void
+>this : number
+
+f(h)
+>f(h) : number
+>f : <T>(g: (this: T) => void) => T
+>h : (this: number) => void
+
+// works with infer types as well
+type Check<T> = T extends (this: infer U, ...args: any[]) => any ? string : unknown;
+>Check : Check<T>
+>this : U
+>args : any[]
+
+type r1 = Check<(this: number) => void>; // should be string
+>r1 : string
+>this : number
+
+type This<T>  = T extends (this: infer U, ...args: any[]) => any ? U : unknown;
+>This : This<T>
+>this : U
+>args : any[]
+
+type r2 = This<(this: number) => void>; // should be number
+>r2 : number
+>this : number
+

@@ -1,0 +1,30 @@
+=== tests/cases/compiler/restArgAssignmentCompat.ts ===
+function f(...x: number[]) {
+>f : Symbol(f, Decl(restArgAssignmentCompat.ts, 0, 0))
+>x : Symbol(x, Decl(restArgAssignmentCompat.ts, 0, 11))
+
+    x.forEach((n, i) => void ('item ' + i + ' = ' + n));
+>x.forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(restArgAssignmentCompat.ts, 0, 11))
+>forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>n : Symbol(n, Decl(restArgAssignmentCompat.ts, 1, 15))
+>i : Symbol(i, Decl(restArgAssignmentCompat.ts, 1, 17))
+>i : Symbol(i, Decl(restArgAssignmentCompat.ts, 1, 17))
+>n : Symbol(n, Decl(restArgAssignmentCompat.ts, 1, 15))
+}
+function g(x: number[], y: string) { }
+>g : Symbol(g, Decl(restArgAssignmentCompat.ts, 2, 1))
+>x : Symbol(x, Decl(restArgAssignmentCompat.ts, 3, 11))
+>y : Symbol(y, Decl(restArgAssignmentCompat.ts, 3, 23))
+
+var n = g;
+>n : Symbol(n, Decl(restArgAssignmentCompat.ts, 5, 3))
+>g : Symbol(g, Decl(restArgAssignmentCompat.ts, 2, 1))
+
+n = f;
+>n : Symbol(n, Decl(restArgAssignmentCompat.ts, 5, 3))
+>f : Symbol(f, Decl(restArgAssignmentCompat.ts, 0, 0))
+
+n([4], 'foo');
+>n : Symbol(n, Decl(restArgAssignmentCompat.ts, 5, 3))
+

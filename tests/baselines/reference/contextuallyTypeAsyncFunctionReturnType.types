@@ -1,0 +1,61 @@
+=== tests/cases/conformance/types/contextualTypes/asyncFunctions/contextuallyTypeAsyncFunctionReturnType.ts ===
+interface Obj { key: "value"; }
+>key : "value"
+
+async function fn1(): Promise<Obj> {
+>fn1 : () => Promise<Obj>
+
+    return { key: "value" };
+>{ key: "value" } : { key: "value"; }
+>key : "value"
+>"value" : "value"
+}
+
+async function fn2(): Promise<Obj> {
+>fn2 : () => Promise<Obj>
+
+    return new Promise(resolve => {
+>new Promise(resolve => {        resolve({ key: "value" });    }) : Promise<Obj>
+>Promise : PromiseConstructor
+>resolve => {        resolve({ key: "value" });    } : (resolve: (value: Obj | PromiseLike<Obj>) => void) => void
+>resolve : (value: Obj | PromiseLike<Obj>) => void
+
+        resolve({ key: "value" });
+>resolve({ key: "value" }) : void
+>resolve : (value: Obj | PromiseLike<Obj>) => void
+>{ key: "value" } : { key: "value"; }
+>key : "value"
+>"value" : "value"
+
+    });
+}
+
+async function fn3(): Promise<Obj> {
+>fn3 : () => Promise<Obj>
+
+    return await { key: "value" };
+>await { key: "value" } : { key: "value"; }
+>{ key: "value" } : { key: "value"; }
+>key : "value"
+>"value" : "value"
+}
+
+async function fn4(): Promise<Obj> {
+>fn4 : () => Promise<Obj>
+
+    return await new Promise(resolve => {
+>await new Promise(resolve => {        resolve({ key: "value" });    }) : Obj
+>new Promise(resolve => {        resolve({ key: "value" });    }) : Promise<Obj>
+>Promise : PromiseConstructor
+>resolve => {        resolve({ key: "value" });    } : (resolve: (value: Obj | PromiseLike<Obj>) => void) => void
+>resolve : (value: Obj | PromiseLike<Obj>) => void
+
+        resolve({ key: "value" });
+>resolve({ key: "value" }) : void
+>resolve : (value: Obj | PromiseLike<Obj>) => void
+>{ key: "value" } : { key: "value"; }
+>key : "value"
+>"value" : "value"
+
+    });
+}

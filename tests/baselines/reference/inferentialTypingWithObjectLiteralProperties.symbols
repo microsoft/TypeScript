@@ -1,0 +1,27 @@
+=== tests/cases/compiler/inferentialTypingWithObjectLiteralProperties.ts ===
+function f<T>(x: T, y: T): T {
+>f : Symbol(f, Decl(inferentialTypingWithObjectLiteralProperties.ts, 0, 0))
+>T : Symbol(T, Decl(inferentialTypingWithObjectLiteralProperties.ts, 0, 11))
+>x : Symbol(x, Decl(inferentialTypingWithObjectLiteralProperties.ts, 0, 14))
+>T : Symbol(T, Decl(inferentialTypingWithObjectLiteralProperties.ts, 0, 11))
+>y : Symbol(y, Decl(inferentialTypingWithObjectLiteralProperties.ts, 0, 19))
+>T : Symbol(T, Decl(inferentialTypingWithObjectLiteralProperties.ts, 0, 11))
+>T : Symbol(T, Decl(inferentialTypingWithObjectLiteralProperties.ts, 0, 11))
+
+return x;
+>x : Symbol(x, Decl(inferentialTypingWithObjectLiteralProperties.ts, 0, 14))
+}
+f({ x: [null] }, { x: [1] }).x[0] = "" // ok
+>f({ x: [null] }, { x: [1] }).x : Symbol(x, Decl(inferentialTypingWithObjectLiteralProperties.ts, 3, 18))
+>f : Symbol(f, Decl(inferentialTypingWithObjectLiteralProperties.ts, 0, 0))
+>x : Symbol(x, Decl(inferentialTypingWithObjectLiteralProperties.ts, 3, 3))
+>x : Symbol(x, Decl(inferentialTypingWithObjectLiteralProperties.ts, 3, 18))
+>x : Symbol(x, Decl(inferentialTypingWithObjectLiteralProperties.ts, 3, 18))
+
+f({ x: [1] }, { x: [null] }).x[0] = "" // was error TS2011: Cannot convert 'string' to 'number'.
+>f({ x: [1] }, { x: [null] }).x : Symbol(x, Decl(inferentialTypingWithObjectLiteralProperties.ts, 4, 3))
+>f : Symbol(f, Decl(inferentialTypingWithObjectLiteralProperties.ts, 0, 0))
+>x : Symbol(x, Decl(inferentialTypingWithObjectLiteralProperties.ts, 4, 3))
+>x : Symbol(x, Decl(inferentialTypingWithObjectLiteralProperties.ts, 4, 15))
+>x : Symbol(x, Decl(inferentialTypingWithObjectLiteralProperties.ts, 4, 3))
+

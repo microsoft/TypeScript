@@ -1,0 +1,270 @@
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts(19,5): error TS2411: Property 'foo' of type 'U' is not assignable to 'string' index type 'T'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts(19,5): error TS2416: Property 'foo' in type 'D3<T, U>' is not assignable to the same property in base type 'C3<T>'.
+  Type 'U' is not assignable to type 'T'.
+    'T' could be instantiated with an arbitrary type which could be unrelated to 'U'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts(50,5): error TS2411: Property 'foo' of type 'U' is not assignable to 'string' index type 'T'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts(50,5): error TS2416: Property 'foo' in type 'D8<T, U, V>' is not assignable to the same property in base type 'C3<T>'.
+  Type 'U' is not assignable to type 'T'.
+    'T' could be instantiated with an arbitrary type which could be unrelated to 'U'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts(67,5): error TS2411: Property 'foo' of type 'V' is not assignable to 'string' index type 'T'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts(67,5): error TS2416: Property 'foo' in type 'D11<T, U, V>' is not assignable to the same property in base type 'C3<T>'.
+  Type 'V' is not assignable to type 'T'.
+    'T' could be instantiated with an arbitrary type which could be unrelated to 'V'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts(72,5): error TS2411: Property 'foo' of type 'V' is not assignable to 'string' index type 'U'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts(72,5): error TS2416: Property 'foo' in type 'D12<T, U, V>' is not assignable to the same property in base type 'C3<U>'.
+  Type 'V' is not assignable to type 'U'.
+    'U' could be instantiated with an arbitrary type which could be unrelated to 'V'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts(112,5): error TS2411: Property 'foo' of type 'U' is not assignable to 'string' index type 'T'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts(112,5): error TS2416: Property 'foo' in type 'D19<T, U, V>' is not assignable to the same property in base type 'C3<T>'.
+  Type 'U' is not assignable to type 'T'.
+    'U' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Date'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts(134,5): error TS2411: Property 'foo' of type 'V' is not assignable to 'string' index type 'T'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts(134,5): error TS2416: Property 'foo' in type 'D23<T, U, V>' is not assignable to the same property in base type 'C3<T>'.
+  Type 'V' is not assignable to type 'T'.
+    'V' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Date'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts(139,5): error TS2411: Property 'foo' of type 'V' is not assignable to 'string' index type 'U'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts(139,5): error TS2416: Property 'foo' in type 'D24<T, U, V>' is not assignable to the same property in base type 'C3<U>'.
+  Type 'V' is not assignable to type 'U'.
+    'V' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint 'Date'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts(156,5): error TS2411: Property 'foo' of type 'Date' is not assignable to 'string' index type 'T'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts(156,5): error TS2416: Property 'foo' in type 'D27<T, U, V>' is not assignable to the same property in base type 'C3<T>'.
+  Type 'Date' is not assignable to type 'T'.
+    'Date' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Date'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts(161,5): error TS2411: Property 'foo' of type 'Date' is not assignable to 'string' index type 'U'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts(161,5): error TS2416: Property 'foo' in type 'D28<T, U, V>' is not assignable to the same property in base type 'C3<U>'.
+  Type 'Date' is not assignable to type 'U'.
+    'Date' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint 'Date'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts(166,5): error TS2411: Property 'foo' of type 'Date' is not assignable to 'string' index type 'V'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts(166,5): error TS2416: Property 'foo' in type 'D29<T, U, V>' is not assignable to the same property in base type 'C3<V>'.
+  Type 'Date' is not assignable to type 'V'.
+    'Date' is assignable to the constraint of type 'V', but 'V' could be instantiated with a different subtype of constraint 'Date'.
+
+
+==== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts (20 errors) ====
+    // checking whether other types are subtypes of type parameters with constraints
+    
+    class C3<T> {
+        foo: T;
+    }
+    
+    class D1<T extends U, U> extends C3<T> {
+        [x: string]: T;
+        foo: T; // ok
+    }
+    
+    class D2<T extends U, U> extends C3<U> {
+        [x: string]: U;
+        foo: T; // ok
+    }
+    
+    class D3<T extends U, U> extends C3<T> {
+        [x: string]: T;
+        foo: U; // error
+        ~~~
+!!! error TS2411: Property 'foo' of type 'U' is not assignable to 'string' index type 'T'.
+        ~~~
+!!! error TS2416: Property 'foo' in type 'D3<T, U>' is not assignable to the same property in base type 'C3<T>'.
+!!! error TS2416:   Type 'U' is not assignable to type 'T'.
+!!! error TS2416:     'T' could be instantiated with an arbitrary type which could be unrelated to 'U'.
+    }
+    
+    class D4<T extends U, U> extends C3<U> {
+        [x: string]: U;
+        foo: U; // ok
+    }
+    
+    
+    // V > U > T
+    // test if T is subtype of T, U, V
+    // should all work
+    class D5<T extends U, U extends V, V> extends C3<T> {
+        [x: string]: T;
+        foo: T; // ok
+    }
+    
+    class D6<T extends U, U extends V, V> extends C3<U> {
+        [x: string]: U;
+        foo: T;
+    }
+    
+    class D7<T extends U, U extends V, V> extends C3<V> {
+        [x: string]: V;
+        foo: T; // ok
+    }
+    
+    // test if U is a subtype of T, U, V
+    // only a subtype of V and itself
+    class D8<T extends U, U extends V, V> extends C3<T> {
+        [x: string]: T;
+        foo: U; // error
+        ~~~
+!!! error TS2411: Property 'foo' of type 'U' is not assignable to 'string' index type 'T'.
+        ~~~
+!!! error TS2416: Property 'foo' in type 'D8<T, U, V>' is not assignable to the same property in base type 'C3<T>'.
+!!! error TS2416:   Type 'U' is not assignable to type 'T'.
+!!! error TS2416:     'T' could be instantiated with an arbitrary type which could be unrelated to 'U'.
+    }
+    
+    class D9<T extends U, U extends V, V> extends C3<U> {
+        [x: string]: U;
+        foo: U; // ok
+    }
+    
+    class D10<T extends U, U extends V, V> extends C3<V> {
+        [x: string]: V;
+        foo: U; // ok
+    }
+    
+    // test if V is a subtype of T, U, V
+    // only a subtype of itself
+    class D11<T extends U, U extends V, V> extends C3<T> {
+        [x: string]: T;
+        foo: V; // error
+        ~~~
+!!! error TS2411: Property 'foo' of type 'V' is not assignable to 'string' index type 'T'.
+        ~~~
+!!! error TS2416: Property 'foo' in type 'D11<T, U, V>' is not assignable to the same property in base type 'C3<T>'.
+!!! error TS2416:   Type 'V' is not assignable to type 'T'.
+!!! error TS2416:     'T' could be instantiated with an arbitrary type which could be unrelated to 'V'.
+    }
+    
+    class D12<T extends U, U extends V, V> extends C3<U> {
+        [x: string]: U;
+        foo: V; // error
+        ~~~
+!!! error TS2411: Property 'foo' of type 'V' is not assignable to 'string' index type 'U'.
+        ~~~
+!!! error TS2416: Property 'foo' in type 'D12<T, U, V>' is not assignable to the same property in base type 'C3<U>'.
+!!! error TS2416:   Type 'V' is not assignable to type 'U'.
+!!! error TS2416:     'U' could be instantiated with an arbitrary type which could be unrelated to 'V'.
+    }
+    
+    class D13<T extends U, U extends V, V> extends C3<V> {
+        [x: string]: V;
+        foo: V; // ok
+    }
+    
+    // Date > V > U > T
+    // test if T is subtype of T, U, V, Date
+    // should all work
+    class D14<T extends U, U extends V, V extends Date> extends C3<Date> {
+        [x: string]: Date;
+        foo: T; // ok
+    }
+    
+    class D15<T extends U, U extends V, V extends Date> extends C3<T> {
+        [x: string]: T;
+        foo: T; // ok
+    }
+    
+    class D16<T extends U, U extends V, V extends Date> extends C3<U> {
+        [x: string]: U;
+        foo: T;
+    }
+    
+    class D17<T extends U, U extends V, V extends Date> extends C3<V> {
+        [x: string]: V;
+        foo: T;
+    }
+    
+    // test if U is a subtype of T, U, V, Date
+    // only a subtype of V, Date and itself
+    class D18<T extends U, U extends V, V extends Date> extends C3<Date> {
+        [x: string]: Date;
+        foo: T; // ok
+    }
+    
+    class D19<T extends U, U extends V, V extends Date> extends C3<T> {
+        [x: string]: T;
+        foo: U; // error
+        ~~~
+!!! error TS2411: Property 'foo' of type 'U' is not assignable to 'string' index type 'T'.
+        ~~~
+!!! error TS2416: Property 'foo' in type 'D19<T, U, V>' is not assignable to the same property in base type 'C3<T>'.
+!!! error TS2416:   Type 'U' is not assignable to type 'T'.
+!!! error TS2416:     'U' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Date'.
+    }
+    
+    class D20<T extends U, U extends V, V extends Date> extends C3<U> {
+        [x: string]: U;
+        foo: U; // ok
+    }
+    
+    class D21<T extends U, U extends V, V extends Date> extends C3<V> {
+        [x: string]: V;
+        foo: U;
+    }
+    
+    // test if V is a subtype of T, U, V, Date
+    // only a subtype of itself and Date
+    class D22<T extends U, U extends V, V extends Date> extends C3<Date> {
+        [x: string]: Date;
+        foo: T; // ok
+    }
+    
+    class D23<T extends U, U extends V, V extends Date> extends C3<T> {
+        [x: string]: T;
+        foo: V; // error
+        ~~~
+!!! error TS2411: Property 'foo' of type 'V' is not assignable to 'string' index type 'T'.
+        ~~~
+!!! error TS2416: Property 'foo' in type 'D23<T, U, V>' is not assignable to the same property in base type 'C3<T>'.
+!!! error TS2416:   Type 'V' is not assignable to type 'T'.
+!!! error TS2416:     'V' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Date'.
+    }
+    
+    class D24<T extends U, U extends V, V extends Date> extends C3<U> {
+        [x: string]: U;
+        foo: V; // error
+        ~~~
+!!! error TS2411: Property 'foo' of type 'V' is not assignable to 'string' index type 'U'.
+        ~~~
+!!! error TS2416: Property 'foo' in type 'D24<T, U, V>' is not assignable to the same property in base type 'C3<U>'.
+!!! error TS2416:   Type 'V' is not assignable to type 'U'.
+!!! error TS2416:     'V' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint 'Date'.
+    }
+    
+    class D25<T extends U, U extends V, V extends Date> extends C3<V> {
+        [x: string]: V;
+        foo: V; // ok
+    }
+    
+    // test if Date is a subtype of T, U, V, Date
+    // only a subtype of itself
+    class D26<T extends U, U extends V, V extends Date> extends C3<Date> {
+        [x: string]: Date;
+        foo: Date; // ok
+    }
+    
+    class D27<T extends U, U extends V, V extends Date> extends C3<T> {
+        [x: string]: T;
+        foo: Date; // error
+        ~~~
+!!! error TS2411: Property 'foo' of type 'Date' is not assignable to 'string' index type 'T'.
+        ~~~
+!!! error TS2416: Property 'foo' in type 'D27<T, U, V>' is not assignable to the same property in base type 'C3<T>'.
+!!! error TS2416:   Type 'Date' is not assignable to type 'T'.
+!!! error TS2416:     'Date' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Date'.
+    }
+    
+    class D28<T extends U, U extends V, V extends Date> extends C3<U> {
+        [x: string]: U;
+        foo: Date; // error
+        ~~~
+!!! error TS2411: Property 'foo' of type 'Date' is not assignable to 'string' index type 'U'.
+        ~~~
+!!! error TS2416: Property 'foo' in type 'D28<T, U, V>' is not assignable to the same property in base type 'C3<U>'.
+!!! error TS2416:   Type 'Date' is not assignable to type 'U'.
+!!! error TS2416:     'Date' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint 'Date'.
+    }
+    
+    class D29<T extends U, U extends V, V extends Date> extends C3<V> {
+        [x: string]: V;
+        foo: Date; // error
+        ~~~
+!!! error TS2411: Property 'foo' of type 'Date' is not assignable to 'string' index type 'V'.
+        ~~~
+!!! error TS2416: Property 'foo' in type 'D29<T, U, V>' is not assignable to the same property in base type 'C3<V>'.
+!!! error TS2416:   Type 'Date' is not assignable to type 'V'.
+!!! error TS2416:     'Date' is assignable to the constraint of type 'V', but 'V' could be instantiated with a different subtype of constraint 'Date'.
+    }

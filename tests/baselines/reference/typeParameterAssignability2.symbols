@@ -1,0 +1,254 @@
+=== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts ===
+// type parameters are not assignable to one another unless directly or indirectly constrained to one another
+
+function foo<T, U extends T>(t: T, u: U) {
+>foo : Symbol(foo, Decl(typeParameterAssignability2.ts, 0, 0))
+>T : Symbol(T, Decl(typeParameterAssignability2.ts, 2, 13))
+>U : Symbol(U, Decl(typeParameterAssignability2.ts, 2, 15))
+>T : Symbol(T, Decl(typeParameterAssignability2.ts, 2, 13))
+>t : Symbol(t, Decl(typeParameterAssignability2.ts, 2, 29))
+>T : Symbol(T, Decl(typeParameterAssignability2.ts, 2, 13))
+>u : Symbol(u, Decl(typeParameterAssignability2.ts, 2, 34))
+>U : Symbol(U, Decl(typeParameterAssignability2.ts, 2, 15))
+
+    t = u; // error
+>t : Symbol(t, Decl(typeParameterAssignability2.ts, 2, 29))
+>u : Symbol(u, Decl(typeParameterAssignability2.ts, 2, 34))
+
+    u = t; // ok
+>u : Symbol(u, Decl(typeParameterAssignability2.ts, 2, 34))
+>t : Symbol(t, Decl(typeParameterAssignability2.ts, 2, 29))
+}
+
+function foo2<T extends U, U>(t: T, u: U) {
+>foo2 : Symbol(foo2, Decl(typeParameterAssignability2.ts, 5, 1))
+>T : Symbol(T, Decl(typeParameterAssignability2.ts, 7, 14))
+>U : Symbol(U, Decl(typeParameterAssignability2.ts, 7, 26))
+>U : Symbol(U, Decl(typeParameterAssignability2.ts, 7, 26))
+>t : Symbol(t, Decl(typeParameterAssignability2.ts, 7, 30))
+>T : Symbol(T, Decl(typeParameterAssignability2.ts, 7, 14))
+>u : Symbol(u, Decl(typeParameterAssignability2.ts, 7, 35))
+>U : Symbol(U, Decl(typeParameterAssignability2.ts, 7, 26))
+
+    t = u; // error
+>t : Symbol(t, Decl(typeParameterAssignability2.ts, 7, 30))
+>u : Symbol(u, Decl(typeParameterAssignability2.ts, 7, 35))
+
+    u = t; // ok
+>u : Symbol(u, Decl(typeParameterAssignability2.ts, 7, 35))
+>t : Symbol(t, Decl(typeParameterAssignability2.ts, 7, 30))
+}
+
+function foo3<T extends U, U extends V, V>(t: T, u: U, v: V) {
+>foo3 : Symbol(foo3, Decl(typeParameterAssignability2.ts, 10, 1))
+>T : Symbol(T, Decl(typeParameterAssignability2.ts, 12, 14))
+>U : Symbol(U, Decl(typeParameterAssignability2.ts, 12, 26))
+>U : Symbol(U, Decl(typeParameterAssignability2.ts, 12, 26))
+>V : Symbol(V, Decl(typeParameterAssignability2.ts, 12, 39))
+>V : Symbol(V, Decl(typeParameterAssignability2.ts, 12, 39))
+>t : Symbol(t, Decl(typeParameterAssignability2.ts, 12, 43))
+>T : Symbol(T, Decl(typeParameterAssignability2.ts, 12, 14))
+>u : Symbol(u, Decl(typeParameterAssignability2.ts, 12, 48))
+>U : Symbol(U, Decl(typeParameterAssignability2.ts, 12, 26))
+>v : Symbol(v, Decl(typeParameterAssignability2.ts, 12, 54))
+>V : Symbol(V, Decl(typeParameterAssignability2.ts, 12, 39))
+
+    t = u; // error
+>t : Symbol(t, Decl(typeParameterAssignability2.ts, 12, 43))
+>u : Symbol(u, Decl(typeParameterAssignability2.ts, 12, 48))
+
+    u = t;
+>u : Symbol(u, Decl(typeParameterAssignability2.ts, 12, 48))
+>t : Symbol(t, Decl(typeParameterAssignability2.ts, 12, 43))
+
+    t = v; // error
+>t : Symbol(t, Decl(typeParameterAssignability2.ts, 12, 43))
+>v : Symbol(v, Decl(typeParameterAssignability2.ts, 12, 54))
+
+    v = t; // ok
+>v : Symbol(v, Decl(typeParameterAssignability2.ts, 12, 54))
+>t : Symbol(t, Decl(typeParameterAssignability2.ts, 12, 43))
+
+    u = v; // error
+>u : Symbol(u, Decl(typeParameterAssignability2.ts, 12, 48))
+>v : Symbol(v, Decl(typeParameterAssignability2.ts, 12, 54))
+
+    v = u; // ok
+>v : Symbol(v, Decl(typeParameterAssignability2.ts, 12, 54))
+>u : Symbol(u, Decl(typeParameterAssignability2.ts, 12, 48))
+}
+
+function foo4<T extends U, U extends V, V extends Date>(t: T, u: U, v: V) {
+>foo4 : Symbol(foo4, Decl(typeParameterAssignability2.ts, 21, 1))
+>T : Symbol(T, Decl(typeParameterAssignability2.ts, 23, 14))
+>U : Symbol(U, Decl(typeParameterAssignability2.ts, 23, 26))
+>U : Symbol(U, Decl(typeParameterAssignability2.ts, 23, 26))
+>V : Symbol(V, Decl(typeParameterAssignability2.ts, 23, 39))
+>V : Symbol(V, Decl(typeParameterAssignability2.ts, 23, 39))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>t : Symbol(t, Decl(typeParameterAssignability2.ts, 23, 56))
+>T : Symbol(T, Decl(typeParameterAssignability2.ts, 23, 14))
+>u : Symbol(u, Decl(typeParameterAssignability2.ts, 23, 61))
+>U : Symbol(U, Decl(typeParameterAssignability2.ts, 23, 26))
+>v : Symbol(v, Decl(typeParameterAssignability2.ts, 23, 67))
+>V : Symbol(V, Decl(typeParameterAssignability2.ts, 23, 39))
+
+    t = u; // error
+>t : Symbol(t, Decl(typeParameterAssignability2.ts, 23, 56))
+>u : Symbol(u, Decl(typeParameterAssignability2.ts, 23, 61))
+
+    t = v; // error
+>t : Symbol(t, Decl(typeParameterAssignability2.ts, 23, 56))
+>v : Symbol(v, Decl(typeParameterAssignability2.ts, 23, 67))
+
+    t = new Date(); // error
+>t : Symbol(t, Decl(typeParameterAssignability2.ts, 23, 56))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+    u = t;
+>u : Symbol(u, Decl(typeParameterAssignability2.ts, 23, 61))
+>t : Symbol(t, Decl(typeParameterAssignability2.ts, 23, 56))
+
+    u = v; // error
+>u : Symbol(u, Decl(typeParameterAssignability2.ts, 23, 61))
+>v : Symbol(v, Decl(typeParameterAssignability2.ts, 23, 67))
+
+    u = new Date(); // error
+>u : Symbol(u, Decl(typeParameterAssignability2.ts, 23, 61))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+    v = t;
+>v : Symbol(v, Decl(typeParameterAssignability2.ts, 23, 67))
+>t : Symbol(t, Decl(typeParameterAssignability2.ts, 23, 56))
+
+    v = u;
+>v : Symbol(v, Decl(typeParameterAssignability2.ts, 23, 67))
+>u : Symbol(u, Decl(typeParameterAssignability2.ts, 23, 61))
+
+    v = new Date(); // ok
+>v : Symbol(v, Decl(typeParameterAssignability2.ts, 23, 67))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+    var d: Date;
+>d : Symbol(d, Decl(typeParameterAssignability2.ts, 36, 7))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+    d = t; // ok
+>d : Symbol(d, Decl(typeParameterAssignability2.ts, 36, 7))
+>t : Symbol(t, Decl(typeParameterAssignability2.ts, 23, 56))
+
+    d = u; // ok
+>d : Symbol(d, Decl(typeParameterAssignability2.ts, 36, 7))
+>u : Symbol(u, Decl(typeParameterAssignability2.ts, 23, 61))
+
+    d = v; // ok
+>d : Symbol(d, Decl(typeParameterAssignability2.ts, 36, 7))
+>v : Symbol(v, Decl(typeParameterAssignability2.ts, 23, 67))
+}
+
+// same as foo4 with different type parameter ordering
+function foo5<V extends Date, U extends V, T extends U>(t: T, u: U, v: V) {
+>foo5 : Symbol(foo5, Decl(typeParameterAssignability2.ts, 40, 1))
+>V : Symbol(V, Decl(typeParameterAssignability2.ts, 43, 14))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>U : Symbol(U, Decl(typeParameterAssignability2.ts, 43, 29))
+>V : Symbol(V, Decl(typeParameterAssignability2.ts, 43, 14))
+>T : Symbol(T, Decl(typeParameterAssignability2.ts, 43, 42))
+>U : Symbol(U, Decl(typeParameterAssignability2.ts, 43, 29))
+>t : Symbol(t, Decl(typeParameterAssignability2.ts, 43, 56))
+>T : Symbol(T, Decl(typeParameterAssignability2.ts, 43, 42))
+>u : Symbol(u, Decl(typeParameterAssignability2.ts, 43, 61))
+>U : Symbol(U, Decl(typeParameterAssignability2.ts, 43, 29))
+>v : Symbol(v, Decl(typeParameterAssignability2.ts, 43, 67))
+>V : Symbol(V, Decl(typeParameterAssignability2.ts, 43, 14))
+
+    t = u; // error
+>t : Symbol(t, Decl(typeParameterAssignability2.ts, 43, 56))
+>u : Symbol(u, Decl(typeParameterAssignability2.ts, 43, 61))
+
+    t = v; // error
+>t : Symbol(t, Decl(typeParameterAssignability2.ts, 43, 56))
+>v : Symbol(v, Decl(typeParameterAssignability2.ts, 43, 67))
+
+    t = new Date(); // error
+>t : Symbol(t, Decl(typeParameterAssignability2.ts, 43, 56))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+    u = t;
+>u : Symbol(u, Decl(typeParameterAssignability2.ts, 43, 61))
+>t : Symbol(t, Decl(typeParameterAssignability2.ts, 43, 56))
+
+    u = v; // error
+>u : Symbol(u, Decl(typeParameterAssignability2.ts, 43, 61))
+>v : Symbol(v, Decl(typeParameterAssignability2.ts, 43, 67))
+
+    u = new Date(); // error
+>u : Symbol(u, Decl(typeParameterAssignability2.ts, 43, 61))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+    v = t;
+>v : Symbol(v, Decl(typeParameterAssignability2.ts, 43, 67))
+>t : Symbol(t, Decl(typeParameterAssignability2.ts, 43, 56))
+
+    v = u;
+>v : Symbol(v, Decl(typeParameterAssignability2.ts, 43, 67))
+>u : Symbol(u, Decl(typeParameterAssignability2.ts, 43, 61))
+
+    v = new Date(); // ok
+>v : Symbol(v, Decl(typeParameterAssignability2.ts, 43, 67))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+    var d: Date;
+>d : Symbol(d, Decl(typeParameterAssignability2.ts, 56, 7))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+    d = t; // ok
+>d : Symbol(d, Decl(typeParameterAssignability2.ts, 56, 7))
+>t : Symbol(t, Decl(typeParameterAssignability2.ts, 43, 56))
+
+    d = u; // ok
+>d : Symbol(d, Decl(typeParameterAssignability2.ts, 56, 7))
+>u : Symbol(u, Decl(typeParameterAssignability2.ts, 43, 61))
+
+    d = v; // ok
+>d : Symbol(d, Decl(typeParameterAssignability2.ts, 56, 7))
+>v : Symbol(v, Decl(typeParameterAssignability2.ts, 43, 67))
+}
+
+function foo6<T extends U, U, V>(t: T, u: U, v: V) {
+>foo6 : Symbol(foo6, Decl(typeParameterAssignability2.ts, 60, 1))
+>T : Symbol(T, Decl(typeParameterAssignability2.ts, 62, 14))
+>U : Symbol(U, Decl(typeParameterAssignability2.ts, 62, 26))
+>U : Symbol(U, Decl(typeParameterAssignability2.ts, 62, 26))
+>V : Symbol(V, Decl(typeParameterAssignability2.ts, 62, 29))
+>t : Symbol(t, Decl(typeParameterAssignability2.ts, 62, 33))
+>T : Symbol(T, Decl(typeParameterAssignability2.ts, 62, 14))
+>u : Symbol(u, Decl(typeParameterAssignability2.ts, 62, 38))
+>U : Symbol(U, Decl(typeParameterAssignability2.ts, 62, 26))
+>v : Symbol(v, Decl(typeParameterAssignability2.ts, 62, 44))
+>V : Symbol(V, Decl(typeParameterAssignability2.ts, 62, 29))
+
+    t = u; // error
+>t : Symbol(t, Decl(typeParameterAssignability2.ts, 62, 33))
+>u : Symbol(u, Decl(typeParameterAssignability2.ts, 62, 38))
+
+    t = v; // error
+>t : Symbol(t, Decl(typeParameterAssignability2.ts, 62, 33))
+>v : Symbol(v, Decl(typeParameterAssignability2.ts, 62, 44))
+
+    u = t; // ok
+>u : Symbol(u, Decl(typeParameterAssignability2.ts, 62, 38))
+>t : Symbol(t, Decl(typeParameterAssignability2.ts, 62, 33))
+
+    u = v; // error
+>u : Symbol(u, Decl(typeParameterAssignability2.ts, 62, 38))
+>v : Symbol(v, Decl(typeParameterAssignability2.ts, 62, 44))
+
+    v = t; // error
+>v : Symbol(v, Decl(typeParameterAssignability2.ts, 62, 44))
+>t : Symbol(t, Decl(typeParameterAssignability2.ts, 62, 33))
+
+    v = u; // error
+>v : Symbol(v, Decl(typeParameterAssignability2.ts, 62, 44))
+>u : Symbol(u, Decl(typeParameterAssignability2.ts, 62, 38))
+}

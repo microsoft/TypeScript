@@ -1,0 +1,18 @@
+tests/cases/compiler/primitiveTypeAssignment.ts(1,9): error TS2693: 'any' only refers to a type, but is being used as a value here.
+tests/cases/compiler/primitiveTypeAssignment.ts(3,9): error TS2693: 'number' only refers to a type, but is being used as a value here.
+tests/cases/compiler/primitiveTypeAssignment.ts(5,9): error TS2693: 'boolean' only refers to a type, but is being used as a value here.
+
+
+==== tests/cases/compiler/primitiveTypeAssignment.ts (3 errors) ====
+    var x = any;
+            ~~~
+!!! error TS2693: 'any' only refers to a type, but is being used as a value here.
+    
+    var y = number;
+            ~~~~~~
+!!! error TS2693: 'number' only refers to a type, but is being used as a value here.
+    
+    var z = boolean;
+            ~~~~~~~
+!!! error TS2693: 'boolean' only refers to a type, but is being used as a value here.
+    

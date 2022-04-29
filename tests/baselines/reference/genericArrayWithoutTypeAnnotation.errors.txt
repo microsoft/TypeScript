@@ -1,0 +1,13 @@
+tests/cases/compiler/genericArrayWithoutTypeAnnotation.ts(4,24): error TS2314: Generic type 'IFoo<T>' requires 1 type argument(s).
+
+
+==== tests/cases/compiler/genericArrayWithoutTypeAnnotation.ts (1 errors) ====
+    interface IFoo<T>{
+    }
+    class Bar {
+        public getBar(foo: IFoo[]) {
+                           ~~~~
+!!! error TS2314: Generic type 'IFoo<T>' requires 1 type argument(s).
+        }
+    }
+    

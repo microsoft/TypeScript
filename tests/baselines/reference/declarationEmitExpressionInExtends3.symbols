@@ -1,0 +1,93 @@
+=== tests/cases/compiler/declarationEmitExpressionInExtends3.ts ===
+export class ExportedClass<T> {
+>ExportedClass : Symbol(ExportedClass, Decl(declarationEmitExpressionInExtends3.ts, 0, 0))
+>T : Symbol(T, Decl(declarationEmitExpressionInExtends3.ts, 0, 27))
+
+	x: T;
+>x : Symbol(ExportedClass.x, Decl(declarationEmitExpressionInExtends3.ts, 0, 31))
+>T : Symbol(T, Decl(declarationEmitExpressionInExtends3.ts, 0, 27))
+}
+
+class LocalClass<T, U> {
+>LocalClass : Symbol(LocalClass, Decl(declarationEmitExpressionInExtends3.ts, 2, 1))
+>T : Symbol(T, Decl(declarationEmitExpressionInExtends3.ts, 4, 17))
+>U : Symbol(U, Decl(declarationEmitExpressionInExtends3.ts, 4, 19))
+
+    x: T;
+>x : Symbol(LocalClass.x, Decl(declarationEmitExpressionInExtends3.ts, 4, 24))
+>T : Symbol(T, Decl(declarationEmitExpressionInExtends3.ts, 4, 17))
+
+    y: U;
+>y : Symbol(LocalClass.y, Decl(declarationEmitExpressionInExtends3.ts, 5, 9))
+>U : Symbol(U, Decl(declarationEmitExpressionInExtends3.ts, 4, 19))
+}
+
+export interface ExportedInterface {
+>ExportedInterface : Symbol(ExportedInterface, Decl(declarationEmitExpressionInExtends3.ts, 7, 1))
+
+    x: number;
+>x : Symbol(ExportedInterface.x, Decl(declarationEmitExpressionInExtends3.ts, 9, 36))
+}
+
+interface LocalInterface {
+>LocalInterface : Symbol(LocalInterface, Decl(declarationEmitExpressionInExtends3.ts, 11, 1))
+
+    x: number;
+>x : Symbol(LocalInterface.x, Decl(declarationEmitExpressionInExtends3.ts, 13, 26))
+}
+
+function getLocalClass<T>(c: T) {
+>getLocalClass : Symbol(getLocalClass, Decl(declarationEmitExpressionInExtends3.ts, 15, 1))
+>T : Symbol(T, Decl(declarationEmitExpressionInExtends3.ts, 17, 23))
+>c : Symbol(c, Decl(declarationEmitExpressionInExtends3.ts, 17, 26))
+>T : Symbol(T, Decl(declarationEmitExpressionInExtends3.ts, 17, 23))
+
+    return LocalClass;
+>LocalClass : Symbol(LocalClass, Decl(declarationEmitExpressionInExtends3.ts, 2, 1))
+}
+
+function getExportedClass<T>(c: T) {
+>getExportedClass : Symbol(getExportedClass, Decl(declarationEmitExpressionInExtends3.ts, 19, 1))
+>T : Symbol(T, Decl(declarationEmitExpressionInExtends3.ts, 21, 26))
+>c : Symbol(c, Decl(declarationEmitExpressionInExtends3.ts, 21, 29))
+>T : Symbol(T, Decl(declarationEmitExpressionInExtends3.ts, 21, 26))
+
+    return ExportedClass;
+>ExportedClass : Symbol(ExportedClass, Decl(declarationEmitExpressionInExtends3.ts, 0, 0))
+}
+
+
+
+export class MyClass extends getLocalClass<LocalInterface>(undefined)<string, number> { // error LocalClass is inaccisible
+>MyClass : Symbol(MyClass, Decl(declarationEmitExpressionInExtends3.ts, 23, 1))
+>getLocalClass : Symbol(getLocalClass, Decl(declarationEmitExpressionInExtends3.ts, 15, 1))
+>LocalInterface : Symbol(LocalInterface, Decl(declarationEmitExpressionInExtends3.ts, 11, 1))
+>undefined : Symbol(undefined)
+}
+
+
+export class MyClass2 extends getExportedClass<LocalInterface>(undefined)<string> { // OK
+>MyClass2 : Symbol(MyClass2, Decl(declarationEmitExpressionInExtends3.ts, 28, 1))
+>getExportedClass : Symbol(getExportedClass, Decl(declarationEmitExpressionInExtends3.ts, 19, 1))
+>LocalInterface : Symbol(LocalInterface, Decl(declarationEmitExpressionInExtends3.ts, 11, 1))
+>undefined : Symbol(undefined)
+}
+
+
+export class MyClass3 extends getExportedClass<LocalInterface>(undefined)<LocalInterface> { // Error LocalInterface is inaccisble
+>MyClass3 : Symbol(MyClass3, Decl(declarationEmitExpressionInExtends3.ts, 32, 1))
+>getExportedClass : Symbol(getExportedClass, Decl(declarationEmitExpressionInExtends3.ts, 19, 1))
+>LocalInterface : Symbol(LocalInterface, Decl(declarationEmitExpressionInExtends3.ts, 11, 1))
+>undefined : Symbol(undefined)
+>LocalInterface : Symbol(LocalInterface, Decl(declarationEmitExpressionInExtends3.ts, 11, 1))
+}
+
+
+export class MyClass4 extends getExportedClass<LocalInterface>(undefined)<ExportedInterface> { // OK
+>MyClass4 : Symbol(MyClass4, Decl(declarationEmitExpressionInExtends3.ts, 36, 1))
+>getExportedClass : Symbol(getExportedClass, Decl(declarationEmitExpressionInExtends3.ts, 19, 1))
+>LocalInterface : Symbol(LocalInterface, Decl(declarationEmitExpressionInExtends3.ts, 11, 1))
+>undefined : Symbol(undefined)
+>ExportedInterface : Symbol(ExportedInterface, Decl(declarationEmitExpressionInExtends3.ts, 7, 1))
+}
+

@@ -1,0 +1,36 @@
+=== tests/cases/compiler/a.ts ===
+export const x = Symbol();
+>x : unique symbol
+>Symbol() : unique symbol
+>Symbol : SymbolConstructor
+
+=== tests/cases/compiler/b.ts ===
+import { x } from "./a";
+>x : unique symbol
+
+export class C {
+>C : C
+
+  private [x]: number = 1;
+>[x] : number
+>x : unique symbol
+>1 : 1
+}
+
+=== tests/cases/compiler/c.ts ===
+import { x } from "./a";
+>x : unique symbol
+
+import { C } from "./b";
+>C : typeof C
+
+export class D extends C {
+>D : D
+>C : C
+
+  private [x]: 12 = 12;
+>[x] : 12
+>x : unique symbol
+>12 : 12
+}
+

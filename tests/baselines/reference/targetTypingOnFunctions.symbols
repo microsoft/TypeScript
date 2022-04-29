@@ -1,0 +1,17 @@
+=== tests/cases/compiler/targetTypingOnFunctions.ts ===
+var fu: (s: string) => string = function (s) { return s.toLowerCase() };
+>fu : Symbol(fu, Decl(targetTypingOnFunctions.ts, 0, 3))
+>s : Symbol(s, Decl(targetTypingOnFunctions.ts, 0, 9))
+>s : Symbol(s, Decl(targetTypingOnFunctions.ts, 0, 42))
+>s.toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
+>s : Symbol(s, Decl(targetTypingOnFunctions.ts, 0, 42))
+>toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
+
+var zu = fu = function (s) { return s.toLowerCase() };
+>zu : Symbol(zu, Decl(targetTypingOnFunctions.ts, 2, 3))
+>fu : Symbol(fu, Decl(targetTypingOnFunctions.ts, 0, 3))
+>s : Symbol(s, Decl(targetTypingOnFunctions.ts, 2, 24))
+>s.toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
+>s : Symbol(s, Decl(targetTypingOnFunctions.ts, 2, 24))
+>toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
+

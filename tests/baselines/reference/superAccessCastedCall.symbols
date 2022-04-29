@@ -1,0 +1,50 @@
+=== tests/cases/compiler/superAccessCastedCall.ts ===
+class Foo {
+>Foo : Symbol(Foo, Decl(superAccessCastedCall.ts, 0, 0))
+
+    bar(): void {}
+>bar : Symbol(Foo.bar, Decl(superAccessCastedCall.ts, 0, 11))
+}
+
+class Bar extends Foo {
+>Bar : Symbol(Bar, Decl(superAccessCastedCall.ts, 2, 1))
+>Foo : Symbol(Foo, Decl(superAccessCastedCall.ts, 0, 0))
+
+    x: Number;
+>x : Symbol(Bar.x, Decl(superAccessCastedCall.ts, 4, 23))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    constructor() {
+        super();
+>super : Symbol(Foo, Decl(superAccessCastedCall.ts, 0, 0))
+
+        this.x = 2;
+>this.x : Symbol(Bar.x, Decl(superAccessCastedCall.ts, 4, 23))
+>this : Symbol(Bar, Decl(superAccessCastedCall.ts, 2, 1))
+>x : Symbol(Bar.x, Decl(superAccessCastedCall.ts, 4, 23))
+    }
+
+    bar() {
+>bar : Symbol(Bar.bar, Decl(superAccessCastedCall.ts, 10, 5))
+
+        super.bar();
+>super.bar : Symbol(Foo.bar, Decl(superAccessCastedCall.ts, 0, 11))
+>super : Symbol(Foo, Decl(superAccessCastedCall.ts, 0, 0))
+>bar : Symbol(Foo.bar, Decl(superAccessCastedCall.ts, 0, 11))
+
+        (super.bar as any)();
+>super.bar : Symbol(Foo.bar, Decl(superAccessCastedCall.ts, 0, 11))
+>super : Symbol(Foo, Decl(superAccessCastedCall.ts, 0, 0))
+>bar : Symbol(Foo.bar, Decl(superAccessCastedCall.ts, 0, 11))
+    }
+} 
+
+let b = new Bar();
+>b : Symbol(b, Decl(superAccessCastedCall.ts, 18, 3))
+>Bar : Symbol(Bar, Decl(superAccessCastedCall.ts, 2, 1))
+
+b.bar()
+>b.bar : Symbol(Bar.bar, Decl(superAccessCastedCall.ts, 10, 5))
+>b : Symbol(b, Decl(superAccessCastedCall.ts, 18, 3))
+>bar : Symbol(Bar.bar, Decl(superAccessCastedCall.ts, 10, 5))
+

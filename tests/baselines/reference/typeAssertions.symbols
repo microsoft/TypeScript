@@ -1,0 +1,131 @@
+=== tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts ===
+// Function call whose argument is a 1 arg generic function call with explicit type arguments
+function fn1<T>(t: T) { }
+>fn1 : Symbol(fn1, Decl(typeAssertions.ts, 0, 0))
+>T : Symbol(T, Decl(typeAssertions.ts, 1, 13))
+>t : Symbol(t, Decl(typeAssertions.ts, 1, 16))
+>T : Symbol(T, Decl(typeAssertions.ts, 1, 13))
+
+function fn2(t: any) { }
+>fn2 : Symbol(fn2, Decl(typeAssertions.ts, 1, 25))
+>t : Symbol(t, Decl(typeAssertions.ts, 2, 13))
+
+fn1(fn2<string>(4)); // Error
+>fn1 : Symbol(fn1, Decl(typeAssertions.ts, 0, 0))
+>fn2 : Symbol(fn2, Decl(typeAssertions.ts, 1, 25))
+
+var a: any;
+>a : Symbol(a, Decl(typeAssertions.ts, 6, 3), Decl(typeAssertions.ts, 10, 3))
+
+var s: string;
+>s : Symbol(s, Decl(typeAssertions.ts, 7, 3), Decl(typeAssertions.ts, 11, 3))
+
+// Type assertion of non - unary expression
+var a = <any>"" + 4;
+>a : Symbol(a, Decl(typeAssertions.ts, 6, 3), Decl(typeAssertions.ts, 10, 3))
+
+var s = "" + <any>4;
+>s : Symbol(s, Decl(typeAssertions.ts, 7, 3), Decl(typeAssertions.ts, 11, 3))
+
+class SomeBase {
+>SomeBase : Symbol(SomeBase, Decl(typeAssertions.ts, 11, 20))
+
+    private p;
+>p : Symbol(SomeBase.p, Decl(typeAssertions.ts, 13, 16))
+}
+class SomeDerived extends SomeBase {
+>SomeDerived : Symbol(SomeDerived, Decl(typeAssertions.ts, 15, 1))
+>SomeBase : Symbol(SomeBase, Decl(typeAssertions.ts, 11, 20))
+
+    private x;
+>x : Symbol(SomeDerived.x, Decl(typeAssertions.ts, 16, 36))
+}
+class SomeOther {
+>SomeOther : Symbol(SomeOther, Decl(typeAssertions.ts, 18, 1))
+
+    private q;
+>q : Symbol(SomeOther.q, Decl(typeAssertions.ts, 19, 17))
+}
+
+// Type assertion should check for assignability in either direction
+var someBase = new SomeBase();
+>someBase : Symbol(someBase, Decl(typeAssertions.ts, 24, 3))
+>SomeBase : Symbol(SomeBase, Decl(typeAssertions.ts, 11, 20))
+
+var someDerived = new SomeDerived();
+>someDerived : Symbol(someDerived, Decl(typeAssertions.ts, 25, 3))
+>SomeDerived : Symbol(SomeDerived, Decl(typeAssertions.ts, 15, 1))
+
+var someOther = new SomeOther();
+>someOther : Symbol(someOther, Decl(typeAssertions.ts, 26, 3))
+>SomeOther : Symbol(SomeOther, Decl(typeAssertions.ts, 18, 1))
+
+someBase = <SomeBase>someDerived;
+>someBase : Symbol(someBase, Decl(typeAssertions.ts, 24, 3))
+>SomeBase : Symbol(SomeBase, Decl(typeAssertions.ts, 11, 20))
+>someDerived : Symbol(someDerived, Decl(typeAssertions.ts, 25, 3))
+
+someBase = <SomeBase>someBase;
+>someBase : Symbol(someBase, Decl(typeAssertions.ts, 24, 3))
+>SomeBase : Symbol(SomeBase, Decl(typeAssertions.ts, 11, 20))
+>someBase : Symbol(someBase, Decl(typeAssertions.ts, 24, 3))
+
+someBase = <SomeBase>someOther; // Error
+>someBase : Symbol(someBase, Decl(typeAssertions.ts, 24, 3))
+>SomeBase : Symbol(SomeBase, Decl(typeAssertions.ts, 11, 20))
+>someOther : Symbol(someOther, Decl(typeAssertions.ts, 26, 3))
+
+someDerived = <SomeDerived>someDerived;
+>someDerived : Symbol(someDerived, Decl(typeAssertions.ts, 25, 3))
+>SomeDerived : Symbol(SomeDerived, Decl(typeAssertions.ts, 15, 1))
+>someDerived : Symbol(someDerived, Decl(typeAssertions.ts, 25, 3))
+
+someDerived = <SomeDerived>someBase;
+>someDerived : Symbol(someDerived, Decl(typeAssertions.ts, 25, 3))
+>SomeDerived : Symbol(SomeDerived, Decl(typeAssertions.ts, 15, 1))
+>someBase : Symbol(someBase, Decl(typeAssertions.ts, 24, 3))
+
+someDerived = <SomeDerived>someOther; // Error
+>someDerived : Symbol(someDerived, Decl(typeAssertions.ts, 25, 3))
+>SomeDerived : Symbol(SomeDerived, Decl(typeAssertions.ts, 15, 1))
+>someOther : Symbol(someOther, Decl(typeAssertions.ts, 26, 3))
+
+someOther = <SomeOther>someDerived; // Error
+>someOther : Symbol(someOther, Decl(typeAssertions.ts, 26, 3))
+>SomeOther : Symbol(SomeOther, Decl(typeAssertions.ts, 18, 1))
+>someDerived : Symbol(someDerived, Decl(typeAssertions.ts, 25, 3))
+
+someOther = <SomeOther>someBase; // Error
+>someOther : Symbol(someOther, Decl(typeAssertions.ts, 26, 3))
+>SomeOther : Symbol(SomeOther, Decl(typeAssertions.ts, 18, 1))
+>someBase : Symbol(someBase, Decl(typeAssertions.ts, 24, 3))
+
+someOther = <SomeOther>someOther;
+>someOther : Symbol(someOther, Decl(typeAssertions.ts, 26, 3))
+>SomeOther : Symbol(SomeOther, Decl(typeAssertions.ts, 18, 1))
+>someOther : Symbol(someOther, Decl(typeAssertions.ts, 26, 3))
+
+// Type assertion cannot be a type-predicate type
+var numOrStr: number | string;
+>numOrStr : Symbol(numOrStr, Decl(typeAssertions.ts, 41, 3))
+
+var str: string;
+>str : Symbol(str, Decl(typeAssertions.ts, 42, 3))
+
+if(<numOrStr is string>(numOrStr === undefined)) { // Error
+>numOrStr : Symbol(numOrStr)
+>numOrStr : Symbol(numOrStr, Decl(typeAssertions.ts, 41, 3))
+>undefined : Symbol(undefined)
+
+	str = numOrStr; // Error, no narrowing occurred
+>str : Symbol(str, Decl(typeAssertions.ts, 42, 3))
+>numOrStr : Symbol(numOrStr, Decl(typeAssertions.ts, 41, 3))
+}
+
+if((numOrStr === undefined) as numOrStr is string) { // Error
+>numOrStr : Symbol(numOrStr, Decl(typeAssertions.ts, 41, 3))
+>undefined : Symbol(undefined)
+>numOrStr : Symbol(numOrStr)
+}
+
+

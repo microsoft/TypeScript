@@ -1,0 +1,76 @@
+=== tests/cases/conformance/types/primitives/void/invalidAssignmentsToVoid.ts ===
+var x: void;
+>x : void
+
+x = 1;
+>x = 1 : 1
+>x : void
+>1 : 1
+
+x = true;
+>x = true : true
+>x : void
+>true : true
+
+x = '';
+>x = '' : ""
+>x : void
+>'' : ""
+
+x = {}
+>x = {} : {}
+>x : void
+>{} : {}
+
+class C { foo: string; }
+>C : C
+>foo : string
+
+var c: C;
+>c : C
+
+x = C;
+>x = C : typeof C
+>x : void
+>C : typeof C
+
+x = c;
+>x = c : C
+>x : void
+>c : C
+
+interface I { foo: string; }
+>foo : string
+
+var i: I;
+>i : I
+
+x = i;
+>x = i : I
+>x : void
+>i : I
+
+module M { export var x = 1; }
+>M : typeof M
+>x : number
+>1 : 1
+
+x = M;
+>x = M : typeof M
+>x : void
+>M : typeof M
+
+function f<T>(a: T) {
+>f : <T>(a: T) => void
+>a : T
+
+    x = a;
+>x = a : T
+>x : void
+>a : T
+}
+x = f;
+>x = f : <T>(a: T) => void
+>x : void
+>f : <T>(a: T) => void
+

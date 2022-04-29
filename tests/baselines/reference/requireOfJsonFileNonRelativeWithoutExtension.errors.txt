@@ -1,0 +1,29 @@
+/src/projects/file1.ts(1,20): error TS2307: Cannot find module 'd.json' or its corresponding type declarations.
+/src/projects/file1.ts(2,20): error TS2307: Cannot find module 'e' or its corresponding type declarations.
+
+
+==== /src/projects/file1.ts (2 errors) ====
+    import d = require("d.json"); // Should fail
+                       ~~~~~~~~
+!!! error TS2307: Cannot find module 'd.json' or its corresponding type declarations.
+    import e = require("e"); // Should fail
+                       ~~~
+!!! error TS2307: Cannot find module 'e' or its corresponding type declarations.
+    
+==== /src/projects/node_modules/b.json (0 errors) ====
+    {
+        "a": true,
+        "b": "hello"
+    }
+    
+==== /src/projects/node_modules/e.json (0 errors) ====
+    {
+        "a": true,
+        "b": "hello"
+    }
+    
+==== /src/node_modules/c.json (0 errors) ====
+    {
+        "a": true,
+        "b": "hello"
+    }

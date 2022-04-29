@@ -1,0 +1,47 @@
+=== tests/cases/compiler/accessOverriddenBaseClassMember1.ts ===
+class Point {
+>Point : Symbol(Point, Decl(accessOverriddenBaseClassMember1.ts, 0, 0))
+
+    constructor(public x: number, public y: number) { }
+>x : Symbol(Point.x, Decl(accessOverriddenBaseClassMember1.ts, 1, 16))
+>y : Symbol(Point.y, Decl(accessOverriddenBaseClassMember1.ts, 1, 33))
+
+    public toString() {
+>toString : Symbol(Point.toString, Decl(accessOverriddenBaseClassMember1.ts, 1, 55))
+
+        return "x=" + this.x + " y=" + this.y;
+>this.x : Symbol(Point.x, Decl(accessOverriddenBaseClassMember1.ts, 1, 16))
+>this : Symbol(Point, Decl(accessOverriddenBaseClassMember1.ts, 0, 0))
+>x : Symbol(Point.x, Decl(accessOverriddenBaseClassMember1.ts, 1, 16))
+>this.y : Symbol(Point.y, Decl(accessOverriddenBaseClassMember1.ts, 1, 33))
+>this : Symbol(Point, Decl(accessOverriddenBaseClassMember1.ts, 0, 0))
+>y : Symbol(Point.y, Decl(accessOverriddenBaseClassMember1.ts, 1, 33))
+    }
+}
+class ColoredPoint extends Point {
+>ColoredPoint : Symbol(ColoredPoint, Decl(accessOverriddenBaseClassMember1.ts, 5, 1))
+>Point : Symbol(Point, Decl(accessOverriddenBaseClassMember1.ts, 0, 0))
+
+    constructor(x: number, y: number, public color: string) {
+>x : Symbol(x, Decl(accessOverriddenBaseClassMember1.ts, 7, 16))
+>y : Symbol(y, Decl(accessOverriddenBaseClassMember1.ts, 7, 26))
+>color : Symbol(ColoredPoint.color, Decl(accessOverriddenBaseClassMember1.ts, 7, 37))
+
+        super(x, y);
+>super : Symbol(Point, Decl(accessOverriddenBaseClassMember1.ts, 0, 0))
+>x : Symbol(x, Decl(accessOverriddenBaseClassMember1.ts, 7, 16))
+>y : Symbol(y, Decl(accessOverriddenBaseClassMember1.ts, 7, 26))
+    }
+    public toString() {
+>toString : Symbol(ColoredPoint.toString, Decl(accessOverriddenBaseClassMember1.ts, 9, 5))
+
+        return super.toString() + " color=" + this.color;
+>super.toString : Symbol(Point.toString, Decl(accessOverriddenBaseClassMember1.ts, 1, 55))
+>super : Symbol(Point, Decl(accessOverriddenBaseClassMember1.ts, 0, 0))
+>toString : Symbol(Point.toString, Decl(accessOverriddenBaseClassMember1.ts, 1, 55))
+>this.color : Symbol(ColoredPoint.color, Decl(accessOverriddenBaseClassMember1.ts, 7, 37))
+>this : Symbol(ColoredPoint, Decl(accessOverriddenBaseClassMember1.ts, 5, 1))
+>color : Symbol(ColoredPoint.color, Decl(accessOverriddenBaseClassMember1.ts, 7, 37))
+    }
+}
+

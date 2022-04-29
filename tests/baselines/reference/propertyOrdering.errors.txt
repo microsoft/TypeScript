@@ -1,0 +1,39 @@
+tests/cases/compiler/propertyOrdering.ts(6,23): error TS2304: Cannot find name 'store'.
+tests/cases/compiler/propertyOrdering.ts(9,34): error TS2551: Property 'store' does not exist on type 'Foo'. Did you mean '_store'?
+tests/cases/compiler/propertyOrdering.ts(16,25): error TS2339: Property '_store' does not exist on type 'Bar'.
+tests/cases/compiler/propertyOrdering.ts(20,14): error TS2339: Property '_store' does not exist on type 'Bar'.
+
+
+==== tests/cases/compiler/propertyOrdering.ts (4 errors) ====
+    class Foo {
+        constructor(store: string) { }
+          public foo() {
+                return this._store.length;   // shouldn't be an error
+          }
+          public _store = store; // no repro if this is first line in class body
+                          ~~~~~
+!!! error TS2304: Cannot find name 'store'.
+    
+    
+          public bar() { return this.store; } // should be an error
+                                     ~~~~~
+!!! error TS2551: Property 'store' does not exist on type 'Foo'. Did you mean '_store'?
+!!! related TS2728 tests/cases/compiler/propertyOrdering.ts:6:14: '_store' is declared here.
+    
+    }
+    
+    class Bar {
+          public foo() {
+    
+                return this._store.length;   // shouldn't be an error
+                            ~~~~~~
+!!! error TS2339: Property '_store' does not exist on type 'Bar'.
+    
+          }
+        constructor(store: string) {
+            this._store = store;
+                 ~~~~~~
+!!! error TS2339: Property '_store' does not exist on type 'Bar'.
+        }
+    }
+    

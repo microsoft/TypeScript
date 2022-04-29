@@ -1,0 +1,97 @@
+=== tests/cases/compiler/duplicateIdentifiersAcrossContainerBoundaries.ts ===
+module M {
+>M : Symbol(M, Decl(duplicateIdentifiersAcrossContainerBoundaries.ts, 0, 0), Decl(duplicateIdentifiersAcrossContainerBoundaries.ts, 2, 1), Decl(duplicateIdentifiersAcrossContainerBoundaries.ts, 5, 1), Decl(duplicateIdentifiersAcrossContainerBoundaries.ts, 9, 1), Decl(duplicateIdentifiersAcrossContainerBoundaries.ts, 12, 1) ... and 5 more)
+
+    export interface I { }
+>I : Symbol(I, Decl(duplicateIdentifiersAcrossContainerBoundaries.ts, 0, 10), Decl(duplicateIdentifiersAcrossContainerBoundaries.ts, 3, 10))
+}
+module M {
+>M : Symbol(M, Decl(duplicateIdentifiersAcrossContainerBoundaries.ts, 0, 0), Decl(duplicateIdentifiersAcrossContainerBoundaries.ts, 2, 1), Decl(duplicateIdentifiersAcrossContainerBoundaries.ts, 5, 1), Decl(duplicateIdentifiersAcrossContainerBoundaries.ts, 9, 1), Decl(duplicateIdentifiersAcrossContainerBoundaries.ts, 12, 1) ... and 5 more)
+
+    export class I { }
+>I : Symbol(I, Decl(duplicateIdentifiersAcrossContainerBoundaries.ts, 0, 10), Decl(duplicateIdentifiersAcrossContainerBoundaries.ts, 3, 10))
+}
+
+module M {
+>M : Symbol(M, Decl(duplicateIdentifiersAcrossContainerBoundaries.ts, 0, 0), Decl(duplicateIdentifiersAcrossContainerBoundaries.ts, 2, 1), Decl(duplicateIdentifiersAcrossContainerBoundaries.ts, 5, 1), Decl(duplicateIdentifiersAcrossContainerBoundaries.ts, 9, 1), Decl(duplicateIdentifiersAcrossContainerBoundaries.ts, 12, 1) ... and 5 more)
+
+    export function f() { }
+>f : Symbol(f, Decl(duplicateIdentifiersAcrossContainerBoundaries.ts, 7, 10), Decl(duplicateIdentifiersAcrossContainerBoundaries.ts, 10, 10))
+}
+module M {
+>M : Symbol(M, Decl(duplicateIdentifiersAcrossContainerBoundaries.ts, 0, 0), Decl(duplicateIdentifiersAcrossContainerBoundaries.ts, 2, 1), Decl(duplicateIdentifiersAcrossContainerBoundaries.ts, 5, 1), Decl(duplicateIdentifiersAcrossContainerBoundaries.ts, 9, 1), Decl(duplicateIdentifiersAcrossContainerBoundaries.ts, 12, 1) ... and 5 more)
+
+    export class f { } // error
+>f : Symbol(f, Decl(duplicateIdentifiersAcrossContainerBoundaries.ts, 7, 10), Decl(duplicateIdentifiersAcrossContainerBoundaries.ts, 10, 10))
+}
+
+module M {
+>M : Symbol(M, Decl(duplicateIdentifiersAcrossContainerBoundaries.ts, 0, 0), Decl(duplicateIdentifiersAcrossContainerBoundaries.ts, 2, 1), Decl(duplicateIdentifiersAcrossContainerBoundaries.ts, 5, 1), Decl(duplicateIdentifiersAcrossContainerBoundaries.ts, 9, 1), Decl(duplicateIdentifiersAcrossContainerBoundaries.ts, 12, 1) ... and 5 more)
+
+    function g() { }
+>g : Symbol(g, Decl(duplicateIdentifiersAcrossContainerBoundaries.ts, 14, 10))
+}
+module M {
+>M : Symbol(M, Decl(duplicateIdentifiersAcrossContainerBoundaries.ts, 0, 0), Decl(duplicateIdentifiersAcrossContainerBoundaries.ts, 2, 1), Decl(duplicateIdentifiersAcrossContainerBoundaries.ts, 5, 1), Decl(duplicateIdentifiersAcrossContainerBoundaries.ts, 9, 1), Decl(duplicateIdentifiersAcrossContainerBoundaries.ts, 12, 1) ... and 5 more)
+
+    export class g { } // no error
+>g : Symbol(g, Decl(duplicateIdentifiersAcrossContainerBoundaries.ts, 17, 10))
+}
+
+module M {
+>M : Symbol(M, Decl(duplicateIdentifiersAcrossContainerBoundaries.ts, 0, 0), Decl(duplicateIdentifiersAcrossContainerBoundaries.ts, 2, 1), Decl(duplicateIdentifiersAcrossContainerBoundaries.ts, 5, 1), Decl(duplicateIdentifiersAcrossContainerBoundaries.ts, 9, 1), Decl(duplicateIdentifiersAcrossContainerBoundaries.ts, 12, 1) ... and 5 more)
+
+    export class C { }
+>C : Symbol(C, Decl(duplicateIdentifiersAcrossContainerBoundaries.ts, 21, 10))
+}
+module M {
+>M : Symbol(M, Decl(duplicateIdentifiersAcrossContainerBoundaries.ts, 0, 0), Decl(duplicateIdentifiersAcrossContainerBoundaries.ts, 2, 1), Decl(duplicateIdentifiersAcrossContainerBoundaries.ts, 5, 1), Decl(duplicateIdentifiersAcrossContainerBoundaries.ts, 9, 1), Decl(duplicateIdentifiersAcrossContainerBoundaries.ts, 12, 1) ... and 5 more)
+
+    function C() { } // no error
+>C : Symbol(C, Decl(duplicateIdentifiersAcrossContainerBoundaries.ts, 24, 10))
+}
+
+module M {
+>M : Symbol(M, Decl(duplicateIdentifiersAcrossContainerBoundaries.ts, 0, 0), Decl(duplicateIdentifiersAcrossContainerBoundaries.ts, 2, 1), Decl(duplicateIdentifiersAcrossContainerBoundaries.ts, 5, 1), Decl(duplicateIdentifiersAcrossContainerBoundaries.ts, 9, 1), Decl(duplicateIdentifiersAcrossContainerBoundaries.ts, 12, 1) ... and 5 more)
+
+    export var v = 3;
+>v : Symbol(v, Decl(duplicateIdentifiersAcrossContainerBoundaries.ts, 29, 14), Decl(duplicateIdentifiersAcrossContainerBoundaries.ts, 32, 14))
+}
+module M {
+>M : Symbol(M, Decl(duplicateIdentifiersAcrossContainerBoundaries.ts, 0, 0), Decl(duplicateIdentifiersAcrossContainerBoundaries.ts, 2, 1), Decl(duplicateIdentifiersAcrossContainerBoundaries.ts, 5, 1), Decl(duplicateIdentifiersAcrossContainerBoundaries.ts, 9, 1), Decl(duplicateIdentifiersAcrossContainerBoundaries.ts, 12, 1) ... and 5 more)
+
+    export var v = 3; // error for redeclaring var in a different parent
+>v : Symbol(v, Decl(duplicateIdentifiersAcrossContainerBoundaries.ts, 29, 14), Decl(duplicateIdentifiersAcrossContainerBoundaries.ts, 32, 14))
+}
+
+class Foo {
+>Foo : Symbol(Foo, Decl(duplicateIdentifiersAcrossContainerBoundaries.ts, 33, 1), Decl(duplicateIdentifiersAcrossContainerBoundaries.ts, 37, 1))
+
+    static x: number;
+>x : Symbol(Foo.x, Decl(duplicateIdentifiersAcrossContainerBoundaries.ts, 35, 11))
+}
+
+module Foo {
+>Foo : Symbol(Foo, Decl(duplicateIdentifiersAcrossContainerBoundaries.ts, 33, 1), Decl(duplicateIdentifiersAcrossContainerBoundaries.ts, 37, 1))
+
+    export var x: number; // error for redeclaring var in a different parent
+>x : Symbol(x, Decl(duplicateIdentifiersAcrossContainerBoundaries.ts, 40, 14))
+}
+
+module N {
+>N : Symbol(N, Decl(duplicateIdentifiersAcrossContainerBoundaries.ts, 41, 1), Decl(duplicateIdentifiersAcrossContainerBoundaries.ts, 47, 1))
+
+    export module F {
+>F : Symbol(F, Decl(duplicateIdentifiersAcrossContainerBoundaries.ts, 43, 10), Decl(duplicateIdentifiersAcrossContainerBoundaries.ts, 48, 18))
+
+        var t;
+>t : Symbol(t, Decl(duplicateIdentifiersAcrossContainerBoundaries.ts, 45, 11))
+    }
+}
+declare module N {
+>N : Symbol(N, Decl(duplicateIdentifiersAcrossContainerBoundaries.ts, 41, 1), Decl(duplicateIdentifiersAcrossContainerBoundaries.ts, 47, 1))
+
+    export function F(); // no error because function is ambient
+>F : Symbol(F, Decl(duplicateIdentifiersAcrossContainerBoundaries.ts, 43, 10), Decl(duplicateIdentifiersAcrossContainerBoundaries.ts, 48, 18))
+}
+

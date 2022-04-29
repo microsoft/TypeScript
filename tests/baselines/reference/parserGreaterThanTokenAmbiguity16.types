@@ -1,0 +1,6 @@
+=== tests/cases/conformance/parser/ecmascript5/Generics/parserGreaterThanTokenAmbiguity16.ts ===
+1 >>>= 2;
+>1 >>>= 2 : number
+>1 : 1
+>2 : 2
+

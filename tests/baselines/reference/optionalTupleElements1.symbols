@@ -1,0 +1,147 @@
+=== tests/cases/conformance/types/tuple/optionalTupleElements1.ts ===
+type T1 = [number, string, boolean];
+>T1 : Symbol(T1, Decl(optionalTupleElements1.ts, 0, 0))
+
+type T2 = [number, string, boolean?];
+>T2 : Symbol(T2, Decl(optionalTupleElements1.ts, 0, 36))
+
+type T3 = [number, string?, boolean?];
+>T3 : Symbol(T3, Decl(optionalTupleElements1.ts, 1, 37))
+
+type T4 = [number?, string?, boolean?];
+>T4 : Symbol(T4, Decl(optionalTupleElements1.ts, 2, 38))
+
+type L1 = T1["length"];
+>L1 : Symbol(L1, Decl(optionalTupleElements1.ts, 3, 39))
+>T1 : Symbol(T1, Decl(optionalTupleElements1.ts, 0, 0))
+
+type L2 = T2["length"];
+>L2 : Symbol(L2, Decl(optionalTupleElements1.ts, 5, 23))
+>T2 : Symbol(T2, Decl(optionalTupleElements1.ts, 0, 36))
+
+type L3 = T3["length"];
+>L3 : Symbol(L3, Decl(optionalTupleElements1.ts, 6, 23))
+>T3 : Symbol(T3, Decl(optionalTupleElements1.ts, 1, 37))
+
+type L4 = T4["length"];
+>L4 : Symbol(L4, Decl(optionalTupleElements1.ts, 7, 23))
+>T4 : Symbol(T4, Decl(optionalTupleElements1.ts, 2, 38))
+
+type T5 = [number, string?, boolean];  // Error
+>T5 : Symbol(T5, Decl(optionalTupleElements1.ts, 8, 23))
+
+function f1(t1: T1, t2: T2, t3: T3, t4: T4) {
+>f1 : Symbol(f1, Decl(optionalTupleElements1.ts, 10, 37))
+>t1 : Symbol(t1, Decl(optionalTupleElements1.ts, 12, 12))
+>T1 : Symbol(T1, Decl(optionalTupleElements1.ts, 0, 0))
+>t2 : Symbol(t2, Decl(optionalTupleElements1.ts, 12, 19))
+>T2 : Symbol(T2, Decl(optionalTupleElements1.ts, 0, 36))
+>t3 : Symbol(t3, Decl(optionalTupleElements1.ts, 12, 27))
+>T3 : Symbol(T3, Decl(optionalTupleElements1.ts, 1, 37))
+>t4 : Symbol(t4, Decl(optionalTupleElements1.ts, 12, 35))
+>T4 : Symbol(T4, Decl(optionalTupleElements1.ts, 2, 38))
+
+    t1 = t1;
+>t1 : Symbol(t1, Decl(optionalTupleElements1.ts, 12, 12))
+>t1 : Symbol(t1, Decl(optionalTupleElements1.ts, 12, 12))
+
+    t1 = t2;  // Error
+>t1 : Symbol(t1, Decl(optionalTupleElements1.ts, 12, 12))
+>t2 : Symbol(t2, Decl(optionalTupleElements1.ts, 12, 19))
+
+    t1 = t3;  // Error
+>t1 : Symbol(t1, Decl(optionalTupleElements1.ts, 12, 12))
+>t3 : Symbol(t3, Decl(optionalTupleElements1.ts, 12, 27))
+
+    t1 = t4;  // Error
+>t1 : Symbol(t1, Decl(optionalTupleElements1.ts, 12, 12))
+>t4 : Symbol(t4, Decl(optionalTupleElements1.ts, 12, 35))
+
+    t2 = t1;
+>t2 : Symbol(t2, Decl(optionalTupleElements1.ts, 12, 19))
+>t1 : Symbol(t1, Decl(optionalTupleElements1.ts, 12, 12))
+
+    t2 = t2;
+>t2 : Symbol(t2, Decl(optionalTupleElements1.ts, 12, 19))
+>t2 : Symbol(t2, Decl(optionalTupleElements1.ts, 12, 19))
+
+    t2 = t3;  // Error
+>t2 : Symbol(t2, Decl(optionalTupleElements1.ts, 12, 19))
+>t3 : Symbol(t3, Decl(optionalTupleElements1.ts, 12, 27))
+
+    t2 = t4;  // Error
+>t2 : Symbol(t2, Decl(optionalTupleElements1.ts, 12, 19))
+>t4 : Symbol(t4, Decl(optionalTupleElements1.ts, 12, 35))
+
+    t3 = t1;
+>t3 : Symbol(t3, Decl(optionalTupleElements1.ts, 12, 27))
+>t1 : Symbol(t1, Decl(optionalTupleElements1.ts, 12, 12))
+
+    t3 = t2;
+>t3 : Symbol(t3, Decl(optionalTupleElements1.ts, 12, 27))
+>t2 : Symbol(t2, Decl(optionalTupleElements1.ts, 12, 19))
+
+    t3 = t3;
+>t3 : Symbol(t3, Decl(optionalTupleElements1.ts, 12, 27))
+>t3 : Symbol(t3, Decl(optionalTupleElements1.ts, 12, 27))
+
+    t3 = t4;  // Error
+>t3 : Symbol(t3, Decl(optionalTupleElements1.ts, 12, 27))
+>t4 : Symbol(t4, Decl(optionalTupleElements1.ts, 12, 35))
+
+    t4 = t1;
+>t4 : Symbol(t4, Decl(optionalTupleElements1.ts, 12, 35))
+>t1 : Symbol(t1, Decl(optionalTupleElements1.ts, 12, 12))
+
+    t4 = t2;
+>t4 : Symbol(t4, Decl(optionalTupleElements1.ts, 12, 35))
+>t2 : Symbol(t2, Decl(optionalTupleElements1.ts, 12, 19))
+
+    t4 = t3;
+>t4 : Symbol(t4, Decl(optionalTupleElements1.ts, 12, 35))
+>t3 : Symbol(t3, Decl(optionalTupleElements1.ts, 12, 27))
+
+    t4 = t4;
+>t4 : Symbol(t4, Decl(optionalTupleElements1.ts, 12, 35))
+>t4 : Symbol(t4, Decl(optionalTupleElements1.ts, 12, 35))
+}
+
+let t2: T2;
+>t2 : Symbol(t2, Decl(optionalTupleElements1.ts, 31, 3))
+>T2 : Symbol(T2, Decl(optionalTupleElements1.ts, 0, 36))
+
+let t3: T3;
+>t3 : Symbol(t3, Decl(optionalTupleElements1.ts, 32, 3))
+>T3 : Symbol(T3, Decl(optionalTupleElements1.ts, 1, 37))
+
+let t4: T4;
+>t4 : Symbol(t4, Decl(optionalTupleElements1.ts, 33, 3))
+>T4 : Symbol(T4, Decl(optionalTupleElements1.ts, 2, 38))
+
+t2 = [42, "hello"];
+>t2 : Symbol(t2, Decl(optionalTupleElements1.ts, 31, 3))
+
+t3 = [42, "hello"];
+>t3 : Symbol(t3, Decl(optionalTupleElements1.ts, 32, 3))
+
+t3 = [42,,true]
+>t3 : Symbol(t3, Decl(optionalTupleElements1.ts, 32, 3))
+
+t3 = [42];
+>t3 : Symbol(t3, Decl(optionalTupleElements1.ts, 32, 3))
+
+t4 = [42, "hello"];
+>t4 : Symbol(t4, Decl(optionalTupleElements1.ts, 33, 3))
+
+t4 = [42,,true];
+>t4 : Symbol(t4, Decl(optionalTupleElements1.ts, 33, 3))
+
+t4 = [,"hello", true];
+>t4 : Symbol(t4, Decl(optionalTupleElements1.ts, 33, 3))
+
+t4 = [,,true];
+>t4 : Symbol(t4, Decl(optionalTupleElements1.ts, 33, 3))
+
+t4 = [];
+>t4 : Symbol(t4, Decl(optionalTupleElements1.ts, 33, 3))
+

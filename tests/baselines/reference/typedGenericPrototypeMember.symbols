@@ -1,0 +1,18 @@
+=== tests/cases/compiler/typedGenericPrototypeMember.ts ===
+class List<T> {
+>List : Symbol(List, Decl(typedGenericPrototypeMember.ts, 0, 0))
+>T : Symbol(T, Decl(typedGenericPrototypeMember.ts, 0, 11))
+
+   add(item: T) { }
+>add : Symbol(List.add, Decl(typedGenericPrototypeMember.ts, 0, 15))
+>item : Symbol(item, Decl(typedGenericPrototypeMember.ts, 1, 7))
+>T : Symbol(T, Decl(typedGenericPrototypeMember.ts, 0, 11))
+}
+
+List.prototype.add("abc"); // Valid because T is instantiated to any
+>List.prototype.add : Symbol(List.add, Decl(typedGenericPrototypeMember.ts, 0, 15))
+>List.prototype : Symbol(List.prototype)
+>List : Symbol(List, Decl(typedGenericPrototypeMember.ts, 0, 0))
+>prototype : Symbol(List.prototype)
+>add : Symbol(List.add, Decl(typedGenericPrototypeMember.ts, 0, 15))
+

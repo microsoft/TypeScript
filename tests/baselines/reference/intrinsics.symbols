@@ -1,0 +1,35 @@
+=== tests/cases/compiler/intrinsics.ts ===
+var hasOwnProperty: hasOwnProperty; // Error
+>hasOwnProperty : Symbol(hasOwnProperty, Decl(intrinsics.ts, 0, 3))
+>hasOwnProperty : Symbol(hasOwnProperty)
+
+module m1 {
+>m1 : Symbol(m1, Decl(intrinsics.ts, 0, 35))
+
+    export var __proto__;
+>__proto__ : Symbol(__proto__, Decl(intrinsics.ts, 3, 14))
+
+    interface __proto__ {}
+>__proto__ : Symbol(__proto__, Decl(intrinsics.ts, 3, 14), Decl(intrinsics.ts, 3, 25))
+
+    class C<T extends { __proto__: __proto__ }> { }
+>C : Symbol(C, Decl(intrinsics.ts, 4, 26))
+>T : Symbol(T, Decl(intrinsics.ts, 6, 12))
+>__proto__ : Symbol(__proto__, Decl(intrinsics.ts, 6, 23))
+>__proto__ : Symbol(__proto__, Decl(intrinsics.ts, 3, 14), Decl(intrinsics.ts, 3, 25))
+}
+
+__proto__ = 0; // Error, __proto__ not defined
+m1.__proto__ = 0;
+>m1.__proto__ : Symbol(m1.__proto__, Decl(intrinsics.ts, 3, 14))
+>m1 : Symbol(m1, Decl(intrinsics.ts, 0, 35))
+>__proto__ : Symbol(m1.__proto__, Decl(intrinsics.ts, 3, 14))
+
+class Foo<__proto__> { }
+>Foo : Symbol(Foo, Decl(intrinsics.ts, 10, 17))
+>__proto__ : Symbol(__proto__, Decl(intrinsics.ts, 12, 10))
+
+var foo: (__proto__: number) => void;
+>foo : Symbol(foo, Decl(intrinsics.ts, 13, 3))
+>__proto__ : Symbol(__proto__, Decl(intrinsics.ts, 13, 10))
+

@@ -1,0 +1,53 @@
+=== tests/cases/conformance/es6/modules/m1.ts ===
+export default function Decl() {
+>Decl : Symbol(Decl, Decl(m1.ts, 0, 0))
+
+    return 0;
+}
+
+export interface Decl {
+>Decl : Symbol(Decl, Decl(m1.ts, 2, 1), Decl(m1.ts, 7, 1))
+
+    p1: number;
+>p1 : Symbol(Decl.p1, Decl(m1.ts, 4, 23))
+
+    p2: number;
+>p2 : Symbol(Decl.p2, Decl(m1.ts, 5, 15))
+}
+
+export namespace Decl {
+>Decl : Symbol(Decl, Decl(m1.ts, 2, 1), Decl(m1.ts, 7, 1))
+
+    export var x = 10;
+>x : Symbol(x, Decl(m1.ts, 10, 14))
+
+    export var y = 20;
+>y : Symbol(y, Decl(m1.ts, 11, 14))
+
+    interface I {
+>I : Symbol(I, Decl(m1.ts, 11, 22))
+    }
+}
+
+=== tests/cases/conformance/es6/modules/m2.ts ===
+import Entity from "m1"
+>Entity : Symbol(Entity, Decl(m2.ts, 0, 6))
+
+Entity();
+>Entity : Symbol(Entity, Decl(m2.ts, 0, 6))
+
+var x: Entity;
+>x : Symbol(x, Decl(m2.ts, 4, 3))
+>Entity : Symbol(Entity, Decl(m2.ts, 0, 6))
+
+var y: Entity.I;
+>y : Symbol(y, Decl(m2.ts, 5, 3))
+>Entity : Symbol(Entity, Decl(m2.ts, 0, 6))
+>I : Symbol(Entity.I)
+
+Entity.x;
+>Entity : Symbol(Entity, Decl(m2.ts, 0, 6))
+
+Entity.y;
+>Entity : Symbol(Entity, Decl(m2.ts, 0, 6))
+

@@ -1,0 +1,36 @@
+=== tests/cases/conformance/classes/constructorDeclarations/superCalls/superPropertyInConstructorBeforeSuperCall.ts ===
+class B {
+>B : Symbol(B, Decl(superPropertyInConstructorBeforeSuperCall.ts, 0, 0))
+
+    constructor(x?: string) {}
+>x : Symbol(x, Decl(superPropertyInConstructorBeforeSuperCall.ts, 1, 16))
+
+    x(): string { return ""; }
+>x : Symbol(B.x, Decl(superPropertyInConstructorBeforeSuperCall.ts, 1, 30))
+}
+class C1 extends B {
+>C1 : Symbol(C1, Decl(superPropertyInConstructorBeforeSuperCall.ts, 3, 1))
+>B : Symbol(B, Decl(superPropertyInConstructorBeforeSuperCall.ts, 0, 0))
+
+    constructor() {
+        super.x();
+>super.x : Symbol(B.x, Decl(superPropertyInConstructorBeforeSuperCall.ts, 1, 30))
+>super : Symbol(B, Decl(superPropertyInConstructorBeforeSuperCall.ts, 0, 0))
+>x : Symbol(B.x, Decl(superPropertyInConstructorBeforeSuperCall.ts, 1, 30))
+
+        super();
+>super : Symbol(B, Decl(superPropertyInConstructorBeforeSuperCall.ts, 0, 0))
+    }
+}
+class C2 extends B {
+>C2 : Symbol(C2, Decl(superPropertyInConstructorBeforeSuperCall.ts, 9, 1))
+>B : Symbol(B, Decl(superPropertyInConstructorBeforeSuperCall.ts, 0, 0))
+
+    constructor() {
+        super(super.x());
+>super : Symbol(B, Decl(superPropertyInConstructorBeforeSuperCall.ts, 0, 0))
+>super.x : Symbol(B.x, Decl(superPropertyInConstructorBeforeSuperCall.ts, 1, 30))
+>super : Symbol(B, Decl(superPropertyInConstructorBeforeSuperCall.ts, 0, 0))
+>x : Symbol(B.x, Decl(superPropertyInConstructorBeforeSuperCall.ts, 1, 30))
+    }
+}

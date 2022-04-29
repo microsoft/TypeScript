@@ -1,0 +1,39 @@
+=== tests/cases/compiler/genericPrototypeProperty2.ts ===
+interface EventTarget { x } 
+>EventTarget : Symbol(EventTarget, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(genericPrototypeProperty2.ts, 0, 0))
+>x : Symbol(EventTarget.x, Decl(genericPrototypeProperty2.ts, 0, 23))
+
+class BaseEvent {
+>BaseEvent : Symbol(BaseEvent, Decl(genericPrototypeProperty2.ts, 0, 27))
+
+    target: EventTarget;
+>target : Symbol(BaseEvent.target, Decl(genericPrototypeProperty2.ts, 1, 17))
+>EventTarget : Symbol(EventTarget, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(genericPrototypeProperty2.ts, 0, 0))
+}
+
+class MyEvent<T extends EventTarget> extends BaseEvent {
+>MyEvent : Symbol(MyEvent, Decl(genericPrototypeProperty2.ts, 3, 1))
+>T : Symbol(T, Decl(genericPrototypeProperty2.ts, 5, 14))
+>EventTarget : Symbol(EventTarget, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(genericPrototypeProperty2.ts, 0, 0))
+>BaseEvent : Symbol(BaseEvent, Decl(genericPrototypeProperty2.ts, 0, 27))
+
+    target: T;
+>target : Symbol(MyEvent.target, Decl(genericPrototypeProperty2.ts, 5, 56))
+>T : Symbol(T, Decl(genericPrototypeProperty2.ts, 5, 14))
+}
+class BaseEventWrapper {
+>BaseEventWrapper : Symbol(BaseEventWrapper, Decl(genericPrototypeProperty2.ts, 7, 1))
+
+    t: BaseEvent;
+>t : Symbol(BaseEventWrapper.t, Decl(genericPrototypeProperty2.ts, 8, 24))
+>BaseEvent : Symbol(BaseEvent, Decl(genericPrototypeProperty2.ts, 0, 27))
+}
+
+class MyEventWrapper extends BaseEventWrapper {
+>MyEventWrapper : Symbol(MyEventWrapper, Decl(genericPrototypeProperty2.ts, 10, 1))
+>BaseEventWrapper : Symbol(BaseEventWrapper, Decl(genericPrototypeProperty2.ts, 7, 1))
+
+    t: MyEvent<any>; // any satisfies constraint and passes assignability check between 'target' properties
+>t : Symbol(MyEventWrapper.t, Decl(genericPrototypeProperty2.ts, 12, 47))
+>MyEvent : Symbol(MyEvent, Decl(genericPrototypeProperty2.ts, 3, 1))
+}

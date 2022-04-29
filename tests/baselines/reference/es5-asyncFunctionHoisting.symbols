@@ -1,0 +1,87 @@
+=== tests/cases/compiler/es5-asyncFunctionHoisting.ts ===
+declare var y;
+>y : Symbol(y, Decl(es5-asyncFunctionHoisting.ts, 0, 11))
+
+async function hoisting() {
+>hoisting : Symbol(hoisting, Decl(es5-asyncFunctionHoisting.ts, 0, 14))
+
+    var a0, a1 = 1;
+>a0 : Symbol(a0, Decl(es5-asyncFunctionHoisting.ts, 3, 7))
+>a1 : Symbol(a1, Decl(es5-asyncFunctionHoisting.ts, 3, 11))
+
+    function z() {
+>z : Symbol(z, Decl(es5-asyncFunctionHoisting.ts, 3, 19))
+
+        var b0, b1 = 1;
+>b0 : Symbol(b0, Decl(es5-asyncFunctionHoisting.ts, 5, 11))
+>b1 : Symbol(b1, Decl(es5-asyncFunctionHoisting.ts, 5, 15))
+    }
+
+    if (true) {
+        var c0, c1 = 1;
+>c0 : Symbol(c0, Decl(es5-asyncFunctionHoisting.ts, 9, 11))
+>c1 : Symbol(c1, Decl(es5-asyncFunctionHoisting.ts, 9, 15))
+    }
+
+    for (var a = 0; y;) {
+>a : Symbol(a, Decl(es5-asyncFunctionHoisting.ts, 12, 12))
+>y : Symbol(y, Decl(es5-asyncFunctionHoisting.ts, 0, 11))
+
+    }
+
+    for (var b in y) {
+>b : Symbol(b, Decl(es5-asyncFunctionHoisting.ts, 16, 12))
+>y : Symbol(y, Decl(es5-asyncFunctionHoisting.ts, 0, 11))
+
+    }
+
+    for (var c of y) {
+>c : Symbol(c, Decl(es5-asyncFunctionHoisting.ts, 20, 12))
+>y : Symbol(y, Decl(es5-asyncFunctionHoisting.ts, 0, 11))
+
+    }
+}
+
+async function hoistingWithAwait() {
+>hoistingWithAwait : Symbol(hoistingWithAwait, Decl(es5-asyncFunctionHoisting.ts, 23, 1))
+
+    var a0, a1 = 1;
+>a0 : Symbol(a0, Decl(es5-asyncFunctionHoisting.ts, 26, 7))
+>a1 : Symbol(a1, Decl(es5-asyncFunctionHoisting.ts, 26, 11))
+
+    function z() {
+>z : Symbol(z, Decl(es5-asyncFunctionHoisting.ts, 26, 19))
+
+        var b0, b1 = 1;
+>b0 : Symbol(b0, Decl(es5-asyncFunctionHoisting.ts, 29, 11))
+>b1 : Symbol(b1, Decl(es5-asyncFunctionHoisting.ts, 29, 15))
+    }
+
+    await 0;
+
+    if (true) {
+        var c0, c1 = 1;
+>c0 : Symbol(c0, Decl(es5-asyncFunctionHoisting.ts, 35, 11))
+>c1 : Symbol(c1, Decl(es5-asyncFunctionHoisting.ts, 35, 15))
+    }
+
+    for (var a = 0; y;) {
+>a : Symbol(a, Decl(es5-asyncFunctionHoisting.ts, 38, 12))
+>y : Symbol(y, Decl(es5-asyncFunctionHoisting.ts, 0, 11))
+
+    }
+
+    for (var b in y) {
+>b : Symbol(b, Decl(es5-asyncFunctionHoisting.ts, 42, 12))
+>y : Symbol(y, Decl(es5-asyncFunctionHoisting.ts, 0, 11))
+
+    }
+
+    for (var c of y) {
+>c : Symbol(c, Decl(es5-asyncFunctionHoisting.ts, 46, 12))
+>y : Symbol(y, Decl(es5-asyncFunctionHoisting.ts, 0, 11))
+
+    }
+}
+
+

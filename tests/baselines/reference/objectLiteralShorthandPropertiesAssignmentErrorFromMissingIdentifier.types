@@ -1,0 +1,51 @@
+=== tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesAssignmentErrorFromMissingIdentifier.ts ===
+var id: number = 10000;
+>id : number
+>10000 : 10000
+
+var name: string = "my name";
+>name : string
+>"my name" : "my name"
+
+var person: { b: string; id: number } = { name, id };  // error
+>person : { b: string; id: number; }
+>b : string
+>id : number
+>{ name, id } : { name: string; id: number; }
+>name : string
+>id : number
+
+function bar(name: string, id: number): { name: number, id: string } { return { name, id }; }  // error
+>bar : (name: string, id: number) => {    name: number;    id: string;}
+>name : string
+>id : number
+>name : number
+>id : string
+>{ name, id } : { name: string; id: number; }
+>name : string
+>id : number
+
+function foo(name: string, id: number): { name: string, id: number } { return { name, id }; }  // error
+>foo : (name: string, id: number) => {    name: string;    id: number;}
+>name : string
+>id : number
+>name : string
+>id : number
+>{ name, id } : { name: string; id: number; }
+>name : string
+>id : number
+
+var person1: { name, id }; // ok
+>person1 : { name: any; id: any; }
+>name : any
+>id : any
+
+var person2: { name: string, id: number } = bar("hello", 5);
+>person2 : { name: string; id: number; }
+>name : string
+>id : number
+>bar("hello", 5) : { name: number; id: string; }
+>bar : (name: string, id: number) => { name: number; id: string; }
+>"hello" : "hello"
+>5 : 5
+

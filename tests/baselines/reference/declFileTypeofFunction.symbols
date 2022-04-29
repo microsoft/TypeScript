@@ -1,0 +1,81 @@
+=== tests/cases/compiler/declFileTypeofFunction.ts ===
+function f(n: typeof f): string;
+>f : Symbol(f, Decl(declFileTypeofFunction.ts, 0, 0), Decl(declFileTypeofFunction.ts, 0, 32), Decl(declFileTypeofFunction.ts, 1, 32))
+>n : Symbol(n, Decl(declFileTypeofFunction.ts, 0, 11))
+>f : Symbol(f, Decl(declFileTypeofFunction.ts, 0, 0), Decl(declFileTypeofFunction.ts, 0, 32), Decl(declFileTypeofFunction.ts, 1, 32))
+
+function f(n: typeof g): string;
+>f : Symbol(f, Decl(declFileTypeofFunction.ts, 0, 0), Decl(declFileTypeofFunction.ts, 0, 32), Decl(declFileTypeofFunction.ts, 1, 32))
+>n : Symbol(n, Decl(declFileTypeofFunction.ts, 1, 11))
+>g : Symbol(g, Decl(declFileTypeofFunction.ts, 2, 34), Decl(declFileTypeofFunction.ts, 3, 32), Decl(declFileTypeofFunction.ts, 4, 32))
+
+function f() { return undefined; }
+>f : Symbol(f, Decl(declFileTypeofFunction.ts, 0, 0), Decl(declFileTypeofFunction.ts, 0, 32), Decl(declFileTypeofFunction.ts, 1, 32))
+>undefined : Symbol(undefined)
+
+function g(n: typeof g): number;
+>g : Symbol(g, Decl(declFileTypeofFunction.ts, 2, 34), Decl(declFileTypeofFunction.ts, 3, 32), Decl(declFileTypeofFunction.ts, 4, 32))
+>n : Symbol(n, Decl(declFileTypeofFunction.ts, 3, 11))
+>g : Symbol(g, Decl(declFileTypeofFunction.ts, 2, 34), Decl(declFileTypeofFunction.ts, 3, 32), Decl(declFileTypeofFunction.ts, 4, 32))
+
+function g(n: typeof f): number;
+>g : Symbol(g, Decl(declFileTypeofFunction.ts, 2, 34), Decl(declFileTypeofFunction.ts, 3, 32), Decl(declFileTypeofFunction.ts, 4, 32))
+>n : Symbol(n, Decl(declFileTypeofFunction.ts, 4, 11))
+>f : Symbol(f, Decl(declFileTypeofFunction.ts, 0, 0), Decl(declFileTypeofFunction.ts, 0, 32), Decl(declFileTypeofFunction.ts, 1, 32))
+
+function g() { return undefined; }
+>g : Symbol(g, Decl(declFileTypeofFunction.ts, 2, 34), Decl(declFileTypeofFunction.ts, 3, 32), Decl(declFileTypeofFunction.ts, 4, 32))
+>undefined : Symbol(undefined)
+
+var b: () => typeof b;
+>b : Symbol(b, Decl(declFileTypeofFunction.ts, 7, 3))
+>b : Symbol(b, Decl(declFileTypeofFunction.ts, 7, 3))
+
+function b1() {
+>b1 : Symbol(b1, Decl(declFileTypeofFunction.ts, 7, 22))
+
+    return b1;
+>b1 : Symbol(b1, Decl(declFileTypeofFunction.ts, 7, 22))
+}
+
+function foo(): typeof foo {
+>foo : Symbol(foo, Decl(declFileTypeofFunction.ts, 11, 1))
+>foo : Symbol(foo, Decl(declFileTypeofFunction.ts, 11, 1))
+
+    return null;
+}
+var foo1: typeof foo;
+>foo1 : Symbol(foo1, Decl(declFileTypeofFunction.ts, 16, 3))
+>foo : Symbol(foo, Decl(declFileTypeofFunction.ts, 11, 1))
+
+var foo2 = foo;
+>foo2 : Symbol(foo2, Decl(declFileTypeofFunction.ts, 17, 3))
+>foo : Symbol(foo, Decl(declFileTypeofFunction.ts, 11, 1))
+
+var foo3 = function () {
+>foo3 : Symbol(foo3, Decl(declFileTypeofFunction.ts, 19, 3))
+
+    return foo3;
+>foo3 : Symbol(foo3, Decl(declFileTypeofFunction.ts, 19, 3))
+}
+var x = () => {
+>x : Symbol(x, Decl(declFileTypeofFunction.ts, 22, 3))
+
+    return x;
+>x : Symbol(x, Decl(declFileTypeofFunction.ts, 22, 3))
+}
+
+function foo5(x: number) {
+>foo5 : Symbol(foo5, Decl(declFileTypeofFunction.ts, 24, 1))
+>x : Symbol(x, Decl(declFileTypeofFunction.ts, 26, 14))
+
+    function bar(x: number) {
+>bar : Symbol(bar, Decl(declFileTypeofFunction.ts, 26, 26))
+>x : Symbol(x, Decl(declFileTypeofFunction.ts, 27, 17))
+
+        return x;
+>x : Symbol(x, Decl(declFileTypeofFunction.ts, 27, 17))
+    }
+    return bar;
+>bar : Symbol(bar, Decl(declFileTypeofFunction.ts, 26, 26))
+}

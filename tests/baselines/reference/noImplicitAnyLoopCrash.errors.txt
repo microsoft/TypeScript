@@ -1,0 +1,15 @@
+tests/cases/compiler/noImplicitAnyLoopCrash.ts(4,16): error TS2556: A spread argument must either have a tuple type or be passed to a rest parameter.
+tests/cases/compiler/noImplicitAnyLoopCrash.ts(4,19): error TS2461: Type 'number' is not an array type.
+
+
+==== tests/cases/compiler/noImplicitAnyLoopCrash.ts (2 errors) ====
+    let foo = () => {};
+    let bar;
+    while (1) {
+        bar = ~foo(...bar);
+                   ~~~~~~
+!!! error TS2556: A spread argument must either have a tuple type or be passed to a rest parameter.
+                      ~~~
+!!! error TS2461: Type 'number' is not an array type.
+    }
+    

@@ -1,0 +1,30 @@
+tests/cases/compiler/requiredInitializedParameter1.ts(11,1): error TS2554: Expected 3 arguments, but got 2.
+tests/cases/compiler/requiredInitializedParameter1.ts(16,1): error TS2554: Expected 3 arguments, but got 1.
+
+
+==== tests/cases/compiler/requiredInitializedParameter1.ts (2 errors) ====
+    function f1(a, b = 0, c) { }
+    function f2(a, b = 0, c = 0) { }
+    function f3(a, b = 0, c?) { }
+    function f4(a, b = 0, ...c) { }
+    
+    f1(0, 1, 2);
+    f2(0, 1, 2);
+    f3(0, 1, 2);
+    f4(0, 1, 2);
+    
+    f1(0, 1);
+    ~~~~~~~~
+!!! error TS2554: Expected 3 arguments, but got 2.
+!!! related TS6210 tests/cases/compiler/requiredInitializedParameter1.ts:1:23: An argument for 'c' was not provided.
+    f2(0, 1);
+    f3(0, 1);
+    f4(0, 1);
+    
+    f1(0);
+    ~~~~~
+!!! error TS2554: Expected 3 arguments, but got 1.
+!!! related TS6210 tests/cases/compiler/requiredInitializedParameter1.ts:1:16: An argument for 'b' was not provided.
+    f2(0);
+    f3(0);
+    f4(0);

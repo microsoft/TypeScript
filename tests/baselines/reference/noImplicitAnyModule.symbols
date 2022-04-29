@@ -1,0 +1,35 @@
+=== tests/cases/compiler/noImplicitAnyModule.ts ===
+declare module Module {
+>Module : Symbol(Module, Decl(noImplicitAnyModule.ts, 0, 0))
+
+    interface Interface {
+>Interface : Symbol(Interface, Decl(noImplicitAnyModule.ts, 0, 23))
+
+        // Should return error for implicit any on return type.
+        new ();
+    }
+
+    class Class {
+>Class : Symbol(Class, Decl(noImplicitAnyModule.ts, 4, 5))
+
+        // Should return error for implicit `any` on parameter.
+        public f(x): any;
+>f : Symbol(Class.f, Decl(noImplicitAnyModule.ts, 6, 17))
+>x : Symbol(x, Decl(noImplicitAnyModule.ts, 8, 17))
+
+        public g(x: any);
+>g : Symbol(Class.g, Decl(noImplicitAnyModule.ts, 8, 25))
+>x : Symbol(x, Decl(noImplicitAnyModule.ts, 9, 17))
+
+        // Should not return error at all.
+        private h(x);
+>h : Symbol(Class.h, Decl(noImplicitAnyModule.ts, 9, 25))
+>x : Symbol(x, Decl(noImplicitAnyModule.ts, 12, 18))
+    }
+
+    // Should return error for implicit any on return type.
+    function f(x: number);
+>f : Symbol(f, Decl(noImplicitAnyModule.ts, 13, 5))
+>x : Symbol(x, Decl(noImplicitAnyModule.ts, 16, 15))
+}
+

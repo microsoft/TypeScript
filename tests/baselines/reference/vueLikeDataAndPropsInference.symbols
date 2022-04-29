@@ -1,0 +1,130 @@
+=== tests/cases/compiler/vueLikeDataAndPropsInference.ts ===
+interface Instance {
+>Instance : Symbol(Instance, Decl(vueLikeDataAndPropsInference.ts, 0, 0))
+
+    _instanceBrand: never
+>_instanceBrand : Symbol(Instance._instanceBrand, Decl(vueLikeDataAndPropsInference.ts, 0, 20))
+}
+
+type DataDef<Data, Props> = (this: Readonly<Props> & Instance) => Data
+>DataDef : Symbol(DataDef, Decl(vueLikeDataAndPropsInference.ts, 2, 1))
+>Data : Symbol(Data, Decl(vueLikeDataAndPropsInference.ts, 4, 13))
+>Props : Symbol(Props, Decl(vueLikeDataAndPropsInference.ts, 4, 18))
+>this : Symbol(this, Decl(vueLikeDataAndPropsInference.ts, 4, 29))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>Props : Symbol(Props, Decl(vueLikeDataAndPropsInference.ts, 4, 18))
+>Instance : Symbol(Instance, Decl(vueLikeDataAndPropsInference.ts, 0, 0))
+>Data : Symbol(Data, Decl(vueLikeDataAndPropsInference.ts, 4, 13))
+
+type PropsDefinition<T> = {
+>PropsDefinition : Symbol(PropsDefinition, Decl(vueLikeDataAndPropsInference.ts, 4, 70))
+>T : Symbol(T, Decl(vueLikeDataAndPropsInference.ts, 6, 21))
+
+    [K in keyof T]: T[K]
+>K : Symbol(K, Decl(vueLikeDataAndPropsInference.ts, 7, 5))
+>T : Symbol(T, Decl(vueLikeDataAndPropsInference.ts, 6, 21))
+>T : Symbol(T, Decl(vueLikeDataAndPropsInference.ts, 6, 21))
+>K : Symbol(K, Decl(vueLikeDataAndPropsInference.ts, 7, 5))
+}
+
+interface Options<
+>Options : Symbol(Options, Decl(vueLikeDataAndPropsInference.ts, 8, 1))
+
+    Data = ((this: Instance) => object),
+>Data : Symbol(Data, Decl(vueLikeDataAndPropsInference.ts, 10, 18))
+>this : Symbol(this, Decl(vueLikeDataAndPropsInference.ts, 11, 13))
+>Instance : Symbol(Instance, Decl(vueLikeDataAndPropsInference.ts, 0, 0))
+
+    PropsDef = {}
+>PropsDef : Symbol(PropsDef, Decl(vueLikeDataAndPropsInference.ts, 11, 40))
+
+    > {
+    data?: Data
+>data : Symbol(Options.data, Decl(vueLikeDataAndPropsInference.ts, 13, 7))
+>Data : Symbol(Data, Decl(vueLikeDataAndPropsInference.ts, 10, 18))
+
+    props?: PropsDef
+>props : Symbol(Options.props, Decl(vueLikeDataAndPropsInference.ts, 14, 15))
+>PropsDef : Symbol(PropsDef, Decl(vueLikeDataAndPropsInference.ts, 11, 40))
+
+    watch?: Record<string, WatchHandler<any>>
+>watch : Symbol(Options.watch, Decl(vueLikeDataAndPropsInference.ts, 15, 20))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>WatchHandler : Symbol(WatchHandler, Decl(vueLikeDataAndPropsInference.ts, 17, 1))
+}
+
+type WatchHandler<T> = (val: T, oldVal: T) => void;
+>WatchHandler : Symbol(WatchHandler, Decl(vueLikeDataAndPropsInference.ts, 17, 1))
+>T : Symbol(T, Decl(vueLikeDataAndPropsInference.ts, 19, 18))
+>val : Symbol(val, Decl(vueLikeDataAndPropsInference.ts, 19, 24))
+>T : Symbol(T, Decl(vueLikeDataAndPropsInference.ts, 19, 18))
+>oldVal : Symbol(oldVal, Decl(vueLikeDataAndPropsInference.ts, 19, 31))
+>T : Symbol(T, Decl(vueLikeDataAndPropsInference.ts, 19, 18))
+
+type ThisTypedOptions<Data, Props> =
+>ThisTypedOptions : Symbol(ThisTypedOptions, Decl(vueLikeDataAndPropsInference.ts, 19, 51))
+>Data : Symbol(Data, Decl(vueLikeDataAndPropsInference.ts, 21, 22))
+>Props : Symbol(Props, Decl(vueLikeDataAndPropsInference.ts, 21, 27))
+
+    Options<DataDef<Data, Props>, PropsDefinition<Props>> &
+>Options : Symbol(Options, Decl(vueLikeDataAndPropsInference.ts, 8, 1))
+>DataDef : Symbol(DataDef, Decl(vueLikeDataAndPropsInference.ts, 2, 1))
+>Data : Symbol(Data, Decl(vueLikeDataAndPropsInference.ts, 21, 22))
+>Props : Symbol(Props, Decl(vueLikeDataAndPropsInference.ts, 21, 27))
+>PropsDefinition : Symbol(PropsDefinition, Decl(vueLikeDataAndPropsInference.ts, 4, 70))
+>Props : Symbol(Props, Decl(vueLikeDataAndPropsInference.ts, 21, 27))
+
+    ThisType<Data & Readonly<Props> & Instance>
+>ThisType : Symbol(ThisType, Decl(lib.es5.d.ts, --, --))
+>Data : Symbol(Data, Decl(vueLikeDataAndPropsInference.ts, 21, 22))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>Props : Symbol(Props, Decl(vueLikeDataAndPropsInference.ts, 21, 27))
+>Instance : Symbol(Instance, Decl(vueLikeDataAndPropsInference.ts, 0, 0))
+
+declare function test<Data, Props>(fn: ThisTypedOptions<Data, Props>): void;
+>test : Symbol(test, Decl(vueLikeDataAndPropsInference.ts, 23, 47), Decl(vueLikeDataAndPropsInference.ts, 25, 76))
+>Data : Symbol(Data, Decl(vueLikeDataAndPropsInference.ts, 25, 22))
+>Props : Symbol(Props, Decl(vueLikeDataAndPropsInference.ts, 25, 27))
+>fn : Symbol(fn, Decl(vueLikeDataAndPropsInference.ts, 25, 35))
+>ThisTypedOptions : Symbol(ThisTypedOptions, Decl(vueLikeDataAndPropsInference.ts, 19, 51))
+>Data : Symbol(Data, Decl(vueLikeDataAndPropsInference.ts, 25, 22))
+>Props : Symbol(Props, Decl(vueLikeDataAndPropsInference.ts, 25, 27))
+
+declare function test(fn: Options): void;
+>test : Symbol(test, Decl(vueLikeDataAndPropsInference.ts, 23, 47), Decl(vueLikeDataAndPropsInference.ts, 25, 76))
+>fn : Symbol(fn, Decl(vueLikeDataAndPropsInference.ts, 26, 22))
+>Options : Symbol(Options, Decl(vueLikeDataAndPropsInference.ts, 8, 1))
+
+test({
+>test : Symbol(test, Decl(vueLikeDataAndPropsInference.ts, 23, 47), Decl(vueLikeDataAndPropsInference.ts, 25, 76))
+
+    props: {
+>props : Symbol(props, Decl(vueLikeDataAndPropsInference.ts, 28, 6))
+
+        foo: ''
+>foo : Symbol(foo, Decl(vueLikeDataAndPropsInference.ts, 29, 12))
+
+    },
+
+    data(): { bar: boolean } {
+>data : Symbol(data, Decl(vueLikeDataAndPropsInference.ts, 31, 6))
+>bar : Symbol(bar, Decl(vueLikeDataAndPropsInference.ts, 33, 13))
+
+        return {
+            bar: true
+>bar : Symbol(bar, Decl(vueLikeDataAndPropsInference.ts, 34, 16))
+        }
+    },
+
+    watch: {
+>watch : Symbol(watch, Decl(vueLikeDataAndPropsInference.ts, 37, 6))
+
+        foo(newVal: string, oldVal: string): void {
+>foo : Symbol(foo, Decl(vueLikeDataAndPropsInference.ts, 39, 12))
+>newVal : Symbol(newVal, Decl(vueLikeDataAndPropsInference.ts, 40, 12))
+>oldVal : Symbol(oldVal, Decl(vueLikeDataAndPropsInference.ts, 40, 27))
+
+            this.bar = false
+        }
+    }
+})

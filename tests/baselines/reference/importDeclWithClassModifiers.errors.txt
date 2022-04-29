@@ -1,0 +1,39 @@
+tests/cases/compiler/importDeclWithClassModifiers.ts(5,8): error TS1044: 'public' modifier cannot appear on a module or namespace element.
+tests/cases/compiler/importDeclWithClassModifiers.ts(5,26): error TS2708: Cannot use namespace 'x' as a value.
+tests/cases/compiler/importDeclWithClassModifiers.ts(5,28): error TS2694: Namespace 'x' has no exported member 'c'.
+tests/cases/compiler/importDeclWithClassModifiers.ts(6,8): error TS1044: 'private' modifier cannot appear on a module or namespace element.
+tests/cases/compiler/importDeclWithClassModifiers.ts(6,27): error TS2708: Cannot use namespace 'x' as a value.
+tests/cases/compiler/importDeclWithClassModifiers.ts(6,29): error TS2694: Namespace 'x' has no exported member 'c'.
+tests/cases/compiler/importDeclWithClassModifiers.ts(7,8): error TS1044: 'static' modifier cannot appear on a module or namespace element.
+tests/cases/compiler/importDeclWithClassModifiers.ts(7,26): error TS2708: Cannot use namespace 'x' as a value.
+tests/cases/compiler/importDeclWithClassModifiers.ts(7,28): error TS2694: Namespace 'x' has no exported member 'c'.
+
+
+==== tests/cases/compiler/importDeclWithClassModifiers.ts (9 errors) ====
+    module x {
+        interface c {
+        }
+    }
+    export public import a = x.c;
+           ~~~~~~
+!!! error TS1044: 'public' modifier cannot appear on a module or namespace element.
+                             ~
+!!! error TS2708: Cannot use namespace 'x' as a value.
+                               ~
+!!! error TS2694: Namespace 'x' has no exported member 'c'.
+    export private import b = x.c;
+           ~~~~~~~
+!!! error TS1044: 'private' modifier cannot appear on a module or namespace element.
+                              ~
+!!! error TS2708: Cannot use namespace 'x' as a value.
+                                ~
+!!! error TS2694: Namespace 'x' has no exported member 'c'.
+    export static import c = x.c;
+           ~~~~~~
+!!! error TS1044: 'static' modifier cannot appear on a module or namespace element.
+                             ~
+!!! error TS2708: Cannot use namespace 'x' as a value.
+                               ~
+!!! error TS2694: Namespace 'x' has no exported member 'c'.
+    var b: a;
+    

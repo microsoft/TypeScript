@@ -1,0 +1,25 @@
+=== tests/cases/compiler/downlevelLetConst12.ts ===
+'use strict'
+// top level let\const should not be renamed
+let foo;
+>foo : Symbol(foo, Decl(downlevelLetConst12.ts, 2, 3))
+
+const bar = 1;
+>bar : Symbol(bar, Decl(downlevelLetConst12.ts, 3, 5))
+
+let [baz] = [];
+>baz : Symbol(baz, Decl(downlevelLetConst12.ts, 5, 5))
+
+let {a: baz2} = { a: 1 };
+>a : Symbol(a, Decl(downlevelLetConst12.ts, 6, 17))
+>baz2 : Symbol(baz2, Decl(downlevelLetConst12.ts, 6, 5))
+>a : Symbol(a, Decl(downlevelLetConst12.ts, 6, 17))
+
+const [baz3] = []
+>baz3 : Symbol(baz3, Decl(downlevelLetConst12.ts, 8, 7))
+
+const {a: baz4} = { a: 1 };
+>a : Symbol(a, Decl(downlevelLetConst12.ts, 9, 19))
+>baz4 : Symbol(baz4, Decl(downlevelLetConst12.ts, 9, 7))
+>a : Symbol(a, Decl(downlevelLetConst12.ts, 9, 19))
+

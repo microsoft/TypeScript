@@ -1,0 +1,38 @@
+=== tests/cases/conformance/es6/computedProperties/computedPropertyNames2_ES5.ts ===
+var methodName = "method";
+>methodName : string
+>"method" : "method"
+
+var accessorName = "accessor";
+>accessorName : string
+>"accessor" : "accessor"
+
+class C {
+>C : C
+
+    [methodName]() { }
+>[methodName] : () => void
+>methodName : string
+
+    static [methodName]() { }
+>[methodName] : () => void
+>methodName : string
+
+    get [accessorName]() { }
+>[accessorName] : void
+>accessorName : string
+
+    set [accessorName](v) { }
+>[accessorName] : any
+>accessorName : string
+>v : any
+
+    static get [accessorName]() { }
+>[accessorName] : void
+>accessorName : string
+
+    static set [accessorName](v) { }
+>[accessorName] : any
+>accessorName : string
+>v : any
+}

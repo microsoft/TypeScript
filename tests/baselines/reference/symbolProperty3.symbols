@@ -1,0 +1,23 @@
+=== tests/cases/conformance/es6/Symbols/symbolProperty3.ts ===
+var s = Symbol;
+>s : Symbol(s, Decl(symbolProperty3.ts, 0, 3))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+var x = {
+>x : Symbol(x, Decl(symbolProperty3.ts, 1, 3))
+
+    [s]: 0,
+>[s] : Symbol([s], Decl(symbolProperty3.ts, 1, 9))
+>s : Symbol(s, Decl(symbolProperty3.ts, 0, 3))
+
+    [s]() { },
+>[s] : Symbol([s], Decl(symbolProperty3.ts, 2, 11))
+>s : Symbol(s, Decl(symbolProperty3.ts, 0, 3))
+
+    get [s]() {
+>[s] : Symbol([s], Decl(symbolProperty3.ts, 3, 14))
+>s : Symbol(s, Decl(symbolProperty3.ts, 0, 3))
+
+        return 0;
+    }
+}

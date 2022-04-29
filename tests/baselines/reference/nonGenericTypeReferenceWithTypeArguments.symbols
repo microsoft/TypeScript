@@ -1,0 +1,68 @@
+=== tests/cases/conformance/types/specifyingTypes/typeReferences/nonGenericTypeReferenceWithTypeArguments.ts ===
+// Check that errors are reported for non-generic types with type arguments
+
+class C { }
+>C : Symbol(C, Decl(nonGenericTypeReferenceWithTypeArguments.ts, 0, 0))
+
+interface I { }
+>I : Symbol(I, Decl(nonGenericTypeReferenceWithTypeArguments.ts, 2, 11))
+
+enum E { }
+>E : Symbol(E, Decl(nonGenericTypeReferenceWithTypeArguments.ts, 3, 15))
+
+type T = { };
+>T : Symbol(T, Decl(nonGenericTypeReferenceWithTypeArguments.ts, 4, 10))
+
+var v1: C<string>;
+>v1 : Symbol(v1, Decl(nonGenericTypeReferenceWithTypeArguments.ts, 6, 3))
+>C : Symbol(C, Decl(nonGenericTypeReferenceWithTypeArguments.ts, 0, 0))
+
+var v2: I<string>;
+>v2 : Symbol(v2, Decl(nonGenericTypeReferenceWithTypeArguments.ts, 7, 3))
+>I : Symbol(I, Decl(nonGenericTypeReferenceWithTypeArguments.ts, 2, 11))
+
+var v3: E<string>;
+>v3 : Symbol(v3, Decl(nonGenericTypeReferenceWithTypeArguments.ts, 8, 3))
+>E : Symbol(E, Decl(nonGenericTypeReferenceWithTypeArguments.ts, 3, 15))
+
+var v4: T<string>;
+>v4 : Symbol(v4, Decl(nonGenericTypeReferenceWithTypeArguments.ts, 9, 3))
+>T : Symbol(T, Decl(nonGenericTypeReferenceWithTypeArguments.ts, 4, 10))
+
+function f<U>() {
+>f : Symbol(f, Decl(nonGenericTypeReferenceWithTypeArguments.ts, 9, 18))
+>U : Symbol(U, Decl(nonGenericTypeReferenceWithTypeArguments.ts, 11, 11))
+
+    class C { }
+>C : Symbol(C, Decl(nonGenericTypeReferenceWithTypeArguments.ts, 11, 17))
+
+    interface I { }
+>I : Symbol(I, Decl(nonGenericTypeReferenceWithTypeArguments.ts, 12, 15))
+
+    enum E { }
+>E : Symbol(E, Decl(nonGenericTypeReferenceWithTypeArguments.ts, 13, 19))
+
+    type T = {};
+>T : Symbol(T, Decl(nonGenericTypeReferenceWithTypeArguments.ts, 14, 14))
+
+    var v1: C<string>;
+>v1 : Symbol(v1, Decl(nonGenericTypeReferenceWithTypeArguments.ts, 16, 7))
+>C : Symbol(C, Decl(nonGenericTypeReferenceWithTypeArguments.ts, 11, 17))
+
+    var v2: I<string>;
+>v2 : Symbol(v2, Decl(nonGenericTypeReferenceWithTypeArguments.ts, 17, 7))
+>I : Symbol(I, Decl(nonGenericTypeReferenceWithTypeArguments.ts, 12, 15))
+
+    var v3: E<string>;
+>v3 : Symbol(v3, Decl(nonGenericTypeReferenceWithTypeArguments.ts, 18, 7))
+>E : Symbol(E, Decl(nonGenericTypeReferenceWithTypeArguments.ts, 13, 19))
+
+    var v4: T<string>;
+>v4 : Symbol(v4, Decl(nonGenericTypeReferenceWithTypeArguments.ts, 19, 7))
+>T : Symbol(T, Decl(nonGenericTypeReferenceWithTypeArguments.ts, 14, 14))
+
+    var v5: U<string>;
+>v5 : Symbol(v5, Decl(nonGenericTypeReferenceWithTypeArguments.ts, 20, 7))
+>U : Symbol(U, Decl(nonGenericTypeReferenceWithTypeArguments.ts, 11, 11))
+}
+

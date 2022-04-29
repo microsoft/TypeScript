@@ -1,0 +1,286 @@
+=== tests/cases/compiler/abstractPropertyInConstructor.ts ===
+abstract class AbstractClass {
+>AbstractClass : Symbol(AbstractClass, Decl(abstractPropertyInConstructor.ts, 0, 0))
+
+    constructor(str: string, other: AbstractClass) {
+>str : Symbol(str, Decl(abstractPropertyInConstructor.ts, 1, 16))
+>other : Symbol(other, Decl(abstractPropertyInConstructor.ts, 1, 28))
+>AbstractClass : Symbol(AbstractClass, Decl(abstractPropertyInConstructor.ts, 0, 0))
+
+        this.method(parseInt(str));
+>this.method : Symbol(AbstractClass.method, Decl(abstractPropertyInConstructor.ts, 20, 37))
+>this : Symbol(AbstractClass, Decl(abstractPropertyInConstructor.ts, 0, 0))
+>method : Symbol(AbstractClass.method, Decl(abstractPropertyInConstructor.ts, 20, 37))
+>parseInt : Symbol(parseInt, Decl(lib.es5.d.ts, --, --))
+>str : Symbol(str, Decl(abstractPropertyInConstructor.ts, 1, 16))
+
+        let val = this.prop.toLowerCase();
+>val : Symbol(val, Decl(abstractPropertyInConstructor.ts, 3, 11))
+>this.prop.toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
+>this.prop : Symbol(AbstractClass.prop, Decl(abstractPropertyInConstructor.ts, 17, 5))
+>this : Symbol(AbstractClass, Decl(abstractPropertyInConstructor.ts, 0, 0))
+>prop : Symbol(AbstractClass.prop, Decl(abstractPropertyInConstructor.ts, 17, 5))
+>toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
+
+        if (!str) {
+>str : Symbol(str, Decl(abstractPropertyInConstructor.ts, 1, 16))
+
+            this.prop = "Hello World";
+>this.prop : Symbol(AbstractClass.prop, Decl(abstractPropertyInConstructor.ts, 17, 5))
+>this : Symbol(AbstractClass, Decl(abstractPropertyInConstructor.ts, 0, 0))
+>prop : Symbol(AbstractClass.prop, Decl(abstractPropertyInConstructor.ts, 17, 5))
+        }
+        this.cb(str);
+>this.cb : Symbol(AbstractClass.cb, Decl(abstractPropertyInConstructor.ts, 19, 26))
+>this : Symbol(AbstractClass, Decl(abstractPropertyInConstructor.ts, 0, 0))
+>cb : Symbol(AbstractClass.cb, Decl(abstractPropertyInConstructor.ts, 19, 26))
+>str : Symbol(str, Decl(abstractPropertyInConstructor.ts, 1, 16))
+
+        // OK, reference is inside function
+        const innerFunction = () => {
+>innerFunction : Symbol(innerFunction, Decl(abstractPropertyInConstructor.ts, 11, 13))
+
+            return this.prop;
+>this.prop : Symbol(AbstractClass.prop, Decl(abstractPropertyInConstructor.ts, 17, 5))
+>this : Symbol(AbstractClass, Decl(abstractPropertyInConstructor.ts, 0, 0))
+>prop : Symbol(AbstractClass.prop, Decl(abstractPropertyInConstructor.ts, 17, 5))
+        }
+
+        // OK, references are to another instance
+        other.cb(other.prop);
+>other.cb : Symbol(AbstractClass.cb, Decl(abstractPropertyInConstructor.ts, 19, 26))
+>other : Symbol(other, Decl(abstractPropertyInConstructor.ts, 1, 28))
+>cb : Symbol(AbstractClass.cb, Decl(abstractPropertyInConstructor.ts, 19, 26))
+>other.prop : Symbol(AbstractClass.prop, Decl(abstractPropertyInConstructor.ts, 17, 5))
+>other : Symbol(other, Decl(abstractPropertyInConstructor.ts, 1, 28))
+>prop : Symbol(AbstractClass.prop, Decl(abstractPropertyInConstructor.ts, 17, 5))
+    }
+
+    abstract prop: string;
+>prop : Symbol(AbstractClass.prop, Decl(abstractPropertyInConstructor.ts, 17, 5))
+
+    abstract cb: (s: string) => void;
+>cb : Symbol(AbstractClass.cb, Decl(abstractPropertyInConstructor.ts, 19, 26))
+>s : Symbol(s, Decl(abstractPropertyInConstructor.ts, 20, 18))
+
+    abstract method(num: number): void;
+>method : Symbol(AbstractClass.method, Decl(abstractPropertyInConstructor.ts, 20, 37))
+>num : Symbol(num, Decl(abstractPropertyInConstructor.ts, 22, 20))
+
+    other = this.prop;
+>other : Symbol(AbstractClass.other, Decl(abstractPropertyInConstructor.ts, 22, 39))
+>this.prop : Symbol(AbstractClass.prop, Decl(abstractPropertyInConstructor.ts, 17, 5))
+>this : Symbol(AbstractClass, Decl(abstractPropertyInConstructor.ts, 0, 0))
+>prop : Symbol(AbstractClass.prop, Decl(abstractPropertyInConstructor.ts, 17, 5))
+
+    fn = () => this.prop;
+>fn : Symbol(AbstractClass.fn, Decl(abstractPropertyInConstructor.ts, 24, 22))
+>this.prop : Symbol(AbstractClass.prop, Decl(abstractPropertyInConstructor.ts, 17, 5))
+>this : Symbol(AbstractClass, Decl(abstractPropertyInConstructor.ts, 0, 0))
+>prop : Symbol(AbstractClass.prop, Decl(abstractPropertyInConstructor.ts, 17, 5))
+
+    method2() {
+>method2 : Symbol(AbstractClass.method2, Decl(abstractPropertyInConstructor.ts, 25, 25))
+
+        this.prop = this.prop + "!";
+>this.prop : Symbol(AbstractClass.prop, Decl(abstractPropertyInConstructor.ts, 17, 5))
+>this : Symbol(AbstractClass, Decl(abstractPropertyInConstructor.ts, 0, 0))
+>prop : Symbol(AbstractClass.prop, Decl(abstractPropertyInConstructor.ts, 17, 5))
+>this.prop : Symbol(AbstractClass.prop, Decl(abstractPropertyInConstructor.ts, 17, 5))
+>this : Symbol(AbstractClass, Decl(abstractPropertyInConstructor.ts, 0, 0))
+>prop : Symbol(AbstractClass.prop, Decl(abstractPropertyInConstructor.ts, 17, 5))
+    }
+}
+
+abstract class DerivedAbstractClass extends AbstractClass {
+>DerivedAbstractClass : Symbol(DerivedAbstractClass, Decl(abstractPropertyInConstructor.ts, 30, 1))
+>AbstractClass : Symbol(AbstractClass, Decl(abstractPropertyInConstructor.ts, 0, 0))
+
+    cb = (s: string) => {};
+>cb : Symbol(DerivedAbstractClass.cb, Decl(abstractPropertyInConstructor.ts, 32, 59))
+>s : Symbol(s, Decl(abstractPropertyInConstructor.ts, 33, 10))
+
+    constructor(str: string, other: AbstractClass, yetAnother: DerivedAbstractClass) {
+>str : Symbol(str, Decl(abstractPropertyInConstructor.ts, 35, 16))
+>other : Symbol(other, Decl(abstractPropertyInConstructor.ts, 35, 28))
+>AbstractClass : Symbol(AbstractClass, Decl(abstractPropertyInConstructor.ts, 0, 0))
+>yetAnother : Symbol(yetAnother, Decl(abstractPropertyInConstructor.ts, 35, 50))
+>DerivedAbstractClass : Symbol(DerivedAbstractClass, Decl(abstractPropertyInConstructor.ts, 30, 1))
+
+        super(str, other);
+>super : Symbol(AbstractClass, Decl(abstractPropertyInConstructor.ts, 0, 0))
+>str : Symbol(str, Decl(abstractPropertyInConstructor.ts, 35, 16))
+>other : Symbol(other, Decl(abstractPropertyInConstructor.ts, 35, 28))
+
+        // there is no implementation of 'prop' in any base class
+        this.cb(this.prop.toLowerCase());
+>this.cb : Symbol(DerivedAbstractClass.cb, Decl(abstractPropertyInConstructor.ts, 32, 59))
+>this : Symbol(DerivedAbstractClass, Decl(abstractPropertyInConstructor.ts, 30, 1))
+>cb : Symbol(DerivedAbstractClass.cb, Decl(abstractPropertyInConstructor.ts, 32, 59))
+>this.prop.toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
+>this.prop : Symbol(AbstractClass.prop, Decl(abstractPropertyInConstructor.ts, 17, 5))
+>this : Symbol(DerivedAbstractClass, Decl(abstractPropertyInConstructor.ts, 30, 1))
+>prop : Symbol(AbstractClass.prop, Decl(abstractPropertyInConstructor.ts, 17, 5))
+>toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
+
+        this.method(1);
+>this.method : Symbol(AbstractClass.method, Decl(abstractPropertyInConstructor.ts, 20, 37))
+>this : Symbol(DerivedAbstractClass, Decl(abstractPropertyInConstructor.ts, 30, 1))
+>method : Symbol(AbstractClass.method, Decl(abstractPropertyInConstructor.ts, 20, 37))
+
+        // OK, references are to another instance
+        other.cb(other.prop);
+>other.cb : Symbol(AbstractClass.cb, Decl(abstractPropertyInConstructor.ts, 19, 26))
+>other : Symbol(other, Decl(abstractPropertyInConstructor.ts, 35, 28))
+>cb : Symbol(AbstractClass.cb, Decl(abstractPropertyInConstructor.ts, 19, 26))
+>other.prop : Symbol(AbstractClass.prop, Decl(abstractPropertyInConstructor.ts, 17, 5))
+>other : Symbol(other, Decl(abstractPropertyInConstructor.ts, 35, 28))
+>prop : Symbol(AbstractClass.prop, Decl(abstractPropertyInConstructor.ts, 17, 5))
+
+        yetAnother.cb(yetAnother.prop);
+>yetAnother.cb : Symbol(DerivedAbstractClass.cb, Decl(abstractPropertyInConstructor.ts, 32, 59))
+>yetAnother : Symbol(yetAnother, Decl(abstractPropertyInConstructor.ts, 35, 50))
+>cb : Symbol(DerivedAbstractClass.cb, Decl(abstractPropertyInConstructor.ts, 32, 59))
+>yetAnother.prop : Symbol(AbstractClass.prop, Decl(abstractPropertyInConstructor.ts, 17, 5))
+>yetAnother : Symbol(yetAnother, Decl(abstractPropertyInConstructor.ts, 35, 50))
+>prop : Symbol(AbstractClass.prop, Decl(abstractPropertyInConstructor.ts, 17, 5))
+    }
+}
+
+class Implementation extends DerivedAbstractClass {
+>Implementation : Symbol(Implementation, Decl(abstractPropertyInConstructor.ts, 46, 1))
+>DerivedAbstractClass : Symbol(DerivedAbstractClass, Decl(abstractPropertyInConstructor.ts, 30, 1))
+
+    prop = "";
+>prop : Symbol(Implementation.prop, Decl(abstractPropertyInConstructor.ts, 48, 51))
+
+    cb = (s: string) => {};
+>cb : Symbol(Implementation.cb, Decl(abstractPropertyInConstructor.ts, 49, 14))
+>s : Symbol(s, Decl(abstractPropertyInConstructor.ts, 50, 10))
+
+    constructor(str: string, other: AbstractClass, yetAnother: DerivedAbstractClass) {
+>str : Symbol(str, Decl(abstractPropertyInConstructor.ts, 52, 16))
+>other : Symbol(other, Decl(abstractPropertyInConstructor.ts, 52, 28))
+>AbstractClass : Symbol(AbstractClass, Decl(abstractPropertyInConstructor.ts, 0, 0))
+>yetAnother : Symbol(yetAnother, Decl(abstractPropertyInConstructor.ts, 52, 50))
+>DerivedAbstractClass : Symbol(DerivedAbstractClass, Decl(abstractPropertyInConstructor.ts, 30, 1))
+
+        super(str, other, yetAnother);
+>super : Symbol(DerivedAbstractClass, Decl(abstractPropertyInConstructor.ts, 30, 1))
+>str : Symbol(str, Decl(abstractPropertyInConstructor.ts, 52, 16))
+>other : Symbol(other, Decl(abstractPropertyInConstructor.ts, 52, 28))
+>yetAnother : Symbol(yetAnother, Decl(abstractPropertyInConstructor.ts, 52, 50))
+
+        this.cb(this.prop);
+>this.cb : Symbol(Implementation.cb, Decl(abstractPropertyInConstructor.ts, 49, 14))
+>this : Symbol(Implementation, Decl(abstractPropertyInConstructor.ts, 46, 1))
+>cb : Symbol(Implementation.cb, Decl(abstractPropertyInConstructor.ts, 49, 14))
+>this.prop : Symbol(Implementation.prop, Decl(abstractPropertyInConstructor.ts, 48, 51))
+>this : Symbol(Implementation, Decl(abstractPropertyInConstructor.ts, 46, 1))
+>prop : Symbol(Implementation.prop, Decl(abstractPropertyInConstructor.ts, 48, 51))
+    }
+
+    method(n: number) {
+>method : Symbol(Implementation.method, Decl(abstractPropertyInConstructor.ts, 55, 5))
+>n : Symbol(n, Decl(abstractPropertyInConstructor.ts, 57, 11))
+
+        this.cb(this.prop + n);
+>this.cb : Symbol(Implementation.cb, Decl(abstractPropertyInConstructor.ts, 49, 14))
+>this : Symbol(Implementation, Decl(abstractPropertyInConstructor.ts, 46, 1))
+>cb : Symbol(Implementation.cb, Decl(abstractPropertyInConstructor.ts, 49, 14))
+>this.prop : Symbol(Implementation.prop, Decl(abstractPropertyInConstructor.ts, 48, 51))
+>this : Symbol(Implementation, Decl(abstractPropertyInConstructor.ts, 46, 1))
+>prop : Symbol(Implementation.prop, Decl(abstractPropertyInConstructor.ts, 48, 51))
+>n : Symbol(n, Decl(abstractPropertyInConstructor.ts, 57, 11))
+    }
+}
+
+class User {
+>User : Symbol(User, Decl(abstractPropertyInConstructor.ts, 60, 1))
+
+    constructor(a: AbstractClass) {
+>a : Symbol(a, Decl(abstractPropertyInConstructor.ts, 63, 16))
+>AbstractClass : Symbol(AbstractClass, Decl(abstractPropertyInConstructor.ts, 0, 0))
+
+        a.prop;
+>a.prop : Symbol(AbstractClass.prop, Decl(abstractPropertyInConstructor.ts, 17, 5))
+>a : Symbol(a, Decl(abstractPropertyInConstructor.ts, 63, 16))
+>prop : Symbol(AbstractClass.prop, Decl(abstractPropertyInConstructor.ts, 17, 5))
+
+        a.cb("hi");
+>a.cb : Symbol(AbstractClass.cb, Decl(abstractPropertyInConstructor.ts, 19, 26))
+>a : Symbol(a, Decl(abstractPropertyInConstructor.ts, 63, 16))
+>cb : Symbol(AbstractClass.cb, Decl(abstractPropertyInConstructor.ts, 19, 26))
+
+        a.method(12);
+>a.method : Symbol(AbstractClass.method, Decl(abstractPropertyInConstructor.ts, 20, 37))
+>a : Symbol(a, Decl(abstractPropertyInConstructor.ts, 63, 16))
+>method : Symbol(AbstractClass.method, Decl(abstractPropertyInConstructor.ts, 20, 37))
+
+        a.method2();
+>a.method2 : Symbol(AbstractClass.method2, Decl(abstractPropertyInConstructor.ts, 25, 25))
+>a : Symbol(a, Decl(abstractPropertyInConstructor.ts, 63, 16))
+>method2 : Symbol(AbstractClass.method2, Decl(abstractPropertyInConstructor.ts, 25, 25))
+    }
+}
+
+abstract class C1 {
+>C1 : Symbol(C1, Decl(abstractPropertyInConstructor.ts, 69, 1))
+
+    abstract x: string;
+>x : Symbol(C1.x, Decl(abstractPropertyInConstructor.ts, 71, 19))
+
+    abstract y: string;
+>y : Symbol(C1.y, Decl(abstractPropertyInConstructor.ts, 72, 23))
+
+    constructor() {
+        let self = this;                // ok
+>self : Symbol(self, Decl(abstractPropertyInConstructor.ts, 76, 11))
+>this : Symbol(C1, Decl(abstractPropertyInConstructor.ts, 69, 1))
+
+        let { x, y: y1 } = this;        // error
+>x : Symbol(x, Decl(abstractPropertyInConstructor.ts, 77, 13))
+>y : Symbol(C1.y, Decl(abstractPropertyInConstructor.ts, 72, 23))
+>y1 : Symbol(y1, Decl(abstractPropertyInConstructor.ts, 77, 16))
+>this : Symbol(C1, Decl(abstractPropertyInConstructor.ts, 69, 1))
+
+        ({ x, y: y1, "y": y1 } = this); // error
+>x : Symbol(x, Decl(abstractPropertyInConstructor.ts, 78, 10))
+>y : Symbol(y, Decl(abstractPropertyInConstructor.ts, 78, 13), Decl(abstractPropertyInConstructor.ts, 78, 20))
+>y1 : Symbol(y1, Decl(abstractPropertyInConstructor.ts, 77, 16))
+>"y" : Symbol(y, Decl(abstractPropertyInConstructor.ts, 78, 13), Decl(abstractPropertyInConstructor.ts, 78, 20))
+>y1 : Symbol(y1, Decl(abstractPropertyInConstructor.ts, 77, 16))
+>this : Symbol(C1, Decl(abstractPropertyInConstructor.ts, 69, 1))
+    }
+}
+
+class C2 {
+>C2 : Symbol(C2, Decl(abstractPropertyInConstructor.ts, 80, 1))
+
+    x: string;
+>x : Symbol(C2.x, Decl(abstractPropertyInConstructor.ts, 82, 10))
+
+    y: string;
+>y : Symbol(C2.y, Decl(abstractPropertyInConstructor.ts, 83, 14))
+
+    constructor() {
+        let self = this;                // ok
+>self : Symbol(self, Decl(abstractPropertyInConstructor.ts, 87, 11))
+>this : Symbol(C2, Decl(abstractPropertyInConstructor.ts, 80, 1))
+
+        let { x, y: y1 } = this;        // ok
+>x : Symbol(x, Decl(abstractPropertyInConstructor.ts, 88, 13))
+>y : Symbol(C2.y, Decl(abstractPropertyInConstructor.ts, 83, 14))
+>y1 : Symbol(y1, Decl(abstractPropertyInConstructor.ts, 88, 16))
+>this : Symbol(C2, Decl(abstractPropertyInConstructor.ts, 80, 1))
+
+        ({ x, y: y1, "y": y1 } = this); // ok
+>x : Symbol(x, Decl(abstractPropertyInConstructor.ts, 89, 10))
+>y : Symbol(y, Decl(abstractPropertyInConstructor.ts, 89, 13), Decl(abstractPropertyInConstructor.ts, 89, 20))
+>y1 : Symbol(y1, Decl(abstractPropertyInConstructor.ts, 88, 16))
+>"y" : Symbol(y, Decl(abstractPropertyInConstructor.ts, 89, 13), Decl(abstractPropertyInConstructor.ts, 89, 20))
+>y1 : Symbol(y1, Decl(abstractPropertyInConstructor.ts, 88, 16))
+>this : Symbol(C2, Decl(abstractPropertyInConstructor.ts, 80, 1))
+    }
+}
+

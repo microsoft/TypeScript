@@ -1,0 +1,94 @@
+tests/cases/conformance/types/union/unionTypeCallSignatures6.ts(11,1): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'A & B'.
+  Type 'void' is not assignable to type 'A'.
+tests/cases/conformance/types/union/unionTypeCallSignatures6.ts(13,1): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'A'.
+tests/cases/conformance/types/union/unionTypeCallSignatures6.ts(38,4): error TS2349: This expression is not callable.
+  Each member of the union type 'F3 | F4' has signatures, but none of those signatures are compatible with each other.
+tests/cases/conformance/types/union/unionTypeCallSignatures6.ts(39,1): error TS2684: The 'this' context of type 'A & C & { f0: F0 | F3; f1: F1 | F3; f2: F1 | F4; f3: F3 | F4; f4: F3 | F5; }' is not assignable to method's 'this' of type 'B'.
+  Property 'b' is missing in type 'A & C & { f0: F0 | F3; f1: F1 | F3; f2: F1 | F4; f3: F3 | F4; f4: F3 | F5; }' but required in type 'B'.
+tests/cases/conformance/types/union/unionTypeCallSignatures6.ts(48,1): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'A & B'.
+tests/cases/conformance/types/union/unionTypeCallSignatures6.ts(55,1): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(this: A & B & C): void', gave the following error.
+    The 'this' context of type 'void' is not assignable to method's 'this' of type 'A & B & C'.
+      Type 'void' is not assignable to type 'A'.
+  Overload 2 of 2, '(this: A & B): void', gave the following error.
+    The 'this' context of type 'void' is not assignable to method's 'this' of type 'A & B'.
+
+
+==== tests/cases/conformance/types/union/unionTypeCallSignatures6.ts (6 errors) ====
+    type A = { a: string };
+    type B = { b: number };
+    type C = { c: string };
+    type D = { d: number };
+    type F0 = () => void;
+    
+    // #31547
+    type F1 = (this: A) => void;
+    type F2 = (this: B) => void;
+    declare var f1: F1 | F2;
+    f1(); // error
+    ~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'A & B'.
+!!! error TS2684:   Type 'void' is not assignable to type 'A'.
+    declare var f2: F0 | F1;
+    f2(); // error
+    ~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'A'.
+    
+    interface F3 {
+      (this: A): void;
+      (this: B): void;
+    }
+    interface F4 {
+      (this: C): void;
+      (this: D): void;
+    }
+    interface F5 {
+      (this: C): void;
+      (this: B): void;
+    }
+    
+    declare var x1: A & C & {
+      f0: F0 | F3;
+      f1: F1 | F3;
+      f2: F1 | F4;
+      f3: F3 | F4;
+      f4: F3 | F5;
+    }
+    x1.f0();
+    x1.f1();
+    x1.f2();
+    x1.f3(); // error
+       ~~
+!!! error TS2349: This expression is not callable.
+!!! error TS2349:   Each member of the union type 'F3 | F4' has signatures, but none of those signatures are compatible with each other.
+    x1.f4(); // error
+    ~~
+!!! error TS2684: The 'this' context of type 'A & C & { f0: F0 | F3; f1: F1 | F3; f2: F1 | F4; f3: F3 | F4; f4: F3 | F5; }' is not assignable to method's 'this' of type 'B'.
+!!! error TS2684:   Property 'b' is missing in type 'A & C & { f0: F0 | F3; f1: F1 | F3; f2: F1 | F4; f3: F3 | F4; f4: F3 | F5; }' but required in type 'B'.
+!!! related TS2728 tests/cases/conformance/types/union/unionTypeCallSignatures6.ts:2:12: 'b' is declared here.
+    
+    declare var x2: A & B & {
+      f4: F3 | F5;
+    }
+    x2.f4();
+    
+    type F6 = (this: A & B) => void;
+    declare var f3: F1 | F6;
+    f3(); // error
+    ~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'A & B'.
+    
+    interface F7 {
+      (this: A & B & C): void;
+      (this: A & B): void;
+    }
+    declare var f4: F6 | F7;
+    f4(); // error
+    ~~~~
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   Overload 1 of 2, '(this: A & B & C): void', gave the following error.
+!!! error TS2769:     The 'this' context of type 'void' is not assignable to method's 'this' of type 'A & B & C'.
+!!! error TS2769:       Type 'void' is not assignable to type 'A'.
+!!! error TS2769:   Overload 2 of 2, '(this: A & B): void', gave the following error.
+!!! error TS2769:     The 'this' context of type 'void' is not assignable to method's 'this' of type 'A & B'.
+    

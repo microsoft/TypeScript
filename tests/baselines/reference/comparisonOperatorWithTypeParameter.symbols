@@ -1,0 +1,342 @@
+=== tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithTypeParameter.ts ===
+var a: {};
+>a : Symbol(a, Decl(comparisonOperatorWithTypeParameter.ts, 0, 3))
+
+var b: Object;
+>b : Symbol(b, Decl(comparisonOperatorWithTypeParameter.ts, 1, 3))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+function foo<T, U/* extends T*/, V/* extends U*/>(t: T, u: U, v: V) {
+>foo : Symbol(foo, Decl(comparisonOperatorWithTypeParameter.ts, 1, 14))
+>T : Symbol(T, Decl(comparisonOperatorWithTypeParameter.ts, 3, 13))
+>U : Symbol(U, Decl(comparisonOperatorWithTypeParameter.ts, 3, 15))
+>V : Symbol(V, Decl(comparisonOperatorWithTypeParameter.ts, 3, 32))
+>t : Symbol(t, Decl(comparisonOperatorWithTypeParameter.ts, 3, 50))
+>T : Symbol(T, Decl(comparisonOperatorWithTypeParameter.ts, 3, 13))
+>u : Symbol(u, Decl(comparisonOperatorWithTypeParameter.ts, 3, 55))
+>U : Symbol(U, Decl(comparisonOperatorWithTypeParameter.ts, 3, 15))
+>v : Symbol(v, Decl(comparisonOperatorWithTypeParameter.ts, 3, 61))
+>V : Symbol(V, Decl(comparisonOperatorWithTypeParameter.ts, 3, 32))
+
+    // errors
+    var ra1 = t < u;
+>ra1 : Symbol(ra1, Decl(comparisonOperatorWithTypeParameter.ts, 5, 7))
+>t : Symbol(t, Decl(comparisonOperatorWithTypeParameter.ts, 3, 50))
+>u : Symbol(u, Decl(comparisonOperatorWithTypeParameter.ts, 3, 55))
+
+    var ra2 = t > u;
+>ra2 : Symbol(ra2, Decl(comparisonOperatorWithTypeParameter.ts, 6, 7))
+>t : Symbol(t, Decl(comparisonOperatorWithTypeParameter.ts, 3, 50))
+>u : Symbol(u, Decl(comparisonOperatorWithTypeParameter.ts, 3, 55))
+
+    var ra3 = t <= u;
+>ra3 : Symbol(ra3, Decl(comparisonOperatorWithTypeParameter.ts, 7, 7))
+>t : Symbol(t, Decl(comparisonOperatorWithTypeParameter.ts, 3, 50))
+>u : Symbol(u, Decl(comparisonOperatorWithTypeParameter.ts, 3, 55))
+
+    var ra4 = t >= u;
+>ra4 : Symbol(ra4, Decl(comparisonOperatorWithTypeParameter.ts, 8, 7))
+>t : Symbol(t, Decl(comparisonOperatorWithTypeParameter.ts, 3, 50))
+>u : Symbol(u, Decl(comparisonOperatorWithTypeParameter.ts, 3, 55))
+
+    var ra5 = t == u;
+>ra5 : Symbol(ra5, Decl(comparisonOperatorWithTypeParameter.ts, 9, 7))
+>t : Symbol(t, Decl(comparisonOperatorWithTypeParameter.ts, 3, 50))
+>u : Symbol(u, Decl(comparisonOperatorWithTypeParameter.ts, 3, 55))
+
+    var ra6 = t != u;
+>ra6 : Symbol(ra6, Decl(comparisonOperatorWithTypeParameter.ts, 10, 7))
+>t : Symbol(t, Decl(comparisonOperatorWithTypeParameter.ts, 3, 50))
+>u : Symbol(u, Decl(comparisonOperatorWithTypeParameter.ts, 3, 55))
+
+    var ra7 = t === u;
+>ra7 : Symbol(ra7, Decl(comparisonOperatorWithTypeParameter.ts, 11, 7))
+>t : Symbol(t, Decl(comparisonOperatorWithTypeParameter.ts, 3, 50))
+>u : Symbol(u, Decl(comparisonOperatorWithTypeParameter.ts, 3, 55))
+
+    var ra8 = t !== u;
+>ra8 : Symbol(ra8, Decl(comparisonOperatorWithTypeParameter.ts, 12, 7))
+>t : Symbol(t, Decl(comparisonOperatorWithTypeParameter.ts, 3, 50))
+>u : Symbol(u, Decl(comparisonOperatorWithTypeParameter.ts, 3, 55))
+
+    var rb1 = u < t;
+>rb1 : Symbol(rb1, Decl(comparisonOperatorWithTypeParameter.ts, 14, 7))
+>u : Symbol(u, Decl(comparisonOperatorWithTypeParameter.ts, 3, 55))
+>t : Symbol(t, Decl(comparisonOperatorWithTypeParameter.ts, 3, 50))
+
+    var rb2 = u > t;
+>rb2 : Symbol(rb2, Decl(comparisonOperatorWithTypeParameter.ts, 15, 7))
+>u : Symbol(u, Decl(comparisonOperatorWithTypeParameter.ts, 3, 55))
+>t : Symbol(t, Decl(comparisonOperatorWithTypeParameter.ts, 3, 50))
+
+    var rb3 = u <= t;
+>rb3 : Symbol(rb3, Decl(comparisonOperatorWithTypeParameter.ts, 16, 7))
+>u : Symbol(u, Decl(comparisonOperatorWithTypeParameter.ts, 3, 55))
+>t : Symbol(t, Decl(comparisonOperatorWithTypeParameter.ts, 3, 50))
+
+    var rb4 = u >= t;
+>rb4 : Symbol(rb4, Decl(comparisonOperatorWithTypeParameter.ts, 17, 7))
+>u : Symbol(u, Decl(comparisonOperatorWithTypeParameter.ts, 3, 55))
+>t : Symbol(t, Decl(comparisonOperatorWithTypeParameter.ts, 3, 50))
+
+    var rb5 = u == t;
+>rb5 : Symbol(rb5, Decl(comparisonOperatorWithTypeParameter.ts, 18, 7))
+>u : Symbol(u, Decl(comparisonOperatorWithTypeParameter.ts, 3, 55))
+>t : Symbol(t, Decl(comparisonOperatorWithTypeParameter.ts, 3, 50))
+
+    var rb6 = u != t;
+>rb6 : Symbol(rb6, Decl(comparisonOperatorWithTypeParameter.ts, 19, 7))
+>u : Symbol(u, Decl(comparisonOperatorWithTypeParameter.ts, 3, 55))
+>t : Symbol(t, Decl(comparisonOperatorWithTypeParameter.ts, 3, 50))
+
+    var rb7 = u === t;
+>rb7 : Symbol(rb7, Decl(comparisonOperatorWithTypeParameter.ts, 20, 7))
+>u : Symbol(u, Decl(comparisonOperatorWithTypeParameter.ts, 3, 55))
+>t : Symbol(t, Decl(comparisonOperatorWithTypeParameter.ts, 3, 50))
+
+    var rb8 = u !== t;
+>rb8 : Symbol(rb8, Decl(comparisonOperatorWithTypeParameter.ts, 21, 7))
+>u : Symbol(u, Decl(comparisonOperatorWithTypeParameter.ts, 3, 55))
+>t : Symbol(t, Decl(comparisonOperatorWithTypeParameter.ts, 3, 50))
+
+    var rc1 = t < v;
+>rc1 : Symbol(rc1, Decl(comparisonOperatorWithTypeParameter.ts, 23, 7))
+>t : Symbol(t, Decl(comparisonOperatorWithTypeParameter.ts, 3, 50))
+>v : Symbol(v, Decl(comparisonOperatorWithTypeParameter.ts, 3, 61))
+
+    var rc2 = t > v;
+>rc2 : Symbol(rc2, Decl(comparisonOperatorWithTypeParameter.ts, 24, 7))
+>t : Symbol(t, Decl(comparisonOperatorWithTypeParameter.ts, 3, 50))
+>v : Symbol(v, Decl(comparisonOperatorWithTypeParameter.ts, 3, 61))
+
+    var rc3 = t <= v;
+>rc3 : Symbol(rc3, Decl(comparisonOperatorWithTypeParameter.ts, 25, 7))
+>t : Symbol(t, Decl(comparisonOperatorWithTypeParameter.ts, 3, 50))
+>v : Symbol(v, Decl(comparisonOperatorWithTypeParameter.ts, 3, 61))
+
+    var rc4 = t >= v;
+>rc4 : Symbol(rc4, Decl(comparisonOperatorWithTypeParameter.ts, 26, 7))
+>t : Symbol(t, Decl(comparisonOperatorWithTypeParameter.ts, 3, 50))
+>v : Symbol(v, Decl(comparisonOperatorWithTypeParameter.ts, 3, 61))
+
+    var rc5 = t == v;
+>rc5 : Symbol(rc5, Decl(comparisonOperatorWithTypeParameter.ts, 27, 7))
+>t : Symbol(t, Decl(comparisonOperatorWithTypeParameter.ts, 3, 50))
+>v : Symbol(v, Decl(comparisonOperatorWithTypeParameter.ts, 3, 61))
+
+    var rc6 = t != v;
+>rc6 : Symbol(rc6, Decl(comparisonOperatorWithTypeParameter.ts, 28, 7))
+>t : Symbol(t, Decl(comparisonOperatorWithTypeParameter.ts, 3, 50))
+>v : Symbol(v, Decl(comparisonOperatorWithTypeParameter.ts, 3, 61))
+
+    var rc7 = t === v;
+>rc7 : Symbol(rc7, Decl(comparisonOperatorWithTypeParameter.ts, 29, 7))
+>t : Symbol(t, Decl(comparisonOperatorWithTypeParameter.ts, 3, 50))
+>v : Symbol(v, Decl(comparisonOperatorWithTypeParameter.ts, 3, 61))
+
+    var rc8 = t !== v;
+>rc8 : Symbol(rc8, Decl(comparisonOperatorWithTypeParameter.ts, 30, 7))
+>t : Symbol(t, Decl(comparisonOperatorWithTypeParameter.ts, 3, 50))
+>v : Symbol(v, Decl(comparisonOperatorWithTypeParameter.ts, 3, 61))
+
+    var rd1 = v < t;
+>rd1 : Symbol(rd1, Decl(comparisonOperatorWithTypeParameter.ts, 32, 7))
+>v : Symbol(v, Decl(comparisonOperatorWithTypeParameter.ts, 3, 61))
+>t : Symbol(t, Decl(comparisonOperatorWithTypeParameter.ts, 3, 50))
+
+    var rd2 = v > t;
+>rd2 : Symbol(rd2, Decl(comparisonOperatorWithTypeParameter.ts, 33, 7))
+>v : Symbol(v, Decl(comparisonOperatorWithTypeParameter.ts, 3, 61))
+>t : Symbol(t, Decl(comparisonOperatorWithTypeParameter.ts, 3, 50))
+
+    var rd3 = v <= t;
+>rd3 : Symbol(rd3, Decl(comparisonOperatorWithTypeParameter.ts, 34, 7))
+>v : Symbol(v, Decl(comparisonOperatorWithTypeParameter.ts, 3, 61))
+>t : Symbol(t, Decl(comparisonOperatorWithTypeParameter.ts, 3, 50))
+
+    var rd4 = v >= t;
+>rd4 : Symbol(rd4, Decl(comparisonOperatorWithTypeParameter.ts, 35, 7))
+>v : Symbol(v, Decl(comparisonOperatorWithTypeParameter.ts, 3, 61))
+>t : Symbol(t, Decl(comparisonOperatorWithTypeParameter.ts, 3, 50))
+
+    var rd5 = v == t;
+>rd5 : Symbol(rd5, Decl(comparisonOperatorWithTypeParameter.ts, 36, 7))
+>v : Symbol(v, Decl(comparisonOperatorWithTypeParameter.ts, 3, 61))
+>t : Symbol(t, Decl(comparisonOperatorWithTypeParameter.ts, 3, 50))
+
+    var rd6 = v != t;
+>rd6 : Symbol(rd6, Decl(comparisonOperatorWithTypeParameter.ts, 37, 7))
+>v : Symbol(v, Decl(comparisonOperatorWithTypeParameter.ts, 3, 61))
+>t : Symbol(t, Decl(comparisonOperatorWithTypeParameter.ts, 3, 50))
+
+    var rd7 = v === t;
+>rd7 : Symbol(rd7, Decl(comparisonOperatorWithTypeParameter.ts, 38, 7))
+>v : Symbol(v, Decl(comparisonOperatorWithTypeParameter.ts, 3, 61))
+>t : Symbol(t, Decl(comparisonOperatorWithTypeParameter.ts, 3, 50))
+
+    var rd8 = v !== t;
+>rd8 : Symbol(rd8, Decl(comparisonOperatorWithTypeParameter.ts, 39, 7))
+>v : Symbol(v, Decl(comparisonOperatorWithTypeParameter.ts, 3, 61))
+>t : Symbol(t, Decl(comparisonOperatorWithTypeParameter.ts, 3, 50))
+
+    // ok
+    var re1 = t < a;
+>re1 : Symbol(re1, Decl(comparisonOperatorWithTypeParameter.ts, 42, 7))
+>t : Symbol(t, Decl(comparisonOperatorWithTypeParameter.ts, 3, 50))
+>a : Symbol(a, Decl(comparisonOperatorWithTypeParameter.ts, 0, 3))
+
+    var re2 = t > a;
+>re2 : Symbol(re2, Decl(comparisonOperatorWithTypeParameter.ts, 43, 7))
+>t : Symbol(t, Decl(comparisonOperatorWithTypeParameter.ts, 3, 50))
+>a : Symbol(a, Decl(comparisonOperatorWithTypeParameter.ts, 0, 3))
+
+    var re3 = t <= a;
+>re3 : Symbol(re3, Decl(comparisonOperatorWithTypeParameter.ts, 44, 7))
+>t : Symbol(t, Decl(comparisonOperatorWithTypeParameter.ts, 3, 50))
+>a : Symbol(a, Decl(comparisonOperatorWithTypeParameter.ts, 0, 3))
+
+    var re4 = t >= a;
+>re4 : Symbol(re4, Decl(comparisonOperatorWithTypeParameter.ts, 45, 7))
+>t : Symbol(t, Decl(comparisonOperatorWithTypeParameter.ts, 3, 50))
+>a : Symbol(a, Decl(comparisonOperatorWithTypeParameter.ts, 0, 3))
+
+    var re5 = t == a;
+>re5 : Symbol(re5, Decl(comparisonOperatorWithTypeParameter.ts, 46, 7))
+>t : Symbol(t, Decl(comparisonOperatorWithTypeParameter.ts, 3, 50))
+>a : Symbol(a, Decl(comparisonOperatorWithTypeParameter.ts, 0, 3))
+
+    var re6 = t != a;
+>re6 : Symbol(re6, Decl(comparisonOperatorWithTypeParameter.ts, 47, 7))
+>t : Symbol(t, Decl(comparisonOperatorWithTypeParameter.ts, 3, 50))
+>a : Symbol(a, Decl(comparisonOperatorWithTypeParameter.ts, 0, 3))
+
+    var re7 = t === a;
+>re7 : Symbol(re7, Decl(comparisonOperatorWithTypeParameter.ts, 48, 7))
+>t : Symbol(t, Decl(comparisonOperatorWithTypeParameter.ts, 3, 50))
+>a : Symbol(a, Decl(comparisonOperatorWithTypeParameter.ts, 0, 3))
+
+    var re8 = t !== a;
+>re8 : Symbol(re8, Decl(comparisonOperatorWithTypeParameter.ts, 49, 7))
+>t : Symbol(t, Decl(comparisonOperatorWithTypeParameter.ts, 3, 50))
+>a : Symbol(a, Decl(comparisonOperatorWithTypeParameter.ts, 0, 3))
+
+    var rf1 = a < t;
+>rf1 : Symbol(rf1, Decl(comparisonOperatorWithTypeParameter.ts, 51, 7))
+>a : Symbol(a, Decl(comparisonOperatorWithTypeParameter.ts, 0, 3))
+>t : Symbol(t, Decl(comparisonOperatorWithTypeParameter.ts, 3, 50))
+
+    var rf2 = a > t;
+>rf2 : Symbol(rf2, Decl(comparisonOperatorWithTypeParameter.ts, 52, 7))
+>a : Symbol(a, Decl(comparisonOperatorWithTypeParameter.ts, 0, 3))
+>t : Symbol(t, Decl(comparisonOperatorWithTypeParameter.ts, 3, 50))
+
+    var rf3 = a <= t;
+>rf3 : Symbol(rf3, Decl(comparisonOperatorWithTypeParameter.ts, 53, 7))
+>a : Symbol(a, Decl(comparisonOperatorWithTypeParameter.ts, 0, 3))
+>t : Symbol(t, Decl(comparisonOperatorWithTypeParameter.ts, 3, 50))
+
+    var rf4 = a >= t;
+>rf4 : Symbol(rf4, Decl(comparisonOperatorWithTypeParameter.ts, 54, 7))
+>a : Symbol(a, Decl(comparisonOperatorWithTypeParameter.ts, 0, 3))
+>t : Symbol(t, Decl(comparisonOperatorWithTypeParameter.ts, 3, 50))
+
+    var rf5 = a == t;
+>rf5 : Symbol(rf5, Decl(comparisonOperatorWithTypeParameter.ts, 55, 7))
+>a : Symbol(a, Decl(comparisonOperatorWithTypeParameter.ts, 0, 3))
+>t : Symbol(t, Decl(comparisonOperatorWithTypeParameter.ts, 3, 50))
+
+    var rf6 = a != t;
+>rf6 : Symbol(rf6, Decl(comparisonOperatorWithTypeParameter.ts, 56, 7))
+>a : Symbol(a, Decl(comparisonOperatorWithTypeParameter.ts, 0, 3))
+>t : Symbol(t, Decl(comparisonOperatorWithTypeParameter.ts, 3, 50))
+
+    var rf7 = a === t;
+>rf7 : Symbol(rf7, Decl(comparisonOperatorWithTypeParameter.ts, 57, 7))
+>a : Symbol(a, Decl(comparisonOperatorWithTypeParameter.ts, 0, 3))
+>t : Symbol(t, Decl(comparisonOperatorWithTypeParameter.ts, 3, 50))
+
+    var rf8 = a !== t;
+>rf8 : Symbol(rf8, Decl(comparisonOperatorWithTypeParameter.ts, 58, 7))
+>a : Symbol(a, Decl(comparisonOperatorWithTypeParameter.ts, 0, 3))
+>t : Symbol(t, Decl(comparisonOperatorWithTypeParameter.ts, 3, 50))
+
+    var rg1 = t < b;
+>rg1 : Symbol(rg1, Decl(comparisonOperatorWithTypeParameter.ts, 60, 7))
+>t : Symbol(t, Decl(comparisonOperatorWithTypeParameter.ts, 3, 50))
+>b : Symbol(b, Decl(comparisonOperatorWithTypeParameter.ts, 1, 3))
+
+    var rg2 = t > b;
+>rg2 : Symbol(rg2, Decl(comparisonOperatorWithTypeParameter.ts, 61, 7))
+>t : Symbol(t, Decl(comparisonOperatorWithTypeParameter.ts, 3, 50))
+>b : Symbol(b, Decl(comparisonOperatorWithTypeParameter.ts, 1, 3))
+
+    var rg3 = t <= b;
+>rg3 : Symbol(rg3, Decl(comparisonOperatorWithTypeParameter.ts, 62, 7))
+>t : Symbol(t, Decl(comparisonOperatorWithTypeParameter.ts, 3, 50))
+>b : Symbol(b, Decl(comparisonOperatorWithTypeParameter.ts, 1, 3))
+
+    var rg4 = t >= b;
+>rg4 : Symbol(rg4, Decl(comparisonOperatorWithTypeParameter.ts, 63, 7))
+>t : Symbol(t, Decl(comparisonOperatorWithTypeParameter.ts, 3, 50))
+>b : Symbol(b, Decl(comparisonOperatorWithTypeParameter.ts, 1, 3))
+
+    var rg5 = t == b;
+>rg5 : Symbol(rg5, Decl(comparisonOperatorWithTypeParameter.ts, 64, 7))
+>t : Symbol(t, Decl(comparisonOperatorWithTypeParameter.ts, 3, 50))
+>b : Symbol(b, Decl(comparisonOperatorWithTypeParameter.ts, 1, 3))
+
+    var rg6 = t != b;
+>rg6 : Symbol(rg6, Decl(comparisonOperatorWithTypeParameter.ts, 65, 7))
+>t : Symbol(t, Decl(comparisonOperatorWithTypeParameter.ts, 3, 50))
+>b : Symbol(b, Decl(comparisonOperatorWithTypeParameter.ts, 1, 3))
+
+    var rg7 = t === b;
+>rg7 : Symbol(rg7, Decl(comparisonOperatorWithTypeParameter.ts, 66, 7))
+>t : Symbol(t, Decl(comparisonOperatorWithTypeParameter.ts, 3, 50))
+>b : Symbol(b, Decl(comparisonOperatorWithTypeParameter.ts, 1, 3))
+
+    var rg8 = t !== b;
+>rg8 : Symbol(rg8, Decl(comparisonOperatorWithTypeParameter.ts, 67, 7))
+>t : Symbol(t, Decl(comparisonOperatorWithTypeParameter.ts, 3, 50))
+>b : Symbol(b, Decl(comparisonOperatorWithTypeParameter.ts, 1, 3))
+
+    var rh1 = b < t;
+>rh1 : Symbol(rh1, Decl(comparisonOperatorWithTypeParameter.ts, 69, 7))
+>b : Symbol(b, Decl(comparisonOperatorWithTypeParameter.ts, 1, 3))
+>t : Symbol(t, Decl(comparisonOperatorWithTypeParameter.ts, 3, 50))
+
+    var rh2 = b > t;
+>rh2 : Symbol(rh2, Decl(comparisonOperatorWithTypeParameter.ts, 70, 7))
+>b : Symbol(b, Decl(comparisonOperatorWithTypeParameter.ts, 1, 3))
+>t : Symbol(t, Decl(comparisonOperatorWithTypeParameter.ts, 3, 50))
+
+    var rh3 = b <= t;
+>rh3 : Symbol(rh3, Decl(comparisonOperatorWithTypeParameter.ts, 71, 7))
+>b : Symbol(b, Decl(comparisonOperatorWithTypeParameter.ts, 1, 3))
+>t : Symbol(t, Decl(comparisonOperatorWithTypeParameter.ts, 3, 50))
+
+    var rh4 = b >= t;
+>rh4 : Symbol(rh4, Decl(comparisonOperatorWithTypeParameter.ts, 72, 7))
+>b : Symbol(b, Decl(comparisonOperatorWithTypeParameter.ts, 1, 3))
+>t : Symbol(t, Decl(comparisonOperatorWithTypeParameter.ts, 3, 50))
+
+    var rh5 = b == t;
+>rh5 : Symbol(rh5, Decl(comparisonOperatorWithTypeParameter.ts, 73, 7))
+>b : Symbol(b, Decl(comparisonOperatorWithTypeParameter.ts, 1, 3))
+>t : Symbol(t, Decl(comparisonOperatorWithTypeParameter.ts, 3, 50))
+
+    var rh6 = b != t;
+>rh6 : Symbol(rh6, Decl(comparisonOperatorWithTypeParameter.ts, 74, 7))
+>b : Symbol(b, Decl(comparisonOperatorWithTypeParameter.ts, 1, 3))
+>t : Symbol(t, Decl(comparisonOperatorWithTypeParameter.ts, 3, 50))
+
+    var rh7 = b === t;
+>rh7 : Symbol(rh7, Decl(comparisonOperatorWithTypeParameter.ts, 75, 7))
+>b : Symbol(b, Decl(comparisonOperatorWithTypeParameter.ts, 1, 3))
+>t : Symbol(t, Decl(comparisonOperatorWithTypeParameter.ts, 3, 50))
+
+    var rh8 = b !== t;
+>rh8 : Symbol(rh8, Decl(comparisonOperatorWithTypeParameter.ts, 76, 7))
+>b : Symbol(b, Decl(comparisonOperatorWithTypeParameter.ts, 1, 3))
+>t : Symbol(t, Decl(comparisonOperatorWithTypeParameter.ts, 3, 50))
+}

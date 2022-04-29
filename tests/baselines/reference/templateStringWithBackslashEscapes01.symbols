@@ -1,0 +1,13 @@
+=== tests/cases/conformance/es6/templates/templateStringWithBackslashEscapes01.ts ===
+var a = `hello\world`;
+>a : Symbol(a, Decl(templateStringWithBackslashEscapes01.ts, 0, 3))
+
+var b = `hello\\world`;
+>b : Symbol(b, Decl(templateStringWithBackslashEscapes01.ts, 1, 3))
+
+var c = `hello\\\world`;
+>c : Symbol(c, Decl(templateStringWithBackslashEscapes01.ts, 2, 3))
+
+var d = `hello\\\\world`;
+>d : Symbol(d, Decl(templateStringWithBackslashEscapes01.ts, 3, 3))
+

@@ -1,0 +1,23 @@
+=== tests/cases/compiler/callOnInstance.ts ===
+declare function D(): string; // error
+>D : Symbol(D, Decl(callOnInstance.ts, 0, 0), Decl(callOnInstance.ts, 0, 29))
+
+declare class D { constructor (value: number); } // error
+>D : Symbol(D, Decl(callOnInstance.ts, 0, 0), Decl(callOnInstance.ts, 0, 29))
+>value : Symbol(value, Decl(callOnInstance.ts, 2, 31))
+
+var s1: string = D(); // OK
+>s1 : Symbol(s1, Decl(callOnInstance.ts, 4, 3))
+>D : Symbol(D, Decl(callOnInstance.ts, 0, 0), Decl(callOnInstance.ts, 0, 29))
+
+var s2: string = (new D(1))();
+>s2 : Symbol(s2, Decl(callOnInstance.ts, 6, 3))
+>D : Symbol(D, Decl(callOnInstance.ts, 0, 0), Decl(callOnInstance.ts, 0, 29))
+
+declare class C { constructor(value: number); }
+>C : Symbol(C, Decl(callOnInstance.ts, 6, 30))
+>value : Symbol(value, Decl(callOnInstance.ts, 8, 30))
+
+(new C(1))(); // Error for calling an instance
+>C : Symbol(C, Decl(callOnInstance.ts, 6, 30))
+

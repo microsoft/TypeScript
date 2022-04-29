@@ -1,0 +1,16 @@
+=== tests/cases/compiler/file1.ts ===
+export interface Foo { x }
+>x : any
+
+=== tests/cases/compiler/file2.ts ===
+export * from "file1"
+var x = 1;
+>x : number
+>1 : 1
+
+=== tests/cases/compiler/file3.ts ===
+export * from "file2"
+var x = 1;
+>x : number
+>1 : 1
+

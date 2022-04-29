@@ -1,0 +1,51 @@
+Exit Code: 2
+Standard output:
+
+> xterm@X.X.X build /xtermjs
+> tsc -b ./tsconfig.all.json
+src/browser/Terminal2.test.ts(80,11): error TS2794: Expected 1 arguments, but got 0. Did you forget to include 'void' in your type argument to 'Promise'?
+error TS2688: Cannot find type definition file for '../../../out-test/api/TestUtils'.
+  The file is in the program because:
+    Entry point of type library '../../../out-test/api/TestUtils' specified in compilerOptions
+error TS2688: Cannot find type definition file for '../../../out-test/api/TestUtils'.
+  The file is in the program because:
+    Entry point of type library '../../../out-test/api/TestUtils' specified in compilerOptions
+addons/xterm-addon-ligatures/src/font.ts(6,26): error TS2307: Cannot find module 'font-finder' or its corresponding type declarations.
+addons/xterm-addon-ligatures/src/font.ts(7,44): error TS2307: Cannot find module 'font-ligatures' or its corresponding type declarations.
+addons/xterm-addon-ligatures/src/font.ts(47,30): error TS2583: Cannot find name 'AsyncIterableIterator'. Do you need to change your target library? Try changing the `lib` compiler option to 'es2018' or later.
+addons/xterm-addon-ligatures/src/font.ts(62,38): error TS2307: Cannot find module 'font-finder' or its corresponding type declarations.
+addons/xterm-addon-ligatures/src/index.ts(7,22): error TS2307: Cannot find module 'font-ligatures' or its corresponding type declarations.
+addons/xterm-addon-ligatures/src/index.ts(75,14): error TS2347: Untyped function calls may not accept type arguments.
+addons/xterm-addon-ligatures/src/index.ts(76,9): error TS7006: Parameter 'range' implicitly has an 'any' type.
+addons/xterm-addon-ligatures/src/index.test.ts(6,23): error TS2307: Cannot find module 'path' or its corresponding type declarations.
+addons/xterm-addon-ligatures/src/index.test.ts(7,24): error TS2307: Cannot find module 'sinon' or its corresponding type declarations.
+addons/xterm-addon-ligatures/src/index.test.ts(9,29): error TS2307: Cannot find module 'font-finder' or its corresponding type declarations.
+addons/xterm-addon-ligatures/src/index.test.ts(10,32): error TS2307: Cannot find module 'font-ligatures' or its corresponding type declarations.
+addons/xterm-addon-ligatures/src/index.test.ts(26,25): error TS2304: Cannot find name '__dirname'.
+addons/xterm-addon-ligatures/src/index.test.ts(33,25): error TS2304: Cannot find name '__dirname'.
+addons/xterm-addon-ligatures/src/index.test.ts(40,25): error TS2304: Cannot find name '__dirname'.
+error TS2688: Cannot find type definition file for '../../../out-test/api/TestUtils'.
+  The file is in the program because:
+    Entry point of type library '../../../out-test/api/TestUtils' specified in compilerOptions
+error TS2688: Cannot find type definition file for '../../../out-test/api/TestUtils'.
+  The file is in the program because:
+    Entry point of type library '../../../out-test/api/TestUtils' specified in compilerOptions
+error TS2688: Cannot find type definition file for '../../../out-test/api/TestUtils'.
+  The file is in the program because:
+    Entry point of type library '../../../out-test/api/TestUtils' specified in compilerOptions
+error TS2688: Cannot find type definition file for '../../../out-test/api/TestUtils'.
+  The file is in the program because:
+    Entry point of type library '../../../out-test/api/TestUtils' specified in compilerOptions
+
+
+
+Standard error:
+npm ERR! code ELIFECYCLE
+npm ERR! errno 2
+npm ERR! xterm@X.X.X build: `tsc -b ./tsconfig.all.json`
+npm ERR! Exit status 2
+npm ERR! 
+npm ERR! Failed at the xterm@X.X.X build script.
+npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
+npm ERR! A complete log of this run can be found in:
+npm ERR!     /root/.npm/_logs/XXXX-XX-XXXXXXXXX-debug.log

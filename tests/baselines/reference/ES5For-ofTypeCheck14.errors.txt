@@ -1,0 +1,8 @@
+tests/cases/conformance/statements/for-ofStatements/ES5For-ofTypeCheck14.ts(2,17): error TS2569: Type 'Set<number>' is not an array type or a string type. Use compiler option '--downlevelIteration' to allow iterating of iterators.
+
+
+==== tests/cases/conformance/statements/for-ofStatements/ES5For-ofTypeCheck14.ts (1 errors) ====
+    var union: string | Set<number>
+    for (const e of union) { }
+                    ~~~~~
+!!! error TS2569: Type 'Set<number>' is not an array type or a string type. Use compiler option '--downlevelIteration' to allow iterating of iterators.

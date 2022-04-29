@@ -1,0 +1,93 @@
+=== tests/cases/compiler/typeofProperty.ts ===
+interface I1 {
+    a: number;
+>a : number
+
+    b: typeof a; // Should yield error (a is not a value)
+>b : any
+>a : any
+}
+
+interface I2 {
+    c: typeof d; // Should yield error (d is not a value)
+>c : any
+>d : any
+
+    d: string;
+>d : string
+}
+
+interface I3 {
+    e: typeof e; // Should yield error (e is not a value)
+>e : any
+>e : any
+}
+
+class C1 {
+>C1 : C1
+
+    a: number;
+>a : number
+
+    b: typeof a; // Should yield error (a is not a value)
+>b : any
+>a : any
+}
+
+
+class C2 {
+>C2 : C2
+
+    c: typeof d; // Should yield error (d is not a value)
+>c : any
+>d : any
+
+    d: string;
+>d : string
+}
+
+class C3 {
+>C3 : C3
+
+    e: typeof e; // Should yield error (e is not a value)
+>e : any
+>e : any
+}
+
+
+
+interface ValidInterface {
+    x: string;
+>x : string
+}
+
+class ValidClass implements ValidInterface {
+>ValidClass : ValidClass
+
+    x: string;
+>x : string
+}
+
+var vcInstance = new ValidClass();
+>vcInstance : ValidClass
+>new ValidClass() : ValidClass
+>ValidClass : typeof ValidClass
+
+var viInstance = vcInstance;
+>viInstance : ValidClass
+>vcInstance : ValidClass
+
+var x1: typeof vcInstance.x; // x1: string
+>x1 : string
+>vcInstance.x : string
+>vcInstance : ValidClass
+>x : string
+
+var x2: typeof viInstance.x; // x2: string
+>x2 : string
+>viInstance.x : string
+>viInstance : ValidClass
+>x : string
+
+
+

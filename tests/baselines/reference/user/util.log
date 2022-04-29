@@ -1,0 +1,17 @@
+Exit Code: 2
+Standard output:
+node_modules/util/util.js(27,20): error TS2555: Expected at least 2 arguments, but got 1.
+node_modules/util/util.js(35,45): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type '(x: string) => string | number' is not assignable to parameter of type '(substring: string, ...args: any[]) => string'.
+      Type 'string | number' is not assignable to type 'string'.
+        Type 'number' is not assignable to type 'string'.
+node_modules/util/util.js(55,20): error TS2555: Expected at least 2 arguments, but got 1.
+node_modules/util/util.js(73,15): error TS2339: Property 'noDeprecation' does not exist on type 'Process'.
+node_modules/util/util.js(80,19): error TS2551: Property 'throwDeprecation' does not exist on type 'Process'. Did you mean 'traceDeprecation'?
+node_modules/util/util.js(106,49): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type '[any?, ...any[]]'.
+node_modules/util/util.js(553,69): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type '[any?, ...any[]]'.
+
+
+
+Standard error:

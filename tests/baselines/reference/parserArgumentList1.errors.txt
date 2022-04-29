@@ -1,0 +1,11 @@
+tests/cases/conformance/parser/ecmascript5/parserArgumentList1.ts(2,42): error TS2304: Cannot find name '_classNameRegexp'.
+
+
+==== tests/cases/conformance/parser/ecmascript5/parserArgumentList1.ts (1 errors) ====
+    export function removeClass (node:HTMLElement, className:string) {
+    	node.className = node.className.replace(_classNameRegexp(className), function (everything, leftDelimiter, name, rightDelimiter) {
+    	                                        ~~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name '_classNameRegexp'.
+    		return leftDelimiter.length + rightDelimiter.length === 2 ? ' ' : '';
+    	});
+    }

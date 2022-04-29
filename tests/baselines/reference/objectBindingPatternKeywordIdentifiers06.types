@@ -1,0 +1,8 @@
+=== tests/cases/conformance/es6/destructuring/objectBindingPatternKeywordIdentifiers06.ts ===
+var { as: as } = { as: 1 }
+>as : any
+>as : number
+>{ as: 1 } : { as: number; }
+>as : number
+>1 : 1
+

@@ -1,0 +1,9 @@
+tests/cases/compiler/ClassDeclaration9.ts(2,4): error TS2391: Function implementation is missing or not immediately following the declaration.
+
+
+==== tests/cases/compiler/ClassDeclaration9.ts (1 errors) ====
+    class C {
+       foo();
+       ~~~
+!!! error TS2391: Function implementation is missing or not immediately following the declaration.
+    }

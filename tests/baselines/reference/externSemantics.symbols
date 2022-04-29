@@ -1,0 +1,10 @@
+=== tests/cases/compiler/externSemantics.ts ===
+declare var x=10;
+>x : Symbol(x, Decl(externSemantics.ts, 0, 11))
+
+declare var v;
+>v : Symbol(v, Decl(externSemantics.ts, 1, 11))
+
+declare var y:number=3;
+>y : Symbol(y, Decl(externSemantics.ts, 2, 11))
+

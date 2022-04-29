@@ -1,0 +1,8 @@
+=== tests/cases/conformance/es6/templates/templateStringWithEmbeddedAdditionES6.ts ===
+var x = `abc${ 10 + 10 }def`;
+>x : string
+>`abc${ 10 + 10 }def` : string
+>10 + 10 : number
+>10 : 10
+>10 : 10
+

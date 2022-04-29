@@ -1,0 +1,11 @@
+tests/cases/compiler/errorForUsingPropertyOfTypeAsType02.ts(3,16): error TS2713: Cannot access 'T.abc' because 'T' is a type, but not a namespace. Did you mean to retrieve the type of the property 'abc' in 'T' with 'T["abc"]'?
+
+
+==== tests/cases/compiler/errorForUsingPropertyOfTypeAsType02.ts (1 errors) ====
+    namespace Test1 {
+        function foo<T extends { abc: number }>(x: T) {
+            let a: T.abc = x.abc;
+                   ~~~~~
+!!! error TS2713: Cannot access 'T.abc' because 'T' is a type, but not a namespace. Did you mean to retrieve the type of the property 'abc' in 'T' with 'T["abc"]'?
+        }
+    }

@@ -1,0 +1,654 @@
+=== tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts ===
+declare module "fs" {
+>"fs" : Symbol("fs", Decl(constructorWithIncompleteTypeAnnotation.ts, 0, 0))
+
+    export class File {
+>File : Symbol(File, Decl(constructorWithIncompleteTypeAnnotation.ts, 0, 21))
+
+        constructor(filename: string);
+>filename : Symbol(filename, Decl(constructorWithIncompleteTypeAnnotation.ts, 2, 20))
+
+        public ReadAllText(): string;
+>ReadAllText : Symbol(File.ReadAllText, Decl(constructorWithIncompleteTypeAnnotation.ts, 2, 38))
+    }
+    export interface IFile {
+>IFile : Symbol(IFile, Decl(constructorWithIncompleteTypeAnnotation.ts, 4, 5))
+
+        [index: number]: string;
+>index : Symbol(index, Decl(constructorWithIncompleteTypeAnnotation.ts, 6, 9))
+    }
+}
+
+import fs = module("fs");
+>fs : Symbol(fs, Decl(constructorWithIncompleteTypeAnnotation.ts, 8, 1))
+
+
+module TypeScriptAllInOne {
+>TypeScriptAllInOne : Symbol(TypeScriptAllInOne, Decl(constructorWithIncompleteTypeAnnotation.ts, 10, 25))
+
+    export class Program {
+>Program : Symbol(Program, Decl(constructorWithIncompleteTypeAnnotation.ts, 13, 27))
+
+        static Main(...args: string[]) {
+>Main : Symbol(Program.Main, Decl(constructorWithIncompleteTypeAnnotation.ts, 14, 26))
+>args : Symbol(args, Decl(constructorWithIncompleteTypeAnnotation.ts, 15, 20))
+
+            try {
+                var bfs = new BasicFeatures();
+>bfs : Symbol(bfs, Decl(constructorWithIncompleteTypeAnnotation.ts, 17, 19))
+>BasicFeatures : Symbol(BasicFeatures, Decl(constructorWithIncompleteTypeAnnotation.ts, 57, 5))
+
+                var retValue: number = 0;
+>retValue : Symbol(retValue, Decl(constructorWithIncompleteTypeAnnotation.ts, 18, 19))
+
+                retValue = bfs.VARIABLES();
+>retValue : Symbol(retValue, Decl(constructorWithIncompleteTypeAnnotation.ts, 18, 19))
+>bfs.VARIABLES : Symbol(BasicFeatures.VARIABLES, Decl(constructorWithIncompleteTypeAnnotation.ts, 59, 25))
+>bfs : Symbol(bfs, Decl(constructorWithIncompleteTypeAnnotation.ts, 17, 19))
+>VARIABLES : Symbol(BasicFeatures.VARIABLES, Decl(constructorWithIncompleteTypeAnnotation.ts, 59, 25))
+
+                if (retValue != 0 ^=  {
+>retValue : Symbol(retValue, Decl(constructorWithIncompleteTypeAnnotation.ts, 18, 19))
+
+                    return 1;
+>return : Symbol(return, Decl(constructorWithIncompleteTypeAnnotation.ts, 21, 39))
+                }
+
+                 case  = bfs.STATEMENTS(4);
+>case : Symbol(Program.case, Decl(constructorWithIncompleteTypeAnnotation.ts, 24, 17))
+
+                if (retValue != 0) {
+>if : Symbol(Program.if, Decl(constructorWithIncompleteTypeAnnotation.ts, 26, 43))
+>retValue : Symbol(retValue, Decl(constructorWithIncompleteTypeAnnotation.ts, 27, 20))
+
+                    return 1;
+                 ^ 
+
+
+                retValue = bfs.TYPES();
+                if (retValue != 0) {
+
+                    return 1 && 
+                }
+
+                retValue = bfs.OPERATOR ' );
+                if (retValue != 0) {
+
+                    return 1;
+                }
+            }
+            catch (e) {
+>e : Symbol(e, Decl(constructorWithIncompleteTypeAnnotation.ts, 45, 19))
+
+                console.log(e);
+>e : Symbol(e, Decl(constructorWithIncompleteTypeAnnotation.ts, 45, 19))
+            }
+            finally {
+
+            }
+
+            console.log('Done');
+
+            return 0;
+
+        }
+    }
+
+    class BasicFeatures {
+>BasicFeatures : Symbol(BasicFeatures, Decl(constructorWithIncompleteTypeAnnotation.ts, 57, 5))
+
+        /// <summary>
+        /// Test various of variables. Including nullable,key world as variable,special format
+        /// </summary>
+        /// <returns></returns>
+        public VARIABLES(): number {
+>VARIABLES : Symbol(BasicFeatures.VARIABLES, Decl(constructorWithIncompleteTypeAnnotation.ts, 59, 25))
+
+            var local = Number.MAX_VALUE;
+>local : Symbol(local, Decl(constructorWithIncompleteTypeAnnotation.ts, 65, 15))
+>Number.MAX_VALUE : Symbol(NumberConstructor.MAX_VALUE, Decl(lib.es5.d.ts, --, --))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>MAX_VALUE : Symbol(NumberConstructor.MAX_VALUE, Decl(lib.es5.d.ts, --, --))
+
+            var min = Number.MIN_VALUE;
+>min : Symbol(min, Decl(constructorWithIncompleteTypeAnnotation.ts, 66, 15))
+>Number.MIN_VALUE : Symbol(NumberConstructor.MIN_VALUE, Decl(lib.es5.d.ts, --, --))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>MIN_VALUE : Symbol(NumberConstructor.MIN_VALUE, Decl(lib.es5.d.ts, --, --))
+
+            var inf = Number.NEGATIVE_INFINITY - 
+>inf : Symbol(inf, Decl(constructorWithIncompleteTypeAnnotation.ts, 67, 15))
+>Number.NEGATIVE_INFINITY : Symbol(NumberConstructor.NEGATIVE_INFINITY, Decl(lib.es5.d.ts, --, --))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>NEGATIVE_INFINITY : Symbol(NumberConstructor.NEGATIVE_INFINITY, Decl(lib.es5.d.ts, --, --))
+
+            var nan = Number.NaN;
+>nan : Symbol(nan, Decl(constructorWithIncompleteTypeAnnotation.ts, 68, 15))
+>Number.NaN : Symbol(NumberConstructor.NaN, Decl(lib.es5.d.ts, --, --))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>NaN : Symbol(NumberConstructor.NaN, Decl(lib.es5.d.ts, --, --))
+
+            var undef = undefined;
+>undef : Symbol(undef, Decl(constructorWithIncompleteTypeAnnotation.ts, 69, 15))
+>undefined : Symbol(undefined)
+
+            var  _\uD4A5\u7204\uC316\uE59F  = local;
+>_\uD4A5\u7204\uC316 : Symbol(_\uD4A5\u7204\uC316, Decl(constructorWithIncompleteTypeAnnotation.ts, 71, 15))
+>uE59F : Symbol(uE59F, Decl(constructorWithIncompleteTypeAnnotation.ts, 71, 37))
+>local : Symbol(local, Decl(constructorWithIncompleteTypeAnnotation.ts, 65, 15))
+
+            var мир = local;
+>мир : Symbol(мир, Decl(constructorWithIncompleteTypeAnnotation.ts, 72, 15))
+>local : Symbol(local, Decl(constructorWithIncompleteTypeAnnotation.ts, 65, 15))
+
+            var local5 = <fs.File>null;
+>local5 : Symbol(local5, Decl(constructorWithIncompleteTypeAnnotation.ts, 74, 15))
+>fs : Symbol(fs, Decl(constructorWithIncompleteTypeAnnotation.ts, 8, 1))
+>File : Symbol(fs.File)
+
+            var local6 = local5 instanceof fs.File;
+>local6 : Symbol(local6, Decl(constructorWithIncompleteTypeAnnotation.ts, 75, 15))
+>local5 : Symbol(local5, Decl(constructorWithIncompleteTypeAnnotation.ts, 74, 15))
+>fs : Symbol(fs, Decl(constructorWithIncompleteTypeAnnotation.ts, 8, 1))
+
+            var hex = 0xBADC0DE, Hex = 0XDEADBEEF;
+>hex : Symbol(hex, Decl(constructorWithIncompleteTypeAnnotation.ts, 77, 15))
+>Hex : Symbol(Hex, Decl(constructorWithIncompleteTypeAnnotation.ts, 77, 32))
+
+            var float = 6.02e23, float2 = 6.02E-23
+>float : Symbol(float, Decl(constructorWithIncompleteTypeAnnotation.ts, 78, 15))
+>float2 : Symbol(float2, Decl(constructorWithIncompleteTypeAnnotation.ts, 78, 32))
+
+            var char = 'c', \u0066 = '\u0066', hexchar = '\x42' != 
+>char : Symbol(char, Decl(constructorWithIncompleteTypeAnnotation.ts, 79, 15))
+>\u0066 : Symbol(\u0066, Decl(constructorWithIncompleteTypeAnnotation.ts, 79, 27))
+>hexchar : Symbol(hexchar, Decl(constructorWithIncompleteTypeAnnotation.ts, 79, 46))
+
+            var quoted = '"', quoted2 = "'";
+>quoted : Symbol(quoted, Decl(constructorWithIncompleteTypeAnnotation.ts, 80, 15))
+>quoted2 : Symbol(quoted2, Decl(constructorWithIncompleteTypeAnnotation.ts, 80, 29))
+
+            var reg = /\w*/;
+>reg : Symbol(reg, Decl(constructorWithIncompleteTypeAnnotation.ts, 81, 15))
+
+            var objLit = { "var": number = 42, equals: function (x) { return x["var"] === 42; },  instanceof : () => 'objLit{42}' };
+>objLit : Symbol(objLit, Decl(constructorWithIncompleteTypeAnnotation.ts, 82, 15))
+>"var" : Symbol("var", Decl(constructorWithIncompleteTypeAnnotation.ts, 82, 26))
+>number : Symbol(number, Decl(constructorWithIncompleteTypeAnnotation.ts, 97, 15))
+>equals : Symbol(equals, Decl(constructorWithIncompleteTypeAnnotation.ts, 82, 46))
+>x : Symbol(x, Decl(constructorWithIncompleteTypeAnnotation.ts, 82, 65))
+>x : Symbol(x, Decl(constructorWithIncompleteTypeAnnotation.ts, 82, 65))
+>instanceof : Symbol(instanceof, Decl(constructorWithIncompleteTypeAnnotation.ts, 82, 96))
+
+            var weekday = Weekdays.Monday;
+>weekday : Symbol(weekday, Decl(constructorWithIncompleteTypeAnnotation.ts, 83, 15))
+>Weekdays.Monday : Symbol(Weekdays.Monday, Decl(constructorWithIncompleteTypeAnnotation.ts, 262, 15))
+>Weekdays : Symbol(Weekdays, Decl(constructorWithIncompleteTypeAnnotation.ts, 260, 1))
+>Monday : Symbol(Weekdays.Monday, Decl(constructorWithIncompleteTypeAnnotation.ts, 262, 15))
+
+            var con = char + f + hexchar + float.toString() + float2.toString() + reg.toString() + objLit + weekday;
+>con : Symbol(con, Decl(constructorWithIncompleteTypeAnnotation.ts, 85, 15))
+>char : Symbol(char, Decl(constructorWithIncompleteTypeAnnotation.ts, 79, 15))
+>f : Symbol(\u0066, Decl(constructorWithIncompleteTypeAnnotation.ts, 79, 27))
+>hexchar : Symbol(hexchar, Decl(constructorWithIncompleteTypeAnnotation.ts, 79, 46))
+>float.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>float : Symbol(float, Decl(constructorWithIncompleteTypeAnnotation.ts, 78, 15))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>float2.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>float2 : Symbol(float2, Decl(constructorWithIncompleteTypeAnnotation.ts, 78, 32))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>reg.toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
+>reg : Symbol(reg, Decl(constructorWithIncompleteTypeAnnotation.ts, 81, 15))
+>toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
+>objLit : Symbol(objLit, Decl(constructorWithIncompleteTypeAnnotation.ts, 82, 15))
+>weekday : Symbol(weekday, Decl(constructorWithIncompleteTypeAnnotation.ts, 83, 15))
+
+            //
+            var any = 0 ^= 
+>any : Symbol(any, Decl(constructorWithIncompleteTypeAnnotation.ts, 88, 15))
+
+            var bool = 0;
+>bool : Symbol(bool, Decl(constructorWithIncompleteTypeAnnotation.ts, 89, 15))
+
+            var declare = 0;
+>declare : Symbol(declare, Decl(constructorWithIncompleteTypeAnnotation.ts, 90, 15))
+
+            var constructor = 0;
+>constructor : Symbol(constructor, Decl(constructorWithIncompleteTypeAnnotation.ts, 91, 15))
+
+            var get = 0;
+>get : Symbol(get, Decl(constructorWithIncompleteTypeAnnotation.ts, 92, 15))
+
+            var implements = 0;
+>implements : Symbol(implements, Decl(constructorWithIncompleteTypeAnnotation.ts, 93, 15))
+
+            var interface = 0;
+>interface : Symbol(interface, Decl(constructorWithIncompleteTypeAnnotation.ts, 94, 15))
+
+            var let = 0;
+>let : Symbol(let, Decl(constructorWithIncompleteTypeAnnotation.ts, 95, 15))
+
+            var module = 0;
+>module : Symbol(module, Decl(constructorWithIncompleteTypeAnnotation.ts, 96, 15))
+
+            var number = 0;
+>number : Symbol(number, Decl(constructorWithIncompleteTypeAnnotation.ts, 97, 15))
+
+            var package = 0;
+>package : Symbol(package, Decl(constructorWithIncompleteTypeAnnotation.ts, 98, 15))
+
+            var private = 0;
+>private : Symbol(private, Decl(constructorWithIncompleteTypeAnnotation.ts, 99, 15))
+
+            var protected = 0;
+>protected : Symbol(protected, Decl(constructorWithIncompleteTypeAnnotation.ts, 100, 15))
+
+            var public = 0;
+>public : Symbol(public, Decl(constructorWithIncompleteTypeAnnotation.ts, 101, 15))
+
+            var set = 0;
+>set : Symbol(set, Decl(constructorWithIncompleteTypeAnnotation.ts, 102, 15))
+
+            var static = 0;
+>static : Symbol(static, Decl(constructorWithIncompleteTypeAnnotation.ts, 103, 15))
+
+            var string = 0 /> 
+>string : Symbol(string, Decl(constructorWithIncompleteTypeAnnotation.ts, 104, 15))
+
+            var yield = 0;
+>yield : Symbol(yield, Decl(constructorWithIncompleteTypeAnnotation.ts, 105, 15))
+
+            var sum3 = any + bool + declare + constructor + get + implements + interface + let + module + number + package + private + protected + public + set + static + string + yield;
+>sum3 : Symbol(sum3, Decl(constructorWithIncompleteTypeAnnotation.ts, 107, 15))
+>any : Symbol(any, Decl(constructorWithIncompleteTypeAnnotation.ts, 88, 15))
+>bool : Symbol(bool, Decl(constructorWithIncompleteTypeAnnotation.ts, 89, 15))
+>declare : Symbol(declare, Decl(constructorWithIncompleteTypeAnnotation.ts, 90, 15))
+>constructor : Symbol(constructor, Decl(constructorWithIncompleteTypeAnnotation.ts, 91, 15))
+>get : Symbol(get, Decl(constructorWithIncompleteTypeAnnotation.ts, 92, 15))
+>implements : Symbol(implements, Decl(constructorWithIncompleteTypeAnnotation.ts, 93, 15))
+>interface : Symbol(interface, Decl(constructorWithIncompleteTypeAnnotation.ts, 94, 15))
+>let : Symbol(let, Decl(constructorWithIncompleteTypeAnnotation.ts, 95, 15))
+>module : Symbol(module, Decl(constructorWithIncompleteTypeAnnotation.ts, 96, 15))
+>number : Symbol(number, Decl(constructorWithIncompleteTypeAnnotation.ts, 97, 15))
+>package : Symbol(package, Decl(constructorWithIncompleteTypeAnnotation.ts, 98, 15))
+>private : Symbol(private, Decl(constructorWithIncompleteTypeAnnotation.ts, 99, 15))
+>protected : Symbol(protected, Decl(constructorWithIncompleteTypeAnnotation.ts, 100, 15))
+>public : Symbol(public, Decl(constructorWithIncompleteTypeAnnotation.ts, 101, 15))
+>set : Symbol(set, Decl(constructorWithIncompleteTypeAnnotation.ts, 102, 15))
+>static : Symbol(static, Decl(constructorWithIncompleteTypeAnnotation.ts, 103, 15))
+>string : Symbol(string, Decl(constructorWithIncompleteTypeAnnotation.ts, 104, 15))
+>yield : Symbol(yield, Decl(constructorWithIncompleteTypeAnnotation.ts, 105, 15))
+
+            return 0;
+        }
+
+        /// <summary>
+        /// Test different statements. Including if-else,swith,foreach,(un)checked,lock,using,try-catch-finally
+        /// </summary>
+        /// <param name="i"></param>
+        /// <returns></returns>
+        STATEMENTS(i: number): number {
+>STATEMENTS : Symbol(BasicFeatures.STATEMENTS, Decl(constructorWithIncompleteTypeAnnotation.ts, 110, 9))
+>i : Symbol(i, Decl(constructorWithIncompleteTypeAnnotation.ts, 117, 19))
+
+            var retVal = 0;
+>retVal : Symbol(retVal, Decl(constructorWithIncompleteTypeAnnotation.ts, 118, 15))
+
+            if (i == 1)
+>i : Symbol(i, Decl(constructorWithIncompleteTypeAnnotation.ts, 117, 19))
+
+                retVal = 1;
+>retVal : Symbol(retVal, Decl(constructorWithIncompleteTypeAnnotation.ts, 118, 15))
+
+            else
+                retVal = 0;
+>retVal : Symbol(retVal, Decl(constructorWithIncompleteTypeAnnotation.ts, 118, 15))
+
+            switch (i) {
+>i : Symbol(i, Decl(constructorWithIncompleteTypeAnnotation.ts, 117, 19))
+
+                case 2:
+                    retVal = 1;
+>retVal : Symbol(retVal, Decl(constructorWithIncompleteTypeAnnotation.ts, 118, 15))
+
+                    break;
+                case 3:
+                    retVal = 1;
+>retVal : Symbol(retVal, Decl(constructorWithIncompleteTypeAnnotation.ts, 118, 15))
+
+                    break;
+                default:
+                    break;
+            }
+
+            for (var x in { x: 0, y: 1 }) {
+>x : Symbol(x, Decl(constructorWithIncompleteTypeAnnotation.ts, 134, 20))
+>x : Symbol(x, Decl(constructorWithIncompleteTypeAnnotation.ts, 134, 27))
+>y : Symbol(y, Decl(constructorWithIncompleteTypeAnnotation.ts, 134, 33))
+
+             ! 
+
+            try {
+                throw null;
+            }
+            catch (Exception)  ? 
+>Exception : Symbol(Exception, Decl(constructorWithIncompleteTypeAnnotation.ts, 140, 19))
+            }
+            finally {
+                try { }
+                catch (Exception) { }
+>Exception : Symbol(Exception, Decl(constructorWithIncompleteTypeAnnotation.ts, 144, 23))
+            }
+
+            return retVal;
+>retVal : Symbol(retVal, Decl(constructorWithIncompleteTypeAnnotation.ts, 118, 15))
+        }
+
+        /// <summary>
+        /// Test types in ts language. Including class,struct,interface,delegate,anonymous type
+        /// </summary>
+        /// <returns></returns>
+        public TYPES(): number {
+>TYPES : Symbol(BasicFeatures.TYPES, Decl(constructorWithIncompleteTypeAnnotation.ts, 148, 9))
+
+            var retVal = 0;
+>retVal : Symbol(retVal, Decl(constructorWithIncompleteTypeAnnotation.ts, 155, 15))
+
+            var c = new CLASS();
+>c : Symbol(c, Decl(constructorWithIncompleteTypeAnnotation.ts, 156, 15))
+>CLASS : Symbol(CLASS, Decl(constructorWithIncompleteTypeAnnotation.ts, 213, 5))
+
+            var xx: IF = c;
+>xx : Symbol(xx, Decl(constructorWithIncompleteTypeAnnotation.ts, 157, 15))
+>IF : Symbol(IF, Decl(constructorWithIncompleteTypeAnnotation.ts, 209, 5))
+>c : Symbol(c, Decl(constructorWithIncompleteTypeAnnotation.ts, 156, 15))
+
+            retVal +=  catch .Property;
+>retVal : Symbol(retVal, Decl(constructorWithIncompleteTypeAnnotation.ts, 155, 15))
+
+            retVal += c.Member();
+>retVal : Symbol(retVal, Decl(constructorWithIncompleteTypeAnnotation.ts, 155, 15))
+>c.Member : Symbol(CLASS.Member, Decl(constructorWithIncompleteTypeAnnotation.ts, 218, 43))
+>c : Symbol(c, Decl(constructorWithIncompleteTypeAnnotation.ts, 156, 15))
+>Member : Symbol(CLASS.Member, Decl(constructorWithIncompleteTypeAnnotation.ts, 218, 43))
+
+            retVal += xx.Foo() ? 0 : 1;
+>retVal : Symbol(retVal, Decl(constructorWithIncompleteTypeAnnotation.ts, 155, 15))
+>xx.Foo : Symbol(IF.Foo, Decl(constructorWithIncompleteTypeAnnotation.ts, 211, 18))
+>xx : Symbol(xx, Decl(constructorWithIncompleteTypeAnnotation.ts, 157, 15))
+>Foo : Symbol(IF.Foo, Decl(constructorWithIncompleteTypeAnnotation.ts, 211, 18))
+
+            //anonymous type
+            var anony = { a: new CLASS() };
+>anony : Symbol(anony, Decl(constructorWithIncompleteTypeAnnotation.ts, 163, 15))
+>a : Symbol(a, Decl(constructorWithIncompleteTypeAnnotation.ts, 163, 25))
+>CLASS : Symbol(CLASS, Decl(constructorWithIncompleteTypeAnnotation.ts, 213, 5))
+
+            retVal += anony.a.d();
+>retVal : Symbol(retVal, Decl(constructorWithIncompleteTypeAnnotation.ts, 155, 15))
+>anony.a.d : Symbol(CLASS.d, Decl(constructorWithIncompleteTypeAnnotation.ts, 217, 13))
+>anony.a : Symbol(a, Decl(constructorWithIncompleteTypeAnnotation.ts, 163, 25))
+>anony : Symbol(anony, Decl(constructorWithIncompleteTypeAnnotation.ts, 163, 15))
+>a : Symbol(a, Decl(constructorWithIncompleteTypeAnnotation.ts, 163, 25))
+>d : Symbol(CLASS.d, Decl(constructorWithIncompleteTypeAnnotation.ts, 217, 13))
+
+            return retVal;
+>retVal : Symbol(retVal, Decl(constructorWithIncompleteTypeAnnotation.ts, 155, 15))
+        }
+
+
+        ///// <summary>
+        ///// Test different operators
+        ///// </summary>
+        ///// <returns></returns>
+        public OPERATOR(): number {
+>OPERATOR : Symbol(BasicFeatures.OPERATOR, Decl(constructorWithIncompleteTypeAnnotation.ts, 168, 9))
+
+            var a: number[] = [1, 2, 3, 4, 5, ];/*[] bug*/ // YES []
+>a : Symbol(a, Decl(constructorWithIncompleteTypeAnnotation.ts, 176, 15))
+
+            var i = a[1];/*[]*/
+>i : Symbol(i, Decl(constructorWithIncompleteTypeAnnotation.ts, 177, 15))
+>a : Symbol(a, Decl(constructorWithIncompleteTypeAnnotation.ts, 176, 15))
+
+            i = i + i - i * i / i % i & i | i ^ i;/*+ - * / % & | ^*/
+>i : Symbol(i, Decl(constructorWithIncompleteTypeAnnotation.ts, 177, 15))
+>i : Symbol(i, Decl(constructorWithIncompleteTypeAnnotation.ts, 177, 15))
+>i : Symbol(i, Decl(constructorWithIncompleteTypeAnnotation.ts, 177, 15))
+>i : Symbol(i, Decl(constructorWithIncompleteTypeAnnotation.ts, 177, 15))
+>i : Symbol(i, Decl(constructorWithIncompleteTypeAnnotation.ts, 177, 15))
+>i : Symbol(i, Decl(constructorWithIncompleteTypeAnnotation.ts, 177, 15))
+>i : Symbol(i, Decl(constructorWithIncompleteTypeAnnotation.ts, 177, 15))
+>i : Symbol(i, Decl(constructorWithIncompleteTypeAnnotation.ts, 177, 15))
+>i : Symbol(i, Decl(constructorWithIncompleteTypeAnnotation.ts, 177, 15))
+>i : Symbol(i, Decl(constructorWithIncompleteTypeAnnotation.ts, 177, 15))
+
+            var b  =  true && false || true ^ false;/*& | ^*/
+>b : Symbol(b, Decl(constructorWithIncompleteTypeAnnotation.ts, 179, 15))
+
+            b = !b;/*!*/
+>b : Symbol(b, Decl(constructorWithIncompleteTypeAnnotation.ts, 179, 15))
+>b : Symbol(b, Decl(constructorWithIncompleteTypeAnnotation.ts, 179, 15))
+
+            i = ~i;/*~i*/
+>i : Symbol(i, Decl(constructorWithIncompleteTypeAnnotation.ts, 177, 15))
+>i : Symbol(i, Decl(constructorWithIncompleteTypeAnnotation.ts, 177, 15))
+
+            b = i < (i - 1) && (i + 1) > i;/*< && >*/
+>b : Symbol(b, Decl(constructorWithIncompleteTypeAnnotation.ts, 179, 15))
+>i : Symbol(i, Decl(constructorWithIncompleteTypeAnnotation.ts, 177, 15))
+>i : Symbol(i, Decl(constructorWithIncompleteTypeAnnotation.ts, 177, 15))
+>i : Symbol(i, Decl(constructorWithIncompleteTypeAnnotation.ts, 177, 15))
+>i : Symbol(i, Decl(constructorWithIncompleteTypeAnnotation.ts, 177, 15))
+
+            var f = true ? 1 : 0;/*? :*/   // YES :
+>f : Symbol(f, Decl(constructorWithIncompleteTypeAnnotation.ts, 183, 15))
+
+            i++;/*++*/
+>i : Symbol(i, Decl(constructorWithIncompleteTypeAnnotation.ts, 177, 15))
+
+            i--;/*--*/
+>i : Symbol(i, Decl(constructorWithIncompleteTypeAnnotation.ts, 177, 15))
+
+            b = true && false || true;/*&& ||*/
+>b : Symbol(b, Decl(constructorWithIncompleteTypeAnnotation.ts, 179, 15))
+
+            i = i << 5;/*<<*/
+>i : Symbol(i, Decl(constructorWithIncompleteTypeAnnotation.ts, 177, 15))
+>i : Symbol(i, Decl(constructorWithIncompleteTypeAnnotation.ts, 177, 15))
+
+            i = i >> 5;/*>>*/
+>i : Symbol(i, Decl(constructorWithIncompleteTypeAnnotation.ts, 177, 15))
+>i : Symbol(i, Decl(constructorWithIncompleteTypeAnnotation.ts, 177, 15))
+
+            var j = i;
+>j : Symbol(j, Decl(constructorWithIncompleteTypeAnnotation.ts, 189, 15))
+>i : Symbol(i, Decl(constructorWithIncompleteTypeAnnotation.ts, 177, 15))
+
+            b = i == j && i != j && i <= j && i >= j;/*= == && != <= >=*/
+>b : Symbol(b, Decl(constructorWithIncompleteTypeAnnotation.ts, 179, 15))
+>i : Symbol(i, Decl(constructorWithIncompleteTypeAnnotation.ts, 177, 15))
+>j : Symbol(j, Decl(constructorWithIncompleteTypeAnnotation.ts, 189, 15))
+>i : Symbol(i, Decl(constructorWithIncompleteTypeAnnotation.ts, 177, 15))
+>j : Symbol(j, Decl(constructorWithIncompleteTypeAnnotation.ts, 189, 15))
+>i : Symbol(i, Decl(constructorWithIncompleteTypeAnnotation.ts, 177, 15))
+>j : Symbol(j, Decl(constructorWithIncompleteTypeAnnotation.ts, 189, 15))
+>i : Symbol(i, Decl(constructorWithIncompleteTypeAnnotation.ts, 177, 15))
+>j : Symbol(j, Decl(constructorWithIncompleteTypeAnnotation.ts, 189, 15))
+
+            i += <number>5.0;/*+=*/
+>i : Symbol(i, Decl(constructorWithIncompleteTypeAnnotation.ts, 177, 15))
+
+            i -= i;/*-=*/
+>i : Symbol(i, Decl(constructorWithIncompleteTypeAnnotation.ts, 177, 15))
+>i : Symbol(i, Decl(constructorWithIncompleteTypeAnnotation.ts, 177, 15))
+
+            i *= i;/**=*/
+>i : Symbol(i, Decl(constructorWithIncompleteTypeAnnotation.ts, 177, 15))
+>i : Symbol(i, Decl(constructorWithIncompleteTypeAnnotation.ts, 177, 15))
+
+            if (i == 0)
+>i : Symbol(i, Decl(constructorWithIncompleteTypeAnnotation.ts, 177, 15))
+
+                i++;
+>i : Symbol(i, Decl(constructorWithIncompleteTypeAnnotation.ts, 177, 15))
+
+            i /= i;/*/=*/
+>i : Symbol(i, Decl(constructorWithIncompleteTypeAnnotation.ts, 177, 15))
+>i : Symbol(i, Decl(constructorWithIncompleteTypeAnnotation.ts, 177, 15))
+
+            i %= i;/*%=*/
+>i : Symbol(i, Decl(constructorWithIncompleteTypeAnnotation.ts, 177, 15))
+>i : Symbol(i, Decl(constructorWithIncompleteTypeAnnotation.ts, 177, 15))
+
+            i &= i;/*&=*/
+>i : Symbol(i, Decl(constructorWithIncompleteTypeAnnotation.ts, 177, 15))
+>i : Symbol(i, Decl(constructorWithIncompleteTypeAnnotation.ts, 177, 15))
+
+            i |= i;/*|=*/
+>i : Symbol(i, Decl(constructorWithIncompleteTypeAnnotation.ts, 177, 15))
+>i : Symbol(i, Decl(constructorWithIncompleteTypeAnnotation.ts, 177, 15))
+
+            i ^= i;/*^=*/
+>i : Symbol(i, Decl(constructorWithIncompleteTypeAnnotation.ts, 177, 15))
+>i : Symbol(i, Decl(constructorWithIncompleteTypeAnnotation.ts, 177, 15))
+
+            i <<= i;/*<<=*/
+>i : Symbol(i, Decl(constructorWithIncompleteTypeAnnotation.ts, 177, 15))
+>i : Symbol(i, Decl(constructorWithIncompleteTypeAnnotation.ts, 177, 15))
+
+            i >>= i;/*>>=*/
+>i : Symbol(i, Decl(constructorWithIncompleteTypeAnnotation.ts, 177, 15))
+>i : Symbol(i, Decl(constructorWithIncompleteTypeAnnotation.ts, 177, 15))
+
+            if (i == 0 &&  != b && f == 1)
+>i : Symbol(i, Decl(constructorWithIncompleteTypeAnnotation.ts, 177, 15))
+>b : Symbol(b, Decl(constructorWithIncompleteTypeAnnotation.ts, 179, 15))
+>f : Symbol(f, Decl(constructorWithIncompleteTypeAnnotation.ts, 183, 15))
+
+                return 0;
+            else return 1;
+        }
+
+    }
+
+    interface IF {
+>IF : Symbol(IF, Decl(constructorWithIncompleteTypeAnnotation.ts, 209, 5))
+
+        Foo(): bool;
+>Foo : Symbol(IF.Foo, Decl(constructorWithIncompleteTypeAnnotation.ts, 211, 18))
+>bool : Symbol(bool)
+    }
+
+    class CLASS implements IF {
+>CLASS : Symbol(CLASS, Decl(constructorWithIncompleteTypeAnnotation.ts, 213, 5))
+>IF : Symbol(IF, Decl(constructorWithIncompleteTypeAnnotation.ts, 209, 5))
+
+         case  d = () => {  yield  0; };
+>d : Symbol(CLASS.d, Decl(constructorWithIncompleteTypeAnnotation.ts, 217, 13))
+
+        public get Property() { return 0; }
+>Property : Symbol(CLASS.Property, Decl(constructorWithIncompleteTypeAnnotation.ts, 217, 40))
+
+        public Member() {
+>Member : Symbol(CLASS.Member, Decl(constructorWithIncompleteTypeAnnotation.ts, 218, 43))
+
+            return 0;
+        }
+        public Foo(): bool {
+>Foo : Symbol(CLASS.Foo, Decl(constructorWithIncompleteTypeAnnotation.ts, 221, 9))
+>bool : Symbol(bool)
+
+            var myEvent = () => { return 1; };
+>myEvent : Symbol(myEvent, Decl(constructorWithIncompleteTypeAnnotation.ts, 223, 15))
+
+            if (myEvent() == 1)
+>myEvent : Symbol(myEvent, Decl(constructorWithIncompleteTypeAnnotation.ts, 223, 15))
+
+                return true ? 
+            else
+                return false;
+        }
+    }
+
+
+    // todo: use these
+    class A  . 
+>A : Symbol(A, Decl(constructorWithIncompleteTypeAnnotation.ts, 229, 5))
+
+        public method1(val:number) {
+            return val;
+        }
+        public method2() {
+            return 2 * this.method1(2);
+>this : Symbol(globalThis)
+        }
+    }
+
+    class B extends A {
+>B : Symbol(B, Decl(constructorWithIncompleteTypeAnnotation.ts, 240, 5))
+>A : Symbol(A, Decl(constructorWithIncompleteTypeAnnotation.ts, 229, 5))
+
+        public method2() {
+>method2 : Symbol(B.method2, Decl(constructorWithIncompleteTypeAnnotation.ts, 242, 23))
+
+            return this.method1(2);
+>this : Symbol(B, Decl(constructorWithIncompleteTypeAnnotation.ts, 240, 5))
+        }
+    }
+
+    class Overloading {
+>Overloading : Symbol(Overloading, Decl(constructorWithIncompleteTypeAnnotation.ts, 247, 5))
+
+        private otherValue = 42;
+>otherValue : Symbol(Overloading.otherValue, Decl(constructorWithIncompleteTypeAnnotation.ts, 249, 23))
+
+        constructor(private value: number, public name: string)  :  }
+>value : Symbol(Overloading.value, Decl(constructorWithIncompleteTypeAnnotation.ts, 253, 20))
+>name : Symbol(Overloading.name, Decl(constructorWithIncompleteTypeAnnotation.ts, 253, 42))
+> : Symbol(fs)
+       
+        public Overloads(value: string);
+        public Overloads( while : string, ...rest: string[]) {  & 
+
+        public DefaultValue(value?: string = "Hello") { }
+    }
+}
+
+enum Weekdays {
+>Weekdays : Symbol(Weekdays, Decl(constructorWithIncompleteTypeAnnotation.ts, 260, 1))
+
+    Monday,
+>Monday : Symbol(Weekdays.Monday, Decl(constructorWithIncompleteTypeAnnotation.ts, 262, 15))
+
+    Tuesday,
+>Tuesday : Symbol(Weekdays.Tuesday, Decl(constructorWithIncompleteTypeAnnotation.ts, 263, 11))
+
+    Weekend,
+>Weekend : Symbol(Weekdays.Weekend, Decl(constructorWithIncompleteTypeAnnotation.ts, 264, 12))
+}
+
+enum Fruit {
+>Fruit : Symbol(Fruit, Decl(constructorWithIncompleteTypeAnnotation.ts, 266, 1))
+
+    Apple,
+>Apple : Symbol(Fruit.Apple, Decl(constructorWithIncompleteTypeAnnotation.ts, 268, 12))
+
+    Pear
+>Pear : Symbol(Fruit.Pear, Decl(constructorWithIncompleteTypeAnnotation.ts, 269, 10))
+}
+
+interface IDisposable {
+>IDisposable : Symbol(IDisposable, Decl(constructorWithIncompleteTypeAnnotation.ts, 271, 1))
+
+    Dispose(): void;
+>Dispose : Symbol(IDisposable.Dispose, Decl(constructorWithIncompleteTypeAnnotation.ts, 273, 23))
+}
+
+TypeScriptAllInOne.Program.Main();
+>TypeScriptAllInOne.Program.Main : Symbol(TypeScriptAllInOne.Program.Main, Decl(constructorWithIncompleteTypeAnnotation.ts, 14, 26))
+>TypeScriptAllInOne.Program : Symbol(TypeScriptAllInOne.Program, Decl(constructorWithIncompleteTypeAnnotation.ts, 13, 27))
+>TypeScriptAllInOne : Symbol(TypeScriptAllInOne, Decl(constructorWithIncompleteTypeAnnotation.ts, 10, 25))
+>Program : Symbol(TypeScriptAllInOne.Program, Decl(constructorWithIncompleteTypeAnnotation.ts, 13, 27))
+>Main : Symbol(TypeScriptAllInOne.Program.Main, Decl(constructorWithIncompleteTypeAnnotation.ts, 14, 26))
+

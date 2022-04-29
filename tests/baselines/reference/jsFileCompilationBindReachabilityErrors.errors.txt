@@ -1,0 +1,31 @@
+tests/cases/compiler/a.js(3,9): error TS7029: Fallthrough case in switch.
+tests/cases/compiler/a.js(16,5): error TS7027: Unreachable code detected.
+tests/cases/compiler/a.js(19,1): error TS7028: Unused label.
+
+
+==== tests/cases/compiler/a.js (3 errors) ====
+    function foo(a, b) {
+        switch (a) {
+            case 10:
+            ~~~~~~~~
+!!! error TS7029: Fallthrough case in switch.
+                if (b) {
+                    return b;
+                }
+            case 20:
+                return a;
+        }
+    }
+    
+    function bar() {
+        return x;
+        function bar2() {
+        }
+        var x = 10; // error
+        ~~~~~~~~~~~
+!!! error TS7027: Unreachable code detected.
+    }
+    
+    label1:  var x2 = 10;
+    ~~~~~~
+!!! error TS7028: Unused label.

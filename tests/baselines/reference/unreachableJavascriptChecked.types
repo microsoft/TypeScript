@@ -1,0 +1,21 @@
+=== tests/cases/compiler/unreachable.js ===
+function unreachable() {
+>unreachable : () => void | 2 | 3 | 4
+
+    return f();
+>f() : void
+>f : () => void
+
+    return 2;
+>2 : 2
+
+    return 3;
+>3 : 3
+
+    function f() {}
+>f : () => void
+
+    return 4;
+>4 : 4
+}
+

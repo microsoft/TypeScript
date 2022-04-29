@@ -1,0 +1,20 @@
+=== tests/cases/compiler/superCallFromClassThatDerivesNonGenericTypeButWithTypeArguments1.ts ===
+class A {
+>A : Symbol(A, Decl(superCallFromClassThatDerivesNonGenericTypeButWithTypeArguments1.ts, 0, 0))
+
+    constructor(private map: (value: number) => string) {
+>map : Symbol(A.map, Decl(superCallFromClassThatDerivesNonGenericTypeButWithTypeArguments1.ts, 1, 16))
+>value : Symbol(value, Decl(superCallFromClassThatDerivesNonGenericTypeButWithTypeArguments1.ts, 1, 30))
+
+    }
+}
+
+class B extends A<number, string> {
+>B : Symbol(B, Decl(superCallFromClassThatDerivesNonGenericTypeButWithTypeArguments1.ts, 4, 1))
+>A : Symbol(A, Decl(superCallFromClassThatDerivesNonGenericTypeButWithTypeArguments1.ts, 0, 0))
+
+    constructor() { super(value => String(value)); }
+>value : Symbol(value, Decl(superCallFromClassThatDerivesNonGenericTypeButWithTypeArguments1.ts, 7, 26))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>value : Symbol(value, Decl(superCallFromClassThatDerivesNonGenericTypeButWithTypeArguments1.ts, 7, 26))
+}

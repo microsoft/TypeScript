@@ -1,0 +1,61 @@
+=== tests/cases/conformance/salsa/webpackLibNormalModule.js ===
+class C {
+>C : Symbol(C, Decl(webpackLibNormalModule.js, 0, 0))
+
+    /** @param {number} x */
+    constructor(x) {
+>x : Symbol(x, Decl(webpackLibNormalModule.js, 2, 16))
+
+        this.x = x
+>this.x : Symbol(C.x, Decl(webpackLibNormalModule.js, 2, 20))
+>this : Symbol(C, Decl(webpackLibNormalModule.js, 0, 0))
+>x : Symbol(C.x, Decl(webpackLibNormalModule.js, 2, 20))
+>x : Symbol(x, Decl(webpackLibNormalModule.js, 2, 16))
+
+        this.exports = [x]
+>this.exports : Symbol(C.exports, Decl(webpackLibNormalModule.js, 3, 18))
+>this : Symbol(C, Decl(webpackLibNormalModule.js, 0, 0))
+>exports : Symbol(C.exports, Decl(webpackLibNormalModule.js, 3, 18))
+>x : Symbol(x, Decl(webpackLibNormalModule.js, 2, 16))
+    }
+    /** @param {number} y */
+    m(y) {
+>m : Symbol(C.m, Decl(webpackLibNormalModule.js, 5, 5))
+>y : Symbol(y, Decl(webpackLibNormalModule.js, 7, 6))
+
+        return this.x + y
+>this.x : Symbol(C.x, Decl(webpackLibNormalModule.js, 2, 20))
+>this : Symbol(C, Decl(webpackLibNormalModule.js, 0, 0))
+>x : Symbol(C.x, Decl(webpackLibNormalModule.js, 2, 20))
+>y : Symbol(y, Decl(webpackLibNormalModule.js, 7, 6))
+    }
+}
+function exec() {
+>exec : Symbol(exec, Decl(webpackLibNormalModule.js, 10, 1))
+
+    const module = new C(12);
+>module : Symbol(module, Decl(webpackLibNormalModule.js, 12, 9))
+>C : Symbol(C, Decl(webpackLibNormalModule.js, 0, 0))
+
+    return module.exports; // should be fine because `module` is defined locally
+>module.exports : Symbol(C.exports, Decl(webpackLibNormalModule.js, 3, 18))
+>module : Symbol(module, Decl(webpackLibNormalModule.js, 12, 9))
+>exports : Symbol(C.exports, Decl(webpackLibNormalModule.js, 3, 18))
+}
+
+function tricky() {
+>tricky : Symbol(tricky, Decl(webpackLibNormalModule.js, 14, 1))
+
+    // (a trickier variant of what webpack does)
+    const module = new C(12);
+>module : Symbol(module, Decl(webpackLibNormalModule.js, 18, 9))
+>C : Symbol(C, Decl(webpackLibNormalModule.js, 0, 0))
+
+    return () => {
+        return module.exports;
+>module.exports : Symbol(C.exports, Decl(webpackLibNormalModule.js, 3, 18))
+>module : Symbol(module, Decl(webpackLibNormalModule.js, 18, 9))
+>exports : Symbol(C.exports, Decl(webpackLibNormalModule.js, 3, 18))
+    }
+}
+

@@ -1,0 +1,14 @@
+=== tests/cases/compiler/index.d.ts ===
+export class C extends Object {
+>C : C
+>Object : Object
+
+    static readonly p: unique symbol;
+>p : unique symbol
+
+    [C.p](): void;
+>[C.p] : () => void
+>C.p : unique symbol
+>C : typeof C
+>p : unique symbol
+}

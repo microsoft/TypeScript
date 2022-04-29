@@ -1,0 +1,52 @@
+=== tests/cases/conformance/types/thisType/thisTypeSyntacticContext.ts ===
+function f(this: { n: number }) {
+>f : Symbol(f, Decl(thisTypeSyntacticContext.ts, 0, 0))
+>this : Symbol(this, Decl(thisTypeSyntacticContext.ts, 0, 11))
+>n : Symbol(n, Decl(thisTypeSyntacticContext.ts, 0, 18))
+}
+
+const o: { n: number, test?: (this: { n: number }) => void } = { n: 1 }
+>o : Symbol(o, Decl(thisTypeSyntacticContext.ts, 3, 5))
+>n : Symbol(n, Decl(thisTypeSyntacticContext.ts, 3, 10))
+>test : Symbol(test, Decl(thisTypeSyntacticContext.ts, 3, 21))
+>this : Symbol(this, Decl(thisTypeSyntacticContext.ts, 3, 30))
+>n : Symbol(n, Decl(thisTypeSyntacticContext.ts, 3, 37))
+>n : Symbol(n, Decl(thisTypeSyntacticContext.ts, 3, 64))
+
+o.test = f
+>o.test : Symbol(test, Decl(thisTypeSyntacticContext.ts, 3, 21))
+>o : Symbol(o, Decl(thisTypeSyntacticContext.ts, 3, 5))
+>test : Symbol(test, Decl(thisTypeSyntacticContext.ts, 3, 21))
+>f : Symbol(f, Decl(thisTypeSyntacticContext.ts, 0, 0))
+
+o.test();
+>o.test : Symbol(test, Decl(thisTypeSyntacticContext.ts, 3, 21))
+>o : Symbol(o, Decl(thisTypeSyntacticContext.ts, 3, 5))
+>test : Symbol(test, Decl(thisTypeSyntacticContext.ts, 3, 21))
+
+o!.test();
+>o!.test : Symbol(test, Decl(thisTypeSyntacticContext.ts, 3, 21))
+>o : Symbol(o, Decl(thisTypeSyntacticContext.ts, 3, 5))
+>test : Symbol(test, Decl(thisTypeSyntacticContext.ts, 3, 21))
+
+o.test!();
+>o.test : Symbol(test, Decl(thisTypeSyntacticContext.ts, 3, 21))
+>o : Symbol(o, Decl(thisTypeSyntacticContext.ts, 3, 5))
+>test : Symbol(test, Decl(thisTypeSyntacticContext.ts, 3, 21))
+
+o.test!!!();
+>o.test : Symbol(test, Decl(thisTypeSyntacticContext.ts, 3, 21))
+>o : Symbol(o, Decl(thisTypeSyntacticContext.ts, 3, 5))
+>test : Symbol(test, Decl(thisTypeSyntacticContext.ts, 3, 21))
+
+(o.test!)();
+>o.test : Symbol(test, Decl(thisTypeSyntacticContext.ts, 3, 21))
+>o : Symbol(o, Decl(thisTypeSyntacticContext.ts, 3, 5))
+>test : Symbol(test, Decl(thisTypeSyntacticContext.ts, 3, 21))
+
+(o.test)();
+>o.test : Symbol(test, Decl(thisTypeSyntacticContext.ts, 3, 21))
+>o : Symbol(o, Decl(thisTypeSyntacticContext.ts, 3, 5))
+>test : Symbol(test, Decl(thisTypeSyntacticContext.ts, 3, 21))
+
+

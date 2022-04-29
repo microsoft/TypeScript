@@ -1,0 +1,41 @@
+tests/cases/conformance/types/intersection/intersectionTypeAssignment.ts(8,1): error TS2741: Property 'b' is missing in type '{ a: string; }' but required in type '{ a: string; b: string; }'.
+tests/cases/conformance/types/intersection/intersectionTypeAssignment.ts(9,1): error TS2322: Type '{ a: string; }' is not assignable to type '{ a: string; } & { b: string; }'.
+  Property 'b' is missing in type '{ a: string; }' but required in type '{ b: string; }'.
+tests/cases/conformance/types/intersection/intersectionTypeAssignment.ts(13,1): error TS2741: Property 'a' is missing in type '{ b: string; }' but required in type '{ a: string; b: string; }'.
+tests/cases/conformance/types/intersection/intersectionTypeAssignment.ts(14,1): error TS2322: Type '{ b: string; }' is not assignable to type '{ a: string; } & { b: string; }'.
+  Property 'a' is missing in type '{ b: string; }' but required in type '{ a: string; }'.
+
+
+==== tests/cases/conformance/types/intersection/intersectionTypeAssignment.ts (4 errors) ====
+    var a: { a: string };
+    var b: { b: string };
+    var x: { a: string, b: string };
+    var y: { a: string } & { b: string };
+    
+    a = x;
+    a = y;
+    x = a;  // Error
+    ~
+!!! error TS2741: Property 'b' is missing in type '{ a: string; }' but required in type '{ a: string; b: string; }'.
+!!! related TS2728 tests/cases/conformance/types/intersection/intersectionTypeAssignment.ts:3:21: 'b' is declared here.
+    y = a;  // Error
+    ~
+!!! error TS2322: Type '{ a: string; }' is not assignable to type '{ a: string; } & { b: string; }'.
+!!! error TS2322:   Property 'b' is missing in type '{ a: string; }' but required in type '{ b: string; }'.
+!!! related TS2728 tests/cases/conformance/types/intersection/intersectionTypeAssignment.ts:4:26: 'b' is declared here.
+    
+    b = x;
+    b = y;
+    x = b;  // Error
+    ~
+!!! error TS2741: Property 'a' is missing in type '{ b: string; }' but required in type '{ a: string; b: string; }'.
+!!! related TS2728 tests/cases/conformance/types/intersection/intersectionTypeAssignment.ts:3:10: 'a' is declared here.
+    y = b;  // Error
+    ~
+!!! error TS2322: Type '{ b: string; }' is not assignable to type '{ a: string; } & { b: string; }'.
+!!! error TS2322:   Property 'a' is missing in type '{ b: string; }' but required in type '{ a: string; }'.
+!!! related TS2728 tests/cases/conformance/types/intersection/intersectionTypeAssignment.ts:4:10: 'a' is declared here.
+    
+    x = y;
+    y = x;
+    

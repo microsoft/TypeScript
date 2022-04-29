@@ -1,0 +1,38 @@
+=== tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclarations/staticFactory1.ts ===
+class Base {
+>Base : Base
+
+    foo() { return 1; }
+>foo : () => number
+>1 : 1
+
+    static create() {
+>create : () => Base
+
+        return new this();
+>new this() : Base
+>this : typeof Base
+    }
+}
+
+class Derived extends Base {
+>Derived : Derived
+>Base : Base
+
+    foo() { return 2; }
+>foo : () => number
+>2 : 2
+}
+var d = Derived.create(); 
+>d : Base
+>Derived.create() : Base
+>Derived.create : () => Base
+>Derived : typeof Derived
+>create : () => Base
+
+d.foo();  
+>d.foo() : number
+>d.foo : () => number
+>d : Base
+>foo : () => number
+

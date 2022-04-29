@@ -1,0 +1,57 @@
+=== tests/cases/compiler/assignmentNonObjectTypeConstraints.ts ===
+const enum E { A, B, C }
+>E : E
+>A : E.A
+>B : E.B
+>C : E.C
+
+function foo<T extends number>(x: T) {
+>foo : <T extends number>(x: T) => void
+>x : T
+
+    var y: number = x;  // Ok
+>y : number
+>x : T
+}
+
+foo(5);
+>foo(5) : void
+>foo : <T extends number>(x: T) => void
+>5 : 5
+
+foo(E.A);
+>foo(E.A) : void
+>foo : <T extends number>(x: T) => void
+>E.A : E.A
+>E : typeof E
+>A : E.A
+
+class A { a }
+>A : A
+>a : any
+
+class B { b }
+>B : B
+>b : any
+
+function bar<T extends A | B>(x: T) {
+>bar : <T extends A | B>(x: T) => void
+>x : T
+
+    var y: A | B = x;  // Ok
+>y : A | B
+>x : A | B
+}
+
+bar(new A);
+>bar(new A) : void
+>bar : <T extends A | B>(x: T) => void
+>new A : A
+>A : typeof A
+
+bar(new B);
+>bar(new B) : void
+>bar : <T extends A | B>(x: T) => void
+>new B : B
+>B : typeof B
+

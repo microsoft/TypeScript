@@ -1,0 +1,150 @@
+=== tests/cases/compiler/constantEnumAssert.ts ===
+enum E1 {
+>E1 : Symbol(E1, Decl(constantEnumAssert.ts, 0, 0))
+
+    a,
+>a : Symbol(E1.a, Decl(constantEnumAssert.ts, 0, 9))
+
+    b
+>b : Symbol(E1.b, Decl(constantEnumAssert.ts, 1, 6))
+}
+
+enum E2 {
+>E2 : Symbol(E2, Decl(constantEnumAssert.ts, 3, 1))
+
+    a = 'a',
+>a : Symbol(E2.a, Decl(constantEnumAssert.ts, 5, 9))
+
+    b = 'b'
+>b : Symbol(E2.b, Decl(constantEnumAssert.ts, 6, 12))
+}
+
+enum E3 {
+>E3 : Symbol(E3, Decl(constantEnumAssert.ts, 8, 1))
+
+    a = 1,
+>a : Symbol(E3.a, Decl(constantEnumAssert.ts, 10, 9))
+
+    b = a << 1,
+>b : Symbol(E3.b, Decl(constantEnumAssert.ts, 11, 10))
+>a : Symbol(E3.a, Decl(constantEnumAssert.ts, 10, 9))
+
+    c = a << 2,
+>c : Symbol(E3.c, Decl(constantEnumAssert.ts, 12, 15))
+>a : Symbol(E3.a, Decl(constantEnumAssert.ts, 10, 9))
+}
+
+const enum E4 {
+>E4 : Symbol(E4, Decl(constantEnumAssert.ts, 14, 1))
+
+    a,
+>a : Symbol(E4.a, Decl(constantEnumAssert.ts, 16, 15))
+
+    b
+>b : Symbol(E4.b, Decl(constantEnumAssert.ts, 17, 6))
+}
+
+const E5 = {
+>E5 : Symbol(E5, Decl(constantEnumAssert.ts, 21, 5))
+
+    a: 'a',
+>a : Symbol(a, Decl(constantEnumAssert.ts, 21, 12))
+
+    b: 'b'
+>b : Symbol(b, Decl(constantEnumAssert.ts, 22, 11))
+}
+
+const foo1 = { a: E1.a }
+>foo1 : Symbol(foo1, Decl(constantEnumAssert.ts, 26, 5))
+>a : Symbol(a, Decl(constantEnumAssert.ts, 26, 14))
+>E1.a : Symbol(E1.a, Decl(constantEnumAssert.ts, 0, 9))
+>E1 : Symbol(E1, Decl(constantEnumAssert.ts, 0, 0))
+>a : Symbol(E1.a, Decl(constantEnumAssert.ts, 0, 9))
+
+const foo2 = { a: E2.a }
+>foo2 : Symbol(foo2, Decl(constantEnumAssert.ts, 28, 5))
+>a : Symbol(a, Decl(constantEnumAssert.ts, 28, 14))
+>E2.a : Symbol(E2.a, Decl(constantEnumAssert.ts, 5, 9))
+>E2 : Symbol(E2, Decl(constantEnumAssert.ts, 3, 1))
+>a : Symbol(E2.a, Decl(constantEnumAssert.ts, 5, 9))
+
+const foo3 = { a: E1.a } as const
+>foo3 : Symbol(foo3, Decl(constantEnumAssert.ts, 30, 5))
+>a : Symbol(a, Decl(constantEnumAssert.ts, 30, 14))
+>E1.a : Symbol(E1.a, Decl(constantEnumAssert.ts, 0, 9))
+>E1 : Symbol(E1, Decl(constantEnumAssert.ts, 0, 0))
+>a : Symbol(E1.a, Decl(constantEnumAssert.ts, 0, 9))
+>const : Symbol(const)
+
+const foo4 = { a: E2.a } as const
+>foo4 : Symbol(foo4, Decl(constantEnumAssert.ts, 32, 5))
+>a : Symbol(a, Decl(constantEnumAssert.ts, 32, 14))
+>E2.a : Symbol(E2.a, Decl(constantEnumAssert.ts, 5, 9))
+>E2 : Symbol(E2, Decl(constantEnumAssert.ts, 3, 1))
+>a : Symbol(E2.a, Decl(constantEnumAssert.ts, 5, 9))
+>const : Symbol(const)
+
+const foo5 = { a: E3.a } as const
+>foo5 : Symbol(foo5, Decl(constantEnumAssert.ts, 34, 5))
+>a : Symbol(a, Decl(constantEnumAssert.ts, 34, 14))
+>E3.a : Symbol(E3.a, Decl(constantEnumAssert.ts, 10, 9))
+>E3 : Symbol(E3, Decl(constantEnumAssert.ts, 8, 1))
+>a : Symbol(E3.a, Decl(constantEnumAssert.ts, 10, 9))
+>const : Symbol(const)
+
+const foo6 = { a: E4.a } as const
+>foo6 : Symbol(foo6, Decl(constantEnumAssert.ts, 36, 5))
+>a : Symbol(a, Decl(constantEnumAssert.ts, 36, 14))
+>E4.a : Symbol(E4.a, Decl(constantEnumAssert.ts, 16, 15))
+>E4 : Symbol(E4, Decl(constantEnumAssert.ts, 14, 1))
+>a : Symbol(E4.a, Decl(constantEnumAssert.ts, 16, 15))
+>const : Symbol(const)
+
+const foo7 = { a: E5.a } as const
+>foo7 : Symbol(foo7, Decl(constantEnumAssert.ts, 38, 5))
+>a : Symbol(a, Decl(constantEnumAssert.ts, 38, 14))
+>E5.a : Symbol(a, Decl(constantEnumAssert.ts, 21, 12))
+>E5 : Symbol(E5, Decl(constantEnumAssert.ts, 21, 5))
+>a : Symbol(a, Decl(constantEnumAssert.ts, 21, 12))
+>const : Symbol(const)
+
+const foo8 = { a: E1.a as const }
+>foo8 : Symbol(foo8, Decl(constantEnumAssert.ts, 40, 5))
+>a : Symbol(a, Decl(constantEnumAssert.ts, 40, 14))
+>E1.a : Symbol(E1.a, Decl(constantEnumAssert.ts, 0, 9))
+>E1 : Symbol(E1, Decl(constantEnumAssert.ts, 0, 0))
+>a : Symbol(E1.a, Decl(constantEnumAssert.ts, 0, 9))
+>const : Symbol(const)
+
+const foo9 = { a: E2.a as const }
+>foo9 : Symbol(foo9, Decl(constantEnumAssert.ts, 42, 5))
+>a : Symbol(a, Decl(constantEnumAssert.ts, 42, 14))
+>E2.a : Symbol(E2.a, Decl(constantEnumAssert.ts, 5, 9))
+>E2 : Symbol(E2, Decl(constantEnumAssert.ts, 3, 1))
+>a : Symbol(E2.a, Decl(constantEnumAssert.ts, 5, 9))
+>const : Symbol(const)
+
+const foo10 = { a: E3.a as const }
+>foo10 : Symbol(foo10, Decl(constantEnumAssert.ts, 44, 5))
+>a : Symbol(a, Decl(constantEnumAssert.ts, 44, 15))
+>E3.a : Symbol(E3.a, Decl(constantEnumAssert.ts, 10, 9))
+>E3 : Symbol(E3, Decl(constantEnumAssert.ts, 8, 1))
+>a : Symbol(E3.a, Decl(constantEnumAssert.ts, 10, 9))
+>const : Symbol(const)
+
+const foo11 = { a: E4.a as const }
+>foo11 : Symbol(foo11, Decl(constantEnumAssert.ts, 46, 5))
+>a : Symbol(a, Decl(constantEnumAssert.ts, 46, 15))
+>E4.a : Symbol(E4.a, Decl(constantEnumAssert.ts, 16, 15))
+>E4 : Symbol(E4, Decl(constantEnumAssert.ts, 14, 1))
+>a : Symbol(E4.a, Decl(constantEnumAssert.ts, 16, 15))
+>const : Symbol(const)
+
+const foo12 = { a: E5.a as const }
+>foo12 : Symbol(foo12, Decl(constantEnumAssert.ts, 48, 5))
+>a : Symbol(a, Decl(constantEnumAssert.ts, 48, 15))
+>E5.a : Symbol(a, Decl(constantEnumAssert.ts, 21, 12))
+>E5 : Symbol(E5, Decl(constantEnumAssert.ts, 21, 5))
+>a : Symbol(a, Decl(constantEnumAssert.ts, 21, 12))
+>const : Symbol(const)
+

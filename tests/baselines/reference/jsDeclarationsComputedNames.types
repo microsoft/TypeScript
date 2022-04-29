@@ -1,0 +1,81 @@
+=== tests/cases/conformance/jsdoc/declarations/index.js ===
+const TopLevelSym = Symbol();
+>TopLevelSym : unique symbol
+>Symbol() : unique symbol
+>Symbol : SymbolConstructor
+
+const InnerSym = Symbol();
+>InnerSym : unique symbol
+>Symbol() : unique symbol
+>Symbol : SymbolConstructor
+
+module.exports = {
+>module.exports = {    [TopLevelSym](x = 12) {        return x;    },    items: {        [InnerSym]: (arg = {x: 12}) => arg.x    }} : { [TopLevelSym](x?: number): number; items: { [InnerSym]: (arg?: { x: number; }) => number; }; }
+>module.exports : { [TopLevelSym](x?: number): number; items: { [InnerSym]: (arg?: { x: number; }) => number; }; }
+>module : { exports: { [TopLevelSym](x?: number): number; items: { [InnerSym]: (arg?: { x: number; }) => number; }; }; }
+>exports : { [TopLevelSym](x?: number): number; items: { [InnerSym]: (arg?: { x: number; }) => number; }; }
+>{    [TopLevelSym](x = 12) {        return x;    },    items: {        [InnerSym]: (arg = {x: 12}) => arg.x    }} : { [TopLevelSym](x?: number): number; items: { [InnerSym]: (arg?: { x: number; }) => number; }; }
+
+    [TopLevelSym](x = 12) {
+>[TopLevelSym] : (x?: number) => number
+>TopLevelSym : unique symbol
+>x : number
+>12 : 12
+
+        return x;
+>x : number
+
+    },
+    items: {
+>items : { [InnerSym]: (arg?: { x: number; }) => number; }
+>{        [InnerSym]: (arg = {x: 12}) => arg.x    } : { [InnerSym]: (arg?: { x: number; }) => number; }
+
+        [InnerSym]: (arg = {x: 12}) => arg.x
+>[InnerSym] : (arg?: { x: number; }) => number
+>InnerSym : unique symbol
+>(arg = {x: 12}) => arg.x : (arg?: { x: number; }) => number
+>arg : { x: number; }
+>{x: 12} : { x: number; }
+>x : number
+>12 : 12
+>arg.x : number
+>arg : { x: number; }
+>x : number
+    }
+}
+
+=== tests/cases/conformance/jsdoc/declarations/index2.js ===
+const TopLevelSym = Symbol();
+>TopLevelSym : unique symbol
+>Symbol() : unique symbol
+>Symbol : SymbolConstructor
+
+const InnerSym = Symbol();
+>InnerSym : unique symbol
+>Symbol() : unique symbol
+>Symbol : SymbolConstructor
+
+export class MyClass {
+>MyClass : MyClass
+
+    static [TopLevelSym] = 12;
+>[TopLevelSym] : number
+>TopLevelSym : unique symbol
+>12 : 12
+
+    [InnerSym] = "ok";
+>[InnerSym] : string
+>InnerSym : unique symbol
+>"ok" : "ok"
+
+    /**
+     * @param {typeof TopLevelSym | typeof InnerSym} _p
+     */
+    constructor(_p = InnerSym) {
+>_p : unique symbol | unique symbol
+>InnerSym : unique symbol
+
+        // switch on _p
+    }
+}
+

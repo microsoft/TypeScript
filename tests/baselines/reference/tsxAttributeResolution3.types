@@ -1,0 +1,115 @@
+=== tests/cases/conformance/jsx/file.tsx ===
+declare module JSX {
+	interface Element { }
+	interface IntrinsicElements {
+		test1: Attribs1;
+>test1 : Attribs1
+	}
+}
+interface Attribs1 {
+	x: string;
+>x : string
+
+	y?: number;
+>y : number
+
+	z?: string;
+>z : string
+}
+
+// OK
+var obj1 = { x: 'foo' };
+>obj1 : { x: string; }
+>{ x: 'foo' } : { x: string; }
+>x : string
+>'foo' : "foo"
+
+<test1 {...obj1} />
+><test1 {...obj1} /> : JSX.Element
+>test1 : any
+>obj1 : { x: string; }
+
+// Error, x is not string
+var obj2 = { x: 32 };
+>obj2 : { x: number; }
+>{ x: 32 } : { x: number; }
+>x : number
+>32 : 32
+
+<test1 {...obj2} />
+><test1 {...obj2} /> : JSX.Element
+>test1 : any
+>obj2 : { x: number; }
+
+// Error, x is missing
+var obj3 = { y: 32 };
+>obj3 : { y: number; }
+>{ y: 32 } : { y: number; }
+>y : number
+>32 : 32
+
+<test1 {...obj3} />
+><test1 {...obj3} /> : JSX.Element
+>test1 : any
+>obj3 : { y: number; }
+
+// OK
+var obj4 = { x: 32, y: 32 };
+>obj4 : { x: number; y: number; }
+>{ x: 32, y: 32 } : { x: number; y: number; }
+>x : number
+>32 : 32
+>y : number
+>32 : 32
+
+<test1 {...obj4} x="ok" />
+><test1 {...obj4} x="ok" /> : JSX.Element
+>test1 : any
+>obj4 : { x: number; y: number; }
+>x : string
+
+// Error
+var obj5 = { x: 32, y: 32 };
+>obj5 : { x: number; y: number; }
+>{ x: 32, y: 32 } : { x: number; y: number; }
+>x : number
+>32 : 32
+>y : number
+>32 : 32
+
+<test1 x="ok" {...obj5} />
+><test1 x="ok" {...obj5} /> : JSX.Element
+>test1 : any
+>x : string
+>obj5 : { x: number; y: number; }
+
+// Ok
+var obj6 = { x: 'ok', y: 32, extra: 100 };
+>obj6 : { x: string; y: number; extra: number; }
+>{ x: 'ok', y: 32, extra: 100 } : { x: string; y: number; extra: number; }
+>x : string
+>'ok' : "ok"
+>y : number
+>32 : 32
+>extra : number
+>100 : 100
+
+<test1 {...obj6} />
+><test1 {...obj6} /> : JSX.Element
+>test1 : any
+>obj6 : { x: string; y: number; extra: number; }
+
+// OK (spread override)
+var obj7 = { x: 'foo' };
+>obj7 : { x: string; }
+>{ x: 'foo' } : { x: string; }
+>x : string
+>'foo' : "foo"
+
+<test1 x={32} {...obj7} />
+><test1 x={32} {...obj7} /> : JSX.Element
+>test1 : any
+>x : number
+>32 : 32
+>obj7 : { x: string; }
+

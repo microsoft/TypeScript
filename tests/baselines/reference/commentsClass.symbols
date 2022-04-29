@@ -1,0 +1,134 @@
+=== tests/cases/compiler/commentsClass.ts ===
+/** This is class c2 without constuctor*/
+class c2 {
+>c2 : Symbol(c2, Decl(commentsClass.ts, 0, 0))
+
+} // trailing comment1
+var i2 = new c2();
+>i2 : Symbol(i2, Decl(commentsClass.ts, 3, 3))
+>c2 : Symbol(c2, Decl(commentsClass.ts, 0, 0))
+
+var i2_c = c2;
+>i2_c : Symbol(i2_c, Decl(commentsClass.ts, 4, 3))
+>c2 : Symbol(c2, Decl(commentsClass.ts, 0, 0))
+
+class c3 {
+>c3 : Symbol(c3, Decl(commentsClass.ts, 4, 14))
+
+    /** Constructor comment*/
+    constructor() {
+    } // trailing comment of constructor
+} /* trailing comment 2 */
+var i3 = new c3();
+>i3 : Symbol(i3, Decl(commentsClass.ts, 10, 3))
+>c3 : Symbol(c3, Decl(commentsClass.ts, 4, 14))
+
+var i3_c = c3;
+>i3_c : Symbol(i3_c, Decl(commentsClass.ts, 11, 3))
+>c3 : Symbol(c3, Decl(commentsClass.ts, 4, 14))
+
+/** Class comment*/
+class c4 {
+>c4 : Symbol(c4, Decl(commentsClass.ts, 11, 14))
+
+    /** Constructor comment*/
+    constructor() {
+    } /* trailing comment of constructor 2*/
+}
+var i4 = new c4();
+>i4 : Symbol(i4, Decl(commentsClass.ts, 18, 3))
+>c4 : Symbol(c4, Decl(commentsClass.ts, 11, 14))
+
+var i4_c = c4;
+>i4_c : Symbol(i4_c, Decl(commentsClass.ts, 19, 3))
+>c4 : Symbol(c4, Decl(commentsClass.ts, 11, 14))
+
+/** Class with statics*/
+class c5 {
+>c5 : Symbol(c5, Decl(commentsClass.ts, 19, 14))
+
+    static s1: number;
+>s1 : Symbol(c5.s1, Decl(commentsClass.ts, 21, 10))
+}
+var i5 = new c5();
+>i5 : Symbol(i5, Decl(commentsClass.ts, 24, 3))
+>c5 : Symbol(c5, Decl(commentsClass.ts, 19, 14))
+
+var i5_c = c5;
+>i5_c : Symbol(i5_c, Decl(commentsClass.ts, 25, 3))
+>c5 : Symbol(c5, Decl(commentsClass.ts, 19, 14))
+
+/// class with statics and constructor
+class c6 { /// class with statics and constructor2
+>c6 : Symbol(c6, Decl(commentsClass.ts, 25, 14))
+
+    /// s1 comment
+    static s1: number; /// s1 comment2
+>s1 : Symbol(c6.s1, Decl(commentsClass.ts, 28, 10))
+
+    /// constructor comment
+    constructor() { /// constructor comment2
+    }
+}
+var i6 = new c6();
+>i6 : Symbol(i6, Decl(commentsClass.ts, 35, 3))
+>c6 : Symbol(c6, Decl(commentsClass.ts, 25, 14))
+
+var i6_c = c6;
+>i6_c : Symbol(i6_c, Decl(commentsClass.ts, 36, 3))
+>c6 : Symbol(c6, Decl(commentsClass.ts, 25, 14))
+
+// class with statics and constructor
+class c7 {
+>c7 : Symbol(c7, Decl(commentsClass.ts, 36, 14))
+
+    // s1 comment
+    static s1: number;
+>s1 : Symbol(c7.s1, Decl(commentsClass.ts, 39, 10))
+
+    // constructor comment
+    constructor() {
+    }
+}
+var i7 = new c7();
+>i7 : Symbol(i7, Decl(commentsClass.ts, 46, 3))
+>c7 : Symbol(c7, Decl(commentsClass.ts, 36, 14))
+
+var i7_c = c7;
+>i7_c : Symbol(i7_c, Decl(commentsClass.ts, 47, 3))
+>c7 : Symbol(c7, Decl(commentsClass.ts, 36, 14))
+
+/** class with statics and constructor
+ */
+class c8 {
+>c8 : Symbol(c8, Decl(commentsClass.ts, 47, 14))
+
+    /** s1 comment */
+    static s1: number; /** s1 comment2 */
+>s1 : Symbol(c8.s1, Decl(commentsClass.ts, 51, 10))
+
+    /** constructor comment 
+    */
+    constructor() {
+        /** constructor comment2 
+        */
+    }
+}
+var i8 = new c8();
+>i8 : Symbol(i8, Decl(commentsClass.ts, 61, 3))
+>c8 : Symbol(c8, Decl(commentsClass.ts, 47, 14))
+
+var i8_c = c8;
+>i8_c : Symbol(i8_c, Decl(commentsClass.ts, 62, 3))
+>c8 : Symbol(c8, Decl(commentsClass.ts, 47, 14))
+
+class c9 {
+>c9 : Symbol(c9, Decl(commentsClass.ts, 62, 14))
+
+    constructor() {
+        /// This is some detached comment
+
+        // should emit this leading comment of } too
+    }
+}
+

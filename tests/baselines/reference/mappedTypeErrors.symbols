@@ -1,0 +1,573 @@
+=== tests/cases/conformance/types/mapped/mappedTypeErrors.ts ===
+interface Shape {
+>Shape : Symbol(Shape, Decl(mappedTypeErrors.ts, 0, 0))
+
+    name: string;
+>name : Symbol(Shape.name, Decl(mappedTypeErrors.ts, 0, 17))
+
+    width: number;
+>width : Symbol(Shape.width, Decl(mappedTypeErrors.ts, 1, 17))
+
+    height: number;
+>height : Symbol(Shape.height, Decl(mappedTypeErrors.ts, 2, 18))
+
+    visible: boolean;
+>visible : Symbol(Shape.visible, Decl(mappedTypeErrors.ts, 3, 19))
+}
+
+interface Named {
+>Named : Symbol(Named, Decl(mappedTypeErrors.ts, 5, 1))
+
+    name: string;
+>name : Symbol(Named.name, Decl(mappedTypeErrors.ts, 7, 17))
+}
+
+interface Point {
+>Point : Symbol(Point, Decl(mappedTypeErrors.ts, 9, 1))
+
+    x: number;
+>x : Symbol(Point.x, Decl(mappedTypeErrors.ts, 11, 17))
+
+    y: number;
+>y : Symbol(Point.y, Decl(mappedTypeErrors.ts, 12, 14))
+}
+
+// Constraint checking
+
+type T00 = { [P in P]: string };  // Error
+>T00 : Symbol(T00, Decl(mappedTypeErrors.ts, 14, 1))
+>P : Symbol(P, Decl(mappedTypeErrors.ts, 18, 14))
+>P : Symbol(P, Decl(mappedTypeErrors.ts, 18, 14))
+
+type T01 = { [P in number]: string };  // Error
+>T01 : Symbol(T01, Decl(mappedTypeErrors.ts, 18, 32))
+>P : Symbol(P, Decl(mappedTypeErrors.ts, 19, 14))
+
+type T02 = { [P in Date]: number };  // Error
+>T02 : Symbol(T02, Decl(mappedTypeErrors.ts, 19, 37))
+>P : Symbol(P, Decl(mappedTypeErrors.ts, 20, 14))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+type T03 = Record<Date, number>;  // Error
+>T03 : Symbol(T03, Decl(mappedTypeErrors.ts, 20, 35))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+type T10 = Pick<Shape, "name">;
+>T10 : Symbol(T10, Decl(mappedTypeErrors.ts, 21, 32))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+>Shape : Symbol(Shape, Decl(mappedTypeErrors.ts, 0, 0))
+
+type T11 = Pick<Shape, "foo">;  // Error
+>T11 : Symbol(T11, Decl(mappedTypeErrors.ts, 23, 31))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+>Shape : Symbol(Shape, Decl(mappedTypeErrors.ts, 0, 0))
+
+type T12 = Pick<Shape, "name" | "foo">;  // Error
+>T12 : Symbol(T12, Decl(mappedTypeErrors.ts, 24, 30))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+>Shape : Symbol(Shape, Decl(mappedTypeErrors.ts, 0, 0))
+
+type T13 = Pick<Shape, keyof Named>;
+>T13 : Symbol(T13, Decl(mappedTypeErrors.ts, 25, 39))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+>Shape : Symbol(Shape, Decl(mappedTypeErrors.ts, 0, 0))
+>Named : Symbol(Named, Decl(mappedTypeErrors.ts, 5, 1))
+
+type T14 = Pick<Shape, keyof Point>;  // Error
+>T14 : Symbol(T14, Decl(mappedTypeErrors.ts, 26, 36))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+>Shape : Symbol(Shape, Decl(mappedTypeErrors.ts, 0, 0))
+>Point : Symbol(Point, Decl(mappedTypeErrors.ts, 9, 1))
+
+type T15 = Pick<Shape, never>;
+>T15 : Symbol(T15, Decl(mappedTypeErrors.ts, 27, 36))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+>Shape : Symbol(Shape, Decl(mappedTypeErrors.ts, 0, 0))
+
+type T16 = Pick<Shape, undefined>;  // Error
+>T16 : Symbol(T16, Decl(mappedTypeErrors.ts, 28, 30))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+>Shape : Symbol(Shape, Decl(mappedTypeErrors.ts, 0, 0))
+
+function f1<T>(x: T) {
+>f1 : Symbol(f1, Decl(mappedTypeErrors.ts, 29, 34))
+>T : Symbol(T, Decl(mappedTypeErrors.ts, 31, 12))
+>x : Symbol(x, Decl(mappedTypeErrors.ts, 31, 15))
+>T : Symbol(T, Decl(mappedTypeErrors.ts, 31, 12))
+
+    let y: Pick<Shape, T>;  // Error
+>y : Symbol(y, Decl(mappedTypeErrors.ts, 32, 7))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+>Shape : Symbol(Shape, Decl(mappedTypeErrors.ts, 0, 0))
+>T : Symbol(T, Decl(mappedTypeErrors.ts, 31, 12))
+}
+
+function f2<T extends string | number>(x: T) {
+>f2 : Symbol(f2, Decl(mappedTypeErrors.ts, 33, 1))
+>T : Symbol(T, Decl(mappedTypeErrors.ts, 35, 12))
+>x : Symbol(x, Decl(mappedTypeErrors.ts, 35, 39))
+>T : Symbol(T, Decl(mappedTypeErrors.ts, 35, 12))
+
+    let y: Pick<Shape, T>;  // Error
+>y : Symbol(y, Decl(mappedTypeErrors.ts, 36, 7))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+>Shape : Symbol(Shape, Decl(mappedTypeErrors.ts, 0, 0))
+>T : Symbol(T, Decl(mappedTypeErrors.ts, 35, 12))
+}
+
+function f3<T extends keyof Shape>(x: T) {
+>f3 : Symbol(f3, Decl(mappedTypeErrors.ts, 37, 1))
+>T : Symbol(T, Decl(mappedTypeErrors.ts, 39, 12))
+>Shape : Symbol(Shape, Decl(mappedTypeErrors.ts, 0, 0))
+>x : Symbol(x, Decl(mappedTypeErrors.ts, 39, 35))
+>T : Symbol(T, Decl(mappedTypeErrors.ts, 39, 12))
+
+    let y: Pick<Shape, T>;
+>y : Symbol(y, Decl(mappedTypeErrors.ts, 40, 7))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+>Shape : Symbol(Shape, Decl(mappedTypeErrors.ts, 0, 0))
+>T : Symbol(T, Decl(mappedTypeErrors.ts, 39, 12))
+}
+
+function f4<T extends keyof Named>(x: T) {
+>f4 : Symbol(f4, Decl(mappedTypeErrors.ts, 41, 1))
+>T : Symbol(T, Decl(mappedTypeErrors.ts, 43, 12))
+>Named : Symbol(Named, Decl(mappedTypeErrors.ts, 5, 1))
+>x : Symbol(x, Decl(mappedTypeErrors.ts, 43, 35))
+>T : Symbol(T, Decl(mappedTypeErrors.ts, 43, 12))
+
+    let y: Pick<Shape, T>;
+>y : Symbol(y, Decl(mappedTypeErrors.ts, 44, 7))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+>Shape : Symbol(Shape, Decl(mappedTypeErrors.ts, 0, 0))
+>T : Symbol(T, Decl(mappedTypeErrors.ts, 43, 12))
+}
+
+// Type identity checking
+
+function f10<T>() {
+>f10 : Symbol(f10, Decl(mappedTypeErrors.ts, 45, 1))
+>T : Symbol(T, Decl(mappedTypeErrors.ts, 49, 13))
+
+    type K = keyof T;
+>K : Symbol(K, Decl(mappedTypeErrors.ts, 49, 19))
+>T : Symbol(T, Decl(mappedTypeErrors.ts, 49, 13))
+
+    var x: { [P in keyof T]: T[P] };
+>x : Symbol(x, Decl(mappedTypeErrors.ts, 51, 7), Decl(mappedTypeErrors.ts, 52, 7), Decl(mappedTypeErrors.ts, 53, 7))
+>P : Symbol(P, Decl(mappedTypeErrors.ts, 51, 14))
+>T : Symbol(T, Decl(mappedTypeErrors.ts, 49, 13))
+>T : Symbol(T, Decl(mappedTypeErrors.ts, 49, 13))
+>P : Symbol(P, Decl(mappedTypeErrors.ts, 51, 14))
+
+    var x: { [Q in keyof T]: T[Q] };
+>x : Symbol(x, Decl(mappedTypeErrors.ts, 51, 7), Decl(mappedTypeErrors.ts, 52, 7), Decl(mappedTypeErrors.ts, 53, 7))
+>Q : Symbol(Q, Decl(mappedTypeErrors.ts, 52, 14))
+>T : Symbol(T, Decl(mappedTypeErrors.ts, 49, 13))
+>T : Symbol(T, Decl(mappedTypeErrors.ts, 49, 13))
+>Q : Symbol(Q, Decl(mappedTypeErrors.ts, 52, 14))
+
+    var x: { [R in K]: T[R] };
+>x : Symbol(x, Decl(mappedTypeErrors.ts, 51, 7), Decl(mappedTypeErrors.ts, 52, 7), Decl(mappedTypeErrors.ts, 53, 7))
+>R : Symbol(R, Decl(mappedTypeErrors.ts, 53, 14))
+>K : Symbol(K, Decl(mappedTypeErrors.ts, 49, 19))
+>T : Symbol(T, Decl(mappedTypeErrors.ts, 49, 13))
+>R : Symbol(R, Decl(mappedTypeErrors.ts, 53, 14))
+}
+
+function f11<T>() {
+>f11 : Symbol(f11, Decl(mappedTypeErrors.ts, 54, 1))
+>T : Symbol(T, Decl(mappedTypeErrors.ts, 56, 13))
+
+    var x: { [P in keyof T]: T[P] };
+>x : Symbol(x, Decl(mappedTypeErrors.ts, 57, 7), Decl(mappedTypeErrors.ts, 58, 7), Decl(mappedTypeErrors.ts, 59, 7), Decl(mappedTypeErrors.ts, 60, 7))
+>P : Symbol(P, Decl(mappedTypeErrors.ts, 57, 14))
+>T : Symbol(T, Decl(mappedTypeErrors.ts, 56, 13))
+>T : Symbol(T, Decl(mappedTypeErrors.ts, 56, 13))
+>P : Symbol(P, Decl(mappedTypeErrors.ts, 57, 14))
+
+    var x: { [P in keyof T]?: T[P] };  // Error
+>x : Symbol(x, Decl(mappedTypeErrors.ts, 57, 7), Decl(mappedTypeErrors.ts, 58, 7), Decl(mappedTypeErrors.ts, 59, 7), Decl(mappedTypeErrors.ts, 60, 7))
+>P : Symbol(P, Decl(mappedTypeErrors.ts, 58, 14))
+>T : Symbol(T, Decl(mappedTypeErrors.ts, 56, 13))
+>T : Symbol(T, Decl(mappedTypeErrors.ts, 56, 13))
+>P : Symbol(P, Decl(mappedTypeErrors.ts, 58, 14))
+
+    var x: { readonly [P in keyof T]: T[P] };  // Error
+>x : Symbol(x, Decl(mappedTypeErrors.ts, 57, 7), Decl(mappedTypeErrors.ts, 58, 7), Decl(mappedTypeErrors.ts, 59, 7), Decl(mappedTypeErrors.ts, 60, 7))
+>P : Symbol(P, Decl(mappedTypeErrors.ts, 59, 23))
+>T : Symbol(T, Decl(mappedTypeErrors.ts, 56, 13))
+>T : Symbol(T, Decl(mappedTypeErrors.ts, 56, 13))
+>P : Symbol(P, Decl(mappedTypeErrors.ts, 59, 23))
+
+    var x: { readonly [P in keyof T]?: T[P] };  // Error
+>x : Symbol(x, Decl(mappedTypeErrors.ts, 57, 7), Decl(mappedTypeErrors.ts, 58, 7), Decl(mappedTypeErrors.ts, 59, 7), Decl(mappedTypeErrors.ts, 60, 7))
+>P : Symbol(P, Decl(mappedTypeErrors.ts, 60, 23))
+>T : Symbol(T, Decl(mappedTypeErrors.ts, 56, 13))
+>T : Symbol(T, Decl(mappedTypeErrors.ts, 56, 13))
+>P : Symbol(P, Decl(mappedTypeErrors.ts, 60, 23))
+}
+
+function f12<T>() {
+>f12 : Symbol(f12, Decl(mappedTypeErrors.ts, 61, 1))
+>T : Symbol(T, Decl(mappedTypeErrors.ts, 63, 13))
+
+    var x: { [P in keyof T]: T[P] };
+>x : Symbol(x, Decl(mappedTypeErrors.ts, 64, 7), Decl(mappedTypeErrors.ts, 65, 7))
+>P : Symbol(P, Decl(mappedTypeErrors.ts, 64, 14))
+>T : Symbol(T, Decl(mappedTypeErrors.ts, 63, 13))
+>T : Symbol(T, Decl(mappedTypeErrors.ts, 63, 13))
+>P : Symbol(P, Decl(mappedTypeErrors.ts, 64, 14))
+
+    var x: { [P in keyof T]: T[P][] };  // Error
+>x : Symbol(x, Decl(mappedTypeErrors.ts, 64, 7), Decl(mappedTypeErrors.ts, 65, 7))
+>P : Symbol(P, Decl(mappedTypeErrors.ts, 65, 14))
+>T : Symbol(T, Decl(mappedTypeErrors.ts, 63, 13))
+>T : Symbol(T, Decl(mappedTypeErrors.ts, 63, 13))
+>P : Symbol(P, Decl(mappedTypeErrors.ts, 65, 14))
+}
+
+// Check that inferences to mapped types are secondary
+
+declare function objAndReadonly<T>(primary: T, secondary: Readonly<T>): T;
+>objAndReadonly : Symbol(objAndReadonly, Decl(mappedTypeErrors.ts, 66, 1))
+>T : Symbol(T, Decl(mappedTypeErrors.ts, 70, 32))
+>primary : Symbol(primary, Decl(mappedTypeErrors.ts, 70, 35))
+>T : Symbol(T, Decl(mappedTypeErrors.ts, 70, 32))
+>secondary : Symbol(secondary, Decl(mappedTypeErrors.ts, 70, 46))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(mappedTypeErrors.ts, 70, 32))
+>T : Symbol(T, Decl(mappedTypeErrors.ts, 70, 32))
+
+declare function objAndPartial<T>(primary: T, secondary: Partial<T>): T;
+>objAndPartial : Symbol(objAndPartial, Decl(mappedTypeErrors.ts, 70, 74))
+>T : Symbol(T, Decl(mappedTypeErrors.ts, 71, 31))
+>primary : Symbol(primary, Decl(mappedTypeErrors.ts, 71, 34))
+>T : Symbol(T, Decl(mappedTypeErrors.ts, 71, 31))
+>secondary : Symbol(secondary, Decl(mappedTypeErrors.ts, 71, 45))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(mappedTypeErrors.ts, 71, 31))
+>T : Symbol(T, Decl(mappedTypeErrors.ts, 71, 31))
+
+function f20() {
+>f20 : Symbol(f20, Decl(mappedTypeErrors.ts, 71, 72))
+
+    let x1 = objAndReadonly({ x: 0, y: 0 }, { x: 1 });  // Error
+>x1 : Symbol(x1, Decl(mappedTypeErrors.ts, 74, 7))
+>objAndReadonly : Symbol(objAndReadonly, Decl(mappedTypeErrors.ts, 66, 1))
+>x : Symbol(x, Decl(mappedTypeErrors.ts, 74, 29))
+>y : Symbol(y, Decl(mappedTypeErrors.ts, 74, 35))
+>x : Symbol(x, Decl(mappedTypeErrors.ts, 74, 45))
+
+    let x2 = objAndReadonly({ x: 0, y: 0 }, { x: 1, y: 1 });
+>x2 : Symbol(x2, Decl(mappedTypeErrors.ts, 75, 7))
+>objAndReadonly : Symbol(objAndReadonly, Decl(mappedTypeErrors.ts, 66, 1))
+>x : Symbol(x, Decl(mappedTypeErrors.ts, 75, 29))
+>y : Symbol(y, Decl(mappedTypeErrors.ts, 75, 35))
+>x : Symbol(x, Decl(mappedTypeErrors.ts, 75, 45))
+>y : Symbol(y, Decl(mappedTypeErrors.ts, 75, 51))
+
+    let x3 = objAndReadonly({ x: 0, y: 0 }, { x: 1, y: 1, z: 1 });  // Error
+>x3 : Symbol(x3, Decl(mappedTypeErrors.ts, 76, 7))
+>objAndReadonly : Symbol(objAndReadonly, Decl(mappedTypeErrors.ts, 66, 1))
+>x : Symbol(x, Decl(mappedTypeErrors.ts, 76, 29))
+>y : Symbol(y, Decl(mappedTypeErrors.ts, 76, 35))
+>x : Symbol(x, Decl(mappedTypeErrors.ts, 76, 45))
+>y : Symbol(y, Decl(mappedTypeErrors.ts, 76, 51))
+>z : Symbol(z, Decl(mappedTypeErrors.ts, 76, 57))
+}
+
+function f21() {
+>f21 : Symbol(f21, Decl(mappedTypeErrors.ts, 77, 1))
+
+    let x1 = objAndPartial({ x: 0, y: 0 }, { x: 1 });
+>x1 : Symbol(x1, Decl(mappedTypeErrors.ts, 80, 7))
+>objAndPartial : Symbol(objAndPartial, Decl(mappedTypeErrors.ts, 70, 74))
+>x : Symbol(x, Decl(mappedTypeErrors.ts, 80, 28))
+>y : Symbol(y, Decl(mappedTypeErrors.ts, 80, 34))
+>x : Symbol(x, Decl(mappedTypeErrors.ts, 80, 44))
+
+    let x2 = objAndPartial({ x: 0, y: 0 }, { x: 1, y: 1 });
+>x2 : Symbol(x2, Decl(mappedTypeErrors.ts, 81, 7))
+>objAndPartial : Symbol(objAndPartial, Decl(mappedTypeErrors.ts, 70, 74))
+>x : Symbol(x, Decl(mappedTypeErrors.ts, 81, 28))
+>y : Symbol(y, Decl(mappedTypeErrors.ts, 81, 34))
+>x : Symbol(x, Decl(mappedTypeErrors.ts, 81, 44))
+>y : Symbol(y, Decl(mappedTypeErrors.ts, 81, 50))
+
+    let x3 = objAndPartial({ x: 0, y: 0 }, { x: 1, y: 1, z: 1 });  // Error
+>x3 : Symbol(x3, Decl(mappedTypeErrors.ts, 82, 7))
+>objAndPartial : Symbol(objAndPartial, Decl(mappedTypeErrors.ts, 70, 74))
+>x : Symbol(x, Decl(mappedTypeErrors.ts, 82, 28))
+>y : Symbol(y, Decl(mappedTypeErrors.ts, 82, 34))
+>x : Symbol(x, Decl(mappedTypeErrors.ts, 82, 44))
+>y : Symbol(y, Decl(mappedTypeErrors.ts, 82, 50))
+>z : Symbol(z, Decl(mappedTypeErrors.ts, 82, 56))
+}
+
+// Verify use of Pick<T, K> for setState functions (#12793)
+
+interface Foo {
+>Foo : Symbol(Foo, Decl(mappedTypeErrors.ts, 83, 1))
+
+    a: string;
+>a : Symbol(Foo.a, Decl(mappedTypeErrors.ts, 87, 15))
+
+    b?: number;
+>b : Symbol(Foo.b, Decl(mappedTypeErrors.ts, 88, 14))
+}
+
+function setState<T, K extends keyof T>(obj: T, props: Pick<T, K>) {
+>setState : Symbol(setState, Decl(mappedTypeErrors.ts, 90, 1))
+>T : Symbol(T, Decl(mappedTypeErrors.ts, 92, 18))
+>K : Symbol(K, Decl(mappedTypeErrors.ts, 92, 20))
+>T : Symbol(T, Decl(mappedTypeErrors.ts, 92, 18))
+>obj : Symbol(obj, Decl(mappedTypeErrors.ts, 92, 40))
+>T : Symbol(T, Decl(mappedTypeErrors.ts, 92, 18))
+>props : Symbol(props, Decl(mappedTypeErrors.ts, 92, 47))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(mappedTypeErrors.ts, 92, 18))
+>K : Symbol(K, Decl(mappedTypeErrors.ts, 92, 20))
+
+    for (let k in props) {
+>k : Symbol(k, Decl(mappedTypeErrors.ts, 93, 12))
+>props : Symbol(props, Decl(mappedTypeErrors.ts, 92, 47))
+
+        obj[k] = props[k];
+>obj : Symbol(obj, Decl(mappedTypeErrors.ts, 92, 40))
+>k : Symbol(k, Decl(mappedTypeErrors.ts, 93, 12))
+>props : Symbol(props, Decl(mappedTypeErrors.ts, 92, 47))
+>k : Symbol(k, Decl(mappedTypeErrors.ts, 93, 12))
+    }
+}
+
+let foo: Foo = { a: "hello", b: 42 };
+>foo : Symbol(foo, Decl(mappedTypeErrors.ts, 98, 3))
+>Foo : Symbol(Foo, Decl(mappedTypeErrors.ts, 83, 1))
+>a : Symbol(a, Decl(mappedTypeErrors.ts, 98, 16))
+>b : Symbol(b, Decl(mappedTypeErrors.ts, 98, 28))
+
+setState(foo, { a: "test", b: 43 })
+>setState : Symbol(setState, Decl(mappedTypeErrors.ts, 90, 1))
+>foo : Symbol(foo, Decl(mappedTypeErrors.ts, 98, 3))
+>a : Symbol(a, Decl(mappedTypeErrors.ts, 99, 15))
+>b : Symbol(b, Decl(mappedTypeErrors.ts, 99, 26))
+
+setState(foo, { a: "hi" });
+>setState : Symbol(setState, Decl(mappedTypeErrors.ts, 90, 1))
+>foo : Symbol(foo, Decl(mappedTypeErrors.ts, 98, 3))
+>a : Symbol(a, Decl(mappedTypeErrors.ts, 100, 15))
+
+setState(foo, { b: undefined });
+>setState : Symbol(setState, Decl(mappedTypeErrors.ts, 90, 1))
+>foo : Symbol(foo, Decl(mappedTypeErrors.ts, 98, 3))
+>b : Symbol(b, Decl(mappedTypeErrors.ts, 101, 15))
+>undefined : Symbol(undefined)
+
+setState(foo, { });
+>setState : Symbol(setState, Decl(mappedTypeErrors.ts, 90, 1))
+>foo : Symbol(foo, Decl(mappedTypeErrors.ts, 98, 3))
+
+setState(foo, foo);
+>setState : Symbol(setState, Decl(mappedTypeErrors.ts, 90, 1))
+>foo : Symbol(foo, Decl(mappedTypeErrors.ts, 98, 3))
+>foo : Symbol(foo, Decl(mappedTypeErrors.ts, 98, 3))
+
+setState(foo, { a: undefined });  // Error
+>setState : Symbol(setState, Decl(mappedTypeErrors.ts, 90, 1))
+>foo : Symbol(foo, Decl(mappedTypeErrors.ts, 98, 3))
+>a : Symbol(a, Decl(mappedTypeErrors.ts, 104, 15))
+>undefined : Symbol(undefined)
+
+setState(foo, { c: true });  // Error
+>setState : Symbol(setState, Decl(mappedTypeErrors.ts, 90, 1))
+>foo : Symbol(foo, Decl(mappedTypeErrors.ts, 98, 3))
+>c : Symbol(c, Decl(mappedTypeErrors.ts, 105, 15))
+
+class C<T> {
+>C : Symbol(C, Decl(mappedTypeErrors.ts, 105, 27))
+>T : Symbol(T, Decl(mappedTypeErrors.ts, 107, 8))
+
+    state: T;
+>state : Symbol(C.state, Decl(mappedTypeErrors.ts, 107, 12))
+>T : Symbol(T, Decl(mappedTypeErrors.ts, 107, 8))
+
+    setState<K extends keyof T>(props: Pick<T, K>) {
+>setState : Symbol(C.setState, Decl(mappedTypeErrors.ts, 108, 13))
+>K : Symbol(K, Decl(mappedTypeErrors.ts, 109, 13))
+>T : Symbol(T, Decl(mappedTypeErrors.ts, 107, 8))
+>props : Symbol(props, Decl(mappedTypeErrors.ts, 109, 32))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(mappedTypeErrors.ts, 107, 8))
+>K : Symbol(K, Decl(mappedTypeErrors.ts, 109, 13))
+
+        for (let k in props) {
+>k : Symbol(k, Decl(mappedTypeErrors.ts, 110, 16))
+>props : Symbol(props, Decl(mappedTypeErrors.ts, 109, 32))
+
+            this.state[k] = props[k];
+>this.state : Symbol(C.state, Decl(mappedTypeErrors.ts, 107, 12))
+>this : Symbol(C, Decl(mappedTypeErrors.ts, 105, 27))
+>state : Symbol(C.state, Decl(mappedTypeErrors.ts, 107, 12))
+>k : Symbol(k, Decl(mappedTypeErrors.ts, 110, 16))
+>props : Symbol(props, Decl(mappedTypeErrors.ts, 109, 32))
+>k : Symbol(k, Decl(mappedTypeErrors.ts, 110, 16))
+        }
+    }
+}
+
+let c = new C<Foo>();
+>c : Symbol(c, Decl(mappedTypeErrors.ts, 116, 3))
+>C : Symbol(C, Decl(mappedTypeErrors.ts, 105, 27))
+>Foo : Symbol(Foo, Decl(mappedTypeErrors.ts, 83, 1))
+
+c.setState({ a: "test", b: 43 });
+>c.setState : Symbol(C.setState, Decl(mappedTypeErrors.ts, 108, 13))
+>c : Symbol(c, Decl(mappedTypeErrors.ts, 116, 3))
+>setState : Symbol(C.setState, Decl(mappedTypeErrors.ts, 108, 13))
+>a : Symbol(a, Decl(mappedTypeErrors.ts, 117, 12))
+>b : Symbol(b, Decl(mappedTypeErrors.ts, 117, 23))
+
+c.setState({ a: "hi" });
+>c.setState : Symbol(C.setState, Decl(mappedTypeErrors.ts, 108, 13))
+>c : Symbol(c, Decl(mappedTypeErrors.ts, 116, 3))
+>setState : Symbol(C.setState, Decl(mappedTypeErrors.ts, 108, 13))
+>a : Symbol(a, Decl(mappedTypeErrors.ts, 118, 12))
+
+c.setState({ b: undefined });
+>c.setState : Symbol(C.setState, Decl(mappedTypeErrors.ts, 108, 13))
+>c : Symbol(c, Decl(mappedTypeErrors.ts, 116, 3))
+>setState : Symbol(C.setState, Decl(mappedTypeErrors.ts, 108, 13))
+>b : Symbol(b, Decl(mappedTypeErrors.ts, 119, 12))
+>undefined : Symbol(undefined)
+
+c.setState({ });
+>c.setState : Symbol(C.setState, Decl(mappedTypeErrors.ts, 108, 13))
+>c : Symbol(c, Decl(mappedTypeErrors.ts, 116, 3))
+>setState : Symbol(C.setState, Decl(mappedTypeErrors.ts, 108, 13))
+
+c.setState(foo);
+>c.setState : Symbol(C.setState, Decl(mappedTypeErrors.ts, 108, 13))
+>c : Symbol(c, Decl(mappedTypeErrors.ts, 116, 3))
+>setState : Symbol(C.setState, Decl(mappedTypeErrors.ts, 108, 13))
+>foo : Symbol(foo, Decl(mappedTypeErrors.ts, 98, 3))
+
+c.setState({ a: undefined });  // Error
+>c.setState : Symbol(C.setState, Decl(mappedTypeErrors.ts, 108, 13))
+>c : Symbol(c, Decl(mappedTypeErrors.ts, 116, 3))
+>setState : Symbol(C.setState, Decl(mappedTypeErrors.ts, 108, 13))
+>a : Symbol(a, Decl(mappedTypeErrors.ts, 122, 12))
+>undefined : Symbol(undefined)
+
+c.setState({ c: true });  // Error
+>c.setState : Symbol(C.setState, Decl(mappedTypeErrors.ts, 108, 13))
+>c : Symbol(c, Decl(mappedTypeErrors.ts, 116, 3))
+>setState : Symbol(C.setState, Decl(mappedTypeErrors.ts, 108, 13))
+>c : Symbol(c, Decl(mappedTypeErrors.ts, 123, 12))
+
+type T2 = { a?: number, [key: string]: any };
+>T2 : Symbol(T2, Decl(mappedTypeErrors.ts, 123, 24))
+>a : Symbol(a, Decl(mappedTypeErrors.ts, 125, 11))
+>key : Symbol(key, Decl(mappedTypeErrors.ts, 125, 25))
+
+let x1: T2 = { a: 'no' };  // Error
+>x1 : Symbol(x1, Decl(mappedTypeErrors.ts, 127, 3))
+>T2 : Symbol(T2, Decl(mappedTypeErrors.ts, 123, 24))
+>a : Symbol(a, Decl(mappedTypeErrors.ts, 127, 14))
+
+let x2: Partial<T2> = { a: 'no' }; // Error
+>x2 : Symbol(x2, Decl(mappedTypeErrors.ts, 128, 3))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>T2 : Symbol(T2, Decl(mappedTypeErrors.ts, 123, 24))
+>a : Symbol(a, Decl(mappedTypeErrors.ts, 128, 23))
+
+let x3: { [P in keyof T2]: T2[P]} = { a: 'no' };  // Error
+>x3 : Symbol(x3, Decl(mappedTypeErrors.ts, 129, 3))
+>P : Symbol(P, Decl(mappedTypeErrors.ts, 129, 11))
+>T2 : Symbol(T2, Decl(mappedTypeErrors.ts, 123, 24))
+>T2 : Symbol(T2, Decl(mappedTypeErrors.ts, 123, 24))
+>P : Symbol(P, Decl(mappedTypeErrors.ts, 129, 11))
+>a : Symbol(a, Decl(mappedTypeErrors.ts, 129, 37))
+
+// Repro from #13044
+
+type Foo2<T, F extends keyof T> = {
+>Foo2 : Symbol(Foo2, Decl(mappedTypeErrors.ts, 129, 48))
+>T : Symbol(T, Decl(mappedTypeErrors.ts, 133, 10))
+>F : Symbol(F, Decl(mappedTypeErrors.ts, 133, 12))
+>T : Symbol(T, Decl(mappedTypeErrors.ts, 133, 10))
+
+    pf: {[P in F]?: T[P]},
+>pf : Symbol(pf, Decl(mappedTypeErrors.ts, 133, 35))
+>P : Symbol(P, Decl(mappedTypeErrors.ts, 134, 10))
+>F : Symbol(F, Decl(mappedTypeErrors.ts, 133, 12))
+>T : Symbol(T, Decl(mappedTypeErrors.ts, 133, 10))
+>P : Symbol(P, Decl(mappedTypeErrors.ts, 134, 10))
+
+    pt: {[P in T]?: T[P]}, // note: should be in keyof T
+>pt : Symbol(pt, Decl(mappedTypeErrors.ts, 134, 26))
+>P : Symbol(P, Decl(mappedTypeErrors.ts, 135, 10))
+>T : Symbol(T, Decl(mappedTypeErrors.ts, 133, 10))
+>T : Symbol(T, Decl(mappedTypeErrors.ts, 133, 10))
+>P : Symbol(P, Decl(mappedTypeErrors.ts, 135, 10))
+
+};
+type O = {x: number, y: boolean};
+>O : Symbol(O, Decl(mappedTypeErrors.ts, 136, 2))
+>x : Symbol(x, Decl(mappedTypeErrors.ts, 137, 10))
+>y : Symbol(y, Decl(mappedTypeErrors.ts, 137, 20))
+
+let o: O = {x: 5, y: false};
+>o : Symbol(o, Decl(mappedTypeErrors.ts, 138, 3))
+>O : Symbol(O, Decl(mappedTypeErrors.ts, 136, 2))
+>x : Symbol(x, Decl(mappedTypeErrors.ts, 138, 12))
+>y : Symbol(y, Decl(mappedTypeErrors.ts, 138, 17))
+
+let f: Foo2<O, 'x'> = {
+>f : Symbol(f, Decl(mappedTypeErrors.ts, 139, 3))
+>Foo2 : Symbol(Foo2, Decl(mappedTypeErrors.ts, 129, 48))
+>O : Symbol(O, Decl(mappedTypeErrors.ts, 136, 2))
+
+    pf: {x: 7},
+>pf : Symbol(pf, Decl(mappedTypeErrors.ts, 139, 23))
+>x : Symbol(x, Decl(mappedTypeErrors.ts, 140, 9))
+
+    pt: {x: 7, y: false},
+>pt : Symbol(pt, Decl(mappedTypeErrors.ts, 140, 15))
+>x : Symbol(x, Decl(mappedTypeErrors.ts, 141, 9))
+>y : Symbol(y, Decl(mappedTypeErrors.ts, 141, 14))
+
+};
+
+// Repro from #28170
+
+function test1<T, K extends keyof T>(obj: Pick<T, K>) {
+>test1 : Symbol(test1, Decl(mappedTypeErrors.ts, 142, 2))
+>T : Symbol(T, Decl(mappedTypeErrors.ts, 146, 15))
+>K : Symbol(K, Decl(mappedTypeErrors.ts, 146, 17))
+>T : Symbol(T, Decl(mappedTypeErrors.ts, 146, 15))
+>obj : Symbol(obj, Decl(mappedTypeErrors.ts, 146, 37))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(mappedTypeErrors.ts, 146, 15))
+>K : Symbol(K, Decl(mappedTypeErrors.ts, 146, 17))
+
+    let x = obj.foo;  // Error
+>x : Symbol(x, Decl(mappedTypeErrors.ts, 147, 7))
+>obj : Symbol(obj, Decl(mappedTypeErrors.ts, 146, 37))
+}
+
+function test2<T, K extends keyof T>(obj: Record<K, number>) {
+>test2 : Symbol(test2, Decl(mappedTypeErrors.ts, 148, 1))
+>T : Symbol(T, Decl(mappedTypeErrors.ts, 150, 15))
+>K : Symbol(K, Decl(mappedTypeErrors.ts, 150, 17))
+>T : Symbol(T, Decl(mappedTypeErrors.ts, 150, 15))
+>obj : Symbol(obj, Decl(mappedTypeErrors.ts, 150, 37))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>K : Symbol(K, Decl(mappedTypeErrors.ts, 150, 17))
+
+    let x = obj.foo;  // Error
+>x : Symbol(x, Decl(mappedTypeErrors.ts, 151, 7))
+>obj : Symbol(obj, Decl(mappedTypeErrors.ts, 150, 37))
+}
+

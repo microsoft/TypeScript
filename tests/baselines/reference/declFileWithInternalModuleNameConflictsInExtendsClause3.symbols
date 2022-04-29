@@ -1,0 +1,38 @@
+=== tests/cases/compiler/declFileWithInternalModuleNameConflictsInExtendsClause3.ts ===
+module X.A.C {
+>X : Symbol(X, Decl(declFileWithInternalModuleNameConflictsInExtendsClause3.ts, 0, 0), Decl(declFileWithInternalModuleNameConflictsInExtendsClause3.ts, 3, 1), Decl(declFileWithInternalModuleNameConflictsInExtendsClause3.ts, 7, 1))
+>A : Symbol(A, Decl(declFileWithInternalModuleNameConflictsInExtendsClause3.ts, 0, 9), Decl(declFileWithInternalModuleNameConflictsInExtendsClause3.ts, 4, 9), Decl(declFileWithInternalModuleNameConflictsInExtendsClause3.ts, 9, 9))
+>C : Symbol(C, Decl(declFileWithInternalModuleNameConflictsInExtendsClause3.ts, 0, 11))
+
+    export interface Z {
+>Z : Symbol(Z, Decl(declFileWithInternalModuleNameConflictsInExtendsClause3.ts, 0, 14))
+    }
+}
+module X.A.B.C {
+>X : Symbol(X, Decl(declFileWithInternalModuleNameConflictsInExtendsClause3.ts, 0, 0), Decl(declFileWithInternalModuleNameConflictsInExtendsClause3.ts, 3, 1), Decl(declFileWithInternalModuleNameConflictsInExtendsClause3.ts, 7, 1))
+>A : Symbol(A, Decl(declFileWithInternalModuleNameConflictsInExtendsClause3.ts, 0, 9), Decl(declFileWithInternalModuleNameConflictsInExtendsClause3.ts, 4, 9), Decl(declFileWithInternalModuleNameConflictsInExtendsClause3.ts, 9, 9))
+>B : Symbol(B, Decl(declFileWithInternalModuleNameConflictsInExtendsClause3.ts, 4, 11), Decl(declFileWithInternalModuleNameConflictsInExtendsClause3.ts, 9, 11))
+>C : Symbol(C, Decl(declFileWithInternalModuleNameConflictsInExtendsClause3.ts, 4, 13), Decl(declFileWithInternalModuleNameConflictsInExtendsClause3.ts, 9, 13))
+
+    export class W implements X.A.C.Z { // This needs to be referred as X.A.C.Z as A has conflict
+>W : Symbol(W, Decl(declFileWithInternalModuleNameConflictsInExtendsClause3.ts, 4, 16))
+>X.A.C.Z : Symbol(X.A.C.Z, Decl(declFileWithInternalModuleNameConflictsInExtendsClause3.ts, 0, 14))
+>X.A.C : Symbol(C, Decl(declFileWithInternalModuleNameConflictsInExtendsClause3.ts, 0, 11))
+>X.A : Symbol(A, Decl(declFileWithInternalModuleNameConflictsInExtendsClause3.ts, 0, 9), Decl(declFileWithInternalModuleNameConflictsInExtendsClause3.ts, 4, 9), Decl(declFileWithInternalModuleNameConflictsInExtendsClause3.ts, 9, 9))
+>X : Symbol(X, Decl(declFileWithInternalModuleNameConflictsInExtendsClause3.ts, 0, 0), Decl(declFileWithInternalModuleNameConflictsInExtendsClause3.ts, 3, 1), Decl(declFileWithInternalModuleNameConflictsInExtendsClause3.ts, 7, 1))
+>A : Symbol(A, Decl(declFileWithInternalModuleNameConflictsInExtendsClause3.ts, 0, 9), Decl(declFileWithInternalModuleNameConflictsInExtendsClause3.ts, 4, 9), Decl(declFileWithInternalModuleNameConflictsInExtendsClause3.ts, 9, 9))
+>C : Symbol(C, Decl(declFileWithInternalModuleNameConflictsInExtendsClause3.ts, 0, 11))
+>Z : Symbol(X.A.C.Z, Decl(declFileWithInternalModuleNameConflictsInExtendsClause3.ts, 0, 14))
+    }
+}
+
+module X.A.B.C {
+>X : Symbol(X, Decl(declFileWithInternalModuleNameConflictsInExtendsClause3.ts, 0, 0), Decl(declFileWithInternalModuleNameConflictsInExtendsClause3.ts, 3, 1), Decl(declFileWithInternalModuleNameConflictsInExtendsClause3.ts, 7, 1))
+>A : Symbol(A, Decl(declFileWithInternalModuleNameConflictsInExtendsClause3.ts, 0, 9), Decl(declFileWithInternalModuleNameConflictsInExtendsClause3.ts, 4, 9), Decl(declFileWithInternalModuleNameConflictsInExtendsClause3.ts, 9, 9))
+>B : Symbol(B, Decl(declFileWithInternalModuleNameConflictsInExtendsClause3.ts, 4, 11), Decl(declFileWithInternalModuleNameConflictsInExtendsClause3.ts, 9, 11))
+>C : Symbol(C, Decl(declFileWithInternalModuleNameConflictsInExtendsClause3.ts, 4, 13), Decl(declFileWithInternalModuleNameConflictsInExtendsClause3.ts, 9, 13))
+
+    export module A {
+>A : Symbol(A, Decl(declFileWithInternalModuleNameConflictsInExtendsClause3.ts, 9, 16))
+    }
+}

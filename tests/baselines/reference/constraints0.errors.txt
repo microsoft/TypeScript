@@ -1,0 +1,25 @@
+tests/cases/compiler/constraints0.ts(14,11): error TS2344: Type 'B' does not satisfy the constraint 'A'.
+  Property 'a' is missing in type 'B' but required in type 'A'.
+
+
+==== tests/cases/compiler/constraints0.ts (1 errors) ====
+    interface A {
+    	a: number;
+    }
+    
+    interface B {
+    	b: string;
+    }
+    
+    interface C<T extends A> {
+        x: T;
+    }
+    
+    var v1: C<A>; // should work
+    var v2: C<B>; // should not work
+              ~
+!!! error TS2344: Type 'B' does not satisfy the constraint 'A'.
+!!! error TS2344:   Property 'a' is missing in type 'B' but required in type 'A'.
+!!! related TS2728 tests/cases/compiler/constraints0.ts:2:2: 'a' is declared here.
+    
+    var y = v1.x.a; // 'a' should be of type 'number'

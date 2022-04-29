@@ -1,0 +1,22 @@
+=== tests/cases/conformance/salsa/a.d.ts ===
+declare namespace C {
+>C : typeof C
+
+    function bar(): void
+>bar : () => void
+}
+=== tests/cases/conformance/salsa/b.js ===
+C.prototype = {};
+>C.prototype = {} : {}
+>C.prototype : {}
+>C : typeof C
+>prototype : {}
+>{} : {}
+
+C.bar = 2;
+>C.bar = 2 : 2
+>C.bar : () => void
+>C : typeof C
+>bar : () => void
+>2 : 2
+

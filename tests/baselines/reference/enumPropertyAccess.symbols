@@ -1,0 +1,42 @@
+=== tests/cases/compiler/enumPropertyAccess.ts ===
+enum Colors {
+>Colors : Symbol(Colors, Decl(enumPropertyAccess.ts, 0, 0))
+
+    Red,
+>Red : Symbol(Colors.Red, Decl(enumPropertyAccess.ts, 0, 13))
+
+    Green
+>Green : Symbol(Colors.Green, Decl(enumPropertyAccess.ts, 1, 8))
+}
+
+var x = Colors.Red; // type of 'x' should be 'Colors'
+>x : Symbol(x, Decl(enumPropertyAccess.ts, 5, 3))
+>Colors.Red : Symbol(Colors.Red, Decl(enumPropertyAccess.ts, 0, 13))
+>Colors : Symbol(Colors, Decl(enumPropertyAccess.ts, 0, 0))
+>Red : Symbol(Colors.Red, Decl(enumPropertyAccess.ts, 0, 13))
+
+var p = x.Green; // error
+>p : Symbol(p, Decl(enumPropertyAccess.ts, 6, 3))
+>x : Symbol(x, Decl(enumPropertyAccess.ts, 5, 3))
+
+x.toFixed(); // ok
+>x.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(enumPropertyAccess.ts, 5, 3))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+
+// Now with generics
+function fill<B extends Colors>(f: B) {
+>fill : Symbol(fill, Decl(enumPropertyAccess.ts, 7, 12))
+>B : Symbol(B, Decl(enumPropertyAccess.ts, 10, 14))
+>Colors : Symbol(Colors, Decl(enumPropertyAccess.ts, 0, 0))
+>f : Symbol(f, Decl(enumPropertyAccess.ts, 10, 32))
+>B : Symbol(B, Decl(enumPropertyAccess.ts, 10, 14))
+
+    f.Green; // error
+>f : Symbol(f, Decl(enumPropertyAccess.ts, 10, 32))
+
+    f.toFixed(); // ok
+>f.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>f : Symbol(f, Decl(enumPropertyAccess.ts, 10, 32))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+}

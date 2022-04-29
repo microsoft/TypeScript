@@ -1,0 +1,104 @@
+=== tests/cases/conformance/externalModules/a.ts ===
+/// <reference path="node_modules/math2d/index.d.ts" />
+/// <reference path="math2d-augment.d.ts" />
+let v = new Math2d.Vector(3, 2);
+>v : Symbol(v, Decl(a.ts, 2, 3))
+>Math2d.Vector : Symbol(Math2d.Vector, Decl(index.d.ts, 8, 2), Decl(math2d-augment.d.ts, 2, 25))
+>Math2d : Symbol(Math2d, Decl(index.d.ts, 0, 0))
+>Vector : Symbol(Math2d.Vector, Decl(index.d.ts, 8, 2), Decl(math2d-augment.d.ts, 2, 25))
+
+let magnitude = Math2d.getLength(v);
+>magnitude : Symbol(magnitude, Decl(a.ts, 3, 3))
+>Math2d.getLength : Symbol(Math2d.getLength, Decl(index.d.ts, 16, 2))
+>Math2d : Symbol(Math2d, Decl(index.d.ts, 0, 0))
+>getLength : Symbol(Math2d.getLength, Decl(index.d.ts, 16, 2))
+>v : Symbol(v, Decl(a.ts, 2, 3))
+
+let p: Math2d.Point = v.translate(5, 5);
+>p : Symbol(p, Decl(a.ts, 4, 3))
+>Math2d : Symbol(Math2d, Decl(index.d.ts, 0, 0))
+>Point : Symbol(Math2d.Point, Decl(index.d.ts, 4, 23))
+>v.translate : Symbol(Math2d.Vector.translate, Decl(index.d.ts, 13, 36))
+>v : Symbol(v, Decl(a.ts, 2, 3))
+>translate : Symbol(Math2d.Vector.translate, Decl(index.d.ts, 13, 36))
+
+p = v.reverse();
+>p : Symbol(p, Decl(a.ts, 4, 3))
+>v.reverse : Symbol(Math2d.Vector.reverse, Decl(math2d-augment.d.ts, 4, 19))
+>v : Symbol(v, Decl(a.ts, 2, 3))
+>reverse : Symbol(Math2d.Vector.reverse, Decl(math2d-augment.d.ts, 4, 19))
+
+var t = p.x;
+>t : Symbol(t, Decl(a.ts, 6, 3))
+>p.x : Symbol(Math2d.Point.x, Decl(index.d.ts, 5, 18))
+>p : Symbol(p, Decl(a.ts, 4, 3))
+>x : Symbol(Math2d.Point.x, Decl(index.d.ts, 5, 18))
+
+=== tests/cases/conformance/externalModules/node_modules/math2d/index.d.ts ===
+export as namespace Math2d;
+>Math2d : Symbol(Math2d, Decl(index.d.ts, 0, 0))
+
+export = M2D;
+>M2D : Symbol(M2D, Decl(index.d.ts, 2, 13), Decl(math2d-augment.d.ts, 0, 33))
+
+declare namespace M2D {
+>M2D : Symbol(M2D, Decl(index.d.ts, 2, 13), Decl(math2d-augment.d.ts, 0, 33))
+
+	interface Point {
+>Point : Symbol(Point, Decl(index.d.ts, 4, 23))
+
+		x: number;
+>x : Symbol(Point.x, Decl(index.d.ts, 5, 18))
+
+		y: number;
+>y : Symbol(Point.y, Decl(index.d.ts, 6, 12))
+	}
+
+	class Vector implements Point {
+>Vector : Symbol(Vector, Decl(index.d.ts, 8, 2), Decl(math2d-augment.d.ts, 2, 25))
+>Point : Symbol(Point, Decl(index.d.ts, 4, 23))
+
+		x: number;
+>x : Symbol(Vector.x, Decl(index.d.ts, 10, 32))
+
+		y: number;
+>y : Symbol(Vector.y, Decl(index.d.ts, 11, 12))
+
+		constructor(x: number, y: number);
+>x : Symbol(x, Decl(index.d.ts, 13, 14))
+>y : Symbol(y, Decl(index.d.ts, 13, 24))
+
+		translate(dx: number, dy: number): Vector;
+>translate : Symbol(Vector.translate, Decl(index.d.ts, 13, 36))
+>dx : Symbol(dx, Decl(index.d.ts, 15, 12))
+>dy : Symbol(dy, Decl(index.d.ts, 15, 23))
+>Vector : Symbol(Vector, Decl(index.d.ts, 8, 2), Decl(math2d-augment.d.ts, 2, 25))
+	}
+
+	function getLength(p: Vector): number;
+>getLength : Symbol(getLength, Decl(index.d.ts, 16, 2))
+>p : Symbol(p, Decl(index.d.ts, 18, 20))
+>Vector : Symbol(Vector, Decl(index.d.ts, 8, 2), Decl(math2d-augment.d.ts, 2, 25))
+
+}
+
+
+=== tests/cases/conformance/externalModules/math2d-augment.d.ts ===
+import * as Math2d from 'math2d';
+>Math2d : Symbol(Math2d, Decl(math2d-augment.d.ts, 0, 6))
+
+// Augment the module
+declare module 'math2d' {
+>'math2d' : Symbol(Math2d, Decl(index.d.ts, 2, 13), Decl(math2d-augment.d.ts, 0, 33))
+
+	// Add a method to the class
+	interface Vector {
+>Vector : Symbol(Vector, Decl(index.d.ts, 8, 2), Decl(math2d-augment.d.ts, 2, 25))
+
+		reverse(): Math2d.Point;
+>reverse : Symbol(Vector.reverse, Decl(math2d-augment.d.ts, 4, 19))
+>Math2d : Symbol(Math2d, Decl(math2d-augment.d.ts, 0, 6))
+>Point : Symbol(Point, Decl(index.d.ts, 4, 23))
+	}
+}
+

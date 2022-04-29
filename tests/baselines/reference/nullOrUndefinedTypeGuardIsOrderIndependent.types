@@ -1,0 +1,43 @@
+=== tests/cases/conformance/expressions/typeGuards/nullOrUndefinedTypeGuardIsOrderIndependent.ts ===
+function test(strOrNull: string | null, strOrUndefined: string | undefined) {
+>test : (strOrNull: string | null, strOrUndefined: string | undefined) => void
+>strOrNull : string | null
+>null : null
+>strOrUndefined : string | undefined
+
+    var str: string = "original";
+>str : string
+>"original" : "original"
+
+    var nil: null;
+>nil : null
+>null : null
+
+    if (null === strOrNull) {
+>null === strOrNull : boolean
+>null : null
+>strOrNull : string | null
+
+        nil = strOrNull;
+>nil = strOrNull : null
+>nil : null
+>strOrNull : null
+    }
+    else {
+        str = strOrNull;
+>str = strOrNull : string
+>str : string
+>strOrNull : string
+    }
+    if (undefined !== strOrUndefined) {
+>undefined !== strOrUndefined : boolean
+>undefined : undefined
+>strOrUndefined : string | undefined
+
+        str = strOrUndefined;
+>str = strOrUndefined : string
+>str : string
+>strOrUndefined : string
+    }
+}
+

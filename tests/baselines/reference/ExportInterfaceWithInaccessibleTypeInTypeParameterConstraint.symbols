@@ -1,0 +1,56 @@
+=== tests/cases/conformance/internalModules/exportDeclarations/ExportInterfaceWithInaccessibleTypeInTypeParameterConstraint.ts ===
+module A {
+>A : Symbol(A, Decl(ExportInterfaceWithInaccessibleTypeInTypeParameterConstraint.ts, 0, 0))
+
+    interface Point {
+>Point : Symbol(Point, Decl(ExportInterfaceWithInaccessibleTypeInTypeParameterConstraint.ts, 0, 10))
+
+        x: number;
+>x : Symbol(Point.x, Decl(ExportInterfaceWithInaccessibleTypeInTypeParameterConstraint.ts, 2, 21))
+
+        y: number;
+>y : Symbol(Point.y, Decl(ExportInterfaceWithInaccessibleTypeInTypeParameterConstraint.ts, 3, 18))
+    }
+
+    export var Origin: Point = { x: 0, y: 0 };
+>Origin : Symbol(Origin, Decl(ExportInterfaceWithInaccessibleTypeInTypeParameterConstraint.ts, 7, 14))
+>Point : Symbol(Point, Decl(ExportInterfaceWithInaccessibleTypeInTypeParameterConstraint.ts, 0, 10))
+>x : Symbol(x, Decl(ExportInterfaceWithInaccessibleTypeInTypeParameterConstraint.ts, 7, 32))
+>y : Symbol(y, Decl(ExportInterfaceWithInaccessibleTypeInTypeParameterConstraint.ts, 7, 38))
+
+    export interface Point3d extends Point {
+>Point3d : Symbol(Point3d, Decl(ExportInterfaceWithInaccessibleTypeInTypeParameterConstraint.ts, 7, 46))
+>Point : Symbol(Point, Decl(ExportInterfaceWithInaccessibleTypeInTypeParameterConstraint.ts, 0, 10))
+
+        z: number;
+>z : Symbol(Point3d.z, Decl(ExportInterfaceWithInaccessibleTypeInTypeParameterConstraint.ts, 9, 44))
+    }
+
+    export var Origin3d: Point3d = { x: 0, y: 0, z: 0 };
+>Origin3d : Symbol(Origin3d, Decl(ExportInterfaceWithInaccessibleTypeInTypeParameterConstraint.ts, 13, 14))
+>Point3d : Symbol(Point3d, Decl(ExportInterfaceWithInaccessibleTypeInTypeParameterConstraint.ts, 7, 46))
+>x : Symbol(x, Decl(ExportInterfaceWithInaccessibleTypeInTypeParameterConstraint.ts, 13, 36))
+>y : Symbol(y, Decl(ExportInterfaceWithInaccessibleTypeInTypeParameterConstraint.ts, 13, 42))
+>z : Symbol(z, Decl(ExportInterfaceWithInaccessibleTypeInTypeParameterConstraint.ts, 13, 48))
+
+    export interface Line<TPoint extends Point>{
+>Line : Symbol(Line, Decl(ExportInterfaceWithInaccessibleTypeInTypeParameterConstraint.ts, 13, 56))
+>TPoint : Symbol(TPoint, Decl(ExportInterfaceWithInaccessibleTypeInTypeParameterConstraint.ts, 15, 26))
+>Point : Symbol(Point, Decl(ExportInterfaceWithInaccessibleTypeInTypeParameterConstraint.ts, 0, 10))
+
+        new (start: TPoint, end: TPoint);
+>start : Symbol(start, Decl(ExportInterfaceWithInaccessibleTypeInTypeParameterConstraint.ts, 16, 13))
+>TPoint : Symbol(TPoint, Decl(ExportInterfaceWithInaccessibleTypeInTypeParameterConstraint.ts, 15, 26))
+>end : Symbol(end, Decl(ExportInterfaceWithInaccessibleTypeInTypeParameterConstraint.ts, 16, 27))
+>TPoint : Symbol(TPoint, Decl(ExportInterfaceWithInaccessibleTypeInTypeParameterConstraint.ts, 15, 26))
+
+        start: TPoint;
+>start : Symbol(Line.start, Decl(ExportInterfaceWithInaccessibleTypeInTypeParameterConstraint.ts, 16, 41))
+>TPoint : Symbol(TPoint, Decl(ExportInterfaceWithInaccessibleTypeInTypeParameterConstraint.ts, 15, 26))
+
+        end: TPoint;
+>end : Symbol(Line.end, Decl(ExportInterfaceWithInaccessibleTypeInTypeParameterConstraint.ts, 18, 22))
+>TPoint : Symbol(TPoint, Decl(ExportInterfaceWithInaccessibleTypeInTypeParameterConstraint.ts, 15, 26))
+    }
+}
+

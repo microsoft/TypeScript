@@ -1,0 +1,542 @@
+=== tests/cases/compiler/inferFromGenericFunctionReturnTypes3.ts ===
+// Repros from #5487
+
+function truePromise(): Promise<true> {
+>truePromise : Symbol(truePromise, Decl(inferFromGenericFunctionReturnTypes3.ts, 0, 0))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+    return Promise.resolve(true);
+>Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+}
+
+interface Wrap<T> {
+>Wrap : Symbol(Wrap, Decl(inferFromGenericFunctionReturnTypes3.ts, 4, 1))
+>T : Symbol(T, Decl(inferFromGenericFunctionReturnTypes3.ts, 6, 15))
+
+    value: T;
+>value : Symbol(Wrap.value, Decl(inferFromGenericFunctionReturnTypes3.ts, 6, 19))
+>T : Symbol(T, Decl(inferFromGenericFunctionReturnTypes3.ts, 6, 15))
+}
+
+function wrap<T>(value: T): Wrap<T> {
+>wrap : Symbol(wrap, Decl(inferFromGenericFunctionReturnTypes3.ts, 8, 1))
+>T : Symbol(T, Decl(inferFromGenericFunctionReturnTypes3.ts, 10, 14))
+>value : Symbol(value, Decl(inferFromGenericFunctionReturnTypes3.ts, 10, 17))
+>T : Symbol(T, Decl(inferFromGenericFunctionReturnTypes3.ts, 10, 14))
+>Wrap : Symbol(Wrap, Decl(inferFromGenericFunctionReturnTypes3.ts, 4, 1))
+>T : Symbol(T, Decl(inferFromGenericFunctionReturnTypes3.ts, 10, 14))
+
+    return { value };
+>value : Symbol(value, Decl(inferFromGenericFunctionReturnTypes3.ts, 11, 12))
+}
+
+function wrappedFoo(): Wrap<'foo'> {
+>wrappedFoo : Symbol(wrappedFoo, Decl(inferFromGenericFunctionReturnTypes3.ts, 12, 1))
+>Wrap : Symbol(Wrap, Decl(inferFromGenericFunctionReturnTypes3.ts, 4, 1))
+
+    return wrap('foo');
+>wrap : Symbol(wrap, Decl(inferFromGenericFunctionReturnTypes3.ts, 8, 1))
+}
+
+function wrapBar(value: 'bar'): Wrap<'bar'> {
+>wrapBar : Symbol(wrapBar, Decl(inferFromGenericFunctionReturnTypes3.ts, 16, 1))
+>value : Symbol(value, Decl(inferFromGenericFunctionReturnTypes3.ts, 18, 17))
+>Wrap : Symbol(Wrap, Decl(inferFromGenericFunctionReturnTypes3.ts, 4, 1))
+
+    return { value };
+>value : Symbol(value, Decl(inferFromGenericFunctionReturnTypes3.ts, 19, 12))
+}
+
+function wrappedBar(): Wrap<'bar'> {
+>wrappedBar : Symbol(wrappedBar, Decl(inferFromGenericFunctionReturnTypes3.ts, 20, 1))
+>Wrap : Symbol(Wrap, Decl(inferFromGenericFunctionReturnTypes3.ts, 4, 1))
+
+    const value = 'bar';
+>value : Symbol(value, Decl(inferFromGenericFunctionReturnTypes3.ts, 23, 9))
+
+    const inferred = wrapBar(value);
+>inferred : Symbol(inferred, Decl(inferFromGenericFunctionReturnTypes3.ts, 24, 9))
+>wrapBar : Symbol(wrapBar, Decl(inferFromGenericFunctionReturnTypes3.ts, 16, 1))
+>value : Symbol(value, Decl(inferFromGenericFunctionReturnTypes3.ts, 23, 9))
+
+    const literal = wrapBar('bar');
+>literal : Symbol(literal, Decl(inferFromGenericFunctionReturnTypes3.ts, 25, 9))
+>wrapBar : Symbol(wrapBar, Decl(inferFromGenericFunctionReturnTypes3.ts, 16, 1))
+
+    const value2: string = 'bar';
+>value2 : Symbol(value2, Decl(inferFromGenericFunctionReturnTypes3.ts, 26, 9))
+
+    const literal2 = wrapBar(value2);  // Error
+>literal2 : Symbol(literal2, Decl(inferFromGenericFunctionReturnTypes3.ts, 27, 9))
+>wrapBar : Symbol(wrapBar, Decl(inferFromGenericFunctionReturnTypes3.ts, 16, 1))
+>value2 : Symbol(value2, Decl(inferFromGenericFunctionReturnTypes3.ts, 26, 9))
+
+    return wrap(value);
+>wrap : Symbol(wrap, Decl(inferFromGenericFunctionReturnTypes3.ts, 8, 1))
+>value : Symbol(value, Decl(inferFromGenericFunctionReturnTypes3.ts, 23, 9))
+}
+
+function wrappedBaz(): Wrap<'baz'> {
+>wrappedBaz : Symbol(wrappedBaz, Decl(inferFromGenericFunctionReturnTypes3.ts, 29, 1))
+>Wrap : Symbol(Wrap, Decl(inferFromGenericFunctionReturnTypes3.ts, 4, 1))
+
+    const value: 'baz' = 'baz';
+>value : Symbol(value, Decl(inferFromGenericFunctionReturnTypes3.ts, 32, 9))
+
+    return wrap(value);
+>wrap : Symbol(wrap, Decl(inferFromGenericFunctionReturnTypes3.ts, 8, 1))
+>value : Symbol(value, Decl(inferFromGenericFunctionReturnTypes3.ts, 32, 9))
+}
+
+// Repro from #11152
+
+interface FolderContentItem {
+>FolderContentItem : Symbol(FolderContentItem, Decl(inferFromGenericFunctionReturnTypes3.ts, 34, 1))
+
+    type: 'folder' | 'file';
+>type : Symbol(FolderContentItem.type, Decl(inferFromGenericFunctionReturnTypes3.ts, 38, 29))
+}
+
+let a: FolderContentItem[] = [];
+>a : Symbol(a, Decl(inferFromGenericFunctionReturnTypes3.ts, 42, 3))
+>FolderContentItem : Symbol(FolderContentItem, Decl(inferFromGenericFunctionReturnTypes3.ts, 34, 1))
+
+a = [1, 2, 3, 4, 5].map(v => ({ type: 'folder' }));
+>a : Symbol(a, Decl(inferFromGenericFunctionReturnTypes3.ts, 42, 3))
+>[1, 2, 3, 4, 5].map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>v : Symbol(v, Decl(inferFromGenericFunctionReturnTypes3.ts, 43, 24))
+>type : Symbol(type, Decl(inferFromGenericFunctionReturnTypes3.ts, 43, 31))
+
+// Repro from #11312
+
+let arr: Array<[number, number]> = [[1, 2]]
+>arr : Symbol(arr, Decl(inferFromGenericFunctionReturnTypes3.ts, 47, 3))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+let mappedArr: Array<[number, number]> = arr.map(([x, y]) => {
+>mappedArr : Symbol(mappedArr, Decl(inferFromGenericFunctionReturnTypes3.ts, 49, 3))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>arr.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>arr : Symbol(arr, Decl(inferFromGenericFunctionReturnTypes3.ts, 47, 3))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(inferFromGenericFunctionReturnTypes3.ts, 49, 51))
+>y : Symbol(y, Decl(inferFromGenericFunctionReturnTypes3.ts, 49, 53))
+
+    return [x, y];
+>x : Symbol(x, Decl(inferFromGenericFunctionReturnTypes3.ts, 49, 51))
+>y : Symbol(y, Decl(inferFromGenericFunctionReturnTypes3.ts, 49, 53))
+
+})
+
+// Repro from #13594
+
+export namespace DiagnosticSeverity {
+>DiagnosticSeverity : Symbol(DiagnosticSeverity, Decl(inferFromGenericFunctionReturnTypes3.ts, 51, 2), Decl(inferFromGenericFunctionReturnTypes3.ts, 60, 1))
+
+	export const Error = 1;
+>Error : Symbol(Error, Decl(inferFromGenericFunctionReturnTypes3.ts, 56, 13))
+
+	export const Warning = 2;
+>Warning : Symbol(Warning, Decl(inferFromGenericFunctionReturnTypes3.ts, 57, 13))
+
+	export const Information = 3;
+>Information : Symbol(Information, Decl(inferFromGenericFunctionReturnTypes3.ts, 58, 13))
+
+	export const Hint = 4;
+>Hint : Symbol(Hint, Decl(inferFromGenericFunctionReturnTypes3.ts, 59, 13))
+}
+
+export type DiagnosticSeverity = 1 | 2 | 3 | 4;
+>DiagnosticSeverity : Symbol(DiagnosticSeverity, Decl(inferFromGenericFunctionReturnTypes3.ts, 51, 2), Decl(inferFromGenericFunctionReturnTypes3.ts, 60, 1))
+
+export interface Diagnostic {
+>Diagnostic : Symbol(Diagnostic, Decl(inferFromGenericFunctionReturnTypes3.ts, 62, 47))
+
+	severity?: DiagnosticSeverity;
+>severity : Symbol(Diagnostic.severity, Decl(inferFromGenericFunctionReturnTypes3.ts, 64, 29))
+>DiagnosticSeverity : Symbol(DiagnosticSeverity, Decl(inferFromGenericFunctionReturnTypes3.ts, 51, 2), Decl(inferFromGenericFunctionReturnTypes3.ts, 60, 1))
+
+	code?: number | string;
+>code : Symbol(Diagnostic.code, Decl(inferFromGenericFunctionReturnTypes3.ts, 65, 31))
+
+	source?: string;
+>source : Symbol(Diagnostic.source, Decl(inferFromGenericFunctionReturnTypes3.ts, 66, 24))
+
+	message: string;
+>message : Symbol(Diagnostic.message, Decl(inferFromGenericFunctionReturnTypes3.ts, 67, 17))
+}
+
+function bug(): Diagnostic[] {
+>bug : Symbol(bug, Decl(inferFromGenericFunctionReturnTypes3.ts, 69, 1))
+>Diagnostic : Symbol(Diagnostic, Decl(inferFromGenericFunctionReturnTypes3.ts, 62, 47))
+
+	let values: any[] = [];
+>values : Symbol(values, Decl(inferFromGenericFunctionReturnTypes3.ts, 72, 4))
+
+	return values.map((value) => {
+>values.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>values : Symbol(values, Decl(inferFromGenericFunctionReturnTypes3.ts, 72, 4))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>value : Symbol(value, Decl(inferFromGenericFunctionReturnTypes3.ts, 73, 20))
+
+		return {
+			severity: DiagnosticSeverity.Error,
+>severity : Symbol(severity, Decl(inferFromGenericFunctionReturnTypes3.ts, 74, 10))
+>DiagnosticSeverity.Error : Symbol(DiagnosticSeverity.Error, Decl(inferFromGenericFunctionReturnTypes3.ts, 56, 13))
+>DiagnosticSeverity : Symbol(DiagnosticSeverity, Decl(inferFromGenericFunctionReturnTypes3.ts, 51, 2), Decl(inferFromGenericFunctionReturnTypes3.ts, 60, 1))
+>Error : Symbol(DiagnosticSeverity.Error, Decl(inferFromGenericFunctionReturnTypes3.ts, 56, 13))
+
+			message: 'message'
+>message : Symbol(message, Decl(inferFromGenericFunctionReturnTypes3.ts, 75, 38))
+		}
+	});
+}
+
+// Repro from #22870
+
+function objectToMap(obj: any) {
+>objectToMap : Symbol(objectToMap, Decl(inferFromGenericFunctionReturnTypes3.ts, 79, 1))
+>obj : Symbol(obj, Decl(inferFromGenericFunctionReturnTypes3.ts, 83, 21))
+
+	return new Map(Object.keys(obj).map(key => [key, obj[key]]));
+>Map : Symbol(Map, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Object.keys(obj).map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>Object.keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>obj : Symbol(obj, Decl(inferFromGenericFunctionReturnTypes3.ts, 83, 21))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>key : Symbol(key, Decl(inferFromGenericFunctionReturnTypes3.ts, 84, 37))
+>key : Symbol(key, Decl(inferFromGenericFunctionReturnTypes3.ts, 84, 37))
+>obj : Symbol(obj, Decl(inferFromGenericFunctionReturnTypes3.ts, 83, 21))
+>key : Symbol(key, Decl(inferFromGenericFunctionReturnTypes3.ts, 84, 37))
+
+};
+
+// Repro from #24352
+
+interface Person {
+>Person : Symbol(Person, Decl(inferFromGenericFunctionReturnTypes3.ts, 85, 2))
+
+  phoneNumbers: {
+>phoneNumbers : Symbol(Person.phoneNumbers, Decl(inferFromGenericFunctionReturnTypes3.ts, 89, 18))
+
+    __typename: 'PhoneNumber';
+>__typename : Symbol(__typename, Decl(inferFromGenericFunctionReturnTypes3.ts, 90, 17))
+
+  }[];
+}
+
+function createPerson(): Person {
+>createPerson : Symbol(createPerson, Decl(inferFromGenericFunctionReturnTypes3.ts, 93, 1))
+>Person : Symbol(Person, Decl(inferFromGenericFunctionReturnTypes3.ts, 85, 2))
+
+  return {
+    phoneNumbers: [1].map(() => ({
+>phoneNumbers : Symbol(phoneNumbers, Decl(inferFromGenericFunctionReturnTypes3.ts, 96, 10))
+>[1].map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+
+      __typename: 'PhoneNumber'
+>__typename : Symbol(__typename, Decl(inferFromGenericFunctionReturnTypes3.ts, 97, 34))
+
+    }))
+  };
+}
+
+// Repro from #26621
+
+type Box<T> = { value: T };
+>Box : Symbol(Box, Decl(inferFromGenericFunctionReturnTypes3.ts, 101, 1))
+>T : Symbol(T, Decl(inferFromGenericFunctionReturnTypes3.ts, 105, 9))
+>value : Symbol(value, Decl(inferFromGenericFunctionReturnTypes3.ts, 105, 15))
+>T : Symbol(T, Decl(inferFromGenericFunctionReturnTypes3.ts, 105, 9))
+
+declare function box<T>(value: T): Box<T>;
+>box : Symbol(box, Decl(inferFromGenericFunctionReturnTypes3.ts, 105, 27))
+>T : Symbol(T, Decl(inferFromGenericFunctionReturnTypes3.ts, 106, 21))
+>value : Symbol(value, Decl(inferFromGenericFunctionReturnTypes3.ts, 106, 24))
+>T : Symbol(T, Decl(inferFromGenericFunctionReturnTypes3.ts, 106, 21))
+>Box : Symbol(Box, Decl(inferFromGenericFunctionReturnTypes3.ts, 101, 1))
+>T : Symbol(T, Decl(inferFromGenericFunctionReturnTypes3.ts, 106, 21))
+
+type WinCondition =
+>WinCondition : Symbol(WinCondition, Decl(inferFromGenericFunctionReturnTypes3.ts, 106, 42))
+
+    | { type: 'win', player: string }
+>type : Symbol(type, Decl(inferFromGenericFunctionReturnTypes3.ts, 109, 7))
+>player : Symbol(player, Decl(inferFromGenericFunctionReturnTypes3.ts, 109, 20))
+
+    | { type: 'draw' };
+>type : Symbol(type, Decl(inferFromGenericFunctionReturnTypes3.ts, 110, 7))
+
+let zz: Box<WinCondition> = box({ type: 'draw' });
+>zz : Symbol(zz, Decl(inferFromGenericFunctionReturnTypes3.ts, 112, 3))
+>Box : Symbol(Box, Decl(inferFromGenericFunctionReturnTypes3.ts, 101, 1))
+>WinCondition : Symbol(WinCondition, Decl(inferFromGenericFunctionReturnTypes3.ts, 106, 42))
+>box : Symbol(box, Decl(inferFromGenericFunctionReturnTypes3.ts, 105, 27))
+>type : Symbol(type, Decl(inferFromGenericFunctionReturnTypes3.ts, 112, 33))
+
+type WinType = 'win' | 'draw';
+>WinType : Symbol(WinType, Decl(inferFromGenericFunctionReturnTypes3.ts, 112, 50))
+
+let yy: Box<WinType> = box('draw');
+>yy : Symbol(yy, Decl(inferFromGenericFunctionReturnTypes3.ts, 116, 3))
+>Box : Symbol(Box, Decl(inferFromGenericFunctionReturnTypes3.ts, 101, 1))
+>WinType : Symbol(WinType, Decl(inferFromGenericFunctionReturnTypes3.ts, 112, 50))
+>box : Symbol(box, Decl(inferFromGenericFunctionReturnTypes3.ts, 105, 27))
+
+// Repro from #27074
+
+interface OK<T> {
+>OK : Symbol(OK, Decl(inferFromGenericFunctionReturnTypes3.ts, 116, 35))
+>T : Symbol(T, Decl(inferFromGenericFunctionReturnTypes3.ts, 120, 13))
+
+    kind: "OK";
+>kind : Symbol(OK.kind, Decl(inferFromGenericFunctionReturnTypes3.ts, 120, 17))
+
+    value: T;
+>value : Symbol(OK.value, Decl(inferFromGenericFunctionReturnTypes3.ts, 121, 15))
+>T : Symbol(T, Decl(inferFromGenericFunctionReturnTypes3.ts, 120, 13))
+}
+export function ok<T>(value: T): OK<T> {
+>ok : Symbol(ok, Decl(inferFromGenericFunctionReturnTypes3.ts, 123, 1))
+>T : Symbol(T, Decl(inferFromGenericFunctionReturnTypes3.ts, 124, 19))
+>value : Symbol(value, Decl(inferFromGenericFunctionReturnTypes3.ts, 124, 22))
+>T : Symbol(T, Decl(inferFromGenericFunctionReturnTypes3.ts, 124, 19))
+>OK : Symbol(OK, Decl(inferFromGenericFunctionReturnTypes3.ts, 116, 35))
+>T : Symbol(T, Decl(inferFromGenericFunctionReturnTypes3.ts, 124, 19))
+
+    return {
+        kind: "OK",
+>kind : Symbol(kind, Decl(inferFromGenericFunctionReturnTypes3.ts, 125, 12))
+
+        value: value
+>value : Symbol(value, Decl(inferFromGenericFunctionReturnTypes3.ts, 126, 19))
+>value : Symbol(value, Decl(inferFromGenericFunctionReturnTypes3.ts, 124, 22))
+
+    };
+}
+
+let result: OK<[string, number]> = ok(["hello", 12]);
+>result : Symbol(result, Decl(inferFromGenericFunctionReturnTypes3.ts, 131, 3))
+>OK : Symbol(OK, Decl(inferFromGenericFunctionReturnTypes3.ts, 116, 35))
+>ok : Symbol(ok, Decl(inferFromGenericFunctionReturnTypes3.ts, 123, 1))
+
+// Repro from #25889
+
+interface I {
+>I : Symbol(I, Decl(inferFromGenericFunctionReturnTypes3.ts, 131, 53))
+
+    code: 'mapped',
+>code : Symbol(I.code, Decl(inferFromGenericFunctionReturnTypes3.ts, 135, 13))
+
+    name: string,
+>name : Symbol(I.name, Decl(inferFromGenericFunctionReturnTypes3.ts, 136, 19))
+}
+
+const a3: I[] = ['a', 'b'].map(name => {
+>a3 : Symbol(a3, Decl(inferFromGenericFunctionReturnTypes3.ts, 140, 5))
+>I : Symbol(I, Decl(inferFromGenericFunctionReturnTypes3.ts, 131, 53))
+>['a', 'b'].map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>name : Symbol(name, Decl(inferFromGenericFunctionReturnTypes3.ts, 140, 31))
+
+    return {
+        code: 'mapped',
+>code : Symbol(code, Decl(inferFromGenericFunctionReturnTypes3.ts, 141, 12))
+
+        name,
+>name : Symbol(name, Decl(inferFromGenericFunctionReturnTypes3.ts, 142, 23))
+    }
+});
+
+// Repro from https://www.memsql.com/blog/porting-30k-lines-of-code-from-flow-to-typescript/
+	
+type Player = {
+>Player : Symbol(Player, Decl(inferFromGenericFunctionReturnTypes3.ts, 145, 3))
+
+    name: string;
+>name : Symbol(name, Decl(inferFromGenericFunctionReturnTypes3.ts, 149, 15))
+
+    age: number;
+>age : Symbol(age, Decl(inferFromGenericFunctionReturnTypes3.ts, 150, 17))
+
+    position: "STRIKER" | "GOALKEEPER",
+>position : Symbol(position, Decl(inferFromGenericFunctionReturnTypes3.ts, 151, 16))
+
+};
+ 
+type F = () => Promise<Array<Player>>;
+>F : Symbol(F, Decl(inferFromGenericFunctionReturnTypes3.ts, 153, 2))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Player : Symbol(Player, Decl(inferFromGenericFunctionReturnTypes3.ts, 145, 3))
+ 
+const f1: F = () => {
+>f1 : Symbol(f1, Decl(inferFromGenericFunctionReturnTypes3.ts, 157, 5))
+>F : Symbol(F, Decl(inferFromGenericFunctionReturnTypes3.ts, 153, 2))
+
+    return Promise.all([
+>Promise.all : Symbol(PromiseConstructor.all, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>all : Symbol(PromiseConstructor.all, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+        {
+            name: "David Gomes",
+>name : Symbol(name, Decl(inferFromGenericFunctionReturnTypes3.ts, 159, 9))
+
+            age: 23,
+>age : Symbol(age, Decl(inferFromGenericFunctionReturnTypes3.ts, 160, 32))
+
+            position: "GOALKEEPER",
+>position : Symbol(position, Decl(inferFromGenericFunctionReturnTypes3.ts, 161, 20))
+
+        }, {
+            name: "Cristiano Ronaldo",
+>name : Symbol(name, Decl(inferFromGenericFunctionReturnTypes3.ts, 163, 12))
+
+            age: 33,
+>age : Symbol(age, Decl(inferFromGenericFunctionReturnTypes3.ts, 164, 38))
+
+            position: "STRIKER",
+>position : Symbol(position, Decl(inferFromGenericFunctionReturnTypes3.ts, 165, 20))
+        }
+    ]);
+};
+
+// Breaking change repros from #29478
+
+declare function foldLeft<U>(z: U, f: (acc: U, t: boolean) => U): U;
+>foldLeft : Symbol(foldLeft, Decl(inferFromGenericFunctionReturnTypes3.ts, 169, 2))
+>U : Symbol(U, Decl(inferFromGenericFunctionReturnTypes3.ts, 173, 26))
+>z : Symbol(z, Decl(inferFromGenericFunctionReturnTypes3.ts, 173, 29))
+>U : Symbol(U, Decl(inferFromGenericFunctionReturnTypes3.ts, 173, 26))
+>f : Symbol(f, Decl(inferFromGenericFunctionReturnTypes3.ts, 173, 34))
+>acc : Symbol(acc, Decl(inferFromGenericFunctionReturnTypes3.ts, 173, 39))
+>U : Symbol(U, Decl(inferFromGenericFunctionReturnTypes3.ts, 173, 26))
+>t : Symbol(t, Decl(inferFromGenericFunctionReturnTypes3.ts, 173, 46))
+>U : Symbol(U, Decl(inferFromGenericFunctionReturnTypes3.ts, 173, 26))
+>U : Symbol(U, Decl(inferFromGenericFunctionReturnTypes3.ts, 173, 26))
+
+let res: boolean = foldLeft(true, (acc, t) => acc && t);  // Error
+>res : Symbol(res, Decl(inferFromGenericFunctionReturnTypes3.ts, 174, 3))
+>foldLeft : Symbol(foldLeft, Decl(inferFromGenericFunctionReturnTypes3.ts, 169, 2))
+>acc : Symbol(acc, Decl(inferFromGenericFunctionReturnTypes3.ts, 174, 35))
+>t : Symbol(t, Decl(inferFromGenericFunctionReturnTypes3.ts, 174, 39))
+>acc : Symbol(acc, Decl(inferFromGenericFunctionReturnTypes3.ts, 174, 35))
+>t : Symbol(t, Decl(inferFromGenericFunctionReturnTypes3.ts, 174, 39))
+
+enum State { A, B }
+>State : Symbol(State, Decl(inferFromGenericFunctionReturnTypes3.ts, 174, 56))
+>A : Symbol(State.A, Decl(inferFromGenericFunctionReturnTypes3.ts, 176, 12))
+>B : Symbol(State.B, Decl(inferFromGenericFunctionReturnTypes3.ts, 176, 15))
+
+type Foo = { state: State }
+>Foo : Symbol(Foo, Decl(inferFromGenericFunctionReturnTypes3.ts, 176, 19))
+>state : Symbol(state, Decl(inferFromGenericFunctionReturnTypes3.ts, 177, 12))
+>State : Symbol(State, Decl(inferFromGenericFunctionReturnTypes3.ts, 174, 56))
+
+declare function bar<T>(f: () => T[]): T[];
+>bar : Symbol(bar, Decl(inferFromGenericFunctionReturnTypes3.ts, 177, 27))
+>T : Symbol(T, Decl(inferFromGenericFunctionReturnTypes3.ts, 178, 21))
+>f : Symbol(f, Decl(inferFromGenericFunctionReturnTypes3.ts, 178, 24))
+>T : Symbol(T, Decl(inferFromGenericFunctionReturnTypes3.ts, 178, 21))
+>T : Symbol(T, Decl(inferFromGenericFunctionReturnTypes3.ts, 178, 21))
+
+let x: Foo[] = bar(() => !!true ? [{ state: State.A }] : [{ state: State.B }]);  // Error
+>x : Symbol(x, Decl(inferFromGenericFunctionReturnTypes3.ts, 179, 3))
+>Foo : Symbol(Foo, Decl(inferFromGenericFunctionReturnTypes3.ts, 176, 19))
+>bar : Symbol(bar, Decl(inferFromGenericFunctionReturnTypes3.ts, 177, 27))
+>state : Symbol(state, Decl(inferFromGenericFunctionReturnTypes3.ts, 179, 36))
+>State.A : Symbol(State.A, Decl(inferFromGenericFunctionReturnTypes3.ts, 176, 12))
+>State : Symbol(State, Decl(inferFromGenericFunctionReturnTypes3.ts, 174, 56))
+>A : Symbol(State.A, Decl(inferFromGenericFunctionReturnTypes3.ts, 176, 12))
+>state : Symbol(state, Decl(inferFromGenericFunctionReturnTypes3.ts, 179, 59))
+>State.B : Symbol(State.B, Decl(inferFromGenericFunctionReturnTypes3.ts, 176, 15))
+>State : Symbol(State, Decl(inferFromGenericFunctionReturnTypes3.ts, 174, 56))
+>B : Symbol(State.B, Decl(inferFromGenericFunctionReturnTypes3.ts, 176, 15))
+
+// Repros from #31443
+
+enum Enum { A, B }
+>Enum : Symbol(Enum, Decl(inferFromGenericFunctionReturnTypes3.ts, 179, 79))
+>A : Symbol(Enum.A, Decl(inferFromGenericFunctionReturnTypes3.ts, 183, 11))
+>B : Symbol(Enum.B, Decl(inferFromGenericFunctionReturnTypes3.ts, 183, 14))
+
+class ClassWithConvert<T> {
+>ClassWithConvert : Symbol(ClassWithConvert, Decl(inferFromGenericFunctionReturnTypes3.ts, 183, 18))
+>T : Symbol(T, Decl(inferFromGenericFunctionReturnTypes3.ts, 185, 23))
+
+  constructor(val: T) { }
+>val : Symbol(val, Decl(inferFromGenericFunctionReturnTypes3.ts, 186, 14))
+>T : Symbol(T, Decl(inferFromGenericFunctionReturnTypes3.ts, 185, 23))
+
+  convert(converter: { to: (v: T) => T; }) { }
+>convert : Symbol(ClassWithConvert.convert, Decl(inferFromGenericFunctionReturnTypes3.ts, 186, 25))
+>converter : Symbol(converter, Decl(inferFromGenericFunctionReturnTypes3.ts, 187, 10))
+>to : Symbol(to, Decl(inferFromGenericFunctionReturnTypes3.ts, 187, 22))
+>v : Symbol(v, Decl(inferFromGenericFunctionReturnTypes3.ts, 187, 28))
+>T : Symbol(T, Decl(inferFromGenericFunctionReturnTypes3.ts, 185, 23))
+>T : Symbol(T, Decl(inferFromGenericFunctionReturnTypes3.ts, 185, 23))
+}
+
+function fn<T>(arg: ClassWithConvert<T>, f: () => ClassWithConvert<T>) { }
+>fn : Symbol(fn, Decl(inferFromGenericFunctionReturnTypes3.ts, 188, 1))
+>T : Symbol(T, Decl(inferFromGenericFunctionReturnTypes3.ts, 190, 12))
+>arg : Symbol(arg, Decl(inferFromGenericFunctionReturnTypes3.ts, 190, 15))
+>ClassWithConvert : Symbol(ClassWithConvert, Decl(inferFromGenericFunctionReturnTypes3.ts, 183, 18))
+>T : Symbol(T, Decl(inferFromGenericFunctionReturnTypes3.ts, 190, 12))
+>f : Symbol(f, Decl(inferFromGenericFunctionReturnTypes3.ts, 190, 40))
+>ClassWithConvert : Symbol(ClassWithConvert, Decl(inferFromGenericFunctionReturnTypes3.ts, 183, 18))
+>T : Symbol(T, Decl(inferFromGenericFunctionReturnTypes3.ts, 190, 12))
+
+fn(new ClassWithConvert(Enum.A), () => new ClassWithConvert(Enum.A));
+>fn : Symbol(fn, Decl(inferFromGenericFunctionReturnTypes3.ts, 188, 1))
+>ClassWithConvert : Symbol(ClassWithConvert, Decl(inferFromGenericFunctionReturnTypes3.ts, 183, 18))
+>Enum.A : Symbol(Enum.A, Decl(inferFromGenericFunctionReturnTypes3.ts, 183, 11))
+>Enum : Symbol(Enum, Decl(inferFromGenericFunctionReturnTypes3.ts, 179, 79))
+>A : Symbol(Enum.A, Decl(inferFromGenericFunctionReturnTypes3.ts, 183, 11))
+>ClassWithConvert : Symbol(ClassWithConvert, Decl(inferFromGenericFunctionReturnTypes3.ts, 183, 18))
+>Enum.A : Symbol(Enum.A, Decl(inferFromGenericFunctionReturnTypes3.ts, 183, 11))
+>Enum : Symbol(Enum, Decl(inferFromGenericFunctionReturnTypes3.ts, 179, 79))
+>A : Symbol(Enum.A, Decl(inferFromGenericFunctionReturnTypes3.ts, 183, 11))
+
+type Func<T> = (x: T) => T;
+>Func : Symbol(Func, Decl(inferFromGenericFunctionReturnTypes3.ts, 191, 69))
+>T : Symbol(T, Decl(inferFromGenericFunctionReturnTypes3.ts, 193, 10))
+>x : Symbol(x, Decl(inferFromGenericFunctionReturnTypes3.ts, 193, 16))
+>T : Symbol(T, Decl(inferFromGenericFunctionReturnTypes3.ts, 193, 10))
+>T : Symbol(T, Decl(inferFromGenericFunctionReturnTypes3.ts, 193, 10))
+
+declare function makeFoo<T>(x: T): Func<T>;
+>makeFoo : Symbol(makeFoo, Decl(inferFromGenericFunctionReturnTypes3.ts, 193, 27))
+>T : Symbol(T, Decl(inferFromGenericFunctionReturnTypes3.ts, 195, 25))
+>x : Symbol(x, Decl(inferFromGenericFunctionReturnTypes3.ts, 195, 28))
+>T : Symbol(T, Decl(inferFromGenericFunctionReturnTypes3.ts, 195, 25))
+>Func : Symbol(Func, Decl(inferFromGenericFunctionReturnTypes3.ts, 191, 69))
+>T : Symbol(T, Decl(inferFromGenericFunctionReturnTypes3.ts, 195, 25))
+
+declare function baz<U>(x: Func<U>, y: Func<U>): void;
+>baz : Symbol(baz, Decl(inferFromGenericFunctionReturnTypes3.ts, 195, 43))
+>U : Symbol(U, Decl(inferFromGenericFunctionReturnTypes3.ts, 196, 21))
+>x : Symbol(x, Decl(inferFromGenericFunctionReturnTypes3.ts, 196, 24))
+>Func : Symbol(Func, Decl(inferFromGenericFunctionReturnTypes3.ts, 191, 69))
+>U : Symbol(U, Decl(inferFromGenericFunctionReturnTypes3.ts, 196, 21))
+>y : Symbol(y, Decl(inferFromGenericFunctionReturnTypes3.ts, 196, 35))
+>Func : Symbol(Func, Decl(inferFromGenericFunctionReturnTypes3.ts, 191, 69))
+>U : Symbol(U, Decl(inferFromGenericFunctionReturnTypes3.ts, 196, 21))
+
+baz(makeFoo(Enum.A), makeFoo(Enum.A));
+>baz : Symbol(baz, Decl(inferFromGenericFunctionReturnTypes3.ts, 195, 43))
+>makeFoo : Symbol(makeFoo, Decl(inferFromGenericFunctionReturnTypes3.ts, 193, 27))
+>Enum.A : Symbol(Enum.A, Decl(inferFromGenericFunctionReturnTypes3.ts, 183, 11))
+>Enum : Symbol(Enum, Decl(inferFromGenericFunctionReturnTypes3.ts, 179, 79))
+>A : Symbol(Enum.A, Decl(inferFromGenericFunctionReturnTypes3.ts, 183, 11))
+>makeFoo : Symbol(makeFoo, Decl(inferFromGenericFunctionReturnTypes3.ts, 193, 27))
+>Enum.A : Symbol(Enum.A, Decl(inferFromGenericFunctionReturnTypes3.ts, 183, 11))
+>Enum : Symbol(Enum, Decl(inferFromGenericFunctionReturnTypes3.ts, 179, 79))
+>A : Symbol(Enum.A, Decl(inferFromGenericFunctionReturnTypes3.ts, 183, 11))
+

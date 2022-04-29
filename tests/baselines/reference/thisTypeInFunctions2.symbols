@@ -1,0 +1,135 @@
+=== tests/cases/conformance/types/thisType/thisTypeInFunctions2.ts ===
+interface IndexedWithThis {
+>IndexedWithThis : Symbol(IndexedWithThis, Decl(thisTypeInFunctions2.ts, 0, 0))
+
+    // this is a workaround for React
+    init?: (this: this) => void;
+>init : Symbol(IndexedWithThis.init, Decl(thisTypeInFunctions2.ts, 0, 27))
+>this : Symbol(this, Decl(thisTypeInFunctions2.ts, 2, 12))
+
+    willDestroy?: (this: any) => void;
+>willDestroy : Symbol(IndexedWithThis.willDestroy, Decl(thisTypeInFunctions2.ts, 2, 32))
+>this : Symbol(this, Decl(thisTypeInFunctions2.ts, 3, 19))
+
+    [propName: string]: number | string | boolean | symbol | undefined | null | {} | ((this: any, ...args:any[]) => any);
+>propName : Symbol(propName, Decl(thisTypeInFunctions2.ts, 4, 5))
+>this : Symbol(this, Decl(thisTypeInFunctions2.ts, 4, 87))
+>args : Symbol(args, Decl(thisTypeInFunctions2.ts, 4, 97))
+}
+interface IndexedWithoutThis {
+>IndexedWithoutThis : Symbol(IndexedWithoutThis, Decl(thisTypeInFunctions2.ts, 5, 1))
+
+    // this is what React would like to write (and what they write today)
+    init?: () => void;
+>init : Symbol(IndexedWithoutThis.init, Decl(thisTypeInFunctions2.ts, 6, 30))
+
+    willDestroy?: () => void;
+>willDestroy : Symbol(IndexedWithoutThis.willDestroy, Decl(thisTypeInFunctions2.ts, 8, 22))
+
+    [propName: string]: any;
+>propName : Symbol(propName, Decl(thisTypeInFunctions2.ts, 10, 5))
+}
+interface SimpleInterface {
+>SimpleInterface : Symbol(SimpleInterface, Decl(thisTypeInFunctions2.ts, 11, 1))
+
+    foo(n: string);
+>foo : Symbol(SimpleInterface.foo, Decl(thisTypeInFunctions2.ts, 12, 27))
+>n : Symbol(n, Decl(thisTypeInFunctions2.ts, 13, 8))
+
+    bar(): number;
+>bar : Symbol(SimpleInterface.bar, Decl(thisTypeInFunctions2.ts, 13, 19))
+}
+declare function extend1(args: IndexedWithThis): void;
+>extend1 : Symbol(extend1, Decl(thisTypeInFunctions2.ts, 15, 1))
+>args : Symbol(args, Decl(thisTypeInFunctions2.ts, 16, 25))
+>IndexedWithThis : Symbol(IndexedWithThis, Decl(thisTypeInFunctions2.ts, 0, 0))
+
+declare function extend2(args: IndexedWithoutThis): void;
+>extend2 : Symbol(extend2, Decl(thisTypeInFunctions2.ts, 16, 54))
+>args : Symbol(args, Decl(thisTypeInFunctions2.ts, 17, 25))
+>IndexedWithoutThis : Symbol(IndexedWithoutThis, Decl(thisTypeInFunctions2.ts, 5, 1))
+
+declare function simple(arg: SimpleInterface): void;
+>simple : Symbol(simple, Decl(thisTypeInFunctions2.ts, 17, 57))
+>arg : Symbol(arg, Decl(thisTypeInFunctions2.ts, 18, 24))
+>SimpleInterface : Symbol(SimpleInterface, Decl(thisTypeInFunctions2.ts, 11, 1))
+
+extend1({
+>extend1 : Symbol(extend1, Decl(thisTypeInFunctions2.ts, 15, 1))
+
+    init() {
+>init : Symbol(init, Decl(thisTypeInFunctions2.ts, 20, 9))
+
+        this // this: IndexedWithThis because of contextual typing.
+>this : Symbol(this, Decl(thisTypeInFunctions2.ts, 2, 12))
+
+        // this.mine
+        this.willDestroy
+>this.willDestroy : Symbol(IndexedWithThis.willDestroy, Decl(thisTypeInFunctions2.ts, 2, 32))
+>this : Symbol(this, Decl(thisTypeInFunctions2.ts, 2, 12))
+>willDestroy : Symbol(IndexedWithThis.willDestroy, Decl(thisTypeInFunctions2.ts, 2, 32))
+
+    },
+    mine: 12,
+>mine : Symbol(mine, Decl(thisTypeInFunctions2.ts, 25, 6))
+
+    foo() {
+>foo : Symbol(foo, Decl(thisTypeInFunctions2.ts, 26, 13))
+
+        this.url; // this: any because 'foo' matches the string indexer
+>this : Symbol(this, Decl(thisTypeInFunctions2.ts, 4, 87))
+
+        this.willDestroy;
+>this : Symbol(this, Decl(thisTypeInFunctions2.ts, 4, 87))
+    }
+});
+extend2({
+>extend2 : Symbol(extend2, Decl(thisTypeInFunctions2.ts, 16, 54))
+
+    init() {
+>init : Symbol(init, Decl(thisTypeInFunctions2.ts, 32, 9))
+
+        this // this: IndexedWithoutThis because of contextual typing
+>this : Symbol(IndexedWithoutThis, Decl(thisTypeInFunctions2.ts, 5, 1))
+
+        this.mine
+>this : Symbol(IndexedWithoutThis, Decl(thisTypeInFunctions2.ts, 5, 1))
+
+    },
+    mine: 13,
+>mine : Symbol(mine, Decl(thisTypeInFunctions2.ts, 36, 6))
+
+    foo() {
+>foo : Symbol(foo, Decl(thisTypeInFunctions2.ts, 37, 13))
+
+        this // this: IndexedWithoutThis because of contextual typing
+>this : Symbol(IndexedWithoutThis, Decl(thisTypeInFunctions2.ts, 5, 1))
+
+        this.mine
+>this : Symbol(IndexedWithoutThis, Decl(thisTypeInFunctions2.ts, 5, 1))
+    }
+});
+
+simple({
+>simple : Symbol(simple, Decl(thisTypeInFunctions2.ts, 17, 57))
+
+    foo(n) {
+>foo : Symbol(foo, Decl(thisTypeInFunctions2.ts, 44, 8))
+>n : Symbol(n, Decl(thisTypeInFunctions2.ts, 45, 8))
+
+        return n.length + this.bar();
+>n.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>n : Symbol(n, Decl(thisTypeInFunctions2.ts, 45, 8))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>this.bar : Symbol(SimpleInterface.bar, Decl(thisTypeInFunctions2.ts, 13, 19))
+>this : Symbol(SimpleInterface, Decl(thisTypeInFunctions2.ts, 11, 1))
+>bar : Symbol(SimpleInterface.bar, Decl(thisTypeInFunctions2.ts, 13, 19))
+
+    },
+    bar() {
+>bar : Symbol(bar, Decl(thisTypeInFunctions2.ts, 47, 6))
+
+        return 14;
+    }
+})
+

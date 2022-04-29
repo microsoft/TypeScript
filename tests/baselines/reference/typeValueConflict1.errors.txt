@@ -1,0 +1,17 @@
+tests/cases/compiler/typeValueConflict1.ts(8,21): error TS2339: Property 'A' does not exist on type 'number'.
+
+
+==== tests/cases/compiler/typeValueConflict1.ts (1 errors) ====
+    module M1 {
+     export class A {
+     }
+    }
+    module M2 {
+     var M1 = 0;
+     // Should error.  M1 should bind to the variable, not to the module.
+     class B extends M1.A {
+                        ~
+!!! error TS2339: Property 'A' does not exist on type 'number'.
+     }
+    }
+    

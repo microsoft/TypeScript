@@ -1,0 +1,31 @@
+=== tests/cases/compiler/constructorOverloads4.ts ===
+declare module M {    
+>M : Symbol(M, Decl(constructorOverloads4.ts, 0, 0))
+
+    export class Function {
+>Function : Symbol(Function, Decl(constructorOverloads4.ts, 3, 5), Decl(constructorOverloads4.ts, 4, 50), Decl(constructorOverloads4.ts, 0, 18))
+
+        constructor(...args: string[]);
+>args : Symbol(args, Decl(constructorOverloads4.ts, 2, 20))
+    }
+    export function Function(...args: any[]): any;
+>Function : Symbol(Function, Decl(constructorOverloads4.ts, 3, 5), Decl(constructorOverloads4.ts, 4, 50), Decl(constructorOverloads4.ts, 0, 18))
+>args : Symbol(args, Decl(constructorOverloads4.ts, 4, 29))
+
+    export function Function(...args: string[]): Function;
+>Function : Symbol(Function, Decl(constructorOverloads4.ts, 3, 5), Decl(constructorOverloads4.ts, 4, 50), Decl(constructorOverloads4.ts, 0, 18))
+>args : Symbol(args, Decl(constructorOverloads4.ts, 5, 29))
+>Function : Symbol(Function, Decl(constructorOverloads4.ts, 3, 5), Decl(constructorOverloads4.ts, 4, 50), Decl(constructorOverloads4.ts, 0, 18))
+}
+
+
+(new M.Function("return 5"))();
+>M.Function : Symbol(M.Function, Decl(constructorOverloads4.ts, 3, 5), Decl(constructorOverloads4.ts, 4, 50), Decl(constructorOverloads4.ts, 0, 18))
+>M : Symbol(M, Decl(constructorOverloads4.ts, 0, 0))
+>Function : Symbol(M.Function, Decl(constructorOverloads4.ts, 3, 5), Decl(constructorOverloads4.ts, 4, 50), Decl(constructorOverloads4.ts, 0, 18))
+
+M.Function("yo");
+>M.Function : Symbol(M.Function, Decl(constructorOverloads4.ts, 3, 5), Decl(constructorOverloads4.ts, 4, 50), Decl(constructorOverloads4.ts, 0, 18))
+>M : Symbol(M, Decl(constructorOverloads4.ts, 0, 0))
+>Function : Symbol(M.Function, Decl(constructorOverloads4.ts, 3, 5), Decl(constructorOverloads4.ts, 4, 50), Decl(constructorOverloads4.ts, 0, 18))
+

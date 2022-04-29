@@ -1,0 +1,11 @@
+=== tests/cases/compiler/topLevelLambda2.ts ===
+function foo(x:any) {}
+>foo : Symbol(foo, Decl(topLevelLambda2.ts, 0, 0))
+>x : Symbol(x, Decl(topLevelLambda2.ts, 0, 13))
+
+foo(()=>this.window);
+>foo : Symbol(foo, Decl(topLevelLambda2.ts, 0, 0))
+>this.window : Symbol(window, Decl(lib.dom.d.ts, --, --))
+>this : Symbol(globalThis)
+>window : Symbol(window, Decl(lib.dom.d.ts, --, --))
+

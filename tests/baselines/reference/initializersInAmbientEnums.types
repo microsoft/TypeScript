@@ -1,0 +1,20 @@
+=== tests/cases/compiler/initializersInAmbientEnums.ts ===
+declare enum E {
+>E : E
+
+    a = 10,
+>a : E
+>10 : 10
+
+    b = a,
+>b : E
+>a : E
+
+    e = 10 << 2 * 8,
+>e : E
+>10 << 2 * 8 : number
+>10 : 10
+>2 * 8 : number
+>2 : 2
+>8 : 8
+}

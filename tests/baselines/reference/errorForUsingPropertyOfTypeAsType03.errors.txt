@@ -1,0 +1,50 @@
+tests/cases/compiler/errorForUsingPropertyOfTypeAsType03.ts(11,13): error TS2749: 'Color.Red.toString' refers to a value, but is being used as a type here. Did you mean 'typeof Color.Red.toString'?
+tests/cases/compiler/errorForUsingPropertyOfTypeAsType03.ts(13,19): error TS2339: Property 'Red' does not exist on type 'Color'.
+tests/cases/compiler/errorForUsingPropertyOfTypeAsType03.ts(19,13): error TS2702: 'C1' only refers to a type, but is being used as a namespace here.
+tests/cases/compiler/errorForUsingPropertyOfTypeAsType03.ts(20,13): error TS2702: 'C1' only refers to a type, but is being used as a namespace here.
+tests/cases/compiler/errorForUsingPropertyOfTypeAsType03.ts(21,16): error TS2339: Property 'Red' does not exist on type 'Color'.
+tests/cases/compiler/errorForUsingPropertyOfTypeAsType03.ts(23,13): error TS2713: Cannot access 'C2.Red' because 'C2' is a type, but not a namespace. Did you mean to retrieve the type of the property 'Red' in 'C2' with 'C2["Red"]'?
+tests/cases/compiler/errorForUsingPropertyOfTypeAsType03.ts(24,13): error TS2713: Cannot access 'C2.Red' because 'C2' is a type, but not a namespace. Did you mean to retrieve the type of the property 'Red' in 'C2' with 'C2["Red"]'?
+
+
+==== tests/cases/compiler/errorForUsingPropertyOfTypeAsType03.ts (7 errors) ====
+    namespace Test1 {
+        enum Color {
+            Red,
+            Green,
+            Blue
+        }
+    
+        type C1 = Color;
+        type C2 = typeof Color;
+    
+        let a1: Color.Red.toString;
+                ~~~~~~~~~~~~~~~~~~
+!!! error TS2749: 'Color.Red.toString' refers to a value, but is being used as a type here. Did you mean 'typeof Color.Red.toString'?
+        let a2: Color.Red["toString"];
+        let a3: Color["Red"]["toString"];
+                      ~~~~~
+!!! error TS2339: Property 'Red' does not exist on type 'Color'.
+    
+        //let b1: (typeof Color).Red.toString;
+        //let b2: (typeof Color).Red["toString"];
+        let b3: (typeof Color)["Red"]["toString"];
+    
+        let c1: C1.Red.toString;
+                ~~
+!!! error TS2702: 'C1' only refers to a type, but is being used as a namespace here.
+        let c2: C1.Red["toString"];
+                ~~
+!!! error TS2702: 'C1' only refers to a type, but is being used as a namespace here.
+        let c3: C1["Red"]["toString"];
+                   ~~~~~
+!!! error TS2339: Property 'Red' does not exist on type 'Color'.
+    
+        let d1: C2.Red.toString;
+                ~~~~~~
+!!! error TS2713: Cannot access 'C2.Red' because 'C2' is a type, but not a namespace. Did you mean to retrieve the type of the property 'Red' in 'C2' with 'C2["Red"]'?
+        let d2: C2.Red["toString"];
+                ~~~~~~
+!!! error TS2713: Cannot access 'C2.Red' because 'C2' is a type, but not a namespace. Did you mean to retrieve the type of the property 'Red' in 'C2' with 'C2["Red"]'?
+        let d3: C2["Red"]["toString"];
+    }

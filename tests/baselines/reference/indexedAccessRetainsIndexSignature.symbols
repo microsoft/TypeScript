@@ -1,0 +1,62 @@
+=== tests/cases/compiler/indexedAccessRetainsIndexSignature.ts ===
+type Diff<T extends keyof any, U extends keyof any> =
+>Diff : Symbol(Diff, Decl(indexedAccessRetainsIndexSignature.ts, 0, 0))
+>T : Symbol(T, Decl(indexedAccessRetainsIndexSignature.ts, 0, 10))
+>U : Symbol(U, Decl(indexedAccessRetainsIndexSignature.ts, 0, 30))
+
+    ({ [P in T]: P } & { [P in U]: never } & { [x: string]: never })[T]
+>P : Symbol(P, Decl(indexedAccessRetainsIndexSignature.ts, 1, 8))
+>T : Symbol(T, Decl(indexedAccessRetainsIndexSignature.ts, 0, 10))
+>P : Symbol(P, Decl(indexedAccessRetainsIndexSignature.ts, 1, 8))
+>P : Symbol(P, Decl(indexedAccessRetainsIndexSignature.ts, 1, 26))
+>U : Symbol(U, Decl(indexedAccessRetainsIndexSignature.ts, 0, 30))
+>x : Symbol(x, Decl(indexedAccessRetainsIndexSignature.ts, 1, 48))
+>T : Symbol(T, Decl(indexedAccessRetainsIndexSignature.ts, 0, 10))
+
+type Omit<U, K extends keyof U> = Pick<U, Diff<keyof U, K>>
+>Omit : Symbol(Omit, Decl(indexedAccessRetainsIndexSignature.ts, 1, 71))
+>U : Symbol(U, Decl(indexedAccessRetainsIndexSignature.ts, 2, 10))
+>K : Symbol(K, Decl(indexedAccessRetainsIndexSignature.ts, 2, 12))
+>U : Symbol(U, Decl(indexedAccessRetainsIndexSignature.ts, 2, 10))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+>U : Symbol(U, Decl(indexedAccessRetainsIndexSignature.ts, 2, 10))
+>Diff : Symbol(Diff, Decl(indexedAccessRetainsIndexSignature.ts, 0, 0))
+>U : Symbol(U, Decl(indexedAccessRetainsIndexSignature.ts, 2, 10))
+>K : Symbol(K, Decl(indexedAccessRetainsIndexSignature.ts, 2, 12))
+
+type Omit1<U, K extends keyof U> = Pick<U, Diff<keyof U, K>>;
+>Omit1 : Symbol(Omit1, Decl(indexedAccessRetainsIndexSignature.ts, 2, 59))
+>U : Symbol(U, Decl(indexedAccessRetainsIndexSignature.ts, 3, 11))
+>K : Symbol(K, Decl(indexedAccessRetainsIndexSignature.ts, 3, 13))
+>U : Symbol(U, Decl(indexedAccessRetainsIndexSignature.ts, 3, 11))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+>U : Symbol(U, Decl(indexedAccessRetainsIndexSignature.ts, 3, 11))
+>Diff : Symbol(Diff, Decl(indexedAccessRetainsIndexSignature.ts, 0, 0))
+>U : Symbol(U, Decl(indexedAccessRetainsIndexSignature.ts, 3, 11))
+>K : Symbol(K, Decl(indexedAccessRetainsIndexSignature.ts, 3, 13))
+
+// is in fact an equivalent of
+
+type Omit2<T, K extends keyof T> = {[P in Diff<keyof T, K>]: T[P]};
+>Omit2 : Symbol(Omit2, Decl(indexedAccessRetainsIndexSignature.ts, 3, 61))
+>T : Symbol(T, Decl(indexedAccessRetainsIndexSignature.ts, 6, 11))
+>K : Symbol(K, Decl(indexedAccessRetainsIndexSignature.ts, 6, 13))
+>T : Symbol(T, Decl(indexedAccessRetainsIndexSignature.ts, 6, 11))
+>P : Symbol(P, Decl(indexedAccessRetainsIndexSignature.ts, 6, 37))
+>Diff : Symbol(Diff, Decl(indexedAccessRetainsIndexSignature.ts, 0, 0))
+>T : Symbol(T, Decl(indexedAccessRetainsIndexSignature.ts, 6, 11))
+>K : Symbol(K, Decl(indexedAccessRetainsIndexSignature.ts, 6, 13))
+>T : Symbol(T, Decl(indexedAccessRetainsIndexSignature.ts, 6, 11))
+>P : Symbol(P, Decl(indexedAccessRetainsIndexSignature.ts, 6, 37))
+
+type O = Omit<{ a: number, b: string }, 'a'>
+>O : Symbol(O, Decl(indexedAccessRetainsIndexSignature.ts, 6, 67))
+>Omit : Symbol(Omit, Decl(indexedAccessRetainsIndexSignature.ts, 1, 71))
+>a : Symbol(a, Decl(indexedAccessRetainsIndexSignature.ts, 8, 15))
+>b : Symbol(b, Decl(indexedAccessRetainsIndexSignature.ts, 8, 26))
+
+export const o: O = { b: '' }
+>o : Symbol(o, Decl(indexedAccessRetainsIndexSignature.ts, 9, 12))
+>O : Symbol(O, Decl(indexedAccessRetainsIndexSignature.ts, 6, 67))
+>b : Symbol(b, Decl(indexedAccessRetainsIndexSignature.ts, 9, 21))
+

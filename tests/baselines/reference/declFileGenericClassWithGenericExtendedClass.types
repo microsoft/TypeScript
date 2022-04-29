@@ -1,0 +1,23 @@
+=== tests/cases/compiler/declFileGenericClassWithGenericExtendedClass.ts ===
+interface IFoo {
+    baz: Baz;
+>baz : Baz
+}
+class Base<T> { }
+>Base : Base<T>
+
+class Derived<T> extends Base<T> { }
+>Derived : Derived<T>
+>Base : Base<T>
+
+interface IBar<T> {
+    derived: Derived<T>;
+>derived : Derived<T>
+}
+class Baz implements IBar<Baz> {
+>Baz : Baz
+
+    derived: Derived<Baz>;
+>derived : Derived<Baz>
+}
+

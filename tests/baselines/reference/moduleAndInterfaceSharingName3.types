@@ -1,0 +1,17 @@
+=== tests/cases/compiler/moduleAndInterfaceSharingName3.ts ===
+module X {
+    export module Y {
+        export interface Z { }
+    }
+    export interface Y<T> { }
+}
+var z: X.Y.Z = null;
+>z : X.Y.Z
+>X : any
+>Y : any
+>null : null
+
+var z2: X.Y<string>;
+>z2 : X.Y<string>
+>X : any
+

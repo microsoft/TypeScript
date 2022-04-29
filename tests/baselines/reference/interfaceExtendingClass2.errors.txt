@@ -1,0 +1,30 @@
+tests/cases/conformance/interfaces/interfacesExtendingClasses/interfaceExtendingClass2.ts(11,5): error TS2411: Property 'a' of type '{ toString: () => {}; }' is not assignable to 'string' index type 'Object'.
+tests/cases/conformance/interfaces/interfacesExtendingClasses/interfaceExtendingClass2.ts(13,13): error TS1131: Property or signature expected.
+tests/cases/conformance/interfaces/interfacesExtendingClasses/interfaceExtendingClass2.ts(14,9): error TS1128: Declaration or statement expected.
+tests/cases/conformance/interfaces/interfacesExtendingClasses/interfaceExtendingClass2.ts(15,5): error TS1128: Declaration or statement expected.
+
+
+==== tests/cases/conformance/interfaces/interfacesExtendingClasses/interfaceExtendingClass2.ts (4 errors) ====
+    class Foo {
+        x: string;
+        y() { }
+        get Z() {
+            return 1;
+        }
+        [x: string]: Object;
+    }
+    
+    interface I2 extends Foo { // error
+        a: {
+        ~
+!!! error TS2411: Property 'a' of type '{ toString: () => {}; }' is not assignable to 'string' index type 'Object'.
+            toString: () => {
+                return 1;
+                ~~~~~~
+!!! error TS1131: Property or signature expected.
+            };
+            ~
+!!! error TS1128: Declaration or statement expected.
+        }
+        ~
+!!! error TS1128: Declaration or statement expected.

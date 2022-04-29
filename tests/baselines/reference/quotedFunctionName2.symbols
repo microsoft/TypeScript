@@ -1,0 +1,7 @@
+=== tests/cases/compiler/quotedFunctionName2.ts ===
+class Test1 {
+>Test1 : Symbol(Test1, Decl(quotedFunctionName2.ts, 0, 0))
+
+  static "prop1"() { }
+>"prop1" : Symbol(Test1["prop1"], Decl(quotedFunctionName2.ts, 0, 13))
+}

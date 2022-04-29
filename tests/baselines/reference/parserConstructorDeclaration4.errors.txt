@@ -1,0 +1,9 @@
+tests/cases/conformance/parser/ecmascript5/ConstructorDeclarations/parserConstructorDeclaration4.ts(2,3): error TS1031: 'declare' modifier cannot appear on class elements of this kind.
+
+
+==== tests/cases/conformance/parser/ecmascript5/ConstructorDeclarations/parserConstructorDeclaration4.ts (1 errors) ====
+    class C {
+      declare constructor() { }
+      ~~~~~~~
+!!! error TS1031: 'declare' modifier cannot appear on class elements of this kind.
+    }

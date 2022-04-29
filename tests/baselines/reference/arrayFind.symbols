@@ -1,0 +1,33 @@
+=== tests/cases/compiler/arrayFind.ts ===
+// test fix for #18112, type guard predicates should narrow returned element
+function isNumber(x: any): x is number {
+>isNumber : Symbol(isNumber, Decl(arrayFind.ts, 0, 0))
+>x : Symbol(x, Decl(arrayFind.ts, 1, 18))
+>x : Symbol(x, Decl(arrayFind.ts, 1, 18))
+
+  return typeof x === "number";
+>x : Symbol(x, Decl(arrayFind.ts, 1, 18))
+}
+
+const arrayOfStringsNumbersAndBooleans = ["string", false, 0, "strung", 1, true];
+>arrayOfStringsNumbersAndBooleans : Symbol(arrayOfStringsNumbersAndBooleans, Decl(arrayFind.ts, 5, 5))
+
+const foundNumber: number | undefined = arrayOfStringsNumbersAndBooleans.find(isNumber);
+>foundNumber : Symbol(foundNumber, Decl(arrayFind.ts, 6, 5))
+>arrayOfStringsNumbersAndBooleans.find : Symbol(Array.find, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>arrayOfStringsNumbersAndBooleans : Symbol(arrayOfStringsNumbersAndBooleans, Decl(arrayFind.ts, 5, 5))
+>find : Symbol(Array.find, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>isNumber : Symbol(isNumber, Decl(arrayFind.ts, 0, 0))
+
+const readonlyArrayOfStringsNumbersAndBooleans = arrayOfStringsNumbersAndBooleans as ReadonlyArray<string | number | boolean>;
+>readonlyArrayOfStringsNumbersAndBooleans : Symbol(readonlyArrayOfStringsNumbersAndBooleans, Decl(arrayFind.ts, 8, 5))
+>arrayOfStringsNumbersAndBooleans : Symbol(arrayOfStringsNumbersAndBooleans, Decl(arrayFind.ts, 5, 5))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
+
+const readonlyFoundNumber: number | undefined = readonlyArrayOfStringsNumbersAndBooleans.find(isNumber);
+>readonlyFoundNumber : Symbol(readonlyFoundNumber, Decl(arrayFind.ts, 9, 5))
+>readonlyArrayOfStringsNumbersAndBooleans.find : Symbol(ReadonlyArray.find, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>readonlyArrayOfStringsNumbersAndBooleans : Symbol(readonlyArrayOfStringsNumbersAndBooleans, Decl(arrayFind.ts, 8, 5))
+>find : Symbol(ReadonlyArray.find, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>isNumber : Symbol(isNumber, Decl(arrayFind.ts, 0, 0))
+

@@ -1,0 +1,21 @@
+tests/cases/compiler/assignmentStricterConstraints.ts(7,1): error TS2322: Type '<T, S extends T>(x: T, y: S) => void' is not assignable to type '<T, S>(x: T, y: S) => void'.
+  Types of parameters 'y' and 'y' are incompatible.
+    Type 'S' is not assignable to type 'T'.
+      'T' could be instantiated with an arbitrary type which could be unrelated to 'S'.
+
+
+==== tests/cases/compiler/assignmentStricterConstraints.ts (1 errors) ====
+    var f = function <T, S extends T>(x: T, y: S): void {
+        x = y
+    }
+    
+    var g = function <T, S>(x: T, y: S): void { }
+    
+    g = f
+    ~
+!!! error TS2322: Type '<T, S extends T>(x: T, y: S) => void' is not assignable to type '<T, S>(x: T, y: S) => void'.
+!!! error TS2322:   Types of parameters 'y' and 'y' are incompatible.
+!!! error TS2322:     Type 'S' is not assignable to type 'T'.
+!!! error TS2322:       'T' could be instantiated with an arbitrary type which could be unrelated to 'S'.
+    g(1, "")
+    

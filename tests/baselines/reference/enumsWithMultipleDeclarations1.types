@@ -1,0 +1,21 @@
+=== tests/cases/compiler/enumsWithMultipleDeclarations1.ts ===
+enum E {
+>E : E
+
+  A
+>A : E.A
+}
+
+enum E {
+>E : E
+
+  B
+>B : E.A
+}
+
+enum E {
+>E : E
+
+  C
+>C : E.A
+}

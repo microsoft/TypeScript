@@ -1,0 +1,59 @@
+===================================================================
+JsFile: sourceMapValidationDestructuringVariableStatementArrayBindingPattern6.js
+mapUrl: sourceMapValidationDestructuringVariableStatementArrayBindingPattern6.js.map
+sourceRoot: 
+sources: sourceMapValidationDestructuringVariableStatementArrayBindingPattern6.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:tests/cases/compiler/sourceMapValidationDestructuringVariableStatementArrayBindingPattern6.js
+sourceFile:sourceMapValidationDestructuringVariableStatementArrayBindingPattern6.ts
+-------------------------------------------------------------------
+>>>var _a = [1, 2][0], x = _a === void 0 ? 20 : _a;
+1 >
+2 >^^^^
+3 >    ^^^^^
+4 >         ^
+5 >          ^
+6 >           ^^
+7 >             ^
+8 >              ^
+9 >               ^^^
+10>                  ^^
+11>                    ^
+12>                     ^^^^^^^^^^^^^^^^^^^
+13>                                        ^^
+14>                                          ^^^^^
+15>                                               ^
+16>                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >var [
+2 >
+3 >    x = 20] = 
+4 >         [
+5 >          1
+6 >           , 
+7 >             2
+8 >              ]
+9 >               
+10>                  
+11>                    x
+12>                      = 
+13>                                        20
+14>                                          
+15>                                               ] = [1, 2];
+1 >Emitted(1, 1) Source(1, 6) + SourceIndex(0)
+2 >Emitted(1, 5) Source(1, 6) + SourceIndex(0)
+3 >Emitted(1, 10) Source(1, 16) + SourceIndex(0)
+4 >Emitted(1, 11) Source(1, 17) + SourceIndex(0)
+5 >Emitted(1, 12) Source(1, 18) + SourceIndex(0)
+6 >Emitted(1, 14) Source(1, 20) + SourceIndex(0)
+7 >Emitted(1, 15) Source(1, 21) + SourceIndex(0)
+8 >Emitted(1, 16) Source(1, 22) + SourceIndex(0)
+9 >Emitted(1, 19) Source(1, 12) + SourceIndex(0)
+10>Emitted(1, 21) Source(1, 6) + SourceIndex(0)
+11>Emitted(1, 22) Source(1, 7) + SourceIndex(0)
+12>Emitted(1, 41) Source(1, 10) + SourceIndex(0)
+13>Emitted(1, 43) Source(1, 12) + SourceIndex(0)
+14>Emitted(1, 48) Source(1, 12) + SourceIndex(0)
+15>Emitted(1, 49) Source(1, 23) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=sourceMapValidationDestructuringVariableStatementArrayBindingPattern6.js.map

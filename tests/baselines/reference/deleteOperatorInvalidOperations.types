@@ -1,0 +1,30 @@
+=== tests/cases/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorInvalidOperations.ts ===
+// Unary operator delete
+var ANY;
+>ANY : any
+
+// operand before delete operator
+var BOOLEAN1 = ANY delete ;     //expect error
+>BOOLEAN1 : any
+>ANY : any
+>delete : boolean
+> : any
+
+// miss an operand
+var BOOLEAN2 = delete ;
+>BOOLEAN2 : boolean
+>delete : boolean
+> : any
+
+// delete global variable s
+class testADelx {
+>testADelx : testADelx
+
+    constructor(public s: () => {}) {
+>s : () => {}
+
+        delete s;      //expect error
+>delete s : boolean
+>s : () => {}
+    }
+}

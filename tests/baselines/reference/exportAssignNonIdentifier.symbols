@@ -1,0 +1,34 @@
+=== tests/cases/conformance/externalModules/foo1.ts ===
+var x = 10;
+>x : Symbol(x, Decl(foo1.ts, 0, 3))
+
+export = typeof x; // Ok
+>x : Symbol(x, Decl(foo1.ts, 0, 3))
+
+=== tests/cases/conformance/externalModules/foo2.ts ===
+export = "sausages"; // Ok
+No type information for this code.
+No type information for this code.=== tests/cases/conformance/externalModules/foo3.ts ===
+export = class Foo3 {}; // Error, not an expression
+>Foo3 : Symbol(Foo3, Decl(foo3.ts, 0, 8))
+
+=== tests/cases/conformance/externalModules/foo4.ts ===
+export = true; // Ok
+No type information for this code.
+No type information for this code.=== tests/cases/conformance/externalModules/foo5.ts ===
+export = undefined; // Valid.  undefined is an identifier in JavaScript/TypeScript
+>undefined : Symbol(undefined)
+
+=== tests/cases/conformance/externalModules/foo6.ts ===
+export = void; // Error, void operator requires an argument
+No type information for this code.
+No type information for this code.=== tests/cases/conformance/externalModules/foo7.ts ===
+export = Date || String; // Ok
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+=== tests/cases/conformance/externalModules/foo8.ts ===
+export = null; // Ok
+No type information for this code.
+No type information for this code.
+No type information for this code.

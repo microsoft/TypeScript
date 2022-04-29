@@ -1,0 +1,11 @@
+tests/cases/conformance/decorators/class/property/decoratorOnClassProperty3.ts(4,12): error TS1436: Decorators must precede the name and all keywords of property declarations.
+
+
+==== tests/cases/conformance/decorators/class/property/decoratorOnClassProperty3.ts (1 errors) ====
+    declare function dec(target: any, propertyKey: string): void;
+    
+    class C {
+        public @dec prop;
+               ~
+!!! error TS1436: Decorators must precede the name and all keywords of property declarations.
+    }

@@ -1,0 +1,6 @@
+=== tests/cases/compiler/incompleteDottedExpressionAtEOF.ts ===
+// used to leak __missing into error message
+var p2 = window. 
+>p2 : Symbol(p2, Decl(incompleteDottedExpressionAtEOF.ts, 1, 3))
+>window : Symbol(window, Decl(lib.dom.d.ts, --, --))
+

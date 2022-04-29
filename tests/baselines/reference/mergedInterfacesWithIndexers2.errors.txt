@@ -1,0 +1,34 @@
+tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithIndexers2.ts(4,5): error TS2413: 'number' index type 'string' is not assignable to 'string' index type '{ length: string; }'.
+tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithIndexers2.ts(14,5): error TS2411: Property ''a'' of type 'number' is not assignable to 'string' index type '{ length: number; }'.
+tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithIndexers2.ts(20,5): error TS2411: Property '1' of type '{ length: number; }' is not assignable to 'number' index type 'string'.
+
+
+==== tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithIndexers2.ts (3 errors) ====
+    // indexers should behave like other members when merging interface declarations
+    
+    interface A {
+        [x: number]: string; // error
+        ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2413: 'number' index type 'string' is not assignable to 'string' index type '{ length: string; }'.
+    }
+    
+    
+    interface A {
+        [x: string]: { length: string }; // error
+    }
+    
+    interface A2 {
+        [x: number]: string;
+        'a': number; //error
+        ~~~
+!!! error TS2411: Property ''a'' of type 'number' is not assignable to 'string' index type '{ length: number; }'.
+    }
+    
+    
+    interface A2 {
+        [x: string]: { length: number };
+        1: { length: number }; // error
+        ~
+!!! error TS2411: Property '1' of type '{ length: number; }' is not assignable to 'number' index type 'string'.
+    }
+    

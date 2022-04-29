@@ -1,0 +1,12 @@
+=== tests/cases/compiler/typeOfOperator1.ts ===
+var x = 1;
+>x : Symbol(x, Decl(typeOfOperator1.ts, 0, 3))
+
+var y: string = typeof x;
+>y : Symbol(y, Decl(typeOfOperator1.ts, 1, 3))
+>x : Symbol(x, Decl(typeOfOperator1.ts, 0, 3))
+
+var z: number = typeof x;
+>z : Symbol(z, Decl(typeOfOperator1.ts, 2, 3))
+>x : Symbol(x, Decl(typeOfOperator1.ts, 0, 3))
+

@@ -1,0 +1,12 @@
+=== tests/cases/conformance/async/es2017/functionDeclarations/asyncFunctionDeclaration7_es2017.ts ===
+async function bar(): Promise<void> {
+>bar : Symbol(bar, Decl(asyncFunctionDeclaration7_es2017.ts, 0, 0))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+  // 'await' here is an identifier, and not a yield expression.
+  async function foo(a = await): Promise<void> {
+>foo : Symbol(foo, Decl(asyncFunctionDeclaration7_es2017.ts, 0, 37))
+>a : Symbol(a, Decl(asyncFunctionDeclaration7_es2017.ts, 2, 21))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+  }
+}

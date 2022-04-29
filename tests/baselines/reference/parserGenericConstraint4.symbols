@@ -1,0 +1,8 @@
+=== tests/cases/conformance/parser/ecmascript5/Generics/parserGenericConstraint4.ts ===
+class C<T extends List<List<T> > > {
+>C : Symbol(C, Decl(parserGenericConstraint4.ts, 0, 0))
+>T : Symbol(T, Decl(parserGenericConstraint4.ts, 0, 8))
+>List : Symbol(List)
+>List : Symbol(List)
+>T : Symbol(T, Decl(parserGenericConstraint4.ts, 0, 8))
+}

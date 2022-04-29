@@ -1,0 +1,99 @@
+=== tests/cases/compiler/jsdocInTypeScript.ts ===
+// JSDoc typedef tags are not bound TypeScript files.
+/** @typedef {function} T */
+declare const x: T;
+>x : Symbol(x, Decl(jsdocInTypeScript.ts, 2, 13))
+>T : Symbol(T, Decl(jsdocInTypeScript.ts, 2, 19))
+
+class T {
+>T : Symbol(T, Decl(jsdocInTypeScript.ts, 2, 19))
+
+    prop: number;
+>prop : Symbol(T.prop, Decl(jsdocInTypeScript.ts, 4, 9))
+}
+
+x.prop;
+>x.prop : Symbol(T.prop, Decl(jsdocInTypeScript.ts, 4, 9))
+>x : Symbol(x, Decl(jsdocInTypeScript.ts, 2, 13))
+>prop : Symbol(T.prop, Decl(jsdocInTypeScript.ts, 4, 9))
+
+// Just to be sure that @property has no impact either.
+/**
+ * @typedef {Object} MyType
+ * @property {string} yes
+ */
+declare const myType: MyType; // should error, no such type
+>myType : Symbol(myType, Decl(jsdocInTypeScript.ts, 15, 13))
+>MyType : Symbol(MyType)
+
+// @param type has no effect.
+/**
+ * @param {number} x
+ * @returns string
+ */
+function f(x: boolean) { return x * 2; } // Should error
+>f : Symbol(f, Decl(jsdocInTypeScript.ts, 15, 29))
+>x : Symbol(x, Decl(jsdocInTypeScript.ts, 22, 11))
+>x : Symbol(x, Decl(jsdocInTypeScript.ts, 22, 11))
+
+// Should fail, because it takes a boolean and returns a number
+f(1); f(true).length;
+>f : Symbol(f, Decl(jsdocInTypeScript.ts, 15, 29))
+>f : Symbol(f, Decl(jsdocInTypeScript.ts, 15, 29))
+
+// @type has no effect either.
+/** @type {{ x?: number }} */
+const z = {};
+>z : Symbol(z, Decl(jsdocInTypeScript.ts, 28, 5))
+
+z.x = 1; // Error
+>z : Symbol(z, Decl(jsdocInTypeScript.ts, 28, 5))
+
+// @template tag should not interfere with constraint or default.
+/** @template T */
+interface I<T extends number = 0> {}
+>I : Symbol(I, Decl(jsdocInTypeScript.ts, 29, 8))
+>T : Symbol(T, Decl(jsdocInTypeScript.ts, 33, 12))
+
+/** @template T */
+function tem<T extends number>(t: T): I<T> { return {}; }
+>tem : Symbol(tem, Decl(jsdocInTypeScript.ts, 33, 36))
+>T : Symbol(T, Decl(jsdocInTypeScript.ts, 36, 13))
+>t : Symbol(t, Decl(jsdocInTypeScript.ts, 36, 31))
+>T : Symbol(T, Decl(jsdocInTypeScript.ts, 36, 13))
+>I : Symbol(I, Decl(jsdocInTypeScript.ts, 29, 8))
+>T : Symbol(T, Decl(jsdocInTypeScript.ts, 36, 13))
+
+let i: I; // Should succeed thanks to type parameter default
+>i : Symbol(i, Decl(jsdocInTypeScript.ts, 38, 3))
+>I : Symbol(I, Decl(jsdocInTypeScript.ts, 29, 8))
+
+/** @typedef {string} N.Str */
+import M = N; // Error: @typedef does not create namespaces in TypeScript code.
+>M : Symbol(M, Decl(jsdocInTypeScript.ts, 38, 9))
+
+// Not legal JSDoc, but that shouldn't matter in TypeScript.
+/**
+ * @type {{foo: (function(string, string): string)}}
+ */
+const obj = { foo: (a, b) => a + b };
+>obj : Symbol(obj, Decl(jsdocInTypeScript.ts, 47, 5))
+>foo : Symbol(foo, Decl(jsdocInTypeScript.ts, 47, 13))
+>a : Symbol(a, Decl(jsdocInTypeScript.ts, 47, 20))
+>b : Symbol(b, Decl(jsdocInTypeScript.ts, 47, 22))
+>a : Symbol(a, Decl(jsdocInTypeScript.ts, 47, 20))
+>b : Symbol(b, Decl(jsdocInTypeScript.ts, 47, 22))
+
+/** @enum {string} */
+var E = {};
+>E : Symbol(E, Decl(jsdocInTypeScript.ts, 50, 3))
+
+E[""];
+>E : Symbol(E, Decl(jsdocInTypeScript.ts, 50, 3))
+
+// make sure import types in JSDoc are not resolved
+/** @type {import("should-not-be-resolved").Type} */
+var v = import(String());
+>v : Symbol(v, Decl(jsdocInTypeScript.ts, 55, 3))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --) ... and 1 more)
+

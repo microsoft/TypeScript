@@ -1,0 +1,23 @@
+=== tests/cases/compiler/arrayAugment.ts ===
+interface Array<T> {
+    split: (parts: number) => T[][];
+>split : (parts: number) => T[][]
+>parts : number
+}
+
+var x = [''];
+>x : string[]
+>[''] : string[]
+>'' : ""
+
+var y = x.split(4);
+>y : string[][]
+>x.split(4) : string[][]
+>x.split : (parts: number) => string[][]
+>x : string[]
+>split : (parts: number) => string[][]
+>4 : 4
+
+var y: string[][]; // Expect no error here
+>y : string[][]
+

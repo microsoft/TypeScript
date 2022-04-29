@@ -1,0 +1,10 @@
+=== tests/cases/conformance/parser/ecmascript6/Symbols/parserSymbolProperty8.ts ===
+var x: {
+>x : { [Symbol.toPrimitive](): string; }
+
+    [Symbol.toPrimitive](): string
+>[Symbol.toPrimitive] : () => string
+>Symbol.toPrimitive : unique symbol
+>Symbol : SymbolConstructor
+>toPrimitive : unique symbol
+}

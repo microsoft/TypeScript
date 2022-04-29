@@ -1,0 +1,79 @@
+tests/cases/compiler/augmentedTypesVar.ts(6,5): error TS2300: Duplicate identifier 'x2'.
+tests/cases/compiler/augmentedTypesVar.ts(7,10): error TS2300: Duplicate identifier 'x2'.
+tests/cases/compiler/augmentedTypesVar.ts(10,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x3' must be of type 'number', but here has type '() => void'.
+tests/cases/compiler/augmentedTypesVar.ts(13,5): error TS2300: Duplicate identifier 'x4'.
+tests/cases/compiler/augmentedTypesVar.ts(14,7): error TS2300: Duplicate identifier 'x4'.
+tests/cases/compiler/augmentedTypesVar.ts(16,5): error TS2300: Duplicate identifier 'x4a'.
+tests/cases/compiler/augmentedTypesVar.ts(17,7): error TS2300: Duplicate identifier 'x4a'.
+tests/cases/compiler/augmentedTypesVar.ts(20,5): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
+tests/cases/compiler/augmentedTypesVar.ts(21,6): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
+tests/cases/compiler/augmentedTypesVar.ts(27,5): error TS2300: Duplicate identifier 'x6a'.
+tests/cases/compiler/augmentedTypesVar.ts(28,8): error TS2300: Duplicate identifier 'x6a'.
+tests/cases/compiler/augmentedTypesVar.ts(30,5): error TS2300: Duplicate identifier 'x6b'.
+tests/cases/compiler/augmentedTypesVar.ts(31,8): error TS2300: Duplicate identifier 'x6b'.
+
+
+==== tests/cases/compiler/augmentedTypesVar.ts (13 errors) ====
+    // var then var
+    var x1 = 1;
+    var x1 = 2;
+    
+    // var then function
+    var x2 = 1; // error
+        ~~
+!!! error TS2300: Duplicate identifier 'x2'.
+    function x2() { } // error
+             ~~
+!!! error TS2300: Duplicate identifier 'x2'.
+    
+    var x3 = 1; 
+    var x3 = () => { } // error
+        ~~
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'x3' must be of type 'number', but here has type '() => void'.
+!!! related TS6203 tests/cases/compiler/augmentedTypesVar.ts:9:5: 'x3' was also declared here.
+    
+    // var then class
+    var x4 = 1; // error
+        ~~
+!!! error TS2300: Duplicate identifier 'x4'.
+    class x4 { } // error
+          ~~
+!!! error TS2300: Duplicate identifier 'x4'.
+    
+    var x4a = 1; // error
+        ~~~
+!!! error TS2300: Duplicate identifier 'x4a'.
+    class x4a { public foo() { } } // error
+          ~~~
+!!! error TS2300: Duplicate identifier 'x4a'.
+    
+    // var then enum
+    var x5 = 1;
+        ~~
+!!! error TS2567: Enum declarations can only merge with namespace or other enum declarations.
+    enum x5 { One } // error
+         ~~
+!!! error TS2567: Enum declarations can only merge with namespace or other enum declarations.
+    
+    // var then module
+    var x6 = 1;
+    module x6 { } // ok since non-instantiated
+    
+    var x6a = 1; // error
+        ~~~
+!!! error TS2300: Duplicate identifier 'x6a'.
+    module x6a { var y = 2; } // error since instantiated
+           ~~~
+!!! error TS2300: Duplicate identifier 'x6a'.
+    
+    var x6b = 1; // error
+        ~~~
+!!! error TS2300: Duplicate identifier 'x6b'.
+    module x6b { export var y = 2; } // error
+           ~~~
+!!! error TS2300: Duplicate identifier 'x6b'.
+    
+    // var then import, messes with other error reporting
+    //var x7 = 1;
+    //import x7 = require('');
+    

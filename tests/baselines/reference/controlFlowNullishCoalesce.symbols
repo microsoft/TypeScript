@@ -1,0 +1,32 @@
+=== tests/cases/conformance/controlFlow/controlFlowNullishCoalesce.ts ===
+// assignments in shortcutting rhs
+let a: number;
+>a : Symbol(a, Decl(controlFlowNullishCoalesce.ts, 1, 3))
+
+o ?? (a = 1);
+>o : Symbol(o, Decl(controlFlowNullishCoalesce.ts, 6, 13))
+>a : Symbol(a, Decl(controlFlowNullishCoalesce.ts, 1, 3))
+
+a.toString();
+>a.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(controlFlowNullishCoalesce.ts, 1, 3))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+
+// assignment flow
+declare const o: { x: number } | undefined;
+>o : Symbol(o, Decl(controlFlowNullishCoalesce.ts, 6, 13))
+>x : Symbol(x, Decl(controlFlowNullishCoalesce.ts, 6, 18))
+
+let x: { x: number } | boolean;
+>x : Symbol(x, Decl(controlFlowNullishCoalesce.ts, 7, 3))
+>x : Symbol(x, Decl(controlFlowNullishCoalesce.ts, 7, 8))
+
+if (x = o ?? true) {
+>x : Symbol(x, Decl(controlFlowNullishCoalesce.ts, 7, 3))
+>o : Symbol(o, Decl(controlFlowNullishCoalesce.ts, 6, 13))
+
+    x;
+>x : Symbol(x, Decl(controlFlowNullishCoalesce.ts, 7, 3))
+}
+
+

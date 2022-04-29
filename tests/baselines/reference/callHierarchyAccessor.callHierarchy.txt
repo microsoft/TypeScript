@@ -1,0 +1,66 @@
+╭ name: bar
+├ kind: getter
+├ containerName: C
+├ file: /tests/cases/fourslash/callHierarchyAccessor.ts
+├ span:
+│ ╭ /tests/cases/fourslash/callHierarchyAccessor.ts:6:5-8:6
+│ │ 6:     get bar() {
+│ │        ^^^^^^^^^^^
+│ │ 7:         return baz();
+│ │    ^^^^^^^^^^^^^^^^^^^^^
+│ │ 8:     }
+│ │    ^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /tests/cases/fourslash/callHierarchyAccessor.ts:6:9-6:12
+│ │ 6:     get bar() {
+│ │            ^^^
+│ ╰
+├ incoming:
+│ ╭ from:
+│ │ ╭ name: foo
+│ │ ├ kind: function
+│ │ ├ file: /tests/cases/fourslash/callHierarchyAccessor.ts
+│ │ ├ span:
+│ │ │ ╭ /tests/cases/fourslash/callHierarchyAccessor.ts:1:1-3:2
+│ │ │ │ 1: function foo() {
+│ │ │ │    ^^^^^^^^^^^^^^^^
+│ │ │ │ 2:     new C().bar;
+│ │ │ │    ^^^^^^^^^^^^^^^^
+│ │ │ │ 3: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /tests/cases/fourslash/callHierarchyAccessor.ts:1:10-1:13
+│ │ │ │ 1: function foo() {
+│ │ │ │             ^^^
+│ │ │ ╰
+│ │ ╰ incoming: none
+│ ├ fromSpans:
+│ │ ╭ /tests/cases/fourslash/callHierarchyAccessor.ts:2:13-2:16
+│ │ │ 2:     new C().bar;
+│ │ │                ^^^
+│ ╰ ╰
+├ outgoing:
+│ ╭ to:
+│ │ ╭ name: baz
+│ │ ├ kind: function
+│ │ ├ file: /tests/cases/fourslash/callHierarchyAccessor.ts
+│ │ ├ span:
+│ │ │ ╭ /tests/cases/fourslash/callHierarchyAccessor.ts:11:1-12:2
+│ │ │ │ 11: function baz() {
+│ │ │ │     ^^^^^^^^^^^^^^^^
+│ │ │ │ 12: }
+│ │ │ │     ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /tests/cases/fourslash/callHierarchyAccessor.ts:11:10-11:13
+│ │ │ │ 11: function baz() {
+│ │ │ │              ^^^
+│ │ │ ╰
+│ │ ╰ outgoing: none
+│ ├ fromSpans:
+│ │ ╭ /tests/cases/fourslash/callHierarchyAccessor.ts:7:16-7:19
+│ │ │ 7:         return baz();
+│ │ │                   ^^^
+╰ ╰ ╰

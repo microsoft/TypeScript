@@ -1,0 +1,15 @@
+=== tests/cases/compiler/keywordExpressionInternalComments.ts ===
+/*1*/ new /*2*/ Array /*3*/;
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+/*1*/ typeof /*2*/ Array /*3*/;
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+/*1*/ void /*2*/ Array /*3*/;
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+/*1*/ delete /*2*/ Array.toString /*3*/;
+>Array.toString : Symbol(Function.toString, Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>toString : Symbol(Function.toString, Decl(lib.es5.d.ts, --, --))
+

@@ -1,0 +1,3 @@
+=== tests/cases/compiler/logicalNotExpression1.ts ===
+!foo;
+No type information for this code.

@@ -1,0 +1,33 @@
+=== tests/cases/compiler/mappedToToIndexSignatureInference.ts ===
+declare const fn: <K extends string, V>(object: { [Key in K]: V }) => object;
+>fn : <K extends string, V>(object: { [Key in K]: V; }) => object
+>object : { [Key in K]: V; }
+
+declare const a: { [index: string]: number };
+>a : { [index: string]: number; }
+>index : string
+
+fn(a);
+>fn(a) : object
+>fn : <K extends string, V>(object: { [Key in K]: V; }) => object
+>a : { [index: string]: number; }
+
+// Repro from #30218
+
+declare function enumValues<K extends string, V extends string>(e: Record<K, V>): V[];
+>enumValues : <K extends string, V extends string>(e: Record<K, V>) => V[]
+>e : Record<K, V>
+
+enum E { A = 'foo', B = 'bar' }
+>E : E
+>A : E.A
+>'foo' : "foo"
+>B : E.B
+>'bar' : "bar"
+
+let x: E[] = enumValues(E);
+>x : E[]
+>enumValues(E) : E[]
+>enumValues : <K extends string, V extends string>(e: Record<K, V>) => V[]
+>E : typeof E
+

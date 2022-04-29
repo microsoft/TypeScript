@@ -1,0 +1,15 @@
+=== tests/cases/conformance/salsa/loop.js ===
+var loop1 = loop2;
+>loop1 : Symbol(loop1, Decl(loop.js, 0, 3))
+>loop2 : Symbol(loop2, Decl(loop.js, 1, 3))
+
+var loop2 = loop1;
+>loop2 : Symbol(loop2, Decl(loop.js, 1, 3))
+>loop1 : Symbol(loop1, Decl(loop.js, 0, 3))
+
+module.exports = loop2;
+>module.exports : Symbol(module.exports, Decl(loop.js, 0, 0))
+>module : Symbol(export=, Decl(loop.js, 1, 18))
+>exports : Symbol(export=, Decl(loop.js, 1, 18))
+>loop2 : Symbol(loop2, Decl(loop.js, 1, 3))
+

@@ -1,0 +1,69 @@
+=== tests/cases/compiler/genericIndexedAccessMethodIntersectionCanBeAccessed.ts ===
+type ExtendedService<T> = {
+>ExtendedService : Symbol(ExtendedService, Decl(genericIndexedAccessMethodIntersectionCanBeAccessed.ts, 0, 0))
+>T : Symbol(T, Decl(genericIndexedAccessMethodIntersectionCanBeAccessed.ts, 0, 21))
+
+    [K in keyof T]: T[K] & {
+>K : Symbol(K, Decl(genericIndexedAccessMethodIntersectionCanBeAccessed.ts, 1, 5))
+>T : Symbol(T, Decl(genericIndexedAccessMethodIntersectionCanBeAccessed.ts, 0, 21))
+>T : Symbol(T, Decl(genericIndexedAccessMethodIntersectionCanBeAccessed.ts, 0, 21))
+>K : Symbol(K, Decl(genericIndexedAccessMethodIntersectionCanBeAccessed.ts, 1, 5))
+
+        __$daemonMode?: string;
+>__$daemonMode : Symbol(__$daemonMode, Decl(genericIndexedAccessMethodIntersectionCanBeAccessed.ts, 1, 28))
+
+        __$action?: string;
+>__$action : Symbol(__$action, Decl(genericIndexedAccessMethodIntersectionCanBeAccessed.ts, 2, 31))
+
+    };
+};
+
+type Service<T> = {
+>Service : Symbol(Service, Decl(genericIndexedAccessMethodIntersectionCanBeAccessed.ts, 5, 2))
+>T : Symbol(T, Decl(genericIndexedAccessMethodIntersectionCanBeAccessed.ts, 7, 13))
+
+    [K in keyof T]: T[K] & {id?: string};
+>K : Symbol(K, Decl(genericIndexedAccessMethodIntersectionCanBeAccessed.ts, 8, 5))
+>T : Symbol(T, Decl(genericIndexedAccessMethodIntersectionCanBeAccessed.ts, 7, 13))
+>T : Symbol(T, Decl(genericIndexedAccessMethodIntersectionCanBeAccessed.ts, 7, 13))
+>K : Symbol(K, Decl(genericIndexedAccessMethodIntersectionCanBeAccessed.ts, 8, 5))
+>id : Symbol(id, Decl(genericIndexedAccessMethodIntersectionCanBeAccessed.ts, 8, 28))
+
+};
+
+export const createService = <T>(
+>createService : Symbol(createService, Decl(genericIndexedAccessMethodIntersectionCanBeAccessed.ts, 11, 12))
+>T : Symbol(T, Decl(genericIndexedAccessMethodIntersectionCanBeAccessed.ts, 11, 30))
+
+    ServiceCtr: ExtendedService<T> & Service<T>
+>ServiceCtr : Symbol(ServiceCtr, Decl(genericIndexedAccessMethodIntersectionCanBeAccessed.ts, 11, 33))
+>ExtendedService : Symbol(ExtendedService, Decl(genericIndexedAccessMethodIntersectionCanBeAccessed.ts, 0, 0))
+>T : Symbol(T, Decl(genericIndexedAccessMethodIntersectionCanBeAccessed.ts, 11, 30))
+>Service : Symbol(Service, Decl(genericIndexedAccessMethodIntersectionCanBeAccessed.ts, 5, 2))
+>T : Symbol(T, Decl(genericIndexedAccessMethodIntersectionCanBeAccessed.ts, 11, 30))
+
+) => {
+    Object.keys(ServiceCtr).forEach(key => {
+>Object.keys(ServiceCtr).forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>Object.keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --))
+>ServiceCtr : Symbol(ServiceCtr, Decl(genericIndexedAccessMethodIntersectionCanBeAccessed.ts, 11, 33))
+>forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>key : Symbol(key, Decl(genericIndexedAccessMethodIntersectionCanBeAccessed.ts, 14, 36))
+
+        const method = (ServiceCtr)[key as keyof T];
+>method : Symbol(method, Decl(genericIndexedAccessMethodIntersectionCanBeAccessed.ts, 15, 13))
+>ServiceCtr : Symbol(ServiceCtr, Decl(genericIndexedAccessMethodIntersectionCanBeAccessed.ts, 11, 33))
+>key : Symbol(key, Decl(genericIndexedAccessMethodIntersectionCanBeAccessed.ts, 14, 36))
+>T : Symbol(T, Decl(genericIndexedAccessMethodIntersectionCanBeAccessed.ts, 11, 30))
+
+        const {__$daemonMode, __$action, id} = method;
+>__$daemonMode : Symbol(__$daemonMode, Decl(genericIndexedAccessMethodIntersectionCanBeAccessed.ts, 16, 15))
+>__$action : Symbol(__$action, Decl(genericIndexedAccessMethodIntersectionCanBeAccessed.ts, 16, 29))
+>id : Symbol(id, Decl(genericIndexedAccessMethodIntersectionCanBeAccessed.ts, 16, 40))
+>method : Symbol(method, Decl(genericIndexedAccessMethodIntersectionCanBeAccessed.ts, 15, 13))
+
+    })
+}
+

@@ -1,0 +1,41 @@
+=== tests/cases/conformance/statements/continueStatements/doWhileContinueStatements.ts ===
+do {
+    continue;
+} while(true)
+
+ONE:
+do {
+    continue ONE;
+}
+while (true)
+
+TWO:
+THREE:
+do {
+    continue THREE;
+}while (true)
+
+FOUR:
+do {
+    FIVE:
+    do {
+        continue FOUR;
+    }while (true)
+}while (true)
+
+do {
+    SIX:
+    do continue SIX; while(true)
+}while (true)
+
+SEVEN:
+do do do continue SEVEN; while (true) while (true)  while (true)
+
+EIGHT:
+do{
+    var fn = function () { }
+>fn : Symbol(fn, Decl(doWhileContinueStatements.ts, 34, 7))
+
+    continue EIGHT;
+}while(true)
+

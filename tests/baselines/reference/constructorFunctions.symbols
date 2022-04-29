@@ -1,0 +1,137 @@
+=== tests/cases/conformance/salsa/index.js ===
+function C1() {
+>C1 : Symbol(C1, Decl(index.js, 0, 0))
+
+    if (!(this instanceof C1)) return new C1();
+>this : Symbol(C1, Decl(index.js, 0, 0))
+>C1 : Symbol(C1, Decl(index.js, 0, 0))
+>C1 : Symbol(C1, Decl(index.js, 0, 0))
+
+    this.x = 1;
+>this.x : Symbol(C1.x, Decl(index.js, 1, 47))
+>this : Symbol(C1, Decl(index.js, 0, 0))
+>x : Symbol(C1.x, Decl(index.js, 1, 47))
+}
+
+const c1_v1 = C1();
+>c1_v1 : Symbol(c1_v1, Decl(index.js, 5, 5))
+>C1 : Symbol(C1, Decl(index.js, 0, 0))
+
+const c1_v2 = new C1();
+>c1_v2 : Symbol(c1_v2, Decl(index.js, 6, 5))
+>C1 : Symbol(C1, Decl(index.js, 0, 0))
+
+var C2 = function () {
+>C2 : Symbol(C2, Decl(index.js, 8, 3))
+
+    if (!(this instanceof C2)) return new C2();
+>this : Symbol(C2, Decl(index.js, 8, 8))
+>C2 : Symbol(C2, Decl(index.js, 8, 3))
+>C2 : Symbol(C2, Decl(index.js, 8, 3))
+
+    this.x = 1;
+>this.x : Symbol(C2.x, Decl(index.js, 9, 47))
+>this : Symbol(C2, Decl(index.js, 8, 8))
+>x : Symbol(C2.x, Decl(index.js, 9, 47))
+
+};
+
+const c2_v1 = C2();
+>c2_v1 : Symbol(c2_v1, Decl(index.js, 13, 5))
+>C2 : Symbol(C2, Decl(index.js, 8, 3))
+
+const c2_v2 = new C2();
+>c2_v2 : Symbol(c2_v2, Decl(index.js, 14, 5))
+>C2 : Symbol(C2, Decl(index.js, 8, 3))
+
+/** @class */
+function C3() {
+>C3 : Symbol(C3, Decl(index.js, 14, 23))
+
+    if (!(this instanceof C3)) return new C3();
+>this : Symbol(C3, Decl(index.js, 14, 23))
+>C3 : Symbol(C3, Decl(index.js, 14, 23))
+>C3 : Symbol(C3, Decl(index.js, 14, 23))
+
+};
+
+const c3_v1 = C3(); // error: @class tag requires 'new'
+>c3_v1 : Symbol(c3_v1, Decl(index.js, 21, 5))
+>C3 : Symbol(C3, Decl(index.js, 14, 23))
+
+const c3_v2 = new C3();
+>c3_v2 : Symbol(c3_v2, Decl(index.js, 22, 5))
+>C3 : Symbol(C3, Decl(index.js, 14, 23))
+
+/** @class */
+var C4 = function () {
+>C4 : Symbol(C4, Decl(index.js, 25, 3))
+
+    if (!(this instanceof C4)) return new C4();
+>this : Symbol(C4, Decl(index.js, 25, 8))
+>C4 : Symbol(C4, Decl(index.js, 25, 3))
+>C4 : Symbol(C4, Decl(index.js, 25, 3))
+
+};
+
+const c4_v1 = C4(); // error: @class tag requires 'new'
+>c4_v1 : Symbol(c4_v1, Decl(index.js, 29, 5))
+>C4 : Symbol(C4, Decl(index.js, 25, 3))
+
+const c4_v2 = new C4();
+>c4_v2 : Symbol(c4_v2, Decl(index.js, 30, 5))
+>C4 : Symbol(C4, Decl(index.js, 25, 3))
+
+var c5_v1;
+>c5_v1 : Symbol(c5_v1, Decl(index.js, 32, 3))
+
+c5_v1 = function f() { };
+>c5_v1 : Symbol(c5_v1, Decl(index.js, 32, 3))
+>f : Symbol(f, Decl(index.js, 33, 7))
+
+new c5_v1();
+>c5_v1 : Symbol(c5_v1, Decl(index.js, 32, 3))
+
+var c5_v2;
+>c5_v2 : Symbol(c5_v2, Decl(index.js, 36, 3))
+
+c5_v2 = class { };
+>c5_v2 : Symbol(c5_v2, Decl(index.js, 36, 3))
+
+new c5_v2();
+>c5_v2 : Symbol(c5_v2, Decl(index.js, 36, 3))
+
+/** @class */
+function C6() {
+>C6 : Symbol(C6, Decl(index.js, 38, 12))
+
+  this.functions = [x => x, x => x + 1, x => x - 1]
+>this.functions : Symbol(C6.functions, Decl(index.js, 41, 15))
+>this : Symbol(C6, Decl(index.js, 38, 12))
+>functions : Symbol(C6.functions, Decl(index.js, 41, 15))
+>x : Symbol(x, Decl(index.js, 42, 20))
+>x : Symbol(x, Decl(index.js, 42, 20))
+>x : Symbol(x, Decl(index.js, 42, 27))
+>x : Symbol(x, Decl(index.js, 42, 27))
+>x : Symbol(x, Decl(index.js, 42, 39))
+>x : Symbol(x, Decl(index.js, 42, 39))
+
+};
+
+var c6_v1 = new C6();
+>c6_v1 : Symbol(c6_v1, Decl(index.js, 45, 3))
+>C6 : Symbol(C6, Decl(index.js, 38, 12))
+
+
+/**
+ * @constructor
+ * @param {number} num
+ */
+function C7(num) {}
+>C7 : Symbol(C7, Decl(index.js, 45, 21))
+>num : Symbol(num, Decl(index.js, 52, 12))
+
+var c7_v1 = new C7();
+>c7_v1 : Symbol(c7_v1, Decl(index.js, 54, 3))
+>C7 : Symbol(C7, Decl(index.js, 45, 21))
+

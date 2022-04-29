@@ -1,0 +1,33 @@
+=== tests/cases/compiler/callSignatureFunctionOverload.ts ===
+var foo: {
+>foo : { (name: string): string; (name: 'order'): string; (name: 'content'): string; (name: 'done'): string; }
+
+    (name: string): string;
+>name : string
+
+    (name: 'order'): string;
+>name : "order"
+
+    (name: 'content'): string;
+>name : "content"
+
+    (name: 'done'): string;
+>name : "done"
+}
+
+var foo2: {
+>foo2 : { (name: string): string; (name: 'order'): string; (name: 'order'): string; (name: 'done'): string; }
+
+    (name: string): string;
+>name : string
+
+    (name: 'order'): string;
+>name : "order"
+
+    (name: 'order'): string;
+>name : "order"
+
+    (name: 'done'): string;
+>name : "done"
+}
+

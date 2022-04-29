@@ -1,0 +1,83 @@
+=== tests/cases/compiler/typeParameterConstraints1.ts ===
+function foo1<T extends any>(test: T) { }
+>foo1 : Symbol(foo1, Decl(typeParameterConstraints1.ts, 0, 0))
+>T : Symbol(T, Decl(typeParameterConstraints1.ts, 0, 14))
+>test : Symbol(test, Decl(typeParameterConstraints1.ts, 0, 29))
+>T : Symbol(T, Decl(typeParameterConstraints1.ts, 0, 14))
+
+function foo2<T extends number>(test: T) { }
+>foo2 : Symbol(foo2, Decl(typeParameterConstraints1.ts, 0, 41))
+>T : Symbol(T, Decl(typeParameterConstraints1.ts, 1, 14))
+>test : Symbol(test, Decl(typeParameterConstraints1.ts, 1, 32))
+>T : Symbol(T, Decl(typeParameterConstraints1.ts, 1, 14))
+
+function foo3<T extends string>(test: T) { }
+>foo3 : Symbol(foo3, Decl(typeParameterConstraints1.ts, 1, 44))
+>T : Symbol(T, Decl(typeParameterConstraints1.ts, 2, 14))
+>test : Symbol(test, Decl(typeParameterConstraints1.ts, 2, 32))
+>T : Symbol(T, Decl(typeParameterConstraints1.ts, 2, 14))
+
+function foo4<T extends Date>(test: T) { } // valid
+>foo4 : Symbol(foo4, Decl(typeParameterConstraints1.ts, 2, 44))
+>T : Symbol(T, Decl(typeParameterConstraints1.ts, 3, 14))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>test : Symbol(test, Decl(typeParameterConstraints1.ts, 3, 30))
+>T : Symbol(T, Decl(typeParameterConstraints1.ts, 3, 14))
+
+function foo5<T extends RegExp>(test: T) { } // valid
+>foo5 : Symbol(foo5, Decl(typeParameterConstraints1.ts, 3, 42))
+>T : Symbol(T, Decl(typeParameterConstraints1.ts, 4, 14))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>test : Symbol(test, Decl(typeParameterConstraints1.ts, 4, 32))
+>T : Symbol(T, Decl(typeParameterConstraints1.ts, 4, 14))
+
+function foo6<T extends hm>(test: T) { }
+>foo6 : Symbol(foo6, Decl(typeParameterConstraints1.ts, 4, 44))
+>T : Symbol(T, Decl(typeParameterConstraints1.ts, 5, 14))
+>hm : Symbol(hm)
+>test : Symbol(test, Decl(typeParameterConstraints1.ts, 5, 28))
+>T : Symbol(T, Decl(typeParameterConstraints1.ts, 5, 14))
+
+function foo7<T extends Object>(test: T) { } // valid
+>foo7 : Symbol(foo7, Decl(typeParameterConstraints1.ts, 5, 40))
+>T : Symbol(T, Decl(typeParameterConstraints1.ts, 6, 14))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>test : Symbol(test, Decl(typeParameterConstraints1.ts, 6, 32))
+>T : Symbol(T, Decl(typeParameterConstraints1.ts, 6, 14))
+
+function foo8<T extends "">(test: T) { }
+>foo8 : Symbol(foo8, Decl(typeParameterConstraints1.ts, 6, 44))
+>T : Symbol(T, Decl(typeParameterConstraints1.ts, 7, 14))
+>test : Symbol(test, Decl(typeParameterConstraints1.ts, 7, 28))
+>T : Symbol(T, Decl(typeParameterConstraints1.ts, 7, 14))
+
+function foo9<T extends 1 > (test: T) { }
+>foo9 : Symbol(foo9, Decl(typeParameterConstraints1.ts, 7, 40))
+>T : Symbol(T, Decl(typeParameterConstraints1.ts, 8, 14))
+>test : Symbol(test, Decl(typeParameterConstraints1.ts, 8, 29))
+>T : Symbol(T, Decl(typeParameterConstraints1.ts, 8, 14))
+
+function foo10<T extends (1)> (test: T) { }
+>foo10 : Symbol(foo10, Decl(typeParameterConstraints1.ts, 8, 41))
+>T : Symbol(T, Decl(typeParameterConstraints1.ts, 9, 15))
+>test : Symbol(test, Decl(typeParameterConstraints1.ts, 9, 31))
+>T : Symbol(T, Decl(typeParameterConstraints1.ts, 9, 15))
+
+function foo11<T extends null> (test: T) { }
+>foo11 : Symbol(foo11, Decl(typeParameterConstraints1.ts, 9, 43))
+>T : Symbol(T, Decl(typeParameterConstraints1.ts, 10, 15))
+>test : Symbol(test, Decl(typeParameterConstraints1.ts, 10, 32))
+>T : Symbol(T, Decl(typeParameterConstraints1.ts, 10, 15))
+
+function foo12<T extends undefined>(test: T) { }
+>foo12 : Symbol(foo12, Decl(typeParameterConstraints1.ts, 10, 44))
+>T : Symbol(T, Decl(typeParameterConstraints1.ts, 11, 15))
+>test : Symbol(test, Decl(typeParameterConstraints1.ts, 11, 36))
+>T : Symbol(T, Decl(typeParameterConstraints1.ts, 11, 15))
+
+function foo13<T extends void>(test: T) { }
+>foo13 : Symbol(foo13, Decl(typeParameterConstraints1.ts, 11, 48))
+>T : Symbol(T, Decl(typeParameterConstraints1.ts, 12, 15))
+>test : Symbol(test, Decl(typeParameterConstraints1.ts, 12, 31))
+>T : Symbol(T, Decl(typeParameterConstraints1.ts, 12, 15))
+

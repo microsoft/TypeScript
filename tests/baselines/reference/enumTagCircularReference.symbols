@@ -1,0 +1,6 @@
+=== tests/cases/conformance/jsdoc/bug27142.js ===
+/** @enum {E} */
+const E = { x: 0 };
+>E : Symbol(E, Decl(bug27142.js, 1, 5), Decl(bug27142.js, 0, 4))
+>x : Symbol(x, Decl(bug27142.js, 1, 11))
+

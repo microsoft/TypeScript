@@ -1,0 +1,53 @@
+=== tests/cases/compiler/genericRestArgs.ts ===
+function makeArrayG<T>(...items: T[]): T[] { return items; }
+>makeArrayG : Symbol(makeArrayG, Decl(genericRestArgs.ts, 0, 0))
+>T : Symbol(T, Decl(genericRestArgs.ts, 0, 20))
+>items : Symbol(items, Decl(genericRestArgs.ts, 0, 23))
+>T : Symbol(T, Decl(genericRestArgs.ts, 0, 20))
+>T : Symbol(T, Decl(genericRestArgs.ts, 0, 20))
+>items : Symbol(items, Decl(genericRestArgs.ts, 0, 23))
+
+var a1Ga = makeArrayG(1, ""); // no error
+>a1Ga : Symbol(a1Ga, Decl(genericRestArgs.ts, 1, 3))
+>makeArrayG : Symbol(makeArrayG, Decl(genericRestArgs.ts, 0, 0))
+
+var a1Gb = makeArrayG<any>(1, ""); 
+>a1Gb : Symbol(a1Gb, Decl(genericRestArgs.ts, 2, 3))
+>makeArrayG : Symbol(makeArrayG, Decl(genericRestArgs.ts, 0, 0))
+
+var a1Gc = makeArrayG<Object>(1, ""); 
+>a1Gc : Symbol(a1Gc, Decl(genericRestArgs.ts, 3, 3))
+>makeArrayG : Symbol(makeArrayG, Decl(genericRestArgs.ts, 0, 0))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+var a1Gd = makeArrayG<number>(1, ""); // error
+>a1Gd : Symbol(a1Gd, Decl(genericRestArgs.ts, 4, 3))
+>makeArrayG : Symbol(makeArrayG, Decl(genericRestArgs.ts, 0, 0))
+
+function makeArrayGOpt<T>(item1?: T, item2?: T, item3?: T) {
+>makeArrayGOpt : Symbol(makeArrayGOpt, Decl(genericRestArgs.ts, 4, 37))
+>T : Symbol(T, Decl(genericRestArgs.ts, 6, 23))
+>item1 : Symbol(item1, Decl(genericRestArgs.ts, 6, 26))
+>T : Symbol(T, Decl(genericRestArgs.ts, 6, 23))
+>item2 : Symbol(item2, Decl(genericRestArgs.ts, 6, 36))
+>T : Symbol(T, Decl(genericRestArgs.ts, 6, 23))
+>item3 : Symbol(item3, Decl(genericRestArgs.ts, 6, 47))
+>T : Symbol(T, Decl(genericRestArgs.ts, 6, 23))
+
+    return [item1, item2, item3];
+>item1 : Symbol(item1, Decl(genericRestArgs.ts, 6, 26))
+>item2 : Symbol(item2, Decl(genericRestArgs.ts, 6, 36))
+>item3 : Symbol(item3, Decl(genericRestArgs.ts, 6, 47))
+}
+var a2Ga = makeArrayGOpt(1, ""); 
+>a2Ga : Symbol(a2Ga, Decl(genericRestArgs.ts, 9, 3))
+>makeArrayGOpt : Symbol(makeArrayGOpt, Decl(genericRestArgs.ts, 4, 37))
+
+var a2Gb = makeArrayG<any>(1, "");
+>a2Gb : Symbol(a2Gb, Decl(genericRestArgs.ts, 10, 3))
+>makeArrayG : Symbol(makeArrayG, Decl(genericRestArgs.ts, 0, 0))
+
+var a2Gc = makeArrayG<any[]>(1, ""); // error
+>a2Gc : Symbol(a2Gc, Decl(genericRestArgs.ts, 11, 3))
+>makeArrayG : Symbol(makeArrayG, Decl(genericRestArgs.ts, 0, 0))
+

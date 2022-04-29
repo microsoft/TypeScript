@@ -1,0 +1,14 @@
+=== tests/cases/compiler/functionOverloads18.ts ===
+function foo(bar:{a:number;});
+>foo : (bar: {    a: number;}) => any
+>bar : { a: number; }
+>a : number
+
+function foo(bar:{a:string;}) { return {a:""} }
+>foo : (bar: { a: number; }) => any
+>bar : { a: string; }
+>a : string
+>{a:""} : { a: string; }
+>a : string
+>"" : ""
+

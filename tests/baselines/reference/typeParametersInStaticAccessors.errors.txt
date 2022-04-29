@@ -1,0 +1,19 @@
+tests/cases/compiler/typeParametersInStaticAccessors.ts(2,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/typeParametersInStaticAccessors.ts(2,29): error TS2302: Static members cannot reference class type parameters.
+tests/cases/compiler/typeParametersInStaticAccessors.ts(3,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/typeParametersInStaticAccessors.ts(3,28): error TS2302: Static members cannot reference class type parameters.
+
+
+==== tests/cases/compiler/typeParametersInStaticAccessors.ts (4 errors) ====
+    class foo<T> {
+        static get Foo(): () => T { return null; }
+                   ~~~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+                                ~
+!!! error TS2302: Static members cannot reference class type parameters.
+        static set Bar(v: { v: T }) { }
+                   ~~~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+                               ~
+!!! error TS2302: Static members cannot reference class type parameters.
+    } 

@@ -1,0 +1,68 @@
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithNumericIndexer3.ts(14,1): error TS2322: Type '{ [x: number]: Base; }' is not assignable to type 'A'.
+  'number' index signatures are incompatible.
+    Property 'bar' is missing in type 'Base' but required in type 'Derived'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithNumericIndexer3.ts(23,1): error TS2322: Type 'A' is not assignable to type '{ [x: number]: Derived2; }'.
+  'number' index signatures are incompatible.
+    Property 'baz' is missing in type 'Derived' but required in type 'Derived2'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithNumericIndexer3.ts(33,9): error TS2322: Type '{ [x: number]: Derived; }' is not assignable to type 'A<T>'.
+  'number' index signatures are incompatible.
+    Type 'Derived' is not assignable to type 'T'.
+      'Derived' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Derived'.
+
+
+==== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithNumericIndexer3.ts (3 errors) ====
+    // Derived type indexer must be subtype of base type indexer
+    
+    interface Base { foo: string; }
+    interface Derived extends Base { bar: string; }
+    interface Derived2 extends Derived { baz: string; }
+    
+    class A {
+        [x: number]: Derived;
+    }
+    
+    var a: A;
+    var b: { [x: number]: Base; };
+    
+    a = b; // error
+    ~
+!!! error TS2322: Type '{ [x: number]: Base; }' is not assignable to type 'A'.
+!!! error TS2322:   'number' index signatures are incompatible.
+!!! error TS2322:     Property 'bar' is missing in type 'Base' but required in type 'Derived'.
+!!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithNumericIndexer3.ts:4:34: 'bar' is declared here.
+    b = a; // ok
+    
+    class B2 extends A {
+        [x: number]: Derived2; // ok
+    }
+    
+    var b2: { [x: number]: Derived2; };
+    a = b2; // ok
+    b2 = a; // error
+    ~~
+!!! error TS2322: Type 'A' is not assignable to type '{ [x: number]: Derived2; }'.
+!!! error TS2322:   'number' index signatures are incompatible.
+!!! error TS2322:     Property 'baz' is missing in type 'Derived' but required in type 'Derived2'.
+!!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithNumericIndexer3.ts:5:38: 'baz' is declared here.
+    
+    module Generics {
+        class A<T extends Derived> {
+            [x: number]: T;
+        }
+    
+        function foo<T extends Derived>() {
+            var a: A<T>;
+            var b: { [x: number]: Derived; };
+            a = b; // error
+            ~
+!!! error TS2322: Type '{ [x: number]: Derived; }' is not assignable to type 'A<T>'.
+!!! error TS2322:   'number' index signatures are incompatible.
+!!! error TS2322:     Type 'Derived' is not assignable to type 'T'.
+!!! error TS2322:       'Derived' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Derived'.
+            b = a; // ok
+    
+            var b2: { [x: number]: T; };
+            a = b2; // ok
+            b2 = a; // ok
+        }
+    }

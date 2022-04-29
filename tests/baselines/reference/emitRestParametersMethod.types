@@ -1,0 +1,33 @@
+=== tests/cases/conformance/es6/restParameters/emitRestParametersMethod.ts ===
+class C {
+>C : C
+
+    constructor(name: string, ...rest) { }
+>name : string
+>rest : any[]
+
+    public bar(...rest) { }
+>bar : (...rest: any[]) => void
+>rest : any[]
+
+    public foo(x: number, ...rest) { }
+>foo : (x: number, ...rest: any[]) => void
+>x : number
+>rest : any[]
+}
+
+class D {
+>D : D
+
+    constructor(...rest) { }
+>rest : any[]
+
+    public bar(...rest) { }
+>bar : (...rest: any[]) => void
+>rest : any[]
+
+    public foo(x: number, ...rest) { }
+>foo : (x: number, ...rest: any[]) => void
+>x : number
+>rest : any[]
+}

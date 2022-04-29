@@ -1,0 +1,14 @@
+=== tests/cases/compiler/callExpressionWithTypeParameterConstrainedToOuterTypeParameter.ts ===
+interface I<T> {
+    <U extends T>(u: U): U;
+>u : U
+}
+var i: I<string>;
+>i : I<string>
+
+var y = i(""); // y should be string
+>y : ""
+>i("") : ""
+>i : I<string>
+>"" : ""
+

@@ -1,0 +1,55 @@
+=== tests/cases/compiler/sourceMapValidationWithComments.ts ===
+class DebugClass {
+>DebugClass : DebugClass
+
+    public static debugFunc() {
+>debugFunc : () => boolean
+
+        // Start Debugger Test Code
+        var i = 0;
+>i : number
+>0 : 0
+
+        i++;
+>i++ : number
+>i : number
+
+        i++;
+>i++ : number
+>i : number
+
+        i++;
+>i++ : number
+>i : number
+
+        i++;
+>i++ : number
+>i : number
+
+        i++;
+>i++ : number
+>i : number
+
+        i++;
+>i++ : number
+>i : number
+
+        i++;
+>i++ : number
+>i : number
+
+        i++;
+>i++ : number
+>i : number
+
+        i++;
+>i++ : number
+>i : number
+
+        // End Debugger Test Code
+
+
+        return true;
+>true : true
+    }
+}

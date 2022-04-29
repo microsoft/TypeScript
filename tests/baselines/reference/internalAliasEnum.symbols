@@ -1,0 +1,34 @@
+=== tests/cases/compiler/internalAliasEnum.ts ===
+module a {
+>a : Symbol(a, Decl(internalAliasEnum.ts, 0, 0))
+
+    export enum weekend {
+>weekend : Symbol(weekend, Decl(internalAliasEnum.ts, 0, 10))
+
+        Friday,
+>Friday : Symbol(weekend.Friday, Decl(internalAliasEnum.ts, 1, 25))
+
+        Saturday,
+>Saturday : Symbol(weekend.Saturday, Decl(internalAliasEnum.ts, 2, 15))
+
+        Sunday
+>Sunday : Symbol(weekend.Sunday, Decl(internalAliasEnum.ts, 3, 17))
+    }
+}
+
+module c {
+>c : Symbol(c, Decl(internalAliasEnum.ts, 6, 1))
+
+    import b = a.weekend;
+>b : Symbol(b, Decl(internalAliasEnum.ts, 8, 10))
+>a : Symbol(a, Decl(internalAliasEnum.ts, 0, 0))
+>weekend : Symbol(b, Decl(internalAliasEnum.ts, 0, 10))
+
+    export var bVal: b = b.Sunday;
+>bVal : Symbol(bVal, Decl(internalAliasEnum.ts, 10, 14))
+>b : Symbol(b, Decl(internalAliasEnum.ts, 8, 10))
+>b.Sunday : Symbol(b.Sunday, Decl(internalAliasEnum.ts, 3, 17))
+>b : Symbol(b, Decl(internalAliasEnum.ts, 8, 10))
+>Sunday : Symbol(b.Sunday, Decl(internalAliasEnum.ts, 3, 17))
+}
+

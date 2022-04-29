@@ -1,0 +1,106 @@
+=== tests/cases/compiler/genericsWithoutTypeParameters1.ts ===
+class C<T> {
+>C : Symbol(C, Decl(genericsWithoutTypeParameters1.ts, 0, 0))
+>T : Symbol(T, Decl(genericsWithoutTypeParameters1.ts, 0, 8))
+
+    foo(): T { return null }
+>foo : Symbol(C.foo, Decl(genericsWithoutTypeParameters1.ts, 0, 12))
+>T : Symbol(T, Decl(genericsWithoutTypeParameters1.ts, 0, 8))
+}
+
+interface I<T> {
+>I : Symbol(I, Decl(genericsWithoutTypeParameters1.ts, 2, 1))
+>T : Symbol(T, Decl(genericsWithoutTypeParameters1.ts, 4, 12))
+
+    bar(): T;
+>bar : Symbol(I.bar, Decl(genericsWithoutTypeParameters1.ts, 4, 16))
+>T : Symbol(T, Decl(genericsWithoutTypeParameters1.ts, 4, 12))
+}
+
+var c1: C;
+>c1 : Symbol(c1, Decl(genericsWithoutTypeParameters1.ts, 8, 3))
+>C : Symbol(C, Decl(genericsWithoutTypeParameters1.ts, 0, 0))
+
+var i1: I;
+>i1 : Symbol(i1, Decl(genericsWithoutTypeParameters1.ts, 9, 3))
+>I : Symbol(I, Decl(genericsWithoutTypeParameters1.ts, 2, 1))
+
+var c2: C<I>;
+>c2 : Symbol(c2, Decl(genericsWithoutTypeParameters1.ts, 10, 3))
+>C : Symbol(C, Decl(genericsWithoutTypeParameters1.ts, 0, 0))
+>I : Symbol(I, Decl(genericsWithoutTypeParameters1.ts, 2, 1))
+
+var i2: I<C>;
+>i2 : Symbol(i2, Decl(genericsWithoutTypeParameters1.ts, 11, 3))
+>I : Symbol(I, Decl(genericsWithoutTypeParameters1.ts, 2, 1))
+>C : Symbol(C, Decl(genericsWithoutTypeParameters1.ts, 0, 0))
+
+function foo(x: C, y: I) { }
+>foo : Symbol(foo, Decl(genericsWithoutTypeParameters1.ts, 11, 13))
+>x : Symbol(x, Decl(genericsWithoutTypeParameters1.ts, 13, 13))
+>C : Symbol(C, Decl(genericsWithoutTypeParameters1.ts, 0, 0))
+>y : Symbol(y, Decl(genericsWithoutTypeParameters1.ts, 13, 18))
+>I : Symbol(I, Decl(genericsWithoutTypeParameters1.ts, 2, 1))
+
+function foo2(x: C<I>, y: I<C>) { }
+>foo2 : Symbol(foo2, Decl(genericsWithoutTypeParameters1.ts, 13, 28))
+>x : Symbol(x, Decl(genericsWithoutTypeParameters1.ts, 14, 14))
+>C : Symbol(C, Decl(genericsWithoutTypeParameters1.ts, 0, 0))
+>I : Symbol(I, Decl(genericsWithoutTypeParameters1.ts, 2, 1))
+>y : Symbol(y, Decl(genericsWithoutTypeParameters1.ts, 14, 22))
+>I : Symbol(I, Decl(genericsWithoutTypeParameters1.ts, 2, 1))
+>C : Symbol(C, Decl(genericsWithoutTypeParameters1.ts, 0, 0))
+
+var x: { a: C } = { a: new C<number>() };
+>x : Symbol(x, Decl(genericsWithoutTypeParameters1.ts, 16, 3))
+>a : Symbol(a, Decl(genericsWithoutTypeParameters1.ts, 16, 8))
+>C : Symbol(C, Decl(genericsWithoutTypeParameters1.ts, 0, 0))
+>a : Symbol(a, Decl(genericsWithoutTypeParameters1.ts, 16, 19))
+>C : Symbol(C, Decl(genericsWithoutTypeParameters1.ts, 0, 0))
+
+var x2: { a: I } = { a: { bar() { return 1 } } };
+>x2 : Symbol(x2, Decl(genericsWithoutTypeParameters1.ts, 17, 3))
+>a : Symbol(a, Decl(genericsWithoutTypeParameters1.ts, 17, 9))
+>I : Symbol(I, Decl(genericsWithoutTypeParameters1.ts, 2, 1))
+>a : Symbol(a, Decl(genericsWithoutTypeParameters1.ts, 17, 20))
+>bar : Symbol(bar, Decl(genericsWithoutTypeParameters1.ts, 17, 25))
+
+class D<T> {
+>D : Symbol(D, Decl(genericsWithoutTypeParameters1.ts, 17, 49))
+>T : Symbol(T, Decl(genericsWithoutTypeParameters1.ts, 19, 8))
+
+    x: C;
+>x : Symbol(D.x, Decl(genericsWithoutTypeParameters1.ts, 19, 12))
+>C : Symbol(C, Decl(genericsWithoutTypeParameters1.ts, 0, 0))
+
+    y: D;
+>y : Symbol(D.y, Decl(genericsWithoutTypeParameters1.ts, 20, 9))
+>D : Symbol(D, Decl(genericsWithoutTypeParameters1.ts, 17, 49))
+}
+
+interface J<T> {
+>J : Symbol(J, Decl(genericsWithoutTypeParameters1.ts, 22, 1))
+>T : Symbol(T, Decl(genericsWithoutTypeParameters1.ts, 24, 12))
+
+    x: I;
+>x : Symbol(J.x, Decl(genericsWithoutTypeParameters1.ts, 24, 16))
+>I : Symbol(I, Decl(genericsWithoutTypeParameters1.ts, 2, 1))
+
+    y: J;
+>y : Symbol(J.y, Decl(genericsWithoutTypeParameters1.ts, 25, 9))
+>J : Symbol(J, Decl(genericsWithoutTypeParameters1.ts, 22, 1))
+}
+
+class A<T> { }
+>A : Symbol(A, Decl(genericsWithoutTypeParameters1.ts, 27, 1))
+>T : Symbol(T, Decl(genericsWithoutTypeParameters1.ts, 29, 8))
+
+function f<T>(x: T): A {
+>f : Symbol(f, Decl(genericsWithoutTypeParameters1.ts, 29, 14))
+>T : Symbol(T, Decl(genericsWithoutTypeParameters1.ts, 30, 11))
+>x : Symbol(x, Decl(genericsWithoutTypeParameters1.ts, 30, 14))
+>T : Symbol(T, Decl(genericsWithoutTypeParameters1.ts, 30, 11))
+>A : Symbol(A, Decl(genericsWithoutTypeParameters1.ts, 27, 1))
+
+    return null;
+}

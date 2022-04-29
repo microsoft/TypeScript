@@ -1,0 +1,104 @@
+=== tests/cases/compiler/declFileTypeAnnotationArrayType.ts ===
+class c {
+>c : Symbol(c, Decl(declFileTypeAnnotationArrayType.ts, 0, 0))
+}
+module m {
+>m : Symbol(m, Decl(declFileTypeAnnotationArrayType.ts, 1, 1))
+
+    export class c {
+>c : Symbol(c, Decl(declFileTypeAnnotationArrayType.ts, 2, 10))
+    }
+    export class g<T> {
+>g : Symbol(g, Decl(declFileTypeAnnotationArrayType.ts, 4, 5))
+>T : Symbol(T, Decl(declFileTypeAnnotationArrayType.ts, 5, 19))
+    }
+}
+class g<T> {
+>g : Symbol(g, Decl(declFileTypeAnnotationArrayType.ts, 7, 1))
+>T : Symbol(T, Decl(declFileTypeAnnotationArrayType.ts, 8, 8))
+}
+
+// Just the name
+function foo(): c[] {
+>foo : Symbol(foo, Decl(declFileTypeAnnotationArrayType.ts, 9, 1))
+>c : Symbol(c, Decl(declFileTypeAnnotationArrayType.ts, 0, 0))
+
+    return [new c()];
+>c : Symbol(c, Decl(declFileTypeAnnotationArrayType.ts, 0, 0))
+}
+function foo2() {
+>foo2 : Symbol(foo2, Decl(declFileTypeAnnotationArrayType.ts, 14, 1))
+
+    return [new c()];
+>c : Symbol(c, Decl(declFileTypeAnnotationArrayType.ts, 0, 0))
+}
+
+// Qualified name
+function foo3(): m.c[] {
+>foo3 : Symbol(foo3, Decl(declFileTypeAnnotationArrayType.ts, 17, 1))
+>m : Symbol(m, Decl(declFileTypeAnnotationArrayType.ts, 1, 1))
+>c : Symbol(m.c, Decl(declFileTypeAnnotationArrayType.ts, 2, 10))
+
+    return [new m.c()];
+>m.c : Symbol(m.c, Decl(declFileTypeAnnotationArrayType.ts, 2, 10))
+>m : Symbol(m, Decl(declFileTypeAnnotationArrayType.ts, 1, 1))
+>c : Symbol(m.c, Decl(declFileTypeAnnotationArrayType.ts, 2, 10))
+}
+function foo4() {
+>foo4 : Symbol(foo4, Decl(declFileTypeAnnotationArrayType.ts, 22, 1))
+
+    return m.c;
+>m.c : Symbol(m.c, Decl(declFileTypeAnnotationArrayType.ts, 2, 10))
+>m : Symbol(m, Decl(declFileTypeAnnotationArrayType.ts, 1, 1))
+>c : Symbol(m.c, Decl(declFileTypeAnnotationArrayType.ts, 2, 10))
+}
+
+// Just the name with type arguments
+function foo5(): g<string>[] {
+>foo5 : Symbol(foo5, Decl(declFileTypeAnnotationArrayType.ts, 25, 1))
+>g : Symbol(g, Decl(declFileTypeAnnotationArrayType.ts, 7, 1))
+
+    return [new g<string>()];
+>g : Symbol(g, Decl(declFileTypeAnnotationArrayType.ts, 7, 1))
+}
+function foo6() {
+>foo6 : Symbol(foo6, Decl(declFileTypeAnnotationArrayType.ts, 30, 1))
+
+    return [new g<string>()];
+>g : Symbol(g, Decl(declFileTypeAnnotationArrayType.ts, 7, 1))
+}
+
+// Qualified name with type arguments
+function foo7(): m.g<number>[] {
+>foo7 : Symbol(foo7, Decl(declFileTypeAnnotationArrayType.ts, 33, 1))
+>m : Symbol(m, Decl(declFileTypeAnnotationArrayType.ts, 1, 1))
+>g : Symbol(m.g, Decl(declFileTypeAnnotationArrayType.ts, 4, 5))
+
+    return [new m.g<number>()];
+>m.g : Symbol(m.g, Decl(declFileTypeAnnotationArrayType.ts, 4, 5))
+>m : Symbol(m, Decl(declFileTypeAnnotationArrayType.ts, 1, 1))
+>g : Symbol(m.g, Decl(declFileTypeAnnotationArrayType.ts, 4, 5))
+}
+function foo8() {
+>foo8 : Symbol(foo8, Decl(declFileTypeAnnotationArrayType.ts, 38, 1))
+
+    return [new m.g<number>()];
+>m.g : Symbol(m.g, Decl(declFileTypeAnnotationArrayType.ts, 4, 5))
+>m : Symbol(m, Decl(declFileTypeAnnotationArrayType.ts, 1, 1))
+>g : Symbol(m.g, Decl(declFileTypeAnnotationArrayType.ts, 4, 5))
+}
+
+// Array of function types
+function foo9(): (()=>c)[] {
+>foo9 : Symbol(foo9, Decl(declFileTypeAnnotationArrayType.ts, 41, 1))
+>c : Symbol(c, Decl(declFileTypeAnnotationArrayType.ts, 0, 0))
+
+    return [() => new c()];
+>c : Symbol(c, Decl(declFileTypeAnnotationArrayType.ts, 0, 0))
+}
+function foo10() {
+>foo10 : Symbol(foo10, Decl(declFileTypeAnnotationArrayType.ts, 46, 1))
+
+    return [() => new c()];
+>c : Symbol(c, Decl(declFileTypeAnnotationArrayType.ts, 0, 0))
+}

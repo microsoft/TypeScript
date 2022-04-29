@@ -1,0 +1,47 @@
+=== tests/cases/conformance/types/typeRelationships/comparable/typeAssertionsWithUnionTypes01.ts ===
+interface I1 {
+    p1: number
+>p1 : number
+}
+
+interface I2 extends I1 {
+    p2: number;
+>p2 : number
+}
+
+var x = { p1: 10, p2: 20 };
+>x : { p1: number; p2: number; }
+>{ p1: 10, p2: 20 } : { p1: number; p2: number; }
+>p1 : number
+>10 : 10
+>p2 : number
+>20 : 20
+
+var y: number | I2 = x;
+>y : number | I2
+>x : { p1: number; p2: number; }
+
+var z: I1 = x;
+>z : I1
+>x : { p1: number; p2: number; }
+
+var a = <number | I2>z;
+>a : number | I2
+><number | I2>z : number | I2
+>z : I1
+
+var b = <number>z;
+>b : number
+><number>z : number
+>z : I1
+
+var c = <I2>z;
+>c : I2
+><I2>z : I2
+>z : I1
+
+var d = <I1>y;
+>d : I1
+><I1>y : I1
+>y : I2
+

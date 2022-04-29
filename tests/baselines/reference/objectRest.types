@@ -1,0 +1,230 @@
+=== tests/cases/conformance/types/rest/objectRest.ts ===
+var o = { a: 1, b: 'no' }
+>o : { a: number; b: string; }
+>{ a: 1, b: 'no' } : { a: number; b: string; }
+>a : number
+>1 : 1
+>b : string
+>'no' : "no"
+
+var { ...clone } = o;
+>clone : { a: number; b: string; }
+>o : { a: number; b: string; }
+
+var { a, ...justB } = o;
+>a : number
+>justB : { b: string; }
+>o : { a: number; b: string; }
+
+var { a, b: renamed, ...empty } = o;
+>a : number
+>b : any
+>renamed : string
+>empty : {}
+>o : { a: number; b: string; }
+
+var { ['b']: renamed, ...justA } = o;
+>'b' : "b"
+>renamed : string
+>justA : { a: number; }
+>o : { a: number; b: string; }
+
+var { 'b': renamed, ...justA } = o;
+>renamed : string
+>justA : { a: number; }
+>o : { a: number; b: string; }
+
+var { b: { '0': n, '1': oooo }, ...justA } = o;
+>b : any
+>n : string
+>oooo : string
+>justA : { a: number; }
+>o : { a: number; b: string; }
+
+let o2 = { c: 'terrible idea?', d: 'yes' };
+>o2 : { c: string; d: string; }
+>{ c: 'terrible idea?', d: 'yes' } : { c: string; d: string; }
+>c : string
+>'terrible idea?' : "terrible idea?"
+>d : string
+>'yes' : "yes"
+
+var { d: renamed, ...d } = o2;
+>d : any
+>renamed : string
+>d : { c: string; }
+>o2 : { c: string; d: string; }
+
+let nestedrest: { x: number, n1: { y: number, n2: { z: number, n3: { n4: number } } }, rest: number, restrest: number };
+>nestedrest : { x: number; n1: {    y: number;    n2: {        z: number;        n3: {            n4: number;        };    };}; rest: number; restrest: number; }
+>x : number
+>n1 : { y: number; n2: {    z: number;    n3: {        n4: number;    };}; }
+>y : number
+>n2 : { z: number; n3: {    n4: number;}; }
+>z : number
+>n3 : { n4: number; }
+>n4 : number
+>rest : number
+>restrest : number
+
+var { x, n1: { y, n2: { z, n3: { ...nr } } }, ...restrest } = nestedrest;
+>x : number
+>n1 : any
+>y : number
+>n2 : any
+>z : number
+>n3 : any
+>nr : { n4: number; }
+>restrest : { rest: number; restrest: number; }
+>nestedrest : { x: number; n1: { y: number; n2: { z: number; n3: { n4: number; }; }; }; rest: number; restrest: number; }
+
+let complex: { x: { ka, ki }, y: number };
+>complex : { x: {    ka;    ki;}; y: number; }
+>x : { ka: any; ki: any; }
+>ka : any
+>ki : any
+>y : number
+
+var { x: { ka, ...nested }, y: other, ...rest } = complex;
+>x : any
+>ka : any
+>nested : { ki: any; }
+>y : any
+>other : number
+>rest : {}
+>complex : { x: { ka: any; ki: any; }; y: number; }
+
+({x: { ka, ...nested }, y: other, ...rest} = complex);
+>({x: { ka, ...nested }, y: other, ...rest} = complex) : { x: { ka: any; ki: any; }; y: number; }
+>{x: { ka, ...nested }, y: other, ...rest} = complex : { x: { ka: any; ki: any; }; y: number; }
+>{x: { ka, ...nested }, y: other, ...rest} : { x: { ki: any; ka: any; }; y: number; }
+>x : { ki: any; ka: any; }
+>{ ka, ...nested } : { ki: any; ka: any; }
+>ka : any
+>nested : { ki: any; }
+>y : number
+>other : number
+>rest : {}
+>complex : { x: { ka: any; ki: any; }; y: number; }
+
+var { x, ...fresh } = { x: 1, y: 2 };
+>x : number
+>fresh : { y: number; }
+>{ x: 1, y: 2 } : { x: number; y: number; }
+>x : number
+>1 : 1
+>y : number
+>2 : 2
+
+({ x, ...fresh } = { x: 1, y: 2 });
+>({ x, ...fresh } = { x: 1, y: 2 }) : { x: number; y: number; }
+>{ x, ...fresh } = { x: 1, y: 2 } : { x: number; y: number; }
+>{ x, ...fresh } : { y: number; x: number; }
+>x : number
+>fresh : { y: number; }
+>{ x: 1, y: 2 } : { x: number; y: number; }
+>x : number
+>1 : 1
+>y : number
+>2 : 2
+
+class Removable {
+>Removable : Removable
+
+    private x: number;
+>x : number
+
+    protected y: number;
+>y : number
+
+    set z(value: number) { }
+>z : number
+>value : number
+
+    get both(): number { return 12 }
+>both : number
+>12 : 12
+
+    set both(value: number) { }
+>both : number
+>value : number
+
+    m() { }
+>m : () => void
+
+    removed: string;
+>removed : string
+
+    remainder: string;
+>remainder : string
+}
+interface I {
+    m(): void;
+>m : () => void
+
+    removed: string;
+>removed : string
+
+    remainder: string;
+>remainder : string
+}
+var removable = new Removable();
+>removable : Removable
+>new Removable() : Removable
+>Removable : typeof Removable
+
+var { removed, ...removableRest } = removable;
+>removed : string
+>removableRest : { remainder: string; }
+>removable : Removable
+
+var i: I = removable;
+>i : I
+>removable : Removable
+
+var { removed, ...removableRest2 } = i;
+>removed : string
+>removableRest2 : { m(): void; remainder: string; }
+>i : I
+
+let computed = 'b';
+>computed : string
+>'b' : "b"
+
+let computed2 = 'a';
+>computed2 : string
+>'a' : "a"
+
+var { [computed]: stillNotGreat, [computed2]: soSo,  ...o } = o;
+>computed : string
+>stillNotGreat : any
+>computed2 : string
+>soSo : any
+>o : { a: number; b: string; }
+>o : { a: number; b: string; }
+
+({ [computed]: stillNotGreat, [computed2]: soSo, ...o } = o);
+>({ [computed]: stillNotGreat, [computed2]: soSo, ...o } = o) : { a: number; b: string; }
+>{ [computed]: stillNotGreat, [computed2]: soSo, ...o } = o : { a: number; b: string; }
+>{ [computed]: stillNotGreat, [computed2]: soSo, ...o } : { a: number; b: string; }
+>[computed] : any
+>computed : string
+>stillNotGreat : any
+>[computed2] : any
+>computed2 : string
+>soSo : any
+>o : { a: number; b: string; }
+>o : { a: number; b: string; }
+
+var noContextualType = ({ aNumber = 12, ...notEmptyObject }) => aNumber + notEmptyObject.anythingGoes;
+>noContextualType : ({ aNumber, ...notEmptyObject }: { [x: string]: any; aNumber?: number; }) => any
+>({ aNumber = 12, ...notEmptyObject }) => aNumber + notEmptyObject.anythingGoes : ({ aNumber, ...notEmptyObject }: { [x: string]: any; aNumber?: number; }) => any
+>aNumber : number
+>12 : 12
+>notEmptyObject : { [x: string]: any; }
+>aNumber + notEmptyObject.anythingGoes : any
+>aNumber : number
+>notEmptyObject.anythingGoes : any
+>notEmptyObject : { [x: string]: any; }
+>anythingGoes : any
+

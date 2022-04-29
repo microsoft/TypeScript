@@ -1,0 +1,8 @@
+tests/cases/conformance/externalModules/exportClassNameWithObjectUMD.ts(1,14): error TS2725: Class name cannot be 'Object' when targeting ES5 with module UMD.
+
+
+==== tests/cases/conformance/externalModules/exportClassNameWithObjectUMD.ts (1 errors) ====
+    export class Object {}
+                 ~~~~~~
+!!! error TS2725: Class name cannot be 'Object' when targeting ES5 with module UMD.
+    

@@ -1,0 +1,68 @@
+=== tests/cases/conformance/types/typeRelationships/typeInference/discriminatedUnionInference.ts ===
+// Repro from #28862
+
+type Foo<A> = { type: "foo", (): A[] };
+>Foo : Symbol(Foo, Decl(discriminatedUnionInference.ts, 0, 0))
+>A : Symbol(A, Decl(discriminatedUnionInference.ts, 2, 9))
+>type : Symbol(type, Decl(discriminatedUnionInference.ts, 2, 15))
+>A : Symbol(A, Decl(discriminatedUnionInference.ts, 2, 9))
+
+type Bar<A> = { type: "bar", (): A };
+>Bar : Symbol(Bar, Decl(discriminatedUnionInference.ts, 2, 39))
+>A : Symbol(A, Decl(discriminatedUnionInference.ts, 3, 9))
+>type : Symbol(type, Decl(discriminatedUnionInference.ts, 3, 15))
+>A : Symbol(A, Decl(discriminatedUnionInference.ts, 3, 9))
+
+type FooBar<A> = Foo<A> | Bar<A>;
+>FooBar : Symbol(FooBar, Decl(discriminatedUnionInference.ts, 3, 37))
+>A : Symbol(A, Decl(discriminatedUnionInference.ts, 5, 12))
+>Foo : Symbol(Foo, Decl(discriminatedUnionInference.ts, 0, 0))
+>A : Symbol(A, Decl(discriminatedUnionInference.ts, 5, 12))
+>Bar : Symbol(Bar, Decl(discriminatedUnionInference.ts, 2, 39))
+>A : Symbol(A, Decl(discriminatedUnionInference.ts, 5, 12))
+
+type InferA<T> = T extends FooBar<infer A> ? A : never;
+>InferA : Symbol(InferA, Decl(discriminatedUnionInference.ts, 5, 33))
+>T : Symbol(T, Decl(discriminatedUnionInference.ts, 7, 12))
+>T : Symbol(T, Decl(discriminatedUnionInference.ts, 7, 12))
+>FooBar : Symbol(FooBar, Decl(discriminatedUnionInference.ts, 3, 37))
+>A : Symbol(A, Decl(discriminatedUnionInference.ts, 7, 39))
+>A : Symbol(A, Decl(discriminatedUnionInference.ts, 7, 39))
+
+type FooA = InferA<Foo<number>>;  // number
+>FooA : Symbol(FooA, Decl(discriminatedUnionInference.ts, 7, 55))
+>InferA : Symbol(InferA, Decl(discriminatedUnionInference.ts, 5, 33))
+>Foo : Symbol(Foo, Decl(discriminatedUnionInference.ts, 0, 0))
+
+// Repro from #28862
+
+type Item<T> = { kind: 'a', data: T } | { kind: 'b', data: T[] };
+>Item : Symbol(Item, Decl(discriminatedUnionInference.ts, 9, 32))
+>T : Symbol(T, Decl(discriminatedUnionInference.ts, 13, 10))
+>kind : Symbol(kind, Decl(discriminatedUnionInference.ts, 13, 16))
+>data : Symbol(data, Decl(discriminatedUnionInference.ts, 13, 27))
+>T : Symbol(T, Decl(discriminatedUnionInference.ts, 13, 10))
+>kind : Symbol(kind, Decl(discriminatedUnionInference.ts, 13, 41))
+>data : Symbol(data, Decl(discriminatedUnionInference.ts, 13, 52))
+>T : Symbol(T, Decl(discriminatedUnionInference.ts, 13, 10))
+
+declare function foo<T>(item: Item<T>): T;
+>foo : Symbol(foo, Decl(discriminatedUnionInference.ts, 13, 65))
+>T : Symbol(T, Decl(discriminatedUnionInference.ts, 15, 21))
+>item : Symbol(item, Decl(discriminatedUnionInference.ts, 15, 24))
+>Item : Symbol(Item, Decl(discriminatedUnionInference.ts, 9, 32))
+>T : Symbol(T, Decl(discriminatedUnionInference.ts, 15, 21))
+>T : Symbol(T, Decl(discriminatedUnionInference.ts, 15, 21))
+
+let x1 = foo({ kind: 'a', data: 42 });  // number
+>x1 : Symbol(x1, Decl(discriminatedUnionInference.ts, 17, 3))
+>foo : Symbol(foo, Decl(discriminatedUnionInference.ts, 13, 65))
+>kind : Symbol(kind, Decl(discriminatedUnionInference.ts, 17, 14))
+>data : Symbol(data, Decl(discriminatedUnionInference.ts, 17, 25))
+
+let x2 = foo({ kind: 'b', data: [1, 2] });  // number
+>x2 : Symbol(x2, Decl(discriminatedUnionInference.ts, 18, 3))
+>foo : Symbol(foo, Decl(discriminatedUnionInference.ts, 13, 65))
+>kind : Symbol(kind, Decl(discriminatedUnionInference.ts, 18, 14))
+>data : Symbol(data, Decl(discriminatedUnionInference.ts, 18, 25))
+

@@ -1,0 +1,28 @@
+=== tests/cases/compiler/mutuallyRecursiveGenericBaseTypes1.ts ===
+interface A<T> {
+    foo(): B<T>; // instead of B does see this
+>foo : { (): B<T>; (): void; }
+
+    foo(): void; // instead of B does see this
+>foo : { (): B<T>; (): void; }
+ 
+    foo2(): B<number>;
+>foo2 : () => B<number>
+}
+ 
+interface B<T> extends A<T> {
+    bar(): void;
+>bar : () => void
+}
+ 
+var b: B<number>;
+>b : B<number>
+
+b.foo(); // should not error
+>b.foo() : B<number>
+>b.foo : { (): B<number>; (): void; }
+>b : B<number>
+>foo : { (): B<number>; (): void; }
+
+ 
+

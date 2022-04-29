@@ -1,0 +1,16 @@
+tests/cases/conformance/parser/ecmascript5/ExportAssignments/parserExportAssignment9.ts(2,3): error TS1319: A default export can only be used in an ECMAScript-style module.
+tests/cases/conformance/parser/ecmascript5/ExportAssignments/parserExportAssignment9.ts(6,3): error TS1319: A default export can only be used in an ECMAScript-style module.
+
+
+==== tests/cases/conformance/parser/ecmascript5/ExportAssignments/parserExportAssignment9.ts (2 errors) ====
+    namespace Foo {
+      export default foo;
+      ~~~~~~~~~~~~~~~~~~~
+!!! error TS1319: A default export can only be used in an ECMAScript-style module.
+    }
+    
+    module Bar {
+      export default bar;
+      ~~~~~~~~~~~~~~~~~~~
+!!! error TS1319: A default export can only be used in an ECMAScript-style module.
+    }

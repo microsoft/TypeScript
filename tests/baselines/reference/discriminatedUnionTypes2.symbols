@@ -1,0 +1,400 @@
+=== tests/cases/conformance/types/union/discriminatedUnionTypes2.ts ===
+function f10(x : { kind: false, a: string } | { kind: true, b: string } | { kind: string, c: string }) {
+>f10 : Symbol(f10, Decl(discriminatedUnionTypes2.ts, 0, 0))
+>x : Symbol(x, Decl(discriminatedUnionTypes2.ts, 0, 13))
+>kind : Symbol(kind, Decl(discriminatedUnionTypes2.ts, 0, 18))
+>a : Symbol(a, Decl(discriminatedUnionTypes2.ts, 0, 31))
+>kind : Symbol(kind, Decl(discriminatedUnionTypes2.ts, 0, 47))
+>b : Symbol(b, Decl(discriminatedUnionTypes2.ts, 0, 59))
+>kind : Symbol(kind, Decl(discriminatedUnionTypes2.ts, 0, 75))
+>c : Symbol(c, Decl(discriminatedUnionTypes2.ts, 0, 89))
+
+    if (x.kind === false) {
+>x.kind : Symbol(kind, Decl(discriminatedUnionTypes2.ts, 0, 18), Decl(discriminatedUnionTypes2.ts, 0, 47), Decl(discriminatedUnionTypes2.ts, 0, 75))
+>x : Symbol(x, Decl(discriminatedUnionTypes2.ts, 0, 13))
+>kind : Symbol(kind, Decl(discriminatedUnionTypes2.ts, 0, 18), Decl(discriminatedUnionTypes2.ts, 0, 47), Decl(discriminatedUnionTypes2.ts, 0, 75))
+
+        x.a;
+>x.a : Symbol(a, Decl(discriminatedUnionTypes2.ts, 0, 31))
+>x : Symbol(x, Decl(discriminatedUnionTypes2.ts, 0, 13))
+>a : Symbol(a, Decl(discriminatedUnionTypes2.ts, 0, 31))
+    }
+    else if (x.kind === true) {
+>x.kind : Symbol(kind, Decl(discriminatedUnionTypes2.ts, 0, 47), Decl(discriminatedUnionTypes2.ts, 0, 75))
+>x : Symbol(x, Decl(discriminatedUnionTypes2.ts, 0, 13))
+>kind : Symbol(kind, Decl(discriminatedUnionTypes2.ts, 0, 47), Decl(discriminatedUnionTypes2.ts, 0, 75))
+
+        x.b;
+>x.b : Symbol(b, Decl(discriminatedUnionTypes2.ts, 0, 59))
+>x : Symbol(x, Decl(discriminatedUnionTypes2.ts, 0, 13))
+>b : Symbol(b, Decl(discriminatedUnionTypes2.ts, 0, 59))
+    }
+    else {
+        x.c;
+>x.c : Symbol(c, Decl(discriminatedUnionTypes2.ts, 0, 89))
+>x : Symbol(x, Decl(discriminatedUnionTypes2.ts, 0, 13))
+>c : Symbol(c, Decl(discriminatedUnionTypes2.ts, 0, 89))
+    }
+}
+
+function f11(x : { kind: false, a: string } | { kind: true, b: string } | { kind: string, c: string }) {
+>f11 : Symbol(f11, Decl(discriminatedUnionTypes2.ts, 10, 1))
+>x : Symbol(x, Decl(discriminatedUnionTypes2.ts, 12, 13))
+>kind : Symbol(kind, Decl(discriminatedUnionTypes2.ts, 12, 18))
+>a : Symbol(a, Decl(discriminatedUnionTypes2.ts, 12, 31))
+>kind : Symbol(kind, Decl(discriminatedUnionTypes2.ts, 12, 47))
+>b : Symbol(b, Decl(discriminatedUnionTypes2.ts, 12, 59))
+>kind : Symbol(kind, Decl(discriminatedUnionTypes2.ts, 12, 75))
+>c : Symbol(c, Decl(discriminatedUnionTypes2.ts, 12, 89))
+
+    switch (x.kind) {
+>x.kind : Symbol(kind, Decl(discriminatedUnionTypes2.ts, 12, 18), Decl(discriminatedUnionTypes2.ts, 12, 47), Decl(discriminatedUnionTypes2.ts, 12, 75))
+>x : Symbol(x, Decl(discriminatedUnionTypes2.ts, 12, 13))
+>kind : Symbol(kind, Decl(discriminatedUnionTypes2.ts, 12, 18), Decl(discriminatedUnionTypes2.ts, 12, 47), Decl(discriminatedUnionTypes2.ts, 12, 75))
+
+        case false:
+            x.a;
+>x.a : Symbol(a, Decl(discriminatedUnionTypes2.ts, 12, 31))
+>x : Symbol(x, Decl(discriminatedUnionTypes2.ts, 12, 13))
+>a : Symbol(a, Decl(discriminatedUnionTypes2.ts, 12, 31))
+
+            break;
+        case true:
+            x.b;
+>x.b : Symbol(b, Decl(discriminatedUnionTypes2.ts, 12, 59))
+>x : Symbol(x, Decl(discriminatedUnionTypes2.ts, 12, 13))
+>b : Symbol(b, Decl(discriminatedUnionTypes2.ts, 12, 59))
+
+            break;
+        default:
+            x.c;
+>x.c : Symbol(c, Decl(discriminatedUnionTypes2.ts, 12, 89))
+>x : Symbol(x, Decl(discriminatedUnionTypes2.ts, 12, 13))
+>c : Symbol(c, Decl(discriminatedUnionTypes2.ts, 12, 89))
+    }
+}
+
+function f13(x: { a: null; b: string } | { a: string, c: number }) {
+>f13 : Symbol(f13, Decl(discriminatedUnionTypes2.ts, 23, 1))
+>x : Symbol(x, Decl(discriminatedUnionTypes2.ts, 25, 13))
+>a : Symbol(a, Decl(discriminatedUnionTypes2.ts, 25, 17))
+>b : Symbol(b, Decl(discriminatedUnionTypes2.ts, 25, 26))
+>a : Symbol(a, Decl(discriminatedUnionTypes2.ts, 25, 42))
+>c : Symbol(c, Decl(discriminatedUnionTypes2.ts, 25, 53))
+
+    x = { a: null, b: "foo", c: 4};  // Error
+>x : Symbol(x, Decl(discriminatedUnionTypes2.ts, 25, 13))
+>a : Symbol(a, Decl(discriminatedUnionTypes2.ts, 26, 9))
+>b : Symbol(b, Decl(discriminatedUnionTypes2.ts, 26, 18))
+>c : Symbol(c, Decl(discriminatedUnionTypes2.ts, 26, 28))
+}
+
+function f14<T>(x: { a: 0; b: string } | { a: T, c: number }) {
+>f14 : Symbol(f14, Decl(discriminatedUnionTypes2.ts, 27, 1))
+>T : Symbol(T, Decl(discriminatedUnionTypes2.ts, 29, 13))
+>x : Symbol(x, Decl(discriminatedUnionTypes2.ts, 29, 16))
+>a : Symbol(a, Decl(discriminatedUnionTypes2.ts, 29, 20))
+>b : Symbol(b, Decl(discriminatedUnionTypes2.ts, 29, 26))
+>a : Symbol(a, Decl(discriminatedUnionTypes2.ts, 29, 42))
+>T : Symbol(T, Decl(discriminatedUnionTypes2.ts, 29, 13))
+>c : Symbol(c, Decl(discriminatedUnionTypes2.ts, 29, 48))
+
+    if (x.a === 0) {
+>x.a : Symbol(a, Decl(discriminatedUnionTypes2.ts, 29, 20), Decl(discriminatedUnionTypes2.ts, 29, 42))
+>x : Symbol(x, Decl(discriminatedUnionTypes2.ts, 29, 16))
+>a : Symbol(a, Decl(discriminatedUnionTypes2.ts, 29, 20), Decl(discriminatedUnionTypes2.ts, 29, 42))
+
+        x.b;  // Error
+>x : Symbol(x, Decl(discriminatedUnionTypes2.ts, 29, 16))
+    }
+}
+
+type Result<T> = { error?: undefined, value: T } | { error: Error };
+>Result : Symbol(Result, Decl(discriminatedUnionTypes2.ts, 33, 1))
+>T : Symbol(T, Decl(discriminatedUnionTypes2.ts, 35, 12))
+>error : Symbol(error, Decl(discriminatedUnionTypes2.ts, 35, 18))
+>value : Symbol(value, Decl(discriminatedUnionTypes2.ts, 35, 37))
+>T : Symbol(T, Decl(discriminatedUnionTypes2.ts, 35, 12))
+>error : Symbol(error, Decl(discriminatedUnionTypes2.ts, 35, 52))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+function f15(x: Result<number>) {
+>f15 : Symbol(f15, Decl(discriminatedUnionTypes2.ts, 35, 68))
+>x : Symbol(x, Decl(discriminatedUnionTypes2.ts, 37, 13))
+>Result : Symbol(Result, Decl(discriminatedUnionTypes2.ts, 33, 1))
+
+    if (!x.error) {
+>x.error : Symbol(error, Decl(discriminatedUnionTypes2.ts, 35, 52), Decl(discriminatedUnionTypes2.ts, 35, 18))
+>x : Symbol(x, Decl(discriminatedUnionTypes2.ts, 37, 13))
+>error : Symbol(error, Decl(discriminatedUnionTypes2.ts, 35, 52), Decl(discriminatedUnionTypes2.ts, 35, 18))
+
+        x.value;
+>x.value : Symbol(value, Decl(discriminatedUnionTypes2.ts, 35, 37))
+>x : Symbol(x, Decl(discriminatedUnionTypes2.ts, 37, 13))
+>value : Symbol(value, Decl(discriminatedUnionTypes2.ts, 35, 37))
+    }
+    else {
+        x.error.message;
+>x.error.message : Symbol(Error.message, Decl(lib.es5.d.ts, --, --))
+>x.error : Symbol(error, Decl(discriminatedUnionTypes2.ts, 35, 52))
+>x : Symbol(x, Decl(discriminatedUnionTypes2.ts, 37, 13))
+>error : Symbol(error, Decl(discriminatedUnionTypes2.ts, 35, 52))
+>message : Symbol(Error.message, Decl(lib.es5.d.ts, --, --))
+    }
+}
+
+f15({ value: 10 });
+>f15 : Symbol(f15, Decl(discriminatedUnionTypes2.ts, 35, 68))
+>value : Symbol(value, Decl(discriminatedUnionTypes2.ts, 46, 5))
+
+f15({ error: new Error("boom") });
+>f15 : Symbol(f15, Decl(discriminatedUnionTypes2.ts, 35, 68))
+>error : Symbol(error, Decl(discriminatedUnionTypes2.ts, 47, 5))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+// Repro from #24193
+
+interface WithError {
+>WithError : Symbol(WithError, Decl(discriminatedUnionTypes2.ts, 47, 34))
+
+    error: Error
+>error : Symbol(WithError.error, Decl(discriminatedUnionTypes2.ts, 51, 21))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    data: null
+>data : Symbol(WithError.data, Decl(discriminatedUnionTypes2.ts, 52, 16))
+}
+
+interface WithoutError<Data> {
+>WithoutError : Symbol(WithoutError, Decl(discriminatedUnionTypes2.ts, 54, 1))
+>Data : Symbol(Data, Decl(discriminatedUnionTypes2.ts, 56, 23))
+
+    error: null
+>error : Symbol(WithoutError.error, Decl(discriminatedUnionTypes2.ts, 56, 30))
+
+    data: Data
+>data : Symbol(WithoutError.data, Decl(discriminatedUnionTypes2.ts, 57, 15))
+>Data : Symbol(Data, Decl(discriminatedUnionTypes2.ts, 56, 23))
+}
+
+type DataCarrier<Data> = WithError | WithoutError<Data>
+>DataCarrier : Symbol(DataCarrier, Decl(discriminatedUnionTypes2.ts, 59, 1))
+>Data : Symbol(Data, Decl(discriminatedUnionTypes2.ts, 61, 17))
+>WithError : Symbol(WithError, Decl(discriminatedUnionTypes2.ts, 47, 34))
+>WithoutError : Symbol(WithoutError, Decl(discriminatedUnionTypes2.ts, 54, 1))
+>Data : Symbol(Data, Decl(discriminatedUnionTypes2.ts, 61, 17))
+
+function f20<Data>(carrier: DataCarrier<Data>) {
+>f20 : Symbol(f20, Decl(discriminatedUnionTypes2.ts, 61, 55))
+>Data : Symbol(Data, Decl(discriminatedUnionTypes2.ts, 63, 13))
+>carrier : Symbol(carrier, Decl(discriminatedUnionTypes2.ts, 63, 19))
+>DataCarrier : Symbol(DataCarrier, Decl(discriminatedUnionTypes2.ts, 59, 1))
+>Data : Symbol(Data, Decl(discriminatedUnionTypes2.ts, 63, 13))
+
+    if (carrier.error === null) {
+>carrier.error : Symbol(error, Decl(discriminatedUnionTypes2.ts, 51, 21), Decl(discriminatedUnionTypes2.ts, 56, 30))
+>carrier : Symbol(carrier, Decl(discriminatedUnionTypes2.ts, 63, 19))
+>error : Symbol(error, Decl(discriminatedUnionTypes2.ts, 51, 21), Decl(discriminatedUnionTypes2.ts, 56, 30))
+
+        const error: null = carrier.error
+>error : Symbol(error, Decl(discriminatedUnionTypes2.ts, 65, 13))
+>carrier.error : Symbol(WithoutError.error, Decl(discriminatedUnionTypes2.ts, 56, 30))
+>carrier : Symbol(carrier, Decl(discriminatedUnionTypes2.ts, 63, 19))
+>error : Symbol(WithoutError.error, Decl(discriminatedUnionTypes2.ts, 56, 30))
+
+        const data: Data = carrier.data
+>data : Symbol(data, Decl(discriminatedUnionTypes2.ts, 66, 13))
+>Data : Symbol(Data, Decl(discriminatedUnionTypes2.ts, 63, 13))
+>carrier.data : Symbol(WithoutError.data, Decl(discriminatedUnionTypes2.ts, 57, 15))
+>carrier : Symbol(carrier, Decl(discriminatedUnionTypes2.ts, 63, 19))
+>data : Symbol(WithoutError.data, Decl(discriminatedUnionTypes2.ts, 57, 15))
+
+    } else {
+        const error: Error = carrier.error
+>error : Symbol(error, Decl(discriminatedUnionTypes2.ts, 68, 13))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>carrier.error : Symbol(WithError.error, Decl(discriminatedUnionTypes2.ts, 51, 21))
+>carrier : Symbol(carrier, Decl(discriminatedUnionTypes2.ts, 63, 19))
+>error : Symbol(WithError.error, Decl(discriminatedUnionTypes2.ts, 51, 21))
+
+        const data: null = carrier.data
+>data : Symbol(data, Decl(discriminatedUnionTypes2.ts, 69, 13))
+>carrier.data : Symbol(WithError.data, Decl(discriminatedUnionTypes2.ts, 52, 16))
+>carrier : Symbol(carrier, Decl(discriminatedUnionTypes2.ts, 63, 19))
+>data : Symbol(WithError.data, Decl(discriminatedUnionTypes2.ts, 52, 16))
+    }
+}
+
+// Repro from #28935
+
+type Foo = { tag: true, x: number } | { tag: false, y: number } | { [x: string]: string };
+>Foo : Symbol(Foo, Decl(discriminatedUnionTypes2.ts, 71, 1))
+>tag : Symbol(tag, Decl(discriminatedUnionTypes2.ts, 75, 12))
+>x : Symbol(x, Decl(discriminatedUnionTypes2.ts, 75, 23))
+>tag : Symbol(tag, Decl(discriminatedUnionTypes2.ts, 75, 39))
+>y : Symbol(y, Decl(discriminatedUnionTypes2.ts, 75, 51))
+>x : Symbol(x, Decl(discriminatedUnionTypes2.ts, 75, 69))
+
+function f30(foo: Foo) {
+>f30 : Symbol(f30, Decl(discriminatedUnionTypes2.ts, 75, 90))
+>foo : Symbol(foo, Decl(discriminatedUnionTypes2.ts, 77, 13))
+>Foo : Symbol(Foo, Decl(discriminatedUnionTypes2.ts, 71, 1))
+
+    if (foo.tag) {
+>foo.tag : Symbol(tag, Decl(discriminatedUnionTypes2.ts, 75, 12), Decl(discriminatedUnionTypes2.ts, 75, 39))
+>foo : Symbol(foo, Decl(discriminatedUnionTypes2.ts, 77, 13))
+>tag : Symbol(tag, Decl(discriminatedUnionTypes2.ts, 75, 12), Decl(discriminatedUnionTypes2.ts, 75, 39))
+
+        foo;
+>foo : Symbol(foo, Decl(discriminatedUnionTypes2.ts, 77, 13))
+    }
+    else {
+        foo;
+>foo : Symbol(foo, Decl(discriminatedUnionTypes2.ts, 77, 13))
+    }
+}
+
+function f31(foo: Foo) {
+>f31 : Symbol(f31, Decl(discriminatedUnionTypes2.ts, 84, 1))
+>foo : Symbol(foo, Decl(discriminatedUnionTypes2.ts, 86, 13))
+>Foo : Symbol(Foo, Decl(discriminatedUnionTypes2.ts, 71, 1))
+
+    if (foo.tag === true) {
+>foo.tag : Symbol(tag, Decl(discriminatedUnionTypes2.ts, 75, 12), Decl(discriminatedUnionTypes2.ts, 75, 39))
+>foo : Symbol(foo, Decl(discriminatedUnionTypes2.ts, 86, 13))
+>tag : Symbol(tag, Decl(discriminatedUnionTypes2.ts, 75, 12), Decl(discriminatedUnionTypes2.ts, 75, 39))
+
+        foo;
+>foo : Symbol(foo, Decl(discriminatedUnionTypes2.ts, 86, 13))
+    }
+    else {
+        foo;
+>foo : Symbol(foo, Decl(discriminatedUnionTypes2.ts, 86, 13))
+    }
+}
+
+// Repro from #33448
+
+type a = {
+>a : Symbol(a, Decl(discriminatedUnionTypes2.ts, 93, 1))
+
+    type: 'a',
+>type : Symbol(type, Decl(discriminatedUnionTypes2.ts, 97, 10))
+
+    data: string
+>data : Symbol(data, Decl(discriminatedUnionTypes2.ts, 98, 14))
+}
+type b = {
+>b : Symbol(b, Decl(discriminatedUnionTypes2.ts, 100, 1))
+
+    type: 'b',
+>type : Symbol(type, Decl(discriminatedUnionTypes2.ts, 101, 10))
+
+    name: string
+>name : Symbol(name, Decl(discriminatedUnionTypes2.ts, 102, 14))
+}
+type c = {
+>c : Symbol(c, Decl(discriminatedUnionTypes2.ts, 104, 1))
+
+    type: 'c',
+>type : Symbol(type, Decl(discriminatedUnionTypes2.ts, 105, 10))
+
+    other: string
+>other : Symbol(other, Decl(discriminatedUnionTypes2.ts, 106, 14))
+}
+
+type abc = a | b | c;
+>abc : Symbol(abc, Decl(discriminatedUnionTypes2.ts, 108, 1))
+>a : Symbol(a, Decl(discriminatedUnionTypes2.ts, 93, 1))
+>b : Symbol(b, Decl(discriminatedUnionTypes2.ts, 100, 1))
+>c : Symbol(c, Decl(discriminatedUnionTypes2.ts, 104, 1))
+
+function f(problem: abc & (b | c)) {
+>f : Symbol(f, Decl(discriminatedUnionTypes2.ts, 110, 21))
+>problem : Symbol(problem, Decl(discriminatedUnionTypes2.ts, 112, 11))
+>abc : Symbol(abc, Decl(discriminatedUnionTypes2.ts, 108, 1))
+>b : Symbol(b, Decl(discriminatedUnionTypes2.ts, 100, 1))
+>c : Symbol(c, Decl(discriminatedUnionTypes2.ts, 104, 1))
+
+    if (problem.type === 'b') {
+>problem.type : Symbol(type, Decl(discriminatedUnionTypes2.ts, 101, 10), Decl(discriminatedUnionTypes2.ts, 105, 10))
+>problem : Symbol(problem, Decl(discriminatedUnionTypes2.ts, 112, 11))
+>type : Symbol(type, Decl(discriminatedUnionTypes2.ts, 101, 10), Decl(discriminatedUnionTypes2.ts, 105, 10))
+
+        problem.name;
+>problem.name : Symbol(name, Decl(discriminatedUnionTypes2.ts, 102, 14))
+>problem : Symbol(problem, Decl(discriminatedUnionTypes2.ts, 112, 11))
+>name : Symbol(name, Decl(discriminatedUnionTypes2.ts, 102, 14))
+    }
+    else {
+        problem.other;
+>problem.other : Symbol(other, Decl(discriminatedUnionTypes2.ts, 106, 14))
+>problem : Symbol(problem, Decl(discriminatedUnionTypes2.ts, 112, 11))
+>other : Symbol(other, Decl(discriminatedUnionTypes2.ts, 106, 14))
+    }
+}
+
+type RuntimeValue =
+>RuntimeValue : Symbol(RuntimeValue, Decl(discriminatedUnionTypes2.ts, 119, 1))
+
+    | { type: 'number', value: number }
+>type : Symbol(type, Decl(discriminatedUnionTypes2.ts, 122, 7))
+>value : Symbol(value, Decl(discriminatedUnionTypes2.ts, 122, 23))
+
+    | { type: 'string', value: string }
+>type : Symbol(type, Decl(discriminatedUnionTypes2.ts, 123, 7))
+>value : Symbol(value, Decl(discriminatedUnionTypes2.ts, 123, 23))
+
+    | { type: 'boolean', value: boolean };
+>type : Symbol(type, Decl(discriminatedUnionTypes2.ts, 124, 7))
+>value : Symbol(value, Decl(discriminatedUnionTypes2.ts, 124, 24))
+
+function foo1(x: RuntimeValue & { type: 'number' }) {
+>foo1 : Symbol(foo1, Decl(discriminatedUnionTypes2.ts, 124, 42))
+>x : Symbol(x, Decl(discriminatedUnionTypes2.ts, 126, 14))
+>RuntimeValue : Symbol(RuntimeValue, Decl(discriminatedUnionTypes2.ts, 119, 1))
+>type : Symbol(type, Decl(discriminatedUnionTypes2.ts, 126, 33))
+
+    if (x.type === 'number') {
+>x.type : Symbol(type, Decl(discriminatedUnionTypes2.ts, 122, 7), Decl(discriminatedUnionTypes2.ts, 126, 33))
+>x : Symbol(x, Decl(discriminatedUnionTypes2.ts, 126, 14))
+>type : Symbol(type, Decl(discriminatedUnionTypes2.ts, 122, 7), Decl(discriminatedUnionTypes2.ts, 126, 33))
+
+        x.value;  // number
+>x.value : Symbol(value, Decl(discriminatedUnionTypes2.ts, 122, 23))
+>x : Symbol(x, Decl(discriminatedUnionTypes2.ts, 126, 14))
+>value : Symbol(value, Decl(discriminatedUnionTypes2.ts, 122, 23))
+    }
+    else {
+        x.value;  // number
+>x.value : Symbol(value, Decl(discriminatedUnionTypes2.ts, 122, 23))
+>x : Symbol(x, Decl(discriminatedUnionTypes2.ts, 126, 14))
+>value : Symbol(value, Decl(discriminatedUnionTypes2.ts, 122, 23))
+    }
+}
+
+function foo2(x: RuntimeValue & ({ type: 'number' } | { type: 'string' })) {
+>foo2 : Symbol(foo2, Decl(discriminatedUnionTypes2.ts, 133, 1))
+>x : Symbol(x, Decl(discriminatedUnionTypes2.ts, 135, 14))
+>RuntimeValue : Symbol(RuntimeValue, Decl(discriminatedUnionTypes2.ts, 119, 1))
+>type : Symbol(type, Decl(discriminatedUnionTypes2.ts, 135, 34))
+>type : Symbol(type, Decl(discriminatedUnionTypes2.ts, 135, 55))
+
+    if (x.type === 'number') {
+>x.type : Symbol(type, Decl(discriminatedUnionTypes2.ts, 122, 7), Decl(discriminatedUnionTypes2.ts, 135, 34), Decl(discriminatedUnionTypes2.ts, 123, 7), Decl(discriminatedUnionTypes2.ts, 135, 55))
+>x : Symbol(x, Decl(discriminatedUnionTypes2.ts, 135, 14))
+>type : Symbol(type, Decl(discriminatedUnionTypes2.ts, 122, 7), Decl(discriminatedUnionTypes2.ts, 135, 34), Decl(discriminatedUnionTypes2.ts, 123, 7), Decl(discriminatedUnionTypes2.ts, 135, 55))
+
+        x.value;  // number
+>x.value : Symbol(value, Decl(discriminatedUnionTypes2.ts, 122, 23))
+>x : Symbol(x, Decl(discriminatedUnionTypes2.ts, 135, 14))
+>value : Symbol(value, Decl(discriminatedUnionTypes2.ts, 122, 23))
+    }
+    else {
+        x.value;  // string
+>x.value : Symbol(value, Decl(discriminatedUnionTypes2.ts, 123, 23))
+>x : Symbol(x, Decl(discriminatedUnionTypes2.ts, 135, 14))
+>value : Symbol(value, Decl(discriminatedUnionTypes2.ts, 123, 23))
+    }
+}
+

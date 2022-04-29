@@ -1,0 +1,63 @@
+tests/cases/conformance/functions/functionNameConflicts.ts(5,14): error TS2300: Duplicate identifier 'fn1'.
+tests/cases/conformance/functions/functionNameConflicts.ts(6,9): error TS2300: Duplicate identifier 'fn1'.
+tests/cases/conformance/functions/functionNameConflicts.ts(8,9): error TS2300: Duplicate identifier 'fn2'.
+tests/cases/conformance/functions/functionNameConflicts.ts(9,14): error TS2300: Duplicate identifier 'fn2'.
+tests/cases/conformance/functions/functionNameConflicts.ts(12,10): error TS2300: Duplicate identifier 'fn3'.
+tests/cases/conformance/functions/functionNameConflicts.ts(13,5): error TS2300: Duplicate identifier 'fn3'.
+tests/cases/conformance/functions/functionNameConflicts.ts(16,9): error TS2300: Duplicate identifier 'fn4'.
+tests/cases/conformance/functions/functionNameConflicts.ts(17,14): error TS2300: Duplicate identifier 'fn4'.
+tests/cases/conformance/functions/functionNameConflicts.ts(19,14): error TS2300: Duplicate identifier 'fn5'.
+tests/cases/conformance/functions/functionNameConflicts.ts(20,9): error TS2300: Duplicate identifier 'fn5'.
+tests/cases/conformance/functions/functionNameConflicts.ts(24,10): error TS2389: Function implementation name must be 'over'.
+
+
+==== tests/cases/conformance/functions/functionNameConflicts.ts (11 errors) ====
+    //Function and variable of the same name in same declaration space
+    //Function overload with different name from implementation signature 
+    
+    module M {
+        function fn1() { }
+                 ~~~
+!!! error TS2300: Duplicate identifier 'fn1'.
+        var fn1;
+            ~~~
+!!! error TS2300: Duplicate identifier 'fn1'.
+    
+        var fn2;
+            ~~~
+!!! error TS2300: Duplicate identifier 'fn2'.
+        function fn2() { }
+                 ~~~
+!!! error TS2300: Duplicate identifier 'fn2'.
+    }
+    
+    function fn3() { }
+             ~~~
+!!! error TS2300: Duplicate identifier 'fn3'.
+    var fn3;
+        ~~~
+!!! error TS2300: Duplicate identifier 'fn3'.
+    
+    function func() {
+        var fn4;
+            ~~~
+!!! error TS2300: Duplicate identifier 'fn4'.
+        function fn4() { }
+                 ~~~
+!!! error TS2300: Duplicate identifier 'fn4'.
+    
+        function fn5() { }
+                 ~~~
+!!! error TS2300: Duplicate identifier 'fn5'.
+        var fn5;
+            ~~~
+!!! error TS2300: Duplicate identifier 'fn5'.
+    }
+    
+    function over();
+    function overrr() {
+             ~~~~~~
+!!! error TS2389: Function implementation name must be 'over'.
+    
+    }
+    

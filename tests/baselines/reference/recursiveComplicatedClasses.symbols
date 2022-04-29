@@ -1,0 +1,50 @@
+=== tests/cases/compiler/recursiveComplicatedClasses.ts ===
+class Signature {
+>Signature : Symbol(Signature, Decl(recursiveComplicatedClasses.ts, 0, 0))
+
+    public parameters: ParameterSymbol[] = null;
+>parameters : Symbol(Signature.parameters, Decl(recursiveComplicatedClasses.ts, 0, 17))
+>ParameterSymbol : Symbol(ParameterSymbol, Decl(recursiveComplicatedClasses.ts, 17, 1))
+}
+
+function aEnclosesB(a: Symbol) {
+>aEnclosesB : Symbol(aEnclosesB, Decl(recursiveComplicatedClasses.ts, 2, 1))
+>a : Symbol(a, Decl(recursiveComplicatedClasses.ts, 4, 20))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(recursiveComplicatedClasses.ts, 6, 1))
+
+    return true;
+}
+
+class Symbol {
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(recursiveComplicatedClasses.ts, 6, 1))
+
+    public bound: boolean;
+>bound : Symbol(Symbol.bound, Decl(recursiveComplicatedClasses.ts, 8, 14))
+
+    public visible() {
+>visible : Symbol(Symbol.visible, Decl(recursiveComplicatedClasses.ts, 9, 26))
+
+        var b: TypeSymbol;
+>b : Symbol(b, Decl(recursiveComplicatedClasses.ts, 11, 11))
+>TypeSymbol : Symbol(TypeSymbol, Decl(recursiveComplicatedClasses.ts, 20, 1))
+
+        return aEnclosesB(b);
+>aEnclosesB : Symbol(aEnclosesB, Decl(recursiveComplicatedClasses.ts, 2, 1))
+>b : Symbol(b, Decl(recursiveComplicatedClasses.ts, 11, 11))
+    }
+
+}
+class InferenceSymbol extends Symbol {
+>InferenceSymbol : Symbol(InferenceSymbol, Decl(recursiveComplicatedClasses.ts, 15, 1))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(recursiveComplicatedClasses.ts, 6, 1))
+}
+
+class ParameterSymbol extends InferenceSymbol {
+>ParameterSymbol : Symbol(ParameterSymbol, Decl(recursiveComplicatedClasses.ts, 17, 1))
+>InferenceSymbol : Symbol(InferenceSymbol, Decl(recursiveComplicatedClasses.ts, 15, 1))
+}
+
+class TypeSymbol extends InferenceSymbol {
+>TypeSymbol : Symbol(TypeSymbol, Decl(recursiveComplicatedClasses.ts, 20, 1))
+>InferenceSymbol : Symbol(InferenceSymbol, Decl(recursiveComplicatedClasses.ts, 15, 1))
+}

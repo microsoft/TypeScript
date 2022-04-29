@@ -1,0 +1,115 @@
+=== tests/cases/conformance/statements/switchStatements/switchStatements.ts ===
+module M {
+>M : Symbol(M, Decl(switchStatements.ts, 0, 0))
+
+    export function fn(x: number) {
+>fn : Symbol(fn, Decl(switchStatements.ts, 0, 10))
+>x : Symbol(x, Decl(switchStatements.ts, 1, 23))
+
+        return '';
+    }
+}
+
+var x: any;
+>x : Symbol(x, Decl(switchStatements.ts, 6, 3))
+
+switch (x) {
+>x : Symbol(x, Decl(switchStatements.ts, 6, 3))
+
+    case '':
+    case 12:
+    case true:
+    case null:
+    case undefined:
+>undefined : Symbol(undefined)
+
+    case new Date(12):
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+    case new Object():
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    case /[a-z]/:
+    case[]:
+    case {}:
+    case { id: 12 }:
+>id : Symbol(id, Decl(switchStatements.ts, 18, 10))
+
+    case['a']:
+    case typeof x:
+>x : Symbol(x, Decl(switchStatements.ts, 6, 3))
+
+    case typeof M:
+>M : Symbol(M, Decl(switchStatements.ts, 0, 0))
+
+    case M.fn(1):
+>M.fn : Symbol(M.fn, Decl(switchStatements.ts, 0, 10))
+>M : Symbol(M, Decl(switchStatements.ts, 0, 0))
+>fn : Symbol(M.fn, Decl(switchStatements.ts, 0, 10))
+
+    case <T>(x: number) => '':
+>T : Symbol(T, Decl(switchStatements.ts, 23, 10))
+>x : Symbol(x, Decl(switchStatements.ts, 23, 13))
+
+    case (<T>(x: number) => '')(2):
+>T : Symbol(T, Decl(switchStatements.ts, 24, 11))
+>x : Symbol(x, Decl(switchStatements.ts, 24, 14))
+
+    default:
+}
+
+// basic assignable check, rest covered in tests for 'assignment compatibility'
+class C { id: number; }
+>C : Symbol(C, Decl(switchStatements.ts, 26, 1))
+>id : Symbol(C.id, Decl(switchStatements.ts, 29, 9))
+
+class D extends C { name: string }
+>D : Symbol(D, Decl(switchStatements.ts, 29, 23))
+>C : Symbol(C, Decl(switchStatements.ts, 26, 1))
+>name : Symbol(D.name, Decl(switchStatements.ts, 30, 19))
+
+switch (new C()) {
+>C : Symbol(C, Decl(switchStatements.ts, 26, 1))
+
+    case new D():
+>D : Symbol(D, Decl(switchStatements.ts, 29, 23))
+
+    case { id: 12, name: '' }:
+>id : Symbol(id, Decl(switchStatements.ts, 34, 10))
+>name : Symbol(name, Decl(switchStatements.ts, 34, 18))
+
+    case new C():
+>C : Symbol(C, Decl(switchStatements.ts, 26, 1))
+}
+
+switch ('') { }
+switch (12) { }
+switch (true) { }
+switch (null) { }
+switch (undefined) { }
+>undefined : Symbol(undefined)
+
+switch (new Date(12)) { }
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+switch (new Object()) { }
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+switch (/[a-z]/) { }
+switch ([]) { }
+switch ({}) { }
+switch ({ id: 12 }) { }
+>id : Symbol(id, Decl(switchStatements.ts, 48, 9))
+
+switch (['a']) { }
+switch (<T>(x: number) => '') { }
+>T : Symbol(T, Decl(switchStatements.ts, 50, 9))
+>x : Symbol(x, Decl(switchStatements.ts, 50, 12))
+
+switch ((<T>(x: T) => '')(1)) { }
+>T : Symbol(T, Decl(switchStatements.ts, 51, 10))
+>x : Symbol(x, Decl(switchStatements.ts, 51, 13))
+>T : Symbol(T, Decl(switchStatements.ts, 51, 10))
+
+
+

@@ -1,0 +1,80 @@
+=== tests/cases/conformance/expressions/unaryOperators/logicalNotOperator/logicalNotOperatorWithEnumType.ts ===
+// ! operator on enum type
+
+enum ENUM { A, B, C };
+>ENUM : ENUM
+>A : ENUM.A
+>B : ENUM.B
+>C : ENUM.C
+
+enum ENUM1 { };
+>ENUM1 : ENUM1
+
+// enum type var
+var ResultIsBoolean1 = !ENUM;
+>ResultIsBoolean1 : boolean
+>!ENUM : boolean
+>ENUM : typeof ENUM
+
+// enum type expressions
+var ResultIsBoolean2 = !ENUM["B"];
+>ResultIsBoolean2 : boolean
+>!ENUM["B"] : boolean
+>ENUM["B"] : ENUM.B
+>ENUM : typeof ENUM
+>"B" : "B"
+
+var ResultIsBoolean3 = !(ENUM.B + ENUM["C"]);
+>ResultIsBoolean3 : boolean
+>!(ENUM.B + ENUM["C"]) : boolean
+>(ENUM.B + ENUM["C"]) : number
+>ENUM.B + ENUM["C"] : number
+>ENUM.B : ENUM.B
+>ENUM : typeof ENUM
+>B : ENUM.B
+>ENUM["C"] : ENUM.C
+>ENUM : typeof ENUM
+>"C" : "C"
+
+// multiple ! operators
+var ResultIsBoolean4 = !!ENUM;
+>ResultIsBoolean4 : boolean
+>!!ENUM : boolean
+>!ENUM : boolean
+>ENUM : typeof ENUM
+
+var ResultIsBoolean5 = !!!(ENUM["B"] + ENUM.C);
+>ResultIsBoolean5 : boolean
+>!!!(ENUM["B"] + ENUM.C) : boolean
+>!!(ENUM["B"] + ENUM.C) : boolean
+>!(ENUM["B"] + ENUM.C) : boolean
+>(ENUM["B"] + ENUM.C) : number
+>ENUM["B"] + ENUM.C : number
+>ENUM["B"] : ENUM.B
+>ENUM : typeof ENUM
+>"B" : "B"
+>ENUM.C : ENUM.C
+>ENUM : typeof ENUM
+>C : ENUM.C
+
+// miss assignment operators
+!ENUM;
+>!ENUM : boolean
+>ENUM : typeof ENUM
+
+!ENUM1;
+>!ENUM1 : boolean
+>ENUM1 : typeof ENUM1
+
+!ENUM.B;
+>!ENUM.B : boolean
+>ENUM.B : ENUM.B
+>ENUM : typeof ENUM
+>B : ENUM.B
+
+!ENUM, ENUM1;
+>!ENUM, ENUM1 : typeof ENUM1
+>!ENUM : boolean
+>ENUM : typeof ENUM
+>ENUM1 : typeof ENUM1
+

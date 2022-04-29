@@ -1,0 +1,14 @@
+tests/cases/compiler/classOverloadForFunction.ts(1,7): error TS2813: Class declaration cannot implement overload list for 'foo'.
+tests/cases/compiler/classOverloadForFunction.ts(2,10): error TS2814: Function with bodies can only merge with classes that are ambient.
+
+
+==== tests/cases/compiler/classOverloadForFunction.ts (2 errors) ====
+    class foo { };
+          ~~~
+!!! error TS2813: Class declaration cannot implement overload list for 'foo'.
+!!! related TS6506 tests/cases/compiler/classOverloadForFunction.ts:1:7: Consider adding a 'declare' modifier to this class.
+    function foo() {}
+             ~~~
+!!! error TS2814: Function with bodies can only merge with classes that are ambient.
+!!! related TS6506 tests/cases/compiler/classOverloadForFunction.ts:1:7: Consider adding a 'declare' modifier to this class.
+    

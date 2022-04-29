@@ -1,0 +1,6 @@
+=== tests/cases/compiler/interfaceWithImplements1.ts ===
+interface IFoo { }
+No type information for this code.
+No type information for this code.interface IBar implements IFoo {
+No type information for this code.}
+No type information for this code.

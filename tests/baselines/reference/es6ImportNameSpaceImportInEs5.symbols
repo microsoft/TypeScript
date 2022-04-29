@@ -1,0 +1,17 @@
+=== tests/cases/compiler/es6ImportNameSpaceImportInEs5_0.ts ===
+export var a = 10;  
+>a : Symbol(a, Decl(es6ImportNameSpaceImportInEs5_0.ts, 0, 10))
+
+=== tests/cases/compiler/es6ImportNameSpaceImportInEs5_1.ts ===
+import * as nameSpaceBinding from "./es6ImportNameSpaceImportInEs5_0";
+>nameSpaceBinding : Symbol(nameSpaceBinding, Decl(es6ImportNameSpaceImportInEs5_1.ts, 0, 6))
+
+var x = nameSpaceBinding.a;
+>x : Symbol(x, Decl(es6ImportNameSpaceImportInEs5_1.ts, 1, 3))
+>nameSpaceBinding.a : Symbol(nameSpaceBinding.a, Decl(es6ImportNameSpaceImportInEs5_0.ts, 0, 10))
+>nameSpaceBinding : Symbol(nameSpaceBinding, Decl(es6ImportNameSpaceImportInEs5_1.ts, 0, 6))
+>a : Symbol(nameSpaceBinding.a, Decl(es6ImportNameSpaceImportInEs5_0.ts, 0, 10))
+
+import * as nameSpaceBinding2 from "./es6ImportNameSpaceImportInEs5_0"; // elide this
+>nameSpaceBinding2 : Symbol(nameSpaceBinding2, Decl(es6ImportNameSpaceImportInEs5_1.ts, 2, 6))
+

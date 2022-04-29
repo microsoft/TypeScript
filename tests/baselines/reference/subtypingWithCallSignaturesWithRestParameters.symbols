@@ -1,0 +1,315 @@
+=== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithCallSignaturesWithRestParameters.ts ===
+// call signatures in derived types must have the same or fewer optional parameters as the base type
+
+interface Base { 
+>Base : Symbol(Base, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 0, 0))
+
+    a: (...args: number[]) => number;
+>a : Symbol(Base.a, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 2, 16))
+>args : Symbol(args, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 3, 8))
+
+    a2: (x: number, ...z: number[]) => number;
+>a2 : Symbol(Base.a2, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 3, 37))
+>x : Symbol(x, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 4, 9))
+>z : Symbol(z, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 4, 19))
+
+    a3: (x: number, y?: string, ...z: number[]) => number;
+>a3 : Symbol(Base.a3, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 4, 46))
+>x : Symbol(x, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 5, 9))
+>y : Symbol(y, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 5, 19))
+>z : Symbol(z, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 5, 31))
+
+    a4: (x?: number, y?: string, ...z: number[]) => number;
+>a4 : Symbol(Base.a4, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 5, 58))
+>x : Symbol(x, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 6, 9))
+>y : Symbol(y, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 6, 20))
+>z : Symbol(z, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 6, 32))
+}
+
+interface I1 extends Base {
+>I1 : Symbol(I1, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 7, 1))
+>Base : Symbol(Base, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 0, 0))
+
+    a: () => number; // ok, same number of required params
+>a : Symbol(I1.a, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 9, 27))
+}
+
+interface I1B extends Base {
+>I1B : Symbol(I1B, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 11, 1))
+>Base : Symbol(Base, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 0, 0))
+
+    a: (...args: number[]) => number; // ok, same number of required params
+>a : Symbol(I1B.a, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 13, 28))
+>args : Symbol(args, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 14, 8))
+}
+
+interface I1C extends Base {
+>I1C : Symbol(I1C, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 15, 1))
+>Base : Symbol(Base, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 0, 0))
+
+    a: (...args: string[]) => number; // error, type mismatch
+>a : Symbol(I1C.a, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 17, 28))
+>args : Symbol(args, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 18, 8))
+}
+
+interface I2 extends Base {
+>I2 : Symbol(I2, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 19, 1))
+>Base : Symbol(Base, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 0, 0))
+
+    a: (x?: number) => number; // ok, same number of required params
+>a : Symbol(I2.a, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 21, 27))
+>x : Symbol(x, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 22, 8))
+}
+
+interface I2B extends Base {
+>I2B : Symbol(I2B, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 23, 1))
+>Base : Symbol(Base, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 0, 0))
+
+    a: (x?: number, y?: number, z?: number) => number; // ok, same number of required params
+>a : Symbol(I2B.a, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 25, 28))
+>x : Symbol(x, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 26, 8))
+>y : Symbol(y, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 26, 19))
+>z : Symbol(z, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 26, 31))
+}
+
+interface I3 extends Base {
+>I3 : Symbol(I3, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 27, 1))
+>Base : Symbol(Base, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 0, 0))
+
+    a: (x: number) => number; // ok, all present params match
+>a : Symbol(I3.a, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 29, 27))
+>x : Symbol(x, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 30, 8))
+}
+
+interface I3B extends Base {
+>I3B : Symbol(I3B, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 31, 1))
+>Base : Symbol(Base, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 0, 0))
+
+    a: (x?: string) => number; // error, incompatible type
+>a : Symbol(I3B.a, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 33, 28))
+>x : Symbol(x, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 34, 8))
+}
+
+
+
+interface I4 extends Base {
+>I4 : Symbol(I4, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 35, 1))
+>Base : Symbol(Base, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 0, 0))
+
+    a2: () => number; // ok, fewer required params
+>a2 : Symbol(I4.a2, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 39, 27))
+}
+
+interface I4B extends Base {
+>I4B : Symbol(I4B, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 41, 1))
+>Base : Symbol(Base, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 0, 0))
+
+    a2: (...args: number[]) => number; // ok, fewer required params
+>a2 : Symbol(I4B.a2, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 43, 28))
+>args : Symbol(args, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 44, 9))
+}
+
+interface I5 extends Base {
+>I5 : Symbol(I5, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 45, 1))
+>Base : Symbol(Base, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 0, 0))
+
+    a2: (x?: number) => number; // ok, fewer required params
+>a2 : Symbol(I5.a2, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 47, 27))
+>x : Symbol(x, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 48, 9))
+}
+
+interface I6 extends Base {
+>I6 : Symbol(I6, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 49, 1))
+>Base : Symbol(Base, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 0, 0))
+
+    a2: (x: number) => number; // ok, same number of required params
+>a2 : Symbol(I6.a2, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 51, 27))
+>x : Symbol(x, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 52, 9))
+}
+
+interface I6B extends Base {
+>I6B : Symbol(I6B, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 53, 1))
+>Base : Symbol(Base, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 0, 0))
+
+    a2: (x: number, ...args: number[]) => number; // ok, same number of required params
+>a2 : Symbol(I6B.a2, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 55, 28))
+>x : Symbol(x, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 56, 9))
+>args : Symbol(args, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 56, 19))
+}
+
+interface I6C extends Base {
+>I6C : Symbol(I6C, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 57, 1))
+>Base : Symbol(Base, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 0, 0))
+
+    a2: (x: number, ...args: string[]) => number; // error
+>a2 : Symbol(I6C.a2, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 59, 28))
+>x : Symbol(x, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 60, 9))
+>args : Symbol(args, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 60, 19))
+}
+
+interface I6D extends Base {
+>I6D : Symbol(I6D, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 61, 1))
+>Base : Symbol(Base, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 0, 0))
+
+    a2: (x: number, y: number) => number; // ok, all present params match
+>a2 : Symbol(I6D.a2, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 63, 28))
+>x : Symbol(x, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 64, 9))
+>y : Symbol(y, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 64, 19))
+}
+
+interface I6E extends Base {
+>I6E : Symbol(I6E, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 65, 1))
+>Base : Symbol(Base, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 0, 0))
+
+    a2: (x: number, y?: number) => number; // ok, same number of required params
+>a2 : Symbol(I6E.a2, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 67, 28))
+>x : Symbol(x, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 68, 9))
+>y : Symbol(y, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 68, 19))
+}
+
+
+
+interface I7 extends Base {
+>I7 : Symbol(I7, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 69, 1))
+>Base : Symbol(Base, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 0, 0))
+
+    a3: () => number; // ok, fewer required params
+>a3 : Symbol(I7.a3, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 73, 27))
+}
+
+interface I8 extends Base {
+>I8 : Symbol(I8, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 75, 1))
+>Base : Symbol(Base, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 0, 0))
+
+    a3: (x?: number) => number; // ok, fewer required params
+>a3 : Symbol(I8.a3, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 77, 27))
+>x : Symbol(x, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 78, 9))
+}
+
+interface I9 extends Base {
+>I9 : Symbol(I9, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 79, 1))
+>Base : Symbol(Base, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 0, 0))
+
+    a3: (x: number) => number; // ok, same number of required params
+>a3 : Symbol(I9.a3, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 81, 27))
+>x : Symbol(x, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 82, 9))
+}
+
+interface I10 extends Base {
+>I10 : Symbol(I10, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 83, 1))
+>Base : Symbol(Base, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 0, 0))
+
+    a3: (x: number, y: string) => number;  // ok, all present params match
+>a3 : Symbol(I10.a3, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 85, 28))
+>x : Symbol(x, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 86, 9))
+>y : Symbol(y, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 86, 19))
+}
+
+interface I10B extends Base {
+>I10B : Symbol(I10B, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 87, 1))
+>Base : Symbol(Base, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 0, 0))
+
+    a3: (x: number, y?: number, z?: number) => number;  // error
+>a3 : Symbol(I10B.a3, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 89, 29))
+>x : Symbol(x, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 90, 9))
+>y : Symbol(y, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 90, 19))
+>z : Symbol(z, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 90, 31))
+}
+
+interface I10C extends Base {
+>I10C : Symbol(I10C, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 91, 1))
+>Base : Symbol(Base, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 0, 0))
+
+    a3: (x: number, ...z: number[]) => number;  // error
+>a3 : Symbol(I10C.a3, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 93, 29))
+>x : Symbol(x, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 94, 9))
+>z : Symbol(z, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 94, 19))
+}
+
+interface I10D extends Base {
+>I10D : Symbol(I10D, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 95, 1))
+>Base : Symbol(Base, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 0, 0))
+
+    a3: (x: string, y?: string, z?: string) => number;  // error, incompatible types
+>a3 : Symbol(I10D.a3, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 97, 29))
+>x : Symbol(x, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 98, 9))
+>y : Symbol(y, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 98, 19))
+>z : Symbol(z, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 98, 31))
+}
+
+interface I10E extends Base {
+>I10E : Symbol(I10E, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 99, 1))
+>Base : Symbol(Base, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 0, 0))
+
+    a3: (x: number, ...z: string[]) => number;  // error
+>a3 : Symbol(I10E.a3, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 101, 29))
+>x : Symbol(x, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 102, 9))
+>z : Symbol(z, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 102, 19))
+}
+
+interface I11 extends Base {
+>I11 : Symbol(I11, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 103, 1))
+>Base : Symbol(Base, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 0, 0))
+
+    a4: () => number; // ok, fewer required params
+>a4 : Symbol(I11.a4, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 105, 28))
+}
+
+interface I12 extends Base {
+>I12 : Symbol(I12, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 107, 1))
+>Base : Symbol(Base, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 0, 0))
+
+    a4: (x?: number, y?: number) => number; // error, type mismatch
+>a4 : Symbol(I12.a4, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 109, 28))
+>x : Symbol(x, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 110, 9))
+>y : Symbol(y, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 110, 20))
+}
+
+interface I13 extends Base {
+>I13 : Symbol(I13, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 111, 1))
+>Base : Symbol(Base, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 0, 0))
+
+    a4: (x: number) => number; // ok, all present params match
+>a4 : Symbol(I13.a4, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 113, 28))
+>x : Symbol(x, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 114, 9))
+}
+
+interface I14 extends Base {
+>I14 : Symbol(I14, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 115, 1))
+>Base : Symbol(Base, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 0, 0))
+
+    a4: (x: number, y?: number) => number;  // error, second param has type mismatch
+>a4 : Symbol(I14.a4, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 117, 28))
+>x : Symbol(x, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 118, 9))
+>y : Symbol(y, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 118, 19))
+}
+
+interface I15 extends Base {
+>I15 : Symbol(I15, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 119, 1))
+>Base : Symbol(Base, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 0, 0))
+
+    a4: (x?: number, y?: string) => number;  // ok, same number of required params with matching types
+>a4 : Symbol(I15.a4, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 121, 28))
+>x : Symbol(x, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 122, 9))
+>y : Symbol(y, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 122, 20))
+}
+
+interface I16 extends Base {
+>I16 : Symbol(I16, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 123, 1))
+>Base : Symbol(Base, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 0, 0))
+
+    a4: (x: number, ...args: string[]) => number;  // error, rest param has type mismatch
+>a4 : Symbol(I16.a4, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 125, 28))
+>x : Symbol(x, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 126, 9))
+>args : Symbol(args, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 126, 19))
+}
+
+interface I17 extends Base {
+>I17 : Symbol(I17, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 127, 1))
+>Base : Symbol(Base, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 0, 0))
+
+    a4: (...args: number[]) => number; // error
+>a4 : Symbol(I17.a4, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 129, 28))
+>args : Symbol(args, Decl(subtypingWithCallSignaturesWithRestParameters.ts, 130, 9))
+}
+

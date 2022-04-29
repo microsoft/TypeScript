@@ -1,0 +1,47 @@
+=== tests/cases/compiler/declFileExportAssignmentImportInternalModule.ts ===
+module m3 {
+>m3 : typeof m3
+
+    export module m2 {
+        export interface connectModule {
+            (res, req, next): void;
+>res : any
+>req : any
+>next : any
+        }
+        export interface connectExport {
+            use: (mod: connectModule) => connectExport;
+>use : (mod: connectModule) => connectExport
+>mod : connectModule
+
+            listen: (port: number) => void;
+>listen : (port: number) => void
+>port : number
+        }
+
+    }
+
+    export var server: {
+>server : { (): m2.connectExport; test1: m2.connectModule; test2(): m2.connectModule; }
+
+        (): m2.connectExport;
+>m2 : any
+
+        test1: m2.connectModule;
+>test1 : m2.connectModule
+>m2 : any
+
+        test2(): m2.connectModule;
+>test2 : () => m2.connectModule
+>m2 : any
+
+    };
+}
+
+import m = m3
+>m : typeof m3
+>m3 : typeof m3
+
+export = m;
+>m : typeof m3
+

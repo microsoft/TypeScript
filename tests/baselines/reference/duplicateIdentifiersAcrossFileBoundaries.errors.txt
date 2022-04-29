@@ -1,0 +1,61 @@
+tests/cases/compiler/file1.ts(3,7): error TS2813: Class declaration cannot implement overload list for 'C2'.
+tests/cases/compiler/file1.ts(4,10): error TS2814: Function with bodies can only merge with classes that are ambient.
+tests/cases/compiler/file1.ts(8,12): error TS2300: Duplicate identifier 'x'.
+tests/cases/compiler/file2.ts(3,10): error TS2814: Function with bodies can only merge with classes that are ambient.
+tests/cases/compiler/file2.ts(4,7): error TS2813: Class declaration cannot implement overload list for 'f'.
+tests/cases/compiler/file2.ts(7,8): error TS2433: A namespace declaration cannot be in a different file from a class or function with which it is merged.
+tests/cases/compiler/file2.ts(8,16): error TS2300: Duplicate identifier 'x'.
+
+
+==== tests/cases/compiler/file1.ts (3 errors) ====
+    interface I { }
+    class C1 { }
+    class C2 { }
+          ~~
+!!! error TS2813: Class declaration cannot implement overload list for 'C2'.
+!!! related TS6506 tests/cases/compiler/file1.ts:3:7: Consider adding a 'declare' modifier to this class.
+    function f() { }
+             ~
+!!! error TS2814: Function with bodies can only merge with classes that are ambient.
+!!! related TS6506 tests/cases/compiler/file2.ts:4:7: Consider adding a 'declare' modifier to this class.
+    var v = 3;
+    
+    class Foo {
+        static x: number;
+               ~
+!!! error TS2300: Duplicate identifier 'x'.
+!!! related TS6203 tests/cases/compiler/file2.ts:8:16: 'x' was also declared here.
+    }
+    
+    module N {
+        export module F {
+            var t;
+        }
+    }
+    
+==== tests/cases/compiler/file2.ts (4 errors) ====
+    class I { } // error -- cannot merge interface with non-ambient class
+    interface C1 { } // error -- cannot merge interface with non-ambient class
+    function C2() { } // error -- cannot merge function with non-ambient class
+             ~~
+!!! error TS2814: Function with bodies can only merge with classes that are ambient.
+!!! related TS6506 tests/cases/compiler/file1.ts:3:7: Consider adding a 'declare' modifier to this class.
+    class f { } // error -- cannot merge function with non-ambient class
+          ~
+!!! error TS2813: Class declaration cannot implement overload list for 'f'.
+!!! related TS6506 tests/cases/compiler/file2.ts:4:7: Consider adding a 'declare' modifier to this class.
+    var v = 3;
+    
+    module Foo {
+           ~~~
+!!! error TS2433: A namespace declaration cannot be in a different file from a class or function with which it is merged.
+        export var x: number; // error for redeclaring var in a different parent
+                   ~
+!!! error TS2300: Duplicate identifier 'x'.
+!!! related TS6203 tests/cases/compiler/file1.ts:8:12: 'x' was also declared here.
+    }
+    
+    declare module N {
+        export function F(); // no error because function is ambient
+    }
+    

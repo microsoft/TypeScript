@@ -1,0 +1,11 @@
+=== tests/cases/conformance/es6/templates/templateStringInConditional.ts ===
+var x = `abc${ " " }def` ? `abc${ " " }def` : `abc${ " " }def`;
+>x : string
+>`abc${ " " }def` ? `abc${ " " }def` : `abc${ " " }def` : string
+>`abc${ " " }def` : string
+>" " : " "
+>`abc${ " " }def` : string
+>" " : " "
+>`abc${ " " }def` : string
+>" " : " "
+

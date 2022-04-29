@@ -1,0 +1,93 @@
+=== tests/cases/conformance/controlFlow/controlFlowBinaryOrExpression.ts ===
+let x: string | number | boolean;
+>x : Symbol(x, Decl(controlFlowBinaryOrExpression.ts, 0, 3))
+
+let cond: boolean;
+>cond : Symbol(cond, Decl(controlFlowBinaryOrExpression.ts, 1, 3))
+
+(x = "") || (x = 0);
+>x : Symbol(x, Decl(controlFlowBinaryOrExpression.ts, 0, 3))
+>x : Symbol(x, Decl(controlFlowBinaryOrExpression.ts, 0, 3))
+
+x; // string | number
+>x : Symbol(x, Decl(controlFlowBinaryOrExpression.ts, 0, 3))
+
+x = "";
+>x : Symbol(x, Decl(controlFlowBinaryOrExpression.ts, 0, 3))
+
+cond || (x = 0);
+>cond : Symbol(cond, Decl(controlFlowBinaryOrExpression.ts, 1, 3))
+>x : Symbol(x, Decl(controlFlowBinaryOrExpression.ts, 0, 3))
+
+x; // string | number
+>x : Symbol(x, Decl(controlFlowBinaryOrExpression.ts, 0, 3))
+
+export interface NodeList {
+>NodeList : Symbol(NodeList, Decl(controlFlowBinaryOrExpression.ts, 8, 2))
+
+    length: number;
+>length : Symbol(NodeList.length, Decl(controlFlowBinaryOrExpression.ts, 10, 27))
+}
+
+export interface HTMLCollection {
+>HTMLCollection : Symbol(HTMLCollection, Decl(controlFlowBinaryOrExpression.ts, 12, 1))
+
+    length: number;
+>length : Symbol(HTMLCollection.length, Decl(controlFlowBinaryOrExpression.ts, 14, 33))
+}
+
+declare function isNodeList(sourceObj: any): sourceObj is NodeList;
+>isNodeList : Symbol(isNodeList, Decl(controlFlowBinaryOrExpression.ts, 16, 1))
+>sourceObj : Symbol(sourceObj, Decl(controlFlowBinaryOrExpression.ts, 18, 28))
+>sourceObj : Symbol(sourceObj, Decl(controlFlowBinaryOrExpression.ts, 18, 28))
+>NodeList : Symbol(NodeList, Decl(controlFlowBinaryOrExpression.ts, 8, 2))
+
+declare function isHTMLCollection(sourceObj: any): sourceObj is HTMLCollection;
+>isHTMLCollection : Symbol(isHTMLCollection, Decl(controlFlowBinaryOrExpression.ts, 18, 67))
+>sourceObj : Symbol(sourceObj, Decl(controlFlowBinaryOrExpression.ts, 19, 34))
+>sourceObj : Symbol(sourceObj, Decl(controlFlowBinaryOrExpression.ts, 19, 34))
+>HTMLCollection : Symbol(HTMLCollection, Decl(controlFlowBinaryOrExpression.ts, 12, 1))
+
+type EventTargetLike = {a: string} | HTMLCollection | NodeList;
+>EventTargetLike : Symbol(EventTargetLike, Decl(controlFlowBinaryOrExpression.ts, 19, 79))
+>a : Symbol(a, Decl(controlFlowBinaryOrExpression.ts, 21, 24))
+>HTMLCollection : Symbol(HTMLCollection, Decl(controlFlowBinaryOrExpression.ts, 12, 1))
+>NodeList : Symbol(NodeList, Decl(controlFlowBinaryOrExpression.ts, 8, 2))
+
+var sourceObj: EventTargetLike = <any>undefined;
+>sourceObj : Symbol(sourceObj, Decl(controlFlowBinaryOrExpression.ts, 23, 3))
+>EventTargetLike : Symbol(EventTargetLike, Decl(controlFlowBinaryOrExpression.ts, 19, 79))
+>undefined : Symbol(undefined)
+
+if (isNodeList(sourceObj)) {
+>isNodeList : Symbol(isNodeList, Decl(controlFlowBinaryOrExpression.ts, 16, 1))
+>sourceObj : Symbol(sourceObj, Decl(controlFlowBinaryOrExpression.ts, 23, 3))
+
+    sourceObj.length;
+>sourceObj.length : Symbol(length, Decl(controlFlowBinaryOrExpression.ts, 10, 27), Decl(controlFlowBinaryOrExpression.ts, 14, 33))
+>sourceObj : Symbol(sourceObj, Decl(controlFlowBinaryOrExpression.ts, 23, 3))
+>length : Symbol(length, Decl(controlFlowBinaryOrExpression.ts, 10, 27), Decl(controlFlowBinaryOrExpression.ts, 14, 33))
+}
+
+if (isHTMLCollection(sourceObj)) {
+>isHTMLCollection : Symbol(isHTMLCollection, Decl(controlFlowBinaryOrExpression.ts, 18, 67))
+>sourceObj : Symbol(sourceObj, Decl(controlFlowBinaryOrExpression.ts, 23, 3))
+
+    sourceObj.length;
+>sourceObj.length : Symbol(length, Decl(controlFlowBinaryOrExpression.ts, 10, 27), Decl(controlFlowBinaryOrExpression.ts, 14, 33))
+>sourceObj : Symbol(sourceObj, Decl(controlFlowBinaryOrExpression.ts, 23, 3))
+>length : Symbol(length, Decl(controlFlowBinaryOrExpression.ts, 10, 27), Decl(controlFlowBinaryOrExpression.ts, 14, 33))
+}
+
+if (isNodeList(sourceObj) || isHTMLCollection(sourceObj)) {
+>isNodeList : Symbol(isNodeList, Decl(controlFlowBinaryOrExpression.ts, 16, 1))
+>sourceObj : Symbol(sourceObj, Decl(controlFlowBinaryOrExpression.ts, 23, 3))
+>isHTMLCollection : Symbol(isHTMLCollection, Decl(controlFlowBinaryOrExpression.ts, 18, 67))
+>sourceObj : Symbol(sourceObj, Decl(controlFlowBinaryOrExpression.ts, 23, 3))
+
+    sourceObj.length;
+>sourceObj.length : Symbol(NodeList.length, Decl(controlFlowBinaryOrExpression.ts, 10, 27))
+>sourceObj : Symbol(sourceObj, Decl(controlFlowBinaryOrExpression.ts, 23, 3))
+>length : Symbol(NodeList.length, Decl(controlFlowBinaryOrExpression.ts, 10, 27))
+}
+

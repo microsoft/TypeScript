@@ -1,0 +1,15 @@
+{
+    "scenario": "relative - global - ref",
+    "projectRoot": "tests/cases/projects/relative-global-ref",
+    "inputFiles": [
+        "consume.ts"
+    ],
+    "resolvedInputFiles": [
+        "lib.es5.d.ts",
+        "decl.d.ts",
+        "consume.ts"
+    ],
+    "emittedFiles": [
+        "consume.js"
+    ]
+}

@@ -1,0 +1,72 @@
+=== tests/cases/compiler/duplicateVariablesByScope.ts ===
+// duplicate local variables are only reported at global scope
+
+module M {
+>M : typeof M
+
+    for (var j = 0; j < 10; j++) {
+>j : number
+>0 : 0
+>j < 10 : boolean
+>j : number
+>10 : 10
+>j++ : number
+>j : number
+    }
+
+    for (var j = 0; j < 10; j++) {
+>j : number
+>0 : 0
+>j < 10 : boolean
+>j : number
+>10 : 10
+>j++ : number
+>j : number
+    }
+}
+
+function foo() {
+>foo : () => void
+
+    var x = 2;
+>x : number
+>2 : 2
+
+    var x = 1;
+>x : number
+>1 : 1
+
+    if (true) {
+>true : true
+
+        var result = 1;
+>result : number
+>1 : 1
+    }
+    else {
+        var result = 2;
+>result : number
+>2 : 2
+    }
+}
+
+class C {
+>C : C
+
+    foo() {
+>foo : () => void
+
+        try {
+            var x = 1;
+>x : number
+>1 : 1
+        }
+        catch (e) {
+>e : any
+
+            var x = 2;
+>x : number
+>2 : 2
+        }
+    }
+}

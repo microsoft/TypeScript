@@ -1,0 +1,30 @@
+=== tests/cases/compiler/parseShortform.ts ===
+interface I {
+    w: {
+>w : { (): boolean; [s: string]: { x: any; y: any; }; [n: number]: { x: any; y: any; }; z: I; }
+
+        z: I;
+>z : I
+
+        (): boolean;
+        [s: string]: { x: any; y: any; };
+>s : string
+>x : any
+>y : any
+
+        [n: number]: { x: any; y: any; };
+>n : number
+>x : any
+>y : any
+
+    };
+    x: boolean;
+>x : boolean
+
+    y: (s: string) => boolean;
+>y : (s: string) => boolean
+>s : string
+
+    z: I; 
+>z : I
+}

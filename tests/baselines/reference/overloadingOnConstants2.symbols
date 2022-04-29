@@ -1,0 +1,89 @@
+=== tests/cases/compiler/overloadingOnConstants2.ts ===
+class C {
+>C : Symbol(C, Decl(overloadingOnConstants2.ts, 0, 0))
+
+   private x = 1;
+>x : Symbol(C.x, Decl(overloadingOnConstants2.ts, 0, 9))
+}
+class D extends C {}
+>D : Symbol(D, Decl(overloadingOnConstants2.ts, 2, 1))
+>C : Symbol(C, Decl(overloadingOnConstants2.ts, 0, 0))
+
+class E { 
+>E : Symbol(E, Decl(overloadingOnConstants2.ts, 3, 20))
+
+   private y = 1;
+>y : Symbol(E.y, Decl(overloadingOnConstants2.ts, 4, 9))
+}
+function foo(x: "hi", items: string[]): D;
+>foo : Symbol(foo, Decl(overloadingOnConstants2.ts, 6, 1), Decl(overloadingOnConstants2.ts, 7, 42), Decl(overloadingOnConstants2.ts, 8, 43))
+>x : Symbol(x, Decl(overloadingOnConstants2.ts, 7, 13))
+>items : Symbol(items, Decl(overloadingOnConstants2.ts, 7, 21))
+>D : Symbol(D, Decl(overloadingOnConstants2.ts, 2, 1))
+
+function foo(x: "bye", items: string[]): E;
+>foo : Symbol(foo, Decl(overloadingOnConstants2.ts, 6, 1), Decl(overloadingOnConstants2.ts, 7, 42), Decl(overloadingOnConstants2.ts, 8, 43))
+>x : Symbol(x, Decl(overloadingOnConstants2.ts, 8, 13))
+>items : Symbol(items, Decl(overloadingOnConstants2.ts, 8, 22))
+>E : Symbol(E, Decl(overloadingOnConstants2.ts, 3, 20))
+
+function foo(x: string, items: string[]): C {
+>foo : Symbol(foo, Decl(overloadingOnConstants2.ts, 6, 1), Decl(overloadingOnConstants2.ts, 7, 42), Decl(overloadingOnConstants2.ts, 8, 43))
+>x : Symbol(x, Decl(overloadingOnConstants2.ts, 9, 13))
+>items : Symbol(items, Decl(overloadingOnConstants2.ts, 9, 23))
+>C : Symbol(C, Decl(overloadingOnConstants2.ts, 0, 0))
+
+   return null;
+}
+var a: D = foo("hi", []); // D
+>a : Symbol(a, Decl(overloadingOnConstants2.ts, 12, 3))
+>D : Symbol(D, Decl(overloadingOnConstants2.ts, 2, 1))
+>foo : Symbol(foo, Decl(overloadingOnConstants2.ts, 6, 1), Decl(overloadingOnConstants2.ts, 7, 42), Decl(overloadingOnConstants2.ts, 8, 43))
+
+var b: E = foo("bye", []); // E 
+>b : Symbol(b, Decl(overloadingOnConstants2.ts, 13, 3))
+>E : Symbol(E, Decl(overloadingOnConstants2.ts, 3, 20))
+>foo : Symbol(foo, Decl(overloadingOnConstants2.ts, 6, 1), Decl(overloadingOnConstants2.ts, 7, 42), Decl(overloadingOnConstants2.ts, 8, 43))
+
+var c = foo("um", []); // error
+>c : Symbol(c, Decl(overloadingOnConstants2.ts, 14, 3))
+>foo : Symbol(foo, Decl(overloadingOnConstants2.ts, 6, 1), Decl(overloadingOnConstants2.ts, 7, 42), Decl(overloadingOnConstants2.ts, 8, 43))
+
+
+//function bar(x: "hi", items: string[]): D;
+function bar(x: "bye", items: string[]): E;
+>bar : Symbol(bar, Decl(overloadingOnConstants2.ts, 14, 22), Decl(overloadingOnConstants2.ts, 18, 43), Decl(overloadingOnConstants2.ts, 19, 44))
+>x : Symbol(x, Decl(overloadingOnConstants2.ts, 18, 13))
+>items : Symbol(items, Decl(overloadingOnConstants2.ts, 18, 22))
+>E : Symbol(E, Decl(overloadingOnConstants2.ts, 3, 20))
+
+function bar(x: string, items: string[]): C;
+>bar : Symbol(bar, Decl(overloadingOnConstants2.ts, 14, 22), Decl(overloadingOnConstants2.ts, 18, 43), Decl(overloadingOnConstants2.ts, 19, 44))
+>x : Symbol(x, Decl(overloadingOnConstants2.ts, 19, 13))
+>items : Symbol(items, Decl(overloadingOnConstants2.ts, 19, 23))
+>C : Symbol(C, Decl(overloadingOnConstants2.ts, 0, 0))
+
+function bar(x: string, items: string[]): C {
+>bar : Symbol(bar, Decl(overloadingOnConstants2.ts, 14, 22), Decl(overloadingOnConstants2.ts, 18, 43), Decl(overloadingOnConstants2.ts, 19, 44))
+>x : Symbol(x, Decl(overloadingOnConstants2.ts, 20, 13))
+>items : Symbol(items, Decl(overloadingOnConstants2.ts, 20, 23))
+>C : Symbol(C, Decl(overloadingOnConstants2.ts, 0, 0))
+
+   return null;
+}
+
+var d: D = bar("hi", []); // D
+>d : Symbol(d, Decl(overloadingOnConstants2.ts, 24, 3))
+>D : Symbol(D, Decl(overloadingOnConstants2.ts, 2, 1))
+>bar : Symbol(bar, Decl(overloadingOnConstants2.ts, 14, 22), Decl(overloadingOnConstants2.ts, 18, 43), Decl(overloadingOnConstants2.ts, 19, 44))
+
+var e: E = bar("bye", []); // E 
+>e : Symbol(e, Decl(overloadingOnConstants2.ts, 25, 3))
+>E : Symbol(E, Decl(overloadingOnConstants2.ts, 3, 20))
+>bar : Symbol(bar, Decl(overloadingOnConstants2.ts, 14, 22), Decl(overloadingOnConstants2.ts, 18, 43), Decl(overloadingOnConstants2.ts, 19, 44))
+
+var f: C = bar("um", []); // C
+>f : Symbol(f, Decl(overloadingOnConstants2.ts, 26, 3))
+>C : Symbol(C, Decl(overloadingOnConstants2.ts, 0, 0))
+>bar : Symbol(bar, Decl(overloadingOnConstants2.ts, 14, 22), Decl(overloadingOnConstants2.ts, 18, 43), Decl(overloadingOnConstants2.ts, 19, 44))
+

@@ -1,0 +1,524 @@
+tests/cases/compiler/privacyImportParseErrors.ts(22,5): error TS2668: 'export' modifier cannot be applied to ambient modules and module augmentations since they are always visible.
+tests/cases/compiler/privacyImportParseErrors.ts(22,27): error TS2435: Ambient modules cannot be nested in other modules or namespaces.
+tests/cases/compiler/privacyImportParseErrors.ts(30,20): error TS2435: Ambient modules cannot be nested in other modules or namespaces.
+tests/cases/compiler/privacyImportParseErrors.ts(59,37): error TS1147: Import declarations in a namespace cannot reference a module.
+tests/cases/compiler/privacyImportParseErrors.ts(59,37): error TS2307: Cannot find module 'm1_M3_public' or its corresponding type declarations.
+tests/cases/compiler/privacyImportParseErrors.ts(69,37): error TS1147: Import declarations in a namespace cannot reference a module.
+tests/cases/compiler/privacyImportParseErrors.ts(69,37): error TS2307: Cannot find module 'm1_M4_private' or its corresponding type declarations.
+tests/cases/compiler/privacyImportParseErrors.ts(81,43): error TS1147: Import declarations in a namespace cannot reference a module.
+tests/cases/compiler/privacyImportParseErrors.ts(82,43): error TS1147: Import declarations in a namespace cannot reference a module.
+tests/cases/compiler/privacyImportParseErrors.ts(106,5): error TS2668: 'export' modifier cannot be applied to ambient modules and module augmentations since they are always visible.
+tests/cases/compiler/privacyImportParseErrors.ts(106,27): error TS2435: Ambient modules cannot be nested in other modules or namespaces.
+tests/cases/compiler/privacyImportParseErrors.ts(114,20): error TS2435: Ambient modules cannot be nested in other modules or namespaces.
+tests/cases/compiler/privacyImportParseErrors.ts(143,37): error TS1147: Import declarations in a namespace cannot reference a module.
+tests/cases/compiler/privacyImportParseErrors.ts(143,37): error TS2307: Cannot find module 'm2_M3_public' or its corresponding type declarations.
+tests/cases/compiler/privacyImportParseErrors.ts(153,37): error TS1147: Import declarations in a namespace cannot reference a module.
+tests/cases/compiler/privacyImportParseErrors.ts(153,37): error TS2307: Cannot find module 'm2_M4_private' or its corresponding type declarations.
+tests/cases/compiler/privacyImportParseErrors.ts(166,43): error TS1147: Import declarations in a namespace cannot reference a module.
+tests/cases/compiler/privacyImportParseErrors.ts(167,43): error TS1147: Import declarations in a namespace cannot reference a module.
+tests/cases/compiler/privacyImportParseErrors.ts(180,1): error TS2668: 'export' modifier cannot be applied to ambient modules and module augmentations since they are always visible.
+tests/cases/compiler/privacyImportParseErrors.ts(180,23): error TS2664: Invalid module name in augmentation, module 'glo_M2_public' cannot be found.
+tests/cases/compiler/privacyImportParseErrors.ts(198,1): error TS2668: 'export' modifier cannot be applied to ambient modules and module augmentations since they are always visible.
+tests/cases/compiler/privacyImportParseErrors.ts(198,23): error TS2664: Invalid module name in augmentation, module 'glo_M4_private' cannot be found.
+tests/cases/compiler/privacyImportParseErrors.ts(218,34): error TS2307: Cannot find module 'glo_M2_public' or its corresponding type declarations.
+tests/cases/compiler/privacyImportParseErrors.ts(238,34): error TS2307: Cannot find module 'glo_M4_private' or its corresponding type declarations.
+tests/cases/compiler/privacyImportParseErrors.ts(251,40): error TS2307: Cannot find module 'glo_M2_public' or its corresponding type declarations.
+tests/cases/compiler/privacyImportParseErrors.ts(252,40): error TS2307: Cannot find module 'glo_M4_private' or its corresponding type declarations.
+tests/cases/compiler/privacyImportParseErrors.ts(255,1): error TS2668: 'export' modifier cannot be applied to ambient modules and module augmentations since they are always visible.
+tests/cases/compiler/privacyImportParseErrors.ts(255,23): error TS2664: Invalid module name in augmentation, module 'use_glo_M1_public' cannot be found.
+tests/cases/compiler/privacyImportParseErrors.ts(258,45): error TS2709: Cannot use namespace 'use_glo_M1_public' as a type.
+tests/cases/compiler/privacyImportParseErrors.ts(261,39): error TS2709: Cannot use namespace 'use_glo_M1_public' as a type.
+tests/cases/compiler/privacyImportParseErrors.ts(264,40): error TS2307: Cannot find module 'glo_M2_public' or its corresponding type declarations.
+tests/cases/compiler/privacyImportParseErrors.ts(273,38): error TS1147: Import declarations in a namespace cannot reference a module.
+tests/cases/compiler/privacyImportParseErrors.ts(277,45): error TS1147: Import declarations in a namespace cannot reference a module.
+tests/cases/compiler/privacyImportParseErrors.ts(284,16): error TS2664: Invalid module name in augmentation, module 'use_glo_M3_private' cannot be found.
+tests/cases/compiler/privacyImportParseErrors.ts(287,46): error TS2709: Cannot use namespace 'use_glo_M3_private' as a type.
+tests/cases/compiler/privacyImportParseErrors.ts(290,40): error TS2709: Cannot use namespace 'use_glo_M3_private' as a type.
+tests/cases/compiler/privacyImportParseErrors.ts(293,41): error TS2307: Cannot find module 'glo_M4_private' or its corresponding type declarations.
+tests/cases/compiler/privacyImportParseErrors.ts(302,38): error TS1147: Import declarations in a namespace cannot reference a module.
+tests/cases/compiler/privacyImportParseErrors.ts(306,45): error TS1147: Import declarations in a namespace cannot reference a module.
+tests/cases/compiler/privacyImportParseErrors.ts(312,16): error TS2664: Invalid module name in augmentation, module 'anotherParseError' cannot be found.
+tests/cases/compiler/privacyImportParseErrors.ts(314,9): error TS1038: A 'declare' modifier cannot be used in an already ambient context.
+tests/cases/compiler/privacyImportParseErrors.ts(314,24): error TS2435: Ambient modules cannot be nested in other modules or namespaces.
+tests/cases/compiler/privacyImportParseErrors.ts(319,16): error TS2435: Ambient modules cannot be nested in other modules or namespaces.
+tests/cases/compiler/privacyImportParseErrors.ts(322,12): error TS2435: Ambient modules cannot be nested in other modules or namespaces.
+tests/cases/compiler/privacyImportParseErrors.ts(326,1): error TS2668: 'export' modifier cannot be applied to ambient modules and module augmentations since they are always visible.
+tests/cases/compiler/privacyImportParseErrors.ts(326,9): error TS1029: 'export' modifier must precede 'declare' modifier.
+tests/cases/compiler/privacyImportParseErrors.ts(326,23): error TS2664: Invalid module name in augmentation, module 'anotherParseError2' cannot be found.
+tests/cases/compiler/privacyImportParseErrors.ts(328,9): error TS1038: A 'declare' modifier cannot be used in an already ambient context.
+tests/cases/compiler/privacyImportParseErrors.ts(328,24): error TS2435: Ambient modules cannot be nested in other modules or namespaces.
+tests/cases/compiler/privacyImportParseErrors.ts(333,16): error TS2435: Ambient modules cannot be nested in other modules or namespaces.
+tests/cases/compiler/privacyImportParseErrors.ts(336,12): error TS2435: Ambient modules cannot be nested in other modules or namespaces.
+tests/cases/compiler/privacyImportParseErrors.ts(341,25): error TS1147: Import declarations in a namespace cannot reference a module.
+tests/cases/compiler/privacyImportParseErrors.ts(344,29): error TS1147: Import declarations in a namespace cannot reference a module.
+tests/cases/compiler/privacyImportParseErrors.ts(350,25): error TS1147: Import declarations in a namespace cannot reference a module.
+tests/cases/compiler/privacyImportParseErrors.ts(353,29): error TS1147: Import declarations in a namespace cannot reference a module.
+
+
+==== tests/cases/compiler/privacyImportParseErrors.ts (55 errors) ====
+    export module m1 {
+        export module m1_M1_public {
+            export class c1 {
+            }
+            export function f1() {
+                return new c1;
+            }
+            export var v1 = c1;
+            export var v2: c1;
+        }
+    
+        module m1_M2_private {
+            export class c1 {
+            }
+            export function f1() {
+                return new c1;
+            }
+            export var v1 = c1;
+            export var v2: c1;
+        }
+    
+        export declare module "m1_M3_public" {
+        ~~~~~~
+!!! error TS2668: 'export' modifier cannot be applied to ambient modules and module augmentations since they are always visible.
+                              ~~~~~~~~~~~~~~
+!!! error TS2435: Ambient modules cannot be nested in other modules or namespaces.
+            export function f1();
+            export class c1 {
+            }
+            export var v1: { new (): c1; };
+            export var v2: c1;
+        }
+    
+        declare module "m1_M4_private" {
+                       ~~~~~~~~~~~~~~~
+!!! error TS2435: Ambient modules cannot be nested in other modules or namespaces.
+            export function f1();
+            export class c1 {
+            }
+            export var v1: { new (): c1; };
+            export var v2: c1;
+        }
+    
+        import m1_im1_private = m1_M1_public;
+        export var m1_im1_private_v1_public = m1_im1_private.c1;
+        export var m1_im1_private_v2_public = new m1_im1_private.c1();
+        export var m1_im1_private_v3_public = m1_im1_private.f1;
+        export var m1_im1_private_v4_public = m1_im1_private.f1();
+        var m1_im1_private_v1_private = m1_im1_private.c1;
+        var m1_im1_private_v2_private = new m1_im1_private.c1();
+        var m1_im1_private_v3_private = m1_im1_private.f1;
+        var m1_im1_private_v4_private = m1_im1_private.f1();
+    
+    
+        import m1_im2_private = m1_M2_private;
+        export var m1_im2_private_v1_public = m1_im2_private.c1;
+        export var m1_im2_private_v2_public = new m1_im2_private.c1();
+        export var m1_im2_private_v3_public = m1_im2_private.f1;
+        export var m1_im2_private_v4_public = m1_im2_private.f1();
+        var m1_im2_private_v1_private = m1_im2_private.c1;
+        var m1_im2_private_v2_private = new m1_im2_private.c1();
+        var m1_im2_private_v3_private = m1_im2_private.f1;
+        var m1_im2_private_v4_private = m1_im2_private.f1();
+    
+        import m1_im3_private = require("m1_M3_public");
+                                        ~~~~~~~~~~~~~~
+!!! error TS1147: Import declarations in a namespace cannot reference a module.
+                                        ~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'm1_M3_public' or its corresponding type declarations.
+        export var m1_im3_private_v1_public = m1_im3_private.c1;
+        export var m1_im3_private_v2_public = new m1_im3_private.c1();
+        export var m1_im3_private_v3_public = m1_im3_private.f1;
+        export var m1_im3_private_v4_public = m1_im3_private.f1();
+        var m1_im3_private_v1_private = m1_im3_private.c1;
+        var m1_im3_private_v2_private = new m1_im3_private.c1();
+        var m1_im3_private_v3_private = m1_im3_private.f1;
+        var m1_im3_private_v4_private = m1_im3_private.f1();
+    
+        import m1_im4_private = require("m1_M4_private");
+                                        ~~~~~~~~~~~~~~~
+!!! error TS1147: Import declarations in a namespace cannot reference a module.
+                                        ~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'm1_M4_private' or its corresponding type declarations.
+        export var m1_im4_private_v1_public = m1_im4_private.c1;
+        export var m1_im4_private_v2_public = new m1_im4_private.c1();
+        export var m1_im4_private_v3_public = m1_im4_private.f1;
+        export var m1_im4_private_v4_public = m1_im4_private.f1();
+        var m1_im4_private_v1_private = m1_im4_private.c1;
+        var m1_im4_private_v2_private = new m1_im4_private.c1();
+        var m1_im4_private_v3_private = m1_im4_private.f1;
+        var m1_im4_private_v4_private = m1_im4_private.f1();
+    
+        export import m1_im1_public = m1_M1_public;
+        export import m1_im2_public = m1_M2_private;
+        export import m1_im3_public = require("m1_M3_public");
+                                              ~~~~~~~~~~~~~~
+!!! error TS1147: Import declarations in a namespace cannot reference a module.
+        export import m1_im4_public = require("m1_M4_private");
+                                              ~~~~~~~~~~~~~~~
+!!! error TS1147: Import declarations in a namespace cannot reference a module.
+    }
+    
+    module m2 {
+        export module m2_M1_public {
+            export class c1 {
+            }
+            export function f1() {
+                return new c1;
+            }
+            export var v1 = c1;
+            export var v2: c1;
+        }
+    
+        module m2_M2_private {
+            export class c1 {
+            }
+            export function f1() {
+                return new c1;
+            }
+            export var v1 = c1;
+            export var v2: c1;
+        }
+    
+        export declare module "m2_M3_public" {
+        ~~~~~~
+!!! error TS2668: 'export' modifier cannot be applied to ambient modules and module augmentations since they are always visible.
+                              ~~~~~~~~~~~~~~
+!!! error TS2435: Ambient modules cannot be nested in other modules or namespaces.
+            export function f1();
+            export class c1 {
+            }
+            export var v1: { new (): c1; };
+            export var v2: c1;
+        }
+    
+        declare module "m2_M4_private" {
+                       ~~~~~~~~~~~~~~~
+!!! error TS2435: Ambient modules cannot be nested in other modules or namespaces.
+            export function f1();
+            export class c1 {
+            }
+            export var v1: { new (): c1; };
+            export var v2: c1;
+        }
+    
+        import m1_im1_private = m2_M1_public;
+        export var m1_im1_private_v1_public = m1_im1_private.c1;
+        export var m1_im1_private_v2_public = new m1_im1_private.c1();
+        export var m1_im1_private_v3_public = m1_im1_private.f1;
+        export var m1_im1_private_v4_public = m1_im1_private.f1();
+        var m1_im1_private_v1_private = m1_im1_private.c1;
+        var m1_im1_private_v2_private = new m1_im1_private.c1();
+        var m1_im1_private_v3_private = m1_im1_private.f1;
+        var m1_im1_private_v4_private = m1_im1_private.f1();
+    
+    
+        import m1_im2_private = m2_M2_private;
+        export var m1_im2_private_v1_public = m1_im2_private.c1;
+        export var m1_im2_private_v2_public = new m1_im2_private.c1();
+        export var m1_im2_private_v3_public = m1_im2_private.f1;
+        export var m1_im2_private_v4_public = m1_im2_private.f1();
+        var m1_im2_private_v1_private = m1_im2_private.c1;
+        var m1_im2_private_v2_private = new m1_im2_private.c1();
+        var m1_im2_private_v3_private = m1_im2_private.f1;
+        var m1_im2_private_v4_private = m1_im2_private.f1();
+    
+        import m1_im3_private = require("m2_M3_public");
+                                        ~~~~~~~~~~~~~~
+!!! error TS1147: Import declarations in a namespace cannot reference a module.
+                                        ~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'm2_M3_public' or its corresponding type declarations.
+        export var m1_im3_private_v1_public = m1_im3_private.c1;
+        export var m1_im3_private_v2_public = new m1_im3_private.c1();
+        export var m1_im3_private_v3_public = m1_im3_private.f1;
+        export var m1_im3_private_v4_public = m1_im3_private.f1();
+        var m1_im3_private_v1_private = m1_im3_private.c1;
+        var m1_im3_private_v2_private = new m1_im3_private.c1();
+        var m1_im3_private_v3_private = m1_im3_private.f1;
+        var m1_im3_private_v4_private = m1_im3_private.f1();
+    
+        import m1_im4_private = require("m2_M4_private");
+                                        ~~~~~~~~~~~~~~~
+!!! error TS1147: Import declarations in a namespace cannot reference a module.
+                                        ~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'm2_M4_private' or its corresponding type declarations.
+        export var m1_im4_private_v1_public = m1_im4_private.c1;
+        export var m1_im4_private_v2_public = new m1_im4_private.c1();
+        export var m1_im4_private_v3_public = m1_im4_private.f1;
+        export var m1_im4_private_v4_public = m1_im4_private.f1();
+        var m1_im4_private_v1_private = m1_im4_private.c1;
+        var m1_im4_private_v2_private = new m1_im4_private.c1();
+        var m1_im4_private_v3_private = m1_im4_private.f1;
+        var m1_im4_private_v4_private = m1_im4_private.f1();
+    
+        // Parse error to export module
+        export import m1_im1_public = m2_M1_public;
+        export import m1_im2_public = m2_M2_private;
+        export import m1_im3_public = require("m2_M3_public");
+                                              ~~~~~~~~~~~~~~
+!!! error TS1147: Import declarations in a namespace cannot reference a module.
+        export import m1_im4_public = require("m2_M4_private");
+                                              ~~~~~~~~~~~~~~~
+!!! error TS1147: Import declarations in a namespace cannot reference a module.
+    }
+    
+    export module glo_M1_public {
+        export class c1 {
+        }
+        export function f1() {
+            return new c1;
+        }
+        export var v1 = c1;
+        export var v2: c1;
+    }
+    
+    export declare module "glo_M2_public" {
+    ~~~~~~
+!!! error TS2668: 'export' modifier cannot be applied to ambient modules and module augmentations since they are always visible.
+                          ~~~~~~~~~~~~~~~
+!!! error TS2664: Invalid module name in augmentation, module 'glo_M2_public' cannot be found.
+        export function f1();
+        export class c1 {
+        }
+        export var v1: { new (): c1; };
+        export var v2: c1;
+    }
+    
+    export module glo_M3_private {
+        export class c1 {
+        }
+        export function f1() {
+            return new c1;
+        }
+        export var v1 = c1;
+        export var v2: c1;
+    }
+    
+    export declare module "glo_M4_private" {
+    ~~~~~~
+!!! error TS2668: 'export' modifier cannot be applied to ambient modules and module augmentations since they are always visible.
+                          ~~~~~~~~~~~~~~~~
+!!! error TS2664: Invalid module name in augmentation, module 'glo_M4_private' cannot be found.
+        export function f1();
+        export class c1 {
+        }
+        export var v1: { new (): c1; };
+        export var v2: c1;
+    }
+    
+    
+    import glo_im1_private = glo_M1_public;
+    export var glo_im1_private_v1_public = glo_im1_private.c1;
+    export var glo_im1_private_v2_public = new glo_im1_private.c1();
+    export var glo_im1_private_v3_public = glo_im1_private.f1;
+    export var glo_im1_private_v4_public = glo_im1_private.f1();
+    var glo_im1_private_v1_private = glo_im1_private.c1;
+    var glo_im1_private_v2_private = new glo_im1_private.c1();
+    var glo_im1_private_v3_private = glo_im1_private.f1;
+    var glo_im1_private_v4_private = glo_im1_private.f1();
+    
+    
+    import glo_im2_private = require("glo_M2_public");
+                                     ~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'glo_M2_public' or its corresponding type declarations.
+    export var glo_im2_private_v1_public = glo_im2_private.c1;
+    export var glo_im2_private_v2_public = new glo_im2_private.c1();
+    export var glo_im2_private_v3_public = glo_im2_private.f1;
+    export var glo_im2_private_v4_public = glo_im2_private.f1();
+    var glo_im2_private_v1_private = glo_im2_private.c1;
+    var glo_im2_private_v2_private = new glo_im2_private.c1();
+    var glo_im2_private_v3_private = glo_im2_private.f1;
+    var glo_im2_private_v4_private = glo_im2_private.f1();
+    
+    import glo_im3_private = glo_M3_private;
+    export var glo_im3_private_v1_public = glo_im3_private.c1;
+    export var glo_im3_private_v2_public = new glo_im3_private.c1();
+    export var glo_im3_private_v3_public = glo_im3_private.f1;
+    export var glo_im3_private_v4_public = glo_im3_private.f1();
+    var glo_im3_private_v1_private = glo_im3_private.c1;
+    var glo_im3_private_v2_private = new glo_im3_private.c1();
+    var glo_im3_private_v3_private = glo_im3_private.f1;
+    var glo_im3_private_v4_private = glo_im3_private.f1();
+    
+    import glo_im4_private = require("glo_M4_private");
+                                     ~~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'glo_M4_private' or its corresponding type declarations.
+    export var glo_im4_private_v1_public = glo_im4_private.c1;
+    export var glo_im4_private_v2_public = new glo_im4_private.c1();
+    export var glo_im4_private_v3_public = glo_im4_private.f1;
+    export var glo_im4_private_v4_public = glo_im4_private.f1();
+    var glo_im4_private_v1_private = glo_im4_private.c1;
+    var glo_im4_private_v2_private = new glo_im4_private.c1();
+    var glo_im4_private_v3_private = glo_im4_private.f1;
+    var glo_im4_private_v4_private = glo_im4_private.f1();
+    
+    // Parse error to export module
+    export import glo_im1_public = glo_M1_public;
+    export import glo_im2_public = glo_M3_private;
+    export import glo_im3_public = require("glo_M2_public");
+                                           ~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'glo_M2_public' or its corresponding type declarations.
+    export import glo_im4_public = require("glo_M4_private");
+                                           ~~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'glo_M4_private' or its corresponding type declarations.
+    
+    
+    export declare module "use_glo_M1_public" {
+    ~~~~~~
+!!! error TS2668: 'export' modifier cannot be applied to ambient modules and module augmentations since they are always visible.
+                          ~~~~~~~~~~~~~~~~~~~
+!!! error TS2664: Invalid module name in augmentation, module 'use_glo_M1_public' cannot be found.
+        import use_glo_M1_public = glo_M1_public;
+        export var use_glo_M1_public_v1_public: { new (): use_glo_M1_public.c1; };
+        export var use_glo_M1_public_v2_public: use_glo_M1_public;
+                                                ~~~~~~~~~~~~~~~~~
+!!! error TS2709: Cannot use namespace 'use_glo_M1_public' as a type.
+        export var use_glo_M1_public_v3_public: () => use_glo_M1_public.c1;
+        var use_glo_M1_public_v1_private: { new (): use_glo_M1_public.c1; };
+        var use_glo_M1_public_v2_private: use_glo_M1_public;
+                                          ~~~~~~~~~~~~~~~~~
+!!! error TS2709: Cannot use namespace 'use_glo_M1_public' as a type.
+        var use_glo_M1_public_v3_private: () => use_glo_M1_public.c1;
+    
+        import use_glo_M2_public = require("glo_M2_public");
+                                           ~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'glo_M2_public' or its corresponding type declarations.
+        export var use_glo_M2_public_v1_public: { new (): use_glo_M2_public.c1; };
+        export var use_glo_M2_public_v2_public: use_glo_M2_public;
+        export var use_glo_M2_public_v3_public: () => use_glo_M2_public.c1;
+        var use_glo_M2_public_v1_private: { new (): use_glo_M2_public.c1; };
+        var use_glo_M2_public_v2_private: use_glo_M2_public;
+        var use_glo_M2_public_v3_private: () => use_glo_M2_public.c1;
+    
+        module m2 {
+            import errorImport = require("glo_M2_public");
+                                         ~~~~~~~~~~~~~~~
+!!! error TS1147: Import declarations in a namespace cannot reference a module.
+            import nonerrorImport = glo_M1_public;
+    
+            module m5 {
+                import m5_errorImport = require("glo_M2_public");
+                                                ~~~~~~~~~~~~~~~
+!!! error TS1147: Import declarations in a namespace cannot reference a module.
+                import m5_nonerrorImport = glo_M1_public;
+            }
+        }
+    }
+    
+    
+    declare module "use_glo_M3_private" {
+                   ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2664: Invalid module name in augmentation, module 'use_glo_M3_private' cannot be found.
+        import use_glo_M3_private = glo_M3_private;
+        export var use_glo_M3_private_v1_public: { new (): use_glo_M3_private.c1; };
+        export var use_glo_M3_private_v2_public: use_glo_M3_private;
+                                                 ~~~~~~~~~~~~~~~~~~
+!!! error TS2709: Cannot use namespace 'use_glo_M3_private' as a type.
+        export var use_glo_M3_private_v3_public: () => use_glo_M3_private.c1;
+        var use_glo_M3_private_v1_private: { new (): use_glo_M3_private.c1; };
+        var use_glo_M3_private_v2_private: use_glo_M3_private;
+                                           ~~~~~~~~~~~~~~~~~~
+!!! error TS2709: Cannot use namespace 'use_glo_M3_private' as a type.
+        var use_glo_M3_private_v3_private: () => use_glo_M3_private.c1;
+    
+        import use_glo_M4_private = require("glo_M4_private");
+                                            ~~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'glo_M4_private' or its corresponding type declarations.
+        export var use_glo_M4_private_v1_public: { new (): use_glo_M4_private.c1; };
+        export var use_glo_M4_private_v2_public: use_glo_M4_private;
+        export var use_glo_M4_private_v3_public: () => use_glo_M4_private.c1;
+        var use_glo_M4_private_v1_private: { new (): use_glo_M4_private.c1; };
+        var use_glo_M4_private_v2_private: use_glo_M4_private;
+        var use_glo_M4_private_v3_private: () => use_glo_M4_private.c1;
+    
+        module m2 {
+            import errorImport = require("glo_M4_private");
+                                         ~~~~~~~~~~~~~~~~
+!!! error TS1147: Import declarations in a namespace cannot reference a module.
+            import nonerrorImport = glo_M3_private;
+    
+            module m5 {
+                import m5_errorImport = require("glo_M4_private");
+                                                ~~~~~~~~~~~~~~~~
+!!! error TS1147: Import declarations in a namespace cannot reference a module.
+                import m5_nonerrorImport = glo_M3_private;
+            }
+        }
+    }
+    
+    declare module "anotherParseError" {
+                   ~~~~~~~~~~~~~~~~~~~
+!!! error TS2664: Invalid module name in augmentation, module 'anotherParseError' cannot be found.
+        module m2 {
+            declare module "abc" {
+            ~~~~~~~
+!!! error TS1038: A 'declare' modifier cannot be used in an already ambient context.
+                           ~~~~~
+!!! error TS2435: Ambient modules cannot be nested in other modules or namespaces.
+            }
+        }
+    
+        module m2 {
+            module "abc2" {
+                   ~~~~~~
+!!! error TS2435: Ambient modules cannot be nested in other modules or namespaces.
+            }
+        }
+        module "abc3" {
+               ~~~~~~
+!!! error TS2435: Ambient modules cannot be nested in other modules or namespaces.
+        }
+    }
+    
+    declare export module "anotherParseError2" {
+    ~~~~~~~
+!!! error TS2668: 'export' modifier cannot be applied to ambient modules and module augmentations since they are always visible.
+            ~~~~~~
+!!! error TS1029: 'export' modifier must precede 'declare' modifier.
+                          ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2664: Invalid module name in augmentation, module 'anotherParseError2' cannot be found.
+        module m2 {
+            declare module "abc" {
+            ~~~~~~~
+!!! error TS1038: A 'declare' modifier cannot be used in an already ambient context.
+                           ~~~~~
+!!! error TS2435: Ambient modules cannot be nested in other modules or namespaces.
+            }
+        }
+    
+        module m2 {
+            module "abc2" {
+                   ~~~~~~
+!!! error TS2435: Ambient modules cannot be nested in other modules or namespaces.
+            }
+        }
+        module "abc3" {
+               ~~~~~~
+!!! error TS2435: Ambient modules cannot be nested in other modules or namespaces.
+        }
+    }
+    
+    module m2 {
+        import m3 = require("use_glo_M1_public");
+                            ~~~~~~~~~~~~~~~~~~~
+!!! error TS1147: Import declarations in a namespace cannot reference a module.
+        module m4 {
+            var a = 10;
+            import m2 = require("use_glo_M1_public");
+                                ~~~~~~~~~~~~~~~~~~~
+!!! error TS1147: Import declarations in a namespace cannot reference a module.
+        }
+    
+    }
+    
+    export module m3 {
+        import m3 = require("use_glo_M1_public");
+                            ~~~~~~~~~~~~~~~~~~~
+!!! error TS1147: Import declarations in a namespace cannot reference a module.
+        module m4 {
+            var a = 10;
+            import m2 = require("use_glo_M1_public");
+                                ~~~~~~~~~~~~~~~~~~~
+!!! error TS1147: Import declarations in a namespace cannot reference a module.
+        }
+    
+    }

@@ -1,0 +1,85 @@
+=== tests/cases/compiler/inlinedAliasAssignableToConstraintSameAsAlias.ts ===
+interface RelationFields {
+>RelationFields : Symbol(RelationFields, Decl(inlinedAliasAssignableToConstraintSameAsAlias.ts, 0, 0))
+
+  x: A;
+>x : Symbol(RelationFields.x, Decl(inlinedAliasAssignableToConstraintSameAsAlias.ts, 0, 26))
+>A : Symbol(A, Decl(inlinedAliasAssignableToConstraintSameAsAlias.ts, 8, 10))
+
+  y: A[];
+>y : Symbol(RelationFields.y, Decl(inlinedAliasAssignableToConstraintSameAsAlias.ts, 1, 7))
+>A : Symbol(A, Decl(inlinedAliasAssignableToConstraintSameAsAlias.ts, 8, 10))
+
+  z: A[];
+>z : Symbol(RelationFields.z, Decl(inlinedAliasAssignableToConstraintSameAsAlias.ts, 2, 9))
+>A : Symbol(A, Decl(inlinedAliasAssignableToConstraintSameAsAlias.ts, 8, 10))
+}
+type Name = keyof RelationFields;
+>Name : Symbol(Name, Decl(inlinedAliasAssignableToConstraintSameAsAlias.ts, 4, 1))
+>RelationFields : Symbol(RelationFields, Decl(inlinedAliasAssignableToConstraintSameAsAlias.ts, 0, 0))
+
+type ShouldA<RF extends RelationFields, N extends Name> = RF[N] extends A[]
+>ShouldA : Symbol(ShouldA, Decl(inlinedAliasAssignableToConstraintSameAsAlias.ts, 5, 33))
+>RF : Symbol(RF, Decl(inlinedAliasAssignableToConstraintSameAsAlias.ts, 6, 13))
+>RelationFields : Symbol(RelationFields, Decl(inlinedAliasAssignableToConstraintSameAsAlias.ts, 0, 0))
+>N : Symbol(N, Decl(inlinedAliasAssignableToConstraintSameAsAlias.ts, 6, 39))
+>Name : Symbol(Name, Decl(inlinedAliasAssignableToConstraintSameAsAlias.ts, 4, 1))
+>RF : Symbol(RF, Decl(inlinedAliasAssignableToConstraintSameAsAlias.ts, 6, 13))
+>N : Symbol(N, Decl(inlinedAliasAssignableToConstraintSameAsAlias.ts, 6, 39))
+>A : Symbol(A, Decl(inlinedAliasAssignableToConstraintSameAsAlias.ts, 8, 10))
+
+  ? RF[N][0]
+>RF : Symbol(RF, Decl(inlinedAliasAssignableToConstraintSameAsAlias.ts, 6, 13))
+>N : Symbol(N, Decl(inlinedAliasAssignableToConstraintSameAsAlias.ts, 6, 39))
+
+  : never;
+
+class A {
+>A : Symbol(A, Decl(inlinedAliasAssignableToConstraintSameAsAlias.ts, 8, 10))
+
+  x: A;
+>x : Symbol(A.x, Decl(inlinedAliasAssignableToConstraintSameAsAlias.ts, 10, 9))
+>A : Symbol(A, Decl(inlinedAliasAssignableToConstraintSameAsAlias.ts, 8, 10))
+
+  y: A[];
+>y : Symbol(A.y, Decl(inlinedAliasAssignableToConstraintSameAsAlias.ts, 11, 7))
+>A : Symbol(A, Decl(inlinedAliasAssignableToConstraintSameAsAlias.ts, 8, 10))
+
+  z: A[];
+>z : Symbol(A.z, Decl(inlinedAliasAssignableToConstraintSameAsAlias.ts, 12, 9))
+>A : Symbol(A, Decl(inlinedAliasAssignableToConstraintSameAsAlias.ts, 8, 10))
+
+  whereRelated< // Works // Type is same as A1, but is not assignable to type A
+>whereRelated : Symbol(A.whereRelated, Decl(inlinedAliasAssignableToConstraintSameAsAlias.ts, 13, 9))
+
+    RF extends RelationFields = RelationFields,
+>RF : Symbol(RF, Decl(inlinedAliasAssignableToConstraintSameAsAlias.ts, 15, 15))
+>RelationFields : Symbol(RelationFields, Decl(inlinedAliasAssignableToConstraintSameAsAlias.ts, 0, 0))
+>RelationFields : Symbol(RelationFields, Decl(inlinedAliasAssignableToConstraintSameAsAlias.ts, 0, 0))
+
+    N extends Name = Name,
+>N : Symbol(N, Decl(inlinedAliasAssignableToConstraintSameAsAlias.ts, 16, 47))
+>Name : Symbol(Name, Decl(inlinedAliasAssignableToConstraintSameAsAlias.ts, 4, 1))
+>Name : Symbol(Name, Decl(inlinedAliasAssignableToConstraintSameAsAlias.ts, 4, 1))
+
+    A1 extends A = RF[N] extends A[] ? RF[N][0] : never,
+>A1 : Symbol(A1, Decl(inlinedAliasAssignableToConstraintSameAsAlias.ts, 17, 26))
+>A : Symbol(A, Decl(inlinedAliasAssignableToConstraintSameAsAlias.ts, 8, 10))
+>RF : Symbol(RF, Decl(inlinedAliasAssignableToConstraintSameAsAlias.ts, 15, 15))
+>N : Symbol(N, Decl(inlinedAliasAssignableToConstraintSameAsAlias.ts, 16, 47))
+>A : Symbol(A, Decl(inlinedAliasAssignableToConstraintSameAsAlias.ts, 8, 10))
+>RF : Symbol(RF, Decl(inlinedAliasAssignableToConstraintSameAsAlias.ts, 15, 15))
+>N : Symbol(N, Decl(inlinedAliasAssignableToConstraintSameAsAlias.ts, 16, 47))
+
+    A2 extends A = ShouldA<RF, N>
+>A2 : Symbol(A2, Decl(inlinedAliasAssignableToConstraintSameAsAlias.ts, 18, 56))
+>A : Symbol(A, Decl(inlinedAliasAssignableToConstraintSameAsAlias.ts, 8, 10))
+>ShouldA : Symbol(ShouldA, Decl(inlinedAliasAssignableToConstraintSameAsAlias.ts, 5, 33))
+>RF : Symbol(RF, Decl(inlinedAliasAssignableToConstraintSameAsAlias.ts, 15, 15))
+>N : Symbol(N, Decl(inlinedAliasAssignableToConstraintSameAsAlias.ts, 16, 47))
+
+  >(): number {
+    return 1;
+  }
+}
+

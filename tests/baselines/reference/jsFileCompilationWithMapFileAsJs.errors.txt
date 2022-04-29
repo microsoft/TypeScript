@@ -1,0 +1,23 @@
+error TS5055: Cannot write file 'tests/cases/compiler/b.js' because it would overwrite input file.
+  Adding a tsconfig.json file will help organize projects that contain both TypeScript and JavaScript files. Learn more at https://aka.ms/tsconfig.
+error TS6054: File 'tests/cases/compiler/b.js.map' has an unsupported extension. The only supported extensions are '.ts', '.tsx', '.d.ts', '.js', '.jsx', '.cts', '.d.cts', '.cjs', '.mts', '.d.mts', '.mjs'.
+  The file is in the program because:
+    Root file specified for compilation
+
+
+!!! error TS5055: Cannot write file 'tests/cases/compiler/b.js' because it would overwrite input file.
+!!! error TS5055:   Adding a tsconfig.json file will help organize projects that contain both TypeScript and JavaScript files. Learn more at https://aka.ms/tsconfig.
+!!! error TS6054: File 'tests/cases/compiler/b.js.map' has an unsupported extension. The only supported extensions are '.ts', '.tsx', '.d.ts', '.js', '.jsx', '.cts', '.d.cts', '.cjs', '.mts', '.d.mts', '.mjs'.
+!!! error TS6054:   The file is in the program because:
+!!! error TS6054:     Root file specified for compilation
+==== tests/cases/compiler/a.ts (0 errors) ====
+    class c {
+    }
+    
+==== tests/cases/compiler/b.js.map (0 errors) ====
+    function foo() {
+    }
+    
+==== tests/cases/compiler/b.js (0 errors) ====
+    function bar() {
+    }

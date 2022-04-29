@@ -1,0 +1,27 @@
+tests/cases/conformance/expressions/functionCalls/callOverload.ts(7,7): error TS2554: Expected 1 arguments, but got 4.
+tests/cases/conformance/expressions/functionCalls/callOverload.ts(8,15): error TS2554: Expected 2 arguments, but got 4.
+tests/cases/conformance/expressions/functionCalls/callOverload.ts(10,1): error TS2555: Expected at least 1 arguments, but got 0.
+tests/cases/conformance/expressions/functionCalls/callOverload.ts(11,10): error TS2556: A spread argument must either have a tuple type or be passed to a rest parameter.
+
+
+==== tests/cases/conformance/expressions/functionCalls/callOverload.ts (4 errors) ====
+    declare function fn(x: any): void;
+    declare function takeTwo(x: any, y: any): void;
+    declare function withRest(a: any, ...args: Array<any>): void;
+    var n: number[];
+    
+    fn(1) // no error
+    fn(1, 2, 3, 4)
+          ~~~~~~~
+!!! error TS2554: Expected 1 arguments, but got 4.
+    takeTwo(1, 2, 3, 4)
+                  ~~~~
+!!! error TS2554: Expected 2 arguments, but got 4.
+    withRest('a', ...n); // no error
+    withRest();
+    ~~~~~~~~~~
+!!! error TS2555: Expected at least 1 arguments, but got 0.
+!!! related TS6210 tests/cases/conformance/expressions/functionCalls/callOverload.ts:3:27: An argument for 'a' was not provided.
+    withRest(...n); 
+             ~~~~
+!!! error TS2556: A spread argument must either have a tuple type or be passed to a rest parameter.

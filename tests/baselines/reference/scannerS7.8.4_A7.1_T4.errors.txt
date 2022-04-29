@@ -1,0 +1,21 @@
+tests/cases/conformance/scanner/ecmascript5/scannerS7.8.4_A7.1_T4.ts(13,7): error TS1125: Hexadecimal digit expected.
+
+
+==== tests/cases/conformance/scanner/ecmascript5/scannerS7.8.4_A7.1_T4.ts (1 errors) ====
+    // Copyright 2009 the Sputnik authors.  All rights reserved.
+    // This code is governed by the BSD license found in the LICENSE file.
+    
+    /**
+     * EscapeSequence :: UnicodeEscapeSequence :: u HexDigit HexDigit HexDigit HexDigit
+     *
+     * @path ch07/7.8/7.8.4/S7.8.4_A7.1_T4.js
+     * @description UnicodeEscapeSequence :: u000G is incorrect
+     * @negative
+     */
+    
+    //CHECK#
+    "\u000G"
+          
+!!! error TS1125: Hexadecimal digit expected.
+    
+    

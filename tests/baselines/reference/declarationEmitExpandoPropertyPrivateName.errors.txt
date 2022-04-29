@@ -1,0 +1,14 @@
+tests/cases/compiler/b.ts(4,1): error TS4032: Property 'val' of exported interface has or is using name 'I' from private module '"tests/cases/compiler/a"'.
+
+
+==== tests/cases/compiler/a.ts (0 errors) ====
+    interface I {}
+    export function f(): I { return null as I; }
+==== tests/cases/compiler/b.ts (1 errors) ====
+    import {f} from "./a";
+    
+    export function q() {}
+    q.val = f();
+    ~~~~~
+!!! error TS4032: Property 'val' of exported interface has or is using name 'I' from private module '"tests/cases/compiler/a"'.
+    

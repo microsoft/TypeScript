@@ -1,0 +1,184 @@
+=== tests/cases/conformance/expressions/typeGuards/typeGuardsInModule.ts ===
+// Note that type guards affect types of variables and parameters only and 
+// have no effect on members of objects such as properties. 
+
+// variables in global
+var num: number;
+>num : Symbol(num, Decl(typeGuardsInModule.ts, 4, 3))
+
+var strOrNum: string | number;
+>strOrNum : Symbol(strOrNum, Decl(typeGuardsInModule.ts, 5, 3))
+
+var var1: string | number;
+>var1 : Symbol(var1, Decl(typeGuardsInModule.ts, 6, 3))
+
+// Inside module
+module m1 {
+>m1 : Symbol(m1, Decl(typeGuardsInModule.ts, 6, 26))
+
+    // global vars in function declaration
+    num = typeof var1 === "string" && var1.length; // string
+>num : Symbol(num, Decl(typeGuardsInModule.ts, 4, 3))
+>var1 : Symbol(var1, Decl(typeGuardsInModule.ts, 6, 3))
+>var1.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>var1 : Symbol(var1, Decl(typeGuardsInModule.ts, 6, 3))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+    // variables in module declaration
+    var var2: string | number;
+>var2 : Symbol(var2, Decl(typeGuardsInModule.ts, 13, 7))
+
+    if (typeof var2 === "string") {
+>var2 : Symbol(var2, Decl(typeGuardsInModule.ts, 13, 7))
+
+        num = var2.length; // string
+>num : Symbol(num, Decl(typeGuardsInModule.ts, 4, 3))
+>var2.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>var2 : Symbol(var2, Decl(typeGuardsInModule.ts, 13, 7))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+    }
+    else {
+        num = var2; // number
+>num : Symbol(num, Decl(typeGuardsInModule.ts, 4, 3))
+>var2 : Symbol(var2, Decl(typeGuardsInModule.ts, 13, 7))
+    }
+
+    // exported variable in the module
+    export var var3: string | number;
+>var3 : Symbol(var3, Decl(typeGuardsInModule.ts, 22, 14))
+
+    if (typeof var3 === "string") {
+>var3 : Symbol(var3, Decl(typeGuardsInModule.ts, 22, 14))
+
+        strOrNum = var3; // string | number
+>strOrNum : Symbol(strOrNum, Decl(typeGuardsInModule.ts, 5, 3))
+>var3 : Symbol(var3, Decl(typeGuardsInModule.ts, 22, 14))
+    }
+    else {
+        strOrNum = var3; // string | number
+>strOrNum : Symbol(strOrNum, Decl(typeGuardsInModule.ts, 5, 3))
+>var3 : Symbol(var3, Decl(typeGuardsInModule.ts, 22, 14))
+    }
+}
+// local module
+module m2 {
+>m2 : Symbol(m2, Decl(typeGuardsInModule.ts, 29, 1))
+
+    var var2: string | number;
+>var2 : Symbol(var2, Decl(typeGuardsInModule.ts, 32, 7))
+
+    export var var3: string | number;
+>var3 : Symbol(var3, Decl(typeGuardsInModule.ts, 33, 14))
+
+    module m3 {
+>m3 : Symbol(m3, Decl(typeGuardsInModule.ts, 33, 37))
+
+        // global vars in function declaration
+        num = typeof var1 === "string" && var1.length; // string
+>num : Symbol(num, Decl(typeGuardsInModule.ts, 4, 3))
+>var1 : Symbol(var1, Decl(typeGuardsInModule.ts, 6, 3))
+>var1.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>var1 : Symbol(var1, Decl(typeGuardsInModule.ts, 6, 3))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+        // local variables from outer module declaration
+        num = typeof var2 === "string" && var2.length; // string
+>num : Symbol(num, Decl(typeGuardsInModule.ts, 4, 3))
+>var2 : Symbol(var2, Decl(typeGuardsInModule.ts, 32, 7))
+>var2.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>var2 : Symbol(var2, Decl(typeGuardsInModule.ts, 32, 7))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+        // exported variable from outer the module
+        strOrNum = typeof var3 === "string" && var3; // string | number
+>strOrNum : Symbol(strOrNum, Decl(typeGuardsInModule.ts, 5, 3))
+>var3 : Symbol(var3, Decl(typeGuardsInModule.ts, 33, 14))
+>var3 : Symbol(var3, Decl(typeGuardsInModule.ts, 33, 14))
+
+        // variables in module declaration
+        var var4: string | number;
+>var4 : Symbol(var4, Decl(typeGuardsInModule.ts, 45, 11))
+
+        if (typeof var4 === "string") {
+>var4 : Symbol(var4, Decl(typeGuardsInModule.ts, 45, 11))
+
+            num = var4.length; // string
+>num : Symbol(num, Decl(typeGuardsInModule.ts, 4, 3))
+>var4.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>var4 : Symbol(var4, Decl(typeGuardsInModule.ts, 45, 11))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+        }
+        else {
+            num = var4; // number
+>num : Symbol(num, Decl(typeGuardsInModule.ts, 4, 3))
+>var4 : Symbol(var4, Decl(typeGuardsInModule.ts, 45, 11))
+        }
+
+        // exported variable in the module
+        export var var5: string | number;
+>var5 : Symbol(var5, Decl(typeGuardsInModule.ts, 54, 18))
+
+        if (typeof var5 === "string") {
+>var5 : Symbol(var5, Decl(typeGuardsInModule.ts, 54, 18))
+
+            strOrNum = var5; // string | number
+>strOrNum : Symbol(strOrNum, Decl(typeGuardsInModule.ts, 5, 3))
+>var5 : Symbol(var5, Decl(typeGuardsInModule.ts, 54, 18))
+        }
+        else {
+            strOrNum = var5; // string | number
+>strOrNum : Symbol(strOrNum, Decl(typeGuardsInModule.ts, 5, 3))
+>var5 : Symbol(var5, Decl(typeGuardsInModule.ts, 54, 18))
+        }
+    }
+}
+// Dotted module
+module m3.m4 {
+>m3 : Symbol(m3, Decl(typeGuardsInModule.ts, 62, 1))
+>m4 : Symbol(m4, Decl(typeGuardsInModule.ts, 64, 10))
+
+    // global vars in function declaration
+    num = typeof var1 === "string" && var1.length; // string
+>num : Symbol(num, Decl(typeGuardsInModule.ts, 4, 3))
+>var1 : Symbol(var1, Decl(typeGuardsInModule.ts, 6, 3))
+>var1.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>var1 : Symbol(var1, Decl(typeGuardsInModule.ts, 6, 3))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+    // variables in module declaration
+    var var2: string | number;
+>var2 : Symbol(var2, Decl(typeGuardsInModule.ts, 69, 7))
+
+    if (typeof var2 === "string") {
+>var2 : Symbol(var2, Decl(typeGuardsInModule.ts, 69, 7))
+
+        num = var2.length; // string
+>num : Symbol(num, Decl(typeGuardsInModule.ts, 4, 3))
+>var2.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>var2 : Symbol(var2, Decl(typeGuardsInModule.ts, 69, 7))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+    }
+    else {
+        num = var2; // number
+>num : Symbol(num, Decl(typeGuardsInModule.ts, 4, 3))
+>var2 : Symbol(var2, Decl(typeGuardsInModule.ts, 69, 7))
+    }
+
+    // exported variable in the module
+    export var var3: string | number;
+>var3 : Symbol(var3, Decl(typeGuardsInModule.ts, 78, 14))
+
+    if (typeof var3 === "string") {
+>var3 : Symbol(var3, Decl(typeGuardsInModule.ts, 78, 14))
+
+        strOrNum = var3; // string | number
+>strOrNum : Symbol(strOrNum, Decl(typeGuardsInModule.ts, 5, 3))
+>var3 : Symbol(var3, Decl(typeGuardsInModule.ts, 78, 14))
+    }
+    else {
+        strOrNum = var3; // string | number
+>strOrNum : Symbol(strOrNum, Decl(typeGuardsInModule.ts, 5, 3))
+>var3 : Symbol(var3, Decl(typeGuardsInModule.ts, 78, 14))
+    }
+}
+

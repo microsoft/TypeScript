@@ -1,0 +1,54 @@
+=== tests/cases/compiler/jqueryInference.ts ===
+// #22362
+interface MyPromise<T, U> {
+>MyPromise : Symbol(MyPromise, Decl(jqueryInference.ts, 0, 0))
+>T : Symbol(T, Decl(jqueryInference.ts, 1, 20))
+>U : Symbol(U, Decl(jqueryInference.ts, 1, 22))
+
+    then(cb: (t: T) => void): void;
+>then : Symbol(MyPromise.then, Decl(jqueryInference.ts, 1, 27))
+>cb : Symbol(cb, Decl(jqueryInference.ts, 2, 9))
+>t : Symbol(t, Decl(jqueryInference.ts, 2, 14))
+>T : Symbol(T, Decl(jqueryInference.ts, 1, 20))
+
+    thenUnion(cb: (t: T | U) => void): this;
+>thenUnion : Symbol(MyPromise.thenUnion, Decl(jqueryInference.ts, 2, 35))
+>cb : Symbol(cb, Decl(jqueryInference.ts, 3, 14))
+>t : Symbol(t, Decl(jqueryInference.ts, 3, 19))
+>T : Symbol(T, Decl(jqueryInference.ts, 1, 20))
+>U : Symbol(U, Decl(jqueryInference.ts, 1, 22))
+}
+
+interface DoNothingAlias<T, U> extends MyPromise<T, U> { }
+>DoNothingAlias : Symbol(DoNothingAlias, Decl(jqueryInference.ts, 4, 1))
+>T : Symbol(T, Decl(jqueryInference.ts, 6, 25))
+>U : Symbol(U, Decl(jqueryInference.ts, 6, 27))
+>MyPromise : Symbol(MyPromise, Decl(jqueryInference.ts, 0, 0))
+>T : Symbol(T, Decl(jqueryInference.ts, 6, 25))
+>U : Symbol(U, Decl(jqueryInference.ts, 6, 27))
+
+declare function shouldBeIdentity<T, U>(p: DoNothingAlias<T, U>): MyPromise<T, U>;
+>shouldBeIdentity : Symbol(shouldBeIdentity, Decl(jqueryInference.ts, 6, 58))
+>T : Symbol(T, Decl(jqueryInference.ts, 8, 34))
+>U : Symbol(U, Decl(jqueryInference.ts, 8, 36))
+>p : Symbol(p, Decl(jqueryInference.ts, 8, 40))
+>DoNothingAlias : Symbol(DoNothingAlias, Decl(jqueryInference.ts, 4, 1))
+>T : Symbol(T, Decl(jqueryInference.ts, 8, 34))
+>U : Symbol(U, Decl(jqueryInference.ts, 8, 36))
+>MyPromise : Symbol(MyPromise, Decl(jqueryInference.ts, 0, 0))
+>T : Symbol(T, Decl(jqueryInference.ts, 8, 34))
+>U : Symbol(U, Decl(jqueryInference.ts, 8, 36))
+
+declare const p1: MyPromise<boolean, any>;
+>p1 : Symbol(p1, Decl(jqueryInference.ts, 10, 13))
+>MyPromise : Symbol(MyPromise, Decl(jqueryInference.ts, 0, 0))
+
+var p2 = shouldBeIdentity(p1);
+>p2 : Symbol(p2, Decl(jqueryInference.ts, 11, 3), Decl(jqueryInference.ts, 12, 3))
+>shouldBeIdentity : Symbol(shouldBeIdentity, Decl(jqueryInference.ts, 6, 58))
+>p1 : Symbol(p1, Decl(jqueryInference.ts, 10, 13))
+
+var p2: MyPromise<boolean, any>;
+>p2 : Symbol(p2, Decl(jqueryInference.ts, 11, 3), Decl(jqueryInference.ts, 12, 3))
+>MyPromise : Symbol(MyPromise, Decl(jqueryInference.ts, 0, 0))
+

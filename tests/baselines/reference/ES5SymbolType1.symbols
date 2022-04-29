@@ -1,0 +1,9 @@
+=== tests/cases/conformance/Symbols/ES5SymbolType1.ts ===
+var s: symbol;
+>s : Symbol(s, Decl(ES5SymbolType1.ts, 0, 3))
+
+s.toString();
+>s.toString : Symbol(Symbol.toString, Decl(lib.es5.d.ts, --, --))
+>s : Symbol(s, Decl(ES5SymbolType1.ts, 0, 3))
+>toString : Symbol(Symbol.toString, Decl(lib.es5.d.ts, --, --))
+

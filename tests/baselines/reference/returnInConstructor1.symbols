@@ -1,0 +1,117 @@
+=== tests/cases/compiler/returnInConstructor1.ts ===
+class A {
+>A : Symbol(A, Decl(returnInConstructor1.ts, 0, 0))
+
+    foo() { }
+>foo : Symbol(A.foo, Decl(returnInConstructor1.ts, 0, 9))
+
+    constructor() {
+        return;
+    }
+}
+
+class B {
+>B : Symbol(B, Decl(returnInConstructor1.ts, 5, 1))
+
+    foo() { }
+>foo : Symbol(B.foo, Decl(returnInConstructor1.ts, 7, 9))
+
+    constructor() {
+        return 1; // error
+    }
+}
+
+class C {
+>C : Symbol(C, Decl(returnInConstructor1.ts, 12, 1))
+
+    foo() { }
+>foo : Symbol(C.foo, Decl(returnInConstructor1.ts, 14, 9))
+
+    constructor() {
+        return this;
+>this : Symbol(C, Decl(returnInConstructor1.ts, 12, 1))
+    }
+}
+
+class D {
+>D : Symbol(D, Decl(returnInConstructor1.ts, 19, 1))
+
+    foo() { }
+>foo : Symbol(D.foo, Decl(returnInConstructor1.ts, 21, 9))
+
+    constructor() {
+        return "test"; // error
+    }
+}
+
+class E {
+>E : Symbol(E, Decl(returnInConstructor1.ts, 26, 1))
+
+    public foo: number;
+>foo : Symbol(E.foo, Decl(returnInConstructor1.ts, 28, 9))
+
+    constructor() {
+        return { foo: 1 };
+>foo : Symbol(foo, Decl(returnInConstructor1.ts, 31, 16))
+    }
+}
+
+class F {
+>F : Symbol(F, Decl(returnInConstructor1.ts, 33, 1))
+
+    public foo: string;
+>foo : Symbol(F.foo, Decl(returnInConstructor1.ts, 35, 9))
+
+    constructor() {
+        return { foo: 1 }; //error
+>foo : Symbol(foo, Decl(returnInConstructor1.ts, 38, 16))
+    }
+}
+
+class G {
+>G : Symbol(G, Decl(returnInConstructor1.ts, 40, 1))
+
+    private test: number;
+>test : Symbol(G.test, Decl(returnInConstructor1.ts, 42, 9))
+
+    public test1() { }
+>test1 : Symbol(G.test1, Decl(returnInConstructor1.ts, 43, 25))
+
+    foo() { }
+>foo : Symbol(G.foo, Decl(returnInConstructor1.ts, 44, 22))
+
+    constructor() {
+        this.test = 2;
+>this.test : Symbol(G.test, Decl(returnInConstructor1.ts, 42, 9))
+>this : Symbol(G, Decl(returnInConstructor1.ts, 40, 1))
+>test : Symbol(G.test, Decl(returnInConstructor1.ts, 42, 9))
+    }
+}
+
+class H extends F {
+>H : Symbol(H, Decl(returnInConstructor1.ts, 49, 1))
+>F : Symbol(F, Decl(returnInConstructor1.ts, 33, 1))
+
+    constructor() {
+        super();
+>super : Symbol(F, Decl(returnInConstructor1.ts, 33, 1))
+
+        return new G(); //error
+>G : Symbol(G, Decl(returnInConstructor1.ts, 40, 1))
+    }
+}
+
+class I extends G {
+>I : Symbol(I, Decl(returnInConstructor1.ts, 56, 1))
+>G : Symbol(G, Decl(returnInConstructor1.ts, 40, 1))
+
+    constructor() {
+        super();
+>super : Symbol(G, Decl(returnInConstructor1.ts, 40, 1))
+
+        return new G();
+>G : Symbol(G, Decl(returnInConstructor1.ts, 40, 1))
+    }
+}
+
+

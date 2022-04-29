@@ -1,0 +1,41 @@
+=== tests/cases/conformance/types/intersection/intersectionTypeEquivalence.ts ===
+interface A { a: string }
+>a : string
+
+interface B { b: string }
+>b : string
+
+interface C { c: string }
+>c : string
+
+// A & B is equivalent to B & A.
+var y: A & B;
+>y : A & B
+
+var y : B & A;
+>y : A & B
+
+// AB & C is equivalent to A & BC, where AB is A & B and BC is B & C.
+var z : A & B & C;
+>z : A & B & C
+
+var z : (A & B) & C;
+>z : A & B & C
+
+var z : A & (B & C);
+>z : A & B & C
+
+var ab : A & B;
+>ab : A & B
+
+var bc : B & C;
+>bc : B & C
+
+var z1: typeof ab & C;
+>z1 : A & B & C
+>ab : A & B
+
+var z1: A & typeof bc;
+>z1 : A & B & C
+>bc : B & C
+

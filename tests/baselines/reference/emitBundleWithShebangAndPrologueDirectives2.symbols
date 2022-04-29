@@ -1,0 +1,21 @@
+=== tests/cases/compiler/test.ts ===
+#!/usr/bin/env gjs
+"use strict"
+class Doo {}
+>Doo : Symbol(Doo, Decl(test.ts, 1, 12))
+
+class Scooby extends Doo {}
+>Scooby : Symbol(Scooby, Decl(test.ts, 2, 12))
+>Doo : Symbol(Doo, Decl(test.ts, 1, 12))
+
+=== tests/cases/compiler/test1.ts ===
+#!/usr/bin/env gjs
+"use strict"
+"Another prologue"
+class Dood {}
+>Dood : Symbol(Dood, Decl(test1.ts, 2, 18))
+
+class Scoobyd extends Dood {}
+>Scoobyd : Symbol(Scoobyd, Decl(test1.ts, 3, 13))
+>Dood : Symbol(Dood, Decl(test1.ts, 2, 18))
+

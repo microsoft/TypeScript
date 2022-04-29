@@ -1,0 +1,66 @@
+=== tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceErrors.ts ===
+// Generic call with multiple type parameters and only one used in parameter type annotation
+function someGenerics1<T, U>(n: T, m: number) { }
+>someGenerics1 : <T, U>(n: T, m: number) => void
+>n : T
+>m : number
+
+someGenerics1<string, number>(3, 4); // Error
+>someGenerics1<string, number>(3, 4) : void
+>someGenerics1 : <T, U>(n: T, m: number) => void
+>3 : 3
+>4 : 4
+
+// 2 parameter generic call with argument 1 of type parameter type and argument 2 of function type whose parameter is of type parameter type
+function someGenerics4<T, U>(n: T, f: (x: U) => void) { }
+>someGenerics4 : <T, U>(n: T, f: (x: U) => void) => void
+>n : T
+>f : (x: U) => void
+>x : U
+
+someGenerics4<string, number>('', (x: string) => ''); // Error
+>someGenerics4<string, number>('', (x: string) => '') : void
+>someGenerics4 : <T, U>(n: T, f: (x: U) => void) => void
+>'' : ""
+>(x: string) => '' : (x: string) => string
+>x : string
+>'' : ""
+
+// 2 parameter generic call with argument 2 of type parameter type and argument 1 of function type whose parameter is of type parameter type
+function someGenerics5<U, T>(n: T, f: (x: U) => void) { }
+>someGenerics5 : <U, T>(n: T, f: (x: U) => void) => void
+>n : T
+>f : (x: U) => void
+>x : U
+
+someGenerics5<number, string>('', (x: string) => ''); // Error
+>someGenerics5<number, string>('', (x: string) => '') : void
+>someGenerics5 : <U, T>(n: T, f: (x: U) => void) => void
+>'' : ""
+>(x: string) => '' : (x: string) => string
+>x : string
+>'' : ""
+
+// Generic call with multiple arguments of function types that each have parameters of the same generic type
+function someGenerics6<A>(a: (a: A) => A, b: (b: A) => A, c: (c: A) => A) { }
+>someGenerics6 : <A>(a: (a: A) => A, b: (b: A) => A, c: (c: A) => A) => void
+>a : (a: A) => A
+>a : A
+>b : (b: A) => A
+>b : A
+>c : (c: A) => A
+>c : A
+
+someGenerics6<number>((n: number) => n, (n: string) => n, (n: number) => n); // Error
+>someGenerics6<number>((n: number) => n, (n: string) => n, (n: number) => n) : void
+>someGenerics6 : <A>(a: (a: A) => A, b: (b: A) => A, c: (c: A) => A) => void
+>(n: number) => n : (n: number) => number
+>n : number
+>n : number
+>(n: string) => n : (n: string) => string
+>n : string
+>n : string
+>(n: number) => n : (n: number) => number
+>n : number
+>n : number
+

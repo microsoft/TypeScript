@@ -1,0 +1,21 @@
+error TS2318: Cannot find global type 'Boolean'.
+error TS2318: Cannot find global type 'IArguments'.
+error TS2318: Cannot find global type 'Number'.
+error TS2318: Cannot find global type 'Object'.
+tests/cases/compiler/modularizeLibrary_ErrorFromUsingES6ArrayWithOnlyES6ArrayLib.ts(3,12): error TS2693: 'Array' only refers to a type, but is being used as a value here.
+
+
+!!! error TS2318: Cannot find global type 'Boolean'.
+!!! error TS2318: Cannot find global type 'IArguments'.
+!!! error TS2318: Cannot find global type 'Number'.
+!!! error TS2318: Cannot find global type 'Object'.
+==== tests/cases/compiler/modularizeLibrary_ErrorFromUsingES6ArrayWithOnlyES6ArrayLib.ts (1 errors) ====
+    // Error missing basic JavaScript objects
+    function f(x: number, y: number, z: number) {
+        return Array.from(arguments);
+               ~~~~~
+!!! error TS2693: 'Array' only refers to a type, but is being used as a value here.
+    }
+    
+    f(1, 2, 3);
+    

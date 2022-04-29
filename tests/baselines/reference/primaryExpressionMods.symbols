@@ -1,0 +1,42 @@
+=== tests/cases/compiler/primaryExpressionMods.ts ===
+module M
+>M : Symbol(M, Decl(primaryExpressionMods.ts, 0, 0))
+{
+    export interface P { x: number; y: number; }
+>P : Symbol(P, Decl(primaryExpressionMods.ts, 1, 1))
+>x : Symbol(P.x, Decl(primaryExpressionMods.ts, 2, 24))
+>y : Symbol(P.y, Decl(primaryExpressionMods.ts, 2, 35))
+
+    export var a = 1;
+>a : Symbol(a, Decl(primaryExpressionMods.ts, 3, 14))
+}
+var p: M.P;             // Used as ModuleName
+>p : Symbol(p, Decl(primaryExpressionMods.ts, 5, 3))
+>M : Symbol(M, Decl(primaryExpressionMods.ts, 0, 0))
+>P : Symbol(M.P, Decl(primaryExpressionMods.ts, 1, 1))
+
+var m: M = M;           // Used as TypeName and PrimaryExpression (error on TypeName)
+>m : Symbol(m, Decl(primaryExpressionMods.ts, 6, 3))
+>M : Symbol(M)
+>M : Symbol(M, Decl(primaryExpressionMods.ts, 0, 0))
+
+var m2: typeof M = M;   // Used as PrimaryExpression in TypeQuery
+>m2 : Symbol(m2, Decl(primaryExpressionMods.ts, 7, 3))
+>M : Symbol(M, Decl(primaryExpressionMods.ts, 0, 0))
+>M : Symbol(M, Decl(primaryExpressionMods.ts, 0, 0))
+
+var x1 = M.a;           // Used as PrimaryExpression
+>x1 : Symbol(x1, Decl(primaryExpressionMods.ts, 8, 3))
+>M.a : Symbol(M.a, Decl(primaryExpressionMods.ts, 3, 14))
+>M : Symbol(M, Decl(primaryExpressionMods.ts, 0, 0))
+>a : Symbol(M.a, Decl(primaryExpressionMods.ts, 3, 14))
+
+var x2 = m.a;           // Same as M.a
+>x2 : Symbol(x2, Decl(primaryExpressionMods.ts, 9, 3))
+>m : Symbol(m, Decl(primaryExpressionMods.ts, 6, 3))
+
+var q: m.P;             // Error
+>q : Symbol(q, Decl(primaryExpressionMods.ts, 10, 3))
+>m : Symbol(m)
+>P : Symbol(m.P)
+

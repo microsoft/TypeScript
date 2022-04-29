@@ -1,0 +1,74 @@
+tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedGenericClassWithAny.ts(3,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedGenericClassWithAny.ts(11,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedGenericClassWithAny.ts(19,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedGenericClassWithAny.ts(30,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedGenericClassWithAny.ts(30,18): error TS2322: Type 'string' is not assignable to type 'T'.
+  'string' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'string'.
+tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedGenericClassWithAny.ts(32,9): error TS2322: Type 'string' is not assignable to type 'T'.
+  'string' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'string'.
+tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedGenericClassWithAny.ts(41,1): error TS2322: Type 'E<string>' is not assignable to type 'C<number>'.
+  Types of property 'x' are incompatible.
+    Type 'string' is not assignable to type 'number'.
+
+
+==== tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedGenericClassWithAny.ts (7 errors) ====
+    class C<T extends number> {
+        x: T;
+        get X(): T { return null; }
+            ~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+        foo(): T {
+            return null;
+        }
+    }
+    
+    class D extends C<number> {
+        x: any;
+        get X(): any {
+            ~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+            return null;
+        }
+        foo(): any {
+            return 1;
+        }
+    
+        static y: any;
+        static get Y(): any {
+                   ~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+            return null;
+        }
+        static bar(): any {
+            return null;
+        }
+    }
+    
+    // if D is a valid class definition than E is now not safe tranisitively through C
+    class E<T extends string> extends D {
+        x: T;
+        get X(): T { return ''; } // error
+            ~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+                     ~~~~~~~~~~
+!!! error TS2322: Type 'string' is not assignable to type 'T'.
+!!! error TS2322:   'string' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'string'.
+        foo(): T {
+            return ''; // error
+            ~~~~~~~~~~
+!!! error TS2322: Type 'string' is not assignable to type 'T'.
+!!! error TS2322:   'string' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'string'.
+        }
+    }
+    
+    var c: C<number>;
+    var d: D;
+    var e: E<string>;
+    
+    c = d;
+    c = e;
+    ~
+!!! error TS2322: Type 'E<string>' is not assignable to type 'C<number>'.
+!!! error TS2322:   Types of property 'x' are incompatible.
+!!! error TS2322:     Type 'string' is not assignable to type 'number'.
+    var r = c.foo(); // e.foo would return string

@@ -1,0 +1,65 @@
+=== tests/cases/compiler/file1.ts ===
+// set of tests cases that checks generation of local storage for exported names
+
+
+export var x;
+>x : Symbol(x, Decl(file1.ts, 3, 10))
+
+export function foo() {}
+>foo : Symbol(foo, Decl(file1.ts, 3, 13))
+
+export * from 'bar';
+
+=== tests/cases/compiler/file2.ts ===
+var x;
+>x : Symbol(x, Decl(file2.ts, 0, 3))
+
+var y;
+>y : Symbol(y, Decl(file2.ts, 1, 3))
+
+export {x};
+>x : Symbol(x, Decl(file2.ts, 2, 8))
+
+export {y as y1}
+>y : Symbol(y, Decl(file2.ts, 1, 3))
+>y1 : Symbol(y1, Decl(file2.ts, 3, 8))
+
+export * from 'bar';
+
+=== tests/cases/compiler/file3.ts ===
+export {x, y as z} from 'a';
+>x : Symbol(x, Decl(file3.ts, 0, 8))
+>z : Symbol(z, Decl(file3.ts, 0, 10))
+
+export default function foo() {}
+>foo : Symbol(foo, Decl(file3.ts, 0, 28))
+
+export * from 'bar';
+
+=== tests/cases/compiler/file4.ts ===
+export var x;
+>x : Symbol(x, Decl(file4.ts, 0, 10))
+
+export function foo() {}
+>foo : Symbol(foo, Decl(file4.ts, 0, 13))
+
+export default function (){}
+
+var z, z1;
+>z : Symbol(z, Decl(file4.ts, 4, 3))
+>z1 : Symbol(z1, Decl(file4.ts, 4, 6))
+
+export {z, z1 as z2};
+>z : Symbol(z, Decl(file4.ts, 5, 8))
+>z1 : Symbol(z1, Decl(file4.ts, 4, 6))
+>z2 : Symbol(z2, Decl(file4.ts, 5, 10))
+
+export {s, s1 as s2} from 'a'
+>s : Symbol(s, Decl(file4.ts, 7, 8))
+>s2 : Symbol(s2, Decl(file4.ts, 7, 10))
+
+=== tests/cases/compiler/file5.ts ===
+function foo() {}
+>foo : Symbol(foo, Decl(file5.ts, 0, 0))
+
+export * from 'a';

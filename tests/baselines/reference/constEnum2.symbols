@@ -1,0 +1,39 @@
+=== tests/cases/conformance/constEnums/constEnum2.ts ===
+// An enum declaration that specifies a const modifier is a constant enum declaration.
+// In a constant enum declaration, all members must have constant values and
+// it is an error for a member declaration to specify an expression that isn't classified as a constant enum expression.
+
+// Error : not a constant enum expression
+
+const CONST = 9000 % 2;
+>CONST : Symbol(CONST, Decl(constEnum2.ts, 6, 5))
+
+const enum D {
+>D : Symbol(D, Decl(constEnum2.ts, 6, 23))
+
+    d = 10,
+>d : Symbol(D.d, Decl(constEnum2.ts, 7, 14))
+
+    e = 199 * Math.floor(Math.random() * 1000),
+>e : Symbol(D.e, Decl(constEnum2.ts, 8, 11))
+>Math.floor : Symbol(Math.floor, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>floor : Symbol(Math.floor, Decl(lib.es5.d.ts, --, --))
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+
+    f = d - (100 * Math.floor(Math.random() % 8))
+>f : Symbol(D.f, Decl(constEnum2.ts, 9, 47))
+>d : Symbol(D.d, Decl(constEnum2.ts, 7, 14))
+>Math.floor : Symbol(Math.floor, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>floor : Symbol(Math.floor, Decl(lib.es5.d.ts, --, --))
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+
+    g = CONST,
+>g : Symbol(D.g, Decl(constEnum2.ts, 10, 49))
+>CONST : Symbol(CONST, Decl(constEnum2.ts, 6, 5))
+}

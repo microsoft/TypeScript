@@ -1,0 +1,38 @@
+===================================================================
+JsFile: file1.js
+mapUrl: file1.js.map
+sourceRoot: 
+sources: file1.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:tests/cases/compiler/file1.js
+sourceFile:file1.ts
+-------------------------------------------------------------------
+>>>export var x = 1;
+1 >
+2 >^^^^^^
+3 >      ^
+4 >       ^^^^
+5 >           ^
+6 >            ^^^
+7 >               ^
+8 >                ^
+9 >                 ^^^^^^^^^^^^^^^->
+1 >
+2 >export
+3 >       
+4 >       var 
+5 >           x
+6 >             = 
+7 >               1
+8 >                ;
+1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(1, 7) Source(1, 7) + SourceIndex(0)
+3 >Emitted(1, 8) Source(1, 8) + SourceIndex(0)
+4 >Emitted(1, 12) Source(1, 12) + SourceIndex(0)
+5 >Emitted(1, 13) Source(1, 13) + SourceIndex(0)
+6 >Emitted(1, 16) Source(1, 16) + SourceIndex(0)
+7 >Emitted(1, 17) Source(1, 17) + SourceIndex(0)
+8 >Emitted(1, 18) Source(1, 18) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=file1.js.map

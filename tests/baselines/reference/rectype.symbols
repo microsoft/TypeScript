@@ -1,0 +1,37 @@
+=== tests/cases/compiler/rectype.ts ===
+module M {
+>M : Symbol(M, Decl(rectype.ts, 0, 0))
+
+    interface I { (i:I):I; }
+>I : Symbol(I, Decl(rectype.ts, 0, 10))
+>i : Symbol(i, Decl(rectype.ts, 1, 19))
+>I : Symbol(I, Decl(rectype.ts, 0, 10))
+>I : Symbol(I, Decl(rectype.ts, 0, 10))
+
+    export function f(p: I) { return f };
+>f : Symbol(f, Decl(rectype.ts, 1, 28))
+>p : Symbol(p, Decl(rectype.ts, 3, 22))
+>I : Symbol(I, Decl(rectype.ts, 0, 10))
+>f : Symbol(f, Decl(rectype.ts, 1, 28))
+
+    var i:I;
+>i : Symbol(i, Decl(rectype.ts, 5, 7))
+>I : Symbol(I, Decl(rectype.ts, 0, 10))
+
+    f(i);
+>f : Symbol(f, Decl(rectype.ts, 1, 28))
+>i : Symbol(i, Decl(rectype.ts, 5, 7))
+
+    f(f(i));
+>f : Symbol(f, Decl(rectype.ts, 1, 28))
+>f : Symbol(f, Decl(rectype.ts, 1, 28))
+>i : Symbol(i, Decl(rectype.ts, 5, 7))
+
+    f((f(f(i))));
+>f : Symbol(f, Decl(rectype.ts, 1, 28))
+>f : Symbol(f, Decl(rectype.ts, 1, 28))
+>f : Symbol(f, Decl(rectype.ts, 1, 28))
+>i : Symbol(i, Decl(rectype.ts, 5, 7))
+}
+
+

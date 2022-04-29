@@ -1,0 +1,132 @@
+=== tests/cases/conformance/types/intersection/intersectionWithUnionConstraint.ts ===
+function f1<T extends string | number, U extends string | number>(x: T & U) {
+>f1 : Symbol(f1, Decl(intersectionWithUnionConstraint.ts, 0, 0))
+>T : Symbol(T, Decl(intersectionWithUnionConstraint.ts, 0, 12))
+>U : Symbol(U, Decl(intersectionWithUnionConstraint.ts, 0, 38))
+>x : Symbol(x, Decl(intersectionWithUnionConstraint.ts, 0, 66))
+>T : Symbol(T, Decl(intersectionWithUnionConstraint.ts, 0, 12))
+>U : Symbol(U, Decl(intersectionWithUnionConstraint.ts, 0, 38))
+
+    // Combined constraint of 'T & U' is 'string | number'
+    let y: string | number = x;
+>y : Symbol(y, Decl(intersectionWithUnionConstraint.ts, 2, 7))
+>x : Symbol(x, Decl(intersectionWithUnionConstraint.ts, 0, 66))
+}
+
+function f2<T extends string | number | undefined, U extends string | null | undefined>(x: T & U) {
+>f2 : Symbol(f2, Decl(intersectionWithUnionConstraint.ts, 3, 1))
+>T : Symbol(T, Decl(intersectionWithUnionConstraint.ts, 5, 12))
+>U : Symbol(U, Decl(intersectionWithUnionConstraint.ts, 5, 50))
+>x : Symbol(x, Decl(intersectionWithUnionConstraint.ts, 5, 88))
+>T : Symbol(T, Decl(intersectionWithUnionConstraint.ts, 5, 12))
+>U : Symbol(U, Decl(intersectionWithUnionConstraint.ts, 5, 50))
+
+    let y1: string | number = x;     // Error
+>y1 : Symbol(y1, Decl(intersectionWithUnionConstraint.ts, 6, 7))
+>x : Symbol(x, Decl(intersectionWithUnionConstraint.ts, 5, 88))
+
+    let y2: string | null = x;       // Error
+>y2 : Symbol(y2, Decl(intersectionWithUnionConstraint.ts, 7, 7))
+>x : Symbol(x, Decl(intersectionWithUnionConstraint.ts, 5, 88))
+
+    let y3: string | undefined = x;
+>y3 : Symbol(y3, Decl(intersectionWithUnionConstraint.ts, 8, 7))
+>x : Symbol(x, Decl(intersectionWithUnionConstraint.ts, 5, 88))
+
+    let y4: number | null = x;       // Error
+>y4 : Symbol(y4, Decl(intersectionWithUnionConstraint.ts, 9, 7))
+>x : Symbol(x, Decl(intersectionWithUnionConstraint.ts, 5, 88))
+
+    let y5: number | undefined = x;  // Error
+>y5 : Symbol(y5, Decl(intersectionWithUnionConstraint.ts, 10, 7))
+>x : Symbol(x, Decl(intersectionWithUnionConstraint.ts, 5, 88))
+
+    let y6: null | undefined = x;    // Error
+>y6 : Symbol(y6, Decl(intersectionWithUnionConstraint.ts, 11, 7))
+>x : Symbol(x, Decl(intersectionWithUnionConstraint.ts, 5, 88))
+}
+
+type T1 = (string | number | undefined) & (string | null | undefined);  // string | undefined
+>T1 : Symbol(T1, Decl(intersectionWithUnionConstraint.ts, 12, 1))
+
+function f3<T extends string | number | undefined>(x: T & (number | object | undefined)) {
+>f3 : Symbol(f3, Decl(intersectionWithUnionConstraint.ts, 14, 70))
+>T : Symbol(T, Decl(intersectionWithUnionConstraint.ts, 16, 12))
+>x : Symbol(x, Decl(intersectionWithUnionConstraint.ts, 16, 51))
+>T : Symbol(T, Decl(intersectionWithUnionConstraint.ts, 16, 12))
+
+    const y: number | undefined = x;
+>y : Symbol(y, Decl(intersectionWithUnionConstraint.ts, 17, 9))
+>x : Symbol(x, Decl(intersectionWithUnionConstraint.ts, 16, 51))
+}
+
+function f4<T extends string | number>(x: T & (number | object)) {
+>f4 : Symbol(f4, Decl(intersectionWithUnionConstraint.ts, 18, 1))
+>T : Symbol(T, Decl(intersectionWithUnionConstraint.ts, 20, 12))
+>x : Symbol(x, Decl(intersectionWithUnionConstraint.ts, 20, 39))
+>T : Symbol(T, Decl(intersectionWithUnionConstraint.ts, 20, 12))
+
+    const y: number = x;
+>y : Symbol(y, Decl(intersectionWithUnionConstraint.ts, 21, 9))
+>x : Symbol(x, Decl(intersectionWithUnionConstraint.ts, 20, 39))
+}
+
+function f5<T, U extends keyof T>(x: keyof T & U) {
+>f5 : Symbol(f5, Decl(intersectionWithUnionConstraint.ts, 22, 1))
+>T : Symbol(T, Decl(intersectionWithUnionConstraint.ts, 24, 12))
+>U : Symbol(U, Decl(intersectionWithUnionConstraint.ts, 24, 14))
+>T : Symbol(T, Decl(intersectionWithUnionConstraint.ts, 24, 12))
+>x : Symbol(x, Decl(intersectionWithUnionConstraint.ts, 24, 34))
+>T : Symbol(T, Decl(intersectionWithUnionConstraint.ts, 24, 12))
+>U : Symbol(U, Decl(intersectionWithUnionConstraint.ts, 24, 14))
+
+    let y: keyof any = x;
+>y : Symbol(y, Decl(intersectionWithUnionConstraint.ts, 25, 7))
+>x : Symbol(x, Decl(intersectionWithUnionConstraint.ts, 24, 34))
+}
+
+// Repro from #23648
+
+type Example<T, U> = { [K in keyof T]: K extends keyof U ? UnexpectedError<K> : NoErrorHere<K> }
+>Example : Symbol(Example, Decl(intersectionWithUnionConstraint.ts, 26, 1))
+>T : Symbol(T, Decl(intersectionWithUnionConstraint.ts, 30, 13))
+>U : Symbol(U, Decl(intersectionWithUnionConstraint.ts, 30, 15))
+>K : Symbol(K, Decl(intersectionWithUnionConstraint.ts, 30, 24))
+>T : Symbol(T, Decl(intersectionWithUnionConstraint.ts, 30, 13))
+>K : Symbol(K, Decl(intersectionWithUnionConstraint.ts, 30, 24))
+>U : Symbol(U, Decl(intersectionWithUnionConstraint.ts, 30, 15))
+>UnexpectedError : Symbol(UnexpectedError, Decl(intersectionWithUnionConstraint.ts, 30, 96))
+>K : Symbol(K, Decl(intersectionWithUnionConstraint.ts, 30, 24))
+>NoErrorHere : Symbol(NoErrorHere, Decl(intersectionWithUnionConstraint.ts, 32, 47))
+>K : Symbol(K, Decl(intersectionWithUnionConstraint.ts, 30, 24))
+
+type UnexpectedError<T extends PropertyKey> = T
+>UnexpectedError : Symbol(UnexpectedError, Decl(intersectionWithUnionConstraint.ts, 30, 96))
+>T : Symbol(T, Decl(intersectionWithUnionConstraint.ts, 32, 21))
+>PropertyKey : Symbol(PropertyKey, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(intersectionWithUnionConstraint.ts, 32, 21))
+
+type NoErrorHere<T extends PropertyKey> = T
+>NoErrorHere : Symbol(NoErrorHere, Decl(intersectionWithUnionConstraint.ts, 32, 47))
+>T : Symbol(T, Decl(intersectionWithUnionConstraint.ts, 33, 17))
+>PropertyKey : Symbol(PropertyKey, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(intersectionWithUnionConstraint.ts, 33, 17))
+
+// Repro from #30331
+
+type a<T> = T extends Array<infer U> ? U : never;
+>a : Symbol(a, Decl(intersectionWithUnionConstraint.ts, 33, 43))
+>T : Symbol(T, Decl(intersectionWithUnionConstraint.ts, 37, 7))
+>T : Symbol(T, Decl(intersectionWithUnionConstraint.ts, 37, 7))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>U : Symbol(U, Decl(intersectionWithUnionConstraint.ts, 37, 33))
+>U : Symbol(U, Decl(intersectionWithUnionConstraint.ts, 37, 33))
+
+type b<T> = { [K in a<T> & keyof T ]: 42 };
+>b : Symbol(b, Decl(intersectionWithUnionConstraint.ts, 37, 49))
+>T : Symbol(T, Decl(intersectionWithUnionConstraint.ts, 38, 7))
+>K : Symbol(K, Decl(intersectionWithUnionConstraint.ts, 38, 15))
+>a : Symbol(a, Decl(intersectionWithUnionConstraint.ts, 33, 43))
+>T : Symbol(T, Decl(intersectionWithUnionConstraint.ts, 38, 7))
+>T : Symbol(T, Decl(intersectionWithUnionConstraint.ts, 38, 7))
+

@@ -1,0 +1,15 @@
+tests/cases/compiler/requiredInitializedParameter2.ts(6,5): error TS2416: Property 'method' in type 'C1' is not assignable to the same property in base type 'I1'.
+  Type '(a: number, b: any) => void' is not assignable to type '() => any'.
+
+
+==== tests/cases/compiler/requiredInitializedParameter2.ts (1 errors) ====
+    interface I1 {
+        method();
+    }
+    
+    class C1 implements I1 {
+        method(a = 0, b) { }
+        ~~~~~~
+!!! error TS2416: Property 'method' in type 'C1' is not assignable to the same property in base type 'I1'.
+!!! error TS2416:   Type '(a: number, b: any) => void' is not assignable to type '() => any'.
+    }

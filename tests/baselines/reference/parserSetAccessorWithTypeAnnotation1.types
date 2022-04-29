@@ -1,0 +1,9 @@
+=== tests/cases/conformance/parser/ecmascript5/Accessors/parserSetAccessorWithTypeAnnotation1.ts ===
+class C {
+>C : C
+
+   set foo(v): number {
+>foo : any
+>v : any
+   }
+}

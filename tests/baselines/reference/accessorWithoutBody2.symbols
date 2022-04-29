@@ -1,0 +1,6 @@
+=== tests/cases/compiler/accessorWithoutBody2.ts ===
+var v = { set foo(a) }
+>v : Symbol(v, Decl(accessorWithoutBody2.ts, 0, 3))
+>foo : Symbol(foo, Decl(accessorWithoutBody2.ts, 0, 9))
+>a : Symbol(a, Decl(accessorWithoutBody2.ts, 0, 18))
+

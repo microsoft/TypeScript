@@ -1,0 +1,98 @@
+=== tests/cases/compiler/shadowedReservedCompilerDeclarationsWithNoEmit.ts ===
+// Shadowed captured this and super
+class Base { }
+>Base : Base
+
+class C extends Base {
+>C : C
+>Base : Base
+
+    constructor() {
+        super();
+>super() : void
+>super : typeof Base
+    }
+
+    foo() {
+>foo : () => void
+
+        let _this = this;
+>_this : this
+>this : this
+
+        () => {
+>() => {            _this;        } : () => void
+
+            _this;
+>_this : this
+
+        };
+    }
+
+    bar() {
+>bar : () => void
+
+        let _super = this;
+>_super : this
+>this : this
+    }
+}
+
+
+/// shadowed arguments
+function f1(arguments, ...a) {
+>f1 : (arguments: any, ...a: any[]) => void
+>arguments : any
+>a : any[]
+}
+
+class C2 extends Base {
+>C2 : C2
+>Base : Base
+
+    constructor() {
+        super();
+>super() : void
+>super : typeof Base
+
+        var _newTarget = "";
+>_newTarget : string
+>"" : ""
+
+        var t = new.target;
+>t : typeof C2
+>new.target : typeof C2
+>target : any
+
+        var y = _newTarget;
+>y : string
+>_newTarget : string
+    }
+}
+
+
+// Shadowed Promise
+var Promise = null;
+>Promise : any
+>null : null
+
+async function f4() {
+>f4 : () => Promise<number>
+
+    return 0;
+>0 : 0
+}
+
+
+// shadowed require
+var require = 0;
+>require : number
+>0 : 0
+
+// shadowed exports
+var exports = 0;
+>exports : number
+>0 : 0
+
+
+export { };

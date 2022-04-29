@@ -1,0 +1,46 @@
+=== tests/cases/compiler/noImplicitThisFunctions.ts ===
+function f1(x) {
+>f1 : Symbol(f1, Decl(noImplicitThisFunctions.ts, 0, 0))
+>x : Symbol(x, Decl(noImplicitThisFunctions.ts, 0, 12))
+
+    // implicit any is still allowed
+    return x + 1;
+>x : Symbol(x, Decl(noImplicitThisFunctions.ts, 0, 12))
+}
+
+function f2(y: number) {
+>f2 : Symbol(f2, Decl(noImplicitThisFunctions.ts, 3, 1))
+>y : Symbol(y, Decl(noImplicitThisFunctions.ts, 5, 12))
+
+    // ok: no reference to this
+    return y + 1;
+>y : Symbol(y, Decl(noImplicitThisFunctions.ts, 5, 12))
+}
+
+function f3(z: number): number {
+>f3 : Symbol(f3, Decl(noImplicitThisFunctions.ts, 8, 1))
+>z : Symbol(z, Decl(noImplicitThisFunctions.ts, 10, 12))
+
+    // error: this is implicitly any
+    return this.a + z;
+>z : Symbol(z, Decl(noImplicitThisFunctions.ts, 10, 12))
+}
+
+// error: `this` is `window`, but is still of type `any`
+let f4: (b: number) => number = b => this.c + b;
+>f4 : Symbol(f4, Decl(noImplicitThisFunctions.ts, 16, 3))
+>b : Symbol(b, Decl(noImplicitThisFunctions.ts, 16, 9))
+>b : Symbol(b, Decl(noImplicitThisFunctions.ts, 16, 31))
+>this : Symbol(globalThis)
+>b : Symbol(b, Decl(noImplicitThisFunctions.ts, 16, 31))
+
+let f5 = () => () => this;
+>f5 : Symbol(f5, Decl(noImplicitThisFunctions.ts, 17, 3))
+>this : Symbol(globalThis)
+
+let f6 = function() { return () => this; };
+>f6 : Symbol(f6, Decl(noImplicitThisFunctions.ts, 19, 3))
+
+let f7 = function() { return function() { return this } };
+>f7 : Symbol(f7, Decl(noImplicitThisFunctions.ts, 20, 3))
+

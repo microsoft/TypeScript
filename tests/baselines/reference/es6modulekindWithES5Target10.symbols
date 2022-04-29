@@ -1,0 +1,11 @@
+=== tests/cases/conformance/externalModules/es6/es6modulekindWithES5Target10.ts ===
+import i = require("mod"); // Error;
+>i : Symbol(i, Decl(es6modulekindWithES5Target10.ts, 0, 0))
+
+
+namespace N {
+>N : Symbol(N, Decl(es6modulekindWithES5Target10.ts, 0, 26))
+}
+export = N; // Error
+>N : Symbol(N, Decl(es6modulekindWithES5Target10.ts, 0, 26))
+

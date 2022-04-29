@@ -1,0 +1,4 @@
+=== tests/cases/conformance/es2019/globalThisCollision.js ===
+var globalThis;
+>globalThis : Symbol(globalThis, Decl(globalThisCollision.js, 0, 3))
+

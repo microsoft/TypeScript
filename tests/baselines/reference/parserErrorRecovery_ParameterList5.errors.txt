@@ -1,0 +1,10 @@
+tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ParameterLists/parserErrorRecovery_ParameterList5.ts(1,11): error TS1005: ',' expected.
+tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ParameterLists/parserErrorRecovery_ParameterList5.ts(1,17): error TS1005: ')' expected.
+
+
+==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ParameterLists/parserErrorRecovery_ParameterList5.ts (2 errors) ====
+    (a:number => { }
+              ~~
+!!! error TS1005: ',' expected.
+                    
+!!! error TS1005: ')' expected.

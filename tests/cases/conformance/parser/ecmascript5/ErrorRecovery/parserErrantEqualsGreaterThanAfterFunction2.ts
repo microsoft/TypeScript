@@ -1,0 +1,1 @@
+function f(p: A) => p;

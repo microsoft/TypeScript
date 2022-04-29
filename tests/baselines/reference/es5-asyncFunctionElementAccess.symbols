@@ -1,0 +1,36 @@
+=== tests/cases/compiler/es5-asyncFunctionElementAccess.ts ===
+declare var x, y, z, a, b, c;
+>x : Symbol(x, Decl(es5-asyncFunctionElementAccess.ts, 0, 11))
+>y : Symbol(y, Decl(es5-asyncFunctionElementAccess.ts, 0, 14))
+>z : Symbol(z, Decl(es5-asyncFunctionElementAccess.ts, 0, 17))
+>a : Symbol(a, Decl(es5-asyncFunctionElementAccess.ts, 0, 20))
+>b : Symbol(b, Decl(es5-asyncFunctionElementAccess.ts, 0, 23))
+>c : Symbol(c, Decl(es5-asyncFunctionElementAccess.ts, 0, 26))
+
+async function elementAccess0() {
+>elementAccess0 : Symbol(elementAccess0, Decl(es5-asyncFunctionElementAccess.ts, 0, 29))
+
+    z = await x[y];
+>z : Symbol(z, Decl(es5-asyncFunctionElementAccess.ts, 0, 17))
+>x : Symbol(x, Decl(es5-asyncFunctionElementAccess.ts, 0, 11))
+>y : Symbol(y, Decl(es5-asyncFunctionElementAccess.ts, 0, 14))
+}
+
+async function elementAccess1() {
+>elementAccess1 : Symbol(elementAccess1, Decl(es5-asyncFunctionElementAccess.ts, 4, 1))
+
+    z = (await x)[y];
+>z : Symbol(z, Decl(es5-asyncFunctionElementAccess.ts, 0, 17))
+>x : Symbol(x, Decl(es5-asyncFunctionElementAccess.ts, 0, 11))
+>y : Symbol(y, Decl(es5-asyncFunctionElementAccess.ts, 0, 14))
+}
+
+async function elementAccess2() {
+>elementAccess2 : Symbol(elementAccess2, Decl(es5-asyncFunctionElementAccess.ts, 8, 1))
+
+    z = x[await y];
+>z : Symbol(z, Decl(es5-asyncFunctionElementAccess.ts, 0, 17))
+>x : Symbol(x, Decl(es5-asyncFunctionElementAccess.ts, 0, 11))
+>y : Symbol(y, Decl(es5-asyncFunctionElementAccess.ts, 0, 14))
+}
+

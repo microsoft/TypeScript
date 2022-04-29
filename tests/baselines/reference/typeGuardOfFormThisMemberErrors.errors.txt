@@ -1,0 +1,47 @@
+tests/cases/conformance/expressions/typeGuards/typeGuardOfFormThisMemberErrors.ts(4,10): error TS1228: A type predicate is only allowed in return type position for functions and methods.
+tests/cases/conformance/expressions/typeGuards/typeGuardOfFormThisMemberErrors.ts(5,17): error TS1228: A type predicate is only allowed in return type position for functions and methods.
+tests/cases/conformance/expressions/typeGuards/typeGuardOfFormThisMemberErrors.ts(11,22): error TS1228: A type predicate is only allowed in return type position for functions and methods.
+tests/cases/conformance/expressions/typeGuards/typeGuardOfFormThisMemberErrors.ts(14,16): error TS1228: A type predicate is only allowed in return type position for functions and methods.
+
+
+==== tests/cases/conformance/expressions/typeGuards/typeGuardOfFormThisMemberErrors.ts (4 errors) ====
+    // There's a 'File' class in the stdlib, wrap with a namespace to avoid collision
+    namespace Test {
+    	export class FileSystemObject {
+    		isFSO: this is FileSystemObject;
+    		       ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1228: A type predicate is only allowed in return type position for functions and methods.
+    		get isFile(): this is File {
+    		              ~~~~~~~~~~~~
+!!! error TS1228: A type predicate is only allowed in return type position for functions and methods.
+    			return this instanceof File;
+    		}
+    		set isFile(param) {
+    			// noop
+    		}
+    		get isDirectory(): this is Directory {
+    		                   ~~~~~~~~~~~~~~~~~
+!!! error TS1228: A type predicate is only allowed in return type position for functions and methods.
+    			return this instanceof Directory;
+    		}
+    		isNetworked: this is (Networked & this);
+    		             ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1228: A type predicate is only allowed in return type position for functions and methods.
+    		constructor(public path: string) {}
+    	}
+    
+    	export class File extends FileSystemObject {
+    		constructor(path: string, public content: string) { super(path); }
+    	}
+    	export class Directory extends FileSystemObject {
+    		children: FileSystemObject[];
+    	}
+    	export interface Networked {
+    		host: string;
+    	}
+    
+    	let file: FileSystemObject = new File("foo/bar.txt", "foo");
+    	file.isNetworked = file.isFile;
+    	file.isFSO = file.isNetworked;
+    	file.isFile = file.isFSO;
+    }

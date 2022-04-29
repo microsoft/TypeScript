@@ -1,0 +1,20 @@
+=== tests/cases/compiler/instanceSubtypeCheck2.ts ===
+class C1<T> {
+>C1 : Symbol(C1, Decl(instanceSubtypeCheck2.ts, 0, 0))
+>T : Symbol(T, Decl(instanceSubtypeCheck2.ts, 0, 9))
+
+    x: C2<T>;
+>x : Symbol(C1.x, Decl(instanceSubtypeCheck2.ts, 0, 13))
+>C2 : Symbol(C2, Decl(instanceSubtypeCheck2.ts, 2, 1))
+>T : Symbol(T, Decl(instanceSubtypeCheck2.ts, 0, 9))
+}
+
+class C2<T> extends C1<T> {
+>C2 : Symbol(C2, Decl(instanceSubtypeCheck2.ts, 2, 1))
+>T : Symbol(T, Decl(instanceSubtypeCheck2.ts, 4, 9))
+>C1 : Symbol(C1, Decl(instanceSubtypeCheck2.ts, 0, 0))
+>T : Symbol(T, Decl(instanceSubtypeCheck2.ts, 4, 9))
+
+    x: string
+>x : Symbol(C2.x, Decl(instanceSubtypeCheck2.ts, 4, 27))
+}

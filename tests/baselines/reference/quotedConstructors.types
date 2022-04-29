@@ -1,0 +1,75 @@
+=== tests/cases/conformance/classes/constructorDeclarations/quotedConstructors.ts ===
+class C {
+>C : C
+
+    "constructor"() {
+        console.log(this);
+>console.log(this) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>this : this
+    }
+}
+
+class D {
+>D : D
+
+    'constructor'() {
+        console.log(this);
+>console.log(this) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>this : this
+    }
+}
+
+class E {
+>E : E
+
+    ['constructor']() {
+>['constructor'] : () => void
+>'constructor' : "constructor"
+
+        console.log(this);
+>console.log(this) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>this : this
+    }
+}
+
+new class {
+>new class {    "constructor"() {        console.log(this);    }} : (Anonymous class)
+>class {    "constructor"() {        console.log(this);    }} : typeof (Anonymous class)
+
+    "constructor"() {
+        console.log(this);
+>console.log(this) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>this : this
+    }
+};
+
+var o = { "constructor"() {} };
+>o : { constructor(): void; }
+>{ "constructor"() {} } : { constructor(): void; }
+>"constructor" : () => void
+
+class F {
+>F : F
+
+    "\x63onstructor"() {
+        console.log(this);
+>console.log(this) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>this : this
+    }
+}
+

@@ -1,0 +1,8 @@
+=== tests/cases/compiler/newLineFlagWithLF.ts ===
+var x=1;
+>x : Symbol(x, Decl(newLineFlagWithLF.ts, 0, 3))
+
+x=2;
+>x : Symbol(x, Decl(newLineFlagWithLF.ts, 0, 3))
+
+

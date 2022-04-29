@@ -1,0 +1,11 @@
+tests/cases/conformance/parser/ecmascript5/Statements/parserSwitchStatement1.d.ts(1,1): error TS1036: Statements are not allowed in ambient contexts.
+tests/cases/conformance/parser/ecmascript5/Statements/parserSwitchStatement1.d.ts(1,9): error TS2304: Cannot find name 'foo'.
+
+
+==== tests/cases/conformance/parser/ecmascript5/Statements/parserSwitchStatement1.d.ts (2 errors) ====
+    switch (foo) {
+    ~~~~~~
+!!! error TS1036: Statements are not allowed in ambient contexts.
+            ~~~
+!!! error TS2304: Cannot find name 'foo'.
+    }

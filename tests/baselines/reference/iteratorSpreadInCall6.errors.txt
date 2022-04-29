@@ -1,0 +1,34 @@
+tests/cases/conformance/es6/spread/iteratorSpreadInCall6.ts(28,28): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number | symbol'.
+
+
+==== tests/cases/conformance/es6/spread/iteratorSpreadInCall6.ts (1 errors) ====
+    function foo(...s: (symbol | number)[]) { }
+    class SymbolIterator {
+        next() {
+            return {
+                value: Symbol(),
+                done: false
+            };
+        }
+    
+        [Symbol.iterator]() {
+            return this;
+        }
+    }
+    
+    class _StringIterator {
+        next() {
+            return {
+                value: "",
+                done: false
+            };
+        }
+    
+        [Symbol.iterator]() {
+            return this;
+        }
+    }
+    
+    foo(...new SymbolIterator, ...new _StringIterator);
+                               ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'number | symbol'.

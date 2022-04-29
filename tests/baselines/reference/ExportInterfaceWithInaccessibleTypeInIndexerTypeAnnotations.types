@@ -1,0 +1,22 @@
+=== tests/cases/conformance/internalModules/exportDeclarations/ExportInterfaceWithInaccessibleTypeInIndexerTypeAnnotations.ts ===
+module A {
+
+    interface Point {
+        x: number;
+>x : number
+
+        y: number;
+>y : number
+    }
+
+    export interface points {
+
+        [idx: number]: Point;
+>idx : number
+
+        [idx: string]: Point;
+>idx : string
+    }
+}
+
+

@@ -1,0 +1,80 @@
+=== tests/cases/conformance/classes/constructorDeclarations/classConstructorAccessibility3.ts ===
+class Foo {
+>Foo : Symbol(Foo, Decl(classConstructorAccessibility3.ts, 0, 0))
+
+     constructor(public x: number) { }
+>x : Symbol(Foo.x, Decl(classConstructorAccessibility3.ts, 1, 17))
+}
+
+class Bar {
+>Bar : Symbol(Bar, Decl(classConstructorAccessibility3.ts, 2, 1))
+
+    public constructor(public x: number) { }
+>x : Symbol(Bar.x, Decl(classConstructorAccessibility3.ts, 5, 23))
+}
+
+class Baz {
+>Baz : Symbol(Baz, Decl(classConstructorAccessibility3.ts, 6, 1))
+
+    protected constructor(public x: number) { }
+>x : Symbol(Baz.x, Decl(classConstructorAccessibility3.ts, 9, 26))
+}
+
+class Qux {
+>Qux : Symbol(Qux, Decl(classConstructorAccessibility3.ts, 10, 1))
+
+     private constructor(public x: number) { }
+>x : Symbol(Qux.x, Decl(classConstructorAccessibility3.ts, 13, 25))
+}
+
+// b is public
+let a = Foo;
+>a : Symbol(a, Decl(classConstructorAccessibility3.ts, 17, 3))
+>Foo : Symbol(Foo, Decl(classConstructorAccessibility3.ts, 0, 0))
+
+a = Bar;
+>a : Symbol(a, Decl(classConstructorAccessibility3.ts, 17, 3))
+>Bar : Symbol(Bar, Decl(classConstructorAccessibility3.ts, 2, 1))
+
+a = Baz; // error Baz is protected
+>a : Symbol(a, Decl(classConstructorAccessibility3.ts, 17, 3))
+>Baz : Symbol(Baz, Decl(classConstructorAccessibility3.ts, 6, 1))
+
+a = Qux; // error Qux is private
+>a : Symbol(a, Decl(classConstructorAccessibility3.ts, 17, 3))
+>Qux : Symbol(Qux, Decl(classConstructorAccessibility3.ts, 10, 1))
+
+// b is protected
+let b = Baz;
+>b : Symbol(b, Decl(classConstructorAccessibility3.ts, 23, 3))
+>Baz : Symbol(Baz, Decl(classConstructorAccessibility3.ts, 6, 1))
+
+b = Foo;
+>b : Symbol(b, Decl(classConstructorAccessibility3.ts, 23, 3))
+>Foo : Symbol(Foo, Decl(classConstructorAccessibility3.ts, 0, 0))
+
+b = Bar;
+>b : Symbol(b, Decl(classConstructorAccessibility3.ts, 23, 3))
+>Bar : Symbol(Bar, Decl(classConstructorAccessibility3.ts, 2, 1))
+
+b = Qux; // error Qux is private
+>b : Symbol(b, Decl(classConstructorAccessibility3.ts, 23, 3))
+>Qux : Symbol(Qux, Decl(classConstructorAccessibility3.ts, 10, 1))
+
+// c is private
+let c = Qux;
+>c : Symbol(c, Decl(classConstructorAccessibility3.ts, 29, 3))
+>Qux : Symbol(Qux, Decl(classConstructorAccessibility3.ts, 10, 1))
+
+c = Foo;
+>c : Symbol(c, Decl(classConstructorAccessibility3.ts, 29, 3))
+>Foo : Symbol(Foo, Decl(classConstructorAccessibility3.ts, 0, 0))
+
+c = Bar;
+>c : Symbol(c, Decl(classConstructorAccessibility3.ts, 29, 3))
+>Bar : Symbol(Bar, Decl(classConstructorAccessibility3.ts, 2, 1))
+
+c = Baz;
+>c : Symbol(c, Decl(classConstructorAccessibility3.ts, 29, 3))
+>Baz : Symbol(Baz, Decl(classConstructorAccessibility3.ts, 6, 1))
+

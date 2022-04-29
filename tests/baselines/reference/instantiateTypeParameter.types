@@ -1,0 +1,5 @@
+=== tests/cases/compiler/instantiateTypeParameter.ts ===
+interface Foo<T> {
+    var x: T<>;
+>x : T
+}

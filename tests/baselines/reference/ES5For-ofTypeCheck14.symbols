@@ -1,0 +1,9 @@
+=== tests/cases/conformance/statements/for-ofStatements/ES5For-ofTypeCheck14.ts ===
+var union: string | Set<number>
+>union : Symbol(union, Decl(ES5For-ofTypeCheck14.ts, 0, 3))
+>Set : Symbol(Set, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+for (const e of union) { }
+>e : Symbol(e, Decl(ES5For-ofTypeCheck14.ts, 1, 10))
+>union : Symbol(union, Decl(ES5For-ofTypeCheck14.ts, 0, 3))
+

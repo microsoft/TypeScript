@@ -1,0 +1,18 @@
+tests/cases/compiler/internalImportUnInstantiatedModuleMergedWithClassNotReferencingInstance.ts(10,16): error TS2437: Module 'A' is hidden by a local declaration with the same name.
+
+
+==== tests/cases/compiler/internalImportUnInstantiatedModuleMergedWithClassNotReferencingInstance.ts (1 errors) ====
+    class A {
+        aProp: string;
+    }
+    module A {
+        export interface X { s: string }
+    }
+    
+    module B {
+        var A = 1;
+        import Y = A;
+                   ~
+!!! error TS2437: Module 'A' is hidden by a local declaration with the same name.
+    }
+    

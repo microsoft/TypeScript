@@ -1,0 +1,8 @@
+=== tests/cases/compiler/isolatedModulesPlainFile-CommonJS.ts ===
+declare function run(a: number): void;
+>run : Symbol(run, Decl(isolatedModulesPlainFile-CommonJS.ts, 0, 0))
+>a : Symbol(a, Decl(isolatedModulesPlainFile-CommonJS.ts, 0, 21))
+
+run(1);
+>run : Symbol(run, Decl(isolatedModulesPlainFile-CommonJS.ts, 0, 0))
+

@@ -1,0 +1,12 @@
+=== tests/cases/compiler/genericFunctions0.ts ===
+function foo<T > (x: T) { return x; }
+>foo : <T>(x: T) => T
+>x : T
+>x : T
+
+var x = foo<number>(5); // 'x' should be number
+>x : number
+>foo<number>(5) : number
+>foo : <T>(x: T) => T
+>5 : 5
+

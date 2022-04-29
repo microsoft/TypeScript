@@ -1,0 +1,103 @@
+=== tests/cases/conformance/types/union/unionTypeFromArrayLiteral.ts ===
+// The resulting type an array literal expression is determined as follows:
+// If the array literal is empty, the resulting type is an array type with the element type Undefined.
+// Otherwise, if the array literal is contextually typed by a type that has a property with the numeric name ‘0’, the resulting type is a tuple type constructed from the types of the element expressions.
+// Otherwise, the resulting type is an array type with an element type that is the union of the types of the element expressions.
+
+var arr1 = [1, 2]; // number[]
+>arr1 : number[]
+>[1, 2] : number[]
+>1 : 1
+>2 : 2
+
+var arr2 = ["hello", true]; // (string | number)[]
+>arr2 : (string | boolean)[]
+>["hello", true] : (string | boolean)[]
+>"hello" : "hello"
+>true : true
+
+var arr3Tuple: [number, string] = [3, "three"]; // [number, string]
+>arr3Tuple : [number, string]
+>[3, "three"] : [number, string]
+>3 : 3
+>"three" : "three"
+
+var arr4Tuple: [number, string] = [3, "three", "hello"]; // [number, string, string]
+>arr4Tuple : [number, string]
+>[3, "three", "hello"] : [number, string, string]
+>3 : 3
+>"three" : "three"
+>"hello" : "hello"
+
+var arrEmpty = [];
+>arrEmpty : any[]
+>[] : undefined[]
+
+var arr5Tuple: {
+>arr5Tuple : { 0: string; 5: number; }
+
+    0: string;
+>0 : string
+
+    5: number;
+>5 : number
+
+} = ["hello", true, false, " hello", true, 10, "any"]; // Tuple
+>["hello", true, false, " hello", true, 10, "any"] : [string, boolean, boolean, string, boolean, number, string]
+>"hello" : "hello"
+>true : true
+>false : false
+>" hello" : " hello"
+>true : true
+>10 : 10
+>"any" : "any"
+
+class C { foo() { } }
+>C : C
+>foo : () => void
+
+class D { foo2() { } }
+>D : D
+>foo2 : () => void
+
+class E extends C { foo3() { } }
+>E : E
+>C : C
+>foo3 : () => void
+
+class F extends C { foo4() { } }
+>F : F
+>C : C
+>foo4 : () => void
+
+var c: C, d: D, e: E, f: F;
+>c : C
+>d : D
+>e : E
+>f : F
+
+var arr6 = [c, d];  // (C | D)[]
+>arr6 : (C | D)[]
+>[c, d] : (C | D)[]
+>c : C
+>d : D
+
+var arr7 = [c, d, e]; // (C | D)[]
+>arr7 : (C | D)[]
+>[c, d, e] : (C | D)[]
+>c : C
+>d : D
+>e : E
+
+var arr8 = [c, e]; // C[]
+>arr8 : C[]
+>[c, e] : C[]
+>c : C
+>e : E
+
+var arr9 = [e, f]; // (E|F)[]
+>arr9 : (E | F)[]
+>[e, f] : (E | F)[]
+>e : E
+>f : F
+

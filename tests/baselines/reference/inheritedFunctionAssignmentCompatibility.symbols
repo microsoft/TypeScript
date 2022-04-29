@@ -1,0 +1,21 @@
+=== tests/cases/compiler/inheritedFunctionAssignmentCompatibility.ts ===
+interface IResultCallback extends Function { }
+>IResultCallback : Symbol(IResultCallback, Decl(inheritedFunctionAssignmentCompatibility.ts, 0, 0))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+function fn(cb: IResultCallback) { }
+>fn : Symbol(fn, Decl(inheritedFunctionAssignmentCompatibility.ts, 0, 46))
+>cb : Symbol(cb, Decl(inheritedFunctionAssignmentCompatibility.ts, 2, 12))
+>IResultCallback : Symbol(IResultCallback, Decl(inheritedFunctionAssignmentCompatibility.ts, 0, 0))
+
+fn((a, b) => true);
+>fn : Symbol(fn, Decl(inheritedFunctionAssignmentCompatibility.ts, 0, 46))
+>a : Symbol(a, Decl(inheritedFunctionAssignmentCompatibility.ts, 4, 4))
+>b : Symbol(b, Decl(inheritedFunctionAssignmentCompatibility.ts, 4, 6))
+
+fn(function (a, b) { return true; })
+>fn : Symbol(fn, Decl(inheritedFunctionAssignmentCompatibility.ts, 0, 46))
+>a : Symbol(a, Decl(inheritedFunctionAssignmentCompatibility.ts, 5, 13))
+>b : Symbol(b, Decl(inheritedFunctionAssignmentCompatibility.ts, 5, 15))
+
+

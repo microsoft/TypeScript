@@ -1,0 +1,55 @@
+=== tests/cases/conformance/es6/Symbols/symbolProperty13.ts ===
+class C {
+>C : Symbol(C, Decl(symbolProperty13.ts, 0, 0))
+
+    [Symbol.iterator]: { x; y };
+>[Symbol.iterator] : Symbol(C[Symbol.iterator], Decl(symbolProperty13.ts, 0, 9))
+>Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>x : Symbol(x, Decl(symbolProperty13.ts, 1, 24))
+>y : Symbol(y, Decl(symbolProperty13.ts, 1, 27))
+}
+interface I {
+>I : Symbol(I, Decl(symbolProperty13.ts, 2, 1))
+
+    [Symbol.iterator]: { x };
+>[Symbol.iterator] : Symbol(I[Symbol.iterator], Decl(symbolProperty13.ts, 3, 13))
+>Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>x : Symbol(x, Decl(symbolProperty13.ts, 4, 24))
+}
+
+declare function foo(i: I): I;
+>foo : Symbol(foo, Decl(symbolProperty13.ts, 5, 1), Decl(symbolProperty13.ts, 7, 30))
+>i : Symbol(i, Decl(symbolProperty13.ts, 7, 21))
+>I : Symbol(I, Decl(symbolProperty13.ts, 2, 1))
+>I : Symbol(I, Decl(symbolProperty13.ts, 2, 1))
+
+declare function foo(a: any): any;
+>foo : Symbol(foo, Decl(symbolProperty13.ts, 5, 1), Decl(symbolProperty13.ts, 7, 30))
+>a : Symbol(a, Decl(symbolProperty13.ts, 8, 21))
+
+declare function bar(i: C): C;
+>bar : Symbol(bar, Decl(symbolProperty13.ts, 8, 34), Decl(symbolProperty13.ts, 10, 30))
+>i : Symbol(i, Decl(symbolProperty13.ts, 10, 21))
+>C : Symbol(C, Decl(symbolProperty13.ts, 0, 0))
+>C : Symbol(C, Decl(symbolProperty13.ts, 0, 0))
+
+declare function bar(a: any): any;
+>bar : Symbol(bar, Decl(symbolProperty13.ts, 8, 34), Decl(symbolProperty13.ts, 10, 30))
+>a : Symbol(a, Decl(symbolProperty13.ts, 11, 21))
+
+foo(new C);
+>foo : Symbol(foo, Decl(symbolProperty13.ts, 5, 1), Decl(symbolProperty13.ts, 7, 30))
+>C : Symbol(C, Decl(symbolProperty13.ts, 0, 0))
+
+var i: I;
+>i : Symbol(i, Decl(symbolProperty13.ts, 14, 3))
+>I : Symbol(I, Decl(symbolProperty13.ts, 2, 1))
+
+bar(i);
+>bar : Symbol(bar, Decl(symbolProperty13.ts, 8, 34), Decl(symbolProperty13.ts, 10, 30))
+>i : Symbol(i, Decl(symbolProperty13.ts, 14, 3))
+

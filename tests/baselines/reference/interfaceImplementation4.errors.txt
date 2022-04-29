@@ -1,0 +1,22 @@
+tests/cases/compiler/interfaceImplementation4.ts(8,7): error TS2420: Class 'C5' incorrectly implements interface 'I1'.
+  Property 'iObj' is missing in type 'C5' but required in type 'I1'.
+
+
+==== tests/cases/compiler/interfaceImplementation4.ts (1 errors) ====
+    interface I1 {
+        iObj:{ };
+        iNum:number;
+        iAny:any;
+        iFn():void;
+    }
+    
+    class C5 implements I1 {
+          ~~
+!!! error TS2420: Class 'C5' incorrectly implements interface 'I1'.
+!!! error TS2420:   Property 'iObj' is missing in type 'C5' but required in type 'I1'.
+!!! related TS2728 tests/cases/compiler/interfaceImplementation4.ts:2:5: 'iObj' is declared here.
+        public iNum:number;
+        public iAny:any;
+        public iFn() { }
+    }
+    

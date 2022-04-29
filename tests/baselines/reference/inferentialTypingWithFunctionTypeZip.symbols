@@ -1,0 +1,42 @@
+=== tests/cases/compiler/inferentialTypingWithFunctionTypeZip.ts ===
+var pair: <T, S>(x: T) => (y: S) => { x: T; y: S; }
+>pair : Symbol(pair, Decl(inferentialTypingWithFunctionTypeZip.ts, 0, 3))
+>T : Symbol(T, Decl(inferentialTypingWithFunctionTypeZip.ts, 0, 11))
+>S : Symbol(S, Decl(inferentialTypingWithFunctionTypeZip.ts, 0, 13))
+>x : Symbol(x, Decl(inferentialTypingWithFunctionTypeZip.ts, 0, 17))
+>T : Symbol(T, Decl(inferentialTypingWithFunctionTypeZip.ts, 0, 11))
+>y : Symbol(y, Decl(inferentialTypingWithFunctionTypeZip.ts, 0, 27))
+>S : Symbol(S, Decl(inferentialTypingWithFunctionTypeZip.ts, 0, 13))
+>x : Symbol(x, Decl(inferentialTypingWithFunctionTypeZip.ts, 0, 37))
+>T : Symbol(T, Decl(inferentialTypingWithFunctionTypeZip.ts, 0, 11))
+>y : Symbol(y, Decl(inferentialTypingWithFunctionTypeZip.ts, 0, 43))
+>S : Symbol(S, Decl(inferentialTypingWithFunctionTypeZip.ts, 0, 13))
+
+var zipWith: <T, S, U>(a: T[], b: S[], f: (x: T) => (y: S) => U) => U[];
+>zipWith : Symbol(zipWith, Decl(inferentialTypingWithFunctionTypeZip.ts, 1, 3))
+>T : Symbol(T, Decl(inferentialTypingWithFunctionTypeZip.ts, 1, 14))
+>S : Symbol(S, Decl(inferentialTypingWithFunctionTypeZip.ts, 1, 16))
+>U : Symbol(U, Decl(inferentialTypingWithFunctionTypeZip.ts, 1, 19))
+>a : Symbol(a, Decl(inferentialTypingWithFunctionTypeZip.ts, 1, 23))
+>T : Symbol(T, Decl(inferentialTypingWithFunctionTypeZip.ts, 1, 14))
+>b : Symbol(b, Decl(inferentialTypingWithFunctionTypeZip.ts, 1, 30))
+>S : Symbol(S, Decl(inferentialTypingWithFunctionTypeZip.ts, 1, 16))
+>f : Symbol(f, Decl(inferentialTypingWithFunctionTypeZip.ts, 1, 38))
+>x : Symbol(x, Decl(inferentialTypingWithFunctionTypeZip.ts, 1, 43))
+>T : Symbol(T, Decl(inferentialTypingWithFunctionTypeZip.ts, 1, 14))
+>y : Symbol(y, Decl(inferentialTypingWithFunctionTypeZip.ts, 1, 53))
+>S : Symbol(S, Decl(inferentialTypingWithFunctionTypeZip.ts, 1, 16))
+>U : Symbol(U, Decl(inferentialTypingWithFunctionTypeZip.ts, 1, 19))
+>U : Symbol(U, Decl(inferentialTypingWithFunctionTypeZip.ts, 1, 19))
+
+var result = zipWith([1, 2], ['a', 'b'], pair);
+>result : Symbol(result, Decl(inferentialTypingWithFunctionTypeZip.ts, 2, 3))
+>zipWith : Symbol(zipWith, Decl(inferentialTypingWithFunctionTypeZip.ts, 1, 3))
+>pair : Symbol(pair, Decl(inferentialTypingWithFunctionTypeZip.ts, 0, 3))
+
+var i = result[0].x; // number
+>i : Symbol(i, Decl(inferentialTypingWithFunctionTypeZip.ts, 3, 3))
+>result[0].x : Symbol(x, Decl(inferentialTypingWithFunctionTypeZip.ts, 0, 37))
+>result : Symbol(result, Decl(inferentialTypingWithFunctionTypeZip.ts, 2, 3))
+>x : Symbol(x, Decl(inferentialTypingWithFunctionTypeZip.ts, 0, 37))
+

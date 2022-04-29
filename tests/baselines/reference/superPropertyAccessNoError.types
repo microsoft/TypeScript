@@ -1,0 +1,179 @@
+=== tests/cases/conformance/expressions/superPropertyAccess/superPropertyAccessNoError.ts ===
+//super.publicInstanceMemberFunction in constructor of derived class
+//super.publicInstanceMemberFunction in instance member function of derived class
+//super.publicInstanceMemberFunction in instance member accessor(get and set) of derived class
+//super.publicInstanceMemberFunction in lambda in member function
+//super.publicStaticMemberFunction in static member function of derived class
+//super.publicStaticMemberFunction in static member accessor(get and set) of derived class
+
+
+class SomeBaseClass {
+>SomeBaseClass : SomeBaseClass
+
+    public func() {
+>func : () => string
+
+        return '';
+>'' : ""
+    }
+
+    static func() {
+>func : () => number
+
+        return 3;
+>3 : 3
+    }
+
+    returnThis() {
+>returnThis : () => this
+
+        return this;
+>this : this
+    }
+}
+
+class SomeDerivedClass extends SomeBaseClass {
+>SomeDerivedClass : SomeDerivedClass
+>SomeBaseClass : SomeBaseClass
+
+    constructor() {
+        super();
+>super() : void
+>super : typeof SomeBaseClass
+
+        var x = super.func();
+>x : string
+>super.func() : string
+>super.func : () => string
+>super : SomeBaseClass
+>func : () => string
+
+        var x: string;
+>x : string
+    }
+
+    fn() {
+>fn : () => void
+
+        var x = super.func();
+>x : string
+>super.func() : string
+>super.func : () => string
+>super : SomeBaseClass
+>func : () => string
+
+        var x: string;
+>x : string
+
+        var y = () => super.func();
+>y : () => string
+>() => super.func() : () => string
+>super.func() : string
+>super.func : () => string
+>super : SomeBaseClass
+>func : () => string
+    }
+
+    get a() {
+>a : any
+
+        var x = super.func();
+>x : string
+>super.func() : string
+>super.func : () => string
+>super : SomeBaseClass
+>func : () => string
+
+        var x: string;
+>x : string
+
+        return null;
+>null : null
+    }
+
+    set a(n) {
+>a : any
+>n : any
+
+        var x = super.func();
+>x : string
+>super.func() : string
+>super.func : () => string
+>super : SomeBaseClass
+>func : () => string
+
+        var x: string;
+>x : string
+    }
+
+    static fn() {
+>fn : () => void
+
+        var x = super.func();
+>x : number
+>super.func() : number
+>super.func : () => number
+>super : typeof SomeBaseClass
+>func : () => number
+
+        var x: number;
+>x : number
+    }
+
+    static get a() {
+>a : any
+
+        var x = super.func();
+>x : number
+>super.func() : number
+>super.func : () => number
+>super : typeof SomeBaseClass
+>func : () => number
+
+        var x: number;
+>x : number
+
+        return null;
+>null : null
+    }
+
+    static set a(n) {
+>a : any
+>n : any
+
+        var x = super.func();
+>x : number
+>super.func() : number
+>super.func : () => number
+>super : typeof SomeBaseClass
+>func : () => number
+
+        var x: number;
+>x : number
+    }
+
+    returnThis() {
+>returnThis : () => this
+
+        return super.returnThis();
+>super.returnThis() : this
+>super.returnThis : () => this
+>super : SomeBaseClass
+>returnThis : () => this
+    }
+}
+
+let instance = new SomeDerivedClass();
+>instance : SomeDerivedClass
+>new SomeDerivedClass() : SomeDerivedClass
+>SomeDerivedClass : typeof SomeDerivedClass
+
+instance.returnThis().fn();
+>instance.returnThis().fn() : void
+>instance.returnThis().fn : () => void
+>instance.returnThis() : SomeDerivedClass
+>instance.returnThis : () => SomeDerivedClass
+>instance : SomeDerivedClass
+>returnThis : () => SomeDerivedClass
+>fn : () => void
+

@@ -1,0 +1,46 @@
+tests/cases/compiler/betterErrorForAccidentalCall.ts(3,1): error TS2349: This expression is not callable.
+  Type 'String' has no call signatures.
+tests/cases/compiler/betterErrorForAccidentalCall.ts(5,1): error TS2349: This expression is not callable.
+  Type 'String' has no call signatures.
+tests/cases/compiler/betterErrorForAccidentalCall.ts(7,1): error TS2349: This expression is not callable.
+  Type 'String' has no call signatures.
+tests/cases/compiler/betterErrorForAccidentalCall.ts(10,1): error TS2349: This expression is not callable.
+  Type 'String' has no call signatures.
+tests/cases/compiler/betterErrorForAccidentalCall.ts(13,1): error TS2349: This expression is not callable.
+  Type 'String' has no call signatures.
+
+
+==== tests/cases/compiler/betterErrorForAccidentalCall.ts (5 errors) ====
+    declare function foo(): string;
+    
+    foo()(1 as number).toString();
+    ~~~~~
+!!! error TS2349: This expression is not callable.
+!!! error TS2349:   Type 'String' has no call signatures.
+    
+    foo()   (1 as number).toString();
+    ~~~~~
+!!! error TS2349: This expression is not callable.
+!!! error TS2349:   Type 'String' has no call signatures.
+    
+    foo()
+    ~~~~~
+!!! error TS2349: This expression is not callable.
+!!! error TS2349:   Type 'String' has no call signatures.
+!!! related TS2734 tests/cases/compiler/betterErrorForAccidentalCall.ts:7:1: Are you missing a semicolon?
+    (1 as number).toString();
+    
+    foo()
+    ~~~~~
+!!! error TS2349: This expression is not callable.
+!!! error TS2349:   Type 'String' has no call signatures.
+!!! related TS2734 tests/cases/compiler/betterErrorForAccidentalCall.ts:10:1: Are you missing a semicolon?
+        (1 + 2).toString();
+    
+    foo()
+    ~~~~~
+!!! error TS2349: This expression is not callable.
+!!! error TS2349:   Type 'String' has no call signatures.
+!!! related TS2734 tests/cases/compiler/betterErrorForAccidentalCall.ts:13:1: Are you missing a semicolon?
+        (<number>1).toString();
+    

@@ -1,0 +1,209 @@
+=== tests/cases/conformance/statements/for-inStatements/for-inStatementsInvalid.ts ===
+var aNumber: number;
+>aNumber : number
+
+for (aNumber in {}) { }
+>aNumber : number
+>{} : {}
+
+var aBoolean: boolean;
+>aBoolean : boolean
+
+for (aBoolean in {}) { }
+>aBoolean : boolean
+>{} : {}
+
+var aRegExp: RegExp;
+>aRegExp : RegExp
+
+for (aRegExp in {}) { }
+>aRegExp : RegExp
+>{} : {}
+
+for (var idx : number in {}) { }
+>idx : string
+>{} : {}
+
+function fn(): void { }
+>fn : () => void
+
+for (var x in fn()) { }
+>x : string
+>fn() : void
+>fn : () => void
+
+var c : string, d:string, e;
+>c : string
+>d : string
+>e : any
+
+for (var x in c || d) { }
+>x : string
+>c || d : string
+>c : string
+>d : string
+
+for (var x in e ? c : d) { }
+>x : string
+>e ? c : d : string
+>e : any
+>c : string
+>d : string
+
+for (var x in 42 ? c : d) { }
+>x : string
+>42 ? c : d : string
+>42 : 42
+>c : string
+>d : string
+
+for (var x in '' ? c : d) { }
+>x : string
+>'' ? c : d : string
+>'' : ""
+>c : string
+>d : string
+
+for (var x in 42 ? d[x] : c[x]) { }
+>x : string
+>42 ? d[x] : c[x] : any
+>42 : 42
+>d[x] : any
+>d : string
+>x : string
+>c[x] : any
+>c : string
+>x : string
+
+for (var x in c[23]) { }
+>x : string
+>c[23] : string
+>c : string
+>23 : 23
+
+for (var x in (<T>(x: T) => x)) { }
+>x : string
+>(<T>(x: T) => x) : <T>(x: T) => T
+><T>(x: T) => x : <T>(x: T) => T
+>x : T
+>x : T
+
+for (var x in function (x: string, y: number) { return x + y }) { }
+>x : string
+>function (x: string, y: number) { return x + y } : (x: string, y: number) => string
+>x : string
+>y : number
+>x + y : string
+>x : string
+>y : number
+
+class A {
+>A : A
+
+    biz() : number{
+>biz : () => number
+
+        for (var x in this.biz()) { }
+>x : string
+>this.biz() : number
+>this.biz : () => number
+>this : this
+>biz : () => number
+
+        for (var x in this.biz) { }
+>x : string
+>this.biz : () => number
+>this : this
+>biz : () => number
+
+        for (var x in this) { }
+>x : string
+>this : this
+
+        return null;
+>null : null
+    }
+
+    static baz() : number {
+>baz : () => number
+
+        for (var x in this) { }
+>x : string
+>this : typeof A
+
+        for (var x in this.baz) { }
+>x : string
+>this.baz : () => number
+>this : typeof A
+>baz : () => number
+
+        for (var x in this.baz()) { }
+>x : string
+>this.baz() : number
+>this.baz : () => number
+>this : typeof A
+>baz : () => number
+
+        return null;
+>null : null
+    }
+}
+
+class B extends A {
+>B : B
+>A : A
+
+    boz() {
+>boz : () => any
+
+        for (var x in this.biz()) { }
+>x : string
+>this.biz() : number
+>this.biz : () => number
+>this : this
+>biz : () => number
+
+        for (var x in this.biz) { }
+>x : string
+>this.biz : () => number
+>this : this
+>biz : () => number
+
+        for (var x in this) { }
+>x : string
+>this : this
+
+        for (var x in super.biz) { }
+>x : string
+>super.biz : () => number
+>super : A
+>biz : () => number
+
+        for (var x in super.biz()) { }
+>x : string
+>super.biz() : number
+>super.biz : () => number
+>super : A
+>biz : () => number
+
+        return null;
+>null : null
+    }
+}
+
+interface I {
+    id: number;
+>id : number
+
+    [idx: number]: number;
+>idx : number
+}
+var i: I;
+>i : I
+
+for (var x in i[42]) { } 
+>x : string
+>i[42] : number
+>i : I
+>42 : 42
+

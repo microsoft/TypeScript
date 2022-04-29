@@ -1,0 +1,75 @@
+=== tests/cases/conformance/controlFlow/controlFlowInstanceofExtendsFunction.ts ===
+declare global {
+>global : Symbol(global, Decl(controlFlowInstanceofExtendsFunction.ts, 0, 0))
+
+    interface Function {
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(controlFlowInstanceofExtendsFunction.ts, 0, 16))
+
+        now(): string;
+>now : Symbol(Function.now, Decl(controlFlowInstanceofExtendsFunction.ts, 1, 24))
+    }
+}
+
+Function.prototype.now = function () {
+>Function.prototype.now : Symbol(Function.now, Decl(controlFlowInstanceofExtendsFunction.ts, 1, 24))
+>Function.prototype : Symbol(FunctionConstructor.prototype, Decl(lib.es5.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(controlFlowInstanceofExtendsFunction.ts, 0, 16))
+>prototype : Symbol(FunctionConstructor.prototype, Decl(lib.es5.d.ts, --, --))
+>now : Symbol(Function.now, Decl(controlFlowInstanceofExtendsFunction.ts, 1, 24))
+
+    return "now"
+}
+
+class X {
+>X : Symbol(X, Decl(controlFlowInstanceofExtendsFunction.ts, 8, 1))
+
+    static now() {
+>now : Symbol(X.now, Decl(controlFlowInstanceofExtendsFunction.ts, 10, 9))
+
+        return {}
+    }
+
+    why() {
+>why : Symbol(X.why, Decl(controlFlowInstanceofExtendsFunction.ts, 13, 5))
+
+    }
+}
+
+class Y {
+>Y : Symbol(Y, Decl(controlFlowInstanceofExtendsFunction.ts, 18, 1))
+
+}
+
+console.log(X.now()) // works as expected
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>X.now : Symbol(X.now, Decl(controlFlowInstanceofExtendsFunction.ts, 10, 9))
+>X : Symbol(X, Decl(controlFlowInstanceofExtendsFunction.ts, 8, 1))
+>now : Symbol(X.now, Decl(controlFlowInstanceofExtendsFunction.ts, 10, 9))
+
+console.log(Y.now()) // works as expected
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>Y.now : Symbol(Function.now, Decl(controlFlowInstanceofExtendsFunction.ts, 1, 24))
+>Y : Symbol(Y, Decl(controlFlowInstanceofExtendsFunction.ts, 18, 1))
+>now : Symbol(Function.now, Decl(controlFlowInstanceofExtendsFunction.ts, 1, 24))
+
+export const x: X | number = Math.random() > 0.5 ? new X() : 1
+>x : Symbol(x, Decl(controlFlowInstanceofExtendsFunction.ts, 27, 12))
+>X : Symbol(X, Decl(controlFlowInstanceofExtendsFunction.ts, 8, 1))
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>X : Symbol(X, Decl(controlFlowInstanceofExtendsFunction.ts, 8, 1))
+
+if (x instanceof X) {
+>x : Symbol(x, Decl(controlFlowInstanceofExtendsFunction.ts, 27, 12))
+>X : Symbol(X, Decl(controlFlowInstanceofExtendsFunction.ts, 8, 1))
+
+    x.why() // should compile
+>x.why : Symbol(X.why, Decl(controlFlowInstanceofExtendsFunction.ts, 13, 5))
+>x : Symbol(x, Decl(controlFlowInstanceofExtendsFunction.ts, 27, 12))
+>why : Symbol(X.why, Decl(controlFlowInstanceofExtendsFunction.ts, 13, 5))
+}

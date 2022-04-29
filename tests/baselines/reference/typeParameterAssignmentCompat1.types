@@ -1,0 +1,46 @@
+=== tests/cases/compiler/typeParameterAssignmentCompat1.ts ===
+interface Foo<T> {
+    frobble(value: T): T;
+>frobble : (value: T) => T
+>value : T
+}
+
+function f<T, U>(): Foo<U> {
+>f : <T, U>() => Foo<U>
+
+    var x: Foo<T>;
+>x : Foo<T>
+
+    var y: Foo<U>;
+>y : Foo<U>
+
+    x = y; // should be an error
+>x = y : Foo<U>
+>x : Foo<T>
+>y : Foo<U>
+
+    return x;
+>x : Foo<T>
+}
+
+class C<T> {
+>C : C<T>
+
+    f<U>(): Foo<U> {
+>f : <U>() => Foo<U>
+
+        var x: Foo<T>;
+>x : Foo<T>
+
+        var y: Foo<U>;
+>y : Foo<U>
+
+        x = y; // should be an error
+>x = y : Foo<U>
+>x : Foo<T>
+>y : Foo<U>
+
+        return x;
+>x : Foo<T>
+    }
+}

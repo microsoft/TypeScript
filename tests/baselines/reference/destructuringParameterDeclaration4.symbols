@@ -1,0 +1,97 @@
+=== tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration4.ts ===
+// If the parameter is a rest parameter, the parameter type is any[]
+// A type annotation for a rest parameter must denote an array type.
+
+// RestParameter:
+//     ...   Identifier   TypeAnnotation(opt)
+
+type arrayString = Array<String>
+>arrayString : Symbol(arrayString, Decl(destructuringParameterDeclaration4.ts, 0, 0))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+type someArray = Array<String> | number[];
+>someArray : Symbol(someArray, Decl(destructuringParameterDeclaration4.ts, 6, 32))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+type stringOrNumArray = Array<String|Number>;
+>stringOrNumArray : Symbol(stringOrNumArray, Decl(destructuringParameterDeclaration4.ts, 7, 42))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+function a0(...x: [number, number, string]) { }  // Error, rest parameter must be array type
+>a0 : Symbol(a0, Decl(destructuringParameterDeclaration4.ts, 8, 45))
+>x : Symbol(x, Decl(destructuringParameterDeclaration4.ts, 10, 12))
+
+function a1(...x: (number|string)[]) { }
+>a1 : Symbol(a1, Decl(destructuringParameterDeclaration4.ts, 10, 47))
+>x : Symbol(x, Decl(destructuringParameterDeclaration4.ts, 11, 12))
+
+function a2(...a: someArray) { }  // Error, rest parameter must be array type
+>a2 : Symbol(a2, Decl(destructuringParameterDeclaration4.ts, 11, 40))
+>a : Symbol(a, Decl(destructuringParameterDeclaration4.ts, 12, 12))
+>someArray : Symbol(someArray, Decl(destructuringParameterDeclaration4.ts, 6, 32))
+
+function a3(...b?) { }            // Error, can't be optional
+>a3 : Symbol(a3, Decl(destructuringParameterDeclaration4.ts, 12, 32))
+>b : Symbol(b, Decl(destructuringParameterDeclaration4.ts, 13, 12))
+
+function a4(...b = [1,2,3]) { }   // Error, can't have initializer
+>a4 : Symbol(a4, Decl(destructuringParameterDeclaration4.ts, 13, 22))
+>b : Symbol(b, Decl(destructuringParameterDeclaration4.ts, 14, 12))
+
+function a5([a, b, [[c]]]) { }
+>a5 : Symbol(a5, Decl(destructuringParameterDeclaration4.ts, 14, 31))
+>a : Symbol(a, Decl(destructuringParameterDeclaration4.ts, 15, 13))
+>b : Symbol(b, Decl(destructuringParameterDeclaration4.ts, 15, 15))
+>c : Symbol(c, Decl(destructuringParameterDeclaration4.ts, 15, 21))
+
+function a6([a, b, c, ...x]: number[]) { }
+>a6 : Symbol(a6, Decl(destructuringParameterDeclaration4.ts, 15, 30))
+>a : Symbol(a, Decl(destructuringParameterDeclaration4.ts, 16, 13))
+>b : Symbol(b, Decl(destructuringParameterDeclaration4.ts, 16, 15))
+>c : Symbol(c, Decl(destructuringParameterDeclaration4.ts, 16, 18))
+>x : Symbol(x, Decl(destructuringParameterDeclaration4.ts, 16, 21))
+
+
+a1(1, 2, "hello", true);  // Error, parameter type is (number|string)[]
+>a1 : Symbol(a1, Decl(destructuringParameterDeclaration4.ts, 10, 47))
+
+a1(...array2);            // Error parameter type is (number|string)[]
+>a1 : Symbol(a1, Decl(destructuringParameterDeclaration4.ts, 10, 47))
+
+a5([1, 2, "string", false, true]);       // Error, parameter type is [any, any, [[any]]]
+>a5 : Symbol(a5, Decl(destructuringParameterDeclaration4.ts, 14, 31))
+
+a5([1, 2]);                              // Error, parameter type is [any, any, [[any]]]
+>a5 : Symbol(a5, Decl(destructuringParameterDeclaration4.ts, 14, 31))
+
+a6([1, 2, "string"]);                   // Error, parameter type is number[]
+>a6 : Symbol(a6, Decl(destructuringParameterDeclaration4.ts, 15, 30))
+
+
+var temp = [1, 2, 3];
+>temp : Symbol(temp, Decl(destructuringParameterDeclaration4.ts, 26, 3))
+
+class C {
+>C : Symbol(C, Decl(destructuringParameterDeclaration4.ts, 26, 21))
+
+    constructor(public ...temp) { }  // Error, rest parameter can't have properties
+>temp : Symbol(C.temp, Decl(destructuringParameterDeclaration4.ts, 28, 16))
+}
+
+// Rest parameter with generic
+function foo1<T extends Number>(...a: T[]) { }
+>foo1 : Symbol(foo1, Decl(destructuringParameterDeclaration4.ts, 29, 1))
+>T : Symbol(T, Decl(destructuringParameterDeclaration4.ts, 32, 14))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(destructuringParameterDeclaration4.ts, 32, 32))
+>T : Symbol(T, Decl(destructuringParameterDeclaration4.ts, 32, 14))
+
+foo1(1, 2, "string", E1.a, E.b);  // Error
+>foo1 : Symbol(foo1, Decl(destructuringParameterDeclaration4.ts, 29, 1))
+
+
+

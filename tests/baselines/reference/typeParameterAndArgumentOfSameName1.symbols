@@ -1,0 +1,17 @@
+=== tests/cases/compiler/typeParameterAndArgumentOfSameName1.ts ===
+function f<A extends Number>(A: A): A {
+>f : Symbol(f, Decl(typeParameterAndArgumentOfSameName1.ts, 0, 0))
+>A : Symbol(A, Decl(typeParameterAndArgumentOfSameName1.ts, 0, 11), Decl(typeParameterAndArgumentOfSameName1.ts, 0, 29))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>A : Symbol(A, Decl(typeParameterAndArgumentOfSameName1.ts, 0, 11), Decl(typeParameterAndArgumentOfSameName1.ts, 0, 29))
+>A : Symbol(A, Decl(typeParameterAndArgumentOfSameName1.ts, 0, 11), Decl(typeParameterAndArgumentOfSameName1.ts, 0, 29))
+>A : Symbol(A, Decl(typeParameterAndArgumentOfSameName1.ts, 0, 11), Decl(typeParameterAndArgumentOfSameName1.ts, 0, 29))
+
+    var r = A.toExponential(123);
+>r : Symbol(r, Decl(typeParameterAndArgumentOfSameName1.ts, 1, 7))
+>A.toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
+>A : Symbol(A, Decl(typeParameterAndArgumentOfSameName1.ts, 0, 11), Decl(typeParameterAndArgumentOfSameName1.ts, 0, 29))
+>toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
+
+    return null;
+}

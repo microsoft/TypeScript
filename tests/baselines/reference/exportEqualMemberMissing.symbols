@@ -1,0 +1,48 @@
+=== tests/cases/compiler/exportEqualMemberMissing_1.ts ===
+///<reference path='exportEqualMemberMissing_0.ts'/>
+import connect = require('./exportEqualMemberMissing_0');
+>connect : Symbol(connect, Decl(exportEqualMemberMissing_1.ts, 0, 0))
+
+connect().use(connect.static('foo')); // Error	1	The property 'static' does not exist on value of type ''.
+>connect().use : Symbol(connect.connectExport.use, Decl(exportEqualMemberMissing_0.ts, 4, 36))
+>connect : Symbol(connect, Decl(exportEqualMemberMissing_1.ts, 0, 0))
+>use : Symbol(connect.connectExport.use, Decl(exportEqualMemberMissing_0.ts, 4, 36))
+>connect : Symbol(connect, Decl(exportEqualMemberMissing_1.ts, 0, 0))
+
+=== tests/cases/compiler/exportEqualMemberMissing_0.ts ===
+module server {
+>server : Symbol(server, Decl(exportEqualMemberMissing_0.ts, 0, 0), Decl(exportEqualMemberMissing_0.ts, 8, 3))
+
+    export interface connectModule {
+>connectModule : Symbol(connectModule, Decl(exportEqualMemberMissing_0.ts, 0, 15))
+
+        (res, req, next): void;
+>res : Symbol(res, Decl(exportEqualMemberMissing_0.ts, 2, 9))
+>req : Symbol(req, Decl(exportEqualMemberMissing_0.ts, 2, 13))
+>next : Symbol(next, Decl(exportEqualMemberMissing_0.ts, 2, 18))
+    }
+    export interface connectExport {
+>connectExport : Symbol(connectExport, Decl(exportEqualMemberMissing_0.ts, 3, 5))
+
+        use: (mod: connectModule) => connectExport;
+>use : Symbol(connectExport.use, Decl(exportEqualMemberMissing_0.ts, 4, 36))
+>mod : Symbol(mod, Decl(exportEqualMemberMissing_0.ts, 5, 14))
+>connectModule : Symbol(connectModule, Decl(exportEqualMemberMissing_0.ts, 0, 15))
+>connectExport : Symbol(connectExport, Decl(exportEqualMemberMissing_0.ts, 3, 5))
+    }
+}
+var server: {
+>server : Symbol(server, Decl(exportEqualMemberMissing_0.ts, 0, 0), Decl(exportEqualMemberMissing_0.ts, 8, 3))
+
+    (): server.connectExport;
+>server : Symbol(server, Decl(exportEqualMemberMissing_0.ts, 0, 0), Decl(exportEqualMemberMissing_0.ts, 8, 3))
+>connectExport : Symbol(server.connectExport, Decl(exportEqualMemberMissing_0.ts, 3, 5))
+
+    foo: Date;
+>foo : Symbol(foo, Decl(exportEqualMemberMissing_0.ts, 9, 29))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+};
+export = server;
+>server : Symbol(server, Decl(exportEqualMemberMissing_0.ts, 0, 0), Decl(exportEqualMemberMissing_0.ts, 8, 3))
+

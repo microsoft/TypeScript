@@ -1,0 +1,22 @@
+=== tests/cases/conformance/dynamicImport/importCallExpressionGrammarError.ts ===
+declare function getSpecifier(): string;
+>getSpecifier : Symbol(getSpecifier, Decl(importCallExpressionGrammarError.ts, 0, 0))
+
+declare var whatToLoad: boolean;
+>whatToLoad : Symbol(whatToLoad, Decl(importCallExpressionGrammarError.ts, 1, 11))
+
+var a = ["./0"];
+>a : Symbol(a, Decl(importCallExpressionGrammarError.ts, 3, 3))
+
+import(...["PathModule"]);
+
+var p1 = import(...a);
+>p1 : Symbol(p1, Decl(importCallExpressionGrammarError.ts, 6, 3))
+>a : Symbol(a, Decl(importCallExpressionGrammarError.ts, 3, 3))
+
+const p2 = import();
+>p2 : Symbol(p2, Decl(importCallExpressionGrammarError.ts, 7, 5))
+
+const p4 = import("pathToModule", "secondModule");
+>p4 : Symbol(p4, Decl(importCallExpressionGrammarError.ts, 8, 5))
+

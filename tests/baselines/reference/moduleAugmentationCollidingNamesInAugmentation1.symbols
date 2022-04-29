@@ -1,0 +1,60 @@
+=== tests/cases/compiler/map1.ts ===
+import { Observable } from "./observable"
+>Observable : Symbol(Observable, Decl(map1.ts, 0, 8))
+
+(<any>Observable.prototype).map = function() { }
+>Observable.prototype : Symbol(Observable.prototype)
+>Observable : Symbol(Observable, Decl(map1.ts, 0, 8))
+>prototype : Symbol(Observable.prototype)
+
+declare module "./observable" {
+>"./observable" : Symbol("tests/cases/compiler/observable", Decl(observable.ts, 0, 0), Decl(map1.ts, 2, 48), Decl(map2.ts, 2, 48))
+
+    interface I {x0}
+>I : Symbol(I, Decl(map1.ts, 4, 31), Decl(map2.ts, 4, 31))
+>x0 : Symbol(I.x0, Decl(map1.ts, 5, 17))
+}
+
+=== tests/cases/compiler/map2.ts ===
+import { Observable } from "./observable"
+>Observable : Symbol(Observable, Decl(map2.ts, 0, 8))
+
+(<any>Observable.prototype).map = function() { }
+>Observable.prototype : Symbol(Observable.prototype)
+>Observable : Symbol(Observable, Decl(map2.ts, 0, 8))
+>prototype : Symbol(Observable.prototype)
+
+declare module "./observable" {
+>"./observable" : Symbol("tests/cases/compiler/observable", Decl(observable.ts, 0, 0), Decl(map1.ts, 2, 48), Decl(map2.ts, 2, 48))
+
+    interface I {x1}
+>I : Symbol(I, Decl(map1.ts, 4, 31), Decl(map2.ts, 4, 31))
+>x1 : Symbol(I.x1, Decl(map2.ts, 5, 17))
+}
+
+
+=== tests/cases/compiler/observable.ts ===
+export declare class Observable<T> {
+>Observable : Symbol(Observable, Decl(observable.ts, 0, 0))
+>T : Symbol(T, Decl(observable.ts, 0, 32))
+
+    filter(pred: (e:T) => boolean): Observable<T>;
+>filter : Symbol(Observable.filter, Decl(observable.ts, 0, 36))
+>pred : Symbol(pred, Decl(observable.ts, 1, 11))
+>e : Symbol(e, Decl(observable.ts, 1, 18))
+>T : Symbol(T, Decl(observable.ts, 0, 32))
+>Observable : Symbol(Observable, Decl(observable.ts, 0, 0))
+>T : Symbol(T, Decl(observable.ts, 0, 32))
+}
+
+=== tests/cases/compiler/main.ts ===
+import { Observable } from "./observable"
+>Observable : Symbol(Observable, Decl(main.ts, 0, 8))
+
+import "./map1";
+import "./map2";
+
+let x: Observable<number>;
+>x : Symbol(x, Decl(main.ts, 4, 3))
+>Observable : Symbol(Observable, Decl(main.ts, 0, 8))
+

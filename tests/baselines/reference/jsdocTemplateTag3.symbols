@@ -1,0 +1,70 @@
+=== tests/cases/conformance/jsdoc/a.js ===
+/**
+ * @template {{ a: number, b: string }} T,U A Comment
+ * @template {{ c: boolean }} V uh ... are comments even supported??
+ * @template W
+ * @template X That last one had no comment
+ * @param {T} t
+ * @param {U} u
+ * @param {V} v
+ * @param {W} w
+ * @param {X} x
+ * @return {W | X}
+ */
+function f(t, u, v, w, x) {
+>f : Symbol(f, Decl(a.js, 0, 0))
+>t : Symbol(t, Decl(a.js, 12, 11))
+>u : Symbol(u, Decl(a.js, 12, 13))
+>v : Symbol(v, Decl(a.js, 12, 16))
+>w : Symbol(w, Decl(a.js, 12, 19))
+>x : Symbol(x, Decl(a.js, 12, 22))
+
+    if(t.a + t.b.length > u.a - u.b.length && v.c) {
+>t.a : Symbol(a, Decl(a.js, 1, 15))
+>t : Symbol(t, Decl(a.js, 12, 11))
+>a : Symbol(a, Decl(a.js, 1, 15))
+>t.b.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>t.b : Symbol(b, Decl(a.js, 1, 26))
+>t : Symbol(t, Decl(a.js, 12, 11))
+>b : Symbol(b, Decl(a.js, 1, 26))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>u : Symbol(u, Decl(a.js, 12, 13))
+>u : Symbol(u, Decl(a.js, 12, 13))
+>v.c : Symbol(c, Decl(a.js, 2, 15))
+>v : Symbol(v, Decl(a.js, 12, 16))
+>c : Symbol(c, Decl(a.js, 2, 15))
+
+        return w;
+>w : Symbol(w, Decl(a.js, 12, 19))
+    }
+    return x;
+>x : Symbol(x, Decl(a.js, 12, 22))
+}
+
+f({ a: 12, b: 'hi', c: null }, undefined, { c: false, d: 12, b: undefined }, 101, 'nope');
+>f : Symbol(f, Decl(a.js, 0, 0))
+>a : Symbol(a, Decl(a.js, 19, 3))
+>b : Symbol(b, Decl(a.js, 19, 10))
+>c : Symbol(c, Decl(a.js, 19, 19))
+>undefined : Symbol(undefined)
+>c : Symbol(c, Decl(a.js, 19, 43))
+>d : Symbol(d, Decl(a.js, 19, 53))
+>b : Symbol(b, Decl(a.js, 19, 60))
+>undefined : Symbol(undefined)
+
+f({ a: 12  }, undefined, undefined, 101, 'nope');
+>f : Symbol(f, Decl(a.js, 0, 0))
+>a : Symbol(a, Decl(a.js, 20, 3))
+>undefined : Symbol(undefined)
+>undefined : Symbol(undefined)
+
+/**
+ * @template {NoLongerAllowed}
+ * @template T preceding line's syntax is no longer allowed
+ * @param {T} x
+ */
+function g(x) { }
+>g : Symbol(g, Decl(a.js, 20, 49))
+>x : Symbol(x, Decl(a.js, 27, 11))
+
+

@@ -1,0 +1,15 @@
+=== tests/cases/conformance/internalModules/moduleDeclarations/InvalidNonInstantiatedModule.ts ===
+module M {
+    export interface Point { x: number; y: number }
+>x : number
+>y : number
+}
+
+var m = M; // Error, not instantiated can not be used as var
+>m : any
+>M : any
+
+var x: typeof M; // Error only a namespace
+>x : any
+>M : any
+

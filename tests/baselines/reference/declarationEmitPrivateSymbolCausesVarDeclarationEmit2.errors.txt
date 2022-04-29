@@ -1,0 +1,25 @@
+tests/cases/compiler/c.ts(4,14): error TS2415: Class 'D' incorrectly extends base class 'C'.
+  Types have separate declarations of a private property '[x]'.
+
+
+==== tests/cases/compiler/a.ts (0 errors) ====
+    export const x = Symbol();
+    
+==== tests/cases/compiler/b.ts (0 errors) ====
+    import { x } from "./a";
+    
+    export class C {
+      private [x]: number = 1;
+    }
+    
+==== tests/cases/compiler/c.ts (1 errors) ====
+    import { x } from "./a";
+    import { C } from "./b";
+    
+    export class D extends C {
+                 ~
+!!! error TS2415: Class 'D' incorrectly extends base class 'C'.
+!!! error TS2415:   Types have separate declarations of a private property '[x]'.
+      private [x]: 12 = 12;
+    }
+    

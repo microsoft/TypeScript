@@ -1,0 +1,84 @@
+=== tests/cases/compiler/collisionThisExpressionAndPropertyNameAsConstuctorParameter.ts ===
+class Foo2 {
+>Foo2 : Foo2
+
+    constructor(_this: number) { //Error
+>_this : number
+
+        var lambda = () => {
+>lambda : () => (x: any) => this
+>() => {            return x => this;   // New scope.  So should inject new _this capture        } : () => (x: any) => this
+
+            return x => this;   // New scope.  So should inject new _this capture
+>x => this : (x: any) => this
+>x : any
+>this : this
+        }
+    }
+}
+
+class Foo3 {
+>Foo3 : Foo3
+
+    constructor(private _this: number) { // Error
+>_this : number
+
+        var lambda = () => {
+>lambda : () => (x: any) => this
+>() => {            return x => this;   // New scope.  So should inject new _this capture        } : () => (x: any) => this
+
+            return x => this;   // New scope.  So should inject new _this capture
+>x => this : (x: any) => this
+>x : any
+>this : this
+        }
+    }
+}   
+
+class Foo4 {
+>Foo4 : Foo4
+
+    constructor(_this: number); // No code gen - no error
+>_this : number
+
+    constructor(_this: string); // No code gen - no error
+>_this : string
+
+    constructor(_this: any) { // Error
+>_this : any
+
+        var lambda = () => {
+>lambda : () => (x: any) => this
+>() => {            return x => this;   // New scope.  So should inject new _this capture        } : () => (x: any) => this
+
+            return x => this;   // New scope.  So should inject new _this capture
+>x => this : (x: any) => this
+>x : any
+>this : this
+        }
+    }
+}  
+
+class Foo5 {
+>Foo5 : Foo5
+
+    constructor(_this: number); // No code gen - no error
+>_this : number
+
+    constructor(_this: string); // No code gen - no error
+>_this : string
+
+    constructor(private _this: any) { // Error
+>_this : any
+
+        var lambda = () => {
+>lambda : () => (x: any) => this
+>() => {            return x => this;   // New scope.  So should inject new _this capture        } : () => (x: any) => this
+
+            return x => this;   // New scope.  So should inject new _this capture
+>x => this : (x: any) => this
+>x : any
+>this : this
+        }
+    }
+}  

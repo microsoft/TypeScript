@@ -1,0 +1,45 @@
+=== tests/cases/compiler/other.ts ===
+type Experiment<Name> = {
+>Experiment : Symbol(Experiment, Decl(other.ts, 0, 0))
+>Name : Symbol(Name, Decl(other.ts, 0, 16))
+
+    name: Name;
+>name : Symbol(name, Decl(other.ts, 0, 25))
+>Name : Symbol(Name, Decl(other.ts, 0, 16))
+
+};
+declare const createExperiment: <Name extends string>(
+>createExperiment : Symbol(createExperiment, Decl(other.ts, 3, 13))
+>Name : Symbol(Name, Decl(other.ts, 3, 33))
+
+    options: Experiment<Name>
+>options : Symbol(options, Decl(other.ts, 3, 54))
+>Experiment : Symbol(Experiment, Decl(other.ts, 0, 0))
+>Name : Symbol(Name, Decl(other.ts, 3, 33))
+
+) => Experiment<Name>;
+>Experiment : Symbol(Experiment, Decl(other.ts, 0, 0))
+>Name : Symbol(Name, Decl(other.ts, 3, 33))
+
+export default createExperiment({
+>createExperiment : Symbol(createExperiment, Decl(other.ts, 3, 13))
+
+    name: "foo"
+>name : Symbol(name, Decl(other.ts, 6, 33))
+
+});
+
+=== tests/cases/compiler/main.ts ===
+import other from "./other";
+>other : Symbol(other, Decl(main.ts, 0, 6))
+
+export const obj = {
+>obj : Symbol(obj, Decl(main.ts, 1, 12))
+
+    [other.name]: 1,
+>[other.name] : Symbol([other.name], Decl(main.ts, 1, 20))
+>other.name : Symbol(name, Decl(other.ts, 0, 25))
+>other : Symbol(other, Decl(main.ts, 0, 6))
+>name : Symbol(name, Decl(other.ts, 0, 25))
+
+};

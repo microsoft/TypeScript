@@ -1,0 +1,12 @@
+tests/cases/conformance/parser/ecmascript5/MemberAccessorDeclarations/parserMemberAccessorDeclaration10.ts(2,5): error TS1031: 'export' modifier cannot appear on class elements of this kind.
+tests/cases/conformance/parser/ecmascript5/MemberAccessorDeclarations/parserMemberAccessorDeclaration10.ts(2,16): error TS2378: A 'get' accessor must return a value.
+
+
+==== tests/cases/conformance/parser/ecmascript5/MemberAccessorDeclarations/parserMemberAccessorDeclaration10.ts (2 errors) ====
+    class C {
+        export get Foo() { }
+        ~~~~~~
+!!! error TS1031: 'export' modifier cannot appear on class elements of this kind.
+                   ~~~
+!!! error TS2378: A 'get' accessor must return a value.
+    }

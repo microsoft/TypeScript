@@ -1,0 +1,43 @@
+=== tests/cases/compiler/strictNullLogicalAndOr.ts ===
+// Repro from #9113
+
+let sinOrCos = Math.random() < .5;
+>sinOrCos : Symbol(sinOrCos, Decl(strictNullLogicalAndOr.ts, 2, 3))
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+
+let choice = sinOrCos && Math.sin || Math.cos;
+>choice : Symbol(choice, Decl(strictNullLogicalAndOr.ts, 3, 3))
+>sinOrCos : Symbol(sinOrCos, Decl(strictNullLogicalAndOr.ts, 2, 3))
+>Math.sin : Symbol(Math.sin, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>sin : Symbol(Math.sin, Decl(lib.es5.d.ts, --, --))
+>Math.cos : Symbol(Math.cos, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>cos : Symbol(Math.cos, Decl(lib.es5.d.ts, --, --))
+
+choice(Math.PI);
+>choice : Symbol(choice, Decl(strictNullLogicalAndOr.ts, 3, 3))
+>Math.PI : Symbol(Math.PI, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>PI : Symbol(Math.PI, Decl(lib.es5.d.ts, --, --))
+
+function sq(n?: number): number {
+>sq : Symbol(sq, Decl(strictNullLogicalAndOr.ts, 5, 16))
+>n : Symbol(n, Decl(strictNullLogicalAndOr.ts, 7, 12))
+
+  const r = n !== undefined && n*n || 0;
+>r : Symbol(r, Decl(strictNullLogicalAndOr.ts, 8, 7))
+>n : Symbol(n, Decl(strictNullLogicalAndOr.ts, 7, 12))
+>undefined : Symbol(undefined)
+>n : Symbol(n, Decl(strictNullLogicalAndOr.ts, 7, 12))
+>n : Symbol(n, Decl(strictNullLogicalAndOr.ts, 7, 12))
+
+  return r;
+>r : Symbol(r, Decl(strictNullLogicalAndOr.ts, 8, 7))
+}
+
+sq(3);
+>sq : Symbol(sq, Decl(strictNullLogicalAndOr.ts, 5, 16))
+

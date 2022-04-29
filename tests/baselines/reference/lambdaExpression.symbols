@@ -1,0 +1,9 @@
+=== tests/cases/compiler/lambdaExpression.ts ===
+() => 0; // Needs to be wrapped in parens to be a valid expression (not declaration)
+var y = 0;
+>y : Symbol(y, Decl(lambdaExpression.ts, 1, 3))
+
+(()=>0);
+var x = 0;
+>x : Symbol(x, Decl(lambdaExpression.ts, 3, 3))
+

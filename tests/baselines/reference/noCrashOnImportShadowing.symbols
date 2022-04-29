@@ -1,0 +1,52 @@
+=== tests/cases/compiler/b.ts ===
+export const zzz = 123;
+>zzz : Symbol(zzz, Decl(b.ts, 0, 12))
+
+=== tests/cases/compiler/a.ts ===
+import * as B from "./b";
+>B : Symbol(B, Decl(a.ts, 0, 6), Decl(a.ts, 0, 25))
+
+interface B {
+>B : Symbol(B, Decl(a.ts, 0, 6), Decl(a.ts, 0, 25))
+
+    x: string;
+>x : Symbol(B.x, Decl(a.ts, 2, 13))
+}
+
+const x: B = { x: "" };
+>x : Symbol(x, Decl(a.ts, 6, 5))
+>B : Symbol(B, Decl(a.ts, 0, 6), Decl(a.ts, 0, 25))
+>x : Symbol(x, Decl(a.ts, 6, 14))
+
+B.zzz;
+>B.zzz : Symbol(B.zzz, Decl(b.ts, 0, 12))
+>B : Symbol(B, Decl(a.ts, 0, 6), Decl(a.ts, 0, 25))
+>zzz : Symbol(B.zzz, Decl(b.ts, 0, 12))
+
+export { B };
+>B : Symbol(B, Decl(a.ts, 9, 8))
+
+=== tests/cases/compiler/index.ts ===
+import { B } from "./a";
+>B : Symbol(B, Decl(index.ts, 0, 8))
+
+const x: B = { x: "" };
+>x : Symbol(x, Decl(index.ts, 2, 5))
+>B : Symbol(B, Decl(index.ts, 0, 8))
+>x : Symbol(x, Decl(index.ts, 2, 14))
+
+B.zzz;
+
+import * as OriginalB from "./b";
+>OriginalB : Symbol(OriginalB, Decl(index.ts, 5, 6))
+
+OriginalB.zzz;
+>OriginalB.zzz : Symbol(OriginalB.zzz, Decl(b.ts, 0, 12))
+>OriginalB : Symbol(OriginalB, Decl(index.ts, 5, 6))
+>zzz : Symbol(OriginalB.zzz, Decl(b.ts, 0, 12))
+
+const y: OriginalB = x;
+>y : Symbol(y, Decl(index.ts, 8, 5))
+>OriginalB : Symbol(OriginalB)
+>x : Symbol(x, Decl(index.ts, 2, 5))
+

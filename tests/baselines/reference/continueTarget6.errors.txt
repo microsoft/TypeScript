@@ -1,0 +1,9 @@
+tests/cases/compiler/continueTarget6.ts(2,3): error TS1115: A 'continue' statement can only jump to a label of an enclosing iteration statement.
+
+
+==== tests/cases/compiler/continueTarget6.ts (1 errors) ====
+    while (true) {
+      continue target;
+      ~~~~~~~~~~~~~~~~
+!!! error TS1115: A 'continue' statement can only jump to a label of an enclosing iteration statement.
+    }

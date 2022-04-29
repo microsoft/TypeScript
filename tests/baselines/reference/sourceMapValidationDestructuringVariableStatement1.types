@@ -1,0 +1,145 @@
+=== tests/cases/compiler/sourceMapValidationDestructuringVariableStatement1.ts ===
+interface Robot {
+    name: string;
+>name : string
+
+    skill: string;
+>skill : string
+}
+declare var console: {
+>console : { log(msg: string): void; }
+
+    log(msg: string): void;
+>log : (msg: string) => void
+>msg : string
+}
+var hello = "hello";
+>hello : string
+>"hello" : "hello"
+
+var robotA: Robot = { name: "mower", skill: "mowing" };
+>robotA : Robot
+>{ name: "mower", skill: "mowing" } : { name: string; skill: string; }
+>name : string
+>"mower" : "mower"
+>skill : string
+>"mowing" : "mowing"
+
+var robotB: Robot = { name: "trimmer", skill: "trimming" };
+>robotB : Robot
+>{ name: "trimmer", skill: "trimming" } : { name: string; skill: string; }
+>name : string
+>"trimmer" : "trimmer"
+>skill : string
+>"trimming" : "trimming"
+
+var a: string, { name: nameA } = robotA;
+>a : string
+>name : any
+>nameA : string
+>robotA : Robot
+
+var b: string, { name: nameB, skill: skillB } = robotB;
+>b : string
+>name : any
+>nameB : string
+>skill : any
+>skillB : string
+>robotB : Robot
+
+var c: string, { name: nameC, skill: skillC } = { name: "Edger", skill: "cutting edges" };
+>c : string
+>name : any
+>nameC : string
+>skill : any
+>skillC : string
+>{ name: "Edger", skill: "cutting edges" } : { name: string; skill: string; }
+>name : string
+>"Edger" : "Edger"
+>skill : string
+>"cutting edges" : "cutting edges"
+
+var { name: nameA } = robotA, a = hello;
+>name : any
+>nameA : string
+>robotA : Robot
+>a : string
+>hello : string
+
+var { name: nameB, skill: skillB } = robotB, b = " hello";
+>name : any
+>nameB : string
+>skill : any
+>skillB : string
+>robotB : Robot
+>b : string
+>" hello" : " hello"
+
+var { name: nameC, skill: skillC } = { name: "Edger", skill: "cutting edges" }, c = hello;
+>name : any
+>nameC : string
+>skill : any
+>skillC : string
+>{ name: "Edger", skill: "cutting edges" } : { name: string; skill: string; }
+>name : string
+>"Edger" : "Edger"
+>skill : string
+>"cutting edges" : "cutting edges"
+>c : string
+>hello : string
+
+var a = hello, { name: nameA } = robotA, a1= "hello";
+>a : string
+>hello : string
+>name : any
+>nameA : string
+>robotA : Robot
+>a1 : string
+>"hello" : "hello"
+
+var b = hello, { name: nameB, skill: skillB } = robotB, b1 = "hello";
+>b : string
+>hello : string
+>name : any
+>nameB : string
+>skill : any
+>skillB : string
+>robotB : Robot
+>b1 : string
+>"hello" : "hello"
+
+var c = hello, { name: nameC, skill: skillC } = { name: "Edger", skill: "cutting edges" }, c1 = hello;
+>c : string
+>hello : string
+>name : any
+>nameC : string
+>skill : any
+>skillC : string
+>{ name: "Edger", skill: "cutting edges" } : { name: string; skill: string; }
+>name : string
+>"Edger" : "Edger"
+>skill : string
+>"cutting edges" : "cutting edges"
+>c1 : string
+>hello : string
+
+if (nameA == nameB) {
+>nameA == nameB : boolean
+>nameA : string
+>nameB : string
+
+    console.log(skillB);
+>console.log(skillB) : void
+>console.log : (msg: string) => void
+>console : { log(msg: string): void; }
+>log : (msg: string) => void
+>skillB : string
+}
+else {
+    console.log(nameC);
+>console.log(nameC) : void
+>console.log : (msg: string) => void
+>console : { log(msg: string): void; }
+>log : (msg: string) => void
+>nameC : string
+}

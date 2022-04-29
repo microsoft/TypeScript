@@ -1,0 +1,35 @@
+=== tests/cases/compiler/recursiveReturns.ts ===
+function R1() {
+>R1 : () => void
+
+	R1();
+>R1() : void
+>R1 : () => void
+
+	return;
+}
+
+function R2() { R2(); }
+>R2 : () => void
+>R2() : void
+>R2 : () => void
+
+function R3(n:number) {
+>R3 : (n: number) => void
+>n : number
+
+	if (n == 0) {
+>n == 0 : boolean
+>n : number
+>0 : 0
+
+		//return;
+	}
+	else {
+		R3(n--);
+>R3(n--) : void
+>R3 : (n: number) => void
+>n-- : number
+>n : number
+	}
+}

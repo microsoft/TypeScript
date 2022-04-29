@@ -1,0 +1,46 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNamesAndStaticFields.ts ===
+class A {
+>A : Symbol(A, Decl(privateNamesAndStaticFields.ts, 0, 0))
+
+    static #foo: number;
+>#foo : Symbol(A.#foo, Decl(privateNamesAndStaticFields.ts, 0, 9))
+
+    static #bar: number;
+>#bar : Symbol(A.#bar, Decl(privateNamesAndStaticFields.ts, 1, 24))
+
+    constructor () {
+        A.#foo = 3;
+>A.#foo : Symbol(A.#foo, Decl(privateNamesAndStaticFields.ts, 0, 9))
+>A : Symbol(A, Decl(privateNamesAndStaticFields.ts, 0, 0))
+
+        B.#foo; // Error
+>B : Symbol(B, Decl(privateNamesAndStaticFields.ts, 8, 1))
+
+        B.#bar; // Error
+>B : Symbol(B, Decl(privateNamesAndStaticFields.ts, 8, 1))
+    }
+}
+
+class B extends A {
+>B : Symbol(B, Decl(privateNamesAndStaticFields.ts, 8, 1))
+>A : Symbol(A, Decl(privateNamesAndStaticFields.ts, 0, 0))
+
+    static #foo: string;
+>#foo : Symbol(B.#foo, Decl(privateNamesAndStaticFields.ts, 10, 19))
+
+    constructor () {
+        super();
+>super : Symbol(A, Decl(privateNamesAndStaticFields.ts, 0, 0))
+
+        B.#foo = "some string";
+>B.#foo : Symbol(B.#foo, Decl(privateNamesAndStaticFields.ts, 10, 19))
+>B : Symbol(B, Decl(privateNamesAndStaticFields.ts, 8, 1))
+    }
+}
+
+// We currently filter out static private identifier fields in `getUnmatchedProperties`.
+// We will need a more robust solution when we support static fields
+const willErrorSomeDay: typeof A = class {}; // OK for now
+>willErrorSomeDay : Symbol(willErrorSomeDay, Decl(privateNamesAndStaticFields.ts, 20, 5))
+>A : Symbol(A, Decl(privateNamesAndStaticFields.ts, 0, 0))
+

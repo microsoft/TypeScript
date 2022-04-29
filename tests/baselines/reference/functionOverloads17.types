@@ -1,0 +1,12 @@
+=== tests/cases/compiler/functionOverloads17.ts ===
+function foo():{a:number;}
+>foo : () => {    a: number;}
+>a : number
+
+function foo():{a:string;} { return {a:""} }
+>foo : () => { a: number; }
+>a : string
+>{a:""} : { a: string; }
+>a : string
+>"" : ""
+

@@ -1,0 +1,292 @@
+=== tests/cases/conformance/expressions/functionCalls/overloadResolutionConstructors.ts ===
+class SomeBase {
+>SomeBase : SomeBase
+
+    private n;
+>n : any
+
+    public s: string;
+>s : string
+}
+class SomeDerived1 extends SomeBase {
+>SomeDerived1 : SomeDerived1
+>SomeBase : SomeBase
+
+    private m;
+>m : any
+}
+class SomeDerived2 extends SomeBase {
+>SomeDerived2 : SomeDerived2
+>SomeBase : SomeBase
+
+    private m;
+>m : any
+}
+class SomeDerived3 extends SomeBase {
+>SomeDerived3 : SomeDerived3
+>SomeBase : SomeBase
+
+    private m;
+>m : any
+}
+
+interface fn1 {
+    new (s: string): string;
+>s : string
+
+    new (s: number): number;
+>s : number
+}
+var fn1: fn1;
+>fn1 : fn1
+
+// Ambiguous call picks the first overload in declaration order
+var s = new fn1(undefined);
+>s : string
+>new fn1(undefined) : string
+>fn1 : fn1
+>undefined : undefined
+
+var s: string;
+>s : string
+
+// No candidate overloads found
+new fn1({}); // Error
+>new fn1({}) : never
+>fn1 : fn1
+>{} : {}
+
+// Generic and non - generic overload where generic overload is the only candidate when called with type arguments
+interface fn2 {
+    new (s: string, n: number): number;
+>s : string
+>n : number
+
+    new <T>(n: number, t: T): T;
+>n : number
+>t : T
+}
+var fn2: fn2;
+>fn2 : fn2
+
+var d = new fn2<Date>(0, undefined);
+>d : Date
+>new fn2<Date>(0, undefined) : Date
+>fn2 : fn2
+>0 : 0
+>undefined : undefined
+
+var d: Date;
+>d : Date
+
+// Generic and non - generic overload where generic overload is the only candidate when called without type arguments
+var s = new fn2(0, '');
+>s : string
+>new fn2(0, '') : ""
+>fn2 : fn2
+>0 : 0
+>'' : ""
+
+// Generic and non - generic overload where non - generic overload is the only candidate when called with type arguments
+new fn2<Date>('', 0); // Error
+>new fn2<Date>('', 0) : number
+>fn2 : fn2
+>'' : ""
+>0 : 0
+
+// Generic and non - generic overload where non - generic overload is the only candidate when called without type arguments
+new fn2('', 0); // OK
+>new fn2('', 0) : number
+>fn2 : fn2
+>'' : ""
+>0 : 0
+
+// Generic overloads with differing arity called without type arguments
+interface fn3 {
+    new<T>(n: T): string;
+>n : T
+
+    new<T, U>(s: string, t: T, u: U): U;
+>s : string
+>t : T
+>u : U
+
+    new<T, U, V>(v: V, u: U, t: T): number;
+>v : V
+>u : U
+>t : T
+}
+var fn3: fn3;
+>fn3 : fn3
+
+var s = new fn3(3);
+>s : string
+>new fn3(3) : string
+>fn3 : fn3
+>3 : 3
+
+var s = new fn3('', 3, '');
+>s : string
+>new fn3('', 3, '') : ""
+>fn3 : fn3
+>'' : ""
+>3 : 3
+>'' : ""
+
+var n = new fn3(5, 5, 5);
+>n : number
+>new fn3(5, 5, 5) : number
+>fn3 : fn3
+>5 : 5
+>5 : 5
+>5 : 5
+
+var n: number;
+>n : number
+
+// Generic overloads with differing arity called with type arguments matching each overload type parameter count
+var s = new fn3<number>(4);
+>s : string
+>new fn3<number>(4) : string
+>fn3 : fn3
+>4 : 4
+
+var s = new fn3<string, string>('', '', '');
+>s : string
+>new fn3<string, string>('', '', '') : string
+>fn3 : fn3
+>'' : ""
+>'' : ""
+>'' : ""
+
+var n = new fn3<number, string, string>('', '', 3);
+>n : number
+>new fn3<number, string, string>('', '', 3) : number
+>fn3 : fn3
+>'' : ""
+>'' : ""
+>3 : 3
+
+// Generic overloads with differing arity called with type argument count that doesn't match any overload
+new fn3<number, number, number, number>(); // Error
+>new fn3<number, number, number, number>() : string
+>fn3 : fn3
+
+// Generic overloads with constraints called with type arguments that satisfy the constraints
+interface fn4 {
+    new<T extends string, U extends number>(n: T, m: U);
+>n : T
+>m : U
+
+    new<T extends number, U extends string>(n: T, m: U);
+>n : T
+>m : U
+}
+var fn4: fn4;
+>fn4 : fn4
+
+new fn4<string, number>('', 3);
+>new fn4<string, number>('', 3) : any
+>fn4 : fn4
+>'' : ""
+>3 : 3
+
+new fn4<string, number>(3, ''); // Error
+>new fn4<string, number>(3, '') : any
+>fn4 : fn4
+>3 : 3
+>'' : ""
+
+new fn4<number, string>('', 3); // Error
+>new fn4<number, string>('', 3) : any
+>fn4 : fn4
+>'' : ""
+>3 : 3
+
+new fn4<number, string>(3, ''); 
+>new fn4<number, string>(3, '') : any
+>fn4 : fn4
+>3 : 3
+>'' : ""
+
+// Generic overloads with constraints called without type arguments but with types that satisfy the constraints
+new fn4('', 3);
+>new fn4('', 3) : any
+>fn4 : fn4
+>'' : ""
+>3 : 3
+
+new fn4(3, '');
+>new fn4(3, '') : any
+>fn4 : fn4
+>3 : 3
+>'' : ""
+
+new fn4(3, undefined);
+>new fn4(3, undefined) : any
+>fn4 : fn4
+>3 : 3
+>undefined : undefined
+
+new fn4('', null);
+>new fn4('', null) : any
+>fn4 : fn4
+>'' : ""
+>null : null
+
+// Generic overloads with constraints called with type arguments that do not satisfy the constraints
+new fn4<boolean, Date>(null, null); // Error
+>new fn4<boolean, Date>(null, null) : any
+>fn4 : fn4
+>null : null
+>null : null
+
+// Generic overloads with constraints called without type arguments but with types that do not satisfy the constraints
+new fn4(true, null); // Error
+>new fn4(true, null) : any
+>fn4 : fn4
+>true : true
+>null : null
+
+new fn4(null, true); // Error
+>new fn4(null, true) : any
+>fn4 : fn4
+>null : null
+>true : true
+
+// Non - generic overloads where contextual typing of function arguments has errors
+interface fn5 {
+    new(f: (n: string) => void): string;
+>f : (n: string) => void
+>n : string
+
+    new(f: (n: number) => void): number;
+>f : (n: number) => void
+>n : number
+}
+var fn5: fn5;
+>fn5 : fn5
+
+var n = new fn5((n) => n.toFixed());
+>n : number
+>new fn5((n) => n.toFixed()) : string
+>fn5 : fn5
+>(n) => n.toFixed() : (n: string) => any
+>n : string
+>n.toFixed() : any
+>n.toFixed : any
+>n : string
+>toFixed : any
+
+var s = new fn5((n) => n.substr(0));
+>s : string
+>new fn5((n) => n.substr(0)) : string
+>fn5 : fn5
+>(n) => n.substr(0) : (n: string) => string
+>n : string
+>n.substr(0) : string
+>n.substr : (from: number, length?: number) => string
+>n : string
+>substr : (from: number, length?: number) => string
+>0 : 0
+

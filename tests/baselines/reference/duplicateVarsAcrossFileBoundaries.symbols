@@ -1,0 +1,56 @@
+=== tests/cases/compiler/duplicateVarsAcrossFileBoundaries_0.ts ===
+var x = 3;
+>x : Symbol(x, Decl(duplicateVarsAcrossFileBoundaries_0.ts, 0, 3), Decl(duplicateVarsAcrossFileBoundaries_1.ts, 0, 3), Decl(duplicateVarsAcrossFileBoundaries_2.ts, 0, 3), Decl(duplicateVarsAcrossFileBoundaries_3.ts, 0, 3))
+
+var y = "";
+>y : Symbol(y, Decl(duplicateVarsAcrossFileBoundaries_0.ts, 1, 3), Decl(duplicateVarsAcrossFileBoundaries_2.ts, 1, 3), Decl(duplicateVarsAcrossFileBoundaries_3.ts, 1, 3))
+
+=== tests/cases/compiler/duplicateVarsAcrossFileBoundaries_1.ts ===
+var x = true;
+>x : Symbol(x, Decl(duplicateVarsAcrossFileBoundaries_0.ts, 0, 3), Decl(duplicateVarsAcrossFileBoundaries_1.ts, 0, 3), Decl(duplicateVarsAcrossFileBoundaries_2.ts, 0, 3), Decl(duplicateVarsAcrossFileBoundaries_3.ts, 0, 3))
+
+var z = 3;
+>z : Symbol(z, Decl(duplicateVarsAcrossFileBoundaries_1.ts, 1, 3), Decl(duplicateVarsAcrossFileBoundaries_2.ts, 2, 3), Decl(duplicateVarsAcrossFileBoundaries_3.ts, 2, 3))
+
+=== tests/cases/compiler/duplicateVarsAcrossFileBoundaries_2.ts ===
+var x = "";
+>x : Symbol(x, Decl(duplicateVarsAcrossFileBoundaries_0.ts, 0, 3), Decl(duplicateVarsAcrossFileBoundaries_1.ts, 0, 3), Decl(duplicateVarsAcrossFileBoundaries_2.ts, 0, 3), Decl(duplicateVarsAcrossFileBoundaries_3.ts, 0, 3))
+
+var y = 3;
+>y : Symbol(y, Decl(duplicateVarsAcrossFileBoundaries_0.ts, 1, 3), Decl(duplicateVarsAcrossFileBoundaries_2.ts, 1, 3), Decl(duplicateVarsAcrossFileBoundaries_3.ts, 1, 3))
+
+var z = false;
+>z : Symbol(z, Decl(duplicateVarsAcrossFileBoundaries_1.ts, 1, 3), Decl(duplicateVarsAcrossFileBoundaries_2.ts, 2, 3), Decl(duplicateVarsAcrossFileBoundaries_3.ts, 2, 3))
+
+=== tests/cases/compiler/duplicateVarsAcrossFileBoundaries_3.ts ===
+var x = 0;
+>x : Symbol(x, Decl(duplicateVarsAcrossFileBoundaries_0.ts, 0, 3), Decl(duplicateVarsAcrossFileBoundaries_1.ts, 0, 3), Decl(duplicateVarsAcrossFileBoundaries_2.ts, 0, 3), Decl(duplicateVarsAcrossFileBoundaries_3.ts, 0, 3))
+
+var y = "";
+>y : Symbol(y, Decl(duplicateVarsAcrossFileBoundaries_0.ts, 1, 3), Decl(duplicateVarsAcrossFileBoundaries_2.ts, 1, 3), Decl(duplicateVarsAcrossFileBoundaries_3.ts, 1, 3))
+
+var z = 0;
+>z : Symbol(z, Decl(duplicateVarsAcrossFileBoundaries_1.ts, 1, 3), Decl(duplicateVarsAcrossFileBoundaries_2.ts, 2, 3), Decl(duplicateVarsAcrossFileBoundaries_3.ts, 2, 3))
+
+=== tests/cases/compiler/duplicateVarsAcrossFileBoundaries_4.ts ===
+module P { }
+>P : Symbol(P, Decl(duplicateVarsAcrossFileBoundaries_4.ts, 0, 0), Decl(duplicateVarsAcrossFileBoundaries_5.ts, 2, 3))
+
+import p = P;
+>p : Symbol(p, Decl(duplicateVarsAcrossFileBoundaries_4.ts, 0, 12))
+>P : Symbol(P, Decl(duplicateVarsAcrossFileBoundaries_4.ts, 0, 0), Decl(duplicateVarsAcrossFileBoundaries_5.ts, 2, 3))
+
+var q;
+>q : Symbol(q, Decl(duplicateVarsAcrossFileBoundaries_4.ts, 2, 3), Decl(duplicateVarsAcrossFileBoundaries_5.ts, 0, 12))
+
+=== tests/cases/compiler/duplicateVarsAcrossFileBoundaries_5.ts ===
+module Q { }
+>Q : Symbol(Q, Decl(duplicateVarsAcrossFileBoundaries_5.ts, 0, 0))
+
+import q = Q;
+>q : Symbol(q, Decl(duplicateVarsAcrossFileBoundaries_4.ts, 2, 3), Decl(duplicateVarsAcrossFileBoundaries_5.ts, 0, 12))
+>Q : Symbol(Q, Decl(duplicateVarsAcrossFileBoundaries_5.ts, 0, 0))
+
+var p;
+>p : Symbol(P, Decl(duplicateVarsAcrossFileBoundaries_4.ts, 0, 0), Decl(duplicateVarsAcrossFileBoundaries_5.ts, 2, 3))
+

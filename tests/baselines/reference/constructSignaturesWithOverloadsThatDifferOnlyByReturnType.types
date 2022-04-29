@@ -1,0 +1,70 @@
+=== tests/cases/conformance/types/objectTypeLiteral/constructSignatures/constructSignaturesWithOverloadsThatDifferOnlyByReturnType.ts ===
+// Error for construct signature overloads to differ only by return type
+
+class C {
+>C : C
+
+    constructor(x: number) { }
+>x : number
+}
+
+class C2<T> {
+>C2 : C2<T>
+
+    constructor(x: T, y?: string) { }
+>x : T
+>y : string
+}
+
+interface I {
+    new(x: number, y: string): C;
+>x : number
+>y : string
+
+    new(x: number, y: string): C2<number>; // error
+>x : number
+>y : string
+}
+
+interface I2<T> {
+    new (x: T, y: string): C2<number>;
+>x : T
+>y : string
+
+    new (x: T, y: string): C; // error
+>x : T
+>y : string
+
+    new <T>(x: T, y: string): C2<T>;
+>x : T
+>y : string
+
+    new <T>(x: T, y: string): C; // error
+>x : T
+>y : string
+
+}
+
+var a: {
+>a : { new (x: number, y: string): C2<number>; new (x: number, y: string): C; }
+
+    new (x: number, y: string): C2<number>;
+>x : number
+>y : string
+
+    new (x: number, y: string): C; // error
+>x : number
+>y : string
+}
+
+var b: {
+>b : { new <T>(x: T, y: string): C2<T>; new <T>(x: T, y: string): C; }
+
+    new <T>(x: T, y: string): C2<T>;
+>x : T
+>y : string
+
+    new <T>(x: T, y: string): C; // error
+>x : T
+>y : string
+}

@@ -1,0 +1,44 @@
+=== tests/cases/conformance/statements/continueStatements/invalidDoWhileContinueStatements.ts ===
+// All errors
+
+// naked continue not allowed
+continue;
+
+// non-existent label
+ONE:
+do continue TWO; while (true)
+
+// continue from inside function
+TWO:
+do {
+    var x = () => {
+>x : Symbol(x, Decl(invalidDoWhileContinueStatements.ts, 12, 7))
+
+        continue TWO;
+    }
+}while (true)
+
+THREE:
+do {
+    var fn = function () {
+>fn : Symbol(fn, Decl(invalidDoWhileContinueStatements.ts, 19, 7))
+
+        continue THREE;
+    }
+}while (true)
+
+// continue forward
+do {
+    continue FIVE;
+    FIVE:
+    do { } while (true)
+}while (true)
+
+// label on non-loop statement
+NINE:
+var y = 12;
+>y : Symbol(y, Decl(invalidDoWhileContinueStatements.ts, 33, 3))
+
+do {
+    continue NINE;
+}while (true)

@@ -1,0 +1,13 @@
+=== tests/cases/conformance/salsa/async.js ===
+exports.default = { m: 1, a: 1 }
+>exports : Symbol(default, Decl(async.js, 0, 0))
+>default : Symbol(default, Decl(async.js, 0, 0))
+>m : Symbol(m, Decl(async.js, 0, 19))
+>a : Symbol(a, Decl(async.js, 0, 25))
+
+module.exports = exports['default'];
+>module.exports : Symbol(module.exports, Decl(async.js, 0, 0))
+>module : Symbol(export=, Decl(async.js, 0, 32))
+>exports : Symbol(export=, Decl(async.js, 0, 32))
+>exports : Symbol("tests/cases/conformance/salsa/async", Decl(async.js, 0, 0))
+

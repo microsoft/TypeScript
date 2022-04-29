@@ -1,0 +1,19 @@
+tests/cases/compiler/unusedClassesinNamespace4.ts(10,11): error TS6196: 'c3' is declared but never used.
+
+
+==== tests/cases/compiler/unusedClassesinNamespace4.ts (1 errors) ====
+    namespace Validation {
+        class c1 {
+    
+        }
+    
+        export class c2 {
+    
+        }
+    
+        class c3 extends c1 {
+              ~~
+!!! error TS6196: 'c3' is declared but never used.
+    
+        }
+    }

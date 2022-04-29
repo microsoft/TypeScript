@@ -1,0 +1,24 @@
+tests/cases/conformance/es6/Symbols/symbolDeclarationEmit12.ts(5,9): error TS2733: Property '[Symbol.toPrimitive]' was also declared here.
+tests/cases/conformance/es6/Symbols/symbolDeclarationEmit12.ts(9,13): error TS2718: Duplicate property '[Symbol.toPrimitive]'.
+tests/cases/conformance/es6/Symbols/symbolDeclarationEmit12.ts(10,13): error TS2718: Duplicate property '[Symbol.toPrimitive]'.
+
+
+==== tests/cases/conformance/es6/Symbols/symbolDeclarationEmit12.ts (3 errors) ====
+    module M {
+        interface I { }
+        export class C {
+            [Symbol.iterator]: I;
+            [Symbol.toPrimitive](x: I) { }
+            ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2733: Property '[Symbol.toPrimitive]' was also declared here.
+            [Symbol.isConcatSpreadable](): I {
+                return undefined
+            }
+            get [Symbol.toPrimitive]() { return undefined; }
+                ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2718: Duplicate property '[Symbol.toPrimitive]'.
+            set [Symbol.toPrimitive](x: I) { }
+                ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2718: Duplicate property '[Symbol.toPrimitive]'.
+        }
+    }
