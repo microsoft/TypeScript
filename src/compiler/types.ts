@@ -8478,7 +8478,7 @@ namespace ts {
     export interface ResolvedModuleSpecifierInfo {
         modulePaths: readonly ModulePath[] | undefined;
         moduleSpecifiers: readonly string[] | undefined;
-        isAutoImportable: boolean | undefined;
+        isBlockedByPackageJsonDependencies: boolean | undefined;
     }
 
     /* @internal */
@@ -8490,7 +8490,7 @@ namespace ts {
     export interface ModuleSpecifierCache {
         get(fromFileName: Path, toFileName: Path, preferences: UserPreferences, options: ModuleSpecifierOptions): Readonly<ResolvedModuleSpecifierInfo> | undefined;
         set(fromFileName: Path, toFileName: Path, preferences: UserPreferences, options: ModuleSpecifierOptions, modulePaths: readonly ModulePath[], moduleSpecifiers: readonly string[]): void;
-        setIsAutoImportable(fromFileName: Path, toFileName: Path, preferences: UserPreferences, options: ModuleSpecifierOptions, isAutoImportable: boolean): void;
+        setBlockedByPackageJsonDependencies(fromFileName: Path, toFileName: Path, preferences: UserPreferences, options: ModuleSpecifierOptions, isBlockedByPackageJsonDependencies: boolean): void;
         setModulePaths(fromFileName: Path, toFileName: Path, preferences: UserPreferences, options: ModuleSpecifierOptions, modulePaths: readonly ModulePath[]): void;
         clear(): void;
         count(): number;

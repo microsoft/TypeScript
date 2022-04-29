@@ -2403,6 +2403,7 @@ namespace ts.server.protocol {
     }
 
     export interface CompletionInfo {
+        readonly flags?: number;
         readonly isGlobalCompletion: boolean;
         readonly isMemberCompletion: boolean;
         readonly isNewIdentifierLocation: boolean;

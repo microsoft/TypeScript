@@ -644,6 +644,7 @@ namespace ts.codefix {
         const compilerOptions = program.getCompilerOptions();
         const moduleSpecifierResolutionHost = createModuleSpecifierResolutionHost(program, host);
         const getChecker = memoizeOne((isFromPackageJson: boolean) => isFromPackageJson ? host.getPackageJsonAutoImportProvider!()!.getTypeChecker() : program.getTypeChecker());
+        const rejectNodeModulesRelativePaths = moduleResolutionUsesNodeModules(getEmitModuleResolutionKind(compilerOptions));
         const getModuleSpecifiers = fromCacheOnly
             ? (moduleSymbol: Symbol) => ({ moduleSpecifiers: moduleSpecifiers.tryGetModuleSpecifiersFromCache(moduleSymbol, sourceFile, moduleSpecifierResolutionHost, preferences), computedWithoutCache: false })
             : (moduleSymbol: Symbol, checker: TypeChecker) => moduleSpecifiers.getModuleSpecifiersWithCacheInfo(moduleSymbol, checker, compilerOptions, sourceFile, moduleSpecifierResolutionHost, preferences);
@@ -655,19 +656,19 @@ namespace ts.codefix {
             const importedSymbolHasValueMeaning = !!(exportInfo.targetFlags & SymbolFlags.Value);
             const addAsTypeOnly = getAddAsTypeOnly(isValidTypeOnlyUseSite, /*isForNewImportDeclaration*/ true, exportInfo.symbol, exportInfo.targetFlags, checker, compilerOptions);
             computedWithoutCacheCount += computedWithoutCache ? 1 : 0;
-            return moduleSpecifiers?.map((moduleSpecifier): FixAddNewImport | FixAddJsdocTypeImport =>
+            return mapDefined(moduleSpecifiers, (moduleSpecifier): FixAddNewImport | FixAddJsdocTypeImport | undefined =>
+                rejectNodeModulesRelativePaths && pathContainsNodeModules(moduleSpecifier) ? undefined :
                 // `position` should only be undefined at a missing jsx namespace, in which case we shouldn't be looking for pure types.
-                !importedSymbolHasValueMeaning && isJs && position !== undefined
-                    ? { kind: ImportFixKind.JsdocTypeImport, moduleSpecifier, position, exportInfo, isReExport: i > 0 }
-                    : {
-                        kind: ImportFixKind.AddNew,
-                        moduleSpecifier,
-                        importKind: getImportKind(sourceFile, exportInfo.exportKind, compilerOptions),
-                        useRequire,
-                        addAsTypeOnly,
-                        exportInfo,
-                        isReExport: i > 0,
-                    }
+                !importedSymbolHasValueMeaning && isJs && position !== undefined ? { kind: ImportFixKind.JsdocTypeImport, moduleSpecifier, position, exportInfo, isReExport: i > 0 } :
+                {
+                    kind: ImportFixKind.AddNew,
+                    moduleSpecifier,
+                    importKind: getImportKind(sourceFile, exportInfo.exportKind, compilerOptions),
+                    useRequire,
+                    addAsTypeOnly,
+                    exportInfo,
+                    isReExport: i > 0,
+                }
             );
         });
 

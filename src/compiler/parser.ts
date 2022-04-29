@@ -8579,7 +8579,8 @@ namespace ts {
                     if (!comment) {
                         comment = parseTrailingTagComments(start, getNodePos(), indent, indentText);
                     }
-                    return finishNode(factory.createJSDocCallbackTag(tagName, typeExpression, fullName, comment), start);
+                    const end = comment !== undefined ? getNodePos() : typeExpression.end;
+                    return finishNode(factory.createJSDocCallbackTag(tagName, typeExpression, fullName, comment), start, end);
                 }
 
                 function escapedTextsEqual(a: EntityName, b: EntityName): boolean {
