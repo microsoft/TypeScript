@@ -6,12 +6,12 @@ return this.edit(role)
 >this.edit : any
 >this : typeof globalThis
 >edit : any
->role : any
+>role : error
 
     .then((role: Role) =>
 >then : any
 >(role: Role) =>        this.roleService.add(role)            .then((data: ng.IHttpPromiseCallbackArg<Role>) => data.data) : (role: Role) => any
->role : Role
+>role : error
 
         this.roleService.add(role)
 >this.roleService.add(role)            .then((data: ng.IHttpPromiseCallbackArg<Role>) => data.data) : any
@@ -22,14 +22,14 @@ return this.edit(role)
 >this : typeof globalThis
 >roleService : any
 >add : any
->role : Role
+>role : error
 
             .then((data: ng.IHttpPromiseCallbackArg<Role>) => data.data));
 >then : any
 >(data: ng.IHttpPromiseCallbackArg<Role>) => data.data : (data: ng.IHttpPromiseCallbackArg<Role>) => any
->data : ng.IHttpPromiseCallbackArg<Role>
+>data : error
 >ng : any
->data.data : any
+>data.data : error
 >data : ng.IHttpPromiseCallbackArg<Role>
 >data : any
 

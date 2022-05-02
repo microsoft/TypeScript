@@ -38913,7 +38913,9 @@ namespace ts {
             }
 
             if (!container) {
-                grammarErrorOnFirstToken(node, Diagnostics.A_return_statement_can_only_be_used_within_a_function_body);
+                if (!!getSourceFileOfNode(node).externalModuleIndicator) {
+                    grammarErrorOnFirstToken(node, Diagnostics.A_return_statement_can_only_be_used_within_a_function_body);
+                }
                 return;
             }
 
