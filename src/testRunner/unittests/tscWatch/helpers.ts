@@ -109,6 +109,15 @@ namespace ts.tscWatch {
             watchOrSolution: WatchOrSolution<T>
         ) => void;
     }
+    export interface TscWatchCompileChangeAsync<T extends BuilderProgram = EmitAndSemanticDiagnosticsBuilderProgram> {
+        caption: string;
+        change: (sys: TestFSWithWatch.TestServerHostTrackingWrittenFiles) => Promise<void> | void;
+        timeouts: (
+            sys: TestFSWithWatch.TestServerHostTrackingWrittenFiles,
+            programs: readonly CommandLineProgram[],
+            watchOrSolution: WatchOrSolution<T>
+        ) => Promise<void> | void;
+    }
     export interface TscWatchCheckOptions {
         baselineSourceMap?: boolean;
         baselineDependencies?: boolean;
@@ -118,6 +127,12 @@ namespace ts.tscWatch {
         subScenario: string;
         commandLineArgs: readonly string[];
         changes: readonly TscWatchCompileChange<T>[];
+    }
+    export interface TscWatchCompileBaseAsync<T extends BuilderProgram = EmitAndSemanticDiagnosticsBuilderProgram> extends TscWatchCheckOptions {
+        scenario: string;
+        subScenario: string;
+        commandLineArgs: readonly string[];
+        changes: readonly TscWatchCompileChangeAsync<T>[];
     }
     export interface TscWatchCompile extends TscWatchCompileBase {
         sys: () => WatchedSystem;
@@ -245,6 +260,15 @@ namespace ts.tscWatch {
         sys.diff(baseline, oldSnap);
         return sys.snap();
     }
+    export async function applyChangeAsync(sys: BaselineBase["sys"], baseline: BaselineBase["baseline"], change: TscWatchCompileChangeAsync["change"], caption?: TscWatchCompileChange["caption"]) {
+        const oldSnap = sys.snap();
+        baseline.push(`Change::${caption ? " " + caption : ""}`, "");
+        const changeResult = change(sys);
+        if (changeResult instanceof Promise) await changeResult;
+        baseline.push("Input::");
+        sys.diff(baseline, oldSnap);
+        return sys.snap();
+    }
 
     export interface RunWatchBaseline<T extends BuilderProgram> extends BaselineBase, TscWatchCompileBase<T> {
         sys: TestFSWithWatch.TestServerHostTrackingWrittenFiles;
@@ -271,6 +295,44 @@ namespace ts.tscWatch {
         for (const { caption, change, timeouts } of changes) {
             oldSnap = applyChange(sys, baseline, change, caption);
             timeouts(sys, programs, watchOrSolution);
+            programs = watchBaseline({
+                baseline,
+                getPrograms,
+                oldPrograms: programs,
+                sys,
+                oldSnap,
+                baselineSourceMap,
+                baselineDependencies,
+            });
+        }
+        Harness.Baseline.runBaseline(`${isBuild(commandLineArgs) ? "tsbuild" : "tsc"}${isWatch(commandLineArgs) ? "Watch" : ""}/${scenario}/${subScenario.split(" ").join("-")}.js`, baseline.join("\r\n"));
+    }
+    export interface RunWatchBaselineAsync<T extends BuilderProgram> extends BaselineBase, TscWatchCompileBaseAsync<T> {
+        sys: TestFSWithWatch.TestServerHostTrackingWrittenFiles;
+        getPrograms: () => readonly CommandLineProgram[];
+        // watchOrSolution: SolutionBuilderAsync;  // so far, not needed
+    }
+    export async function runWatchBaselineAsync<T extends BuilderProgram = EmitAndSemanticDiagnosticsBuilderProgram>({
+        scenario, subScenario, commandLineArgs,
+        getPrograms, sys, baseline, oldSnap,
+        baselineSourceMap, baselineDependencies,
+        changes
+    }: RunWatchBaselineAsync<T>) {
+        baseline.push(`${sys.getExecutingFilePath()} ${commandLineArgs.join(" ")}`);
+        let programs = watchBaseline({
+            baseline,
+            getPrograms,
+            oldPrograms: emptyArray,
+            sys,
+            oldSnap,
+            baselineSourceMap,
+            baselineDependencies,
+        });
+
+        for (const { caption, change, timeouts } of changes) {
+            oldSnap = await applyChangeAsync(sys, baseline, change, caption);
+            const timeoutsResult = timeouts(sys, programs);
+            if (timeoutsResult instanceof Promise) await timeoutsResult;
             programs = watchBaseline({
                 baseline,
                 getPrograms,
