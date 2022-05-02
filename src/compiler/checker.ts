@@ -17212,8 +17212,7 @@ namespace ts {
         }
 
         function isContextSensitiveFunctionLikeDeclaration(node: FunctionLikeDeclaration): boolean {
-            return (!isFunctionDeclaration(node) || isInJSFile(node) && !!getTypeForDeclarationFromJSDocComment(node)) &&
-                (hasContextSensitiveParameters(node) || hasContextSensitiveReturnExpression(node));
+            return hasContextSensitiveParameters(node) || hasContextSensitiveReturnExpression(node);
         }
 
         function hasContextSensitiveReturnExpression(node: FunctionLikeDeclaration) {
@@ -17222,7 +17221,7 @@ namespace ts {
         }
 
         function isContextSensitiveFunctionOrObjectLiteralMethod(func: Node): func is FunctionExpression | ArrowFunction | MethodDeclaration {
-            return (isInJSFile(func) && isFunctionDeclaration(func) || isFunctionExpressionOrArrowFunction(func) || isObjectLiteralMethod(func)) &&
+            return (isFunctionExpressionOrArrowFunction(func) || isObjectLiteralMethod(func)) &&
                 isContextSensitiveFunctionLikeDeclaration(func);
         }
 
