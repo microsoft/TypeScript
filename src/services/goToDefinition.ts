@@ -235,7 +235,7 @@ namespace ts.GoToDefinition {
             return definitionFromType(typeChecker.getTypeAtLocation(node.parent), typeChecker, node.parent, /*failedAliasResolution*/ false);
         }
 
-        const { symbol, failedAliasResolution } = getSymbol(node, typeChecker, /*skipAlias*/ true);
+        const { symbol, failedAliasResolution } = getSymbol(node, typeChecker, /*stopAtAlias*/ false);
         if (!symbol) return undefined;
 
         const typeAtLocation = typeChecker.getTypeOfSymbolAtLocation(symbol, node);
