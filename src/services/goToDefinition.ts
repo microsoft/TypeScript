@@ -1,6 +1,6 @@
 /* @internal */
 namespace ts.GoToDefinition {
-    export function getDefinitionAtPosition(program: Program, sourceFile: SourceFile, position: number, searchOtherFilesOnly?: boolean, skipAlias = true): readonly DefinitionInfo[] | undefined {
+    export function getDefinitionAtPosition(program: Program, sourceFile: SourceFile, position: number, searchOtherFilesOnly?: boolean, stopAtAlias?: boolean): readonly DefinitionInfo[] | undefined {
         const resolvedRef = getReferenceAtPosition(sourceFile, position, program);
         const fileReferenceDefinition = resolvedRef && [getDefinitionInfoForFileReference(resolvedRef.reference.fileName, resolvedRef.fileName, resolvedRef.unverified)] || emptyArray;
         if (resolvedRef?.file) {
@@ -28,7 +28,7 @@ namespace ts.GoToDefinition {
 
         if (isStaticModifier(node) && isClassStaticBlockDeclaration(node.parent)) {
             const classDecl = node.parent.parent;
-            const { symbol, failedAliasResolution } = getSymbol(classDecl, typeChecker, skipAlias);
+            const { symbol, failedAliasResolution } = getSymbol(classDecl, typeChecker, stopAtAlias);
 
             const staticBlocks = filter(classDecl.members, isClassStaticBlockDeclaration);
             const containerName = symbol ? typeChecker.symbolToString(symbol, classDecl) : "";
@@ -40,7 +40,7 @@ namespace ts.GoToDefinition {
             });
         }
 
-        let { symbol, failedAliasResolution } = getSymbol(node, typeChecker, skipAlias);
+        let { symbol, failedAliasResolution } = getSymbol(node, typeChecker, stopAtAlias);
         let fallbackNode = node;
 
         if (searchOtherFilesOnly && failedAliasResolution) {
@@ -48,7 +48,7 @@ namespace ts.GoToDefinition {
             const importDeclaration = forEach([node, ...symbol?.declarations || emptyArray], n => findAncestor(n, isAnyImportOrBareOrAccessedRequire));
             const moduleSpecifier = importDeclaration && tryGetModuleSpecifierFromDeclaration(importDeclaration);
             if (moduleSpecifier) {
-                ({ symbol, failedAliasResolution } = getSymbol(moduleSpecifier, typeChecker, skipAlias));
+                ({ symbol, failedAliasResolution } = getSymbol(moduleSpecifier, typeChecker, stopAtAlias));
                 fallbackNode = moduleSpecifier;
             }
         }
@@ -292,14 +292,14 @@ namespace ts.GoToDefinition {
         return mapDefined(checker.getIndexInfosAtLocation(node), info => info.declaration && createDefinitionFromSignatureDeclaration(checker, info.declaration));
     }
 
-    function getSymbol(node: Node, checker: TypeChecker, skipAlias: boolean) {
+    function getSymbol(node: Node, checker: TypeChecker, stopAtAlias: boolean | undefined) {
         const symbol = checker.getSymbolAtLocation(node);
         // If this is an alias, and the request came at the declaration location
         // get the aliased symbol instead. This allows for goto def on an import e.g.
         //   import {A, B} from "mod";
         // to jump to the implementation directly.
         let failedAliasResolution = false;
-        if (symbol?.declarations && symbol.flags & SymbolFlags.Alias && skipAlias && shouldSkipAlias(node, symbol.declarations[0])) {
+        if (symbol?.declarations && symbol.flags & SymbolFlags.Alias && !stopAtAlias && shouldSkipAlias(node, symbol.declarations[0])) {
             const aliased = checker.getAliasedSymbol(symbol);
             if (aliased.declarations) {
                 return { symbol: aliased };

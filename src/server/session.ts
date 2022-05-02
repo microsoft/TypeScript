@@ -334,7 +334,7 @@ namespace ts.server {
     }
 
     function getDefinitionLocation(defaultProject: Project, initialLocation: DocumentPosition, isForRename: boolean): DocumentPosition | undefined {
-        const infos = defaultProject.getLanguageService().getDefinitionAtPosition(initialLocation.fileName, initialLocation.pos, /*searchOtherFilesOnly*/ false, !isForRename);
+        const infos = defaultProject.getLanguageService().getDefinitionAtPosition(initialLocation.fileName, initialLocation.pos, /*searchOtherFilesOnly*/ false, isForRename);
         const info = infos && firstOrUndefined(infos);
         return info && !info.isLocal ? { fileName: info.fileName, pos: info.textSpan.start } : undefined;
     }
@@ -1246,7 +1246,7 @@ namespace ts.server {
                 definitions?.forEach(d => definitionSet.add(d));
                 const noDtsProject = project.getNoDtsResolutionProject([file]);
                 const ls = noDtsProject.getLanguageService();
-                const jsDefinitions = ls.getDefinitionAtPosition(file, position, /*searchOtherFilesOnly*/ true, /*skipAlias*/ true)
+                const jsDefinitions = ls.getDefinitionAtPosition(file, position, /*searchOtherFilesOnly*/ true, /*stopAtAlias*/ false)
                     ?.filter(d => toNormalizedPath(d.fileName) !== file);
                 if (some(jsDefinitions)) {
                     for (const jsDefinition of jsDefinitions) {
@@ -1333,7 +1333,7 @@ namespace ts.server {
                 if ((isStringLiteralLike(initialNode) || isIdentifier(initialNode)) && isAccessExpression(initialNode.parent)) {
                     return forEachNameInAccessChainWalkingLeft(initialNode, nameInChain => {
                         if (nameInChain === initialNode) return undefined;
-                        const candidates = ls.getDefinitionAtPosition(file, nameInChain.getStart(), /*searchOtherFilesOnly*/ true, /*skipAlias*/ true)
+                        const candidates = ls.getDefinitionAtPosition(file, nameInChain.getStart(), /*searchOtherFilesOnly*/ true, /*stopAtAlias*/ false)
                             ?.filter(d => toNormalizedPath(d.fileName) !== file && d.isAmbient)
                             .map(d => ({
                                 fileName: d.fileName,
