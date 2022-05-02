@@ -14,18 +14,6 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }`
     };
 
-    export const safeList = {
-        path: "/safeList.json" as Path,
-        content: JSON.stringify({
-            commander: "commander",
-            express: "express",
-            jquery: "jquery",
-            lodash: "lodash",
-            moment: "moment",
-            chroma: "chroma-js"
-        })
-    };
-
     function getExecutingFilePathFromLibFile(): string {
         return combinePaths(getDirectoryPath(libFile.path), "tsc.js");
     }
@@ -43,11 +31,11 @@ interface Array<T> { length: number; [n: number]: T; }`
     }
 
     export function createWatchedSystem(fileOrFolderList: readonly FileOrFolderOrSymLink[], params?: TestServerHostCreationParameters): TestServerHost {
-        return new TestServerHost(/*withSafelist*/ false, fileOrFolderList, params);
+        return new TestServerHost(fileOrFolderList, params);
     }
 
     export function createServerHost(fileOrFolderList: readonly FileOrFolderOrSymLink[], params?: TestServerHostCreationParameters): TestServerHost {
-        const host = new TestServerHost(/*withSafelist*/ true, fileOrFolderList, params);
+        const host = new TestServerHost(fileOrFolderList, params);
         // Just like sys, patch the host to use writeFile
         patchWriteFileEnsuringDirectory(host);
         return host;
@@ -338,7 +326,6 @@ interface Array<T> { length: number; [n: number]: T; }`
         private readonly inodes?: ESMap<Path, number>;
         watchDirectory: HostWatchDirectory;
         constructor(
-            public withSafeList: boolean,
             fileOrFolderorSymLinkList: readonly FileOrFolderOrSymLink[],
             {
                 useCaseSensitiveFileNames, executingFilePath, currentDirectory,
@@ -430,7 +417,6 @@ interface Array<T> { length: number; [n: number]: T; }`
 
         private reloadFS(fileOrFolderOrSymLinkList: readonly FileOrFolderOrSymLink[]) {
             Debug.assert(this.fs.size === 0);
-            fileOrFolderOrSymLinkList = fileOrFolderOrSymLinkList.concat(this.withSafeList ? safeList : []);
             const filesOrFoldersToLoad: readonly FileOrFolderOrSymLink[] = !this.windowsStyleRoot ? fileOrFolderOrSymLinkList :
                 fileOrFolderOrSymLinkList.map<FileOrFolderOrSymLink>(f => {
                     const result = clone(f);
@@ -438,39 +424,7 @@ interface Array<T> { length: number; [n: number]: T; }`
                     return result;
                 });
             for (const fileOrDirectory of filesOrFoldersToLoad) {
-                const path = this.toFullPath(fileOrDirectory.path);
-                // If its a change
-                const currentEntry = this.fs.get(path);
-                if (currentEntry) {
-                    if (isFsFile(currentEntry)) {
-                        if (isFile(fileOrDirectory)) {
-                            // Update file
-                            if (currentEntry.content !== fileOrDirectory.content) {
-                                this.modifyFile(fileOrDirectory.path, fileOrDirectory.content);
-                            }
-                        }
-                        else {
-                            // TODO: Changing from file => folder/Symlink
-                        }
-                    }
-                    else if (isFsSymLink(currentEntry)) {
-                        // TODO: update symlinks
-                    }
-                    else {
-                        // Folder
-                        if (isFile(fileOrDirectory)) {
-                            // TODO: Changing from folder => file
-                        }
-                        else {
-                            // Folder update: Nothing to do.
-                            currentEntry.modifiedTime = this.now();
-                            this.invokeFsWatches(currentEntry.fullPath, "change");
-                        }
-                    }
-                }
-                else {
-                    this.ensureFileOrFolder(fileOrDirectory);
-                }
+                this.ensureFileOrFolder(fileOrDirectory);
             }
         }
 

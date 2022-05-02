@@ -145,7 +145,7 @@ namespace ts.projectSystem {
             installTypingHost: server.ServerHost,
             readonly typesRegistry = new Map<string, MapLike<string>>(),
             log?: TI.Log) {
-            super(installTypingHost, globalTypingsCacheLocation, TestFSWithWatch.safeList.path, customTypesMap.path, throttleLimit, log);
+            super(installTypingHost, globalTypingsCacheLocation, "/safeList.json" as Path, customTypesMap.path, throttleLimit, log);
         }
 
         protected postExecActions: PostExecAction[] = [];
