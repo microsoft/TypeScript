@@ -87,6 +87,7 @@ declare namespace Reflect {
     /**
      * Sets the property of target, equivalent to `target[propertyKey] = value` when `receiver === target`.
      * @param target Object that contains the property on itself or in its prototype chain.
+     * @param value The value to set.
      * @param propertyKey Name of the property.
      * @param receiver The reference to use as the `this` value in the setter function,
      *        if `target[propertyKey]` is an accessor property.
