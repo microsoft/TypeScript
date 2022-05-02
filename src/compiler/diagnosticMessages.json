@@ -956,7 +956,7 @@
         "category": "Error",
         "code": 1325
     },
-    "Dynamic import cannot have type arguments.": {
+    "This use of 'import' is invalid. 'import()' calls can be written, but they must have parentheses and cannot have type arguments.": {
         "category": "Error",
         "code": 1326
     },
@@ -2511,10 +2511,7 @@
         "category": "Error",
         "code": 2568
     },
-    "Type '{0}' is not an array type or a string type. Use compiler option '--downlevelIteration' to allow iterating of iterators.": {
-        "category": "Error",
-        "code": 2569
-    },
+
     "Could not find name '{0}'. Did you mean '{1}'?": {
         "category": "Error",
         "code": 2570

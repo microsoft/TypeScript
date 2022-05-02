@@ -38250,7 +38250,7 @@ namespace ts {
 
             return (use & IterationUse.PossiblyOutOfBounds) ? includeUndefinedInIndexSignature(arrayElementType) : arrayElementType;
 
-            function getIterationDiagnosticDetails(allowsStrings: boolean, downlevelIteration: boolean | undefined): [DiagnosticMessage, boolean] {
+            function getIterationDiagnosticDetails(allowsStrings: boolean, downlevelIteration: boolean | undefined): [error: DiagnosticMessage, maybeMissingAwait: boolean] {
                 if (downlevelIteration) {
                     return allowsStrings
                         ? [Diagnostics.Type_0_is_not_an_array_type_or_a_string_type_or_does_not_have_a_Symbol_iterator_method_that_returns_an_iterator, true]
@@ -38260,7 +38260,7 @@ namespace ts {
                 const yieldType = getIterationTypeOfIterable(use, IterationTypeKind.Yield, inputType, /*errorNode*/ undefined);
 
                 if (yieldType) {
-                    return [Diagnostics.Type_0_is_not_an_array_type_or_a_string_type_Use_compiler_option_downlevelIteration_to_allow_iterating_of_iterators, false];
+                    return [Diagnostics.Type_0_can_only_be_iterated_through_when_using_the_downlevelIteration_flag_or_with_a_target_of_es2015_or_higher, false];
                 }
 
                 if (isES2015OrLaterIterable(inputType.symbol?.escapedName)) {
@@ -41898,7 +41898,7 @@ namespace ts {
                         const symbol = getIntrinsicTagSymbol(name.parent as JsxOpeningLikeElement);
                         return symbol === unknownSymbol ? undefined : symbol;
                     }
-                    const result = resolveEntityName(name, meaning, /*ignoreErrors*/ false, /*dontResolveAlias*/ !isJSDoc, getHostSignatureFromJSDoc(name));
+                    const result = resolveEntityName(name, meaning, /*ignoreErrors*/ false, /* dontResolveAlias */ true, getHostSignatureFromJSDoc(name));
                     if (!result && isJSDoc) {
                         const container = findAncestor(name, or(isClassLike, isInterfaceDeclaration));
                         if (container) {
@@ -43901,6 +43901,9 @@ namespace ts {
         }
 
         function checkGrammarExpressionWithTypeArguments(node: ExpressionWithTypeArguments | TypeQueryNode) {
+            if (isExpressionWithTypeArguments(node) && isImportKeyword(node.expression) && node.typeArguments) {
+                return grammarErrorOnNode(node, Diagnostics.This_use_of_import_is_invalid_import_calls_can_be_written_but_they_must_have_parentheses_and_cannot_have_type_arguments);
+            }
             return checkGrammarTypeArguments(node, node.typeArguments);
         }
 
@@ -44951,7 +44954,7 @@ namespace ts {
             }
 
             if (node.typeArguments) {
-                return grammarErrorOnNode(node, Diagnostics.Dynamic_import_cannot_have_type_arguments);
+                return grammarErrorOnNode(node, Diagnostics.This_use_of_import_is_invalid_import_calls_can_be_written_but_they_must_have_parentheses_and_cannot_have_type_arguments);
             }
 
             const nodeArguments = node.arguments;
