@@ -30,11 +30,11 @@ interface Array<T> { length: number; [n: number]: T; }`
         inodeWatching?: boolean;
     }
 
-    export function createWatchedSystem(fileOrFolderList: readonly FileOrFolderOrSymLink[], params?: TestServerHostCreationParameters): TestServerHost {
+    export function createWatchedSystem(fileOrFolderList: FileOrFolderOrSymLinkMap | readonly FileOrFolderOrSymLink[], params?: TestServerHostCreationParameters): TestServerHost {
         return new TestServerHost(fileOrFolderList, params);
     }
 
-    export function createServerHost(fileOrFolderList: readonly FileOrFolderOrSymLink[], params?: TestServerHostCreationParameters): TestServerHost {
+    export function createServerHost(fileOrFolderList: FileOrFolderOrSymLinkMap | readonly FileOrFolderOrSymLink[], params?: TestServerHostCreationParameters): TestServerHost {
         const host = new TestServerHost(fileOrFolderList, params);
         // Just like sys, patch the host to use writeFile
         patchWriteFileEnsuringDirectory(host);
@@ -59,6 +59,9 @@ interface Array<T> { length: number; [n: number]: T; }`
     }
 
     export type FileOrFolderOrSymLink = File | Folder | SymLink;
+    export interface FileOrFolderOrSymLinkMap {
+        [path: string]: string | Omit<FileOrFolderOrSymLink, "path">;
+    }
     export function isFile(fileOrFolderOrSymLink: FileOrFolderOrSymLink): fileOrFolderOrSymLink is File {
         return isString((fileOrFolderOrSymLink as File).content);
     }
@@ -289,7 +292,6 @@ interface Array<T> { length: number; [n: number]: T; }`
         useCaseSensitiveFileNames: boolean;
         executingFilePath: string;
         currentDirectory: string;
-        fileOrFolderorSymLinkList: readonly FileOrFolderOrSymLink[];
         newLine?: string;
         useWindowsStylePaths?: boolean;
         environmentVariables?: ESMap<string, string>;
@@ -326,7 +328,7 @@ interface Array<T> { length: number; [n: number]: T; }`
         private readonly inodes?: ESMap<Path, number>;
         watchDirectory: HostWatchDirectory;
         constructor(
-            fileOrFolderorSymLinkList: readonly FileOrFolderOrSymLink[],
+            fileOrFolderorSymLinkList: FileOrFolderOrSymLinkMap | readonly FileOrFolderOrSymLink[],
             {
                 useCaseSensitiveFileNames, executingFilePath, currentDirectory,
                 newLine, windowsStyleRoot, environmentVariables,
@@ -415,16 +417,27 @@ interface Array<T> { length: number; [n: number]: T; }`
             return new Date(this.time);
         }
 
-        private reloadFS(fileOrFolderOrSymLinkList: readonly FileOrFolderOrSymLink[]) {
+        private reloadFS(fileOrFolderOrSymLinkList: FileOrFolderOrSymLinkMap | readonly FileOrFolderOrSymLink[]) {
             Debug.assert(this.fs.size === 0);
-            const filesOrFoldersToLoad: readonly FileOrFolderOrSymLink[] = !this.windowsStyleRoot ? fileOrFolderOrSymLinkList :
-                fileOrFolderOrSymLinkList.map<FileOrFolderOrSymLink>(f => {
-                    const result = clone(f);
-                    result.path = this.getHostSpecificPath(f.path);
-                    return result;
-                });
-            for (const fileOrDirectory of filesOrFoldersToLoad) {
-                this.ensureFileOrFolder(fileOrDirectory);
+            if (isArray(fileOrFolderOrSymLinkList)) {
+                fileOrFolderOrSymLinkList.forEach(f => this.ensureFileOrFolder(!this.windowsStyleRoot ?
+                    f :
+                    { ...f, path: this.getHostSpecificPath(f.path) }
+                ));
+            }
+            else {
+                for (const key in fileOrFolderOrSymLinkList) {
+                    if (hasProperty(fileOrFolderOrSymLinkList, key)) {
+                        const path = this.getHostSpecificPath(key);
+                        const value = fileOrFolderOrSymLinkList[key];
+                        if (isString(value)) {
+                            this.ensureFileOrFolder({ path, content: value });
+                        }
+                        else {
+                            this.ensureFileOrFolder({ path, ...value });
+                        }
+                    }
+                }
             }
         }
 

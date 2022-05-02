@@ -587,22 +587,18 @@ namespace ts.tscWatch {
                 scenario,
                 subScenario: `fsWatch/when using file watching thats on inode`,
                 commandLineArgs: ["-w", "--extendedDiagnostics"],
-                sys: () => {
-                    const configFile: File = {
-                        path: `${projectRoot}/tsconfig.json`,
-                        content: JSON.stringify({ watchOptions: { watchFile: "useFsEvents" }, files: ["foo.d.ts", "main.ts"] })
-                    };
-                    const main: File = {
-                        path: `${projectRoot}/main.ts`,
-                        content: `import { foo } from "./foo"; foo();`
-                    };
-                    const foo: File = {
-                        path: `${projectRoot}/foo.d.ts`,
-                        content: `export function foo(): string;`
-                    };
-                    const files = [libFile, main, foo, configFile];
-                    return createWatchedSystem(files, { currentDirectory: projectRoot, inodeWatching: true });
-                },
+                sys: () => createWatchedSystem(
+                    {
+                        [libFile.path]: libFile.content,
+                        [`${projectRoot}/main.ts`]: `import { foo } from "./foo"; foo();`,
+                        [`${projectRoot}/foo.d.ts`]: `export function foo(): string;`,
+                        [`${projectRoot}/tsconfig.json`]: JSON.stringify({ watchOptions: { watchFile: "useFsEvents" }, files: ["foo.d.ts", "main.ts"] }),
+                    },
+                    {
+                        currentDirectory: projectRoot,
+                        inodeWatching: true
+                    }
+                ),
                 changes: [
                     {
                         caption: "Replace file with rename event that introduces error",

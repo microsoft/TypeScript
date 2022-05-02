@@ -432,7 +432,7 @@ namespace ts.tscWatch {
         return sys;
     }
 
-    export function createSystemWithSolutionBuild(solutionRoots: readonly string[], files: readonly TestFSWithWatch.FileOrFolderOrSymLink[], params?: TestFSWithWatch.TestServerHostCreationParameters) {
+    export function createSystemWithSolutionBuild(solutionRoots: readonly string[], files: TestFSWithWatch.FileOrFolderOrSymLinkMap | readonly TestFSWithWatch.FileOrFolderOrSymLink[], params?: TestFSWithWatch.TestServerHostCreationParameters) {
         return solutionBuildWithBaseline(createWatchedSystem(files, params), solutionRoots);
     }
 }
