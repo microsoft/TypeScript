@@ -324,7 +324,7 @@
   "Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_a_test_runner_Try_npm_i_save_dev_type_2582": "找不到名称 \"{0}\"。是否需要安装测试运行器的类型定义? 请尝试使用 `npm i --save-dev @types/jest` 或 `npm i --save-dev @types/mocha`。",
   "Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_a_test_runner_Try_npm_i_save_dev_type_2593": "找不到名称“{0}”。是否需要安装测试运行器的类型定义? 请尝试使用 `npm i --save-dev @types/jest` 或 `npm i --save-dev @types/mocha`，然后将 “jest” 或 “mocha” 添加到 tsconfig 中的类型字段。。",
   "Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_jQuery_Try_npm_i_save_dev_types_Slash_2581": "找不到名称 \"{0}\"。是否需要安装 jQuery 的类型定义? 请尝试使用 `npm i --save-dev @types/jquery`。",
-  "Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_jQuery_Try_npm_i_save_dev_types_Slash_2592": "找不到名称“{0}”。是否需要安装 jQuery 的类型定义? 请尝试使用 `npm i --save-dev @types/jquery`，然后将 “jquery” 添加到 teconfig 中的类型字段。",
+  "Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_jQuery_Try_npm_i_save_dev_types_Slash_2592": "找不到名称“{0}”。是否需要安装 jQuery 的类型定义? 请尝试使用 `npm i --save-dev @types/jquery`，然后将 “jquery” 添加到 tsconfig 中的类型字段。",
   "Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_node_Try_npm_i_save_dev_types_Slashno_2580": "找不到名称 \"{0}\"。是否需要为节点安装类型定义? 请尝试使用 `npm i --save-dev @types/node`。",
   "Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_node_Try_npm_i_save_dev_types_Slashno_2591": "找不到名称“{0}”。是否需要为节点安装类型定义? 请尝试使用 `npm i --save-dev @types/node`，然后将 “node” 添加到类型字段。",
   "Cannot_find_namespace_0_2503": "找不到命名空间“{0}”。",
