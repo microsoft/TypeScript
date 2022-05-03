@@ -1,19 +1,13 @@
-tests/cases/conformance/node/index.ts(1,18): error TS7062: JSON imports are experimental in ES module mode imports.
 tests/cases/conformance/node/otherc.cts(1,35): error TS2836: Import assertions are not allowed on statements that transpile to commonjs 'require' calls.
-tests/cases/conformance/node/otherc.cts(2,22): error TS7062: JSON imports are experimental in ES module mode imports.
 
 
-==== tests/cases/conformance/node/index.ts (1 errors) ====
+==== tests/cases/conformance/node/index.ts (0 errors) ====
     import json from "./package.json" assert { type: "json" };
-                     ~~~~~~~~~~~~~~~~
-!!! error TS7062: JSON imports are experimental in ES module mode imports.
-==== tests/cases/conformance/node/otherc.cts (2 errors) ====
+==== tests/cases/conformance/node/otherc.cts (1 errors) ====
     import json from "./package.json" assert { type: "json" }; // should error, cjs mode imports don't support assertions
                                       ~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2836: Import assertions are not allowed on statements that transpile to commonjs 'require' calls.
     const json2 = import("./package.json", { assert: { type: "json" } }); // should be fine
-                         ~~~~~~~~~~~~~~~~
-!!! error TS7062: JSON imports are experimental in ES module mode imports.
 ==== tests/cases/conformance/node/package.json (0 errors) ====
     {
         "name": "pkg",

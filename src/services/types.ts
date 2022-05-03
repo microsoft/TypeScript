@@ -267,7 +267,7 @@ namespace ts {
 
         /*
          * Unlike `realpath and `readDirectory`, `readFile` and `fileExists` are now _required_
-         * to properly acquire and setup source files under module: node12+ modes.
+         * to properly acquire and setup source files under module: node16+ modes.
          */
         readFile(path: string, encoding?: string): string | undefined;
         fileExists(path: string): boolean;
