@@ -34839,7 +34839,7 @@ namespace ts {
                                     superCallStatement = statement;
                                     break;
                                 }
-                                if (!isPrologueDirective(statement) && nodeImmediatelyReferencesSuperOrThis(statement)) {
+                                if (nodeImmediatelyReferencesSuperOrThis(statement)) {
                                     break;
                                 }
                             }
