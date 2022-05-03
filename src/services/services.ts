@@ -995,12 +995,16 @@ namespace ts {
     // the set of scripts handled by the host changes.
     class HostCache {
         private fileNameToEntry: ESMap<Path, CachedHostFileInformation>;
+        private fileExistsCache: ESMap<string, boolean>;
+        private directoryExistsCache: undefined | ESMap<string, boolean>;
         private currentDirectory: string;
 
-        constructor(private host: LanguageServiceHost, getCanonicalFileName: GetCanonicalFileName) {
+        constructor(private host: LanguageServiceHost, getCanonicalFileName: GetCanonicalFileName, cacheDirectoryExists: boolean) {
             // script id => script index
             this.currentDirectory = host.getCurrentDirectory();
             this.fileNameToEntry = new Map();
+            this.fileExistsCache = new Map();
+            this.directoryExistsCache = cacheDirectoryExists ? new Map() : undefined;
 
             // Initialize the list with the root file names
             const rootFileNames = host.getScriptFileNames();
@@ -1028,6 +1032,22 @@ namespace ts {
 
             this.fileNameToEntry.set(path, entry);
             return entry;
+        }
+
+        public fileExists(fileName: string): boolean | undefined {
+            return this.fileExistsCache.get(fileName);
+        }
+
+        public setFileExists(fileName: string, exists: boolean): void {
+            this.fileExistsCache.set(fileName, exists);
+        }
+
+        public directoryExists(directoryName: string): boolean | undefined {
+            return this.directoryExistsCache?.get(directoryName);
+        }
+
+        public setDirectoryExists(directoryName: string, exists: boolean): void {
+            this.directoryExistsCache?.set(directoryName, exists);
         }
 
         public getEntryByPath(path: Path): CachedHostFileInformation | undefined {
@@ -1367,7 +1387,7 @@ namespace ts {
             }
 
             // Get a fresh cache of the host information
-            let hostCache: HostCache | undefined = new HostCache(host, getCanonicalFileName);
+            let hostCache: HostCache | undefined = new HostCache(host, getCanonicalFileName, /*cacheDirectoryExists*/ !!host.directoryExists);
             const rootFileNames = hostCache.getRootFileNames();
             const newSettings = host.getCompilationSettings() || getDefaultCompilerOptions();
             const hasInvalidatedResolution: HasInvalidatedResolution = host.hasInvalidatedResolution || returnFalse;
@@ -1410,9 +1430,7 @@ namespace ts {
                 readFile,
                 getSymlinkCache: maybeBind(host, host.getSymlinkCache),
                 realpath: maybeBind(host, host.realpath),
-                directoryExists: directoryName => {
-                    return directoryProbablyExists(directoryName, host);
-                },
+                directoryExists,
                 getDirectories: path => {
                     return host.getDirectories ? host.getDirectories(path) : [];
                 },
@@ -1492,11 +1510,25 @@ namespace ts {
             }
 
             function fileExists(fileName: string): boolean {
+                // Check this before the file contents cache because it saves computing the Path
+                // and also covers non-existence
+                const cached = hostCache?.fileExists(fileName);
+                if (cached !== undefined) return cached;
                 const path = toPath(fileName, currentDirectory, getCanonicalFileName);
                 const entry = hostCache && hostCache.getEntryByPath(path);
-                return entry ?
+                const exists = entry ?
                     !isString(entry) :
                     (!!host.fileExists && host.fileExists(fileName));
+                hostCache?.setFileExists(fileName, exists);
+                return exists;
+            }
+
+            function directoryExists(directoryName: string): boolean {
+                const cached = hostCache?.directoryExists(directoryName);
+                if (cached !== undefined) return cached;
+                const exists = directoryProbablyExists(directoryName, host);
+                hostCache?.setDirectoryExists(directoryName, exists);
+                return exists;
             }
 
             function readFile(fileName: string) {
