@@ -228,3 +228,101 @@ const reducer: (...args: ReducerArgs) => void = (op, args) => {
 
 reducer("add", { a: 1, b: 3 });
 reducer("concat", { firstArr: [1, 2], secondArr: [3, 4] });
+
+// repro from https://github.com/microsoft/TypeScript/pull/47190#issuecomment-1057603588
+
+type FooMethod = {
+  method(...args:
+    [type: "str", cb: (e: string) => void] |
+    [type: "num", cb: (e: number) => void]
+  ): void;
+}
+
+let fooM: FooMethod = {
+  method(type, cb) {
+    if (type == 'num') {
+      cb(123)
+    } else {
+      cb("abc")
+    }
+  }
+};
+
+type FooAsyncMethod = {
+  method(...args:
+    [type: "str", cb: (e: string) => void] |
+    [type: "num", cb: (e: number) => void]
+  ): Promise<any>;
+}
+
+let fooAsyncM: FooAsyncMethod = {
+  async method(type, cb) {
+    if (type == 'num') {
+      cb(123)
+    } else {
+      cb("abc")
+    }
+  }
+};
+
+type FooGenMethod = {
+  method(...args:
+    [type: "str", cb: (e: string) => void] |
+    [type: "num", cb: (e: number) => void]
+  ): Generator<any, any, any>;
+}
+
+let fooGenM: FooGenMethod = {
+  *method(type, cb) {
+    if (type == 'num') {
+      cb(123)
+    } else {
+      cb("abc")
+    }
+  }
+};
+
+type FooAsyncGenMethod = {
+  method(...args:
+    [type: "str", cb: (e: string) => void] |
+    [type: "num", cb: (e: number) => void]
+  ): AsyncGenerator<any, any, any>;
+}
+
+let fooAsyncGenM: FooAsyncGenMethod = {
+  async *method(type, cb) {
+    if (type == 'num') {
+      cb(123)
+    } else {
+      cb("abc")
+    }
+  }
+};
+
+// Repro from #48345
+
+type Func = <T extends ["a", number] | ["b", string]>(...args: T) => void;
+
+const f60: Func = (kind, payload) => {
+    if (kind === "a") {
+        payload.toFixed();  // error
+    }
+    if (kind === "b") {
+        payload.toUpperCase();  // error
+    }
+};
+
+// Repro from #48902
+
+function foo({
+    value1,
+    test1 = value1.test1,
+    test2 = value1.test2,
+    test3 = value1.test3,
+    test4 = value1.test4,
+    test5 = value1.test5,
+    test6 = value1.test6,
+    test7 = value1.test7,
+    test8 = value1.test8,
+    test9 = value1.test9
+}) {}
