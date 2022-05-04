@@ -1407,7 +1407,7 @@ namespace Harness {
         }
 
         function getBaselineFileChangedErrorMessage(relativeFileName: string): string {
-            return `The baseline file ${relativeFileName} has changed. (You must run "gulp baseline-accept" to confirm that this baseline change as a result of your code change was intended.)`;
+            return `The baseline file ${relativeFileName} has changed. (Run "gulp baseline-accept" if the new baseline is correct.)`;
         }
 
         export function runBaseline(relativeFileName: string, actual: string | null, opts?: BaselineOptions): void {
