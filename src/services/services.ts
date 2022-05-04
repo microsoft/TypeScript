@@ -1351,26 +1351,6 @@ namespace ts {
             const hasChangedAutomaticTypeDirectiveNames = maybeBind(host, host.hasChangedAutomaticTypeDirectiveNames);
             const projectReferences = host.getProjectReferences?.();
             let parsedCommandLines: ESMap<Path, ParsedCommandLine | false> | undefined;
-            const parseConfigHost: ParseConfigFileHost = {
-                useCaseSensitiveFileNames,
-                fileExists,
-                readFile,
-                readDirectory,
-                trace: maybeBind(host, host.trace),
-                getCurrentDirectory: () => currentDirectory,
-                onUnRecoverableConfigFileDiagnostic: noop,
-            };
-
-            // If the program is already up-to-date, we can reuse it
-            if (isProgramUptoDate(program, rootFileNames, newSettings, (_path, fileName) => host.getScriptVersion(fileName), fileExists, hasInvalidatedResolution, hasChangedAutomaticTypeDirectiveNames, getParsedCommandLine, projectReferences)) {
-                return;
-            }
-
-            // IMPORTANT - It is critical from this moment onward that we do not check
-            // cancellation tokens.  We are about to mutate source files from a previous program
-            // instance.  If we cancel midway through, we may end up in an inconsistent state where
-            // the program points to old source files that have been invalidated because of
-            // incremental parsing.
 
             // Now create a new compiler
             const compilerHost: CompilerHost = {
@@ -1383,8 +1363,22 @@ namespace ts {
                 getDefaultLibFileName: options => host.getDefaultLibFileName(options),
                 writeFile: noop,
                 getCurrentDirectory: () => currentDirectory,
-                fileExists,
-                readFile,
+                fileExists: fileName => {
+                    const path = toPath(fileName, currentDirectory, getCanonicalFileName);
+                    const entry = hostCache && hostCache.getEntryByPath(path);
+                    return entry ?
+                        !isString(entry) :
+                        (!!host.fileExists && host.fileExists(fileName));
+                },
+                readFile: fileName => {
+                    // stub missing host functionality
+                    const path = toPath(fileName, currentDirectory, getCanonicalFileName);
+                    const entry = hostCache && hostCache.getEntryByPath(path);
+                    if (entry) {
+                        return isString(entry) ? undefined : getSnapshotText(entry.scriptSnapshot);
+                    }
+                    return host.readFile && host.readFile(fileName);
+                },
                 getSymlinkCache: maybeBind(host, host.getSymlinkCache),
                 realpath: maybeBind(host, host.realpath),
                 directoryExists: directoryName => {
@@ -1393,12 +1387,15 @@ namespace ts {
                 getDirectories: path => {
                     return host.getDirectories ? host.getDirectories(path) : [];
                 },
-                readDirectory,
+                readDirectory: (path: string, extensions?: readonly string[], exclude?: readonly string[], include?: readonly string[], depth?: number) => {
+                    Debug.checkDefined(host.readDirectory, "'LanguageServiceHost.readDirectory' must be implemented to correctly process 'projectReferences'");
+                    return host.readDirectory!(path, extensions, exclude, include, depth);
+                },
                 onReleaseOldSourceFile,
                 onReleaseParsedCommandLine,
                 hasInvalidatedResolution,
                 hasChangedAutomaticTypeDirectiveNames,
-                trace: parseConfigHost.trace,
+                trace: maybeBind(host, host.trace),
                 resolveModuleNames: maybeBind(host, host.resolveModuleNames),
                 getModuleResolutionCache: maybeBind(host, host.getModuleResolutionCache),
                 resolveTypeReferenceDirectives: maybeBind(host, host.resolveTypeReferenceDirectives),
@@ -1406,6 +1403,27 @@ namespace ts {
                 getParsedCommandLine,
             };
             host.setCompilerHost?.(compilerHost);
+
+            const parseConfigHost: ParseConfigFileHost = {
+                useCaseSensitiveFileNames,
+                fileExists: compilerHost.fileExists,
+                readFile: compilerHost.readFile,
+                readDirectory: compilerHost.readDirectory!,
+                trace: compilerHost.trace,
+                getCurrentDirectory: compilerHost.getCurrentDirectory,
+                onUnRecoverableConfigFileDiagnostic: noop,
+            };
+
+            // If the program is already up-to-date, we can reuse it
+            if (isProgramUptoDate(program, rootFileNames, newSettings, (_path, fileName) => host.getScriptVersion(fileName), compilerHost.fileExists, hasInvalidatedResolution, hasChangedAutomaticTypeDirectiveNames, getParsedCommandLine, projectReferences)) {
+                return;
+            }
+
+            // IMPORTANT - It is critical from this moment onward that we do not check
+            // cancellation tokens.  We are about to mutate source files from a previous program
+            // instance.  If we cancel midway through, we may end up in an inconsistent state where
+            // the program points to old source files that have been invalidated because of
+            // incremental parsing.
 
             const documentRegistryBucketKey = documentRegistry.getKeyForCompilationSettings(newSettings);
             const options: CreateProgramOptions = {
@@ -1466,29 +1484,6 @@ namespace ts {
                 else if (oldResolvedRef) {
                     onReleaseOldSourceFile(oldResolvedRef.sourceFile, oldOptions);
                 }
-            }
-
-            function fileExists(fileName: string): boolean {
-                const path = toPath(fileName, currentDirectory, getCanonicalFileName);
-                const entry = hostCache && hostCache.getEntryByPath(path);
-                return entry ?
-                    !isString(entry) :
-                    (!!host.fileExists && host.fileExists(fileName));
-            }
-
-            function readFile(fileName: string) {
-                // stub missing host functionality
-                const path = toPath(fileName, currentDirectory, getCanonicalFileName);
-                const entry = hostCache && hostCache.getEntryByPath(path);
-                if (entry) {
-                    return isString(entry) ? undefined : getSnapshotText(entry.scriptSnapshot);
-                }
-                return host.readFile && host.readFile(fileName);
-            }
-
-            function readDirectory(path: string, extensions?: readonly string[], exclude?: readonly string[], include?: readonly string[], depth?: number) {
-                Debug.checkDefined(host.readDirectory, "'LanguageServiceHost.readDirectory' must be implemented to correctly process 'projectReferences'");
-                return host.readDirectory!(path, extensions, exclude, include, depth);
             }
 
             // Release any files we have acquired in the old program but are
