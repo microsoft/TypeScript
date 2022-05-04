@@ -164,7 +164,7 @@ namespace ts.Completions {
         TypeAssertionKeywords,
         TypeKeywords,
         TypeKeyword,                    // Literally just `type`
-        Last = TypeKeywords
+        Last = TypeKeyword
     }
 
     const enum GlobalsSearch { Continue, Success, Fail }
@@ -574,7 +574,7 @@ namespace ts.Completions {
         if (keywordFilters !== KeywordCompletionFilters.None) {
             const entryNames = new Set(entries.map(e => e.name));
             for (const keywordEntry of getKeywordCompletions(keywordFilters, !insideJsDocTagTypeExpression && isSourceFileJS(sourceFile))) {
-                if (!entryNames.has(keywordEntry.name)) {
+                if (isTypeOnlyLocation && isTypeKeyword(stringToToken(keywordEntry.name)!) || !entryNames.has(keywordEntry.name)) {
                     insertSorted(entries, keywordEntry, compareCompletionEntries, /*allowDuplicates*/ true);
                 }
             }
