@@ -1,5 +1,6 @@
 /*@internal*/
 /// <reference lib="dom" />
+/// <reference lib="webworker.importscripts" />
 
 namespace ts.server {
     export interface HostWithWriteMessage {
@@ -111,11 +112,35 @@ namespace ts.server {
         }
     }
 
+    export declare const dynamicImport: ((id: string) => Promise<any>) | undefined;
+
+    // Attempt to load `dynamicImport`
+    if (typeof importScripts === "function") {
+        try {
+            // NOTE: importScripts is synchronous
+            importScripts("tsserverWeb.js");
+        }
+        catch {
+            // ignored
+        }
+    }
+
     export function createWebSystem(host: WebHost, args: string[], getExecutingFilePath: () => string): ServerHost {
         const returnEmptyString = () => "";
         const getExecutingDirectoryPath = memoize(() => memoize(() => ensureTrailingDirectorySeparator(getDirectoryPath(getExecutingFilePath()))));
         // Later we could map ^memfs:/ to do something special if we want to enable more functionality like module resolution or something like that
         const getWebPath = (path: string) => startsWith(path, directorySeparator) ? path.replace(directorySeparator, getExecutingDirectoryPath()) : undefined;
+
+        const dynamicImport = async (id: string): Promise<any> => {
+            // Use syntactic dynamic import first, if available
+            if (ts.server.dynamicImport) {
+                return ts.server.dynamicImport(id);
+            }
+
+            // Fall back to `eval` if dynamic import wasn't avaialble.
+            return eval(`import(${JSON.stringify(id)})`); // eslint-disable-line no-eval
+        };
+
         return {
             args,
             newLine: "\r\n", // This can be configured by clients
@@ -157,11 +182,8 @@ namespace ts.server {
                 }
 
                 const scriptPath = combinePaths(packageRoot, browser);
-
-                // TODO: TS rewrites `import(...)` to `require`. Use eval to bypass this
-                // eslint-disable-next-line no-eval
                 try {
-                    const module = (await eval(`import(${JSON.stringify(scriptPath)})`)).default;
+                    const { default: module } = await dynamicImport(scriptPath);
                     return { module, error: undefined };
                 }
                 catch (e) {
