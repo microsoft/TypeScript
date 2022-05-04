@@ -148,6 +148,7 @@ namespace ts {
         /*@internal*/ buildNextInvalidatedProject(): void;
         /*@internal*/ getAllParsedConfigs(): readonly ParsedCommandLine[];
         /*@internal*/ close(): void;
+        /*@internal*/ getModuleResolutionCache(): ModuleResolutionCache | undefined;
     }
 
     /**
@@ -1992,6 +1993,7 @@ namespace ts {
                 config => isParsedCommandLine(config) ? config : undefined
             )),
             close: () => stopWatching(state),
+            getModuleResolutionCache: ()=> state.moduleResolutionCache,
         };
     }
 
