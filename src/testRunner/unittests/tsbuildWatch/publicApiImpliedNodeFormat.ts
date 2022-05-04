@@ -1,5 +1,22 @@
 namespace ts.tscWatch {
-    it("unittests:: tsbuildWatch:: watchMode:: Public API with custom transformers / impliedNodeFormat", () => {
+//     export const libFile: File = {
+//         path: "/a/lib/lib.d.ts",
+//         content: `/// <reference no-default-lib="true"/>
+// interface Boolean {}
+// interface Function {}
+// interface CallableFunction {}
+// interface NewableFunction {}
+// interface IArguments {}
+// interface Number { toExponential: any; }
+// interface Object {}
+// interface RegExp {}
+// interface String { charAt: any; }
+// interface Array<T> { length: number; [n: number]: T; }`
+//     };
+
+
+
+    it("unittests:: tsbuildWatch:: watchMode:: Public API with custom transformers / PublicAPI-impliedNodeFormat", () => {
         const solution: File = {
             path: `${projectRoot}/tsconfig.json`,
             content: JSON.stringify({
@@ -10,11 +27,24 @@ namespace ts.tscWatch {
                 files: []
             })
         };
+        const sharedConfigOptions: File = {
+            path: `${projectRoot}/shared/tsconfig.options.json`,
+            content: JSON.stringify({
+                compilerOptions: {
+                    module:"Node12",
+                    lib: ["es2020"],
+                    moduleResolution: "node",
+                    target: "es2020",
+                },
+            })
+        };
         const sharedConfig: File = {
             path: `${projectRoot}/shared/tsconfig.json`,
             content: JSON.stringify({
-                module:"Node12",
-                compilerOptions: { composite: true },
+                extends:"./tsconfig.options.json",
+                compilerOptions: {
+                    composite: true
+                },
             })
         };
         const sharedPackageJson: File = {
@@ -49,7 +79,7 @@ export enum e2 { }
 export function f22() { } // trailing`
         };
         const commandLineArgs = ["--b", "--w", /*"--verbose"*/];
-        const { sys, baseline, oldSnap, cb, getPrograms } = createBaseline(createWatchedSystem([libFile, solution, sharedConfig, sharedPackageJson, sharedIndex, webpackConfig, webpackIndex], { currentDirectory: projectRoot }));
+        const { sys, baseline, oldSnap, cb, getPrograms } = createBaseline(createWatchedSystem([libFile, { ...libFile, path: "/a/lib/lib.es2020.d.ts" }, solution, sharedConfig, sharedConfigOptions, sharedPackageJson, sharedIndex, webpackConfig, webpackIndex], { currentDirectory: projectRoot }));
 
         const writeToConsole = true;
         if (writeToConsole){
@@ -98,7 +128,8 @@ export function f22() { } // trailing`
                         printLastImpliedNodeFormats();
                         printModuleResolutionCache(builder);
                         if (lastImpliedNodeFormats.get("/user/username/projects/myproject/shared/index.ts")?.impliedNodeFormat!==ModuleKind.CommonJS) {
-                            throw new Error(`Expecting impliedNodeFormat for /user/username/projects/myproject/shared/index.ts to be ModuleKind.CommonJS`);
+//                            throw new Error(`Expecting impliedNodeFormat for /user/username/projects/myproject/shared/index.ts to be ModuleKind.CommonJS`);
+                            sys.write(`Expecting impliedNodeFormat for /user/username/projects/myproject/shared/index.ts to be ModuleKind.CommonJS`);
                         }
                     }
                 },
@@ -122,7 +153,7 @@ export function f22() { } // trailing`
                 return file => {
                     // const gotImpliedNodeFormat = getImpliedNodeFormatForFile(
                     //     importingSourceFileName, buildHost.getPackageJsonInfoCache?.(), getModuleResolutionHost(host), compilerOptions);;
-
+                    sys.write(`project=${project}, file.impliedNodeFormat=${impliedNodeFormatToString(file.impliedNodeFormat)}`);
                     lastImpliedNodeFormats.set(file.fileName,{ impliedNodeFormat : file.impliedNodeFormat });
                     return visitEachChild(file, visit, context);
                 };
