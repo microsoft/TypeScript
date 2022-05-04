@@ -11,11 +11,6 @@ type GlobalOk1 = (typeof globalThis)["valueModule"]
 type GlobalOk2 = globalThis.namespaceModule.typ
 const bad1: (typeof globalThis)["\"ambientModule\""] = 'ambientModule'
 
-type GlobalThis = keyof typeof globalThis
-// should error
-const bad2: GlobalThis = 'ambientModule'
-const ok1: GlobalThis = 'valueModule'
-
 
 //// [globalThisAmbientModules.js]
 var valueModule;
@@ -23,6 +18,3 @@ var valueModule;
     valueModule.val = 1;
 })(valueModule || (valueModule = {}));
 var bad1 = 'ambientModule';
-// should error
-var bad2 = 'ambientModule';
-var ok1 = 'valueModule';

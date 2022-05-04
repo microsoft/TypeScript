@@ -36,16 +36,3 @@ const bad1: (typeof globalThis)["\"ambientModule\""] = 'ambientModule'
 >bad1 : Symbol(bad1, Decl(globalThisAmbientModules.ts, 10, 5))
 >globalThis : Symbol(globalThis)
 
-type GlobalThis = keyof typeof globalThis
->GlobalThis : Symbol(GlobalThis, Decl(globalThisAmbientModules.ts, 10, 70))
->globalThis : Symbol(globalThis)
-
-// should error
-const bad2: GlobalThis = 'ambientModule'
->bad2 : Symbol(bad2, Decl(globalThisAmbientModules.ts, 14, 5))
->GlobalThis : Symbol(GlobalThis, Decl(globalThisAmbientModules.ts, 10, 70))
-
-const ok1: GlobalThis = 'valueModule'
->ok1 : Symbol(ok1, Decl(globalThisAmbientModules.ts, 15, 5))
->GlobalThis : Symbol(GlobalThis, Decl(globalThisAmbientModules.ts, 10, 70))
-

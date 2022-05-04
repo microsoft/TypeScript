@@ -9,8 +9,3 @@ type GlobalBad1 = (typeof globalThis)["\"ambientModule\""]
 type GlobalOk1 = (typeof globalThis)["valueModule"]
 type GlobalOk2 = globalThis.namespaceModule.typ
 const bad1: (typeof globalThis)["\"ambientModule\""] = 'ambientModule'
-
-type GlobalThis = keyof typeof globalThis
-// should error
-const bad2: GlobalThis = 'ambientModule'
-const ok1: GlobalThis = 'valueModule'
