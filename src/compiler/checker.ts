@@ -35325,6 +35325,10 @@ namespace ts {
             // Grammar checking
             if (!checkGrammarMethod(node)) checkGrammarComputedPropertyName(node.name);
 
+            if (isMethodDeclaration(node) && node.asteriskToken && isIdentifier(node.name) && idText(node.name) === "constructor") {
+                error(node.name, Diagnostics.Class_constructor_may_not_be_a_generator);
+            }
+
             // Grammar checking for modifiers is done inside the function checkGrammarFunctionLikeDeclaration
             checkFunctionOrMethodDeclaration(node);
 
@@ -35477,6 +35481,9 @@ namespace ts {
         }
 
         function checkAccessorDeclaration(node: AccessorDeclaration) {
+            if (isIdentifier(node.name) && idText(node.name) === "constructor") {
+                error(node.name, Diagnostics.Class_constructor_may_not_be_an_accessor);
+            }
             addLazyDiagnostic(checkAccessorDeclarationDiagnostics);
             checkSourceElement(node.body);
             setNodeLinksForPrivateIdentifierScope(node);
