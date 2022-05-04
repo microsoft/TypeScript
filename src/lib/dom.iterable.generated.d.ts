@@ -101,7 +101,7 @@ interface Headers {
 
 interface IDBDatabase {
     /** Returns a new transaction with the given mode ("readonly" or "readwrite") and scope which can be a single object store name or an array of names. */
-    transaction(storeNames: string | Iterable<string>, mode?: IDBTransactionMode): IDBTransaction;
+    transaction(storeNames: string | Iterable<string>, mode?: IDBTransactionMode, option?: { durability?: TransactionDurabilityOptions }): IDBTransaction;
 }
 
 interface IDBObjectStore {
