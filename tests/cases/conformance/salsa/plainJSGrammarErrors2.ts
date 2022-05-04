@@ -4,5 +4,11 @@
 // @allowJs: true
 // @filename: plainJSGrammarErrors2.js
 
-// top-level return allowed in JS script files
-return
+// @filename: /a.js
+export default 1;
+
+// @filename: /b.js
+/**
+ * @deprecated
+ */
+export { default as A } from "./a";

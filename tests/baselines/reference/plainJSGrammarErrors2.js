@@ -1,8 +1,22 @@
+//// [tests/cases/conformance/salsa/plainJSGrammarErrors2.ts] ////
+
 //// [plainJSGrammarErrors2.js]
-// top-level return allowed in JS script files
-return
+
+//// [a.js]
+export default 1;
+
+//// [b.js]
+/**
+ * @deprecated
+ */
+export { default as A } from "./a";
 
 
 //// [plainJSGrammarErrors2.js]
-// top-level return allowed in JS script files
-return;
+//// [a.js]
+export default 1;
+//// [b.js]
+/**
+ * @deprecated
+ */
+export { default as A } from "./a";
