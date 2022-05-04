@@ -997,13 +997,12 @@ namespace ts {
         private fileNameToEntry: ESMap<Path, CachedHostFileInformation>;
         private currentDirectory: string;
 
-        constructor(private host: LanguageServiceHost, getCanonicalFileName: GetCanonicalFileName) {
+        constructor(private host: LanguageServiceHost, rootFileNames: readonly string[], getCanonicalFileName: GetCanonicalFileName) {
             // script id => script index
             this.currentDirectory = host.getCurrentDirectory();
             this.fileNameToEntry = new Map();
 
             // Initialize the list with the root file names
-            const rootFileNames = host.getScriptFileNames();
             tracing?.push(tracing.Phase.Session, "initializeHostCache", { count: rootFileNames.length });
             for (const fileName of rootFileNames) {
                 this.createEntry(fileName, toPath(fileName, this.currentDirectory, getCanonicalFileName));
@@ -1034,32 +1033,9 @@ namespace ts {
             return this.fileNameToEntry.get(path);
         }
 
-        public getHostFileInformation(path: Path): HostFileInformation | undefined {
-            const entry = this.fileNameToEntry.get(path);
-            return !isString(entry) ? entry : undefined;
-        }
-
         public getOrCreateEntryByPath(fileName: string, path: Path): HostFileInformation {
             const info = this.getEntryByPath(path) || this.createEntry(fileName, path);
             return isString(info) ? undefined! : info; // TODO: GH#18217
-        }
-
-        public getRootFileNames(): string[] {
-            const names: string[] = [];
-            this.fileNameToEntry.forEach(entry => {
-                if (isString(entry)) {
-                    names.push(entry);
-                }
-                else {
-                    names.push(entry.hostFileName);
-                }
-            });
-            return names;
-        }
-
-        public getScriptSnapshot(path: Path): IScriptSnapshot {
-            const file = this.getHostFileInformation(path);
-            return (file && file.scriptSnapshot)!; // TODO: GH#18217
         }
     }
 
@@ -1366,9 +1342,10 @@ namespace ts {
                 lastTypesRootVersion = typeRootsVersion;
             }
 
+            const rootFileNames = host.getScriptFileNames();
+
             // Get a fresh cache of the host information
-            let hostCache: HostCache | undefined = new HostCache(host, getCanonicalFileName);
-            const rootFileNames = hostCache.getRootFileNames();
+            let hostCache: HostCache | undefined = new HostCache(host, rootFileNames, getCanonicalFileName);
             const newSettings = host.getCompilationSettings() || getDefaultCompilerOptions();
             const hasInvalidatedResolution: HasInvalidatedResolution = host.hasInvalidatedResolution || returnFalse;
             const hasChangedAutomaticTypeDirectiveNames = maybeBind(host, host.hasChangedAutomaticTypeDirectiveNames);
