@@ -900,6 +900,10 @@
         "category": "Error",
         "code": 1308
     },
+    "The current file is a CommonJS module and cannot use 'await' at the top level.": {
+        "category": "Error",
+        "code": 1309
+    },
     "Did you mean to use a ':'? An '=' can only follow a property name when the containing object literal is part of a destructuring pattern.": {
         "category": "Error",
         "code": 1312
@@ -944,11 +948,11 @@
         "category": "Error",
         "code": 1322
     },
-    "Dynamic imports are only supported when the '--module' flag is set to 'es2020', 'es2022', 'esnext', 'commonjs', 'amd', 'system', 'umd', 'node12', or 'nodenext'.": {
+    "Dynamic imports are only supported when the '--module' flag is set to 'es2020', 'es2022', 'esnext', 'commonjs', 'amd', 'system', 'umd', 'node16', or 'nodenext'.": {
         "category": "Error",
         "code": 1323
     },
-    "Dynamic imports only support a second argument when the '--module' option is set to 'esnext' or 'nodenext'.": {
+    "Dynamic imports only support a second argument when the '--module' option is set to 'esnext', 'node16', or 'nodenext'.": {
         "category": "Error",
         "code": 1324
     },
@@ -1016,7 +1020,7 @@
         "category": "Error",
         "code": 1342
     },
-    "The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'es2022', 'esnext', 'system', 'node12', or 'nodenext'.": {
+    "The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'es2022', 'esnext', 'system', 'node16', or 'nodenext'.": {
         "category": "Error",
         "code": 1343
     },
@@ -1140,7 +1144,7 @@
         "category": "Message",
         "code": 1377
     },
-    "Top-level 'await' expressions are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', or 'nodenext', and the 'target' option is set to 'es2017' or higher.": {
+    "Top-level 'await' expressions are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', or 'nodenext', and the 'target' option is set to 'es2017' or higher.": {
         "category": "Error",
         "code": 1378
     },
@@ -1348,7 +1352,7 @@
         "category": "Error",
         "code": 1431
     },
-    "Top-level 'for await' loops are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', or 'nodenext', and the 'target' option is set to 'es2017' or higher.": {
+    "Top-level 'for await' loops are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', or 'nodenext', and the 'target' option is set to 'es2017' or higher.": {
         "category": "Error",
         "code": 1432
     },
@@ -1420,7 +1424,7 @@
         "category": "Error",
         "code": 1451
     },
-    "Resolution modes are only supported when `moduleResolution` is `node12` or `nodenext`.": {
+    "Resolution modes are only supported when `moduleResolution` is `node16` or `nodenext`.": {
         "category": "Error",
         "code": 1452
     },
@@ -1465,7 +1469,7 @@
         "category": "Message",
         "code": 1475
     },
-    "\"auto\": Treat files with imports, exports, import.meta, jsx (with jsx: react-jsx), or esm format (with module: node12+) as modules.": {
+    "\"auto\": Treat files with imports, exports, import.meta, jsx (with jsx: react-jsx), or esm format (with module: node16+) as modules.": {
         "category": "Message",
         "code": 1476
     },
@@ -1505,10 +1509,6 @@
     "The 'type' modifier cannot be used on a named export when 'export type' is used on its export statement.": {
         "category": "Error",
         "code": 2207
-    },
-    "This type parameter probably needs an `extends object` constraint.": {
-        "category": "Error",
-        "code": 2208
     },
 
     "Duplicate identifier '{0}'.": {
@@ -3422,11 +3422,11 @@
         "category": "Error",
         "code": 2833
     },
-    "Relative import paths need explicit file extensions in EcmaScript imports when '--moduleResolution' is 'node12' or 'nodenext'. Consider adding an extension to the import path.": {
+    "Relative import paths need explicit file extensions in EcmaScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.": {
         "category": "Error",
         "code": 2834
     },
-    "Relative import paths need explicit file extensions in EcmaScript imports when '--moduleResolution' is 'node12' or 'nodenext'. Did you mean '{0}'?": {
+    "Relative import paths need explicit file extensions in EcmaScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean '{0}'?": {
         "category": "Error",
         "code": 2835
     },
@@ -6109,10 +6109,6 @@
     "A mapped type may not declare properties or methods.": {
         "category": "Error",
         "code": 7061
-    },
-    "JSON imports are experimental in ES module mode imports.": {
-        "category": "Error",
-        "code": 7062
     },
 
     "You cannot rename this element.": {

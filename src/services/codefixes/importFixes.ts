@@ -864,7 +864,7 @@ namespace ts.codefix {
             case ModuleKind.None:
                 // Fall back to the `import * as ns` style import.
                 return ImportKind.Namespace;
-            case ModuleKind.Node12:
+            case ModuleKind.Node16:
             case ModuleKind.NodeNext:
                 return importingFile.impliedNodeFormat === ModuleKind.ESNext ? ImportKind.Namespace : ImportKind.CommonJS;
             default:

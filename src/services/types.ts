@@ -267,7 +267,7 @@ namespace ts {
 
         /*
          * Unlike `realpath and `readDirectory`, `readFile` and `fileExists` are now _required_
-         * to properly acquire and setup source files under module: node12+ modes.
+         * to properly acquire and setup source files under module: node16+ modes.
          */
         readFile(path: string, encoding?: string): string | undefined;
         fileExists(path: string): boolean;
@@ -474,7 +474,10 @@ namespace ts {
 
         /*@internal*/
         // eslint-disable-next-line @typescript-eslint/unified-signatures
-        getDefinitionAtPosition(fileName: string, position: number, searchOtherFilesOnly: boolean): readonly DefinitionInfo[] | undefined;
+        getDefinitionAtPosition(fileName: string, position: number, searchOtherFilesOnly: false, stopAtAlias: boolean): readonly DefinitionInfo[] | undefined;
+        /*@internal*/
+        // eslint-disable-next-line @typescript-eslint/unified-signatures
+        getDefinitionAtPosition(fileName: string, position: number, searchOtherFilesOnly: boolean, stopAtAlias: false): readonly DefinitionInfo[] | undefined;
         getDefinitionAtPosition(fileName: string, position: number): readonly DefinitionInfo[] | undefined;
         getDefinitionAndBoundSpan(fileName: string, position: number): DefinitionInfoAndBoundSpan | undefined;
         getTypeDefinitionAtPosition(fileName: string, position: number): readonly DefinitionInfo[] | undefined;

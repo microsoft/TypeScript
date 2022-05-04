@@ -423,7 +423,7 @@ namespace ts {
                 es2020: ModuleKind.ES2020,
                 es2022: ModuleKind.ES2022,
                 esnext: ModuleKind.ESNext,
-                node12: ModuleKind.Node12,
+                node16: ModuleKind.Node16,
                 nodenext: ModuleKind.NodeNext,
             })),
             affectsModuleResolution: true,
@@ -781,7 +781,7 @@ namespace ts {
             type: new Map(getEntries({
                 node: ModuleResolutionKind.NodeJs,
                 classic: ModuleResolutionKind.Classic,
-                node12: ModuleResolutionKind.Node12,
+                node16: ModuleResolutionKind.Node16,
                 nodenext: ModuleResolutionKind.NodeNext,
             })),
             affectsModuleResolution: true,
@@ -1263,7 +1263,7 @@ namespace ts {
             affectsModuleResolution: true,
             description: Diagnostics.Control_what_method_is_used_to_detect_module_format_JS_files,
             category: Diagnostics.Language_and_Environment,
-            defaultValueDescription: Diagnostics.auto_Colon_Treat_files_with_imports_exports_import_meta_jsx_with_jsx_Colon_react_jsx_or_esm_format_with_module_Colon_node12_as_modules,
+            defaultValueDescription: Diagnostics.auto_Colon_Treat_files_with_imports_exports_import_meta_jsx_with_jsx_Colon_react_jsx_or_esm_format_with_module_Colon_node16_as_modules,
         }
     ];
 
