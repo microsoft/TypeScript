@@ -356,7 +356,7 @@ namespace ts.server {
                 logger.info(`Finding references to ${location.fileName} position ${location.pos} in project ${project.getProjectName()}`);
                 const projectOutputs = project.getLanguageService().findReferences(location.fileName, location.pos);
                 if (projectOutputs) {
-                    const clearIsDefinition = projectOutputs[0].references[0].isDefinition === undefined;
+                    const clearIsDefinition = projectOutputs[0]?.references[0]?.isDefinition === undefined;
                     for (const referencedSymbol of projectOutputs) {
                         const mappedDefinitionFile = getMappedLocation(project, documentSpanLocation(referencedSymbol.definition));
                         const definition: ReferencedSymbolDefinitionInfo = mappedDefinitionFile === undefined ?
