@@ -4387,6 +4387,16 @@ namespace ts {
             Extension.Dts;
     }
 
+    /**
+     * This function is an inverse of `getDeclarationEmitExtensionForPath`.
+     */
+    export function getPossibleOriginalInputExtensionForExtension(path: string) {
+        return fileExtensionIsOneOf(path, [Extension.Dmts, Extension.Mjs, Extension.Mts]) ? [Extension.Mts, Extension.Mjs] :
+            fileExtensionIsOneOf(path, [Extension.Dcts, Extension.Cjs, Extension.Cts]) ? [Extension.Cts, Extension.Cjs]:
+            fileExtensionIsOneOf(path, [`.json.d.ts`]) ? [Extension.Json] :
+            [Extension.Tsx, Extension.Ts, Extension.Jsx, Extension.Js];
+    }
+
     export function outFile(options: CompilerOptions) {
         return options.outFile || options.out;
     }
