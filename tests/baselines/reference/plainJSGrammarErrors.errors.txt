@@ -100,10 +100,9 @@ tests/cases/conformance/salsa/plainJSGrammarErrors.js(202,22): error TS17012: 't
 tests/cases/conformance/salsa/plainJSGrammarErrors.js(203,30): message TS1450: Dynamic imports can only accept a module specifier and an optional assertion as arguments
 tests/cases/conformance/salsa/plainJSGrammarErrors.js(204,30): message TS1450: Dynamic imports can only accept a module specifier and an optional assertion as arguments
 tests/cases/conformance/salsa/plainJSGrammarErrors.js(205,36): error TS1325: Argument of dynamic import cannot be spread element.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(207,1): error TS1108: A 'return' statement can only be used within a function body.
 
 
-==== tests/cases/conformance/salsa/plainJSGrammarErrors.js (103 errors) ====
+==== tests/cases/conformance/salsa/plainJSGrammarErrors.js (102 errors) ====
     class C {
         // #private mistakes
         q = #unbound
@@ -515,6 +514,4 @@ tests/cases/conformance/salsa/plainJSGrammarErrors.js(207,1): error TS1108: A 'r
 !!! error TS1325: Argument of dynamic import cannot be spread element.
     
     return
-    ~~~~~~
-!!! error TS1108: A 'return' statement can only be used within a function body.
     
