@@ -154,6 +154,7 @@
         "unittests/tsc/incremental.ts",
         "unittests/tsc/listFilesOnly.ts",
         "unittests/tsc/projectReferences.ts",
+        "unittests/tsc/redirect.ts",
         "unittests/tsc/runWithoutArgs.ts",
         "unittests/tscWatch/consoleClearing.ts",
         "unittests/tscWatch/emit.ts",

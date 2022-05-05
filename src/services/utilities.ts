@@ -1929,11 +1929,11 @@ namespace ts {
     }
 
     export function moduleResolutionRespectsExports(moduleResolution: ModuleResolutionKind): boolean {
-        return moduleResolution >= ModuleResolutionKind.Node12 && moduleResolution <= ModuleResolutionKind.NodeNext;
+        return moduleResolution >= ModuleResolutionKind.Node16 && moduleResolution <= ModuleResolutionKind.NodeNext;
     }
 
     export function moduleResolutionUsesNodeModules(moduleResolution: ModuleResolutionKind): boolean {
-        return moduleResolution === ModuleResolutionKind.NodeJs || moduleResolution >= ModuleResolutionKind.Node12 && moduleResolution <= ModuleResolutionKind.NodeNext;
+        return moduleResolution === ModuleResolutionKind.NodeJs || moduleResolution >= ModuleResolutionKind.Node16 && moduleResolution <= ModuleResolutionKind.NodeNext;
     }
 
     export function makeImportIfNecessary(defaultImport: Identifier | undefined, namedImports: readonly ImportSpecifier[] | undefined, moduleSpecifier: string, quotePreference: QuotePreference): ImportDeclaration | undefined {
