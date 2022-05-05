@@ -926,14 +926,6 @@ namespace ts {
 
     /// Language Service
 
-    // Information about a specific host file.
-    interface HostFileInformation {
-        hostFileName: string;
-        version: string;
-        scriptSnapshot: IScriptSnapshot;
-        scriptKind: ScriptKind;
-    }
-
     /* @internal */
     export interface DisplayPartsSymbolWriter extends EmitTextWriter {
         displayParts(): SymbolDisplayPart[];
@@ -985,58 +977,6 @@ namespace ts {
 
     export function getSupportedCodeFixes() {
         return codefix.getSupportedErrorCodes();
-    }
-
-    // Either it will be file name if host doesnt have file or it will be the host's file information
-    type CachedHostFileInformation = HostFileInformation | string;
-
-    // Cache host information about script Should be refreshed
-    // at each language service public entry point, since we don't know when
-    // the set of scripts handled by the host changes.
-    class HostCache {
-        private fileNameToEntry: ESMap<Path, CachedHostFileInformation>;
-        private currentDirectory: string;
-
-        constructor(private host: LanguageServiceHost, rootFileNames: readonly string[], getCanonicalFileName: GetCanonicalFileName) {
-            // script id => script index
-            this.currentDirectory = host.getCurrentDirectory();
-            this.fileNameToEntry = new Map();
-
-            // Initialize the list with the root file names
-            tracing?.push(tracing.Phase.Session, "initializeHostCache", { count: rootFileNames.length });
-            for (const fileName of rootFileNames) {
-                this.createEntry(fileName, toPath(fileName, this.currentDirectory, getCanonicalFileName));
-            }
-            tracing?.pop();
-        }
-
-        private createEntry(fileName: string, path: Path) {
-            let entry: CachedHostFileInformation;
-            const scriptSnapshot = this.host.getScriptSnapshot(fileName);
-            if (scriptSnapshot) {
-                entry = {
-                    hostFileName: fileName,
-                    version: this.host.getScriptVersion(fileName),
-                    scriptSnapshot,
-                    scriptKind: getScriptKind(fileName, this.host)
-                };
-            }
-            else {
-                entry = fileName;
-            }
-
-            this.fileNameToEntry.set(path, entry);
-            return entry;
-        }
-
-        public getEntryByPath(path: Path): CachedHostFileInformation | undefined {
-            return this.fileNameToEntry.get(path);
-        }
-
-        public getOrCreateEntryByPath(fileName: string, path: Path): HostFileInformation {
-            const info = this.getEntryByPath(path) || this.createEntry(fileName, path);
-            return isString(info) ? undefined! : info; // TODO: GH#18217
-        }
     }
 
     class SyntaxTreeCache {
@@ -1345,7 +1285,6 @@ namespace ts {
             const rootFileNames = host.getScriptFileNames();
 
             // Get a fresh cache of the host information
-            let hostCache: HostCache | undefined = new HostCache(host, rootFileNames, getCanonicalFileName);
             const newSettings = host.getCompilationSettings() || getDefaultCompilerOptions();
             const hasInvalidatedResolution: HasInvalidatedResolution = host.hasInvalidatedResolution || returnFalse;
             const hasChangedAutomaticTypeDirectiveNames = maybeBind(host, host.hasChangedAutomaticTypeDirectiveNames);
@@ -1363,22 +1302,8 @@ namespace ts {
                 getDefaultLibFileName: options => host.getDefaultLibFileName(options),
                 writeFile: noop,
                 getCurrentDirectory: () => currentDirectory,
-                fileExists: fileName => {
-                    const path = toPath(fileName, currentDirectory, getCanonicalFileName);
-                    const entry = hostCache && hostCache.getEntryByPath(path);
-                    return entry ?
-                        !isString(entry) :
-                        (!!host.fileExists && host.fileExists(fileName));
-                },
-                readFile: fileName => {
-                    // stub missing host functionality
-                    const path = toPath(fileName, currentDirectory, getCanonicalFileName);
-                    const entry = hostCache && hostCache.getEntryByPath(path);
-                    if (entry) {
-                        return isString(entry) ? undefined : getSnapshotText(entry.scriptSnapshot);
-                    }
-                    return host.readFile && host.readFile(fileName);
-                },
+                fileExists: fileName => host.fileExists(fileName),
+                readFile: fileName => host.readFile && host.readFile(fileName),
                 getSymlinkCache: maybeBind(host, host.getSymlinkCache),
                 realpath: maybeBind(host, host.realpath),
                 directoryExists: directoryName => {
@@ -1420,6 +1345,7 @@ namespace ts {
             compilerHost.getSourceFile = getSourceFileWithCache!;
 
             host.setCompilerHost?.(compilerHost);
+            let cachingInEffect = true;
 
             const parseConfigHost: ParseConfigFileHost = {
                 useCaseSensitiveFileNames,
@@ -1452,9 +1378,9 @@ namespace ts {
             };
             program = createProgram(options);
 
-            // hostCache is captured in the closure for 'getOrCreateSourceFile' but it should not be used past this point.
-            // It needs to be cleared to allow all collected snapshots to be released
-            hostCache = undefined;
+            // 'getOrCreateSourceFile' depends on caching but should be used past this point.
+            // After this point, the cache needs to be cleared to allow all collected snapshots to be released
+            cachingInEffect = false;
             compilerHost.getSourceFile = originalGetSourceFile;
             compilerHost.readFile = originalReadFile;
             compilerHost.fileExists = originalFileExists;
@@ -1521,14 +1447,17 @@ namespace ts {
             }
 
             function getOrCreateSourceFileByPath(fileName: string, path: Path, _languageVersion: ScriptTarget, _onError?: (message: string) => void, shouldCreateNewSourceFile?: boolean): SourceFile | undefined {
-                Debug.assert(hostCache !== undefined, "getOrCreateSourceFileByPath called after typical CompilerHost lifetime, check the callstack something with a reference to an old host.");
+                Debug.assert(cachingInEffect, "getOrCreateSourceFileByPath called after typical CompilerHost lifetime, check the callstack something with a reference to an old host.");
                 // The program is asking for this file, check first if the host can locate it.
                 // If the host can not locate the file, then it does not exist. return undefined
                 // to the program to allow reporting of errors for missing files.
-                const hostFileInformation = hostCache && hostCache.getOrCreateEntryByPath(fileName, path);
-                if (!hostFileInformation) {
+                const scriptSnapshot = host.getScriptSnapshot(fileName);
+                if (!scriptSnapshot) {
                     return undefined;
                 }
+
+                const scriptKind = getScriptKind(fileName, host);
+                const scriptVersion = host.getScriptVersion(fileName);
 
                 // Check if the language version has changed since we last created a program; if they are the same,
                 // it is safe to reuse the sourceFiles; if not, then the shape of the AST can change, and the oldSourceFile
@@ -1562,8 +1491,8 @@ namespace ts {
                         // We do not support the scenario where a host can modify a registered
                         // file's script kind, i.e. in one project some file is treated as ".ts"
                         // and in another as ".js"
-                        if (hostFileInformation.scriptKind === oldSourceFile.scriptKind) {
-                            return documentRegistry.updateDocumentWithKey(fileName, path, host, documentRegistryBucketKey, hostFileInformation.scriptSnapshot, hostFileInformation.version, hostFileInformation.scriptKind);
+                        if (scriptKind === oldSourceFile.scriptKind) {
+                            return documentRegistry.updateDocumentWithKey(fileName, path, host, documentRegistryBucketKey, scriptSnapshot, scriptVersion, scriptKind);
                         }
                         else {
                             // Release old source file and fall through to aquire new file with new script kind
@@ -1575,7 +1504,7 @@ namespace ts {
                 }
 
                 // Could not find this file in the old program, create a new SourceFile for it.
-                return documentRegistry.acquireDocumentWithKey(fileName, path, host, documentRegistryBucketKey, hostFileInformation.scriptSnapshot, hostFileInformation.version, hostFileInformation.scriptKind);
+                return documentRegistry.acquireDocumentWithKey(fileName, path, host, documentRegistryBucketKey, scriptSnapshot, scriptVersion, scriptKind);
             }
         }
 
