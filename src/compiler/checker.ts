@@ -42198,7 +42198,7 @@ namespace ts {
             if (isDeclaration(node)) {
                 // In this case, we call getSymbolOfNode instead of getSymbolAtLocation because it is a declaration
                 const symbol = getSymbolOfNode(node);
-                return getTypeOfSymbol(symbol);
+                return symbol ? getTypeOfSymbol(symbol) : errorType;
             }
 
             if (isDeclarationNameOrImportPropertyName(node)) {
