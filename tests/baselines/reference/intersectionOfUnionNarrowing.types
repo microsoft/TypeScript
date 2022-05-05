@@ -20,25 +20,25 @@ declare const q: X & AorB;
 
 if (q.a !== undefined) {
 >q.a !== undefined : boolean
->q.a : ({ aProp: string; } & object) | undefined
+>q.a : { aProp: string; } | undefined
 >q : X & AorB
->a : ({ aProp: string; } & object) | undefined
+>a : { aProp: string; } | undefined
 >undefined : undefined
 
   q.a.aProp;
 >q.a.aProp : string
->q.a : { aProp: string; } & object
+>q.a : { aProp: string; }
 >q : X & { a: object; b: undefined; }
->a : { aProp: string; } & object
+>a : { aProp: string; }
 >aProp : string
 
 } else {
   // q.b is previously incorrectly inferred as potentially undefined
   q.b.bProp;
 >q.b.bProp : string
->q.b : { bProp: string; } & object
+>q.b : { bProp: string; }
 >q : X & { a: undefined; b: object; }
->b : { bProp: string; } & object
+>b : { bProp: string; }
 >bProp : string
 }
 

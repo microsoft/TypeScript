@@ -151,7 +151,7 @@ function test<T extends IFoo>() {
 
     // The 'object' type has no effect on intersections
     const obj6: object & { x: string } = { z: 'abc' }
->obj6 : object & { x: string; }
+>obj6 : { x: string; }
 >x : string
 >{ z: 'abc' } : { z: string; }
 >z : string
