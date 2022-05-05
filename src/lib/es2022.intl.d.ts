@@ -20,7 +20,7 @@ declare namespace Intl {
      *
      * @returns A new iterable Segments object containing the segments of the input string, using the segmenter's locale and granularity.
      */
-    segment<T extends string>(input: T): Segments<T>;
+    segment(input: string): Segments;
     resolvedOptions(): ResolvedSegmenterOptions;
   }
 
@@ -29,25 +29,25 @@ declare namespace Intl {
     localeMatcher?: "best fit" | "lookup";
   }
 
-  interface Segments<T extends string> {
+  interface Segments {
     /**
      * Returns an object describing the segment in the original string that includes the code unit at a specified index.
      *
      * @param codeUnitIndex - A number specifying the index of the code unit in the original input string. If the value is omitted, it defaults to `0`.
      */
-    containing(codeUnitIndex?: number): SegmentData<T>;
+    containing(codeUnitIndex?: number): SegmentData;
 
     /** Returns an iterator to iterate over the segments. */
-    [Symbol.iterator](): IterableIterator<SegmentData<T>>;
+    [Symbol.iterator](): IterableIterator<SegmentData>;
   }
 
-  interface SegmentData<T extends string> {
+  interface SegmentData {
     /** A string containing the segment extracted from the original input string. */
     segment: string;
     /** The code unit index in the original input string at which the segment begins. */
     index: number;
     /** The complete input string that was segmented. */
-    input: T;
+    input: string;
     /**
      * A boolean value only if granularity is "word"; otherwise, undefined.
      * If granularity is "word", then isWordLike is true when the segment is word-like (i.e., consists of letters/numbers/ideographs/etc.); otherwise, false.
