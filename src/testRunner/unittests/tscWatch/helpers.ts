@@ -171,9 +171,10 @@ namespace ts.tscWatch {
     export interface Baseline extends BaselineBase, CommandLineCallbacks {
     }
 
-    export function createBaseline(system: WatchedSystem, modifySystem?: (sys: WatchedSystem) => void): Baseline {
+    export function createBaseline(system: WatchedSystem, modifySystem?: (sys: WatchedSystem, originalRead: WatchedSystem["readFile"]) => void): Baseline {
+        const originalRead = system.readFile;
         const initialSys = fakes.patchHostForBuildInfoReadWrite(system);
-        modifySystem?.(initialSys);
+        modifySystem?.(initialSys, originalRead);
         const sys = TestFSWithWatch.changeToHostTrackingWrittenFiles(initialSys);
         const baseline: string[] = [];
         baseline.push("Input::");
@@ -336,7 +337,7 @@ namespace ts.tscWatch {
         if (!builderProgram) return;
         if (builderProgram !== oldProgram?.[1]) {
             const state = builderProgram.getState();
-            const internalState = state as unknown as BuilderState;
+            const internalState = state as unknown as BuilderProgramState;
             if (state.semanticDiagnosticsPerFile?.size) {
                 baseline.push("Semantic diagnostics in builder refreshed for::");
                 for (const file of program.getSourceFiles()) {
@@ -354,8 +355,11 @@ namespace ts.tscWatch {
                     baseline.push("Shape signatures in builder refreshed for::");
                     internalState.hasCalledUpdateShapeSignature.forEach((path: Path) => {
                         const info = state.fileInfos.get(path);
-                        if(info?.version === info?.signature || !info?.signature) {
+                        if (info?.version === info?.signature || !info?.signature) {
                             baseline.push(path + " (used version)");
+                        }
+                        else if (internalState.filesChangingSignature?.has(path)) {
+                            baseline.push(path + " (computed .d.ts during emit)");
                         }
                         else {
                             baseline.push(path + " (computed .d.ts)");
@@ -407,30 +411,32 @@ namespace ts.tscWatch {
         sys.writeFile(file, content.replace(searchValue, replaceValue));
     }
 
-    export function createSolutionBuilder(system: WatchedSystem, rootNames: readonly string[], defaultOptions?: BuildOptions) {
-        const host = createSolutionBuilderHost(system);
-        return ts.createSolutionBuilder(host, rootNames, defaultOptions || {});
+    export function createSolutionBuilder(system: WatchedSystem, rootNames: readonly string[], originalRead?: WatchedSystem["readFile"]) {
+        const host = createSolutionBuilderHostForBaseline(system, /*versionToWrite*/ undefined, originalRead);
+        return ts.createSolutionBuilder(host, rootNames, {});
     }
 
     export function ensureErrorFreeBuild(host: WatchedSystem, rootNames: readonly string[]) {
         // ts build should succeed
-        const solutionBuilder = createSolutionBuilder(host, rootNames, {});
-        solutionBuilder.build();
+        solutionBuildWithBaseline(host, rootNames);
         assert.equal(host.getOutput().length, 0, JSON.stringify(host.getOutput(), /*replacer*/ undefined, " "));
     }
 
-    export function createSystemWithSolutionBuild(solutionRoots: readonly string[], files: readonly TestFSWithWatch.FileOrFolderOrSymLink[], params?: TestFSWithWatch.TestServerHostCreationParameters) {
-        const sys = createWatchedSystem(files, params);
+    export function solutionBuildWithBaseline(sys: WatchedSystem, solutionRoots: readonly string[], originalRead?: WatchedSystem["readFile"]) {
         const originalReadFile = sys.readFile;
         const originalWrite = sys.write;
         const originalWriteFile = sys.writeFile;
         const solutionBuilder = createSolutionBuilder(TestFSWithWatch.changeToHostTrackingWrittenFiles(
             fakes.patchHostForBuildInfoReadWrite(sys)
-        ), solutionRoots, {});
+        ), solutionRoots, originalRead);
         solutionBuilder.build();
         sys.readFile = originalReadFile;
         sys.write = originalWrite;
         sys.writeFile = originalWriteFile;
         return sys;
+    }
+
+    export function createSystemWithSolutionBuild(solutionRoots: readonly string[], files: readonly TestFSWithWatch.FileOrFolderOrSymLink[], params?: TestFSWithWatch.TestServerHostCreationParameters) {
+        return solutionBuildWithBaseline(createWatchedSystem(files, params), solutionRoots);
     }
 }

@@ -90,7 +90,7 @@ namespace ts.tscWatch {
                     content: JSON.stringify({
                         compilerOptions: {
                             outDir: "build",
-                            module: "node12",
+                            module: "node16",
                         },
                         references: [{ path: "../pkg2" }]
                     })
@@ -109,7 +109,7 @@ namespace ts.tscWatch {
                         compilerOptions: {
                             composite: true,
                             outDir: "build",
-                            module: "node12",
+                            module: "node16",
                         }
                     })
                 },
@@ -126,7 +126,7 @@ namespace ts.tscWatch {
                     path: `${projectRoot}/node_modules/pkg2`,
                     symLink: `${projectRoot}/packages/pkg2`,
                 },
-                { ...libFile, path: `/a/lib/lib.es2020.full.d.ts` }
+                { ...libFile, path: `/a/lib/lib.es2022.full.d.ts` }
             ], { currentDirectory: projectRoot }),
             commandLineArgs: ["-b", "packages/pkg1", "-w", "--verbose", "--traceResolution"],
             changes: [

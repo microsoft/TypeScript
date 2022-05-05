@@ -784,3 +784,49 @@ const f60: Func = (kind, payload) => {
     }
 };
 
+// Repro from #48902
+
+function foo({
+>foo : Symbol(foo, Decl(dependentDestructuredVariables.ts, 308, 2))
+
+    value1,
+>value1 : Symbol(value1, Decl(dependentDestructuredVariables.ts, 312, 14))
+
+    test1 = value1.test1,
+>test1 : Symbol(test1, Decl(dependentDestructuredVariables.ts, 313, 11))
+>value1 : Symbol(value1, Decl(dependentDestructuredVariables.ts, 312, 14))
+
+    test2 = value1.test2,
+>test2 : Symbol(test2, Decl(dependentDestructuredVariables.ts, 314, 25))
+>value1 : Symbol(value1, Decl(dependentDestructuredVariables.ts, 312, 14))
+
+    test3 = value1.test3,
+>test3 : Symbol(test3, Decl(dependentDestructuredVariables.ts, 315, 25))
+>value1 : Symbol(value1, Decl(dependentDestructuredVariables.ts, 312, 14))
+
+    test4 = value1.test4,
+>test4 : Symbol(test4, Decl(dependentDestructuredVariables.ts, 316, 25))
+>value1 : Symbol(value1, Decl(dependentDestructuredVariables.ts, 312, 14))
+
+    test5 = value1.test5,
+>test5 : Symbol(test5, Decl(dependentDestructuredVariables.ts, 317, 25))
+>value1 : Symbol(value1, Decl(dependentDestructuredVariables.ts, 312, 14))
+
+    test6 = value1.test6,
+>test6 : Symbol(test6, Decl(dependentDestructuredVariables.ts, 318, 25))
+>value1 : Symbol(value1, Decl(dependentDestructuredVariables.ts, 312, 14))
+
+    test7 = value1.test7,
+>test7 : Symbol(test7, Decl(dependentDestructuredVariables.ts, 319, 25))
+>value1 : Symbol(value1, Decl(dependentDestructuredVariables.ts, 312, 14))
+
+    test8 = value1.test8,
+>test8 : Symbol(test8, Decl(dependentDestructuredVariables.ts, 320, 25))
+>value1 : Symbol(value1, Decl(dependentDestructuredVariables.ts, 312, 14))
+
+    test9 = value1.test9
+>test9 : Symbol(test9, Decl(dependentDestructuredVariables.ts, 321, 25))
+>value1 : Symbol(value1, Decl(dependentDestructuredVariables.ts, 312, 14))
+
+}) {}
+

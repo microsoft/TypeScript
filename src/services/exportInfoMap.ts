@@ -291,8 +291,8 @@ namespace ts {
     ): boolean {
         if (from === to) return false;
         const cachedResult = moduleSpecifierCache?.get(from.path, to.path, preferences, {});
-        if (cachedResult?.isAutoImportable !== undefined) {
-            return cachedResult.isAutoImportable;
+        if (cachedResult?.isBlockedByPackageJsonDependencies !== undefined) {
+            return !cachedResult.isBlockedByPackageJsonDependencies;
         }
 
         const getCanonicalFileName = hostGetCanonicalFileName(moduleSpecifierResolutionHost);
@@ -313,7 +313,7 @@ namespace ts {
 
         if (packageJsonFilter) {
             const isAutoImportable = hasImportablePath && packageJsonFilter.allowsImportingSourceFile(to, moduleSpecifierResolutionHost);
-            moduleSpecifierCache?.setIsAutoImportable(from.path, to.path, preferences, {}, isAutoImportable);
+            moduleSpecifierCache?.setBlockedByPackageJsonDependencies(from.path, to.path, preferences, {}, !isAutoImportable);
             return isAutoImportable;
         }
 

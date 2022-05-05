@@ -656,10 +656,10 @@ namespace ts {
         AllowNumericSeparator = 1 << 3
     }
 
-    export function getLiteralText(node: LiteralLikeNode, sourceFile: SourceFile, flags: GetLiteralTextFlags) {
+    export function getLiteralText(node: LiteralLikeNode, sourceFile: SourceFile | undefined, flags: GetLiteralTextFlags) {
         // If we don't need to downlevel and we can reach the original source text using
         // the node's parent reference, then simply get the text as it was originally written.
-        if (canUseOriginalText(node, flags)) {
+        if (sourceFile && canUseOriginalText(node, flags)) {
             return getSourceTextOfNodeFromSourceFile(sourceFile, node);
         }
 
@@ -808,7 +808,7 @@ namespace ts {
     }
 
     function isCommonJSContainingModuleKind(kind: ModuleKind) {
-        return kind === ModuleKind.CommonJS || kind === ModuleKind.Node12 || kind === ModuleKind.NodeNext;
+        return kind === ModuleKind.CommonJS || kind === ModuleKind.Node16 || kind === ModuleKind.NodeNext;
     }
 
     export function isEffectiveExternalModule(node: SourceFile, compilerOptions: CompilerOptions) {
@@ -4469,10 +4469,10 @@ namespace ts {
         return combinePaths(newDirPath, sourceFilePath);
     }
 
-    export function writeFile(host: { writeFile: WriteFileCallback; }, diagnostics: DiagnosticCollection, fileName: string, data: string, writeByteOrderMark: boolean, sourceFiles?: readonly SourceFile[]) {
-        host.writeFile(fileName, data, writeByteOrderMark, hostErrorMessage => {
+    export function writeFile(host: { writeFile: WriteFileCallback; }, diagnostics: DiagnosticCollection, fileName: string, text: string, writeByteOrderMark: boolean, sourceFiles?: readonly SourceFile[], data?: WriteFileCallbackData) {
+        host.writeFile(fileName, text, writeByteOrderMark, hostErrorMessage => {
             diagnostics.add(createCompilerDiagnostic(Diagnostics.Could_not_write_file_0_Colon_1, fileName, hostErrorMessage));
-        }, sourceFiles);
+        }, sourceFiles, data);
     }
 
     function ensureDirectoriesExist(
@@ -6329,7 +6329,7 @@ namespace ts {
                     file.externalModuleIndicator = isFileProbablyExternalModule(file);
                 };
             case ModuleDetectionKind.Auto:
-                // If module is nodenext or node12, all esm format files are modules
+                // If module is nodenext or node16, all esm format files are modules
                 // If jsx is react-jsx or react-jsxdev then jsx tags force module-ness
                 // otherwise, the presence of import or export statments (or import.meta) implies module-ness
                 const checks: ((file: SourceFile) => Node | true | undefined)[] = [isFileProbablyExternalModule];
@@ -6337,7 +6337,7 @@ namespace ts {
                     checks.push(isFileModuleFromUsingJSXTag);
                 }
                 const moduleKind = getEmitModuleKind(options);
-                if (moduleKind === ModuleKind.Node12 || moduleKind === ModuleKind.NodeNext) {
+                if (moduleKind === ModuleKind.Node16 || moduleKind === ModuleKind.NodeNext) {
                     checks.push(isFileForcedToBeModuleByFormat);
                 }
                 const combined = or(...checks);
@@ -6348,7 +6348,7 @@ namespace ts {
 
     export function getEmitScriptTarget(compilerOptions: {module?: CompilerOptions["module"], target?: CompilerOptions["target"]}) {
         return compilerOptions.target ||
-            (compilerOptions.module === ModuleKind.Node12 && ScriptTarget.ES2020) ||
+            (compilerOptions.module === ModuleKind.Node16 && ScriptTarget.ES2022) ||
             (compilerOptions.module === ModuleKind.NodeNext && ScriptTarget.ESNext) ||
             ScriptTarget.ES3;
     }
@@ -6366,8 +6366,8 @@ namespace ts {
                 case ModuleKind.CommonJS:
                     moduleResolution = ModuleResolutionKind.NodeJs;
                     break;
-                case ModuleKind.Node12:
-                    moduleResolution = ModuleResolutionKind.Node12;
+                case ModuleKind.Node16:
+                    moduleResolution = ModuleResolutionKind.Node16;
                     break;
                 case ModuleKind.NodeNext:
                     moduleResolution = ModuleResolutionKind.NodeNext;
@@ -6392,7 +6392,7 @@ namespace ts {
             case ModuleKind.ES2020:
             case ModuleKind.ES2022:
             case ModuleKind.ESNext:
-            case ModuleKind.Node12:
+            case ModuleKind.Node16:
             case ModuleKind.NodeNext:
                 return true;
             default:
@@ -6417,7 +6417,7 @@ namespace ts {
             return compilerOptions.esModuleInterop;
         }
         switch (getEmitModuleKind(compilerOptions)) {
-            case ModuleKind.Node12:
+            case ModuleKind.Node16:
             case ModuleKind.NodeNext:
                 return true;
         }

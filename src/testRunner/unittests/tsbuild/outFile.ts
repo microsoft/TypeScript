@@ -10,10 +10,6 @@ namespace ts {
             outFileWithBuildFs = undefined!;
         });
 
-        function createSolutionBuilder(host: fakes.SolutionBuilderHost, baseOptions?: BuildOptions) {
-            return ts.createSolutionBuilder(host, ["/src/third"], { dry: false, force: false, verbose: true, ...(baseOptions || {}) });
-        }
-
         interface VerifyOutFileScenarioInput {
             subScenario: string;
             modifyFs?: (fs: vfs.FileSystem) => void;
@@ -108,8 +104,9 @@ namespace ts {
         function getOutFileFsAfterBuild() {
             if (outFileWithBuildFs) return outFileWithBuildFs;
             const fs = outFileFs.shadow();
-            const host = fakes.SolutionBuilderHost.create(fs);
-            const builder = createSolutionBuilder(host);
+            const sys = new fakes.System(fs, { executingFilePath: "/lib/tsc" });
+            const host = createSolutionBuilderHostForBaseline(sys as TscCompileSystem);
+            const builder = createSolutionBuilder(host, ["/src/third"], { dry: false, force: false, verbose: true });
             builder.build();
             fs.makeReadonly();
             return outFileWithBuildFs = fs;
@@ -147,7 +144,7 @@ namespace ts {
             compile: sys => {
                 // Buildinfo will have version which does not match with current ts version
                 const buildHost = createSolutionBuilderHostForBaseline(sys, "FakeTSCurrentVersion");
-                const builder = ts.createSolutionBuilder(buildHost, ["/src/third"], { verbose: true });
+                const builder = createSolutionBuilder(buildHost, ["/src/third"], { verbose: true });
                 sys.exit(builder.build());
             }
         });
@@ -181,7 +178,7 @@ namespace ts {
             commandLineArgs: ["--build", "/src/second/tsconfig.json"],
             compile: sys => {
                 const buildHost = createSolutionBuilderHostForBaseline(sys);
-                const builder = ts.createSolutionBuilder(buildHost, ["/src/third/tsconfig.json"], {});
+                const builder = createSolutionBuilder(buildHost, ["/src/third/tsconfig.json"], {});
                 sys.exit(builder.build("/src/second/tsconfig.json"));
             }
         });
@@ -193,7 +190,7 @@ namespace ts {
             commandLineArgs: ["--build", "--clean", "/src/second/tsconfig.json"],
             compile: sys => {
                 const buildHost = createSolutionBuilderHostForBaseline(sys);
-                const builder = ts.createSolutionBuilder(buildHost, ["/src/third/tsconfig.json"], { verbose: true });
+                const builder = createSolutionBuilder(buildHost, ["/src/third/tsconfig.json"], { verbose: true });
                 sys.exit(builder.clean("/src/second/tsconfig.json"));
             }
         });
