@@ -90,7 +90,7 @@ namespace ts.tscWatch {
                     content: JSON.stringify({
                         compilerOptions: {
                             outDir: "build",
-                            module: "node12",
+                            module: "node16",
                         },
                         references: [{ path: "../pkg2" }]
                     })
@@ -109,7 +109,7 @@ namespace ts.tscWatch {
                         compilerOptions: {
                             composite: true,
                             outDir: "build",
-                            module: "node12",
+                            module: "node16",
                         }
                     })
                 },

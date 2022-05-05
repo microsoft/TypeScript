@@ -1,0 +1,10 @@
+=== /index.ts ===
+/// <reference types="pkg" resolution-mode="import"/>
+No type information for this code.export interface LocalInterface extends ImportInterface {}
+No type information for this code.=== /node_modules/pkg/import.d.ts ===
+export {};
+declare global {
+>global : any
+
+    interface ImportInterface {}
+}
