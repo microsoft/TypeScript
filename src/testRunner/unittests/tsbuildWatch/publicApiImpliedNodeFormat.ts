@@ -1,21 +1,4 @@
 namespace ts.tscWatch {
-//     export const libFile: File = {
-//         path: "/a/lib/lib.d.ts",
-//         content: `/// <reference no-default-lib="true"/>
-// interface Boolean {}
-// interface Function {}
-// interface CallableFunction {}
-// interface NewableFunction {}
-// interface IArguments {}
-// interface Number { toExponential: any; }
-// interface Object {}
-// interface RegExp {}
-// interface String { charAt: any; }
-// interface Array<T> { length: number; [n: number]: T; }`
-//     };
-
-
-
     it("unittests:: tsbuildWatch:: watchMode:: Public API with custom transformers / PublicAPI-impliedNodeFormat", () => {
         const solution: File = {
             path: `${projectRoot}/tsconfig.json`,
@@ -31,9 +14,9 @@ namespace ts.tscWatch {
             path: `${projectRoot}/shared/tsconfig.options.json`,
             content: JSON.stringify({
                 compilerOptions: {
-                    module:"Node12",
+                    //module:"Node12",  == NOT NEEDED
                     lib: ["es2020"],
-                    moduleResolution: "node",
+                    moduleResolution: "Node12", // absolutely needed
                     target: "es2020",
                 },
             })
@@ -81,7 +64,7 @@ export function f22() { } // trailing`
         const commandLineArgs = ["--b", "--w", /*"--verbose"*/];
         const { sys, baseline, oldSnap, cb, getPrograms } = createBaseline(createWatchedSystem([libFile, { ...libFile, path: "/a/lib/lib.es2020.d.ts" }, solution, sharedConfig, sharedConfigOptions, sharedPackageJson, sharedIndex, webpackConfig, webpackIndex], { currentDirectory: projectRoot }));
 
-        const writeToConsole = true;
+        const writeToConsole = false; // MUST BE false WHEN NOT TESTING SINGULARLY
         if (writeToConsole){
             const origSysWrite = sys.write.bind(sys);
             sys.write = (message: string)=>{
@@ -110,7 +93,7 @@ export function f22() { } // trailing`
         builder.build();
         runWatchBaseline({
             scenario: "publicApi",
-            subScenario: "with custom transformers",
+            subScenario: "with custom transformers, test that impliedNodeFormat is set",
             commandLineArgs,
             sys,
             baseline,
@@ -128,22 +111,13 @@ export function f22() { } // trailing`
                         printLastImpliedNodeFormats();
                         printModuleResolutionCache(builder);
                         if (lastImpliedNodeFormats.get("/user/username/projects/myproject/shared/index.ts")?.impliedNodeFormat!==ModuleKind.CommonJS) {
-//                            throw new Error(`Expecting impliedNodeFormat for /user/username/projects/myproject/shared/index.ts to be ModuleKind.CommonJS`);
-                            sys.write(`Expecting impliedNodeFormat for /user/username/projects/myproject/shared/index.ts to be ModuleKind.CommonJS`);
+                            throw new Error(`Expecting impliedNodeFormat for /user/username/projects/myproject/shared/index.ts to be ModuleKind.CommonJS`);
+                        }
+                        else {
+                            sys.write(`impliedNodeFormat for /user/username/projects/myproject/shared/index.ts is correctly ModuleKind.CommonJS`);
                         }
                     }
                 },
-                // {
-                //     caption: "add package.json to shared",
-                //     change: sys => sys.writeFile(sharedPackageJson.path, sharedPackageJson.content),
-                //     timeouts: sys => {
-                //         sys.checkTimeoutQueueLengthAndRun(1); // Shared
-                //         sys.checkTimeoutQueueLengthAndRun(1); // webpack
-                //         sys.checkTimeoutQueueLengthAndRun(1); // solution
-                //         sys.checkTimeoutQueueLength(0);
-                //         printLastImpliedNodeFormats();
-                //     }
-                // }
             ],
             watchOrSolution: builder
         });
@@ -151,8 +125,6 @@ export function f22() { } // trailing`
         function getCustomTransformers(project: string): CustomTransformers {
             const before: TransformerFactory<SourceFile> = context => {
                 return file => {
-                    // const gotImpliedNodeFormat = getImpliedNodeFormatForFile(
-                    //     importingSourceFileName, buildHost.getPackageJsonInfoCache?.(), getModuleResolutionHost(host), compilerOptions);;
                     sys.write(`project=${project}, file.impliedNodeFormat=${impliedNodeFormatToString(file.impliedNodeFormat)}`);
                     lastImpliedNodeFormats.set(file.fileName,{ impliedNodeFormat : file.impliedNodeFormat });
                     return visitEachChild(file, visit, context);
