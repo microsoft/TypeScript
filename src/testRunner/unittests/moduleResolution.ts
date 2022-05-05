@@ -215,6 +215,7 @@ namespace ts {
                     extension: Extension.Ts,
                 },
                 failedLookupLocations: [],
+                resolutionDiagnostics: [],
             });
             assert.isDefined(cache.get("/sub"));
             assert.isUndefined(cache.get("/"));
@@ -228,6 +229,7 @@ namespace ts {
                     extension: Extension.Ts,
                 },
                 failedLookupLocations: [],
+                resolutionDiagnostics: [],
             });
             assert.isDefined(cache.get("/sub/dir/foo"));
             assert.isDefined(cache.get("/sub/dir"));
@@ -243,6 +245,7 @@ namespace ts {
                     extension: Extension.Ts,
                 },
                 failedLookupLocations: [],
+                resolutionDiagnostics: [],
             });
             assert.isDefined(cache.get("/foo/bar"));
             assert.isDefined(cache.get("/foo"));
@@ -257,6 +260,7 @@ namespace ts {
                     extension: Extension.Ts,
                 },
                 failedLookupLocations: [],
+                resolutionDiagnostics: [],
             });
             assert.isDefined(cache.get("/foo"));
             assert.isUndefined(cache.get("/"));
@@ -270,6 +274,7 @@ namespace ts {
                     extension: Extension.Ts,
                 },
                 failedLookupLocations: [],
+                resolutionDiagnostics: [],
             });
             assert.isDefined(cache.get("c:/foo"));
             assert.isDefined(cache.get("c:/"));
@@ -279,6 +284,7 @@ namespace ts {
             cache.set("/foo/bar/baz", {
                 resolvedModule: undefined,
                 failedLookupLocations: [],
+                resolutionDiagnostics: [],
             });
             assert.isDefined(cache.get("/foo/bar/baz"));
             assert.isDefined(cache.get("/foo/bar"));

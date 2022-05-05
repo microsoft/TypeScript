@@ -1511,6 +1511,15 @@
         "code": 2207
     },
 
+    "The project root is ambiguous, but is required to resolve export map entry '{0}' in file '{1}'. Supply the `rootDir` compiler option to disambiguate.": {
+        "category": "Error",
+        "code": 2209
+    },
+    "The project root is ambiguous, but is required to resolve import map entry '{0}' in file '{1}'. Supply the `rootDir` compiler option to disambiguate.": {
+        "category": "Error",
+        "code": 2210
+    },
+
     "Duplicate identifier '{0}'.": {
         "category": "Error",
         "code": 2300
