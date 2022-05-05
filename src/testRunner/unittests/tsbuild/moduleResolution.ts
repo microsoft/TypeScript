@@ -126,7 +126,7 @@ namespace ts.tscWatch {
                     path: `${projectRoot}/node_modules/pkg2`,
                     symLink: `${projectRoot}/packages/pkg2`,
                 },
-                { ...libFile, path: `/a/lib/lib.es2020.full.d.ts` }
+                { ...libFile, path: `/a/lib/lib.es2022.full.d.ts` }
             ], { currentDirectory: projectRoot }),
             commandLineArgs: ["-b", "packages/pkg1", "-w", "--verbose", "--traceResolution"],
             changes: [
