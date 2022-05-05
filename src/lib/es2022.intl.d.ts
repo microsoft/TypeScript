@@ -6,10 +6,10 @@ declare namespace Intl {
      * [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/Segmenter/Segmenter#parameters)
      */
     interface SegmenterOptions {
-        /** The type of input to be split */
-        granularity?: "grapheme" | "word" | "sentence" | undefined;
         /** The locale matching algorithm to use. For information about this option, see [Intl page](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Intl#Locale_negotiation). */
         localeMatcher?: "best fit" | "lookup" | undefined;
+        /** The type of input to be split */
+        granularity?: "grapheme" | "word" | "sentence" | undefined;
     }
 
     interface Segmenter {
@@ -25,8 +25,8 @@ declare namespace Intl {
     }
 
     interface ResolvedSegmenterOptions {
-        granularity?: "grapheme" | "word" | "sentence";
-        localeMatcher?: "best fit" | "lookup";
+        locale: string;
+        granularity: "grapheme" | "word" | "sentence";
     }
 
     interface Segments {
