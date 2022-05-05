@@ -691,6 +691,10 @@ namespace ts.formatting {
                 isListItem: boolean,
                 isFirstListItem?: boolean): number {
 
+                if (nodeIsMissing(child)) {
+                    return inheritedIndentation;
+                }
+
                 const childStartPos = child.getStart(sourceFile);
 
                 const childStartLine = sourceFile.getLineAndCharacterOfPosition(childStartPos).line;
