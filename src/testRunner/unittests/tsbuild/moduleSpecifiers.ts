@@ -178,7 +178,7 @@ namespace ts {
                     }`,
             }, ""),
             modifyFs: fs => {
-                fs.writeFileSync("/lib/lib.es2020.full.d.ts", tscWatch.libFile.content);
+                fs.writeFileSync("/lib/lib.es2022.full.d.ts", tscWatch.libFile.content);
                 fs.symlinkSync("/src", "/src/src-types/node_modules");
                 fs.symlinkSync("/src", "/src/src-dogs/node_modules");
             },
