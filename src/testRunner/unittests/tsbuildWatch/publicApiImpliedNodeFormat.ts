@@ -118,6 +118,42 @@ export function f22() { } // trailing`
                         }
                     }
                 },
+                {
+                    caption: "change package.json type to module",
+                    change: sys => sys.writeFile(sharedPackageJson.path, sharedPackageJson.content.replace("commonjs","module")),
+                    timeouts: sys => {
+                        sys.checkTimeoutQueueLengthAndRun(1); // Shared
+                        sys.checkTimeoutQueueLengthAndRun(1); // webpack
+                        sys.checkTimeoutQueueLengthAndRun(1); // solution
+                        sys.checkTimeoutQueueLength(0);
+                        printLastImpliedNodeFormats();
+                        printModuleResolutionCache(builder);
+                        if (lastImpliedNodeFormats.get("/user/username/projects/myproject/shared/index.ts")?.impliedNodeFormat!==ModuleKind.ESNext) {
+                            throw new Error(`Expecting impliedNodeFormat for /user/username/projects/myproject/shared/index.ts to be ModuleKind.ESNext`);
+                        }
+                        else {
+                            sys.write(`impliedNodeFormat for /user/username/projects/myproject/shared/index.ts is correctly ModuleKind.ESNext`);
+                        }
+                    }
+                },
+                {
+                    caption: "date change package.json",
+                    change: sys => sys.writeFile(sharedPackageJson.path, sharedPackageJson.content.replace("commonjs","module")),
+                    timeouts: sys => {
+                        sys.checkTimeoutQueueLengthAndRun(1); // Shared
+                        sys.checkTimeoutQueueLengthAndRun(1); // webpack
+                        sys.checkTimeoutQueueLengthAndRun(1); // solution
+                        sys.checkTimeoutQueueLength(0);
+                        printLastImpliedNodeFormats();
+                        printModuleResolutionCache(builder);
+                        if (lastImpliedNodeFormats.get("/user/username/projects/myproject/shared/index.ts")?.impliedNodeFormat!==ModuleKind.ESNext) {
+                            throw new Error(`Expecting impliedNodeFormat for /user/username/projects/myproject/shared/index.ts to be ModuleKind.ESNext`);
+                        }
+                        else {
+                            sys.write(`impliedNodeFormat for /user/username/projects/myproject/shared/index.ts is correctly ModuleKind.ESNext`);
+                        }
+                    }
+                }
             ],
             watchOrSolution: builder
         });
