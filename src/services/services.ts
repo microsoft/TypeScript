@@ -1402,20 +1402,37 @@ namespace ts {
                 useSourceOfProjectReferenceRedirect: maybeBind(host, host.useSourceOfProjectReferenceRedirect),
                 getParsedCommandLine,
             };
+
+            const originalGetSourceFile = compilerHost.getSourceFile;
+
+            const {
+                originalReadFile,
+                originalFileExists,
+                originalDirectoryExists,
+                originalCreateDirectory,
+                originalWriteFile,
+                getSourceFileWithCache,
+            } = changeCompilerHostLikeToUseCache(
+                compilerHost,
+                fileName => toPath(fileName, currentDirectory, getCanonicalFileName),
+                (...args) => originalGetSourceFile.call(compilerHost, ...args)
+            );
+            compilerHost.getSourceFile = getSourceFileWithCache!;
+
             host.setCompilerHost?.(compilerHost);
 
             const parseConfigHost: ParseConfigFileHost = {
                 useCaseSensitiveFileNames,
-                fileExists: compilerHost.fileExists,
-                readFile: compilerHost.readFile,
-                readDirectory: compilerHost.readDirectory!,
+                fileExists: fileName => compilerHost.fileExists(fileName),
+                readFile: fileName => compilerHost.readFile(fileName),
+                readDirectory: (...args) => compilerHost.readDirectory!(...args),
                 trace: compilerHost.trace,
                 getCurrentDirectory: compilerHost.getCurrentDirectory,
                 onUnRecoverableConfigFileDiagnostic: noop,
             };
 
             // If the program is already up-to-date, we can reuse it
-            if (isProgramUptoDate(program, rootFileNames, newSettings, (_path, fileName) => host.getScriptVersion(fileName), compilerHost.fileExists, hasInvalidatedResolution, hasChangedAutomaticTypeDirectiveNames, getParsedCommandLine, projectReferences)) {
+            if (isProgramUptoDate(program, rootFileNames, newSettings, (_path, fileName) => host.getScriptVersion(fileName), fileName => compilerHost.fileExists(fileName), hasInvalidatedResolution, hasChangedAutomaticTypeDirectiveNames, getParsedCommandLine, projectReferences)) {
                 return;
             }
 
@@ -1438,6 +1455,12 @@ namespace ts {
             // hostCache is captured in the closure for 'getOrCreateSourceFile' but it should not be used past this point.
             // It needs to be cleared to allow all collected snapshots to be released
             hostCache = undefined;
+            compilerHost.getSourceFile = originalGetSourceFile;
+            compilerHost.readFile = originalReadFile;
+            compilerHost.fileExists = originalFileExists;
+            compilerHost.directoryExists = originalDirectoryExists;
+            compilerHost.createDirectory = originalCreateDirectory;
+            compilerHost.writeFile = originalWriteFile!;
             parsedCommandLines = undefined;
 
             // We reset this cache on structure invalidation so we don't hold on to outdated files for long; however we can't use the `compilerHost` above,
