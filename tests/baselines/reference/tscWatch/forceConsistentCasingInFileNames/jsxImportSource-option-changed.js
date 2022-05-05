@@ -90,14 +90,14 @@ WatchedFiles::
   {"fileName":"/user/username/projects/myproject/node_modules/react/jsx-runtime/package.json","pollingInterval":250}
 /user/username/projects/myproject/node_modules/react/package.json:
   {"fileName":"/user/username/projects/myproject/node_modules/react/package.json","pollingInterval":250}
+/user/username/projects/myproject/node_modules/@types:
+  {"fileName":"/user/username/projects/myproject/node_modules/@types","pollingInterval":500}
 
 FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/myproject/node_modules:
-  {"directoryName":"/user/username/projects/myproject/node_modules","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/node_modules"}
 
 exitCode:: ExitStatus.undefined
 

@@ -52,13 +52,13 @@ c:/myfolder/allproject/project/file2.ts:
   {"fileName":"c:/myfolder/allproject/project/file2.ts","pollingInterval":250}
 c:/a/lib/lib.d.ts:
   {"fileName":"c:/a/lib/lib.d.ts","pollingInterval":250}
+c:/myfolder/allproject/project/node_modules/@types:
+  {"fileName":"c:/myfolder/allproject/project/node_modules/@types","pollingInterval":500}
+c:/myfolder/allproject/node_modules/@types:
+  {"fileName":"c:/myfolder/allproject/node_modules/@types","pollingInterval":500}
 
 FsWatches::
 
 FsWatchesRecursive::
 c:/myfolder/allproject/project:
-  {"directoryName":"c:/myfolder/allproject/project","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-c:/myfolder/allproject/project/node_modules/@types:
-  {"directoryName":"c:/myfolder/allproject/project/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-c:/myfolder/allproject/node_modules/@types:
-  {"directoryName":"c:/myfolder/allproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"c:/myfolder/allproject/project"}

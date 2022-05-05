@@ -79,14 +79,14 @@ WatchedFiles::
   {"fileName":"/user/username/projects/noEmitOnError/src/other.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
   {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+/user/username/projects/noemitonerror/node_modules/@types:
+  {"fileName":"/user/username/projects/noEmitOnError/node_modules/@types","pollingInterval":500}
 
 FsWatches::
 
 FsWatchesRecursive::
-/user/username/projects/noemitonerror/node_modules/@types:
-  {"directoryName":"/user/username/projects/noEmitOnError/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/noemitonerror:
-  {"directoryName":"/user/username/projects/noemitonerror","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/noemitonerror"}
 
 exitCode:: ExitStatus.undefined
 
@@ -210,14 +210,14 @@ WatchedFiles::
   {"fileName":"/user/username/projects/noEmitOnError/src/other.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
   {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+/user/username/projects/noemitonerror/node_modules/@types:
+  {"fileName":"/user/username/projects/noEmitOnError/node_modules/@types","pollingInterval":500}
 
 FsWatches::
 
 FsWatchesRecursive::
-/user/username/projects/noemitonerror/node_modules/@types:
-  {"directoryName":"/user/username/projects/noEmitOnError/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/noemitonerror:
-  {"directoryName":"/user/username/projects/noemitonerror","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/noemitonerror"}
 
 exitCode:: ExitStatus.undefined
 
@@ -266,14 +266,14 @@ WatchedFiles::
   {"fileName":"/user/username/projects/noEmitOnError/src/other.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
   {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+/user/username/projects/noemitonerror/node_modules/@types:
+  {"fileName":"/user/username/projects/noEmitOnError/node_modules/@types","pollingInterval":500}
 
 FsWatches::
 
 FsWatchesRecursive::
-/user/username/projects/noemitonerror/node_modules/@types:
-  {"directoryName":"/user/username/projects/noEmitOnError/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/noemitonerror:
-  {"directoryName":"/user/username/projects/noemitonerror","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/noemitonerror"}
 
 exitCode:: ExitStatus.undefined
 
@@ -417,14 +417,14 @@ WatchedFiles::
   {"fileName":"/user/username/projects/noEmitOnError/src/other.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
   {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+/user/username/projects/noemitonerror/node_modules/@types:
+  {"fileName":"/user/username/projects/noEmitOnError/node_modules/@types","pollingInterval":500}
 
 FsWatches::
 
 FsWatchesRecursive::
-/user/username/projects/noemitonerror/node_modules/@types:
-  {"directoryName":"/user/username/projects/noEmitOnError/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/noemitonerror:
-  {"directoryName":"/user/username/projects/noemitonerror","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/noemitonerror"}
 
 exitCode:: ExitStatus.undefined
 
@@ -548,14 +548,14 @@ WatchedFiles::
   {"fileName":"/user/username/projects/noEmitOnError/src/other.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
   {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+/user/username/projects/noemitonerror/node_modules/@types:
+  {"fileName":"/user/username/projects/noEmitOnError/node_modules/@types","pollingInterval":500}
 
 FsWatches::
 
 FsWatchesRecursive::
-/user/username/projects/noemitonerror/node_modules/@types:
-  {"directoryName":"/user/username/projects/noEmitOnError/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/noemitonerror:
-  {"directoryName":"/user/username/projects/noemitonerror","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/noemitonerror"}
 
 exitCode:: ExitStatus.undefined
 
@@ -602,14 +602,14 @@ WatchedFiles::
   {"fileName":"/user/username/projects/noEmitOnError/src/other.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
   {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+/user/username/projects/noemitonerror/node_modules/@types:
+  {"fileName":"/user/username/projects/noEmitOnError/node_modules/@types","pollingInterval":500}
 
 FsWatches::
 
 FsWatchesRecursive::
-/user/username/projects/noemitonerror/node_modules/@types:
-  {"directoryName":"/user/username/projects/noEmitOnError/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/noemitonerror:
-  {"directoryName":"/user/username/projects/noemitonerror","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/noemitonerror"}
 
 exitCode:: ExitStatus.undefined
 
@@ -717,14 +717,14 @@ WatchedFiles::
   {"fileName":"/user/username/projects/noEmitOnError/src/other.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
   {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+/user/username/projects/noemitonerror/node_modules/@types:
+  {"fileName":"/user/username/projects/noEmitOnError/node_modules/@types","pollingInterval":500}
 
 FsWatches::
 
 FsWatchesRecursive::
-/user/username/projects/noemitonerror/node_modules/@types:
-  {"directoryName":"/user/username/projects/noEmitOnError/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/noemitonerror:
-  {"directoryName":"/user/username/projects/noemitonerror","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/noemitonerror"}
 
 exitCode:: ExitStatus.undefined
 

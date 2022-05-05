@@ -63,7 +63,7 @@ FsWatches::
 
 FsWatchesRecursive::
 /:
-  {"directoryName":"","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":""}
 
 exitCode:: ExitStatus.undefined
 
@@ -140,7 +140,7 @@ FsWatches::
 
 FsWatchesRecursive::
 /:
-  {"directoryName":"","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":""}
 
 exitCode:: ExitStatus.undefined
 

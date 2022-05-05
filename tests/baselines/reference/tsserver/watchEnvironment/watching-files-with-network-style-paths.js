@@ -36,12 +36,12 @@ c:/myprojects/project/jsconfig.json:
   {"fileName":"c:/myprojects/project/jsconfig.json","pollingInterval":250}
 c:/a/lib/lib.d.ts:
   {"fileName":"c:/a/lib/lib.d.ts","pollingInterval":250}
+c:/myprojects/project/node_modules/@types:
+  {"fileName":"c:/myprojects/project/node_modules/@types","pollingInterval":500}
 
 FsWatches::
 
 FsWatchesRecursive::
-c:/myprojects/project/node_modules/@types:
-  {"directoryName":"c:/myprojects/project/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 For files of style //vda1cs4850/myprojects/project/x.js
 Provided types map file "/typesMap.json" doesn't exist
@@ -81,12 +81,12 @@ WatchedFiles::
   {"fileName":"//vda1cs4850/myprojects/project/jsconfig.json","pollingInterval":250}
 //vda1cs4850/a/lib/lib.d.ts:
   {"fileName":"//vda1cs4850/a/lib/lib.d.ts","pollingInterval":250}
+//vda1cs4850/myprojects/project/node_modules/@types:
+  {"fileName":"//vda1cs4850/myprojects/project/node_modules/@types","pollingInterval":500}
 
 FsWatches::
 
 FsWatchesRecursive::
-//vda1cs4850/myprojects/project/node_modules/@types:
-  {"directoryName":"//vda1cs4850/myprojects/project/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 For files of style //vda1cs4850/c$/myprojects/project/x.js
 Provided types map file "/typesMap.json" doesn't exist
@@ -126,12 +126,12 @@ WatchedFiles::
   {"fileName":"//vda1cs4850/c$/myprojects/project/jsconfig.json","pollingInterval":250}
 //vda1cs4850/a/lib/lib.d.ts:
   {"fileName":"//vda1cs4850/a/lib/lib.d.ts","pollingInterval":250}
+//vda1cs4850/c$/myprojects/project/node_modules/@types:
+  {"fileName":"//vda1cs4850/c$/myprojects/project/node_modules/@types","pollingInterval":500}
 
 FsWatches::
 
 FsWatchesRecursive::
-//vda1cs4850/c$/myprojects/project/node_modules/@types:
-  {"directoryName":"//vda1cs4850/c$/myprojects/project/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 For files of style c:/users/username/myprojects/project/x.js
 Provided types map file "/typesMap.json" doesn't exist
@@ -171,12 +171,12 @@ c:/users/username/myprojects/project/jsconfig.json:
   {"fileName":"c:/users/username/myprojects/project/jsconfig.json","pollingInterval":250}
 c:/a/lib/lib.d.ts:
   {"fileName":"c:/a/lib/lib.d.ts","pollingInterval":250}
+c:/users/username/myprojects/project/node_modules/@types:
+  {"fileName":"c:/users/username/myprojects/project/node_modules/@types","pollingInterval":500}
 
 FsWatches::
 
 FsWatchesRecursive::
-c:/users/username/myprojects/project/node_modules/@types:
-  {"directoryName":"c:/users/username/myprojects/project/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 For files of style //vda1cs4850/c$/users/username/myprojects/project/x.js
 Provided types map file "/typesMap.json" doesn't exist
@@ -216,9 +216,9 @@ WatchedFiles::
   {"fileName":"//vda1cs4850/c$/users/username/myprojects/project/jsconfig.json","pollingInterval":250}
 //vda1cs4850/a/lib/lib.d.ts:
   {"fileName":"//vda1cs4850/a/lib/lib.d.ts","pollingInterval":250}
+//vda1cs4850/c$/users/username/myprojects/project/node_modules/@types:
+  {"fileName":"//vda1cs4850/c$/users/username/myprojects/project/node_modules/@types","pollingInterval":500}
 
 FsWatches::
 
 FsWatchesRecursive::
-//vda1cs4850/c$/users/username/myprojects/project/node_modules/@types:
-  {"directoryName":"//vda1cs4850/c$/users/username/myprojects/project/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}

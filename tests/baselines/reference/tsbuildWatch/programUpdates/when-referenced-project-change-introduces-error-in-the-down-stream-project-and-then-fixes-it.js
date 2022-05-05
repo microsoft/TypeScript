@@ -93,9 +93,9 @@ FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/sample1/library:
-  {"directoryName":"/user/username/projects/sample1/library","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/sample1/library"}
 /user/username/projects/sample1/app:
-  {"directoryName":"/user/username/projects/sample1/app","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/sample1/app"}
 
 exitCode:: ExitStatus.undefined
 
@@ -241,9 +241,9 @@ FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/sample1/library:
-  {"directoryName":"/user/username/projects/sample1/library","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/sample1/library"}
 /user/username/projects/sample1/app:
-  {"directoryName":"/user/username/projects/sample1/app","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/sample1/app"}
 
 exitCode:: ExitStatus.undefined
 
@@ -372,9 +372,9 @@ FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/sample1/library:
-  {"directoryName":"/user/username/projects/sample1/library","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/sample1/library"}
 /user/username/projects/sample1/app:
-  {"directoryName":"/user/username/projects/sample1/app","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/sample1/app"}
 
 exitCode:: ExitStatus.undefined
 

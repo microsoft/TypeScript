@@ -50,11 +50,11 @@ c:/project/file2.ts:
   {"fileName":"c:/project/file2.ts","pollingInterval":250}
 c:/a/lib/lib.d.ts:
   {"fileName":"c:/a/lib/lib.d.ts","pollingInterval":250}
+c:/project/node_modules/@types:
+  {"fileName":"c:/project/node_modules/@types","pollingInterval":500}
 
 FsWatches::
 
 FsWatchesRecursive::
 c:/project:
-  {"directoryName":"c:/project","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-c:/project/node_modules/@types:
-  {"directoryName":"c:/project/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"c:/project"}

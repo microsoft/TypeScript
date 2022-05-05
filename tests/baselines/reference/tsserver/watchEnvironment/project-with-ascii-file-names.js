@@ -37,11 +37,11 @@ WatchedFiles::
   {"fileName":"/User/userName/Projects/I/jsconfig.json","pollingInterval":250}
 /a/lib/lib.d.ts:
   {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+/user/username/projects/i/node_modules:
+  {"fileName":"/User/userName/Projects/I/node_modules","pollingInterval":500}
+/user/username/projects/i/node_modules/@types:
+  {"fileName":"/User/userName/Projects/I/node_modules/@types","pollingInterval":500}
 
 FsWatches::
 
 FsWatchesRecursive::
-/user/username/projects/i/node_modules:
-  {"directoryName":"/User/userName/Projects/I/node_modules","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/i/node_modules/@types:
-  {"directoryName":"/User/userName/Projects/I/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}

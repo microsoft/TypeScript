@@ -51,17 +51,17 @@ Open files:
 		Projects: /a/b/tsconfig.json
 response:{"responseRequired":false}
 WatchedFiles::
+/a/b/node_modules/@types:
+  {"fileName":"/a/b/node_modules/@types","pollingInterval":500}
 
 FsWatches::
 /a/b/tsconfig.json:
-  {"directoryName":"/a/b/tsconfig.json","fallbackPollingInterval":2000,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/a/b/tsconfig.json"}
 /a/b/commonfile2.ts:
-  {"directoryName":"/a/b/commonFile2.ts","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/a/b/commonFile2.ts"}
 /a/lib/lib.d.ts:
-  {"directoryName":"/a/lib/lib.d.ts","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/a/lib/lib.d.ts"}
 
 FsWatchesRecursive::
 /a/b:
-  {"directoryName":"/a/b","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/a/b/node_modules/@types:
-  {"directoryName":"/a/b/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/a/b"}

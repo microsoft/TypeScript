@@ -449,7 +449,7 @@ FsWatches::
 
 FsWatchesRecursive::
 /a/b:
-  {"directoryName":"/a/b","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/a/b"}
 
 exitCode:: ExitStatus.undefined
 
@@ -523,7 +523,7 @@ FsWatches::
 
 FsWatchesRecursive::
 /a/b:
-  {"directoryName":"/a/b","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/a/b"}
 
 exitCode:: ExitStatus.undefined
 
@@ -585,7 +585,7 @@ FsWatches::
 
 FsWatchesRecursive::
 /a/b:
-  {"directoryName":"/a/b","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/a/b"}
 
 exitCode:: ExitStatus.undefined
 
