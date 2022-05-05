@@ -944,7 +944,7 @@ namespace ts {
             initializeState("", content, languageVersion, /*syntaxCursor*/ undefined, ScriptKind.JS);
             // Prime the scanner.
             nextToken();
-            const entityName = parseEntityName(/*allowReservedWords*/ true, /*allowPrivateIdentifiers*/ false);
+            const entityName = parseEntityName(/*allowReservedWords*/ true);
             const isInvalid = token() === SyntaxKind.EndOfFileToken && !parseDiagnostics.length;
             clearState();
             return isInvalid ? entityName : undefined;
@@ -2829,7 +2829,7 @@ namespace ts {
             return createMissingList<T>();
         }
 
-        function parseEntityName(allowReservedWords: boolean, allowPrivateIdentifiers: boolean, diagnosticMessage?: DiagnosticMessage): EntityName {
+        function parseEntityName(allowReservedWords: boolean, diagnosticMessage?: DiagnosticMessage): EntityName {
             const pos = getNodePos();
             let entity: EntityName = allowReservedWords ? parseIdentifierName(diagnosticMessage) : parseIdentifier(diagnosticMessage);
             let dotPos = getNodePos();
@@ -2843,7 +2843,7 @@ namespace ts {
                 entity = finishNode(
                     factory.createQualifiedName(
                         entity,
-                        parseRightSideOfDot(allowReservedWords, allowPrivateIdentifiers) as Identifier
+                        parseRightSideOfDot(allowReservedWords, /* allowPrivateIdentifiers */ false) as Identifier
                     ),
                     pos
                 );
@@ -3028,7 +3028,7 @@ namespace ts {
         // TYPES
 
         function parseEntityNameOfTypeReference() {
-            return parseEntityName(/*allowReservedWords*/ true, /*allowPrivateIdentifiers*/ false, Diagnostics.Type_expected);
+            return parseEntityName(/*allowReservedWords*/ true, Diagnostics.Type_expected);
         }
 
         function parseTypeArgumentsOfTypeReference() {
@@ -3188,7 +3188,7 @@ namespace ts {
         function parseTypeQuery(): TypeQueryNode {
             const pos = getNodePos();
             parseExpected(SyntaxKind.TypeOfKeyword);
-            const entityName = parseEntityName(/*allowReservedWords*/ true, /*allowPrivateIdentifiers*/ true);
+            const entityName = parseEntityName(/*allowReservedWords*/ true);
             // Make sure we perform ASI to prevent parsing the next line's type arguments as part of an instantiation expression.
             const typeArguments = !scanner.hasPrecedingLineBreak() ? tryParseTypeArguments() : undefined;
             return finishNode(factory.createTypeQueryNode(entityName, typeArguments), pos);
@@ -4290,10 +4290,10 @@ namespace ts {
             }
 
             const pos = getNodePos();
-            let expr = parseAssignmentExpressionOrHigher(/*disallowReturnTypeInArrowFunction*/ false);
+            let expr = parseAssignmentExpressionOrHigher();
             let operatorToken: BinaryOperatorToken;
             while ((operatorToken = parseOptionalToken(SyntaxKind.CommaToken))) {
-                expr = makeBinaryExpression(expr, operatorToken, parseAssignmentExpressionOrHigher(/*disallowReturnTypeInArrowFunction*/ false), pos);
+                expr = makeBinaryExpression(expr, operatorToken, parseAssignmentExpressionOrHigher(), pos);
             }
 
             if (saveDecoratorContext) {
@@ -4303,10 +4303,10 @@ namespace ts {
         }
 
         function parseInitializer(): Expression | undefined {
-            return parseOptional(SyntaxKind.EqualsToken) ? parseAssignmentExpressionOrHigher(/*disallowReturnTypeInArrowFunction*/ false) : undefined;
+            return parseOptional(SyntaxKind.EqualsToken) ? parseAssignmentExpressionOrHigher() : undefined;
         }
 
-        function parseAssignmentExpressionOrHigher(disallowReturnTypeInArrowFunction: boolean): Expression {
+        function parseAssignmentExpressionOrHigher(): Expression {
             //  AssignmentExpression[in,yield]:
             //      1) ConditionalExpression[?in,?yield]
             //      2) LeftHandSideExpression = AssignmentExpression[?in,?yield]
@@ -4334,7 +4334,7 @@ namespace ts {
             // If we do successfully parse arrow-function, we must *not* recurse for productions 1, 2 or 3. An ArrowFunction is
             // not a LeftHandSideExpression, nor does it start a ConditionalExpression.  So we are done
             // with AssignmentExpression if we see one.
-            const arrowExpression = tryParseParenthesizedArrowFunctionExpression(disallowReturnTypeInArrowFunction) || tryParseAsyncSimpleArrowFunctionExpression(disallowReturnTypeInArrowFunction);
+            const arrowExpression = tryParseParenthesizedArrowFunctionExpression() || tryParseAsyncSimpleArrowFunctionExpression();
             if (arrowExpression) {
                 return arrowExpression;
             }
@@ -4355,7 +4355,7 @@ namespace ts {
             // parameter ('x => ...') above. We handle it here by checking if the parsed expression was a single
             // identifier and the current token is an arrow.
             if (expr.kind === SyntaxKind.Identifier && token() === SyntaxKind.EqualsGreaterThanToken) {
-                return parseSimpleArrowFunctionExpression(pos, expr as Identifier, disallowReturnTypeInArrowFunction, /*asyncModifier*/ undefined);
+                return parseSimpleArrowFunctionExpression(pos, expr as Identifier, /*asyncModifier*/ undefined);
             }
 
             // Now see if we might be in cases '2' or '3'.
@@ -4365,7 +4365,7 @@ namespace ts {
             // Note: we call reScanGreaterToken so that we get an appropriately merged token
             // for cases like `> > =` becoming `>>=`
             if (isLeftHandSideExpression(expr) && isAssignmentOperator(reScanGreaterToken())) {
-                return makeBinaryExpression(expr, parseTokenNode(), parseAssignmentExpressionOrHigher(disallowReturnTypeInArrowFunction), pos);
+                return makeBinaryExpression(expr, parseTokenNode(), parseAssignmentExpressionOrHigher(), pos);
             }
 
             // It wasn't an assignment or a lambda.  This is a conditional expression:
@@ -4419,7 +4419,7 @@ namespace ts {
                 return finishNode(
                     factory.createYieldExpression(
                         parseOptionalToken(SyntaxKind.AsteriskToken),
-                        parseAssignmentExpressionOrHigher(/*disallowReturnTypeInArrowFunction*/ false)
+                        parseAssignmentExpressionOrHigher()
                     ),
                     pos
                 );
@@ -4431,7 +4431,7 @@ namespace ts {
             }
         }
 
-        function parseSimpleArrowFunctionExpression(pos: number, identifier: Identifier, disallowReturnTypeInArrowFunction: boolean, asyncModifier?: NodeArray<Modifier> | undefined): ArrowFunction {
+        function parseSimpleArrowFunctionExpression(pos: number, identifier: Identifier, asyncModifier?: NodeArray<Modifier> | undefined): ArrowFunction {
             Debug.assert(token() === SyntaxKind.EqualsGreaterThanToken, "parseSimpleArrowFunctionExpression should only have been called if we had a =>");
             const parameter = factory.createParameterDeclaration(
                 /*decorators*/ undefined,
@@ -4446,12 +4446,12 @@ namespace ts {
 
             const parameters = createNodeArray<ParameterDeclaration>([parameter], parameter.pos, parameter.end);
             const equalsGreaterThanToken = parseExpectedToken(SyntaxKind.EqualsGreaterThanToken);
-            const body = parseArrowFunctionExpressionBody(/*isAsync*/ !!asyncModifier, disallowReturnTypeInArrowFunction);
+            const body = parseArrowFunctionExpressionBody(/*isAsync*/ !!asyncModifier);
             const node = factory.createArrowFunction(asyncModifier, /*typeParameters*/ undefined, parameters, /*type*/ undefined, equalsGreaterThanToken, body);
             return addJSDocComment(finishNode(node, pos));
         }
 
-        function tryParseParenthesizedArrowFunctionExpression(disallowReturnTypeInArrowFunction: boolean): Expression | undefined {
+        function tryParseParenthesizedArrowFunctionExpression(): Expression | undefined {
             const triState = isParenthesizedArrowFunctionExpression();
             if (triState === Tristate.False) {
                 // It's definitely not a parenthesized arrow function expression.
@@ -4463,8 +4463,8 @@ namespace ts {
             // it out, but don't allow any ambiguity, and return 'undefined' if this could be an
             // expression instead.
             return triState === Tristate.True ?
-                parseParenthesizedArrowFunctionExpression(/*allowAmbiguity*/ true, /*disallowReturnTypeInArrowFunction*/ false) :
-                tryParse(() => parsePossibleParenthesizedArrowFunctionExpression(disallowReturnTypeInArrowFunction));
+                parseParenthesizedArrowFunctionExpression(/*allowAmbiguity*/ true) :
+                tryParse(parsePossibleParenthesizedArrowFunctionExpression);
         }
 
         //  True        -> We definitely expect a parenthesized arrow function here.
@@ -4610,13 +4610,13 @@ namespace ts {
             }
         }
 
-        function parsePossibleParenthesizedArrowFunctionExpression(disallowReturnTypeInArrowFunction: boolean): ArrowFunction | undefined {
+        function parsePossibleParenthesizedArrowFunctionExpression(): ArrowFunction | undefined {
             const tokenPos = scanner.getTokenPos();
             if (notParenthesizedArrow?.has(tokenPos)) {
                 return undefined;
             }
 
-            const result = parseParenthesizedArrowFunctionExpression(/*allowAmbiguity*/ false, disallowReturnTypeInArrowFunction);
+            const result = parseParenthesizedArrowFunctionExpression(/*allowAmbiguity*/ false);
             if (!result) {
                 (notParenthesizedArrow || (notParenthesizedArrow = new Set())).add(tokenPos);
             }
@@ -4624,14 +4624,14 @@ namespace ts {
             return result;
         }
 
-        function tryParseAsyncSimpleArrowFunctionExpression(disallowReturnTypeInArrowFunction: boolean): ArrowFunction | undefined {
+        function tryParseAsyncSimpleArrowFunctionExpression(): ArrowFunction | undefined {
             // We do a check here so that we won't be doing unnecessarily call to "lookAhead"
             if (token() === SyntaxKind.AsyncKeyword) {
                 if (lookAhead(isUnParenthesizedAsyncArrowFunctionWorker) === Tristate.True) {
                     const pos = getNodePos();
                     const asyncModifier = parseModifiersForArrowFunction();
                     const expr = parseBinaryExpressionOrHigher(OperatorPrecedence.Lowest);
-                    return parseSimpleArrowFunctionExpression(pos, expr as Identifier, disallowReturnTypeInArrowFunction, asyncModifier);
+                    return parseSimpleArrowFunctionExpression(pos, expr as Identifier, asyncModifier);
                 }
             }
             return undefined;
@@ -4658,7 +4658,7 @@ namespace ts {
             return Tristate.False;
         }
 
-        function parseParenthesizedArrowFunctionExpression(allowAmbiguity: boolean, disallowReturnTypeInArrowFunction: boolean): ArrowFunction | undefined {
+        function parseParenthesizedArrowFunctionExpression(allowAmbiguity: boolean): ArrowFunction | undefined {
             const pos = getNodePos();
             const hasJSDoc = hasPrecedingJSDocComment();
             const modifiers = parseModifiersForArrowFunction();
@@ -4695,24 +4695,6 @@ namespace ts {
                 }
             }
 
-            // Given:
-            //     x ? y => ({ y }) : z => ({ z })
-            // We try to parse the body of the first arrow function by looking at:
-            //     ({ y }) : z => ({ z })
-            // This is a valid arrow function with "z" as the return type.
-            //
-            // But, if we're in the true side of a conditional expression, this colon
-            // terminates the expression, so we cannot allow a return type if we aren't
-            // certain whether or not the preceding text was parsed as a parameter list.
-            //
-            // For example,
-            //     a() ? (b: number, c?: string): void => d() : e
-            // is determined by isParenthesizedArrowFunctionExpression to unambiguously
-            // be an arrow expression, so we allow a return type.
-            if (disallowReturnTypeInArrowFunction && token() === SyntaxKind.ColonToken) {
-                return undefined;
-            }
-
             const type = parseReturnType(SyntaxKind.ColonToken, /*isType*/ false);
             if (type && !allowAmbiguity && typeHasArrowFunctionBlockingParseError(type)) {
                 return undefined;
@@ -4745,14 +4727,14 @@ namespace ts {
             const lastToken = token();
             const equalsGreaterThanToken = parseExpectedToken(SyntaxKind.EqualsGreaterThanToken);
             const body = (lastToken === SyntaxKind.EqualsGreaterThanToken || lastToken === SyntaxKind.OpenBraceToken)
-                ? parseArrowFunctionExpressionBody(some(modifiers, isAsyncModifier), disallowReturnTypeInArrowFunction)
+                ? parseArrowFunctionExpressionBody(some(modifiers, isAsyncModifier))
                 : parseIdentifier();
 
             const node = factory.createArrowFunction(modifiers, typeParameters, parameters, type, equalsGreaterThanToken, body);
             return withJSDoc(finishNode(node, pos), hasJSDoc);
         }
 
-        function parseArrowFunctionExpressionBody(isAsync: boolean, disallowReturnTypeInArrowFunction: boolean): Block | Expression {
+        function parseArrowFunctionExpressionBody(isAsync: boolean): Block | Expression {
             if (token() === SyntaxKind.OpenBraceToken) {
                 return parseFunctionBlock(isAsync ? SignatureFlags.Await : SignatureFlags.None);
             }
@@ -4782,8 +4764,8 @@ namespace ts {
             const savedTopLevel = topLevel;
             topLevel = false;
             const node = isAsync
-                ? doInAwaitContext(() => parseAssignmentExpressionOrHigher(disallowReturnTypeInArrowFunction))
-                : doOutsideOfAwaitContext(() => parseAssignmentExpressionOrHigher(disallowReturnTypeInArrowFunction));
+                ? doInAwaitContext(parseAssignmentExpressionOrHigher)
+                : doOutsideOfAwaitContext(parseAssignmentExpressionOrHigher);
             topLevel = savedTopLevel;
             return node;
         }
@@ -4802,10 +4784,10 @@ namespace ts {
                 factory.createConditionalExpression(
                     leftOperand,
                     questionToken,
-                    doOutsideOfContext(disallowInAndDecoratorContext, () => parseAssignmentExpressionOrHigher(/*disallowReturnTypeInArrowFunction*/ true)),
+                    doOutsideOfContext(disallowInAndDecoratorContext, parseAssignmentExpressionOrHigher),
                     colonToken = parseExpectedToken(SyntaxKind.ColonToken),
                     nodeIsPresent(colonToken)
-                        ? parseAssignmentExpressionOrHigher(/*disallowReturnTypeInArrowFunction*/ true)
+                        ? parseAssignmentExpressionOrHigher()
                         : createMissingNode(SyntaxKind.Identifier, /*reportAtCurrentPosition*/ false, Diagnostics._0_expected, tokenToString(SyntaxKind.ColonToken))
                 ),
                 pos
@@ -5803,14 +5785,14 @@ namespace ts {
         function parseSpreadElement(): Expression {
             const pos = getNodePos();
             parseExpected(SyntaxKind.DotDotDotToken);
-            const expression = parseAssignmentExpressionOrHigher(/*disallowReturnTypeInArrowFunction*/ false);
+            const expression = parseAssignmentExpressionOrHigher();
             return finishNode(factory.createSpreadElement(expression), pos);
         }
 
         function parseArgumentOrArrayLiteralElement(): Expression {
             return token() === SyntaxKind.DotDotDotToken ? parseSpreadElement() :
                 token() === SyntaxKind.CommaToken ? finishNode(factory.createOmittedExpression(), getNodePos()) :
-                parseAssignmentExpressionOrHigher(/*disallowReturnTypeInArrowFunction*/ false);
+                parseAssignmentExpressionOrHigher();
         }
 
         function parseArgumentExpression(): Expression {
@@ -5832,7 +5814,7 @@ namespace ts {
             const hasJSDoc = hasPrecedingJSDocComment();
 
             if (parseOptionalToken(SyntaxKind.DotDotDotToken)) {
-                const expression = parseAssignmentExpressionOrHigher(/*disallowReturnTypeInArrowFunction*/ false);
+                const expression = parseAssignmentExpressionOrHigher();
                 return withJSDoc(finishNode(factory.createSpreadAssignment(expression), pos), hasJSDoc);
             }
 
@@ -5867,7 +5849,7 @@ namespace ts {
             const isShorthandPropertyAssignment = tokenIsIdentifier && (token() !== SyntaxKind.ColonToken);
             if (isShorthandPropertyAssignment) {
                 const equalsToken = parseOptionalToken(SyntaxKind.EqualsToken);
-                const objectAssignmentInitializer = equalsToken ? allowInAnd(() => parseAssignmentExpressionOrHigher(/*disallowReturnTypeInArrowFunction*/ false)) : undefined;
+                const objectAssignmentInitializer = equalsToken ? allowInAnd(parseAssignmentExpressionOrHigher) : undefined;
                 node = factory.createShorthandPropertyAssignment(name as Identifier, objectAssignmentInitializer);
                 // Save equals token for error reporting.
                 // TODO(rbuckton): Consider manufacturing this when we need to report an error as it is otherwise not useful.
@@ -5875,7 +5857,7 @@ namespace ts {
             }
             else {
                 parseExpected(SyntaxKind.ColonToken);
-                const initializer = allowInAnd(() => parseAssignmentExpressionOrHigher(/*disallowReturnTypeInArrowFunction*/ false));
+                const initializer = allowInAnd(parseAssignmentExpressionOrHigher);
                 node = factory.createPropertyAssignment(name, initializer);
             }
             // Decorators, Modifiers, questionToken, and exclamationToken are not supported by property assignments and are reported in the grammar checker
@@ -6075,7 +6057,7 @@ namespace ts {
 
             let node: IterationStatement;
             if (awaitToken ? parseExpected(SyntaxKind.OfKeyword) : parseOptional(SyntaxKind.OfKeyword)) {
-                const expression = allowInAnd(() => parseAssignmentExpressionOrHigher(/*disallowReturnTypeInArrowFunction*/ false));
+                const expression = allowInAnd(parseAssignmentExpressionOrHigher);
                 parseExpected(SyntaxKind.CloseParenToken);
                 node = factory.createForOfStatement(awaitToken, initializer, expression, parseStatement());
             }
@@ -7417,7 +7399,7 @@ namespace ts {
             const pos = getNodePos();
             const name = tokenIsIdentifierOrKeyword(token()) ? parseIdentifierName() : parseLiteralLikeNode(SyntaxKind.StringLiteral) as StringLiteral;
             parseExpected(SyntaxKind.ColonToken);
-            const value = parseAssignmentExpressionOrHigher(/*disallowReturnTypeInArrowFunction*/ false);
+            const value = parseAssignmentExpressionOrHigher();
             return finishNode(factory.createAssertEntry(name, value), pos);
         }
 
@@ -7488,7 +7470,7 @@ namespace ts {
         function parseModuleReference() {
             return isExternalModuleReference()
                 ? parseExternalModuleReference()
-                : parseEntityName(/*allowReservedWords*/ false, /*allowPrivateIdentifiers*/ false);
+                : parseEntityName(/*allowReservedWords*/ false);
         }
 
         function parseExternalModuleReference() {
@@ -7683,7 +7665,7 @@ namespace ts {
             else {
                 parseExpected(SyntaxKind.DefaultKeyword);
             }
-            const expression = parseAssignmentExpressionOrHigher(/*disallowReturnTypeInArrowFunction*/ false);
+            const expression = parseAssignmentExpressionOrHigher();
             parseSemicolon();
             setAwaitContext(savedAwaitContext);
             const node = factory.createExportAssignment(decorators, modifiers, isExportEquals, expression);
@@ -7761,7 +7743,7 @@ namespace ts {
                 const pos = getNodePos();
                 const hasBrace = parseOptional(SyntaxKind.OpenBraceToken);
                 const p2 = getNodePos();
-                let entityName: EntityName | JSDocMemberName = parseEntityName(/* allowReservedWords*/ false, /*allowPrivateIdentifiers*/ false);
+                let entityName: EntityName | JSDocMemberName = parseEntityName(/* allowReservedWords*/ false);
                 while (token() === SyntaxKind.PrivateIdentifier) {
                     reScanHashToken(); // rescan #id as # id
                     nextTokenJSDoc(); // then skip the #
@@ -8224,7 +8206,7 @@ namespace ts {
                     // parseEntityName logs an error for non-identifier, so create a MissingNode ourselves to avoid the error
                     const p2 = getNodePos();
                     let name: EntityName | JSDocMemberName | undefined = tokenIsIdentifierOrKeyword(token())
-                        ? parseEntityName(/*allowReservedWords*/ true, /*allowPrivateIdentifiers*/ false)
+                        ? parseEntityName(/*allowReservedWords*/ true)
                         : undefined;
                     if (name) {
                         while (token() === SyntaxKind.PrivateIdentifier) {

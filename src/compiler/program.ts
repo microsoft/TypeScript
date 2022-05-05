@@ -913,7 +913,6 @@ namespace ts {
         Diagnostics.A_rest_parameter_cannot_have_an_initializer.code,
         Diagnostics.A_rest_parameter_must_be_last_in_a_parameter_list.code,
         Diagnostics.A_rest_parameter_or_binding_pattern_may_not_have_a_trailing_comma.code,
-        Diagnostics.A_return_statement_can_only_be_used_within_a_function_body.code,
         Diagnostics.A_return_statement_cannot_be_used_inside_a_class_static_block.code,
         Diagnostics.A_set_accessor_cannot_have_rest_parameter.code,
         Diagnostics.A_set_accessor_must_have_exactly_one_parameter.code,
