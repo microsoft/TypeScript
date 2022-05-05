@@ -381,38 +381,45 @@ namespace ts {
         host.log?.("getExportInfoMap: cache miss or empty; calculating new results");
         const compilerOptions = program.getCompilerOptions();
         let moduleCount = 0;
-        forEachExternalModuleToImportFrom(program, host, /*useAutoImportProvider*/ true, (moduleSymbol, moduleFile, program, isFromPackageJson) => {
-            if (++moduleCount % 100 === 0) cancellationToken?.throwIfCancellationRequested();
-            const seenExports = new Map<__String, true>();
-            const checker = program.getTypeChecker();
-            const defaultInfo = getDefaultLikeExportInfo(moduleSymbol, checker, compilerOptions);
-            // Note: I think we shouldn't actually see resolved module symbols here, but weird merges
-            // can cause it to happen: see 'completionsImport_mergedReExport.ts'
-            if (defaultInfo && isImportableSymbol(defaultInfo.symbol, checker)) {
-                cache.add(
-                    importingFile.path,
-                    defaultInfo.symbol,
-                    defaultInfo.exportKind === ExportKind.Default ? InternalSymbolName.Default : InternalSymbolName.ExportEquals,
-                    moduleSymbol,
-                    moduleFile,
-                    defaultInfo.exportKind,
-                    isFromPackageJson,
-                    checker);
-            }
-            checker.forEachExportAndPropertyOfModule(moduleSymbol, (exported, key) => {
-                if (exported !== defaultInfo?.symbol && isImportableSymbol(exported, checker) && addToSeen(seenExports, key)) {
+        try {
+            forEachExternalModuleToImportFrom(program, host, /*useAutoImportProvider*/ true, (moduleSymbol, moduleFile, program, isFromPackageJson) => {
+                if (++moduleCount % 100 === 0) cancellationToken?.throwIfCancellationRequested();
+                const seenExports = new Map<__String, true>();
+                const checker = program.getTypeChecker();
+                const defaultInfo = getDefaultLikeExportInfo(moduleSymbol, checker, compilerOptions);
+                // Note: I think we shouldn't actually see resolved module symbols here, but weird merges
+                // can cause it to happen: see 'completionsImport_mergedReExport.ts'
+                if (defaultInfo && isImportableSymbol(defaultInfo.symbol, checker)) {
                     cache.add(
                         importingFile.path,
-                        exported,
-                        key,
+                        defaultInfo.symbol,
+                        defaultInfo.exportKind === ExportKind.Default ? InternalSymbolName.Default : InternalSymbolName.ExportEquals,
                         moduleSymbol,
                         moduleFile,
-                        ExportKind.Named,
+                        defaultInfo.exportKind,
                         isFromPackageJson,
                         checker);
                 }
+                checker.forEachExportAndPropertyOfModule(moduleSymbol, (exported, key) => {
+                    if (exported !== defaultInfo?.symbol && isImportableSymbol(exported, checker) && addToSeen(seenExports, key)) {
+                        cache.add(
+                            importingFile.path,
+                            exported,
+                            key,
+                            moduleSymbol,
+                            moduleFile,
+                            ExportKind.Named,
+                            isFromPackageJson,
+                            checker);
+                    }
+                });
             });
-        });
+        }
+        catch (err) {
+            // Ensure cache is reset if operation is cancelled
+            cache.clear();
+            throw err;
+        }
 
         host.log?.(`getExportInfoMap: done in ${timestamp() - start} ms`);
         return cache;
