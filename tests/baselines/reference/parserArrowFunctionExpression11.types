@@ -2,12 +2,12 @@
 a ? b ? c : (d) : e => f
 >a ? b ? c : (d) : e => f : any
 >a : any
->b ? c : (d) : any
+>b ? c : (d) : e => f : any
 >b : any
 >c : any
->(d) : any
+>(d) : e => f : (d: any) => e
 >d : any
->e => f : (e: any) => any
->e : any
 >f : any
+
+> : any
 

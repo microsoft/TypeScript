@@ -1,10 +1,10 @@
 === tests/cases/compiler/coAndContraVariantInferences.ts ===
 type A = { kind: 'a' };
->A : A
+>A : { kind: 'a'; }
 >kind : "a"
 
 type B = { kind: 'b' };
->B : B
+>B : { kind: 'b'; }
 >kind : "b"
 
 declare const a: A;

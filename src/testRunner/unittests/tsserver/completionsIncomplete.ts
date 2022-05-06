@@ -135,7 +135,7 @@ namespace ts.projectSystem {
             typeToTriggerCompletions(indexFile.path, "s", completions => {
                 const sigint = completions.entries.find(e => e.name === "SIGINT");
                 assert(sigint);
-                assert(!(sigint!.data as any).moduleSpecifier);
+                assert(!(sigint.data as any).moduleSpecifier);
             })
             .continueTyping("i", completions => {
                 const sigint = completions.entries.find(e => e.name === "SIGINT");
@@ -255,7 +255,7 @@ namespace ts.projectSystem {
 
             assert(details[0]);
             assert(details[0].codeActions);
-            assert(details[0].codeActions![0].changes[0].textChanges[0].newText.includes(`"${(entry.data as any).moduleSpecifier}"`));
+            assert(details[0].codeActions[0].changes[0].textChanges[0].newText.includes(`"${(entry.data as any).moduleSpecifier}"`));
             return details;
         }
     }

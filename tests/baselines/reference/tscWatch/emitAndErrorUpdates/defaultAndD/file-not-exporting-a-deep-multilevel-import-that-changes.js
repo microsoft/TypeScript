@@ -96,11 +96,11 @@ Semantic diagnostics in builder refreshed for::
 
 Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
-/user/username/projects/myproject/a.ts (used version)
-/user/username/projects/myproject/b.ts (used version)
-/user/username/projects/myproject/c.ts (used version)
-/user/username/projects/myproject/d.ts (used version)
-/user/username/projects/myproject/e.ts (used version)
+/user/username/projects/myproject/a.ts (computed .d.ts during emit)
+/user/username/projects/myproject/b.ts (computed .d.ts during emit)
+/user/username/projects/myproject/c.ts (computed .d.ts during emit)
+/user/username/projects/myproject/d.ts (computed .d.ts during emit)
+/user/username/projects/myproject/e.ts (computed .d.ts during emit)
 
 WatchedFiles::
 /user/username/projects/myproject/tsconfig.json:
@@ -217,7 +217,7 @@ Output::
 >> Screen clear
 [[90m12:00:54 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:25 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:13 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -237,14 +237,12 @@ Semantic diagnostics in builder refreshed for::
 /user/username/projects/myproject/b.ts
 /user/username/projects/myproject/c.ts
 /user/username/projects/myproject/d.ts
-/user/username/projects/myproject/e.ts
 
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/a.ts (computed .d.ts)
 /user/username/projects/myproject/b.ts (computed .d.ts)
-/user/username/projects/myproject/c.ts (computed .d.ts)
-/user/username/projects/myproject/d.ts (computed .d.ts)
-/user/username/projects/myproject/e.ts (computed .d.ts)
+/user/username/projects/myproject/c.ts (computed .d.ts during emit)
+/user/username/projects/myproject/d.ts (computed .d.ts during emit)
 
 WatchedFiles::
 /user/username/projects/myproject/tsconfig.json:
@@ -286,12 +284,8 @@ export interface Coords {
 
 //// [/user/username/projects/myproject/b.js] file written with same contents
 //// [/user/username/projects/myproject/b.d.ts] file written with same contents
-//// [/user/username/projects/myproject/c.js] file written with same contents
 //// [/user/username/projects/myproject/c.d.ts] file written with same contents
-//// [/user/username/projects/myproject/d.js] file written with same contents
 //// [/user/username/projects/myproject/d.d.ts] file written with same contents
-//// [/user/username/projects/myproject/e.js] file written with same contents
-//// [/user/username/projects/myproject/e.d.ts] file written with same contents
 
 Change:: Rename property x to x2 of interface Coords to revert back to original text
 
@@ -309,7 +303,7 @@ export interface Coords {
 
 Output::
 >> Screen clear
-[[90m12:01:29 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:17 AM[0m] File change detected. Starting incremental compilation...
 
 [96mc.ts[0m:[93m6[0m:[93m13[0m - [91merror[0m[90m TS2322: [0mType '{ x: number; y: number; }' is not assignable to type 'Coords'.
   Object literal may only specify known properties, and 'x' does not exist in type 'Coords'.
@@ -327,7 +321,7 @@ Output::
 [7m2[0m getPoint().c.x;
 [7m [0m [91m             ~[0m
 
-[[90m12:01:48 AM[0m] Found 2 errors. Watching for file changes.
+[[90m12:01:36 AM[0m] Found 2 errors. Watching for file changes.
 
 
 
@@ -351,8 +345,8 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/a.ts (computed .d.ts)
 /user/username/projects/myproject/b.ts (computed .d.ts)
-/user/username/projects/myproject/c.ts (used version)
-/user/username/projects/myproject/d.ts (used version)
+/user/username/projects/myproject/c.ts (computed .d.ts during emit)
+/user/username/projects/myproject/d.ts (computed .d.ts during emit)
 
 WatchedFiles::
 /user/username/projects/myproject/tsconfig.json:
@@ -413,9 +407,9 @@ export interface Coords {
 
 Output::
 >> Screen clear
-[[90m12:01:52 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:40 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:02:14 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:59 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -435,14 +429,12 @@ Semantic diagnostics in builder refreshed for::
 /user/username/projects/myproject/b.ts
 /user/username/projects/myproject/c.ts
 /user/username/projects/myproject/d.ts
-/user/username/projects/myproject/e.ts
 
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/a.ts (computed .d.ts)
 /user/username/projects/myproject/b.ts (computed .d.ts)
-/user/username/projects/myproject/c.ts (used version)
-/user/username/projects/myproject/d.ts (used version)
-/user/username/projects/myproject/e.ts (used version)
+/user/username/projects/myproject/c.ts (computed .d.ts during emit)
+/user/username/projects/myproject/d.ts (computed .d.ts during emit)
 
 WatchedFiles::
 /user/username/projects/myproject/tsconfig.json:
@@ -486,4 +478,3 @@ export interface Coords {
 //// [/user/username/projects/myproject/b.d.ts] file written with same contents
 //// [/user/username/projects/myproject/c.d.ts] file written with same contents
 //// [/user/username/projects/myproject/d.d.ts] file written with same contents
-//// [/user/username/projects/myproject/e.d.ts] file written with same contents

@@ -28,7 +28,7 @@ export function foo<T extends NumList | StrList>(arr: T & (NumList | StrList)) {
 // Repro from #38102
 
 export type TypedArray = Int32Array | Uint8Array;
->TypedArray : TypedArray
+>TypedArray : Int32Array | Uint8Array
 
 export function isTypedArray(a: {}): a is Int32Array | Uint8Array {
 >isTypedArray : (a: {}) => a is Int32Array | Uint8Array

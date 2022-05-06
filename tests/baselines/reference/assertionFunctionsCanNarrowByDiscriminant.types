@@ -18,7 +18,7 @@ interface Dog {
 }
 
 type Animal = Cat | Dog;
->Animal : Animal
+>Animal : Cat | Dog
 
 declare function assertEqual<T>(value: any, type: T): asserts value is T;
 >assertEqual : <T>(value: any, type: T) => asserts value is T

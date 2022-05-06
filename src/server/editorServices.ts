@@ -715,6 +715,8 @@ namespace ts.server {
         readonly newInferredProjectName = createProjectNameFactoryWithCounter(makeInferredProjectName);
         /*@internal*/
         readonly newAutoImportProviderProjectName = createProjectNameFactoryWithCounter(makeAutoImportProviderProjectName);
+        /*@internal*/
+        readonly newAuxiliaryProjectName = createProjectNameFactoryWithCounter(makeAuxiliaryProjectName);
         /**
          * Open files: with value being project root path, and key being Path of the file that is open
          */
@@ -989,13 +991,15 @@ namespace ts.server {
 
         private delayUpdateProjectGraph(project: Project) {
             project.markAsDirty();
-            const projectName = project.getProjectName();
-            this.pendingProjectUpdates.set(projectName, project);
-            this.throttledOperations.schedule(projectName, /*delay*/ 250, () => {
-                if (this.pendingProjectUpdates.delete(projectName)) {
-                    updateProjectIfDirty(project);
-                }
-            });
+            if (project.projectKind !== ProjectKind.AutoImportProvider && project.projectKind !== ProjectKind.Auxiliary) {
+                const projectName = project.getProjectName();
+                this.pendingProjectUpdates.set(projectName, project);
+                this.throttledOperations.schedule(projectName, /*delay*/ 250, () => {
+                    if (this.pendingProjectUpdates.delete(projectName)) {
+                        updateProjectIfDirty(project);
+                    }
+                });
+            }
         }
 
         /*@internal*/
@@ -2297,7 +2301,7 @@ namespace ts.server {
             configFileExistenceInfo.config.watchedDirectoriesStale = undefined;
         }
 
-        private updateNonInferredProjectFiles<T>(project: ExternalProject | ConfiguredProject | AutoImportProviderProject, files: T[], propertyReader: FilePropertyReader<T>) {
+        private updateNonInferredProjectFiles<T>(project: Project, files: T[], propertyReader: FilePropertyReader<T>) {
             const projectRootFilesMap = project.getRootFilesMap();
             const newRootScriptInfoMap = new Map<string, true>();
 
@@ -3589,7 +3593,7 @@ namespace ts.server {
             const toRemoveScriptInfos = new Map(this.filenameToScriptInfo);
             this.filenameToScriptInfo.forEach(info => {
                 // If script info is open or orphan, retain it and its dependencies
-                if (!info.isScriptOpen() && info.isOrphan() && !info.isContainedByAutoImportProvider()) {
+                if (!info.isScriptOpen() && info.isOrphan() && !info.isContainedByBackgroundProject()) {
                     // Otherwise if there is any source info that is alive, this alive too
                     if (!info.sourceMapFilePath) return;
                     let sourceInfos: Set<Path> | undefined;

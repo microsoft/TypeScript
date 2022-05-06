@@ -270,7 +270,7 @@ namespace Debug {
 >Debug : typeof Debug
 
     export declare function assert(value: unknown, message?: string): asserts value;
->assert : (value: unknown, message?: string | undefined) => asserts value
+>assert : (value: unknown, message?: string) => asserts value
 >value : unknown
 >message : string | undefined
 

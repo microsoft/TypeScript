@@ -1,11 +1,11 @@
 === tests/cases/compiler/controlFlowForCatchAndFinally.ts ===
 type Page = {close(): Promise<void>; content(): Promise<string>};
->Page : Page
+>Page : { close(): Promise<void>; content(): Promise<string>; }
 >close : () => Promise<void>
 >content : () => Promise<string>
 
 type Browser = {close(): Promise<void>};
->Browser : Browser
+>Browser : { close(): Promise<void>; }
 >close : () => Promise<void>
 
 declare function test1(): Promise<Browser>;

@@ -90,6 +90,14 @@ test({
     }
 });
 
+test({
+    a: () => 0,
+    b: (a) => a,
+    c: (b) => {
+        const x: number = b;
+    }
+});
+
 // Repro from #41712
 
 class Wrapper<T = any> {
@@ -175,6 +183,21 @@ example({
     map: (number) => String(number)
 });
 
+// Repro from #45255
+
+declare const branch:
+  <T, U extends T>(_: { test: T, if: (t: T) => t is U, then: (u: U) => void }) => void
+
+declare const x: "a" | "b"
+
+branch({
+  test: x,
+  if: (t): t is "a" => t === "a",
+  then: u => {
+    let test1: "a" = u
+  }
+})
+
 
 //// [intraExpressionInferences.js]
 "use strict";
@@ -224,6 +247,13 @@ function test(foo) { }
 test({
     a: function () { return 0; },
     b: function (a) { return 'a'; },
+    c: function (b) {
+        var x = b;
+    }
+});
+test({
+    a: function () { return 0; },
+    b: function (a) { return a; },
     c: function (b) {
         var x = b;
     }
@@ -278,6 +308,13 @@ example({
 example({
     fetch: function (params, foo) { return 123; },
     map: function (number) { return String(number); }
+});
+branch({
+    test: x,
+    "if": function (t) { return t === "a"; },
+    then: function (u) {
+        var test1 = u;
+    }
 });
 
 
@@ -340,3 +377,9 @@ interface Params {
     one: number;
     two: string;
 }
+declare const branch: <T, U extends T>(_: {
+    test: T;
+    if: (t: T) => t is U;
+    then: (u: U) => void;
+}) => void;
+declare const x: "a" | "b";

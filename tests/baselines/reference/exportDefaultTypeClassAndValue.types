@@ -10,7 +10,7 @@ export default class Foo {}
 >Foo : foo
 
 type Bar = {}
->Bar : Bar
+>Bar : {}
 
 export default Bar
 >Bar : Bar

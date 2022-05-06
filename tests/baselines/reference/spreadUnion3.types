@@ -18,7 +18,7 @@ f(undefined)
 
 
 function g(t?: { a: number } | null): void {
->g : (t?: { a: number; } | null | undefined) => void
+>g : (t?: {    a: number;} | null) => void
 >t : { a: number; } | null | undefined
 >a : number
 >null : null

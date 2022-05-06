@@ -37,7 +37,7 @@ interface AA {
 }
 
 type BB = {
->BB : BB
+>BB : { [x: string]: number; }
 
     [P in keyof any]: number
 }

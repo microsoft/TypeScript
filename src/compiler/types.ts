@@ -3615,7 +3615,7 @@ namespace ts {
         languageVersion: ScriptTarget;
 
         /**
-         * When `module` is `Node12` or `NodeNext`, this field controls whether the
+         * When `module` is `Node16` or `NodeNext`, this field controls whether the
          * source file in question is an ESNext-output-format file, or a CommonJS-output-format
          * module. This is derived by the module resolver as it looks up the file, since
          * it is derived from either the file extension of the module, or the containing
@@ -3856,12 +3856,16 @@ namespace ts {
      */
     export type ResolvedConfigFileName = string & { _isResolvedConfigFileName: never };
 
+    export interface WriteFileCallbackData {
+        /*@internal*/ sourceMapUrlPos?: number;
+    }
     export type WriteFileCallback = (
         fileName: string,
-        data: string,
+        text: string,
         writeByteOrderMark: boolean,
         onError?: (message: string) => void,
         sourceFiles?: readonly SourceFile[],
+        data?: WriteFileCallbackData,
     ) => void;
 
     export class OperationCanceledException { }
@@ -4067,6 +4071,8 @@ namespace ts {
          * This implementation handles file exists to be true if file is source of project reference redirect when program is created using useSourceOfProjectReferenceRedirect
          */
         /*@internal*/ fileExists(fileName: string): boolean;
+        /** Call compilerHost.writeFile on host program was created with */
+        /*@internal*/ writeFile: WriteFileCallback;
     }
 
     /*@internal*/
@@ -4490,7 +4496,6 @@ namespace ts {
         UseAliasDefinedOutsideCurrentScope      = 1 << 14,  // Allow non-visible aliases
         UseSingleQuotesForStringLiteralType     = 1 << 28,  // Use single quotes for string literal type
         NoTypeReduction                         = 1 << 29,  // Don't call getReducedType
-        NoUndefinedOptionalParameterType        = 1 << 30,  // Do not add undefined to optional parameter type
 
         // Error handling
         AllowThisInObjectLiteral                = 1 << 15,
@@ -4669,8 +4674,10 @@ namespace ts {
     export type AnyImportOrRequire = AnyImportSyntax | VariableDeclarationInitializedTo<RequireOrImportCall>;
 
     /* @internal */
-    export type AnyImportOrRequireStatement = AnyImportSyntax | RequireVariableStatement;
+    export type AnyImportOrBareOrAccessedRequire = AnyImportSyntax | VariableDeclarationInitializedTo<RequireOrImportCall | AccessExpression>;
 
+    /* @internal */
+    export type AnyImportOrRequireStatement = AnyImportSyntax | RequireVariableStatement;
 
     /* @internal */
     export type AnyImportOrReExport = AnyImportSyntax | ExportDeclaration;
@@ -4943,7 +4950,8 @@ namespace ts {
     /* @internal */
     export interface SymbolLinks {
         immediateTarget?: Symbol;                   // Immediate target of an alias. May be another alias. Do not access directly, use `checker.getImmediateAliasedSymbol` instead.
-        target?: Symbol;                            // Resolved (non-alias) target of an alias
+        aliasTarget?: Symbol,                       // Resolved (non-alias) target of an alias
+        target?: Symbol;                            // Original version of an instantiated symbol
         type?: Type;                                // Type of value symbol
         writeType?: Type;                           // Type of value symbol in write contexts
         nameType?: Type;                            // Type associated with a late-bound symbol
@@ -6041,11 +6049,12 @@ namespace ts {
         Classic  = 1,
         NodeJs   = 2,
         // Starting with node12, node's module resolver has significant departures from traditional cjs resolution
-        // to better support ecmascript modules and their use within node - more features are still being added, so
-        // we can expect it to change over time, and as such, offer both a `NodeNext` moving resolution target, and a `Node12`
-        // version-anchored resolution target
-        Node12   = 3,
-        NodeNext = 99, // Not simply `Node12` so that compiled code linked against TS can use the `Next` value reliably (same as with `ModuleKind`)
+        // to better support ecmascript modules and their use within node - however more features are still being added.
+        // TypeScript's Node ESM support was introduced after Node 12 went end-of-life, and Node 14 is the earliest stable
+        // version that supports both pattern trailers - *but*, Node 16 is the first version that also supports ECMASCript 2022.
+        // In turn, we offer both a `NodeNext` moving resolution target, and a `Node16` version-anchored resolution target
+        Node16   = 3,
+        NodeNext = 99, // Not simply `Node16` so that compiled code linked against TS can use the `Next` value reliably (same as with `ModuleKind`)
     }
 
     export enum ModuleDetectionKind {
@@ -6054,7 +6063,7 @@ namespace ts {
          */
         Legacy = 1,
         /**
-         * Legacy, but also files with jsx under react-jsx or react-jsxdev and esm mode files under moduleResolution: node12+
+         * Legacy, but also files with jsx under react-jsx or react-jsxdev and esm mode files under moduleResolution: node16+
          */
         Auto = 2,
         /**
@@ -6178,6 +6187,8 @@ namespace ts {
         assumeChangesOnlyAffectDirectDependencies?: boolean;
         noLib?: boolean;
         noResolve?: boolean;
+        /*@internal*/
+        noDtsResolution?: boolean;
         noUncheckedIndexedAccess?: boolean;
         out?: string;
         outDir?: string;
@@ -6271,8 +6282,8 @@ namespace ts {
         ES2022 = 7,
         ESNext = 99,
 
-        // Node12+ is an amalgam of commonjs (albeit updated) and es2020+, and represents a distinct module system from es2020/esnext
-        Node12 = 100,
+        // Node16+ is an amalgam of commonjs (albeit updated) and es2022+, and represents a distinct module system from es2020/esnext
+        Node16 = 100,
         NodeNext = 199,
     }
 
@@ -6706,6 +6717,8 @@ namespace ts {
         readonly resolvedModule: ResolvedModuleFull | undefined;
         /* @internal */
         readonly failedLookupLocations: string[];
+        /* @internal */
+        readonly resolutionDiagnostics: Diagnostic[]
     }
 
     export interface ResolvedTypeReferenceDirective {
@@ -6727,6 +6740,8 @@ namespace ts {
     export interface ResolvedTypeReferenceDirectiveWithFailedLookupLocations {
         readonly resolvedTypeReferenceDirective: ResolvedTypeReferenceDirective | undefined;
         readonly failedLookupLocations: string[];
+        /* @internal */
+        resolutionDiagnostics: Diagnostic[]
     }
 
     /* @internal */
@@ -6778,6 +6793,7 @@ namespace ts {
 
         // For testing:
         /*@internal*/ disableUseFileVersionAsSignature?: boolean;
+        /*@internal*/ storeFilesChangingSignatureDuringEmit?: boolean;
     }
 
     /** true if --out otherwise source file name */
@@ -8459,7 +8475,7 @@ namespace ts {
     export interface ResolvedModuleSpecifierInfo {
         modulePaths: readonly ModulePath[] | undefined;
         moduleSpecifiers: readonly string[] | undefined;
-        isAutoImportable: boolean | undefined;
+        isBlockedByPackageJsonDependencies: boolean | undefined;
     }
 
     /* @internal */
@@ -8471,7 +8487,7 @@ namespace ts {
     export interface ModuleSpecifierCache {
         get(fromFileName: Path, toFileName: Path, preferences: UserPreferences, options: ModuleSpecifierOptions): Readonly<ResolvedModuleSpecifierInfo> | undefined;
         set(fromFileName: Path, toFileName: Path, preferences: UserPreferences, options: ModuleSpecifierOptions, modulePaths: readonly ModulePath[], moduleSpecifiers: readonly string[]): void;
-        setIsAutoImportable(fromFileName: Path, toFileName: Path, preferences: UserPreferences, options: ModuleSpecifierOptions, isAutoImportable: boolean): void;
+        setBlockedByPackageJsonDependencies(fromFileName: Path, toFileName: Path, preferences: UserPreferences, options: ModuleSpecifierOptions, isBlockedByPackageJsonDependencies: boolean): void;
         setModulePaths(fromFileName: Path, toFileName: Path, preferences: UserPreferences, options: ModuleSpecifierOptions, modulePaths: readonly ModulePath[]): void;
         clear(): void;
         count(): number;

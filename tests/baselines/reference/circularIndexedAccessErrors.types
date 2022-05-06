@@ -1,6 +1,6 @@
 === tests/cases/conformance/types/keyof/circularIndexedAccessErrors.ts ===
 type T1 = {
->T1 : T1
+>T1 : { x: any; }
 
     x: T1["x"];  // Error
 >x : any

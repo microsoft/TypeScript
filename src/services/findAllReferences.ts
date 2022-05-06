@@ -1365,6 +1365,31 @@ namespace ts.FindAllReferences {
             }
         }
 
+        export function getTopMostDeclarationNamesInFile(declarationName: string, sourceFile: SourceFile): readonly Node[] {
+            const candidates = filter(getPossibleSymbolReferenceNodes(sourceFile, declarationName), name => !!getDeclarationFromName(name));
+            return candidates.reduce((topMost, decl) => {
+                const depth = getDepth(decl);
+                if (!some(topMost.declarationNames) || depth === topMost.depth) {
+                    topMost.declarationNames.push(decl);
+                    topMost.depth = depth;
+                }
+                else if (depth < topMost.depth) {
+                    topMost.declarationNames = [decl];
+                    topMost.depth = depth;
+                }
+                return topMost;
+            }, { depth: Infinity, declarationNames: [] as Node[] }).declarationNames;
+
+            function getDepth(declaration: Node | undefined) {
+                let depth = 0;
+                while (declaration) {
+                    declaration = getContainerNode(declaration);
+                    depth++;
+                }
+                return depth;
+            }
+        }
+
         export function someSignatureUsage(
             signature: SignatureDeclaration,
             sourceFiles: readonly SourceFile[],

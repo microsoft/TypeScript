@@ -217,6 +217,7 @@ namespace ts.refactor.extractSymbol {
         export const cannotAccessVariablesFromNestedScopes = createMessage("Cannot access variables from nested scopes");
         export const cannotExtractToJSClass = createMessage("Cannot extract constant to a class scope in JS");
         export const cannotExtractToExpressionArrowFunction = createMessage("Cannot extract constant to an arrow function without a block");
+        export const cannotExtractFunctionsContainingThisToMethod = createMessage("Cannot extract functions containing this to method");
     }
 
     enum RangeFacts {
@@ -225,10 +226,11 @@ namespace ts.refactor.extractSymbol {
         IsGenerator = 1 << 1,
         IsAsyncFunction = 1 << 2,
         UsesThis = 1 << 3,
+        UsesThisInFunction = 1 << 4,
         /**
          * The range is in a function which needs the 'static' modifier in a class
          */
-        InStaticRegion = 1 << 4
+        InStaticRegion = 1 << 5,
     }
 
     /**
@@ -242,6 +244,10 @@ namespace ts.refactor.extractSymbol {
          * Used to ensure we don't turn something used outside the range free (or worse, resolve to a different entity).
          */
         readonly declarations: Symbol[];
+        /**
+         * If `this` is referring to a function instead of class, we need to retrieve its type.
+         */
+        readonly thisNode: Node | undefined;
     }
 
     /**
@@ -294,6 +300,8 @@ namespace ts.refactor.extractSymbol {
         // about what things need to be done as part of the extraction.
         let rangeFacts = RangeFacts.None;
 
+        let thisNode: Node | undefined;
+
         if (!start || !end) {
             // cannot find either start or end node
             return { errors: [createFileDiagnostic(sourceFile, span.start, length, Messages.cannotExtractRange)] };
@@ -336,7 +344,7 @@ namespace ts.refactor.extractSymbol {
                 return { errors: [createFileDiagnostic(sourceFile, span.start, length, Messages.cannotExtractRange)] };
             }
 
-            return { targetRange: { range: statements, facts: rangeFacts, declarations } };
+            return { targetRange: { range: statements, facts: rangeFacts, declarations, thisNode } };
         }
 
         if (isReturnStatement(start) && !start.expression) {
@@ -351,7 +359,7 @@ namespace ts.refactor.extractSymbol {
         if (errors) {
             return { errors };
         }
-        return { targetRange: { range: getStatementOrExpressionRange(node)!, facts: rangeFacts, declarations } }; // TODO: GH#18217
+        return { targetRange: { range: getStatementOrExpressionRange(node)!, facts: rangeFacts, declarations, thisNode } }; // TODO: GH#18217
 
         /**
          * Attempt to refine the extraction node (generally, by shrinking it) to produce better results.
@@ -453,6 +461,17 @@ namespace ts.refactor.extractSymbol {
 
             visit(nodeToCheck);
 
+            if (rangeFacts & RangeFacts.UsesThis) {
+                const container = getThisContainer(nodeToCheck, /** includeArrowFunctions */ false);
+                if (
+                    container.kind === SyntaxKind.FunctionDeclaration ||
+                    (container.kind === SyntaxKind.MethodDeclaration && container.parent.kind === SyntaxKind.ObjectLiteralExpression) ||
+                    container.kind === SyntaxKind.FunctionExpression
+                ) {
+                    rangeFacts |= RangeFacts.UsesThisInFunction;
+                }
+            }
+
             return errors;
 
             function visit(node: Node) {
@@ -494,6 +513,7 @@ namespace ts.refactor.extractSymbol {
                         }
                         else {
                             rangeFacts |= RangeFacts.UsesThis;
+                            thisNode = node;
                         }
                         break;
                     case SyntaxKind.ArrowFunction:
@@ -501,6 +521,7 @@ namespace ts.refactor.extractSymbol {
                         forEachChild(node, function check(n) {
                             if (isThis(n)) {
                                 rangeFacts |= RangeFacts.UsesThis;
+                                thisNode = node;
                             }
                             else if (isClassLike(n) || (isFunctionLike(n) && !isArrowFunction(n))) {
                                 return false;
@@ -559,6 +580,7 @@ namespace ts.refactor.extractSymbol {
                     case SyntaxKind.ThisType:
                     case SyntaxKind.ThisKeyword:
                         rangeFacts |= RangeFacts.UsesThis;
+                        thisNode = node;
                         break;
                     case SyntaxKind.LabeledStatement: {
                         const label = (node as LabeledStatement).label;
@@ -650,7 +672,7 @@ namespace ts.refactor.extractSymbol {
      */
     function collectEnclosingScopes(range: TargetRange): Scope[] {
         let current: Node = isReadonlyArray(range.range) ? first(range.range) : range.range;
-        if (range.facts & RangeFacts.UsesThis) {
+        if (range.facts & RangeFacts.UsesThis && !(range.facts & RangeFacts.UsesThisInFunction)) {
             // if range uses this as keyword or as type inside the class then it can only be extracted to a method of the containing class
             const containingClass = getContainingClass(current);
             if (containingClass) {
@@ -904,6 +926,8 @@ namespace ts.refactor.extractSymbol {
 
         let newFunction: MethodDeclaration | FunctionDeclaration;
 
+        const callThis = !!(range.facts & RangeFacts.UsesThisInFunction);
+
         if (isClassLike(scope)) {
             // always create private method in TypeScript files
             const modifiers: Modifier[] = isJS ? [] : [factory.createModifier(SyntaxKind.PrivateKeyword)];
@@ -926,6 +950,23 @@ namespace ts.refactor.extractSymbol {
             );
         }
         else {
+            if (callThis) {
+                parameters.unshift(
+                    factory.createParameterDeclaration(
+                        /*decorators*/ undefined,
+                        /*modifiers*/ undefined,
+                        /*dotDotDotToken*/ undefined,
+                        /*name*/ "this",
+                        /*questionToken*/ undefined,
+                        checker.typeToTypeNode(
+                            checker.getTypeAtLocation(range.thisNode!),
+                            scope,
+                            NodeBuilderFlags.NoTruncation
+                        ),
+                        /*initializer*/ undefined,
+                    )
+                );
+            }
             newFunction = factory.createFunctionDeclaration(
                 /*decorators*/ undefined,
                 range.facts & RangeFacts.IsAsyncFunction ? [factory.createToken(SyntaxKind.AsyncKeyword)] : undefined,
@@ -953,8 +994,15 @@ namespace ts.refactor.extractSymbol {
         // replace range with function call
         const called = getCalledExpression(scope, range, functionNameText);
 
+        if (callThis) {
+            callArguments.unshift(factory.createIdentifier("this"));
+        }
+
         let call: Expression = factory.createCallExpression(
-            called,
+            callThis ? factory.createPropertyAccessExpression(
+                called,
+                "call"
+            ) : called,
             callTypeArguments, // Note that no attempt is made to take advantage of type argument inference
             callArguments);
         if (range.facts & RangeFacts.IsGenerator) {
@@ -1708,6 +1756,10 @@ namespace ts.refactor.extractSymbol {
             if (i > 0 && (scopeUsages.usages.size > 0 || scopeUsages.typeParameterUsages.size > 0)) {
                 const errorNode = isReadonlyArray(targetRange.range) ? targetRange.range[0] : targetRange.range;
                 constantErrorsPerScope[i].push(createDiagnosticForNode(errorNode, Messages.cannotAccessVariablesFromNestedScopes));
+            }
+
+            if (targetRange.facts & RangeFacts.UsesThisInFunction && isClassLike(scopes[i])) {
+                functionErrorsPerScope[i].push(createDiagnosticForNode(targetRange.thisNode!, Messages.cannotExtractFunctionsContainingThisToMethod));
             }
 
             let hasWrite = false;
