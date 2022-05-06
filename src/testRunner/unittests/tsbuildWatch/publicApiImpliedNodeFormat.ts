@@ -80,15 +80,23 @@ export function f22() { } // trailing`
                 sys.write(`fileName:${fileName},impliedNodeFormat:${impliedNodeFormatToString(x.impliedNodeFormat)}`+sys.newLine);
             });
         }
-
-        function printModuleResolutionCache(buildr: SolutionBuilder<EmitAndSemanticDiagnosticsBuilderProgram>){
-            const x = { moduleResolutionCache: buildr.getModuleResolutionCache() };
-            sys.write(JSON.stringify(x,undefined,2));
-        }
-
+        // function printModuleResolutionCache(buildr: SolutionBuilder<EmitAndSemanticDiagnosticsBuilderProgram>){
+        //     const x = { moduleResolutionCache: buildr.getModuleResolutionCache() };
+        //     sys.write(JSON.stringify(x,undefined,2));
+        // }
         const buildHost = createSolutionBuilderWithWatchHostForBaseline(sys, cb);
         buildHost.getCustomTransformers = getCustomTransformers;
         const builder = createSolutionBuilderWithWatch(buildHost, [solution.path], { verbose: true });
+        const compilerOptions: {
+            lib: ["es2020"],
+            target: "es2020"
+            moduleResolution?: "Node12" | "NodeNext", // absolutely needed
+            module?: "Node12" | "NodeNext"
+        }={
+            lib: ["es2020"],
+            moduleResolution: "Node12",
+            target: "es2020",
+        };
 
         builder.build();
         runWatchBaseline({
@@ -109,7 +117,6 @@ export function f22() { } // trailing`
                         sys.checkTimeoutQueueLengthAndRun(1); // solution
                         sys.checkTimeoutQueueLength(0);
                         printLastImpliedNodeFormats();
-                        printModuleResolutionCache(builder);
                         if (lastImpliedNodeFormats.get("/user/username/projects/myproject/shared/index.ts")?.impliedNodeFormat!==ModuleKind.CommonJS) {
                             throw new Error(`Expecting impliedNodeFormat for /user/username/projects/myproject/shared/index.ts to be ModuleKind.CommonJS`);
                         }
@@ -127,7 +134,6 @@ export function f22() { } // trailing`
                         sys.checkTimeoutQueueLengthAndRun(1); // solution
                         sys.checkTimeoutQueueLength(0);
                         printLastImpliedNodeFormats();
-                        printModuleResolutionCache(builder);
                         if (lastImpliedNodeFormats.get("/user/username/projects/myproject/shared/index.ts")?.impliedNodeFormat!==ModuleKind.ESNext) {
                             throw new Error(`Expecting impliedNodeFormat for /user/username/projects/myproject/shared/index.ts to be ModuleKind.ESNext`);
                         }
@@ -138,19 +144,67 @@ export function f22() { } // trailing`
                 },
                 {
                     caption: "date change package.json",
-                    change: sys => sys.writeFile(sharedPackageJson.path, sharedPackageJson.content.replace("commonjs","module")),
+                    change: sys => {
+                        sys.writeFile(sharedPackageJson.path, sharedPackageJson.content.replace("commonjs","module"));
+                    },
                     timeouts: sys => {
                         sys.checkTimeoutQueueLengthAndRun(1); // Shared
                         sys.checkTimeoutQueueLengthAndRun(1); // webpack
                         sys.checkTimeoutQueueLengthAndRun(1); // solution
                         sys.checkTimeoutQueueLength(0);
                         printLastImpliedNodeFormats();
-                        printModuleResolutionCache(builder);
                         if (lastImpliedNodeFormats.get("/user/username/projects/myproject/shared/index.ts")?.impliedNodeFormat!==ModuleKind.ESNext) {
                             throw new Error(`Expecting impliedNodeFormat for /user/username/projects/myproject/shared/index.ts to be ModuleKind.ESNext`);
                         }
                         else {
                             sys.write(`impliedNodeFormat for /user/username/projects/myproject/shared/index.ts is correctly ModuleKind.ESNext`);
+                        }
+                    }
+                },
+                {
+                    caption: "tsconfig  compilerOptions -> module:node12, moduleResolution omitted",
+                    change: sys => {
+                        const co: Partial<typeof compilerOptions>= { ...compilerOptions };
+                        delete co.moduleResolution;
+                        co.module = "Node12";
+                        const tsconfig = { compilerOptions:co };
+                        sys.writeFile(sharedConfigOptions.path, JSON.stringify(tsconfig));
+                    },
+                    timeouts: sys => {
+                        sys.checkTimeoutQueueLengthAndRun(1); // Shared
+                        sys.checkTimeoutQueueLengthAndRun(1); // webpack
+                        sys.checkTimeoutQueueLengthAndRun(1); // solution
+                        sys.checkTimeoutQueueLength(0);
+                        printLastImpliedNodeFormats();
+                        if (lastImpliedNodeFormats.get("/user/username/projects/myproject/shared/index.ts")?.impliedNodeFormat!==ModuleKind.ESNext) {
+                            throw new Error(`Expecting impliedNodeFormat for /user/username/projects/myproject/shared/index.ts to be ModuleKind.ESNext`);
+                        }
+                        else {
+                            sys.write(`impliedNodeFormat for /user/username/projects/myproject/shared/index.ts is correctly ModuleKind.ESNext`);
+                        }
+                    }
+                },
+                {
+                    caption: "tsconfig  compilerOptions -> module:node12, moduleResolution: node",
+                    change: sys => {
+                        const co: Partial<typeof compilerOptions>= { ...compilerOptions };
+                        delete co.moduleResolution;
+                        co.module = "Node12";
+                        (co.moduleResolution as any) = "Node";
+                        const tsconfig = { compilerOptions:co };
+                        sys.writeFile(sharedConfigOptions.path, JSON.stringify(tsconfig));
+                    },
+                    timeouts: sys => {
+                        sys.checkTimeoutQueueLengthAndRun(1); // Shared
+                        sys.checkTimeoutQueueLengthAndRun(1); // webpack
+                        sys.checkTimeoutQueueLengthAndRun(1); // solution
+                        sys.checkTimeoutQueueLength(0);
+                        printLastImpliedNodeFormats();
+                        if (lastImpliedNodeFormats.get("/user/username/projects/myproject/shared/index.ts")?.impliedNodeFormat!==undefined) {
+                            throw new Error(`Expecting impliedNodeFormat for /user/username/projects/myproject/shared/index.ts is not undefined`);
+                        }
+                        else {
+                            sys.write(`impliedNodeFormat for /user/username/projects/myproject/shared/index.ts is undefined, as expected`);
                         }
                     }
                 }
