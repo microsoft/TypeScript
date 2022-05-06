@@ -2,10 +2,11 @@
 /index.ts(2,73): error TS1453: `resolution-mode` should be either `require` or `import`.
 /index.ts(4,10): error TS2305: Module '"pkg"' has no exported member 'ImportInterface'.
 /index.ts(4,39): error TS2821: Import assertions are only supported when the '--module' option is set to 'esnext' or 'nodenext'.
+/index.ts(4,39): error TS4125: Resolution mode assertions are unstable. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.
 /index.ts(6,76): error TS2821: Import assertions are only supported when the '--module' option is set to 'esnext' or 'nodenext'.
 
 
-==== /index.ts (5 errors) ====
+==== /index.ts (6 errors) ====
     // incorrect mode
     import type { RequireInterface } from "pkg" assert { "resolution-mode": "foobar" };
                                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -18,6 +19,8 @@
 !!! error TS2305: Module '"pkg"' has no exported member 'ImportInterface'.
                                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2821: Import assertions are only supported when the '--module' option is set to 'esnext' or 'nodenext'.
+                                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS4125: Resolution mode assertions are unstable. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.
     // not exclusively type-only
     import {type RequireInterface as Req, RequireInterface as Req2} from "pkg" assert { "resolution-mode": "require" };
                                                                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
