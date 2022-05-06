@@ -1,0 +1,111 @@
+=== tests/cases/compiler/_44856.ts ===
+// The expected rule for properties of union type (|) is  
+// (1) must contain all required properties of at least one union member
+// (2) may contain additional properties that belong to any union member
+
+{
+    type A2 = {a: string; b: string};
+>A2 : Symbol(A2, Decl(_44856.ts, 4, 1))
+>a : Symbol(a, Decl(_44856.ts, 5, 15))
+>b : Symbol(b, Decl(_44856.ts, 5, 25))
+
+    type A3 = {a: string; b: boolean; c: number};
+>A3 : Symbol(A3, Decl(_44856.ts, 5, 37))
+>a : Symbol(a, Decl(_44856.ts, 6, 15))
+>b : Symbol(b, Decl(_44856.ts, 6, 25))
+>c : Symbol(c, Decl(_44856.ts, 6, 37))
+  
+    {
+      // THIS IS THE UNEXPECTED OUTLIER
+      const b: A2|A3 = {a: '', b: '', c: 1}; // ❌ assignment strictly checked, extra prop from A3 not allowed
+>b : Symbol(b, Decl(_44856.ts, 10, 11))
+>A2 : Symbol(A2, Decl(_44856.ts, 4, 1))
+>A3 : Symbol(A3, Decl(_44856.ts, 5, 37))
+>a : Symbol(a, Decl(_44856.ts, 10, 24))
+>b : Symbol(b, Decl(_44856.ts, 10, 30))
+>c : Symbol(c, Decl(_44856.ts, 10, 37))
+    }
+}
+
+{
+    type A2 = {a: string; b: string};
+>A2 : Symbol(A2, Decl(_44856.ts, 14, 1))
+>a : Symbol(a, Decl(_44856.ts, 15, 15))
+>b : Symbol(b, Decl(_44856.ts, 15, 25))
+
+    type A3 = {a: string; b: boolean; c: boolean};
+>A3 : Symbol(A3, Decl(_44856.ts, 15, 37))
+>a : Symbol(a, Decl(_44856.ts, 16, 15))
+>b : Symbol(b, Decl(_44856.ts, 16, 25))
+>c : Symbol(c, Decl(_44856.ts, 16, 37))
+
+    type A4 = {a: string; b: number; c: number};
+>A4 : Symbol(A4, Decl(_44856.ts, 16, 50))
+>a : Symbol(a, Decl(_44856.ts, 17, 15))
+>b : Symbol(b, Decl(_44856.ts, 17, 25))
+>c : Symbol(c, Decl(_44856.ts, 17, 36))
+  
+    {
+      // THIS IS THE UNEXPECTED OUTLIER
+      const b: A2|A3 = {a: '', b: '', c: true}; // ❌ assignment strictly checked, extra prop from A3 not allowed
+>b : Symbol(b, Decl(_44856.ts, 21, 11))
+>A2 : Symbol(A2, Decl(_44856.ts, 14, 1))
+>A3 : Symbol(A3, Decl(_44856.ts, 15, 37))
+>a : Symbol(a, Decl(_44856.ts, 21, 24))
+>b : Symbol(b, Decl(_44856.ts, 21, 30))
+>c : Symbol(c, Decl(_44856.ts, 21, 37))
+    }
+    {
+      // BEHAVING AS EXPECTED
+      const b: A2|A3|A4 = {a: '', b: '', c: true}; // ✔ assignments allow extra props of other union types
+>b : Symbol(b, Decl(_44856.ts, 25, 11))
+>A2 : Symbol(A2, Decl(_44856.ts, 14, 1))
+>A3 : Symbol(A3, Decl(_44856.ts, 15, 37))
+>A4 : Symbol(A4, Decl(_44856.ts, 16, 50))
+>a : Symbol(a, Decl(_44856.ts, 25, 27))
+>b : Symbol(b, Decl(_44856.ts, 25, 33))
+>c : Symbol(c, Decl(_44856.ts, 25, 40))
+    }
+  }
+  
+  {
+    type A2 = {a: string; b: string};
+>A2 : Symbol(A2, Decl(_44856.ts, 29, 3))
+>a : Symbol(a, Decl(_44856.ts, 30, 15))
+>b : Symbol(b, Decl(_44856.ts, 30, 25))
+
+    type A3 = {a: string; b: boolean; c: boolean};
+>A3 : Symbol(A3, Decl(_44856.ts, 30, 37))
+>a : Symbol(a, Decl(_44856.ts, 31, 15))
+>b : Symbol(b, Decl(_44856.ts, 31, 25))
+>c : Symbol(c, Decl(_44856.ts, 31, 37))
+
+    type A4 = {a: string; b: boolean; c: number};
+>A4 : Symbol(A4, Decl(_44856.ts, 31, 50))
+>a : Symbol(a, Decl(_44856.ts, 32, 15))
+>b : Symbol(b, Decl(_44856.ts, 32, 25))
+>c : Symbol(c, Decl(_44856.ts, 32, 37))
+  
+    {
+      // THIS IS THE UNEXPECTED OUTLIER
+      const b: A2|A3 = {a: '', b: '', c: true}; // ❌ assignment strictly checked, extra prop from A3 not allowed
+>b : Symbol(b, Decl(_44856.ts, 36, 11))
+>A2 : Symbol(A2, Decl(_44856.ts, 29, 3))
+>A3 : Symbol(A3, Decl(_44856.ts, 30, 37))
+>a : Symbol(a, Decl(_44856.ts, 36, 24))
+>b : Symbol(b, Decl(_44856.ts, 36, 30))
+>c : Symbol(c, Decl(_44856.ts, 36, 37))
+    }
+    {
+      // BEHAVING AS EXPECTED
+      const b: A2|A3|A4 = {a: '', b: '', c: true}; // ✔ assignments allow extra props of other union types
+>b : Symbol(b, Decl(_44856.ts, 40, 11))
+>A2 : Symbol(A2, Decl(_44856.ts, 29, 3))
+>A3 : Symbol(A3, Decl(_44856.ts, 30, 37))
+>A4 : Symbol(A4, Decl(_44856.ts, 31, 50))
+>a : Symbol(a, Decl(_44856.ts, 40, 27))
+>b : Symbol(b, Decl(_44856.ts, 40, 33))
+>c : Symbol(c, Decl(_44856.ts, 40, 40))
+    }
+  }
+

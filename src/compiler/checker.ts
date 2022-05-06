@@ -12313,7 +12313,7 @@ namespace ts {
             return getReducedType(getApparentType(getReducedType(type)));
         }
 
-        function createUnionOrIntersectionProperty(containingType: UnionOrIntersectionType, name: __String, skipObjectFunctionPropertyAugment?: boolean): Symbol | undefined {
+        function createUnionOrIntersectionProperty(containingType: UnionOrIntersectionType, name: __String, skipObjectFunctionPropertyAugment?: boolean, fromIsDiscriminantProperty?: boolean | undefined): Symbol | undefined {
             let singleProp: Symbol | undefined;
             let propSet: ESMap<SymbolId, Symbol> | undefined;
             let indexTypes: Type[] | undefined;
@@ -12438,7 +12438,7 @@ namespace ts {
                 else if (type !== firstType) {
                     checkFlags |= CheckFlags.HasNonUniformType;
                 }
-                if (isLiteralType(type) || isPatternLiteralType(type) || type === uniqueLiteralType) {
+                if ((isLiteralType(type) && (!fromIsDiscriminantProperty || !(type.flags & TypeFlags.Boolean && type.flags & TypeFlags.Union))) || isPatternLiteralType(type) || type === uniqueLiteralType) {
                     checkFlags |= CheckFlags.HasLiteralType;
                 }
                 if (type.flags & TypeFlags.Never && type !== uniqueLiteralType) {
@@ -12481,11 +12481,11 @@ namespace ts {
         // constituents, in which case the isPartial flag is set when the containing type is union type. We need
         // these partial properties when identifying discriminant properties, but otherwise they are filtered out
         // and do not appear to be present in the union type.
-        function getUnionOrIntersectionProperty(type: UnionOrIntersectionType, name: __String, skipObjectFunctionPropertyAugment?: boolean): Symbol | undefined {
+        function getUnionOrIntersectionProperty(type: UnionOrIntersectionType, name: __String, skipObjectFunctionPropertyAugment?: boolean, fromIsDiscriminantProperty?: boolean | undefined): Symbol | undefined {
             let property = type.propertyCacheWithoutObjectFunctionPropertyAugment?.get(name) ||
                 !skipObjectFunctionPropertyAugment ? type.propertyCache?.get(name) : undefined;
             if (!property) {
-                property = createUnionOrIntersectionProperty(type, name, skipObjectFunctionPropertyAugment);
+                property = createUnionOrIntersectionProperty(type, name, skipObjectFunctionPropertyAugment, fromIsDiscriminantProperty);
                 if (property) {
                     const properties = skipObjectFunctionPropertyAugment ?
                         type.propertyCacheWithoutObjectFunctionPropertyAugment ||= createSymbolTable() :
@@ -23219,7 +23219,7 @@ namespace ts {
 
         function isDiscriminantProperty(type: Type | undefined, name: __String) {
             if (type && type.flags & TypeFlags.Union) {
-                const prop = getUnionOrIntersectionProperty(type as UnionType, name);
+                const prop = getUnionOrIntersectionProperty(type as UnionType, name, /* skipObjectFunctionPropertyAugment */ undefined, /* fromIsDiscriminantProperty */ true);
                 if (prop && getCheckFlags(prop) & CheckFlags.SyntheticProperty) {
                     if ((prop as TransientSymbol).isDiscriminantProperty === undefined) {
                         (prop as TransientSymbol).isDiscriminantProperty =

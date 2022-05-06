@@ -1,0 +1,119 @@
+=== tests/cases/compiler/_44856.ts ===
+// The expected rule for properties of union type (|) is  
+// (1) must contain all required properties of at least one union member
+// (2) may contain additional properties that belong to any union member
+
+{
+    type A2 = {a: string; b: string};
+>A2 : { a: string; b: string; }
+>a : string
+>b : string
+
+    type A3 = {a: string; b: boolean; c: number};
+>A3 : { a: string; b: boolean; c: number; }
+>a : string
+>b : boolean
+>c : number
+  
+    {
+      // THIS IS THE UNEXPECTED OUTLIER
+      const b: A2|A3 = {a: '', b: '', c: 1}; // ❌ assignment strictly checked, extra prop from A3 not allowed
+>b : { a: string; b: string; } | { a: string; b: boolean; c: number; }
+>{a: '', b: '', c: 1} : { a: string; b: string; c: number; }
+>a : string
+>'' : ""
+>b : string
+>'' : ""
+>c : number
+>1 : 1
+    }
+}
+
+{
+    type A2 = {a: string; b: string};
+>A2 : { a: string; b: string; }
+>a : string
+>b : string
+
+    type A3 = {a: string; b: boolean; c: boolean};
+>A3 : { a: string; b: boolean; c: boolean; }
+>a : string
+>b : boolean
+>c : boolean
+
+    type A4 = {a: string; b: number; c: number};
+>A4 : { a: string; b: number; c: number; }
+>a : string
+>b : number
+>c : number
+  
+    {
+      // THIS IS THE UNEXPECTED OUTLIER
+      const b: A2|A3 = {a: '', b: '', c: true}; // ❌ assignment strictly checked, extra prop from A3 not allowed
+>b : { a: string; b: string; } | { a: string; b: boolean; c: boolean; }
+>{a: '', b: '', c: true} : { a: string; b: string; c: true; }
+>a : string
+>'' : ""
+>b : string
+>'' : ""
+>c : true
+>true : true
+    }
+    {
+      // BEHAVING AS EXPECTED
+      const b: A2|A3|A4 = {a: '', b: '', c: true}; // ✔ assignments allow extra props of other union types
+>b : { a: string; b: string; } | { a: string; b: boolean; c: boolean; } | { a: string; b: number; c: number; }
+>{a: '', b: '', c: true} : { a: string; b: string; c: true; }
+>a : string
+>'' : ""
+>b : string
+>'' : ""
+>c : true
+>true : true
+    }
+  }
+  
+  {
+    type A2 = {a: string; b: string};
+>A2 : { a: string; b: string; }
+>a : string
+>b : string
+
+    type A3 = {a: string; b: boolean; c: boolean};
+>A3 : { a: string; b: boolean; c: boolean; }
+>a : string
+>b : boolean
+>c : boolean
+
+    type A4 = {a: string; b: boolean; c: number};
+>A4 : { a: string; b: boolean; c: number; }
+>a : string
+>b : boolean
+>c : number
+  
+    {
+      // THIS IS THE UNEXPECTED OUTLIER
+      const b: A2|A3 = {a: '', b: '', c: true}; // ❌ assignment strictly checked, extra prop from A3 not allowed
+>b : { a: string; b: string; } | { a: string; b: boolean; c: boolean; }
+>{a: '', b: '', c: true} : { a: string; b: string; c: true; }
+>a : string
+>'' : ""
+>b : string
+>'' : ""
+>c : true
+>true : true
+    }
+    {
+      // BEHAVING AS EXPECTED
+      const b: A2|A3|A4 = {a: '', b: '', c: true}; // ✔ assignments allow extra props of other union types
+>b : { a: string; b: string; } | { a: string; b: boolean; c: boolean; } | { a: string; b: boolean; c: number; }
+>{a: '', b: '', c: true} : { a: string; b: string; c: true; }
+>a : string
+>'' : ""
+>b : string
+>'' : ""
+>c : true
+>true : true
+    }
+  }
+
