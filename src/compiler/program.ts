@@ -593,7 +593,7 @@ namespace ts {
     }
 
     /* @internal */
-    export function getResolutionModeOverrideForClause(clause: AssertClause | undefined, grammarErrorOnNode?: (node: Node, diagnostic: DiagnosticMessage) => boolean) {
+    export function getResolutionModeOverrideForClause(clause: AssertClause | undefined, grammarErrorOnNode?: (node: Node, diagnostic: DiagnosticMessage) => void) {
         if (!clause) return undefined;
         if (length(clause.elements) !== 1) {
             grammarErrorOnNode?.(clause, Diagnostics.Type_import_assertions_should_have_exactly_one_key_resolution_mode_with_value_import_or_require);

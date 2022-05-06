@@ -4121,6 +4121,10 @@ namespace ts {
         return indentStrings[1].length;
     }
 
+    export function isNightly() {
+        return stringContains(version, "-dev") || stringContains(version, "-insiders");
+    }
+
     export function createTextWriter(newLine: string): EmitTextWriter {
         let output: string;
         let indent: number;

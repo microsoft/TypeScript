@@ -40718,6 +40718,10 @@ namespace ts {
                 const validForTypeAssertions = isExclusivelyTypeOnlyImportOrExport(declaration);
                 const override = getResolutionModeOverrideForClause(declaration.assertClause, validForTypeAssertions ? grammarErrorOnNode : undefined);
                 if (validForTypeAssertions && override) {
+                    if (!isNightly()) {
+                        grammarErrorOnNode(declaration.assertClause, Diagnostics.Resolution_mode_assertions_are_unstable_Use_nightly_TypeScript_to_silence_this_error_Try_updating_with_npm_install_D_typescript_next);
+                    }
+
                     if (getEmitModuleResolutionKind(compilerOptions) !== ModuleResolutionKind.Node16 && getEmitModuleResolutionKind(compilerOptions) !== ModuleResolutionKind.NodeNext) {
                         return grammarErrorOnNode(declaration.assertClause, Diagnostics.Resolution_modes_are_only_supported_when_moduleResolution_is_node16_or_nodenext);
                     }
