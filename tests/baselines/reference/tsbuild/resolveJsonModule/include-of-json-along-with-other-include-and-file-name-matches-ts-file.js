@@ -23,13 +23,58 @@ import hello from "./index.json"
 export default hello.hello
 
 //// [/src/tsconfig_withFiles.json]
-
+{
+  "compilerOptions": {
+    "composite": true,
+    "moduleResolution": "node",
+    "module": "commonjs",
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "outDir": "dist",
+    "skipDefaultLibCheck": true
+  },
+  "files": [
+    "src/index.ts", "src/hello.json"
+  ]
+}
 
 //// [/src/tsconfig_withInclude.json]
-
+{
+  "compilerOptions": {
+    "composite": true,
+    "moduleResolution": "node",
+    "module": "commonjs",
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "outDir": "dist",
+    "skipDefaultLibCheck": true
+  },
+  "include": [
+    "src/**/*"
+  ]
+}
 
 //// [/src/tsconfig_withIncludeAndFiles.json]
-
+{
+  "compilerOptions": {
+    "composite": true,
+    "moduleResolution": "node",
+    "module": "commonjs",
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "outDir": "dist",
+    "skipDefaultLibCheck": true
+  },
+  "files": [
+    "src/hello.json"
+  ],
+  "include": [
+    "src/**/*"
+  ]
+}
 
 //// [/src/tsconfig_withIncludeOfJson.json]
 {
@@ -52,12 +97,12 @@ export default hello.hello
 
 Output::
 /lib/tsc --b /src/tsconfig_withIncludeOfJson.json --v --explainFiles
-[[90m12:00:00 AM[0m] Projects in this build: 
+[[90m12:00:09 AM[0m] Projects in this build: 
     * src/tsconfig_withIncludeOfJson.json
 
-[[90m12:00:00 AM[0m] Project 'src/tsconfig_withIncludeOfJson.json' is out of date because output file 'src/dist/src/index.js' does not exist
+[[90m12:00:10 AM[0m] Project 'src/tsconfig_withIncludeOfJson.json' is out of date because output file 'src/dist/src/index.js' does not exist
 
-[[90m12:00:00 AM[0m] Building project '/src/tsconfig_withIncludeOfJson.json'...
+[[90m12:00:11 AM[0m] Building project '/src/tsconfig_withIncludeOfJson.json'...
 
 lib/lib.d.ts
   Default library for target 'es3'
@@ -89,7 +134,7 @@ exports["default"] = index_json_1["default"].hello;
 
 
 //// [/src/dist/tsconfig_withIncludeOfJson.tsbuildinfo]
-{"program":{"fileNames":["../../lib/lib.d.ts","../src/index.json","../src/index.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-2379406821-{\"hello\":\"world\"}","-6335882310-import hello from \"./index.json\"\n\nexport default hello.hello"],"options":{"allowSyntheticDefaultImports":true,"composite":true,"esModuleInterop":true,"module":1,"outDir":"./","skipDefaultLibCheck":true},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[[3,1]],"semanticDiagnosticsPerFile":[1,2,3]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../lib/lib.d.ts","../src/index.json","../src/index.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-2379406821-{\"hello\":\"world\"}",{"version":"-6335882310-import hello from \"./index.json\"\n\nexport default hello.hello","signature":"-1680156224-declare const _default: string;\r\nexport default _default;\r\n"}],"options":{"allowSyntheticDefaultImports":true,"composite":true,"esModuleInterop":true,"module":1,"outDir":"./","skipDefaultLibCheck":true},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3]},"version":"FakeTSVersion"}
 
 //// [/src/dist/tsconfig_withIncludeOfJson.tsbuildinfo.readable.baseline.txt]
 {
@@ -116,7 +161,7 @@ exports["default"] = index_json_1["default"].hello;
       },
       "../src/index.ts": {
         "version": "-6335882310-import hello from \"./index.json\"\n\nexport default hello.hello",
-        "signature": "-6335882310-import hello from \"./index.json\"\n\nexport default hello.hello"
+        "signature": "-1680156224-declare const _default: string;\r\nexport default _default;\r\n"
       }
     },
     "options": {
@@ -132,11 +177,7 @@ exports["default"] = index_json_1["default"].hello;
         "../src/index.json"
       ]
     },
-    "exportedModulesMap": {
-      "../src/index.ts": [
-        "../src/index.json"
-      ]
-    },
+    "exportedModulesMap": {},
     "semanticDiagnosticsPerFile": [
       "../../lib/lib.d.ts",
       "../src/index.json",
@@ -144,6 +185,6 @@ exports["default"] = index_json_1["default"].hello;
     ]
   },
   "version": "FakeTSVersion",
-  "size": 970
+  "size": 1067
 }
 

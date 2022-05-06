@@ -1,0 +1,38 @@
+=== tests/cases/conformance/es2019/globalThisAmbientModules.ts ===
+declare module "ambientModule" {
+>"ambientModule" : Symbol("ambientModule", Decl(globalThisAmbientModules.ts, 0, 0))
+
+    export type typ = 1
+>typ : Symbol(typ, Decl(globalThisAmbientModules.ts, 0, 32))
+
+    export var val: typ
+>val : Symbol(val, Decl(globalThisAmbientModules.ts, 2, 14))
+>typ : Symbol(typ, Decl(globalThisAmbientModules.ts, 0, 32))
+}
+namespace valueModule { export var val = 1 }
+>valueModule : Symbol(valueModule, Decl(globalThisAmbientModules.ts, 3, 1))
+>val : Symbol(val, Decl(globalThisAmbientModules.ts, 4, 34))
+
+namespace namespaceModule { export type typ = 1 }
+>namespaceModule : Symbol(namespaceModule, Decl(globalThisAmbientModules.ts, 4, 44))
+>typ : Symbol(typ, Decl(globalThisAmbientModules.ts, 5, 27))
+
+// should error
+type GlobalBad1 = (typeof globalThis)["\"ambientModule\""]
+>GlobalBad1 : Symbol(GlobalBad1, Decl(globalThisAmbientModules.ts, 5, 49))
+>globalThis : Symbol(globalThis)
+
+type GlobalOk1 = (typeof globalThis)["valueModule"]
+>GlobalOk1 : Symbol(GlobalOk1, Decl(globalThisAmbientModules.ts, 7, 58))
+>globalThis : Symbol(globalThis)
+
+type GlobalOk2 = globalThis.namespaceModule.typ
+>GlobalOk2 : Symbol(GlobalOk2, Decl(globalThisAmbientModules.ts, 8, 51))
+>globalThis : Symbol(globalThis)
+>namespaceModule : Symbol(namespaceModule, Decl(globalThisAmbientModules.ts, 4, 44))
+>typ : Symbol(namespaceModule.typ, Decl(globalThisAmbientModules.ts, 5, 27))
+
+const bad1: (typeof globalThis)["\"ambientModule\""] = 'ambientModule'
+>bad1 : Symbol(bad1, Decl(globalThisAmbientModules.ts, 10, 5))
+>globalThis : Symbol(globalThis)
+

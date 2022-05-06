@@ -1,6 +1,18 @@
 Input::
 //// [/lib/lib.d.ts]
-
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
 
@@ -73,7 +85,7 @@ default: es3
 
 --module, -m
 Specify what module code is generated.
-one of: none, commonjs, amd, umd, system, es6/es2015, es2020, es2022, esnext, node12, nodenext
+one of: none, commonjs, amd, umd, system, es6/es2015, es2020, es2022, esnext, node16, nodenext
 default: undefined
 
 --lib

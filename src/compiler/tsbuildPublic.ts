@@ -1896,7 +1896,7 @@ namespace ts {
             {
                 createNewValue: (path, _input) => state.watchFile(
                     path,
-                    () => invalidateProjectAndScheduleBuilds(state, resolvedPath, ConfigFileProgramReloadLevel.Full),
+                    () => invalidateProjectAndScheduleBuilds(state, resolvedPath, ConfigFileProgramReloadLevel.None),
                     PollingInterval.High,
                     parsed?.watchOptions,
                     WatchType.PackageJson,

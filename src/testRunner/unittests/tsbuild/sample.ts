@@ -21,7 +21,8 @@ namespace ts {
         function getSampleFsAfterBuild() {
             if (projFsWithBuild) return projFsWithBuild;
             const fs = projFs.shadow();
-            const host = fakes.SolutionBuilderHost.create(fs);
+            const sys = new fakes.System(fs, { executingFilePath: "/lib/tsc" });
+            const host = createSolutionBuilderHostForBaseline(sys as TscCompileSystem);
             const builder = createSolutionBuilder(host, ["/src/tests"], {});
             builder.build();
             fs.makeReadonly();
@@ -245,7 +246,7 @@ namespace ts {
                     )
                 );
 
-                const host = createSolutionBuilderHost(system);
+                const host = createSolutionBuilderHostForBaseline(system);
                 const builder = createSolutionBuilder(host, [testsConfig.path], {});
                 baseline.push("Input::");
                 baselineState();
@@ -316,7 +317,7 @@ namespace ts {
                     )
                 );
 
-                const host = createSolutionBuilderHost(system);
+                const host = createSolutionBuilderHostForBaseline(system);
                 const builder = createSolutionBuilder(host, [testsConfig.path], { dry: false, force: false, verbose: false });
                 builder.build();
                 baselineState("Build of project");

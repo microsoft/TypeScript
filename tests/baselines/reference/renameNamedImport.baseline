@@ -1,0 +1,4 @@
+/*====== /src/index.ts ======*/
+
+import { [|RENAME|] } from '../lib/index';
+RENAME;

@@ -229,6 +229,7 @@ interface Array<T> { length: number; [n: number]: T; }`
     export class TestServerHost extends VirtualServerHost implements server.ServerHost {
         readonly screenClears: number[] = [];
         private readonly output: string[] = [];
+
         constructor(
             public withSafeList: boolean,
             fileOrFolderorSymLinkList: readonly FileOrFolderOrSymLink[],

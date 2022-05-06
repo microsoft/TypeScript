@@ -130,6 +130,26 @@ describe("unittests:: Public APIs:: getTypeAtLocation", () => {
         const type = checker.getTypeAtLocation(file);
         assert.equal(type.flags, ts.TypeFlags.Any);
     });
+
+    it("returns an errorType for VariableDeclaration with BindingPattern name", () => {
+        const content = "const foo = [1];\n" + "const [a] = foo;";
+
+        const host = new fakes.CompilerHost(vfs.createFromFileSystem(
+            Harness.IO,
+            /*ignoreCase*/ true,
+            { documents: [new documents.TextDocument("/file.ts", content)], cwd: "/" }));
+
+        const program = ts.createProgram({
+            host,
+            rootNames: ["/file.ts"],
+            options: { noLib: true }
+        });
+
+        const checker = program.getTypeChecker();
+        const file = program.getSourceFile("/file.ts")!;
+        const [declaration] = (ts.findLast(file.statements, ts.isVariableStatement) as ts.VariableStatement).declarationList.declarations;
+        assert.equal(checker.getTypeAtLocation(declaration).flags, ts.TypeFlags.Any);
+    });
 });
 
 describe("unittests:: Public APIs:: validateLocaleAndSetLanguage", () => {

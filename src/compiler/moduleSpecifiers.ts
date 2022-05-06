@@ -41,7 +41,7 @@ namespace ts.moduleSpecifiers {
     }
 
     function isFormatRequiringExtensions(compilerOptions: CompilerOptions, importingSourceFileName: Path, host: ModuleSpecifierResolutionHost) {
-        if (getEmitModuleResolutionKind(compilerOptions) !== ModuleResolutionKind.Node12
+        if (getEmitModuleResolutionKind(compilerOptions) !== ModuleResolutionKind.Node16
         && getEmitModuleResolutionKind(compilerOptions) !== ModuleResolutionKind.NodeNext) {
             return false;
         }
@@ -734,7 +734,7 @@ namespace ts.moduleSpecifiers {
             const cachedPackageJson = host.getPackageJsonInfoCache?.()?.getPackageJsonInfo(packageJsonPath);
             if (typeof cachedPackageJson === "object" || cachedPackageJson === undefined && host.fileExists(packageJsonPath)) {
                 const packageJsonContent = cachedPackageJson?.packageJsonContent || JSON.parse(host.readFile!(packageJsonPath)!);
-                if (getEmitModuleResolutionKind(options) === ModuleResolutionKind.Node12 || getEmitModuleResolutionKind(options) === ModuleResolutionKind.NodeNext) {
+                if (getEmitModuleResolutionKind(options) === ModuleResolutionKind.Node16 || getEmitModuleResolutionKind(options) === ModuleResolutionKind.NodeNext) {
                     // `conditions` *could* be made to go against `importingSourceFile.impliedNodeFormat` if something wanted to generate
                     // an ImportEqualsDeclaration in an ESM-implied file or an ImportCall in a CJS-implied file. But since this function is
                     // usually called to conjure an import out of thin air, we don't have an existing usage to call `getModeForUsageAtIndex`

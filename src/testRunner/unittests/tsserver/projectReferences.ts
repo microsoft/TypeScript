@@ -1278,8 +1278,7 @@ bar;`
                 const files = [solnConfig, sharedConfig, sharedIndex, sharedPackage, appConfig, appBar, appIndex, sharedSymlink, libFile];
                 const host = createServerHost(files);
                 if (built) {
-                    const solutionBuilder = tscWatch.createSolutionBuilder(host, [solnConfig.path], {});
-                    solutionBuilder.build();
+                    tscWatch.solutionBuildWithBaseline(host, [solnConfig.path]);
                     host.clearOutput();
                 }
                 const session = createSession(host, { logger: createLoggerWithInMemoryLogs() });

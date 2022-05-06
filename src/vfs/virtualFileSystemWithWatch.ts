@@ -178,7 +178,7 @@ namespace ts.VirtualFS {
         DynamicPolling = "RecursiveDirectoryUsingDynamicPriorityPolling"
     }
 
-    const timeIncrements = 1000;
+    export const timeIncrements = 1000;
     /**
      * also implements {server.ServerHost} but that would create a circular dependency
      */
@@ -204,6 +204,7 @@ namespace ts.VirtualFS {
         private readonly currentDirectory: string;
         public require: ((initialPath: string, moduleName: string) => RequireResult) | undefined;
         public defaultWatchFileKind?: () => WatchFileKind | undefined;
+        public storeFilesChangingSignatureDuringEmit = true;
         watchFile: HostWatchFile;
         watchDirectory: HostWatchDirectory;
         constructor(

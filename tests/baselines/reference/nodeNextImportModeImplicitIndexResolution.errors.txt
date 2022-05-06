@@ -1,5 +1,5 @@
-tests/cases/compiler/index.ts(2,31): error TS2834: Relative import paths need explicit file extensions in EcmaScript imports when '--moduleResolution' is 'node12' or 'nodenext'. Consider adding an extension to the import path.
-tests/cases/compiler/index.ts(3,31): error TS2834: Relative import paths need explicit file extensions in EcmaScript imports when '--moduleResolution' is 'node12' or 'nodenext'. Consider adding an extension to the import path.
+tests/cases/compiler/index.ts(2,31): error TS2834: Relative import paths need explicit file extensions in EcmaScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+tests/cases/compiler/index.ts(3,31): error TS2834: Relative import paths need explicit file extensions in EcmaScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
 
 
 ==== tests/cases/compiler/node_modules/pkg/package.json (0 errors) ====
@@ -24,8 +24,8 @@ tests/cases/compiler/index.ts(3,31): error TS2834: Relative import paths need ex
     import { item } from "pkg"; // should work (`index.js` is assumed to be the entrypoint for packages found via nonrelative import)
     import { item as item2 } from "./pkg";  // shouldn't work (`index.js` is _not_ assumed to be the entrypoint for packages found via relative import)
                                   ~~~~~~~
-!!! error TS2834: Relative import paths need explicit file extensions in EcmaScript imports when '--moduleResolution' is 'node12' or 'nodenext'. Consider adding an extension to the import path.
+!!! error TS2834: Relative import paths need explicit file extensions in EcmaScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
     import { item as item3 } from "./node_modules/pkg" // _even if they're in a node_modules folder_
                                   ~~~~~~~~~~~~~~~~~~~~
-!!! error TS2834: Relative import paths need explicit file extensions in EcmaScript imports when '--moduleResolution' is 'node12' or 'nodenext'. Consider adding an extension to the import path.
+!!! error TS2834: Relative import paths need explicit file extensions in EcmaScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
     

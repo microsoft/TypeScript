@@ -70,12 +70,12 @@ export { C } from "./c";
 
 Output::
 /lib/tsc --b /src --verbose
-[[90m12:01:00 AM[0m] Projects in this build: 
+[[90m12:00:07 AM[0m] Projects in this build: 
     * src/tsconfig.json
 
-[[90m12:01:00 AM[0m] Project 'src/tsconfig.json' is out of date because output file 'src/lib/a.d.ts' does not exist
+[[90m12:00:08 AM[0m] Project 'src/tsconfig.json' is out of date because output file 'src/lib/a.d.ts' does not exist
 
-[[90m12:01:00 AM[0m] Building project '/src/tsconfig.json'...
+[[90m12:00:09 AM[0m] Building project '/src/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 
@@ -108,7 +108,7 @@ export { C } from "./c";
 
 
 //// [/src/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../lib/lib.d.ts","./src/c.ts","./src/b.ts","./src/a.ts","./src/index.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"429593025-import { A } from \"./a\";\n\nexport interface C {\n  a: A;\n}\n","-2273488249-import { C } from \"./c\";\n\nexport interface B {\n  b: C;\n}\n","-15463561693-import { B } from \"./b\";\n\nexport interface A {\n  b: B;\n}\n","1286756397-export { A } from \"./a\";\nexport { B } from \"./b\";\nexport { C } from \"./c\";\n"],"options":{"composite":true,"declaration":true,"emitDeclarationOnly":true,"esModuleInterop":true,"module":1,"outDir":"./lib","rootDir":"./src","sourceMap":true,"strict":true,"target":1},"fileIdsList":[[3],[2],[4],[2,3,4]],"referencedMap":[[4,1],[3,2],[2,3],[5,4]],"exportedModulesMap":[[4,1],[3,2],[2,3],[5,4]],"semanticDiagnosticsPerFile":[1,4,3,2,5]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../lib/lib.d.ts","./src/c.ts","./src/b.ts","./src/a.ts","./src/index.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"429593025-import { A } from \"./a\";\n\nexport interface C {\n  a: A;\n}\n","signature":"-2697851509-import { A } from \"./a\";\r\nexport interface C {\r\n    a: A;\r\n}\r\n"},{"version":"-2273488249-import { C } from \"./c\";\n\nexport interface B {\n  b: C;\n}\n","signature":"20298635505-import { C } from \"./c\";\r\nexport interface B {\r\n    b: C;\r\n}\r\n"},{"version":"-15463561693-import { B } from \"./b\";\n\nexport interface A {\n  b: B;\n}\n","signature":"-4206296467-import { B } from \"./b\";\r\nexport interface A {\r\n    b: B;\r\n}\r\n"},{"version":"1286756397-export { A } from \"./a\";\nexport { B } from \"./b\";\nexport { C } from \"./c\";\n","signature":"-6009477228-export { A } from \"./a\";\r\nexport { B } from \"./b\";\r\nexport { C } from \"./c\";\r\n"}],"options":{"composite":true,"declaration":true,"emitDeclarationOnly":true,"esModuleInterop":true,"module":1,"outDir":"./lib","rootDir":"./src","sourceMap":true,"strict":true,"target":1},"fileIdsList":[[3],[2],[4],[2,3,4]],"referencedMap":[[4,1],[3,2],[2,3],[5,4]],"exportedModulesMap":[[4,1],[3,2],[2,3],[5,4]],"semanticDiagnosticsPerFile":[1,4,3,2,5]},"version":"FakeTSVersion"}
 
 //// [/src/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -144,19 +144,19 @@ export { C } from "./c";
       },
       "./src/c.ts": {
         "version": "429593025-import { A } from \"./a\";\n\nexport interface C {\n  a: A;\n}\n",
-        "signature": "429593025-import { A } from \"./a\";\n\nexport interface C {\n  a: A;\n}\n"
+        "signature": "-2697851509-import { A } from \"./a\";\r\nexport interface C {\r\n    a: A;\r\n}\r\n"
       },
       "./src/b.ts": {
         "version": "-2273488249-import { C } from \"./c\";\n\nexport interface B {\n  b: C;\n}\n",
-        "signature": "-2273488249-import { C } from \"./c\";\n\nexport interface B {\n  b: C;\n}\n"
+        "signature": "20298635505-import { C } from \"./c\";\r\nexport interface B {\r\n    b: C;\r\n}\r\n"
       },
       "./src/a.ts": {
         "version": "-15463561693-import { B } from \"./b\";\n\nexport interface A {\n  b: B;\n}\n",
-        "signature": "-15463561693-import { B } from \"./b\";\n\nexport interface A {\n  b: B;\n}\n"
+        "signature": "-4206296467-import { B } from \"./b\";\r\nexport interface A {\r\n    b: B;\r\n}\r\n"
       },
       "./src/index.ts": {
         "version": "1286756397-export { A } from \"./a\";\nexport { B } from \"./b\";\nexport { C } from \"./c\";\n",
-        "signature": "1286756397-export { A } from \"./a\";\nexport { B } from \"./b\";\nexport { C } from \"./c\";\n"
+        "signature": "-6009477228-export { A } from \"./a\";\r\nexport { B } from \"./b\";\r\nexport { C } from \"./c\";\r\n"
       }
     },
     "options": {
@@ -212,7 +212,7 @@ export { C } from "./c";
     ]
   },
   "version": "FakeTSVersion",
-  "size": 1306
+  "size": 1768
 }
 
 
@@ -231,12 +231,12 @@ export interface A {
 
 Output::
 /lib/tsc --b /src --verbose
-[[90m12:04:00 AM[0m] Projects in this build: 
+[[90m12:00:18 AM[0m] Projects in this build: 
     * src/tsconfig.json
 
-[[90m12:04:00 AM[0m] Project 'src/tsconfig.json' is out of date because oldest output 'src/lib/a.d.ts' is older than newest input 'src/src/a.ts'
+[[90m12:00:19 AM[0m] Project 'src/tsconfig.json' is out of date because oldest output 'src/lib/a.d.ts' is older than newest input 'src/src/a.ts'
 
-[[90m12:04:00 AM[0m] Building project '/src/tsconfig.json'...
+[[90m12:00:20 AM[0m] Building project '/src/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 

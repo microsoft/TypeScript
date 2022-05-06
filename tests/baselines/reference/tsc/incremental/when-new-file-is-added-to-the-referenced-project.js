@@ -18,7 +18,7 @@ declare const console: { log(msg: any): void; };
 declare class class1 {}
 
 //// [/src/projects/project1/class1.ts]
-
+class class1 {}
 
 //// [/src/projects/project1/tsconfig.json]
 {"compilerOptions":{"module":"none","composite":true},"exclude":["temp"]}
@@ -50,7 +50,7 @@ var class2 = /** @class */ (function () {
 
 
 //// [/src/projects/project2/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../lib/lib.d.ts","../project1/class1.d.ts","./class2.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-3469237238-declare class class1 {}","affectsGlobalScope":true},{"version":"777969115-class class2 {}","affectsGlobalScope":true}],"options":{"composite":true,"module":0},"semanticDiagnosticsPerFile":[1,2,3]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../lib/lib.d.ts","../project1/class1.d.ts","./class2.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-3469237238-declare class class1 {}","affectsGlobalScope":true},{"version":"777969115-class class2 {}","signature":"-2390931783-declare class class2 {\r\n}\r\n","affectsGlobalScope":true}],"options":{"composite":true,"module":0},"semanticDiagnosticsPerFile":[1,2,3]},"version":"FakeTSVersion"}
 
 //// [/src/projects/project2/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -73,7 +73,7 @@ var class2 = /** @class */ (function () {
       },
       "./class2.ts": {
         "version": "777969115-class class2 {}",
-        "signature": "777969115-class class2 {}",
+        "signature": "-2390931783-declare class class2 {\r\n}\r\n",
         "affectsGlobalScope": true
       }
     },
@@ -88,7 +88,7 @@ var class2 = /** @class */ (function () {
     ]
   },
   "version": "FakeTSVersion",
-  "size": 829
+  "size": 887
 }
 
 
