@@ -1071,7 +1071,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI.",
+                  "text": "A value representing an unencoded URI.",
                   "kind": "text"
                 }
               ]
@@ -1184,7 +1184,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI component.",
+                  "text": "A value representing an unencoded URI component.",
                   "kind": "text"
                 }
               ]
@@ -5343,7 +5343,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI.",
+                  "text": "A value representing an unencoded URI.",
                   "kind": "text"
                 }
               ]
@@ -5456,7 +5456,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI component.",
+                  "text": "A value representing an unencoded URI component.",
                   "kind": "text"
                 }
               ]
@@ -8859,7 +8859,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI.",
+                  "text": "A value representing an unencoded URI.",
                   "kind": "text"
                 }
               ]
@@ -8972,7 +8972,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI component.",
+                  "text": "A value representing an unencoded URI component.",
                   "kind": "text"
                 }
               ]

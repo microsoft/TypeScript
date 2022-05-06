@@ -1,4 +1,4 @@
-// @module: commonjs,node12,nodenext
+// @module: commonjs,node16,nodenext
 // @filename: node_modules/pkg/index.d.ts
 interface GlobalThing { a: number }
 // @filename: node_modules/pkg/package.json

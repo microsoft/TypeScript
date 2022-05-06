@@ -164,7 +164,7 @@ namespace ts.Completions {
         TypeAssertionKeywords,
         TypeKeywords,
         TypeKeyword,                    // Literally just `type`
-        Last = TypeKeywords
+        Last = TypeKeyword
     }
 
     const enum GlobalsSearch { Continue, Success, Fail }
@@ -574,7 +574,7 @@ namespace ts.Completions {
         if (keywordFilters !== KeywordCompletionFilters.None) {
             const entryNames = new Set(entries.map(e => e.name));
             for (const keywordEntry of getKeywordCompletions(keywordFilters, !insideJsDocTagTypeExpression && isSourceFileJS(sourceFile))) {
-                if (!entryNames.has(keywordEntry.name)) {
+                if (isTypeOnlyLocation && isTypeKeyword(stringToToken(keywordEntry.name)!) || !entryNames.has(keywordEntry.name)) {
                     insertSorted(entries, keywordEntry, compareCompletionEntries, /*allowDuplicates*/ true);
                 }
             }
@@ -2761,7 +2761,7 @@ namespace ts.Completions {
                             }
 
                             // Do a relatively cheap check to bail early if all re-exports are non-importable
-                            // due to file location or package.json dependency filtering. For non-node12+
+                            // due to file location or package.json dependency filtering. For non-node16+
                             // module resolution modes, getting past this point guarantees that we'll be
                             // able to generate a suitable module specifier, so we can safely show a completion,
                             // even if we defer computing the module specifier.
@@ -2770,7 +2770,7 @@ namespace ts.Completions {
                                 return;
                             }
 
-                            // In node12+, module specifier resolution can fail due to modules being blocked
+                            // In node16+, module specifier resolution can fail due to modules being blocked
                             // by package.json `exports`. If that happens, don't show a completion item.
                             // N.B. in this resolution mode we always try to resolve module specifiers here,
                             // because we have to know now if it's going to fail so we can omit the completion
