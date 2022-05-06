@@ -81,6 +81,7 @@ namespace ts {
         ["es2021.intl", "lib.es2021.intl.d.ts"],
         ["es2022.array", "lib.es2022.array.d.ts"],
         ["es2022.error", "lib.es2022.error.d.ts"],
+        ["es2022.intl", "lib.es2022.intl.d.ts"],
         ["es2022.object", "lib.es2022.object.d.ts"],
         ["es2022.string", "lib.es2022.string.d.ts"],
         ["esnext.array", "lib.es2022.array.d.ts"],
