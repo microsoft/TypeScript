@@ -2745,6 +2745,7 @@ namespace ts {
                     const startPos = scanner.getStartPos();
                     const result = parseListElement(kind, parseElement);
                     if (!result) {
+                        parsingContext = saveParsingContext;
                         return undefined;
                     }
                     list.push(result as NonNullable<T>);
