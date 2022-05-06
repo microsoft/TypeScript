@@ -101,6 +101,7 @@ Output::
 FileWatcher:: Triggered with /user/username/projects/myproject/foo.ts 0:: WatchInfo: /user/username/projects/myproject/foo.ts 250 {"watchFile":4} Source file
 Scheduling update
 Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/foo.ts 0:: WatchInfo: /user/username/projects/myproject/foo.ts 250 {"watchFile":4} Source file
+sysLog:: /user/username/projects/myproject/foo.ts:: Changing watcher to PresentFileSystemEntryWatcher
 Synchronizing program
 [[90m12:00:32 AM[0m] File change detected. Starting incremental compilation...
 
@@ -144,12 +145,12 @@ WatchedFiles::
 FsWatches::
 /user/username/projects/myproject/tsconfig.json:
   {"directoryName":"/user/username/projects/myproject/tsconfig.json","inode":10}
-/user/username/projects/myproject/foo.ts:
-  {"directoryName":"/user/username/projects/myproject/foo.ts","inode":9}
 /user/username/projects/myproject/main.ts:
   {"directoryName":"/user/username/projects/myproject/main.ts","inode":8}
 /a/lib/lib.d.ts:
   {"directoryName":"/a/lib/lib.d.ts","inode":3}
+/user/username/projects/myproject/foo.ts:
+  {"directoryName":"/user/username/projects/myproject/foo.ts","inode":13}
 
 FsWatchesRecursive::
 
@@ -166,6 +167,43 @@ export declare function foo(): string;
 
 
 Output::
+FileWatcher:: Triggered with /user/username/projects/myproject/foo.ts 2:: WatchInfo: /user/username/projects/myproject/foo.ts 250 {"watchFile":4} Source file
+Scheduling update
+Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/foo.ts 2:: WatchInfo: /user/username/projects/myproject/foo.ts 250 {"watchFile":4} Source file
+sysLog:: /user/username/projects/myproject/foo.ts:: Changing watcher to MissingFileSystemEntryWatcher
+FileWatcher:: Triggered with /user/username/projects/myproject/foo.ts 0:: WatchInfo: /user/username/projects/myproject/foo.ts 250 {"watchFile":4} Source file
+Scheduling update
+Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/foo.ts 0:: WatchInfo: /user/username/projects/myproject/foo.ts 250 {"watchFile":4} Source file
+sysLog:: /user/username/projects/myproject/foo.ts:: Changing watcher to PresentFileSystemEntryWatcher
+FileWatcher:: Triggered with /user/username/projects/myproject/foo.ts 0:: WatchInfo: /user/username/projects/myproject/foo.ts 250 {"watchFile":4} Source file
+Scheduling update
+Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/foo.ts 0:: WatchInfo: /user/username/projects/myproject/foo.ts 250 {"watchFile":4} Source file
+sysLog:: /user/username/projects/myproject/foo.ts:: Changing watcher to PresentFileSystemEntryWatcher
+Synchronizing program
+[[90m12:00:43 AM[0m] File change detected. Starting incremental compilation...
+
+CreatingProgramWith::
+  roots: ["/user/username/projects/myproject/foo.ts","/user/username/projects/myproject/main.ts"]
+  options: {"watch":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+[[90m12:00:50 AM[0m] Found 0 errors. Watching for file changes.
+
+
+
+Program root files: ["/user/username/projects/myproject/foo.ts","/user/username/projects/myproject/main.ts"]
+Program options: {"watch":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program structureReused: SafeModules
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/foo.ts
+/user/username/projects/myproject/main.ts
+
+Semantic diagnostics in builder refreshed for::
+/user/username/projects/myproject/foo.ts
+/user/username/projects/myproject/main.ts
+
+Shape signatures in builder refreshed for::
+/user/username/projects/myproject/foo.ts (computed .d.ts)
+/user/username/projects/myproject/main.ts (computed .d.ts)
 
 WatchedFiles::
 /user/username/projects/myproject/node_modules/@types:
@@ -174,14 +212,16 @@ WatchedFiles::
 FsWatches::
 /user/username/projects/myproject/tsconfig.json:
   {"directoryName":"/user/username/projects/myproject/tsconfig.json","inode":10}
-/user/username/projects/myproject/foo.ts:
-  {"directoryName":"/user/username/projects/myproject/foo.ts","inode":9}
 /user/username/projects/myproject/main.ts:
   {"directoryName":"/user/username/projects/myproject/main.ts","inode":8}
 /a/lib/lib.d.ts:
   {"directoryName":"/a/lib/lib.d.ts","inode":3}
+/user/username/projects/myproject/foo.ts:
+  {"directoryName":"/user/username/projects/myproject/foo.ts","inode":14}
 
 FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+//// [/user/username/projects/myproject/foo.js] file written with same contents Inode:: 11
+//// [/user/username/projects/myproject/main.js] file written with same contents Inode:: 12

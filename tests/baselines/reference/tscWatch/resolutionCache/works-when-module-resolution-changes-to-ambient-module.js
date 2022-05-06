@@ -87,7 +87,9 @@ declare module "fs" {
 
 
 Output::
-sysLog:: /a/b/node_modules:: Changing watcher to PresentFileSystemEntryWatchersysLog:: /a/b/node_modules/@types:: Changing watcher to PresentFileSystemEntryWatcher
+sysLog:: /a/b/node_modules:: Changing watcher to PresentFileSystemEntryWatcher
+sysLog:: /a/b/node_modules/@types:: Changing watcher to PresentFileSystemEntryWatcher
+
 >> Screen clear
 [[90m12:00:27 AM[0m] File change detected. Starting incremental compilation...
 

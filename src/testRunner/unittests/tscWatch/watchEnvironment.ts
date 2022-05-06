@@ -647,7 +647,7 @@ namespace ts.tscWatch {
                     {
                         caption: "Replace file with rename event that fixes error",
                         change: sys => sys.modifyFile(`${projectRoot}/foo.ts`, `export declare function foo(): string;`, { invokeFileDeleteCreateAsPartInsteadOfChange: true, }),
-                        timeouts: sys => sys.checkTimeoutQueueLengthAndRun(0),
+                        timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
                     },
                 ]
             });

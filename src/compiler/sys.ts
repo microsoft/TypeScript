@@ -1096,17 +1096,10 @@ namespace ts {
                 }
             };
 
-            /**
-             * Invoke the callback with rename and update the watcher if not closed
-             * @param createWatcher
-             */
-            function invokeCallbackAndUpdateWatcher(createWatcher: () => FileWatcher) {
-                sysLog(`sysLog:: ${fileOrDirectory}:: Changing watcher to ${createWatcher === watchPresentFileSystemEntry ? "Present" : "Missing"}FileSystemEntryWatcher`);
-                // Call the callback for current directory
-                callback("rename", "");
-
+            function updateWatcher(createWatcher: () => FileWatcher) {
                 // If watcher is not closed, update it
                 if (watcher) {
+                    sysLog(`sysLog:: ${fileOrDirectory}:: Changing watcher to ${createWatcher === watchPresentFileSystemEntry ? "Present" : "Missing"}FileSystemEntryWatcher`);
                     watcher.close();
                     watcher = createWatcher();
                 }
@@ -1130,7 +1123,10 @@ namespace ts {
                             callback
                     );
                     // Watch the missing file or directory or error
-                    presentWatcher.on("error", () => invokeCallbackAndUpdateWatcher(watchMissingFileSystemEntry));
+                    presentWatcher.on("error", () => {
+                        callback("rename", "");
+                        updateWatcher(watchMissingFileSystemEntry);
+                    });
                     return presentWatcher;
                 }
                 catch (e) {
@@ -1144,15 +1140,15 @@ namespace ts {
             }
 
             function callbackChangingToMissingFileSystemEntry(event: "rename" | "change", relativeName: string | undefined) {
+                callback(event, relativeName);
                 // because relativeName is not guaranteed to be correct we need to check on each rename with few combinations
                 // Eg on ubuntu while watching app/node_modules the relativeName is "node_modules" which is neither relative nor full path
-                return event === "rename" &&
+                if (event === "rename" &&
                     (!relativeName ||
                         relativeName === lastDirectoryPart ||
-                        (relativeName.lastIndexOf(lastDirectoryPartWithDirectorySeparator!) !== -1 && relativeName.lastIndexOf(lastDirectoryPartWithDirectorySeparator!) === relativeName.length - lastDirectoryPartWithDirectorySeparator!.length)) &&
-                    !fileSystemEntryExists(fileOrDirectory, entryKind) ?
-                    invokeCallbackAndUpdateWatcher(watchMissingFileSystemEntry) :
-                    callback(event, relativeName);
+                        (relativeName.lastIndexOf(lastDirectoryPartWithDirectorySeparator!) !== -1 && relativeName.lastIndexOf(lastDirectoryPartWithDirectorySeparator!) === relativeName.length - lastDirectoryPartWithDirectorySeparator!.length))) {
+                    updateWatcher(!fileSystemEntryExists(fileOrDirectory, entryKind) ? watchMissingFileSystemEntry : watchPresentFileSystemEntry);
+                }
             }
 
             /**
@@ -1177,10 +1173,11 @@ namespace ts {
                     fileOrDirectory,
                     (_fileName, eventKind) => {
                         if (eventKind === FileWatcherEventKind.Created && fileSystemEntryExists(fileOrDirectory, entryKind)) {
+                            callback("rename", "");
                             // Call the callback for current file or directory
                             // For now it could be callback for the inner directory creation,
                             // but just return current directory, better than current no-op
-                            invokeCallbackAndUpdateWatcher(watchPresentFileSystemEntry);
+                            updateWatcher(watchPresentFileSystemEntry);
                         }
                     },
                     fallbackPollingInterval,

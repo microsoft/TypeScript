@@ -31,6 +31,7 @@ Output::
 
 sysLog:: /a/b:: Changing to watchFile
 
+
 Program root files: ["/a/b/commonFile1.ts","/a/b/commonFile2.ts"]
 Program options: {"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
 Program structureReused: Not
