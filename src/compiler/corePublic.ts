@@ -5,7 +5,7 @@ namespace ts {
     // The following is baselined as a literal template type without intervention
     /** The version of the TypeScript compiler release */
     // eslint-disable-next-line @typescript-eslint/no-inferrable-types
-    export const version = `${versionMajorMinor}.0-beta`;
+    export const version = `${versionMajorMinor}.1-rc`;
 
     /**
      * Type of objects whose values are all of the same type.
