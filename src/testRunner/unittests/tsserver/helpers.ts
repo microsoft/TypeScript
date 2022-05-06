@@ -109,7 +109,7 @@ namespace ts.projectSystem {
                     .replace(/getExportInfoMap: done in \d+(?:\.\d+)?/g, `getExportInfoMap: done in *`)
                     .replace(/collectAutoImports: \d+(?:\.\d+)?/g, `collectAutoImports: *`)
                     .replace(/dependencies in \d+(?:\.\d+)?/g, `dependencies in *`)
-                    .replace(/\"exportMapKey\"\:\"\w(\w|\d)*\|\d+\|/g, match => match.replace(/\|\d+\|/, `|*|`))
+                    .replace(/\"exportMapKey\"\:\"[_$a-zA-Z][_$_$a-zA-Z0-9]*\|\d+\|/g, match => match.replace(/\|\d+\|/, `|*|`))
             )
         };
     }
