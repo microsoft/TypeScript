@@ -1147,7 +1147,12 @@ namespace ts {
                     (!relativeName ||
                         relativeName === lastDirectoryPart ||
                         (relativeName.lastIndexOf(lastDirectoryPartWithDirectorySeparator!) !== -1 && relativeName.lastIndexOf(lastDirectoryPartWithDirectorySeparator!) === relativeName.length - lastDirectoryPartWithDirectorySeparator!.length))) {
-                    updateWatcher(!fileSystemEntryExists(fileOrDirectory, entryKind) ? watchMissingFileSystemEntry : watchPresentFileSystemEntry);
+                    if (inodeWatching) {
+                        updateWatcher(!fileSystemEntryExists(fileOrDirectory, entryKind) ? watchMissingFileSystemEntry : watchPresentFileSystemEntry);
+                    }
+                    else if (!fileSystemEntryExists(fileOrDirectory, entryKind)) {
+                        updateWatcher(watchMissingFileSystemEntry);
+                    }
                 }
             }
 
