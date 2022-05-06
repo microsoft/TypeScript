@@ -267,13 +267,17 @@ interface Array<T> { length: number; [n: number]: T; }`
         inode: number | undefined;
     }
 
-    export interface ReloadWatchInvokeOptions {
+    export interface WatchInvokeOptions {
         /** Invokes the directory watcher for the parent instead of the file changed */
         invokeDirectoryWatcherInsteadOfFileChanged: boolean;
         /** When new file is created, do not invoke watches for it */
         ignoreWatchInvokedWithTriggerAsFileCreate: boolean;
         /** Invoke the file delete, followed by create instead of file changed */
         invokeFileDeleteCreateAsPartInsteadOfChange: boolean;
+        /** Dont invoke delete watches */
+        ignoreDelete: boolean;
+        /** Skip inode check on file or folder create*/
+        skipInodeCheckOnCreate: boolean;
     }
 
     export enum Tsc_WatchFile {
@@ -324,7 +328,7 @@ interface Array<T> { length: number; [n: number]: T; }`
         public defaultWatchFileKind?: () => WatchFileKind | undefined;
         public storeFilesChangingSignatureDuringEmit = true;
         watchFile: HostWatchFile;
-        private readonly inodeWatching: boolean | undefined;
+        private inodeWatching: boolean | undefined;
         private readonly inodes?: ESMap<Path, number>;
         watchDirectory: HostWatchDirectory;
         constructor(
@@ -376,7 +380,7 @@ interface Array<T> { length: number; [n: number]: T; }`
                 tscWatchDirectory,
                 defaultWatchFileKind: () => this.defaultWatchFileKind?.(),
                 inodeWatching: !!this.inodeWatching,
-                sysLog: this.write.bind(this)
+                sysLog: s => this.write(s + this.newLine),
             });
             this.watchFile = watchFile;
             this.watchDirectory = watchDirectory;
@@ -441,7 +445,7 @@ interface Array<T> { length: number; [n: number]: T; }`
             }
         }
 
-        modifyFile(filePath: string, content: string, options?: Partial<ReloadWatchInvokeOptions>) {
+        modifyFile(filePath: string, content: string, options?: Partial<WatchInvokeOptions>) {
             const path = this.toFullPath(filePath);
             const currentEntry = this.fs.get(path);
             if (!currentEntry || !isFsFile(currentEntry)) {
@@ -449,8 +453,8 @@ interface Array<T> { length: number; [n: number]: T; }`
             }
 
             if (options && options.invokeFileDeleteCreateAsPartInsteadOfChange) {
-                this.removeFileOrFolder(currentEntry, returnFalse);
-                this.ensureFileOrFolder({ path: filePath, content });
+                this.removeFileOrFolder(currentEntry, /*isRenaming*/ false, options);
+                this.ensureFileOrFolder({ path: filePath, content }, /*ignoreWatchInvokedWithTriggerAsFileCreate*/ undefined, /*ignoreParentWatch*/ undefined, options);
             }
             else {
                 currentEntry.content = content;
@@ -475,7 +479,7 @@ interface Array<T> { length: number; [n: number]: T; }`
             Debug.assert(!!file);
 
             // Only remove the file
-            this.removeFileOrFolder(file, returnFalse, /*isRenaming*/ true);
+            this.removeFileOrFolder(file, /*isRenaming*/ true);
 
             // Add updated folder with new folder name
             const newFullPath = getNormalizedAbsolutePath(newFileName, this.currentDirectory);
@@ -495,7 +499,7 @@ interface Array<T> { length: number; [n: number]: T; }`
             Debug.assert(!!folder);
 
             // Only remove the folder
-            this.removeFileOrFolder(folder, returnFalse, /*isRenaming*/ true);
+            this.removeFileOrFolder(folder, /*isRenaming*/ true);
 
             // Add updated folder with new folder name
             const newFullPath = getNormalizedAbsolutePath(newFolderName, this.currentDirectory);
@@ -530,29 +534,29 @@ interface Array<T> { length: number; [n: number]: T; }`
             }
         }
 
-        ensureFileOrFolder(fileOrDirectoryOrSymLink: FileOrFolderOrSymLink, ignoreWatchInvokedWithTriggerAsFileCreate?: boolean, ignoreParentWatch?: boolean) {
+        ensureFileOrFolder(fileOrDirectoryOrSymLink: FileOrFolderOrSymLink, ignoreWatchInvokedWithTriggerAsFileCreate?: boolean, ignoreParentWatch?: boolean, options?: Partial<WatchInvokeOptions>) {
             if (isFile(fileOrDirectoryOrSymLink)) {
                 const file = this.toFsFile(fileOrDirectoryOrSymLink);
                 // file may already exist when updating existing type declaration file
                 if (!this.fs.get(file.path)) {
-                    const baseFolder = this.ensureFolder(getDirectoryPath(file.fullPath), ignoreParentWatch);
-                    this.addFileOrFolderInFolder(baseFolder, file, ignoreWatchInvokedWithTriggerAsFileCreate);
+                    const baseFolder = this.ensureFolder(getDirectoryPath(file.fullPath), ignoreParentWatch, options);
+                    this.addFileOrFolderInFolder(baseFolder, file, ignoreWatchInvokedWithTriggerAsFileCreate, options);
                 }
             }
             else if (isSymLink(fileOrDirectoryOrSymLink)) {
                 const symLink = this.toFsSymLink(fileOrDirectoryOrSymLink);
                 Debug.assert(!this.fs.get(symLink.path));
-                const baseFolder = this.ensureFolder(getDirectoryPath(symLink.fullPath), ignoreParentWatch);
-                this.addFileOrFolderInFolder(baseFolder, symLink, ignoreWatchInvokedWithTriggerAsFileCreate);
+                const baseFolder = this.ensureFolder(getDirectoryPath(symLink.fullPath), ignoreParentWatch, options);
+                this.addFileOrFolderInFolder(baseFolder, symLink, ignoreWatchInvokedWithTriggerAsFileCreate, options);
             }
             else {
                 const fullPath = getNormalizedAbsolutePath(fileOrDirectoryOrSymLink.path, this.currentDirectory);
-                this.ensureFolder(getDirectoryPath(fullPath), ignoreParentWatch);
-                this.ensureFolder(fullPath, ignoreWatchInvokedWithTriggerAsFileCreate);
+                this.ensureFolder(getDirectoryPath(fullPath), ignoreParentWatch, options);
+                this.ensureFolder(fullPath, ignoreWatchInvokedWithTriggerAsFileCreate, options);
             }
         }
 
-        private ensureFolder(fullPath: string, ignoreWatch: boolean | undefined): FsFolder {
+        private ensureFolder(fullPath: string, ignoreWatch: boolean | undefined, options: Partial<WatchInvokeOptions> | undefined): FsFolder {
             const path = this.toPath(fullPath);
             let folder = this.fs.get(path) as FsFolder;
             if (!folder) {
@@ -560,8 +564,8 @@ interface Array<T> { length: number; [n: number]: T; }`
                 const baseFullPath = getDirectoryPath(fullPath);
                 if (fullPath !== baseFullPath) {
                     // Add folder in the base folder
-                    const baseFolder = this.ensureFolder(baseFullPath, ignoreWatch);
-                    this.addFileOrFolderInFolder(baseFolder, folder, ignoreWatch);
+                    const baseFolder = this.ensureFolder(baseFullPath, ignoreWatch, options);
+                    this.addFileOrFolderInFolder(baseFolder, folder, ignoreWatch, options);
                 }
                 else {
                     // root folder
@@ -574,7 +578,7 @@ interface Array<T> { length: number; [n: number]: T; }`
             return folder;
         }
 
-        private addFileOrFolderInFolder(folder: FsFolder, fileOrDirectory: FsFile | FsFolder | FsSymLink, ignoreWatch?: boolean) {
+        private addFileOrFolderInFolder(folder: FsFolder, fileOrDirectory: FsFile | FsFolder | FsSymLink, ignoreWatch?: boolean, options?: Partial<WatchInvokeOptions>) {
             if (!this.fs.has(fileOrDirectory.path)) {
                 insertSorted(folder.entries, fileOrDirectory, (a, b) => compareStringsCaseSensitive(getBaseFileName(a.path), getBaseFileName(b.path)));
             }
@@ -585,11 +589,14 @@ interface Array<T> { length: number; [n: number]: T; }`
             if (ignoreWatch) {
                 return;
             }
+            const inodeWatching = this.inodeWatching;
+            if (options?.skipInodeCheckOnCreate) this.inodeWatching = false;
             this.invokeFileAndFsWatches(fileOrDirectory.fullPath, FileWatcherEventKind.Created);
             this.invokeFileAndFsWatches(folder.fullPath, FileWatcherEventKind.Changed);
+            this.inodeWatching = inodeWatching;
         }
 
-        private removeFileOrFolder(fileOrDirectory: FsFile | FsFolder | FsSymLink, isRemovableLeafFolder: (folder: FsFolder) => boolean, isRenaming = false) {
+        private removeFileOrFolder(fileOrDirectory: FsFile | FsFolder | FsSymLink, isRenaming?: boolean, options?: Partial<WatchInvokeOptions>) {
             const basePath = getDirectoryPath(fileOrDirectory.path);
             const baseFolder = this.fs.get(basePath) as FsFolder;
             if (basePath !== fileOrDirectory.path) {
@@ -602,21 +609,16 @@ interface Array<T> { length: number; [n: number]: T; }`
             if (isFsFolder(fileOrDirectory)) {
                 Debug.assert(fileOrDirectory.entries.length === 0 || isRenaming);
             }
-            this.invokeFileAndFsWatches(fileOrDirectory.fullPath, FileWatcherEventKind.Deleted);
+            if (!options?.ignoreDelete) this.invokeFileAndFsWatches(fileOrDirectory.fullPath, FileWatcherEventKind.Deleted);
             this.inodes?.delete(fileOrDirectory.path);
-            this.invokeFileAndFsWatches(baseFolder.fullPath, FileWatcherEventKind.Changed);
-            if (basePath !== fileOrDirectory.path &&
-                baseFolder.entries.length === 0 &&
-                isRemovableLeafFolder(baseFolder)) {
-                this.removeFileOrFolder(baseFolder, isRemovableLeafFolder);
-            }
+            if (!options?.ignoreDelete) this.invokeFileAndFsWatches(baseFolder.fullPath, FileWatcherEventKind.Changed);
         }
 
         deleteFile(filePath: string) {
             const path = this.toFullPath(filePath);
             const currentEntry = this.fs.get(path) as FsFile;
             Debug.assert(isFsFile(currentEntry));
-            this.removeFileOrFolder(currentEntry, returnFalse);
+            this.removeFileOrFolder(currentEntry);
         }
 
         deleteFolder(folderPath: string, recursive?: boolean) {
@@ -630,11 +632,11 @@ interface Array<T> { length: number; [n: number]: T; }`
                         this.deleteFolder(fsEntry.fullPath, recursive);
                     }
                     else {
-                        this.removeFileOrFolder(fsEntry, returnFalse);
+                        this.removeFileOrFolder(fsEntry);
                     }
                 });
             }
-            this.removeFileOrFolder(currentEntry, returnFalse);
+            this.removeFileOrFolder(currentEntry);
         }
 
         private watchFileWorker(fileName: string, cb: FileWatcherCallback, pollingInterval: PollingInterval) {
@@ -947,11 +949,11 @@ interface Array<T> { length: number; [n: number]: T; }`
             }
         }
 
-        prependFile(path: string, content: string, options?: Partial<ReloadWatchInvokeOptions>): void {
+        prependFile(path: string, content: string, options?: Partial<WatchInvokeOptions>): void {
             this.modifyFile(path, content + this.readFile(path), options);
         }
 
-        appendFile(path: string, content: string, options?: Partial<ReloadWatchInvokeOptions>): void {
+        appendFile(path: string, content: string, options?: Partial<WatchInvokeOptions>): void {
             this.modifyFile(path, this.readFile(path) + content, options);
         }
 
