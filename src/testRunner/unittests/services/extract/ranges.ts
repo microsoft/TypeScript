@@ -9,7 +9,7 @@ namespace ts {
             }
             const result = refactor.extractSymbol.getRangeToExtract(file, createTextSpanFromRange(selectionRange), /*userRequested*/ false);
             assert(result.targetRange === undefined, "failure expected");
-            const sortedErrors = result.errors!.map(e => e.messageText as string).sort();
+            const sortedErrors = result.errors.map(e => e.messageText as string).sort();
             assert.deepEqual(sortedErrors, expectedErrors.sort(), "unexpected errors");
         });
     }

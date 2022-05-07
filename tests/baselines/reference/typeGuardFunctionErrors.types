@@ -343,7 +343,7 @@ if (hasMissingParameter()) {
 // repro #17297
 
 type Keys = 'a'|'b'|'c'
->Keys : Keys
+>Keys : "a" | "b" | "c"
 
 type KeySet<T extends Keys> = { [k in T]: true }
 >KeySet : KeySet<T>
@@ -355,11 +355,11 @@ declare function hasKey<T extends Keys>(x: KeySet<T>): x is KeySet<T|'d'>;
 >x : KeySet<T>
 
 type Foo = { 'a': string; }
->Foo : Foo
+>Foo : { a: string; }
 >'a' : string
 
 type Bar = { 'a': number; }
->Bar : Bar
+>Bar : { a: number; }
 >'a' : number
 
 interface NeedsFoo<T extends Foo> {

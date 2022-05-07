@@ -42,6 +42,7 @@ declare namespace ts.server.protocol {
         Rename = "rename",
         Saveto = "saveto",
         SignatureHelp = "signatureHelp",
+        FindSourceDefinition = "findSourceDefinition",
         Status = "status",
         TypeDefinition = "typeDefinition",
         ProjectInfo = "projectInfo",
@@ -660,6 +661,9 @@ declare namespace ts.server.protocol {
     }
     interface DefinitionAndBoundSpanRequest extends FileLocationRequest {
         readonly command: CommandTypes.DefinitionAndBoundSpan;
+    }
+    interface FindSourceDefinitionRequest extends FileLocationRequest {
+        readonly command: CommandTypes.FindSourceDefinition;
     }
     interface DefinitionAndBoundSpanResponse extends Response {
         readonly body: DefinitionInfoAndBoundSpan;
@@ -1821,6 +1825,7 @@ declare namespace ts.server.protocol {
         body?: CompletionInfo;
     }
     interface CompletionInfo {
+        readonly flags?: number;
         readonly isGlobalCompletion: boolean;
         readonly isMemberCompletion: boolean;
         readonly isNewIdentifierLocation: boolean;

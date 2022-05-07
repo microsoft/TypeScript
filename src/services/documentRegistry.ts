@@ -25,7 +25,7 @@ namespace ts {
          * shape of a the resulting SourceFile. This allows the DocumentRegistry to store
          * multiple copies of the same file for different compilation settings. A minimal
          * resolution cache is needed to fully define a source file's shape when
-         * the compilation settings include `module: node12`+, so providing a cache host
+         * the compilation settings include `module: node16`+, so providing a cache host
          * object should be preferred. A common host is a language service `ConfiguredProject`.
          * @param scriptSnapshot Text of the file. Only used if the file was not found
          * in the registry and a new one was created.
@@ -58,7 +58,7 @@ namespace ts {
          * shape of a the resulting SourceFile. This allows the DocumentRegistry to store
          * multiple copies of the same file for different compilation settings. A minimal
          * resolution cache is needed to fully define a source file's shape when
-         * the compilation settings include `module: node12`+, so providing a cache host
+         * the compilation settings include `module: node16`+, so providing a cache host
          * object should be preferred. A common host is a language service `ConfiguredProject`.
          * @param scriptSnapshot Text of the file.
          * @param version Current version of the file.
@@ -236,7 +236,7 @@ namespace ts {
                 // It is fairly suspicious to have one path in two buckets - you'd expect dependencies to have similar configurations.
                 // If this occurs unexpectedly, the fix is likely to synchronize the project settings.
                 // Skip .d.ts files to reduce noise (should also cover most of node_modules).
-                const otherBucketKey = !fileExtensionIs(path, Extension.Dts) &&
+                const otherBucketKey = !isDeclarationFileName(path) &&
                     forEachEntry(buckets, (bucket, bucketKey) => bucketKey !== key && bucket.has(path) && bucketKey);
                 if (otherBucketKey) {
                     tracing.instant(tracing.Phase.Session, "documentRegistryBucketOverlap", { path, key1: otherBucketKey, key2: key });

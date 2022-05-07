@@ -377,12 +377,12 @@ namespace ts.Completions.StringCompletions {
 
     function isEmitResolutionKindUsingNodeModules(compilerOptions: CompilerOptions): boolean {
         return getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.NodeJs ||
-            getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.Node12 ||
+            getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.Node16 ||
             getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.NodeNext;
     }
 
     function isEmitModuleResolutionRespectingExportMaps(compilerOptions: CompilerOptions) {
-        return getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.Node12 ||
+        return getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.Node16 ||
         getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.NodeNext;
     }
 

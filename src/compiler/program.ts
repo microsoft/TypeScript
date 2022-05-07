@@ -262,7 +262,7 @@ namespace ts {
             return newValue;
         };
         if (originalWriteFile) {
-            host.writeFile = (fileName, data, writeByteOrderMark, onError, sourceFiles) => {
+            host.writeFile = (fileName, data, ...rest) => {
                 const key = toPath(fileName);
                 fileExistsCache.delete(key);
 
@@ -277,7 +277,7 @@ namespace ts {
                         sourceFileCache.delete(key);
                     }
                 }
-                originalWriteFile.call(host, fileName, data, writeByteOrderMark, onError, sourceFiles);
+                originalWriteFile.call(host, fileName, data, ...rest);
             };
         }
 
@@ -593,7 +593,7 @@ namespace ts {
     }
 
     /* @internal */
-    export function getResolutionModeOverrideForClause(clause: AssertClause | undefined, grammarErrorOnNode?: (node: Node, diagnostic: DiagnosticMessage) => boolean) {
+    export function getResolutionModeOverrideForClause(clause: AssertClause | undefined, grammarErrorOnNode?: (node: Node, diagnostic: DiagnosticMessage) => void) {
         if (!clause) return undefined;
         if (length(clause.elements) !== 1) {
             grammarErrorOnNode?.(clause, Diagnostics.Type_import_assertions_should_have_exactly_one_key_resolution_mode_with_value_import_or_require);
@@ -858,7 +858,7 @@ namespace ts {
      */
     export function getImpliedNodeFormatForFile(fileName: Path, packageJsonInfoCache: PackageJsonInfoCache | undefined, host: ModuleResolutionHost, options: CompilerOptions): ModuleKind.ESNext | ModuleKind.CommonJS | undefined {
         switch (getEmitModuleResolutionKind(options)) {
-            case ModuleResolutionKind.Node12:
+            case ModuleResolutionKind.Node16:
             case ModuleResolutionKind.NodeNext:
                 return fileExtensionIsOneOf(fileName, [Extension.Dmts, Extension.Mts, Extension.Mjs]) ? ModuleKind.ESNext :
                     fileExtensionIsOneOf(fileName, [Extension.Dcts, Extension.Cts, Extension.Cjs]) ? ModuleKind.CommonJS :
@@ -913,7 +913,6 @@ namespace ts {
         Diagnostics.A_rest_parameter_cannot_have_an_initializer.code,
         Diagnostics.A_rest_parameter_must_be_last_in_a_parameter_list.code,
         Diagnostics.A_rest_parameter_or_binding_pattern_may_not_have_a_trailing_comma.code,
-        Diagnostics.A_return_statement_can_only_be_used_within_a_function_body.code,
         Diagnostics.A_return_statement_cannot_be_used_inside_a_class_static_block.code,
         Diagnostics.A_set_accessor_cannot_have_rest_parameter.code,
         Diagnostics.A_set_accessor_must_have_exactly_one_parameter.code,
@@ -1186,7 +1185,7 @@ namespace ts {
                             else if (getEmitModuleKind(parsedRef.commandLine.options) === ModuleKind.None) {
                                 const getCommonSourceDirectory = memoize(() => getCommonSourceDirectoryOfConfig(parsedRef.commandLine, !host.useCaseSensitiveFileNames()));
                                 for (const fileName of parsedRef.commandLine.fileNames) {
-                                    if (!fileExtensionIs(fileName, Extension.Dts) && !fileExtensionIs(fileName, Extension.Json)) {
+                                    if (!isDeclarationFileName(fileName) && !fileExtensionIs(fileName, Extension.Json)) {
                                         processProjectReferenceFile(getOutputDeclarationFileName(fileName, parsedRef.commandLine, !host.useCaseSensitiveFileNames(), getCommonSourceDirectory), { kind: FileIncludeKind.OutputFromProjectReference, index });
                                     }
                                 }
@@ -1210,7 +1209,7 @@ namespace ts {
                 const containingFilename = combinePaths(containingDirectory, inferredTypesContainingFile);
                 const resolutions = resolveTypeReferenceDirectiveNamesWorker(typeReferences, containingFilename);
                 for (let i = 0; i < typeReferences.length; i++) {
-                    // under node12/nodenext module resolution, load `types`/ata include names as cjs resolution results by passing an `undefined` mode
+                    // under node16/nodenext module resolution, load `types`/ata include names as cjs resolution results by passing an `undefined` mode
                     processTypeReferenceDirective(typeReferences[i], /*mode*/ undefined, resolutions[i], { kind: FileIncludeKind.AutomaticTypeDirectiveFile, typeReference: typeReferences[i], packageId: resolutions[i]?.packageId });
                 }
                 tracing?.pop();
@@ -1340,6 +1339,7 @@ namespace ts {
             useCaseSensitiveFileNames: () => host.useCaseSensitiveFileNames(),
             getFileIncludeReasons: () => fileReasons,
             structureIsReused,
+            writeFile,
         };
 
         onProgramCreateComplete();
@@ -1364,6 +1364,36 @@ namespace ts {
 
         return program;
 
+        function addResolutionDiagnostics(list: Diagnostic[] | undefined) {
+            if (!list) return;
+            for (const elem of list) {
+                programDiagnostics.add(elem);
+            }
+        }
+
+        function pullDiagnosticsFromCache(names: string[] | readonly FileReference[], containingFile: SourceFile) {
+            if (!moduleResolutionCache) return;
+            const containingFileName = getNormalizedAbsolutePath(containingFile.originalFileName, currentDirectory);
+            const containingFileMode = !isString(containingFile) ? containingFile.impliedNodeFormat : undefined;
+            const containingDir = getDirectoryPath(containingFileName);
+            const redirectedReference = getRedirectReferenceForResolution(containingFile);
+            let i = 0;
+            for (const n of names) {
+                // mimics logic done in the resolution cache, should be resilient to upgrading it to use `FileReference`s for non-type-reference modal lookups to make it rely on the index in the list less
+                const mode = typeof n === "string" ? getModeForResolutionAtIndex(containingFile, i) : getModeForFileReference(n, containingFileMode);
+                const name = typeof n === "string" ? n : n.fileName;
+                i++;
+                // only nonrelative names hit the cache, and, at least as of right now, only nonrelative names can issue diagnostics
+                // (Since diagnostics are only issued via import or export map lookup)
+                // This may totally change if/when the issue of output paths not mapping to input files is fixed in a broader context
+                // When it is, how we extract diagnostics from the module name resolver will have the be refined - the current cache
+                // APIs wrapping the underlying resolver make it almost impossible to smuggle the diagnostics out in a generalized way
+                if (isExternalModuleNameRelative(name)) continue;
+                const diags = moduleResolutionCache.getOrCreateCacheForModuleName(name, mode, redirectedReference).get(containingDir)?.resolutionDiagnostics;
+                addResolutionDiagnostics(diags);
+            }
+        }
+
         function resolveModuleNamesWorker(moduleNames: string[], containingFile: SourceFile, reusedNames: string[] | undefined): readonly ResolvedModuleFull[] {
             if (!moduleNames.length) return emptyArray;
             const containingFileName = getNormalizedAbsolutePath(containingFile.originalFileName, currentDirectory);
@@ -1374,6 +1404,7 @@ namespace ts {
             performance.mark("afterResolveModule");
             performance.measure("ResolveModule", "beforeResolveModule", "afterResolveModule");
             tracing?.pop();
+            pullDiagnosticsFromCache(moduleNames, containingFile);
             return result;
         }
 
@@ -1393,7 +1424,7 @@ namespace ts {
 
         function getRedirectReferenceForResolution(file: SourceFile) {
             const redirect = getResolvedProjectReferenceToRedirect(file.originalFileName);
-            if (redirect || !fileExtensionIsOneOf(file.originalFileName, [Extension.Dts, Extension.Dcts, Extension.Dmts])) return redirect;
+            if (redirect || !isDeclarationFileName(file.originalFileName)) return redirect;
 
             // The originalFileName could not be actual source file name if file found was d.ts from referecned project
             // So in this case try to look up if this is output from referenced project, if it is use the redirected project in that case
@@ -1894,8 +1925,7 @@ namespace ts {
                 getProjectReferenceRedirect,
                 isSourceOfProjectReferenceRedirect,
                 getSymlinkCache,
-                writeFile: writeFileCallback || (
-                    (fileName, data, writeByteOrderMark, onError, sourceFiles) => host.writeFile(fileName, data, writeByteOrderMark, onError, sourceFiles)),
+                writeFile: writeFileCallback || writeFile,
                 isEmitBlocked,
                 readFile: f => host.readFile(f),
                 fileExists: f => {
@@ -1912,6 +1942,17 @@ namespace ts {
                 redirectTargetsMap,
                 getFileIncludeReasons: program.getFileIncludeReasons,
             };
+        }
+
+        function writeFile(
+            fileName: string,
+            text: string,
+            writeByteOrderMark: boolean,
+            onError?: (message: string) => void,
+            sourceFiles?: readonly SourceFile[],
+            data?: WriteFileCallbackData
+        ) {
+            host.writeFile(fileName, text, writeByteOrderMark, onError, sourceFiles, data);
         }
 
         function emitBuildInfo(writeFileCallback?: WriteFileCallback): EmitResult {
@@ -2969,7 +3010,7 @@ namespace ts {
 
         function getProjectReferenceRedirectProject(fileName: string) {
             // Ignore dts or any json files
-            if (!resolvedProjectReferences || !resolvedProjectReferences.length || fileExtensionIs(fileName, Extension.Dts) || fileExtensionIs(fileName, Extension.Json)) {
+            if (!resolvedProjectReferences || !resolvedProjectReferences.length || isDeclarationFileName(fileName) || fileExtensionIs(fileName, Extension.Json)) {
                 return undefined;
             }
 
@@ -3025,7 +3066,7 @@ namespace ts {
                     else {
                         const getCommonSourceDirectory = memoize(() => getCommonSourceDirectoryOfConfig(resolvedRef.commandLine, !host.useCaseSensitiveFileNames()));
                         forEach(resolvedRef.commandLine.fileNames, fileName => {
-                            if (!fileExtensionIs(fileName, Extension.Dts) && !fileExtensionIs(fileName, Extension.Json)) {
+                            if (!isDeclarationFileName(fileName) && !fileExtensionIs(fileName, Extension.Json)) {
                                 const outputDts = getOutputDeclarationFileName(fileName, resolvedRef.commandLine, !host.useCaseSensitiveFileNames(), getCommonSourceDirectory);
                                 mapFromToProjectReferenceRedirectSource!.set(toPath(outputDts), fileName);
                             }
@@ -3074,8 +3115,8 @@ namespace ts {
                 const fileName = toFileNameLowerCase(ref.fileName);
                 setResolvedTypeReferenceDirective(file, fileName, resolvedTypeReferenceDirective);
                 const mode = ref.resolutionMode || file.impliedNodeFormat;
-                if (mode && getEmitModuleResolutionKind(options) !== ModuleResolutionKind.Node12 && getEmitModuleResolutionKind(options) !== ModuleResolutionKind.NodeNext) {
-                    programDiagnostics.add(createDiagnosticForRange(file, ref, Diagnostics.Resolution_modes_are_only_supported_when_moduleResolution_is_node12_or_nodenext));
+                if (mode && getEmitModuleResolutionKind(options) !== ModuleResolutionKind.Node16 && getEmitModuleResolutionKind(options) !== ModuleResolutionKind.NodeNext) {
+                    programDiagnostics.add(createDiagnosticForRange(file, ref, Diagnostics.Resolution_modes_are_only_supported_when_moduleResolution_is_node16_or_nodenext));
                 }
                 processTypeReferenceDirective(fileName, mode, resolvedTypeReferenceDirective, { kind: FileIncludeKind.TypeReferenceDirective, file: file.path, index, });
             }
@@ -3504,7 +3545,7 @@ namespace ts {
 
             if (options.resolveJsonModule) {
                 if (getEmitModuleResolutionKind(options) !== ModuleResolutionKind.NodeJs &&
-                    getEmitModuleResolutionKind(options) !== ModuleResolutionKind.Node12 &&
+                    getEmitModuleResolutionKind(options) !== ModuleResolutionKind.Node16 &&
                     getEmitModuleResolutionKind(options) !== ModuleResolutionKind.NodeNext) {
                     createDiagnosticForOptionName(Diagnostics.Option_resolveJsonModule_cannot_be_specified_without_node_module_resolution_strategy, "resolveJsonModule");
                 }
@@ -3947,7 +3988,7 @@ namespace ts {
                 return containsPath(options.outDir, filePath, currentDirectory, !host.useCaseSensitiveFileNames());
             }
 
-            if (fileExtensionIsOneOf(filePath, supportedJSExtensionsFlat) || fileExtensionIs(filePath, Extension.Dts)) {
+            if (fileExtensionIsOneOf(filePath, supportedJSExtensionsFlat) || isDeclarationFileName(filePath)) {
                 // Otherwise just check if sourceFile with the name exists
                 const filePathWithoutExtension = removeFileExtension(filePath);
                 return !!getSourceFileByPath((filePathWithoutExtension + Extension.Ts) as Path) ||

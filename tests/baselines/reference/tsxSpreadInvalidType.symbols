@@ -1,0 +1,34 @@
+=== tests/cases/conformance/jsx/a.tsx ===
+namespace JSX {
+>JSX : Symbol(JSX, Decl(a.tsx, 0, 0))
+
+    export interface IntrinsicElements { [key: string]: any }
+>IntrinsicElements : Symbol(IntrinsicElements, Decl(a.tsx, 0, 15))
+>key : Symbol(key, Decl(a.tsx, 1, 42))
+}
+
+const a = {} as never;
+>a : Symbol(a, Decl(a.tsx, 4, 5))
+
+const b = null;
+>b : Symbol(b, Decl(a.tsx, 5, 5))
+
+const c = undefined;
+>c : Symbol(c, Decl(a.tsx, 6, 5))
+>undefined : Symbol(undefined)
+
+const d = <div { ...a } />
+>d : Symbol(d, Decl(a.tsx, 8, 5))
+>div : Symbol(JSX.IntrinsicElements, Decl(a.tsx, 0, 15))
+>a : Symbol(a, Decl(a.tsx, 4, 5))
+
+const e = <div { ...b } />
+>e : Symbol(e, Decl(a.tsx, 9, 5))
+>div : Symbol(JSX.IntrinsicElements, Decl(a.tsx, 0, 15))
+>b : Symbol(b, Decl(a.tsx, 5, 5))
+
+const f = <div { ...c } />
+>f : Symbol(f, Decl(a.tsx, 10, 5))
+>div : Symbol(JSX.IntrinsicElements, Decl(a.tsx, 0, 15))
+>c : Symbol(c, Decl(a.tsx, 6, 5))
+

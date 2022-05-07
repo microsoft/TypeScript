@@ -267,7 +267,7 @@ namespace ts {
 
         /*
          * Unlike `realpath and `readDirectory`, `readFile` and `fileExists` are now _required_
-         * to properly acquire and setup source files under module: node12+ modes.
+         * to properly acquire and setup source files under module: node16+ modes.
          */
         readFile(path: string, encoding?: string): string | undefined;
         fileExists(path: string): boolean;
@@ -472,6 +472,12 @@ namespace ts {
 
         getSmartSelectionRange(fileName: string, position: number): SelectionRange;
 
+        /*@internal*/
+        // eslint-disable-next-line @typescript-eslint/unified-signatures
+        getDefinitionAtPosition(fileName: string, position: number, searchOtherFilesOnly: false, stopAtAlias: boolean): readonly DefinitionInfo[] | undefined;
+        /*@internal*/
+        // eslint-disable-next-line @typescript-eslint/unified-signatures
+        getDefinitionAtPosition(fileName: string, position: number, searchOtherFilesOnly: boolean, stopAtAlias: false): readonly DefinitionInfo[] | undefined;
         getDefinitionAtPosition(fileName: string, position: number): readonly DefinitionInfo[] | undefined;
         getDefinitionAndBoundSpan(fileName: string, position: number): DefinitionInfoAndBoundSpan | undefined;
         getTypeDefinitionAtPosition(fileName: string, position: number): readonly DefinitionInfo[] | undefined;
@@ -1032,6 +1038,8 @@ namespace ts {
         containerName: string;
         unverified?: boolean;
         /* @internal */ isLocal?: boolean;
+        /* @internal */ isAmbient?: boolean;
+        /* @internal */ failedAliasResolution?: boolean;
     }
 
     export interface DefinitionInfoAndBoundSpan {
@@ -1171,7 +1179,20 @@ namespace ts {
         argumentCount: number;
     }
 
+    // Do not change existing values, as they exist in telemetry.
+    export const enum CompletionInfoFlags {
+        None = 0,
+        MayIncludeAutoImports = 1 << 0,
+        IsImportStatementCompletion = 1 << 1,
+        IsContinuation = 1 << 2,
+        ResolvedModuleSpecifiers = 1 << 3,
+        ResolvedModuleSpecifiersBeyondLimit = 1 << 4,
+        MayIncludeMethodSnippets = 1 << 5,
+    }
+
     export interface CompletionInfo {
+        /** For performance telemetry. */
+        flags?: CompletionInfoFlags;
         /** Not true for all global completions. This will be true if the enclosing scope matches a few syntax kinds. See `isSnippetScope`. */
         isGlobalCompletion: boolean;
         isMemberCompletion: boolean;

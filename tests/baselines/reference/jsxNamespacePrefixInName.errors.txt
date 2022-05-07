@@ -19,6 +19,7 @@ tests/cases/compiler/jsxNamespacePrefixInName.tsx(21,21): error TS1003: Identifi
 tests/cases/compiler/jsxNamespacePrefixInName.tsx(22,26): error TS1003: Identifier expected.
 tests/cases/compiler/jsxNamespacePrefixInName.tsx(22,27): error TS1003: Identifier expected.
 tests/cases/compiler/jsxNamespacePrefixInName.tsx(22,29): error TS1005: '...' expected.
+tests/cases/compiler/jsxNamespacePrefixInName.tsx(22,29): error TS2698: Spread types may only be created from object types.
 tests/cases/compiler/jsxNamespacePrefixInName.tsx(24,21): error TS1109: Expression expected.
 tests/cases/compiler/jsxNamespacePrefixInName.tsx(24,22): error TS1109: Expression expected.
 tests/cases/compiler/jsxNamespacePrefixInName.tsx(24,25): error TS1005: ',' expected.
@@ -29,7 +30,7 @@ tests/cases/compiler/jsxNamespacePrefixInName.tsx(24,42): error TS1109: Expressi
 tests/cases/compiler/jsxNamespacePrefixInName.tsx(25,24): error TS1003: Identifier expected.
 
 
-==== tests/cases/compiler/jsxNamespacePrefixInName.tsx (29 errors) ====
+==== tests/cases/compiler/jsxNamespacePrefixInName.tsx (30 errors) ====
     var justElement1 = <a:element />;
     var justElement2 = <a:element></a:element>;
     var justElement3 = <a:element attr={"value"}></a:element>;
@@ -94,6 +95,8 @@ tests/cases/compiler/jsxNamespacePrefixInName.tsx(25,24): error TS1003: Identifi
 !!! error TS1003: Identifier expected.
                                 ~~~~~~~
 !!! error TS1005: '...' expected.
+                                ~~~~~~~
+!!! error TS2698: Spread types may only be created from object types.
     
     var beginOfIdent1 = <:a attr={"value"} />;
                         ~

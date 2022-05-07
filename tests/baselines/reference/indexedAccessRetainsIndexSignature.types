@@ -17,7 +17,7 @@ type Omit2<T, K extends keyof T> = {[P in Diff<keyof T, K>]: T[P]};
 >Omit2 : Omit2<T, K>
 
 type O = Omit<{ a: number, b: string }, 'a'>
->O : O
+>O : { b: string; }
 >a : number
 >b : string
 

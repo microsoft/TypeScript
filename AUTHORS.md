@@ -169,6 +169,7 @@ TypeScript is authored by:
  - Gabriel Isenberg
  - Gabriela Araujo Britto
  - Gabriela Britto
+ - Gao Sheng
  - gb714us
  - Gilad Peleg
  - Godfrey Chan

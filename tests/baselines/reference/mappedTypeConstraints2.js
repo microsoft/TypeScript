@@ -25,19 +25,52 @@ type Foo<T extends string> = {
 
 const get = <T extends string>(t: T, foo: Foo<T>): T => foo[`get${t}`];  // Type 'Foo<T>[`get${T}`]' is not assignable to type 'T'
 
+// Repro from #48626
+
+interface Bounds {
+    min: number;
+    max: number;
+}
+
+type NumericBoundsOf<T> = {
+    [K in keyof T as T[K] extends number | undefined ? K : never]: Bounds;
+}
+
+function validate<T extends object>(obj: T, bounds: NumericBoundsOf<T>) {
+    for (const [key, val] of Object.entries(obj)) {
+        const boundsForKey = bounds[key as keyof NumericBoundsOf<T>];
+        if (boundsForKey) {
+            const { min, max } = boundsForKey;
+            if (min > val || max < val) return false;
+        }
+    }
+    return true;
+}
+
 
 //// [mappedTypeConstraints2.js]
 "use strict";
 function f1(obj, key) {
-    var x = obj[key];
+    const x = obj[key];
 }
 function f2(obj, key) {
-    var x = obj[key]; // Error
+    const x = obj[key]; // Error
 }
 function f3(obj, key) {
-    var x = obj[key]; // Error
+    const x = obj[key]; // Error
 }
-var get = function (t, foo) { return foo["get".concat(t)]; }; // Type 'Foo<T>[`get${T}`]' is not assignable to type 'T'
+const get = (t, foo) => foo[`get${t}`]; // Type 'Foo<T>[`get${T}`]' is not assignable to type 'T'
+function validate(obj, bounds) {
+    for (const [key, val] of Object.entries(obj)) {
+        const boundsForKey = bounds[key];
+        if (boundsForKey) {
+            const { min, max } = boundsForKey;
+            if (min > val || max < val)
+                return false;
+        }
+    }
+    return true;
+}
 
 
 //// [mappedTypeConstraints2.d.ts]
@@ -63,3 +96,11 @@ declare type Foo<T extends string> = {
     [RemappedT in T as `get${RemappedT}`]: RemappedT;
 };
 declare const get: <T extends string>(t: T, foo: Foo<T>) => T;
+interface Bounds {
+    min: number;
+    max: number;
+}
+declare type NumericBoundsOf<T> = {
+    [K in keyof T as T[K] extends number | undefined ? K : never]: Bounds;
+};
+declare function validate<T extends object>(obj: T, bounds: NumericBoundsOf<T>): boolean;

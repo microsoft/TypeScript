@@ -1,6 +1,6 @@
-/index.ts(1,23): error TS1452: Resolution modes are only supported when `moduleResolution` is `node12` or `nodenext`.
+/index.ts(1,23): error TS1452: Resolution modes are only supported when `moduleResolution` is `node16` or `nodenext`.
 /index.ts(1,23): error TS2688: Cannot find type definition file for 'pkg'.
-/index.ts(2,23): error TS1452: Resolution modes are only supported when `moduleResolution` is `node12` or `nodenext`.
+/index.ts(2,23): error TS1452: Resolution modes are only supported when `moduleResolution` is `node16` or `nodenext`.
 /index.ts(2,23): error TS2688: Cannot find type definition file for 'pkg'.
 /index.ts(3,1): error TS2304: Cannot find name 'foo'.
 /index.ts(4,1): error TS2304: Cannot find name 'bar'.
@@ -9,12 +9,12 @@
 ==== /index.ts (6 errors) ====
     /// <reference types="pkg" resolution-mode="require" />
                           ~~~
-!!! error TS1452: Resolution modes are only supported when `moduleResolution` is `node12` or `nodenext`.
+!!! error TS1452: Resolution modes are only supported when `moduleResolution` is `node16` or `nodenext`.
                           ~~~
 !!! error TS2688: Cannot find type definition file for 'pkg'.
     /// <reference types="pkg" resolution-mode="import" />
                           ~~~
-!!! error TS1452: Resolution modes are only supported when `moduleResolution` is `node12` or `nodenext`.
+!!! error TS1452: Resolution modes are only supported when `moduleResolution` is `node16` or `nodenext`.
                           ~~~
 !!! error TS2688: Cannot find type definition file for 'pkg'.
     foo; // `resolution-mode` is an error in old resolution settings, which resolves is arbitrary
