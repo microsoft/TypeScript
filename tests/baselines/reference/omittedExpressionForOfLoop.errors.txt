@@ -1,0 +1,8 @@
+tests/cases/compiler/omittedExpressionForOfLoop.ts(1,19): error TS2304: Cannot find name 'doesNotExist'.
+
+
+==== tests/cases/compiler/omittedExpressionForOfLoop.ts (1 errors) ====
+    for (const [,] of doesNotExist) {
+                      ~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'doesNotExist'.
+    }

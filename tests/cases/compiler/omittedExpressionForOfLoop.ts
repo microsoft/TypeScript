@@ -1,0 +1,2 @@
+for (const [,] of doesNotExist) {
+}

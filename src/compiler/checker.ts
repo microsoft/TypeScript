@@ -37830,6 +37830,12 @@ namespace ts {
             return checkVariableLikeDeclaration(node);
         }
 
+        function checkOmittedExpression(node: OmittedExpression) {
+            if (node.parent.parent?.parent?.parent.kind === SyntaxKind.ForOfStatement) {
+                checkRightHandSideOfForOf(node.parent.parent.parent.parent as ForOfStatement);
+            }
+        }
+
         function checkVariableStatement(node: VariableStatement) {
             // Grammar checking
             if (!checkGrammarDecoratorsAndModifiers(node) && !checkGrammarVariableDeclarationList(node.declarationList)) checkGrammarForDisallowedLetOrConstStatement(node);
@@ -41261,6 +41267,8 @@ namespace ts {
                     return checkVariableDeclaration(node as VariableDeclaration);
                 case SyntaxKind.BindingElement:
                     return checkBindingElement(node as BindingElement);
+                case SyntaxKind.OmittedExpression:
+                    return checkOmittedExpression(node as OmittedExpression);
                 case SyntaxKind.ClassDeclaration:
                     return checkClassDeclaration(node as ClassDeclaration);
                 case SyntaxKind.InterfaceDeclaration:

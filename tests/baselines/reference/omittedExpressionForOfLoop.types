@@ -1,0 +1,5 @@
+=== tests/cases/compiler/omittedExpressionForOfLoop.ts ===
+for (const [,] of doesNotExist) {
+> : undefined
+>doesNotExist : any
+}
