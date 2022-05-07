@@ -37,3 +37,29 @@ function add3(a, b) { return a + b; }
 >a : Symbol(a, Decl(test.js, 17, 14))
 >b : Symbol(b, Decl(test.js, 17, 16))
 
+// Confirm initializers are compatible.
+// They can't have more parameters than the type/context.
+
+/** @type {() => void} */
+function funcWithMoreParameters(more) {} // error
+>funcWithMoreParameters : Symbol(funcWithMoreParameters, Decl(test.js, 17, 37))
+>more : Symbol(more, Decl(test.js, 23, 32))
+
+/** @type {() => void} */
+const variableWithMoreParameters = function (more) {}; // error
+>variableWithMoreParameters : Symbol(variableWithMoreParameters, Decl(test.js, 26, 5))
+>more : Symbol(more, Decl(test.js, 26, 45))
+
+/** @type {() => void} */
+const arrowWithMoreParameters = (more) => {}; // error
+>arrowWithMoreParameters : Symbol(arrowWithMoreParameters, Decl(test.js, 29, 5))
+>more : Symbol(more, Decl(test.js, 29, 33))
+
+({
+  /** @type {() => void} */
+  methodWithMoreParameters(more) {}, // error
+>methodWithMoreParameters : Symbol(methodWithMoreParameters, Decl(test.js, 31, 2))
+>more : Symbol(more, Decl(test.js, 33, 27))
+
+});
+
