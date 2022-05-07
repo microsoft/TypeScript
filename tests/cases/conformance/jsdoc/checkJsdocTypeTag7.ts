@@ -10,4 +10,7 @@
 class C {
     /** @type {Foo} */
     foo(a, b) {}
+
+    /** @type {(optional?) => void} */
+    methodWithOptionalParameters() {}
 }

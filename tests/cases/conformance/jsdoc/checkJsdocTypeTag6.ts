@@ -26,15 +26,15 @@ function add3(a, b) { return a + b; }
 // They can't have more parameters than the type/context.
 
 /** @type {() => void} */
-function func(more) {} // error
+function funcWithMoreParameters(more) {} // error
 
 /** @type {() => void} */
-const variable = function (more) {}; // error
+const variableWithMoreParameters = function (more) {}; // error
 
 /** @type {() => void} */
-const arrow = (more) => {}; // error
+const arrowWithMoreParameters = (more) => {}; // error
 
 ({
   /** @type {() => void} */
-  method(more) {}, // error
+  methodWithMoreParameters(more) {}, // error
 });
