@@ -459,6 +459,7 @@ namespace ts.codefix {
         const importAdder = createImportAdder(context.sourceFile, context.program, context.preferences, context.host);
         const functionDeclaration = createSignatureDeclarationFromCallExpression(SyntaxKind.FunctionDeclaration, context, importAdder, info.call, idText(info.token), info.modifierFlags, info.parentDeclaration) as FunctionDeclaration;
         changes.insertNodeAtEndOfScope(info.sourceFile, info.parentDeclaration, functionDeclaration);
+        importAdder.writeFixes(changes);
     }
 
     function addJsxAttributes(changes: textChanges.ChangeTracker, context: CodeFixContextBase, info: JsxAttributesInfo) {
@@ -468,7 +469,7 @@ namespace ts.codefix {
         const jsxAttributesNode = info.parentDeclaration.attributes;
         const hasSpreadAttribute = some(jsxAttributesNode.properties, isJsxSpreadAttribute);
         const attrs = map(info.attributes, attr => {
-            const value = tryGetValueFromType(context, checker, importAdder, quotePreference, checker.getTypeOfSymbol(attr));
+            const value = tryGetValueFromType(context, checker, importAdder, quotePreference, checker.getTypeOfSymbol(attr), info.parentDeclaration);
             const name = factory.createIdentifier(attr.name);
             const jsxAttribute = factory.createJsxAttribute(name, factory.createJsxExpression(/*dotDotDotToken*/ undefined, value));
             // formattingScanner requires the Identifier to have a context for scanning attributes with "-" (data-foo).
@@ -478,6 +479,7 @@ namespace ts.codefix {
         const jsxAttributes = factory.createJsxAttributes(hasSpreadAttribute ? [...attrs, ...jsxAttributesNode.properties] : [...jsxAttributesNode.properties, ...attrs]);
         const options = { prefix: jsxAttributesNode.pos === jsxAttributesNode.end ? " " : undefined };
         changes.replaceNode(context.sourceFile, jsxAttributesNode, jsxAttributes, options);
+        importAdder.writeFixes(changes);
     }
 
     function addObjectLiteralProperties(changes: textChanges.ChangeTracker, context: CodeFixContextBase, info: ObjectLiteralInfo) {
@@ -486,7 +488,7 @@ namespace ts.codefix {
         const target = getEmitScriptTarget(context.program.getCompilerOptions());
         const checker = context.program.getTypeChecker();
         const props = map(info.properties, prop => {
-            const initializer = tryGetValueFromType(context, checker, importAdder, quotePreference, checker.getTypeOfSymbol(prop));
+            const initializer = tryGetValueFromType(context, checker, importAdder, quotePreference, checker.getTypeOfSymbol(prop), info.parentDeclaration);
             return factory.createPropertyAssignment(createPropertyNameNodeForIdentifierOrLiteral(prop.name, target, quotePreference === QuotePreference.Single), initializer);
         });
         const options = {
@@ -495,9 +497,10 @@ namespace ts.codefix {
             indentation: info.indentation
         };
         changes.replaceNode(context.sourceFile, info.parentDeclaration, factory.createObjectLiteralExpression([...info.parentDeclaration.properties, ...props], /*multiLine*/ true), options);
+        importAdder.writeFixes(changes);
     }
 
-    function tryGetValueFromType(context: CodeFixContextBase, checker: TypeChecker, importAdder: ImportAdder, quotePreference: QuotePreference, type: Type): Expression {
+    function tryGetValueFromType(context: CodeFixContextBase, checker: TypeChecker, importAdder: ImportAdder, quotePreference: QuotePreference, type: Type, enclosingDeclaration: Node | undefined): Expression {
         if (type.flags & TypeFlags.AnyOrUnknown) {
             return createUndefined();
         }
@@ -534,7 +537,7 @@ namespace ts.codefix {
             return factory.createNull();
         }
         if (type.flags & TypeFlags.Union) {
-            const expression = firstDefined((type as UnionType).types, t => tryGetValueFromType(context, checker, importAdder, quotePreference, t));
+            const expression = firstDefined((type as UnionType).types, t => tryGetValueFromType(context, checker, importAdder, quotePreference, t, enclosingDeclaration));
             return expression ?? createUndefined();
         }
         if (checker.isArrayLikeType(type)) {
@@ -542,7 +545,7 @@ namespace ts.codefix {
         }
         if (isObjectLiteralType(type)) {
             const props = map(checker.getPropertiesOfType(type), prop => {
-                const initializer = prop.valueDeclaration ? tryGetValueFromType(context, checker, importAdder, quotePreference, checker.getTypeAtLocation(prop.valueDeclaration)) : createUndefined();
+                const initializer = prop.valueDeclaration ? tryGetValueFromType(context, checker, importAdder, quotePreference, checker.getTypeAtLocation(prop.valueDeclaration), enclosingDeclaration) : createUndefined();
                 return factory.createPropertyAssignment(prop.name, initializer);
             });
             return factory.createObjectLiteralExpression(props, /*multiLine*/ true);
@@ -555,7 +558,7 @@ namespace ts.codefix {
             if (signature === undefined) return createUndefined();
 
             const func = createSignatureDeclarationFromSignature(SyntaxKind.FunctionExpression, context, quotePreference, signature[0],
-                createStubbedBody(Diagnostics.Function_not_implemented.message, quotePreference), /*name*/ undefined, /*modifiers*/ undefined, /*optional*/ undefined, /*enclosingDeclaration*/ undefined, importAdder) as FunctionExpression | undefined;
+                createStubbedBody(Diagnostics.Function_not_implemented.message, quotePreference), /*name*/ undefined, /*modifiers*/ undefined, /*optional*/ undefined, /*enclosingDeclaration*/ enclosingDeclaration, importAdder) as FunctionExpression | undefined;
             return func ?? createUndefined();
         }
         if (getObjectFlags(type) & ObjectFlags.Class) {
