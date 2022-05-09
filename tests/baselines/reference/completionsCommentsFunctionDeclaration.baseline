@@ -6,6 +6,7 @@
       "name": "3"
     },
     "completionList": {
+      "flags": 0,
       "isGlobalCompletion": true,
       "isMemberCompletion": false,
       "isNewIdentifierLocation": false,
@@ -1070,7 +1071,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI.",
+                  "text": "A value representing an unencoded URI.",
                   "kind": "text"
                 }
               ]
@@ -1183,7 +1184,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI component.",
+                  "text": "A value representing an unencoded URI component.",
                   "kind": "text"
                 }
               ]
@@ -4316,6 +4317,7 @@
       "name": "7"
     },
     "completionList": {
+      "flags": 0,
       "isGlobalCompletion": false,
       "isMemberCompletion": false,
       "isNewIdentifierLocation": true,
@@ -5341,7 +5343,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI.",
+                  "text": "A value representing an unencoded URI.",
                   "kind": "text"
                 }
               ]
@@ -5454,7 +5456,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI component.",
+                  "text": "A value representing an unencoded URI component.",
                   "kind": "text"
                 }
               ]
@@ -7792,6 +7794,7 @@
       "name": "9"
     },
     "completionList": {
+      "flags": 0,
       "isGlobalCompletion": true,
       "isMemberCompletion": false,
       "isNewIdentifierLocation": false,
@@ -8856,7 +8859,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI.",
+                  "text": "A value representing an unencoded URI.",
                   "kind": "text"
                 }
               ]
@@ -8969,7 +8972,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI component.",
+                  "text": "A value representing an unencoded URI component.",
                   "kind": "text"
                 }
               ]

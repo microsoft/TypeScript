@@ -70,9 +70,9 @@ Semantic diagnostics in builder refreshed for::
 
 Shape signatures in builder refreshed for::
 /lib/lib.d.ts (used version)
-/src/project/src/filepresent.ts (used version)
-/src/project/src/anotherfilewithsamereferenes.ts (used version)
-/src/project/src/main.ts (used version)
+/src/project/src/filepresent.ts (computed .d.ts during emit)
+/src/project/src/anotherfilewithsamereferenes.ts (computed .d.ts during emit)
+/src/project/src/main.ts (computed .d.ts during emit)
 
 
 //// [/src/project/src/anotherFileWithSameReferenes.d.ts]
@@ -106,7 +106,7 @@ function main() { }
 
 
 //// [/src/project/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../lib/lib.d.ts","./src/filepresent.ts","./src/anotherfilewithsamereferenes.ts","./src/main.ts","./src/filenotfound.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-12346563362-function something() { return 10; }","affectsGlobalScope":true},{"version":"-28237004260-/// <reference path=\"./filePresent.ts\"/>\n/// <reference path=\"./fileNotFound.ts\"/>\nfunction anotherFileWithSameReferenes() { }\n","affectsGlobalScope":true},{"version":"-21256825585-/// <reference path=\"./filePresent.ts\"/>\n/// <reference path=\"./fileNotFound.ts\"/>\nfunction main() { }\n","affectsGlobalScope":true}],"options":{"composite":true},"fileIdsList":[[2,5]],"referencedMap":[[3,1],[4,1]],"exportedModulesMap":[[3,1],[4,1]],"semanticDiagnosticsPerFile":[1,3,2,4]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../lib/lib.d.ts","./src/filepresent.ts","./src/anotherfilewithsamereferenes.ts","./src/main.ts","./src/filenotfound.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-12346563362-function something() { return 10; }","signature":"-2893492081-declare function something(): number;\r\n","affectsGlobalScope":true},{"version":"-28237004260-/// <reference path=\"./filePresent.ts\"/>\n/// <reference path=\"./fileNotFound.ts\"/>\nfunction anotherFileWithSameReferenes() { }\n","signature":"5108835150-/// <reference path=\"filePresent.d.ts\" />\r\ndeclare function anotherFileWithSameReferenes(): void;\r\n","affectsGlobalScope":true},{"version":"-21256825585-/// <reference path=\"./filePresent.ts\"/>\n/// <reference path=\"./fileNotFound.ts\"/>\nfunction main() { }\n","signature":"-7575087679-/// <reference path=\"filePresent.d.ts\" />\r\ndeclare function main(): void;\r\n","affectsGlobalScope":true}],"options":{"composite":true},"fileIdsList":[[2,5]],"referencedMap":[[3,1],[4,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,3,2,4]},"version":"FakeTSVersion"}
 
 //// [/src/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -132,17 +132,17 @@ function main() { }
       },
       "./src/filepresent.ts": {
         "version": "-12346563362-function something() { return 10; }",
-        "signature": "-12346563362-function something() { return 10; }",
+        "signature": "-2893492081-declare function something(): number;\r\n",
         "affectsGlobalScope": true
       },
       "./src/anotherfilewithsamereferenes.ts": {
         "version": "-28237004260-/// <reference path=\"./filePresent.ts\"/>\n/// <reference path=\"./fileNotFound.ts\"/>\nfunction anotherFileWithSameReferenes() { }\n",
-        "signature": "-28237004260-/// <reference path=\"./filePresent.ts\"/>\n/// <reference path=\"./fileNotFound.ts\"/>\nfunction anotherFileWithSameReferenes() { }\n",
+        "signature": "5108835150-/// <reference path=\"filePresent.d.ts\" />\r\ndeclare function anotherFileWithSameReferenes(): void;\r\n",
         "affectsGlobalScope": true
       },
       "./src/main.ts": {
         "version": "-21256825585-/// <reference path=\"./filePresent.ts\"/>\n/// <reference path=\"./fileNotFound.ts\"/>\nfunction main() { }\n",
-        "signature": "-21256825585-/// <reference path=\"./filePresent.ts\"/>\n/// <reference path=\"./fileNotFound.ts\"/>\nfunction main() { }\n",
+        "signature": "-7575087679-/// <reference path=\"filePresent.d.ts\" />\r\ndeclare function main(): void;\r\n",
         "affectsGlobalScope": true
       }
     },
@@ -159,16 +159,7 @@ function main() { }
         "./src/filenotfound.ts"
       ]
     },
-    "exportedModulesMap": {
-      "./src/anotherfilewithsamereferenes.ts": [
-        "./src/filepresent.ts",
-        "./src/filenotfound.ts"
-      ],
-      "./src/main.ts": [
-        "./src/filepresent.ts",
-        "./src/filenotfound.ts"
-      ]
-    },
+    "exportedModulesMap": {},
     "semanticDiagnosticsPerFile": [
       "../../lib/lib.d.ts",
       "./src/anotherfilewithsamereferenes.ts",
@@ -177,7 +168,7 @@ function main() { }
     ]
   },
   "version": "FakeTSVersion",
-  "size": 1266
+  "size": 1562
 }
 
 
@@ -260,21 +251,12 @@ Program files::
 /src/project/src/main.ts
 
 Semantic diagnostics in builder refreshed for::
-/lib/lib.d.ts
-/src/project/src/filePresent.ts
-/src/project/src/anotherFileWithSameReferenes.ts
 /src/project/src/main.ts
 
 Shape signatures in builder refreshed for::
 /src/project/src/main.ts (computed .d.ts)
-/src/project/src/filepresent.ts (computed .d.ts)
-/src/project/src/anotherfilewithsamereferenes.ts (computed .d.ts)
 
 
-//// [/src/project/src/anotherFileWithSameReferenes.d.ts] file written with same contents
-//// [/src/project/src/anotherFileWithSameReferenes.js] file written with same contents
-//// [/src/project/src/filePresent.d.ts] file written with same contents
-//// [/src/project/src/filePresent.js] file written with same contents
 //// [/src/project/src/main.d.ts] file written with same contents
 //// [/src/project/src/main.js]
 /// <reference path="./filePresent.ts"/>

@@ -360,7 +360,7 @@ interface Array<T> { length: number; [n: number]: T; }`
         DynamicPolling = "RecursiveDirectoryUsingDynamicPriorityPolling"
     }
 
-    const timeIncrements = 1000;
+    export const timeIncrements = 1000;
     export interface TestServerHostOptions {
         useCaseSensitiveFileNames: boolean;
         executingFilePath: string;
@@ -396,6 +396,7 @@ interface Array<T> { length: number; [n: number]: T; }`
         private readonly currentDirectory: string;
         public require: ((initialPath: string, moduleName: string) => RequireResult) | undefined;
         public defaultWatchFileKind?: () => WatchFileKind | undefined;
+        public storeFilesChangingSignatureDuringEmit = true;
         watchFile: HostWatchFile;
         watchDirectory: HostWatchDirectory;
         constructor(

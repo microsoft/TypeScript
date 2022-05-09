@@ -249,7 +249,7 @@ namespace compiler {
         }
 
         // establish defaults (aligns with old harness)
-        if (compilerOptions.target === undefined && compilerOptions.module !== ts.ModuleKind.Node12 && compilerOptions.module !== ts.ModuleKind.NodeNext) compilerOptions.target = ts.ScriptTarget.ES3;
+        if (compilerOptions.target === undefined && compilerOptions.module !== ts.ModuleKind.Node16 && compilerOptions.module !== ts.ModuleKind.NodeNext) compilerOptions.target = ts.ScriptTarget.ES3;
         if (compilerOptions.newLine === undefined) compilerOptions.newLine = ts.NewLineKind.CarriageReturnLineFeed;
         if (compilerOptions.skipDefaultLibCheck === undefined) compilerOptions.skipDefaultLibCheck = true;
         if (compilerOptions.noErrorTruncation === undefined) compilerOptions.noErrorTruncation = true;

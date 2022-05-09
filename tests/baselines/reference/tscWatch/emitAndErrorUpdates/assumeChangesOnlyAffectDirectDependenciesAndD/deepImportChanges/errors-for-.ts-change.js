@@ -61,9 +61,9 @@ Semantic diagnostics in builder refreshed for::
 
 Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
-/user/username/projects/myproject/c.ts (used version)
-/user/username/projects/myproject/b.ts (used version)
-/user/username/projects/myproject/a.ts (used version)
+/user/username/projects/myproject/c.ts (computed .d.ts during emit)
+/user/username/projects/myproject/b.ts (computed .d.ts during emit)
+/user/username/projects/myproject/a.ts (computed .d.ts during emit)
 
 WatchedFiles::
 /user/username/projects/myproject/tsconfig.json:
@@ -154,12 +154,7 @@ Output::
 >> Screen clear
 [[90m12:00:42 AM[0m] File change detected. Starting incremental compilation...
 
-[96ma.ts[0m:[93m4[0m:[93m17[0m - [91merror[0m[90m TS2339: [0mProperty 'd' does not exist on type 'C'.
-
-[7m4[0m console.log(b.c.d);
-[7m [0m [91m                ~[0m
-
-[[90m12:01:01 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:00:55 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -175,12 +170,10 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 /user/username/projects/myproject/c.ts
 /user/username/projects/myproject/b.ts
-/user/username/projects/myproject/a.ts
 
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/c.ts (computed .d.ts)
 /user/username/projects/myproject/b.ts (computed .d.ts)
-/user/username/projects/myproject/a.ts (computed .d.ts)
 
 WatchedFiles::
 /user/username/projects/myproject/tsconfig.json:
@@ -225,8 +218,6 @@ export declare class C {
 
 //// [/user/username/projects/myproject/b.js] file written with same contents
 //// [/user/username/projects/myproject/b.d.ts] file written with same contents
-//// [/user/username/projects/myproject/a.js] file written with same contents
-//// [/user/username/projects/myproject/a.d.ts] file written with same contents
 
 Change:: Rename property d2 to d of class C to revert back to original text
 
@@ -240,14 +231,9 @@ export class C
 
 Output::
 >> Screen clear
-[[90m12:01:05 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:59 AM[0m] File change detected. Starting incremental compilation...
 
-[96ma.ts[0m:[93m4[0m:[93m17[0m - [91merror[0m[90m TS2339: [0mProperty 'd' does not exist on type 'C'.
-
-[7m4[0m console.log(b.c.d);
-[7m [0m [91m                ~[0m
-
-[[90m12:01:18 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:01:12 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -324,14 +310,9 @@ export class C
 
 Output::
 >> Screen clear
-[[90m12:01:22 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:16 AM[0m] File change detected. Starting incremental compilation...
 
-[96ma.ts[0m:[93m4[0m:[93m17[0m - [91merror[0m[90m TS2339: [0mProperty 'd' does not exist on type 'C'.
-
-[7m4[0m console.log(b.c.d);
-[7m [0m [91m                ~[0m
-
-[[90m12:01:35 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:01:29 AM[0m] Found 0 errors. Watching for file changes.
 
 
 

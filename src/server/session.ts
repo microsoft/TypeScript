@@ -317,6 +317,7 @@ namespace ts.server {
             projects,
             defaultProject,
             initialLocation,
+            /*isForRename*/ true,
             (project, location, tryAddToTodo) => {
                 const projectOutputs = project.getLanguageService().findRenameLocations(location.fileName, location.pos, findInStrings, findInComments, providePrefixAndSuffixTextForRename);
                 if (projectOutputs) {
@@ -332,8 +333,8 @@ namespace ts.server {
         return outputs;
     }
 
-    function getDefinitionLocation(defaultProject: Project, initialLocation: DocumentPosition): DocumentPosition | undefined {
-        const infos = defaultProject.getLanguageService().getDefinitionAtPosition(initialLocation.fileName, initialLocation.pos);
+    function getDefinitionLocation(defaultProject: Project, initialLocation: DocumentPosition, isForRename: boolean): DocumentPosition | undefined {
+        const infos = defaultProject.getLanguageService().getDefinitionAtPosition(initialLocation.fileName, initialLocation.pos, /*searchOtherFilesOnly*/ false, isForRename);
         const info = infos && firstOrUndefined(infos);
         return info && !info.isLocal ? { fileName: info.fileName, pos: info.textSpan.start } : undefined;
     }
@@ -350,6 +351,7 @@ namespace ts.server {
             projects,
             defaultProject,
             initialLocation,
+            /*isForRename*/ false,
             (project, location, getMappedLocation) => {
                 logger.info(`Finding references to ${location.fileName} position ${location.pos} in project ${project.getProjectName()}`);
                 const projectOutputs = project.getLanguageService().findReferences(location.fileName, location.pos);
@@ -417,7 +419,8 @@ namespace ts.server {
         projects: Projects,
         defaultProject: Project,
         initialLocation: TLocation,
-        cb: CombineProjectOutputCallback<TLocation>
+        isForRename: boolean,
+        cb: CombineProjectOutputCallback<TLocation>,
     ): void {
         const projectService = defaultProject.projectService;
         let toDo: ProjectAndLocation<TLocation>[] | undefined;
@@ -430,7 +433,7 @@ namespace ts.server {
 
         // After initial references are collected, go over every other project and see if it has a reference for the symbol definition.
         if (initialLocation) {
-            const defaultDefinition = getDefinitionLocation(defaultProject, initialLocation);
+            const defaultDefinition = getDefinitionLocation(defaultProject, initialLocation, isForRename);
             if (defaultDefinition) {
                 const getGeneratedDefinition = memoize(() => defaultProject.isSourceOfProjectReferenceRedirect(defaultDefinition.fileName) ?
                     defaultDefinition :
@@ -1243,7 +1246,7 @@ namespace ts.server {
                 definitions?.forEach(d => definitionSet.add(d));
                 const noDtsProject = project.getNoDtsResolutionProject([file]);
                 const ls = noDtsProject.getLanguageService();
-                const jsDefinitions = ls.getDefinitionAtPosition(file, position, /*searchOtherFilesOnly*/ true)
+                const jsDefinitions = ls.getDefinitionAtPosition(file, position, /*searchOtherFilesOnly*/ true, /*stopAtAlias*/ false)
                     ?.filter(d => toNormalizedPath(d.fileName) !== file);
                 if (some(jsDefinitions)) {
                     for (const jsDefinition of jsDefinitions) {
@@ -1288,7 +1291,7 @@ namespace ts.server {
                     const compilerOptions = project.getCompilationSettings();
                     const packageJson = getPackageScopeForPath(project.toPath(packageDirectory + "/package.json"), packageJsonCache, project, compilerOptions);
                     if (!packageJson) return undefined;
-                    // Use fake options instead of actual compiler options to avoid following export map if the project uses node12 or nodenext -
+                    // Use fake options instead of actual compiler options to avoid following export map if the project uses node16 or nodenext -
                     // Mapping from an export map entry across packages is out of scope for now. Returned entrypoints will only be what can be
                     // resolved from the package root under --moduleResolution node
                     const entrypoints = getEntrypointsFromPackageJsonInfo(
@@ -1330,7 +1333,7 @@ namespace ts.server {
                 if ((isStringLiteralLike(initialNode) || isIdentifier(initialNode)) && isAccessExpression(initialNode.parent)) {
                     return forEachNameInAccessChainWalkingLeft(initialNode, nameInChain => {
                         if (nameInChain === initialNode) return undefined;
-                        const candidates = ls.getDefinitionAtPosition(file, nameInChain.getStart(), /*searchOtherFilesOnly*/ true)
+                        const candidates = ls.getDefinitionAtPosition(file, nameInChain.getStart(), /*searchOtherFilesOnly*/ true, /*stopAtAlias*/ false)
                             ?.filter(d => toNormalizedPath(d.fileName) !== file && d.isAmbient)
                             .map(d => ({
                                 fileName: d.fileName,

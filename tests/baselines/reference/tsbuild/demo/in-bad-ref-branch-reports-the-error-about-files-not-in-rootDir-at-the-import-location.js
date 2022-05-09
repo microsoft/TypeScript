@@ -132,21 +132,29 @@ export function lastElementOf<T>(arr: T[]): T | undefined {
 }
 
 //// [/src/zoo/zoo.ts]
+import { Dog, createDog } from '../animals/index';
+
+export function createZoo(): Array<Dog> {
+    return [
+        createDog()
+    ];
+}
+
 
 
 
 
 Output::
 /lib/tsc --b /src/tsconfig.json --verbose
-[[90m12:00:00 AM[0m] Projects in this build: 
+[[90m12:00:07 AM[0m] Projects in this build: 
     * src/core/tsconfig.json
     * src/animals/tsconfig.json
     * src/zoo/tsconfig.json
     * src/tsconfig.json
 
-[[90m12:00:00 AM[0m] Project 'src/core/tsconfig.json' is out of date because output file 'src/lib/core/utilities.js' does not exist
+[[90m12:00:08 AM[0m] Project 'src/core/tsconfig.json' is out of date because output file 'src/lib/core/utilities.js' does not exist
 
-[[90m12:00:00 AM[0m] Building project '/src/core/tsconfig.json'...
+[[90m12:00:09 AM[0m] Building project '/src/core/tsconfig.json'...
 
 [96msrc/animals/index.ts[0m:[93m1[0m:[93m20[0m - [91merror[0m[90m TS6059: [0mFile '/src/animals/animal.ts' is not under 'rootDir' '/src/core'. 'rootDir' is expected to contain all source files.
 
@@ -199,13 +207,13 @@ Output::
     [7m [0m [96m                   ~~~[0m
     File is included via import here.
 
-[[90m12:00:00 AM[0m] Project 'src/animals/tsconfig.json' can't be built because its dependency 'src/core' has errors
+[[90m12:00:14 AM[0m] Project 'src/animals/tsconfig.json' can't be built because its dependency 'src/core' has errors
 
-[[90m12:00:00 AM[0m] Skipping build of project '/src/animals/tsconfig.json' because its dependency '/src/core' has errors
+[[90m12:00:15 AM[0m] Skipping build of project '/src/animals/tsconfig.json' because its dependency '/src/core' has errors
 
-[[90m12:00:00 AM[0m] Project 'src/zoo/tsconfig.json' can't be built because its dependency 'src/animals' was not built
+[[90m12:00:16 AM[0m] Project 'src/zoo/tsconfig.json' can't be built because its dependency 'src/animals' was not built
 
-[[90m12:00:00 AM[0m] Skipping build of project '/src/zoo/tsconfig.json' because its dependency '/src/animals' was not built
+[[90m12:00:17 AM[0m] Skipping build of project '/src/zoo/tsconfig.json' because its dependency '/src/animals' was not built
 
 
 Found 7 errors.

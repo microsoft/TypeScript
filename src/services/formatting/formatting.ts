@@ -691,6 +691,10 @@ namespace ts.formatting {
                 isListItem: boolean,
                 isFirstListItem?: boolean): number {
 
+                if (nodeIsMissing(child)) {
+                    return inheritedIndentation;
+                }
+
                 const childStartPos = child.getStart(sourceFile);
 
                 const childStartLine = sourceFile.getLineAndCharacterOfPosition(childStartPos).line;
@@ -778,6 +782,13 @@ namespace ts.formatting {
 
                 let listDynamicIndentation = parentDynamicIndentation;
                 let startLine = parentStartLine;
+                // node range is outside the target range - do not dive inside
+                if (!rangeOverlapsWithStartEnd(originalRange, nodes.pos, nodes.end)) {
+                    if (nodes.end < originalRange.pos) {
+                        formattingScanner.skipToEndOf(nodes);
+                    }
+                    return;
+                }
 
                 if (listStartToken !== SyntaxKind.Unknown) {
                     // introduce a new indentation scope for lists (including list start and end tokens)

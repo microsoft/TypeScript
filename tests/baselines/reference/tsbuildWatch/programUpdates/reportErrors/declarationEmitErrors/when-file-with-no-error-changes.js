@@ -55,7 +55,7 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 /user/username/projects/solution/app/filewitherror.ts (used version)
-/user/username/projects/solution/app/filewithouterror.ts (used version)
+/user/username/projects/solution/app/filewithouterror.ts (computed .d.ts)
 
 WatchedFiles::
 /user/username/projects/solution/app/tsconfig.json:
