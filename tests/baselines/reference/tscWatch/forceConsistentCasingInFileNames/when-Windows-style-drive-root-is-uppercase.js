@@ -38,11 +38,11 @@ Output::
 a/lib/lib.d.ts
   Default library for target 'es3'
 project/a.ts
-  Matched by include pattern '**/*' in 'project/tsconfig.json'
+  Matched by default include pattern '**/*'
   Imported via "C://project/a" from file 'project/b.ts'
   Imported via "c://project/a" from file 'project/b.ts'
 project/b.ts
-  Matched by include pattern '**/*' in 'project/tsconfig.json'
+  Matched by default include pattern '**/*'
 [[90m12:00:22 AM[0m] Found 0 errors. Watching for file changes.
 
 
@@ -121,11 +121,11 @@ Output::
 a/lib/lib.d.ts
   Default library for target 'es3'
 project/a.ts
-  Matched by include pattern '**/*' in 'project/tsconfig.json'
+  Matched by default include pattern '**/*'
   Imported via "C://project/a" from file 'project/b.ts'
   Imported via "c://project/a" from file 'project/b.ts'
 project/b.ts
-  Matched by include pattern '**/*' in 'project/tsconfig.json'
+  Matched by default include pattern '**/*'
 [[90m12:00:32 AM[0m] Found 0 errors. Watching for file changes.
 
 

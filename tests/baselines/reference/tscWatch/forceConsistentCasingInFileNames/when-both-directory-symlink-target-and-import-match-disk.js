@@ -40,11 +40,11 @@ Output::
   Default library for target 'es3'
 XY/a.ts
   Imported via "./XY/a" from file 'b.ts'
-  Matched by include pattern '**/*' in 'tsconfig.json'
+  Matched by default include pattern '**/*'
 link/a.ts
   Imported via "./link/a" from file 'b.ts'
 b.ts
-  Matched by include pattern '**/*' in 'tsconfig.json'
+  Matched by default include pattern '**/*'
 [[90m12:00:30 AM[0m] Found 0 errors. Watching for file changes.
 
 
@@ -150,11 +150,11 @@ Output::
   Default library for target 'es3'
 XY/a.ts
   Imported via "./XY/a" from file 'b.ts'
-  Matched by include pattern '**/*' in 'tsconfig.json'
+  Matched by default include pattern '**/*'
 link/a.ts
   Imported via "./link/a" from file 'b.ts'
 b.ts
-  Matched by include pattern '**/*' in 'tsconfig.json'
+  Matched by default include pattern '**/*'
 [[90m12:00:37 AM[0m] Found 0 errors. Watching for file changes.
 
 

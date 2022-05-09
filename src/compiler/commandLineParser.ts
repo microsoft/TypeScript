@@ -2326,7 +2326,7 @@ namespace ts {
     function filterSameAsDefaultInclude(specs: readonly string[] | undefined) {
         if (!length(specs)) return undefined;
         if (length(specs) !== 1) return specs;
-        if (specs![0] === "**/*") return undefined;
+        if (specs![0] === defaultIncludeSpec) return undefined;
         return specs;
     }
 
@@ -2627,6 +2627,9 @@ namespace ts {
         return getDirectoryPath(getNormalizedAbsolutePath(fileName, basePath));
     }
 
+    /*@internal*/
+    export const defaultIncludeSpec = "**/*";
+
     /**
      * Parse the contents of a config file from json or json source file (tsconfig.json).
      * @param json The contents of the config file to parse
@@ -2705,6 +2708,7 @@ namespace ts {
             let includeSpecs = toPropValue(getSpecsFromRaw("include"));
 
             const excludeOfRaw = getSpecsFromRaw("exclude");
+            let isDefaultIncludeSpec = false;
             let excludeSpecs = toPropValue(excludeOfRaw);
             if (excludeOfRaw === "no-prop" && raw.compilerOptions) {
                 const outDir = raw.compilerOptions.outDir;
@@ -2716,7 +2720,8 @@ namespace ts {
             }
 
             if (filesSpecs === undefined && includeSpecs === undefined) {
-                includeSpecs = ["**/*"];
+                includeSpecs = [defaultIncludeSpec];
+                isDefaultIncludeSpec = true;
             }
             let validatedIncludeSpecs: readonly string[] | undefined, validatedExcludeSpecs: readonly string[] | undefined;
 
@@ -2740,6 +2745,7 @@ namespace ts {
                 validatedIncludeSpecs,
                 validatedExcludeSpecs,
                 pathPatterns: undefined, // Initialized on first use
+                isDefaultIncludeSpec,
             };
         }
 

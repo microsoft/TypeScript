@@ -6385,6 +6385,7 @@ namespace ts {
         validatedIncludeSpecs: readonly string[] | undefined;
         validatedExcludeSpecs: readonly string[] | undefined;
         pathPatterns: readonly (string | Pattern)[] | undefined;
+        isDefaultIncludeSpec: boolean;
     }
 
     /* @internal */
