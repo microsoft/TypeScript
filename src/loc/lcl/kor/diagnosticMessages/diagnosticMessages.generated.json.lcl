@@ -5360,10 +5360,13 @@
       </Item>
       <Item ItemId=";Dynamic_imports_are_only_supported_when_the_module_flag_is_set_to_es2020_es2022_esnext_commonjs_amd__1323" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Dynamic imports are only supported when the '--module' flag is set to 'es2020', 'es2022', 'esnext', 'commonjs', 'amd', 'system', 'umd', 'node12', or 'nodenext'.]]></Val>
+          <Val><![CDATA[Dynamic imports are only supported when the '--module' flag is set to 'es2020', 'es2022', 'esnext', 'commonjs', 'amd', 'system', 'umd', 'node16', or 'nodenext'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[동적 가져오기는 '--module' 플래그가 'es2020', 'es2022', 'esnext', 'commonjs', 'amd', 'system', 'umd', 'node12' 또는 'nodenext'로 설정된 경우에만 지원됩니다.]]></Val>
+            <Val><![CDATA[동적 가져오기는 '--module' 플래그가 'es2020', 'es2022', 'esnext', 'commonjs', 'amd', 'system', 'umd', 'node16' 또는 'nodenext'로 설정된 경우에만 지원됩니다.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Dynamic imports are only supported when the '--module' flag is set to 'es2020', 'es2022', 'esnext', 'commonjs', 'amd', 'system', 'umd', 'node12', or 'nodenext'.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -5376,11 +5379,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Dynamic_imports_only_support_a_second_argument_when_the_module_option_is_set_to_esnext_or_nodenext_1324" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Dynamic_imports_only_support_a_second_argument_when_the_module_option_is_set_to_esnext_node16_or_nod_1324" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Dynamic imports only support a second argument when the '--module' option is set to 'esnext' or 'nodenext'.]]></Val>
+          <Val><![CDATA[Dynamic imports only support a second argument when the '--module' option is set to 'esnext', 'node16', or 'nodenext'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[동적 가져오기는 '--module' 옵션이 'esnext' 또는 'nodenext'로 설정된 경우에만 두 번째 인수를 지원합니다.]]></Val>
+            <Val><![CDATA[동적 가져오기는 '--module' 옵션이 'esnext', 'node16' 또는 'nodenext'로 설정된 경우에만 두 번째 인수를 지원합니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7961,15 +7964,6 @@
           <Val><![CDATA[JSDoc types may be moved to TypeScript types.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[JSDoc 형식이 TypeScript 형식으로 이동될 수 있습니다.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";JSON_imports_are_experimental_in_ES_module_mode_imports_7062" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[JSON imports are experimental in ES module mode imports.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[JSON 가져오기는 ES 모듈 모드 가져오기에서 실험적입니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10757,19 +10751,25 @@
       </Item>
       <Item ItemId=";Relative_import_paths_need_explicit_file_extensions_in_EcmaScript_imports_when_moduleResolution_is_n_2834" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Relative import paths need explicit file extensions in EcmaScript imports when '--moduleResolution' is 'node12' or 'nodenext'. Consider adding an extension to the import path.]]></Val>
+          <Val><![CDATA[Relative import paths need explicit file extensions in EcmaScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[상대 가져오기 경로는 '--moduleResolution'이 'node12' 또는 'nodenext'인 경우 EcmaScript 가져오기의 명시적 파일 확장자가 필요합니다. 가져오기 경로에 확장자를 추가하는 것을 고려하세요.]]></Val>
+            <Val><![CDATA[상대 가져오기 경로는 '--moduleResolution'이 'node16' 또는 'nodenext'인 경우 EcmaScript 가져오기의 명시적 파일 확장자가 필요합니다. 가져오기 경로에 확장자를 추가하는 것을 고려하세요.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Relative import paths need explicit file extensions in EcmaScript imports when '--moduleResolution' is 'node12' or 'nodenext'. Consider adding an extension to the import path.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Relative_import_paths_need_explicit_file_extensions_in_EcmaScript_imports_when_moduleResolution_is_n_2835" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Relative import paths need explicit file extensions in EcmaScript imports when '--moduleResolution' is 'node12' or 'nodenext'. Did you mean '{0}'?]]></Val>
+          <Val><![CDATA[Relative import paths need explicit file extensions in EcmaScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean '{0}'?]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[상대 가져오기 경로는 '--moduleResolution'이 'node12' 또는 'nodenext'인 경우 EcmaScript 가져오기의 명시적 파일 확장자가 필요합니다. '{0}'을(를) 의미했나요?]]></Val>
+            <Val><![CDATA[상대 가져오기 경로는 '--moduleResolution'이 'node16' 또는 'nodenext'인 경우 EcmaScript 가져오기의 명시적 파일 확장자가 필요합니다. '{0}'을(를) 의미했나요?]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Relative import paths need explicit file extensions in EcmaScript imports when '--moduleResolution' is 'node12' or 'nodenext'. Did you mean '{0}'?]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -11115,11 +11115,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Resolution_modes_are_only_supported_when_moduleResolution_is_node12_or_nodenext_1452" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Resolution_modes_are_only_supported_when_moduleResolution_is_node16_or_nodenext_1452" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Resolution modes are only supported when `moduleResolution` is `node12` or `nodenext`.]]></Val>
+          <Val><![CDATA[Resolution modes are only supported when `moduleResolution` is `node16` or `nodenext`.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[해상도 모드는 `moduleResolution`이 `node12` 또는 `nodenext`인 경우에만 지원됩니다.]]></Val>
+            <Val><![CDATA[해상도 모드는 `moduleResolution`이 `node16` 또는 `nodenext`인 경우에만 지원됩니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -12696,6 +12696,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";The_current_file_is_a_CommonJS_module_and_cannot_use_await_at_the_top_level_1309" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[The current file is a CommonJS module and cannot use 'await' at the top level.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[현재 파일은 CommonJS 모듈이며 최상위 수준에서 'await'를 사용할 수 없습니다.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";The_current_host_does_not_support_the_0_option_5001" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[The current host does not support the '{0}' option.]]></Val>
@@ -12827,10 +12836,13 @@
       </Item>
       <Item ItemId=";The_import_meta_meta_property_is_only_allowed_when_the_module_option_is_es2020_es2022_esnext_system__1343" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'es2022', 'esnext', 'system', 'node12', or 'nodenext'.]]></Val>
+          <Val><![CDATA[The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'es2022', 'esnext', 'system', 'node16', or 'nodenext'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['import.meta' 메타 속성은 '--module' 옵션이 'es2020', 'es2022', 'esnext', 'system', 'node12' 또는 'nodenext'인 경우에만 허용됩니다.]]></Val>
+            <Val><![CDATA['import.meta' 메타 속성은 '--module' 옵션이 'es2020', 'es2022', 'esnext', 'system', 'node16' 또는 'nodenext'인 경우에만 허용됩니다.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'es2022', 'esnext', 'system', 'node12', or 'nodenext'.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -13136,6 +13148,24 @@
           <Val><![CDATA[The parser expected to find a '{1}' to match the '{0}' token here.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[여기서 파서는 '{0}' 토큰과 일치하는 '{1}'을(를) 찾아야 합니다.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";The_project_root_is_ambiguous_but_is_required_to_resolve_export_map_entry_0_in_file_1_Supply_the_roo_2209" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[The project root is ambiguous, but is required to resolve export map entry '{0}' in file '{1}'. Supply the `rootDir` compiler option to disambiguate.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[프로젝트 루트가 모호하지만 '{1}' 파일에서 '{0}' 내보내기 맵 항목을 확인하는 데 필요합니다. 명확하게 하려면 `rootDir` 컴파일러 옵션을 제공하세요.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";The_project_root_is_ambiguous_but_is_required_to_resolve_import_map_entry_0_in_file_1_Supply_the_roo_2210" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[The project root is ambiguous, but is required to resolve import map entry '{0}' in file '{1}'. Supply the `rootDir` compiler option to disambiguate.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[프로젝트 루트가 모호하지만 '{1}' 파일에서 '{0}' 가져오기 맵 항목을 확인하는 데 필요합니다. 명확하게 하려면 `rootDir` 컴파일러 옵션을 제공하세요.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -13728,15 +13758,6 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";This_type_parameter_probably_needs_an_extends_object_constraint_2208" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[This type parameter probably needs an `extends object` constraint.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[이 형식 매개 변수에는 `extends object` 제약 조건이 필요할 수 있습니다.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";This_use_of_import_is_invalid_import_calls_can_be_written_but_they_must_have_parentheses_and_cannot__1326" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[This use of 'import' is invalid. 'import()' calls can be written, but they must have parentheses and cannot have type arguments.]]></Val>
@@ -13746,11 +13767,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Top_level_await_expressions_are_only_allowed_when_the_module_option_is_set_to_es2022_esnext_system_o_1378" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Top_level_await_expressions_are_only_allowed_when_the_module_option_is_set_to_es2022_esnext_system_n_1378" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Top-level 'await' expressions are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', or 'nodenext', and the 'target' option is set to 'es2017' or higher.]]></Val>
+          <Val><![CDATA[Top-level 'await' expressions are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', or 'nodenext', and the 'target' option is set to 'es2017' or higher.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[최상위 'await' 식은 'module' 옵션이 'es2022', 'esnext', 'system' 또는 'nodenext'로 설정되고 'target' 옵션이 'es2017' 이상으로 설정된 경우에만 허용됩니다.]]></Val>
+            <Val><![CDATA[최상위 'await' 식은 'module' 옵션이 'es2022', 'esnext', 'system', 'node16' 또는 'nodenext'로 설정되고 'target' 옵션이 'es2017' 이상으로 설정된 경우에만 허용됩니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -13764,11 +13785,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Top_level_for_await_loops_are_only_allowed_when_the_module_option_is_set_to_es2022_esnext_system_or__1432" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Top_level_for_await_loops_are_only_allowed_when_the_module_option_is_set_to_es2022_esnext_system_nod_1432" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Top-level 'for await' loops are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', or 'nodenext', and the 'target' option is set to 'es2017' or higher.]]></Val>
+          <Val><![CDATA[Top-level 'for await' loops are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', or 'nodenext', and the 'target' option is set to 'es2017' or higher.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[최상위 'for await' 루프는 'module' 옵션이 'es2022', 'esnext', 'system' 또는 'nodenext'로 설정되고 'target' 옵션이 'es2017' 이상으로 설정된 경우에만 허용됩니다.]]></Val>
+            <Val><![CDATA[최상위 'for await' 루프는 'module' 옵션이 'es2022', 'esnext', 'system', 'node16' 또는 'nodenext'로 설정되고 'target' 옵션이 'es2017' 이상으로 설정된 경우에만 허용됩니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -15950,10 +15971,13 @@
       </Item>
       <Item ItemId=";auto_Colon_Treat_files_with_imports_exports_import_meta_jsx_with_jsx_Colon_react_jsx_or_esm_format_w_1476" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA["auto": Treat files with imports, exports, import.meta, jsx (with jsx: react-jsx), or esm format (with module: node12+) as modules.]]></Val>
+          <Val><![CDATA["auto": Treat files with imports, exports, import.meta, jsx (with jsx: react-jsx), or esm format (with module: node16+) as modules.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA["auto": 가져오기, 내보내기, import.meta, jsx(jsx: react-jsx 포함) 또는 esm 형식(모듈: node12+ 포함)이 있는 파일을 모듈로 처리합니다.]]></Val>
+            <Val><![CDATA["auto": 가져오기, 내보내기, import.meta, jsx(jsx: react-jsx 포함) 또는 esm 형식(모듈: node16+ 포함)이 있는 파일을 모듈로 처리합니다.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA["auto": Treat files with imports, exports, import.meta, jsx (with jsx: react-jsx), or esm format (with module: node12+) as modules.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
