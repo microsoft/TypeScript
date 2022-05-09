@@ -1381,7 +1381,7 @@ namespace ts {
                 disableCPUProfiler,
                 cpuProfilingEnabled: () => !!activeSession || contains(process.execArgv, "--cpu-prof") || contains(process.execArgv, "--prof"),
                 realpath,
-                debugMode: !!process.env.NODE_INSPECTOR_IPC || !!process.env.VSCODE_INSPECTOR_OPTIONS || some(process.execArgv as string[], arg => /^--(inspect|debug)(-brk)?(=\d+)?$/i.test(arg)),
+                debugMode: !!process.env.NODE_INSPECTOR_IPC || !!process.env.VSCODE_INSPECTOR_OPTIONS || some(process.execArgv as string[], arg => /^--(inspect|debug)(-brk)?(=\d+)?$/i.test(arg)) || (process.recordreplay && typeof process.recordreplay.currentPointURL === "function"),
                 tryEnableSourceMapsForHost() {
                     try {
                         require("source-map-support").install();
