@@ -19,7 +19,7 @@ declare namespace Intl {
         timeStyle?: "full" | "long" | "medium" | "short";
         hourCycle?: "h11" | "h12" | "h23" | "h24";
         dayPeriod?: "narrow" | "short" | "long";
-        fractionalSecondDigits?: 0 | 1 | 2 | 3;
+        fractionalSecondDigits?: 1 | 2 | 3;
     }
 
     /**
