@@ -414,31 +414,6 @@ namespace ts.projectSystem {
         }
     }
 
-    export function createVirtualFilesystemSession(host: server.ServerHost, fshost: VirtualFS.VirtualServerHost | undefined, opts: Partial<TestSessionOptions> = {}) {
-        if (opts.typingsInstaller === undefined) {
-            opts.typingsInstaller = new TestTypingsInstaller("/a/data/", /*throttleLimit*/ 5, host);
-        }
-
-        if (opts.eventHandler !== undefined) {
-            opts.canUseEvents = true;
-        }
-
-        const sessionOptions: TestSessionOptions = {
-            host,
-            fshost,
-            cancellationToken: server.nullCancellationToken,
-            useSingleInferredProject: false,
-            useInferredProjectPerProjectRoot: false,
-            typingsInstaller: undefined!, // TODO: GH#18217
-            byteLength: Utils.byteLength,
-            hrtime: process.hrtime,
-            logger: opts.logger || createHasErrorMessageLogger(),
-            canUseEvents: false
-        };
-
-        return new TestSession({ ...sessionOptions, ...opts });
-    }
-
     export interface TestProjectServiceOptions extends server.ProjectServiceOptions {
         logger: Logger;
     }

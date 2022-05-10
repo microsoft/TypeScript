@@ -1064,7 +1064,11 @@ namespace ts {
      * patch writefile to create folder before writing the file
      */
     /*@internal*/
-    export function patchWriteFileEnsuringDirectory(sys: System) {
+    export function patchWriteFileEnsuringDirectory(sys: {
+        writeFile(path: string, data: string, writeByteOrderMark?: boolean): void;
+        directoryExists(path: string): boolean;
+        createDirectory(path: string): void;
+    }) {
         // patch writefile to create folder before writing the file
         const originalWriteFile = sys.writeFile;
         sys.writeFile = (path, data, writeBom) =>

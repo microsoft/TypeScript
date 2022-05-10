@@ -761,7 +761,7 @@ namespace ts.server {
         readonly toCanonicalFileName: (f: string) => string;
 
         public readonly host: ServerHost;
-        public readonly fshost: ServerHost | undefined; // TODOO: Should be TestFSWithWatch.VirtualServerHost | undefined
+        public readonly fshost: VirtualFS.VirtualServerHost | undefined;
         public readonly logger: Logger;
         public readonly cancellationToken: HostCancellationToken;
         public readonly useSingleInferredProject: boolean;
@@ -808,7 +808,7 @@ namespace ts.server {
 
         constructor(opts: ProjectServiceOptions) {
             this.host = opts.host;
-            this.fshost = opts.fshost;
+            this.fshost = opts.fshost as VirtualFS.VirtualServerHost | undefined; // TODO: OK as long as VirtualServerHost is a supertype of ServerHost
             this.logger = opts.logger;
             this.cancellationToken = opts.cancellationToken;
             this.useSingleInferredProject = opts.useSingleInferredProject;
@@ -3702,21 +3702,20 @@ namespace ts.server {
         /* @internal */
         updateFileSystem(updatedFiles: protocol.FileSystemRequestArgs[] | undefined, deletedFiles?: string[]) {
             Debug.assert(this.fshost);
-            const fs = this.fshost as VirtualFS.VirtualServerHost;
             if (updatedFiles) {
                 for (const { file, fileContent } of updatedFiles) {
-                    if (fs.fileExists(file)) {
-                        fs.modifyFile(file, fileContent);
+                    if (this.fshost.fileExists(file)) {
+                        this.fshost.modifyFile(file, fileContent);
                     }
                     else {
-                        fs.ensureFileOrFolder({ path: getDirectoryPath(file) });
-                        fs.writeFile(file, fileContent);
+                        this.fshost.ensureFileOrFolder({ path: getDirectoryPath(file) });
+                        this.fshost.writeFile(file, fileContent);
                     }
                 }
             }
             if (deletedFiles) {
                 for (const file of deletedFiles) {
-                    fs.deleteFile(file, /*deleteEmptyParentFolders*/ true);
+                    this.fshost.deleteFile(file, /*deleteEmptyParentFolders*/ true);
                 }
             }
         }

@@ -53,6 +53,54 @@ interface Array<T> { length: number; [n: number]: T; }`
         return host;
     }
 
+    class Callbacks {
+        private map: TimeOutCallback[] = [];
+        private nextId = 1;
+
+        getNextId() {
+            return this.nextId;
+        }
+
+        register(cb: (...args: any[]) => void, args: any[]) {
+            const timeoutId = this.nextId;
+            this.nextId++;
+            this.map[timeoutId] = cb.bind(/*this*/ undefined, ...args);
+            return timeoutId;
+        }
+
+        unregister(id: any) {
+            if (typeof id === "number") {
+                delete this.map[id];
+            }
+        }
+
+        count() {
+            let n = 0;
+            for (const _ in this.map) {
+                n++;
+            }
+            return n;
+        }
+
+        invoke(invokeKey?: number) {
+            if (invokeKey) {
+                this.map[invokeKey]();
+                delete this.map[invokeKey];
+                return;
+            }
+
+            // Note: invoking a callback may result in new callbacks been queued,
+            // so do not clear the entire callback list regardless. Only remove the
+            // ones we have invoked.
+            for (const key in this.map) {
+                this.map[key]();
+                delete this.map[key];
+            }
+        }
+    }
+
+    type TimeOutCallback = () => any;
+
     export function getDiffInKeys<T>(map: ESMap<string, T>, expectedKeys: readonly string[]) {
         if (map.size === expectedKeys.length) {
             return "";
@@ -226,26 +274,190 @@ interface Array<T> { length: number; [n: number]: T; }`
         };
     }
 
+    export const timeIncrements = 1000;
+
     export class TestServerHost extends VirtualServerHost implements server.ServerHost {
         readonly screenClears: number[] = [];
         private readonly output: string[] = [];
+        private time = timeIncrements;
+        private timeoutCallbacks = new Callbacks();
+        private immediateCallbacks = new Callbacks();
+        private readonly environmentVariables?: ESMap<string, string>;
+        public require: ((initialPath: string, moduleName: string) => RequireResult) | undefined;
+        private readonly tscWatchFile?: string;
+        private readonly tscWatchDirectory?: string;
+        private readonly runWithoutRecursiveWatches?: boolean;
+        runWithFallbackPolling: boolean;
+        public defaultWatchFileKind?: () => WatchFileKind | undefined;
 
         constructor(
             public withSafeList: boolean,
-            fileOrFolderorSymLinkList: readonly FileOrFolderOrSymLink[],
+            fileOrFolderOrSymLinkList: readonly FileOrFolderOrSymLink[],
             options: TestServerHostCreationParameters = {}) {
-            super(
-                fileOrFolderorSymLinkList.concat(withSafeList ? safeList : []),
-                {
-                    ...options,
-                    executingFilePath: options.executingFilePath || getExecutingFilePathFromLibFile()
-                });
+            super({
+                ...options,
+                executingFilePath: options.executingFilePath || getExecutingFilePathFromLibFile()
+            });
+            const { environmentVariables, runWithoutRecursiveWatches, runWithFallbackPolling } = options;
+            fileOrFolderOrSymLinkList = fileOrFolderOrSymLinkList.concat(withSafeList ? safeList : []);
+            this.tscWatchFile = environmentVariables && environmentVariables.get("TSC_WATCHFILE");
+            this.tscWatchDirectory = environmentVariables && environmentVariables.get("TSC_WATCHDIRECTORY");
+            this.runWithoutRecursiveWatches = runWithoutRecursiveWatches;
+            this.runWithFallbackPolling = !!runWithFallbackPolling;
+            this.environmentVariables = environmentVariables;
+            this.init();
+            this.reloadFS(fileOrFolderOrSymLinkList);
         }
+
+        override init() {
+            const { watchFile, watchDirectory } = createSystemWatchFunctions({
+                // We dont have polling watch file
+                // it is essentially fsWatch but lets get that separate from fsWatch and
+                // into watchedFiles for easier testing
+                pollingWatchFile: this.tscWatchFile === Tsc_WatchFile.SingleFileWatcherPerName ?
+                    createSingleFileWatcherPerName(
+                        this.watchFileWorker.bind(this),
+                        this.useCaseSensitiveFileNames
+                    ) :
+                    this.watchFileWorker.bind(this),
+                getModifiedTime: this.getModifiedTime.bind(this),
+                setTimeout: this.setTimeout.bind(this),
+                clearTimeout: this.clearTimeout.bind(this),
+                fsWatch: this.fsWatch.bind(this),
+                fileExists: this.fileExists.bind(this),
+                useCaseSensitiveFileNames: this.useCaseSensitiveFileNames,
+                getCurrentDirectory: this.getCurrentDirectory.bind(this),
+                fsSupportsRecursiveFsWatch: this.tscWatchDirectory ? false : !this.runWithoutRecursiveWatches,
+                directoryExists: this.directoryExists.bind(this),
+                getAccessibleSortedChildDirectories: path => this.getDirectories(path),
+                realpath: this.realpath.bind(this),
+                tscWatchFile: this.tscWatchFile,
+                tscWatchDirectory: this.tscWatchDirectory,
+                defaultWatchFileKind: () => this.defaultWatchFileKind?.(),
+            });
+            this.watchFile = watchFile;
+            this.watchDirectory = watchDirectory;
+        }
+
+        private reloadFS(fileOrFolderOrSymLinkList: readonly FileOrFolderOrSymLink[], options?: Partial<ReloadWatchInvokeOptions>) {
+            Debug.assert(this.fs.size === 0);
+            const filesOrFoldersToLoad: readonly FileOrFolderOrSymLink[] = !this.windowsStyleRoot ? fileOrFolderOrSymLinkList :
+                fileOrFolderOrSymLinkList.map<FileOrFolderOrSymLink>(f => {
+                    const result = clone(f);
+                    result.path = this.getHostSpecificPath(f.path);
+                    return result;
+                });
+            for (const fileOrDirectory of filesOrFoldersToLoad) {
+                const path = this.toFullPath(fileOrDirectory.path);
+                // If its a change
+                const currentEntry = this.fs.get(path);
+                if (currentEntry) {
+                    if (isFsFile(currentEntry)) {
+                        if (isFile(fileOrDirectory)) {
+                            // Update file
+                            if (currentEntry.content !== fileOrDirectory.content) {
+                                this.modifyFile(fileOrDirectory.path, fileOrDirectory.content, options);
+                            }
+                        }
+                        else {
+                            // TODO: Changing from file => folder/Symlink
+                        }
+                    }
+                    else if (isFsSymLink(currentEntry)) {
+                        // TODO: update symlinks
+                    }
+                    else {
+                        // Folder
+                        if (isFile(fileOrDirectory)) {
+                            // TODO: Changing from folder => file
+                        }
+                        else {
+                            // Folder update: Nothing to do.
+                            currentEntry.modifiedTime = this.now();
+                            this.invokeFsWatches(currentEntry.fullPath, "change");
+                        }
+                    }
+                }
+                else {
+                    this.ensureFileOrFolder(fileOrDirectory, options && options.ignoreWatchInvokedWithTriggerAsFileCreate);
+                }
+            }
+        }
+
+        protected override fsWatch(
+            fileOrDirectory: string,
+            _entryKind: FileSystemEntryKind,
+            cb: FsWatchCallback,
+            recursive: boolean,
+            fallbackPollingInterval: PollingInterval,
+            fallbackOptions: WatchOptions | undefined): FileWatcher {
+            return this.runWithFallbackPolling ?
+                this.watchFile(
+                    fileOrDirectory,
+                    createFileWatcherCallback(cb),
+                    fallbackPollingInterval,
+                    fallbackOptions
+                ) :
+                createWatcher(
+                    recursive ? this.fsWatchesRecursive : this.fsWatches,
+                    this.toFullPath(fileOrDirectory),
+                    {
+                        directoryName: fileOrDirectory,
+                        cb,
+                        fallbackPollingInterval,
+                        fallbackOptions
+                    }
+                );
+        }
+
+        // Output is pretty
+        writeOutputIsTTY() {
+            return true;
+        }
+
+        override now() {
+            this.time += timeIncrements;
+            return new Date(this.time);
+        }
+
+        // TODO: record and invoke callbacks to simulate timer events
+        setTimeout(callback: TimeOutCallback, _time: number, ...args: any[]) {
+            return this.timeoutCallbacks.register(callback, args);
+        }
+
+        getNextTimeoutId() {
+            return this.timeoutCallbacks.getNextId();
+        }
+
+        clearTimeout(timeoutId: any): void {
+            this.timeoutCallbacks.unregister(timeoutId);
+        }
+
+        runQueuedTimeoutCallbacks(timeoutId?: number) {
+            try {
+                this.timeoutCallbacks.invoke(timeoutId);
+            }
+            catch (e) {
+                if (e.message === this.exitMessage) {
+                    return;
+                }
+                throw e;
+            }
+        }
+
         runQueuedImmediateCallbacks(checkCount?: number) {
             if (checkCount !== undefined) {
                 assert.equal(this.immediateCallbacks.count(), checkCount);
             }
-            super.runQueuedImmediateCallbacks();
+            this.immediateCallbacks.invoke();
+        }
+
+        setImmediate(callback: TimeOutCallback, _time: number, ...args: any[]) {
+            return this.immediateCallbacks.register(callback, args);
+        }
+
+        clearImmediate(timeoutId: any): void {
+            this.immediateCallbacks.unregister(timeoutId);
         }
 
         clearScreen(): void {
@@ -260,6 +472,115 @@ interface Array<T> { length: number; [n: number]: T; }`
         checkTimeoutQueueLength(expected: number) {
             const callbacksCount = this.timeoutCallbacks.count();
             assert.equal(callbacksCount, expected, `expected ${expected} timeout callbacks queued but found ${callbacksCount}.`);
+        }
+
+        renameFile(fileName: string, newFileName: string) {
+            const fullPath = getNormalizedAbsolutePath(fileName, this.currentDirectory);
+            const path = this.toPath(fullPath);
+            const file = this.fs.get(path) as FsFile;
+            Debug.assert(!!file);
+
+            // Only remove the file
+            this.removeFileOrFolder(file, /*isRemoveableLeafFolder*/ false, /*isRenaming*/ true);
+
+            // Add updated folder with new folder name
+            const newFullPath = getNormalizedAbsolutePath(newFileName, this.currentDirectory);
+            const newFile = this.toFsFile({ path: newFullPath, content: file.content });
+            const newPath = newFile.path;
+            const basePath = getDirectoryPath(path);
+            Debug.assert(basePath !== path);
+            Debug.assert(basePath === getDirectoryPath(newPath));
+            const baseFolder = this.fs.get(basePath) as FsFolder;
+            this.addFileOrFolderInFolder(baseFolder, newFile);
+        }
+
+        renameFolder(folderName: string, newFolderName: string) {
+            const fullPath = getNormalizedAbsolutePath(folderName, this.currentDirectory);
+            const path = this.toPath(fullPath);
+            const folder = this.fs.get(path) as FsFolder;
+            Debug.assert(!!folder);
+
+            // Only remove the folder
+            this.removeFileOrFolder(folder, /*isRemoveableLeafFolder*/ false, /*isRenaming*/ true);
+
+            // Add updated folder with new folder name
+            const newFullPath = getNormalizedAbsolutePath(newFolderName, this.currentDirectory);
+            const newFolder = this.toFsFolder(newFullPath);
+            const newPath = newFolder.path;
+            const basePath = getDirectoryPath(path);
+            Debug.assert(basePath !== path);
+            Debug.assert(basePath === getDirectoryPath(newPath));
+            const baseFolder = this.fs.get(basePath) as FsFolder;
+            this.addFileOrFolderInFolder(baseFolder, newFolder);
+
+            // Invoke watches for files in the folder as deleted (from old path)
+            this.renameFolderEntries(folder, newFolder);
+        }
+
+        private renameFolderEntries(oldFolder: FsFolder, newFolder: FsFolder) {
+            for (const entry of oldFolder.entries) {
+                this.fs.delete(entry.path);
+                this.invokeFileAndFsWatches(entry.fullPath, FileWatcherEventKind.Deleted);
+
+                entry.fullPath = combinePaths(newFolder.fullPath, getBaseFileName(entry.fullPath));
+                entry.path = this.toPath(entry.fullPath);
+                if (newFolder !== oldFolder) {
+                    newFolder.entries.push(entry);
+                }
+                this.fs.set(entry.path, entry);
+                this.invokeFileAndFsWatches(entry.fullPath, FileWatcherEventKind.Created);
+                if (isFsFolder(entry)) {
+                    this.renameFolderEntries(entry, entry);
+                }
+            }
+        }
+
+        deleteFolder(folderPath: string, recursive?: boolean) {
+            const path = this.toFullPath(folderPath);
+            const currentEntry = this.fs.get(path) as FsFolder;
+            Debug.assert(isFsFolder(currentEntry));
+            if (recursive && currentEntry.entries.length) {
+                const subEntries = currentEntry.entries.slice();
+                subEntries.forEach(fsEntry => {
+                    if (isFsFolder(fsEntry)) {
+                        this.deleteFolder(fsEntry.fullPath, recursive);
+                    }
+                    else {
+                        this.removeFileOrFolder(fsEntry, /*isRemoveableLeafFolder*/ false);
+                    }
+                });
+            }
+            this.removeFileOrFolder(currentEntry, /*isRemoveableLeafFolder*/ false);
+        }
+
+        readFile(s: string): string | undefined {
+            const fsEntry = this.getRealFile(this.toFullPath(s));
+            return fsEntry ? fsEntry.content : undefined;
+        }
+
+        getFileSize(s: string) {
+            const path = this.toFullPath(s);
+            const entry = this.fs.get(path)!;
+            if (isFsFile(entry)) {
+                return entry.fileSize ? entry.fileSize : entry.content.length;
+            }
+            return undefined!; // TODO: GH#18217
+        }
+
+        createHash(s: string): string {
+            return `${generateDjb2Hash(s)}-${s}`;
+        }
+
+        createSHA256Hash(s: string): string {
+            return sys.createSHA256Hash!(s);
+        }
+
+        prependFile(path: string, content: string, options?: Partial<ReloadWatchInvokeOptions>): void {
+            this.modifyFile(path, content + this.readFile(path), options);
+        }
+
+        appendFile(path: string, content: string, options?: Partial<ReloadWatchInvokeOptions>): void {
+            this.modifyFile(path, this.readFile(path) + content, options);
         }
 
         override write(message: string) {
@@ -323,6 +644,10 @@ interface Array<T> { length: number; [n: number]: T; }`
             baseline.push("");
             serializeMultiMap(baseline, "FsWatchesRecursive", this.fsWatchesRecursive, serializeTestFsWatcher);
             baseline.push("");
+        }
+
+        override getEnvironmentVariable(name: string) {
+            return this.environmentVariables && this.environmentVariables.get(name) || "";
         }
     }
 

@@ -55,8 +55,8 @@ ${file.fileContent}`;
         }
         it("with updateFileSystem request", () => {
             // TODO: probably some other watcher tests, not sure what
-            const host = VirtualFS.createVirtualServerHost([], { executingFilePath: "/a/tsc.js" });
-            const session = createVirtualFilesystemSession(host, host);
+            const host = VirtualFS.createVirtualServerHost({ executingFilePath: "/a/tsc.js" });
+            const session = createSession(host, { fshost: host });
             const files = [app, file1, file2, file3, config, lib];
             session.executeCommandSeq<protocol.UpdateFileSystemRequest>({
                 command: protocol.CommandTypes.UpdateFileSystem,
