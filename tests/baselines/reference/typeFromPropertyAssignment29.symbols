@@ -172,9 +172,9 @@ namespace Ns {
 >ExpandoNamespace : Symbol(ExpandoNamespace, Decl(typeFromPropertyAssignment29.ts, 47, 14))
 
     ExpandoNamespace.p6 = 42;
->ExpandoNamespace.p6 : Symbol(ExpandoNamespace.p6, Decl(typeFromPropertyAssignment29.ts, 48, 40))
+>ExpandoNamespace.p6 : Symbol(p6, Decl(typeFromPropertyAssignment29.ts, 48, 40))
 >ExpandoNamespace : Symbol(ExpandoNamespace, Decl(typeFromPropertyAssignment29.ts, 47, 14))
->p6 : Symbol(ExpandoNamespace.p6, Decl(typeFromPropertyAssignment29.ts, 48, 40))
+>p6 : Symbol(p6, Decl(typeFromPropertyAssignment29.ts, 48, 40))
 
     export function foo() {
 >foo : Symbol(foo, Decl(typeFromPropertyAssignment29.ts, 49, 29))

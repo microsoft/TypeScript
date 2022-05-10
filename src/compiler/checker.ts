@@ -4020,7 +4020,10 @@ namespace ts {
                         }
                     });
                 }) : undefined;
-                let res = firstVariableMatch ? [firstVariableMatch, ...additionalContainers, container] : [...additionalContainers, container];
+                let res = firstVariableMatch ? [firstVariableMatch, ...additionalContainers] : [...additionalContainers];
+                if (!container.valueDeclaration || container.valueDeclaration.kind !== SyntaxKind.FunctionDeclaration || !isExpandoFunctionDeclaration(container.valueDeclaration)) {
+                    res = append(res, container);
+                }
                 res = append(res, objectLiteralContainer);
                 res = addRange(res, reexportContainers);
                 return res;
