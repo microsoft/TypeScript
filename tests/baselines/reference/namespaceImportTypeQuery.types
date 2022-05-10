@@ -13,10 +13,10 @@ import * as types from './a';
 >types : typeof types
 
 let A: typeof types.A;
->A : any
->types.A : any
+>A : typeof types.A
+>types.A : typeof types.A
 >types : typeof types
->A : any
+>A : typeof types.A
 
 let B: typeof types.B;
 >B : typeof types.B
