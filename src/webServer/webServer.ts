@@ -137,8 +137,7 @@ namespace ts.server {
                 return ts.server.dynamicImport(id);
             }
 
-            // Fall back to `eval` if dynamic import wasn't avaialble.
-            return eval(`import(${JSON.stringify(id)})`); // eslint-disable-line no-eval
+            throw new Error("Dynamic import not implemented");
         };
 
         return {
