@@ -349,7 +349,7 @@ declare namespace FourSlashInterface {
         baselineSyntacticDiagnostics(): void;
         baselineSyntacticAndSemanticDiagnostics(): void;
         getEmitOutput(expectedOutputFiles: ReadonlyArray<string>): void;
-        baselineCompletions(): void;
+        baselineCompletions(preferences?: UserPreferences): void;
         baselineQuickInfo(): void;
         baselineSmartSelection(): void;
         baselineSignatureHelp(): void;
