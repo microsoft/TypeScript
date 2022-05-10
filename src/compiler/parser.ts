@@ -4538,6 +4538,10 @@ namespace ts {
                 // isn't actually allowed, but we want to treat it as a lambda so we can provide
                 // a good error message.
                 if (isModifierKind(second) && second !== SyntaxKind.AsyncKeyword && lookAhead(nextTokenIsIdentifier)) {
+                    if (nextToken() === SyntaxKind.AsKeyword) {
+                        // https://github.com/microsoft/TypeScript/issues/44466
+                        return Tristate.False;
+                    }
                     return Tristate.True;
                 }
 
