@@ -24,3 +24,18 @@ let B: typeof types.B;
 >types : Symbol(types, Decl(b.ts, 0, 6))
 >B : Symbol(types.B, Decl(a.ts, 1, 18))
 
+let t: typeof types = {
+>t : Symbol(t, Decl(b.ts, 4, 3))
+>types : Symbol(types, Decl(b.ts, 0, 6))
+
+  // error: while you can ask for `typeof types.A`,
+  // `typeof types` does not include `A`
+  A: undefined as any,
+>A : Symbol(A, Decl(b.ts, 4, 23))
+>undefined : Symbol(undefined)
+
+  B: undefined as any,
+>B : Symbol(B, Decl(b.ts, 7, 22))
+>undefined : Symbol(undefined)
+}
+
