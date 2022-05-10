@@ -155,9 +155,9 @@ src/first/first_part3.ts
 lib/lib.d.ts
   Default library for target 'es5'
 src/second/second_part1.ts
-  Matched by include pattern '**/*' in 'src/second/tsconfig.json'
+  Matched by default include pattern '**/*'
 src/second/second_part2.ts
-  Matched by include pattern '**/*' in 'src/second/tsconfig.json'
+  Matched by default include pattern '**/*'
 [[90m12:00:27 AM[0m] Project 'src/third/tsconfig.json' is out of date because output file 'src/third/thirdjs/output/third-output.js' does not exist
 
 [[90m12:00:28 AM[0m] Building project '/src/third/tsconfig.json'...

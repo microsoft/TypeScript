@@ -1444,6 +1444,10 @@
         "category": "Error",
         "code": 1456
     },
+    "Matched by default include pattern '**/*'": {
+        "category": "Message",
+        "code": 1457
+    },
 
     "The 'import.meta' meta-property is not allowed in files which will build into CommonJS output.": {
         "category": "Error",

@@ -3764,7 +3764,7 @@ namespace ts {
                     }
                     const matchedByInclude = getMatchedIncludeSpec(program, fileName);
                     // Could be additional files specified as roots
-                    if (!matchedByInclude) return undefined;
+                    if (!matchedByInclude || !isString(matchedByInclude)) return undefined;
                     configFileNode = getTsConfigPropArrayElementValue(options.configFile, "include", matchedByInclude);
                     message = Diagnostics.File_is_matched_by_include_pattern_specified_here;
                     break;
