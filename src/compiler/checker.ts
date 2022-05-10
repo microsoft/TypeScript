@@ -23064,6 +23064,31 @@ namespace ts {
             return links.resolvedSymbol;
         }
 
+        function getSymbolWithAnyMeaning(node: Identifier): Symbol {
+            const links = getNodeLinks(node);
+            return links.resolvedSymbol || !nodeIsMissing(node) &&
+                // resolveName(
+                //     node,
+                //     node.escapedText,
+                //     // SymbolFlags.All & (~SymbolFlags.Alias), // >> TODO: is that ok?
+                //     SymbolFlags.All,
+                //     undefined, // Do not report error if symbol is not found
+                //     node,
+                //     !isWriteOnlyAccess(node),
+                //     /*excludeGlobals*/ false) || unknownSymbol;
+                resolveNameHelper(
+                    node,
+                    node.escapedText,
+                    SymbolFlags.Value | SymbolFlags.ExportValue,
+                    undefined,
+                    node,
+                    !isWriteOnlyAccess(node),
+                    /*excludeGlobals*/ false,
+                    /*getSpellingSuggestions*/ true,
+                    (symbol, name, _meaning) => getSymbol(symbol, name, SymbolFlags.All)
+                ) || unknownSymbol;
+        }
+
         function isInTypeQuery(node: Node): boolean {
             // TypeScript 1.0 spec (April 2014): 3.6.3
             // A type query consists of the keyword typeof followed by an expression.
@@ -25477,21 +25502,19 @@ namespace ts {
         }
 
         function markAliasReferenced(symbol: Symbol, location: Node) {
-            if (isNonLocalAlias(symbol, /*excludes*/ SymbolFlags.Value) && !isInTypeQuery(location) && !getTypeOnlyAliasDeclaration(symbol)) {
-                const target = resolveAlias(symbol);
-                if (target.flags & SymbolFlags.Value) {
-                    // An alias resolving to a const enum cannot be elided if (1) 'isolatedModules' is enabled
-                    // (because the const enum value will not be inlined), or if (2) the alias is an export
-                    // of a const enum declaration that will be preserved.
-                    if (compilerOptions.isolatedModules ||
-                        shouldPreserveConstEnums(compilerOptions) && isExportOrExportExpression(location) ||
-                        !isConstEnumOrConstEnumOnlyModule(target)
-                    ) {
-                        markAliasSymbolAsReferenced(symbol);
-                    }
-                    else {
-                        markConstEnumAliasAsReferenced(symbol);
-                    }
+            const isInJSDoc = findAncestor(location, isJSDocNode);
+            if (isNonLocalAlias(symbol, /*excludes*/ SymbolFlags.Value) && !isInTypeQuery(location) && !getTypeOnlyAliasDeclaration(symbol) && !isInJSDoc) {
+                // An alias resolving to a const enum cannot be elided if (1) 'isolatedModules' is enabled
+                // (because the const enum value will not be inlined), or if (2) the alias is an export
+                // of a const enum declaration that will be preserved.
+                if (compilerOptions.isolatedModules ||
+                    shouldPreserveConstEnums(compilerOptions) && isExportOrExportExpression(location) ||
+                    !isConstEnumOrConstEnumOnlyModule(resolveAlias(symbol))
+                ) {
+                    markAliasSymbolAsReferenced(symbol);
+                }
+                else {
+                    markConstEnumAliasAsReferenced(symbol);
                 }
             }
         }
@@ -25584,6 +25607,15 @@ namespace ts {
                 return checkThisExpression(node);
             }
 
+            // We should only mark aliases as referenced if there isn't a local value declaration
+            // for the symbol. Also, don't mark any property access expression LHS - checkPropertyAccessExpression will handle that
+            if (!(node.parent && isPropertyAccessExpression(node.parent) && node.parent.expression === node)) {
+                const symbol = getSymbolWithAnyMeaning(node);
+                if (symbol !== unknownSymbol) {
+                    markAliasReferenced(symbol, node);
+                }
+            }
+
             const symbol = getResolvedSymbol(node);
             if (symbol === unknownSymbol) {
                 return errorType;
@@ -25615,11 +25647,11 @@ namespace ts {
                 return getTypeOfSymbol(symbol);
             }
 
-            // We should only mark aliases as referenced if there isn't a local value declaration
-            // for the symbol. Also, don't mark any property access expression LHS - checkPropertyAccessExpression will handle that
-            if (!(node.parent && isPropertyAccessExpression(node.parent) && node.parent.expression === node)) {
-                markAliasReferenced(symbol, node);
-            }
+            // // We should only mark aliases as referenced if there isn't a local value declaration
+            // // for the symbol. Also, don't mark any property access expression LHS - checkPropertyAccessExpression will handle that
+            // if (!(node.parent && isPropertyAccessExpression(node.parent) && node.parent.expression === node)) {
+            //     markAliasReferenced(symbol, node);
+            // }
 
             const localOrExportSymbol = getExportSymbolOfValueSymbolIfExported(symbol);
             const targetSymbol = checkDeprecatedAliasedSymbol(localOrExportSymbol, node);
@@ -40996,10 +41028,11 @@ namespace ts {
                 const id = node.expression as Identifier;
                 const sym = resolveEntityName(id, SymbolFlags.All, /*ignoreErrors*/ true, /*dontResolveAlias*/ true, node);
                 if (sym) {
-                    markAliasReferenced(sym, id);
                     // If not a value, we're interpreting the identifier as a type export, along the lines of (`export { Id as default }`)
                     const target = sym.flags & SymbolFlags.Alias ? resolveAlias(sym) : sym;
                     if (target === unknownSymbol || target.flags & SymbolFlags.Value) {
+                        // Only mark aliases that resolve to values as referenced
+                        markAliasReferenced(sym, id);
                         // However if it is a value, we need to check it's being used correctly
                         checkExpressionCached(node.expression);
                     }
