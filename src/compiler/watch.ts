@@ -507,6 +507,13 @@ namespace ts {
         ExtendedConfigOfReferencedProject: "Extended config file of referenced project",
         WildcardDirectoryOfReferencedProject: "Wild card directory of referenced project",
         PackageJson: "package.json file",
+        ClosedScriptInfo: "Closed Script info",
+        ConfigFileForInferredRoot: "Config file for the inferred project root",
+        NodeModules: "node_modules for closed script infos and package.jsons affecting module specifier cache",
+        MissingSourceMapFile: "Missing source map file",
+        NoopConfigFileForInferredRoot: "Noop Config file for the inferred project root",
+        MissingGeneratedFile: "Missing generated file",
+        NodeModulesForModuleSpecifierCache: "node_modules for module specifier cache invalidation",
     };
 
     export interface WatchTypeRegistry {
@@ -521,6 +528,20 @@ namespace ts {
         ExtendedConfigOfReferencedProject: "Extended config file of referenced project",
         WildcardDirectoryOfReferencedProject: "Wild card directory of referenced project",
         PackageJson: "package.json file",
+        /* @internal */
+        ClosedScriptInfo: "Closed Script info",
+        /* @internal */
+        ConfigFileForInferredRoot: "Config file for the inferred project root",
+        /* @internal */
+        NodeModules: "node_modules for closed script infos and package.jsons affecting module specifier cache",
+        /* @internal */
+        MissingSourceMapFile: "Missing source map file",
+        /* @internal */
+        NoopConfigFileForInferredRoot: "Noop Config file for the inferred project root",
+        /* @internal */
+        MissingGeneratedFile: "Missing generated file",
+        /* @internal */
+        NodeModulesForModuleSpecifierCache: "node_modules for module specifier cache invalidation",
     }
 
     interface WatchFactory<X, Y = undefined> extends ts.WatchFactory<X, Y> {
