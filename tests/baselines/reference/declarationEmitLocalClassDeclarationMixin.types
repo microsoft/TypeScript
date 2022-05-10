@@ -33,7 +33,7 @@ export const Mixed = mixin(Unmixed);
 >Unmixed : typeof Unmixed
 
 function Filter<C extends Constructor<{}>>(ctor: C) {
->Filter : <C extends Constructor<{}>>(ctor: C) => { new (...args: any[]): FilterMixin; prototype: Filter<any>.FilterMixin; } & C
+>Filter : <C extends Constructor<{}>>(ctor: C) => ((abstract new (...args: any[]) => FilterMixin) & { prototype: Filter<any>.FilterMixin; }) & C
 >ctor : C
 
     abstract class FilterMixin extends ctor {
@@ -50,13 +50,13 @@ function Filter<C extends Constructor<{}>>(ctor: C) {
 >12 : 12
     }
     return FilterMixin;
->FilterMixin : { new (...args: any[]): FilterMixin; prototype: Filter<any>.FilterMixin; } & C
+>FilterMixin : ((abstract new (...args: any[]) => FilterMixin) & { prototype: Filter<any>.FilterMixin; }) & C
 }
 
 export class FilteredThing extends Filter(Unmixed) {
 >FilteredThing : FilteredThing
 >Filter(Unmixed) : Filter<typeof Unmixed>.FilterMixin & Unmixed
->Filter : <C extends Constructor<{}>>(ctor: C) => { new (...args: any[]): FilterMixin; prototype: Filter<any>.FilterMixin; } & C
+>Filter : <C extends Constructor<{}>>(ctor: C) => ((abstract new (...args: any[]) => FilterMixin) & { prototype: Filter<any>.FilterMixin; }) & C
 >Unmixed : typeof Unmixed
 
     match(path: string) {

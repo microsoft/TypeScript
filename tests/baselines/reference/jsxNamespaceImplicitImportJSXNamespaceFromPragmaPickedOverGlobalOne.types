@@ -60,7 +60,7 @@ type ReactJSXElementChildrenAttribute = JSX.ElementChildrenAttribute
 >JSX : any
 
 type ReactJSXLibraryManagedAttributes<C, P> = JSX.LibraryManagedAttributes<C, P>
->ReactJSXLibraryManagedAttributes : JSX.LibraryManagedAttributes<C, P>
+>ReactJSXLibraryManagedAttributes : ReactJSXLibraryManagedAttributes<C, P>
 >JSX : any
 
 type ReactJSXIntrinsicAttributes = JSX.IntrinsicAttributes
@@ -92,7 +92,7 @@ export namespace EmotionJSX {
         extends ReactJSXIntrinsicClassAttributes<T> { }
 
     type IntrinsicElements = {
->IntrinsicElements : IntrinsicElements
+>IntrinsicElements : { div: { css?: string | undefined; }; }
 
         [K in keyof ReactJSXIntrinsicElements]: ReactJSXIntrinsicElements[K] & {
             css?: string

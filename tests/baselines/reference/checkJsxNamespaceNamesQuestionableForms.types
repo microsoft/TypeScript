@@ -1,0 +1,37 @@
+=== tests/cases/conformance/jsx/checkJsxNamespaceNamesQuestionableForms.tsx ===
+declare namespace JSX {
+    interface IntrinsicElements {
+        'this:b': any;
+>'this:b' : any
+
+        'b:c': {
+>'b:c' : { x: any; }
+
+            x: any
+>x : any
+
+        };
+        'a:b': any;
+>'a:b' : any
+    }
+}
+
+<a:b></a:b>;
+><a:b></a:b> : any
+>a:b : any
+>a:b : any
+
+<b:c.x></b:c.x>;
+><b:c.x></b:c.x> : any
+>b:c.x : any
+>b:c : any
+>x : any
+>b:c.x : any
+>b:c : any
+>x : any
+
+<this:b></this:b>;
+><this:b></this:b> : any
+>this:b : any
+>this:b : any
+

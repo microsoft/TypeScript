@@ -8,30 +8,42 @@ namespace ts {
             projFs = undefined!;
         });
 
-        verifyTscSerializedIncrementalEdits({
+        verifyTscWithEdits({
             scenario: "inferredTypeFromTransitiveModule",
             subScenario: "inferred type from transitive module",
             fs: () => projFs,
             commandLineArgs: ["--b", "/src", "--verbose"],
-            incrementalScenarios: [{
-                buildKind: BuildKind.IncrementalDtsChange,
-                modifyFs: changeBarParam,
-            }],
+            edits: [
+                {
+                    subScenario: "incremental-declaration-changes",
+                    modifyFs: changeBarParam,
+                },
+                {
+                    subScenario: "incremental-declaration-changes",
+                    modifyFs: changeBarParamBack,
+                },
+            ],
         });
 
-        verifyTscSerializedIncrementalEdits({
+        verifyTscWithEdits({
             subScenario: "inferred type from transitive module with isolatedModules",
             fs: () => projFs,
             scenario: "inferredTypeFromTransitiveModule",
             commandLineArgs: ["--b", "/src", "--verbose"],
             modifyFs: changeToIsolatedModules,
-            incrementalScenarios: [{
-                buildKind: BuildKind.IncrementalDtsChange,
-                modifyFs: changeBarParam
-            }]
+            edits: [
+                {
+                    subScenario: "incremental-declaration-changes",
+                    modifyFs: changeBarParam
+                },
+                {
+                    subScenario: "incremental-declaration-changes",
+                    modifyFs: changeBarParamBack,
+                },
+            ]
         });
 
-        verifyTscSerializedIncrementalEdits({
+        verifyTscWithEdits({
             scenario: "inferredTypeFromTransitiveModule",
             subScenario: "reports errors in files affected by change in signature with isolatedModules",
             fs: () => projFs,
@@ -42,14 +54,21 @@ namespace ts {
 import { default as bar } from './bar';
 bar("hello");`);
             },
-            incrementalScenarios: [
+            edits: [
                 {
-                    buildKind: BuildKind.IncrementalDtsChange,
+                    subScenario: "incremental-declaration-changes",
+                    modifyFs: changeBarParam
+                },
+                {
+                    subScenario: "incremental-declaration-changes",
+                    modifyFs: changeBarParamBack,
+                },
+                {
+                    subScenario: "incremental-declaration-changes",
                     modifyFs: changeBarParam
                 },
                 {
                     subScenario: "Fix Error",
-                    buildKind: BuildKind.IncrementalDtsChange,
                     modifyFs: fs => replaceText(fs, "/src/lazyIndex.ts", `bar("hello")`, "bar()")
                 },
             ]
@@ -62,5 +81,9 @@ bar("hello");`);
 
     function changeBarParam(fs: vfs.FileSystem) {
         replaceText(fs, "/src/bar.ts", "param: string", "");
+    }
+
+    function changeBarParamBack(fs: vfs.FileSystem) {
+        replaceText(fs, "/src/bar.ts", "foobar()", "foobar(param: string)");
     }
 }

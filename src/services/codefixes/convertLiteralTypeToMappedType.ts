@@ -5,7 +5,7 @@ namespace ts.codefix {
 
     registerCodeFix({
         errorCodes,
-        getCodeActions: context => {
+        getCodeActions: function getCodeActionsToConvertLiteralTypeToMappedType(context) {
             const { sourceFile, span } = context;
             const info = getInfo(sourceFile, span.start);
             if (!info) {
@@ -47,7 +47,12 @@ namespace ts.codefix {
     }
 
     function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, { container, typeNode, constraint, name }: Info): void {
-        changes.replaceNode(sourceFile, container, factory.createMappedTypeNode(/*readonlyToken*/ undefined,
-            factory.createTypeParameterDeclaration(name, factory.createTypeReferenceNode(constraint)), /*nameType*/ undefined, /*questionToken*/ undefined, typeNode));
+        changes.replaceNode(sourceFile, container, factory.createMappedTypeNode(
+            /*readonlyToken*/ undefined,
+            factory.createTypeParameterDeclaration(/*modifiers*/ undefined, name, factory.createTypeReferenceNode(constraint)),
+            /*nameType*/ undefined,
+            /*questionToken*/ undefined,
+            typeNode,
+            /*members*/ undefined));
     }
 }

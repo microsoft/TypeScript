@@ -1,7 +1,7 @@
 === tests/cases/conformance/es6/templates/templateStringWithEmbeddedConditional.ts ===
 var x = `abc${ true ? false : " " }def`;
->x : "abcfalsedef" | "abc def"
->`abc${ true ? false : " " }def` : "abcfalsedef" | "abc def"
+>x : string
+>`abc${ true ? false : " " }def` : string
 >true ? false : " " : false | " "
 >true : true
 >false : false

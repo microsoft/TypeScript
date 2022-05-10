@@ -1,0 +1,54 @@
+=== tests/cases/conformance/classes/mixinAbstractClasses.2.ts ===
+interface Mixin {
+>Mixin : Symbol(Mixin, Decl(mixinAbstractClasses.2.ts, 2, 1), Decl(mixinAbstractClasses.2.ts, 0, 0))
+
+    mixinMethod(): void;
+>mixinMethod : Symbol(Mixin.mixinMethod, Decl(mixinAbstractClasses.2.ts, 0, 17))
+}
+
+function Mixin<TBaseClass extends abstract new (...args: any) => any>(baseClass: TBaseClass): TBaseClass & (abstract new (...args: any) => Mixin) {
+>Mixin : Symbol(Mixin, Decl(mixinAbstractClasses.2.ts, 2, 1), Decl(mixinAbstractClasses.2.ts, 0, 0))
+>TBaseClass : Symbol(TBaseClass, Decl(mixinAbstractClasses.2.ts, 4, 15))
+>args : Symbol(args, Decl(mixinAbstractClasses.2.ts, 4, 48))
+>baseClass : Symbol(baseClass, Decl(mixinAbstractClasses.2.ts, 4, 70))
+>TBaseClass : Symbol(TBaseClass, Decl(mixinAbstractClasses.2.ts, 4, 15))
+>TBaseClass : Symbol(TBaseClass, Decl(mixinAbstractClasses.2.ts, 4, 15))
+>args : Symbol(args, Decl(mixinAbstractClasses.2.ts, 4, 122))
+>Mixin : Symbol(Mixin, Decl(mixinAbstractClasses.2.ts, 2, 1), Decl(mixinAbstractClasses.2.ts, 0, 0))
+
+    // error expected: A mixin class that extends from a type variable containing an abstract construct signature must also be declared 'abstract'.
+    class MixinClass extends baseClass implements Mixin {
+>MixinClass : Symbol(MixinClass, Decl(mixinAbstractClasses.2.ts, 4, 147))
+>baseClass : Symbol(baseClass, Decl(mixinAbstractClasses.2.ts, 4, 70))
+>Mixin : Symbol(Mixin, Decl(mixinAbstractClasses.2.ts, 2, 1), Decl(mixinAbstractClasses.2.ts, 0, 0))
+
+        mixinMethod() {
+>mixinMethod : Symbol(MixinClass.mixinMethod, Decl(mixinAbstractClasses.2.ts, 6, 57))
+        }
+    }
+    return MixinClass;
+>MixinClass : Symbol(MixinClass, Decl(mixinAbstractClasses.2.ts, 4, 147))
+}
+
+abstract class AbstractBase {
+>AbstractBase : Symbol(AbstractBase, Decl(mixinAbstractClasses.2.ts, 11, 1))
+
+    abstract abstractBaseMethod(): void;
+>abstractBaseMethod : Symbol(AbstractBase.abstractBaseMethod, Decl(mixinAbstractClasses.2.ts, 13, 29))
+}
+
+const MixedBase = Mixin(AbstractBase);
+>MixedBase : Symbol(MixedBase, Decl(mixinAbstractClasses.2.ts, 17, 5))
+>Mixin : Symbol(Mixin, Decl(mixinAbstractClasses.2.ts, 2, 1), Decl(mixinAbstractClasses.2.ts, 0, 0))
+>AbstractBase : Symbol(AbstractBase, Decl(mixinAbstractClasses.2.ts, 11, 1))
+
+// error expected: Non-abstract class 'DerivedFromAbstract' does not implement inherited abstract member 'abstractBaseMethod' from class 'AbstractBase & Mixin'.
+class DerivedFromAbstract extends MixedBase {
+>DerivedFromAbstract : Symbol(DerivedFromAbstract, Decl(mixinAbstractClasses.2.ts, 17, 38))
+>MixedBase : Symbol(MixedBase, Decl(mixinAbstractClasses.2.ts, 17, 5))
+}
+
+// error expected: Cannot create an instance of an abstract class.
+new MixedBase();
+>MixedBase : Symbol(MixedBase, Decl(mixinAbstractClasses.2.ts, 17, 5))
+

@@ -1,0 +1,23 @@
+=== tests/cases/conformance/jsdoc/typedefScope1.js ===
+function B1() {
+>B1 : Symbol(B1, Decl(typedefScope1.js, 0, 0))
+
+    /** @typedef {number} B */
+    /** @type {B} */
+    var ok1 = 0;
+>ok1 : Symbol(ok1, Decl(typedefScope1.js, 3, 7))
+}
+
+function B2() {
+>B2 : Symbol(B2, Decl(typedefScope1.js, 4, 1))
+
+    /** @typedef {string} B */
+    /** @type {B} */
+    var ok2 = 'hi';
+>ok2 : Symbol(ok2, Decl(typedefScope1.js, 9, 7))
+}
+
+/** @type {B} */
+var notOK = 0;
+>notOK : Symbol(notOK, Decl(typedefScope1.js, 13, 3))
+

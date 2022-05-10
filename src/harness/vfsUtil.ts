@@ -55,12 +55,12 @@ namespace vfs {
         } = {};
 
         private _cwd: string; // current working directory
-        private _time: number | Date | (() => number | Date);
+        private _time: number;
         private _shadowRoot: FileSystem | undefined;
         private _dirStack: string[] | undefined;
 
         constructor(ignoreCase: boolean, options: FileSystemOptions = {}) {
-            const { time = -1, files, meta } = options;
+            const { time = ts.TestFSWithWatch.timeIncrements, files, meta } = options;
             this.ignoreCase = ignoreCase;
             this.stringComparer = this.ignoreCase ? vpath.compareCaseInsensitive : vpath.compareCaseSensitive;
             this._time = time;
@@ -167,16 +167,15 @@ namespace vfs {
          *
          * @link http://pubs.opengroup.org/onlinepubs/9699919799/functions/time.html
          */
-        public time(value?: number | Date | (() => number | Date)): number {
-            if (value !== undefined && this.isReadonly) throw createIOError("EPERM");
-            let result = this._time;
-            if (typeof result === "function") result = result();
-            if (typeof result === "object") result = result.getTime();
-            if (result === -1) result = Date.now();
+        public time(value?: number): number {
             if (value !== undefined) {
+                if (this.isReadonly) throw createIOError("EPERM");
                 this._time = value;
             }
-            return result;
+            else if (!this.isReadonly) {
+                this._time += ts.TestFSWithWatch.timeIncrements;
+            }
+            return this._time;
         }
 
         /**
@@ -809,7 +808,11 @@ namespace vfs {
             const baseBuffer = base._getBuffer(baseNode);
 
             // no difference if both buffers are the same reference
-            if (changedBuffer === baseBuffer) return false;
+            if (changedBuffer === baseBuffer) {
+                if (!options.includeChangedFileWithSameContent || changedNode.mtimeMs === baseNode.mtimeMs) return false;
+                container[basename] = new SameFileWithModifiedTime(changedBuffer);
+                return true;
+            }
 
             // no difference if both buffers are identical
             if (Buffer.compare(changedBuffer, baseBuffer) === 0) {
@@ -839,7 +842,7 @@ namespace vfs {
                 container[basename] = new Symlink(node.symlink);
             }
             else {
-                container[basename] = new File(node.buffer || "");
+                container[basename] = new File(changed._getBuffer(node));
             }
             return true;
         }
@@ -848,14 +851,18 @@ namespace vfs {
             // no difference if links are empty
             if (!changedLinks.size) return false;
 
-            changedLinks.forEach((node, basename) => { FileSystem.trackCreatedInode(container, basename, changed, node); });
+            changedLinks.forEach((node, basename) => {
+                FileSystem.trackCreatedInode(container, basename, changed, node);
+            });
             return true;
         }
 
         private static trackDeletedInodes(container: FileSet, baseLinks: ReadonlyMap<string, Inode>) {
             // no difference if links are empty
             if (!baseLinks.size) return false;
-            baseLinks.forEach((node, basename) => { container[basename] = isDirectory(node) ? new Rmdir() : new Unlink(); });
+            baseLinks.forEach((node, basename) => {
+                container[basename] = isDirectory(node) ? new Rmdir() : new Unlink();
+            });
             return true;
         }
 
@@ -863,7 +870,7 @@ namespace vfs {
         private _mknod(dev: number, type: typeof S_IFDIR, mode: number, time?: number): DirectoryInode;
         private _mknod(dev: number, type: typeof S_IFLNK, mode: number, time?: number): SymlinkInode;
         private _mknod(dev: number, type: number, mode: number, time = this.time()) {
-            return <Inode>{
+            return {
                 dev,
                 ino: ++inoCount,
                 mode: (mode & ~S_IFMT & ~0o022 & 0o7777) | (type & S_IFMT),
@@ -872,7 +879,7 @@ namespace vfs {
                 ctimeMs: time,
                 birthtimeMs: time,
                 nlink: 0
-            };
+            } as Inode;
         }
 
         private _addLink(parent: DirectoryInode | undefined, links: collections.SortedMap<string, Inode>, name: string, node: Inode, time = this.time()) {
@@ -956,7 +963,7 @@ namespace vfs {
 
             let shadow = shadows.get(root.ino);
             if (!shadow) {
-                shadow = <Inode>{
+                shadow = {
                     dev: root.dev,
                     ino: root.ino,
                     mode: root.mode,
@@ -966,9 +973,9 @@ namespace vfs {
                     birthtimeMs: root.birthtimeMs,
                     nlink: root.nlink,
                     shadowRoot: root
-                };
+                } as Inode;
 
-                if (isSymlink(root)) (<SymlinkInode>shadow).symlink = root.symlink;
+                if (isSymlink(root)) (shadow as SymlinkInode).symlink = root.symlink;
                 shadows.set(shadow.ino, shadow);
             }
 
@@ -1164,9 +1171,8 @@ namespace vfs {
     }
 
     export interface FileSystemOptions {
-        // Sets the initial timestamp for new files and directories, or the function used
-        // to calculate timestamps.
-        time?: number | Date | (() => number | Date);
+        // Sets the initial timestamp for new files and directories
+        time?: number;
 
         // A set of file system entries to initially add to the file system.
         files?: FileSet;
@@ -1387,6 +1393,12 @@ namespace vfs {
         }
     }
 
+    export class SameFileWithModifiedTime extends File {
+        constructor(data: Buffer | string, metaAndEncoding?: { encoding?: string, meta?: Record<string, any> }) {
+            super(data, metaAndEncoding);
+        }
+    }
+
     /** Extended options for a hard link in a `FileSet` */
     export class Link {
         public readonly path: string;
@@ -1574,6 +1586,9 @@ namespace vfs {
             }
             else if (entry instanceof Directory) {
                 text += formatPatchWorker(file, entry.files);
+            }
+            else if (entry instanceof SameFileWithModifiedTime) {
+                text += `//// [${file}] file changed its modified time\r\n`;
             }
             else if (entry instanceof SameFileContentFile) {
                 text += `//// [${file}] file written with same contents\r\n`;

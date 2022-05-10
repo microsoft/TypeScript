@@ -501,10 +501,10 @@ take(function(...rest){});
 // Repro from #29833
 
 type ArgsUnion = [number, string] | [number, Error];
->ArgsUnion : ArgsUnion
+>ArgsUnion : [number, string] | [number, Error]
 
 type TupleUnionFunc = (...params: ArgsUnion) => number;
->TupleUnionFunc : TupleUnionFunc
+>TupleUnionFunc : (...params: ArgsUnion) => number
 >params : ArgsUnion
 
 const funcUnionTupleNoRest: TupleUnionFunc = (num, strOrErr) => {

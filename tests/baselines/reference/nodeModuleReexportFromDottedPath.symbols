@@ -1,0 +1,41 @@
+=== /node_modules/.prisma/client/index.d.ts ===
+export interface PrismaClientOptions {
+>PrismaClientOptions : Symbol(PrismaClientOptions, Decl(index.d.ts, 0, 0))
+
+  rejectOnNotFound?: any;
+>rejectOnNotFound : Symbol(PrismaClientOptions.rejectOnNotFound, Decl(index.d.ts, 0, 38))
+}
+
+export class PrismaClient<T extends PrismaClientOptions = PrismaClientOptions> {
+>PrismaClient : Symbol(PrismaClient, Decl(index.d.ts, 2, 1))
+>T : Symbol(T, Decl(index.d.ts, 4, 26))
+>PrismaClientOptions : Symbol(PrismaClientOptions, Decl(index.d.ts, 0, 0))
+>PrismaClientOptions : Symbol(PrismaClientOptions, Decl(index.d.ts, 0, 0))
+
+  private fetcher;
+>fetcher : Symbol(PrismaClient.fetcher, Decl(index.d.ts, 4, 80))
+}
+
+=== /node_modules/@prisma/client/index.d.ts ===
+export * from ".prisma/client";
+No type information for this code.
+No type information for this code.=== /index.ts ===
+import { PrismaClient } from "@prisma/client";
+>PrismaClient : Symbol(PrismaClient, Decl(index.ts, 0, 8))
+
+declare const enhancePrisma: <TPrismaClientCtor>(client: TPrismaClientCtor) => TPrismaClientCtor & { enhanced: unknown };
+>enhancePrisma : Symbol(enhancePrisma, Decl(index.ts, 1, 13))
+>TPrismaClientCtor : Symbol(TPrismaClientCtor, Decl(index.ts, 1, 30))
+>client : Symbol(client, Decl(index.ts, 1, 49))
+>TPrismaClientCtor : Symbol(TPrismaClientCtor, Decl(index.ts, 1, 30))
+>TPrismaClientCtor : Symbol(TPrismaClientCtor, Decl(index.ts, 1, 30))
+>enhanced : Symbol(enhanced, Decl(index.ts, 1, 100))
+
+const EnhancedPrisma = enhancePrisma(PrismaClient);
+>EnhancedPrisma : Symbol(EnhancedPrisma, Decl(index.ts, 2, 5))
+>enhancePrisma : Symbol(enhancePrisma, Decl(index.ts, 1, 13))
+>PrismaClient : Symbol(PrismaClient, Decl(index.ts, 0, 8))
+
+export default new EnhancedPrisma();
+>EnhancedPrisma : Symbol(EnhancedPrisma, Decl(index.ts, 2, 5))
+

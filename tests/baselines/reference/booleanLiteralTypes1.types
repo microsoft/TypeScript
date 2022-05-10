@@ -13,18 +13,18 @@ function f1() {
 >f1 : () => void
 
     var a: A1;
->a : boolean
+>a : A1
 
     var a: A2;
->a : boolean
+>a : A1
 
     var a: true | false;
->a : boolean
+>a : A1
 >true : true
 >false : false
 
     var a: false | true;
->a : boolean
+>a : A1
 >false : false
 >true : true
 }
@@ -244,7 +244,7 @@ function f13(x: true | false) {
 }
 
 type Item =
->Item : Item
+>Item : { kind: true; a: string; } | { kind: false; b: string; }
 
     { kind: true, a: string } |
 >kind : true

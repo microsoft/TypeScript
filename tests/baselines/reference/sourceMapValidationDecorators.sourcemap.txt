@@ -360,12 +360,12 @@ sourceFile:sourceMapValidationDecorators.ts
 1->
 2 >    x1
 3 >              : number = 
-4 >                 10
-5 >                   ;
+4 >                 10;
+5 >                   
 1->Emitted(34, 5) Source(33, 20) + SourceIndex(0)
 2 >Emitted(34, 15) Source(33, 22) + SourceIndex(0)
 3 >Emitted(34, 18) Source(33, 33) + SourceIndex(0)
-4 >Emitted(34, 20) Source(33, 35) + SourceIndex(0)
+4 >Emitted(34, 20) Source(33, 36) + SourceIndex(0)
 5 >Emitted(34, 21) Source(33, 36) + SourceIndex(0)
 ---
 >>>    __decorate([

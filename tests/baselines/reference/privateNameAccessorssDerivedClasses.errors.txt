@@ -1,0 +1,18 @@
+tests/cases/conformance/classes/members/privateNames/privateNameAccessorssDerivedClasses.ts(9,23): error TS18013: Property '#prop' is not accessible outside class 'Base' because it has a private identifier.
+
+
+==== tests/cases/conformance/classes/members/privateNames/privateNameAccessorssDerivedClasses.ts (1 errors) ====
+    class Base {
+        get #prop(): number { return  123; }
+        static method(x: Derived) {
+            console.log(x.#prop);
+        }
+    }
+    class Derived extends Base {
+        static method(x: Derived) {
+            console.log(x.#prop);
+                          ~~~~~
+!!! error TS18013: Property '#prop' is not accessible outside class 'Base' because it has a private identifier.
+        }
+    }
+    

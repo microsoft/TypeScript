@@ -1122,9 +1122,9 @@ declare module Immutable {
 
       [Symbol.iterator](): IterableIterator<[keyof T, T[keyof T]]>;
 >[Symbol.iterator] : () => IterableIterator<[keyof T, T[keyof T]]>
->Symbol.iterator : symbol
+>Symbol.iterator : unique symbol
 >Symbol : SymbolConstructor
->iterator : symbol
+>iterator : unique symbol
     }
   }
   export function Record<T>(defaultValues: T, name?: string): Record.Class<T>;
@@ -1585,9 +1585,9 @@ declare module Immutable {
 
       [Symbol.iterator](): IterableIterator<[K, V]>;
 >[Symbol.iterator] : () => IterableIterator<[K, V]>
->Symbol.iterator : symbol
+>Symbol.iterator : unique symbol
 >Symbol : SymbolConstructor
->iterator : symbol
+>iterator : unique symbol
     }
     export module Indexed {}
     export function Indexed<T>(collection: Iterable<T>): Collection.Indexed<T>;
@@ -1734,9 +1734,9 @@ declare module Immutable {
 
       [Symbol.iterator](): IterableIterator<T>;
 >[Symbol.iterator] : () => IterableIterator<T>
->Symbol.iterator : symbol
+>Symbol.iterator : unique symbol
 >Symbol : SymbolConstructor
->iterator : symbol
+>iterator : unique symbol
     }
     export module Set {}
     export function Set<T>(collection: Iterable<T>): Collection.Set<T>;
@@ -1798,9 +1798,9 @@ declare module Immutable {
 
       [Symbol.iterator](): IterableIterator<T>;
 >[Symbol.iterator] : () => IterableIterator<T>
->Symbol.iterator : symbol
+>Symbol.iterator : unique symbol
 >Symbol : SymbolConstructor
->iterator : symbol
+>iterator : unique symbol
     }
   }
   export function Collection<I extends Collection<any, any>>(collection: I): I;

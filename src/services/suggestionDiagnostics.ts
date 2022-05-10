@@ -6,11 +6,13 @@ namespace ts {
         program.getSemanticDiagnostics(sourceFile, cancellationToken);
         const diags: DiagnosticWithLocation[] = [];
         const checker = program.getTypeChecker();
+        const isCommonJSFile = sourceFile.impliedNodeFormat === ModuleKind.CommonJS || fileExtensionIsOneOf(sourceFile.fileName, [Extension.Cts, Extension.Cjs]) ;
 
-        if (sourceFile.commonJsModuleIndicator &&
-            (programContainsEs6Modules(program) || compilerOptionsIndicateEs6Modules(program.getCompilerOptions())) &&
+        if (!isCommonJSFile &&
+            sourceFile.commonJsModuleIndicator &&
+            (programContainsEsModules(program) || compilerOptionsIndicateEsModules(program.getCompilerOptions())) &&
             containsTopLevelCommonjs(sourceFile)) {
-            diags.push(createDiagnosticForNode(getErrorNodeFromCommonJsIndicator(sourceFile.commonJsModuleIndicator), Diagnostics.File_is_a_CommonJS_module_it_may_be_converted_to_an_ES6_module));
+            diags.push(createDiagnosticForNode(getErrorNodeFromCommonJsIndicator(sourceFile.commonJsModuleIndicator), Diagnostics.File_is_a_CommonJS_module_it_may_be_converted_to_an_ES_module));
         }
 
         const isJsFile = isSourceFileJS(sourceFile);
@@ -23,9 +25,9 @@ namespace ts {
                 const importNode = importFromModuleSpecifier(moduleSpecifier);
                 const name = importNameForConvertToDefaultImport(importNode);
                 if (!name) continue;
-                const module = getResolvedModule(sourceFile, moduleSpecifier.text);
+                const module = getResolvedModule(sourceFile, moduleSpecifier.text, getModeForUsageLocation(sourceFile, moduleSpecifier));
                 const resolvedFile = module && program.getSourceFile(module.resolvedFileName);
-                if (resolvedFile && resolvedFile.externalModuleIndicator && isExportAssignment(resolvedFile.externalModuleIndicator) && resolvedFile.externalModuleIndicator.isExportEquals) {
+                if (resolvedFile && resolvedFile.externalModuleIndicator && resolvedFile.externalModuleIndicator !== true && isExportAssignment(resolvedFile.externalModuleIndicator) && resolvedFile.externalModuleIndicator.isExportEquals) {
                     diags.push(createDiagnosticForNode(name, Diagnostics.Import_may_be_converted_to_a_default_import));
                 }
             }
@@ -57,14 +59,14 @@ namespace ts {
                 }
             }
 
-            if (isFunctionLikeDeclaration(node)) {
+            if (canBeConvertedToAsync(node)) {
                 addConvertToAsyncFunctionDiagnostics(node, checker, diags);
             }
             node.forEachChild(check);
         }
     }
 
-    // convertToEs6Module only works on top-level, so don't trigger it if commonjs code only appears in nested scopes.
+    // convertToEsModule only works on top-level, so don't trigger it if commonjs code only appears in nested scopes.
     function containsTopLevelCommonjs(sourceFile: SourceFile): boolean {
         return sourceFile.statements.some(statement => {
             switch (statement.kind) {
@@ -114,14 +116,13 @@ namespace ts {
         return !isAsyncFunction(node) &&
             node.body &&
             isBlock(node.body) &&
-            hasReturnStatementWithPromiseHandler(node.body) &&
+            hasReturnStatementWithPromiseHandler(node.body, checker) &&
             returnsPromise(node, checker);
     }
 
-    function returnsPromise(node: FunctionLikeDeclaration, checker: TypeChecker): boolean {
-        const functionType = checker.getTypeAtLocation(node);
-        const callSignatures = checker.getSignaturesOfType(functionType, SignatureKind.Call);
-        const returnType = callSignatures.length ? checker.getReturnTypeOfSignature(callSignatures[0]) : undefined;
+    export function returnsPromise(node: FunctionLikeDeclaration, checker: TypeChecker): boolean {
+        const signature = checker.getSignatureFromDeclaration(node);
+        const returnType = signature ? checker.getReturnTypeOfSignature(signature) : undefined;
         return !!returnType && !!checker.getPromisedTypeOfPromise(returnType);
     }
 
@@ -129,58 +130,78 @@ namespace ts {
         return isBinaryExpression(commonJsModuleIndicator) ? commonJsModuleIndicator.left : commonJsModuleIndicator;
     }
 
-    function hasReturnStatementWithPromiseHandler(body: Block): boolean {
-        return !!forEachReturnStatement(body, isReturnStatementWithFixablePromiseHandler);
+    function hasReturnStatementWithPromiseHandler(body: Block, checker: TypeChecker): boolean {
+        return !!forEachReturnStatement(body, statement => isReturnStatementWithFixablePromiseHandler(statement, checker));
     }
 
-    export function isReturnStatementWithFixablePromiseHandler(node: Node): node is ReturnStatement & { expression: CallExpression } {
-        return isReturnStatement(node) && !!node.expression && isFixablePromiseHandler(node.expression);
+    export function isReturnStatementWithFixablePromiseHandler(node: Node, checker: TypeChecker): node is ReturnStatement & { expression: CallExpression } {
+        return isReturnStatement(node) && !!node.expression && isFixablePromiseHandler(node.expression, checker);
     }
 
     // Should be kept up to date with transformExpression in convertToAsyncFunction.ts
-    export function isFixablePromiseHandler(node: Node): boolean {
+    export function isFixablePromiseHandler(node: Node, checker: TypeChecker): boolean {
         // ensure outermost call exists and is a promise handler
-        if (!isPromiseHandler(node) || !node.arguments.every(isFixablePromiseArgument)) {
+        if (!isPromiseHandler(node) || !hasSupportedNumberOfArguments(node) || !node.arguments.every(arg => isFixablePromiseArgument(arg, checker))) {
             return false;
         }
 
         // ensure all chained calls are valid
-        let currentNode = node.expression;
+        let currentNode = node.expression.expression;
         while (isPromiseHandler(currentNode) || isPropertyAccessExpression(currentNode)) {
-            if (isCallExpression(currentNode) && !currentNode.arguments.every(isFixablePromiseArgument)) {
-                return false;
+            if (isCallExpression(currentNode)) {
+                if (!hasSupportedNumberOfArguments(currentNode) || !currentNode.arguments.every(arg => isFixablePromiseArgument(arg, checker))) {
+                    return false;
+                }
+                currentNode = currentNode.expression.expression;
             }
-            currentNode = currentNode.expression;
+            else {
+                currentNode = currentNode.expression;
+            }
         }
         return true;
     }
 
-    function isPromiseHandler(node: Node): node is CallExpression {
+    function isPromiseHandler(node: Node): node is CallExpression & { readonly expression: PropertyAccessExpression } {
         return isCallExpression(node) && (
-            hasPropertyAccessExpressionWithName(node, "then") && hasSupportedNumberOfArguments(node) ||
-            hasPropertyAccessExpressionWithName(node, "catch"));
+            hasPropertyAccessExpressionWithName(node, "then") ||
+            hasPropertyAccessExpressionWithName(node, "catch") ||
+            hasPropertyAccessExpressionWithName(node, "finally"));
     }
 
-    function hasSupportedNumberOfArguments(node: CallExpression) {
-        if (node.arguments.length > 2) return false;
-        if (node.arguments.length < 2) return true;
-        return some(node.arguments, arg => {
-            return arg.kind === SyntaxKind.NullKeyword ||
-                isIdentifier(arg) && arg.text === "undefined";
+    function hasSupportedNumberOfArguments(node: CallExpression & { readonly expression: PropertyAccessExpression }) {
+        const name = node.expression.name.text;
+        const maxArguments = name === "then" ? 2 : name === "catch" ? 1 : name === "finally" ? 1 : 0;
+        if (node.arguments.length > maxArguments) return false;
+        if (node.arguments.length < maxArguments) return true;
+        return maxArguments === 1 || some(node.arguments, arg => {
+            return arg.kind === SyntaxKind.NullKeyword || isIdentifier(arg) && arg.text === "undefined";
         });
     }
 
     // should be kept up to date with getTransformationBody in convertToAsyncFunction.ts
-    function isFixablePromiseArgument(arg: Expression): boolean {
+    function isFixablePromiseArgument(arg: Expression, checker: TypeChecker): boolean {
         switch (arg.kind) {
             case SyntaxKind.FunctionDeclaration:
             case SyntaxKind.FunctionExpression:
+                const functionFlags = getFunctionFlags(arg as FunctionDeclaration | FunctionExpression);
+                if (functionFlags & FunctionFlags.Generator) {
+                    return false;
+                }
+                // falls through
             case SyntaxKind.ArrowFunction:
                 visitedNestedConvertibleFunctions.set(getKeyFromNode(arg as FunctionLikeDeclaration), true);
                 // falls through
             case SyntaxKind.NullKeyword:
-            case SyntaxKind.Identifier: // identifier includes undefined
                 return true;
+            case SyntaxKind.Identifier:
+            case SyntaxKind.PropertyAccessExpression: {
+                const symbol = checker.getSymbolAtLocation(arg);
+                if (!symbol) {
+                    return false;
+                }
+                return checker.isUndefinedSymbol(symbol) ||
+                    some(skipAlias(symbol, checker).declarations, d => isFunctionLike(d) || hasInitializer(d) && !!d.initializer && isFunctionLike(d.initializer));
+            }
             default:
                 return false;
         }
@@ -205,5 +226,17 @@ namespace ts {
         }
 
         return false;
+    }
+
+    export function canBeConvertedToAsync(node: Node): node is FunctionDeclaration | MethodDeclaration | FunctionExpression | ArrowFunction {
+        switch (node.kind) {
+            case SyntaxKind.FunctionDeclaration:
+            case SyntaxKind.MethodDeclaration:
+            case SyntaxKind.FunctionExpression:
+            case SyntaxKind.ArrowFunction:
+                return true;
+            default:
+                return false;
+        }
     }
 }

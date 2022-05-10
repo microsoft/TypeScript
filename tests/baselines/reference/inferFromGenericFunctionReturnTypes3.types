@@ -172,11 +172,11 @@ export namespace DiagnosticSeverity {
 }
 
 export type DiagnosticSeverity = 1 | 2 | 3 | 4;
->DiagnosticSeverity : DiagnosticSeverity
+>DiagnosticSeverity : 1 | 2 | 3 | 4
 
 export interface Diagnostic {
 	severity?: DiagnosticSeverity;
->severity : 1 | 2 | 3 | 4 | undefined
+>severity : DiagnosticSeverity | undefined
 
 	code?: number | string;
 >code : string | number | undefined
@@ -294,7 +294,7 @@ declare function box<T>(value: T): Box<T>;
 >value : T
 
 type WinCondition =
->WinCondition : WinCondition
+>WinCondition : { type: 'win'; player: string; } | { type: 'draw'; }
 
     | { type: 'win', player: string }
 >type : "win"
@@ -315,7 +315,7 @@ type WinType = 'win' | 'draw';
 >WinType : "win" | "draw"
 
 let yy: Box<WinType> = box('draw');
->yy : Box<"win" | "draw">
+>yy : Box<WinType>
 >box('draw') : Box<"draw">
 >box : <T>(value: T) => Box<T>
 >'draw' : "draw"
@@ -391,7 +391,7 @@ const a3: I[] = ['a', 'b'].map(name => {
 // Repro from https://www.memsql.com/blog/porting-30k-lines-of-code-from-flow-to-typescript/
 	
 type Player = {
->Player : Player
+>Player : { name: string; age: number; position: "STRIKER" | "GOALKEEPER"; }
 
     name: string;
 >name : string
@@ -405,18 +405,18 @@ type Player = {
 };
  
 type F = () => Promise<Array<Player>>;
->F : F
+>F : () => Promise<Array<Player>>
  
 const f1: F = () => {
 >f1 : F
->() => {    return Promise.all([        {            name: "David Gomes",            age: 23,            position: "GOALKEEPER",        }, {            name: "Cristiano Ronaldo",            age: 33,            position: "STRIKER",        }    ]);} : () => Promise<[{ name: string; age: number; position: "GOALKEEPER"; }, { name: string; age: number; position: "STRIKER"; }]>
+>() => {    return Promise.all([        {            name: "David Gomes",            age: 23,            position: "GOALKEEPER",        }, {            name: "Cristiano Ronaldo",            age: 33,            position: "STRIKER",        }    ]);} : () => Promise<({ name: string; age: number; position: "GOALKEEPER"; } | { name: string; age: number; position: "STRIKER"; })[]>
 
     return Promise.all([
->Promise.all([        {            name: "David Gomes",            age: 23,            position: "GOALKEEPER",        }, {            name: "Cristiano Ronaldo",            age: 33,            position: "STRIKER",        }    ]) : Promise<[{ name: string; age: number; position: "GOALKEEPER"; }, { name: string; age: number; position: "STRIKER"; }]>
->Promise.all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<T[]>; <T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(values: readonly [T1 | PromiseLike<T1>, T2 | PromiseLike<T2>, T3 | PromiseLike<T3>, T4 | PromiseLike<T4>, T5 | PromiseLike<T5>, T6 | PromiseLike<T6>, T7 | PromiseLike<T7>, T8 | PromiseLike<T8>, T9 | PromiseLike<T9>, T10 | PromiseLike<T10>]): Promise<[T1, T2, T3, T4, T5, T6, T7, T8, T9, T10]>; <T1, T2, T3, T4, T5, T6, T7, T8, T9>(values: readonly [T1 | PromiseLike<T1>, T2 | PromiseLike<T2>, T3 | PromiseLike<T3>, T4 | PromiseLike<T4>, T5 | PromiseLike<T5>, T6 | PromiseLike<T6>, T7 | PromiseLike<T7>, T8 | PromiseLike<T8>, T9 | PromiseLike<T9>]): Promise<[T1, T2, T3, T4, T5, T6, T7, T8, T9]>; <T1, T2, T3, T4, T5, T6, T7, T8>(values: readonly [T1 | PromiseLike<T1>, T2 | PromiseLike<T2>, T3 | PromiseLike<T3>, T4 | PromiseLike<T4>, T5 | PromiseLike<T5>, T6 | PromiseLike<T6>, T7 | PromiseLike<T7>, T8 | PromiseLike<T8>]): Promise<[T1, T2, T3, T4, T5, T6, T7, T8]>; <T1, T2, T3, T4, T5, T6, T7>(values: readonly [T1 | PromiseLike<T1>, T2 | PromiseLike<T2>, T3 | PromiseLike<T3>, T4 | PromiseLike<T4>, T5 | PromiseLike<T5>, T6 | PromiseLike<T6>, T7 | PromiseLike<T7>]): Promise<[T1, T2, T3, T4, T5, T6, T7]>; <T1, T2, T3, T4, T5, T6>(values: readonly [T1 | PromiseLike<T1>, T2 | PromiseLike<T2>, T3 | PromiseLike<T3>, T4 | PromiseLike<T4>, T5 | PromiseLike<T5>, T6 | PromiseLike<T6>]): Promise<[T1, T2, T3, T4, T5, T6]>; <T1, T2, T3, T4, T5>(values: readonly [T1 | PromiseLike<T1>, T2 | PromiseLike<T2>, T3 | PromiseLike<T3>, T4 | PromiseLike<T4>, T5 | PromiseLike<T5>]): Promise<[T1, T2, T3, T4, T5]>; <T1, T2, T3, T4>(values: readonly [T1 | PromiseLike<T1>, T2 | PromiseLike<T2>, T3 | PromiseLike<T3>, T4 | PromiseLike<T4>]): Promise<[T1, T2, T3, T4]>; <T1, T2, T3>(values: readonly [T1 | PromiseLike<T1>, T2 | PromiseLike<T2>, T3 | PromiseLike<T3>]): Promise<[T1, T2, T3]>; <T1, T2>(values: readonly [T1 | PromiseLike<T1>, T2 | PromiseLike<T2>]): Promise<[T1, T2]>; <T>(values: readonly (T | PromiseLike<T>)[]): Promise<T[]>; }
+>Promise.all([        {            name: "David Gomes",            age: 23,            position: "GOALKEEPER",        }, {            name: "Cristiano Ronaldo",            age: 33,            position: "STRIKER",        }    ]) : Promise<({ name: string; age: number; position: "GOALKEEPER"; } | { name: string; age: number; position: "STRIKER"; })[]>
+>Promise.all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T extends [] | readonly unknown[]>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
 >Promise : PromiseConstructor
->all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<T[]>; <T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(values: readonly [T1 | PromiseLike<T1>, T2 | PromiseLike<T2>, T3 | PromiseLike<T3>, T4 | PromiseLike<T4>, T5 | PromiseLike<T5>, T6 | PromiseLike<T6>, T7 | PromiseLike<T7>, T8 | PromiseLike<T8>, T9 | PromiseLike<T9>, T10 | PromiseLike<T10>]): Promise<[T1, T2, T3, T4, T5, T6, T7, T8, T9, T10]>; <T1, T2, T3, T4, T5, T6, T7, T8, T9>(values: readonly [T1 | PromiseLike<T1>, T2 | PromiseLike<T2>, T3 | PromiseLike<T3>, T4 | PromiseLike<T4>, T5 | PromiseLike<T5>, T6 | PromiseLike<T6>, T7 | PromiseLike<T7>, T8 | PromiseLike<T8>, T9 | PromiseLike<T9>]): Promise<[T1, T2, T3, T4, T5, T6, T7, T8, T9]>; <T1, T2, T3, T4, T5, T6, T7, T8>(values: readonly [T1 | PromiseLike<T1>, T2 | PromiseLike<T2>, T3 | PromiseLike<T3>, T4 | PromiseLike<T4>, T5 | PromiseLike<T5>, T6 | PromiseLike<T6>, T7 | PromiseLike<T7>, T8 | PromiseLike<T8>]): Promise<[T1, T2, T3, T4, T5, T6, T7, T8]>; <T1, T2, T3, T4, T5, T6, T7>(values: readonly [T1 | PromiseLike<T1>, T2 | PromiseLike<T2>, T3 | PromiseLike<T3>, T4 | PromiseLike<T4>, T5 | PromiseLike<T5>, T6 | PromiseLike<T6>, T7 | PromiseLike<T7>]): Promise<[T1, T2, T3, T4, T5, T6, T7]>; <T1, T2, T3, T4, T5, T6>(values: readonly [T1 | PromiseLike<T1>, T2 | PromiseLike<T2>, T3 | PromiseLike<T3>, T4 | PromiseLike<T4>, T5 | PromiseLike<T5>, T6 | PromiseLike<T6>]): Promise<[T1, T2, T3, T4, T5, T6]>; <T1, T2, T3, T4, T5>(values: readonly [T1 | PromiseLike<T1>, T2 | PromiseLike<T2>, T3 | PromiseLike<T3>, T4 | PromiseLike<T4>, T5 | PromiseLike<T5>]): Promise<[T1, T2, T3, T4, T5]>; <T1, T2, T3, T4>(values: readonly [T1 | PromiseLike<T1>, T2 | PromiseLike<T2>, T3 | PromiseLike<T3>, T4 | PromiseLike<T4>]): Promise<[T1, T2, T3, T4]>; <T1, T2, T3>(values: readonly [T1 | PromiseLike<T1>, T2 | PromiseLike<T2>, T3 | PromiseLike<T3>]): Promise<[T1, T2, T3]>; <T1, T2>(values: readonly [T1 | PromiseLike<T1>, T2 | PromiseLike<T2>]): Promise<[T1, T2]>; <T>(values: readonly (T | PromiseLike<T>)[]): Promise<T[]>; }
->[        {            name: "David Gomes",            age: 23,            position: "GOALKEEPER",        }, {            name: "Cristiano Ronaldo",            age: 33,            position: "STRIKER",        }    ] : [{ name: string; age: number; position: "GOALKEEPER"; }, { name: string; age: number; position: "STRIKER"; }]
+>all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T extends [] | readonly unknown[]>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
+>[        {            name: "David Gomes",            age: 23,            position: "GOALKEEPER",        }, {            name: "Cristiano Ronaldo",            age: 33,            position: "STRIKER",        }    ] : ({ name: string; age: number; position: "GOALKEEPER"; } | { name: string; age: number; position: "STRIKER"; })[]
         {
 >{            name: "David Gomes",            age: 23,            position: "GOALKEEPER",        } : { name: string; age: number; position: "GOALKEEPER"; }
 
@@ -461,14 +461,14 @@ declare function foldLeft<U>(z: U, f: (acc: U, t: boolean) => U): U;
 
 let res: boolean = foldLeft(true, (acc, t) => acc && t);  // Error
 >res : boolean
->foldLeft(true, (acc, t) => acc && t) : true
+>foldLeft(true, (acc, t) => acc && t) : boolean
 >foldLeft : <U>(z: U, f: (acc: U, t: boolean) => U) => U
 >true : true
->(acc, t) => acc && t : (acc: true, t: boolean) => boolean
->acc : true
+>(acc, t) => acc && t : (acc: boolean, t: boolean) => boolean
+>acc : boolean
 >t : boolean
 >acc && t : boolean
->acc : true
+>acc : boolean
 >t : boolean
 
 enum State { A, B }
@@ -477,7 +477,7 @@ enum State { A, B }
 >B : State.B
 
 type Foo = { state: State }
->Foo : Foo
+>Foo : { state: State; }
 >state : State
 
 declare function bar<T>(f: () => T[]): T[];

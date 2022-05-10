@@ -15,7 +15,7 @@ export const thing = () => parse();
 exports.__esModule = true;
 exports.thing = void 0;
 var url_1 = require("url");
-var thing = function () { return url_1.parse(); };
+var thing = function () { return (0, url_1.parse)(); };
 exports.thing = thing;
 
 

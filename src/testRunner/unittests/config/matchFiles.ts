@@ -136,11 +136,11 @@ namespace ts {
 
     function createDiagnosticForConfigFile(json: any, start: number, length: number, diagnosticMessage: DiagnosticMessage, arg0: string) {
         const text = JSON.stringify(json);
-        const file = <SourceFile>{
+        const file = {
             fileName: caseInsensitiveTsconfigPath,
             kind: SyntaxKind.SourceFile,
             text
-        };
+        } as SourceFile;
         return createFileDiagnostic(file, start, length, diagnosticMessage, arg0);
     }
 
@@ -709,7 +709,7 @@ namespace ts {
                         include: [
                             "**/a.ts"
                         ],
-                        exclude: <string[]>[]
+                        exclude: [] as string[]
                     };
                     const expected: ParsedCommandLine = {
                         options: {},

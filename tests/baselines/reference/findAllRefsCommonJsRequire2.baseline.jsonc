@@ -3,8 +3,8 @@
 // /*FIND ALL REFS*/[|f|]
 
 // === /a.js ===
-// function [|f|]() { }
-// module.exports.f = [|f|]
+// function f() { }
+// module.exports.[|f|] = f
 
 [
   {
@@ -100,8 +100,7 @@
           "start": 0,
           "length": 28
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -109,8 +108,7 @@
           "length": 1
         },
         "fileName": "/b.js",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   },
@@ -119,13 +117,29 @@
       "containerKind": "",
       "containerName": "",
       "fileName": "/a.js",
-      "kind": "function",
-      "name": "function f(): void",
+      "kind": "alias",
+      "name": "(alias) function f(): void\nimport f",
       "textSpan": {
-        "start": 9,
+        "start": 32,
         "length": 1
       },
       "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "alias",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
         {
           "text": "function",
           "kind": "keyword"
@@ -136,7 +150,7 @@
         },
         {
           "text": "f",
-          "kind": "functionName"
+          "kind": "aliasName"
         },
         {
           "text": "(",
@@ -157,30 +171,33 @@
         {
           "text": "void",
           "kind": "keyword"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "import",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "f",
+          "kind": "aliasName"
         }
       ],
       "contextSpan": {
-        "start": 0,
+        "start": 17,
         "length": 16
       }
     },
     "references": [
       {
         "textSpan": {
-          "start": 9,
-          "length": 1
-        },
-        "fileName": "/a.js",
-        "contextSpan": {
-          "start": 0,
-          "length": 16
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 36,
+          "start": 32,
           "length": 1
         },
         "fileName": "/a.js",
@@ -188,8 +205,7 @@
           "start": 17,
           "length": 20
         },
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": true
       }
     ]
   }

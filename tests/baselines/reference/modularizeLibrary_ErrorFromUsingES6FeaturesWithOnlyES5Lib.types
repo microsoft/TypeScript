@@ -60,8 +60,8 @@ Math.sign(1);
 
 // Using ES6 object
 var o = {
->o : { a: number; [Symbol.hasInstance](value: any): boolean; }
->{    a: 2,    [Symbol.hasInstance](value: any) {        return false;    }} : { a: number; [Symbol.hasInstance](value: any): boolean; }
+>o : { [x: number]: (value: any) => boolean; a: number; }
+>{    a: 2,    [Symbol.hasInstance](value: any) {        return false;    }} : { [x: number]: (value: any) => boolean; a: number; }
 
     a: 2,
 >a : number
@@ -80,9 +80,9 @@ var o = {
 };
 o.hasOwnProperty(Symbol.hasInstance);
 >o.hasOwnProperty(Symbol.hasInstance) : boolean
->o.hasOwnProperty : (v: string | number | symbol) => boolean
->o : { a: number; [Symbol.hasInstance](value: any): boolean; }
->hasOwnProperty : (v: string | number | symbol) => boolean
+>o.hasOwnProperty : (v: PropertyKey) => boolean
+>o : { [x: number]: (value: any) => boolean; a: number; }
+>hasOwnProperty : (v: PropertyKey) => boolean
 >Symbol.hasInstance : any
 >Symbol : any
 >hasInstance : any
@@ -140,8 +140,8 @@ var s = Symbol();
 
 // Using ES6 wellknown-symbol
 const o1 = {
->o1 : { [Symbol.hasInstance](value: any): boolean; }
->{    [Symbol.hasInstance](value: any) {        return false;    }} : { [Symbol.hasInstance](value: any): boolean; }
+>o1 : { [x: number]: (value: any) => boolean; }
+>{    [Symbol.hasInstance](value: any) {        return false;    }} : { [x: number]: (value: any) => boolean; }
 
     [Symbol.hasInstance](value: any) {
 >[Symbol.hasInstance] : (value: any) => boolean

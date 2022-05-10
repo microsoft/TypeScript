@@ -37,6 +37,10 @@ Semantic diagnostics in builder refreshed for::
 /a/lib/lib.d.ts
 /a/app.ts
 
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/a/app.ts (used version)
+
 WatchedFiles::
 /a/app.ts:
   {"fileName":"/a/app.ts","pollingInterval":250}
@@ -82,6 +86,9 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 /a/lib/lib.d.ts
 /a/app.ts
+
+Shape signatures in builder refreshed for::
+/a/app.ts (computed .d.ts)
 
 WatchedFiles::
 /a/app.ts:

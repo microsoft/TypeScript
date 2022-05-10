@@ -1,0 +1,36 @@
+=== tests/cases/compiler/doNotElaborateAssignabilityToTypeParameters.ts ===
+async function foo<T>(x: T): Promise<T> {
+>foo : Symbol(foo, Decl(doNotElaborateAssignabilityToTypeParameters.ts, 0, 0))
+>T : Symbol(T, Decl(doNotElaborateAssignabilityToTypeParameters.ts, 0, 19))
+>x : Symbol(x, Decl(doNotElaborateAssignabilityToTypeParameters.ts, 0, 22))
+>T : Symbol(T, Decl(doNotElaborateAssignabilityToTypeParameters.ts, 0, 19))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>T : Symbol(T, Decl(doNotElaborateAssignabilityToTypeParameters.ts, 0, 19))
+
+  let yaddable = await getXOrYadda(x);
+>yaddable : Symbol(yaddable, Decl(doNotElaborateAssignabilityToTypeParameters.ts, 1, 5))
+>getXOrYadda : Symbol(getXOrYadda, Decl(doNotElaborateAssignabilityToTypeParameters.ts, 8, 1))
+>x : Symbol(x, Decl(doNotElaborateAssignabilityToTypeParameters.ts, 0, 22))
+
+  return yaddable;
+>yaddable : Symbol(yaddable, Decl(doNotElaborateAssignabilityToTypeParameters.ts, 1, 5))
+}
+
+interface Yadda {
+>Yadda : Symbol(Yadda, Decl(doNotElaborateAssignabilityToTypeParameters.ts, 3, 1))
+
+  stuff: string,
+>stuff : Symbol(Yadda.stuff, Decl(doNotElaborateAssignabilityToTypeParameters.ts, 5, 17))
+
+  things: string,
+>things : Symbol(Yadda.things, Decl(doNotElaborateAssignabilityToTypeParameters.ts, 6, 16))
+}
+
+declare function getXOrYadda<T>(x: T): T | Yadda;
+>getXOrYadda : Symbol(getXOrYadda, Decl(doNotElaborateAssignabilityToTypeParameters.ts, 8, 1))
+>T : Symbol(T, Decl(doNotElaborateAssignabilityToTypeParameters.ts, 10, 29))
+>x : Symbol(x, Decl(doNotElaborateAssignabilityToTypeParameters.ts, 10, 32))
+>T : Symbol(T, Decl(doNotElaborateAssignabilityToTypeParameters.ts, 10, 29))
+>T : Symbol(T, Decl(doNotElaborateAssignabilityToTypeParameters.ts, 10, 29))
+>Yadda : Symbol(Yadda, Decl(doNotElaborateAssignabilityToTypeParameters.ts, 3, 1))
+

@@ -1,0 +1,22 @@
+=== tests/cases/compiler/conditionalTypeClassMembers.ts ===
+declare class MyRecord {
+>MyRecord : MyRecord
+
+    private a();
+>a : () => any
+
+    b(): unknown;
+>b : () => unknown
+}
+
+declare class MySet<TSet extends MyRecord> {
+>MySet : MySet<TSet>
+
+    public item(): TSet;
+>item : () => TSet
+}
+
+type DS<TRec extends MyRecord | { [key: string]: unknown }> = TRec extends MyRecord ? MySet<TRec> : TRec[];
+>DS : DS<TRec>
+>key : string
+

@@ -241,7 +241,7 @@ namespace ts.server {
                 this.reloadWithFileText();
             }
 
-            // At this point if svc is present its valid
+            // At this point if svc is present it's valid
             return this.svc;
         }
 
@@ -415,6 +415,15 @@ namespace ts.server {
             return this.realpath && this.realpath !== this.path ? this.realpath : undefined;
         }
 
+        /**
+         * @internal
+         * Does not compute realpath; uses precomputed result. Use `ensureRealPath`
+         * first if a definite result is needed.
+         */
+        isSymlink(): boolean | undefined {
+            return this.realpath && this.realpath !== this.path;
+        }
+
         getFormatCodeSettings(): FormatCodeSettings | undefined { return this.formatSettings; }
         getPreferences(): protocol.UserPreferences | undefined { return this.preferences; }
 
@@ -422,10 +431,10 @@ namespace ts.server {
             const isNew = !this.isAttached(project);
             if (isNew) {
                 this.containingProjects.push(project);
-                project.onFileAddedOrRemoved();
                 if (!project.getCompilerOptions().preserveSymlinks) {
                     this.ensureRealPath();
                 }
+                project.onFileAddedOrRemoved(this.isSymlink());
             }
             return isNew;
         }
@@ -447,23 +456,23 @@ namespace ts.server {
                     return;
                 case 1:
                     if (this.containingProjects[0] === project) {
-                        project.onFileAddedOrRemoved();
+                        project.onFileAddedOrRemoved(this.isSymlink());
                         this.containingProjects.pop();
                     }
                     break;
                 case 2:
                     if (this.containingProjects[0] === project) {
-                        project.onFileAddedOrRemoved();
+                        project.onFileAddedOrRemoved(this.isSymlink());
                         this.containingProjects[0] = this.containingProjects.pop()!;
                     }
                     else if (this.containingProjects[1] === project) {
-                        project.onFileAddedOrRemoved();
+                        project.onFileAddedOrRemoved(this.isSymlink());
                         this.containingProjects.pop();
                     }
                     break;
                 default:
                     if (unorderedRemoveItem(this.containingProjects, project)) {
-                        project.onFileAddedOrRemoved();
+                        project.onFileAddedOrRemoved(this.isSymlink());
                     }
                     break;
             }
@@ -477,6 +486,7 @@ namespace ts.server {
                 const existingRoot = p.getRootFilesMap().get(this.path);
                 // detach is unnecessary since we'll clean the list of containing projects anyways
                 p.removeFile(this, /*fileExists*/ false, /*detachFromProjects*/ false);
+                p.onFileAddedOrRemoved(this.isSymlink());
                 // If the info was for the external or configured project's root,
                 // add missing file as the root
                 if (existingRoot && !isInferredProject(p)) {
@@ -491,7 +501,7 @@ namespace ts.server {
                 case 0:
                     return Errors.ThrowNoProject();
                 case 1:
-                    return ensureNotAutoImportProvider(this.containingProjects[0]);
+                    return ensurePrimaryProjectKind(this.containingProjects[0]);
                 default:
                     // If this file belongs to multiple projects, below is the order in which default project is used
                     // - for open script info, its default configured project during opening is default if info is part of it
@@ -526,7 +536,7 @@ namespace ts.server {
                             firstInferredProject = project;
                         }
                     }
-                    return ensureNotAutoImportProvider(defaultConfiguredProject ||
+                    return ensurePrimaryProjectKind(defaultConfiguredProject ||
                         firstNonSourceOfProjectReferenceRedirect ||
                         firstConfiguredProject ||
                         firstExternalProject ||
@@ -612,8 +622,10 @@ namespace ts.server {
         }
 
         /*@internal*/
-        isContainedByAutoImportProvider() {
-            return some(this.containingProjects, p => p.projectKind === ProjectKind.AutoImportProvider);
+        isContainedByBackgroundProject() {
+            return some(
+                this.containingProjects,
+                p => p.projectKind === ProjectKind.AutoImportProvider || p.projectKind === ProjectKind.Auxiliary);
         }
 
         /**
@@ -659,8 +671,13 @@ namespace ts.server {
         }
     }
 
-    function ensureNotAutoImportProvider(project: Project | undefined) {
-        if (!project || project.projectKind === ProjectKind.AutoImportProvider) {
+    /**
+     * Throws an error if `project` is an AutoImportProvider or AuxiliaryProject,
+     * which are used in the background by other Projects and should never be
+     * reported as the default project for a ScriptInfo.
+     */
+    function ensurePrimaryProjectKind(project: Project | undefined) {
+        if (!project || project.projectKind === ProjectKind.AutoImportProvider || project.projectKind === ProjectKind.Auxiliary) {
             return Errors.ThrowNoProject();
         }
         return project;

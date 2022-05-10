@@ -1,10 +1,10 @@
 === tests/cases/conformance/types/keyof/keyofIntersection.ts ===
 type A = { a: string };
->A : A
+>A : { a: string; }
 >a : string
 
 type B = { b: string };
->B : B
+>B : { b: string; }
 >b : string
 
 type T01 = keyof (A & B);  // "a" | "b"

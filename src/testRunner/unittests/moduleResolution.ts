@@ -65,11 +65,12 @@ namespace ts {
                 fileExists: path => {
                     assert.isTrue(directories.has(getDirectoryPath(path)), `'fileExists' '${path}' request in non-existing directory`);
                     return map.has(path);
-                }
+                },
+                useCaseSensitiveFileNames: true
             };
         }
         else {
-            return { readFile, realpath, fileExists: path => map.has(path) };
+            return { readFile, realpath, fileExists: path => map.has(path), useCaseSensitiveFileNames: true };
         }
         function readFile(path: string): string | undefined {
             const file = map.get(path);
@@ -81,9 +82,11 @@ namespace ts {
     }
 
     describe("unittests:: moduleResolution:: Node module resolution - relative paths", () => {
-
+        // node module resolution does _not_ implicitly append these extensions to an extensionless path (though will still attempt to load them if explicitly)
+        const nonImplicitExtensions = [Extension.Mts, Extension.Dmts, Extension.Mjs, Extension.Cts, Extension.Dcts, Extension.Cjs];
+        const autoExtensions = filter(supportedTSExtensionsFlat, e => nonImplicitExtensions.indexOf(e) === -1);
         function testLoadAsFile(containingFileName: string, moduleFileNameNoExt: string, moduleName: string): void {
-            for (const ext of supportedTSExtensions) {
+            for (const ext of autoExtensions) {
                 test(ext, /*hasDirectoryExists*/ false);
                 test(ext, /*hasDirectoryExists*/ true);
             }
@@ -96,7 +99,7 @@ namespace ts {
 
                 const failedLookupLocations: string[] = [];
                 const dir = getDirectoryPath(containingFileName);
-                for (const e of supportedTSExtensions) {
+                for (const e of autoExtensions) {
                     if (e === ext) {
                         break;
                     }
@@ -137,7 +140,7 @@ namespace ts {
                 const resolution = nodeModuleNameResolver(moduleName, containingFile.name, {}, createModuleResolutionHost(hasDirectoryExists, containingFile, packageJson, moduleFile));
                 checkResolvedModule(resolution.resolvedModule, createResolvedModule(moduleFile.name));
                 // expect three failed lookup location - attempt to load module as file with all supported extensions
-                assert.equal(resolution.failedLookupLocations.length, supportedTSExtensions.length);
+                assert.equal(resolution.failedLookupLocations.length, supportedTSExtensions[0].length);
             }
         }
 
@@ -203,7 +206,7 @@ namespace ts {
     describe("unittests:: moduleResolution:: Node module resolution - non-relative paths", () => {
         it("computes correct commonPrefix for moduleName cache", () => {
             const resolutionCache = createModuleResolutionCache("/", (f) => f);
-            let cache = resolutionCache.getOrCreateCacheForModuleName("a");
+            let cache = resolutionCache.getOrCreateCacheForModuleName("a", /*mode*/ undefined);
             cache.set("/sub", {
                 resolvedModule: {
                     originalPath: undefined,
@@ -212,11 +215,12 @@ namespace ts {
                     extension: Extension.Ts,
                 },
                 failedLookupLocations: [],
+                resolutionDiagnostics: [],
             });
             assert.isDefined(cache.get("/sub"));
             assert.isUndefined(cache.get("/"));
 
-            cache = resolutionCache.getOrCreateCacheForModuleName("b");
+            cache = resolutionCache.getOrCreateCacheForModuleName("b", /*mode*/ undefined);
             cache.set("/sub/dir/foo", {
                 resolvedModule: {
                     originalPath: undefined,
@@ -225,13 +229,14 @@ namespace ts {
                     extension: Extension.Ts,
                 },
                 failedLookupLocations: [],
+                resolutionDiagnostics: [],
             });
             assert.isDefined(cache.get("/sub/dir/foo"));
             assert.isDefined(cache.get("/sub/dir"));
             assert.isDefined(cache.get("/sub"));
             assert.isUndefined(cache.get("/"));
 
-            cache = resolutionCache.getOrCreateCacheForModuleName("c");
+            cache = resolutionCache.getOrCreateCacheForModuleName("c", /*mode*/ undefined);
             cache.set("/foo/bar", {
                 resolvedModule: {
                     originalPath: undefined,
@@ -240,12 +245,13 @@ namespace ts {
                     extension: Extension.Ts,
                 },
                 failedLookupLocations: [],
+                resolutionDiagnostics: [],
             });
             assert.isDefined(cache.get("/foo/bar"));
             assert.isDefined(cache.get("/foo"));
             assert.isDefined(cache.get("/"));
 
-            cache = resolutionCache.getOrCreateCacheForModuleName("d");
+            cache = resolutionCache.getOrCreateCacheForModuleName("d", /*mode*/ undefined);
             cache.set("/foo", {
                 resolvedModule: {
                     originalPath: undefined,
@@ -254,11 +260,12 @@ namespace ts {
                     extension: Extension.Ts,
                 },
                 failedLookupLocations: [],
+                resolutionDiagnostics: [],
             });
             assert.isDefined(cache.get("/foo"));
             assert.isUndefined(cache.get("/"));
 
-            cache = resolutionCache.getOrCreateCacheForModuleName("e");
+            cache = resolutionCache.getOrCreateCacheForModuleName("e", /*mode*/ undefined);
             cache.set("c:/foo", {
                 resolvedModule: {
                     originalPath: undefined,
@@ -267,15 +274,17 @@ namespace ts {
                     extension: Extension.Ts,
                 },
                 failedLookupLocations: [],
+                resolutionDiagnostics: [],
             });
             assert.isDefined(cache.get("c:/foo"));
             assert.isDefined(cache.get("c:/"));
             assert.isUndefined(cache.get("d:/"));
 
-            cache = resolutionCache.getOrCreateCacheForModuleName("f");
+            cache = resolutionCache.getOrCreateCacheForModuleName("f", /*mode*/ undefined);
             cache.set("/foo/bar/baz", {
                 resolvedModule: undefined,
                 failedLookupLocations: [],
+                resolutionDiagnostics: [],
             });
             assert.isDefined(cache.get("/foo/bar/baz"));
             assert.isDefined(cache.get("/foo/bar"));

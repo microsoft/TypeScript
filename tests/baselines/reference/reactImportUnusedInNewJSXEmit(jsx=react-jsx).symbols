@@ -8,7 +8,7 @@ function Bar() {
 >Bar : Symbol(Bar, Decl(index.tsx, 2, 26))
 
   return <div />;
->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2420, 114))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
 }
 
 export function Foo() {

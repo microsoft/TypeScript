@@ -1,8 +1,8 @@
 /// <reference path="fourslash.ts" />
 
 ////try { }
-////catch ([|{| "isWriteAccess": true, "isDefinition": true |}err|]) {
-////    [|err|];
+////catch (/*1*/err) {
+////    /*2*/err;
 ////}
 
-verify.singleReferenceGroup("var err: any");
+verify.baselineFindAllReferences('1', '2');

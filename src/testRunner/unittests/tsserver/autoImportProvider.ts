@@ -302,6 +302,15 @@ namespace ts.projectSystem {
             assert.isDefined(projectService.configuredProjects.get("/packages/a/tsconfig.json")!.getPackageJsonAutoImportProvider());
             assert.isDefined(projectService.configuredProjects.get("/packages/a/tsconfig.json")!.getPackageJsonAutoImportProvider());
         });
+
+        it("Can use the same document registry bucket key as main program", () => {
+            for (const option of sourceFileAffectingCompilerOptions) {
+                assert(
+                    !hasProperty(server.AutoImportProviderProject.compilerOptionsOverrides, option.name),
+                    `'${option.name}' may cause AutoImportProviderProject not to share source files with main program`
+                );
+            }
+        });
     });
 
     function setup(files: File[]) {
@@ -317,7 +326,7 @@ namespace ts.projectSystem {
         };
 
         function updateFile(path: string, newText: string) {
-            Debug.assertDefined(files.find(f => f.path === path));
+            Debug.assertIsDefined(files.find(f => f.path === path));
             session.executeCommandSeq<protocol.ApplyChangedToOpenFilesRequest>({
                 command: protocol.CommandTypes.ApplyChangedToOpenFiles,
                 arguments: {
@@ -330,7 +339,7 @@ namespace ts.projectSystem {
         }
 
         function findAllReferences(file: string, line: number, offset: number) {
-            Debug.assertDefined(files.find(f => f.path === file));
+            Debug.assertIsDefined(files.find(f => f.path === file));
             session.executeCommandSeq<protocol.ReferencesRequest>({
                 command: protocol.CommandTypes.References,
                 arguments: {

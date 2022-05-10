@@ -2,7 +2,7 @@
 // Repro from #20196
 
 type A = {
->A : A
+>A : { a: (x: number) => string; }
 
   a: (x: number) => string
 >a : (x: number) => string
@@ -10,7 +10,7 @@ type A = {
 
 };
 type B = {
->B : B
+>B : { a: (x: boolean) => string; }
 
   a: (x: boolean) => string
 >a : (x: boolean) => string
@@ -37,24 +37,24 @@ function callN<T extends A | B>(p: T) {
   p.a("s"); // Error
 >p.a("s") : string
 >p.a : ((x: number) => string) | ((x: boolean) => string)
->p : T
+>p : A | B
 >a : ((x: number) => string) | ((x: boolean) => string)
 >"s" : "s"
   
   var a: T["a"] = p.a;
 >a : T["a"]
 >p.a : ((x: number) => string) | ((x: boolean) => string)
->p : T
+>p : A | B
 >a : ((x: number) => string) | ((x: boolean) => string)
 
   a(""); // Error
 >a("") : string
->a : T["a"]
+>a : ((x: number) => string) | ((x: boolean) => string)
 >"" : ""
 
   a("", "", "", ""); // Error
 >a("", "", "", "") : string
->a : T["a"]
+>a : ((x: number) => string) | ((x: boolean) => string)
 >"" : ""
 >"" : ""
 >"" : ""

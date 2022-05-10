@@ -5,16 +5,18 @@ on:
         # This is probably 6am UTC, which is 10pm PST or 11pm PDT
         # Alternatively, 6am local is also fine
         - cron: '0 6 * * *'
+    workflow_dispatch: {}
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    if: github.repository == 'microsoft/TypeScript'
 
     steps:
     - uses: actions/checkout@v2
-    - uses: actions/setup-node@v1
+    - uses: actions/setup-node@v3
       with:
-        node-version: 12
+        node-version: 14
         registry-url: https://registry.npmjs.org/
 
     - name: Configure git and update package-lock.json

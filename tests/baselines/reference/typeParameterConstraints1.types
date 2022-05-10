@@ -20,7 +20,7 @@ function foo5<T extends RegExp>(test: T) { } // valid
 >test : T
 
 function foo6<T extends hm>(test: T) { }
->foo6 : <T extends any>(test: T) => void
+>foo6 : <T extends hm>(test: T) => void
 >test : T
 
 function foo7<T extends Object>(test: T) { } // valid

@@ -10,7 +10,7 @@ const MW = require("./MW");
 module.exports = class MC {
 >module.exports = class MC {  watch() {    return new MW(this);  }} : typeof import("tests/cases/conformance/jsdoc/MC")
 >module.exports : typeof import("tests/cases/conformance/jsdoc/MC")
->module : { "\"tests/cases/conformance/jsdoc/MC\"": typeof import("tests/cases/conformance/jsdoc/MC"); }
+>module : { exports: typeof import("tests/cases/conformance/jsdoc/MC"); }
 >exports : typeof import("tests/cases/conformance/jsdoc/MC")
 >class MC {  watch() {    return new MW(this);  }} : typeof import("tests/cases/conformance/jsdoc/MC")
 >MC : typeof import("tests/cases/conformance/jsdoc/MC")
@@ -49,7 +49,7 @@ class MW {
 module.exports = MW;
 >module.exports = MW : typeof MW
 >module.exports : typeof MW
->module : { "\"tests/cases/conformance/jsdoc/MW\"": typeof MW; }
+>module : { exports: typeof MW; }
 >exports : typeof MW
 >MW : typeof MW
 

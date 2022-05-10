@@ -6,6 +6,7 @@ class A {
     x = 1;
     test() {
         this.#fieldFunc();
+        this.#fieldFunc?.();
         const func = this.#fieldFunc;
         func();
         new this.#fieldFunc();

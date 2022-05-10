@@ -54,7 +54,7 @@ declare function isHTMLCollection(sourceObj: any): sourceObj is HTMLCollection;
 >sourceObj : any
 
 type EventTargetLike = {a: string} | HTMLCollection | NodeList;
->EventTargetLike : EventTargetLike
+>EventTargetLike : NodeList | HTMLCollection | { a: string; }
 >a : string
 
 var sourceObj: EventTargetLike = <any>undefined;

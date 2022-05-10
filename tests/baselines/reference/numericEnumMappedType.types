@@ -14,10 +14,10 @@ declare enum E2 { ONE, TWO, THREE }
 >THREE : E2
 
 type Bins1 = { [k in E1]?: string; }
->Bins1 : Bins1
+>Bins1 : { 0?: string | undefined; 1?: string | undefined; 2?: string | undefined; }
 
 type Bins2 = { [k in E2]?: string; }
->Bins2 : Bins2
+>Bins2 : { [x: number]: string | undefined; }
 
 const b1: Bins1 = {};
 >b1 : Bins1
@@ -91,7 +91,7 @@ enum N2 { C = val(), D = val() }
 >val : () => number
 
 type T1 = { [K in N1 | N2]: K };
->T1 : T1
+>T1 : { [x: number]: N1 | N2; }
 
 // Enum types with string valued members are always literal enum types and therefore
 // ONE and TWO below are not computed members but rather just numerically valued members

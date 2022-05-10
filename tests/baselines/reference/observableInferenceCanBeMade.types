@@ -14,7 +14,7 @@ type ObservedValueOf<O> = O extends ObservableInput<infer T> ? T : never;
 
 interface Subscribable<T> {
     subscribe(next?: (value: T) => void, error?: (error: any) => void, complete?: () => void): void;
->subscribe : (next?: ((value: T) => void) | undefined, error?: ((error: any) => void) | undefined, complete?: (() => void) | undefined) => void
+>subscribe : (next?: ((value: T) => void) | undefined, error?: ((error: any) => void) | undefined, complete?: () => void) => void
 >next : ((value: T) => void) | undefined
 >value : T
 >error : ((error: any) => void) | undefined
@@ -29,7 +29,7 @@ declare class Observable<T> implements Subscribable<T> {
 >Observable : Observable<T>
 
     subscribe(next?: (value: T) => void, error?: (error: any) => void, complete?: () => void): void;
->subscribe : (next?: ((value: T) => void) | undefined, error?: ((error: any) => void) | undefined, complete?: (() => void) | undefined) => void
+>subscribe : (next?: ((value: T) => void) | undefined, error?: ((error: any) => void) | undefined, complete?: () => void) => void
 >next : ((value: T) => void) | undefined
 >value : T
 >error : ((error: any) => void) | undefined
@@ -39,13 +39,13 @@ declare class Observable<T> implements Subscribable<T> {
 
 function asObservable(input: string | ObservableInput<string>): Observable<string> {
 >asObservable : (input: string | ObservableInput<string>) => Observable<string>
->input : string | Subscribable<never> | Subscribable<string>
+>input : string | ObservableInput<string>
 
     return typeof input === 'string' ? of(input) : from(input)
 >typeof input === 'string' ? of(input) : from(input) : Observable<string>
 >typeof input === 'string' : boolean
 >typeof input : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
->input : string | Subscribable<never> | Subscribable<string>
+>input : string | ObservableInput<string>
 >'string' : "string"
 >of(input) : Observable<string>
 >of : <T>(a: T) => Observable<T>

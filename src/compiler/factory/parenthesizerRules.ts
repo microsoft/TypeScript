@@ -5,7 +5,12 @@ namespace ts {
             cachedLiteralKind: SyntaxKind;
         }
 
+        let binaryLeftOperandParenthesizerCache: ESMap<BinaryOperator, (node: Expression) => Expression> | undefined;
+        let binaryRightOperandParenthesizerCache: ESMap<BinaryOperator, (node: Expression) => Expression> | undefined;
+
         return {
+            getParenthesizeLeftSideOfBinaryForOperator,
+            getParenthesizeRightSideOfBinaryForOperator,
             parenthesizeLeftSideOfBinary,
             parenthesizeRightSideOfBinary,
             parenthesizeExpressionOfComputedPropertyName,
@@ -20,12 +25,41 @@ namespace ts {
             parenthesizeExpressionForDisallowedComma,
             parenthesizeExpressionOfExpressionStatement,
             parenthesizeConciseBodyOfArrowFunction,
-            parenthesizeMemberOfConditionalType,
-            parenthesizeMemberOfElementType,
-            parenthesizeElementTypeOfArrayType,
-            parenthesizeConstituentTypesOfUnionOrIntersectionType,
+            parenthesizeCheckTypeOfConditionalType,
+            parenthesizeExtendsTypeOfConditionalType,
+            parenthesizeConstituentTypesOfUnionType,
+            parenthesizeConstituentTypeOfUnionType,
+            parenthesizeConstituentTypesOfIntersectionType,
+            parenthesizeConstituentTypeOfIntersectionType,
+            parenthesizeOperandOfTypeOperator,
+            parenthesizeOperandOfReadonlyTypeOperator,
+            parenthesizeNonArrayTypeOfPostfixType,
+            parenthesizeElementTypesOfTupleType,
+            parenthesizeElementTypeOfTupleType,
+            parenthesizeTypeOfOptionalType,
             parenthesizeTypeArguments,
+            parenthesizeLeadingTypeArgument,
         };
+
+        function getParenthesizeLeftSideOfBinaryForOperator(operatorKind: BinaryOperator) {
+            binaryLeftOperandParenthesizerCache ||= new Map();
+            let parenthesizerRule = binaryLeftOperandParenthesizerCache.get(operatorKind);
+            if (!parenthesizerRule) {
+                parenthesizerRule = node => parenthesizeLeftSideOfBinary(operatorKind, node);
+                binaryLeftOperandParenthesizerCache.set(operatorKind, parenthesizerRule);
+            }
+            return parenthesizerRule;
+        }
+
+        function getParenthesizeRightSideOfBinaryForOperator(operatorKind: BinaryOperator) {
+            binaryRightOperandParenthesizerCache ||= new Map();
+            let parenthesizerRule = binaryRightOperandParenthesizerCache.get(operatorKind);
+            if (!parenthesizerRule) {
+                parenthesizerRule = node => parenthesizeRightSideOfBinary(operatorKind, /*leftSide*/ undefined, node);
+                binaryRightOperandParenthesizerCache.set(operatorKind, parenthesizerRule);
+            }
+            return parenthesizerRule;
+        }
 
         /**
          * Determines whether the operand to a BinaryExpression needs to be parenthesized.
@@ -165,18 +199,18 @@ namespace ts {
                 return node.kind;
             }
 
-            if (node.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>node).operatorToken.kind === SyntaxKind.PlusToken) {
-                if ((<BinaryPlusExpression>node).cachedLiteralKind !== undefined) {
-                    return (<BinaryPlusExpression>node).cachedLiteralKind;
+            if (node.kind === SyntaxKind.BinaryExpression && (node as BinaryExpression).operatorToken.kind === SyntaxKind.PlusToken) {
+                if ((node as BinaryPlusExpression).cachedLiteralKind !== undefined) {
+                    return (node as BinaryPlusExpression).cachedLiteralKind;
                 }
 
-                const leftKind = getLiteralKindOfBinaryPlusOperand((<BinaryExpression>node).left);
+                const leftKind = getLiteralKindOfBinaryPlusOperand((node as BinaryExpression).left);
                 const literalKind = isLiteralKind(leftKind)
-                    && leftKind === getLiteralKindOfBinaryPlusOperand((<BinaryExpression>node).right)
+                    && leftKind === getLiteralKindOfBinaryPlusOperand((node as BinaryExpression).right)
                         ? leftKind
                         : SyntaxKind.Unknown;
 
-                (<BinaryPlusExpression>node).cachedLiteralKind = literalKind;
+                (node as BinaryPlusExpression).cachedLiteralKind = literalKind;
                 return literalKind;
             }
 
@@ -210,7 +244,7 @@ namespace ts {
             return parenthesizeBinaryOperand(binaryOperator, leftSide, /*isLeftSideOfBinary*/ true);
         }
 
-        function parenthesizeRightSideOfBinary(binaryOperator: SyntaxKind, leftSide: Expression, rightSide: Expression): Expression {
+        function parenthesizeRightSideOfBinary(binaryOperator: SyntaxKind, leftSide: Expression | undefined, rightSide: Expression): Expression {
             return parenthesizeBinaryOperand(binaryOperator, rightSide, /*isLeftSideOfBinary*/ false, leftSide);
         }
 
@@ -294,7 +328,7 @@ namespace ts {
             //
             const emittedExpression = skipPartiallyEmittedExpressions(expression);
             if (isLeftHandSideExpression(emittedExpression)
-                && (emittedExpression.kind !== SyntaxKind.NewExpression || (<NewExpression>emittedExpression).arguments)) {
+                && (emittedExpression.kind !== SyntaxKind.NewExpression || (emittedExpression as NewExpression).arguments)) {
                 // TODO(rbuckton): Verify whether this assertion holds.
                 return expression as LeftHandSideExpression;
             }
@@ -352,6 +386,8 @@ namespace ts {
             return expression;
         }
 
+        function parenthesizeConciseBodyOfArrowFunction(body: Expression): Expression;
+        function parenthesizeConciseBodyOfArrowFunction(body: ConciseBody): ConciseBody;
         function parenthesizeConciseBodyOfArrowFunction(body: ConciseBody): ConciseBody {
             if (!isBlock(body) && (isCommaSequence(body) || getLeftmostExpression(body, /*stopAtCallExpressions*/ false).kind === SyntaxKind.ObjectLiteralExpression)) {
                 // TODO(rbuckton): Verifiy whether `setTextRange` is needed.
@@ -361,38 +397,199 @@ namespace ts {
             return body;
         }
 
-        function parenthesizeMemberOfConditionalType(member: TypeNode): TypeNode {
-            return member.kind === SyntaxKind.ConditionalType ? factory.createParenthesizedType(member) : member;
-        }
+        // Type[Extends] :
+        //     FunctionOrConstructorType
+        //     ConditionalType[?Extends]
 
-        function parenthesizeMemberOfElementType(member: TypeNode): TypeNode {
-            switch (member.kind) {
-                case SyntaxKind.UnionType:
-                case SyntaxKind.IntersectionType:
+        // ConditionalType[Extends] :
+        //     UnionType[?Extends]
+        //     [~Extends] UnionType[~Extends] `extends` Type[+Extends] `?` Type[~Extends] `:` Type[~Extends]
+        //
+        // - The check type (the `UnionType`, above) does not allow function, constructor, or conditional types (they must be parenthesized)
+        // - The extends type (the first `Type`, above) does not allow conditional types (they must be parenthesized). Function and constructor types are fine.
+        // - The true and false branch types (the second and third `Type` non-terminals, above) allow any type
+        function parenthesizeCheckTypeOfConditionalType(checkType: TypeNode): TypeNode {
+            switch (checkType.kind) {
                 case SyntaxKind.FunctionType:
                 case SyntaxKind.ConstructorType:
-                    return factory.createParenthesizedType(member);
+                case SyntaxKind.ConditionalType:
+                    return factory.createParenthesizedType(checkType);
             }
-            return parenthesizeMemberOfConditionalType(member);
+            return checkType;
         }
 
-        function parenthesizeElementTypeOfArrayType(member: TypeNode): TypeNode {
-            switch (member.kind) {
-                case SyntaxKind.TypeQuery:
+        function parenthesizeExtendsTypeOfConditionalType(extendsType: TypeNode): TypeNode {
+            switch (extendsType.kind) {
+                case SyntaxKind.ConditionalType:
+                    return factory.createParenthesizedType(extendsType);
+            }
+            return extendsType;
+        }
+
+        // UnionType[Extends] :
+        //     `|`? IntersectionType[?Extends]
+        //     UnionType[?Extends] `|` IntersectionType[?Extends]
+        //
+        // - A union type constituent has the same precedence as the check type of a conditional type
+        function parenthesizeConstituentTypeOfUnionType(type: TypeNode) {
+            switch (type.kind) {
+                case SyntaxKind.UnionType: // Not strictly necessary, but a union containing a union should have been flattened
+                case SyntaxKind.IntersectionType: // Not strictly necessary, but makes generated output more readable and avoids breaks in DT tests
+                    return factory.createParenthesizedType(type);
+            }
+            return parenthesizeCheckTypeOfConditionalType(type);
+        }
+
+        function parenthesizeConstituentTypesOfUnionType(members: readonly TypeNode[]): NodeArray<TypeNode> {
+            return factory.createNodeArray(sameMap(members, parenthesizeConstituentTypeOfUnionType));
+        }
+
+        // IntersectionType[Extends] :
+        //     `&`? TypeOperator[?Extends]
+        //     IntersectionType[?Extends] `&` TypeOperator[?Extends]
+        //
+        // - An intersection type constituent does not allow function, constructor, conditional, or union types (they must be parenthesized)
+        function parenthesizeConstituentTypeOfIntersectionType(type: TypeNode) {
+            switch (type.kind) {
+                case SyntaxKind.UnionType:
+                case SyntaxKind.IntersectionType: // Not strictly necessary, but an intersection containing an intersection should have been flattened
+                    return factory.createParenthesizedType(type);
+            }
+            return parenthesizeConstituentTypeOfUnionType(type);
+        }
+
+        function parenthesizeConstituentTypesOfIntersectionType(members: readonly TypeNode[]): NodeArray<TypeNode> {
+            return factory.createNodeArray(sameMap(members, parenthesizeConstituentTypeOfIntersectionType));
+        }
+
+        // TypeOperator[Extends] :
+        //     PostfixType
+        //     InferType[?Extends]
+        //     `keyof` TypeOperator[?Extends]
+        //     `unique` TypeOperator[?Extends]
+        //     `readonly` TypeOperator[?Extends]
+        //
+        function parenthesizeOperandOfTypeOperator(type: TypeNode) {
+            switch (type.kind) {
+                case SyntaxKind.IntersectionType:
+                    return factory.createParenthesizedType(type);
+            }
+            return parenthesizeConstituentTypeOfIntersectionType(type);
+        }
+
+        function parenthesizeOperandOfReadonlyTypeOperator(type: TypeNode) {
+            switch (type.kind) {
                 case SyntaxKind.TypeOperator:
-                case SyntaxKind.InferType:
-                    return factory.createParenthesizedType(member);
+                    return factory.createParenthesizedType(type);
             }
-            return parenthesizeMemberOfElementType(member);
+            return parenthesizeOperandOfTypeOperator(type);
         }
 
-        function parenthesizeConstituentTypesOfUnionOrIntersectionType(members: readonly TypeNode[]): NodeArray<TypeNode> {
-            return factory.createNodeArray(sameMap(members, parenthesizeMemberOfElementType));
+        // PostfixType :
+        //     NonArrayType
+        //     NonArrayType [no LineTerminator here] `!` // JSDoc
+        //     NonArrayType [no LineTerminator here] `?` // JSDoc
+        //     IndexedAccessType
+        //     ArrayType
+        //
+        // IndexedAccessType :
+        //     NonArrayType `[` Type[~Extends] `]`
+        //
+        // ArrayType :
+        //     NonArrayType `[` `]`
+        //
+        function parenthesizeNonArrayTypeOfPostfixType(type: TypeNode) {
+            switch (type.kind) {
+                case SyntaxKind.InferType:
+                case SyntaxKind.TypeOperator:
+                case SyntaxKind.TypeQuery: // Not strictly necessary, but makes generated output more readable and avoids breaks in DT tests
+                    return factory.createParenthesizedType(type);
+            }
+            return parenthesizeOperandOfTypeOperator(type);
+        }
 
+        // TupleType :
+        //     `[` Elision? `]`
+        //     `[` NamedTupleElementTypes `]`
+        //     `[` NamedTupleElementTypes `,` Elision? `]`
+        //     `[` TupleElementTypes `]`
+        //     `[` TupleElementTypes `,` Elision? `]`
+        //
+        // NamedTupleElementTypes :
+        //     Elision? NamedTupleMember
+        //     NamedTupleElementTypes `,` Elision? NamedTupleMember
+        //
+        // NamedTupleMember :
+        //     Identifier `?`? `:` Type[~Extends]
+        //     `...` Identifier `:` Type[~Extends]
+        //
+        // TupleElementTypes :
+        //     Elision? TupleElementType
+        //     TupleElementTypes `,` Elision? TupleElementType
+        //
+        // TupleElementType :
+        //     Type[~Extends] // NOTE: Needs cover grammar to disallow JSDoc postfix-optional
+        //     OptionalType
+        //     RestType
+        //
+        // OptionalType :
+        //     Type[~Extends] `?` // NOTE: Needs cover grammar to disallow JSDoc postfix-optional
+        //
+        // RestType :
+        //     `...` Type[~Extends]
+        //
+        function parenthesizeElementTypesOfTupleType(types: readonly (TypeNode | NamedTupleMember)[]): NodeArray<TypeNode> {
+            return factory.createNodeArray(sameMap(types, parenthesizeElementTypeOfTupleType));
+        }
+
+        function parenthesizeElementTypeOfTupleType(type: TypeNode | NamedTupleMember): TypeNode {
+            if (hasJSDocPostfixQuestion(type)) return factory.createParenthesizedType(type);
+            return type;
+        }
+
+        function hasJSDocPostfixQuestion(type: TypeNode | NamedTupleMember): boolean {
+            if (isJSDocNullableType(type)) return type.postfix;
+            if (isNamedTupleMember(type)) return hasJSDocPostfixQuestion(type.type);
+            if (isFunctionTypeNode(type) || isConstructorTypeNode(type) || isTypeOperatorNode(type)) return hasJSDocPostfixQuestion(type.type);
+            if (isConditionalTypeNode(type)) return hasJSDocPostfixQuestion(type.falseType);
+            if (isUnionTypeNode(type)) return hasJSDocPostfixQuestion(last(type.types));
+            if (isIntersectionTypeNode(type)) return hasJSDocPostfixQuestion(last(type.types));
+            if (isInferTypeNode(type)) return !!type.typeParameter.constraint && hasJSDocPostfixQuestion(type.typeParameter.constraint);
+            return false;
+        }
+
+        function parenthesizeTypeOfOptionalType(type: TypeNode): TypeNode {
+            if (hasJSDocPostfixQuestion(type)) return factory.createParenthesizedType(type);
+            return parenthesizeNonArrayTypeOfPostfixType(type);
+        }
+
+        // function parenthesizeMemberOfElementType(member: TypeNode): TypeNode {
+        //     switch (member.kind) {
+        //         case SyntaxKind.UnionType:
+        //         case SyntaxKind.IntersectionType:
+        //         case SyntaxKind.FunctionType:
+        //         case SyntaxKind.ConstructorType:
+        //             return factory.createParenthesizedType(member);
+        //     }
+        //     return parenthesizeMemberOfConditionalType(member);
+        // }
+
+        // function parenthesizeElementTypeOfArrayType(member: TypeNode): TypeNode {
+        //     switch (member.kind) {
+        //         case SyntaxKind.TypeQuery:
+        //         case SyntaxKind.TypeOperator:
+        //         case SyntaxKind.InferType:
+        //             return factory.createParenthesizedType(member);
+        //     }
+        //     return parenthesizeMemberOfElementType(member);
+        // }
+
+        function parenthesizeLeadingTypeArgument(node: TypeNode) {
+            return isFunctionOrConstructorTypeNode(node) && node.typeParameters ? factory.createParenthesizedType(node) : node;
         }
 
         function parenthesizeOrdinalTypeArgument(node: TypeNode, i: number) {
-            return i === 0 && isFunctionOrConstructorTypeNode(node) && node.typeParameters ? factory.createParenthesizedType(node) : node;
+            return i === 0 ? parenthesizeLeadingTypeArgument(node) : node;
         }
 
         function parenthesizeTypeArguments(typeArguments: NodeArray<TypeNode> | undefined): NodeArray<TypeNode> | undefined {
@@ -403,6 +600,8 @@ namespace ts {
     }
 
     export const nullParenthesizerRules: ParenthesizerRules = {
+        getParenthesizeLeftSideOfBinaryForOperator: _ => identity,
+        getParenthesizeRightSideOfBinaryForOperator: _ => identity,
         parenthesizeLeftSideOfBinary: (_binaryOperator, leftSide) => leftSide,
         parenthesizeRightSideOfBinary: (_binaryOperator, _leftSide, rightSide) => rightSide,
         parenthesizeExpressionOfComputedPropertyName: identity,
@@ -417,10 +616,19 @@ namespace ts {
         parenthesizeExpressionForDisallowedComma: identity,
         parenthesizeExpressionOfExpressionStatement: identity,
         parenthesizeConciseBodyOfArrowFunction: identity,
-        parenthesizeMemberOfConditionalType: identity,
-        parenthesizeMemberOfElementType: identity,
-        parenthesizeElementTypeOfArrayType: identity,
-        parenthesizeConstituentTypesOfUnionOrIntersectionType: nodes => cast(nodes, isNodeArray),
+        parenthesizeCheckTypeOfConditionalType: identity,
+        parenthesizeExtendsTypeOfConditionalType: identity,
+        parenthesizeConstituentTypesOfUnionType: nodes => cast(nodes, isNodeArray),
+        parenthesizeConstituentTypeOfUnionType: identity,
+        parenthesizeConstituentTypesOfIntersectionType: nodes => cast(nodes, isNodeArray),
+        parenthesizeConstituentTypeOfIntersectionType: identity,
+        parenthesizeOperandOfTypeOperator: identity,
+        parenthesizeOperandOfReadonlyTypeOperator: identity,
+        parenthesizeNonArrayTypeOfPostfixType: identity,
+        parenthesizeElementTypesOfTupleType: nodes => cast(nodes, isNodeArray),
+        parenthesizeElementTypeOfTupleType: identity,
+        parenthesizeTypeOfOptionalType: identity,
         parenthesizeTypeArguments: nodes => nodes && cast(nodes, isNodeArray),
+        parenthesizeLeadingTypeArgument: identity,
     };
 }

@@ -1,0 +1,40 @@
+=== tests/cases/compiler/foo.ts ===
+export const enum ConstFooEnum {
+>ConstFooEnum : Symbol(ConstFooEnum, Decl(foo.ts, 0, 0))
+
+    Some,
+>Some : Symbol(ConstFooEnum.Some, Decl(foo.ts, 0, 32))
+
+    Values,
+>Values : Symbol(ConstFooEnum.Values, Decl(foo.ts, 1, 9))
+
+    Here
+>Here : Symbol(ConstFooEnum.Here, Decl(foo.ts, 2, 11))
+
+};
+export function fooFunc(): void { /* removed */ }
+>fooFunc : Symbol(fooFunc, Decl(foo.ts, 4, 2))
+
+=== tests/cases/compiler/index.ts ===
+import * as Foo from "./foo";
+>Foo : Symbol(Foo, Decl(index.ts, 0, 6))
+
+function check(x: Foo.ConstFooEnum): void {
+>check : Symbol(check, Decl(index.ts, 0, 29))
+>x : Symbol(x, Decl(index.ts, 2, 15))
+>Foo : Symbol(Foo, Decl(index.ts, 0, 6))
+>ConstFooEnum : Symbol(Foo.ConstFooEnum, Decl(foo.ts, 0, 0))
+
+  switch (x) {
+>x : Symbol(x, Decl(index.ts, 2, 15))
+
+    case Foo.ConstFooEnum.Some:
+>Foo.ConstFooEnum.Some : Symbol(Foo.ConstFooEnum.Some, Decl(foo.ts, 0, 32))
+>Foo.ConstFooEnum : Symbol(Foo.ConstFooEnum, Decl(foo.ts, 0, 0))
+>Foo : Symbol(Foo, Decl(index.ts, 0, 6))
+>ConstFooEnum : Symbol(Foo.ConstFooEnum, Decl(foo.ts, 0, 0))
+>Some : Symbol(Foo.ConstFooEnum.Some, Decl(foo.ts, 0, 32))
+
+      break;
+  }
+}

@@ -343,7 +343,7 @@ if (isSuccess(result)) {
 // Repro from #10898
 
 type TestEvent = "onmouseover" | "onmouseout";
->TestEvent : TestEvent
+>TestEvent : "onmouseover" | "onmouseout"
 
 function onMouseOver(): TestEvent { return "onmouseover"; }
 >onMouseOver : () => TestEvent
@@ -398,7 +398,7 @@ export function keys<K extends string, V>(obj: Record<K, V>): K[] {
 }
 
 type Obj = { code: LangCode }
->Obj : Obj
+>Obj : { code: LangCode; }
 >code : "fr" | "en" | "es" | "it" | "nl"
 
 const langCodeSet = Set('fr', 'en', 'es', 'it', 'nl')
@@ -443,15 +443,15 @@ function test<T extends { a: string, b: string }>(obj: T): T {
 
     let { a, ...rest } = obj;
 >a : string
->rest : Pick<T, Exclude<keyof T, "a">>
+>rest : Omit<T, "a">
 >obj : T
 
     return { a: 'hello', ...rest } as T;
 >{ a: 'hello', ...rest } as T : T
->{ a: 'hello', ...rest } : { a: string; } & Pick<T, Exclude<keyof T, "a">>
+>{ a: 'hello', ...rest } : { a: string; } & Omit<T, "a">
 >a : string
 >'hello' : "hello"
->rest : Pick<T, Exclude<keyof T, "a">>
+>rest : Omit<T, "a">
 }
 
 // Repro from #32169

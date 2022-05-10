@@ -8,12 +8,12 @@ namespace Test1 {
     }
 
     var x: Foo.bar = "";
->x : any
+>x : Foo.bar
 >Foo : any
 >"" : ""
 
     var y: Test1.Foo.bar = "";
->y : any
+>y : Test1.Foo.bar
 >Test1 : any
 >Foo : any
 >"" : ""
@@ -30,12 +30,12 @@ namespace Test2 {
     }
 
     var x: Foo.bar = "";
->x : any
+>x : Foo.bar
 >Foo : any
 >"" : ""
 
     var y: Test2.Foo.bar = "";
->y : any
+>y : Test2.Foo.bar
 >Test2 : any
 >Foo : any
 >"" : ""
@@ -45,19 +45,19 @@ namespace Test3 {
 >Test3 : typeof Test3
 
     export type Foo = {
->Foo : Foo
+>Foo : { bar: string; }
 
         bar: string;
 >bar : string
     }
 
     var x: Foo.bar = "";
->x : any
+>x : Foo.bar
 >Foo : any
 >"" : ""
 
     var y: Test3.Foo.bar = "";
->y : any
+>y : Test3.Foo.bar
 >Test3 : any
 >Foo : any
 >"" : ""
@@ -67,19 +67,19 @@ namespace Test4 {
 >Test4 : typeof Test4
 
     export type Foo = { bar: number }
->Foo : Foo
+>Foo : { bar: number; } | { bar: string; }
 >bar : number
 
                     | { bar: string }
 >bar : string
 
     var x: Foo.bar = "";
->x : any
+>x : Foo.bar
 >Foo : any
 >"" : ""
 
     var y: Test4.Foo.bar = "";
->y : any
+>y : Test4.Foo.bar
 >Test4 : any
 >Foo : any
 >"" : ""
@@ -89,19 +89,19 @@ namespace Test5 {
 >Test5 : typeof Test5
 
     export type Foo = { bar: number }
->Foo : Foo
+>Foo : { bar: number; } | { wat: string; }
 >bar : number
 
                     | { wat: string }
 >wat : string
 
     var x: Foo.bar = "";
->x : any
+>x : Foo.bar
 >Foo : any
 >"" : ""
 
     var y: Test5.Foo.bar = "";
->y : any
+>y : Test5.Foo.bar
 >Test5 : any
 >Foo : any
 >"" : ""

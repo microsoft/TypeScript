@@ -29,37 +29,37 @@ interface Point {
 // Constraint checking
 
 type T00 = { [P in P]: string };  // Error
->T00 : T00
+>T00 : { [x: string]: string; }
 
 type T01 = { [P in number]: string };  // Error
->T01 : T01
+>T01 : { [x: number]: string; }
 
 type T02 = { [P in Date]: number };  // Error
->T02 : T02
+>T02 : {}
 
 type T03 = Record<Date, number>;  // Error
->T03 : Record<Date, number>
+>T03 : {}
 
 type T10 = Pick<Shape, "name">;
->T10 : Pick<Shape, "name">
+>T10 : { name: string; }
 
 type T11 = Pick<Shape, "foo">;  // Error
->T11 : Pick<Shape, "foo">
+>T11 : { foo: unknown; }
 
 type T12 = Pick<Shape, "name" | "foo">;  // Error
->T12 : Pick<Shape, "name" | "foo">
+>T12 : { name: string; foo: unknown; }
 
 type T13 = Pick<Shape, keyof Named>;
->T13 : Pick<Shape, "name">
+>T13 : { name: string; }
 
 type T14 = Pick<Shape, keyof Point>;  // Error
->T14 : Pick<Shape, "x" | "y">
+>T14 : { x: unknown; y: unknown; }
 
 type T15 = Pick<Shape, never>;
->T15 : Pick<Shape, never>
+>T15 : {}
 
 type T16 = Pick<Shape, undefined>;  // Error
->T16 : Pick<Shape, undefined>
+>T16 : {}
 
 function f1<T>(x: T) {
 >f1 : <T>(x: T) => void
@@ -78,7 +78,7 @@ function f2<T extends string | number>(x: T) {
 }
 
 function f3<T extends keyof Shape>(x: T) {
->f3 : <T extends "name" | "width" | "height" | "visible">(x: T) => void
+>f3 : <T extends keyof Shape>(x: T) => void
 >x : T
 
     let y: Pick<Shape, T>;
@@ -374,9 +374,9 @@ let c = new C<Foo>();
 
 c.setState({ a: "test", b: 43 });
 >c.setState({ a: "test", b: 43 }) : void
->c.setState : <K extends "a" | "b">(props: Pick<Foo, K>) => void
+>c.setState : <K extends keyof Foo>(props: Pick<Foo, K>) => void
 >c : C<Foo>
->setState : <K extends "a" | "b">(props: Pick<Foo, K>) => void
+>setState : <K extends keyof Foo>(props: Pick<Foo, K>) => void
 >{ a: "test", b: 43 } : { a: string; b: number; }
 >a : string
 >"test" : "test"
@@ -385,56 +385,56 @@ c.setState({ a: "test", b: 43 });
 
 c.setState({ a: "hi" });
 >c.setState({ a: "hi" }) : void
->c.setState : <K extends "a" | "b">(props: Pick<Foo, K>) => void
+>c.setState : <K extends keyof Foo>(props: Pick<Foo, K>) => void
 >c : C<Foo>
->setState : <K extends "a" | "b">(props: Pick<Foo, K>) => void
+>setState : <K extends keyof Foo>(props: Pick<Foo, K>) => void
 >{ a: "hi" } : { a: string; }
 >a : string
 >"hi" : "hi"
 
 c.setState({ b: undefined });
 >c.setState({ b: undefined }) : void
->c.setState : <K extends "a" | "b">(props: Pick<Foo, K>) => void
+>c.setState : <K extends keyof Foo>(props: Pick<Foo, K>) => void
 >c : C<Foo>
->setState : <K extends "a" | "b">(props: Pick<Foo, K>) => void
+>setState : <K extends keyof Foo>(props: Pick<Foo, K>) => void
 >{ b: undefined } : { b: undefined; }
 >b : undefined
 >undefined : undefined
 
 c.setState({ });
 >c.setState({ }) : void
->c.setState : <K extends "a" | "b">(props: Pick<Foo, K>) => void
+>c.setState : <K extends keyof Foo>(props: Pick<Foo, K>) => void
 >c : C<Foo>
->setState : <K extends "a" | "b">(props: Pick<Foo, K>) => void
+>setState : <K extends keyof Foo>(props: Pick<Foo, K>) => void
 >{ } : {}
 
 c.setState(foo);
 >c.setState(foo) : void
->c.setState : <K extends "a" | "b">(props: Pick<Foo, K>) => void
+>c.setState : <K extends keyof Foo>(props: Pick<Foo, K>) => void
 >c : C<Foo>
->setState : <K extends "a" | "b">(props: Pick<Foo, K>) => void
+>setState : <K extends keyof Foo>(props: Pick<Foo, K>) => void
 >foo : Foo
 
 c.setState({ a: undefined });  // Error
 >c.setState({ a: undefined }) : void
->c.setState : <K extends "a" | "b">(props: Pick<Foo, K>) => void
+>c.setState : <K extends keyof Foo>(props: Pick<Foo, K>) => void
 >c : C<Foo>
->setState : <K extends "a" | "b">(props: Pick<Foo, K>) => void
+>setState : <K extends keyof Foo>(props: Pick<Foo, K>) => void
 >{ a: undefined } : { a: undefined; }
 >a : undefined
 >undefined : undefined
 
 c.setState({ c: true });  // Error
 >c.setState({ c: true }) : void
->c.setState : <K extends "a" | "b">(props: Pick<Foo, K>) => void
+>c.setState : <K extends keyof Foo>(props: Pick<Foo, K>) => void
 >c : C<Foo>
->setState : <K extends "a" | "b">(props: Pick<Foo, K>) => void
+>setState : <K extends keyof Foo>(props: Pick<Foo, K>) => void
 >{ c: true } : { c: boolean; }
 >c : boolean
 >true : true
 
 type T2 = { a?: number, [key: string]: any };
->T2 : T2
+>T2 : { [key: string]: any; a?: number | undefined; }
 >a : number | undefined
 >key : string
 
@@ -469,7 +469,7 @@ type Foo2<T, F extends keyof T> = {
 
 };
 type O = {x: number, y: boolean};
->O : O
+>O : { x: number; y: boolean; }
 >x : number
 >y : boolean
 

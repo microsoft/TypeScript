@@ -164,10 +164,23 @@ namespace ts {
     export const updateFunctionTypeNode = Debug.deprecate(factory.updateFunctionTypeNode, factoryDeprecation);
 
     /** @deprecated Use `factory.createConstructorTypeNode` or the factory supplied by your transformation context instead. */
-    export const createConstructorTypeNode = Debug.deprecate(factory.createConstructorTypeNode, factoryDeprecation);
+    export const createConstructorTypeNode = Debug.deprecate((
+        typeParameters: readonly TypeParameterDeclaration[] | undefined,
+        parameters: readonly ParameterDeclaration[],
+        type: TypeNode
+    ) => {
+        return factory.createConstructorTypeNode(/*modifiers*/ undefined, typeParameters, parameters, type);
+    }, factoryDeprecation);
 
     /** @deprecated Use `factory.updateConstructorTypeNode` or the factory supplied by your transformation context instead. */
-    export const updateConstructorTypeNode = Debug.deprecate(factory.updateConstructorTypeNode, factoryDeprecation);
+    export const updateConstructorTypeNode = Debug.deprecate((
+        node: ConstructorTypeNode,
+        typeParameters: NodeArray<TypeParameterDeclaration> | undefined,
+        parameters: NodeArray<ParameterDeclaration>,
+        type: TypeNode
+    ) => {
+        return factory.updateConstructorTypeNode(node, node.modifiers, typeParameters, parameters, type);
+    }, factoryDeprecation);
 
     /** @deprecated Use `factory.createTypeQueryNode` or the factory supplied by your transformation context instead. */
     export const createTypeQueryNode = Debug.deprecate(factory.createTypeQueryNode, factoryDeprecation);
@@ -1079,7 +1092,7 @@ namespace ts {
         }
         return factory.createYieldExpression(asteriskToken, expression);
     } as {
-        (expression?: Expression): YieldExpression;
+        (expression?: Expression | undefined): YieldExpression;
         (asteriskToken: AsteriskToken | undefined, expression: Expression): YieldExpression;
     }, factoryDeprecation);
 
@@ -1112,7 +1125,7 @@ namespace ts {
         name: PropertyName | string,
         questionToken: QuestionToken | undefined,
         type: TypeNode | undefined,
-        initializer?: Expression
+        initializer?: Expression | undefined
     ): PropertySignature {
         const node = factory.createPropertySignature(modifiers, name, questionToken, type);
         node.initializer = initializer;
@@ -1174,7 +1187,7 @@ namespace ts {
             arguments.length >= 1 && arguments.length <= 3 ? factory.createVariableDeclaration(name, /*exclamationToken*/ undefined, exclamationTokenOrType as TypeNode | undefined, typeOrInitializer as Expression | undefined) :
             Debug.fail("Argument count mismatch");
     } as {
-        (name: string | BindingName, type?: TypeNode, initializer?: Expression): VariableDeclaration;
+        (name: string | BindingName, type?: TypeNode | undefined, initializer?: Expression | undefined): VariableDeclaration;
         (name: string | BindingName, exclamationToken: ExclamationToken | undefined, type: TypeNode | undefined, initializer: Expression | undefined): VariableDeclaration;
     }, factoryDeprecation);
 
@@ -1199,7 +1212,7 @@ namespace ts {
     }, factoryDeprecation);
 
     /** @deprecated Use `factory.createExportDeclaration` or the factory supplied by your transformation context instead. */
-    export const createExportDeclaration = Debug.deprecate(function createExportDeclaration(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, exportClause: NamedExportBindings | undefined, moduleSpecifier?: Expression, isTypeOnly = false) {
+    export const createExportDeclaration = Debug.deprecate(function createExportDeclaration(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, exportClause: NamedExportBindings | undefined, moduleSpecifier?: Expression | undefined, isTypeOnly = false) {
         return factory.createExportDeclaration(decorators, modifiers, isTypeOnly, exportClause, moduleSpecifier);
     }, factoryDeprecation);
 
@@ -1211,12 +1224,12 @@ namespace ts {
         exportClause: NamedExportBindings | undefined,
         moduleSpecifier: Expression | undefined,
         isTypeOnly: boolean) {
-        return factory.updateExportDeclaration(node, decorators, modifiers, isTypeOnly, exportClause, moduleSpecifier);
+        return factory.updateExportDeclaration(node, decorators, modifiers, isTypeOnly, exportClause, moduleSpecifier, node.assertClause);
     }, factoryDeprecation);
 
     /** @deprecated Use `factory.createJSDocParameterTag` or the factory supplied by your transformation context instead. */
-    export const createJSDocParamTag = Debug.deprecate(function createJSDocParamTag(name: EntityName, isBracketed: boolean, typeExpression?: JSDocTypeExpression, comment?: string): JSDocParameterTag {
-        return factory.createJSDocParameterTag(/*tagName*/ undefined, name, isBracketed, typeExpression, /*isNameFirst*/ false, comment);
+    export const createJSDocParamTag = Debug.deprecate(function createJSDocParamTag(name: EntityName, isBracketed: boolean, typeExpression?: JSDocTypeExpression | undefined, comment?: string | undefined): JSDocParameterTag {
+        return factory.createJSDocParameterTag(/*tagName*/ undefined, name, isBracketed, typeExpression, /*isNameFirst*/ false, comment ? factory.createNodeArray([factory.createJSDocText(comment)]) : undefined);
     }, factoryDeprecation);
 
     /** @deprecated Use `factory.createComma` or the factory supplied by your transformation context instead. */
@@ -1341,4 +1354,24 @@ namespace ts {
     export interface Map<T> extends ESMap<string, T> { }
 
     // #endregion
+
+    // DEPRECATION: Renamed node tests
+    // DEPRECATION PLAN:
+    //     - soft: 4.2
+    //     - warn: 4.3
+    //     - error: TBD
+    // #region Renamed node Tests
+
+    /**
+     * @deprecated Use `isMemberName` instead.
+     */
+    export const isIdentifierOrPrivateIdentifier = Debug.deprecate(function isIdentifierOrPrivateIdentifier(node: Node): node is MemberName {
+        return isMemberName(node);
+    }, {
+        since: "4.2",
+        warnAfter: "4.3",
+        message: "Use `isMemberName` instead."
+    });
+
+    // #endregion Renamed node Tests
 }

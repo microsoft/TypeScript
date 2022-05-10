@@ -1,0 +1,111 @@
+[
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoInheritedLinkTag.ts",
+      "position": 258,
+      "name": ""
+    },
+    "quickInfo": {
+      "kind": "method",
+      "kindModifiers": "deprecated",
+      "textSpan": {
+        "start": 257,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "method",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "C",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "m",
+          "kind": "methodName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [],
+      "tags": [
+        {
+          "name": "deprecated",
+          "text": [
+            {
+              "text": "Use ",
+              "kind": "text"
+            },
+            {
+              "text": "{@link ",
+              "kind": "link"
+            },
+            {
+              "text": "PerspectiveCamera#setFocalLength .setFocalLength()",
+              "kind": "linkText"
+            },
+            {
+              "text": "}",
+              "kind": "link"
+            },
+            {
+              "text": " and ",
+              "kind": "text"
+            },
+            {
+              "text": "{@link ",
+              "kind": "link"
+            },
+            {
+              "text": "PerspectiveCamera#filmGauge .filmGauge",
+              "kind": "linkText"
+            },
+            {
+              "text": "}",
+              "kind": "link"
+            },
+            {
+              "text": " instead.",
+              "kind": "text"
+            }
+          ]
+        }
+      ]
+    }
+  }
+]

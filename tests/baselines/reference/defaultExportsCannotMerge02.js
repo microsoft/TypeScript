@@ -37,7 +37,7 @@ exports.default = Decl;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var m1_1 = require("m1");
-m1_1.default();
+(0, m1_1.default)();
 var x;
 var y;
 var z = new m1_1.default();

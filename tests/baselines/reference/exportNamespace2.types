@@ -4,7 +4,7 @@ export class A {}
 
 === tests/cases/conformance/externalModules/typeOnly/b.ts ===
 export * as a from './a';
->a : typeof a
+>a : typeof import("tests/cases/conformance/externalModules/typeOnly/a")
 
 === tests/cases/conformance/externalModules/typeOnly/c.ts ===
 import type { a } from './b';

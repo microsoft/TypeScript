@@ -61,7 +61,7 @@ type N7 = void & string;
 >N7 : never
 
 type X = { x: string };
->X : X
+>X : { x: string; }
 >x : string
 
 type X1 = X | 'a' & 'b';
@@ -89,17 +89,17 @@ type X7 = X | void & string;
 >X7 : X
 
 type A = { kind: 'a', foo: string };
->A : A
+>A : { kind: 'a'; foo: string; }
 >kind : "a"
 >foo : string
 
 type B = { kind: 'b', foo: number };
->B : B
+>B : { kind: 'b'; foo: number; }
 >kind : "b"
 >foo : number
 
 type C = { kind: 'c', foo: number };
->C : C
+>C : { kind: 'c'; foo: number; }
 >kind : "c"
 >foo : number
 
@@ -159,26 +159,26 @@ type M1 = { a: 1, b: 2 } & { a: 2, c: 3 };  // never
 >c : 3
 
 type M2 = Merge1<{ a: 1, b: 2 }, { a: 2, c: 3 }>;  // {}
->M2 : Merge1<{ a: 1; b: 2; }, { a: 2; c: 3; }>
+>M2 : {}
 >a : 1
 >b : 2
 >a : 2
 >c : 3
 
 type M3 = Merge2<{ a: 1, b: 2 }, { a: 2, c: 3 }>;  // { a: 1, b: 2, c: 3 }
->M3 : Merge2<{ a: 1; b: 2; }, { a: 2; c: 3; }>
+>M3 : { a: 1; b: 2; c: 3; }
 >a : 1
 >b : 2
 >a : 2
 >c : 3
 
 type D = { kind: 'd', foo: unknown };
->D : D
+>D : { kind: 'd'; foo: unknown; }
 >kind : "d"
 >foo : unknown
 
 type E = { kind: 'e', foo: unknown };
->E : E
+>E : { kind: 'e'; foo: unknown; }
 >kind : "e"
 >foo : unknown
 

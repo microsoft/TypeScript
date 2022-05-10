@@ -49,23 +49,23 @@ function boxify<T>(obj: T): Boxified<T> {
 }
 
 type A = { a: string };
->A : A
+>A : { a: string; }
 >a : string
 
 type B = { b: string };
->B : B
+>B : { b: string; }
 >b : string
 
 type C = { c: string };
->C : C
+>C : { c: string; }
 >c : string
 
 function f1(x: A | B | C | undefined) {
->f1 : (x: A | B | C | undefined) => Boxified<A> | Boxified<B> | Boxified<C> | undefined
+>f1 : (x: A | B | C | undefined) => Boxified<A | B | C | undefined>
 >x : A | B | C | undefined
 
     return boxify(x);
->boxify(x) : Boxified<A> | Boxified<B> | Boxified<C> | undefined
+>boxify(x) : Boxified<A | B | C | undefined>
 >boxify : <T>(obj: T) => Boxified<T>
 >x : A | B | C | undefined
 }
@@ -114,7 +114,7 @@ type DeepReadonly<T> = {
 };
 
 type Foo = {
->Foo : Foo
+>Foo : { x: number; y: {    a: string;    b: number;}; z: boolean; }
 
     x: number;
 >x : number
@@ -130,7 +130,7 @@ type Foo = {
 };
 
 type DeepReadonlyFoo = {
->DeepReadonlyFoo : DeepReadonlyFoo
+>DeepReadonlyFoo : { readonly x: number; readonly y: {    readonly a: string;    readonly b: number;}; readonly z: boolean; }
 
     readonly x: number;
 >x : number
@@ -154,7 +154,7 @@ var x1: DeepReadonlyFoo;
 // Repro from #13232
 
 type Z = { a: number };
->Z : Z
+>Z : { a: number; }
 >a : number
 
 type Clone<T> = {

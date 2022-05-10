@@ -3,7 +3,7 @@ export class A {}
 >A : A
 
 export type B  = { b: string };
->B : B
+>B : { b: string; }
 >b : string
 
 export const C = "";
@@ -30,4 +30,9 @@ b.b;
 >b.b : string
 >b : B
 >b : string
+
+const c = { A };
+>c : { A: typeof A; }
+>{ A } : { A: typeof A; }
+>A : typeof A
 

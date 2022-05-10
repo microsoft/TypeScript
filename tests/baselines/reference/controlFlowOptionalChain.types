@@ -223,16 +223,16 @@ if (o3?.x === 1) {
 }
 else {
     o3;
->o3 : { x: 1; y: string; } | { x: 2; y: number; } | undefined
+>o3 : { x: 2; y: number; } | undefined
 
     o3?.x;
 >o3?.x : 2 | undefined
->o3 : { x: 1; y: string; } | { x: 2; y: number; } | undefined
+>o3 : { x: 2; y: number; } | undefined
 >x : 2 | undefined
 
     o3.x;
 >o3.x : 2
->o3 : { x: 1; y: string; } | { x: 2; y: number; } | undefined
+>o3 : { x: 2; y: number; } | undefined
 >x : 2
 }
 o3;
@@ -635,7 +635,7 @@ function f01(x: unknown) {
 }
 
 type Thing = { foo: string | number, bar(): number, baz: object };
->Thing : Thing
+>Thing : { foo: string | number; bar(): number; baz: object; }
 >foo : string | number
 >bar : () => number
 >baz : object
@@ -1870,7 +1870,7 @@ function f41(o: Thing | undefined) {
 // Repros from #34570
 
 type Shape =
->Shape : Shape
+>Shape : { type: 'rectangle'; width: number; height: number; } | { type: 'circle'; radius: number; }
 
     | { type: 'rectangle', width: number, height: number }
 >type : "rectangle"
@@ -1882,12 +1882,12 @@ type Shape =
 >radius : number
 
 function getArea(shape?: Shape) {
->getArea : (shape?: { type: "rectangle"; width: number; height: number; } | { type: "circle"; radius: number; } | undefined) => number
->shape : { type: "rectangle"; width: number; height: number; } | { type: "circle"; radius: number; } | undefined
+>getArea : (shape?: Shape) => number
+>shape : Shape | undefined
 
     switch (shape?.type) {
 >shape?.type : "rectangle" | "circle" | undefined
->shape : { type: "rectangle"; width: number; height: number; } | { type: "circle"; radius: number; } | undefined
+>shape : Shape | undefined
 >type : "rectangle" | "circle" | undefined
 
         case 'circle':
@@ -1923,7 +1923,7 @@ function getArea(shape?: Shape) {
 }
 
 type Feature = {
->Feature : Feature
+>Feature : { id: string; geometry?: { type: string; coordinates: number[]; } | undefined; }
 
   id: string;
 >id : string

@@ -8,7 +8,7 @@ module M {
 >M : typeof M
 
     type W = Window | string;
->W : W
+>W : string | Window
 
     export module N {
 >N : typeof N
@@ -34,7 +34,7 @@ module M1 {
 >Window : Window
 
         export var p: W; // No error
->p : string | globalThis.Window
+>p : W
     }
 }
 

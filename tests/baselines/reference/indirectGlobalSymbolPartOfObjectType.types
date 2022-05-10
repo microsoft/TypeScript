@@ -1,0 +1,15 @@
+=== tests/cases/compiler/indirectGlobalSymbolPartOfObjectType.ts ===
+export { }
+const Symbol = globalThis.Symbol;
+>Symbol : SymbolConstructor
+>globalThis.Symbol : SymbolConstructor
+>globalThis : typeof globalThis
+>Symbol : SymbolConstructor
+
+[][Symbol.iterator];
+>[][Symbol.iterator] : () => IterableIterator<undefined>
+>[] : undefined[]
+>Symbol.iterator : unique symbol
+>Symbol : SymbolConstructor
+>iterator : unique symbol
+

@@ -81,7 +81,7 @@ function f4<T extends { a: string, b: string }>(obj: Record<Exclude<keyof T, 'b'
 // Repro from #28821
 
 type TargetProps = {
->TargetProps : TargetProps
+>TargetProps : { foo: string; bar: string; }
 
     foo: string,
 >foo : string
@@ -98,12 +98,12 @@ const modifier = <T extends TargetProps>(targetProps: T) => {
 
     let {bar, ...rest} = targetProps;
 >bar : string
->rest : Pick<T, Exclude<keyof T, "bar">>
+>rest : Omit<T, "bar">
 >targetProps : T
 
     rest.foo;
 >rest.foo : T["foo"]
->rest : Pick<T, Exclude<keyof T, "bar">>
+>rest : Omit<T, "bar">
 >foo : T["foo"]
 
 };

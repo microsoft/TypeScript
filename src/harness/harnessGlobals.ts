@@ -9,7 +9,9 @@ globalThis.assert = _chai.assert;
 {
     // chai's builtin `assert.isFalse` is featureful but slow - we don't use those features,
     // so we'll just overwrite it as an alterative to migrating a bunch of code off of chai
-    assert.isFalse = (expr: any, msg: string) => { if (expr !== false) throw new Error(msg); };
+    assert.isFalse = (expr: any, msg: string) => {
+        if (expr !== false) throw new Error(msg);
+    };
 
     const assertDeepImpl = assert.deepEqual;
     assert.deepEqual = (a, b, msg) => {
@@ -18,8 +20,8 @@ globalThis.assert = _chai.assert;
         }
         assertDeepImpl(a, b, msg);
 
-        function arrayExtraKeysObject(a: readonly ({} | null | undefined)[]): object {
-            const obj: { [key: string]: {} | null | undefined } = {};
+        function arrayExtraKeysObject(a: readonly unknown[]): object {
+            const obj: { [key: string]: unknown } = {};
             for (const key in a) {
                 if (Number.isNaN(Number(key))) {
                     obj[key] = a[key];

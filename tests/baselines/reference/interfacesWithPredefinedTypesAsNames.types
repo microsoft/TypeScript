@@ -8,3 +8,5 @@ interface void {}
 >void {} : undefined
 >{} : {}
 
+interface unknown {}
+interface never {}

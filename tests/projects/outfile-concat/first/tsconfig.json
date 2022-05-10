@@ -8,7 +8,6 @@
     "declarationMap": true,
     "outFile": "./bin/first-output.js",
     "skipDefaultLibCheck": true,
-    "bundledPackageName": "first",
   },
   "files": [
     "first_PART1.ts",

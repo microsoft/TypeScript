@@ -1,5 +1,5 @@
 tests/cases/compiler/primaryExpressionMods.ts(7,8): error TS2709: Cannot use namespace 'M' as a type.
-tests/cases/compiler/primaryExpressionMods.ts(11,8): error TS2503: Cannot find namespace 'm'.
+tests/cases/compiler/primaryExpressionMods.ts(11,8): error TS2833: Cannot find namespace 'm'. Did you mean 'M'?
 
 
 ==== tests/cases/compiler/primaryExpressionMods.ts (2 errors) ====
@@ -17,5 +17,6 @@ tests/cases/compiler/primaryExpressionMods.ts(11,8): error TS2503: Cannot find n
     var x2 = m.a;           // Same as M.a
     var q: m.P;             // Error
            ~
-!!! error TS2503: Cannot find namespace 'm'.
+!!! error TS2833: Cannot find namespace 'm'. Did you mean 'M'?
+!!! related TS2728 tests/cases/compiler/primaryExpressionMods.ts:1:8: 'M' is declared here.
     

@@ -15,8 +15,7 @@
       "start": 8,
       "length": 3
     },
-    "isWriteAccess": false,
-    "isDefinition": false
+    "isWriteAccess": false
   },
   {
     "fileName": "/project/c.ts",
@@ -24,8 +23,7 @@
       "start": 16,
       "length": 3
     },
-    "isWriteAccess": false,
-    "isDefinition": false
+    "isWriteAccess": false
   },
   {
     "fileName": "/project/d.ts",
@@ -33,8 +31,7 @@
       "start": 19,
       "length": 10
     },
-    "isWriteAccess": false,
-    "isDefinition": false
+    "isWriteAccess": false
   },
   {
     "fileName": "/project/d.ts",
@@ -42,7 +39,6 @@
       "start": 56,
       "length": 3
     },
-    "isWriteAccess": false,
-    "isDefinition": false
+    "isWriteAccess": false
   }
 ]

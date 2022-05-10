@@ -58,11 +58,11 @@ type T31 = Partial<Boxified<string[]>>;
 >T31 : (Box<string> | undefined)[]
 
 type A = { a: string };
->A : A
+>A : { a: string; }
 >a : string
 
 type B = { b: string };
->B : B
+>B : { b: string; }
 >b : string
 
 type T40 = Boxified<A | A[] | ReadonlyArray<A> | [A, B] | string | string[]>;
@@ -152,10 +152,10 @@ let y22 = nonpartial(x22);
 >nonpartial : <T>(x: Partial<T>) => T
 >x22 : { a: number | undefined; b?: string[] | undefined; }
 
-type Awaited<T> = T extends PromiseLike<infer U> ? U : T;
->Awaited : Awaited<T>
+type __Awaited<T> = T extends PromiseLike<infer U> ? U : T;
+>__Awaited : __Awaited<T>
 
-type Awaitified<T> = { [P in keyof T]: Awaited<T[P]> };
+type Awaitified<T> = { [P in keyof T]: __Awaited<T[P]> };
 >Awaitified : Awaitified<T>
 
 declare function all<T extends any[]>(...values: T): Promise<Awaitified<T>>;
@@ -229,7 +229,7 @@ type Mapped<T> = { [K in keyof T]: T[K] };
 >Mapped : Mapped<T>
 
 type F<T> = ElementType<Mapped<T>>;
->F : ElementType<Mapped<T>>
+>F : F<T>
 
 type R1 = F<[string, number, boolean]>;  // string | number | boolean
 >R1 : string | number | boolean
@@ -262,13 +262,13 @@ function acceptMappedArray<T extends any[]>(arr: T) {
 // Repro from #26163
 
 type Unconstrained<T> = ElementType<Mapped<T>>;
->Unconstrained : ElementType<Mapped<T>>
+>Unconstrained : Unconstrained<T>
 
 type T1 = Unconstrained<[string, number, boolean]>;  // string | number | boolean
 >T1 : string | number | boolean
 
 type Constrained<T extends any[]> = ElementType<Mapped<T>>;
->Constrained : ElementType<Mapped<T>>
+>Constrained : Constrained<T>
 
 type T2 = Constrained<[string, number, boolean]>;  // string | number | boolean
 >T2 : string | number | boolean

@@ -15,11 +15,9 @@ tests/cases/conformance/types/unknown/unknownType1.ts(111,9): error TS2322: Type
 tests/cases/conformance/types/unknown/unknownType1.ts(112,9): error TS2322: Type 'unknown' is not assignable to type 'string[]'.
 tests/cases/conformance/types/unknown/unknownType1.ts(113,9): error TS2322: Type 'unknown' is not assignable to type '{}'.
 tests/cases/conformance/types/unknown/unknownType1.ts(114,9): error TS2322: Type 'unknown' is not assignable to type '{} | null | undefined'.
-  Type 'unknown' is not assignable to type '{}'.
 tests/cases/conformance/types/unknown/unknownType1.ts(120,9): error TS2322: Type 'T' is not assignable to type 'object'.
-  Type 'unknown' is not assignable to type 'object'.
 tests/cases/conformance/types/unknown/unknownType1.ts(128,5): error TS2322: Type 'number[]' is not assignable to type '{ [x: string]: unknown; }'.
-  Index signature is missing in type 'number[]'.
+  Index signature for type 'string' is missing in type 'number[]'.
 tests/cases/conformance/types/unknown/unknownType1.ts(129,5): error TS2322: Type 'number' is not assignable to type '{ [x: string]: unknown; }'.
 tests/cases/conformance/types/unknown/unknownType1.ts(143,29): error TS2698: Spread types may only be created from object types.
 tests/cases/conformance/types/unknown/unknownType1.ts(144,29): error TS2698: Spread types may only be created from object types.
@@ -27,9 +25,7 @@ tests/cases/conformance/types/unknown/unknownType1.ts(150,17): error TS2355: A f
 tests/cases/conformance/types/unknown/unknownType1.ts(156,14): error TS2700: Rest types may only be created from object types.
 tests/cases/conformance/types/unknown/unknownType1.ts(162,5): error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
 tests/cases/conformance/types/unknown/unknownType1.ts(171,9): error TS2322: Type 'U' is not assignable to type '{}'.
-  Type 'unknown' is not assignable to type '{}'.
 tests/cases/conformance/types/unknown/unknownType1.ts(181,5): error TS2322: Type 'T' is not assignable to type '{}'.
-  Type 'unknown' is not assignable to type '{}'.
 
 
 ==== tests/cases/conformance/types/unknown/unknownType1.ts (27 errors) ====
@@ -181,7 +177,6 @@ tests/cases/conformance/types/unknown/unknownType1.ts(181,5): error TS2322: Type
         let v7: {} | null | undefined = x;  // Error
             ~~
 !!! error TS2322: Type 'unknown' is not assignable to type '{} | null | undefined'.
-!!! error TS2322:   Type 'unknown' is not assignable to type '{}'.
     }
     
     // Type parameter 'T extends unknown' not related to object
@@ -190,7 +185,6 @@ tests/cases/conformance/types/unknown/unknownType1.ts(181,5): error TS2322: Type
         let y: object = x;  // Error
             ~
 !!! error TS2322: Type 'T' is not assignable to type 'object'.
-!!! error TS2322:   Type 'unknown' is not assignable to type 'object'.
     }
     
     // Anything fresh but primitive assignable to { [x: string]: unknown }
@@ -201,7 +195,7 @@ tests/cases/conformance/types/unknown/unknownType1.ts(181,5): error TS2322: Type
         x = [1, 2, 3]; // Error
         ~
 !!! error TS2322: Type 'number[]' is not assignable to type '{ [x: string]: unknown; }'.
-!!! error TS2322:   Index signature is missing in type 'number[]'.
+!!! error TS2322:   Index signature for type 'string' is missing in type 'number[]'.
         x = 123;  // Error
         ~
 !!! error TS2322: Type 'number' is not assignable to type '{ [x: string]: unknown; }'.
@@ -259,7 +253,6 @@ tests/cases/conformance/types/unknown/unknownType1.ts(181,5): error TS2322: Type
         let y: {} = u;
             ~
 !!! error TS2322: Type 'U' is not assignable to type '{}'.
-!!! error TS2322:   Type 'unknown' is not assignable to type '{}'.
     }
     
     // Repro from #26796
@@ -272,6 +265,5 @@ tests/cases/conformance/types/unknown/unknownType1.ts(181,5): error TS2322: Type
         return arg;  // Error
         ~~~~~~~~~~~
 !!! error TS2322: Type 'T' is not assignable to type '{}'.
-!!! error TS2322:   Type 'unknown' is not assignable to type '{}'.
     }
     

@@ -1,3 +1,5 @@
+/// <reference lib="es2020.intl" />
+
 interface BigIntToLocaleStringOptions {
     /**
      * The locale matching algorithm to use.The default is "best fit". For information about this option, see the {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl#Locale_negotiation Intl page}.
@@ -92,7 +94,7 @@ interface BigInt {
     toString(radix?: number): string;
 
     /** Returns a string representation appropriate to the host environment's current locale. */
-    toLocaleString(locales?: string, options?: BigIntToLocaleStringOptions): string;
+    toLocaleString(locales?: Intl.LocalesArgument, options?: BigIntToLocaleStringOptions): string;
 
     /** Returns the primitive value of the specified object. */
     valueOf(): bigint;
@@ -101,7 +103,7 @@ interface BigInt {
 }
 
 interface BigIntConstructor {
-    (value?: any): bigint;
+    (value: bigint | boolean | number | string): bigint;
     readonly prototype: BigInt;
 
     /**
@@ -164,7 +166,7 @@ interface BigInt64Array {
     every(predicate: (value: bigint, index: number, array: BigInt64Array) => boolean, thisArg?: any): boolean;
 
     /**
-     * Returns the this object after filling the section identified by start and end with value
+     * Changes all array elements from `start` to `end` index to a static `value` and returns the modified array
      * @param value value to fill array section with
      * @param start index to start filling the array at. If start is negative, it is treated as
      * length+start where length is the length of the array.
@@ -436,7 +438,7 @@ interface BigUint64Array {
     every(predicate: (value: bigint, index: number, array: BigUint64Array) => boolean, thisArg?: any): boolean;
 
     /**
-     * Returns the this object after filling the section identified by start and end with value
+     * Changes all array elements from `start` to `end` index to a static `value` and returns the modified array
      * @param value value to fill array section with
      * @param start index to start filling the array at. If start is negative, it is treated as
      * length+start where length is the length of the array.
@@ -671,6 +673,7 @@ interface DataView {
      * Gets the BigInt64 value at the specified byte offset from the start of the view. There is
      * no alignment constraint; multi-byte values may be fetched from any offset.
      * @param byteOffset The place in the buffer at which the value should be retrieved.
+     * @param littleEndian If false or undefined, a big-endian value should be read.
      */
     getBigInt64(byteOffset: number, littleEndian?: boolean): bigint;
 
@@ -678,6 +681,7 @@ interface DataView {
      * Gets the BigUint64 value at the specified byte offset from the start of the view. There is
      * no alignment constraint; multi-byte values may be fetched from any offset.
      * @param byteOffset The place in the buffer at which the value should be retrieved.
+     * @param littleEndian If false or undefined, a big-endian value should be read.
      */
     getBigUint64(byteOffset: number, littleEndian?: boolean): bigint;
 
@@ -685,8 +689,7 @@ interface DataView {
      * Stores a BigInt64 value at the specified byte offset from the start of the view.
      * @param byteOffset The place in the buffer at which the value should be set.
      * @param value The value to set.
-     * @param littleEndian If false or undefined, a big-endian value should be written,
-     * otherwise a little-endian value should be written.
+     * @param littleEndian If false or undefined, a big-endian value should be written.
      */
     setBigInt64(byteOffset: number, value: bigint, littleEndian?: boolean): void;
 
@@ -694,8 +697,7 @@ interface DataView {
      * Stores a BigUint64 value at the specified byte offset from the start of the view.
      * @param byteOffset The place in the buffer at which the value should be set.
      * @param value The value to set.
-     * @param littleEndian If false or undefined, a big-endian value should be written,
-     * otherwise a little-endian value should be written.
+     * @param littleEndian If false or undefined, a big-endian value should be written.
      */
     setBigUint64(byteOffset: number, value: bigint, littleEndian?: boolean): void;
 }

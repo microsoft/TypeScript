@@ -2,15 +2,14 @@ tests/cases/conformance/types/literal/templateLiteralTypes1.ts(40,5): error TS23
 tests/cases/conformance/types/literal/templateLiteralTypes1.ts(45,5): error TS2322: Type '{ [P in B as `p_${P}`]: T; }' is not assignable to type '{ [Q in A as `p_${Q}`]: U; }'.
   Type 'A' is not assignable to type 'B'.
     'A' is assignable to the constraint of type 'B', but 'B' could be instantiated with a different subtype of constraint 'string'.
-      Type 'string' is not assignable to type 'B'.
-        'string' is assignable to the constraint of type 'B', but 'B' could be instantiated with a different subtype of constraint 'string'.
 tests/cases/conformance/types/literal/templateLiteralTypes1.ts(165,15): error TS1338: 'infer' declarations are only permitted in the 'extends' clause of a conditional type.
 tests/cases/conformance/types/literal/templateLiteralTypes1.ts(197,16): error TS2590: Expression produces a union type that is too complex to represent.
 tests/cases/conformance/types/literal/templateLiteralTypes1.ts(201,16): error TS2590: Expression produces a union type that is too complex to represent.
 tests/cases/conformance/types/literal/templateLiteralTypes1.ts(205,16): error TS2590: Expression produces a union type that is too complex to represent.
+tests/cases/conformance/types/literal/templateLiteralTypes1.ts(252,7): error TS2590: Expression produces a union type that is too complex to represent.
 
 
-==== tests/cases/conformance/types/literal/templateLiteralTypes1.ts (6 errors) ====
+==== tests/cases/conformance/types/literal/templateLiteralTypes1.ts (7 errors) ====
     // Template types example from #12754
     
     const createScopedActionType = <S extends string>(scope: S) => <T extends string>(type: T) => `${scope}/${type}` as `${S}/${T}`;
@@ -62,8 +61,6 @@ tests/cases/conformance/types/literal/templateLiteralTypes1.ts(205,16): error TS
 !!! error TS2322: Type '{ [P in B as `p_${P}`]: T; }' is not assignable to type '{ [Q in A as `p_${Q}`]: U; }'.
 !!! error TS2322:   Type 'A' is not assignable to type 'B'.
 !!! error TS2322:     'A' is assignable to the constraint of type 'B', but 'B' could be instantiated with a different subtype of constraint 'string'.
-!!! error TS2322:       Type 'string' is not assignable to type 'B'.
-!!! error TS2322:         'string' is assignable to the constraint of type 'B', but 'B' could be instantiated with a different subtype of constraint 'string'.
     }
     
     // String transformations using recursive conditional types
@@ -245,6 +242,7 @@ tests/cases/conformance/types/literal/templateLiteralTypes1.ts(205,16): error TS
     // Repro from #40970
     
     type PathKeys<T> =
+        unknown extends T ? never :
         T extends readonly any[] ? Extract<keyof T, `${number}`> | SubKeys<T, Extract<keyof T, `${number}`>> :
         T extends object ? Extract<keyof T, string> | SubKeys<T, Extract<keyof T, string>> :
         never;
@@ -263,4 +261,23 @@ tests/cases/conformance/types/literal/templateLiteralTypes1.ts(205,16): error TS
     } as const;
     
     let make = getProp2(obj2, 'cars.1.make');  // 'Trabant'
+    
+    // Repro from #46480
+    
+    export type Spacing =
+        | `0`
+        | `${number}px`
+        | `${number}rem`
+        | `s${1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20}`;
+    
+    const spacing: Spacing = "s12"
+    
+    export type SpacingShorthand =
+        | `${Spacing} ${Spacing}`
+        | `${Spacing} ${Spacing} ${Spacing}`
+        | `${Spacing} ${Spacing} ${Spacing} ${Spacing}`;
+          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2590: Expression produces a union type that is too complex to represent.
+    
+    const test1: SpacingShorthand = "0 0 0";
     

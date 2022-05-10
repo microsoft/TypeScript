@@ -1,6 +1,6 @@
 === tests/cases/compiler/0.ts ===
 export type Data = string | boolean;
->Data : Data
+>Data : string | boolean
 
 let obj: Data = true;
 >obj : Data
@@ -12,11 +12,11 @@ import * as Z from "./0"
 
 //let v2: Z.Data;
 let v = "str" || true;
->v : Z.Data
+>v : string | boolean
 >"str" || true : true | "str"
 >"str" : "str"
 >true : true
 
 export { v }
->v : Z.Data
+>v : string | boolean
 

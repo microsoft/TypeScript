@@ -2,9 +2,9 @@
 module.exports.n = {};
 >module.exports.n = {} : typeof n
 >module.exports.n : typeof n
->module.exports : typeof import("tests/cases/conformance/salsa/mod")
->module : { "\"tests/cases/conformance/salsa/mod\"": typeof import("tests/cases/conformance/salsa/mod"); }
->exports : typeof import("tests/cases/conformance/salsa/mod")
+>module.exports : typeof module.exports
+>module : { exports: typeof module.exports; }
+>exports : typeof module.exports
 >n : typeof n
 >{} : {}
 
@@ -12,9 +12,9 @@ module.exports.n.K = function C() {
 >module.exports.n.K = function C() {    this.x = 10;} : typeof C
 >module.exports.n.K : typeof C
 >module.exports.n : typeof n
->module.exports : typeof import("tests/cases/conformance/salsa/mod")
->module : { "\"tests/cases/conformance/salsa/mod\"": typeof import("tests/cases/conformance/salsa/mod"); }
->exports : typeof import("tests/cases/conformance/salsa/mod")
+>module.exports : typeof module.exports
+>module : { exports: typeof module.exports; }
+>exports : typeof module.exports
 >n : typeof n
 >K : typeof C
 >function C() {    this.x = 10;} : typeof C
@@ -30,9 +30,9 @@ module.exports.n.K = function C() {
 module.exports.Classic = class {
 >module.exports.Classic = class {    constructor() {        this.p = 1    }} : typeof Classic
 >module.exports.Classic : typeof Classic
->module.exports : typeof import("tests/cases/conformance/salsa/mod")
->module : { "\"tests/cases/conformance/salsa/mod\"": typeof import("tests/cases/conformance/salsa/mod"); }
->exports : typeof import("tests/cases/conformance/salsa/mod")
+>module.exports : typeof module.exports
+>module : { exports: typeof module.exports; }
+>exports : typeof module.exports
 >Classic : typeof Classic
 >class {    constructor() {        this.p = 1    }} : typeof Classic
 

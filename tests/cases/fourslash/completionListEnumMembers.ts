@@ -11,5 +11,5 @@
 
 verify.completions(
     { marker: ["valueReference", "typeReference"], exact: ["bar", "baz"] },
-    { marker: "enumValueReference", exact: ["toString", "toFixed", "toExponential", "toPrecision", "valueOf", "toLocaleString"] },
+    { marker: "enumValueReference", unsorted: ["toString", "toFixed", "toExponential", "toPrecision", "valueOf", "toLocaleString"] },
 );

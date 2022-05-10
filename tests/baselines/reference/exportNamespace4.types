@@ -7,7 +7,7 @@ export type * from './a'; // Grammar error
 No type information for this code.
 No type information for this code.=== tests/cases/conformance/externalModules/typeOnly/c.ts ===
 export type * as ns from './a'; // Grammar error
->ns : typeof ns
+>ns : typeof import("tests/cases/conformance/externalModules/typeOnly/a")
 
 === tests/cases/conformance/externalModules/typeOnly/d.ts ===
 import { A } from './b';

@@ -1,6 +1,6 @@
 ﻿/// <reference path="fourslash.ts"/>
 
-////[|var [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}Base|] = class { };|]
-////class C extends [|Base|] { }
+/////*1*/var /*2*/Base = class { };
+////class C extends /*3*/Base { }
 
-verify.singleReferenceGroup("var Base: typeof Base", "Base");
+verify.baselineFindAllReferences('1', '2', '3');

@@ -1,0 +1,23 @@
+=== tests/cases/conformance/classes/classStaticBlock/classStaticBlock18.ts ===
+function foo () {
+>foo : Symbol(foo, Decl(classStaticBlock18.ts, 0, 0))
+
+  return class {
+    static foo = 1;
+>foo : Symbol((Anonymous class).foo, Decl(classStaticBlock18.ts, 1, 16))
+
+    static {
+      const c = class {
+>c : Symbol(c, Decl(classStaticBlock18.ts, 4, 11))
+
+        static bar = 2;
+>bar : Symbol(c.bar, Decl(classStaticBlock18.ts, 4, 23))
+
+        static {
+          // do
+        }
+      }
+    }
+  }
+}
+

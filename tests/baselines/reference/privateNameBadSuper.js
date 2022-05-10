@@ -1,23 +1,23 @@
 //// [privateNameBadSuper.ts]
 class B {};
 class A extends B {
-    #x;
-    constructor() {
-        void 0; // Error: 'super' call must  come first
-        super();
-    }
+  #x;
+  constructor() {
+    this;
+    super();
+  }
 }
 
 //// [privateNameBadSuper.js]
-var _x;
+var _A_x;
 class B {
 }
 ;
 class A extends B {
     constructor() {
-        void 0; // Error: 'super' call must  come first
+        this;
         super();
-        _x.set(this, void 0);
+        _A_x.set(this, void 0);
     }
 }
-_x = new WeakMap();
+_A_x = new WeakMap();

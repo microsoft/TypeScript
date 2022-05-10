@@ -1,7 +1,6 @@
 // @allowJs: true
 // @out: out.js
 // @declaration: true
-// @bundledPackageName: out
 // @filename: b.js
 var x = "hello";
 

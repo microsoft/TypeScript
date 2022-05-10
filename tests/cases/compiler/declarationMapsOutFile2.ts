@@ -1,6 +1,5 @@
 // @declaration: true
 // @declarationMap: true
-// @bundledPackageName: "lib"
 // @outFile: bundle.js
 // @filename: a.ts
 class Foo {
