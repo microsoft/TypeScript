@@ -5,7 +5,7 @@ declare namespace Intl {
         dateStyle?: "full" | "long" | "medium" | "short" | undefined;
         timeStyle?: "full" | "long" | "medium" | "short" | undefined;
         dayPeriod?: "narrow" | "short" | "long" | undefined;
-        fractionalSecondDigits?: 0 | 1 | 2 | 3 | undefined;
+        fractionalSecondDigits?: 1 | 2 | 3 | undefined;
     }
 
     interface DateTimeRangeFormatPart extends DateTimeFormatPart {
