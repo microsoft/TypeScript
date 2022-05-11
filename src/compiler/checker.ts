@@ -4110,8 +4110,10 @@ namespace ts {
             return getMergedSymbol(symbol && (symbol.flags & SymbolFlags.ExportValue) !== 0 && symbol.exportSymbol || symbol);
         }
 
-        function symbolIsValue(symbol: Symbol): boolean {
-            return !!(symbol.flags & SymbolFlags.Value || symbol.flags & SymbolFlags.Alias && resolveAlias(symbol).flags & SymbolFlags.Value && !getTypeOnlyAliasDeclaration(symbol));
+        function symbolIsValue(symbol: Symbol, includeTypeOnlyMembers?: boolean): boolean {
+            return !!(
+                symbol.flags & SymbolFlags.Value ||
+                symbol.flags & SymbolFlags.Alias && resolveAlias(symbol).flags & SymbolFlags.Value && (includeTypeOnlyMembers || !getTypeOnlyAliasDeclaration(symbol)));
         }
 
         function findConstructorDeclaration(node: ClassLikeDeclaration): ConstructorDeclaration | undefined {
@@ -12575,12 +12577,12 @@ namespace ts {
          * @param type a type to look up property from
          * @param name a name of property to look up in a given type
          */
-        function getPropertyOfType(type: Type, name: __String, skipObjectFunctionPropertyAugment?: boolean): Symbol | undefined {
+        function getPropertyOfType(type: Type, name: __String, skipObjectFunctionPropertyAugment?: boolean, includeTypeOnlyMembers?: boolean): Symbol | undefined {
             type = getReducedApparentType(type);
             if (type.flags & TypeFlags.Object) {
                 const resolved = resolveStructuredTypeMembers(type as ObjectType);
                 const symbol = resolved.members.get(name);
-                if (symbol && symbolIsValue(symbol)) {
+                if (symbol && symbolIsValue(symbol, includeTypeOnlyMembers)) {
                     return symbol;
                 }
                 if (skipObjectFunctionPropertyAugment) return undefined;
@@ -16208,7 +16210,7 @@ namespace ts {
                         // the `exports` lookup process that only looks up namespace members which is used for most type references
                         const mergedResolvedSymbol = getMergedSymbol(resolveSymbol(currentNamespace));
                         const next = node.isTypeOf
-                            ? getPropertyOfType(getTypeOfSymbol(mergedResolvedSymbol), current.escapedText)
+                            ? getPropertyOfType(getTypeOfSymbol(mergedResolvedSymbol), current.escapedText, /*skipObjectFunctionPropertyAugment*/ false, /*includeTypeOnlyMembers*/ true)
                             : getSymbol(getExportsOfSymbol(mergedResolvedSymbol), current.escapedText, meaning);
                         if (!next) {
                             error(current, Diagnostics.Namespace_0_has_no_exported_member_1, getFullyQualifiedName(currentNamespace), declarationNameToString(current));
@@ -28995,9 +28997,9 @@ namespace ts {
                     if (isIdentifier(left) && parentSymbol) {
                         markAliasReferenced(parentSymbol, node);
                     }
-                    return isErrorType(apparentType) ? errorType : apparentType;;
+                    return isErrorType(apparentType) ? errorType : apparentType;
                 }
-                prop = getPropertyOfType(apparentType, right.escapedText);
+                prop = getPropertyOfType(apparentType, right.escapedText, /*skipObjectFunctionPropertyAugment*/ false, /*includeTypeOnlyMembers*/ node.kind === SyntaxKind.QualifiedName);
             }
             // In `Foo.Bar.Baz`, 'Foo' is not referenced if 'Bar' is a const enum or a module containing only const enums.
             // `Foo` is also not referenced in `enum FooCopy { Bar = Foo.Bar }`, because the enum member value gets inlined
