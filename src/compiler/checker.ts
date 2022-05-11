@@ -22403,7 +22403,7 @@ namespace ts {
                     inferFromTypes((source as IndexedAccessType).objectType, (target as IndexedAccessType).objectType);
                     inferFromTypes((source as IndexedAccessType).indexType, (target as IndexedAccessType).indexType);
                 }
-                else if (source.flags & TypeFlags.StringMapping && target.flags & TypeFlags.StringMapping) {
+                else if (source. flags & TypeFlags.StringMapping && target.flags & TypeFlags.StringMapping) {
                     if ((source as StringMappingType).symbol === (target as StringMappingType).symbol) {
                         inferFromTypes((source as StringMappingType).type, (target as StringMappingType).type);
                     }
@@ -22943,38 +22943,45 @@ namespace ts {
             if (!inference.inferredType) {
                 let inferredType: Type | undefined;
                 const signature = context.signature;
-                if (signature) {
-                    const inferredCovariantType = inference.candidates ? getCovariantInference(inference, signature) : undefined;
-                    if (inference.contraCandidates) {
-                        // If we have both co- and contra-variant inferences, we prefer the contra-variant inference
-                        // unless the co-variant inference is a subtype of some contra-variant inference and not 'never'.
-                        inferredType = inferredCovariantType && !(inferredCovariantType.flags & TypeFlags.Never) &&
-                            some(inference.contraCandidates, t => isTypeSubtypeOf(inferredCovariantType, t)) ?
-                            inferredCovariantType : getContravariantInference(inference);
-                    }
-                    else if (inferredCovariantType) {
-                        inferredType = inferredCovariantType;
-                    }
-                    else if (context.flags & InferenceFlags.NoDefault) {
-                        // We use silentNeverType as the wildcard that signals no inferences.
-                        inferredType = silentNeverType;
-                    }
-                    else {
-                        // Infer either the default or the empty object type when no inferences were
-                        // made. It is important to remember that in this case, inference still
-                        // succeeds, meaning there is no error for not having inference candidates. An
-                        // inference error only occurs when there are *conflicting* candidates, i.e.
-                        // candidates with no common supertype.
-                        const defaultType = getDefaultFromTypeParameter(inference.typeParameter);
-                        if (defaultType) {
-                            // Instantiate the default type. Any forward reference to a type
-                            // parameter should be instantiated to the empty object type.
-                            inferredType = instantiateType(defaultType, mergeTypeMappers(createBackreferenceMapper(context, index), context.nonFixingMapper));
+                if (!(inference.priority! & InferencePriority.BindingPattern)) {
+                    // Binding pattern inferences provide a contextual type for other inferences,
+                    // but cannot stand alone - they are expected to be overwritten by another
+                    // inference with higher priority before fixing. This prevents highly suspicious
+                    // patterns like `function f<T>(): T; const { foo } = f()` from inferring T as
+                    // `{ foo: any }`.
+                    if (signature) {
+                        const inferredCovariantType = inference.candidates ? getCovariantInference(inference, signature) : undefined;
+                        if (inference.contraCandidates) {
+                            // If we have both co- and contra-variant inferences, we prefer the contra-variant inference
+                            // unless the co-variant inference is a subtype of some contra-variant inference and not 'never'.
+                            inferredType = inferredCovariantType && !(inferredCovariantType.flags & TypeFlags.Never) &&
+                                some(inference.contraCandidates, t => isTypeSubtypeOf(inferredCovariantType, t)) ?
+                                inferredCovariantType : getContravariantInference(inference);
+                        }
+                        else if (inferredCovariantType) {
+                            inferredType = inferredCovariantType;
+                        }
+                        else if (context.flags & InferenceFlags.NoDefault) {
+                            // We use silentNeverType as the wildcard that signals no inferences.
+                            inferredType = silentNeverType;
+                        }
+                        else {
+                            // Infer either the default or the empty object type when no inferences were
+                            // made. It is important to remember that in this case, inference still
+                            // succeeds, meaning there is no error for not having inference candidates. An
+                            // inference error only occurs when there are *conflicting* candidates, i.e.
+                            // candidates with no common supertype.
+                            const defaultType = getDefaultFromTypeParameter(inference.typeParameter);
+                            if (defaultType) {
+                                // Instantiate the default type. Any forward reference to a type
+                                // parameter should be instantiated to the empty object type.
+                                inferredType = instantiateType(defaultType, mergeTypeMappers(createBackreferenceMapper(context, index), context.nonFixingMapper));
+                            }
                         }
                     }
-                }
-                else {
-                    inferredType = getTypeFromInference(inference);
+                    else {
+                        inferredType = getTypeFromInference(inference);
+                    }
                 }
 
                 inference.inferredType = inferredType || getDefaultTypeArgumentType(!!(context.flags & InferenceFlags.AnyDefault));
@@ -29902,7 +29909,8 @@ namespace ts {
             // 'let f: (x: string) => number = wrap(s => s.length)', we infer from the declared type of 'f' to the
             // return type of 'wrap'.
             if (node.kind !== SyntaxKind.Decorator) {
-                const contextualType = getContextualType(node, every(signature.typeParameters, p => !!getDefaultFromTypeParameter(p)) ? ContextFlags.SkipBindingPatterns : ContextFlags.None);
+                const skipBindingPatterns = every(signature.typeParameters, p => !!getDefaultFromTypeParameter(p));
+                const contextualType = getContextualType(node, skipBindingPatterns ? ContextFlags.SkipBindingPatterns : ContextFlags.None);
                 if (contextualType) {
                     const inferenceTargetType = getReturnTypeOfSignature(signature);
                     if (couldContainTypeVariables(inferenceTargetType)) {
@@ -29924,7 +29932,9 @@ namespace ts {
                             getOrCreateTypeFromSignature(getSignatureInstantiationWithoutFillingInTypeArguments(contextualSignature, contextualSignature.typeParameters)) :
                             instantiatedType;
                         // Inferences made from return types have lower priority than all other inferences.
-                        inferTypes(context.inferences, inferenceSourceType, inferenceTargetType, InferencePriority.ReturnType);
+                        const isFromBindingPattern = !skipBindingPatterns && getContextualType(node, ContextFlags.SkipBindingPatterns) !== contextualType;
+                        const priority = InferencePriority.ReturnType | (isFromBindingPattern ? InferencePriority.BindingPattern : 0);
+                        inferTypes(context.inferences, inferenceSourceType, inferenceTargetType, priority);
                         // Create a type mapper for instantiating generic contextual types using the inferences made
                         // from the return type. We need a separate inference pass here because (a) instantiation of
                         // the source type uses the outer context's return mapper (which excludes inferences made from
