@@ -31,6 +31,25 @@ declare namespace Intl {
         | "seconds";
 
     /**
+     * Value of the `unit` property in objects returned by
+     * `Intl.RelativeTimeFormat.prototype.formatToParts()`. `formatToParts` and
+     * `format` methods accept either singular or plural unit names as input,
+     * but `formatToParts` only outputs singular (e.g. "day") not plural (e.g.
+     * "days").
+     *
+     * [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/RelativeTimeFormat/formatToParts#Using_formatToParts).
+     */
+     type RelativeTimeFormatUnitSingular =
+        | "year"
+        | "quarter"
+        | "month"
+        | "week"
+        | "day"
+        | "hour"
+        | "minute"
+        | "second";
+
+    /**
      * The locale matching algorithm to use.
      *
      * [MDN](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Intl#Locale_negotiation).
@@ -100,11 +119,16 @@ declare namespace Intl {
      *
      * [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/RelativeTimeFormat/formatToParts#Using_formatToParts).
      */
-    interface RelativeTimeFormatPart {
-        type: string;
-        value: string;
-        unit?: RelativeTimeFormatUnit;
-    }
+    type RelativeTimeFormatPart =
+        | {
+              type: "literal";
+              value: string;
+          }
+        | {
+              type: Exclude<NumberFormatPartTypes, "literal">;
+              value: string;
+              unit: RelativeTimeFormatUnitSingular;
+          };
 
     interface RelativeTimeFormat {
         /**

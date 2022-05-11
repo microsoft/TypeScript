@@ -261,6 +261,9 @@ namespace ts {
         const configFile = program.getCompilerOptions().configFile;
         if (!configFile?.configFileSpecs?.validatedIncludeSpecs) return undefined;
 
+        // Return true if its default include spec
+        if (configFile.configFileSpecs.isDefaultIncludeSpec) return true;
+
         const isJsonFile = fileExtensionIs(fileName, Extension.Json);
         const basePath = getDirectoryPath(getNormalizedAbsolutePath(configFile.fileName, program.getCurrentDirectory()));
         const useCaseSensitiveFileNames = program.useCaseSensitiveFileNames();
@@ -327,15 +330,18 @@ namespace ts {
                 const matchedByFiles = getMatchedFileSpec(program, fileName);
                 if (matchedByFiles) return chainDiagnosticMessages(/*details*/ undefined, Diagnostics.Part_of_files_list_in_tsconfig_json);
                 const matchedByInclude = getMatchedIncludeSpec(program, fileName);
-                return matchedByInclude ?
+                return isString(matchedByInclude) ?
                     chainDiagnosticMessages(
                         /*details*/ undefined,
                         Diagnostics.Matched_by_include_pattern_0_in_1,
                         matchedByInclude,
                         toFileName(options.configFile, fileNameConvertor)
                     ) :
-                    // Could be additional files specified as roots
-                    chainDiagnosticMessages(/*details*/ undefined, Diagnostics.Root_file_specified_for_compilation);
+                    // Could be additional files specified as roots or matched by default include
+                    chainDiagnosticMessages(/*details*/ undefined, matchedByInclude ?
+                        Diagnostics.Matched_by_default_include_pattern_Asterisk_Asterisk_Slash_Asterisk :
+                        Diagnostics.Root_file_specified_for_compilation
+                    );
             case FileIncludeKind.SourceFromProjectReference:
             case FileIncludeKind.OutputFromProjectReference:
                 const isOutput = reason.kind === FileIncludeKind.OutputFromProjectReference;

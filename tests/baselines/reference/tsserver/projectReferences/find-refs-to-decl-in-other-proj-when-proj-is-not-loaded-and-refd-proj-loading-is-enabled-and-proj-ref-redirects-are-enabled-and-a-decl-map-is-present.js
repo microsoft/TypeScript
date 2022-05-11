@@ -58,7 +58,7 @@ Project '/user/username/projects/myproject/a/tsconfig.json' (Configured)
 	../b/index.ts
 	  Imported via "../b/lib" from file 'index.ts'
 	index.ts
-	  Matched by include pattern '**/*' in 'tsconfig.json'
+	  Matched by default include pattern '**/*'
 
 -----------------------------------------------
 Search path: /user/username/projects/myproject/a
@@ -95,9 +95,9 @@ Project '/user/username/projects/myproject/b/tsconfig.json' (Configured)
 
 	index.ts
 	  Imported via "." from file 'helper.ts'
-	  Matched by include pattern '**/*' in 'tsconfig.json'
+	  Matched by default include pattern '**/*'
 	helper.ts
-	  Matched by include pattern '**/*' in 'tsconfig.json'
+	  Matched by default include pattern '**/*'
 
 -----------------------------------------------
 Search path: /user/username/projects/myproject/b

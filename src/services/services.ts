@@ -592,7 +592,7 @@ namespace ts {
      * @returns `true` if `node` has a JSDoc "inheritDoc" tag on it, otherwise `false`.
      */
     function hasJSDocInheritDocTag(node: Node) {
-        return getJSDocTags(node).some(tag => tag.tagName.text === "inheritDoc");
+        return getJSDocTags(node).some(tag => tag.tagName.text === "inheritDoc" || tag.tagName.text === "inheritdoc");
     }
 
     function getJsDocTagsOfDeclarations(declarations: Declaration[] | undefined, checker: TypeChecker | undefined): JSDocTagInfo[] {
@@ -643,13 +643,15 @@ namespace ts {
     }
 
     function findBaseOfDeclaration<T>(checker: TypeChecker, declaration: Declaration, cb: (symbol: Symbol) => T[] | undefined): T[] | undefined {
-        if (hasStaticModifier(declaration)) return;
-
         const classOrInterfaceDeclaration = declaration.parent?.kind === SyntaxKind.Constructor ? declaration.parent.parent : declaration.parent;
         if (!classOrInterfaceDeclaration) return;
 
+        const isStaticMember = hasStaticModifier(declaration);
         return firstDefined(getAllSuperTypeNodes(classOrInterfaceDeclaration), superTypeNode => {
-            const symbol = checker.getPropertyOfType(checker.getTypeAtLocation(superTypeNode), declaration.symbol.name);
+            const baseType = checker.getTypeAtLocation(superTypeNode);
+            const symbol = isStaticMember
+                ? find(checker.getExportsOfModule(baseType.symbol), s => s.escapedName === declaration.symbol.name)
+                : checker.getPropertyOfType(baseType, declaration.symbol.name);
             return symbol ? cb(symbol) : undefined;
         });
     }
