@@ -1,4 +1,4 @@
-tests/cases/conformance/functions/functionImplementations.ts(90,1): error TS2838: This condition will always return 'false' since JavaScript compares objects by reference, not value.
+tests/cases/conformance/functions/functionImplementations.ts(90,1): error TS2839: This condition will always return 'false' since JavaScript compares objects by reference, not value.
 
 
 ==== tests/cases/conformance/functions/functionImplementations.ts (1 errors) ====
@@ -97,7 +97,7 @@ tests/cases/conformance/functions/functionImplementations.ts(90,1): error TS2838
     ~~~~~~~~~~~~~~~~~~~~
     };
     ~
-!!! error TS2838: This condition will always return 'false' since JavaScript compares objects by reference, not value.
+!!! error TS2839: This condition will always return 'false' since JavaScript compares objects by reference, not value.
     
     // Type of 'this' in function implementation is 'any'
     function thisFunc() {
