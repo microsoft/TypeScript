@@ -1506,6 +1506,11 @@ type Awaited<T> =
                 never : // the argument to `then` was not callable
         T; // non-object or non-thenable
 
+/**
+ * Obtain the type of an array's items.
+ */
+type ArrayValue<T> = T extends (infer V)[] ? V : T extends readonly (infer V)[] ? V : never;
+
 interface ArrayLike<T> {
     readonly length: number;
     readonly [n: number]: T;

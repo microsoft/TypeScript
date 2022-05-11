@@ -1,0 +1,51 @@
+=== tests/cases/compiler/arrayValue.ts ===
+type TNever1 = ArrayValue<number>;
+>TNever1 : never
+
+type TNever2 = ArrayValue<string>;
+>TNever2 : never
+
+type TNever3 = ArrayValue<Promise<boolean>>;
+>TNever3 : never
+
+type TNever4 = ArrayValue<void>;
+>TNever4 : never
+
+type TValuePrimitive1 = ArrayValue<Array<number>>;
+>TValuePrimitive1 : number
+
+type TValuePrimitive2 = ArrayValue<Array<string>>;
+>TValuePrimitive2 : string
+
+type TValuePrimitive3 = ArrayValue<Array<boolean>>;
+>TValuePrimitive3 : boolean
+
+type TValueWithUndefined = ArrayValue<Array<string | undefined>>;
+>TValueWithUndefined : string
+
+type TValueWithObject = ArrayValue<Array<{
+>TValueWithObject : { foo: string; bar: number; }
+
+  foo: string;
+>foo : string
+
+  bar: number;
+>bar : number
+
+}>>;
+
+type TValueWithNestedArrays = ArrayValue<Array<Array<string>>>;
+>TValueWithNestedArrays : string[]
+
+type TValueReadonlyPrimitive1 = ArrayValue<ReadonlyArray<number>>;
+>TValueReadonlyPrimitive1 : number
+
+type TValueReadonlyPrimitive2 = ArrayValue<ReadonlyArray<string>>;
+>TValueReadonlyPrimitive2 : string
+
+type TValueReadonlyPrimitive3 = ArrayValue<ReadonlyArray<boolean>>;
+>TValueReadonlyPrimitive3 : boolean
+
+type TValueReadonlyWithUndefined = ArrayValue<ReadonlyArray<string | undefined>>;
+>TValueReadonlyWithUndefined : string
+

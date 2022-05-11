@@ -1,0 +1,77 @@
+=== tests/cases/compiler/arrayValueStrict.ts ===
+type TNever1 = ArrayValue<number>;
+>TNever1 : Symbol(TNever1, Decl(arrayValueStrict.ts, 0, 0))
+>ArrayValue : Symbol(ArrayValue, Decl(lib.es5.d.ts, --, --))
+
+type TNever2 = ArrayValue<string>;
+>TNever2 : Symbol(TNever2, Decl(arrayValueStrict.ts, 0, 34))
+>ArrayValue : Symbol(ArrayValue, Decl(lib.es5.d.ts, --, --))
+
+type TNever3 = ArrayValue<Promise<boolean>>;
+>TNever3 : Symbol(TNever3, Decl(arrayValueStrict.ts, 1, 34))
+>ArrayValue : Symbol(ArrayValue, Decl(lib.es5.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+
+type TNever4 = ArrayValue<void>;
+>TNever4 : Symbol(TNever4, Decl(arrayValueStrict.ts, 2, 44))
+>ArrayValue : Symbol(ArrayValue, Decl(lib.es5.d.ts, --, --))
+
+type TValuePrimitive1 = ArrayValue<Array<number>>;
+>TValuePrimitive1 : Symbol(TValuePrimitive1, Decl(arrayValueStrict.ts, 3, 32))
+>ArrayValue : Symbol(ArrayValue, Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 3 more)
+
+type TValuePrimitive2 = ArrayValue<Array<string>>;
+>TValuePrimitive2 : Symbol(TValuePrimitive2, Decl(arrayValueStrict.ts, 5, 50))
+>ArrayValue : Symbol(ArrayValue, Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 3 more)
+
+type TValuePrimitive3 = ArrayValue<Array<boolean>>;
+>TValuePrimitive3 : Symbol(TValuePrimitive3, Decl(arrayValueStrict.ts, 6, 50))
+>ArrayValue : Symbol(ArrayValue, Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 3 more)
+
+type TValueWithUndefined = ArrayValue<Array<string | undefined>>;
+>TValueWithUndefined : Symbol(TValueWithUndefined, Decl(arrayValueStrict.ts, 7, 51))
+>ArrayValue : Symbol(ArrayValue, Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 3 more)
+
+type TValueWithObject = ArrayValue<Array<{
+>TValueWithObject : Symbol(TValueWithObject, Decl(arrayValueStrict.ts, 9, 65))
+>ArrayValue : Symbol(ArrayValue, Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 3 more)
+
+  foo: string;
+>foo : Symbol(foo, Decl(arrayValueStrict.ts, 11, 42))
+
+  bar: number;
+>bar : Symbol(bar, Decl(arrayValueStrict.ts, 12, 14))
+
+}>>;
+
+type TValueWithNestedArrays = ArrayValue<Array<Array<string>>>;
+>TValueWithNestedArrays : Symbol(TValueWithNestedArrays, Decl(arrayValueStrict.ts, 14, 4))
+>ArrayValue : Symbol(ArrayValue, Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 3 more)
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 3 more)
+
+type TValueReadonlyPrimitive1 = ArrayValue<ReadonlyArray<number>>;
+>TValueReadonlyPrimitive1 : Symbol(TValueReadonlyPrimitive1, Decl(arrayValueStrict.ts, 16, 63))
+>ArrayValue : Symbol(ArrayValue, Decl(lib.es5.d.ts, --, --))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --), Decl(lib.es2019.array.d.ts, --, --) ... and 1 more)
+
+type TValueReadonlyPrimitive2 = ArrayValue<ReadonlyArray<string>>;
+>TValueReadonlyPrimitive2 : Symbol(TValueReadonlyPrimitive2, Decl(arrayValueStrict.ts, 18, 66))
+>ArrayValue : Symbol(ArrayValue, Decl(lib.es5.d.ts, --, --))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --), Decl(lib.es2019.array.d.ts, --, --) ... and 1 more)
+
+type TValueReadonlyPrimitive3 = ArrayValue<ReadonlyArray<boolean>>;
+>TValueReadonlyPrimitive3 : Symbol(TValueReadonlyPrimitive3, Decl(arrayValueStrict.ts, 19, 66))
+>ArrayValue : Symbol(ArrayValue, Decl(lib.es5.d.ts, --, --))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --), Decl(lib.es2019.array.d.ts, --, --) ... and 1 more)
+
+type TValueReadonlyWithUndefined = ArrayValue<ReadonlyArray<string | undefined>>;
+>TValueReadonlyWithUndefined : Symbol(TValueReadonlyWithUndefined, Decl(arrayValueStrict.ts, 20, 67))
+>ArrayValue : Symbol(ArrayValue, Decl(lib.es5.d.ts, --, --))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --), Decl(lib.es2019.array.d.ts, --, --) ... and 1 more)
+
