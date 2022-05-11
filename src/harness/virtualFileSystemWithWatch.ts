@@ -53,6 +53,14 @@ interface Array<T> { length: number; [n: number]: T; }`
         return host;
     }
 
+    export function createVirtualServerHost(params: VirtualServerHostCreationParameters): VirtualServerHost {
+        const host = new VirtualServerHost(params);
+        host.init();
+        // Just like sys, patch the host to use writeFile
+        patchWriteFileEnsuringDirectory(host);
+        return host;
+    }
+
     class Callbacks {
         private map: TimeOutCallback[] = [];
         private nextId = 1;

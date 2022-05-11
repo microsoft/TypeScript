@@ -8,14 +8,6 @@ namespace ts.VirtualFS {
         windowsStyleRoot?: string;
     }
 
-    export function createVirtualServerHost(params: VirtualServerHostCreationParameters): VirtualServerHost {
-        const host = new VirtualServerHost(params);
-        host.init();
-        // Just like sys, patch the host to use writeFile
-        patchWriteFileEnsuringDirectory(host);
-        return host;
-    }
-
     export interface File {
         path: string;
         content: string;
