@@ -650,7 +650,7 @@ namespace ts {
         return firstDefined(getAllSuperTypeNodes(classOrInterfaceDeclaration), superTypeNode => {
             const baseType = checker.getTypeAtLocation(superTypeNode);
             const symbol = isStaticMember
-                ? find(checker.getExportsOfModule(baseType.symbol), s => s.escapedName === declaration.symbol.name)
+                ? baseType.symbol && find(checker.getExportsOfModule(baseType.symbol), s => s.escapedName === declaration.symbol.name)
                 : checker.getPropertyOfType(baseType, declaration.symbol.name);
             return symbol ? cb(symbol) : undefined;
         });
