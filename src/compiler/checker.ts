@@ -16210,7 +16210,7 @@ namespace ts {
                         // the `exports` lookup process that only looks up namespace members which is used for most type references
                         const mergedResolvedSymbol = getMergedSymbol(resolveSymbol(currentNamespace));
                         const next = node.isTypeOf
-                            ? getPropertyOfType(getTypeOfSymbol(mergedResolvedSymbol), current.escapedText, /*skipObjectFunctionPropertyAugment*/ undefined, /*includeTypeOnlyMembers*/ true)
+                            ? getPropertyOfType(getTypeOfSymbol(mergedResolvedSymbol), current.escapedText, /*skipObjectFunctionPropertyAugment*/ false, /*includeTypeOnlyMembers*/ true)
                             : getSymbol(getExportsOfSymbol(mergedResolvedSymbol), current.escapedText, meaning);
                         if (!next) {
                             error(current, Diagnostics.Namespace_0_has_no_exported_member_1, getFullyQualifiedName(currentNamespace), declarationNameToString(current));
