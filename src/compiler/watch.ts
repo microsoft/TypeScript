@@ -529,7 +529,7 @@ namespace ts {
         WildcardDirectoryOfReferencedProject: "Wild card directory of referenced project",
         PackageJson: "package.json file",
 
-	// Additional tsserver specific watch information
+        // Additional tsserver specific watch information
         /* @internal */
         ClosedScriptInfo: "Closed Script info",
         /* @internal */
