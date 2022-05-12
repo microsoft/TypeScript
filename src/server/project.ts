@@ -85,6 +85,7 @@ namespace ts.server {
         languageService: LanguageService;
         languageServiceHost: LanguageServiceHost;
         serverHost: ServerHost;
+        fsHost: FileServerHost;
         session?: Session<unknown>;
         config: any;
     }
@@ -233,7 +234,7 @@ namespace ts.server {
             return hasOneOrMoreJsAndNoTsFiles(this);
         }
 
-        public static resolveModule(moduleName: string, initialDir: string, host: ServerHost, fshost: ServerHost, log: (message: string) => void, logErrors?: (message: string) => void): {} | undefined {
+        public static resolveModule(moduleName: string, initialDir: string, host: ServerHost, fshost: FileServerHost, log: (message: string) => void, logErrors?: (message: string) => void): {} | undefined {
             const resolvedPath = normalizeSlashes(fshost.resolvePath(combinePaths(initialDir, "node_modules")));
             log(`Loading ${moduleName} from ${initialDir} (resolved to ${resolvedPath})`);
             const result = host.require!(resolvedPath, moduleName); // TODO: GH#18217
@@ -1632,13 +1633,13 @@ namespace ts.server {
                     this.projectService.logger.info(`Skipped loading plugin ${configEntry.name} because it did not expose a proper factory function`);
                     return;
                 }
-                // TODO: serverHost very likely needs to be fshost, or an object that defaults to fshost
                 const info: PluginCreateInfo = {
                     config: configEntry,
                     project: this,
                     languageService: this.languageService,
                     languageServiceHost: this,
-                    serverHost: this.projectService.fshost || this.projectService.host,
+                    serverHost: this.projectService.host,
+                    fsHost: this.projectService.fshost,
                     session: this.projectService.session
                 };
 
@@ -1725,8 +1726,8 @@ namespace ts.server {
 
         /*@internal*/
         getModuleResolutionHostForAutoImportProvider(): ModuleResolutionHost {
+            const fshost = this.projectService.fshost || this.projectService.host;
             if (this.program) {
-                const fshost = this.projectService.fshost || this.projectService.host;
                 return {
                     fileExists: this.program.fileExists,
                     directoryExists: this.program.directoryExists,
@@ -1738,8 +1739,16 @@ namespace ts.server {
                     useCaseSensitiveFileNames: this.program.useCaseSensitiveFileNames(),
                 };
             }
-            // TODO: Not sure whether this needs to be fshost or host or an object that can fall back fshost->host
-            return this.projectService.host;
+            return {
+                fileExists: fshost.fileExists.bind(fshost),
+                directoryExists: fshost.directoryExists.bind(fshost),
+                realpath: fshost.realpath?.bind(fshost),
+                getCurrentDirectory: this.getCurrentDirectory.bind(this), // TODO: Not sure whether this should be fshost.getCurrentDirectory.bind(fshost)
+                readFile: fshost.readFile.bind(fshost),
+                getDirectories: fshost.getDirectories.bind(fshost),
+                trace: this.projectService.host.trace?.bind(this.projectService.host),
+                useCaseSensitiveFileNames: fshost.useCaseSensitiveFileNames,
+            };
         }
 
         /*@internal*/
@@ -2356,7 +2365,7 @@ namespace ts.server {
             // Ensure the config file existience info is cached
             let configFileExistenceInfo = this.projectService.configFileExistenceInfoCache.get(canonicalConfigFilePath);
             if (!configFileExistenceInfo) {
-                this.projectService.configFileExistenceInfoCache.set(canonicalConfigFilePath, configFileExistenceInfo = { exists: this.projectService.host.fileExists(configFileName) });
+                this.projectService.configFileExistenceInfoCache.set(canonicalConfigFilePath, configFileExistenceInfo = { exists: this.projectService.fshost.fileExists(configFileName) });
             }
             // Ensure we have upto date parsed command line
             this.projectService.ensureParsedConfigUptoDate(configFileName, canonicalConfigFilePath, configFileExistenceInfo, this);

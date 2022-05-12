@@ -644,7 +644,7 @@ namespace ts.server {
 
     export interface SessionOptions {
         host: ServerHost;
-        fshost: ServerHost | undefined;
+        fshost?: FileServerHost;
         cancellationToken: ServerCancellationToken;
         useSingleInferredProject: boolean;
         useInferredProjectPerProjectRoot: boolean;
@@ -692,7 +692,7 @@ namespace ts.server {
         private suppressDiagnosticEvents?: boolean;
         private eventHandler: ProjectServiceEventHandler | undefined;
         private readonly noGetErrOnBackgroundUpdate?: boolean;
-        private fshost: ServerHost | undefined;
+        private fshost?: FileServerHost;
 
         constructor(opts: SessionOptions) {
             this.host = opts.host;

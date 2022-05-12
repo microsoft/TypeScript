@@ -17,4 +17,10 @@ declare namespace ts.server {
         trace?(s: string): void;
         require?(initialPath: string, moduleName: string): RequireResult;
     }
+    export type FileServerHost = Pick<
+        ServerHost,
+        | "readFile" | "writeFile" | "fileExists" | "directoryExists" | "getFileSize" | "getModifiedTime"
+        | "getDirectories" | "getCurrentDirectory" | "getExecutingFilePath" | "realpath" | "resolvePath"
+        | "watchFile" | "watchDirectory"
+        | "useCaseSensitiveFileNames" | "newLine">
 }

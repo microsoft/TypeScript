@@ -395,7 +395,7 @@ namespace ts.server {
 
     export interface ProjectServiceOptions {
         host: ServerHost;
-        fshost: ServerHost | undefined;
+        fshost: FileServerHost | undefined;
         logger: Logger;
         cancellationToken: HostCancellationToken;
         useSingleInferredProject: boolean;
@@ -761,7 +761,7 @@ namespace ts.server {
         readonly toCanonicalFileName: (f: string) => string;
 
         public readonly host: ServerHost;
-        public readonly fshost: VirtualFS.VirtualServerHost | undefined;
+        public readonly fshost: FileServerHost;
         public readonly logger: Logger;
         public readonly cancellationToken: HostCancellationToken;
         public readonly useSingleInferredProject: boolean;
@@ -808,7 +808,7 @@ namespace ts.server {
 
         constructor(opts: ProjectServiceOptions) {
             this.host = opts.host;
-            this.fshost = opts.fshost as VirtualFS.VirtualServerHost | undefined; // TODO: OK as long as VirtualServerHost is a supertype of ServerHost
+            this.fshost = opts.fshost || this.host;
             this.logger = opts.logger;
             this.cancellationToken = opts.cancellationToken;
             this.useSingleInferredProject = opts.useSingleInferredProject;
@@ -836,7 +836,7 @@ namespace ts.server {
                 this.syntaxOnly = false;
             }
 
-            if (this.host.realpath) {
+            if (this.fshost.realpath) {
                 this.realpathToScriptInfos = createMultiMap();
             }
             const fshost = this.fshost || this.host;
@@ -859,7 +859,7 @@ namespace ts.server {
             this.typingsCache = new TypingsCache(this.typingsInstaller);
 
             this.hostConfiguration = {
-                formatCodeOptions: getDefaultFormatCodeSettings(this.host.newLine),
+                formatCodeOptions: getDefaultFormatCodeSettings(this.fshost.newLine),
                 preferences: emptyOptions,
                 hostInfo: "Unknown host",
                 extraFileExtensions: [],
@@ -3701,7 +3701,7 @@ namespace ts.server {
 
         /* @internal */
         updateFileSystem(updatedFiles: protocol.FileSystemRequestArgs[] | undefined, deletedFiles?: string[]) {
-            Debug.assert(this.fshost);
+            Debug.assert(this.fshost instanceof VirtualFS.VirtualServerHost);
             if (updatedFiles) {
                 for (const { file, fileContent } of updatedFiles) {
                     if (this.fshost.fileExists(file)) {

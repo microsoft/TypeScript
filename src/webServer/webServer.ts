@@ -178,12 +178,13 @@ namespace ts.server {
         serverMode: SessionOptions["serverMode"];
     }
     export class WorkerSession extends Session<{}> {
-        constructor(host: ServerHost, fshost: ServerHost, private webHost: HostWithWriteMessage, options: StartSessionOptions, logger: Logger, cancellationToken: ServerCancellationToken, hrtime: SessionOptions["hrtime"]) {
+        constructor(host: ServerHost, fshost: FileServerHost, private webHost: HostWithWriteMessage, options: StartSessionOptions, logger: Logger, cancellationToken: ServerCancellationToken, hrtime: SessionOptions["hrtime"]) {
             super({
                 host,
                 fshost,
                 cancellationToken,
                 ...options,
+                serverMode: fshost instanceof VirtualFS.VirtualServerHost ? LanguageServiceMode.Semantic : options.serverMode,
                 typingsInstaller: nullTypingsInstaller,
                 byteLength: notImplemented, // Formats the message text in send of Session which is overriden in this class so not needed
                 hrtime,

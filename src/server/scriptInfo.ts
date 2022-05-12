@@ -46,7 +46,7 @@ namespace ts.server {
          */
         private pendingReloadFromDisk = false;
 
-        constructor(private readonly host: ServerHost, private readonly info: ScriptInfo, initialVersion?: ScriptInfoVersion) {
+        constructor(private readonly host: FileServerHost, private readonly info: ScriptInfo, initialVersion?: ScriptInfoVersion) {
             this.version = initialVersion || { svc: 0, text: 0 };
         }
 
@@ -329,7 +329,7 @@ namespace ts.server {
         documentPositionMapper?: DocumentPositionMapper | false;
 
         constructor(
-            private readonly host: ServerHost,
+            private readonly host: FileServerHost,
             readonly fileName: NormalizedPath,
             readonly scriptKind: ScriptKind,
             public readonly hasMixedContent: boolean,
