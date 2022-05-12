@@ -21248,8 +21248,8 @@ namespace ts {
                 type;
         }
 
-        function getWidenedLiteralLikeTypeForContextualType(type: Type, contextualType: Type | undefined) {
-            if (!isLiteralOfContextualType(type, contextualType)) {
+        function getWidenedLiteralLikeTypeForContextualType(type: Type, contextualType: Type | undefined, contextNode?: Node) {
+            if (!isLiteralOfContextualType(type, contextualType) && !(contextNode && isLiteralOfContextualType(type, instantiateContextualType(contextualType, contextNode)))) {
                 type = getWidenedUniqueESSymbolType(getWidenedLiteralType(type));
             }
             return type;
@@ -34495,7 +34495,7 @@ namespace ts {
             const type = checkExpression(node, checkMode, forceTuple);
             return isConstContext(node) || isCommonJsExportedExpression(node) ? getRegularTypeOfLiteralType(type) :
                 isTypeAssertion(node) ? type :
-                getWidenedLiteralLikeTypeForContextualType(type, instantiateContextualType(arguments.length === 2 ? getContextualType(node) : contextualType, node));
+                getWidenedLiteralLikeTypeForContextualType(type, arguments.length === 2 ? getContextualType(node) : contextualType, node);
         }
 
         function checkPropertyAssignment(node: PropertyAssignment, checkMode?: CheckMode): Type {
