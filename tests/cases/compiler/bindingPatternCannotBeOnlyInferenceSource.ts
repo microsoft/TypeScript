@@ -1,5 +1,7 @@
+// @strictNullChecks: true
+
 declare function f<T>(): T;
-const {} = f();       // error
+const {} = f();       // error (only in strictNullChecks)
 const { p1 } = f();   // error
 const [] = f();       // error
 const [e1, e2] = f(); // error
