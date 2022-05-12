@@ -21248,11 +21248,15 @@ namespace ts {
                 type;
         }
 
-        function getWidenedLiteralLikeTypeForContextualType(type: Type, contextualType: Type | undefined, contextNode?: Node) {
-            if (!isLiteralOfContextualType(type, contextualType) && !(contextNode && isLiteralOfContextualType(type, instantiateContextualType(contextualType, contextNode)))) {
-                type = getWidenedUniqueESSymbolType(getWidenedLiteralType(type));
+        function getWidenedLiteralLikeTypeForContextualType(type: Type, contextualType: Type | undefined, node?: Node) {
+            if (isLiteralOfContextualType(type, contextualType)) {
+                return type;
             }
-            return type;
+            const instantiatedContextualType = node && instantiateContextualType(contextualType, node) || contextualType;
+            if (instantiatedContextualType !== contextualType && isLiteralOfContextualType(type, instantiatedContextualType)) {
+                return type;
+            }
+            return getWidenedUniqueESSymbolType(getWidenedLiteralType(type));
         }
 
         function getWidenedLiteralLikeTypeForContextualReturnTypeIfNeeded(type: Type | undefined, contextualSignatureReturnType: Type | undefined, isAsync: boolean) {
