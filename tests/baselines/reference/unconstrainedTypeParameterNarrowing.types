@@ -1,0 +1,43 @@
+=== tests/cases/compiler/unconstrainedTypeParameterNarrowing.ts ===
+function f1<T>(x: T) {
+>f1 : <T>(x: T) => void
+>x : T
+
+    if (typeof x === "object" && x) {
+>typeof x === "object" && x : false | (T & (object | null))
+>typeof x === "object" : boolean
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>x : T
+>"object" : "object"
+>x : T & (object | null)
+
+        g(x);
+>g(x) : void
+>g : (x: object) => void
+>x : T & object
+    }
+}
+
+function f2<T extends unknown>(x: T) {
+>f2 : <T extends unknown>(x: T) => void
+>x : T
+
+    if (typeof x === "object" && x) {
+>typeof x === "object" && x : false | (T & (object | null))
+>typeof x === "object" : boolean
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>x : T
+>"object" : "object"
+>x : T & (object | null)
+
+        g(x);
+>g(x) : void
+>g : (x: object) => void
+>x : T & object
+    }
+}
+
+function g(x: object) {}
+>g : (x: object) => void
+>x : object
+

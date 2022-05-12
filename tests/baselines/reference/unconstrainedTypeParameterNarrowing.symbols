@@ -1,0 +1,37 @@
+=== tests/cases/compiler/unconstrainedTypeParameterNarrowing.ts ===
+function f1<T>(x: T) {
+>f1 : Symbol(f1, Decl(unconstrainedTypeParameterNarrowing.ts, 0, 0))
+>T : Symbol(T, Decl(unconstrainedTypeParameterNarrowing.ts, 0, 12))
+>x : Symbol(x, Decl(unconstrainedTypeParameterNarrowing.ts, 0, 15))
+>T : Symbol(T, Decl(unconstrainedTypeParameterNarrowing.ts, 0, 12))
+
+    if (typeof x === "object" && x) {
+>x : Symbol(x, Decl(unconstrainedTypeParameterNarrowing.ts, 0, 15))
+>x : Symbol(x, Decl(unconstrainedTypeParameterNarrowing.ts, 0, 15))
+
+        g(x);
+>g : Symbol(g, Decl(unconstrainedTypeParameterNarrowing.ts, 10, 1))
+>x : Symbol(x, Decl(unconstrainedTypeParameterNarrowing.ts, 0, 15))
+    }
+}
+
+function f2<T extends unknown>(x: T) {
+>f2 : Symbol(f2, Decl(unconstrainedTypeParameterNarrowing.ts, 4, 1))
+>T : Symbol(T, Decl(unconstrainedTypeParameterNarrowing.ts, 6, 12))
+>x : Symbol(x, Decl(unconstrainedTypeParameterNarrowing.ts, 6, 31))
+>T : Symbol(T, Decl(unconstrainedTypeParameterNarrowing.ts, 6, 12))
+
+    if (typeof x === "object" && x) {
+>x : Symbol(x, Decl(unconstrainedTypeParameterNarrowing.ts, 6, 31))
+>x : Symbol(x, Decl(unconstrainedTypeParameterNarrowing.ts, 6, 31))
+
+        g(x);
+>g : Symbol(g, Decl(unconstrainedTypeParameterNarrowing.ts, 10, 1))
+>x : Symbol(x, Decl(unconstrainedTypeParameterNarrowing.ts, 6, 31))
+    }
+}
+
+function g(x: object) {}
+>g : Symbol(g, Decl(unconstrainedTypeParameterNarrowing.ts, 10, 1))
+>x : Symbol(x, Decl(unconstrainedTypeParameterNarrowing.ts, 12, 11))
+
