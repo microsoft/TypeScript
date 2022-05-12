@@ -3459,6 +3459,10 @@
         "category": "Error",
         "code": 2838
     },
+    "This condition will always return '{0}' since JavaScript compares objects by reference, not value.": {
+        "category": "Error",
+        "code": 2839
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
