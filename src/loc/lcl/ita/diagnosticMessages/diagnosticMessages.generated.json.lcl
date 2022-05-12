@@ -8325,6 +8325,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Matched_by_default_include_pattern_Asterisk_Asterisk_Slash_Asterisk_1457" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Matched by default include pattern '**/*']]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Corrispondente per impostazione predefinita al criterio di inclusione '**/*']]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Matched_by_include_pattern_0_in_1_1407" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Matched by include pattern '{0}' in '{1}']]></Val>
