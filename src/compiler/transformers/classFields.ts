@@ -366,7 +366,7 @@ namespace ts {
         }
 
         function visitMethodOrAccessorDeclaration(node: MethodDeclaration | AccessorDeclaration) {
-            Debug.assert(!some(node.decorators));
+            Debug.assert(!hasDecorators(node));
 
             if (!shouldTransformPrivateElementsOrClassStaticBlocks || !isPrivateIdentifier(node.name)) {
                 return visitEachChild(node, classElementVisitor, context);
@@ -385,7 +385,7 @@ namespace ts {
                     factory.createAssignment(
                         functionName,
                         factory.createFunctionExpression(
-                            filter(node.modifiers, m => !isStaticModifier(m)),
+                            filter(node.modifiers, (m): m is Modifier => isModifier(m) && !isStaticModifier(m)),
                             node.asteriskToken,
                             functionName,
                             /* typeParameters */ undefined,
@@ -421,7 +421,7 @@ namespace ts {
         }
 
         function visitPropertyDeclaration(node: PropertyDeclaration) {
-            Debug.assert(!some(node.decorators));
+            Debug.assert(!hasDecorators(node));
 
             if (isPrivateIdentifier(node.name)) {
                 if (!shouldTransformPrivateElementsOrClassStaticBlocks) {
@@ -433,8 +433,8 @@ namespace ts {
                     // Initializer is elided as the field is initialized in transformConstructor.
                     return factory.updatePropertyDeclaration(
                         node,
-                        /*decorators*/ undefined,
-                        visitNodes(node.modifiers, visitor, isModifier),
+                        /*decorators*/ RESERVED,
+                        visitNodes(node.modifiers, visitor, isModifierLike),
                         node.name,
                         /*questionOrExclamationToken*/ undefined,
                         /*type*/ undefined,
@@ -461,8 +461,8 @@ namespace ts {
                 const initializerStatement = transformPropertyOrClassStaticBlock(node, factory.createThis());
                 if (initializerStatement) {
                     const staticBlock = factory.createClassStaticBlockDeclaration(
-                        /*decorators*/ undefined,
-                        /*modifiers*/ undefined,
+                        /*decorators*/ RESERVED,
+                        /*modifiers*/ RESERVED,
                         factory.createBlock([initializerStatement])
                     );
 
@@ -1051,7 +1051,7 @@ namespace ts {
             const statements: Statement[] = [
                 factory.updateClassDeclaration(
                     node,
-                    /*decorators*/ undefined,
+                    /*decorators*/ RESERVED,
                     node.modifiers,
                     node.name,
                     /*typeParameters*/ undefined,
@@ -1123,8 +1123,8 @@ namespace ts {
 
             const classExpression = factory.updateClassExpression(
                 node,
-                visitNodes(node.decorators, visitor, isDecorator),
-                node.modifiers,
+                /*decorators*/ RESERVED,
+                visitNodes(node.modifiers, visitor, isModifierLike),
                 node.name,
                 /*typeParameters*/ undefined,
                 visitNodes(node.heritageClauses, heritageClauseVisitor, isHeritageClause),
@@ -1208,8 +1208,8 @@ namespace ts {
 
             if (!shouldTransformPrivateElementsOrClassStaticBlocks && some(pendingExpressions)) {
                 members.push(factory.createClassStaticBlockDeclaration(
-                    /*decorators*/ undefined,
-                    /*modifiers*/ undefined,
+                    /*decorators*/ RESERVED,
+                    /*modifiers*/ RESERVED,
                     factory.createBlock([
                         factory.createExpressionStatement(factory.inlineExpressions(pendingExpressions))
                     ])
@@ -1265,7 +1265,7 @@ namespace ts {
                 setOriginalNode(
                     setTextRange(
                         factory.createConstructorDeclaration(
-                            /*decorators*/ undefined,
+                            /*decorators*/ RESERVED,
                             /*modifiers*/ undefined,
                             parameters ?? [],
                             body

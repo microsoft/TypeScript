@@ -7,7 +7,7 @@ namespace ts {
             it("parenthesizes default export if necessary", () => {
                 function checkExpression(expression: Expression) {
                     const node = factory.createExportAssignment(
-                        /*decorators*/ undefined,
+                        RESERVED,
                         /*modifiers*/ undefined,
                         /*isExportEquals*/ false,
                         expression,
@@ -15,8 +15,8 @@ namespace ts {
                     assertSyntaxKind(node.expression, SyntaxKind.ParenthesizedExpression);
                 }
 
-                const clazz = factory.createClassExpression(/*decorators*/ undefined, /*modifiers*/ undefined, "C", /*typeParameters*/ undefined, /*heritageClauses*/ undefined, [
-                    factory.createPropertyDeclaration(/*decorators*/ undefined, [factory.createToken(SyntaxKind.StaticKeyword)], "prop", /*questionOrExclamationToken*/ undefined, /*type*/ undefined, factory.createStringLiteral("1")),
+                const clazz = factory.createClassExpression(RESERVED, /*modifiers*/ undefined, "C", /*typeParameters*/ undefined, /*heritageClauses*/ undefined, [
+                    factory.createPropertyDeclaration(RESERVED, [factory.createToken(SyntaxKind.StaticKeyword)], "prop", /*questionOrExclamationToken*/ undefined, /*type*/ undefined, factory.createStringLiteral("1")),
                 ]);
                 checkExpression(clazz);
                 checkExpression(factory.createPropertyAccessExpression(clazz, "prop"));

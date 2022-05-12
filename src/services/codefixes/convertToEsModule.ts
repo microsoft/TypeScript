@@ -544,7 +544,7 @@ namespace ts.codefix {
 
     function functionExpressionToDeclaration(name: string | undefined, additionalModifiers: readonly Modifier[], fn: FunctionExpression | ArrowFunction | MethodDeclaration, useSitesToUnqualify: ESMap<Node, Node> | undefined): FunctionDeclaration {
         return factory.createFunctionDeclaration(
-            getSynthesizedDeepClones(fn.decorators), // TODO: GH#19915 Don't think this is even legal.
+            RESERVED,
             concatenate(additionalModifiers, getSynthesizedDeepClones(fn.modifiers)),
             getSynthesizedDeepClone(fn.asteriskToken),
             name,
@@ -556,7 +556,7 @@ namespace ts.codefix {
 
     function classExpressionToDeclaration(name: string | undefined, additionalModifiers: readonly Modifier[], cls: ClassExpression, useSitesToUnqualify: ESMap<Node, Node> | undefined): ClassDeclaration {
         return factory.createClassDeclaration(
-            getSynthesizedDeepClones(cls.decorators), // TODO: GH#19915 Don't think this is even legal.
+            RESERVED,
             concatenate(additionalModifiers, getSynthesizedDeepClones(cls.modifiers)),
             name,
             getSynthesizedDeepClones(cls.typeParameters),
@@ -584,7 +584,7 @@ namespace ts.codefix {
 
     function makeExportDeclaration(exportSpecifiers: ExportSpecifier[] | undefined, moduleSpecifier?: string): ExportDeclaration {
         return factory.createExportDeclaration(
-            /*decorators*/ undefined,
+            RESERVED,
             /*modifiers*/ undefined,
             /*isTypeOnly*/ false,
             exportSpecifiers && factory.createNamedExports(exportSpecifiers),

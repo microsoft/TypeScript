@@ -14,7 +14,7 @@ namespace ts.codefix {
         if (getEmitModuleKind(opts) === ModuleKind.CommonJS) {
             // import Bluebird = require("bluebird");
             variations.push(createAction(context, sourceFile, node, factory.createImportEqualsDeclaration(
-                /*decorators*/ undefined,
+                RESERVED,
                 /*modifiers*/ undefined,
                 /*isTypeOnly*/ false,
                 namespace.name,

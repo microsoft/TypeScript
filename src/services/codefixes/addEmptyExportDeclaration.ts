@@ -9,7 +9,7 @@ namespace ts.codefix {
             const { sourceFile } = context;
             const changes = textChanges.ChangeTracker.with(context, changes => {
                 const exportDeclaration = factory.createExportDeclaration(
-                    /*decorators*/ undefined,
+                    RESERVED,
                     /*modifiers*/ undefined,
                     /*isTypeOnly*/ false,
                     factory.createNamedExports([]),

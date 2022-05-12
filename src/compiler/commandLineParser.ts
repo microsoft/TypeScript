@@ -2058,8 +2058,8 @@ namespace ts {
                     continue;
                 }
 
-                if (element.questionToken) {
-                    errors.push(createDiagnosticForNodeInSourceFile(sourceFile, element.questionToken, Diagnostics.The_0_modifier_can_only_be_used_in_TypeScript_files, "?"));
+                if (element.illegalQuestionToken) {
+                    errors.push(createDiagnosticForNodeInSourceFile(sourceFile, element.illegalQuestionToken, Diagnostics.The_0_modifier_can_only_be_used_in_TypeScript_files, "?"));
                 }
                 if (!isDoubleQuotedString(element.name)) {
                     errors.push(createDiagnosticForNodeInSourceFile(sourceFile, element.name, Diagnostics.String_literal_with_double_quotes_expected));

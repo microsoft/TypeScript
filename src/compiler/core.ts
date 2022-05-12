@@ -163,10 +163,11 @@ namespace ts {
     }
 
     /** Works like Array.prototype.find, returning `undefined` if no element satisfying the predicate is found. */
-    export function find<T, U extends T>(array: readonly T[], predicate: (element: T, index: number) => element is U): U | undefined;
-    export function find<T>(array: readonly T[], predicate: (element: T, index: number) => boolean): T | undefined;
-    export function find<T>(array: readonly T[], predicate: (element: T, index: number) => boolean): T | undefined {
-        for (let i = 0; i < array.length; i++) {
+    export function find<T, U extends T>(array: readonly T[] | undefined, predicate: (element: T, index: number) => element is U, startIndex?: number): U | undefined;
+    export function find<T>(array: readonly T[] | undefined, predicate: (element: T, index: number) => boolean, startIndex?: number): T | undefined;
+    export function find<T>(array: readonly T[] | undefined, predicate: (element: T, index: number) => boolean, startIndex?: number): T | undefined {
+        if (array === undefined) return undefined;
+        for (let i = startIndex ?? 0; i < array.length; i++) {
             const value = array[i];
             if (predicate(value, i)) {
                 return value;
@@ -175,10 +176,11 @@ namespace ts {
         return undefined;
     }
 
-    export function findLast<T, U extends T>(array: readonly T[], predicate: (element: T, index: number) => element is U): U | undefined;
-    export function findLast<T>(array: readonly T[], predicate: (element: T, index: number) => boolean): T | undefined;
-    export function findLast<T>(array: readonly T[], predicate: (element: T, index: number) => boolean): T | undefined {
-        for (let i = array.length - 1; i >= 0; i--) {
+    export function findLast<T, U extends T>(array: readonly T[] | undefined, predicate: (element: T, index: number) => element is U, startIndex?: number): U | undefined;
+    export function findLast<T>(array: readonly T[] | undefined, predicate: (element: T, index: number) => boolean, startIndex?: number): T | undefined;
+    export function findLast<T>(array: readonly T[] | undefined, predicate: (element: T, index: number) => boolean, startIndex?: number): T | undefined {
+        if (array === undefined) return undefined;
+        for (let i = startIndex ?? array.length - 1; i >= 0; i--) {
             const value = array[i];
             if (predicate(value, i)) {
                 return value;
@@ -188,8 +190,9 @@ namespace ts {
     }
 
     /** Works like Array.prototype.findIndex, returning `-1` if no element satisfying the predicate is found. */
-    export function findIndex<T>(array: readonly T[], predicate: (element: T, index: number) => boolean, startIndex?: number): number {
-        for (let i = startIndex || 0; i < array.length; i++) {
+    export function findIndex<T>(array: readonly T[] | undefined, predicate: (element: T, index: number) => boolean, startIndex?: number): number {
+        if (array === undefined) return -1;
+        for (let i = startIndex ?? 0; i < array.length; i++) {
             if (predicate(array[i], i)) {
                 return i;
             }
@@ -197,8 +200,9 @@ namespace ts {
         return -1;
     }
 
-    export function findLastIndex<T>(array: readonly T[], predicate: (element: T, index: number) => boolean, startIndex?: number): number {
-        for (let i = startIndex === undefined ? array.length - 1 : startIndex; i >= 0; i--) {
+    export function findLastIndex<T>(array: readonly T[] | undefined, predicate: (element: T, index: number) => boolean, startIndex?: number): number {
+        if (array === undefined) return -1;
+        for (let i = startIndex ?? array.length - 1; i >= 0; i--) {
             if (predicate(array[i], i)) {
                 return i;
             }
@@ -1079,8 +1083,8 @@ namespace ts {
     /**
      * Returns the first element of an array if non-empty, `undefined` otherwise.
      */
-    export function firstOrUndefined<T>(array: readonly T[]): T | undefined {
-        return array.length === 0 ? undefined : array[0];
+    export function firstOrUndefined<T>(array: readonly T[] | undefined): T | undefined {
+        return array === undefined || array.length === 0 ? undefined : array[0];
     }
 
     export function first<T>(array: readonly T[]): T {
@@ -1091,8 +1095,8 @@ namespace ts {
     /**
      * Returns the last element of an array if non-empty, `undefined` otherwise.
      */
-    export function lastOrUndefined<T>(array: readonly T[]): T | undefined {
-        return array.length === 0 ? undefined : array[array.length - 1];
+    export function lastOrUndefined<T>(array: readonly T[] | undefined): T | undefined {
+        return array === undefined || array.length === 0 ? undefined : array[array.length - 1];
     }
 
     export function last<T>(array: readonly T[]): T {

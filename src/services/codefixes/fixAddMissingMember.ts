@@ -278,7 +278,7 @@ namespace ts.codefix {
         }
         else if (isPrivateIdentifier(token)) {
             const property = factory.createPropertyDeclaration(
-                /*decorators*/ undefined,
+                RESERVED,
                 /*modifiers*/ undefined,
                 tokenName,
                 /*questionToken*/ undefined,
@@ -345,7 +345,7 @@ namespace ts.codefix {
         const modifiers = modifierFlags ? factory.createNodeArray(factory.createModifiersFromModifierFlags(modifierFlags)) : undefined;
 
         const property = isClassLike(node)
-            ? factory.createPropertyDeclaration(/*decorators*/ undefined, modifiers, tokenName, /*questionToken*/ undefined, typeNode, /*initializer*/ undefined)
+            ? factory.createPropertyDeclaration(RESERVED, modifiers, tokenName, /*questionToken*/ undefined, typeNode, /*initializer*/ undefined)
             : factory.createPropertySignature(/*modifiers*/ undefined, tokenName, /*questionToken*/ undefined, typeNode);
 
         const lastProp = getNodeToInsertPropertyAfter(node);
@@ -371,7 +371,7 @@ namespace ts.codefix {
         // Index signatures cannot have the static modifier.
         const stringTypeNode = factory.createKeywordTypeNode(SyntaxKind.StringKeyword);
         const indexingParameter = factory.createParameterDeclaration(
-            /*decorators*/ undefined,
+            RESERVED,
             /*modifiers*/ undefined,
             /*dotDotDotToken*/ undefined,
             "x",
@@ -379,7 +379,7 @@ namespace ts.codefix {
             stringTypeNode,
             /*initializer*/ undefined);
         const indexSignature = factory.createIndexSignature(
-            /*decorators*/ undefined,
+            RESERVED,
             /*modifiers*/ undefined,
             [indexingParameter],
             typeNode);
@@ -445,7 +445,7 @@ namespace ts.codefix {
         const enumMember = factory.createEnumMember(token, hasStringInitializer ? factory.createStringLiteral(token.text) : undefined);
         changes.replaceNode(parentDeclaration.getSourceFile(), parentDeclaration, factory.updateEnumDeclaration(
             parentDeclaration,
-            parentDeclaration.decorators,
+            RESERVED,
             parentDeclaration.modifiers,
             parentDeclaration.name,
             concatenate(parentDeclaration.members, singleElementArray(enumMember))

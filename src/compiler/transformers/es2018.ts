@@ -796,7 +796,7 @@ namespace ts {
             if (parametersWithPrecedingObjectRestOrSpread?.has(node)) {
                 return factory.updateParameterDeclaration(
                     node,
-                    /*decorators*/ undefined,
+                    /*decorators*/ RESERVED,
                     /*modifiers*/ undefined,
                     node.dotDotDotToken,
                     isBindingPattern(node.name) ? factory.getGeneratedNameForNode(node) : node.name,
@@ -810,7 +810,7 @@ namespace ts {
                 // evaluated inside the function body.
                 return factory.updateParameterDeclaration(
                     node,
-                    /*decorators*/ undefined,
+                    /*decorators*/ RESERVED,
                     /*modifiers*/ undefined,
                     node.dotDotDotToken,
                     factory.getGeneratedNameForNode(node),
@@ -842,7 +842,7 @@ namespace ts {
             parametersWithPrecedingObjectRestOrSpread = collectParametersWithPrecedingObjectRestOrSpread(node);
             const updated = factory.updateConstructorDeclaration(
                 node,
-                /*decorators*/ undefined,
+                /*decorators*/ RESERVED,
                 node.modifiers,
                 visitParameterList(node.parameters, parameterVisitor, context),
                 transformFunctionBody(node)
@@ -859,7 +859,7 @@ namespace ts {
             parametersWithPrecedingObjectRestOrSpread = collectParametersWithPrecedingObjectRestOrSpread(node);
             const updated = factory.updateGetAccessorDeclaration(
                 node,
-                /*decorators*/ undefined,
+                /*decorators*/ RESERVED,
                 node.modifiers,
                 visitNode(node.name, visitor, isPropertyName),
                 visitParameterList(node.parameters, parameterVisitor, context),
@@ -878,7 +878,7 @@ namespace ts {
             parametersWithPrecedingObjectRestOrSpread = collectParametersWithPrecedingObjectRestOrSpread(node);
             const updated = factory.updateSetAccessorDeclaration(
                 node,
-                /*decorators*/ undefined,
+                /*decorators*/ RESERVED,
                 node.modifiers,
                 visitNode(node.name, visitor, isPropertyName),
                 visitParameterList(node.parameters, parameterVisitor, context),
@@ -896,9 +896,9 @@ namespace ts {
             parametersWithPrecedingObjectRestOrSpread = collectParametersWithPrecedingObjectRestOrSpread(node);
             const updated = factory.updateMethodDeclaration(
                 node,
-                /*decorators*/ undefined,
+                /*decorators*/ RESERVED,
                 enclosingFunctionFlags & FunctionFlags.Generator
-                    ? visitNodes(node.modifiers, visitorNoAsyncModifier, isModifier)
+                    ? visitNodes(node.modifiers, visitorNoAsyncModifier, isModifierLike)
                     : node.modifiers,
                 enclosingFunctionFlags & FunctionFlags.Async
                     ? undefined
@@ -924,7 +924,7 @@ namespace ts {
             parametersWithPrecedingObjectRestOrSpread = collectParametersWithPrecedingObjectRestOrSpread(node);
             const updated = factory.updateFunctionDeclaration(
                 node,
-                /*decorators*/ undefined,
+                /*decorators*/ RESERVED,
                 enclosingFunctionFlags & FunctionFlags.Generator
                     ? visitNodes(node.modifiers, visitorNoAsyncModifier, isModifier)
                     : node.modifiers,

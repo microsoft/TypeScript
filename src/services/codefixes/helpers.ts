@@ -87,7 +87,7 @@ namespace ts.codefix {
                     }
                 }
                 addClassElement(factory.createPropertyDeclaration(
-                    /*decorators*/ undefined,
+                    RESERVED,
                     modifiers,
                     name,
                     optional && (preserveOptional & PreserveOptionalFlags.Property) ? factory.createToken(SyntaxKind.QuestionToken) : undefined,
@@ -111,7 +111,7 @@ namespace ts.codefix {
                 for (const accessor of orderedAccessors) {
                     if (isGetAccessorDeclaration(accessor)) {
                         addClassElement(factory.createGetAccessorDeclaration(
-                            /*decorators*/ undefined,
+                            RESERVED,
                             modifiers,
                             name,
                             emptyArray,
@@ -123,7 +123,7 @@ namespace ts.codefix {
                         const parameter = getSetAccessorValueParameter(accessor);
                         const parameterName = parameter && isIdentifier(parameter.name) ? idText(parameter.name) : undefined;
                         addClassElement(factory.createSetAccessorDeclaration(
-                            /*decorators*/ undefined,
+                            RESERVED,
                             modifiers,
                             name,
                             createDummyParameters(1, [parameterName], [typeNode], 1, /*inJs*/ false),
@@ -245,7 +245,7 @@ namespace ts.codefix {
                 }
                 return factory.updateParameterDeclaration(
                     parameterDecl,
-                    parameterDecl.decorators,
+                    RESERVED,
                     parameterDecl.modifiers,
                     parameterDecl.dotDotDotToken,
                     parameterDecl.name,
@@ -275,7 +275,7 @@ namespace ts.codefix {
             return factory.updateArrowFunction(signatureDeclaration, modifiers, typeParameters, parameters, type, signatureDeclaration.equalsGreaterThanToken, body ?? signatureDeclaration.body);
         }
         if (isMethodDeclaration(signatureDeclaration)) {
-            return factory.updateMethodDeclaration(signatureDeclaration, /* decorators */ undefined, modifiers, asteriskToken, name ?? factory.createIdentifier(""), questionToken, typeParameters, parameters, type, body);
+            return factory.updateMethodDeclaration(signatureDeclaration, RESERVED, modifiers, asteriskToken, name ?? factory.createIdentifier(""), questionToken, typeParameters, parameters, type, body);
         }
         return undefined;
     }
@@ -320,7 +320,7 @@ namespace ts.codefix {
         switch (kind) {
             case SyntaxKind.MethodDeclaration:
                 return factory.createMethodDeclaration(
-                    /*decorators*/ undefined,
+                    RESERVED,
                     modifiers,
                     asteriskToken,
                     name,
@@ -341,7 +341,7 @@ namespace ts.codefix {
                 );
             case SyntaxKind.FunctionDeclaration:
                 return factory.createFunctionDeclaration(
-                    /*decorators*/ undefined,
+                    RESERVED,
                     modifiers,
                     asteriskToken,
                     name,
@@ -372,7 +372,7 @@ namespace ts.codefix {
         const parameters: ParameterDeclaration[] = [];
         for (let i = 0; i < argCount; i++) {
             const newParameter = factory.createParameterDeclaration(
-                /*decorators*/ undefined,
+                RESERVED,
                 /*modifiers*/ undefined,
                 /*dotDotDotToken*/ undefined,
                 /*name*/ names && names[i] || `arg${i}`,
@@ -417,7 +417,7 @@ namespace ts.codefix {
 
         if (someSigHasRestParameter) {
             const restParameter = factory.createParameterDeclaration(
-                /*decorators*/ undefined,
+                RESERVED,
                 /*modifiers*/ undefined,
                 factory.createToken(SyntaxKind.DotDotDotToken),
                 maxArgsParameterSymbolNames[maxNonRestArgs] || "rest",
@@ -456,7 +456,7 @@ namespace ts.codefix {
         body: Block | undefined
     ): MethodDeclaration {
         return factory.createMethodDeclaration(
-            /*decorators*/ undefined,
+            RESERVED,
             modifiers,
             /*asteriskToken*/ undefined,
             name,

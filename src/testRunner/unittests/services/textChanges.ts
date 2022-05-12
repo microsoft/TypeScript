@@ -83,7 +83,7 @@ namespace M
             runSingleFileTest("extractMethodLike", /*placeOpenBraceOnNewLineForFunctions*/ true, text, /*validateNodes*/ true, (sourceFile, changeTracker) => {
                 const statements = (findChild("foo", sourceFile) as FunctionDeclaration).body!.statements.slice(1);
                 const newFunction = factory.createFunctionDeclaration(
-                    /*decorators*/ undefined,
+                    RESERVED,
                     /*modifiers*/ undefined,
                     /*asteriskToken*/ undefined,
                     /*name*/ "bar",
@@ -182,7 +182,7 @@ var a = 4; // comment 7
         }
         function createTestClass() {
             return factory.createClassDeclaration(
-                /*decorators*/ undefined,
+                RESERVED,
                 [
                     factory.createToken(SyntaxKind.PublicKeyword)
                 ],
@@ -198,7 +198,7 @@ var a = 4; // comment 7
                 ],
                 [
                     factory.createPropertyDeclaration(
-                        /*decorators*/ undefined,
+                        RESERVED,
                         /*modifiers*/ undefined,
                         "property1",
                         /*questionToken*/ undefined,
@@ -643,7 +643,7 @@ class A {
                 for (let i = 0; i < 11 /*error doesn't occur with fewer nodes*/; ++i) {
                     newNodes.push(
                         // eslint-disable-next-line boolean-trivia
-                        factory.createPropertyDeclaration(undefined, undefined, i + "", undefined, undefined, undefined));
+                        factory.createPropertyDeclaration(RESERVED, undefined, i + "", undefined, undefined, undefined));
                 }
                 const insertAfter = findChild("x", sourceFile);
                 for (const newNode of newNodes) {
@@ -659,7 +659,7 @@ class A {
 `;
             runSingleFileTest("insertNodeAfterInClass1", /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
                 // eslint-disable-next-line boolean-trivia
-                changeTracker.insertNodeAfter(sourceFile, findChild("x", sourceFile), factory.createPropertyDeclaration(undefined, undefined, "a", undefined, factory.createKeywordTypeNode(SyntaxKind.BooleanKeyword), undefined));
+                changeTracker.insertNodeAfter(sourceFile, findChild("x", sourceFile), factory.createPropertyDeclaration(RESERVED, undefined, "a", undefined, factory.createKeywordTypeNode(SyntaxKind.BooleanKeyword), undefined));
             });
         }
         {
@@ -670,7 +670,7 @@ class A {
 `;
             runSingleFileTest("insertNodeAfterInClass2", /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
                 // eslint-disable-next-line boolean-trivia
-                changeTracker.insertNodeAfter(sourceFile, findChild("x", sourceFile), factory.createPropertyDeclaration(undefined, undefined, "a", undefined, factory.createKeywordTypeNode(SyntaxKind.BooleanKeyword), undefined));
+                changeTracker.insertNodeAfter(sourceFile, findChild("x", sourceFile), factory.createPropertyDeclaration(RESERVED, undefined, "a", undefined, factory.createKeywordTypeNode(SyntaxKind.BooleanKeyword), undefined));
             });
         }
         {
@@ -703,7 +703,7 @@ class A {
 `;
             runSingleFileTest("insertNodeInClassAfterNodeWithoutSeparator1", /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
                 const newNode = factory.createPropertyDeclaration(
-                    /*decorators*/ undefined,
+                    RESERVED,
                     /*modifiers*/ undefined,
                     factory.createComputedPropertyName(factory.createNumericLiteral(1)),
                     /*questionToken*/ undefined,
@@ -721,7 +721,7 @@ class A {
 `;
             runSingleFileTest("insertNodeInClassAfterNodeWithoutSeparator2", /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
                 const newNode = factory.createPropertyDeclaration(
-                    /*decorators*/ undefined,
+                    RESERVED,
                     /*modifiers*/ undefined,
                     factory.createComputedPropertyName(factory.createNumericLiteral(1)),
                     /*questionToken*/ undefined,
@@ -738,7 +738,7 @@ interface A {
 `;
             runSingleFileTest("insertNodeInInterfaceAfterNodeWithoutSeparator1", /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
                 const newNode = factory.createPropertyDeclaration(
-                    /*decorators*/ undefined,
+                    RESERVED,
                     /*modifiers*/ undefined,
                     factory.createComputedPropertyName(factory.createNumericLiteral(1)),
                     /*questionToken*/ undefined,
@@ -755,7 +755,7 @@ interface A {
 `;
             runSingleFileTest("insertNodeInInterfaceAfterNodeWithoutSeparator2", /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
                 const newNode = factory.createPropertyDeclaration(
-                    /*decorators*/ undefined,
+                    RESERVED,
                     /*modifiers*/ undefined,
                     factory.createComputedPropertyName(factory.createNumericLiteral(1)),
                     /*questionToken*/ undefined,

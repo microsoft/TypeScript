@@ -51,7 +51,7 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
             case SyntaxKind.MethodDeclaration: {
                 updated = factory.updateMethodDeclaration(
                     lastDeclaration,
-                    lastDeclaration.decorators,
+                    RESERVED,
                     lastDeclaration.modifiers,
                     lastDeclaration.asteriskToken,
                     lastDeclaration.name,
@@ -75,7 +75,7 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
             case SyntaxKind.Constructor: {
                 updated = factory.updateConstructorDeclaration(
                     lastDeclaration,
-                    lastDeclaration.decorators,
+                    RESERVED,
                     lastDeclaration.modifiers,
                     getNewParametersForCombinedSignature(signatureDecls),
                     lastDeclaration.body
@@ -94,7 +94,7 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
             case SyntaxKind.FunctionDeclaration: {
                 updated = factory.updateFunctionDeclaration(
                     lastDeclaration,
-                    lastDeclaration.decorators,
+                    RESERVED,
                     lastDeclaration.modifiers,
                     lastDeclaration.asteriskToken,
                     lastDeclaration.name,
@@ -126,7 +126,7 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
             }
             return factory.createNodeArray([
                 factory.createParameterDeclaration(
-                    /*decorators*/ undefined,
+                    RESERVED,
                     /*modifiers*/ undefined,
                     factory.createToken(SyntaxKind.DotDotDotToken),
                     "args",
@@ -209,7 +209,7 @@ ${newComment.split("\n").map(c => ` * ${c}`).join("\n")}
             return;
         }
         const signatureDecls = decls as (MethodSignature | MethodDeclaration | CallSignatureDeclaration | ConstructorDeclaration | ConstructSignatureDeclaration | FunctionDeclaration)[];
-        if (some(signatureDecls, d => !!d.typeParameters || some(d.parameters, p => !!p.decorators || !!p.modifiers || !isIdentifier(p.name)))) {
+        if (some(signatureDecls, d => !!d.typeParameters || some(d.parameters, p => !!p.modifiers || !isIdentifier(p.name)))) {
             return;
         }
         const signatures = mapDefined(signatureDecls, d => checker.getSignatureFromDeclaration(d));

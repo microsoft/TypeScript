@@ -378,7 +378,7 @@ interface Symbol {
                     }
                     let expectedIndex = 0;
                     incrementalReadableBuildInfo.program.affectedFilesPendingEmit.forEach(([actualFile]) => {
-                        expectedIndex = findIndex(cleanReadableBuildInfo!.program!.affectedFilesPendingEmit!, ([expectedFile]) => actualFile === expectedFile, expectedIndex);
+                        expectedIndex = findIndex(cleanReadableBuildInfo!.program!.affectedFilesPendingEmit, ([expectedFile]) => actualFile === expectedFile, expectedIndex);
                         if (expectedIndex === -1) {
                             addBaseline(
                                 `Incremental build contains ${actualFile} file as pending emit, clean build does not have it: ${outputFile}::`,

@@ -191,8 +191,10 @@ namespace ts {
 
         export function assertEachNode<T extends Node, U extends T>(nodes: NodeArray<T>, test: (node: T) => node is U, message?: string, stackCrawlMark?: AnyFunction): asserts nodes is NodeArray<U>;
         export function assertEachNode<T extends Node, U extends T>(nodes: readonly T[], test: (node: T) => node is U, message?: string, stackCrawlMark?: AnyFunction): asserts nodes is readonly U[];
+        export function assertEachNode<T extends Node, U extends T>(nodes: NodeArray<T> | undefined, test: (node: T) => node is U, message?: string, stackCrawlMark?: AnyFunction): asserts nodes is NodeArray<U> | undefined;
+        export function assertEachNode<T extends Node, U extends T>(nodes: readonly T[] | undefined, test: (node: T) => node is U, message?: string, stackCrawlMark?: AnyFunction): asserts nodes is readonly U[] | undefined;
         export function assertEachNode(nodes: readonly Node[], test: (node: Node) => boolean, message?: string, stackCrawlMark?: AnyFunction): void;
-        export function assertEachNode(nodes: readonly Node[], test: (node: Node) => boolean, message?: string, stackCrawlMark?: AnyFunction) {
+        export function assertEachNode(nodes: readonly Node[] | undefined, test: (node: Node) => boolean, message?: string, stackCrawlMark?: AnyFunction) {
             if (shouldAssertFunction(AssertionLevel.Normal, "assertEachNode")) {
                 assert(
                     test === undefined || every(nodes, test),
@@ -708,9 +710,9 @@ namespace ts {
             };
         }
 
-        function createDeprecation(name: string, options: DeprecationOptions & { error: true }): () => never;
-        function createDeprecation(name: string, options?: DeprecationOptions): () => void;
-        function createDeprecation(name: string, options: DeprecationOptions = {}) {
+        export function createDeprecation(name: string, options: DeprecationOptions & { error: true }): () => never;
+        export function createDeprecation(name: string, options?: DeprecationOptions): () => void;
+        export function createDeprecation(name: string, options: DeprecationOptions = {}) {
             const version = typeof options.typeScriptVersion === "string" ? new Version(options.typeScriptVersion) : options.typeScriptVersion ?? getTypeScriptVersion();
             const errorAfter = typeof options.errorAfter === "string" ? new Version(options.errorAfter) : options.errorAfter;
             const warnAfter = typeof options.warnAfter === "string" ? new Version(options.warnAfter) : options.warnAfter;

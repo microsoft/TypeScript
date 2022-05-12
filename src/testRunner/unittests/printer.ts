@@ -148,13 +148,13 @@ namespace ts {
             printsCorrectly("class", {}, printer => printer.printNode(
                 EmitHint.Unspecified,
                 factory.createClassDeclaration(
-                    /*decorators*/ undefined,
+                    RESERVED,
                     /*modifiers*/ undefined,
                     /*name*/ factory.createIdentifier("C"),
                     /*typeParameters*/ undefined,
                     /*heritageClauses*/ undefined,
                     [factory.createPropertyDeclaration(
-                        /*decorators*/ undefined,
+                        RESERVED,
                         factory.createNodeArray([factory.createToken(SyntaxKind.PublicKeyword)]),
                         factory.createIdentifier("prop"),
                         /*questionToken*/ undefined,
@@ -199,7 +199,7 @@ namespace ts {
             printsCorrectly("emptyGlobalAugmentation", {}, printer => printer.printNode(
                 EmitHint.Unspecified,
                 factory.createModuleDeclaration(
-                    /*decorators*/ undefined,
+                    RESERVED,
                     /*modifiers*/ [factory.createToken(SyntaxKind.DeclareKeyword)],
                     factory.createIdentifier("global"),
                     factory.createModuleBlock(emptyArray),
@@ -210,7 +210,7 @@ namespace ts {
             printsCorrectly("emptyGlobalAugmentationWithNoDeclareKeyword", {}, printer => printer.printNode(
                 EmitHint.Unspecified,
                 factory.createModuleDeclaration(
-                    /*decorators*/ undefined,
+                    RESERVED,
                     /*modifiers*/ undefined,
                     factory.createIdentifier("global"),
                     factory.createModuleBlock(emptyArray),
@@ -222,14 +222,14 @@ namespace ts {
             printsCorrectly("classWithOptionalMethodAndProperty", {}, printer => printer.printNode(
                 EmitHint.Unspecified,
                 factory.createClassDeclaration(
-                    /*decorators*/ undefined,
+                    RESERVED,
                     /*modifiers*/ [factory.createToken(SyntaxKind.DeclareKeyword)],
                     /*name*/ factory.createIdentifier("X"),
                     /*typeParameters*/ undefined,
                     /*heritageClauses*/ undefined,
                     [
                         factory.createMethodDeclaration(
-                            /*decorators*/ undefined,
+                            RESERVED,
                             /*modifiers*/ undefined,
                             /*asteriskToken*/ undefined,
                             /*name*/ factory.createIdentifier("method"),
@@ -240,7 +240,7 @@ namespace ts {
                             /*body*/ undefined
                         ),
                         factory.createPropertyDeclaration(
-                            /*decorators*/ undefined,
+                            RESERVED,
                             /*modifiers*/ undefined,
                             /*name*/ factory.createIdentifier("property"),
                             /*questionToken*/ factory.createToken(SyntaxKind.QuestionToken),
@@ -259,7 +259,7 @@ namespace ts {
                     factory.createFunctionTypeNode(
                         /*typeArguments*/ undefined,
                         [factory.createParameterDeclaration(
-                            /*decorators*/ undefined,
+                            RESERVED,
                             /*modifiers*/ undefined,
                             /*dotDotDotToken*/ undefined,
                             factory.createIdentifier("args")
@@ -269,7 +269,7 @@ namespace ts {
                     factory.createFunctionTypeNode(
                         [factory.createTypeParameterDeclaration(/*modifiers*/ undefined, "T")],
                         [factory.createParameterDeclaration(
-                            /*decorators*/ undefined,
+                            RESERVED,
                             /*modifiers*/ undefined,
                             /*dotDotDotToken*/ undefined,
                             factory.createIdentifier("args")
@@ -279,7 +279,7 @@ namespace ts {
                     factory.createFunctionTypeNode(
                         /*typeArguments*/ undefined,
                         [factory.createParameterDeclaration(
-                            /*decorators*/ undefined,
+                            RESERVED,
                             /*modifiers*/ undefined,
                             factory.createToken(SyntaxKind.DotDotDotToken),
                             factory.createIdentifier("args")
@@ -289,7 +289,7 @@ namespace ts {
                     factory.createFunctionTypeNode(
                         /*typeArguments*/ undefined,
                         [factory.createParameterDeclaration(
-                            /*decorators*/ undefined,
+                            RESERVED,
                             /*modifiers*/ undefined,
                             /*dotDotDotToken*/ undefined,
                             factory.createIdentifier("args"),
@@ -300,7 +300,7 @@ namespace ts {
                     factory.createFunctionTypeNode(
                         /*typeArguments*/ undefined,
                         [factory.createParameterDeclaration(
-                            /*decorators*/ undefined,
+                            RESERVED,
                             /*modifiers*/ undefined,
                             /*dotDotDotToken*/ undefined,
                             factory.createIdentifier("args"),
@@ -312,7 +312,7 @@ namespace ts {
                     factory.createFunctionTypeNode(
                         /*typeArguments*/ undefined,
                         [factory.createParameterDeclaration(
-                            /*decorators*/ undefined,
+                            RESERVED,
                             /*modifiers*/ undefined,
                             /*dotDotDotToken*/ undefined,
                             factory.createObjectBindingPattern([])

@@ -289,8 +289,8 @@ namespace ts {
         function visitMethodDeclaration(node: MethodDeclaration) {
             return factory.updateMethodDeclaration(
                 node,
-                /*decorators*/ undefined,
-                visitNodes(node.modifiers, visitor, isModifier),
+                /*decorators*/ RESERVED,
+                visitNodes(node.modifiers, visitor, isModifierLike),
                 node.asteriskToken,
                 node.name,
                 /*questionToken*/ undefined,
@@ -314,8 +314,8 @@ namespace ts {
         function visitFunctionDeclaration(node: FunctionDeclaration): VisitResult<Statement> {
             return factory.updateFunctionDeclaration(
                 node,
-                /*decorators*/ undefined,
-                visitNodes(node.modifiers, visitor, isModifier),
+                /*decorators*/ RESERVED,
+                visitNodes(node.modifiers, visitor, isModifierLike),
                 node.asteriskToken,
                 node.name,
                 /*typeParameters*/ undefined,
@@ -338,7 +338,7 @@ namespace ts {
         function visitFunctionExpression(node: FunctionExpression): Expression {
             return factory.updateFunctionExpression(
                 node,
-                visitNodes(node.modifiers, visitor, isModifier),
+                visitNodes(node.modifiers, visitor, isModifierLike),
                 node.asteriskToken,
                 node.name,
                 /*typeParameters*/ undefined,
@@ -361,7 +361,7 @@ namespace ts {
         function visitArrowFunction(node: ArrowFunction) {
             return factory.updateArrowFunction(
                 node,
-                visitNodes(node.modifiers, visitor, isModifier),
+                visitNodes(node.modifiers, visitor, isModifierLike),
                 /*typeParameters*/ undefined,
                 visitParameterList(node.parameters, visitor, context),
                 /*type*/ undefined,
@@ -764,7 +764,7 @@ namespace ts {
                             /* typeParameters */ undefined,
                             /* parameters */ [
                                 factory.createParameterDeclaration(
-                                    /* decorators */ undefined,
+                                    /*decorators*/ RESERVED,
                                     /* modifiers */ undefined,
                                     /* dotDotDotToken */ undefined,
                                     "v",
