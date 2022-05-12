@@ -530,19 +530,12 @@ namespace ts {
         PackageJson: "package.json file",
 
         // Additional tsserver specific watch information
-        /* @internal */
         ClosedScriptInfo: "Closed Script info",
-        /* @internal */
         ConfigFileForInferredRoot: "Config file for the inferred project root",
-        /* @internal */
         NodeModules: "node_modules for closed script infos and package.jsons affecting module specifier cache",
-        /* @internal */
         MissingSourceMapFile: "Missing source map file",
-        /* @internal */
         NoopConfigFileForInferredRoot: "Noop Config file for the inferred project root",
-        /* @internal */
         MissingGeneratedFile: "Missing generated file",
-        /* @internal */
         NodeModulesForModuleSpecifierCache: "node_modules for module specifier cache invalidation",
     }
 
