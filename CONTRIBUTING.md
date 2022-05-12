@@ -97,6 +97,10 @@ TypeScript is currently accepting contributions in the form of bug fixes. A bug 
 
 Features (things that add new or improved functionality to TypeScript) may be accepted, but will need to first be approved (labelled ["help wanted"](https://github.com/Microsoft/TypeScript/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22) or in the "Backlog" milestone) by a TypeScript project maintainer in the suggestion issue. Features with language design impact, or that are adequately satisfied with external tools, will not be accepted.
 
+## Claiming issues ("cookie licking")
+
+Please do not "claim" issues (aka ["cookie lick"](https://devblogs.microsoft.com/oldnewthing/20091201-00/?p=15843)). While it may seem helpful to let people know that you're planning to work on an issue (or to simply ask to work on it), doing so is more likely to cause future contributors to avoid the issue altogether. If you'd like to work on an issue, work on it, and send a PR; if you get stuck or don't have the time, someone else will try again in the future. (If you "claimed" it, that future person may not have considered working on it at all!)
+
 ## Legal
 
 You will need to complete a Contributor License Agreement (CLA). Briefly, this agreement testifies that you are granting us permission to use the submitted change according to the terms of the project's license, and that the work being submitted is under appropriate copyright. Upon submitting a pull request, you will automatically be given instructions on how to sign the CLA.
@@ -113,6 +117,10 @@ Your pull request should:
     * Include baseline changes with your change
 * Follow the code conventions described in [Coding guidelines](https://github.com/Microsoft/TypeScript/wiki/Coding-guidelines)
 * To avoid line ending issues, set `autocrlf = input` and `whitespace = cr-at-eol` in your git configuration
+
+## Force-pushing
+
+Avoid force-pushing your changes, especially when updating your PR based on review feedback. Force-pushed changes are not easily viewable on GitHub, and not at all viewable if a force-push also rebases against main. TypeScript PRs are squash merged, so the specific commits on your PR branch do not matter, only the PR title itself. Don't worry about having a perfect commit history; instead focus on making your changes as easy to review and merge as possible.
 
 ## Contributing `lib.d.ts` fixes
 
