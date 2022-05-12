@@ -97,7 +97,7 @@ interface Array<T> { length: number; [n: number]: T; }`
         symLink: string;
     }
 
-    type FSEntry = FsFile | FsFolder | FsSymLink;
+    export type FSEntry = FsFile | FsFolder | FsSymLink;
 
     function isFsFolder(s: FSEntry | undefined): s is FsFolder {
         return !!s && isArray((s as FsFolder).entries);
