@@ -10,7 +10,7 @@ function f1<T>(x: T) {
 >x : Symbol(x, Decl(unconstrainedTypeParameterNarrowing.ts, 0, 15))
 
         g(x);
->g : Symbol(g, Decl(unconstrainedTypeParameterNarrowing.ts, 10, 1))
+>g : Symbol(g, Decl(unconstrainedTypeParameterNarrowing.ts, 24, 1))
 >x : Symbol(x, Decl(unconstrainedTypeParameterNarrowing.ts, 0, 15))
     }
 }
@@ -26,12 +26,60 @@ function f2<T extends unknown>(x: T) {
 >x : Symbol(x, Decl(unconstrainedTypeParameterNarrowing.ts, 6, 31))
 
         g(x);
->g : Symbol(g, Decl(unconstrainedTypeParameterNarrowing.ts, 10, 1))
+>g : Symbol(g, Decl(unconstrainedTypeParameterNarrowing.ts, 24, 1))
 >x : Symbol(x, Decl(unconstrainedTypeParameterNarrowing.ts, 6, 31))
     }
 }
 
+// #48468 but with an explicit constraint so as to not trigger the `{}` and unconstrained type parameter bug
+function deepEquals<T extends unknown>(a: T, b: T) {
+>deepEquals : Symbol(deepEquals, Decl(unconstrainedTypeParameterNarrowing.ts, 10, 1))
+>T : Symbol(T, Decl(unconstrainedTypeParameterNarrowing.ts, 13, 20))
+>a : Symbol(a, Decl(unconstrainedTypeParameterNarrowing.ts, 13, 39))
+>T : Symbol(T, Decl(unconstrainedTypeParameterNarrowing.ts, 13, 20))
+>b : Symbol(b, Decl(unconstrainedTypeParameterNarrowing.ts, 13, 44))
+>T : Symbol(T, Decl(unconstrainedTypeParameterNarrowing.ts, 13, 20))
+
+    if (typeof a !== "object" || typeof b !== "object" || !a || !b) {
+>a : Symbol(a, Decl(unconstrainedTypeParameterNarrowing.ts, 13, 39))
+>b : Symbol(b, Decl(unconstrainedTypeParameterNarrowing.ts, 13, 44))
+>a : Symbol(a, Decl(unconstrainedTypeParameterNarrowing.ts, 13, 39))
+>b : Symbol(b, Decl(unconstrainedTypeParameterNarrowing.ts, 13, 44))
+
+        return false;
+    }
+    if (Array.isArray(a) || Array.isArray(b)) {
+>Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(unconstrainedTypeParameterNarrowing.ts, 13, 39))
+>Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>b : Symbol(b, Decl(unconstrainedTypeParameterNarrowing.ts, 13, 44))
+
+        return false;
+    }
+    if (Object.keys(a).length !== Object.keys(b).length) {
+>Object.keys(a).length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>Object.keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(unconstrainedTypeParameterNarrowing.ts, 13, 39))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>Object.keys(b).length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>Object.keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --))
+>b : Symbol(b, Decl(unconstrainedTypeParameterNarrowing.ts, 13, 44))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+
+        return false;
+    }
+    return true;
+}
+
 function g(x: object) {}
->g : Symbol(g, Decl(unconstrainedTypeParameterNarrowing.ts, 10, 1))
->x : Symbol(x, Decl(unconstrainedTypeParameterNarrowing.ts, 12, 11))
+>g : Symbol(g, Decl(unconstrainedTypeParameterNarrowing.ts, 24, 1))
+>x : Symbol(x, Decl(unconstrainedTypeParameterNarrowing.ts, 26, 11))
 

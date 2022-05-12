@@ -37,6 +37,72 @@ function f2<T extends unknown>(x: T) {
     }
 }
 
+// #48468 but with an explicit constraint so as to not trigger the `{}` and unconstrained type parameter bug
+function deepEquals<T extends unknown>(a: T, b: T) {
+>deepEquals : <T extends unknown>(a: T, b: T) => boolean
+>a : T
+>b : T
+
+    if (typeof a !== "object" || typeof b !== "object" || !a || !b) {
+>typeof a !== "object" || typeof b !== "object" || !a || !b : boolean
+>typeof a !== "object" || typeof b !== "object" || !a : boolean
+>typeof a !== "object" || typeof b !== "object" : boolean
+>typeof a !== "object" : boolean
+>typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>a : T
+>"object" : "object"
+>typeof b !== "object" : boolean
+>typeof b : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>b : T
+>"object" : "object"
+>!a : boolean
+>a : T & (object | null)
+>!b : boolean
+>b : T & (object | null)
+
+        return false;
+>false : false
+    }
+    if (Array.isArray(a) || Array.isArray(b)) {
+>Array.isArray(a) || Array.isArray(b) : boolean
+>Array.isArray(a) : boolean
+>Array.isArray : (arg: any) => arg is any[]
+>Array : ArrayConstructor
+>isArray : (arg: any) => arg is any[]
+>a : T & object
+>Array.isArray(b) : boolean
+>Array.isArray : (arg: any) => arg is any[]
+>Array : ArrayConstructor
+>isArray : (arg: any) => arg is any[]
+>b : T & object
+
+        return false;
+>false : false
+    }
+    if (Object.keys(a).length !== Object.keys(b).length) {
+>Object.keys(a).length !== Object.keys(b).length : boolean
+>Object.keys(a).length : number
+>Object.keys(a) : string[]
+>Object.keys : (o: object) => string[]
+>Object : ObjectConstructor
+>keys : (o: object) => string[]
+>a : T & object
+>length : number
+>Object.keys(b).length : number
+>Object.keys(b) : string[]
+>Object.keys : (o: object) => string[]
+>Object : ObjectConstructor
+>keys : (o: object) => string[]
+>b : T & object
+>length : number
+
+        return false;
+>false : false
+    }
+    return true;
+>true : true
+}
+
 function g(x: object) {}
 >g : (x: object) => void
 >x : object
