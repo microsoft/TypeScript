@@ -22407,7 +22407,7 @@ namespace ts {
                     inferFromTypes((source as IndexedAccessType).objectType, (target as IndexedAccessType).objectType);
                     inferFromTypes((source as IndexedAccessType).indexType, (target as IndexedAccessType).indexType);
                 }
-                else if (source. flags & TypeFlags.StringMapping && target.flags & TypeFlags.StringMapping) {
+                else if (source.flags & TypeFlags.StringMapping && target.flags & TypeFlags.StringMapping) {
                     if ((source as StringMappingType).symbol === (target as StringMappingType).symbol) {
                         inferFromTypes((source as StringMappingType).type, (target as StringMappingType).type);
                     }
