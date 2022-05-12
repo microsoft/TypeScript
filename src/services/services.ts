@@ -2880,7 +2880,7 @@ namespace ts {
     export function getDefaultLibFilePath(options: CompilerOptions): string {
         // Check __dirname is defined and that we are on a node.js system.
         if (typeof __dirname !== "undefined") {
-            return __dirname + directorySeparator + getDefaultLibFileName(options);
+            return combinePaths(__dirname, getDefaultLibFileName(options));
         }
 
         throw new Error("getDefaultLibFilePath is only supported when consumed as a node module. ");
