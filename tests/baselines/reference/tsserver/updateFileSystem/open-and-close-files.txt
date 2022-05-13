@@ -1,0 +1,47 @@
+
+#### Initial updateFileSystem
+//// [/a/b/app.ts] added
+import { xyz } from './file3'; let x = xyz
+
+//// [/a/b/commonFile1.ts] added
+let x = 1
+
+//// [/a/b/commonFile2.ts] added
+let y = 1
+
+//// [/a/b/file3.ts] added
+export let xyz = 1;
+
+//// [/a/b/tsconfig.json] added
+{}
+
+//// [/a/lib/lib.d.ts] added
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+
+
+
+#### Opening app.ts
+No changes.
+
+#### Opening file3.ts
+No changes.
+
+#### non-delete
+No changes.
+
+#### delete
+//// [/a/b/commonFile1.ts] deleted
+
+
+#### close
+No changes.

@@ -40,131 +40,68 @@ interface Array<T> { length: number; [n: number]: T; }`
             return `// some copy right notice
 ${file.fileContent}`;
         }
-        // TODO: This is almost certainly in harness/virtualFileSystemHost.ts, or should be.
-        function verifyFileSystem(host: VirtualFS.VirtualServerHost | undefined, files: protocol.FileSystemRequestArgs[]) {
-            // 1. make sure that everything in files is there
-            assert.isDefined(host);
-            const fs = (host as any).fs as ESMap<string, VirtualFS.FSEntry>;
-            // console.log(Array.from(fs.values() as any as Iterable<ts.TestFSWithWatch.FSEntry>).filter(ts.TestFSWithWatch.isFsFile))
-            assert.equal(Array.from(fs.values() as any as Iterable<VirtualFS.FSEntry>).filter(VirtualFS.isFsFile).length, files.length);
-            for (const { file, fileContent } of files) {
-                assert(host?.fileExists(file));
-                assert.equal(host!.readFile(file), fileContent);
+        function baselineFileSystem(scenario: string, subScenario: string, requests: [string, Partial<protocol.Request>][], host: VirtualFS.VirtualServerHost, session: TestSession) {
+            const history: string[] = []
+            let prev = host.snap()
+            for (const [name, request] of requests) {
+                session.executeCommandSeq(request)
+                history.push("")
+                history.push("#### " + name)
+                host.diff(history, prev)
+                prev = host.snap()
             }
-            // 2. make sure nothing else is
+            Harness.Baseline.runBaseline(`tsserver/${scenario}/${subScenario.split(" ").join("-")}.txt`, history.join("\r\n"));
+            baselineTsserverLogs(scenario, subScenario, session)
         }
+
         it("with updateFileSystem request", () => {
-            // TODO: probably some other watcher tests, not sure what
             const host = VirtualFS.createVirtualServerHost({ executingFilePath: "/a/tsc.js" });
-            const session = createSession(host, { fshost: host });
-            const files = [app, file1, file2, file3, config, lib];
-            session.executeCommandSeq<protocol.UpdateFileSystemRequest>({
-                command: protocol.CommandTypes.UpdateFileSystem,
-                arguments:{
-                    fileSystem: "memfs",
-                    files,
-                    deleted: [],
-                }
-            });
-            session.executeCommandSeq<protocol.OpenRequest>({
-                command: protocol.CommandTypes.Open,
-                arguments: { file: app.file }
-            });
-            const service = session.getProjectService(); // session -> service -> project
-            const project = service.configuredProjects.get(config.file)!;
-            const fakehost = (session as any).host as VirtualFS.VirtualServerHost;
-            assert.isDefined(project);
-            assert.equal(fakehost.fsWatches.size, 0);
-            assert.equal(fakehost.fsWatchesRecursive.size, 2);
-            assert.equal(fakehost.watchedFiles.size, 5);
-            verifyProjectVersion(project, 1);
-            session.executeCommandSeq<protocol.OpenRequest>({
-                command: protocol.CommandTypes.Open,
-                arguments: {
-                    file: file3.file,
-                    fileContent: fileContentWithComment(file3)
-                }
-            });
-            verifyProjectVersion(project, 2);
-
-            // Verify Texts
-            verifyFileSystem(host, files);
-            verifyText(service, file1.file, file1.fileContent);
-            verifyText(service, commonFile2.path, commonFile2.content);
-            verifyText(service, app.file, app.fileContent);
-            verifyText(service, file3.file, fileContentWithComment(file3));
-            assert.equal(fakehost.fsWatches.size, 0);
-            assert.equal(fakehost.fsWatchesRecursive.size, 2);
-            assert.equal(fakehost.watchedFiles.size, 4);
-
-            session.executeCommandSeq<protocol.UpdateFileSystemRequest>({
-                command: protocol.CommandTypes.UpdateFileSystem,
-                arguments:{
-                    fileSystem: "memfs",
-                    files: [],
-                    deleted: [],
-                }
-            });
-            // no change when not deleting file
-            verifyProjectVersion(project, 2);
-
-            // Verify Texts
-            verifyFileSystem(host, files);
-            verifyText(service, file1.file, file1.fileContent);
-            verifyText(service, commonFile2.path, commonFile2.content);
-            verifyText(service, app.file, app.fileContent);
-            verifyText(service, file3.file, fileContentWithComment(file3));
-            assert.equal(fakehost.fsWatches.size, 0);
-            assert.equal(fakehost.fsWatchesRecursive.size, 2);
-            assert.equal(fakehost.watchedFiles.size, 4);
-
-            session.executeCommandSeq<protocol.UpdateFileSystemRequest>({
-                command: protocol.CommandTypes.UpdateFileSystem,
-                arguments:{
-                    fileSystem: "memfs",
-                    files: [],
-                    deleted: [file1.file],
-                }
-            });
-            verifyProjectVersion(project, 3);
-
-            // Verify Texts
-            verifyFileSystem(host, [app, file2, file3, config, lib]);
-            verifyText(service, commonFile2.path, commonFile2.content);
-            verifyText(service, app.file, app.fileContent);
-            verifyText(service, file3.file, fileContentWithComment(file3));
-            assert.equal(fakehost.fsWatches.size, 0);
-            assert.equal(fakehost.fsWatchesRecursive.size, 2);
-            assert.equal(fakehost.watchedFiles.size, 3);
-
-            session.executeCommandSeq<protocol.CloseRequest>({
-                command: protocol.CommandTypes.Close,
-                arguments: { file: app.file }
-            });
-
-            // also no change when closing a file??? (changes session version but not project version?)
-            verifyProjectVersion(project, 3);
-
-            // Verify Texts
-            verifyFileSystem(host, [app, file2, file3, config, lib]);
-            verifyText(service, commonFile2.path, commonFile2.content);
-            verifyText(service, app.file, app.fileContent);
-            verifyText(service, file3.file, fileContentWithComment(file3));
-            assert.equal(fakehost.fsWatches.size, 0);
-            assert.equal(fakehost.fsWatchesRecursive.size, 2);
-            assert.equal(fakehost.watchedFiles.size, 4);
+            const session = createSession(host, { fshost: host, logger: createLoggerWithInMemoryLogs(), canUseEvents: true });
+            const requests: [string, Partial<protocol.Request>][] = [
+                ["Initial updateFileSystem", {
+                    command: protocol.CommandTypes.UpdateFileSystem,
+                    arguments:{
+                        fileSystem: "memfs",
+                        files: [app, file1, file2, file3, config, lib],
+                        deleted: [],
+                    }
+                }],
+                ["Opening app.ts", {
+                    command: protocol.CommandTypes.Open,
+                    arguments: { file: app.file }
+                }],
+                ["Opening file3.ts", {
+                    command: protocol.CommandTypes.Open,
+                    arguments: {
+                        file: file3.file,
+                        fileContent: fileContentWithComment(file3)
+                    }
+                }],
+                ["non-delete", {
+                    command: protocol.CommandTypes.UpdateFileSystem,
+                    arguments:{
+                        fileSystem: "memfs",
+                        files: [],
+                        deleted: [],
+                    }
+                }],
+                ["delete", {
+                    command: protocol.CommandTypes.UpdateFileSystem,
+                    arguments:{
+                        fileSystem: "memfs",
+                        files: [],
+                        deleted: [file1.file],
+                    }
+                }],
+                ["close", {
+                    command: protocol.CommandTypes.Close,
+                    arguments: { file: app.file }
+                }],
+            ]
+            const scenario = "updateFileSystem"
+            const subScenario = "open and close files"
+            baselineFileSystem(scenario, subScenario, requests, host, session);
         });
-
-        function verifyText(service: server.ProjectService, file: string, expected: string) {
-            const info = service.getScriptInfo(file)!;
-            const snap = info.getSnapshot();
-            // Verified applied in reverse order
-            assert.equal(snap.getText(0, snap.getLength()), expected, `Text of changed file: ${file}`);
-        }
-
-        function verifyProjectVersion(project: server.Project, expected: number) {
-            assert.equal(Number(project.getProjectVersion()), expected);
-        }
     });
     describe("unittests:: tsserver:: applyChangesToOpenFiles", () => {
         const configFile: File = {
