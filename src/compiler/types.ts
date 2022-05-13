@@ -5922,6 +5922,7 @@ namespace ts {
         mapper: TypeMapper;                           // Mapper that fixes inferences
         nonFixingMapper: TypeMapper;                  // Mapper that doesn't fix inferences
         returnMapper?: TypeMapper;                    // Type mapper for inferences from return types (if any)
+        combinedReturnMapper?: TypeMapper;            // Non-fixing mapper combined with return mapper for contextual signature instantiation
         inferredTypeParameters?: readonly TypeParameter[]; // Inferred type parameters for function result
         intraExpressionInferenceSites?: IntraExpressionInferenceSite[];
     }
