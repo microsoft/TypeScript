@@ -1,0 +1,68 @@
+=== tests/cases/conformance/types/tuple/variadicTupleRestSandwich.ts ===
+/**
+ * The (OK/Error) X (expected/unexpected) notations on the rhs 
+ * of the assignments are valid for versions 4.2.3 ~ 4.8 dev
+ */
+
+{
+    type T1 = [x:number,y?:boolean];
+>T1 : [x: number, y?: boolean | undefined]
+
+    type T2 = [...T1, "$"];  // GUI shows type T2 = [number, boolean | undefined, "$"]
+>T2 : [number, boolean | undefined, "$"]
+
+    const t2a:T2 = [1, "$"]; // Error (expected)
+>t2a : [number, boolean | undefined, "$"]
+>[1, "$"] : [number, string]
+>1 : 1
+>"$" : "$"
+
+    const t2b:T2 = [1, true, "$"]; // OK (expected)
+>t2b : [number, boolean | undefined, "$"]
+>[1, true, "$"] : [number, true, "$"]
+>1 : 1
+>true : true
+>"$" : "$"
+}
+
+{
+    type Last = "$";
+>Last : "$"
+
+    type T11 = [x:"^",...y:boolean[]];
+>T11 : [x: "^", ...y: boolean[]]
+
+    type T11m = [z?:string];
+>T11m : [z?: string | undefined]
+
+    type T12 = [...T11, ...T11m,"$"]; // type T12 = [1, ...(string | boolean | undefined)[], "$"]
+>T12 : ["^", ...(string | boolean | undefined)[], "$"]
+
+    const t12a:T12 = ["^", "$"]; // Error (unexpected)
+>t12a : ["^", ...(string | boolean | undefined)[], "$"]
+>["^", "$"] : ["^", "$"]
+>"^" : "^"
+>"$" : "$"
+
+    const t12b:T12 = ["^", true, "$"]; // Error (unexpected)
+>t12b : ["^", ...(string | boolean | undefined)[], "$"]
+>["^", true, "$"] : ["^", true, "$"]
+>"^" : "^"
+>true : true
+>"$" : "$"
+
+    const t12c:T12 = ["^", "$" as Last]; // OK (expected)
+>t12c : ["^", ...(string | boolean | undefined)[], "$"]
+>["^", "$" as Last] : ["^", "$"]
+>"^" : "^"
+>"$" as Last : "$"
+>"$" : "$"
+
+    const t12d:T12 = ["^", true, "$" as Last]; // OK (expected)
+>t12d : ["^", ...(string | boolean | undefined)[], "$"]
+>["^", true, "$" as Last] : ["^", true, "$"]
+>"^" : "^"
+>true : true
+>"$" as Last : "$"
+>"$" : "$"
+}
