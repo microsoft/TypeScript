@@ -1,5 +1,5 @@
 namespace ts.tscWatch {
-    it("unittests:: tsbuildWatch:: watchMode:: Public API with custom transformers / PublicAPI-impliedNodeFormat", () => {
+    it("unittests:: tsbuildWatch:: watchMode:: Public API with custom transformers impliedNodeFormat", () => {
         const solution: File = {
             path: `${projectRoot}/tsconfig.json`,
             content: JSON.stringify({
@@ -80,10 +80,6 @@ export function f22() { } // trailing`
                 sys.write(`fileName:${fileName},impliedNodeFormat:${impliedNodeFormatToString(x.impliedNodeFormat)}`+sys.newLine);
             });
         }
-        // function printModuleResolutionCache(buildr: SolutionBuilder<EmitAndSemanticDiagnosticsBuilderProgram>){
-        //     const x = { moduleResolutionCache: buildr.getModuleResolutionCache() };
-        //     sys.write(JSON.stringify(x,undefined,2));
-        // }
         const buildHost = createSolutionBuilderWithWatchHostForBaseline(sys, cb);
         buildHost.getCustomTransformers = getCustomTransformers;
         const builder = createSolutionBuilderWithWatch(buildHost, [solution.path], { verbose: true });
@@ -101,7 +97,7 @@ export function f22() { } // trailing`
         builder.build();
         runWatchBaseline({
             scenario: "publicApi",
-            subScenario: "with custom transformers, test that impliedNodeFormat is set",
+            subScenario: "with custom transformers impliedNodeFormat",
             commandLineArgs,
             sys,
             baseline,
