@@ -43,13 +43,13 @@ export function T3(a, b) {
     return _jsx("div", Object.assign({}, a, { className: "T3" }, b, { children: "T3" }));
 }
 export function T4(a, b) {
-    return _jsx("div", Object.assign({ className: "T4" }, Object.assign(Object.assign({}, a), b), { children: "T4" }));
+    return _jsx("div", Object.assign({ className: "T4" }, a, b, { children: "T4" }));
 }
 export function T5(a, b, c, d) {
-    return _jsx("div", Object.assign({ className: "T5" }, Object.assign(Object.assign(Object.assign({}, a), b), { c, d }), { children: "T5" }));
+    return _jsx("div", Object.assign({ className: "T5" }, a, b, { c, d }, { children: "T5" }));
 }
 export function T6(a, b, c, d) {
-    return _jsx("div", Object.assign({ className: "T6" }, Object.assign(Object.assign(Object.assign({}, a), b), Object.assign(Object.assign({}, c), d)), { children: "T6" }));
+    return _jsx("div", Object.assign({ className: "T6" }, a, b, Object.assign(Object.assign({}, c), d), { children: "T6" }));
 }
 export function T7(a, b, c, d) {
     return _jsx("div", { children: "T7" });

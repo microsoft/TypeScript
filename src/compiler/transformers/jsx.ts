@@ -170,7 +170,7 @@ namespace ts {
         function hasKeyAfterPropsSpread(node: JsxOpeningLikeElement) {
             let spread = false;
             for (const elem of node.attributes.properties) {
-                if (isJsxSpreadAttribute(elem)) {
+                if (isJsxSpreadAttribute(elem) && (!isObjectLiteralExpression(elem.expression) || elem.expression.properties.some(isSpreadAssignment))) {
                     spread = true;
                 }
                 else if (spread && isJsxAttribute(elem) && elem.name.escapedText === "key") {
@@ -348,7 +348,10 @@ namespace ts {
             return element;
         }
 
-        function transformJsxSpreadAttributeToSpreadAssignment(node: JsxSpreadAttribute) {
+        function transformJsxSpreadAttributeToProps(node: JsxSpreadAttribute) {
+            if (isObjectLiteralExpression(node.expression)) {
+                return node.expression.properties;
+            }
             return factory.createSpreadAssignment(visitNode(node.expression, visitor, isExpression));
         }
 
@@ -359,8 +362,8 @@ namespace ts {
         }
 
         function transformJsxAttributesToProps(attrs: readonly(JsxSpreadAttribute | JsxAttribute)[], children?: PropertyAssignment) {
-            const props = flatten<SpreadAssignment | PropertyAssignment>(spanMap(attrs, isJsxSpreadAttribute, (attrs, isSpread) =>
-                map(attrs, attr => isSpread ? transformJsxSpreadAttributeToSpreadAssignment(attr as JsxSpreadAttribute) : transformJsxAttributeToObjectLiteralElement(attr as JsxAttribute))));
+            const props = flatten(spanMap(attrs, isJsxSpreadAttribute, (attrs, isSpread) =>
+                flatten(map(attrs, attr => isSpread ? transformJsxSpreadAttributeToProps(attr as JsxSpreadAttribute) : transformJsxAttributeToObjectLiteralElement(attr as JsxAttribute)))));
             if (children) {
                 props.push(children);
             }
@@ -368,30 +371,52 @@ namespace ts {
         }
 
         function transformJsxAttributesToExpression(attrs: readonly(JsxSpreadAttribute | JsxAttribute)[], children?: PropertyAssignment) {
-            // Map spans of JsxAttribute nodes into object literals and spans
-            // of JsxSpreadAttribute nodes into expressions.
-            const expressions = flatten(
-                spanMap(attrs, isJsxSpreadAttribute, (attrs, isSpread) => isSpread
-                    ? map(attrs, transformJsxSpreadAttributeToExpression)
-                    : factory.createObjectLiteralExpression(map(attrs, transformJsxAttributeToObjectLiteralElement))
-                )
-            );
+            const expressions: Expression[] = [];
+            let properties: ObjectLiteralElementLike[] = [];
 
-            if (isJsxSpreadAttribute(attrs[0])) {
-                // We must always emit at least one object literal before a spread
-                // argument.factory.createObjectLiteral
-                expressions.unshift(factory.createObjectLiteralExpression());
+            for (const attr of attrs) {
+                if (isJsxSpreadAttribute(attr)) {
+                    // as an optimization we try to flatten the first level of spread inline object
+                    // as if its props would be passed as JSX attributes
+                    if (isObjectLiteralExpression(attr.expression)) {
+                        for (const prop of attr.expression.properties) {
+                            if (isSpreadAssignment(prop)) {
+                                finishObjectLiteralIfNeeded();
+                                expressions.push(prop.expression);
+                                continue;
+                            }
+                            properties.push(prop);
+                        }
+                        continue;
+                    }
+                    finishObjectLiteralIfNeeded();
+                    expressions.push(attr.expression);
+                    continue;
+                }
+                properties.push(transformJsxAttributeToObjectLiteralElement(attr));
             }
 
             if (children) {
-                expressions.push(factory.createObjectLiteralExpression([children]));
+                properties.push(children);
+            }
+
+            finishObjectLiteralIfNeeded();
+
+            if (expressions.length && !isObjectLiteralExpression(expressions[0])) {
+                // We must always emit at least one object literal before a spread attribute
+                // as the JSX always factory expects a fresh object, so we need to make a copy here
+                // we also avoid mutating an external reference by doing this (first expression is used as assign's target)
+                expressions.unshift(factory.createObjectLiteralExpression());
             }
 
             return singleOrUndefined(expressions) || emitHelpers().createAssignHelper(expressions);
-        }
 
-        function transformJsxSpreadAttributeToExpression(node: JsxSpreadAttribute) {
-            return visitNode(node.expression, visitor, isExpression);
+            function finishObjectLiteralIfNeeded() {
+                if (properties.length) {
+                    expressions.push(factory.createObjectLiteralExpression(properties));
+                    properties = [];
+                }
+            }
         }
 
         function transformJsxAttributeToObjectLiteralElement(node: JsxAttribute) {

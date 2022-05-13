@@ -37,11 +37,11 @@ export function T3(a, b) {
     return React.createElement("div", { ...a, className: "T3", ...b }, "T3");
 }
 export function T4(a, b) {
-    return React.createElement("div", { className: "T4", ...{ ...a, ...b } }, "T4");
+    return React.createElement("div", { className: "T4", ...a, ...b }, "T4");
 }
 export function T5(a, b, c, d) {
-    return React.createElement("div", { className: "T5", ...{ ...a, ...b, ...{ c, d } } }, "T5");
+    return React.createElement("div", { className: "T5", ...a, ...b, ...{ c, d } }, "T5");
 }
 export function T6(a, b, c, d) {
-    return React.createElement("div", { className: "T6", ...{ ...a, ...b, ...{ ...c, ...d } } }, "T6");
+    return React.createElement("div", { className: "T6", ...a, ...b, ...{ ...c, ...d } }, "T6");
 }
