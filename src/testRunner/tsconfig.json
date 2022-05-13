@@ -234,6 +234,7 @@
         "unittests/tsserver/typeOnlyImportChains.ts",
         "unittests/tsserver/typeReferenceDirectives.ts",
         "unittests/tsserver/typingsInstaller.ts",
+        "unittests/tsserver/updateFileSystem.ts",
         "unittests/tsserver/versionCache.ts",
         "unittests/tsserver/watchEnvironment.ts",
         "unittests/tsserver/webServer.ts",
