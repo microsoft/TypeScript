@@ -1020,6 +1020,10 @@
         "category": "Error",
         "code": 1340
     },
+    "Class constructor may not be an accessor.": {
+        "category": "Error",
+        "code": 1341
+    },
     "Type arguments cannot be used here.": {
         "category": "Error",
         "code": 1342
@@ -1091,6 +1095,10 @@
     "Identifier expected. '{0}' is a reserved word that cannot be used here.": {
         "category": "Error",
         "code": 1359
+    },
+    "Class constructor may not be a generator.": {
+        "category": "Error",
+        "code": 1360
     },
     "'{0}' cannot be used as a value because it was imported using 'import type'.": {
         "category": "Error",
