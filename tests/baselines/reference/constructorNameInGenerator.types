@@ -1,4 +1,4 @@
-=== tests/cases/compiler/constructorNameInGenerator.ts ===
+=== tests/cases/conformance/salsa/constructorNameInGenerator.ts ===
 class C2 {
 >C2 : C2
 

@@ -1,4 +1,4 @@
-=== tests/cases/compiler/constructorNameInAccessor.ts ===
+=== tests/cases/conformance/salsa/constructorNameInAccessor.ts ===
 class C1 {
 >C1 : Symbol(C1, Decl(constructorNameInAccessor.ts, 0, 0))
 
