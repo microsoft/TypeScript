@@ -400,26 +400,33 @@ namespace ts {
             return factory.createPropertyAssignment(name, expression);
         }
 
-        function transformJsxAttributeInitializer(node: StringLiteral | JsxExpression | undefined): Expression {
+        function transformJsxAttributeInitializer(node: JsxAttributeValue | undefined): Expression {
             if (node === undefined) {
                 return factory.createTrue();
             }
-            else if (node.kind === SyntaxKind.StringLiteral) {
+            if (node.kind === SyntaxKind.StringLiteral) {
                 // Always recreate the literal to escape any escape sequences or newlines which may be in the original jsx string and which
                 // Need to be escaped to be handled correctly in a normal string
                 const singleQuote = node.singleQuote !== undefined ? node.singleQuote : !isStringDoubleQuoted(node, currentSourceFile);
                 const literal = factory.createStringLiteral(tryDecodeEntities(node.text) || node.text, singleQuote);
                 return setTextRange(literal, node);
             }
-            else if (node.kind === SyntaxKind.JsxExpression) {
+            if (node.kind === SyntaxKind.JsxExpression) {
                 if (node.expression === undefined) {
                     return factory.createTrue();
                 }
                 return visitNode(node.expression, visitor, isExpression);
             }
-            else {
-                return Debug.failBadSyntaxKind(node);
+            if (isJsxElement(node)) {
+                return visitJsxElement(node, /*isChild*/ false);
             }
+            if (isJsxSelfClosingElement(node)) {
+                return visitJsxSelfClosingElement(node, /*isChild*/ false);
+            }
+            if (isJsxFragment(node)) {
+                return visitJsxFragment(node, /*isChild*/ false);
+            }
+            return Debug.failBadSyntaxKind(node);
         }
 
         function visitJsxText(node: JsxText): StringLiteral | undefined {

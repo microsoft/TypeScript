@@ -25,7 +25,7 @@ namespace ts {
          * shape of a the resulting SourceFile. This allows the DocumentRegistry to store
          * multiple copies of the same file for different compilation settings. A minimal
          * resolution cache is needed to fully define a source file's shape when
-         * the compilation settings include `module: node12`+, so providing a cache host
+         * the compilation settings include `module: node16`+, so providing a cache host
          * object should be preferred. A common host is a language service `ConfiguredProject`.
          * @param scriptSnapshot Text of the file. Only used if the file was not found
          * in the registry and a new one was created.
@@ -58,7 +58,7 @@ namespace ts {
          * shape of a the resulting SourceFile. This allows the DocumentRegistry to store
          * multiple copies of the same file for different compilation settings. A minimal
          * resolution cache is needed to fully define a source file's shape when
-         * the compilation settings include `module: node12`+, so providing a cache host
+         * the compilation settings include `module: node16`+, so providing a cache host
          * object should be preferred. A common host is a language service `ConfiguredProject`.
          * @param scriptSnapshot Text of the file.
          * @param version Current version of the file.

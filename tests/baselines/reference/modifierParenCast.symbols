@@ -1,0 +1,33 @@
+=== tests/cases/compiler/modifierParenCast.ts ===
+let readonly: any = undefined;
+>readonly : Symbol(readonly, Decl(modifierParenCast.ts, 0, 3))
+>undefined : Symbol(undefined)
+
+let override: any = undefined;
+>override : Symbol(override, Decl(modifierParenCast.ts, 1, 3))
+>undefined : Symbol(undefined)
+
+let out: any = undefined;
+>out : Symbol(out, Decl(modifierParenCast.ts, 2, 3))
+>undefined : Symbol(undefined)
+
+let declare: any = undefined;
+>declare : Symbol(declare, Decl(modifierParenCast.ts, 3, 3))
+>undefined : Symbol(undefined)
+
+export const a = (readonly as number);
+>a : Symbol(a, Decl(modifierParenCast.ts, 5, 12))
+>readonly : Symbol(readonly, Decl(modifierParenCast.ts, 0, 3))
+
+export const b = (override as number);
+>b : Symbol(b, Decl(modifierParenCast.ts, 6, 12))
+>override : Symbol(override, Decl(modifierParenCast.ts, 1, 3))
+
+export const c = (out as number);
+>c : Symbol(c, Decl(modifierParenCast.ts, 7, 12))
+>out : Symbol(out, Decl(modifierParenCast.ts, 2, 3))
+
+export const d = (declare as number);
+>d : Symbol(d, Decl(modifierParenCast.ts, 8, 12))
+>declare : Symbol(declare, Decl(modifierParenCast.ts, 3, 3))
+

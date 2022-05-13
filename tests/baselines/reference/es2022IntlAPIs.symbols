@@ -11,7 +11,7 @@ for (const zoneName of timezoneNames) {
   var formatter = new Intl.DateTimeFormat('en-US', {
 >formatter : Symbol(formatter, Decl(es2022IntlAPIs.ts, 3, 5))
 >Intl.DateTimeFormat : Symbol(Intl.DateTimeFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2021.intl.d.ts, --, --))
->Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --) ... and 1 more)
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --) ... and 2 more)
 >DateTimeFormat : Symbol(Intl.DateTimeFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2021.intl.d.ts, --, --))
 
     timeZone: 'America/Los_Angeles',

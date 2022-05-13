@@ -7,7 +7,7 @@ import type { TheNum } from 'pkg2'
 export const theNum: TheNum = 42;
 
 //// [/user/username/projects/myproject/packages/pkg1/tsconfig.json]
-{"compilerOptions":{"outDir":"build","module":"node12"},"references":[{"path":"../pkg2"}]}
+{"compilerOptions":{"outDir":"build","module":"node16"},"references":[{"path":"../pkg2"}]}
 
 //// [/user/username/projects/myproject/packages/pkg2/const.cts]
 export type TheNum = 42;
@@ -16,13 +16,13 @@ export type TheNum = 42;
 export type { TheNum } from './const.cjs';
 
 //// [/user/username/projects/myproject/packages/pkg2/tsconfig.json]
-{"compilerOptions":{"composite":true,"outDir":"build","module":"node12"}}
+{"compilerOptions":{"composite":true,"outDir":"build","module":"node16"}}
 
 //// [/user/username/projects/myproject/packages/pkg2/package.json]
 {"name":"pkg2","version":"1.0.0","main":"build/index.js","type":"module"}
 
 //// [/user/username/projects/myproject/node_modules/pkg2] symlink(/user/username/projects/myproject/packages/pkg2)
-//// [/a/lib/lib.es2020.full.d.ts]
+//// [/a/lib/lib.es2022.full.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -52,7 +52,7 @@ Output::
 Found 'package.json' at '/user/username/projects/myproject/packages/pkg2/package.json'.
 'package.json' does not have a 'typesVersions' field.
 ======== Resolving module './const.cjs' from '/user/username/projects/myproject/packages/pkg2/index.ts'. ========
-Module resolution kind is not specified, using 'Node12'.
+Module resolution kind is not specified, using 'Node16'.
 Loading module as file / folder, candidate module location '/user/username/projects/myproject/packages/pkg2/const.cjs', target file type 'TypeScript'.
 File name '/user/username/projects/myproject/packages/pkg2/const.cjs' has a '.cjs' extension - stripping it.
 File '/user/username/projects/myproject/packages/pkg2/const.cts' exist - use it as a name resolution result.
@@ -67,7 +67,7 @@ File '/package.json' does not exist.
 Found 'package.json' at '/user/username/projects/myproject/packages/pkg1/package.json'.
 'package.json' does not have a 'typesVersions' field.
 ======== Resolving module 'pkg2' from '/user/username/projects/myproject/packages/pkg1/index.ts'. ========
-Module resolution kind is not specified, using 'Node12'.
+Module resolution kind is not specified, using 'Node16'.
 File '/user/username/projects/myproject/packages/pkg1/package.json' exists according to earlier cached lookups.
 Loading module 'pkg2' from 'node_modules' folder, target file type 'TypeScript'.
 Directory '/user/username/projects/myproject/packages/pkg1/node_modules' does not exist, skipping all lookups in it.
@@ -90,7 +90,7 @@ File '/user/username/projects/myproject/packages/pkg2/build/package.json' does n
 File '/user/username/projects/myproject/packages/pkg2/package.json' exists according to earlier cached lookups.
 ======== Resolving module './const.cjs' from '/user/username/projects/myproject/packages/pkg2/build/index.d.ts'. ========
 Using compiler options of project reference redirect '/user/username/projects/myproject/packages/pkg2/tsconfig.json'.
-Module resolution kind is not specified, using 'Node12'.
+Module resolution kind is not specified, using 'Node16'.
 Loading module as file / folder, candidate module location '/user/username/projects/myproject/packages/pkg2/build/const.cjs', target file type 'TypeScript'.
 File name '/user/username/projects/myproject/packages/pkg2/build/const.cjs' has a '.cjs' extension - stripping it.
 File '/user/username/projects/myproject/packages/pkg2/build/const.cts' does not exist.
@@ -107,17 +107,17 @@ Program root files: ["/user/username/projects/myproject/packages/pkg2/const.cts"
 Program options: {"composite":true,"outDir":"/user/username/projects/myproject/packages/pkg2/build","module":100,"watch":true,"traceResolution":true,"configFilePath":"/user/username/projects/myproject/packages/pkg2/tsconfig.json"}
 Program structureReused: Not
 Program files::
-/a/lib/lib.es2020.full.d.ts
+/a/lib/lib.es2022.full.d.ts
 /user/username/projects/myproject/packages/pkg2/const.cts
 /user/username/projects/myproject/packages/pkg2/index.ts
 
 Semantic diagnostics in builder refreshed for::
-/a/lib/lib.es2020.full.d.ts
+/a/lib/lib.es2022.full.d.ts
 /user/username/projects/myproject/packages/pkg2/const.cts
 /user/username/projects/myproject/packages/pkg2/index.ts
 
 Shape signatures in builder refreshed for::
-/a/lib/lib.es2020.full.d.ts (used version)
+/a/lib/lib.es2022.full.d.ts (used version)
 /user/username/projects/myproject/packages/pkg2/const.cts (computed .d.ts during emit)
 /user/username/projects/myproject/packages/pkg2/index.ts (computed .d.ts during emit)
 
@@ -125,19 +125,19 @@ Program root files: ["/user/username/projects/myproject/packages/pkg1/index.ts"]
 Program options: {"outDir":"/user/username/projects/myproject/packages/pkg1/build","module":100,"watch":true,"traceResolution":true,"configFilePath":"/user/username/projects/myproject/packages/pkg1/tsconfig.json"}
 Program structureReused: Not
 Program files::
-/a/lib/lib.es2020.full.d.ts
+/a/lib/lib.es2022.full.d.ts
 /user/username/projects/myproject/packages/pkg2/build/const.d.cts
 /user/username/projects/myproject/packages/pkg2/build/index.d.ts
 /user/username/projects/myproject/packages/pkg1/index.ts
 
 Semantic diagnostics in builder refreshed for::
-/a/lib/lib.es2020.full.d.ts
+/a/lib/lib.es2022.full.d.ts
 /user/username/projects/myproject/packages/pkg2/build/const.d.cts
 /user/username/projects/myproject/packages/pkg2/build/index.d.ts
 /user/username/projects/myproject/packages/pkg1/index.ts
 
 Shape signatures in builder refreshed for::
-/a/lib/lib.es2020.full.d.ts (used version)
+/a/lib/lib.es2022.full.d.ts (used version)
 /user/username/projects/myproject/packages/pkg2/build/const.d.cts (used version)
 /user/username/projects/myproject/packages/pkg2/build/index.d.ts (used version)
 /user/username/projects/myproject/packages/pkg1/index.ts (used version)
@@ -198,13 +198,13 @@ export type { TheNum } from './const.cjs';
 
 
 //// [/user/username/projects/myproject/packages/pkg2/build/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../../../a/lib/lib.es2020.full.d.ts","../const.cts","../index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-11202312776-export type TheNum = 42;","signature":"-9649133742-export declare type TheNum = 42;\n","impliedFormat":1},{"version":"-9668872159-export type { TheNum } from './const.cjs';","signature":"-9835135925-export type { TheNum } from './const.cjs';\n","impliedFormat":99}],"options":{"composite":true,"module":100,"outDir":"./"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[[3,1]],"semanticDiagnosticsPerFile":[1,2,3]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../../../a/lib/lib.es2022.full.d.ts","../const.cts","../index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-11202312776-export type TheNum = 42;","signature":"-9649133742-export declare type TheNum = 42;\n","impliedFormat":1},{"version":"-9668872159-export type { TheNum } from './const.cjs';","signature":"-9835135925-export type { TheNum } from './const.cjs';\n","impliedFormat":99}],"options":{"composite":true,"module":100,"outDir":"./"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[[3,1]],"semanticDiagnosticsPerFile":[1,2,3]},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/packages/pkg2/build/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "program": {
     "fileNames": [
-      "../../../../../../../a/lib/lib.es2020.full.d.ts",
+      "../../../../../../../a/lib/lib.es2022.full.d.ts",
       "../const.cts",
       "../index.ts"
     ],
@@ -214,7 +214,7 @@ export type { TheNum } from './const.cjs';
       ]
     ],
     "fileInfos": {
-      "../../../../../../../a/lib/lib.es2020.full.d.ts": {
+      "../../../../../../../a/lib/lib.es2022.full.d.ts": {
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true,
@@ -247,7 +247,7 @@ export type { TheNum } from './const.cjs';
       ]
     },
     "semanticDiagnosticsPerFile": [
-      "../../../../../../../a/lib/lib.es2020.full.d.ts",
+      "../../../../../../../a/lib/lib.es2022.full.d.ts",
       "../const.cts",
       "../index.ts"
     ]
@@ -279,7 +279,7 @@ Output::
 Found 'package.json' at '/user/username/projects/myproject/packages/pkg1/package.json'.
 'package.json' does not have a 'typesVersions' field.
 ======== Resolving module 'pkg2' from '/user/username/projects/myproject/packages/pkg1/index.ts'. ========
-Module resolution kind is not specified, using 'Node12'.
+Module resolution kind is not specified, using 'Node16'.
 File '/user/username/projects/myproject/packages/pkg1/package.json' exists according to earlier cached lookups.
 Loading module 'pkg2' from 'node_modules' folder, target file type 'TypeScript'.
 Directory '/user/username/projects/myproject/packages/pkg1/node_modules' does not exist, skipping all lookups in it.
@@ -309,7 +309,7 @@ Found 'package.json' at '/user/username/projects/myproject/packages/pkg2/package
 'package.json' does not have a 'typesVersions' field.
 ======== Resolving module './const.cjs' from '/user/username/projects/myproject/packages/pkg2/build/index.d.ts'. ========
 Using compiler options of project reference redirect '/user/username/projects/myproject/packages/pkg2/tsconfig.json'.
-Module resolution kind is not specified, using 'Node12'.
+Module resolution kind is not specified, using 'Node16'.
 Loading module as file / folder, candidate module location '/user/username/projects/myproject/packages/pkg2/build/const.cjs', target file type 'TypeScript'.
 File name '/user/username/projects/myproject/packages/pkg2/build/const.cjs' has a '.cjs' extension - stripping it.
 File '/user/username/projects/myproject/packages/pkg2/build/const.cts' does not exist.
@@ -331,7 +331,7 @@ Program root files: ["/user/username/projects/myproject/packages/pkg1/index.ts"]
 Program options: {"outDir":"/user/username/projects/myproject/packages/pkg1/build","module":100,"watch":true,"traceResolution":true,"configFilePath":"/user/username/projects/myproject/packages/pkg1/tsconfig.json"}
 Program structureReused: Not
 Program files::
-/a/lib/lib.es2020.full.d.ts
+/a/lib/lib.es2022.full.d.ts
 /user/username/projects/myproject/packages/pkg2/build/const.d.cts
 /user/username/projects/myproject/packages/pkg2/build/index.d.ts
 /user/username/projects/myproject/packages/pkg1/index.ts
@@ -399,7 +399,7 @@ Output::
 Found 'package.json' at '/user/username/projects/myproject/packages/pkg1/package.json'.
 'package.json' does not have a 'typesVersions' field.
 ======== Resolving module 'pkg2' from '/user/username/projects/myproject/packages/pkg1/index.ts'. ========
-Module resolution kind is not specified, using 'Node12'.
+Module resolution kind is not specified, using 'Node16'.
 File '/user/username/projects/myproject/packages/pkg1/package.json' exists according to earlier cached lookups.
 Loading module 'pkg2' from 'node_modules' folder, target file type 'TypeScript'.
 Directory '/user/username/projects/myproject/packages/pkg1/node_modules' does not exist, skipping all lookups in it.
@@ -423,7 +423,7 @@ Found 'package.json' at '/user/username/projects/myproject/packages/pkg2/package
 'package.json' does not have a 'typesVersions' field.
 ======== Resolving module './const.cjs' from '/user/username/projects/myproject/packages/pkg2/build/index.d.ts'. ========
 Using compiler options of project reference redirect '/user/username/projects/myproject/packages/pkg2/tsconfig.json'.
-Module resolution kind is not specified, using 'Node12'.
+Module resolution kind is not specified, using 'Node16'.
 Loading module as file / folder, candidate module location '/user/username/projects/myproject/packages/pkg2/build/const.cjs', target file type 'TypeScript'.
 File name '/user/username/projects/myproject/packages/pkg2/build/const.cjs' has a '.cjs' extension - stripping it.
 File '/user/username/projects/myproject/packages/pkg2/build/const.cts' does not exist.
@@ -440,7 +440,7 @@ Program root files: ["/user/username/projects/myproject/packages/pkg1/index.ts"]
 Program options: {"outDir":"/user/username/projects/myproject/packages/pkg1/build","module":100,"watch":true,"traceResolution":true,"configFilePath":"/user/username/projects/myproject/packages/pkg1/tsconfig.json"}
 Program structureReused: Not
 Program files::
-/a/lib/lib.es2020.full.d.ts
+/a/lib/lib.es2022.full.d.ts
 /user/username/projects/myproject/packages/pkg2/build/const.d.cts
 /user/username/projects/myproject/packages/pkg2/build/index.d.ts
 /user/username/projects/myproject/packages/pkg1/index.ts
@@ -509,7 +509,7 @@ Output::
 Found 'package.json' at '/user/username/projects/myproject/packages/pkg1/package.json'.
 'package.json' does not have a 'typesVersions' field.
 ======== Resolving module 'pkg2' from '/user/username/projects/myproject/packages/pkg1/index.ts'. ========
-Module resolution kind is not specified, using 'Node12'.
+Module resolution kind is not specified, using 'Node16'.
 File '/user/username/projects/myproject/packages/pkg1/package.json' exists according to earlier cached lookups.
 Loading module 'pkg2' from 'node_modules' folder, target file type 'TypeScript'.
 Directory '/user/username/projects/myproject/packages/pkg1/node_modules' does not exist, skipping all lookups in it.
@@ -539,7 +539,7 @@ Found 'package.json' at '/user/username/projects/myproject/packages/pkg2/package
 'package.json' does not have a 'typesVersions' field.
 ======== Resolving module './const.cjs' from '/user/username/projects/myproject/packages/pkg2/build/index.d.ts'. ========
 Using compiler options of project reference redirect '/user/username/projects/myproject/packages/pkg2/tsconfig.json'.
-Module resolution kind is not specified, using 'Node12'.
+Module resolution kind is not specified, using 'Node16'.
 Loading module as file / folder, candidate module location '/user/username/projects/myproject/packages/pkg2/build/const.cjs', target file type 'TypeScript'.
 File name '/user/username/projects/myproject/packages/pkg2/build/const.cjs' has a '.cjs' extension - stripping it.
 File '/user/username/projects/myproject/packages/pkg2/build/const.cts' does not exist.
@@ -561,7 +561,7 @@ Program root files: ["/user/username/projects/myproject/packages/pkg1/index.ts"]
 Program options: {"outDir":"/user/username/projects/myproject/packages/pkg1/build","module":100,"watch":true,"traceResolution":true,"configFilePath":"/user/username/projects/myproject/packages/pkg1/tsconfig.json"}
 Program structureReused: Not
 Program files::
-/a/lib/lib.es2020.full.d.ts
+/a/lib/lib.es2022.full.d.ts
 /user/username/projects/myproject/packages/pkg2/build/const.d.cts
 /user/username/projects/myproject/packages/pkg2/build/index.d.ts
 /user/username/projects/myproject/packages/pkg1/index.ts
@@ -631,7 +631,7 @@ Output::
 [[90m12:01:40 AM[0m] Building project '/user/username/projects/myproject/packages/pkg2/tsconfig.json'...
 
 ======== Resolving module './const.cjs' from '/user/username/projects/myproject/packages/pkg2/index.cts'. ========
-Module resolution kind is not specified, using 'Node12'.
+Module resolution kind is not specified, using 'Node16'.
 Loading module as file / folder, candidate module location '/user/username/projects/myproject/packages/pkg2/const.cjs', target file type 'TypeScript'.
 File '/user/username/projects/myproject/packages/pkg2/const.cjs.ts' does not exist.
 File '/user/username/projects/myproject/packages/pkg2/const.cjs.tsx' does not exist.
@@ -650,7 +650,7 @@ Program root files: ["/user/username/projects/myproject/packages/pkg2/const.cts"
 Program options: {"composite":true,"outDir":"/user/username/projects/myproject/packages/pkg2/build","module":100,"watch":true,"traceResolution":true,"configFilePath":"/user/username/projects/myproject/packages/pkg2/tsconfig.json"}
 Program structureReused: Not
 Program files::
-/a/lib/lib.es2020.full.d.ts
+/a/lib/lib.es2022.full.d.ts
 /user/username/projects/myproject/packages/pkg2/const.cts
 /user/username/projects/myproject/packages/pkg2/index.cts
 
@@ -701,13 +701,13 @@ exitCode:: ExitStatus.undefined
 //// [/user/username/projects/myproject/packages/pkg2/build/const.cjs] file changed its modified time
 //// [/user/username/projects/myproject/packages/pkg2/build/const.d.cts] file changed its modified time
 //// [/user/username/projects/myproject/packages/pkg2/build/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../../../a/lib/lib.es2020.full.d.ts","../const.cts","../index.cts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-11202312776-export type TheNum = 42;","signature":"-9649133742-export declare type TheNum = 42;\n","impliedFormat":1},{"version":"-9668872159-export type { TheNum } from './const.cjs';","signature":"-9835135925-export type { TheNum } from './const.cjs';\n","impliedFormat":1}],"options":{"composite":true,"module":100,"outDir":"./"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[[3,1]],"semanticDiagnosticsPerFile":[1,2,3]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../../../a/lib/lib.es2022.full.d.ts","../const.cts","../index.cts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-11202312776-export type TheNum = 42;","signature":"-9649133742-export declare type TheNum = 42;\n","impliedFormat":1},{"version":"-9668872159-export type { TheNum } from './const.cjs';","signature":"-9835135925-export type { TheNum } from './const.cjs';\n","impliedFormat":1}],"options":{"composite":true,"module":100,"outDir":"./"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[[3,1]],"semanticDiagnosticsPerFile":[1,2,3]},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/packages/pkg2/build/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "program": {
     "fileNames": [
-      "../../../../../../../a/lib/lib.es2020.full.d.ts",
+      "../../../../../../../a/lib/lib.es2022.full.d.ts",
       "../const.cts",
       "../index.cts"
     ],
@@ -717,7 +717,7 @@ exitCode:: ExitStatus.undefined
       ]
     ],
     "fileInfos": {
-      "../../../../../../../a/lib/lib.es2020.full.d.ts": {
+      "../../../../../../../a/lib/lib.es2022.full.d.ts": {
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true,
@@ -750,7 +750,7 @@ exitCode:: ExitStatus.undefined
       ]
     },
     "semanticDiagnosticsPerFile": [
-      "../../../../../../../a/lib/lib.es2020.full.d.ts",
+      "../../../../../../../a/lib/lib.es2022.full.d.ts",
       "../const.cts",
       "../index.cts"
     ]

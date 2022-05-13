@@ -103,7 +103,7 @@ Output::
 [96muser/username/projects/myproject/another.ts[0m:[93m1[0m:[93m24[0m - [91merror[0m[90m TS1261: [0mAlready included file name '/user/username/projects/myproject/Logger.ts' differs from file name '/user/username/projects/myproject/logger.ts' only in casing.
   The file is in the program because:
     Imported via "./Logger" from file '/user/username/projects/myproject/another.ts'
-    Matched by include pattern '**/*' in '/user/username/projects/myproject/tsconfig.json'
+    Matched by default include pattern '**/*'
 
 [7m1[0m import { logger } from "./Logger"; new logger();
 [7m [0m [91m                       ~~~~~~~~~~[0m

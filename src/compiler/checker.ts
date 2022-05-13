@@ -1048,7 +1048,7 @@ namespace ts {
         const builtinGlobals = createSymbolTable();
         builtinGlobals.set(undefinedSymbol.escapedName, undefinedSymbol);
 
-        // Extensions suggested for path imports when module resolution is node12 or higher.
+        // Extensions suggested for path imports when module resolution is node16 or higher.
         // The first element of each tuple is the extension a file has.
         // The second element of each tuple is the extension that should be used in a path import.
         // e.g. if we want to import file `foo.mts`, we should write `import {} from "./foo.mjs".
@@ -3528,7 +3528,7 @@ namespace ts {
                     if (resolvedModule.isExternalLibraryImport && !resolutionExtensionIsTSOrJson(resolvedModule.extension)) {
                         errorOnImplicitAnyModule(/*isError*/ false, errorNode, resolvedModule, moduleReference);
                     }
-                    if (getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.Node12 || getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.NodeNext) {
+                    if (getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.Node16 || getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.NodeNext) {
                         const isSyncImport = (currentSourceFile.impliedNodeFormat === ModuleKind.CommonJS && !findAncestor(location, isImportCall)) || !!findAncestor(location, isImportEqualsDeclaration);
                         const overrideClauseHost = findAncestor(location, l => isImportTypeNode(l) || isExportDeclaration(l) || isImportDeclaration(l)) as ImportTypeNode | ImportDeclaration | ExportDeclaration | undefined;
                         const overrideClause = overrideClauseHost && isImportTypeNode(overrideClauseHost) ? overrideClauseHost.assertions?.assertClause : overrideClauseHost?.assertClause;
@@ -3536,9 +3536,6 @@ namespace ts {
                         // normal mode restrictions
                         if (isSyncImport && sourceFile.impliedNodeFormat === ModuleKind.ESNext && !getResolutionModeOverrideForClause(overrideClause)) {
                             error(errorNode, Diagnostics.Module_0_cannot_be_imported_using_this_construct_The_specifier_only_resolves_to_an_ES_module_which_cannot_be_imported_synchronously_Use_dynamic_import_instead, moduleReference);
-                        }
-                        if (mode === ModuleKind.ESNext && compilerOptions.resolveJsonModule && resolvedModule.extension === Extension.Json) {
-                            error(errorNode, Diagnostics.JSON_imports_are_experimental_in_ES_module_mode_imports);
                         }
                     }
                     // merged symbol is module declaration symbol combined with all augmentations
@@ -3596,7 +3593,7 @@ namespace ts {
                     const tsExtension = tryExtractTSExtension(moduleReference);
                     const isExtensionlessRelativePathImport = pathIsRelative(moduleReference) && !hasExtension(moduleReference);
                     const moduleResolutionKind = getEmitModuleResolutionKind(compilerOptions);
-                    const resolutionIsNode12OrNext = moduleResolutionKind === ModuleResolutionKind.Node12 ||
+                    const resolutionIsNode16OrNext = moduleResolutionKind === ModuleResolutionKind.Node16 ||
                         moduleResolutionKind === ModuleResolutionKind.NodeNext;
                     if (tsExtension) {
                         const diag = Diagnostics.An_import_path_cannot_end_with_a_0_extension_Consider_importing_1_instead;
@@ -3617,16 +3614,16 @@ namespace ts {
                         hasJsonModuleEmitEnabled(compilerOptions)) {
                         error(errorNode, Diagnostics.Cannot_find_module_0_Consider_using_resolveJsonModule_to_import_module_with_json_extension, moduleReference);
                     }
-                    else if (mode === ModuleKind.ESNext && resolutionIsNode12OrNext && isExtensionlessRelativePathImport) {
+                    else if (mode === ModuleKind.ESNext && resolutionIsNode16OrNext && isExtensionlessRelativePathImport) {
                         const absoluteRef = getNormalizedAbsolutePath(moduleReference, getDirectoryPath(currentSourceFile.path));
                         const suggestedExt = suggestedExtensions.find(([actualExt, _importExt]) => host.fileExists(absoluteRef + actualExt))?.[1];
                         if (suggestedExt) {
                             error(errorNode,
-                                Diagnostics.Relative_import_paths_need_explicit_file_extensions_in_EcmaScript_imports_when_moduleResolution_is_node12_or_nodenext_Did_you_mean_0,
+                                Diagnostics.Relative_import_paths_need_explicit_file_extensions_in_EcmaScript_imports_when_moduleResolution_is_node16_or_nodenext_Did_you_mean_0,
                                 moduleReference + suggestedExt);
                         }
                         else {
-                            error(errorNode, Diagnostics.Relative_import_paths_need_explicit_file_extensions_in_EcmaScript_imports_when_moduleResolution_is_node12_or_nodenext_Consider_adding_an_extension_to_the_import_path);
+                            error(errorNode, Diagnostics.Relative_import_paths_need_explicit_file_extensions_in_EcmaScript_imports_when_moduleResolution_is_node16_or_nodenext_Consider_adding_an_extension_to_the_import_path);
                         }
                     }
                     else {
@@ -4113,8 +4110,10 @@ namespace ts {
             return getMergedSymbol(symbol && (symbol.flags & SymbolFlags.ExportValue) !== 0 && symbol.exportSymbol || symbol);
         }
 
-        function symbolIsValue(symbol: Symbol): boolean {
-            return !!(symbol.flags & SymbolFlags.Value || symbol.flags & SymbolFlags.Alias && resolveAlias(symbol).flags & SymbolFlags.Value && !getTypeOnlyAliasDeclaration(symbol));
+        function symbolIsValue(symbol: Symbol, includeTypeOnlyMembers?: boolean): boolean {
+            return !!(
+                symbol.flags & SymbolFlags.Value ||
+                symbol.flags & SymbolFlags.Alias && resolveAlias(symbol).flags & SymbolFlags.Value && (includeTypeOnlyMembers || !getTypeOnlyAliasDeclaration(symbol)));
         }
 
         function findConstructorDeclaration(node: ClassLikeDeclaration): ConstructorDeclaration | undefined {
@@ -6191,7 +6190,7 @@ namespace ts {
                     const targetFile = getSourceFileOfModule(chain[0]);
                     let specifier: string | undefined;
                     let assertion: ImportTypeAssertionContainer | undefined;
-                    if (getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.Node12 || getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.NodeNext) {
+                    if (getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.Node16 || getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.NodeNext) {
                         // An `import` type directed at an esm format file is only going to resolve in esm mode - set the esm mode assertion
                         if (targetFile?.impliedNodeFormat === ModuleKind.ESNext && targetFile.impliedNodeFormat !== contextFile?.impliedNodeFormat) {
                             specifier = getSpecifierForModuleSymbol(chain[0], context, ModuleKind.ESNext);
@@ -6208,7 +6207,7 @@ namespace ts {
                     }
                     if (!(context.flags & NodeBuilderFlags.AllowNodeModulesRelativePaths) && getEmitModuleResolutionKind(compilerOptions) !== ModuleResolutionKind.Classic && specifier.indexOf("/node_modules/") >= 0) {
                         const oldSpecifier = specifier;
-                        if (getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.Node12 || getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.NodeNext) {
+                        if (getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.Node16 || getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.NodeNext) {
                             // We might be able to write a portable import type using a mode override; try specifier generation again, but with a different mode set
                             const swappedMode = contextFile?.impliedNodeFormat === ModuleKind.ESNext ? ModuleKind.CommonJS : ModuleKind.ESNext;
                             specifier = getSpecifierForModuleSymbol(chain[0], context, swappedMode);
@@ -11507,7 +11506,7 @@ namespace ts {
                 if (symbol === globalThisSymbol) {
                     const varsOnly = new Map<string, Symbol>() as SymbolTable;
                     members.forEach(p => {
-                        if (!(p.flags & SymbolFlags.BlockScoped)) {
+                        if (!(p.flags & SymbolFlags.BlockScoped) && !(p.flags & SymbolFlags.ValueModule && p.declarations?.length && every(p.declarations, isAmbientModule))) {
                             varsOnly.set(p.escapedName, p);
                         }
                     });
@@ -12578,12 +12577,12 @@ namespace ts {
          * @param type a type to look up property from
          * @param name a name of property to look up in a given type
          */
-        function getPropertyOfType(type: Type, name: __String, skipObjectFunctionPropertyAugment?: boolean): Symbol | undefined {
+        function getPropertyOfType(type: Type, name: __String, skipObjectFunctionPropertyAugment?: boolean, includeTypeOnlyMembers?: boolean): Symbol | undefined {
             type = getReducedApparentType(type);
             if (type.flags & TypeFlags.Object) {
                 const resolved = resolveStructuredTypeMembers(type as ObjectType);
                 const symbol = resolved.members.get(name);
-                if (symbol && symbolIsValue(symbol)) {
+                if (symbol && symbolIsValue(symbol, includeTypeOnlyMembers)) {
                     return symbol;
                 }
                 if (skipObjectFunctionPropertyAugment) return undefined;
@@ -16212,7 +16211,7 @@ namespace ts {
                         // the `exports` lookup process that only looks up namespace members which is used for most type references
                         const mergedResolvedSymbol = getMergedSymbol(resolveSymbol(currentNamespace));
                         const next = node.isTypeOf
-                            ? getPropertyOfType(getTypeOfSymbol(mergedResolvedSymbol), current.escapedText)
+                            ? getPropertyOfType(getTypeOfSymbol(mergedResolvedSymbol), current.escapedText, /*skipObjectFunctionPropertyAugment*/ false, /*includeTypeOnlyMembers*/ true)
                             : getSymbol(getExportsOfSymbol(mergedResolvedSymbol), current.escapedText, meaning);
                         if (!next) {
                             error(current, Diagnostics.Namespace_0_has_no_exported_member_1, getFullyQualifiedName(currentNamespace), declarationNameToString(current));
@@ -19351,6 +19350,20 @@ namespace ts {
                             }
                         }
                     }
+                    if (relation === comparableRelation && sourceFlags & TypeFlags.TypeParameter) {
+                        // This is a carve-out in comparability to essentially forbid comparing a type parameter
+                        // with another type parameter unless one extends the other. (Remember: comparability is mostly bidirectional!)
+                        let constraint = getConstraintOfTypeParameter(source);
+                        if (constraint && hasNonCircularBaseConstraint(source)) {
+                            while (constraint && constraint.flags & TypeFlags.TypeParameter) {
+                                if (result = isRelatedTo(constraint, target, RecursionFlags.Source, /*reportErrors*/ false)) {
+                                    return result;
+                                }
+                                constraint = getConstraintOfTypeParameter(constraint);
+                            }
+                        }
+                        return Ternary.False;
+                    }
                 }
                 else if (targetFlags & TypeFlags.Index) {
                     const targetType = (target as IndexType).type;
@@ -19562,8 +19575,8 @@ namespace ts {
                 if (sourceFlags & TypeFlags.TypeVariable) {
                     // IndexedAccess comparisons are handled above in the `targetFlags & TypeFlage.IndexedAccess` branch
                     if (!(sourceFlags & TypeFlags.IndexedAccess && targetFlags & TypeFlags.IndexedAccess)) {
-                        const constraint = getConstraintOfType(source as TypeVariable);
-                        if (!constraint || (sourceFlags & TypeFlags.TypeParameter && constraint.flags & TypeFlags.Any)) {
+                        const constraint = getConstraintOfType(source as TypeVariable) || unknownType;
+                        if (!getConstraintOfType(source as TypeVariable) || (sourceFlags & TypeFlags.TypeParameter && constraint.flags & TypeFlags.Any)) {
                             // A type variable with no constraint is not related to the non-primitive object type.
                             if (result = isRelatedTo(emptyObjectType, extractTypesOfKind(target, ~TypeFlags.NonPrimitive), RecursionFlags.Both)) {
                                 resetErrorInfo(saveErrorInfo);
@@ -19571,12 +19584,12 @@ namespace ts {
                             }
                         }
                         // hi-speed no-this-instantiation check (less accurate, but avoids costly `this`-instantiation when the constraint will suffice), see #28231 for report on why this is needed
-                        else if (result = isRelatedTo(constraint, target, RecursionFlags.Source, /*reportErrors*/ false, /*headMessage*/ undefined, intersectionState)) {
+                        if (result = isRelatedTo(constraint, target, RecursionFlags.Source, /*reportErrors*/ false, /*headMessage*/ undefined, intersectionState)) {
                             resetErrorInfo(saveErrorInfo);
                             return result;
                         }
                         // slower, fuller, this-instantiated check (necessary when comparing raw `this` types from base classes), see `subclassWithPolymorphicThisIsAssignable.ts` test for example
-                        else if (result = isRelatedTo(getTypeWithThisArgument(constraint, source), target, RecursionFlags.Source, reportErrors && !(targetFlags & sourceFlags & TypeFlags.TypeParameter), /*headMessage*/ undefined, intersectionState)) {
+                        else if (result = isRelatedTo(getTypeWithThisArgument(constraint, source), target, RecursionFlags.Source, reportErrors && constraint !== unknownType && !(targetFlags & sourceFlags & TypeFlags.TypeParameter), /*headMessage*/ undefined, intersectionState)) {
                             resetErrorInfo(saveErrorInfo);
                             return result;
                         }
@@ -25529,7 +25542,7 @@ namespace ts {
                 if (isBindingElement(declaration) && !declaration.initializer && !declaration.dotDotDotToken && declaration.parent.elements.length >= 2) {
                     const parent = declaration.parent.parent;
                     if (parent.kind === SyntaxKind.VariableDeclaration && getCombinedNodeFlags(declaration) & NodeFlags.Const || parent.kind === SyntaxKind.Parameter) {
-                        const links = getNodeLinks(location);
+                        const links = getNodeLinks(parent);
                         if (!(links.flags & NodeCheckFlags.InCheckIdentifier)) {
                             links.flags |= NodeCheckFlags.InCheckIdentifier;
                             const parentType = getTypeForBindingElementParent(parent, CheckMode.Normal);
@@ -26809,7 +26822,27 @@ namespace ts {
         }
 
         function getTypeOfPropertyOfContextualType(type: Type, name: __String, nameType?: Type) {
-            return mapType(type, t => {
+            return mapType(type, (t): Type | undefined => {
+                if (t.flags & TypeFlags.Intersection) {
+                    const intersection = t as IntersectionType;
+                    let newTypes = mapDefined(intersection.types, getTypeOfConcretePropertyOfContextualType);
+                    if (newTypes.length > 0) {
+                        return getIntersectionType(newTypes);
+                    }
+                    newTypes = mapDefined(intersection.types, getTypeOfApplicableIndexInfoOfContextualType);
+                    if (newTypes.length > 0) {
+                        return getIntersectionType(newTypes);
+                    }
+                    return undefined;
+                }
+                const concretePropertyType = getTypeOfConcretePropertyOfContextualType(t);
+                if (concretePropertyType) {
+                    return concretePropertyType;
+                }
+                return getTypeOfApplicableIndexInfoOfContextualType(t);
+            }, /*noReductions*/ true);
+
+            function getTypeOfConcretePropertyOfContextualType(t: Type) {
                 if (isGenericMappedType(t) && !t.declaration.nameType) {
                     const constraint = getConstraintTypeFromMappedType(t);
                     const constraintOfConstraint = getBaseConstraintOfType(constraint) || constraint;
@@ -26817,8 +26850,9 @@ namespace ts {
                     if (isTypeAssignableTo(propertyNameType, constraintOfConstraint)) {
                         return substituteIndexedMappedType(t, propertyNameType);
                     }
+                    return undefined;
                 }
-                else if (t.flags & TypeFlags.StructuredType) {
+                if (t.flags & TypeFlags.StructuredType) {
                     const prop = getPropertyOfType(t, name);
                     if (prop) {
                         return isCircularMappedProperty(prop) ? undefined : getTypeOfSymbol(prop);
@@ -26829,10 +26863,15 @@ namespace ts {
                             return restType;
                         }
                     }
-                    return findApplicableIndexInfo(getIndexInfosOfStructuredType(t), nameType || getStringLiteralType(unescapeLeadingUnderscores(name)))?.type;
                 }
                 return undefined;
-            }, /*noReductions*/ true);
+            }
+            function getTypeOfApplicableIndexInfoOfContextualType(t: Type) {
+                if (!(t.flags & TypeFlags.StructuredType)) {
+                    return undefined;
+                }
+                return findApplicableIndexInfo(getIndexInfosOfStructuredType(t), nameType || getStringLiteralType(unescapeLeadingUnderscores(name)))?.type;
+            }
         }
 
         // In an object literal contextually typed by a type T, the contextual type of a property assignment is the type of
@@ -28959,9 +28998,9 @@ namespace ts {
                     if (isIdentifier(left) && parentSymbol) {
                         markAliasReferenced(parentSymbol, node);
                     }
-                    return isErrorType(apparentType) ? errorType : apparentType;;
+                    return isErrorType(apparentType) ? errorType : apparentType;
                 }
-                prop = getPropertyOfType(apparentType, right.escapedText);
+                prop = getPropertyOfType(apparentType, right.escapedText, /*skipObjectFunctionPropertyAugment*/ false, /*includeTypeOnlyMembers*/ node.kind === SyntaxKind.QualifiedName);
             }
             // In `Foo.Bar.Baz`, 'Foo' is not referenced if 'Bar' is a const enum or a module containing only const enums.
             // `Foo` is also not referenced in `enum FooCopy { Bar = Foo.Bar }`, because the enum member value gets inlined
@@ -32058,13 +32097,13 @@ namespace ts {
         }
 
         function checkImportMetaProperty(node: MetaProperty) {
-            if (moduleKind === ModuleKind.Node12 || moduleKind === ModuleKind.NodeNext) {
+            if (moduleKind === ModuleKind.Node16 || moduleKind === ModuleKind.NodeNext) {
                 if (getSourceFileOfNode(node).impliedNodeFormat !== ModuleKind.ESNext) {
                     error(node, Diagnostics.The_import_meta_meta_property_is_not_allowed_in_files_which_will_build_into_CommonJS_output);
                 }
             }
             else if (moduleKind < ModuleKind.ES2020 && moduleKind !== ModuleKind.System) {
-                error(node, Diagnostics.The_import_meta_meta_property_is_only_allowed_when_the_module_option_is_es2020_es2022_esnext_system_node12_or_nodenext);
+                error(node, Diagnostics.The_import_meta_meta_property_is_only_allowed_when_the_module_option_is_es2020_es2022_esnext_system_node16_or_nodenext);
             }
             const file = getSourceFileOfNode(node);
             Debug.assert(!!(file.flags & NodeFlags.PossiblyContainsImportMeta), "Containing file is missing import meta node flag.");
@@ -33094,16 +33133,37 @@ namespace ts {
                     if (!hasParseDiagnostics(sourceFile)) {
                         let span: TextSpan | undefined;
                         if (!isEffectiveExternalModule(sourceFile, compilerOptions)) {
-                            if (!span) span = getSpanOfTokenAtPosition(sourceFile, node.pos);
+                            span ??= getSpanOfTokenAtPosition(sourceFile, node.pos);
                             const diagnostic = createFileDiagnostic(sourceFile, span.start, span.length,
                                 Diagnostics.await_expressions_are_only_allowed_at_the_top_level_of_a_file_when_that_file_is_a_module_but_this_file_has_no_imports_or_exports_Consider_adding_an_empty_export_to_make_this_file_a_module);
                             diagnostics.add(diagnostic);
                         }
-                        if ((moduleKind !== ModuleKind.ES2022 && moduleKind !== ModuleKind.ESNext && moduleKind !== ModuleKind.System && !(moduleKind === ModuleKind.NodeNext && getSourceFileOfNode(node).impliedNodeFormat === ModuleKind.ESNext)) || languageVersion < ScriptTarget.ES2017) {
-                            span = getSpanOfTokenAtPosition(sourceFile, node.pos);
-                            const diagnostic = createFileDiagnostic(sourceFile, span.start, span.length,
-                                Diagnostics.Top_level_await_expressions_are_only_allowed_when_the_module_option_is_set_to_es2022_esnext_system_or_nodenext_and_the_target_option_is_set_to_es2017_or_higher);
-                            diagnostics.add(diagnostic);
+                        switch (moduleKind) {
+                            case ModuleKind.Node16:
+                            case ModuleKind.NodeNext:
+                                if (sourceFile.impliedNodeFormat === ModuleKind.CommonJS) {
+                                    span ??= getSpanOfTokenAtPosition(sourceFile, node.pos);
+                                    diagnostics.add(
+                                        createFileDiagnostic(sourceFile, span.start, span.length, Diagnostics.The_current_file_is_a_CommonJS_module_and_cannot_use_await_at_the_top_level)
+                                    );
+                                    break;
+                                }
+                                // fallthrough
+                            case ModuleKind.ES2022:
+                            case ModuleKind.ESNext:
+                            case ModuleKind.System:
+                                if (languageVersion >= ScriptTarget.ES2017) {
+                                    break;
+                                }
+                                // fallthrough
+                            default:
+                                span ??= getSpanOfTokenAtPosition(sourceFile, node.pos);
+                                diagnostics.add(
+                                    createFileDiagnostic(sourceFile, span.start, span.length,
+                                        Diagnostics.Top_level_await_expressions_are_only_allowed_when_the_module_option_is_set_to_es2022_esnext_system_node16_or_nodenext_and_the_target_option_is_set_to_es2017_or_higher
+                                    )
+                                );
+                                break;
                         }
                     }
                 }
@@ -33918,6 +33978,10 @@ namespace ts {
                 case SyntaxKind.ExclamationEqualsToken:
                 case SyntaxKind.EqualsEqualsEqualsToken:
                 case SyntaxKind.ExclamationEqualsEqualsToken:
+                    if (isLiteralExpressionOfObject(left) || isLiteralExpressionOfObject(right)) {
+                        const eqType = operator === SyntaxKind.EqualsEqualsToken || operator === SyntaxKind.EqualsEqualsEqualsToken;
+                        error(errorNode, Diagnostics.This_condition_will_always_return_0_since_JavaScript_compares_objects_by_reference_not_value, eqType ? "false" : "true");
+                    }
                     reportOperatorErrorUnless((left, right) => isTypeEqualityComparableTo(left, right) || isTypeEqualityComparableTo(right, left));
                     return booleanType;
 
@@ -35807,8 +35871,8 @@ namespace ts {
             if (node.assertions) {
                 const override = getResolutionModeOverrideForClause(node.assertions.assertClause, grammarErrorOnNode);
                 if (override) {
-                    if (getEmitModuleResolutionKind(compilerOptions) !== ModuleResolutionKind.Node12 && getEmitModuleResolutionKind(compilerOptions) !== ModuleResolutionKind.NodeNext) {
-                        grammarErrorOnNode(node.assertions.assertClause, Diagnostics.Resolution_modes_are_only_supported_when_moduleResolution_is_node12_or_nodenext);
+                    if (getEmitModuleResolutionKind(compilerOptions) !== ModuleResolutionKind.Node16 && getEmitModuleResolutionKind(compilerOptions) !== ModuleResolutionKind.NodeNext) {
+                        grammarErrorOnNode(node.assertions.assertClause, Diagnostics.Resolution_modes_are_only_supported_when_moduleResolution_is_node16_or_nodenext);
                     }
                 }
             }
@@ -36239,7 +36303,7 @@ namespace ts {
          * @param type The type of the promise.
          * @remarks The "promised type" of a type is the type of the "value" parameter of the "onfulfilled" callback.
          */
-        function getPromisedTypeOfPromise(type: Type, errorNode?: Node): Type | undefined {
+        function getPromisedTypeOfPromise(type: Type, errorNode?: Node, thisTypeForErrorOut?: { value?: Type }): Type | undefined {
             //
             //  { // type
             //      then( // thenFunction
@@ -36281,7 +36345,30 @@ namespace ts {
                 return undefined;
             }
 
-            const onfulfilledParameterType = getTypeWithFacts(getUnionType(map(thenSignatures, getTypeOfFirstParameterOfSignature)), TypeFacts.NEUndefinedOrNull);
+            let thisTypeForError: Type | undefined;
+            let candidates: Signature[] | undefined;
+            for (const thenSignature of thenSignatures) {
+                const thisType = getThisTypeOfSignature(thenSignature);
+                if (thisType && thisType !== voidType && !isTypeRelatedTo(type, thisType, subtypeRelation)) {
+                    thisTypeForError = thisType;
+                }
+                else {
+                    candidates = append(candidates, thenSignature);
+                }
+            }
+
+            if (!candidates) {
+                Debug.assertIsDefined(thisTypeForError);
+                if (thisTypeForErrorOut) {
+                    thisTypeForErrorOut.value = thisTypeForError;
+                }
+                if (errorNode) {
+                    error(errorNode, Diagnostics.The_this_context_of_type_0_is_not_assignable_to_method_s_this_of_type_1, typeToString(type), typeToString(thisTypeForError));
+                }
+                return undefined;
+            }
+
+            const onfulfilledParameterType = getTypeWithFacts(getUnionType(map(candidates, getTypeOfFirstParameterOfSignature)), TypeFacts.NEUndefinedOrNull);
             if (isTypeAny(onfulfilledParameterType)) {
                 return undefined;
             }
@@ -36428,7 +36515,8 @@ namespace ts {
                 return typeAsAwaitable.awaitedTypeOfType = mapType(type, mapper);
             }
 
-            const promisedType = getPromisedTypeOfPromise(type);
+            const thisTypeForErrorOut: { value: Type | undefined } = { value: undefined };
+            const promisedType = getPromisedTypeOfPromise(type, /*errorNode*/ undefined, thisTypeForErrorOut);
             if (promisedType) {
                 if (type.id === promisedType.id || awaitedTypeStack.lastIndexOf(promisedType.id) >= 0) {
                     // Verify that we don't have a bad actor in the form of a promise whose
@@ -36501,7 +36589,12 @@ namespace ts {
             if (isThenableType(type)) {
                 if (errorNode) {
                     Debug.assertIsDefined(diagnosticMessage);
-                    error(errorNode, diagnosticMessage, arg0);
+                    let chain: DiagnosticMessageChain | undefined;
+                    if (thisTypeForErrorOut.value) {
+                        chain = chainDiagnosticMessages(chain, Diagnostics.The_this_context_of_type_0_is_not_assignable_to_method_s_this_of_type_1, typeToString(type), typeToString(thisTypeForErrorOut.value));
+                    }
+                    chain = chainDiagnosticMessages(chain, diagnosticMessage, arg0);
+                    diagnostics.add(createDiagnosticForNodeFromMessageChain(errorNode, chain));
                 }
                 return undefined;
             }
@@ -37426,7 +37519,7 @@ namespace ts {
 
         function checkCollisionWithRequireExportsInGeneratedCode(node: Node, name: Identifier | undefined) {
             // No need to check for require or exports for ES6 modules and later
-            if (moduleKind >= ModuleKind.ES2015 && !(moduleKind >= ModuleKind.Node12 && getSourceFileOfNode(node).impliedNodeFormat === ModuleKind.CommonJS)) {
+            if (moduleKind >= ModuleKind.ES2015 && !(moduleKind >= ModuleKind.Node16 && getSourceFileOfNode(node).impliedNodeFormat === ModuleKind.CommonJS)) {
                 return;
             }
 
@@ -40701,8 +40794,12 @@ namespace ts {
                 const validForTypeAssertions = isExclusivelyTypeOnlyImportOrExport(declaration);
                 const override = getResolutionModeOverrideForClause(declaration.assertClause, validForTypeAssertions ? grammarErrorOnNode : undefined);
                 if (validForTypeAssertions && override) {
-                    if (getEmitModuleResolutionKind(compilerOptions) !== ModuleResolutionKind.Node12 && getEmitModuleResolutionKind(compilerOptions) !== ModuleResolutionKind.NodeNext) {
-                        return grammarErrorOnNode(declaration.assertClause, Diagnostics.Resolution_modes_are_only_supported_when_moduleResolution_is_node12_or_nodenext);
+                    if (!isNightly()) {
+                        grammarErrorOnNode(declaration.assertClause, Diagnostics.Resolution_mode_assertions_are_unstable_Use_nightly_TypeScript_to_silence_this_error_Try_updating_with_npm_install_D_typescript_next);
+                    }
+
+                    if (getEmitModuleResolutionKind(compilerOptions) !== ModuleResolutionKind.Node16 && getEmitModuleResolutionKind(compilerOptions) !== ModuleResolutionKind.NodeNext) {
+                        return grammarErrorOnNode(declaration.assertClause, Diagnostics.Resolution_modes_are_only_supported_when_moduleResolution_is_node16_or_nodenext);
                     }
                     return; // Other grammar checks do not apply to type-only imports with resolution mode assertions
                 }
@@ -42181,7 +42278,7 @@ namespace ts {
             if (isDeclaration(node)) {
                 // In this case, we call getSymbolOfNode instead of getSymbolAtLocation because it is a declaration
                 const symbol = getSymbolOfNode(node);
-                return getTypeOfSymbol(symbol);
+                return symbol ? getTypeOfSymbol(symbol) : errorType;
             }
 
             if (isDeclarationNameOrImportPropertyName(node)) {
@@ -44174,9 +44271,30 @@ namespace ts {
                                 diagnostics.add(createDiagnosticForNode(forInOrOfStatement.awaitModifier,
                                     Diagnostics.for_await_loops_are_only_allowed_at_the_top_level_of_a_file_when_that_file_is_a_module_but_this_file_has_no_imports_or_exports_Consider_adding_an_empty_export_to_make_this_file_a_module));
                             }
-                            if ((moduleKind !== ModuleKind.ES2022 && moduleKind !== ModuleKind.ESNext && moduleKind !== ModuleKind.System && !(moduleKind === ModuleKind.NodeNext && getSourceFileOfNode(forInOrOfStatement).impliedNodeFormat === ModuleKind.ESNext)) || languageVersion < ScriptTarget.ES2017) {
-                                diagnostics.add(createDiagnosticForNode(forInOrOfStatement.awaitModifier,
-                                    Diagnostics.Top_level_for_await_loops_are_only_allowed_when_the_module_option_is_set_to_es2022_esnext_system_or_nodenext_and_the_target_option_is_set_to_es2017_or_higher));
+                            switch (moduleKind) {
+                                case ModuleKind.Node16:
+                                case ModuleKind.NodeNext:
+                                    if (sourceFile.impliedNodeFormat === ModuleKind.CommonJS) {
+                                        diagnostics.add(
+                                            createDiagnosticForNode(forInOrOfStatement.awaitModifier, Diagnostics.The_current_file_is_a_CommonJS_module_and_cannot_use_await_at_the_top_level)
+                                        );
+                                        break;
+                                    }
+                                    // fallthrough
+                                case ModuleKind.ES2022:
+                                case ModuleKind.ESNext:
+                                case ModuleKind.System:
+                                    if (languageVersion >= ScriptTarget.ES2017) {
+                                        break;
+                                    }
+                                    // fallthrough
+                                default:
+                                    diagnostics.add(
+                                        createDiagnosticForNode(forInOrOfStatement.awaitModifier,
+                                            Diagnostics.Top_level_for_await_loops_are_only_allowed_when_the_module_option_is_set_to_es2022_esnext_system_node16_or_nodenext_and_the_target_option_is_set_to_es2017_or_higher
+                                        )
+                                    );
+                                    break;
                             }
                         }
                     }
@@ -44948,7 +45066,7 @@ namespace ts {
 
         function checkGrammarImportCallExpression(node: ImportCall): boolean {
             if (moduleKind === ModuleKind.ES2015) {
-                return grammarErrorOnNode(node, Diagnostics.Dynamic_imports_are_only_supported_when_the_module_flag_is_set_to_es2020_es2022_esnext_commonjs_amd_system_umd_node12_or_nodenext);
+                return grammarErrorOnNode(node, Diagnostics.Dynamic_imports_are_only_supported_when_the_module_flag_is_set_to_es2020_es2022_esnext_commonjs_amd_system_umd_node16_or_nodenext);
             }
 
             if (node.typeArguments) {
@@ -44962,7 +45080,7 @@ namespace ts {
 
                 if (nodeArguments.length > 1) {
                     const assertionArgument = nodeArguments[1];
-                    return grammarErrorOnNode(assertionArgument, Diagnostics.Dynamic_imports_only_support_a_second_argument_when_the_module_option_is_set_to_esnext_or_nodenext);
+                    return grammarErrorOnNode(assertionArgument, Diagnostics.Dynamic_imports_only_support_a_second_argument_when_the_module_option_is_set_to_esnext_node16_or_nodenext);
                 }
             }
 

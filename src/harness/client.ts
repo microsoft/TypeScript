@@ -38,6 +38,7 @@ namespace ts.server {
         private lineMaps = new Map<string, number[]>();
         private messages: string[] = [];
         private lastRenameEntry: RenameEntry | undefined;
+        private preferences: UserPreferences | undefined;
 
         constructor(private host: SessionClientHost) {
         }
@@ -124,6 +125,7 @@ namespace ts.server {
 
         /*@internal*/
         configure(preferences: UserPreferences) {
+            this.preferences = preferences;
             const args: protocol.ConfigureRequestArguments = { preferences };
             const request = this.processRequest(CommandNames.Configure, args);
             this.processResponse(request, /*expectEmptyBody*/ true);
@@ -488,13 +490,25 @@ namespace ts.server {
             return notImplemented();
         }
 
-        findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean): RenameLocation[] {
+        findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean, providePrefixAndSuffixTextForRename?: boolean): RenameLocation[] {
             if (!this.lastRenameEntry ||
                 this.lastRenameEntry.inputs.fileName !== fileName ||
                 this.lastRenameEntry.inputs.position !== position ||
                 this.lastRenameEntry.inputs.findInStrings !== findInStrings ||
                 this.lastRenameEntry.inputs.findInComments !== findInComments) {
-                this.getRenameInfo(fileName, position, { allowRenameOfImportPath: true }, findInStrings, findInComments);
+                if (providePrefixAndSuffixTextForRename !== undefined) {
+                    // User preferences have to be set through the `Configure` command
+                    this.configure({ providePrefixAndSuffixTextForRename });
+                    // Options argument is not used, so don't pass in options
+                    this.getRenameInfo(fileName, position, /*options*/{}, findInStrings, findInComments);
+                    // Restore previous user preferences
+                    if (this.preferences) {
+                        this.configure(this.preferences);
+                    }
+                }
+                else {
+                    this.getRenameInfo(fileName, position, /*options*/{}, findInStrings, findInComments);
+                }
             }
 
             return this.lastRenameEntry!.locations;

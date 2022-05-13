@@ -1,0 +1,5 @@
+=== tests/cases/conformance/parser/ecmascript5/ArrowFunctionExpressions/parserArrowFunctionExpression16.ts ===
+true ? false ? (param): string => param : null : null
+>param : Symbol(param, Decl(parserArrowFunctionExpression16.ts, 0, 16))
+>param : Symbol(param, Decl(parserArrowFunctionExpression16.ts, 0, 16))
+

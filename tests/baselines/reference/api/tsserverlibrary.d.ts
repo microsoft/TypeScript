@@ -14,7 +14,7 @@ and limitations under the License.
 ***************************************************************************** */
 
 declare namespace ts {
-    const versionMajorMinor = "4.7";
+    const versionMajorMinor = "4.8";
     /** The version of the TypeScript compiler release */
     const version: string;
     /**
@@ -1388,8 +1388,9 @@ declare namespace ts {
         readonly kind: SyntaxKind.JsxAttribute;
         readonly parent: JsxAttributes;
         readonly name: Identifier;
-        readonly initializer?: StringLiteral | JsxExpression;
+        readonly initializer?: JsxAttributeValue;
     }
+    export type JsxAttributeValue = StringLiteral | JsxExpression | JsxElement | JsxSelfClosingElement | JsxFragment;
     export interface JsxSpreadAttribute extends ObjectLiteralElement {
         readonly kind: SyntaxKind.JsxSpreadAttribute;
         readonly parent: JsxAttributes;
@@ -2063,7 +2064,7 @@ declare namespace ts {
         hasNoDefaultLib: boolean;
         languageVersion: ScriptTarget;
         /**
-         * When `module` is `Node12` or `NodeNext`, this field controls whether the
+         * When `module` is `Node16` or `NodeNext`, this field controls whether the
          * source file in question is an ESNext-output-format file, or a CommonJS-output-format
          * module. This is derived by the module resolver as it looks up the file, since
          * it is derived from either the file extension of the module, or the containing
@@ -2893,7 +2894,7 @@ declare namespace ts {
     export enum ModuleResolutionKind {
         Classic = 1,
         NodeJs = 2,
-        Node12 = 3,
+        Node16 = 3,
         NodeNext = 99
     }
     export enum ModuleDetectionKind {
@@ -2902,7 +2903,7 @@ declare namespace ts {
          */
         Legacy = 1,
         /**
-         * Legacy, but also files with jsx under react-jsx or react-jsxdev and esm mode files under moduleResolution: node12+
+         * Legacy, but also files with jsx under react-jsx or react-jsxdev and esm mode files under moduleResolution: node16+
          */
         Auto = 2,
         /**
@@ -3074,7 +3075,7 @@ declare namespace ts {
         ES2020 = 6,
         ES2022 = 7,
         ESNext = 99,
-        Node12 = 100,
+        Node16 = 100,
         NodeNext = 199
     }
     export enum JsxEmit {
@@ -3746,8 +3747,8 @@ declare namespace ts {
         createJsxOpeningFragment(): JsxOpeningFragment;
         createJsxJsxClosingFragment(): JsxClosingFragment;
         updateJsxFragment(node: JsxFragment, openingFragment: JsxOpeningFragment, children: readonly JsxChild[], closingFragment: JsxClosingFragment): JsxFragment;
-        createJsxAttribute(name: Identifier, initializer: StringLiteral | JsxExpression | undefined): JsxAttribute;
-        updateJsxAttribute(node: JsxAttribute, name: Identifier, initializer: StringLiteral | JsxExpression | undefined): JsxAttribute;
+        createJsxAttribute(name: Identifier, initializer: JsxAttributeValue | undefined): JsxAttribute;
+        updateJsxAttribute(node: JsxAttribute, name: Identifier, initializer: JsxAttributeValue | undefined): JsxAttribute;
         createJsxAttributes(properties: readonly JsxAttributeLike[]): JsxAttributes;
         updateJsxAttributes(node: JsxAttributes, properties: readonly JsxAttributeLike[]): JsxAttributes;
         createJsxSpreadAttribute(expression: Expression): JsxSpreadAttribute;
@@ -4510,6 +4511,8 @@ declare namespace ts {
     function isObjectLiteralElement(node: Node): node is ObjectLiteralElement;
     function isStringLiteralLike(node: Node): node is StringLiteralLike;
     function isJSDocLinkLike(node: Node): node is JSDocLink | JSDocLinkCode | JSDocLinkPlain;
+    function hasRestParameter(s: SignatureDeclaration | JSDocSignature): boolean;
+    function isRestParameter(node: ParameterDeclaration | JSDocParameterTag): boolean;
 }
 declare namespace ts {
     const factory: NodeFactory;
@@ -4818,7 +4821,7 @@ declare namespace ts {
         /**
          * Controls the format the file is detected as - this can be derived from only the path
          * and files on disk, but needs to be done with a module resolution cache in scope to be performant.
-         * This is usually `undefined` for compilations that do not have `moduleResolution` values of `node12` or `nodenext`.
+         * This is usually `undefined` for compilations that do not have `moduleResolution` values of `node16` or `nodenext`.
          */
         impliedNodeFormat?: ModuleKind.ESNext | ModuleKind.CommonJS;
         /**
@@ -6822,7 +6825,7 @@ declare namespace ts {
          * shape of a the resulting SourceFile. This allows the DocumentRegistry to store
          * multiple copies of the same file for different compilation settings. A minimal
          * resolution cache is needed to fully define a source file's shape when
-         * the compilation settings include `module: node12`+, so providing a cache host
+         * the compilation settings include `module: node16`+, so providing a cache host
          * object should be preferred. A common host is a language service `ConfiguredProject`.
          * @param scriptSnapshot Text of the file. Only used if the file was not found
          * in the registry and a new one was created.
@@ -6841,7 +6844,7 @@ declare namespace ts {
          * shape of a the resulting SourceFile. This allows the DocumentRegistry to store
          * multiple copies of the same file for different compilation settings. A minimal
          * resolution cache is needed to fully define a source file's shape when
-         * the compilation settings include `module: node12`+, so providing a cache host
+         * the compilation settings include `module: node16`+, so providing a cache host
          * object should be preferred. A common host is a language service `ConfiguredProject`.
          * @param scriptSnapshot Text of the file.
          * @param version Current version of the file.
@@ -11337,9 +11340,9 @@ declare namespace ts {
     /** @deprecated Use `factory.updateJsxFragment` or the factory supplied by your transformation context instead. */
     const updateJsxFragment: (node: JsxFragment, openingFragment: JsxOpeningFragment, children: readonly JsxChild[], closingFragment: JsxClosingFragment) => JsxFragment;
     /** @deprecated Use `factory.createJsxAttribute` or the factory supplied by your transformation context instead. */
-    const createJsxAttribute: (name: Identifier, initializer: StringLiteral | JsxExpression | undefined) => JsxAttribute;
+    const createJsxAttribute: (name: Identifier, initializer: JsxAttributeValue | undefined) => JsxAttribute;
     /** @deprecated Use `factory.updateJsxAttribute` or the factory supplied by your transformation context instead. */
-    const updateJsxAttribute: (node: JsxAttribute, name: Identifier, initializer: StringLiteral | JsxExpression | undefined) => JsxAttribute;
+    const updateJsxAttribute: (node: JsxAttribute, name: Identifier, initializer: JsxAttributeValue | undefined) => JsxAttribute;
     /** @deprecated Use `factory.createJsxAttributes` or the factory supplied by your transformation context instead. */
     const createJsxAttributes: (properties: readonly JsxAttributeLike[]) => JsxAttributes;
     /** @deprecated Use `factory.updateJsxAttributes` or the factory supplied by your transformation context instead. */
