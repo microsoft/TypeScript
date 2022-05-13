@@ -2483,7 +2483,9 @@ namespace ts {
             return runWithCancellationToken(() => {
                 const resolver = getTypeChecker().getEmitResolver(sourceFile, cancellationToken);
                 // Don't actually write any files since we're just getting diagnostics.
-                return ts.getDeclarationDiagnostics(getEmitHost(noop), resolver, sourceFile) || emptyArray;
+                const emitHost = getEmitHost(noop);
+                const result = transformNodes(resolver, emitHost, factory, options, sourceFile ? [sourceFile] : filter(emitHost.getSourceFiles(), isSourceFileNotJson), [transformDeclarations], /*allowDtsFiles*/ false);
+                return result.diagnostics || emptyArray;
             });
         }
 

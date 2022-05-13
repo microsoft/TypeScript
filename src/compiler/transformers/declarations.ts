@@ -1,11 +1,5 @@
 /*@internal*/
 namespace ts {
-    export function getDeclarationDiagnostics(host: EmitHost, resolver: EmitResolver, file: SourceFile | undefined): DiagnosticWithLocation[] | undefined {
-        const compilerOptions = host.getCompilerOptions();
-        const result = transformNodes(resolver, host, factory, compilerOptions, file ? [file] : filter(host.getSourceFiles(), isSourceFileNotJson), [transformDeclarations], /*allowDtsFiles*/ false);
-        return result.diagnostics;
-    }
-
     function hasInternalAnnotation(range: CommentRange, currentSourceFile: SourceFile) {
         const comment = currentSourceFile.text.substring(range.pos, range.end);
         return stringContains(comment, "@internal");
