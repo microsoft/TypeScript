@@ -27875,7 +27875,7 @@ namespace ts {
                  * so there is code logic dulplication/mirroring.
                  * That may be condsidered bad for maintenance and upgrading.
                  * A little more work and these remaining cases should be able to be run in the new code.
-                 * On the other hand the below code is not too big - perhaps leave it?  Which is better?
+                 * On the other hand the below code is not too big - perhaps leave it? Which is better?
                  */
                 const elementTypes: Type[] = [];
                 const elementFlags: ElementFlags[] = [];
