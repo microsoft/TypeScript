@@ -51,7 +51,6 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
             case SyntaxKind.MethodDeclaration: {
                 updated = factory.updateMethodDeclaration(
                     lastDeclaration,
-                    RESERVED,
                     lastDeclaration.modifiers,
                     lastDeclaration.asteriskToken,
                     lastDeclaration.name,
@@ -75,7 +74,6 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
             case SyntaxKind.Constructor: {
                 updated = factory.updateConstructorDeclaration(
                     lastDeclaration,
-                    RESERVED,
                     lastDeclaration.modifiers,
                     getNewParametersForCombinedSignature(signatureDecls),
                     lastDeclaration.body
@@ -94,7 +92,6 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
             case SyntaxKind.FunctionDeclaration: {
                 updated = factory.updateFunctionDeclaration(
                     lastDeclaration,
-                    RESERVED,
                     lastDeclaration.modifiers,
                     lastDeclaration.asteriskToken,
                     lastDeclaration.name,
@@ -126,7 +123,6 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
             }
             return factory.createNodeArray([
                 factory.createParameterDeclaration(
-                    RESERVED,
                     /*modifiers*/ undefined,
                     factory.createToken(SyntaxKind.DotDotDotToken),
                     "args",

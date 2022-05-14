@@ -29,14 +29,12 @@ namespace ts.codefix {
         const importClause = Debug.checkDefined(importDeclaration.importClause);
         changes.replaceNode(context.sourceFile, importDeclaration, factory.updateImportDeclaration(
             importDeclaration,
-            RESERVED,
             importDeclaration.modifiers,
             factory.updateImportClause(importClause, importClause.isTypeOnly, importClause.name, /*namedBindings*/ undefined),
             importDeclaration.moduleSpecifier,
             importDeclaration.assertClause));
 
         changes.insertNodeAfter(context.sourceFile, importDeclaration, factory.createImportDeclaration(
-            RESERVED,
             /*modifiers*/ undefined,
             factory.updateImportClause(importClause, importClause.isTypeOnly, /*name*/ undefined, importClause.namedBindings),
             importDeclaration.moduleSpecifier,

@@ -25,7 +25,6 @@ namespace ts.codefix {
 
         const typeNode = factory.createTypeReferenceNode(param.name as Identifier, /*typeArguments*/ undefined);
         const replacement = factory.createParameterDeclaration(
-            RESERVED,
             param.modifiers,
             param.dotDotDotToken,
             "arg" + i,

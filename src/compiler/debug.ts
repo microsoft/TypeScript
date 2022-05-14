@@ -19,6 +19,7 @@ namespace ts {
         warnAfter?: Version | string;
         errorAfter?: Version | string;
         typeScriptVersion?: Version | string;
+        name?: string;
     }
 
     export namespace Debug {
@@ -732,7 +733,7 @@ namespace ts {
         }
 
         export function deprecate<F extends (...args: any[]) => any>(func: F, options?: DeprecationOptions): F {
-            const deprecation = createDeprecation(getFunctionName(func), options);
+            const deprecation = createDeprecation(options?.name ?? getFunctionName(func), options);
             return wrapFunction(deprecation, func);
         }
     }

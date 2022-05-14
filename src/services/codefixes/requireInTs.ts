@@ -24,8 +24,8 @@ namespace ts.codefix {
     function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, info: Info) {
         const { allowSyntheticDefaults, defaultImportName, namedImports, statement, required } = info;
         changes.replaceNode(sourceFile, statement, defaultImportName && !allowSyntheticDefaults
-            ? factory.createImportEqualsDeclaration(RESERVED, /*modifiers*/ undefined, /*isTypeOnly*/ false, defaultImportName, factory.createExternalModuleReference(required))
-            : factory.createImportDeclaration(RESERVED, /*modifiers*/ undefined, factory.createImportClause(/*isTypeOnly*/ false, defaultImportName, namedImports), required, /*assertClause*/ undefined));
+            ? factory.createImportEqualsDeclaration(/*modifiers*/ undefined, /*isTypeOnly*/ false, defaultImportName, factory.createExternalModuleReference(required))
+            : factory.createImportDeclaration(/*modifiers*/ undefined, factory.createImportClause(/*isTypeOnly*/ false, defaultImportName, namedImports), required, /*assertClause*/ undefined));
     }
 
     interface Info {

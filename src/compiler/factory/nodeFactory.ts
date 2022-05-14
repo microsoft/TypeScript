@@ -1,12 +1,6 @@
 namespace ts {
     let nextAutoGenerateId = 0;
 
-    /**
-     * Indicates a parameter that is reserved for future use or future removal.
-     */
-    /* @internal */
-    export const RESERVED = null; // eslint-disable-line no-null/no-null
-
     /* @internal */
     export const enum NodeFactoryFlags {
         None = 0,
@@ -598,12 +592,9 @@ namespace ts {
 
         function createBaseNamedDeclaration<T extends NamedDeclaration>(
             kind: T["kind"],
-            decorators: null,
             modifiers: readonly ModifierLike[] | undefined,
             name: Identifier | PrivateIdentifier | StringLiteralLike | NumericLiteral | ComputedPropertyName | BindingPattern | string | undefined
         ) {
-            Debug.assert(decorators === RESERVED, "Decorators have been merged with modifiers. If you're seeing this message you've likely accessed the factory via a non-public API.");
-
             const node = createBaseDeclaration(kind);
             name = asName(name);
             node.name = name;
@@ -638,14 +629,12 @@ namespace ts {
 
         function createBaseGenericNamedDeclaration<T extends NamedDeclaration & { typeParameters?: NodeArray<TypeParameterDeclaration> }>(
             kind: T["kind"],
-            decorators: null,
             modifiers: readonly ModifierLike[] | undefined,
             name: Identifier | PrivateIdentifier | StringLiteralLike | NumericLiteral | ComputedPropertyName | BindingPattern | string | undefined,
             typeParameters: readonly TypeParameterDeclaration[] | undefined
         ) {
             const node = createBaseNamedDeclaration(
                 kind,
-                decorators,
                 modifiers,
                 name
             );
@@ -657,7 +646,6 @@ namespace ts {
 
         function createBaseSignatureDeclaration<T extends SignatureDeclarationBase>(
             kind: T["kind"],
-            decorators: null,
             modifiers: readonly ModifierLike[] | undefined,
             name: Identifier | PrivateIdentifier | StringLiteralLike | NumericLiteral | ComputedPropertyName | BindingPattern | string | undefined,
             typeParameters: readonly TypeParameterDeclaration[] | undefined,
@@ -666,7 +654,6 @@ namespace ts {
         ) {
             const node = createBaseGenericNamedDeclaration(
                 kind,
-                decorators,
                 modifiers,
                 name,
                 typeParameters
@@ -693,7 +680,6 @@ namespace ts {
 
         function createBaseFunctionLikeDeclaration<T extends FunctionLikeDeclaration>(
             kind: T["kind"],
-            decorators: null,
             modifiers: readonly ModifierLike[] | undefined,
             name: Identifier | PrivateIdentifier | StringLiteralLike | NumericLiteral | ComputedPropertyName | BindingPattern | string | undefined,
             typeParameters: readonly TypeParameterDeclaration[] | undefined,
@@ -703,7 +689,6 @@ namespace ts {
         ) {
             const node = createBaseSignatureDeclaration(
                 kind,
-                decorators,
                 modifiers,
                 name,
                 typeParameters,
@@ -718,7 +703,6 @@ namespace ts {
 
         function createBaseInterfaceOrClassLikeDeclaration<T extends InterfaceDeclaration | ClassLikeDeclaration>(
             kind: T["kind"],
-            decorators: null,
             modifiers: readonly ModifierLike[] | undefined,
             name: string | Identifier | undefined,
             typeParameters: readonly TypeParameterDeclaration[] | undefined,
@@ -726,7 +710,6 @@ namespace ts {
         ) {
             const node = createBaseGenericNamedDeclaration(
                 kind,
-                decorators,
                 modifiers,
                 name,
                 typeParameters
@@ -738,7 +721,6 @@ namespace ts {
 
         function createBaseClassLikeDeclaration<T extends ClassLikeDeclaration>(
             kind: T["kind"],
-            decorators: null,
             modifiers: readonly ModifierLike[] | undefined,
             name: string | Identifier | undefined,
             typeParameters: readonly TypeParameterDeclaration[] | undefined,
@@ -747,7 +729,6 @@ namespace ts {
         ) {
             const node = createBaseInterfaceOrClassLikeDeclaration(
                 kind,
-                decorators,
                 modifiers,
                 name,
                 typeParameters,
@@ -760,14 +741,12 @@ namespace ts {
 
         function createBaseBindingLikeDeclaration<T extends PropertyDeclaration | VariableDeclaration | ParameterDeclaration | BindingElement>(
             kind: T["kind"],
-            decorators: null,
             modifiers: readonly ModifierLike[] | undefined,
             name: string | T["name"] | undefined,
             initializer: Expression | undefined
         ) {
             const node = createBaseNamedDeclaration(
                 kind,
-                decorators,
                 modifiers,
                 name
             );
@@ -778,7 +757,6 @@ namespace ts {
 
         function createBaseVariableLikeDeclaration<T extends PropertyDeclaration | VariableDeclaration | ParameterDeclaration>(
             kind: T["kind"],
-            decorators: null,
             modifiers: readonly ModifierLike[] | undefined,
             name: string | T["name"] | undefined,
             type: TypeNode | undefined,
@@ -786,7 +764,6 @@ namespace ts {
         ) {
             const node = createBaseBindingLikeDeclaration(
                 kind,
-                decorators,
                 modifiers,
                 name,
                 initializer
@@ -1137,7 +1114,6 @@ namespace ts {
         function createTypeParameterDeclaration(modifiers: readonly Modifier[] | undefined, name: string | Identifier, constraint?: TypeNode, defaultType?: TypeNode): TypeParameterDeclaration {
             const node = createBaseNamedDeclaration<TypeParameterDeclaration>(
                 SyntaxKind.TypeParameter,
-                /*decorators*/ RESERVED,
                 modifiers,
                 name
             );
@@ -1159,7 +1135,6 @@ namespace ts {
 
         // @api
         function createParameterDeclaration(
-            decorators: null,
             modifiers: readonly ModifierLike[] | undefined,
             dotDotDotToken: DotDotDotToken | undefined,
             name: string | BindingName,
@@ -1169,7 +1144,6 @@ namespace ts {
         ) {
             const node = createBaseVariableLikeDeclaration<ParameterDeclaration>(
                 SyntaxKind.Parameter,
-                decorators,
                 modifiers,
                 name,
                 type,
@@ -1194,7 +1168,6 @@ namespace ts {
         // @api
         function updateParameterDeclaration(
             node: ParameterDeclaration,
-            decorators: null,
             modifiers: readonly ModifierLike[] | undefined,
             dotDotDotToken: DotDotDotToken | undefined,
             name: string | BindingName,
@@ -1208,7 +1181,7 @@ namespace ts {
                 || node.questionToken !== questionToken
                 || node.type !== type
                 || node.initializer !== initializer
-                ? update(createParameterDeclaration(decorators, modifiers, dotDotDotToken, name, questionToken, type, initializer), node)
+                ? update(createParameterDeclaration(modifiers, dotDotDotToken, name, questionToken, type, initializer), node)
                 : node;
         }
 
@@ -1243,7 +1216,6 @@ namespace ts {
         ): PropertySignature {
             const node = createBaseNamedDeclaration<PropertySignature>(
                 SyntaxKind.PropertySignature,
-                /*decorators*/ RESERVED,
                 modifiers,
                 name
             );
@@ -1282,7 +1254,6 @@ namespace ts {
 
         // @api
         function createPropertyDeclaration(
-            decorators: null,
             modifiers: readonly ModifierLike[] | undefined,
             name: string | PropertyName,
             questionOrExclamationToken: QuestionToken | ExclamationToken | undefined,
@@ -1291,7 +1262,6 @@ namespace ts {
         ) {
             const node = createBaseVariableLikeDeclaration<PropertyDeclaration>(
                 SyntaxKind.PropertyDeclaration,
-                decorators,
                 modifiers,
                 name,
                 type,
@@ -1315,7 +1285,6 @@ namespace ts {
         // @api
         function updatePropertyDeclaration(
             node: PropertyDeclaration,
-            decorators: null,
             modifiers: readonly ModifierLike[] | undefined,
             name: string | PropertyName,
             questionOrExclamationToken: QuestionToken | ExclamationToken | undefined,
@@ -1328,7 +1297,7 @@ namespace ts {
                 || node.exclamationToken !== (questionOrExclamationToken !== undefined && isExclamationToken(questionOrExclamationToken) ? questionOrExclamationToken : undefined)
                 || node.type !== type
                 || node.initializer !== initializer
-                ? update(createPropertyDeclaration(decorators, modifiers, name, questionOrExclamationToken, type, initializer), node)
+                ? update(createPropertyDeclaration(modifiers, name, questionOrExclamationToken, type, initializer), node)
                 : node;
         }
 
@@ -1343,7 +1312,6 @@ namespace ts {
         ) {
             const node = createBaseSignatureDeclaration<MethodSignature>(
                 SyntaxKind.MethodSignature,
-                /*decorators*/ RESERVED,
                 modifiers,
                 name,
                 typeParameters,
@@ -1377,7 +1345,6 @@ namespace ts {
 
         // @api
         function createMethodDeclaration(
-            decorators: null,
             modifiers: readonly ModifierLike[] | undefined,
             asteriskToken: AsteriskToken | undefined,
             name: string | PropertyName,
@@ -1389,7 +1356,6 @@ namespace ts {
         ) {
             const node = createBaseFunctionLikeDeclaration<MethodDeclaration>(
                 SyntaxKind.MethodDeclaration,
-                decorators,
                 modifiers,
                 name,
                 typeParameters,
@@ -1426,7 +1392,6 @@ namespace ts {
         // @api
         function updateMethodDeclaration(
             node: MethodDeclaration,
-            decorators: null,
             modifiers: readonly ModifierLike[] | undefined,
             asteriskToken: AsteriskToken | undefined,
             name: PropertyName,
@@ -1444,7 +1409,7 @@ namespace ts {
                 || node.parameters !== parameters
                 || node.type !== type
                 || node.body !== body
-                ? finishUpdateMethodDeclaration(createMethodDeclaration(decorators, modifiers, asteriskToken, name, questionToken, typeParameters, parameters, type, body), node)
+                ? finishUpdateMethodDeclaration(createMethodDeclaration(modifiers, asteriskToken, name, questionToken, typeParameters, parameters, type, body), node)
                 : node;
         }
 
@@ -1457,15 +1422,10 @@ namespace ts {
 
         // @api
         function createClassStaticBlockDeclaration(
-            decorators: null,
-            modifiers: null,
             body: Block
         ): ClassStaticBlockDeclaration {
-            Debug.assert(decorators === RESERVED, "This node does not support decorators. If you're seeing this message you've likely accessed the factory via a non-public API.");
-            Debug.assert(modifiers === RESERVED, "This node does not support modifiers. If you're seeing this message you've likely accessed the factory via a non-public API.");
             const node = createBaseGenericNamedDeclaration<ClassStaticBlockDeclaration>(
                 SyntaxKind.ClassStaticBlockDeclaration,
-                decorators,
                 /*modifiers*/ undefined,
                 /*name*/ undefined,
                 /*typeParameters*/ undefined
@@ -1482,12 +1442,10 @@ namespace ts {
         // @api
         function updateClassStaticBlockDeclaration(
             node: ClassStaticBlockDeclaration,
-            decorators: null,
-            modifiers: null,
             body: Block
         ): ClassStaticBlockDeclaration {
             return node.body !== body
-                ? finishUpdateClassStaticBlockDeclaration(createClassStaticBlockDeclaration(decorators, modifiers, body), node)
+                ? finishUpdateClassStaticBlockDeclaration(createClassStaticBlockDeclaration(body), node)
                 : node;
         }
 
@@ -1501,15 +1459,12 @@ namespace ts {
 
         // @api
         function createConstructorDeclaration(
-            decorators: null,
             modifiers: readonly Modifier[] | undefined,
             parameters: readonly ParameterDeclaration[],
             body: Block | undefined
         ) {
-            Debug.assert(decorators === RESERVED, "This node does not support decorators. If you're seeing this message you've likely accessed the factory via a non-public API.");
             const node = createBaseFunctionLikeDeclaration<ConstructorDeclaration>(
                 SyntaxKind.Constructor,
-                decorators,
                 modifiers,
                 /*name*/ undefined,
                 /*typeParameters*/ undefined,
@@ -1529,7 +1484,6 @@ namespace ts {
         // @api
         function updateConstructorDeclaration(
             node: ConstructorDeclaration,
-            decorators: null,
             modifiers: readonly Modifier[] | undefined,
             parameters: readonly ParameterDeclaration[],
             body: Block | undefined
@@ -1537,7 +1491,7 @@ namespace ts {
             return node.modifiers !== modifiers
                 || node.parameters !== parameters
                 || node.body !== body
-                ? finishUpdateConstructorDeclaration(createConstructorDeclaration(decorators, modifiers, parameters, body), node)
+                ? finishUpdateConstructorDeclaration(createConstructorDeclaration(modifiers, parameters, body), node)
                 : node;
         }
 
@@ -1552,7 +1506,6 @@ namespace ts {
 
         // @api
         function createGetAccessorDeclaration(
-            decorators: null,
             modifiers: readonly ModifierLike[] | undefined,
             name: string | PropertyName,
             parameters: readonly ParameterDeclaration[],
@@ -1561,7 +1514,6 @@ namespace ts {
         ) {
             const node = createBaseFunctionLikeDeclaration<GetAccessorDeclaration>(
                 SyntaxKind.GetAccessor,
-                decorators,
                 modifiers,
                 name,
                 /*typeParameters*/ undefined,
@@ -1578,7 +1530,6 @@ namespace ts {
         // @api
         function updateGetAccessorDeclaration(
             node: GetAccessorDeclaration,
-            decorators: null,
             modifiers: readonly ModifierLike[] | undefined,
             name: PropertyName,
             parameters: readonly ParameterDeclaration[],
@@ -1590,7 +1541,7 @@ namespace ts {
                 || node.parameters !== parameters
                 || node.type !== type
                 || node.body !== body
-                ? finishUpdateGetAccessorDeclaration(createGetAccessorDeclaration(decorators, modifiers, name, parameters, type, body), node)
+                ? finishUpdateGetAccessorDeclaration(createGetAccessorDeclaration(modifiers, name, parameters, type, body), node)
                 : node;
         }
 
@@ -1603,7 +1554,6 @@ namespace ts {
 
         // @api
         function createSetAccessorDeclaration(
-            decorators: null,
             modifiers: readonly ModifierLike[] | undefined,
             name: string | PropertyName,
             parameters: readonly ParameterDeclaration[],
@@ -1611,7 +1561,6 @@ namespace ts {
         ) {
             const node = createBaseFunctionLikeDeclaration<SetAccessorDeclaration>(
                 SyntaxKind.SetAccessor,
-                decorators,
                 modifiers,
                 name,
                 /*typeParameters*/ undefined,
@@ -1629,7 +1578,6 @@ namespace ts {
         // @api
         function updateSetAccessorDeclaration(
             node: SetAccessorDeclaration,
-            decorators: null,
             modifiers: readonly ModifierLike[] | undefined,
             name: PropertyName,
             parameters: readonly ParameterDeclaration[],
@@ -1639,7 +1587,7 @@ namespace ts {
                 || node.name !== name
                 || node.parameters !== parameters
                 || node.body !== body
-                ? finishUpdateSetAccessorDeclaration(createSetAccessorDeclaration(decorators, modifiers, name, parameters, body), node)
+                ? finishUpdateSetAccessorDeclaration(createSetAccessorDeclaration(modifiers, name, parameters, body), node)
                 : node;
         }
 
@@ -1659,7 +1607,6 @@ namespace ts {
         ): CallSignatureDeclaration {
             const node = createBaseSignatureDeclaration<CallSignatureDeclaration>(
                 SyntaxKind.CallSignature,
-                /*decorators*/ RESERVED,
                 /*modifiers*/ undefined,
                 /*name*/ undefined,
                 typeParameters,
@@ -1692,7 +1639,6 @@ namespace ts {
         ): ConstructSignatureDeclaration {
             const node = createBaseSignatureDeclaration<ConstructSignatureDeclaration>(
                 SyntaxKind.ConstructSignature,
-                /*decorators*/ RESERVED,
                 /*modifiers*/ undefined,
                 /*name*/ undefined,
                 typeParameters,
@@ -1719,15 +1665,12 @@ namespace ts {
 
         // @api
         function createIndexSignature(
-            decorators: null,
             modifiers: readonly Modifier[] | undefined,
             parameters: readonly ParameterDeclaration[],
             type: TypeNode | undefined
         ): IndexSignatureDeclaration {
-            Debug.assert(decorators === RESERVED, "This node does not support decorators. If you're seeing this message you've likely accessed the factory via a non-public API.");
             const node = createBaseSignatureDeclaration<IndexSignatureDeclaration>(
                 SyntaxKind.IndexSignature,
-                decorators,
                 modifiers,
                 /*name*/ undefined,
                 /*typeParameters*/ undefined,
@@ -1741,7 +1684,6 @@ namespace ts {
         // @api
         function updateIndexSignature(
             node: IndexSignatureDeclaration,
-            decorators: null,
             modifiers: readonly Modifier[] | undefined,
             parameters: readonly ParameterDeclaration[],
             type: TypeNode
@@ -1749,7 +1691,7 @@ namespace ts {
             return node.parameters !== parameters
                 || node.type !== type
                 || node.modifiers !== modifiers
-                ? finishUpdateBaseSignatureDeclaration(createIndexSignature(decorators, modifiers, parameters, type), node)
+                ? finishUpdateBaseSignatureDeclaration(createIndexSignature(modifiers, parameters, type), node)
                 : node;
         }
 
@@ -1823,7 +1765,6 @@ namespace ts {
         ): FunctionTypeNode {
             const node = createBaseSignatureDeclaration<FunctionTypeNode>(
                 SyntaxKind.FunctionType,
-                /*decorators*/ RESERVED,
                 /*modifiers*/ undefined,
                 /*name*/ undefined,
                 typeParameters,
@@ -1873,7 +1814,6 @@ namespace ts {
         ): ConstructorTypeNode {
             const node = createBaseSignatureDeclaration<ConstructorTypeNode>(
                 SyntaxKind.ConstructorType,
-                /*decorators*/ RESERVED,
                 modifiers,
                 /*name*/ undefined,
                 typeParameters,
@@ -2306,7 +2246,6 @@ namespace ts {
         function createBindingElement(dotDotDotToken: DotDotDotToken | undefined, propertyName: string | PropertyName | undefined, name: string | BindingName, initializer?: Expression) {
             const node = createBaseBindingLikeDeclaration<BindingElement>(
                 SyntaxKind.BindingElement,
-                /*decorators*/ RESERVED,
                 /*modifiers*/ undefined,
                 name,
                 initializer && parenthesizerRules().parenthesizeExpressionForDisallowedComma(initializer)
@@ -2668,7 +2607,6 @@ namespace ts {
         ) {
             const node = createBaseFunctionLikeDeclaration<FunctionExpression>(
                 SyntaxKind.FunctionExpression,
-                /*decorators*/ RESERVED,
                 modifiers,
                 name,
                 typeParameters,
@@ -2728,7 +2666,6 @@ namespace ts {
         ) {
             const node = createBaseFunctionLikeDeclaration<ArrowFunction>(
                 SyntaxKind.ArrowFunction,
-                /*decorators*/ RESERVED,
                 modifiers,
                 /*name*/ undefined,
                 typeParameters,
@@ -3100,7 +3037,6 @@ namespace ts {
 
         // @api
         function createClassExpression(
-            decorators: null,
             modifiers: readonly ModifierLike[] | undefined,
             name: string | Identifier | undefined,
             typeParameters: readonly TypeParameterDeclaration[] | undefined,
@@ -3109,7 +3045,6 @@ namespace ts {
         ) {
             const node = createBaseClassLikeDeclaration<ClassExpression>(
                 SyntaxKind.ClassExpression,
-                decorators,
                 modifiers,
                 name,
                 typeParameters,
@@ -3123,7 +3058,6 @@ namespace ts {
         // @api
         function updateClassExpression(
             node: ClassExpression,
-            decorators: null,
             modifiers: readonly ModifierLike[] | undefined,
             name: Identifier | undefined,
             typeParameters: readonly TypeParameterDeclaration[] | undefined,
@@ -3135,7 +3069,7 @@ namespace ts {
                 || node.typeParameters !== typeParameters
                 || node.heritageClauses !== heritageClauses
                 || node.members !== members
-                ? update(createClassExpression(decorators, modifiers, name, typeParameters, heritageClauses, members), node)
+                ? update(createClassExpression(modifiers, name, typeParameters, heritageClauses, members), node)
                 : node;
         }
 
@@ -3632,7 +3566,6 @@ namespace ts {
         function createVariableDeclaration(name: string | BindingName, exclamationToken: ExclamationToken | undefined, type: TypeNode | undefined, initializer: Expression | undefined) {
             const node = createBaseVariableLikeDeclaration<VariableDeclaration>(
                 SyntaxKind.VariableDeclaration,
-                /*decorators*/ RESERVED,
                 /*modifiers*/ undefined,
                 name,
                 type,
@@ -3681,7 +3614,6 @@ namespace ts {
 
         // @api
         function createFunctionDeclaration(
-            decorators: null,
             modifiers: readonly ModifierLike[] | undefined,
             asteriskToken: AsteriskToken | undefined,
             name: string | Identifier | undefined,
@@ -3692,7 +3624,6 @@ namespace ts {
         ) {
             const node = createBaseFunctionLikeDeclaration<FunctionDeclaration>(
                 SyntaxKind.FunctionDeclaration,
-                decorators,
                 modifiers,
                 name,
                 typeParameters,
@@ -3729,7 +3660,6 @@ namespace ts {
         // @api
         function updateFunctionDeclaration(
             node: FunctionDeclaration,
-            decorators: null,
             modifiers: readonly ModifierLike[] | undefined,
             asteriskToken: AsteriskToken | undefined,
             name: Identifier | undefined,
@@ -3745,7 +3675,7 @@ namespace ts {
                 || node.parameters !== parameters
                 || node.type !== type
                 || node.body !== body
-                ? finishUpdateFunctionDeclaration(createFunctionDeclaration(decorators, modifiers, asteriskToken, name, typeParameters, parameters, type, body), node)
+                ? finishUpdateFunctionDeclaration(createFunctionDeclaration(modifiers, asteriskToken, name, typeParameters, parameters, type, body), node)
                 : node;
         }
 
@@ -3759,7 +3689,6 @@ namespace ts {
 
         // @api
         function createClassDeclaration(
-            decorators: null,
             modifiers: readonly ModifierLike[] | undefined,
             name: string | Identifier | undefined,
             typeParameters: readonly TypeParameterDeclaration[] | undefined,
@@ -3768,7 +3697,6 @@ namespace ts {
         ) {
             const node = createBaseClassLikeDeclaration<ClassDeclaration>(
                 SyntaxKind.ClassDeclaration,
-                decorators,
                 modifiers,
                 name,
                 typeParameters,
@@ -3790,7 +3718,6 @@ namespace ts {
         // @api
         function updateClassDeclaration(
             node: ClassDeclaration,
-            decorators: null,
             modifiers: readonly ModifierLike[] | undefined,
             name: Identifier | undefined,
             typeParameters: readonly TypeParameterDeclaration[] | undefined,
@@ -3802,23 +3729,20 @@ namespace ts {
                 || node.typeParameters !== typeParameters
                 || node.heritageClauses !== heritageClauses
                 || node.members !== members
-                ? update(createClassDeclaration(decorators, modifiers, name, typeParameters, heritageClauses, members), node)
+                ? update(createClassDeclaration(modifiers, name, typeParameters, heritageClauses, members), node)
                 : node;
         }
 
         // @api
         function createInterfaceDeclaration(
-            decorators: null,
             modifiers: readonly Modifier[] | undefined,
             name: string | Identifier,
             typeParameters: readonly TypeParameterDeclaration[] | undefined,
             heritageClauses: readonly HeritageClause[] | undefined,
             members: readonly TypeElement[]
         ) {
-            Debug.assert(decorators === RESERVED, "This node does not support decorators. If you're seeing this message you've likely accessed the factory via a non-public API.");
             const node = createBaseInterfaceOrClassLikeDeclaration<InterfaceDeclaration>(
                 SyntaxKind.InterfaceDeclaration,
-                decorators,
                 modifiers,
                 name,
                 typeParameters,
@@ -3835,7 +3759,6 @@ namespace ts {
         // @api
         function updateInterfaceDeclaration(
             node: InterfaceDeclaration,
-            decorators: null,
             modifiers: readonly Modifier[] | undefined,
             name: Identifier,
             typeParameters: readonly TypeParameterDeclaration[] | undefined,
@@ -3847,7 +3770,7 @@ namespace ts {
                 || node.typeParameters !== typeParameters
                 || node.heritageClauses !== heritageClauses
                 || node.members !== members
-                ? finishUpdateInterfaceDeclaration(createInterfaceDeclaration(decorators, modifiers, name, typeParameters, heritageClauses, members), node)
+                ? finishUpdateInterfaceDeclaration(createInterfaceDeclaration(modifiers, name, typeParameters, heritageClauses, members), node)
                 : node;
         }
 
@@ -3860,16 +3783,13 @@ namespace ts {
 
         // @api
         function createTypeAliasDeclaration(
-            decorators: null,
             modifiers: readonly Modifier[] | undefined,
             name: string | Identifier,
             typeParameters: readonly TypeParameterDeclaration[] | undefined,
             type: TypeNode
         ) {
-            Debug.assert(decorators === RESERVED, "This node does not support decorators. If you're seeing this message you've likely accessed the factory via a non-public API.");
             const node = createBaseGenericNamedDeclaration<TypeAliasDeclaration>(
                 SyntaxKind.TypeAliasDeclaration,
-                decorators,
                 modifiers,
                 name,
                 typeParameters
@@ -3885,7 +3805,6 @@ namespace ts {
         // @api
         function updateTypeAliasDeclaration(
             node: TypeAliasDeclaration,
-            decorators: null,
             modifiers: readonly Modifier[] | undefined,
             name: Identifier,
             typeParameters: readonly TypeParameterDeclaration[] | undefined,
@@ -3895,7 +3814,7 @@ namespace ts {
                 || node.name !== name
                 || node.typeParameters !== typeParameters
                 || node.type !== type
-                ? finishUpdateTypeAliasDeclaration(createTypeAliasDeclaration(decorators, modifiers, name, typeParameters, type), node)
+                ? finishUpdateTypeAliasDeclaration(createTypeAliasDeclaration(modifiers, name, typeParameters, type), node)
                 : node;
         }
 
@@ -3908,15 +3827,12 @@ namespace ts {
 
         // @api
         function createEnumDeclaration(
-            decorators: null,
             modifiers: readonly Modifier[] | undefined,
             name: string | Identifier,
             members: readonly EnumMember[]
         ) {
-            Debug.assert(decorators === RESERVED, "This node does not support decorators. If you're seeing this message you've likely accessed the factory via a non-public API.");
             const node = createBaseNamedDeclaration<EnumDeclaration>(
                 SyntaxKind.EnumDeclaration,
-                decorators,
                 modifiers,
                 name
             );
@@ -3934,14 +3850,13 @@ namespace ts {
         // @api
         function updateEnumDeclaration(
             node: EnumDeclaration,
-            decorators: null,
             modifiers: readonly Modifier[] | undefined,
             name: Identifier,
             members: readonly EnumMember[]) {
             return node.modifiers !== modifiers
                 || node.name !== name
                 || node.members !== members
-                ? finishUpdateEnumDeclaration(createEnumDeclaration(decorators, modifiers, name, members), node)
+                ? finishUpdateEnumDeclaration(createEnumDeclaration(modifiers, name, members), node)
                 : node;
         }
 
@@ -3954,14 +3869,11 @@ namespace ts {
 
         // @api
         function createModuleDeclaration(
-            decorators: null,
             modifiers: readonly Modifier[] | undefined,
             name: ModuleName,
             body: ModuleBody | undefined,
             flags = NodeFlags.None
         ) {
-            Debug.assert(decorators === RESERVED, "This node does not support decorators. If you're seeing this message you've likely accessed the factory via a non-public API.");
-
             const node = createBaseDeclaration<ModuleDeclaration>(SyntaxKind.ModuleDeclaration);
             node.modifiers = asNodeArray(modifiers);
             node.flags |= flags & (NodeFlags.Namespace | NodeFlags.NestedNamespace | NodeFlags.GlobalAugmentation);
@@ -3987,7 +3899,6 @@ namespace ts {
         // @api
         function updateModuleDeclaration(
             node: ModuleDeclaration,
-            decorators: null,
             modifiers: readonly Modifier[] | undefined,
             name: ModuleName,
             body: ModuleBody | undefined
@@ -3995,7 +3906,7 @@ namespace ts {
             return node.modifiers !== modifiers
                 || node.name !== name
                 || node.body !== body
-                ? finishUpdateModuleDeclaration(createModuleDeclaration(decorators, modifiers, name, body, node.flags), node)
+                ? finishUpdateModuleDeclaration(createModuleDeclaration(modifiers, name, body, node.flags), node)
                 : node;
         }
 
@@ -4040,7 +3951,6 @@ namespace ts {
         function createNamespaceExportDeclaration(name: string | Identifier) {
             const node = createBaseNamedDeclaration<NamespaceExportDeclaration>(
                 SyntaxKind.NamespaceExportDeclaration,
-                /*decorators*/ RESERVED,
                 /*modifiers*/ undefined,
                 name
             );
@@ -4069,16 +3979,13 @@ namespace ts {
 
         // @api
         function createImportEqualsDeclaration(
-            decorators: null,
             modifiers: readonly Modifier[] | undefined,
             isTypeOnly: boolean,
             name: string | Identifier,
             moduleReference: ModuleReference
         ) {
-            Debug.assert(decorators === RESERVED, "This node does not support decorators. If you're seeing this message you've likely accessed the factory via a non-public API.");
             const node = createBaseNamedDeclaration<ImportEqualsDeclaration>(
                 SyntaxKind.ImportEqualsDeclaration,
-                decorators,
                 modifiers,
                 name
             );
@@ -4096,7 +4003,6 @@ namespace ts {
         // @api
         function updateImportEqualsDeclaration(
             node: ImportEqualsDeclaration,
-            decorators: null,
             modifiers: readonly Modifier[] | undefined,
             isTypeOnly: boolean,
             name: Identifier,
@@ -4106,7 +4012,7 @@ namespace ts {
                 || node.isTypeOnly !== isTypeOnly
                 || node.name !== name
                 || node.moduleReference !== moduleReference
-                ? finishUpdateImportEqualsDeclaration(createImportEqualsDeclaration(decorators, modifiers, isTypeOnly, name, moduleReference), node)
+                ? finishUpdateImportEqualsDeclaration(createImportEqualsDeclaration(modifiers, isTypeOnly, name, moduleReference), node)
                 : node;
         }
 
@@ -4119,14 +4025,11 @@ namespace ts {
 
         // @api
         function createImportDeclaration(
-            decorators: null,
             modifiers: readonly Modifier[] | undefined,
             importClause: ImportClause | undefined,
             moduleSpecifier: Expression,
             assertClause: AssertClause | undefined
         ): ImportDeclaration {
-            Debug.assert(decorators === RESERVED, "This node does not support decorators. If you're seeing this message you've likely accessed the factory via a non-public API.");
-
             const node = createBaseDeclaration<ImportDeclaration>(SyntaxKind.ImportDeclaration);
             node.modifiers = asNodeArray(modifiers);
             node.importClause = importClause;
@@ -4145,7 +4048,6 @@ namespace ts {
         // @api
         function updateImportDeclaration(
             node: ImportDeclaration,
-            decorators: null,
             modifiers: readonly Modifier[] | undefined,
             importClause: ImportClause | undefined,
             moduleSpecifier: Expression,
@@ -4155,7 +4057,7 @@ namespace ts {
                 || node.importClause !== importClause
                 || node.moduleSpecifier !== moduleSpecifier
                 || node.assertClause !== assertClause
-                ? finishUpdateImportDeclaration(createImportDeclaration(decorators, modifiers, importClause, moduleSpecifier, assertClause), node)
+                ? finishUpdateImportDeclaration(createImportDeclaration(modifiers, importClause, moduleSpecifier, assertClause), node)
                 : node;
         }
 
@@ -4315,13 +4217,10 @@ namespace ts {
 
         // @api
         function createExportAssignment(
-            decorators: null,
             modifiers: readonly Modifier[] | undefined,
             isExportEquals: boolean | undefined,
             expression: Expression
         ) {
-            Debug.assert(decorators === RESERVED, "This node does not support decorators. If you're seeing this message you've likely accessed the factory via a non-public API.");
-
             const node = createBaseDeclaration<ExportAssignment>(SyntaxKind.ExportAssignment);
             node.modifiers = asNodeArray(modifiers);
             node.isExportEquals = isExportEquals;
@@ -4339,13 +4238,12 @@ namespace ts {
         // @api
         function updateExportAssignment(
             node: ExportAssignment,
-            decorators: null,
             modifiers: readonly Modifier[] | undefined,
             expression: Expression
         ) {
             return node.modifiers !== modifiers
                 || node.expression !== expression
-                ? finishUpdateExportAssignment(createExportAssignment(decorators, modifiers, node.isExportEquals, expression), node)
+                ? finishUpdateExportAssignment(createExportAssignment(modifiers, node.isExportEquals, expression), node)
                 : node;
         }
 
@@ -4358,15 +4256,12 @@ namespace ts {
 
         // @api
         function createExportDeclaration(
-            decorators: null,
             modifiers: readonly Modifier[] | undefined,
             isTypeOnly: boolean,
             exportClause: NamedExportBindings | undefined,
             moduleSpecifier?: Expression,
             assertClause?: AssertClause
         ) {
-            Debug.assert(decorators === RESERVED, "This node does not support decorators. If you're seeing this message you've likely accessed the factory via a non-public API.");
-
             const node = createBaseDeclaration<ExportDeclaration>(SyntaxKind.ExportDeclaration);
             node.modifiers = asNodeArray(modifiers);
             node.isTypeOnly = isTypeOnly;
@@ -4387,7 +4282,6 @@ namespace ts {
         // @api
         function updateExportDeclaration(
             node: ExportDeclaration,
-            decorators: null,
             modifiers: readonly Modifier[] | undefined,
             isTypeOnly: boolean,
             exportClause: NamedExportBindings | undefined,
@@ -4399,7 +4293,7 @@ namespace ts {
                 || node.exportClause !== exportClause
                 || node.moduleSpecifier !== moduleSpecifier
                 || node.assertClause !== assertClause
-                ? finishUpdateExportDeclaration(createExportDeclaration(decorators, modifiers, isTypeOnly, exportClause, moduleSpecifier, assertClause), node)
+                ? finishUpdateExportDeclaration(createExportDeclaration(modifiers, isTypeOnly, exportClause, moduleSpecifier, assertClause), node)
                 : node;
         }
 
@@ -4530,7 +4424,6 @@ namespace ts {
         function createJSDocFunctionType(parameters: readonly ParameterDeclaration[], type: TypeNode | undefined): JSDocFunctionType {
             const node = createBaseSignatureDeclaration<JSDocFunctionType>(
                 SyntaxKind.JSDocFunctionType,
-                /*decorators*/ RESERVED,
                 /*modifiers*/ undefined,
                 /*name*/ undefined,
                 /*typeParameters*/ undefined,
@@ -5256,7 +5149,6 @@ namespace ts {
         function createPropertyAssignment(name: string | PropertyName, initializer: Expression) {
             const node = createBaseNamedDeclaration<PropertyAssignment>(
                 SyntaxKind.PropertyAssignment,
-                /*decorators*/ RESERVED,
                 /*modifiers*/ undefined,
                 name
             );
@@ -5296,7 +5188,6 @@ namespace ts {
         function createShorthandPropertyAssignment(name: string | Identifier, objectAssignmentInitializer?: Expression) {
             const node = createBaseNamedDeclaration<ShorthandPropertyAssignment>(
                 SyntaxKind.ShorthandPropertyAssignment,
-                /*decorators*/ RESERVED,
                 /*modifiers*/ undefined,
                 name
             );
@@ -5729,7 +5620,6 @@ namespace ts {
 
         function createExportDefault(expression: Expression) {
             return createExportAssignment(
-                RESERVED,
                 /*modifiers*/ undefined,
                 /*isExportEquals*/ false,
                 expression);
@@ -5737,7 +5627,6 @@ namespace ts {
 
         function createExternalModuleExport(exportName: Identifier) {
             return createExportDeclaration(
-                RESERVED,
                 /*modifiers*/ undefined,
                 /*isTypeOnly*/ false,
                 createNamedExports([
@@ -5990,11 +5879,9 @@ namespace ts {
                 createParenthesizedExpression(
                     createObjectLiteralExpression([
                         createSetAccessorDeclaration(
-                            RESERVED,
                             /*modifiers*/ undefined,
                             "value",
                             [createParameterDeclaration(
-                                RESERVED,
                                 /*modifiers*/ undefined,
                                 /*dotDotDotToken*/ undefined,
                                 paramName,
@@ -6336,30 +6223,30 @@ namespace ts {
                 modifierArray = modifiers;
             }
             return isTypeParameterDeclaration(node) ? updateTypeParameterDeclaration(node, modifierArray, node.name, node.constraint, node.default) :
-                isParameter(node) ? updateParameterDeclaration(node, RESERVED, modifierArray, node.dotDotDotToken, node.name, node.questionToken, node.type, node.initializer) :
+                isParameter(node) ? updateParameterDeclaration(node, modifierArray, node.dotDotDotToken, node.name, node.questionToken, node.type, node.initializer) :
                 isConstructorTypeNode(node) ? updateConstructorTypeNode1(node, modifierArray, node.typeParameters, node.parameters, node.type) :
                 isPropertySignature(node) ? updatePropertySignature(node, modifierArray, node.name, node.questionToken, node.type) :
-                isPropertyDeclaration(node) ? updatePropertyDeclaration(node, RESERVED, modifierArray, node.name, node.questionToken ?? node.exclamationToken, node.type, node.initializer) :
+                isPropertyDeclaration(node) ? updatePropertyDeclaration(node, modifierArray, node.name, node.questionToken ?? node.exclamationToken, node.type, node.initializer) :
                 isMethodSignature(node) ? updateMethodSignature(node, modifierArray, node.name, node.questionToken, node.typeParameters, node.parameters, node.type) :
-                isMethodDeclaration(node) ? updateMethodDeclaration(node, RESERVED, modifierArray, node.asteriskToken, node.name, node.questionToken, node.typeParameters, node.parameters, node.type, node.body) :
-                isConstructorDeclaration(node) ? updateConstructorDeclaration(node, RESERVED, modifierArray, node.parameters, node.body) :
-                isGetAccessorDeclaration(node) ? updateGetAccessorDeclaration(node, RESERVED, modifierArray, node.name, node.parameters, node.type, node.body) :
-                isSetAccessorDeclaration(node) ? updateSetAccessorDeclaration(node, RESERVED, modifierArray, node.name, node.parameters, node.body) :
-                isIndexSignatureDeclaration(node) ? updateIndexSignature(node, RESERVED, modifierArray, node.parameters, node.type) :
+                isMethodDeclaration(node) ? updateMethodDeclaration(node, modifierArray, node.asteriskToken, node.name, node.questionToken, node.typeParameters, node.parameters, node.type, node.body) :
+                isConstructorDeclaration(node) ? updateConstructorDeclaration(node, modifierArray, node.parameters, node.body) :
+                isGetAccessorDeclaration(node) ? updateGetAccessorDeclaration(node, modifierArray, node.name, node.parameters, node.type, node.body) :
+                isSetAccessorDeclaration(node) ? updateSetAccessorDeclaration(node, modifierArray, node.name, node.parameters, node.body) :
+                isIndexSignatureDeclaration(node) ? updateIndexSignature(node, modifierArray, node.parameters, node.type) :
                 isFunctionExpression(node) ? updateFunctionExpression(node, modifierArray, node.asteriskToken, node.name, node.typeParameters, node.parameters, node.type, node.body) :
                 isArrowFunction(node) ? updateArrowFunction(node, modifierArray, node.typeParameters, node.parameters, node.type, node.equalsGreaterThanToken, node.body) :
-                isClassExpression(node) ? updateClassExpression(node, RESERVED, modifierArray, node.name, node.typeParameters, node.heritageClauses, node.members) :
+                isClassExpression(node) ? updateClassExpression(node, modifierArray, node.name, node.typeParameters, node.heritageClauses, node.members) :
                 isVariableStatement(node) ? updateVariableStatement(node, modifierArray, node.declarationList) :
-                isFunctionDeclaration(node) ? updateFunctionDeclaration(node, RESERVED, modifierArray, node.asteriskToken, node.name, node.typeParameters, node.parameters, node.type, node.body) :
-                isClassDeclaration(node) ? updateClassDeclaration(node, RESERVED, modifierArray, node.name, node.typeParameters, node.heritageClauses, node.members) :
-                isInterfaceDeclaration(node) ? updateInterfaceDeclaration(node, RESERVED, modifierArray, node.name, node.typeParameters, node.heritageClauses, node.members) :
-                isTypeAliasDeclaration(node) ? updateTypeAliasDeclaration(node, RESERVED, modifierArray, node.name, node.typeParameters, node.type) :
-                isEnumDeclaration(node) ? updateEnumDeclaration(node, RESERVED, modifierArray, node.name, node.members) :
-                isModuleDeclaration(node) ? updateModuleDeclaration(node, RESERVED, modifierArray, node.name, node.body) :
-                isImportEqualsDeclaration(node) ? updateImportEqualsDeclaration(node, RESERVED, modifierArray, node.isTypeOnly, node.name, node.moduleReference) :
-                isImportDeclaration(node) ? updateImportDeclaration(node, RESERVED, modifierArray, node.importClause, node.moduleSpecifier, node.assertClause) :
-                isExportAssignment(node) ? updateExportAssignment(node, RESERVED, modifierArray, node.expression) :
-                isExportDeclaration(node) ? updateExportDeclaration(node, RESERVED, modifierArray, node.isTypeOnly, node.exportClause, node.moduleSpecifier, node.assertClause) :
+                isFunctionDeclaration(node) ? updateFunctionDeclaration(node, modifierArray, node.asteriskToken, node.name, node.typeParameters, node.parameters, node.type, node.body) :
+                isClassDeclaration(node) ? updateClassDeclaration(node, modifierArray, node.name, node.typeParameters, node.heritageClauses, node.members) :
+                isInterfaceDeclaration(node) ? updateInterfaceDeclaration(node, modifierArray, node.name, node.typeParameters, node.heritageClauses, node.members) :
+                isTypeAliasDeclaration(node) ? updateTypeAliasDeclaration(node, modifierArray, node.name, node.typeParameters, node.type) :
+                isEnumDeclaration(node) ? updateEnumDeclaration(node, modifierArray, node.name, node.members) :
+                isModuleDeclaration(node) ? updateModuleDeclaration(node, modifierArray, node.name, node.body) :
+                isImportEqualsDeclaration(node) ? updateImportEqualsDeclaration(node, modifierArray, node.isTypeOnly, node.name, node.moduleReference) :
+                isImportDeclaration(node) ? updateImportDeclaration(node, modifierArray, node.importClause, node.moduleSpecifier, node.assertClause) :
+                isExportAssignment(node) ? updateExportAssignment(node, modifierArray, node.expression) :
+                isExportDeclaration(node) ? updateExportDeclaration(node, modifierArray, node.isTypeOnly, node.exportClause, node.moduleSpecifier, node.assertClause) :
                 Debug.assertNever(node);
         }
 

@@ -3192,7 +3192,6 @@ namespace ts {
             }
             return finishNode(
                 factory.createParameterDeclaration(
-                    /*decorators*/ RESERVED,
                     /*modifiers*/ undefined,
                     /*dotDotDotToken*/ undefined,
                     // TODO(rbuckton): JSDoc parameters don't have names (except `this`/`new`), should we manufacture an empty identifier?
@@ -3342,7 +3341,6 @@ namespace ts {
 
             if (token() === SyntaxKind.ThisKeyword) {
                 const node = factory.createParameterDeclaration(
-                    /*decorators*/ RESERVED,
                     decorators,
                     /*dotDotDotToken*/ undefined,
                     createIdentifier(/*isIdentifier*/ true),
@@ -3371,7 +3369,6 @@ namespace ts {
             const node = withJSDoc(
                 finishNode(
                     factory.createParameterDeclaration(
-                        /*decorators*/ RESERVED,
                         modifiers,
                         dotDotDotToken,
                         parseNameOfParameter(modifiers),
@@ -3558,7 +3555,7 @@ namespace ts {
             const parameters = parseBracketedList<ParameterDeclaration>(ParsingContext.Parameters, () => parseParameter(/*inOuterAwaitContext*/ false), SyntaxKind.OpenBracketToken, SyntaxKind.CloseBracketToken);
             const type = parseTypeAnnotation();
             parseTypeMemberSemicolon();
-            const node = factory.createIndexSignature(/*decorators*/ RESERVED, modifiers, parameters, type);
+            const node = factory.createIndexSignature(modifiers, parameters, type);
             node.illegalDecorators = decorators;
             return withJSDoc(finishNode(node, pos), hasJSDoc);
         }
@@ -4490,7 +4487,6 @@ namespace ts {
         function parseSimpleArrowFunctionExpression(pos: number, identifier: Identifier, asyncModifier?: NodeArray<Modifier> | undefined): ArrowFunction {
             Debug.assert(token() === SyntaxKind.EqualsGreaterThanToken, "parseSimpleArrowFunctionExpression should only have been called if we had a =>");
             const parameter = factory.createParameterDeclaration(
-                /*decorators*/ RESERVED,
                 /*modifiers*/ undefined,
                 /*dotDotDotToken*/ undefined,
                 identifier,
@@ -6830,7 +6826,7 @@ namespace ts {
             const type = parseReturnType(SyntaxKind.ColonToken, /*isType*/ false);
             const body = parseFunctionBlockOrSemicolon(isGenerator | isAsync, Diagnostics.or_expected);
             setAwaitContext(savedAwaitContext);
-            const node = factory.createFunctionDeclaration(/*decorators*/ RESERVED, modifiers, asteriskToken, name, typeParameters, parameters, type, body);
+            const node = factory.createFunctionDeclaration(modifiers, asteriskToken, name, typeParameters, parameters, type, body);
             node.illegalDecorators = decorators;
             return withJSDoc(finishNode(node, pos), hasJSDoc);
         }
@@ -6854,7 +6850,7 @@ namespace ts {
                     const parameters = parseParameters(SignatureFlags.None);
                     const type = parseReturnType(SyntaxKind.ColonToken, /*isType*/ false);
                     const body = parseFunctionBlockOrSemicolon(SignatureFlags.None, Diagnostics.or_expected);
-                    const node = factory.createConstructorDeclaration(/*decorators*/ RESERVED, modifiers, parameters, body);
+                    const node = factory.createConstructorDeclaration(modifiers, parameters, body);
 
                     // Attach invalid nodes if they exist so that we can report them in the grammar checker.
                     node.illegalDecorators = decorators;
@@ -6883,7 +6879,6 @@ namespace ts {
             const type = parseReturnType(SyntaxKind.ColonToken, /*isType*/ false);
             const body = parseFunctionBlockOrSemicolon(isGenerator | isAsync, diagnosticMessage);
             const node = factory.createMethodDeclaration(
-                /*decorators*/ RESERVED,
                 combineDecoratorsAndModifiers(decorators, modifiers),
                 asteriskToken,
                 name,
@@ -6912,7 +6907,6 @@ namespace ts {
             const initializer = doOutsideOfContext(NodeFlags.YieldContext | NodeFlags.AwaitContext | NodeFlags.DisallowInContext, parseInitializer);
             parseSemicolonAfterPropertyName(name, type, initializer);
             const node = factory.createPropertyDeclaration(
-                /*decorators*/ RESERVED,
                 combineDecoratorsAndModifiers(decorators, modifiers),
                 name,
                 questionToken || exclamationToken,
@@ -6945,8 +6939,8 @@ namespace ts {
             const type = parseReturnType(SyntaxKind.ColonToken, /*isType*/ false);
             const body = parseFunctionBlockOrSemicolon(SignatureFlags.None);
             const node = kind === SyntaxKind.GetAccessor
-                ? factory.createGetAccessorDeclaration(/*decorators*/ RESERVED, combineDecoratorsAndModifiers(decorators, modifiers), name, parameters, type, body)
-                : factory.createSetAccessorDeclaration(/*decorators*/ RESERVED, combineDecoratorsAndModifiers(decorators, modifiers), name, parameters, body);
+                ? factory.createGetAccessorDeclaration(combineDecoratorsAndModifiers(decorators, modifiers), name, parameters, type, body)
+                : factory.createSetAccessorDeclaration(combineDecoratorsAndModifiers(decorators, modifiers), name, parameters, body);
             // Keep track of `typeParameters` (for both) and `type` (for setters) if they were parsed those indicate grammar errors
             node.illegalTypeParameters = typeParameters;
             if (isSetAccessorDeclaration(node)) node.illegalType = type;
@@ -7025,7 +7019,7 @@ namespace ts {
         function parseClassStaticBlockDeclaration(pos: number, hasJSDoc: boolean, decorators: NodeArray<Decorator> | undefined, modifiers: ModifiersArray | undefined): ClassStaticBlockDeclaration {
             parseExpectedToken(SyntaxKind.StaticKeyword);
             const body = parseClassStaticBlockBody();
-            const node = withJSDoc(finishNode(factory.createClassStaticBlockDeclaration(/*decorators*/ RESERVED, RESERVED, body), pos), hasJSDoc);
+            const node = withJSDoc(finishNode(factory.createClassStaticBlockDeclaration(body), pos), hasJSDoc);
             node.illegalDecorators = decorators;
             node.illegalModifiers = modifiers;
             return node;
@@ -7231,8 +7225,8 @@ namespace ts {
             }
             setAwaitContext(savedAwaitContext);
             const node = kind === SyntaxKind.ClassDeclaration
-                ? factory.createClassDeclaration(/*decorators*/ RESERVED, combineDecoratorsAndModifiers(decorators, modifiers), name, typeParameters, heritageClauses, members)
-                : factory.createClassExpression(/*decorators*/ RESERVED, combineDecoratorsAndModifiers(decorators, modifiers), name, typeParameters, heritageClauses, members);
+                ? factory.createClassDeclaration(combineDecoratorsAndModifiers(decorators, modifiers), name, typeParameters, heritageClauses, members)
+                : factory.createClassExpression(combineDecoratorsAndModifiers(decorators, modifiers), name, typeParameters, heritageClauses, members);
             return withJSDoc(finishNode(node, pos), hasJSDoc);
         }
 
@@ -7300,7 +7294,7 @@ namespace ts {
             const typeParameters = parseTypeParameters();
             const heritageClauses = parseHeritageClauses();
             const members = parseObjectTypeMembers();
-            const node = factory.createInterfaceDeclaration(/*decorators*/ RESERVED, modifiers, name, typeParameters, heritageClauses, members);
+            const node = factory.createInterfaceDeclaration(modifiers, name, typeParameters, heritageClauses, members);
             node.illegalDecorators = decorators;
             return withJSDoc(finishNode(node, pos), hasJSDoc);
         }
@@ -7312,7 +7306,7 @@ namespace ts {
             parseExpected(SyntaxKind.EqualsToken);
             const type = token() === SyntaxKind.IntrinsicKeyword && tryParse(parseKeywordAndNoDot) || parseType();
             parseSemicolon();
-            const node = factory.createTypeAliasDeclaration(/*decorators*/ RESERVED, modifiers, name, typeParameters, type);
+            const node = factory.createTypeAliasDeclaration(modifiers, name, typeParameters, type);
             node.illegalDecorators = decorators;
             return withJSDoc(finishNode(node, pos), hasJSDoc);
         }
@@ -7340,7 +7334,7 @@ namespace ts {
             else {
                 members = createMissingList<EnumMember>();
             }
-            const node = factory.createEnumDeclaration(/*decorators*/ RESERVED, modifiers, name, members);
+            const node = factory.createEnumDeclaration(modifiers, name, members);
             node.illegalDecorators = decorators;
             return withJSDoc(finishNode(node, pos), hasJSDoc);
         }
@@ -7366,7 +7360,7 @@ namespace ts {
             const body = parseOptional(SyntaxKind.DotToken)
                 ? parseModuleOrNamespaceDeclaration(getNodePos(), /*hasJSDoc*/ false, /*decorators*/ undefined, /*modifiers*/ undefined, NodeFlags.NestedNamespace | namespaceFlag) as NamespaceDeclaration
                 : parseModuleBlock();
-            const node = factory.createModuleDeclaration(/*decorators*/ RESERVED, modifiers, name, body, flags);
+            const node = factory.createModuleDeclaration(modifiers, name, body, flags);
             node.illegalDecorators = decorators;
             return withJSDoc(finishNode(node, pos), hasJSDoc);
         }
@@ -7390,7 +7384,7 @@ namespace ts {
             else {
                 parseSemicolon();
             }
-            const node = factory.createModuleDeclaration(/*decorators*/ RESERVED, modifiers, name, body, flags);
+            const node = factory.createModuleDeclaration(modifiers, name, body, flags);
             node.illegalDecorators = decorators;
             return withJSDoc(finishNode(node, pos), hasJSDoc);
         }
@@ -7485,7 +7479,7 @@ namespace ts {
             }
 
             parseSemicolon();
-            const node = factory.createImportDeclaration(/*decorators*/ RESERVED, modifiers, importClause, moduleSpecifier, assertClause);
+            const node = factory.createImportDeclaration(modifiers, importClause, moduleSpecifier, assertClause);
             node.illegalDecorators = decorators;
             return withJSDoc(finishNode(node, pos), hasJSDoc);
         }
@@ -7538,7 +7532,7 @@ namespace ts {
             parseExpected(SyntaxKind.EqualsToken);
             const moduleReference = parseModuleReference();
             parseSemicolon();
-            const node = factory.createImportEqualsDeclaration(/*decorators*/ RESERVED, modifiers, isTypeOnly, identifier, moduleReference);
+            const node = factory.createImportEqualsDeclaration(modifiers, isTypeOnly, identifier, moduleReference);
             node.illegalDecorators = decorators;
             const finished = withJSDoc(finishNode(node, pos), hasJSDoc);
             return finished;
@@ -7747,7 +7741,7 @@ namespace ts {
             }
             parseSemicolon();
             setAwaitContext(savedAwaitContext);
-            const node = factory.createExportDeclaration(/*decorators*/ RESERVED, modifiers, isTypeOnly, exportClause, moduleSpecifier, assertClause);
+            const node = factory.createExportDeclaration(modifiers, isTypeOnly, exportClause, moduleSpecifier, assertClause);
             node.illegalDecorators = decorators;
             return withJSDoc(finishNode(node, pos), hasJSDoc);
         }
@@ -7765,7 +7759,7 @@ namespace ts {
             const expression = parseAssignmentExpressionOrHigher();
             parseSemicolon();
             setAwaitContext(savedAwaitContext);
-            const node = factory.createExportAssignment(/*decorators*/ RESERVED, modifiers, isExportEquals, expression);
+            const node = factory.createExportAssignment(modifiers, isExportEquals, expression);
             node.illegalDecorators = decorators;
             return withJSDoc(finishNode(node, pos), hasJSDoc);
         }
@@ -8616,7 +8610,6 @@ namespace ts {
                     if (parseOptional(SyntaxKind.DotToken)) {
                         const body = parseJSDocTypeNameWithNamespace(/*nested*/ true);
                         const jsDocNamespaceNode = factory.createModuleDeclaration(
-                            /*decorators*/ RESERVED,
                             /*modifiers*/ undefined,
                             typeNameOrNamespaceName,
                             body,

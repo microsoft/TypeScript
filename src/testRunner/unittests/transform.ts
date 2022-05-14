@@ -232,8 +232,8 @@ namespace ts {
                     const result = factory.updateSourceFile(
                         sourceFile,
                         factory.createNodeArray([
-                            factory.createClassDeclaration(RESERVED, /*modifiers*/ undefined, "Foo", /*typeParameters*/ undefined, /*heritageClauses*/ undefined, /*members*/ undefined!), // TODO: GH#18217
-                            factory.createModuleDeclaration(RESERVED, /*modifiers*/ undefined, factory.createIdentifier("Foo"), factory.createModuleBlock([factory.createEmptyStatement()]))
+                            factory.createClassDeclaration(/*modifiers*/ undefined, "Foo", /*typeParameters*/ undefined, /*heritageClauses*/ undefined, /*members*/ undefined!), // TODO: GH#18217
+                            factory.createModuleDeclaration(/*modifiers*/ undefined, factory.createIdentifier("Foo"), factory.createModuleBlock([factory.createEmptyStatement()]))
                         ])
                     );
                     return result;
@@ -277,7 +277,7 @@ namespace ts {
                             const exports = [{ name: "x" }];
                             const exportSpecifiers = exports.map(e => factory.createExportSpecifier(/*isTypeOnly*/ false, e.name, e.name));
                             const exportClause = factory.createNamedExports(exportSpecifiers);
-                            const newEd = factory.updateExportDeclaration(ed, RESERVED, ed.modifiers, ed.isTypeOnly, exportClause, ed.moduleSpecifier, ed.assertClause);
+                            const newEd = factory.updateExportDeclaration(ed, ed.modifiers, ed.isTypeOnly, exportClause, ed.moduleSpecifier, ed.assertClause);
 
                             return newEd as Node as T;
                         }
@@ -307,7 +307,6 @@ namespace ts {
                 function visitNode(sf: SourceFile) {
                     // produce `import * as i0 from './comp';
                     const importStar = factory.createImportDeclaration(
-                        RESERVED,
                         /*modifiers*/ undefined,
                         /*importClause*/ factory.createImportClause(
                             /*isTypeOnly*/ false,
@@ -339,8 +338,8 @@ namespace ts {
                 };
                 function visitNode(sf: SourceFile) {
                     // produce `class Foo { @Bar baz() {} }`;
-                    const classDecl = factory.createClassDeclaration(RESERVED, /*modifiers*/ undefined, "Foo", /*typeParameters*/ undefined, /*heritageClauses*/ undefined, [
-                        factory.createMethodDeclaration(RESERVED, [factory.createDecorator(factory.createIdentifier("Bar"))], /**/ undefined, "baz", /**/ undefined, /**/ undefined, [], /**/ undefined, factory.createBlock([]))
+                    const classDecl = factory.createClassDeclaration(/*modifiers*/ undefined, "Foo", /*typeParameters*/ undefined, /*heritageClauses*/ undefined, [
+                        factory.createMethodDeclaration([factory.createDecorator(factory.createIdentifier("Bar"))], /**/ undefined, "baz", /**/ undefined, /**/ undefined, [], /**/ undefined, factory.createBlock([]))
                     ]);
                     return factory.updateSourceFile(sf, [classDecl]);
                 }
@@ -378,9 +377,9 @@ namespace ts {
                 function visitNode(sf: SourceFile) {
                     // produce `class Foo { constructor(@Dec private x) {} }`;
                     // The decorator is required to trigger ts.ts transformations.
-                    const classDecl = factory.createClassDeclaration(RESERVED, [], "Foo", /*typeParameters*/ undefined, /*heritageClauses*/ undefined, [
-                        factory.createConstructorDeclaration(RESERVED, /*modifiers*/ undefined, [
-                            factory.createParameterDeclaration(RESERVED, [factory.createDecorator(factory.createIdentifier("Dec")), factory.createModifier(SyntaxKind.PrivateKeyword)], /*dotDotDotToken*/ undefined, "x")], factory.createBlock([]))
+                    const classDecl = factory.createClassDeclaration([], "Foo", /*typeParameters*/ undefined, /*heritageClauses*/ undefined, [
+                        factory.createConstructorDeclaration(/*modifiers*/ undefined, [
+                            factory.createParameterDeclaration([factory.createDecorator(factory.createIdentifier("Dec")), factory.createModifier(SyntaxKind.PrivateKeyword)], /*dotDotDotToken*/ undefined, "x")], factory.createBlock([]))
                     ]);
                     return factory.updateSourceFile(sf, [classDecl]);
                 }
@@ -556,7 +555,6 @@ module MyModule {
                     if (isMethodDeclaration(node)) {
                         return factory.updateMethodDeclaration(
                             node,
-                            RESERVED,
                             node.modifiers,
                             node.asteriskToken,
                             factory.createIdentifier("foobar"),
@@ -606,12 +604,11 @@ module MyModule {
             };
             function rootTransform<T extends Node>(node: T): Node {
                 if (isClassLike(node)) {
-                    const newMembers = [factory.createPropertyDeclaration(RESERVED, [factory.createModifier(SyntaxKind.StaticKeyword)], "newField", /* questionOrExclamationToken */ undefined, /* type */ undefined, factory.createStringLiteral("x"))];
+                    const newMembers = [factory.createPropertyDeclaration([factory.createModifier(SyntaxKind.StaticKeyword)], "newField", /* questionOrExclamationToken */ undefined, /* type */ undefined, factory.createStringLiteral("x"))];
                     setSyntheticLeadingComments(newMembers[0], [{ kind: SyntaxKind.MultiLineCommentTrivia, text: "comment", pos: -1, end: -1, hasTrailingNewLine: true }]);
                     return isClassDeclaration(node) ?
                         factory.updateClassDeclaration(
                             node,
-                            RESERVED,
                             node.modifiers,
                             node.name,
                             node.typeParameters,
@@ -619,7 +616,6 @@ module MyModule {
                             newMembers) :
                         factory.updateClassExpression(
                             node,
-                            RESERVED,
                             node.modifiers,
                             node.name,
                             node.typeParameters,

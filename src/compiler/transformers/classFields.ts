@@ -433,7 +433,6 @@ namespace ts {
                     // Initializer is elided as the field is initialized in transformConstructor.
                     return factory.updatePropertyDeclaration(
                         node,
-                        /*decorators*/ RESERVED,
                         visitNodes(node.modifiers, visitor, isModifierLike),
                         node.name,
                         /*questionOrExclamationToken*/ undefined,
@@ -461,8 +460,6 @@ namespace ts {
                 const initializerStatement = transformPropertyOrClassStaticBlock(node, factory.createThis());
                 if (initializerStatement) {
                     const staticBlock = factory.createClassStaticBlockDeclaration(
-                        /*decorators*/ RESERVED,
-                        /*modifiers*/ RESERVED,
                         factory.createBlock([initializerStatement])
                     );
 
@@ -1051,7 +1048,6 @@ namespace ts {
             const statements: Statement[] = [
                 factory.updateClassDeclaration(
                     node,
-                    /*decorators*/ RESERVED,
                     node.modifiers,
                     node.name,
                     /*typeParameters*/ undefined,
@@ -1123,7 +1119,6 @@ namespace ts {
 
             const classExpression = factory.updateClassExpression(
                 node,
-                /*decorators*/ RESERVED,
                 visitNodes(node.modifiers, visitor, isModifierLike),
                 node.name,
                 /*typeParameters*/ undefined,
@@ -1208,8 +1203,6 @@ namespace ts {
 
             if (!shouldTransformPrivateElementsOrClassStaticBlocks && some(pendingExpressions)) {
                 members.push(factory.createClassStaticBlockDeclaration(
-                    /*decorators*/ RESERVED,
-                    /*modifiers*/ RESERVED,
                     factory.createBlock([
                         factory.createExpressionStatement(factory.inlineExpressions(pendingExpressions))
                     ])
@@ -1265,7 +1258,6 @@ namespace ts {
                 setOriginalNode(
                     setTextRange(
                         factory.createConstructorDeclaration(
-                            /*decorators*/ RESERVED,
                             /*modifiers*/ undefined,
                             parameters ?? [],
                             body

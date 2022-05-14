@@ -1944,7 +1944,6 @@ namespace ts {
 
     export function makeImport(defaultImport: Identifier | undefined, namedImports: readonly ImportSpecifier[] | undefined, moduleSpecifier: string | Expression, quotePreference: QuotePreference, isTypeOnly?: boolean): ImportDeclaration {
         return factory.createImportDeclaration(
-            RESERVED,
             /*modifiers*/ undefined,
             defaultImport || namedImports
                 ? factory.createImportClause(!!isTypeOnly, defaultImport, namedImports && namedImports.length ? factory.createNamedImports(namedImports) : undefined)

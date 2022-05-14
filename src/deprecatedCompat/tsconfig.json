@@ -1,7 +1,8 @@
 {
     "extends": "../tsconfig-base",
     "compilerOptions": {
-        "outFile": "../../built/local/deprecatedCompat.js"
+        "outFile": "../../built/local/deprecatedCompat.js",
+        "experimentalDecorators": true
     },
     "references": [
         { "path": "../compiler" }

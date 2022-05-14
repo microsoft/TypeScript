@@ -4,7 +4,7 @@ namespace ts {
     // Compound nodes
 
     export function createEmptyExports(factory: NodeFactory) {
-        return factory.createExportDeclaration(/*decorators*/ RESERVED, /*modifiers*/ undefined, /*isTypeOnly*/ false, factory.createNamedExports([]), /*moduleSpecifier*/ undefined);
+        return factory.createExportDeclaration(/*modifiers*/ undefined, /*isTypeOnly*/ false, factory.createNamedExports([]), /*moduleSpecifier*/ undefined);
     }
 
     export function createMemberAccessForPropertyName(factory: NodeFactory, target: Expression, memberName: PropertyName, location?: TextRange): MemberExpression {
@@ -519,7 +519,6 @@ namespace ts {
             }
             if (namedBindings) {
                 const externalHelpersImportDeclaration = nodeFactory.createImportDeclaration(
-                    /*decorators*/ RESERVED,
                     /*modifiers*/ undefined,
                     nodeFactory.createImportClause(/*isTypeOnly*/ false, /*name*/ undefined, namedBindings),
                     nodeFactory.createStringLiteral(externalHelpersModuleNameText),

@@ -13,74 +13,48 @@ namespace ts {
     }
 
     function patchNodeFactory(factory: NodeFactory) {
-        const createConstructorTypeNodeDeprecation = Debug.createDeprecation("createConstructorTypeNode", { since: "4.2", warnAfter: "4.3", message: "Use the overload that accepts 'modifiers'" });
-        const prevCreateConstructorTypeNode = factory.createConstructorTypeNode;
-        factory.createConstructorTypeNode = createConstructorTypeNode;
+        const {
+            createConstructorTypeNode,
+            updateConstructorTypeNode,
+        } = factory;
 
-        const updateConstructorTypeNodeDeprecation = Debug.createDeprecation("updateConstructorTypeNode", { since: "4.2", warnAfter: "4.3", message: "Use the overload that accepts 'modifiers'" });
-        const prevUpdateConstructorTypeNode = factory.updateConstructorTypeNode;
-        factory.updateConstructorTypeNode = updateConstructorTypeNode;
+        factory.createConstructorTypeNode = buildOverload("createConstructorTypeNode")
+            .overload({
+                0(modifiers: readonly Modifier[] | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode): ConstructorTypeNode {
+                    return createConstructorTypeNode(modifiers, typeParameters, parameters, type);
+                },
 
-        // @api
-        function createConstructorTypeNode(...args: Parameters<typeof createConstructorTypeNode1> | Parameters<typeof createConstructorTypeNode2>) {
-            return isCreateConstructorTypeNode1Args(args) ?
-                createConstructorTypeNode1(...args) :
-                createConstructorTypeNode2(...args);
-        }
+                1(typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode): ConstructorTypeNode {
+                    return createConstructorTypeNode(/*modifiers*/ undefined, typeParameters, parameters, type);
+                },
+            })
+            .bind({
+                0: args => args.length === 4,
+                1: args => args.length === 3,
+            })
+            .deprecate({
+                1: { since: "4.2", warnAfter: "4.3", message: "Use the overload that accepts 'modifiers'" }
+            })
+            .finish();
 
-        function isCreateConstructorTypeNode1Args(args: Parameters<typeof createConstructorTypeNode1> | Parameters<typeof createConstructorTypeNode2>): args is Parameters<typeof createConstructorTypeNode1> {
-            return args.length === 4;
-        }
+        factory.updateConstructorTypeNode = buildOverload("updateConstructorTypeNode")
+            .overload({
+                0(node: ConstructorTypeNode, modifiers: readonly Modifier[] | undefined, typeParameters: NodeArray<TypeParameterDeclaration> | undefined, parameters: NodeArray<ParameterDeclaration>, type: TypeNode) {
+                    return updateConstructorTypeNode(node, modifiers, typeParameters, parameters, type);
+                },
 
-        function createConstructorTypeNode1(
-            modifiers: readonly Modifier[] | undefined,
-            typeParameters: readonly TypeParameterDeclaration[] | undefined,
-            parameters: readonly ParameterDeclaration[],
-            type: TypeNode
-        ): ConstructorTypeNode {
-            return prevCreateConstructorTypeNode(modifiers, typeParameters, parameters, type);
-        }
-
-        /** @deprecated */
-        function createConstructorTypeNode2(
-            typeParameters: readonly TypeParameterDeclaration[] | undefined,
-            parameters: readonly ParameterDeclaration[],
-            type: TypeNode
-        ): ConstructorTypeNode {
-            createConstructorTypeNodeDeprecation();
-            return createConstructorTypeNode1(/*modifiers*/ undefined, typeParameters, parameters, type);
-        }
-
-        function updateConstructorTypeNode(...args: Parameters<typeof updateConstructorTypeNode1> | Parameters<typeof updateConstructorTypeNode2>) {
-            return isUpdateConstructorTypeNode1Args(args) ?
-                updateConstructorTypeNode1(...args) :
-                updateConstructorTypeNode2(...args);
-        }
-
-        function isUpdateConstructorTypeNode1Args(args: Parameters<typeof updateConstructorTypeNode1> | Parameters<typeof updateConstructorTypeNode2>): args is Parameters<typeof updateConstructorTypeNode1> {
-            return args.length === 5;
-        }
-
-        function updateConstructorTypeNode1(
-            node: ConstructorTypeNode,
-            modifiers: readonly Modifier[] | undefined,
-            typeParameters: NodeArray<TypeParameterDeclaration> | undefined,
-            parameters: NodeArray<ParameterDeclaration>,
-            type: TypeNode
-        ) {
-            return prevUpdateConstructorTypeNode(node, modifiers, typeParameters, parameters, type);
-        }
-
-        /** @deprecated */
-        function updateConstructorTypeNode2(
-            node: ConstructorTypeNode,
-            typeParameters: NodeArray<TypeParameterDeclaration> | undefined,
-            parameters: NodeArray<ParameterDeclaration>,
-            type: TypeNode
-        ) {
-            updateConstructorTypeNodeDeprecation();
-            return updateConstructorTypeNode1(node, node.modifiers, typeParameters, parameters, type);
-        }
+                1(node: ConstructorTypeNode, typeParameters: NodeArray<TypeParameterDeclaration> | undefined, parameters: NodeArray<ParameterDeclaration>, type: TypeNode) {
+                    return updateConstructorTypeNode(node, node.modifiers, typeParameters, parameters, type);
+                }
+            })
+            .bind({
+                0: args => args.length === 5,
+                1: args => args.length === 4,
+            })
+            .deprecate({
+                1: { since: "4.2", warnAfter: "4.3", message: "Use the overload that accepts 'modifiers'" }
+            })
+            .finish();
     }
 
     // Patch `createNodeFactory` because it creates the factories that are provided to transformers

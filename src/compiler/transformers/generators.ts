@@ -451,7 +451,6 @@ namespace ts {
                 node = setOriginalNode(
                     setTextRange(
                         factory.createFunctionDeclaration(
-                            /*decorators*/ RESERVED,
                             node.modifiers,
                             /*asteriskToken*/ undefined,
                             node.name,
@@ -2658,7 +2657,7 @@ namespace ts {
                         /*asteriskToken*/ undefined,
                         /*name*/ undefined,
                         /*typeParameters*/ undefined,
-                        [factory.createParameterDeclaration(/*decorators*/ RESERVED, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, state)],
+                        [factory.createParameterDeclaration(/*modifiers*/ undefined, /*dotDotDotToken*/ undefined, state)],
                         /*type*/ undefined,
                         factory.createBlock(
                             buildResult,

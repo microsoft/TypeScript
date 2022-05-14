@@ -125,7 +125,7 @@ namespace ts.refactor {
             if (isExportAssignment(exportNode) && !exportNode.isExportEquals) {
                 const exp = exportNode.expression as Identifier;
                 const spec = makeExportSpecifier(exp.text, exp.text);
-                changes.replaceNode(exportingSourceFile, exportNode, factory.createExportDeclaration(RESERVED, /*modifiers*/ undefined, /*isTypeOnly*/ false, factory.createNamedExports([spec])));
+                changes.replaceNode(exportingSourceFile, exportNode, factory.createExportDeclaration(/*modifiers*/ undefined, /*isTypeOnly*/ false, factory.createNamedExports([spec])));
             }
             else {
                 changes.delete(exportingSourceFile, Debug.checkDefined(findModifier(exportNode, SyntaxKind.DefaultKeyword), "Should find a default keyword in modifier list"));

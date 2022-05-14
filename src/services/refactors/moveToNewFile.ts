@@ -256,13 +256,12 @@ namespace ts.refactor {
         switch (node.kind) {
             case SyntaxKind.ImportDeclaration:
                 return factory.createImportDeclaration(
-                    RESERVED,
                     /*modifiers*/ undefined,
                     factory.createImportClause(/*isTypeOnly*/ false, /*name*/ undefined, factory.createNamespaceImport(newNamespaceId)),
                     newModuleString,
                     /*assertClause*/ undefined);
             case SyntaxKind.ImportEqualsDeclaration:
-                return factory.createImportEqualsDeclaration(RESERVED, /*modifiers*/ undefined, /*isTypeOnly*/ false, newNamespaceId, factory.createExternalModuleReference(newModuleString));
+                return factory.createImportEqualsDeclaration(/*modifiers*/ undefined, /*isTypeOnly*/ false, newNamespaceId, factory.createExternalModuleReference(newModuleString));
             case SyntaxKind.VariableDeclaration:
                 return factory.createVariableDeclaration(newNamespaceId, /*exclamationToken*/ undefined, /*type*/ undefined, createRequireCall(newModuleString));
             default:
@@ -593,7 +592,7 @@ namespace ts.refactor {
                 const defaultImport = clause.name && keep(clause.name) ? clause.name : undefined;
                 const namedBindings = clause.namedBindings && filterNamedBindings(clause.namedBindings, keep);
                 return defaultImport || namedBindings
-                    ? factory.createImportDeclaration(RESERVED, /*modifiers*/ undefined, factory.createImportClause(/*isTypeOnly*/ false, defaultImport, namedBindings), moduleSpecifier, /*assertClause*/ undefined)
+                    ? factory.createImportDeclaration(/*modifiers*/ undefined, factory.createImportClause(/*isTypeOnly*/ false, defaultImport, namedBindings), moduleSpecifier, /*assertClause*/ undefined)
                     : undefined;
             }
             case SyntaxKind.ImportEqualsDeclaration:
@@ -786,22 +785,22 @@ namespace ts.refactor {
         const modifiers = canHaveModifiers(d) ? concatenate([factory.createModifier(SyntaxKind.ExportKeyword)], getModifiers(d)) : undefined;
         switch (d.kind) {
             case SyntaxKind.FunctionDeclaration:
-                return factory.updateFunctionDeclaration(d, RESERVED, modifiers, d.asteriskToken, d.name, d.typeParameters, d.parameters, d.type, d.body);
+                return factory.updateFunctionDeclaration(d, modifiers, d.asteriskToken, d.name, d.typeParameters, d.parameters, d.type, d.body);
             case SyntaxKind.ClassDeclaration:
                 const decorators = canHaveDecorators(d) ? getDecorators(d) : undefined;
-                return factory.updateClassDeclaration(d, RESERVED, concatenate<ModifierLike>(decorators, modifiers), d.name, d.typeParameters, d.heritageClauses, d.members);
+                return factory.updateClassDeclaration(d, concatenate<ModifierLike>(decorators, modifiers), d.name, d.typeParameters, d.heritageClauses, d.members);
             case SyntaxKind.VariableStatement:
                 return factory.updateVariableStatement(d, modifiers, d.declarationList);
             case SyntaxKind.ModuleDeclaration:
-                return factory.updateModuleDeclaration(d, RESERVED, modifiers, d.name, d.body);
+                return factory.updateModuleDeclaration(d, modifiers, d.name, d.body);
             case SyntaxKind.EnumDeclaration:
-                return factory.updateEnumDeclaration(d, RESERVED, modifiers, d.name, d.members);
+                return factory.updateEnumDeclaration(d, modifiers, d.name, d.members);
             case SyntaxKind.TypeAliasDeclaration:
-                return factory.updateTypeAliasDeclaration(d, RESERVED, modifiers, d.name, d.typeParameters, d.type);
+                return factory.updateTypeAliasDeclaration(d, modifiers, d.name, d.typeParameters, d.type);
             case SyntaxKind.InterfaceDeclaration:
-                return factory.updateInterfaceDeclaration(d, RESERVED, modifiers, d.name, d.typeParameters, d.heritageClauses, d.members);
+                return factory.updateInterfaceDeclaration(d, modifiers, d.name, d.typeParameters, d.heritageClauses, d.members);
             case SyntaxKind.ImportEqualsDeclaration:
-                return factory.updateImportEqualsDeclaration(d, RESERVED, modifiers, d.isTypeOnly, d.name, d.moduleReference);
+                return factory.updateImportEqualsDeclaration(d, modifiers, d.isTypeOnly, d.name, d.moduleReference);
             case SyntaxKind.ExpressionStatement:
                 return Debug.fail(); // Shouldn't try to add 'export' keyword to `exports.x = ...`
             default:

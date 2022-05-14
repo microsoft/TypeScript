@@ -148,7 +148,6 @@ namespace ts.codefix {
 
     function generateGetAccessor(fieldName: AcceptedNameType, accessorName: AcceptedNameType, type: TypeNode | undefined, modifiers: NodeArray<ModifierLike> | undefined, isStatic: boolean, container: ContainerDeclaration) {
         return factory.createGetAccessorDeclaration(
-            RESERVED,
             modifiers,
             accessorName,
             /*parameters*/ undefined!, // TODO: GH#18217
@@ -163,11 +162,9 @@ namespace ts.codefix {
 
     function generateSetAccessor(fieldName: AcceptedNameType, accessorName: AcceptedNameType, type: TypeNode | undefined, modifiers: NodeArray<ModifierLike> | undefined, isStatic: boolean, container: ContainerDeclaration) {
         return factory.createSetAccessorDeclaration(
-            RESERVED,
             modifiers,
             accessorName,
             [factory.createParameterDeclaration(
-                RESERVED,
                 /*modifiers*/ undefined,
                 /*dotDotDotToken*/ undefined,
                 factory.createIdentifier("value"),
@@ -188,7 +185,6 @@ namespace ts.codefix {
     function updatePropertyDeclaration(changeTracker: textChanges.ChangeTracker, file: SourceFile, declaration: PropertyDeclaration, type: TypeNode | undefined, fieldName: AcceptedNameType, modifiers: readonly ModifierLike[] | undefined) {
         const property = factory.updatePropertyDeclaration(
             declaration,
-            RESERVED,
             modifiers,
             fieldName,
             declaration.questionToken || declaration.exclamationToken,
@@ -212,7 +208,7 @@ namespace ts.codefix {
         }
         else {
             changeTracker.replaceNode(file, declaration,
-                factory.updateParameterDeclaration(declaration, RESERVED, modifiers, declaration.dotDotDotToken, cast(fieldName, isIdentifier), declaration.questionToken, declaration.type, declaration.initializer));
+                factory.updateParameterDeclaration(declaration, modifiers, declaration.dotDotDotToken, cast(fieldName, isIdentifier), declaration.questionToken, declaration.type, declaration.initializer));
         }
     }
 

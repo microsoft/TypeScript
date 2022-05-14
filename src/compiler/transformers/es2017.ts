@@ -289,7 +289,6 @@ namespace ts {
         function visitMethodDeclaration(node: MethodDeclaration) {
             return factory.updateMethodDeclaration(
                 node,
-                /*decorators*/ RESERVED,
                 visitNodes(node.modifiers, visitor, isModifierLike),
                 node.asteriskToken,
                 node.name,
@@ -314,7 +313,6 @@ namespace ts {
         function visitFunctionDeclaration(node: FunctionDeclaration): VisitResult<Statement> {
             return factory.updateFunctionDeclaration(
                 node,
-                /*decorators*/ RESERVED,
                 visitNodes(node.modifiers, visitor, isModifierLike),
                 node.asteriskToken,
                 node.name,
@@ -764,7 +762,6 @@ namespace ts {
                             /* typeParameters */ undefined,
                             /* parameters */ [
                                 factory.createParameterDeclaration(
-                                    /*decorators*/ RESERVED,
                                     /* modifiers */ undefined,
                                     /* dotDotDotToken */ undefined,
                                     "v",

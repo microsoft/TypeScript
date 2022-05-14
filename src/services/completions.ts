@@ -1195,7 +1195,6 @@ namespace ts.Completions {
 
                 const parameters = typeNode.parameters.map(typedParam =>
                     factory.createParameterDeclaration(
-                        RESERVED,
                         /*modifiers*/ undefined,
                         typedParam.dotDotDotToken,
                         typedParam.name,
@@ -1204,7 +1203,6 @@ namespace ts.Completions {
                         typedParam.initializer,
                     ));
                 return factory.createMethodDeclaration(
-                    RESERVED,
                     /*modifiers*/ undefined,
                     /*asteriskToken*/ undefined,
                     name,

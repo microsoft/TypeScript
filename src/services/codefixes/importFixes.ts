@@ -1257,13 +1257,11 @@ namespace ts.codefix {
         if (namespaceLikeImport) {
             const declaration = namespaceLikeImport.importKind === ImportKind.CommonJS
                 ? factory.createImportEqualsDeclaration(
-                    RESERVED,
                     /*modifiers*/ undefined,
                     needsTypeOnly(namespaceLikeImport),
                     factory.createIdentifier(namespaceLikeImport.name),
                     factory.createExternalModuleReference(quotedModuleSpecifier))
                 : factory.createImportDeclaration(
-                    RESERVED,
                     /*modifiers*/ undefined,
                     factory.createImportClause(
                         needsTypeOnly(namespaceLikeImport),

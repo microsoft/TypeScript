@@ -16,67 +16,66 @@ namespace ts {
     }
 
     function patchNodeFactory(factory: NodeFactory) {
-        const createImportTypeNodeDeprecation = Debug.createDeprecation("createImportTypeNode", { since: "4.6", warnAfter: "4.7", message: "Use the overload that accepts 'assertions'" });
-        const prevCreateImportTypeNode = factory.createImportTypeNode;
-        factory.createImportTypeNode = createImportTypeNode;
+        const {
+            createImportTypeNode,
+            updateImportTypeNode,
+        } = factory;
 
-        const updateImportTypeNodeDeprecation = Debug.createDeprecation("updateImportTypeNode", { since: "4.6", warnAfter: "4.7", message: "Use the overload that accepts 'assertions'" });
-        const prevUpdateImportTypeNode = factory.updateImportTypeNode;
-        factory.updateImportTypeNode = updateImportTypeNode;
+        factory.createImportTypeNode = buildOverload("createImportTypeNode")
+            .overload({
+                0(argument: TypeNode, assertions?: ImportTypeAssertionContainer, qualifier?: EntityName, typeArguments?: readonly TypeNode[], isTypeOf?: boolean): ImportTypeNode {
+                    return createImportTypeNode(argument, assertions, qualifier, typeArguments, isTypeOf);
+                },
 
-        function createImportTypeNode(...args: Parameters<typeof createImportTypeNode1> | Parameters<typeof createImportTypeNode2>) {
-            if (isCreateImportTypeNode1Args(args)) {
-                return createImportTypeNode1(...args);
-            }
-            else {
-                return createImportTypeNode2(...args);
-            }
-        }
+                1(argument: TypeNode, qualifier?: EntityName, typeArguments?: readonly TypeNode[], isTypeOf?: boolean): ImportTypeNode {
+                    return createImportTypeNode(argument, /*assertions*/ undefined, qualifier, typeArguments, isTypeOf);
+                },
+            })
+            .bind({
+                0: ([, assertions, qualifier, typeArguments, isTypeOf]) =>
+                    (assertions === undefined || isImportTypeAssertionContainer(assertions)) &&
+                    (qualifier === undefined || !isArray(qualifier)) &&
+                    (typeArguments === undefined || isArray(typeArguments)) &&
+                    (isTypeOf === undefined || typeof isTypeOf === "boolean"),
 
-        function isCreateImportTypeNode1Args(args: Parameters<typeof createImportTypeNode1> | Parameters<typeof createImportTypeNode2>): args is Parameters<typeof createImportTypeNode1> {
-            const [, assertions, qualifier, typeArguments] = args;
-            if (assertions !== undefined) return isImportTypeAssertionContainer(assertions);
-            if (qualifier !== undefined) return !isArray(qualifier);
-            if (typeArguments !== undefined) return isArray(typeArguments);
-            return true;
-        }
+                1: ([, qualifier, typeArguments, isTypeOf, other]) =>
+                    (other === undefined) &&
+                    (qualifier === undefined || isEntityName(qualifier)) &&
+                    (typeArguments === undefined || isArray(typeArguments)) &&
+                    (isTypeOf === undefined || typeof isTypeOf === "boolean"),
+            })
+            .deprecate({
+                1: { since: "4.6", warnAfter: "4.7", message: "Use the overload that accepts 'assertions'" }
+            })
+            .finish();
 
-        function createImportTypeNode1(argument: TypeNode, assertions?: ImportTypeAssertionContainer, qualifier?: EntityName, typeArguments?: readonly TypeNode[], isTypeOf?: boolean): ImportTypeNode {
-            return prevCreateImportTypeNode(argument, assertions, qualifier, typeArguments, isTypeOf);
-        }
+        factory.updateImportTypeNode = buildOverload("updateImportTypeNode")
+            .overload({
+                0(node: ImportTypeNode, argument: TypeNode, assertions: ImportTypeAssertionContainer | undefined, qualifier: EntityName | undefined, typeArguments: readonly TypeNode[] | undefined, isTypeOf?: boolean): ImportTypeNode {
+                    return updateImportTypeNode(node, argument, assertions, qualifier, typeArguments, isTypeOf);
+                },
 
-        /** @deprecated */
-        function createImportTypeNode2(argument: TypeNode, qualifier?: EntityName, typeArguments?: readonly TypeNode[], isTypeOf?: boolean): ImportTypeNode {
-            createImportTypeNodeDeprecation();
-            return prevCreateImportTypeNode(argument, /*assertions*/ undefined, qualifier, typeArguments, isTypeOf);
-        }
+                1(node: ImportTypeNode, argument: TypeNode, qualifier: EntityName | undefined, typeArguments: readonly TypeNode[] | undefined, isTypeOf?: boolean): ImportTypeNode {
+                    return updateImportTypeNode(node, argument, node.assertions, qualifier, typeArguments, isTypeOf);
+                },
+            })
+            .bind({
+                0: ([, , assertions, qualifier, typeArguments, isTypeOf]) =>
+                    (assertions === undefined || isImportTypeAssertionContainer(assertions)) &&
+                    (qualifier === undefined || !isArray(qualifier)) &&
+                    (typeArguments === undefined || isArray(typeArguments)) &&
+                    (isTypeOf === undefined || typeof isTypeOf === "boolean"),
 
-        function updateImportTypeNode(...args: Parameters<typeof updateImportTypeNode1> | Parameters<typeof updateImportTypeNode2>) {
-            if (isUpdateImportTypeNode1Args(args)) {
-                return updateImportTypeNode1(...args);
-            }
-            else {
-                return updateImportTypeNode2(...args);
-            }
-        }
-
-        function isUpdateImportTypeNode1Args(args: Parameters<typeof updateImportTypeNode1> | Parameters<typeof updateImportTypeNode2>): args is Parameters<typeof updateImportTypeNode1> {
-            const [, , assertions, qualifier, typeArguments] = args;
-            if (assertions !== undefined) return isImportTypeAssertionContainer(assertions);
-            if (qualifier !== undefined) return !isArray(qualifier);
-            if (typeArguments !== undefined) return isArray(typeArguments);
-            return true;
-        }
-
-        function updateImportTypeNode1(node: ImportTypeNode, argument: TypeNode, assertions: ImportTypeAssertionContainer | undefined, qualifier: EntityName | undefined, typeArguments: readonly TypeNode[] | undefined, isTypeOf?: boolean): ImportTypeNode {
-            return prevUpdateImportTypeNode(node, argument, assertions, qualifier, typeArguments, isTypeOf);
-        }
-
-        /** @deprecated */
-        function updateImportTypeNode2(node: ImportTypeNode, argument: TypeNode, qualifier: EntityName | undefined, typeArguments: readonly TypeNode[] | undefined, isTypeOf?: boolean): ImportTypeNode {
-            updateImportTypeNodeDeprecation();
-            return prevUpdateImportTypeNode(node, argument, node.assertions, qualifier, typeArguments, isTypeOf);
-        }
+                1: ([, , qualifier, typeArguments, isTypeOf, other]) =>
+                    (other === undefined) &&
+                    (qualifier === undefined || isEntityName(qualifier)) &&
+                    (typeArguments === undefined || isArray(typeArguments)) &&
+                    (isTypeOf === undefined || typeof isTypeOf === "boolean"),
+            }).
+            deprecate({
+                1: { since: "4.6", warnAfter: "4.7", message: "Use the overload that accepts 'assertions'" }
+            })
+            .finish();
     }
 
     // Patch `createNodeFactory` because it creates the factories that are provided to transformers

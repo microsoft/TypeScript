@@ -474,7 +474,6 @@ namespace ts.refactor.convertParamsToDestructuredObject {
         }
 
         const objectParameter = factory.createParameterDeclaration(
-            RESERVED,
             /*modifiers*/ undefined,
             /*dotDotDotToken*/ undefined,
             objectParameterName,
@@ -485,7 +484,6 @@ namespace ts.refactor.convertParamsToDestructuredObject {
         if (hasThisParameter(functionDeclaration.parameters)) {
             const thisParameter = functionDeclaration.parameters[0];
             const newThisParameter = factory.createParameterDeclaration(
-                RESERVED,
                 /*modifiers*/ undefined,
                 /*dotDotDotToken*/ undefined,
                 thisParameter.name,

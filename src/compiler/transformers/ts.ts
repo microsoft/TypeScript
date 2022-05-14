@@ -712,7 +712,6 @@ namespace ts {
                 : undefined;
 
             const classDeclaration = factory.createClassDeclaration(
-                /*decorators*/ RESERVED,
                 modifiers,
                 name,
                 /*typeParameters*/ undefined,
@@ -838,7 +837,7 @@ namespace ts {
             //  }
             const heritageClauses = visitNodes(node.heritageClauses, visitor, isHeritageClause);
             const members = transformClassMembers(node);
-            const classExpression = factory.createClassExpression(/*decorators*/ RESERVED, /*modifiers*/ undefined, name, /*typeParameters*/ undefined, heritageClauses, members);
+            const classExpression = factory.createClassExpression(/*modifiers*/ undefined, name, /*typeParameters*/ undefined, heritageClauses, members);
             setOriginalNode(classExpression, node);
             setTextRange(classExpression, location);
 
@@ -867,7 +866,6 @@ namespace ts {
             }
 
             const classExpression = factory.createClassExpression(
-                /*decorators*/ RESERVED,
                 /*modifiers*/ undefined,
                 node.name,
                 /*typeParameters*/ undefined,
@@ -896,7 +894,6 @@ namespace ts {
                 for (const parameter of parametersWithPropertyAssignments) {
                     if (isIdentifier(parameter.name)) {
                         members.push(setOriginalNode(factory.createPropertyDeclaration(
-                            /*decorators*/ RESERVED,
                             /*modifiers*/ undefined,
                             parameter.name,
                             /*questionOrExclamationToken*/ undefined,
@@ -1903,7 +1900,6 @@ namespace ts {
             }
             const updated = factory.updatePropertyDeclaration(
                 node,
-                /*decorators*/ RESERVED,
                 visitNodes(node.modifiers, modifierVisitor, isModifierLike),
                 visitPropertyNameOfClassElement(node),
                 /*questionOrExclamationToken*/ undefined,
@@ -1926,7 +1922,6 @@ namespace ts {
 
             return factory.updateConstructorDeclaration(
                 node,
-                /*decorators*/ RESERVED,
                 /*modifiers*/ undefined,
                 visitParameterList(node.parameters, visitor, context),
                 transformConstructorBody(node.body, node)
@@ -2042,7 +2037,6 @@ namespace ts {
             }
             const updated = factory.updateMethodDeclaration(
                 node,
-                /*decorators*/ RESERVED,
                 visitNodes(node.modifiers, modifierVisitor, isModifierLike),
                 node.asteriskToken,
                 visitPropertyNameOfClassElement(node),
@@ -2077,7 +2071,6 @@ namespace ts {
             }
             const updated = factory.updateGetAccessorDeclaration(
                 node,
-                /*decorators*/ RESERVED,
                 visitNodes(node.modifiers, modifierVisitor, isModifierLike),
                 visitPropertyNameOfClassElement(node),
                 visitParameterList(node.parameters, visitor, context),
@@ -2099,7 +2092,6 @@ namespace ts {
             }
             const updated = factory.updateSetAccessorDeclaration(
                 node,
-                /*decorators*/ RESERVED,
                 visitNodes(node.modifiers, modifierVisitor, isModifierLike),
                 visitPropertyNameOfClassElement(node),
                 visitParameterList(node.parameters, visitor, context),
@@ -2120,7 +2112,6 @@ namespace ts {
             }
             const updated = factory.updateFunctionDeclaration(
                 node,
-                /*decorators*/ RESERVED,
                 visitNodes(node.modifiers, modifierVisitor, isModifier),
                 node.asteriskToken,
                 node.name,
@@ -2174,7 +2165,6 @@ namespace ts {
 
             const updated = factory.updateParameterDeclaration(
                 node,
-                /*decorators*/ RESERVED,
                 /*modifiers*/ undefined,
                 node.dotDotDotToken,
                 visitNode(node.name, visitor, isBindingName),
@@ -2411,7 +2401,7 @@ namespace ts {
                         /*asteriskToken*/ undefined,
                         /*name*/ undefined,
                         /*typeParameters*/ undefined,
-                        [factory.createParameterDeclaration(/*decorators*/ RESERVED, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, parameterName)],
+                        [factory.createParameterDeclaration(/*modifiers*/ undefined, /*dotDotDotToken*/ undefined, parameterName)],
                         /*type*/ undefined,
                         transformEnumBody(node, containerName)
                     ),
@@ -2712,7 +2702,7 @@ namespace ts {
                         /*asteriskToken*/ undefined,
                         /*name*/ undefined,
                         /*typeParameters*/ undefined,
-                        [factory.createParameterDeclaration(/*decorators*/ RESERVED, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, parameterName)],
+                        [factory.createParameterDeclaration(/*modifiers*/ undefined, /*dotDotDotToken*/ undefined, parameterName)],
                         /*type*/ undefined,
                         transformModuleBody(node, containerName)
                     ),
@@ -2847,7 +2837,6 @@ namespace ts {
                 compilerOptions.importsNotUsedAsValues === ImportsNotUsedAsValues.Error
                 ? factory.updateImportDeclaration(
                     node,
-                    /*decorators*/ RESERVED,
                     /*modifiers*/ undefined,
                     importClause,
                     node.moduleSpecifier,
@@ -2939,7 +2928,6 @@ namespace ts {
             return exportClause
                 ? factory.updateExportDeclaration(
                     node,
-                    /*decorators*/ RESERVED,
                     /*modifiers*/ undefined,
                     node.isTypeOnly,
                     exportClause,
@@ -3010,7 +2998,6 @@ namespace ts {
                     return setOriginalNode(
                         setTextRange(
                             factory.createImportDeclaration(
-                                /*decorators*/ RESERVED,
                                 /*modifiers*/ undefined,
                                 /*importClause*/ undefined,
                                 node.moduleReference.expression,

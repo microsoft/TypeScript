@@ -200,7 +200,6 @@ namespace ts.refactor {
         const { firstStatement, selection, typeParameters } = info;
 
         const newTypeNode = factory.createTypeAliasDeclaration(
-            RESERVED,
             /* modifiers */ undefined,
             name,
             typeParameters.map(id => factory.updateTypeParameterDeclaration(id, id.modifiers, id.name, id.constraint, /* defaultType */ undefined)),
@@ -214,7 +213,6 @@ namespace ts.refactor {
         const { firstStatement, selection, typeParameters, typeElements } = info;
 
         const newTypeNode = factory.createInterfaceDeclaration(
-            RESERVED,
             /* modifiers */ undefined,
             name,
             typeParameters,
