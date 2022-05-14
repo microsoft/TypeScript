@@ -12181,6 +12181,20 @@ namespace ts {
                         undefined;
                 }
                 if (t.flags & TypeFlags.Index) {
+                    if ((t as IndexType).type.flags & TypeFlags.IndexedAccess) {
+                        const indexedAccess = (t as IndexType).type as IndexedAccessType;
+                        const baseObjectType = getBaseConstraint(indexedAccess.objectType);
+                        const baseIndexType = getBaseConstraint(indexedAccess.indexType);
+                        const indexedAccessType = baseObjectType && baseIndexType && getIndexedAccessTypeOrUndefined(baseObjectType, baseIndexType);
+                        const mappedIndexTypeOfIndexedAccess = indexedAccessType && mapType(indexedAccessType, getIndexType);
+                        const narrowed = mappedIndexTypeOfIndexedAccess && mapType(keyofConstraintType, t => {
+                            const intersected = getIntersectionType([t, mappedIndexTypeOfIndexedAccess]);
+                            return intersected.flags & TypeFlags.Never ? undefined : t;
+                        });
+                        if (narrowed) {
+                            return narrowed;
+                        }
+                    }
                     return keyofConstraintType;
                 }
                 if (t.flags & TypeFlags.TemplateLiteral) {

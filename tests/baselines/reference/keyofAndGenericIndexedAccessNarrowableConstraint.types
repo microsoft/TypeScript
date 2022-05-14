@@ -1,0 +1,24 @@
+=== tests/cases/conformance/types/keyof/keyofAndGenericIndexedAccessNarrowableConstraint.ts ===
+export type Context = {
+>Context : { V1: {    "a": string;}; V2: {    "b": string;}; }
+
+    V1: { "a": string },
+>V1 : { a: string; }
+>"a" : string
+
+    V2: { "b": string },
+>V2 : { b: string; }
+>"b" : string
+}
+
+export function path<V extends keyof Context, K extends keyof Context[V]>(v: V, k: K)  {
+>path : <V extends keyof Context, K extends keyof Context[V]>(v: V, k: K) => string
+>v : V
+>k : K
+
+    return `${v}.${k}`
+>`${v}.${k}` : string
+>v : V
+>k : K
+}
+

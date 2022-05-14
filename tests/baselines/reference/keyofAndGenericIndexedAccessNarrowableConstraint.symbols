@@ -1,0 +1,30 @@
+=== tests/cases/conformance/types/keyof/keyofAndGenericIndexedAccessNarrowableConstraint.ts ===
+export type Context = {
+>Context : Symbol(Context, Decl(keyofAndGenericIndexedAccessNarrowableConstraint.ts, 0, 0))
+
+    V1: { "a": string },
+>V1 : Symbol(V1, Decl(keyofAndGenericIndexedAccessNarrowableConstraint.ts, 0, 23))
+>"a" : Symbol("a", Decl(keyofAndGenericIndexedAccessNarrowableConstraint.ts, 1, 9))
+
+    V2: { "b": string },
+>V2 : Symbol(V2, Decl(keyofAndGenericIndexedAccessNarrowableConstraint.ts, 1, 24))
+>"b" : Symbol("b", Decl(keyofAndGenericIndexedAccessNarrowableConstraint.ts, 2, 9))
+}
+
+export function path<V extends keyof Context, K extends keyof Context[V]>(v: V, k: K)  {
+>path : Symbol(path, Decl(keyofAndGenericIndexedAccessNarrowableConstraint.ts, 3, 1))
+>V : Symbol(V, Decl(keyofAndGenericIndexedAccessNarrowableConstraint.ts, 5, 21))
+>Context : Symbol(Context, Decl(keyofAndGenericIndexedAccessNarrowableConstraint.ts, 0, 0))
+>K : Symbol(K, Decl(keyofAndGenericIndexedAccessNarrowableConstraint.ts, 5, 45))
+>Context : Symbol(Context, Decl(keyofAndGenericIndexedAccessNarrowableConstraint.ts, 0, 0))
+>V : Symbol(V, Decl(keyofAndGenericIndexedAccessNarrowableConstraint.ts, 5, 21))
+>v : Symbol(v, Decl(keyofAndGenericIndexedAccessNarrowableConstraint.ts, 5, 74))
+>V : Symbol(V, Decl(keyofAndGenericIndexedAccessNarrowableConstraint.ts, 5, 21))
+>k : Symbol(k, Decl(keyofAndGenericIndexedAccessNarrowableConstraint.ts, 5, 79))
+>K : Symbol(K, Decl(keyofAndGenericIndexedAccessNarrowableConstraint.ts, 5, 45))
+
+    return `${v}.${k}`
+>v : Symbol(v, Decl(keyofAndGenericIndexedAccessNarrowableConstraint.ts, 5, 74))
+>k : Symbol(k, Decl(keyofAndGenericIndexedAccessNarrowableConstraint.ts, 5, 79))
+}
+
