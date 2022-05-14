@@ -1,56 +1,68 @@
 === tests/cases/conformance/types/tuple/variadicTupleRestSandwich.ts ===
 /**
- * The (OK/Error) X (expected/unexpected) notations on the rhs 
- * of the assignments are valid for versions 4.2.3 ~ 4.8 dev
+ * The before: (OK/Error) X (expected/unexpected) notations on the rhs 
+ * of the assignments are valid for versions 4.2.3 ~ 4.8 dev.
  */
 
 {
+    // Type T2 IS NOT a rest sandwich format - always no change in result between before and after
     type T1 = [x:number,y?:boolean];
 >T1 : Symbol(T1, Decl(variadicTupleRestSandwich.ts, 5, 1))
 
-    type T2 = [...T1, "$"];  // GUI shows type T2 = [number, boolean | undefined, "$"]
->T2 : Symbol(T2, Decl(variadicTupleRestSandwich.ts, 6, 36))
+    type T2 = [...T1, "$"];  // GUI shows type T2 = [number, boolean | undefined, "$"] canonical type 1 format (no rest)
+>T2 : Symbol(T2, Decl(variadicTupleRestSandwich.ts, 7, 36))
 >T1 : Symbol(T1, Decl(variadicTupleRestSandwich.ts, 5, 1))
 
-    const t2a:T2 = [1, "$"]; // Error (expected)
->t2a : Symbol(t2a, Decl(variadicTupleRestSandwich.ts, 9, 9))
->T2 : Symbol(T2, Decl(variadicTupleRestSandwich.ts, 6, 36))
+    const t2a:T2 = [1, "$"]; // { before: Error (expected), after: Error (expected) }
+>t2a : Symbol(t2a, Decl(variadicTupleRestSandwich.ts, 10, 9))
+>T2 : Symbol(T2, Decl(variadicTupleRestSandwich.ts, 7, 36))
 
-    const t2b:T2 = [1, true, "$"]; // OK (expected)
->t2b : Symbol(t2b, Decl(variadicTupleRestSandwich.ts, 10, 9))
->T2 : Symbol(T2, Decl(variadicTupleRestSandwich.ts, 6, 36))
+    const t2b:T2 = [1, true, "$"]; // { before: OK (expected), after: OK (expected) }
+>t2b : Symbol(t2b, Decl(variadicTupleRestSandwich.ts, 11, 9))
+>T2 : Symbol(T2, Decl(variadicTupleRestSandwich.ts, 7, 36))
 }
 
 {
+    // Type T12 IS a rest sandwich format - this example shows results that improvably differ between before and after.
     type Last = "$";
->Last : Symbol(Last, Decl(variadicTupleRestSandwich.ts, 13, 1))
+>Last : Symbol(Last, Decl(variadicTupleRestSandwich.ts, 14, 1))
 
     type T11 = [x:"^",...y:boolean[]];
->T11 : Symbol(T11, Decl(variadicTupleRestSandwich.ts, 14, 20))
+>T11 : Symbol(T11, Decl(variadicTupleRestSandwich.ts, 16, 20))
 
     type T11m = [z?:string];
->T11m : Symbol(T11m, Decl(variadicTupleRestSandwich.ts, 15, 38))
+>T11m : Symbol(T11m, Decl(variadicTupleRestSandwich.ts, 17, 38))
 
-    type T12 = [...T11, ...T11m,"$"]; // type T12 = [1, ...(string | boolean | undefined)[], "$"]
->T12 : Symbol(T12, Decl(variadicTupleRestSandwich.ts, 16, 28))
->T11 : Symbol(T11, Decl(variadicTupleRestSandwich.ts, 14, 20))
->T11m : Symbol(T11m, Decl(variadicTupleRestSandwich.ts, 15, 38))
+    type T12 = [...T11, ...T11m,"$"]; // type T12 = ["^", ...(string | boolean | undefined)[], "$"] canonical type 2 format (rest sandwich)
+>T12 : Symbol(T12, Decl(variadicTupleRestSandwich.ts, 18, 28))
+>T11 : Symbol(T11, Decl(variadicTupleRestSandwich.ts, 16, 20))
+>T11m : Symbol(T11m, Decl(variadicTupleRestSandwich.ts, 17, 38))
 
-    const t12a:T12 = ["^", "$"]; // Error (unexpected)
->t12a : Symbol(t12a, Decl(variadicTupleRestSandwich.ts, 19, 9))
->T12 : Symbol(T12, Decl(variadicTupleRestSandwich.ts, 16, 28))
+    /** 
+    * In the next two assignment examples:
+    *   before: the glutinous rest element `T12[1]` greedily eats the rhs `$`, preventing `T12[2]` from correctly matching rhs `$`. 
+    *   after: first `T12[0]` matches rhs "^", rest element `T12[1]` matching is deffered, `T12[2]`matches the last "$", 
+    *     and finally matches the rest element `T12[1]`.
+    */
+    const t12a:T12 = ["^", "$"]; // { before: Error (unexpected), after: OK (expected) } 
+>t12a : Symbol(t12a, Decl(variadicTupleRestSandwich.ts, 27, 9))
+>T12 : Symbol(T12, Decl(variadicTupleRestSandwich.ts, 18, 28))
 
-    const t12b:T12 = ["^", true, "$"]; // Error (unexpected)
->t12b : Symbol(t12b, Decl(variadicTupleRestSandwich.ts, 20, 9))
->T12 : Symbol(T12, Decl(variadicTupleRestSandwich.ts, 16, 28))
+    const t12b:T12 = ["^", true, "$"]; // { before :Error (unexpected), after: OK (expected) }
+>t12b : Symbol(t12b, Decl(variadicTupleRestSandwich.ts, 28, 9))
+>T12 : Symbol(T12, Decl(variadicTupleRestSandwich.ts, 18, 28))
 
-    const t12c:T12 = ["^", "$" as Last]; // OK (expected)
->t12c : Symbol(t12c, Decl(variadicTupleRestSandwich.ts, 21, 9))
->T12 : Symbol(T12, Decl(variadicTupleRestSandwich.ts, 16, 28))
->Last : Symbol(Last, Decl(variadicTupleRestSandwich.ts, 13, 1))
+    // In the next two assignment examples, the before unexpected errors are prevented by explicity casting rhs "$" to the literal type it really is meant to be,
+    // which is not compatible with the rest element `T12[1]`.  This is just to illustrate how the unidirecitonal L to R matching is working
+    // and can sometimes get the right answer.
+    const t12c:T12 = ["^", "$" as Last]; // { before: OK (expected), after: OK (expected) }
+>t12c : Symbol(t12c, Decl(variadicTupleRestSandwich.ts, 33, 9))
+>T12 : Symbol(T12, Decl(variadicTupleRestSandwich.ts, 18, 28))
+>Last : Symbol(Last, Decl(variadicTupleRestSandwich.ts, 14, 1))
 
-    const t12d:T12 = ["^", true, "$" as Last]; // OK (expected)
->t12d : Symbol(t12d, Decl(variadicTupleRestSandwich.ts, 22, 9))
->T12 : Symbol(T12, Decl(variadicTupleRestSandwich.ts, 16, 28))
->Last : Symbol(Last, Decl(variadicTupleRestSandwich.ts, 13, 1))
+    const t12d:T12 = ["^", true, "$" as Last]; // { before: OK (expected), after: OK (expected) }
+>t12d : Symbol(t12d, Decl(variadicTupleRestSandwich.ts, 34, 9))
+>T12 : Symbol(T12, Decl(variadicTupleRestSandwich.ts, 18, 28))
+>Last : Symbol(Last, Decl(variadicTupleRestSandwich.ts, 14, 1))
 }
+
