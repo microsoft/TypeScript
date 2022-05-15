@@ -27615,13 +27615,13 @@ namespace ts {
                         }
                     }
                     if (contextualType) {
-                        const contextualProperty = getPropertyOfType(contextualType, member.escapedName)
+                        const contextualProperty = getPropertyOfType(contextualType, member.escapedName);
                         const isFromOverload = contextualProperty?.declarations?.some(decl => {
-                            const param = findAncestor(decl, isParameter)
-                            return param && isFunctionDeclaration(param.parent) && countWhere(getSymbolOfNode(param.parent).declarations, isFunctionLike) > 1
-                        })
+                            const param = findAncestor(decl, isParameter);
+                            return param && isFunctionDeclaration(param.parent) && countWhere(getSymbolOfNode(param.parent).declarations, isFunctionLike) > 1;
+                        });
                         if (!isFromOverload) {
-                            checkDeprecatedProperty(member, contextualProperty)
+                            checkDeprecatedProperty(member, contextualProperty);
                         }
 
                     }
@@ -28332,12 +28332,14 @@ namespace ts {
             if (isNodeOpeningLikeElement) {
                 const sig = getResolvedSignature(node);
                 checkDeprecatedSignature(sig, node);
-                const param = sig.parameters[0]
-                for (const source of node.attributes.properties) {
-                    const member = source.symbol;
-                    const attributesTarget = getTypeOfSymbol(param)
-                    if (member && attributesTarget) {
-                        checkDeprecatedProperty(member, getPropertyOfType(attributesTarget, member.escapedName))
+                const param = sig.parameters[0];
+                if (param) {
+                    for (const source of node.attributes.properties) {
+                        const member = source.symbol;
+                        const attributesTarget = getTypeOfSymbol(param);
+                        if (member && attributesTarget) {
+                            checkDeprecatedProperty(member, getPropertyOfType(attributesTarget, member.escapedName));
+                        }
                     }
                 }
                 checkJsxReturnAssignableToAppropriateBound(getJsxReferenceKind(node), getReturnTypeOfSignature(sig), node);

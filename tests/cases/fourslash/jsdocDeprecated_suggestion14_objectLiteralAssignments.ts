@@ -21,7 +21,7 @@
 //// props = { [|foo|], bar, [|callback|] };
 //// props = { bar, [|callback|]() {} };
 
-//// // Skip if there is a type incompatibility error.
+//// // Do not skip if there is a type incompatibility error.
 //// const props5: Props = { [|foo|]: "foo", boo: "boo" };
 
 //// // Skip for union types.
