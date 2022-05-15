@@ -848,6 +848,8 @@ namespace ts {
         emptyTypeLiteralSymbol.members = createSymbolTable();
         const emptyTypeLiteralType = createAnonymousType(emptyTypeLiteralSymbol, emptySymbols, emptyArray, emptyArray, emptyArray);
 
+        const unknownUnionType = strictNullChecks ? getUnionType([undefinedType, nullType, createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, emptyArray)]) : unknownType;
+
         const emptyGenericType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, emptyArray) as ObjectType as GenericType;
         emptyGenericType.instantiations = new Map<string, TypeReference>();
 
@@ -14835,6 +14837,7 @@ namespace ts {
                     t.flags & TypeFlags.Number && includes & TypeFlags.NumberLiteral ||
                     t.flags & TypeFlags.BigInt && includes & TypeFlags.BigIntLiteral ||
                     t.flags & TypeFlags.ESSymbol && includes & TypeFlags.UniqueESSymbol ||
+                    t.flags & TypeFlags.Void && includes & TypeFlags.Undefined ||
                     t.flags & TypeFlags.NonPrimitive && includes & TypeFlags.Object ||
                     isEmptyAnonymousObjectType(t) && includes & TypeFlags.DefinitelyNonNullable;
                 if (remove) {
@@ -14998,6 +15001,7 @@ namespace ts {
                 includes & TypeFlags.Number && includes & TypeFlags.NumberLiteral ||
                 includes & TypeFlags.BigInt && includes & TypeFlags.BigIntLiteral ||
                 includes & TypeFlags.ESSymbol && includes & TypeFlags.UniqueESSymbol ||
+                includes & TypeFlags.Void && includes & TypeFlags.Undefined ||
                 includes & TypeFlags.NonPrimitive && includes & TypeFlags.Object ||
                 includes & TypeFlags.IncludesEmptyObject && includes & TypeFlags.DefinitelyNonNullable) {
                 removeRedundantSupertypes(typeSet, includes);
@@ -18183,7 +18187,7 @@ namespace ts {
             // Since unions and intersections may reduce to `never`, we exclude them here.
             if (s & TypeFlags.Undefined && (!strictNullChecks && !(t & TypeFlags.UnionOrIntersection) || t & (TypeFlags.Undefined | TypeFlags.Void))) return true;
             if (s & TypeFlags.Null && (!strictNullChecks && !(t & TypeFlags.UnionOrIntersection) || t & TypeFlags.Null)) return true;
-            if (s & TypeFlags.Object && t & TypeFlags.NonPrimitive) return true;
+            if (s & TypeFlags.Object && t & TypeFlags.NonPrimitive && !(relation === strictSubtypeRelation && isEmptyAnonymousObjectType(source))) return true;
             if (relation === assignableRelation || relation === comparableRelation) {
                 if (s & TypeFlags.Any) return true;
                 // Type number or any numeric literal type is assignable to any numeric enum type or any
@@ -23505,6 +23509,24 @@ namespace ts {
             return filterType(type, t => (getTypeFacts(t) & include) !== 0);
         }
 
+        function getIntersectionWithFacts(type: Type, facts: TypeFacts) {
+            const reduced = getTypeWithFacts(strictNullChecks && type.flags & TypeFlags.Unknown ? unknownUnionType : type, facts);
+            if (strictNullChecks) {
+                switch (facts) {
+                    case TypeFacts.NEUndefined:
+                        const emptyOrNull = maybeTypeOfKind(reduced, TypeFlags.Null) ? emptyObjectType : getUnionType([emptyObjectType, nullType]);
+                        return mapType(reduced, t => getTypeFacts(t) & TypeFacts.EQUndefined ? getIntersectionType([t, getTypeFacts(t) & TypeFacts.EQNull ? emptyOrNull : emptyObjectType]): t);
+                    case TypeFacts.NENull:
+                        const emptyOrUndefined = maybeTypeOfKind(reduced, TypeFlags.Undefined) ? emptyObjectType : getUnionType([emptyObjectType, undefinedType]);
+                        return mapType(reduced, t => getTypeFacts(t) & TypeFacts.EQNull ? getIntersectionType([t, getTypeFacts(t) & TypeFacts.EQUndefined ? emptyOrUndefined : emptyObjectType]): t);
+                    case TypeFacts.NEUndefinedOrNull:
+                    case TypeFacts.Truthy:
+                        return mapType(reduced, t => getTypeFacts(t) & TypeFacts.EQUndefinedOrNull ? getIntersectionType([t, emptyObjectType]): t);
+                }
+            }
+            return reduced;
+        }
+
         function getTypeWithDefault(type: Type, defaultExpression: Expression) {
             return defaultExpression ?
                 getUnionType([getNonUndefinedType(type), getTypeOfExpression(defaultExpression)]) :
@@ -24637,6 +24659,9 @@ namespace ts {
                     return getEvolvingArrayType(getUnionType(map(types, getElementTypeOfEvolvingArrayType)));
                 }
                 const result = getUnionType(sameMap(types, finalizeEvolvingArrayType), subtypeReduction);
+                if (result === unknownUnionType) {
+                    return unknownType;
+                }
                 if (result !== declaredType && result.flags & declaredType.flags & TypeFlags.Union && arraysEqual((result as UnionType).types, (declaredType as UnionType).types)) {
                     return declaredType;
                 }
@@ -24744,8 +24769,7 @@ namespace ts {
 
             function narrowTypeByTruthiness(type: Type, expr: Expression, assumeTrue: boolean): Type {
                 if (isMatchingReference(reference, expr)) {
-                    return type.flags & TypeFlags.Unknown && assumeTrue ? nonNullUnknownType :
-                        getTypeWithFacts(type, assumeTrue ? TypeFacts.Truthy : TypeFacts.Falsy);
+                    return getIntersectionWithFacts(type, assumeTrue ? TypeFacts.Truthy : TypeFacts.Falsy);
                 }
                 if (strictNullChecks && assumeTrue && optionalChainContainsReference(expr, reference)) {
                     type = getTypeWithFacts(type, TypeFacts.NEUndefinedOrNull);
@@ -24905,9 +24929,6 @@ namespace ts {
                     assumeTrue = !assumeTrue;
                 }
                 const valueType = getTypeOfExpression(value);
-                if (assumeTrue && (type.flags & TypeFlags.Unknown) && (operator === SyntaxKind.EqualsEqualsToken || operator === SyntaxKind.ExclamationEqualsToken) && (valueType.flags & TypeFlags.Null)) {
-                    return getUnionType([nullType, undefinedType]);
-                }
                 if ((type.flags & TypeFlags.Unknown) && assumeTrue && (operator === SyntaxKind.EqualsEqualsEqualsToken || operator === SyntaxKind.ExclamationEqualsEqualsToken)) {
                     if (valueType.flags & (TypeFlags.Primitive | TypeFlags.NonPrimitive)) {
                         return valueType;
@@ -24927,7 +24948,7 @@ namespace ts {
                         valueType.flags & TypeFlags.Null ?
                             assumeTrue ? TypeFacts.EQNull : TypeFacts.NENull :
                             assumeTrue ? TypeFacts.EQUndefined : TypeFacts.NEUndefined;
-                    return type.flags & TypeFlags.Unknown && facts & (TypeFacts.NENull | TypeFacts.NEUndefinedOrNull) ? nonNullUnknownType : getTypeWithFacts(type, facts);
+                    return getIntersectionWithFacts(type, facts);
                 }
                 if (assumeTrue) {
                     const filterFn: (t: Type) => boolean = operator === SyntaxKind.EqualsEqualsToken ?
@@ -24956,17 +24977,11 @@ namespace ts {
                 if (type.flags & TypeFlags.Any && literal.text === "function") {
                     return type;
                 }
-                if (assumeTrue && type.flags & TypeFlags.Unknown && literal.text === "object") {
-                    // The non-null unknown type is used to track whether a previous narrowing operation has removed the null type
-                    // from the unknown type. For example, the expression `x && typeof x === 'object'` first narrows x to the non-null
-                    // unknown type, and then narrows that to the non-primitive type.
-                    return type === nonNullUnknownType ? nonPrimitiveType : getUnionType([nonPrimitiveType, nullType]);
-                }
                 const facts = assumeTrue ?
                     typeofEQFacts.get(literal.text) || TypeFacts.TypeofEQHostObject :
                     typeofNEFacts.get(literal.text) || TypeFacts.TypeofNEHostObject;
                 const impliedType = getImpliedTypeFromTypeofGuard(type, literal.text);
-                return getTypeWithFacts(assumeTrue && impliedType ? mapType(type, narrowUnionMemberByTypeof(impliedType)) : type, facts);
+                return getTypeWithFacts(assumeTrue && impliedType ? narrowTypeByImpliedType(type, impliedType) : type, facts);
             }
 
             function narrowTypeBySwitchOptionalChainContainment(type: Type, switchStatement: SwitchStatement, clauseStart: number, clauseEnd: number, clauseCheck: (type: Type) => boolean) {
@@ -25019,10 +25034,10 @@ namespace ts {
 
             function getImpliedTypeFromTypeofGuard(type: Type, text: string) {
                 switch (text) {
+                    case "object":
+                        return type.flags & TypeFlags.Any ? type : getUnionType([nullType, nonPrimitiveType]);
                     case "function":
                         return type.flags & TypeFlags.Any ? type : globalFunctionType;
-                    case "object":
-                        return type.flags & TypeFlags.Unknown ? getUnionType([nonPrimitiveType, nullType]) : type;
                     default:
                         return typeofTypesByName.get(text);
                 }
@@ -25034,22 +25049,24 @@ namespace ts {
             // the guard. For example: narrowing `{} | undefined` by `"boolean"` should produce the type `boolean`, not
             // the filtered type `{}`. For this reason we narrow constituents of the union individually, in addition to
             // filtering by type-facts.
-            function narrowUnionMemberByTypeof(candidate: Type) {
-                return (type: Type) => {
-                    if (isTypeSubtypeOf(type, candidate)) {
-                        return type;
+            function narrowTypeByImpliedType(type: Type, candidate: Type) {
+                if (type.flags & TypeFlags.AnyOrUnknown) {
+                    return candidate;
+                }
+                return mapType(type, t => {
+                    if (isTypeRelatedTo(t, candidate, strictSubtypeRelation)) {
+                        return t;
                     }
-                    if (isTypeSubtypeOf(candidate, type)) {
-                        return candidate;
-                    }
-                    if (type.flags & TypeFlags.Instantiable) {
-                        const constraint = getBaseConstraintOfType(type) || anyType;
-                        if (isTypeSubtypeOf(candidate, constraint)) {
-                            return getIntersectionType([type, candidate]);
+                    return mapType(candidate, c => {
+                        if (!areTypesComparable(t, c)) {
+                            return neverType;
                         }
-                    }
-                    return type;
-                };
+                        if ((c.flags & TypeFlags.Primitive || c === globalFunctionType) && t.flags & TypeFlags.Object && !isEmptyAnonymousObjectType(t)) {
+                            return isTypeSubtypeOf(c, t) ? c : neverType;
+                        }
+                        return getIntersectionType([t, c]);
+                    });
+                });
             }
 
             function narrowBySwitchOnTypeOf(type: Type, switchStatement: SwitchStatement, clauseStart: number, clauseEnd: number): Type {
@@ -25109,7 +25126,7 @@ namespace ts {
                   because it is caught in the first clause.
                 */
                 const impliedType = getTypeWithFacts(getUnionType(clauseWitnesses.map(text => getImpliedTypeFromTypeofGuard(type, text) || type)), switchFacts);
-                return getTypeWithFacts(mapType(type, narrowUnionMemberByTypeof(impliedType)), switchFacts);
+                return getTypeWithFacts(narrowTypeByImpliedType(type, impliedType), switchFacts);
             }
 
             function isMatchingConstructorReference(expr: Expression) {
