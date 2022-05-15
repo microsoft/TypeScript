@@ -14838,7 +14838,6 @@ namespace ts {
                     t.flags & TypeFlags.BigInt && includes & TypeFlags.BigIntLiteral ||
                     t.flags & TypeFlags.ESSymbol && includes & TypeFlags.UniqueESSymbol ||
                     t.flags & TypeFlags.Void && includes & TypeFlags.Undefined ||
-                    t.flags & TypeFlags.NonPrimitive && includes & TypeFlags.Object ||
                     isEmptyAnonymousObjectType(t) && includes & TypeFlags.DefinitelyNonNullable;
                 if (remove) {
                     orderedRemoveItemAt(types, i);
@@ -15002,7 +15001,6 @@ namespace ts {
                 includes & TypeFlags.BigInt && includes & TypeFlags.BigIntLiteral ||
                 includes & TypeFlags.ESSymbol && includes & TypeFlags.UniqueESSymbol ||
                 includes & TypeFlags.Void && includes & TypeFlags.Undefined ||
-                includes & TypeFlags.NonPrimitive && includes & TypeFlags.Object ||
                 includes & TypeFlags.IncludesEmptyObject && includes & TypeFlags.DefinitelyNonNullable) {
                 removeRedundantSupertypes(typeSet, includes);
             }
@@ -25061,8 +25059,11 @@ namespace ts {
                         if (!areTypesComparable(t, c)) {
                             return neverType;
                         }
-                        if ((c.flags & TypeFlags.Primitive) && t.flags & TypeFlags.Object && !isEmptyAnonymousObjectType(t)) {
+                        if (c.flags & TypeFlags.Primitive && t.flags & TypeFlags.Object && !isEmptyAnonymousObjectType(t)) {
                             return isTypeSubtypeOf(c, t) ? c : neverType;
+                        }
+                        if (c === globalFunctionType && t.flags & TypeFlags.NonPrimitive) {
+                            return c;
                         }
                         return getIntersectionType([t, c]);
                     });
