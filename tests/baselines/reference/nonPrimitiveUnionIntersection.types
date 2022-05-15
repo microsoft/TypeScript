@@ -28,7 +28,7 @@ const foo: object & {} = {bar: 'bar'}; // ok
 >'bar' : "bar"
 
 const bar: object & {err: string} = {bar: 'bar'}; // error
->bar : { err: string; }
+>bar : object & { err: string; }
 >err : string
 >{bar: 'bar'} : { bar: string; }
 >bar : string
