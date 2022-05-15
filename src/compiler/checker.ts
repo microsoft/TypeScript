@@ -27556,18 +27556,22 @@ namespace ts {
                 //     console.groupEnd();
                 // }
                 /**
-                 * `getContextualTypeForElementExpression_alt` is a workaround for `getContextualTypeForElementExpression` which fails when accessing indices beyond the first
-                 * index corresponding to a rest index.  `getContextualTypeForElementExpression` returns the value at the first rest index for any index value >= the first rest
-                 * index.  That doesn't work when there are real values beyond the first rest index, which are actually allowed in the current code from createNormalizedTupleType:
-                 *   checker.ts: function createNormalizedTupleType, see the code corresponding to comments:
-                 *       // Turn optional elements preceding the last required element into required elements
-                 *       // Turn elements between first rest and last optional/rest into a single rest element
+                 * `getContextualTypeForElementExpression_alt`
+                 * is a workaround for `getContextualTypeForElementExpression` which fails when accessing indices beyond the first
+                 * index corresponding to a rest index.  `getContextualTypeForElementExpression` returns the value at the first rest index
+                 * for any index value >= the first rest index.
+                 * That doesn't work when there are real values beyond the first rest index, which are actually allowed in the current code from
+                 * `createNormalizedTupleType:` (`checker.ts`: `function createNormalizedTupleType`), see the code corresponding to comments:
+                 *         // Turn optional elements preceding the last required element into required elements
+                 *         // Turn elements between first rest and last optional/rest into a single rest element
                  * Proposal: IF an abstract representation is necessary (is it necessary?)
                  * 1. Modify `getContextualTypeForElementExpression` to accept negeative indices, where -n refers to the nth element from the end, starting at -1.
-                 *    (Same numbering convention as slice).
+                 *   (Same numbering convention as slice).
                  * 2. Create `getContextualTupleTypeAndFlagForElementExpression(ctx:Readonly<TupleTypeReference>, index:number)`
-                 *    because the abstract typeArguments and elementFlags arrays should be in 1-1 correspondance.
-                 *    See "NOTE!!!" below, highlighting cases where the defacto length of typeArguments is longer that elementFlags.
+                 *   because the abstract typeArguments and elementFlags arrays should be in 1-1 correspondance.
+                 *
+                 * Related:     See "NOTE!!!" below, highlighting cases where the defacto length of `contextualType.typeArguments`
+                 *   is longer that of `contextualType.target.elementFlags`.
                  * @param arrayContextualType
                  * @param index
                  * @returns
