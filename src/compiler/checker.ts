@@ -25061,7 +25061,7 @@ namespace ts {
                         if (!areTypesComparable(t, c)) {
                             return neverType;
                         }
-                        if ((c.flags & TypeFlags.Primitive || c === globalFunctionType) && t.flags & TypeFlags.Object && !isEmptyAnonymousObjectType(t)) {
+                        if ((c.flags & TypeFlags.Primitive) && t.flags & TypeFlags.Object && !isEmptyAnonymousObjectType(t)) {
                             return isTypeSubtypeOf(c, t) ? c : neverType;
                         }
                         return getIntersectionType([t, c]);
