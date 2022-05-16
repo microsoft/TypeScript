@@ -18,7 +18,6 @@
         "types.ts",
         "utilitiesPublic.ts",
         "utilities.ts",
-        "watchType.ts",
         "protocol.ts",
         "scriptInfo.ts",
         "typingsCache.ts",

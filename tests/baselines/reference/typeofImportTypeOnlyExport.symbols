@@ -1,0 +1,35 @@
+=== tests/cases/conformance/declarationEmit/button.ts ===
+import {classMap} from './lit.js';
+>classMap : Symbol(classMap, Decl(button.ts, 0, 8))
+
+export const c = classMap();
+>c : Symbol(c, Decl(button.ts, 1, 12))
+>classMap : Symbol(classMap, Decl(button.ts, 0, 8))
+
+=== tests/cases/conformance/declarationEmit/lit.ts ===
+class ClassMapDirective {}
+>ClassMapDirective : Symbol(ClassMapDirective, Decl(lit.ts, 0, 0))
+
+export type {ClassMapDirective};
+>ClassMapDirective : Symbol(ClassMapDirective, Decl(lit.ts, 2, 13))
+
+export const directive =
+>directive : Symbol(directive, Decl(lit.ts, 4, 12))
+
+  <C>(class_: C) =>
+>C : Symbol(C, Decl(lit.ts, 5, 3))
+>class_ : Symbol(class_, Decl(lit.ts, 5, 6))
+>C : Symbol(C, Decl(lit.ts, 5, 3))
+
+  () => ({
+    directive: class_,
+>directive : Symbol(directive, Decl(lit.ts, 6, 10))
+>class_ : Symbol(class_, Decl(lit.ts, 5, 6))
+
+  });
+
+export const classMap = directive(ClassMapDirective);
+>classMap : Symbol(classMap, Decl(lit.ts, 10, 12))
+>directive : Symbol(directive, Decl(lit.ts, 4, 12))
+>ClassMapDirective : Symbol(ClassMapDirective, Decl(lit.ts, 0, 0))
+
