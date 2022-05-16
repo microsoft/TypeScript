@@ -51,6 +51,8 @@ function watch(rootFileNames: string[], options: ts.CompilerOptions) {
         getCurrentDirectory: () => process.cwd(),
         getCompilationSettings: () => options,
         getDefaultLibFileName: (options) => ts.getDefaultLibFilePath(options),
+        fileExists: fileName => fs.existsSync(fileName),
+        readFile: fileName => fs.readFileSync(fileName),
     };
 
     // Create the language service files

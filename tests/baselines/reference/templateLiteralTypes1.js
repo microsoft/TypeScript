@@ -217,6 +217,7 @@ type BB = AA<-2, -2>;
 // Repro from #40970
 
 type PathKeys<T> =
+    unknown extends T ? never :
     T extends readonly any[] ? Extract<keyof T, `${number}`> | SubKeys<T, Extract<keyof T, `${number}`>> :
     T extends object ? Extract<keyof T, string> | SubKeys<T, Extract<keyof T, string>> :
     never;

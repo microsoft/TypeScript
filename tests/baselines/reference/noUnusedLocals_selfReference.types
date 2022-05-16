@@ -34,7 +34,7 @@ interface I { x: I };
 >x : I
 
 type T = { x: T };
->T : T
+>T : { x: T; }
 >x : T
 
 namespace N { N; }

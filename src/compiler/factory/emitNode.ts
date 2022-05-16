@@ -127,7 +127,7 @@ namespace ts {
     /**
      * Gets a custom text range to use when emitting comments.
      */
-    export function getCommentRange(node: Node) {
+    export function getCommentRange(node: Node): TextRange {
         return node.emitNode?.commentRange ?? node;
     }
 
@@ -278,5 +278,17 @@ namespace ts {
     export function ignoreSourceNewlines<T extends Node>(node: T): T {
         getOrCreateEmitNode(node).flags |= EmitFlags.IgnoreSourceNewlines;
         return node;
+    }
+
+    /* @internal */
+    export function setTypeNode<T extends Node>(node: T, type: TypeNode): T {
+        const emitNode = getOrCreateEmitNode(node);
+        emitNode.typeNode = type;
+        return node;
+    }
+
+    /* @internal */
+    export function getTypeNode<T extends Node>(node: T): TypeNode | undefined {
+        return node.emitNode?.typeNode;
     }
 }

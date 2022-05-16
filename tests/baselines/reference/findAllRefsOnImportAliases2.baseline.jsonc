@@ -300,8 +300,7 @@
           "start": 0,
           "length": 21
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -313,8 +312,7 @@
           "start": 0,
           "length": 34
         },
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -326,8 +324,7 @@
           "start": 0,
           "length": 34
         },
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   },
@@ -404,8 +401,7 @@
           "start": 0,
           "length": 34
         },
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -413,8 +409,7 @@
           "length": 2
         },
         "fileName": "/tests/cases/fourslash/b.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   },
@@ -491,8 +486,7 @@
           "start": 0,
           "length": 34
         },
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       }
     ]
   }
@@ -550,8 +544,7 @@
           "start": 0,
           "length": 21
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -563,8 +556,7 @@
           "start": 0,
           "length": 34
         },
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -576,8 +568,7 @@
           "start": 0,
           "length": 34
         },
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   },
@@ -654,8 +645,7 @@
           "start": 0,
           "length": 34
         },
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -663,8 +653,7 @@
           "length": 2
         },
         "fileName": "/tests/cases/fourslash/b.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   },
@@ -741,8 +730,7 @@
           "start": 0,
           "length": 34
         },
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       }
     ]
   }
@@ -920,8 +908,7 @@
           "start": 0,
           "length": 34
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -929,8 +916,7 @@
           "length": 2
         },
         "fileName": "/tests/cases/fourslash/b.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }

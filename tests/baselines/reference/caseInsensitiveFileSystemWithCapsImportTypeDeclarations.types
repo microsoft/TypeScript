@@ -21,7 +21,7 @@ import { TypeA } from './type-a';
 >TypeA : any
 
 export type TypeB = Merge<TypeA, {
->TypeB : TypeB
+>TypeB : TypeA & { b: string; }
 
     b: string;
 >b : string
@@ -29,7 +29,7 @@ export type TypeB = Merge<TypeA, {
 }>;
 === tests/cases/compiler/Uppercased_Dir/src/type-a.ts ===
 export type TypeA = {
->TypeA : TypeA
+>TypeA : { a: string; }
 
     a: string;
 >a : string

@@ -98,7 +98,7 @@ Output::
 
 [96mb.ts[0m:[93m1[0m:[93m43[0m - [91merror[0m[90m TS1149: [0mFile name '/A.ts' differs from already included file name '/a.ts' only in casing.
   The file is in the program because:
-    Matched by include pattern '**/*' in '/tsconfig.json'
+    Matched by default include pattern '**/*'
     Imported via './a' from file '/b.ts'
     Imported via './A' from file '/b.ts'
 

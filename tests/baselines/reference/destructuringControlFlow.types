@@ -161,7 +161,7 @@ function f4() {
 // Repro from #31770
 
 type KeyValue = [string, string?];
->KeyValue : KeyValue
+>KeyValue : [string, (string | undefined)?]
 
 let [key, value]: KeyValue = ["foo"];
 >key : string

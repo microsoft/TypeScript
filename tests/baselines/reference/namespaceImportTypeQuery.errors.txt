@@ -1,4 +1,5 @@
-/b.ts(2,21): error TS2339: Property 'A' does not exist on type 'typeof import("/a")'.
+/b.ts(8,3): error TS2322: Type '{ A: any; B: any; }' is not assignable to type 'typeof import("/a")'.
+  Object literal may only specify known properties, and 'A' does not exist in type 'typeof import("/a")'.
 
 
 ==== /a.ts (0 errors) ====
@@ -9,7 +10,15 @@
 ==== /b.ts (1 errors) ====
     import * as types from './a';
     let A: typeof types.A;
-                        ~
-!!! error TS2339: Property 'A' does not exist on type 'typeof import("/a")'.
     let B: typeof types.B;
+    
+    let t: typeof types = {
+      // error: while you can ask for `typeof types.A`,
+      // `typeof types` does not include `A`
+      A: undefined as any,
+      ~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type '{ A: any; B: any; }' is not assignable to type 'typeof import("/a")'.
+!!! error TS2322:   Object literal may only specify known properties, and 'A' does not exist in type 'typeof import("/a")'.
+      B: undefined as any,
+    }
     

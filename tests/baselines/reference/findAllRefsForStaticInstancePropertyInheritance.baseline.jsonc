@@ -711,8 +711,7 @@
           "start": 10,
           "length": 7
         },
-        "isWriteAccess": false,
-        "isDefinition": true
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -720,8 +719,7 @@
           "length": 3
         },
         "fileName": "/tests/cases/fourslash/findAllRefsForStaticInstancePropertyInheritance.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -729,8 +727,7 @@
           "length": 3
         },
         "fileName": "/tests/cases/fourslash/findAllRefsForStaticInstancePropertyInheritance.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   },
@@ -803,8 +800,7 @@
           "start": 95,
           "length": 7
         },
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -812,8 +808,7 @@
           "length": 3
         },
         "fileName": "/tests/cases/fourslash/findAllRefsForStaticInstancePropertyInheritance.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }
@@ -912,8 +907,7 @@
           "start": 10,
           "length": 7
         },
-        "isWriteAccess": false,
-        "isDefinition": true
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -921,8 +915,7 @@
           "length": 3
         },
         "fileName": "/tests/cases/fourslash/findAllRefsForStaticInstancePropertyInheritance.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -930,8 +923,7 @@
           "length": 3
         },
         "fileName": "/tests/cases/fourslash/findAllRefsForStaticInstancePropertyInheritance.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   },
@@ -1004,8 +996,7 @@
           "start": 95,
           "length": 7
         },
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -1013,8 +1004,7 @@
           "length": 3
         },
         "fileName": "/tests/cases/fourslash/findAllRefsForStaticInstancePropertyInheritance.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }
@@ -1113,8 +1103,7 @@
           "start": 10,
           "length": 7
         },
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -1122,8 +1111,7 @@
           "length": 3
         },
         "fileName": "/tests/cases/fourslash/findAllRefsForStaticInstancePropertyInheritance.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -1131,8 +1119,7 @@
           "length": 3
         },
         "fileName": "/tests/cases/fourslash/findAllRefsForStaticInstancePropertyInheritance.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   },
@@ -1205,8 +1192,7 @@
           "start": 95,
           "length": 7
         },
-        "isWriteAccess": false,
-        "isDefinition": true
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -1214,8 +1200,7 @@
           "length": 3
         },
         "fileName": "/tests/cases/fourslash/findAllRefsForStaticInstancePropertyInheritance.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }
@@ -1314,8 +1299,7 @@
           "start": 41,
           "length": 14
         },
-        "isWriteAccess": false,
-        "isDefinition": true
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -1323,8 +1307,7 @@
           "length": 3
         },
         "fileName": "/tests/cases/fourslash/findAllRefsForStaticInstancePropertyInheritance.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }
@@ -1423,8 +1406,7 @@
           "start": 79,
           "length": 14
         },
-        "isWriteAccess": false,
-        "isDefinition": true
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -1432,8 +1414,7 @@
           "length": 3
         },
         "fileName": "/tests/cases/fourslash/findAllRefsForStaticInstancePropertyInheritance.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }

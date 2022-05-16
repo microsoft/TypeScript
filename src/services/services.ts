@@ -592,7 +592,7 @@ namespace ts {
      * @returns `true` if `node` has a JSDoc "inheritDoc" tag on it, otherwise `false`.
      */
     function hasJSDocInheritDocTag(node: Node) {
-        return getJSDocTags(node).some(tag => tag.tagName.text === "inheritDoc");
+        return getJSDocTags(node).some(tag => tag.tagName.text === "inheritDoc" || tag.tagName.text === "inheritdoc");
     }
 
     function getJsDocTagsOfDeclarations(declarations: Declaration[] | undefined, checker: TypeChecker | undefined): JSDocTagInfo[] {
@@ -643,13 +643,14 @@ namespace ts {
     }
 
     function findBaseOfDeclaration<T>(checker: TypeChecker, declaration: Declaration, cb: (symbol: Symbol) => T[] | undefined): T[] | undefined {
-        if (hasStaticModifier(declaration)) return;
-
         const classOrInterfaceDeclaration = declaration.parent?.kind === SyntaxKind.Constructor ? declaration.parent.parent : declaration.parent;
         if (!classOrInterfaceDeclaration) return;
 
+        const isStaticMember = hasStaticModifier(declaration);
         return firstDefined(getAllSuperTypeNodes(classOrInterfaceDeclaration), superTypeNode => {
-            const symbol = checker.getPropertyOfType(checker.getTypeAtLocation(superTypeNode), declaration.symbol.name);
+            const baseType = checker.getTypeAtLocation(superTypeNode);
+            const type = isStaticMember && baseType.symbol ? checker.getTypeOfSymbol(baseType.symbol) : baseType;
+            const symbol = checker.getPropertyOfType(type, declaration.symbol.name);
             return symbol ? cb(symbol) : undefined;
         });
     }
@@ -1004,9 +1005,11 @@ namespace ts {
 
             // Initialize the list with the root file names
             const rootFileNames = host.getScriptFileNames();
+            tracing?.push(tracing.Phase.Session, "initializeHostCache", { count: rootFileNames.length });
             for (const fileName of rootFileNames) {
                 this.createEntry(fileName, toPath(fileName, this.currentDirectory, getCanonicalFileName));
             }
+            tracing?.pop();
         }
 
         private createEntry(fileName: string, path: Path) {
@@ -1085,7 +1088,17 @@ namespace ts {
 
             if (this.currentFileName !== fileName) {
                 // This is a new file, just parse it
-                sourceFile = createLanguageServiceSourceFile(fileName, scriptSnapshot, ScriptTarget.Latest, version, /*setNodeParents*/ true, scriptKind);
+                const options: CreateSourceFileOptions = {
+                    languageVersion: ScriptTarget.Latest,
+                    impliedNodeFormat: getImpliedNodeFormatForFile(
+                        toPath(fileName, this.host.getCurrentDirectory(), this.host.getCompilerHost?.()?.getCanonicalFileName || hostGetCanonicalFileName(this.host)),
+                        this.host.getCompilerHost?.()?.getModuleResolutionCache?.()?.getPackageJsonInfoCache(),
+                        this.host,
+                        this.host.getCompilationSettings()
+                    ),
+                    setExternalModuleIndicator: getSetExternalModuleIndicator(this.host.getCompilationSettings())
+                };
+                sourceFile = createLanguageServiceSourceFile(fileName, scriptSnapshot, options, version, /*setNodeParents*/ true, scriptKind);
             }
             else if (this.currentFileVersion !== version) {
                 // This is the same file, just a newer version. Incrementally parse the file.
@@ -1110,8 +1123,8 @@ namespace ts {
         sourceFile.scriptSnapshot = scriptSnapshot;
     }
 
-    export function createLanguageServiceSourceFile(fileName: string, scriptSnapshot: IScriptSnapshot, scriptTarget: ScriptTarget, version: string, setNodeParents: boolean, scriptKind?: ScriptKind): SourceFile {
-        const sourceFile = createSourceFile(fileName, getSnapshotText(scriptSnapshot), scriptTarget, setNodeParents, scriptKind);
+    export function createLanguageServiceSourceFile(fileName: string, scriptSnapshot: IScriptSnapshot, scriptTargetOrOptions: ScriptTarget | CreateSourceFileOptions, version: string, setNodeParents: boolean, scriptKind?: ScriptKind): SourceFile {
+        const sourceFile = createSourceFile(fileName, getSnapshotText(scriptSnapshot), scriptTargetOrOptions, setNodeParents, scriptKind);
         setSourceFileFields(sourceFile, scriptSnapshot, version);
         return sourceFile;
     }
@@ -1167,8 +1180,13 @@ namespace ts {
             }
         }
 
+        const options: CreateSourceFileOptions = {
+            languageVersion: sourceFile.languageVersion,
+            impliedNodeFormat: sourceFile.impliedNodeFormat,
+            setExternalModuleIndicator: sourceFile.setExternalModuleIndicator,
+        };
         // Otherwise, just create a new source file.
-        return createLanguageServiceSourceFile(sourceFile.fileName, scriptSnapshot, sourceFile.languageVersion, version, /*setNodeParents*/ true, sourceFile.scriptKind);
+        return createLanguageServiceSourceFile(sourceFile.fileName, scriptSnapshot, options, version, /*setNodeParents*/ true, sourceFile.scriptKind);
     }
 
     const NoopCancellationToken: CancellationToken = {
@@ -1551,7 +1569,7 @@ namespace ts {
                         // file's script kind, i.e. in one project some file is treated as ".ts"
                         // and in another as ".js"
                         if (hostFileInformation.scriptKind === oldSourceFile.scriptKind) {
-                            return documentRegistry.updateDocumentWithKey(fileName, path, newSettings, documentRegistryBucketKey, hostFileInformation.scriptSnapshot, hostFileInformation.version, hostFileInformation.scriptKind);
+                            return documentRegistry.updateDocumentWithKey(fileName, path, host, documentRegistryBucketKey, hostFileInformation.scriptSnapshot, hostFileInformation.version, hostFileInformation.scriptKind);
                         }
                         else {
                             // Release old source file and fall through to aquire new file with new script kind
@@ -1563,7 +1581,7 @@ namespace ts {
                 }
 
                 // Could not find this file in the old program, create a new SourceFile for it.
-                return documentRegistry.acquireDocumentWithKey(fileName, path, newSettings, documentRegistryBucketKey, hostFileInformation.scriptSnapshot, hostFileInformation.version, hostFileInformation.scriptKind);
+                return documentRegistry.acquireDocumentWithKey(fileName, path, host, documentRegistryBucketKey, hostFileInformation.scriptSnapshot, hostFileInformation.version, hostFileInformation.scriptKind);
             }
         }
 
@@ -1724,6 +1742,9 @@ namespace ts {
             if (isNamedTupleMember(node.parent) && node.pos === node.parent.pos) {
                 return node.parent;
             }
+            if (isImportMeta(node.parent) && node.parent.name === node) {
+                return node.parent;
+            }
             return node;
         }
 
@@ -1740,15 +1761,17 @@ namespace ts {
                 case SyntaxKind.SuperKeyword:
                 case SyntaxKind.NamedTupleMember:
                     return true;
+                case SyntaxKind.MetaProperty:
+                    return isImportMeta(node);
                 default:
                     return false;
             }
         }
 
         /// Goto definition
-        function getDefinitionAtPosition(fileName: string, position: number): readonly DefinitionInfo[] | undefined {
+        function getDefinitionAtPosition(fileName: string, position: number, searchOtherFilesOnly?: boolean, stopAtAlias?: boolean): readonly DefinitionInfo[] | undefined {
             synchronizeHostData();
-            return GoToDefinition.getDefinitionAtPosition(program, getValidSourceFile(fileName), position);
+            return GoToDefinition.getDefinitionAtPosition(program, getValidSourceFile(fileName), position, searchOtherFilesOnly, stopAtAlias);
         }
 
         function getDefinitionAndBoundSpan(fileName: string, position: number): DefinitionInfoAndBoundSpan | undefined {
@@ -1776,7 +1799,6 @@ namespace ts {
                     fileName: entry.fileName,
                     textSpan: highlightSpan.textSpan,
                     isWriteAccess: highlightSpan.kind === HighlightSpanKind.writtenReference,
-                    isDefinition: false,
                     ...highlightSpan.isInString && { isInString: true },
                     ...highlightSpan.contextSpan && { contextSpan: highlightSpan.contextSpan }
                 }))
@@ -1816,7 +1838,7 @@ namespace ts {
 
         function getReferencesAtPosition(fileName: string, position: number): ReferenceEntry[] | undefined {
             synchronizeHostData();
-            return getReferencesWorker(getTouchingPropertyName(getValidSourceFile(fileName), position), position, { use: FindAllReferences.FindReferencesUse.References }, (entry, node, checker) => FindAllReferences.toReferenceEntry(entry, checker.getSymbolAtLocation(node)));
+            return getReferencesWorker(getTouchingPropertyName(getValidSourceFile(fileName), position), position, { use: FindAllReferences.FindReferencesUse.References }, FindAllReferences.toReferenceEntry);
         }
 
         function getReferencesWorker<T>(node: Node, position: number, options: FindAllReferences.Options, cb: FindAllReferences.ToReferenceOrRenameEntry<T>): T[] | undefined {
@@ -1837,8 +1859,7 @@ namespace ts {
 
         function getFileReferences(fileName: string): ReferenceEntry[] {
             synchronizeHostData();
-            const moduleSymbol = program.getSourceFile(fileName)?.symbol;
-            return FindAllReferences.Core.getReferencesForFileName(fileName, program, program.getSourceFiles()).map(r => FindAllReferences.toReferenceEntry(r, moduleSymbol));
+            return FindAllReferences.Core.getReferencesForFileName(fileName, program, program.getSourceFiles()).map(FindAllReferences.toReferenceEntry);
         }
 
         function getNavigateToItems(searchValue: string, maxResultCount?: number, fileName?: string, excludeDtsFiles = false): NavigateToItem[] {
@@ -2636,7 +2657,7 @@ namespace ts {
             return declaration ? CallHierarchy.getOutgoingCalls(program, declaration) : [];
         }
 
-        function provideInlayHints(fileName: string, span: TextSpan, preferences: InlayHintsOptions = emptyOptions): InlayHint[] {
+        function provideInlayHints(fileName: string, span: TextSpan, preferences: UserPreferences = emptyOptions): InlayHint[] {
             synchronizeHostData();
             const sourceFile = getValidSourceFile(fileName);
             return InlayHints.provideInlayHints(getInlayHintsContext(sourceFile, span, preferences));
@@ -2858,7 +2879,7 @@ namespace ts {
     export function getDefaultLibFilePath(options: CompilerOptions): string {
         // Check __dirname is defined and that we are on a node.js system.
         if (typeof __dirname !== "undefined") {
-            return __dirname + directorySeparator + getDefaultLibFileName(options);
+            return combinePaths(__dirname, getDefaultLibFileName(options));
         }
 
         throw new Error("getDefaultLibFilePath is only supported when consumed as a node module. ");

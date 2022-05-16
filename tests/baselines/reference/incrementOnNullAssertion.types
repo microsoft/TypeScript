@@ -27,21 +27,21 @@ if (foo[x] === undefined) {
 }
 else {
     let nu = foo[x]
->nu : number | undefined
->foo[x] : number | undefined
+>nu : number
+>foo[x] : number
 >foo : Dictionary<number>
 >x : "bar"
 
     let n = foo[x]
->n : number | undefined
->foo[x] : number | undefined
+>n : number
+>foo[x] : number
 >foo : Dictionary<number>
 >x : "bar"
 
     foo[x]!++
 >foo[x]!++ : number
 >foo[x]! : number
->foo[x] : number | undefined
+>foo[x] : number
 >foo : Dictionary<number>
 >x : "bar"
 }

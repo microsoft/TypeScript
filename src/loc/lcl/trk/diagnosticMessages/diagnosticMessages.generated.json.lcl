@@ -530,20 +530,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";A_namespace_declaration_is_only_allowed_in_a_namespace_or_module_1235" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";A_namespace_declaration_is_only_allowed_at_the_top_level_of_a_namespace_or_module_1235" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[A namespace declaration is only allowed in a namespace or module.]]></Val>
+          <Val><![CDATA[A namespace declaration is only allowed at the top level of a namespace or module.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Ad alanı bildirimine yalnızca bir ad alanında veya modülde izin verilir.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";A_new_expression_with_type_arguments_must_always_be_followed_by_a_parenthesized_argument_list_1384" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[A 'new' expression with type arguments must always be followed by a parenthesized argument list.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Tür bağımsız değişkenlerine sahip bir 'new' ifadesinin arkasından her zaman parantez içine alınmış bağımsız değişken listesi gelmelidir.]]></Val>
+            <Val><![CDATA[Ad alanı bildirimine yalnızca bir ad alanının veya modülün en üst düzeyinde izin verilir.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -961,6 +952,15 @@
           <Val><![CDATA[A type predicate's type must be assignable to its parameter's type.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Bir tür koşulunun türü, parametresinin türüne atanabilir olmalıdır.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";A_type_referenced_in_a_decorated_signature_must_be_imported_with_import_type_or_a_namespace_import_w_1272" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[A type referenced in a decorated signature must be imported with 'import type' or a namespace import when 'isolatedModules' and 'emitDecoratorMetadata' are enabled.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['isolatedModules' ve 'emitDecoratorMetadata' etkinleştirildiğinde, dekore edilmiş bir imzada başvurulan bir tür 'import type' veya bir namespace import ile içeri aktarılmalıdır.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1423,10 +1423,13 @@
       </Item>
       <Item ItemId=";Add_undefined_to_a_type_when_accessed_using_an_index_6674" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Add `undefined` to a type when accessed using an index.]]></Val>
+          <Val><![CDATA[Add 'undefined' to a type when accessed using an index.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Bir dizin kullanarak erişildiğinde türe `undefined` ekleyin.]]></Val>
+            <Val><![CDATA[İndis kullanılarak erişildiğinde türe 'undefined' ekle.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Add `undefined` to a type when accessed using an index.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -1502,6 +1505,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";All_declarations_of_0_must_have_identical_constraints_2838" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[All declarations of '{0}' must have identical constraints.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Tüm '{0}' bildirimleri, aynı kısıtlamalara sahip olmalıdır.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";All_declarations_of_0_must_have_identical_modifiers_2687" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[All declarations of '{0}' must have identical modifiers.]]></Val>
@@ -1570,10 +1582,13 @@
       </Item>
       <Item ItemId=";Allow_JavaScript_files_to_be_a_part_of_your_program_Use_the_checkJS_option_to_get_errors_from_these__6600" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Allow JavaScript files to be a part of your program. Use the `checkJS` option to get errors from these files.]]></Val>
+          <Val><![CDATA[Allow JavaScript files to be a part of your program. Use the 'checkJS' option to get errors from these files.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[JavaScript dosyalarının programınızın bir parçası olmasına izin verin. Bu dosyalardan hataları almak için `checkJS` seçeneğini kullanın.]]></Val>
+            <Val><![CDATA[JavaScript dosyalarının programınızın bir parçası olmasına izin verin. Bu dosyalardan hata almak için 'checkJS' seçeneğini kullanın.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Allow JavaScript files to be a part of your program. Use the `checkJS` option to get errors from these files.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -1853,11 +1868,20 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";An_export_declaration_can_only_be_used_in_a_module_1233" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";An_export_declaration_can_only_be_used_at_the_top_level_of_a_module_1474" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[An export declaration can only be used in a module.]]></Val>
+          <Val><![CDATA[An export declaration can only be used at the top level of a module.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Dışarı aktarma bildirimi yalnızca bir modülde kullanılabilir.]]></Val>
+            <Val><![CDATA[Dışarı aktarma bildirimi yalnızca modülün en üst düzeyinde kullanılabilir.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";An_export_declaration_can_only_be_used_at_the_top_level_of_a_namespace_or_module_1233" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[An export declaration can only be used at the top level of a namespace or module.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Dışarı aktarma bildirimi yalnızca bir ad alanının veya modülün en üst düzeyinde kullanılabilir.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1937,11 +1961,20 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";An_import_declaration_can_only_be_used_in_a_namespace_or_module_1232" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";An_import_declaration_can_only_be_used_at_the_top_level_of_a_module_1473" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[An import declaration can only be used in a namespace or module.]]></Val>
+          <Val><![CDATA[An import declaration can only be used at the top level of a module.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[İçeri aktarma bildirimi yalnızca bir ad alanında veya modülde kullanılabilir.]]></Val>
+            <Val><![CDATA[İçeri aktarma bildirimi yalnızca modülün en üst düzeyinde kullanılabilir.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";An_import_declaration_can_only_be_used_at_the_top_level_of_a_namespace_or_module_1232" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[An import declaration can only be used at the top level of a namespace or module.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[İçeri aktarma bildirimi yalnızca bir ad alanının veya modülün en üst düzeyinde kullanılabilir.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2446,10 +2479,13 @@
       </Item>
       <Item ItemId=";Build_all_projects_including_those_that_appear_to_be_up_to_date_6636" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Build all projects, including those that appear to be up to date]]></Val>
+          <Val><![CDATA[Build all projects, including those that appear to be up to date.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Güncel görünenler de dahil olmak üzere tüm projeleri derleyin]]></Val>
+            <Val><![CDATA[Güncel görünenler de dahil olmak üzere tüm projeleri derleyin.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Build all projects, including those that appear to be up to date]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -3203,6 +3239,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Cannot_use_export_import_on_a_type_or_type_only_namespace_when_the_isolatedModules_flag_is_provided_1269" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Cannot use 'export import' on a type or type-only namespace when the '--isolatedModules' flag is provided.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['--isolatedModules' bayrağı sağlandığında, bir tür veya yalnızca tür ad alanında 'export import' kullanılamaz.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Cannot_use_imports_exports_or_module_augmentations_when_module_is_none_1148" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Cannot use imports, exports, or module augmentations when '--module' is 'none'.]]></Val>
@@ -3358,10 +3403,13 @@
       </Item>
       <Item ItemId=";Check_that_the_arguments_for_bind_call_and_apply_methods_match_the_original_function_6697" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Check that the arguments for `bind`, `call`, and `apply` methods match the original function.]]></Val>
+          <Val><![CDATA[Check that the arguments for 'bind', 'call', and 'apply' methods match the original function.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[`bind`, `call` ve `apply` yöntemlerinin bağımsız değişkenlerinin özgün işlevle eşleştiğini denetleyin.]]></Val>
+            <Val><![CDATA['bind', 'call' ve 'apply' yöntemlerinin bağımsız değişkenlerinin özgün işlevle eşleşip eşleşmediğini denetle.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Check that the arguments for `bind`, `call`, and `apply` methods match the original function.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -3854,6 +3902,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Control_what_method_is_used_to_detect_module_format_JS_files_1475" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Control what method is used to detect module-format JS files.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Modül biçimli JS dosyalarını algılamak için kullanılan yöntemi denetle.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Conversion_of_type_0_to_type_1_may_be_a_mistake_because_neither_type_sufficiently_overlaps_with_the__2352" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Conversion of type '{0}' to type '{1}' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.]]></Val>
@@ -4030,6 +4087,15 @@
           <Val><![CDATA[Convert named export to default export]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Adlandırılmış dışarı aktarmayı varsayılan dışarı aktarmaya dönüştürün]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Convert_named_imports_to_default_import_95170" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Convert named imports to default import]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Adlandırılmış içeri aktarmaları varsayılan içeri aktarmaya dönüştür]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4517,6 +4583,24 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Decorator_function_return_type_0_is_not_assignable_to_type_1_1270" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Decorator function return type '{0}' is not assignable to type '{1}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['{0}' dekoratör işlevi dönüş türü, '{1}' türüne atanamıyor.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Decorator_function_return_type_is_0_but_is_expected_to_be_void_or_any_1271" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Decorator function return type is '{0}' but is expected to be 'void' or 'any'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Dekoratör işlevi dönüş türü '{0}', ancak 'void' veya 'any' olması bekleniyor.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Decorators_are_not_valid_here_1206" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Decorators are not valid here.]]></Val>
@@ -4549,6 +4633,15 @@
           <Val><![CDATA[Decorators must precede the name and all keywords of property declarations.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Dekoratörler, özellik bildirimlerinin adından ve tüm anahtar sözcüklerinden önce gelmelidir.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Default_catch_clause_variables_as_unknown_instead_of_any_6803" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Default catch clause variables as 'unknown' instead of 'any'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Catch yan tümcesi değişkenlerini varsayılan olarak 'any' yerine 'unknown' olarak kabul et.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4607,11 +4700,32 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Delete_all_unused_param_tags_95172" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Delete all unused '@param' tags]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Kullanılmayan tüm “@param” etiketlerini silin]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Delete_the_outputs_of_all_projects_6365" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Delete the outputs of all projects]]></Val>
+          <Val><![CDATA[Delete the outputs of all projects.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Tüm projelerin çıkışlarını sil]]></Val>
+            <Val><![CDATA[Tüm projelerin çıktılarını sil.]]></Val>
+          </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Delete the outputs of all projects]]></Val>
+          </Prev>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Delete_unused_param_tag_0_95171" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Delete unused '@param' tag '{0}']]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Kullanılmayan “{0}” “@param” etiket adını silin]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4645,10 +4759,13 @@
       </Item>
       <Item ItemId=";Deprecated_setting_Use_outFile_instead_6677" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Deprecated setting. Use `outFile` instead.]]></Val>
+          <Val><![CDATA[Deprecated setting. Use 'outFile' instead.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Ayar kullanım dışı bırakıldı. Bunun yerine `outFile` kullanın.]]></Val>
+            <Val><![CDATA[Ayar kullanım dışı bırakıldı. Bunun yerine 'outFile' kullanın.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Deprecated setting. Use `outFile` instead.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -4774,10 +4891,13 @@
       </Item>
       <Item ItemId=";Disable_emitting_declarations_that_have_internal_in_their_JSDoc_comments_6701" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Disable emitting declarations that have `@internal` in their JSDoc comments.]]></Val>
+          <Val><![CDATA[Disable emitting declarations that have '@internal' in their JSDoc comments.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[JSDoc açıklamalarında `@internal` olan yayma bildirimlerini devre dışı bırakın.]]></Val>
+            <Val><![CDATA[JSDoc açıklamalarında '@internal' olan üretme bildirimlerini devre dışı bırak.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Disable emitting declarations that have `@internal` in their JSDoc comments.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -4801,10 +4921,13 @@
       </Item>
       <Item ItemId=";Disable_erasing_const_enum_declarations_in_generated_code_6682" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Disable erasing `const enum` declarations in generated code.]]></Val>
+          <Val><![CDATA[Disable erasing 'const enum' declarations in generated code.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Oluşturulan kodda `const enum` bildirimlerinin silinmesini devre dışı bırakın.]]></Val>
+            <Val><![CDATA[Oluşturulan kodda 'const enum' bildirimlerinin silinmesini devre dışı bırak.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Disable erasing `const enum` declarations in generated code.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -4828,10 +4951,13 @@
       </Item>
       <Item ItemId=";Disable_generating_custom_helper_functions_like_extends_in_compiled_output_6661" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Disable generating custom helper functions like `__extends` in compiled output.]]></Val>
+          <Val><![CDATA[Disable generating custom helper functions like '__extends' in compiled output.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Derlenen çıkışta `__extends` gibi özel yardımcı işlevler oluşturmayı devre dışı bırakın.]]></Val>
+            <Val><![CDATA[Derlenen çıktıda '__extends' gibi özel yardımcı işlevler oluşturmayı devre dışı bırak.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Disable generating custom helper functions like `__extends` in compiled output.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -4855,10 +4981,13 @@
       </Item>
       <Item ItemId=";Disable_preferring_source_files_instead_of_declaration_files_when_referencing_composite_projects_6620" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Disable preferring source files instead of declaration files when referencing composite projects]]></Val>
+          <Val><![CDATA[Disable preferring source files instead of declaration files when referencing composite projects.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Bileşik projelere başvurulurken bildirim dosyaları yerine kaynak dosyaları tercih etmeyi devre dışı bırak]]></Val>
+            <Val><![CDATA[Bileşik projelere başvurulurken bildirim dosyaları yerine kaynak dosyaların tercih edilmesini devre dışı bırak.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Disable preferring source files instead of declaration files when referencing composite projects]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -4936,10 +5065,13 @@
       </Item>
       <Item ItemId=";Disable_wiping_the_console_in_watch_mode_6684" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Disable wiping the console in watch mode]]></Val>
+          <Val><![CDATA[Disable wiping the console in watch mode.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[İzleme modunda konsolu temizlemeyi devre dışı bırak]]></Val>
+            <Val><![CDATA[İzleme modunda konsolu temizlemeyi devre dışı bırak.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Disable wiping the console in watch mode]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -4954,10 +5086,13 @@
       </Item>
       <Item ItemId=";Disallow_import_s_require_s_or_reference_s_from_expanding_the_number_of_files_TypeScript_should_add__6672" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Disallow `import`s, `require`s or `<reference>`s from expanding the number of files TypeScript should add to a project.]]></Val>
+          <Val><![CDATA[Disallow 'import's, 'require's or '<reference>'s from expanding the number of files TypeScript should add to a project.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[`import`, `require` veya `<reference>` öğelerinin, TypeScript’in bir projeye eklemesi gereken dosya sayısını artırmasını engelleyin.]]></Val>
+            <Val><![CDATA['import', 'require' veya '<reference>' ifadelerinin TypeScript'in projeye eklemesi gereken dosya sayısını artırmasına izin verme.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Disallow `import`s, `require`s or `<reference>`s from expanding the number of files TypeScript should add to a project.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -5207,18 +5342,6 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Dynamic_import_cannot_have_type_arguments_1326" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Dynamic import cannot have type arguments.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Dinamik içeri aktarma, tür bağımsız değişkenleri içeremez.]]></Val>
-          </Tgt>
-          <Prev Cat="Text">
-            <Val><![CDATA[Dynamic import cannot have type arguments]]></Val>
-          </Prev>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";Dynamic_import_s_specifier_must_be_of_type_string_but_here_has_type_0_7036" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Dynamic import's specifier must be of type 'string', but here has type '{0}'.]]></Val>
@@ -5230,10 +5353,13 @@
       </Item>
       <Item ItemId=";Dynamic_imports_are_only_supported_when_the_module_flag_is_set_to_es2020_es2022_esnext_commonjs_amd__1323" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Dynamic imports are only supported when the '--module' flag is set to 'es2020', 'es2022', 'esnext', 'commonjs', 'amd', 'system', 'umd', 'node12', or 'nodenext'.]]></Val>
+          <Val><![CDATA[Dynamic imports are only supported when the '--module' flag is set to 'es2020', 'es2022', 'esnext', 'commonjs', 'amd', 'system', 'umd', 'node16', or 'nodenext'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Dinamik içeri aktarmalar yalnızca '--module' bayrağı 'es2020', 'es2022', 'esnext', 'commonjs', 'amd', 'system', 'umd', 'node12' veya 'nodenext' olarak ayarlandığında desteklenir.]]></Val>
+            <Val><![CDATA[Dinamik içe aktarma yalnızca '--module' bayrağı 'es2020', 'es2022', 'esnext', 'commonjs', 'amd', 'system', 'umd', 'node16' veya 'nodenext' olarak ayarlandığında desteklenir.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Dynamic imports are only supported when the '--module' flag is set to 'es2020', 'es2022', 'esnext', 'commonjs', 'amd', 'system', 'umd', 'node12', or 'nodenext'.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -5246,11 +5372,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Dynamic_imports_only_support_a_second_argument_when_the_module_option_is_set_to_esnext_or_nodenext_1324" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Dynamic_imports_only_support_a_second_argument_when_the_module_option_is_set_to_esnext_node16_or_nod_1324" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Dynamic imports only support a second argument when the '--module' option is set to 'esnext' or 'nodenext'.]]></Val>
+          <Val><![CDATA[Dynamic imports only support a second argument when the '--module' option is set to 'esnext', 'node16', or 'nodenext'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Dinamik içeri aktarmalar, yalnızca '--module' seçeneği 'esnext' veya 'nodenext' olarak ayarlandığında ikinci bir bağımsız değişkeni destekler.]]></Val>
+            <Val><![CDATA[Dinamik içe aktarma, yalnızca '--module' seçeneği 'esnext', 'node16' veya 'nodenext' olarak ayarlandığında ikinci bir argümanı destekler.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5365,10 +5491,13 @@
       </Item>
       <Item ItemId=";Emit_additional_JavaScript_to_ease_support_for_importing_CommonJS_modules_This_enables_allowSyntheti_6626" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Emit additional JavaScript to ease support for importing CommonJS modules. This enables `allowSyntheticDefaultImports` for type compatibility.]]></Val>
+          <Val><![CDATA[Emit additional JavaScript to ease support for importing CommonJS modules. This enables 'allowSyntheticDefaultImports' for type compatibility.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[CommonJS modüllerini içeri aktarmak için desteğe kolaylık sağlamak üzere ek JavaScript yayın. Bu, tür uyumluluğu için 'allowSyntheticDefaultImports' öğesini etkinleştirir.]]></Val>
+            <Val><![CDATA[CommonJS modüllerini içeri aktarma desteğini kolaylaştırmak için ek JavaScript üret. Bu, tür uyumluluğu için 'allowSyntheticDefaultImports' özelliğini etkinleştirir.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Emit additional JavaScript to ease support for importing CommonJS modules. This enables `allowSyntheticDefaultImports` for type compatibility.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -5419,10 +5548,13 @@
       </Item>
       <Item ItemId=";Enable_color_and_formatting_in_TypeScript_s_output_to_make_compiler_errors_easier_to_read_6685" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Enable color and formatting in TypeScript's output to make compiler errors easier to read]]></Val>
+          <Val><![CDATA[Enable color and formatting in TypeScript's output to make compiler errors easier to read.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Derleyici hatalarının okunmasını kolaylaştırmak için TypeScript’in çıkışında renk ve biçimlendirme özelliğini etkinleştirin]]></Val>
+            <Val><![CDATA[Derleyici hatalarının okunmasını kolaylaştırmak için TypeScript çıktısında renk ve biçimlendirmeyi etkinleştirin.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Enable color and formatting in TypeScript's output to make compiler errors easier to read]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -5446,10 +5578,13 @@
       </Item>
       <Item ItemId=";Enable_error_reporting_for_expressions_and_declarations_with_an_implied_any_type_6665" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Enable error reporting for expressions and declarations with an implied `any` type..]]></Val>
+          <Val><![CDATA[Enable error reporting for expressions and declarations with an implied 'any' type.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Örtük `any` türüne sahip ifade ve bildirimlerde hata raporlamayı etkinleştirin.]]></Val>
+            <Val><![CDATA[Örtük olarak 'any' türüne sahip ifade ve bildirimlerde hata raporlamayı etkinleştir.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Enable error reporting for expressions and declarations with an implied `any` type..]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -5471,21 +5606,24 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Enable_error_reporting_when_a_local_variables_aren_t_read_6675" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Enable_error_reporting_when_local_variables_aren_t_read_6675" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Enable error reporting when a local variables aren't read.]]></Val>
+          <Val><![CDATA[Enable error reporting when local variables aren't read.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Yerel değişkenler okunmadığında hata raporlamayı etkinleştirin.]]></Val>
+            <Val><![CDATA[Yerel değişkenler okunmadığında hata raporlamayı etkinleştir.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Enable_error_reporting_when_this_is_given_the_type_any_6668" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Enable error reporting when `this` is given the type `any`.]]></Val>
+          <Val><![CDATA[Enable error reporting when 'this' is given the type 'any'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[`this` için `any` türü verildiğinde hata bildirimini etkinleştirin.]]></Val>
+            <Val><![CDATA['this' için 'any' türü verildiğinde hata raporlamayı etkinleştir.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Enable error reporting when `this` is given the type `any`.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -5500,19 +5638,13 @@
       </Item>
       <Item ItemId=";Enable_importing_json_files_6689" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Enable importing .json files]]></Val>
+          <Val><![CDATA[Enable importing .json files.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[.json dosyalarını içeri aktarmayı etkinleştir]]></Val>
+            <Val><![CDATA[.json dosyalarını içeri aktarmayı etkinleştirin.]]></Val>
           </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";Enable_incremental_compilation_6378" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Enable incremental compilation]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Artımlı derlemeyi etkinleştir]]></Val>
-          </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Enable importing .json files]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -5590,10 +5722,13 @@
       </Item>
       <Item ItemId=";Enable_verbose_logging_6713" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Enable verbose logging]]></Val>
+          <Val><![CDATA[Enable verbose logging.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Ayrıntılı günlüğe yazmayı etkinleştir]]></Val>
+            <Val><![CDATA[Ayrıntılı günlüğe yazmayı etkinleştir.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Enable verbose logging]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -5626,10 +5761,13 @@
       </Item>
       <Item ItemId=";Enforces_using_indexed_accessors_for_keys_declared_using_an_indexed_type_6671" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Enforces using indexed accessors for keys declared using an indexed type]]></Val>
+          <Val><![CDATA[Enforces using indexed accessors for keys declared using an indexed type.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Dizini oluşturulmuş bir tür kullanılarak bildirilen anahtarlar için dizini oluşturulmuş erişimcileri kullanmayı zorlar]]></Val>
+            <Val><![CDATA[Dizini oluşturulmuş bir tür kullanılarak bildirilen anahtarlar için dizini oluşturulmuş erişimciler kullanılmasını zorunlu kılar.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Enforces using indexed accessors for keys declared using an indexed type]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -5839,6 +5977,15 @@
           <Val><![CDATA[Expected {0} type arguments; provide these with an '@extends' tag.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[{0} tür bağımsız değişkeni bekleniyordu; bunları bir '@extends' etiketiyle sağlayın.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Expected_1_argument_but_got_0_new_Promise_needs_a_JSDoc_hint_to_produce_a_resolve_that_can_be_called_2810" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Expected 1 argument, but got 0. 'new Promise()' needs a JSDoc hint to produce a 'resolve' that can be called without arguments.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[1 bağımsız değişken bekleniyordu ancak 0 bağımsız değişken var. Bağımsız değişkenler olmadan çağrılabilen bir 'resolve' oluşturmak için 'new Promise()' çağrısında bir JSDoc ipucu bulunması gerekir.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6910,10 +7057,13 @@
       </Item>
       <Item ItemId=";Have_recompiles_in_projects_that_use_incremental_and_watch_mode_assume_that_changes_within_a_file_wi_6606" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Have recompiles in projects that use `incremental` and `watch` mode assume that changes within a file will only affect files directly depending on it.]]></Val>
+          <Val><![CDATA[Have recompiles in projects that use 'incremental' and 'watch' mode assume that changes within a file will only affect files directly depending on it.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[`incremental` ve `watch` modunu kullanan projelerde yeniden derlemelerin olması, bir dosya içindeki değişikliklerin yalnızca doğrudan buna bağımlı olan dosyaları etkileyeceğini varsayar.]]></Val>
+            <Val><![CDATA['incremental' ve 'watch' modu kullanan projelerdeki yeniden derlemelerde, bir dosyada yapılan değişikliklerin yalnızca bu dosyaya bağımlı olan dosyaları etkileyeceğinin varsayılmasını sağla.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Have recompiles in projects that use `incremental` and `watch` mode assume that changes within a file will only affect files directly depending on it.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -7342,15 +7492,6 @@
           <Val><![CDATA[Include sourcemap files inside the emitted JavaScript.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Yayılan JavaScript içine kaynak eşleme dosyalarını ekleyin.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";Include_undefined_in_index_signature_results_6716" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Include 'undefined' in index signature results]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Dizin imzası sonuçlarına 'undefined' öğesini ekle]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7820,15 +7961,6 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";JSON_imports_are_experimental_in_ES_module_mode_imports_7062" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[JSON imports are experimental in ES module mode imports.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[JSON içeri aktarmaları, ES modül modu içeri aktarmaları için deneyseldir.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";JSX_attributes_must_only_be_assigned_a_non_empty_expression_17000" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[JSX attributes must only be assigned a non-empty 'expression'.]]></Val>
@@ -8045,20 +8177,20 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";List_of_file_name_suffixes_to_search_when_resolving_a_module_6931" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[List of file name suffixes to search when resolving a module.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Bir modül çözümlenirken aranacak dosya adı son eklerinin listesi.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";List_of_folders_to_include_type_definitions_from_6161" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[List of folders to include type definitions from.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Eklenecek tür tanımlarının alınacağı klasörlerin listesi.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";List_of_language_service_plugins_6181" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[List of language service plugins.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Dil hizmeti eklentilerinin listesi.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8113,10 +8245,13 @@
       </Item>
       <Item ItemId=";Log_paths_used_during_the_moduleResolution_process_6706" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Log paths used during the `moduleResolution` process.]]></Val>
+          <Val><![CDATA[Log paths used during the 'moduleResolution' process.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[`moduleResolution` işlemi sırasında kullanılan yolları günlüğe kaydedin.]]></Val>
+            <Val><![CDATA['moduleResolution' işlemi sırasında kullanılan yolları günlüğe kaydet.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Log paths used during the `moduleResolution` process.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -8179,6 +8314,15 @@
           <Val><![CDATA[Mapped object type implicitly has an 'any' template type.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Eşleştirilmiş nesne türü örtük olarak 'any' şablon türüne sahip.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Matched_by_default_include_pattern_Asterisk_Asterisk_Slash_Asterisk_1457" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Matched by default include pattern '**/*']]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Varsayılan '**/*' ekleme deseniyle eşleşti]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10289,15 +10433,6 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Property_0_may_not_be_used_in_a_static_property_s_initializer_in_the_same_class_when_target_is_esnex_2810" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Property '{0}' may not be used in a static property's initializer in the same class when 'target' is 'esnext' and 'useDefineForClassFields' is 'false'.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['target', 'esnext' ve 'useDefineForClassFields', 'false' olduğunda, '{0}' özelliği aynı sınıftaki bir statik özelliğin başlatıcısında kullanılamaz.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";Property_0_may_not_exist_on_type_1_Did_you_mean_2_2568" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Property '{0}' may not exist on type '{1}'. Did you mean '{2}'?]]></Val>
@@ -10534,10 +10669,13 @@
       </Item>
       <Item ItemId=";Raise_an_error_when_a_function_parameter_isn_t_read_6676" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Raise an error when a function parameter isn't read]]></Val>
+          <Val><![CDATA[Raise an error when a function parameter isn't read.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[İşlev parametresi okunmazsa bir hata oluştur]]></Val>
+            <Val><![CDATA[İşlev parametresi okunmadığında hata oluştur.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Raise an error when a function parameter isn't read]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -10615,19 +10753,25 @@
       </Item>
       <Item ItemId=";Relative_import_paths_need_explicit_file_extensions_in_EcmaScript_imports_when_moduleResolution_is_n_2834" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Relative import paths need explicit file extensions in EcmaScript imports when '--moduleResolution' is 'node12' or 'nodenext'. Consider adding an extension to the import path.]]></Val>
+          <Val><![CDATA[Relative import paths need explicit file extensions in EcmaScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['--moduleResolution' değeri 'node12' veya 'nodenext' olduğunda göreli içeri aktarma yolları EcmaScript içeri aktarmalarında açık dosya uzantılarını gerektirir. İçeri aktarma yoluna bir uzantı eklemeyi düşünün.]]></Val>
+            <Val><![CDATA[Göreli içe aktarma yolları, '--moduleResolution' 'node16' veya 'nodenext' olduğunda EcmaScript içe aktarmalarında açık dosya uzantılarına ihtiyaç duyar. İçe aktarma yoluna bir uzantı eklemeyi düşünün.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Relative import paths need explicit file extensions in EcmaScript imports when '--moduleResolution' is 'node12' or 'nodenext'. Consider adding an extension to the import path.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Relative_import_paths_need_explicit_file_extensions_in_EcmaScript_imports_when_moduleResolution_is_n_2835" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Relative import paths need explicit file extensions in EcmaScript imports when '--moduleResolution' is 'node12' or 'nodenext'. Did you mean '{0}'?]]></Val>
+          <Val><![CDATA[Relative import paths need explicit file extensions in EcmaScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean '{0}'?]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['--moduleResolution' değeri 'node12' veya 'nodenext' olduğunda göreli içeri aktarma yolları EcmaScript içeri aktarmalarında açık dosya uzantılarını gerektirir. Şunu mu demek istediniz: '{0}'?]]></Val>
+            <Val><![CDATA[Göreli içe aktarma yolları, '--moduleResolution' 'node16' veya 'nodenext' olduğunda EcmaScript içe aktarmalarında açık dosya uzantılarına ihtiyaç duyar. Şunu mu demek istediniz: '{0}'?]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Relative import paths need explicit file extensions in EcmaScript imports when '--moduleResolution' is 'node12' or 'nodenext'. Did you mean '{0}'?]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -10847,6 +10991,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Rename_param_tag_name_0_to_1_95173" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Rename '@param' tag name '{0}' to '{1}']]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[“{0}” “@param” etiket adını “{1}” olarak yeniden adlandırın]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Replace_0_with_Promise_1_90036" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Replace '{0}' with 'Promise<{1}>']]></Val>
@@ -10960,6 +11113,24 @@
           <Val><![CDATA[Resolution for type reference directive '{0}' was found in cache from location '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA['{0}' tür başvurusu yönergesinin çözümlemesi '{1}' konumundaki önbellekte bulundu.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Resolution_mode_assertions_are_unstable_Use_nightly_TypeScript_to_silence_this_error_Try_updating_wi_4125" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Resolution mode assertions are unstable. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Çözme modu onaylamaları kararlı değil. Bu hatayı sessize almak için gecelik TypeScript kullanın. 'npm install -D typescript@next' ile güncelleştirmeyi deneyin.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Resolution_modes_are_only_supported_when_moduleResolution_is_node16_or_nodenext_1452" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Resolution modes are only supported when `moduleResolution` is `node16` or `nodenext`.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Çözünürlük modları yalnızca `moduleResolution` değeri `node16` veya `nodenext` olduğunda desteklenir.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11734,10 +11905,13 @@
       </Item>
       <Item ItemId=";Specify_a_file_that_bundles_all_outputs_into_one_JavaScript_file_If_declaration_is_true_also_designa_6679" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Specify a file that bundles all outputs into one JavaScript file. If `declaration` is true, also designates a file that bundles all .d.ts output.]]></Val>
+          <Val><![CDATA[Specify a file that bundles all outputs into one JavaScript file. If 'declaration' is true, also designates a file that bundles all .d.ts output.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Tüm çıkışları tek bir JavaScript dosyasında paketleyen bir dosya belirtin. `declaration` değeri true ise, tüm .d.ts çıkışını paketleyen bir dosya da belirtir.]]></Val>
+            <Val><![CDATA[Tüm çıktıları tek bir JavaScript dosyasında paketleyen bir dosya belirt. 'declaration' değeri true ise, tüm .d.ts çıktısını paketleyen bir dosya da belirtir.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Specify a file that bundles all outputs into one JavaScript file. If `declaration` is true, also designates a file that bundles all .d.ts output.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -11797,10 +11971,13 @@
       </Item>
       <Item ItemId=";Specify_emit_Slashchecking_behavior_for_imports_that_are_only_used_for_types_6718" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Specify emit/checking behavior for imports that are only used for types]]></Val>
+          <Val><![CDATA[Specify emit/checking behavior for imports that are only used for types.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Yalnızca türlere yönelik kullanılan içeri aktarmalar için gösterme/denetleme davranışını belirtin]]></Val>
+            <Val><![CDATA[Yalnızca türler için kullanılan içeri aktarmalar için üretme/denetleme davranışını belirt.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Specify emit/checking behavior for imports that are only used for types]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -11869,19 +12046,25 @@
       </Item>
       <Item ItemId=";Specify_module_specifier_used_to_import_the_JSX_factory_functions_when_using_jsx_Colon_react_jsx_Ast_6649" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Specify module specifier used to import the JSX factory functions when using `jsx: react-jsx*`.`]]></Val>
+          <Val><![CDATA[Specify module specifier used to import the JSX factory functions when using 'jsx: react-jsx*'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[`jsx: react-jsx*` kullanırken JSX fabrika işlevlerini içeri aktarmak için kullanılan modül belirticiyi belirtin.]]></Val>
+            <Val><![CDATA['jsx: react-jsx*' kullanırken JSX fabrika işlevlerini içeri aktarmak için kullanılan modül belirticisini belirt.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Specify module specifier used to import the JSX factory functions when using `jsx: react-jsx*`.`]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Specify_multiple_folders_that_act_like_Slashnode_modules_Slash_types_6710" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Specify multiple folders that act like `./node_modules/@types`.]]></Val>
+          <Val><![CDATA[Specify multiple folders that act like './node_modules/@types'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[`./node_modules/@types` gibi davranan birden çok klasör belirtin.]]></Val>
+            <Val><![CDATA['./node_modules/@types' gibi davranan birden çok klasör belirt.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Specify multiple folders that act like `./node_modules/@types`.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -11959,10 +12142,13 @@
       </Item>
       <Item ItemId=";Specify_the_JSX_factory_function_used_when_targeting_React_JSX_emit_e_g_React_createElement_or_h_6647" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Specify the JSX factory function used when targeting React JSX emit, e.g. 'React.createElement' or 'h']]></Val>
+          <Val><![CDATA[Specify the JSX factory function used when targeting React JSX emit, e.g. 'React.createElement' or 'h'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[React JSX yayma hedeflenirken kullanılacak JSX fabrika işlevini belirtin, örneğin 'React.createElement' veya 'h'.]]></Val>
+            <Val><![CDATA[React JSX üretme hedeflenirken kullanılacak JSX fabrika işlevini belirtin; örneğin 'React.createElement' veya 'h'.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Specify the JSX factory function used when targeting React JSX emit, e.g. 'React.createElement' or 'h']]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -11993,15 +12179,6 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Specify_the_folder_for_tsbuildinfo_incremental_compilation_files_6707" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Specify the folder for .tsbuildinfo incremental compilation files.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[.tsbuildinfo artımlı derleme dosyaları için klasörü belirtin.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";Specify_the_location_where_debugger_should_locate_TypeScript_files_instead_of_source_locations_6004" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Specify the location where debugger should locate TypeScript files instead of source locations.]]></Val>
@@ -12022,10 +12199,13 @@
       </Item>
       <Item ItemId=";Specify_the_maximum_folder_depth_used_for_checking_JavaScript_files_from_node_modules_Only_applicabl_6656" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Specify the maximum folder depth used for checking JavaScript files from `node_modules`. Only applicable with `allowJs`.]]></Val>
+          <Val><![CDATA[Specify the maximum folder depth used for checking JavaScript files from 'node_modules'. Only applicable with 'allowJs'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[`node_modules` öğesinden JavaScript dosyalarını denetlemek için kullanılan en yüksek klasör derinliğini belirtin. Yalnızca `allowJs` ile geçerlidir.]]></Val>
+            <Val><![CDATA['node_modules' öğesinden JavaScript dosyaları teslim almak için kullanılan maksimum klasör derinliğini belirtin. Yalnızca 'allowJs' ile geçerlidir.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Specify the maximum folder depth used for checking JavaScript files from `node_modules`. Only applicable with `allowJs`.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -12043,10 +12223,13 @@
       </Item>
       <Item ItemId=";Specify_the_object_invoked_for_createElement_This_only_applies_when_targeting_react_JSX_emit_6686" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Specify the object invoked for `createElement`. This only applies when targeting `react` JSX emit.]]></Val>
+          <Val><![CDATA[Specify the object invoked for 'createElement'. This only applies when targeting 'react' JSX emit.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[`createElement` için çağrılan nesneyi belirtin. Bu yalnızca `react` JSX yayma hedeflerken geçerlidir.]]></Val>
+            <Val><![CDATA['createElement' için çağrılan nesneyi belirtin. Bu, yalnızca 'react' JSX üretme hedeflenirken geçerlidir.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Specify the object invoked for `createElement`. This only applies when targeting `react` JSX emit.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -12055,6 +12238,15 @@
           <Val><![CDATA[Specify the output directory for generated declaration files.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Oluşturulan bildirim dosyaları için çıkış dizinini belirtin.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Specify_the_path_to_tsbuildinfo_incremental_compilation_file_6707" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Specify the path to .tsbuildinfo incremental compilation file.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[.tsbuildinfo artımlı derleme dosyasının yolunu belirtin.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -12181,15 +12373,6 @@
           <Val><![CDATA[Statements are not allowed in ambient contexts.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Çevresel bağlamlarda deyimlere izin verilmez.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";Static_fields_with_private_names_can_t_have_initializers_when_the_useDefineForClassFields_flag_is_no_2805" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Static fields with private names can't have initializers when the '--useDefineForClassFields' flag is not specified with a '--target' of 'esnext'. Consider adding the '--useDefineForClassFields' flag.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['--useDefineForClassFields' bayrağı 'esnext' öğesinin '--target' hedefi ile belirtilmediğinde özel adlara sahip statik alanlar başlatıcılara sahip olamaz. '--useDefineForClassFields' bayrağını eklemeyi düşünün.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -12334,10 +12517,13 @@
       </Item>
       <Item ItemId=";Suppress_noImplicitAny_errors_when_indexing_objects_that_lack_index_signatures_6703" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Suppress `noImplicitAny` errors when indexing objects that lack index signatures.]]></Val>
+          <Val><![CDATA[Suppress 'noImplicitAny' errors when indexing objects that lack index signatures.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Dizin imzası olmayan nesnelerin dizinini oluştururken `noImplicitAny` hatalarını gizleyin.]]></Val>
+            <Val><![CDATA[Dizin imzası olmayan nesnelerin dizinini oluştururken 'noImplicitAny' hatalarını gizle.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Suppress `noImplicitAny` errors when indexing objects that lack index signatures.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -12521,6 +12707,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";The_current_file_is_a_CommonJS_module_and_cannot_use_await_at_the_top_level_1309" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[The current file is a CommonJS module and cannot use 'await' at the top level.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Geçerli dosya bir CommonJS modülüdür ve en üst düzeyde 'await'i kullanamaz.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";The_current_host_does_not_support_the_0_option_5001" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[The current host does not support the '{0}' option.]]></Val>
@@ -12652,10 +12847,13 @@
       </Item>
       <Item ItemId=";The_import_meta_meta_property_is_only_allowed_when_the_module_option_is_es2020_es2022_esnext_system__1343" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'es2022', 'esnext', 'system', 'node12', or 'nodenext'.]]></Val>
+          <Val><![CDATA[The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'es2022', 'esnext', 'system', 'node16', or 'nodenext'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['import.meta' meta özelliğine yalnızca '--module' seçeneği 'es2020', 'es2022', 'esnext', 'system', 'node12' veya 'nodenext' olduğunda izin verilir.]]></Val>
+            <Val><![CDATA['import.meta' meta özelliğine yalnızca '--module' seçeneği 'es2020', 'es2022', 'esnext', 'system', 'node16' veya 'nodenext' olduğunda izin verilir.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'es2022', 'esnext', 'system', 'node12', or 'nodenext'.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -12956,11 +13154,29 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";The_parser_expected_to_find_a_to_match_the_token_here_1007" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";The_parser_expected_to_find_a_1_to_match_the_0_token_here_1007" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[The parser expected to find a '}' to match the '{' token here.]]></Val>
+          <Val><![CDATA[The parser expected to find a '{1}' to match the '{0}' token here.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Ayrıştırıcı, buradaki '{' belirteciyle eşleştirmek için bir '}' bulmayı bekliyordu.]]></Val>
+            <Val><![CDATA[Ayrıştırıcı, buradaki '{0}' belirteciyle eşleştirmek için bir '{1}' bulmayı bekliyordu.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";The_project_root_is_ambiguous_but_is_required_to_resolve_export_map_entry_0_in_file_1_Supply_the_roo_2209" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[The project root is ambiguous, but is required to resolve export map entry '{0}' in file '{1}'. Supply the `rootDir` compiler option to disambiguate.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Proje kökü belirsizdir, ancak '{1}' dosyasındaki '{0}' dışa aktarma haritası girişini çözmek için gereklidir. Belirsizliği gidermek için `rootDir` derleyici seçeneğini sağlayın.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";The_project_root_is_ambiguous_but_is_required_to_resolve_import_map_entry_0_in_file_1_Supply_the_roo_2210" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[The project root is ambiguous, but is required to resolve import map entry '{0}' in file '{1}'. Supply the `rootDir` compiler option to disambiguate.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Proje kökü belirsizdir, ancak '{1}' dosyasındaki '{0}' içe aktarma haritası girişini çözmek için gereklidir. Belirsizliği gidermek için `rootDir` derleme seçeneğini sağlayın.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -13553,11 +13769,20 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Top_level_await_expressions_are_only_allowed_when_the_module_option_is_set_to_es2022_esnext_system_o_1378" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";This_use_of_import_is_invalid_import_calls_can_be_written_but_they_must_have_parentheses_and_cannot__1326" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Top-level 'await' expressions are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', or 'nodenext', and the 'target' option is set to 'es2017' or higher.]]></Val>
+          <Val><![CDATA[This use of 'import' is invalid. 'import()' calls can be written, but they must have parentheses and cannot have type arguments.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Üst düzey 'await' ifadelerine yalnızca 'module' seçeneği 'es2022', 'esnext', 'system' veya 'nodenext' olarak ayarlandığında ve 'target' seçeneği 'es2017' veya üzeri olarak ayarlandığında izin verilir.]]></Val>
+            <Val><![CDATA['import' çağrısının bu kullanımı geçersiz. 'import()' çağrıları yazılabilir ancak ayraç içermeleri gerekir ve tür bağımsız değişkenleri içeremezler.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Top_level_await_expressions_are_only_allowed_when_the_module_option_is_set_to_es2022_esnext_system_n_1378" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Top-level 'await' expressions are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', or 'nodenext', and the 'target' option is set to 'es2017' or higher.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Üst düzey 'await' ifadelerine yalnızca 'module' seçeneği 'es2022', 'esnext', 'system', 'node16' veya 'nodenext' olarak ayarlandığında ve 'target' seçeneği 'es2017' veya üzeri olarak ayarlandığında izin verilir.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -13571,11 +13796,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Top_level_for_await_loops_are_only_allowed_when_the_module_option_is_set_to_es2022_esnext_system_or__1432" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Top_level_for_await_loops_are_only_allowed_when_the_module_option_is_set_to_es2022_esnext_system_nod_1432" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Top-level 'for await' loops are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', or 'nodenext', and the 'target' option is set to 'es2017' or higher.]]></Val>
+          <Val><![CDATA[Top-level 'for await' loops are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', or 'nodenext', and the 'target' option is set to 'es2017' or higher.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Üst düzey 'for await' döngülerine yalnızca 'module' seçeneği 'es2022', 'esnext', 'system' veya 'nodenext' olarak ayarlandığında ve 'target' seçeneği 'es2017' veya üzeri olarak ayarlandığında izin verilir.]]></Val>
+            <Val><![CDATA[Üst düzey 'bekleme için' döngülerine yalnızca 'modül' seçeneği 'es2022', 'esnext', 'system', 'node16' veya 'nodenext' olarak ayarlandığında ve 'target' seçeneği 'es2017' veya üstü olarak ayarlandığında izin verilir.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -13727,6 +13952,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Type_0_has_no_signatures_for_which_the_type_argument_list_is_applicable_2635" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Type '{0}' has no signatures for which the type argument list is applicable.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['{0}' türü, tür bağımsız değişkeni listesi için geçerli imzalar içermiyor.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Type_0_is_missing_the_following_properties_from_type_1_Colon_2_2739" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Type '{0}' is missing the following properties from type '{1}': {2}]]></Val>
@@ -13781,15 +14015,6 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Type_0_is_not_an_array_type_or_a_string_type_Use_compiler_option_downlevelIteration_to_allow_iterati_2569" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Type '{0}' is not an array type or a string type. Use compiler option '--downlevelIteration' to allow iterating of iterators.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['{0}' türü bir dizi türü veya bir dize türü değil. Yineleyicilerin yinelenmesine izin vermek için '--downlevelIteration' derleyici seçeneğini kullanın.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";Type_0_is_not_an_array_type_or_a_string_type_or_does_not_have_a_Symbol_iterator_method_that_returns__2549" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Type '{0}' is not an array type or a string type or does not have a '[Symbol.iterator]5D;()' method that returns an iterator.]]></Val>
@@ -13831,6 +14056,15 @@
           <Val><![CDATA[Type '{0}' is not assignable to type '{1}'. Two different types with this name exist, but they are unrelated.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA['{0}' türü '{1}' türüne atanamaz. Bu ada sahip iki farklı tür mevcut, ancak bu türler birbiriyle ilişkisiz.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Type_0_is_not_assignable_to_type_1_as_implied_by_variance_annotation_2636" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Type '{0}' is not assignable to type '{1}' as implied by variance annotation.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Varyans ek açıklaması tarafından belirtildiği gibi '{0}' türü '{1}' türüne atanamaz.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -14048,15 +14282,6 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Type_catch_clause_variables_as_unknown_instead_of_any_6803" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Type catch clause variables as 'unknown' instead of 'any'.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Catch yan tümcesi değişkenlerini 'any' yerine 'unknown' olarak yazın.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";Type_declaration_files_to_be_included_in_compilation_6124" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Type declaration files to be included in compilation.]]></Val>
@@ -14071,6 +14296,15 @@
           <Val><![CDATA[Type expected.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Tür bekleniyor.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Type_import_assertions_should_have_exactly_one_key_resolution_mode_with_value_import_or_require_1456" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Type import assertions should have exactly one key - `resolution-mode` - with value `import` or `require`.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Tür içe aktarma iddiaları, `import` veya `require`. değerine sahip tam olarak bir anahtara - `resolution-mode`’na sahip olmalıdır.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -14897,6 +15131,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Variance_annotations_are_only_supported_in_type_aliases_for_object_function_constructor_and_mapped_t_2637" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Variance annotations are only supported in type aliases for object, function, constructor, and mapped types.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Varyans ek açıklamaları yalnızca nesne, işlev, oluşturucu ve eşlenen türler için tür diğer adlarında desteklenir.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Version_0_6029" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Version {0}]]></Val>
@@ -14906,11 +15149,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Visit_https_Colon_Slash_Slashaka_ms_Slashtsconfig_json_to_read_more_about_this_file_95110" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Visit_https_Colon_Slash_Slashaka_ms_Slashtsconfig_to_read_more_about_this_file_95110" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Visit https://aka.ms/tsconfig.json to read more about this file]]></Val>
+          <Val><![CDATA[Visit https://aka.ms/tsconfig to read more about this file]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Bu dosya hakkında daha fazla bilgi için https://aka.ms/tsconfig.json adresini ziyaret edin]]></Val>
+            <Val><![CDATA[Bu dosya hakkında daha fazla bilgi için https://aka.ms/tsconfig sayfasını ziyaret edin]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -14962,10 +15205,13 @@
       </Item>
       <Item ItemId=";When_type_checking_take_into_account_null_and_undefined_6699" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[When type checking, take into account `null` and `undefined`.]]></Val>
+          <Val><![CDATA[When type checking, take into account 'null' and 'undefined'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Tür denetimi sırasında `null` ve `undefined` öğelerini hesaba katın.]]></Val>
+            <Val><![CDATA[Tür denetimi sırasında 'null' ve 'undefined' öğelerini hesaba kat.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[When type checking, take into account `null` and `undefined`.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -15440,6 +15686,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";_0_modifier_can_only_appear_on_a_type_parameter_of_a_class_interface_or_type_alias_1274" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['{0}' modifier can only appear on a type parameter of a class, interface or type alias]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['{0}' değiştiricisi yalnızca bir sınıfın, arabirimin veya tür diğer adının tür parametresinde görünebilir]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";_0_modifier_cannot_appear_on_a_constructor_declaration_1089" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA['{0}' modifier cannot appear on a constructor declaration.]]></Val>
@@ -15472,6 +15727,15 @@
           <Val><![CDATA['{0}' modifier cannot appear on a type member.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA['{0}' değiştiricisi, bir tür üyesinde görünemez.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";_0_modifier_cannot_appear_on_a_type_parameter_1273" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['{0}' modifier cannot appear on a type parameter]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['{0}' değiştiricisi, bir tür parametresinde görünemez]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -15713,6 +15977,18 @@
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Özellik başlatıcılarda 'arguments' öğesine başvurulamaz.]]></Val>
           </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";auto_Colon_Treat_files_with_imports_exports_import_meta_jsx_with_jsx_Colon_react_jsx_or_esm_format_w_1476" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA["auto": Treat files with imports, exports, import.meta, jsx (with jsx: react-jsx), or esm format (with module: node16+) as modules.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA["auto": İçe aktarma, dışa aktarma, import.meta, jsx (jsx: react-jsx ile) veya esm biçimi (modül: node16+ ile) içeren dosyaları modül olarak ele alın.]]></Val>
+          </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA["auto": Treat files with imports, exports, import.meta, jsx (with jsx: react-jsx), or esm format (with module: node12+) as modules.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -16139,6 +16415,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";or_JSX_element_expected_1145" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['{' or JSX element expected.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['{' veya JSX öğesi bekleniyor.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";or_expected_1144" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA['{' or ';' expected.]]></Val>
@@ -16270,6 +16555,33 @@
           <Val><![CDATA['require' call may be converted to an import.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA['require' çağrısı bir import olarak dönüştürülebilir.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";resolution_mode_can_only_be_set_for_type_only_imports_1454" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[`resolution-mode` can only be set for type-only imports.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[`resolution-mode` yalnızca tür içeri aktarmaları için ayarlanabilir.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";resolution_mode_is_the_only_valid_key_for_type_import_assertions_1455" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[`resolution-mode` is the only valid key for type import assertions.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[`resolution-mode`, tür içe aktarma iddiaları için tek geçerli anahtardır.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";resolution_mode_should_be_either_require_or_import_1453" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[`resolution-mode` should be either `require` or `import`.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[`resolution-mode`, `require` ya da `import` olmalıdır.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

@@ -196,22 +196,22 @@ export function bounceAndTakeIfA<AB extends 'A' | 'B'>(value: AB): AB {
 // Repro from #13995
 
 type Common = { id: number };
->Common : Common
+>Common : { id: number; }
 >id : number
 
 type AA = { tag: 'A', id: number };
->AA : AA
+>AA : { tag: 'A'; id: number; }
 >tag : "A"
 >id : number
 
 type BB = { tag: 'B', id: number, foo: number };
->BB : BB
+>BB : { tag: 'B'; id: number; foo: number; }
 >tag : "B"
 >id : number
 >foo : number
 
 type MyUnion = AA | BB;
->MyUnion : MyUnion
+>MyUnion : AA | BB
 
 const fn = (value: MyUnion) => {
 >fn : (value: MyUnion) => void
@@ -284,7 +284,7 @@ const fn2 = <T extends MyUnion>(value: T): MyUnion => {
 // Repro from #13995
 
 type A1 = {
->A1 : A1
+>A1 : { testable: true; doTest: () => void; }
 
     testable: true
 >testable : true
@@ -294,7 +294,7 @@ type A1 = {
 >doTest : () => void
 }
 type B1 = {
->B1 : B1
+>B1 : { testable: false; }
 
     testable: false
 >testable : false
@@ -303,7 +303,7 @@ type B1 = {
 };
 
 type Union = A1 | B1
->Union : Union
+>Union : A1 | B1
 
 function notWorking<T extends Union>(object: T) {
 >notWorking : <T extends Union>(object: T) => void
@@ -561,7 +561,7 @@ interface Checkbox {
 }
 
 type Control = Button | Checkbox;
->Control : Control
+>Control : Button | Checkbox
 
 function update<T extends Control, K extends keyof T>(control : T | undefined, key: K, value: T[K]): void {
 >update : <T extends Control, K extends keyof T>(control: T | undefined, key: K, value: T[K]) => void

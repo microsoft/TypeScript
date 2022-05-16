@@ -713,7 +713,7 @@ namespace ts.projectSystem {
     }
 
     export interface MakeReferenceItem extends DocumentSpanFromSubstring {
-        isDefinition: boolean;
+        isDefinition?: boolean;
         isWriteAccess?: boolean;
         lineText: string;
     }
@@ -722,7 +722,7 @@ namespace ts.projectSystem {
         return {
             ...protocolFileSpanWithContextFromSubstring(rest),
             isDefinition,
-            isWriteAccess: isWriteAccess === undefined ? isDefinition : isWriteAccess,
+            isWriteAccess: isWriteAccess === undefined ? !!isDefinition : isWriteAccess,
             lineText,
         };
     }

@@ -13,13 +13,13 @@ interface D { d: string }
 
 // Identical ways of writing the same type
 type X1 = (A | B) & (C | D);
->X1 : X1
+>X1 : (A | B) & (C | D)
 
 type X2 = A & (C | D) | B & (C | D)
->X2 : X2
+>X2 : (A & (C | D)) | (B & (C | D))
 
 type X3 = A & C | A & D | B & C | B & D;
->X3 : X3
+>X3 : (A & C) | (A & D) | (B & C) | (B & D)
 
 var x: X1;
 >x : X1
@@ -38,13 +38,13 @@ interface Y { y: string }
 
 // Identical ways of writing the same type
 type Y1 = (A | X & Y) & (C | D);
->Y1 : Y1
+>Y1 : (A | (X & Y)) & (C | D)
 
 type Y2 = A & (C | D) | X & Y & (C | D)
->Y2 : Y2
+>Y2 : (A & (C | D)) | (X & Y & (C | D))
 
 type Y3 = A & C | A & D | X & Y & C | X & Y & D;
->Y3 : Y3
+>Y3 : (A & C) | (A & D) | (X & Y & C) | (X & Y & D)
 
 var y: Y1;
 >y : Y1
@@ -63,16 +63,16 @@ interface N { n: string }
 
 // Identical ways of writing the same type
 type Z1 = (A | X & (M | N)) & (C | D);
->Z1 : Z1
+>Z1 : (A | (X & (M | N))) & (C | D)
 
 type Z2 = A & (C | D) | X & (M | N) & (C | D)
->Z2 : Z2
+>Z2 : (A & (C | D)) | (X & (M | N) & (C | D))
 
 type Z3 = A & C | A & D | X & (M | N) & C | X & (M | N) & D;
->Z3 : Z3
+>Z3 : (A & C) | (A & D) | (X & (M | N) & C) | (X & (M | N) & D)
 
 type Z4 = A & C | A & D | X & M & C | X & N & C | X & M & D | X & N & D;
->Z4 : Z4
+>Z4 : (A & C) | (A & D) | (X & M & C) | (X & M & D) | (X & N & C) | (X & N & D)
 
 var z: Z1;
 >z : Z1
@@ -89,14 +89,14 @@ var z: Z4;
 // Repro from #9919
 
 type ToString = {
->ToString : ToString
+>ToString : { toString(): string; }
 
     toString(): string;
 >toString : () => string
 }
 
 type BoxedValue = { kind: 'int',    num: number }
->BoxedValue : BoxedValue
+>BoxedValue : { kind: 'int'; num: number; } | { kind: 'string'; str: string; }
 >kind : "int"
 >num : number
 
@@ -105,10 +105,10 @@ type BoxedValue = { kind: 'int',    num: number }
 >str : string
 
 type IntersectionFail = BoxedValue & ToString
->IntersectionFail : IntersectionFail
+>IntersectionFail : BoxedValue & ToString
 
 type IntersectionInline = { kind: 'int',    num: number } & ToString
->IntersectionInline : IntersectionInline
+>IntersectionInline : ({ kind: 'int'; num: number; } & ToString) | ({ kind: 'string'; str: string; } & ToString)
 >kind : "int"
 >num : number
 
@@ -198,11 +198,11 @@ namespace enums {
 >c211 : C.c211
     }
     export type Genre = A | B | C;
->Genre : Genre
+>Genre : A | B | C
 }
 
 type Foo = {
->Foo : Foo
+>Foo : { genreId: enums.Genre; }
 
     genreId: enums.Genre;
 >genreId : enums.Genre
@@ -211,7 +211,7 @@ type Foo = {
 };
 
 type Bar = {
->Bar : Bar
+>Bar : { genreId: enums.Genre; }
 
     genreId: enums.Genre;
 >genreId : enums.Genre
@@ -220,7 +220,7 @@ type Bar = {
 };
 
 type FooBar = Foo & Bar;
->FooBar : FooBar
+>FooBar : Foo & Bar
 
 function foo(so: any) {
 >foo : (so: any) => enums.Genre

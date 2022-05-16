@@ -1,21 +1,17 @@
 /// <reference path='fourslash.ts'/>
 
-////[|export default function [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}DefaultExportedFunction|]() {
-////    return [|DefaultExportedFunction|];
-////}|]
+/////*1*/export default function /*2*/DefaultExportedFunction() {
+////    return /*3*/DefaultExportedFunction;
+////}
 ////
-////var x: typeof [|DefaultExportedFunction|];
+////var x: typeof /*4*/DefaultExportedFunction;
 ////
-////var y = [|DefaultExportedFunction|]();
+////var y = /*5*/DefaultExportedFunction();
 ////
-////[|namespace [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 5 |}DefaultExportedFunction|] {
-////}|]
+/////*6*/namespace /*7*/DefaultExportedFunction {
+////}
 
-
-const [r0Def, r0, r1, r2, r3, r4Def, r4] = test.ranges();
-const fnRanges = [r0, r1, r2, r3];
-verify.singleReferenceGroup("function DefaultExportedFunction(): () => typeof DefaultExportedFunction", fnRanges);
 
 // The namespace and function do not merge,
 // so the namespace should be all alone.
-verify.singleReferenceGroup(`namespace DefaultExportedFunction`, [r4]);
+verify.baselineFindAllReferences('1', '2', '3', '4', '5', '6', '7');

@@ -261,6 +261,9 @@ namespace ts {
         const configFile = program.getCompilerOptions().configFile;
         if (!configFile?.configFileSpecs?.validatedIncludeSpecs) return undefined;
 
+        // Return true if its default include spec
+        if (configFile.configFileSpecs.isDefaultIncludeSpec) return true;
+
         const isJsonFile = fileExtensionIs(fileName, Extension.Json);
         const basePath = getDirectoryPath(getNormalizedAbsolutePath(configFile.fileName, program.getCurrentDirectory()));
         const useCaseSensitiveFileNames = program.useCaseSensitiveFileNames();
@@ -327,15 +330,18 @@ namespace ts {
                 const matchedByFiles = getMatchedFileSpec(program, fileName);
                 if (matchedByFiles) return chainDiagnosticMessages(/*details*/ undefined, Diagnostics.Part_of_files_list_in_tsconfig_json);
                 const matchedByInclude = getMatchedIncludeSpec(program, fileName);
-                return matchedByInclude ?
+                return isString(matchedByInclude) ?
                     chainDiagnosticMessages(
                         /*details*/ undefined,
                         Diagnostics.Matched_by_include_pattern_0_in_1,
                         matchedByInclude,
                         toFileName(options.configFile, fileNameConvertor)
                     ) :
-                    // Could be additional files specified as roots
-                    chainDiagnosticMessages(/*details*/ undefined, Diagnostics.Root_file_specified_for_compilation);
+                    // Could be additional files specified as roots or matched by default include
+                    chainDiagnosticMessages(/*details*/ undefined, matchedByInclude ?
+                        Diagnostics.Matched_by_default_include_pattern_Asterisk_Asterisk_Slash_Asterisk :
+                        Diagnostics.Root_file_specified_for_compilation
+                    );
             case FileIncludeKind.SourceFromProjectReference:
             case FileIncludeKind.OutputFromProjectReference:
                 const isOutput = reason.kind === FileIncludeKind.OutputFromProjectReference;
@@ -507,6 +513,13 @@ namespace ts {
         ExtendedConfigOfReferencedProject: "Extended config file of referenced project",
         WildcardDirectoryOfReferencedProject: "Wild card directory of referenced project",
         PackageJson: "package.json file",
+        ClosedScriptInfo: "Closed Script info",
+        ConfigFileForInferredRoot: "Config file for the inferred project root",
+        NodeModules: "node_modules for closed script infos and package.jsons affecting module specifier cache",
+        MissingSourceMapFile: "Missing source map file",
+        NoopConfigFileForInferredRoot: "Noop Config file for the inferred project root",
+        MissingGeneratedFile: "Missing generated file",
+        NodeModulesForModuleSpecifierCache: "node_modules for module specifier cache invalidation",
     };
 
     export interface WatchTypeRegistry {
@@ -521,6 +534,15 @@ namespace ts {
         ExtendedConfigOfReferencedProject: "Extended config file of referenced project",
         WildcardDirectoryOfReferencedProject: "Wild card directory of referenced project",
         PackageJson: "package.json file",
+
+        // Additional tsserver specific watch information
+        ClosedScriptInfo: "Closed Script info",
+        ConfigFileForInferredRoot: "Config file for the inferred project root",
+        NodeModules: "node_modules for closed script infos and package.jsons affecting module specifier cache",
+        MissingSourceMapFile: "Missing source map file",
+        NoopConfigFileForInferredRoot: "Noop Config file for the inferred project root",
+        MissingGeneratedFile: "Missing generated file",
+        NodeModulesForModuleSpecifierCache: "node_modules for module specifier cache invalidation",
     }
 
     interface WatchFactory<X, Y = undefined> extends ts.WatchFactory<X, Y> {
@@ -539,7 +561,7 @@ namespace ts {
         const useCaseSensitiveFileNames = host.useCaseSensitiveFileNames();
         const hostGetNewLine = memoize(() => host.getNewLine());
         return {
-            getSourceFile: (fileName, languageVersion, onError) => {
+            getSourceFile: (fileName, languageVersionOrOptions, onError) => {
                 let text: string | undefined;
                 try {
                     performance.mark("beforeIORead");
@@ -554,7 +576,7 @@ namespace ts {
                     text = "";
                 }
 
-                return text !== undefined ? createSourceFile(fileName, text, languageVersion) : undefined;
+                return text !== undefined ? createSourceFile(fileName, text, languageVersionOrOptions) : undefined;
             },
             getDefaultLibLocation: maybeBind(host, host.getDefaultLibLocation),
             getDefaultLibFileName: options => host.getDefaultLibFileName(options),
@@ -573,6 +595,7 @@ namespace ts {
             createHash: maybeBind(host, host.createHash),
             readDirectory: maybeBind(host, host.readDirectory),
             disableUseFileVersionAsSignature: host.disableUseFileVersionAsSignature,
+            storeFilesChangingSignatureDuringEmit: host.storeFilesChangingSignatureDuringEmit,
         };
 
         function writeFile(fileName: string, text: string, writeByteOrderMark: boolean, onError: (message: string) => void) {
@@ -637,6 +660,7 @@ namespace ts {
             createHash: maybeBind(system, system.createHash),
             createProgram: createProgram || createEmitAndSemanticDiagnosticsBuilderProgram as any as CreateProgram<T>,
             disableUseFileVersionAsSignature: system.disableUseFileVersionAsSignature,
+            storeFilesChangingSignatureDuringEmit: system.storeFilesChangingSignatureDuringEmit,
         };
     }
 

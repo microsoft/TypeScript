@@ -9,12 +9,12 @@ namespace ts.server {
         let cache: ESMap<Path, ResolvedModuleSpecifierInfo> | undefined;
         let currentKey: string | undefined;
         const result: ModuleSpecifierCache = {
-            get(fromFileName, toFileName, preferences) {
-                if (!cache || currentKey !== key(fromFileName, preferences)) return undefined;
+            get(fromFileName, toFileName, preferences, options) {
+                if (!cache || currentKey !== key(fromFileName, preferences, options)) return undefined;
                 return cache.get(toFileName);
             },
-            set(fromFileName, toFileName, preferences, modulePaths, moduleSpecifiers) {
-                ensureCache(fromFileName, preferences).set(toFileName, createInfo(modulePaths, moduleSpecifiers, /*isAutoImportable*/ true));
+            set(fromFileName, toFileName, preferences, options, modulePaths, moduleSpecifiers) {
+                ensureCache(fromFileName, preferences, options).set(toFileName, createInfo(modulePaths, moduleSpecifiers, /*isBlockedByPackageJsonDependencies*/ false));
 
                 // If any module specifiers were generated based off paths in node_modules,
                 // a package.json file in that package was read and is an input to the cached.
@@ -36,24 +36,24 @@ namespace ts.server {
                     }
                 }
             },
-            setModulePaths(fromFileName, toFileName, preferences, modulePaths) {
-                const cache = ensureCache(fromFileName, preferences);
+            setModulePaths(fromFileName, toFileName, preferences, options, modulePaths) {
+                const cache = ensureCache(fromFileName, preferences, options);
                 const info = cache.get(toFileName);
                 if (info) {
                     info.modulePaths = modulePaths;
                 }
                 else {
-                    cache.set(toFileName, createInfo(modulePaths, /*moduleSpecifiers*/ undefined, /*isAutoImportable*/ undefined));
+                    cache.set(toFileName, createInfo(modulePaths, /*moduleSpecifiers*/ undefined, /*isBlockedByPackageJsonDependencies*/ undefined));
                 }
             },
-            setIsAutoImportable(fromFileName, toFileName, preferences, isAutoImportable) {
-                const cache = ensureCache(fromFileName, preferences);
+            setBlockedByPackageJsonDependencies(fromFileName, toFileName, preferences, options, isBlockedByPackageJsonDependencies) {
+                const cache = ensureCache(fromFileName, preferences, options);
                 const info = cache.get(toFileName);
                 if (info) {
-                    info.isAutoImportable = isAutoImportable;
+                    info.isBlockedByPackageJsonDependencies = isBlockedByPackageJsonDependencies;
                 }
                 else {
-                    cache.set(toFileName, createInfo(/*modulePaths*/ undefined, /*moduleSpecifiers*/ undefined, isAutoImportable));
+                    cache.set(toFileName, createInfo(/*modulePaths*/ undefined, /*moduleSpecifiers*/ undefined, isBlockedByPackageJsonDependencies));
                 }
             },
             clear() {
@@ -71,8 +71,8 @@ namespace ts.server {
         }
         return result;
 
-        function ensureCache(fromFileName: Path, preferences: UserPreferences) {
-            const newKey = key(fromFileName, preferences);
+        function ensureCache(fromFileName: Path, preferences: UserPreferences, options: ModuleSpecifierOptions) {
+            const newKey = key(fromFileName, preferences, options);
             if (cache && (currentKey !== newKey)) {
                 result.clear();
             }
@@ -80,16 +80,16 @@ namespace ts.server {
             return cache ||= new Map();
         }
 
-        function key(fromFileName: Path, preferences: UserPreferences) {
-            return `${fromFileName},${preferences.importModuleSpecifierEnding},${preferences.importModuleSpecifierPreference}`;
+        function key(fromFileName: Path, preferences: UserPreferences, options: ModuleSpecifierOptions) {
+            return `${fromFileName},${preferences.importModuleSpecifierEnding},${preferences.importModuleSpecifierPreference},${options.overrideImportMode}`;
         }
 
         function createInfo(
             modulePaths: readonly ModulePath[] | undefined,
             moduleSpecifiers: readonly string[] | undefined,
-            isAutoImportable: boolean | undefined,
+            isBlockedByPackageJsonDependencies: boolean | undefined,
         ): ResolvedModuleSpecifierInfo {
-            return { modulePaths, moduleSpecifiers, isAutoImportable };
+            return { modulePaths, moduleSpecifiers, isBlockedByPackageJsonDependencies };
         }
     }
 }

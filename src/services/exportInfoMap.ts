@@ -29,6 +29,7 @@ namespace ts {
         // Used to rehydrate `symbol` and `moduleSymbol` when transient
         id: number;
         symbolName: string;
+        capitalizedSymbolName: string | undefined;
         symbolTableKey: __String;
         moduleName: string;
         moduleFile: SourceFile | undefined;
@@ -48,7 +49,7 @@ namespace ts {
         clear(): void;
         add(importingFile: Path, symbol: Symbol, key: __String, moduleSymbol: Symbol, moduleFile: SourceFile | undefined, exportKind: ExportKind, isFromPackageJson: boolean, checker: TypeChecker): void;
         get(importingFile: Path, key: string): readonly SymbolExportInfo[] | undefined;
-        forEach(importingFile: Path, action: (info: readonly SymbolExportInfo[], getSymbolName: (preferCapitalized?: boolean) => string, isFromAmbientModule: boolean, key: string) => void): void;
+        search(importingFile: Path, preferCapitalized: boolean, matches: (name: string, targetFlags: SymbolFlags) => boolean, action: (info: readonly SymbolExportInfo[], symbolName: string, isFromAmbientModule: boolean, key: string) => void): void;
         releaseSymbols(): void;
         isEmpty(): boolean;
         /** @returns Whether the change resulted in the cache being cleared */
@@ -58,6 +59,7 @@ namespace ts {
     export interface CacheableExportInfoMapHost {
         getCurrentProgram(): Program | undefined;
         getPackageJsonAutoImportProvider(): Program | undefined;
+        getGlobalTypingsCacheLocation(): string | undefined;
     }
 
     export function createCacheableExportInfoMap(host: CacheableExportInfoMapHost): ExportInfoMap {
@@ -98,7 +100,7 @@ namespace ts {
                         packageName = unmangleScopedPackageName(getPackageNameFromTypesPackageName(moduleFile.fileName.substring(topLevelPackageNameIndex + 1, packageRootIndex)));
                         if (startsWith(importingFile, moduleFile.path.substring(0, topLevelNodeModulesIndex))) {
                             const prevDeepestNodeModulesPath = packages.get(packageName);
-                            const nodeModulesPath = moduleFile.fileName.substring(0, topLevelPackageNameIndex);
+                            const nodeModulesPath = moduleFile.fileName.substring(0, topLevelPackageNameIndex + 1);
                             if (prevDeepestNodeModulesPath) {
                                 const prevDeepestNodeModulesIndex = prevDeepestNodeModulesPath.indexOf(nodeModulesPathPart);
                                 if (topLevelNodeModulesIndex > prevDeepestNodeModulesIndex) {
@@ -121,9 +123,12 @@ namespace ts {
                 // 3. Otherwise, we have a default/namespace import that can be imported by any name, and
                 //    `symbolTableKey` will be something undesirable like `export=` or `default`, so we try to
                 //    get a better name.
-                const importedName = exportKind === ExportKind.Named || isExternalModuleSymbol(namedSymbol)
+                const names = exportKind === ExportKind.Named || isExternalModuleSymbol(namedSymbol)
                     ? unescapeLeadingUnderscores(symbolTableKey)
-                    : getNameForExportedSymbol(namedSymbol, /*scriptTarget*/ undefined);
+                    : getNamesForExportedSymbol(namedSymbol, /*scriptTarget*/ undefined);
+
+                const symbolName = typeof names === "string" ? names : names[0];
+                const capitalizedSymbolName = typeof names === "string" ? undefined : names[1];
 
                 const moduleName = stripQuotes(moduleSymbol.name);
                 const id = exportInfoId++;
@@ -132,10 +137,11 @@ namespace ts {
                 const storedModuleSymbol = moduleSymbol.flags & SymbolFlags.Transient ? undefined : moduleSymbol;
                 if (!storedSymbol || !storedModuleSymbol) symbols.set(id, [symbol, moduleSymbol]);
 
-                exportInfo.add(key(importedName, symbol, isExternalModuleNameRelative(moduleName) ? undefined : moduleName, checker), {
+                exportInfo.add(key(symbolName, symbol, isExternalModuleNameRelative(moduleName) ? undefined : moduleName, checker), {
                     id,
                     symbolTableKey,
-                    symbolName: importedName,
+                    symbolName,
+                    capitalizedSymbolName,
                     moduleName,
                     moduleFile,
                     moduleFileName: moduleFile?.fileName,
@@ -152,24 +158,17 @@ namespace ts {
                 const result = exportInfo.get(key);
                 return result?.map(rehydrateCachedInfo);
             },
-            forEach: (importingFile, action) => {
+            search: (importingFile, preferCapitalized, matches, action) => {
                 if (importingFile !== usableByFileName) return;
                 exportInfo.forEach((info, key) => {
                     const { symbolName, ambientModuleName } = parseKey(key);
-                    const rehydrated = info.map(rehydrateCachedInfo);
-                    const filtered = rehydrated.filter((r, i) => isNotShadowedByDeeperNodeModulesPackage(r, info[i].packageName));
-                    if (filtered.length) {
-                        action(
-                            filtered,
-                            preferCapitalized => {
-                                const { symbol, exportKind } = rehydrated[0];
-                                const namedSymbol = exportKind === ExportKind.Default && getLocalSymbolForExportDefault(symbol) || symbol;
-                                return preferCapitalized
-                                    ? getNameForExportedSymbol(namedSymbol, /*scriptTarget*/ undefined, /*preferCapitalized*/ true)
-                                    : symbolName;
-                            },
-                            !!ambientModuleName,
-                            key);
+                    const name = preferCapitalized && info[0].capitalizedSymbolName || symbolName;
+                    if (matches(name, info[0].targetFlags)) {
+                        const rehydrated = info.map(rehydrateCachedInfo);
+                        const filtered = rehydrated.filter((r, i) => isNotShadowedByDeeperNodeModulesPackage(r, info[i].packageName));
+                        if (filtered.length) {
+                            action(filtered, name, !!ambientModuleName, key);
+                        }
                     }
                 });
             },
@@ -274,6 +273,8 @@ namespace ts {
 
         function isNotShadowedByDeeperNodeModulesPackage(info: SymbolExportInfo, packageName: string | undefined) {
             if (!packageName || !info.moduleFileName) return true;
+            const typingsCacheLocation = host.getGlobalTypingsCacheLocation();
+            if (typingsCacheLocation && startsWith(info.moduleFileName, typingsCacheLocation)) return true;
             const packageDeepestNodeModulesPath = packages.get(packageName);
             return !packageDeepestNodeModulesPath || startsWith(info.moduleFileName, packageDeepestNodeModulesPath);
         }
@@ -289,9 +290,9 @@ namespace ts {
         moduleSpecifierCache: ModuleSpecifierCache | undefined,
     ): boolean {
         if (from === to) return false;
-        const cachedResult = moduleSpecifierCache?.get(from.path, to.path, preferences);
-        if (cachedResult?.isAutoImportable !== undefined) {
-            return cachedResult.isAutoImportable;
+        const cachedResult = moduleSpecifierCache?.get(from.path, to.path, preferences, {});
+        if (cachedResult?.isBlockedByPackageJsonDependencies !== undefined) {
+            return !cachedResult.isBlockedByPackageJsonDependencies;
         }
 
         const getCanonicalFileName = hostGetCanonicalFileName(moduleSpecifierResolutionHost);
@@ -312,7 +313,7 @@ namespace ts {
 
         if (packageJsonFilter) {
             const isAutoImportable = hasImportablePath && packageJsonFilter.allowsImportingSourceFile(to, moduleSpecifierResolutionHost);
-            moduleSpecifierCache?.setIsAutoImportable(from.path, to.path, preferences, isAutoImportable);
+            moduleSpecifierCache?.setBlockedByPackageJsonDependencies(from.path, to.path, preferences, {}, !isAutoImportable);
             return isAutoImportable;
         }
 
@@ -369,6 +370,7 @@ namespace ts {
         const cache = host.getCachedExportInfoMap?.() || createCacheableExportInfoMap({
             getCurrentProgram: () => program,
             getPackageJsonAutoImportProvider: () => host.getPackageJsonAutoImportProvider?.(),
+            getGlobalTypingsCacheLocation: () => host.getGlobalTypingsCacheLocation?.(),
         });
 
         if (cache.isUsableByFile(importingFile.path)) {
@@ -379,38 +381,45 @@ namespace ts {
         host.log?.("getExportInfoMap: cache miss or empty; calculating new results");
         const compilerOptions = program.getCompilerOptions();
         let moduleCount = 0;
-        forEachExternalModuleToImportFrom(program, host, /*useAutoImportProvider*/ true, (moduleSymbol, moduleFile, program, isFromPackageJson) => {
-            if (++moduleCount % 100 === 0) cancellationToken?.throwIfCancellationRequested();
-            const seenExports = new Map<__String, true>();
-            const checker = program.getTypeChecker();
-            const defaultInfo = getDefaultLikeExportInfo(moduleSymbol, checker, compilerOptions);
-            // Note: I think we shouldn't actually see resolved module symbols here, but weird merges
-            // can cause it to happen: see 'completionsImport_mergedReExport.ts'
-            if (defaultInfo && isImportableSymbol(defaultInfo.symbol, checker)) {
-                cache.add(
-                    importingFile.path,
-                    defaultInfo.symbol,
-                    defaultInfo.exportKind === ExportKind.Default ? InternalSymbolName.Default : InternalSymbolName.ExportEquals,
-                    moduleSymbol,
-                    moduleFile,
-                    defaultInfo.exportKind,
-                    isFromPackageJson,
-                    checker);
-            }
-            checker.forEachExportAndPropertyOfModule(moduleSymbol, (exported, key) => {
-                if (exported !== defaultInfo?.symbol && isImportableSymbol(exported, checker) && addToSeen(seenExports, key)) {
+        try {
+            forEachExternalModuleToImportFrom(program, host, /*useAutoImportProvider*/ true, (moduleSymbol, moduleFile, program, isFromPackageJson) => {
+                if (++moduleCount % 100 === 0) cancellationToken?.throwIfCancellationRequested();
+                const seenExports = new Map<__String, true>();
+                const checker = program.getTypeChecker();
+                const defaultInfo = getDefaultLikeExportInfo(moduleSymbol, checker, compilerOptions);
+                // Note: I think we shouldn't actually see resolved module symbols here, but weird merges
+                // can cause it to happen: see 'completionsImport_mergedReExport.ts'
+                if (defaultInfo && isImportableSymbol(defaultInfo.symbol, checker)) {
                     cache.add(
                         importingFile.path,
-                        exported,
-                        key,
+                        defaultInfo.symbol,
+                        defaultInfo.exportKind === ExportKind.Default ? InternalSymbolName.Default : InternalSymbolName.ExportEquals,
                         moduleSymbol,
                         moduleFile,
-                        ExportKind.Named,
+                        defaultInfo.exportKind,
                         isFromPackageJson,
                         checker);
                 }
+                checker.forEachExportAndPropertyOfModule(moduleSymbol, (exported, key) => {
+                    if (exported !== defaultInfo?.symbol && isImportableSymbol(exported, checker) && addToSeen(seenExports, key)) {
+                        cache.add(
+                            importingFile.path,
+                            exported,
+                            key,
+                            moduleSymbol,
+                            moduleFile,
+                            ExportKind.Named,
+                            isFromPackageJson,
+                            checker);
+                    }
+                });
             });
-        });
+        }
+        catch (err) {
+            // Ensure cache is reset if operation is cancelled
+            cache.clear();
+            throw err;
+        }
 
         host.log?.(`getExportInfoMap: done in ${timestamp() - start} ms`);
         return cache;

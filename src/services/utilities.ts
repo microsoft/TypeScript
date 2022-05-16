@@ -200,7 +200,7 @@ namespace ts {
             case SyntaxKind.ImportType:
                 return !(node.parent as ImportTypeNode).isTypeOf;
             case SyntaxKind.ExpressionWithTypeArguments:
-                return !isExpressionWithTypeArgumentsInClassExtendsClause(node.parent as ExpressionWithTypeArguments);
+                return isPartOfTypeNode(node.parent);
         }
 
         return false;
@@ -806,6 +806,8 @@ namespace ts {
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.FunctionExpression:
                     return getAdjustedLocationForFunction(node as FunctionDeclaration | FunctionExpression);
+                case SyntaxKind.Constructor:
+                    return node;
             }
         }
         if (isNamedDeclaration(node)) {
@@ -1256,8 +1258,10 @@ namespace ts {
      * Finds the rightmost token satisfying `token.end <= position`,
      * excluding `JsxText` tokens containing only whitespace.
      */
-    export function findPrecedingToken(position: number, sourceFile: SourceFile, startNode?: Node, excludeJsdoc?: boolean): Node | undefined {
-        const result = find(startNode || sourceFile);
+    export function findPrecedingToken(position: number, sourceFile: SourceFileLike, startNode: Node, excludeJsdoc?: boolean): Node | undefined;
+    export function findPrecedingToken(position: number, sourceFile: SourceFile, startNode?: Node, excludeJsdoc?: boolean): Node | undefined;
+    export function findPrecedingToken(position: number, sourceFile: SourceFileLike, startNode?: Node, excludeJsdoc?: boolean): Node | undefined {
+        const result = find((startNode || sourceFile) as Node);
         Debug.assert(!(result && isWhiteSpaceOnlyJsxText(result)));
         return result;
 
@@ -1322,7 +1326,7 @@ namespace ts {
         return isToken(n) && !isWhiteSpaceOnlyJsxText(n);
     }
 
-    function findRightmostToken(n: Node, sourceFile: SourceFile): Node | undefined {
+    function findRightmostToken(n: Node, sourceFile: SourceFileLike): Node | undefined {
         if (isNonWhitespaceToken(n)) {
             return n;
         }
@@ -1339,7 +1343,7 @@ namespace ts {
     /**
      * Finds the rightmost child to the left of `children[exclusiveStartPosition]` which is a non-all-whitespace token or has constituent tokens.
      */
-    function findRightmostChildNodeWithTokens(children: Node[], exclusiveStartPosition: number, sourceFile: SourceFile, parentKind: SyntaxKind): Node | undefined {
+    function findRightmostChildNodeWithTokens(children: Node[], exclusiveStartPosition: number, sourceFile: SourceFileLike, parentKind: SyntaxKind): Node | undefined {
         for (let i = exclusiveStartPosition - 1; i >= 0; i--) {
             const child = children[i];
 
@@ -1926,6 +1930,14 @@ namespace ts {
         };
     }
 
+    export function moduleResolutionRespectsExports(moduleResolution: ModuleResolutionKind): boolean {
+        return moduleResolution >= ModuleResolutionKind.Node16 && moduleResolution <= ModuleResolutionKind.NodeNext;
+    }
+
+    export function moduleResolutionUsesNodeModules(moduleResolution: ModuleResolutionKind): boolean {
+        return moduleResolution === ModuleResolutionKind.NodeJs || moduleResolution >= ModuleResolutionKind.Node16 && moduleResolution <= ModuleResolutionKind.NodeNext;
+    }
+
     export function makeImportIfNecessary(defaultImport: Identifier | undefined, namedImports: readonly ImportSpecifier[] | undefined, moduleSpecifier: string, quotePreference: QuotePreference): ImportDeclaration | undefined {
         return defaultImport || namedImports && namedImports.length ? makeImport(defaultImport, namedImports, moduleSpecifier, quotePreference) : undefined;
     }
@@ -2307,13 +2319,15 @@ namespace ts {
             : "linkplain";
         const parts = [linkPart(`{@${prefix} `)];
         if (!link.name) {
-            if (link.text) parts.push(linkTextPart(link.text));
+            if (link.text) {
+                parts.push(linkTextPart(link.text));
+            }
         }
         else {
             const symbol = checker?.getSymbolAtLocation(link.name);
             const suffix = findLinkNameEnd(link.text);
             const name = getTextOfNode(link.name) + link.text.slice(0, suffix);
-            const text = link.text.slice(suffix);
+            const text = skipSeparatorFromLinkText(link.text.slice(suffix));
             const decl = symbol?.valueDeclaration || symbol?.declarations?.[0];
             if (decl) {
                 parts.push(linkNamePart(name, decl));
@@ -2325,6 +2339,15 @@ namespace ts {
         }
         parts.push(linkPart("}"));
         return parts;
+    }
+
+    function skipSeparatorFromLinkText(text: string) {
+        let pos = 0;
+        if (text.charCodeAt(pos++) === CharacterCodes.bar) {
+            while (pos < text.length && text.charCodeAt(pos) === CharacterCodes.space) pos++;
+            return text.slice(pos);
+        }
+        return text;
     }
 
     function findLinkNameEnd(text: string) {
@@ -2381,6 +2404,14 @@ namespace ts {
         flags |= TypeFormatFlags.UseAliasDefinedOutsideCurrentScope | TypeFormatFlags.MultilineObjectLiterals | TypeFormatFlags.WriteTypeArgumentsOfSignature | TypeFormatFlags.OmitParameterModifiers;
         return mapToDisplayParts(writer => {
             typechecker.writeSignature(signature, enclosingDeclaration, flags, /*signatureKind*/ undefined, writer);
+        });
+    }
+
+    export function nodeToDisplayParts(node: Node, enclosingDeclaration: Node): SymbolDisplayPart[] {
+        const file = enclosingDeclaration.getSourceFile();
+        return mapToDisplayParts(writer => {
+            const printer = createPrinter({ removeComments: true, omitTrailingSemicolon: true });
+            printer.writeNode(EmitHint.Unspecified, node, file, writer);
         });
     }
 
@@ -2930,7 +2961,7 @@ namespace ts {
         const packageJsons: PackageJsonInfo[] = [];
         forEachAncestorDirectory(getDirectoryPath(fileName), ancestor => {
             const packageJsonFileName = combinePaths(ancestor, "package.json");
-            if (host.fileExists!(packageJsonFileName)) {
+            if (host.fileExists(packageJsonFileName)) {
                 const info = createPackageJsonInfo(packageJsonFileName, host);
                 if (info) {
                     packageJsons.push(info);
@@ -3210,13 +3241,34 @@ namespace ts {
         return isArray(valueOrArray) ? first(valueOrArray) : valueOrArray;
     }
 
+    export function getNamesForExportedSymbol(symbol: Symbol, scriptTarget: ScriptTarget | undefined): string | [lowercase: string, capitalized: string] {
+        if (needsNameFromDeclaration(symbol)) {
+            const fromDeclaration = getDefaultLikeExportNameFromDeclaration(symbol);
+            if (fromDeclaration) return fromDeclaration;
+            const fileNameCase = codefix.moduleSymbolToValidIdentifier(getSymbolParentOrFail(symbol), scriptTarget, /*preferCapitalized*/ false);
+            const capitalized = codefix.moduleSymbolToValidIdentifier(getSymbolParentOrFail(symbol), scriptTarget, /*preferCapitalized*/ true);
+            if (fileNameCase === capitalized) return fileNameCase;
+            return [fileNameCase, capitalized];
+        }
+        return symbol.name;
+    }
+
     export function getNameForExportedSymbol(symbol: Symbol, scriptTarget: ScriptTarget | undefined, preferCapitalized?: boolean) {
-        if (!(symbol.flags & SymbolFlags.Transient) && (symbol.escapedName === InternalSymbolName.ExportEquals || symbol.escapedName === InternalSymbolName.Default)) {
+        if (needsNameFromDeclaration(symbol)) {
             // Name of "export default foo;" is "foo". Name of "export default 0" is the filename converted to camelCase.
-            return firstDefined(symbol.declarations, d => isExportAssignment(d) ? tryCast(skipOuterExpressions(d.expression), isIdentifier)?.text : undefined)
+            return getDefaultLikeExportNameFromDeclaration(symbol)
                 || codefix.moduleSymbolToValidIdentifier(getSymbolParentOrFail(symbol), scriptTarget, !!preferCapitalized);
         }
         return symbol.name;
+
+    }
+
+    function needsNameFromDeclaration(symbol: Symbol) {
+        return !(symbol.flags & SymbolFlags.Transient) && (symbol.escapedName === InternalSymbolName.ExportEquals || symbol.escapedName === InternalSymbolName.Default);
+    }
+
+    function getDefaultLikeExportNameFromDeclaration(symbol: Symbol) {
+        return firstDefined(symbol.declarations, d => isExportAssignment(d) ? tryCast(skipOuterExpressions(d.expression), isIdentifier)?.text : undefined);
     }
 
     function getSymbolParentOrFail(symbol: Symbol) {
@@ -3312,6 +3364,10 @@ namespace ts {
             ...options,
             semicolons: shouldRemoveSemicolons ? SemicolonPreference.Remove : SemicolonPreference.Ignore,
         };
+    }
+
+    export function jsxModeNeedsExplicitImport(jsx: JsxEmit | undefined) {
+        return jsx === JsxEmit.React || jsx === JsxEmit.ReactNative;
     }
 
     // #endregion

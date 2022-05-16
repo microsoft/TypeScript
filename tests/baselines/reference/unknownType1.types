@@ -91,7 +91,7 @@ type T35<T> = T extends unknown ? { x: T } : false;
 >false : false
 
 type T36 = T35<string | number>;  // { x: string } | { x: number }
->T36 : T36
+>T36 : { x: string; } | { x: number; }
 
 type T37 = T35<any>;  // { x: any }
 >T37 : { x: any; }

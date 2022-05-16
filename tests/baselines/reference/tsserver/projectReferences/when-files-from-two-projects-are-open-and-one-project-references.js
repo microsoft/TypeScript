@@ -244,7 +244,7 @@ Project '/user/username/projects/myproject/main/tsconfig.json' (Configured)
 	../../../../../a/lib/lib.d.ts
 	  Default library for target 'es3'
 	src/file1.ts
-	  Matched by include pattern '**/*' in 'tsconfig.json'
+	  Matched by default include pattern '**/*'
 
 -----------------------------------------------
 Search path: /user/username/projects/myproject/main
@@ -277,7 +277,7 @@ Project '/user/username/projects/myproject/core/tsconfig.json' (Configured)
 	../../../../../a/lib/lib.d.ts
 	  Default library for target 'es3'
 	src/file1.ts
-	  Matched by include pattern '**/*' in 'tsconfig.json'
+	  Matched by default include pattern '**/*'
 
 -----------------------------------------------
 Search path: /user/username/projects/myproject/core
@@ -297,6 +297,7 @@ Open files:
 		Projects: /user/username/projects/myproject/core/tsconfig.json
 response:{"responseRequired":false}
 request:{"command":"references","arguments":{"file":"/user/username/projects/myproject/core/src/file1.ts","line":1,"offset":14},"seq":1,"type":"request"}
+Finding references to /user/username/projects/myproject/core/src/file1.ts position 13 in project /user/username/projects/myproject/core/tsconfig.json
 Creating configuration project /user/username/projects/myproject/indirect/tsconfig.json
 Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/indirect/src/file1.ts 500 undefined WatchType: Closed Script info
@@ -315,7 +316,7 @@ Project '/user/username/projects/myproject/indirect/tsconfig.json' (Configured)
 	../../../../../a/lib/lib.d.ts
 	  Default library for target 'es3'
 	src/file1.ts
-	  Matched by include pattern '**/*' in 'tsconfig.json'
+	  Matched by default include pattern '**/*'
 
 -----------------------------------------------
 Creating configuration project /user/username/projects/myproject/coreRef1/tsconfig.json
@@ -336,7 +337,7 @@ Project '/user/username/projects/myproject/coreRef1/tsconfig.json' (Configured)
 	../../../../../a/lib/lib.d.ts
 	  Default library for target 'es3'
 	src/file1.ts
-	  Matched by include pattern '**/*' in 'tsconfig.json'
+	  Matched by default include pattern '**/*'
 
 -----------------------------------------------
 Creating configuration project /user/username/projects/myproject/indirectDisabledChildLoad1/tsconfig.json
@@ -357,7 +358,7 @@ Project '/user/username/projects/myproject/indirectDisabledChildLoad1/tsconfig.j
 	../../../../../a/lib/lib.d.ts
 	  Default library for target 'es3'
 	src/file1.ts
-	  Matched by include pattern '**/*' in 'tsconfig.json'
+	  Matched by default include pattern '**/*'
 
 -----------------------------------------------
 Creating configuration project /user/username/projects/myproject/indirectDisabledChildLoad2/tsconfig.json
@@ -378,7 +379,7 @@ Project '/user/username/projects/myproject/indirectDisabledChildLoad2/tsconfig.j
 	../../../../../a/lib/lib.d.ts
 	  Default library for target 'es3'
 	src/file1.ts
-	  Matched by include pattern '**/*' in 'tsconfig.json'
+	  Matched by default include pattern '**/*'
 
 -----------------------------------------------
 Creating configuration project /user/username/projects/myproject/refToCoreRef3/tsconfig.json
@@ -399,7 +400,7 @@ Project '/user/username/projects/myproject/refToCoreRef3/tsconfig.json' (Configu
 	../../../../../a/lib/lib.d.ts
 	  Default library for target 'es3'
 	src/file1.ts
-	  Matched by include pattern '**/*' in 'tsconfig.json'
+	  Matched by default include pattern '**/*'
 
 -----------------------------------------------
 Creating configuration project /user/username/projects/myproject/coreRef3/tsconfig.json
@@ -420,7 +421,7 @@ Project '/user/username/projects/myproject/coreRef3/tsconfig.json' (Configured)
 	../../../../../a/lib/lib.d.ts
 	  Default library for target 'es3'
 	src/file1.ts
-	  Matched by include pattern '**/*' in 'tsconfig.json'
+	  Matched by default include pattern '**/*'
 
 -----------------------------------------------
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/core/src/file1.d.ts 2000 undefined Project: /user/username/projects/myproject/core/tsconfig.json WatchType: Missing generated file

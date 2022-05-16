@@ -1,4 +1,4 @@
-tests/cases/compiler/divergentAccessorsTypes2.ts(10,1): error TS2322: Type '42' is not assignable to type 'string | undefined'.
+tests/cases/compiler/divergentAccessorsTypes2.ts(10,1): error TS2322: Type 'number' is not assignable to type 'string'.
 
 
 ==== tests/cases/compiler/divergentAccessorsTypes2.ts (1 errors) ====
@@ -13,5 +13,5 @@ tests/cases/compiler/divergentAccessorsTypes2.ts(10,1): error TS2322: Type '42' 
     s.foo = "hello";
     s.foo = 42;
     ~~~~~
-!!! error TS2322: Type '42' is not assignable to type 'string | undefined'.
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
     

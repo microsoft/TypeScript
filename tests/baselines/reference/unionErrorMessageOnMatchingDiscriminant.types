@@ -1,6 +1,6 @@
 === tests/cases/compiler/unionErrorMessageOnMatchingDiscriminant.ts ===
 type A = {
->A : A
+>A : { type: 'a'; data: {    a: string;}; }
 
     type: 'a',
 >type : "a"
@@ -12,7 +12,7 @@ type A = {
 };
 
 type B = {
->B : B
+>B : { type: 'b'; data: null; }
 
     type: 'b',
 >type : "b"
@@ -24,7 +24,7 @@ type B = {
 };
 
 type C = {
->C : C
+>C : { type: 'c'; payload: string; }
 
     type: 'c',
 >type : "c"
@@ -35,7 +35,7 @@ type C = {
 };
 
 type Union = A | B | C;
->Union : Union
+>Union : A | B | C
 
 // error
 const foo: Union = {

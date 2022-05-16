@@ -12,15 +12,12 @@ class D extends C {
 
 
 //// [typeOfThisInStaticMembers3.js]
-var _a, _b, _c;
 class C {
+    static { this.a = 1; }
+    static { this.b = this.a + 1; }
 }
-_a = C;
-C.a = 1;
-C.b = _a.a + 1;
-class D extends (_c = C) {
+class D extends C {
+    static { this.c = 2; }
+    static { this.d = this.c + 1; }
+    static { this.e = super.a + this.c + 1; }
 }
-_b = D;
-D.c = 2;
-D.d = _b.c + 1;
-D.e = Reflect.get(_c, "a", _b) + _b.c + 1;

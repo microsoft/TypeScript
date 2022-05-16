@@ -430,8 +430,7 @@
           "start": 26,
           "length": 19
         },
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   },
@@ -504,8 +503,7 @@
           "start": 110,
           "length": 2
         },
-        "isWriteAccess": false,
-        "isDefinition": true
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -513,8 +511,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/referencesForClassMembersExtendingAbstractClass.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }
@@ -992,8 +989,7 @@
           "start": 50,
           "length": 24
         },
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   },
@@ -1074,8 +1070,7 @@
           "start": 117,
           "length": 12
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -1083,8 +1078,7 @@
           "length": 6
         },
         "fileName": "/tests/cases/fourslash/referencesForClassMembersExtendingAbstractClass.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }

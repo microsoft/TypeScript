@@ -1,15 +1,15 @@
 === tests/cases/conformance/types/tuple/optionalTupleElements1.ts ===
 type T1 = [number, string, boolean];
->T1 : T1
+>T1 : [number, string, boolean]
 
 type T2 = [number, string, boolean?];
->T2 : T2
+>T2 : [number, string, (boolean | undefined)?]
 
 type T3 = [number, string?, boolean?];
->T3 : T3
+>T3 : [number, (string | undefined)?, (boolean | undefined)?]
 
 type T4 = [number?, string?, boolean?];
->T4 : T4
+>T4 : [(number | undefined)?, (string | undefined)?, (boolean | undefined)?]
 
 type L1 = T1["length"];
 >L1 : 3
@@ -24,7 +24,7 @@ type L4 = T4["length"];
 >L4 : 0 | 3 | 2 | 1
 
 type T5 = [number, string?, boolean];  // Error
->T5 : T5
+>T5 : [number, (string | undefined)?, boolean]
 
 function f1(t1: T1, t2: T2, t3: T3, t4: T4) {
 >f1 : (t1: T1, t2: T2, t3: T3, t4: T4) => void

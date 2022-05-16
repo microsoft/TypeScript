@@ -215,8 +215,8 @@ namespace FourSlashInterface {
             this.state.verifyRefactorsAvailable(names);
         }
 
-        public refactorAvailable(name: string, actionName?: string) {
-            this.state.verifyRefactorAvailable(this.negative, "implicit", name, actionName);
+        public refactorAvailable(name: string, actionName?: string, actionDescription?: string) {
+            this.state.verifyRefactorAvailable(this.negative, "implicit", name, actionName, actionDescription);
         }
 
         public refactorAvailableForTriggerReason(triggerReason: ts.RefactorTriggerReason, name: string, actionName?: string) {
@@ -255,7 +255,7 @@ namespace FourSlashInterface {
             }
         }
 
-        public getInlayHints(expected: readonly VerifyInlayHintsOptions[], span: ts.TextSpan, preference?: ts.InlayHintsOptions) {
+        public getInlayHints(expected: readonly VerifyInlayHintsOptions[], span: ts.TextSpan, preference?: ts.UserPreferences) {
             this.state.verifyInlayHints(expected, span, preference);
         }
 
@@ -324,6 +324,10 @@ namespace FourSlashInterface {
             this.state.verifyGoToType(arg0, endMarkerName);
         }
 
+        public goToSourceDefinition(startMarkerNames: ArrayOrSingle<string>, end: { file: string } | ArrayOrSingle<string>) {
+            this.state.verifyGoToSourceDefinition(startMarkerNames, end);
+        }
+
         public goToDefinitionForMarkers(...markerNames: string[]) {
             this.state.verifyGoToDefinitionForMarkers(markerNames);
         }
@@ -352,12 +356,12 @@ namespace FourSlashInterface {
             this.state.verifyBaselineFindAllReferences(...markerNames);
         }
 
-        public baselineGetFileReferences(fileName: string) {
-            this.state.verifyBaselineGetFileReferences(fileName);
+        public baselineFindAllReferencesMulti(seq: number, ...markerNames: string[]) {
+            this.state.verifyBaselineFindAllReferencesMulti(seq, ...markerNames);
         }
 
-        public singleReferenceGroup(definition: ReferenceGroupDefinition, ranges?: FourSlash.Range[] | string) {
-            this.state.verifySingleReferenceGroup(definition, ranges);
+        public baselineGetFileReferences(fileName: string) {
+            this.state.verifyBaselineGetFileReferences(fileName);
         }
 
         public findReferencesDefinitionDisplayPartsAtCaretAre(expected: ts.SymbolDisplayPart[]) {
@@ -400,8 +404,8 @@ namespace FourSlashInterface {
             this.state.baselineSignatureHelp();
         }
 
-        public baselineCompletions() {
-            this.state.baselineCompletions();
+        public baselineCompletions(preferences?: ts.UserPreferences) {
+            this.state.baselineCompletions(preferences);
         }
 
         public baselineSmartSelection() {
@@ -478,8 +482,8 @@ namespace FourSlashInterface {
             this.state.verifyImportFixAtPosition(expectedTextArray, errorCode, preferences);
         }
 
-        public importFixModuleSpecifiers(marker: string, moduleSpecifiers: string[]) {
-            this.state.verifyImportFixModuleSpecifiers(marker, moduleSpecifiers);
+        public importFixModuleSpecifiers(marker: string, moduleSpecifiers: string[], preferences?: ts.UserPreferences) {
+            this.state.verifyImportFixModuleSpecifiers(marker, moduleSpecifiers, preferences);
         }
 
         public navigationBar(json: any, options?: { checkSpans?: boolean }) {
@@ -950,8 +954,35 @@ namespace FourSlashInterface {
     }
 
     export namespace Completion {
-        export import SortText = ts.Completions.SortText;
+        import SortTextType = ts.Completions.SortText;
+        export type SortText = SortTextType;
         export import CompletionSource = ts.Completions.CompletionSource;
+
+        export const SortText = {
+            // Presets
+            LocalDeclarationPriority: "10" as SortText,
+            LocationPriority: "11" as SortText,
+            OptionalMember: "12" as SortText,
+            MemberDeclaredBySpreadAssignment: "13" as SortText,
+            SuggestedClassMembers: "14" as SortText,
+            GlobalsOrKeywords: "15" as SortText,
+            AutoImportSuggestions: "16" as SortText,
+            ClassMemberSnippets: "17" as SortText,
+            JavascriptIdentifiers: "18" as SortText,
+
+            // Transformations
+            Deprecated(sortText: SortText): SortText {
+                return "z" + sortText as SortText;
+            },
+
+            ObjectLiteralProperty(presetSortText: SortText, symbolDisplayName: string): SortText {
+                return `${presetSortText}\0${symbolDisplayName}\0` as SortText;
+            },
+
+            SortBelow(sortText: SortText): SortText {
+                return sortText + "1" as SortText;
+            },
+        };
 
         const functionEntry = (name: string): ExpectedCompletionEntryObject => ({
             name,
@@ -963,7 +994,7 @@ namespace FourSlashInterface {
             name,
             kind: "function",
             kindModifiers: "deprecated,declare",
-            sortText: SortText.DeprecatedGlobalsOrKeywords
+            sortText: "z15" as SortText,
         });
         const varEntry = (name: string): ExpectedCompletionEntryObject => ({
             name,
@@ -992,7 +1023,7 @@ namespace FourSlashInterface {
             name,
             kind: "method",
             kindModifiers: "deprecated,declare",
-            sortText: SortText.DeprecatedLocationPriority
+            sortText: "z11" as SortText,
         });
         const propertyEntry = (name: string): ExpectedCompletionEntryObject => ({
             name,
@@ -1692,8 +1723,14 @@ namespace FourSlashInterface {
         readonly text?: string;
         readonly documentation?: string;
         readonly sourceDisplay?: string;
+        readonly labelDetails?: ExpectedCompletionEntryLabelDetails;
         readonly tags?: readonly ts.JSDocTagInfo[];
         readonly sortText?: ts.Completions.SortText;
+    }
+
+    export interface ExpectedCompletionEntryLabelDetails {
+        detail?: string;
+        description?: string;
     }
 
     export type ExpectedExactCompletionsPlus = readonly ExpectedCompletionEntry[] & {

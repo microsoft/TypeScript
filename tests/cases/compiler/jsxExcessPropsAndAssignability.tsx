@@ -12,8 +12,6 @@ const myHoc = <ComposedComponentProps extends any>(
 
     const props: ComposedComponentProps = null as any;
 
-    // Expected no error, got none - good
     <WrapperComponent {...props} myProp={'1000000'} />;
-    // Expected error, but got none - bad!
     <WrapperComponent {...props} myProp={1000000} />;
 };

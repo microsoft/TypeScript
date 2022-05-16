@@ -2,7 +2,7 @@
 // Repro from #44435
 
 type Correct = {
->Correct : Correct
+>Correct : { code: string; property: true; err: undefined; }
 
 	code: string
 >code : string
@@ -15,13 +15,13 @@ type Correct = {
 >err : undefined
 }
 type Err = {
->Err : Err
+>Err : { err: `${string} is wrong!`; }
 
 	err: `${string} is wrong!`
 >err : `${string} is wrong!`
 }
 type SomeReturnType = Correct | Err;
->SomeReturnType : SomeReturnType
+>SomeReturnType : Correct | Err
 
 const example: SomeReturnType = {} as SomeReturnType;
 >example : SomeReturnType
