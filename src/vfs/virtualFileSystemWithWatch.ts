@@ -618,7 +618,6 @@ namespace ts.VirtualFS {
 
         writtenFiles?: ESMap<Path, number>;
         diff(baseline: string[], base: ESMap<string, FSEntry> = new Map()) {
-            const len = baseline.length;
             this.fs.forEach(newFsEntry => {
                 diffFsEntry(baseline, base.get(newFsEntry.path), newFsEntry, this.writtenFiles);
             });
@@ -628,17 +627,12 @@ namespace ts.VirtualFS {
                     diffFsEntry(baseline, oldFsEntry, newFsEntry, this.writtenFiles);
                 }
             });
-            if (len === baseline.length) {
-                baseline.push("No changes.")
-            }
-            else {
-                baseline.push("");
-            }
+            baseline.push("");
         }
     }
 
     function diffFsFile(baseline: string[], fsEntry: FsFile) {
-        baseline.push(`//// [${fsEntry.fullPath}] added\r\n${fsEntry.content}`, "");
+        baseline.push(`//// [${fsEntry.fullPath}]\r\n${fsEntry.content}`, "");
     }
 
     function diffFsSymLink(baseline: string[], fsEntry: FsSymLink) {
