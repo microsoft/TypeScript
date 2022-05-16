@@ -649,9 +649,8 @@ namespace ts {
         const isStaticMember = hasStaticModifier(declaration);
         return firstDefined(getAllSuperTypeNodes(classOrInterfaceDeclaration), superTypeNode => {
             const baseType = checker.getTypeAtLocation(superTypeNode);
-            const symbol = isStaticMember
-                ? find(checker.getExportsOfModule(baseType.symbol), s => s.escapedName === declaration.symbol.name)
-                : checker.getPropertyOfType(baseType, declaration.symbol.name);
+            const type = isStaticMember && baseType.symbol ? checker.getTypeOfSymbol(baseType.symbol) : baseType;
+            const symbol = checker.getPropertyOfType(type, declaration.symbol.name);
             return symbol ? cb(symbol) : undefined;
         });
     }
