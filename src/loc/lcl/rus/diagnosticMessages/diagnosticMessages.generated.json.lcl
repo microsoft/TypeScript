@@ -3518,6 +3518,24 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Class_constructor_may_not_be_a_generator_1360" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Class constructor may not be a generator.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Конструктор класса не может быть генератором.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Class_constructor_may_not_be_an_accessor_1341" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Class constructor may not be an accessor.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Конструктор класса не может быть методом доступа.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Class_declaration_cannot_implement_overload_list_for_0_2813" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Class declaration cannot implement overload list for '{0}'.]]></Val>
@@ -13483,6 +13501,15 @@
           <Val><![CDATA[This JSX tag's '{0}' prop expects type '{1}' which requires multiple children, but only a single child was provided.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Свойство "{0}" этого тега JSX ожидает тип "{1}", требующий несколько дочерних объектов, однако был предоставлен только один дочерний объект.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";This_condition_will_always_return_0_since_JavaScript_compares_objects_by_reference_not_value_2839" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[This condition will always return '{0}' since JavaScript compares objects by reference, not value.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Это условие всегда будет возвращать ''{0}'', так как JavaScript сравнивает объекты по ссылке, а не по значению.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
