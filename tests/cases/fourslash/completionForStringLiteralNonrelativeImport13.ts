@@ -31,6 +31,6 @@
 
 verify.completions({
     marker: test.markerNames(),
-    exact: ["aaa", "index", "ts3.1", "zzz"],
+    exact: ["index", "ts3.1", "zzz"],
     isNewIdentifierLocation: true,
 });

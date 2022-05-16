@@ -448,9 +448,25 @@ namespace ts.Completions.StringCompletions {
 
         fragment = ensureTrailingDirectorySeparator(fragment);
 
-        // const absolutePath = normalizeAndPreserveTrailingSlash(isRootedDiskPath(fragment) ? fragment : combinePaths(scriptPath, fragment)); // TODO(rbuckton): should use resolvePaths
         const absolutePath = resolvePath(scriptPath, fragment);
         const baseDirectory = hasTrailingDirectorySeparator(absolutePath) ? absolutePath : getDirectoryPath(absolutePath);
+
+        // check for a version redirect
+        const packageJsonPath = findPackageJson(baseDirectory, host);
+        if (packageJsonPath) {
+            const packageJson = readJson(packageJsonPath, host as { readFile: (filename: string) => string | undefined });
+            const typesVersions = (packageJson as any).typesVersions;
+            if (typeof typesVersions === "object") {
+                const versionResult = getPackageJsonTypesVersionsPaths(typesVersions);
+                const versionPaths = versionResult && versionResult.paths;
+                if (versionPaths) {
+                    const packageDirectory = getDirectoryPath(packageJsonPath);
+                    const pathInPackage = absolutePath.slice(ensureTrailingDirectorySeparator(packageDirectory).length);
+                    addCompletionEntriesFromPaths(result, pathInPackage, packageDirectory, extensions, versionPaths, host);
+                    return result;
+                }
+            }
+        }
 
         const ignoreCase = !(host.useCaseSensitiveFileNames && host.useCaseSensitiveFileNames());
         if (!tryDirectoryExists(host, baseDirectory)) return result;
@@ -501,21 +517,6 @@ namespace ts.Completions.StringCompletions {
                 const directoryName = getBaseFileName(normalizePath(directory));
                 if (directoryName !== "@types") {
                     result.push(directoryResult(directoryName));
-                }
-            }
-        }
-
-        // check for a version redirect
-        const packageJsonPath = findPackageJson(baseDirectory, host);
-        if (packageJsonPath) {
-            const packageJson = readJson(packageJsonPath, host as { readFile: (filename: string) => string | undefined });
-            const typesVersions = (packageJson as any).typesVersions;
-            if (typeof typesVersions === "object") {
-                const versionResult = getPackageJsonTypesVersionsPaths(typesVersions);
-                const versionPaths = versionResult && versionResult.paths;
-                const rest = absolutePath.slice(ensureTrailingDirectorySeparator(baseDirectory).length);
-                if (versionPaths) {
-                    addCompletionEntriesFromPaths(result, rest, baseDirectory, extensions, versionPaths, host);
                 }
             }
         }
