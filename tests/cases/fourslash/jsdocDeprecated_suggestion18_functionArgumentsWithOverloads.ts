@@ -13,4 +13,11 @@
 
 const ranges = test.ranges();
 
-verify.getSuggestionDiagnostics([])
+verify.getSuggestionDiagnostics([
+    {
+        message: "'a' is deprecated.",
+        code: 6385,
+        range: ranges[0],
+        reportsDeprecated: true,
+    }
+])

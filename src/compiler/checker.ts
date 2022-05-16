@@ -1022,6 +1022,7 @@ namespace ts {
 
         const diagnostics = createDiagnosticCollection();
         const suggestionDiagnostics = createDiagnosticCollection();
+        let deprecationsInChooseOverload: Diagnostic[] | undefined;
 
         const typeofTypesByName: ReadonlyESMap<string, Type> = new Map(getEntries({
             string: stringType,
@@ -1220,7 +1221,12 @@ namespace ts {
                 );
             }
             // We call `addRelatedInfo()` before adding the diagnostic to prevent duplicates.
-            suggestionDiagnostics.add(diagnostic);
+            if (deprecationsInChooseOverload) {
+                deprecationsInChooseOverload.push(diagnostic);
+            }
+            else {
+                suggestionDiagnostics.add(diagnostic);
+            }
             return diagnostic;
         }
 
@@ -27616,14 +27622,7 @@ namespace ts {
                     }
                     if (contextualType) {
                         const contextualProperty = getPropertyOfType(contextualType, member.escapedName);
-                        const isFromOverload = contextualProperty?.declarations?.some(decl => {
-                            const param = findAncestor(decl, isParameter);
-                            return param && isFunctionDeclaration(param.parent) && countWhere(getSymbolOfNode(param.parent).declarations, isFunctionLike) > 1;
-                        });
-                        if (!isFromOverload) {
-                            checkDeprecatedProperty(member, contextualProperty);
-                        }
-
+                        checkDeprecatedProperty(member, contextualProperty);
                     }
 
                     prop.declarations = member.declarations;
@@ -30425,6 +30424,8 @@ namespace ts {
             const signatureHelpTrailingComma =
                 !!(checkMode & CheckMode.IsForSignatureHelp) && node.kind === SyntaxKind.CallExpression && node.arguments.hasTrailingComma;
 
+            const deprecationsOutArray: Diagnostic[] = [];
+
             // Section 4.12.1:
             // if the candidate list contains one or more signatures for which the type of each argument
             // expression is a subtype of each corresponding parameter type, the return type of the first
@@ -30436,12 +30437,15 @@ namespace ts {
             // is just important for choosing the best signature. So in the case where there is only one
             // signature, the subtype pass is useless. So skipping it is an optimization.
             if (candidates.length > 1) {
-                result = chooseOverload(candidates, subtypeRelation, isSingleNonGenericCandidate, signatureHelpTrailingComma);
+                result = chooseOverload(candidates, subtypeRelation, isSingleNonGenericCandidate, signatureHelpTrailingComma, deprecationsOutArray);
             }
             if (!result) {
-                result = chooseOverload(candidates, assignableRelation, isSingleNonGenericCandidate, signatureHelpTrailingComma);
+                result = chooseOverload(candidates, assignableRelation, isSingleNonGenericCandidate, signatureHelpTrailingComma, deprecationsOutArray);
             }
             if (result) {
+                for (const diagnostic of deprecationsOutArray ?? []) {
+                    suggestionDiagnostics.add(diagnostic);
+                }
                 return result;
             }
 
@@ -30558,7 +30562,7 @@ namespace ts {
                 candidateForTypeArgumentError = oldCandidateForTypeArgumentError;
             }
 
-            function chooseOverload(candidates: Signature[], relation: ESMap<string, RelationComparisonResult>, isSingleNonGenericCandidate: boolean, signatureHelpTrailingComma = false) {
+            function chooseOverload(candidates: Signature[], relation: ESMap<string, RelationComparisonResult>, isSingleNonGenericCandidate: boolean, signatureHelpTrailingComma = false, deprecationsOutArray?: Diagnostic[]) {
                 candidatesForArgumentError = undefined;
                 candidateForArgumentArityError = undefined;
                 candidateForTypeArgumentError = undefined;
@@ -30575,7 +30579,13 @@ namespace ts {
                     return candidate;
                 }
 
+                // Suppress suggestions for overload which is not chosen yet.
+                const oldDeprecationsInChooseOverload = deprecationsInChooseOverload;
+                deprecationsInChooseOverload = deprecationsOutArray ?? [];
+
                 for (let candidateIndex = 0; candidateIndex < candidates.length; candidateIndex++) {
+                    deprecationsInChooseOverload.length = 0;
+
                     const candidate = candidates[candidateIndex];
                     if (!hasCorrectTypeArgumentArity(candidate, typeArguments) || !hasCorrectArity(node, args, candidate, signatureHelpTrailingComma)) {
                         continue;
@@ -30636,9 +30646,11 @@ namespace ts {
                         }
                     }
                     candidates[candidateIndex] = checkCandidate;
+                    deprecationsInChooseOverload = oldDeprecationsInChooseOverload;
                     return checkCandidate;
                 }
 
+                deprecationsInChooseOverload = oldDeprecationsInChooseOverload;
                 return undefined;
             }
         }
