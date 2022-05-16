@@ -5397,6 +5397,11 @@ namespace ts {
         // Flags that require TypeFlags.Union
         /* @internal */
         ContainsIntersections = 1 << 24, // Union contains intersections
+        /* @internal */
+        IsUnknownLikeUnionComputed = 1 << 25, // IsUnknownLikeUnion flag has been computed
+        /* @internal */
+        IsUnknownLikeUnion = 1 << 26, // Union of null, undefined, and empty object type
+        /* @internal */
 
         // Flags that require TypeFlags.Intersection
         /* @internal */

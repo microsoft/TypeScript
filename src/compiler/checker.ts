@@ -18118,6 +18118,18 @@ namespace ts {
                 type.symbol && type.symbol.flags & SymbolFlags.TypeLiteral && getMembersOfSymbol(type.symbol).size === 0));
         }
 
+        function isUnknownLikeUnionType(type: Type) {
+            if (strictNullChecks && type.flags & TypeFlags.Union) {
+                if (!((type as UnionType).objectFlags & ObjectFlags.IsUnknownLikeUnionComputed)) {
+                    const types = (type as UnionType).types;
+                    (type as UnionType).objectFlags |= ObjectFlags.IsUnknownLikeUnionComputed | (types.length >= 3 && types[0].flags & TypeFlags.Undefined &&
+                        types[1].flags & TypeFlags.Null && some(types, isEmptyAnonymousObjectType) ? ObjectFlags.IsUnknownLikeUnion : 0);
+                }
+                return !!((type as UnionType).objectFlags & ObjectFlags.IsUnknownLikeUnion);
+            }
+            return false;
+        }
+
         function isStringIndexSignatureOnlyType(type: Type): boolean {
             return type.flags & TypeFlags.Object && !isGenericMappedType(type) && getPropertiesOfType(type).length === 0 && getIndexInfosOfType(type).length === 1 && !!getIndexInfoOfType(type, stringType) ||
                 type.flags & TypeFlags.UnionOrIntersection && every((type as UnionOrIntersectionType).types, isStringIndexSignatureOnlyType) ||
@@ -18193,6 +18205,8 @@ namespace ts {
                 // bit-flag enum types sometimes look like literal enum types with numeric literal values.
                 if (s & (TypeFlags.Number | TypeFlags.NumberLiteral) && !(s & TypeFlags.EnumLiteral) && (
                     t & TypeFlags.Enum || relation === assignableRelation && t & TypeFlags.NumberLiteral && t & TypeFlags.EnumLiteral)) return true;
+                // Anything is assignable to a union containing undefined, null, and {}
+                if (isUnknownLikeUnionType(target)) return true;
             }
             return false;
         }
@@ -25059,7 +25073,7 @@ namespace ts {
                         if (!areTypesComparable(t, c)) {
                             return neverType;
                         }
-                        if (c.flags & TypeFlags.Primitive && t.flags & TypeFlags.Object && !isEmptyAnonymousObjectType(t)) {
+                        if ((c.flags & TypeFlags.Primitive || c === globalFunctionType) && t.flags & TypeFlags.Object && !isEmptyAnonymousObjectType(t)) {
                             return isTypeSubtypeOf(c, t) ? c : neverType;
                         }
                         if (c === globalFunctionType && t.flags & TypeFlags.NonPrimitive) {
