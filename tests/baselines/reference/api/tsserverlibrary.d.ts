@@ -6958,6 +6958,7 @@ declare namespace ts.server {
         trace?(s: string): void;
         require?(initialPath: string, moduleName: string): RequireResult;
     }
+    type FileServerHost = Pick<ServerHost, "readFile" | "writeFile" | "fileExists" | "directoryExists" | "getFileSize" | "getModifiedTime" | "getDirectories" | "getCurrentDirectory" | "getExecutingFilePath" | "realpath" | "resolvePath" | "watchFile" | "watchDirectory" | "useCaseSensitiveFileNames" | "newLine">;
 }
 declare namespace ts.server {
     enum LogLevel {
@@ -9899,7 +9900,7 @@ declare namespace ts.server {
         private formatSettings;
         private preferences;
         private textStorage;
-        constructor(host: ServerHost, fileName: NormalizedPath, scriptKind: ScriptKind, hasMixedContent: boolean, path: Path, initialVersion?: ScriptInfoVersion);
+        constructor(host: FileServerHost, fileName: NormalizedPath, scriptKind: ScriptKind, hasMixedContent: boolean, path: Path, initialVersion?: ScriptInfoVersion);
         isScriptOpen(): boolean;
         open(newText: string): void;
         close(fileExists?: boolean): void;
@@ -9963,6 +9964,7 @@ declare namespace ts.server {
         languageService: LanguageService;
         languageServiceHost: LanguageServiceHost;
         serverHost: ServerHost;
+        fsHost: FileServerHost;
         session?: Session<unknown>;
         config: any;
     }
@@ -10027,7 +10029,7 @@ declare namespace ts.server {
         private readonly cancellationToken;
         isNonTsProject(): boolean;
         isJsOnlyProject(): boolean;
-        static resolveModule(moduleName: string, initialDir: string, host: ServerHost, fshost: ServerHost, log: (message: string) => void, logErrors?: (message: string) => void): {} | undefined;
+        static resolveModule(moduleName: string, initialDir: string, host: ServerHost, fshost: FileServerHost, log: (message: string) => void, logErrors?: (message: string) => void): {} | undefined;
         isKnownTypesPackageName(name: string): boolean;
         installPackage(options: InstallPackageOptions): Promise<ApplyCodeActionCommandResult>;
         private get typingsCache();
@@ -10341,7 +10343,7 @@ declare namespace ts.server {
     }
     export interface ProjectServiceOptions {
         host: ServerHost;
-        fshost: ServerHost | undefined;
+        fshost: FileServerHost | undefined;
         logger: Logger;
         cancellationToken: HostCancellationToken;
         useSingleInferredProject: boolean;
@@ -10413,7 +10415,7 @@ declare namespace ts.server {
         readonly currentDirectory: NormalizedPath;
         readonly toCanonicalFileName: (f: string) => string;
         readonly host: ServerHost;
-        readonly fshost: ServerHost | undefined;
+        readonly fshost: FileServerHost;
         readonly logger: Logger;
         readonly cancellationToken: HostCancellationToken;
         readonly useSingleInferredProject: boolean;
@@ -10616,7 +10618,7 @@ declare namespace ts.server {
     }
     interface SessionOptions {
         host: ServerHost;
-        fshost: ServerHost | undefined;
+        fshost?: FileServerHost;
         cancellationToken: ServerCancellationToken;
         useSingleInferredProject: boolean;
         useInferredProjectPerProjectRoot: boolean;
@@ -10658,7 +10660,7 @@ declare namespace ts.server {
         private suppressDiagnosticEvents?;
         private eventHandler;
         private readonly noGetErrOnBackgroundUpdate?;
-        private fshost;
+        private fshost?;
         constructor(opts: SessionOptions);
         private sendRequestCompletedEvent;
         private addPerformanceData;

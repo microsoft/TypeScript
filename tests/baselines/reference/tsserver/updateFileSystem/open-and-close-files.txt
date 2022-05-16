@@ -1,21 +1,21 @@
 
 #### Initial updateFileSystem
-//// [/a/b/app.ts] added
+//// [/a/b/app.ts]
 import { xyz } from './file3'; let x = xyz
 
-//// [/a/b/commonFile1.ts] added
+//// [/a/b/commonFile1.ts]
 let x = 1
 
-//// [/a/b/commonFile2.ts] added
+//// [/a/b/commonFile2.ts]
 let y = 1
 
-//// [/a/b/file3.ts] added
+//// [/a/b/file3.ts]
 export let xyz = 1;
 
-//// [/a/b/tsconfig.json] added
+//// [/a/b/tsconfig.json]
 {}
 
-//// [/a/lib/lib.d.ts] added
+//// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -31,17 +31,16 @@ interface Array<T> { length: number; [n: number]: T; }
 
 
 #### Opening app.ts
-No changes.
+
 
 #### Opening file3.ts
-No changes.
+
 
 #### non-delete
-No changes.
+
 
 #### delete
 //// [/a/b/commonFile1.ts] deleted
 
 
 #### close
-No changes.

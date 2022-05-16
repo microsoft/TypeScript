@@ -456,6 +456,15 @@ namespace ts.VirtualFS {
             return (fsEntry && fsEntry.modifiedTime)!; // TODO: GH#18217
         }
 
+        setModifiedTime(s: string, date: Date) {
+            const path = this.toFullPath(s);
+            const fsEntry = this.fs.get(path);
+            if (fsEntry) {
+                fsEntry.modifiedTime = date;
+                this.invokeFileAndFsWatches(fsEntry.fullPath, FileWatcherEventKind.Changed);
+            }
+        }
+
         readFile(s: string): string | undefined {
             const fsEntry = this.getRealFile(this.toFullPath(s));
             return fsEntry ? fsEntry.content : undefined;
