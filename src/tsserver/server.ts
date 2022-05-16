@@ -58,14 +58,14 @@ namespace ts.server {
         console.warn = (...args) => logger.msg(args.length === 1 ? args[0] : args.join(", "), Msg.Err);
         console.error = (...args) => logger.msg(args.length === 1 ? args[0] : args.join(", "), Msg.Err);
 
-        let fshost
+        let fshost;
         if (vfs) {
             fshost = new VirtualFS.VirtualServerHost({
                 useCaseSensitiveFileNames: sys.useCaseSensitiveFileNames,
                 executingFilePath: "", // TODO: "" is the default..maybe this should be vfs, vfs:// or .
                 newLine: sys.newLine,
-            })
-            fshost.init()
+            });
+            fshost.init();
         }
         else {
             fshost = sys as ServerHost;

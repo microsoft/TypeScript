@@ -517,7 +517,7 @@ namespace ts.VirtualFS {
         }
 
         setTimeout(callback: (...args: any[]) => void, ms: number, ...args: any[]): any {
-            // tslint:disable-next-line:no-restricted-globals
+            // tslint:disable:no-restricted-globals
             setTimeout(callback, ms, ...args);
         }
 
@@ -526,8 +526,8 @@ namespace ts.VirtualFS {
         }
 
         setImmediate(callback: (...args: any[]) => void, ...args: any[]): any {
-            // tslint:disable-next-line:no-restricted-globals
-            setImmediate(callback, ...args)
+            setImmediate(callback, ...args);
+            // tslint:enable:no-restricted-globals
         }
 
         clearImmediate(_timeoutId: any): void {

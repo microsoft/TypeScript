@@ -40,17 +40,17 @@ interface Array<T> { length: number; [n: number]: T; }`
 ${file.fileContent}`;
         }
         function baselineFileSystem(scenario: string, subScenario: string, requests: [string, Partial<protocol.Request>][], host: VirtualFS.VirtualServerHost, session: TestSession) {
-            const history: string[] = []
-            let prev = host.snap()
+            const history: string[] = [];
+            let prev = host.snap();
             for (const [name, request] of requests) {
-                session.executeCommandSeq(request)
-                history.push("")
-                history.push("#### " + name)
-                host.diff(history, prev)
-                prev = host.snap()
+                session.executeCommandSeq(request);
+                history.push("");
+                history.push("#### " + name);
+                host.diff(history, prev);
+                prev = host.snap();
             }
             Harness.Baseline.runBaseline(`tsserver/${scenario}/${subScenario.split(" ").join("-")}.txt`, history.join("\r\n"));
-            baselineTsserverLogs(scenario, subScenario, session)
+            baselineTsserverLogs(scenario, subScenario, session);
         }
 
         it("with updateFileSystem request", () => {
@@ -96,9 +96,9 @@ ${file.fileContent}`;
                     command: protocol.CommandTypes.Close,
                     arguments: { file: app.file }
                 }],
-            ]
-            const scenario = "updateFileSystem"
-            const subScenario = "open and close files"
+            ];
+            const scenario = "updateFileSystem";
+            const subScenario = "open and close files";
             baselineFileSystem(scenario, subScenario, requests, host, session);
         });
     });

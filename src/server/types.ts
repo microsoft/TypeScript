@@ -22,5 +22,5 @@ declare namespace ts.server {
         | "readFile" | "writeFile" | "fileExists" | "directoryExists" | "getFileSize" | "getModifiedTime"
         | "getDirectories" | "getCurrentDirectory" | "getExecutingFilePath" | "realpath" | "resolvePath"
         | "watchFile" | "watchDirectory"
-        | "useCaseSensitiveFileNames" | "newLine">
+        | "useCaseSensitiveFileNames" | "newLine">;
 }
