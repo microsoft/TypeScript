@@ -5050,7 +5050,7 @@
         "category": "Error",
         "code": 6258
     },
-      "Found 1 error in {1}": {
+    "Found 1 error in {1}": {
         "category": "Message",
         "code": 6259
     },
@@ -5363,7 +5363,7 @@
         "category": "Message",
         "code": 6606
     },
-    "Specify the base directory to resolve non-relative module names.": {
+    "Specify the base directory to resolve non-absolute module names.": {
         "category": "Message",
         "code": 6607
     },
@@ -5920,9 +5920,9 @@
         "category": "Message",
         "code": 6930
     },
-    "List of file name suffixes to search when resolving a module." : {
-      "category": "Error",
-      "code": 6931
+    "List of file name suffixes to search when resolving a module.": {
+        "category": "Error",
+        "code": 6931
     },
 
     "Variable '{0}' implicitly has an '{1}' type.": {
@@ -7235,7 +7235,6 @@
         "category": "Message",
         "code": 95173
     },
-
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
         "category": "Error",
