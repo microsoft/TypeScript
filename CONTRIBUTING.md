@@ -99,7 +99,11 @@ Features (things that add new or improved functionality to TypeScript) may be ac
 
 ## Claiming issues ("cookie licking")
 
-Please do not "claim" issues (aka ["cookie lick"](https://devblogs.microsoft.com/oldnewthing/20091201-00/?p=15843)). While it may seem helpful to let people know that you're planning to work on an issue (or to simply ask to work on it), doing so is more likely to cause future contributors to avoid the issue altogether. If you'd like to work on an issue, work on it, and send a PR; if you get stuck or don't have the time, someone else will try again in the future. (If you "claimed" it, that future person may not have considered working on it at all!)
+If you intend to work on an issue, please avoid leaving comments like "I'm going to work on this". There are a few reasons for this. These comments tend to [discourage anyone from working in the area](https://devblogs.microsoft.com/oldnewthing/20091201-00/?p=15843), yet many issues are much more difficult than they first appear, and you might find yourself trying to fix several issues before finding one that can be completed. Many issues have a long trail of people indicating that they're going to try to fix it, but no PR.
+
+Conversely, you do not need to ask anyone's permission before starting work on an issue marked as "help wanted". It's always fine to try! We ask that you choose issues tagged in the "Backlog" milestone as these are issues that we've identified as needing fixes / implementations.
+
+The sheer quantity of open issues, combined with their general difficulty, makes it extremely unlikely that you and another contributor are a) working on the same issue and b) both going to find a solution.
 
 ## Legal
 
