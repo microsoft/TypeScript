@@ -462,8 +462,9 @@ namespace ts.Completions.StringCompletions {
                 if (versionPaths) {
                     const packageDirectory = getDirectoryPath(packageJsonPath);
                     const pathInPackage = absolutePath.slice(ensureTrailingDirectorySeparator(packageDirectory).length);
-                    addCompletionEntriesFromPaths(result, pathInPackage, packageDirectory, extensions, versionPaths, host);
-                    return result;
+                    if (addCompletionEntriesFromPaths(result, pathInPackage, packageDirectory, extensions, versionPaths, host)) {
+                        return result;
+                    }
                 }
             }
         }
@@ -525,18 +526,22 @@ namespace ts.Completions.StringCompletions {
     }
 
     function addCompletionEntriesFromPaths(result: NameAndKind[], fragment: string, baseDirectory: string, fileExtensions: readonly string[], paths: MapLike<string[]>, host: LanguageServiceHost) {
+        let matchedPath = false;
         for (const path in paths) {
             if (!hasProperty(paths, path)) continue;
             const patterns = paths[path];
             if (patterns) {
+                const pathPattern = tryParsePattern(path);
                 for (const { name, kind, extension } of getCompletionsForPathMapping(path, patterns, fragment, baseDirectory, fileExtensions, host)) {
                     // Path mappings may provide a duplicate way to get to something we've already added, so don't add again.
                     if (!result.some(entry => entry.name === name)) {
                         result.push(nameAndKind(name, kind, extension));
                     }
+                    matchedPath = typeof pathPattern === "object" && isPatternMatch(pathPattern, fragment);
                 }
             }
         }
+        return matchedPath;
     }
 
     /**
