@@ -1,0 +1,26 @@
+=== tests/cases/compiler/functionReadonlyName.ts ===
+const f0 = new Function()
+>f0 : Symbol(f0, Decl(functionReadonlyName.ts, 0, 5))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+f0.name = 'foo';
+>f0 : Symbol(f0, Decl(functionReadonlyName.ts, 0, 5))
+
+function f1() {};
+>f1 : Symbol(f1, Decl(functionReadonlyName.ts, 1, 16))
+
+f1.name = 'foo';
+>f1 : Symbol(f1, Decl(functionReadonlyName.ts, 1, 16))
+
+const f2 = function () {};
+>f2 : Symbol(f2, Decl(functionReadonlyName.ts, 6, 5))
+
+f2.name = 'foo'
+>f2 : Symbol(f2, Decl(functionReadonlyName.ts, 6, 5))
+
+const f3 = () => {}
+>f3 : Symbol(f3, Decl(functionReadonlyName.ts, 9, 5))
+
+f3.name = 'foo'
+>f3 : Symbol(f3, Decl(functionReadonlyName.ts, 9, 5))
+

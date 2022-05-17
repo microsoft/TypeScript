@@ -1,0 +1,27 @@
+tests/cases/compiler/functionReadonlyName.ts(2,4): error TS2339: Property 'name' does not exist on type 'Function'.
+tests/cases/compiler/functionReadonlyName.ts(5,4): error TS2339: Property 'name' does not exist on type '() => void'.
+tests/cases/compiler/functionReadonlyName.ts(8,4): error TS2339: Property 'name' does not exist on type '() => void'.
+tests/cases/compiler/functionReadonlyName.ts(11,4): error TS2339: Property 'name' does not exist on type '() => void'.
+
+
+==== tests/cases/compiler/functionReadonlyName.ts (4 errors) ====
+    const f0 = new Function()
+    f0.name = 'foo';
+       ~~~~
+!!! error TS2339: Property 'name' does not exist on type 'Function'.
+    
+    function f1() {};
+    f1.name = 'foo';
+       ~~~~
+!!! error TS2339: Property 'name' does not exist on type '() => void'.
+    
+    const f2 = function () {};
+    f2.name = 'foo'
+       ~~~~
+!!! error TS2339: Property 'name' does not exist on type '() => void'.
+    
+    const f3 = () => {}
+    f3.name = 'foo'
+       ~~~~
+!!! error TS2339: Property 'name' does not exist on type '() => void'.
+    

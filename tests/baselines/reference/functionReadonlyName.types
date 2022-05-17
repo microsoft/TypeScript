@@ -1,0 +1,45 @@
+=== tests/cases/compiler/functionReadonlyName.ts ===
+const f0 = new Function()
+>f0 : Function
+>new Function() : Function
+>Function : FunctionConstructor
+
+f0.name = 'foo';
+>f0.name = 'foo' : "foo"
+>f0.name : any
+>f0 : Function
+>name : any
+>'foo' : "foo"
+
+function f1() {};
+>f1 : () => void
+
+f1.name = 'foo';
+>f1.name = 'foo' : "foo"
+>f1.name : any
+>f1 : () => void
+>name : any
+>'foo' : "foo"
+
+const f2 = function () {};
+>f2 : () => void
+>function () {} : () => void
+
+f2.name = 'foo'
+>f2.name = 'foo' : "foo"
+>f2.name : any
+>f2 : () => void
+>name : any
+>'foo' : "foo"
+
+const f3 = () => {}
+>f3 : () => void
+>() => {} : () => void
+
+f3.name = 'foo'
+>f3.name = 'foo' : "foo"
+>f3.name : any
+>f3 : () => void
+>name : any
+>'foo' : "foo"
+

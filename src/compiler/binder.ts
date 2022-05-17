@@ -3053,8 +3053,12 @@ namespace ts {
             if (!isInJSFile(node) && !isFunctionSym) {
                 return;
             }
-            if (isFunctionSym && isBindableStaticNameExpression(node.left) && getDeclarationName(node.left) === "length") {
-                return;
+            if (isFunctionSym && isBindableStaticNameExpression(node.left)) {
+                const declarationName = getDeclarationName(node.left);
+                // specialcase readonly properties of functions as we don't have access to type info here
+                if (declarationName === "length" || declarationName === "name") {
+                    return;
+                }
             }
             const rootExpr = getLeftmostAccessExpression(node.left);
             if (isIdentifier(rootExpr) && lookupSymbolForName(container, rootExpr.escapedText)!?.flags & SymbolFlags.Alias) {
