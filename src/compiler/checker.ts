@@ -23522,21 +23522,23 @@ namespace ts {
         }
 
         function getIntersectionWithFacts(type: Type, facts: TypeFacts) {
-            const reduced = getTypeWithFacts(strictNullChecks && type.flags & TypeFlags.Unknown ? unknownUnionType : type, facts);
+            const reduced = recombineUnknownType(getTypeWithFacts(strictNullChecks && type.flags & TypeFlags.Unknown ? unknownUnionType : type, facts));
             if (strictNullChecks) {
                 switch (facts) {
                     case TypeFacts.NEUndefined:
-                        const emptyOrNull = maybeTypeOfKind(reduced, TypeFlags.Null) ? emptyObjectType : getUnionType([emptyObjectType, nullType]);
-                        return mapType(reduced, t => getTypeFacts(t) & TypeFacts.EQUndefined ? getIntersectionType([t, getTypeFacts(t) & TypeFacts.EQNull ? emptyOrNull : emptyObjectType]): t);
+                        return mapType(reduced, t => getTypeFacts(t) & TypeFacts.EQUndefined ? getIntersectionType([t, getTypeFacts(t) & TypeFacts.EQNull && !maybeTypeOfKind(reduced, TypeFlags.Null) ? getUnionType([emptyObjectType, nullType]) : emptyObjectType]): t);
                     case TypeFacts.NENull:
-                        const emptyOrUndefined = maybeTypeOfKind(reduced, TypeFlags.Undefined) ? emptyObjectType : getUnionType([emptyObjectType, undefinedType]);
-                        return mapType(reduced, t => getTypeFacts(t) & TypeFacts.EQNull ? getIntersectionType([t, getTypeFacts(t) & TypeFacts.EQUndefined ? emptyOrUndefined : emptyObjectType]): t);
+                        return mapType(reduced, t => getTypeFacts(t) & TypeFacts.EQNull ? getIntersectionType([t, getTypeFacts(t) & TypeFacts.EQUndefined && !maybeTypeOfKind(reduced, TypeFlags.Undefined) ? getUnionType([emptyObjectType, undefinedType]) : emptyObjectType]): t);
                     case TypeFacts.NEUndefinedOrNull:
                     case TypeFacts.Truthy:
                         return mapType(reduced, t => getTypeFacts(t) & TypeFacts.EQUndefinedOrNull ? getIntersectionType([t, emptyObjectType]): t);
                 }
             }
             return reduced;
+        }
+
+        function recombineUnknownType(type: Type) {
+            return type === unknownUnionType ? unknownType : type;
         }
 
         function getTypeWithDefault(type: Type, defaultExpression: Expression) {
@@ -24670,10 +24672,7 @@ namespace ts {
                 if (isEvolvingArrayTypeList(types)) {
                     return getEvolvingArrayType(getUnionType(map(types, getElementTypeOfEvolvingArrayType)));
                 }
-                const result = getUnionType(sameMap(types, finalizeEvolvingArrayType), subtypeReduction);
-                if (result === unknownUnionType) {
-                    return unknownType;
-                }
+                const result = recombineUnknownType(getUnionType(sameMap(types, finalizeEvolvingArrayType), subtypeReduction));
                 if (result !== declaredType && result.flags & declaredType.flags & TypeFlags.Union && arraysEqual((result as UnionType).types, (declaredType as UnionType).types)) {
                     return declaredType;
                 }
