@@ -526,30 +526,39 @@ namespace ts.Completions.StringCompletions {
     }
 
     function addCompletionEntriesFromPaths(result: NameAndKind[], fragment: string, baseDirectory: string, fileExtensions: readonly string[], paths: MapLike<string[]>, host: LanguageServiceHost) {
+        let pathResults: { results: NameAndKind[], matchedPattern: boolean }[] = [];
         let matchedPathPrefixLength: number | undefined;
-        let pathResults: NameAndKind[] = [];
         for (const path in paths) {
             if (!hasProperty(paths, path)) continue;
             const patterns = paths[path];
             if (patterns) {
                 const pathPattern = tryParsePattern(path);
                 if (!pathPattern) continue;
-                const isLongestMatch = typeof pathPattern === "object" && isPatternMatch(pathPattern, fragment)
-                    && (matchedPathPrefixLength === undefined || pathPattern.prefix.length > matchedPathPrefixLength);
+                const isMatch = typeof pathPattern === "object" && isPatternMatch(pathPattern, fragment);
+                const isLongestMatch = isMatch && (matchedPathPrefixLength === undefined || pathPattern.prefix.length > matchedPathPrefixLength);
                 if (isLongestMatch) {
+                    // If this is a higher priority match than anything we've seen so far, previous results from matches are invalid, e.g.
+                    // {
+                    //   "bar/*": ["bar/*"], // <-- 1. We add 'bar', but 'bar/*' doesn't match yet.
+                    //   "*": ["dist/*"],   //  <-- 2. We match here. 'bar' is still ok because it didn't come from a match.
+                    //   "foo/*": ["foo/*"] //  <-- 3. We matched '*' earlier and added results from dist, but if 'foo/*' also matches,
+                    // }                               results in dist are actually not visible. 'bar' still stands because it didn't come from a match.
                     matchedPathPrefixLength = pathPattern.prefix.length;
-                    pathResults = [];
+                    pathResults = pathResults.filter(r => !r.matchedPattern);
                 }
                 if (typeof pathPattern === "string" || matchedPathPrefixLength === undefined || pathPattern.prefix.length >= matchedPathPrefixLength) {
+                    const pathResult: typeof pathResults[number] = { results: [], matchedPattern: isMatch };
                     for (const { name, kind, extension } of getCompletionsForPathMapping(path, patterns, fragment, baseDirectory, fileExtensions, host)) {
-                        pathResults.push(nameAndKind(name, kind, extension));
+                        pathResult.results.push(nameAndKind(name, kind, extension));
                     }
+                    pathResults.push(pathResult);
                 }
             }
         }
-        // Path mappings may provide a duplicate way to get to something we've already added, so don't add again.
-        pathResults.forEach(pathResult => pushIfUnique(result, pathResult, (a, b) =>
-            (host.useCaseSensitiveFileNames?.() ? equateStringsCaseSensitive : equateStringsCaseInsensitive)(a.name, b.name)));
+
+        pathResults.forEach(pathResult => pathResult.results.forEach(pathResult => pushIfUnique(result, pathResult, (a, b) =>
+            (host.useCaseSensitiveFileNames?.() ? equateStringsCaseSensitive : equateStringsCaseInsensitive)(a.name, b.name))));
+
         return matchedPathPrefixLength !== undefined;
     }
 
