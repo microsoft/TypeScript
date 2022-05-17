@@ -665,8 +665,12 @@ namespace ts.Completions.StringCompletions {
 
         const pathPrefix = path.slice(0, path.length - 1);
         const remainingFragment = tryRemovePrefix(fragment, pathPrefix);
-        return remainingFragment === undefined ? justPathMappingName(pathPrefix) : flatMap(patterns, pattern =>
-            getModulesForPathsPattern(remainingFragment, baseUrl, pattern, fileExtensions, host));
+        if (remainingFragment === undefined) {
+            const starIsFullPathComponent = path[path.length - 2] === "/";
+            return starIsFullPathComponent ? justPathMappingName(pathPrefix) : flatMap(patterns, pattern =>
+                getModulesForPathsPattern("", baseUrl, pattern, fileExtensions, host)?.map(({ name, ...rest }) => ({ name: pathPrefix + name, ...rest })));
+        }
+        return flatMap(patterns, pattern => getModulesForPathsPattern(remainingFragment, baseUrl, pattern, fileExtensions, host));
 
         function justPathMappingName(name: string): readonly NameAndKind[] {
             return startsWith(name, fragment) ? [directoryResult(name)] : emptyArray;
