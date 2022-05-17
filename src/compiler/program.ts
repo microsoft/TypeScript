@@ -1120,6 +1120,7 @@ namespace ts {
         // Key is a file name. Value is the (non-empty, or undefined) list of files that redirect to it.
         let redirectTargetsMap = createMultiMap<Path, string>();
         let usesUriStyleNodeCoreModules = false;
+        let cacheDtsEmitResult: ESMap<Path, CacheDtsEmitResult> | undefined;
 
         /**
          * map with
@@ -1943,6 +1944,7 @@ namespace ts {
                 getSourceFileFromReference: (file, ref) => program.getSourceFileFromReference(file, ref),
                 redirectTargetsMap,
                 getFileIncludeReasons: program.getFileIncludeReasons,
+                getDtsEmitResultCache: () => cacheDtsEmitResult ||= new Map(),
             };
         }
 
@@ -2484,8 +2486,28 @@ namespace ts {
                 const resolver = getTypeChecker().getEmitResolver(sourceFile, cancellationToken);
                 // Don't actually write any files since we're just getting diagnostics.
                 const emitHost = getEmitHost(noop);
-                const result = transformNodes(resolver, emitHost, factory, options, sourceFile ? [sourceFile] : filter(emitHost.getSourceFiles(), isSourceFileNotJson), [transformDeclarations], /*allowDtsFiles*/ false);
-                return result.diagnostics || emptyArray;
+                if (sourceFile) {
+                    if (!outFile(options)) {
+                        // Check from cache
+                        const existing = cacheDtsEmitResult?.get(sourceFile.resolvedPath);
+                        if (existing) return existing.diagnostics || emptyArray;
+                    }
+                    const result = transformNodes(resolver, emitHost, factory, options, [sourceFile], [transformDeclarations], /*allowDtsFiles*/ false);
+                    if (!outFile(options)) {
+                        (cacheDtsEmitResult ||= new Map()).set(sourceFile.resolvedPath, result);
+                    }
+                    return result.diagnostics || emptyArray;
+                }
+                let diagnostics: DiagnosticWithLocation[] | undefined;
+                forEachEmittedFile(emitHost, (_emitFileNames, sourceFileOrBundle) => {
+                    const key = getCacheDtsEmitResultKey(sourceFileOrBundle!, options);
+                    const existing = cacheDtsEmitResult?.get(key);
+                    if (existing) return existing.diagnostics || emptyArray;
+                    const result = transformNodes(resolver, emitHost, factory, options, [sourceFileOrBundle!], [transformDeclarations], /*allowDtsFiles*/ false);
+                    diagnostics = addRange(diagnostics, result.diagnostics);
+                    (cacheDtsEmitResult ||= new Map()).set(key, result);
+                });
+                return diagnostics || emptyArray;
             });
         }
 

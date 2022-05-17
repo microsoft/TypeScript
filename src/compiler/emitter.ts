@@ -277,6 +277,15 @@ namespace ts {
     }
 
     /*@internal*/
+    export function getCacheDtsEmitResultKey(sourceFileOrBundle: SourceFile | Bundle, options: CompilerOptions) {
+        return isSourceFile(sourceFileOrBundle) ? sourceFileOrBundle.resolvedPath : outFile(options) as Path;
+    }
+
+    function isForceDtsEmitResult(result: CacheDtsEmitResult | undefined): result is ForceDtsEmitResult {
+        return !!result && !(result as TransformationResult<SourceFile | Bundle>).transformed;
+    }
+
+    /*@internal*/
     // targetSourceFile is when users only want one file in entire project to be emitted. This is used in compileOnSave feature
     export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFile: SourceFile | undefined, { scriptTransformers, declarationTransformers }: EmitTransformers, emitOnlyDtsFiles?: boolean, onlyBuildInfo?: boolean, forceDtsEmit?: boolean): EmitResult {
         const compilerOptions = host.getCompilerOptions();
@@ -288,7 +297,6 @@ namespace ts {
         const { enter, exit } = performance.createTimer("printTime", "beforePrint", "afterPrint");
         let bundleBuildInfo: BundleBuildInfo | undefined;
         let emitSkipped = false;
-        let exportedModulesFromDeclarationEmit: ExportedModulesFromDeclarationEmit | undefined;
 
         // Emit each output file
         enter();
@@ -308,7 +316,6 @@ namespace ts {
             diagnostics: emitterDiagnostics.getDiagnostics(),
             emittedFiles: emittedFilesList,
             sourceMaps: sourceMapDataList,
-            exportedModulesFromDeclarationEmit
         };
 
         function emitSourceFileOrBundle({ jsFilePath, sourceMapFilePath, declarationFilePath, declarationMapPath, buildInfoPath }: EmitFileNames, sourceFileOrBundle: SourceFile | Bundle | undefined) {
@@ -411,8 +418,7 @@ namespace ts {
                 substituteNode: transform.substituteNode,
             });
 
-            Debug.assert(transform.transformed.length === 1, "Should only see one output from the transform");
-            printSourceFileOrBundle(jsFilePath, sourceMapFilePath, transform.transformed[0], printer, compilerOptions);
+            printSourceFileOrBundle(jsFilePath, sourceMapFilePath, transform, printer, compilerOptions);
 
             // Clean up emit nodes on parse tree
             transform.dispose();
@@ -433,12 +439,48 @@ namespace ts {
             const filesForEmit = forceDtsEmit ? sourceFiles : filter(sourceFiles, isSourceFileNotJson);
             // Setup and perform the transformation to retrieve declarations from the input files
             const inputListOrBundle = outFile(compilerOptions) ? [factory.createBundle(filesForEmit, !isSourceFile(sourceFileOrBundle) ? sourceFileOrBundle.prepends : undefined)] : filesForEmit;
-            if (emitOnlyDtsFiles && !getEmitDeclarations(compilerOptions)) {
+            // Use existing result:
+            const key = getCacheDtsEmitResultKey(sourceFileOrBundle, compilerOptions);
+            const cache = host.getDtsEmitResultCache();
+            const existing = declarationTransformers.length === 1 ? cache.get(key) : undefined;
+            if (isForceDtsEmitResult(existing)) {
+                if (existing.diagnostics?.length) {
+                    for (const diagnostic of existing.diagnostics) {
+                        emitterDiagnostics.add(diagnostic);
+                    }
+                }
+                const declBlocked = !!existing.diagnostics?.length || !!host.isEmitBlocked(declarationFilePath) || !!compilerOptions.noEmit;
+                emitSkipped = emitSkipped || declBlocked;
+                if (!declBlocked || forceDtsEmit) {
+                    // Write the output file
+                    if (declarationMapPath && !forceDtsEmit) {
+                        if (sourceMapDataList && existing.sourceMapData) {
+                            sourceMapDataList.push(existing.sourceMapData);
+                        }
+                        writeFile(host, emitterDiagnostics, declarationMapPath, existing.sourceMap!, /*writeByteOrderMark*/ false, sourceFiles);
+                    }
+                    writeFile(
+                        host,
+                        emitterDiagnostics,
+                        declarationFilePath,
+                        existing.text,
+                        !!compilerOptions.emitBOM,
+                        filesForEmit,
+                        {
+                            sourceMapUrlPos: existing.sourceMapUrlPos,
+                            exportedModulesFromDeclarationEmit: existing.exportedModulesFromDeclarationEmit,
+                        }
+                    );
+                }
+                return;
+            }
+
+            if (!existing && emitOnlyDtsFiles && !getEmitDeclarations(compilerOptions)) {
                 // Checker wont collect the linked aliases since thats only done when declaration is enabled.
                 // Do that here when emitting only dts files
                 filesForEmit.forEach(collectLinkedAliases);
             }
-            const declarationTransform = transformNodes(resolver, host, factory, compilerOptions, inputListOrBundle, declarationTransformers, /*allowDtsFiles*/ false);
+            const declarationTransform = existing || transformNodes(resolver, host, factory, compilerOptions, inputListOrBundle, declarationTransformers, /*allowDtsFiles*/ false);
             if (length(declarationTransform.diagnostics)) {
                 for (const diagnostic of declarationTransform.diagnostics!) {
                     emitterDiagnostics.add(diagnostic);
@@ -451,8 +493,8 @@ namespace ts {
                 noEmitHelpers: true,
                 module: compilerOptions.module,
                 target: compilerOptions.target,
-                sourceMap: compilerOptions.sourceMap,
-                inlineSourceMap: compilerOptions.inlineSourceMap,
+                // Emit maps when there is noEmit not set with forceDtsEmit
+                sourceMap: (!forceDtsEmit || !compilerOptions.noEmit) && compilerOptions.declarationMap,
                 extendedDiagnostics: compilerOptions.extendedDiagnostics,
                 onlyPrintJsDocStyle: true,
                 writeBundleFileInfo: !!bundleBuildInfo,
@@ -472,24 +514,19 @@ namespace ts {
             const declBlocked = (!!declarationTransform.diagnostics && !!declarationTransform.diagnostics.length) || !!host.isEmitBlocked(declarationFilePath) || !!compilerOptions.noEmit;
             emitSkipped = emitSkipped || declBlocked;
             if (!declBlocked || forceDtsEmit) {
-                Debug.assert(declarationTransform.transformed.length === 1, "Should only see one output from the decl transform");
                 printSourceFileOrBundle(
                     declarationFilePath,
                     declarationMapPath,
-                    declarationTransform.transformed[0],
+                    declarationTransform,
                     declarationPrinter,
                     {
-                        sourceMap: !forceDtsEmit && compilerOptions.declarationMap,
+                        sourceMap: printerOptions.sourceMap,
                         sourceRoot: compilerOptions.sourceRoot,
                         mapRoot: compilerOptions.mapRoot,
                         extendedDiagnostics: compilerOptions.extendedDiagnostics,
                         // Explicitly do not passthru either `inline` option
                     }
                 );
-                if (forceDtsEmit && declarationTransform.transformed[0].kind === SyntaxKind.SourceFile) {
-                    const sourceFile = declarationTransform.transformed[0];
-                    exportedModulesFromDeclarationEmit = sourceFile.exportedModulesFromDeclarationEmit;
-                }
             }
             declarationTransform.dispose();
             if (bundleBuildInfo) bundleBuildInfo.dts = declarationPrinter.bundleFileInfo;
@@ -509,7 +546,10 @@ namespace ts {
             forEachChild(node, collectLinkedAliases);
         }
 
-        function printSourceFileOrBundle(jsFilePath: string, sourceMapFilePath: string | undefined, sourceFileOrBundle: SourceFile | Bundle, printer: Printer, mapOptions: SourceMapOptions) {
+        function printSourceFileOrBundle(
+            jsFilePath: string, sourceMapFilePath: string | undefined, transform: TransformationResult<SourceFile | Bundle>, printer: Printer, mapOptions: SourceMapOptions) {
+            Debug.assert(transform.transformed.length === 1, "Should only see one output from the transform");
+            const sourceFileOrBundle = transform.transformed[0];
             const bundle = sourceFileOrBundle.kind === SyntaxKind.Bundle ? sourceFileOrBundle : undefined;
             const sourceFile = sourceFileOrBundle.kind === SyntaxKind.SourceFile ? sourceFileOrBundle : undefined;
             const sourceFiles = bundle ? bundle.sourceFiles : [sourceFile!];
@@ -532,9 +572,11 @@ namespace ts {
             }
 
             let sourceMapUrlPos;
+            let sourceMap;
+            let sourceMapData;
             if (sourceMapGenerator) {
                 if (sourceMapDataList) {
-                    sourceMapDataList.push({
+                    sourceMapDataList.push(sourceMapData = {
                         inputSourceFileNames: sourceMapGenerator.getSources(),
                         sourceMap: sourceMapGenerator.toJSON()
                     });
@@ -555,8 +597,8 @@ namespace ts {
 
                 // Write the source map
                 if (sourceMapFilePath) {
-                    const sourceMap = sourceMapGenerator.toString();
-                    writeFile(host, emitterDiagnostics, sourceMapFilePath, sourceMap, /*writeByteOrderMark*/ false, sourceFiles);
+                    sourceMap = sourceMapGenerator.toString();
+                    if (!forceDtsEmit) writeFile(host, emitterDiagnostics, sourceMapFilePath, sourceMap, /*writeByteOrderMark*/ false, sourceFiles);
                 }
             }
             else {
@@ -564,7 +606,30 @@ namespace ts {
             }
 
             // Write the output file
-            writeFile(host, emitterDiagnostics, jsFilePath, writer.getText(), !!compilerOptions.emitBOM, sourceFiles, { sourceMapUrlPos });
+            writeFile(
+                host,
+                emitterDiagnostics,
+                jsFilePath,
+                writer.getText(),
+                !!compilerOptions.emitBOM,
+                sourceFiles,
+                {
+                    sourceMapUrlPos,
+                    exportedModulesFromDeclarationEmit: sourceFile?.exportedModulesFromDeclarationEmit,
+                }
+            );
+            if (forceDtsEmit) {
+                // Store the result
+                const key = getCacheDtsEmitResultKey(sourceFileOrBundle, compilerOptions);
+                host.getDtsEmitResultCache().set(key, {
+                    diagnostics: transform.diagnostics,
+                    text: writer.getText(),
+                    sourceMap,
+                    sourceMapData,
+                    sourceMapUrlPos,
+                    exportedModulesFromDeclarationEmit: sourceFile?.exportedModulesFromDeclarationEmit,
+                });
+            }
 
             // Reset state
             writer.clear();
@@ -833,6 +898,7 @@ namespace ts {
             getSourceFileFromReference: returnUndefined,
             redirectTargetsMap: createMultiMap(),
             getFileIncludeReasons: notImplemented,
+            getDtsEmitResultCache: () => new Map(),
         };
         emitFiles(
             notImplementedResolver,

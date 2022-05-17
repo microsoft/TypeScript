@@ -1173,7 +1173,7 @@ namespace ts {
                     const info = state.fileInfos.get(file.resolvedPath)!;
                     const signature = state.currentAffectedFilesSignatures?.get(file.resolvedPath) || info.signature;
                     if (signature === file.version) {
-                        const newSignature = (computeHash || generateDjb2Hash)(data?.sourceMapUrlPos !== undefined ? text.substring(0, data.sourceMapUrlPos) : text);
+                        const newSignature = BuilderState.getSignatureFromWriteFileText(text, data, computeHash);
                         if (newSignature !== file.version) { // Update it
                             if (host.storeFilesChangingSignatureDuringEmit) (state.filesChangingSignature ||= new Set()).add(file.resolvedPath);
                             if (state.exportedModulesMap) BuilderState.updateExportedModules(file, file.exportedModulesFromDeclarationEmit, state.currentAffectedFilesExportedModulesMap ||= BuilderState.createManyToManyPathMap());

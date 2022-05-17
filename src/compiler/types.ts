@@ -3864,7 +3864,8 @@ namespace ts {
     export type ResolvedConfigFileName = string & { _isResolvedConfigFileName: never };
 
     export interface WriteFileCallbackData {
-        /*@internal*/ sourceMapUrlPos?: number;
+        /*@internal*/ sourceMapUrlPos: number | undefined;
+        /*@internal*/ exportedModulesFromDeclarationEmit: ExportedModulesFromDeclarationEmit | undefined;
     }
     export type WriteFileCallback = (
         fileName: string,
@@ -3972,6 +3973,19 @@ namespace ts {
 
     /*@internal*/
     export type FilePreprocessingDiagnostics = FilePreprocessingReferencedDiagnostic | FilePreprocessingFileExplainingDiagnostic;
+
+    /*@internal*/
+    export interface ForceDtsEmitResult {
+        diagnostics: readonly DiagnosticWithLocation[] | undefined;
+        text: string;
+        sourceMap: string | undefined;
+        sourceMapData: SourceMapEmitResult | undefined;
+        sourceMapUrlPos: number | undefined;
+        exportedModulesFromDeclarationEmit: ExportedModulesFromDeclarationEmit | undefined;
+    }
+
+    /*@internal*/
+    export type CacheDtsEmitResult = ForceDtsEmitResult | TransformationResult<SourceFile | Bundle>;
 
     export interface Program extends ScriptReferenceHost {
         getCurrentDirectory(): string;
@@ -4174,7 +4188,6 @@ namespace ts {
         diagnostics: readonly Diagnostic[];
         emittedFiles?: string[]; // Array of files the compiler wrote to disk
         /* @internal */ sourceMaps?: SourceMapEmitResult[];  // Array of sourceMapData if compiler emitted sourcemaps
-        /* @internal */ exportedModulesFromDeclarationEmit?: ExportedModulesFromDeclarationEmit;
     }
 
     /* @internal */
@@ -7104,6 +7117,7 @@ namespace ts {
         getProgramBuildInfo(): ProgramBuildInfo | undefined;
         getSourceFileFromReference: Program["getSourceFileFromReference"];
         readonly redirectTargetsMap: RedirectTargetsMap;
+        getDtsEmitResultCache(): ESMap<Path, CacheDtsEmitResult>;
     }
 
     /* @internal */
