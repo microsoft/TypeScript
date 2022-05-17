@@ -1,0 +1,45 @@
+=== tests/cases/compiler/functionReadonlyLength.ts ===
+const f0 = new Function()
+>f0 : Function
+>new Function() : Function
+>Function : FunctionConstructor
+
+f0.length = 1;
+>f0.length = 1 : 1
+>f0.length : any
+>f0 : Function
+>length : any
+>1 : 1
+
+function f1() {};
+>f1 : () => void
+
+f1.length = 1;
+>f1.length = 1 : 1
+>f1.length : any
+>f1 : () => void
+>length : any
+>1 : 1
+
+const f2 = function () {};
+>f2 : () => void
+>function () {} : () => void
+
+f2.length = 1
+>f2.length = 1 : 1
+>f2.length : any
+>f2 : () => void
+>length : any
+>1 : 1
+
+const f3 = () => {}
+>f3 : () => void
+>() => {} : () => void
+
+f3.length = 1
+>f3.length = 1 : 1
+>f3.length : any
+>f3 : () => void
+>length : any
+>1 : 1
+

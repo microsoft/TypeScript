@@ -1,0 +1,34 @@
+=== tests/cases/compiler/functionReadonlyLength.ts ===
+const f0 = new Function()
+>f0 : Symbol(f0, Decl(functionReadonlyLength.ts, 0, 5))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+f0.length = 1;
+>f0.length : Symbol(Function.length, Decl(lib.es5.d.ts, --, --))
+>f0 : Symbol(f0, Decl(functionReadonlyLength.ts, 0, 5))
+>length : Symbol(Function.length, Decl(lib.es5.d.ts, --, --))
+
+function f1() {};
+>f1 : Symbol(f1, Decl(functionReadonlyLength.ts, 1, 14))
+
+f1.length = 1;
+>f1.length : Symbol(Function.length, Decl(lib.es5.d.ts, --, --))
+>f1 : Symbol(f1, Decl(functionReadonlyLength.ts, 1, 14))
+>length : Symbol(Function.length, Decl(lib.es5.d.ts, --, --))
+
+const f2 = function () {};
+>f2 : Symbol(f2, Decl(functionReadonlyLength.ts, 6, 5))
+
+f2.length = 1
+>f2.length : Symbol(Function.length, Decl(lib.es5.d.ts, --, --))
+>f2 : Symbol(f2, Decl(functionReadonlyLength.ts, 6, 5))
+>length : Symbol(Function.length, Decl(lib.es5.d.ts, --, --))
+
+const f3 = () => {}
+>f3 : Symbol(f3, Decl(functionReadonlyLength.ts, 9, 5))
+
+f3.length = 1
+>f3.length : Symbol(Function.length, Decl(lib.es5.d.ts, --, --))
+>f3 : Symbol(f3, Decl(functionReadonlyLength.ts, 9, 5))
+>length : Symbol(Function.length, Decl(lib.es5.d.ts, --, --))
+

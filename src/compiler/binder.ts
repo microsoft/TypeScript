@@ -3049,7 +3049,11 @@ namespace ts {
         function bindSpecialPropertyAssignment(node: BindablePropertyAssignmentExpression) {
             // Class declarations in Typescript do not allow property declarations
             const parentSymbol = lookupSymbolForPropertyAccess(node.left.expression, container) || lookupSymbolForPropertyAccess(node.left.expression, blockScopeContainer) ;
-            if (!isInJSFile(node) && !isFunctionSymbol(parentSymbol)) {
+            const isFunctionSym = isFunctionSymbol(parentSymbol);
+            if (!isInJSFile(node) && !isFunctionSym) {
+                return;
+            }
+            if (isFunctionSym && isBindableStaticNameExpression(node.left) && getDeclarationName(node.left) === "length") {
                 return;
             }
             const rootExpr = getLeftmostAccessExpression(node.left);
