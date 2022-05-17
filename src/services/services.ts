@@ -1292,7 +1292,7 @@ namespace ts {
             let parsedCommandLines: ESMap<Path, ParsedCommandLine | false> | undefined;
 
             // Now create a new compiler
-            const compilerHost: CompilerHost = {
+            let compilerHost: CompilerHost | undefined = {
                 getSourceFile: getOrCreateSourceFile,
                 getSourceFileByPath: getOrCreateSourceFileByPath,
                 getCancellationToken: () => cancellationToken,
@@ -1330,14 +1330,7 @@ namespace ts {
 
             const originalGetSourceFile = compilerHost.getSourceFile;
 
-            const {
-                originalReadFile,
-                originalFileExists,
-                originalDirectoryExists,
-                originalCreateDirectory,
-                originalWriteFile,
-                getSourceFileWithCache,
-            } = changeCompilerHostLikeToUseCache(
+            const { getSourceFileWithCache } = changeCompilerHostLikeToUseCache(
                 compilerHost,
                 fileName => toPath(fileName, currentDirectory, getCanonicalFileName),
                 (...args) => originalGetSourceFile.call(compilerHost, ...args)
@@ -1345,20 +1338,19 @@ namespace ts {
             compilerHost.getSourceFile = getSourceFileWithCache!;
 
             host.setCompilerHost?.(compilerHost);
-            let cachingInEffect = true;
 
             const parseConfigHost: ParseConfigFileHost = {
                 useCaseSensitiveFileNames,
-                fileExists: fileName => compilerHost.fileExists(fileName),
-                readFile: fileName => compilerHost.readFile(fileName),
-                readDirectory: (...args) => compilerHost.readDirectory!(...args),
+                fileExists: fileName => compilerHost!.fileExists(fileName),
+                readFile: fileName => compilerHost!.readFile(fileName),
+                readDirectory: (...args) => compilerHost!.readDirectory!(...args),
                 trace: compilerHost.trace,
                 getCurrentDirectory: compilerHost.getCurrentDirectory,
                 onUnRecoverableConfigFileDiagnostic: noop,
             };
 
             // If the program is already up-to-date, we can reuse it
-            if (isProgramUptoDate(program, rootFileNames, newSettings, (_path, fileName) => host.getScriptVersion(fileName), fileName => compilerHost.fileExists(fileName), hasInvalidatedResolution, hasChangedAutomaticTypeDirectiveNames, getParsedCommandLine, projectReferences)) {
+            if (isProgramUptoDate(program, rootFileNames, newSettings, (_path, fileName) => host.getScriptVersion(fileName), fileName => compilerHost!.fileExists(fileName), hasInvalidatedResolution, hasChangedAutomaticTypeDirectiveNames, getParsedCommandLine, projectReferences)) {
                 return;
             }
 
@@ -1380,13 +1372,7 @@ namespace ts {
 
             // 'getOrCreateSourceFile' depends on caching but should be used past this point.
             // After this point, the cache needs to be cleared to allow all collected snapshots to be released
-            cachingInEffect = false;
-            compilerHost.getSourceFile = originalGetSourceFile;
-            compilerHost.readFile = originalReadFile;
-            compilerHost.fileExists = originalFileExists;
-            compilerHost.directoryExists = originalDirectoryExists;
-            compilerHost.createDirectory = originalCreateDirectory;
-            compilerHost.writeFile = originalWriteFile!;
+            compilerHost = undefined;
             parsedCommandLines = undefined;
 
             // We reset this cache on structure invalidation so we don't hold on to outdated files for long; however we can't use the `compilerHost` above,
@@ -1447,7 +1433,7 @@ namespace ts {
             }
 
             function getOrCreateSourceFileByPath(fileName: string, path: Path, _languageVersion: ScriptTarget, _onError?: (message: string) => void, shouldCreateNewSourceFile?: boolean): SourceFile | undefined {
-                Debug.assert(cachingInEffect, "getOrCreateSourceFileByPath called after typical CompilerHost lifetime, check the callstack something with a reference to an old host.");
+                Debug.assert(compilerHost, "getOrCreateSourceFileByPath called after typical CompilerHost lifetime, check the callstack something with a reference to an old host.");
                 // The program is asking for this file, check first if the host can locate it.
                 // If the host can not locate the file, then it does not exist. return undefined
                 // to the program to allow reporting of errors for missing files.
