@@ -315,6 +315,7 @@ namespace ts.server {
             projects,
             defaultProject,
             initialLocation,
+            /*isForRename*/ true,
             (project, position) => project.getLanguageService().findRenameLocations(position.fileName, position.pos, findInStrings, findInComments, providePrefixAndSuffixTextForRename),
             (renameLocation, cb) => cb(documentSpanLocation(renameLocation)),
         );
@@ -340,8 +341,8 @@ namespace ts.server {
         return results;
     }
 
-    function getDefinitionLocation(defaultProject: Project, initialLocation: DocumentPosition): DocumentPosition | undefined {
-        const infos = defaultProject.getLanguageService().getDefinitionAtPosition(initialLocation.fileName, initialLocation.pos);
+    function getDefinitionLocation(defaultProject: Project, initialLocation: DocumentPosition, isForRename: boolean): DocumentPosition | undefined {
+        const infos = defaultProject.getLanguageService().getDefinitionAtPosition(initialLocation.fileName, initialLocation.pos, /*searchOtherFilesOnly*/ false, /*stopAtAlias*/ isForRename);
         const info = infos && firstOrUndefined(infos);
         return info && !info.isLocal ? { fileName: info.fileName, pos: info.textSpan.start } : undefined;
     }
@@ -356,6 +357,7 @@ namespace ts.server {
             projects,
             defaultProject,
             initialLocation,
+            /*isForRename*/ false,
             (project, position) => {
                 logger.info(`Finding references to ${position.fileName} position ${position.pos} in project ${project.getProjectName()}`);
                 return project.getLanguageService().findReferences(position.fileName, position.pos);
@@ -495,6 +497,7 @@ namespace ts.server {
         projects: Projects,
         defaultProject: Project,
         initialLocation: DocumentPosition,
+        isForRename: boolean,
         getResultsForPosition: (project: Project, location: DocumentPosition) => readonly TResult[] | undefined,
         forPositionInResult: (result: TResult, cb: (location: DocumentPosition) => void) => void,
     ): readonly TResult[] | ESMap<Project, readonly TResult[]> {
@@ -518,7 +521,7 @@ namespace ts.server {
         const projectService = defaultProject.projectService;
         const cancellationToken = defaultProject.getCancellationToken();
 
-        const defaultDefinition = getDefinitionLocation(defaultProject, initialLocation);
+        const defaultDefinition = getDefinitionLocation(defaultProject, initialLocation, isForRename);
 
         // Don't call these unless !!defaultDefinition
         const getGeneratedDefinition = memoize(() => defaultProject.isSourceOfProjectReferenceRedirect(defaultDefinition!.fileName) ?
