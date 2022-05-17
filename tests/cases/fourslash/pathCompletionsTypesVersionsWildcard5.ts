@@ -6,8 +6,11 @@
 //// {
 ////   "types": "index.d.ts",
 ////   "typesVersions": {
-////     ">=4.3.5": {
-////       "browser/*": ["dist/*"]
+////     "*": {
+////       "*": ["dist/*"],
+////       "foo/*": ["dist/*"],
+////       "bar/*": ["dist/*"],
+////       "exact-match": ["dist/index.d.ts"]
 ////     }
 ////   }
 //// }
@@ -21,6 +24,9 @@
 // @Filename: /node_modules/foo/dist/blah.d.ts
 //// export const blah = 0;
 
+// @Filename: /node_modules/foo/dist/foo/onlyInFooFolder.d.ts
+//// export const foo = 0;
+
 // @Filename: /node_modules/foo/dist/subfolder/one.d.ts
 //// export const one = 0;
 
@@ -30,19 +36,19 @@
 verify.completions({
   marker: "",
   isNewIdentifierLocation: true,
-  exact: ["browser", "nope", "dist"],
+  exact: ["blah", "index", "foo", "subfolder", "bar", "exact-match"],
 });
 
-edit.insert("browser/");
+edit.insert("foo/");
 
 verify.completions({
   isNewIdentifierLocation: true,
-  exact: ["blah", "index", "subfolder"],
+  exact: ["blah", "index", "foo", "subfolder"],
 });
 
-edit.insert("subfolder/");
+edit.insert("foo/");
 
 verify.completions({
   isNewIdentifierLocation: true,
-  exact: ["one"],
+  exact: ["onlyInFooFolder"],
 });

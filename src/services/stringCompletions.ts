@@ -526,22 +526,31 @@ namespace ts.Completions.StringCompletions {
     }
 
     function addCompletionEntriesFromPaths(result: NameAndKind[], fragment: string, baseDirectory: string, fileExtensions: readonly string[], paths: MapLike<string[]>, host: LanguageServiceHost) {
-        let matchedPath = false;
+        let matchedPathPrefixLength: number | undefined;
+        let pathResults: NameAndKind[] = [];
         for (const path in paths) {
             if (!hasProperty(paths, path)) continue;
             const patterns = paths[path];
             if (patterns) {
                 const pathPattern = tryParsePattern(path);
-                for (const { name, kind, extension } of getCompletionsForPathMapping(path, patterns, fragment, baseDirectory, fileExtensions, host)) {
-                    // Path mappings may provide a duplicate way to get to something we've already added, so don't add again.
-                    if (!result.some(entry => entry.name === name)) {
-                        result.push(nameAndKind(name, kind, extension));
+                if (!pathPattern) continue;
+                const isLongestMatch = typeof pathPattern === "object" && isPatternMatch(pathPattern, fragment)
+                    && (matchedPathPrefixLength === undefined || pathPattern.prefix.length > matchedPathPrefixLength);
+                if (isLongestMatch) {
+                    matchedPathPrefixLength = pathPattern.prefix.length;
+                    pathResults = [];
+                }
+                if (typeof pathPattern === "string" || matchedPathPrefixLength === undefined || pathPattern.prefix.length >= matchedPathPrefixLength) {
+                    for (const { name, kind, extension } of getCompletionsForPathMapping(path, patterns, fragment, baseDirectory, fileExtensions, host)) {
+                        pathResults.push(nameAndKind(name, kind, extension));
                     }
-                    matchedPath = typeof pathPattern === "object" && isPatternMatch(pathPattern, fragment);
                 }
             }
         }
-        return matchedPath;
+        // Path mappings may provide a duplicate way to get to something we've already added, so don't add again.
+        pathResults.forEach(pathResult => pushIfUnique(result, pathResult, (a, b) =>
+            (host.useCaseSensitiveFileNames?.() ? equateStringsCaseSensitive : equateStringsCaseInsensitive)(a.name, b.name)));
+        return matchedPathPrefixLength !== undefined;
     }
 
     /**
@@ -673,7 +682,7 @@ namespace ts.Completions.StringCompletions {
         return flatMap(patterns, pattern => getModulesForPathsPattern(remainingFragment, baseUrl, pattern, fileExtensions, host));
 
         function justPathMappingName(name: string): readonly NameAndKind[] {
-            return startsWith(name, fragment) ? [directoryResult(name)] : emptyArray;
+            return startsWith(name, fragment) ? [directoryResult(removeTrailingDirectorySeparator(name))] : emptyArray;
         }
     }
 
