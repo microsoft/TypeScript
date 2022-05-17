@@ -766,10 +766,11 @@ namespace ts {
         YieldContext       = 1 << 13, // If node was parsed in the 'yield' context created when parsing a generator
         DecoratorContext   = 1 << 14, // If node was parsed as part of a decorator
         AwaitContext       = 1 << 15, // If node was parsed in the 'await' context created when parsing an async function
-        ThisNodeHasError   = 1 << 16, // If the parser encountered an error when parsing the code that created this node
-        JavaScriptFile     = 1 << 17, // If node was parsed in a JavaScript
-        ThisNodeOrAnySubNodesHasError = 1 << 18, // If this node or any of its children had an error
-        HasAggregatedChildData = 1 << 19, // If we've computed data from children and cached it in this node
+        DisallowConditionalTypesContext = 1 << 16, // If node was parsed in a context where conditional types are not allowed
+        ThisNodeHasError   = 1 << 17, // If the parser encountered an error when parsing the code that created this node
+        JavaScriptFile     = 1 << 18, // If node was parsed in a JavaScript
+        ThisNodeOrAnySubNodesHasError = 1 << 19, // If this node or any of its children had an error
+        HasAggregatedChildData = 1 << 20, // If we've computed data from children and cached it in this node
 
         // These flags will be set when the parser encounters a dynamic import expression or 'import.meta' to avoid
         // walking the tree if the flags are not set. However, these flags are just a approximation
@@ -780,15 +781,15 @@ namespace ts {
         // removal, it is likely that users will add the import anyway.
         // The advantage of this approach is its simplicity. For the case of batch compilation,
         // we guarantee that users won't have to pay the price of walking the tree if a dynamic import isn't used.
-        /* @internal */ PossiblyContainsDynamicImport = 1 << 20,
-        /* @internal */ PossiblyContainsImportMeta    = 1 << 21,
+        /* @internal */ PossiblyContainsDynamicImport = 1 << 21,
+        /* @internal */ PossiblyContainsImportMeta    = 1 << 22,
 
-        JSDoc                                         = 1 << 22, // If node was parsed inside jsdoc
-        /* @internal */ Ambient                       = 1 << 23, // If node was inside an ambient context -- a declaration file, or inside something with the `declare` modifier.
-        /* @internal */ InWithStatement               = 1 << 24, // If any ancestor of node was the `statement` of a WithStatement (not the `expression`)
-        JsonFile                                      = 1 << 25, // If node was parsed in a Json
-        /* @internal */ TypeCached                    = 1 << 26, // If a type was cached for node at any point
-        /* @internal */ Deprecated                    = 1 << 27, // If has '@deprecated' JSDoc tag
+        JSDoc                                         = 1 << 23, // If node was parsed inside jsdoc
+        /* @internal */ Ambient                       = 1 << 24, // If node was inside an ambient context -- a declaration file, or inside something with the `declare` modifier.
+        /* @internal */ InWithStatement               = 1 << 25, // If any ancestor of node was the `statement` of a WithStatement (not the `expression`)
+        JsonFile                                      = 1 << 26, // If node was parsed in a Json
+        /* @internal */ TypeCached                    = 1 << 27, // If a type was cached for node at any point
+        /* @internal */ Deprecated                    = 1 << 28, // If has '@deprecated' JSDoc tag
 
         BlockScoped = Let | Const,
 
@@ -796,7 +797,7 @@ namespace ts {
         ReachabilityAndEmitFlags = ReachabilityCheckFlags | HasAsyncFunctions,
 
         // Parsing context flags
-        ContextFlags = DisallowInContext | YieldContext | DecoratorContext | AwaitContext | JavaScriptFile | InWithStatement | Ambient,
+        ContextFlags = DisallowInContext | DisallowConditionalTypesContext | YieldContext | DecoratorContext | AwaitContext | JavaScriptFile | InWithStatement | Ambient,
 
         // Exclude these flags when parsing a Type
         TypeExcludesFlags = YieldContext | AwaitContext,
@@ -2620,8 +2621,15 @@ namespace ts {
         readonly parent: JsxAttributes;
         readonly name: Identifier;
         /// JSX attribute initializers are optional; <X y /> is sugar for <X y={true} />
-        readonly initializer?: StringLiteral | JsxExpression;
+        readonly initializer?: JsxAttributeValue;
     }
+
+    export type JsxAttributeValue =
+        | StringLiteral
+        | JsxExpression
+        | JsxElement
+        | JsxSelfClosingElement
+        | JsxFragment;
 
     export interface JsxSpreadAttribute extends ObjectLiteralElement {
         readonly kind: SyntaxKind.JsxSpreadAttribute;
@@ -3243,11 +3251,13 @@ namespace ts {
     export interface JSDocNonNullableType extends JSDocType {
         readonly kind: SyntaxKind.JSDocNonNullableType;
         readonly type: TypeNode;
+        readonly postfix: boolean;
     }
 
     export interface JSDocNullableType extends JSDocType {
         readonly kind: SyntaxKind.JSDocNullableType;
         readonly type: TypeNode;
+        readonly postfix: boolean;
     }
 
     export interface JSDocOptionalType extends JSDocType {
@@ -3467,7 +3477,6 @@ namespace ts {
         | FlowStart
         | FlowLabel
         | FlowAssignment
-        | FlowCall
         | FlowCondition
         | FlowSwitchClause
         | FlowArrayMutation
@@ -3622,7 +3631,7 @@ namespace ts {
         languageVersion: ScriptTarget;
 
         /**
-         * When `module` is `Node12` or `NodeNext`, this field controls whether the
+         * When `module` is `Node16` or `NodeNext`, this field controls whether the
          * source file in question is an ESNext-output-format file, or a CommonJS-output-format
          * module. This is derived by the module resolver as it looks up the file, since
          * it is derived from either the file extension of the module, or the containing
@@ -3863,12 +3872,16 @@ namespace ts {
      */
     export type ResolvedConfigFileName = string & { _isResolvedConfigFileName: never };
 
+    export interface WriteFileCallbackData {
+        /*@internal*/ sourceMapUrlPos?: number;
+    }
     export type WriteFileCallback = (
         fileName: string,
-        data: string,
+        text: string,
         writeByteOrderMark: boolean,
         onError?: (message: string) => void,
         sourceFiles?: readonly SourceFile[],
+        data?: WriteFileCallbackData,
     ) => void;
 
     export class OperationCanceledException { }
@@ -4025,11 +4038,6 @@ namespace ts {
 
         /* @internal */ getCommonSourceDirectory(): string;
 
-        // For testing purposes only.  Should not be used by any other consumers (including the
-        // language service).
-        /* @internal */ getDiagnosticsProducingTypeChecker(): TypeChecker;
-        /* @internal */ dropDiagnosticsProducingTypeChecker(): void;
-
         /* @internal */ getCachedSemanticDiagnostics(sourceFile?: SourceFile): readonly Diagnostic[] | undefined;
 
         /* @internal */ getClassifiableNames(): Set<__String>;
@@ -4079,6 +4087,8 @@ namespace ts {
          * This implementation handles file exists to be true if file is source of project reference redirect when program is created using useSourceOfProjectReferenceRedirect
          */
         /*@internal*/ fileExists(fileName: string): boolean;
+        /** Call compilerHost.writeFile on host program was created with */
+        /*@internal*/ writeFile: WriteFileCallback;
     }
 
     /*@internal*/
@@ -4298,6 +4308,7 @@ namespace ts {
          */
         getResolvedSignature(node: CallLikeExpression, candidatesOutArray?: Signature[], argumentCount?: number): Signature | undefined;
         /* @internal */ getResolvedSignatureForSignatureHelp(node: CallLikeExpression, candidatesOutArray?: Signature[], argumentCount?: number): Signature | undefined;
+        /* @internal */ getResolvedSignatureForStringLiteralCompletions(call: CallLikeExpression, editingArgument: Node, candidatesOutArray: Signature[]): Signature | undefined;
         /* @internal */ getExpandedParameters(sig: Signature): readonly (readonly Symbol[])[];
         /* @internal */ hasEffectiveRestParameter(sig: Signature): boolean;
         /* @internal */ containsArgumentsReference(declaration: SignatureDeclaration): boolean;
@@ -4501,7 +4512,6 @@ namespace ts {
         UseAliasDefinedOutsideCurrentScope      = 1 << 14,  // Allow non-visible aliases
         UseSingleQuotesForStringLiteralType     = 1 << 28,  // Use single quotes for string literal type
         NoTypeReduction                         = 1 << 29,  // Don't call getReducedType
-        NoUndefinedOptionalParameterType        = 1 << 30,  // Do not add undefined to optional parameter type
 
         // Error handling
         AllowThisInObjectLiteral                = 1 << 15,
@@ -4680,8 +4690,10 @@ namespace ts {
     export type AnyImportOrRequire = AnyImportSyntax | VariableDeclarationInitializedTo<RequireOrImportCall>;
 
     /* @internal */
-    export type AnyImportOrRequireStatement = AnyImportSyntax | RequireVariableStatement;
+    export type AnyImportOrBareOrAccessedRequire = AnyImportSyntax | VariableDeclarationInitializedTo<RequireOrImportCall | AccessExpression>;
 
+    /* @internal */
+    export type AnyImportOrRequireStatement = AnyImportSyntax | RequireVariableStatement;
 
     /* @internal */
     export type AnyImportOrReExport = AnyImportSyntax | ExportDeclaration;
@@ -4954,7 +4966,8 @@ namespace ts {
     /* @internal */
     export interface SymbolLinks {
         immediateTarget?: Symbol;                   // Immediate target of an alias. May be another alias. Do not access directly, use `checker.getImmediateAliasedSymbol` instead.
-        target?: Symbol;                            // Resolved (non-alias) target of an alias
+        aliasTarget?: Symbol,                       // Resolved (non-alias) target of an alias
+        target?: Symbol;                            // Original version of an instantiated symbol
         type?: Type;                                // Type of value symbol
         writeType?: Type;                           // Type of value symbol in write contexts
         nameType?: Type;                            // Type associated with a late-bound symbol
@@ -5926,6 +5939,13 @@ namespace ts {
         nonFixingMapper: TypeMapper;                  // Mapper that doesn't fix inferences
         returnMapper?: TypeMapper;                    // Type mapper for inferences from return types (if any)
         inferredTypeParameters?: readonly TypeParameter[]; // Inferred type parameters for function result
+        intraExpressionInferenceSites?: IntraExpressionInferenceSite[];
+    }
+
+    /* @internal */
+    export interface IntraExpressionInferenceSite {
+        node: Expression | MethodDeclaration;
+        type: Type;
     }
 
     /* @internal */
@@ -6045,11 +6065,12 @@ namespace ts {
         Classic  = 1,
         NodeJs   = 2,
         // Starting with node12, node's module resolver has significant departures from traditional cjs resolution
-        // to better support ecmascript modules and their use within node - more features are still being added, so
-        // we can expect it to change over time, and as such, offer both a `NodeNext` moving resolution target, and a `Node12`
-        // version-anchored resolution target
-        Node12   = 3,
-        NodeNext = 99, // Not simply `Node12` so that compiled code linked against TS can use the `Next` value reliably (same as with `ModuleKind`)
+        // to better support ecmascript modules and their use within node - however more features are still being added.
+        // TypeScript's Node ESM support was introduced after Node 12 went end-of-life, and Node 14 is the earliest stable
+        // version that supports both pattern trailers - *but*, Node 16 is the first version that also supports ECMASCript 2022.
+        // In turn, we offer both a `NodeNext` moving resolution target, and a `Node16` version-anchored resolution target
+        Node16   = 3,
+        NodeNext = 99, // Not simply `Node16` so that compiled code linked against TS can use the `Next` value reliably (same as with `ModuleKind`)
     }
 
     export enum ModuleDetectionKind {
@@ -6058,7 +6079,7 @@ namespace ts {
          */
         Legacy = 1,
         /**
-         * Legacy, but also files with jsx under react-jsx or react-jsxdev and esm mode files under moduleResolution: node12+
+         * Legacy, but also files with jsx under react-jsx or react-jsxdev and esm mode files under moduleResolution: node16+
          */
         Auto = 2,
         /**
@@ -6162,6 +6183,7 @@ namespace ts {
         maxNodeModuleJsDepth?: number;
         module?: ModuleKind;
         moduleResolution?: ModuleResolutionKind;
+        moduleSuffixes?: string[];
         moduleDetection?: ModuleDetectionKind;
         newLine?: NewLineKind;
         noEmit?: boolean;
@@ -6181,6 +6203,8 @@ namespace ts {
         assumeChangesOnlyAffectDirectDependencies?: boolean;
         noLib?: boolean;
         noResolve?: boolean;
+        /*@internal*/
+        noDtsResolution?: boolean;
         noUncheckedIndexedAccess?: boolean;
         out?: string;
         outDir?: string;
@@ -6274,8 +6298,8 @@ namespace ts {
         ES2022 = 7,
         ESNext = 99,
 
-        // Node12+ is an amalgam of commonjs (albeit updated) and es2020+, and represents a distinct module system from es2020/esnext
-        Node12 = 100,
+        // Node16+ is an amalgam of commonjs (albeit updated) and es2022+, and represents a distinct module system from es2020/esnext
+        Node16 = 100,
         NodeNext = 199,
     }
 
@@ -6377,6 +6401,7 @@ namespace ts {
         validatedIncludeSpecs: readonly string[] | undefined;
         validatedExcludeSpecs: readonly string[] | undefined;
         pathPatterns: readonly (string | Pattern)[] | undefined;
+        isDefaultIncludeSpec: boolean;
     }
 
     /* @internal */
@@ -6466,6 +6491,7 @@ namespace ts {
     export interface CommandLineOptionOfListType extends CommandLineOptionBase {
         type: "list";
         element: CommandLineOptionOfCustomType | CommandLineOptionOfStringType | CommandLineOptionOfNumberType | CommandLineOptionOfBooleanType | TsConfigOnlyOption;
+        listPreserveFalsyValues?: boolean;
     }
 
     /* @internal */
@@ -6624,7 +6650,7 @@ namespace ts {
         realpath?(path: string): string;
         getCurrentDirectory?(): string;
         getDirectories?(path: string): string[];
-        useCaseSensitiveFileNames?: boolean | (() => boolean);
+        useCaseSensitiveFileNames?: boolean | (() => boolean) | undefined;
     }
 
     /**
@@ -6708,6 +6734,8 @@ namespace ts {
         readonly resolvedModule: ResolvedModuleFull | undefined;
         /* @internal */
         readonly failedLookupLocations: string[];
+        /* @internal */
+        readonly resolutionDiagnostics: Diagnostic[]
     }
 
     export interface ResolvedTypeReferenceDirective {
@@ -6729,6 +6757,8 @@ namespace ts {
     export interface ResolvedTypeReferenceDirectiveWithFailedLookupLocations {
         readonly resolvedTypeReferenceDirective: ResolvedTypeReferenceDirective | undefined;
         readonly failedLookupLocations: string[];
+        /* @internal */
+        resolutionDiagnostics: Diagnostic[]
     }
 
     /* @internal */
@@ -6780,6 +6810,7 @@ namespace ts {
 
         // For testing:
         /*@internal*/ disableUseFileVersionAsSignature?: boolean;
+        /*@internal*/ storeFilesChangingSignatureDuringEmit?: boolean;
     }
 
     /** true if --out otherwise source file name */
@@ -7142,10 +7173,19 @@ namespace ts {
         parenthesizeExpressionOfExpressionStatement(expression: Expression): Expression;
         parenthesizeConciseBodyOfArrowFunction(body: Expression): Expression;
         parenthesizeConciseBodyOfArrowFunction(body: ConciseBody): ConciseBody;
-        parenthesizeMemberOfConditionalType(member: TypeNode): TypeNode;
-        parenthesizeMemberOfElementType(member: TypeNode): TypeNode;
-        parenthesizeElementTypeOfArrayType(member: TypeNode): TypeNode;
-        parenthesizeConstituentTypesOfUnionOrIntersectionType(members: readonly TypeNode[]): NodeArray<TypeNode>;
+        parenthesizeCheckTypeOfConditionalType(type: TypeNode): TypeNode;
+        parenthesizeExtendsTypeOfConditionalType(type: TypeNode): TypeNode;
+        parenthesizeOperandOfTypeOperator(type: TypeNode): TypeNode;
+        parenthesizeOperandOfReadonlyTypeOperator(type: TypeNode): TypeNode;
+        parenthesizeNonArrayTypeOfPostfixType(type: TypeNode): TypeNode;
+        parenthesizeElementTypesOfTupleType(types: readonly (TypeNode | NamedTupleMember)[]): NodeArray<TypeNode>;
+        parenthesizeElementTypeOfTupleType(type: TypeNode | NamedTupleMember): TypeNode | NamedTupleMember;
+        parenthesizeTypeOfOptionalType(type: TypeNode): TypeNode;
+        parenthesizeConstituentTypeOfUnionType(type: TypeNode): TypeNode;
+        parenthesizeConstituentTypesOfUnionType(constituents: readonly TypeNode[]): NodeArray<TypeNode>;
+        parenthesizeConstituentTypeOfIntersectionType(type: TypeNode): TypeNode;
+        parenthesizeConstituentTypesOfIntersectionType(constituents: readonly TypeNode[]): NodeArray<TypeNode>;
+        parenthesizeLeadingTypeArgument(typeNode: TypeNode): TypeNode;
         parenthesizeTypeArguments(typeParameters: readonly TypeNode[] | undefined): NodeArray<TypeNode> | undefined;
     }
 
@@ -7164,6 +7204,8 @@ namespace ts {
     export interface NodeFactory {
         /* @internal */ readonly parenthesizer: ParenthesizerRules;
         /* @internal */ readonly converters: NodeConverters;
+        /* @internal */ readonly baseFactory: BaseNodeFactory;
+        /* @internal */ readonly flags: NodeFactoryFlags;
         createNodeArray<T extends Node>(elements?: readonly T[], hasTrailingComma?: boolean): NodeArray<T>;
 
         //
@@ -7564,9 +7606,9 @@ namespace ts {
 
         createJSDocAllType(): JSDocAllType;
         createJSDocUnknownType(): JSDocUnknownType;
-        createJSDocNonNullableType(type: TypeNode): JSDocNonNullableType;
+        createJSDocNonNullableType(type: TypeNode, postfix?: boolean): JSDocNonNullableType;
         updateJSDocNonNullableType(node: JSDocNonNullableType, type: TypeNode): JSDocNonNullableType;
-        createJSDocNullableType(type: TypeNode): JSDocNullableType;
+        createJSDocNullableType(type: TypeNode, postfix?: boolean): JSDocNullableType;
         updateJSDocNullableType(node: JSDocNullableType, type: TypeNode): JSDocNullableType;
         createJSDocOptionalType(type: TypeNode): JSDocOptionalType;
         updateJSDocOptionalType(node: JSDocOptionalType, type: TypeNode): JSDocOptionalType;
@@ -7657,8 +7699,8 @@ namespace ts {
         createJsxOpeningFragment(): JsxOpeningFragment;
         createJsxJsxClosingFragment(): JsxClosingFragment;
         updateJsxFragment(node: JsxFragment, openingFragment: JsxOpeningFragment, children: readonly JsxChild[], closingFragment: JsxClosingFragment): JsxFragment;
-        createJsxAttribute(name: Identifier, initializer: StringLiteral | JsxExpression | undefined): JsxAttribute;
-        updateJsxAttribute(node: JsxAttribute, name: Identifier, initializer: StringLiteral | JsxExpression | undefined): JsxAttribute;
+        createJsxAttribute(name: Identifier, initializer: JsxAttributeValue | undefined): JsxAttribute;
+        updateJsxAttribute(node: JsxAttribute, name: Identifier, initializer: JsxAttributeValue | undefined): JsxAttribute;
         createJsxAttributes(properties: readonly JsxAttributeLike[]): JsxAttributes;
         updateJsxAttributes(node: JsxAttributes, properties: readonly JsxAttributeLike[]): JsxAttributes;
         createJsxSpreadAttribute(expression: Expression): JsxSpreadAttribute;
@@ -8453,7 +8495,7 @@ namespace ts {
     export interface ResolvedModuleSpecifierInfo {
         modulePaths: readonly ModulePath[] | undefined;
         moduleSpecifiers: readonly string[] | undefined;
-        isAutoImportable: boolean | undefined;
+        isBlockedByPackageJsonDependencies: boolean | undefined;
     }
 
     /* @internal */
@@ -8465,7 +8507,7 @@ namespace ts {
     export interface ModuleSpecifierCache {
         get(fromFileName: Path, toFileName: Path, preferences: UserPreferences, options: ModuleSpecifierOptions): Readonly<ResolvedModuleSpecifierInfo> | undefined;
         set(fromFileName: Path, toFileName: Path, preferences: UserPreferences, options: ModuleSpecifierOptions, modulePaths: readonly ModulePath[], moduleSpecifiers: readonly string[]): void;
-        setIsAutoImportable(fromFileName: Path, toFileName: Path, preferences: UserPreferences, options: ModuleSpecifierOptions, isAutoImportable: boolean): void;
+        setBlockedByPackageJsonDependencies(fromFileName: Path, toFileName: Path, preferences: UserPreferences, options: ModuleSpecifierOptions, isBlockedByPackageJsonDependencies: boolean): void;
         setModulePaths(fromFileName: Path, toFileName: Path, preferences: UserPreferences, options: ModuleSpecifierOptions, modulePaths: readonly ModulePath[]): void;
         clear(): void;
         count(): number;
@@ -8768,6 +8810,8 @@ namespace ts {
         readonly includeAutomaticOptionalChainCompletions?: boolean;
         readonly includeCompletionsWithInsertText?: boolean;
         readonly includeCompletionsWithClassMemberSnippets?: boolean;
+        readonly includeCompletionsWithObjectLiteralMethodSnippets?: boolean;
+        readonly useLabelDetailsInCompletionEntries?: boolean;
         readonly allowIncompleteCompletions?: boolean;
         readonly importModuleSpecifierPreference?: "shortest" | "project-relative" | "relative" | "non-relative";
         /** Determines whether we import `foo/index.ts` as "foo", "foo/index", or "foo/index.js" */

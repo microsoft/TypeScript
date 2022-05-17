@@ -6,6 +6,7 @@
       "name": "26"
     },
     "completionList": {
+      "flags": 0,
       "isGlobalCompletion": true,
       "isMemberCompletion": false,
       "isNewIdentifierLocation": false,
@@ -1339,7 +1340,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI.",
+                  "text": "A value representing an unencoded URI.",
                   "kind": "text"
                 }
               ]
@@ -1452,7 +1453,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI component.",
+                  "text": "A value representing an unencoded URI component.",
                   "kind": "text"
                 }
               ]
@@ -3772,7 +3773,7 @@
           "name": "escape",
           "kind": "function",
           "kindModifiers": "deprecated,declare",
-          "sortText": "24",
+          "sortText": "z15",
           "displayParts": [
             {
               "text": "function",
@@ -3862,7 +3863,7 @@
           "name": "unescape",
           "kind": "function",
           "kindModifiers": "deprecated,declare",
-          "sortText": "24",
+          "sortText": "z15",
           "displayParts": [
             {
               "text": "function",

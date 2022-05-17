@@ -32,10 +32,10 @@ type T09 = Foo1<`**${string}**${string}**`>;
 >T09 : `*${string}**${string}*`
 
 type T10 = Foo1<`**${'a' | 'b' | 'c'}**`>;
->T10 : T10
+>T10 : "*a*" | "*b*" | "*c*"
 
 type T11 = Foo1<`**${boolean}**${boolean}**`>;
->T11 : T11
+>T11 : "*false**false*" | "*false**true*" | "*true**false*" | "*true**true*"
 
 declare function foo1<V extends string>(arg: `*${V}*`): V;
 >foo1 : <V extends string>(arg: `*${V}*`) => V
@@ -366,10 +366,10 @@ const templated2: Templated = `${value2} abc` as const;
 // Repro from #43620
 
 type Prefixes = "foo" | "bar";
->Prefixes : Prefixes
+>Prefixes : "foo" | "bar"
 
 type AllPrefixData = "foo:baz" | "bar:baz";
->AllPrefixData : AllPrefixData
+>AllPrefixData : "foo:baz" | "bar:baz"
 
 type PrefixData<P extends Prefixes> = `${P}:baz`;
 >PrefixData : `${P}:baz`
@@ -382,7 +382,7 @@ interface ITest<P extends Prefixes, E extends AllPrefixData = PrefixData<P>> {
 // Repro from #45906
 
 type Schema = { a: { b: { c: number } } };
->Schema : Schema
+>Schema : { a: {    b: {        c: number;    };}; }
 >a : { b: {    c: number;}; }
 >b : { c: number; }
 >c : number
@@ -481,7 +481,7 @@ function ff4(x: string, y: `foo-${string}`) {
 // Repro from #46045
 
 type Action =
->Action : Action
+>Action : { type: `${string}_REQUEST`; } | { type: `${string}_SUCCESS`; response: string; }
 
     | { type: `${string}_REQUEST` }
 >type : `${string}_REQUEST`

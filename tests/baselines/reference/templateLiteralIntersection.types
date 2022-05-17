@@ -9,7 +9,7 @@ type A = typeof a
 >a : "a"
 
 type MixA = A & {foo: string}
->MixA : MixA
+>MixA : "a" & { foo: string; }
 >foo : string
 
 type OriginA1 = `${A}`
@@ -23,7 +23,7 @@ type B = `${typeof a}`
 >a : "a"
 
 type MixB = B & { foo: string }
->MixB : MixB
+>MixB : "a" & { foo: string; }
 >foo : string
 
 type OriginB1 = `${B}`
@@ -33,7 +33,7 @@ type OriginB2 = `${MixB}`
 >OriginB2 : "a"
 
 type MixC = { foo: string } & A
->MixC : MixC
+>MixC : { foo: string; } & "a"
 >foo : string
 
 type OriginC = `${MixC}`
@@ -54,7 +54,7 @@ type E = `${A & {}}`;
 >E : "a"
 
 type MixE = E & {}
->MixE : MixE
+>MixE : "a" & {}
 
 type OriginE = `${MixE}`
 >OriginE : "a"

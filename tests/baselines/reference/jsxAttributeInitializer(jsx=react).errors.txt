@@ -1,0 +1,15 @@
+tests/cases/conformance/jsx/a.tsx(7,16): error TS1145: '{' or JSX element expected.
+
+
+==== tests/cases/conformance/jsx/a.tsx (1 errors) ====
+    declare var React: any;
+    
+    <div>
+        <div attr=<div /> />
+        <div attr=<div>foo</div> />
+        <div attr=<><div>foo</div></> />
+        <div attr= />
+                   ~
+!!! error TS1145: '{' or JSX element expected.
+    </div>
+    

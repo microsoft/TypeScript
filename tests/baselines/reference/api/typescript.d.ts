@@ -14,7 +14,7 @@ and limitations under the License.
 ***************************************************************************** */
 
 declare namespace ts {
-    const versionMajorMinor = "4.7";
+    const versionMajorMinor = "4.8";
     /** The version of the TypeScript compiler release */
     const version: string;
     /**
@@ -525,16 +525,17 @@ declare namespace ts {
         YieldContext = 8192,
         DecoratorContext = 16384,
         AwaitContext = 32768,
-        ThisNodeHasError = 65536,
-        JavaScriptFile = 131072,
-        ThisNodeOrAnySubNodesHasError = 262144,
-        HasAggregatedChildData = 524288,
-        JSDoc = 4194304,
-        JsonFile = 33554432,
+        DisallowConditionalTypesContext = 65536,
+        ThisNodeHasError = 131072,
+        JavaScriptFile = 262144,
+        ThisNodeOrAnySubNodesHasError = 524288,
+        HasAggregatedChildData = 1048576,
+        JSDoc = 8388608,
+        JsonFile = 67108864,
         BlockScoped = 3,
         ReachabilityCheckFlags = 768,
         ReachabilityAndEmitFlags = 2816,
-        ContextFlags = 25358336,
+        ContextFlags = 50720768,
         TypeExcludesFlags = 40960,
     }
     export enum ModifierFlags {
@@ -1394,8 +1395,9 @@ declare namespace ts {
         readonly kind: SyntaxKind.JsxAttribute;
         readonly parent: JsxAttributes;
         readonly name: Identifier;
-        readonly initializer?: StringLiteral | JsxExpression;
+        readonly initializer?: JsxAttributeValue;
     }
+    export type JsxAttributeValue = StringLiteral | JsxExpression | JsxElement | JsxSelfClosingElement | JsxFragment;
     export interface JsxSpreadAttribute extends ObjectLiteralElement {
         readonly kind: SyntaxKind.JsxSpreadAttribute;
         readonly parent: JsxAttributes;
@@ -1812,10 +1814,12 @@ declare namespace ts {
     export interface JSDocNonNullableType extends JSDocType {
         readonly kind: SyntaxKind.JSDocNonNullableType;
         readonly type: TypeNode;
+        readonly postfix: boolean;
     }
     export interface JSDocNullableType extends JSDocType {
         readonly kind: SyntaxKind.JSDocNullableType;
         readonly type: TypeNode;
+        readonly postfix: boolean;
     }
     export interface JSDocOptionalType extends JSDocType {
         readonly kind: SyntaxKind.JSDocOptionalType;
@@ -1990,7 +1994,7 @@ declare namespace ts {
         Label = 12,
         Condition = 96
     }
-    export type FlowNode = FlowStart | FlowLabel | FlowAssignment | FlowCall | FlowCondition | FlowSwitchClause | FlowArrayMutation | FlowCall | FlowReduceLabel;
+    export type FlowNode = FlowStart | FlowLabel | FlowAssignment | FlowCondition | FlowSwitchClause | FlowArrayMutation | FlowCall | FlowReduceLabel;
     export interface FlowNodeBase {
         flags: FlowFlags;
         id?: number;
@@ -2067,7 +2071,7 @@ declare namespace ts {
         hasNoDefaultLib: boolean;
         languageVersion: ScriptTarget;
         /**
-         * When `module` is `Node12` or `NodeNext`, this field controls whether the
+         * When `module` is `Node16` or `NodeNext`, this field controls whether the
          * source file in question is an ESNext-output-format file, or a CommonJS-output-format
          * module. This is derived by the module resolver as it looks up the file, since
          * it is derived from either the file extension of the module, or the containing
@@ -2176,7 +2180,9 @@ declare namespace ts {
     export type ResolvedConfigFileName = string & {
         _isResolvedConfigFileName: never;
     };
-    export type WriteFileCallback = (fileName: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void, sourceFiles?: readonly SourceFile[]) => void;
+    export interface WriteFileCallbackData {
+    }
+    export type WriteFileCallback = (fileName: string, text: string, writeByteOrderMark: boolean, onError?: (message: string) => void, sourceFiles?: readonly SourceFile[], data?: WriteFileCallbackData) => void;
     export class OperationCanceledException {
     }
     export interface CancellationToken {
@@ -2398,7 +2404,6 @@ declare namespace ts {
         UseAliasDefinedOutsideCurrentScope = 16384,
         UseSingleQuotesForStringLiteralType = 268435456,
         NoTypeReduction = 536870912,
-        NoUndefinedOptionalParameterType = 1073741824,
         AllowThisInObjectLiteral = 32768,
         AllowQualifiedNameInPlaceOfIdentifier = 65536,
         /** @deprecated AllowQualifedNameInPlaceOfIdentifier. Use AllowQualifiedNameInPlaceOfIdentifier instead. */
@@ -2896,7 +2901,7 @@ declare namespace ts {
     export enum ModuleResolutionKind {
         Classic = 1,
         NodeJs = 2,
-        Node12 = 3,
+        Node16 = 3,
         NodeNext = 99
     }
     export enum ModuleDetectionKind {
@@ -2905,7 +2910,7 @@ declare namespace ts {
          */
         Legacy = 1,
         /**
-         * Legacy, but also files with jsx under react-jsx or react-jsxdev and esm mode files under moduleResolution: node12+
+         * Legacy, but also files with jsx under react-jsx or react-jsxdev and esm mode files under moduleResolution: node16+
          */
         Auto = 2,
         /**
@@ -2984,6 +2989,7 @@ declare namespace ts {
         maxNodeModuleJsDepth?: number;
         module?: ModuleKind;
         moduleResolution?: ModuleResolutionKind;
+        moduleSuffixes?: string[];
         moduleDetection?: ModuleDetectionKind;
         newLine?: NewLineKind;
         noEmit?: boolean;
@@ -3076,7 +3082,7 @@ declare namespace ts {
         ES2020 = 6,
         ES2022 = 7,
         ESNext = 99,
-        Node12 = 100,
+        Node16 = 100,
         NodeNext = 199
     }
     export enum JsxEmit {
@@ -3170,7 +3176,7 @@ declare namespace ts {
         realpath?(path: string): string;
         getCurrentDirectory?(): string;
         getDirectories?(path: string): string[];
-        useCaseSensitiveFileNames?: boolean | (() => boolean);
+        useCaseSensitiveFileNames?: boolean | (() => boolean) | undefined;
     }
     /**
      * Used by services to specify the minimum host area required to set up source files under any compilation settings
@@ -3662,9 +3668,9 @@ declare namespace ts {
         updateExternalModuleReference(node: ExternalModuleReference, expression: Expression): ExternalModuleReference;
         createJSDocAllType(): JSDocAllType;
         createJSDocUnknownType(): JSDocUnknownType;
-        createJSDocNonNullableType(type: TypeNode): JSDocNonNullableType;
+        createJSDocNonNullableType(type: TypeNode, postfix?: boolean): JSDocNonNullableType;
         updateJSDocNonNullableType(node: JSDocNonNullableType, type: TypeNode): JSDocNonNullableType;
-        createJSDocNullableType(type: TypeNode): JSDocNullableType;
+        createJSDocNullableType(type: TypeNode, postfix?: boolean): JSDocNullableType;
         updateJSDocNullableType(node: JSDocNullableType, type: TypeNode): JSDocNullableType;
         createJSDocOptionalType(type: TypeNode): JSDocOptionalType;
         updateJSDocOptionalType(node: JSDocOptionalType, type: TypeNode): JSDocOptionalType;
@@ -3750,8 +3756,8 @@ declare namespace ts {
         createJsxOpeningFragment(): JsxOpeningFragment;
         createJsxJsxClosingFragment(): JsxClosingFragment;
         updateJsxFragment(node: JsxFragment, openingFragment: JsxOpeningFragment, children: readonly JsxChild[], closingFragment: JsxClosingFragment): JsxFragment;
-        createJsxAttribute(name: Identifier, initializer: StringLiteral | JsxExpression | undefined): JsxAttribute;
-        updateJsxAttribute(node: JsxAttribute, name: Identifier, initializer: StringLiteral | JsxExpression | undefined): JsxAttribute;
+        createJsxAttribute(name: Identifier, initializer: JsxAttributeValue | undefined): JsxAttribute;
+        updateJsxAttribute(node: JsxAttribute, name: Identifier, initializer: JsxAttributeValue | undefined): JsxAttribute;
         createJsxAttributes(properties: readonly JsxAttributeLike[]): JsxAttributes;
         updateJsxAttributes(node: JsxAttributes, properties: readonly JsxAttributeLike[]): JsxAttributes;
         createJsxSpreadAttribute(expression: Expression): JsxSpreadAttribute;
@@ -4108,6 +4114,8 @@ declare namespace ts {
         readonly includeAutomaticOptionalChainCompletions?: boolean;
         readonly includeCompletionsWithInsertText?: boolean;
         readonly includeCompletionsWithClassMemberSnippets?: boolean;
+        readonly includeCompletionsWithObjectLiteralMethodSnippets?: boolean;
+        readonly useLabelDetailsInCompletionEntries?: boolean;
         readonly allowIncompleteCompletions?: boolean;
         readonly importModuleSpecifierPreference?: "shortest" | "project-relative" | "relative" | "non-relative";
         /** Determines whether we import `foo/index.ts` as "foo", "foo/index", or "foo/index.js" */
@@ -4512,6 +4520,8 @@ declare namespace ts {
     function isObjectLiteralElement(node: Node): node is ObjectLiteralElement;
     function isStringLiteralLike(node: Node): node is StringLiteralLike;
     function isJSDocLinkLike(node: Node): node is JSDocLink | JSDocLinkCode | JSDocLinkPlain;
+    function hasRestParameter(s: SignatureDeclaration | JSDocSignature): boolean;
+    function isRestParameter(node: ParameterDeclaration | JSDocParameterTag): boolean;
 }
 declare namespace ts {
     const factory: NodeFactory;
@@ -4821,7 +4831,7 @@ declare namespace ts {
         /**
          * Controls the format the file is detected as - this can be derived from only the path
          * and files on disk, but needs to be done with a module resolution cache in scope to be performant.
-         * This is usually `undefined` for compilations that do not have `moduleResolution` values of `node12` or `nodenext`.
+         * This is usually `undefined` for compilations that do not have `moduleResolution` values of `node16` or `nodenext`.
          */
         impliedNodeFormat?: ModuleKind.ESNext | ModuleKind.CommonJS;
         /**
@@ -6213,7 +6223,6 @@ declare namespace ts {
     }
     interface ReferenceEntry extends DocumentSpan {
         isWriteAccess: boolean;
-        isDefinition: boolean;
         isInString?: true;
     }
     interface ImplementationLocation extends DocumentSpan {
@@ -6327,7 +6336,10 @@ declare namespace ts {
     }
     interface ReferencedSymbol {
         definition: ReferencedSymbolDefinitionInfo;
-        references: ReferenceEntry[];
+        references: ReferencedSymbolEntry[];
+    }
+    interface ReferencedSymbolEntry extends ReferenceEntry {
+        isDefinition?: boolean;
     }
     enum SymbolDisplayPartKind {
         aliasName = 0,
@@ -6436,7 +6448,18 @@ declare namespace ts {
         argumentIndex: number;
         argumentCount: number;
     }
+    enum CompletionInfoFlags {
+        None = 0,
+        MayIncludeAutoImports = 1,
+        IsImportStatementCompletion = 2,
+        IsContinuation = 4,
+        ResolvedModuleSpecifiers = 8,
+        ResolvedModuleSpecifiersBeyondLimit = 16,
+        MayIncludeMethodSnippets = 32
+    }
     interface CompletionInfo {
+        /** For performance telemetry. */
+        flags?: CompletionInfoFlags;
         /** Not true for all global completions. This will be true if the enclosing scope matches a few syntax kinds. See `isSnippetScope`. */
         isGlobalCompletion: boolean;
         isMemberCompletion: boolean;
@@ -6494,6 +6517,7 @@ declare namespace ts {
         hasAction?: true;
         source?: string;
         sourceDisplay?: SymbolDisplayPart[];
+        labelDetails?: CompletionEntryLabelDetails;
         isRecommended?: true;
         isFromUncheckedFile?: true;
         isPackageJsonImport?: true;
@@ -6507,6 +6531,10 @@ declare namespace ts {
          * is an auto-import.
          */
         data?: CompletionEntryData;
+    }
+    interface CompletionEntryLabelDetails {
+        detail?: string;
+        description?: string;
     }
     interface CompletionEntryDetails {
         name: string;
@@ -6807,7 +6835,7 @@ declare namespace ts {
          * shape of a the resulting SourceFile. This allows the DocumentRegistry to store
          * multiple copies of the same file for different compilation settings. A minimal
          * resolution cache is needed to fully define a source file's shape when
-         * the compilation settings include `module: node12`+, so providing a cache host
+         * the compilation settings include `module: node16`+, so providing a cache host
          * object should be preferred. A common host is a language service `ConfiguredProject`.
          * @param scriptSnapshot Text of the file. Only used if the file was not found
          * in the registry and a new one was created.
@@ -6826,7 +6854,7 @@ declare namespace ts {
          * shape of a the resulting SourceFile. This allows the DocumentRegistry to store
          * multiple copies of the same file for different compilation settings. A minimal
          * resolution cache is needed to fully define a source file's shape when
-         * the compilation settings include `module: node12`+, so providing a cache host
+         * the compilation settings include `module: node16`+, so providing a cache host
          * object should be preferred. A common host is a language service `ConfiguredProject`.
          * @param scriptSnapshot Text of the file.
          * @param version Current version of the file.
@@ -7464,9 +7492,9 @@ declare namespace ts {
     /** @deprecated Use `factory.updateJsxFragment` or the factory supplied by your transformation context instead. */
     const updateJsxFragment: (node: JsxFragment, openingFragment: JsxOpeningFragment, children: readonly JsxChild[], closingFragment: JsxClosingFragment) => JsxFragment;
     /** @deprecated Use `factory.createJsxAttribute` or the factory supplied by your transformation context instead. */
-    const createJsxAttribute: (name: Identifier, initializer: StringLiteral | JsxExpression | undefined) => JsxAttribute;
+    const createJsxAttribute: (name: Identifier, initializer: JsxAttributeValue | undefined) => JsxAttribute;
     /** @deprecated Use `factory.updateJsxAttribute` or the factory supplied by your transformation context instead. */
-    const updateJsxAttribute: (node: JsxAttribute, name: Identifier, initializer: StringLiteral | JsxExpression | undefined) => JsxAttribute;
+    const updateJsxAttribute: (node: JsxAttribute, name: Identifier, initializer: JsxAttributeValue | undefined) => JsxAttribute;
     /** @deprecated Use `factory.createJsxAttributes` or the factory supplied by your transformation context instead. */
     const createJsxAttributes: (properties: readonly JsxAttributeLike[]) => JsxAttributes;
     /** @deprecated Use `factory.updateJsxAttributes` or the factory supplied by your transformation context instead. */

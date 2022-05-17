@@ -2,9 +2,9 @@
 b ? (c) : d => e
 >b ? (c) : d => e : any
 >b : any
->(c) : any
+>(c) : d => e : (c: any) => d
 >c : any
->d => e : (d: any) => any
->d : any
 >e : any
+
+> : any
 

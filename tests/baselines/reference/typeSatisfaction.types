@@ -5,14 +5,14 @@ interface I1 {
 }
 
 type T1 = {
->T1 : T1
+>T1 : { a: "a" | "b"; }
 
     a: "a" | "b";
 >a : "a" | "b"
 }
 
 type T2 = (x: string) => void;
->T2 : T2
+>T2 : (x: string) => void
 >x : string
 
 const t1 = { a: 1 } satisfies I1; // Ok

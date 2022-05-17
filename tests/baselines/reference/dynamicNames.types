@@ -45,7 +45,7 @@ export declare class T2 extends T1 {
 >T1 : T1
 }
 export declare type T3 = {
->T3 : T3
+>T3 : { a: number; 1: string; [s0]: boolean; }
 
     [c0]: number;
 >[c0] : number
@@ -135,7 +135,7 @@ namespace N {
 >T5 : T5
     }
     export declare type T7 = {
->T7 : T7
+>T7 : { a: number; 1: string; [s0]: boolean; }
 
         [N.c2]: number;
 >[N.c2] : number
@@ -204,7 +204,7 @@ declare class T10 extends T9 {
 >T9 : T9
 }
 declare type T11 = {
->T11 : T11
+>T11 : { a: number; 1: string; [s0]: boolean; }
 
     [c4]: number;
 >[c4] : number
@@ -249,7 +249,7 @@ declare class T14 extends T13 {
 >T13 : T13
 }
 declare type T15 = {
->T15 : T15
+>T15 : { a: number; 1: string; [s0]: boolean; }
 
     a: number;
 >a : number

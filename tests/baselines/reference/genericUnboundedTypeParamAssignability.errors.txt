@@ -1,0 +1,28 @@
+tests/cases/compiler/genericUnboundedTypeParamAssignability.ts(2,5): error TS2339: Property 'toString' does not exist on type 'T'.
+tests/cases/compiler/genericUnboundedTypeParamAssignability.ts(17,5): error TS2339: Property 'toString' does not exist on type 'T'.
+
+
+==== tests/cases/compiler/genericUnboundedTypeParamAssignability.ts (2 errors) ====
+    function f1<T>(o: T) {
+      o.toString(); // error
+        ~~~~~~~~
+!!! error TS2339: Property 'toString' does not exist on type 'T'.
+    }
+    
+    function f2<T extends {}>(o: T) {
+      o.toString(); // no error
+    }
+    
+    function f3<T extends Record<string, any>>(o: T) {
+      o.toString(); // no error
+    }
+    
+    function user<T>(t: T) {
+      f1(t);
+      f2(t); // error in strict, unbounded T doesn't satisfy the constraint
+      f3(t); // error in strict, unbounded T doesn't satisfy the constraint
+      t.toString();  // error, for the same reason as f1()
+        ~~~~~~~~
+!!! error TS2339: Property 'toString' does not exist on type 'T'.
+    }
+    

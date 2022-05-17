@@ -34,6 +34,8 @@ namespace ts {
         const getJSDocPrimaryTypeCreateFunction = memoizeOne(<T extends JSDocType>(kind: T["kind"]) => () => createJSDocPrimaryTypeWorker(kind));
         const getJSDocUnaryTypeCreateFunction = memoizeOne(<T extends JSDocType & { readonly type: TypeNode | undefined; }>(kind: T["kind"]) => (type: T["type"]) => createJSDocUnaryTypeWorker<T>(kind, type));
         const getJSDocUnaryTypeUpdateFunction = memoizeOne(<T extends JSDocType & { readonly type: TypeNode | undefined; }>(kind: T["kind"]) => (node: T, type: T["type"]) => updateJSDocUnaryTypeWorker<T>(kind, node, type));
+        const getJSDocPrePostfixUnaryTypeCreateFunction = memoizeOne(<T extends JSDocType & { readonly type: TypeNode | undefined; readonly postfix: boolean; }>(kind: T["kind"]) => (type: T["type"], postfix?: boolean) => createJSDocPrePostfixUnaryTypeWorker<T>(kind, type, postfix));
+        const getJSDocPrePostfixUnaryTypeUpdateFunction = memoizeOne(<T extends JSDocType & { readonly type: TypeNode | undefined; readonly postfix: boolean; }>(kind: T["kind"]) => (node: T, type: T["type"]) => updateJSDocPrePostfixUnaryTypeWorker<T>(kind, node, type));
         const getJSDocSimpleTagCreateFunction = memoizeOne(<T extends JSDocTag>(kind: T["kind"]) => (tagName: Identifier | undefined, comment?: NodeArray<JSDocComment>) => createJSDocSimpleTagWorker(kind, tagName, comment));
         const getJSDocSimpleTagUpdateFunction = memoizeOne(<T extends JSDocTag>(kind: T["kind"]) => (node: T, tagName: Identifier | undefined, comment?: NodeArray<JSDocComment>) => updateJSDocSimpleTagWorker(kind, node, tagName, comment));
         const getJSDocTypeLikeTagCreateFunction = memoizeOne(<T extends JSDocTag & { typeExpression?: JSDocTypeExpression }>(kind: T["kind"]) => (tagName: Identifier | undefined, typeExpression?: JSDocTypeExpression, comment?: NodeArray<JSDocComment>) => createJSDocTypeLikeTagWorker(kind, tagName, typeExpression, comment));
@@ -42,6 +44,8 @@ namespace ts {
         const factory: NodeFactory = {
             get parenthesizer() { return parenthesizerRules(); },
             get converters() { return converters(); },
+            baseFactory,
+            flags,
             createNodeArray,
             createNumericLiteral,
             createBigIntLiteral,
@@ -319,10 +323,10 @@ namespace ts {
             // lazily load factory members for JSDoc types with similar structure
             get createJSDocAllType() { return getJSDocPrimaryTypeCreateFunction<JSDocAllType>(SyntaxKind.JSDocAllType); },
             get createJSDocUnknownType() { return getJSDocPrimaryTypeCreateFunction<JSDocUnknownType>(SyntaxKind.JSDocUnknownType); },
-            get createJSDocNonNullableType() { return getJSDocUnaryTypeCreateFunction<JSDocNonNullableType>(SyntaxKind.JSDocNonNullableType); },
-            get updateJSDocNonNullableType() { return getJSDocUnaryTypeUpdateFunction<JSDocNonNullableType>(SyntaxKind.JSDocNonNullableType); },
-            get createJSDocNullableType() { return getJSDocUnaryTypeCreateFunction<JSDocNullableType>(SyntaxKind.JSDocNullableType); },
-            get updateJSDocNullableType() { return getJSDocUnaryTypeUpdateFunction<JSDocNullableType>(SyntaxKind.JSDocNullableType); },
+            get createJSDocNonNullableType() { return getJSDocPrePostfixUnaryTypeCreateFunction<JSDocNonNullableType>(SyntaxKind.JSDocNonNullableType); },
+            get updateJSDocNonNullableType() { return getJSDocPrePostfixUnaryTypeUpdateFunction<JSDocNonNullableType>(SyntaxKind.JSDocNonNullableType); },
+            get createJSDocNullableType() { return getJSDocPrePostfixUnaryTypeCreateFunction<JSDocNullableType>(SyntaxKind.JSDocNullableType); },
+            get updateJSDocNullableType() { return getJSDocPrePostfixUnaryTypeUpdateFunction<JSDocNullableType>(SyntaxKind.JSDocNullableType); },
             get createJSDocOptionalType() { return getJSDocUnaryTypeCreateFunction<JSDocOptionalType>(SyntaxKind.JSDocOptionalType); },
             get updateJSDocOptionalType() { return getJSDocUnaryTypeUpdateFunction<JSDocOptionalType>(SyntaxKind.JSDocOptionalType); },
             get createJSDocVariadicType() { return getJSDocUnaryTypeCreateFunction<JSDocVariadicType>(SyntaxKind.JSDocVariadicType); },
@@ -1914,7 +1918,7 @@ namespace ts {
         // @api
         function createArrayTypeNode(elementType: TypeNode) {
             const node = createBaseNode<ArrayTypeNode>(SyntaxKind.ArrayType);
-            node.elementType = parenthesizerRules().parenthesizeElementTypeOfArrayType(elementType);
+            node.elementType = parenthesizerRules().parenthesizeNonArrayTypeOfPostfixType(elementType);
             node.transformFlags = TransformFlags.ContainsTypeScript;
             return node;
         }
@@ -1929,7 +1933,7 @@ namespace ts {
         // @api
         function createTupleTypeNode(elements: readonly (TypeNode | NamedTupleMember)[]) {
             const node = createBaseNode<TupleTypeNode>(SyntaxKind.TupleType);
-            node.elements = createNodeArray(elements);
+            node.elements = createNodeArray(parenthesizerRules().parenthesizeElementTypesOfTupleType(elements));
             node.transformFlags = TransformFlags.ContainsTypeScript;
             return node;
         }
@@ -1965,7 +1969,7 @@ namespace ts {
         // @api
         function createOptionalTypeNode(type: TypeNode) {
             const node = createBaseNode<OptionalTypeNode>(SyntaxKind.OptionalType);
-            node.type = parenthesizerRules().parenthesizeElementTypeOfArrayType(type);
+            node.type = parenthesizerRules().parenthesizeTypeOfOptionalType(type);
             node.transformFlags = TransformFlags.ContainsTypeScript;
             return node;
         }
@@ -1992,44 +1996,44 @@ namespace ts {
                 : node;
         }
 
-        function createUnionOrIntersectionTypeNode(kind: SyntaxKind.UnionType | SyntaxKind.IntersectionType, types: readonly TypeNode[]) {
+        function createUnionOrIntersectionTypeNode(kind: SyntaxKind.UnionType | SyntaxKind.IntersectionType, types: readonly TypeNode[], parenthesize: (nodes: readonly TypeNode[]) => readonly TypeNode[]) {
             const node = createBaseNode<UnionTypeNode | IntersectionTypeNode>(kind);
-            node.types = parenthesizerRules().parenthesizeConstituentTypesOfUnionOrIntersectionType(types);
+            node.types = factory.createNodeArray(parenthesize(types));
             node.transformFlags = TransformFlags.ContainsTypeScript;
             return node;
         }
 
-        function updateUnionOrIntersectionTypeNode<T extends UnionOrIntersectionTypeNode>(node: T, types: NodeArray<TypeNode>): T {
+        function updateUnionOrIntersectionTypeNode<T extends UnionOrIntersectionTypeNode>(node: T, types: NodeArray<TypeNode>, parenthesize: (nodes: readonly TypeNode[]) => readonly TypeNode[]): T {
             return node.types !== types
-                ? update(createUnionOrIntersectionTypeNode(node.kind, types) as T, node)
+                ? update(createUnionOrIntersectionTypeNode(node.kind, types, parenthesize) as T, node)
                 : node;
         }
 
         // @api
         function createUnionTypeNode(types: readonly TypeNode[]): UnionTypeNode {
-            return createUnionOrIntersectionTypeNode(SyntaxKind.UnionType, types) as UnionTypeNode;
+            return createUnionOrIntersectionTypeNode(SyntaxKind.UnionType, types, parenthesizerRules().parenthesizeConstituentTypesOfUnionType) as UnionTypeNode;
         }
 
         // @api
         function updateUnionTypeNode(node: UnionTypeNode, types: NodeArray<TypeNode>) {
-            return updateUnionOrIntersectionTypeNode(node, types);
+            return updateUnionOrIntersectionTypeNode(node, types, parenthesizerRules().parenthesizeConstituentTypesOfUnionType);
         }
 
         // @api
         function createIntersectionTypeNode(types: readonly TypeNode[]): IntersectionTypeNode {
-            return createUnionOrIntersectionTypeNode(SyntaxKind.IntersectionType, types) as IntersectionTypeNode;
+            return createUnionOrIntersectionTypeNode(SyntaxKind.IntersectionType, types, parenthesizerRules().parenthesizeConstituentTypesOfIntersectionType) as IntersectionTypeNode;
         }
 
         // @api
         function updateIntersectionTypeNode(node: IntersectionTypeNode, types: NodeArray<TypeNode>) {
-            return updateUnionOrIntersectionTypeNode(node, types);
+            return updateUnionOrIntersectionTypeNode(node, types, parenthesizerRules().parenthesizeConstituentTypesOfIntersectionType);
         }
 
         // @api
         function createConditionalTypeNode(checkType: TypeNode, extendsType: TypeNode, trueType: TypeNode, falseType: TypeNode) {
             const node = createBaseNode<ConditionalTypeNode>(SyntaxKind.ConditionalType);
-            node.checkType = parenthesizerRules().parenthesizeMemberOfConditionalType(checkType);
-            node.extendsType = parenthesizerRules().parenthesizeMemberOfConditionalType(extendsType);
+            node.checkType = parenthesizerRules().parenthesizeCheckTypeOfConditionalType(checkType);
+            node.extendsType = parenthesizerRules().parenthesizeExtendsTypeOfConditionalType(extendsType);
             node.trueType = trueType;
             node.falseType = falseType;
             node.transformFlags = TransformFlags.ContainsTypeScript;
@@ -2156,7 +2160,9 @@ namespace ts {
         function createTypeOperatorNode(operator: SyntaxKind.KeyOfKeyword | SyntaxKind.UniqueKeyword | SyntaxKind.ReadonlyKeyword, type: TypeNode): TypeOperatorNode {
             const node = createBaseNode<TypeOperatorNode>(SyntaxKind.TypeOperator);
             node.operator = operator;
-            node.type = parenthesizerRules().parenthesizeMemberOfElementType(type);
+            node.type = operator === SyntaxKind.ReadonlyKeyword ?
+                parenthesizerRules().parenthesizeOperandOfReadonlyTypeOperator(type) :
+                parenthesizerRules().parenthesizeOperandOfTypeOperator(type);
             node.transformFlags = TransformFlags.ContainsTypeScript;
             return node;
         }
@@ -2171,7 +2177,7 @@ namespace ts {
         // @api
         function createIndexedAccessTypeNode(objectType: TypeNode, indexType: TypeNode) {
             const node = createBaseNode<IndexedAccessTypeNode>(SyntaxKind.IndexedAccessType);
-            node.objectType = parenthesizerRules().parenthesizeMemberOfElementType(objectType);
+            node.objectType = parenthesizerRules().parenthesizeNonArrayTypeOfPostfixType(objectType);
             node.indexType = indexType;
             node.transformFlags = TransformFlags.ContainsTypeScript;
             return node;
@@ -4382,12 +4388,21 @@ namespace ts {
         }
 
         // @api
-        // createJSDocNonNullableType
         // createJSDocNullableType
+        // createJSDocNonNullableType
+        function createJSDocPrePostfixUnaryTypeWorker<T extends JSDocType & { readonly type: TypeNode | undefined; readonly postfix: boolean }>(kind: T["kind"], type: T["type"], postfix = false): T {
+            const node = createJSDocUnaryTypeWorker(
+                kind,
+                postfix ? type && parenthesizerRules().parenthesizeNonArrayTypeOfPostfixType(type) : type
+            ) as Mutable<T>;
+            node.postfix = postfix;
+            return node;
+        }
+
+        // @api
         // createJSDocOptionalType
         // createJSDocVariadicType
         // createJSDocNamepathType
-
         function createJSDocUnaryTypeWorker<T extends JSDocType & { readonly type: TypeNode | undefined; }>(kind: T["kind"], type: T["type"]): T {
             const node = createBaseNode<T>(kind);
             node.type = type;
@@ -4397,6 +4412,13 @@ namespace ts {
         // @api
         // updateJSDocNonNullableType
         // updateJSDocNullableType
+        function updateJSDocPrePostfixUnaryTypeWorker<T extends JSDocType & { readonly type: TypeNode | undefined; readonly postfix: boolean; }>(kind: T["kind"], node: T, type: T["type"]): T {
+            return node.type !== type
+            ? update(createJSDocPrePostfixUnaryTypeWorker(kind, type, node.postfix), node)
+            : node;
+        }
+
+        // @api
         // updateJSDocOptionalType
         // updateJSDocVariadicType
         // updateJSDocNamepathType
@@ -4964,7 +4986,7 @@ namespace ts {
         }
 
         // @api
-        function createJsxAttribute(name: Identifier, initializer: StringLiteral | JsxExpression | undefined) {
+        function createJsxAttribute(name: Identifier, initializer: JsxAttributeValue | undefined) {
             const node = createBaseNode<JsxAttribute>(SyntaxKind.JsxAttribute);
             node.name = name;
             node.initializer = initializer;
@@ -4976,7 +4998,7 @@ namespace ts {
         }
 
         // @api
-        function updateJsxAttribute(node: JsxAttribute, name: Identifier, initializer: StringLiteral | JsxExpression | undefined) {
+        function updateJsxAttribute(node: JsxAttribute, name: Identifier, initializer: JsxAttributeValue | undefined) {
             return node.name !== name
                 || node.initializer !== initializer
                 ? update(createJsxAttribute(name, initializer), node)
@@ -5275,7 +5297,7 @@ namespace ts {
             hasNoDefaultLib: boolean,
             libReferences: readonly FileReference[]
         ) {
-            const node = baseFactory.createBaseSourceFileNode(SyntaxKind.SourceFile) as Mutable<SourceFile>;
+            const node = (source.redirectInfo ? Object.create(source.redirectInfo.redirectTarget) : baseFactory.createBaseSourceFileNode(SyntaxKind.SourceFile)) as Mutable<SourceFile>;
             for (const p in source) {
                 if (p === "emitNode" || hasProperty(node, p) || !hasProperty(source, p)) continue;
                 (node as any)[p] = (source as any)[p];

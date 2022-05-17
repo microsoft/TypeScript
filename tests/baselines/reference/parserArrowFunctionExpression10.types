@@ -1,14 +1,12 @@
 === tests/cases/conformance/parser/ecmascript5/ArrowFunctionExpressions/parserArrowFunctionExpression10.ts ===
 a ? (b) : c => (d) : e => f
->a ? (b) : c => (d) : any
+>a ? (b) : c => (d) : e => f : any
 >a : any
->(b) : any
+>(b) : c => (d) : e => f : (b: any) => c
 >b : any
->c => (d) : (c: any) => any
->c : any
->(d) : any
+>(d) : e => f : (d: any) => e
 >d : any
->e => f : (e: any) => any
->e : any
 >f : any
+
+> : any
 

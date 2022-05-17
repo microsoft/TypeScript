@@ -6,6 +6,7 @@
       "name": "4"
     },
     "completionList": {
+      "flags": 0,
       "isGlobalCompletion": false,
       "isMemberCompletion": true,
       "isNewIdentifierLocation": false,
@@ -754,6 +755,7 @@
       "name": "5"
     },
     "completionList": {
+      "flags": 0,
       "isGlobalCompletion": false,
       "isMemberCompletion": false,
       "isNewIdentifierLocation": false,
@@ -2367,7 +2369,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI.",
+                  "text": "A value representing an unencoded URI.",
                   "kind": "text"
                 }
               ]
@@ -2480,7 +2482,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI component.",
+                  "text": "A value representing an unencoded URI component.",
                   "kind": "text"
                 }
               ]
@@ -4644,7 +4646,7 @@
           "name": "escape",
           "kind": "function",
           "kindModifiers": "deprecated,declare",
-          "sortText": "24",
+          "sortText": "z15",
           "displayParts": [
             {
               "text": "function",
@@ -4734,7 +4736,7 @@
           "name": "unescape",
           "kind": "function",
           "kindModifiers": "deprecated,declare",
-          "sortText": "24",
+          "sortText": "z15",
           "displayParts": [
             {
               "text": "function",
@@ -4830,6 +4832,7 @@
       "name": "7"
     },
     "completionList": {
+      "flags": 0,
       "isGlobalCompletion": false,
       "isMemberCompletion": true,
       "isNewIdentifierLocation": false,
@@ -5578,6 +5581,7 @@
       "name": "9"
     },
     "completionList": {
+      "flags": 0,
       "isGlobalCompletion": false,
       "isMemberCompletion": true,
       "isNewIdentifierLocation": false,
@@ -6326,6 +6330,7 @@
       "name": "11"
     },
     "completionList": {
+      "flags": 0,
       "isGlobalCompletion": false,
       "isMemberCompletion": true,
       "isNewIdentifierLocation": false,
@@ -7074,6 +7079,7 @@
       "name": "12"
     },
     "completionList": {
+      "flags": 0,
       "isGlobalCompletion": false,
       "isMemberCompletion": true,
       "isNewIdentifierLocation": false,
@@ -7822,6 +7828,7 @@
       "name": "13"
     },
     "completionList": {
+      "flags": 0,
       "isGlobalCompletion": false,
       "isMemberCompletion": false,
       "isNewIdentifierLocation": true,
@@ -9435,7 +9442,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI.",
+                  "text": "A value representing an unencoded URI.",
                   "kind": "text"
                 }
               ]
@@ -9548,7 +9555,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI component.",
+                  "text": "A value representing an unencoded URI component.",
                   "kind": "text"
                 }
               ]
@@ -11712,7 +11719,7 @@
           "name": "escape",
           "kind": "function",
           "kindModifiers": "deprecated,declare",
-          "sortText": "24",
+          "sortText": "z15",
           "displayParts": [
             {
               "text": "function",
@@ -11802,7 +11809,7 @@
           "name": "unescape",
           "kind": "function",
           "kindModifiers": "deprecated,declare",
-          "sortText": "24",
+          "sortText": "z15",
           "displayParts": [
             {
               "text": "function",
@@ -11898,6 +11905,7 @@
       "name": "16"
     },
     "completionList": {
+      "flags": 0,
       "isGlobalCompletion": false,
       "isMemberCompletion": true,
       "isNewIdentifierLocation": false,
@@ -12646,6 +12654,7 @@
       "name": "17"
     },
     "completionList": {
+      "flags": 0,
       "isGlobalCompletion": false,
       "isMemberCompletion": false,
       "isNewIdentifierLocation": false,
@@ -14259,7 +14268,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI.",
+                  "text": "A value representing an unencoded URI.",
                   "kind": "text"
                 }
               ]
@@ -14372,7 +14381,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI component.",
+                  "text": "A value representing an unencoded URI component.",
                   "kind": "text"
                 }
               ]
@@ -16536,7 +16545,7 @@
           "name": "escape",
           "kind": "function",
           "kindModifiers": "deprecated,declare",
-          "sortText": "24",
+          "sortText": "z15",
           "displayParts": [
             {
               "text": "function",
@@ -16626,7 +16635,7 @@
           "name": "unescape",
           "kind": "function",
           "kindModifiers": "deprecated,declare",
-          "sortText": "24",
+          "sortText": "z15",
           "displayParts": [
             {
               "text": "function",
@@ -16722,6 +16731,7 @@
       "name": "19"
     },
     "completionList": {
+      "flags": 0,
       "isGlobalCompletion": false,
       "isMemberCompletion": true,
       "isNewIdentifierLocation": false,
@@ -17470,6 +17480,7 @@
       "name": "21"
     },
     "completionList": {
+      "flags": 0,
       "isGlobalCompletion": false,
       "isMemberCompletion": true,
       "isNewIdentifierLocation": false,
@@ -18218,6 +18229,7 @@
       "name": "23"
     },
     "completionList": {
+      "flags": 0,
       "isGlobalCompletion": false,
       "isMemberCompletion": true,
       "isNewIdentifierLocation": false,
@@ -18966,6 +18978,7 @@
       "name": "24"
     },
     "completionList": {
+      "flags": 0,
       "isGlobalCompletion": false,
       "isMemberCompletion": true,
       "isNewIdentifierLocation": false,
@@ -19714,6 +19727,7 @@
       "name": "25"
     },
     "completionList": {
+      "flags": 0,
       "isGlobalCompletion": false,
       "isMemberCompletion": false,
       "isNewIdentifierLocation": true,
@@ -21327,7 +21341,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI.",
+                  "text": "A value representing an unencoded URI.",
                   "kind": "text"
                 }
               ]
@@ -21440,7 +21454,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI component.",
+                  "text": "A value representing an unencoded URI component.",
                   "kind": "text"
                 }
               ]
@@ -23604,7 +23618,7 @@
           "name": "escape",
           "kind": "function",
           "kindModifiers": "deprecated,declare",
-          "sortText": "24",
+          "sortText": "z15",
           "displayParts": [
             {
               "text": "function",
@@ -23694,7 +23708,7 @@
           "name": "unescape",
           "kind": "function",
           "kindModifiers": "deprecated,declare",
-          "sortText": "24",
+          "sortText": "z15",
           "displayParts": [
             {
               "text": "function",
@@ -23790,6 +23804,7 @@
       "name": "29"
     },
     "completionList": {
+      "flags": 0,
       "isGlobalCompletion": true,
       "isMemberCompletion": false,
       "isNewIdentifierLocation": false,
@@ -25403,7 +25418,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI.",
+                  "text": "A value representing an unencoded URI.",
                   "kind": "text"
                 }
               ]
@@ -25516,7 +25531,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI component.",
+                  "text": "A value representing an unencoded URI component.",
                   "kind": "text"
                 }
               ]
@@ -27680,7 +27695,7 @@
           "name": "escape",
           "kind": "function",
           "kindModifiers": "deprecated,declare",
-          "sortText": "24",
+          "sortText": "z15",
           "displayParts": [
             {
               "text": "function",
@@ -27770,7 +27785,7 @@
           "name": "unescape",
           "kind": "function",
           "kindModifiers": "deprecated,declare",
-          "sortText": "24",
+          "sortText": "z15",
           "displayParts": [
             {
               "text": "function",
@@ -27866,6 +27881,7 @@
       "name": "30"
     },
     "completionList": {
+      "flags": 0,
       "isGlobalCompletion": false,
       "isMemberCompletion": true,
       "isNewIdentifierLocation": false,
@@ -29021,6 +29037,7 @@
       "name": "31"
     },
     "completionList": {
+      "flags": 0,
       "isGlobalCompletion": false,
       "isMemberCompletion": false,
       "isNewIdentifierLocation": false,
@@ -30634,7 +30651,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI.",
+                  "text": "A value representing an unencoded URI.",
                   "kind": "text"
                 }
               ]
@@ -30747,7 +30764,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI component.",
+                  "text": "A value representing an unencoded URI component.",
                   "kind": "text"
                 }
               ]
@@ -32911,7 +32928,7 @@
           "name": "escape",
           "kind": "function",
           "kindModifiers": "deprecated,declare",
-          "sortText": "24",
+          "sortText": "z15",
           "displayParts": [
             {
               "text": "function",
@@ -33001,7 +33018,7 @@
           "name": "unescape",
           "kind": "function",
           "kindModifiers": "deprecated,declare",
-          "sortText": "24",
+          "sortText": "z15",
           "displayParts": [
             {
               "text": "function",
@@ -33097,6 +33114,7 @@
       "name": "33"
     },
     "completionList": {
+      "flags": 0,
       "isGlobalCompletion": true,
       "isMemberCompletion": false,
       "isNewIdentifierLocation": false,
@@ -34664,7 +34682,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI.",
+                  "text": "A value representing an unencoded URI.",
                   "kind": "text"
                 }
               ]
@@ -34777,7 +34795,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI component.",
+                  "text": "A value representing an unencoded URI component.",
                   "kind": "text"
                 }
               ]
@@ -36941,7 +36959,7 @@
           "name": "escape",
           "kind": "function",
           "kindModifiers": "deprecated,declare",
-          "sortText": "24",
+          "sortText": "z15",
           "displayParts": [
             {
               "text": "function",
@@ -37031,7 +37049,7 @@
           "name": "unescape",
           "kind": "function",
           "kindModifiers": "deprecated,declare",
-          "sortText": "24",
+          "sortText": "z15",
           "displayParts": [
             {
               "text": "function",
@@ -37127,6 +37145,7 @@
       "name": "34"
     },
     "completionList": {
+      "flags": 0,
       "isGlobalCompletion": false,
       "isMemberCompletion": true,
       "isNewIdentifierLocation": false,
@@ -38282,6 +38301,7 @@
       "name": "35"
     },
     "completionList": {
+      "flags": 0,
       "isGlobalCompletion": false,
       "isMemberCompletion": false,
       "isNewIdentifierLocation": true,
@@ -39849,7 +39869,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI.",
+                  "text": "A value representing an unencoded URI.",
                   "kind": "text"
                 }
               ]
@@ -39962,7 +39982,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI component.",
+                  "text": "A value representing an unencoded URI component.",
                   "kind": "text"
                 }
               ]
@@ -42126,7 +42146,7 @@
           "name": "escape",
           "kind": "function",
           "kindModifiers": "deprecated,declare",
-          "sortText": "24",
+          "sortText": "z15",
           "displayParts": [
             {
               "text": "function",
@@ -42216,7 +42236,7 @@
           "name": "unescape",
           "kind": "function",
           "kindModifiers": "deprecated,declare",
-          "sortText": "24",
+          "sortText": "z15",
           "displayParts": [
             {
               "text": "function",
@@ -42312,6 +42332,7 @@
       "name": "36"
     },
     "completionList": {
+      "flags": 0,
       "isGlobalCompletion": false,
       "isMemberCompletion": true,
       "isNewIdentifierLocation": false,
@@ -43467,6 +43488,7 @@
       "name": "38"
     },
     "completionList": {
+      "flags": 0,
       "isGlobalCompletion": true,
       "isMemberCompletion": false,
       "isNewIdentifierLocation": false,
@@ -45080,7 +45102,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI.",
+                  "text": "A value representing an unencoded URI.",
                   "kind": "text"
                 }
               ]
@@ -45193,7 +45215,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI component.",
+                  "text": "A value representing an unencoded URI component.",
                   "kind": "text"
                 }
               ]
@@ -47357,7 +47379,7 @@
           "name": "escape",
           "kind": "function",
           "kindModifiers": "deprecated,declare",
-          "sortText": "24",
+          "sortText": "z15",
           "displayParts": [
             {
               "text": "function",
@@ -47447,7 +47469,7 @@
           "name": "unescape",
           "kind": "function",
           "kindModifiers": "deprecated,declare",
-          "sortText": "24",
+          "sortText": "z15",
           "displayParts": [
             {
               "text": "function",
@@ -47543,6 +47565,7 @@
       "name": "39"
     },
     "completionList": {
+      "flags": 0,
       "isGlobalCompletion": false,
       "isMemberCompletion": true,
       "isNewIdentifierLocation": false,
@@ -48698,6 +48721,7 @@
       "name": "40"
     },
     "completionList": {
+      "flags": 0,
       "isGlobalCompletion": false,
       "isMemberCompletion": false,
       "isNewIdentifierLocation": true,
@@ -50311,7 +50335,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI.",
+                  "text": "A value representing an unencoded URI.",
                   "kind": "text"
                 }
               ]
@@ -50424,7 +50448,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI component.",
+                  "text": "A value representing an unencoded URI component.",
                   "kind": "text"
                 }
               ]
@@ -52588,7 +52612,7 @@
           "name": "escape",
           "kind": "function",
           "kindModifiers": "deprecated,declare",
-          "sortText": "24",
+          "sortText": "z15",
           "displayParts": [
             {
               "text": "function",
@@ -52678,7 +52702,7 @@
           "name": "unescape",
           "kind": "function",
           "kindModifiers": "deprecated,declare",
-          "sortText": "24",
+          "sortText": "z15",
           "displayParts": [
             {
               "text": "function",
@@ -52774,6 +52798,7 @@
       "name": "41"
     },
     "completionList": {
+      "flags": 0,
       "isGlobalCompletion": false,
       "isMemberCompletion": true,
       "isNewIdentifierLocation": false,
@@ -53929,6 +53954,7 @@
       "name": "42"
     },
     "completionList": {
+      "flags": 0,
       "isGlobalCompletion": false,
       "isMemberCompletion": false,
       "isNewIdentifierLocation": true,
@@ -55542,7 +55568,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI.",
+                  "text": "A value representing an unencoded URI.",
                   "kind": "text"
                 }
               ]
@@ -55655,7 +55681,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI component.",
+                  "text": "A value representing an unencoded URI component.",
                   "kind": "text"
                 }
               ]
@@ -57819,7 +57845,7 @@
           "name": "escape",
           "kind": "function",
           "kindModifiers": "deprecated,declare",
-          "sortText": "24",
+          "sortText": "z15",
           "displayParts": [
             {
               "text": "function",
@@ -57909,7 +57935,7 @@
           "name": "unescape",
           "kind": "function",
           "kindModifiers": "deprecated,declare",
-          "sortText": "24",
+          "sortText": "z15",
           "displayParts": [
             {
               "text": "function",
@@ -58005,6 +58031,7 @@
       "name": "45"
     },
     "completionList": {
+      "flags": 0,
       "isGlobalCompletion": false,
       "isMemberCompletion": false,
       "isNewIdentifierLocation": false,
@@ -59613,7 +59640,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI.",
+                  "text": "A value representing an unencoded URI.",
                   "kind": "text"
                 }
               ]
@@ -59726,7 +59753,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI component.",
+                  "text": "A value representing an unencoded URI component.",
                   "kind": "text"
                 }
               ]
@@ -61890,7 +61917,7 @@
           "name": "escape",
           "kind": "function",
           "kindModifiers": "deprecated,declare",
-          "sortText": "24",
+          "sortText": "z15",
           "displayParts": [
             {
               "text": "function",
@@ -61980,7 +62007,7 @@
           "name": "unescape",
           "kind": "function",
           "kindModifiers": "deprecated,declare",
-          "sortText": "24",
+          "sortText": "z15",
           "displayParts": [
             {
               "text": "function",
@@ -62076,6 +62103,7 @@
       "name": "49"
     },
     "completionList": {
+      "flags": 0,
       "isGlobalCompletion": false,
       "isMemberCompletion": false,
       "isNewIdentifierLocation": true,
@@ -63684,7 +63712,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI.",
+                  "text": "A value representing an unencoded URI.",
                   "kind": "text"
                 }
               ]
@@ -63797,7 +63825,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI component.",
+                  "text": "A value representing an unencoded URI component.",
                   "kind": "text"
                 }
               ]
@@ -65961,7 +65989,7 @@
           "name": "escape",
           "kind": "function",
           "kindModifiers": "deprecated,declare",
-          "sortText": "24",
+          "sortText": "z15",
           "displayParts": [
             {
               "text": "function",
@@ -66051,7 +66079,7 @@
           "name": "unescape",
           "kind": "function",
           "kindModifiers": "deprecated,declare",
-          "sortText": "24",
+          "sortText": "z15",
           "displayParts": [
             {
               "text": "function",
@@ -66147,6 +66175,7 @@
       "name": "52"
     },
     "completionList": {
+      "flags": 0,
       "isGlobalCompletion": false,
       "isMemberCompletion": false,
       "isNewIdentifierLocation": false,
@@ -67755,7 +67784,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI.",
+                  "text": "A value representing an unencoded URI.",
                   "kind": "text"
                 }
               ]
@@ -67868,7 +67897,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI component.",
+                  "text": "A value representing an unencoded URI component.",
                   "kind": "text"
                 }
               ]
@@ -70032,7 +70061,7 @@
           "name": "escape",
           "kind": "function",
           "kindModifiers": "deprecated,declare",
-          "sortText": "24",
+          "sortText": "z15",
           "displayParts": [
             {
               "text": "function",
@@ -70122,7 +70151,7 @@
           "name": "unescape",
           "kind": "function",
           "kindModifiers": "deprecated,declare",
-          "sortText": "24",
+          "sortText": "z15",
           "displayParts": [
             {
               "text": "function",
@@ -70218,6 +70247,7 @@
       "name": "56"
     },
     "completionList": {
+      "flags": 0,
       "isGlobalCompletion": false,
       "isMemberCompletion": false,
       "isNewIdentifierLocation": true,
@@ -71826,7 +71856,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI.",
+                  "text": "A value representing an unencoded URI.",
                   "kind": "text"
                 }
               ]
@@ -71939,7 +71969,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI component.",
+                  "text": "A value representing an unencoded URI component.",
                   "kind": "text"
                 }
               ]
@@ -74103,7 +74133,7 @@
           "name": "escape",
           "kind": "function",
           "kindModifiers": "deprecated,declare",
-          "sortText": "24",
+          "sortText": "z15",
           "displayParts": [
             {
               "text": "function",
@@ -74193,7 +74223,7 @@
           "name": "unescape",
           "kind": "function",
           "kindModifiers": "deprecated,declare",
-          "sortText": "24",
+          "sortText": "z15",
           "displayParts": [
             {
               "text": "function",
@@ -74289,6 +74319,7 @@
       "name": "59"
     },
     "completionList": {
+      "flags": 0,
       "isGlobalCompletion": false,
       "isMemberCompletion": false,
       "isNewIdentifierLocation": false,
@@ -75897,7 +75928,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI.",
+                  "text": "A value representing an unencoded URI.",
                   "kind": "text"
                 }
               ]
@@ -76010,7 +76041,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI component.",
+                  "text": "A value representing an unencoded URI component.",
                   "kind": "text"
                 }
               ]
@@ -78174,7 +78205,7 @@
           "name": "escape",
           "kind": "function",
           "kindModifiers": "deprecated,declare",
-          "sortText": "24",
+          "sortText": "z15",
           "displayParts": [
             {
               "text": "function",
@@ -78264,7 +78295,7 @@
           "name": "unescape",
           "kind": "function",
           "kindModifiers": "deprecated,declare",
-          "sortText": "24",
+          "sortText": "z15",
           "displayParts": [
             {
               "text": "function",
@@ -78360,6 +78391,7 @@
       "name": "63"
     },
     "completionList": {
+      "flags": 0,
       "isGlobalCompletion": false,
       "isMemberCompletion": false,
       "isNewIdentifierLocation": true,
@@ -79968,7 +80000,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI.",
+                  "text": "A value representing an unencoded URI.",
                   "kind": "text"
                 }
               ]
@@ -80081,7 +80113,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI component.",
+                  "text": "A value representing an unencoded URI component.",
                   "kind": "text"
                 }
               ]
@@ -82245,7 +82277,7 @@
           "name": "escape",
           "kind": "function",
           "kindModifiers": "deprecated,declare",
-          "sortText": "24",
+          "sortText": "z15",
           "displayParts": [
             {
               "text": "function",
@@ -82335,7 +82367,7 @@
           "name": "unescape",
           "kind": "function",
           "kindModifiers": "deprecated,declare",
-          "sortText": "24",
+          "sortText": "z15",
           "displayParts": [
             {
               "text": "function",
@@ -82431,6 +82463,7 @@
       "name": "67"
     },
     "completionList": {
+      "flags": 0,
       "isGlobalCompletion": false,
       "isMemberCompletion": true,
       "isNewIdentifierLocation": false,
@@ -82814,6 +82847,7 @@
       "name": "87"
     },
     "completionList": {
+      "flags": 0,
       "isGlobalCompletion": false,
       "isMemberCompletion": false,
       "isNewIdentifierLocation": true,
@@ -84379,7 +84413,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI.",
+                  "text": "A value representing an unencoded URI.",
                   "kind": "text"
                 }
               ]
@@ -84492,7 +84526,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI component.",
+                  "text": "A value representing an unencoded URI component.",
                   "kind": "text"
                 }
               ]
@@ -86812,7 +86846,7 @@
           "name": "escape",
           "kind": "function",
           "kindModifiers": "deprecated,declare",
-          "sortText": "24",
+          "sortText": "z15",
           "displayParts": [
             {
               "text": "function",
@@ -86902,7 +86936,7 @@
           "name": "unescape",
           "kind": "function",
           "kindModifiers": "deprecated,declare",
-          "sortText": "24",
+          "sortText": "z15",
           "displayParts": [
             {
               "text": "function",
@@ -86998,6 +87032,7 @@
       "name": "88"
     },
     "completionList": {
+      "flags": 0,
       "isGlobalCompletion": false,
       "isMemberCompletion": true,
       "isNewIdentifierLocation": false,
@@ -88153,6 +88188,7 @@
       "name": "109"
     },
     "completionList": {
+      "flags": 0,
       "isGlobalCompletion": true,
       "isMemberCompletion": false,
       "isNewIdentifierLocation": false,
@@ -89747,7 +89783,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI.",
+                  "text": "A value representing an unencoded URI.",
                   "kind": "text"
                 }
               ]
@@ -89860,7 +89896,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI component.",
+                  "text": "A value representing an unencoded URI component.",
                   "kind": "text"
                 }
               ]
@@ -92180,7 +92216,7 @@
           "name": "escape",
           "kind": "function",
           "kindModifiers": "deprecated,declare",
-          "sortText": "24",
+          "sortText": "z15",
           "displayParts": [
             {
               "text": "function",
@@ -92270,7 +92306,7 @@
           "name": "unescape",
           "kind": "function",
           "kindModifiers": "deprecated,declare",
-          "sortText": "24",
+          "sortText": "z15",
           "displayParts": [
             {
               "text": "function",
@@ -92366,6 +92402,7 @@
       "name": "110"
     },
     "completionList": {
+      "flags": 0,
       "isGlobalCompletion": false,
       "isMemberCompletion": true,
       "isNewIdentifierLocation": false,
@@ -92590,6 +92627,7 @@
       "name": "114"
     },
     "completionList": {
+      "flags": 0,
       "isGlobalCompletion": false,
       "isMemberCompletion": true,
       "isNewIdentifierLocation": false,
@@ -92689,6 +92727,7 @@
       "name": "115"
     },
     "completionList": {
+      "flags": 0,
       "isGlobalCompletion": false,
       "isMemberCompletion": false,
       "isNewIdentifierLocation": true,
@@ -94370,7 +94409,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI.",
+                  "text": "A value representing an unencoded URI.",
                   "kind": "text"
                 }
               ]
@@ -94483,7 +94522,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI component.",
+                  "text": "A value representing an unencoded URI component.",
                   "kind": "text"
                 }
               ]
@@ -96647,7 +96686,7 @@
           "name": "escape",
           "kind": "function",
           "kindModifiers": "deprecated,declare",
-          "sortText": "24",
+          "sortText": "z15",
           "displayParts": [
             {
               "text": "function",
@@ -96737,7 +96776,7 @@
           "name": "unescape",
           "kind": "function",
           "kindModifiers": "deprecated,declare",
-          "sortText": "24",
+          "sortText": "z15",
           "displayParts": [
             {
               "text": "function",

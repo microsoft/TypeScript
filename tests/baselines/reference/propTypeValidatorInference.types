@@ -275,12 +275,12 @@ const propTypesWithoutAnnotation = {
 };
 
 type ExtractedProps = PropTypes.InferProps<typeof propTypes>;
->ExtractedProps : ExtractedProps
+>ExtractedProps : PropTypes.InferPropsInner<Pick<PropTypes.ValidationMap<Props>, PropTypes.RequiredKeys<PropTypes.ValidationMap<Props>>>> & Partial<PropTypes.InferPropsInner<Pick<PropTypes.ValidationMap<Props>, "any">>>
 >PropTypes : any
 >propTypes : PropTypes.ValidationMap<Props>
 
 type ExtractedPropsWithoutAnnotation = PropTypes.InferProps<typeof propTypesWithoutAnnotation>;
->ExtractedPropsWithoutAnnotation : ExtractedPropsWithoutAnnotation
+>ExtractedPropsWithoutAnnotation : PropTypes.InferPropsInner<Pick<{ any: PropTypes.Requireable<any>; array: PropTypes.Validator<any[]>; bool: PropTypes.Validator<boolean>; shape: PropTypes.Validator<PropTypes.InferProps<{ foo: PropTypes.Validator<string>; bar: PropTypes.Requireable<boolean>; baz: PropTypes.Requireable<any>; }>>; oneOfType: PropTypes.Validator<string | boolean | PropTypes.InferProps<{ foo: PropTypes.Requireable<string>; bar: PropTypes.Validator<number>; }>>; }, PropTypes.RequiredKeys<{ any: PropTypes.Requireable<any>; array: PropTypes.Validator<any[]>; bool: PropTypes.Validator<boolean>; shape: PropTypes.Validator<PropTypes.InferProps<{ foo: PropTypes.Validator<string>; bar: PropTypes.Requireable<boolean>; baz: PropTypes.Requireable<any>; }>>; oneOfType: PropTypes.Validator<string | boolean | PropTypes.InferProps<{ foo: PropTypes.Requireable<string>; bar: PropTypes.Validator<number>; }>>; }>>> & Partial<PropTypes.InferPropsInner<Pick<{ any: PropTypes.Requireable<any>; array: PropTypes.Validator<any[]>; bool: PropTypes.Validator<boolean>; shape: PropTypes.Validator<PropTypes.InferProps<{ foo: PropTypes.Validator<string>; bar: PropTypes.Requireable<boolean>; baz: PropTypes.Requireable<any>; }>>; oneOfType: PropTypes.Validator<string | boolean | PropTypes.InferProps<{ foo: PropTypes.Requireable<string>; bar: PropTypes.Validator<number>; }>>; }, "any">>>
 >PropTypes : any
 >propTypesWithoutAnnotation : { any: PropTypes.Requireable<any>; array: PropTypes.Validator<any[]>; bool: PropTypes.Validator<boolean>; shape: PropTypes.Validator<PropTypes.InferProps<{ foo: PropTypes.Validator<string>; bar: PropTypes.Requireable<boolean>; baz: PropTypes.Requireable<any>; }>>; oneOfType: PropTypes.Validator<string | boolean | PropTypes.InferProps<{ foo: PropTypes.Requireable<string>; bar: PropTypes.Validator<number>; }>>; }
 

@@ -853,7 +853,7 @@ Project '/user/username/projects/myproject/indirect3/tsconfig.json' (Configured)
 	../target/src/main.d.ts
 	  Imported via 'main' from file 'main.ts'
 	main.ts
-	  Matched by include pattern '**/*' in 'tsconfig.json'
+	  Matched by default include pattern '**/*'
 
 -----------------------------------------------
 event:

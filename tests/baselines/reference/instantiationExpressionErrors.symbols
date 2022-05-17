@@ -99,3 +99,11 @@ const x3 = f<true>;
 
 true;
 
+// Parsed as instantiation expression
+
+const x4 = f<true>
+>x4 : Symbol(x4, Decl(instantiationExpressionErrors.ts, 44, 5))
+>f : Symbol(f, Decl(instantiationExpressionErrors.ts, 0, 11))
+
+if (true) {}
+

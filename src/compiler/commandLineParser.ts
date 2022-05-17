@@ -81,6 +81,7 @@ namespace ts {
         ["es2021.intl", "lib.es2021.intl.d.ts"],
         ["es2022.array", "lib.es2022.array.d.ts"],
         ["es2022.error", "lib.es2022.error.d.ts"],
+        ["es2022.intl", "lib.es2022.intl.d.ts"],
         ["es2022.object", "lib.es2022.object.d.ts"],
         ["es2022.string", "lib.es2022.string.d.ts"],
         ["esnext.array", "lib.es2022.array.d.ts"],
@@ -423,7 +424,7 @@ namespace ts {
                 es2020: ModuleKind.ES2020,
                 es2022: ModuleKind.ES2022,
                 esnext: ModuleKind.ESNext,
-                node12: ModuleKind.Node12,
+                node16: ModuleKind.Node16,
                 nodenext: ModuleKind.NodeNext,
             })),
             affectsModuleResolution: true,
@@ -781,7 +782,7 @@ namespace ts {
             type: new Map(getEntries({
                 node: ModuleResolutionKind.NodeJs,
                 classic: ModuleResolutionKind.Classic,
-                node12: ModuleResolutionKind.Node12,
+                node16: ModuleResolutionKind.Node16,
                 nodenext: ModuleResolutionKind.NodeNext,
             })),
             affectsModuleResolution: true,
@@ -883,6 +884,18 @@ namespace ts {
             category: Diagnostics.Modules,
             description: Diagnostics.Allow_accessing_UMD_globals_from_modules,
             defaultValueDescription: false,
+        },
+        {
+            name: "moduleSuffixes",
+            type: "list",
+            element: {
+                name: "suffix",
+                type: "string",
+            },
+            listPreserveFalsyValues: true,
+            affectsModuleResolution: true,
+            category: Diagnostics.Modules,
+            description: Diagnostics.List_of_file_name_suffixes_to_search_when_resolving_a_module,
         },
 
         // Source Maps
@@ -1251,7 +1264,7 @@ namespace ts {
             affectsModuleResolution: true,
             description: Diagnostics.Control_what_method_is_used_to_detect_module_format_JS_files,
             category: Diagnostics.Language_and_Environment,
-            defaultValueDescription: Diagnostics.auto_Colon_Treat_files_with_imports_exports_import_meta_jsx_with_jsx_Colon_react_jsx_or_esm_format_with_module_Colon_node12_as_modules,
+            defaultValueDescription: Diagnostics.auto_Colon_Treat_files_with_imports_exports_import_meta_jsx_with_jsx_Colon_react_jsx_or_esm_format_with_module_Colon_node16_as_modules,
         }
     ];
 
@@ -2313,7 +2326,7 @@ namespace ts {
     function filterSameAsDefaultInclude(specs: readonly string[] | undefined) {
         if (!length(specs)) return undefined;
         if (length(specs) !== 1) return specs;
-        if (specs![0] === "**/*") return undefined;
+        if (specs![0] === defaultIncludeSpec) return undefined;
         return specs;
     }
 
@@ -2614,6 +2627,9 @@ namespace ts {
         return getDirectoryPath(getNormalizedAbsolutePath(fileName, basePath));
     }
 
+    /*@internal*/
+    export const defaultIncludeSpec = "**/*";
+
     /**
      * Parse the contents of a config file from json or json source file (tsconfig.json).
      * @param json The contents of the config file to parse
@@ -2692,6 +2708,7 @@ namespace ts {
             let includeSpecs = toPropValue(getSpecsFromRaw("include"));
 
             const excludeOfRaw = getSpecsFromRaw("exclude");
+            let isDefaultIncludeSpec = false;
             let excludeSpecs = toPropValue(excludeOfRaw);
             if (excludeOfRaw === "no-prop" && raw.compilerOptions) {
                 const outDir = raw.compilerOptions.outDir;
@@ -2703,7 +2720,8 @@ namespace ts {
             }
 
             if (filesSpecs === undefined && includeSpecs === undefined) {
-                includeSpecs = ["**/*"];
+                includeSpecs = [defaultIncludeSpec];
+                isDefaultIncludeSpec = true;
             }
             let validatedIncludeSpecs: readonly string[] | undefined, validatedExcludeSpecs: readonly string[] | undefined;
 
@@ -2727,6 +2745,7 @@ namespace ts {
                 validatedIncludeSpecs,
                 validatedExcludeSpecs,
                 pathPatterns: undefined, // Initialized on first use
+                isDefaultIncludeSpec,
             };
         }
 
@@ -3192,7 +3211,7 @@ namespace ts {
         if (option.type === "list") {
             const listOption = option;
             if (listOption.element.isFilePath || !isString(listOption.element.type)) {
-                return filter(map(value, v => normalizeOptionValue(listOption.element, basePath, v)), v => !!v) as CompilerOptionsValue;
+                return filter(map(value, v => normalizeOptionValue(listOption.element, basePath, v)), v => listOption.listPreserveFalsyValues ? true : !!v) as CompilerOptionsValue;
             }
             return value;
         }
@@ -3233,7 +3252,7 @@ namespace ts {
     }
 
     function convertJsonOptionOfListType(option: CommandLineOptionOfListType, values: readonly any[], basePath: string, errors: Push<Diagnostic>): any[] {
-        return filter(map(values, v => convertJsonOption(option.element, v, basePath, errors)), v => !!v);
+        return filter(map(values, v => convertJsonOption(option.element, v, basePath, errors)), v => option.listPreserveFalsyValues ? true : !!v);
     }
 
     /**

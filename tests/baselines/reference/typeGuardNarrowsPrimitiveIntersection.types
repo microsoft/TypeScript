@@ -1,6 +1,6 @@
 === tests/cases/conformance/expressions/typeGuards/typeGuardNarrowsPrimitiveIntersection.ts ===
 type Tag = {__tag: any};
->Tag : Tag
+>Tag : { __tag: any; }
 >__tag : any
 
 declare function isNonBlank(value: string) : value is (string & Tag);

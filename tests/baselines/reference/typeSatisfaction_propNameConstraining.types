@@ -1,6 +1,6 @@
 === tests/cases/conformance/expressions/typeSatisfaction/typeSatisfaction_propNameConstraining.ts ===
 type Keys = 'a' | 'b' | 'c' | 'd';
->Keys : Keys
+>Keys : "a" | "b" | "c" | "d"
 
 const p = {
 >p : { a: number; b: string; x: number; }

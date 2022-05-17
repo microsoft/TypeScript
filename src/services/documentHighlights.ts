@@ -93,6 +93,8 @@ namespace ts {
                     return highlightSpans(getAsyncAndAwaitOccurrences(node));
                 case SyntaxKind.YieldKeyword:
                     return highlightSpans(getYieldOccurrences(node));
+                case SyntaxKind.InKeyword:
+                    return undefined;
                 default:
                     return isModifierKind(node.kind) && (isDeclaration(node.parent) || isVariableStatement(node.parent))
                         ? highlightSpans(getModifierOccurrences(node.kind, node.parent))

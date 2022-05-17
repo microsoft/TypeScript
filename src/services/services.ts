@@ -592,7 +592,7 @@ namespace ts {
      * @returns `true` if `node` has a JSDoc "inheritDoc" tag on it, otherwise `false`.
      */
     function hasJSDocInheritDocTag(node: Node) {
-        return getJSDocTags(node).some(tag => tag.tagName.text === "inheritDoc");
+        return getJSDocTags(node).some(tag => tag.tagName.text === "inheritDoc" || tag.tagName.text === "inheritdoc");
     }
 
     function getJsDocTagsOfDeclarations(declarations: Declaration[] | undefined, checker: TypeChecker | undefined): JSDocTagInfo[] {
@@ -643,13 +643,14 @@ namespace ts {
     }
 
     function findBaseOfDeclaration<T>(checker: TypeChecker, declaration: Declaration, cb: (symbol: Symbol) => T[] | undefined): T[] | undefined {
-        if (hasStaticModifier(declaration)) return;
-
         const classOrInterfaceDeclaration = declaration.parent?.kind === SyntaxKind.Constructor ? declaration.parent.parent : declaration.parent;
         if (!classOrInterfaceDeclaration) return;
 
+        const isStaticMember = hasStaticModifier(declaration);
         return firstDefined(getAllSuperTypeNodes(classOrInterfaceDeclaration), superTypeNode => {
-            const symbol = checker.getPropertyOfType(checker.getTypeAtLocation(superTypeNode), declaration.symbol.name);
+            const baseType = checker.getTypeAtLocation(superTypeNode);
+            const type = isStaticMember && baseType.symbol ? checker.getTypeOfSymbol(baseType.symbol) : baseType;
+            const symbol = checker.getPropertyOfType(type, declaration.symbol.name);
             return symbol ? cb(symbol) : undefined;
         });
     }
@@ -1768,9 +1769,9 @@ namespace ts {
         }
 
         /// Goto definition
-        function getDefinitionAtPosition(fileName: string, position: number): readonly DefinitionInfo[] | undefined {
+        function getDefinitionAtPosition(fileName: string, position: number, searchOtherFilesOnly?: boolean, stopAtAlias?: boolean): readonly DefinitionInfo[] | undefined {
             synchronizeHostData();
-            return GoToDefinition.getDefinitionAtPosition(program, getValidSourceFile(fileName), position);
+            return GoToDefinition.getDefinitionAtPosition(program, getValidSourceFile(fileName), position, searchOtherFilesOnly, stopAtAlias);
         }
 
         function getDefinitionAndBoundSpan(fileName: string, position: number): DefinitionInfoAndBoundSpan | undefined {
@@ -1798,7 +1799,6 @@ namespace ts {
                     fileName: entry.fileName,
                     textSpan: highlightSpan.textSpan,
                     isWriteAccess: highlightSpan.kind === HighlightSpanKind.writtenReference,
-                    isDefinition: false,
                     ...highlightSpan.isInString && { isInString: true },
                     ...highlightSpan.contextSpan && { contextSpan: highlightSpan.contextSpan }
                 }))
@@ -1838,7 +1838,7 @@ namespace ts {
 
         function getReferencesAtPosition(fileName: string, position: number): ReferenceEntry[] | undefined {
             synchronizeHostData();
-            return getReferencesWorker(getTouchingPropertyName(getValidSourceFile(fileName), position), position, { use: FindAllReferences.FindReferencesUse.References }, (entry, node, checker) => FindAllReferences.toReferenceEntry(entry, checker.getSymbolAtLocation(node)));
+            return getReferencesWorker(getTouchingPropertyName(getValidSourceFile(fileName), position), position, { use: FindAllReferences.FindReferencesUse.References }, FindAllReferences.toReferenceEntry);
         }
 
         function getReferencesWorker<T>(node: Node, position: number, options: FindAllReferences.Options, cb: FindAllReferences.ToReferenceOrRenameEntry<T>): T[] | undefined {
@@ -1859,8 +1859,7 @@ namespace ts {
 
         function getFileReferences(fileName: string): ReferenceEntry[] {
             synchronizeHostData();
-            const moduleSymbol = program.getSourceFile(fileName)?.symbol;
-            return FindAllReferences.Core.getReferencesForFileName(fileName, program, program.getSourceFiles()).map(r => FindAllReferences.toReferenceEntry(r, moduleSymbol));
+            return FindAllReferences.Core.getReferencesForFileName(fileName, program, program.getSourceFiles()).map(FindAllReferences.toReferenceEntry);
         }
 
         function getNavigateToItems(searchValue: string, maxResultCount?: number, fileName?: string, excludeDtsFiles = false): NavigateToItem[] {
@@ -2880,7 +2879,7 @@ namespace ts {
     export function getDefaultLibFilePath(options: CompilerOptions): string {
         // Check __dirname is defined and that we are on a node.js system.
         if (typeof __dirname !== "undefined") {
-            return __dirname + directorySeparator + getDefaultLibFileName(options);
+            return combinePaths(__dirname, getDefaultLibFileName(options));
         }
 
         throw new Error("getDefaultLibFilePath is only supported when consumed as a node module. ");
