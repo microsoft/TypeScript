@@ -5041,7 +5041,8 @@ namespace ts {
                         (type === markerSubType ? "sub-" : "super-") + symbolName(varianceTypeParameter.symbol) : "?";
                     return factory.createTypeReferenceNode(factory.createIdentifier(name), /*typeArguments*/ undefined);
                 }
-                if (type.flags & TypeFlags.Union && (type as UnionType).origin) {
+                // Switch to the union origin only if it has fewer constituents than the union itself.
+                if (type.flags & TypeFlags.Union && (type as UnionType).origin && getConstituentCount(type) > getConstituentCount((type as UnionType).origin!)) {
                     type = (type as UnionType).origin!;
                 }
                 if (type.flags & (TypeFlags.Union | TypeFlags.Intersection)) {
@@ -15086,6 +15087,11 @@ namespace ts {
                 if (!(t.flags & TypeFlags.Never)) intersections.push(t);
             }
             return intersections;
+        }
+
+        function getConstituentCount(type: Type): number {
+            return !(type.flags & TypeFlags.UnionOrIntersection) ? 1 : reduceLeft((type as UnionOrIntersectionType).types,
+                (n, t) => n + (t.aliasSymbol ? 1 : getConstituentCount(t.flags & TypeFlags.Union && (t as UnionType).origin || t)), 0);
         }
 
         function getTypeFromIntersectionTypeNode(node: IntersectionTypeNode): Type {
