@@ -21840,20 +21840,6 @@ namespace ts {
             return t;
         }
 
-        function mapToInferredTypeIncludingReturnTypeInferences(context: InferenceContext, returnContext: InferenceContext, t: Type): Type {
-            const inferences = context.inferences;
-            for (let i = 0; i < inferences.length; i++) {
-                const inference = inferences[i];
-                if (t === inference.typeParameter) {
-                    if (inference.inferredType || hasInferenceCandidates(inference)) {
-                        return getInferredType(context, i);
-                    }
-                    return getMappedType(t, returnContext.mapper);
-                }
-            }
-            return t;
-        }
-
         function clearCachedInferences(inferences: InferenceInfo[]) {
             for (const inference of inferences) {
                 if (!inference.isFixed) {
@@ -27069,10 +27055,12 @@ namespace ts {
                 const inferenceContext = getInferenceContext(node);
                 // If no inferences have been made, nothing is gained from instantiating as type parameters
                 // would just be replaced with their defaults similar to the apparent type.
-                if (inferenceContext && contextFlags! & ContextFlags.Signature && (inferenceContext.combinedReturnMapper || some(inferenceContext.inferences, hasInferenceCandidates))) {
+                if (inferenceContext && contextFlags! & ContextFlags.Signature && (inferenceContext.returnMapper || some(inferenceContext.inferences, hasInferenceCandidates))) {
                     // For contextual signatures we incorporate all inferences made so far, e.g. from return
                     // types as well as arguments to the left in a function call.
-                    return instantiateInstantiableTypes(contextualType, inferenceContext.combinedReturnMapper || inferenceContext.nonFixingMapper);
+                    return instantiateInstantiableTypes(contextualType, inferenceContext.returnMapper
+                        ? combineTypeMappers(inferenceContext.nonFixingMapper, inferenceContext.returnMapper)
+                        : inferenceContext.nonFixingMapper);
                 }
                 if (inferenceContext?.returnMapper) {
                     // For other purposes (e.g. determining whether to produce literal types) we only
@@ -29962,11 +29950,7 @@ namespace ts {
                         const returnContext = createInferenceContext(signature.typeParameters!, signature, context.flags);
                         const returnSourceType = instantiateType(contextualType, outerContext && outerContext.returnMapper);
                         inferTypes(returnContext.inferences, returnSourceType, inferenceTargetType);
-                        if (some(returnContext.inferences, hasInferenceCandidates)) {
-                            const clonedReturnContext = cloneInferredPartOfContext(returnContext)!;
-                            context.returnMapper = getMapperFromContext(clonedReturnContext);
-                            context.combinedReturnMapper = makeFunctionTypeMapper(t => mapToInferredTypeIncludingReturnTypeInferences(context, clonedReturnContext, t));
-                        }
+                        context.returnMapper = some(returnContext.inferences, hasInferenceCandidates) ? getMapperFromContext(cloneInferredPartOfContext(returnContext)) : undefined;
                     }
                 }
             }
