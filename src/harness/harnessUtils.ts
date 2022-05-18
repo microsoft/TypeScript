@@ -120,9 +120,22 @@ namespace Utils {
                 });
 
                 for (const childName in node) {
-                    if (childName === "parent" || childName === "nextContainer" || childName === "modifiers" || childName === "externalModuleIndicator" ||
+                    if (childName === "parent" ||
+                        childName === "nextContainer" ||
+                        childName === "modifiers" ||
+                        childName === "externalModuleIndicator" ||
                         // for now ignore jsdoc comments
-                        childName === "jsDocComment" || childName === "checkJsDirective" || childName === "commonJsModuleIndicator") {
+                        childName === "jsDocComment" ||
+                        childName === "checkJsDirective" ||
+                        childName === "commonJsModuleIndicator" ||
+                        // ignore nodes added only to report grammar errors
+                        childName === "illegalInitializer" ||
+                        childName === "illegalDecorators" ||
+                        childName === "illegalModifiers" ||
+                        childName === "illegalQuestionToken" ||
+                        childName === "illegalExclamationToken" ||
+                        childName === "illegalTypeParameters" ||
+                        childName === "illegalType") {
                         continue;
                     }
                     const child = (node as any)[childName];
