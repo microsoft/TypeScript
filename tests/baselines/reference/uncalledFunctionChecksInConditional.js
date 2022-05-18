@@ -50,6 +50,10 @@ if (ux || y || uz || isFoo) {
     // error on isFoo
 }
 
+if (x && z) {
+    // no error
+    z();
+}
 
 //// [uncalledFunctionChecksInConditional.js]
 if (isFoo) {
@@ -81,4 +85,8 @@ if (x || uy || z || isUndefinedFoo) {
 }
 if (ux || y || uz || isFoo) {
     // error on isFoo
+}
+if (x && z) {
+    // no error
+    z();
 }
