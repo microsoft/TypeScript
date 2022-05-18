@@ -1,0 +1,43 @@
+=== tests/cases/conformance/controlFlow/controlFlowOptionalChainAlias2.ts ===
+interface Food2b {
+>Food2b : Symbol(Food2b, Decl(controlFlowOptionalChainAlias2.ts, 0, 0))
+
+    bard?: {
+>bard : Symbol(Food2b.bard, Decl(controlFlowOptionalChainAlias2.ts, 0, 18))
+
+        getValues(): number[];
+>getValues : Symbol(getValues, Decl(controlFlowOptionalChainAlias2.ts, 1, 12))
+    }
+}
+declare const food2b: Food2b | undefined;
+>food2b : Symbol(food2b, Decl(controlFlowOptionalChainAlias2.ts, 5, 13))
+>Food2b : Symbol(Food2b, Decl(controlFlowOptionalChainAlias2.ts, 0, 0))
+
+const bards = food2b?.bard?.getValues();
+>bards : Symbol(bards, Decl(controlFlowOptionalChainAlias2.ts, 6, 5))
+>food2b?.bard?.getValues : Symbol(getValues, Decl(controlFlowOptionalChainAlias2.ts, 1, 12))
+>food2b?.bard : Symbol(Food2b.bard, Decl(controlFlowOptionalChainAlias2.ts, 0, 18))
+>food2b : Symbol(food2b, Decl(controlFlowOptionalChainAlias2.ts, 5, 13))
+>bard : Symbol(Food2b.bard, Decl(controlFlowOptionalChainAlias2.ts, 0, 18))
+>getValues : Symbol(getValues, Decl(controlFlowOptionalChainAlias2.ts, 1, 12))
+
+if (bards) {
+>bards : Symbol(bards, Decl(controlFlowOptionalChainAlias2.ts, 6, 5))
+
+    food2b; // type Food2b, OK  
+>food2b : Symbol(food2b, Decl(controlFlowOptionalChainAlias2.ts, 5, 13))
+
+    food2b.bard; // type { getValues(): number[] } | undefined. --- BUG 
+>food2b.bard : Symbol(Food2b.bard, Decl(controlFlowOptionalChainAlias2.ts, 0, 18))
+>food2b : Symbol(food2b, Decl(controlFlowOptionalChainAlias2.ts, 5, 13))
+>bard : Symbol(Food2b.bard, Decl(controlFlowOptionalChainAlias2.ts, 0, 18))
+
+    food2b.bard.getValues(); // error --- BUG
+>food2b.bard.getValues : Symbol(getValues, Decl(controlFlowOptionalChainAlias2.ts, 1, 12))
+>food2b.bard : Symbol(Food2b.bard, Decl(controlFlowOptionalChainAlias2.ts, 0, 18))
+>food2b : Symbol(food2b, Decl(controlFlowOptionalChainAlias2.ts, 5, 13))
+>bard : Symbol(Food2b.bard, Decl(controlFlowOptionalChainAlias2.ts, 0, 18))
+>getValues : Symbol(getValues, Decl(controlFlowOptionalChainAlias2.ts, 1, 12))
+}
+
+

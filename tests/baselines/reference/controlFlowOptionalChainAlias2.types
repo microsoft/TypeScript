@@ -1,0 +1,42 @@
+=== tests/cases/conformance/controlFlow/controlFlowOptionalChainAlias2.ts ===
+interface Food2b {
+    bard?: {
+>bard : { getValues(): number[]; } | undefined
+
+        getValues(): number[];
+>getValues : () => number[]
+    }
+}
+declare const food2b: Food2b | undefined;
+>food2b : Food2b | undefined
+
+const bards = food2b?.bard?.getValues();
+>bards : number[] | undefined
+>food2b?.bard?.getValues() : number[] | undefined
+>food2b?.bard?.getValues : (() => number[]) | undefined
+>food2b?.bard : { getValues(): number[]; } | undefined
+>food2b : Food2b | undefined
+>bard : { getValues(): number[]; } | undefined
+>getValues : (() => number[]) | undefined
+
+if (bards) {
+>bards : number[] | undefined
+
+    food2b; // type Food2b, OK  
+>food2b : Food2b
+
+    food2b.bard; // type { getValues(): number[] } | undefined. --- BUG 
+>food2b.bard : { getValues(): number[]; } | undefined
+>food2b : Food2b
+>bard : { getValues(): number[]; } | undefined
+
+    food2b.bard.getValues(); // error --- BUG
+>food2b.bard.getValues() : number[]
+>food2b.bard.getValues : () => number[]
+>food2b.bard : { getValues(): number[]; } | undefined
+>food2b : Food2b
+>bard : { getValues(): number[]; } | undefined
+>getValues : () => number[]
+}
+
+

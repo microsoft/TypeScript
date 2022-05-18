@@ -4,6 +4,7 @@ tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(18,1): error TS2
 tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(22,1): error TS2454: Variable 'd' is used before being assigned.
 tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(35,5): error TS2722: Cannot invoke an object which is possibly 'undefined'.
 tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(39,1): error TS2722: Cannot invoke an object which is possibly 'undefined'.
+tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(51,9): error TS2339: Property 'f' does not exist on type 'never'.
 tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(52,5): error TS2532: Object is possibly 'undefined'.
 tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(57,1): error TS2532: Object is possibly 'undefined'.
 tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(68,5): error TS2532: Object is possibly 'undefined'.
@@ -16,6 +17,7 @@ tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(105,5): error TS
 tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(111,1): error TS2532: Object is possibly 'undefined'.
 tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(112,1): error TS2532: Object is possibly 'undefined'.
 tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(112,1): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(129,9): error TS2339: Property 'f' does not exist on type 'never'.
 tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(130,5): error TS2532: Object is possibly 'undefined'.
 tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(134,1): error TS2532: Object is possibly 'undefined'.
 tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(208,9): error TS2532: Object is possibly 'undefined'.
@@ -61,7 +63,7 @@ tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(518,13): error T
 tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(567,21): error TS2532: Object is possibly 'undefined'.
 
 
-==== tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts (61 errors) ====
+==== tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts (63 errors) ====
     // assignments in shortcutting chain
     declare const o: undefined | {
         [key: string]: any;
@@ -125,6 +127,8 @@ tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(567,21): error T
         x;
         o2;
         o2?.f;
+            ~
+!!! error TS2339: Property 'f' does not exist on type 'never'.
         o2.f;
         ~~
 !!! error TS2532: Object is possibly 'undefined'.
@@ -227,6 +231,8 @@ tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(567,21): error T
     else {
         o6;
         o6?.f;
+            ~
+!!! error TS2339: Property 'f' does not exist on type 'never'.
         o6.f;
         ~~
 !!! error TS2532: Object is possibly 'undefined'.

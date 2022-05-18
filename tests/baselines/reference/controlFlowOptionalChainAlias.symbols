@@ -1,0 +1,35 @@
+=== tests/cases/conformance/controlFlow/controlFlowOptionalChainAlias.ts ===
+interface Foodb {
+>Foodb : Symbol(Foodb, Decl(controlFlowOptionalChainAlias.ts, 0, 0))
+
+    getValues(): number[];
+>getValues : Symbol(Foodb.getValues, Decl(controlFlowOptionalChainAlias.ts, 0, 17))
+}
+
+declare const foodb: Foodb | undefined;
+>foodb : Symbol(foodb, Decl(controlFlowOptionalChainAlias.ts, 4, 13))
+>Foodb : Symbol(Foodb, Decl(controlFlowOptionalChainAlias.ts, 0, 0))
+
+const valsb = foodb?.getValues();
+>valsb : Symbol(valsb, Decl(controlFlowOptionalChainAlias.ts, 6, 5))
+>foodb?.getValues : Symbol(Foodb.getValues, Decl(controlFlowOptionalChainAlias.ts, 0, 17))
+>foodb : Symbol(foodb, Decl(controlFlowOptionalChainAlias.ts, 4, 13))
+>getValues : Symbol(Foodb.getValues, Decl(controlFlowOptionalChainAlias.ts, 0, 17))
+
+if (valsb) {
+>valsb : Symbol(valsb, Decl(controlFlowOptionalChainAlias.ts, 6, 5))
+
+    foodb; // before: Foodb|undefined after: Foodb 
+>foodb : Symbol(foodb, Decl(controlFlowOptionalChainAlias.ts, 4, 13))
+
+    foodb.getValues; // before: error, after: OK
+>foodb.getValues : Symbol(Foodb.getValues, Decl(controlFlowOptionalChainAlias.ts, 0, 17))
+>foodb : Symbol(foodb, Decl(controlFlowOptionalChainAlias.ts, 4, 13))
+>getValues : Symbol(Foodb.getValues, Decl(controlFlowOptionalChainAlias.ts, 0, 17))
+
+    foodb.getValues(); // before: error, after: OK
+>foodb.getValues : Symbol(Foodb.getValues, Decl(controlFlowOptionalChainAlias.ts, 0, 17))
+>foodb : Symbol(foodb, Decl(controlFlowOptionalChainAlias.ts, 4, 13))
+>getValues : Symbol(Foodb.getValues, Decl(controlFlowOptionalChainAlias.ts, 0, 17))
+}
+

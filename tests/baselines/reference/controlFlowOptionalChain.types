@@ -142,7 +142,7 @@ if (o2?.f(x)) {
 >x : string | number
 
     x; // number
->x : number
+>x : string | number
 
     o2.f; // (x: any) => x is number
 >o2.f : (x: any) => x is number
@@ -159,24 +159,24 @@ if (o2?.f(x)) {
 >o2?.f : (x: any) => x is number
 >o2 : { f(x: any): x is number; }
 >f : (x: any) => x is number
->x : number
+>x : string | number
 }
 else {
     x;
 >x : string | number
 
     o2;
->o2 : { f(x: any): x is number; } | undefined
+>o2 : undefined
 
     o2?.f;
->o2?.f : ((x: any) => x is number) | undefined
->o2 : { f(x: any): x is number; } | undefined
->f : ((x: any) => x is number) | undefined
+>o2?.f : any
+>o2 : undefined
+>f : any
 
     o2.f;
->o2.f : (x: any) => x is number
->o2 : { f(x: any): x is number; } | undefined
->f : (x: any) => x is number
+>o2.f : any
+>o2 : undefined
+>f : any
 }
 x;
 >x : string | number
@@ -522,26 +522,26 @@ if (o6?.f()) {
 >f : (() => this is Derived) | undefined
 
     o6; // Derived
->o6 : Derived
+>o6 : Base
 
     o6.f;
 >o6.f : () => this is Derived
->o6 : Derived
+>o6 : Base
 >f : () => this is Derived
 }
 else {
     o6;
->o6 : Base | undefined
+>o6 : undefined
 
     o6?.f;
->o6?.f : (() => this is Derived) | undefined
->o6 : Base | undefined
->f : (() => this is Derived) | undefined
+>o6?.f : any
+>o6 : undefined
+>f : any
 
     o6.f;
->o6.f : () => this is Derived
->o6 : Base | undefined
->f : () => this is Derived
+>o6.f : any
+>o6 : undefined
+>f : any
 }
 o6;
 >o6 : Base | undefined

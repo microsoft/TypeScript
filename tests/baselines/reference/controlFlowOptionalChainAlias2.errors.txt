@@ -1,0 +1,20 @@
+tests/cases/conformance/controlFlow/controlFlowOptionalChainAlias2.ts(11,5): error TS2532: Object is possibly 'undefined'.
+
+
+==== tests/cases/conformance/controlFlow/controlFlowOptionalChainAlias2.ts (1 errors) ====
+    interface Food2b {
+        bard?: {
+            getValues(): number[];
+        }
+    }
+    declare const food2b: Food2b | undefined;
+    const bards = food2b?.bard?.getValues();
+    if (bards) {
+        food2b; // type Food2b, OK  
+        food2b.bard; // type { getValues(): number[] } | undefined. --- BUG 
+        food2b.bard.getValues(); // error --- BUG
+        ~~~~~~~~~~~
+!!! error TS2532: Object is possibly 'undefined'.
+    }
+    
+    

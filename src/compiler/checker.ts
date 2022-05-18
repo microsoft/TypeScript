@@ -25281,9 +25281,24 @@ namespace ts {
             // will be a subtype or the same type as the argument.
             function narrowType(type: Type, expr: Expression, assumeTrue: boolean): Type {
                 // for `a?.b`, we emulate a synthetic `a !== null && a !== undefined` condition for `a`
+                function isExpressionOfOptionalChainRoot_alt(node: Node): node is Expression & { parent: OptionalChainRoot } {
+                    const kind = node.kind;
+                    const flagRes = !!(node.flags & NodeFlags.OptionalChain) &&
+                        (kind === SyntaxKind.PropertyAccessExpression
+                            || kind === SyntaxKind.ElementAccessExpression
+                            || kind === SyntaxKind.CallExpression
+                            || kind === SyntaxKind.NonNullExpression);
+                    const nn = !isNonNullExpression(node);
+                    const qt = !!(node as any).questionDotToken;
+                    return flagRes && nn && qt;
+                }
                 if (isExpressionOfOptionalChainRoot(expr) ||
                     isBinaryExpression(expr.parent) && expr.parent.operatorToken.kind === SyntaxKind.QuestionQuestionToken && expr.parent.left === expr) {
                     return narrowTypeByOptionality(type, expr, assumeTrue);
+                }
+                const c2 = (expr.kind===SyntaxKind.CallExpression && (expr as any).expression && isExpressionOfOptionalChainRoot_alt((expr as any).expression as Expression));
+                if (c2){
+                    return narrowTypeByOptionality2(type, expr, (expr as any).expression, assumeTrue);
                 }
                 switch (expr.kind) {
                     case SyntaxKind.Identifier:
@@ -25332,6 +25347,18 @@ namespace ts {
                     return narrowTypeByDiscriminant(type, access, t => getTypeWithFacts(t, assumePresent ? TypeFacts.NEUndefinedOrNull : TypeFacts.EQUndefinedOrNull));
                 }
                 return type;
+            }
+            function narrowTypeByOptionality2(type: Type, _expr1: Expression, expr2: Expression, assumePresent: boolean): Type {
+                let ret: Type | undefined;
+                let exprTmp = expr2;
+                while (exprTmp && !ret) {
+                    if (isMatchingReference(reference, exprTmp)) {
+                        ret = getTypeWithFacts(type, assumePresent ? TypeFacts.NEUndefinedOrNull : TypeFacts.EQUndefinedOrNull);
+                    }
+                    exprTmp = (exprTmp as any).expression;
+                }
+                if (!ret) ret = type;
+                return ret;
             }
         }
 

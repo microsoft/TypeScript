@@ -145,14 +145,10 @@ else {
 >o2 : Symbol(o2, Decl(controlFlowOptionalChain.ts, 40, 13))
 
     o2?.f;
->o2?.f : Symbol(f, Decl(controlFlowOptionalChain.ts, 40, 19))
 >o2 : Symbol(o2, Decl(controlFlowOptionalChain.ts, 40, 13))
->f : Symbol(f, Decl(controlFlowOptionalChain.ts, 40, 19))
 
     o2.f;
->o2.f : Symbol(f, Decl(controlFlowOptionalChain.ts, 40, 19))
 >o2 : Symbol(o2, Decl(controlFlowOptionalChain.ts, 40, 13))
->f : Symbol(f, Decl(controlFlowOptionalChain.ts, 40, 19))
 }
 x;
 >x : Symbol(x, Decl(controlFlowOptionalChain.ts, 25, 13))
@@ -514,14 +510,10 @@ else {
 >o6 : Symbol(o6, Decl(controlFlowOptionalChain.ts, 121, 13))
 
     o6?.f;
->o6?.f : Symbol(Base.f, Decl(controlFlowOptionalChain.ts, 113, 16))
 >o6 : Symbol(o6, Decl(controlFlowOptionalChain.ts, 121, 13))
->f : Symbol(Base.f, Decl(controlFlowOptionalChain.ts, 113, 16))
 
     o6.f;
->o6.f : Symbol(Base.f, Decl(controlFlowOptionalChain.ts, 113, 16))
 >o6 : Symbol(o6, Decl(controlFlowOptionalChain.ts, 121, 13))
->f : Symbol(Base.f, Decl(controlFlowOptionalChain.ts, 113, 16))
 }
 o6;
 >o6 : Symbol(o6, Decl(controlFlowOptionalChain.ts, 121, 13))
