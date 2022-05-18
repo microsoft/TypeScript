@@ -457,12 +457,13 @@ namespace ts.Completions.StringCompletions {
             const packageJson = readJson(packageJsonPath, host as { readFile: (filename: string) => string | undefined });
             const typesVersions = (packageJson as any).typesVersions;
             if (typeof typesVersions === "object") {
-                const versionResult = getPackageJsonTypesVersionsPaths(typesVersions);
-                const versionPaths = versionResult && versionResult.paths;
+                const versionPaths = getPackageJsonTypesVersionsPaths(typesVersions)?.paths;
                 if (versionPaths) {
                     const packageDirectory = getDirectoryPath(packageJsonPath);
                     const pathInPackage = absolutePath.slice(ensureTrailingDirectorySeparator(packageDirectory).length);
                     if (addCompletionEntriesFromPaths(result, pathInPackage, packageDirectory, extensions, versionPaths, host)) {
+                        // A true result means one of the `versionPaths` was matched, which will block relative resolution
+                        // to files and folders from here. All reachable paths given the pattern match are already added.
                         return result;
                     }
                 }
@@ -525,9 +526,10 @@ namespace ts.Completions.StringCompletions {
         return result;
     }
 
+    /** @returns whether `fragment` was a match for any `paths` (which should indicate whether any other path completions should be offered) */
     function addCompletionEntriesFromPaths(result: NameAndKind[], fragment: string, baseDirectory: string, fileExtensions: readonly string[], paths: MapLike<string[]>, host: LanguageServiceHost) {
         let pathResults: { results: NameAndKind[], matchedPattern: boolean }[] = [];
-        let matchedPathPrefixLength: number | undefined;
+        let matchedPathPrefixLength = -1;
         for (const path in paths) {
             if (!hasProperty(paths, path)) continue;
             const patterns = paths[path];
@@ -538,28 +540,34 @@ namespace ts.Completions.StringCompletions {
                 const isLongestMatch = isMatch && (matchedPathPrefixLength === undefined || pathPattern.prefix.length > matchedPathPrefixLength);
                 if (isLongestMatch) {
                     // If this is a higher priority match than anything we've seen so far, previous results from matches are invalid, e.g.
+                    // for `import {} from "some-package/|"` with a typesVersions:
                     // {
                     //   "bar/*": ["bar/*"], // <-- 1. We add 'bar', but 'bar/*' doesn't match yet.
-                    //   "*": ["dist/*"],   //  <-- 2. We match here. 'bar' is still ok because it didn't come from a match.
-                    //   "foo/*": ["foo/*"] //  <-- 3. We matched '*' earlier and added results from dist, but if 'foo/*' also matches,
-                    // }                               results in dist are actually not visible. 'bar' still stands because it didn't come from a match.
+                    //   "*": ["dist/*"],    // <-- 2. We match here and add files from dist. 'bar' is still ok because it didn't come from a match.
+                    //   "foo/*": ["foo/*"]  // <-- 3. We matched '*' earlier and added results from dist, but if 'foo/*' also matched,
+                    // }                               results in dist would not be visible. 'bar' still stands because it didn't come from a match.
+                    //                                 This is especially important if `dist/foo` is a folder, because if we fail to clear results
+                    //                                 added by the '*' match, after typing `"some-package/foo/|"` we would get file results from both
+                    //                                 ./dist/foo and ./foo, when only the latter will actually be resolvable.
+                    //                                 See pathCompletionsTypesVersionsWildcard6.ts.
                     matchedPathPrefixLength = pathPattern.prefix.length;
                     pathResults = pathResults.filter(r => !r.matchedPattern);
                 }
                 if (typeof pathPattern === "string" || matchedPathPrefixLength === undefined || pathPattern.prefix.length >= matchedPathPrefixLength) {
-                    const pathResult: typeof pathResults[number] = { results: [], matchedPattern: isMatch };
-                    for (const { name, kind, extension } of getCompletionsForPathMapping(path, patterns, fragment, baseDirectory, fileExtensions, host)) {
-                        pathResult.results.push(nameAndKind(name, kind, extension));
-                    }
-                    pathResults.push(pathResult);
+                    pathResults.push({
+                        matchedPattern: isMatch,
+                        results: getCompletionsForPathMapping(path, patterns, fragment, baseDirectory, fileExtensions, host)
+                            .map(({ name, kind, extension }) => nameAndKind(name, kind, extension)),
+                    });
                 }
             }
         }
 
-        pathResults.forEach(pathResult => pathResult.results.forEach(pathResult => pushIfUnique(result, pathResult, (a, b) =>
-            (host.useCaseSensitiveFileNames?.() ? equateStringsCaseSensitive : equateStringsCaseInsensitive)(a.name, b.name))));
+        const equatePaths = host.useCaseSensitiveFileNames?.() ? equateStringsCaseSensitive : equateStringsCaseInsensitive;
+        const equateResults: EqualityComparer<NameAndKind> = (a, b) => equatePaths(a.name, b.name);
+        pathResults.forEach(pathResult => pathResult.results.forEach(pathResult => pushIfUnique(result, pathResult, equateResults)));
 
-        return matchedPathPrefixLength !== undefined;
+        return matchedPathPrefixLength > -1;
     }
 
     /**
