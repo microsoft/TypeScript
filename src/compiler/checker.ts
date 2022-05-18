@@ -21248,15 +21248,11 @@ namespace ts {
                 type;
         }
 
-        function getWidenedLiteralLikeTypeForContextualType(type: Type, contextualType: Type | undefined, node?: Node) {
-            if (isLiteralOfContextualType(type, contextualType)) {
-                return type;
+        function getWidenedLiteralLikeTypeForContextualType(type: Type, contextualType: Type | undefined) {
+            if (!isLiteralOfContextualType(type, contextualType)) {
+                type = getWidenedUniqueESSymbolType(getWidenedLiteralType(type));
             }
-            const instantiatedContextualType = node && instantiateContextualType(contextualType, node) || contextualType;
-            if (instantiatedContextualType !== contextualType && isLiteralOfContextualType(type, instantiatedContextualType)) {
-                return type;
-            }
-            return getWidenedUniqueESSymbolType(getWidenedLiteralType(type));
+            return type;
         }
 
         function getWidenedLiteralLikeTypeForContextualReturnTypeIfNeeded(type: Type | undefined, contextualSignatureReturnType: Type | undefined, isAsync: boolean) {
@@ -26521,7 +26517,7 @@ namespace ts {
                 if (result) {
                     return result;
                 }
-                if (!(contextFlags! & ContextFlags.SkipBindingPatterns) && isBindingPattern(declaration.name)) { // This is less a contextual type and more an implied shape - in some cases, this may be undesirable
+                if (!(contextFlags! & ContextFlags.SkipBindingPatterns) && isBindingPattern(declaration.name) && declaration.name.elements.length > 0) {
                     return getTypeFromBindingPattern(declaration.name, /*includePatternInType*/ true, /*reportErrors*/ false);
                 }
             }
@@ -27055,12 +27051,10 @@ namespace ts {
                 const inferenceContext = getInferenceContext(node);
                 // If no inferences have been made, nothing is gained from instantiating as type parameters
                 // would just be replaced with their defaults similar to the apparent type.
-                if (inferenceContext && contextFlags! & ContextFlags.Signature && (inferenceContext.returnMapper || some(inferenceContext.inferences, hasInferenceCandidates))) {
+                if (inferenceContext && contextFlags! & ContextFlags.Signature && some(inferenceContext.inferences, hasInferenceCandidates)) {
                     // For contextual signatures we incorporate all inferences made so far, e.g. from return
                     // types as well as arguments to the left in a function call.
-                    return instantiateInstantiableTypes(contextualType, inferenceContext.returnMapper
-                        ? combineTypeMappers(inferenceContext.nonFixingMapper, inferenceContext.returnMapper)
-                        : inferenceContext.nonFixingMapper);
+                    return instantiateInstantiableTypes(contextualType, inferenceContext.nonFixingMapper);
                 }
                 if (inferenceContext?.returnMapper) {
                     // For other purposes (e.g. determining whether to produce literal types) we only
@@ -34503,7 +34497,7 @@ namespace ts {
             const type = checkExpression(node, checkMode, forceTuple);
             return isConstContext(node) || isCommonJsExportedExpression(node) ? getRegularTypeOfLiteralType(type) :
                 isTypeAssertion(node) ? type :
-                getWidenedLiteralLikeTypeForContextualType(type, arguments.length === 2 ? getContextualType(node) : contextualType, node);
+                getWidenedLiteralLikeTypeForContextualType(type, instantiateContextualType(arguments.length === 2 ? getContextualType(node) : contextualType, node));
         }
 
         function checkPropertyAssignment(node: PropertyAssignment, checkMode?: CheckMode): Type {
