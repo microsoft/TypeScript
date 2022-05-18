@@ -97,7 +97,7 @@ TypeScript is currently accepting contributions in the form of bug fixes. A bug 
 
 Features (things that add new or improved functionality to TypeScript) may be accepted, but will need to first be approved (labelled ["help wanted"](https://github.com/Microsoft/TypeScript/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22) or in the "Backlog" milestone) by a TypeScript project maintainer in the suggestion issue. Features with language design impact, or that are adequately satisfied with external tools, will not be accepted.
 
-## Claiming issues ("cookie licking")
+## Issue claiming
 
 If you intend to work on an issue, please avoid leaving comments like "I'm going to work on this". There are a few reasons for this. These comments tend to [discourage anyone from working in the area](https://devblogs.microsoft.com/oldnewthing/20091201-00/?p=15843), yet many issues are much more difficult than they first appear, and you might find yourself trying to fix several issues before finding one that can be completed. Many issues have a long trail of people indicating that they're going to try to fix it, but no PR.
 
