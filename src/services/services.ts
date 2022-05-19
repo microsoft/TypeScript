@@ -1601,6 +1601,62 @@ namespace ts {
             return host.getPackageJsonAutoImportProvider?.();
         }
 
+        function updateIsDefinitionOfReferencedSymbols(referencedSymbols: readonly ReferencedSymbol[], knownSymbolSpans: Set<DocumentSpan>): boolean {
+            const checker = program.getTypeChecker();
+            const symbol = getSymbolForProgram();
+
+            if (!symbol) return false;
+
+            for (const referencedSymbol of referencedSymbols) {
+                for (const ref of referencedSymbol.references) {
+                    const refNode = getNodeForSpan(ref);
+                    Debug.assertIsDefined(refNode);
+                    if (knownSymbolSpans.has(ref) || FindAllReferences.isDeclarationOfSymbol(refNode, symbol)) {
+                        knownSymbolSpans.add(ref);
+                        ref.isDefinition = true;
+                        const mappedSpan = getMappedDocumentSpan(ref, sourceMapper, maybeBind(host, host.fileExists));
+                        if (mappedSpan) {
+                            knownSymbolSpans.add(mappedSpan);
+                        }
+                    }
+                    else {
+                        ref.isDefinition = false;
+                    }
+                }
+            }
+
+            return true;
+
+            function getSymbolForProgram(): Symbol | undefined {
+                for (const referencedSymbol of referencedSymbols) {
+                    for (const ref of referencedSymbol.references) {
+                        if (knownSymbolSpans.has(ref)) {
+                            const refNode = getNodeForSpan(ref);
+                            Debug.assertIsDefined(refNode);
+                            return checker.getSymbolAtLocation(refNode);
+                        }
+                        const mappedSpan = getMappedDocumentSpan(ref, sourceMapper, maybeBind(host, host.fileExists));
+                        if (mappedSpan && knownSymbolSpans.has(mappedSpan)) {
+                            const refNode = getNodeForSpan(mappedSpan);
+                            if (refNode) {
+                                return checker.getSymbolAtLocation(refNode);
+                            }
+                        }
+                    }
+                }
+
+                return undefined;
+            }
+
+            function getNodeForSpan(docSpan: DocumentSpan): Node | undefined {
+                const sourceFile = program.getSourceFile(docSpan.fileName);
+                if (!sourceFile) return undefined;
+                const rawNode = getTouchingPropertyName(sourceFile, docSpan.textSpan.start);
+                const adjustedNode = FindAllReferences.Core.getAdjustedNode(rawNode, { use: FindAllReferences.FindReferencesUse.References });
+                return adjustedNode;
+            }
+        }
+
         function cleanupSemanticCache(): void {
             program = undefined!; // TODO: GH#18217
         }
@@ -2716,6 +2772,7 @@ namespace ts {
             getNonBoundSourceFile,
             getProgram,
             getAutoImportProvider,
+            updateIsDefinitionOfReferencedSymbols,
             getApplicableRefactors,
             getEditsForRefactor,
             toLineColumnOffset,
