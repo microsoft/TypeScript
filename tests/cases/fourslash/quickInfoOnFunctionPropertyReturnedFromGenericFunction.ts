@@ -10,4 +10,4 @@
 ////
 //// createProps({})./**/createVariants();
 
-verify.quickInfoAt("", "(property) createVariants: () => void");
+verify.quickInfoAt("", "(property) getProps<{}>.createVariants: () => void");

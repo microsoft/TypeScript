@@ -4020,10 +4020,7 @@ namespace ts {
                         }
                     });
                 }) : undefined;
-                let res = firstVariableMatch ? [firstVariableMatch, ...additionalContainers] : [...additionalContainers];
-                if (!container.valueDeclaration || container.valueDeclaration.kind !== SyntaxKind.FunctionDeclaration || !isExpandoFunctionDeclaration(container.valueDeclaration)) {
-                    res = append(res, container);
-                }
+                let res = firstVariableMatch ? [firstVariableMatch, ...additionalContainers, container] : [...additionalContainers, container];
                 res = append(res, objectLiteralContainer);
                 res = addRange(res, reexportContainers);
                 return res;
@@ -10066,7 +10063,7 @@ namespace ts {
 
         // The outer type parameters are those defined by enclosing generic classes, methods, or functions.
         function getOuterTypeParametersOfClassOrInterface(symbol: Symbol): TypeParameter[] | undefined {
-            const declaration = symbol.flags & SymbolFlags.Class ? symbol.valueDeclaration : getDeclarationOfKind(symbol, SyntaxKind.InterfaceDeclaration)!;
+            const declaration = symbol.flags & SymbolFlags.Class ? symbol.valueDeclaration : (getDeclarationOfKind(symbol, SyntaxKind.InterfaceDeclaration) || getDeclarationOfKind(symbol, SyntaxKind.FunctionDeclaration)!);
             Debug.assert(!!declaration, "Class was missing valueDeclaration -OR- non-class had no interface declarations");
             return getOuterTypeParameters(declaration);
         }
