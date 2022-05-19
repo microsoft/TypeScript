@@ -16104,7 +16104,17 @@ namespace ts {
         }
 
         function getTrueTypeFromConditionalType(type: ConditionalType) {
-            return type.resolvedTrueType || (type.resolvedTrueType = instantiateType(getTypeFromTypeNode(type.root.node.trueType), type.mapper));
+            if (type.resolvedTrueType) {
+                return type.resolvedTrueType;
+            }
+            // since conditional type is distributive, keyof operator should not
+            // return IndexType for unions, see issue #49000
+            if (type.root.node.trueType.kind === SyntaxKind.TypeOperator
+                && (type.root.node.trueType as TypeOperatorNode).operator === SyntaxKind.KeyOfKeyword
+                && (type.extendsType.flags & TypeFlags.Union || type.extendsType.flags & TypeFlags.Unknown)) {
+                return unknownType;
+            }
+            return type.resolvedTrueType = instantiateType(getTypeFromTypeNode(type.root.node.trueType), type.mapper);
         }
 
         function getFalseTypeFromConditionalType(type: ConditionalType) {

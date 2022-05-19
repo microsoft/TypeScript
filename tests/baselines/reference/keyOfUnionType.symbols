@@ -1,0 +1,71 @@
+=== tests/cases/compiler/keyOfUnionType.ts ===
+// repro from https://github.com/microsoft/TypeScript/issues/49000
+
+type UnionOfObjs = { prop0: string } | { prop1: number; prop2: boolean } | { prop3: string[] };
+>UnionOfObjs : Symbol(UnionOfObjs, Decl(keyOfUnionType.ts, 0, 0))
+>prop0 : Symbol(prop0, Decl(keyOfUnionType.ts, 2, 20))
+>prop1 : Symbol(prop1, Decl(keyOfUnionType.ts, 2, 40))
+>prop2 : Symbol(prop2, Decl(keyOfUnionType.ts, 2, 55))
+>prop3 : Symbol(prop3, Decl(keyOfUnionType.ts, 2, 76))
+
+type KeyOfUnion<T>   = T extends string | number ? keyof T : never;
+>KeyOfUnion : Symbol(KeyOfUnion, Decl(keyOfUnionType.ts, 2, 95))
+>T : Symbol(T, Decl(keyOfUnionType.ts, 4, 16))
+>T : Symbol(T, Decl(keyOfUnionType.ts, 4, 16))
+>T : Symbol(T, Decl(keyOfUnionType.ts, 4, 16))
+
+type KeyOfUnknown<T> = T extends unknown ? keyof T : never;
+>KeyOfUnknown : Symbol(KeyOfUnknown, Decl(keyOfUnionType.ts, 4, 67))
+>T : Symbol(T, Decl(keyOfUnionType.ts, 5, 18))
+>T : Symbol(T, Decl(keyOfUnionType.ts, 5, 18))
+>T : Symbol(T, Decl(keyOfUnionType.ts, 5, 18))
+
+type KeyOfObject<T>  = T extends object  ? keyof T : never;
+>KeyOfObject : Symbol(KeyOfObject, Decl(keyOfUnionType.ts, 5, 59))
+>T : Symbol(T, Decl(keyOfUnionType.ts, 6, 17))
+>T : Symbol(T, Decl(keyOfUnionType.ts, 6, 17))
+>T : Symbol(T, Decl(keyOfUnionType.ts, 6, 17))
+
+type Working = { [K in KeyOfUnknown<UnionOfObjs>]: UnionOfObjs[K] };
+>Working : Symbol(Working, Decl(keyOfUnionType.ts, 6, 59))
+>K : Symbol(K, Decl(keyOfUnionType.ts, 8, 18))
+>KeyOfUnknown : Symbol(KeyOfUnknown, Decl(keyOfUnionType.ts, 4, 67))
+>UnionOfObjs : Symbol(UnionOfObjs, Decl(keyOfUnionType.ts, 0, 0))
+>UnionOfObjs : Symbol(UnionOfObjs, Decl(keyOfUnionType.ts, 0, 0))
+>K : Symbol(K, Decl(keyOfUnionType.ts, 8, 18))
+
+// The case below should be equivalent to `Working`, however
+// it was broken in the past and does not error
+type Broken<T> = { [K in KeyOfUnknown<T>]: T[K] };
+>Broken : Symbol(Broken, Decl(keyOfUnionType.ts, 8, 68))
+>T : Symbol(T, Decl(keyOfUnionType.ts, 12, 12))
+>K : Symbol(K, Decl(keyOfUnionType.ts, 12, 20))
+>KeyOfUnknown : Symbol(KeyOfUnknown, Decl(keyOfUnionType.ts, 4, 67))
+>T : Symbol(T, Decl(keyOfUnionType.ts, 12, 12))
+>T : Symbol(T, Decl(keyOfUnionType.ts, 12, 12))
+>K : Symbol(K, Decl(keyOfUnionType.ts, 12, 20))
+
+type Test = Broken<UnionOfObjs>
+>Test : Symbol(Test, Decl(keyOfUnionType.ts, 12, 50))
+>Broken : Symbol(Broken, Decl(keyOfUnionType.ts, 8, 68))
+>UnionOfObjs : Symbol(UnionOfObjs, Decl(keyOfUnionType.ts, 0, 0))
+
+// Other cases
+type Okay<T> = { [K in KeyOfObject<T>]: T[K] };
+>Okay : Symbol(Okay, Decl(keyOfUnionType.ts, 13, 31))
+>T : Symbol(T, Decl(keyOfUnionType.ts, 16, 10))
+>K : Symbol(K, Decl(keyOfUnionType.ts, 16, 18))
+>KeyOfObject : Symbol(KeyOfObject, Decl(keyOfUnionType.ts, 5, 59))
+>T : Symbol(T, Decl(keyOfUnionType.ts, 16, 10))
+>T : Symbol(T, Decl(keyOfUnionType.ts, 16, 10))
+>K : Symbol(K, Decl(keyOfUnionType.ts, 16, 18))
+
+type NotOkay<T> = { [K in KeyOfUnion<T>]: T[K] };
+>NotOkay : Symbol(NotOkay, Decl(keyOfUnionType.ts, 16, 47))
+>T : Symbol(T, Decl(keyOfUnionType.ts, 18, 13))
+>K : Symbol(K, Decl(keyOfUnionType.ts, 18, 21))
+>KeyOfUnion : Symbol(KeyOfUnion, Decl(keyOfUnionType.ts, 2, 95))
+>T : Symbol(T, Decl(keyOfUnionType.ts, 18, 13))
+>T : Symbol(T, Decl(keyOfUnionType.ts, 18, 13))
+>K : Symbol(K, Decl(keyOfUnionType.ts, 18, 21))
+

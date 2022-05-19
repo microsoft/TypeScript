@@ -1,0 +1,37 @@
+=== tests/cases/compiler/keyOfUnionType.ts ===
+// repro from https://github.com/microsoft/TypeScript/issues/49000
+
+type UnionOfObjs = { prop0: string } | { prop1: number; prop2: boolean } | { prop3: string[] };
+>UnionOfObjs : { prop0: string; } | { prop1: number; prop2: boolean; } | { prop3: string[]; }
+>prop0 : string
+>prop1 : number
+>prop2 : boolean
+>prop3 : string[]
+
+type KeyOfUnion<T>   = T extends string | number ? keyof T : never;
+>KeyOfUnion : KeyOfUnion<T>
+
+type KeyOfUnknown<T> = T extends unknown ? keyof T : never;
+>KeyOfUnknown : KeyOfUnknown<T>
+
+type KeyOfObject<T>  = T extends object  ? keyof T : never;
+>KeyOfObject : KeyOfObject<T>
+
+type Working = { [K in KeyOfUnknown<UnionOfObjs>]: UnionOfObjs[K] };
+>Working : { prop0: unknown; prop1: unknown; prop2: unknown; prop3: unknown; }
+
+// The case below should be equivalent to `Working`, however
+// it was broken in the past and does not error
+type Broken<T> = { [K in KeyOfUnknown<T>]: T[K] };
+>Broken : Broken<T>
+
+type Test = Broken<UnionOfObjs>
+>Test : { prop0: unknown; prop1: unknown; prop2: unknown; prop3: unknown; }
+
+// Other cases
+type Okay<T> = { [K in KeyOfObject<T>]: T[K] };
+>Okay : Okay<T>
+
+type NotOkay<T> = { [K in KeyOfUnion<T>]: T[K] };
+>NotOkay : NotOkay<T>
+

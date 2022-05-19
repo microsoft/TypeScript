@@ -1,0 +1,41 @@
+tests/cases/compiler/keyOfUnionType.ts(9,52): error TS2536: Type 'K' cannot be used to index type 'UnionOfObjs'.
+tests/cases/compiler/keyOfUnionType.ts(13,26): error TS2322: Type 'KeyOfUnknown<T>' is not assignable to type 'string | number | symbol'.
+  Type 'unknown' is not assignable to type 'string | number | symbol'.
+tests/cases/compiler/keyOfUnionType.ts(13,44): error TS2536: Type 'K' cannot be used to index type 'T'.
+tests/cases/compiler/keyOfUnionType.ts(19,27): error TS2322: Type 'KeyOfUnion<T>' is not assignable to type 'string | number | symbol'.
+  Type 'unknown' is not assignable to type 'string | number | symbol'.
+tests/cases/compiler/keyOfUnionType.ts(19,43): error TS2536: Type 'K' cannot be used to index type 'T'.
+
+
+==== tests/cases/compiler/keyOfUnionType.ts (5 errors) ====
+    // repro from https://github.com/microsoft/TypeScript/issues/49000
+    
+    type UnionOfObjs = { prop0: string } | { prop1: number; prop2: boolean } | { prop3: string[] };
+    
+    type KeyOfUnion<T>   = T extends string | number ? keyof T : never;
+    type KeyOfUnknown<T> = T extends unknown ? keyof T : never;
+    type KeyOfObject<T>  = T extends object  ? keyof T : never;
+    
+    type Working = { [K in KeyOfUnknown<UnionOfObjs>]: UnionOfObjs[K] };
+                                                       ~~~~~~~~~~~~~~
+!!! error TS2536: Type 'K' cannot be used to index type 'UnionOfObjs'.
+    
+    // The case below should be equivalent to `Working`, however
+    // it was broken in the past and does not error
+    type Broken<T> = { [K in KeyOfUnknown<T>]: T[K] };
+                             ~~~~~~~~~~~~~~~
+!!! error TS2322: Type 'KeyOfUnknown<T>' is not assignable to type 'string | number | symbol'.
+!!! error TS2322:   Type 'unknown' is not assignable to type 'string | number | symbol'.
+                                               ~~~~
+!!! error TS2536: Type 'K' cannot be used to index type 'T'.
+    type Test = Broken<UnionOfObjs>
+    
+    // Other cases
+    type Okay<T> = { [K in KeyOfObject<T>]: T[K] };
+    
+    type NotOkay<T> = { [K in KeyOfUnion<T>]: T[K] };
+                              ~~~~~~~~~~~~~
+!!! error TS2322: Type 'KeyOfUnion<T>' is not assignable to type 'string | number | symbol'.
+!!! error TS2322:   Type 'unknown' is not assignable to type 'string | number | symbol'.
+                                              ~~~~
+!!! error TS2536: Type 'K' cannot be used to index type 'T'.
