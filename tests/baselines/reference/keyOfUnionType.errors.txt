@@ -20,7 +20,7 @@ tests/cases/compiler/keyOfUnionType.ts(19,43): error TS2536: Type 'K' cannot be 
                                                        ~~~~~~~~~~~~~~
 !!! error TS2536: Type 'K' cannot be used to index type 'UnionOfObjs'.
     
-    // The case below should be equivalent to `Working`, however
+    // The case below should be equivalent to type `Working` above, however
     // it was broken in the past and does not error
     type Broken<T> = { [K in KeyOfUnknown<T>]: T[K] };
                              ~~~~~~~~~~~~~~~

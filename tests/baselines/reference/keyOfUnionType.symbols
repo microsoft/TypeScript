@@ -34,7 +34,7 @@ type Working = { [K in KeyOfUnknown<UnionOfObjs>]: UnionOfObjs[K] };
 >UnionOfObjs : Symbol(UnionOfObjs, Decl(keyOfUnionType.ts, 0, 0))
 >K : Symbol(K, Decl(keyOfUnionType.ts, 8, 18))
 
-// The case below should be equivalent to `Working`, however
+// The case below should be equivalent to type `Working` above, however
 // it was broken in the past and does not error
 type Broken<T> = { [K in KeyOfUnknown<T>]: T[K] };
 >Broken : Symbol(Broken, Decl(keyOfUnionType.ts, 8, 68))

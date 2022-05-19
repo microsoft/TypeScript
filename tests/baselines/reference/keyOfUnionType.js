@@ -9,7 +9,7 @@ type KeyOfObject<T>  = T extends object  ? keyof T : never;
 
 type Working = { [K in KeyOfUnknown<UnionOfObjs>]: UnionOfObjs[K] };
 
-// The case below should be equivalent to `Working`, however
+// The case below should be equivalent to type `Working` above, however
 // it was broken in the past and does not error
 type Broken<T> = { [K in KeyOfUnknown<T>]: T[K] };
 type Test = Broken<UnionOfObjs>
