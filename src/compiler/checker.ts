@@ -5041,8 +5041,7 @@ namespace ts {
                         (type === markerSubType ? "sub-" : "super-") + symbolName(varianceTypeParameter.symbol) : "?";
                     return factory.createTypeReferenceNode(factory.createIdentifier(name), /*typeArguments*/ undefined);
                 }
-                // Switch to the union origin only if it has fewer constituents than the union itself.
-                if (type.flags & TypeFlags.Union && (type as UnionType).origin && getConstituentCount(type) > getConstituentCount((type as UnionType).origin!)) {
+                if (type.flags & TypeFlags.Union && (type as UnionType).origin) {
                     type = (type as UnionType).origin!;
                 }
                 if (type.flags & (TypeFlags.Union | TypeFlags.Intersection)) {
@@ -15042,8 +15041,9 @@ namespace ts {
                         }
                         const constituents = getCrossProductIntersections(typeSet);
                         // We attach a denormalized origin type when at least one constituent of the cross-product union is an
-                        // intersection (i.e. when the intersection didn't just reduce one or more unions to smaller unions).
-                        const origin = some(constituents, t => !!(t.flags & TypeFlags.Intersection)) ? createOriginUnionOrIntersectionType(TypeFlags.Intersection, typeSet) : undefined;
+                        // intersection (i.e. when the intersection didn't just reduce one or more unions to smaller unions) and
+                        // the denormalized origin has fewer constituents than the union itself.
+                        const origin = some(constituents, t => !!(t.flags & TypeFlags.Intersection)) && getConstituentCountOfTypes(constituents) > getConstituentCountOfTypes(typeSet) ? createOriginUnionOrIntersectionType(TypeFlags.Intersection, typeSet) : undefined;
                         result = getUnionType(constituents, UnionReduction.Literal, aliasSymbol, aliasTypeArguments, origin);
                     }
                 }
@@ -15090,8 +15090,13 @@ namespace ts {
         }
 
         function getConstituentCount(type: Type): number {
-            return !(type.flags & TypeFlags.UnionOrIntersection) ? 1 : reduceLeft((type as UnionOrIntersectionType).types,
-                (n, t) => n + (t.aliasSymbol ? 1 : getConstituentCount(t.flags & TypeFlags.Union && (t as UnionType).origin || t)), 0);
+            return !(type.flags & TypeFlags.UnionOrIntersection) || type.aliasSymbol ? 1 :
+                type.flags & TypeFlags.Union && (type as UnionType).origin ? getConstituentCount((type as UnionType).origin!) :
+                getConstituentCountOfTypes((type as UnionOrIntersectionType).types);
+        }
+
+        function getConstituentCountOfTypes(types: Type[]): number {
+            return reduceLeft(types, (n, t) => n + getConstituentCount(t), 0);
         }
 
         function getTypeFromIntersectionTypeNode(node: IntersectionTypeNode): Type {
