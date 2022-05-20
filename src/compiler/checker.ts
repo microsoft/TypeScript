@@ -18261,15 +18261,27 @@ namespace ts {
 
         function getNormalizedType(type: Type, writing: boolean): Type {
             while (true) {
-                let t = isFreshLiteralType(type) ? (type as FreshableType).regularType :
-                    getObjectFlags(type) & ObjectFlags.Reference && (type as TypeReference).node ? createTypeReference((type as TypeReference).target, getTypeArguments(type as TypeReference)) :
-                    type.flags & TypeFlags.UnionOrIntersection ? getReducedType(type) :
+                const t = isFreshLiteralType(type) ? (type as FreshableType).regularType :
+                    getObjectFlags(type) & ObjectFlags.Reference ? (type as TypeReference).node ? createTypeReference((type as TypeReference).target, getTypeArguments(type as TypeReference)) : getSingleBaseForNonAugmentingSubtype(type) || type :
+                    type.flags & TypeFlags.UnionOrIntersection ? getNormalizedUnionOrIntersectionType(type as UnionOrIntersectionType, writing) :
                     type.flags & TypeFlags.Substitution ? writing ? (type as SubstitutionType).baseType : (type as SubstitutionType).substitute :
                     type.flags & TypeFlags.Simplifiable ? getSimplifiedType(type, writing) :
                     type;
-                t = getSingleBaseForNonAugmentingSubtype(t) || t;
-                if (t === type) break;
+                if (t === type) return t;
                 type = t;
+            }
+        }
+
+        function getNormalizedUnionOrIntersectionType(type: UnionOrIntersectionType, writing: boolean) {
+            const reduced = getReducedType(type);
+            if (reduced !== type) {
+                return reduced;
+            }
+            if (type.flags & TypeFlags.Intersection) {
+                const normalizedTypes = sameMap(type.types, t => getNormalizedType(t, writing));
+                if (normalizedTypes !== type.types) {
+                    return getIntersectionType(normalizedTypes);
+                }
             }
             return type;
         }
@@ -21422,10 +21434,10 @@ namespace ts {
             if (!deferredGlobalNonNullableTypeAlias) {
                 deferredGlobalNonNullableTypeAlias = getGlobalSymbol("NonNullable" as __String, SymbolFlags.TypeAlias, /*diagnostic*/ undefined) || unknownSymbol;
             }
-            // If the NonNullable<T> type is available, return an instantiation. Otherwise just return the reduced type.
-            return deferredGlobalNonNullableTypeAlias !== unknownSymbol ?
-                getTypeAliasInstantiation(deferredGlobalNonNullableTypeAlias, [reducedType]) :
-                reducedType;
+            if (deferredGlobalNonNullableTypeAlias === unknownSymbol || !maybeTypeOfKind(reducedType, TypeFlags.Instantiable | TypeFlags.Intersection)) {
+                return reducedType;
+            }
+            return getTypeAliasInstantiation(deferredGlobalNonNullableTypeAlias, [reducedType]);
         }
 
         function getNonNullableType(type: Type): Type {
@@ -25485,8 +25497,10 @@ namespace ts {
                     !(someType(type, isGenericTypeWithoutNullableConstraint) && isGenericIndexType(getTypeOfExpression((parent as ElementAccessExpression).argumentExpression)));
         }
 
-        function isGenericTypeWithUnionConstraint(type: Type) {
-            return !!(type.flags & TypeFlags.Instantiable && getBaseConstraintOrType(type).flags & (TypeFlags.Nullable | TypeFlags.Union));
+        function isGenericTypeWithUnionConstraint(type: Type): boolean {
+            return type.flags & TypeFlags.Intersection ?
+                some((type as IntersectionType).types, isGenericTypeWithUnionConstraint) :
+                !!(type.flags & TypeFlags.Instantiable && getBaseConstraintOrType(type).flags & (TypeFlags.Nullable | TypeFlags.Union));
         }
 
         function isGenericTypeWithoutNullableConstraint(type: Type) {
@@ -25517,7 +25531,7 @@ namespace ts {
             const substituteConstraints = !(checkMode && checkMode & CheckMode.Inferential) &&
                 someType(type, isGenericTypeWithUnionConstraint) &&
                 (isConstraintPosition(type, reference) || hasContextualTypeWithNoGenericTypes(reference, checkMode));
-            return substituteConstraints ? mapType(type, t => t.flags & TypeFlags.Instantiable ? getBaseConstraintOrType(t) : t) : type;
+            return substituteConstraints ? mapType(type, getBaseConstraintOrType) : type;
         }
 
         function isExportOrExportExpression(location: Node) {
