@@ -21427,21 +21427,23 @@ namespace ts {
         }
 
         function getGlobalNonNullableTypeInstantiation(type: Type) {
-            // First reduce away any constituents that are assignable to 'undefined' or 'null'. This not only eliminates
-            // 'undefined' and 'null', but also higher-order types such as a type parameter 'U extends undefined | null'
-            // that isn't eliminated by a NonNullable<T> instantiation.
-            const reducedType = getTypeWithFacts(type, TypeFacts.NEUndefinedOrNull);
             if (!deferredGlobalNonNullableTypeAlias) {
                 deferredGlobalNonNullableTypeAlias = getGlobalSymbol("NonNullable" as __String, SymbolFlags.TypeAlias, /*diagnostic*/ undefined) || unknownSymbol;
             }
-            if (deferredGlobalNonNullableTypeAlias === unknownSymbol || !maybeTypeOfKind(reducedType, TypeFlags.Instantiable | TypeFlags.Intersection)) {
-                return reducedType;
-            }
-            return getTypeAliasInstantiation(deferredGlobalNonNullableTypeAlias, [reducedType]);
+            return deferredGlobalNonNullableTypeAlias !== unknownSymbol ?
+                getTypeAliasInstantiation(deferredGlobalNonNullableTypeAlias, [type]) :
+                getIntersectionType([type, emptyObjectType]);
         }
 
         function getNonNullableType(type: Type): Type {
-            return strictNullChecks ? getGlobalNonNullableTypeInstantiation(type) : type;
+            if (strictNullChecks) {
+                // First reduce away any constituents that are assignable to 'undefined' or 'null'. This not only eliminates
+                // 'undefined' and 'null', but also higher-order types such as a type parameter 'U extends undefined | null'
+                // that isn't eliminated by a NonNullable<T> instantiation.
+                const reducedType = getTypeWithFacts(type, TypeFacts.NEUndefinedOrNull);
+                return maybeTypeOfKind(reducedType, TypeFlags.Instantiable) ? getGlobalNonNullableTypeInstantiation(reducedType) : reducedType;
+            }
+            return type;
         }
 
         function addOptionalTypeMarker(type: Type) {
@@ -23555,7 +23557,7 @@ namespace ts {
                         return mapType(reduced, t => getTypeFacts(t) & TypeFacts.EQNull ? getIntersectionType([t, getTypeFacts(t) & TypeFacts.EQUndefined && !maybeTypeOfKind(reduced, TypeFlags.Undefined) ? getUnionType([emptyObjectType, undefinedType]) : emptyObjectType]): t);
                     case TypeFacts.NEUndefinedOrNull:
                     case TypeFacts.Truthy:
-                        return mapType(reduced, t => getTypeFacts(t) & TypeFacts.EQUndefinedOrNull ? getIntersectionType([t, emptyObjectType]): t);
+                        return mapType(reduced, t => getTypeFacts(t) & TypeFacts.EQUndefinedOrNull ? getGlobalNonNullableTypeInstantiation(t): t);
                 }
             }
             return reduced;
