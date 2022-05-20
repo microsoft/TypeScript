@@ -10,7 +10,7 @@ function f1<T extends string | undefined>(x: T, y: { a: T }, z: [T]): string {
 >x : T
 
         x;
->x : T & {}
+>x : NonNullable<T>
 
         x.length;
 >x.length : number
@@ -67,7 +67,7 @@ function f2<T>(x: Extract<T, string | undefined> | null): string {
 >x : Extract<T, string | undefined> | null
 
         x;
->x : Extract<T, string | undefined> & {}
+>x : NonNullable<Extract<T, string | undefined>>
 
         x.length;
 >x.length : number
@@ -404,11 +404,11 @@ function fx1<T, K extends keyof T>(obj: T, key: K) {
 >key : K
 
     const x2 = obj && obj[key];
->x2 : (T & {})[K]
->obj && obj[key] : (T & {})[K]
+>x2 : NonNullable<T>[K]
+>obj && obj[key] : NonNullable<T>[K]
 >obj : T
->obj[key] : (T & {})[K]
->obj : T & {}
+>obj[key] : NonNullable<T>[K]
+>obj : NonNullable<T>
 >key : K
 }
 

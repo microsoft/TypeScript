@@ -100,7 +100,7 @@ function f11<T>(x: T) {
 >x : T
 
         x;  // T & {}
->x : T & {}
+>x : NonNullable<T>
     }
     else {
         x;  // T
@@ -115,7 +115,7 @@ function f11<T>(x: T) {
     }
     else {
         x;  // T & {}
->x : T & {}
+>x : NonNullable<T>
     }
 }
 
@@ -255,7 +255,7 @@ function f21<T>(x: T) {
 >undefined : undefined
 
         x;  // T & {}
->x : T & {}
+>x : NonNullable<T>
     }
     else {
         x;  // T
@@ -267,7 +267,7 @@ function f21<T>(x: T) {
 >null : null
 
         x;  // T & {}
->x : T & {}
+>x : NonNullable<T>
     }
     else {
         x;  // T
@@ -325,7 +325,7 @@ function f22<T extends {} | undefined>(x: T) {
 >undefined : undefined
 
         x;  // T & {}
->x : T & {}
+>x : NonNullable<T>
     }
     else {
         x;  // T
@@ -337,7 +337,7 @@ function f22<T extends {} | undefined>(x: T) {
 >null : null
 
         x;  // T & {}
->x : T & {}
+>x : NonNullable<T>
     }
     else {
         x;  // T
@@ -372,7 +372,7 @@ function f23<T>(x: T | undefined | null) {
 >undefined : undefined
 
         x;  // T & {}
->x : T & {}
+>x : NonNullable<T>
     }
     if (x != null) {
 >x != null : boolean
@@ -380,7 +380,7 @@ function f23<T>(x: T | undefined | null) {
 >null : null
 
         x;  // T & {}
->x : T & {}
+>x : NonNullable<T>
     }
 }
 
@@ -417,7 +417,7 @@ function f31<T>(x: T) {
 >x : T
 >typeof x === "object" : boolean
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
->x : T & {}
+>x : NonNullable<T>
 >"object" : "object"
 
         x;  // T & object
