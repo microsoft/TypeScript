@@ -22,6 +22,15 @@ type T06 = {} & undefined;  // never
 type T07 = undefined & void;  // undefined
 >T07 : undefined
 
+type T10 = string & {};  // Specially preserved
+>T10 : string & {}
+
+type T11 = number & {};  // Specially preserved
+>T11 : number & {}
+
+type T12 = bigint & {};  // Specially preserved
+>T12 : bigint & {}
+
 type ThisNode = {};
 >ThisNode : {}
 

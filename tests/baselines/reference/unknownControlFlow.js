@@ -7,6 +7,10 @@ type T05 = {} & null;  // never
 type T06 = {} & undefined;  // never
 type T07 = undefined & void;  // undefined
 
+type T10 = string & {};  // Specially preserved
+type T11 = number & {};  // Specially preserved
+type T12 = bigint & {};  // Specially preserved
+
 type ThisNode = {};
 type ThatNode = {};
 type ThisOrThatNode = ThisNode | ThatNode;
@@ -493,6 +497,9 @@ declare type T04 = {} & {
 declare type T05 = {} & null;
 declare type T06 = {} & undefined;
 declare type T07 = undefined & void;
+declare type T10 = string & {};
+declare type T11 = number & {};
+declare type T12 = bigint & {};
 declare type ThisNode = {};
 declare type ThatNode = {};
 declare type ThisOrThatNode = ThisNode | ThatNode;

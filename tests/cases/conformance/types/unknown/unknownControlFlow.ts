@@ -9,6 +9,10 @@ type T05 = {} & null;  // never
 type T06 = {} & undefined;  // never
 type T07 = undefined & void;  // undefined
 
+type T10 = string & {};  // Specially preserved
+type T11 = number & {};  // Specially preserved
+type T12 = bigint & {};  // Specially preserved
+
 type ThisNode = {};
 type ThatNode = {};
 type ThisOrThatNode = ThisNode | ThatNode;

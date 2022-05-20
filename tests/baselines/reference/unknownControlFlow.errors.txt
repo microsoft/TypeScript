@@ -1,4 +1,4 @@
-tests/cases/conformance/types/unknown/unknownControlFlow.ts(14,9): error TS2322: Type 'unknown' is not assignable to type '{}'.
+tests/cases/conformance/types/unknown/unknownControlFlow.ts(18,9): error TS2322: Type 'unknown' is not assignable to type '{}'.
 
 
 ==== tests/cases/conformance/types/unknown/unknownControlFlow.ts (1 errors) ====
@@ -9,6 +9,10 @@ tests/cases/conformance/types/unknown/unknownControlFlow.ts(14,9): error TS2322:
     type T05 = {} & null;  // never
     type T06 = {} & undefined;  // never
     type T07 = undefined & void;  // undefined
+    
+    type T10 = string & {};  // Specially preserved
+    type T11 = number & {};  // Specially preserved
+    type T12 = bigint & {};  // Specially preserved
     
     type ThisNode = {};
     type ThatNode = {};
