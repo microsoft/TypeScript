@@ -60,6 +60,7 @@
         "es2022.intl",
         "es2022.object",
         "es2022.string",
+        "es2022.sharedmemory",
         "esnext.intl",
         // Default libraries
         "es5.full",
