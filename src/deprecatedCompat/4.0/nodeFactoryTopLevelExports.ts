@@ -1117,7 +1117,7 @@ namespace ts {
         initializer?: Expression | undefined
     ): PropertySignature {
         const node = factory.createPropertySignature(modifiers, name, questionToken, type);
-        node.illegalInitializer = initializer;
+        (node as Mutable<PropertySignature>).initializer = initializer;
         return node;
     }, factoryDeprecation);
 
@@ -1135,7 +1135,7 @@ namespace ts {
             if (updated === node) {
                 updated = factory.cloneNode(node);
             }
-            updated.illegalInitializer = initializer;
+            (updated as Mutable<PropertySignature>).initializer = initializer;
         }
         return updated;
     }, factoryDeprecation);

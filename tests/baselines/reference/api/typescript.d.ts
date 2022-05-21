@@ -839,7 +839,6 @@ declare namespace ts {
         readonly parent: ClassLikeDeclaration | ObjectLiteralExpression;
         readonly modifiers?: NodeArray<ModifierLike> | undefined;
         readonly name: PropertyName;
-        readonly exclamationToken?: undefined;
         readonly body?: FunctionBody | undefined;
     }
     export interface ConstructorDeclaration extends FunctionLikeDeclarationBase, ClassElement, JSDocContainer {
@@ -847,8 +846,6 @@ declare namespace ts {
         readonly parent: ClassLikeDeclaration;
         readonly modifiers?: NodeArray<Modifier> | undefined;
         readonly body?: FunctionBody | undefined;
-        readonly typeParameters?: undefined;
-        readonly type?: undefined;
     }
     /** For when we encounter a semicolon in a class declaration. ES6 allows these as class elements. */
     export interface SemicolonClassElement extends ClassElement {
@@ -860,7 +857,6 @@ declare namespace ts {
         readonly parent: ClassLikeDeclaration | ObjectLiteralExpression | TypeLiteralNode | InterfaceDeclaration;
         readonly modifiers?: NodeArray<ModifierLike>;
         readonly name: PropertyName;
-        readonly typeParameters?: undefined;
         readonly body?: FunctionBody;
     }
     export interface SetAccessorDeclaration extends FunctionLikeDeclarationBase, ClassElement, TypeElement, ObjectLiteralElement, JSDocContainer {
@@ -868,8 +864,6 @@ declare namespace ts {
         readonly parent: ClassLikeDeclaration | ObjectLiteralExpression | TypeLiteralNode | InterfaceDeclaration;
         readonly modifiers?: NodeArray<ModifierLike>;
         readonly name: PropertyName;
-        readonly typeParameters?: undefined;
-        readonly type?: undefined;
         readonly body?: FunctionBody;
     }
     export type AccessorDeclaration = GetAccessorDeclaration | SetAccessorDeclaration;
@@ -913,7 +907,6 @@ declare namespace ts {
     }
     export interface FunctionTypeNode extends FunctionOrConstructorTypeNodeBase {
         readonly kind: SyntaxKind.FunctionType;
-        readonly modifiers?: undefined;
     }
     export interface ConstructorTypeNode extends FunctionOrConstructorTypeNodeBase {
         readonly kind: SyntaxKind.ConstructorType;
@@ -7865,27 +7858,31 @@ declare namespace ts {
 declare namespace ts {
     interface Node {
         /** @deprecated `decorators` has been merged with `modifiers` on the declarations that support decorators. */
-        readonly decorators?: readonly Decorator[] | undefined;
+        readonly decorators?: NodeArray<Decorator> | undefined;
         /** @deprecated `modifiers` has been removed from `Node` and moved to the specific `Node` subtypes that support them. */
         readonly modifiers?: NodeArray<ModifierLike> | undefined;
     }
     interface PropertySignature {
         /** @deprecated A property signature cannot have an initializer */
-        readonly initializer?: undefined;
+        readonly initializer?: Expression | undefined;
     }
     interface PropertyAssignment {
         /** @deprecated A property assignment cannot have a question token */
-        readonly questionToken?: undefined;
+        readonly questionToken?: QuestionToken | undefined;
         /** @deprecated A property assignment cannot have an exclamation token */
-        readonly exclamationToken?: undefined;
+        readonly exclamationToken?: ExclamationToken | undefined;
     }
     interface ShorthandPropertyAssignment {
-        /** @deprecated A shorthand property assignment cannot have a question token */
-        readonly questionToken?: undefined;
-        /** @deprecated A shorthand property assignment cannot have an exclamation token */
-        readonly exclamationToken?: undefined;
         /** @deprecated A shorthand property assignment cannot have modifiers */
-        readonly modifiers?: undefined;
+        readonly modifiers?: NodeArray<Modifier> | undefined;
+        /** @deprecated A shorthand property assignment cannot have a question token */
+        readonly questionToken?: QuestionToken | undefined;
+        /** @deprecated A shorthand property assignment cannot have an exclamation token */
+        readonly exclamationToken?: ExclamationToken | undefined;
+    }
+    interface FunctionTypeNode {
+        /** @deprecated A function type cannot have modifiers */
+        readonly modifiers?: NodeArray<Modifier> | undefined;
     }
     interface NodeFactory {
         /**

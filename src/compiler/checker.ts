@@ -35092,10 +35092,7 @@ namespace ts {
             forEach(node.parameters, checkParameter);
 
             // TODO(rbuckton): Should we start checking JSDoc types?
-            if (canHaveIllegalType(node) && node.illegalType) {
-                checkSourceElement(node.illegalType);
-            }
-            else if (node.type) {
+            if (node.type) {
                 checkSourceElement(node.type);
             }
 
@@ -43413,7 +43410,7 @@ namespace ts {
         }
 
         function checkGrammarDecorators(node: Node): boolean {
-            if (canHaveIllegalDecorators(node) && some(node.illegalDecorators)) {
+            if (canHaveIllegalDecorators(node) && some(node.decorators)) {
                 return grammarErrorOnFirstToken(node, Diagnostics.Decorators_are_not_valid_here);
             }
             if (!canHaveDecorators(node) || !hasDecorators(node)) {
@@ -43437,11 +43434,6 @@ namespace ts {
         }
 
         function checkGrammarModifiers(node: HasModifiers | HasIllegalModifiers): boolean {
-            if (canHaveIllegalModifiers(node)) {
-                const firstModifier = firstOrUndefined(node.illegalModifiers);
-                return !!firstModifier && grammarErrorOnNode(firstModifier, Diagnostics.Modifiers_cannot_appear_here);
-            }
-
             const quickResult = reportObviousModifierErrors(node);
             if (quickResult !== undefined) {
                 return quickResult;
@@ -43721,7 +43713,7 @@ namespace ts {
          * true | false: Early return this value from checkGrammarModifiers.
          * undefined: Need to do full checking on the modifiers.
          */
-        function reportObviousModifierErrors(node: HasModifiers): boolean | undefined {
+        function reportObviousModifierErrors(node: HasModifiers | HasIllegalModifiers): boolean | undefined {
             return !node.modifiers
                 ? false
                 : shouldReportBadModifier(node)
@@ -43729,7 +43721,7 @@ namespace ts {
                     : undefined;
         }
 
-        function shouldReportBadModifier(node: HasModifiers): boolean {
+        function shouldReportBadModifier(node: HasModifiers | HasIllegalModifiers): boolean {
             switch (node.kind) {
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
@@ -43749,6 +43741,13 @@ namespace ts {
                 case SyntaxKind.Parameter:
                 case SyntaxKind.TypeParameter:
                     return false;
+                case SyntaxKind.ClassStaticBlockDeclaration:
+                case SyntaxKind.PropertyAssignment:
+                case SyntaxKind.ShorthandPropertyAssignment:
+                case SyntaxKind.NamespaceExportDeclaration:
+                case SyntaxKind.FunctionType:
+                case SyntaxKind.MissingDeclaration:
+                    return true;
                 default:
                     if (node.parent.kind === SyntaxKind.ModuleBlock || node.parent.kind === SyntaxKind.SourceFile) {
                         return false;
@@ -44122,9 +44121,8 @@ namespace ts {
                         }
                     }
                 }
-
-                if (canHaveIllegalModifiers(prop) && prop.illegalModifiers) {
-                    for (const mod of prop.illegalModifiers) {
+                else if (canHaveIllegalModifiers(prop) && prop.modifiers) {
+                    for (const mod of prop.modifiers) {
                         grammarErrorOnNode(mod, Diagnostics._0_modifier_cannot_be_used_here, getTextOfNode(mod));
                     }
                 }
@@ -44140,11 +44138,10 @@ namespace ts {
                 let currentKind: DeclarationMeaning;
                 switch (prop.kind) {
                     case SyntaxKind.ShorthandPropertyAssignment:
-                        checkGrammarForInvalidExclamationToken(prop.illegalExclamationToken, Diagnostics.A_definite_assignment_assertion_is_not_permitted_in_this_context);
-                        // falls through
                     case SyntaxKind.PropertyAssignment:
                         // Grammar checking for computedPropertyName and shorthandPropertyAssignment
-                        checkGrammarForInvalidQuestionMark(prop.illegalQuestionToken, Diagnostics.An_object_member_cannot_be_declared_optional);
+                        checkGrammarForInvalidExclamationToken(prop.exclamationToken, Diagnostics.A_definite_assignment_assertion_is_not_permitted_in_this_context);
+                        checkGrammarForInvalidQuestionMark(prop.questionToken, Diagnostics.An_object_member_cannot_be_declared_optional);
                         if (name.kind === SyntaxKind.NumericLiteral) {
                             checkGrammarNumericLiteral(name);
                         }
@@ -44376,7 +44373,7 @@ namespace ts {
                     return grammarErrorOnNode(accessor.body, Diagnostics.An_implementation_cannot_be_declared_in_ambient_contexts);
                 }
             }
-            if (accessor.illegalTypeParameters) {
+            if (accessor.typeParameters) {
                 return grammarErrorOnNode(accessor.name, Diagnostics.An_accessor_cannot_have_type_parameters);
             }
             if (!doesAccessorHaveCorrectParameterCount(accessor)) {
@@ -44386,7 +44383,7 @@ namespace ts {
                         Diagnostics.A_set_accessor_must_have_exactly_one_parameter);
             }
             if (accessor.kind === SyntaxKind.SetAccessor) {
-                if (accessor.illegalType) {
+                if (accessor.type) {
                     return grammarErrorOnNode(accessor.name, Diagnostics.A_set_accessor_cannot_have_a_return_type_annotation);
                 }
                 const parameter = Debug.checkDefined(getSetAccessorValueParameter(accessor), "Return value does not match parameter count assertion.");
@@ -44487,7 +44484,7 @@ namespace ts {
                     else if (checkGrammarForInvalidQuestionMark(node.questionToken, Diagnostics.An_object_member_cannot_be_declared_optional)) {
                         return true;
                     }
-                    else if (checkGrammarForInvalidExclamationToken(node.illegalExclamationToken, Diagnostics.A_definite_assignment_assertion_is_not_permitted_in_this_context)) {
+                    else if (checkGrammarForInvalidExclamationToken(node.exclamationToken, Diagnostics.A_definite_assignment_assertion_is_not_permitted_in_this_context)) {
                         return true;
                     }
                     else if (node.body === undefined) {
@@ -44616,7 +44613,7 @@ namespace ts {
         }
 
         function checkAmbientInitializer(node: VariableDeclaration | PropertyDeclaration | PropertySignature) {
-            const initializer = hasOnlyExpressionInitializer(node) ? node.initializer : node.illegalInitializer;
+            const initializer = node.initializer;
             if (initializer) {
                 const isInvalidInitializer = !(
                     isStringOrNumberLiteralExpression(initializer) ||
@@ -44813,7 +44810,7 @@ namespace ts {
 
         function checkGrammarConstructorTypeParameters(node: ConstructorDeclaration) {
             const jsdocTypeParameters = isInJSFile(node) ? getJSDocTypeParameterDeclarations(node) : undefined;
-            const range = node.illegalTypeParameters || jsdocTypeParameters && firstOrUndefined(jsdocTypeParameters);
+            const range = node.typeParameters || jsdocTypeParameters && firstOrUndefined(jsdocTypeParameters);
             if (range) {
                 const pos = range.pos === range.end ? range.pos : skipTrivia(getSourceFileOfNode(node).text, range.pos);
                 return grammarErrorAtPos(node, pos, range.end - pos, Diagnostics.Type_parameters_cannot_appear_on_a_constructor_declaration);
@@ -44821,7 +44818,7 @@ namespace ts {
         }
 
         function checkGrammarConstructorTypeAnnotation(node: ConstructorDeclaration) {
-            const type = node.illegalType || getEffectiveReturnTypeNode(node);
+            const type = node.type || getEffectiveReturnTypeNode(node);
             if (type) {
                 return grammarErrorOnNode(type, Diagnostics.Type_annotation_cannot_appear_on_a_constructor_declaration);
             }
@@ -44851,8 +44848,8 @@ namespace ts {
 
                 // Interfaces cannot contain property declarations
                 Debug.assertNode(node, isPropertySignature);
-                if (node.illegalInitializer) {
-                    return grammarErrorOnNode(node.illegalInitializer, Diagnostics.An_interface_property_cannot_have_an_initializer);
+                if (node.initializer) {
+                    return grammarErrorOnNode(node.initializer, Diagnostics.An_interface_property_cannot_have_an_initializer);
                 }
             }
             else if (isTypeLiteralNode(node.parent)) {
@@ -44861,8 +44858,8 @@ namespace ts {
                 }
                 // Type literals cannot contain property declarations
                 Debug.assertNode(node, isPropertySignature);
-                if (node.illegalInitializer) {
-                    return grammarErrorOnNode(node.illegalInitializer, Diagnostics.A_type_literal_property_cannot_have_an_initializer);
+                if (node.initializer) {
+                    return grammarErrorOnNode(node.initializer, Diagnostics.A_type_literal_property_cannot_have_an_initializer);
                 }
             }
 

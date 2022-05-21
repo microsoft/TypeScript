@@ -255,6 +255,7 @@ class D {
     constructor(p1: A): p1 is C {
 >p1 : Symbol(p1, Decl(typeGuardFunctionErrors.ts, 102, 16))
 >A : Symbol(A, Decl(typeGuardFunctionErrors.ts, 0, 0))
+>p1 : Symbol(p1, Decl(typeGuardFunctionErrors.ts, 102, 16))
 >C : Symbol(C, Decl(typeGuardFunctionErrors.ts, 6, 1))
 
         return true;
@@ -272,6 +273,7 @@ class D {
 >m2 : Symbol(D.m2, Decl(typeGuardFunctionErrors.ts, 107, 5))
 >p1 : Symbol(p1, Decl(typeGuardFunctionErrors.ts, 108, 11))
 >A : Symbol(A, Decl(typeGuardFunctionErrors.ts, 0, 0))
+>p1 : Symbol(p1, Decl(typeGuardFunctionErrors.ts, 108, 11))
 >C : Symbol(C, Decl(typeGuardFunctionErrors.ts, 6, 1))
 
         return true;

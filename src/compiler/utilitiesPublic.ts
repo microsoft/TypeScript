@@ -944,8 +944,8 @@ namespace ts {
         if (node.typeParameters) {
             return node.typeParameters;
         }
-        if (canHaveIllegalTypeParameters(node) && node.illegalTypeParameters) {
-            return node.illegalTypeParameters;
+        if (canHaveIllegalTypeParameters(node) && node.typeParameters) {
+            return node.typeParameters;
         }
         if (isInJSFile(node)) {
             const decls = getJSDocTypeParameterDeclarations(node);

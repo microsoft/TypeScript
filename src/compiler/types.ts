@@ -1421,7 +1421,7 @@ namespace ts {
         readonly type?: TypeNode;                    // Optional type annotation
 
         // The following properties are used only to report grammar errors
-        /* @internal */ illegalInitializer?: Expression; // Present for use with reporting a grammar error
+        /* @internal */ readonly initializer?: Expression | undefined; // A property signature cannot have an initializer
     }
 
     export interface PropertyDeclaration extends ClassElement, JSDocContainer {
@@ -1484,10 +1484,10 @@ namespace ts {
         readonly initializer: Expression;
 
         // The following properties are used only to report grammar errors
-        /* @internal */ illegalDecorators?: NodeArray<Decorator>;
-        /* @internal */ illegalModifiers?: NodeArray<Modifier>;
-        /* @internal */ illegalQuestionToken?: QuestionToken;
-        /* @internal */ illegalExclamationToken?: ExclamationToken;
+        /* @internal */ readonly decorators?: NodeArray<Decorator> | undefined; // property assignment cannot have decorators
+        /* @internal */ readonly modifiers?: NodeArray<Modifier> | undefined; // property assignment cannot have modifiers
+        /* @internal */ readonly questionToken?: QuestionToken | undefined; // property assignment cannot have a question token
+        /* @internal */ readonly exclamationToken?: ExclamationToken | undefined; // property assignment cannot have an exclamation token
     }
 
     export interface ShorthandPropertyAssignment extends ObjectLiteralElement, JSDocContainer {
@@ -1500,10 +1500,10 @@ namespace ts {
         readonly objectAssignmentInitializer?: Expression;
 
         // The following properties are used only to report grammar errors
-        /* @internal */ illegalDecorators?: NodeArray<Decorator>;
-        /* @internal */ illegalModifiers?: NodeArray<Modifier>;
-        /* @internal */ illegalQuestionToken?: QuestionToken;
-        /* @internal */ illegalExclamationToken?: ExclamationToken;
+        /* @internal */ readonly decorators?: NodeArray<Decorator> | undefined; // shorthand property assignment cannot have decorators
+        /* @internal */ readonly modifiers?: NodeArray<Modifier> | undefined; // shorthand property assignment cannot have modifiers
+        /* @internal */ readonly questionToken?: QuestionToken | undefined; // shorthand property assignment cannot have a question token
+        /* @internal */ readonly exclamationToken?: ExclamationToken | undefined; // shorthand property assignment cannot have an exclamation token
     }
 
     export interface SpreadAssignment extends ObjectLiteralElement, JSDocContainer {
@@ -1582,7 +1582,7 @@ namespace ts {
         readonly body?: FunctionBody;
 
         // The following properties are used only to report grammar errors
-        /* @internal */ illegalDecorators?: NodeArray<Decorator>;
+        /* @internal */ readonly decorators?: NodeArray<Decorator> | undefined; // functions cannot have decorators
     }
 
     export interface MethodSignature extends SignatureDeclarationBase, TypeElement {
@@ -1606,11 +1606,10 @@ namespace ts {
         readonly parent: ClassLikeDeclaration | ObjectLiteralExpression;
         readonly modifiers?: NodeArray<ModifierLike> | undefined;
         readonly name: PropertyName;
-        readonly exclamationToken?: undefined; // A method cannot have an exclamation token
         readonly body?: FunctionBody | undefined;
 
         // The following properties are used only to report grammar errors
-        /* @internal*/ illegalExclamationToken?: ExclamationToken;
+        /* @internal */ readonly exclamationToken?: ExclamationToken | undefined; // A method cannot have an exclamation token
     }
 
     export interface ConstructorDeclaration extends FunctionLikeDeclarationBase, ClassElement, JSDocContainer {
@@ -1618,13 +1617,11 @@ namespace ts {
         readonly parent: ClassLikeDeclaration;
         readonly modifiers?: NodeArray<Modifier> | undefined;
         readonly body?: FunctionBody | undefined;
-        readonly typeParameters?: undefined; // A constructor cannot have type parameters
-        readonly type?: undefined; // A constructor cannot have a return type annotation
 
         // The following properties are used only to report grammar errors
-        /* @internal */ illegalDecorators?: NodeArray<Decorator>;
-        /* @internal */ illegalTypeParameters?: NodeArray<TypeParameterDeclaration>;
-        /* @internal */ illegalType?: TypeNode;
+        /* @internal */ readonly decorators?: NodeArray<Decorator> | undefined; // A constructor cannot have decorators
+        /* @internal */ readonly typeParameters?: NodeArray<TypeParameterDeclaration>; // A constructor cannot have type parameters
+        /* @internal */ readonly type?: TypeNode; // A constructor cannot have a return type annotation
     }
 
     /** For when we encounter a semicolon in a class declaration. ES6 allows these as class elements. */
@@ -1640,11 +1637,10 @@ namespace ts {
         readonly parent: ClassLikeDeclaration | ObjectLiteralExpression | TypeLiteralNode | InterfaceDeclaration;
         readonly modifiers?: NodeArray<ModifierLike>;
         readonly name: PropertyName;
-        readonly typeParameters?: undefined; // A get accessor cannot have type parameters
         readonly body?: FunctionBody;
 
         // The following properties are used only to report grammar errors
-        /* @internal */ illegalTypeParameters?: NodeArray<TypeParameterDeclaration>;
+        /* @internal */ readonly typeParameters?: NodeArray<TypeParameterDeclaration> | undefined; // A get accessor cannot have type parameters
     }
 
     // See the comment on MethodDeclaration for the intuition behind SetAccessorDeclaration being a
@@ -1654,13 +1650,11 @@ namespace ts {
         readonly parent: ClassLikeDeclaration | ObjectLiteralExpression | TypeLiteralNode | InterfaceDeclaration;
         readonly modifiers?: NodeArray<ModifierLike>;
         readonly name: PropertyName;
-        readonly typeParameters?: undefined; // A set accessor cannot have type parameters
-        readonly type?: undefined; // A set accessor cannot have a return type
         readonly body?: FunctionBody;
 
         // The following properties are used only to report grammar errors
-        /* @internal */ illegalTypeParameters?: NodeArray<TypeParameterDeclaration>;
-        /* @internal */ illegalType?: TypeNode;
+        /* @internal */ readonly typeParameters?: NodeArray<TypeParameterDeclaration> | undefined; // A set accessor cannot have type parameters
+        /* @internal */ readonly type?: TypeNode | undefined; // A set accessor cannot have a return type
     }
 
     export type AccessorDeclaration = GetAccessorDeclaration | SetAccessorDeclaration;
@@ -1672,7 +1666,7 @@ namespace ts {
         readonly type: TypeNode;
 
         // The following properties are used only to report grammar errors
-        /* @internal */ illegalDecorators?: NodeArray<Decorator>;
+        /* @internal */ readonly decorators?: NodeArray<Decorator> | undefined;
     }
 
     export interface ClassStaticBlockDeclaration extends ClassElement, JSDocContainer {
@@ -1684,8 +1678,8 @@ namespace ts {
         /* @internal */ returnFlowNode?: FlowNode;
 
         // The following properties are used only to report grammar errors
-        /* @internal */ illegalDecorators?: NodeArray<Decorator>;
-        /* @internal */ illegalModifiers?: NodeArray<Modifier>;
+        /* @internal */ readonly decorators?: NodeArray<Decorator> | undefined;
+        /* @internal */ readonly modifiers?: NodeArray<Modifier> | undefined;
     }
 
     export interface TypeNode extends Node {
@@ -1732,10 +1726,9 @@ namespace ts {
 
     export interface FunctionTypeNode extends FunctionOrConstructorTypeNodeBase {
         readonly kind: SyntaxKind.FunctionType;
-        readonly modifiers?: undefined; // Function types cannot have modifiers
 
         // The following properties are used only to report grammar errors
-        /* @internal */ illegalModifiers?: NodeArray<Modifier>;
+        /* @internal */ readonly modifiers?: NodeArray<Modifier> | undefined;
     }
 
     export interface ConstructorTypeNode extends FunctionOrConstructorTypeNodeBase {
@@ -2835,8 +2828,8 @@ namespace ts {
         readonly name?: Identifier;
 
         // The following properties are used only to report grammar errors
-        /*@internal*/ illegalDecorators?: NodeArray<Decorator>;
-        /*@internal*/ illegalModifiers?: NodeArray<Modifier>;
+        /*@internal*/ decorators?: NodeArray<Decorator> | undefined;
+        /*@internal*/ modifiers?: NodeArray<Modifier> | undefined;
     }
 
     export type BlockLike =
@@ -2858,7 +2851,7 @@ namespace ts {
         readonly declarationList: VariableDeclarationList;
 
         // The following properties are used only to report grammar errors
-        /* @internal*/ illegalDecorators?: NodeArray<Decorator>;
+        /* @internal*/ decorators?: NodeArray<Decorator> | undefined;
     }
 
     export interface ExpressionStatement extends Statement {
@@ -3072,7 +3065,7 @@ namespace ts {
         readonly members: NodeArray<TypeElement>;
 
         // The following properties are used only to report grammar errors
-        /* @internal */ illegalDecorators?: NodeArray<Decorator>;
+        /* @internal */ readonly decorators?: NodeArray<Decorator> | undefined;
     }
 
     export interface HeritageClause extends Node {
@@ -3090,7 +3083,7 @@ namespace ts {
         readonly type: TypeNode;
 
         // The following properties are used only to report grammar errors
-        /* @internal */ illegalDecorators?: NodeArray<Decorator>;
+        /* @internal */ readonly decorators?: NodeArray<Decorator> | undefined;
     }
 
     export interface EnumMember extends NamedDeclaration, JSDocContainer {
@@ -3109,7 +3102,7 @@ namespace ts {
         readonly members: NodeArray<EnumMember>;
 
         // The following properties are used only to report grammar errors
-        /* @internal */ illegalDecorators?: NodeArray<Decorator>;
+        /* @internal */ readonly decorators?: NodeArray<Decorator> | undefined;
     }
 
     export type ModuleName =
@@ -3135,7 +3128,7 @@ namespace ts {
         readonly body?: ModuleBody | JSDocNamespaceDeclaration;
 
         // The following properties are used only to report grammar errors
-        /* @internal */ illegalDecorators?: NodeArray<Decorator>;
+        /* @internal */ readonly decorators?: NodeArray<Decorator> | undefined;
     }
 
     export type NamespaceBody =
@@ -3186,7 +3179,7 @@ namespace ts {
         readonly moduleReference: ModuleReference;
 
         // The following properties are used only to report grammar errors
-        /* @internal */ illegalDecorators?: NodeArray<Decorator>;
+        /* @internal */ readonly decorators?: NodeArray<Decorator> | undefined;
     }
 
     export interface ExternalModuleReference extends Node {
@@ -3209,7 +3202,7 @@ namespace ts {
         readonly assertClause?: AssertClause;
 
         // The following properties are used only to report grammar errors
-        /* @internal */ illegalDecorators?: NodeArray<Decorator>;
+        /* @internal */ readonly decorators?: NodeArray<Decorator> | undefined;
     }
 
     export type NamedImportBindings =
@@ -3269,8 +3262,8 @@ namespace ts {
         readonly name: Identifier;
 
         // The following properties are used only to report grammar errors
-        /* @internal */ illegalDecorators?: NodeArray<Decorator>;
-        /* @internal */ illegalModifiers?: NodeArray<Modifier>;
+        /* @internal */ readonly decorators?: NodeArray<Decorator> | undefined;
+        /* @internal */ readonly modifiers?: NodeArray<Modifier> | undefined;
     }
 
     export interface ExportDeclaration extends DeclarationStatement, JSDocContainer {
@@ -3285,7 +3278,7 @@ namespace ts {
         readonly assertClause?: AssertClause;
 
         // The following properties are used only to report grammar errors
-        /* @internal */ illegalDecorators?: NodeArray<Decorator>;
+        /* @internal */ readonly decorators?: NodeArray<Decorator> | undefined;
     }
 
     export interface NamedImports extends Node {
@@ -3350,7 +3343,7 @@ namespace ts {
         readonly expression: Expression;
 
         // The following properties are used only to report grammar errors
-        /* @internal */ illegalDecorators?: NodeArray<Decorator>;
+        /* @internal */ readonly decorators?: NodeArray<Decorator> | undefined;
     }
 
     export interface FileReference extends TextRange {

@@ -123,11 +123,11 @@ namespace ts {
                     visitNode(cbNode, (node as TypeParameterDeclaration).default) ||
                     visitNode(cbNode, (node as TypeParameterDeclaration).expression);
             case SyntaxKind.ShorthandPropertyAssignment:
-                return visitNodes(cbNode, cbNodes, (node as ShorthandPropertyAssignment).illegalDecorators) ||
-                    visitNodes(cbNode, cbNodes, (node as ShorthandPropertyAssignment).illegalModifiers) ||
+                return visitNodes(cbNode, cbNodes, (node as ShorthandPropertyAssignment).decorators) ||
+                    visitNodes(cbNode, cbNodes, (node as ShorthandPropertyAssignment).modifiers) ||
                     visitNode(cbNode, (node as ShorthandPropertyAssignment).name) ||
-                    visitNode(cbNode, (node as ShorthandPropertyAssignment).illegalQuestionToken) ||
-                    visitNode(cbNode, (node as ShorthandPropertyAssignment).illegalExclamationToken) ||
+                    visitNode(cbNode, (node as ShorthandPropertyAssignment).questionToken) ||
+                    visitNode(cbNode, (node as ShorthandPropertyAssignment).exclamationToken) ||
                     visitNode(cbNode, (node as ShorthandPropertyAssignment).equalsToken) ||
                     visitNode(cbNode, (node as ShorthandPropertyAssignment).objectAssignmentInitializer);
             case SyntaxKind.SpreadAssignment:
@@ -151,13 +151,13 @@ namespace ts {
                     visitNode(cbNode, (node as PropertySignature).name) ||
                     visitNode(cbNode, (node as PropertySignature).questionToken) ||
                     visitNode(cbNode, (node as PropertySignature).type) ||
-                    visitNode(cbNode, (node as PropertySignature).illegalInitializer);
+                    visitNode(cbNode, (node as PropertySignature).initializer);
             case SyntaxKind.PropertyAssignment:
-                return visitNodes(cbNode, cbNodes, (node as PropertyAssignment).illegalDecorators) ||
-                    visitNodes(cbNode, cbNodes, (node as PropertyAssignment).illegalModifiers) ||
+                return visitNodes(cbNode, cbNodes, (node as PropertyAssignment).decorators) ||
+                    visitNodes(cbNode, cbNodes, (node as PropertyAssignment).modifiers) ||
                     visitNode(cbNode, (node as PropertyAssignment).name) ||
-                    visitNode(cbNode, (node as PropertyAssignment).illegalQuestionToken) ||
-                    visitNode(cbNode, (node as PropertyAssignment).illegalExclamationToken) ||
+                    visitNode(cbNode, (node as PropertyAssignment).questionToken) ||
+                    visitNode(cbNode, (node as PropertyAssignment).exclamationToken) ||
                     visitNode(cbNode, (node as PropertyAssignment).initializer);
             case SyntaxKind.VariableDeclaration:
                 return visitNode(cbNode, (node as VariableDeclaration).name) ||
@@ -170,7 +170,7 @@ namespace ts {
                     visitNode(cbNode, (node as BindingElement).name) ||
                     visitNode(cbNode, (node as BindingElement).initializer);
             case SyntaxKind.IndexSignature:
-                return visitNodes(cbNode, cbNodes, (node as IndexSignatureDeclaration).illegalDecorators) ||
+                return visitNodes(cbNode, cbNodes, (node as IndexSignatureDeclaration).decorators) ||
                     visitNodes(cbNode, cbNodes, (node as IndexSignatureDeclaration).modifiers) ||
                     visitNodes(cbNode, cbNodes, (node as IndexSignatureDeclaration).typeParameters) ||
                     visitNodes(cbNode, cbNodes, (node as IndexSignatureDeclaration).parameters) ||
@@ -181,7 +181,7 @@ namespace ts {
                     visitNodes(cbNode, cbNodes, (node as ConstructorTypeNode).parameters) ||
                     visitNode(cbNode, (node as ConstructorTypeNode).type);
             case SyntaxKind.FunctionType:
-                return visitNodes(cbNode, cbNodes, (node as FunctionTypeNode).illegalModifiers) ||
+                return visitNodes(cbNode, cbNodes, (node as FunctionTypeNode).modifiers) ||
                     visitNodes(cbNode, cbNodes, (node as FunctionTypeNode).typeParameters) ||
                     visitNodes(cbNode, cbNodes, (node as FunctionTypeNode).parameters) ||
                     visitNode(cbNode, (node as FunctionTypeNode).type);
@@ -195,7 +195,7 @@ namespace ts {
                     visitNode(cbNode, (node as MethodDeclaration).asteriskToken) ||
                     visitNode(cbNode, (node as MethodDeclaration).name) ||
                     visitNode(cbNode, (node as MethodDeclaration).questionToken) ||
-                    visitNode(cbNode, (node as MethodDeclaration).illegalExclamationToken) ||
+                    visitNode(cbNode, (node as MethodDeclaration).exclamationToken) ||
                     visitNodes(cbNode, cbNodes, (node as MethodDeclaration).typeParameters) ||
                     visitNodes(cbNode, cbNodes, (node as MethodDeclaration).parameters) ||
                     visitNode(cbNode, (node as MethodDeclaration).type) ||
@@ -208,29 +208,29 @@ namespace ts {
                     visitNodes(cbNode, cbNodes, (node as MethodSignature).parameters) ||
                     visitNode(cbNode, (node as MethodSignature).type);
             case SyntaxKind.Constructor:
-                return visitNodes(cbNode, cbNodes, (node as ConstructorDeclaration).illegalDecorators) ||
+                return visitNodes(cbNode, cbNodes, (node as ConstructorDeclaration).decorators) ||
                     visitNodes(cbNode, cbNodes, (node as ConstructorDeclaration).modifiers) ||
                     visitNode(cbNode, (node as ConstructorDeclaration).name) ||
-                    visitNodes(cbNode, cbNodes, (node as ConstructorDeclaration).illegalTypeParameters) ||
+                    visitNodes(cbNode, cbNodes, (node as ConstructorDeclaration).typeParameters) ||
                     visitNodes(cbNode, cbNodes, (node as ConstructorDeclaration).parameters) ||
-                    visitNode(cbNode, (node as ConstructorDeclaration).illegalType) ||
+                    visitNode(cbNode, (node as ConstructorDeclaration).type) ||
                     visitNode(cbNode, (node as ConstructorDeclaration).body);
             case SyntaxKind.GetAccessor:
                 return visitNodes(cbNode, cbNodes, (node as GetAccessorDeclaration).modifiers) ||
                     visitNode(cbNode, (node as GetAccessorDeclaration).name) ||
-                    visitNodes(cbNode, cbNodes, (node as GetAccessorDeclaration).illegalTypeParameters) ||
+                    visitNodes(cbNode, cbNodes, (node as GetAccessorDeclaration).typeParameters) ||
                     visitNodes(cbNode, cbNodes, (node as GetAccessorDeclaration).parameters) ||
                     visitNode(cbNode, (node as GetAccessorDeclaration).type) ||
                     visitNode(cbNode, (node as GetAccessorDeclaration).body);
             case SyntaxKind.SetAccessor:
                 return visitNodes(cbNode, cbNodes, (node as SetAccessorDeclaration).modifiers) ||
                     visitNode(cbNode, (node as SetAccessorDeclaration).name) ||
-                    visitNodes(cbNode, cbNodes, (node as SetAccessorDeclaration).illegalTypeParameters) ||
+                    visitNodes(cbNode, cbNodes, (node as SetAccessorDeclaration).typeParameters) ||
                     visitNodes(cbNode, cbNodes, (node as SetAccessorDeclaration).parameters) ||
-                    visitNode(cbNode, (node as SetAccessorDeclaration).illegalType) ||
+                    visitNode(cbNode, (node as SetAccessorDeclaration).type) ||
                     visitNode(cbNode, (node as SetAccessorDeclaration).body);
             case SyntaxKind.FunctionDeclaration:
-                return visitNodes(cbNode, cbNodes, (node as FunctionDeclaration).illegalDecorators) ||
+                return visitNodes(cbNode, cbNodes, (node as FunctionDeclaration).decorators) ||
                     visitNodes(cbNode, cbNodes, (node as FunctionDeclaration).modifiers) ||
                     visitNode(cbNode, (node as FunctionDeclaration).asteriskToken) ||
                     visitNode(cbNode, (node as FunctionDeclaration).name) ||
@@ -254,8 +254,8 @@ namespace ts {
                     visitNode(cbNode, (node as ArrowFunction).equalsGreaterThanToken) ||
                     visitNode(cbNode, (node as ArrowFunction).body);
             case SyntaxKind.ClassStaticBlockDeclaration:
-                return visitNodes(cbNode, cbNodes, (node as ClassStaticBlockDeclaration).illegalDecorators) ||
-                    visitNodes(cbNode, cbNodes, (node as ClassStaticBlockDeclaration).illegalModifiers) ||
+                return visitNodes(cbNode, cbNodes, (node as ClassStaticBlockDeclaration).decorators) ||
+                    visitNodes(cbNode, cbNodes, (node as ClassStaticBlockDeclaration).modifiers) ||
                     visitNode(cbNode, (node as ClassStaticBlockDeclaration).body);
             case SyntaxKind.TypeReference:
                 return visitNode(cbNode, (node as TypeReferenceNode).typeName) ||
@@ -382,7 +382,7 @@ namespace ts {
                 return visitNodes(cbNode, cbNodes, (node as SourceFile).statements) ||
                     visitNode(cbNode, (node as SourceFile).endOfFileToken);
             case SyntaxKind.VariableStatement:
-                return visitNodes(cbNode, cbNodes, (node as VariableStatement).illegalDecorators) ||
+                return visitNodes(cbNode, cbNodes, (node as VariableStatement).decorators) ||
                     visitNodes(cbNode, cbNodes, (node as VariableStatement).modifiers) ||
                     visitNode(cbNode, (node as VariableStatement).declarationList);
             case SyntaxKind.VariableDeclarationList:
@@ -453,20 +453,20 @@ namespace ts {
                     visitNodes(cbNode, cbNodes, (node as ClassLikeDeclaration).heritageClauses) ||
                     visitNodes(cbNode, cbNodes, (node as ClassLikeDeclaration).members);
             case SyntaxKind.InterfaceDeclaration:
-                return visitNodes(cbNode, cbNodes, (node as InterfaceDeclaration).illegalDecorators) ||
+                return visitNodes(cbNode, cbNodes, (node as InterfaceDeclaration).decorators) ||
                     visitNodes(cbNode, cbNodes, (node as InterfaceDeclaration).modifiers) ||
                     visitNode(cbNode, (node as InterfaceDeclaration).name) ||
                     visitNodes(cbNode, cbNodes, (node as InterfaceDeclaration).typeParameters) ||
                     visitNodes(cbNode, cbNodes, (node as ClassDeclaration).heritageClauses) ||
                     visitNodes(cbNode, cbNodes, (node as InterfaceDeclaration).members);
             case SyntaxKind.TypeAliasDeclaration:
-                return visitNodes(cbNode, cbNodes, (node as TypeAliasDeclaration).illegalDecorators) ||
+                return visitNodes(cbNode, cbNodes, (node as TypeAliasDeclaration).decorators) ||
                     visitNodes(cbNode, cbNodes, (node as TypeAliasDeclaration).modifiers) ||
                     visitNode(cbNode, (node as TypeAliasDeclaration).name) ||
                     visitNodes(cbNode, cbNodes, (node as TypeAliasDeclaration).typeParameters) ||
                     visitNode(cbNode, (node as TypeAliasDeclaration).type);
             case SyntaxKind.EnumDeclaration:
-                return visitNodes(cbNode, cbNodes, (node as EnumDeclaration).illegalDecorators) ||
+                return visitNodes(cbNode, cbNodes, (node as EnumDeclaration).decorators) ||
                     visitNodes(cbNode, cbNodes, (node as EnumDeclaration).modifiers) ||
                     visitNode(cbNode, (node as EnumDeclaration).name) ||
                     visitNodes(cbNode, cbNodes, (node as EnumDeclaration).members);
@@ -474,17 +474,17 @@ namespace ts {
                 return visitNode(cbNode, (node as EnumMember).name) ||
                     visitNode(cbNode, (node as EnumMember).initializer);
             case SyntaxKind.ModuleDeclaration:
-                return visitNodes(cbNode, cbNodes, (node as ModuleDeclaration).illegalDecorators) ||
+                return visitNodes(cbNode, cbNodes, (node as ModuleDeclaration).decorators) ||
                     visitNodes(cbNode, cbNodes, (node as ModuleDeclaration).modifiers) ||
                     visitNode(cbNode, (node as ModuleDeclaration).name) ||
                     visitNode(cbNode, (node as ModuleDeclaration).body);
             case SyntaxKind.ImportEqualsDeclaration:
-                return visitNodes(cbNode, cbNodes, (node as ImportEqualsDeclaration).illegalDecorators) ||
+                return visitNodes(cbNode, cbNodes, (node as ImportEqualsDeclaration).decorators) ||
                     visitNodes(cbNode, cbNodes, (node as ImportEqualsDeclaration).modifiers) ||
                     visitNode(cbNode, (node as ImportEqualsDeclaration).name) ||
                     visitNode(cbNode, (node as ImportEqualsDeclaration).moduleReference);
             case SyntaxKind.ImportDeclaration:
-                return visitNodes(cbNode, cbNodes, (node as ImportDeclaration).illegalDecorators) ||
+                return visitNodes(cbNode, cbNodes, (node as ImportDeclaration).decorators) ||
                     visitNodes(cbNode, cbNodes, (node as ImportDeclaration).modifiers) ||
                     visitNode(cbNode, (node as ImportDeclaration).importClause) ||
                     visitNode(cbNode, (node as ImportDeclaration).moduleSpecifier) ||
@@ -498,7 +498,7 @@ namespace ts {
                 return visitNode(cbNode, (node as AssertEntry).name) ||
                     visitNode(cbNode, (node as AssertEntry).value);
             case SyntaxKind.NamespaceExportDeclaration:
-                return visitNodes(cbNode, cbNodes, (node as NamespaceExportDeclaration).illegalDecorators) ||
+                return visitNodes(cbNode, cbNodes, (node as NamespaceExportDeclaration).decorators) ||
                     visitNode(cbNode, (node as NamespaceExportDeclaration).name);
             case SyntaxKind.NamespaceImport:
                 return visitNode(cbNode, (node as NamespaceImport).name);
@@ -508,7 +508,7 @@ namespace ts {
             case SyntaxKind.NamedExports:
                 return visitNodes(cbNode, cbNodes, (node as NamedImportsOrExports).elements);
             case SyntaxKind.ExportDeclaration:
-                return visitNodes(cbNode, cbNodes, (node as ExportDeclaration).illegalDecorators) ||
+                return visitNodes(cbNode, cbNodes, (node as ExportDeclaration).decorators) ||
                     visitNodes(cbNode, cbNodes, (node as ExportDeclaration).modifiers) ||
                     visitNode(cbNode, (node as ExportDeclaration).exportClause) ||
                     visitNode(cbNode, (node as ExportDeclaration).moduleSpecifier) ||
@@ -518,7 +518,7 @@ namespace ts {
                 return visitNode(cbNode, (node as ImportOrExportSpecifier).propertyName) ||
                     visitNode(cbNode, (node as ImportOrExportSpecifier).name);
             case SyntaxKind.ExportAssignment:
-                return visitNodes(cbNode, cbNodes, (node as ExportAssignment).illegalDecorators) ||
+                return visitNodes(cbNode, cbNodes, (node as ExportAssignment).decorators) ||
                     visitNodes(cbNode, cbNodes, (node as ExportAssignment).modifiers) ||
                     visitNode(cbNode, (node as ExportAssignment).expression);
             case SyntaxKind.TemplateExpression:
@@ -543,8 +543,8 @@ namespace ts {
             case SyntaxKind.ExternalModuleReference:
                 return visitNode(cbNode, (node as ExternalModuleReference).expression);
             case SyntaxKind.MissingDeclaration:
-                return visitNodes(cbNode, cbNodes, (node as MissingDeclaration).illegalDecorators) ||
-                    visitNodes(cbNode, cbNodes, (node as MissingDeclaration).illegalModifiers);
+                return visitNodes(cbNode, cbNodes, (node as MissingDeclaration).decorators) ||
+                    visitNodes(cbNode, cbNodes, (node as MissingDeclaration).modifiers);
             case SyntaxKind.CommaListExpression:
                 return visitNodes(cbNode, cbNodes, (node as CommaListExpression).elements);
 
@@ -3556,7 +3556,7 @@ namespace ts {
             const type = parseTypeAnnotation();
             parseTypeMemberSemicolon();
             const node = factory.createIndexSignature(modifiers, parameters, type);
-            node.illegalDecorators = decorators;
+            (node as Mutable<IndexSignatureDeclaration>).decorators = decorators;
             return withJSDoc(finishNode(node, pos), hasJSDoc);
         }
 
@@ -3578,7 +3578,7 @@ namespace ts {
                 // Although type literal properties cannot not have initializers, we attempt
                 // to parse an initializer so we can report in the checker that an interface
                 // property or type literal property cannot have an initializer.
-                if (token() === SyntaxKind.EqualsToken) node.illegalInitializer = parseInitializer();
+                if (token() === SyntaxKind.EqualsToken) (node as Mutable<PropertySignature>).initializer = parseInitializer();
             }
             parseTypeMemberSemicolon();
             return withJSDoc(finishNode(node, pos), hasJSDoc);
@@ -3809,7 +3809,7 @@ namespace ts {
             const node = isConstructorType
                 ? factory.createConstructorTypeNode(modifiers, typeParameters, parameters, type)
                 : factory.createFunctionTypeNode(typeParameters, parameters, type);
-            if (!isConstructorType) (node as Mutable<FunctionTypeNode>).illegalModifiers = modifiers;
+            if (!isConstructorType) (node as Mutable<FunctionTypeNode>).modifiers = modifiers;
             return withJSDoc(finishNode(node, pos), hasJSDoc);
         }
 
@@ -5925,10 +5925,10 @@ namespace ts {
                 node = factory.createPropertyAssignment(name, initializer);
             }
             // Decorators, Modifiers, questionToken, and exclamationToken are not supported by property assignments and are reported in the grammar checker
-            node.illegalDecorators = decorators;
-            node.illegalModifiers = modifiers;
-            node.illegalQuestionToken = questionToken;
-            node.illegalExclamationToken = exclamationToken;
+            node.decorators = decorators;
+            node.modifiers = modifiers;
+            node.questionToken = questionToken;
+            node.exclamationToken = exclamationToken;
             return withJSDoc(finishNode(node, pos), hasJSDoc);
         }
 
@@ -6647,8 +6647,8 @@ namespace ts {
                         // would follow. For recovery and error reporting purposes, return an incomplete declaration.
                         const missing = createMissingNode<MissingDeclaration>(SyntaxKind.MissingDeclaration, /*reportAtCurrentPosition*/ true, Diagnostics.Declaration_expected);
                         setTextRangePos(missing, pos);
-                        missing.illegalDecorators = decorators;
-                        missing.illegalModifiers = modifiers;
+                        missing.decorators = decorators;
+                        missing.modifiers = modifiers;
                         return missing;
                     }
                     return undefined!; // TODO: GH#18217
@@ -6806,7 +6806,7 @@ namespace ts {
             parseSemicolon();
             const node = factory.createVariableStatement(modifiers, declarationList);
             // Decorators are not allowed on a variable statement, so we keep track of them to report them in the grammar checker.
-            node.illegalDecorators = decorators;
+            node.decorators = decorators;
             return withJSDoc(finishNode(node, pos), hasJSDoc);
         }
 
@@ -6827,7 +6827,7 @@ namespace ts {
             const body = parseFunctionBlockOrSemicolon(isGenerator | isAsync, Diagnostics.or_expected);
             setAwaitContext(savedAwaitContext);
             const node = factory.createFunctionDeclaration(modifiers, asteriskToken, name, typeParameters, parameters, type, body);
-            node.illegalDecorators = decorators;
+            (node as Mutable<FunctionDeclaration>).decorators = decorators;
             return withJSDoc(finishNode(node, pos), hasJSDoc);
         }
 
@@ -6853,9 +6853,9 @@ namespace ts {
                     const node = factory.createConstructorDeclaration(modifiers, parameters, body);
 
                     // Attach invalid nodes if they exist so that we can report them in the grammar checker.
-                    node.illegalDecorators = decorators;
-                    node.illegalTypeParameters = typeParameters;
-                    node.illegalType = type;
+                    (node as Mutable<ConstructorDeclaration>).decorators = decorators;
+                    (node as Mutable<ConstructorDeclaration>).typeParameters = typeParameters;
+                    (node as Mutable<ConstructorDeclaration>).type = type;
                     return withJSDoc(finishNode(node, pos), hasJSDoc);
                 }
             });
@@ -6890,7 +6890,7 @@ namespace ts {
             );
 
             // An exclamation token on a method is invalid syntax and will be handled by the grammar checker
-            node.illegalExclamationToken = exclamationToken;
+            (node as Mutable<MethodDeclaration>).exclamationToken = exclamationToken;
             return withJSDoc(finishNode(node, pos), hasJSDoc);
         }
 
@@ -6942,8 +6942,8 @@ namespace ts {
                 ? factory.createGetAccessorDeclaration(combineDecoratorsAndModifiers(decorators, modifiers), name, parameters, type, body)
                 : factory.createSetAccessorDeclaration(combineDecoratorsAndModifiers(decorators, modifiers), name, parameters, body);
             // Keep track of `typeParameters` (for both) and `type` (for setters) if they were parsed those indicate grammar errors
-            node.illegalTypeParameters = typeParameters;
-            if (isSetAccessorDeclaration(node)) node.illegalType = type;
+            (node as Mutable<AccessorDeclaration>).typeParameters = typeParameters;
+            if (isSetAccessorDeclaration(node)) (node as Mutable<SetAccessorDeclaration>).type = type;
             return withJSDoc(finishNode(node, pos), hasJSDoc);
         }
 
@@ -7020,8 +7020,8 @@ namespace ts {
             parseExpectedToken(SyntaxKind.StaticKeyword);
             const body = parseClassStaticBlockBody();
             const node = withJSDoc(finishNode(factory.createClassStaticBlockDeclaration(body), pos), hasJSDoc);
-            node.illegalDecorators = decorators;
-            node.illegalModifiers = modifiers;
+            (node as Mutable<ClassStaticBlockDeclaration>).decorators = decorators;
+            (node as Mutable<ClassStaticBlockDeclaration>).modifiers = modifiers;
             return node;
         }
 
@@ -7295,7 +7295,7 @@ namespace ts {
             const heritageClauses = parseHeritageClauses();
             const members = parseObjectTypeMembers();
             const node = factory.createInterfaceDeclaration(modifiers, name, typeParameters, heritageClauses, members);
-            node.illegalDecorators = decorators;
+            (node as Mutable<InterfaceDeclaration>).decorators = decorators;
             return withJSDoc(finishNode(node, pos), hasJSDoc);
         }
 
@@ -7307,7 +7307,7 @@ namespace ts {
             const type = token() === SyntaxKind.IntrinsicKeyword && tryParse(parseKeywordAndNoDot) || parseType();
             parseSemicolon();
             const node = factory.createTypeAliasDeclaration(modifiers, name, typeParameters, type);
-            node.illegalDecorators = decorators;
+            (node as Mutable<TypeAliasDeclaration>).decorators = decorators;
             return withJSDoc(finishNode(node, pos), hasJSDoc);
         }
 
@@ -7335,7 +7335,7 @@ namespace ts {
                 members = createMissingList<EnumMember>();
             }
             const node = factory.createEnumDeclaration(modifiers, name, members);
-            node.illegalDecorators = decorators;
+            (node as Mutable<EnumDeclaration>).decorators = decorators;
             return withJSDoc(finishNode(node, pos), hasJSDoc);
         }
 
@@ -7361,7 +7361,7 @@ namespace ts {
                 ? parseModuleOrNamespaceDeclaration(getNodePos(), /*hasJSDoc*/ false, /*decorators*/ undefined, /*modifiers*/ undefined, NodeFlags.NestedNamespace | namespaceFlag) as NamespaceDeclaration
                 : parseModuleBlock();
             const node = factory.createModuleDeclaration(modifiers, name, body, flags);
-            node.illegalDecorators = decorators;
+            (node as Mutable<ModuleDeclaration>).decorators = decorators;
             return withJSDoc(finishNode(node, pos), hasJSDoc);
         }
 
@@ -7385,7 +7385,7 @@ namespace ts {
                 parseSemicolon();
             }
             const node = factory.createModuleDeclaration(modifiers, name, body, flags);
-            node.illegalDecorators = decorators;
+            (node as Mutable<ModuleDeclaration>).decorators = decorators;
             return withJSDoc(finishNode(node, pos), hasJSDoc);
         }
 
@@ -7431,8 +7431,8 @@ namespace ts {
             parseSemicolon();
             const node = factory.createNamespaceExportDeclaration(name);
             // NamespaceExportDeclaration nodes cannot have decorators or modifiers, so we attach them here so we can report them in the grammar checker
-            node.illegalDecorators = decorators;
-            node.illegalModifiers = modifiers;
+            (node as Mutable<NamespaceExportDeclaration>).decorators = decorators;
+            (node as Mutable<NamespaceExportDeclaration>).modifiers = modifiers;
             return withJSDoc(finishNode(node, pos), hasJSDoc);
         }
 
@@ -7480,7 +7480,7 @@ namespace ts {
 
             parseSemicolon();
             const node = factory.createImportDeclaration(modifiers, importClause, moduleSpecifier, assertClause);
-            node.illegalDecorators = decorators;
+            (node as Mutable<ImportDeclaration>).decorators = decorators;
             return withJSDoc(finishNode(node, pos), hasJSDoc);
         }
 
@@ -7533,7 +7533,7 @@ namespace ts {
             const moduleReference = parseModuleReference();
             parseSemicolon();
             const node = factory.createImportEqualsDeclaration(modifiers, isTypeOnly, identifier, moduleReference);
-            node.illegalDecorators = decorators;
+            (node as Mutable<ImportEqualsDeclaration>).decorators = decorators;
             const finished = withJSDoc(finishNode(node, pos), hasJSDoc);
             return finished;
         }
@@ -7742,7 +7742,7 @@ namespace ts {
             parseSemicolon();
             setAwaitContext(savedAwaitContext);
             const node = factory.createExportDeclaration(modifiers, isTypeOnly, exportClause, moduleSpecifier, assertClause);
-            node.illegalDecorators = decorators;
+            (node as Mutable<ExportDeclaration>).decorators = decorators;
             return withJSDoc(finishNode(node, pos), hasJSDoc);
         }
 
@@ -7760,7 +7760,7 @@ namespace ts {
             parseSemicolon();
             setAwaitContext(savedAwaitContext);
             const node = factory.createExportAssignment(modifiers, isExportEquals, expression);
-            node.illegalDecorators = decorators;
+            (node as Mutable<ExportAssignment>).decorators = decorators;
             return withJSDoc(finishNode(node, pos), hasJSDoc);
         }
 

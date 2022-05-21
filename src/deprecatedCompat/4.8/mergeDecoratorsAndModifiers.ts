@@ -6,7 +6,7 @@
 namespace ts {
     export interface Node {
         /** @deprecated `decorators` has been merged with `modifiers` on the declarations that support decorators. */
-        readonly decorators?: readonly Decorator[] | undefined;
+        readonly decorators?: NodeArray<Decorator> | undefined;
 
         /** @deprecated `modifiers` has been removed from `Node` and moved to the specific `Node` subtypes that support them. */
         readonly modifiers?: NodeArray<ModifierLike> | undefined;
@@ -14,26 +14,31 @@ namespace ts {
 
     export interface PropertySignature {
         /** @deprecated A property signature cannot have an initializer */
-        readonly initializer?: undefined;
+        readonly initializer?: Expression | undefined;
     }
 
     export interface PropertyAssignment {
         /** @deprecated A property assignment cannot have a question token */
-        readonly questionToken?: undefined;
+        readonly questionToken?: QuestionToken | undefined;
 
         /** @deprecated A property assignment cannot have an exclamation token */
-        readonly exclamationToken?: undefined;
+        readonly exclamationToken?: ExclamationToken | undefined;
     }
 
     export interface ShorthandPropertyAssignment {
+        /** @deprecated A shorthand property assignment cannot have modifiers */
+        readonly modifiers?: NodeArray<Modifier> | undefined;
+
         /** @deprecated A shorthand property assignment cannot have a question token */
-        readonly questionToken?: undefined;
+        readonly questionToken?: QuestionToken | undefined;
 
         /** @deprecated A shorthand property assignment cannot have an exclamation token */
-        readonly exclamationToken?: undefined;
+        readonly exclamationToken?: ExclamationToken | undefined;
+    }
 
-        /** @deprecated A shorthand property assignment cannot have modifiers */
-        readonly modifiers?: undefined;
+    export interface FunctionTypeNode {
+        /** @deprecated A function type cannot have modifiers */
+        readonly modifiers?: NodeArray<Modifier> | undefined;
     }
 
     export interface NodeFactory {
