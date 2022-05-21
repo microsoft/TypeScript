@@ -66,7 +66,7 @@ interface Atomics {
      * Waits asynchronously on a shared memory location and returns a Promise
      * @see wait
      */
-    waitAsync(typedArray: BigInt64Array, index: number, value: bigint, timeout?: number): { async: false, value: "ok" | "not-equal" | "timed-out" } | { async: true, value: Promise<bigint> };
+    waitAsync(typedArray: BigInt64Array, index: number, value: bigint, timeout?: number): { async: false, value: "ok" | "not-equal" | "timed-out" } | { async: true, value: Promise<"ok" | "not-equal" | "timed-out"> };
 
     /**
      * Wakes up sleeping agents that are waiting on the given index of the array, returning the
