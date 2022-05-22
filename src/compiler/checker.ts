@@ -2500,7 +2500,7 @@ namespace ts {
 
         function checkAndReportErrorForExtendingPrimitiveType(errorLocation: Node, name: __String, meaning: SymbolFlags): boolean {
             if (meaning & (SymbolFlags.Value & ~SymbolFlags.NamespaceModule)) {
-                if (isPrimitiveTypeName(name) && (errorLocation.parent.kind & SyntaxKind.ExpressionWithTypeArguments)) {
+                if (isPrimitiveTypeName(name) && !(errorLocation.parent.parent.kind & ~SyntaxKind.HeritageClause)) {
                     const rawName = unescapeLeadingUnderscores(name);
                     error(errorLocation, Diagnostics.An_interface_cannot_extend_a_primitive_type_like_0_An_interface_can_only_extend_named_types_and_classes, rawName);
                     return true;
