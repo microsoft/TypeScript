@@ -2180,6 +2180,7 @@ namespace ts {
                             !checkAndReportErrorForExtendingInterface(errorLocation) &&
                             !checkAndReportErrorForUsingTypeAsNamespace(errorLocation, name, meaning) &&
                             !checkAndReportErrorForExportingPrimitiveType(errorLocation, name) &&
+                            !checkAndReportErrorForExtendingPrimitiveType(errorLocation, name, meaning) &&
                             !checkAndReportErrorForUsingTypeAsValue(errorLocation, name, meaning) &&
                             !checkAndReportErrorForUsingNamespaceModuleAsValue(errorLocation, name, meaning) &&
                             !checkAndReportErrorForUsingValueAsType(errorLocation, name, meaning)) {
@@ -2491,6 +2492,17 @@ namespace ts {
                     else {
                         error(errorLocation, Diagnostics._0_only_refers_to_a_type_but_is_being_used_as_a_value_here, rawName);
                     }
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        function checkAndReportErrorForExtendingPrimitiveType(errorLocation: Node, name: __String, meaning: SymbolFlags): boolean {
+            if (meaning & (SymbolFlags.Value & ~SymbolFlags.NamespaceModule)) {
+                if (isPrimitiveTypeName(name) && (errorLocation.parent.kind & SyntaxKind.ExpressionWithTypeArguments)) {
+                    const rawName = unescapeLeadingUnderscores(name);
+                    error(errorLocation, Diagnostics.An_interface_cannot_extend_a_primitive_type_like_0_An_interface_can_only_extend_named_types_and_classes, rawName);
                     return true;
                 }
             }

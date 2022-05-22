@@ -7356,5 +7356,9 @@
     "A 'return' statement cannot be used inside a class static block.": {
         "category": "Error",
         "code": 18041
+    },
+    "An interface cannot extend a primitive type like '{0}'; An interface can only extend named types and classes.": {
+        "category": "Error",
+        "code": 18042
     }
 }
