@@ -15798,7 +15798,7 @@ namespace ts {
         function substituteIndexedMappedType(objectType: MappedType, index: Type) {
             const mapper = createTypeMapper([getTypeParameterFromMappedType(objectType)], [index]);
             const templateMapper = combineTypeMappers(objectType.mapper, mapper);
-            return instantiateType(getTemplateTypeFromMappedType(objectType), templateMapper);
+            return instantiateType(getTemplateTypeFromMappedType(objectType.target as MappedType || objectType), templateMapper);
         }
 
         function getIndexedAccessType(objectType: Type, indexType: Type, accessFlags = AccessFlags.None, accessNode?: ElementAccessExpression | IndexedAccessTypeNode | PropertyName | BindingName | SyntheticExpression, aliasSymbol?: Symbol, aliasTypeArguments?: readonly Type[]): Type {
