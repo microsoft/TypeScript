@@ -478,13 +478,13 @@ Input::
 
 Output::
 >> Screen clear
-[[90m12:01:33 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:34 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:34 AM[0m] Project 'project1.tsconfig.json' is out of date because oldest output 'commonFile1.d.ts' is older than newest input 'alpha.tsconfig.json'
+[[90m12:01:35 AM[0m] Project 'project1.tsconfig.json' is out of date because oldest output 'commonFile1.d.ts' is older than newest input 'alpha.tsconfig.json'
 
-[[90m12:01:35 AM[0m] Building project '/a/b/project1.tsconfig.json'...
+[[90m12:01:36 AM[0m] Building project '/a/b/project1.tsconfig.json'...
 
-[[90m12:01:37 AM[0m] Updating unchanged output timestamps of project '/a/b/project1.tsconfig.json'...
+[[90m12:01:38 AM[0m] Updating unchanged output timestamps of project '/a/b/project1.tsconfig.json'...
 
 
 
@@ -538,13 +538,13 @@ Change:: Build project 2
 Input::
 
 Output::
-[[90m12:01:38 AM[0m] Project 'project2.tsconfig.json' is out of date because oldest output 'other.js' is older than newest input 'alpha.tsconfig.json'
+[[90m12:01:39 AM[0m] Project 'project2.tsconfig.json' is out of date because oldest output 'other.js' is older than newest input 'alpha.tsconfig.json'
 
-[[90m12:01:39 AM[0m] Building project '/a/b/project2.tsconfig.json'...
+[[90m12:01:40 AM[0m] Building project '/a/b/project2.tsconfig.json'...
 
-[[90m12:01:41 AM[0m] Updating unchanged output timestamps of project '/a/b/project2.tsconfig.json'...
+[[90m12:01:42 AM[0m] Updating unchanged output timestamps of project '/a/b/project2.tsconfig.json'...
 
-[[90m12:01:42 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:43 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
