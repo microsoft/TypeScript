@@ -65,7 +65,7 @@ Output::
 node_modules/react/jsx-runtime/index.d.ts
   Imported via "react/jsx-runtime" from file 'index.tsx' with packageId 'react/jsx-runtime/index.d.ts@0.0.1' to import 'jsx' and 'jsxs' factory functions
 index.tsx
-  Matched by include pattern '**/*' in 'tsconfig.json'
+  Matched by default include pattern '**/*'
 [[90m12:00:44 AM[0m] Found 0 errors. Watching for file changes.
 
 
@@ -202,7 +202,7 @@ Output::
 node_modules/preact/jsx-runtime/index.d.ts
   Imported via "preact/jsx-runtime" from file 'index.tsx' with packageId 'preact/jsx-runtime/index.d.ts@0.0.1' to import 'jsx' and 'jsxs' factory functions
 index.tsx
-  Matched by include pattern '**/*' in 'tsconfig.json'
+  Matched by default include pattern '**/*'
 [[90m12:00:57 AM[0m] Found 1 error. Watching for file changes.
 
 

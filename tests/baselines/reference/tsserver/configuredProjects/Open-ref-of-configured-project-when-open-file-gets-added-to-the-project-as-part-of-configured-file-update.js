@@ -156,11 +156,11 @@ Project '/a/b/tsconfig.json' (Configured)
 
 
 	src/file1.ts
-	  Matched by include pattern '**/*' in 'tsconfig.json'
+	  Matched by default include pattern '**/*'
 	file3.ts
-	  Matched by include pattern '**/*' in 'tsconfig.json'
+	  Matched by default include pattern '**/*'
 	src/file2.ts
-	  Matched by include pattern '**/*' in 'tsconfig.json'
+	  Matched by default include pattern '**/*'
 
 -----------------------------------------------
 Running: *ensureProjectForOpenFiles*
@@ -343,11 +343,11 @@ Project '/a/b/tsconfig.json' (Configured)
 
 
 	src/file1.ts
-	  Matched by include pattern '**/*' in 'tsconfig.json'
+	  Matched by default include pattern '**/*'
 	file3.ts
-	  Matched by include pattern '**/*' in 'tsconfig.json'
+	  Matched by default include pattern '**/*'
 	src/file2.ts
-	  Matched by include pattern '**/*' in 'tsconfig.json'
+	  Matched by default include pattern '**/*'
 
 -----------------------------------------------
 DirectoryWatcher:: Close:: WatchInfo: /a/b 1 undefined Config: /a/b/tsconfig.json WatchType: Wild card directory

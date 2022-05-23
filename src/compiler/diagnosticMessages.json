@@ -435,6 +435,10 @@
         "category": "Error",
         "code": 1144
     },
+    "'{' or JSX element expected.": {
+        "category": "Error",
+        "code": 1145
+    },
     "Declaration expected.": {
         "category": "Error",
         "code": 1146
@@ -1016,6 +1020,10 @@
         "category": "Error",
         "code": 1340
     },
+    "Class constructor may not be an accessor.": {
+        "category": "Error",
+        "code": 1341
+    },
     "Type arguments cannot be used here.": {
         "category": "Error",
         "code": 1342
@@ -1087,6 +1095,10 @@
     "Identifier expected. '{0}' is a reserved word that cannot be used here.": {
         "category": "Error",
         "code": 1359
+    },
+    "Class constructor may not be a generator.": {
+        "category": "Error",
+        "code": 1360
     },
     "'{0}' cannot be used as a value because it was imported using 'import type'.": {
         "category": "Error",
@@ -1444,6 +1456,10 @@
         "category": "Error",
         "code": 1456
     },
+    "Matched by default include pattern '**/*'": {
+        "category": "Message",
+        "code": 1457
+    },
 
     "The 'import.meta' meta-property is not allowed in files which will build into CommonJS output.": {
         "category": "Error",
@@ -1509,6 +1525,15 @@
     "The 'type' modifier cannot be used on a named export when 'export type' is used on its export statement.": {
         "category": "Error",
         "code": 2207
+    },
+
+    "The project root is ambiguous, but is required to resolve export map entry '{0}' in file '{1}'. Supply the `rootDir` compiler option to disambiguate.": {
+        "category": "Error",
+        "code": 2209
+    },
+    "The project root is ambiguous, but is required to resolve import map entry '{0}' in file '{1}'. Supply the `rootDir` compiler option to disambiguate.": {
+        "category": "Error",
+        "code": 2210
     },
 
     "Duplicate identifier '{0}'.": {
@@ -3442,6 +3467,10 @@
         "category": "Error",
         "code": 2838
     },
+    "This condition will always return '{0}' since JavaScript compares objects by reference, not value.": {
+        "category": "Error",
+        "code": 2839
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
@@ -3870,6 +3899,10 @@
     "Compiler option '{0}' of value '{1}' is unstable. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.": {
         "category": "Error",
         "code": 4124
+    },
+    "Resolution mode assertions are unstable. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.": {
+        "category": "Error",
+        "code": 4125
     },
 
     "The current host does not support the '{0}' option.": {

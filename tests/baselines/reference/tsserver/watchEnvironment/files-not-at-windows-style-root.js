@@ -33,9 +33,9 @@ Project 'c:/myfolder/allproject/project/tsconfig.json' (Configured)
 	../../../a/lib/lib.d.ts
 	  Default library for target 'es3'
 	file1.ts
-	  Matched by include pattern '**/*' in 'tsconfig.json'
+	  Matched by default include pattern '**/*'
 	file2.ts
-	  Matched by include pattern '**/*' in 'tsconfig.json'
+	  Matched by default include pattern '**/*'
 
 -----------------------------------------------
 Project 'c:/myfolder/allproject/project/tsconfig.json' (Configured)

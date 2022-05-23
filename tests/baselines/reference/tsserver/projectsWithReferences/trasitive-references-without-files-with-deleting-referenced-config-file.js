@@ -100,7 +100,7 @@ Project '/user/username/projects/myproject/c/tsconfig.json' (Configured)
 	../refs/a.d.ts
 	  Imported via "@ref/a" from file 'index.ts'
 	index.ts
-	  Matched by include pattern '**/*' in 'tsconfig.json'
+	  Matched by default include pattern '**/*'
 
 -----------------------------------------------
 Project '/user/username/projects/myproject/c/tsconfig.json' (Configured)
@@ -154,7 +154,7 @@ Project '/user/username/projects/myproject/c/tsconfig.json' (Configured)
 	../b/index.ts
 	  Imported via '../b' from file 'index.ts'
 	index.ts
-	  Matched by include pattern '**/*' in 'tsconfig.json'
+	  Matched by default include pattern '**/*'
 
 -----------------------------------------------
 Running: *ensureProjectForOpenFiles*
@@ -240,7 +240,7 @@ Project '/user/username/projects/myproject/c/tsconfig.json' (Configured)
 	../refs/a.d.ts
 	  Imported via "@ref/a" from file 'index.ts'
 	index.ts
-	  Matched by include pattern '**/*' in 'tsconfig.json'
+	  Matched by default include pattern '**/*'
 
 -----------------------------------------------
 Running: *ensureProjectForOpenFiles*

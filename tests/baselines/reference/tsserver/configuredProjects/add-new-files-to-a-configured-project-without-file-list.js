@@ -28,7 +28,7 @@ Project '/a/b/tsconfig.json' (Configured)
 	../lib/lib.d.ts
 	  Default library for target 'es3'
 	commonFile1.ts
-	  Matched by include pattern '**/*' in 'tsconfig.json'
+	  Matched by default include pattern '**/*'
 
 -----------------------------------------------
 Project '/a/b/tsconfig.json' (Configured)
@@ -56,9 +56,9 @@ Project '/a/b/tsconfig.json' (Configured)
 	../lib/lib.d.ts
 	  Default library for target 'es3'
 	commonFile1.ts
-	  Matched by include pattern '**/*' in 'tsconfig.json'
+	  Matched by default include pattern '**/*'
 	commonFile2.ts
-	  Matched by include pattern '**/*' in 'tsconfig.json'
+	  Matched by default include pattern '**/*'
 
 -----------------------------------------------
 Running: *ensureProjectForOpenFiles*

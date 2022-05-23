@@ -42,12 +42,12 @@ Project '/a/b/tsconfig.json' (Configured)
 
 	utils/db.ts
 	  Imported via '~/utils/db' from file 'models/vessel.ts'
-	  Matched by include pattern '**/*' in 'tsconfig.json'
+	  Matched by default include pattern '**/*'
 	models/vessel.ts
 	  Imported via '~/models/vessel' from file 'controllers/vessels/client.ts'
-	  Matched by include pattern '**/*' in 'tsconfig.json'
+	  Matched by default include pattern '**/*'
 	controllers/vessels/client.ts
-	  Matched by include pattern '**/*' in 'tsconfig.json'
+	  Matched by default include pattern '**/*'
 
 -----------------------------------------------
 Project '/a/b/tsconfig.json' (Configured)

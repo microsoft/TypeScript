@@ -26,7 +26,7 @@ Project '/a/b/tsconfig.json' (Configured)
 
 
 	app.js
-	  Matched by include pattern '**/*' in 'tsconfig.json'
+	  Matched by default include pattern '**/*'
 
 -----------------------------------------------
 Project '/a/b/tsconfig.json' (Configured)
@@ -48,9 +48,9 @@ Project '/a/b/tsconfig.json' (Configured)
 
 
 	app.js
-	  Matched by include pattern '**/*' in 'tsconfig.json'
+	  Matched by default include pattern '**/*'
 	../data/node_modules/@types/jquery/index.d.ts
-	  Root file specified for compilation
+	  Matched by default include pattern '**/*'
 
 -----------------------------------------------
 Running: *ensureProjectForOpenFiles*

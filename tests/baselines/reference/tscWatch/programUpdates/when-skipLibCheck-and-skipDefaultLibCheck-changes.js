@@ -283,7 +283,7 @@ Input::
 
 Output::
 >> Screen clear
-[[90m12:00:45 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:46 AM[0m] File change detected. Starting incremental compilation...
 
 [96ma.ts[0m:[93m2[0m:[93m5[0m - [91merror[0m[90m TS2687: [0mAll declarations of 'fullscreen' must have identical modifiers.
 
@@ -295,7 +295,7 @@ Output::
 [7m2[0m     fullscreen: boolean;
 [7m [0m [91m    ~~~~~~~~~~[0m
 
-[[90m12:00:46 AM[0m] Found 2 errors. Watching for file changes.
+[[90m12:00:47 AM[0m] Found 2 errors. Watching for file changes.
 
 
 
@@ -342,14 +342,14 @@ Input::
 
 Output::
 >> Screen clear
-[[90m12:00:50 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:51 AM[0m] File change detected. Starting incremental compilation...
 
 [96ma.ts[0m:[93m2[0m:[93m5[0m - [91merror[0m[90m TS2687: [0mAll declarations of 'fullscreen' must have identical modifiers.
 
 [7m2[0m     fullscreen: boolean;
 [7m [0m [91m    ~~~~~~~~~~[0m
 
-[[90m12:00:51 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:00:52 AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -397,7 +397,7 @@ Input::
 
 Output::
 >> Screen clear
-[[90m12:00:55 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:56 AM[0m] File change detected. Starting incremental compilation...
 
 [96m../../../../a/lib/lib.d.ts[0m:[93m13[0m:[93m14[0m - [91merror[0m[90m TS2687: [0mAll declarations of 'fullscreen' must have identical modifiers.
 
@@ -414,7 +414,7 @@ Output::
 [7m2[0m     fullscreen: boolean;
 [7m [0m [91m    ~~~~~~~~~~[0m
 
-[[90m12:00:56 AM[0m] Found 3 errors. Watching for file changes.
+[[90m12:00:57 AM[0m] Found 3 errors. Watching for file changes.
 
 
 

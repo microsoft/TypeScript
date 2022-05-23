@@ -41,9 +41,9 @@ Project '/user/username/rootfolder/otherfolder/a/b/project/tsconfig.json' (Confi
 	../../../../../../../a/lib/lib.d.ts
 	  Default library for target 'es3'
 	file1.ts
-	  Matched by include pattern '**/*' in 'tsconfig.json'
+	  Matched by default include pattern '**/*'
 	file3.ts
-	  Matched by include pattern '**/*' in 'tsconfig.json'
+	  Matched by default include pattern '**/*'
 
 -----------------------------------------------
 event:
@@ -122,9 +122,9 @@ Project '/user/username/rootfolder/otherfolder/a/b/project/tsconfig.json' (Confi
 	../node_modules/file2.d.ts
 	  Imported via "file2" from file 'file1.ts'
 	file1.ts
-	  Matched by include pattern '**/*' in 'tsconfig.json'
+	  Matched by default include pattern '**/*'
 	file3.ts
-	  Matched by include pattern '**/*' in 'tsconfig.json'
+	  Matched by default include pattern '**/*'
 
 -----------------------------------------------
 Running: *ensureProjectForOpenFiles*

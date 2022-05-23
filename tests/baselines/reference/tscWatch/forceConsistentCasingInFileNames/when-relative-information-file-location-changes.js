@@ -34,7 +34,7 @@ Output::
   The file is in the program because:
     Imported via "./ModuleC" from file '/user/username/projects/myproject/moduleA.ts'
     Imported via "./moduleC" from file '/user/username/projects/myproject/moduleB.ts'
-    Matched by include pattern '**/*' in 'tsconfig.json'
+    Matched by default include pattern '**/*'
 
 [7m1[0m import a = require("./ModuleC")
 [7m [0m [91m                   ~~~~~~~~~~~[0m
@@ -48,7 +48,7 @@ Output::
   The file is in the program because:
     Imported via "./ModuleC" from file '/user/username/projects/myproject/moduleA.ts'
     Imported via "./moduleC" from file '/user/username/projects/myproject/moduleB.ts'
-    Matched by include pattern '**/*' in 'tsconfig.json'
+    Matched by default include pattern '**/*'
 
 [7m1[0m import a = require("./moduleC")
 [7m [0m [91m                   ~~~~~~~~~~~[0m
@@ -63,11 +63,11 @@ Output::
 ModuleC.ts
   Imported via "./ModuleC" from file 'moduleA.ts'
   Imported via "./moduleC" from file 'moduleB.ts'
-  Matched by include pattern '**/*' in 'tsconfig.json'
+  Matched by default include pattern '**/*'
 moduleA.ts
-  Matched by include pattern '**/*' in 'tsconfig.json'
+  Matched by default include pattern '**/*'
 moduleB.ts
-  Matched by include pattern '**/*' in 'tsconfig.json'
+  Matched by default include pattern '**/*'
 [[90m12:00:32 AM[0m] Found 2 errors. Watching for file changes.
 
 
@@ -149,7 +149,7 @@ Output::
   The file is in the program because:
     Imported via "./ModuleC" from file '/user/username/projects/myproject/moduleA.ts'
     Imported via "./moduleC" from file '/user/username/projects/myproject/moduleB.ts'
-    Matched by include pattern '**/*' in 'tsconfig.json'
+    Matched by default include pattern '**/*'
 
 [7m2[0m                     import a = require("./ModuleC")
 [7m [0m [91m                                       ~~~~~~~~~~~[0m
@@ -163,7 +163,7 @@ Output::
   The file is in the program because:
     Imported via "./ModuleC" from file '/user/username/projects/myproject/moduleA.ts'
     Imported via "./moduleC" from file '/user/username/projects/myproject/moduleB.ts'
-    Matched by include pattern '**/*' in 'tsconfig.json'
+    Matched by default include pattern '**/*'
 
 [7m1[0m import a = require("./moduleC")
 [7m [0m [91m                   ~~~~~~~~~~~[0m
@@ -178,11 +178,11 @@ Output::
 ModuleC.ts
   Imported via "./ModuleC" from file 'moduleA.ts'
   Imported via "./moduleC" from file 'moduleB.ts'
-  Matched by include pattern '**/*' in 'tsconfig.json'
+  Matched by default include pattern '**/*'
 moduleA.ts
-  Matched by include pattern '**/*' in 'tsconfig.json'
+  Matched by default include pattern '**/*'
 moduleB.ts
-  Matched by include pattern '**/*' in 'tsconfig.json'
+  Matched by default include pattern '**/*'
 [[90m12:00:39 AM[0m] Found 2 errors. Watching for file changes.
 
 

@@ -880,6 +880,10 @@ namespace ts.server {
             throw new Error("Program objects are not serializable through the server protocol.");
         }
 
+        updateIsDefinitionOfReferencedSymbols(_referencedSymbols: readonly ReferencedSymbol[], _knownSymbolSpans: Set<DocumentSpan>): boolean {
+            return notImplemented();
+        }
+
         getNonBoundSourceFile(_fileName: string): SourceFile {
             throw new Error("SourceFile objects are not serializable through the server protocol.");
         }

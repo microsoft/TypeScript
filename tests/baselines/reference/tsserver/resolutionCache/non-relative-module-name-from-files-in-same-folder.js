@@ -74,9 +74,9 @@ Project '/user/username/projects/myproject/tsconfig.json' (Configured)
 	  Imported via "module2" from file 'src/file1.ts'
 	  Imported via "module2" from file 'src/file2.ts'
 	src/file1.ts
-	  Matched by include pattern '**/*' in 'tsconfig.json'
+	  Matched by default include pattern '**/*'
 	src/file2.ts
-	  Matched by include pattern '**/*' in 'tsconfig.json'
+	  Matched by default include pattern '**/*'
 
 -----------------------------------------------
 Project '/user/username/projects/myproject/tsconfig.json' (Configured)

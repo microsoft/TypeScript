@@ -30,7 +30,7 @@ Project '/a/b/projects/project/src/tsconfig.json' (Configured)
 	../../../../lib/lib.d.ts
 	  Default library for target 'es3'
 	file1.ts
-	  Matched by include pattern '**/*' in 'tsconfig.json'
+	  Matched by default include pattern '**/*'
 
 -----------------------------------------------
 Project '/a/b/projects/project/src/tsconfig.json' (Configured)
@@ -51,7 +51,7 @@ Project '/a/b/projects/project/src/tsconfig.json' (Configured)
 	../../../../lib/lib.d.ts
 	  Default library for target 'es3'
 	file1.ts
-	  Matched by include pattern '**/*' in 'tsconfig.json'
+	  Matched by default include pattern '**/*'
 
 -----------------------------------------------
 DirectoryWatcher:: Close:: WatchInfo: /a/b/projects/project/src 1 undefined Config: /a/b/projects/project/src/tsconfig.json WatchType: Wild card directory

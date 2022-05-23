@@ -67,7 +67,7 @@ Project '/user/username/projects/myproject/tsconfig.json' (Configured)
 	node_modules/module2/index.ts
 	  Imported via "module2" from file 'src/file1.ts'
 	src/file1.ts
-	  Matched by include pattern '**/*' in 'tsconfig.json'
+	  Matched by default include pattern '**/*'
 
 -----------------------------------------------
 Project '/user/username/projects/myproject/tsconfig.json' (Configured)

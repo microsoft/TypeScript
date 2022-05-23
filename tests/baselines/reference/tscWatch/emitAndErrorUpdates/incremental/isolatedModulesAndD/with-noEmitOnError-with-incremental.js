@@ -510,14 +510,14 @@ Input::
 
 Output::
 >> Screen clear
-[[90m12:01:30 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:31 AM[0m] File change detected. Starting incremental compilation...
 
 [96msrc/main.ts[0m:[93m2[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType 'number' is not assignable to type 'string'.
 
 [7m2[0m const a: string = 10;
 [7m [0m [91m      ~[0m
 
-[[90m12:01:31 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:01:32 AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -567,9 +567,9 @@ const a: string = "hello";
 
 Output::
 >> Screen clear
-[[90m12:01:35 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:36 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:45 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:46 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -683,9 +683,9 @@ Input::
 
 Output::
 >> Screen clear
-[[90m12:01:52 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:53 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:53 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:54 AM[0m] Found 0 errors. Watching for file changes.
 
 
 

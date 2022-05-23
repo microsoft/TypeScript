@@ -39,7 +39,7 @@ Project '/user/username/projects/myproject/main/tsconfig.json' (Configured)
 	../decls/fns.d.ts
 	  Imported via '../decls/fns' from file 'main.ts'
 	main.ts
-	  Matched by include pattern '**/*' in 'tsconfig.json'
+	  Matched by default include pattern '**/*'
 
 -----------------------------------------------
 Search path: /user/username/projects/myproject/main
@@ -83,7 +83,7 @@ Project '/user/username/projects/myproject/random/tsconfig.json' (Configured)
 	../../../../../a/lib/lib.d.ts
 	  Default library for target 'es3'
 	random.ts
-	  Matched by include pattern '**/*' in 'tsconfig.json'
+	  Matched by default include pattern '**/*'
 
 -----------------------------------------------
 Project '/user/username/projects/myproject/main/tsconfig.json' (Configured)
@@ -124,7 +124,7 @@ Project '/user/username/projects/myproject/main/tsconfig.json' (Configured)
 	../../../../../a/lib/lib.d.ts
 	  Default library for target 'es3'
 	main.ts
-	  Matched by include pattern '**/*' in 'tsconfig.json'
+	  Matched by default include pattern '**/*'
 
 -----------------------------------------------
 response:{"response":{"definitions":[{"file":"/user/username/projects/myproject/main/main.ts","start":{"line":2,"offset":5},"end":{"line":2,"offset":8},"contextStart":{"line":1,"offset":1},"contextEnd":{"line":7,"offset":22}}],"textSpan":{"start":{"line":9,"offset":1},"end":{"line":9,"offset":4}}},"responseRequired":true}
@@ -210,7 +210,7 @@ Project '/user/username/projects/myproject/main/tsconfig.json' (Configured)
 	../../../../../a/lib/lib.d.ts
 	  Default library for target 'es3'
 	main.ts
-	  Matched by include pattern '**/*' in 'tsconfig.json'
+	  Matched by default include pattern '**/*'
 
 -----------------------------------------------
 DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/main 1 undefined Config: /user/username/projects/myproject/main/tsconfig.json WatchType: Wild card directory

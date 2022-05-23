@@ -28,7 +28,7 @@ Project '/jsconfig.json' (Configured)
 
 
 	app.js
-	  Matched by include pattern '**/*' in 'jsconfig.json'
+	  Matched by default include pattern '**/*'
 
 -----------------------------------------------
 DirectoryWatcher:: Triggered with tmp :: WatchInfo:  1 undefined Config: /jsconfig.json WatchType: Wild card directory
@@ -77,9 +77,9 @@ Project '/jsconfig.json' (Configured)
 
 
 	app.js
-	  Matched by include pattern '**/*' in 'jsconfig.json'
+	  Matched by default include pattern '**/*'
 	tmp/node_modules/@types/jquery/index.d.ts
-	  Root file specified for compilation
+	  Matched by default include pattern '**/*'
 
 -----------------------------------------------
 Running: *ensureProjectForOpenFiles*

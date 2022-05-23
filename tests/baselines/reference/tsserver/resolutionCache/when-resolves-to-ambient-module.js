@@ -53,14 +53,14 @@ Project '/user/username/projects/myproject/src/tsconfig.json' (Configured)
 	../../../../../a/lib/lib.d.ts
 	  Default library for target 'es5'
 	somefolder/module1.ts
-	  Matched by include pattern '**/*' in 'tsconfig.json'
+	  Matched by default include pattern '**/*'
 	  Imported via "somefolder/module1" from file 'somefolder/srcfile.ts'
 	somefolder/srcfile.ts
-	  Matched by include pattern '**/*' in 'tsconfig.json'
+	  Matched by default include pattern '**/*'
 	typings/electron.d.ts
-	  Matched by include pattern '**/*' in 'tsconfig.json'
+	  Matched by default include pattern '**/*'
 	typings/node.d.ts
-	  Matched by include pattern '**/*' in 'tsconfig.json'
+	  Matched by default include pattern '**/*'
 
 -----------------------------------------------
 Project '/user/username/projects/myproject/src/tsconfig.json' (Configured)

@@ -38,7 +38,7 @@ Project '/user/username/rootfolder/otherfolder/a/b/tsconfig.json' (Configured)
 	../../../../../../a/lib/lib.d.ts
 	  Default library for target 'es3'
 	app.ts
-	  Matched by include pattern '**/*' in 'tsconfig.json'
+	  Matched by default include pattern '**/*'
 
 -----------------------------------------------
 Project '/user/username/rootfolder/otherfolder/a/b/tsconfig.json' (Configured)
@@ -642,7 +642,7 @@ Project '/user/username/rootfolder/otherfolder/a/b/tsconfig.json' (Configured)
 	  Imported via 'lodash' from file 'app.ts' with packageId '@types/lodash/index.d.ts@4.14.74'
 	  Entry point for implicit type library 'lodash' with packageId '@types/lodash/index.d.ts@4.14.74'
 	app.ts
-	  Matched by include pattern '**/*' in 'tsconfig.json'
+	  Matched by default include pattern '**/*'
 
 -----------------------------------------------
 Running: *ensureProjectForOpenFiles*

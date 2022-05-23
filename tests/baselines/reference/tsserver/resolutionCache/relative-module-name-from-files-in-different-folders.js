@@ -93,24 +93,24 @@ Project '/user/username/projects/myproject/tsconfig.json' (Configured)
 	../../../../a/lib/lib.d.ts
 	  Default library for target 'es3'
 	product/module2.ts
-	  Matched by include pattern '**/*' in 'tsconfig.json'
+	  Matched by default include pattern '**/*'
 	  Imported via "../module2" from file 'product/src/file1.ts'
 	  Imported via "../../module2" from file 'product/src/feature/file2.ts'
 	  Imported via "../module2" from file 'product/test/file4.ts'
 	  Imported via "../../module2" from file 'product/test/src/file3.ts'
 	product/src/module1.ts
 	  Imported via "./module1" from file 'product/src/file1.ts'
-	  Matched by include pattern '**/*' in 'tsconfig.json'
+	  Matched by default include pattern '**/*'
 	  Imported via "../module1" from file 'product/src/feature/file2.ts'
 	  Imported via "../../src/module1" from file 'product/test/src/file3.ts'
 	product/src/file1.ts
-	  Matched by include pattern '**/*' in 'tsconfig.json'
+	  Matched by default include pattern '**/*'
 	product/src/feature/file2.ts
-	  Matched by include pattern '**/*' in 'tsconfig.json'
+	  Matched by default include pattern '**/*'
 	product/test/file4.ts
-	  Matched by include pattern '**/*' in 'tsconfig.json'
+	  Matched by default include pattern '**/*'
 	product/test/src/file3.ts
-	  Matched by include pattern '**/*' in 'tsconfig.json'
+	  Matched by default include pattern '**/*'
 
 -----------------------------------------------
 Project '/user/username/projects/myproject/tsconfig.json' (Configured)

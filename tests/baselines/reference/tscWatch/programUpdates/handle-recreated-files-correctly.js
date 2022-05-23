@@ -30,9 +30,9 @@ Output::
 a/lib/lib.d.ts
   Default library for target 'es3'
 a/b/commonFile1.ts
-  Matched by include pattern '**/*' in 'a/b/tsconfig.json'
+  Matched by default include pattern '**/*'
 a/b/commonFile2.ts
-  Matched by include pattern '**/*' in 'a/b/tsconfig.json'
+  Matched by default include pattern '**/*'
 [[90m12:00:22 AM[0m] Found 0 errors. Watching for file changes.
 
 
@@ -98,9 +98,9 @@ Output::
 a/lib/lib.d.ts
   Default library for target 'es3'
 a/b/commonFile1.ts
-  Matched by include pattern '**/*' in 'a/b/tsconfig.json'
+  Matched by default include pattern '**/*'
 a/b/commonFile2.ts
-  Matched by include pattern '**/*' in 'a/b/tsconfig.json'
+  Matched by default include pattern '**/*'
 [[90m12:00:32 AM[0m] Found 0 errors. Watching for file changes.
 
 
@@ -161,7 +161,7 @@ Output::
 a/lib/lib.d.ts
   Default library for target 'es3'
 a/b/commonFile1.ts
-  Matched by include pattern '**/*' in 'a/b/tsconfig.json'
+  Matched by default include pattern '**/*'
 [[90m12:00:38 AM[0m] Found 0 errors. Watching for file changes.
 
 
@@ -213,9 +213,9 @@ Output::
 a/lib/lib.d.ts
   Default library for target 'es3'
 a/b/commonFile1.ts
-  Matched by include pattern '**/*' in 'a/b/tsconfig.json'
+  Matched by default include pattern '**/*'
 a/b/commonFile2.ts
-  Matched by include pattern '**/*' in 'a/b/tsconfig.json'
+  Matched by default include pattern '**/*'
 [[90m12:00:48 AM[0m] Found 0 errors. Watching for file changes.
 
 

@@ -35,7 +35,7 @@ Project '/user/username/projects/myproject/main/tsconfig.json' (Configured)
 	../../../../../a/lib/lib.d.ts
 	  Default library for target 'es3'
 	main.ts
-	  Matched by include pattern '**/*' in 'tsconfig.json'
+	  Matched by default include pattern '**/*'
 
 -----------------------------------------------
 Search path: /user/username/projects/myproject/main
@@ -79,7 +79,7 @@ Project '/user/username/projects/myproject/random/tsconfig.json' (Configured)
 	../../../../../a/lib/lib.d.ts
 	  Default library for target 'es3'
 	random.ts
-	  Matched by include pattern '**/*' in 'tsconfig.json'
+	  Matched by default include pattern '**/*'
 
 -----------------------------------------------
 Project '/user/username/projects/myproject/main/tsconfig.json' (Configured)
@@ -178,7 +178,7 @@ Project '/user/username/projects/myproject/main/tsconfig.json' (Configured)
 	../../../../../a/lib/lib.d.ts
 	  Default library for target 'es3'
 	main.ts
-	  Matched by include pattern '**/*' in 'tsconfig.json'
+	  Matched by default include pattern '**/*'
 
 -----------------------------------------------
 DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/main 1 undefined Config: /user/username/projects/myproject/main/tsconfig.json WatchType: Wild card directory

@@ -107,7 +107,7 @@ Project '/user/username/projects/myproject/dummy/tsconfig.json' (Configured)
 
 
 	dummy.ts
-	  Matched by include pattern '**/*' in 'tsconfig.json'
+	  Matched by default include pattern '**/*'
 
 -----------------------------------------------
 Project '/user/username/projects/myproject/a/tsconfig.json' (Configured)

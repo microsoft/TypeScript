@@ -425,18 +425,18 @@ Input::
 
 Output::
 >> Screen clear
-[[90m12:01:26 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:27 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:27 AM[0m] Project 'tsconfig.json' is out of date because oldest output 'dev-build/shared/types/db.js' is older than newest input 'src/main.ts'
+[[90m12:01:28 AM[0m] Project 'tsconfig.json' is out of date because oldest output 'dev-build/shared/types/db.js' is older than newest input 'src/main.ts'
 
-[[90m12:01:28 AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
+[[90m12:01:29 AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
 
 [96msrc/main.ts[0m:[93m2[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType 'number' is not assignable to type 'string'.
 
 [7m2[0m const a: string = 10;
 [7m [0m [91m      ~[0m
 
-[[90m12:01:29 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:01:30 AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -482,15 +482,15 @@ const a: string = "hello";
 
 Output::
 >> Screen clear
-[[90m12:01:33 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:34 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:34 AM[0m] Project 'tsconfig.json' is out of date because oldest output 'dev-build/shared/types/db.js' is older than newest input 'src/main.ts'
+[[90m12:01:35 AM[0m] Project 'tsconfig.json' is out of date because oldest output 'dev-build/shared/types/db.js' is older than newest input 'src/main.ts'
 
-[[90m12:01:35 AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
+[[90m12:01:36 AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
 
-[[90m12:01:43 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/noEmitOnError/tsconfig.json'...
+[[90m12:01:44 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/noEmitOnError/tsconfig.json'...
 
-[[90m12:01:47 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:48 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -600,15 +600,15 @@ Input::
 
 Output::
 >> Screen clear
-[[90m12:01:51 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:52 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:52 AM[0m] Project 'tsconfig.json' is out of date because oldest output 'dev-build/shared/types/db.js' is older than newest input 'src/main.ts'
+[[90m12:01:53 AM[0m] Project 'tsconfig.json' is out of date because oldest output 'dev-build/shared/types/db.js' is older than newest input 'src/main.ts'
 
-[[90m12:01:53 AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
+[[90m12:01:54 AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
 
-[[90m12:01:55 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/noEmitOnError/tsconfig.json'...
+[[90m12:01:56 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/noEmitOnError/tsconfig.json'...
 
-[[90m12:01:56 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:57 AM[0m] Found 0 errors. Watching for file changes.
 
 
 

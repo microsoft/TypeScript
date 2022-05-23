@@ -117,9 +117,9 @@ Input::
 
 Output::
 >> Screen clear
-[[90m12:00:26 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:32 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:00:33 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:00:39 AM[0m] Found 0 errors. Watching for file changes.
 
 
 

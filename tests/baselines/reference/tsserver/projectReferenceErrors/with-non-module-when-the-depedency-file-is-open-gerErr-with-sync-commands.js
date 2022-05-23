@@ -56,7 +56,7 @@ Project '/user/username/projects/myproject/usage/tsconfig.json' (Configured)
 	../dependency/fns.ts
 	  Source from referenced project '../dependency/tsconfig.json' included because '--outFile' specified
 	usage.ts
-	  Matched by include pattern '**/*' in 'tsconfig.json'
+	  Matched by default include pattern '**/*'
 
 -----------------------------------------------
 Search path: /user/username/projects/myproject/usage
@@ -90,7 +90,7 @@ Project '/user/username/projects/myproject/dependency/tsconfig.json' (Configured
 	../../../../../a/lib/lib.d.ts
 	  Default library for target 'es3'
 	fns.ts
-	  Matched by include pattern '**/*' in 'tsconfig.json'
+	  Matched by default include pattern '**/*'
 
 -----------------------------------------------
 Search path: /user/username/projects/myproject/dependency

@@ -38,9 +38,9 @@ Project '/a/username/project/tsconfig.json' (Configured)
 	../../lib/lib.d.ts
 	  Default library for target 'es3'
 	src/file1.ts
-	  Matched by include pattern '**/*' in 'tsconfig.json'
+	  Matched by default include pattern '**/*'
 	src/index.ts
-	  Matched by include pattern '**/*' in 'tsconfig.json'
+	  Matched by default include pattern '**/*'
 	  Imported via "./" from file 'src/index.ts'
 
 -----------------------------------------------
@@ -93,12 +93,12 @@ Project '/a/username/project/tsconfig.json' (Configured)
 	../../lib/lib.d.ts
 	  Default library for target 'es3'
 	src/file1.ts
-	  Matched by include pattern '**/*' in 'tsconfig.json'
+	  Matched by default include pattern '**/*'
 	src/index.ts
-	  Matched by include pattern '**/*' in 'tsconfig.json'
+	  Matched by default include pattern '**/*'
 	  Imported via "./" from file 'src/index.ts'
 	src/file2.ts
-	  Matched by include pattern '**/*' in 'tsconfig.json'
+	  Matched by default include pattern '**/*'
 
 -----------------------------------------------
 Completion Entries:: ["file1","file2"]

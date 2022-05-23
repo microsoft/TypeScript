@@ -2866,16 +2866,6 @@ namespace ts {
         return typeParameters && find(typeParameters, p => p.name.escapedText === name);
     }
 
-    export function hasRestParameter(s: SignatureDeclaration | JSDocSignature): boolean {
-        const last = lastOrUndefined<ParameterDeclaration | JSDocParameterTag>(s.parameters);
-        return !!last && isRestParameter(last);
-    }
-
-    export function isRestParameter(node: ParameterDeclaration | JSDocParameterTag): boolean {
-        const type = isJSDocParameterTag(node) ? (node.typeExpression && node.typeExpression.type) : node.type;
-        return (node as ParameterDeclaration).dotDotDotToken !== undefined || !!type && type.kind === SyntaxKind.JSDocVariadicType;
-    }
-
     export function hasTypeArguments(node: Node): node is HasTypeArguments {
         return !!(node as HasTypeArguments).typeArguments;
     }
@@ -4121,6 +4111,10 @@ namespace ts {
         return indentStrings[1].length;
     }
 
+    export function isNightly() {
+        return stringContains(version, "-dev") || stringContains(version, "-insiders");
+    }
+
     export function createTextWriter(newLine: string): EmitTextWriter {
         let output: string;
         let indent: number;
@@ -4385,6 +4379,16 @@ namespace ts {
             fileExtensionIsOneOf(path, [Extension.Cjs, Extension.Cts]) ? Extension.Dcts :
             fileExtensionIsOneOf(path, [Extension.Json]) ? `.json.d.ts` : // Drive-by redefinition of json declaration file output name so if it's ever enabled, it behaves well
             Extension.Dts;
+    }
+
+    /**
+     * This function is an inverse of `getDeclarationEmitExtensionForPath`.
+     */
+    export function getPossibleOriginalInputExtensionForExtension(path: string) {
+        return fileExtensionIsOneOf(path, [Extension.Dmts, Extension.Mjs, Extension.Mts]) ? [Extension.Mts, Extension.Mjs] :
+            fileExtensionIsOneOf(path, [Extension.Dcts, Extension.Cjs, Extension.Cts]) ? [Extension.Cts, Extension.Cjs]:
+            fileExtensionIsOneOf(path, [`.json.d.ts`]) ? [Extension.Json] :
+            [Extension.Tsx, Extension.Ts, Extension.Jsx, Extension.Js];
     }
 
     export function outFile(options: CompilerOptions) {
