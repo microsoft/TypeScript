@@ -5619,7 +5619,7 @@ namespace ts {
                     anyType : getNonMissingTypeOfSymbol(propertySymbol);
                 const saveEnclosingDeclaration = context.enclosingDeclaration;
                 context.enclosingDeclaration = undefined;
-                if (context.tracker.trackSymbol && getCheckFlags(propertySymbol) & CheckFlags.Late && isLateBoundName(propertySymbol.escapedName)) {
+                if (context.tracker.trackSymbol && isLateBoundName(propertySymbol.escapedName)) {
                     if (propertySymbol.declarations) {
                         const decl = first(propertySymbol.declarations);
                         if (hasLateBindableName(decl)) {
