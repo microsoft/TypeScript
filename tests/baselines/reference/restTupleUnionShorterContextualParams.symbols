@@ -1,0 +1,31 @@
+=== tests/cases/compiler/restTupleUnionShorterContextualParams.ts ===
+// repro #48663
+
+// showcase how those transitive assignments are OK
+const f1: (x: string | number) => void = x => {};
+>f1 : Symbol(f1, Decl(restTupleUnionShorterContextualParams.ts, 3, 5))
+>x : Symbol(x, Decl(restTupleUnionShorterContextualParams.ts, 3, 11))
+>x : Symbol(x, Decl(restTupleUnionShorterContextualParams.ts, 3, 40))
+
+const f2: (x: string | number, y: string | number) => void = f1;
+>f2 : Symbol(f2, Decl(restTupleUnionShorterContextualParams.ts, 4, 5))
+>x : Symbol(x, Decl(restTupleUnionShorterContextualParams.ts, 4, 11))
+>y : Symbol(y, Decl(restTupleUnionShorterContextualParams.ts, 4, 30))
+>f1 : Symbol(f1, Decl(restTupleUnionShorterContextualParams.ts, 3, 5))
+
+const f3: (...args: [number, string] | [string, number]) => void = f2;
+>f3 : Symbol(f3, Decl(restTupleUnionShorterContextualParams.ts, 5, 5))
+>args : Symbol(args, Decl(restTupleUnionShorterContextualParams.ts, 5, 11))
+>f2 : Symbol(f2, Decl(restTupleUnionShorterContextualParams.ts, 4, 5))
+
+// by extension those should be OK too
+const f4: (...args: [number, string] | [string, number]) => void = (item) => {}
+>f4 : Symbol(f4, Decl(restTupleUnionShorterContextualParams.ts, 8, 5))
+>args : Symbol(args, Decl(restTupleUnionShorterContextualParams.ts, 8, 11))
+>item : Symbol(item, Decl(restTupleUnionShorterContextualParams.ts, 8, 68))
+
+const f5: (...args: [number, string] | [string, number]) => void = (item: number | string) => {}
+>f5 : Symbol(f5, Decl(restTupleUnionShorterContextualParams.ts, 9, 5))
+>args : Symbol(args, Decl(restTupleUnionShorterContextualParams.ts, 9, 11))
+>item : Symbol(item, Decl(restTupleUnionShorterContextualParams.ts, 9, 68))
+

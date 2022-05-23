@@ -17967,7 +17967,10 @@ namespace ts {
 
             for (let i = 0; i < paramCount; i++) {
                 const sourceType = i === restIndex ? getRestTypeAtPosition(source, i) : tryGetTypeAtPosition(source, i);
-                const targetType = i === restIndex ? getRestTypeAtPosition(target, i) : tryGetTypeAtPosition(target, i);
+                let targetType = i === restIndex ? getRestTypeAtPosition(target, i) : tryGetTypeAtPosition(target, i);
+                if (i === restIndex && targetType && sourceType && isTupleType(sourceType) && !sourceType.target.hasRestElement) {
+                    targetType = mapType(targetType, t => isTupleType(t) && !t.target.hasRestElement ? sliceTupleType(t, 0, t.target.fixedLength - sourceType.target.fixedLength) : t);
+                }
                 if (sourceType && targetType) {
                     // In order to ensure that any generic type Foo<T> is at least co-variant with respect to T no matter
                     // how Foo uses T, we need to relate parameters bi-variantly (given that parameters are input positions,

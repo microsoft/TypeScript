@@ -1,0 +1,34 @@
+=== tests/cases/compiler/restTupleUnionShorterContextualParams.ts ===
+// repro #48663
+
+// showcase how those transitive assignments are OK
+const f1: (x: string | number) => void = x => {};
+>f1 : (x: string | number) => void
+>x : string | number
+>x => {} : (x: string | number) => void
+>x : string | number
+
+const f2: (x: string | number, y: string | number) => void = f1;
+>f2 : (x: string | number, y: string | number) => void
+>x : string | number
+>y : string | number
+>f1 : (x: string | number) => void
+
+const f3: (...args: [number, string] | [string, number]) => void = f2;
+>f3 : (...args: [number, string] | [string, number]) => void
+>args : [number, string] | [string, number]
+>f2 : (x: string | number, y: string | number) => void
+
+// by extension those should be OK too
+const f4: (...args: [number, string] | [string, number]) => void = (item) => {}
+>f4 : (...args: [number, string] | [string, number]) => void
+>args : [number, string] | [string, number]
+>(item) => {} : (item: string | number) => void
+>item : string | number
+
+const f5: (...args: [number, string] | [string, number]) => void = (item: number | string) => {}
+>f5 : (...args: [number, string] | [string, number]) => void
+>args : [number, string] | [string, number]
+>(item: number | string) => {} : (item: number | string) => void
+>item : string | number
+
