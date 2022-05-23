@@ -404,8 +404,8 @@ namespace FourSlashInterface {
             this.state.baselineSignatureHelp();
         }
 
-        public baselineCompletions() {
-            this.state.baselineCompletions();
+        public baselineCompletions(preferences?: ts.UserPreferences) {
+            this.state.baselineCompletions(preferences);
         }
 
         public baselineSmartSelection() {

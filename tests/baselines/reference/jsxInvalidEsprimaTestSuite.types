@@ -250,9 +250,8 @@ var x = <div>one</div> /* intervening comment */ <div>two</div>;;
 === tests/cases/conformance/jsx/29.tsx ===
 <a b=<}>;
 ><a b=<}>; : any
-><a b= : any
 >a : any
->b : true
+>b : any
 ><}>; : any
 > : any
 

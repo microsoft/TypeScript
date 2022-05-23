@@ -39,13 +39,13 @@ Output::
 ../../../../a/lib/lib.d.ts
   Default library for target 'es3'
 XY.ts
-  Matched by include pattern '**/*' in 'tsconfig.json'
+  Matched by default include pattern '**/*'
   Imported via "./XY" from file 'b.ts'
 link.ts
   Imported via "./link" from file 'b.ts'
-  Matched by include pattern '**/*' in 'tsconfig.json'
+  Matched by default include pattern '**/*'
 b.ts
-  Matched by include pattern '**/*' in 'tsconfig.json'
+  Matched by default include pattern '**/*'
 [[90m12:00:32 AM[0m] Found 0 errors. Watching for file changes.
 
 
@@ -137,13 +137,13 @@ Output::
 ../../../../a/lib/lib.d.ts
   Default library for target 'es3'
 XY.ts
-  Matched by include pattern '**/*' in 'tsconfig.json'
+  Matched by default include pattern '**/*'
   Imported via "./XY" from file 'b.ts'
 link.ts
   Imported via "./link" from file 'b.ts'
-  Matched by include pattern '**/*' in 'tsconfig.json'
+  Matched by default include pattern '**/*'
 b.ts
-  Matched by include pattern '**/*' in 'tsconfig.json'
+  Matched by default include pattern '**/*'
 [[90m12:00:42 AM[0m] Found 0 errors. Watching for file changes.
 
 

@@ -282,7 +282,7 @@ namespace ts {
         }
 
         // directoryExists
-        if (originalDirectoryExists && originalCreateDirectory) {
+        if (originalDirectoryExists) {
             host.directoryExists = directory => {
                 const key = toPath(directory);
                 const value = directoryExistsCache.get(key);
@@ -291,11 +291,14 @@ namespace ts {
                 directoryExistsCache.set(key, !!newValue);
                 return newValue;
             };
-            host.createDirectory = directory => {
-                const key = toPath(directory);
-                directoryExistsCache.delete(key);
-                originalCreateDirectory.call(host, directory);
-            };
+
+            if (originalCreateDirectory) {
+                host.createDirectory = directory => {
+                    const key = toPath(directory);
+                    directoryExistsCache.delete(key);
+                    originalCreateDirectory.call(host, directory);
+                };
+            }
         }
 
         return {
@@ -593,7 +596,7 @@ namespace ts {
     }
 
     /* @internal */
-    export function getResolutionModeOverrideForClause(clause: AssertClause | undefined, grammarErrorOnNode?: (node: Node, diagnostic: DiagnosticMessage) => boolean) {
+    export function getResolutionModeOverrideForClause(clause: AssertClause | undefined, grammarErrorOnNode?: (node: Node, diagnostic: DiagnosticMessage) => void) {
         if (!clause) return undefined;
         if (length(clause.elements) !== 1) {
             grammarErrorOnNode?.(clause, Diagnostics.Type_import_assertions_should_have_exactly_one_key_resolution_mode_with_value_import_or_require);
@@ -966,6 +969,8 @@ namespace ts {
         Diagnostics.extends_clause_already_seen.code,
         Diagnostics.let_declarations_can_only_be_declared_inside_a_block.code,
         Diagnostics.let_is_not_allowed_to_be_used_as_a_name_in_let_or_const_declarations.code,
+        Diagnostics.Class_constructor_may_not_be_a_generator.code,
+        Diagnostics.Class_constructor_may_not_be_an_accessor.code,
     ]);
 
     /**
@@ -3764,7 +3769,7 @@ namespace ts {
                     }
                     const matchedByInclude = getMatchedIncludeSpec(program, fileName);
                     // Could be additional files specified as roots
-                    if (!matchedByInclude) return undefined;
+                    if (!matchedByInclude || !isString(matchedByInclude)) return undefined;
                     configFileNode = getTsConfigPropArrayElementValue(options.configFile, "include", matchedByInclude);
                     message = Diagnostics.File_is_matched_by_include_pattern_specified_here;
                     break;

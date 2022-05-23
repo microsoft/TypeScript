@@ -93,11 +93,12 @@ namespace ts.JsDoc {
         const parts: SymbolDisplayPart[][] = [];
         forEachUnique(declarations, declaration => {
             for (const jsdoc of getCommentHavingNodes(declaration)) {
+                const inheritDoc = isJSDoc(jsdoc) && jsdoc.tags && find(jsdoc.tags, t => t.kind === SyntaxKind.JSDocTag && (t.tagName.escapedText === "inheritDoc" || t.tagName.escapedText === "inheritdoc"));
                 // skip comments containing @typedefs since they're not associated with particular declarations
                 // Exceptions:
                 // - @typedefs are themselves declarations with associated comments
                 // - @param or @return indicate that the author thinks of it as a 'local' @typedef that's part of the function documentation
-                if (jsdoc.comment === undefined
+                if (jsdoc.comment === undefined && !inheritDoc
                     || isJSDoc(jsdoc)
                        && declaration.kind !== SyntaxKind.JSDocTypedefTag && declaration.kind !== SyntaxKind.JSDocCallbackTag
                        && jsdoc.tags
@@ -105,7 +106,10 @@ namespace ts.JsDoc {
                        && !jsdoc.tags.some(t => t.kind === SyntaxKind.JSDocParameterTag || t.kind === SyntaxKind.JSDocReturnTag)) {
                     continue;
                 }
-                const newparts = getDisplayPartsFromComment(jsdoc.comment, checker);
+                let newparts = jsdoc.comment ? getDisplayPartsFromComment(jsdoc.comment, checker) : [];
+                if (inheritDoc && inheritDoc.comment) {
+                    newparts = newparts.concat(getDisplayPartsFromComment(inheritDoc.comment, checker));
+                }
                 if (!contains(parts, newparts, isIdenticalListOfDisplayParts)) {
                     parts.push(newparts);
                 }

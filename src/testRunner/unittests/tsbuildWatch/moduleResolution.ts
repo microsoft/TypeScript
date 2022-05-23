@@ -45,8 +45,7 @@ namespace ts.tscWatch {
                     caption: "Append text",
                     change: sys => sys.appendFile(`${projectRoot}/project1/index.ts`, "const bar = 10;"),
                     timeouts: sys => {
-                        sys.checkTimeoutQueueLengthAndRun(1); // build project1
-                        sys.checkTimeoutQueueLengthAndRun(1); // Solution
+                        sys.checkTimeoutQueueLengthAndRun(1); // build project1 and solution
                         sys.checkTimeoutQueueLength(0);
                     }
                 },
