@@ -405,6 +405,9 @@ Output::
 
 [[90m12:01:19 AM[0m] Building project '/a/b/project2.tsconfig.json'...
 
+sysLog:: watchPresentFileSystemEntry:: /a/b 1 change:: commonFile1.js
+sysLog:: watchPresentFileSystemEntry:: /a/b 1 change:: commonFile2.js
+sysLog:: watchPresentFileSystemEntry:: /a/b 1 change:: other.js
 [[90m12:01:29 AM[0m] Found 0 errors. Watching for file changes.
 
 
@@ -477,6 +480,8 @@ Input::
 
 
 Output::
+sysLog:: watchPresentFileSystemEntry:: /a/b 1 change:: alpha.tsconfig.json
+
 >> Screen clear
 [[90m12:01:34 AM[0m] File change detected. Starting incremental compilation...
 
@@ -486,6 +491,11 @@ Output::
 
 [[90m12:01:38 AM[0m] Updating unchanged output timestamps of project '/a/b/project1.tsconfig.json'...
 
+sysLog:: watchPresentFileSystemEntry:: /a/b 1 change:: commonFile1.js
+sysLog:: watchPresentFileSystemEntry:: /a/b 1 change:: commonFile1.d.ts
+sysLog:: watchPresentFileSystemEntry:: /a/b 1 change:: commonFile2.js
+sysLog:: watchPresentFileSystemEntry:: /a/b 1 change:: commonFile2.d.ts
+sysLog:: watchPresentFileSystemEntry:: /a/b 1 change:: project1.tsconfig.tsbuildinfo
 
 
 Program root files: ["/a/b/commonFile1.ts","/a/b/commonFile2.ts"]
@@ -544,6 +554,9 @@ Output::
 
 [[90m12:01:42 AM[0m] Updating unchanged output timestamps of project '/a/b/project2.tsconfig.json'...
 
+sysLog:: watchPresentFileSystemEntry:: /a/b 1 change:: commonFile1.js
+sysLog:: watchPresentFileSystemEntry:: /a/b 1 change:: commonFile2.js
+sysLog:: watchPresentFileSystemEntry:: /a/b 1 change:: other.js
 [[90m12:01:43 AM[0m] Found 0 errors. Watching for file changes.
 
 

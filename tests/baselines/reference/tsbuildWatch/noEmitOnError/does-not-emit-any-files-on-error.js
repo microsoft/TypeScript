@@ -98,6 +98,8 @@ Input::
 //// [/user/username/projects/noEmitOnError/src/main.ts] file written with same contents
 
 Output::
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/noemitonerror 1 change:: src/main.ts
+
 >> Screen clear
 [[90m12:00:39 AM[0m] File change detected. Starting incremental compilation...
 
@@ -157,6 +159,8 @@ const a = {
 
 
 Output::
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/noemitonerror 1 change:: src/main.ts
+
 >> Screen clear
 [[90m12:00:46 AM[0m] File change detected. Starting incremental compilation...
 
@@ -164,6 +168,20 @@ Output::
 
 [[90m12:00:48 AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
 
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/noemitonerror 1 rename:: dev-build
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/noemitonerror 1 change:: 
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/noemitonerror 1 rename:: dev-build/shared
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/noemitonerror 1 change:: dev-build
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/noemitonerror 1 rename:: dev-build/shared/types
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/noemitonerror 1 change:: dev-build/shared
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/noemitonerror 1 rename:: dev-build/shared/types/db.js
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/noemitonerror 1 change:: dev-build/shared/types
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/noemitonerror 1 rename:: dev-build/src
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/noemitonerror 1 change:: dev-build
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/noemitonerror 1 rename:: dev-build/src/main.js
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/noemitonerror 1 change:: dev-build/src
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/noemitonerror 1 rename:: dev-build/src/other.js
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/noemitonerror 1 change:: dev-build/src
 [[90m12:01:05 AM[0m] Found 0 errors. Watching for file changes.
 
 
@@ -236,6 +254,8 @@ const a: string = 10;
 
 
 Output::
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/noemitonerror 1 change:: src/main.ts
+
 >> Screen clear
 [[90m12:01:09 AM[0m] File change detected. Starting incremental compilation...
 
@@ -292,6 +312,8 @@ Input::
 //// [/user/username/projects/noEmitOnError/src/main.ts] file written with same contents
 
 Output::
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/noemitonerror 1 change:: src/main.ts
+
 >> Screen clear
 [[90m12:01:17 AM[0m] File change detected. Starting incremental compilation...
 
@@ -349,6 +371,8 @@ const a: string = "hello";
 
 
 Output::
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/noemitonerror 1 change:: src/main.ts
+
 >> Screen clear
 [[90m12:01:24 AM[0m] File change detected. Starting incremental compilation...
 
@@ -356,8 +380,11 @@ Output::
 
 [[90m12:01:26 AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
 
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/noemitonerror 1 change:: dev-build/src/main.js
 [[90m12:01:31 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/noEmitOnError/tsconfig.json'...
 
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/noemitonerror 1 change:: dev-build/shared/types/db.js
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/noemitonerror 1 change:: dev-build/src/other.js
 [[90m12:01:32 AM[0m] Found 0 errors. Watching for file changes.
 
 
@@ -410,6 +437,8 @@ Input::
 //// [/user/username/projects/noEmitOnError/src/main.ts] file written with same contents
 
 Output::
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/noemitonerror 1 change:: src/main.ts
+
 >> Screen clear
 [[90m12:01:36 AM[0m] File change detected. Starting incremental compilation...
 
@@ -419,6 +448,9 @@ Output::
 
 [[90m12:01:40 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/noEmitOnError/tsconfig.json'...
 
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/noemitonerror 1 change:: dev-build/shared/types/db.js
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/noemitonerror 1 change:: dev-build/src/main.js
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/noemitonerror 1 change:: dev-build/src/other.js
 [[90m12:01:41 AM[0m] Found 0 errors. Watching for file changes.
 
 

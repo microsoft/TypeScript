@@ -98,6 +98,7 @@ export declare function foo2(): string;
 
 
 Output::
+sysLog:: callbackChangingToMissingFileSystemEntry:: /user/username/projects/myproject/foo.ts 0 rename::  true foo.ts /foo.ts
 FileWatcher:: Triggered with /user/username/projects/myproject/foo.ts 0:: WatchInfo: /user/username/projects/myproject/foo.ts 250 {"watchFile":4} Source file
 Scheduling update
 Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/foo.ts 0:: WatchInfo: /user/username/projects/myproject/foo.ts 250 {"watchFile":4} Source file
@@ -167,14 +168,18 @@ export declare function foo(): string;
 
 
 Output::
+sysLog:: callbackChangingToMissingFileSystemEntry:: /user/username/projects/myproject/foo.ts 0 rename::  true foo.ts /foo.ts
 FileWatcher:: Triggered with /user/username/projects/myproject/foo.ts 2:: WatchInfo: /user/username/projects/myproject/foo.ts 250 {"watchFile":4} Source file
 Scheduling update
 Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/foo.ts 2:: WatchInfo: /user/username/projects/myproject/foo.ts 250 {"watchFile":4} Source file
 sysLog:: /user/username/projects/myproject/foo.ts:: Changing watcher to MissingFileSystemEntryWatcher
+sysLog:: watchMissingFileSystemEntry:: /user/username/projects/myproject/foo.ts 0 /user/username/projects/myproject/foo.ts:: 0
+sysLog:: watchMissingFileSystemEntry::  Callback :: rename, "" and will update the watcher
 FileWatcher:: Triggered with /user/username/projects/myproject/foo.ts 0:: WatchInfo: /user/username/projects/myproject/foo.ts 250 {"watchFile":4} Source file
 Scheduling update
 Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/foo.ts 0:: WatchInfo: /user/username/projects/myproject/foo.ts 250 {"watchFile":4} Source file
 sysLog:: /user/username/projects/myproject/foo.ts:: Changing watcher to PresentFileSystemEntryWatcher
+sysLog:: callbackChangingToMissingFileSystemEntry:: /user/username/projects/myproject/foo.ts 0 rename::  true foo.ts /foo.ts
 FileWatcher:: Triggered with /user/username/projects/myproject/foo.ts 0:: WatchInfo: /user/username/projects/myproject/foo.ts 250 {"watchFile":4} Source file
 Scheduling update
 Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/foo.ts 0:: WatchInfo: /user/username/projects/myproject/foo.ts 250 {"watchFile":4} Source file

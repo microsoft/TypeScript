@@ -75,9 +75,13 @@ Input::
 
 
 Output::
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: tsconfig.json
+
 >> Screen clear
 [[90m12:00:28 AM[0m] File change detected. Starting incremental compilation...
 
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 rename:: index.js
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: 
 [[90m12:00:31 AM[0m] Found 0 errors. Watching for file changes.
 
 

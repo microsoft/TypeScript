@@ -441,9 +441,22 @@ export const newFileConst = 30;
 
 
 Output::
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/sample1/core 1 rename:: newfile.ts
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/sample1/core 1 change:: 
+
 >> Screen clear
 [[90m12:01:13 AM[0m] File change detected. Starting incremental compilation...
 
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/sample1/core 1 rename:: newfile.js
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/sample1/core 1 change:: 
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/sample1/core 1 rename:: newfile.d.ts
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/sample1/core 1 change:: 
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/sample1/core 1 change:: tsconfig.tsbuildinfo
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/sample1/core 1 change:: anotherModule.js
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/sample1/core 1 change:: anotherModule.d.ts
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/sample1/core 1 change:: index.js
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/sample1/core 1 change:: index.d.ts
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/sample1/core 1 change:: tsconfig.tsbuildinfo.readable.baseline.txt
 
 
 Program root files: ["/user/username/projects/sample1/core/anotherModule.ts","/user/username/projects/sample1/core/index.ts","/user/username/projects/sample1/core/newfile.ts"]
@@ -558,6 +571,10 @@ Change:: Build logic and tests
 Input::
 
 Output::
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/sample1/logic 1 change:: index.js
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/sample1/logic 1 change:: index.js.map
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/sample1/logic 1 change:: index.d.ts
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/sample1/logic 1 change:: tsconfig.tsbuildinfo
 [[90m12:01:27 AM[0m] Found 0 errors. Watching for file changes.
 
 
@@ -634,9 +651,19 @@ export class someClass2 { }
 
 
 Output::
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/sample1/core 1 change:: newfile.ts
+
 >> Screen clear
 [[90m12:01:31 AM[0m] File change detected. Starting incremental compilation...
 
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/sample1/core 1 change:: newfile.js
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/sample1/core 1 change:: newfile.d.ts
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/sample1/core 1 change:: tsconfig.tsbuildinfo
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/sample1/core 1 change:: anotherModule.js
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/sample1/core 1 change:: anotherModule.d.ts
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/sample1/core 1 change:: index.js
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/sample1/core 1 change:: index.d.ts
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/sample1/core 1 change:: tsconfig.tsbuildinfo.readable.baseline.txt
 
 
 Program root files: ["/user/username/projects/sample1/core/anotherModule.ts","/user/username/projects/sample1/core/index.ts","/user/username/projects/sample1/core/newfile.ts"]
@@ -759,6 +786,10 @@ Change:: Build logic and tests
 Input::
 
 Output::
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/sample1/logic 1 change:: index.js
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/sample1/logic 1 change:: index.js.map
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/sample1/logic 1 change:: index.d.ts
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/sample1/logic 1 change:: tsconfig.tsbuildinfo
 [[90m12:01:47 AM[0m] Found 0 errors. Watching for file changes.
 
 

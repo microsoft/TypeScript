@@ -96,9 +96,22 @@ export function bar() { };
 //// [/a/b/moduleFile.js] deleted
 
 Output::
+sysLog:: watchPresentFileSystemEntry:: /a/b 1 rename:: moduleFile.ts
+sysLog:: watchPresentFileSystemEntry:: /a/b 1 change:: 
+sysLog:: watchPresentFileSystemEntry:: /a/b 1 rename:: moduleFile1.ts
+sysLog:: watchPresentFileSystemEntry:: /a/b 1 change:: 
+sysLog:: watchPresentFileSystemEntry:: /a/b 1 rename:: moduleFile.js
+sysLog:: watchPresentFileSystemEntry:: /a/b 1 change:: 
+
 >> Screen clear
 [[90m12:00:27 AM[0m] File change detected. Starting incremental compilation...
 
+sysLog:: watchPresentFileSystemEntry:: /a/b 1 change:: file1.js
+sysLog:: watchPresentFileSystemEntry:: /a/b 1 change:: file1.js
+sysLog:: watchPresentFileSystemEntry:: /a/b 1 rename:: moduleFile1.js
+sysLog:: watchPresentFileSystemEntry:: /a/b 1 rename:: moduleFile1.js
+sysLog:: watchPresentFileSystemEntry:: /a/b 1 change:: 
+sysLog:: watchPresentFileSystemEntry:: /a/b 1 change:: 
 [96ma/b/file1.ts[0m:[93m1[0m:[93m20[0m - [91merror[0m[90m TS2307: [0mCannot find module './moduleFile' or its corresponding type declarations.
 
 [7m1[0m import * as T from "./moduleFile"; T.bar();
@@ -168,9 +181,21 @@ export function bar() { };
 //// [/a/b/moduleFile1.ts] deleted
 
 Output::
+sysLog:: watchPresentFileSystemEntry:: /a/b 1 rename:: moduleFile1.ts
+sysLog:: watchPresentFileSystemEntry:: /a/b 1 rename:: moduleFile1.ts
+sysLog:: watchPresentFileSystemEntry:: /a/b 1 change:: 
+sysLog:: watchPresentFileSystemEntry:: /a/b 1 change:: 
+sysLog:: watchPresentFileSystemEntry:: /a/b 1 rename:: moduleFile.ts
+sysLog:: watchPresentFileSystemEntry:: /a/b 1 rename:: moduleFile.ts
+sysLog:: watchPresentFileSystemEntry:: /a/b 1 change:: 
+sysLog:: watchPresentFileSystemEntry:: /a/b 1 change:: 
+
 >> Screen clear
 [[90m12:00:37 AM[0m] File change detected. Starting incremental compilation...
 
+sysLog:: watchPresentFileSystemEntry:: /a/b 1 rename:: moduleFile.js
+sysLog:: watchPresentFileSystemEntry:: /a/b 1 change:: 
+sysLog:: watchPresentFileSystemEntry:: /a/b 1 change:: file1.js
 [[90m12:00:43 AM[0m] Found 0 errors. Watching for file changes.
 
 

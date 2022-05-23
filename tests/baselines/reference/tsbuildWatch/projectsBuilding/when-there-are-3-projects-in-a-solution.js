@@ -281,6 +281,8 @@ export const pkg0 = 0;const someConst2 = 10;
 
 
 Output::
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/pkg0 1 change:: index.ts
+
 >> Screen clear
 [[90m12:01:12 AM[0m] File change detected. Starting incremental compilation...
 
@@ -288,14 +290,24 @@ Output::
 
 [[90m12:01:14 AM[0m] Building project '/user/username/projects/myproject/pkg0/tsconfig.json'...
 
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/pkg0 1 change:: index.js
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/pkg0 1 change:: index.d.ts
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/pkg0 1 change:: tsconfig.tsbuildinfo
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/pkg0 1 change:: tsconfig.tsbuildinfo.readable.baseline.txt
 [[90m12:01:27 AM[0m] Project 'pkg1/tsconfig.json' is up to date with .d.ts files from its dependencies
 
 [[90m12:01:29 AM[0m] Updating output timestamps of project '/user/username/projects/myproject/pkg1/tsconfig.json'...
 
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/pkg1 1 change:: index.js
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/pkg1 1 change:: index.d.ts
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/pkg1 1 change:: tsconfig.tsbuildinfo
 [[90m12:01:30 AM[0m] Project 'pkg2/tsconfig.json' is up to date with .d.ts files from its dependencies
 
 [[90m12:01:32 AM[0m] Updating output timestamps of project '/user/username/projects/myproject/pkg2/tsconfig.json'...
 
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/pkg2 1 change:: index.js
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/pkg2 1 change:: index.d.ts
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/pkg2 1 change:: tsconfig.tsbuildinfo
 [[90m12:01:33 AM[0m] Found 0 errors. Watching for file changes.
 
 
@@ -435,6 +447,8 @@ export const pkg0 = 0;const someConst2 = 10;export const someConst = 10;
 
 
 Output::
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/pkg0 1 change:: index.ts
+
 >> Screen clear
 [[90m12:01:36 AM[0m] File change detected. Starting incremental compilation...
 
@@ -442,6 +456,10 @@ Output::
 
 [[90m12:01:38 AM[0m] Building project '/user/username/projects/myproject/pkg0/tsconfig.json'...
 
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/pkg0 1 change:: index.js
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/pkg0 1 change:: index.d.ts
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/pkg0 1 change:: tsconfig.tsbuildinfo
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/pkg0 1 change:: tsconfig.tsbuildinfo.readable.baseline.txt
 
 
 Program root files: ["/user/username/projects/myproject/pkg0/index.ts"]
@@ -546,12 +564,18 @@ Output::
 
 [[90m12:01:54 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg1/tsconfig.json'...
 
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/pkg1 1 change:: index.js
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/pkg1 1 change:: index.d.ts
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/pkg1 1 change:: tsconfig.tsbuildinfo
 [[90m12:01:55 AM[0m] Project 'pkg2/tsconfig.json' is out of date because oldest output 'pkg2/index.js' is older than newest input 'pkg0/tsconfig.json'
 
 [[90m12:01:56 AM[0m] Building project '/user/username/projects/myproject/pkg2/tsconfig.json'...
 
 [[90m12:01:58 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg2/tsconfig.json'...
 
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/pkg2 1 change:: index.js
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/pkg2 1 change:: index.d.ts
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/pkg2 1 change:: tsconfig.tsbuildinfo
 [[90m12:01:59 AM[0m] Found 0 errors. Watching for file changes.
 
 

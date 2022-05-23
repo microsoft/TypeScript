@@ -139,9 +139,13 @@ export const b = 2;
 
 
 Output::
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: XY.ts
+
 >> Screen clear
 [[90m12:00:35 AM[0m] File change detected. Starting incremental compilation...
 
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: XY.js
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: b.js
 [96mb.ts[0m:[93m2[0m:[93m19[0m - [91merror[0m[90m TS1149: [0mFile name '/user/username/projects/myproject/Xy.ts' differs from already included file name '/user/username/projects/myproject/XY.ts' only in casing.
   The file is in the program because:
     Matched by default include pattern '**/*'

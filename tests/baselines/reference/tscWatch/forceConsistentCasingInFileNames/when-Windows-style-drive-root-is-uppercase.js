@@ -115,9 +115,13 @@ export const b = 2;
 
 
 Output::
+sysLog:: watchPresentFileSystemEntry:: c:/project 1 change:: a.ts
+
 >> Screen clear
 [[90m12:00:25 AM[0m] File change detected. Starting incremental compilation...
 
+sysLog:: watchPresentFileSystemEntry:: c:/project 1 change:: a.js
+sysLog:: watchPresentFileSystemEntry:: c:/project 1 change:: b.js
 a/lib/lib.d.ts
   Default library for target 'es3'
 project/a.ts

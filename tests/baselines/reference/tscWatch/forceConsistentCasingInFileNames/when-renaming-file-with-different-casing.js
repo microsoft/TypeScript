@@ -95,6 +95,11 @@ Input::
 //// [/user/username/projects/myproject/Logger.ts] file was renamed from file /user/username/projects/myproject/logger.ts
 
 Output::
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 rename:: logger.ts
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: 
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 rename:: Logger.ts
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: 
+
 >> Screen clear
 [[90m12:00:32 AM[0m] File change detected. Starting incremental compilation...
 

@@ -139,9 +139,12 @@ export var T: number;export function Foo() { };
 
 
 Output::
+sysLog:: watchPresentFileSystemEntry:: /a/b 1 change:: moduleFile1.ts
+
 >> Screen clear
 [[90m12:00:38 AM[0m] File change detected. Starting incremental compilation...
 
+sysLog:: watchPresentFileSystemEntry:: /a/b 1 change:: moduleFile1.js
 [96ma/b/globalFile3.ts[0m:[93m1[0m:[93m1[0m - [91merror[0m[90m TS1208: [0m'globalFile3.ts' cannot be compiled under '--isolatedModules' because it is considered a global script file. Add an import, export, or an empty 'export {}' statement to make it a module.
 
 [7m1[0m interface GlobalFoo { age: number }

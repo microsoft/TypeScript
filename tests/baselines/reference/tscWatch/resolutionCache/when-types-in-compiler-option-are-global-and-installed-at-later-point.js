@@ -87,11 +87,37 @@ declare namespace myapp {
 
 
 Output::
+sysLog:: watchMissingFileSystemEntry:: /user/username/projects/myproject/node_modules 1 /user/username/projects/myproject/node_modules:: 0
+sysLog:: watchMissingFileSystemEntry::  Callback :: rename, "" and will update the watcher
 sysLog:: /user/username/projects/myproject/node_modules:: Changing watcher to PresentFileSystemEntryWatcher
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/node_modules 1 rename:: 
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 rename:: node_modules
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: 
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/node_modules 1 rename:: @myapp
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 rename:: node_modules/@myapp
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/node_modules 1 change:: 
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: node_modules
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/node_modules 1 rename:: @myapp/ts-types
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 rename:: node_modules/@myapp/ts-types
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/node_modules 1 change:: @myapp
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: node_modules/@myapp
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/node_modules 1 rename:: @myapp/ts-types/package.json
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 rename:: node_modules/@myapp/ts-types/package.json
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/node_modules 1 change:: @myapp/ts-types
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: node_modules/@myapp/ts-types
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/node_modules 1 rename:: @myapp/ts-types/types
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 rename:: node_modules/@myapp/ts-types/types
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/node_modules 1 change:: @myapp/ts-types
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: node_modules/@myapp/ts-types
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/node_modules 1 rename:: @myapp/ts-types/types/somefile.define.d.ts
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 rename:: node_modules/@myapp/ts-types/types/somefile.define.d.ts
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/node_modules 1 change:: @myapp/ts-types/types
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: node_modules/@myapp/ts-types/types
 
 >> Screen clear
 [[90m12:00:39 AM[0m] File change detected. Starting incremental compilation...
 
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: lib/app.js
 [[90m12:00:43 AM[0m] Found 0 errors. Watching for file changes.
 
 

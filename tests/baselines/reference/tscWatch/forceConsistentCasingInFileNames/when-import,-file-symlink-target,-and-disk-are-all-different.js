@@ -36,6 +36,12 @@ Output::
 >> Screen clear
 [[90m12:00:25 AM[0m] Starting compilation in watch mode...
 
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 rename:: XY.js
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: 
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 rename:: link.js
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: 
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 rename:: b.js
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: 
 [96mb.ts[0m:[93m2[0m:[93m19[0m - [91merror[0m[90m TS2307: [0mCannot find module './yX' or its corresponding type declarations.
 
 [7m2[0m import { a } from "./yX";
@@ -139,9 +145,14 @@ export const b = 2;
 
 
 Output::
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: XY.ts
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: XY.ts
+
 >> Screen clear
 [[90m12:00:35 AM[0m] File change detected. Starting incremental compilation...
 
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: XY.js
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: XY.js
 [96mb.ts[0m:[93m2[0m:[93m19[0m - [91merror[0m[90m TS2307: [0mCannot find module './yX' or its corresponding type declarations.
 
 [7m2[0m import { a } from "./yX";

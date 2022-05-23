@@ -256,6 +256,8 @@ export function f2() { } // trailing
 
 
 Output::
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/shared 1 change:: index.ts
+
 >> Screen clear
 [[90m12:00:55 AM[0m] File change detected. Starting incremental compilation...
 
@@ -263,12 +265,19 @@ Output::
 
 [[90m12:00:57 AM[0m] Building project '/user/username/projects/myproject/shared/tsconfig.json'...
 
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/shared 1 change:: index.js
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/shared 1 change:: index.d.ts
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/shared 1 change:: tsconfig.tsbuildinfo
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/shared 1 change:: tsconfig.tsbuildinfo.readable.baseline.txt
 [[90m12:01:10 AM[0m] Project 'webpack/tsconfig.json' is out of date because oldest output 'webpack/index.js' is older than newest input 'shared/tsconfig.json'
 
 [[90m12:01:11 AM[0m] Building project '/user/username/projects/myproject/webpack/tsconfig.json'...
 
 [[90m12:01:13 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/webpack/tsconfig.json'...
 
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/webpack 1 change:: index.js
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/webpack 1 change:: index.d.ts
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/webpack 1 change:: tsconfig.tsbuildinfo
 [[90m12:01:14 AM[0m] Found 0 errors. Watching for file changes.
 
 

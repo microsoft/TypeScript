@@ -101,6 +101,7 @@ Output::
 >> Screen clear
 [[90m12:00:28 AM[0m] File change detected. Starting incremental compilation...
 
+sysLog:: watchPresentFileSystemEntry:: /a/b 1 change:: file1.js
 [[90m12:00:34 AM[0m] Found 0 errors. Watching for file changes.
 
 

@@ -193,6 +193,9 @@ export const y = 10;
 
 
 Output::
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/sample1/core 1 rename:: file3.ts
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/sample1/core 1 change:: 
+
 >> Screen clear
 [[90m12:00:50 AM[0m] File change detected. Starting incremental compilation...
 
@@ -200,8 +203,22 @@ Output::
 
 [[90m12:00:52 AM[0m] Building project '/user/username/projects/sample1/core/tsconfig.json'...
 
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/sample1/core 1 rename:: file3.js
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/sample1/core 1 change:: 
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/sample1/core 1 rename:: file3.d.ts.map
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/sample1/core 1 change:: 
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/sample1/core 1 rename:: file3.d.ts
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/sample1/core 1 change:: 
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/sample1/core 1 change:: tsconfig.tsbuildinfo
 [[90m12:01:03 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/sample1/core/tsconfig.json'...
 
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/sample1/core 1 change:: anotherModule.js
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/sample1/core 1 change:: anotherModule.d.ts
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/sample1/core 1 change:: anotherModule.d.ts.map
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/sample1/core 1 change:: index.js
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/sample1/core 1 change:: index.d.ts
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/sample1/core 1 change:: index.d.ts.map
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/sample1/core 1 change:: tsconfig.tsbuildinfo.readable.baseline.txt
 [[90m12:01:07 AM[0m] Found 0 errors. Watching for file changes.
 
 

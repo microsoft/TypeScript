@@ -232,24 +232,28 @@ Output::
 
 [[90m12:01:13 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg0/tsconfig.json'...
 
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/pkg0 1 change:: index.js
 [[90m12:01:14 AM[0m] Project 'pkg1/tsconfig.json' is out of date because oldest output 'pkg1/index.js' is older than newest input 'typings/xterm.d.ts'
 
 [[90m12:01:15 AM[0m] Building project '/user/username/projects/myproject/pkg1/tsconfig.json'...
 
 [[90m12:01:17 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg1/tsconfig.json'...
 
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/pkg1 1 change:: index.js
 [[90m12:01:18 AM[0m] Project 'pkg2/tsconfig.json' is out of date because oldest output 'pkg2/index.js' is older than newest input 'typings/xterm.d.ts'
 
 [[90m12:01:19 AM[0m] Building project '/user/username/projects/myproject/pkg2/tsconfig.json'...
 
 [[90m12:01:21 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg2/tsconfig.json'...
 
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/pkg2 1 change:: index.js
 [[90m12:01:22 AM[0m] Project 'pkg3/tsconfig.json' is out of date because oldest output 'pkg3/index.js' is older than newest input 'typings/xterm.d.ts'
 
 [[90m12:01:23 AM[0m] Building project '/user/username/projects/myproject/pkg3/tsconfig.json'...
 
 [[90m12:01:25 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg3/tsconfig.json'...
 
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/pkg3 1 change:: index.js
 [[90m12:01:26 AM[0m] Found 0 errors. Watching for file changes.
 
 
@@ -419,18 +423,21 @@ Output::
 
 [[90m12:01:39 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg0/tsconfig.json'...
 
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/pkg0 1 change:: index.js
 [[90m12:01:40 AM[0m] Project 'pkg1/tsconfig.json' is out of date because oldest output 'pkg1/index.js' is older than newest input 'typings/xterm.d.ts'
 
 [[90m12:01:41 AM[0m] Building project '/user/username/projects/myproject/pkg1/tsconfig.json'...
 
 [[90m12:01:43 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg1/tsconfig.json'...
 
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/pkg1 1 change:: index.js
 [[90m12:01:44 AM[0m] Project 'pkg2/tsconfig.json' is out of date because oldest output 'pkg2/index.js' is older than newest input 'typings/xterm.d.ts'
 
 [[90m12:01:45 AM[0m] Building project '/user/username/projects/myproject/pkg2/tsconfig.json'...
 
 [[90m12:01:47 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg2/tsconfig.json'...
 
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/pkg2 1 change:: index.js
 [[90m12:01:48 AM[0m] Found 0 errors. Watching for file changes.
 
 

@@ -134,6 +134,10 @@ export const y = 10;
 
 
 Output::
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/src 1 rename:: file3.ts
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/src 1 change:: 
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: src
+
 
 WatchedFiles::
 /user/username/projects/myproject/tsconfig.json:
@@ -174,6 +178,12 @@ Output::
 >> Screen clear
 [[90m12:00:41 AM[0m] File change detected. Starting incremental compilation...
 
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/dist 1 rename:: file3.js
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/dist 1 change:: 
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: dist
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/dist 1 rename:: file3.d.ts
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/dist 1 change:: 
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: dist
 [[90m12:00:46 AM[0m] Found 0 errors. Watching for file changes.
 
 

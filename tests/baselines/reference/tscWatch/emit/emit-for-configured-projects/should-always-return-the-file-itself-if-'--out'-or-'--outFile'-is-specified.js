@@ -138,9 +138,12 @@ export var T: number;export function Foo() { };
 
 
 Output::
+sysLog:: watchPresentFileSystemEntry:: /a/b 1 change:: moduleFile1.ts
+
 >> Screen clear
 [[90m12:00:30 AM[0m] File change detected. Starting incremental compilation...
 
+sysLog:: watchPresentFileSystemEntry:: /a/b 1 change:: out.js
 [[90m12:00:34 AM[0m] Found 0 errors. Watching for file changes.
 
 
