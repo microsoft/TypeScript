@@ -85,9 +85,23 @@ export var myClassWithError = class {
 
 
 Output::
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/solution/app 1 change:: fileWithError.ts
+
 >> Screen clear
 [[90m12:00:30 AM[0m] File change detected. Starting incremental compilation...
 
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/solution/app 1 rename:: fileWithError.js
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/solution/app 1 change:: 
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/solution/app 1 rename:: fileWithError.d.ts
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/solution/app 1 change:: 
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/solution/app 1 rename:: fileWithoutError.js
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/solution/app 1 change:: 
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/solution/app 1 rename:: fileWithoutError.d.ts
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/solution/app 1 change:: 
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/solution/app 1 rename:: tsconfig.tsbuildinfo
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/solution/app 1 change:: 
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/solution/app 1 rename:: tsconfig.tsbuildinfo.readable.baseline.txt
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/solution/app 1 change:: 
 [[90m12:00:43 AM[0m] Found 0 errors. Watching for file changes.
 
 

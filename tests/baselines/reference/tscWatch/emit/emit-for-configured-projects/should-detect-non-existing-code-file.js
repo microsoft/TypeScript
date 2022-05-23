@@ -92,9 +92,12 @@ export var x = Foo();export var yy = Foo();
 
 
 Output::
+sysLog:: watchPresentFileSystemEntry:: /a/b 1 change:: referenceFile1.ts
+
 >> Screen clear
 [[90m12:00:21 AM[0m] File change detected. Starting incremental compilation...
 
+sysLog:: watchPresentFileSystemEntry:: /a/b 1 change:: referenceFile1.js
 [96ma/b/referenceFile1.ts[0m:[93m1[0m:[93m22[0m - [91merror[0m[90m TS6053: [0mFile '/a/b/moduleFile2.ts' not found.
 
 [7m1[0m /// <reference path="./moduleFile2.ts" />
@@ -165,9 +168,15 @@ export var Foo4 = 10;
 
 
 Output::
+sysLog:: watchPresentFileSystemEntry:: /a/b 1 rename:: moduleFile2.ts
+sysLog:: watchPresentFileSystemEntry:: /a/b 1 change:: 
+
 >> Screen clear
 [[90m12:00:28 AM[0m] File change detected. Starting incremental compilation...
 
+sysLog:: watchPresentFileSystemEntry:: /a/b 1 rename:: moduleFile2.js
+sysLog:: watchPresentFileSystemEntry:: /a/b 1 change:: 
+sysLog:: watchPresentFileSystemEntry:: /a/b 1 change:: referenceFile1.js
 [96ma/b/referenceFile1.ts[0m:[93m2[0m:[93m16[0m - [91merror[0m[90m TS2304: [0mCannot find name 'Foo'.
 
 [7m2[0m export var x = Foo();export var yy = Foo();

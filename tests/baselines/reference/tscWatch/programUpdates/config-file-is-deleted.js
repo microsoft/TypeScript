@@ -84,6 +84,8 @@ Input::
 //// [/a/b/tsconfig.json] deleted
 
 Output::
+sysLog:: watchPresentFileSystemEntry:: /a/b 1 rename:: tsconfig.json
+sysLog:: watchPresentFileSystemEntry:: /a/b 1 change:: 
 [91merror[0m[90m TS5083: [0mCannot read file '/a/b/tsconfig.json'.
 
 

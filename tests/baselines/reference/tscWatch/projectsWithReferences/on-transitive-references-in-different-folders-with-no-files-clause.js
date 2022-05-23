@@ -346,9 +346,21 @@ export declare function gfoo(): void;
 
 
 Output::
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/transitivereferences/b 1 change:: index.ts
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/transitiveReferences/b 1 change:: index.ts
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/transitivereferences/b 1 change:: index.js
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/transitiveReferences/b 1 change:: index.js
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/transitivereferences/b 1 change:: index.d.ts
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/transitiveReferences/b 1 change:: index.d.ts
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/transitivereferences/b 1 change:: tsconfig.tsbuildinfo
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/transitiveReferences/b 1 change:: tsconfig.tsbuildinfo
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/transitivereferences/b 1 change:: tsconfig.tsbuildinfo.readable.baseline.txt
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/transitiveReferences/b 1 change:: tsconfig.tsbuildinfo.readable.baseline.txt
+
 >> Screen clear
 [[90m12:01:16 AM[0m] File change detected. Starting incremental compilation...
 
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/transitivereferences/c 1 change:: index.js
 [[90m12:01:20 AM[0m] Found 0 errors. Watching for file changes.
 
 
@@ -446,9 +458,15 @@ export class A {}
 
 
 Output::
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/transitiveReferences 1 rename:: nrefs
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/transitiveReferences 1 change:: 
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/transitiveReferences 1 change:: nrefs
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/transitivereferences/c 1 change:: tsconfig.json
+
 >> Screen clear
 [[90m12:01:28 AM[0m] File change detected. Starting incremental compilation...
 
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/transitivereferences/c 1 change:: index.js
 [[90m12:01:32 AM[0m] Found 0 errors. Watching for file changes.
 
 
@@ -545,9 +563,12 @@ Input::
 
 
 Output::
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/transitivereferences/c 1 change:: tsconfig.json
+
 >> Screen clear
 [[90m12:01:36 AM[0m] File change detected. Starting incremental compilation...
 
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/transitivereferences/c 1 change:: index.js
 [[90m12:01:40 AM[0m] Found 0 errors. Watching for file changes.
 
 
@@ -644,6 +665,9 @@ Input::
 
 
 Output::
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/transitivereferences/b 1 change:: tsconfig.json
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/transitiveReferences/b 1 change:: tsconfig.json
+
 >> Screen clear
 [[90m12:01:44 AM[0m] File change detected. Starting incremental compilation...
 
@@ -739,6 +763,9 @@ Input::
 
 
 Output::
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/transitivereferences/b 1 change:: tsconfig.json
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/transitiveReferences/b 1 change:: tsconfig.json
+
 >> Screen clear
 [[90m12:01:50 AM[0m] File change detected. Starting incremental compilation...
 
@@ -821,9 +848,17 @@ Input::
 //// [/user/username/projects/transitiveReferences/b/tsconfig.json] deleted
 
 Output::
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/transitivereferences/b 1 rename:: tsconfig.json
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/transitiveReferences/b 1 rename:: tsconfig.json
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/transitiveReferences 1 change:: b
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/transitivereferences/b 1 change:: 
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/transitiveReferences/b 1 change:: 
+
 >> Screen clear
 [[90m12:01:53 AM[0m] File change detected. Starting incremental compilation...
 
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/transitiveReferences/b 1 change:: index.js
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/transitivereferences/c 1 change:: index.js
 [96mc/tsconfig.json[0m:[93m1[0m:[93m84[0m - [91merror[0m[90m TS6053: [0mFile '/user/username/projects/transitiveReferences/b' not found.
 
 [7m1[0m {"compilerOptions":{"baseUrl":"./","paths":{"@ref/*":["../refs/*"]}},"references":[{"path":"../b"}]}
@@ -909,9 +944,14 @@ Input::
 
 
 Output::
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/transitiveReferences/b 1 rename:: tsconfig.json
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/transitiveReferences 1 change:: b
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/transitiveReferences/b 1 change:: 
+
 >> Screen clear
 [[90m12:02:03 AM[0m] File change detected. Starting incremental compilation...
 
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/transitivereferences/c 1 change:: index.js
 [[90m12:02:07 AM[0m] Found 0 errors. Watching for file changes.
 
 
@@ -1006,9 +1046,16 @@ Input::
 //// [/user/username/projects/transitiveReferences/a/tsconfig.json] deleted
 
 Output::
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/transitivereferences/a 1 rename:: tsconfig.json
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/transitiveReferences/a 1 rename:: tsconfig.json
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/transitiveReferences 1 change:: a
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/transitivereferences/a 1 change:: 
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/transitiveReferences/a 1 change:: 
+
 >> Screen clear
 [[90m12:02:09 AM[0m] File change detected. Starting incremental compilation...
 
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/transitiveReferences/a 1 change:: index.js
 [96mb/tsconfig.json[0m:[93m1[0m:[93m96[0m - [91merror[0m[90m TS6053: [0mFile '/user/username/projects/transitiveReferences/a' not found.
 
 [7m1[0m {"compilerOptions":{"composite":true,"baseUrl":"./","paths":{"@ref/*":["../*"]}},"references":[{"path":"../a"}]}
@@ -1105,6 +1152,10 @@ Input::
 
 
 Output::
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/transitiveReferences/a 1 rename:: tsconfig.json
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/transitiveReferences 1 change:: a
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/transitiveReferences/a 1 change:: 
+
 >> Screen clear
 [[90m12:02:17 AM[0m] File change detected. Starting incremental compilation...
 

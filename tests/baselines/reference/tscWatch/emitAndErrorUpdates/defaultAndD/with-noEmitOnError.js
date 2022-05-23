@@ -97,6 +97,8 @@ Input::
 //// [/user/username/projects/noEmitOnError/src/main.ts] file written with same contents
 
 Output::
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/noemitonerror 1 change:: src/main.ts
+
 >> Screen clear
 [[90m12:00:36 AM[0m] File change detected. Starting incremental compilation...
 
@@ -156,9 +158,31 @@ const a = {
 
 
 Output::
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/noemitonerror 1 change:: src/main.ts
+
 >> Screen clear
 [[90m12:00:41 AM[0m] File change detected. Starting incremental compilation...
 
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/noemitonerror 1 rename:: dev-build
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/noemitonerror 1 change:: 
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/noemitonerror 1 rename:: dev-build/shared
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/noemitonerror 1 change:: dev-build
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/noemitonerror 1 rename:: dev-build/shared/types
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/noemitonerror 1 change:: dev-build/shared
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/noemitonerror 1 rename:: dev-build/shared/types/db.js
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/noemitonerror 1 change:: dev-build/shared/types
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/noemitonerror 1 rename:: dev-build/shared/types/db.d.ts
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/noemitonerror 1 change:: dev-build/shared/types
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/noemitonerror 1 rename:: dev-build/src
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/noemitonerror 1 change:: dev-build
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/noemitonerror 1 rename:: dev-build/src/main.js
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/noemitonerror 1 change:: dev-build/src
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/noemitonerror 1 rename:: dev-build/src/main.d.ts
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/noemitonerror 1 change:: dev-build/src
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/noemitonerror 1 rename:: dev-build/src/other.js
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/noemitonerror 1 change:: dev-build/src
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/noemitonerror 1 rename:: dev-build/src/other.d.ts
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/noemitonerror 1 change:: dev-build/src
 [[90m12:01:04 AM[0m] Found 0 errors. Watching for file changes.
 
 
@@ -243,6 +267,8 @@ const a: string = 10;
 
 
 Output::
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/noemitonerror 1 change:: src/main.ts
+
 >> Screen clear
 [[90m12:01:08 AM[0m] File change detected. Starting incremental compilation...
 
@@ -299,6 +325,8 @@ Input::
 //// [/user/username/projects/noEmitOnError/src/main.ts] file written with same contents
 
 Output::
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/noemitonerror 1 change:: src/main.ts
+
 >> Screen clear
 [[90m12:01:14 AM[0m] File change detected. Starting incremental compilation...
 
@@ -356,9 +384,13 @@ const a: string = "hello";
 
 
 Output::
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/noemitonerror 1 change:: src/main.ts
+
 >> Screen clear
 [[90m12:01:19 AM[0m] File change detected. Starting incremental compilation...
 
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/noemitonerror 1 change:: dev-build/src/main.js
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/noemitonerror 1 change:: dev-build/src/main.d.ts
 [[90m12:01:26 AM[0m] Found 0 errors. Watching for file changes.
 
 
@@ -414,6 +446,8 @@ Input::
 //// [/user/username/projects/noEmitOnError/src/main.ts] file written with same contents
 
 Output::
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/noemitonerror 1 change:: src/main.ts
+
 >> Screen clear
 [[90m12:01:30 AM[0m] File change detected. Starting incremental compilation...
 

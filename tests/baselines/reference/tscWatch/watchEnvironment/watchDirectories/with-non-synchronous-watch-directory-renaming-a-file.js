@@ -126,9 +126,17 @@ export const x = 10;
 //// [/user/username/projects/myproject/src/file2.ts] deleted
 
 Output::
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/src 1 rename:: file2.ts
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/src 1 change:: 
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: src
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/src 1 rename:: renamed.ts
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/src 1 change:: 
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: src
+
 >> Screen clear
 [[90m12:00:37 AM[0m] File change detected. Starting incremental compilation...
 
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/dist 1 change:: file1.js
 [91merror[0m[90m TS6053: [0mFile '/user/username/projects/myproject/src/file2.ts' not found.
   The file is in the program because:
     Matched by default include pattern '**/*'
@@ -184,6 +192,9 @@ Output::
 >> Screen clear
 [[90m12:00:42 AM[0m] File change detected. Starting incremental compilation...
 
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/dist 1 rename:: renamed.js
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/dist 1 change:: 
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: dist
 [96muser/username/projects/myproject/src/file1.ts[0m:[93m1[0m:[93m19[0m - [91merror[0m[90m TS2307: [0mCannot find module './file2' or its corresponding type declarations.
 
 [7m1[0m import { x } from "./file2";

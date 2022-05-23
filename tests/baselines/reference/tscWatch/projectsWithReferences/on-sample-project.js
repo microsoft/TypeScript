@@ -536,6 +536,13 @@ function foo() { }
 
 
 Output::
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/sample1/logic 1 change:: index.ts
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/sample1/logic 1 change:: index.js.map
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/sample1/logic 1 change:: index.js
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/sample1/logic 1 change:: index.d.ts
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/sample1/logic 1 change:: tsconfig.tsbuildinfo
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/sample1/logic 1 change:: tsconfig.tsbuildinfo.readable.baseline.txt
+
 >> Screen clear
 [[90m12:01:32 AM[0m] File change detected. Starting incremental compilation...
 
@@ -718,6 +725,13 @@ export declare function gfoo(): void;
 
 
 Output::
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/sample1/logic 1 change:: index.ts
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/sample1/logic 1 change:: index.js.map
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/sample1/logic 1 change:: index.js
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/sample1/logic 1 change:: index.d.ts
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/sample1/logic 1 change:: tsconfig.tsbuildinfo
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/sample1/logic 1 change:: tsconfig.tsbuildinfo.readable.baseline.txt
+
 >> Screen clear
 [[90m12:01:51 AM[0m] File change detected. Starting incremental compilation...
 
@@ -977,6 +991,15 @@ export declare function gfoo(): void;
 
 
 Output::
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/sample1/logic 1 change:: tsconfig.json
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/sample1/logic 1 change:: index.js
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/sample1/logic 1 rename:: decls
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/sample1/logic 1 change:: 
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/sample1/logic 1 rename:: decls/index.d.ts
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/sample1/logic 1 change:: decls
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/sample1/logic 1 change:: tsconfig.tsbuildinfo
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/sample1/logic 1 change:: tsconfig.tsbuildinfo.readable.baseline.txt
+
 >> Screen clear
 [[90m12:02:22 AM[0m] File change detected. Starting incremental compilation...
 

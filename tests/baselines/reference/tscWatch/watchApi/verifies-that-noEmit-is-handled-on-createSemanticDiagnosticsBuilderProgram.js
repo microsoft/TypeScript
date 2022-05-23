@@ -79,6 +79,8 @@ export const x = 10;
 
 
 Output::
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: main.ts
+
 >> Screen clear
 [[90m12:00:27 AM[0m] File change detected. Starting incremental compilation...
 

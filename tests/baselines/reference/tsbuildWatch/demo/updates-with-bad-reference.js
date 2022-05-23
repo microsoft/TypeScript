@@ -433,6 +433,8 @@ export function lastElementOf<T>(arr: T[]): T | undefined {
 
 
 Output::
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/demo/core 1 change:: utilities.ts
+
 >> Screen clear
 [[90m12:01:07 AM[0m] File change detected. Starting incremental compilation...
 

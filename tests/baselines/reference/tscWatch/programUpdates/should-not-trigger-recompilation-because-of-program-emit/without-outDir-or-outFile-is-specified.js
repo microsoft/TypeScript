@@ -130,6 +130,8 @@ Output::
 >> Screen clear
 [[90m12:00:25 AM[0m] Starting compilation in watch mode...
 
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/src 1 rename:: file2.js
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/src 1 change:: 
 [91merror[0m[90m TS2318: [0mCannot find global type 'Array'.
 
 [91merror[0m[90m TS2318: [0mCannot find global type 'Boolean'.
@@ -254,9 +256,18 @@ export const y = 10;
 
 
 Output::
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/src 1 rename:: file3.ts
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 rename:: src/file3.ts
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/src 1 change:: 
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: src
+
 >> Screen clear
 [[90m12:00:33 AM[0m] File change detected. Starting incremental compilation...
 
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/src 1 rename:: file3.js
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 rename:: src/file3.js
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/src 1 change:: 
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: src
 [91merror[0m[90m TS2318: [0mCannot find global type 'Array'.
 
 [91merror[0m[90m TS2318: [0mCannot find global type 'Boolean'.

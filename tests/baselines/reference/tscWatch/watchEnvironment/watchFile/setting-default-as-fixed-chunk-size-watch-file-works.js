@@ -78,6 +78,8 @@ var zz30 = 100;
 
 
 Output::
+sysLog:: watchPresentFileSystemEntry:: /a/b 1 change:: commonFile1.ts
+
 
 WatchedFiles::
 /a/b/node_modules/@types:
@@ -100,6 +102,8 @@ Output::
 >> Screen clear
 [[90m12:00:26 AM[0m] File change detected. Starting incremental compilation...
 
+sysLog:: watchPresentFileSystemEntry:: /a/b 1 change:: commonFile1.js
+sysLog:: watchPresentFileSystemEntry:: /a/b 1 change:: commonFile2.js
 [[90m12:00:33 AM[0m] Found 0 errors. Watching for file changes.
 
 

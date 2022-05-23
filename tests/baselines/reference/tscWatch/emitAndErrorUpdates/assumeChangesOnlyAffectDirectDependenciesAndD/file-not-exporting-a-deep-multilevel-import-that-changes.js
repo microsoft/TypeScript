@@ -214,9 +214,15 @@ export interface Coords {
 
 
 Output::
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: a.ts
+
 >> Screen clear
 [[90m12:00:54 AM[0m] File change detected. Starting incremental compilation...
 
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: a.js
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: a.d.ts
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: b.js
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: b.d.ts
 [96mc.ts[0m:[93m6[0m:[93m13[0m - [91merror[0m[90m TS2322: [0mType '{ x: number; y: number; }' is not assignable to type 'Coords'.
   Object literal may only specify known properties, and 'x' does not exist in type 'Coords'.
 
@@ -312,9 +318,15 @@ export interface Coords {
 
 
 Output::
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: a.ts
+
 >> Screen clear
 [[90m12:01:11 AM[0m] File change detected. Starting incremental compilation...
 
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: a.js
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: a.d.ts
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: b.js
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: b.d.ts
 [96mc.ts[0m:[93m6[0m:[93m13[0m - [91merror[0m[90m TS2322: [0mType '{ x: number; y: number; }' is not assignable to type 'Coords'.
   Object literal may only specify known properties, and 'x' does not exist in type 'Coords'.
 
@@ -410,9 +422,15 @@ export interface Coords {
 
 
 Output::
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: a.ts
+
 >> Screen clear
 [[90m12:01:28 AM[0m] File change detected. Starting incremental compilation...
 
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: a.js
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: a.d.ts
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: b.js
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: b.d.ts
 [96mc.ts[0m:[93m6[0m:[93m13[0m - [91merror[0m[90m TS2322: [0mType '{ x: number; y: number; }' is not assignable to type 'Coords'.
   Object literal may only specify known properties, and 'x' does not exist in type 'Coords'.
 

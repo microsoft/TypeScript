@@ -151,9 +151,12 @@ export const b = 2;
 
 
 Output::
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: XY/a.ts
+
 >> Screen clear
 [[90m12:00:33 AM[0m] File change detected. Starting incremental compilation...
 
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: out.js
 [96mb.ts[0m:[93m2[0m:[93m19[0m - [91merror[0m[90m TS1261: [0mAlready included file name '/user/username/projects/myproject/Xy/a.ts' differs from file name '/user/username/projects/myproject/XY/a.ts' only in casing.
   The file is in the program because:
     Imported via "./Xy/a" from file '/user/username/projects/myproject/b.ts'

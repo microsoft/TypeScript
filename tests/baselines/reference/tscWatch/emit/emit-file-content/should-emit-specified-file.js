@@ -109,9 +109,14 @@ export function Foo() { return 10; }export function foo2() { return 2; }
 
 
 Output::
+sysLog:: watchPresentFileSystemEntry:: /a/b 1 change:: f1.ts
+
 >> Screen clear
 [[90m12:00:29 AM[0m] File change detected. Starting incremental compilation...
 
+sysLog:: watchPresentFileSystemEntry:: /a/b 1 change:: f1.js
+sysLog:: watchPresentFileSystemEntry:: /a/b 1 change:: f2.js
+sysLog:: watchPresentFileSystemEntry:: /a/b 1 change:: f3.js
 [[90m12:00:39 AM[0m] Found 0 errors. Watching for file changes.
 
 
@@ -178,9 +183,13 @@ export function Foo() { return 10; }export function foo2() { return 2; }export f
 
 
 Output::
+sysLog:: watchPresentFileSystemEntry:: /a/b 1 change:: f1.ts
+
 >> Screen clear
 [[90m12:00:42 AM[0m] File change detected. Starting incremental compilation...
 
+sysLog:: watchPresentFileSystemEntry:: /a/b 1 change:: f1.js
+sysLog:: watchPresentFileSystemEntry:: /a/b 1 change:: f2.js
 [[90m12:00:49 AM[0m] Found 0 errors. Watching for file changes.
 
 

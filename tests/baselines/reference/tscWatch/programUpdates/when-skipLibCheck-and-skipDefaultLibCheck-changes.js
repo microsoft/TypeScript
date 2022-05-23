@@ -103,6 +103,8 @@ Input::
 
 
 Output::
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: tsconfig.json
+
 >> Screen clear
 [[90m12:00:30 AM[0m] File change detected. Starting incremental compilation...
 
@@ -158,6 +160,8 @@ Input::
 
 
 Output::
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: tsconfig.json
+
 >> Screen clear
 [[90m12:00:35 AM[0m] File change detected. Starting incremental compilation...
 
@@ -218,6 +222,8 @@ Input::
 
 
 Output::
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: tsconfig.json
+
 >> Screen clear
 [[90m12:00:40 AM[0m] File change detected. Starting incremental compilation...
 
@@ -282,6 +288,8 @@ Input::
 
 
 Output::
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: tsconfig.json
+
 >> Screen clear
 [[90m12:00:46 AM[0m] File change detected. Starting incremental compilation...
 
@@ -341,6 +349,8 @@ Input::
 
 
 Output::
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: tsconfig.json
+
 >> Screen clear
 [[90m12:00:51 AM[0m] File change detected. Starting incremental compilation...
 
@@ -396,6 +406,8 @@ Input::
 
 
 Output::
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: tsconfig.json
+
 >> Screen clear
 [[90m12:00:56 AM[0m] File change detected. Starting incremental compilation...
 

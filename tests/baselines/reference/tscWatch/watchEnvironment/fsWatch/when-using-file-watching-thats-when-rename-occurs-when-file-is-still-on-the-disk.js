@@ -98,6 +98,7 @@ export declare function foo2(): string;
 
 
 Output::
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/foo.ts 0 rename:: 
 FileWatcher:: Triggered with /user/username/projects/myproject/foo.ts 0:: WatchInfo: /user/username/projects/myproject/foo.ts 250 {"watchFile":4} Source file
 Scheduling update
 Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/foo.ts 0:: WatchInfo: /user/username/projects/myproject/foo.ts 250 {"watchFile":4} Source file
@@ -166,9 +167,11 @@ export declare function foo(): string;
 
 
 Output::
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/foo.ts 0 rename:: 
 FileWatcher:: Triggered with /user/username/projects/myproject/foo.ts 2:: WatchInfo: /user/username/projects/myproject/foo.ts 250 {"watchFile":4} Source file
 Scheduling update
 Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/foo.ts 2:: WatchInfo: /user/username/projects/myproject/foo.ts 250 {"watchFile":4} Source file
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/foo.ts 0 rename:: 
 FileWatcher:: Triggered with /user/username/projects/myproject/foo.ts 0:: WatchInfo: /user/username/projects/myproject/foo.ts 250 {"watchFile":4} Source file
 Scheduling update
 Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/foo.ts 0:: WatchInfo: /user/username/projects/myproject/foo.ts 250 {"watchFile":4} Source file

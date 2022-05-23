@@ -84,9 +84,11 @@ Input::
 
 
 Output::
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 rename:: foo
 DirectoryWatcher:: Triggered with /user/username/projects/myproject/foo :: WatchInfo: /user/username/projects/myproject 1 undefined Wild card directory
 Scheduling update
 Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/foo :: WatchInfo: /user/username/projects/myproject 1 undefined Wild card directory
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: 
 Reloading new file names and options
 Synchronizing program
 

@@ -97,9 +97,12 @@ import { logger } from "./Logger"; new logger();
 
 
 Output::
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: another.ts
+
 >> Screen clear
 [[90m12:00:32 AM[0m] File change detected. Starting incremental compilation...
 
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: another.js
 [96muser/username/projects/myproject/another.ts[0m:[93m1[0m:[93m24[0m - [91merror[0m[90m TS1261: [0mAlready included file name '/user/username/projects/myproject/Logger.ts' differs from file name '/user/username/projects/myproject/logger.ts' only in casing.
   The file is in the program because:
     Imported via "./Logger" from file '/user/username/projects/myproject/another.ts'

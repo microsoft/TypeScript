@@ -39,8 +39,10 @@ Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/mypr
 FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 250 {"watchFile":4} Source file
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 {"watchFile":4} Type roots
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 {"watchFile":4} Type roots
+sysLog:: callbackChangingToMissingFileSystemEntry:: /user/username/projects/myproject 1 rename:: main.js true myproject /myproject
 DirectoryWatcher:: Triggered with /user/username/projects/myproject/main.js :: WatchInfo: /user/username/projects/myproject 0 {"watchFile":4} Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/main.js :: WatchInfo: /user/username/projects/myproject 0 {"watchFile":4} Failed Lookup Locations
+sysLog:: callbackChangingToMissingFileSystemEntry:: /user/username/projects/myproject 1 change::  true myproject /myproject
 [[90m12:00:26 AM[0m] Found 0 errors. Watching for file changes.
 
 
@@ -99,30 +101,39 @@ export function foo2(): string;
 
 
 Output::
+sysLog:: callbackChangingToMissingFileSystemEntry:: /user/username/projects/myproject/foo.d.ts 0 rename::  true foo.d.ts /foo.d.ts
 FileWatcher:: Triggered with /user/username/projects/myproject/foo.d.ts 2:: WatchInfo: /user/username/projects/myproject/foo.d.ts 250 {"watchFile":4} Source file
 Scheduling update
 Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/foo.d.ts 2:: WatchInfo: /user/username/projects/myproject/foo.d.ts 250 {"watchFile":4} Source file
 sysLog:: /user/username/projects/myproject/foo.d.ts:: Changing watcher to MissingFileSystemEntryWatcher
+sysLog:: callbackChangingToMissingFileSystemEntry:: /user/username/projects/myproject 1 rename:: foo.d.ts true myproject /myproject
 DirectoryWatcher:: Triggered with /user/username/projects/myproject/foo.d.ts :: WatchInfo: /user/username/projects/myproject 0 {"watchFile":4} Failed Lookup Locations
 Scheduling invalidateFailedLookup
 Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/foo.d.ts :: WatchInfo: /user/username/projects/myproject 0 {"watchFile":4} Failed Lookup Locations
+sysLog:: callbackChangingToMissingFileSystemEntry:: /user/username/projects/myproject 1 change::  true myproject /myproject
+sysLog:: watchMissingFileSystemEntry:: /user/username/projects/myproject/foo.d.ts 0 /user/username/projects/myproject/foo.d.ts:: 0
+sysLog:: watchMissingFileSystemEntry::  Callback :: rename, "" and will update the watcher
 FileWatcher:: Triggered with /user/username/projects/myproject/foo.d.ts 0:: WatchInfo: /user/username/projects/myproject/foo.d.ts 250 {"watchFile":4} Source file
 Scheduling update
 Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/foo.d.ts 0:: WatchInfo: /user/username/projects/myproject/foo.d.ts 250 {"watchFile":4} Source file
 sysLog:: /user/username/projects/myproject/foo.d.ts:: Changing watcher to PresentFileSystemEntryWatcher
+sysLog:: callbackChangingToMissingFileSystemEntry:: /user/username/projects/myproject/foo.d.ts 0 rename::  true foo.d.ts /foo.d.ts
 FileWatcher:: Triggered with /user/username/projects/myproject/foo.d.ts 0:: WatchInfo: /user/username/projects/myproject/foo.d.ts 250 {"watchFile":4} Source file
 Scheduling update
 Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/foo.d.ts 0:: WatchInfo: /user/username/projects/myproject/foo.d.ts 250 {"watchFile":4} Source file
 sysLog:: /user/username/projects/myproject/foo.d.ts:: Changing watcher to PresentFileSystemEntryWatcher
+sysLog:: callbackChangingToMissingFileSystemEntry:: /user/username/projects/myproject 1 rename:: foo.d.ts true myproject /myproject
 DirectoryWatcher:: Triggered with /user/username/projects/myproject/foo.d.ts :: WatchInfo: /user/username/projects/myproject 0 {"watchFile":4} Failed Lookup Locations
 Scheduling invalidateFailedLookup, Cancelled earlier one
 Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/foo.d.ts :: WatchInfo: /user/username/projects/myproject 0 {"watchFile":4} Failed Lookup Locations
+sysLog:: callbackChangingToMissingFileSystemEntry:: /user/username/projects/myproject 1 change::  true myproject /myproject
 Synchronizing program
 [[90m12:00:30 AM[0m] File change detected. Starting incremental compilation...
 
 CreatingProgramWith::
   roots: ["/user/username/projects/myproject/foo.d.ts","/user/username/projects/myproject/main.ts"]
   options: {"watch":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+sysLog:: callbackChangingToMissingFileSystemEntry:: /user/username/projects/myproject 1 change:: main.js true myproject /myproject
 [96mmain.ts[0m:[93m1[0m:[93m10[0m - [91merror[0m[90m TS2724: [0m'"./foo"' has no exported member named 'foo'. Did you mean 'foo2'?
 
 [7m1[0m import { foo } from "./foo"; foo();
@@ -183,30 +194,39 @@ export function foo(): string;
 
 
 Output::
+sysLog:: callbackChangingToMissingFileSystemEntry:: /user/username/projects/myproject/foo.d.ts 0 rename::  true foo.d.ts /foo.d.ts
 FileWatcher:: Triggered with /user/username/projects/myproject/foo.d.ts 2:: WatchInfo: /user/username/projects/myproject/foo.d.ts 250 {"watchFile":4} Source file
 Scheduling update
 Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/foo.d.ts 2:: WatchInfo: /user/username/projects/myproject/foo.d.ts 250 {"watchFile":4} Source file
 sysLog:: /user/username/projects/myproject/foo.d.ts:: Changing watcher to MissingFileSystemEntryWatcher
+sysLog:: callbackChangingToMissingFileSystemEntry:: /user/username/projects/myproject 1 rename:: foo.d.ts true myproject /myproject
 DirectoryWatcher:: Triggered with /user/username/projects/myproject/foo.d.ts :: WatchInfo: /user/username/projects/myproject 0 {"watchFile":4} Failed Lookup Locations
 Scheduling invalidateFailedLookup
 Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/foo.d.ts :: WatchInfo: /user/username/projects/myproject 0 {"watchFile":4} Failed Lookup Locations
+sysLog:: callbackChangingToMissingFileSystemEntry:: /user/username/projects/myproject 1 change::  true myproject /myproject
+sysLog:: watchMissingFileSystemEntry:: /user/username/projects/myproject/foo.d.ts 0 /user/username/projects/myproject/foo.d.ts:: 0
+sysLog:: watchMissingFileSystemEntry::  Callback :: rename, "" and will update the watcher
 FileWatcher:: Triggered with /user/username/projects/myproject/foo.d.ts 0:: WatchInfo: /user/username/projects/myproject/foo.d.ts 250 {"watchFile":4} Source file
 Scheduling update
 Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/foo.d.ts 0:: WatchInfo: /user/username/projects/myproject/foo.d.ts 250 {"watchFile":4} Source file
 sysLog:: /user/username/projects/myproject/foo.d.ts:: Changing watcher to PresentFileSystemEntryWatcher
+sysLog:: callbackChangingToMissingFileSystemEntry:: /user/username/projects/myproject/foo.d.ts 0 rename::  true foo.d.ts /foo.d.ts
 FileWatcher:: Triggered with /user/username/projects/myproject/foo.d.ts 0:: WatchInfo: /user/username/projects/myproject/foo.d.ts 250 {"watchFile":4} Source file
 Scheduling update
 Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/foo.d.ts 0:: WatchInfo: /user/username/projects/myproject/foo.d.ts 250 {"watchFile":4} Source file
 sysLog:: /user/username/projects/myproject/foo.d.ts:: Changing watcher to PresentFileSystemEntryWatcher
+sysLog:: callbackChangingToMissingFileSystemEntry:: /user/username/projects/myproject 1 rename:: foo.d.ts true myproject /myproject
 DirectoryWatcher:: Triggered with /user/username/projects/myproject/foo.d.ts :: WatchInfo: /user/username/projects/myproject 0 {"watchFile":4} Failed Lookup Locations
 Scheduling invalidateFailedLookup, Cancelled earlier one
 Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/foo.d.ts :: WatchInfo: /user/username/projects/myproject 0 {"watchFile":4} Failed Lookup Locations
+sysLog:: callbackChangingToMissingFileSystemEntry:: /user/username/projects/myproject 1 change::  true myproject /myproject
 Synchronizing program
 [[90m12:00:38 AM[0m] File change detected. Starting incremental compilation...
 
 CreatingProgramWith::
   roots: ["/user/username/projects/myproject/foo.d.ts","/user/username/projects/myproject/main.ts"]
   options: {"watch":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+sysLog:: callbackChangingToMissingFileSystemEntry:: /user/username/projects/myproject 1 change:: main.js true myproject /myproject
 [[90m12:00:42 AM[0m] Found 0 errors. Watching for file changes.
 
 

@@ -97,9 +97,13 @@ export var t1 = 10;export var t3 = 10;
 
 
 Output::
+sysLog:: watchPresentFileSystemEntry:: /a/b 1 change:: file1.ts
+
 >> Screen clear
 [[90m12:00:25 AM[0m] File change detected. Starting incremental compilation...
 
+sysLog:: watchPresentFileSystemEntry:: /a/b 1 change:: file1.js
+sysLog:: watchPresentFileSystemEntry:: /a/b 1 change:: file2.js
 [[90m12:00:32 AM[0m] Found 0 errors. Watching for file changes.
 
 

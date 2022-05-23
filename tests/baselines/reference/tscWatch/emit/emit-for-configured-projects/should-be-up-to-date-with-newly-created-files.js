@@ -137,9 +137,18 @@ import {Foo} from "./moduleFile1"; let y = Foo();
 
 
 Output::
+sysLog:: watchPresentFileSystemEntry:: /a/b 1 rename:: file1Consumer3.ts
+sysLog:: watchPresentFileSystemEntry:: /a/b 1 change:: 
+sysLog:: watchPresentFileSystemEntry:: /a/b 1 change:: moduleFile1.ts
+
 >> Screen clear
 [[90m12:00:40 AM[0m] File change detected. Starting incremental compilation...
 
+sysLog:: watchPresentFileSystemEntry:: /a/b 1 change:: moduleFile1.js
+sysLog:: watchPresentFileSystemEntry:: /a/b 1 rename:: file1Consumer3.js
+sysLog:: watchPresentFileSystemEntry:: /a/b 1 change:: 
+sysLog:: watchPresentFileSystemEntry:: /a/b 1 change:: file1Consumer2.js
+sysLog:: watchPresentFileSystemEntry:: /a/b 1 change:: file1Consumer1.js
 [[90m12:00:52 AM[0m] Found 0 errors. Watching for file changes.
 
 

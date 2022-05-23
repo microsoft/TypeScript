@@ -147,9 +147,13 @@ import {Foo} from "./moduleFile1"; export var y = 10;export var T: number;
 
 
 Output::
+sysLog:: watchPresentFileSystemEntry:: /a/b 1 change:: file1Consumer1.ts
+
 >> Screen clear
 [[90m12:00:41 AM[0m] File change detected. Starting incremental compilation...
 
+sysLog:: watchPresentFileSystemEntry:: /a/b 1 change:: file1Consumer1.js
+sysLog:: watchPresentFileSystemEntry:: /a/b 1 change:: file1Consumer1Consumer1.js
 [[90m12:00:48 AM[0m] Found 0 errors. Watching for file changes.
 
 
@@ -219,9 +223,14 @@ export var T: number;export function Foo() { };
 
 
 Output::
+sysLog:: watchPresentFileSystemEntry:: /a/b 1 change:: moduleFile1.ts
+
 >> Screen clear
 [[90m12:00:52 AM[0m] File change detected. Starting incremental compilation...
 
+sysLog:: watchPresentFileSystemEntry:: /a/b 1 change:: moduleFile1.js
+sysLog:: watchPresentFileSystemEntry:: /a/b 1 change:: file1Consumer2.js
+sysLog:: watchPresentFileSystemEntry:: /a/b 1 change:: file1Consumer1.js
 [[90m12:01:02 AM[0m] Found 0 errors. Watching for file changes.
 
 
@@ -299,9 +308,16 @@ import {Foo} from "./moduleFile1"; export var y = 10;export var T: number;export
 
 
 Output::
+sysLog:: watchPresentFileSystemEntry:: /a/b 1 change:: file1Consumer1.ts
+sysLog:: watchPresentFileSystemEntry:: /a/b 1 change:: moduleFile1.ts
+
 >> Screen clear
 [[90m12:01:08 AM[0m] File change detected. Starting incremental compilation...
 
+sysLog:: watchPresentFileSystemEntry:: /a/b 1 change:: moduleFile1.js
+sysLog:: watchPresentFileSystemEntry:: /a/b 1 change:: file1Consumer2.js
+sysLog:: watchPresentFileSystemEntry:: /a/b 1 change:: file1Consumer1.js
+sysLog:: watchPresentFileSystemEntry:: /a/b 1 change:: file1Consumer1Consumer1.js
 [[90m12:01:21 AM[0m] Found 0 errors. Watching for file changes.
 
 

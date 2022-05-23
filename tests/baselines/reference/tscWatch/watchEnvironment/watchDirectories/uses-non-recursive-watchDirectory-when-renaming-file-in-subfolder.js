@@ -76,9 +76,19 @@ Input::
 //// [/a/username/project/src/file1.ts] deleted
 
 Output::
+sysLog:: watchPresentFileSystemEntry:: /a/username/project/src 1 rename:: file1.ts
+sysLog:: watchPresentFileSystemEntry:: /a/username/project/src 1 change:: 
+sysLog:: watchPresentFileSystemEntry:: /a/username/project 1 change:: src
+sysLog:: watchPresentFileSystemEntry:: /a/username/project/src 1 rename:: file2.ts
+sysLog:: watchPresentFileSystemEntry:: /a/username/project/src 1 change:: 
+sysLog:: watchPresentFileSystemEntry:: /a/username/project 1 change:: src
+
 >> Screen clear
 [[90m12:00:26 AM[0m] File change detected. Starting incremental compilation...
 
+sysLog:: watchPresentFileSystemEntry:: /a/username/project/src 1 rename:: file2.js
+sysLog:: watchPresentFileSystemEntry:: /a/username/project/src 1 change:: 
+sysLog:: watchPresentFileSystemEntry:: /a/username/project 1 change:: src
 [[90m12:00:29 AM[0m] Found 0 errors. Watching for file changes.
 
 

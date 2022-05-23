@@ -217,9 +217,17 @@ export class C
 
 
 Output::
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: c.ts
+
 >> Screen clear
 [[90m12:00:46 AM[0m] File change detected. Starting incremental compilation...
 
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: a.d.ts
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: c.js
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: c.d.ts
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: b.js
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: b.d.ts
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: tsconfig.tsbuildinfo
 [96ma.ts[0m:[93m4[0m:[93m17[0m - [91merror[0m[90m TS2339: [0mProperty 'd' does not exist on type 'C'.
 
 [7m4[0m console.log(b.c.d);
@@ -227,6 +235,7 @@ Output::
 
 [[90m12:01:05 AM[0m] Found 1 error. Watching for file changes.
 
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: tsconfig.tsbuildinfo.readable.baseline.txt
 
 
 Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts","/user/username/projects/myproject/c.ts"]
@@ -382,11 +391,20 @@ export class C
 
 
 Output::
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: c.ts
+
 >> Screen clear
 [[90m12:01:12 AM[0m] File change detected. Starting incremental compilation...
 
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: a.d.ts
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: c.js
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: c.d.ts
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: b.js
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: b.d.ts
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: tsconfig.tsbuildinfo
 [[90m12:01:31 AM[0m] Found 0 errors. Watching for file changes.
 
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: tsconfig.tsbuildinfo.readable.baseline.txt
 
 
 Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts","/user/username/projects/myproject/c.ts"]
@@ -530,9 +548,17 @@ export class C
 
 
 Output::
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: c.ts
+
 >> Screen clear
 [[90m12:01:38 AM[0m] File change detected. Starting incremental compilation...
 
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: a.d.ts
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: c.js
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: c.d.ts
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: b.js
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: b.d.ts
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: tsconfig.tsbuildinfo
 [96ma.ts[0m:[93m4[0m:[93m17[0m - [91merror[0m[90m TS2339: [0mProperty 'd' does not exist on type 'C'.
 
 [7m4[0m console.log(b.c.d);
@@ -540,6 +566,7 @@ Output::
 
 [[90m12:01:57 AM[0m] Found 1 error. Watching for file changes.
 
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: tsconfig.tsbuildinfo.readable.baseline.txt
 
 
 Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts","/user/username/projects/myproject/c.ts"]

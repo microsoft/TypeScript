@@ -153,9 +153,11 @@ export const z = 1;
 
 
 Output::
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 rename:: new-file.ts
 DirectoryWatcher:: Triggered with /user/username/projects/myproject/new-file.ts :: WatchInfo: /user/username/projects/myproject 1 undefined Wild card directory
 Scheduling update
 Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/new-file.ts :: WatchInfo: /user/username/projects/myproject 1 undefined Wild card directory
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: 
 Reloading new file names and options
 Synchronizing program
 [[90m12:00:39 AM[0m] File change detected. Starting incremental compilation...
@@ -164,14 +166,20 @@ CreatingProgramWith::
   roots: ["/user/username/projects/myproject/f1.ts","/user/username/projects/myproject/f2.ts","/user/username/projects/myproject/new-file.ts"]
   options: {"composite":true,"watch":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/new-file.ts 250 undefined Source file
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 rename:: new-file.js
 DirectoryWatcher:: Triggered with /user/username/projects/myproject/new-file.js :: WatchInfo: /user/username/projects/myproject 1 undefined Wild card directory
 Project: /user/username/projects/myproject/tsconfig.json Detected file add/remove of non supported extension: /user/username/projects/myproject/new-file.js
 Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/new-file.js :: WatchInfo: /user/username/projects/myproject 1 undefined Wild card directory
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: 
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 rename:: new-file.d.ts
 DirectoryWatcher:: Triggered with /user/username/projects/myproject/new-file.d.ts :: WatchInfo: /user/username/projects/myproject 1 undefined Wild card directory
 Project: /user/username/projects/myproject/tsconfig.json Detected output file: /user/username/projects/myproject/new-file.d.ts
 Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/new-file.d.ts :: WatchInfo: /user/username/projects/myproject 1 undefined Wild card directory
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: 
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: tsconfig.tsbuildinfo
 [[90m12:00:47 AM[0m] Found 0 errors. Watching for file changes.
 
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: tsconfig.tsbuildinfo.readable.baseline.txt
 
 
 Program root files: ["/user/username/projects/myproject/f1.ts","/user/username/projects/myproject/f2.ts","/user/username/projects/myproject/new-file.ts"]
@@ -281,14 +289,19 @@ Output::
 FileWatcher:: Triggered with /user/username/projects/myproject/f1.ts 1:: WatchInfo: /user/username/projects/myproject/f1.ts 250 undefined Source file
 Scheduling update
 Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/f1.ts 1:: WatchInfo: /user/username/projects/myproject/f1.ts 250 undefined Source file
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: f1.ts
 Synchronizing program
 [[90m12:00:53 AM[0m] File change detected. Starting incremental compilation...
 
 CreatingProgramWith::
   roots: ["/user/username/projects/myproject/f1.ts","/user/username/projects/myproject/f2.ts","/user/username/projects/myproject/new-file.ts"]
   options: {"composite":true,"watch":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: f1.js
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: f1.d.ts
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: tsconfig.tsbuildinfo
 [[90m12:01:03 AM[0m] Found 0 errors. Watching for file changes.
 
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: tsconfig.tsbuildinfo.readable.baseline.txt
 
 
 Program root files: ["/user/username/projects/myproject/f1.ts","/user/username/projects/myproject/f2.ts","/user/username/projects/myproject/new-file.ts"]

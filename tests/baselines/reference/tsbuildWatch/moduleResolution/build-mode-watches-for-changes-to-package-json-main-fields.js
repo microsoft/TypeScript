@@ -278,6 +278,8 @@ Input::
 
 
 Output::
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/packages/pkg2 1 change:: package.json
+
 >> Screen clear
 [[90m12:01:17 AM[0m] File change detected. Starting incremental compilation...
 
@@ -370,6 +372,8 @@ Input::
 
 
 Output::
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/packages/pkg2 1 change:: package.json
+
 >> Screen clear
 [[90m12:01:24 AM[0m] File change detected. Starting incremental compilation...
 
@@ -414,6 +418,7 @@ File '/user/username/projects/myproject/packages/pkg2/build/const.ts' does not e
 File '/user/username/projects/myproject/packages/pkg2/build/const.tsx' does not exist.
 File '/user/username/projects/myproject/packages/pkg2/build/const.d.ts' exist - use it as a name resolution result.
 ======== Module name './const.js' was successfully resolved to '/user/username/projects/myproject/packages/pkg2/build/const.d.ts'. ========
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/packages/pkg1 1 change:: build/index.js
 [[90m12:01:30 AM[0m] Found 0 errors. Watching for file changes.
 
 

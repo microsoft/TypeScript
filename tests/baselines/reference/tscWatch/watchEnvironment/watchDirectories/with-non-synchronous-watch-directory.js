@@ -27,6 +27,8 @@ Output::
 >> Screen clear
 [[90m12:00:29 AM[0m] Starting compilation in watch mode...
 
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/src 1 rename:: file1.js
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/src 1 change:: 
 [[90m12:00:32 AM[0m] Found 0 errors. Watching for file changes.
 
 
@@ -124,9 +126,21 @@ Input::
 //// [/user/username/projects/myproject/node_modules/file2/index.d.ts] deleted
 
 Output::
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/node_modules/file2 1 rename:: index.d.ts
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/node_modules/file2 1 change:: 
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/node_modules 1 change:: file2
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/node_modules/file2 1 rename:: 
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/node_modules 1 rename:: file2
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/node_modules 1 change:: 
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: node_modules
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/node_modules 1 rename:: 
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 rename:: node_modules
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: 
+
 >> Screen clear
 [[90m12:00:36 AM[0m] File change detected. Starting incremental compilation...
 
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/src 1 change:: file1.js
 [96muser/username/projects/myproject/src/file1.ts[0m:[93m1[0m:[93m19[0m - [91merror[0m[90m TS2307: [0mCannot find module 'file2' or its corresponding type declarations.
 
 [7m1[0m import { x } from "file2";
@@ -229,6 +243,10 @@ Change:: Start npm install
 Input::
 
 Output::
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/node_modules 1 rename:: 
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 rename:: node_modules
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: 
+
 
 WatchedFiles::
 /user/username/projects/myproject/tsconfig.json:
@@ -258,6 +276,10 @@ Change:: npm install folder creation of file2
 Input::
 
 Output::
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/node_modules 1 rename:: file2
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/node_modules 1 change:: 
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: node_modules
+
 
 WatchedFiles::
 /user/username/projects/myproject/tsconfig.json:
@@ -290,6 +312,8 @@ export const x = 10;
 
 
 Output::
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/node_modules 1 change:: file2
+
 
 WatchedFiles::
 /user/username/projects/myproject/tsconfig.json:
@@ -384,6 +408,7 @@ Output::
 >> Screen clear
 [[90m12:00:50 AM[0m] File change detected. Starting incremental compilation...
 
+sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/src 1 change:: file1.js
 [[90m12:00:54 AM[0m] Found 0 errors. Watching for file changes.
 
 

@@ -77,9 +77,12 @@ let x = 11
 
 
 Output::
+sysLog:: watchPresentFileSystemEntry:: /a 1 change:: a.ts
+
 >> Screen clear
 [[90m12:00:22 AM[0m] File change detected. Starting incremental compilation...
 
+sysLog:: watchPresentFileSystemEntry:: /a 1 change:: out.js
 [[90m12:00:26 AM[0m] Found 0 errors. Watching for file changes.
 
 
@@ -130,9 +133,12 @@ let xy = 11
 
 
 Output::
+sysLog:: watchPresentFileSystemEntry:: /a 1 change:: a.ts
+
 >> Screen clear
 [[90m12:00:30 AM[0m] File change detected. Starting incremental compilation...
 
+sysLog:: watchPresentFileSystemEntry:: /a 1 change:: out.js
 [[90m12:00:34 AM[0m] Found 0 errors. Watching for file changes.
 
 

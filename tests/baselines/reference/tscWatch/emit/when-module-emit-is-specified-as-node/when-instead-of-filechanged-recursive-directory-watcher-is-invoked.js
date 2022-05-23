@@ -86,6 +86,8 @@ var zz30 = 100;
 
 
 Output::
+sysLog:: watchPresentFileSystemEntry:: /a/rootfolder/project/scripts 1 rename:: TypeScript.ts
+
 >> Screen clear
 [[90m12:00:34 AM[0m] File change detected. Starting incremental compilation...
 

@@ -24,6 +24,10 @@ Output::
 >> Screen clear
 [[90m12:00:15 AM[0m] Starting compilation in watch mode...
 
+sysLog:: watchPresentFileSystemEntry:: /a 1 rename:: f1.js
+sysLog:: watchPresentFileSystemEntry:: /a 1 change:: 
+sysLog:: watchPresentFileSystemEntry:: /a 1 rename:: d/f0.js
+sysLog:: watchPresentFileSystemEntry:: /a 1 change:: d
 [96ma/d/f0.ts[0m:[93m1[0m:[93m17[0m - [91merror[0m[90m TS2306: [0mFile '/a/f1.ts' is not a module.
 
 [7m1[0m import {x} from "f1"
@@ -93,9 +97,12 @@ import {x} from "f1"
 
 
 Output::
+sysLog:: watchPresentFileSystemEntry:: /a 1 change:: d/f0.ts
+
 >> Screen clear
 [[90m12:00:24 AM[0m] File change detected. Starting incremental compilation...
 
+sysLog:: watchPresentFileSystemEntry:: /a 1 change:: d/f0.js
 [96ma/d/f0.ts[0m:[93m1[0m:[93m17[0m - [91merror[0m[90m TS2306: [0mFile '/a/f1.ts' is not a module.
 
 [7m1[0m import {x} from "f1"
@@ -162,9 +169,12 @@ import {x} from "f2"
 
 
 Output::
+sysLog:: watchPresentFileSystemEntry:: /a 1 change:: d/f0.ts
+
 >> Screen clear
 [[90m12:00:32 AM[0m] File change detected. Starting incremental compilation...
 
+sysLog:: watchPresentFileSystemEntry:: /a 1 change:: d/f0.js
 [96ma/d/f0.ts[0m:[93m1[0m:[93m17[0m - [91merror[0m[90m TS2792: [0mCannot find module 'f2'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
 
 [7m1[0m import {x} from "f2"
@@ -221,9 +231,13 @@ import {x} from "f1"
 
 
 Output::
+sysLog:: watchPresentFileSystemEntry:: /a 1 change:: d/f0.ts
+
 >> Screen clear
 [[90m12:00:40 AM[0m] File change detected. Starting incremental compilation...
 
+sysLog:: watchPresentFileSystemEntry:: /a 1 change:: f1.js
+sysLog:: watchPresentFileSystemEntry:: /a 1 change:: d/f0.js
 [96ma/d/f0.ts[0m:[93m1[0m:[93m17[0m - [91merror[0m[90m TS2306: [0mFile '/a/f1.ts' is not a module.
 
 [7m1[0m import {x} from "f1"
