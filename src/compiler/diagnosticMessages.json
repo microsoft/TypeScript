@@ -7357,8 +7357,12 @@
         "category": "Error",
         "code": 18041
     },
-    "An interface cannot extend a primitive type like '{0}'; An interface can only extend named types and classes.": {
+    "An interface cannot extend a primitive type like '{0}'. An interface can only extend named object types.": {
         "category": "Error",
         "code": 18042
+    },
+    "A class cannot extend a primitive type like '{0}'. A class can only extend named object types.": {
+        "category": "Error",
+        "code": 18043
     }
 }

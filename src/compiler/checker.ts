@@ -2502,8 +2502,13 @@ namespace ts {
             if (meaning & (SymbolFlags.Value & ~SymbolFlags.NamespaceModule)) {
                 if (isPrimitiveTypeName(name) && !(errorLocation.parent.parent.kind & ~SyntaxKind.HeritageClause)) {
                     const rawName = unescapeLeadingUnderscores(name);
-                    error(errorLocation, Diagnostics.An_interface_cannot_extend_a_primitive_type_like_0_An_interface_can_only_extend_named_types_and_classes, rawName);
-                    return true;
+                    if(meaning & SymbolFlags.Interface) {
+                        error(errorLocation, Diagnostics.An_interface_cannot_extend_a_primitive_type_like_0_An_interface_can_only_extend_named_object_types, rawName);
+                    }
+                    else if(meaning & SymbolFlags.Class) {
+                        error(errorLocation, Diagnostics.A_class_cannot_extend_a_primitive_type_like_0_A_class_can_only_extend_named_object_types, rawName);
+                    }
+                     return true;
                 }
             }
             return false;
