@@ -733,7 +733,7 @@ namespace ts {
                     decl.modifiers,
                     decl.importClause,
                     rewriteModuleSpecifier(decl, decl.moduleSpecifier),
-                    getResolutionModeOverrideForClause(decl.assertClause) ? decl.assertClause : undefined
+                    getResolutionModeOverrideForClauseInNightly(decl.assertClause)
                 );
             }
             // The `importClause` visibility corresponds to the default's visibility.
@@ -745,7 +745,7 @@ namespace ts {
                     decl.importClause.isTypeOnly,
                     visibleDefaultBinding,
                     /*namedBindings*/ undefined,
-                ), rewriteModuleSpecifier(decl, decl.moduleSpecifier), getResolutionModeOverrideForClause(decl.assertClause) ? decl.assertClause : undefined);
+                ), rewriteModuleSpecifier(decl, decl.moduleSpecifier), getResolutionModeOverrideForClauseInNightly(decl.assertClause));
             }
             if (decl.importClause.namedBindings.kind === SyntaxKind.NamespaceImport) {
                 // Namespace import (optionally with visible default)
@@ -755,7 +755,7 @@ namespace ts {
                     decl.importClause.isTypeOnly,
                     visibleDefaultBinding,
                     namedBindings,
-                ), rewriteModuleSpecifier(decl, decl.moduleSpecifier), getResolutionModeOverrideForClause(decl.assertClause) ? decl.assertClause : undefined) : undefined;
+                ), rewriteModuleSpecifier(decl, decl.moduleSpecifier), getResolutionModeOverrideForClauseInNightly(decl.assertClause)) : undefined;
             }
             // Named imports (optionally with visible default)
             const bindingList = mapDefined(decl.importClause.namedBindings.elements, b => resolver.isDeclarationVisible(b) ? b : undefined);
@@ -771,7 +771,7 @@ namespace ts {
                         bindingList && bindingList.length ? factory.updateNamedImports(decl.importClause.namedBindings, bindingList) : undefined,
                     ),
                     rewriteModuleSpecifier(decl, decl.moduleSpecifier),
-                    getResolutionModeOverrideForClause(decl.assertClause) ? decl.assertClause : undefined
+                    getResolutionModeOverrideForClauseInNightly(decl.assertClause)
                 );
             }
             // Augmentation of export depends on import
@@ -782,10 +782,21 @@ namespace ts {
                     decl.modifiers,
                     /*importClause*/ undefined,
                     rewriteModuleSpecifier(decl, decl.moduleSpecifier),
-                    getResolutionModeOverrideForClause(decl.assertClause) ? decl.assertClause : undefined
+                    getResolutionModeOverrideForClauseInNightly(decl.assertClause)
                 );
             }
             // Nothing visible
+        }
+
+        function getResolutionModeOverrideForClauseInNightly(assertClause: AssertClause | undefined) {
+            const mode = getResolutionModeOverrideForClause(assertClause);
+            if (mode !== undefined) {
+                if (!isNightly()) {
+                    context.addDiagnostic(createDiagnosticForNode(assertClause!, Diagnostics.Resolution_mode_assertions_are_unstable_Use_nightly_TypeScript_to_silence_this_error_Try_updating_with_npm_install_D_typescript_next));
+                }
+                return assertClause;
+            }
+            return undefined;
         }
 
         function transformAndReplaceLatePaintedStatements(statements: NodeArray<Statement>): NodeArray<Statement> {

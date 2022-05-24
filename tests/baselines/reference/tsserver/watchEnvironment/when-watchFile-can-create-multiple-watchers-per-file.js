@@ -39,7 +39,7 @@ Project '/user/username/projects/myproject/tsconfig.json' (Configured)
 	tsconfig.json
 	  Imported via "./tsconfig.json" from file 'index.ts'
 	index.ts
-	  Matched by include pattern '**/*' in 'tsconfig.json'
+	  Matched by default include pattern '**/*'
 
 -----------------------------------------------
 Search path: /user/username/projects/myproject

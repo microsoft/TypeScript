@@ -2866,16 +2866,6 @@ namespace ts {
         return typeParameters && find(typeParameters, p => p.name.escapedText === name);
     }
 
-    export function hasRestParameter(s: SignatureDeclaration | JSDocSignature): boolean {
-        const last = lastOrUndefined<ParameterDeclaration | JSDocParameterTag>(s.parameters);
-        return !!last && isRestParameter(last);
-    }
-
-    export function isRestParameter(node: ParameterDeclaration | JSDocParameterTag): boolean {
-        const type = isJSDocParameterTag(node) ? (node.typeExpression && node.typeExpression.type) : node.type;
-        return (node as ParameterDeclaration).dotDotDotToken !== undefined || !!type && type.kind === SyntaxKind.JSDocVariadicType;
-    }
-
     export function hasTypeArguments(node: Node): node is HasTypeArguments {
         return !!(node as HasTypeArguments).typeArguments;
     }
@@ -4119,6 +4109,10 @@ namespace ts {
 
     export function getIndentSize() {
         return indentStrings[1].length;
+    }
+
+    export function isNightly() {
+        return stringContains(version, "-dev") || stringContains(version, "-insiders");
     }
 
     export function createTextWriter(newLine: string): EmitTextWriter {

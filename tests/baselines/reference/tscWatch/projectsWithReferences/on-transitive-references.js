@@ -697,9 +697,9 @@ Input::
 
 Output::
 >> Screen clear
-[[90m12:01:49 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:50 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:50 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:51 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -768,14 +768,14 @@ Input::
 
 Output::
 >> Screen clear
-[[90m12:01:52 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:53 AM[0m] File change detected. Starting incremental compilation...
 
 [96mtsconfig.c.json[0m:[93m1[0m:[93m100[0m - [91merror[0m[90m TS6053: [0mFile '/user/username/projects/transitiveReferences/tsconfig.b.json' not found.
 
 [7m1[0m {"files":["c.ts"],"compilerOptions":{"baseUrl":"./","paths":{"@ref/*":["./refs/*"]}},"references":[{"path":"tsconfig.b.json"}]}
 [7m [0m [91m                                                                                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
 
-[[90m12:01:59 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:02:00 AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -859,9 +859,9 @@ Input::
 
 Output::
 >> Screen clear
-[[90m12:02:02 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:02:03 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:02:06 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:02:07 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -942,14 +942,14 @@ Input::
 
 Output::
 >> Screen clear
-[[90m12:02:08 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:02:09 AM[0m] File change detected. Starting incremental compilation...
 
 [96mtsconfig.b.json[0m:[93m10[0m:[93m21[0m - [91merror[0m[90m TS6053: [0mFile '/user/username/projects/transitiveReferences/tsconfig.a.json' not found.
 
 [7m10[0m     "references": [ { "path": "tsconfig.a.json" } ]
 [7m  [0m [91m                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
 
-[[90m12:02:12 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:02:13 AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -1031,9 +1031,9 @@ Input::
 
 Output::
 >> Screen clear
-[[90m12:02:15 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:02:17 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:02:16 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:02:18 AM[0m] Found 0 errors. Watching for file changes.
 
 
 

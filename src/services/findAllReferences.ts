@@ -564,7 +564,7 @@ namespace ts.FindAllReferences {
     }
 
     /** Whether a reference, `node`, is a definition of the `target` symbol */
-    function isDeclarationOfSymbol(node: Node, target: Symbol | undefined): boolean {
+    export function isDeclarationOfSymbol(node: Node, target: Symbol | undefined): boolean {
         if (!target) return false;
         const source = getDeclarationFromName(node) ||
             (node.kind === SyntaxKind.DefaultKeyword ? node.parent

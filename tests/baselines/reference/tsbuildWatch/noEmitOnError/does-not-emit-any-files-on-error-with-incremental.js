@@ -478,18 +478,18 @@ Input::
 
 Output::
 >> Screen clear
-[[90m12:01:36 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:37 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:37 AM[0m] Project 'tsconfig.json' is out of date because buildinfo file 'dev-build/tsconfig.tsbuildinfo' indicates that some of the changes are not emitted
+[[90m12:01:38 AM[0m] Project 'tsconfig.json' is out of date because buildinfo file 'dev-build/tsconfig.tsbuildinfo' indicates that some of the changes are not emitted
 
-[[90m12:01:38 AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
+[[90m12:01:39 AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
 
 [96msrc/main.ts[0m:[93m2[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType 'number' is not assignable to type 'string'.
 
 [7m2[0m const a: string = 10;
 [7m [0m [91m      ~[0m
 
-[[90m12:01:39 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:01:40 AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -535,13 +535,13 @@ const a: string = "hello";
 
 Output::
 >> Screen clear
-[[90m12:01:43 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:44 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:44 AM[0m] Project 'tsconfig.json' is out of date because buildinfo file 'dev-build/tsconfig.tsbuildinfo' indicates that some of the changes are not emitted
+[[90m12:01:45 AM[0m] Project 'tsconfig.json' is out of date because buildinfo file 'dev-build/tsconfig.tsbuildinfo' indicates that some of the changes are not emitted
 
-[[90m12:01:45 AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
+[[90m12:01:46 AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
 
-[[90m12:01:56 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:57 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -649,13 +649,13 @@ Input::
 
 Output::
 >> Screen clear
-[[90m12:02:00 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:02:01 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:02:01 AM[0m] Project 'tsconfig.json' is up to date but needs update to timestamps of output files that are older than input files
+[[90m12:02:02 AM[0m] Project 'tsconfig.json' is up to date but needs update to timestamps of output files that are older than input files
 
-[[90m12:02:02 AM[0m] Updating output timestamps of project '/user/username/projects/noEmitOnError/tsconfig.json'...
+[[90m12:02:03 AM[0m] Updating output timestamps of project '/user/username/projects/noEmitOnError/tsconfig.json'...
 
-[[90m12:02:04 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:02:05 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
