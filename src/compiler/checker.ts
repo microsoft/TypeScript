@@ -12187,9 +12187,8 @@ namespace ts {
                         const baseIndexType = getBaseConstraint(indexedAccess.indexType);
                         const indexedAccessType = baseObjectType && baseIndexType && getIndexedAccessTypeOrUndefined(baseObjectType, baseIndexType);
                         const mappedIndexTypeOfIndexedAccess = indexedAccessType && mapType(indexedAccessType, getIndexType);
-                        const narrowed = mappedIndexTypeOfIndexedAccess && mapType(keyofConstraintType, t => {
-                            const intersected = getIntersectionType([t, mappedIndexTypeOfIndexedAccess]);
-                            return intersected.flags & TypeFlags.Never ? undefined : t;
+                        const narrowed = mappedIndexTypeOfIndexedAccess && filterType(keyofConstraintType, t => {
+                            return !(getIntersectionType([t, mappedIndexTypeOfIndexedAccess]).flags & TypeFlags.Never);
                         });
                         if (narrowed) {
                             return narrowed;
