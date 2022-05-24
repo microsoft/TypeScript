@@ -404,7 +404,7 @@ namespace ts.server {
                 }
             });
 
-            return addRange(result, this.typingFiles) || ts.emptyArray;
+            return addRange(result, this.compilerOptions.types ? undefined : this.typingFiles) || ts.emptyArray;
         }
 
         private getOrCreateScriptInfoAndAttachToProject(fileName: string) {
@@ -1115,6 +1115,7 @@ namespace ts.server {
                 this.typingFiles = typingFiles;
                 // Invalidate files with unresolved imports
                 this.resolutionCache.setFilesWithInvalidatedNonRelativeUnresolvedImports(this.cachedUnresolvedImportsPerFile);
+                this.scheduleInvalidateResolutionsOfFailedLookupLocations();
                 this.projectService.delayUpdateProjectGraphAndEnsureProjectStructureForOpenFiles(this);
             }
         }

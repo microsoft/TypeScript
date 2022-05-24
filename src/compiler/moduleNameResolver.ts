@@ -2574,6 +2574,26 @@ namespace ts {
      */
     /* @internal */
     export function loadModuleFromGlobalCache(moduleName: string, projectName: string | undefined, compilerOptions: CompilerOptions, host: ModuleResolutionHost, globalCache: string, packageJsonInfoCache: PackageJsonInfoCache): ResolvedModuleWithFailedLookupLocations {
+        const { resolved, failedLookupLocations, diagnostics, state } = loadFromGlobalCache(compilerOptions, host, projectName, moduleName, globalCache, packageJsonInfoCache);
+        return createResolvedModuleWithFailedLookupLocations(resolved, /*isExternalLibraryImport*/ true, failedLookupLocations, diagnostics, state.resultFromCache);
+    }
+
+    /* @internal */
+    export function loadTypeReferenceDirectiveFromGlobalCache(typeReferenceDirectiveName: string, projectName: string | undefined, compilerOptions: CompilerOptions, host: ModuleResolutionHost, globalCache: string, packageJsonInfoCache: PackageJsonInfoCache): ResolvedTypeReferenceDirectiveWithFailedLookupLocations {
+        const { resolved, failedLookupLocations, diagnostics } = loadFromGlobalCache(compilerOptions, host, projectName, typeReferenceDirectiveName, globalCache, packageJsonInfoCache);
+        return {
+            resolvedTypeReferenceDirective: resolved ? {
+                primary: false,
+                resolvedFileName: resolved.path,
+                packageId: resolved.packageId,
+                isExternalLibraryImport: true,
+            } : undefined,
+            failedLookupLocations,
+            resolutionDiagnostics: diagnostics,
+        };
+    }
+
+    function loadFromGlobalCache(compilerOptions: CompilerOptions, host: ModuleResolutionHost, projectName: string | undefined, moduleName: string, globalCache: string, packageJsonInfoCache: PackageJsonInfoCache) {
         const traceEnabled = isTraceEnabled(compilerOptions, host);
         if (traceEnabled) {
             trace(host, Diagnostics.Auto_discovery_for_typings_is_enabled_in_project_0_Running_extra_resolution_pass_for_module_1_using_cache_location_2, projectName, moduleName, globalCache);
@@ -2582,8 +2602,9 @@ namespace ts {
         const diagnostics: Diagnostic[] = [];
         const state: ModuleResolutionState = { compilerOptions, host, traceEnabled, failedLookupLocations, packageJsonInfoCache, features: NodeResolutionFeatures.None, conditions: [], requestContainingDirectory: undefined, reportDiagnostic: diag => void diagnostics.push(diag) };
         const resolved = loadModuleFromImmediateNodeModulesDirectory(Extensions.DtsOnly, moduleName, globalCache, state, /*typesScopeOnly*/ false, /*cache*/ undefined, /*redirectedReference*/ undefined);
-        return createResolvedModuleWithFailedLookupLocations(resolved, /*isExternalLibraryImport*/ true, failedLookupLocations, diagnostics, state.resultFromCache);
+        return { resolved, failedLookupLocations, diagnostics, state };
     }
+
 
     /**
      * Represents result of search. Normally when searching among several alternatives we treat value `undefined` as indicator

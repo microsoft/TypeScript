@@ -346,8 +346,28 @@ namespace ts {
             return primaryResult;
         }
 
-        function resolveTypeReferenceDirective(typeReferenceDirectiveName: string, containingFile: string | undefined, options: CompilerOptions, host: ModuleResolutionHost, redirectedReference?: ResolvedProjectReference, _containingSourceFile?: SourceFile, resolutionMode?: SourceFile["impliedNodeFormat"] | undefined): CachedResolvedTypeReferenceDirectiveWithFailedLookupLocations {
-            return ts.resolveTypeReferenceDirective(typeReferenceDirectiveName, containingFile, options, host, redirectedReference, typeReferenceDirectiveResolutionCache, resolutionMode);
+        function resolveTypeReferenceDirective(typeReferenceDirectiveName: string, containingFile: string | undefined, compilerOptions: CompilerOptions, host: ModuleResolutionHost, redirectedReference?: ResolvedProjectReference, _containingSourceFile?: SourceFile, resolutionMode?: SourceFile["impliedNodeFormat"] | undefined): CachedResolvedTypeReferenceDirectiveWithFailedLookupLocations {
+            const primaryResult = ts.resolveTypeReferenceDirective(typeReferenceDirectiveName, containingFile, compilerOptions, host, redirectedReference, typeReferenceDirectiveResolutionCache, resolutionMode);
+            if (!resolutionHost.getGlobalCache || primaryResult.resolvedTypeReferenceDirective) {
+                return primaryResult;
+            }
+            const globalCache = resolutionHost.getGlobalCache();
+            if (globalCache !== undefined && !isExternalModuleNameRelative(typeReferenceDirectiveName)) {
+                const { resolvedTypeReferenceDirective, failedLookupLocations } = loadTypeReferenceDirectiveFromGlobalCache(
+                    Debug.checkDefined(resolutionHost.globalCacheResolutionModuleName)(typeReferenceDirectiveName),
+                    resolutionHost.projectName,
+                    compilerOptions,
+                    host,
+                    globalCache,
+                    moduleResolutionCache,
+                );
+                if (resolvedTypeReferenceDirective) {
+                    (primaryResult.resolvedTypeReferenceDirective as any) = resolvedTypeReferenceDirective;
+                    primaryResult.failedLookupLocations.push(...failedLookupLocations);
+                    return primaryResult;
+                }
+            }
+            return primaryResult;
         }
 
         interface ResolveNamesWithLocalCacheInput<T extends ResolutionWithFailedLookupLocations, R extends ResolutionWithResolvedFileName> {

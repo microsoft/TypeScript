@@ -901,10 +901,14 @@ namespace ts.projectSystem {
             checkProjectActualFiles(p, [app.path, cacacheDTS.path, jsconfig.path]);
         });
 
-        it("configured projects discover from node_modules", () => {
-            const app = {
-                path: "/app.js",
-                content: ""
+        function testConfiguredProjectNodeModules({ jsconfigContent, appJsContent, jQueryInProject = true }: {
+            jsconfigContent?: object,
+            appJsContent?: string,
+            jQueryInProject?: boolean,
+        } = {}) {
+        const app = {
+            path: "/app.js",
+                content: appJsContent || ""
             };
             const pkgJson = {
                 path: "/package.json",
@@ -916,7 +920,7 @@ namespace ts.projectSystem {
             };
             const jsconfig = {
                 path: "/jsconfig.json",
-                content: JSON.stringify({})
+                content: JSON.stringify(jsconfigContent || {})
             };
             // Should only accept direct dependencies.
             const commander = {
@@ -969,8 +973,24 @@ namespace ts.projectSystem {
             installer.installAll(/*expectedCount*/ 1);
 
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
-            host.checkTimeoutQueueLengthAndRun(2);
-            checkProjectActualFiles(p, [app.path, jqueryDTS.path, jsconfig.path]);
+            host.checkTimeoutQueueLengthAndRun(3);
+            checkProjectActualFiles(p, jQueryInProject ? [app.path, jqueryDTS.path, jsconfig.path] : [app.path, jsconfig.path]);
+        }
+
+        it("configured projects discover from node_modules", () => {
+            testConfiguredProjectNodeModules();
+        });
+
+        it("configured projects discover from node_modules - empty types", () => {
+            testConfiguredProjectNodeModules({ jsconfigContent: { compilerOptions: { types: [] } }, jQueryInProject: false });
+        });
+
+        it("configured projects discover from node_modules - explicit types", () => {
+            testConfiguredProjectNodeModules({ jsconfigContent: { compilerOptions: { types: ["jquery"] } }, jQueryInProject: true });
+        });
+
+        it("configured projects discover from node_modules - empty types but has import", () => {
+            testConfiguredProjectNodeModules({ jsconfigContent: { compilerOptions: { types: [] } }, appJsContent: `import "jquery";`, jQueryInProject: true });
         });
 
         it("configured projects discover from bower_components", () => {
