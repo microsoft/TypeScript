@@ -9915,9 +9915,9 @@ namespace ts {
                     getTypeOfSymbol(symbol);
             }
             if (symbol.flags & SymbolFlags.Accessor) {
-                return checkFlags & CheckFlags.Instantiated ?
-                    getWriteTypeOfInstantiatedSymbol(symbol) :
-                    getWriteTypeOfAccessors(symbol);
+                return checkFlags & CheckFlags.DeferredType ? getWriteTypeOfSymbolWithDeferredType(symbol) || getTypeOfSymbolWithDeferredType(symbol)
+                    : checkFlags & CheckFlags.Instantiated ? getWriteTypeOfInstantiatedSymbol(symbol)
+                    : getWriteTypeOfAccessors(symbol);
             }
             return getTypeOfSymbol(symbol);
         }
@@ -12449,11 +12449,16 @@ namespace ts {
                 propTypes.push(type);
             }
             addRange(propTypes, indexTypes);
-            const oopsAllAccessors =
-                (props.every(p => p.flags & SymbolFlags.GetAccessor) ? SymbolFlags.GetAccessor : 0)
-                | (props.every(p => p.flags & SymbolFlags.SetAccessor) ? SymbolFlags.SetAccessor : 0)
-                | (props.every(p => !(p.flags & SymbolFlags.Accessor)) ? SymbolFlags.Property : 0);
-            const result = createSymbol(oopsAllAccessors | optionalFlag, name, syntheticFlag | checkFlags);
+            let propertyFlag: number = 0;
+            if (props.every(p => p.flags & SymbolFlags.Accessor)) { // TODO: Move this into the `const prop of props` loop
+                const f = isUnion ? props.every : props.some;
+                propertyFlag = (f.call(props, (p : Symbol) => p.flags & SymbolFlags.GetAccessor) ? SymbolFlags.GetAccessor : 0)
+                    | (f.call(props, (p : Symbol) => p.flags & SymbolFlags.SetAccessor) ? SymbolFlags.SetAccessor : 0);
+            }
+            if (propertyFlag === 0) {
+                propertyFlag = SymbolFlags.Property;
+            }
+            const result = createSymbol(propertyFlag | optionalFlag, name, syntheticFlag | checkFlags);
             result.containingType = containingType;
             if (!hasNonUniformValueDeclaration && firstValueDeclaration) {
                 result.valueDeclaration = firstValueDeclaration;
@@ -39954,11 +39959,11 @@ namespace ts {
                     if (basePropertyFlags && derivedPropertyFlags) {
                         // property/accessor is overridden with property/accessor
                         if ((getCheckFlags(base) & CheckFlags.Synthetic
-                            ? base.declarations?.some(d => isPropertyAbstract(d, baseDeclarationFlags))
-                            : base.declarations?.every(d => isPropertyAbstract(d, baseDeclarationFlags)))
+                            ? base.declarations?.some(d => isPropertyAbstractOrInterface(d, baseDeclarationFlags))
+                            : base.declarations?.every(d => isPropertyAbstractOrInterface(d, baseDeclarationFlags)))
                             || getCheckFlags(base) & CheckFlags.Mapped
                             || derived.valueDeclaration && isBinaryExpression(derived.valueDeclaration)) {
-                            // when the base property is abstract, base/derived flags don't need to match
+                            // when the base property is abstract or from an interface, base/derived flags don't need to match
                             // for intersection properties, this must be true of *any* of the declarations, for others it must be true of *all*
                             // same when the derived property is from an assignment
                             continue;
@@ -40017,7 +40022,7 @@ namespace ts {
             }
         }
 
-        function isPropertyAbstract(declaration: Declaration, baseDeclarationFlags: ModifierFlags) {
+        function isPropertyAbstractOrInterface(declaration: Declaration, baseDeclarationFlags: ModifierFlags) {
             return baseDeclarationFlags & ModifierFlags.Abstract && (!isPropertyDeclaration(declaration) || !declaration.initializer)
                 || isInterfaceDeclaration(declaration.parent);
         }
