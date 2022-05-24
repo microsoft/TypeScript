@@ -12420,6 +12420,8 @@ namespace ts {
             let writeTypes: Type[] | undefined;
             let firstValueDeclaration: Declaration | undefined;
             let hasNonUniformValueDeclaration = false;
+            let propertyFlag = 0;
+            let isAllAccessors = true;
             for (const prop of props) {
                 if (!firstValueDeclaration) {
                     firstValueDeclaration = prop.valueDeclaration;
@@ -12447,14 +12449,16 @@ namespace ts {
                     checkFlags |= CheckFlags.HasNeverType;
                 }
                 propTypes.push(type);
+                if (isAllAccessors && prop.flags & SymbolFlags.Accessor) {
+                    propertyFlag = isUnion ? propertyFlag & (prop.flags & SymbolFlags.Accessor)
+                        : propertyFlag | (prop.flags & SymbolFlags.Accessor);
+                }
+                else {
+                    isAllAccessors = false;
+                    propertyFlag = 0;
+                }
             }
             addRange(propTypes, indexTypes);
-            let propertyFlag: number = 0;
-            if (props.every(p => p.flags & SymbolFlags.Accessor)) { // TODO: Move this into the `const prop of props` loop
-                const f = isUnion ? props.every : props.some;
-                propertyFlag = (f.call(props, (p : Symbol) => p.flags & SymbolFlags.GetAccessor) ? SymbolFlags.GetAccessor : 0)
-                    | (f.call(props, (p : Symbol) => p.flags & SymbolFlags.SetAccessor) ? SymbolFlags.SetAccessor : 0);
-            }
             if (propertyFlag === 0) {
                 propertyFlag = SymbolFlags.Property;
             }
