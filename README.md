@@ -95,7 +95,7 @@ gulp help              # List the above commands.
 ## Usage
 
 ```bash
-node built/local/tsc.js hello.ts
+node <repo-root>/built/local/tsc.js hello.ts
 ```
 
 
