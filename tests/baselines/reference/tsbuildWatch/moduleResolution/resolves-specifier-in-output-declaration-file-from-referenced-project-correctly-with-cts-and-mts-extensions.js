@@ -624,11 +624,11 @@ export type { TheNum } from './const.cjs';
 
 Output::
 >> Screen clear
-[[90m12:01:38 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:39 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:39 AM[0m] Project 'packages/pkg2/tsconfig.json' is out of date because oldest output 'packages/pkg2/build/const.cjs' is older than newest input 'packages/pkg2/index.cts'
+[[90m12:01:40 AM[0m] Project 'packages/pkg2/tsconfig.json' is out of date because oldest output 'packages/pkg2/build/const.cjs' is older than newest input 'packages/pkg2/index.cts'
 
-[[90m12:01:40 AM[0m] Building project '/user/username/projects/myproject/packages/pkg2/tsconfig.json'...
+[[90m12:01:41 AM[0m] Building project '/user/username/projects/myproject/packages/pkg2/tsconfig.json'...
 
 ======== Resolving module './const.cjs' from '/user/username/projects/myproject/packages/pkg2/index.cts'. ========
 Module resolution kind is not specified, using 'Node16'.
@@ -642,7 +642,7 @@ File '/user/username/projects/myproject/packages/pkg2/const.cts' exist - use it 
 File '/a/lib/package.json' does not exist.
 File '/a/package.json' does not exist.
 File '/package.json' does not exist.
-[[90m12:01:49 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/packages/pkg2/tsconfig.json'...
+[[90m12:01:50 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/packages/pkg2/tsconfig.json'...
 
 
 

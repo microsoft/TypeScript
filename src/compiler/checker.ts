@@ -15802,7 +15802,7 @@ namespace ts {
         function substituteIndexedMappedType(objectType: MappedType, index: Type) {
             const mapper = createTypeMapper([getTypeParameterFromMappedType(objectType)], [index]);
             const templateMapper = combineTypeMappers(objectType.mapper, mapper);
-            return instantiateType(getTemplateTypeFromMappedType(objectType), templateMapper);
+            return instantiateType(getTemplateTypeFromMappedType(objectType.target as MappedType || objectType), templateMapper);
         }
 
         function getIndexedAccessType(objectType: Type, indexType: Type, accessFlags = AccessFlags.None, accessNode?: ElementAccessExpression | IndexedAccessTypeNode | PropertyName | BindingName | SyntheticExpression, aliasSymbol?: Symbol, aliasTypeArguments?: readonly Type[]): Type {
@@ -38005,7 +38005,7 @@ namespace ts {
                     const childSymbol = getSymbolAtLocation(childNode);
                     if (childSymbol && childSymbol === testedSymbol) {
                         // If the test was a simple identifier, the above check is sufficient
-                        if (isIdentifier(expr)) {
+                        if (isIdentifier(expr) || isIdentifier(testedNode) && isBinaryExpression(testedNode.parent)) {
                             return true;
                         }
                         // Otherwise we need to ensure the symbol is called on the same target
