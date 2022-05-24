@@ -1,0 +1,9 @@
+=== tests/cases/compiler/conditionalTypeInferFromNestedSameShapeTuple.ts ===
+// repro #48524
+
+type Magic<X> = X extends [[infer Y, ...infer _], ...infer __] ? Y : never;
+>Magic : Magic<X>
+
+type R = Magic<[[number]]>
+>R : number
+
