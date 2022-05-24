@@ -263,20 +263,6 @@ namespace ts {
         VoidIsNonOptional = 1 << 1,
     }
 
-    const enum TemplateTypePlaceholderPriority {
-        Never, // lowest
-        KeywordLiterals, // true | false | null | undefined
-        Boolean,
-        BigIntLiterals,
-        BigInt,
-        NumberLiterals,
-        Enums,
-        Number,
-        StringLiterals,
-        TemplateLiterals,
-        String, // highest
-    }
-
     const enum IntrinsicTypeKind {
         Uppercase,
         Lowercase,
@@ -22743,23 +22729,6 @@ namespace ts {
                 }
             }
 
-            function getTemplateTypePlaceholderPriority(type: Type) {
-                return type.flags & TypeFlags.String ? TemplateTypePlaceholderPriority.String :
-                    type.flags & TypeFlags.TemplateLiteral ? TemplateTypePlaceholderPriority.TemplateLiterals :
-                    type.flags & TypeFlags.StringMapping ? TemplateTypePlaceholderPriority.StringLiterals :
-                    type.flags & TypeFlags.StringLiteral ? TemplateTypePlaceholderPriority.StringLiterals :
-                    type.flags & TypeFlags.Number ? TemplateTypePlaceholderPriority.Number :
-                    type.flags & TypeFlags.Enum ? TemplateTypePlaceholderPriority.Enums :
-                    type.flags & TypeFlags.NumberLiteral ? TemplateTypePlaceholderPriority.NumberLiterals :
-                    type.flags & TypeFlags.BigInt ? TemplateTypePlaceholderPriority.BigInt :
-                    type.flags & TypeFlags.BigIntLiteral ? TemplateTypePlaceholderPriority.BigIntLiterals :
-                    type.flags & TypeFlags.Boolean ? TemplateTypePlaceholderPriority.Boolean :
-                    type.flags & TypeFlags.BooleanLiteral ? TemplateTypePlaceholderPriority.KeywordLiterals :
-                    type.flags & TypeFlags.Undefined ? TemplateTypePlaceholderPriority.KeywordLiterals :
-                    type.flags & TypeFlags.Null ? TemplateTypePlaceholderPriority.KeywordLiterals :
-                    TemplateTypePlaceholderPriority.Never;
-            }
-
             function inferToTemplateLiteralType(source: Type, target: TemplateLiteralType) {
                 const matches = inferTypesFromTemplateLiteralType(source, target);
                 const types = target.types;
@@ -22797,19 +22766,22 @@ namespace ts {
                                     }
 
                                     // for each type in the constraint, find the highest priority matching type
-                                    const matchingType = reduceType(constraint, (matchingType, t) =>
-                                        !(t.flags & allTypeFlags) || getTemplateTypePlaceholderPriority(t) <= getTemplateTypePlaceholderPriority(matchingType) ? matchingType :
-                                        t.flags & TypeFlags.String ? source :
-                                        t.flags & TypeFlags.TemplateLiteral && isTypeMatchedByTemplateLiteralType(source, t as TemplateLiteralType) ? source :
-                                        t.flags & TypeFlags.StringMapping && str === applyStringMapping(t.symbol, str) ? source :
-                                        t.flags & (TypeFlags.Number | TypeFlags.Enum) ? getNumberLiteralType(+str) : // if `str` was not a valid number, TypeFlags.Number and TypeFlags.Enum would have been excluded above.
-                                        t.flags & TypeFlags.BigInt ? parseBigIntLiteralType(str) : // if `str` was not a valid bigint, TypeFlags.BigInt would have been excluded above.
-                                        t.flags & TypeFlags.Boolean ? str === "true" ? trueType : falseType :
-                                        t.flags & TypeFlags.StringLiteral && (t as StringLiteralType).value === str ? t :
-                                        t.flags & TypeFlags.NumberLiteral && (t as NumberLiteralType).value === +str ? t :
-                                        t.flags & TypeFlags.BigIntLiteral && pseudoBigIntToString((t as BigIntLiteralType).value) === str ? t :
-                                        t.flags & (TypeFlags.BooleanLiteral | TypeFlags.Nullable) && (t as IntrinsicType).intrinsicName === str ? t :
-                                        matchingType,
+                                    const matchingType = reduceType(constraint, (left, right) =>
+                                        !(right.flags & allTypeFlags) ? left :
+                                        left.flags & TypeFlags.String ? left : right.flags & TypeFlags.String ? source :
+                                        left.flags & TypeFlags.TemplateLiteral ? left : right.flags & TypeFlags.TemplateLiteral && isTypeMatchedByTemplateLiteralType(source, right as TemplateLiteralType) ? source :
+                                        left.flags & TypeFlags.StringMapping ? left : right.flags & TypeFlags.StringMapping && str === applyStringMapping(right.symbol, str) ? source :
+                                        left.flags & TypeFlags.StringLiteral ? left : right.flags & TypeFlags.StringLiteral && (right as StringLiteralType).value === str ? right :
+                                        left.flags & TypeFlags.Number ? left : right.flags & TypeFlags.Number ? getNumberLiteralType(+str) :
+                                        left.flags & TypeFlags.Enum ? left : right.flags & TypeFlags.Enum ? getNumberLiteralType(+str) :
+                                        left.flags & TypeFlags.NumberLiteral ? left : right.flags & TypeFlags.NumberLiteral && (right as NumberLiteralType).value === +str ? right :
+                                        left.flags & TypeFlags.BigInt ? left : right.flags & TypeFlags.BigInt ? parseBigIntLiteralType(str) :
+                                        left.flags & TypeFlags.BigIntLiteral ? left : right.flags & TypeFlags.BigIntLiteral && pseudoBigIntToString((right as BigIntLiteralType).value) === str ? right :
+                                        left.flags & TypeFlags.Boolean ? left : right.flags & TypeFlags.Boolean ? str === "true" ? trueType : falseType :
+                                        left.flags & TypeFlags.BooleanLiteral ? left : right.flags & TypeFlags.BooleanLiteral && (right as IntrinsicType).intrinsicName === str ? right :
+                                        left.flags & TypeFlags.Undefined ? left : right.flags & TypeFlags.Undefined && (right as IntrinsicType).intrinsicName === str ? right :
+                                        left.flags & TypeFlags.Null ? left : right.flags & TypeFlags.Null && (right as IntrinsicType).intrinsicName === str ? right :
+                                        left,
                                         neverType as Type);
 
                                     if (!(matchingType.flags & TypeFlags.Never)) {
