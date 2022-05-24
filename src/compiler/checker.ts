@@ -22749,7 +22749,8 @@ namespace ts {
                             const inferenceContext = getInferenceInfoForType(target);
                             const constraint = inferenceContext ? getBaseConstraintOfType(inferenceContext.typeParameter) : undefined;
                             if (constraint && !isTypeAny(constraint)) {
-                                let allTypeFlags = reduceType(constraint, (flags, t) => flags | t.flags, 0 as TypeFlags);
+                                const constraintTypes = constraint.flags & TypeFlags.Union ? (constraint as UnionType).types : [constraint];
+                                let allTypeFlags: TypeFlags = reduceLeft(constraintTypes, (flags, t) => flags | t.flags, 0 as TypeFlags);
 
                                 // If the constraint contains `string`, we don't need to look for a more preferred type
                                 if (!(allTypeFlags & TypeFlags.String)) {
@@ -22766,7 +22767,7 @@ namespace ts {
                                     }
 
                                     // for each type in the constraint, find the highest priority matching type
-                                    const matchingType = reduceType(constraint, (left, right) =>
+                                    const matchingType = reduceLeft(constraintTypes, (left, right) =>
                                         !(right.flags & allTypeFlags) ? left :
                                         left.flags & TypeFlags.String ? left : right.flags & TypeFlags.String ? source :
                                         left.flags & TypeFlags.TemplateLiteral ? left : right.flags & TypeFlags.TemplateLiteral && isTypeMatchedByTemplateLiteralType(source, right as TemplateLiteralType) ? source :
@@ -22777,7 +22778,7 @@ namespace ts {
                                         left.flags & TypeFlags.NumberLiteral ? left : right.flags & TypeFlags.NumberLiteral && (right as NumberLiteralType).value === +str ? right :
                                         left.flags & TypeFlags.BigInt ? left : right.flags & TypeFlags.BigInt ? parseBigIntLiteralType(str) :
                                         left.flags & TypeFlags.BigIntLiteral ? left : right.flags & TypeFlags.BigIntLiteral && pseudoBigIntToString((right as BigIntLiteralType).value) === str ? right :
-                                        left.flags & TypeFlags.Boolean ? left : right.flags & TypeFlags.Boolean ? str === "true" ? trueType : falseType :
+                                        left.flags & TypeFlags.Boolean ? left : right.flags & TypeFlags.Boolean ? str === "true" ? trueType : str === "false" ? falseType : booleanType :
                                         left.flags & TypeFlags.BooleanLiteral ? left : right.flags & TypeFlags.BooleanLiteral && (right as IntrinsicType).intrinsicName === str ? right :
                                         left.flags & TypeFlags.Undefined ? left : right.flags & TypeFlags.Undefined && (right as IntrinsicType).intrinsicName === str ? right :
                                         left.flags & TypeFlags.Null ? left : right.flags & TypeFlags.Null && (right as IntrinsicType).intrinsicName === str ? right :
@@ -23798,12 +23799,6 @@ namespace ts {
 
         function forEachType<T>(type: Type, f: (t: Type) => T | undefined): T | undefined {
             return type.flags & TypeFlags.Union ? forEach((type as UnionType).types, f) : f(type);
-        }
-
-        function reduceType<T>(type: Type, f: (memo: T, t: Type) => T | undefined, initial: T): T;
-        function reduceType<T>(type: Type, f: (memo: T | undefined, t: Type) => T | undefined): T | undefined;
-        function reduceType<T>(type: Type, f: (memo: T | undefined, t: Type) => T | undefined, initial?: T | undefined): T | undefined {
-            return type.flags & TypeFlags.Union ? reduceLeft((type as UnionType).types, f, initial) : f(initial, type);
         }
 
         function someType(type: Type, f: (t: Type) => boolean): boolean {
