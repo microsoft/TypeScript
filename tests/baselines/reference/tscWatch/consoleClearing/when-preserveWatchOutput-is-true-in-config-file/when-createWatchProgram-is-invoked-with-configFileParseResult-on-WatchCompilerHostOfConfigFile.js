@@ -70,10 +70,8 @@ Input::
 
 
 Output::
-sysLog:: watchPresentFileSystemEntry::  1 change:: f.ts
 [[90m12:00:19 AM[0m] File change detected. Starting incremental compilation...
 
-sysLog:: watchPresentFileSystemEntry::  1 change:: f.js
 [[90m12:00:23 AM[0m] Found 0 errors. Watching for file changes.
 
 

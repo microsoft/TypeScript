@@ -355,21 +355,11 @@ export interface Coords {
 
 
 Output::
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: a.ts
-
 >> Screen clear
 [[90m12:00:58 AM[0m] File change detected. Starting incremental compilation...
 
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: c.d.ts
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: d.d.ts
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: a.js
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: a.d.ts
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: b.js
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: b.d.ts
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: tsconfig.tsbuildinfo
 [[90m12:01:20 AM[0m] Found 0 errors. Watching for file changes.
 
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: tsconfig.tsbuildinfo.readable.baseline.txt
 
 
 Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts","/user/username/projects/myproject/c.ts","/user/username/projects/myproject/d.ts","/user/username/projects/myproject/e.ts"]
@@ -549,18 +539,9 @@ export interface Coords {
 
 
 Output::
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: a.ts
-
 >> Screen clear
 [[90m12:01:27 AM[0m] File change detected. Starting incremental compilation...
 
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: c.d.ts
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: d.d.ts
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: a.js
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: a.d.ts
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: b.js
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: b.d.ts
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: tsconfig.tsbuildinfo
 [96mc.ts[0m:[93m6[0m:[93m13[0m - [91merror[0m[90m TS2322: [0mType '{ x: number; y: number; }' is not assignable to type 'Coords'.
   Object literal may only specify known properties, and 'x' does not exist in type 'Coords'.
 
@@ -579,7 +560,6 @@ sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 chang
 
 [[90m12:01:49 AM[0m] Found 2 errors. Watching for file changes.
 
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: tsconfig.tsbuildinfo.readable.baseline.txt
 
 
 Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts","/user/username/projects/myproject/c.ts","/user/username/projects/myproject/d.ts","/user/username/projects/myproject/e.ts"]
@@ -804,21 +784,11 @@ export interface Coords {
 
 
 Output::
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: a.ts
-
 >> Screen clear
 [[90m12:01:56 AM[0m] File change detected. Starting incremental compilation...
 
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: c.d.ts
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: d.d.ts
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: a.js
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: a.d.ts
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: b.js
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: b.d.ts
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: tsconfig.tsbuildinfo
 [[90m12:02:18 AM[0m] Found 0 errors. Watching for file changes.
 
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: tsconfig.tsbuildinfo.readable.baseline.txt
 
 
 Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts","/user/username/projects/myproject/c.ts","/user/username/projects/myproject/d.ts","/user/username/projects/myproject/e.ts"]

@@ -78,8 +78,6 @@ Input::
 
 
 Output::
-sysLog:: watchPresentFileSystemEntry:: /a/b 1 change:: tsconfig.json
-
 >> Screen clear
 [[90m12:00:22 AM[0m] File change detected. Starting incremental compilation...
 
@@ -133,8 +131,6 @@ Input::
 
 
 Output::
-sysLog:: watchPresentFileSystemEntry:: /a/b 1 change:: tsconfig.json
-
 >> Screen clear
 [[90m12:00:27 AM[0m] File change detected. Starting incremental compilation...
 

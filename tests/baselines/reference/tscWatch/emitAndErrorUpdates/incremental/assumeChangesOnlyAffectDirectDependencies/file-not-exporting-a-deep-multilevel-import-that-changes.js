@@ -328,20 +328,11 @@ export interface Coords {
 
 
 Output::
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: a.ts
-
 >> Screen clear
 [[90m12:00:48 AM[0m] File change detected. Starting incremental compilation...
 
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: a.js
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: b.js
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: c.js
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: d.js
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: e.js
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: tsconfig.tsbuildinfo
 [[90m12:01:07 AM[0m] Found 0 errors. Watching for file changes.
 
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: tsconfig.tsbuildinfo.readable.baseline.txt
 
 
 Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts","/user/username/projects/myproject/c.ts","/user/username/projects/myproject/d.ts","/user/username/projects/myproject/e.ts"]
@@ -512,17 +503,11 @@ export interface Coords {
 
 
 Output::
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: a.ts
-
 >> Screen clear
 [[90m12:01:14 AM[0m] File change detected. Starting incremental compilation...
 
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: a.js
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: b.js
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: tsconfig.tsbuildinfo
 [[90m12:01:24 AM[0m] Found 0 errors. Watching for file changes.
 
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: tsconfig.tsbuildinfo.readable.baseline.txt
 
 
 Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts","/user/username/projects/myproject/c.ts","/user/username/projects/myproject/d.ts","/user/username/projects/myproject/e.ts"]
@@ -684,17 +669,11 @@ export interface Coords {
 
 
 Output::
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: a.ts
-
 >> Screen clear
 [[90m12:01:31 AM[0m] File change detected. Starting incremental compilation...
 
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: a.js
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: b.js
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: tsconfig.tsbuildinfo
 [[90m12:01:41 AM[0m] Found 0 errors. Watching for file changes.
 
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: tsconfig.tsbuildinfo.readable.baseline.txt
 
 
 Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts","/user/username/projects/myproject/c.ts","/user/username/projects/myproject/d.ts","/user/username/projects/myproject/e.ts"]

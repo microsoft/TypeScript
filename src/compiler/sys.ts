@@ -1120,15 +1120,10 @@ namespace ts {
                         recursive,
                         inodeWatching ?
                             callbackChangingToMissingFileSystemEntry :
-                            (eventName, relativeFileName) => {
-
-                                sysLog(`sysLog:: watchPresentFileSystemEntry:: ${fileOrDirectory} ${entryKind} ${eventName}:: ${relativeFileName}`);
-                                callback(eventName, relativeFileName);
-                            }
+                            callback
                     );
                     // Watch the missing file or directory or error
                     presentWatcher.on("error", () => {
-                        sysLog(`sysLog:: watchPresentFileSystemEntry:: on Error ${fileOrDirectory} ${entryKind} rename, ""`);
                         callback("rename", "");
                         updateWatcher(watchMissingFileSystemEntry);
                     });
@@ -1145,7 +1140,6 @@ namespace ts {
             }
 
             function callbackChangingToMissingFileSystemEntry(event: "rename" | "change", relativeName: string | undefined) {
-                sysLog(`sysLog:: callbackChangingToMissingFileSystemEntry:: ${fileOrDirectory} ${entryKind} ${event}:: ${relativeName} ${inodeWatching} ${lastDirectoryPart} ${lastDirectoryPartWithDirectorySeparator}`);
                 callback(event, relativeName);
                 // because relativeName is not guaranteed to be correct we need to check on each rename with few combinations
                 // Eg on ubuntu while watching app/node_modules the relativeName is "node_modules" which is neither relative nor full path
@@ -1169,10 +1163,7 @@ namespace ts {
             function watchPresentFileSystemEntryWithFsWatchFile(): FileWatcher {
                 return watchFile(
                     fileOrDirectory,
-                    createFileWatcherCallback((eventName, relativeFileName) => {
-                        sysLog(`sysLog:: watchPresentFileSystemEntryWithFsWatchFile:: ${fileOrDirectory} ${entryKind} ${eventName}:: ${relativeFileName}`);
-                        callback(eventName, relativeFileName);
-                    }),
+                    createFileWatcherCallback(callback),
                     fallbackPollingInterval,
                     fallbackOptions
                 );
@@ -1186,9 +1177,7 @@ namespace ts {
                 return watchFile(
                     fileOrDirectory,
                     (_fileName, eventKind) => {
-                        sysLog(`sysLog:: watchMissingFileSystemEntry:: ${fileOrDirectory} ${entryKind} ${_fileName}:: ${eventKind}`);
                         if (eventKind === FileWatcherEventKind.Created && fileSystemEntryExists(fileOrDirectory, entryKind)) {
-                            sysLog(`sysLog:: watchMissingFileSystemEntry::  Callback :: rename, "" and will update the watcher`);
                             callback("rename", "");
                             // Call the callback for current file or directory
                             // For now it could be callback for the inner directory creation,

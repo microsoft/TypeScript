@@ -112,8 +112,6 @@ module1("hello");
 
 
 Output::
-sysLog:: watchPresentFileSystemEntry:: /a/b/projects/myproject/src 1 change:: file1.ts
-
 >> Screen clear
 [[90m12:00:40 AM[0m] File change detected. Starting incremental compilation...
 

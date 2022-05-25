@@ -62,8 +62,6 @@ Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myprojec
 FileWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules/reala/package.json 2000 undefined package.json file
 DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules/@types 1 undefined Type roots
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules/@types 1 undefined Type roots
-sysLog:: watchPresentFileSystemEntry:: /home/user/projects/myproject/src 1 rename:: file.js
-sysLog:: watchPresentFileSystemEntry:: /home/user/projects/myproject/src 1 change:: 
 [[90m12:00:48 AM[0m] Found 0 errors. Watching for file changes.
 
 DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject 1 undefined Wild card directory

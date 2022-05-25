@@ -216,8 +216,6 @@ Input::
 
 
 Output::
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/demo/core 1 change:: tsconfig.json
-
 >> Screen clear
 [[90m12:00:52 AM[0m] File change detected. Starting incremental compilation...
 

@@ -221,16 +221,6 @@ Output::
 >> Screen clear
 [[90m12:00:57 AM[0m] File change detected. Starting incremental compilation...
 
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/sample1/logic 1 rename:: index.js.map
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/sample1/logic 1 change:: 
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/sample1/logic 1 rename:: index.js
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/sample1/logic 1 change:: 
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/sample1/logic 1 rename:: index.d.ts
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/sample1/logic 1 change:: 
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/sample1/logic 1 rename:: tsconfig.tsbuildinfo
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/sample1/logic 1 change:: 
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/sample1/logic 1 rename:: tsconfig.tsbuildinfo.readable.baseline.txt
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/sample1/logic 1 change:: 
 
 
 Program root files: ["/user/username/projects/sample1/logic/index.ts"]

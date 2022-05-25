@@ -214,17 +214,9 @@ export interface Coords {
 
 
 Output::
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: a.ts
-
 >> Screen clear
 [[90m12:00:54 AM[0m] File change detected. Starting incremental compilation...
 
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: b.d.ts
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: c.d.ts
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: d.d.ts
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: e.d.ts
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: a.js
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: a.d.ts
 [[90m12:01:13 AM[0m] Found 0 errors. Watching for file changes.
 
 
@@ -312,17 +304,9 @@ export interface Coords {
 
 
 Output::
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: a.ts
-
 >> Screen clear
 [[90m12:01:17 AM[0m] File change detected. Starting incremental compilation...
 
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: b.d.ts
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: c.d.ts
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: d.d.ts
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: e.d.ts
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: a.js
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: a.d.ts
 [96mc.ts[0m:[93m6[0m:[93m13[0m - [91merror[0m[90m TS2322: [0mType '{ x: number; y: number; }' is not assignable to type 'Coords'.
   Object literal may only specify known properties, and 'x' does not exist in type 'Coords'.
 
@@ -426,17 +410,9 @@ export interface Coords {
 
 
 Output::
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: a.ts
-
 >> Screen clear
 [[90m12:01:40 AM[0m] File change detected. Starting incremental compilation...
 
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: b.d.ts
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: c.d.ts
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: d.d.ts
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: e.d.ts
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: a.js
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: a.d.ts
 [[90m12:01:59 AM[0m] Found 0 errors. Watching for file changes.
 
 

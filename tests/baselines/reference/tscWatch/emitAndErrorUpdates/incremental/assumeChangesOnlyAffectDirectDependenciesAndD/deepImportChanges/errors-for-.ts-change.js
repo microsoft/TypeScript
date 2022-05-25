@@ -218,19 +218,11 @@ export class C
 
 
 Output::
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: c.ts
-
 >> Screen clear
 [[90m12:00:46 AM[0m] File change detected. Starting incremental compilation...
 
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: c.js
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: c.d.ts
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: b.js
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: b.d.ts
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: tsconfig.tsbuildinfo
 [[90m12:01:02 AM[0m] Found 0 errors. Watching for file changes.
 
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: tsconfig.tsbuildinfo.readable.baseline.txt
 
 
 Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts","/user/username/projects/myproject/c.ts"]
@@ -372,19 +364,11 @@ export class C
 
 
 Output::
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: c.ts
-
 >> Screen clear
 [[90m12:01:09 AM[0m] File change detected. Starting incremental compilation...
 
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: c.js
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: c.d.ts
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: b.js
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: b.d.ts
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: tsconfig.tsbuildinfo
 [[90m12:01:25 AM[0m] Found 0 errors. Watching for file changes.
 
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: tsconfig.tsbuildinfo.readable.baseline.txt
 
 
 Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts","/user/username/projects/myproject/c.ts"]
@@ -526,19 +510,11 @@ export class C
 
 
 Output::
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: c.ts
-
 >> Screen clear
 [[90m12:01:32 AM[0m] File change detected. Starting incremental compilation...
 
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: c.js
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: c.d.ts
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: b.js
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: b.d.ts
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: tsconfig.tsbuildinfo
 [[90m12:01:48 AM[0m] Found 0 errors. Watching for file changes.
 
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: tsconfig.tsbuildinfo.readable.baseline.txt
 
 
 Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts","/user/username/projects/myproject/c.ts"]

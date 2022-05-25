@@ -36,8 +36,6 @@ Output::
 >> Screen clear
 [[90m12:00:37 AM[0m] Starting compilation in watch mode...
 
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/src 1 rename:: main.js
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/src 1 change:: 
 [[90m12:00:40 AM[0m] Found 0 errors. Watching for file changes.
 
 
@@ -101,9 +99,6 @@ Input::
 //// [/user/username/projects/myproject/node_modules/bar/fooBar.d.ts] deleted
 
 Output::
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 rename:: node_modules/bar/fooBar.d.ts
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: node_modules/bar
-
 
 WatchedFiles::
 /user/username/projects/myproject/tsconfig.json:

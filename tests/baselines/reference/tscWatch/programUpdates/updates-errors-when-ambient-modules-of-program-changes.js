@@ -77,15 +77,9 @@ declare module 'a' {
 
 
 Output::
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 rename:: b.ts
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: 
-
 >> Screen clear
 [[90m12:00:27 AM[0m] File change detected. Starting incremental compilation...
 
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: a.js
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 rename:: b.js
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: 
 [96ma.ts[0m:[93m2[0m:[93m8[0m - [91merror[0m[90m TS2300: [0mDuplicate identifier 'foo'.
 
 [7m2[0m   type foo = number;
@@ -159,13 +153,9 @@ Input::
 //// [/user/username/projects/myproject/b.ts] deleted
 
 Output::
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 rename:: b.ts
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: 
-
 >> Screen clear
 [[90m12:00:35 AM[0m] File change detected. Starting incremental compilation...
 
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: a.js
 [[90m12:00:39 AM[0m] Found 0 errors. Watching for file changes.
 
 

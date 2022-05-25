@@ -153,8 +153,6 @@ Input::
 
 
 Output::
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/packages/pkg2 1 change:: package.json
-
 >> Screen clear
 [[90m12:00:53 AM[0m] File change detected. Starting incremental compilation...
 
@@ -182,7 +180,6 @@ File '/user/username/projects/myproject/node_modules/pkg2/build/other.tsx' does 
 File '/user/username/projects/myproject/node_modules/pkg2/build/other.d.ts' exist - use it as a name resolution result.
 Resolving real path for '/user/username/projects/myproject/node_modules/pkg2/build/other.d.ts', result '/user/username/projects/myproject/packages/pkg2/build/other.d.ts'.
 ======== Module name 'pkg2' was successfully resolved to '/user/username/projects/myproject/packages/pkg2/build/other.d.ts' with Package ID 'pkg2/build/other.d.ts@1.0.0'. ========
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/packages/pkg1 1 change:: build/index.js
 [96mpackages/pkg1/index.ts[0m:[93m1[0m:[93m15[0m - [91merror[0m[90m TS2305: [0mModule '"pkg2"' has no exported member 'TheNum'.
 
 [7m1[0m import type { TheNum } from 'pkg2'
@@ -288,7 +285,6 @@ File '/user/username/projects/myproject/packages/pkg2/build/const.ts' does not e
 File '/user/username/projects/myproject/packages/pkg2/build/const.tsx' does not exist.
 File '/user/username/projects/myproject/packages/pkg2/build/const.d.ts' exist - use it as a name resolution result.
 ======== Module name './const.js' was successfully resolved to '/user/username/projects/myproject/packages/pkg2/build/const.d.ts'. ========
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/packages/pkg1 1 change:: build/index.js
 [[90m12:01:05 AM[0m] Found 0 errors. Watching for file changes.
 
 

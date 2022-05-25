@@ -90,7 +90,6 @@ Output::
 >> Screen clear
 [[90m12:00:25 AM[0m] File change detected. Starting incremental compilation...
 
-sysLog:: watchPresentFileSystemEntry:: /a 1 change:: b/file1.js
 [96ma/b/file1.ts[0m:[93m1[0m:[93m20[0m - [91merror[0m[90m TS2307: [0mCannot find module './moduleFile' or its corresponding type declarations.
 
 [7m1[0m import * as T from "./moduleFile"; T.bar();
@@ -138,11 +137,6 @@ export function bar() { };
 //// [/a/b/moduleFile1.ts] deleted
 
 Output::
-sysLog:: watchPresentFileSystemEntry:: /a 1 rename:: b/moduleFile1.ts
-sysLog:: watchPresentFileSystemEntry:: /a 1 change:: b
-sysLog:: watchPresentFileSystemEntry:: /a 1 rename:: b/moduleFile.ts
-sysLog:: watchPresentFileSystemEntry:: /a 1 change:: b
-
 >> Screen clear
 [[90m12:00:33 AM[0m] File change detected. Starting incremental compilation...
 

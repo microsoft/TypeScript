@@ -264,8 +264,6 @@ export interface Session {
 
 
 Output::
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/reexport/src/pure 1 change:: session.ts
-
 >> Screen clear
 [[90m12:01:07 AM[0m] File change detected. Starting incremental compilation...
 
@@ -431,8 +429,6 @@ export interface Session {
 
 
 Output::
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/reexport/src/pure 1 change:: session.ts
-
 >> Screen clear
 [[90m12:01:34 AM[0m] File change detected. Starting incremental compilation...
 

@@ -482,8 +482,6 @@ let y: string = 10;
 
 
 Output::
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/sample1/logic 1 change:: index.ts
-
 >> Screen clear
 [[90m12:01:24 AM[0m] File change detected. Starting incremental compilation...
 
@@ -492,8 +490,6 @@ sysLog:: watchPresentFileSystemEntry:: /user/username/projects/sample1/logic 1 c
 [7m8[0m let y: string = 10;
 [7m [0m [91m    ~[0m
 
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/sample1/logic 1 change:: tsconfig.tsbuildinfo
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/sample1/logic 1 change:: tsconfig.tsbuildinfo.readable.baseline.txt
 [[90m12:01:31 AM[0m] Found 1 error. Watching for file changes.
 
 
@@ -638,8 +634,6 @@ let x: string = 10;
 
 
 Output::
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/sample1/core 1 change:: index.ts
-
 >> Screen clear
 [[90m12:01:35 AM[0m] File change detected. Starting incremental compilation...
 
@@ -648,8 +642,6 @@ sysLog:: watchPresentFileSystemEntry:: /user/username/projects/sample1/core 1 ch
 [7m5[0m let x: string = 10;
 [7m [0m [91m    ~[0m
 
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/sample1/core 1 change:: tsconfig.tsbuildinfo
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/sample1/core 1 change:: tsconfig.tsbuildinfo.readable.baseline.txt
 [96msample1/logic/index.ts[0m:[93m8[0m:[93m5[0m - [91merror[0m[90m TS2322: [0mType 'number' is not assignable to type 'string'.
 
 [7m8[0m let y: string = 10;

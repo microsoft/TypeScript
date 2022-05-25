@@ -82,8 +82,6 @@ export class myClass2 { }
 
 
 Output::
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/solution/app 1 change:: fileWithoutError.ts
-
 >> Screen clear
 [[90m12:00:30 AM[0m] File change detected. Starting incremental compilation...
 

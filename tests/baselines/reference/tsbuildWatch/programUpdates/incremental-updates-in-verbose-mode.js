@@ -499,8 +499,6 @@ function someFn() { }
 
 
 Output::
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/sample1/logic 1 change:: index.ts
-
 >> Screen clear
 [[90m12:01:31 AM[0m] File change detected. Starting incremental compilation...
 
@@ -508,11 +506,6 @@ sysLog:: watchPresentFileSystemEntry:: /user/username/projects/sample1/logic 1 c
 
 [[90m12:01:33 AM[0m] Building project '/user/username/projects/sample1/logic/tsconfig.json'...
 
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/sample1/logic 1 change:: index.js.map
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/sample1/logic 1 change:: index.js
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/sample1/logic 1 change:: index.d.ts
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/sample1/logic 1 change:: tsconfig.tsbuildinfo
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/sample1/logic 1 change:: tsconfig.tsbuildinfo.readable.baseline.txt
 [[90m12:01:49 AM[0m] Project 'sample1/tests/tsconfig.json' is up to date with .d.ts files from its dependencies
 
 [[90m12:01:51 AM[0m] Updating output timestamps of project '/user/username/projects/sample1/tests/tsconfig.json'...
@@ -667,8 +660,6 @@ export function someFn() { }
 
 
 Output::
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/sample1/logic 1 change:: index.ts
-
 >> Screen clear
 [[90m12:01:56 AM[0m] File change detected. Starting incremental compilation...
 
@@ -676,11 +667,6 @@ sysLog:: watchPresentFileSystemEntry:: /user/username/projects/sample1/logic 1 c
 
 [[90m12:01:58 AM[0m] Building project '/user/username/projects/sample1/logic/tsconfig.json'...
 
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/sample1/logic 1 change:: index.js.map
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/sample1/logic 1 change:: index.js
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/sample1/logic 1 change:: index.d.ts
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/sample1/logic 1 change:: tsconfig.tsbuildinfo
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/sample1/logic 1 change:: tsconfig.tsbuildinfo.readable.baseline.txt
 [[90m12:02:14 AM[0m] Project 'sample1/tests/tsconfig.json' is out of date because oldest output 'sample1/tests/index.js' is older than newest input 'sample1/logic/tsconfig.json'
 
 [[90m12:02:15 AM[0m] Building project '/user/username/projects/sample1/tests/tsconfig.json'...

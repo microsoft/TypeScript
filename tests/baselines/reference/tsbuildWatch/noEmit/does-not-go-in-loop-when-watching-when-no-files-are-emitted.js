@@ -81,8 +81,6 @@ Input::
 //// [/user/username/projects/myproject/a.js] file written with same contents
 
 Output::
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: a.js
-
 >> Screen clear
 [[90m12:00:31 AM[0m] File change detected. Starting incremental compilation...
 
@@ -131,8 +129,6 @@ const x = 10;
 
 
 Output::
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: a.js
-
 >> Screen clear
 [[90m12:00:38 AM[0m] File change detected. Starting incremental compilation...
 

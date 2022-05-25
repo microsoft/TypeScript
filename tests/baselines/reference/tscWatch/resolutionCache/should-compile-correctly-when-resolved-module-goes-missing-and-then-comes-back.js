@@ -24,8 +24,6 @@ Output::
 >> Screen clear
 [[90m12:00:13 AM[0m] Starting compilation in watch mode...
 
-sysLog:: watchPresentFileSystemEntry:: /a 1 rename:: foo.js
-sysLog:: watchPresentFileSystemEntry:: /a 1 change:: 
 [[90m12:00:16 AM[0m] Found 0 errors. Watching for file changes.
 
 
@@ -78,13 +76,9 @@ Input::
 //// [/a/bar.d.ts] deleted
 
 Output::
-sysLog:: watchPresentFileSystemEntry:: /a 1 rename:: bar.d.ts
-sysLog:: watchPresentFileSystemEntry:: /a 1 change:: 
-
 >> Screen clear
 [[90m12:00:18 AM[0m] File change detected. Starting incremental compilation...
 
-sysLog:: watchPresentFileSystemEntry:: /a 1 change:: foo.js
 [96ma/foo.ts[0m:[93m1[0m:[93m17[0m - [91merror[0m[90m TS2792: [0mCannot find module 'bar'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
 
 [7m1[0m import {x} from "bar"
@@ -135,14 +129,9 @@ export const y = 1;export const x = 10;
 
 
 Output::
-sysLog:: watchPresentFileSystemEntry:: /a 1 rename:: bar.d.ts
-sysLog:: watchPresentFileSystemEntry::  1 change:: a
-sysLog:: watchPresentFileSystemEntry:: /a 1 change:: 
-
 >> Screen clear
 [[90m12:00:25 AM[0m] File change detected. Starting incremental compilation...
 
-sysLog:: watchPresentFileSystemEntry:: /a 1 change:: foo.js
 [[90m12:00:29 AM[0m] Found 0 errors. Watching for file changes.
 
 

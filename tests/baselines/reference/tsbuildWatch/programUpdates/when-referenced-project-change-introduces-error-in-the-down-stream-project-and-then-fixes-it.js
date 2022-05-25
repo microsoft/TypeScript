@@ -181,15 +181,9 @@ export function createSomeObject(): SomeObject
 
 
 Output::
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/sample1/library 1 change:: library.ts
-
 >> Screen clear
 [[90m12:00:44 AM[0m] File change detected. Starting incremental compilation...
 
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/sample1/library 1 change:: library.js
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/sample1/library 1 change:: library.d.ts
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/sample1/library 1 change:: tsconfig.tsbuildinfo
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/sample1/library 1 change:: tsconfig.tsbuildinfo.readable.baseline.txt
 [96mApp/app.ts[0m:[93m2[0m:[93m20[0m - [91merror[0m[90m TS2551: [0mProperty 'message' does not exist on type 'SomeObject'. Did you mean 'message2'?
 
 [7m2[0m createSomeObject().message;
@@ -328,16 +322,9 @@ export function createSomeObject(): SomeObject
 
 
 Output::
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/sample1/library 1 change:: library.ts
-
 >> Screen clear
 [[90m12:01:01 AM[0m] File change detected. Starting incremental compilation...
 
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/sample1/library 1 change:: library.js
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/sample1/library 1 change:: library.d.ts
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/sample1/library 1 change:: tsconfig.tsbuildinfo
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/sample1/library 1 change:: tsconfig.tsbuildinfo.readable.baseline.txt
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/sample1/app 1 change:: app.js
 [[90m12:01:17 AM[0m] Found 0 errors. Watching for file changes.
 
 

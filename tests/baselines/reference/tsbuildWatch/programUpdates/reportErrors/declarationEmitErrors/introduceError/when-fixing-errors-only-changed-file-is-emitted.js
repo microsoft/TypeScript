@@ -158,8 +158,6 @@ export var myClassWithError = class {
 
 
 Output::
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/solution/app 1 change:: fileWithError.ts
-
 >> Screen clear
 [[90m12:00:42 AM[0m] File change detected. Starting incremental compilation...
 
@@ -214,17 +212,9 @@ export var myClassWithError = class {
 
 
 Output::
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/solution/app 1 change:: fileWithError.ts
-
 >> Screen clear
 [[90m12:00:47 AM[0m] File change detected. Starting incremental compilation...
 
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/solution/app 1 change:: fileWithError.js
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/solution/app 1 change:: fileWithError.d.ts
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/solution/app 1 change:: tsconfig.tsbuildinfo
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/solution/app 1 change:: fileWithoutError.js
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/solution/app 1 change:: fileWithoutError.d.ts
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/solution/app 1 change:: tsconfig.tsbuildinfo.readable.baseline.txt
 [[90m12:01:01 AM[0m] Found 0 errors. Watching for file changes.
 
 

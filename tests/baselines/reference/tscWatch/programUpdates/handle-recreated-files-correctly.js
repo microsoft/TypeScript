@@ -92,13 +92,9 @@ let y = 1;let xy = 10;
 
 
 Output::
-sysLog:: watchPresentFileSystemEntry:: /a/b 1 change:: commonFile2.ts
-
 >> Screen clear
 [[90m12:00:25 AM[0m] File change detected. Starting incremental compilation...
 
-sysLog:: watchPresentFileSystemEntry:: /a/b 1 change:: commonFile2.js
-sysLog:: watchPresentFileSystemEntry:: /a/b 1 change:: commonFile1.js
 a/lib/lib.d.ts
   Default library for target 'es3'
 a/b/commonFile1.ts
@@ -159,13 +155,9 @@ Input::
 //// [/a/b/commonFile2.ts] deleted
 
 Output::
-sysLog:: watchPresentFileSystemEntry:: /a/b 1 rename:: commonFile2.ts
-sysLog:: watchPresentFileSystemEntry:: /a/b 1 change:: 
-
 >> Screen clear
 [[90m12:00:34 AM[0m] File change detected. Starting incremental compilation...
 
-sysLog:: watchPresentFileSystemEntry:: /a/b 1 change:: commonFile1.js
 a/lib/lib.d.ts
   Default library for target 'es3'
 a/b/commonFile1.ts
@@ -215,14 +207,9 @@ let y = 1
 
 
 Output::
-sysLog:: watchPresentFileSystemEntry:: /a/b 1 rename:: commonFile2.ts
-sysLog:: watchPresentFileSystemEntry:: /a/b 1 change:: 
-
 >> Screen clear
 [[90m12:00:41 AM[0m] File change detected. Starting incremental compilation...
 
-sysLog:: watchPresentFileSystemEntry:: /a/b 1 change:: commonFile2.js
-sysLog:: watchPresentFileSystemEntry:: /a/b 1 change:: commonFile1.js
 a/lib/lib.d.ts
   Default library for target 'es3'
 a/b/commonFile1.ts

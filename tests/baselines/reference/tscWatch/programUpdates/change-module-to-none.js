@@ -76,12 +76,9 @@ Input::
 
 
 Output::
-sysLog:: watchPresentFileSystemEntry:: /a/b 1 change:: tsconfig.json
-
 >> Screen clear
 [[90m12:00:22 AM[0m] File change detected. Starting incremental compilation...
 
-sysLog:: watchPresentFileSystemEntry:: /a/b 1 change:: f1.js
 [96ma/b/f1.ts[0m:[93m1[0m:[93m1[0m - [91merror[0m[90m TS1148: [0mCannot use imports, exports, or module augmentations when '--module' is 'none'.
 
 [7m1[0m export {}

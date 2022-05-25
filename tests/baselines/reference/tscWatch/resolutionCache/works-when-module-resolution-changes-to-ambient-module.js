@@ -87,28 +87,8 @@ declare module "fs" {
 
 
 Output::
-sysLog:: watchMissingFileSystemEntry:: /a/b/node_modules 1 /a/b/node_modules:: 0
-sysLog:: watchMissingFileSystemEntry::  Callback :: rename, "" and will update the watcher
 sysLog:: /a/b/node_modules:: Changing watcher to PresentFileSystemEntryWatcher
-sysLog:: watchPresentFileSystemEntry:: /a/b/node_modules 1 rename:: 
-sysLog:: watchMissingFileSystemEntry:: /a/b/node_modules/@types 1 /a/b/node_modules/@types:: 0
-sysLog:: watchMissingFileSystemEntry::  Callback :: rename, "" and will update the watcher
 sysLog:: /a/b/node_modules/@types:: Changing watcher to PresentFileSystemEntryWatcher
-sysLog:: watchPresentFileSystemEntry:: /a/b/node_modules/@types 1 rename:: 
-sysLog:: watchPresentFileSystemEntry:: /a/b/node_modules 1 rename:: @types
-sysLog:: watchPresentFileSystemEntry:: /a/b/node_modules 1 change:: 
-sysLog:: watchPresentFileSystemEntry:: /a/b/node_modules/@types 1 rename:: node
-sysLog:: watchPresentFileSystemEntry:: /a/b/node_modules 1 rename:: @types/node
-sysLog:: watchPresentFileSystemEntry:: /a/b/node_modules/@types 1 change:: 
-sysLog:: watchPresentFileSystemEntry:: /a/b/node_modules 1 change:: @types
-sysLog:: watchPresentFileSystemEntry:: /a/b/node_modules/@types 1 rename:: node/package.json
-sysLog:: watchPresentFileSystemEntry:: /a/b/node_modules 1 rename:: @types/node/package.json
-sysLog:: watchPresentFileSystemEntry:: /a/b/node_modules/@types 1 change:: node
-sysLog:: watchPresentFileSystemEntry:: /a/b/node_modules 1 change:: @types/node
-sysLog:: watchPresentFileSystemEntry:: /a/b/node_modules/@types 1 rename:: node/index.d.ts
-sysLog:: watchPresentFileSystemEntry:: /a/b/node_modules 1 rename:: @types/node/index.d.ts
-sysLog:: watchPresentFileSystemEntry:: /a/b/node_modules/@types 1 change:: node
-sysLog:: watchPresentFileSystemEntry:: /a/b/node_modules 1 change:: @types/node
 
 >> Screen clear
 [[90m12:00:27 AM[0m] File change detected. Starting incremental compilation...

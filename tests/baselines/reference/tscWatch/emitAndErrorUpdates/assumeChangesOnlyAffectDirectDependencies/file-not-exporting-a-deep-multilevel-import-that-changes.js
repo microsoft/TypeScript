@@ -184,16 +184,9 @@ export interface Coords {
 
 
 Output::
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: a.ts
-
 >> Screen clear
 [[90m12:00:44 AM[0m] File change detected. Starting incremental compilation...
 
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: a.js
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: b.js
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: c.js
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: d.js
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: e.js
 [[90m12:01:00 AM[0m] Found 0 errors. Watching for file changes.
 
 
@@ -270,13 +263,9 @@ export interface Coords {
 
 
 Output::
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: a.ts
-
 >> Screen clear
 [[90m12:01:04 AM[0m] File change detected. Starting incremental compilation...
 
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: a.js
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: b.js
 [[90m12:01:11 AM[0m] Found 0 errors. Watching for file changes.
 
 
@@ -344,13 +333,9 @@ export interface Coords {
 
 
 Output::
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: a.ts
-
 >> Screen clear
 [[90m12:01:15 AM[0m] File change detected. Starting incremental compilation...
 
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: a.js
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: b.js
 [[90m12:01:22 AM[0m] Found 0 errors. Watching for file changes.
 
 

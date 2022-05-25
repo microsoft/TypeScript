@@ -135,15 +135,9 @@ export var T: number;export function Foo() { };
 //// [/a/b/file1Consumer2.ts] deleted
 
 Output::
-sysLog:: watchPresentFileSystemEntry:: /a/b 1 change:: moduleFile1.ts
-sysLog:: watchPresentFileSystemEntry:: /a/b 1 rename:: file1Consumer2.ts
-sysLog:: watchPresentFileSystemEntry:: /a/b 1 change:: 
-
 >> Screen clear
 [[90m12:00:39 AM[0m] File change detected. Starting incremental compilation...
 
-sysLog:: watchPresentFileSystemEntry:: /a/b 1 change:: moduleFile1.js
-sysLog:: watchPresentFileSystemEntry:: /a/b 1 change:: file1Consumer1.js
 [[90m12:00:46 AM[0m] Found 0 errors. Watching for file changes.
 
 

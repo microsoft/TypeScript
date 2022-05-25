@@ -27,8 +27,6 @@ Output::
 >> Screen clear
 [[90m12:00:17 AM[0m] Starting compilation in watch mode...
 
-sysLog:: watchPresentFileSystemEntry:: /a 1 rename:: b/c/app.js
-sysLog:: watchPresentFileSystemEntry:: /a 1 change:: b/c
 [96ma/b/c/app.ts[0m:[93m2[0m:[93m25[0m - [91merror[0m[90m TS2305: [0mModule '"./module"' has no exported member 'f'.
 
 [7m2[0m                 import {f} from "./module"
