@@ -26519,7 +26519,7 @@ namespace ts {
                 if (result) {
                     return result;
                 }
-                if (!(contextFlags! & ContextFlags.SkipBindingPatterns) && isBindingPattern(declaration.name)) { // This is less a contextual type and more an implied shape - in some cases, this may be undesirable
+                if (!(contextFlags! & ContextFlags.SkipBindingPatterns) && isBindingPattern(declaration.name) && declaration.name.elements.length > 0) {
                     return getTypeFromBindingPattern(declaration.name, /*includePatternInType*/ true, /*reportErrors*/ false);
                 }
             }
@@ -27053,22 +27053,20 @@ namespace ts {
                 const inferenceContext = getInferenceContext(node);
                 // If no inferences have been made, nothing is gained from instantiating as type parameters
                 // would just be replaced with their defaults similar to the apparent type.
-                if (inferenceContext && some(inferenceContext.inferences, hasInferenceCandidates)) {
+                if (inferenceContext && contextFlags! & ContextFlags.Signature && some(inferenceContext.inferences, hasInferenceCandidates)) {
                     // For contextual signatures we incorporate all inferences made so far, e.g. from return
                     // types as well as arguments to the left in a function call.
-                    if (contextFlags && contextFlags & ContextFlags.Signature) {
-                        return instantiateInstantiableTypes(contextualType, inferenceContext.nonFixingMapper);
-                    }
+                    return instantiateInstantiableTypes(contextualType, inferenceContext.nonFixingMapper);
+                }
+                if (inferenceContext?.returnMapper) {
                     // For other purposes (e.g. determining whether to produce literal types) we only
                     // incorporate inferences made from the return type in a function call. We remove
                     // the 'boolean' type from the contextual type such that contextually typed boolean
                     // literals actually end up widening to 'boolean' (see #48363).
-                    if (inferenceContext.returnMapper) {
-                        const type = instantiateInstantiableTypes(contextualType, inferenceContext.returnMapper);
-                        return type.flags & TypeFlags.Union && containsType((type as UnionType).types, regularFalseType) && containsType((type as UnionType).types, regularTrueType) ?
-                            filterType(type, t => t !== regularFalseType && t !== regularTrueType) :
-                            type;
-                    }
+                    const type = instantiateInstantiableTypes(contextualType, inferenceContext.returnMapper);
+                    return type.flags & TypeFlags.Union && containsType((type as UnionType).types, regularFalseType) && containsType((type as UnionType).types, regularTrueType) ?
+                        filterType(type, t => t !== regularFalseType && t !== regularTrueType) :
+                        type;
                 }
             }
             return contextualType;
@@ -29904,29 +29902,43 @@ namespace ts {
             // 'let f: (x: string) => number = wrap(s => s.length)', we infer from the declared type of 'f' to the
             // return type of 'wrap'.
             if (node.kind !== SyntaxKind.Decorator) {
-                const contextualType = getContextualType(node, every(signature.typeParameters, p => !!getDefaultFromTypeParameter(p)) ? ContextFlags.SkipBindingPatterns : ContextFlags.None);
+                const skipBindingPatterns = every(signature.typeParameters, p => !!getDefaultFromTypeParameter(p));
+                const contextualType = getContextualType(node, skipBindingPatterns ? ContextFlags.SkipBindingPatterns : ContextFlags.None);
                 if (contextualType) {
                     const inferenceTargetType = getReturnTypeOfSignature(signature);
                     if (couldContainTypeVariables(inferenceTargetType)) {
-                        // We clone the inference context to avoid disturbing a resolution in progress for an
-                        // outer call expression. Effectively we just want a snapshot of whatever has been
-                        // inferred for any outer call expression so far.
                         const outerContext = getInferenceContext(node);
-                        const outerMapper = getMapperFromContext(cloneInferenceContext(outerContext, InferenceFlags.NoDefault));
-                        const instantiatedType = instantiateType(contextualType, outerMapper);
-                        // If the contextual type is a generic function type with a single call signature, we
-                        // instantiate the type with its own type parameters and type arguments. This ensures that
-                        // the type parameters are not erased to type any during type inference such that they can
-                        // be inferred as actual types from the contextual type. For example:
-                        //   declare function arrayMap<T, U>(f: (x: T) => U): (a: T[]) => U[];
-                        //   const boxElements: <A>(a: A[]) => { value: A }[] = arrayMap(value => ({ value }));
-                        // Above, the type of the 'value' parameter is inferred to be 'A'.
-                        const contextualSignature = getSingleCallSignature(instantiatedType);
-                        const inferenceSourceType = contextualSignature && contextualSignature.typeParameters ?
-                            getOrCreateTypeFromSignature(getSignatureInstantiationWithoutFillingInTypeArguments(contextualSignature, contextualSignature.typeParameters)) :
-                            instantiatedType;
-                        // Inferences made from return types have lower priority than all other inferences.
-                        inferTypes(context.inferences, inferenceSourceType, inferenceTargetType, InferencePriority.ReturnType);
+                        const isFromBindingPattern = !skipBindingPatterns && getContextualType(node, ContextFlags.SkipBindingPatterns) !== contextualType;
+                        // A return type inference from a binding pattern can be used in instantiating the contextual
+                        // type of an argument later in inference, but cannot stand on its own as the final return type.
+                        // It is incorporated into `context.returnMapper` which is used in `instantiateContextualType`,
+                        // but doesn't need to go into `context.inferences`. This allows a an array binding pattern to
+                        // produce a tuple for `T` in
+                        //   declare function f<T>(cb: () => T): T;
+                        //   const [e1, e2, e3] = f(() => [1, "hi", true]);
+                        // but does not produce any inference for `T` in
+                        //   declare function f<T>(): T;
+                        //   const [e1, e2, e3] = f();
+                        if (!isFromBindingPattern) {
+                            // We clone the inference context to avoid disturbing a resolution in progress for an
+                            // outer call expression. Effectively we just want a snapshot of whatever has been
+                            // inferred for any outer call expression so far.
+                            const outerMapper = getMapperFromContext(cloneInferenceContext(outerContext, InferenceFlags.NoDefault));
+                            const instantiatedType = instantiateType(contextualType, outerMapper);
+                            // If the contextual type is a generic function type with a single call signature, we
+                            // instantiate the type with its own type parameters and type arguments. This ensures that
+                            // the type parameters are not erased to type any during type inference such that they can
+                            // be inferred as actual types from the contextual type. For example:
+                            //   declare function arrayMap<T, U>(f: (x: T) => U): (a: T[]) => U[];
+                            //   const boxElements: <A>(a: A[]) => { value: A }[] = arrayMap(value => ({ value }));
+                            // Above, the type of the 'value' parameter is inferred to be 'A'.
+                            const contextualSignature = getSingleCallSignature(instantiatedType);
+                            const inferenceSourceType = contextualSignature && contextualSignature.typeParameters ?
+                                getOrCreateTypeFromSignature(getSignatureInstantiationWithoutFillingInTypeArguments(contextualSignature, contextualSignature.typeParameters)) :
+                                instantiatedType;
+                            // Inferences made from return types have lower priority than all other inferences.
+                            inferTypes(context.inferences, inferenceSourceType, inferenceTargetType, InferencePriority.ReturnType);
+                        }
                         // Create a type mapper for instantiating generic contextual types using the inferences made
                         // from the return type. We need a separate inference pass here because (a) instantiation of
                         // the source type uses the outer context's return mapper (which excludes inferences made from
