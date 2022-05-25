@@ -42,19 +42,19 @@ interface Array<T> { length: number; [n: number]: T; }`
         withSafeList?: boolean;
     }
 
+    export function createVirtualServerHost(params: VirtualServerHostCreationParameters): VirtualServerHost {
+        const host = new VirtualServerHost(params);
+        // Just like sys, patch the host to use writeFile
+        patchWriteFileEnsuringDirectory(host);
+        return host;
+    }
+
     export function createWatchedSystem(fileOrFolderList: readonly FileOrFolderOrSymLink[], params?: TestServerHostCreationParameters): TestServerHost {
         return new TestServerHost(/*withSafelist*/ false, fileOrFolderList, params);
     }
 
     export function createServerHost(fileOrFolderList: readonly FileOrFolderOrSymLink[], params?: TestServerHostCreationParameters): TestServerHost {
         const host = new TestServerHost(/*withSafelist*/ true, fileOrFolderList, params);
-        // Just like sys, patch the host to use writeFile
-        patchWriteFileEnsuringDirectory(host);
-        return host;
-    }
-
-    export function createVirtualServerHost(params: VirtualServerHostCreationParameters): VirtualServerHost {
-        const host = new VirtualServerHost(params);
         // Just like sys, patch the host to use writeFile
         patchWriteFileEnsuringDirectory(host);
         return host;
@@ -393,32 +393,6 @@ interface Array<T> { length: number; [n: number]: T; }`
             }
         }
 
-        protected override fsWatch(
-            fileOrDirectory: string,
-            _entryKind: FileSystemEntryKind,
-            cb: FsWatchCallback,
-            recursive: boolean,
-            fallbackPollingInterval: PollingInterval,
-            fallbackOptions: WatchOptions | undefined): FileWatcher {
-            return this.runWithFallbackPolling ?
-                this.watchFile(
-                    fileOrDirectory,
-                    createFileWatcherCallback(cb),
-                    fallbackPollingInterval,
-                    fallbackOptions
-                ) :
-                createWatcher(
-                    recursive ? this.fsWatchesRecursive : this.fsWatches,
-                    this.toFullPath(fileOrDirectory),
-                    {
-                        directoryName: fileOrDirectory,
-                        cb,
-                        fallbackPollingInterval,
-                        fallbackOptions
-                    }
-                );
-        }
-
         // Output is pretty
         writeOutputIsTTY() {
             return true;
@@ -427,60 +401,6 @@ interface Array<T> { length: number; [n: number]: T; }`
         override now() {
             this.time += timeIncrements;
             return new Date(this.time);
-        }
-
-        // TODO: record and invoke callbacks to simulate timer events
-        setTimeout(callback: TimeOutCallback, ms: number, ...args: any[]) {
-            return this.timeoutCallbacks.register(callback, args, ms);
-        }
-
-        getNextTimeoutId() {
-            return this.timeoutCallbacks.getNextId();
-        }
-
-        clearTimeout(timeoutId: any): void {
-            this.timeoutCallbacks.unregister(timeoutId);
-        }
-
-        runQueuedTimeoutCallbacks(timeoutId?: number) {
-            try {
-                this.timeoutCallbacks.invoke(timeoutId);
-            }
-            catch (e) {
-                if (e.message === this.exitMessage) {
-                    return;
-                }
-                throw e;
-            }
-        }
-
-        runQueuedImmediateCallbacks(checkCount?: number) {
-            if (checkCount !== undefined) {
-                assert.equal(this.immediateCallbacks.count(), checkCount);
-            }
-            this.immediateCallbacks.invoke();
-        }
-
-        setImmediate(callback: TimeOutCallback, ...args: any[]) {
-            return this.immediateCallbacks.register(callback, args);
-        }
-
-        clearImmediate(timeoutId: any): void {
-            this.immediateCallbacks.unregister(timeoutId);
-        }
-
-        clearScreen(): void {
-            this.screenClears.push(this.output.length);
-        }
-
-        checkTimeoutQueueLengthAndRun(expected: number) {
-            this.checkTimeoutQueueLength(expected);
-            this.runQueuedTimeoutCallbacks();
-        }
-
-        checkTimeoutQueueLength(expected: number) {
-            const callbacksCount = this.timeoutCallbacks.count();
-            assert.equal(callbacksCount, expected, `expected ${expected} timeout callbacks queued but found ${callbacksCount}.`);
         }
 
         renameFile(fileName: string, newFileName: string) {
@@ -562,6 +482,32 @@ interface Array<T> { length: number; [n: number]: T; }`
             this.removeFileOrFolder(currentEntry, /*isRemoveableLeafFolder*/ false);
         }
 
+        protected override fsWatch(
+            fileOrDirectory: string,
+            _entryKind: FileSystemEntryKind,
+            cb: FsWatchCallback,
+            recursive: boolean,
+            fallbackPollingInterval: PollingInterval,
+            fallbackOptions: WatchOptions | undefined): FileWatcher {
+            return this.runWithFallbackPolling ?
+                this.watchFile(
+                    fileOrDirectory,
+                    createFileWatcherCallback(cb),
+                    fallbackPollingInterval,
+                    fallbackOptions
+                ) :
+                createWatcher(
+                    recursive ? this.fsWatchesRecursive : this.fsWatches,
+                    this.toFullPath(fileOrDirectory),
+                    {
+                        directoryName: fileOrDirectory,
+                        cb,
+                        fallbackPollingInterval,
+                        fallbackOptions
+                    }
+                );
+        }
+
         readFile(s: string): string | undefined {
             const fsEntry = this.getRealFile(this.toFullPath(s));
             return fsEntry ? fsEntry.content : undefined;
@@ -582,6 +528,60 @@ interface Array<T> { length: number; [n: number]: T; }`
 
         createSHA256Hash(s: string): string {
             return sys.createSHA256Hash!(s);
+        }
+
+        // TODO: record and invoke callbacks to simulate timer events
+        setTimeout(callback: TimeOutCallback, ms: number, ...args: any[]) {
+            return this.timeoutCallbacks.register(callback, args, ms);
+        }
+
+        getNextTimeoutId() {
+            return this.timeoutCallbacks.getNextId();
+        }
+
+        clearTimeout(timeoutId: any): void {
+            this.timeoutCallbacks.unregister(timeoutId);
+        }
+
+        clearScreen(): void {
+            this.screenClears.push(this.output.length);
+        }
+
+        checkTimeoutQueueLengthAndRun(expected: number) {
+            this.checkTimeoutQueueLength(expected);
+            this.runQueuedTimeoutCallbacks();
+        }
+
+        checkTimeoutQueueLength(expected: number) {
+            const callbacksCount = this.timeoutCallbacks.count();
+            assert.equal(callbacksCount, expected, `expected ${expected} timeout callbacks queued but found ${callbacksCount}.`);
+        }
+
+        runQueuedImmediateCallbacks(checkCount?: number) {
+            if (checkCount !== undefined) {
+                assert.equal(this.immediateCallbacks.count(), checkCount);
+            }
+            this.immediateCallbacks.invoke();
+        }
+
+        runQueuedTimeoutCallbacks(timeoutId?: number) {
+            try {
+                this.timeoutCallbacks.invoke(timeoutId);
+            }
+            catch (e) {
+                if (e.message === this.exitMessage) {
+                    return;
+                }
+                throw e;
+            }
+        }
+
+        setImmediate(callback: TimeOutCallback, ...args: any[]) {
+            return this.immediateCallbacks.register(callback, args);
+        }
+
+        clearImmediate(timeoutId: any): void {
+            this.immediateCallbacks.unregister(timeoutId);
         }
 
         prependFile(path: string, content: string, options?: Partial<ReloadWatchInvokeOptions>): void {
@@ -683,7 +683,6 @@ interface Array<T> { length: number; [n: number]: T; }`
         };
         return host;
     }
-
     export const tsbuildProjectsLocation = "/user/username/projects";
     export function getTsBuildProjectFilePath(project: string, file: string) {
         return `${tsbuildProjectsLocation}/${project}/${file}`;
