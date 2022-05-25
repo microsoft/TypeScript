@@ -279,27 +279,6 @@ interface Array<T> { length: number; [n: number]: T; }`
         }
     }
 
-    export type TestServerHostTrackingWrittenFiles = TestServerHost & { writtenFiles: ESMap<Path, number>; };
-
-    export function changeToHostTrackingWrittenFiles(inputHost: TestServerHost) {
-        const host = inputHost as TestServerHostTrackingWrittenFiles;
-        const originalWriteFile = host.writeFile;
-        host.writtenFiles = new Map<Path, number>();
-        host.writeFile = (fileName, content) => {
-            originalWriteFile.call(host, fileName, content);
-            const path = host.toFullPath(fileName);
-            host.writtenFiles.set(path, (host.writtenFiles.get(path) || 0) + 1);
-        };
-        return host;
-    }
-
-    export function getTsBuildProjectFile(project: string, file: string): File {
-        return {
-            path: getTsBuildProjectFilePath(project, file),
-            content: Harness.IO.readFile(`${Harness.IO.getWorkspaceRoot()}/tests/projects/${project}/${file}`)!
-        };
-    }
-
     export const timeIncrements = 1000;
 
     export class TestServerHost extends VirtualServerBaseHost implements server.ServerHost {
@@ -691,8 +670,29 @@ interface Array<T> { length: number; [n: number]: T; }`
         if (baselinedOutput) baseline.push(baselinedOutput.join(""));
     }
 
+    export type TestServerHostTrackingWrittenFiles = TestServerHost & { writtenFiles: ESMap<Path, number>; };
+
+    export function changeToHostTrackingWrittenFiles(inputHost: TestServerHost) {
+        const host = inputHost as TestServerHostTrackingWrittenFiles;
+        const originalWriteFile = host.writeFile;
+        host.writtenFiles = new Map<Path, number>();
+        host.writeFile = (fileName, content) => {
+            originalWriteFile.call(host, fileName, content);
+            const path = host.toFullPath(fileName);
+            host.writtenFiles.set(path, (host.writtenFiles.get(path) || 0) + 1);
+        };
+        return host;
+    }
+
     export const tsbuildProjectsLocation = "/user/username/projects";
     export function getTsBuildProjectFilePath(project: string, file: string) {
         return `${tsbuildProjectsLocation}/${project}/${file}`;
+    }
+
+    export function getTsBuildProjectFile(project: string, file: string): File {
+        return {
+            path: getTsBuildProjectFilePath(project, file),
+            content: Harness.IO.readFile(`${Harness.IO.getWorkspaceRoot()}/tests/projects/${project}/${file}`)!
+        };
     }
 }
