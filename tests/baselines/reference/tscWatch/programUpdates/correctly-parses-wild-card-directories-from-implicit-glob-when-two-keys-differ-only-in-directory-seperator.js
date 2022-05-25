@@ -281,7 +281,6 @@ Output::
 FileWatcher:: Triggered with /user/username/projects/myproject/f1.ts 1:: WatchInfo: /user/username/projects/myproject/f1.ts 250 undefined Source file
 Scheduling update
 Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/f1.ts 1:: WatchInfo: /user/username/projects/myproject/f1.ts 250 undefined Source file
-Reloading new file names and options
 Synchronizing program
 [[90m12:00:53 AM[0m] File change detected. Starting incremental compilation...
 
