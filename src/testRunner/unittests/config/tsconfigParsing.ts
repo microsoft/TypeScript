@@ -421,5 +421,14 @@ namespace ts {
             const parsedCommand = parseJsonConfigFileContent(parsed.config, sys, "/foo.bar");
             assert.deepEqual(parsedCommand.wildcardDirectories, { "/foo.bar/src": WatchDirectoryFlags.Recursive });
         });
+
+        it("correctly parses wild card directories from implicit glob when two keys differ only in directory seperator", () => {
+            const parsed = parseConfigFileTextToJson("/foo.bar/tsconfig.json", JSON.stringify({
+                include: ["./", "./**/*.json"]
+            }));
+
+            const parsedCommand = parseJsonConfigFileContent(parsed.config, sys, "/foo");
+            assert.deepEqual(parsedCommand.wildcardDirectories, { "/foo": WatchDirectoryFlags.Recursive });
+        });
     });
 }
