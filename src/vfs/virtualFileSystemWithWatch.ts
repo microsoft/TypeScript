@@ -117,9 +117,12 @@ namespace ts.VirtualFS {
     }
 
     /**
+     * Use TestServerHost for tests or VirtualServerHost for virtual file systems.
+     * This is a base for those two classes.
+     *
      * also implements {server.ServerHost} but that would create a circular dependency
      */
-    export class VirtualServerHost implements FormatDiagnosticsHost, ModuleResolutionHost {
+    export abstract class VirtualServerBaseHost implements FormatDiagnosticsHost, ModuleResolutionHost {
         args: string[] = [];
 
         protected fs: ESMap<Path, FSEntry> = new Map();
@@ -150,31 +153,6 @@ namespace ts.VirtualFS {
             this.toPath = s => toPath(s, currentDirectory, this.getCanonicalFileName);
             this.executingFilePath = this.getHostSpecificPath(executingFilePath);
             this.currentDirectory = this.getHostSpecificPath(currentDirectory);
-        }
-
-        init() {
-            const { watchFile, watchDirectory } = createSystemWatchFunctions({
-                // We dont have polling watch file
-                // it is essentially fsWatch but lets get that separate from fsWatch and
-                // into watchedFiles for easier testing
-                pollingWatchFile: this.watchFileWorker.bind(this),
-                getModifiedTime: this.getModifiedTime.bind(this),
-                setTimeout: this.setTimeout.bind(this),
-                clearTimeout: this.clearTimeout.bind(this),
-                fsWatch: this.fsWatch.bind(this),
-                fileExists: this.fileExists.bind(this),
-                useCaseSensitiveFileNames: this.useCaseSensitiveFileNames,
-                getCurrentDirectory: this.getCurrentDirectory.bind(this),
-                fsSupportsRecursiveFsWatch: true,
-                directoryExists: this.directoryExists.bind(this),
-                getAccessibleSortedChildDirectories: path => this.getDirectories(path),
-                realpath: this.realpath.bind(this),
-                tscWatchFile: undefined,
-                tscWatchDirectory: undefined,
-                defaultWatchFileKind: () => undefined,
-            });
-            this.watchFile = watchFile;
-            this.watchDirectory = watchDirectory;
         }
 
         getNewLine() {
@@ -637,6 +615,34 @@ namespace ts.VirtualFS {
                 }
             });
             baseline.push("");
+        }
+    }
+
+    export class VirtualServerHost extends VirtualServerBaseHost {
+        constructor(options: VirtualServerHostCreationParameters) {
+            super(options)
+            const { watchFile, watchDirectory } = createSystemWatchFunctions({
+                // We dont have polling watch file
+                // it is essentially fsWatch but lets get that separate from fsWatch and
+                // into watchedFiles for easier testing
+                pollingWatchFile: this.watchFileWorker.bind(this),
+                getModifiedTime: this.getModifiedTime.bind(this),
+                setTimeout: this.setTimeout.bind(this),
+                clearTimeout: this.clearTimeout.bind(this),
+                fsWatch: this.fsWatch.bind(this),
+                fileExists: this.fileExists.bind(this),
+                useCaseSensitiveFileNames: this.useCaseSensitiveFileNames,
+                getCurrentDirectory: this.getCurrentDirectory.bind(this),
+                fsSupportsRecursiveFsWatch: true,
+                directoryExists: this.directoryExists.bind(this),
+                getAccessibleSortedChildDirectories: path => this.getDirectories(path),
+                realpath: this.realpath.bind(this),
+                tscWatchFile: undefined,
+                tscWatchDirectory: undefined,
+                defaultWatchFileKind: () => undefined,
+            });
+            this.watchFile = watchFile;
+            this.watchDirectory = watchDirectory;
         }
     }
 

@@ -65,7 +65,6 @@ namespace ts.server {
                 executingFilePath: "", // TODO: "" is the default..maybe this should be vfs, vfs:// or .
                 newLine: sys.newLine,
             });
-            fshost.init();
         }
         else {
             fshost = sys as ServerHost;

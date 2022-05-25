@@ -55,7 +55,6 @@ interface Array<T> { length: number; [n: number]: T; }`
 
     export function createVirtualServerHost(params: VirtualServerHostCreationParameters): VirtualServerHost {
         const host = new VirtualServerHost(params);
-        host.init();
         // Just like sys, patch the host to use writeFile
         patchWriteFileEnsuringDirectory(host);
         return host;
@@ -303,7 +302,7 @@ interface Array<T> { length: number; [n: number]: T; }`
 
     export const timeIncrements = 1000;
 
-    export class TestServerHost extends VirtualServerHost implements server.ServerHost {
+    export class TestServerHost extends VirtualServerBaseHost implements server.ServerHost {
         readonly screenClears: number[] = [];
         private readonly output: string[] = [];
         private time = timeIncrements;
@@ -332,11 +331,6 @@ interface Array<T> { length: number; [n: number]: T; }`
             this.runWithoutRecursiveWatches = runWithoutRecursiveWatches;
             this.runWithFallbackPolling = !!runWithFallbackPolling;
             this.environmentVariables = environmentVariables;
-            this.init();
-            this.reloadFS(fileOrFolderOrSymLinkList);
-        }
-
-        override init() {
             const { watchFile, watchDirectory } = createSystemWatchFunctions({
                 // We dont have polling watch file
                 // it is essentially fsWatch but lets get that separate from fsWatch and
@@ -364,6 +358,7 @@ interface Array<T> { length: number; [n: number]: T; }`
             });
             this.watchFile = watchFile;
             this.watchDirectory = watchDirectory;
+            this.reloadFS(fileOrFolderOrSymLinkList);
         }
 
         getTime() {

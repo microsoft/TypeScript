@@ -184,7 +184,6 @@ namespace ts.server {
                 fshost,
                 cancellationToken,
                 ...options,
-                serverMode: fshost instanceof VirtualFS.VirtualServerHost ? LanguageServiceMode.Semantic : options.serverMode,
                 typingsInstaller: nullTypingsInstaller,
                 byteLength: notImplemented, // Formats the message text in send of Session which is overriden in this class so not needed
                 hrtime,
