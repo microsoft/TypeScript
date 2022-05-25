@@ -417,6 +417,10 @@ namespace ts {
         // Enum value count
         Count,
 
+        ConcurrentKeyword,
+        ConcurrentBlock,
+        ConcurrentStatement,
+
         // Markers
         FirstAssignment = EqualsToken,
         LastAssignment = CaretEqualsToken,
@@ -552,6 +556,7 @@ namespace ts {
         | SyntaxKind.CaseKeyword
         | SyntaxKind.CatchKeyword
         | SyntaxKind.ClassKeyword
+        | SyntaxKind.ConcurrentKeyword
         | SyntaxKind.ConstKeyword
         | SyntaxKind.ConstructorKeyword
         | SyntaxKind.ContinueKeyword
@@ -926,6 +931,7 @@ namespace ts {
         | ExportDeclaration
         | NamedTupleMember
         | EndOfFileToken
+        | ConcurrentStatement
         ;
 
     export type HasType =
@@ -2107,6 +2113,43 @@ namespace ts {
         readonly kind: SyntaxKind.FunctionExpression;
         readonly name?: Identifier;
         readonly body: FunctionBody;  // Required, whereas the member inherited from FunctionDeclaration is optional
+    }
+
+    export interface AwaitVariableStatement extends VariableStatement {
+        readonly declarationList: AwaitVariableDeclarationList;
+    }
+    export interface InitializedAwaitVariableDeclaration
+        extends NamedDeclaration,
+            JSDocContainer {
+        readonly kind: SyntaxKind.VariableDeclaration;
+        readonly parent: AwaitVariableDeclarationList;
+        readonly name: BindingName; // Declared variable name
+        readonly exclamationToken?: ExclamationToken; // Optional definite assignment assertion
+        readonly type?: TypeNode; // Optional type annotation
+        readonly initializer: AwaitExpression;
+    }
+
+    export interface AwaitVariableDeclarationList extends Node {
+        readonly kind: SyntaxKind.VariableDeclarationList;
+        readonly parent: AwaitVariableStatement;
+        readonly declarations: NodeArray<InitializedAwaitVariableDeclaration>;
+    }
+
+    export interface AwaitExpressionStatement extends ExpressionStatement {
+        readonly expression: AwaitExpression;
+    }
+
+    export type ValidConcurrentBlockStatement = AwaitVariableStatement | AwaitExpressionStatement;
+
+    export interface ConcurrentBlock extends Statement {
+        readonly kind: SyntaxKind.ConcurrentBlock;
+        readonly statements: NodeArray<ValidConcurrentBlockStatement>;
+        /*@internal*/ multiLine?: boolean;
+    }
+
+    export interface ConcurrentStatement extends Statement {
+        readonly kind: SyntaxKind.ConcurrentStatement;
+        readonly body: ConcurrentBlock;
     }
 
     export interface ArrowFunction extends Expression, FunctionLikeDeclarationBase, JSDocContainer {
@@ -7244,6 +7287,10 @@ namespace ts {
         createEmptyStatement(): EmptyStatement;
         createExpressionStatement(expression: Expression): ExpressionStatement;
         updateExpressionStatement(node: ExpressionStatement, expression: Expression): ExpressionStatement;
+        createConcurrentStatement(body: ConcurrentBlock): ConcurrentStatement;
+        updateConcurrentStatement(node: ConcurrentStatement, body: ConcurrentBlock): ConcurrentStatement;
+        createConcurrentBlock(statements: readonly ValidConcurrentBlockStatement[], multiLine?: boolean): ConcurrentBlock;
+        updateConcurrentBlock(node: ConcurrentBlock, statements: readonly ValidConcurrentBlockStatement[]): ConcurrentBlock;
         createIfStatement(expression: Expression, thenStatement: Statement, elseStatement?: Statement): IfStatement;
         updateIfStatement(node: IfStatement, expression: Expression, thenStatement: Statement, elseStatement: Statement | undefined): IfStatement;
         createDoStatement(statement: Statement, expression: Expression): DoStatement;

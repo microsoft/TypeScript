@@ -232,6 +232,10 @@ namespace ts {
             createEmptyStatement,
             createExpressionStatement,
             updateExpressionStatement,
+            createConcurrentStatement,
+            updateConcurrentStatement,
+            createConcurrentBlock,
+            updateConcurrentBlock,
             createIfStatement,
             updateIfStatement,
             createDoStatement,
@@ -3226,6 +3230,38 @@ namespace ts {
         function updateExpressionStatement(node: ExpressionStatement, expression: Expression) {
             return node.expression !== expression
                 ? update(createExpressionStatement(expression), node)
+                : node;
+        }
+
+        // @api
+        function createConcurrentStatement(body: ConcurrentBlock) {
+            const node = createBaseNode<ConcurrentStatement>(SyntaxKind.ConcurrentStatement);
+            node.body = body;
+            node.transformFlags |=
+                propagateChildFlags(node.body);
+            return node;
+        }
+
+        // @api
+        function updateConcurrentStatement(node: ConcurrentStatement, body: ConcurrentBlock) {
+            return node.body !== body
+                ? update(createConcurrentStatement(body), node)
+                : node;
+        }
+
+        // @api
+        function createConcurrentBlock(statements: readonly ValidConcurrentBlockStatement[], multiLine?: boolean) {
+            const node = createBaseNode<ConcurrentBlock>(SyntaxKind.ConcurrentBlock);
+            node.statements = createNodeArray(statements);
+            node.multiLine = multiLine;
+            node.transformFlags |= propagateChildrenFlags(node.statements);
+            return node;
+        }
+
+        // @api
+        function updateConcurrentBlock(node: ConcurrentBlock, statements: readonly ValidConcurrentBlockStatement[]) {
+            return node.statements !== statements
+                ? update(createConcurrentBlock(statements, node.multiLine), node)
                 : node;
         }
 

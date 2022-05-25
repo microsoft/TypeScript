@@ -156,6 +156,7 @@ namespace ts {
         yield: SyntaxKind.YieldKeyword,
         async: SyntaxKind.AsyncKeyword,
         await: SyntaxKind.AwaitKeyword,
+        concurrent: SyntaxKind.ConcurrentKeyword,
         of: SyntaxKind.OfKeyword,
     };
 

@@ -481,6 +481,43 @@ namespace ts {
         return node.kind === SyntaxKind.ExpressionStatement;
     }
 
+    export function isAwaitVariableStatement(
+        node: Node
+    ): node is AwaitVariableStatement {
+        return (
+            isVariableStatement(node) &&
+            node.declarationList.declarations.every(
+                (declaration) =>
+                    declaration.initializer !== undefined &&
+                    isAwaitExpression(declaration.initializer)
+            )
+        );
+    }
+
+    export function isAwaitExpressionStatement(
+        node: Node
+    ): node is AwaitExpressionStatement {
+        return (
+            isExpressionStatement(node) && isAwaitExpression(node.expression)
+        );
+    }
+
+    export function isValidConcurrentBlockStatement(
+        node: Node
+    ): node is ValidConcurrentBlockStatement {
+        return node.kind === SyntaxKind.ConcurrentBlock;
+    }
+
+    export function isConcurrentBlock(node: Node): node is ConcurrentBlock {
+        return node.kind === SyntaxKind.ConcurrentBlock;
+    }
+
+    export function isConcurrentStatement(
+        node: Node
+    ): node is ConcurrentStatement {
+        return node.kind === SyntaxKind.ConcurrentStatement;
+    }
+
     export function isIfStatement(node: Node): node is IfStatement {
         return node.kind === SyntaxKind.IfStatement;
     }

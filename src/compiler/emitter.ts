@@ -1317,7 +1317,10 @@ namespace ts {
                     case SyntaxKind.TemplateHead:
                     case SyntaxKind.TemplateMiddle:
                     case SyntaxKind.TemplateTail:
-                        return emitLiteral(node as LiteralExpression, /*jsxAttributeEscape*/ false);
+                        return emitLiteral(
+                            node as LiteralExpression,
+                            /*jsxAttributeEscape*/ false
+                        );
 
                     // Identifiers
                     case SyntaxKind.Identifier:
@@ -1332,11 +1335,15 @@ namespace ts {
                     case SyntaxKind.QualifiedName:
                         return emitQualifiedName(node as QualifiedName);
                     case SyntaxKind.ComputedPropertyName:
-                        return emitComputedPropertyName(node as ComputedPropertyName);
+                        return emitComputedPropertyName(
+                            node as ComputedPropertyName
+                        );
 
                     // Signature elements
                     case SyntaxKind.TypeParameter:
-                        return emitTypeParameter(node as TypeParameterDeclaration);
+                        return emitTypeParameter(
+                            node as TypeParameterDeclaration
+                        );
                     case SyntaxKind.Parameter:
                         return emitParameter(node as ParameterDeclaration);
                     case SyntaxKind.Decorator:
@@ -1346,24 +1353,36 @@ namespace ts {
                     case SyntaxKind.PropertySignature:
                         return emitPropertySignature(node as PropertySignature);
                     case SyntaxKind.PropertyDeclaration:
-                        return emitPropertyDeclaration(node as PropertyDeclaration);
+                        return emitPropertyDeclaration(
+                            node as PropertyDeclaration
+                        );
                     case SyntaxKind.MethodSignature:
                         return emitMethodSignature(node as MethodSignature);
                     case SyntaxKind.MethodDeclaration:
                         return emitMethodDeclaration(node as MethodDeclaration);
                     case SyntaxKind.ClassStaticBlockDeclaration:
-                        return emitClassStaticBlockDeclaration(node as ClassStaticBlockDeclaration);
+                        return emitClassStaticBlockDeclaration(
+                            node as ClassStaticBlockDeclaration
+                        );
                     case SyntaxKind.Constructor:
                         return emitConstructor(node as ConstructorDeclaration);
                     case SyntaxKind.GetAccessor:
                     case SyntaxKind.SetAccessor:
-                        return emitAccessorDeclaration(node as AccessorDeclaration);
+                        return emitAccessorDeclaration(
+                            node as AccessorDeclaration
+                        );
                     case SyntaxKind.CallSignature:
-                        return emitCallSignature(node as CallSignatureDeclaration);
+                        return emitCallSignature(
+                            node as CallSignatureDeclaration
+                        );
                     case SyntaxKind.ConstructSignature:
-                        return emitConstructSignature(node as ConstructSignatureDeclaration);
+                        return emitConstructSignature(
+                            node as ConstructSignatureDeclaration
+                        );
                     case SyntaxKind.IndexSignature:
-                        return emitIndexSignature(node as IndexSignatureDeclaration);
+                        return emitIndexSignature(
+                            node as IndexSignatureDeclaration
+                        );
 
                     // Types
                     case SyntaxKind.TypePredicate:
@@ -1388,21 +1407,29 @@ namespace ts {
                     case SyntaxKind.UnionType:
                         return emitUnionType(node as UnionTypeNode);
                     case SyntaxKind.IntersectionType:
-                        return emitIntersectionType(node as IntersectionTypeNode);
+                        return emitIntersectionType(
+                            node as IntersectionTypeNode
+                        );
                     case SyntaxKind.ConditionalType:
                         return emitConditionalType(node as ConditionalTypeNode);
                     case SyntaxKind.InferType:
                         return emitInferType(node as InferTypeNode);
                     case SyntaxKind.ParenthesizedType:
-                        return emitParenthesizedType(node as ParenthesizedTypeNode);
+                        return emitParenthesizedType(
+                            node as ParenthesizedTypeNode
+                        );
                     case SyntaxKind.ExpressionWithTypeArguments:
-                        return emitExpressionWithTypeArguments(node as ExpressionWithTypeArguments);
+                        return emitExpressionWithTypeArguments(
+                            node as ExpressionWithTypeArguments
+                        );
                     case SyntaxKind.ThisType:
                         return emitThisType();
                     case SyntaxKind.TypeOperator:
                         return emitTypeOperator(node as TypeOperatorNode);
                     case SyntaxKind.IndexedAccessType:
-                        return emitIndexedAccessType(node as IndexedAccessTypeNode);
+                        return emitIndexedAccessType(
+                            node as IndexedAccessTypeNode
+                        );
                     case SyntaxKind.MappedType:
                         return emitMappedType(node as MappedTypeNode);
                     case SyntaxKind.LiteralType:
@@ -1410,17 +1437,25 @@ namespace ts {
                     case SyntaxKind.NamedTupleMember:
                         return emitNamedTupleMember(node as NamedTupleMember);
                     case SyntaxKind.TemplateLiteralType:
-                        return emitTemplateType(node as TemplateLiteralTypeNode);
+                        return emitTemplateType(
+                            node as TemplateLiteralTypeNode
+                        );
                     case SyntaxKind.TemplateLiteralTypeSpan:
-                        return emitTemplateTypeSpan(node as TemplateLiteralTypeSpan);
+                        return emitTemplateTypeSpan(
+                            node as TemplateLiteralTypeSpan
+                        );
                     case SyntaxKind.ImportType:
                         return emitImportTypeNode(node as ImportTypeNode);
 
                     // Binding patterns
                     case SyntaxKind.ObjectBindingPattern:
-                        return emitObjectBindingPattern(node as ObjectBindingPattern);
+                        return emitObjectBindingPattern(
+                            node as ObjectBindingPattern
+                        );
                     case SyntaxKind.ArrayBindingPattern:
-                        return emitArrayBindingPattern(node as ArrayBindingPattern);
+                        return emitArrayBindingPattern(
+                            node as ArrayBindingPattern
+                        );
                     case SyntaxKind.BindingElement:
                         return emitBindingElement(node as BindingElement);
 
@@ -1436,9 +1471,21 @@ namespace ts {
                     case SyntaxKind.VariableStatement:
                         return emitVariableStatement(node as VariableStatement);
                     case SyntaxKind.EmptyStatement:
-                        return emitEmptyStatement(/*isEmbeddedStatement*/ false);
+                        return emitEmptyStatement(
+                            /*isEmbeddedStatement*/ false
+                        );
                     case SyntaxKind.ExpressionStatement:
-                        return emitExpressionStatement(node as ExpressionStatement);
+                        return emitExpressionStatement(
+                            node as ExpressionStatement
+                        );
+                    case SyntaxKind.ConcurrentStatement:
+                        return emitConcurrentStatement(
+                            node as ConcurrentStatement
+                        );
+                    case SyntaxKind.ConcurrentBlock:
+                        return emitConcurrentBlock(
+                            node as ConcurrentBlock
+                        );
                     case SyntaxKind.IfStatement:
                         return emitIfStatement(node as IfStatement);
                     case SyntaxKind.DoStatement:
@@ -1472,17 +1519,27 @@ namespace ts {
 
                     // Declarations
                     case SyntaxKind.VariableDeclaration:
-                        return emitVariableDeclaration(node as VariableDeclaration);
+                        return emitVariableDeclaration(
+                            node as VariableDeclaration
+                        );
                     case SyntaxKind.VariableDeclarationList:
-                        return emitVariableDeclarationList(node as VariableDeclarationList);
+                        return emitVariableDeclarationList(
+                            node as VariableDeclarationList
+                        );
                     case SyntaxKind.FunctionDeclaration:
-                        return emitFunctionDeclaration(node as FunctionDeclaration);
+                        return emitFunctionDeclaration(
+                            node as FunctionDeclaration
+                        );
                     case SyntaxKind.ClassDeclaration:
                         return emitClassDeclaration(node as ClassDeclaration);
                     case SyntaxKind.InterfaceDeclaration:
-                        return emitInterfaceDeclaration(node as InterfaceDeclaration);
+                        return emitInterfaceDeclaration(
+                            node as InterfaceDeclaration
+                        );
                     case SyntaxKind.TypeAliasDeclaration:
-                        return emitTypeAliasDeclaration(node as TypeAliasDeclaration);
+                        return emitTypeAliasDeclaration(
+                            node as TypeAliasDeclaration
+                        );
                     case SyntaxKind.EnumDeclaration:
                         return emitEnumDeclaration(node as EnumDeclaration);
                     case SyntaxKind.ModuleDeclaration:
@@ -1492,9 +1549,13 @@ namespace ts {
                     case SyntaxKind.CaseBlock:
                         return emitCaseBlock(node as CaseBlock);
                     case SyntaxKind.NamespaceExportDeclaration:
-                        return emitNamespaceExportDeclaration(node as NamespaceExportDeclaration);
+                        return emitNamespaceExportDeclaration(
+                            node as NamespaceExportDeclaration
+                        );
                     case SyntaxKind.ImportEqualsDeclaration:
-                        return emitImportEqualsDeclaration(node as ImportEqualsDeclaration);
+                        return emitImportEqualsDeclaration(
+                            node as ImportEqualsDeclaration
+                        );
                     case SyntaxKind.ImportDeclaration:
                         return emitImportDeclaration(node as ImportDeclaration);
                     case SyntaxKind.ImportClause:
@@ -1520,23 +1581,31 @@ namespace ts {
 
                     // Module references
                     case SyntaxKind.ExternalModuleReference:
-                        return emitExternalModuleReference(node as ExternalModuleReference);
+                        return emitExternalModuleReference(
+                            node as ExternalModuleReference
+                        );
 
                     // JSX (non-expression)
                     case SyntaxKind.JsxText:
                         return emitJsxText(node as JsxText);
                     case SyntaxKind.JsxOpeningElement:
                     case SyntaxKind.JsxOpeningFragment:
-                        return emitJsxOpeningElementOrFragment(node as JsxOpeningElement);
+                        return emitJsxOpeningElementOrFragment(
+                            node as JsxOpeningElement
+                        );
                     case SyntaxKind.JsxClosingElement:
                     case SyntaxKind.JsxClosingFragment:
-                        return emitJsxClosingElementOrFragment(node as JsxClosingElement);
+                        return emitJsxClosingElementOrFragment(
+                            node as JsxClosingElement
+                        );
                     case SyntaxKind.JsxAttribute:
                         return emitJsxAttribute(node as JsxAttribute);
                     case SyntaxKind.JsxAttributes:
                         return emitJsxAttributes(node as JsxAttributes);
                     case SyntaxKind.JsxSpreadAttribute:
-                        return emitJsxSpreadAttribute(node as JsxSpreadAttribute);
+                        return emitJsxSpreadAttribute(
+                            node as JsxSpreadAttribute
+                        );
                     case SyntaxKind.JsxExpression:
                         return emitJsxExpression(node as JsxExpression);
 
@@ -1552,9 +1621,13 @@ namespace ts {
 
                     // Property assignments
                     case SyntaxKind.PropertyAssignment:
-                        return emitPropertyAssignment(node as PropertyAssignment);
+                        return emitPropertyAssignment(
+                            node as PropertyAssignment
+                        );
                     case SyntaxKind.ShorthandPropertyAssignment:
-                        return emitShorthandPropertyAssignment(node as ShorthandPropertyAssignment);
+                        return emitShorthandPropertyAssignment(
+                            node as ShorthandPropertyAssignment
+                        );
                     case SyntaxKind.SpreadAssignment:
                         return emitSpreadAssignment(node as SpreadAssignment);
 
@@ -1567,27 +1640,37 @@ namespace ts {
                         return writeUnparsedNode(node as UnparsedNode);
                     case SyntaxKind.UnparsedSource:
                     case SyntaxKind.UnparsedPrepend:
-                        return emitUnparsedSourceOrPrepend(node as UnparsedSource);
+                        return emitUnparsedSourceOrPrepend(
+                            node as UnparsedSource
+                        );
                     case SyntaxKind.UnparsedText:
                     case SyntaxKind.UnparsedInternalText:
                         return emitUnparsedTextLike(node as UnparsedTextLike);
                     case SyntaxKind.UnparsedSyntheticReference:
-                        return emitUnparsedSyntheticReference(node as UnparsedSyntheticReference);
+                        return emitUnparsedSyntheticReference(
+                            node as UnparsedSyntheticReference
+                        );
 
                     // Top-level nodes
                     case SyntaxKind.SourceFile:
                         return emitSourceFile(node as SourceFile);
                     case SyntaxKind.Bundle:
-                        return Debug.fail("Bundles should be printed using printBundle");
+                        return Debug.fail(
+                            "Bundles should be printed using printBundle"
+                        );
                     // SyntaxKind.UnparsedSource (handled above)
                     case SyntaxKind.InputFiles:
                         return Debug.fail("InputFiles should not be printed");
 
                     // JSDoc nodes (only used in codefixes currently)
                     case SyntaxKind.JSDocTypeExpression:
-                        return emitJSDocTypeExpression(node as JSDocTypeExpression);
+                        return emitJSDocTypeExpression(
+                            node as JSDocTypeExpression
+                        );
                     case SyntaxKind.JSDocNameReference:
-                        return emitJSDocNameReference(node as JSDocNameReference);
+                        return emitJSDocNameReference(
+                            node as JSDocNameReference
+                        );
                     case SyntaxKind.JSDocAllType:
                         return writePunctuation("*");
                     case SyntaxKind.JSDocUnknownType:
@@ -1595,14 +1678,18 @@ namespace ts {
                     case SyntaxKind.JSDocNullableType:
                         return emitJSDocNullableType(node as JSDocNullableType);
                     case SyntaxKind.JSDocNonNullableType:
-                        return emitJSDocNonNullableType(node as JSDocNonNullableType);
+                        return emitJSDocNonNullableType(
+                            node as JSDocNonNullableType
+                        );
                     case SyntaxKind.JSDocOptionalType:
                         return emitJSDocOptionalType(node as JSDocOptionalType);
                     case SyntaxKind.JSDocFunctionType:
                         return emitJSDocFunctionType(node as JSDocFunctionType);
                     case SyntaxKind.RestType:
                     case SyntaxKind.JSDocVariadicType:
-                        return emitRestOrJSDocVariadicType(node as RestTypeNode | JSDocVariadicType);
+                        return emitRestOrJSDocVariadicType(
+                            node as RestTypeNode | JSDocVariadicType
+                        );
                     case SyntaxKind.JSDocNamepathType:
                         return;
                     case SyntaxKind.JSDocComment:
@@ -1616,7 +1703,9 @@ namespace ts {
                         return emitJSDocSimpleTag(node as JSDocTag);
                     case SyntaxKind.JSDocAugmentsTag:
                     case SyntaxKind.JSDocImplementsTag:
-                        return emitJSDocHeritageTag(node as JSDocImplementsTag | JSDocAugmentsTag);
+                        return emitJSDocHeritageTag(
+                            node as JSDocImplementsTag | JSDocAugmentsTag
+                        );
                     case SyntaxKind.JSDocAuthorTag:
                     case SyntaxKind.JSDocDeprecatedTag:
                         return;
@@ -1632,7 +1721,9 @@ namespace ts {
                     // SyntaxKind.JSDocEnumTag (see below)
                     case SyntaxKind.JSDocParameterTag:
                     case SyntaxKind.JSDocPropertyTag:
-                        return emitJSDocPropertyLikeTag(node as JSDocPropertyLikeTag);
+                        return emitJSDocPropertyLikeTag(
+                            node as JSDocPropertyLikeTag
+                        );
                     case SyntaxKind.JSDocEnumTag:
                     case SyntaxKind.JSDocReturnTag:
                     case SyntaxKind.JSDocThisTag:
@@ -2834,6 +2925,15 @@ namespace ts {
             if (!isJsonSourceFile(currentSourceFile!) || nodeIsSynthesized(node.expression)) {
                 writeTrailingSemicolon();
             }
+        }
+
+        function emitConcurrentStatement(_node: ConcurrentStatement) {
+          throw new Error("Concurrent statements should never be emitted. Transform them instead.");
+        }
+
+
+        function emitConcurrentBlock(_node: ConcurrentBlock) {
+          throw new Error("Concurrent blocks should never be emitted. Transform them instead.");
         }
 
         function emitIfStatement(node: IfStatement) {
