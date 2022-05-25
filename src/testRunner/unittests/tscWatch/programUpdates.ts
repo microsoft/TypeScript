@@ -639,7 +639,7 @@ export class A {
                 {
                     caption: "Add new file",
                     change: sys => sys.writeFile(`${projectRoot}/new-file.ts`, "export const z = 1;"),
-                    timeouts: sys => sys.checkTimeoutQueueLengthAndRun(0),
+                    timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
                 },
                 {
                     caption: "Import new file",
