@@ -2635,10 +2635,10 @@ namespace ts {
                 || node.kind === SyntaxKind.ExportAssignment && exportAssignmentIsAlias(node as ExportAssignment)
                 || isBinaryExpression(node) && getAssignmentDeclarationKind(node) === AssignmentDeclarationKind.ModuleExports && exportAssignmentIsAlias(node)
                 || isAccessExpression(node)
-                && isBinaryExpression(node.parent)
-                && node.parent.left === node
-                && node.parent.operatorToken.kind === SyntaxKind.EqualsToken
-                && isAliasableOrJsExpression(node.parent.right)
+                    && isBinaryExpression(node.parent)
+                    && node.parent.left === node
+                    && node.parent.operatorToken.kind === SyntaxKind.EqualsToken
+                    && isAliasableOrJsExpression(node.parent.right)
                 || node.kind === SyntaxKind.ShorthandPropertyAssignment
                 || node.kind === SyntaxKind.PropertyAssignment && isAliasableOrJsExpression((node as PropertyAssignment).initializer)
                 || node.kind === SyntaxKind.VariableDeclaration && isVariableDeclarationInitializedToBareOrAccessedRequire(node)
