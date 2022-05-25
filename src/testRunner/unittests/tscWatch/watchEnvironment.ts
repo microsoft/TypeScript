@@ -650,6 +650,36 @@ namespace ts.tscWatch {
 
             verifyTscWatch({
                 scenario,
+                subScenario: `fsWatch/when using file watching thats on inode when rename event ends with tilde`,
+                commandLineArgs: ["-w", "--extendedDiagnostics"],
+                sys: () => createWatchedSystem(
+                    {
+                        [libFile.path]: libFile.content,
+                        [`${projectRoot}/main.ts`]: `import { foo } from "./foo"; foo();`,
+                        [`${projectRoot}/foo.d.ts`]: `export function foo(): string;`,
+                        [`${projectRoot}/tsconfig.json`]: JSON.stringify({ watchOptions: { watchFile: "useFsEvents" }, files: ["foo.d.ts", "main.ts"] }),
+                    },
+                    {
+                        currentDirectory: projectRoot,
+                        inodeWatching: true
+                    }
+                ),
+                changes: [
+                    {
+                        caption: "Replace file with rename event that introduces error",
+                        change: sys => sys.modifyFile(`${projectRoot}/foo.d.ts`, `export function foo2(): string;`, { invokeFileDeleteCreateAsPartInsteadOfChange: true, useTildeAsSuffixInRenameEventFileName: true }),
+                        timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
+                    },
+                    {
+                        caption: "Replace file with rename event that fixes error",
+                        change: sys => sys.modifyFile(`${projectRoot}/foo.d.ts`, `export function foo(): string;`, { invokeFileDeleteCreateAsPartInsteadOfChange: true, useTildeAsSuffixInRenameEventFileName: true }),
+                        timeouts: sys => sys.checkTimeoutQueueLengthAndRun(0),
+                    },
+                ]
+            });
+
+            verifyTscWatch({
+                scenario,
                 subScenario: `fsWatch/when using file watching thats on inode when rename occurs when file is still on the disk`,
                 commandLineArgs: ["-w", "--extendedDiagnostics"],
                 sys: () => createWatchedSystem(

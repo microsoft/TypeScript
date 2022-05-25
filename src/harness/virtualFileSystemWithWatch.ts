@@ -297,6 +297,8 @@ interface Array<T> { length: number; [n: number]: T; }`
         ignoreDelete: boolean;
         /** Skip inode check on file or folder create*/
         skipInodeCheckOnCreate: boolean;
+        /** When invoking rename event on fs watch, send event with file name suffixed with tilde */
+        useTildeAsSuffixInRenameEventFileName: boolean;
     }
 
     export enum Tsc_WatchFile {
@@ -490,11 +492,11 @@ interface Array<T> { length: number; [n: number]: T; }`
                 if (options && options.invokeDirectoryWatcherInsteadOfFileChanged) {
                     const directoryFullPath = getDirectoryPath(currentEntry.fullPath);
                     this.invokeFileWatcher(directoryFullPath, FileWatcherEventKind.Changed, /*useFileNameInCallback*/ true);
-                    this.invokeFsWatchesCallbacks(directoryFullPath, "rename", currentEntry.fullPath);
-                    this.invokeRecursiveFsWatches(directoryFullPath, "rename", currentEntry.fullPath);
+                    this.invokeFsWatchesCallbacks(directoryFullPath, "rename", currentEntry.fullPath, options.useTildeAsSuffixInRenameEventFileName);
+                    this.invokeRecursiveFsWatches(directoryFullPath, "rename", currentEntry.fullPath, options.useTildeAsSuffixInRenameEventFileName);
                 }
                 else {
-                    this.invokeFileAndFsWatches(currentEntry.fullPath, FileWatcherEventKind.Changed);
+                    this.invokeFileAndFsWatches(currentEntry.fullPath, FileWatcherEventKind.Changed, options?.useTildeAsSuffixInRenameEventFileName);
                 }
             }
         }
@@ -618,8 +620,8 @@ interface Array<T> { length: number; [n: number]: T; }`
             }
             const inodeWatching = this.inodeWatching;
             if (options?.skipInodeCheckOnCreate) this.inodeWatching = false;
-            this.invokeFileAndFsWatches(fileOrDirectory.fullPath, FileWatcherEventKind.Created);
-            this.invokeFileAndFsWatches(folder.fullPath, FileWatcherEventKind.Changed);
+            this.invokeFileAndFsWatches(fileOrDirectory.fullPath, FileWatcherEventKind.Created, options?.useTildeAsSuffixInRenameEventFileName);
+            this.invokeFileAndFsWatches(folder.fullPath, FileWatcherEventKind.Changed, options?.useTildeAsSuffixInRenameEventFileName);
             this.inodeWatching = inodeWatching;
         }
 
@@ -636,9 +638,9 @@ interface Array<T> { length: number; [n: number]: T; }`
             if (isFsFolder(fileOrDirectory)) {
                 Debug.assert(fileOrDirectory.entries.length === 0 || isRenaming);
             }
-            if (!options?.ignoreDelete) this.invokeFileAndFsWatches(fileOrDirectory.fullPath, FileWatcherEventKind.Deleted);
+            if (!options?.ignoreDelete) this.invokeFileAndFsWatches(fileOrDirectory.fullPath, FileWatcherEventKind.Deleted, options?.useTildeAsSuffixInRenameEventFileName);
             this.inodes?.delete(fileOrDirectory.path);
-            if (!options?.ignoreDelete) this.invokeFileAndFsWatches(baseFolder.fullPath, FileWatcherEventKind.Changed);
+            if (!options?.ignoreDelete) this.invokeFileAndFsWatches(baseFolder.fullPath, FileWatcherEventKind.Changed, options?.useTildeAsSuffixInRenameEventFileName);
         }
 
         deleteFile(filePath: string) {
@@ -700,45 +702,47 @@ interface Array<T> { length: number; [n: number]: T; }`
             invokeWatcherCallbacks(this.watchedFiles.get(this.toPath(fileFullPath)), ({ cb, fileName }) => cb(useFileNameInCallback ? fileName : fileFullPath, eventKind));
         }
 
-        private fsWatchCallback(map: MultiMap<Path, TestFsWatcher>, fullPath: string, eventName: "rename" | "change", entryFullPath?: string) {
+        private fsWatchCallback(map: MultiMap<Path, TestFsWatcher>, fullPath: string, eventName: "rename" | "change", entryFullPath: string | undefined, useTildeSuffix: boolean | undefined) {
             const path = this.toPath(fullPath);
             const currentInode = this.inodes?.get(path);
             invokeWatcherCallbacks(map.get(path), ({ cb, inode }) => {
                 // TODO::
                 if (this.inodeWatching && inode !== undefined && inode !== currentInode) return;
-                cb(eventName, entryFullPath ? this.getRelativePathToDirectory(fullPath, entryFullPath) : "");
+                let relativeFileName = (entryFullPath ? this.getRelativePathToDirectory(fullPath, entryFullPath) : "");
+                if (useTildeSuffix) relativeFileName = (relativeFileName ? relativeFileName : getBaseFileName(fullPath)) + "~";
+                cb(eventName, relativeFileName);
             });
         }
 
-        invokeFsWatchesCallbacks(fullPath: string, eventName: "rename" | "change", entryFullPath?: string) {
-            this.fsWatchCallback(this.fsWatches, fullPath, eventName, entryFullPath);
+        invokeFsWatchesCallbacks(fullPath: string, eventName: "rename" | "change", entryFullPath?: string, useTildeSuffix?: boolean) {
+            this.fsWatchCallback(this.fsWatches, fullPath, eventName, entryFullPath, useTildeSuffix);
         }
 
-        invokeFsWatchesRecursiveCallbacks(fullPath: string, eventName: "rename" | "change", entryFullPath?: string) {
-            this.fsWatchCallback(this.fsWatchesRecursive, fullPath, eventName, entryFullPath);
+        invokeFsWatchesRecursiveCallbacks(fullPath: string, eventName: "rename" | "change", entryFullPath?: string, useTildeSuffix?: boolean) {
+            this.fsWatchCallback(this.fsWatchesRecursive, fullPath, eventName, entryFullPath, useTildeSuffix);
         }
 
         private getRelativePathToDirectory(directoryFullPath: string, fileFullPath: string) {
             return getRelativePathToDirectoryOrUrl(directoryFullPath, fileFullPath, this.currentDirectory, this.getCanonicalFileName, /*isAbsolutePathAnUrl*/ false);
         }
 
-        private invokeRecursiveFsWatches(fullPath: string, eventName: "rename" | "change", entryFullPath?: string) {
-            this.invokeFsWatchesRecursiveCallbacks(fullPath, eventName, entryFullPath);
+        private invokeRecursiveFsWatches(fullPath: string, eventName: "rename" | "change", entryFullPath?: string, useTildeSuffix?: boolean) {
+            this.invokeFsWatchesRecursiveCallbacks(fullPath, eventName, entryFullPath, useTildeSuffix);
             const basePath = getDirectoryPath(fullPath);
             if (this.getCanonicalFileName(fullPath) !== this.getCanonicalFileName(basePath)) {
-                this.invokeRecursiveFsWatches(basePath, eventName, entryFullPath || fullPath);
+                this.invokeRecursiveFsWatches(basePath, eventName, entryFullPath || fullPath, useTildeSuffix);
             }
         }
 
-        private invokeFsWatches(fullPath: string, eventName: "rename" | "change") {
-            this.invokeFsWatchesCallbacks(fullPath, eventName);
-            this.invokeFsWatchesCallbacks(getDirectoryPath(fullPath), eventName, fullPath);
-            this.invokeRecursiveFsWatches(fullPath, eventName);
+        private invokeFsWatches(fullPath: string, eventName: "rename" | "change", useTildeSuffix: boolean | undefined) {
+            this.invokeFsWatchesCallbacks(fullPath, eventName, fullPath, useTildeSuffix);
+            this.invokeFsWatchesCallbacks(getDirectoryPath(fullPath), eventName, fullPath, useTildeSuffix);
+            this.invokeRecursiveFsWatches(fullPath, eventName, /*entryFullPath*/ undefined, useTildeSuffix);
         }
 
-        private invokeFileAndFsWatches(fileOrFolderFullPath: string, eventKind: FileWatcherEventKind) {
+        private invokeFileAndFsWatches(fileOrFolderFullPath: string, eventKind: FileWatcherEventKind, useTildeSuffix?: boolean) {
             this.invokeFileWatcher(fileOrFolderFullPath, eventKind);
-            this.invokeFsWatches(fileOrFolderFullPath, eventKind === FileWatcherEventKind.Changed ? "change" : "rename");
+            this.invokeFsWatches(fileOrFolderFullPath, eventKind === FileWatcherEventKind.Changed ? "change" : "rename", useTildeSuffix);
         }
 
         private toFsEntry(path: string): FSEntryBase {
