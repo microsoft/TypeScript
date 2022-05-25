@@ -133,8 +133,8 @@ namespace ts.server {
 
         const dynamicImport = async (id: string): Promise<any> => {
             // Use syntactic dynamic import first, if available
-            if (ts.server.dynamicImport) {
-                return ts.server.dynamicImport(id);
+            if (server.dynamicImport) {
+                return server.dynamicImport(id);
             }
 
             throw new Error("Dynamic import not implemented");
@@ -162,7 +162,6 @@ namespace ts.server {
             clearImmediate: handle => clearTimeout(handle),
             /* eslint-enable no-restricted-globals */
 
-            require: () => ({ module: undefined, error: new Error("Not implemented") }),
             importServicePlugin: async (root: string, moduleName: string): Promise<ImportPluginResult> => {
                 const packageRoot = combinePaths(root, "node_modules", moduleName);
 

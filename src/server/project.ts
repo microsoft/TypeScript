@@ -101,6 +101,14 @@ namespace ts.server {
 
     export type PluginModuleFactory = (mod: { typescript: typeof ts }) => PluginModule;
 
+    /* @internal */
+    export interface BeginEnablePluginResult {
+        pluginConfigEntry: PluginImport;
+        pluginConfigOverrides: Map<any> | undefined;
+        resolvedModule: PluginModuleFactory | undefined;
+        errorLogs: string[] | undefined;
+    }
+
     /**
      * The project root can be script info - if root is present,
      * or it could be just normalized path if root wasn't present on the host(only for non inferred project)
@@ -133,6 +141,7 @@ namespace ts.server {
         private externalFiles: SortedReadonlyArray<string> | undefined;
         private missingFilesMap: ESMap<Path, FileWatcher> | undefined;
         private generatedFilesMap: GeneratedFileWatcherMap | undefined;
+
         private plugins: PluginModuleWithName[] = [];
 
         /*@internal*/
@@ -1545,10 +1554,10 @@ namespace ts.server {
             return !!this.program && this.program.isSourceOfProjectReferenceRedirect(fileName);
         }
 
-        protected async enableGlobalPlugins(options: CompilerOptions, pluginConfigOverrides: Map<any> | undefined): Promise<void> {
+        protected enableGlobalPlugins(options: CompilerOptions, pluginConfigOverrides: Map<any> | undefined): void {
             const host = this.projectService.host;
 
-            if (!host.require) {
+            if (!host.require && !host.importServicePlugin) {
                 this.projectService.logger.info("Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded");
                 return;
             }
@@ -1572,43 +1581,60 @@ namespace ts.server {
                     // Provide global: true so plugins can detect why they can't find their config
                     this.projectService.logger.info(`Loading global plugin ${globalPluginName}`);
 
-                    await this.enablePlugin({ name: globalPluginName, global: true } as PluginImport, searchPaths, pluginConfigOverrides);
+                    this.enablePlugin({ name: globalPluginName, global: true } as PluginImport, searchPaths, pluginConfigOverrides);
                 }
             }
         }
 
-        protected async enablePlugin(pluginConfigEntry: PluginImport, searchPaths: string[], pluginConfigOverrides: Map<any> | undefined): Promise<void> {
-            this.projectService.logger.info(`Enabling plugin ${pluginConfigEntry.name} from candidate paths: ${searchPaths.join(",")}`);
-            if (!pluginConfigEntry.name || parsePackageName(pluginConfigEntry.name).rest) {
-                this.projectService.logger.info(`Skipped loading plugin ${pluginConfigEntry.name || JSON.stringify(pluginConfigEntry)} because only package name is allowed plugin name`);
-                return;
-            }
+        /**
+         * Performs the initial steps of enabling a plugin by finding and instantiating the module for a plugin synchronously using 'require'.
+         */
+        /*@internal*/
+        beginEnablePluginSync(pluginConfigEntry: PluginImport, searchPaths: string[], pluginConfigOverrides: Map<any> | undefined): BeginEnablePluginResult {
+            Debug.assertIsDefined(this.projectService.host.require);
 
-            const log = (message: string) => this.projectService.logger.info(message);
             let errorLogs: string[] | undefined;
+            const log = (message: string) => this.projectService.logger.info(message);
             const logError = (message: string) => {
-                (errorLogs || (errorLogs = [])).push(message);
+                (errorLogs ??= []).push(message);
             };
+            const resolvedModule = firstDefined(searchPaths, searchPath =>
+                Project.resolveModule(pluginConfigEntry.name, searchPath, this.projectService.host, log, logError) as PluginModuleFactory | undefined);
+            return { pluginConfigEntry, pluginConfigOverrides, resolvedModule, errorLogs };
+        }
 
-            let resolvedModule: any | undefined;
-            if (this.projectService.host.importServicePlugin) {
-                for (const searchPath of searchPaths) {
+        /**
+         * Performs the initial steps of enabling a plugin by finding and instantiating the module for a plugin asynchronously using dynamic `import`.
+         */
+        /*@internal*/
+        async beginEnablePluginAsync(pluginConfigEntry: PluginImport, searchPaths: string[], pluginConfigOverrides: Map<any> | undefined): Promise<BeginEnablePluginResult> {
+            Debug.assertIsDefined(this.projectService.host.importServicePlugin);
+
+            let errorLogs: string[] | undefined;
+            let resolvedModule: PluginModuleFactory | undefined;
+            for (const searchPath of searchPaths) {
+                try {
                     const result = await this.projectService.host.importServicePlugin(searchPath, pluginConfigEntry.name);
                     if (result.error) {
-                        logError(result.error.toString());
+                        (errorLogs ??= []).push(result.error.toString());
                     }
                     else {
-                        resolvedModule = result.module;
+                        resolvedModule = result.module as PluginModuleFactory;
                         break;
                     }
-
+                }
+                catch (e) {
+                    (errorLogs ??= []).push(`${e}`);
                 }
             }
-            else {
-                resolvedModule = firstDefined(searchPaths, searchPath =>
-                    Project.resolveModule(pluginConfigEntry.name, searchPath, this.projectService.host, log, logError) as PluginModuleFactory | undefined);
-            }
+            return { pluginConfigEntry, pluginConfigOverrides, resolvedModule, errorLogs };
+        }
 
+        /**
+         * Performs the remaining steps of enabling a plugin after its module has been instantiated.
+         */
+        /*@internal*/
+        endEnablePlugin({ pluginConfigEntry, pluginConfigOverrides, resolvedModule, errorLogs }: BeginEnablePluginResult) {
             if (resolvedModule) {
                 const configurationOverride = pluginConfigOverrides && pluginConfigOverrides.get(pluginConfigEntry.name);
                 if (configurationOverride) {
@@ -1621,9 +1647,13 @@ namespace ts.server {
                 this.enableProxy(resolvedModule, pluginConfigEntry);
             }
             else {
-                forEach(errorLogs, log);
+                forEach(errorLogs, message => this.projectService.logger.info(message));
                 this.projectService.logger.info(`Couldn't find ${pluginConfigEntry.name}`);
             }
+        }
+
+        protected enablePlugin(pluginConfigEntry: PluginImport, searchPaths: string[], pluginConfigOverrides: Map<any> | undefined): void {
+            this.projectService.requestEnablePlugin(this, pluginConfigEntry, searchPaths, pluginConfigOverrides);
         }
 
         private enableProxy(pluginModuleFactory: PluginModuleFactory, configEntry: PluginImport) {
@@ -2289,10 +2319,10 @@ namespace ts.server {
         }
 
         /*@internal*/
-        async enablePluginsWithOptions(options: CompilerOptions, pluginConfigOverrides: ESMap<string, any> | undefined): Promise<void> {
+        enablePluginsWithOptions(options: CompilerOptions, pluginConfigOverrides: ESMap<string, any> | undefined): void {
             const host = this.projectService.host;
 
-            if (!host.require) {
+            if (!host.require && !host.importServicePlugin) {
                 this.projectService.logger.info("Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded");
                 return;
             }
@@ -2310,7 +2340,7 @@ namespace ts.server {
             // Enable tsconfig-specified plugins
             if (options.plugins) {
                 for (const pluginConfigEntry of options.plugins) {
-                    await this.enablePlugin(pluginConfigEntry, searchPaths, pluginConfigOverrides);
+                    this.enablePlugin(pluginConfigEntry, searchPaths, pluginConfigOverrides);
                 }
             }
 
