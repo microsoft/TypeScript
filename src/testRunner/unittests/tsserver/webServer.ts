@@ -1,3 +1,4 @@
+/* eslint-disable boolean-trivia */
 namespace ts.projectSystem {
     describe("unittests:: tsserver:: webServer", () => {
         class TestWorkerSession extends server.WorkerSession {
@@ -27,7 +28,8 @@ namespace ts.projectSystem {
                 return this.projectService;
             }
         }
-        function setup(logLevel: server.LogLevel | undefined) {
+
+        function setup(logLevel: server.LogLevel | undefined, options?: Partial<server.StartSessionOptions>, importServicePlugin?: server.ServerHost["importServicePlugin"]) {
             const host = createServerHost([libFile], { windowsStyleRoot: "c:/" });
             const messages: any[] = [];
             const webHost: server.WebHost = {
@@ -36,8 +38,9 @@ namespace ts.projectSystem {
                 writeMessage: s => messages.push(s),
             };
             const webSys = server.createWebSystem(webHost, emptyArray, () => host.getExecutingFilePath());
+            if (importServicePlugin) webSys.importServicePlugin = importServicePlugin;
             const logger = logLevel !== undefined ? new server.MainProcessLogger(logLevel, webHost) : nullLogger();
-            const session = new TestWorkerSession(webSys, webHost, { serverMode: LanguageServiceMode.PartialSemantic }, logger);
+            const session = new TestWorkerSession(webSys, webHost, { serverMode: LanguageServiceMode.PartialSemantic, ...options }, logger);
             return { getMessages: () => messages, clearMessages: () => messages.length = 0, session };
 
         }
@@ -151,6 +154,118 @@ namespace ts.projectSystem {
 
             it("with logging disabled", () => {
                 verify(/*logLevel*/ undefined);
+            });
+        });
+
+        describe("async loaded plugins", () => {
+            it("plugins are not loaded immediately", async () => {
+                let pluginModuleInstantiated = false;
+                let pluginInvoked = false;
+                const importServicePlugin = async (_root: string, _moduleName: string): Promise<server.ImportPluginResult> => {
+                    await Promise.resolve(); // simulate at least a single turn delay
+                    pluginModuleInstantiated = true;
+                    return {
+                        module: (() => {
+                            pluginInvoked = true;
+                            return { create: info => info.languageService };
+                        }) as server.PluginModuleFactory,
+                        error: undefined
+                    };
+                };
+
+                const { session } = setup(/*logLevel*/ undefined, { globalPlugins: ["plugin-a"] }, importServicePlugin);
+                const projectService = session.getProjectService();
+
+                session.executeCommand({ seq: 1, type: "request", command: protocol.CommandTypes.Open, arguments: { file: "^memfs:/foo.ts", content: "" } });
+
+                // This should be false because `executeCommand` should have already triggered
+                // plugin enablement asynchronously and there are no plugin enablements currently
+                // being processed.
+                expect(projectService.hasNewPluginEnablementRequests()).eq(false);
+
+                // Should be true because async imports have already been triggered in the background
+                expect(projectService.hasPendingPluginEnablements()).eq(true);
+
+                // Should be false because resolution of async imports happens in a later turn.
+                expect(pluginModuleInstantiated).eq(false);
+
+                await projectService.waitForPendingPlugins();
+
+                // at this point all plugin modules should have been instantiated and all plugins
+                // should have been invoked
+                expect(pluginModuleInstantiated).eq(true);
+                expect(pluginInvoked).eq(true);
+            });
+
+            it("plugins evaluation in correct order even if imports resolve out of order", async () => {
+                let resolvePluginA!: () => void;
+                let resolvePluginB!: () => void;
+                const pluginAPromise = new Promise<void>(_resolve => resolvePluginA = _resolve);
+                const pluginBPromise = new Promise<void>(_resolve => resolvePluginB = _resolve);
+                const log: string[] = [];
+                const importServicePlugin = async (_root: string, moduleName: string): Promise<server.ImportPluginResult> => {
+                    log.push(`request import ${moduleName}`);
+                    const promise = moduleName === "plugin-a" ? pluginAPromise : pluginBPromise;
+                    await promise;
+                    log.push(`fulfill import ${moduleName}`);
+                    return {
+                        module: (() => {
+                            log.push(`invoke plugin ${moduleName}`);
+                            return { create: info => info.languageService };
+                        }) as server.PluginModuleFactory,
+                        error: undefined
+                    };
+                };
+
+                const { session } = setup(/*logLevel*/ undefined, { globalPlugins: ["plugin-a", "plugin-b"] }, importServicePlugin);
+                const projectService = session.getProjectService();
+
+                session.executeCommand({ seq: 1, type: "request", command: protocol.CommandTypes.Open, arguments: { file: "^memfs:/foo.ts", content: "" } });
+
+                // wait a turn
+                await Promise.resolve();
+
+                // resolve imports out of order
+                resolvePluginB();
+                resolvePluginA();
+
+                // wait for load to complete
+                await projectService.waitForPendingPlugins();
+
+                expect(log).to.deep.equal([
+                    "request import plugin-a",
+                    "request import plugin-b",
+                    "fulfill import plugin-b",
+                    "fulfill import plugin-a",
+                    "invoke plugin plugin-a",
+                    "invoke plugin plugin-b",
+                ]);
+            });
+
+            it("sends projectsUpdatedInBackground event", async () => {
+                const importServicePlugin = async (_root: string, _moduleName: string): Promise<server.ImportPluginResult> => {
+                    await Promise.resolve(); // simulate at least a single turn delay
+                    return {
+                        module: (() => ({ create: info => info.languageService })) as server.PluginModuleFactory,
+                        error: undefined
+                    };
+                };
+
+                const { session, getMessages } = setup(/*logLevel*/ undefined, { globalPlugins: ["plugin-a"] }, importServicePlugin);
+                const projectService = session.getProjectService();
+
+                session.executeCommand({ seq: 1, type: "request", command: protocol.CommandTypes.Open, arguments: { file: "^memfs:/foo.ts", content: "" } });
+
+                await projectService.waitForPendingPlugins();
+
+                expect(getMessages()).to.deep.equal([{
+                    seq: 0,
+                    type: "event",
+                    event: "projectsUpdatedInBackground",
+                    body: {
+                        openFiles: ["^memfs:/foo.ts"]
+                    }
+                }]);
             });
         });
     });

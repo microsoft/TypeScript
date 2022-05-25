@@ -4086,6 +4086,16 @@ namespace ts.server {
             project.endEnablePlugin(project.beginEnablePluginSync(pluginConfigEntry, searchPaths, pluginConfigOverrides));
         }
 
+        /* @internal */
+        hasNewPluginEnablementRequests() {
+            return !!this.pendingPluginEnablements;
+        }
+
+        /* @internal */
+        hasPendingPluginEnablements() {
+            return !!this.currentPluginEnablementPromise;
+        }
+
         /**
          * Waits for any ongoing plugin enablement requests to complete.
          */
@@ -4107,8 +4117,10 @@ namespace ts.server {
         }
 
         private async enableRequestedPluginsAsync() {
-            // If we're already enabling plugins, wait for any existing operations to complete
-            await this.waitForPendingPlugins();
+            if (this.currentPluginEnablementPromise) {
+                // If we're already enabling plugins, wait for any existing operations to complete
+                await this.waitForPendingPlugins();
+            }
 
             // Skip if there are no new plugin enablement requests
             if (!this.pendingPluginEnablements) {
