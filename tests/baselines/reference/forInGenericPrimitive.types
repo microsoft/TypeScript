@@ -1,0 +1,53 @@
+=== tests/cases/compiler/forInGenericPrimitive.ts ===
+function f<
+>f : <A, B extends string | { a: number; }, C extends string | void, D extends string | number | { s: string; } | null, E extends { x: number; }>(a: A, b: B, c: C, d: D, e: E) => void
+
+A,
+B extends { a: number } | string,
+>a : number
+
+C extends string | void,
+D extends number | { s: string } | null | string,
+>s : string
+>null : null
+
+E extends { x: number },
+>x : number
+
+>(
+    a: A,
+>a : A
+
+    b: B,
+>b : B
+
+    c: C,
+>c : C
+
+    d: D,
+>d : D
+
+    e: E,
+>e : E
+
+) {
+    for (const _ in a) { }
+>_ : Extract<keyof A, string>
+>a : A
+
+    for (const _ in b) { }
+>_ : Extract<keyof B, string>
+>b : B
+
+    for (const _ in c) { }
+>_ : Extract<keyof C, string>
+>c : C
+
+    for (const _ in d) { }
+>_ : Extract<keyof D, string>
+>d : D
+
+    for (const _ in e) { }
+>_ : Extract<keyof E, string>
+>e : E
+}

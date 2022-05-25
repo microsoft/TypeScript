@@ -33348,6 +33348,12 @@ namespace ts {
                 isTypeAssignableToKind(source, kind, strict);
         }
 
+        function anyTypesAssignableToKind(source: Type, kind: TypeFlags, strict?: boolean): boolean {
+            return source.flags & TypeFlags.Union ?
+                some((source as UnionType).types, subType => allTypesAssignableToKind(subType, kind, strict)) :
+                isTypeAssignableToKind(source, kind, strict);
+        }
+
         function isConstEnumObjectType(type: Type): boolean {
             return !!(getObjectFlags(type) & ObjectFlags.Anonymous) && !!type.symbol && isConstEnumSymbol(type.symbol);
         }
@@ -38220,7 +38226,9 @@ namespace ts {
 
             // unknownType is returned i.e. if node.expression is identifier whose name cannot be resolved
             // in this case error about missing name is already reported - do not report extra one
-            if (rightType === neverType || !isTypeAssignableToKind(rightType, TypeFlags.NonPrimitive | TypeFlags.InstantiableNonPrimitive)) {
+            // TypeFlags.Nullable must be explicitly checked for in rightType for this check for non-strict modes, where
+            // `getNonNullableTypeIfNeeded` is a noop (and the nullable types as any-ish).
+            if (!isTypeAny(rightType) && !(rightType.flags & TypeFlags.Nullable) && anyTypesAssignableToKind(getBaseConstraintOrType(rightType), (TypeFlags.Primitive | TypeFlags.Never) & ~TypeFlags.Nullable)) {
                 error(node.expression, Diagnostics.The_right_hand_side_of_a_for_in_statement_must_be_of_type_any_an_object_type_or_a_type_parameter_but_here_has_type_0, typeToString(rightType));
             }
 
