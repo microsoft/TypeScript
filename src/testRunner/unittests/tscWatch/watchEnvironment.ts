@@ -668,12 +668,12 @@ namespace ts.tscWatch {
                     {
                         caption: "Replace file with rename event that introduces error",
                         change: sys => sys.modifyFile(`${projectRoot}/foo.d.ts`, `export function foo2(): string;`, { invokeFileDeleteCreateAsPartInsteadOfChange: true, useTildeAsSuffixInRenameEventFileName: true }),
-                        timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
+                        timeouts: sys => sys.checkTimeoutQueueLengthAndRun(2),
                     },
                     {
                         caption: "Replace file with rename event that fixes error",
                         change: sys => sys.modifyFile(`${projectRoot}/foo.d.ts`, `export function foo(): string;`, { invokeFileDeleteCreateAsPartInsteadOfChange: true, useTildeAsSuffixInRenameEventFileName: true }),
-                        timeouts: sys => sys.checkTimeoutQueueLengthAndRun(0),
+                        timeouts: sys => sys.checkTimeoutQueueLengthAndRun(2),
                     },
                 ]
             });

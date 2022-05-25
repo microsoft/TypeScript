@@ -1081,7 +1081,7 @@ namespace ts {
             let lastDirectoryPartWithDirectorySeparator: string | undefined;
             let lastDirectoryPart: string | undefined;
             if (inodeWatching) {
-                lastDirectoryPartWithDirectorySeparator = fileOrDirectory.substr(fileOrDirectory.lastIndexOf(directorySeparator));
+                lastDirectoryPartWithDirectorySeparator = fileOrDirectory.substring(fileOrDirectory.lastIndexOf(directorySeparator));
                 lastDirectoryPart = lastDirectoryPartWithDirectorySeparator.slice(directorySeparator.length);
             }
             /** Watcher for the file system entry depending on whether it is missing or present */
@@ -1140,13 +1140,14 @@ namespace ts {
             }
 
             function callbackChangingToMissingFileSystemEntry(event: "rename" | "change", relativeName: string | undefined) {
+                if (relativeName && endsWith(relativeName, "~")) relativeName = relativeName.slice(0, relativeName.length - 1);
                 callback(event, relativeName);
                 // because relativeName is not guaranteed to be correct we need to check on each rename with few combinations
                 // Eg on ubuntu while watching app/node_modules the relativeName is "node_modules" which is neither relative nor full path
                 if (event === "rename" &&
                     (!relativeName ||
                         relativeName === lastDirectoryPart ||
-                        (relativeName.lastIndexOf(lastDirectoryPartWithDirectorySeparator!) !== -1 && relativeName.lastIndexOf(lastDirectoryPartWithDirectorySeparator!) === relativeName.length - lastDirectoryPartWithDirectorySeparator!.length))) {
+                        endsWith(relativeName, lastDirectoryPartWithDirectorySeparator!))) {
                     if (inodeWatching) {
                         updateWatcher(!fileSystemEntryExists(fileOrDirectory, entryKind) ? watchMissingFileSystemEntry : watchPresentFileSystemEntry);
                     }
