@@ -2197,9 +2197,6 @@ namespace ts {
     }
 
     function isVariableDeclarationInitializedWithRequireHelper(node: Node, allowAccessedRequire: boolean) {
-        if (node.kind === SyntaxKind.BindingElement) {
-            node = node.parent.parent;
-        }
         return isVariableDeclaration(node) &&
             !!node.initializer &&
             isRequireCall(allowAccessedRequire ? getLeftmostAccessExpression(node.initializer) : node.initializer, /*requireStringLiteralLikeArgument*/ true);
