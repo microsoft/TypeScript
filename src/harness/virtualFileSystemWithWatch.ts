@@ -282,11 +282,11 @@ interface Array<T> { length: number; [n: number]: T; }`
     export const timeIncrements = 1000;
 
     export class TestServerHost extends VirtualServerBaseHost implements server.ServerHost {
-        readonly screenClears: number[] = [];
         private readonly output: string[] = [];
         private time = timeIncrements;
         private timeoutCallbacks = new Callbacks(this);
         private immediateCallbacks = new Callbacks(this);
+        readonly screenClears: number[] = [];
         private readonly environmentVariables?: ESMap<string, string>;
         public require: ((initialPath: string, moduleName: string) => RequireResult) | undefined;
         private readonly tscWatchFile?: string;
@@ -340,6 +340,16 @@ interface Array<T> { length: number; [n: number]: T; }`
             this.reloadFS(fileOrFolderOrSymLinkList);
         }
 
+        // Output is pretty
+        writeOutputIsTTY() {
+            return true;
+        }
+
+        override now() {
+            this.time += timeIncrements;
+            return new Date(this.time);
+        }
+
         getTime() {
             return this.time;
         }
@@ -391,16 +401,6 @@ interface Array<T> { length: number; [n: number]: T; }`
                     this.ensureFileOrFolder(fileOrDirectory, options && options.ignoreWatchInvokedWithTriggerAsFileCreate);
                 }
             }
-        }
-
-        // Output is pretty
-        writeOutputIsTTY() {
-            return true;
-        }
-
-        override now() {
-            this.time += timeIncrements;
-            return new Date(this.time);
         }
 
         renameFile(fileName: string, newFileName: string) {
@@ -557,13 +557,6 @@ interface Array<T> { length: number; [n: number]: T; }`
             assert.equal(callbacksCount, expected, `expected ${expected} timeout callbacks queued but found ${callbacksCount}.`);
         }
 
-        runQueuedImmediateCallbacks(checkCount?: number) {
-            if (checkCount !== undefined) {
-                assert.equal(this.immediateCallbacks.count(), checkCount);
-            }
-            this.immediateCallbacks.invoke();
-        }
-
         runQueuedTimeoutCallbacks(timeoutId?: number) {
             try {
                 this.timeoutCallbacks.invoke(timeoutId);
@@ -574,6 +567,13 @@ interface Array<T> { length: number; [n: number]: T; }`
                 }
                 throw e;
             }
+        }
+
+        runQueuedImmediateCallbacks(checkCount?: number) {
+            if (checkCount !== undefined) {
+                assert.equal(this.immediateCallbacks.count(), checkCount);
+            }
+            this.immediateCallbacks.invoke();
         }
 
         setImmediate(callback: TimeOutCallback, ...args: any[]) {
