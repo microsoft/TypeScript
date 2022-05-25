@@ -162,7 +162,6 @@ namespace ts.server {
             clearImmediate: handle => clearTimeout(handle),
             /* eslint-enable no-restricted-globals */
 
-            require: () => ({ module: undefined, error: new Error("Not implemented") }),
             importServicePlugin: async (root: string, moduleName: string): Promise<ImportPluginResult> => {
                 const packageRoot = combinePaths(root, "node_modules", moduleName);
 

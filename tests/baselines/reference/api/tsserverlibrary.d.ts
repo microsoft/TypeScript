@@ -6844,6 +6844,16 @@ declare namespace ts.server {
             message?: string;
         };
     };
+    type ImportPluginResult = {
+        module: {};
+        error: undefined;
+    } | {
+        module: undefined;
+        error: {
+            stack?: string;
+            message: string;
+        };
+    };
     interface ServerHost extends System {
         watchFile(path: string, callback: FileWatcherCallback, pollingInterval?: number, options?: WatchOptions): FileWatcher;
         watchDirectory(path: string, callback: DirectoryWatcherCallback, recursive?: boolean, options?: WatchOptions): FileWatcher;
@@ -6854,6 +6864,7 @@ declare namespace ts.server {
         gc?(): void;
         trace?(s: string): void;
         require?(initialPath: string, moduleName: string): RequireResult;
+        importServicePlugin?(root: string, moduleName: string): Promise<ImportPluginResult>;
     }
 }
 declare namespace ts.server {
@@ -10255,6 +10266,8 @@ declare namespace ts.server {
         /** Tracks projects that we have already sent telemetry for. */
         private readonly seenProjects;
         private performanceEventHandler?;
+        private pendingPluginEnablements?;
+        private currentPluginEnablementPromise?;
         constructor(opts: ProjectServiceOptions);
         toPath(fileName: string): Path;
         private loadTypesMap;
@@ -10414,6 +10427,9 @@ declare namespace ts.server {
         applySafeList(proj: protocol.ExternalProject): NormalizedPath[];
         openExternalProject(proj: protocol.ExternalProject): void;
         hasDeferredExtension(): boolean;
+        private enableRequestedPluginsAsync;
+        private enableRequestedPluginsWorker;
+        private enableRequestedPluginsForProjectAsync;
         configurePlugin(args: protocol.ConfigurePluginRequestArguments): void;
     }
     export {};
