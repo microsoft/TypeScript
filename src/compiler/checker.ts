@@ -9915,8 +9915,7 @@ namespace ts {
                     getTypeOfSymbol(symbol);
             }
             if (symbol.flags & SymbolFlags.Accessor) {
-                return checkFlags & CheckFlags.DeferredType ? getWriteTypeOfSymbolWithDeferredType(symbol) || getTypeOfSymbolWithDeferredType(symbol)
-                    : checkFlags & CheckFlags.Instantiated ? getWriteTypeOfInstantiatedSymbol(symbol)
+                return checkFlags & CheckFlags.Instantiated ? getWriteTypeOfInstantiatedSymbol(symbol)
                     : getWriteTypeOfAccessors(symbol);
             }
             return getTypeOfSymbol(symbol);
@@ -12420,8 +12419,6 @@ namespace ts {
             let writeTypes: Type[] | undefined;
             let firstValueDeclaration: Declaration | undefined;
             let hasNonUniformValueDeclaration = false;
-            let propertyFlag = 0;
-            let isAllAccessors = true;
             for (const prop of props) {
                 if (!firstValueDeclaration) {
                     firstValueDeclaration = prop.valueDeclaration;
@@ -12449,20 +12446,9 @@ namespace ts {
                     checkFlags |= CheckFlags.HasNeverType;
                 }
                 propTypes.push(type);
-                if (isAllAccessors && prop.flags & SymbolFlags.Accessor) {
-                    propertyFlag = isUnion ? propertyFlag & (prop.flags & SymbolFlags.Accessor)
-                        : propertyFlag | (prop.flags & SymbolFlags.Accessor);
-                }
-                else {
-                    isAllAccessors = false;
-                    propertyFlag = 0;
-                }
             }
             addRange(propTypes, indexTypes);
-            if (propertyFlag === 0) {
-                propertyFlag = SymbolFlags.Property;
-            }
-            const result = createSymbol(propertyFlag | optionalFlag, name, syntheticFlag | checkFlags);
+            const result = createSymbol(/*propertyFlag*/ SymbolFlags.Property | optionalFlag, name, syntheticFlag | checkFlags);
             result.containingType = containingType;
             if (!hasNonUniformValueDeclaration && firstValueDeclaration) {
                 result.valueDeclaration = firstValueDeclaration;
