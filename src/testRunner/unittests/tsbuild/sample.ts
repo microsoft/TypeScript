@@ -338,11 +338,11 @@ namespace ts {
                 function verifyInvalidation(heading: string) {
                     // Rebuild this project
                     builder.invalidateProject(logicConfig.path as ResolvedConfigFilePath);
-                    builder.buildNextInvalidatedProject();
+                    builder.getNextInvalidatedProject()?.done();
                     baselineState(`${heading}:: After rebuilding logicConfig`);
 
                     // Build downstream projects should update 'tests', but not 'core'
-                    builder.buildNextInvalidatedProject();
+                    builder.getNextInvalidatedProject()?.done();
                     baselineState(`${heading}:: After building next project`);
                 }
 

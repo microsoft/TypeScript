@@ -630,6 +630,9 @@ namespace Harness.LanguageService {
         getAutoImportProvider(): ts.Program | undefined {
             throw new Error("Program can not be marshaled across the shim layer.");
         }
+        updateIsDefinitionOfReferencedSymbols(_referencedSymbols: readonly ts.ReferencedSymbol[], _knownSymbolSpans: ts.Set<ts.DocumentSpan>): boolean {
+            return ts.notImplemented();
+        }
         getNonBoundSourceFile(): ts.SourceFile {
             throw new Error("SourceFile can not be marshaled across the shim layer.");
         }

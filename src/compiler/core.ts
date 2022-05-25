@@ -2299,7 +2299,7 @@ namespace ts {
         return startsWith(getCanonicalFileName(str), getCanonicalFileName(prefix)) ? str.substring(prefix.length) : undefined;
     }
 
-    function isPatternMatch({ prefix, suffix }: Pattern, candidate: string) {
+    export function isPatternMatch({ prefix, suffix }: Pattern, candidate: string) {
         return candidate.length >= prefix.length + suffix.length &&
             startsWith(candidate, prefix) &&
             endsWith(candidate, suffix);

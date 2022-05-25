@@ -145,8 +145,6 @@ namespace ts {
         // Testing only
         /*@internal*/ getUpToDateStatusOfProject(project: string): UpToDateStatus;
         /*@internal*/ invalidateProject(configFilePath: ResolvedConfigFilePath, reloadLevel?: ConfigFileProgramReloadLevel): void;
-        /*@internal*/ buildNextInvalidatedProject(): void;
-        /*@internal*/ getAllParsedConfigs(): readonly ParsedCommandLine[];
         /*@internal*/ close(): void;
     }
 
@@ -250,7 +248,6 @@ namespace ts {
         allProjectBuildPending: boolean;
         needsSummary: boolean;
         watchAllProjectsPending: boolean;
-        currentInvalidatedProject: InvalidatedProject<T> | undefined;
 
         // Watch state
         readonly watch: boolean;
@@ -332,7 +329,6 @@ namespace ts {
             allProjectBuildPending: true,
             needsSummary: true,
             watchAllProjectsPending: watch,
-            currentInvalidatedProject: undefined,
 
             // Watch state
             watch,
@@ -684,7 +680,6 @@ namespace ts {
         projectPath: ResolvedConfigFilePath
     ) {
         state.projectPendingBuild.delete(projectPath);
-        state.currentInvalidatedProject = undefined;
         return state.diagnostics.has(projectPath) ?
             ExitStatus.DiagnosticsPresent_OutputsSkipped :
             ExitStatus.Success;
@@ -1171,19 +1166,22 @@ namespace ts {
             !isIncrementalCompilation(config.options);
     }
 
-    function getNextInvalidatedProject<T extends BuilderProgram>(
+    interface InvalidateProjectCreateInfo {
+        kind: InvalidatedProjectKind;
+        status: UpToDateStatus;
+        project: ResolvedConfigFileName;
+        projectPath: ResolvedConfigFilePath;
+        projectIndex: number;
+        config: ParsedCommandLine;
+    }
+
+    function getNextInvalidatedProjectCreateInfo<T extends BuilderProgram>(
         state: SolutionBuilderState<T>,
         buildOrder: AnyBuildOrder,
         reportQueue: boolean
-    ): InvalidatedProject<T> | undefined {
+    ): InvalidateProjectCreateInfo | undefined {
         if (!state.projectPendingBuild.size) return undefined;
         if (isCircularBuildOrder(buildOrder)) return undefined;
-        if (state.currentInvalidatedProject) {
-            // Only if same buildOrder the currentInvalidated project can be sent again
-            return arrayIsEqualTo(state.currentInvalidatedProject.buildOrder, buildOrder) ?
-                state.currentInvalidatedProject :
-                undefined;
-        }
 
         const { options, projectPendingBuild } = state;
         for (let projectIndex = 0; projectIndex < buildOrder.length; projectIndex++) {
@@ -1220,9 +1218,9 @@ namespace ts {
             }
 
             const status = getUpToDateStatus(state, config, projectPath);
-            verboseReportProjectStatus(state, project, status);
             if (!options.force) {
                 if (status.type === UpToDateStatusType.UpToDate) {
+                    verboseReportProjectStatus(state, project, status);
                     reportAndStoreErrors(state, projectPath, getConfigFileParsingDiagnostics(config));
                     projectPendingBuild.delete(projectPath);
                     // Up to date, skip
@@ -1235,17 +1233,19 @@ namespace ts {
 
                 if (status.type === UpToDateStatusType.UpToDateWithUpstreamTypes) {
                     reportAndStoreErrors(state, projectPath, getConfigFileParsingDiagnostics(config));
-                    return createUpdateOutputFileStampsProject(
-                        state,
+                    return {
+                        kind: InvalidatedProjectKind.UpdateOutputFileStamps,
+                        status,
                         project,
                         projectPath,
-                        config,
-                        buildOrder
-                    );
+                        projectIndex,
+                        config
+                    };
                 }
             }
 
             if (status.type === UpToDateStatusType.UpstreamBlocked) {
+                verboseReportProjectStatus(state, project, status);
                 reportAndStoreErrors(state, projectPath, getConfigFileParsingDiagnostics(config));
                 projectPendingBuild.delete(projectPath);
                 if (options.verbose) {
@@ -1262,26 +1262,61 @@ namespace ts {
             }
 
             if (status.type === UpToDateStatusType.ContainerOnly) {
+                verboseReportProjectStatus(state, project, status);
                 reportAndStoreErrors(state, projectPath, getConfigFileParsingDiagnostics(config));
                 projectPendingBuild.delete(projectPath);
                 // Do nothing
                 continue;
             }
 
-            return createBuildOrUpdateInvalidedProject(
-                needsBuild(state, status, config) ?
+            return {
+                kind: needsBuild(state, status, config) ?
                     InvalidatedProjectKind.Build :
                     InvalidatedProjectKind.UpdateBundle,
-                state,
+                status,
                 project,
                 projectPath,
                 projectIndex,
                 config,
-                buildOrder,
-            );
+            };
         }
 
         return undefined;
+    }
+
+    function createInvalidatedProjectWithInfo<T extends BuilderProgram>(
+        state: SolutionBuilderState<T>,
+        info: InvalidateProjectCreateInfo,
+        buildOrder: AnyBuildOrder,
+    ) {
+        verboseReportProjectStatus(state, info.project, info.status);
+        return info.kind !== InvalidatedProjectKind.UpdateOutputFileStamps ?
+            createBuildOrUpdateInvalidedProject(
+                info.kind,
+                state,
+                info.project,
+                info.projectPath,
+                info.projectIndex,
+                info.config,
+                buildOrder as BuildOrder,
+            ) :
+            createUpdateOutputFileStampsProject(
+                state,
+                info.project,
+                info.projectPath,
+                info.config,
+                buildOrder as BuildOrder
+            );
+    }
+
+    function getNextInvalidatedProject<T extends BuilderProgram>(
+        state: SolutionBuilderState<T>,
+        buildOrder: AnyBuildOrder,
+        reportQueue: boolean
+    ): InvalidatedProject<T> | undefined {
+        const info = getNextInvalidatedProjectCreateInfo(state, buildOrder, reportQueue);
+        if (!info) return info;
+        return createInvalidatedProjectWithInfo(state, info, buildOrder);
     }
 
     function listEmittedFile({ write }: SolutionBuilderState, proj: ParsedCommandLine, file: string) {
@@ -1769,10 +1804,10 @@ namespace ts {
     function invalidateProjectAndScheduleBuilds(state: SolutionBuilderState, resolvedPath: ResolvedConfigFilePath, reloadLevel: ConfigFileProgramReloadLevel) {
         state.reportFileChangeDetected = true;
         invalidateProject(state, resolvedPath, reloadLevel);
-        scheduleBuildInvalidatedProject(state);
+        scheduleBuildInvalidatedProject(state, 250, /*changeDetected*/ true);
     }
 
-    function scheduleBuildInvalidatedProject(state: SolutionBuilderState) {
+    function scheduleBuildInvalidatedProject(state: SolutionBuilderState, time: number, changeDetected: boolean) {
         const { hostWithWatch } = state;
         if (!hostWithWatch.setTimeout || !hostWithWatch.clearTimeout) {
             return;
@@ -1780,26 +1815,36 @@ namespace ts {
         if (state.timerToBuildInvalidatedProject) {
             hostWithWatch.clearTimeout(state.timerToBuildInvalidatedProject);
         }
-        state.timerToBuildInvalidatedProject = hostWithWatch.setTimeout(buildNextInvalidatedProject, 250, state);
+        state.timerToBuildInvalidatedProject = hostWithWatch.setTimeout(buildNextInvalidatedProject, time, state, changeDetected);
     }
 
-    function buildNextInvalidatedProject(state: SolutionBuilderState) {
+    function buildNextInvalidatedProject(state: SolutionBuilderState, changeDetected: boolean) {
         state.timerToBuildInvalidatedProject = undefined;
         if (state.reportFileChangeDetected) {
             state.reportFileChangeDetected = false;
             state.projectErrorsReported.clear();
             reportWatchStatus(state, Diagnostics.File_change_detected_Starting_incremental_compilation);
         }
+        let projectsBuilt = 0;
         const buildOrder = getBuildOrder(state);
         const invalidatedProject = getNextInvalidatedProject(state, buildOrder, /*reportQueue*/ false);
         if (invalidatedProject) {
             invalidatedProject.done();
-            if (state.projectPendingBuild.size) {
-                // Schedule next project for build
-                if (state.watch && !state.timerToBuildInvalidatedProject) {
-                    scheduleBuildInvalidatedProject(state);
+            projectsBuilt++;
+            while (state.projectPendingBuild.size) {
+                // If already scheduled, skip
+                if (state.timerToBuildInvalidatedProject) return;
+                // Before scheduling check if the next project needs build
+                const info = getNextInvalidatedProjectCreateInfo(state, buildOrder, /*reportQueue*/ false);
+                if (!info) break; // Nothing to build any more
+                if (info.kind !== InvalidatedProjectKind.UpdateOutputFileStamps && (changeDetected || projectsBuilt === 5)) {
+                    // Schedule next project for build
+                    scheduleBuildInvalidatedProject(state, 100, /*changeDetected*/ false);
+                    return;
                 }
-                return;
+                const project = createInvalidatedProjectWithInfo(state, info, buildOrder);
+                project.done();
+                if (info.kind !== InvalidatedProjectKind.UpdateOutputFileStamps) projectsBuilt++;
             }
         }
         disableCache(state);
@@ -1961,11 +2006,6 @@ namespace ts {
                 return getUpToDateStatus(state, parseConfigFile(state, configFileName, configFilePath), configFilePath);
             },
             invalidateProject: (configFilePath, reloadLevel) => invalidateProject(state, configFilePath, reloadLevel || ConfigFileProgramReloadLevel.None),
-            buildNextInvalidatedProject: () => buildNextInvalidatedProject(state),
-            getAllParsedConfigs: () => arrayFrom(mapDefinedIterator(
-                state.configFileCache.values(),
-                config => isParsedCommandLine(config) ? config : undefined
-            )),
             close: () => stopWatching(state),
         };
     }

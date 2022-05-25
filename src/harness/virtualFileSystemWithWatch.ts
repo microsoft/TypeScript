@@ -61,18 +61,27 @@ interface Array<T> { length: number; [n: number]: T; }`
         return host;
     }
 
+    interface CallbackData {
+        cb: TimeOutCallback;
+        args: any[];
+        ms: number | undefined;
+        time: number;
+    }
     class Callbacks {
-        private map: TimeOutCallback[] = [];
+        private map: { cb: TimeOutCallback; args: any[]; ms: number | undefined; time: number; }[] = [];
         private nextId = 1;
+
+        constructor(private host: TestServerHost) {
+        }
 
         getNextId() {
             return this.nextId;
         }
 
-        register(cb: (...args: any[]) => void, args: any[]) {
+        register(cb: TimeOutCallback, args: any[], ms?: number) {
             const timeoutId = this.nextId;
             this.nextId++;
-            this.map[timeoutId] = cb.bind(/*this*/ undefined, ...args);
+            this.map[timeoutId] = { cb, args, ms, time: this.host.getTime() };
             return timeoutId;
         }
 
@@ -90,9 +99,19 @@ interface Array<T> { length: number; [n: number]: T; }`
             return n;
         }
 
+        private invokeCallback({ cb, args, ms, time }: CallbackData) {
+            if (ms !== undefined) {
+                const newTime = ms + time;
+                if (this.host.getTime() < newTime) {
+                    this.host.setTime(newTime);
+                }
+            }
+            cb(...args);
+        }
+
         invoke(invokeKey?: number) {
             if (invokeKey) {
-                this.map[invokeKey]();
+                this.invokeCallback(this.map[invokeKey]);
                 delete this.map[invokeKey];
                 return;
             }
@@ -101,13 +120,13 @@ interface Array<T> { length: number; [n: number]: T; }`
             // so do not clear the entire callback list regardless. Only remove the
             // ones we have invoked.
             for (const key in this.map) {
-                this.map[key]();
+                this.invokeCallback(this.map[key]);
                 delete this.map[key];
             }
         }
     }
 
-    type TimeOutCallback = () => any;
+    type TimeOutCallback = (...args: any[]) => void;
 
     export function getDiffInKeys<T>(map: ESMap<string, T>, expectedKeys: readonly string[]) {
         if (map.size === expectedKeys.length) {
@@ -288,8 +307,8 @@ interface Array<T> { length: number; [n: number]: T; }`
         readonly screenClears: number[] = [];
         private readonly output: string[] = [];
         private time = timeIncrements;
-        private timeoutCallbacks = new Callbacks();
-        private immediateCallbacks = new Callbacks();
+        private timeoutCallbacks = new Callbacks(this);
+        private immediateCallbacks = new Callbacks(this);
         private readonly environmentVariables?: ESMap<string, string>;
         public require: ((initialPath: string, moduleName: string) => RequireResult) | undefined;
         private readonly tscWatchFile?: string;
@@ -345,6 +364,14 @@ interface Array<T> { length: number; [n: number]: T; }`
             });
             this.watchFile = watchFile;
             this.watchDirectory = watchDirectory;
+        }
+
+        getTime() {
+            return this.time;
+        }
+
+        setTime(time: number) {
+            this.time = time;
         }
 
         private reloadFS(fileOrFolderOrSymLinkList: readonly FileOrFolderOrSymLink[], options?: Partial<ReloadWatchInvokeOptions>) {
@@ -429,8 +456,8 @@ interface Array<T> { length: number; [n: number]: T; }`
         }
 
         // TODO: record and invoke callbacks to simulate timer events
-        setTimeout(callback: TimeOutCallback, _time: number, ...args: any[]) {
-            return this.timeoutCallbacks.register(callback, args);
+        setTimeout(callback: TimeOutCallback, ms: number, ...args: any[]) {
+            return this.timeoutCallbacks.register(callback, args, ms);
         }
 
         getNextTimeoutId() {
@@ -460,7 +487,7 @@ interface Array<T> { length: number; [n: number]: T; }`
             this.immediateCallbacks.invoke();
         }
 
-        setImmediate(callback: TimeOutCallback, _time: number, ...args: any[]) {
+        setImmediate(callback: TimeOutCallback, ...args: any[]) {
             return this.immediateCallbacks.register(callback, args);
         }
 

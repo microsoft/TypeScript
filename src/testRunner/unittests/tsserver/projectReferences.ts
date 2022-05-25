@@ -581,6 +581,126 @@ testCompositeFunction('why hello there', 42);`
             baselineTsserverLogs("projectReferences", `finding local reference doesnt load ancestor/sibling projects`, session);
         });
 
+        it("when finding references in overlapping projects", () => {
+            const solutionLocation = "/user/username/projects/solution";
+            const solutionConfig: File = {
+                path: `${solutionLocation}/tsconfig.json`,
+                content: JSON.stringify({
+                    files: [],
+                    include: [],
+                    references: [
+                        { path: "./a" },
+                        { path: "./b" },
+                        { path: "./c" },
+                        { path: "./d" },
+                    ]
+                })
+            };
+            const aConfig: File = {
+                path: `${solutionLocation}/a/tsconfig.json`,
+                content: JSON.stringify({
+                    compilerOptions: {
+                        composite: true,
+                        module: "none"
+                    },
+                    files: ["./index.ts"]
+                })
+            };
+            const aFile: File = {
+                path: `${solutionLocation}/a/index.ts`,
+                content: `
+                export interface I {
+                    M(): void;
+                }`
+            };
+
+            const bConfig: File = {
+                path: `${solutionLocation}/b/tsconfig.json`,
+                content: JSON.stringify({
+                    compilerOptions: {
+                        composite: true
+                    },
+                    files: ["./index.ts"],
+                    references: [
+                        { path: "../a" }
+                    ]
+                })
+            };
+            const bFile: File = {
+                path: `${solutionLocation}/b/index.ts`,
+                content: `
+                import { I } from "../a";
+
+                export class B implements I {
+                    M() {}
+                }`
+            };
+
+            const cConfig: File = {
+                path: `${solutionLocation}/c/tsconfig.json`,
+                content: JSON.stringify({
+                    compilerOptions: {
+                        composite: true
+                    },
+                    files: ["./index.ts"],
+                    references: [
+                        { path: "../b" }
+                    ]
+                })
+            };
+            const cFile: File = {
+                path: `${solutionLocation}/c/index.ts`,
+                content: `
+                import { I } from "../a";
+                import { B } from "../b";
+
+                export const C: I = new B();
+                `
+            };
+
+            const dConfig: File = {
+                path: `${solutionLocation}/d/tsconfig.json`,
+                content: JSON.stringify({
+                    compilerOptions: {
+                        composite: true
+                    },
+                    files: ["./index.ts"],
+                    references: [
+                        { path: "../c" }
+                    ]
+                })
+            };
+            const dFile: File = {
+                path: `${solutionLocation}/d/index.ts`,
+                content: `
+                import { I } from "../a";
+                import { C } from "../c";
+
+                export const D: I = C;
+                `
+            };
+
+            const files = [libFile, solutionConfig, aConfig, aFile, bConfig, bFile, cConfig, cFile, dConfig, dFile, libFile];
+            const host = createServerHost(files);
+            const session = createSession(host, { logger: createLoggerWithInMemoryLogs() });
+            openFilesForSession([bFile], session);
+
+            // The first search will trigger project loads
+            session.executeCommandSeq<protocol.ReferencesRequest>({
+                command: protocol.CommandTypes.References,
+                arguments: protocolFileLocationFromSubstring(bFile, "I", { index: 1 })
+            });
+
+            // The second search starts with the projects already loaded
+            // Formerly, this would search some projects multiple times
+            session.executeCommandSeq<protocol.ReferencesRequest>({
+                command: protocol.CommandTypes.References,
+                arguments: protocolFileLocationFromSubstring(bFile, "I", { index: 1 })
+            });
+
+            baselineTsserverLogs("projectReferences", `finding references in overlapping projects`, session);
+        });
+
         describe("special handling of localness of the definitions for findAllRefs", () => {
             function verify(scenario: string, definition: string, usage: string, referenceTerm: string) {
                 it(scenario, () => {
