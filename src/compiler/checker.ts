@@ -10201,7 +10201,7 @@ namespace ts {
                     for (const node of implementsTypeNodes) {
                         const implementsType = getTypeFromTypeNode(node);
                         if (!isErrorType(implementsType)) {
-                            if (resolvedImplementsTypes === []) {
+                            if (resolvedImplementsTypes.length === 0) {
                                 resolvedImplementsTypes = [implementsType as ObjectType];
                             }
                             else {
@@ -10345,7 +10345,7 @@ namespace ts {
                             if (!isErrorType(baseType)) {
                                 if (isValidBaseType(baseType)) {
                                     if (type !== baseType && !hasBaseType(baseType, type)) {
-                                        if (type.resolvedBaseTypes === []) {
+                                        if (type.resolvedBaseTypes.length === 0) {
                                             type.resolvedBaseTypes = [baseType as ObjectType];
                                         }
                                         else {
@@ -19321,7 +19321,7 @@ namespace ts {
                 if (sourceFlags & (TypeFlags.Object | TypeFlags.Conditional) && source.aliasSymbol && source.aliasTypeArguments &&
                     source.aliasSymbol === target.aliasSymbol && !(isMarkerType(source) || isMarkerType(target))) {
                     const variances = getAliasVariances(source.aliasSymbol);
-                    if (variances === []) {
+                    if (variances.length === 0) {
                         return Ternary.Unknown;
                     }
                     const varianceResult = relateVariances(source.aliasTypeArguments, target.aliasTypeArguments, variances, intersectionState);
@@ -19725,7 +19725,7 @@ namespace ts {
                         // We return Ternary.Maybe for a recursive invocation of getVariances (signalled by []). This
                         // effectively means we measure variance only from type parameter occurrences that aren't nested in
                         // recursive instantiations of the generic type.
-                        if (variances === []) {
+                        if (variances.length === 0) {
                             return Ternary.Unknown;
                         }
                         const varianceResult = relateVariances(getTypeArguments(source as TypeReference), getTypeArguments(target as TypeReference), variances, intersectionState);

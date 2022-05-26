@@ -536,7 +536,7 @@ namespace ts {
 
         // @api
         function createNodeArray<T extends Node>(elements?: readonly T[], hasTrailingComma?: boolean): NodeArray<T> {
-            if (elements === undefined || elements === []) {
+            if (elements === undefined || elements.length === 0) {
                 elements = [];
             }
             else if (isNodeArray(elements)) {

@@ -528,7 +528,7 @@ namespace ts {
         function getAllFileNames(state: BuilderState, programOfThisState: Program): readonly string[] {
             if (!state.allFileNames) {
                 const sourceFiles = programOfThisState.getSourceFiles();
-                state.allFileNames = sourceFiles === [] ? [] : sourceFiles.map(file => file.fileName);
+                state.allFileNames = sourceFiles.length === 0 ? [] : sourceFiles.map(file => file.fileName);
             }
             return state.allFileNames;
         }
