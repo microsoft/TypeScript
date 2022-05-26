@@ -14,6 +14,7 @@ namespace ts {
         removeResolutionsOfFile(filePath: Path): void;
         removeResolutionsFromProjectReferenceRedirects(filePath: Path): void;
         setFilesWithInvalidatedNonRelativeUnresolvedImports(filesWithUnresolvedImports: ESMap<Path, readonly string[]>): void;
+        invalidateTypingsFiles(): void;
         createHasInvalidatedResolution(forceAllFilesAsInvalidated?: boolean): HasInvalidatedResolution;
         hasChangedAutomaticTypeDirectiveNames(): boolean;
         isFileWithInvalidatedNonRelativeUnresolvedImports(path: Path): boolean;
@@ -156,6 +157,7 @@ namespace ts {
         const resolvedFileToResolution = createMultiMap<ResolutionWithFailedLookupLocations>();
 
         let hasChangedAutomaticTypeDirectiveNames = false;
+        let hasChangedTypingsFiles = false;
         let failedLookupChecks: Path[] | undefined;
         let startsWithPathChecks: Set<Path> | undefined;
         let isInDirectoryChecks: Path[] | undefined;
@@ -221,6 +223,7 @@ namespace ts {
             invalidateResolutionOfFile,
             invalidateResolutionsOfFailedLookupLocations,
             setFilesWithInvalidatedNonRelativeUnresolvedImports,
+            invalidateTypingsFiles,
             createHasInvalidatedResolution,
             isFileWithInvalidatedNonRelativeUnresolvedImports,
             updateTypeRootsWatch,
@@ -259,6 +262,7 @@ namespace ts {
             // (between startCachingPerDirectoryResolution and finishCachingPerDirectoryResolution)
             clearPerDirectoryResolutions();
             hasChangedAutomaticTypeDirectiveNames = false;
+            hasChangedTypingsFiles = false;
         }
 
         function startRecordingFilesWithChangedResolutions() {
@@ -279,6 +283,10 @@ namespace ts {
             // Invalidated if file has unresolved imports
             const value = filesWithInvalidatedNonRelativeUnresolvedImports.get(path);
             return !!value && !!value.length;
+        }
+
+        function isInvalidatedAutomaticTypeReferenceDirective(path: Path): boolean {
+            return hasChangedTypingsFiles && endsWith(path, inferredTypesContainingFile);
         }
 
         function createHasInvalidatedResolution(forceAllFilesAsInvalidated?: boolean): HasInvalidatedResolution {
@@ -312,6 +320,7 @@ namespace ts {
                 }
             });
             hasChangedAutomaticTypeDirectiveNames = false;
+            hasChangedTypingsFiles = false;
         }
 
         function resolveModuleName(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, redirectedReference?: ResolvedProjectReference, _containingSourceFile?: never, mode?: ModuleKind.CommonJS | ModuleKind.ESNext | undefined): CachedResolvedModuleWithFailedLookupLocations {
@@ -362,8 +371,8 @@ namespace ts {
                     moduleResolutionCache,
                 );
                 if (resolvedTypeReferenceDirective) {
-                    (primaryResult.resolvedTypeReferenceDirective as any) = resolvedTypeReferenceDirective;
                     primaryResult.failedLookupLocations.push(...failedLookupLocations);
+                    (primaryResult.resolvedTypeReferenceDirective as any) = resolvedTypeReferenceDirective;
                     return primaryResult;
                 }
             }
@@ -401,7 +410,8 @@ namespace ts {
             }
             const resolvedModules: (R | undefined)[] = [];
             const compilerOptions = resolutionHost.getCompilationSettings();
-            const hasInvalidatedNonRelativeUnresolvedImport = logChanges && isFileWithInvalidatedNonRelativeUnresolvedImports(path);
+            const isInvalidated = logChanges && isFileWithInvalidatedNonRelativeUnresolvedImports(path)
+                || isInvalidatedAutomaticTypeReferenceDirective(path);
 
             // All the resolutions in this file are invalidated if this file wasn't resolved using same redirect
             const program = resolutionHost.getCurrentProgram();
@@ -427,7 +437,7 @@ namespace ts {
                 if (!seenNamesInFile.has(name, mode) &&
                     unmatchedRedirects || !resolution || resolution.isInvalidated ||
                     // If the name is unresolved import that was invalidated, recalculate
-                    (hasInvalidatedNonRelativeUnresolvedImport && !isExternalModuleNameRelative(name) && shouldRetryResolution(resolution))) {
+                    (isInvalidated && !isExternalModuleNameRelative(name) && shouldRetryResolution(resolution))) {
                     const existingResolution = resolution;
                     const resolutionInDirectory = perDirectoryResolution.get(name, mode);
                     if (resolutionInDirectory) {
@@ -849,6 +859,11 @@ namespace ts {
         function setFilesWithInvalidatedNonRelativeUnresolvedImports(filesMap: ReadonlyESMap<Path, readonly string[]>) {
             Debug.assert(filesWithInvalidatedNonRelativeUnresolvedImports === filesMap || filesWithInvalidatedNonRelativeUnresolvedImports === undefined);
             filesWithInvalidatedNonRelativeUnresolvedImports = filesMap;
+        }
+
+        function invalidateTypingsFiles() {
+            hasChangedAutomaticTypeDirectiveNames = true;
+            hasChangedTypingsFiles = true;
         }
 
         function scheduleInvalidateResolutionOfFailedLookupLocation(fileOrDirectoryPath: Path, isCreatingWatchedDirectory: boolean) {

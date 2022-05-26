@@ -901,10 +901,11 @@ namespace ts.projectSystem {
             checkProjectActualFiles(p, [app.path, cacacheDTS.path, jsconfig.path]);
         });
 
-        function testConfiguredProjectNodeModules({ jsconfigContent, appJsContent, jQueryInProject = true }: {
+        function testConfiguredProjectNodeModules({ jsconfigContent, appJsContent, jQueryJsInProjectBeforeInstall, jQueryDtsInProjectAfterInstall = true }: {
             jsconfigContent?: object,
             appJsContent?: string,
-            jQueryInProject?: boolean,
+            jQueryJsInProjectBeforeInstall?: boolean,
+            jQueryDtsInProjectAfterInstall?: boolean,
         } = {}) {
         const app = {
             path: "/app.js",
@@ -968,13 +969,14 @@ namespace ts.projectSystem {
 
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
             const p = configuredProjectAt(projectService, 0);
-            checkProjectActualFiles(p, [app.path, jsconfig.path]);
+            const filesBeforeInstall = jQueryJsInProjectBeforeInstall ? [app.path, jquery.path, jsconfig.path] : [app.path, jsconfig.path];
+            checkProjectActualFiles(p, filesBeforeInstall);
 
             installer.installAll(/*expectedCount*/ 1);
 
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
-            host.checkTimeoutQueueLengthAndRun(3);
-            checkProjectActualFiles(p, jQueryInProject ? [app.path, jqueryDTS.path, jsconfig.path] : [app.path, jsconfig.path]);
+            host.checkTimeoutQueueLengthAndRun(2);
+            checkProjectActualFiles(p, jQueryDtsInProjectAfterInstall ? [app.path, jqueryDTS.path, jsconfig.path] : filesBeforeInstall);
         }
 
         it("configured projects discover from node_modules", () => {
@@ -982,15 +984,26 @@ namespace ts.projectSystem {
         });
 
         it("configured projects discover from node_modules - empty types", () => {
-            testConfiguredProjectNodeModules({ jsconfigContent: { compilerOptions: { types: [] } }, jQueryInProject: false });
+            testConfiguredProjectNodeModules({
+                jsconfigContent: { compilerOptions: { types: [] } },
+                jQueryDtsInProjectAfterInstall: false,
+            });
         });
 
         it("configured projects discover from node_modules - explicit types", () => {
-            testConfiguredProjectNodeModules({ jsconfigContent: { compilerOptions: { types: ["jquery"] } }, jQueryInProject: true });
+            testConfiguredProjectNodeModules({
+                jsconfigContent: { compilerOptions: { types: ["jquery"] } },
+                jQueryDtsInProjectAfterInstall: true
+            });
         });
 
         it("configured projects discover from node_modules - empty types but has import", () => {
-            testConfiguredProjectNodeModules({ jsconfigContent: { compilerOptions: { types: [] } }, appJsContent: `import "jquery";`, jQueryInProject: true });
+            testConfiguredProjectNodeModules({
+                jsconfigContent: { compilerOptions: { types: [] } },
+                appJsContent: `import "jquery";`,
+                jQueryJsInProjectBeforeInstall: true,
+                jQueryDtsInProjectAfterInstall: true,
+            });
         });
 
         it("configured projects discover from bower_components", () => {

@@ -1114,8 +1114,8 @@ namespace ts.server {
                 // If typing files changed, then only schedule project update
                 this.typingFiles = typingFiles;
                 // Invalidate files with unresolved imports
+                this.resolutionCache.invalidateTypingsFiles();
                 this.resolutionCache.setFilesWithInvalidatedNonRelativeUnresolvedImports(this.cachedUnresolvedImportsPerFile);
-                this.scheduleInvalidateResolutionsOfFailedLookupLocations();
                 this.projectService.delayUpdateProjectGraphAndEnsureProjectStructureForOpenFiles(this);
             }
         }
