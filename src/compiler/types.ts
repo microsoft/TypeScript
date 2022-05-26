@@ -4954,6 +4954,14 @@ namespace ts {
         /* @internal */ assignmentDeclarationMembers?: ESMap<number, Declaration>; // detected late-bound assignment declarations associated with the symbol
     }
 
+
+    /* @internal */
+    export const enum DiscriminantKind {
+        None = 0, // not discriminating
+        Concrete = 1, // "a" | "b"
+        Potential = 2, // T | "a" or more likely (T & "a") | (T & "b")
+    }
+
     /* @internal */
     export interface SymbolLinks {
         immediateTarget?: Symbol;                   // Immediate target of an alias. May be another alias. Do not access directly, use `checker.getImmediateAliasedSymbol` instead.
@@ -4977,7 +4985,7 @@ namespace ts {
         leftSpread?: Symbol;                        // Left source for synthetic spread property
         rightSpread?: Symbol;                       // Right source for synthetic spread property
         syntheticOrigin?: Symbol;                   // For a property on a mapped or spread type, points back to the original property
-        isDiscriminantProperty?: boolean;           // True if discriminant synthetic property
+        isDiscriminantProperty?: DiscriminantKind;  // Set if discriminant synthetic property
         resolvedExports?: SymbolTable;              // Resolved exports of module or combined early- and late-bound static members of a class.
         resolvedMembers?: SymbolTable;              // Combined early- and late-bound members of a symbol
         exportsChecked?: boolean;                   // True if exports of external module have been checked

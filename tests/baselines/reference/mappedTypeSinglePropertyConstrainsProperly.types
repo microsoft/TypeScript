@@ -1,0 +1,71 @@
+=== tests/cases/compiler/mappedTypeSinglePropertyConstrainsProperly.ts ===
+interface ListElement {
+    condition: boolean;
+>condition : boolean
+
+    id: string;
+>id : string
+}
+
+const list = [
+>list : readonly [{ readonly condition: true; readonly id: "yes"; }, { readonly condition: false; readonly id: "no"; }]
+>[    { condition: true, id: "yes" },    { condition: false, id: "no" },] as const : readonly [{ readonly condition: true; readonly id: "yes"; }, { readonly condition: false; readonly id: "no"; }]
+>[    { condition: true, id: "yes" },    { condition: false, id: "no" },] : readonly [{ readonly condition: true; readonly id: "yes"; }, { readonly condition: false; readonly id: "no"; }]
+
+    { condition: true, id: "yes" },
+>{ condition: true, id: "yes" } : { readonly condition: true; readonly id: "yes"; }
+>condition : true
+>true : true
+>id : "yes"
+>"yes" : "yes"
+
+    { condition: false, id: "no" },
+>{ condition: false, id: "no" } : { readonly condition: false; readonly id: "no"; }
+>condition : false
+>false : false
+>id : "no"
+>"no" : "no"
+
+] as const;
+
+type CheckCondition<
+>CheckCondition : CheckCondition<List, ID>
+
+    List extends readonly ListElement[],
+    ID extends List[number]["id"],
+    > = ({ id: ID } & List[number])["condition"]
+>id : ID
+
+type Mapped = {
+>Mapped : true
+
+    [ID in "yes"]: CheckCondition<typeof list, ID>
+>list : readonly [{ readonly condition: true; readonly id: "yes"; }, { readonly condition: false; readonly id: "no"; }]
+
+}["yes"]
+
+type NotMapped = CheckCondition<typeof list, "yes">
+>NotMapped : true
+>list : readonly [{ readonly condition: true; readonly id: "yes"; }, { readonly condition: false; readonly id: "no"; }]
+
+declare const mapped: Mapped
+>mapped : true
+
+declare const notMapped: NotMapped
+>notMapped : true
+
+let test: true = true
+>test : true
+>true : true
+>true : true
+
+test = mapped
+>test = mapped : true
+>test : true
+>mapped : true
+
+test = notMapped
+>test = notMapped : true
+>test : true
+>notMapped : true
+

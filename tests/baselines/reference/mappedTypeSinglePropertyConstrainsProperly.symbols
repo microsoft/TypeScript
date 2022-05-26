@@ -1,0 +1,76 @@
+=== tests/cases/compiler/mappedTypeSinglePropertyConstrainsProperly.ts ===
+interface ListElement {
+>ListElement : Symbol(ListElement, Decl(mappedTypeSinglePropertyConstrainsProperly.ts, 0, 0))
+
+    condition: boolean;
+>condition : Symbol(ListElement.condition, Decl(mappedTypeSinglePropertyConstrainsProperly.ts, 0, 23))
+
+    id: string;
+>id : Symbol(ListElement.id, Decl(mappedTypeSinglePropertyConstrainsProperly.ts, 1, 23))
+}
+
+const list = [
+>list : Symbol(list, Decl(mappedTypeSinglePropertyConstrainsProperly.ts, 5, 5))
+
+    { condition: true, id: "yes" },
+>condition : Symbol(condition, Decl(mappedTypeSinglePropertyConstrainsProperly.ts, 6, 5))
+>id : Symbol(id, Decl(mappedTypeSinglePropertyConstrainsProperly.ts, 6, 22))
+
+    { condition: false, id: "no" },
+>condition : Symbol(condition, Decl(mappedTypeSinglePropertyConstrainsProperly.ts, 7, 5))
+>id : Symbol(id, Decl(mappedTypeSinglePropertyConstrainsProperly.ts, 7, 23))
+
+] as const;
+>const : Symbol(const)
+
+type CheckCondition<
+>CheckCondition : Symbol(CheckCondition, Decl(mappedTypeSinglePropertyConstrainsProperly.ts, 8, 11))
+
+    List extends readonly ListElement[],
+>List : Symbol(List, Decl(mappedTypeSinglePropertyConstrainsProperly.ts, 10, 20))
+>ListElement : Symbol(ListElement, Decl(mappedTypeSinglePropertyConstrainsProperly.ts, 0, 0))
+
+    ID extends List[number]["id"],
+>ID : Symbol(ID, Decl(mappedTypeSinglePropertyConstrainsProperly.ts, 11, 40))
+>List : Symbol(List, Decl(mappedTypeSinglePropertyConstrainsProperly.ts, 10, 20))
+
+    > = ({ id: ID } & List[number])["condition"]
+>id : Symbol(id, Decl(mappedTypeSinglePropertyConstrainsProperly.ts, 13, 10))
+>ID : Symbol(ID, Decl(mappedTypeSinglePropertyConstrainsProperly.ts, 11, 40))
+>List : Symbol(List, Decl(mappedTypeSinglePropertyConstrainsProperly.ts, 10, 20))
+
+type Mapped = {
+>Mapped : Symbol(Mapped, Decl(mappedTypeSinglePropertyConstrainsProperly.ts, 13, 48))
+
+    [ID in "yes"]: CheckCondition<typeof list, ID>
+>ID : Symbol(ID, Decl(mappedTypeSinglePropertyConstrainsProperly.ts, 16, 5))
+>CheckCondition : Symbol(CheckCondition, Decl(mappedTypeSinglePropertyConstrainsProperly.ts, 8, 11))
+>list : Symbol(list, Decl(mappedTypeSinglePropertyConstrainsProperly.ts, 5, 5))
+>ID : Symbol(ID, Decl(mappedTypeSinglePropertyConstrainsProperly.ts, 16, 5))
+
+}["yes"]
+
+type NotMapped = CheckCondition<typeof list, "yes">
+>NotMapped : Symbol(NotMapped, Decl(mappedTypeSinglePropertyConstrainsProperly.ts, 17, 8))
+>CheckCondition : Symbol(CheckCondition, Decl(mappedTypeSinglePropertyConstrainsProperly.ts, 8, 11))
+>list : Symbol(list, Decl(mappedTypeSinglePropertyConstrainsProperly.ts, 5, 5))
+
+declare const mapped: Mapped
+>mapped : Symbol(mapped, Decl(mappedTypeSinglePropertyConstrainsProperly.ts, 21, 13))
+>Mapped : Symbol(Mapped, Decl(mappedTypeSinglePropertyConstrainsProperly.ts, 13, 48))
+
+declare const notMapped: NotMapped
+>notMapped : Symbol(notMapped, Decl(mappedTypeSinglePropertyConstrainsProperly.ts, 22, 13))
+>NotMapped : Symbol(NotMapped, Decl(mappedTypeSinglePropertyConstrainsProperly.ts, 17, 8))
+
+let test: true = true
+>test : Symbol(test, Decl(mappedTypeSinglePropertyConstrainsProperly.ts, 24, 3))
+
+test = mapped
+>test : Symbol(test, Decl(mappedTypeSinglePropertyConstrainsProperly.ts, 24, 3))
+>mapped : Symbol(mapped, Decl(mappedTypeSinglePropertyConstrainsProperly.ts, 21, 13))
+
+test = notMapped
+>test : Symbol(test, Decl(mappedTypeSinglePropertyConstrainsProperly.ts, 24, 3))
+>notMapped : Symbol(notMapped, Decl(mappedTypeSinglePropertyConstrainsProperly.ts, 22, 13))
+
