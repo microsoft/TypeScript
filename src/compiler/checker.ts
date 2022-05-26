@@ -21146,9 +21146,11 @@ namespace ts {
                 return getSupertypeOrUnion(types);
             }
             const primaryTypes = filter(types, t => !(t.flags & TypeFlags.Nullable));
-            return primaryTypes.length ?
-                getNullableType(getSupertypeOrUnion(primaryTypes), getFalsyFlagsOfTypes(types) & TypeFlags.Nullable) :
-                getUnionType(types, UnionReduction.Subtype);
+            if (primaryTypes.length) {
+                const supertypeOrUnion = getSupertypeOrUnion(primaryTypes);
+                return primaryTypes === types ? supertypeOrUnion : getUnionType([supertypeOrUnion, ...filter(types, t => !!(t.flags & TypeFlags.Nullable))]);
+            }
+            return getUnionType(types, UnionReduction.Subtype);
         }
 
         // Return the leftmost type for which no type to the right is a subtype.
@@ -21377,12 +21379,13 @@ namespace ts {
         // flags for the string, number, boolean, "", 0, false, void, undefined, or null types respectively. Returns
         // no flags for all other types (including non-falsy literal types).
         function getFalsyFlags(type: Type): TypeFlags {
-            return type.flags & TypeFlags.Union ? getFalsyFlagsOfTypes((type as UnionType).types) :
-                type.flags & TypeFlags.StringLiteral ? (type as StringLiteralType).value === "" ? TypeFlags.StringLiteral : 0 :
-                type.flags & TypeFlags.NumberLiteral ? (type as NumberLiteralType).value === 0 ? TypeFlags.NumberLiteral : 0 :
-                type.flags & TypeFlags.BigIntLiteral ? isZeroBigInt(type as BigIntLiteralType) ? TypeFlags.BigIntLiteral : 0 :
-                type.flags & TypeFlags.BooleanLiteral ? (type === falseType || type === regularFalseType) ? TypeFlags.BooleanLiteral : 0 :
-                type.flags & TypeFlags.PossiblyFalsy;
+            const t = type.flags & TypeFlags.Intersection ? getBaseConstraintOrType(type) : type;
+            return t.flags & TypeFlags.Union ? getFalsyFlagsOfTypes((t as UnionType).types) :
+                t.flags & TypeFlags.StringLiteral ? (t as StringLiteralType).value === "" ? TypeFlags.StringLiteral : 0 :
+                t.flags & TypeFlags.NumberLiteral ? (t as NumberLiteralType).value === 0 ? TypeFlags.NumberLiteral : 0 :
+                t.flags & TypeFlags.BigIntLiteral ? isZeroBigInt(t as BigIntLiteralType) ? TypeFlags.BigIntLiteral : 0 :
+                t.flags & TypeFlags.BooleanLiteral ? (t === falseType || t === regularFalseType) ? TypeFlags.BooleanLiteral : 0 :
+                t.flags & TypeFlags.PossiblyFalsy;
         }
 
         function removeDefinitelyFalsyTypes(type: Type): Type {
