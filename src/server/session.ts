@@ -575,7 +575,7 @@ namespace ts.server {
         // it easier for the caller to skip post-processing.
         if (searchedProjects.size === 1) {
             const it = resultsMap.values().next();
-            return it.done ? [] : it.value; // There may not be any results at all
+            return it.done ? emptyArray : it.value; // There may not be any results at all
         }
 
         return resultsMap;
