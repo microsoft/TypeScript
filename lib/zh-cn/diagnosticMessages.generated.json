@@ -20,7 +20,7 @@
   "A_computed_property_name_in_a_method_overload_must_refer_to_an_expression_whose_type_is_a_literal_ty_1168": "方法重载中的计算属性名称必须引用文本类型或 \"unique symbol\" 类型的表达式。",
   "A_computed_property_name_in_a_type_literal_must_refer_to_an_expression_whose_type_is_a_literal_type__1170": "类型文本中的计算属性名称必须引用类型为文本类型或 \"unique symbol\" 类型的表达式。",
   "A_computed_property_name_in_an_ambient_context_must_refer_to_an_expression_whose_type_is_a_literal_t_1165": "环境上下文中的计算属性名称必须引用类型为文本类型或 \"unique symbol\" 类型的表达式。",
-  "A_computed_property_name_in_an_interface_must_refer_to_an_expression_whose_type_is_a_literal_type_or_1169": "接口中的计算属性名称必须引用类型为文本类型或 \"unique symbol\" 的表达式。",
+  "A_computed_property_name_in_an_interface_must_refer_to_an_expression_whose_type_is_a_literal_type_or_1169": "接口中的计算属性名称所引用的表达式，其类型必须为字面量类型或 \"unique symbol\"。",
   "A_computed_property_name_must_be_of_type_string_number_symbol_or_any_2464": "计算属性名的类型必须为 \"string\"、\"number\"、\"symbol\" 或 \"any\"。",
   "A_computed_property_name_of_the_form_0_must_be_of_type_symbol_2471": "窗体“{0}”的计算属性名必须是 \"symbol\" 类型。",
   "A_const_assertions_can_only_be_applied_to_references_to_enum_members_or_string_number_boolean_array__1355": "\"const\" 断言只能用于引用枚举成员、字符串、数字、布尔值、数组。",
