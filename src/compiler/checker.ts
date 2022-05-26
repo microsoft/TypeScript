@@ -2641,7 +2641,8 @@ namespace ts {
                     && isAliasableOrJsExpression(node.parent.right)
                 || node.kind === SyntaxKind.ShorthandPropertyAssignment
                 || node.kind === SyntaxKind.PropertyAssignment && isAliasableOrJsExpression((node as PropertyAssignment).initializer)
-                || isVariableDeclarationInitializedToBareOrAccessedRequire(node);
+                || node.kind === SyntaxKind.VariableDeclaration && isVariableDeclarationInitializedToBareOrAccessedRequire(node)
+                || node.kind === SyntaxKind.BindingElement && isVariableDeclarationInitializedToBareOrAccessedRequire(node.parent.parent);
         }
 
         function isAliasableOrJsExpression(e: Expression) {
@@ -37819,8 +37820,8 @@ namespace ts {
             }
             // For a commonjs `const x = require`, validate the alias and exit
             const symbol = getSymbolOfNode(node);
-            if (symbol.flags & SymbolFlags.Alias && isVariableDeclarationInitializedToBareOrAccessedRequire(node)) {
-                checkAliasSymbol(node);
+            if (symbol.flags & SymbolFlags.Alias && isVariableDeclarationInitializedToBareOrAccessedRequire(node.kind === SyntaxKind.BindingElement ? node.parent.parent : node)) {
+                checkAliasSymbol(node as BindingElement | VariableDeclaration);
                 return;
             }
 
@@ -40684,7 +40685,7 @@ namespace ts {
             return true;
         }
 
-        function checkAliasSymbol(node: ImportEqualsDeclaration | VariableDeclaration | ImportClause | NamespaceImport | ImportSpecifier | ExportSpecifier | NamespaceExport) {
+        function checkAliasSymbol(node: ImportEqualsDeclaration | VariableDeclaration | ImportClause | NamespaceImport | ImportSpecifier | ExportSpecifier | NamespaceExport | BindingElement) {
             let symbol = getSymbolOfNode(node);
             const target = resolveAlias(symbol);
 
