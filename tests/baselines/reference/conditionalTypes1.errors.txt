@@ -1,3 +1,5 @@
+tests/cases/conformance/types/conditional/conditionalTypes1.ts(12,5): error TS2322: Type 'T' is not assignable to type 'NonNullable<T>'.
+  Type 'T' is not assignable to type '{}'.
 tests/cases/conformance/types/conditional/conditionalTypes1.ts(17,5): error TS2322: Type 'T' is not assignable to type 'NonNullable<T>'.
   Type 'string | undefined' is not assignable to type 'NonNullable<T>'.
     Type 'undefined' is not assignable to type 'NonNullable<T>'.
@@ -66,7 +68,7 @@ tests/cases/conformance/types/conditional/conditionalTypes1.ts(288,43): error TS
       Type 'boolean' is not assignable to type 'true'.
 
 
-==== tests/cases/conformance/types/conditional/conditionalTypes1.ts (19 errors) ====
+==== tests/cases/conformance/types/conditional/conditionalTypes1.ts (20 errors) ====
     type T00 = Exclude<"a" | "b" | "c" | "d", "a" | "c" | "f">;  // "b" | "d"
     type T01 = Extract<"a" | "b" | "c" | "d", "a" | "c" | "f">;  // "a" | "c"
     
@@ -79,6 +81,10 @@ tests/cases/conformance/types/conditional/conditionalTypes1.ts(288,43): error TS
     function f1<T>(x: T, y: NonNullable<T>) {
         x = y;
         y = x;  // Error
+        ~
+!!! error TS2322: Type 'T' is not assignable to type 'NonNullable<T>'.
+!!! error TS2322:   Type 'T' is not assignable to type '{}'.
+!!! related TS2208 tests/cases/conformance/types/conditional/conditionalTypes1.ts:10:13: This type parameter probably needs an `extends object` constraint.
     }
     
     function f2<T extends string | undefined>(x: T, y: NonNullable<T>) {

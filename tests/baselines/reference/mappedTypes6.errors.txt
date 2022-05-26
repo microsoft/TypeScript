@@ -2,6 +2,25 @@ tests/cases/conformance/types/mapped/mappedTypes6.ts(23,5): error TS2322: Type '
 tests/cases/conformance/types/mapped/mappedTypes6.ts(24,5): error TS2322: Type 'Partial<T>' is not assignable to type 'Required<T>'.
 tests/cases/conformance/types/mapped/mappedTypes6.ts(27,5): error TS2322: Type 'Partial<T>' is not assignable to type 'T'.
   'T' could be instantiated with an arbitrary type which could be unrelated to 'Partial<T>'.
+tests/cases/conformance/types/mapped/mappedTypes6.ts(37,5): error TS2322: Type 'Required<T>' is not assignable to type 'Denullified<T>'.
+  Type 'T[P]' is not assignable to type 'NonNullable<T[P]>'.
+    Type 'T[keyof T]' is not assignable to type 'NonNullable<T[P]>'.
+      Type 'T[string] | T[number] | T[symbol]' is not assignable to type 'NonNullable<T[P]>'.
+        Type 'T[string]' is not assignable to type 'NonNullable<T[P]>'.
+          Type 'T[string]' is not assignable to type 'T[P]'.
+            Type 'string' is not assignable to type 'P'.
+              'string' is assignable to the constraint of type 'P', but 'P' could be instantiated with a different subtype of constraint 'string | number | symbol'.
+                Type 'T[keyof T]' is not assignable to type 'T[P]'.
+                  Type 'keyof T' is not assignable to type 'P'.
+                    'keyof T' is assignable to the constraint of type 'P', but 'P' could be instantiated with a different subtype of constraint 'string | number | symbol'.
+                      Type 'string | number | symbol' is not assignable to type 'P'.
+                        'string | number | symbol' is assignable to the constraint of type 'P', but 'P' could be instantiated with a different subtype of constraint 'string | number | symbol'.
+                          Type 'string' is not assignable to type 'P'.
+                            'string' is assignable to the constraint of type 'P', but 'P' could be instantiated with a different subtype of constraint 'string | number | symbol'.
+                              Type 'T[P]' is not assignable to type '{}'.
+                                Type 'T[keyof T]' is not assignable to type '{}'.
+                                  Type 'T[string] | T[number] | T[symbol]' is not assignable to type '{}'.
+                                    Type 'T[string]' is not assignable to type '{}'.
 tests/cases/conformance/types/mapped/mappedTypes6.ts(38,5): error TS2322: Type 'T' is not assignable to type 'Denullified<T>'.
 tests/cases/conformance/types/mapped/mappedTypes6.ts(39,5): error TS2322: Type 'Partial<T>' is not assignable to type 'Denullified<T>'.
 tests/cases/conformance/types/mapped/mappedTypes6.ts(42,5): error TS2322: Type 'T' is not assignable to type 'Required<T>'.
@@ -21,7 +40,7 @@ tests/cases/conformance/types/mapped/mappedTypes6.ts(119,4): error TS2540: Canno
 tests/cases/conformance/types/mapped/mappedTypes6.ts(120,4): error TS2540: Cannot assign to 'b' because it is a read-only property.
 
 
-==== tests/cases/conformance/types/mapped/mappedTypes6.ts (18 errors) ====
+==== tests/cases/conformance/types/mapped/mappedTypes6.ts (19 errors) ====
     type T00<T> = { [P in keyof T]: T[P] };
     type T01<T> = { [P in keyof T]?: T[P] };
     type T02<T> = { [P in keyof T]+?: T[P] };
@@ -66,6 +85,26 @@ tests/cases/conformance/types/mapped/mappedTypes6.ts(120,4): error TS2540: Canno
     function f2<T>(w: Denullified<T>, x: Required<T>, y: T, z: Partial<T>) {
         w = w;
         w = x;  // Error
+        ~
+!!! error TS2322: Type 'Required<T>' is not assignable to type 'Denullified<T>'.
+!!! error TS2322:   Type 'T[P]' is not assignable to type 'NonNullable<T[P]>'.
+!!! error TS2322:     Type 'T[keyof T]' is not assignable to type 'NonNullable<T[P]>'.
+!!! error TS2322:       Type 'T[string] | T[number] | T[symbol]' is not assignable to type 'NonNullable<T[P]>'.
+!!! error TS2322:         Type 'T[string]' is not assignable to type 'NonNullable<T[P]>'.
+!!! error TS2322:           Type 'T[string]' is not assignable to type 'T[P]'.
+!!! error TS2322:             Type 'string' is not assignable to type 'P'.
+!!! error TS2322:               'string' is assignable to the constraint of type 'P', but 'P' could be instantiated with a different subtype of constraint 'string | number | symbol'.
+!!! error TS2322:                 Type 'T[keyof T]' is not assignable to type 'T[P]'.
+!!! error TS2322:                   Type 'keyof T' is not assignable to type 'P'.
+!!! error TS2322:                     'keyof T' is assignable to the constraint of type 'P', but 'P' could be instantiated with a different subtype of constraint 'string | number | symbol'.
+!!! error TS2322:                       Type 'string | number | symbol' is not assignable to type 'P'.
+!!! error TS2322:                         'string | number | symbol' is assignable to the constraint of type 'P', but 'P' could be instantiated with a different subtype of constraint 'string | number | symbol'.
+!!! error TS2322:                           Type 'string' is not assignable to type 'P'.
+!!! error TS2322:                             'string' is assignable to the constraint of type 'P', but 'P' could be instantiated with a different subtype of constraint 'string | number | symbol'.
+!!! error TS2322:                               Type 'T[P]' is not assignable to type '{}'.
+!!! error TS2322:                                 Type 'T[keyof T]' is not assignable to type '{}'.
+!!! error TS2322:                                   Type 'T[string] | T[number] | T[symbol]' is not assignable to type '{}'.
+!!! error TS2322:                                     Type 'T[string]' is not assignable to type '{}'.
         w = y;  // Error
         ~
 !!! error TS2322: Type 'T' is not assignable to type 'Denullified<T>'.
