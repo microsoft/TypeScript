@@ -56,7 +56,7 @@ namespace ts {
                 }
             },
             getPrograms: () => {
-                const result = programs || emptyArray;
+                const result = programs || [];
                 programs = undefined;
                 return result;
             }
@@ -193,7 +193,7 @@ ${patch ? vfs.formatPatch(patch) : ""}`
             const { baselineSourceMap, baselineReadFileCalls, baselinePrograms, baselineDependencies } = input;
             if (baselinePrograms) {
                 const baseline: string[] = [];
-                tscWatch.baselinePrograms(baseline, getPrograms!, emptyArray, baselineDependencies);
+                tscWatch.baselinePrograms(baseline, getPrograms!, [], baselineDependencies);
                 sys.write(baseline.join("\n"));
             }
             if (baselineReadFileCalls) {

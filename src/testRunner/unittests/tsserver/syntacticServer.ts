@@ -48,39 +48,39 @@ import { something } from "something";
             openFilesForSession([file1], session);
             checkNumberOfProjects(service, { inferredProjects: 1 });
             const project = service.inferredProjects[0];
-            checkProjectActualFiles(project, emptyArray);
+            checkProjectActualFiles(project, []);
             verifyCompletions();
             verifyGoToDefToB();
 
             openFilesForSession([file2], session);
             checkNumberOfProjects(service, { inferredProjects: 1 });
-            checkProjectActualFiles(project, emptyArray);
+            checkProjectActualFiles(project, []);
             verifyCompletions();
             verifyGoToDefToB();
             verifyGoToDefToC();
 
             openFilesForSession([file3], session);
             checkNumberOfProjects(service, { inferredProjects: 1 });
-            checkProjectActualFiles(project, emptyArray);
+            checkProjectActualFiles(project, []);
 
             openFilesForSession([something], session);
             checkNumberOfProjects(service, { inferredProjects: 1 });
-            checkProjectActualFiles(project, emptyArray);
+            checkProjectActualFiles(project, []);
 
             // Close open files and verify resolutions
             closeFilesForSession([file3], session);
             checkNumberOfProjects(service, { inferredProjects: 1 });
-            checkProjectActualFiles(project, emptyArray);
+            checkProjectActualFiles(project, []);
 
             closeFilesForSession([file2], session);
             checkNumberOfProjects(service, { inferredProjects: 1 });
-            checkProjectActualFiles(project, emptyArray);
+            checkProjectActualFiles(project, []);
 
             function verifyCompletions() {
                 assert.isFalse(project.languageServiceEnabled);
-                checkWatchedFiles(host, emptyArray);
-                checkWatchedDirectories(host, emptyArray, /*recursive*/ true);
-                checkWatchedDirectories(host, emptyArray, /*recursive*/ false);
+                checkWatchedFiles(host, []);
+                checkWatchedDirectories(host, [], /*recursive*/ true);
+                checkWatchedDirectories(host, [], /*recursive*/ false);
                 verifySessionException<protocol.CompletionsRequest>(session, {
                     command: protocol.CommandTypes.Completions,
                     arguments: protocolFileLocationFromSubstring(file1, "prop", { index: 1 })
@@ -136,7 +136,7 @@ import { something } from "something";
             openFilesForSession([file1], session);
             checkNumberOfProjects(service, { inferredProjects: 1 });
             const project = service.inferredProjects[0];
-            checkProjectActualFiles(project, emptyArray); // Should not contain atTypes
+            checkProjectActualFiles(project, []); // Should not contain atTypes
         });
 
         it("should not include referenced files from unopened files", () => {
@@ -170,18 +170,18 @@ function fooB() { }`
             openFilesForSession([file1], session);
             checkNumberOfProjects(service, { inferredProjects: 1 });
             const project = service.inferredProjects[0];
-            checkProjectActualFiles(project, emptyArray);
+            checkProjectActualFiles(project, []);
 
             openFilesForSession([file2], session);
             checkNumberOfProjects(service, { inferredProjects: 1 });
             assert.isFalse(project.dirty);
             project.updateGraph();
-            checkProjectActualFiles(project, emptyArray);
+            checkProjectActualFiles(project, []);
 
             closeFilesForSession([file2], session);
             checkNumberOfProjects(service, { inferredProjects: 1 });
             assert.isTrue(project.dirty);
-            checkProjectActualFiles(project, emptyArray);
+            checkProjectActualFiles(project, []);
         });
     });
 }

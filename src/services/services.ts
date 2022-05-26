@@ -132,7 +132,7 @@ namespace ts {
 
     function createChildren(node: Node, sourceFile: SourceFileLike | undefined): Node[] {
         if (!isNodeKind(node.kind)) {
-            return emptyArray;
+            return [];
         }
 
         const children: Node[] = [];
@@ -269,7 +269,7 @@ namespace ts {
         }
 
         public getChildren(): Node[] {
-            return this.kind === SyntaxKind.EndOfFileToken ? (this as EndOfFileToken).jsDoc || emptyArray : emptyArray;
+            return this.kind === SyntaxKind.EndOfFileToken ? (this as EndOfFileToken).jsDoc || [] : [];
         }
 
         public getFirstToken(): Node | undefined {
@@ -329,7 +329,7 @@ namespace ts {
 
         getDocumentationComment(checker: TypeChecker | undefined): SymbolDisplayPart[] {
             if (!this.documentationComment) {
-                this.documentationComment = emptyArray; // Set temporarily to avoid an infinite loop finding inherited docs
+                this.documentationComment = []; // Set temporarily to avoid an infinite loop finding inherited docs
 
                 if (!this.declarations && (this as Symbol as TransientSymbol).target && ((this as Symbol as TransientSymbol).target as TransientSymbol).tupleLabelDeclaration) {
                     const labelDecl = ((this as Symbol as TransientSymbol).target as TransientSymbol).tupleLabelDeclaration!;
@@ -596,7 +596,7 @@ namespace ts {
     }
 
     function getJsDocTagsOfDeclarations(declarations: Declaration[] | undefined, checker: TypeChecker | undefined): JSDocTagInfo[] {
-        if (!declarations) return emptyArray;
+        if (!declarations) return [];
 
         let tags = JsDoc.getJsDocTagsFromDeclarations(declarations, checker);
         if (checker && (tags.length === 0 || declarations.some(hasJSDocInheritDocTag))) {
@@ -620,7 +620,7 @@ namespace ts {
     }
 
     function getDocumentationComment(declarations: readonly Declaration[] | undefined, checker: TypeChecker | undefined): SymbolDisplayPart[] {
-        if (!declarations) return emptyArray;
+        if (!declarations) return [];
 
         let doc = JsDoc.getJsDocCommentsFromDeclarations(declarations, checker);
         if (checker && (doc.length === 0 || declarations.some(hasJSDocInheritDocTag))) {
@@ -1986,7 +1986,7 @@ namespace ts {
             const matchKind = token.getStart(sourceFile) === position ? braceMatching.get(token.kind.toString()) : undefined;
             const match = matchKind && findChildOfKind(token.parent, matchKind, sourceFile);
             // We want to order the braces when we return the result.
-            return match ? [createTextSpanFromNode(token, sourceFile), createTextSpanFromNode(match, sourceFile)].sort((a, b) => a.start - b.start) : emptyArray;
+            return match ? [createTextSpanFromNode(token, sourceFile), createTextSpanFromNode(match, sourceFile)].sort((a, b) => a.start - b.start) : [];
         }
 
         function getIndentationAtPosition(fileName: string, position: number, editorOptions: EditorOptions | EditorSettings) {
@@ -2810,10 +2810,10 @@ namespace ts {
     /* @internal */
     export function getPropertySymbolsFromContextualType(node: ObjectLiteralElementWithName, checker: TypeChecker, contextualType: Type, unionSymbolOk: boolean): readonly Symbol[] {
         const name = getNameFromPropertyName(node.name);
-        if (!name) return emptyArray;
+        if (!name) return [];
         if (!contextualType.isUnion()) {
             const symbol = contextualType.getProperty(name);
-            return symbol ? [symbol] : emptyArray;
+            return symbol ? [symbol] : [];
         }
 
         const discriminatedPropertySymbols = mapDefined(contextualType.types, t => (isObjectLiteralExpression(node.parent)|| isJsxAttributes(node.parent)) && checker.isTypeInvalidDueToUnionDiscriminant(t, node.parent) ? undefined : t.getProperty(name));

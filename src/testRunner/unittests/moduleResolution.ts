@@ -599,7 +599,7 @@ export = C;
                 "/a/b",
                 /*useCaseSensitiveFileNames*/ false,
                 ["c.ts", "/a/b/d.ts"],
-                () => emptyArray
+                () => []
             );
         });
 
@@ -626,7 +626,7 @@ export = C;
                             [
                                 tscWatch.getDiagnosticMessageChain(
                                     Diagnostics.The_file_is_in_the_program_because_Colon,
-                                    emptyArray,
+                                    [],
                                     [
                                         tscWatch.getDiagnosticMessageChain(Diagnostics.Referenced_via_0_from_file_1, ["D.ts", "c.ts"]),
                                         tscWatch.getDiagnosticMessageChain(Diagnostics.Root_file_specified_for_compilation)
@@ -663,7 +663,7 @@ export = C;
                             [
                                 tscWatch.getDiagnosticMessageChain(
                                     Diagnostics.The_file_is_in_the_program_because_Colon,
-                                    emptyArray,
+                                    [],
                                     [
                                         tscWatch.getDiagnosticMessageChain(Diagnostics.Imported_via_0_from_file_1, [`"D"`, "c.ts"]),
                                         tscWatch.getDiagnosticMessageChain(Diagnostics.Root_file_specified_for_compilation)
@@ -700,7 +700,7 @@ export = C;
                             [
                                 tscWatch.getDiagnosticMessageChain(
                                     Diagnostics.The_file_is_in_the_program_because_Colon,
-                                    emptyArray,
+                                    [],
                                     [
                                         tscWatch.getDiagnosticMessageChain(Diagnostics.Imported_via_0_from_file_1, [`"./ModuleB"`, "moduleA.ts"]),
                                         tscWatch.getDiagnosticMessageChain(Diagnostics.Root_file_specified_for_compilation)
@@ -738,7 +738,7 @@ export = C;
                             [
                                 tscWatch.getDiagnosticMessageChain(
                                     Diagnostics.The_file_is_in_the_program_because_Colon,
-                                    emptyArray,
+                                    [],
                                     [
                                         tscWatch.getDiagnosticMessageChain(Diagnostics.Imported_via_0_from_file_1, [`"D"`, "c.ts"]),
                                         tscWatch.getDiagnosticMessageChain(Diagnostics.Root_file_specified_for_compilation)
@@ -791,7 +791,7 @@ export = C;
                     const importHereInB = tscWatch.getDiagnosticMessageChain(Diagnostics.Imported_via_0_from_file_1, [`"./moduleC"`, "moduleB.ts"]);
                     const details = [tscWatch.getDiagnosticMessageChain(
                         Diagnostics.The_file_is_in_the_program_because_Colon,
-                        emptyArray,
+                        [],
                         [importHereInA, importHereInB, tscWatch.getDiagnosticMessageChain(Diagnostics.Root_file_specified_for_compilation)]
                     )];
                     return [
@@ -854,7 +854,7 @@ import b = require("./moduleB");
                             [
                                 tscWatch.getDiagnosticMessageChain(
                                     Diagnostics.The_file_is_in_the_program_because_Colon,
-                                    emptyArray,
+                                    [],
                                     [
                                         tscWatch.getDiagnosticMessageChain(Diagnostics.Imported_via_0_from_file_1, [`"./ModuleC"`, "/a/B/c/moduleA.ts"]),
                                         tscWatch.getDiagnosticMessageChain(Diagnostics.Imported_via_0_from_file_1, [`"./moduleC"`, "/a/B/c/moduleB.ts"])
@@ -895,7 +895,7 @@ import b = require("./moduleB");
                 "/a/B/c",
                 /*useCaseSensitiveFileNames*/ false,
                 ["moduleD.ts"],
-                () => emptyArray
+                () => []
             );
         });
 
@@ -911,7 +911,7 @@ import b = require("./moduleB");
                 "d:/someFolder",
                 /*useCaseSensitiveFileNames*/ false,
                 ["d:/someFolder/moduleA.ts", "d:/someFolder/moduleB.ts"],
-                () => emptyArray
+                () => []
             );
         });
     });

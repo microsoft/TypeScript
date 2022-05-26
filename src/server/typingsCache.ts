@@ -38,7 +38,7 @@ namespace ts.server {
         if (arr1 === arr2) {
             return true;
         }
-        if ((arr1 || emptyArray).length === 0 && (arr2 || emptyArray).length === 0) {
+        if ((arr1 || []).length === 0 && (arr2 || []).length === 0) {
             return true;
         }
         const set = new Map<string, boolean>();
@@ -114,7 +114,7 @@ namespace ts.server {
                 this.perProjectCache.set(project.getProjectName(), {
                     compilerOptions: project.getCompilationSettings(),
                     typeAcquisition,
-                    typings: entry ? entry.typings : emptyArray,
+                    typings: entry ? entry.typings : [] as any as SortedReadonlyArray<string>,
                     unresolvedImports,
                     poisoned: true
                 });
@@ -132,7 +132,7 @@ namespace ts.server {
                 unresolvedImports,
                 poisoned: false
             });
-            return !typeAcquisition || !typeAcquisition.enable ? emptyArray : typings;
+            return !typeAcquisition || !typeAcquisition.enable ? [] as any as SortedReadonlyArray<string> : typings;
         }
 
         onProjectClosed(project: Project) {

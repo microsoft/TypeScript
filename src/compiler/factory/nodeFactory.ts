@@ -536,7 +536,7 @@ namespace ts {
 
         // @api
         function createNodeArray<T extends Node>(elements?: readonly T[], hasTrailingComma?: boolean): NodeArray<T> {
-            if (elements === undefined || elements === emptyArray) {
+            if (elements === undefined || elements === []) {
                 elements = [];
             }
             else if (isNodeArray(elements)) {
@@ -5316,7 +5316,7 @@ namespace ts {
         }
 
         // @api
-        function createBundle(sourceFiles: readonly SourceFile[], prepends: readonly (UnparsedSource | InputFiles)[] = emptyArray) {
+        function createBundle(sourceFiles: readonly SourceFile[], prepends: readonly (UnparsedSource | InputFiles)[] = []) {
             const node = createBaseNode<Bundle>(SyntaxKind.Bundle);
             node.prepends = prepends;
             node.sourceFiles = sourceFiles;
@@ -5324,7 +5324,7 @@ namespace ts {
         }
 
         // @api
-        function updateBundle(node: Bundle, sourceFiles: readonly SourceFile[], prepends: readonly (UnparsedSource | InputFiles)[] = emptyArray) {
+        function updateBundle(node: Bundle, sourceFiles: readonly SourceFile[], prepends: readonly (UnparsedSource | InputFiles)[] = []) {
             return node.sourceFiles !== sourceFiles
                 || node.prepends !== prepends
                 ? update(createBundle(sourceFiles, prepends), node)
@@ -5339,8 +5339,8 @@ namespace ts {
             node.texts = texts;
             node.fileName = "";
             node.text = "";
-            node.referencedFiles = emptyArray;
-            node.libReferenceDirectives = emptyArray;
+            node.referencedFiles = [];
+            node.libReferenceDirectives = [];
             node.getLineAndCharacterOfPosition = pos => getLineAndCharacterOfPosition(node, pos);
             return node;
         }
@@ -6530,7 +6530,7 @@ namespace ts {
         let texts: UnparsedSourceText[] | undefined;
         let hasNoDefaultLib: boolean | undefined;
 
-        for (const section of bundleFileInfo ? bundleFileInfo.sections : emptyArray) {
+        for (const section of bundleFileInfo ? bundleFileInfo.sections : []) {
             switch (section.kind) {
                 case BundleFileSectionKind.Prologue:
                     prologues = append(prologues, setTextRange(factory.createUnparsedPrologue(section.data), section));
@@ -6564,7 +6564,7 @@ namespace ts {
                         }
                     }
                     prependChildren = addRange(prependChildren, prependTexts);
-                    texts = append(texts, factory.createUnparsedPrepend(section.data, prependTexts ?? emptyArray));
+                    texts = append(texts, factory.createUnparsedPrepend(section.data, prependTexts ?? []));
                     break;
                 case BundleFileSectionKind.Internal:
                     if (stripInternal) {
@@ -6587,15 +6587,15 @@ namespace ts {
             texts = [textNode];
         }
 
-        const node = parseNodeFactory.createUnparsedSource(prologues ?? emptyArray, /*syntheticReferences*/ undefined, texts);
+        const node = parseNodeFactory.createUnparsedSource(prologues ?? [], /*syntheticReferences*/ undefined, texts);
         setEachParent(prologues, node);
         setEachParent(texts, node);
         setEachParent(prependChildren, node);
         node.hasNoDefaultLib = hasNoDefaultLib;
         node.helpers = helpers;
-        node.referencedFiles = referencedFiles || emptyArray;
+        node.referencedFiles = referencedFiles || [];
         node.typeReferenceDirectives = typeReferenceDirectives;
-        node.libReferenceDirectives = libReferenceDirectives || emptyArray;
+        node.libReferenceDirectives = libReferenceDirectives || [];
         return node;
     }
 
@@ -6629,7 +6629,7 @@ namespace ts {
             }
         }
 
-        const node = factory.createUnparsedSource(emptyArray, syntheticReferences, texts ?? emptyArray);
+        const node = factory.createUnparsedSource([], syntheticReferences, texts ?? []);
         setEachParent(syntheticReferences, node);
         setEachParent(texts, node);
         node.helpers = map(bundleFileInfo.sources && bundleFileInfo.sources.helpers, name => getAllUnscopedEmitHelpers().get(name)!);

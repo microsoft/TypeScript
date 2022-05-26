@@ -3,7 +3,7 @@
 var x = null;                        // error at "x"
 var x1 = undefined;		             // error at "x1"
 var widenArray = [null, undefined];  // error at "widenArray"
-var emptyArray = [];
+var [] = [];
 
 // these should not be error
 class AnimalObj {
@@ -14,7 +14,7 @@ var bar = "Hello World";
 var foo1: any = null;
 var foo2: any = undefined;
 var temp: number = 5;
-var c: AnimalObj = { x: null }; 
+var c: AnimalObj = { x: null };
 var array1 = ["Bob",2];
 var array2: any[] = [];
 var array3: any[] = [null, undefined];

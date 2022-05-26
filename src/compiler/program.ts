@@ -326,7 +326,7 @@ namespace ts {
             diagnostics = addRange(diagnostics, program.getDeclarationDiagnostics(sourceFile, cancellationToken));
         }
 
-        return sortAndDeduplicateDiagnostics(diagnostics || emptyArray);
+        return sortAndDeduplicateDiagnostics(diagnostics || []);
     }
 
     export interface FormatDiagnosticsHost {
@@ -1205,7 +1205,7 @@ namespace ts {
             tracing?.pop();
 
             // load type declarations specified via 'types' argument or implicitly from types/ and node_modules/@types folders
-            const typeReferences: string[] = rootNames.length ? getAutomaticTypeDirectiveNames(options, host) : emptyArray;
+            const typeReferences: string[] = rootNames.length ? getAutomaticTypeDirectiveNames(options, host) : [];
 
             if (typeReferences.length) {
                 tracing?.push(tracing.Phase.Program, "processTypeReferences", { count: typeReferences.length });
@@ -1353,10 +1353,10 @@ namespace ts {
         fileProcessingDiagnostics?.forEach(diagnostic => {
             switch (diagnostic.kind) {
                 case FilePreprocessingDiagnosticsKind.FilePreprocessingFileExplainingDiagnostic:
-                    return programDiagnostics.add(createDiagnosticExplainingFile(diagnostic.file && getSourceFileByPath(diagnostic.file), diagnostic.fileProcessingReason, diagnostic.diagnostic, diagnostic.args || emptyArray));
+                    return programDiagnostics.add(createDiagnosticExplainingFile(diagnostic.file && getSourceFileByPath(diagnostic.file), diagnostic.fileProcessingReason, diagnostic.diagnostic, diagnostic.args || []));
                 case FilePreprocessingDiagnosticsKind.FilePreprocessingReferencedDiagnostic:
                     const { file, pos, end } = getReferencedFileLocation(getSourceFileByPath, diagnostic.reason) as ReferenceFileLocation;
-                    return programDiagnostics.add(createFileDiagnostic(file, Debug.checkDefined(pos), Debug.checkDefined(end) - pos, diagnostic.diagnostic, ...diagnostic.args || emptyArray));
+                    return programDiagnostics.add(createFileDiagnostic(file, Debug.checkDefined(pos), Debug.checkDefined(end) - pos, diagnostic.diagnostic, ...diagnostic.args || []));
                 default:
                     Debug.assertNever(diagnostic);
             }
@@ -1400,7 +1400,7 @@ namespace ts {
         }
 
         function resolveModuleNamesWorker(moduleNames: string[], containingFile: SourceFile, reusedNames: string[] | undefined): readonly ResolvedModuleFull[] {
-            if (!moduleNames.length) return emptyArray;
+            if (!moduleNames.length) return [];
             const containingFileName = getNormalizedAbsolutePath(containingFile.originalFileName, currentDirectory);
             const redirectedReference = getRedirectReferenceForResolution(containingFile);
             tracing?.push(tracing.Phase.Program, "resolveModuleNamesWorker", { containingFileName });
@@ -1603,7 +1603,7 @@ namespace ts {
 
             const resolutions = unknownModuleNames && unknownModuleNames.length
                 ? resolveModuleNamesWorker(unknownModuleNames, file, reusedNames)
-                : emptyArray;
+                : [];
 
             // Combine results of resolutions and predicted results
             if (!result) {
@@ -2118,7 +2118,7 @@ namespace ts {
 
         function getProgramDiagnostics(sourceFile: SourceFile): readonly Diagnostic[] {
             if (skipTypeChecking(sourceFile, options, program)) {
-                return emptyArray;
+                return [];
             }
 
             const programDiagnosticsInFile = programDiagnostics.getDiagnostics(sourceFile.fileName);
@@ -2181,7 +2181,7 @@ namespace ts {
         function getBindAndCheckDiagnosticsForFileNoCache(sourceFile: SourceFile, cancellationToken: CancellationToken | undefined): readonly Diagnostic[] {
             return runWithCancellationToken(() => {
                 if (skipTypeChecking(sourceFile, options, program)) {
-                    return emptyArray;
+                    return [];
                 }
 
                 const typeChecker = getTypeChecker();
@@ -2199,8 +2199,8 @@ namespace ts {
                 // - external: files that are added by plugins
                 const includeBindAndCheckDiagnostics = !isTsNoCheck && (sourceFile.scriptKind === ScriptKind.TS || sourceFile.scriptKind === ScriptKind.TSX
                         || sourceFile.scriptKind === ScriptKind.External || isPlainJs || isCheckJs || sourceFile.scriptKind === ScriptKind.Deferred);
-                let bindDiagnostics: readonly Diagnostic[] = includeBindAndCheckDiagnostics ? sourceFile.bindDiagnostics : emptyArray;
-                let checkDiagnostics = includeBindAndCheckDiagnostics ? typeChecker.getDiagnostics(sourceFile, cancellationToken) : emptyArray;
+                let bindDiagnostics: readonly Diagnostic[] = includeBindAndCheckDiagnostics ? sourceFile.bindDiagnostics : [];
+                let checkDiagnostics = includeBindAndCheckDiagnostics ? typeChecker.getDiagnostics(sourceFile, cancellationToken) : [];
                 if (isPlainJs) {
                     bindDiagnostics = filter(bindDiagnostics, d => plainJSErrors.has(d.code));
                     checkDiagnostics = filter(checkDiagnostics, d => plainJSErrors.has(d.code));
@@ -2486,7 +2486,7 @@ namespace ts {
             return runWithCancellationToken(() => {
                 const resolver = getTypeChecker().getEmitResolver(sourceFile, cancellationToken);
                 // Don't actually write any files since we're just getting diagnostics.
-                return ts.getDeclarationDiagnostics(getEmitHost(noop), resolver, sourceFile) || emptyArray;
+                return ts.getDeclarationDiagnostics(getEmitHost(noop), resolver, sourceFile) || [];
             });
         }
 
@@ -2526,7 +2526,7 @@ namespace ts {
         }
 
         function getOptionsDiagnosticsOfConfigFile() {
-            if (!options.configFile) return emptyArray;
+            if (!options.configFile) return [];
             let diagnostics = programDiagnostics.getDiagnostics(options.configFile.fileName);
             forEachResolvedProjectReference(resolvedRef => {
                 diagnostics = concatenate(diagnostics, programDiagnostics.getDiagnostics(resolvedRef.sourceFile.fileName));
@@ -2535,11 +2535,11 @@ namespace ts {
         }
 
         function getGlobalDiagnostics(): SortedReadonlyArray<Diagnostic> {
-            return rootNames.length ? sortAndDeduplicateDiagnostics(getTypeChecker().getGlobalDiagnostics().slice()) : emptyArray as any as SortedReadonlyArray<Diagnostic>;
+            return rootNames.length ? sortAndDeduplicateDiagnostics(getTypeChecker().getGlobalDiagnostics().slice()) : [] as any as SortedReadonlyArray<Diagnostic>;
         }
 
         function getConfigFileParsingDiagnostics(): readonly Diagnostic[] {
-            return configFileParsingDiagnostics || emptyArray;
+            return configFileParsingDiagnostics || [];
         }
 
         function processRootFile(fileName: string, isDefaultLib: boolean, ignoreNoDefaultLib: boolean, reason: FileIncludeReason) {
@@ -2604,9 +2604,9 @@ namespace ts {
                 collectDynamicImportOrRequireCalls(file);
             }
 
-            file.imports = imports || emptyArray;
-            file.moduleAugmentations = moduleAugmentations || emptyArray;
-            file.ambientModuleNames = ambientModules || emptyArray;
+            file.imports = imports || [];
+            file.moduleAugmentations = moduleAugmentations || [];
+            file.ambientModuleNames = ambientModules || [];
 
             return;
 
@@ -3693,7 +3693,7 @@ namespace ts {
             const location = locationReason && getReferencedFileLocation(getSourceFileByPath, locationReason);
             const fileIncludeReasonDetails = fileIncludeReasons && chainDiagnosticMessages(fileIncludeReasons, Diagnostics.The_file_is_in_the_program_because_Colon);
             const redirectInfo = file && explainIfFileIsRedirect(file);
-            const chain = chainDiagnosticMessages(redirectInfo ? fileIncludeReasonDetails ? [fileIncludeReasonDetails, ...redirectInfo] : redirectInfo : fileIncludeReasonDetails, diagnostic, ...args || emptyArray);
+            const chain = chainDiagnosticMessages(redirectInfo ? fileIncludeReasonDetails ? [fileIncludeReasonDetails, ...redirectInfo] : redirectInfo : fileIncludeReasonDetails, diagnostic, ...args || []);
             return location && isReferenceFileLocation(location) ?
                 createFileDiagnosticFromMessageChain(location.file, location.pos, location.end - location.pos, chain, relatedInfo) :
                 createCompilerDiagnosticFromMessageChain(chain, relatedInfo);
@@ -3895,7 +3895,7 @@ namespace ts {
         }
 
         function getOptionPathsSyntax() {
-            return getOptionsSyntaxByName("paths") || emptyArray;
+            return getOptionsSyntaxByName("paths") || [];
         }
 
         function getOptionsSyntaxByValue(name: string, value: string) {
@@ -4192,7 +4192,7 @@ namespace ts {
     }
 
     /*@internal*/
-    export const emitSkippedWithNoDiagnostics: EmitResult = { diagnostics: emptyArray, sourceMaps: undefined, emittedFiles: undefined, emitSkipped: true };
+    export const emitSkippedWithNoDiagnostics: EmitResult = { diagnostics: [], sourceMaps: undefined, emittedFiles: undefined, emitSkipped: true };
 
     /*@internal*/
     export function handleNoEmitOptions<T extends BuilderProgram>(
@@ -4274,7 +4274,7 @@ namespace ts {
 
     /* @internal */
     export function createPrependNodes(projectReferences: readonly ProjectReference[] | undefined, getCommandLine: (ref: ProjectReference, index: number) => ParsedCommandLine | undefined, readFile: (path: string) => string | undefined) {
-        if (!projectReferences) return emptyArray;
+        if (!projectReferences) return [];
         let nodes: InputFiles[] | undefined;
         for (let i = 0; i < projectReferences.length; i++) {
             const ref = projectReferences[i];
@@ -4289,7 +4289,7 @@ namespace ts {
                 (nodes || (nodes = [])).push(node);
             }
         }
-        return nodes || emptyArray;
+        return nodes || [];
     }
     /**
      * Returns the target config filename of a project reference.

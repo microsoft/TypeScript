@@ -30,7 +30,7 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
             });
             return [refactorInfo];
         }
-        return emptyArray;
+        return [];
     }
 
     function getNodeOrParentOfParentheses(file: SourceFile, startPosition: number) {

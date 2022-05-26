@@ -427,7 +427,7 @@ namespace ts {
 
         // Emit and report any errors we ran into.
         const emitResult = isListFilesOnly
-            ? { emitSkipped: true, diagnostics: emptyArray }
+            ? { emitSkipped: true, diagnostics: [] }
             : program.emit(/*targetSourceFile*/ undefined, writeFile, cancellationToken, emitOnlyDtsFiles, customTransformers);
         const { emittedFiles, diagnostics: emitDiagnostics } = emitResult;
         addRange(allDiagnostics, emitDiagnostics);

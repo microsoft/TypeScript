@@ -143,7 +143,7 @@ namespace ts.projectSystem {
             expectedWatchedFiles.set(packageJson.path, 1); // typing installer
             checkWatchedFilesDetailed(host, expectedWatchedFiles);
 
-            checkWatchedDirectories(host, emptyArray, /*recursive*/ false);
+            checkWatchedDirectories(host, [], /*recursive*/ false);
 
             const expectedWatchedDirectoriesRecursive = new Map<string, number>();
             expectedWatchedDirectoriesRecursive.set("/a/b", 1); // wild card
@@ -159,7 +159,7 @@ namespace ts.projectSystem {
             checkProjectActualFiles(p, [file1.path, jquery.path, tsconfig.path]);
             // should not watch jquery
             checkWatchedFilesDetailed(host, expectedWatchedFiles);
-            checkWatchedDirectories(host, emptyArray, /*recursive*/ false);
+            checkWatchedDirectories(host, [], /*recursive*/ false);
             checkWatchedDirectoriesDetailed(host, expectedWatchedDirectoriesRecursive, /*recursive*/ true);
         });
 
@@ -1019,7 +1019,7 @@ namespace ts.projectSystem {
             watchedFilesExpected.set(combinePaths(installer.globalTypingsCacheLocation, "package.json"), 1);
             checkWatchedFilesDetailed(host, watchedFilesExpected);
 
-            checkWatchedDirectories(host, emptyArray, /*recursive*/ false);
+            checkWatchedDirectories(host, [], /*recursive*/ false);
 
             checkWatchedDirectoriesDetailed(host, ["/", "/node_modules", "/bower_components"], 1, /*recursive*/ true);
 
@@ -1540,7 +1540,7 @@ namespace ts.projectSystem {
 
             const host = createServerHost([app, jquery, chroma]);
             const logger = trackingLogger();
-            const result = JsTyping.discoverTypings(host, logger.log, [app.path, jquery.path, chroma.path], getDirectoryPath(app.path as Path), safeList, emptyMap, { enable: true }, emptyArray, emptyMap);
+            const result = JsTyping.discoverTypings(host, logger.log, [app.path, jquery.path, chroma.path], getDirectoryPath(app.path as Path), safeList, emptyMap, { enable: true }, [], emptyMap);
             const finish = logger.finish();
             assert.deepEqual(finish, [
                 'Inferred typings from file names: ["jquery","chroma-js"]',

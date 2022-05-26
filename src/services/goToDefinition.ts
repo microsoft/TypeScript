@@ -2,7 +2,7 @@
 namespace ts.GoToDefinition {
     export function getDefinitionAtPosition(program: Program, sourceFile: SourceFile, position: number, searchOtherFilesOnly?: boolean, stopAtAlias?: boolean): readonly DefinitionInfo[] | undefined {
         const resolvedRef = getReferenceAtPosition(sourceFile, position, program);
-        const fileReferenceDefinition = resolvedRef && [getDefinitionInfoForFileReference(resolvedRef.reference.fileName, resolvedRef.fileName, resolvedRef.unverified)] || emptyArray;
+        const fileReferenceDefinition = resolvedRef && [getDefinitionInfoForFileReference(resolvedRef.reference.fileName, resolvedRef.fileName, resolvedRef.unverified)] || [];
         if (resolvedRef?.file) {
             // If `file` is missing, do a symbol-based lookup as well
             return fileReferenceDefinition;
@@ -17,7 +17,7 @@ namespace ts.GoToDefinition {
         const typeChecker = program.getTypeChecker();
 
         if (node.kind === SyntaxKind.OverrideKeyword || (isJSDocOverrideTag(node) && rangeContainsPosition(node.tagName, position))) {
-            return getDefinitionFromOverriddenMember(typeChecker, node) || emptyArray;
+            return getDefinitionFromOverriddenMember(typeChecker, node) || [];
         }
 
         // Labels
@@ -45,7 +45,7 @@ namespace ts.GoToDefinition {
 
         if (searchOtherFilesOnly && failedAliasResolution) {
             // We couldn't resolve the specific import, try on the module specifier.
-            const importDeclaration = forEach([node, ...symbol?.declarations || emptyArray], n => findAncestor(n, isAnyImportOrBareOrAccessedRequire));
+            const importDeclaration = forEach([node, ...symbol?.declarations || []], n => findAncestor(n, isAnyImportOrBareOrAccessedRequire));
             const moduleSpecifier = importDeclaration && tryGetModuleSpecifierFromDeclaration(importDeclaration);
             if (moduleSpecifier) {
                 ({ symbol, failedAliasResolution } = getSymbol(moduleSpecifier, typeChecker, stopAtAlias));
@@ -90,7 +90,7 @@ namespace ts.GoToDefinition {
                 return [sigInfo];
             }
             else {
-                const defs = getDefinitionFromSymbol(typeChecker, symbol, node, failedAliasResolution, calledDeclaration) || emptyArray;
+                const defs = getDefinitionFromSymbol(typeChecker, symbol, node, failedAliasResolution, calledDeclaration) || [];
                 // For a 'super()' call, put the signature first, else put the variable first.
                 return node.kind === SyntaxKind.SuperKeyword ? [sigInfo, ...defs] : [...defs, sigInfo];
             }
@@ -103,8 +103,8 @@ namespace ts.GoToDefinition {
         // assignment. This case and others are handled by the following code.
         if (node.parent.kind === SyntaxKind.ShorthandPropertyAssignment) {
             const shorthandSymbol = typeChecker.getShorthandAssignmentValueSymbol(symbol.valueDeclaration);
-            const definitions = shorthandSymbol?.declarations ? shorthandSymbol.declarations.map(decl => createDefinitionInfo(decl, typeChecker, shorthandSymbol, node, /*unverified*/ false, failedAliasResolution)) : emptyArray;
-            return concatenate(definitions, getDefinitionFromObjectLiteralElement(typeChecker, node) || emptyArray);
+            const definitions = shorthandSymbol?.declarations ? shorthandSymbol.declarations.map(decl => createDefinitionInfo(decl, typeChecker, shorthandSymbol, node, /*unverified*/ false, failedAliasResolution)) : [];
+            return concatenate(definitions, getDefinitionFromObjectLiteralElement(typeChecker, node) || []);
         }
 
         // If the node is the name of a BindingElement within an ObjectBindingPattern instead of just returning the
@@ -122,7 +122,7 @@ namespace ts.GoToDefinition {
             (node === (parent.propertyName || parent.name))) {
             const name = getNameFromPropertyName(node);
             const type = typeChecker.getTypeAtLocation(parent.parent);
-            return name === undefined ? emptyArray : flatMap(type.isUnion() ? type.types : [type], t => {
+            return name === undefined ? [] : flatMap(type.isUnion() ? type.types : [type], t => {
                 const prop = t.getProperty(name);
                 return prop && getDefinitionFromSymbol(typeChecker, prop, node);
             });

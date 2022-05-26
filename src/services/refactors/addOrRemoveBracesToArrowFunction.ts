@@ -29,7 +29,7 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
     function getRefactorActionsToRemoveFunctionBraces(context: RefactorContext): readonly ApplicableRefactorInfo[] {
         const { file, startPosition, triggerReason } = context;
         const info = getConvertibleArrowFunctionAtPosition(file, startPosition, triggerReason === "invoked");
-        if (!info) return emptyArray;
+        if (!info) return [];
 
         if (!isRefactorErrorInfo(info)) {
             return [{
@@ -52,7 +52,7 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
             }];
         }
 
-        return emptyArray;
+        return [];
     }
 
     function getRefactorEditsToRemoveFunctionBraces(context: RefactorContext, actionName: string): RefactorEditInfo | undefined {

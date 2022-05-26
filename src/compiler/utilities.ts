@@ -21,7 +21,7 @@ namespace ts {
     }
 
     export function getDeclarationsOfKind<T extends Declaration>(symbol: Symbol, kind: T["kind"]): T[] {
-        return filter(symbol.declarations || emptyArray, d => d.kind === kind) as T[];
+        return filter(symbol.declarations || [], d => d.kind === kind) as T[];
     }
 
     export function createSymbolTable(symbols?: readonly Symbol[]): SymbolTable {
@@ -576,13 +576,13 @@ namespace ts {
                 Math: ["clz32", "imul", "sign", "log10", "log2", "log1p", "expm1", "cosh", "sinh", "tanh", "acosh", "asinh", "atanh", "hypot", "trunc", "fround", "cbrt"],
                 Map: ["entries", "keys", "values"],
                 Set: ["entries", "keys", "values"],
-                Promise: emptyArray,
+                Promise: [],
                 PromiseConstructor: ["all", "race", "reject", "resolve"],
                 Symbol: ["for", "keyFor"],
                 WeakMap: ["entries", "keys", "values"],
                 WeakSet: ["entries", "keys", "values"],
-                Iterator: emptyArray,
-                AsyncIterator: emptyArray,
+                Iterator: [],
+                AsyncIterator: [],
                 String: ["codePointAt", "includes", "endsWith", "normalize", "repeat", "startsWith", "anchor", "big", "blink", "bold", "fixed", "fontcolor", "fontsize", "italics", "link", "small", "strike", "sub", "sup"],
                 StringConstructor: ["fromCodePoint", "raw"]
             },
@@ -590,8 +590,8 @@ namespace ts {
                 Array: ["includes"]
             },
             es2017: {
-                Atomics: emptyArray,
-                SharedArrayBuffer: emptyArray,
+                Atomics: [],
+                SharedArrayBuffer: [],
                 String: ["padStart", "padEnd"],
                 ObjectConstructor: ["values", "entries", "getOwnPropertyDescriptors"],
                 DateTimeFormat: ["formatToParts"]
@@ -602,10 +602,10 @@ namespace ts {
                 RegExpExecArray: ["groups"],
                 RegExp: ["dotAll"],
                 Intl: ["PluralRules"],
-                AsyncIterable: emptyArray,
-                AsyncIterableIterator: emptyArray,
-                AsyncGenerator: emptyArray,
-                AsyncGeneratorFunction: emptyArray,
+                AsyncIterable: [],
+                AsyncIterableIterator: [],
+                AsyncGenerator: [],
+                AsyncGeneratorFunction: [],
                 NumberFormat: ["formatToParts"]
             },
             es2019: {
@@ -615,9 +615,9 @@ namespace ts {
                 Symbol: ["description"]
             },
             es2020: {
-                BigInt: emptyArray,
-                BigInt64Array: emptyArray,
-                BigUint64Array: emptyArray,
+                BigInt: [],
+                BigInt64Array: [],
+                BigUint64Array: [],
                 PromiseConstructor: ["allSettled"],
                 SymbolConstructor: ["matchAll"],
                 String: ["matchAll"],
@@ -1622,7 +1622,7 @@ namespace ts {
 
     export function getTsConfigPropArray(tsConfigSourceFile: TsConfigSourceFile | undefined, propKey: string): readonly PropertyAssignment[] {
         const jsonObjectLiteral = getTsConfigObjectLiteralExpression(tsConfigSourceFile);
-        return jsonObjectLiteral ? getPropertyAssignment(jsonObjectLiteral, propKey) : emptyArray;
+        return jsonObjectLiteral ? getPropertyAssignment(jsonObjectLiteral, propKey) : [];
     }
 
     export function getContainingFunction(node: Node): SignatureDeclaration | undefined {
@@ -2740,7 +2740,7 @@ namespace ts {
             }
             node = getNextJSDocCommentLocation(node);
         }
-        return result || emptyArray;
+        return result || [];
     }
 
     function filterOwnedJSDocTags(hostNode: Node, jsDoc: JSDoc | JSDocTag) {
@@ -3217,9 +3217,9 @@ namespace ts {
 
     /** Returns the node in an `extends` or `implements` clause of a class or interface. */
     export function getAllSuperTypeNodes(node: Node): readonly TypeNode[] {
-        return isInterfaceDeclaration(node) ? getInterfaceBaseTypeNodes(node) || emptyArray :
-            isClassLike(node) ? concatenate(singleElementArray(getEffectiveBaseTypeNode(node)), getEffectiveImplementsTypeNodes(node)) || emptyArray :
-            emptyArray;
+        return isInterfaceDeclaration(node) ? getInterfaceBaseTypeNodes(node) || [] :
+            isClassLike(node) ? concatenate(singleElementArray(getEffectiveBaseTypeNode(node)), getEffectiveImplementsTypeNodes(node)) || [] :
+            [];
     }
 
     export function getInterfaceBaseTypeNodes(node: InterfaceDeclaration) {
@@ -6577,7 +6577,7 @@ namespace ts {
             if (!resolution || !resolution.originalPath || !resolution.resolvedFileName) return;
             const { resolvedFileName, originalPath } = resolution;
             cache.setSymlinkedFile(toPath(originalPath, cwd, getCanonicalFileName), resolvedFileName);
-            const [commonResolved, commonOriginal] = guessDirectorySymlink(resolvedFileName, originalPath, cwd, getCanonicalFileName) || emptyArray;
+            const [commonResolved, commonOriginal] = guessDirectorySymlink(resolvedFileName, originalPath, cwd, getCanonicalFileName) || [];
             if (commonResolved && commonOriginal) {
                 cache.setSymlinkedDirectory(
                     commonOriginal,
@@ -7126,8 +7126,8 @@ namespace ts {
     }
 
     export const emptyFileSystemEntries: FileSystemEntries = {
-        files: emptyArray,
-        directories: emptyArray
+        files: [],
+        directories: []
     };
 
 
@@ -7166,7 +7166,7 @@ namespace ts {
         if (!diagnostic.relatedInformation) {
             diagnostic.relatedInformation = [];
         }
-        Debug.assert(diagnostic.relatedInformation !== emptyArray, "Diagnostic had empty array singleton for related info, but is still being constructed!");
+        Debug.assert(diagnostic.relatedInformation !== [], "Diagnostic had empty array singleton for related info, but is still being constructed!");
         diagnostic.relatedInformation.push(...relatedInformation);
         return diagnostic;
     }

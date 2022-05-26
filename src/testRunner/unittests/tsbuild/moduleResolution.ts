@@ -55,7 +55,7 @@ namespace ts.tscWatch {
             subScenario: `resolves specifier in output declaration file from referenced project correctly`,
             sys,
             commandLineArgs: ["-b", "packages/pkg1", "--verbose", "--traceResolution"],
-            changes: emptyArray
+            changes: []
         });
 
         verifyTscWatch({
@@ -63,7 +63,7 @@ namespace ts.tscWatch {
             subScenario: `resolves specifier in output declaration file from referenced project correctly with preserveSymlinks`,
             sys: () => sys({ preserveSymlinks: true }),
             commandLineArgs: ["-b", "packages/pkg1", "--verbose", "--traceResolution"],
-            changes: emptyArray
+            changes: []
         });
 
         verifyTscWatch({

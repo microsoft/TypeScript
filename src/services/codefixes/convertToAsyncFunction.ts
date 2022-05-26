@@ -76,7 +76,7 @@ namespace ts.codefix {
             return;
         }
 
-        const returnStatements = functionToConvertRenamed.body && isBlock(functionToConvertRenamed.body) ? getReturnStatementsWithPromiseHandlers(functionToConvertRenamed.body, checker) : emptyArray;
+        const returnStatements = functionToConvertRenamed.body && isBlock(functionToConvertRenamed.body) ? getReturnStatementsWithPromiseHandlers(functionToConvertRenamed.body, checker) : [];
         const transformer: Transformer = { checker, synthNamesMap, setOfExpressionsToReturn, isInJSFile: isInJavascript };
         if (!returnStatements.length) {
             return;
@@ -276,7 +276,7 @@ namespace ts.codefix {
     }
 
     function getNewNameIfConflict(name: Identifier, originalNames: ReadonlyESMap<string, Symbol[]>): SynthIdentifier {
-        const numVarsSameName = (originalNames.get(name.text) || emptyArray).length;
+        const numVarsSameName = (originalNames.get(name.text) || []).length;
         const identifier = numVarsSameName === 0 ? name : factory.createIdentifier(name.text + "_" + numVarsSameName);
         return createSynthIdentifier(identifier);
     }
@@ -287,7 +287,7 @@ namespace ts.codefix {
 
     function silentFail() {
         codeActionSucceeded = false;
-        return emptyArray;
+        return [];
     }
 
     // dispatch function to recursively build the refactoring
@@ -644,7 +644,7 @@ namespace ts.codefix {
                 else {
                     const inlinedStatements = isFixablePromiseHandler(funcBody, transformer.checker) ?
                         transformReturnStatementWithFixablePromiseHandler(transformer, factory.createReturnStatement(funcBody), hasContinuation, continuationArgName) :
-                        emptyArray;
+                        [];
 
                     if (inlinedStatements.length > 0) {
                         return inlinedStatements;
@@ -673,7 +673,7 @@ namespace ts.codefix {
                 // If no cases apply, we've found a transformation body we don't know how to handle, so the refactoring should no-op to avoid deleting code.
                 return silentFail();
         }
-        return emptyArray;
+        return [];
     }
 
     function getPossiblyAwaitedRightHandSide(checker: TypeChecker, type: Type, expr: Expression): AwaitExpression | Expression {
@@ -809,7 +809,7 @@ namespace ts.codefix {
         return { kind: SynthBindingNameKind.Identifier, identifier, types, hasBeenDeclared: false, hasBeenReferenced: false };
     }
 
-    function createSynthBindingPattern(bindingPattern: BindingPattern, elements: readonly SynthBindingName[] = emptyArray, types: Type[] = []): SynthBindingPattern {
+    function createSynthBindingPattern(bindingPattern: BindingPattern, elements: readonly SynthBindingName[] = [], types: Type[] = []): SynthBindingPattern {
         return { kind: SynthBindingNameKind.BindingPattern, bindingPattern, elements, types };
     }
 

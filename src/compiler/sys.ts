@@ -587,7 +587,7 @@ namespace ts {
                         }
                     }, /*recursive*/ false, options),
                     refCount: 1,
-                    childWatches: emptyArray
+                    childWatches: []
                 };
                 cache.set(dirPath, directoryWatcher);
                 updateChildWatches(dirName, dirPath, options);
@@ -719,7 +719,7 @@ namespace ts {
         function removeChildWatches(parentWatcher: HostDirectoryWatcher | undefined) {
             if (!parentWatcher) return;
             const existingChildWatches = parentWatcher.childWatches;
-            parentWatcher.childWatches = emptyArray;
+            parentWatcher.childWatches = [];
             for (const childWatcher of existingChildWatches) {
                 childWatcher.close();
                 removeChildWatches(cache.get(toCanonicalFilePath(childWatcher.dirName)));
@@ -737,14 +737,14 @@ namespace ts {
                     // Filter our the symbolic link directories since those arent included in recursive watch
                     // which is same behaviour when recursive: true is passed to fs.watch
                     return !isIgnoredPath(childFullName, options) && filePathComparer(childFullName, normalizePath(realpath(childFullName))) === Comparison.EqualTo ? childFullName : undefined;
-                }) : emptyArray,
+                }) : [],
                 parentWatcher.childWatches,
                 (child, childWatcher) => filePathComparer(child, childWatcher.dirName),
                 createAndAddChildDirectoryWatcher,
                 closeFileWatcher,
                 addChildDirectoryWatcher
             );
-            parentWatcher.childWatches = newChildWatches || emptyArray;
+            parentWatcher.childWatches = newChildWatches || [];
             return hasChanges;
 
             /**

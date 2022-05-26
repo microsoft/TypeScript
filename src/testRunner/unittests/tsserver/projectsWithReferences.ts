@@ -14,7 +14,7 @@ namespace ts.projectSystem {
             service.openClientFile(testsIndex.path);
 
             checkWatchedFilesDetailed(host, [coreConfig, coreIndex, coreAnotherModule, logicConfig, logicIndex, testsConfig, libFile].map(f => f.path.toLowerCase()), 1);
-            checkWatchedDirectoriesDetailed(host, emptyArray, 1, /*recursive*/ false);
+            checkWatchedDirectoriesDetailed(host, [], 1, /*recursive*/ false);
             checkWatchedDirectoriesDetailed(host, [
                 TestFSWithWatch.getTsBuildProjectFilePath("sample1", "core"),
                 TestFSWithWatch.getTsBuildProjectFilePath("sample1", "logic"),
@@ -109,7 +109,7 @@ export class A {}`
                     `${tscWatch.projectRoot}/refs`, // Failed lookup since refs/a.ts does not exist
                     ...getTypeRootsFromLocation(`${tscWatch.projectRoot}/c`)
                 ], 1, /*recursive*/ true);
-                checkOrphanScriptInfos(service, emptyArray);
+                checkOrphanScriptInfos(service, []);
 
                 // non local edit
                 host.appendFile(bTs.path, `export function gFoo() { }`);
@@ -126,7 +126,7 @@ export class A {}`
                     `${tscWatch.projectRoot}/refs`, // Failed lookup since refs/a.ts does not exist
                     ...getTypeRootsFromLocation(`${tscWatch.projectRoot}/c`)
                 ], 1, /*recursive*/ true);
-                checkOrphanScriptInfos(service, emptyArray);
+                checkOrphanScriptInfos(service, []);
             });
 
             it("edit on config file", () => {
@@ -249,7 +249,7 @@ export class A {}`
                     `${tscWatch.projectRoot}/refs`, // Failed lookup since refs/a.ts does not exist
                     ...getTypeRootsFromLocation(`${tscWatch.projectRoot}/c`)
                 ], 1, /*recursive*/ true);
-                checkOrphanScriptInfos(service, emptyArray);
+                checkOrphanScriptInfos(service, []);
             });
 
             it("deleting transitively referenced config file", () => {
@@ -268,7 +268,7 @@ export class A {}`
                     `${tscWatch.projectRoot}/refs`, // Failed lookup since refs/a.ts does not exist
                     ...getTypeRootsFromLocation(`${tscWatch.projectRoot}/c`)
                 ], 1, /*recursive*/ true);
-                checkOrphanScriptInfos(service, emptyArray);
+                checkOrphanScriptInfos(service, []);
 
                 // revert
                 host.writeFile(aConfig.path, aConfig.content);
@@ -284,7 +284,7 @@ export class A {}`
                     `${tscWatch.projectRoot}/refs`, // Failed lookup since refs/a.ts does not exist
                     ...getTypeRootsFromLocation(`${tscWatch.projectRoot}/c`)
                 ], 1, /*recursive*/ true);
-                checkOrphanScriptInfos(service, emptyArray);
+                checkOrphanScriptInfos(service, []);
             });
         });
 
@@ -351,7 +351,7 @@ export class A {}`
                 expectedWatchedDirectoriesDetailed.set(`${tscWatch.projectRoot}/a`, 2); // Failed to package json and wild card directory
                 expectedWatchedDirectoriesDetailed.set(`${tscWatch.projectRoot}/b`, 2); // Failed to package json and wild card directory
                 checkWatchedDirectoriesDetailed(host, expectedWatchedDirectoriesDetailed, /*recursive*/ true);
-                checkOrphanScriptInfos(service, emptyArray);
+                checkOrphanScriptInfos(service, []);
 
                 // non local edit
                 host.appendFile(bTs.path, `export function gFoo() { }`);
@@ -363,7 +363,7 @@ export class A {}`
                     tscWatch.projectRoot // watches for directories created for resolution of b
                 ], 1, /*recursive*/ false);
                 checkWatchedDirectoriesDetailed(host, expectedWatchedDirectoriesDetailed, /*recursive*/ true);
-                checkOrphanScriptInfos(service, emptyArray);
+                checkOrphanScriptInfos(service, []);
             });
 
             it("edit on config file", () => {
@@ -488,7 +488,7 @@ export class A {}`
                 expectedWatchedDirectoriesDetailed.set(`${tscWatch.projectRoot}/a`, 2); // Failed to package json and wild card directory
                 expectedWatchedDirectoriesDetailed.set(`${tscWatch.projectRoot}/b`, 2); // Failed to package json and wild card directory
                 checkWatchedDirectoriesDetailed(host, expectedWatchedDirectoriesDetailed, /*recursive*/ true);
-                checkOrphanScriptInfos(service, emptyArray);
+                checkOrphanScriptInfos(service, []);
             });
 
             it("deleting transitively referenced config file", () => {
@@ -509,7 +509,7 @@ export class A {}`
                 ], identity, () => 1);
                 expectedWatchedDirectoriesDetailed.set(`${tscWatch.projectRoot}/b`, 2); // Failed to package json and wild card directory
                 checkWatchedDirectoriesDetailed(host, expectedWatchedDirectoriesDetailed, /*recursive*/ true);
-                checkOrphanScriptInfos(service, emptyArray);
+                checkOrphanScriptInfos(service, []);
 
                 // revert
                 host.writeFile(aConfig.path, aConfig.content);
@@ -521,7 +521,7 @@ export class A {}`
                 ], 1, /*recursive*/ false);
                 expectedWatchedDirectoriesDetailed.set(`${tscWatch.projectRoot}/a`, 2); // Failed to package json and wild card directory
                 checkWatchedDirectoriesDetailed(host, expectedWatchedDirectoriesDetailed, /*recursive*/ true);
-                checkOrphanScriptInfos(service, emptyArray);
+                checkOrphanScriptInfos(service, []);
             });
         });
     });

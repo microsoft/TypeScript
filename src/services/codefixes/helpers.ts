@@ -114,7 +114,7 @@ namespace ts.codefix {
                             /*decorators*/ undefined,
                             modifiers,
                             name,
-                            emptyArray,
+                            [],
                             typeNode,
                             ambient ? undefined : body || createStubbedMethodBody(quotePreference)));
                     }

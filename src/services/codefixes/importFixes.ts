@@ -443,7 +443,7 @@ namespace ts.codefix {
             // Don't bother providing an action to add a new import if we can add to an existing one.
             return {
                 computedWithoutCacheCount: 0,
-                fixes: [...(useNamespace ? [useNamespace] : emptyArray), addToExisting],
+                fixes: [...(useNamespace ? [useNamespace] : []), addToExisting],
             };
         }
 
@@ -460,7 +460,7 @@ namespace ts.codefix {
             fromCacheOnly);
         return {
             computedWithoutCacheCount,
-            fixes: [...(useNamespace ? [useNamespace] : emptyArray), ...fixes],
+            fixes: [...(useNamespace ? [useNamespace] : []), ...fixes],
         };
     }
 
@@ -589,7 +589,7 @@ namespace ts.codefix {
 
     function getExistingImportDeclarations({ moduleSymbol, exportKind, targetFlags, symbol }: SymbolExportInfo, checker: TypeChecker, importingFile: SourceFile, compilerOptions: CompilerOptions): readonly FixAddToExistingImportInfo[] {
         // Can't use an es6 import for a type in JS.
-        if (!(targetFlags & SymbolFlags.Value) && isSourceFileJS(importingFile)) return emptyArray;
+        if (!(targetFlags & SymbolFlags.Value) && isSourceFileJS(importingFile)) return [];
         const importKind = getImportKind(importingFile, exportKind, compilerOptions);
         return mapDefined(importingFile.imports, (moduleSpecifier): FixAddToExistingImportInfo | undefined => {
             const i = importFromModuleSpecifier(moduleSpecifier);
@@ -1015,7 +1015,7 @@ namespace ts.codefix {
                     sourceFile,
                     importClauseOrBindingPattern,
                     importKind === ImportKind.Default ? { name: symbolName, addAsTypeOnly } : undefined,
-                    importKind === ImportKind.Named ? [{ name: symbolName, addAsTypeOnly }] : emptyArray,
+                    importKind === ImportKind.Named ? [{ name: symbolName, addAsTypeOnly }] : [],
                     compilerOptions);
                 const moduleSpecifierWithoutQuotes = stripQuotes(moduleSpecifier);
                 return includeSymbolNameInDescription

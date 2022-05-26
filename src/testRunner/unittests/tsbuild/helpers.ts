@@ -163,7 +163,7 @@ interface Symbol {
         const content = outFile && sys.fileExists(outFile) ? originalReadCall.call(sys, outFile, "utf8")! : "";
         baselineRecorder.WriteLine("======================================================================");
         baselineRecorder.WriteLine(`File:: ${outFile}`);
-        for (const section of bundleFileInfo ? bundleFileInfo.sections : emptyArray) {
+        for (const section of bundleFileInfo ? bundleFileInfo.sections : []) {
             baselineRecorder.WriteLine("----------------------------------------------------------------------");
             writeSectionHeader(section);
             if (section.kind !== BundleFileSectionKind.Prepend) {

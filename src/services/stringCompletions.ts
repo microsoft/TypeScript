@@ -308,10 +308,10 @@ namespace ts.Completions.StringCompletions {
     }
 
     function getStringLiteralTypes(type: Type | undefined, uniques = new Map<string, true>()): readonly StringLiteralType[] {
-        if (!type) return emptyArray;
+        if (!type) return [];
         type = skipConstraint(type);
         return type.isUnion() ? flatMap(type.types, t => getStringLiteralTypes(t, uniques)) :
-            type.isStringLiteral() && !(type.flags & TypeFlags.EnumLiteral) && addToSeen(uniques, type.value) ? [type] : emptyArray;
+            type.isStringLiteral() && !(type.flags & TypeFlags.EnumLiteral) && addToSeen(uniques, type.value) ? [type] : [];
     }
 
     interface NameAndKind {
@@ -686,7 +686,7 @@ namespace ts.Completions.StringCompletions {
     ): readonly NameAndKind[] {
         if (!endsWith(path, "*")) {
             // For a path mapping "foo": ["/x/y/z.ts"], add "foo" itself as a completion.
-            return !stringContains(path, "*") ? justPathMappingName(path) : emptyArray;
+            return !stringContains(path, "*") ? justPathMappingName(path) : [];
         }
 
         const pathPrefix = path.slice(0, path.length - 1);
@@ -699,7 +699,7 @@ namespace ts.Completions.StringCompletions {
         return flatMap(patterns, pattern => getModulesForPathsPattern(remainingFragment, baseUrl, pattern, fileExtensions, host));
 
         function justPathMappingName(name: string): readonly NameAndKind[] {
-            return startsWith(name, fragment) ? [directoryResult(removeTrailingDirectorySeparator(name))] : emptyArray;
+            return startsWith(name, fragment) ? [directoryResult(removeTrailingDirectorySeparator(name))] : [];
         }
     }
 
@@ -800,7 +800,7 @@ namespace ts.Completions.StringCompletions {
         // Check for typings specified in compiler options
         const seen = new Map<string, true>();
 
-        const typeRoots = tryAndIgnoreErrors(() => getEffectiveTypeRoots(options, host)) || emptyArray;
+        const typeRoots = tryAndIgnoreErrors(() => getEffectiveTypeRoots(options, host)) || [];
 
         for (const root of typeRoots) {
             getCompletionEntriesFromDirectories(root);
@@ -839,7 +839,7 @@ namespace ts.Completions.StringCompletions {
     }
 
     function enumerateNodeModulesVisibleToScript(host: LanguageServiceHost, scriptPath: string): readonly string[] {
-        if (!host.readFile || !host.fileExists) return emptyArray;
+        if (!host.readFile || !host.fileExists) return [];
 
         const result: string[] = [];
         for (const packageJson of findPackageJsons(scriptPath, host)) {

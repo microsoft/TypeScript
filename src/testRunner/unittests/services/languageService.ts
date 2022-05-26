@@ -60,8 +60,8 @@ export function Component(x: Config): any;`
                 ),
                 {
                     emitSkipped: true,
-                    diagnostics: emptyArray,
-                    outputFiles: emptyArray,
+                    diagnostics: [],
+                    outputFiles: [],
                     exportedModulesFromDeclarationEmit: undefined
                 }
             );
@@ -74,7 +74,7 @@ export function Component(x: Config): any;`
                 ),
                 {
                     emitSkipped: false,
-                    diagnostics: emptyArray,
+                    diagnostics: [],
                     outputFiles: [{
                         name: "foo.d.ts",
                         text: "export {};\r\n",

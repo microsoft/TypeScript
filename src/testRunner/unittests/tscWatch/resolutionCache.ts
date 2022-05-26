@@ -481,7 +481,7 @@ declare namespace myapp {
                 const files = [libFile, mainFile, config, linkedPackageInMain, linkedPackageJson, linkedPackageIndex, linkedPackageOther];
                 return createWatchedSystem(files, { currentDirectory: mainPackageRoot });
             },
-            changes: emptyArray
+            changes: []
         });
 
         describe("works when installing something in node_modules or @types when there is no notification from fs for index file", () => {

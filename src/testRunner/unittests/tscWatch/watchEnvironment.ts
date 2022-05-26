@@ -244,7 +244,7 @@ namespace ts.tscWatch {
                     environmentVariables.set("TSC_WATCHDIRECTORY", Tsc_WatchDirectory.NonRecursiveWatchDirectory);
                     return createWatchedSystem(files, { environmentVariables, currentDirectory: cwd });
                 },
-                changes: emptyArray
+                changes: []
             });
 
             verifyTscWatch({
@@ -440,7 +440,7 @@ namespace ts.tscWatch {
                     const files = [libFile, commonFile1, commonFile2, configFile];
                     return createWatchedSystem(files);
                 },
-                changes: emptyArray
+                changes: []
             });
 
             verifyTscWatch({
@@ -459,7 +459,7 @@ namespace ts.tscWatch {
                     const files = [libFile, commonFile1, commonFile2, configFile];
                     return createWatchedSystem(files, { runWithoutRecursiveWatches: true });
                 },
-                changes: emptyArray
+                changes: []
             });
 
             verifyTscWatch({
@@ -478,7 +478,7 @@ namespace ts.tscWatch {
                     const files = [libFile, commonFile1, commonFile2, configFile];
                     return createWatchedSystem(files, { runWithoutRecursiveWatches: true, runWithFallbackPolling: true });
                 },
-                changes: emptyArray
+                changes: []
             });
 
             verifyTscWatch({
@@ -493,7 +493,7 @@ namespace ts.tscWatch {
                     const files = [libFile, commonFile1, commonFile2, configFile];
                     return createWatchedSystem(files);
                 },
-                changes: emptyArray
+                changes: []
             });
 
             describe("exclude options", () => {

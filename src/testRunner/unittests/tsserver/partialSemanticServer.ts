@@ -46,9 +46,9 @@ import { something } from "something";
 
             function verifyCompletions() {
                 assert.isTrue(project.languageServiceEnabled);
-                checkWatchedFiles(host, emptyArray);
-                checkWatchedDirectories(host, emptyArray, /*recursive*/ true);
-                checkWatchedDirectories(host, emptyArray, /*recursive*/ false);
+                checkWatchedFiles(host, []);
+                checkWatchedDirectories(host, [], /*recursive*/ true);
+                checkWatchedDirectories(host, [], /*recursive*/ false);
                 const response = session.executeCommandSeq<protocol.CompletionsRequest>({
                     command: protocol.CommandTypes.Completions,
                     arguments: protocolFileLocationFromSubstring(file1, "prop", { index: 1 })
@@ -246,7 +246,7 @@ function fooB() { }`
             const project = service.inferredProjects[0];
             assert.isFalse(project.autoImportProviderHost);
             assert.isUndefined(project.getPackageJsonAutoImportProvider());
-            assert.deepEqual(project.getPackageJsonsForAutoImport(), emptyArray);
+            assert.deepEqual(project.getPackageJsonsForAutoImport(), []);
         });
 
         it("should support go-to-definition on module specifiers", () => {

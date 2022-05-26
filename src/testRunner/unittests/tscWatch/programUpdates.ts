@@ -25,7 +25,7 @@ namespace ts.tscWatch {
                 };
                 return createWatchedSystem([appFile, moduleFile, libFile]);
             },
-            changes: emptyArray
+            changes: []
         });
 
         verifyTscWatch({
@@ -45,7 +45,7 @@ namespace ts.tscWatch {
                 };
                 return createWatchedSystem([f1, libFile, config], { useCaseSensitiveFileNames: false });
             },
-            changes: emptyArray
+            changes: []
         });
 
         verifyTscWatch({
@@ -77,7 +77,7 @@ namespace ts.tscWatch {
                 };
                 return createWatchedSystem([configFile, libFile, file1, file2, file3]);
             },
-            changes: emptyArray
+            changes: []
         });
 
         verifyTscWatch({
@@ -111,7 +111,7 @@ namespace ts.tscWatch {
                 };
                 return createWatchedSystem([commonFile1, commonFile2, libFile, configFile]);
             },
-            changes: emptyArray
+            changes: []
         });
 
         verifyTscWatch({
@@ -315,7 +315,7 @@ export class A {
                 };
                 return createWatchedSystem([libFile, commonFile1, commonFile2, excludedFile1, configFile]);
             },
-            changes: emptyArray
+            changes: []
         });
 
         verifyTscWatch({
@@ -377,7 +377,7 @@ export class A {
                 };
                 return createWatchedSystem([commonFile1, commonFile2, libFile, configFile]);
             },
-            changes: emptyArray
+            changes: []
         });
 
         verifyTscWatch({
@@ -488,7 +488,7 @@ export class A {
                 };
                 return createWatchedSystem([file1, file2, file3, libFile, configFile]);
             },
-            changes: emptyArray
+            changes: []
         });
 
         verifyTscWatch({
@@ -539,7 +539,7 @@ export class A {
             watchBaseline({
                 baseline,
                 getPrograms,
-                oldPrograms: emptyArray,
+                oldPrograms: [],
                 sys,
                 oldSnap,
             });
@@ -557,14 +557,14 @@ export class A {
             watchBaseline({
                 baseline,
                 getPrograms: getPrograms2,
-                oldPrograms: emptyArray,
+                oldPrograms: [],
                 sys,
                 oldSnap: oldSnap2,
             });
 
             sys.checkTimeoutQueueLength(0);
-            baseline.push(`First program is not updated:: ${getPrograms() === emptyArray}`);
-            baseline.push(`Second program is not updated:: ${getPrograms2() === emptyArray}`);
+            baseline.push(`First program is not updated:: ${getPrograms() === []}`);
+            baseline.push(`Second program is not updated:: ${getPrograms2() === []}`);
             Harness.Baseline.runBaseline(`tscWatch/${scenario}/two-watch-programs-are-not-affected-by-each-other.js`, baseline.join("\r\n"));
         });
 
@@ -768,7 +768,7 @@ export class A {
                 };
                 return createWatchedSystem([file1, libFile, corruptedConfig]);
             },
-            changes: emptyArray
+            changes: []
         });
 
         verifyTscWatch({
@@ -849,7 +849,7 @@ declare const eval: any`
                 };
                 return createWatchedSystem([f, config, libFile]);
             },
-            changes: emptyArray
+            changes: []
         });
 
         function runQueuedTimeoutCallbacksTwice(sys: WatchedSystem) {
@@ -935,7 +935,7 @@ declare const eval: any`
                 };
                 return createWatchedSystem([f1, config, node, cwd, libFile], { currentDirectory: cwd.path });
             },
-            changes: emptyArray
+            changes: []
         });
 
         verifyTscWatch({
@@ -978,7 +978,7 @@ declare const eval: any`
                 };
                 return createWatchedSystem([file, configFile, libFile]);
             },
-            changes: emptyArray
+            changes: []
         });
 
         verifyTscWatch({
@@ -998,7 +998,7 @@ declare const eval: any`
                 };
                 return createWatchedSystem([file, configFile, libFile]);
             },
-            changes: emptyArray
+            changes: []
         });
 
         verifyTscWatch({
@@ -1051,7 +1051,7 @@ declare const eval: any`
                 };
                 return createWatchedSystem([file1, configFile, libFile]);
             },
-            changes: emptyArray
+            changes: []
         });
 
         verifyTscWatch({
@@ -1080,7 +1080,7 @@ declare const eval: any`
                 };
                 return createWatchedSystem([f, config, t1, t2, libFile], { currentDirectory: getDirectoryPath(f.path) });
             },
-            changes: emptyArray
+            changes: []
         });
 
         it("should support files without extensions", () => {
@@ -1104,7 +1104,7 @@ declare const eval: any`
                 baseline,
                 oldSnap,
                 getPrograms,
-                changes: emptyArray,
+                changes: [],
                 watchOrSolution: watch
             });
         });
@@ -1164,7 +1164,7 @@ declare const eval: any`
                         };
                         const tsconfig: File = {
                             path: `${projectRoot}/tsconfig.json`,
-                            content: generateTSConfig(options, emptyArray, "\n")
+                            content: generateTSConfig(options, [], "\n")
                         };
                         return createWatchedSystem([file1, file2, libFile, tsconfig], { currentDirectory: projectRoot });
                     },
@@ -1571,7 +1571,7 @@ interface Document {
                     });
                 }
 
-                verifyLibErrors(`${subScenario}/with default options`, emptyArray);
+                verifyLibErrors(`${subScenario}/with default options`, []);
                 verifyLibErrors(`${subScenario}/with skipLibCheck`, ["--skipLibCheck"]);
                 verifyLibErrors(`${subScenario}/with skipDefaultLibCheck`, ["--skipDefaultLibCheck"]);
             }

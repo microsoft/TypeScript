@@ -1768,7 +1768,7 @@ namespace FourSlashInterface {
         readonly argumentCount?: number;
         /** @default false */
         readonly isVariadic?: boolean;
-        /** @default ts.emptyArray */
+        /** @default [] */
         readonly tags?: readonly ts.JSDocTagInfo[];
         readonly triggerReason?: ts.SignatureHelpTriggerReason;
         readonly overrideSelectedItemIndex?: number;

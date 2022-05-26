@@ -18,9 +18,9 @@ namespace ts.refactor.convertParamsToDestructuredObject {
     function getRefactorActionsToConvertParametersToDestructuredObject(context: RefactorContext): readonly ApplicableRefactorInfo[] {
         const { file, startPosition } = context;
         const isJSFile = isSourceFileJS(file);
-        if (isJSFile) return emptyArray; // TODO: GH#30113
+        if (isJSFile) return []; // TODO: GH#30113
         const functionDeclaration = getFunctionDeclarationAtPosition(file, startPosition, context.program.getTypeChecker());
-        if (!functionDeclaration) return emptyArray;
+        if (!functionDeclaration) return [];
 
         return [{
             name: refactorName,

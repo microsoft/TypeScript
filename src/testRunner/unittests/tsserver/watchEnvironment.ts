@@ -65,7 +65,7 @@ namespace ts.projectSystem {
                 const completions = project.getLanguageService().getCompletionsAtPosition(index.path, completionPosition, { includeExternalModuleExports: false, includeInsertTextCompletions: false })!;
                 checkArray("Completion Entries", completions.entries.map(e => e.name), expectedCompletions);
 
-                checkWatchedDirectories(host, emptyArray, /*recursive*/ true);
+                checkWatchedDirectories(host, [], /*recursive*/ true);
 
                 checkWatchedFilesDetailed(host, expectedWatchedFiles);
                 checkWatchedDirectoriesDetailed(host, expectedWatchedDirectories, /*recursive*/ false);
@@ -207,7 +207,7 @@ namespace ts.projectSystem {
         });
 
         function verifyProject() {
-            checkWatchedDirectories(host, emptyArray, /*recursive*/ true);
+            checkWatchedDirectories(host, [], /*recursive*/ true);
             checkWatchedFilesDetailed(host, expectedWatchedFiles);
             checkWatchedDirectoriesDetailed(host, expectedWatchedDirectories, /*recursive*/ false);
             checkProjectActualFiles(project, fileNames);
@@ -275,7 +275,7 @@ namespace ts.projectSystem {
             );
 
             // Instead of polling watch (= watchedFiles), uses fsWatch
-            checkWatchedFiles(host, emptyArray);
+            checkWatchedFiles(host, []);
             checkWatchedDirectoriesDetailed(
                 host,
                 files.map(f => f.path.toLowerCase()),
@@ -359,7 +359,7 @@ namespace ts.projectSystem {
                     }]
                 )
             );
-            checkWatchedDirectories(host, emptyArray, /*recursive*/ true);
+            checkWatchedDirectories(host, [], /*recursive*/ true);
         });
 
         it("with fallbackPolling option as host configuration", () => {
@@ -400,8 +400,8 @@ namespace ts.projectSystem {
                     }]
                 )
             );
-            checkWatchedDirectories(host, emptyArray, /*recursive*/ false);
-            checkWatchedDirectories(host, emptyArray, /*recursive*/ true);
+            checkWatchedDirectories(host, [], /*recursive*/ false);
+            checkWatchedDirectories(host, [], /*recursive*/ true);
         });
 
         it("with watchFile option in configFile", () => {
@@ -517,7 +517,7 @@ namespace ts.projectSystem {
                     }]
                 )
             );
-            checkWatchedDirectories(host, emptyArray, /*recursive*/ true);
+            checkWatchedDirectories(host, [], /*recursive*/ true);
         });
 
         it("with fallbackPolling option in configFile", () => {
@@ -562,8 +562,8 @@ namespace ts.projectSystem {
                     }]
                 )
             );
-            checkWatchedDirectories(host, emptyArray, /*recursive*/ false);
-            checkWatchedDirectories(host, emptyArray, /*recursive*/ true);
+            checkWatchedDirectories(host, [], /*recursive*/ false);
+            checkWatchedDirectories(host, [], /*recursive*/ true);
         });
 
         describe("excludeDirectories", () => {
@@ -607,7 +607,7 @@ namespace ts.projectSystem {
             it("with excludeDirectories option in configFile", () => {
                 const { host, configFile } = setup();
                 checkWatchedFilesDetailed(host, [configFile.path, libFile.path], 1);
-                checkWatchedDirectories(host, emptyArray, /*recursive*/ false);
+                checkWatchedDirectories(host, [], /*recursive*/ false);
                 checkWatchedDirectoriesDetailed(
                     host,
                     arrayToMap(
@@ -622,7 +622,7 @@ namespace ts.projectSystem {
             it("with excludeDirectories option in configuration", () => {
                 const { host, configFile } = setup(/*configureHost*/ true);
                 checkWatchedFilesDetailed(host, [configFile.path, libFile.path], 1);
-                checkWatchedDirectories(host, emptyArray, /*recursive*/ false);
+                checkWatchedDirectories(host, [], /*recursive*/ false);
                 checkWatchedDirectoriesDetailed(
                     host,
                     [`${tscWatch.projectRoot}/src`],
@@ -649,7 +649,7 @@ namespace ts.projectSystem {
             it("external project watch options", () => {
                 const host = setupExternalProject();
                 checkWatchedFilesDetailed(host, [libFile.path], 1);
-                checkWatchedDirectories(host, emptyArray, /*recursive*/ false);
+                checkWatchedDirectories(host, [], /*recursive*/ false);
                 checkWatchedDirectoriesDetailed(
                     host,
                     [`${tscWatch.projectRoot}/src`, `${tscWatch.projectRoot}/node_modules`],
@@ -661,7 +661,7 @@ namespace ts.projectSystem {
             it("external project watch options in host configuration", () => {
                 const host = setupExternalProject(/*configureHost*/ true);
                 checkWatchedFilesDetailed(host, [libFile.path], 1);
-                checkWatchedDirectories(host, emptyArray, /*recursive*/ false);
+                checkWatchedDirectories(host, [], /*recursive*/ false);
                 checkWatchedDirectoriesDetailed(
                     host,
                     [`${tscWatch.projectRoot}/src`],
@@ -714,7 +714,7 @@ namespace ts.projectSystem {
                     [libFile.path, `${tscWatch.projectRoot}/tsconfig.json`, `${tscWatch.projectRoot}/jsconfig.json`, `${tscWatch.projectRoot}/src/tsconfig.json`, `${tscWatch.projectRoot}/src/jsconfig.json`],
                     1
                 );
-                checkWatchedDirectories(host, emptyArray, /*recursive*/ false);
+                checkWatchedDirectories(host, [], /*recursive*/ false);
                 checkWatchedDirectoriesDetailed(
                     host,
                     [`${tscWatch.projectRoot}/src`, `${tscWatch.projectRoot}/node_modules`],
@@ -730,7 +730,7 @@ namespace ts.projectSystem {
                     [libFile.path, `${tscWatch.projectRoot}/tsconfig.json`, `${tscWatch.projectRoot}/jsconfig.json`, `${tscWatch.projectRoot}/src/tsconfig.json`, `${tscWatch.projectRoot}/src/jsconfig.json`],
                     1
                 );
-                checkWatchedDirectories(host, emptyArray, /*recursive*/ false);
+                checkWatchedDirectories(host, [], /*recursive*/ false);
                 checkWatchedDirectoriesDetailed(
                     host,
                     [`${tscWatch.projectRoot}/src`],

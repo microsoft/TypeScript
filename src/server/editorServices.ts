@@ -814,8 +814,8 @@ namespace ts.server {
             this.throttleWaitMilliseconds = opts.throttleWaitMilliseconds;
             this.eventHandler = opts.eventHandler;
             this.suppressDiagnosticEvents = opts.suppressDiagnosticEvents;
-            this.globalPlugins = opts.globalPlugins || emptyArray;
-            this.pluginProbeLocations = opts.pluginProbeLocations || emptyArray;
+            this.globalPlugins = opts.globalPlugins || [];
+            this.pluginProbeLocations = opts.pluginProbeLocations || [];
             this.allowLocalPluginLoads = !!opts.allowLocalPluginLoads;
             this.typesMapLocation = (opts.typesMapLocation === undefined) ? combinePaths(getDirectoryPath(this.getExecutingFilePath()), "typesMap.json") : opts.typesMapLocation;
             this.session = opts.session;

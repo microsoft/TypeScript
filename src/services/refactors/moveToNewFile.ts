@@ -20,7 +20,7 @@ namespace ts.refactor {
                     [{ ...moveToNewFileAction, notApplicableReason: getLocaleSpecificMessage(Diagnostics.Selection_is_not_a_valid_statement_or_statements) }]
                 }];
             }
-            return emptyArray;
+            return [];
         },
         getEditsForAction: function getRefactorEditsToMoveToNewFile(context, actionName): RefactorEditInfo {
             Debug.assert(actionName === refactorName, "Wrong refactor invoked");
@@ -821,7 +821,7 @@ namespace ts.refactor {
             case SyntaxKind.TypeAliasDeclaration:
             case SyntaxKind.InterfaceDeclaration:
             case SyntaxKind.ImportEqualsDeclaration:
-                return emptyArray;
+                return [];
             case SyntaxKind.ExpressionStatement:
                 return Debug.fail("Can't export an ExpressionStatement"); // Shouldn't try to add 'export' keyword to `exports.x = ...`
             default:

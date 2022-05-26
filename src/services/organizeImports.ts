@@ -288,7 +288,7 @@ namespace ts.OrganizeImports {
             const newNamedImports = sortedImportSpecifiers.length === 0
                 ? newDefaultImport
                     ? undefined
-                    : factory.createNamedImports(emptyArray)
+                    : factory.createNamedImports([])
                 : namedImports.length === 0
                     ? factory.createNamedImports(sortedImportSpecifiers)
                     : factory.updateNamedImports(namedImports[0].importClause!.namedBindings as NamedImports, sortedImportSpecifiers); // TODO: GH#18217
@@ -384,7 +384,7 @@ namespace ts.OrganizeImports {
                 continue;
             }
             const newExportSpecifiers: ExportSpecifier[] = [];
-            newExportSpecifiers.push(...flatMap(exportGroup, i => i.exportClause && isNamedExports(i.exportClause) ? i.exportClause.elements : emptyArray));
+            newExportSpecifiers.push(...flatMap(exportGroup, i => i.exportClause && isNamedExports(i.exportClause) ? i.exportClause.elements : []));
 
             const sortedExportSpecifiers = sortSpecifiers(newExportSpecifiers);
 

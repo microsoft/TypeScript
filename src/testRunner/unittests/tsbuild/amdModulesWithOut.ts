@@ -34,7 +34,7 @@ namespace ts {
                     ...(modifyAgainFs ? [{
                         subScenario: "incremental-headers-change-without-dts-changes",
                         modifyFs: modifyAgainFs
-                    }] : emptyArray),
+                    }] : []),
                 ]
             });
         }

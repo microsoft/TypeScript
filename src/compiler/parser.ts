@@ -921,10 +921,10 @@ namespace ts {
             if (scriptKind === ScriptKind.JSON) {
                 const result = parseJsonText(fileName, sourceText, languageVersion, syntaxCursor, setParentNodes);
                 convertToObjectWorker(result, result.statements[0]?.expression, result.parseDiagnostics, /*returnValue*/ false, /*knownRootOptions*/ undefined, /*jsonConversionNotifier*/ undefined);
-                result.referencedFiles = emptyArray;
-                result.typeReferenceDirectives = emptyArray;
-                result.libReferenceDirectives = emptyArray;
-                result.amdDependencies = emptyArray;
+                result.referencedFiles = [];
+                result.typeReferenceDirectives = [];
+                result.libReferenceDirectives = [];
+                result.amdDependencies = [];
                 result.hasNoDefaultLib = false;
                 result.pragmas = emptyMap as ReadonlyPragmaMap;
                 return result;
@@ -9420,7 +9420,7 @@ namespace ts {
     export function processCommentPragmas(context: PragmaContext, sourceText: string): void {
         const pragmas: PragmaPseudoMapEntry[] = [];
 
-        for (const range of getLeadingCommentRanges(sourceText, 0) || emptyArray) {
+        for (const range of getLeadingCommentRanges(sourceText, 0) || []) {
             const comment = sourceText.substring(range.pos, range.end);
             extractPragmas(pragmas, range, comment);
         }

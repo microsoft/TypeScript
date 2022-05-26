@@ -679,7 +679,7 @@ namespace ts {
                     if (host.log) {
                         host.log(`Encountered error while decoding sourcemap: ${decoder.error}`);
                     }
-                    decodedMappings = emptyArray;
+                    decodedMappings = [];
                 }
                 else {
                     decodedMappings = mappings;

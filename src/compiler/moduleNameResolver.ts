@@ -480,7 +480,7 @@ namespace ts {
             traceEnabled: isTraceEnabled(options, host),
             failedLookupLocations: [],
             packageJsonInfoCache: cache?.getPackageJsonInfoCache(),
-            conditions: emptyArray,
+            conditions: [],
             features: NodeResolutionFeatures.None,
             requestContainingDirectory: containingDirectory,
             reportDiagnostic: noop

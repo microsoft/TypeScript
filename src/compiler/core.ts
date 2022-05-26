@@ -19,7 +19,6 @@ namespace ts {
         }
     }
 
-    export const emptyArray: never[] = [] as never[];
     export const emptyMap: ReadonlyESMap<never, never> = new Map<never, never>();
     export const emptySet: ReadonlySet<never> = new Set<never>();
 
@@ -392,7 +391,7 @@ namespace ts {
                 }
             }
         }
-        return result || emptyArray;
+        return result || [];
     }
 
     export function flatMapToMutable<T, U>(array: readonly T[] | undefined, mapfn: (x: T, i: number) => U | readonly U[] | undefined): U[] {
@@ -744,7 +743,7 @@ namespace ts {
      * Deduplicates an array that has already been sorted.
      */
     function deduplicateSorted<T>(array: SortedReadonlyArray<T>, comparer: EqualityComparer<T> | Comparer<T>): SortedReadonlyArray<T> {
-        if (array.length === 0) return emptyArray as any as SortedReadonlyArray<T>;
+        if (array.length === 0) return [] as any as SortedReadonlyArray<T>;
 
         let last = array[0];
         const deduplicated: T[] = [last];

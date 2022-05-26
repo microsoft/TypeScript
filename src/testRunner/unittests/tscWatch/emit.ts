@@ -72,7 +72,7 @@ namespace ts.tscWatch {
                     };
                     return createWatchedSystem([file1, file2, file3, file4, libFile, configFile]);
                 },
-                changes: emptyArray
+                changes: []
             });
         }
         verifyFilesEmittedOnce("with --outFile and multiple declaration files in the program", /*useOutFile*/ true);
@@ -136,7 +136,7 @@ namespace ts.tscWatch {
                         path: configFilePath,
                         content: JSON.stringify(configObj || {})
                     };
-                    const additionalFiles = getAdditionalFileOrFolder?.() || emptyArray;
+                    const additionalFiles = getAdditionalFileOrFolder?.() || [];
                     const files = [moduleFile1, file1Consumer1, file1Consumer2, globalFile3, moduleFile2, configFile, libFile, ...additionalFiles];
                     return createWatchedSystem(firstReloadFileList ?
                         map(firstReloadFileList, fileName => find(files, file => file.path === fileName)!) :

@@ -148,7 +148,7 @@ namespace ts.moduleSpecifiers {
     ): readonly [specifiers?: readonly string[], moduleFile?: SourceFile, modulePaths?: readonly ModulePath[], cache?: ModuleSpecifierCache] {
         const moduleSourceFile = getSourceFileOfModule(moduleSymbol);
         if (!moduleSourceFile) {
-            return emptyArray as [];
+            return [] as [];
         }
 
         const cache = host.getModuleSpecifierCache?.();
@@ -199,7 +199,7 @@ namespace ts.moduleSpecifiers {
             options
         );
         if (specifiers) return { moduleSpecifiers: specifiers, computedWithoutCache };
-        if (!moduleSourceFile) return { moduleSpecifiers: emptyArray, computedWithoutCache };
+        if (!moduleSourceFile) return { moduleSpecifiers: [], computedWithoutCache };
 
         computedWithoutCache = true;
         modulePaths ||= getAllModulePathsWorker(importingSourceFile.path, moduleSourceFile.originalFileName, host);
@@ -398,8 +398,8 @@ namespace ts.moduleSpecifiers {
         const cwd = host.getCurrentDirectory();
         const referenceRedirect = host.isSourceOfProjectReferenceRedirect(importedFileName) ? host.getProjectReferenceRedirect(importedFileName) : undefined;
         const importedPath = toPath(importedFileName, cwd, getCanonicalFileName);
-        const redirects = host.redirectTargetsMap.get(importedPath) || emptyArray;
-        const importedFileNames = [...(referenceRedirect ? [referenceRedirect] : emptyArray), importedFileName, ...redirects];
+        const redirects = host.redirectTargetsMap.get(importedPath) || [];
+        const importedFileNames = [...(referenceRedirect ? [referenceRedirect] : []), importedFileName, ...redirects];
         const targets = importedFileNames.map(f => getNormalizedAbsolutePath(f, cwd));
         let shouldFilterIgnoredPaths = !every(targets, containsIgnoredPath);
 

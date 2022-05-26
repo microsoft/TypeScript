@@ -32,7 +32,7 @@ namespace ts.refactor.extractSymbol {
 
         if (targetRange === undefined) {
             if (!rangeToExtract.errors || rangeToExtract.errors.length === 0 || !context.preferences.provideRefactorNotApplicableReason) {
-                return emptyArray;
+                return [];
             }
 
             const errors = [];
@@ -56,7 +56,7 @@ namespace ts.refactor.extractSymbol {
         const extractions = getPossibleExtractions(targetRange, context);
         if (extractions === undefined) {
             // No extractions possible
-            return emptyArray;
+            return [];
         }
 
         const functionActions: RefactorActionInfo[] = [];
@@ -156,7 +156,7 @@ namespace ts.refactor.extractSymbol {
             });
         }
 
-        return infos.length ? infos : emptyArray;
+        return infos.length ? infos : [];
 
         function getStringError(errors: readonly Diagnostic[]) {
             let error = errors[0].messageText;
@@ -1504,7 +1504,7 @@ namespace ts.refactor.extractSymbol {
             assertType<never>(scope);
         }
 
-        return emptyArray;
+        return [];
     }
 
     /**

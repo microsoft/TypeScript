@@ -274,7 +274,7 @@ namespace ts {
     }
 
     function convertToDiagnostics(diagnostics: readonly ReusableDiagnostic[], newProgram: Program, getCanonicalFileName: GetCanonicalFileName): readonly Diagnostic[] {
-        if (!diagnostics.length) return emptyArray;
+        if (!diagnostics.length) return [];
         const buildInfoDirectory = getDirectoryPath(getNormalizedAbsolutePath(getTsBuildInfoEmitOutputFilePath(newProgram.getCompilerOptions())!, newProgram.getCurrentDirectory()));
         return diagnostics.map(diagnostic => {
             const result: Diagnostic = convertToDiagnosticRelatedInformation(diagnostic, newProgram, toPath);
@@ -1034,7 +1034,7 @@ namespace ts {
             oldProgram = oldProgramOrHost as BuilderProgram;
             configFileParsingDiagnostics = configFileParsingDiagnosticsOrOldProgram as readonly Diagnostic[];
         }
-        return { host, newProgram, oldProgram, configFileParsingDiagnostics: configFileParsingDiagnostics || emptyArray };
+        return { host, newProgram, oldProgram, configFileParsingDiagnostics: configFileParsingDiagnostics || [] };
     }
 
     export function createBuilderProgram(kind: BuilderProgramKind.SemanticDiagnosticsBuilderProgram, builderCreationParameters: BuilderCreationParameters): SemanticDiagnosticsBuilderProgram;
@@ -1229,7 +1229,7 @@ namespace ts {
                     }
                     return {
                         emitSkipped,
-                        diagnostics: diagnostics || emptyArray,
+                        diagnostics: diagnostics || [],
                         emittedFiles,
                         sourceMaps
                     };
@@ -1330,7 +1330,7 @@ namespace ts {
             for (const sourceFile of Debug.checkDefined(state.program).getSourceFiles()) {
                 diagnostics = addRange(diagnostics, getSemanticDiagnosticsOfFile(state, sourceFile, cancellationToken));
             }
-            return diagnostics || emptyArray;
+            return diagnostics || [];
         }
     }
 
@@ -1372,7 +1372,7 @@ namespace ts {
             compilerOptions: program.options ? convertToOptionsWithAbsolutePaths(program.options, toAbsolutePath) : {},
             referencedMap: toManyToManyPathMap(program.referencedMap),
             exportedModulesMap: toManyToManyPathMap(program.exportedModulesMap),
-            semanticDiagnosticsPerFile: program.semanticDiagnosticsPerFile && arrayToMap(program.semanticDiagnosticsPerFile, value => toFilePath(isNumber(value) ? value : value[0]), value => isNumber(value) ? emptyArray : value[1]),
+            semanticDiagnosticsPerFile: program.semanticDiagnosticsPerFile && arrayToMap(program.semanticDiagnosticsPerFile, value => toFilePath(isNumber(value) ? value : value[0]), value => isNumber(value) ? [] : value[1]),
             hasReusableDiagnostic: true,
             affectedFilesPendingEmit: map(program.affectedFilesPendingEmit, value => toFilePath(value[0])),
             affectedFilesPendingEmitKind: program.affectedFilesPendingEmit && arrayToMap(program.affectedFilesPendingEmit, value => toFilePath(value[0]), value => value[1]),

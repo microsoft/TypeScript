@@ -202,8 +202,8 @@ namespace ts {
             function getFileSystemEntriesFromHost(dir: string, path: Path): FileSystemEntries {
                 if (rootSymLinkResult && path === rootDirPath) return rootSymLinkResult;
                 const result: FileSystemEntries = {
-                    files: map(host.readDirectory!(dir, /*extensions*/ undefined, /*exclude*/ undefined, /*include*/["*.*"]), getBaseNameOfFileName) || emptyArray,
-                    directories: host.getDirectories!(dir) || emptyArray
+                    files: map(host.readDirectory!(dir, /*extensions*/ undefined, /*exclude*/ undefined, /*include*/["*.*"]), getBaseNameOfFileName) || [],
+                    directories: host.getDirectories!(dir) || []
                 };
                 if (path === rootDirPath) rootSymLinkResult = result;
                 return result;
@@ -297,7 +297,7 @@ namespace ts {
         createExtendedConfigFileWatch: (extendedConfigPath: string, extendedConfigFilePath: Path) => FileWatcher,
         toPath: (fileName: string) => Path,
     ) {
-        const extendedConfigs = arrayToMap(options?.configFile?.extendedSourceFiles || emptyArray, toPath);
+        const extendedConfigs = arrayToMap(options?.configFile?.extendedSourceFiles || [], toPath);
         // remove project from all unrelated watchers
         extendedConfigFilesMap.forEach((watcher, extendedConfigFilePath) => {
             if (!extendedConfigs.has(extendedConfigFilePath)) {

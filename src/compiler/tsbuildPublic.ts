@@ -410,8 +410,8 @@ namespace ts {
         }
 
         return circularDiagnostics ?
-            { buildOrder: buildOrder || emptyArray, circularDiagnostics } :
-            buildOrder || emptyArray;
+            { buildOrder: buildOrder || [], circularDiagnostics } :
+            buildOrder || [];
 
         function visit(configFileName: ResolvedConfigFileName, inCircularContext?: boolean) {
             const projPath = toResolvedConfigFilePath(state, configFileName);
@@ -830,7 +830,7 @@ namespace ts {
         }
 
         function withProgramOrEmptyArray<U>(action: (program: T) => readonly U[]): readonly U[] {
-            return withProgramOrUndefined(action) || emptyArray;
+            return withProgramOrUndefined(action) || [];
         }
 
         function createProgram() {
@@ -1542,12 +1542,12 @@ namespace ts {
             if (configStatus) return configStatus;
 
             // Check extended config time
-            const extendedConfigStatus = forEach(project.options.configFile!.extendedSourceFiles || emptyArray, configFile => checkConfigFileUpToDateStatus(state, configFile, oldestOutputFileTime, oldestOutputFileName));
+            const extendedConfigStatus = forEach(project.options.configFile!.extendedSourceFiles || [], configFile => checkConfigFileUpToDateStatus(state, configFile, oldestOutputFileTime, oldestOutputFileName));
             if (extendedConfigStatus) return extendedConfigStatus;
 
             // Check package file time
             const dependentPackageFileStatus = forEach(
-                state.lastCachedPackageJsonLookups.get(resolvedPath) || emptyArray,
+                state.lastCachedPackageJsonLookups.get(resolvedPath) || [],
                 ([path]) => checkConfigFileUpToDateStatus(state, path, oldestOutputFileTime, oldestOutputFileName)
             );
             if (dependentPackageFileStatus) return dependentPackageFileStatus;
@@ -2056,7 +2056,7 @@ namespace ts {
             buildOrder.forEach(project => {
                 const projectPath = toResolvedConfigFilePath(state, project);
                 if (!state.projectErrorsReported.has(projectPath)) {
-                    reportErrors(state, diagnostics.get(projectPath) || emptyArray);
+                    reportErrors(state, diagnostics.get(projectPath) || []);
                 }
             });
             if (canReportSummary) diagnostics.forEach(singleProjectErrors => totalErrors += getErrorCountForSummary(singleProjectErrors));

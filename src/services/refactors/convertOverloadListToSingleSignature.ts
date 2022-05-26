@@ -17,7 +17,7 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
     function getRefactorActionsToConvertOverloadsToOneSignature(context: RefactorContext): readonly ApplicableRefactorInfo[] {
         const { file, startPosition, program } = context;
         const info = getConvertableOverloadListAtPosition(file, startPosition, program);
-        if (!info) return emptyArray;
+        if (!info) return [];
 
         return [{
             name: refactorName,

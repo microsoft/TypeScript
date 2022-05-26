@@ -261,7 +261,7 @@ namespace ts.tscWatch {
         let programs = watchBaseline({
             baseline,
             getPrograms,
-            oldPrograms: emptyArray,
+            oldPrograms: [],
             sys,
             oldSnap,
             baselineSourceMap,

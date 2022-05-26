@@ -88,7 +88,7 @@ namespace M
                     /*asteriskToken*/ undefined,
                     /*name*/ "bar",
                     /*typeParameters*/ undefined,
-                    /*parameters*/ emptyArray,
+                    /*parameters*/ [],
                     /*type*/ factory.createKeywordTypeNode(SyntaxKind.AnyKeyword),
                     /*body */ factory.createBlock(statements)
                 );
@@ -100,7 +100,7 @@ namespace M
                     factory.createCallExpression(
                         /*expression*/ newFunction.name!,
                         /*typeArguments*/ undefined,
-                        /*argumentsArray*/ emptyArray
+                        /*argumentsArray*/ []
                     ));
                 changeTracker.replaceNodeRange(sourceFile, statements[0], last(statements), newStatement, { suffix: newLineCharacter });
             });
@@ -336,7 +336,7 @@ namespace M {
             const superCall = factory.createCallExpression(
                 factory.createSuper(),
                 /*typeArguments*/ undefined,
-                /*argumentsArray*/ emptyArray
+                /*argumentsArray*/ []
             );
             return factory.createExpressionStatement(superCall);
         }

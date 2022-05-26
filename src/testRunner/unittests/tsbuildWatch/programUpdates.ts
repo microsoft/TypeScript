@@ -68,7 +68,7 @@ namespace ts.tscWatch {
             subScenario: "creates solution in watch mode",
             commandLineArgs: ["-b", "-w", `sample1/${SubProject.tests}`],
             sys: () => createWatchedSystem(allFiles, { currentDirectory: projectsLocation }),
-            changes: emptyArray
+            changes: []
         });
 
         it("verify building references watches only those projects", () => {
@@ -84,7 +84,7 @@ namespace ts.tscWatch {
                 baseline,
                 oldSnap,
                 getPrograms,
-                changes: emptyArray,
+                changes: [],
                 watchOrSolution: solutionBuilder
             });
         });
@@ -359,7 +359,7 @@ let x: string = 10;`),
                     ]
                 });
             }
-            verifyIncrementalErrors("when preserveWatchOutput is not used", emptyArray);
+            verifyIncrementalErrors("when preserveWatchOutput is not used", []);
             verifyIncrementalErrors("when preserveWatchOutput is passed on command line", ["--preserveWatchOutput"]);
 
             describe("when declaration emit errors are present", () => {

@@ -551,7 +551,7 @@ namespace ts.codefix {
             return factory.createObjectLiteralExpression(props, /*multiLine*/ true);
         }
         if (getObjectFlags(type) & ObjectFlags.Anonymous) {
-            const decl = find(type.symbol.declarations || emptyArray, or(isFunctionTypeNode, isMethodSignature, isMethodDeclaration));
+            const decl = find(type.symbol.declarations || [], or(isFunctionTypeNode, isMethodSignature, isMethodDeclaration));
             if (decl === undefined) return createUndefined();
 
             const signature = checker.getSignaturesOfType(type, SignatureKind.Call);
@@ -584,10 +584,10 @@ namespace ts.codefix {
 
     function getUnmatchedAttributes(checker: TypeChecker, target: ScriptTarget, source: JsxOpeningLikeElement) {
         const attrsType = checker.getContextualType(source.attributes);
-        if (attrsType === undefined) return emptyArray;
+        if (attrsType === undefined) return [];
 
         const targetProps = attrsType.getProperties();
-        if (!length(targetProps)) return emptyArray;
+        if (!length(targetProps)) return [];
 
         const seenNames = new Set<__String>();
         for (const sourceProp of source.attributes.properties) {

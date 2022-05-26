@@ -6,7 +6,7 @@ namespace ts.server {
         verbose
     }
 
-    export const emptyArray: SortedReadonlyArray<never> = createSortedArray<never>();
+    export const []: SortedReadonlyArray<never> = createSortedArray<never>();
 
     export interface Logger {
         close(): void;

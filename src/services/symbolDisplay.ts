@@ -593,7 +593,7 @@ namespace ts.SymbolDisplay {
                 documentation = firstDefined(objectType.isUnion() ? objectType.types : [objectType], t => {
                     const prop = t.getProperty(name);
                     return prop ? prop.getDocumentationComment(typeChecker) : undefined;
-                }) || emptyArray;
+                }) || [];
             }
         }
 

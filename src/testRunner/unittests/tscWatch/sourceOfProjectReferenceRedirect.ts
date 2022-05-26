@@ -30,7 +30,7 @@ namespace ts.tscWatch {
                 baseline,
                 oldSnap,
                 getPrograms,
-                changes: emptyArray,
+                changes: [],
                 watchOrSolution: watch
             });
         }

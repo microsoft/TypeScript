@@ -206,7 +206,7 @@ namespace ts {
         function rehydrateCachedInfo(info: CachedSymbolExportInfo): SymbolExportInfo {
             if (info.symbol && info.moduleSymbol) return info as SymbolExportInfo;
             const { id, exportKind, targetFlags, isFromPackageJson, moduleFileName } = info;
-            const [cachedSymbol, cachedModuleSymbol] = symbols.get(id) || emptyArray;
+            const [cachedSymbol, cachedModuleSymbol] = symbols.get(id) || [];
             if (cachedSymbol && cachedModuleSymbol) {
                 return {
                     symbol: cachedSymbol,

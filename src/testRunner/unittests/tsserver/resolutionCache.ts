@@ -473,7 +473,7 @@ namespace ts.projectSystem {
         }
 
         function verifyWatchesWithConfigFile(host: TestServerHost, files: File[], openFile: File, extraExpectedDirectories?: readonly string[]) {
-            const expectedRecursiveDirectories = new Set([tscWatch.projectRoot, `${tscWatch.projectRoot}/${nodeModulesAtTypes}`, ...(extraExpectedDirectories || emptyArray)]);
+            const expectedRecursiveDirectories = new Set([tscWatch.projectRoot, `${tscWatch.projectRoot}/${nodeModulesAtTypes}`, ...(extraExpectedDirectories || [])]);
             checkWatchedFiles(host, mapDefined(files, f => {
                 if (f === openFile) {
                     return undefined;
@@ -793,7 +793,7 @@ export const x = 10;`
                 checkProjectActualFiles(service.configuredProjects.get(configFile.path)!, files.map(f => f.path));
                 checkWatchedFilesDetailed(host, mapDefined(files, f => f === srcFile ? undefined : f.path), 1);
                 if (useNodeFile) {
-                    checkWatchedDirectories(host, emptyArray,  /*recursive*/ false); // since fs resolves to ambient module, shouldnt watch failed lookup
+                    checkWatchedDirectories(host, [],  /*recursive*/ false); // since fs resolves to ambient module, shouldnt watch failed lookup
                 }
                 else {
                     checkWatchedDirectoriesDetailed(host, [`${tscWatch.projectRoot}`, `${tscWatch.projectRoot}/src`], 1,  /*recursive*/ false); // failed lookup for fs

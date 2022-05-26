@@ -20,7 +20,7 @@ namespace ts.refactor {
         ],
         getAvailableActions: function getRefactorActionsToConvertBetweenNamedAndDefaultExports(context): readonly ApplicableRefactorInfo[] {
             const info = getInfo(context, context.triggerReason === "invoked");
-            if (!info) return emptyArray;
+            if (!info) return [];
 
             if (!isRefactorErrorInfo(info)) {
                 const action = info.wasDefault ? defaultToNamedAction : namedToDefaultAction;
@@ -36,7 +36,7 @@ namespace ts.refactor {
                 ];
             }
 
-            return emptyArray;
+            return [];
         },
         getEditsForAction: function getRefactorEditsToConvertBetweenNamedAndDefaultExports(context, actionName): RefactorEditInfo {
             Debug.assert(actionName === defaultToNamedAction.name || actionName === namedToDefaultAction.name, "Unexpected action name");

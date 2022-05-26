@@ -168,7 +168,7 @@ namespace ts.tscWatch {
                 { currentDirectory: `${TestFSWithWatch.tsbuildProjectsLocation}/transitiveReferences` }
             ),
             commandLineArgs: ["-w", "-p", "tsconfig.c.json"],
-            changes: emptyArray,
+            changes: [],
             baselineDependencies: true,
         });
 

@@ -1102,7 +1102,7 @@ foo();`
                     content: `let b = 1;`
                 };
 
-                const host = createServerHost([alphaExtendedConfig, aConfig, aFile, bravoExtendedConfig, bConfig, bFile, ...(additionalFiles || emptyArray)]);
+                const host = createServerHost([alphaExtendedConfig, aConfig, aFile, bravoExtendedConfig, bConfig, bFile, ...(additionalFiles || [])]);
                 const projectService = createProjectService(host);
                 return { host, projectService, aFile, bFile, aConfig, bConfig, alphaExtendedConfig, bravoExtendedConfig };
             }
@@ -1315,7 +1315,7 @@ foo();`
             assert.strictEqual(projectService.configuredProjects.get(configFile.path), project);
             checkProjectActualFiles(project, mapDefined(files, file => file === file2a ? undefined : file.path));
             checkWatchedFiles(host, mapDefined(files, file => file === file1 ? undefined : file.path));
-            checkWatchedDirectories(host, emptyArray, /*recursive*/ false);
+            checkWatchedDirectories(host, [], /*recursive*/ false);
             checkWatchedDirectoriesDetailed(host, ["/a/b/node_modules/@types"], 1, /*recursive*/ true);
 
             // On next file open the files file2a should be closed and not watched any more
@@ -1324,7 +1324,7 @@ foo();`
             assert.strictEqual(projectService.configuredProjects.get(configFile.path), project);
             checkProjectActualFiles(project, mapDefined(files, file => file === file2a ? undefined : file.path));
             checkWatchedFiles(host, [libFile.path, configFile.path]);
-            checkWatchedDirectories(host, emptyArray, /*recursive*/ false);
+            checkWatchedDirectories(host, [], /*recursive*/ false);
             checkWatchedDirectoriesDetailed(host, ["/a/b/node_modules/@types"], 1, /*recursive*/ true);
         });
 
