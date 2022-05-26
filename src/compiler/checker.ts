@@ -9915,8 +9915,9 @@ namespace ts {
                     getTypeOfSymbol(symbol);
             }
             if (symbol.flags & SymbolFlags.Accessor) {
-                return checkFlags & CheckFlags.Instantiated ? getWriteTypeOfInstantiatedSymbol(symbol)
-                    : getWriteTypeOfAccessors(symbol);
+                return checkFlags & CheckFlags.Instantiated ?
+                    getWriteTypeOfInstantiatedSymbol(symbol) :
+                    getWriteTypeOfAccessors(symbol);
             }
             return getTypeOfSymbol(symbol);
         }
@@ -12448,7 +12449,7 @@ namespace ts {
                 propTypes.push(type);
             }
             addRange(propTypes, indexTypes);
-            const result = createSymbol(/*propertyFlag*/ SymbolFlags.Property | optionalFlag, name, syntheticFlag | checkFlags);
+            const result = createSymbol(SymbolFlags.Property | optionalFlag, name, syntheticFlag | checkFlags);
             result.containingType = containingType;
             if (!hasNonUniformValueDeclaration && firstValueDeclaration) {
                 result.valueDeclaration = firstValueDeclaration;
