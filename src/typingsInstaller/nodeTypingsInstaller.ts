@@ -1,3 +1,6 @@
+import * as fs from "fs";
+import * as path from "path";
+
 import {
     installNpmPackages, Log, RequestCompletedAction, TypingsInstaller,
 } from "./_namespaces/ts.server.typingsInstaller";
@@ -10,16 +13,6 @@ import {
     combinePaths, createGetCanonicalFileName, Debug, ESMap, forEachAncestorDirectory, getDirectoryPath, getEntries, Map,
     MapLike, normalizeSlashes, stringContains, sys, toPath, version,
 } from "./_namespaces/ts";
-
-const fs: {
-    appendFileSync(file: string, content: string): void
-} = require("fs");
-
-const path: {
-    join(...parts: string[]): string;
-    dirname(path: string): string;
-    basename(path: string, extension?: string): string;
-} = require("path");
 
 class FileLog implements Log {
     constructor(private logFile: string | undefined) {
