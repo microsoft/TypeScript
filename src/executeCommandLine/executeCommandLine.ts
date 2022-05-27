@@ -1,7 +1,18 @@
 namespace ts {
-    interface Statistic {
+    export interface Statistic {
         name: string;
-        value: string;
+        value: number;
+        type: StatisticType
+    }
+
+    export enum StatisticType {
+        time,
+        count,
+        memory,
+    }
+
+    export interface SolutionBuilderHostBase<T extends BuilderProgram> extends ProgramHost<T> {
+        statistics?: Statistic[][];
     }
 
     function countLines(program: Program): Map<number> {
@@ -751,9 +762,22 @@ namespace ts {
                 createBuilderStatusReporter(sys, shouldBePretty(sys, buildOptions)),
                 createWatchStatusReporter(sys, buildOptions)
             );
+            const onWatchStatusChange = buildHost.onWatchStatusChange;
+            let reportWatchStatistics = false;
+            buildHost.onWatchStatusChange = (d, newLine, options, errorCount) => {
+                onWatchStatusChange?.(d, newLine, options, errorCount);
+                if (!reportWatchStatistics) return;
+                if (d.code === Diagnostics.Found_0_errors_Watching_for_file_changes.code ||
+                    d.code === Diagnostics.Found_1_error_Watching_for_file_changes.code) {
+                    reportSolutionBuilderTimes(sys, builder, buildHost);
+                }
+            };
             updateSolutionBuilderHost(sys, cb, buildHost);
+            enableSolutionPerformance(sys, buildOptions);
             const builder = createSolutionBuilderWithWatch(buildHost, projects, buildOptions, watchOptions);
             builder.build();
+            reportSolutionBuilderTimes(sys, builder, buildHost);
+            reportWatchStatistics = true;
             return builder;
         }
 
@@ -765,10 +789,53 @@ namespace ts {
             createReportErrorSummary(sys, buildOptions)
         );
         updateSolutionBuilderHost(sys, cb, buildHost);
+        enableSolutionPerformance(sys, buildOptions);
         const builder = createSolutionBuilder(buildHost, projects, buildOptions);
         const exitStatus = buildOptions.clean ? builder.clean() : builder.build();
+        reportSolutionBuilderTimes(sys, builder, buildHost);
         dumpTracingLegend(); // Will no-op if there hasn't been any tracing
         return sys.exit(exitStatus);
+    }
+
+    function enableSolutionPerformance(system: System, options: BuildOptions) {
+        if (system === sys && (options.diagnostics || options.extendedDiagnostics)) solutionPerformance.enable();
+    }
+
+    function reportSolutionBuilderTimes(system: System, builder: SolutionBuilder<BuilderProgram>, buildHost: SolutionBuilderHost<BuilderProgram>) {
+        if (system !== sys) return;
+
+        if (solutionPerformance.isEnabled()) {
+            const solutionStatistics: Statistic[] = [];
+            solutionPerformance.forEachMeasure((name, duration) => solutionStatistics.push({ name: `${name} time`, value: duration, type: StatisticType.time }));
+            solutionStatistics.push(
+                { name: "projectsBuilt", value: solutionPerformance.getCount("projectsBuilt"), type: StatisticType.count },
+                { name: "timestampUpdated", value: solutionPerformance.getCount("timestampUpdated"), type: StatisticType.count },
+                { name: "bundlesUpdated", value: solutionPerformance.getCount("bundlesUpdated"), type: StatisticType.count },
+                { name: "projects", value: getBuildOrderFromAnyBuildOrder(builder.getBuildOrder()).length, type: StatisticType.count },
+            );
+            buildHost.statistics = append(buildHost.statistics, solutionStatistics);
+            solutionPerformance.disable();
+            solutionPerformance.enable();
+        }
+
+        if (!buildHost.statistics) return;
+        const statistics: Statistic[] = [];
+        const map: Map<Statistic> = new Map();
+        for (const statistic of buildHost.statistics) {
+            for (const s of statistic) {
+                const existing = map.get(s.name);
+                if (existing) {
+                    if (existing.type === StatisticType.memory) existing.value = Math.max(existing.value, s.value);
+                    else existing.value += s.value;
+                }
+                else {
+                    map.set(s.name, s);
+                    statistics.push(s);
+                }
+            }
+        }
+        buildHost.statistics = undefined;
+        reportAllStatistics(system, statistics);
     }
 
     function createReportErrorSummary(sys: System, options: CompilerOptions | BuildOptions): ReportEmitErrorSummary | undefined {
@@ -842,10 +909,13 @@ namespace ts {
     ) {
         updateCreateProgram(sys, buildHost);
         buildHost.afterProgramEmitAndDiagnostics = program => {
-            reportStatistics(sys, program.getProgram());
+            buildHost.statistics = append(buildHost.statistics, reportStatistics(sys, program.getProgram()));
             cb(program);
         };
-        buildHost.afterEmitBundle = cb;
+        buildHost.afterEmitBundle = config => {
+            buildHost.statistics = append(buildHost.statistics, reportStatistics(sys, config));
+            cb(config);
+        };
     }
 
     function updateCreateProgram<T extends BuilderProgram>(sys: System, host: { createProgram: CreateProgram<T>; }) {
@@ -939,8 +1009,13 @@ namespace ts {
         }
     }
 
-    function reportStatistics(sys: System, program: Program) {
-        const compilerOptions = program.getCompilerOptions();
+    function isProgram(programOrConfig: Program | ParsedCommandLine): programOrConfig is Program {
+        return !!(programOrConfig as Program).getCompilerOptions;
+    }
+    function reportStatistics(sys: System, programOrConfig: Program | ParsedCommandLine): Statistic[] | undefined {
+        const program = isProgram(programOrConfig) ? programOrConfig : undefined;
+        const config = !isProgram(programOrConfig) ? programOrConfig : undefined;
+        const compilerOptions = program?.getCompilerOptions() || config?.options!;
 
         if (canTrace(sys, compilerOptions)) {
             tracing?.stopTracing();
@@ -950,30 +1025,32 @@ namespace ts {
         if (canReportDiagnostics(sys, compilerOptions)) {
             statistics = [];
             const memoryUsed = sys.getMemoryUsage ? sys.getMemoryUsage() : -1;
-            reportCountStatistic("Files", program.getSourceFiles().length);
+            if (program) {
+                reportCountStatistic("Files", program.getSourceFiles().length);
 
-            const lineCounts = countLines(program);
-            const nodeCounts = countNodes(program);
-            if (compilerOptions.extendedDiagnostics) {
-                for (const key of arrayFrom(lineCounts.keys())) {
-                    reportCountStatistic("Lines of " + key, lineCounts.get(key)!);
+                const lineCounts = countLines(program);
+                const nodeCounts = countNodes(program);
+                if (compilerOptions.extendedDiagnostics) {
+                    for (const key of arrayFrom(lineCounts.keys())) {
+                        reportCountStatistic("Lines of " + key, lineCounts.get(key)!);
+                    }
+                    for (const key of arrayFrom(nodeCounts.keys())) {
+                        reportCountStatistic("Nodes of " + key, nodeCounts.get(key)!);
+                    }
                 }
-                for (const key of arrayFrom(nodeCounts.keys())) {
-                    reportCountStatistic("Nodes of " + key, nodeCounts.get(key)!);
+                else {
+                    reportCountStatistic("Lines", reduceLeftIterator(lineCounts.values(), (sum, count) => sum + count, 0));
+                    reportCountStatistic("Nodes", reduceLeftIterator(nodeCounts.values(), (sum, count) => sum + count, 0));
                 }
-            }
-            else {
-                reportCountStatistic("Lines", reduceLeftIterator(lineCounts.values(), (sum, count) => sum + count, 0));
-                reportCountStatistic("Nodes", reduceLeftIterator(nodeCounts.values(), (sum, count) => sum + count, 0));
-            }
 
-            reportCountStatistic("Identifiers", program.getIdentifierCount());
-            reportCountStatistic("Symbols", program.getSymbolCount());
-            reportCountStatistic("Types", program.getTypeCount());
-            reportCountStatistic("Instantiations", program.getInstantiationCount());
+                reportCountStatistic("Identifiers", program.getIdentifierCount());
+                reportCountStatistic("Symbols", program.getSymbolCount());
+                reportCountStatistic("Types", program.getTypeCount());
+                reportCountStatistic("Instantiations", program.getInstantiationCount());
+            }
 
             if (memoryUsed >= 0) {
-                reportStatisticalValue("Memory used", Math.round(memoryUsed / 1000) + "K");
+                reportMemoryStatistic("Memory used", memoryUsed);
             }
 
             const isPerformanceEnabled = performance.isEnabled();
@@ -982,11 +1059,13 @@ namespace ts {
             const checkTime = isPerformanceEnabled ? performance.getDuration("Check") : 0;
             const emitTime = isPerformanceEnabled ? performance.getDuration("Emit") : 0;
             if (compilerOptions.extendedDiagnostics) {
-                const caches = program.getRelationCacheSizes();
-                reportCountStatistic("Assignability cache size", caches.assignable);
-                reportCountStatistic("Identity cache size", caches.identity);
-                reportCountStatistic("Subtype cache size", caches.subtype);
-                reportCountStatistic("Strict subtype cache size", caches.strictSubtype);
+                if (program) {
+                    const caches = program.getRelationCacheSizes();
+                    reportCountStatistic("Assignability cache size", caches.assignable);
+                    reportCountStatistic("Identity cache size", caches.identity);
+                    reportCountStatistic("Subtype cache size", caches.subtype);
+                    reportCountStatistic("Strict subtype cache size", caches.strictSubtype);
+                }
                 if (isPerformanceEnabled) {
                     performance.forEachMeasure((name, duration) => reportTimeStatistic(`${name} time`, duration));
                 }
@@ -1006,43 +1085,59 @@ namespace ts {
             if (isPerformanceEnabled) {
                 reportTimeStatistic("Total time", programTime + bindTime + checkTime + emitTime);
             }
-            reportStatistics();
+            reportAllStatistics(sys, statistics);
             if (!isPerformanceEnabled) {
                 sys.write(Diagnostics.Performance_timings_for_diagnostics_or_extendedDiagnostics_are_not_available_in_this_session_A_native_implementation_of_the_Web_Performance_API_could_not_be_found.message + "\n");
             }
             else {
                 performance.disable();
             }
+            return statistics;
         }
 
-        function reportStatistics() {
-            let nameSize = 0;
-            let valueSize = 0;
-            for (const { name, value } of statistics) {
-                if (name.length > nameSize) {
-                    nameSize = name.length;
-                }
-
-                if (value.length > valueSize) {
-                    valueSize = value.length;
-                }
-            }
-
-            for (const { name, value } of statistics) {
-                sys.write(padRight(name + ":", nameSize + 2) + padLeft(value.toString(), valueSize) + sys.newLine);
-            }
-        }
-
-        function reportStatisticalValue(name: string, value: string) {
-            statistics.push({ name, value });
+        function reportMemoryStatistic(name: string, memoryUsed: number) {
+            statistics.push({ name, value: memoryUsed, type: StatisticType.memory });
         }
 
         function reportCountStatistic(name: string, count: number) {
-            reportStatisticalValue(name, "" + count);
+            statistics.push({ name, value: count, type: StatisticType.count });
         }
 
         function reportTimeStatistic(name: string, time: number) {
-            reportStatisticalValue(name, (time / 1000).toFixed(2) + "s");
+            statistics.push({ name, value: time, type: StatisticType.time });
+        }
+    }
+
+    function reportAllStatistics(sys: System, statistics: Statistic[]) {
+        let nameSize = 0;
+        let valueSize = 0;
+        for (const s of statistics) {
+            if (s.name.length > nameSize) {
+                nameSize = s.name.length;
+            }
+
+            const valueString = statisticValue(s);
+            if (valueString.length > valueSize) {
+                valueSize = valueString.length;
+            }
+        }
+
+        for (const s of statistics) {
+            sys.write(padRight(s.name + ":", nameSize + 2) + padLeft(statisticValue(s).toString(), valueSize) + sys.newLine);
+        }
+    }
+
+    function statisticValue(s: Statistic) {
+        switch (s.type) {
+            case StatisticType.count:
+                return "" + s.value;
+            case StatisticType.time:
+                return (s.value / 1000).toFixed(2) + "s";
+            case StatisticType.memory:
+                return Math.round(s.value / 1000) + "K";
+                break;
+            default:
+                Debug.assertNever(s.type);
         }
     }
 
