@@ -379,7 +379,7 @@ namespace ts.server {
         // have started the other project searches from related symbols.  Propagate the
         // correct results to all other projects.
 
-        const defaultProjectResults = perProjectResults.get(defaultProject)!;
+        const defaultProjectResults = perProjectResults.get(defaultProject);
         if (defaultProjectResults?.[0].references[0]?.isDefinition === undefined) {
             // Clear all isDefinition properties
             perProjectResults.forEach(projectResults => {
