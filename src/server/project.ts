@@ -234,8 +234,8 @@ namespace ts.server {
             return hasOneOrMoreJsAndNoTsFiles(this);
         }
 
-        public static resolveModule(moduleName: string, initialDir: string, host: ServerHost, fshost: FileServerHost, log: (message: string) => void, logErrors?: (message: string) => void): {} | undefined {
-            const resolvedPath = normalizeSlashes(fshost.resolvePath(combinePaths(initialDir, "node_modules")));
+        public static resolveModule(moduleName: string, initialDir: string, host: ServerHost, log: (message: string) => void, logErrors?: (message: string) => void): {} | undefined {
+            const resolvedPath = normalizeSlashes(host.resolvePath(combinePaths(initialDir, "node_modules")));
             log(`Loading ${moduleName} from ${initialDir} (resolved to ${resolvedPath})`);
             const result = host.require!(resolvedPath, moduleName); // TODO: GH#18217
             if (result.error) {
@@ -317,14 +317,13 @@ namespace ts.server {
 
             this.setInternalCompilerOptionsForEmittingJsFiles();
             const host = this.projectService.host;
-            const fshost = this.projectService.fshost || this.projectService.host;
             if (this.projectService.logger.loggingEnabled()) {
                 this.trace = s => this.writeLog(s);
             }
             else if (host.trace) {
                 this.trace = s => host.trace!(s);
             }
-            this.realpath = maybeBind(fshost, fshost.realpath);
+            this.realpath = maybeBind(this.projectService.fshost, this.projectService.fshost.realpath);
 
             // Use the current directory as resolution root only if the project created using current directory string
             this.resolutionCache = createResolutionCache(
@@ -456,7 +455,7 @@ namespace ts.server {
         }
 
         useCaseSensitiveFileNames() {
-            return (this.projectService.fshost || this.projectService.host).useCaseSensitiveFileNames;
+            return this.projectService.fshost.useCaseSensitiveFileNames;
         }
 
         readDirectory(path: string, extensions?: readonly string[], exclude?: readonly string[], include?: readonly string[], depth?: number): string[] {
@@ -464,11 +463,11 @@ namespace ts.server {
         }
 
         readFile(fileName: string): string | undefined {
-            return (this.projectService.fshost || this.projectService.host).readFile(fileName);
+            return this.projectService.fshost.readFile(fileName);
         }
 
         writeFile(fileName: string, content: string): void {
-            return (this.projectService.fshost || this.projectService.host).writeFile(fileName, content);
+            return this.projectService.fshost.writeFile(fileName, content);
         }
 
         fileExists(file: string): boolean {
@@ -1609,7 +1608,7 @@ namespace ts.server {
                 (errorLogs || (errorLogs = [])).push(message);
             };
             const resolvedModule = firstDefined(searchPaths, searchPath =>
-                Project.resolveModule(pluginConfigEntry.name, searchPath, this.projectService.host, this.projectService.fshost || this.projectService.host, log, logError) as PluginModuleFactory | undefined);
+                Project.resolveModule(pluginConfigEntry.name, searchPath, this.projectService.host, log, logError) as PluginModuleFactory | undefined);
             if (resolvedModule) {
                 const configurationOverride = pluginConfigOverrides && pluginConfigOverrides.get(pluginConfigEntry.name);
                 if (configurationOverride) {
@@ -1726,28 +1725,27 @@ namespace ts.server {
 
         /*@internal*/
         getModuleResolutionHostForAutoImportProvider(): ModuleResolutionHost {
-            const fshost = this.projectService.fshost || this.projectService.host;
             if (this.program) {
                 return {
                     fileExists: this.program.fileExists,
                     directoryExists: this.program.directoryExists,
-                    realpath: this.program.realpath || fshost.realpath?.bind(fshost),
+                    realpath: this.program.realpath || this.projectService.fshost.realpath?.bind(this.projectService.fshost),
                     getCurrentDirectory: this.getCurrentDirectory.bind(this),
-                    readFile: fshost.readFile.bind(fshost),
-                    getDirectories: fshost.getDirectories.bind(fshost),
+                    readFile: this.projectService.fshost.readFile.bind(this.projectService.fshost),
+                    getDirectories: this.projectService.fshost.getDirectories.bind(this.projectService.fshost),
                     trace: this.projectService.host.trace?.bind(this.projectService.host),
                     useCaseSensitiveFileNames: this.program.useCaseSensitiveFileNames(),
                 };
             }
             return {
-                fileExists: fshost.fileExists.bind(fshost),
-                directoryExists: fshost.directoryExists.bind(fshost),
-                realpath: fshost.realpath?.bind(fshost),
-                getCurrentDirectory: this.getCurrentDirectory.bind(this), // TODO: Not sure whether this should be fshost.getCurrentDirectory.bind(fshost)
-                readFile: fshost.readFile.bind(fshost),
-                getDirectories: fshost.getDirectories.bind(fshost),
+                fileExists: this.projectService.fshost.fileExists.bind(this.projectService.fshost),
+                directoryExists: this.projectService.fshost.directoryExists.bind(this.projectService.fshost),
+                realpath: this.projectService.fshost.realpath?.bind(this.projectService.fshost),
+                getCurrentDirectory: this.getCurrentDirectory.bind(this), // TODO: Not sure whether this should be this.projectService.fshost.getCurrentDirectory.bind(this.projectService.fshost)
+                readFile: this.projectService.fshost.readFile.bind(this.projectService.fshost),
+                getDirectories: this.projectService.fshost.getDirectories.bind(this.projectService.fshost),
                 trace: this.projectService.host.trace?.bind(this.projectService.host),
-                useCaseSensitiveFileNames: fshost.useCaseSensitiveFileNames,
+                useCaseSensitiveFileNames: this.projectService.fshost.useCaseSensitiveFileNames,
             };
         }
 
@@ -1933,7 +1931,7 @@ namespace ts.server {
                 compilerOptions,
                 /*compileOnSaveEnabled*/ false,
                 watchOptions,
-                projectService.fshost || projectService.host,
+                projectService.fshost,
                 currentDirectory);
             this.typeAcquisition = typeAcquisition;
             this.projectRootPath = projectRootPath && projectService.toCanonicalFileName(projectRootPath);
@@ -2187,7 +2185,7 @@ namespace ts.server {
                 compilerOptions,
                 /*compileOnSaveEnabled*/ false,
                 hostProject.getWatchOptions(),
-                hostProject.projectService.fshost || hostProject.projectService.host,
+                hostProject.projectService.fshost,
                 hostProject.currentDirectory);
 
             this.rootFileNames = initialRootNames;
@@ -2618,7 +2616,7 @@ namespace ts.server {
                 compilerOptions,
                 compileOnSaveEnabled,
                 watchOptions,
-                projectService.fshost || projectService.host,
+                projectService.fshost,
                 getDirectoryPath(projectFilePath || normalizeSlashes(externalProjectName)));
             this.enableGlobalPlugins(this.getCompilerOptions(), pluginConfigOverrides);
         }

@@ -42,7 +42,7 @@ namespace ts.server {
         };
 
         function addOrUpdate(fileName: Path) {
-            const packageJsonInfo = Debug.checkDefined(createPackageJsonInfo(fileName, (host.fshost || host.host)));
+            const packageJsonInfo = Debug.checkDefined(createPackageJsonInfo(fileName, host.fshost));
             packageJsons.set(fileName, packageJsonInfo);
             directoriesWithoutPackageJson.delete(getDirectoryPath(fileName));
         }

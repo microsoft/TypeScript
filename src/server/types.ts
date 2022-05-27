@@ -21,6 +21,6 @@ declare namespace ts.server {
         ServerHost,
         | "readFile" | "writeFile" | "fileExists" | "directoryExists" | "getFileSize" | "getModifiedTime"
         | "getDirectories" | "getCurrentDirectory" | "getExecutingFilePath" | "realpath" | "resolvePath"
-        | "watchFile" | "watchDirectory"
+        | "createDirectory" | "setModifiedTime" | "deleteFile" | "readDirectory" | "watchFile" | "watchDirectory"
         | "useCaseSensitiveFileNames" | "newLine">;
 }

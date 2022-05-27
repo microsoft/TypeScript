@@ -620,7 +620,7 @@ namespace ts.VirtualFS {
 
     export class VirtualServerHost extends VirtualServerBaseHost {
         constructor(options: VirtualServerHostCreationParameters) {
-            super(options)
+            super(options);
             const { watchFile, watchDirectory } = createSystemWatchFunctions({
                 // We dont have polling watch file
                 // it is essentially fsWatch but lets get that separate from fsWatch and
