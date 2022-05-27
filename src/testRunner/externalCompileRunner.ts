@@ -1,9 +1,9 @@
+import * as del from "del";
+import * as fs from "fs";
+import * as path from "path";
+
 import * as ts from "./_namespaces/ts";
 import { Baseline, IO, isWorker, RunnerBase, TestRunnerKind } from "./_namespaces/Harness";
-
-const fs: typeof import("fs") = require("fs");
-const path: typeof import("path") = require("path");
-const del: typeof import("del") = require("del");
 
 interface ExecResult {
     stdout: Buffer;
