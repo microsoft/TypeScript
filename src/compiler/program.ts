@@ -282,7 +282,7 @@ namespace ts {
         }
 
         // directoryExists
-        if (originalDirectoryExists && originalCreateDirectory) {
+        if (originalDirectoryExists) {
             host.directoryExists = directory => {
                 const key = toPath(directory);
                 const value = directoryExistsCache.get(key);
@@ -291,11 +291,14 @@ namespace ts {
                 directoryExistsCache.set(key, !!newValue);
                 return newValue;
             };
-            host.createDirectory = directory => {
-                const key = toPath(directory);
-                directoryExistsCache.delete(key);
-                originalCreateDirectory.call(host, directory);
-            };
+
+            if (originalCreateDirectory) {
+                host.createDirectory = directory => {
+                    const key = toPath(directory);
+                    directoryExistsCache.delete(key);
+                    originalCreateDirectory.call(host, directory);
+                };
+            }
         }
 
         return {

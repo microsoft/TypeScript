@@ -553,11 +553,14 @@ export declare const newFileConst = 30;
 
 
 
-Change:: Build logic or update time stamps
+Change:: Build logic and tests
 
 Input::
 
 Output::
+[[90m12:01:27 AM[0m] Found 0 errors. Watching for file changes.
+
+
 
 Program root files: ["/user/username/projects/sample1/logic/index.ts"]
 Program options: {"composite":true,"declaration":true,"sourceMap":true,"forceConsistentCasingInFileNames":true,"skipDefaultLibCheck":true,"watch":true,"configFilePath":"/user/username/projects/sample1/logic/tsconfig.json"}
@@ -571,48 +574,6 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
-
-WatchedFiles::
-/user/username/projects/sample1/core/tsconfig.json:
-  {"fileName":"/user/username/projects/sample1/core/tsconfig.json","pollingInterval":250}
-/user/username/projects/sample1/core/anothermodule.ts:
-  {"fileName":"/user/username/projects/sample1/core/anotherModule.ts","pollingInterval":250}
-/user/username/projects/sample1/core/index.ts:
-  {"fileName":"/user/username/projects/sample1/core/index.ts","pollingInterval":250}
-/user/username/projects/sample1/logic/tsconfig.json:
-  {"fileName":"/user/username/projects/sample1/logic/tsconfig.json","pollingInterval":250}
-/user/username/projects/sample1/logic/index.ts:
-  {"fileName":"/user/username/projects/sample1/logic/index.ts","pollingInterval":250}
-/user/username/projects/sample1/tests/tsconfig.json:
-  {"fileName":"/user/username/projects/sample1/tests/tsconfig.json","pollingInterval":250}
-/user/username/projects/sample1/tests/index.ts:
-  {"fileName":"/user/username/projects/sample1/tests/index.ts","pollingInterval":250}
-/user/username/projects/sample1/core/newfile.ts:
-  {"fileName":"/user/username/projects/sample1/core/newfile.ts","pollingInterval":250}
-
-FsWatches::
-
-FsWatchesRecursive::
-/user/username/projects/sample1/core:
-  {"directoryName":"/user/username/projects/sample1/core","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/sample1/logic:
-  {"directoryName":"/user/username/projects/sample1/logic","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-
-exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/sample1/logic/index.js.map] file changed its modified time
-//// [/user/username/projects/sample1/logic/index.js] file changed its modified time
-//// [/user/username/projects/sample1/logic/index.d.ts] file changed its modified time
-//// [/user/username/projects/sample1/logic/tsconfig.tsbuildinfo] file changed its modified time
-
-Change:: Build Tests
-
-Input::
-
-Output::
-[[90m12:01:27 AM[0m] Found 0 errors. Watching for file changes.
-
-
 
 Program root files: ["/user/username/projects/sample1/tests/index.ts"]
 Program options: {"composite":true,"declaration":true,"forceConsistentCasingInFileNames":true,"skipDefaultLibCheck":true,"watch":true,"configFilePath":"/user/username/projects/sample1/tests/tsconfig.json"}
@@ -656,6 +617,10 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+//// [/user/username/projects/sample1/logic/index.js.map] file changed its modified time
+//// [/user/username/projects/sample1/logic/index.js] file changed its modified time
+//// [/user/username/projects/sample1/logic/index.d.ts] file changed its modified time
+//// [/user/username/projects/sample1/logic/tsconfig.tsbuildinfo] file changed its modified time
 //// [/user/username/projects/sample1/tests/index.js] file changed its modified time
 //// [/user/username/projects/sample1/tests/index.d.ts] file changed its modified time
 //// [/user/username/projects/sample1/tests/tsconfig.tsbuildinfo] file changed its modified time
@@ -789,11 +754,14 @@ export declare class someClass2 {
 
 
 
-Change:: Build logic or update time stamps
+Change:: Build logic and tests
 
 Input::
 
 Output::
+[[90m12:01:47 AM[0m] Found 0 errors. Watching for file changes.
+
+
 
 Program root files: ["/user/username/projects/sample1/logic/index.ts"]
 Program options: {"composite":true,"declaration":true,"sourceMap":true,"forceConsistentCasingInFileNames":true,"skipDefaultLibCheck":true,"watch":true,"configFilePath":"/user/username/projects/sample1/logic/tsconfig.json"}
@@ -807,48 +775,6 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
-
-WatchedFiles::
-/user/username/projects/sample1/core/tsconfig.json:
-  {"fileName":"/user/username/projects/sample1/core/tsconfig.json","pollingInterval":250}
-/user/username/projects/sample1/core/anothermodule.ts:
-  {"fileName":"/user/username/projects/sample1/core/anotherModule.ts","pollingInterval":250}
-/user/username/projects/sample1/core/index.ts:
-  {"fileName":"/user/username/projects/sample1/core/index.ts","pollingInterval":250}
-/user/username/projects/sample1/logic/tsconfig.json:
-  {"fileName":"/user/username/projects/sample1/logic/tsconfig.json","pollingInterval":250}
-/user/username/projects/sample1/logic/index.ts:
-  {"fileName":"/user/username/projects/sample1/logic/index.ts","pollingInterval":250}
-/user/username/projects/sample1/tests/tsconfig.json:
-  {"fileName":"/user/username/projects/sample1/tests/tsconfig.json","pollingInterval":250}
-/user/username/projects/sample1/tests/index.ts:
-  {"fileName":"/user/username/projects/sample1/tests/index.ts","pollingInterval":250}
-/user/username/projects/sample1/core/newfile.ts:
-  {"fileName":"/user/username/projects/sample1/core/newfile.ts","pollingInterval":250}
-
-FsWatches::
-
-FsWatchesRecursive::
-/user/username/projects/sample1/core:
-  {"directoryName":"/user/username/projects/sample1/core","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/sample1/logic:
-  {"directoryName":"/user/username/projects/sample1/logic","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-
-exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/sample1/logic/index.js.map] file changed its modified time
-//// [/user/username/projects/sample1/logic/index.js] file changed its modified time
-//// [/user/username/projects/sample1/logic/index.d.ts] file changed its modified time
-//// [/user/username/projects/sample1/logic/tsconfig.tsbuildinfo] file changed its modified time
-
-Change:: Build Tests
-
-Input::
-
-Output::
-[[90m12:01:47 AM[0m] Found 0 errors. Watching for file changes.
-
-
 
 Program root files: ["/user/username/projects/sample1/tests/index.ts"]
 Program options: {"composite":true,"declaration":true,"forceConsistentCasingInFileNames":true,"skipDefaultLibCheck":true,"watch":true,"configFilePath":"/user/username/projects/sample1/tests/tsconfig.json"}
@@ -892,6 +818,10 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+//// [/user/username/projects/sample1/logic/index.js.map] file changed its modified time
+//// [/user/username/projects/sample1/logic/index.js] file changed its modified time
+//// [/user/username/projects/sample1/logic/index.d.ts] file changed its modified time
+//// [/user/username/projects/sample1/logic/tsconfig.tsbuildinfo] file changed its modified time
 //// [/user/username/projects/sample1/tests/index.js] file changed its modified time
 //// [/user/username/projects/sample1/tests/index.d.ts] file changed its modified time
 //// [/user/username/projects/sample1/tests/tsconfig.tsbuildinfo] file changed its modified time

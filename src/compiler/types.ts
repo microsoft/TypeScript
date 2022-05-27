@@ -5883,7 +5883,7 @@ namespace ts {
         ReturnType                   = 1 << 7,  // Inference made from return type of generic function
         LiteralKeyof                 = 1 << 8,  // Inference made from a string literal to a keyof T
         NoConstraints                = 1 << 9,  // Don't infer from constraints of instantiable types
-        AlwaysStrict                 = 1 << 10,  // Always use strict rules for contravariant inferences
+        AlwaysStrict                 = 1 << 10, // Always use strict rules for contravariant inferences
         MaxValue                     = 1 << 11, // Seed for inference priority tracking
 
         PriorityImpliesCombination = ReturnType | MappedTypeConstraint | LiteralKeyof,  // These priorities imply that the resulting type should be a combination of all candidates
@@ -8825,6 +8825,7 @@ namespace ts {
         readonly includeInlayParameterNameHintsWhenArgumentMatchesName?: boolean;
         readonly includeInlayFunctionParameterTypeHints?: boolean,
         readonly includeInlayVariableTypeHints?: boolean;
+        readonly includeInlayVariableTypeHintsWhenTypeMatchesName?: boolean;
         readonly includeInlayPropertyDeclarationTypeHints?: boolean;
         readonly includeInlayFunctionLikeReturnTypeHints?: boolean;
         readonly includeInlayEnumMemberValueHints?: boolean;

@@ -72,7 +72,7 @@ namespace ts {
                     // Though an error in es2020 modules, in node-flavor es2020 modules, we can helpfully transform this to a synthetic `require` call
                     // To give easy access to a synchronous `require` in node-flavor esm. We do the transform even in scenarios where we error, but `import.meta.url`
                     // is available, just because the output is reasonable for a node-like runtime.
-                    return getEmitScriptTarget(compilerOptions) >= ModuleKind.ES2020 ? visitImportEqualsDeclaration(node as ImportEqualsDeclaration) : undefined;
+                    return getEmitModuleKind(compilerOptions) >= ModuleKind.Node16 ? visitImportEqualsDeclaration(node as ImportEqualsDeclaration) : undefined;
                 case SyntaxKind.ExportAssignment:
                     return visitExportAssignment(node as ExportAssignment);
                 case SyntaxKind.ExportDeclaration:
