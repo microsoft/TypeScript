@@ -137,6 +137,10 @@ namespace ts.InlayHints {
 
             const typeDisplayString = printTypeInSingleLine(declarationType);
             if (typeDisplayString) {
+                const isVariableNameMatchesType = preferences.includeInlayVariableTypeHintsWhenTypeMatchesName === false && equateStringsCaseInsensitive(decl.name.getText(), typeDisplayString);
+                if (isVariableNameMatchesType) {
+                    return;
+                }
                 addTypeHints(typeDisplayString, decl.name.end);
             }
         }

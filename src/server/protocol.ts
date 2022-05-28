@@ -728,7 +728,7 @@ namespace ts.server.protocol {
     }
 
     // All we need is the `success` and `message` fields of Response.
-    export interface ApplyCodeActionCommandResponse extends Response {}
+    export interface ApplyCodeActionCommandResponse extends Response { }
 
     export interface FileRangeRequestArgs extends FileRequestArgs {
         /**
@@ -1067,7 +1067,7 @@ namespace ts.server.protocol {
         readonly arguments: JsxClosingTagRequestArgs;
     }
 
-    export interface JsxClosingTagRequestArgs extends FileLocationRequestArgs {}
+    export interface JsxClosingTagRequestArgs extends FileLocationRequestArgs { }
 
     export interface JsxClosingTagResponse extends Response {
         readonly body: TextInsertion;
@@ -2390,7 +2390,7 @@ namespace ts.server.protocol {
         /**
          * Human-readable description of the `source` from the CompletionEntry.
          */
-         sourceDisplay?: SymbolDisplayPart[];
+        sourceDisplay?: SymbolDisplayPart[];
     }
 
     /** @deprecated Prefer CompletionInfoResponse, which supports several top-level fields in addition to the array of entries. */
@@ -3415,7 +3415,7 @@ namespace ts.server.protocol {
         /**
          * Allows completions to be formatted with snippet text, indicated by `CompletionItem["isSnippet"]`.
          */
-         readonly includeCompletionsWithSnippetText?: boolean;
+        readonly includeCompletionsWithSnippetText?: boolean;
         /**
          * If enabled, the completion list will include completions with invalid identifier names.
          * For those entries, The `insertText` and `replacementSpan` properties will be set to change from `.x` property access to `["x"]`.
@@ -3465,6 +3465,7 @@ namespace ts.server.protocol {
         readonly includeInlayParameterNameHintsWhenArgumentMatchesName?: boolean;
         readonly includeInlayFunctionParameterTypeHints?: boolean,
         readonly includeInlayVariableTypeHints?: boolean;
+        readonly includeInlayVariableTypeHintsWhenTypeMatchesName?: boolean;
         readonly includeInlayPropertyDeclarationTypeHints?: boolean;
         readonly includeInlayFunctionLikeReturnTypeHints?: boolean;
         readonly includeInlayEnumMemberValueHints?: boolean;

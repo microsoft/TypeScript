@@ -2834,12 +2834,14 @@ namespace ts {
         }
 
         function setCommonJsModuleIndicator(node: Node) {
-            if (file.externalModuleIndicator) {
+            if (file.externalModuleIndicator && file.externalModuleIndicator !== true) {
                 return false;
             }
             if (!file.commonJsModuleIndicator) {
                 file.commonJsModuleIndicator = node;
-                bindSourceFileAsExternalModule();
+                if (!file.externalModuleIndicator) {
+                    bindSourceFileAsExternalModule();
+                }
             }
             return true;
         }
@@ -3291,7 +3293,12 @@ namespace ts {
             }
 
             if (!isBindingPattern(node.name)) {
-                if (isInJSFile(node) && isVariableDeclarationInitializedToBareOrAccessedRequire(node) && !getJSDocTypeTag(node) && !(getCombinedModifierFlags(node) & ModifierFlags.Export)) {
+                const possibleVariableDecl = node.kind === SyntaxKind.VariableDeclaration ? node : node.parent.parent;
+                if (isInJSFile(node) &&
+                    isVariableDeclarationInitializedToBareOrAccessedRequire(possibleVariableDecl) &&
+                    !getJSDocTypeTag(node) &&
+                    !(getCombinedModifierFlags(node) & ModifierFlags.Export)
+                ) {
                     declareSymbolAndAddToSymbolTable(node as Declaration, SymbolFlags.Alias, SymbolFlags.AliasExcludes);
                 }
                 else if (isBlockOrCatchScoped(node)) {
