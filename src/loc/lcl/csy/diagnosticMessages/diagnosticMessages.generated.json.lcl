@@ -3528,6 +3528,24 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Class_constructor_may_not_be_a_generator_1360" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Class constructor may not be a generator.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Konstruktor třídy nemůže být generátor.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Class_constructor_may_not_be_an_accessor_1341" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Class constructor may not be an accessor.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Konstruktor třídy nemůže být přístupový objekt.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Class_declaration_cannot_implement_overload_list_for_0_2813" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Class declaration cannot implement overload list for '{0}'.]]></Val>
@@ -8334,6 +8352,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Matched_by_default_include_pattern_Asterisk_Asterisk_Slash_Asterisk_1457" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Matched by default include pattern '**/*']]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Porovnává se ve výchozím nastavení se vzorem zahrnutí **/*.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Matched_by_include_pattern_0_in_1_1407" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Matched by include pattern '{0}' in '{1}']]></Val>
@@ -11124,6 +11151,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Resolution_mode_assertions_are_unstable_Use_nightly_TypeScript_to_silence_this_error_Try_updating_wi_4125" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Resolution mode assertions are unstable. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Kontrolní výrazy režimu řešení jsou nestabilní. Ke ztlumení této chyby použijte noční TypeScript. Zkuste provést aktualizaci pomocí příkazu npm install -D typescript@next.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Resolution_modes_are_only_supported_when_moduleResolution_is_node16_or_nodenext_1452" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Resolution modes are only supported when `moduleResolution` is `node16` or `nodenext`.]]></Val>
@@ -13475,6 +13511,15 @@
           <Val><![CDATA[This JSX tag's '{0}' prop expects type '{1}' which requires multiple children, but only a single child was provided.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Vlastnost {0} této značky JSX očekává typ {1}, který vyžaduje více podřízených objektů, ale zadal se jen jeden.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";This_condition_will_always_return_0_since_JavaScript_compares_objects_by_reference_not_value_2839" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[This condition will always return '{0}' since JavaScript compares objects by reference, not value.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Tato podmínka vždy vrátí „{0}“, protože JavaScript porovnává objekty pomocí odkazu, nikoli hodnoty.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -16409,6 +16454,15 @@
           <Val><![CDATA[options]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[možnosti]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";or_JSX_element_expected_1145" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['{' or JSX element expected.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Očekával se element { nebo JSX.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

@@ -806,6 +806,8 @@ namespace ts {
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.FunctionExpression:
                     return getAdjustedLocationForFunction(node as FunctionDeclaration | FunctionExpression);
+                case SyntaxKind.Constructor:
+                    return node;
             }
         }
         if (isNamedDeclaration(node)) {
@@ -2113,6 +2115,48 @@ namespace ts {
         }
 
         return true;
+    }
+
+    export function getMappedLocation(location: DocumentPosition, sourceMapper: SourceMapper, fileExists: ((path: string) => boolean) | undefined): DocumentPosition | undefined {
+        const mapsTo = sourceMapper.tryGetSourcePosition(location);
+        return mapsTo && (!fileExists || fileExists(normalizePath(mapsTo.fileName)) ? mapsTo : undefined);
+    }
+
+    export function getMappedDocumentSpan(documentSpan: DocumentSpan, sourceMapper: SourceMapper, fileExists?: (path: string) => boolean): DocumentSpan | undefined {
+        const { fileName, textSpan } = documentSpan;
+        const newPosition = getMappedLocation({ fileName, pos: textSpan.start }, sourceMapper, fileExists);
+        if (!newPosition) return undefined;
+        const newEndPosition = getMappedLocation({ fileName, pos: textSpan.start + textSpan.length }, sourceMapper, fileExists);
+        const newLength = newEndPosition
+            ? newEndPosition.pos - newPosition.pos
+            : textSpan.length; // This shouldn't happen
+        return {
+            fileName: newPosition.fileName,
+            textSpan: {
+                start: newPosition.pos,
+                length: newLength,
+            },
+            originalFileName: documentSpan.fileName,
+            originalTextSpan: documentSpan.textSpan,
+            contextSpan: getMappedContextSpan(documentSpan, sourceMapper, fileExists),
+            originalContextSpan: documentSpan.contextSpan
+        };
+    }
+
+    export function getMappedContextSpan(documentSpan: DocumentSpan, sourceMapper: SourceMapper, fileExists?: (path: string) => boolean): TextSpan | undefined {
+        const contextSpanStart = documentSpan.contextSpan && getMappedLocation(
+            { fileName: documentSpan.fileName, pos: documentSpan.contextSpan.start },
+            sourceMapper,
+            fileExists
+        );
+        const contextSpanEnd = documentSpan.contextSpan && getMappedLocation(
+            { fileName: documentSpan.fileName, pos: documentSpan.contextSpan.start + documentSpan.contextSpan.length },
+            sourceMapper,
+            fileExists
+        );
+        return contextSpanStart && contextSpanEnd ?
+            { start: contextSpanStart.pos, length: contextSpanEnd.pos - contextSpanStart.pos } :
+            undefined;
     }
 
     // #endregion

@@ -4538,6 +4538,10 @@ namespace ts {
                 // isn't actually allowed, but we want to treat it as a lambda so we can provide
                 // a good error message.
                 if (isModifierKind(second) && second !== SyntaxKind.AsyncKeyword && lookAhead(nextTokenIsIdentifier)) {
+                    if (nextToken() === SyntaxKind.AsKeyword) {
+                        // https://github.com/microsoft/TypeScript/issues/44466
+                        return Tristate.False;
+                    }
                     return Tristate.True;
                 }
 
@@ -5450,15 +5454,23 @@ namespace ts {
 
             scanJsxIdentifier();
             const pos = getNodePos();
-            return finishNode(
-                factory.createJsxAttribute(
-                    parseIdentifierName(),
-                    token() !== SyntaxKind.EqualsToken ? undefined :
-                    scanJsxAttributeValue() === SyntaxKind.StringLiteral ? parseLiteralNode() as StringLiteral :
-                    parseJsxExpression(/*inExpressionContext*/ true)
-                ),
-                pos
-            );
+            return finishNode(factory.createJsxAttribute(parseIdentifierName(), parseJsxAttributeValue()), pos);
+        }
+
+        function parseJsxAttributeValue(): JsxAttributeValue | undefined {
+            if (token() === SyntaxKind.EqualsToken) {
+                if (scanJsxAttributeValue() === SyntaxKind.StringLiteral) {
+                    return parseLiteralNode() as StringLiteral;
+                }
+                if (token() === SyntaxKind.OpenBraceToken) {
+                    return parseJsxExpression(/*inExpressionContext*/ true);
+                }
+                if (token() === SyntaxKind.LessThanToken) {
+                    return parseJsxElementOrSelfClosingElementOrFragment(/*inExpressionContext*/ true);
+                }
+                parseErrorAtCurrentToken(Diagnostics.or_JSX_element_expected);
+            }
+            return undefined;
         }
 
         function parseJsxSpreadAttribute(): JsxSpreadAttribute {

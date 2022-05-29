@@ -203,6 +203,8 @@ Project '/user/username/projects/container/exec/tsconfig.json' (Configured)
 	  Part of 'files' list in tsconfig.json
 
 -----------------------------------------------
+Search path: /user/username/projects/container/lib
+For info: /user/username/projects/container/lib/index.ts :: Config file name: /user/username/projects/container/lib/tsconfig.json
 response:{"response":{"info":{"canRename":true,"displayName":"myConst","fullDisplayName":"container.myConst","kind":"const","kindModifiers":"export","triggerSpan":{"start":{"line":3,"offset":16},"end":{"line":3,"offset":23}}},"locs":[{"file":"/user/username/projects/container/lib/index.ts","locs":[{"start":{"line":2,"offset":18},"end":{"line":2,"offset":25},"contextStart":{"line":2,"offset":5},"contextEnd":{"line":2,"offset":31}}]},{"file":"/user/username/projects/container/compositeExec/index.ts","locs":[{"start":{"line":3,"offset":16},"end":{"line":3,"offset":23}}]},{"file":"/user/username/projects/container/exec/index.ts","locs":[{"start":{"line":3,"offset":16},"end":{"line":3,"offset":23}}]}]},"responseRequired":true}
 FileWatcher:: Close:: WatchInfo: /user/username/projects/temp/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 FileWatcher:: Close:: WatchInfo: /user/username/projects/temp/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root

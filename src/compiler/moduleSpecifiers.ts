@@ -810,6 +810,7 @@ namespace ts.moduleSpecifiers {
     function removeExtensionAndIndexPostFix(fileName: string, ending: Ending, options: CompilerOptions, host?: ModuleSpecifierResolutionHost): string {
         if (fileExtensionIsOneOf(fileName, [Extension.Json, Extension.Mjs, Extension.Cjs])) return fileName;
         const noExtension = removeFileExtension(fileName);
+        if (fileName === noExtension) return fileName;
         if (fileExtensionIsOneOf(fileName, [Extension.Dmts, Extension.Mts, Extension.Dcts, Extension.Cts])) return noExtension + getJSExtensionForFile(fileName, options);
         switch (ending) {
             case Ending.Minimal:

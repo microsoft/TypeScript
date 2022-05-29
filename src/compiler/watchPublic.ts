@@ -700,6 +700,7 @@ namespace ts {
 
         function reloadFileNamesFromConfigFile() {
             writeLog("Reloading new file names and options");
+            reloadLevel = ConfigFileProgramReloadLevel.None;
             rootFileNames = getFileNamesFromConfigSpecs(compilerOptions.configFile!.configFileSpecs!, getNormalizedAbsolutePath(getDirectoryPath(configFileName), currentDirectory), compilerOptions, parseConfigFileHost, extraFileExtensions);
             if (updateErrorForNoInputFiles(rootFileNames, getNormalizedAbsolutePath(configFileName, currentDirectory), compilerOptions.configFile!.configFileSpecs!, configFileParsingDiagnostics!, canConfigFileJsonReportNoInputFiles)) {
                 hasChangedConfigFileParsingErrors = true;

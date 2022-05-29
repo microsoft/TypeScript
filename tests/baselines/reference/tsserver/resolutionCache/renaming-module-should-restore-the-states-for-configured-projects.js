@@ -30,9 +30,9 @@ Project '/a/b/tsconfig.json' (Configured)
 
 	moduleFile.ts
 	  Imported via './moduleFile' from file 'file1.ts'
-	  Matched by include pattern '**/*' in 'tsconfig.json'
+	  Matched by default include pattern '**/*'
 	file1.ts
-	  Matched by include pattern '**/*' in 'tsconfig.json'
+	  Matched by default include pattern '**/*'
 
 -----------------------------------------------
 Project '/a/b/tsconfig.json' (Configured)
@@ -73,9 +73,9 @@ Project '/a/b/tsconfig.json' (Configured)
 
 
 	file1.ts
-	  Matched by include pattern '**/*' in 'tsconfig.json'
+	  Matched by default include pattern '**/*'
 	moduleFile1.ts
-	  Matched by include pattern '**/*' in 'tsconfig.json'
+	  Matched by default include pattern '**/*'
 
 -----------------------------------------------
 Running: *ensureProjectForOpenFiles*
@@ -135,9 +135,9 @@ Project '/a/b/tsconfig.json' (Configured)
 
 	moduleFile.ts
 	  Imported via './moduleFile' from file 'file1.ts'
-	  Matched by include pattern '**/*' in 'tsconfig.json'
+	  Matched by default include pattern '**/*'
 	file1.ts
-	  Matched by include pattern '**/*' in 'tsconfig.json'
+	  Matched by default include pattern '**/*'
 
 -----------------------------------------------
 response:{"response":[],"responseRequired":true}

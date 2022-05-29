@@ -2612,8 +2612,15 @@ namespace ts {
         readonly parent: JsxAttributes;
         readonly name: Identifier;
         /// JSX attribute initializers are optional; <X y /> is sugar for <X y={true} />
-        readonly initializer?: StringLiteral | JsxExpression;
+        readonly initializer?: JsxAttributeValue;
     }
+
+    export type JsxAttributeValue =
+        | StringLiteral
+        | JsxExpression
+        | JsxElement
+        | JsxSelfClosingElement
+        | JsxFragment;
 
     export interface JsxSpreadAttribute extends ObjectLiteralElement {
         readonly kind: SyntaxKind.JsxSpreadAttribute;
@@ -5390,6 +5397,11 @@ namespace ts {
         // Flags that require TypeFlags.Union
         /* @internal */
         ContainsIntersections = 1 << 24, // Union contains intersections
+        /* @internal */
+        IsUnknownLikeUnionComputed = 1 << 25, // IsUnknownLikeUnion flag has been computed
+        /* @internal */
+        IsUnknownLikeUnion = 1 << 26, // Union of null, undefined, and empty object type
+        /* @internal */
 
         // Flags that require TypeFlags.Intersection
         /* @internal */
@@ -5867,10 +5879,10 @@ namespace ts {
         ReturnType                   = 1 << 7,  // Inference made from return type of generic function
         LiteralKeyof                 = 1 << 8,  // Inference made from a string literal to a keyof T
         NoConstraints                = 1 << 9,  // Don't infer from constraints of instantiable types
-        AlwaysStrict                 = 1 << 10,  // Always use strict rules for contravariant inferences
+        AlwaysStrict                 = 1 << 10, // Always use strict rules for contravariant inferences
         MaxValue                     = 1 << 11, // Seed for inference priority tracking
 
-        PriorityImpliesCombination = ReturnType | MappedTypeConstraint | LiteralKeyof,  // These priorities imply that the resulting type should be a combination of all candidates
+        PriorityImpliesCombination = ReturnType | MappedTypeConstraint | LiteralKeyof, // These priorities imply that the resulting type should be a combination of all candidates
         Circularity = -1,  // Inference circularity (value less than all other priorities)
     }
 
@@ -6385,6 +6397,7 @@ namespace ts {
         validatedIncludeSpecs: readonly string[] | undefined;
         validatedExcludeSpecs: readonly string[] | undefined;
         pathPatterns: readonly (string | Pattern)[] | undefined;
+        isDefaultIncludeSpec: boolean;
     }
 
     /* @internal */
@@ -7679,8 +7692,8 @@ namespace ts {
         createJsxOpeningFragment(): JsxOpeningFragment;
         createJsxJsxClosingFragment(): JsxClosingFragment;
         updateJsxFragment(node: JsxFragment, openingFragment: JsxOpeningFragment, children: readonly JsxChild[], closingFragment: JsxClosingFragment): JsxFragment;
-        createJsxAttribute(name: Identifier, initializer: StringLiteral | JsxExpression | undefined): JsxAttribute;
-        updateJsxAttribute(node: JsxAttribute, name: Identifier, initializer: StringLiteral | JsxExpression | undefined): JsxAttribute;
+        createJsxAttribute(name: Identifier, initializer: JsxAttributeValue | undefined): JsxAttribute;
+        updateJsxAttribute(node: JsxAttribute, name: Identifier, initializer: JsxAttributeValue | undefined): JsxAttribute;
         createJsxAttributes(properties: readonly JsxAttributeLike[]): JsxAttributes;
         updateJsxAttributes(node: JsxAttributes, properties: readonly JsxAttributeLike[]): JsxAttributes;
         createJsxSpreadAttribute(expression: Expression): JsxSpreadAttribute;
@@ -8805,6 +8818,7 @@ namespace ts {
         readonly includeInlayParameterNameHintsWhenArgumentMatchesName?: boolean;
         readonly includeInlayFunctionParameterTypeHints?: boolean,
         readonly includeInlayVariableTypeHints?: boolean;
+        readonly includeInlayVariableTypeHintsWhenTypeMatchesName?: boolean;
         readonly includeInlayPropertyDeclarationTypeHints?: boolean;
         readonly includeInlayFunctionLikeReturnTypeHints?: boolean;
         readonly includeInlayEnumMemberValueHints?: boolean;

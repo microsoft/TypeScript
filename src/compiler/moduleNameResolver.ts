@@ -1288,18 +1288,22 @@ namespace ts {
         );
     }
 
+    const jsOnlyExtensions = [Extensions.JavaScript];
+    const tsExtensions = [Extensions.TypeScript, Extensions.JavaScript];
+    const tsPlusJsonExtensions = [...tsExtensions, Extensions.Json];
+    const tsconfigExtensions = [Extensions.TSConfig];
     function nodeNextModuleNameResolverWorker(features: NodeResolutionFeatures, moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: ModuleResolutionCache, redirectedReference?: ResolvedProjectReference, resolutionMode?: ModuleKind.CommonJS | ModuleKind.ESNext): ResolvedModuleWithFailedLookupLocations {
         const containingDirectory = getDirectoryPath(containingFile);
 
         // es module file or cjs-like input file, use a variant of the legacy cjs resolver that supports the selected modern features
         const esmMode = resolutionMode === ModuleKind.ESNext ? NodeResolutionFeatures.EsmMode : 0;
-        return nodeModuleNameResolverWorker(features | esmMode, moduleName, containingDirectory, compilerOptions, host, cache, compilerOptions.resolveJsonModule ? tsPlusJsonExtensions : tsExtensions, redirectedReference);
+        let extensions = compilerOptions.noDtsResolution ? [Extensions.TsOnly, Extensions.JavaScript] : tsExtensions;
+        if (compilerOptions.resolveJsonModule) {
+            extensions = [...extensions, Extensions.Json];
+        }
+        return nodeModuleNameResolverWorker(features | esmMode, moduleName, containingDirectory, compilerOptions, host, cache, extensions, redirectedReference);
     }
 
-    const jsOnlyExtensions = [Extensions.JavaScript];
-    const tsExtensions = [Extensions.TypeScript, Extensions.JavaScript];
-    const tsPlusJsonExtensions = [...tsExtensions, Extensions.Json];
-    const tsconfigExtensions = [Extensions.TSConfig];
     function tryResolveJSModuleWorker(moduleName: string, initialDir: string, host: ModuleResolutionHost): ResolvedModuleWithFailedLookupLocations {
         return nodeModuleNameResolverWorker(NodeResolutionFeatures.None, moduleName, initialDir, { moduleResolution: ModuleResolutionKind.NodeJs, allowJs: true }, host, /*cache*/ undefined, jsOnlyExtensions, /*redirectedReferences*/ undefined);
     }

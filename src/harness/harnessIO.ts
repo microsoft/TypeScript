@@ -1389,20 +1389,25 @@ namespace Harness {
                 else {
                     IO.writeFile(actualFileName, encodedActual);
                 }
+                const errorMessage = getBaselineFileChangedErrorMessage(relativeFileName);
                 if (!!require && opts && opts.PrintDiff) {
                     const Diff = require("diff");
                     const patch = Diff.createTwoFilesPatch("Expected", "Actual", expected, actual, "The current baseline", "The new version");
-                    throw new Error(`The baseline file ${relativeFileName} has changed.${ts.ForegroundColorEscapeSequences.Grey}\n\n${patch}`);
+                    throw new Error(`${errorMessage}${ts.ForegroundColorEscapeSequences.Grey}\n\n${patch}`);
                 }
                 else {
                     if (!IO.fileExists(expected)) {
                         throw new Error(`New baseline created at ${IO.joinPath("tests", "baselines","local", relativeFileName)}`);
                     }
                     else {
-                        throw new Error(`The baseline file ${relativeFileName} has changed.`);
+                        throw new Error(errorMessage);
                     }
                 }
             }
+        }
+
+        function getBaselineFileChangedErrorMessage(relativeFileName: string): string {
+            return `The baseline file ${relativeFileName} has changed. (Run "gulp baseline-accept" if the new baseline is correct.)`;
         }
 
         export function runBaseline(relativeFileName: string, actual: string | null, opts?: BaselineOptions): void {

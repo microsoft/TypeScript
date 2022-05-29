@@ -1,0 +1,13 @@
+=== tests/cases/compiler/contextualSignatureInObjectFreeze.ts ===
+// #49101
+
+Object.freeze({
+>Object.freeze : Symbol(ObjectConstructor.freeze, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>freeze : Symbol(ObjectConstructor.freeze, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    f: function () { }
+>f : Symbol(f, Decl(contextualSignatureInObjectFreeze.ts, 2, 15))
+
+})
+
