@@ -14,6 +14,10 @@ let x: number;
 ({ x: x = undefined } = a);
 ({ y: x = undefined } = a);
 
+const { x: z1 } = a;
+const { x: z2 = 0 } = a;
+const { x: z3 = undefined } = a;
+
 
 declare const r: Iterator<number>;
 let done: boolean;

@@ -29,6 +29,10 @@ tests/cases/compiler/destructuringAssignmentWithDefault2.ts(13,7): error TS2322:
           ~
 !!! error TS2322: Type 'undefined' is not assignable to type 'number'.
     
+    const { x: z1 } = a;
+    const { x: z2 = 0 } = a;
+    const { x: z3 = undefined } = a;
+    
     
     declare const r: Iterator<number>;
     let done: boolean;

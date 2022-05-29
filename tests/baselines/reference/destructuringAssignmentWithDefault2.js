@@ -13,6 +13,10 @@ let x: number;
 ({ x: x = undefined } = a);
 ({ y: x = undefined } = a);
 
+const { x: z1 } = a;
+const { x: z2 = 0 } = a;
+const { x: z3 = undefined } = a;
+
 
 declare const r: Iterator<number>;
 let done: boolean;
@@ -33,6 +37,9 @@ var x;
 (_d = a.x, x = _d === void 0 ? undefined : _d);
 (_e = a.x, x = _e === void 0 ? undefined : _e);
 (_f = a.y, x = _f === void 0 ? undefined : _f);
+var z1 = a.x;
+var _l = a.x, z2 = _l === void 0 ? 0 : _l;
+var _m = a.x, z3 = _m === void 0 ? undefined : _m;
 var done;
 var value;
 (_g = r.next(), _h = _g.done, done = _h === void 0 ? false : _h, value = _g.value);

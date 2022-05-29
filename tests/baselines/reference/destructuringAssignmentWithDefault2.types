@@ -66,6 +66,23 @@ let x: number;
 >undefined : undefined
 >a : { x?: number | undefined; y?: number | undefined; }
 
+const { x: z1 } = a;
+>x : any
+>z1 : number | undefined
+>a : { x?: number | undefined; y?: number | undefined; }
+
+const { x: z2 = 0 } = a;
+>x : any
+>z2 : number
+>0 : 0
+>a : { x?: number | undefined; y?: number | undefined; }
+
+const { x: z3 = undefined } = a;
+>x : any
+>z3 : number | undefined
+>undefined : undefined
+>a : { x?: number | undefined; y?: number | undefined; }
+
 
 declare const r: Iterator<number>;
 >r : Iterator<number, any, undefined>
