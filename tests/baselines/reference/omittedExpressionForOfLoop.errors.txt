@@ -1,8 +1,20 @@
 tests/cases/compiler/omittedExpressionForOfLoop.ts(1,19): error TS2304: Cannot find name 'doesNotExist'.
+tests/cases/compiler/omittedExpressionForOfLoop.ts(4,19): error TS2532: Object is possibly 'undefined'.
 
 
-==== tests/cases/compiler/omittedExpressionForOfLoop.ts (1 errors) ====
+==== tests/cases/compiler/omittedExpressionForOfLoop.ts (2 errors) ====
     for (const [,] of doesNotExist) {
                       ~~~~~~~~~~~~
 !!! error TS2304: Cannot find name 'doesNotExist'.
+    }
+    
+    for (const [,] of undefined) {
+                      ~~~~~~~~~
+!!! error TS2532: Object is possibly 'undefined'.
+    }
+    
+    for (const [,] of []) {
+    }
+    
+    for (const [] of []) {
     }

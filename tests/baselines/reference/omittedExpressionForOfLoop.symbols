@@ -1,4 +1,13 @@
 === tests/cases/compiler/omittedExpressionForOfLoop.ts ===
 for (const [,] of doesNotExist) {
-No type information for this code.}
-No type information for this code.
+}
+
+for (const [,] of undefined) {
+>undefined : Symbol(undefined)
+}
+
+for (const [,] of []) {
+}
+
+for (const [] of []) {
+}
