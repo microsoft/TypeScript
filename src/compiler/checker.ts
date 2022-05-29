@@ -37933,7 +37933,7 @@ namespace ts {
             // For a binding pattern, validate the initializer and exit
             if (isBindingPattern(node.name)) {
                 const needCheckInitializer = node.initializer && node.parent.parent.kind !== SyntaxKind.ForInStatement;
-                const needCheckWidenedType = node.name.elements.length === 0;
+                const needCheckWidenedType = node.name.elements.length === 0 || !some(node.name.elements, not(isOmittedExpression));
                 if (needCheckInitializer || needCheckWidenedType) {
                     // Don't validate for-in initializer as it is already an error
                     const widenedType = getWidenedTypeForVariableLikeDeclaration(node);
@@ -38063,12 +38063,6 @@ namespace ts {
         function checkBindingElement(node: BindingElement) {
             checkGrammarBindingElement(node);
             return checkVariableLikeDeclaration(node);
-        }
-
-        function checkOmittedExpression(node: OmittedExpression) {
-            if (node.parent.parent?.parent?.parent.kind === SyntaxKind.ForOfStatement) {
-                checkRightHandSideOfForOf(node.parent.parent.parent.parent as ForOfStatement);
-            }
         }
 
         function checkVariableStatement(node: VariableStatement) {
@@ -41502,8 +41496,6 @@ namespace ts {
                     return checkVariableDeclaration(node as VariableDeclaration);
                 case SyntaxKind.BindingElement:
                     return checkBindingElement(node as BindingElement);
-                case SyntaxKind.OmittedExpression:
-                    return checkOmittedExpression(node as OmittedExpression);
                 case SyntaxKind.ClassDeclaration:
                     return checkClassDeclaration(node as ClassDeclaration);
                 case SyntaxKind.InterfaceDeclaration:
