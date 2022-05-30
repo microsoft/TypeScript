@@ -4120,6 +4120,7 @@ declare namespace ts {
         readonly includeInlayParameterNameHintsWhenArgumentMatchesName?: boolean;
         readonly includeInlayFunctionParameterTypeHints?: boolean;
         readonly includeInlayVariableTypeHints?: boolean;
+        readonly includeInlayVariableTypeHintsWhenTypeMatchesName?: boolean;
         readonly includeInlayPropertyDeclarationTypeHints?: boolean;
         readonly includeInlayFunctionLikeReturnTypeHints?: boolean;
         readonly includeInlayEnumMemberValueHints?: boolean;
@@ -9711,6 +9712,7 @@ declare namespace ts.server.protocol {
         readonly includeInlayParameterNameHintsWhenArgumentMatchesName?: boolean;
         readonly includeInlayFunctionParameterTypeHints?: boolean;
         readonly includeInlayVariableTypeHints?: boolean;
+        readonly includeInlayVariableTypeHintsWhenTypeMatchesName?: boolean;
         readonly includeInlayPropertyDeclarationTypeHints?: boolean;
         readonly includeInlayFunctionLikeReturnTypeHints?: boolean;
         readonly includeInlayEnumMemberValueHints?: boolean;
