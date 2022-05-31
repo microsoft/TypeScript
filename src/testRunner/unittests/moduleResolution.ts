@@ -141,7 +141,7 @@ namespace ts {
                 checkResolvedModule(resolution.resolvedModule, createResolvedModule(moduleFile.name));
                 // expect three failed lookup location - attempt to load module as file with all supported extensions
                 assert.equal(resolution.failedLookupLocations.length, supportedTSExtensions[0].length);
-                // TODO
+                assert.deepEqual(resolution.affectingLocations, [packageJsonFileName]);
             }
         }
 
