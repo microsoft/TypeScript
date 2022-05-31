@@ -263,7 +263,7 @@ export function start() {
             const configPath = ts.combinePaths(taskConfigsFolder, `task-config${i}.json`);
             IO.writeFile(configPath, JSON.stringify(config));
             const worker: Worker = {
-                process: fork(__filename, [`--config="${configPath}"`], { stdio: ["pipe", "pipe", "pipe", "ipc"] }),
+                process: fork(process.argv[1], [`--config="${configPath}"`], { stdio: ["pipe", "pipe", "pipe", "ipc"] }),
                 accumulatedOutput: "",
                 currentTasks: undefined,
                 timer: undefined

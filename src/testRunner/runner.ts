@@ -291,3 +291,6 @@ function startTestEnvironment() {
 }
 
 startTestEnvironment();
+
+// This brings in all of the unittests.
+import "./_namespaces/tests";
