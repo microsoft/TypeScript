@@ -11,9 +11,9 @@ for (const [,] of undefined) {
 
 for (const [,] of []) {
 > : undefined
->[] : undefined[]
+>[] : never[]
 }
 
 for (const [] of []) {
->[] : undefined[]
+>[] : never[]
 }

@@ -12,6 +12,7 @@ for (const [] of []) {
 }
 
 //// [omittedExpressionForOfLoop.js]
+"use strict";
 for (var _i = 0, doesNotExist_1 = doesNotExist; _i < doesNotExist_1.length; _i++) {
     var _a = doesNotExist_1[_i];
 }

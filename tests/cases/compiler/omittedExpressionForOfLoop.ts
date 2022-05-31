@@ -1,3 +1,4 @@
+// @strict: true
 for (const [,] of doesNotExist) {
 }
 
