@@ -50,6 +50,7 @@
 
         "runner.ts",
 
+        "unittests/helpers.ts",
         "unittests/services/extract/helpers.ts",
         "unittests/tsbuild/helpers.ts",
         "unittests/tsc/helpers.ts",
@@ -262,6 +263,7 @@
         "_namespaces/ts.tscWatch.ts",
         "_namespaces/ts.projectSystem.ts",
         "_namespaces/ts.server.ts",
-        "_namespaces/ts.textStorage.ts"
+        "_namespaces/ts.textStorage.ts",
+        "_namespaces/tests.ts"
     ]
 }

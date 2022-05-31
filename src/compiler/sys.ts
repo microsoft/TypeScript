@@ -1521,7 +1521,14 @@ export let sys: System = (() => {
                 }
             },
             getExecutingFilePath() {
-                return __filename;
+                // This function previously returned a path like `built/local/tsc.js`.
+                // Now, with a module output, this file is now `built/local/compiler/sys.js`.
+                // We want to return a file that looks like the old one, so that callers
+                // can locate other assets like the lib.d.ts files.
+                //
+                // TODO(jakebailey): replace this function with one that returns the path
+                // to the lib folder (or package path)?.
+                return _path.join(_path.dirname(__dirname), "fake.js");
             },
             getCurrentDirectory,
             getDirectories,
