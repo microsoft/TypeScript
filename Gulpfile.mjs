@@ -21,6 +21,8 @@ const { src, dest, task, parallel, series, watch } = gulp;
 const copyright = "CopyrightNotice.txt";
 const cleanTasks = [];
 
+const testRunner = "./built/local/testRunner/runner.js";
+
 const buildScripts = () => buildProject("scripts");
 task("scripts", buildScripts);
 task("scripts").description = "Builds files in the 'scripts' folder.";
@@ -90,6 +92,14 @@ const localize = async () => {
         return exec(process.execPath, ["scripts/generateLocalizedDiagnosticMessages.mjs", "src/loc/lcl", "built/local", diagnosticMessagesGeneratedJson], { ignoreExitCode: true });
     }
 };
+
+const preSrc = parallel(generateLibs, series(buildScripts, generateDiagnostics, localize));
+const buildSrc = () => buildProject("src");
+
+task("build-src", series(preSrc, buildSrc));
+
+const cleanSrc = () => cleanProject("src");
+task("clean-src", cleanSrc);
 
 const buildDebugTools = () => buildProject("src/debug");
 const cleanDebugTools = () => cleanProject("src/debug");
@@ -414,8 +424,8 @@ task("watch-local").flags = {
 const preTest = parallel(buildTsc, buildTests, buildServices, buildLssl);
 preTest.displayName = "preTest";
 
-const runTests = () => runConsoleTests("built/local/run.js", "mocha-fivemat-progress-reporter", /*runInParallel*/ false, /*watchMode*/ false);
-task("runtests", series(preBuild, preTest, runTests));
+const runTests = () => runConsoleTests(testRunner, "mocha-fivemat-progress-reporter", /*runInParallel*/ false, /*watchMode*/ false);
+task("runtests", series(/*preBuild, preTest,*/ task("build-src"), runTests)); // TODO(jakebailey): fix this for modules
 task("runtests").description = "Runs the tests using the built run.js file.";
 task("runtests").flags = {
     "-t --tests=<regex>": "Pattern for tests to run.",
@@ -433,8 +443,8 @@ task("runtests").flags = {
     "   --shardId": "1-based ID of this shard (default: 1)",
 };
 
-const runTestsParallel = () => runConsoleTests("built/local/run.js", "min", /*runInParallel*/ cmdLineOptions.workers > 1, /*watchMode*/ false);
-task("runtests-parallel", series(preBuild, preTest, runTestsParallel));
+const runTestsParallel = () => runConsoleTests(testRunner, "min", /*runInParallel*/ cmdLineOptions.workers > 1, /*watchMode*/ false);
+task("runtests-parallel", series(/*preBuild, preTest,*/ task("build-src"), runTestsParallel)); // TODO(jakebailey): fix this for modules
 task("runtests-parallel").description = "Runs all the tests in parallel using the built run.js file.";
 task("runtests-parallel").flags = {
     "   --light": "Run tests in light mode (fewer verifications, but tests run faster).",
@@ -559,10 +569,10 @@ task("publish-nightly").description = "Runs `npm publish --tag next` to create a
 // write some kind of trigger file that indicates build completion that we could listen for instead.
 const watchRuntests = () => watch(["built/local/*.js", "tests/cases/**/*.ts", "tests/cases/**/tsconfig.json"], { delay: 5000 }, async () => {
     if (cmdLineOptions.tests || cmdLineOptions.failed) {
-        await runConsoleTests("built/local/run.js", "mocha-fivemat-progress-reporter", /*runInParallel*/ false, /*watchMode*/ true);
+        await runConsoleTests(testRunner, "mocha-fivemat-progress-reporter", /*runInParallel*/ false, /*watchMode*/ true);
     }
     else {
-        await runConsoleTests("built/local/run.js", "min", /*runInParallel*/ true, /*watchMode*/ true);
+        await runConsoleTests(testRunner, "min", /*runInParallel*/ true, /*watchMode*/ true);
     }
 });
 task("watch", series(preBuild, preTest, parallel(watchLib, watchDiagnostics, watchServices, watchLssl, watchTests, watchRuntests)));
