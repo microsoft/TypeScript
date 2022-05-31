@@ -1,7 +1,7 @@
 {
     "extends": "../tsconfig-base",
     "compilerOptions": {
-        "outDir": "../../built/local",
+        "outDir": "../../built/local/harness",
         "types": [
             "node", "mocha", "chai"
         ],
@@ -19,43 +19,5 @@
         { "path": "../deprecatedCompat" },
     ],
 
-    "files": [
-        "collectionsImpl.ts",
-        "util.ts",
-        "documentsUtil.ts",
-        "vpathUtil.ts",
-        "vfsUtil.ts",
-        "compilerImpl.ts",
-        "evaluatorImpl.ts",
-        "fakesHosts.ts",
-        "client.ts",
-        "findUpDir.ts",
-
-        "runnerbase.ts",
-        "sourceMapRecorder.ts",
-        "harnessGlobals.ts",
-        "harnessUtils.ts",
-        "harnessIO.ts",
-        "harnessLanguageService.ts",
-        "virtualFileSystemWithWatch.ts",
-        "fourslashImpl.ts",
-        "fourslashInterfaceImpl.ts",
-        "typeWriter.ts",
-        "_namespaces/ts.server.ts",
-        "_namespaces/ts.ts",
-        "_namespaces/collections.ts",
-        "_namespaces/compiler.ts",
-        "_namespaces/documents.ts",
-        "_namespaces/evaluator.ts",
-        "_namespaces/fakes.ts",
-        "_namespaces/Utils.ts",
-        "_namespaces/FourSlash.ts",
-        "_namespaces/FourSlashInterface.ts",
-        "_namespaces/Harness.ts",
-        "_namespaces/Harness.LanguageService.ts",
-        "_namespaces/Harness.SourceMapRecorder.ts",
-        "_namespaces/vfs.ts",
-        "_namespaces/ts.TestFSWithWatch.ts",
-        "_namespaces/vpath.ts"
-    ]
+    "include": ["**/*"]
 }

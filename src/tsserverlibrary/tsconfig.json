@@ -1,18 +1,14 @@
 {
-    "extends": "../tsconfig-library-base",
+    "extends": "../tsconfig-base",
     "compilerOptions": {
-        "outDir": "../../built/local"
+        "outDir": "../../built/local/tsserverlibrary"
     },
-    "files": [
-        "tsserverlibrary.ts",
-        "_namespaces/ts.server.ts",
-        "_namespaces/ts.ts"
-    ],
     "references": [
         { "path": "../compiler" },
         { "path": "../jsTyping" },
         { "path": "../services" },
         { "path": "../server" },
         { "path": "../deprecatedCompat" }
-    ]
+    ],
+    "include": ["**/*"]
 }

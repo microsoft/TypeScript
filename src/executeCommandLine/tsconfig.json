@@ -1,15 +1,12 @@
 {
     "extends": "../tsconfig-base",
     "compilerOptions": {
-        "outDir": "../../built/local"
+        "outDir": "../../built/local/executeCommandLine"
     },
 
     "references": [
         { "path": "../compiler" }
     ],
 
-    "files": [
-        "executeCommandLine.ts",
-        "_namespaces/ts.ts"
-    ]
+    "include": ["**/*"]
 }

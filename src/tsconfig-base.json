@@ -1,10 +1,10 @@
 {
     "compilerOptions": {
         "pretty": true,
-        "lib": ["es2015.iterable", "es2015.generator", "es5"],
-        "target": "es5",
+        "lib": ["es2018"],
+        "target": "es2018",
+        "module": "CommonJS",
         "moduleResolution": "node",
-        "rootDir": ".",
 
         "declaration": true,
         "declarationMap": true,

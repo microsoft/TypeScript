@@ -1,19 +1,12 @@
 {
-    "extends": "../tsconfig-noncomposite-base",
+    "extends": "../tsconfig-base",
  
     "compilerOptions": {
-        "outDir": "../../built/local",
+        "outDir": "../../built/local/tsserver",
         "types": [
             "node"
         ]
     },
-    "files": [
-        "nodeServer.ts",
-        "webServer.ts",
-        "server.ts",
-        "_namespaces/ts.server.ts",
-        "_namespaces/ts.ts"
-    ],
     "references": [
         { "path": "../compiler" },
         { "path": "../services" },
@@ -21,5 +14,6 @@
         { "path": "../server" },
         { "path": "../webServer" },
         { "path": "../deprecatedCompat" }
-    ]
+    ],
+    "include": ["**/*"]
 }

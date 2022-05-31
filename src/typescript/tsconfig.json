@@ -1,15 +1,13 @@
 {
     "extends": "../tsconfig-base",
     "compilerOptions": {
-        "outDir": "../../built/local/server",
-        "types": [
-            "node"
-        ]
+        "outDir": "../../built/local/typescript"
     },
     "references": [
         { "path": "../compiler" },
         { "path": "../jsTyping" },
-        { "path": "../services" }
+        { "path": "../services" },
+        { "path": "../deprecatedCompat" }
     ],
     "include": ["**/*"]
 }
