@@ -146,7 +146,7 @@ function union5<T extends object | string, U extends object | number>(p: T | U) 
         "key" in p;
 >"key" in p : boolean
 >"key" : "key"
->p : T | U
+>p : (T & object) | (U & object)
     }
 }
 

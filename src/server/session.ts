@@ -379,8 +379,8 @@ namespace ts.server {
         // have started the other project searches from related symbols.  Propagate the
         // correct results to all other projects.
 
-        const defaultProjectResults = perProjectResults.get(defaultProject)!;
-        if (defaultProjectResults[0].references[0].isDefinition === undefined) {
+        const defaultProjectResults = perProjectResults.get(defaultProject);
+        if (defaultProjectResults?.[0].references[0]?.isDefinition === undefined) {
             // Clear all isDefinition properties
             perProjectResults.forEach(projectResults => {
                 for (const referencedSymbol of projectResults) {
@@ -575,13 +575,11 @@ namespace ts.server {
         // it easier for the caller to skip post-processing.
         if (searchedProjects.size === 1) {
             const it = resultsMap.values().next();
-            Debug.assert(!it.done);
-            return it.value;
+            return it.done ? emptyArray : it.value; // There may not be any results at all
         }
 
         return resultsMap;
 
-        // May enqueue to otherPositionQueue
         function searchPosition(project: Project, location: DocumentPosition): readonly TResult[] | undefined {
             const projectResults = getResultsForPosition(project, location);
             if (!projectResults) return undefined;
