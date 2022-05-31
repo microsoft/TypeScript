@@ -32,10 +32,10 @@ type T09 = Foo1<`**${string}**${string}**`>;
 >T09 : `*${string}**${string}*`
 
 type T10 = Foo1<`**${'a' | 'b' | 'c'}**`>;
->T10 : T10
+>T10 : "*a*" | "*b*" | "*c*"
 
 type T11 = Foo1<`**${boolean}**${boolean}**`>;
->T11 : T11
+>T11 : "*false**false*" | "*false**true*" | "*true**false*" | "*true**true*"
 
 declare function foo1<V extends string>(arg: `*${V}*`): V;
 >foo1 : <V extends string>(arg: `*${V}*`) => V
@@ -366,10 +366,10 @@ const templated2: Templated = `${value2} abc` as const;
 // Repro from #43620
 
 type Prefixes = "foo" | "bar";
->Prefixes : Prefixes
+>Prefixes : "foo" | "bar"
 
 type AllPrefixData = "foo:baz" | "bar:baz";
->AllPrefixData : AllPrefixData
+>AllPrefixData : "foo:baz" | "bar:baz"
 
 type PrefixData<P extends Prefixes> = `${P}:baz`;
 >PrefixData : `${P}:baz`
@@ -382,7 +382,7 @@ interface ITest<P extends Prefixes, E extends AllPrefixData = PrefixData<P>> {
 // Repro from #45906
 
 type Schema = { a: { b: { c: number } } };
->Schema : Schema
+>Schema : { a: {    b: {        c: number;    };}; }
 >a : { b: {    c: number;}; }
 >b : { c: number; }
 >c : number
@@ -481,7 +481,7 @@ function ff4(x: string, y: `foo-${string}`) {
 // Repro from #46045
 
 type Action =
->Action : Action
+>Action : { type: `${string}_REQUEST`; } | { type: `${string}_SUCCESS`; response: string; }
 
     | { type: `${string}_REQUEST` }
 >type : `${string}_REQUEST`
@@ -511,5 +511,86 @@ function reducer(action: Action) {
 >action : { type: `${string}_SUCCESS`; response: string; }
 >response : string
     }
+}
+
+// Repro from #46768
+
+type DotString = `${string}.${string}.${string}`;
+>DotString : `${string}.${string}.${string}`
+
+declare function noSpread<P extends DotString>(args: P[]): P;
+>noSpread : <P extends `${string}.${string}.${string}`>(args: P[]) => P
+>args : P[]
+
+declare function spread<P extends DotString>(...args: P[]): P;
+>spread : <P extends `${string}.${string}.${string}`>(...args: P[]) => P
+>args : P[]
+
+noSpread([`1.${'2'}.3`, `1.${'2'}.4`]);
+>noSpread([`1.${'2'}.3`, `1.${'2'}.4`]) : "1.2.3" | "1.2.4"
+>noSpread : <P extends `${string}.${string}.${string}`>(args: P[]) => P
+>[`1.${'2'}.3`, `1.${'2'}.4`] : ("1.2.3" | "1.2.4")[]
+>`1.${'2'}.3` : "1.2.3"
+>'2' : "2"
+>`1.${'2'}.4` : "1.2.4"
+>'2' : "2"
+
+noSpread([`1.${'2' as string}.3`, `1.${'2' as string}.4`]);
+>noSpread([`1.${'2' as string}.3`, `1.${'2' as string}.4`]) : `1.${string}.3` | `1.${string}.4`
+>noSpread : <P extends `${string}.${string}.${string}`>(args: P[]) => P
+>[`1.${'2' as string}.3`, `1.${'2' as string}.4`] : (`1.${string}.3` | `1.${string}.4`)[]
+>`1.${'2' as string}.3` : `1.${string}.3`
+>'2' as string : string
+>'2' : "2"
+>`1.${'2' as string}.4` : `1.${string}.4`
+>'2' as string : string
+>'2' : "2"
+
+spread(`1.${'2'}.3`, `1.${'2'}.4`);
+>spread(`1.${'2'}.3`, `1.${'2'}.4`) : "1.2.3" | "1.2.4"
+>spread : <P extends `${string}.${string}.${string}`>(...args: P[]) => P
+>`1.${'2'}.3` : "1.2.3"
+>'2' : "2"
+>`1.${'2'}.4` : "1.2.4"
+>'2' : "2"
+
+spread(`1.${'2' as string}.3`, `1.${'2' as string}.4`);
+>spread(`1.${'2' as string}.3`, `1.${'2' as string}.4`) : `1.${string}.3` | `1.${string}.4`
+>spread : <P extends `${string}.${string}.${string}`>(...args: P[]) => P
+>`1.${'2' as string}.3` : `1.${string}.3`
+>'2' as string : string
+>'2' : "2"
+>`1.${'2' as string}.4` : `1.${string}.4`
+>'2' as string : string
+>'2' : "2"
+
+function ft1<T extends string>(t: T, u: Uppercase<T>, u1: Uppercase<`1.${T}.3`>, u2: Uppercase<`1.${T}.4`>) {
+>ft1 : <T extends string>(t: T, u: Uppercase<T>, u1: Uppercase<`1.${T}.3`>, u2: Uppercase<`1.${T}.4`>) => void
+>t : T
+>u : Uppercase<T>
+>u1 : Uppercase<`1.${T}.3`>
+>u2 : Uppercase<`1.${T}.4`>
+
+    spread(`1.${t}.3`, `1.${t}.4`);
+>spread(`1.${t}.3`, `1.${t}.4`) : `1.${T}.3` | `1.${T}.4`
+>spread : <P extends `${string}.${string}.${string}`>(...args: P[]) => P
+>`1.${t}.3` : `1.${T}.3`
+>t : T
+>`1.${t}.4` : `1.${T}.4`
+>t : T
+
+    spread(`1.${u}.3`, `1.${u}.4`);
+>spread(`1.${u}.3`, `1.${u}.4`) : `1.${Uppercase<T>}.3` | `1.${Uppercase<T>}.4`
+>spread : <P extends `${string}.${string}.${string}`>(...args: P[]) => P
+>`1.${u}.3` : `1.${Uppercase<T>}.3`
+>u : Uppercase<T>
+>`1.${u}.4` : `1.${Uppercase<T>}.4`
+>u : Uppercase<T>
+
+    spread(u1, u2);
+>spread(u1, u2) : Uppercase<`1.${T}.3`> | Uppercase<`1.${T}.4`>
+>spread : <P extends `${string}.${string}.${string}`>(...args: P[]) => P
+>u1 : Uppercase<`1.${T}.3`>
+>u2 : Uppercase<`1.${T}.4`>
 }
 

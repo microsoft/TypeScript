@@ -174,14 +174,12 @@ namespace ts {
     const binder = createBinder();
 
     export function bindSourceFile(file: SourceFile, options: CompilerOptions) {
-        tracing?.push(tracing.Phase.Bind, "bindSourceFile", { path: file.path }, /*separateBeginAndEnd*/ true);
         performance.mark("beforeBind");
         perfLogger.logStartBindFile("" + file.fileName);
         binder(file, options);
         perfLogger.logStopBindFile();
         performance.mark("afterBind");
         performance.measure("Bind", "beforeBind", "afterBind");
-        tracing?.pop();
     }
 
     function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
@@ -253,7 +251,9 @@ namespace ts {
             Debug.attachFlowNodeDebugInfo(reportedUnreachableFlow);
 
             if (!file.locals) {
+                tracing?.push(tracing.Phase.Bind, "bindSourceFile", { path: file.path }, /*separateBeginAndEnd*/ true);
                 bind(file);
+                tracing?.pop();
                 file.symbolCount = symbolCount;
                 file.classifiableNames = classifiableNames;
                 delayedBindJSDocTypedefTag();
@@ -657,11 +657,15 @@ namespace ts {
                 const saveExceptionTarget = currentExceptionTarget;
                 const saveActiveLabelList = activeLabelList;
                 const saveHasExplicitReturn = hasExplicitReturn;
-                const isIIFE = containerFlags & ContainerFlags.IsFunctionExpression && !hasSyntacticModifier(node, ModifierFlags.Async) &&
-                    !(node as FunctionLikeDeclaration).asteriskToken && !!getImmediatelyInvokedFunctionExpression(node);
+                const isImmediatelyInvoked =
+                    (containerFlags & ContainerFlags.IsFunctionExpression &&
+                        !hasSyntacticModifier(node, ModifierFlags.Async) &&
+                        !(node as FunctionLikeDeclaration).asteriskToken &&
+                        !!getImmediatelyInvokedFunctionExpression(node)) ||
+                    node.kind === SyntaxKind.ClassStaticBlockDeclaration;
                 // A non-async, non-generator IIFE is considered part of the containing control flow. Return statements behave
                 // similarly to break statements that exit to a label just past the statement body.
-                if (!isIIFE) {
+                if (!isImmediatelyInvoked) {
                     currentFlow = initFlowNode({ flags: FlowFlags.Start });
                     if (containerFlags & (ContainerFlags.IsFunctionExpression | ContainerFlags.IsObjectLiteralOrClassExpressionMethodOrAccessor)) {
                         currentFlow.node = node as FunctionExpression | ArrowFunction | MethodDeclaration | GetAccessorDeclaration | SetAccessorDeclaration;
@@ -669,7 +673,7 @@ namespace ts {
                 }
                 // We create a return control flow graph for IIFEs and constructors. For constructors
                 // we use the return control flow graph in strict property initialization checks.
-                currentReturnTarget = isIIFE || node.kind === SyntaxKind.Constructor || node.kind === SyntaxKind.ClassStaticBlockDeclaration || (isInJSFile(node) && (node.kind === SyntaxKind.FunctionDeclaration || node.kind === SyntaxKind.FunctionExpression)) ? createBranchLabel() : undefined;
+                currentReturnTarget = isImmediatelyInvoked || node.kind === SyntaxKind.Constructor || (isInJSFile(node) && (node.kind === SyntaxKind.FunctionDeclaration || node.kind === SyntaxKind.FunctionExpression)) ? createBranchLabel() : undefined;
                 currentExceptionTarget = undefined;
                 currentBreakTarget = undefined;
                 currentContinueTarget = undefined;
@@ -695,7 +699,7 @@ namespace ts {
                         (node as FunctionLikeDeclaration | ClassStaticBlockDeclaration).returnFlowNode = currentFlow;
                     }
                 }
-                if (!isIIFE) {
+                if (!isImmediatelyInvoked) {
                     currentFlow = saveCurrentFlow;
                 }
                 currentBreakTarget = saveBreakTarget;
@@ -889,7 +893,7 @@ namespace ts {
             return isDottedName(expr)
                 || (isPropertyAccessExpression(expr) || isNonNullExpression(expr) || isParenthesizedExpression(expr)) && isNarrowableReference(expr.expression)
                 || isBinaryExpression(expr) && expr.operatorToken.kind === SyntaxKind.CommaToken && isNarrowableReference(expr.right)
-                || isElementAccessExpression(expr) && isStringOrNumericLiteralLike(expr.argumentExpression) && isNarrowableReference(expr.expression)
+                || isElementAccessExpression(expr) && (isStringOrNumericLiteralLike(expr.argumentExpression) || isEntityNameExpression(expr.argumentExpression)) && isNarrowableReference(expr.expression)
                 || isAssignmentExpression(expr) && isNarrowableReference(expr.left);
         }
 
@@ -1069,7 +1073,6 @@ namespace ts {
                 node = node.parent;
             }
             return !isStatementCondition(node) &&
-                !isLogicalAssignmentExpression(node.parent) &&
                 !isLogicalExpression(node.parent) &&
                 !(isOptionalChain(node.parent) && node.parent.expression === node);
         }
@@ -1365,7 +1368,7 @@ namespace ts {
         }
 
         function maybeBindExpressionFlowIfCall(node: Expression) {
-            // A top level or LHS of comma expression call expression with a dotted function name and at least one argument
+            // A top level or comma expression call expression with a dotted function name and at least one argument
             // is potentially an assertion and is therefore included in the control flow.
             if (node.kind === SyntaxKind.CallExpression) {
                 const call = node as CallExpression;
@@ -1550,24 +1553,29 @@ namespace ts {
                 return state;
             }
 
-            function onLeft(left: Expression, state: WorkArea, _node: BinaryExpression) {
+            function onLeft(left: Expression, state: WorkArea, node: BinaryExpression) {
                 if (!state.skip) {
-                    return maybeBind(left);
+                    const maybeBound = maybeBind(left);
+                    if (node.operatorToken.kind === SyntaxKind.CommaToken) {
+                        maybeBindExpressionFlowIfCall(left);
+                    }
+                    return maybeBound;
                 }
             }
 
-            function onOperator(operatorToken: BinaryOperatorToken, state: WorkArea, node: BinaryExpression) {
+            function onOperator(operatorToken: BinaryOperatorToken, state: WorkArea, _node: BinaryExpression) {
                 if (!state.skip) {
-                    if (operatorToken.kind === SyntaxKind.CommaToken) {
-                        maybeBindExpressionFlowIfCall(node.left);
-                    }
                     bind(operatorToken);
                 }
             }
 
-            function onRight(right: Expression, state: WorkArea, _node: BinaryExpression) {
+            function onRight(right: Expression, state: WorkArea, node: BinaryExpression) {
                 if (!state.skip) {
-                    return maybeBind(right);
+                    const maybeBound = maybeBind(right);
+                    if (node.operatorToken.kind === SyntaxKind.CommaToken) {
+                        maybeBindExpressionFlowIfCall(right);
+                    }
+                    return maybeBound;
                 }
             }
 
@@ -1810,6 +1818,7 @@ namespace ts {
                 case SyntaxKind.ModuleDeclaration:
                 case SyntaxKind.TypeAliasDeclaration:
                 case SyntaxKind.MappedType:
+                case SyntaxKind.IndexSignature:
                     return ContainerFlags.IsContainer | ContainerFlags.HasLocals;
 
                 case SyntaxKind.SourceFile:
@@ -1830,7 +1839,6 @@ namespace ts {
                 case SyntaxKind.JSDocFunctionType:
                 case SyntaxKind.FunctionType:
                 case SyntaxKind.ConstructSignature:
-                case SyntaxKind.IndexSignature:
                 case SyntaxKind.ConstructorType:
                 case SyntaxKind.ClassStaticBlockDeclaration:
                     return ContainerFlags.IsContainer | ContainerFlags.IsControlFlowContainer | ContainerFlags.HasLocals | ContainerFlags.IsFunctionLike;
@@ -2065,12 +2073,6 @@ namespace ts {
                     if (!existingKind) {
                         seen.set(identifier.escapedText, currentKind);
                         continue;
-                    }
-
-                    if (currentKind === ElementKind.Property && existingKind === ElementKind.Property) {
-                        const span = getErrorSpanForNode(file, identifier);
-                        file.bindDiagnostics.push(createFileDiagnostic(file, span.start, span.length,
-                            Diagnostics.An_object_literal_cannot_have_multiple_properties_with_the_same_name_in_strict_mode));
                     }
                 }
             }
@@ -2341,7 +2343,7 @@ namespace ts {
         }
 
         function checkStrictModeNumericLiteral(node: NumericLiteral) {
-            if (inStrictMode && node.numericLiteralFlags & TokenFlags.Octal) {
+            if (languageVersion < ScriptTarget.ES5 && inStrictMode && node.numericLiteralFlags & TokenFlags.Octal) {
                 file.bindDiagnostics.push(createDiagnosticForNode(node, Diagnostics.Octal_literals_are_not_allowed_in_strict_mode));
             }
         }
@@ -2409,6 +2411,7 @@ namespace ts {
                 return;
             }
             setParent(node, parent);
+            if (tracing) (node as TracingNode).tracingPath = file.path;
             const saveInStrictMode = inStrictMode;
 
             // Even though in the AST the jsdoc @typedef node belongs to the current node,
@@ -2831,12 +2834,14 @@ namespace ts {
         }
 
         function setCommonJsModuleIndicator(node: Node) {
-            if (file.externalModuleIndicator) {
+            if (file.externalModuleIndicator && file.externalModuleIndicator !== true) {
                 return false;
             }
             if (!file.commonJsModuleIndicator) {
                 file.commonJsModuleIndicator = node;
-                bindSourceFileAsExternalModule();
+                if (!file.externalModuleIndicator) {
+                    bindSourceFileAsExternalModule();
+                }
             }
             return true;
         }
@@ -2947,6 +2952,7 @@ namespace ts {
                 case SyntaxKind.MethodDeclaration:
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
+                case SyntaxKind.ClassStaticBlockDeclaration:
                     // this.foo assignment in a JavaScript class
                     // Bind this property to the containing class
                     const containingClass = thisContainer.parent;
@@ -3287,7 +3293,12 @@ namespace ts {
             }
 
             if (!isBindingPattern(node.name)) {
-                if (isInJSFile(node) && isRequireVariableDeclaration(node) && !getJSDocTypeTag(node)) {
+                const possibleVariableDecl = node.kind === SyntaxKind.VariableDeclaration ? node : node.parent.parent;
+                if (isInJSFile(node) &&
+                    isVariableDeclarationInitializedToBareOrAccessedRequire(possibleVariableDecl) &&
+                    !getJSDocTypeTag(node) &&
+                    !(getCombinedModifierFlags(node) & ModifierFlags.Export)
+                ) {
                     declareSymbolAndAddToSymbolTable(node as Declaration, SymbolFlags.Alias, SymbolFlags.AliasExcludes);
                 }
                 else if (isBlockOrCatchScoped(node)) {

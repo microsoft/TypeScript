@@ -55,7 +55,29 @@ namespace ts.formatting {
             // indentation is first non-whitespace character in a previous line
             // for block indentation, we should look for a line which contains something that's not
             // whitespace.
-            if (options.indentStyle === IndentStyle.Block) {
+            const currentToken = getTokenAtPosition(sourceFile, position);
+            // For object literals, we want indentation to work just like with blocks.
+            // If the `{` starts in any position (even in the middle of a line), then
+            // the following indentation should treat `{` as the start of that line (including leading whitespace).
+            // ```
+            //     const a: { x: undefined, y: undefined } = {}       // leading 4 whitespaces and { starts in the middle of line
+            // ->
+            //     const a: { x: undefined, y: undefined } = {
+            //         x: undefined,
+            //         y: undefined,
+            //     }
+            // ---------------------
+            //     const a: {x : undefined, y: undefined } =
+            //      {}
+            // ->
+            //     const a: { x: undefined, y: undefined } =
+            //      {                                                  // leading 5 whitespaces and { starts at 6 column
+            //          x: undefined,
+            //          y: undefined,
+            //      }
+            // ```
+            const isObjectLiteral = currentToken.kind === SyntaxKind.OpenBraceToken && currentToken.parent.kind === SyntaxKind.ObjectLiteralExpression;
+            if (options.indentStyle === IndentStyle.Block || isObjectLiteral) {
                 return getBlockIndent(sourceFile, position, options);
             }
 
@@ -70,7 +92,9 @@ namespace ts.formatting {
             const containerList = getListByPosition(position, precedingToken.parent, sourceFile);
             // use list position if the preceding token is before any list items
             if (containerList && !rangeContainsRange(containerList, precedingToken)) {
-                return getActualIndentationForListStartLine(containerList, sourceFile, options) + options.indentSize!; // TODO: GH#18217
+                const useTheSameBaseIndentation = [SyntaxKind.FunctionExpression, SyntaxKind.ArrowFunction].indexOf(currentToken.parent.kind) !== -1;
+                const indentSize = useTheSameBaseIndentation ? 0 : options.indentSize!;
+                return getActualIndentationForListStartLine(containerList, sourceFile, options) + indentSize; // TODO: GH#18217
             }
 
             return getSmartIndent(sourceFile, position, precedingToken, lineAtPosition, assumeNewLineBeforeCloseBrace, options);
@@ -432,6 +456,8 @@ namespace ts.formatting {
                 case SyntaxKind.ConstructorType:
                 case SyntaxKind.ConstructSignature:
                     return getList((node as SignatureDeclaration).typeParameters) || getList((node as SignatureDeclaration).parameters);
+                case SyntaxKind.GetAccessor:
+                    return getList((node as GetAccessorDeclaration).parameters);
                 case SyntaxKind.ClassDeclaration:
                 case SyntaxKind.ClassExpression:
                 case SyntaxKind.InterfaceDeclaration:

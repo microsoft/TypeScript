@@ -83,6 +83,7 @@ namespace ts.server.protocol {
         SignatureHelp = "signatureHelp",
         /* @internal */
         SignatureHelpFull = "signatureHelp-full",
+        FindSourceDefinition = "findSourceDefinition",
         Status = "status",
         TypeDefinition = "typeDefinition",
         ProjectInfo = "projectInfo",
@@ -727,7 +728,7 @@ namespace ts.server.protocol {
     }
 
     // All we need is the `success` and `message` fields of Response.
-    export interface ApplyCodeActionCommandResponse extends Response {}
+    export interface ApplyCodeActionCommandResponse extends Response { }
 
     export interface FileRangeRequestArgs extends FileRequestArgs {
         /**
@@ -904,6 +905,10 @@ namespace ts.server.protocol {
         readonly command: CommandTypes.DefinitionAndBoundSpan;
     }
 
+    export interface FindSourceDefinitionRequest extends FileLocationRequest {
+        readonly command: CommandTypes.FindSourceDefinition;
+    }
+
     export interface DefinitionAndBoundSpanResponse extends Response {
         readonly body: DefinitionInfoAndBoundSpan;
     }
@@ -1062,7 +1067,7 @@ namespace ts.server.protocol {
         readonly arguments: JsxClosingTagRequestArgs;
     }
 
-    export interface JsxClosingTagRequestArgs extends FileLocationRequestArgs {}
+    export interface JsxClosingTagRequestArgs extends FileLocationRequestArgs { }
 
     export interface JsxClosingTagResponse extends Response {
         readonly body: TextInsertion;
@@ -1158,9 +1163,12 @@ namespace ts.server.protocol {
         isWriteAccess: boolean;
 
         /**
-         * True if reference is a definition, false otherwise.
+         * Present only if the search was triggered from a declaration.
+         * True indicates that the references refers to the same symbol
+         * (i.e. has the same meaning) as the declaration that began the
+         * search.
          */
-        isDefinition: boolean;
+        isDefinition?: boolean;
     }
 
     /**
@@ -2289,7 +2297,11 @@ namespace ts.server.protocol {
         /**
          * Human-readable description of the `source`.
          */
-         sourceDisplay?: SymbolDisplayPart[];
+        sourceDisplay?: SymbolDisplayPart[];
+        /**
+         * Additional details for the label.
+         */
+        labelDetails?: CompletionEntryLabelDetails;
         /**
          * If true, this completion should be highlighted as recommended. There will only be one of these.
          * This will be set when we know the user should write an expression with a certain type and that type is an enum or constructable class.
@@ -2317,6 +2329,21 @@ namespace ts.server.protocol {
          * items with the same name.
          */
         data?: unknown;
+    }
+
+    export interface CompletionEntryLabelDetails {
+        /**
+         * An optional string which is rendered less prominently directly after
+         * {@link CompletionEntry.name name}, without any spacing. Should be
+         * used for function signatures or type annotations.
+         */
+        detail?: string;
+        /**
+         * An optional string which is rendered less prominently after
+         * {@link CompletionEntryLabelDetails.detail}. Should be used for fully qualified
+         * names or file path.
+         */
+        description?: string;
     }
 
     /**
@@ -2363,7 +2390,7 @@ namespace ts.server.protocol {
         /**
          * Human-readable description of the `source` from the CompletionEntry.
          */
-         sourceDisplay?: SymbolDisplayPart[];
+        sourceDisplay?: SymbolDisplayPart[];
     }
 
     /** @deprecated Prefer CompletionInfoResponse, which supports several top-level fields in addition to the array of entries. */
@@ -2376,6 +2403,7 @@ namespace ts.server.protocol {
     }
 
     export interface CompletionInfo {
+        readonly flags?: number;
         readonly isGlobalCompletion: boolean;
         readonly isMemberCompletion: boolean;
         readonly isNewIdentifierLocation: boolean;
@@ -3199,14 +3227,32 @@ namespace ts.server.protocol {
         payload: TypingsInstalledTelemetryEventPayload;
     }
 
-    /*
-     * __GDPR__
-     * "typingsinstalled" : {
-     *     "${include}": ["${TypeScriptCommonProperties}"],
-     *     "installedPackages": { "classification": "PublicNonPersonalData", "purpose": "FeatureInsight" },
-     *     "installSuccess": { "classification": "SystemMetaData", "purpose": "FeatureInsight" },
-     *     "typingsInstallerVersion": { "classification": "SystemMetaData", "purpose": "FeatureInsight" }
-     * }
+    // A __GDPR__FRAGMENT__ has no meaning until it is ${include}d by a __GDPR__ comment, at which point
+    // the included properties are effectively inlined into the __GDPR__ declaration.  In this case, for
+    // example, any __GDPR__ comment including the TypeScriptCommonProperties will be updated with an
+    // additional version property with the classification below.  Obviously, the purpose of such a construct
+    // is to reduce duplication and keep multiple use sites consistent (e.g. by making sure that all reflect
+    // any newly added TypeScriptCommonProperties).  Unfortunately, the system has limits - in particular,
+    // these reusable __GDPR__FRAGMENT__s are not accessible across repo boundaries.  Therefore, even though
+    // the code for adding the common properties (i.e. version), along with the corresponding __GDPR__FRAGMENT__,
+    // lives in the VS Code repo (see https://github.com/microsoft/vscode/blob/main/extensions/typescript-language-features/src/utils/telemetry.ts)
+    // we have to duplicate it here.  It would be nice to keep them in sync, but the only likely failure mode
+    // is adding a property to the VS Code repro but not here and the only consequence would be having that
+    // property suppressed on the events (i.e. __GDPT__ comments) in this repo that reference the out-of-date
+    // local __GDPR__FRAGMENT__.
+    /* __GDPR__FRAGMENT__
+        "TypeScriptCommonProperties" : {
+            "version" : { "classification": "SystemMetaData", "purpose": "FeatureInsight" }
+        }
+    */
+
+    /* __GDPR__
+        "typingsinstalled" : {
+            "${include}": ["${TypeScriptCommonProperties}"],
+            "installedPackages": { "classification": "PublicNonPersonalData", "purpose": "FeatureInsight" },
+            "installSuccess": { "classification": "SystemMetaData", "purpose": "FeatureInsight" },
+            "typingsInstallerVersion": { "classification": "SystemMetaData", "purpose": "FeatureInsight" }
+        }
      */
     export interface TypingsInstalledTelemetryEventPayload {
         /**
@@ -3369,7 +3415,7 @@ namespace ts.server.protocol {
         /**
          * Allows completions to be formatted with snippet text, indicated by `CompletionItem["isSnippet"]`.
          */
-         readonly includeCompletionsWithSnippetText?: boolean;
+        readonly includeCompletionsWithSnippetText?: boolean;
         /**
          * If enabled, the completion list will include completions with invalid identifier names.
          * For those entries, The `insertText` and `replacementSpan` properties will be set to change from `.x` property access to `["x"]`.
@@ -3381,6 +3427,25 @@ namespace ts.server.protocol {
          * values, with insertion text to replace preceding `.` tokens with `?.`.
          */
         readonly includeAutomaticOptionalChainCompletions?: boolean;
+        /**
+         * If enabled, completions for class members (e.g. methods and properties) will include
+         * a whole declaration for the member.
+         * E.g., `class A { f| }` could be completed to `class A { foo(): number {} }`, instead of
+         * `class A { foo }`.
+         */
+        readonly includeCompletionsWithClassMemberSnippets?: boolean;
+        /**
+         * If enabled, object literal methods will have a method declaration completion entry in addition
+         * to the regular completion entry containing just the method name.
+         * E.g., `const objectLiteral: T = { f| }` could be completed to `const objectLiteral: T = { foo(): void {} }`,
+         * in addition to `const objectLiteral: T = { foo }`.
+         */
+        readonly includeCompletionsWithObjectLiteralMethodSnippets?: boolean;
+        /**
+         * Indicates whether {@link CompletionEntry.labelDetails completion entry label details} are supported.
+         * If not, contents of `labelDetails` may be included in the {@link CompletionEntry.name} property.
+         */
+        readonly useLabelDetailsInCompletionEntries?: boolean;
         readonly allowIncompleteCompletions?: boolean;
         readonly importModuleSpecifierPreference?: "shortest" | "project-relative" | "relative" | "non-relative";
         /** Determines whether we import `foo/index.ts` as "foo", "foo/index", or "foo/index.js" */
@@ -3395,6 +3460,15 @@ namespace ts.server.protocol {
 
         readonly displayPartsForJSDoc?: boolean;
         readonly generateReturnInDocTemplate?: boolean;
+
+        readonly includeInlayParameterNameHints?: "none" | "literals" | "all";
+        readonly includeInlayParameterNameHintsWhenArgumentMatchesName?: boolean;
+        readonly includeInlayFunctionParameterTypeHints?: boolean,
+        readonly includeInlayVariableTypeHints?: boolean;
+        readonly includeInlayVariableTypeHintsWhenTypeMatchesName?: boolean;
+        readonly includeInlayPropertyDeclarationTypeHints?: boolean;
+        readonly includeInlayFunctionLikeReturnTypeHints?: boolean;
+        readonly includeInlayEnumMemberValueHints?: boolean;
     }
 
     export interface CompilerOptions {
@@ -3509,6 +3583,7 @@ namespace ts.server.protocol {
         ES2019 = "ES2019",
         ES2020 = "ES2020",
         ES2021 = "ES2021",
+        ES2022 = "ES2022",
         ESNext = "ESNext"
     }
 

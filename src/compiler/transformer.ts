@@ -9,7 +9,7 @@ namespace ts {
                 return transformECMAScriptModule;
             case ModuleKind.System:
                 return transformSystemModule;
-            case ModuleKind.Node12:
+            case ModuleKind.Node16:
             case ModuleKind.NodeNext:
                 return transformNodeModule;
             default:
@@ -566,7 +566,7 @@ namespace ts {
     }
 
     export const nullTransformationContext: TransformationContext = {
-        factory,
+        factory: factory, // eslint-disable-line object-shorthand
         getCompilerOptions: () => ({}),
         getEmitResolver: notImplemented,
         getEmitHost: notImplemented,

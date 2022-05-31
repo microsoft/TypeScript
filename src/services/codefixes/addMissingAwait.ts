@@ -17,7 +17,7 @@ namespace ts.codefix {
         Diagnostics.This_condition_will_always_return_true_since_this_0_is_always_defined.code,
         Diagnostics.Type_0_is_not_an_array_type.code,
         Diagnostics.Type_0_is_not_an_array_type_or_a_string_type.code,
-        Diagnostics.Type_0_is_not_an_array_type_or_a_string_type_Use_compiler_option_downlevelIteration_to_allow_iterating_of_iterators.code,
+        Diagnostics.Type_0_can_only_be_iterated_through_when_using_the_downlevelIteration_flag_or_with_a_target_of_es2015_or_higher.code,
         Diagnostics.Type_0_is_not_an_array_type_or_a_string_type_or_does_not_have_a_Symbol_iterator_method_that_returns_an_iterator.code,
         Diagnostics.Type_0_is_not_an_array_type_or_does_not_have_a_Symbol_iterator_method_that_returns_an_iterator.code,
         Diagnostics.Type_0_must_have_a_Symbol_iterator_method_that_returns_an_iterator.code,
@@ -30,7 +30,7 @@ namespace ts.codefix {
     registerCodeFix({
         fixIds: [fixId],
         errorCodes,
-        getCodeActions: context => {
+        getCodeActions: function getCodeActionsToAddMissingAwait(context) {
             const { sourceFile, errorCode, span, cancellationToken, program } = context;
             const expression = getAwaitErrorSpanExpression(sourceFile, errorCode, span, cancellationToken, program);
             if (!expression) {
@@ -93,7 +93,7 @@ namespace ts.codefix {
     }
 
     function isMissingAwaitError(sourceFile: SourceFile, errorCode: number, span: TextSpan, cancellationToken: CancellationToken, program: Program) {
-        const checker = program.getDiagnosticsProducingTypeChecker();
+        const checker = program.getTypeChecker();
         const diagnostics = checker.getDiagnostics(sourceFile, cancellationToken);
         return some(diagnostics, ({ start, length, relatedInformation, code }) =>
             isNumber(start) && isNumber(length) && textSpansEqual({ start, length }, span) &&

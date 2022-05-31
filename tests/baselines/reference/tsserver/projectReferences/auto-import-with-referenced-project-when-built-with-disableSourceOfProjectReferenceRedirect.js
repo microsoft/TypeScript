@@ -72,9 +72,9 @@ Project '/user/username/projects/myproject/app/src/program/tsconfig.json' (Confi
 	../../../shared/bld/library/index.d.ts
 	  Imported via "shared" from file 'bar.ts' with packageId 'shared/bld/library/index.d.ts@1.0.0'
 	bar.ts
-	  Matched by include pattern '**/*' in 'tsconfig.json'
+	  Matched by default include pattern '**/*'
 	index.ts
-	  Matched by include pattern '**/*' in 'tsconfig.json'
+	  Matched by default include pattern '**/*'
 
 -----------------------------------------------
 Search path: /user/username/projects/myproject/app/src/program
@@ -98,4 +98,4 @@ response:{"responseRequired":false}
 request:{"command":"getCodeFixes","arguments":{"file":"/user/username/projects/myproject/app/src/program/index.ts","startLine":1,"startOffset":1,"endLine":1,"endOffset":4,"errorCodes":[2304]},"seq":1,"type":"request"}
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
-response:{"response":[{"fixName":"import","description":"Import 'foo' from module \"shared\"","changes":[{"fileName":"/user/username/projects/myproject/app/src/program/index.ts","textChanges":[{"start":{"line":1,"offset":1},"end":{"line":1,"offset":1},"newText":"import { foo } from \"shared\";\n\n"}]}]}],"responseRequired":true}
+response:{"response":[{"fixName":"import","description":"Add import from \"shared\"","changes":[{"fileName":"/user/username/projects/myproject/app/src/program/index.ts","textChanges":[{"start":{"line":1,"offset":1},"end":{"line":1,"offset":1},"newText":"import { foo } from \"shared\";\n\n"}]}]}],"responseRequired":true}

@@ -1,4 +1,4 @@
-namespace Playback {
+namespace Playback { // eslint-disable-line one-namespace-per-file
     interface FileInformation {
         contents?: string;
         contentsPath?: string;
@@ -445,3 +445,7 @@ namespace Playback {
         return wrapper;
     }
 }
+
+// empty modules for the module migration script
+namespace ts.server { } // eslint-disable-line one-namespace-per-file
+namespace Harness { } // eslint-disable-line one-namespace-per-file

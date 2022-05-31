@@ -499,12 +499,16 @@ namespace ts {
     /*@internal*/
     export const ignoredPaths = ["/node_modules/.", "/.git", "/.#"];
 
+    let curSysLog: (s: string) => void = noop; // eslint-disable-line prefer-const
+
     /*@internal*/
-    export let sysLog: (s: string) => void = noop; // eslint-disable-line prefer-const
+    export function sysLog(s: string) {
+        return curSysLog(s);
+    }
 
     /*@internal*/
     export function setSysLog(logger: typeof sysLog) {
-        sysLog = logger;
+        curSysLog = logger;
     }
 
     /*@internal*/
@@ -1206,11 +1210,13 @@ namespace ts {
         base64decode?(input: string): string;
         base64encode?(input: string): string;
         /*@internal*/ bufferFrom?(input: string, encoding?: string): Buffer;
+        /*@internal*/ require?(baseDir: string, moduleName: string): RequireResult;
+        /*@internal*/ defaultWatchFileKind?(): WatchFileKind | undefined;
+
         // For testing
         /*@internal*/ now?(): Date;
         /*@internal*/ disableUseFileVersionAsSignature?: boolean;
-        /*@internal*/ require?(baseDir: string, moduleName: string): RequireResult;
-        /*@internal*/ defaultWatchFileKind?(): WatchFileKind | undefined;
+        /*@internal*/ storeFilesChangingSignatureDuringEmit?: boolean;
     }
 
     export interface FileWatcher {
@@ -1625,7 +1631,6 @@ namespace ts {
                         sysLog(`sysLog:: ${fileOrDirectory}:: Defaulting to fsWatchFile`);
                         return watchPresentFileSystemEntryWithFsWatchFile();
                     }
-
                     try {
                         const presentWatcher = _fs.watch(
                             fileOrDirectory,
@@ -1804,7 +1809,7 @@ namespace ts {
             }
 
             function readDirectory(path: string, extensions?: readonly string[], excludes?: readonly string[], includes?: readonly string[], depth?: number): string[] {
-                return matchFiles(path, extensions, excludes, includes, useCaseSensitiveFileNames, process.cwd(), depth, getAccessibleFileSystemEntries, realpath, directoryExists);
+                return matchFiles(path, extensions, excludes, includes, useCaseSensitiveFileNames, process.cwd(), depth, getAccessibleFileSystemEntries, realpath);
             }
 
             function fileSystemEntryExists(path: string, entryKind: FileSystemEntryKind): boolean {
@@ -1899,6 +1904,11 @@ namespace ts {
         }
         return sys!;
     })();
+
+    /*@internal*/
+    export function setSys(s: System) {
+        sys = s;
+    }
 
     if (sys && sys.getEnvironmentVariable) {
         setCustomPollingValues(sys);

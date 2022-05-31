@@ -95,7 +95,7 @@ namespace fakes {
         }
 
         public readDirectory(path: string, extensions?: readonly string[], exclude?: readonly string[], include?: readonly string[], depth?: number): string[] {
-            return ts.matchFiles(path, extensions, exclude, include, this.useCaseSensitiveFileNames, this.getCurrentDirectory(), depth, path => this.getAccessibleFileSystemEntries(path), path => this.realpath(path), path => this.directoryExists(path));
+            return ts.matchFiles(path, extensions, exclude, include, this.useCaseSensitiveFileNames, this.getCurrentDirectory(), depth, path => this.getAccessibleFileSystemEntries(path), path => this.realpath(path));
         }
 
         public getAccessibleFileSystemEntries(path: string): ts.FileSystemEntries {
@@ -511,18 +511,19 @@ ${indentText}${text}`;
             buildInfo.version = ts.version;
             return ts.getBuildInfoText(buildInfo);
         };
+        return patchHostForBuildInfoWrite(sys, version);
+    }
+
+    export function patchHostForBuildInfoWrite<T extends ts.System>(sys: T, version: string) {
         const originalWrite = sys.write;
         sys.write = msg => originalWrite.call(sys, msg.replace(ts.version, version));
-
-        if (sys.writeFile) {
-            const originalWriteFile = sys.writeFile;
-            sys.writeFile = (fileName: string, content: string, writeByteOrderMark: boolean) => {
-                if (!ts.isBuildInfoFile(fileName)) return originalWriteFile.call(sys, fileName, content, writeByteOrderMark);
-                const buildInfo = ts.getBuildInfo(content);
-                buildInfo.version = version;
-                originalWriteFile.call(sys, fileName, ts.getBuildInfoText(buildInfo), writeByteOrderMark);
-            };
-        }
+        const originalWriteFile = sys.writeFile;
+        sys.writeFile = (fileName: string, content: string, writeByteOrderMark: boolean) => {
+            if (!ts.isBuildInfoFile(fileName)) return originalWriteFile.call(sys, fileName, content, writeByteOrderMark);
+            const buildInfo = ts.getBuildInfo(content);
+            buildInfo.version = version;
+            originalWriteFile.call(sys, fileName, ts.getBuildInfoText(buildInfo), writeByteOrderMark);
+        };
         return sys;
     }
 

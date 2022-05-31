@@ -58,7 +58,7 @@ namespace ts {
         let needsScopeFixMarker = false;
         let resultHasScopeMarker = false;
         let enclosingDeclaration: Node;
-        let necessaryTypeReferences: Set<string> | undefined;
+        let necessaryTypeReferences: Set<[specifier: string, mode: SourceFile["impliedNodeFormat"] | undefined]> | undefined;
         let lateMarkedStatements: LateVisibilityPaintedStatement[] | undefined;
         let lateStatementReplacementMap: ESMap<NodeId, VisitResult<LateVisibilityPaintedStatement | ExportAssignment>>;
         let suppressNewDiagnosticContexts: boolean;
@@ -92,7 +92,7 @@ namespace ts {
         const { noResolve, stripInternal } = options;
         return transformRoot;
 
-        function recordTypeReferenceDirectivesIfNecessary(typeReferenceDirectives: readonly string[] | undefined): void {
+        function recordTypeReferenceDirectivesIfNecessary(typeReferenceDirectives: readonly [specifier: string, mode: SourceFile["impliedNodeFormat"] | undefined][] | undefined): void {
             if (!typeReferenceDirectives) {
                 return;
             }
@@ -296,7 +296,7 @@ namespace ts {
                         const sourceFile = createUnparsedSourceFile(prepend, "dts", stripInternal);
                         hasNoDefaultLib = hasNoDefaultLib || !!sourceFile.hasNoDefaultLib;
                         collectReferences(sourceFile, refs);
-                        recordTypeReferenceDirectivesIfNecessary(sourceFile.typeReferenceDirectives);
+                        recordTypeReferenceDirectivesIfNecessary(map(sourceFile.typeReferenceDirectives, ref => [ref.fileName, ref.resolutionMode]));
                         collectLibs(sourceFile, libs);
                         return sourceFile;
                     }
@@ -354,10 +354,10 @@ namespace ts {
             }
 
             function getFileReferencesForUsedTypeReferences() {
-                return necessaryTypeReferences ? mapDefined(arrayFrom(necessaryTypeReferences.keys()), getFileReferenceForTypeName) : [];
+                return necessaryTypeReferences ? mapDefined(arrayFrom(necessaryTypeReferences.keys()), getFileReferenceForSpecifierModeTuple) : [];
             }
 
-            function getFileReferenceForTypeName(typeName: string): FileReference | undefined {
+            function getFileReferenceForSpecifierModeTuple([typeName, mode]: [specifier: string, mode: SourceFile["impliedNodeFormat"] | undefined]): FileReference | undefined {
                 // Elide type references for which we have imports
                 if (emittedImports) {
                     for (const importStatement of emittedImports) {
@@ -372,7 +372,7 @@ namespace ts {
                         }
                     }
                 }
-                return { fileName: typeName, pos: -1, end: -1 };
+                return { fileName: typeName, pos: -1, end: -1, ...(mode ? { resolutionMode: mode } : undefined) };
             }
 
             function mapReferencesIntoArray(references: FileReference[], outputFilePath: string): (file: SourceFile) => void {
@@ -399,7 +399,7 @@ namespace ts {
                             // If some compiler option/symlink/whatever allows access to the file containing the ambient module declaration
                             // via a non-relative name, emit a type reference directive to that non-relative name, rather than
                             // a relative path to the declaration file
-                            recordTypeReferenceDirectivesIfNecessary([specifier]);
+                            recordTypeReferenceDirectivesIfNecessary([[specifier, /*mode*/ undefined]]);
                             return;
                         }
 
@@ -733,7 +733,7 @@ namespace ts {
                     decl.modifiers,
                     decl.importClause,
                     rewriteModuleSpecifier(decl, decl.moduleSpecifier),
-                    /*assertClause*/ undefined
+                    getResolutionModeOverrideForClauseInNightly(decl.assertClause)
                 );
             }
             // The `importClause` visibility corresponds to the default's visibility.
@@ -745,7 +745,7 @@ namespace ts {
                     decl.importClause.isTypeOnly,
                     visibleDefaultBinding,
                     /*namedBindings*/ undefined,
-                ), rewriteModuleSpecifier(decl, decl.moduleSpecifier), /*assertClause*/ undefined);
+                ), rewriteModuleSpecifier(decl, decl.moduleSpecifier), getResolutionModeOverrideForClauseInNightly(decl.assertClause));
             }
             if (decl.importClause.namedBindings.kind === SyntaxKind.NamespaceImport) {
                 // Namespace import (optionally with visible default)
@@ -755,7 +755,7 @@ namespace ts {
                     decl.importClause.isTypeOnly,
                     visibleDefaultBinding,
                     namedBindings,
-                ), rewriteModuleSpecifier(decl, decl.moduleSpecifier), /*assertClause*/ undefined) : undefined;
+                ), rewriteModuleSpecifier(decl, decl.moduleSpecifier), getResolutionModeOverrideForClauseInNightly(decl.assertClause)) : undefined;
             }
             // Named imports (optionally with visible default)
             const bindingList = mapDefined(decl.importClause.namedBindings.elements, b => resolver.isDeclarationVisible(b) ? b : undefined);
@@ -771,7 +771,7 @@ namespace ts {
                         bindingList && bindingList.length ? factory.updateNamedImports(decl.importClause.namedBindings, bindingList) : undefined,
                     ),
                     rewriteModuleSpecifier(decl, decl.moduleSpecifier),
-                    /*assertClause*/ undefined
+                    getResolutionModeOverrideForClauseInNightly(decl.assertClause)
                 );
             }
             // Augmentation of export depends on import
@@ -782,10 +782,21 @@ namespace ts {
                     decl.modifiers,
                     /*importClause*/ undefined,
                     rewriteModuleSpecifier(decl, decl.moduleSpecifier),
-                    /*assertClause*/ undefined
+                    getResolutionModeOverrideForClauseInNightly(decl.assertClause)
                 );
             }
             // Nothing visible
+        }
+
+        function getResolutionModeOverrideForClauseInNightly(assertClause: AssertClause | undefined) {
+            const mode = getResolutionModeOverrideForClause(assertClause);
+            if (mode !== undefined) {
+                if (!isNightly()) {
+                    context.addDiagnostic(createDiagnosticForNode(assertClause!, Diagnostics.Resolution_mode_assertions_are_unstable_Use_nightly_TypeScript_to_silence_this_error_Try_updating_with_npm_install_D_typescript_next));
+                }
+                return assertClause;
+            }
+            return undefined;
         }
 
         function transformAndReplaceLatePaintedStatements(statements: NodeArray<Statement>): NodeArray<Statement> {
@@ -878,7 +889,7 @@ namespace ts {
             }
 
             if (canProduceDiagnostic && !suppressNewDiagnosticContexts) {
-                getSymbolAccessibilityDiagnostic = createGetSymbolAccessibilityDiagnosticForNode(input as DeclarationDiagnosticProducing);
+                getSymbolAccessibilityDiagnostic = createGetSymbolAccessibilityDiagnosticForNode(input);
             }
 
             if (isTypeQueryNode(input)) {
@@ -1029,7 +1040,7 @@ namespace ts {
                     }
                     case SyntaxKind.TypeParameter: {
                         if (isPrivateMethodTypeParameter(input) && (input.default || input.constraint)) {
-                            return cleanup(factory.updateTypeParameterDeclaration(input, input.name, /*constraint*/ undefined, /*defaultType*/ undefined));
+                            return cleanup(factory.updateTypeParameterDeclaration(input, input.modifiers, input.name, /*constraint*/ undefined, /*defaultType*/ undefined));
                         }
                         return cleanup(visitEachChild(input, visitDeclarationSubtree, context));
                     }
@@ -1056,6 +1067,7 @@ namespace ts {
                         return cleanup(factory.updateImportTypeNode(
                             input,
                             factory.updateLiteralTypeNode(input.argument, rewriteModuleSpecifier(input, input.argument.literal)),
+                            input.assertions,
                             input.qualifier,
                             visitNodes(input.typeArguments, visitDeclarationSubtree, isTypeNode),
                             input.isTypeOf
@@ -1073,7 +1085,7 @@ namespace ts {
 
             function cleanup<T extends Node>(returnValue: T | undefined): T | undefined {
                 if (returnValue && canProduceDiagnostic && hasDynamicName(input as Declaration)) {
-                    checkName(input as DeclarationDiagnosticProducing);
+                    checkName(input);
                 }
                 if (isEnclosingDeclaration(input)) {
                     enclosingDeclaration = previousEnclosingDeclaration;
@@ -1117,7 +1129,7 @@ namespace ts {
                         input.isTypeOnly,
                         input.exportClause,
                         rewriteModuleSpecifier(input, input.moduleSpecifier),
-                        /*assertClause*/ undefined
+                        getResolutionModeOverrideForClause(input.assertClause) ? input.assertClause : undefined
                     );
                 }
                 case SyntaxKind.ExportAssignment: {
@@ -1139,6 +1151,9 @@ namespace ts {
                         const varDecl = factory.createVariableDeclaration(newId, /*exclamationToken*/ undefined, resolver.createTypeOfExpression(input.expression, input, declarationEmitNodeBuilderFlags, symbolTracker), /*initializer*/ undefined);
                         errorFallbackNode = undefined;
                         const statement = factory.createVariableStatement(needsDeclare ? [factory.createModifier(SyntaxKind.DeclareKeyword)] : [], factory.createVariableDeclarationList([varDecl], NodeFlags.Const));
+
+                        preserveJsDoc(statement, input);
+                        removeAllComments(input);
                         return [statement, factory.updateExportAssignment(input, input.decorators, input.modifiers, newId)];
                     }
                 }
@@ -1162,6 +1177,9 @@ namespace ts {
         }
 
         function transformTopLevelDeclaration(input: LateVisibilityPaintedStatement) {
+            if (lateMarkedStatements) {
+                while (orderedRemoveItem(lateMarkedStatements, input));
+            }
             if (shouldStripInternal(input)) return;
             switch (input.kind) {
                 case SyntaxKind.ImportEqualsDeclaration: {
@@ -1610,7 +1628,7 @@ namespace ts {
     }
 
     // Elide "public" modifier, as it is the default
-    function maskModifiers(node: Node, modifierMask?: ModifierFlags, modifierAdditions?: ModifierFlags): Modifier[] {
+    function maskModifiers(node: Node, modifierMask?: ModifierFlags, modifierAdditions?: ModifierFlags): Modifier[] | undefined {
         return factory.createModifiersFromModifierFlags(maskModifierFlags(node, modifierMask, modifierAdditions));
     }
 

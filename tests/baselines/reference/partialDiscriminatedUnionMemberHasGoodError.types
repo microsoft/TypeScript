@@ -16,7 +16,7 @@ interface TypeB {
 }
 
 type ValidType = TypeA | TypeB;
->ValidType : ValidType
+>ValidType : TypeA | TypeB
 
 interface Wrapper {
     types: ValidType[];

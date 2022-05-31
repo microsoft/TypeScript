@@ -1,0 +1,24 @@
+tests/cases/conformance/jsx/a.tsx(9,21): error TS2698: Spread types may only be created from object types.
+tests/cases/conformance/jsx/a.tsx(10,21): error TS2698: Spread types may only be created from object types.
+tests/cases/conformance/jsx/a.tsx(11,21): error TS2698: Spread types may only be created from object types.
+
+
+==== tests/cases/conformance/jsx/a.tsx (3 errors) ====
+    namespace JSX {
+        export interface IntrinsicElements { [key: string]: any }
+    }
+    
+    const a = {} as never;
+    const b = null;
+    const c = undefined;
+    
+    const d = <div { ...a } />
+                        ~
+!!! error TS2698: Spread types may only be created from object types.
+    const e = <div { ...b } />
+                        ~
+!!! error TS2698: Spread types may only be created from object types.
+    const f = <div { ...c } />
+                        ~
+!!! error TS2698: Spread types may only be created from object types.
+    

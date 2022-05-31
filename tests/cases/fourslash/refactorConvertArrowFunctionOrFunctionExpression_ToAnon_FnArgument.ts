@@ -10,6 +10,6 @@ edit.applyRefactor({
     actionDescription: "Convert to anonymous function",
     newContent: `function doSomething(a){}
 doSomething(function() {
-        return 1 + 1;
-    });`,
+    return 1 + 1;
+});`,
 });

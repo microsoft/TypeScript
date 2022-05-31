@@ -1,7 +1,7 @@
 namespace ts {
     // WARNING: The script `configurePrerelease.ts` uses a regexp to parse out these values.
     // If changing the text in this section, be sure to test `configurePrerelease` too.
-    export const versionMajorMinor = "4.5";
+    export const versionMajorMinor = "4.8";
     // The following is baselined as a literal template type without intervention
     /** The version of the TypeScript compiler release */
     // eslint-disable-next-line @typescript-eslint/no-inferrable-types
@@ -113,17 +113,22 @@ namespace ts {
     }
 
     /* @internal */
-    export namespace NativeCollections {
-        declare const Map: MapConstructor | undefined;
-        declare const Set: SetConstructor | undefined;
+    namespace NativeCollections {
+        declare const self: any;
+
+        const globals = typeof globalThis !== "undefined" ? globalThis :
+                  typeof global !== "undefined" ? global :
+                  typeof self !== "undefined" ? self :
+                  undefined;
 
         /**
          * Returns the native Map implementation if it is available and compatible (i.e. supports iteration).
          */
         export function tryGetNativeMap(): MapConstructor | undefined {
             // Internet Explorer's Map doesn't support iteration, so don't use it.
+            const gMap = globals?.Map;
             // eslint-disable-next-line no-in-operator
-            return typeof Map !== "undefined" && "entries" in Map.prototype && new Map([[0, 0]]).size === 1 ? Map : undefined;
+            return typeof gMap !== "undefined" && "entries" in gMap.prototype && new gMap([[0, 0]]).size === 1 ? gMap : undefined;
         }
 
         /**
@@ -131,8 +136,33 @@ namespace ts {
          */
         export function tryGetNativeSet(): SetConstructor | undefined {
             // Internet Explorer's Set doesn't support iteration, so don't use it.
+            const gSet = globals?.Set;
             // eslint-disable-next-line no-in-operator
-            return typeof Set !== "undefined" && "entries" in Set.prototype && new Set([0]).size === 1 ? Set : undefined;
+            return typeof gSet !== "undefined" && "entries" in gSet.prototype && new gSet([0]).size === 1 ? gSet : undefined;
         }
+    }
+
+    /* @internal */
+    export const Map = getCollectionImplementation("Map", "tryGetNativeMap", "createMapShim");
+    /* @internal */
+    export const Set = getCollectionImplementation("Set", "tryGetNativeSet", "createSetShim");
+
+    /* @internal */
+    type GetIteratorCallback = <I extends readonly any[] | ReadonlySet<any> | ReadonlyESMap<any, any> | undefined>(iterable: I) => Iterator<
+        I extends ReadonlyESMap<infer K, infer V> ? [K, V] :
+        I extends ReadonlySet<infer T> ? T :
+        I extends readonly (infer T)[] ? T :
+        I extends undefined ? undefined :
+        never>;
+
+    /* @internal */
+    function getCollectionImplementation<
+        K1 extends MatchingKeys<typeof NativeCollections, () => any>,
+        K2 extends MatchingKeys<typeof ShimCollections, (getIterator?: GetIteratorCallback) => ReturnType<(typeof NativeCollections)[K1]>>
+    >(name: string, nativeFactory: K1, shimFactory: K2): NonNullable<ReturnType<(typeof NativeCollections)[K1]>> {
+        // NOTE: ts.ShimCollections will be defined for typescriptServices.js but not for tsc.js, so we must test for it.
+        const constructor = NativeCollections[nativeFactory]() ?? ShimCollections?.[shimFactory](getIterator);
+        if (constructor) return constructor as NonNullable<ReturnType<(typeof NativeCollections)[K1]>>;
+        throw new Error(`TypeScript requires an environment that provides a compatible native ${name} implementation.`);
     }
 }

@@ -1853,7 +1853,7 @@ namespace ts {
             if (isIdentifier(node.expression)) {
                 const expression = substituteExpressionIdentifier(node.expression);
                 noSubstitution[getNodeId(expression)] = true;
-                if (!isIdentifier(expression)) {
+                if (!isIdentifier(expression) && !(getEmitFlags(node.expression) & EmitFlags.HelperName)) {
                     return addEmitFlags(
                         factory.updateCallExpression(node,
                             expression,
@@ -1872,7 +1872,7 @@ namespace ts {
             if (isIdentifier(node.tag)) {
                 const tag = substituteExpressionIdentifier(node.tag);
                 noSubstitution[getNodeId(tag)] = true;
-                if (!isIdentifier(tag)) {
+                if (!isIdentifier(tag) && !(getEmitFlags(node.tag) & EmitFlags.HelperName)) {
                     return addEmitFlags(
                         factory.updateTaggedTemplateExpression(node,
                             tag,

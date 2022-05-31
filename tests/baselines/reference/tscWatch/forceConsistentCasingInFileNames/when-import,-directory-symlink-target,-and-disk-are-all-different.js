@@ -46,9 +46,9 @@ Output::
 link/a.ts
   Imported via "./link/a" from file 'b.ts'
 b.ts
-  Matched by include pattern '**/*' in 'tsconfig.json'
+  Matched by default include pattern '**/*'
 XY/a.ts
-  Matched by include pattern '**/*' in 'tsconfig.json'
+  Matched by default include pattern '**/*'
 [[90m12:00:30 AM[0m] Found 1 error. Watching for file changes.
 
 
@@ -162,9 +162,9 @@ Output::
 link/a.ts
   Imported via "./link/a" from file 'b.ts'
 b.ts
-  Matched by include pattern '**/*' in 'tsconfig.json'
+  Matched by default include pattern '**/*'
 XY/a.ts
-  Matched by include pattern '**/*' in 'tsconfig.json'
+  Matched by default include pattern '**/*'
 [[90m12:00:37 AM[0m] Found 1 error. Watching for file changes.
 
 

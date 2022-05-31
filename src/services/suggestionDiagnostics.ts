@@ -6,11 +6,13 @@ namespace ts {
         program.getSemanticDiagnostics(sourceFile, cancellationToken);
         const diags: DiagnosticWithLocation[] = [];
         const checker = program.getTypeChecker();
+        const isCommonJSFile = sourceFile.impliedNodeFormat === ModuleKind.CommonJS || fileExtensionIsOneOf(sourceFile.fileName, [Extension.Cts, Extension.Cjs]) ;
 
-        if (sourceFile.commonJsModuleIndicator &&
-            (programContainsEs6Modules(program) || compilerOptionsIndicateEs6Modules(program.getCompilerOptions())) &&
+        if (!isCommonJSFile &&
+            sourceFile.commonJsModuleIndicator &&
+            (programContainsEsModules(program) || compilerOptionsIndicateEsModules(program.getCompilerOptions())) &&
             containsTopLevelCommonjs(sourceFile)) {
-            diags.push(createDiagnosticForNode(getErrorNodeFromCommonJsIndicator(sourceFile.commonJsModuleIndicator), Diagnostics.File_is_a_CommonJS_module_it_may_be_converted_to_an_ES6_module));
+            diags.push(createDiagnosticForNode(getErrorNodeFromCommonJsIndicator(sourceFile.commonJsModuleIndicator), Diagnostics.File_is_a_CommonJS_module_it_may_be_converted_to_an_ES_module));
         }
 
         const isJsFile = isSourceFileJS(sourceFile);
@@ -25,7 +27,7 @@ namespace ts {
                 if (!name) continue;
                 const module = getResolvedModule(sourceFile, moduleSpecifier.text, getModeForUsageLocation(sourceFile, moduleSpecifier));
                 const resolvedFile = module && program.getSourceFile(module.resolvedFileName);
-                if (resolvedFile && resolvedFile.externalModuleIndicator && isExportAssignment(resolvedFile.externalModuleIndicator) && resolvedFile.externalModuleIndicator.isExportEquals) {
+                if (resolvedFile && resolvedFile.externalModuleIndicator && resolvedFile.externalModuleIndicator !== true && isExportAssignment(resolvedFile.externalModuleIndicator) && resolvedFile.externalModuleIndicator.isExportEquals) {
                     diags.push(createDiagnosticForNode(name, Diagnostics.Import_may_be_converted_to_a_default_import));
                 }
             }
@@ -64,7 +66,7 @@ namespace ts {
         }
     }
 
-    // convertToEs6Module only works on top-level, so don't trigger it if commonjs code only appears in nested scopes.
+    // convertToEsModule only works on top-level, so don't trigger it if commonjs code only appears in nested scopes.
     function containsTopLevelCommonjs(sourceFile: SourceFile): boolean {
         return sourceFile.statements.some(statement => {
             switch (statement.kind) {

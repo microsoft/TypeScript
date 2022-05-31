@@ -15,7 +15,6 @@ namespace ts.OrganizeImports {
         preferences: UserPreferences,
         skipDestructiveCodeActions?: boolean
     ) {
-
         const changeTracker = textChanges.ChangeTracker.fromContext({ host, formatContext, preferences });
 
         const coalesceAndOrganizeImports = (importGroup: readonly ImportDeclaration[]) => stableSort(
@@ -23,8 +22,8 @@ namespace ts.OrganizeImports {
             (s1, s2) => compareImportsOrRequireStatements(s1, s2));
 
         // All of the old ImportDeclarations in the file, in syntactic order.
-        const topLevelImportDecls = sourceFile.statements.filter(isImportDeclaration);
-        organizeImportsWorker(topLevelImportDecls, coalesceAndOrganizeImports);
+        const topLevelImportGroupDecls = groupImportsByNewlineContiguous(sourceFile, sourceFile.statements.filter(isImportDeclaration));
+        topLevelImportGroupDecls.forEach(importGroupDecl => organizeImportsWorker(importGroupDecl, coalesceAndOrganizeImports));
 
         // All of the old ExportDeclarations in the file, in syntactic order.
         const topLevelExportDecls = sourceFile.statements.filter(isExportDeclaration);
@@ -33,8 +32,8 @@ namespace ts.OrganizeImports {
         for (const ambientModule of sourceFile.statements.filter(isAmbientModule)) {
             if (!ambientModule.body) continue;
 
-            const ambientModuleImportDecls = ambientModule.body.statements.filter(isImportDeclaration);
-            organizeImportsWorker(ambientModuleImportDecls, coalesceAndOrganizeImports);
+            const ambientModuleImportGroupDecls = groupImportsByNewlineContiguous(sourceFile, ambientModule.body.statements.filter(isImportDeclaration));
+            ambientModuleImportGroupDecls.forEach(importGroupDecl => organizeImportsWorker(importGroupDecl, coalesceAndOrganizeImports));
 
             const ambientModuleExportDecls = ambientModule.body.statements.filter(isExportDeclaration);
             organizeImportsWorker(ambientModuleExportDecls, coalesceExports);
@@ -88,6 +87,48 @@ namespace ts.OrganizeImports {
         }
     }
 
+    function groupImportsByNewlineContiguous(sourceFile: SourceFile, importDecls: ImportDeclaration[]): ImportDeclaration[][] {
+        const scanner = createScanner(sourceFile.languageVersion, /*skipTrivia*/ false, sourceFile.languageVariant);
+        const groupImports: ImportDeclaration[][] = [];
+        let groupIndex = 0;
+        for (const topLevelImportDecl of importDecls) {
+            if (isNewGroup(sourceFile, topLevelImportDecl, scanner)) {
+                groupIndex++;
+            }
+
+            if (!groupImports[groupIndex]) {
+                groupImports[groupIndex] = [];
+            }
+
+            groupImports[groupIndex].push(topLevelImportDecl);
+        }
+
+        return groupImports;
+    }
+
+    // a new group is created if an import includes at least two new line
+    // new line from multi-line comment doesn't count
+    function isNewGroup(sourceFile: SourceFile, topLevelImportDecl: ImportDeclaration, scanner: Scanner) {
+        const startPos = topLevelImportDecl.getFullStart();
+        const endPos = topLevelImportDecl.getStart();
+        scanner.setText(sourceFile.text, startPos, endPos - startPos);
+
+        let numberOfNewLines = 0;
+        while (scanner.getTokenPos() < endPos) {
+            const tokenKind = scanner.scan();
+
+            if (tokenKind === SyntaxKind.NewLineTrivia) {
+                numberOfNewLines++;
+
+                if (numberOfNewLines >= 2) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
     function removeUnusedImports(oldImports: readonly ImportDeclaration[], sourceFile: SourceFile, program: Program, skipDestructiveCodeActions: boolean | undefined) {
         // As a precaution, consider unused import detection to be destructive (GH #43051)
         if (skipDestructiveCodeActions) {
@@ -95,6 +136,7 @@ namespace ts.OrganizeImports {
         }
 
         const typeChecker = program.getTypeChecker();
+        const compilerOptions = program.getCompilerOptions();
         const jsxNamespace = typeChecker.getJsxNamespace(sourceFile);
         const jsxFragmentFactory = typeChecker.getJsxFragmentFactory(sourceFile);
         const jsxElementsPresent = !!(sourceFile.transformFlags & TransformFlags.ContainsJsx);
@@ -162,7 +204,7 @@ namespace ts.OrganizeImports {
 
         function isDeclarationUsed(identifier: Identifier) {
             // The JSX factory symbol is always used if JSX elements are present - even if they are not allowed.
-            return jsxElementsPresent && (identifier.text === jsxNamespace || jsxFragmentFactory && identifier.text === jsxFragmentFactory) ||
+            return jsxElementsPresent && (identifier.text === jsxNamespace || jsxFragmentFactory && identifier.text === jsxFragmentFactory) && jsxModeNeedsExplicitImport(compilerOptions.jsx) ||
                 FindAllReferences.Core.isSymbolReferencedInFile(identifier, typeChecker, sourceFile);
         }
     }
@@ -236,10 +278,9 @@ namespace ts.OrganizeImports {
                 }
             }
 
-            newImportSpecifiers.push(...flatMap(namedImports, i => (i.importClause!.namedBindings as NamedImports).elements)); // TODO: GH#18217
+            newImportSpecifiers.push(...getNewImportSpecifiers(namedImports));
 
             const sortedImportSpecifiers = sortSpecifiers(newImportSpecifiers);
-
             const importDecl = defaultImports.length > 0
                 ? defaultImports[0]
                 : namedImports[0];
@@ -491,5 +532,21 @@ namespace ts.OrganizeImports {
             case SyntaxKind.VariableStatement:
                 return 6;
         }
+    }
+
+    function getNewImportSpecifiers(namedImports: ImportDeclaration[]) {
+        return flatMap(namedImports, namedImport =>
+            map(tryGetNamedBindingElements(namedImport), importSpecifier =>
+                importSpecifier.name && importSpecifier.propertyName && importSpecifier.name.escapedText === importSpecifier.propertyName.escapedText
+                    ? factory.updateImportSpecifier(importSpecifier, importSpecifier.isTypeOnly, /*propertyName*/ undefined, importSpecifier.name)
+                    : importSpecifier
+            )
+        );
+    }
+
+    function tryGetNamedBindingElements(namedImport: ImportDeclaration) {
+        return namedImport.importClause?.namedBindings && isNamedImports(namedImport.importClause.namedBindings)
+            ? namedImport.importClause.namedBindings.elements
+            : undefined;
     }
 }

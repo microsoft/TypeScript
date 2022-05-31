@@ -26,3 +26,6 @@ x4.isElement;
 var x5 = <T extends>() => {}</T>;
 x5.isElement;
 
+// This is a generic function
+var x6 = <T = string,>() => {};
+x6();

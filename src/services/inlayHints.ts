@@ -7,11 +7,11 @@ namespace ts.InlayHints {
         return new RegExp(`^\\s?/\\*\\*?\\s?${name}\\s?\\*\\/\\s?$`);
     };
 
-    function shouldShowParameterNameHints(preferences: InlayHintsOptions) {
+    function shouldShowParameterNameHints(preferences: UserPreferences) {
         return preferences.includeInlayParameterNameHints === "literals" || preferences.includeInlayParameterNameHints === "all";
     }
 
-    function shouldShowLiteralParameterNameHintsOnly(preferences: InlayHintsOptions) {
+    function shouldShowLiteralParameterNameHintsOnly(preferences: UserPreferences) {
         return preferences.includeInlayParameterNameHints === "literals";
     }
 
@@ -47,7 +47,7 @@ namespace ts.InlayHints {
                 return;
             }
 
-            if (isTypeNode(node)) {
+            if (isTypeNode(node) && !isExpressionWithTypeArguments(node)) {
                 return;
             }
 
@@ -137,6 +137,10 @@ namespace ts.InlayHints {
 
             const typeDisplayString = printTypeInSingleLine(declarationType);
             if (typeDisplayString) {
+                const isVariableNameMatchesType = preferences.includeInlayVariableTypeHintsWhenTypeMatchesName === false && equateStringsCaseInsensitive(decl.name.getText(), typeDisplayString);
+                if (isVariableNameMatchesType) {
+                    return;
+                }
                 addTypeHints(typeDisplayString, decl.name.end);
             }
         }
@@ -279,7 +283,7 @@ namespace ts.InlayHints {
                     continue;
                 }
 
-                addTypeHints(typeDisplayString, param.name.end);
+                addTypeHints(typeDisplayString, param.questionToken ? param.questionToken.end : param.name.end);
             }
         }
 

@@ -1,0 +1,21 @@
+=== tests/cases/compiler/objectBindingPatternContextuallyTypesArgument.ts ===
+declare function id<T>(x: T): T;
+>id : Symbol(id, Decl(objectBindingPatternContextuallyTypesArgument.ts, 0, 0))
+>T : Symbol(T, Decl(objectBindingPatternContextuallyTypesArgument.ts, 0, 20))
+>x : Symbol(x, Decl(objectBindingPatternContextuallyTypesArgument.ts, 0, 23))
+>T : Symbol(T, Decl(objectBindingPatternContextuallyTypesArgument.ts, 0, 20))
+>T : Symbol(T, Decl(objectBindingPatternContextuallyTypesArgument.ts, 0, 20))
+
+const { f = (x: string) => x.length } = id({ f: x => x.charAt });
+>f : Symbol(f, Decl(objectBindingPatternContextuallyTypesArgument.ts, 1, 7))
+>x : Symbol(x, Decl(objectBindingPatternContextuallyTypesArgument.ts, 1, 13))
+>x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(objectBindingPatternContextuallyTypesArgument.ts, 1, 13))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>id : Symbol(id, Decl(objectBindingPatternContextuallyTypesArgument.ts, 0, 0))
+>f : Symbol(f, Decl(objectBindingPatternContextuallyTypesArgument.ts, 1, 44))
+>x : Symbol(x, Decl(objectBindingPatternContextuallyTypesArgument.ts, 1, 47))
+>x.charAt : Symbol(String.charAt, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(objectBindingPatternContextuallyTypesArgument.ts, 1, 47))
+>charAt : Symbol(String.charAt, Decl(lib.es5.d.ts, --, --))
+

@@ -15,7 +15,7 @@ interface Hash<T> {
 }
 
 type StringHash = Hash<string>;
->StringHash : StringHash
+>StringHash : Hash<string>
 
 interface StringHash2 extends Hash<string> {}
 === tests/cases/compiler/a.ts ===

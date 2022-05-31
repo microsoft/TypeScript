@@ -14,6 +14,8 @@ namespace ts {
         switch (getEmitScriptTarget(options)) {
             case ScriptTarget.ESNext:
                 return "lib.esnext.full.d.ts";
+            case ScriptTarget.ES2022:
+                return "lib.es2022.full.d.ts";
             case ScriptTarget.ES2021:
                 return "lib.es2021.full.d.ts";
             case ScriptTarget.ES2020:
@@ -903,9 +905,16 @@ namespace ts {
     /** Gets the text of a jsdoc comment, flattening links to their text. */
     export function getTextOfJSDocComment(comment?: string | NodeArray<JSDocComment>) {
         return typeof comment === "string" ? comment
-            : comment?.map(c =>
-                // TODO: Other kinds here
-                c.kind === SyntaxKind.JSDocText ? c.text : `{@link ${c.name ? entityNameToString(c.name) + " " : ""}${c.text}}`).join("");
+            : comment?.map(c => c.kind === SyntaxKind.JSDocText ? c.text : formatJSDocLink(c)).join("");
+    }
+
+    function formatJSDocLink(link: JSDocLink | JSDocLinkCode | JSDocLinkPlain) {
+        const kind = link.kind === SyntaxKind.JSDocLink ? "link"
+            : link.kind === SyntaxKind.JSDocLinkCode ? "linkcode"
+            : "linkplain";
+        const name = link.name ? entityNameToString(link.name) : "";
+        const space = link.name && link.text.startsWith("://") ? "" : " ";
+        return `{@${kind} ${name}${space}${link.text}}`;
     }
 
     /**
@@ -917,7 +926,7 @@ namespace ts {
             return emptyArray;
         }
         if (isJSDocTypeAlias(node)) {
-            Debug.assert(node.parent.kind === SyntaxKind.JSDocComment);
+            Debug.assert(node.parent.kind === SyntaxKind.JSDoc);
             return flatMap(node.parent.tags, tag => isJSDocTemplateTag(tag) ? tag.typeParameters : undefined);
         }
         if (node.typeParameters) {
@@ -1105,6 +1114,19 @@ namespace ts {
         return isLiteralKind(node.kind);
     }
 
+    /** @internal */
+    export function isLiteralExpressionOfObject(node: Node) {
+        switch (node.kind) {
+            case SyntaxKind.ObjectLiteralExpression:
+            case SyntaxKind.ArrayLiteralExpression:
+            case SyntaxKind.RegularExpressionLiteral:
+            case SyntaxKind.FunctionExpression:
+            case SyntaxKind.ClassExpression:
+                return true;
+        }
+        return false;
+    }
+
     // Pseudo-literals
 
     /* @internal */
@@ -1178,11 +1200,13 @@ namespace ts {
             case SyntaxKind.DeclareKeyword:
             case SyntaxKind.DefaultKeyword:
             case SyntaxKind.ExportKeyword:
+            case SyntaxKind.InKeyword:
             case SyntaxKind.PublicKeyword:
             case SyntaxKind.PrivateKeyword:
             case SyntaxKind.ProtectedKeyword:
             case SyntaxKind.ReadonlyKeyword:
             case SyntaxKind.StaticKeyword:
+            case SyntaxKind.OutKeyword:
             case SyntaxKind.OverrideKeyword:
                 return true;
         }
@@ -1324,7 +1348,9 @@ namespace ts {
             || kind === SyntaxKind.CallSignature
             || kind === SyntaxKind.PropertySignature
             || kind === SyntaxKind.MethodSignature
-            || kind === SyntaxKind.IndexSignature;
+            || kind === SyntaxKind.IndexSignature
+            || kind === SyntaxKind.GetAccessor
+            || kind === SyntaxKind.SetAccessor;
     }
 
     export function isClassOrTypeElement(node: Node): node is ClassElement | TypeElement {
@@ -1529,6 +1555,7 @@ namespace ts {
             case SyntaxKind.TrueKeyword:
             case SyntaxKind.SuperKeyword:
             case SyntaxKind.NonNullExpression:
+            case SyntaxKind.ExpressionWithTypeArguments:
             case SyntaxKind.MetaProperty:
             case SyntaxKind.ImportKeyword: // technically this is only an Expression if it's in a CallExpression
                 return true;
@@ -1902,7 +1929,7 @@ namespace ts {
 
     /** True if node is of a kind that may contain comment text. */
     export function isJSDocCommentContainingNode(node: Node): boolean {
-        return node.kind === SyntaxKind.JSDocComment
+        return node.kind === SyntaxKind.JSDoc
             || node.kind === SyntaxKind.JSDocNamepathType
             || node.kind === SyntaxKind.JSDocText
             || isJSDocLinkLike(node)
@@ -2001,5 +2028,16 @@ namespace ts {
     export function isJSDocLinkLike(node: Node): node is JSDocLink | JSDocLinkCode | JSDocLinkPlain {
         return node.kind === SyntaxKind.JSDocLink || node.kind === SyntaxKind.JSDocLinkCode || node.kind === SyntaxKind.JSDocLinkPlain;
     }
+
+    export function hasRestParameter(s: SignatureDeclaration | JSDocSignature): boolean {
+        const last = lastOrUndefined<ParameterDeclaration | JSDocParameterTag>(s.parameters);
+        return !!last && isRestParameter(last);
+    }
+
+    export function isRestParameter(node: ParameterDeclaration | JSDocParameterTag): boolean {
+        const type = isJSDocParameterTag(node) ? (node.typeExpression && node.typeExpression.type) : node.type;
+        return (node as ParameterDeclaration).dotDotDotToken !== undefined || !!type && type.kind === SyntaxKind.JSDocVariadicType;
+    }
+
     // #endregion
 }

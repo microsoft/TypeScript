@@ -22,7 +22,7 @@
     }
 
 type FileMatchOrMatch = FileMatch | Match;
->FileMatchOrMatch : FileMatchOrMatch
+>FileMatchOrMatch : Match | FileMatch
 
 
 let elementA: FileMatchOrMatch, elementB: FileMatchOrMatch;

@@ -1,0 +1,12 @@
+=== tests/cases/conformance/parser/ecmascript5/ArrowFunctionExpressions/parserArrowFunctionExpression14.ts ===
+a() ? (b: number, c?: string): void => d() : e;
+>a() ? (b: number, c?: string): void => d() : e : any
+>a() : any
+>a : any
+>(b: number, c?: string): void => d() : (b: number, c?: string) => void
+>b : number
+>c : string
+>d() : any
+>d : any
+>e : any
+

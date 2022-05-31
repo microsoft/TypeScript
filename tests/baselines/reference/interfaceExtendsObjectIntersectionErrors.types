@@ -1,20 +1,20 @@
 === tests/cases/conformance/interfaces/interfaceDeclarations/interfaceExtendsObjectIntersectionErrors.ts ===
 type T1 = { a: number };
->T1 : T1
+>T1 : { a: number; }
 >a : number
 
 type T2 = T1 & { b: number };
->T2 : T2
+>T2 : T1 & { b: number; }
 >b : number
 
 type T3 = number[];
->T3 : T3
+>T3 : number[]
 
 type T4 = [string, number];
->T4 : T4
+>T4 : [string, number]
 
 type T5 = { [P in 'a' | 'b' | 'c']: string };
->T5 : T5
+>T5 : { a: string; b: string; c: string; }
 
 interface I1 extends T1 { a: string }
 >a : string
@@ -130,7 +130,7 @@ interface I23 extends Identifiable<T1 & { b: number}> { a: string }
 >a : string
 
 type U = { a: number } | { b: string };
->U : U
+>U : { a: number; } | { b: string; }
 >a : number
 >b : string
 

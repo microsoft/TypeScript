@@ -18,14 +18,14 @@ edit.insert('.');
 // Check members of the function
 verify.completions({
     marker: "",
-    exact: [
-        { name: "qua", kind: "property" },
-        { name: "foo", kind: "method" },
+    unsorted: [
         { name: "bar", kind: "method" },
+        { name: "qua", kind: "property" },
         ...["myCtor", "x", "prototype"].map(name => ({
             name,
             kind: "warning",
             sortText: completion.SortText.JavascriptIdentifiers
         })),
+        { name: "foo", kind: "method" },
     ],
 });

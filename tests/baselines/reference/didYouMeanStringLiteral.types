@@ -1,6 +1,6 @@
 === tests/cases/compiler/didYouMeanStringLiteral.ts ===
 type T1 = "string" | "number" | "boolean";
->T1 : T1
+>T1 : "string" | "number" | "boolean"
 
 type T2 = T1 & ("number" | "boolean"); // "number" | "boolean"
 >T2 : "number" | "boolean"

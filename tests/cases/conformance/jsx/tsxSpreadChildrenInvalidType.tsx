@@ -1,4 +1,4 @@
-// @jsx: react
+// @jsx: react,react-jsx
 // @target: es2015,es5
 declare module JSX {
 	interface Element { }
