@@ -1,15 +1,14 @@
 === tests/cases/conformance/parser/ecmascript5/ArrowFunctionExpressions/file.js ===
 x ? y => ({ y }) : z => ({ z })
->x ? y => ({ y }) : z => ({ z }) : ((y: any) => { y: any; }) | ((z: any) => { z: any; })
+>x ? y => ({ y }) : z => ({ z }) : any
 >x : any
->y => ({ y }) : (y: any) => { y: any; }
+>y => ({ y }) : z => ({ z }) : (y: any) => ({ y }: { y: any; }) => z
 >y : any
->({ y }) : { y: any; }
->{ y } : { y: any; }
+>({ y }) : z => ({ z }) : ({ y }: { y: any; }) => z
 >y : any
->z => ({ z }) : (z: any) => { z: any; }
->z : any
 >({ z }) : { z: any; }
 >{ z } : { z: any; }
 >z : any
+
+> : any
 

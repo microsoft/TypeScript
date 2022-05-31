@@ -4964,7 +4964,7 @@ namespace ts {
         }
 
         // @api
-        function createJsxAttribute(name: Identifier, initializer: StringLiteral | JsxExpression | undefined) {
+        function createJsxAttribute(name: Identifier, initializer: JsxAttributeValue | undefined) {
             const node = createBaseNode<JsxAttribute>(SyntaxKind.JsxAttribute);
             node.name = name;
             node.initializer = initializer;
@@ -4976,7 +4976,7 @@ namespace ts {
         }
 
         // @api
-        function updateJsxAttribute(node: JsxAttribute, name: Identifier, initializer: StringLiteral | JsxExpression | undefined) {
+        function updateJsxAttribute(node: JsxAttribute, name: Identifier, initializer: JsxAttributeValue | undefined) {
             return node.name !== name
                 || node.initializer !== initializer
                 ? update(createJsxAttribute(name, initializer), node)
@@ -5275,7 +5275,7 @@ namespace ts {
             hasNoDefaultLib: boolean,
             libReferences: readonly FileReference[]
         ) {
-            const node = baseFactory.createBaseSourceFileNode(SyntaxKind.SourceFile) as Mutable<SourceFile>;
+            const node = (source.redirectInfo ? Object.create(source.redirectInfo.redirectTarget) : baseFactory.createBaseSourceFileNode(SyntaxKind.SourceFile)) as Mutable<SourceFile>;
             for (const p in source) {
                 if (p === "emitNode" || hasProperty(node, p) || !hasProperty(source, p)) continue;
                 (node as any)[p] = (source as any)[p];

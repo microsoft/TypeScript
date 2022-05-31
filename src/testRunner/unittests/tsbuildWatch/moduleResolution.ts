@@ -45,8 +45,7 @@ namespace ts.tscWatch {
                     caption: "Append text",
                     change: sys => sys.appendFile(`${projectRoot}/project1/index.ts`, "const bar = 10;"),
                     timeouts: sys => {
-                        sys.checkTimeoutQueueLengthAndRun(1); // build project1
-                        sys.checkTimeoutQueueLengthAndRun(1); // Solution
+                        sys.checkTimeoutQueueLengthAndRun(1); // build project1 and solution
                         sys.checkTimeoutQueueLength(0);
                     }
                 },
@@ -77,7 +76,7 @@ namespace ts.tscWatch {
                     content: JSON.stringify({
                         compilerOptions: {
                             outDir: "build",
-                            module: "node12",
+                            module: "node16",
                         },
                         references: [{ path: "../pkg2" }]
                     })
@@ -96,7 +95,7 @@ namespace ts.tscWatch {
                         compilerOptions: {
                             composite: true,
                             outDir: "build",
-                            module: "node12",
+                            module: "node16",
                         }
                     })
                 },
@@ -113,7 +112,7 @@ namespace ts.tscWatch {
                     path: `${projectRoot}/node_modules/pkg2`,
                     symLink: `${projectRoot}/packages/pkg2`,
                 },
-                { ...libFile, path: `/a/lib/lib.es2020.full.d.ts` }
+                { ...libFile, path: `/a/lib/lib.es2022.full.d.ts` }
             ], { currentDirectory: projectRoot }),
             commandLineArgs: ["-b", "packages/pkg1", "-w", "--verbose", "--traceResolution"],
             changes: [

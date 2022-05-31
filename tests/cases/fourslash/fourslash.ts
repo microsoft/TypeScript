@@ -349,7 +349,7 @@ declare namespace FourSlashInterface {
         baselineSyntacticDiagnostics(): void;
         baselineSyntacticAndSemanticDiagnostics(): void;
         getEmitOutput(expectedOutputFiles: ReadonlyArray<string>): void;
-        baselineCompletions(): void;
+        baselineCompletions(preferences?: UserPreferences): void;
         baselineQuickInfo(): void;
         baselineSmartSelection(): void;
         baselineSignatureHelp(): void;
@@ -666,6 +666,7 @@ declare namespace FourSlashInterface {
         readonly includeInlayParameterNameHintsWhenArgumentMatchesName?: boolean;
         readonly includeInlayFunctionParameterTypeHints?: boolean;
         readonly includeInlayVariableTypeHints?: boolean;
+        readonly includeInlayVariableTypeHintsWhenTypeMatchesName?: boolean;
         readonly includeInlayPropertyDeclarationTypeHints?: boolean;
         readonly includeInlayFunctionLikeReturnTypeHints?: boolean;
         readonly includeInlayEnumMemberValueHints?: boolean;

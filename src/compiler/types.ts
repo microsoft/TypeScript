@@ -2612,8 +2612,15 @@ namespace ts {
         readonly parent: JsxAttributes;
         readonly name: Identifier;
         /// JSX attribute initializers are optional; <X y /> is sugar for <X y={true} />
-        readonly initializer?: StringLiteral | JsxExpression;
+        readonly initializer?: JsxAttributeValue;
     }
+
+    export type JsxAttributeValue =
+        | StringLiteral
+        | JsxExpression
+        | JsxElement
+        | JsxSelfClosingElement
+        | JsxFragment;
 
     export interface JsxSpreadAttribute extends ObjectLiteralElement {
         readonly kind: SyntaxKind.JsxSpreadAttribute;
@@ -3615,7 +3622,7 @@ namespace ts {
         languageVersion: ScriptTarget;
 
         /**
-         * When `module` is `Node12` or `NodeNext`, this field controls whether the
+         * When `module` is `Node16` or `NodeNext`, this field controls whether the
          * source file in question is an ESNext-output-format file, or a CommonJS-output-format
          * module. This is derived by the module resolver as it looks up the file, since
          * it is derived from either the file extension of the module, or the containing
@@ -5390,6 +5397,11 @@ namespace ts {
         // Flags that require TypeFlags.Union
         /* @internal */
         ContainsIntersections = 1 << 24, // Union contains intersections
+        /* @internal */
+        IsUnknownLikeUnionComputed = 1 << 25, // IsUnknownLikeUnion flag has been computed
+        /* @internal */
+        IsUnknownLikeUnion = 1 << 26, // Union of null, undefined, and empty object type
+        /* @internal */
 
         // Flags that require TypeFlags.Intersection
         /* @internal */
@@ -5867,10 +5879,10 @@ namespace ts {
         ReturnType                   = 1 << 7,  // Inference made from return type of generic function
         LiteralKeyof                 = 1 << 8,  // Inference made from a string literal to a keyof T
         NoConstraints                = 1 << 9,  // Don't infer from constraints of instantiable types
-        AlwaysStrict                 = 1 << 10,  // Always use strict rules for contravariant inferences
+        AlwaysStrict                 = 1 << 10, // Always use strict rules for contravariant inferences
         MaxValue                     = 1 << 11, // Seed for inference priority tracking
 
-        PriorityImpliesCombination = ReturnType | MappedTypeConstraint | LiteralKeyof,  // These priorities imply that the resulting type should be a combination of all candidates
+        PriorityImpliesCombination = ReturnType | MappedTypeConstraint | LiteralKeyof, // These priorities imply that the resulting type should be a combination of all candidates
         Circularity = -1,  // Inference circularity (value less than all other priorities)
     }
 
@@ -6049,11 +6061,12 @@ namespace ts {
         Classic  = 1,
         NodeJs   = 2,
         // Starting with node12, node's module resolver has significant departures from traditional cjs resolution
-        // to better support ecmascript modules and their use within node - more features are still being added, so
-        // we can expect it to change over time, and as such, offer both a `NodeNext` moving resolution target, and a `Node12`
-        // version-anchored resolution target
-        Node12   = 3,
-        NodeNext = 99, // Not simply `Node12` so that compiled code linked against TS can use the `Next` value reliably (same as with `ModuleKind`)
+        // to better support ecmascript modules and their use within node - however more features are still being added.
+        // TypeScript's Node ESM support was introduced after Node 12 went end-of-life, and Node 14 is the earliest stable
+        // version that supports both pattern trailers - *but*, Node 16 is the first version that also supports ECMASCript 2022.
+        // In turn, we offer both a `NodeNext` moving resolution target, and a `Node16` version-anchored resolution target
+        Node16   = 3,
+        NodeNext = 99, // Not simply `Node16` so that compiled code linked against TS can use the `Next` value reliably (same as with `ModuleKind`)
     }
 
     export enum ModuleDetectionKind {
@@ -6062,7 +6075,7 @@ namespace ts {
          */
         Legacy = 1,
         /**
-         * Legacy, but also files with jsx under react-jsx or react-jsxdev and esm mode files under moduleResolution: node12+
+         * Legacy, but also files with jsx under react-jsx or react-jsxdev and esm mode files under moduleResolution: node16+
          */
         Auto = 2,
         /**
@@ -6281,8 +6294,8 @@ namespace ts {
         ES2022 = 7,
         ESNext = 99,
 
-        // Node12+ is an amalgam of commonjs (albeit updated) and es2020+, and represents a distinct module system from es2020/esnext
-        Node12 = 100,
+        // Node16+ is an amalgam of commonjs (albeit updated) and es2022+, and represents a distinct module system from es2020/esnext
+        Node16 = 100,
         NodeNext = 199,
     }
 
@@ -6384,6 +6397,7 @@ namespace ts {
         validatedIncludeSpecs: readonly string[] | undefined;
         validatedExcludeSpecs: readonly string[] | undefined;
         pathPatterns: readonly (string | Pattern)[] | undefined;
+        isDefaultIncludeSpec: boolean;
     }
 
     /* @internal */
@@ -6718,6 +6732,8 @@ namespace ts {
         readonly failedLookupLocations: string[];
         /* @internal */
         readonly affectingLocations: string[];
+        /* @internal */
+        readonly resolutionDiagnostics: Diagnostic[]
     }
 
     export interface ResolvedTypeReferenceDirective {
@@ -6740,6 +6756,7 @@ namespace ts {
         readonly resolvedTypeReferenceDirective: ResolvedTypeReferenceDirective | undefined;
         readonly failedLookupLocations: string[];
         /*@internal*/ readonly affectingLocations: string[];
+        /* @internal */ resolutionDiagnostics: Diagnostic[];
     }
 
     /* @internal */
@@ -7677,8 +7694,8 @@ namespace ts {
         createJsxOpeningFragment(): JsxOpeningFragment;
         createJsxJsxClosingFragment(): JsxClosingFragment;
         updateJsxFragment(node: JsxFragment, openingFragment: JsxOpeningFragment, children: readonly JsxChild[], closingFragment: JsxClosingFragment): JsxFragment;
-        createJsxAttribute(name: Identifier, initializer: StringLiteral | JsxExpression | undefined): JsxAttribute;
-        updateJsxAttribute(node: JsxAttribute, name: Identifier, initializer: StringLiteral | JsxExpression | undefined): JsxAttribute;
+        createJsxAttribute(name: Identifier, initializer: JsxAttributeValue | undefined): JsxAttribute;
+        updateJsxAttribute(node: JsxAttribute, name: Identifier, initializer: JsxAttributeValue | undefined): JsxAttribute;
         createJsxAttributes(properties: readonly JsxAttributeLike[]): JsxAttributes;
         updateJsxAttributes(node: JsxAttributes, properties: readonly JsxAttributeLike[]): JsxAttributes;
         createJsxSpreadAttribute(expression: Expression): JsxSpreadAttribute;
@@ -8803,6 +8820,7 @@ namespace ts {
         readonly includeInlayParameterNameHintsWhenArgumentMatchesName?: boolean;
         readonly includeInlayFunctionParameterTypeHints?: boolean,
         readonly includeInlayVariableTypeHints?: boolean;
+        readonly includeInlayVariableTypeHintsWhenTypeMatchesName?: boolean;
         readonly includeInlayPropertyDeclarationTypeHints?: boolean;
         readonly includeInlayFunctionLikeReturnTypeHints?: boolean;
         readonly includeInlayEnumMemberValueHints?: boolean;

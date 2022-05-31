@@ -808,7 +808,7 @@ namespace ts {
     }
 
     function isCommonJSContainingModuleKind(kind: ModuleKind) {
-        return kind === ModuleKind.CommonJS || kind === ModuleKind.Node12 || kind === ModuleKind.NodeNext;
+        return kind === ModuleKind.CommonJS || kind === ModuleKind.Node16 || kind === ModuleKind.NodeNext;
     }
 
     export function isEffectiveExternalModule(node: SourceFile, compilerOptions: CompilerOptions) {
@@ -2197,9 +2197,6 @@ namespace ts {
     }
 
     function isVariableDeclarationInitializedWithRequireHelper(node: Node, allowAccessedRequire: boolean) {
-        if (node.kind === SyntaxKind.BindingElement) {
-            node = node.parent.parent;
-        }
         return isVariableDeclaration(node) &&
             !!node.initializer &&
             isRequireCall(allowAccessedRequire ? getLeftmostAccessExpression(node.initializer) : node.initializer, /*requireStringLiteralLikeArgument*/ true);
@@ -2864,16 +2861,6 @@ namespace ts {
         const name = node.name.escapedText;
         const { typeParameters } = (node.parent.parent.parent as SignatureDeclaration | InterfaceDeclaration | ClassDeclaration);
         return typeParameters && find(typeParameters, p => p.name.escapedText === name);
-    }
-
-    export function hasRestParameter(s: SignatureDeclaration | JSDocSignature): boolean {
-        const last = lastOrUndefined<ParameterDeclaration | JSDocParameterTag>(s.parameters);
-        return !!last && isRestParameter(last);
-    }
-
-    export function isRestParameter(node: ParameterDeclaration | JSDocParameterTag): boolean {
-        const type = isJSDocParameterTag(node) ? (node.typeExpression && node.typeExpression.type) : node.type;
-        return (node as ParameterDeclaration).dotDotDotToken !== undefined || !!type && type.kind === SyntaxKind.JSDocVariadicType;
     }
 
     export function hasTypeArguments(node: Node): node is HasTypeArguments {
@@ -4121,6 +4108,10 @@ namespace ts {
         return indentStrings[1].length;
     }
 
+    export function isNightly() {
+        return stringContains(version, "-dev") || stringContains(version, "-insiders");
+    }
+
     export function createTextWriter(newLine: string): EmitTextWriter {
         let output: string;
         let indent: number;
@@ -4385,6 +4376,16 @@ namespace ts {
             fileExtensionIsOneOf(path, [Extension.Cjs, Extension.Cts]) ? Extension.Dcts :
             fileExtensionIsOneOf(path, [Extension.Json]) ? `.json.d.ts` : // Drive-by redefinition of json declaration file output name so if it's ever enabled, it behaves well
             Extension.Dts;
+    }
+
+    /**
+     * This function is an inverse of `getDeclarationEmitExtensionForPath`.
+     */
+    export function getPossibleOriginalInputExtensionForExtension(path: string) {
+        return fileExtensionIsOneOf(path, [Extension.Dmts, Extension.Mjs, Extension.Mts]) ? [Extension.Mts, Extension.Mjs] :
+            fileExtensionIsOneOf(path, [Extension.Dcts, Extension.Cjs, Extension.Cts]) ? [Extension.Cts, Extension.Cjs]:
+            fileExtensionIsOneOf(path, [`.json.d.ts`]) ? [Extension.Json] :
+            [Extension.Tsx, Extension.Ts, Extension.Jsx, Extension.Js];
     }
 
     export function outFile(options: CompilerOptions) {
@@ -6301,8 +6302,9 @@ namespace ts {
      */
     function isFileForcedToBeModuleByFormat(file: SourceFile): true | undefined {
         // Excludes declaration files - they still require an explicit `export {}` or the like
-        // for back compat purposes.
-        return file.impliedNodeFormat === ModuleKind.ESNext && !file.isDeclarationFile ? true : undefined;
+        // for back compat purposes. The only non-declaration files _not_ forced to be a module are `.js` files
+        // that aren't esm-mode (meaning not in a `type: module` scope).
+        return (file.impliedNodeFormat === ModuleKind.ESNext || (fileExtensionIsOneOf(file.fileName, [Extension.Cjs, Extension.Cts]))) && !file.isDeclarationFile ? true : undefined;
     }
 
     export function getSetExternalModuleIndicator(options: CompilerOptions): (file: SourceFile) => void {
@@ -6311,7 +6313,7 @@ namespace ts {
             case ModuleDetectionKind.Force:
                 // All non-declaration files are modules, declaration files still do the usual isFileProbablyExternalModule
                 return (file: SourceFile) => {
-                    file.externalModuleIndicator = !file.isDeclarationFile || isFileProbablyExternalModule(file);
+                    file.externalModuleIndicator = isFileProbablyExternalModule(file) || !file.isDeclarationFile || undefined;
                 };
             case ModuleDetectionKind.Legacy:
                 // Files are modules if they have imports, exports, or import.meta
@@ -6319,7 +6321,7 @@ namespace ts {
                     file.externalModuleIndicator = isFileProbablyExternalModule(file);
                 };
             case ModuleDetectionKind.Auto:
-                // If module is nodenext or node12, all esm format files are modules
+                // If module is nodenext or node16, all esm format files are modules
                 // If jsx is react-jsx or react-jsxdev then jsx tags force module-ness
                 // otherwise, the presence of import or export statments (or import.meta) implies module-ness
                 const checks: ((file: SourceFile) => Node | true | undefined)[] = [isFileProbablyExternalModule];
@@ -6327,7 +6329,7 @@ namespace ts {
                     checks.push(isFileModuleFromUsingJSXTag);
                 }
                 const moduleKind = getEmitModuleKind(options);
-                if (moduleKind === ModuleKind.Node12 || moduleKind === ModuleKind.NodeNext) {
+                if (moduleKind === ModuleKind.Node16 || moduleKind === ModuleKind.NodeNext) {
                     checks.push(isFileForcedToBeModuleByFormat);
                 }
                 const combined = or(...checks);
@@ -6338,7 +6340,7 @@ namespace ts {
 
     export function getEmitScriptTarget(compilerOptions: {module?: CompilerOptions["module"], target?: CompilerOptions["target"]}) {
         return compilerOptions.target ||
-            (compilerOptions.module === ModuleKind.Node12 && ScriptTarget.ES2020) ||
+            (compilerOptions.module === ModuleKind.Node16 && ScriptTarget.ES2022) ||
             (compilerOptions.module === ModuleKind.NodeNext && ScriptTarget.ESNext) ||
             ScriptTarget.ES3;
     }
@@ -6356,8 +6358,8 @@ namespace ts {
                 case ModuleKind.CommonJS:
                     moduleResolution = ModuleResolutionKind.NodeJs;
                     break;
-                case ModuleKind.Node12:
-                    moduleResolution = ModuleResolutionKind.Node12;
+                case ModuleKind.Node16:
+                    moduleResolution = ModuleResolutionKind.Node16;
                     break;
                 case ModuleKind.NodeNext:
                     moduleResolution = ModuleResolutionKind.NodeNext;
@@ -6371,7 +6373,8 @@ namespace ts {
     }
 
     export function getEmitModuleDetectionKind(options: CompilerOptions) {
-        return options.moduleDetection || ModuleDetectionKind.Auto;
+        return options.moduleDetection ||
+            (getEmitModuleKind(options) === ModuleKind.Node16 || getEmitModuleKind(options) === ModuleKind.NodeNext ? ModuleDetectionKind.Force : ModuleDetectionKind.Auto);
     }
 
     export function hasJsonModuleEmitEnabled(options: CompilerOptions) {
@@ -6382,7 +6385,7 @@ namespace ts {
             case ModuleKind.ES2020:
             case ModuleKind.ES2022:
             case ModuleKind.ESNext:
-            case ModuleKind.Node12:
+            case ModuleKind.Node16:
             case ModuleKind.NodeNext:
                 return true;
             default:
@@ -6407,7 +6410,7 @@ namespace ts {
             return compilerOptions.esModuleInterop;
         }
         switch (getEmitModuleKind(compilerOptions)) {
-            case ModuleKind.Node12:
+            case ModuleKind.Node16:
             case ModuleKind.NodeNext:
                 return true;
         }

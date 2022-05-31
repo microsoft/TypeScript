@@ -29,11 +29,13 @@ class Test<T extends A> {
 >m : Symbol(Test.m, Decl(strictNullNotNullIndexTypeNoLib.ts, 6, 23))
 
         this.attrs.params!.name;
+>this.attrs.params!.name : Symbol(name, Decl(strictNullNotNullIndexTypeNoLib.ts, 2, 14))
 >this.attrs.params : Symbol(params, Decl(strictNullNotNullIndexTypeNoLib.ts, 1, 13))
 >this.attrs : Symbol(Test.attrs, Decl(strictNullNotNullIndexTypeNoLib.ts, 5, 25))
 >this : Symbol(Test, Decl(strictNullNotNullIndexTypeNoLib.ts, 3, 1))
 >attrs : Symbol(Test.attrs, Decl(strictNullNotNullIndexTypeNoLib.ts, 5, 25))
 >params : Symbol(params, Decl(strictNullNotNullIndexTypeNoLib.ts, 1, 13))
+>name : Symbol(name, Decl(strictNullNotNullIndexTypeNoLib.ts, 2, 14))
     }
 }
 

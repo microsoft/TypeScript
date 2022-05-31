@@ -89,13 +89,6 @@ namespace ts.tscWatch {
             });
         });
 
-        const buildTests: TscWatchCompileChange = {
-            caption: "Build Tests",
-            change: noop,
-            // Build tests
-            timeouts: checkSingleTimeoutQueueLengthAndRunAndVerifyNoTimeout,
-        };
-
         describe("validates the changes and watched files", () => {
             const newFileWithoutExtension = "newFile";
             const newFile: File = {
@@ -104,10 +97,10 @@ namespace ts.tscWatch {
             };
 
             function verifyProjectChanges(subScenario: string, allFilesGetter: () => readonly File[]) {
-                const buildLogicOrUpdateTimeStamps: TscWatchCompileChange = {
-                    caption: "Build logic or update time stamps",
+                const buildLogicAndTests: TscWatchCompileChange = {
+                    caption: "Build logic and tests",
                     change: noop,
-                    timeouts: checkSingleTimeoutQueueLengthAndRun, // Builds logic or updates timestamps
+                    timeouts: checkSingleTimeoutQueueLengthAndRunAndVerifyNoTimeout,
                 };
 
                 verifyTscWatch({
@@ -121,12 +114,10 @@ namespace ts.tscWatch {
                     changes: [
                         changeCore(() => `${core[1].content}
 export class someClass { }`, "Make change to core"),
-                        buildLogicOrUpdateTimeStamps,
-                        buildTests,
+                        buildLogicAndTests,
                         // Another change requeues and builds it
                         changeCore(() => core[1].content, "Revert core file"),
-                        buildLogicOrUpdateTimeStamps,
-                        buildTests,
+                        buildLogicAndTests,
                         {
                             caption: "Make two changes",
                             change: sys => {
@@ -140,8 +131,7 @@ export class someClass2 { }`);
                             },
                             timeouts: checkSingleTimeoutQueueLengthAndRun, // Builds core
                         },
-                        buildLogicOrUpdateTimeStamps,
-                        buildTests,
+                        buildLogicAndTests,
                     ]
                 });
 
@@ -156,8 +146,6 @@ export class someClass2 { }`);
                     changes: [
                         changeCore(() => `${core[1].content}
 function foo() { }`, "Make local change to core"),
-                        buildLogicOrUpdateTimeStamps,
-                        buildTests
                     ]
                 });
 
@@ -174,12 +162,10 @@ function foo() { }`, "Make local change to core"),
                     ),
                     changes: [
                         changeNewFile(newFile.content),
-                        buildLogicOrUpdateTimeStamps,
-                        buildTests,
+                        buildLogicAndTests,
                         changeNewFile(`${newFile.content}
 export class someClass2 { }`),
-                        buildLogicOrUpdateTimeStamps,
-                        buildTests
+                        buildLogicAndTests,
                     ]
                 });
             }
@@ -223,7 +209,12 @@ export class someClass2 { }`),
                     change: sys => sys.writeFile(logic[0].path, logic[0].content),
                     timeouts: checkSingleTimeoutQueueLengthAndRun, // Builds logic
                 },
-                buildTests
+                {
+                    caption: "Build Tests",
+                    change: noop,
+                    // Build tests
+                    timeouts: checkSingleTimeoutQueueLengthAndRunAndVerifyNoTimeout,
+                }
             ]
         });
 
@@ -488,8 +479,8 @@ let x: string = 10;`),
                     change: sys => sys.writeFile(logic[1].path, `${logic[1].content}
 function someFn() { }`),
                     timeouts: sys => {
-                        sys.checkTimeoutQueueLengthAndRun(1); // build logic
-                        sys.checkTimeoutQueueLengthAndRun(1); // build tests
+                        sys.checkTimeoutQueueLengthAndRun(1); // build logic and updates tests
+                        sys.checkTimeoutQueueLength(0);
                     },
                 },
                 {

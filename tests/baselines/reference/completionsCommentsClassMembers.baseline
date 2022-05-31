@@ -2369,7 +2369,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI.",
+                  "text": "A value representing an unencoded URI.",
                   "kind": "text"
                 }
               ]
@@ -2482,7 +2482,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI component.",
+                  "text": "A value representing an unencoded URI component.",
                   "kind": "text"
                 }
               ]
@@ -4219,6 +4219,18 @@
           "displayParts": [
             {
               "text": "try",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "type",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "type",
               "kind": "keyword"
             }
           ]
@@ -9430,7 +9442,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI.",
+                  "text": "A value representing an unencoded URI.",
                   "kind": "text"
                 }
               ]
@@ -9543,7 +9555,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI component.",
+                  "text": "A value representing an unencoded URI component.",
                   "kind": "text"
                 }
               ]
@@ -11280,6 +11292,18 @@
           "displayParts": [
             {
               "text": "try",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "type",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "type",
               "kind": "keyword"
             }
           ]
@@ -14244,7 +14268,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI.",
+                  "text": "A value representing an unencoded URI.",
                   "kind": "text"
                 }
               ]
@@ -14357,7 +14381,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI component.",
+                  "text": "A value representing an unencoded URI component.",
                   "kind": "text"
                 }
               ]
@@ -16094,6 +16118,18 @@
           "displayParts": [
             {
               "text": "try",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "type",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "type",
               "kind": "keyword"
             }
           ]
@@ -21305,7 +21341,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI.",
+                  "text": "A value representing an unencoded URI.",
                   "kind": "text"
                 }
               ]
@@ -21418,7 +21454,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI component.",
+                  "text": "A value representing an unencoded URI component.",
                   "kind": "text"
                 }
               ]
@@ -23155,6 +23191,18 @@
           "displayParts": [
             {
               "text": "try",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "type",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "type",
               "kind": "keyword"
             }
           ]
@@ -25370,7 +25418,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI.",
+                  "text": "A value representing an unencoded URI.",
                   "kind": "text"
                 }
               ]
@@ -25483,7 +25531,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI component.",
+                  "text": "A value representing an unencoded URI component.",
                   "kind": "text"
                 }
               ]
@@ -27220,6 +27268,18 @@
           "displayParts": [
             {
               "text": "try",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "type",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "type",
               "kind": "keyword"
             }
           ]
@@ -30591,7 +30651,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI.",
+                  "text": "A value representing an unencoded URI.",
                   "kind": "text"
                 }
               ]
@@ -30704,7 +30764,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI component.",
+                  "text": "A value representing an unencoded URI component.",
                   "kind": "text"
                 }
               ]
@@ -32441,6 +32501,18 @@
           "displayParts": [
             {
               "text": "try",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "type",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "type",
               "kind": "keyword"
             }
           ]
@@ -34610,7 +34682,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI.",
+                  "text": "A value representing an unencoded URI.",
                   "kind": "text"
                 }
               ]
@@ -34723,7 +34795,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI component.",
+                  "text": "A value representing an unencoded URI component.",
                   "kind": "text"
                 }
               ]
@@ -36460,6 +36532,18 @@
           "displayParts": [
             {
               "text": "try",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "type",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "type",
               "kind": "keyword"
             }
           ]
@@ -39785,7 +39869,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI.",
+                  "text": "A value representing an unencoded URI.",
                   "kind": "text"
                 }
               ]
@@ -39898,7 +39982,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI component.",
+                  "text": "A value representing an unencoded URI component.",
                   "kind": "text"
                 }
               ]
@@ -41635,6 +41719,18 @@
           "displayParts": [
             {
               "text": "try",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "type",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "type",
               "kind": "keyword"
             }
           ]
@@ -45006,7 +45102,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI.",
+                  "text": "A value representing an unencoded URI.",
                   "kind": "text"
                 }
               ]
@@ -45119,7 +45215,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI component.",
+                  "text": "A value representing an unencoded URI component.",
                   "kind": "text"
                 }
               ]
@@ -46856,6 +46952,18 @@
           "displayParts": [
             {
               "text": "try",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "type",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "type",
               "kind": "keyword"
             }
           ]
@@ -50227,7 +50335,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI.",
+                  "text": "A value representing an unencoded URI.",
                   "kind": "text"
                 }
               ]
@@ -50340,7 +50448,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI component.",
+                  "text": "A value representing an unencoded URI component.",
                   "kind": "text"
                 }
               ]
@@ -52077,6 +52185,18 @@
           "displayParts": [
             {
               "text": "try",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "type",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "type",
               "kind": "keyword"
             }
           ]
@@ -55448,7 +55568,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI.",
+                  "text": "A value representing an unencoded URI.",
                   "kind": "text"
                 }
               ]
@@ -55561,7 +55681,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI component.",
+                  "text": "A value representing an unencoded URI component.",
                   "kind": "text"
                 }
               ]
@@ -57298,6 +57418,18 @@
           "displayParts": [
             {
               "text": "try",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "type",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "type",
               "kind": "keyword"
             }
           ]
@@ -59508,7 +59640,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI.",
+                  "text": "A value representing an unencoded URI.",
                   "kind": "text"
                 }
               ]
@@ -59621,7 +59753,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI component.",
+                  "text": "A value representing an unencoded URI component.",
                   "kind": "text"
                 }
               ]
@@ -61358,6 +61490,18 @@
           "displayParts": [
             {
               "text": "try",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "type",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "type",
               "kind": "keyword"
             }
           ]
@@ -63568,7 +63712,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI.",
+                  "text": "A value representing an unencoded URI.",
                   "kind": "text"
                 }
               ]
@@ -63681,7 +63825,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI component.",
+                  "text": "A value representing an unencoded URI component.",
                   "kind": "text"
                 }
               ]
@@ -65418,6 +65562,18 @@
           "displayParts": [
             {
               "text": "try",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "type",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "type",
               "kind": "keyword"
             }
           ]
@@ -67628,7 +67784,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI.",
+                  "text": "A value representing an unencoded URI.",
                   "kind": "text"
                 }
               ]
@@ -67741,7 +67897,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI component.",
+                  "text": "A value representing an unencoded URI component.",
                   "kind": "text"
                 }
               ]
@@ -69478,6 +69634,18 @@
           "displayParts": [
             {
               "text": "try",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "type",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "type",
               "kind": "keyword"
             }
           ]
@@ -71688,7 +71856,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI.",
+                  "text": "A value representing an unencoded URI.",
                   "kind": "text"
                 }
               ]
@@ -71801,7 +71969,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI component.",
+                  "text": "A value representing an unencoded URI component.",
                   "kind": "text"
                 }
               ]
@@ -73538,6 +73706,18 @@
           "displayParts": [
             {
               "text": "try",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "type",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "type",
               "kind": "keyword"
             }
           ]
@@ -75748,7 +75928,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI.",
+                  "text": "A value representing an unencoded URI.",
                   "kind": "text"
                 }
               ]
@@ -75861,7 +76041,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI component.",
+                  "text": "A value representing an unencoded URI component.",
                   "kind": "text"
                 }
               ]
@@ -77598,6 +77778,18 @@
           "displayParts": [
             {
               "text": "try",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "type",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "type",
               "kind": "keyword"
             }
           ]
@@ -79808,7 +80000,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI.",
+                  "text": "A value representing an unencoded URI.",
                   "kind": "text"
                 }
               ]
@@ -79921,7 +80113,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI component.",
+                  "text": "A value representing an unencoded URI component.",
                   "kind": "text"
                 }
               ]
@@ -81658,6 +81850,18 @@
           "displayParts": [
             {
               "text": "try",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "type",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "type",
               "kind": "keyword"
             }
           ]
@@ -84209,7 +84413,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI.",
+                  "text": "A value representing an unencoded URI.",
                   "kind": "text"
                 }
               ]
@@ -84322,7 +84526,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI component.",
+                  "text": "A value representing an unencoded URI component.",
                   "kind": "text"
                 }
               ]
@@ -89567,7 +89771,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI.",
+                  "text": "A value representing an unencoded URI.",
                   "kind": "text"
                 }
               ]
@@ -89680,7 +89884,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI component.",
+                  "text": "A value representing an unencoded URI component.",
                   "kind": "text"
                 }
               ]
@@ -94181,7 +94385,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI.",
+                  "text": "A value representing an unencoded URI.",
                   "kind": "text"
                 }
               ]
@@ -94294,7 +94498,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI component.",
+                  "text": "A value representing an unencoded URI component.",
                   "kind": "text"
                 }
               ]
@@ -96031,6 +96235,18 @@
           "displayParts": [
             {
               "text": "try",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "type",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "type",
               "kind": "keyword"
             }
           ]
