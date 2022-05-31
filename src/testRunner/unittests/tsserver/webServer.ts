@@ -1,10 +1,10 @@
 namespace ts.projectSystem {
     describe("unittests:: tsserver:: webServer", () => {
         class TestWorkerSession extends server.WorkerSession {
-            constructor(host: server.ServerHost, webHost: server.HostWithWriteMessage, options: Partial<server.StartSessionOptions>, logger: server.Logger) {
+            constructor(host: server.ServerHost, fshost: server.FileServerHost, webHost: server.HostWithWriteMessage, options: Partial<server.StartSessionOptions>, logger: server.Logger) {
                 super(
                     host,
-                    host,
+                    fshost,
                     webHost,
                     {
                         globalPlugins: undefined,
@@ -28,7 +28,7 @@ namespace ts.projectSystem {
                 return this.projectService;
             }
         }
-        function setup(logLevel: server.LogLevel | undefined) {
+        function setup(logLevel: server.LogLevel | undefined, isVfs: boolean) {
             const host = createServerHost([libFile], { windowsStyleRoot: "c:/" });
             const messages: any[] = [];
             const webHost: server.WebHost = {
@@ -37,20 +37,32 @@ namespace ts.projectSystem {
                 writeMessage: s => messages.push(s),
             };
             const webSys = server.createWebSystem(webHost, emptyArray, () => host.getExecutingFilePath());
+            let fshost = webSys;
+            let serverMode = LanguageServiceMode.PartialSemantic;
+            if (isVfs) {
+                fshost = VirtualFS.createVirtualServerHost({ executingFilePath: "/a/lib/tsc.js" });
+                (fshost as VirtualFS.VirtualServerHost).ensureFileOrFolder(libFile);
+                serverMode = LanguageServiceMode.Semantic;
+            }
             const logger = logLevel !== undefined ? new server.MainProcessLogger(logLevel, webHost) : nullLogger();
-            const session = new TestWorkerSession(webSys, webHost, { serverMode: LanguageServiceMode.PartialSemantic }, logger);
+            const session = new TestWorkerSession(webSys, fshost, webHost, { serverMode }, logger);
             return { getMessages: () => messages, clearMessages: () => messages.length = 0, session };
 
         }
 
         describe("open files are added to inferred project and semantic operations succeed", () => {
-            function verify(logLevel: server.LogLevel | undefined) {
-                const { session, clearMessages, getMessages } = setup(logLevel);
+            function verify(logLevel: server.LogLevel | undefined, isVfs: boolean) {
+                const { session, clearMessages, getMessages } = setup(logLevel, isVfs);
                 const service = session.getProjectService();
-                const file: File = {
+                const file: File = isVfs ? {
+                    path: "/sample-folder/large.ts",
+                    content: "export const numberConst = 10; export const arrayConst: Array<string> = [];"
+                } : {
                     path: "^memfs:/sample-folder/large.ts",
                     content: "export const numberConst = 10; export const arrayConst: Array<string> = [];"
                 };
+                // Lib files are rooted
+                const libFilePath = isVfs ? "/a/lib/lib.d.ts" : "/lib.d.ts"
                 session.executeCommand({
                     seq: 1,
                     type: "request",
@@ -62,7 +74,7 @@ namespace ts.projectSystem {
                 });
                 checkNumberOfProjects(service, { inferredProjects: 1 });
                 const project = service.inferredProjects[0];
-                checkProjectActualFiles(project, ["/lib.d.ts", file.path]); // Lib files are rooted
+                checkProjectActualFiles(project, [libFilePath, file.path]);
                 verifyQuickInfo();
                 verifyGotoDefInLib();
 
@@ -113,7 +125,7 @@ namespace ts.projectSystem {
                         performanceData: undefined,
                         body: {
                             definitions: [{
-                                file: "/lib.d.ts",
+                                file: libFilePath,
                                 ...protocolTextSpanWithContextFromSubstring({
                                     fileText: libFile.content,
                                     text: "Array",
@@ -147,11 +159,15 @@ namespace ts.projectSystem {
             }
 
             it("with logging enabled", () => {
-                verify(server.LogLevel.verbose);
+                verify(server.LogLevel.verbose, /*trueVirtual*/ false);
             });
 
             it("with logging disabled", () => {
-                verify(/*logLevel*/ undefined);
+                verify(/*logLevel*/ undefined, /*trueVirtual*/ false);
+            });
+
+            it("with memfs virtual file system", () => {
+                verify(/*logLevel*/ undefined, /*trueVirtual*/ true);
             });
         });
     });

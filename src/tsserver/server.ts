@@ -62,7 +62,7 @@ namespace ts.server {
         if (vfs) {
             fshost = new VirtualFS.VirtualServerHost({
                 useCaseSensitiveFileNames: sys.useCaseSensitiveFileNames,
-                executingFilePath: "", // TODO: "" is the default..maybe this should be vfs, vfs:// or .
+                executingFilePath: directorySeparator, // Use same executingFilePath as webserver
                 newLine: sys.newLine,
             });
         }

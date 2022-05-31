@@ -73,7 +73,6 @@ namespace ts.server {
             },
             writeMessage,
         };
-
         // Do this after sys has been set as findArguments is going to work only then
         const sys = server.createWebSystem(webHost, args, () => findArgument("--executingFilePath") || location + "");
         setSys(sys);

@@ -6959,7 +6959,7 @@ declare namespace ts.server {
         trace?(s: string): void;
         require?(initialPath: string, moduleName: string): RequireResult;
     }
-    type FileServerHost = Pick<ServerHost, "readFile" | "writeFile" | "fileExists" | "directoryExists" | "getFileSize" | "getModifiedTime" | "getDirectories" | "getCurrentDirectory" | "getExecutingFilePath" | "realpath" | "resolvePath" | "watchFile" | "watchDirectory" | "useCaseSensitiveFileNames" | "newLine">;
+    type FileServerHost = Pick<ServerHost, "readFile" | "writeFile" | "fileExists" | "directoryExists" | "getFileSize" | "getModifiedTime" | "getDirectories" | "getCurrentDirectory" | "getExecutingFilePath" | "realpath" | "resolvePath" | "createDirectory" | "setModifiedTime" | "deleteFile" | "readDirectory" | "watchFile" | "watchDirectory" | "useCaseSensitiveFileNames" | "newLine">;
 }
 declare namespace ts.server {
     enum LogLevel {
@@ -10031,7 +10031,7 @@ declare namespace ts.server {
         private readonly cancellationToken;
         isNonTsProject(): boolean;
         isJsOnlyProject(): boolean;
-        static resolveModule(moduleName: string, initialDir: string, host: ServerHost, fshost: FileServerHost, log: (message: string) => void, logErrors?: (message: string) => void): {} | undefined;
+        static resolveModule(moduleName: string, initialDir: string, host: ServerHost, log: (message: string) => void, logErrors?: (message: string) => void): {} | undefined;
         isKnownTypesPackageName(name: string): boolean;
         installPackage(options: InstallPackageOptions): Promise<ApplyCodeActionCommandResult>;
         private get typingsCache();
@@ -10662,7 +10662,7 @@ declare namespace ts.server {
         private suppressDiagnosticEvents?;
         private eventHandler;
         private readonly noGetErrOnBackgroundUpdate?;
-        private fshost?;
+        private fshost;
         constructor(opts: SessionOptions);
         private sendRequestCompletedEvent;
         private addPerformanceData;
