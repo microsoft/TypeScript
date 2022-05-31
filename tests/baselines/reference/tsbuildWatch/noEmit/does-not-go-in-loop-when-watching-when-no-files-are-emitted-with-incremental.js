@@ -129,8 +129,6 @@ Input::
 //// [/user/username/projects/myproject/a.js] file written with same contents
 
 Output::
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: a.js
-
 >> Screen clear
 [[90m12:00:35 AM[0m] File change detected. Starting incremental compilation...
 
@@ -179,8 +177,6 @@ const x = 10;
 
 
 Output::
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: a.js
-
 >> Screen clear
 [[90m12:00:42 AM[0m] File change detected. Starting incremental compilation...
 
@@ -188,8 +184,6 @@ sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 chang
 
 [[90m12:00:44 AM[0m] Building project '/user/username/projects/myproject/tsconfig.json'...
 
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: tsconfig.tsbuildinfo
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: tsconfig.tsbuildinfo.readable.baseline.txt
 [[90m12:00:51 AM[0m] Found 0 errors. Watching for file changes.
 
 

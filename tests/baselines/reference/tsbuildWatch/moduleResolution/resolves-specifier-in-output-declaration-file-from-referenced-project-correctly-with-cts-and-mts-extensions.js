@@ -269,8 +269,6 @@ Input::
 
 
 Output::
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/packages/pkg1 1 change:: package.json
-
 >> Screen clear
 [[90m12:01:11 AM[0m] File change detected. Starting incremental compilation...
 
@@ -391,8 +389,6 @@ Input::
 
 
 Output::
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/packages/pkg1 1 change:: package.json
-
 >> Screen clear
 [[90m12:01:18 AM[0m] File change detected. Starting incremental compilation...
 
@@ -436,7 +432,6 @@ File '/user/username/projects/myproject/packages/pkg2/build/const.d.cts' exist -
 File '/a/lib/package.json' does not exist.
 File '/a/package.json' does not exist.
 File '/package.json' does not exist.
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/packages/pkg1 1 change:: build/index.js
 [[90m12:01:24 AM[0m] Found 0 errors. Watching for file changes.
 
 
@@ -504,8 +499,6 @@ Input::
 
 
 Output::
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/packages/pkg1 1 change:: package.json
-
 >> Screen clear
 [[90m12:01:28 AM[0m] File change detected. Starting incremental compilation...
 
@@ -630,12 +623,6 @@ export type { TheNum } from './const.cjs';
 //// [/user/username/projects/myproject/packages/pkg2/index.ts] deleted
 
 Output::
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/packages/pkg2 1 change:: package.json
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/packages/pkg2 1 rename:: index.ts
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/packages/pkg2 1 change:: 
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/packages/pkg2 1 rename:: index.cts
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/packages/pkg2 1 change:: 
-
 >> Screen clear
 [[90m12:01:39 AM[0m] File change detected. Starting incremental compilation...
 
@@ -655,16 +642,8 @@ File '/user/username/projects/myproject/packages/pkg2/const.cts' exist - use it 
 File '/a/lib/package.json' does not exist.
 File '/a/package.json' does not exist.
 File '/package.json' does not exist.
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/packages/pkg2 1 rename:: build/index.cjs
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/packages/pkg2 1 change:: build
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/packages/pkg2 1 rename:: build/index.d.cts
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/packages/pkg2 1 change:: build
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/packages/pkg2 1 change:: build/tsconfig.tsbuildinfo
 [[90m12:01:50 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/packages/pkg2/tsconfig.json'...
 
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/packages/pkg2 1 change:: build/const.cjs
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/packages/pkg2 1 change:: build/const.d.cts
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/packages/pkg2 1 change:: build/tsconfig.tsbuildinfo.readable.baseline.txt
 
 
 Program root files: ["/user/username/projects/myproject/packages/pkg2/const.cts","/user/username/projects/myproject/packages/pkg2/index.cts"]

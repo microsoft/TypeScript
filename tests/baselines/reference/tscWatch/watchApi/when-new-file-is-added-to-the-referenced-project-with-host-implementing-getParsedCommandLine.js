@@ -168,11 +168,9 @@ class class3 {}
 
 
 Output::
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/projects/project1 1 rename:: class3.ts
 DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.ts :: WatchInfo: /user/username/projects/myproject/projects/project1 1 undefined Wild card directory of referenced project
 Scheduling update
 Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.ts :: WatchInfo: /user/username/projects/myproject/projects/project1 1 undefined Wild card directory of referenced project
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/projects/project1 1 change:: 
 Synchronizing program
 Loading config file: /user/username/projects/myproject/projects/project1/tsconfig.json
 [[90m12:00:45 AM[0m] File change detected. Starting incremental compilation...
@@ -182,12 +180,8 @@ CreatingProgramWith::
   options: {"module":0,"composite":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/projects/project2/tsconfig.json"}
   projectReferences: [{"path":"/user/username/projects/myproject/projects/project1","originalPath":"../project1"}]
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/project1/class3.ts 250 undefined Source file
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/projects/project2 1 change:: class2.js
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/projects/project2 1 change:: class2.d.ts
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/projects/project2 1 change:: tsconfig.tsbuildinfo
 [[90m12:00:55 AM[0m] Found 0 errors. Watching for file changes.
 
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/projects/project2 1 change:: tsconfig.tsbuildinfo.readable.baseline.txt
 
 
 Program root files: ["/user/username/projects/myproject/projects/project2/class2.ts"]
@@ -300,16 +294,12 @@ declare class file {}
 
 
 Output::
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/projects/project1 1 rename:: temp
 DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/project1/temp :: WatchInfo: /user/username/projects/myproject/projects/project1 1 undefined Wild card directory of referenced project
 Project: /user/username/projects/myproject/projects/project1/tsconfig.json Detected excluded file: /user/username/projects/myproject/projects/project1/temp
 Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/project1/temp :: WatchInfo: /user/username/projects/myproject/projects/project1 1 undefined Wild card directory of referenced project
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/projects/project1 1 change:: 
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/projects/project1 1 rename:: temp/file.d.ts
 DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/project1/temp/file.d.ts :: WatchInfo: /user/username/projects/myproject/projects/project1 1 undefined Wild card directory of referenced project
 Project: /user/username/projects/myproject/projects/project1/tsconfig.json Detected excluded file: /user/username/projects/myproject/projects/project1/temp/file.d.ts
 Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/project1/temp/file.d.ts :: WatchInfo: /user/username/projects/myproject/projects/project1 1 undefined Wild card directory of referenced project
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/projects/project1 1 change:: temp
 
 
 WatchedFiles::
@@ -351,11 +341,9 @@ declare class class3 {}
 
 
 Output::
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/projects/project1 1 rename:: class3.d.ts
 DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.d.ts :: WatchInfo: /user/username/projects/myproject/projects/project1 1 undefined Wild card directory of referenced project
 Project: /user/username/projects/myproject/projects/project1/tsconfig.json Detected output file: /user/username/projects/myproject/projects/project1/class3.d.ts
 Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.d.ts :: WatchInfo: /user/username/projects/myproject/projects/project1 1 undefined Wild card directory of referenced project
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/projects/project1 1 change:: 
 
 
 WatchedFiles::

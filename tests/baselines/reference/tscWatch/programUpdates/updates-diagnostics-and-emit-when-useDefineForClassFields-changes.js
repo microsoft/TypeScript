@@ -86,12 +86,9 @@ Input::
 
 
 Output::
-sysLog:: watchPresentFileSystemEntry::  1 change:: tsconfig.json
-
 >> Screen clear
 [[90m12:00:20 AM[0m] File change detected. Starting incremental compilation...
 
-sysLog:: watchPresentFileSystemEntry::  1 change:: a.js
 [96ma.ts[0m:[93m2[0m:[93m21[0m - [91merror[0m[90m TS2610: [0m'prop' is defined as an accessor in class 'C', but is overridden here in 'D' as an instance property.
 
 [7m2[0m class D extends C { prop = 1; }

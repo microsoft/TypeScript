@@ -98,8 +98,6 @@ Input::
 //// [/user/username/projects/noEmitOnError/src/main.ts] file written with same contents
 
 Output::
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/noemitonerror 1 change:: src/main.ts
-
 >> Screen clear
 [[90m12:00:39 AM[0m] File change detected. Starting incremental compilation...
 
@@ -159,8 +157,6 @@ const a = {
 
 
 Output::
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/noemitonerror 1 change:: src/main.ts
-
 >> Screen clear
 [[90m12:00:46 AM[0m] File change detected. Starting incremental compilation...
 
@@ -168,24 +164,6 @@ sysLog:: watchPresentFileSystemEntry:: /user/username/projects/noemitonerror 1 c
 
 [[90m12:00:48 AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
 
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/noemitonerror 1 rename:: dev-build
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/noemitonerror 1 change:: 
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/noemitonerror 1 rename:: dev-build/shared
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/noemitonerror 1 change:: dev-build
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/noemitonerror 1 rename:: dev-build/shared/types
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/noemitonerror 1 change:: dev-build/shared
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/noemitonerror 1 rename:: dev-build/shared/types/db.js
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/noemitonerror 1 change:: dev-build/shared/types
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/noemitonerror 1 rename:: dev-build/src
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/noemitonerror 1 change:: dev-build
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/noemitonerror 1 rename:: dev-build/src/main.js
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/noemitonerror 1 change:: dev-build/src
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/noemitonerror 1 rename:: dev-build/src/other.js
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/noemitonerror 1 change:: dev-build/src
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/noemitonerror 1 rename:: dev-build/tsconfig.tsbuildinfo
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/noemitonerror 1 change:: dev-build
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/noemitonerror 1 rename:: dev-build/tsconfig.tsbuildinfo.readable.baseline.txt
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/noemitonerror 1 change:: dev-build
 [[90m12:01:09 AM[0m] Found 0 errors. Watching for file changes.
 
 
@@ -315,8 +293,6 @@ const a: string = 10;
 
 
 Output::
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/noemitonerror 1 change:: src/main.ts
-
 >> Screen clear
 [[90m12:01:13 AM[0m] File change detected. Starting incremental compilation...
 
@@ -329,8 +305,6 @@ sysLog:: watchPresentFileSystemEntry:: /user/username/projects/noemitonerror 1 c
 [7m2[0m const a: string = 10;
 [7m [0m [91m      ~[0m
 
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/noemitonerror 1 change:: dev-build/tsconfig.tsbuildinfo
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/noemitonerror 1 change:: dev-build/tsconfig.tsbuildinfo.readable.baseline.txt
 [[90m12:01:22 AM[0m] Found 1 error. Watching for file changes.
 
 
@@ -450,8 +424,6 @@ Input::
 //// [/user/username/projects/noEmitOnError/src/main.ts] file written with same contents
 
 Output::
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/noemitonerror 1 change:: src/main.ts
-
 >> Screen clear
 [[90m12:01:27 AM[0m] File change detected. Starting incremental compilation...
 
@@ -509,8 +481,6 @@ const a: string = "hello";
 
 
 Output::
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/noemitonerror 1 change:: src/main.ts
-
 >> Screen clear
 [[90m12:01:34 AM[0m] File change detected. Starting incremental compilation...
 
@@ -518,13 +488,8 @@ sysLog:: watchPresentFileSystemEntry:: /user/username/projects/noemitonerror 1 c
 
 [[90m12:01:36 AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
 
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/noemitonerror 1 change:: dev-build/src/main.js
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/noemitonerror 1 change:: dev-build/tsconfig.tsbuildinfo
 [[90m12:01:44 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/noEmitOnError/tsconfig.json'...
 
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/noemitonerror 1 change:: dev-build/shared/types/db.js
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/noemitonerror 1 change:: dev-build/src/other.js
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/noemitonerror 1 change:: dev-build/tsconfig.tsbuildinfo.readable.baseline.txt
 [[90m12:01:48 AM[0m] Found 0 errors. Watching for file changes.
 
 
@@ -634,8 +599,6 @@ Input::
 //// [/user/username/projects/noEmitOnError/src/main.ts] file written with same contents
 
 Output::
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/noemitonerror 1 change:: src/main.ts
-
 >> Screen clear
 [[90m12:01:52 AM[0m] File change detected. Starting incremental compilation...
 
@@ -645,10 +608,6 @@ sysLog:: watchPresentFileSystemEntry:: /user/username/projects/noemitonerror 1 c
 
 [[90m12:01:56 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/noEmitOnError/tsconfig.json'...
 
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/noemitonerror 1 change:: dev-build/shared/types/db.js
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/noemitonerror 1 change:: dev-build/src/main.js
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/noemitonerror 1 change:: dev-build/src/other.js
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/noemitonerror 1 change:: dev-build/tsconfig.tsbuildinfo
 [[90m12:01:57 AM[0m] Found 0 errors. Watching for file changes.
 
 

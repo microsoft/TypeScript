@@ -99,8 +99,6 @@ Thing.fn();
 
 
 Output::
-sysLog:: watchPresentFileSystemEntry:: /project 1 change:: src/index.ts
-
 >> Screen clear
 [[90m12:00:30 AM[0m] File change detected. Starting incremental compilation...
 

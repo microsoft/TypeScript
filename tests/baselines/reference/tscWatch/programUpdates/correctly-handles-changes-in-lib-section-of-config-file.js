@@ -83,12 +83,9 @@ Input::
 
 
 Output::
-sysLog:: watchPresentFileSystemEntry:: /src 1 change:: tsconfig.json
-
 >> Screen clear
 [[90m12:00:22 AM[0m] File change detected. Starting incremental compilation...
 
-sysLog:: watchPresentFileSystemEntry:: /src 1 change:: app.js
 [[90m12:00:26 AM[0m] Found 0 errors. Watching for file changes.
 
 

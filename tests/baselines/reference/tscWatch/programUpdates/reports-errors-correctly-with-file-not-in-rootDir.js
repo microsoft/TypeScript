@@ -97,12 +97,9 @@ import { x } from "../b";
 
 
 Output::
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: a.ts
-
 >> Screen clear
 [[90m12:00:35 AM[0m] File change detected. Starting incremental compilation...
 
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: lib/a.js
 [96ma.ts[0m:[93m3[0m:[93m19[0m - [91merror[0m[90m TS6059: [0mFile '/user/username/projects/b.ts' is not under 'rootDir' '/user/username/projects/myproject'. 'rootDir' is expected to contain all source files.
 
 [7m3[0m import { x } from "../b";

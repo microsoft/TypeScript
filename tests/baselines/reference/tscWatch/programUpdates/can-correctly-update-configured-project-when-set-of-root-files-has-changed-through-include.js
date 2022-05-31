@@ -79,14 +79,9 @@ export const y = 10;
 
 
 Output::
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/project 1 rename:: file2.ts
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/project 1 change:: 
-
 >> Screen clear
 [[90m12:00:29 AM[0m] File change detected. Starting incremental compilation...
 
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/project 1 rename:: file2.js
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/project 1 change:: 
 [[90m12:00:32 AM[0m] Found 0 errors. Watching for file changes.
 
 

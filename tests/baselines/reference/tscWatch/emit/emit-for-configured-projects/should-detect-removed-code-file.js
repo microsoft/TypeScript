@@ -99,13 +99,9 @@ Input::
 //// [/a/b/moduleFile1.ts] deleted
 
 Output::
-sysLog:: watchPresentFileSystemEntry:: /a/b 1 rename:: moduleFile1.ts
-sysLog:: watchPresentFileSystemEntry:: /a/b 1 change:: 
-
 >> Screen clear
 [[90m12:00:24 AM[0m] File change detected. Starting incremental compilation...
 
-sysLog:: watchPresentFileSystemEntry:: /a/b 1 change:: referenceFile1.js
 [96ma/b/referenceFile1.ts[0m:[93m1[0m:[93m22[0m - [91merror[0m[90m TS6053: [0mFile '/a/b/moduleFile1.ts' not found.
 
 [7m1[0m /// <reference path="./moduleFile1.ts" />

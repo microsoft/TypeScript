@@ -158,8 +158,6 @@ export var myClassWithError = class {
 
 
 Output::
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/solution/app 1 change:: fileWithError.ts
-
 >> Screen clear
 [[90m12:00:42 AM[0m] File change detected. Starting incremental compilation...
 
@@ -211,8 +209,6 @@ export class myClass2 { }
 
 
 Output::
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/solution/app 1 change:: fileWithoutError.ts
-
 >> Screen clear
 [[90m12:00:47 AM[0m] File change detected. Starting incremental compilation...
 

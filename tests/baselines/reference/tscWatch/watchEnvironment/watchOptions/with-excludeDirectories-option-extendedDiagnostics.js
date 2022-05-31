@@ -50,10 +50,8 @@ DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 1 {"
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 1 {"excludeDirectories":["/user/username/projects/myproject/node_modules"]} Failed Lookup Locations
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/bar/package.json 2000 {"excludeDirectories":["/user/username/projects/myproject/node_modules"]} package.json file
 ExcludeWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 {"excludeDirectories":["/user/username/projects/myproject/node_modules"]} Type roots
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/src 1 rename:: main.js
 DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/main.js :: WatchInfo: /user/username/projects/myproject/src 1 {"excludeDirectories":["/user/username/projects/myproject/node_modules"]} Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/main.js :: WatchInfo: /user/username/projects/myproject/src 1 {"excludeDirectories":["/user/username/projects/myproject/node_modules"]} Failed Lookup Locations
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/src 1 change:: 
 [[90m12:00:40 AM[0m] Found 0 errors. Watching for file changes.
 
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 1 {"excludeDirectories":["/user/username/projects/myproject/node_modules"]} Wild card directory
@@ -119,9 +117,6 @@ Input::
 //// [/user/username/projects/myproject/node_modules/bar/fooBar.d.ts] deleted
 
 Output::
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 rename:: node_modules/bar/fooBar.d.ts
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: node_modules/bar
-
 
 WatchedFiles::
 /user/username/projects/myproject/tsconfig.json:

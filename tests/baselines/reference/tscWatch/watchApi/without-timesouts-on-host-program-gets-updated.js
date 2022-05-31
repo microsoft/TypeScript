@@ -74,11 +74,6 @@ const y =10;
 
 
 Output::
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 rename:: bar.ts
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: 
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 rename:: bar.js
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: 
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject 1 change:: main.js
 [[90m12:00:32 AM[0m] Found 0 errors. Watching for file changes.
 
 

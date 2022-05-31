@@ -74,15 +74,9 @@ let y = 1
 
 
 Output::
-sysLog:: watchPresentFileSystemEntry:: /a/b 1 rename:: commonFile2.ts
-sysLog:: watchPresentFileSystemEntry:: /a/b 1 change:: 
-
 >> Screen clear
 [[90m12:00:21 AM[0m] File change detected. Starting incremental compilation...
 
-sysLog:: watchPresentFileSystemEntry:: /a/b 1 rename:: commonFile2.js
-sysLog:: watchPresentFileSystemEntry:: /a/b 1 change:: 
-sysLog:: watchPresentFileSystemEntry:: /a/b 1 change:: commonFile1.js
 [[90m12:00:27 AM[0m] Found 0 errors. Watching for file changes.
 
 

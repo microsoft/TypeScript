@@ -75,16 +75,9 @@ var a = 10;
 //// [/home/username/project/src/file1.ts] deleted
 
 Output::
-sysLog:: watchPresentFileSystemEntry:: /home/username/project 1 rename:: src/file1.ts
-sysLog:: watchPresentFileSystemEntry:: /home/username/project 1 change:: src
-sysLog:: watchPresentFileSystemEntry:: /home/username/project 1 rename:: src/file2.ts
-sysLog:: watchPresentFileSystemEntry:: /home/username/project 1 change:: src
-
 >> Screen clear
 [[90m12:00:28 AM[0m] File change detected. Starting incremental compilation...
 
-sysLog:: watchPresentFileSystemEntry:: /home/username/project 1 rename:: src/file2.js
-sysLog:: watchPresentFileSystemEntry:: /home/username/project 1 change:: src
 [[90m12:00:31 AM[0m] Found 0 errors. Watching for file changes.
 
 

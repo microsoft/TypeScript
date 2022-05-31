@@ -32,8 +32,6 @@ Output::
 >> Screen clear
 [[90m12:00:33 AM[0m] Starting compilation in watch mode...
 
-sysLog:: watchPresentFileSystemEntry:: /users/username/projects/project/src 1 rename:: index.js
-sysLog:: watchPresentFileSystemEntry:: /users/username/projects/project/src 1 change:: 
 [[90m12:00:38 AM[0m] Found 0 errors. Watching for file changes.
 
 
@@ -178,7 +176,6 @@ Output::
 >> Screen clear
 [[90m12:00:44 AM[0m] Starting compilation in watch mode...
 
-sysLog:: watchPresentFileSystemEntry:: /users/username/projects/project/src 1 change:: index.js
 [96msrc/index.ts[0m:[93m1[0m:[93m51[0m - [91merror[0m[90m TS2339: [0mProperty 'foo' does not exist on type 'Result'.
 
 [7m1[0m import classNames from "classnames"; classNames().foo;

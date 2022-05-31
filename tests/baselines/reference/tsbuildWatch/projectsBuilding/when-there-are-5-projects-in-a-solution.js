@@ -437,8 +437,6 @@ export const pkg0 = 0;const someConst2 = 10;
 
 
 Output::
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/pkg0 1 change:: index.ts
-
 >> Screen clear
 [[90m12:01:44 AM[0m] File change detected. Starting incremental compilation...
 
@@ -446,38 +444,22 @@ sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/pkg0 1 
 
 [[90m12:01:46 AM[0m] Building project '/user/username/projects/myproject/pkg0/tsconfig.json'...
 
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/pkg0 1 change:: index.js
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/pkg0 1 change:: index.d.ts
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/pkg0 1 change:: tsconfig.tsbuildinfo
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/pkg0 1 change:: tsconfig.tsbuildinfo.readable.baseline.txt
 [[90m12:01:59 AM[0m] Project 'pkg1/tsconfig.json' is up to date with .d.ts files from its dependencies
 
 [[90m12:02:01 AM[0m] Updating output timestamps of project '/user/username/projects/myproject/pkg1/tsconfig.json'...
 
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/pkg1 1 change:: index.js
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/pkg1 1 change:: index.d.ts
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/pkg1 1 change:: tsconfig.tsbuildinfo
 [[90m12:02:02 AM[0m] Project 'pkg2/tsconfig.json' is up to date with .d.ts files from its dependencies
 
 [[90m12:02:04 AM[0m] Updating output timestamps of project '/user/username/projects/myproject/pkg2/tsconfig.json'...
 
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/pkg2 1 change:: index.js
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/pkg2 1 change:: index.d.ts
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/pkg2 1 change:: tsconfig.tsbuildinfo
 [[90m12:02:05 AM[0m] Project 'pkg3/tsconfig.json' is up to date with .d.ts files from its dependencies
 
 [[90m12:02:07 AM[0m] Updating output timestamps of project '/user/username/projects/myproject/pkg3/tsconfig.json'...
 
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/pkg3 1 change:: index.js
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/pkg3 1 change:: index.d.ts
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/pkg3 1 change:: tsconfig.tsbuildinfo
 [[90m12:02:08 AM[0m] Project 'pkg4/tsconfig.json' is up to date with .d.ts files from its dependencies
 
 [[90m12:02:10 AM[0m] Updating output timestamps of project '/user/username/projects/myproject/pkg4/tsconfig.json'...
 
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/pkg4 1 change:: index.js
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/pkg4 1 change:: index.d.ts
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/pkg4 1 change:: tsconfig.tsbuildinfo
 [[90m12:02:11 AM[0m] Found 0 errors. Watching for file changes.
 
 
@@ -647,8 +629,6 @@ export const pkg0 = 0;const someConst2 = 10;export const someConst = 10;
 
 
 Output::
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/pkg0 1 change:: index.ts
-
 >> Screen clear
 [[90m12:02:14 AM[0m] File change detected. Starting incremental compilation...
 
@@ -656,10 +636,6 @@ sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/pkg0 1 
 
 [[90m12:02:16 AM[0m] Building project '/user/username/projects/myproject/pkg0/tsconfig.json'...
 
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/pkg0 1 change:: index.js
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/pkg0 1 change:: index.d.ts
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/pkg0 1 change:: tsconfig.tsbuildinfo
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/pkg0 1 change:: tsconfig.tsbuildinfo.readable.baseline.txt
 
 
 Program root files: ["/user/username/projects/myproject/pkg0/index.ts"]
@@ -776,36 +752,24 @@ Output::
 
 [[90m12:02:32 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg1/tsconfig.json'...
 
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/pkg1 1 change:: index.js
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/pkg1 1 change:: index.d.ts
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/pkg1 1 change:: tsconfig.tsbuildinfo
 [[90m12:02:33 AM[0m] Project 'pkg2/tsconfig.json' is out of date because oldest output 'pkg2/index.js' is older than newest input 'pkg0/tsconfig.json'
 
 [[90m12:02:34 AM[0m] Building project '/user/username/projects/myproject/pkg2/tsconfig.json'...
 
 [[90m12:02:36 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg2/tsconfig.json'...
 
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/pkg2 1 change:: index.js
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/pkg2 1 change:: index.d.ts
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/pkg2 1 change:: tsconfig.tsbuildinfo
 [[90m12:02:37 AM[0m] Project 'pkg3/tsconfig.json' is out of date because oldest output 'pkg3/index.js' is older than newest input 'pkg0/tsconfig.json'
 
 [[90m12:02:38 AM[0m] Building project '/user/username/projects/myproject/pkg3/tsconfig.json'...
 
 [[90m12:02:40 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg3/tsconfig.json'...
 
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/pkg3 1 change:: index.js
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/pkg3 1 change:: index.d.ts
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/pkg3 1 change:: tsconfig.tsbuildinfo
 [[90m12:02:41 AM[0m] Project 'pkg4/tsconfig.json' is out of date because oldest output 'pkg4/index.js' is older than newest input 'pkg0/tsconfig.json'
 
 [[90m12:02:42 AM[0m] Building project '/user/username/projects/myproject/pkg4/tsconfig.json'...
 
 [[90m12:02:44 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg4/tsconfig.json'...
 
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/pkg4 1 change:: index.js
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/pkg4 1 change:: index.d.ts
-sysLog:: watchPresentFileSystemEntry:: /user/username/projects/myproject/pkg4 1 change:: tsconfig.tsbuildinfo
 [[90m12:02:45 AM[0m] Found 0 errors. Watching for file changes.
 
 

@@ -75,15 +75,9 @@ var b = 10;
 
 
 Output::
-sysLog:: watchPresentFileSystemEntry:: /home/username/project/app 1 rename:: file.ts
-sysLog:: watchPresentFileSystemEntry:: /home/username/project/app 1 change:: 
-sysLog:: watchPresentFileSystemEntry:: /home/username/project/app 1 rename:: file.ts
-sysLog:: watchPresentFileSystemEntry:: /home/username/project/app 1 change:: 
-
 >> Screen clear
 [[90m12:00:28 AM[0m] File change detected. Starting incremental compilation...
 
-sysLog:: watchPresentFileSystemEntry:: /home/username/project/app 1 change:: file.js
 [[90m12:00:32 AM[0m] Found 0 errors. Watching for file changes.
 
 
