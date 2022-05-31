@@ -942,3 +942,15 @@ export function verifyGetErrScenario(scenario: VerifyGetErrScenario) {
     verifyErrorsUsingGeterrForProject(scenario);
     verifyErrorsUsingSyncMethods(scenario);
 }
+
+export function verifyDynamic(service: ts.server.ProjectService, path: string) {
+    const info = ts.Debug.checkDefined(service.filenameToScriptInfo.get(path), `Expected ${path} in :: ${JSON.stringify(ts.arrayFrom(service.filenameToScriptInfo.entries(), ([key, f]) => ({ key, fileName: f.fileName, path: f.path })))}`);
+    assert.isTrue(info.isDynamic);
+}
+
+export function createHostWithSolutionBuild(files: readonly ts.TestFSWithWatch.FileOrFolderOrSymLink[], rootNames: readonly string[]) {
+    const host = ts.projectSystem.createServerHost(files);
+    // ts build should succeed
+    ts.tscWatch.ensureErrorFreeBuild(host, rootNames);
+    return host;
+}
