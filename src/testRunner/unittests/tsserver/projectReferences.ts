@@ -1,11 +1,5 @@
 import * as ts from "../../_namespaces/ts";
-
-export function createHostWithSolutionBuild(files: readonly ts.TestFSWithWatch.FileOrFolderOrSymLink[], rootNames: readonly string[]) {
-    const host = ts.projectSystem.createServerHost(files);
-    // ts build should succeed
-    ts.tscWatch.ensureErrorFreeBuild(host, rootNames);
-    return host;
-}
+import { createHostWithSolutionBuild } from "./helpers";
 
 describe("unittests:: tsserver:: with project references and tsbuild", () => {
     describe("with container project", () => {
