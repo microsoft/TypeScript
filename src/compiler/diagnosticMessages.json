@@ -5261,7 +5261,7 @@
         "code": 6385,
         "reportsDeprecated": true
     },
-    "Performance timings for '--diagnostics' or '--extendedDiagnostics' are not available in this session. A native implementation of the Web Performance API could not be found.": {
+    "Performance timings for '--diagnostics' or '--extendedDiagnostics' or '--solutionDiagnostics' are not available in this session. A native implementation of the Web Performance API could not be found.": {
         "category": "Message",
         "code": 6386
     },
@@ -5798,6 +5798,10 @@
     "Specify emit/checking behavior for imports that are only used for types.": {
         "category": "Message",
         "code": 6718
+    },
+    "Output more detailed solution performance information after building.": {
+        "category": "Message",
+        "code": 6719
     },
     "Default catch clause variables as 'unknown' instead of 'any'.": {
         "category": "Message",

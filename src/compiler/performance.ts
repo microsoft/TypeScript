@@ -20,6 +20,7 @@ namespace ts {
         const marks = new Map<string, number>();
         const counts = new Map<string, number>();
         const durations = new Map<string, number>();
+        const durationMarks = new Set<string>();
 
         return {
             createTimerIf,
@@ -29,6 +30,7 @@ namespace ts {
             getCount,
             getDuration,
             forEachMeasure,
+            forEachCount,
             isEnabled,
             enable,
             disable,
@@ -87,6 +89,7 @@ namespace ts {
          */
         function measure(measureName: string, startMarkName: string, endMarkName: string) {
             if (enabled) {
+                durationMarks.add(startMarkName).add(endMarkName);
                 const end = marks.get(endMarkName) ?? timestamp();
                 const start = marks.get(startMarkName) ?? timeorigin;
                 const previousDuration = durations.get(measureName) || 0;
@@ -120,6 +123,15 @@ namespace ts {
          */
         function forEachMeasure(cb: (measureName: string, duration: number) => void) {
             durations.forEach((duration, measureName) => cb(measureName, duration));
+        }
+
+        /**
+         * Iterate over each count which is not duration mark, performing some action
+         *
+         * @param cb The action to perform for each measure
+         */
+        function forEachCount(cb: (countName: string, count: number) => void) {
+            counts.forEach((count, countName) => !durationMarks.has(countName) && cb(countName, count));
         }
 
         /**

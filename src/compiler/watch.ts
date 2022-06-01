@@ -34,6 +34,7 @@ namespace ts {
         if (system.clearScreen &&
             !options.preserveWatchOutput &&
             !options.extendedDiagnostics &&
+            !options.solutionDiagnostics &&
             !options.diagnostics &&
             contains(screenStartingMessageCodes, diagnostic.code)) {
             system.clearScreen();
