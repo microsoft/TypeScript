@@ -14,8 +14,8 @@ function Menu<MenuItemVariant extends ListItemVariant = ListItemVariant.OneLine>
 >data : IData<MenuItemVariant>
 
     const listItemVariant = data.menuItemsVariant ?? ListItemVariant.OneLine;
->listItemVariant : ListItemVariant.OneLine | NonNullable<MenuItemVariant>
->data.menuItemsVariant ?? ListItemVariant.OneLine : ListItemVariant.OneLine | NonNullable<MenuItemVariant>
+>listItemVariant : ListItemVariant.OneLine | MenuItemVariant
+>data.menuItemsVariant ?? ListItemVariant.OneLine : ListItemVariant.OneLine | MenuItemVariant
 >data.menuItemsVariant : MenuItemVariant | undefined
 >data : IData<MenuItemVariant>
 >menuItemsVariant : MenuItemVariant | undefined
