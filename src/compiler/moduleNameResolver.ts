@@ -2413,8 +2413,8 @@ namespace ts {
                 );
             if (
                 !pathAndExtension && packageInfo
-                && packageInfo.packageJsonContent.exports === undefined
-                && packageInfo.packageJsonContent.main === undefined
+                // eslint-disable-next-line no-null/no-null
+                && (packageInfo.packageJsonContent.exports === undefined || packageInfo.packageJsonContent.exports === null)
                 && state.features & NodeResolutionFeatures.EsmMode
             ) {
                 // EsmMode disables index lookup in `loadNodeModuleFromDirectoryWorker` generally, however non-relative package resolutions still assume

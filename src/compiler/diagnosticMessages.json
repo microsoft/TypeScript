@@ -1526,6 +1526,10 @@
         "category": "Error",
         "code": 2207
     },
+    "This type parameter probably needs an `extends object` constraint.": {
+        "category": "Error",
+        "code": 2208
+    },
 
     "The project root is ambiguous, but is required to resolve export map entry '{0}' in file '{1}'. Supply the `rootDir` compiler option to disambiguate.": {
         "category": "Error",
@@ -3470,6 +3474,10 @@
     "This condition will always return '{0}' since JavaScript compares objects by reference, not value.": {
         "category": "Error",
         "code": 2839
+    },
+    "An interface cannot extend a primitive type like '{0}'; an interface can only extend named types and classes": {
+        "category": "Error",
+        "code": 2840
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {

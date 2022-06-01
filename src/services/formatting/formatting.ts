@@ -617,7 +617,6 @@ namespace ts.formatting {
                             case SyntaxKind.JsxOpeningElement:
                             case SyntaxKind.JsxClosingElement:
                             case SyntaxKind.JsxSelfClosingElement:
-                            case SyntaxKind.ExpressionWithTypeArguments:
                                 return false;
                         }
                         break;
@@ -835,7 +834,7 @@ namespace ts.formatting {
                 const listEndToken = getCloseTokenForOpenToken(listStartToken);
                 if (listEndToken !== SyntaxKind.Unknown && formattingScanner.isOnToken() && formattingScanner.getStartPos() < originalRange.end) {
                     let tokenInfo: TokenInfo | undefined = formattingScanner.readTokenInfo(parent);
-                    if (tokenInfo.token.kind === SyntaxKind.CommaToken && isCallLikeExpression(parent)) {
+                    if (tokenInfo.token.kind === SyntaxKind.CommaToken) {
                         // consume the comma
                         consumeTokenAndAdvanceScanner(tokenInfo, parent, listDynamicIndentation, parent);
                         tokenInfo = formattingScanner.isOnToken() ? formattingScanner.readTokenInfo(parent) : undefined;
@@ -1311,6 +1310,12 @@ namespace ts.formatting {
             case SyntaxKind.MethodDeclaration:
             case SyntaxKind.MethodSignature:
             case SyntaxKind.ArrowFunction:
+            case SyntaxKind.CallSignature:
+            case SyntaxKind.ConstructSignature:
+            case SyntaxKind.FunctionType:
+            case SyntaxKind.ConstructorType:
+            case SyntaxKind.GetAccessor:
+            case SyntaxKind.SetAccessor:
                 if ((node as FunctionDeclaration).typeParameters === list) {
                     return SyntaxKind.LessThanToken;
                 }
@@ -1327,7 +1332,19 @@ namespace ts.formatting {
                     return SyntaxKind.OpenParenToken;
                 }
                 break;
+            case SyntaxKind.ClassDeclaration:
+            case SyntaxKind.ClassExpression:
+            case SyntaxKind.InterfaceDeclaration:
+            case SyntaxKind.TypeAliasDeclaration:
+                if ((node as ClassDeclaration).typeParameters === list) {
+                    return SyntaxKind.LessThanToken;
+                }
+                break;
             case SyntaxKind.TypeReference:
+            case SyntaxKind.TaggedTemplateExpression:
+            case SyntaxKind.TypeQuery:
+            case SyntaxKind.ExpressionWithTypeArguments:
+            case SyntaxKind.ImportType:
                 if ((node as TypeReferenceNode).typeArguments === list) {
                     return SyntaxKind.LessThanToken;
                 }
