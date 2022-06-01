@@ -21463,6 +21463,7 @@ namespace ts {
          * with no call or construct signatures.
          */
         function isObjectTypeWithInferableIndex(type: Type): boolean {
+            const objectFlags = getObjectFlags(type);
             return type.flags & TypeFlags.Intersection
                 ? every((type as IntersectionType).types, isObjectTypeWithInferableIndex)
                 : !!(
@@ -21470,6 +21471,9 @@ namespace ts {
                     && (type.symbol.flags & (SymbolFlags.ObjectLiteral | SymbolFlags.TypeLiteral | SymbolFlags.Enum | SymbolFlags.ValueModule)) !== 0
                     && !(type.symbol.flags & SymbolFlags.Class)
                     && !typeHasCallOrConstructSignatures(type)
+                ) || !!(
+                    objectFlags
+                    && objectFlags & ObjectFlags.ObjectRestType
                 ) || !!(getObjectFlags(type) & ObjectFlags.ReverseMapped && isObjectTypeWithInferableIndex((type as ReverseMappedType).source));
         }
 
