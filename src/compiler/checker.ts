@@ -12283,7 +12283,7 @@ namespace ts {
             let objectType;
             return !!(type.flags & TypeFlags.IndexedAccess && getObjectFlags(objectType = (type as IndexedAccessType).objectType) & ObjectFlags.Mapped &&
                 !isGenericMappedType(objectType) && isGenericIndexType((type as IndexedAccessType).indexType) &&
-                !(objectType as MappedType).declaration.questionToken && !(objectType as MappedType).declaration.nameType);
+                !(getMappedTypeModifiers(objectType as MappedType) & MappedTypeModifiers.ExcludeOptional) && !(objectType as MappedType).declaration.nameType);
         }
 
         /**
