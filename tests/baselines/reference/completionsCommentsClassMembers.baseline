@@ -4224,6 +4224,18 @@
           ]
         },
         {
+          "name": "type",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "type",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
           "name": "TypeError",
           "kind": "var",
           "kindModifiers": "declare",
@@ -11285,6 +11297,18 @@
           ]
         },
         {
+          "name": "type",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "type",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
           "name": "TypeError",
           "kind": "var",
           "kindModifiers": "declare",
@@ -16094,6 +16118,18 @@
           "displayParts": [
             {
               "text": "try",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "type",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "type",
               "kind": "keyword"
             }
           ]
@@ -23160,6 +23196,18 @@
           ]
         },
         {
+          "name": "type",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "type",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
           "name": "TypeError",
           "kind": "var",
           "kindModifiers": "declare",
@@ -27220,6 +27268,18 @@
           "displayParts": [
             {
               "text": "try",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "type",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "type",
               "kind": "keyword"
             }
           ]
@@ -32446,6 +32506,18 @@
           ]
         },
         {
+          "name": "type",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "type",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
           "name": "TypeError",
           "kind": "var",
           "kindModifiers": "declare",
@@ -36460,6 +36532,18 @@
           "displayParts": [
             {
               "text": "try",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "type",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "type",
               "kind": "keyword"
             }
           ]
@@ -41635,6 +41719,18 @@
           "displayParts": [
             {
               "text": "try",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "type",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "type",
               "kind": "keyword"
             }
           ]
@@ -46861,6 +46957,18 @@
           ]
         },
         {
+          "name": "type",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "type",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
           "name": "TypeError",
           "kind": "var",
           "kindModifiers": "declare",
@@ -52077,6 +52185,18 @@
           "displayParts": [
             {
               "text": "try",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "type",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "type",
               "kind": "keyword"
             }
           ]
@@ -57303,6 +57423,18 @@
           ]
         },
         {
+          "name": "type",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "type",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
           "name": "TypeError",
           "kind": "var",
           "kindModifiers": "declare",
@@ -61358,6 +61490,18 @@
           "displayParts": [
             {
               "text": "try",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "type",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "type",
               "kind": "keyword"
             }
           ]
@@ -65423,6 +65567,18 @@
           ]
         },
         {
+          "name": "type",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "type",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
           "name": "TypeError",
           "kind": "var",
           "kindModifiers": "declare",
@@ -69478,6 +69634,18 @@
           "displayParts": [
             {
               "text": "try",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "type",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "type",
               "kind": "keyword"
             }
           ]
@@ -73543,6 +73711,18 @@
           ]
         },
         {
+          "name": "type",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "type",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
           "name": "TypeError",
           "kind": "var",
           "kindModifiers": "declare",
@@ -77603,6 +77783,18 @@
           ]
         },
         {
+          "name": "type",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "type",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
           "name": "TypeError",
           "kind": "var",
           "kindModifiers": "declare",
@@ -81658,6 +81850,18 @@
           "displayParts": [
             {
               "text": "try",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "type",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "type",
               "kind": "keyword"
             }
           ]
@@ -96031,6 +96235,18 @@
           "displayParts": [
             {
               "text": "try",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "type",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "type",
               "kind": "keyword"
             }
           ]
