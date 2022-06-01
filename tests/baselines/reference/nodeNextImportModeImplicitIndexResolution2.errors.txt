@@ -1,0 +1,44 @@
+/index.cts(4,21): error TS2307: Cannot find module 'dedent4' or its corresponding type declarations.
+/index.mts(4,21): error TS2307: Cannot find module 'dedent4' or its corresponding type declarations.
+
+
+==== /node_modules/@types/dedent/package.json (0 errors) ====
+    { "name": "@types/dedent", "version": "1.0.0", "main": "" }
+    
+==== /node_modules/@types/dedent2/package.json (0 errors) ====
+    { "name": "@types/dedent2", "version": "1.0.0", "main": "asdfasdfasdf" }
+    
+==== /node_modules/@types/dedent3/package.json (0 errors) ====
+    { "name": "@types/dedent3", "version": "1.0.0", "main": "asdfasdfasdf", "exports": null }
+    
+==== /node_modules/@types/dedent4/package.json (0 errors) ====
+    { "name": "@types/dedent4", "version": "1.0.0", "main": "asdfasdfasdf", "exports": "./asdfasdfasdf" }
+    
+==== /node_modules/@types/dedent/index.d.ts (0 errors) ====
+    export {};
+    
+==== /node_modules/@types/dedent2/index.d.ts (0 errors) ====
+    export {};
+    
+==== /node_modules/@types/dedent3/index.d.ts (0 errors) ====
+    export {};
+    
+==== /node_modules/@types/dedent4/index.d.ts (0 errors) ====
+    export {};
+    
+==== /index.mts (1 errors) ====
+    import dedent from "dedent";
+    import dedent2 from "dedent2";
+    import dedent3 from "dedent3";
+    import dedent4 from "dedent4"; // Error
+                        ~~~~~~~~~
+!!! error TS2307: Cannot find module 'dedent4' or its corresponding type declarations.
+    
+==== /index.cts (1 errors) ====
+    import dedent from "dedent";
+    import dedent2 from "dedent2";
+    import dedent3 from "dedent3";
+    import dedent4 from "dedent4"; // Error
+                        ~~~~~~~~~
+!!! error TS2307: Cannot find module 'dedent4' or its corresponding type declarations.
+    

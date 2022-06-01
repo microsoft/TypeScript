@@ -1,0 +1,89 @@
+=== tests/cases/compiler/nonNullableTypes1.ts ===
+function f1<T>(x: T) {
+>f1 : Symbol(f1, Decl(nonNullableTypes1.ts, 0, 0))
+>T : Symbol(T, Decl(nonNullableTypes1.ts, 0, 12))
+>x : Symbol(x, Decl(nonNullableTypes1.ts, 0, 15))
+>T : Symbol(T, Decl(nonNullableTypes1.ts, 0, 12))
+
+    let y = x || "hello";  // NonNullable<T> | string
+>y : Symbol(y, Decl(nonNullableTypes1.ts, 1, 7))
+>x : Symbol(x, Decl(nonNullableTypes1.ts, 0, 15))
+}
+
+function error(): never {
+>error : Symbol(error, Decl(nonNullableTypes1.ts, 2, 1))
+
+    throw new Error();
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+}
+
+function f2<T>(x: T) {  // NonNullable<T>
+>f2 : Symbol(f2, Decl(nonNullableTypes1.ts, 6, 1))
+>T : Symbol(T, Decl(nonNullableTypes1.ts, 8, 12))
+>x : Symbol(x, Decl(nonNullableTypes1.ts, 8, 15))
+>T : Symbol(T, Decl(nonNullableTypes1.ts, 8, 12))
+
+    return x || error();
+>x : Symbol(x, Decl(nonNullableTypes1.ts, 8, 15))
+>error : Symbol(error, Decl(nonNullableTypes1.ts, 2, 1))
+}
+
+function f3(x: unknown) {
+>f3 : Symbol(f3, Decl(nonNullableTypes1.ts, 10, 1))
+>x : Symbol(x, Decl(nonNullableTypes1.ts, 12, 12))
+
+    let y = x!;  // {}
+>y : Symbol(y, Decl(nonNullableTypes1.ts, 13, 7))
+>x : Symbol(x, Decl(nonNullableTypes1.ts, 12, 12))
+}
+
+function f4<T extends { x: string } | undefined>(obj: T) {
+>f4 : Symbol(f4, Decl(nonNullableTypes1.ts, 14, 1))
+>T : Symbol(T, Decl(nonNullableTypes1.ts, 16, 12))
+>x : Symbol(x, Decl(nonNullableTypes1.ts, 16, 23))
+>obj : Symbol(obj, Decl(nonNullableTypes1.ts, 16, 49))
+>T : Symbol(T, Decl(nonNullableTypes1.ts, 16, 12))
+
+    if (obj?.x === "hello") {
+>obj?.x : Symbol(x, Decl(nonNullableTypes1.ts, 16, 23))
+>obj : Symbol(obj, Decl(nonNullableTypes1.ts, 16, 49))
+>x : Symbol(x, Decl(nonNullableTypes1.ts, 16, 23))
+
+        obj;  // NonNullable<T>
+>obj : Symbol(obj, Decl(nonNullableTypes1.ts, 16, 49))
+    }
+    if (obj?.x) {
+>obj?.x : Symbol(x, Decl(nonNullableTypes1.ts, 16, 23))
+>obj : Symbol(obj, Decl(nonNullableTypes1.ts, 16, 49))
+>x : Symbol(x, Decl(nonNullableTypes1.ts, 16, 23))
+
+        obj;  // NonNullable<T>
+>obj : Symbol(obj, Decl(nonNullableTypes1.ts, 16, 49))
+    }
+    if (typeof obj?.x === "string") {
+>obj?.x : Symbol(x, Decl(nonNullableTypes1.ts, 16, 23))
+>obj : Symbol(obj, Decl(nonNullableTypes1.ts, 16, 49))
+>x : Symbol(x, Decl(nonNullableTypes1.ts, 16, 23))
+
+        obj;  // NonNullable<T>
+>obj : Symbol(obj, Decl(nonNullableTypes1.ts, 16, 49))
+    }
+}
+
+class A {
+>A : Symbol(A, Decl(nonNullableTypes1.ts, 26, 1))
+
+    x = "hello";
+>x : Symbol(A.x, Decl(nonNullableTypes1.ts, 28, 9))
+
+    foo() {
+>foo : Symbol(A.foo, Decl(nonNullableTypes1.ts, 29, 16))
+
+        let zz = this?.x;  // string
+>zz : Symbol(zz, Decl(nonNullableTypes1.ts, 31, 11))
+>this?.x : Symbol(A.x, Decl(nonNullableTypes1.ts, 28, 9))
+>this : Symbol(A, Decl(nonNullableTypes1.ts, 26, 1))
+>x : Symbol(A.x, Decl(nonNullableTypes1.ts, 28, 9))
+    }
+}
+
