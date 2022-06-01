@@ -1,0 +1,84 @@
+=== tests/cases/compiler/destructuringAssignmentWithDefault2.ts ===
+const a: { x?: number; y?: number } = { };
+>a : Symbol(a, Decl(destructuringAssignmentWithDefault2.ts, 0, 5))
+>x : Symbol(x, Decl(destructuringAssignmentWithDefault2.ts, 0, 10))
+>y : Symbol(y, Decl(destructuringAssignmentWithDefault2.ts, 0, 22))
+
+let x: number;
+>x : Symbol(x, Decl(destructuringAssignmentWithDefault2.ts, 2, 3))
+
+// Should not error out
+({ x = 0 } = a);
+>x : Symbol(x, Decl(destructuringAssignmentWithDefault2.ts, 5, 2))
+>a : Symbol(a, Decl(destructuringAssignmentWithDefault2.ts, 0, 5))
+
+({ x: x = 0} = a);
+>x : Symbol(x, Decl(destructuringAssignmentWithDefault2.ts, 6, 2))
+>x : Symbol(x, Decl(destructuringAssignmentWithDefault2.ts, 2, 3))
+>a : Symbol(a, Decl(destructuringAssignmentWithDefault2.ts, 0, 5))
+
+({ y: x = 0} = a);
+>y : Symbol(y, Decl(destructuringAssignmentWithDefault2.ts, 7, 2))
+>x : Symbol(x, Decl(destructuringAssignmentWithDefault2.ts, 2, 3))
+>a : Symbol(a, Decl(destructuringAssignmentWithDefault2.ts, 0, 5))
+
+// Should be error
+({ x = undefined } = a);
+>x : Symbol(x, Decl(destructuringAssignmentWithDefault2.ts, 10, 2))
+>undefined : Symbol(undefined)
+>a : Symbol(a, Decl(destructuringAssignmentWithDefault2.ts, 0, 5))
+
+({ x: x = undefined } = a);
+>x : Symbol(x, Decl(destructuringAssignmentWithDefault2.ts, 11, 2))
+>x : Symbol(x, Decl(destructuringAssignmentWithDefault2.ts, 2, 3))
+>undefined : Symbol(undefined)
+>a : Symbol(a, Decl(destructuringAssignmentWithDefault2.ts, 0, 5))
+
+({ y: x = undefined } = a);
+>y : Symbol(y, Decl(destructuringAssignmentWithDefault2.ts, 12, 2))
+>x : Symbol(x, Decl(destructuringAssignmentWithDefault2.ts, 2, 3))
+>undefined : Symbol(undefined)
+>a : Symbol(a, Decl(destructuringAssignmentWithDefault2.ts, 0, 5))
+
+const { x: z1 } = a;
+>x : Symbol(x, Decl(destructuringAssignmentWithDefault2.ts, 0, 10))
+>z1 : Symbol(z1, Decl(destructuringAssignmentWithDefault2.ts, 14, 7))
+>a : Symbol(a, Decl(destructuringAssignmentWithDefault2.ts, 0, 5))
+
+const { x: z2 = 0 } = a;
+>x : Symbol(x, Decl(destructuringAssignmentWithDefault2.ts, 0, 10))
+>z2 : Symbol(z2, Decl(destructuringAssignmentWithDefault2.ts, 15, 7))
+>a : Symbol(a, Decl(destructuringAssignmentWithDefault2.ts, 0, 5))
+
+const { x: z3 = undefined } = a;
+>x : Symbol(x, Decl(destructuringAssignmentWithDefault2.ts, 0, 10))
+>z3 : Symbol(z3, Decl(destructuringAssignmentWithDefault2.ts, 16, 7))
+>undefined : Symbol(undefined)
+>a : Symbol(a, Decl(destructuringAssignmentWithDefault2.ts, 0, 5))
+
+
+declare const r: Iterator<number>;
+>r : Symbol(r, Decl(destructuringAssignmentWithDefault2.ts, 19, 13))
+>Iterator : Symbol(Iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+
+let done: boolean;
+>done : Symbol(done, Decl(destructuringAssignmentWithDefault2.ts, 20, 3))
+
+let value;
+>value : Symbol(value, Decl(destructuringAssignmentWithDefault2.ts, 21, 3))
+
+({ done = false, value } = r.next());
+>done : Symbol(done, Decl(destructuringAssignmentWithDefault2.ts, 23, 2))
+>value : Symbol(value, Decl(destructuringAssignmentWithDefault2.ts, 23, 16))
+>r.next : Symbol(Iterator.next, Decl(lib.es2015.iterable.d.ts, --, --))
+>r : Symbol(r, Decl(destructuringAssignmentWithDefault2.ts, 19, 13))
+>next : Symbol(Iterator.next, Decl(lib.es2015.iterable.d.ts, --, --))
+
+({ done: done = false, value } = r.next());
+>done : Symbol(done, Decl(destructuringAssignmentWithDefault2.ts, 24, 2))
+>done : Symbol(done, Decl(destructuringAssignmentWithDefault2.ts, 20, 3))
+>value : Symbol(value, Decl(destructuringAssignmentWithDefault2.ts, 24, 22))
+>r.next : Symbol(Iterator.next, Decl(lib.es2015.iterable.d.ts, --, --))
+>r : Symbol(r, Decl(destructuringAssignmentWithDefault2.ts, 19, 13))
+>next : Symbol(Iterator.next, Decl(lib.es2015.iterable.d.ts, --, --))
+
