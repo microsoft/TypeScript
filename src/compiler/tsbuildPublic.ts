@@ -22,6 +22,7 @@ namespace ts {
         traceResolution?: boolean;
         /* @internal */ diagnostics?: boolean;
         /* @internal */ extendedDiagnostics?: boolean;
+        /* @internal */ solutionDiagnostics?: boolean;
         /* @internal */ locale?: string;
         /* @internal */ generateCpuProfile?: string;
         /* @internal */ generateTrace?: string;
@@ -189,6 +190,7 @@ namespace ts {
         commonOptionsWithBuild.forEach(option => {
             if (hasProperty(buildOptions, option.name)) result[option.name] = buildOptions[option.name];
         });
+        if (buildOptions.solutionDiagnostics) result.solutionDiagnostics = true;
         return result;
     }
 
@@ -2004,7 +2006,15 @@ namespace ts {
                     : ExitStatus.DiagnosticsPresent_OutputsSkipped;
     }
 
-    function clean(state: SolutionBuilderState, project?: string, onlyReferences?: boolean) {
+    function clean(state: SolutionBuilderState, project?: string, onlyReferences?: boolean): ExitStatus {
+        solutionPerformance.mark("beforeClean");
+        const result = cleanWorker(state, project, onlyReferences);
+        solutionPerformance.mark("afterClean");
+        solutionPerformance.measure("Clean", "beforeClean", "afterClean");
+        return result;
+    }
+
+    function cleanWorker(state: SolutionBuilderState, project?: string, onlyReferences?: boolean) {
         const buildOrder = getBuildOrderFor(state, project, onlyReferences);
         if (!buildOrder) return ExitStatus.InvalidProject_OutputsSkipped;
 

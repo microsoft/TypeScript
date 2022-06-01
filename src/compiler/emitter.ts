@@ -396,7 +396,7 @@ namespace ts {
                 sourceMap: compilerOptions.sourceMap,
                 inlineSourceMap: compilerOptions.inlineSourceMap,
                 inlineSources: compilerOptions.inlineSources,
-                extendedDiagnostics: compilerOptions.extendedDiagnostics,
+                extendedDiagnostics: compilerOptions.extendedDiagnostics || compilerOptions.solutionDiagnostics,
                 writeBundleFileInfo: !!bundleBuildInfo,
                 relativeToBuildInfo
             };
@@ -454,7 +454,7 @@ namespace ts {
                 target: compilerOptions.target,
                 sourceMap: compilerOptions.sourceMap,
                 inlineSourceMap: compilerOptions.inlineSourceMap,
-                extendedDiagnostics: compilerOptions.extendedDiagnostics,
+                extendedDiagnostics: compilerOptions.extendedDiagnostics || compilerOptions.solutionDiagnostics,
                 onlyPrintJsDocStyle: true,
                 writeBundleFileInfo: !!bundleBuildInfo,
                 recordInternalSection: !!bundleBuildInfo,
@@ -483,7 +483,7 @@ namespace ts {
                         sourceMap: !forceDtsEmit && compilerOptions.declarationMap,
                         sourceRoot: compilerOptions.sourceRoot,
                         mapRoot: compilerOptions.mapRoot,
-                        extendedDiagnostics: compilerOptions.extendedDiagnostics,
+                        extendedDiagnostics: compilerOptions.extendedDiagnostics || compilerOptions.solutionDiagnostics,
                         // Explicitly do not passthru either `inline` option
                     }
                 );

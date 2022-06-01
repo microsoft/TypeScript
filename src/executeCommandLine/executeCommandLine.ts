@@ -769,14 +769,14 @@ namespace ts {
                 if (!reportWatchStatistics) return;
                 if (d.code === Diagnostics.Found_0_errors_Watching_for_file_changes.code ||
                     d.code === Diagnostics.Found_1_error_Watching_for_file_changes.code) {
-                    reportSolutionBuilderTimes(sys, builder, buildHost);
+                    reportSolutionBuilderTimes(sys, buildOptions, builder, buildHost);
                 }
             };
             updateSolutionBuilderHost(sys, cb, buildHost);
             enableSolutionPerformance(sys, buildOptions);
             const builder = createSolutionBuilderWithWatch(buildHost, projects, buildOptions, watchOptions);
             builder.build();
-            reportSolutionBuilderTimes(sys, builder, buildHost);
+            reportSolutionBuilderTimes(sys, buildOptions, builder, buildHost);
             reportWatchStatistics = true;
             return builder;
         }
@@ -792,30 +792,32 @@ namespace ts {
         enableSolutionPerformance(sys, buildOptions);
         const builder = createSolutionBuilder(buildHost, projects, buildOptions);
         const exitStatus = buildOptions.clean ? builder.clean() : builder.build();
-        reportSolutionBuilderTimes(sys, builder, buildHost);
+        reportSolutionBuilderTimes(sys, buildOptions, builder, buildHost);
         dumpTracingLegend(); // Will no-op if there hasn't been any tracing
         return sys.exit(exitStatus);
     }
 
     function enableSolutionPerformance(system: System, options: BuildOptions) {
-        if (system === sys && (options.diagnostics || options.extendedDiagnostics)) solutionPerformance.enable();
+        if (system === sys && options.solutionDiagnostics) solutionPerformance.enable();
     }
 
-    function reportSolutionBuilderTimes(system: System, builder: SolutionBuilder<BuilderProgram>, buildHost: SolutionBuilderHost<BuilderProgram>) {
-        if (system !== sys) return;
+    function reportSolutionBuilderTimes(system: System, buildOptions: BuildOptions, builder: SolutionBuilder<BuilderProgram>, buildHost: SolutionBuilderHost<BuilderProgram>) {
+        if (system !== sys || !buildOptions.solutionDiagnostics) return;
+
 
         if (solutionPerformance.isEnabled()) {
             const solutionStatistics: Statistic[] = [];
-            solutionPerformance.forEachMeasure((name, duration) => solutionStatistics.push({ name: `${name} time`, value: duration, type: StatisticType.time }));
             solutionStatistics.push(
-                { name: "projectsBuilt", value: solutionPerformance.getCount("projectsBuilt"), type: StatisticType.count },
-                { name: "timestampUpdated", value: solutionPerformance.getCount("timestampUpdated"), type: StatisticType.count },
-                { name: "bundlesUpdated", value: solutionPerformance.getCount("bundlesUpdated"), type: StatisticType.count },
-                { name: "projects", value: getBuildOrderFromAnyBuildOrder(builder.getBuildOrder()).length, type: StatisticType.count },
+                { name: "Projects", value: getBuildOrderFromAnyBuildOrder(builder.getBuildOrder()).length, type: StatisticType.count },
             );
+            solutionPerformance.forEachCount((name, count) => solutionStatistics.push({ name, value: count, type: StatisticType.count }));
+            solutionPerformance.forEachMeasure((name, duration) => solutionStatistics.push({ name: `${name} time`, value: duration, type: StatisticType.time }));
             buildHost.statistics = append(buildHost.statistics, solutionStatistics);
             solutionPerformance.disable();
             solutionPerformance.enable();
+        }
+        else {
+            sys.write(Diagnostics.Performance_timings_for_diagnostics_or_extendedDiagnostics_or_solutionDiagnostics_are_not_available_in_this_session_A_native_implementation_of_the_Web_Performance_API_could_not_be_found.message + "\n");
         }
 
         if (!buildHost.statistics) return;
@@ -990,8 +992,8 @@ namespace ts {
         return createWatchProgram(watchCompilerHost);
     }
 
-    function canReportDiagnostics(system: System, compilerOptions: CompilerOptions) {
-        return system === sys && (compilerOptions.diagnostics || compilerOptions.extendedDiagnostics);
+    function canGenerateStatistics(system: System, compilerOptions: CompilerOptions) {
+        return system === sys && (compilerOptions.diagnostics || compilerOptions.extendedDiagnostics || compilerOptions.solutionDiagnostics);
     }
 
     function canTrace(system: System, compilerOptions: CompilerOptions) {
@@ -999,7 +1001,7 @@ namespace ts {
     }
 
     function enableStatisticsAndTracing(system: System, compilerOptions: CompilerOptions, isBuildMode: boolean) {
-        if (canReportDiagnostics(system, compilerOptions)) {
+        if (canGenerateStatistics(system, compilerOptions)) {
             performance.enable(system);
         }
 
@@ -1022,7 +1024,7 @@ namespace ts {
         }
 
         let statistics: Statistic[];
-        if (canReportDiagnostics(sys, compilerOptions)) {
+        if (canGenerateStatistics(sys, compilerOptions)) {
             statistics = [];
             const memoryUsed = sys.getMemoryUsage ? sys.getMemoryUsage() : -1;
             if (program) {
@@ -1030,7 +1032,7 @@ namespace ts {
 
                 const lineCounts = countLines(program);
                 const nodeCounts = countNodes(program);
-                if (compilerOptions.extendedDiagnostics) {
+                if (compilerOptions.extendedDiagnostics || compilerOptions.solutionDiagnostics) {
                     for (const key of arrayFrom(lineCounts.keys())) {
                         reportCountStatistic("Lines of " + key, lineCounts.get(key)!);
                     }
@@ -1058,7 +1060,7 @@ namespace ts {
             const bindTime = isPerformanceEnabled ? performance.getDuration("Bind") : 0;
             const checkTime = isPerformanceEnabled ? performance.getDuration("Check") : 0;
             const emitTime = isPerformanceEnabled ? performance.getDuration("Emit") : 0;
-            if (compilerOptions.extendedDiagnostics) {
+            if (compilerOptions.extendedDiagnostics || compilerOptions.solutionDiagnostics) {
                 if (program) {
                     const caches = program.getRelationCacheSizes();
                     reportCountStatistic("Assignability cache size", caches.assignable);
@@ -1085,9 +1087,9 @@ namespace ts {
             if (isPerformanceEnabled) {
                 reportTimeStatistic("Total time", programTime + bindTime + checkTime + emitTime);
             }
-            reportAllStatistics(sys, statistics);
+            if (compilerOptions.diagnostics || compilerOptions.extendedDiagnostics) reportAllStatistics(sys, statistics);
             if (!isPerformanceEnabled) {
-                sys.write(Diagnostics.Performance_timings_for_diagnostics_or_extendedDiagnostics_are_not_available_in_this_session_A_native_implementation_of_the_Web_Performance_API_could_not_be_found.message + "\n");
+                sys.write(Diagnostics.Performance_timings_for_diagnostics_or_extendedDiagnostics_or_solutionDiagnostics_are_not_available_in_this_session_A_native_implementation_of_the_Web_Performance_API_could_not_be_found.message + "\n");
             }
             else {
                 performance.disable();
