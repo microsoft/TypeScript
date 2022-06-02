@@ -4724,6 +4724,7 @@ declare namespace ts {
     function isImportEqualsDeclaration(node: Node): node is ImportEqualsDeclaration;
     function isImportDeclaration(node: Node): node is ImportDeclaration;
     function isImportClause(node: Node): node is ImportClause;
+    function isImportTypeAssertionContainer(node: Node): node is ImportTypeAssertionContainer;
     function isAssertClause(node: Node): node is AssertClause;
     function isAssertEntry(node: Node): node is AssertEntry;
     function isNamespaceImport(node: Node): node is NamespaceImport;
