@@ -5732,6 +5732,12 @@ namespace ts {
                 case SyntaxKind.NoSubstitutionTemplateLiteral:  // foo<T> `...`
                 case SyntaxKind.TemplateHead:                   // foo<T> `...${100}...`
                     return true;
+                // These strict mode reserved words are valid identifiers in non-strict mode, and can thus
+                // start an expression. However, when they follow a type argument list and are immediately
+                // preceded by a line break, we don't consider them expression starters.
+                case SyntaxKind.InterfaceKeyword:
+                case SyntaxKind.LetKeyword:
+                    return scanner.hasPrecedingLineBreak();
             }
             // Consider something a type argument list only if the following token can't start an expression.
             return !isStartOfExpression();
