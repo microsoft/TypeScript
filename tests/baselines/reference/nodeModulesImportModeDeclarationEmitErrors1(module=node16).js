@@ -30,3 +30,10 @@ export interface LocalInterface extends RequireInterface, ImportInterface {}
 //// [index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+
+
+//// [index.d.ts]
+import type { RequireInterface } from "pkg";
+import { ImportInterface } from "pkg" assert { "resolution-mode": "import" };
+export interface LocalInterface extends RequireInterface, ImportInterface {
+}

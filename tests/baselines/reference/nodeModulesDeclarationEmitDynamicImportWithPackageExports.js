@@ -153,3 +153,19 @@ export declare const d: {
     cjsNonmain: true;
 };
 export declare const e: typeof import("inner/mjs");
+//// [other.d.cts]
+export declare const a: Promise<{
+    default: typeof import("./index.cjs");
+}>;
+export declare const b: Promise<typeof import("./index.mjs", { assert: { "resolution-mode": "import" } })>;
+export declare const c: Promise<typeof import("./index.js", { assert: { "resolution-mode": "import" } })>;
+export declare const f: Promise<{
+    default: typeof import("inner");
+    cjsMain: true;
+}>;
+//// [other2.d.cts]
+export declare const d: Promise<{
+    default: typeof import("inner/cjs");
+    cjsNonmain: true;
+}>;
+export declare const e: Promise<typeof import("inner/mjs", { assert: { "resolution-mode": "import" } })>;
