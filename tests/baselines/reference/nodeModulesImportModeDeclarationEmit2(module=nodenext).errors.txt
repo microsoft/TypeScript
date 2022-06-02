@@ -1,11 +1,21 @@
+/index.ts(1,45): error TS4125: Resolution mode assertions are unstable. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.
+/index.ts(2,44): error TS4125: Resolution mode assertions are unstable. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.
 /index.ts(6,14): error TS2305: Module '"pkg"' has no exported member 'RequireInterface'.
 /index.ts(6,50): error TS1454: `resolution-mode` can only be set for type-only imports.
+/index.ts(6,50): error TS4125: Resolution mode assertions are unstable. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.
 /index.ts(7,49): error TS1454: `resolution-mode` can only be set for type-only imports.
+/index.ts(7,49): error TS4125: Resolution mode assertions are unstable. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.
+/index.ts(10,45): error TS4125: Resolution mode assertions are unstable. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.
+/index.ts(11,44): error TS4125: Resolution mode assertions are unstable. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.
 
 
-==== /index.ts (3 errors) ====
+==== /index.ts (9 errors) ====
     import type { RequireInterface } from "pkg" assert { "resolution-mode": "require" };
+                                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS4125: Resolution mode assertions are unstable. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.
     import type { ImportInterface } from "pkg" assert { "resolution-mode": "import" };
+                                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS4125: Resolution mode assertions are unstable. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.
     
     export interface LocalInterface extends RequireInterface, ImportInterface {}
     
@@ -14,13 +24,21 @@
 !!! error TS2305: Module '"pkg"' has no exported member 'RequireInterface'.
                                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS1454: `resolution-mode` can only be set for type-only imports.
+                                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS4125: Resolution mode assertions are unstable. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.
     import {type ImportInterface as Imp} from "pkg" assert { "resolution-mode": "import" };
                                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS1454: `resolution-mode` can only be set for type-only imports.
+                                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS4125: Resolution mode assertions are unstable. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.
     export interface Loc extends Req, Imp {}
     
     export type { RequireInterface } from "pkg" assert { "resolution-mode": "require" };
+                                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS4125: Resolution mode assertions are unstable. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.
     export type { ImportInterface } from "pkg" assert { "resolution-mode": "import" };
+                                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS4125: Resolution mode assertions are unstable. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.
     
 ==== /node_modules/pkg/package.json (0 errors) ====
     {

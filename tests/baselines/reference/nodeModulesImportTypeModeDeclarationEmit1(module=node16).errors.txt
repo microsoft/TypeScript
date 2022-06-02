@@ -1,0 +1,44 @@
+/index.ts(2,21): error TS4125: Resolution mode assertions are unstable. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.
+/index.ts(2,31): error TS4125: Resolution mode assertions are unstable. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.
+/index.ts(3,21): error TS4125: Resolution mode assertions are unstable. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.
+/index.ts(3,31): error TS4125: Resolution mode assertions are unstable. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.
+/index.ts(5,58): error TS4125: Resolution mode assertions are unstable. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.
+/index.ts(6,14): error TS2841: The type of this expression cannot be named without a resolution mode assertion, which is an unstable feature. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.
+/index.ts(6,58): error TS4125: Resolution mode assertions are unstable. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.
+
+
+==== /index.ts (7 errors) ====
+    export type LocalInterface =
+        & import("pkg", { assert: {"resolution-mode": "require"} }).RequireInterface
+                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS4125: Resolution mode assertions are unstable. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.
+                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS4125: Resolution mode assertions are unstable. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.
+        & import("pkg", { assert: {"resolution-mode": "import"} }).ImportInterface;
+                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS4125: Resolution mode assertions are unstable. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.
+                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS4125: Resolution mode assertions are unstable. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.
+    
+    export const a = (null as any as import("pkg", { assert: {"resolution-mode": "require"} }).RequireInterface);
+                                                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS4125: Resolution mode assertions are unstable. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.
+    export const b = (null as any as import("pkg", { assert: {"resolution-mode": "import"} }).ImportInterface);
+                 ~
+!!! error TS2841: The type of this expression cannot be named without a resolution mode assertion, which is an unstable feature. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.
+                                                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS4125: Resolution mode assertions are unstable. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.
+    
+==== /node_modules/pkg/package.json (0 errors) ====
+    {
+        "name": "pkg",
+        "version": "0.0.1",
+        "exports": {
+            "import": "./import.js",
+            "require": "./require.js"
+        }
+    }
+==== /node_modules/pkg/import.d.ts (0 errors) ====
+    export interface ImportInterface {}
+==== /node_modules/pkg/require.d.ts (0 errors) ====
+    export interface RequireInterface {}

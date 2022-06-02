@@ -28,9 +28,3 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.b = exports.a = void 0;
 exports.a = null;
 exports.b = null;
-
-
-//// [index.d.ts]
-export declare type LocalInterface = import("pkg", { assert: { "resolution-mode": "require" } }).RequireInterface & import("pkg", { assert: { "resolution-mode": "import" } }).ImportInterface;
-export declare const a: import("pkg").RequireInterface;
-export declare const b: import("pkg", { assert: { "resolution-mode": "import" } }).ImportInterface;
