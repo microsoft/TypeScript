@@ -3479,6 +3479,10 @@
         "category": "Error",
         "code": 2840
     },
+    "The type of this expression cannot be named without a resolution mode assertion, which is an unstable feature. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.": {
+        "category": "Error",
+        "code": 2841
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
