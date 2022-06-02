@@ -796,9 +796,9 @@ define(function () {
 >Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
         Array.isArray : function (value) { return Object.prototype.toString.call(value) === '[object Array]'; };
->Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >value : Symbol(value, Decl(fixSignatureCaching.ts, 297, 34))
 >Object.prototype.toString.call : Symbol(Function.call, Decl(lib.es5.d.ts, --, --))
 >Object.prototype.toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
@@ -825,9 +825,9 @@ define(function () {
 >value : Symbol(value, Decl(fixSignatureCaching.ts, 299, 20))
 
         : Array.isArray;
->Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
     function equalIC(a, b) {
 >equalIC : Symbol(equalIC, Decl(fixSignatureCaching.ts, 300, 24))
