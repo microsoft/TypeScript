@@ -2064,6 +2064,24 @@ namespace ts {
         return toSearchResult(/*value*/ undefined);
     }
 
+    /**
+     * From https://github.com/nodejs/node/blob/8f39f51cbbd3b2de14b9ee896e26421cc5b20121/lib/internal/modules/esm/resolve.js#L722 -
+     * "longest" has some nuance as to what "longest" means in the presence of pattern trailers
+     */
+    function comparePatternKeys(a: string, b: string) {
+        const aPatternIndex = a.indexOf("*");
+        const bPatternIndex = b.indexOf("*");
+        const baseLenA = aPatternIndex === -1 ? a.length : aPatternIndex + 1;
+        const baseLenB = bPatternIndex === -1 ? b.length : bPatternIndex + 1;
+        if (baseLenA > baseLenB) return -1;
+        if (baseLenB > baseLenA) return 1;
+        if (aPatternIndex === -1) return 1;
+        if (bPatternIndex === -1) return -1;
+        if (a.length > b.length) return -1;
+        if (b.length > a.length) return 1;
+        return 0;
+    }
+
     function loadModuleFromImportsOrExports(extensions: Extensions, state: ModuleResolutionState, cache: ModuleResolutionCache | undefined, redirectedReference: ResolvedProjectReference | undefined, moduleName: string, lookupTable: object, scope: PackageJsonInfo, isImports: boolean): SearchResult<Resolved> | undefined {
         const loadModuleFromTargetImportOrExport = getLoadModuleFromTargetImportOrExport(extensions, state, cache, redirectedReference, moduleName, scope, isImports);
 
@@ -2071,7 +2089,7 @@ namespace ts {
             const target = (lookupTable as {[idx: string]: unknown})[moduleName];
             return loadModuleFromTargetImportOrExport(target, /*subpath*/ "", /*pattern*/ false);
         }
-        const expandingKeys = sort(filter(getOwnKeys(lookupTable as MapLike<unknown>), k => k.indexOf("*") !== -1 || endsWith(k, "/")), (a, b) => a.length - b.length);
+        const expandingKeys = sort(filter(getOwnKeys(lookupTable as MapLike<unknown>), k => k.indexOf("*") !== -1 || endsWith(k, "/")), comparePatternKeys);
         for (const potentialTarget of expandingKeys) {
             if (state.features & NodeResolutionFeatures.ExportsPatternTrailers && matchesPatternWithTrailer(potentialTarget, moduleName)) {
                 const target = (lookupTable as {[idx: string]: unknown})[potentialTarget];
