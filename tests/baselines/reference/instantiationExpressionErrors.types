@@ -132,3 +132,23 @@ const x4 = f<true>
 if (true) {}
 >true : true
 
+// Parsed as instantiation expression
+
+const x5 = f<true>
+>x5 : { (): true; g<U>(): U; }
+>f : { <T>(): T; g<U>(): U; }
+>true : true
+
+let yy = 0;
+>yy : number
+>0 : 0
+
+// Parsed as instantiation expression
+
+const x6 = f<true>
+>x6 : { (): true; g<U>(): U; }
+>f : { <T>(): T; g<U>(): U; }
+>true : true
+
+interface I {}
+

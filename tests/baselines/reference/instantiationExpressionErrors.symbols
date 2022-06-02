@@ -107,3 +107,21 @@ const x4 = f<true>
 
 if (true) {}
 
+// Parsed as instantiation expression
+
+const x5 = f<true>
+>x5 : Symbol(x5, Decl(instantiationExpressionErrors.ts, 49, 5))
+>f : Symbol(f, Decl(instantiationExpressionErrors.ts, 0, 11))
+
+let yy = 0;
+>yy : Symbol(yy, Decl(instantiationExpressionErrors.ts, 50, 3))
+
+// Parsed as instantiation expression
+
+const x6 = f<true>
+>x6 : Symbol(x6, Decl(instantiationExpressionErrors.ts, 54, 5))
+>f : Symbol(f, Decl(instantiationExpressionErrors.ts, 0, 11))
+
+interface I {}
+>I : Symbol(I, Decl(instantiationExpressionErrors.ts, 54, 18))
+

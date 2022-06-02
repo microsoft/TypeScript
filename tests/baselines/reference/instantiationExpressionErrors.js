@@ -46,6 +46,16 @@ true;
 const x4 = f<true>
 if (true) {}
 
+// Parsed as instantiation expression
+
+const x5 = f<true>
+let yy = 0;
+
+// Parsed as instantiation expression
+
+const x6 = f<true>
+interface I {}
+
 
 //// [instantiationExpressionErrors.js]
 "use strict";
@@ -78,6 +88,11 @@ true;
 // Parsed as instantiation expression
 var x4 = (f);
 if (true) { }
+// Parsed as instantiation expression
+var x5 = (f);
+var yy = 0;
+// Parsed as instantiation expression
+var x6 = (f);
 
 
 //// [instantiationExpressionErrors.d.ts]
@@ -113,3 +128,14 @@ declare const x4: {
     (): true;
     g<U>(): U;
 };
+declare const x5: {
+    (): true;
+    g<U>(): U;
+};
+declare let yy: number;
+declare const x6: {
+    (): true;
+    g<U>(): U;
+};
+interface I {
+}
