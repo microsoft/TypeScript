@@ -5732,9 +5732,14 @@ namespace ts {
                 case SyntaxKind.NoSubstitutionTemplateLiteral:  // foo<T> `...`
                 case SyntaxKind.TemplateHead:                   // foo<T> `...${100}...`
                     return true;
-                // These strict mode reserved words are valid identifiers in non-strict mode, and can thus
+                // Technically strict mode reserved words are valid identifiers in non-strict mode, and can thus
                 // start an expression. However, when they follow a type argument list and are immediately
                 // preceded by a line break, we don't consider them expression starters.
+                // This supports a semicolon-less style for code like the following:
+                //
+                //   let specialFoo = foo<string>
+                //   let value = ...
+                //
                 case SyntaxKind.InterfaceKeyword:
                 case SyntaxKind.LetKeyword:
                     return scanner.hasPrecedingLineBreak();
