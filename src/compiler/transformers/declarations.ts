@@ -317,8 +317,15 @@ export function transformDeclarations(context: TransformationContext) {
     const resolver = context.getEmitResolver();
     const options = context.getCompilerOptions();
     const { noResolve, stripInternal } = options;
+    const isolatedDeclarations = false;
     return transformRoot;
 
+    function reportIsolatedDeclarationError(_node: Node) {
+        // context.addDiagnostic(createDiagnosticForNode(
+        //     node,
+        //     Diagnostics.Declaration_emit_for_this_file_requires_type_resolution_An_explicit_type_annotation_may_unblock_declaration_emit
+        // ));
+    }
     function recordTypeReferenceDirectivesIfNecessary(typeReferenceDirectives: readonly [specifier: string, mode: ResolutionMode][] | undefined): void {
         if (!typeReferenceDirectives) {
             return;
@@ -739,6 +746,7 @@ export function transformDeclarations(context: TransformationContext) {
     }
 
     function shouldPrintWithInitializer(node: Node) {
+        if (isolatedDeclarations) return false;
         return canHaveLiteralInitializer(node) && resolver.isLiteralConstDeclaration(getParseTreeNode(node) as CanHaveLiteralInitializer); // TODO: Make safe
     }
 
@@ -771,6 +779,13 @@ export function transformDeclarations(context: TransformationContext) {
         if (shouldPrintWithInitializer(node)) {
             // Literal const declarations will have an initializer ensured rather than a type
             return;
+        }
+        if (isolatedDeclarations) {
+            if (type == undefined) {
+                reportIsolatedDeclarationError(node);
+                return factory.createTypeReferenceNode("invalid");
+            }
+            return visitNode(type, visitDeclarationSubtree);
         }
         const shouldUseResolverType = node.kind === SyntaxKind.Parameter &&
             (resolver.isRequiredInitializedParameter(node) ||
@@ -1387,7 +1402,13 @@ export function transformDeclarations(context: TransformationContext) {
                         errorNode: input
                     });
                     errorFallbackNode = input;
-                    const varDecl = factory.createVariableDeclaration(newId, /*exclamationToken*/ undefined, resolver.createTypeOfExpression(input.expression, input, declarationEmitNodeBuilderFlags, symbolTracker), /*initializer*/ undefined);
+                    if (isolatedDeclarations) {
+                        reportIsolatedDeclarationError(input);
+                    }
+                    const type = isolatedDeclarations ? 
+                        factory.createTypeReferenceNode("invalud") :
+                        resolver.createTypeOfExpression(input.expression, input, declarationEmitNodeBuilderFlags, symbolTracker)
+                    const varDecl = factory.createVariableDeclaration(newId, /*exclamationToken*/ undefined, type, /*initializer*/ undefined);
                     errorFallbackNode = undefined;
                     const statement = factory.createVariableStatement(needsDeclare ? [factory.createModifier(SyntaxKind.DeclareKeyword)] : [], factory.createVariableDeclarationList([varDecl], NodeFlags.Const));
 
@@ -1494,9 +1515,15 @@ export function transformDeclarations(context: TransformationContext) {
                             return undefined; // TODO GH#33569: Handle element access expressions that created late bound names (rather than silently omitting them)
                         }
                         getSymbolAccessibilityDiagnostic = createGetSymbolAccessibilityDiagnosticForNode(p.valueDeclaration);
-                        const type = resolver.createTypeOfDeclaration(p.valueDeclaration, fakespace, declarationEmitNodeBuilderFlags, symbolTracker);
+                        let type = resolver.createTypeOfDeclaration(p.valueDeclaration, fakespace, declarationEmitNodeBuilderFlags, symbolTracker);
                         getSymbolAccessibilityDiagnostic = oldDiag;
                         const nameStr = unescapeLeadingUnderscores(p.escapedName);
+
+                        if(isolatedDeclarations) {
+                            reportIsolatedDeclarationError(p.valueDeclaration);
+                            type = factory.createTypeReferenceNode("invalid");
+                        }
+
                         const isNonContextualKeywordName = isStringANonContextualKeyword(nameStr);
                         const name = isNonContextualKeywordName ? factory.getGeneratedNameForNode(p.valueDeclaration) : factory.createIdentifier(nameStr);
                         if (isNonContextualKeywordName) {
@@ -1678,6 +1705,24 @@ export function transformDeclarations(context: TransformationContext) {
                 if (extendsClause && !isEntityNameExpression(extendsClause.expression) && extendsClause.expression.kind !== SyntaxKind.NullKeyword) {
                     // We must add a temporary declaration for the extends clause expression
 
+                    // Isolated declarations do not allow inferred type in the extends clause
+                    if(isolatedDeclarations) {
+                        reportIsolatedDeclarationError(extendsClause);
+                        return cleanup(factory.updateClassDeclaration(
+                            input,
+                            modifiers,
+                            input.name,
+                            typeParameters,
+                            factory.createNodeArray([factory.createHeritageClause(SyntaxKind.ExtendsKeyword, 
+                                [
+                                    factory.createExpressionWithTypeArguments(
+                                        factory.createIdentifier("invalid"),
+                                        /* typeArguments */undefined
+                                    )
+                                ])]),
+                            members
+                        ))
+                    }
                     const oldId = input.name ? unescapeLeadingUnderscores(input.name.escapedText) : "default";
                     const newId = factory.createUniqueName(`${oldId}_base`, GeneratedIdentifierFlags.Optimistic);
                     getSymbolAccessibilityDiagnostic = () => ({
@@ -1725,7 +1770,7 @@ export function transformDeclarations(context: TransformationContext) {
                 return cleanup(factory.updateEnumDeclaration(input, factory.createNodeArray(ensureModifiers(input)), input.name, factory.createNodeArray(mapDefined(input.members, m => {
                     if (shouldStripInternal(m)) return;
                     // Rewrite enum values to their constants, if available
-                    const constValue = resolver.getConstantValue(m);
+                    const constValue = isolatedDeclarations? undefined : resolver.getConstantValue(m);
                     return preserveJsDoc(factory.updateEnumMember(m, m.name, constValue !== undefined ? typeof constValue === "string" ? factory.createStringLiteral(constValue) : factory.createNumericLiteral(constValue) : undefined), m);
                 }))));
             }
