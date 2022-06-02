@@ -3121,7 +3121,7 @@ namespace ts {
                 setResolvedTypeReferenceDirective(file, fileName, resolvedTypeReferenceDirective);
                 const mode = ref.resolutionMode || file.impliedNodeFormat;
                 if (mode && getEmitModuleResolutionKind(options) !== ModuleResolutionKind.Node16 && getEmitModuleResolutionKind(options) !== ModuleResolutionKind.NodeNext) {
-                    programDiagnostics.add(createDiagnosticForRange(file, ref, Diagnostics.Resolution_modes_are_only_supported_when_moduleResolution_is_node16_or_nodenext));
+                    programDiagnostics.add(createDiagnosticForRange(file, ref, Diagnostics.resolution_mode_assertions_are_only_supported_when_moduleResolution_is_node16_or_nodenext));
                 }
                 processTypeReferenceDirective(fileName, mode, resolvedTypeReferenceDirective, { kind: FileIncludeKind.TypeReferenceDirective, file: file.path, index, });
             }
