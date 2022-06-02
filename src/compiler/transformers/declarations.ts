@@ -795,13 +795,13 @@ namespace ts {
             // Nothing visible
         }
 
-        function getResolutionModeOverrideForClauseInNightly<T extends AssertClause | ImportTypeAssertionContainer>(container: T | undefined): T | undefined {
-            const mode = getResolutionModeOverrideForClause(container?.kind === SyntaxKind.AssertClause ? container : container?.assertClause);
+        function getResolutionModeOverrideForClauseInNightly(assertClause: AssertClause | undefined) {
+            const mode = getResolutionModeOverrideForClause(assertClause);
             if (mode !== undefined) {
                 if (!isNightly()) {
-                    context.addDiagnostic(createDiagnosticForNode(container!, Diagnostics.Resolution_mode_assertions_are_unstable_Use_nightly_TypeScript_to_silence_this_error_Try_updating_with_npm_install_D_typescript_next));
+                    context.addDiagnostic(createDiagnosticForNode(assertClause!, Diagnostics.resolution_mode_assertions_are_unstable_Use_nightly_TypeScript_to_silence_this_error_Try_updating_with_npm_install_D_typescript_next));
                 }
-                return container;
+                return assertClause;
             }
             return undefined;
         }
@@ -1074,7 +1074,7 @@ namespace ts {
                         return cleanup(factory.updateImportTypeNode(
                             input,
                             factory.updateLiteralTypeNode(input.argument, rewriteModuleSpecifier(input, input.argument.literal)),
-                            getResolutionModeOverrideForClauseInNightly(input.assertions),
+                            input.assertions,
                             input.qualifier,
                             visitNodes(input.typeArguments, visitDeclarationSubtree, isTypeNode),
                             input.isTypeOf
