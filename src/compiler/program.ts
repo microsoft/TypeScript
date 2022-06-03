@@ -540,6 +540,8 @@ namespace ts {
      * Subset of a SourceFile used to calculate index-based resolutions
      * This includes some internal fields, so unless you have very good reason,
      * (and are willing to use some less stable internals) you should probably just pass a SourceFile.
+     * 
+     * @internal
      */
     export interface SourceFileImportsList {
         /* @internal */ imports: SourceFile["imports"];
@@ -562,7 +564,10 @@ namespace ts {
      * @param file File to fetch the resolution mode within
      * @param index Index into the file's complete resolution list to get the resolution of - this is a concatenation of the file's imports and module augmentations
      */
-    export function getModeForResolutionAtIndex(file: SourceFileImportsList, index: number) {
+    export function getModeForResolutionAtIndex(file: SourceFile, index: number): ModuleKind.CommonJS | ModuleKind.ESNext | undefined;
+    /** @internal */
+    export function getModeForResolutionAtIndex(file: SourceFileImportsList, index: number): ModuleKind.CommonJS | ModuleKind.ESNext | undefined;
+    export function getModeForResolutionAtIndex(file: SourceFileImportsList, index: number): ModuleKind.CommonJS | ModuleKind.ESNext | undefined {
         if (file.impliedNodeFormat === undefined) return undefined;
         // we ensure all elements of file.imports and file.moduleAugmentations have the relevant parent pointers set during program setup,
         // so it's safe to use them even pre-bind
