@@ -540,7 +540,7 @@ namespace ts {
      * Subset of a SourceFile used to calculate index-based resolutions
      * This includes some internal fields, so unless you have very good reason,
      * (and are willing to use some less stable internals) you should probably just pass a SourceFile.
-     * 
+     *
      * @internal
      */
     export interface SourceFileImportsList {
@@ -566,6 +566,7 @@ namespace ts {
      */
     export function getModeForResolutionAtIndex(file: SourceFile, index: number): ModuleKind.CommonJS | ModuleKind.ESNext | undefined;
     /** @internal */
+    // eslint-disable-next-line @typescript-eslint/unified-signatures
     export function getModeForResolutionAtIndex(file: SourceFileImportsList, index: number): ModuleKind.CommonJS | ModuleKind.ESNext | undefined;
     export function getModeForResolutionAtIndex(file: SourceFileImportsList, index: number): ModuleKind.CommonJS | ModuleKind.ESNext | undefined {
         if (file.impliedNodeFormat === undefined) return undefined;
