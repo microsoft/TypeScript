@@ -2016,6 +2016,8 @@ namespace ts {
             case SyntaxKind.AwaitExpression:
             case SyntaxKind.MetaProperty:
                 return true;
+            case SyntaxKind.ExpressionWithTypeArguments:
+                return !isHeritageClause(node.parent);
             case SyntaxKind.QualifiedName:
                 while (node.parent.kind === SyntaxKind.QualifiedName) {
                     node = node.parent;
