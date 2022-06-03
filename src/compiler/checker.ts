@@ -26840,6 +26840,14 @@ namespace ts {
                 const lhsType = getTypeOfExpression(e.expression);
                 return isPrivateIdentifier(e.name) ? tryGetPrivateIdentifierPropertyOfType(lhsType, e.name) : getPropertyOfType(lhsType, e.name.escapedText);
             }
+            if (isElementAccessExpression(e)) {
+                const propType = checkExpressionCached(e.argumentExpression);
+                if (!isTypeUsableAsPropertyName(propType)) {
+                    return undefined;
+                }
+                const lhsType = getTypeOfExpression(e.expression);
+                return getPropertyOfType(lhsType, getPropertyNameFromType(propType));
+            }
             return undefined;
 
             function tryGetPrivateIdentifierPropertyOfType(type: Type, id: PrivateIdentifier) {
