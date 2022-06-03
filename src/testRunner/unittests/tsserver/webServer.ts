@@ -62,7 +62,7 @@ namespace ts.projectSystem {
                     content: "export const numberConst = 10; export const arrayConst: Array<string> = [];"
                 };
                 // Lib files are rooted
-                const libFilePath = isVfs ? "/a/lib/lib.d.ts" : "/lib.d.ts"
+                const libFilePath = isVfs ? "/a/lib/lib.d.ts" : "/lib.d.ts";
                 session.executeCommand({
                     seq: 1,
                     type: "request",

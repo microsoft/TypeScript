@@ -98,28 +98,28 @@ ${file.fileContent}`;
                     arguments: { file: app.file }
                 }],
             ];
-            VirtualFS.createWatcher(fshost.fsWatches, '/host/b/app.ts' as Path, {
+            VirtualFS.createWatcher(fshost.fsWatches, "/host/b/app.ts" as Path, {
                 cb: (_, relativeFileName) => {
-                    assert.fail("The watcher for /host/b/app.ts should not be called at all. Called with " + relativeFileName)
+                    assert.fail("The watcher for /host/b/app.ts should not be called at all. Called with " + relativeFileName);
                 },
-                directoryName: '/host/b',
+                directoryName: "/host/b",
                 fallbackOptions: {},
                 fallbackPollingInterval: PollingInterval.Medium,
-            })
+            });
 
             const scenario = "updateFileSystem";
             const subScenario = "open and close files";
             baselineFileSystem(scenario, subScenario, requests, fshost, session);
 
             host.ensureFileOrFolder({
-                path: '/host/b/app.ts',
+                path: "/host/b/app.ts",
                 content: 'console.log("hello")'
-            })
-            host.modifyFile('/host/b/app.ts', "console.log('goodbye')")
-            assert.isFalse(host.fileExists('/fshost/b/app.ts'), 'host fileExists /fshost/b/app.ts')
-            assert.isTrue(fshost.fileExists('/fshost/b/app.ts'), 'fshost fileExists /fshost/b/app.ts')
-            assert.isTrue(host.fileExists('/host/b/app.ts'), 'host fileExists /host/b/app.ts')
-            assert.isFalse(fshost.fileExists('/host/b/app.ts'), 'fshost fileExists /host/b/app.ts')
+            });
+            host.modifyFile("/host/b/app.ts", "console.log('goodbye')");
+            assert.isFalse(host.fileExists("/fshost/b/app.ts"), "host fileExists /fshost/b/app.ts");
+            assert.isTrue(fshost.fileExists("/fshost/b/app.ts"), "fshost fileExists /fshost/b/app.ts");
+            assert.isTrue(host.fileExists("/host/b/app.ts"), "host fileExists /host/b/app.ts");
+            assert.isFalse(fshost.fileExists("/host/b/app.ts"), "fshost fileExists /host/b/app.ts");
         });
     });
 }
