@@ -5103,14 +5103,6 @@ declare namespace ts {
     export function formatDiagnosticsWithColorAndContext(diagnostics: readonly Diagnostic[], host: FormatDiagnosticsHost): string;
     export function flattenDiagnosticMessageText(diag: string | DiagnosticMessageChain | undefined, newLine: string, indent?: number): string;
     /**
-     * Subset of a SourceFile used to calculate index-based resolutions
-     * This includes some internal fields, so unless you have very good reason,
-     * (and are willing to use some less stable internals) you should probably just pass a SourceFile.
-     */
-    export interface SourceFileImportsList {
-        impliedNodeFormat?: SourceFile["impliedNodeFormat"];
-    }
-    /**
      * Calculates the resulting resolution mode for some reference in some file - this is generally the explicitly
      * provided resolution mode in the reference, unless one is not present, in which case it is the mode of the containing file.
      */
@@ -5122,7 +5114,7 @@ declare namespace ts {
      * @param file File to fetch the resolution mode within
      * @param index Index into the file's complete resolution list to get the resolution of - this is a concatenation of the file's imports and module augmentations
      */
-    export function getModeForResolutionAtIndex(file: SourceFileImportsList, index: number): ModuleKind.CommonJS | ModuleKind.ESNext | undefined;
+    export function getModeForResolutionAtIndex(file: SourceFile, index: number): ModuleKind.CommonJS | ModuleKind.ESNext | undefined;
     /**
      * Calculates the final resolution mode for a given module reference node. This is generally the explicitly provided resolution mode, if
      * one exists, or the mode of the containing source file. (Excepting import=require, which is always commonjs, and dynamic import, which is always esm).
