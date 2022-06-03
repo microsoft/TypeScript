@@ -3986,6 +3986,7 @@ namespace ts.Completions {
         return kind === SyntaxKind.AsyncKeyword
             || kind === SyntaxKind.AwaitKeyword
             || kind === SyntaxKind.AsKeyword
+            || kind === SyntaxKind.TypeKeyword
             || !isContextualKeyword(kind) && !isClassMemberCompletionKeyword(kind);
     }
 

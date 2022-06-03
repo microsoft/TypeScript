@@ -1,12 +1,23 @@
 tests/cases/conformance/types/conditional/conditionalTypes1.ts(12,5): error TS2322: Type 'T' is not assignable to type 'NonNullable<T>'.
+  Type 'T' is not assignable to type '{}'.
 tests/cases/conformance/types/conditional/conditionalTypes1.ts(17,5): error TS2322: Type 'T' is not assignable to type 'NonNullable<T>'.
   Type 'string | undefined' is not assignable to type 'NonNullable<T>'.
     Type 'undefined' is not assignable to type 'NonNullable<T>'.
+      Type 'undefined' is not assignable to type 'T'.
+        'undefined' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'string | undefined'.
+          Type 'T' is not assignable to type '{}'.
+            Type 'string | undefined' is not assignable to type '{}'.
+              Type 'undefined' is not assignable to type '{}'.
 tests/cases/conformance/types/conditional/conditionalTypes1.ts(24,5): error TS2322: Type 'T[keyof T] | undefined' is not assignable to type 'NonNullable<Partial<T>[keyof T]>'.
-  Type 'undefined' is not assignable to type 'NonNullable<Partial<T>[keyof T]>'.
+  Type 'undefined' is not assignable to type 'T[keyof T] & {}'.
+    Type 'undefined' is not assignable to type 'T[keyof T]'.
 tests/cases/conformance/types/conditional/conditionalTypes1.ts(29,5): error TS2322: Type 'T["x"]' is not assignable to type 'NonNullable<T["x"]>'.
   Type 'string | undefined' is not assignable to type 'NonNullable<T["x"]>'.
     Type 'undefined' is not assignable to type 'NonNullable<T["x"]>'.
+      Type 'undefined' is not assignable to type '{}'.
+        Type 'T["x"]' is not assignable to type '{}'.
+          Type 'string | undefined' is not assignable to type '{}'.
+            Type 'undefined' is not assignable to type '{}'.
 tests/cases/conformance/types/conditional/conditionalTypes1.ts(103,5): error TS2322: Type 'FunctionProperties<T>' is not assignable to type 'T'.
   'T' could be instantiated with an arbitrary type which could be unrelated to 'FunctionProperties<T>'.
 tests/cases/conformance/types/conditional/conditionalTypes1.ts(104,5): error TS2322: Type 'NonFunctionProperties<T>' is not assignable to type 'T'.
@@ -72,6 +83,8 @@ tests/cases/conformance/types/conditional/conditionalTypes1.ts(288,43): error TS
         y = x;  // Error
         ~
 !!! error TS2322: Type 'T' is not assignable to type 'NonNullable<T>'.
+!!! error TS2322:   Type 'T' is not assignable to type '{}'.
+!!! related TS2208 tests/cases/conformance/types/conditional/conditionalTypes1.ts:10:13: This type parameter probably needs an `extends object` constraint.
     }
     
     function f2<T extends string | undefined>(x: T, y: NonNullable<T>) {
@@ -81,6 +94,11 @@ tests/cases/conformance/types/conditional/conditionalTypes1.ts(288,43): error TS
 !!! error TS2322: Type 'T' is not assignable to type 'NonNullable<T>'.
 !!! error TS2322:   Type 'string | undefined' is not assignable to type 'NonNullable<T>'.
 !!! error TS2322:     Type 'undefined' is not assignable to type 'NonNullable<T>'.
+!!! error TS2322:       Type 'undefined' is not assignable to type 'T'.
+!!! error TS2322:         'undefined' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'string | undefined'.
+!!! error TS2322:           Type 'T' is not assignable to type '{}'.
+!!! error TS2322:             Type 'string | undefined' is not assignable to type '{}'.
+!!! error TS2322:               Type 'undefined' is not assignable to type '{}'.
         let s1: string = x;  // Error
         let s2: string = y;
     }
@@ -90,7 +108,8 @@ tests/cases/conformance/types/conditional/conditionalTypes1.ts(288,43): error TS
         y = x;  // Error
         ~
 !!! error TS2322: Type 'T[keyof T] | undefined' is not assignable to type 'NonNullable<Partial<T>[keyof T]>'.
-!!! error TS2322:   Type 'undefined' is not assignable to type 'NonNullable<Partial<T>[keyof T]>'.
+!!! error TS2322:   Type 'undefined' is not assignable to type 'T[keyof T] & {}'.
+!!! error TS2322:     Type 'undefined' is not assignable to type 'T[keyof T]'.
     }
     
     function f4<T extends { x: string | undefined }>(x: T["x"], y: NonNullable<T["x"]>) {
@@ -100,6 +119,10 @@ tests/cases/conformance/types/conditional/conditionalTypes1.ts(288,43): error TS
 !!! error TS2322: Type 'T["x"]' is not assignable to type 'NonNullable<T["x"]>'.
 !!! error TS2322:   Type 'string | undefined' is not assignable to type 'NonNullable<T["x"]>'.
 !!! error TS2322:     Type 'undefined' is not assignable to type 'NonNullable<T["x"]>'.
+!!! error TS2322:       Type 'undefined' is not assignable to type '{}'.
+!!! error TS2322:         Type 'T["x"]' is not assignable to type '{}'.
+!!! error TS2322:           Type 'string | undefined' is not assignable to type '{}'.
+!!! error TS2322:             Type 'undefined' is not assignable to type '{}'.
         let s1: string = x;  // Error
         let s2: string = y;
     }

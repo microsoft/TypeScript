@@ -1192,7 +1192,8 @@ namespace ts {
             node.transformFlags |=
                 propagateChildFlags(node.expression) |
                 TransformFlags.ContainsTypeScript |
-                TransformFlags.ContainsTypeScriptClassSyntax;
+                TransformFlags.ContainsTypeScriptClassSyntax |
+                TransformFlags.ContainsDecorators;
             return node;
         }
 

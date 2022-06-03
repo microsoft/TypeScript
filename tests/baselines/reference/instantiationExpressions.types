@@ -17,18 +17,22 @@ function f1() {
 
     let f0 = fx<>;  // Error
 >f0 : { <T>(x: T): T; <T>(x: T, n: number): T; <T, U>(t: [T, U]): [T, U]; }
+>fx<> : { <T>(x: T): T; <T>(x: T, n: number): T; <T, U>(t: [T, U]): [T, U]; }
 >fx : { <T>(x: T): T; <T>(x: T, n: number): T; <T, U>(t: [T, U]): [T, U]; }
 
     let f1 = fx<string>;  // { (x: string): string; (x: string, n: number): string; }
 >f1 : { (x: string): string; (x: string, n: number): string; }
+>fx<string> : { (x: string): string; (x: string, n: number): string; }
 >fx : { <T>(x: T): T; <T>(x: T, n: number): T; <T, U>(t: [T, U]): [T, U]; }
 
     let f2 = fx<string, number>;  // (t: [string, number]) => [string, number]
 >f2 : (t: [string, number]) => [string, number]
+>fx<string, number> : (t: [string, number]) => [string, number]
 >fx : { <T>(x: T): T; <T>(x: T, n: number): T; <T, U>(t: [T, U]): [T, U]; }
 
     let f3 = fx<string, number, boolean>;  // Error
 >f3 : {}
+>fx<string, number, boolean> : {}
 >fx : { <T>(x: T): T; <T>(x: T, n: number): T; <T, U>(t: [T, U]): [T, U]; }
 }
 
@@ -53,14 +57,17 @@ function f2() {
 
     const A0 = Array<>;  // Error
 >A0 : ArrayConstructor
+>Array<> : ArrayConstructor
 >Array : ArrayConstructor
 
     const A1 = Array<string>;  // new (...) => string[]
 >A1 : { (arrayLength: number): string[]; (...items: string[]): string[]; new (arrayLength: number): string[]; new (...items: string[]): string[]; isArray(arg: any): arg is any[]; readonly prototype: any[]; }
+>Array<string> : { (arrayLength: number): string[]; (...items: string[]): string[]; new (arrayLength: number): string[]; new (...items: string[]): string[]; isArray(arg: any): arg is any[]; readonly prototype: any[]; }
 >Array : ArrayConstructor
 
     const A2 = Array<string, number>;  // Error
 >A2 : { isArray(arg: any): arg is any[]; readonly prototype: any[]; }
+>Array<string, number> : { isArray(arg: any): arg is any[]; readonly prototype: any[]; }
 >Array : ArrayConstructor
 }
 
@@ -92,10 +99,12 @@ function f3() {
 
     let c1 = C<string>;  // { new (x: string): C<string>; f<U>(x: U): T[]; prototype: C<any>; }
 >c1 : { new (x: string): C<string>; prototype: C<any>; f<U>(x: U): U[]; }
+>C<string> : { new (x: string): C<string>; prototype: C<any>; f<U>(x: U): U[]; }
 >C : typeof C
 
     let f1 = C.f<string>;  // (x: string) => string[]
 >f1 : (x: string) => string[]
+>C.f<string> : (x: string) => string[]
 >C.f : <U>(x: U) => U[]
 >C : typeof C
 >f : <U>(x: U) => U[]
@@ -110,6 +119,7 @@ function f10(f: { <T>(a: T): T, <U>(a: U, b: number): U[] }) {
 
     let fs = f<string>;  // { (a: string): string; (a: string, b: number): string[]; }
 >fs : { (a: string): string; (a: string, b: number): string[]; }
+>f<string> : { (a: string): string; (a: string, b: number): string[]; }
 >f : { <T>(a: T): T; <U>(a: U, b: number): U[]; }
 }
 
@@ -122,6 +132,7 @@ function f11(f: { <T>(a: T): T, (a: string, b: number): string[] }) {
 
     let fs = f<string>;  // (a: string) => string
 >fs : (a: string) => string
+>f<string> : (a: string) => string
 >f : { <T>(a: T): T; (a: string, b: number): string[]; }
 }
 
@@ -133,6 +144,7 @@ function f12(f: { <T>(a: T): T, x: string }) {
 
     let fs = f<string>;  // { (a: string): string; x: string; }
 >fs : { (a: string): string; x: string; }
+>f<string> : { (a: string): string; x: string; }
 >f : { <T>(a: T): T; x: string; }
 }
 
@@ -144,6 +156,7 @@ function f13(f: { x: string, y: string }) {
 
     let fs = f<string>;  // Error, no applicable signatures
 >fs : { x: string; y: string; }
+>f<string> : { x: string; y: string; }
 >f : { x: string; y: string; }
 }
 
@@ -156,6 +169,7 @@ function f14(f: { new <T>(a: T): T, new <U>(a: U, b: number): U[] }) {
 
     let fs = f<string>;  // { new (a: string): string; new (a: string, b: number): string[]; }
 >fs : { new (a: string): string; new (a: string, b: number): string[]; }
+>f<string> : { new (a: string): string; new (a: string, b: number): string[]; }
 >f : { new <T>(a: T): T; new <U>(a: U, b: number): U[]; }
 }
 
@@ -168,6 +182,7 @@ function f15(f: { new <T>(a: T): T, <U>(a: U, b: number): U[] }) {
 
     let fs = f<string>;  // { new (a: string): string; (a: string, b: number): string[]; }
 >fs : { (a: string, b: number): string[]; new (a: string): string; }
+>f<string> : { (a: string, b: number): string[]; new (a: string): string; }
 >f : { <U>(a: U, b: number): U[]; new <T>(a: T): T; }
 }
 
@@ -180,6 +195,7 @@ function f16(f: { new <T>(a: T): T, (a: string, b: number): string[] }) {
 
     let fs = f<string>;  // new (a: string) => string
 >fs : new (a: string) => string
+>f<string> : new (a: string) => string
 >f : { (a: string, b: number): string[]; new <T>(a: T): T; }
 }
 
@@ -192,6 +208,7 @@ function f17(f: { <T>(a: T): T, new (a: string, b: number): string[] }) {
 
     let fs = f<string>;  // (a: string) => string
 >fs : (a: string) => string
+>f<string> : (a: string) => string
 >f : { <T>(a: T): T; new (a: string, b: number): string[]; }
 }
 
@@ -204,6 +221,7 @@ function f20(f: (<T>(a: T) => T) & (<U>(a: U, b: number) => U[])) {
 
     let fs = f<string>;  // ((a: string) => string) & ((a: string, b: number) => string[]])
 >fs : ((a: string) => string) & ((a: string, b: number) => string[])
+>f<string> : ((a: string) => string) & ((a: string, b: number) => string[])
 >f : (<T>(a: T) => T) & (<U>(a: U, b: number) => U[])
 }
 
@@ -216,6 +234,7 @@ function f21(f: (<T>(a: T) => T) & ((a: string, b: number) => string[])) {
 
     let fs = f<string>;  // (a: string) => string
 >fs : (a: string) => string
+>f<string> : (a: string) => string
 >f : (<T>(a: T) => T) & ((a: string, b: number) => string[])
 }
 
@@ -227,6 +246,7 @@ function f22(f: (<T>(a: T) => T) & { x: string }) {
 
     let fs = f<string>;  // ((a: string) => string) & { x: string }
 >fs : ((a: string) => string) & { x: string; }
+>f<string> : ((a: string) => string) & { x: string; }
 >f : (<T>(a: T) => T) & { x: string; }
 }
 
@@ -238,6 +258,7 @@ function f23(f: { x: string } & { y: string }) {
 
     let fs = f<string>;  // Error, no applicable signatures
 >fs : { x: string; } & { y: string; }
+>f<string> : { x: string; } & { y: string; }
 >f : { x: string; } & { y: string; }
 }
 
@@ -250,6 +271,7 @@ function f24(f: (new <T>(a: T) => T) & (new <U>(a: U, b: number) => U[])) {
 
     let fs = f<string>;  // (new (a: string) => string) & ((a: string, b: number) => string[]])
 >fs : (new (a: string) => string) & (new (a: string, b: number) => string[])
+>f<string> : (new (a: string) => string) & (new (a: string, b: number) => string[])
 >f : (new <T>(a: T) => T) & (new <U>(a: U, b: number) => U[])
 }
 
@@ -262,6 +284,7 @@ function f25(f: (new <T>(a: T) => T) & (<U>(a: U, b: number) => U[])) {
 
     let fs = f<string>;  // (new (a: string) => string) & ((a: string, b: number) => string[]])
 >fs : (new (a: string) => string) & ((a: string, b: number) => string[])
+>f<string> : (new (a: string) => string) & ((a: string, b: number) => string[])
 >f : (new <T>(a: T) => T) & (<U>(a: U, b: number) => U[])
 }
 
@@ -274,6 +297,7 @@ function f26(f: (new <T>(a: T) => T) & ((a: string, b: number) => string[])) {
 
     let fs = f<string>;  // new (a: string) => string
 >fs : new (a: string) => string
+>f<string> : new (a: string) => string
 >f : (new <T>(a: T) => T) & ((a: string, b: number) => string[])
 }
 
@@ -286,6 +310,7 @@ function f27(f: (<T>(a: T) => T) & (new (a: string, b: number) => string[])) {
 
     let fs = f<string>;  // (a: string) => string
 >fs : (a: string) => string
+>f<string> : (a: string) => string
 >f : (<T>(a: T) => T) & (new (a: string, b: number) => string[])
 }
 
@@ -298,6 +323,7 @@ function f30(f: (<T>(a: T) => T) | (<U>(a: U, b: number) => U[])) {
 
     let fs = f<string>;  // ((a: string) => string) | ((a: string, b: number) => string[]])
 >fs : ((a: string) => string) | ((a: string, b: number) => string[])
+>f<string> : ((a: string) => string) | ((a: string, b: number) => string[])
 >f : (<T>(a: T) => T) | (<U>(a: U, b: number) => U[])
 }
 
@@ -310,6 +336,7 @@ function f31(f: (<T>(a: T) => T) | ((a: string, b: number) => string[])) {
 
     let fs = f<string>;  // Error, '(a: string, b: number) => string[]' has no applicable signatures
 >fs : ((a: string) => string) | {}
+>f<string> : ((a: string) => string) | {}
 >f : (<T>(a: T) => T) | ((a: string, b: number) => string[])
 }
 
@@ -321,6 +348,7 @@ function f32(f: (<T>(a: T) => T) | { x: string }) {
 
     let fs = f<string>;  // ((a: string) => string) | { x: string }
 >fs : { x: string; } | ((a: string) => string)
+>f<string> : { x: string; } | ((a: string) => string)
 >f : { x: string; } | (<T>(a: T) => T)
 }
 
@@ -332,6 +360,7 @@ function f33(f: { x: string } | { y: string }) {
 
     let fs = f<string>;  // Error, no applicable signatures
 >fs : { x: string; } | { y: string; }
+>f<string> : { x: string; } | { y: string; }
 >f : { x: string; } | { y: string; }
 }
 
@@ -344,6 +373,7 @@ function f34(f: (new <T>(a: T) => T) | (new <U>(a: U, b: number) => U[])) {
 
     let fs = f<string>;  // (new (a: string) => string) | ((a: string, b: number) => string[]])
 >fs : (new (a: string) => string) | (new (a: string, b: number) => string[])
+>f<string> : (new (a: string) => string) | (new (a: string, b: number) => string[])
 >f : (new <T>(a: T) => T) | (new <U>(a: U, b: number) => U[])
 }
 
@@ -356,6 +386,7 @@ function f35(f: (new <T>(a: T) => T) | (<U>(a: U, b: number) => U[])) {
 
     let fs = f<string>;  // (new (a: string) => string) | ((a: string, b: number) => string[]])
 >fs : (new (a: string) => string) | ((a: string, b: number) => string[])
+>f<string> : (new (a: string) => string) | ((a: string, b: number) => string[])
 >f : (new <T>(a: T) => T) | (<U>(a: U, b: number) => U[])
 }
 
@@ -368,6 +399,7 @@ function f36(f: (new <T>(a: T) => T) | ((a: string, b: number) => string[])) {
 
     let fs = f<string>;  // Error, '(a: string, b: number) => string[]' has no applicable signatures
 >fs : (new (a: string) => string) | {}
+>f<string> : (new (a: string) => string) | {}
 >f : (new <T>(a: T) => T) | ((a: string, b: number) => string[])
 }
 
@@ -380,6 +412,7 @@ function f37(f: (<T>(a: T) => T) | (new (a: string, b: number) => string[])) {
 
     let fs = f<string>;  // Error, 'new (a: string, b: number) => string[]' has no applicable signatures
 >fs : ((a: string) => string) | {}
+>f<string> : ((a: string) => string) | {}
 >f : (<T>(a: T) => T) | (new (a: string, b: number) => string[])
 }
 
@@ -392,6 +425,7 @@ function f38<T extends (<A>(x: A) => A) | (<B>(x: B) => B[]), U>(f: T | U | (<C>
 
     let fs = f<string>;  // U | ((x: string) => string) | ((x: string) => string[]) | ((x: string) => string[][])
 >fs : U | ((x: string) => string) | ((x: string) => string[]) | ((x: string) => string[][])
+>f<string> : U | ((x: string) => string) | ((x: string) => string[]) | ((x: string) => string[][])
 >f : T | U | (<C>(x: C) => C[][])
 }
 

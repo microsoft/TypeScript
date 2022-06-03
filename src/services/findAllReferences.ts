@@ -564,7 +564,7 @@ namespace ts.FindAllReferences {
     }
 
     /** Whether a reference, `node`, is a definition of the `target` symbol */
-    function isDeclarationOfSymbol(node: Node, target: Symbol | undefined): boolean {
+    export function isDeclarationOfSymbol(node: Node, target: Symbol | undefined): boolean {
         if (!target) return false;
         const source = getDeclarationFromName(node) ||
             (node.kind === SyntaxKind.DefaultKeyword ? node.parent
@@ -1601,7 +1601,7 @@ namespace ts.FindAllReferences {
             // Use the parent symbol if the location is commonjs require syntax on javascript files only.
             if (isInJSFile(referenceLocation)
                 && referenceLocation.parent.kind === SyntaxKind.BindingElement
-                && isVariableDeclarationInitializedToBareOrAccessedRequire(referenceLocation.parent)) {
+                && isVariableDeclarationInitializedToBareOrAccessedRequire(referenceLocation.parent.parent.parent)) {
                 referenceSymbol = referenceLocation.parent.symbol;
                 // The parent will not have a symbol if it's an ObjectBindingPattern (when destructuring is used).  In
                 // this case, just skip it, since the bound identifiers are not an alias of the import.

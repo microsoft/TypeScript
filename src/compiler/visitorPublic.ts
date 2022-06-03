@@ -80,8 +80,6 @@ namespace ts {
             return nodes;
         }
 
-        let updated: T[] | undefined;
-
         // Ensure start and count have valid values
         const length = nodes.length;
         if (start === undefined || start < 0) {
@@ -96,11 +94,54 @@ namespace ts {
         let pos = -1;
         let end = -1;
         if (start > 0 || count < length) {
-            // If we are not visiting all of the original nodes, we must always create a new array.
             // Since this is a fragment of a node array, we do not copy over the previous location
             // and will only copy over `hasTrailingComma` if we are including the last element.
-            updated = [];
             hasTrailingComma = nodes.hasTrailingComma && start + count === length;
+        }
+        else {
+            pos = nodes.pos;
+            end = nodes.end;
+            hasTrailingComma = nodes.hasTrailingComma;
+        }
+
+        const updated = visitArrayWorker(nodes, visitor, test, start, count);
+        if (updated !== nodes as readonly T[]) {
+            // TODO(rbuckton): Remove dependency on `ts.factory` in favor of a provided factory.
+            const updatedArray = factory.createNodeArray(updated, hasTrailingComma);
+            setTextRangePosEnd(updatedArray, pos, end);
+            return updatedArray;
+        }
+
+        return nodes;
+    }
+
+    /* @internal */
+    export function visitArray<T extends Node>(nodes: readonly T[] | undefined, visitor: Visitor | undefined, test: (node: Node) => node is T, start?: number, count?: number): readonly T[] | undefined {
+        if (nodes === undefined || visitor === undefined) {
+            return nodes;
+        }
+
+        // Ensure start and count have valid values
+        const length = nodes.length;
+        if (start === undefined || start < 0) {
+            start = 0;
+        }
+
+        if (count === undefined || count > length - start) {
+            count = length - start;
+        }
+
+        return visitArrayWorker(nodes, visitor, test, start, count);
+    }
+
+    /* @internal */
+    function visitArrayWorker<T extends Node>(nodes: readonly T[], visitor: Visitor, test: ((node: Node) => boolean) | undefined, start: number, count: number): readonly T[] | undefined {
+        let updated: T[] | undefined;
+
+        const length = nodes.length;
+        if (start > 0 || count < length) {
+            // If we are not visiting all of the original nodes, we must always create a new array.
+            updated = [];
         }
 
         // Visit each original node.
@@ -111,9 +152,6 @@ namespace ts {
                 if (updated === undefined) {
                     // Ensure we have a copy of `nodes`, up to the current index.
                     updated = nodes.slice(0, i);
-                    hasTrailingComma = nodes.hasTrailingComma;
-                    pos = nodes.pos;
-                    end = nodes.end;
                 }
                 if (visited) {
                     if (isArray(visited)) {
@@ -130,14 +168,7 @@ namespace ts {
             }
         }
 
-        if (updated) {
-            // TODO(rbuckton): Remove dependency on `ts.factory` in favor of a provided factory.
-            const updatedArray = factory.createNodeArray(updated, hasTrailingComma);
-            setTextRangePosEnd(updatedArray, pos, end);
-            return updatedArray;
-        }
-
-        return nodes;
+        return updated ?? nodes;
     }
 
     /**

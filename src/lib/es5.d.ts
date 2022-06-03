@@ -1564,7 +1564,7 @@ type Omit<T, K extends keyof any> = Pick<T, Exclude<keyof T, K>>;
 /**
  * Exclude null and undefined from T
  */
-type NonNullable<T> = T extends null | undefined ? never : T;
+type NonNullable<T> = T & {};
 
 /**
  * Obtain the parameters of a function type in a tuple
