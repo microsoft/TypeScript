@@ -4138,7 +4138,7 @@ namespace ts.server {
         }
 
         private async enableRequestedPluginsWorker(pendingPlugins: [Project, Promise<BeginEnablePluginResult>[]][]) {
-            // This should only be called from `enableRequestedServicePlugins`, which ensures this precondition is met.
+            // This should only be called from `enableRequestedPluginsAsync`, which ensures this precondition is met.
             Debug.assert(this.currentPluginEnablementPromise === undefined);
 
             // Process all pending plugins, partitioned by project. This way a project with few plugins doesn't need to wait
