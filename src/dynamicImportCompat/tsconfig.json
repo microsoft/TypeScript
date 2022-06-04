@@ -8,9 +8,9 @@
         "lib": ["esnext"],
         "declaration": false,
         "sourceMap": true,
-        "tsBuildInfoFile": "../../built/local/tsserverWeb.tsbuildinfo"
+        "tsBuildInfoFile": "../../built/local/dynamicImportCompat.tsbuildinfo"
     },
     "files": [
-        "tsserverWeb.ts",
+        "dynamicImportCompat.ts",
     ]
 }

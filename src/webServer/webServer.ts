@@ -118,7 +118,7 @@ namespace ts.server {
     if (typeof importScripts === "function") {
         try {
             // NOTE: importScripts is synchronous
-            importScripts("tsserverWeb.js");
+            importScripts("dynamicImportCompat.js");
         }
         catch {
             // ignored

@@ -9,7 +9,7 @@
         { "path": "./watchGuard" },
         { "path": "./debug" },
         { "path": "./cancellationToken" },
-        { "path": "./tsserverWeb" },
+        { "path": "./dynamicImportCompat" },
         { "path": "./testRunner" }
     ]
 }

@@ -4082,7 +4082,7 @@ namespace ts.server {
                 return;
             }
 
-            // Otherwise, load the plugin using `resolve`
+            // Otherwise, load the plugin using `require`
             project.endEnablePlugin(project.beginEnablePluginSync(pluginConfigEntry, searchPaths, pluginConfigOverrides));
         }
 

@@ -214,11 +214,11 @@ task("watch-services").flags = {
     "   --built": "Compile using the built version of the compiler."
 };
 
-const buildServerWeb = () => buildProject("src/tsserverWeb", cmdLineOptions);
-task("tsserverWeb", buildServerWeb);
+const buildDynamicImportCompat = () => buildProject("src/dynamicImportCompat", cmdLineOptions);
+task("dynamicImportCompat", buildDynamicImportCompat);
 
 const buildServerMain = () => buildProject("src/tsserver", cmdLineOptions);
-const buildServer = series(buildServerWeb, buildServerMain);
+const buildServer = series(buildDynamicImportCompat, buildServerMain);
 buildServer.displayName = "buildServer";
 task("tsserver", series(preBuild, buildServer));
 task("tsserver").description = "Builds the language server";
@@ -226,17 +226,17 @@ task("tsserver").flags = {
     "   --built": "Compile using the built version of the compiler."
 };
 
-const cleanServerWeb = () => cleanProject("src/tsserverWeb");
+const cleanDynamicImportCompat = () => cleanProject("src/dynamicImportCompat");
 const cleanServerMain = () => cleanProject("src/tsserver");
-const cleanServer = series(cleanServerWeb, cleanServerMain);
+const cleanServer = series(cleanDynamicImportCompat, cleanServerMain);
 cleanServer.displayName = "cleanServer";
 cleanTasks.push(cleanServer);
 task("clean-tsserver", cleanServer);
 task("clean-tsserver").description = "Cleans outputs for the language server";
 
-const watchServerWeb = () => watchProject("src/tsserverWeb", cmdLineOptions);
+const watchDynamicImportCompat = () => watchProject("src/dynamicImportCompat", cmdLineOptions);
 const watchServer = () => watchProject("src/tsserver", cmdLineOptions);
-task("watch-tsserver", series(preBuild, parallel(watchLib, watchDiagnostics, watchServerWeb, watchServer)));
+task("watch-tsserver", series(preBuild, parallel(watchLib, watchDiagnostics, watchDynamicImportCompat, watchServer)));
 task("watch-tsserver").description = "Watch for changes and rebuild the language server only";
 task("watch-tsserver").flags = {
     "   --built": "Compile using the built version of the compiler."
@@ -558,7 +558,7 @@ const produceLKG = async () => {
         "built/local/typescriptServices.js",
         "built/local/typescriptServices.d.ts",
         "built/local/tsserver.js",
-        "built/local/tsserverWeb.js",
+        "built/local/dynamicImportCompat.js",
         "built/local/typescript.js",
         "built/local/typescript.d.ts",
         "built/local/tsserverlibrary.js",
