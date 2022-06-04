@@ -83,8 +83,6 @@ namespace ts.codefix {
         }
 
         const pos = skipTrivia(sourceFile.text, moveRangePastModifiers(functionToConvert).pos);
-        // const pos = functionToConvert.modifiers?.end ?? functionToConvert.getStart(sourceFile);
-        // const options = functionToConvert.modifiers ? { prefix: " " } : { suffix: " " };
         changes.insertModifierAt(sourceFile, pos, SyntaxKind.AsyncKeyword, { suffix: " " });
 
         for (const returnStatement of returnStatements) {

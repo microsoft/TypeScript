@@ -4199,23 +4199,20 @@ namespace ts {
                         pos++;
                     }
 
-                    if (start < pos) {
-                        const textRange: TextRange = { pos: -1, end: -1 };
-                        if (start === 0) textRange.pos = modifiers.pos;
-                        if (pos === modifiers.length - 1) textRange.end = modifiers.end;
-                        emitNodeListItems(
-                            emit,
-                            node,
-                            modifiers,
-                            lastMode === "modifiers" ? ListFormat.Modifiers : ListFormat.Decorators,
-                            /*parenthesizerRule*/ undefined,
-                            start,
-                            pos - start,
-                            /*hasTrailingComma*/ false,
-                            textRange);
-                        start = pos;
-                    }
-
+                    const textRange: TextRange = { pos: -1, end: -1 };
+                    if (start === 0) textRange.pos = modifiers.pos;
+                    if (pos === modifiers.length - 1) textRange.end = modifiers.end;
+                    emitNodeListItems(
+                        emit,
+                        node,
+                        modifiers,
+                        lastMode === "modifiers" ? ListFormat.Modifiers : ListFormat.Decorators,
+                        /*parenthesizerRule*/ undefined,
+                        start,
+                        pos - start,
+                        /*hasTrailingComma*/ false,
+                        textRange);
+                    start = pos;
                     lastMode = mode;
                     pos++;
                 }

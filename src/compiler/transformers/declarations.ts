@@ -1557,11 +1557,11 @@ namespace ts {
             return some(statements, isScopeMarker);
         }
 
-        function ensureModifiers<T extends HasModifiers>(node: T): readonly NonNullable<T["modifiers"]>[number][] | undefined {
+        function ensureModifiers<T extends HasModifiers>(node: T): readonly Modifier[] | undefined {
             const currentFlags = getEffectiveModifierFlags(node);
             const newFlags = ensureModifierFlags(node);
             if (currentFlags === newFlags) {
-                return visitNodes(node.modifiers, n => tryCast(n, isModifier), isModifier);
+                return visitArray(node.modifiers, n => tryCast(n, isModifier), isModifier);
             }
             return factory.createModifiersFromModifierFlags(newFlags);
         }

@@ -116,8 +116,8 @@ namespace ts {
     }
 
     /* @internal */
-    export function visitArray<T extends Node>(nodes: readonly T[] | undefined, visitor: Visitor | undefined, test: (node: Node) => node is T, start?: number, count?: number): readonly T[] | undefined {
-        if (nodes === undefined || visitor === undefined) {
+    export function visitArray<T extends Node, U extends T>(nodes: readonly T[] | undefined, visitor: Visitor, test: (node: Node) => node is U, start?: number, count?: number): readonly U[] | undefined {
+        if (nodes === undefined) {
             return nodes;
         }
 
@@ -131,7 +131,7 @@ namespace ts {
             count = length - start;
         }
 
-        return visitArrayWorker(nodes, visitor, test, start, count);
+        return visitArrayWorker(nodes, visitor, test, start, count) as readonly U[];
     }
 
     /* @internal */

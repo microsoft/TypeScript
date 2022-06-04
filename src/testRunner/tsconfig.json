@@ -24,7 +24,7 @@
         { "path": "../typingsInstallerCore", "prepend": true },
         { "path": "../deprecatedCompat", "prepend": true },
         { "path": "../harness", "prepend": true },
-        { "path": "../loggedIO", "prepend": true },
+        { "path": "../loggedIO", "prepend": true }
     ],
 
     "files": [

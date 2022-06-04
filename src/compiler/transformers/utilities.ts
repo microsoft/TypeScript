@@ -467,7 +467,7 @@ namespace ts {
         }
 
         const { firstAccessor, secondAccessor, getAccessor, setAccessor } = getAllAccessorDeclarations(parent.members, accessor);
-        const firstAccessorWithDecorators = 
+        const firstAccessorWithDecorators =
             hasDecorators(firstAccessor) ? firstAccessor :
             secondAccessor && hasDecorators(secondAccessor) ? secondAccessor :
             undefined;
