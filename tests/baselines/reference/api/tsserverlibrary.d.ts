@@ -6834,7 +6834,7 @@ declare namespace ts.server {
         compressionKind: string;
         data: any;
     }
-    type RequireResult = {
+    type ModuleImportResult = {
         module: {};
         error: undefined;
     } | {
@@ -6844,16 +6844,8 @@ declare namespace ts.server {
             message?: string;
         };
     };
-    type ImportPluginResult = {
-        module: {};
-        error: undefined;
-    } | {
-        module: undefined;
-        error: {
-            stack?: string;
-            message: string;
-        };
-    };
+    /** @deprecated Use {@link ModuleImportResult} instead. */
+    type RequireResult = ModuleImportResult;
     interface ServerHost extends System {
         watchFile(path: string, callback: FileWatcherCallback, pollingInterval?: number, options?: WatchOptions): FileWatcher;
         watchDirectory(path: string, callback: DirectoryWatcherCallback, recursive?: boolean, options?: WatchOptions): FileWatcher;
@@ -6863,8 +6855,8 @@ declare namespace ts.server {
         clearImmediate(timeoutId: any): void;
         gc?(): void;
         trace?(s: string): void;
-        require?(initialPath: string, moduleName: string): RequireResult;
-        importServicePlugin?(root: string, moduleName: string): Promise<ImportPluginResult>;
+        require?(initialPath: string, moduleName: string): ModuleImportResult;
+        importServicePlugin?(root: string, moduleName: string): Promise<ModuleImportResult>;
     }
 }
 declare namespace ts.server {

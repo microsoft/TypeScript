@@ -259,7 +259,7 @@ namespace ts.server {
             sys.gc = () => global.gc?.();
         }
 
-        sys.require = (initialDir: string, moduleName: string): RequireResult => {
+        sys.require = (initialDir: string, moduleName: string): ModuleImportResult => {
             try {
                 return { module: require(resolveJSModule(moduleName, initialDir, sys)), error: undefined };
             }

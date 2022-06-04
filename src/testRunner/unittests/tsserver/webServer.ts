@@ -38,7 +38,7 @@ namespace ts.projectSystem {
                 writeMessage: s => messages.push(s),
             };
             const webSys = server.createWebSystem(webHost, emptyArray, () => host.getExecutingFilePath());
-            if (importServicePlugin) webSys.importServicePlugin = importServicePlugin;
+            webSys.importServicePlugin = importServicePlugin;
             const logger = logLevel !== undefined ? new server.MainProcessLogger(logLevel, webHost) : nullLogger();
             const session = new TestWorkerSession(webSys, webHost, { serverMode: LanguageServiceMode.PartialSemantic, ...options }, logger);
             return { getMessages: () => messages, clearMessages: () => messages.length = 0, session };
@@ -161,7 +161,7 @@ namespace ts.projectSystem {
             it("plugins are not loaded immediately", async () => {
                 let pluginModuleInstantiated = false;
                 let pluginInvoked = false;
-                const importServicePlugin = async (_root: string, _moduleName: string): Promise<server.ImportPluginResult> => {
+                const importServicePlugin = async (_root: string, _moduleName: string): Promise<server.ModuleImportResult> => {
                     await Promise.resolve(); // simulate at least a single turn delay
                     pluginModuleInstantiated = true;
                     return {
@@ -203,7 +203,7 @@ namespace ts.projectSystem {
                 const pluginAPromise = new Promise<void>(_resolve => resolvePluginA = _resolve);
                 const pluginBPromise = new Promise<void>(_resolve => resolvePluginB = _resolve);
                 const log: string[] = [];
-                const importServicePlugin = async (_root: string, moduleName: string): Promise<server.ImportPluginResult> => {
+                const importServicePlugin = async (_root: string, moduleName: string): Promise<server.ModuleImportResult> => {
                     log.push(`request import ${moduleName}`);
                     const promise = moduleName === "plugin-a" ? pluginAPromise : pluginBPromise;
                     await promise;
@@ -243,7 +243,7 @@ namespace ts.projectSystem {
             });
 
             it("sends projectsUpdatedInBackground event", async () => {
-                const importServicePlugin = async (_root: string, _moduleName: string): Promise<server.ImportPluginResult> => {
+                const importServicePlugin = async (_root: string, _moduleName: string): Promise<server.ModuleImportResult> => {
                     await Promise.resolve(); // simulate at least a single turn delay
                     return {
                         module: (() => ({ create: info => info.languageService })) as server.PluginModuleFactory,

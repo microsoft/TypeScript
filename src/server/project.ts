@@ -251,6 +251,26 @@ namespace ts.server {
         }
 
         /*@internal*/
+        public static async importServicePluginAsync(moduleName: string, initialDir: string, host: ServerHost, log: (message: string) => void, logErrors?: (message: string) => void): Promise<{} | undefined> {
+            Debug.assertIsDefined(host.importServicePlugin);
+            const resolvedPath = combinePaths(initialDir, "node_modules");
+            log(`Dynamically importing ${moduleName} from ${initialDir} (resolved to ${resolvedPath})`);
+            let result: ModuleImportResult;
+            try {
+                result = await host.importServicePlugin(resolvedPath, moduleName);
+            }
+            catch (e) {
+                result = { module: undefined, error: e };
+            }
+            if (result.error) {
+                const err = result.error.stack || result.error.message || JSON.stringify(result.error);
+                (logErrors || log)(`Failed to dynamically import module '${moduleName}' from ${resolvedPath}: ${err}`);
+                return undefined;
+            }
+            return result.module;
+        }
+
+        /*@internal*/
         readonly currentDirectory: string;
 
         /*@internal*/
@@ -1611,20 +1631,16 @@ namespace ts.server {
             Debug.assertIsDefined(this.projectService.host.importServicePlugin);
 
             let errorLogs: string[] | undefined;
+            const log = (message: string) => this.projectService.logger.info(message);
+            const logError = (message: string) => {
+                (errorLogs ??= []).push(message);
+            };
+
             let resolvedModule: PluginModuleFactory | undefined;
             for (const searchPath of searchPaths) {
-                try {
-                    const result = await this.projectService.host.importServicePlugin(searchPath, pluginConfigEntry.name);
-                    if (result.error) {
-                        (errorLogs ??= []).push(result.error.toString());
-                    }
-                    else {
-                        resolvedModule = result.module as PluginModuleFactory;
-                        break;
-                    }
-                }
-                catch (e) {
-                    (errorLogs ??= []).push(`${e}`);
+                resolvedModule = await Project.importServicePluginAsync(pluginConfigEntry.name, searchPath, this.projectService.host, log, logError) as PluginModuleFactory | undefined;
+                if (resolvedModule !== undefined) {
+                    break;
                 }
             }
             return { pluginConfigEntry, pluginConfigOverrides, resolvedModule, errorLogs };

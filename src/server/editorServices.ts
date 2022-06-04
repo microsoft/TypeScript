@@ -4152,11 +4152,19 @@ namespace ts.server {
 
         private async enableRequestedPluginsForProjectAsync(project: Project, promises: Promise<BeginEnablePluginResult>[]) {
             // Await all pending plugin imports. This ensures all requested plugin modules are fully loaded
-            // prior to patching the language service.
+            // prior to patching the language service, and that any promise rejections are observed.
             const results = await Promise.all(promises);
+            if (project.isClosed() && (!(project instanceof ConfiguredProject) || !project.hasOpenRef())) {
+                // project is not alive, so don't enable plugins.
+                return;
+            }
+
             for (const result of results) {
                 project.endEnablePlugin(result);
             }
+
+            // Plugins may have modified external files, so mark the project as dirty.
+            project.markAsDirty();
         }
 
         configurePlugin(args: protocol.ConfigurePluginRequestArguments) {
