@@ -259,6 +259,15 @@ function deepEquals<T>(a: T, b: T): boolean {
     return true;
 }
 
+// Repro from #49386
+
+function foo<T>(x: T | null) {
+    let y = x;
+    if (y !== null) {
+        y;
+    }
+}
+
 
 //// [unknownControlFlow.js]
 "use strict";
@@ -485,6 +494,13 @@ function deepEquals(a, b) {
     }
     return true;
 }
+// Repro from #49386
+function foo(x) {
+    var y = x;
+    if (y !== null) {
+        y;
+    }
+}
 
 
 //// [unknownControlFlow.d.ts]
@@ -524,3 +540,4 @@ declare function f40(a: string | undefined, b: number | null | undefined): void;
 declare type QQ<T> = NonNullable<NonNullable<NonNullable<T>>>;
 declare function f41<T>(a: T): void;
 declare function deepEquals<T>(a: T, b: T): boolean;
+declare function foo<T>(x: T | null): void;
