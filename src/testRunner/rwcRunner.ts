@@ -178,7 +178,7 @@ namespace RWC {
                         return null; // eslint-disable-line no-null/no-null
                     }
                     // Do not include the library in the baselines to avoid noise
-                    const baselineFiles = tsconfigFiles.concat(inputFiles, otherFiles).filter(f => true);
+                    const baselineFiles = tsconfigFiles.concat(inputFiles, otherFiles).filter(() => true);
                     const errors = compilerResult.diagnostics.filter(e => !e.file || !Harness.isDefaultLibraryFile(e.file.fileName));
                     return Harness.Compiler.iterateErrorBaseline(baselineFiles, errors, { caseSensitive, currentDirectory });
                 }, baselineOpts);
