@@ -448,6 +448,8 @@ Output::
 >> Screen clear
 [[90m12:01:14 AM[0m] File change detected. Starting incremental compilation...
 
+[[90m12:01:30 AM[0m] Found 0 errors. Watching for file changes.
+
 
 
 Program root files: ["/user/username/projects/sample1/core/anotherModule.ts","/user/username/projects/sample1/core/index.ts"]
@@ -547,79 +549,10 @@ function foo() { }
   "size": 1225
 }
 
-
-Change:: Build logic or update time stamps
-
-Input::
-
-Output::
-
-WatchedFiles::
-/user/username/projects/sample1/core/tsconfig.json:
-  {"fileName":"/user/username/projects/sample1/core/tsconfig.json","pollingInterval":250}
-/user/username/projects/sample1/core/anothermodule.ts:
-  {"fileName":"/user/username/projects/sample1/core/anotherModule.ts","pollingInterval":250}
-/user/username/projects/sample1/core/index.ts:
-  {"fileName":"/user/username/projects/sample1/core/index.ts","pollingInterval":250}
-/user/username/projects/sample1/logic/tsconfig.json:
-  {"fileName":"/user/username/projects/sample1/logic/tsconfig.json","pollingInterval":250}
-/user/username/projects/sample1/logic/index.ts:
-  {"fileName":"/user/username/projects/sample1/logic/index.ts","pollingInterval":250}
-/user/username/projects/sample1/tests/tsconfig.json:
-  {"fileName":"/user/username/projects/sample1/tests/tsconfig.json","pollingInterval":250}
-/user/username/projects/sample1/tests/index.ts:
-  {"fileName":"/user/username/projects/sample1/tests/index.ts","pollingInterval":250}
-
-FsWatches::
-
-FsWatchesRecursive::
-/user/username/projects/sample1/core:
-  {"directoryName":"/user/username/projects/sample1/core","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/sample1/logic:
-  {"directoryName":"/user/username/projects/sample1/logic","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-
-exitCode:: ExitStatus.undefined
-
 //// [/user/username/projects/sample1/logic/index.js.map] file changed its modified time
 //// [/user/username/projects/sample1/logic/index.js] file changed its modified time
 //// [/user/username/projects/sample1/logic/index.d.ts] file changed its modified time
 //// [/user/username/projects/sample1/logic/tsconfig.tsbuildinfo] file changed its modified time
-
-Change:: Build Tests
-
-Input::
-
-Output::
-[[90m12:01:30 AM[0m] Found 0 errors. Watching for file changes.
-
-
-
-WatchedFiles::
-/user/username/projects/sample1/core/tsconfig.json:
-  {"fileName":"/user/username/projects/sample1/core/tsconfig.json","pollingInterval":250}
-/user/username/projects/sample1/core/anothermodule.ts:
-  {"fileName":"/user/username/projects/sample1/core/anotherModule.ts","pollingInterval":250}
-/user/username/projects/sample1/core/index.ts:
-  {"fileName":"/user/username/projects/sample1/core/index.ts","pollingInterval":250}
-/user/username/projects/sample1/logic/tsconfig.json:
-  {"fileName":"/user/username/projects/sample1/logic/tsconfig.json","pollingInterval":250}
-/user/username/projects/sample1/logic/index.ts:
-  {"fileName":"/user/username/projects/sample1/logic/index.ts","pollingInterval":250}
-/user/username/projects/sample1/tests/tsconfig.json:
-  {"fileName":"/user/username/projects/sample1/tests/tsconfig.json","pollingInterval":250}
-/user/username/projects/sample1/tests/index.ts:
-  {"fileName":"/user/username/projects/sample1/tests/index.ts","pollingInterval":250}
-
-FsWatches::
-
-FsWatchesRecursive::
-/user/username/projects/sample1/core:
-  {"directoryName":"/user/username/projects/sample1/core","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/sample1/logic:
-  {"directoryName":"/user/username/projects/sample1/logic","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-
-exitCode:: ExitStatus.undefined
-
 //// [/user/username/projects/sample1/tests/index.js] file changed its modified time
 //// [/user/username/projects/sample1/tests/index.d.ts] file changed its modified time
 //// [/user/username/projects/sample1/tests/tsconfig.tsbuildinfo] file changed its modified time

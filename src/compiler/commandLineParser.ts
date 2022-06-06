@@ -3549,7 +3549,7 @@ namespace ts {
         }
         if (isImplicitGlob(spec.substring(spec.lastIndexOf(directorySeparator) + 1))) {
             return {
-                key: useCaseSensitiveFileNames ? spec : toFileNameLowerCase(spec),
+                key: removeTrailingDirectorySeparator(useCaseSensitiveFileNames ? spec : toFileNameLowerCase(spec)),
                 flags: WatchDirectoryFlags.Recursive
             };
         }

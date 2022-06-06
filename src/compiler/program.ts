@@ -536,20 +536,39 @@ namespace ts {
         return resolutions;
     }
 
-    /* @internal */
-    interface SourceFileImportsList {
-        imports: SourceFile["imports"];
-        moduleAugmentations: SourceFile["moduleAugmentations"];
+    /**
+     * Subset of a SourceFile used to calculate index-based resolutions
+     * This includes some internal fields, so unless you have very good reason,
+     * (and are willing to use some less stable internals) you should probably just pass a SourceFile.
+     *
+     * @internal
+     */
+    export interface SourceFileImportsList {
+        /* @internal */ imports: SourceFile["imports"];
+        /* @internal */ moduleAugmentations: SourceFile["moduleAugmentations"];
         impliedNodeFormat?: SourceFile["impliedNodeFormat"];
     };
 
-    /* @internal */
+    /**
+     * Calculates the resulting resolution mode for some reference in some file - this is generally the explicitly
+     * provided resolution mode in the reference, unless one is not present, in which case it is the mode of the containing file.
+     */
     export function getModeForFileReference(ref: FileReference | string, containingFileMode: SourceFile["impliedNodeFormat"]) {
         return (isString(ref) ? containingFileMode : ref.resolutionMode) || containingFileMode;
     }
 
-    /* @internal */
-    export function getModeForResolutionAtIndex(file: SourceFileImportsList, index: number) {
+    /**
+     * Calculates the final resolution mode for an import at some index within a file's imports list. This is generally the explicitly
+     * defined mode of the import if provided, or, if not, the mode of the containing file (with some exceptions: import=require is always commonjs, dynamic import is always esm).
+     * If you have an actual import node, prefer using getModeForUsageLocation on the reference string node.
+     * @param file File to fetch the resolution mode within
+     * @param index Index into the file's complete resolution list to get the resolution of - this is a concatenation of the file's imports and module augmentations
+     */
+    export function getModeForResolutionAtIndex(file: SourceFile, index: number): ModuleKind.CommonJS | ModuleKind.ESNext | undefined;
+    /** @internal */
+    // eslint-disable-next-line @typescript-eslint/unified-signatures
+    export function getModeForResolutionAtIndex(file: SourceFileImportsList, index: number): ModuleKind.CommonJS | ModuleKind.ESNext | undefined;
+    export function getModeForResolutionAtIndex(file: SourceFileImportsList, index: number): ModuleKind.CommonJS | ModuleKind.ESNext | undefined {
         if (file.impliedNodeFormat === undefined) return undefined;
         // we ensure all elements of file.imports and file.moduleAugmentations have the relevant parent pointers set during program setup,
         // so it's safe to use them even pre-bind
@@ -567,7 +586,15 @@ namespace ts {
         return false;
     }
 
-    /* @internal */
+    /**
+     * Calculates the final resolution mode for a given module reference node. This is generally the explicitly provided resolution mode, if
+     * one exists, or the mode of the containing source file. (Excepting import=require, which is always commonjs, and dynamic import, which is always esm).
+     * Notably, this function always returns `undefined` if the containing file has an `undefined` `impliedNodeFormat` - this field is only set when
+     * `moduleResolution` is `node16`+.
+     * @param file The file the import or import-like reference is contained within
+     * @param usage The module reference string
+     * @returns The final resolution mode of the import
+     */
     export function getModeForUsageLocation(file: {impliedNodeFormat?: SourceFile["impliedNodeFormat"]}, usage: StringLiteralLike) {
         if (file.impliedNodeFormat === undefined) return undefined;
         if ((isImportDeclaration(usage.parent) || isExportDeclaration(usage.parent))) {
@@ -3121,7 +3148,7 @@ namespace ts {
                 setResolvedTypeReferenceDirective(file, fileName, resolvedTypeReferenceDirective);
                 const mode = ref.resolutionMode || file.impliedNodeFormat;
                 if (mode && getEmitModuleResolutionKind(options) !== ModuleResolutionKind.Node16 && getEmitModuleResolutionKind(options) !== ModuleResolutionKind.NodeNext) {
-                    programDiagnostics.add(createDiagnosticForRange(file, ref, Diagnostics.Resolution_modes_are_only_supported_when_moduleResolution_is_node16_or_nodenext));
+                    programDiagnostics.add(createDiagnosticForRange(file, ref, Diagnostics.resolution_mode_assertions_are_only_supported_when_moduleResolution_is_node16_or_nodenext));
                 }
                 processTypeReferenceDirective(fileName, mode, resolvedTypeReferenceDirective, { kind: FileIncludeKind.TypeReferenceDirective, file: file.path, index, });
             }

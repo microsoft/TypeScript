@@ -48,9 +48,7 @@ namespace ts.tscWatch {
                     change: sys => sys.writeFile(coreFiles[0].path, coreFiles[0].content),
                     timeouts: sys => {
                         sys.checkTimeoutQueueLengthAndRun(1); // build core
-                        sys.checkTimeoutQueueLengthAndRun(1); // build animals
-                        sys.checkTimeoutQueueLengthAndRun(1); // build zoo
-                        sys.checkTimeoutQueueLengthAndRun(1); // build solution
+                        sys.checkTimeoutQueueLengthAndRun(1); // build animals, zoo and solution
                         sys.checkTimeoutQueueLength(0);
                     },
                 }

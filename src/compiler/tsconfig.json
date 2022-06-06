@@ -49,6 +49,8 @@
         "transformers/taggedTemplate.ts",
         "transformers/ts.ts",
         "transformers/classFields.ts",
+        "transformers/typeSerializer.ts",
+        "transformers/legacyDecorators.ts",
         "transformers/es2017.ts",
         "transformers/es2018.ts",
         "transformers/es2019.ts",
