@@ -4724,6 +4724,7 @@ declare namespace ts {
     function isImportEqualsDeclaration(node: Node): node is ImportEqualsDeclaration;
     function isImportDeclaration(node: Node): node is ImportDeclaration;
     function isImportClause(node: Node): node is ImportClause;
+    function isImportTypeAssertionContainer(node: Node): node is ImportTypeAssertionContainer;
     function isAssertClause(node: Node): node is AssertClause;
     function isAssertEntry(node: Node): node is AssertEntry;
     function isNamespaceImport(node: Node): node is NamespaceImport;
@@ -5102,6 +5103,31 @@ declare namespace ts {
     export function formatDiagnostic(diagnostic: Diagnostic, host: FormatDiagnosticsHost): string;
     export function formatDiagnosticsWithColorAndContext(diagnostics: readonly Diagnostic[], host: FormatDiagnosticsHost): string;
     export function flattenDiagnosticMessageText(diag: string | DiagnosticMessageChain | undefined, newLine: string, indent?: number): string;
+    /**
+     * Calculates the resulting resolution mode for some reference in some file - this is generally the explicitly
+     * provided resolution mode in the reference, unless one is not present, in which case it is the mode of the containing file.
+     */
+    export function getModeForFileReference(ref: FileReference | string, containingFileMode: SourceFile["impliedNodeFormat"]): ModuleKind.CommonJS | ModuleKind.ESNext | undefined;
+    /**
+     * Calculates the final resolution mode for an import at some index within a file's imports list. This is generally the explicitly
+     * defined mode of the import if provided, or, if not, the mode of the containing file (with some exceptions: import=require is always commonjs, dynamic import is always esm).
+     * If you have an actual import node, prefer using getModeForUsageLocation on the reference string node.
+     * @param file File to fetch the resolution mode within
+     * @param index Index into the file's complete resolution list to get the resolution of - this is a concatenation of the file's imports and module augmentations
+     */
+    export function getModeForResolutionAtIndex(file: SourceFile, index: number): ModuleKind.CommonJS | ModuleKind.ESNext | undefined;
+    /**
+     * Calculates the final resolution mode for a given module reference node. This is generally the explicitly provided resolution mode, if
+     * one exists, or the mode of the containing source file. (Excepting import=require, which is always commonjs, and dynamic import, which is always esm).
+     * Notably, this function always returns `undefined` if the containing file has an `undefined` `impliedNodeFormat` - this field is only set when
+     * `moduleResolution` is `node16`+.
+     * @param file The file the import or import-like reference is contained within
+     * @param usage The module reference string
+     * @returns The final resolution mode of the import
+     */
+    export function getModeForUsageLocation(file: {
+        impliedNodeFormat?: SourceFile["impliedNodeFormat"];
+    }, usage: StringLiteralLike): ModuleKind.CommonJS | ModuleKind.ESNext | undefined;
     export function getConfigFileParsingDiagnostics(configFileParseResult: ParsedCommandLine): readonly Diagnostic[];
     /**
      * A function for determining if a given file is esm or cjs format, assuming modern node module resolution rules, as configured by the

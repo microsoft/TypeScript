@@ -5942,6 +5942,9 @@ namespace ts {
                 typeArguments = (expression as ExpressionWithTypeArguments).typeArguments;
                 expression = (expression as ExpressionWithTypeArguments).expression;
             }
+            if (token() === SyntaxKind.QuestionDotToken) {
+                parseErrorAtCurrentToken(Diagnostics.Invalid_optional_chain_from_new_expression_Did_you_mean_to_call_0, getTextOfNodeFromSourceText(sourceText, expression));
+            }
             const argumentList = token() === SyntaxKind.OpenParenToken ? parseArgumentList() : undefined;
             return finishNode(factory.createNewExpression(expression, typeArguments, argumentList), pos);
         }

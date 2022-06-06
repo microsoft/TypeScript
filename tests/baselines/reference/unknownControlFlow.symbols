@@ -616,3 +616,23 @@ function deepEquals<T>(a: T, b: T): boolean {
     return true;
 }
 
+// Repro from #49386
+
+function foo<T>(x: T | null) {
+>foo : Symbol(foo, Decl(unknownControlFlow.ts, 258, 1))
+>T : Symbol(T, Decl(unknownControlFlow.ts, 262, 13))
+>x : Symbol(x, Decl(unknownControlFlow.ts, 262, 16))
+>T : Symbol(T, Decl(unknownControlFlow.ts, 262, 13))
+
+    let y = x;
+>y : Symbol(y, Decl(unknownControlFlow.ts, 263, 7))
+>x : Symbol(x, Decl(unknownControlFlow.ts, 262, 16))
+
+    if (y !== null) {
+>y : Symbol(y, Decl(unknownControlFlow.ts, 263, 7))
+
+        y;
+>y : Symbol(y, Decl(unknownControlFlow.ts, 263, 7))
+    }
+}
+

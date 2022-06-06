@@ -6,8 +6,6 @@ namespace ts {
     const USE_NEW_TYPE_METADATA_FORMAT = false;
 
     const enum TypeScriptSubstitutionFlags {
-        /** Enables substitutions for decorated classes. */
-        ClassAliases = 1 << 0,
         /** Enables substitutions for namespace exports. */
         NamespaceExports = 1 << 1,
         /* Enables substitutions for unqualified enum members */
@@ -43,9 +41,9 @@ namespace ts {
 
         const resolver = context.getEmitResolver();
         const compilerOptions = context.getCompilerOptions();
-        const strictNullChecks = getStrictOptionValue(compilerOptions, "strictNullChecks");
         const languageVersion = getEmitScriptTarget(compilerOptions);
         const moduleKind = getEmitModuleKind(compilerOptions);
+        const typeSerializer = compilerOptions.emitDecoratorMetadata ? createRuntimeTypeSerializer(context) : undefined;
 
         // Save the previous transformation hooks.
         const previousOnEmitNode = context.onEmitNode;
@@ -64,7 +62,6 @@ namespace ts {
         let currentNamespace: ModuleDeclaration;
         let currentNamespaceContainerName: Identifier;
         let currentLexicalScope: SourceFile | Block | ModuleBlock | CaseBlock;
-        let currentNameScope: ClassDeclaration | undefined;
         let currentScopeFirstDeclarationsOfName: UnderscoreEscapedMap<Node> | undefined;
         let currentClassHasParameterProperties: boolean | undefined;
 
@@ -73,12 +70,6 @@ namespace ts {
          * They are persisted between each SourceFile transformation and should not be reset.
          */
         let enabledSubstitutions: TypeScriptSubstitutionFlags;
-
-        /**
-         * A map that keeps track of aliases created for classes with decorators to avoid issues
-         * with the double-binding behavior of classes.
-         */
-        let classAliases: Identifier[];
 
         /**
          * Keeps track of whether we are within any containing namespaces when performing
@@ -131,7 +122,6 @@ namespace ts {
         function saveStateAndInvoke<T>(node: Node, f: (node: Node) => T): T {
             // Save state
             const savedCurrentScope = currentLexicalScope;
-            const savedCurrentNameScope = currentNameScope;
             const savedCurrentScopeFirstDeclarationsOfName = currentScopeFirstDeclarationsOfName;
             const savedCurrentClassHasParameterProperties = currentClassHasParameterProperties;
 
@@ -146,7 +136,6 @@ namespace ts {
             }
 
             currentLexicalScope = savedCurrentScope;
-            currentNameScope = savedCurrentNameScope;
             currentClassHasParameterProperties = savedCurrentClassHasParameterProperties;
             return visited;
         }
@@ -163,7 +152,6 @@ namespace ts {
                 case SyntaxKind.ModuleBlock:
                 case SyntaxKind.Block:
                     currentLexicalScope = node as SourceFile | CaseBlock | ModuleBlock | Block;
-                    currentNameScope = undefined;
                     currentScopeFirstDeclarationsOfName = undefined;
                     break;
 
@@ -182,10 +170,6 @@ namespace ts {
                         // however, class declaration parsing allows for undefined names, so syntactically invalid
                         // programs may also have an undefined name.
                         Debug.assert(node.kind === SyntaxKind.ClassDeclaration || hasSyntacticModifier(node, ModifierFlags.Default));
-                    }
-                    if (isClassDeclaration(node)) {
-                        // XXX: should probably also cover interfaces and type aliases that can have type variables?
-                        currentNameScope = node;
                     }
 
                     break;
@@ -298,12 +282,12 @@ namespace ts {
         }
 
         /**
-         * Specialized visitor that visits the immediate children of a class with TypeScript syntax.
+         * Gets a specialized visitor that visits the immediate children of a class with TypeScript syntax.
          *
-         * @param node The node to visit.
+         * @param parent The class containing the elements to visit.
          */
-        function classElementVisitor(node: Node): VisitResult<Node> {
-            return saveStateAndInvoke(node, classElementVisitorWorker);
+        function getClassElementVisitor(parent: ClassLikeDeclaration): (node: Node) => VisitResult<Node> {
+            return node => saveStateAndInvoke(node, n => classElementVisitorWorker(n, parent));
         }
 
         /**
@@ -311,7 +295,7 @@ namespace ts {
          *
          * @param node The node to visit.
          */
-        function classElementVisitorWorker(node: Node): VisitResult<Node> {
+        function classElementVisitorWorker(node: Node, parent: ClassLikeDeclaration): VisitResult<Node> {
             switch (node.kind) {
                 case SyntaxKind.Constructor:
                     return visitConstructor(node as ConstructorDeclaration);
@@ -319,17 +303,59 @@ namespace ts {
                 case SyntaxKind.PropertyDeclaration:
                     // Property declarations are not TypeScript syntax, but they must be visited
                     // for the decorator transformation.
-                    return visitPropertyDeclaration(node as PropertyDeclaration);
-                case SyntaxKind.IndexSignature:
+                    return visitPropertyDeclaration(node as PropertyDeclaration, parent);
+
                 case SyntaxKind.GetAccessor:
+                    // Get Accessors can have TypeScript modifiers, decorators, and type annotations.
+                    return visitGetAccessor(node as GetAccessorDeclaration, parent);
+
                 case SyntaxKind.SetAccessor:
+                    // Set Accessors can have TypeScript modifiers and type annotations.
+                    return visitSetAccessor(node as SetAccessorDeclaration, parent);
+
                 case SyntaxKind.MethodDeclaration:
+                    // TypeScript method declarations may have decorators, modifiers
+                    // or type annotations.
+                    return visitMethodDeclaration(node as MethodDeclaration, parent);
+
                 case SyntaxKind.ClassStaticBlockDeclaration:
-                    // Fallback to the default visit behavior.
-                    return visitorWorker(node);
+                    return visitEachChild(node, visitor, context);
 
                 case SyntaxKind.SemicolonClassElement:
                     return node;
+
+                case SyntaxKind.IndexSignature:
+                    // Index signatures are elided
+                    return;
+
+                default:
+                    return Debug.failBadSyntaxKind(node);
+            }
+        }
+
+        function getObjectLiteralElementVisitor(parent: ObjectLiteralExpression): (node: Node) => VisitResult<Node> {
+            return node => saveStateAndInvoke(node, n => objectLiteralElementVisitorWorker(n, parent));
+        }
+
+        function objectLiteralElementVisitorWorker(node: Node, parent: ObjectLiteralExpression): VisitResult<Node> {
+            switch (node.kind) {
+                case SyntaxKind.PropertyAssignment:
+                case SyntaxKind.ShorthandPropertyAssignment:
+                case SyntaxKind.SpreadAssignment:
+                    return visitor(node);
+
+                case SyntaxKind.GetAccessor:
+                    // Get Accessors can have TypeScript modifiers, decorators, and type annotations.
+                    return visitGetAccessor(node as GetAccessorDeclaration, parent);
+
+                case SyntaxKind.SetAccessor:
+                    // Set Accessors can have TypeScript modifiers and type annotations.
+                    return visitSetAccessor(node as SetAccessorDeclaration, parent);
+
+                case SyntaxKind.MethodDeclaration:
+                    // TypeScript method declarations may have decorators, modifiers
+                    // or type annotations.
+                    return visitMethodDeclaration(node as MethodDeclaration, parent);
 
                 default:
                     return Debug.failBadSyntaxKind(node);
@@ -410,26 +436,15 @@ namespace ts {
 
                 case SyntaxKind.IndexSignature:
                     // TypeScript index signatures are elided.
-                    // falls through
-
-                case SyntaxKind.Decorator:
-                    // TypeScript decorators are elided. They will be emitted as part of visitClassDeclaration.
                     return undefined;
 
                 case SyntaxKind.TypeAliasDeclaration:
                     // TypeScript type-only declarations are elided.
                     return factory.createNotEmittedStatement(node);
 
-                case SyntaxKind.PropertyDeclaration:
-                    // TypeScript property declarations are elided. However their names are still visited, and can potentially be retained if they could have sideeffects
-                    return visitPropertyDeclaration(node as PropertyDeclaration);
-
                 case SyntaxKind.NamespaceExportDeclaration:
                     // TypeScript namespace export declarations are elided.
                     return undefined;
-
-                case SyntaxKind.Constructor:
-                    return visitConstructor(node as ConstructorDeclaration);
 
                 case SyntaxKind.InterfaceDeclaration:
                     // TypeScript interfaces are elided, but some comments may be preserved.
@@ -469,18 +484,16 @@ namespace ts {
                     // TypeScript supports type arguments on an expression in an `extends` heritage clause.
                     return visitExpressionWithTypeArguments(node as ExpressionWithTypeArguments);
 
+                case SyntaxKind.ObjectLiteralExpression:
+                    return visitObjectLiteralExpression(node as ObjectLiteralExpression);
+
+                case SyntaxKind.Constructor:
+                case SyntaxKind.PropertyDeclaration:
                 case SyntaxKind.MethodDeclaration:
-                    // TypeScript method declarations may have decorators, modifiers
-                    // or type annotations.
-                    return visitMethodDeclaration(node as MethodDeclaration);
-
                 case SyntaxKind.GetAccessor:
-                    // Get Accessors can have TypeScript modifiers, decorators, and type annotations.
-                    return visitGetAccessor(node as GetAccessorDeclaration);
-
                 case SyntaxKind.SetAccessor:
-                    // Set Accessors can have TypeScript modifiers and type annotations.
-                    return visitSetAccessor(node as SetAccessorDeclaration);
+                case SyntaxKind.ClassStaticBlockDeclaration:
+                    return Debug.fail("Class and object literal elements must be visited with their respective visitors");
 
                 case SyntaxKind.FunctionDeclaration:
                     // Typescript function declarations can have modifiers, decorators, and type annotations.
@@ -569,6 +582,13 @@ namespace ts {
                 visitLexicalEnvironment(node.statements, sourceElementVisitor, context, /*start*/ 0, alwaysStrict));
         }
 
+        function visitObjectLiteralExpression(node: ObjectLiteralExpression) {
+            return factory.updateObjectLiteralExpression(
+                node,
+                visitNodes(node.properties, getObjectLiteralElementVisitor(node), isObjectLiteralElement)
+            );
+        }
+
         function getClassFacts(node: ClassDeclaration, staticProperties: readonly PropertyDeclaration[]) {
             let facts = ClassFacts.None;
             if (some(staticProperties)) facts |= ClassFacts.HasStaticInitializedProperties;
@@ -596,7 +616,15 @@ namespace ts {
 
         function visitClassDeclaration(node: ClassDeclaration): VisitResult<Statement> {
             if (!isClassLikeDeclarationWithTypeScriptSyntax(node) && !(currentNamespace && hasSyntacticModifier(node, ModifierFlags.Export))) {
-                return visitEachChild(node, visitor, context);
+                return factory.updateClassDeclaration(
+                    node,
+                    elideNodes(factory, node.decorators), // preserve positions, if available
+                    visitNodes(node.modifiers, modifierVisitor, isModifier),
+                    node.name,
+                    /*typeParameters*/ undefined,
+                    visitNodes(node.heritageClauses, visitor, isHeritageClause),
+                    visitNodes(node.members, getClassElementVisitor(node), isClassElement)
+                );
             }
 
             const staticProperties = getProperties(node, /*requireInitializer*/ true, /*isStatic*/ true);
@@ -607,17 +635,37 @@ namespace ts {
             }
 
             const name = node.name || (facts & ClassFacts.NeedsName ? factory.getGeneratedNameForNode(node) : undefined);
-            const classStatement = facts & ClassFacts.HasConstructorDecorators
-                ? createClassDeclarationHeadWithDecorators(node, name)
-                : createClassDeclarationHeadWithoutDecorators(node, name, facts);
+            const allDecorators = getAllDecoratorsOfConstructor(node);
+            const decorators = transformAllDecoratorsOfDeclaration(node, node, allDecorators);
+
+            // we do not emit modifiers on the declaration if we are emitting an IIFE
+            const modifiers = !(facts & ClassFacts.UseImmediatelyInvokedFunctionExpression)
+                ? visitNodes(node.modifiers, modifierVisitor, isModifier)
+                : elideNodes(factory, node.modifiers); // preserve positions, if available
+
+            //  ${modifiers} class ${name} ${heritageClauses} {
+            //      ${members}
+            //  }
+            const classStatement = factory.updateClassDeclaration(
+                node,
+                decorators,
+                modifiers,
+                name,
+                /*typeParameters*/ undefined,
+                visitNodes(node.heritageClauses, visitor, isHeritageClause),
+                transformClassMembers(node)
+            );
+
+            // To better align with the old emitter, we should not emit a trailing source map
+            // entry if the class has static properties.
+            let emitFlags = getEmitFlags(node);
+            if (facts & ClassFacts.HasStaticInitializedProperties) {
+                emitFlags |= EmitFlags.NoTrailingSourceMap;
+            }
+
+            setEmitFlags(classStatement, emitFlags);
 
             let statements: Statement[] = [classStatement];
-
-
-            // Write any decorators of the node.
-            addClassElementDecorationStatements(statements, node, /*isStatic*/ false);
-            addClassElementDecorationStatements(statements, node, /*isStatic*/ true);
-            addConstructorDecorationStatement(statements, node);
 
             if (facts & ClassFacts.UseImmediatelyInvokedFunctionExpression) {
                 // When we emit a TypeScript class down to ES5, we must wrap it in an IIFE so that the
@@ -693,191 +741,20 @@ namespace ts {
             return singleOrMany(statements);
         }
 
-        /**
-         * Transforms a non-decorated class declaration and appends the resulting statements.
-         *
-         * @param node A ClassDeclaration node.
-         * @param name The name of the class.
-         * @param facts Precomputed facts about the class.
-         */
-        function createClassDeclarationHeadWithoutDecorators(node: ClassDeclaration, name: Identifier | undefined, facts: ClassFacts) {
-            //  ${modifiers} class ${name} ${heritageClauses} {
-            //      ${members}
-            //  }
-
-            // we do not emit modifiers on the declaration if we are emitting an IIFE
-            const modifiers = !(facts & ClassFacts.UseImmediatelyInvokedFunctionExpression)
-                ? visitNodes(node.modifiers, modifierVisitor, isModifier)
-                : undefined;
-
-            const classDeclaration = factory.createClassDeclaration(
-                /*decorators*/ undefined,
-                modifiers,
-                name,
-                /*typeParameters*/ undefined,
-                visitNodes(node.heritageClauses, visitor, isHeritageClause),
-                transformClassMembers(node)
-            );
-
-            // To better align with the old emitter, we should not emit a trailing source map
-            // entry if the class has static properties.
-            let emitFlags = getEmitFlags(node);
-            if (facts & ClassFacts.HasStaticInitializedProperties) {
-                emitFlags |= EmitFlags.NoTrailingSourceMap;
-            }
-
-            setTextRange(classDeclaration, node);
-            setOriginalNode(classDeclaration, node);
-            setEmitFlags(classDeclaration, emitFlags);
-            return classDeclaration;
-        }
-
-        /**
-         * Transforms a decorated class declaration and appends the resulting statements. If
-         * the class requires an alias to avoid issues with double-binding, the alias is returned.
-         */
-        function createClassDeclarationHeadWithDecorators(node: ClassDeclaration, name: Identifier | undefined) {
-            // When we emit an ES6 class that has a class decorator, we must tailor the
-            // emit to certain specific cases.
-            //
-            // In the simplest case, we emit the class declaration as a let declaration, and
-            // evaluate decorators after the close of the class body:
-            //
-            //  [Example 1]
-            //  ---------------------------------------------------------------------
-            //  TypeScript                      | Javascript
-            //  ---------------------------------------------------------------------
-            //  @dec                            | let C = class C {
-            //  class C {                       | }
-            //  }                               | C = __decorate([dec], C);
-            //  ---------------------------------------------------------------------
-            //  @dec                            | let C = class C {
-            //  export class C {                | }
-            //  }                               | C = __decorate([dec], C);
-            //                                  | export { C };
-            //  ---------------------------------------------------------------------
-            //
-            // If a class declaration contains a reference to itself *inside* of the class body,
-            // this introduces two bindings to the class: One outside of the class body, and one
-            // inside of the class body. If we apply decorators as in [Example 1] above, there
-            // is the possibility that the decorator `dec` will return a new value for the
-            // constructor, which would result in the binding inside of the class no longer
-            // pointing to the same reference as the binding outside of the class.
-            //
-            // As a result, we must instead rewrite all references to the class *inside* of the
-            // class body to instead point to a local temporary alias for the class:
-            //
-            //  [Example 2]
-            //  ---------------------------------------------------------------------
-            //  TypeScript                      | Javascript
-            //  ---------------------------------------------------------------------
-            //  @dec                            | let C = C_1 = class C {
-            //  class C {                       |   static x() { return C_1.y; }
-            //    static x() { return C.y; }    | }
-            //    static y = 1;                 | C.y = 1;
-            //  }                               | C = C_1 = __decorate([dec], C);
-            //                                  | var C_1;
-            //  ---------------------------------------------------------------------
-            //  @dec                            | let C = class C {
-            //  export class C {                |   static x() { return C_1.y; }
-            //    static x() { return C.y; }    | }
-            //    static y = 1;                 | C.y = 1;
-            //  }                               | C = C_1 = __decorate([dec], C);
-            //                                  | export { C };
-            //                                  | var C_1;
-            //  ---------------------------------------------------------------------
-            //
-            // If a class declaration is the default export of a module, we instead emit
-            // the export after the decorated declaration:
-            //
-            //  [Example 3]
-            //  ---------------------------------------------------------------------
-            //  TypeScript                      | Javascript
-            //  ---------------------------------------------------------------------
-            //  @dec                            | let default_1 = class {
-            //  export default class {          | }
-            //  }                               | default_1 = __decorate([dec], default_1);
-            //                                  | export default default_1;
-            //  ---------------------------------------------------------------------
-            //  @dec                            | let C = class C {
-            //  export default class C {        | }
-            //  }                               | C = __decorate([dec], C);
-            //                                  | export default C;
-            //  ---------------------------------------------------------------------
-            //
-            // If the class declaration is the default export and a reference to itself
-            // inside of the class body, we must emit both an alias for the class *and*
-            // move the export after the declaration:
-            //
-            //  [Example 4]
-            //  ---------------------------------------------------------------------
-            //  TypeScript                      | Javascript
-            //  ---------------------------------------------------------------------
-            //  @dec                            | let C = class C {
-            //  export default class C {        |   static x() { return C_1.y; }
-            //    static x() { return C.y; }    | }
-            //    static y = 1;                 | C.y = 1;
-            //  }                               | C = C_1 = __decorate([dec], C);
-            //                                  | export default C;
-            //                                  | var C_1;
-            //  ---------------------------------------------------------------------
-            //
-
-            const location = moveRangePastDecorators(node);
-            const classAlias = getClassAliasIfNeeded(node);
-
-            // When we transform to ES5/3 this will be moved inside an IIFE and should reference the name
-            // without any block-scoped variable collision handling
-            const declName = languageVersion <= ScriptTarget.ES2015 ?
-                factory.getInternalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true) :
-                factory.getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true);
-
-            //  ... = class ${name} ${heritageClauses} {
-            //      ${members}
-            //  }
-            const heritageClauses = visitNodes(node.heritageClauses, visitor, isHeritageClause);
-            const members = transformClassMembers(node);
-            const classExpression = factory.createClassExpression(/*decorators*/ undefined, /*modifiers*/ undefined, name, /*typeParameters*/ undefined, heritageClauses, members);
-            setOriginalNode(classExpression, node);
-            setTextRange(classExpression, location);
-
-            //  let ${name} = ${classExpression} where name is either declaredName if the class doesn't contain self-reference
-            //                                         or decoratedClassAlias if the class contain self-reference.
-            const statement = factory.createVariableStatement(
-                /*modifiers*/ undefined,
-                factory.createVariableDeclarationList([
-                    factory.createVariableDeclaration(
-                        declName,
-                        /*exclamationToken*/ undefined,
-                        /*type*/ undefined,
-                        classAlias ? factory.createAssignment(classAlias, classExpression) : classExpression
-                    )
-                ], NodeFlags.Let)
-            );
-            setOriginalNode(statement, node);
-            setTextRange(statement, location);
-            setCommentRange(statement, node);
-            return statement;
-        }
-
         function visitClassExpression(node: ClassExpression): Expression {
-            if (!isClassLikeDeclarationWithTypeScriptSyntax(node)) {
-                return visitEachChild(node, visitor, context);
-            }
-
-            const classExpression = factory.createClassExpression(
-                /*decorators*/ undefined,
+            const allDecorators = getAllDecoratorsOfConstructor(node);
+            const decorators = transformAllDecoratorsOfDeclaration(node, node, allDecorators);
+            return factory.updateClassExpression(
+                node,
+                decorators,
                 /*modifiers*/ undefined,
                 node.name,
                 /*typeParameters*/ undefined,
                 visitNodes(node.heritageClauses, visitor, isHeritageClause),
-                transformClassMembers(node)
+                isClassLikeDeclarationWithTypeScriptSyntax(node) ?
+                    transformClassMembers(node) :
+                    visitNodes(node.members, getClassElementVisitor(node), isClassElement)
             );
-
-            setOriginalNode(classExpression, node);
-            setTextRange(classExpression, node);
-
-            return classExpression;
         }
 
         /**
@@ -905,59 +782,15 @@ namespace ts {
                 }
             }
 
-            addRange(members, visitNodes(node.members, classElementVisitor, isClassElement));
+            addRange(members, visitNodes(node.members, getClassElementVisitor(node), isClassElement));
             return setTextRange(factory.createNodeArray(members), /*location*/ node.members);
-        }
-
-
-        /**
-         * Gets either the static or instance members of a class that are decorated, or have
-         * parameters that are decorated.
-         *
-         * @param node The class containing the member.
-         * @param isStatic A value indicating whether to retrieve static or instance members of
-         *                 the class.
-         */
-        function getDecoratedClassElements(node: ClassExpression | ClassDeclaration, isStatic: boolean): readonly ClassElement[] {
-            return filter(node.members, isStatic ? m => isStaticDecoratedClassElement(m, node) : m => isInstanceDecoratedClassElement(m, node));
-        }
-
-        /**
-         * Determines whether a class member is a static member of a class that is decorated, or
-         * has parameters that are decorated.
-         *
-         * @param member The class member.
-         */
-        function isStaticDecoratedClassElement(member: ClassElement, parent: ClassLikeDeclaration) {
-            return isDecoratedClassElement(member, /*isStaticElement*/ true, parent);
-        }
-
-        /**
-         * Determines whether a class member is an instance member of a class that is decorated,
-         * or has parameters that are decorated.
-         *
-         * @param member The class member.
-         */
-        function isInstanceDecoratedClassElement(member: ClassElement, parent: ClassLikeDeclaration) {
-            return isDecoratedClassElement(member, /*isStaticElement*/ false, parent);
-        }
-
-        /**
-         * Determines whether a class member is either a static or an instance member of a class
-         * that is decorated, or has parameters that are decorated.
-         *
-         * @param member The class member.
-         */
-        function isDecoratedClassElement(member: ClassElement, isStaticElement: boolean, parent: ClassLikeDeclaration) {
-            return nodeOrChildIsDecorated(member, parent)
-                && isStaticElement === isStatic(member);
         }
 
         /**
          * A structure describing the decorators for a class element.
          */
         interface AllDecorators {
-            decorators: readonly Decorator[] | undefined;
+            decorators: NodeArray<Decorator> | undefined;
             parameters?: readonly (readonly Decorator[] | undefined)[];
         }
 
@@ -1011,14 +844,14 @@ namespace ts {
         /**
          * Gets an AllDecorators object containing the decorators for the member and its parameters.
          *
-         * @param node The class node that contains the member.
+         * @param parent The class node that contains the member.
          * @param member The class member.
          */
-        function getAllDecoratorsOfClassElement(node: ClassExpression | ClassDeclaration, member: ClassElement): AllDecorators | undefined {
+        function getAllDecoratorsOfClassElement(member: ClassElement, parent: ClassExpression | ClassDeclaration): AllDecorators | undefined {
             switch (member.kind) {
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
-                    return getAllDecoratorsOfAccessors(node, member as AccessorDeclaration);
+                    return getAllDecoratorsOfAccessors(parent, member as AccessorDeclaration);
 
                 case SyntaxKind.MethodDeclaration:
                     return getAllDecoratorsOfMethod(member as MethodDeclaration);
@@ -1085,7 +918,6 @@ namespace ts {
             const decorators = property.decorators;
             if (!decorators) {
                 return undefined;
-
             }
 
             return { decorators };
@@ -1102,232 +934,86 @@ namespace ts {
                 return undefined;
             }
 
-            const decoratorExpressions: Expression[] = [];
-            addRange(decoratorExpressions, map(allDecorators.decorators, transformDecorator));
-            addRange(decoratorExpressions, flatMap(allDecorators.parameters, transformDecoratorsOfParameter));
-            addTypeMetadata(node, container, decoratorExpressions);
-            return decoratorExpressions;
+            const decorators = visitNodes(allDecorators.decorators, visitor, isDecorator);
+            const parameterDecorators = flatMap(allDecorators.parameters, transformDecoratorsOfParameter);
+            const metadataDecorators = some(decorators) || some(parameterDecorators) ? getTypeMetadata(node, container) : undefined;
+            const result = factory.createNodeArray(concatenate(concatenate(decorators, parameterDecorators), metadataDecorators));
+            setTextRange(result, decorators);
+            return result;
         }
 
         /**
-         * Generates statements used to apply decorators to either the static or instance members
-         * of a class.
+         * Transforms the decorators of a parameter into decorators of the class/method.
          *
-         * @param node The class node.
-         * @param isStatic A value indicating whether to generate statements for static or
-         *                 instance members.
-         */
-        function addClassElementDecorationStatements(statements: Statement[], node: ClassDeclaration, isStatic: boolean) {
-            addRange(statements, map(generateClassElementDecorationExpressions(node, isStatic), expressionToStatement));
-        }
-
-        /**
-         * Generates expressions used to apply decorators to either the static or instance members
-         * of a class.
-         *
-         * @param node The class node.
-         * @param isStatic A value indicating whether to generate expressions for static or
-         *                 instance members.
-         */
-        function generateClassElementDecorationExpressions(node: ClassExpression | ClassDeclaration, isStatic: boolean) {
-            const members = getDecoratedClassElements(node, isStatic);
-            let expressions: Expression[] | undefined;
-            for (const member of members) {
-                const expression = generateClassElementDecorationExpression(node, member);
-                if (expression) {
-                    if (!expressions) {
-                        expressions = [expression];
-                    }
-                    else {
-                        expressions.push(expression);
-                    }
-                }
-            }
-            return expressions;
-        }
-
-        /**
-         * Generates an expression used to evaluate class element decorators at runtime.
-         *
-         * @param node The class node that contains the member.
-         * @param member The class member.
-         */
-        function generateClassElementDecorationExpression(node: ClassExpression | ClassDeclaration, member: ClassElement) {
-            const allDecorators = getAllDecoratorsOfClassElement(node, member);
-            const decoratorExpressions = transformAllDecoratorsOfDeclaration(member, node, allDecorators);
-            if (!decoratorExpressions) {
-                return undefined;
-            }
-
-            // Emit the call to __decorate. Given the following:
-            //
-            //   class C {
-            //     @dec method(@dec2 x) {}
-            //     @dec get accessor() {}
-            //     @dec prop;
-            //   }
-            //
-            // The emit for a method is:
-            //
-            //   __decorate([
-            //       dec,
-            //       __param(0, dec2),
-            //       __metadata("design:type", Function),
-            //       __metadata("design:paramtypes", [Object]),
-            //       __metadata("design:returntype", void 0)
-            //   ], C.prototype, "method", null);
-            //
-            // The emit for an accessor is:
-            //
-            //   __decorate([
-            //       dec
-            //   ], C.prototype, "accessor", null);
-            //
-            // The emit for a property is:
-            //
-            //   __decorate([
-            //       dec
-            //   ], C.prototype, "prop");
-            //
-
-            const prefix = getClassMemberPrefix(node, member);
-            const memberName = getExpressionForPropertyName(member, /*generateNameForComputedPropertyName*/ !hasSyntacticModifier(member, ModifierFlags.Ambient));
-            const descriptor = languageVersion > ScriptTarget.ES3
-                ? member.kind === SyntaxKind.PropertyDeclaration
-                    // We emit `void 0` here to indicate to `__decorate` that it can invoke `Object.defineProperty` directly, but that it
-                    // should not invoke `Object.getOwnPropertyDescriptor`.
-                    ? factory.createVoidZero()
-
-                    // We emit `null` here to indicate to `__decorate` that it can invoke `Object.getOwnPropertyDescriptor` directly.
-                    // We have this extra argument here so that we can inject an explicit property descriptor at a later date.
-                    : factory.createNull()
-                : undefined;
-
-            const helper = emitHelpers().createDecorateHelper(
-                decoratorExpressions,
-                prefix,
-                memberName,
-                descriptor
-            );
-
-            setTextRange(helper, moveRangePastDecorators(member));
-            setEmitFlags(helper, EmitFlags.NoComments);
-            return helper;
-        }
-
-        /**
-         * Generates a __decorate helper call for a class constructor.
-         *
-         * @param node The class node.
-         */
-        function addConstructorDecorationStatement(statements: Statement[], node: ClassDeclaration) {
-            const expression = generateConstructorDecorationExpression(node);
-            if (expression) {
-                statements.push(setOriginalNode(factory.createExpressionStatement(expression), node));
-            }
-        }
-
-        /**
-         * Generates a __decorate helper call for a class constructor.
-         *
-         * @param node The class node.
-         */
-        function generateConstructorDecorationExpression(node: ClassExpression | ClassDeclaration) {
-            const allDecorators = getAllDecoratorsOfConstructor(node);
-            const decoratorExpressions = transformAllDecoratorsOfDeclaration(node, node, allDecorators);
-            if (!decoratorExpressions) {
-                return undefined;
-            }
-
-            const classAlias = classAliases && classAliases[getOriginalNodeId(node)];
-
-            // When we transform to ES5/3 this will be moved inside an IIFE and should reference the name
-            // without any block-scoped variable collision handling
-            const localName = languageVersion <= ScriptTarget.ES2015 ?
-                factory.getInternalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true) :
-                factory.getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true);
-            const decorate = emitHelpers().createDecorateHelper(decoratorExpressions, localName);
-            const expression = factory.createAssignment(localName, classAlias ? factory.createAssignment(classAlias, decorate) : decorate);
-            setEmitFlags(expression, EmitFlags.NoComments);
-            setSourceMapRange(expression, moveRangePastDecorators(node));
-            return expression;
-        }
-
-        /**
-         * Transforms a decorator into an expression.
-         *
-         * @param decorator The decorator node.
-         */
-        function transformDecorator(decorator: Decorator) {
-            return visitNode(decorator.expression, visitor, isExpression);
-        }
-
-        /**
-         * Transforms the decorators of a parameter.
-         *
-         * @param decorators The decorators for the parameter at the provided offset.
+         * @param parameterDecorators The decorators for the parameter at the provided offset.
          * @param parameterOffset The offset of the parameter.
          */
-        function transformDecoratorsOfParameter(decorators: Decorator[], parameterOffset: number) {
-            let expressions: Expression[] | undefined;
-            if (decorators) {
-                expressions = [];
-                for (const decorator of decorators) {
-                    const helper = emitHelpers().createParamHelper(
-                        transformDecorator(decorator),
-                        parameterOffset);
-                    setTextRange(helper, decorator.expression);
+        function transformDecoratorsOfParameter(parameterDecorators: Decorator[], parameterOffset: number) {
+            if (parameterDecorators) {
+                const decorators: Decorator[] = [];
+                for (const parameterDecorator of parameterDecorators) {
+                    const expression = visitNode(parameterDecorator.expression, visitor, isExpression);
+                    const helper = emitHelpers().createParamHelper(expression, parameterOffset);
+                    setTextRange(helper, parameterDecorator.expression);
                     setEmitFlags(helper, EmitFlags.NoComments);
-                    expressions.push(helper);
-                }
-            }
 
-            return expressions;
+                    const decorator = factory.createDecorator(helper);
+                    setTextRange(decorator, parameterDecorator.expression);
+                    setEmitFlags(decorator, EmitFlags.NoComments);
+                    decorators.push(decorator);
+                }
+                return decorators;
+            }
         }
 
         /**
-         * Adds optional type metadata for a declaration.
+         * Gets optional type metadata for a declaration.
          *
          * @param node The declaration node.
-         * @param decoratorExpressions The destination array to which to add new decorator expressions.
          */
-        function addTypeMetadata(node: Declaration, container: ClassLikeDeclaration, decoratorExpressions: Expression[]) {
-            if (USE_NEW_TYPE_METADATA_FORMAT) {
-                addNewTypeMetadata(node, container, decoratorExpressions);
-            }
-            else {
-                addOldTypeMetadata(node, container, decoratorExpressions);
-            }
+        function getTypeMetadata(node: Declaration, container: ClassLikeDeclaration) {
+            return USE_NEW_TYPE_METADATA_FORMAT ?
+                getNewTypeMetadata(node, container) :
+                getOldTypeMetadata(node, container);
         }
 
-        function addOldTypeMetadata(node: Declaration, container: ClassLikeDeclaration, decoratorExpressions: Expression[]) {
-            if (compilerOptions.emitDecoratorMetadata) {
+        function getOldTypeMetadata(node: Declaration, container: ClassLikeDeclaration) {
+            if (typeSerializer) {
+                let decorators: Decorator[] | undefined;
                 if (shouldAddTypeMetadata(node)) {
-                    decoratorExpressions.push(emitHelpers().createMetadataHelper("design:type", serializeTypeOfNode(node)));
+                    const typeMetadata = emitHelpers().createMetadataHelper("design:type", typeSerializer.serializeTypeOfNode({ currentLexicalScope, currentNameScope: container }, node));
+                    decorators = append(decorators, factory.createDecorator(typeMetadata));
                 }
                 if (shouldAddParamTypesMetadata(node)) {
-                    decoratorExpressions.push(emitHelpers().createMetadataHelper("design:paramtypes", serializeParameterTypesOfNode(node, container)));
+                    const paramTypesMetadata = emitHelpers().createMetadataHelper("design:paramtypes", typeSerializer.serializeParameterTypesOfNode({ currentLexicalScope, currentNameScope: container }, node, container));
+                    decorators = append(decorators, factory.createDecorator(paramTypesMetadata));
                 }
                 if (shouldAddReturnTypeMetadata(node)) {
-                    decoratorExpressions.push(emitHelpers().createMetadataHelper("design:returntype", serializeReturnTypeOfNode(node)));
+                    const returnTypeMetadata = emitHelpers().createMetadataHelper("design:returntype", typeSerializer.serializeReturnTypeOfNode({ currentLexicalScope, currentNameScope: container }, node));
+                    decorators = append(decorators, factory.createDecorator(returnTypeMetadata));
                 }
+                return decorators;
             }
         }
 
-        function addNewTypeMetadata(node: Declaration, container: ClassLikeDeclaration, decoratorExpressions: Expression[]) {
-            if (compilerOptions.emitDecoratorMetadata) {
+        function getNewTypeMetadata(node: Declaration, container: ClassLikeDeclaration) {
+            if (typeSerializer) {
                 let properties: ObjectLiteralElementLike[] | undefined;
                 if (shouldAddTypeMetadata(node)) {
-                    (properties || (properties = [])).push(factory.createPropertyAssignment("type", factory.createArrowFunction(/*modifiers*/ undefined, /*typeParameters*/ undefined, [], /*type*/ undefined, factory.createToken(SyntaxKind.EqualsGreaterThanToken), serializeTypeOfNode(node))));
+                    const typeProperty = factory.createPropertyAssignment("type", factory.createArrowFunction(/*modifiers*/ undefined, /*typeParameters*/ undefined, [], /*type*/ undefined, factory.createToken(SyntaxKind.EqualsGreaterThanToken), typeSerializer.serializeTypeOfNode({ currentLexicalScope, currentNameScope: container }, node)));
+                    properties = append(properties, typeProperty);
                 }
                 if (shouldAddParamTypesMetadata(node)) {
-                    (properties || (properties = [])).push(factory.createPropertyAssignment("paramTypes", factory.createArrowFunction(/*modifiers*/ undefined, /*typeParameters*/ undefined, [], /*type*/ undefined, factory.createToken(SyntaxKind.EqualsGreaterThanToken), serializeParameterTypesOfNode(node, container))));
+                    const paramTypeProperty = factory.createPropertyAssignment("paramTypes", factory.createArrowFunction(/*modifiers*/ undefined, /*typeParameters*/ undefined, [], /*type*/ undefined, factory.createToken(SyntaxKind.EqualsGreaterThanToken), typeSerializer.serializeParameterTypesOfNode({ currentLexicalScope, currentNameScope: container }, node, container)));
+                    properties = append(properties, paramTypeProperty);
                 }
                 if (shouldAddReturnTypeMetadata(node)) {
-                    (properties || (properties = [])).push(factory.createPropertyAssignment("returnType", factory.createArrowFunction(/*modifiers*/ undefined, /*typeParameters*/ undefined, [], /*type*/ undefined, factory.createToken(SyntaxKind.EqualsGreaterThanToken), serializeReturnTypeOfNode(node))));
+                    const returnTypeProperty = factory.createPropertyAssignment("returnType", factory.createArrowFunction(/*modifiers*/ undefined, /*typeParameters*/ undefined, [], /*type*/ undefined, factory.createToken(SyntaxKind.EqualsGreaterThanToken), typeSerializer.serializeReturnTypeOfNode({ currentLexicalScope, currentNameScope: container }, node)));
+                    properties = append(properties, returnTypeProperty);
                 }
                 if (properties) {
-                    decoratorExpressions.push(emitHelpers().createMetadataHelper("design:typeinfo", factory.createObjectLiteralExpression(properties, /*multiLine*/ true)));
+                    const typeInfoMetadata = emitHelpers().createMetadataHelper("design:typeinfo", factory.createObjectLiteralExpression(properties, /*multiLine*/ true));
+                    return [factory.createDecorator(typeInfoMetadata)];
                 }
             }
         }
@@ -1339,7 +1025,7 @@ namespace ts {
          *
          * @param node The node to test.
          */
-        function shouldAddTypeMetadata(node: Declaration): boolean {
+        function shouldAddTypeMetadata(node: Declaration): node is MethodDeclaration | AccessorDeclaration | PropertyDeclaration {
             const kind = node.kind;
             return kind === SyntaxKind.MethodDeclaration
                 || kind === SyntaxKind.GetAccessor
@@ -1354,7 +1040,7 @@ namespace ts {
          *
          * @param node The node to test.
          */
-        function shouldAddReturnTypeMetadata(node: Declaration): boolean {
+        function shouldAddReturnTypeMetadata(node: Declaration): node is MethodDeclaration {
             return node.kind === SyntaxKind.MethodDeclaration;
         }
 
@@ -1365,7 +1051,7 @@ namespace ts {
          *
          * @param node The node to test.
          */
-        function shouldAddParamTypesMetadata(node: Declaration): boolean {
+        function shouldAddParamTypesMetadata(node: Declaration): node is ClassLikeDeclaration & { _hasConstructorBrand: never } | MethodDeclaration | AccessorDeclaration {
             switch (node.kind) {
                 case SyntaxKind.ClassDeclaration:
                 case SyntaxKind.ClassExpression:
@@ -1376,427 +1062,6 @@ namespace ts {
                     return true;
             }
             return false;
-        }
-
-        type SerializedEntityNameAsExpression = Identifier | BinaryExpression | PropertyAccessExpression;
-        type SerializedTypeNode = SerializedEntityNameAsExpression | VoidExpression | ConditionalExpression;
-
-        function getAccessorTypeNode(node: AccessorDeclaration) {
-            const accessors = resolver.getAllAccessorDeclarations(node);
-            return accessors.setAccessor && getSetAccessorTypeAnnotationNode(accessors.setAccessor)
-                || accessors.getAccessor && getEffectiveReturnTypeNode(accessors.getAccessor);
-        }
-
-        /**
-         * Serializes the type of a node for use with decorator type metadata.
-         *
-         * @param node The node that should have its type serialized.
-         */
-        function serializeTypeOfNode(node: Node): SerializedTypeNode {
-            switch (node.kind) {
-                case SyntaxKind.PropertyDeclaration:
-                case SyntaxKind.Parameter:
-                    return serializeTypeNode((node as PropertyDeclaration | ParameterDeclaration | GetAccessorDeclaration).type);
-                case SyntaxKind.SetAccessor:
-                case SyntaxKind.GetAccessor:
-                    return serializeTypeNode(getAccessorTypeNode(node as AccessorDeclaration));
-                case SyntaxKind.ClassDeclaration:
-                case SyntaxKind.ClassExpression:
-                case SyntaxKind.MethodDeclaration:
-                    return factory.createIdentifier("Function");
-                default:
-                    return factory.createVoidZero();
-            }
-        }
-
-        /**
-         * Serializes the types of the parameters of a node for use with decorator type metadata.
-         *
-         * @param node The node that should have its parameter types serialized.
-         */
-        function serializeParameterTypesOfNode(node: Node, container: ClassLikeDeclaration): ArrayLiteralExpression {
-            const valueDeclaration =
-                isClassLike(node)
-                    ? getFirstConstructorWithBody(node)
-                    : isFunctionLike(node) && nodeIsPresent((node as FunctionLikeDeclaration).body)
-                        ? node
-                        : undefined;
-
-            const expressions: SerializedTypeNode[] = [];
-            if (valueDeclaration) {
-                const parameters = getParametersOfDecoratedDeclaration(valueDeclaration, container);
-                const numParameters = parameters.length;
-                for (let i = 0; i < numParameters; i++) {
-                    const parameter = parameters[i];
-                    if (i === 0 && isIdentifier(parameter.name) && parameter.name.escapedText === "this") {
-                        continue;
-                    }
-                    if (parameter.dotDotDotToken) {
-                        expressions.push(serializeTypeNode(getRestParameterElementType(parameter.type)));
-                    }
-                    else {
-                        expressions.push(serializeTypeOfNode(parameter));
-                    }
-                }
-            }
-
-            return factory.createArrayLiteralExpression(expressions);
-        }
-
-        function getParametersOfDecoratedDeclaration(node: SignatureDeclaration, container: ClassLikeDeclaration) {
-            if (container && node.kind === SyntaxKind.GetAccessor) {
-                const { setAccessor } = getAllAccessorDeclarations(container.members, node as AccessorDeclaration);
-                if (setAccessor) {
-                    return setAccessor.parameters;
-                }
-            }
-            return node.parameters;
-        }
-
-        /**
-         * Serializes the return type of a node for use with decorator type metadata.
-         *
-         * @param node The node that should have its return type serialized.
-         */
-        function serializeReturnTypeOfNode(node: Node): SerializedTypeNode {
-            if (isFunctionLike(node) && node.type) {
-                return serializeTypeNode(node.type);
-            }
-            else if (isAsyncFunction(node)) {
-                return factory.createIdentifier("Promise");
-            }
-
-            return factory.createVoidZero();
-        }
-
-        /**
-         * Serializes a type node for use with decorator type metadata.
-         *
-         * Types are serialized in the following fashion:
-         * - Void types point to "undefined" (e.g. "void 0")
-         * - Function and Constructor types point to the global "Function" constructor.
-         * - Interface types with a call or construct signature types point to the global
-         *   "Function" constructor.
-         * - Array and Tuple types point to the global "Array" constructor.
-         * - Type predicates and booleans point to the global "Boolean" constructor.
-         * - String literal types and strings point to the global "String" constructor.
-         * - Enum and number types point to the global "Number" constructor.
-         * - Symbol types point to the global "Symbol" constructor.
-         * - Type references to classes (or class-like variables) point to the constructor for the class.
-         * - Anything else points to the global "Object" constructor.
-         *
-         * @param node The type node to serialize.
-         */
-        function serializeTypeNode(node: TypeNode | undefined): SerializedTypeNode {
-            if (node === undefined) {
-                return factory.createIdentifier("Object");
-            }
-
-            switch (node.kind) {
-                case SyntaxKind.VoidKeyword:
-                case SyntaxKind.UndefinedKeyword:
-                case SyntaxKind.NeverKeyword:
-                    return factory.createVoidZero();
-
-                case SyntaxKind.ParenthesizedType:
-                    return serializeTypeNode((node as ParenthesizedTypeNode).type);
-
-                case SyntaxKind.FunctionType:
-                case SyntaxKind.ConstructorType:
-                    return factory.createIdentifier("Function");
-
-                case SyntaxKind.ArrayType:
-                case SyntaxKind.TupleType:
-                    return factory.createIdentifier("Array");
-
-                case SyntaxKind.TypePredicate:
-                case SyntaxKind.BooleanKeyword:
-                    return factory.createIdentifier("Boolean");
-
-                case SyntaxKind.TemplateLiteralType:
-                case SyntaxKind.StringKeyword:
-                    return factory.createIdentifier("String");
-
-                case SyntaxKind.ObjectKeyword:
-                    return factory.createIdentifier("Object");
-
-                case SyntaxKind.LiteralType:
-                    switch ((node as LiteralTypeNode).literal.kind) {
-                        case SyntaxKind.StringLiteral:
-                        case SyntaxKind.NoSubstitutionTemplateLiteral:
-                            return factory.createIdentifier("String");
-
-                        case SyntaxKind.PrefixUnaryExpression:
-                        case SyntaxKind.NumericLiteral:
-                            return factory.createIdentifier("Number");
-
-                        case SyntaxKind.BigIntLiteral:
-                            return getGlobalBigIntNameWithFallback();
-
-                        case SyntaxKind.TrueKeyword:
-                        case SyntaxKind.FalseKeyword:
-                            return factory.createIdentifier("Boolean");
-
-                        case SyntaxKind.NullKeyword:
-                            return factory.createVoidZero();
-
-                        default:
-                            return Debug.failBadSyntaxKind((node as LiteralTypeNode).literal);
-                    }
-
-                case SyntaxKind.NumberKeyword:
-                    return factory.createIdentifier("Number");
-
-                case SyntaxKind.BigIntKeyword:
-                    return getGlobalBigIntNameWithFallback();
-
-                case SyntaxKind.SymbolKeyword:
-                    return languageVersion < ScriptTarget.ES2015
-                        ? getGlobalSymbolNameWithFallback()
-                        : factory.createIdentifier("Symbol");
-
-                case SyntaxKind.TypeReference:
-                    return serializeTypeReferenceNode(node as TypeReferenceNode);
-
-                case SyntaxKind.IntersectionType:
-                case SyntaxKind.UnionType:
-                    return serializeTypeList((node as UnionOrIntersectionTypeNode).types);
-
-                case SyntaxKind.ConditionalType:
-                    return serializeTypeList([(node as ConditionalTypeNode).trueType, (node as ConditionalTypeNode).falseType]);
-
-                case SyntaxKind.TypeOperator:
-                    if ((node as TypeOperatorNode).operator === SyntaxKind.ReadonlyKeyword) {
-                        return serializeTypeNode((node as TypeOperatorNode).type);
-                    }
-                    break;
-
-                case SyntaxKind.TypeQuery:
-                case SyntaxKind.IndexedAccessType:
-                case SyntaxKind.MappedType:
-                case SyntaxKind.TypeLiteral:
-                case SyntaxKind.AnyKeyword:
-                case SyntaxKind.UnknownKeyword:
-                case SyntaxKind.ThisType:
-                case SyntaxKind.ImportType:
-                    break;
-
-                // handle JSDoc types from an invalid parse
-                case SyntaxKind.JSDocAllType:
-                case SyntaxKind.JSDocUnknownType:
-                case SyntaxKind.JSDocFunctionType:
-                case SyntaxKind.JSDocVariadicType:
-                case SyntaxKind.JSDocNamepathType:
-                    break;
-
-                case SyntaxKind.JSDocNullableType:
-                case SyntaxKind.JSDocNonNullableType:
-                case SyntaxKind.JSDocOptionalType:
-                    return serializeTypeNode((node as JSDocNullableType | JSDocNonNullableType | JSDocOptionalType).type);
-                default:
-                    return Debug.failBadSyntaxKind(node);
-            }
-
-            return factory.createIdentifier("Object");
-        }
-
-        function serializeTypeList(types: readonly TypeNode[]): SerializedTypeNode {
-            // Note when updating logic here also update getEntityNameForDecoratorMetadata
-            // so that aliases can be marked as referenced
-            let serializedUnion: SerializedTypeNode | undefined;
-            for (let typeNode of types) {
-                while (typeNode.kind === SyntaxKind.ParenthesizedType) {
-                    typeNode = (typeNode as ParenthesizedTypeNode).type; // Skip parens if need be
-                }
-                if (typeNode.kind === SyntaxKind.NeverKeyword) {
-                    continue; // Always elide `never` from the union/intersection if possible
-                }
-                if (!strictNullChecks && (typeNode.kind === SyntaxKind.LiteralType && (typeNode as LiteralTypeNode).literal.kind === SyntaxKind.NullKeyword || typeNode.kind === SyntaxKind.UndefinedKeyword)) {
-                    continue; // Elide null and undefined from unions for metadata, just like what we did prior to the implementation of strict null checks
-                }
-                const serializedIndividual = serializeTypeNode(typeNode);
-
-                if (isIdentifier(serializedIndividual) && serializedIndividual.escapedText === "Object") {
-                    // One of the individual is global object, return immediately
-                    return serializedIndividual;
-                }
-                // If there exists union that is not void 0 expression, check if the the common type is identifier.
-                // anything more complex and we will just default to Object
-                else if (serializedUnion) {
-                    // Different types
-                    if (!isIdentifier(serializedUnion) ||
-                        !isIdentifier(serializedIndividual) ||
-                        serializedUnion.escapedText !== serializedIndividual.escapedText) {
-                        return factory.createIdentifier("Object");
-                    }
-                }
-                else {
-                    // Initialize the union type
-                    serializedUnion = serializedIndividual;
-                }
-            }
-
-            // If we were able to find common type, use it
-            return serializedUnion || factory.createVoidZero(); // Fallback is only hit if all union constituients are null/undefined/never
-        }
-
-        /**
-         * Serializes a TypeReferenceNode to an appropriate JS constructor value for use with
-         * decorator type metadata.
-         *
-         * @param node The type reference node.
-         */
-        function serializeTypeReferenceNode(node: TypeReferenceNode): SerializedTypeNode {
-            const kind = resolver.getTypeReferenceSerializationKind(node.typeName, currentNameScope || currentLexicalScope);
-            switch (kind) {
-                case TypeReferenceSerializationKind.Unknown:
-                    // From conditional type type reference that cannot be resolved is Similar to any or unknown
-                    if (findAncestor(node, n => n.parent && isConditionalTypeNode(n.parent) && (n.parent.trueType === n || n.parent.falseType === n))) {
-                        return factory.createIdentifier("Object");
-                    }
-
-                    const serialized = serializeEntityNameAsExpressionFallback(node.typeName);
-                    const temp = factory.createTempVariable(hoistVariableDeclaration);
-                    return factory.createConditionalExpression(
-                        factory.createTypeCheck(factory.createAssignment(temp, serialized), "function"),
-                        /*questionToken*/ undefined,
-                        temp,
-                        /*colonToken*/ undefined,
-                        factory.createIdentifier("Object")
-                    );
-
-                case TypeReferenceSerializationKind.TypeWithConstructSignatureAndValue:
-                    return serializeEntityNameAsExpression(node.typeName);
-
-                case TypeReferenceSerializationKind.VoidNullableOrNeverType:
-                    return factory.createVoidZero();
-
-                case TypeReferenceSerializationKind.BigIntLikeType:
-                    return getGlobalBigIntNameWithFallback();
-
-                case TypeReferenceSerializationKind.BooleanType:
-                    return factory.createIdentifier("Boolean");
-
-                case TypeReferenceSerializationKind.NumberLikeType:
-                    return factory.createIdentifier("Number");
-
-                case TypeReferenceSerializationKind.StringLikeType:
-                    return factory.createIdentifier("String");
-
-                case TypeReferenceSerializationKind.ArrayLikeType:
-                    return factory.createIdentifier("Array");
-
-                case TypeReferenceSerializationKind.ESSymbolType:
-                    return languageVersion < ScriptTarget.ES2015
-                        ? getGlobalSymbolNameWithFallback()
-                        : factory.createIdentifier("Symbol");
-
-                case TypeReferenceSerializationKind.TypeWithCallSignature:
-                    return factory.createIdentifier("Function");
-
-                case TypeReferenceSerializationKind.Promise:
-                    return factory.createIdentifier("Promise");
-
-                case TypeReferenceSerializationKind.ObjectType:
-                    return factory.createIdentifier("Object");
-                default:
-                    return Debug.assertNever(kind);
-            }
-        }
-
-        function createCheckedValue(left: Expression, right: Expression) {
-            return factory.createLogicalAnd(
-                factory.createStrictInequality(factory.createTypeOfExpression(left), factory.createStringLiteral("undefined")),
-                right
-            );
-        }
-
-        /**
-         * Serializes an entity name which may not exist at runtime, but whose access shouldn't throw
-         *
-         * @param node The entity name to serialize.
-         */
-        function serializeEntityNameAsExpressionFallback(node: EntityName): BinaryExpression {
-            if (node.kind === SyntaxKind.Identifier) {
-                // A -> typeof A !== undefined && A
-                const copied = serializeEntityNameAsExpression(node);
-                return createCheckedValue(copied, copied);
-            }
-            if (node.left.kind === SyntaxKind.Identifier) {
-                // A.B -> typeof A !== undefined && A.B
-                return createCheckedValue(serializeEntityNameAsExpression(node.left), serializeEntityNameAsExpression(node));
-            }
-            // A.B.C -> typeof A !== undefined && (_a = A.B) !== void 0 && _a.C
-            const left = serializeEntityNameAsExpressionFallback(node.left);
-            const temp = factory.createTempVariable(hoistVariableDeclaration);
-            return factory.createLogicalAnd(
-                factory.createLogicalAnd(
-                    left.left,
-                    factory.createStrictInequality(factory.createAssignment(temp, left.right), factory.createVoidZero())
-                ),
-                factory.createPropertyAccessExpression(temp, node.right)
-            );
-        }
-
-        /**
-         * Serializes an entity name as an expression for decorator type metadata.
-         *
-         * @param node The entity name to serialize.
-         */
-        function serializeEntityNameAsExpression(node: EntityName): SerializedEntityNameAsExpression {
-            switch (node.kind) {
-                case SyntaxKind.Identifier:
-                    // Create a clone of the name with a new parent, and treat it as if it were
-                    // a source tree node for the purposes of the checker.
-                    const name = setParent(setTextRange(parseNodeFactory.cloneNode(node), node), node.parent);
-                    name.original = undefined;
-                    setParent(name, getParseTreeNode(currentLexicalScope)); // ensure the parent is set to a parse tree node.
-                    return name;
-
-                case SyntaxKind.QualifiedName:
-                    return serializeQualifiedNameAsExpression(node);
-            }
-        }
-
-        /**
-         * Serializes an qualified name as an expression for decorator type metadata.
-         *
-         * @param node The qualified name to serialize.
-         * @param useFallback A value indicating whether to use logical operators to test for the
-         *                    qualified name at runtime.
-         */
-        function serializeQualifiedNameAsExpression(node: QualifiedName): SerializedEntityNameAsExpression {
-            return factory.createPropertyAccessExpression(serializeEntityNameAsExpression(node.left), node.right);
-        }
-
-        /**
-         * Gets an expression that points to the global "Symbol" constructor at runtime if it is
-         * available.
-         */
-        function getGlobalSymbolNameWithFallback(): ConditionalExpression {
-            return factory.createConditionalExpression(
-                factory.createTypeCheck(factory.createIdentifier("Symbol"), "function"),
-                /*questionToken*/ undefined,
-                factory.createIdentifier("Symbol"),
-                /*colonToken*/ undefined,
-                factory.createIdentifier("Object")
-            );
-        }
-
-        /**
-         * Gets an expression that points to the global "BigInt" constructor at runtime if it is
-         * available.
-         */
-        function getGlobalBigIntNameWithFallback(): SerializedTypeNode {
-            return languageVersion < ScriptTarget.ESNext
-                ? factory.createConditionalExpression(
-                    factory.createTypeCheck(factory.createIdentifier("BigInt"), "function"),
-                    /*questionToken*/ undefined,
-                    factory.createIdentifier("BigInt"),
-                    /*colonToken*/ undefined,
-                    factory.createIdentifier("Object")
-                )
-                : factory.createIdentifier("BigInt");
         }
 
         /**
@@ -1891,26 +1156,37 @@ namespace ts {
             return !nodeIsMissing(node.body);
         }
 
-        function visitPropertyDeclaration(node: PropertyDeclaration) {
-            if (node.flags & NodeFlags.Ambient || hasSyntacticModifier(node, ModifierFlags.Abstract)) {
+        function visitPropertyDeclaration(node: PropertyDeclaration, parent: ClassLikeDeclaration) {
+            const isAmbient = node.flags & NodeFlags.Ambient || hasSyntacticModifier(node, ModifierFlags.Abstract);
+            if (isAmbient && !some(node.decorators)) {
                 return undefined;
             }
-            const updated = factory.updatePropertyDeclaration(
+
+            const allDecorators = getAllDecoratorsOfClassElement(node, parent);
+            const decorators = transformAllDecoratorsOfDeclaration(node, parent, allDecorators);
+
+            // Preserve a `declare x` property with decorators to be handled by the decorators transform
+            if (isAmbient) {
+                return factory.updatePropertyDeclaration(
+                    node,
+                    decorators,
+                    factory.createModifiersFromModifierFlags(ModifierFlags.Ambient),
+                    visitNode(node.name, visitor, isPropertyName),
+                    /*questionOrExclamationToken*/ undefined,
+                    /*type*/ undefined,
+                    /*initializer*/ undefined
+                );
+            }
+
+            return factory.updatePropertyDeclaration(
                 node,
-                /*decorators*/ undefined,
+                decorators,
                 visitNodes(node.modifiers, visitor, isModifier),
                 visitPropertyNameOfClassElement(node),
                 /*questionOrExclamationToken*/ undefined,
                 /*type*/ undefined,
                 visitNode(node.initializer, visitor)
             );
-            if (updated !== node) {
-                // While we emit the source map for the node after skipping decorators and modifiers,
-                // we need to emit the comments for the original range.
-                setCommentRange(updated, node);
-                setSourceMapRange(updated, moveRangePastDecorators(node));
-            }
-            return updated;
         }
 
         function visitConstructor(node: ConstructorDeclaration) {
@@ -1921,7 +1197,7 @@ namespace ts {
             return factory.updateConstructorDeclaration(
                 node,
                 /*decorators*/ undefined,
-                /*modifiers*/ undefined,
+                /*modifiers*/ visitNodes(node.modifiers, visitor, isModifier),
                 visitParameterList(node.parameters, visitor, context),
                 transformConstructorBody(node.body, node)
             );
@@ -2030,13 +1306,20 @@ namespace ts {
             );
         }
 
-        function visitMethodDeclaration(node: MethodDeclaration) {
+        function visitMethodDeclaration(node: MethodDeclaration, parent: ClassLikeDeclaration | ObjectLiteralExpression) {
+            if (!(node.transformFlags & TransformFlags.ContainsTypeScript)) {
+                return node;
+            }
+
             if (!shouldEmitFunctionLikeDeclaration(node)) {
                 return undefined;
             }
-            const updated = factory.updateMethodDeclaration(
+
+            const allDecorators = isClassLike(parent) ? getAllDecoratorsOfClassElement(node, parent) : undefined;
+            const decorators = isClassLike(parent) ? transformAllDecoratorsOfDeclaration(node, parent, allDecorators) : undefined;
+            return factory.updateMethodDeclaration(
                 node,
-                /*decorators*/ undefined,
+                decorators,
                 visitNodes(node.modifiers, modifierVisitor, isModifier),
                 node.asteriskToken,
                 visitPropertyNameOfClassElement(node),
@@ -2046,13 +1329,6 @@ namespace ts {
                 /*type*/ undefined,
                 visitFunctionBody(node.body, visitor, context)
             );
-            if (updated !== node) {
-                // While we emit the source map for the node after skipping decorators and modifiers,
-                // we need to emit the comments for the original range.
-                setCommentRange(updated, node);
-                setSourceMapRange(updated, moveRangePastDecorators(node));
-            }
-            return updated;
         }
 
         /**
@@ -2065,47 +1341,51 @@ namespace ts {
             return !(nodeIsMissing(node.body) && hasSyntacticModifier(node, ModifierFlags.Abstract));
         }
 
-        function visitGetAccessor(node: GetAccessorDeclaration) {
+        function visitGetAccessor(node: GetAccessorDeclaration, parent: ClassLikeDeclaration | ObjectLiteralExpression) {
+            if (!(node.transformFlags & TransformFlags.ContainsTypeScript)) {
+                return node;
+            }
+
             if (!shouldEmitAccessorDeclaration(node)) {
                 return undefined;
             }
-            const updated = factory.updateGetAccessorDeclaration(
+
+            const decorators = isClassLike(parent) ?
+                transformAllDecoratorsOfDeclaration(node, parent, getAllDecoratorsOfClassElement(node, parent)) :
+                undefined;
+
+            return factory.updateGetAccessorDeclaration(
                 node,
-                /*decorators*/ undefined,
+                decorators,
                 visitNodes(node.modifiers, modifierVisitor, isModifier),
                 visitPropertyNameOfClassElement(node),
                 visitParameterList(node.parameters, visitor, context),
                 /*type*/ undefined,
                 visitFunctionBody(node.body, visitor, context) || factory.createBlock([])
             );
-            if (updated !== node) {
-                // While we emit the source map for the node after skipping decorators and modifiers,
-                // we need to emit the comments for the original range.
-                setCommentRange(updated, node);
-                setSourceMapRange(updated, moveRangePastDecorators(node));
-            }
-            return updated;
         }
 
-        function visitSetAccessor(node: SetAccessorDeclaration) {
+        function visitSetAccessor(node: SetAccessorDeclaration, parent: ClassLikeDeclaration | ObjectLiteralExpression) {
+            if (!(node.transformFlags & TransformFlags.ContainsTypeScript)) {
+                return node;
+            }
+
             if (!shouldEmitAccessorDeclaration(node)) {
                 return undefined;
             }
-            const updated = factory.updateSetAccessorDeclaration(
+
+            const decorators = isClassLike(parent) ?
+                transformAllDecoratorsOfDeclaration(node, parent, getAllDecoratorsOfClassElement(node, parent)) :
+                undefined;
+
+            return factory.updateSetAccessorDeclaration(
                 node,
-                /*decorators*/ undefined,
+                decorators,
                 visitNodes(node.modifiers, modifierVisitor, isModifier),
                 visitPropertyNameOfClassElement(node),
                 visitParameterList(node.parameters, visitor, context),
                 visitFunctionBody(node.body, visitor, context) || factory.createBlock([])
             );
-            if (updated !== node) {
-                // While we emit the source map for the node after skipping decorators and modifiers,
-                // we need to emit the comments for the original range.
-                setCommentRange(updated, node);
-                setSourceMapRange(updated, moveRangePastDecorators(node));
-            }
-            return updated;
         }
 
         function visitFunctionDeclaration(node: FunctionDeclaration): VisitResult<Statement> {
@@ -2168,8 +1448,8 @@ namespace ts {
 
             const updated = factory.updateParameterDeclaration(
                 node,
-                /*decorators*/ undefined,
-                /*modifiers*/ undefined,
+                elideNodes(factory, node.decorators), // preserve positions, if available
+                elideNodes(factory, node.modifiers), // preserve positions, if available
                 node.dotDotDotToken,
                 visitNode(node.name, visitor, isBindingName),
                 /*questionToken*/ undefined,
@@ -3101,13 +2381,6 @@ namespace ts {
                 && hasSyntacticModifier(node, ModifierFlags.Default);
         }
 
-        /**
-         * Creates a statement for the provided expression. This is used in calls to `map`.
-         */
-        function expressionToStatement(expression: Expression) {
-            return factory.createExpressionStatement(expression);
-        }
-
         function addExportMemberAssignment(statements: Statement[], node: ClassDeclaration | FunctionDeclaration) {
             const expression = factory.createAssignment(
                 factory.getExternalModuleOrNamespaceExportName(currentNamespaceContainerName, node, /*allowComments*/ false, /*allowSourceMaps*/ true),
@@ -3157,48 +2430,10 @@ namespace ts {
             return factory.getGeneratedNameForNode(node);
         }
 
-        /**
-         * Gets a local alias for a class declaration if it is a decorated class with an internal
-         * reference to the static side of the class. This is necessary to avoid issues with
-         * double-binding semantics for the class name.
-         */
-        function getClassAliasIfNeeded(node: ClassDeclaration) {
-            if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.ClassWithConstructorReference) {
-                enableSubstitutionForClassAliases();
-                const classAlias = factory.createUniqueName(node.name && !isGeneratedIdentifier(node.name) ? idText(node.name) : "default");
-                classAliases[getOriginalNodeId(node)] = classAlias;
-                hoistVariableDeclaration(classAlias);
-                return classAlias;
-            }
-        }
-
-        function getClassPrototype(node: ClassExpression | ClassDeclaration) {
-            return factory.createPropertyAccessExpression(factory.getDeclarationName(node), "prototype");
-        }
-
-        function getClassMemberPrefix(node: ClassExpression | ClassDeclaration, member: ClassElement) {
-            return isStatic(member)
-                ? factory.getDeclarationName(node)
-                : getClassPrototype(node);
-        }
-
         function enableSubstitutionForNonQualifiedEnumMembers() {
             if ((enabledSubstitutions & TypeScriptSubstitutionFlags.NonQualifiedEnumMembers) === 0) {
                 enabledSubstitutions |= TypeScriptSubstitutionFlags.NonQualifiedEnumMembers;
                 context.enableSubstitution(SyntaxKind.Identifier);
-            }
-        }
-
-        function enableSubstitutionForClassAliases() {
-            if ((enabledSubstitutions & TypeScriptSubstitutionFlags.ClassAliases) === 0) {
-                enabledSubstitutions |= TypeScriptSubstitutionFlags.ClassAliases;
-
-                // We need to enable substitutions for identifiers. This allows us to
-                // substitute class names inside of a class declaration.
-                context.enableSubstitution(SyntaxKind.Identifier);
-
-                // Keep track of class aliases.
-                classAliases = [];
             }
         }
 
@@ -3302,33 +2537,8 @@ namespace ts {
         }
 
         function substituteExpressionIdentifier(node: Identifier): Expression {
-            return trySubstituteClassAlias(node)
-                || trySubstituteNamespaceExportedName(node)
+            return trySubstituteNamespaceExportedName(node)
                 || node;
-        }
-
-        function trySubstituteClassAlias(node: Identifier): Expression | undefined {
-            if (enabledSubstitutions & TypeScriptSubstitutionFlags.ClassAliases) {
-                if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.ConstructorReferenceInClass) {
-                    // Due to the emit for class decorators, any reference to the class from inside of the class body
-                    // must instead be rewritten to point to a temporary variable to avoid issues with the double-bind
-                    // behavior of class names in ES6.
-                    // Also, when emitting statics for class expressions, we must substitute a class alias for
-                    // constructor references in static property initializers.
-                    const declaration = resolver.getReferencedValueDeclaration(node);
-                    if (declaration) {
-                        const classAlias = classAliases[declaration.id!]; // TODO: GH#18217
-                        if (classAlias) {
-                            const clone = factory.cloneNode(classAlias);
-                            setSourceMapRange(clone, node);
-                            setCommentRange(clone, node);
-                            return clone;
-                        }
-                    }
-                }
-            }
-
-            return undefined;
         }
 
         function trySubstituteNamespaceExportedName(node: Identifier): Expression | undefined {

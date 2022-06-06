@@ -651,6 +651,10 @@
         "category": "Error",
         "code": 1208
     },
+    "Invalid optional chain from new expression. Did you mean to call '{0}()'?": {
+        "category": "Error",
+        "code": 1209
+    },
     "Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of '{0}'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.": {
         "category": "Error",
         "code": 1210
@@ -1436,7 +1440,7 @@
         "category": "Error",
         "code": 1451
     },
-    "Resolution modes are only supported when `moduleResolution` is `node16` or `nodenext`.": {
+    "'resolution-mode' assertions are only supported when `moduleResolution` is `node16` or `nodenext`.": {
         "category": "Error",
         "code": 1452
     },
@@ -3479,6 +3483,10 @@
         "category": "Error",
         "code": 2840
     },
+    "The type of this expression cannot be named without a 'resolution-mode' assertion, which is an unstable feature. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.": {
+        "category": "Error",
+        "code": 2841
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
@@ -3908,7 +3916,7 @@
         "category": "Error",
         "code": 4124
     },
-    "Resolution mode assertions are unstable. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.": {
+    "'resolution-mode' assertions are unstable. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.": {
         "category": "Error",
         "code": 4125
     },
