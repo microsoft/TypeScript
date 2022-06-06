@@ -23,12 +23,11 @@ jobs:
     if: ${{ github.repository == 'microsoft/TypeScript' && !github.event.label && !github.event.inputs.bisect_issue }}
     runs-on: ubuntu-latest
     steps:
-    - name: Use node
-      uses: actions/setup-node@v3
+    - uses: actions/setup-node@v3
     - uses: microsoft/TypeScript-Twoslash-Repro-Action@master
-      with: 
+      with:
         github-token: ${{ secrets.TS_BOT_GITHUB_TOKEN }}
-  
+
   bisect:
     if: ${{ github.event.label.name == 'Bisect Repro' || github.event.inputs.bisect_issue }}
     runs-on: ubuntu-latest
@@ -37,9 +36,7 @@ jobs:
       with:
         fetch-depth: 0
     - uses: actions/setup-node@v3
-      with:
-        node-version: 16
     - uses: microsoft/TypeScript-Twoslash-Repro-Action@master
-      with: 
+      with:
         github-token: ${{ secrets.TS_BOT_GITHUB_TOKEN }}
         bisect: ${{ github.event.issue.number || github.event.inputs.bisect_issue }}
