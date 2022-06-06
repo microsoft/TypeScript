@@ -37125,6 +37125,12 @@ namespace ts {
             checkSourceElement(node.typeExpression);
         }
 
+        function checkJSDocLinkLikeTag(node: JSDocLink | JSDocLinkCode | JSDocLinkPlain) {
+            if (node.name) {
+                resolveJSDocMemberName(node.name, /*ignoreErrors*/ true);
+            }
+        }
+
         function checkJSDocParameterTag(node: JSDocParameterTag) {
             checkSourceElement(node.typeExpression);
         }
@@ -41350,9 +41356,15 @@ namespace ts {
         }
 
         function checkSourceElementWorker(node: Node): void {
-            if (isInJSFile(node)) {
-                forEach((node as JSDocContainer).jsDoc, ({ tags }) => forEach(tags, checkSourceElement));
-            }
+            forEach((node as JSDocContainer).jsDoc, ({ comment, tags }) => {
+                checkJSDocCommentWorker(comment);
+                forEach(tags, tag => {
+                    checkJSDocCommentWorker(tag.comment);
+                    if (isInJSFile(node)) {
+                        checkSourceElement(tag);
+                    }
+                });
+            });
 
             const kind = node.kind;
             if (cancellationToken) {
@@ -41440,6 +41452,10 @@ namespace ts {
                     return checkJSDocTemplateTag(node as JSDocTemplateTag);
                 case SyntaxKind.JSDocTypeTag:
                     return checkJSDocTypeTag(node as JSDocTypeTag);
+                case SyntaxKind.JSDocLink:
+                case SyntaxKind.JSDocLinkCode:
+                case SyntaxKind.JSDocLinkPlain:
+                    return checkJSDocLinkLikeTag(node as JSDocLink | JSDocLinkCode | JSDocLinkPlain);
                 case SyntaxKind.JSDocParameterTag:
                     return checkJSDocParameterTag(node as JSDocParameterTag);
                 case SyntaxKind.JSDocPropertyTag:
@@ -41532,6 +41548,16 @@ namespace ts {
                     return;
                 case SyntaxKind.MissingDeclaration:
                     return checkMissingDeclaration(node);
+            }
+        }
+
+        function checkJSDocCommentWorker(node: string | readonly JSDocComment[] | undefined) {
+            if (isArray(node)) {
+                forEach(node, tag => {
+                    if (isJSDocLinkLike(tag)) {
+                        checkSourceElement(tag);
+                    }
+                });
             }
         }
 
@@ -42168,7 +42194,7 @@ namespace ts {
                     if (!result && isJSDoc) {
                         const container = findAncestor(name, or(isClassLike, isInterfaceDeclaration));
                         if (container) {
-                            return resolveJSDocMemberName(name, getSymbolOfNode(container));
+                            return resolveJSDocMemberName(name, /*ignoreErrors*/ false, getSymbolOfNode(container));
                         }
                     }
                     return result;
@@ -42217,11 +42243,11 @@ namespace ts {
          *
          * For unqualified names, a container K may be provided as a second argument.
          */
-        function resolveJSDocMemberName(name: EntityName | JSDocMemberName, container?: Symbol): Symbol | undefined {
+        function resolveJSDocMemberName(name: EntityName | JSDocMemberName, ignoreErrors?: boolean, container?: Symbol): Symbol | undefined {
             if (isEntityName(name)) {
                 // resolve static values first
                 const meaning = SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Value;
-                let symbol = resolveEntityName(name, meaning, /*ignoreErrors*/ false, /*dontResolveAlias*/ true, getHostSignatureFromJSDoc(name));
+                let symbol = resolveEntityName(name, meaning, ignoreErrors, /*dontResolveAlias*/ true, getHostSignatureFromJSDoc(name));
                 if (!symbol && isIdentifier(name) && container) {
                     symbol = getMergedSymbol(getSymbol(getExportsOfSymbol(container), name.escapedText, meaning));
                 }
@@ -42229,7 +42255,7 @@ namespace ts {
                     return symbol;
                 }
             }
-            const left = isIdentifier(name) ? container : resolveJSDocMemberName(name.left);
+            const left = isIdentifier(name) ? container : resolveJSDocMemberName(name.left, ignoreErrors, container);
             const right = isIdentifier(name) ? name.escapedText : name.right.escapedText;
             if (left) {
                 const proto = left.flags & SymbolFlags.Value && getPropertyOfType(getTypeOfSymbol(left), "prototype" as __String);
