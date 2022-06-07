@@ -1841,6 +1841,14 @@ namespace ts {
     }
 
     function buildNextInvalidatedProject(state: SolutionBuilderState, changeDetected: boolean) {
+        buildPerformance.mark("beforeBuild");
+        const buildOrder = buildNextInvalidatedProjectWorker(state, changeDetected);
+        buildPerformance.mark("afterBuild");
+        buildPerformance.measure("Build", "beforeBuild", "afterBuild");
+        if (buildOrder) reportErrorSummary(state, buildOrder);
+    }
+
+    function buildNextInvalidatedProjectWorker(state: SolutionBuilderState, changeDetected: boolean) {
         state.timerToBuildInvalidatedProject = undefined;
         if (state.reportFileChangeDetected) {
             state.reportFileChangeDetected = false;
@@ -1870,7 +1878,7 @@ namespace ts {
             }
         }
         disableCache(state);
-        reportErrorSummary(state, buildOrder);
+        return buildOrder;
     }
 
     function watchConfigFile(state: SolutionBuilderState, resolved: ResolvedConfigFileName, resolvedPath: ResolvedConfigFilePath, parsed: ParsedCommandLine | undefined) {
