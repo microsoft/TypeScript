@@ -182,3 +182,25 @@ function f100<T, K extends keyof T>(obj: T, keys: K[]) : void {
     }
 }
 
+// Repro from #49316
+
+function configureStore<S extends object>(reducer: (() => void) | Record<keyof S, () => void>) {
+>configureStore : <S extends object>(reducer: (() => void) | Record<keyof S, () => void>) => void
+>reducer : Record<keyof S, () => void> | (() => void)
+
+    let rootReducer: () => void;
+>rootReducer : () => void
+
+    if (typeof reducer === 'function') {
+>typeof reducer === 'function' : boolean
+>typeof reducer : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>reducer : Record<keyof S, () => void> | (() => void)
+>'function' : "function"
+
+        rootReducer = reducer;
+>rootReducer = reducer : () => void
+>rootReducer : () => void
+>reducer : () => void
+    }
+}
+
