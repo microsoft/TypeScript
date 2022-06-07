@@ -384,4 +384,140 @@ namespace ts {
     export function isNonStaticMethodOrAccessorWithPrivateName(member: ClassElement): member is PrivateIdentifierMethodDeclaration | PrivateIdentifierAccessorDeclaration {
         return !isStatic(member) && isMethodOrAccessor(member) && isPrivateIdentifier(member.name);
     }
+
+    /**
+     * Gets an array of arrays of decorators for the parameters of a function-like node.
+     * The offset into the result array should correspond to the offset of the parameter.
+     *
+     * @param node The function-like node.
+     */
+    function getDecoratorsOfParameters(node: FunctionLikeDeclaration | undefined) {
+        let decorators: (readonly Decorator[] | undefined)[] | undefined;
+        if (node) {
+            const parameters = node.parameters;
+            const firstParameterIsThis = parameters.length > 0 && parameterIsThisKeyword(parameters[0]);
+            const firstParameterOffset = firstParameterIsThis ? 1 : 0;
+            const numParameters = firstParameterIsThis ? parameters.length - 1 : parameters.length;
+            for (let i = 0; i < numParameters; i++) {
+                const parameter = parameters[i + firstParameterOffset];
+                if (decorators || parameter.decorators) {
+                    if (!decorators) {
+                        decorators = new Array(numParameters);
+                    }
+
+                    decorators[i] = parameter.decorators;
+                }
+            }
+        }
+
+        return decorators;
+    }
+
+    /**
+     * Gets an AllDecorators object containing the decorators for the class and the decorators for the
+     * parameters of the constructor of the class.
+     *
+     * @param node The class node.
+     */
+    export function getAllDecoratorsOfClass(node: ClassLikeDeclaration): AllDecorators | undefined {
+        const decorators = node.decorators;
+        const parameters = getDecoratorsOfParameters(getFirstConstructorWithBody(node));
+        if (!decorators && !parameters) {
+            return undefined;
+        }
+
+        return {
+            decorators,
+            parameters
+        };
+    }
+
+    /**
+     * Gets an AllDecorators object containing the decorators for the member and its parameters.
+     *
+     * @param parent The class node that contains the member.
+     * @param member The class member.
+     */
+    export function getAllDecoratorsOfClassElement(member: ClassElement, parent: ClassLikeDeclaration): AllDecorators | undefined {
+        switch (member.kind) {
+            case SyntaxKind.GetAccessor:
+            case SyntaxKind.SetAccessor:
+                return getAllDecoratorsOfAccessors(member as AccessorDeclaration, parent);
+
+            case SyntaxKind.MethodDeclaration:
+                return getAllDecoratorsOfMethod(member as MethodDeclaration);
+
+            case SyntaxKind.PropertyDeclaration:
+                return getAllDecoratorsOfProperty(member as PropertyDeclaration);
+
+            default:
+                return undefined;
+        }
+    }
+
+    /**
+     * Gets an AllDecorators object containing the decorators for the accessor and its parameters.
+     *
+     * @param parent The class node that contains the accessor.
+     * @param accessor The class accessor member.
+     */
+    function getAllDecoratorsOfAccessors(accessor: AccessorDeclaration, parent: ClassExpression | ClassDeclaration): AllDecorators | undefined {
+        if (!accessor.body) {
+            return undefined;
+        }
+
+        const { firstAccessor, secondAccessor, getAccessor, setAccessor } = getAllAccessorDeclarations(parent.members, accessor);
+        const firstAccessorWithDecorators = firstAccessor.decorators ? firstAccessor : secondAccessor && secondAccessor.decorators ? secondAccessor : undefined;
+        if (!firstAccessorWithDecorators || accessor !== firstAccessorWithDecorators) {
+            return undefined;
+        }
+
+        const decorators = firstAccessorWithDecorators.decorators;
+        const parameters = getDecoratorsOfParameters(setAccessor);
+        if (!decorators && !parameters) {
+            return undefined;
+        }
+
+        return {
+            decorators,
+            parameters,
+            getDecorators: getAccessor?.decorators,
+            setDecorators: setAccessor?.decorators
+        };
+    }
+
+    /**
+     * Gets an AllDecorators object containing the decorators for the method and its parameters.
+     *
+     * @param method The class method member.
+     */
+    function getAllDecoratorsOfMethod(method: MethodDeclaration): AllDecorators | undefined {
+        if (!method.body) {
+            return undefined;
+        }
+
+        const decorators = method.decorators;
+        const parameters = getDecoratorsOfParameters(method);
+        if (!decorators && !parameters) {
+            return undefined;
+        }
+
+        return { decorators, parameters };
+    }
+
+    /**
+     * Gets an AllDecorators object containing the decorators for the property.
+     *
+     * @param property The class property member.
+     */
+    function getAllDecoratorsOfProperty(property: PropertyDeclaration): AllDecorators | undefined {
+        const decorators = property.decorators;
+        if (!decorators) {
+            return undefined;
+
+        }
+
+        return { decorators };
+    }
+
 }
