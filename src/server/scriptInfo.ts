@@ -329,7 +329,8 @@ namespace ts.server {
         documentPositionMapper?: DocumentPositionMapper | false;
 
         constructor(
-            private readonly host: FileServerHost,
+            private readonly host: ServerHost,
+            private readonly fshost: FileServerHost,
             readonly fileName: NormalizedPath,
             readonly scriptKind: ScriptKind,
             public readonly hasMixedContent: boolean,
@@ -337,7 +338,7 @@ namespace ts.server {
             initialVersion?: ScriptInfoVersion) {
             this.isDynamic = isDynamicFileName(fileName);
 
-            this.textStorage = new TextStorage(host, this, initialVersion);
+            this.textStorage = new TextStorage(fshost, this, initialVersion);
             if (hasMixedContent || this.isDynamic) {
                 this.textStorage.reload("");
                 this.realpath = this.path;
@@ -395,10 +396,10 @@ namespace ts.server {
             if (this.realpath === undefined) {
                 // Default is just the path
                 this.realpath = this.path;
-                if (this.host.realpath) {
+                if (this.fshost.realpath) {
                     Debug.assert(!!this.containingProjects.length);
                     const project = this.containingProjects[0];
-                    const realpath = this.host.realpath(this.path);
+                    const realpath = this.fshost.realpath(this.path);
                     if (realpath) {
                         this.realpath = project.toPath(realpath);
                         // If it is different from this.path, add to the map
@@ -576,7 +577,7 @@ namespace ts.server {
         }
 
         saveTo(fileName: string) {
-            this.host.writeFile(fileName, getSnapshotText(this.textStorage.getSnapshot()));
+            this.fshost.writeFile(fileName, getSnapshotText(this.textStorage.getSnapshot()));
         }
 
         /*@internal*/

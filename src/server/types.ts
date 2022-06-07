@@ -22,6 +22,5 @@ declare namespace ts.server {
         | "readFile" | "writeFile" | "fileExists" | "directoryExists" | "getFileSize" | "getModifiedTime"
         | "getDirectories" | "getCurrentDirectory" | "getExecutingFilePath" | "realpath" | "resolvePath"
         | "createDirectory" | "setModifiedTime" | "deleteFile" | "readDirectory" | "watchFile" | "watchDirectory"
-        | "useCaseSensitiveFileNames" | "newLine">;
-    export type RuntimeServerHost = Omit<ServerHost, keyof FileServerHost>
+        | "useCaseSensitiveFileNames">;
 }

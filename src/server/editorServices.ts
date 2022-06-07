@@ -760,7 +760,7 @@ namespace ts.server {
         readonly currentDirectory: NormalizedPath;
         readonly toCanonicalFileName: (f: string) => string;
 
-        public readonly host: RuntimeServerHost;
+        public readonly host: ServerHost;
         public readonly fshost: FileServerHost;
         public readonly logger: Logger;
         public readonly cancellationToken: HostCancellationToken;
@@ -808,7 +808,7 @@ namespace ts.server {
 
         constructor(opts: ProjectServiceOptions) {
             this.host = opts.host;
-            this.fshost = opts.fshost || (this.host as ServerHost);
+            this.fshost = opts.fshost || this.host;
             this.logger = opts.logger;
             this.cancellationToken = opts.cancellationToken;
             this.useSingleInferredProject = opts.useSingleInferredProject;
@@ -858,7 +858,7 @@ namespace ts.server {
             this.typingsCache = new TypingsCache(this.typingsInstaller);
 
             this.hostConfiguration = {
-                formatCodeOptions: getDefaultFormatCodeSettings(this.fshost.newLine),
+                formatCodeOptions: getDefaultFormatCodeSettings(this.host.newLine),
                 preferences: emptyOptions,
                 hostInfo: "Unknown host",
                 extraFileExtensions: [],
@@ -2794,7 +2794,7 @@ namespace ts.server {
                 if (!openedByClient && !isDynamic && !(hostToQueryFileExistsOn || this.fshost).fileExists(fileName)) {
                     return;
                 }
-                info = new ScriptInfo(this.fshost, fileName, scriptKind!, !!hasMixedContent, path, this.filenameToScriptInfoVersion.get(path)); // TODO: GH#18217
+                info = new ScriptInfo(this.host, this.fshost, fileName, scriptKind!, !!hasMixedContent, path, this.filenameToScriptInfoVersion.get(path)); // TODO: GH#18217
                 this.filenameToScriptInfo.set(info.path, info);
                 this.filenameToScriptInfoVersion.delete(info.path);
                 if (!openedByClient) {

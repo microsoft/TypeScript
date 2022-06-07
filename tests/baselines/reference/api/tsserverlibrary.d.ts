@@ -6985,8 +6985,7 @@ declare namespace ts.server {
         trace?(s: string): void;
         require?(initialPath: string, moduleName: string): RequireResult;
     }
-    type FileServerHost = Pick<ServerHost, "readFile" | "writeFile" | "fileExists" | "directoryExists" | "getFileSize" | "getModifiedTime" | "getDirectories" | "getCurrentDirectory" | "getExecutingFilePath" | "realpath" | "resolvePath" | "createDirectory" | "setModifiedTime" | "deleteFile" | "readDirectory" | "watchFile" | "watchDirectory" | "useCaseSensitiveFileNames" | "newLine">;
-    type RuntimeServerHost = Omit<ServerHost, keyof FileServerHost>;
+    type FileServerHost = Pick<ServerHost, "readFile" | "writeFile" | "fileExists" | "directoryExists" | "getFileSize" | "getModifiedTime" | "getDirectories" | "getCurrentDirectory" | "getExecutingFilePath" | "realpath" | "resolvePath" | "createDirectory" | "setModifiedTime" | "deleteFile" | "readDirectory" | "watchFile" | "watchDirectory" | "useCaseSensitiveFileNames">;
 }
 declare namespace ts.server {
     enum LogLevel {
@@ -9918,6 +9917,7 @@ declare namespace ts.server {
     function isDynamicFileName(fileName: NormalizedPath): boolean;
     class ScriptInfo {
         private readonly host;
+        private readonly fshost;
         readonly fileName: NormalizedPath;
         readonly scriptKind: ScriptKind;
         readonly hasMixedContent: boolean;
@@ -9929,7 +9929,7 @@ declare namespace ts.server {
         private formatSettings;
         private preferences;
         private textStorage;
-        constructor(host: FileServerHost, fileName: NormalizedPath, scriptKind: ScriptKind, hasMixedContent: boolean, path: Path, initialVersion?: ScriptInfoVersion);
+        constructor(host: ServerHost, fshost: FileServerHost, fileName: NormalizedPath, scriptKind: ScriptKind, hasMixedContent: boolean, path: Path, initialVersion?: ScriptInfoVersion);
         isScriptOpen(): boolean;
         open(newText: string): void;
         close(fileExists?: boolean): void;
@@ -9992,7 +9992,7 @@ declare namespace ts.server {
         project: Project;
         languageService: LanguageService;
         languageServiceHost: LanguageServiceHost;
-        serverHost: RuntimeServerHost;
+        serverHost: ServerHost;
         fsHost: FileServerHost;
         session?: Session<unknown>;
         config: any;
@@ -10058,7 +10058,7 @@ declare namespace ts.server {
         private readonly cancellationToken;
         isNonTsProject(): boolean;
         isJsOnlyProject(): boolean;
-        static resolveModule(moduleName: string, initialDir: string, host: RuntimeServerHost, fshost: FileServerHost, log: (message: string) => void, logErrors?: (message: string) => void): {} | undefined;
+        static resolveModule(moduleName: string, initialDir: string, host: ServerHost, fshost: FileServerHost, log: (message: string) => void, logErrors?: (message: string) => void): {} | undefined;
         isKnownTypesPackageName(name: string): boolean;
         installPackage(options: InstallPackageOptions): Promise<ApplyCodeActionCommandResult>;
         private get typingsCache();
@@ -10443,7 +10443,7 @@ declare namespace ts.server {
         private pendingProjectUpdates;
         readonly currentDirectory: NormalizedPath;
         readonly toCanonicalFileName: (f: string) => string;
-        readonly host: RuntimeServerHost;
+        readonly host: ServerHost;
         readonly fshost: FileServerHost;
         readonly logger: Logger;
         readonly cancellationToken: HostCancellationToken;

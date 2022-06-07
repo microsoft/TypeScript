@@ -84,7 +84,7 @@ namespace ts.server {
         project: Project;
         languageService: LanguageService;
         languageServiceHost: LanguageServiceHost;
-        serverHost: RuntimeServerHost;
+        serverHost: ServerHost;
         fsHost: FileServerHost;
         session?: Session<unknown>;
         config: any;
@@ -234,7 +234,7 @@ namespace ts.server {
             return hasOneOrMoreJsAndNoTsFiles(this);
         }
 
-        public static resolveModule(moduleName: string, initialDir: string, host: RuntimeServerHost, fshost: FileServerHost, log: (message: string) => void, logErrors?: (message: string) => void): {} | undefined {
+        public static resolveModule(moduleName: string, initialDir: string, host: ServerHost, fshost: FileServerHost, log: (message: string) => void, logErrors?: (message: string) => void): {} | undefined {
             const resolvedPath = normalizeSlashes(fshost.resolvePath(combinePaths(initialDir, "node_modules")));
             log(`Loading ${moduleName} from ${initialDir} (resolved to ${resolvedPath})`);
             const result = host.require!(resolvedPath, moduleName); // TODO: GH#18217
@@ -381,7 +381,7 @@ namespace ts.server {
         }
 
         getNewLine() {
-            return this.projectService.fshost.newLine;
+            return this.projectService.host.newLine;
         }
 
         getProjectVersion() {
