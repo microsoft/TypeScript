@@ -87,8 +87,8 @@ namespace ts {
         NEUndefinedOrNull = 1 << 21,  // x != undefined / x != null
         Truthy = 1 << 22,             // x
         Falsy = 1 << 23,              // !x
-        IsUndefined = 1 << 24,        // Exactly undefined
-        IsNull = 1 << 25,             // Exactly null
+        IsUndefined = 1 << 24,        // Contains undefined or intersection with undefined
+        IsNull = 1 << 25,             // Contains null or intersection with null
         IsUndefinedOrNull = IsUndefined | IsNull,
         All = (1 << 27) - 1,
         // The following members encode facts about particular kinds of types for use in the getTypeFacts function.
@@ -6224,6 +6224,7 @@ namespace ts {
                                     factory.createStringLiteral("import")
                                 )
                             ])));
+                            context.tracker.reportImportTypeNodeResolutionModeOverride?.();
                         }
                     }
                     if (!specifier) {
@@ -6247,6 +6248,7 @@ namespace ts {
                                         factory.createStringLiteral(swappedMode === ModuleKind.ESNext ? "import" : "require")
                                     )
                                 ])));
+                                context.tracker.reportImportTypeNodeResolutionModeOverride?.();
                             }
                         }
 
@@ -18164,6 +18166,10 @@ namespace ts {
             return false;
         }
 
+        function containsUndefinedType(type: Type) {
+            return !!((type.flags & TypeFlags.Union ? (type as UnionType).types[0] : type).flags & TypeFlags.Undefined);
+        }
+
         function isStringIndexSignatureOnlyType(type: Type): boolean {
             return type.flags & TypeFlags.Object && !isGenericMappedType(type) && getPropertiesOfType(type).length === 0 && getIndexInfosOfType(type).length === 1 && !!getIndexInfoOfType(type, stringType) ||
                 type.flags & TypeFlags.UnionOrIntersection && every((type as UnionOrIntersectionType).types, isStringIndexSignatureOnlyType) ||
@@ -25909,7 +25915,7 @@ namespace ts {
                     return convertAutoToAny(flowType);
                 }
             }
-            else if (!assumeInitialized && !(getTypeFacts(type) & TypeFacts.IsUndefined) && getTypeFacts(flowType) & TypeFacts.IsUndefined) {
+            else if (!assumeInitialized && !containsUndefinedType(type) && containsUndefinedType(flowType)) {
                 error(node, Diagnostics.Variable_0_is_used_before_being_assigned, symbolToString(symbol));
                 // Return the declared type to reduce follow-on errors
                 return type;
@@ -29266,7 +29272,7 @@ namespace ts {
                 assumeUninitialized = true;
             }
             const flowType = getFlowTypeOfReference(node, propType, assumeUninitialized ? getOptionalType(propType) : propType);
-            if (assumeUninitialized && !(getTypeFacts(propType) & TypeFacts.IsUndefined) && getTypeFacts(flowType) & TypeFacts.IsUndefined) {
+            if (assumeUninitialized && !containsUndefinedType(propType) && containsUndefinedType(flowType)) {
                 error(errorNode, Diagnostics.Property_0_is_used_before_being_assigned, symbolToString(prop!)); // TODO: GH#18217
                 // Return the declared type to reduce follow-on errors
                 return propType;
@@ -33704,6 +33710,10 @@ namespace ts {
             if (target.kind === SyntaxKind.BinaryExpression && (target as BinaryExpression).operatorToken.kind === SyntaxKind.EqualsToken) {
                 checkBinaryExpression(target as BinaryExpression, checkMode);
                 target = (target as BinaryExpression).left;
+                // A default value is specified, so remove undefined from the final type.
+                if (strictNullChecks) {
+                    sourceType = getTypeWithFacts(sourceType, TypeFacts.NEUndefined);
+                }
             }
             if (target.kind === SyntaxKind.ObjectLiteralExpression) {
                 return checkObjectLiteralAssignment(target as ObjectLiteralExpression, sourceType, rightIsThis);
@@ -36025,8 +36035,11 @@ namespace ts {
             if (node.assertions) {
                 const override = getResolutionModeOverrideForClause(node.assertions.assertClause, grammarErrorOnNode);
                 if (override) {
+                    if (!isNightly()) {
+                        grammarErrorOnNode(node.assertions.assertClause, Diagnostics.resolution_mode_assertions_are_unstable_Use_nightly_TypeScript_to_silence_this_error_Try_updating_with_npm_install_D_typescript_next);
+                    }
                     if (getEmitModuleResolutionKind(compilerOptions) !== ModuleResolutionKind.Node16 && getEmitModuleResolutionKind(compilerOptions) !== ModuleResolutionKind.NodeNext) {
-                        grammarErrorOnNode(node.assertions.assertClause, Diagnostics.Resolution_modes_are_only_supported_when_moduleResolution_is_node16_or_nodenext);
+                        grammarErrorOnNode(node.assertions.assertClause, Diagnostics.resolution_mode_assertions_are_only_supported_when_moduleResolution_is_node16_or_nodenext);
                     }
                 }
             }
@@ -37114,6 +37127,12 @@ namespace ts {
 
         function checkJSDocTypeTag(node: JSDocTypeTag) {
             checkSourceElement(node.typeExpression);
+        }
+
+        function checkJSDocLinkLikeTag(node: JSDocLink | JSDocLinkCode | JSDocLinkPlain) {
+            if (node.name) {
+                resolveJSDocMemberName(node.name, /*ignoreErrors*/ true);
+            }
         }
 
         function checkJSDocParameterTag(node: JSDocParameterTag) {
@@ -40240,7 +40259,7 @@ namespace ts {
                     const propName = (member as PropertyDeclaration).name;
                     if (isIdentifier(propName) || isPrivateIdentifier(propName) || isComputedPropertyName(propName)) {
                         const type = getTypeOfSymbol(getSymbolOfNode(member));
-                        if (!(type.flags & TypeFlags.AnyOrUnknown || getTypeFacts(type) & TypeFacts.IsUndefined)) {
+                        if (!(type.flags & TypeFlags.AnyOrUnknown || containsUndefinedType(type))) {
                             if (!constructor || !isPropertyInitializedInConstructor(propName, type, constructor)) {
                                 error(member.name, Diagnostics.Property_0_has_no_initializer_and_is_not_definitely_assigned_in_the_constructor, declarationNameToString(propName));
                             }
@@ -40266,7 +40285,7 @@ namespace ts {
                     setParent(reference, staticBlock);
                     reference.flowNode = staticBlock.returnFlowNode;
                     const flowType = getFlowTypeOfReference(reference, propType, getOptionalType(propType));
-                    if (!(getTypeFacts(flowType) & TypeFacts.IsUndefined)) {
+                    if (!containsUndefinedType(flowType)) {
                         return true;
                     }
                 }
@@ -40282,7 +40301,7 @@ namespace ts {
             setParent(reference, constructor);
             reference.flowNode = constructor.returnFlowNode;
             const flowType = getFlowTypeOfReference(reference, propType, getOptionalType(propType));
-            return !(getTypeFacts(flowType) & TypeFacts.IsUndefined);
+            return !containsUndefinedType(flowType);
         }
 
 
@@ -40957,11 +40976,11 @@ namespace ts {
                 const override = getResolutionModeOverrideForClause(declaration.assertClause, validForTypeAssertions ? grammarErrorOnNode : undefined);
                 if (validForTypeAssertions && override) {
                     if (!isNightly()) {
-                        grammarErrorOnNode(declaration.assertClause, Diagnostics.Resolution_mode_assertions_are_unstable_Use_nightly_TypeScript_to_silence_this_error_Try_updating_with_npm_install_D_typescript_next);
+                        grammarErrorOnNode(declaration.assertClause, Diagnostics.resolution_mode_assertions_are_unstable_Use_nightly_TypeScript_to_silence_this_error_Try_updating_with_npm_install_D_typescript_next);
                     }
 
                     if (getEmitModuleResolutionKind(compilerOptions) !== ModuleResolutionKind.Node16 && getEmitModuleResolutionKind(compilerOptions) !== ModuleResolutionKind.NodeNext) {
-                        return grammarErrorOnNode(declaration.assertClause, Diagnostics.Resolution_modes_are_only_supported_when_moduleResolution_is_node16_or_nodenext);
+                        return grammarErrorOnNode(declaration.assertClause, Diagnostics.resolution_mode_assertions_are_only_supported_when_moduleResolution_is_node16_or_nodenext);
                     }
                     return; // Other grammar checks do not apply to type-only imports with resolution mode assertions
                 }
@@ -41341,9 +41360,15 @@ namespace ts {
         }
 
         function checkSourceElementWorker(node: Node): void {
-            if (isInJSFile(node)) {
-                forEach((node as JSDocContainer).jsDoc, ({ tags }) => forEach(tags, checkSourceElement));
-            }
+            forEach((node as JSDocContainer).jsDoc, ({ comment, tags }) => {
+                checkJSDocCommentWorker(comment);
+                forEach(tags, tag => {
+                    checkJSDocCommentWorker(tag.comment);
+                    if (isInJSFile(node)) {
+                        checkSourceElement(tag);
+                    }
+                });
+            });
 
             const kind = node.kind;
             if (cancellationToken) {
@@ -41431,6 +41456,10 @@ namespace ts {
                     return checkJSDocTemplateTag(node as JSDocTemplateTag);
                 case SyntaxKind.JSDocTypeTag:
                     return checkJSDocTypeTag(node as JSDocTypeTag);
+                case SyntaxKind.JSDocLink:
+                case SyntaxKind.JSDocLinkCode:
+                case SyntaxKind.JSDocLinkPlain:
+                    return checkJSDocLinkLikeTag(node as JSDocLink | JSDocLinkCode | JSDocLinkPlain);
                 case SyntaxKind.JSDocParameterTag:
                     return checkJSDocParameterTag(node as JSDocParameterTag);
                 case SyntaxKind.JSDocPropertyTag:
@@ -41523,6 +41552,16 @@ namespace ts {
                     return;
                 case SyntaxKind.MissingDeclaration:
                     return checkMissingDeclaration(node);
+            }
+        }
+
+        function checkJSDocCommentWorker(node: string | readonly JSDocComment[] | undefined) {
+            if (isArray(node)) {
+                forEach(node, tag => {
+                    if (isJSDocLinkLike(tag)) {
+                        checkSourceElement(tag);
+                    }
+                });
             }
         }
 
@@ -42159,7 +42198,7 @@ namespace ts {
                     if (!result && isJSDoc) {
                         const container = findAncestor(name, or(isClassLike, isInterfaceDeclaration));
                         if (container) {
-                            return resolveJSDocMemberName(name, getSymbolOfNode(container));
+                            return resolveJSDocMemberName(name, /*ignoreErrors*/ false, getSymbolOfNode(container));
                         }
                     }
                     return result;
@@ -42208,11 +42247,11 @@ namespace ts {
          *
          * For unqualified names, a container K may be provided as a second argument.
          */
-        function resolveJSDocMemberName(name: EntityName | JSDocMemberName, container?: Symbol): Symbol | undefined {
+        function resolveJSDocMemberName(name: EntityName | JSDocMemberName, ignoreErrors?: boolean, container?: Symbol): Symbol | undefined {
             if (isEntityName(name)) {
                 // resolve static values first
                 const meaning = SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Value;
-                let symbol = resolveEntityName(name, meaning, /*ignoreErrors*/ false, /*dontResolveAlias*/ true, getHostSignatureFromJSDoc(name));
+                let symbol = resolveEntityName(name, meaning, ignoreErrors, /*dontResolveAlias*/ true, getHostSignatureFromJSDoc(name));
                 if (!symbol && isIdentifier(name) && container) {
                     symbol = getMergedSymbol(getSymbol(getExportsOfSymbol(container), name.escapedText, meaning));
                 }
@@ -42220,7 +42259,7 @@ namespace ts {
                     return symbol;
                 }
             }
-            const left = isIdentifier(name) ? container : resolveJSDocMemberName(name.left);
+            const left = isIdentifier(name) ? container : resolveJSDocMemberName(name.left, ignoreErrors, container);
             const right = isIdentifier(name) ? name.escapedText : name.right.escapedText;
             if (left) {
                 const proto = left.flags & SymbolFlags.Value && getPropertyOfType(getTypeOfSymbol(left), "prototype" as __String);

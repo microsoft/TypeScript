@@ -9,10 +9,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Use node version 14.x
-      uses: actions/setup-node@v3
-      with:
-        node-version: 14.x
+    - uses: actions/setup-node@v3
     - uses: actions/checkout@v2
       with:
         fetch-depth: 5

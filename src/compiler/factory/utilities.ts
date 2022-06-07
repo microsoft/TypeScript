@@ -1215,4 +1215,16 @@ namespace ts {
             return resultHolder.value;
         }
     }
+
+    /**
+     * If `nodes` is not undefined, creates an empty `NodeArray` that preserves the `pos` and `end` of `nodes`.
+     * @internal
+     */
+    export function elideNodes<T extends Node>(factory: NodeFactory, nodes: NodeArray<T>): NodeArray<T>;
+    export function elideNodes<T extends Node>(factory: NodeFactory, nodes: NodeArray<T> | undefined): NodeArray<T> | undefined;
+    export function elideNodes<T extends Node>(factory: NodeFactory, nodes: NodeArray<T> | undefined): NodeArray<T> | undefined {
+        if (nodes === undefined) return undefined;
+        if (nodes.length === 0) return nodes;
+        return setTextRange(factory.createNodeArray([], nodes.hasTrailingComma), nodes);
+    }
 }

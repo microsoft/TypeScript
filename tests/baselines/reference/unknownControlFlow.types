@@ -697,3 +697,24 @@ function deepEquals<T>(a: T, b: T): boolean {
 >true : true
 }
 
+// Repro from #49386
+
+function foo<T>(x: T | null) {
+>foo : <T>(x: T | null) => void
+>x : T | null
+>null : null
+
+    let y = x;
+>y : T | null
+>x : T | null
+
+    if (y !== null) {
+>y !== null : boolean
+>y : T | null
+>null : null
+
+        y;
+>y : T & ({} | undefined)
+    }
+}
+

@@ -7,10 +7,12 @@ declare let f: { <T>(): T, g<U>(): U };
 
 const a1 = f<number>;  // { (): number; g<U>(): U; }
 >a1 : { (): number; g<U>(): U; }
+>f<number> : { (): number; g<U>(): U; }
 >f : { <T>(): T; g<U>(): U; }
 
 const a2 = f.g<number>;  // () => number
 >a2 : () => number
+>f.g<number> : () => number
 >f.g : <U>() => U
 >f : { <T>(): T; g<U>(): U; }
 >g : <U>() => U
@@ -18,17 +20,21 @@ const a2 = f.g<number>;  // () => number
 const a3 = f<number>.g;  // <U>() => U
 >a3 : <U>() => U
 >f<number>.g : <U>() => U
+>f<number> : { (): number; g<U>(): U; }
 >f : { <T>(): T; g<U>(): U; }
 >g : <U>() => U
 
 const a4 = f<number>.g<number>;  // () => number
 >a4 : () => number
+>f<number>.g<number> : () => number
 >f<number>.g : <U>() => U
+>f<number> : { (): number; g<U>(): U; }
 >f : { <T>(): T; g<U>(): U; }
 >g : <U>() => U
 
 const a5 = f['g']<number>;  // () => number
 >a5 : () => number
+>f['g']<number> : () => number
 >f['g'] : <U>() => U
 >f : { <T>(): T; g<U>(): U; }
 >'g' : "g"
@@ -48,6 +54,7 @@ const a7 = (f<number>)['g'];
 >a7 : <U>() => U
 >(f<number>)['g'] : <U>() => U
 >(f<number>) : { (): number; g<U>(): U; }
+>f<number> : { (): number; g<U>(): U; }
 >f : { <T>(): T; g<U>(): U; }
 >'g' : "g"
 
@@ -64,7 +71,9 @@ const a8 = f<number><number>;  // Relational operator error
 
 const a9 = (f<number>)<number>;  // Error, no applicable signatures
 >a9 : { g<U>(): U; }
+>(f<number>)<number> : { g<U>(): U; }
 >(f<number>) : { (): number; g<U>(): U; }
+>f<number> : { (): number; g<U>(): U; }
 >f : { <T>(): T; g<U>(): U; }
 
 // Type arguments with `?.` token
@@ -82,11 +91,13 @@ const b2 = f?.<number>();
 const b3 = f<number>?.();
 >b3 : number
 >f<number>?.() : number
+>f<number> : { (): number; g<U>(): U; }
 >f : { <T>(): T; g<U>(): U; }
 
 const b4 = f<number>?.<number>();  // Error, expected no type arguments
 >b4 : number
 >f<number>?.<number>() : number
+>f<number> : { (): number; g<U>(): U; }
 >f : { <T>(): T; g<U>(): U; }
 
 // Parsed as function call, even though this differs from JavaScript
@@ -116,6 +127,7 @@ true;
 
 const x3 = f<true>;
 >x3 : { (): true; g<U>(): U; }
+>f<true> : { (): true; g<U>(): U; }
 >f : { <T>(): T; g<U>(): U; }
 >true : true
 
@@ -126,6 +138,7 @@ true;
 
 const x4 = f<true>
 >x4 : { (): true; g<U>(): U; }
+>f<true> : { (): true; g<U>(): U; }
 >f : { <T>(): T; g<U>(): U; }
 >true : true
 
