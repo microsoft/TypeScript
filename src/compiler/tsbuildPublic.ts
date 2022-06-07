@@ -393,7 +393,7 @@ namespace ts {
         }
         configFileCache.set(configFilePath, parsed || diagnostic!);
         buildPerformance.mark("afterConfigFileParsing");
-        buildPerformance.measure("Config File Parsing", "beforeConfigFileParsing", "afterConfigFileParsing");
+        buildPerformance.measure("Config file parsing", "beforeConfigFileParsing", "afterConfigFileParsing");
         return parsed;
     }
 
@@ -710,7 +710,7 @@ namespace ts {
                 if (updateOutputFileStampsPending) {
                     updateOutputTimestamps(state, config, projectPath);
                 }
-                buildPerformance.mark("Projects With Only Timestamp Updates");
+                buildPerformance.mark("Timestamps only updates");
                 return doneInvalidatedProject(state, projectPath);
             }
         };
@@ -824,8 +824,8 @@ namespace ts {
 
         function done(cancellationToken?: CancellationToken, writeFile?: WriteFileCallback, customTransformers?: CustomTransformers) {
             executeSteps(BuildStep.Done, cancellationToken, writeFile, customTransformers);
-            if (kind === InvalidatedProjectKind.Build) buildPerformance.mark("Projects Built");
-            else buildPerformance.mark("Bundles Updated");
+            if (kind === InvalidatedProjectKind.Build) buildPerformance.mark("Projects built");
+            else buildPerformance.mark("Bundles updated");
             return doneInvalidatedProject(state, projectPath);
         }
 
@@ -1723,7 +1723,7 @@ namespace ts {
         buildPerformance.mark("beforeBuild");
         const result = buildWorker(state, project, cancellationToken, writeFile, getCustomTransformers, onlyReferences);
         buildPerformance.mark("afterBuild");
-        buildPerformance.measure("Build", "beforeBuild", "afterBuild");
+        buildPerformance.measure("Total", "beforeBuild", "afterBuild");
         return result;
     }
 
@@ -1760,7 +1760,7 @@ namespace ts {
         buildPerformance.mark("beforeClean");
         const result = cleanWorker(state, project, onlyReferences);
         buildPerformance.mark("afterClean");
-        buildPerformance.measure("Clean", "beforeClean", "afterClean");
+        buildPerformance.measure("Total", "beforeClean", "afterClean");
         return result;
     }
 
@@ -1844,7 +1844,7 @@ namespace ts {
         buildPerformance.mark("beforeBuild");
         const buildOrder = buildNextInvalidatedProjectWorker(state, changeDetected);
         buildPerformance.mark("afterBuild");
-        buildPerformance.measure("Build", "beforeBuild", "afterBuild");
+        buildPerformance.measure("Total", "beforeBuild", "afterBuild");
         if (buildOrder) reportErrorSummary(state, buildOrder);
     }
 
@@ -2004,7 +2004,7 @@ namespace ts {
             }
         }
         buildPerformance.mark("afterWatcherCreation");
-        buildPerformance.measure("Watcher Creation", "beforeWatcherCreation", "afterWatcherCreation");
+        buildPerformance.measure("Watcher creation", "beforeWatcherCreation", "afterWatcherCreation");
     }
 
     function stopWatching(state: SolutionBuilderState) {

@@ -9,15 +9,6 @@ namespace ts {
         return counts;
     }
 
-    function countNodes(program: Program): Map<number> {
-        const counts = getCountsMap();
-        forEach(program.getSourceFiles(), file => {
-            const key = getCountKey(program, file);
-            counts.set(key, counts.get(key)! + file.nodeCount);
-        });
-        return counts;
-    }
-
     function getCountsMap() {
         const counts = new Map<string, number>();
         counts.set("Library", 0);
@@ -984,27 +975,22 @@ namespace ts {
         if (canReportDiagnostics(sys, compilerOptions)) {
             statistics = [];
             const memoryUsed = sys.getMemoryUsage ? sys.getMemoryUsage() : -1;
-            reportCountStatistic("Files", program.getSourceFiles().length, /*aggregate*/ true);
+            reportCountStatistic("Files", program.getSourceFiles().length);
 
             const lineCounts = countLines(program);
-            const nodeCounts = countNodes(program);
             if (compilerOptions.extendedDiagnostics) {
                 for (const key of arrayFrom(lineCounts.keys())) {
-                    reportCountStatistic("Lines of " + key, lineCounts.get(key)!, /*aggregate*/ true);
-                }
-                for (const key of arrayFrom(nodeCounts.keys())) {
-                    reportCountStatistic("Nodes of " + key, nodeCounts.get(key)!, /*aggregate*/ false);
+                    reportCountStatistic("Lines of " + key, lineCounts.get(key)!);
                 }
             }
             else {
-                reportCountStatistic("Lines", reduceLeftIterator(lineCounts.values(), (sum, count) => sum + count, 0), /*aggregate*/ true);
-                reportCountStatistic("Nodes", reduceLeftIterator(nodeCounts.values(), (sum, count) => sum + count, 0), /*aggregate*/ false);
+                reportCountStatistic("Lines", reduceLeftIterator(lineCounts.values(), (sum, count) => sum + count, 0));
             }
 
-            reportCountStatistic("Identifiers", program.getIdentifierCount(), /*aggregate*/ true);
-            reportCountStatistic("Symbols", program.getSymbolCount(), /*aggregate*/ true);
-            reportCountStatistic("Types", program.getTypeCount(), /*aggregate*/ true);
-            reportCountStatistic("Instantiations", program.getInstantiationCount(), /*aggregate*/ true);
+            reportCountStatistic("Identifiers", program.getIdentifierCount());
+            reportCountStatistic("Symbols", program.getSymbolCount());
+            reportCountStatistic("Types", program.getTypeCount());
+            reportCountStatistic("Instantiations", program.getInstantiationCount());
 
             if (memoryUsed >= 0) {
                 reportMemoryStatistic("Memory used", memoryUsed);
@@ -1017,12 +1003,12 @@ namespace ts {
             const emitTime = isPerformanceEnabled ? performance.getDuration("Emit") : 0;
             if (compilerOptions.extendedDiagnostics) {
                 const caches = program.getRelationCacheSizes();
-                reportCountStatistic("Assignability cache size", caches.assignable, /*aggregate*/ true);
-                reportCountStatistic("Identity cache size", caches.identity, /*aggregate*/ true);
-                reportCountStatistic("Subtype cache size", caches.subtype, /*aggregate*/ true);
-                reportCountStatistic("Strict subtype cache size", caches.strictSubtype, /*aggregate*/ true);
+                reportCountStatistic("Assignability cache size", caches.assignable);
+                reportCountStatistic("Identity cache size", caches.identity);
+                reportCountStatistic("Subtype cache size", caches.subtype);
+                reportCountStatistic("Strict subtype cache size", caches.strictSubtype);
                 if (isPerformanceEnabled) {
-                    performance.forEachMeasure((duration, name) => reportTimeStatistic(`${name} time`, duration));
+                    performance.forEachMeasure((duration, name) => reportTimeStatistic(`${name} time`, duration, /*aggregate*/ true));
                 }
             }
             else if (isPerformanceEnabled) {
@@ -1030,15 +1016,15 @@ namespace ts {
                 // Note: To match the behavior of previous versions of the compiler, the reported parse time includes
                 // I/O read time and processing time for triple-slash references and module imports, and the reported
                 // emit time includes I/O write time. We preserve this behavior so we can accurately compare times.
-                reportTimeStatistic("I/O read", performance.getDuration("I/O Read"));
-                reportTimeStatistic("I/O write", performance.getDuration("I/O Write"));
-                reportTimeStatistic("Parse time", programTime);
-                reportTimeStatistic("Bind time", bindTime);
-                reportTimeStatistic("Check time", checkTime);
-                reportTimeStatistic("Emit time", emitTime);
+                reportTimeStatistic("I/O read", performance.getDuration("I/O Read"), /*aggregate*/ true);
+                reportTimeStatistic("I/O write", performance.getDuration("I/O Write"), /*aggregate*/ true);
+                reportTimeStatistic("Parse time", programTime, /*aggregate*/ true);
+                reportTimeStatistic("Bind time", bindTime, /*aggregate*/ true);
+                reportTimeStatistic("Check time", checkTime, /*aggregate*/ true);
+                reportTimeStatistic("Emit time", emitTime, /*aggregate*/ true);
             }
             if (isPerformanceEnabled) {
-                reportTimeStatistic("Total time", programTime + bindTime + checkTime + emitTime);
+                reportTimeStatistic("Total time", programTime + bindTime + checkTime + emitTime, /*aggregate*/ false);
             }
             reportAllStatistics(sys, statistics);
             if (!isPerformanceEnabled) {
@@ -1058,12 +1044,12 @@ namespace ts {
             reportStatisticalValue({ name, value: memoryUsed, type: StatisticType.memory }, /*aggregate*/ true);
         }
 
-        function reportCountStatistic(name: string, count: number, aggregate: boolean) {
-            reportStatisticalValue({ name, value: count, type: StatisticType.count }, aggregate);
+        function reportCountStatistic(name: string, count: number) {
+            reportStatisticalValue({ name, value: count, type: StatisticType.count }, /*aggregate*/ true);
         }
 
-        function reportTimeStatistic(name: string, time: number) {
-            reportStatisticalValue({ name, value: time, type: StatisticType.time }, /*aggregate*/ true);
+        function reportTimeStatistic(name: string, time: number, aggregate: boolean) {
+            reportStatisticalValue({ name, value: time, type: StatisticType.time }, aggregate);
         }
     }
 
