@@ -596,4 +596,8 @@ Output::
 exitCode:: ExitStatus.Success
 
 
+//// [/src/2/second-output.d.ts] unlink
+//// [/src/2/second-output.d.ts.map] unlink
+//// [/src/2/second-output.js] unlink
+//// [/src/2/second-output.js.map] unlink
 //// [/src/2/second-output.tsbuildinfo] unlink

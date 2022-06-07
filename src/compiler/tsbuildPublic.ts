@@ -1974,19 +1974,21 @@ namespace ts {
                 reportParseConfigFileDiagnostic(state, resolvedPath);
                 continue;
             }
-            const buildInfoPath = getTsBuildInfoEmitOutputFilePath(parsed.options);
-            if (buildInfoPath) {
-                // Only delete buildInfo as thats sufficient
-                removeOutput(buildInfoPath, resolvedPath);
-                continue;
-            }
             const outputs = getAllProjectOutputs(parsed, !host.useCaseSensitiveFileNames());
             if (!outputs.length) continue;
             const inputFileNames = new Set(parsed.fileNames.map(f => toPath(state, f)));
             for (const output of outputs) {
                 // If output name is same as input file name, do not delete and ignore the error
                 if (inputFileNames.has(toPath(state, output))) continue;
-                removeOutput(output, resolvedPath);
+                if (host.fileExists(output)) {
+                    if (filesToDelete) {
+                        filesToDelete.push(output);
+                    }
+                    else {
+                        host.deleteFile(output);
+                        invalidateProject(state, resolvedPath, ConfigFileProgramReloadLevel.None);
+                    }
+                }
             }
         }
 
@@ -1995,18 +1997,6 @@ namespace ts {
         }
 
         return ExitStatus.Success;
-
-        function removeOutput(output: string, resolvedPath: ResolvedConfigFilePath) {
-            if (host.fileExists(output)) {
-                if (filesToDelete) {
-                    filesToDelete.push(output);
-                }
-                else {
-                    host.deleteFile(output);
-                    invalidateProject(state, resolvedPath, ConfigFileProgramReloadLevel.None);
-                }
-            }
-        }
     }
 
     function invalidateProject(state: SolutionBuilderState, resolved: ResolvedConfigFilePath, reloadLevel: ConfigFileProgramReloadLevel) {
