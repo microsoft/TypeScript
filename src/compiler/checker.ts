@@ -25140,10 +25140,10 @@ namespace ts {
             // filtering by type-facts.
             function narrowTypeByTypeFacts(type: Type, impliedType: Type, facts: TypeFacts) {
                 return mapType(type, t =>
+                    isTypeRelatedTo(t, impliedType, strictSubtypeRelation) ? getTypeFacts(t) & facts ? t : neverType :
                     isTypeSubtypeOf(impliedType, t) ? impliedType :
-                    !(getTypeFacts(t) & facts) ? neverType :
-                    isTypeRelatedTo(t, impliedType, strictSubtypeRelation) ? t :
-                    getIntersectionType([t, impliedType]));
+                    getTypeFacts(t) & facts ? getIntersectionType([t, impliedType]) :
+                    neverType);
             }
 
             function narrowBySwitchOnTypeOf(type: Type, switchStatement: SwitchStatement, clauseStart: number, clauseEnd: number): Type {
