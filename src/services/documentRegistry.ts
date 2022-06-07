@@ -366,7 +366,7 @@ namespace ts {
         }
         let str = "{";
         for (const key in value) {
-            if (ts.hasOwnProperty.call(value, key)) { // eslint-disable-line @typescript-eslint/no-unnecessary-qualifier
+            if (hasProperty(value, key)) {
                 str += `${key}: ${compilerOptionValueToString((value as any)[key])}`;
             }
         }
