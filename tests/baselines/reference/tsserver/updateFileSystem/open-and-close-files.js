@@ -80,7 +80,9 @@ Open files:
 response:{"responseRequired":false}
 request:{"command":"updateFileSystem","arguments":{"fileSystem":"memfs","files":[],"deleted":[]},"seq":4,"type":"request"}
 response:{"response":true,"responseRequired":true}
-request:{"command":"updateFileSystem","arguments":{"fileSystem":"memfs","files":[],"deleted":["/fshost/b/commonFile1.ts"]},"seq":5,"type":"request"}
+request:{"command":"updateFileSystem","arguments":{"fileSystem":"memfs","files":[{"file":"/fshost/b/app.ts","fileContent":"import { xyz } from './file3'; let y = xyz"}],"deleted":[]},"seq":5,"type":"request"}
+response:{"response":true,"responseRequired":true}
+request:{"command":"updateFileSystem","arguments":{"fileSystem":"memfs","files":[],"deleted":["/fshost/b/commonFile1.ts"]},"seq":6,"type":"request"}
 FileWatcher:: Triggered with /fshost/b/commonFile1.ts 2:: WatchInfo: /fshost/b/commonFile1.ts 500 undefined WatchType: Closed Script info
 FileWatcher:: Close:: WatchInfo: /fshost/b/commonFile1.ts 500 undefined WatchType: Closed Script info
 Scheduled: /fshost/b/tsconfig.json
@@ -91,7 +93,7 @@ Scheduled: /fshost/b/tsconfig.json
 Scheduled: *ensureProjectForOpenFiles*
 Elapsed:: *ms DirectoryWatcher:: Triggered with /fshost/b/commonFile1.ts :: WatchInfo: /fshost/b 1 undefined Config: /fshost/b/tsconfig.json WatchType: Wild card directory
 response:{"response":true,"responseRequired":true}
-request:{"command":"close","arguments":{"file":"/fshost/b/app.ts"},"seq":6,"type":"request"}
+request:{"command":"close","arguments":{"file":"/fshost/b/app.ts"},"seq":7,"type":"request"}
 FileWatcher:: Added:: WatchInfo: /fshost/b/app.ts 500 undefined WatchType: Closed Script info
 Project '/fshost/b/tsconfig.json' (Configured)
 	Files (4)

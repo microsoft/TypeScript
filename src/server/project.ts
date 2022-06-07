@@ -1741,7 +1741,7 @@ namespace ts.server {
                 fileExists: this.projectService.fshost.fileExists.bind(this.projectService.fshost),
                 directoryExists: this.projectService.fshost.directoryExists.bind(this.projectService.fshost),
                 realpath: this.projectService.fshost.realpath?.bind(this.projectService.fshost),
-                getCurrentDirectory: this.getCurrentDirectory.bind(this), // TODO: Not sure whether this should be this.projectService.fshost.getCurrentDirectory.bind(this.projectService.fshost)
+                getCurrentDirectory: this.projectService.fshost.getCurrentDirectory.bind(this.projectService.fshost),
                 readFile: this.projectService.fshost.readFile.bind(this.projectService.fshost),
                 getDirectories: this.projectService.fshost.getDirectories.bind(this.projectService.fshost),
                 trace: this.projectService.host.trace?.bind(this.projectService.host),

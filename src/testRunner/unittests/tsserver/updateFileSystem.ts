@@ -85,6 +85,17 @@ ${file.fileContent}`;
                         deleted: [],
                     }
                 }],
+                ["change app.ts content", {
+                    command: protocol.CommandTypes.UpdateFileSystem,
+                    arguments: {
+                        fileSystem: "memfs",
+                        files: [{
+                            file: "/fshost/b/app.ts",
+                            fileContent: "import { xyz } from './file3'; let y = xyz"
+                        }],
+                        deleted: [],
+                    },
+                }],
                 ["delete", {
                     command: protocol.CommandTypes.UpdateFileSystem,
                     arguments:{

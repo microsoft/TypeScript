@@ -289,8 +289,6 @@ interface Array<T> { length: number; [n: number]: T; }`
         readonly screenClears: number[] = [];
         private readonly environmentVariables?: ESMap<string, string>;
         public require: ((initialPath: string, moduleName: string) => RequireResult) | undefined;
-        private readonly tscWatchFile?: string;
-        private readonly tscWatchDirectory?: string;
         private readonly runWithoutRecursiveWatches?: boolean;
         runWithFallbackPolling: boolean;
         public defaultWatchFileKind?: () => WatchFileKind | undefined;
@@ -305,8 +303,8 @@ interface Array<T> { length: number; [n: number]: T; }`
             });
             const { environmentVariables, runWithoutRecursiveWatches, runWithFallbackPolling } = options;
             fileOrFolderOrSymLinkList = fileOrFolderOrSymLinkList.concat(withSafeList ? safeList : []);
-            this.tscWatchFile = environmentVariables && environmentVariables.get("TSC_WATCHFILE");
-            this.tscWatchDirectory = environmentVariables && environmentVariables.get("TSC_WATCHDIRECTORY");
+            const tscWatchFile = environmentVariables && environmentVariables.get("TSC_WATCHFILE");
+            const tscWatchDirectory = environmentVariables && environmentVariables.get("TSC_WATCHDIRECTORY");
             this.runWithoutRecursiveWatches = runWithoutRecursiveWatches;
             this.runWithFallbackPolling = !!runWithFallbackPolling;
             this.environmentVariables = environmentVariables;
@@ -314,7 +312,7 @@ interface Array<T> { length: number; [n: number]: T; }`
                 // We dont have polling watch file
                 // it is essentially fsWatch but lets get that separate from fsWatch and
                 // into watchedFiles for easier testing
-                pollingWatchFile: this.tscWatchFile === Tsc_WatchFile.SingleFileWatcherPerName ?
+                pollingWatchFile: tscWatchFile === Tsc_WatchFile.SingleFileWatcherPerName ?
                     createSingleFileWatcherPerName(
                         this.watchFileWorker.bind(this),
                         this.useCaseSensitiveFileNames
@@ -327,12 +325,12 @@ interface Array<T> { length: number; [n: number]: T; }`
                 fileExists: this.fileExists.bind(this),
                 useCaseSensitiveFileNames: this.useCaseSensitiveFileNames,
                 getCurrentDirectory: this.getCurrentDirectory.bind(this),
-                fsSupportsRecursiveFsWatch: this.tscWatchDirectory ? false : !this.runWithoutRecursiveWatches,
+                fsSupportsRecursiveFsWatch: tscWatchDirectory ? false : !this.runWithoutRecursiveWatches,
                 directoryExists: this.directoryExists.bind(this),
                 getAccessibleSortedChildDirectories: path => this.getDirectories(path),
                 realpath: this.realpath.bind(this),
-                tscWatchFile: this.tscWatchFile,
-                tscWatchDirectory: this.tscWatchDirectory,
+                tscWatchFile: tscWatchFile,
+                tscWatchDirectory: tscWatchDirectory,
                 defaultWatchFileKind: () => this.defaultWatchFileKind?.(),
             });
             this.watchFile = watchFile;
@@ -506,20 +504,6 @@ interface Array<T> { length: number; [n: number]: T; }`
                         fallbackOptions
                     }
                 );
-        }
-
-        readFile(s: string): string | undefined {
-            const fsEntry = this.getRealFile(this.toFullPath(s));
-            return fsEntry ? fsEntry.content : undefined;
-        }
-
-        getFileSize(s: string) {
-            const path = this.toFullPath(s);
-            const entry = this.fs.get(path)!;
-            if (isFsFile(entry)) {
-                return entry.fileSize ? entry.fileSize : entry.content.length;
-            }
-            return undefined!; // TODO: GH#18217
         }
 
         createHash(s: string): string {

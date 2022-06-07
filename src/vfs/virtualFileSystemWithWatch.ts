@@ -209,7 +209,10 @@ namespace ts.VirtualFS {
             if (isFile(fileOrDirectoryOrSymLink)) {
                 const file = this.toFsFile(fileOrDirectoryOrSymLink);
                 // file may already exist when updating existing type declaration file
-                if (!this.fs.get(file.path)) {
+                if (this.fs.get(file.path)) {
+                    this.modifyFile(file.path, file.content);
+                }
+                else {
                     const baseFolder = this.ensureFolder(getDirectoryPath(file.fullPath), ignoreParentWatch);
                     this.addFileOrFolderInFolder(baseFolder, file, ignoreWatchInvokedWithTriggerAsFileCreate);
                 }

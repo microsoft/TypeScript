@@ -39,6 +39,12 @@ interface Array<T> { length: number; [n: number]: T; }
 #### non-delete
 
 
+#### change app.ts content
+//// [/fshost/b/app.ts]
+import { xyz } from './file3'; let y = xyz
+
+
+
 #### delete
 //// [/fshost/b/commonFile1.ts] deleted
 

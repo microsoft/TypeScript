@@ -3698,13 +3698,8 @@ namespace ts.server {
         updateFileSystem(updatedFiles: protocol.FileSystemRequestArgs[] | undefined, deletedFiles?: string[]) {
             Debug.assert(this.fshost instanceof VirtualFS.VirtualServerHost);
             if (updatedFiles) {
-                for (const { file: path, fileContent: content } of updatedFiles) {
-                    if (this.fshost.fileExists(path)) {
-                        this.fshost.modifyFile(path, content);
-                    }
-                    else {
-                        this.fshost.ensureFileOrFolder({ path, content });
-                    }
+                for (const { file, fileContent } of updatedFiles) {
+                    this.fshost.ensureFileOrFolder({ path: file, content: fileContent });
                 }
             }
             if (deletedFiles) {
