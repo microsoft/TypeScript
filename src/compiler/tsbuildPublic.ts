@@ -1185,14 +1185,6 @@ namespace ts {
         buildOrder: AnyBuildOrder,
         reportQueue: boolean
     ): InvalidateProjectCreateInfo | undefined {
-        return getNextInvalidatedProjectCreateInfoWorker(state, buildOrder, reportQueue);
-    }
-
-    function getNextInvalidatedProjectCreateInfoWorker<T extends BuilderProgram>(
-        state: SolutionBuilderState<T>,
-        buildOrder: AnyBuildOrder,
-        reportQueue: boolean
-    ): InvalidateProjectCreateInfo | undefined {
         if (!state.projectPendingBuild.size) return undefined;
         if (isCircularBuildOrder(buildOrder)) return undefined;
 
@@ -1337,11 +1329,11 @@ namespace ts {
         }
     }
 
-    function getOldProgram<T extends BuilderProgram>(state: SolutionBuilderState<T>, proj: ResolvedConfigFilePath, parsed: ParsedCommandLine) {
-        if (state.options.force) return undefined;
-        const value = state.builderPrograms.get(proj);
+    function getOldProgram<T extends BuilderProgram>({ options, builderPrograms, compilerHost }: SolutionBuilderState<T>, proj: ResolvedConfigFilePath, parsed: ParsedCommandLine) {
+        if (options.force) return undefined;
+        const value = builderPrograms.get(proj);
         if (value) return value;
-        return readBuilderProgram(parsed.options, state.compilerHost) as any as T;
+        return readBuilderProgram(parsed.options, compilerHost) as any as T;
     }
 
     function afterProgramDone<T extends BuilderProgram>(

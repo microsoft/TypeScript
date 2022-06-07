@@ -1052,6 +1052,7 @@ namespace ts {
             if (isPerformanceEnabled) {
                 reportTimeStatistic("Total time", programTime + bindTime + checkTime + emitTime);
             }
+            reportAllStatistics(sys, statistics);
             if (!isPerformanceEnabled) {
                 sys.write(Diagnostics.Performance_timings_for_diagnostics_or_extendedDiagnostics_are_not_available_in_this_session_A_native_implementation_of_the_Web_Performance_API_could_not_be_found.message + "\n");
             }
@@ -1105,7 +1106,6 @@ namespace ts {
                 return (s.value / 1000).toFixed(2) + "s";
             case StatisticType.memory:
                 return Math.round(s.value / 1000) + "K";
-                break;
             default:
                 Debug.assertNever(s.type);
         }
