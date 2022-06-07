@@ -84,7 +84,7 @@ namespace ts.server {
         project: Project;
         languageService: LanguageService;
         languageServiceHost: LanguageServiceHost;
-        serverHost: ServerHost;
+        serverHost: RuntimeServerHost;
         fsHost: FileServerHost;
         session?: Session<unknown>;
         config: any;
@@ -234,8 +234,8 @@ namespace ts.server {
             return hasOneOrMoreJsAndNoTsFiles(this);
         }
 
-        public static resolveModule(moduleName: string, initialDir: string, host: ServerHost, log: (message: string) => void, logErrors?: (message: string) => void): {} | undefined {
-            const resolvedPath = normalizeSlashes(host.resolvePath(combinePaths(initialDir, "node_modules")));
+        public static resolveModule(moduleName: string, initialDir: string, host: RuntimeServerHost, fshost: FileServerHost, log: (message: string) => void, logErrors?: (message: string) => void): {} | undefined {
+            const resolvedPath = normalizeSlashes(fshost.resolvePath(combinePaths(initialDir, "node_modules")));
             log(`Loading ${moduleName} from ${initialDir} (resolved to ${resolvedPath})`);
             const result = host.require!(resolvedPath, moduleName); // TODO: GH#18217
             if (result.error) {
@@ -381,7 +381,7 @@ namespace ts.server {
         }
 
         getNewLine() {
-            return this.projectService.host.newLine;
+            return this.projectService.fshost.newLine;
         }
 
         getProjectVersion() {
@@ -1608,7 +1608,7 @@ namespace ts.server {
                 (errorLogs || (errorLogs = [])).push(message);
             };
             const resolvedModule = firstDefined(searchPaths, searchPath =>
-                Project.resolveModule(pluginConfigEntry.name, searchPath, this.projectService.host, log, logError) as PluginModuleFactory | undefined);
+                Project.resolveModule(pluginConfigEntry.name, searchPath, this.projectService.host, this.projectService.fshost, log, logError) as PluginModuleFactory | undefined);
             if (resolvedModule) {
                 const configurationOverride = pluginConfigOverrides && pluginConfigOverrides.get(pluginConfigEntry.name);
                 if (configurationOverride) {
@@ -1998,7 +1998,7 @@ namespace ts.server {
                 compilerOptions,
                 /*compileOnSaveEnabled*/ false,
                 /*watchOptions*/ undefined,
-                projectService.host,
+                projectService.fshost,
                 /*currentDirectory*/ undefined);
         }
 

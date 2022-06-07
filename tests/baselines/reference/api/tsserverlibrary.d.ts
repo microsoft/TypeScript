@@ -6986,6 +6986,7 @@ declare namespace ts.server {
         require?(initialPath: string, moduleName: string): RequireResult;
     }
     type FileServerHost = Pick<ServerHost, "readFile" | "writeFile" | "fileExists" | "directoryExists" | "getFileSize" | "getModifiedTime" | "getDirectories" | "getCurrentDirectory" | "getExecutingFilePath" | "realpath" | "resolvePath" | "createDirectory" | "setModifiedTime" | "deleteFile" | "readDirectory" | "watchFile" | "watchDirectory" | "useCaseSensitiveFileNames" | "newLine">;
+    type RuntimeServerHost = Omit<ServerHost, keyof FileServerHost>;
 }
 declare namespace ts.server {
     enum LogLevel {
@@ -9991,7 +9992,7 @@ declare namespace ts.server {
         project: Project;
         languageService: LanguageService;
         languageServiceHost: LanguageServiceHost;
-        serverHost: ServerHost;
+        serverHost: RuntimeServerHost;
         fsHost: FileServerHost;
         session?: Session<unknown>;
         config: any;
@@ -10057,7 +10058,7 @@ declare namespace ts.server {
         private readonly cancellationToken;
         isNonTsProject(): boolean;
         isJsOnlyProject(): boolean;
-        static resolveModule(moduleName: string, initialDir: string, host: ServerHost, log: (message: string) => void, logErrors?: (message: string) => void): {} | undefined;
+        static resolveModule(moduleName: string, initialDir: string, host: RuntimeServerHost, fshost: FileServerHost, log: (message: string) => void, logErrors?: (message: string) => void): {} | undefined;
         isKnownTypesPackageName(name: string): boolean;
         installPackage(options: InstallPackageOptions): Promise<ApplyCodeActionCommandResult>;
         private get typingsCache();
@@ -10442,7 +10443,7 @@ declare namespace ts.server {
         private pendingProjectUpdates;
         readonly currentDirectory: NormalizedPath;
         readonly toCanonicalFileName: (f: string) => string;
-        readonly host: ServerHost;
+        readonly host: RuntimeServerHost;
         readonly fshost: FileServerHost;
         readonly logger: Logger;
         readonly cancellationToken: HostCancellationToken;

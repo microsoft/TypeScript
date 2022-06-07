@@ -760,7 +760,7 @@ namespace ts.server {
         readonly currentDirectory: NormalizedPath;
         readonly toCanonicalFileName: (f: string) => string;
 
-        public readonly host: ServerHost;
+        public readonly host: RuntimeServerHost;
         public readonly fshost: FileServerHost;
         public readonly logger: Logger;
         public readonly cancellationToken: HostCancellationToken;
@@ -808,7 +808,7 @@ namespace ts.server {
 
         constructor(opts: ProjectServiceOptions) {
             this.host = opts.host;
-            this.fshost = opts.fshost || this.host;
+            this.fshost = opts.fshost || (this.host as ServerHost);
             this.logger = opts.logger;
             this.cancellationToken = opts.cancellationToken;
             this.useSingleInferredProject = opts.useSingleInferredProject;

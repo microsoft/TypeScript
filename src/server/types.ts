@@ -23,4 +23,5 @@ declare namespace ts.server {
         | "getDirectories" | "getCurrentDirectory" | "getExecutingFilePath" | "realpath" | "resolvePath"
         | "createDirectory" | "setModifiedTime" | "deleteFile" | "readDirectory" | "watchFile" | "watchDirectory"
         | "useCaseSensitiveFileNames" | "newLine">;
+    export type RuntimeServerHost = Omit<ServerHost, keyof FileServerHost>
 }
