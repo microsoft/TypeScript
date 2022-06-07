@@ -1837,7 +1837,8 @@ namespace ts {
             isUse: boolean,
             excludeGlobals: boolean,
             getSpellingSuggestions: boolean,
-            lookup: typeof getSymbol): Symbol | undefined {
+            lookup: typeof getSymbol,
+            reportErrors = true): Symbol | undefined {
             const originalLocation = location; // needed for did-you-mean error reporting, which gathers candidates starting from the original location
             let result: Symbol | undefined;
             let lastLocation: Node | undefined;
@@ -1997,7 +1998,9 @@ namespace ts {
                                 // TypeScript 1.0 spec (April 2014): 3.4.1
                                 // The scope of a type parameter extends over the entire declaration with which the type
                                 // parameter list is associated, with the exception of static member declarations in classes.
-                                error(errorLocation, Diagnostics.Static_members_cannot_reference_class_type_parameters);
+                                if (reportErrors) {
+                                    error(errorLocation, Diagnostics.Static_members_cannot_reference_class_type_parameters);
+                                }
                                 return undefined;
                             }
                             break loop;
@@ -2015,7 +2018,7 @@ namespace ts {
                         if (lastLocation === (location as ExpressionWithTypeArguments).expression && (location.parent as HeritageClause).token === SyntaxKind.ExtendsKeyword) {
                             const container = location.parent.parent;
                             if (isClassLike(container) && (result = lookup(getSymbolOfNode(container).members!, name, meaning & SymbolFlags.Type))) {
-                                if (nameNotFoundMessage) {
+                                if (reportErrors && nameNotFoundMessage) {
                                     error(errorLocation, Diagnostics.Base_class_expressions_cannot_reference_class_type_parameters);
                                 }
                                 return undefined;
@@ -2035,7 +2038,9 @@ namespace ts {
                         if (isClassLike(grandparent) || grandparent.kind === SyntaxKind.InterfaceDeclaration) {
                             // A reference to this grandparent's type parameters would be an error
                             if (result = lookup(getSymbolOfNode(grandparent as ClassLikeDeclaration | InterfaceDeclaration).members!, name, meaning & SymbolFlags.Type)) {
-                                error(errorLocation, Diagnostics.A_computed_property_name_cannot_reference_a_type_parameter_from_its_containing_type);
+                                if (reportErrors) {
+                                    error(errorLocation, Diagnostics.A_computed_property_name_cannot_reference_a_type_parameter_from_its_containing_type);
+                                }
                                 return undefined;
                             }
                         }
@@ -2172,126 +2177,128 @@ namespace ts {
                     }
                 }
             }
-            if (!result) {
+            if (reportErrors) {
+                if (!result) {
+                    if (nameNotFoundMessage) {
+                        addLazyDiagnostic(() => {
+                            if (!errorLocation ||
+                                !checkAndReportErrorForMissingPrefix(errorLocation, name, nameArg!) && // TODO: GH#18217
+                                !checkAndReportErrorForExtendingInterface(errorLocation) &&
+                                !checkAndReportErrorForUsingTypeAsNamespace(errorLocation, name, meaning) &&
+                                !checkAndReportErrorForExportingPrimitiveType(errorLocation, name) &&
+                                !checkAndReportErrorForUsingTypeAsValue(errorLocation, name, meaning) &&
+                                !checkAndReportErrorForUsingNamespaceModuleAsValue(errorLocation, name, meaning) &&
+                                !checkAndReportErrorForUsingValueAsType(errorLocation, name, meaning)) {
+                                let suggestion: Symbol | undefined;
+                                if (getSpellingSuggestions && suggestionCount < maximumSuggestionCount) {
+                                    suggestion = getSuggestedSymbolForNonexistentSymbol(originalLocation, name, meaning);
+                                    const isGlobalScopeAugmentationDeclaration = suggestion?.valueDeclaration && isAmbientModule(suggestion.valueDeclaration) && isGlobalScopeAugmentation(suggestion.valueDeclaration);
+                                    if (isGlobalScopeAugmentationDeclaration) {
+                                        suggestion = undefined;
+                                    }
+                                    if (suggestion) {
+                                        const suggestionName = symbolToString(suggestion);
+                                        const isUncheckedJS = isUncheckedJSSuggestion(originalLocation, suggestion, /*excludeClasses*/ false);
+                                        const message = meaning === SymbolFlags.Namespace || nameArg && typeof nameArg !== "string" && nodeIsSynthesized(nameArg) ? Diagnostics.Cannot_find_namespace_0_Did_you_mean_1
+                                            : isUncheckedJS ? Diagnostics.Could_not_find_name_0_Did_you_mean_1
+                                            : Diagnostics.Cannot_find_name_0_Did_you_mean_1;
+                                        const diagnostic = createError(errorLocation, message, diagnosticName(nameArg!), suggestionName);
+                                        addErrorOrSuggestion(!isUncheckedJS, diagnostic);
+                                        if (suggestion.valueDeclaration) {
+                                            addRelatedInfo(
+                                                diagnostic,
+                                                createDiagnosticForNode(suggestion.valueDeclaration, Diagnostics._0_is_declared_here, suggestionName)
+                                            );
+                                        }
+                                    }
+                                }
+                                if (!suggestion) {
+                                    if (nameArg) {
+                                        const lib = getSuggestedLibForNonExistentName(nameArg);
+                                        if (lib) {
+                                            error(errorLocation, nameNotFoundMessage, diagnosticName(nameArg), lib);
+                                        }
+                                        else {
+                                            error(errorLocation, nameNotFoundMessage, diagnosticName(nameArg));
+                                        }
+                                    }
+                                }
+                                suggestionCount++;
+                            }
+                        });
+                    }
+                    return undefined;
+                }
+
+                if (propertyWithInvalidInitializer && !(getEmitScriptTarget(compilerOptions) === ScriptTarget.ESNext && useDefineForClassFields)) {
+                    // We have a match, but the reference occurred within a property initializer and the identifier also binds
+                    // to a local variable in the constructor where the code will be emitted. Note that this is actually allowed
+                    // with ESNext+useDefineForClassFields because the scope semantics are different.
+                    const propertyName = (propertyWithInvalidInitializer as PropertyDeclaration).name;
+                    error(errorLocation, Diagnostics.Initializer_of_instance_member_variable_0_cannot_reference_identifier_1_declared_in_the_constructor,
+                        declarationNameToString(propertyName), diagnosticName(nameArg!));
+                    return undefined;
+                }
+
+                // Perform extra checks only if error reporting was requested
                 if (nameNotFoundMessage) {
                     addLazyDiagnostic(() => {
-                        if (!errorLocation ||
-                            !checkAndReportErrorForMissingPrefix(errorLocation, name, nameArg!) && // TODO: GH#18217
-                            !checkAndReportErrorForExtendingInterface(errorLocation) &&
-                            !checkAndReportErrorForUsingTypeAsNamespace(errorLocation, name, meaning) &&
-                            !checkAndReportErrorForExportingPrimitiveType(errorLocation, name) &&
-                            !checkAndReportErrorForUsingTypeAsValue(errorLocation, name, meaning) &&
-                            !checkAndReportErrorForUsingNamespaceModuleAsValue(errorLocation, name, meaning) &&
-                            !checkAndReportErrorForUsingValueAsType(errorLocation, name, meaning)) {
-                            let suggestion: Symbol | undefined;
-                            if (getSpellingSuggestions && suggestionCount < maximumSuggestionCount) {
-                                suggestion = getSuggestedSymbolForNonexistentSymbol(originalLocation, name, meaning);
-                                const isGlobalScopeAugmentationDeclaration = suggestion?.valueDeclaration && isAmbientModule(suggestion.valueDeclaration) && isGlobalScopeAugmentation(suggestion.valueDeclaration);
-                                if (isGlobalScopeAugmentationDeclaration) {
-                                    suggestion = undefined;
-                                }
-                                if (suggestion) {
-                                    const suggestionName = symbolToString(suggestion);
-                                    const isUncheckedJS = isUncheckedJSSuggestion(originalLocation, suggestion, /*excludeClasses*/ false);
-                                    const message = meaning === SymbolFlags.Namespace || nameArg && typeof nameArg !== "string" && nodeIsSynthesized(nameArg) ? Diagnostics.Cannot_find_namespace_0_Did_you_mean_1
-                                        : isUncheckedJS ? Diagnostics.Could_not_find_name_0_Did_you_mean_1
-                                        : Diagnostics.Cannot_find_name_0_Did_you_mean_1;
-                                    const diagnostic = createError(errorLocation, message, diagnosticName(nameArg!), suggestionName);
-                                    addErrorOrSuggestion(!isUncheckedJS, diagnostic);
-                                    if (suggestion.valueDeclaration) {
-                                        addRelatedInfo(
-                                            diagnostic,
-                                            createDiagnosticForNode(suggestion.valueDeclaration, Diagnostics._0_is_declared_here, suggestionName)
-                                        );
-                                    }
-                                }
+                        // Only check for block-scoped variable if we have an error location and are looking for the
+                        // name with variable meaning
+                        //      For example,
+                        //          declare module foo {
+                        //              interface bar {}
+                        //          }
+                        //      const foo/*1*/: foo/*2*/.bar;
+                        // The foo at /*1*/ and /*2*/ will share same symbol with two meanings:
+                        // block-scoped variable and namespace module. However, only when we
+                        // try to resolve name in /*1*/ which is used in variable position,
+                        // we want to check for block-scoped
+                        if (errorLocation &&
+                            (meaning & SymbolFlags.BlockScopedVariable ||
+                            ((meaning & SymbolFlags.Class || meaning & SymbolFlags.Enum) && (meaning & SymbolFlags.Value) === SymbolFlags.Value))) {
+                            const exportOrLocalSymbol = getExportSymbolOfValueSymbolIfExported(result!);
+                            if (exportOrLocalSymbol.flags & SymbolFlags.BlockScopedVariable || exportOrLocalSymbol.flags & SymbolFlags.Class || exportOrLocalSymbol.flags & SymbolFlags.Enum) {
+                                checkResolvedBlockScopedVariable(exportOrLocalSymbol, errorLocation);
                             }
-                            if (!suggestion) {
-                                if (nameArg) {
-                                    const lib = getSuggestedLibForNonExistentName(nameArg);
-                                    if (lib) {
-                                        error(errorLocation, nameNotFoundMessage, diagnosticName(nameArg), lib);
-                                    }
-                                    else {
-                                        error(errorLocation, nameNotFoundMessage, diagnosticName(nameArg));
-                                    }
-                                }
+                        }
+
+                        // If we're in an external module, we can't reference value symbols created from UMD export declarations
+                        if (result && isInExternalModule && (meaning & SymbolFlags.Value) === SymbolFlags.Value && !(originalLocation!.flags & NodeFlags.JSDoc)) {
+                            const merged = getMergedSymbol(result);
+                            if (length(merged.declarations) && every(merged.declarations, d => isNamespaceExportDeclaration(d) || isSourceFile(d) && !!d.symbol.globalExports)) {
+                                errorOrSuggestion(!compilerOptions.allowUmdGlobalAccess, errorLocation!, Diagnostics._0_refers_to_a_UMD_global_but_the_current_file_is_a_module_Consider_adding_an_import_instead, unescapeLeadingUnderscores(name));
                             }
-                            suggestionCount++;
+                        }
+
+                        // If we're in a parameter initializer or binding name, we can't reference the values of the parameter whose initializer we're within or parameters to the right
+                        if (result && associatedDeclarationForContainingInitializerOrBindingName && !withinDeferredContext && (meaning & SymbolFlags.Value) === SymbolFlags.Value) {
+                            const candidate = getMergedSymbol(getLateBoundSymbol(result));
+                            const root = (getRootDeclaration(associatedDeclarationForContainingInitializerOrBindingName) as ParameterDeclaration);
+                            // A parameter initializer or binding pattern initializer within a parameter cannot refer to itself
+                            if (candidate === getSymbolOfNode(associatedDeclarationForContainingInitializerOrBindingName)) {
+                                error(errorLocation, Diagnostics.Parameter_0_cannot_reference_itself, declarationNameToString(associatedDeclarationForContainingInitializerOrBindingName.name));
+                            }
+                            // And it cannot refer to any declarations which come after it
+                            else if (candidate.valueDeclaration && candidate.valueDeclaration.pos > associatedDeclarationForContainingInitializerOrBindingName.pos && root.parent.locals && lookup(root.parent.locals, candidate.escapedName, meaning) === candidate) {
+                                error(errorLocation, Diagnostics.Parameter_0_cannot_reference_identifier_1_declared_after_it, declarationNameToString(associatedDeclarationForContainingInitializerOrBindingName.name), declarationNameToString(errorLocation as Identifier));
+                            }
+                        }
+                        if (result && errorLocation && meaning & SymbolFlags.Value && result.flags & SymbolFlags.Alias && !(result.flags & SymbolFlags.Value) && !isValidTypeOnlyAliasUseSite(errorLocation)) {
+                            const typeOnlyDeclaration = getTypeOnlyAliasDeclaration(result);
+                            if (typeOnlyDeclaration) {
+                                const message = typeOnlyDeclaration.kind === SyntaxKind.ExportSpecifier
+                                    ? Diagnostics._0_cannot_be_used_as_a_value_because_it_was_exported_using_export_type
+                                    : Diagnostics._0_cannot_be_used_as_a_value_because_it_was_imported_using_import_type;
+                                const unescapedName = unescapeLeadingUnderscores(name);
+                                addTypeOnlyDeclarationRelatedInfo(
+                                    error(errorLocation, message, unescapedName),
+                                    typeOnlyDeclaration,
+                                    unescapedName);
+                            }
                         }
                     });
                 }
-                return undefined;
-            }
-
-            if (propertyWithInvalidInitializer && !(getEmitScriptTarget(compilerOptions) === ScriptTarget.ESNext && useDefineForClassFields)) {
-                // We have a match, but the reference occurred within a property initializer and the identifier also binds
-                // to a local variable in the constructor where the code will be emitted. Note that this is actually allowed
-                // with ESNext+useDefineForClassFields because the scope semantics are different.
-                const propertyName = (propertyWithInvalidInitializer as PropertyDeclaration).name;
-                error(errorLocation, Diagnostics.Initializer_of_instance_member_variable_0_cannot_reference_identifier_1_declared_in_the_constructor,
-                    declarationNameToString(propertyName), diagnosticName(nameArg!));
-                return undefined;
-            }
-
-            // Perform extra checks only if error reporting was requested
-            if (nameNotFoundMessage) {
-                addLazyDiagnostic(() => {
-                    // Only check for block-scoped variable if we have an error location and are looking for the
-                    // name with variable meaning
-                    //      For example,
-                    //          declare module foo {
-                    //              interface bar {}
-                    //          }
-                    //      const foo/*1*/: foo/*2*/.bar;
-                    // The foo at /*1*/ and /*2*/ will share same symbol with two meanings:
-                    // block-scoped variable and namespace module. However, only when we
-                    // try to resolve name in /*1*/ which is used in variable position,
-                    // we want to check for block-scoped
-                    if (errorLocation &&
-                        (meaning & SymbolFlags.BlockScopedVariable ||
-                         ((meaning & SymbolFlags.Class || meaning & SymbolFlags.Enum) && (meaning & SymbolFlags.Value) === SymbolFlags.Value))) {
-                        const exportOrLocalSymbol = getExportSymbolOfValueSymbolIfExported(result!);
-                        if (exportOrLocalSymbol.flags & SymbolFlags.BlockScopedVariable || exportOrLocalSymbol.flags & SymbolFlags.Class || exportOrLocalSymbol.flags & SymbolFlags.Enum) {
-                            checkResolvedBlockScopedVariable(exportOrLocalSymbol, errorLocation);
-                        }
-                    }
-
-                    // If we're in an external module, we can't reference value symbols created from UMD export declarations
-                    if (result && isInExternalModule && (meaning & SymbolFlags.Value) === SymbolFlags.Value && !(originalLocation!.flags & NodeFlags.JSDoc)) {
-                        const merged = getMergedSymbol(result);
-                        if (length(merged.declarations) && every(merged.declarations, d => isNamespaceExportDeclaration(d) || isSourceFile(d) && !!d.symbol.globalExports)) {
-                            errorOrSuggestion(!compilerOptions.allowUmdGlobalAccess, errorLocation!, Diagnostics._0_refers_to_a_UMD_global_but_the_current_file_is_a_module_Consider_adding_an_import_instead, unescapeLeadingUnderscores(name));
-                        }
-                    }
-
-                    // If we're in a parameter initializer or binding name, we can't reference the values of the parameter whose initializer we're within or parameters to the right
-                    if (result && associatedDeclarationForContainingInitializerOrBindingName && !withinDeferredContext && (meaning & SymbolFlags.Value) === SymbolFlags.Value) {
-                        const candidate = getMergedSymbol(getLateBoundSymbol(result));
-                        const root = (getRootDeclaration(associatedDeclarationForContainingInitializerOrBindingName) as ParameterDeclaration);
-                        // A parameter initializer or binding pattern initializer within a parameter cannot refer to itself
-                        if (candidate === getSymbolOfNode(associatedDeclarationForContainingInitializerOrBindingName)) {
-                            error(errorLocation, Diagnostics.Parameter_0_cannot_reference_itself, declarationNameToString(associatedDeclarationForContainingInitializerOrBindingName.name));
-                        }
-                        // And it cannot refer to any declarations which come after it
-                        else if (candidate.valueDeclaration && candidate.valueDeclaration.pos > associatedDeclarationForContainingInitializerOrBindingName.pos && root.parent.locals && lookup(root.parent.locals, candidate.escapedName, meaning) === candidate) {
-                            error(errorLocation, Diagnostics.Parameter_0_cannot_reference_identifier_1_declared_after_it, declarationNameToString(associatedDeclarationForContainingInitializerOrBindingName.name), declarationNameToString(errorLocation as Identifier));
-                        }
-                    }
-                    if (result && errorLocation && meaning & SymbolFlags.Value && result.flags & SymbolFlags.Alias && !(result.flags & SymbolFlags.Value) && !isValidTypeOnlyAliasUseSite(errorLocation)) {
-                        const typeOnlyDeclaration = getTypeOnlyAliasDeclaration(result);
-                        if (typeOnlyDeclaration) {
-                            const message = typeOnlyDeclaration.kind === SyntaxKind.ExportSpecifier
-                                ? Diagnostics._0_cannot_be_used_as_a_value_because_it_was_exported_using_export_type
-                                : Diagnostics._0_cannot_be_used_as_a_value_because_it_was_imported_using_import_type;
-                            const unescapedName = unescapeLeadingUnderscores(name);
-                            addTypeOnlyDeclarationRelatedInfo(
-                                error(errorLocation, message, unescapedName),
-                                typeOnlyDeclaration,
-                                unescapedName);
-                        }
-                    }
-                });
             }
             return result;
         }
@@ -23085,7 +23092,8 @@ namespace ts {
                     !isWriteOnlyAccess(node),
                     /*excludeGlobals*/ false,
                     /*getSpellingSuggestions*/ true,
-                    (symbol, name, _meaning) => getSymbol(symbol, name, SymbolFlags.All)
+                    (symbol, name, _meaning) => getSymbol(symbol, name, SymbolFlags.All),
+                    /*reportErrors*/ false,
                 ) || unknownSymbol;
         }
 
@@ -42483,7 +42491,8 @@ namespace ts {
             }
             const node = getParseTreeNode(nodeIn, isIdentifier);
             if (node) {
-                const symbol = getReferencedValueSymbol(node);
+                // const symbol = getReferencedValueSymbol(node);
+                const symbol = getReferencedAnySymbol(node);
                 // We should only get the declaration of an alias if there isn't a local value
                 // declaration for the symbol
                 if (isNonLocalAlias(symbol, /*excludes*/ SymbolFlags.Value) && !getTypeOnlyAliasDeclaration(symbol)) {
@@ -42885,6 +42894,38 @@ namespace ts {
             }
 
             return resolveName(location, reference.escapedText, SymbolFlags.Value | SymbolFlags.ExportValue | SymbolFlags.Alias, /*nodeNotFoundMessage*/ undefined, /*nameArg*/ undefined, /*isUse*/ true);
+        }
+
+        function getReferencedAnySymbol(reference: Identifier, startInDeclarationContainer?: boolean): Symbol | undefined {
+            // >> Can't use cached resolved symbol because it might be `unknown` symbol
+            // const resolvedSymbol = getNodeLinks(reference).resolvedSymbol;
+            // if (resolvedSymbol) {
+            //     return resolvedSymbol;
+            // }
+
+            let location: Node = reference;
+            if (startInDeclarationContainer) {
+                // When resolving the name of a declaration as a value, we need to start resolution
+                // at a point outside of the declaration.
+                const parent = reference.parent;
+                if (isDeclaration(parent) && reference === parent.name) {
+                    location = getDeclarationContainer(parent);
+                }
+            }
+
+            // return resolveName(location, reference.escapedText, SymbolFlags.Value | SymbolFlags.ExportValue | SymbolFlags.Alias, /*nodeNotFoundMessage*/ undefined, /*nameArg*/ undefined, /*isUse*/ true);
+            return resolveNameHelper(
+                location,
+                reference.escapedText,
+                SymbolFlags.Value | SymbolFlags.ExportValue | SymbolFlags.Alias,
+                /*nameNotFoundMessage*/ undefined,
+                /*nameArg*/ undefined,
+                /*isUse*/ true,
+                /*excludeGlobals*/ false,
+                /*getSpellingSuggestions*/ true,
+                (symbol, name, _meaning) => getSymbol(symbol, name, SymbolFlags.All),
+                /*reportErrors*/ false,
+            );
         }
 
         function getReferencedValueDeclaration(referenceIn: Identifier): Declaration | undefined {

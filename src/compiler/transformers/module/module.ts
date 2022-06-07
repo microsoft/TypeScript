@@ -1901,7 +1901,7 @@ namespace ts {
                 return node;
             }
             else if (!(isGeneratedIdentifier(node) && !(node.autoGenerateFlags & GeneratedIdentifierFlags.AllowNameSubstitution)) && !isLocalName(node)) {
-                const exportContainer = resolver.getReferencedExportContainer(node, isExportName(node));
+                const exportContainer = resolver.getReferencedExportContainer(node, isExportName(node)); // >> Look into it here
                 if (exportContainer && exportContainer.kind === SyntaxKind.SourceFile) {
                     return setTextRange(
                         factory.createPropertyAccessExpression(
@@ -1911,7 +1911,7 @@ namespace ts {
                         /*location*/ node
                     );
                 }
-                const importDeclaration = resolver.getReferencedImportDeclaration(node);
+                const importDeclaration = resolver.getReferencedImportDeclaration(node); // >> Look into it here
                 if (importDeclaration) {
                     if (isImportClause(importDeclaration)) {
                         return setTextRange(
@@ -1980,8 +1980,8 @@ namespace ts {
          */
         function getExports(name: Identifier): Identifier[] | undefined {
             if (!isGeneratedIdentifier(name)) {
-                const valueDeclaration = resolver.getReferencedImportDeclaration(name)
-                    || resolver.getReferencedValueDeclaration(name);
+                const valueDeclaration = resolver.getReferencedImportDeclaration(name) // >> Look into it here
+                    || resolver.getReferencedValueDeclaration(name); // >> Look into it here
                 if (valueDeclaration) {
                     return currentModuleInfo
                         && currentModuleInfo.exportedBindings[getOriginalNodeId(valueDeclaration)];
