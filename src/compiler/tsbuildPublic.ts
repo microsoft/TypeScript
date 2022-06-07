@@ -69,6 +69,7 @@ namespace ts {
     }
 
     /*@internal*/
+    /** Helper to use now method instead of current date for testing purposes to get consistent baselines */
     export function getCurrentTime(host: { now?(): Date; }) {
         return host.now ? host.now() : new Date();
     }
@@ -214,6 +215,8 @@ namespace ts {
     interface FileWatcherWithModifiedTime {
         callbacks: FileWatcherCallback[];
         watcher: FileWatcher;
+        // modified time can be undefined if it was not queried
+        // Eg. if input file timestamp was not queried because tsbuildinfo was missing but watcher for that file is created
         modifiedTime: Date | undefined;
     }
 
@@ -990,6 +993,7 @@ namespace ts {
                 emittedOutputs.set(toPath(state, name), name);
                 if (buildInfo) {
                     setBuildInfo(state, buildInfo, projectPath, options);
+                    // Buildinfo has information on when last dts change time
                     if (buildInfo.program?.dtsChangeTime !== existingBuildInfo?.program?.dtsChangeTime) {
                         resultFlags &= ~BuildResultFlags.DeclarationOutputUnchanged;
                     }
@@ -1060,7 +1064,7 @@ namespace ts {
             state.diagnostics.delete(projectPath);
             state.projectStatus.set(projectPath, {
                 type: UpToDateStatusType.UpToDate,
-                newestDeclarationFileContentChangedTime: getDtsChangeTime(state, config.options, projectPath),
+                newestDeclarationFileContentChangedTime: getDtsChangeTime(state, config.options, projectPath)!,
                 oldestOutputFileName
             });
             afterProgramDone(state, program, config);
@@ -1382,6 +1386,7 @@ namespace ts {
         buildResult: BuildResultFlags,
         errorType: string,
     ) {
+        // Since buildinfo has changeset and diagnostics when doing multi file emit, only --out cannot emit buildinfo if it has errors
         const canEmitBuildInfo = program && !outFile(program.getCompilerOptions());
 
         reportAndStoreErrors(state, resolvedPath, diagnostics);
@@ -1402,6 +1407,9 @@ namespace ts {
             if (!isFileWatcherWithModifiedTime(existing)) return existing;
             if (existing.modifiedTime) return existing.modifiedTime;
         }
+        // In watch mode we store the modified times in the cache
+        // This is either Date | FileWatcherWithModifiedTime because we query modified times first and
+        // then after complete compilation of the project, watch the files so we dont want to loose these modified times.
         const result = ts.getModifiedTime(state.host, fileName);
         if (state.watch) {
             if (existing) (existing as FileWatcherWithModifiedTime).modifiedTime = result;
@@ -1449,6 +1457,7 @@ namespace ts {
     }
 
     function getOutputTimeStampMap(state: SolutionBuilderState, resolvedConfigFilePath: ResolvedConfigFilePath) {
+        // Output timestamps are stored only in watch mode
         if (!state.watch) return undefined;
         let result = state.outputTimeStamps.get(resolvedConfigFilePath);
         if (!result) state.outputTimeStamps.set(resolvedConfigFilePath, result = new Map());
@@ -1506,7 +1515,7 @@ namespace ts {
             };
         }
 
-        // Fast check to see if reference projects are buildable
+        // Fast check to see if reference projects are upto date and error free
         let referenceStatuses;
         const force = !!state.options.force;
         if (project.projectReferences) {
@@ -1581,6 +1590,7 @@ namespace ts {
             }
 
             if (buildInfo.program) {
+                // If there are pending changes that are not emitted, project is out of date
                 if ((buildInfo.program as ProgramMultiFileEmitBuildInfo).changeFileSet?.length ||
                     (!project.options.noEmit && (buildInfo.program as ProgramMultiFileEmitBuildInfo).affectedFilesPendingEmit?.length)) {
                     return {
@@ -1593,6 +1603,7 @@ namespace ts {
 
             oldestOutputFileTime = buildInfoTime;
             oldestOutputFileName = buildInfoPath;
+            // Get the last dtsChange time from build info
             newestDeclarationFileContentChangedTime = buildInfo.program?.dtsChangeTime ? new Date(buildInfo.program.dtsChangeTime) : undefined;
         }
 
@@ -1660,6 +1671,8 @@ namespace ts {
                     };
                 }
 
+                // No need to get newestDeclarationFileContentChangedTime since thats needed only for composite projects
+                // And composite projects are the only ones that can be referenced
                 if (outputTime < oldestOutputFileTime) {
                     oldestOutputFileTime = outputTime;
                     oldestOutputFileName = output;
@@ -1800,6 +1813,8 @@ namespace ts {
         let now: Date | undefined;
         const buildInfoPath = getTsBuildInfoEmitOutputFilePath(proj.options);
         if (buildInfoPath) {
+            // For incremental projects, only buildinfo needs to be upto date with timestamp check
+            // as we dont check output files for up-to-date ness
             if (!skipOutputs?.has(toPath(state, buildInfoPath))) {
                 if (!!state.options.verbose) reportStatus(state, verboseMessage, proj.options.configFilePath!);
                 state.host.setModifiedTime(buildInfoPath, now = getCurrentTime(state.host));
@@ -1823,6 +1838,7 @@ namespace ts {
                     reportStatus(state, verboseMessage, proj.options.configFilePath!);
                 }
                 host.setModifiedTime(file, now ||= getCurrentTime(state.host));
+                // Store output timestamps in a map because non incremental build will need to check them to determine up-to-dateness
                 if (outputTimeStampMap) {
                     outputTimeStampMap.set(path, now);
                     modifiedOutputs!.add(path);

@@ -480,6 +480,7 @@ namespace ts {
         const newTime = modifiedTime.getTime();
         if (oldTime !== newTime) {
             watchedFile.mtime = modifiedTime;
+            // Pass modified times so tsc --build can use it
             watchedFile.callback(watchedFile.fileName, getFileWatcherEventKind(oldTime, newTime), modifiedTime);
             return true;
         }
@@ -798,6 +799,7 @@ namespace ts {
     ): FsWatchCallback {
         return (eventName, _relativeFileName, modifiedTime) => {
             if (eventName === "rename") {
+                // Check time stamps rather than file system entry checks
                 modifiedTime ||= getModifiedTime(fileName) || missingFileModifiedTime;
                 callback(fileName, modifiedTime !== missingFileModifiedTime ? FileWatcherEventKind.Created : FileWatcherEventKind.Deleted, modifiedTime);
             }

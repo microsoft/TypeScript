@@ -367,6 +367,7 @@ namespace ts {
             }
             const version = ts.version; // Extracted into a const so the form is stable between namespace and module
             const buildInfo: BuildInfo = { bundle, program, version };
+            // Pass buildinfo as additional data to avoid having to reparse
             writeFile(host, emitterDiagnostics, buildInfoPath, getBuildInfoText(buildInfo), /*writeByteOrderMark*/ false, /*sourceFiles*/ undefined, { buildInfo });
         }
 
@@ -568,6 +569,8 @@ namespace ts {
             // Write the output file
             const text = writer.getText();
             writeFile(host, emitterDiagnostics, jsFilePath, text, !!compilerOptions.emitBOM, sourceFiles, { sourceMapUrlPos });
+            // We store the hash of the text written in the buildinfo to ensure that text of the referenced d.ts file is same as whats in the buildinfo
+            // This is needed because incremental can be toggled between two runs and we might use stale file text to do text manipulation in prepend mode
             if (printer.bundleFileInfo) printer.bundleFileInfo.hash = BuilderState.computeSignature(text, maybeBind(host, host.createHash));
 
             // Reset state
@@ -756,6 +759,7 @@ namespace ts {
         const { buildInfoPath, jsFilePath, sourceMapFilePath, declarationFilePath, declarationMapPath } = getOutputPathsForBundle(config.options, /*forceDtsPaths*/ false);
         let buildInfo: BuildInfo;
         if (host.getBuildInfo) {
+            // If host directly provides buildinfo we can get it directly. This allows host to cache the buildinfo
             const hostBuildInfo = host.getBuildInfo(buildInfoPath!, config.options.configFilePath);
             if (!hostBuildInfo) return buildInfoPath!;
             buildInfo = hostBuildInfo;
@@ -769,6 +773,7 @@ namespace ts {
 
         const jsFileText = host.readFile(Debug.checkDefined(jsFilePath));
         if (!jsFileText) return jsFilePath!;
+        // If the jsFileText is not same has what it was created with, tsbuildinfo is stale so dont use it
         if (BuilderState.computeSignature(jsFileText, createHash) !== buildInfo.bundle.js.hash) return jsFilePath!;
         const sourceMapText = sourceMapFilePath && host.readFile(sourceMapFilePath);
         // error if no source map or for now if inline sourcemap

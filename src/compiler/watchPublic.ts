@@ -11,6 +11,7 @@ namespace ts {
         if (!buildInfoPath) return undefined;
         let buildInfo;
         if (host.getBuildInfo) {
+            // host provides buildinfo, get it from there. This allows host to cache it
             buildInfo = host.getBuildInfo(buildInfoPath, compilerOptions.configFilePath);
             if (!buildInfo) return undefined;
         }

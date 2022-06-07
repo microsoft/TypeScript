@@ -783,6 +783,7 @@ namespace ts {
         if (outFilePath && !state.compilerOptions.composite) return;
         const currentDirectory = Debug.checkDefined(state.program).getCurrentDirectory();
         const buildInfoDirectory = getDirectoryPath(getNormalizedAbsolutePath(getTsBuildInfoEmitOutputFilePath(state.compilerOptions)!, currentDirectory));
+        // Update the dtsChange time in buildInfo
         state.dtsChangeTime = state.hasChangedEmitSignature ? getCurrentTime(host).getTime() : state.dtsChangeTime;
         if (outFilePath) {
             const fileNames: string[] = [];
@@ -1196,6 +1197,9 @@ namespace ts {
                             }
                         }
 
+                        // Store d.ts emit hash so later can be compared to check if d.ts has changed.
+                        // Currently we do this only for composite projects since these are the only projects that can be referenced by other projects
+                        // and would need their d.ts change time in --build mode
                         if (state.compilerOptions.composite) {
                             const filePath = sourceFiles[0].resolvedPath;
                             const oldSignature = state.emitSignatures?.get(filePath);
