@@ -6,9 +6,21 @@ namespace ts {
         exit(): void;
     }
 
+    export interface Statistic {
+        name: string;
+        value: number;
+        type: StatisticType
+    }
+
+    export enum StatisticType {
+        time,
+        count,
+        memory,
+    }
+
     const nullTimer: Timer = { enter: noop, exit: noop };
     export const performance = createPerformanceTracker();
-    export const solutionPerformance = createPerformanceTracker();
+    export const buildPerformance = createPerformanceTracker();
 
     function createPerformanceTracker() {
         let perfHooks: PerformanceHooks | undefined;
@@ -21,16 +33,19 @@ namespace ts {
         const counts = new Map<string, number>();
         const durations = new Map<string, number>();
         const durationMarks = new Set<string>();
+        let statistics: ESMap<string, Statistic> | undefined;
 
         return {
             createTimerIf,
             createTimer,
             mark,
             measure,
+            addStatistics,
             getCount,
             getDuration,
             forEachMeasure,
             forEachCount,
+            forEachStatistics,
             isEnabled,
             enable,
             disable,
@@ -98,6 +113,19 @@ namespace ts {
             }
         }
 
+        function addStatistics(s: Statistic) {
+            if (enabled) {
+                const existing = statistics?.get(s.name);
+                if (existing) {
+                    if (existing.type === StatisticType.memory) existing.value = Math.max(existing.value, s.value);
+                    else existing.value += s.value;
+                }
+                else {
+                    (statistics ??= new Map()).set(s.name, s);
+                }
+            }
+        }
+
         /**
          * Gets the number of times a marker was encountered.
          *
@@ -121,8 +149,8 @@ namespace ts {
          *
          * @param cb The action to perform for each measure
          */
-        function forEachMeasure(cb: (measureName: string, duration: number) => void) {
-            durations.forEach((duration, measureName) => cb(measureName, duration));
+        function forEachMeasure(cb: (duration: number, measureName: string) => void) {
+            durations.forEach(cb);
         }
 
         /**
@@ -130,8 +158,13 @@ namespace ts {
          *
          * @param cb The action to perform for each measure
          */
-        function forEachCount(cb: (countName: string, count: number) => void) {
-            counts.forEach((count, countName) => !durationMarks.has(countName) && cb(countName, count));
+        function forEachCount(cb: (count: number, countName: string) => void) {
+            counts.forEach((count, countName) => !durationMarks.has(countName) && cb(count, countName));
+        }
+
+
+        function forEachStatistics(cb: (statistic: Statistic, name: string) => void) {
+            statistics?.forEach(cb);
         }
 
         /**
@@ -166,6 +199,8 @@ namespace ts {
                 marks.clear();
                 counts.clear();
                 durations.clear();
+                durationMarks.clear();
+                statistics?.clear();
                 performanceImpl = undefined;
                 enabled = false;
             }

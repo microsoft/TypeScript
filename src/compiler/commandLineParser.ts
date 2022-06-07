@@ -1331,14 +1331,7 @@ namespace ts {
             description: Diagnostics.Delete_the_outputs_of_all_projects,
             type: "boolean",
             defaultValueDescription: false,
-        },
-        {
-            name: "solutionDiagnostics",
-            type: "boolean",
-            category: Diagnostics.Compiler_Diagnostics,
-            description: Diagnostics.Output_more_detailed_solution_performance_information_after_building,
-            defaultValueDescription: false,
-        },
+        }
     ];
 
     /* @internal */

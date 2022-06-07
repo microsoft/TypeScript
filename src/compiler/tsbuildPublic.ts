@@ -22,7 +22,6 @@ namespace ts {
         traceResolution?: boolean;
         /* @internal */ diagnostics?: boolean;
         /* @internal */ extendedDiagnostics?: boolean;
-        /* @internal */ solutionDiagnostics?: boolean;
         /* @internal */ locale?: string;
         /* @internal */ generateCpuProfile?: string;
         /* @internal */ generateTrace?: string;
@@ -189,7 +188,6 @@ namespace ts {
         commonOptionsWithBuild.forEach(option => {
             if (hasProperty(buildOptions, option.name)) result[option.name] = buildOptions[option.name];
         });
-        if (buildOptions.solutionDiagnostics) result.solutionDiagnostics = true;
         return result;
     }
 
@@ -380,7 +378,7 @@ namespace ts {
         if (value) {
             return isParsedCommandLine(value) ? value : undefined;
         }
-        solutionPerformance.mark("beforeParseConfigFile");
+        buildPerformance.mark("beforeConfigFileParsing");
         let diagnostic: Diagnostic | undefined;
         const { parseConfigFileHost, baseCompilerOptions, baseWatchOptions, extendedConfigCache, host } = state;
         let parsed: ParsedCommandLine | undefined;
@@ -394,8 +392,8 @@ namespace ts {
             parseConfigFileHost.onUnRecoverableConfigFileDiagnostic = noop;
         }
         configFileCache.set(configFilePath, parsed || diagnostic!);
-        solutionPerformance.mark("afterParseConfigFile");
-        solutionPerformance.measure("ParseConfigFile", "beforeParseConfigFile", "afterParseConfigFile");
+        buildPerformance.mark("afterConfigFileParsing");
+        buildPerformance.measure("Config File Parsing", "beforeConfigFileParsing", "afterConfigFileParsing");
         return parsed;
     }
 
@@ -455,7 +453,6 @@ namespace ts {
     }
 
     function createStateBuildOrder(state: SolutionBuilderState) {
-        solutionPerformance.mark("beforeCreateBuildOrder");
         const buildOrder = createBuildOrder(state, state.rootNames.map(f => resolveProjectName(state, f)));
 
         // Clear all to ResolvedConfigFilePaths cache to start fresh
@@ -512,8 +509,6 @@ namespace ts {
                 { onDeleteValue: existingMap => existingMap.forEach(closeFileWatcher) }
             );
         }
-        solutionPerformance.mark("afterCreateBuildOrder");
-        solutionPerformance.measure("CreateBuildOrder", "beforeCreateBuildOrder", "afterCreateBuildOrder");
         return state.buildOrder = buildOrder;
     }
 
@@ -715,7 +710,7 @@ namespace ts {
                 if (updateOutputFileStampsPending) {
                     updateOutputTimestamps(state, config, projectPath);
                 }
-                solutionPerformance.mark("timestampUpdated");
+                buildPerformance.mark("Projects With Only Timestamp Updates");
                 return doneInvalidatedProject(state, projectPath);
             }
         };
@@ -829,8 +824,8 @@ namespace ts {
 
         function done(cancellationToken?: CancellationToken, writeFile?: WriteFileCallback, customTransformers?: CustomTransformers) {
             executeSteps(BuildStep.Done, cancellationToken, writeFile, customTransformers);
-            if (kind === InvalidatedProjectKind.Build) solutionPerformance.mark("projectsBuilt");
-            else solutionPerformance.mark("bundlesUpdated");
+            if (kind === InvalidatedProjectKind.Build) buildPerformance.mark("Projects Built");
+            else buildPerformance.mark("Bundles Updated");
             return doneInvalidatedProject(state, projectPath);
         }
 
@@ -971,7 +966,6 @@ namespace ts {
             let anyDtsChanged = false;
             const emitterDiagnostics = createDiagnosticCollection();
             const emittedOutputs = new Map<Path, string>();
-            solutionPerformance.mark("beforeOutputFilesWrite");
             outputFiles.forEach(({ name, text, writeByteOrderMark }) => {
                 let priorChangeTime: Date | undefined;
                 if (!anyDtsChanged && isDeclarationFileName(name)) {
@@ -991,8 +985,6 @@ namespace ts {
                     newestDeclarationFileContentChangedTime = newer(priorChangeTime, newestDeclarationFileContentChangedTime);
                 }
             });
-            solutionPerformance.mark("afterOutputFilesWrite");
-            solutionPerformance.measure("OutputFilesWrite", "beforeOutputFilesWrite", "afterOutputFilesWrite");
 
             finishEmit(
                 emitterDiagnostics,
@@ -1193,11 +1185,7 @@ namespace ts {
         buildOrder: AnyBuildOrder,
         reportQueue: boolean
     ): InvalidateProjectCreateInfo | undefined {
-        solutionPerformance.mark("beforeGetNextInvalidatedProjectCreateInfo");
-        const result = getNextInvalidatedProjectCreateInfoWorker(state, buildOrder, reportQueue);
-        solutionPerformance.mark("afterGetNextInvalidatedProjectCreateInfo");
-        solutionPerformance.measure("GetNextInvalidatedProjectCreateInfo", "beforeGetNextInvalidatedProjectCreateInfo", "afterGetNextInvalidatedProjectCreateInfo");
-        return result;
+        return getNextInvalidatedProjectCreateInfoWorker(state, buildOrder, reportQueue);
     }
 
     function getNextInvalidatedProjectCreateInfoWorker<T extends BuilderProgram>(
@@ -1353,11 +1341,7 @@ namespace ts {
         if (state.options.force) return undefined;
         const value = state.builderPrograms.get(proj);
         if (value) return value;
-        solutionPerformance.mark("beforeReadBuilderProgram");
-        const program = readBuilderProgram(parsed.options, state.compilerHost) as any as T;
-        solutionPerformance.mark("afterReadBuilderProgram");
-        solutionPerformance.measure("ReadBuilderProgram", "beforeReadBuilderProgram", "afterReadBuilderProgram");
-        return program;
+        return readBuilderProgram(parsed.options, state.compilerHost) as any as T;
     }
 
     function afterProgramDone<T extends BuilderProgram>(
@@ -1585,10 +1569,7 @@ namespace ts {
             state.buildInfoChecked.set(resolvedPath, true);
             const buildInfoPath = getTsBuildInfoEmitOutputFilePath(project.options);
             if (buildInfoPath) {
-                solutionPerformance.mark("beforeBuildInfoRead");
                 const value = state.readFileWithCache(buildInfoPath);
-                solutionPerformance.mark("afterBuildInfoRead");
-                solutionPerformance.measure("BuildInfoRead", "beforeBuildInfoRead", "afterBuildInfoRead");
                 const buildInfo = value && getBuildInfo(value);
                 if (buildInfo && (buildInfo.bundle || buildInfo.program) && buildInfo.version !== version) {
                     return {
@@ -1629,17 +1610,16 @@ namespace ts {
             return prior;
         }
 
-        solutionPerformance.mark("beforeGetUpToDateStatus");
+        buildPerformance.mark("beforeUpToDateCheckTime");
         const actual = getUpToDateStatusWorker(state, project, resolvedPath);
-        solutionPerformance.mark("afterGetUpToDateStatus");
-        solutionPerformance.measure("GetUpToDateStatus", "beforeGetUpToDateStatus", "afterGetUpToDateStatus");
+        buildPerformance.mark("afterUpToDateCheckTime");
+        buildPerformance.measure("Up-to-date check time", "beforeUpToDateCheckTime", "afterUpToDateCheckTime");
         state.projectStatus.set(resolvedPath, actual);
         return actual;
     }
 
     function updateOutputTimestampsWorker(state: SolutionBuilderState, proj: ParsedCommandLine, priorNewestUpdateTime: Date, verboseMessage: DiagnosticMessage, skipOutputs?: ESMap<Path, string>) {
         if (proj.options.noEmit) return priorNewestUpdateTime;
-        solutionPerformance.mark("beforeUpdateOutputTimestamps");
         const { host } = state;
         const outputs = getAllProjectOutputs(proj, !host.useCaseSensitiveFileNames());
         if (!skipOutputs || outputs.length !== skipOutputs.size) {
@@ -1662,9 +1642,6 @@ namespace ts {
                 host.setModifiedTime(file, now);
             }
         }
-
-        solutionPerformance.mark("afterUpdateOutputTimestamps");
-        solutionPerformance.measure("UpdateOutputTimestamps", "beforeUpdateOutputTimestamps", "afterUpdateOutputTimestamps");
         return priorNewestUpdateTime;
     }
 
@@ -1751,10 +1728,10 @@ namespace ts {
     }
 
     function build(state: SolutionBuilderState, project?: string, cancellationToken?: CancellationToken, writeFile?: WriteFileCallback, getCustomTransformers?: (project: string) => CustomTransformers, onlyReferences?: boolean): ExitStatus {
-        solutionPerformance.mark("beforeBuild");
+        buildPerformance.mark("beforeBuild");
         const result = buildWorker(state, project, cancellationToken, writeFile, getCustomTransformers, onlyReferences);
-        solutionPerformance.mark("afterBuild");
-        solutionPerformance.measure("Build", "beforeBuild", "afterBuild");
+        buildPerformance.mark("afterBuild");
+        buildPerformance.measure("Build", "beforeBuild", "afterBuild");
         return result;
     }
 
@@ -1770,10 +1747,7 @@ namespace ts {
             const invalidatedProject = getNextInvalidatedProject(state, buildOrder, reportQueue);
             if (!invalidatedProject) break;
             reportQueue = false;
-            solutionPerformance.mark("beforeInvalidatedProjectBuild");
             invalidatedProject.done(cancellationToken, writeFile, getCustomTransformers?.(invalidatedProject.project));
-            solutionPerformance.mark("afterInvalidatedProjectBuild");
-            solutionPerformance.measure("InvalidatedProjectBuild", "beforeInvalidatedProjectBuild", "afterInvalidatedProjectBuild");
             if (!state.diagnostics.has(invalidatedProject.projectPath)) successfulProjects++;
         }
 
@@ -1791,10 +1765,10 @@ namespace ts {
     }
 
     function clean(state: SolutionBuilderState, project?: string, onlyReferences?: boolean): ExitStatus {
-        solutionPerformance.mark("beforeClean");
+        buildPerformance.mark("beforeClean");
         const result = cleanWorker(state, project, onlyReferences);
-        solutionPerformance.mark("afterClean");
-        solutionPerformance.measure("Clean", "beforeClean", "afterClean");
+        buildPerformance.mark("afterClean");
+        buildPerformance.measure("Clean", "beforeClean", "afterClean");
         return result;
     }
 
@@ -1875,14 +1849,6 @@ namespace ts {
     }
 
     function buildNextInvalidatedProject(state: SolutionBuilderState, changeDetected: boolean) {
-        solutionPerformance.mark("beforeBuild");
-        const buildOrder = buildNextInvalidatedProjectWorker(state, changeDetected);
-        solutionPerformance.mark("afterBuild");
-        solutionPerformance.measure("Build", "beforeBuild", "afterBuild");
-        if (buildOrder) reportErrorSummary(state, buildOrder);
-    }
-
-    function buildNextInvalidatedProjectWorker(state: SolutionBuilderState, changeDetected: boolean) {
         state.timerToBuildInvalidatedProject = undefined;
         if (state.reportFileChangeDetected) {
             state.reportFileChangeDetected = false;
@@ -1893,10 +1859,7 @@ namespace ts {
         const buildOrder = getBuildOrder(state);
         const invalidatedProject = getNextInvalidatedProject(state, buildOrder, /*reportQueue*/ false);
         if (invalidatedProject) {
-            solutionPerformance.mark("beforeInvalidatedProjectBuild");
             invalidatedProject.done();
-            solutionPerformance.mark("afterInvalidatedProjectBuild");
-            solutionPerformance.measure("InvalidatedProjectBuild", "beforeInvalidatedProjectBuild", "afterInvalidatedProjectBuild");
             projectsBuilt++;
             while (state.projectPendingBuild.size) {
                 // If already scheduled, skip
@@ -1910,15 +1873,12 @@ namespace ts {
                     return;
                 }
                 const project = createInvalidatedProjectWithInfo(state, info, buildOrder);
-                solutionPerformance.mark("beforeInvalidatedProjectBuild");
                 project.done();
-                solutionPerformance.mark("afterInvalidatedProjectBuild");
-                solutionPerformance.measure("InvalidatedProjectBuild", "beforeInvalidatedProjectBuild", "afterInvalidatedProjectBuild");
                 if (info.kind !== InvalidatedProjectKind.UpdateOutputFileStamps) projectsBuilt++;
             }
         }
         disableCache(state);
-        return buildOrder;
+        reportErrorSummary(state, buildOrder);
     }
 
     function watchConfigFile(state: SolutionBuilderState, resolved: ResolvedConfigFileName, resolvedPath: ResolvedConfigFilePath, parsed: ParsedCommandLine | undefined) {
@@ -2024,7 +1984,7 @@ namespace ts {
 
     function startWatching(state: SolutionBuilderState, buildOrder: AnyBuildOrder) {
         if (!state.watchAllProjectsPending) return;
-        solutionPerformance.mark("beforeStartWatching");
+        buildPerformance.mark("beforeWatcherCreation");
         state.watchAllProjectsPending = false;
         for (const resolved of getBuildOrderFromAnyBuildOrder(buildOrder)) {
             const resolvedPath = toResolvedConfigFilePath(state, resolved);
@@ -2043,8 +2003,8 @@ namespace ts {
                 watchPackageJsonFiles(state, resolved, resolvedPath, cfg);
             }
         }
-        solutionPerformance.mark("afterStartWatching");
-        solutionPerformance.measure("StartWatching", "beforeStartWatching", "afterStartWatching");
+        buildPerformance.mark("afterWatcherCreation");
+        buildPerformance.measure("Watcher Creation", "beforeWatcherCreation", "afterWatcherCreation");
     }
 
     function stopWatching(state: SolutionBuilderState) {
