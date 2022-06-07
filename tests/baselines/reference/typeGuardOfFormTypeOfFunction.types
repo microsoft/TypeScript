@@ -204,3 +204,18 @@ function configureStore<S extends object>(reducer: (() => void) | Record<keyof S
     }
 }
 
+function f101(x: string | Record<string, any>) {
+>f101 : (x: string | Record<string, any>) => any
+>x : string | Record<string, any>
+
+    return typeof x === "object" && x.anything;
+>typeof x === "object" && x.anything : any
+>typeof x === "object" : boolean
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>x : string | Record<string, any>
+>"object" : "object"
+>x.anything : any
+>x : Record<string, any>
+>anything : any
+}
+

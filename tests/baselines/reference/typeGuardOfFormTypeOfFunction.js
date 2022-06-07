@@ -81,6 +81,10 @@ function configureStore<S extends object>(reducer: (() => void) | Record<keyof S
     }
 }
 
+function f101(x: string | Record<string, any>) {
+    return typeof x === "object" && x.anything;
+}
+
 
 //// [typeGuardOfFormTypeOfFunction.js]
 function f1(x) {
@@ -152,4 +156,7 @@ function configureStore(reducer) {
     if (typeof reducer === 'function') {
         rootReducer = reducer;
     }
+}
+function f101(x) {
+    return typeof x === "object" && x.anything;
 }

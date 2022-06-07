@@ -80,3 +80,7 @@ function configureStore<S extends object>(reducer: (() => void) | Record<keyof S
         rootReducer = reducer;
     }
 }
+
+function f101(x: string | Record<string, any>) {
+    return typeof x === "object" && x.anything;
+}
