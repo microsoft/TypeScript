@@ -15,12 +15,14 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - uses: actions/setup-node@v3
+      with:
+        node-version: 14
 
     - name: Configure git and update package-lock.json
       run: |
         git config user.email "typescriptbot@microsoft.com"
         git config user.name "TypeScript Bot"
-        npm install --package-lock-only
+        npm install --package-lock-only --ignore-scripts
         git add -f package-lock.json
         if git commit -m "Update package-lock.json"; then
           git push
