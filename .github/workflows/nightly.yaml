@@ -15,11 +15,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Use node version 14
-      uses: actions/setup-node@v3
-      with:
-        node-version: 14
-        registry-url: https://registry.npmjs.org/
+    - uses: actions/setup-node@v3
     - name: Setup and publish nightly
       run: |
         npm whoami
@@ -30,6 +26,4 @@ jobs:
         gulp clean
         npm publish --tag next
       env:
-        NODE_AUTH_TOKEN: ${{secrets.npm_token}}
-        CI: true
-    
+        NPM_TOKEN: ${{secrets.npm_token}}
