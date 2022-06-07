@@ -242,7 +242,7 @@ function test9(a: boolean | number) {
     }
     else {
         a;
->a : never
+>a : undefined
     }
 }
 
@@ -259,7 +259,7 @@ function test10(a: boolean | number) {
         if (typeof a === "boolean") {
 >typeof a === "boolean" : boolean
 >typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
->a : never
+>a : undefined
 >"boolean" : "boolean"
 
             a;
@@ -267,7 +267,7 @@ function test10(a: boolean | number) {
         }
         else {
             a;
->a : never
+>a : undefined
         }
     }
     else {
