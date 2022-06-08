@@ -150,6 +150,7 @@
         "unittests/tsbuildWatch/publicApi.ts",
         "unittests/tsbuildWatch/reexport.ts",
         "unittests/tsbuildWatch/watchEnvironment.ts",
+        "unittests/tsc/cancellationToken.ts",
         "unittests/tsc/composite.ts",
         "unittests/tsc/declarationEmit.ts",
         "unittests/tsc/incremental.ts",
