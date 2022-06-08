@@ -63,16 +63,6 @@ WatchedFiles::
   {"fileName":"/project/src/index.ts","pollingInterval":250}
 /a/lib/lib.es2020.full.d.ts:
   {"fileName":"/a/lib/lib.es2020.full.d.ts","pollingInterval":250}
-/project/src/package.json:
-  {"fileName":"/project/src/package.json","pollingInterval":250}
-/project/package.json:
-  {"fileName":"/project/package.json","pollingInterval":250}
-/a/lib/package.json:
-  {"fileName":"/a/lib/package.json","pollingInterval":250}
-/a/package.json:
-  {"fileName":"/a/package.json","pollingInterval":250}
-/package.json:
-  {"fileName":"/package.json","pollingInterval":250}
 
 FsWatches::
 
@@ -129,10 +119,6 @@ WatchedFiles::
   {"fileName":"/project/src/index.ts","pollingInterval":250}
 /a/lib/lib.es2020.full.d.ts:
   {"fileName":"/a/lib/lib.es2020.full.d.ts","pollingInterval":250}
-/project/src/package.json:
-  {"fileName":"/project/src/package.json","pollingInterval":250}
-/project/package.json:
-  {"fileName":"/project/package.json","pollingInterval":250}
 
 FsWatches::
 

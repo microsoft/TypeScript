@@ -79,12 +79,8 @@ WatchedFiles::
   {"fileName":"/user/username/projects/myproject/packages/B/src/bar/foo.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
   {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-/user/username/projects/myproject/packages/b/lib/foo/package.json:
-  {"fileName":"/user/username/projects/myproject/packages/b/lib/foo/package.json","pollingInterval":250}
 /user/username/projects/myproject/packages/b/package.json:
-  {"fileName":"/user/username/projects/myproject/packages/b/package.json","pollingInterval":250}
-/user/username/projects/myproject/packages/b/lib/bar/foo/package.json:
-  {"fileName":"/user/username/projects/myproject/packages/b/lib/bar/foo/package.json","pollingInterval":250}
+  {"fileName":"/user/username/projects/myproject/packages/B/package.json","pollingInterval":250}
 
 FsWatches::
 
