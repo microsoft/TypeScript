@@ -19,7 +19,7 @@ declare function suddenly(f: (a: { x: { z, ka }, y: string }) => void);
 suddenly(({ x: a, ...rest }) => rest.y);
 >suddenly(({ x: a, ...rest }) => rest.y) : any
 >suddenly : (f: (a: { x: { z: any; ka: any; }; y: string; }) => void) => any
->({ x: a, ...rest }) => rest.y : ({ x, ...rest }: { x: { z: any; ka: any; }; y: string; }) => string
+>({ x: a, ...rest }) => rest.y : ({ x: a, ...rest }: { x: { z: any; ka: any; }; y: string; }) => string
 >x : any
 >a : { z: any; ka: any; }
 >rest : { y: string; }
