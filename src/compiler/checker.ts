@@ -5969,29 +5969,19 @@ namespace ts {
                 return parameterNode;
 
                 function cloneBindingName(node: BindingName): BindingName {
-                    return elideInitializerAndPropertyRenamingAndSetEmitFlags(node) as BindingName;
-                    function elideInitializerAndPropertyRenamingAndSetEmitFlags(node: Node): Node {
+                    return elideInitializerAndSetEmitFlags(node) as BindingName;
+                    function elideInitializerAndSetEmitFlags(node: Node): Node {
                         if (context.tracker.trackSymbol && isComputedPropertyName(node) && isLateBindableName(node)) {
                             trackComputedName(node.expression, context.enclosingDeclaration, context);
                         }
-                        let visited = visitEachChild(node, elideInitializerAndPropertyRenamingAndSetEmitFlags, nullTransformationContext, /*nodesVisitor*/ undefined, elideInitializerAndPropertyRenamingAndSetEmitFlags)!;
+                        let visited = visitEachChild(node, elideInitializerAndSetEmitFlags, nullTransformationContext, /*nodesVisitor*/ undefined, elideInitializerAndSetEmitFlags)!;
                         if (isBindingElement(visited)) {
-                            if (visited.propertyName && isIdentifier(visited.propertyName) && isIdentifier(visited.name)) {
-                                visited = factory.updateBindingElement(
-                                    visited,
-                                    visited.dotDotDotToken,
-                                    /* propertyName*/ undefined,
-                                    visited.propertyName,
-                                    /*initializer*/ undefined);
-                            }
-                            else {
-                                visited = factory.updateBindingElement(
-                                    visited,
-                                    visited.dotDotDotToken,
-                                    visited.propertyName,
-                                    visited.name,
-                                    /*initializer*/ undefined);
-                            }
+                            visited = factory.updateBindingElement(
+                                visited,
+                                visited.dotDotDotToken,
+                                visited.propertyName,
+                                visited.name,
+                                /*initializer*/ undefined);
                         }
                         if (!nodeIsSynthesized(visited)) {
                             visited = factory.cloneNode(visited);
