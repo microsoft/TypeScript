@@ -1143,7 +1143,16 @@ namespace ts {
             }
 
             function callbackChangingToMissingFileSystemEntry(event: "rename" | "change", relativeName: string | undefined) {
-                if (relativeName && endsWith(relativeName, "~")) relativeName = relativeName.slice(0, relativeName.length - 1);
+                // In some scenarios, file save operation fires event with fileName.ext~ instead of fileName.ext
+                // To ensure we see the file going missing and coming back up (file delete and then recreated)
+                // and watches being updated correctly we are calling back with fileName.ext as well as fileName.ext~
+                // The worst is we have fired event that was not needed but we wont miss any changes
+                // especially in cases where file goes missing and watches wrong inode
+                let originalRelativeName: string | undefined;
+                if (relativeName && endsWith(relativeName, "~")) {
+                    originalRelativeName = relativeName;
+                    relativeName = relativeName.slice(0, relativeName.length - 1);
+                }
                 // because relativeName is not guaranteed to be correct we need to check on each rename with few combinations
                 // Eg on ubuntu while watching app/node_modules the relativeName is "node_modules" which is neither relative nor full path
                 if (event === "rename" &&
@@ -1151,8 +1160,10 @@ namespace ts {
                         relativeName === lastDirectoryPart ||
                         endsWith(relativeName, lastDirectoryPartWithDirectorySeparator!))) {
                     const modifiedTime = getModifiedTime(fileOrDirectory) || missingFileModifiedTime;
+                    if (originalRelativeName) callback(event, originalRelativeName, modifiedTime);
                     callback(event, relativeName, modifiedTime);
                     if (inodeWatching) {
+                        // If this was rename event, inode has changed means we need to update watcher
                         updateWatcher(modifiedTime === missingFileModifiedTime ? watchMissingFileSystemEntry : watchPresentFileSystemEntry);
                     }
                     else if (modifiedTime === missingFileModifiedTime) {
@@ -1160,6 +1171,7 @@ namespace ts {
                     }
                 }
                 else {
+                    if (originalRelativeName) callback(event, originalRelativeName);
                     callback(event, relativeName);
                 }
             }
