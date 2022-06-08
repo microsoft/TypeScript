@@ -32,3 +32,59 @@ interface I {
 }
 
 //// [renamingDestructuredPropertyInFunctionType.js]
+
+
+//// [renamingDestructuredPropertyInFunctionType.d.ts]
+declare type O = {
+    a: string;
+    b: number;
+    c: number;
+};
+declare type F1 = (arg: number) => any;
+declare type F2 = ({ a }: O) => any;
+declare type F3 = ({ a, b, c }: O) => any;
+declare type F4 = ({ a }: O) => any;
+declare type F5 = ({ a, b, c }: O) => any;
+declare type F6 = ({ a }: {
+    a: any;
+}) => typeof string;
+declare type F7 = ({ a, b }: {
+    a: any;
+    b: any;
+}) => typeof number;
+declare type F8 = ({ a, b }: {
+    a: any;
+    b: any;
+}) => typeof number;
+declare type F9 = ([a, b, c]: [any, any, any]) => void;
+declare type G1 = (arg: number) => any;
+declare type G2 = ({ a }: O) => any;
+declare type G3 = ({ a, b, c }: O) => any;
+declare type G4 = ({ a }: O) => any;
+declare type G5 = ({ a, b, c }: O) => any;
+declare type G6 = ({ a }: {
+    a: any;
+}) => typeof string;
+declare type G7 = ({ a, b }: {
+    a: any;
+    b: any;
+}) => typeof number;
+declare type G8 = ({ a, b }: {
+    a: any;
+    b: any;
+}) => typeof number;
+declare type G9 = ([a, b, c]: [any, any, any]) => void;
+interface I {
+    method1(arg: number): any;
+    method2({ a }: {
+        a: any;
+    }): any;
+    (arg: number): any;
+    ({ a }: {
+        a: any;
+    }): any;
+    new (arg: number): any;
+    new ({ a }: {
+        a: any;
+    }): any;
+}

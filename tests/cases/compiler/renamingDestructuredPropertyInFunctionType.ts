@@ -1,3 +1,4 @@
+// @declaration: true
 type O = { a: string; b: number; c: number; };
 type F1 = (arg: number) => any; // OK
 type F2 = ({ a: string }: O) => any; // Error
