@@ -32,11 +32,11 @@ Output::
 [[90m12:00:26 AM[0m] Projects in this build: 
     * tsconfig.json
 
-[[90m12:00:27 AM[0m] Project 'tsconfig.json' is out of date because oldest output 'a.js' is older than newest input 'b.ts'
+[[90m12:00:27 AM[0m] Project 'tsconfig.json' is out of date because output file 'tsconfig.tsbuildinfo' does not exist
 
 [[90m12:00:28 AM[0m] Building project '/user/username/projects/myproject/tsconfig.json'...
 
-[[90m12:00:33 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:00:34 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -130,13 +130,13 @@ Input::
 
 Output::
 >> Screen clear
-[[90m12:00:37 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:38 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:00:38 AM[0m] Project 'tsconfig.json' is out of date because output file 'b.js' does not exist
+[[90m12:00:39 AM[0m] Project 'tsconfig.json' is out of date because output 'tsconfig.tsbuildinfo' is older than input 'a.js'
 
-[[90m12:00:39 AM[0m] Building project '/user/username/projects/myproject/tsconfig.json'...
+[[90m12:00:40 AM[0m] Building project '/user/username/projects/myproject/tsconfig.json'...
 
-[[90m12:00:40 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:00:41 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -178,13 +178,13 @@ const x = 10;
 
 Output::
 >> Screen clear
-[[90m12:00:44 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:45 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:00:45 AM[0m] Project 'tsconfig.json' is out of date because output file 'b.js' does not exist
+[[90m12:00:46 AM[0m] Project 'tsconfig.json' is out of date because output 'tsconfig.tsbuildinfo' is older than input 'a.js'
 
-[[90m12:00:46 AM[0m] Building project '/user/username/projects/myproject/tsconfig.json'...
+[[90m12:00:47 AM[0m] Building project '/user/username/projects/myproject/tsconfig.json'...
 
-[[90m12:00:53 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:00:55 AM[0m] Found 0 errors. Watching for file changes.
 
 
 

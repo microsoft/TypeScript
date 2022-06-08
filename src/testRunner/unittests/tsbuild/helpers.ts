@@ -198,43 +198,92 @@ interface Symbol {
 
     type ReadableProgramBuildInfoDiagnostic = string | [string, readonly ReusableDiagnostic[]];
     type ReadableProgramBuilderInfoFilePendingEmit = [string, "DtsOnly" | "Full"];
-    interface ReadableProgramBuildInfo {
-        fileNames: readonly string[];
+    type ReadableProgramBuildInfoEmitSignature = string | [string, string];
+    type ReadableProgramBuildInfoFileInfo = Omit<BuilderState.FileInfo, "impliedFormat"> & { impliedFormat: string | undefined; };
+    type ReadableProgramMultiFileEmitBuildInfo = Omit<ProgramMultiFileEmitBuildInfo,
+        "fileIdsList" | "fileInfos" |
+        "referencedMap" | "exportedModulesMap" | "semanticDiagnosticsPerFile" |
+        "affectedFilesPendingEmit" | "changeFileSet" | "emitSignatures"
+    > & {
         fileNamesList: readonly (readonly string[])[] | undefined;
-        fileInfos: MapLike<BuilderState.FileInfo>;
-        options: CompilerOptions | undefined;
+        fileInfos: MapLike<ReadableProgramBuildInfoFileInfo>;
         referencedMap?: MapLike<string[]>;
         exportedModulesMap?: MapLike<string[]>;
         semanticDiagnosticsPerFile?: readonly ReadableProgramBuildInfoDiagnostic[];
         affectedFilesPendingEmit?: readonly ReadableProgramBuilderInfoFilePendingEmit[];
+        changeFileSet?: readonly string[];
+        emitSignatures?: readonly ReadableProgramBuildInfoEmitSignature[];
+    };
+    type ReadableProgramBundleEmitBuildInfo = Omit<ProgramBundleEmitBuildInfo, "fileInfos"> & {
+        fileInfos: MapLike<string>;
+    };
+
+    type ReadableProgramBuildInfo = ReadableProgramMultiFileEmitBuildInfo | ReadableProgramBundleEmitBuildInfo;
+
+    function isReadableProgramBundleEmitBuildInfo(info: ReadableProgramBuildInfo | undefined): info is ReadableProgramBundleEmitBuildInfo {
+        return !!info && !!outFile(info.options || {});
     }
     type ReadableBuildInfo = Omit<BuildInfo, "program"> & { program: ReadableProgramBuildInfo | undefined; size: number; };
     function generateBuildInfoProgramBaseline(sys: System, buildInfoPath: string, buildInfo: BuildInfo) {
-        const fileInfos: ReadableProgramBuildInfo["fileInfos"] = {};
-        buildInfo.program?.fileInfos.forEach((fileInfo, index) => fileInfos[toFileName(index + 1 as ProgramBuildInfoFileId)] = toBuilderStateFileInfo(fileInfo));
-        const fileNamesList = buildInfo.program?.fileIdsList?.map(fileIdsListId => fileIdsListId.map(toFileName));
-        const program: ReadableProgramBuildInfo | undefined = buildInfo.program && {
-            fileNames: buildInfo.program.fileNames,
-            fileNamesList,
-            fileInfos,
-            options: buildInfo.program.options,
-            referencedMap: toMapOfReferencedSet(buildInfo.program.referencedMap),
-            exportedModulesMap: toMapOfReferencedSet(buildInfo.program.exportedModulesMap),
-            semanticDiagnosticsPerFile: buildInfo.program.semanticDiagnosticsPerFile?.map(d =>
-                isNumber(d) ?
-                    toFileName(d) :
-                    [toFileName(d[0]), d[1]]
-            ),
-            affectedFilesPendingEmit: buildInfo.program.affectedFilesPendingEmit?.map(([fileId, emitKind]) => [
-                toFileName(fileId),
-                emitKind === BuilderFileEmit.DtsOnly ? "DtsOnly" :
-                    emitKind === BuilderFileEmit.Full ? "Full" :
-                        Debug.assertNever(emitKind)
-            ]),
-        };
+        let program: ReadableProgramBuildInfo | undefined;
+        let fileNamesList: string[][] | undefined;
+        if (buildInfo.program && isProgramBundleEmitBuildInfo(buildInfo.program)) {
+            const fileInfos: ReadableProgramBundleEmitBuildInfo["fileInfos"] = {};
+            buildInfo.program?.fileInfos?.forEach((fileInfo, index) => fileInfos[toFileName(index + 1 as ProgramBuildInfoFileId)] = fileInfo);
+            program = {
+                ...buildInfo.program,
+                fileInfos
+            };
+        }
+        else if (buildInfo.program) {
+            const fileInfos: ReadableProgramMultiFileEmitBuildInfo["fileInfos"] = {};
+            buildInfo.program?.fileInfos?.forEach((fileInfo, index) => fileInfos[toFileName(index + 1 as ProgramBuildInfoFileId)] = toReadableFileInfo(fileInfo));
+            fileNamesList = buildInfo.program.fileIdsList?.map(fileIdsListId => fileIdsListId.map(toFileName));
+            program = buildInfo.program && {
+                fileNames: buildInfo.program.fileNames,
+                fileNamesList,
+                fileInfos: buildInfo.program.fileInfos ? fileInfos : undefined!,
+                options: buildInfo.program.options,
+                referencedMap: toMapOfReferencedSet(buildInfo.program.referencedMap),
+                exportedModulesMap: toMapOfReferencedSet(buildInfo.program.exportedModulesMap),
+                semanticDiagnosticsPerFile: buildInfo.program.semanticDiagnosticsPerFile?.map(d =>
+                    isNumber(d) ?
+                        toFileName(d) :
+                        [toFileName(d[0]), d[1]]
+                ),
+                affectedFilesPendingEmit: buildInfo.program.affectedFilesPendingEmit?.map(([fileId, emitKind]) => [
+                    toFileName(fileId),
+                    emitKind === BuilderFileEmit.DtsOnly ? "DtsOnly" :
+                        emitKind === BuilderFileEmit.Full ? "Full" :
+                            Debug.assertNever(emitKind)
+                ]),
+                changeFileSet: buildInfo.program.changeFileSet?.map(toFileName),
+                emitSignatures: buildInfo.program.emitSignatures?.map(s =>
+                    isNumber(s) ?
+                        toFileName(s) :
+                        [toFileName(s[0]), s[1]]
+                ),
+                dtsChangeTime: buildInfo.program.dtsChangeTime,
+            };
+        }
         const version = buildInfo.version === ts.version ? fakes.version : buildInfo.version;
         const result: ReadableBuildInfo = {
-            bundle: buildInfo.bundle,
+            // Baseline fixed order for bundle
+            bundle: buildInfo.bundle && {
+                ...buildInfo.bundle,
+                js: buildInfo.bundle.js && {
+                    sections: buildInfo.bundle.js.sections,
+                    hash: buildInfo.bundle.js.hash,
+                    mapHash: buildInfo.bundle.js.mapHash,
+                    sources: buildInfo.bundle.js.sources,
+                },
+                dts: buildInfo.bundle.dts && {
+                    sections: buildInfo.bundle.dts.sections,
+                    hash: buildInfo.bundle.dts.hash,
+                    mapHash: buildInfo.bundle.dts.mapHash,
+                    sources: buildInfo.bundle.dts.sources,
+                },
+            },
             program,
             version,
             size: getBuildInfoText({ ...buildInfo, version }).length,
@@ -248,6 +297,14 @@ interface Symbol {
 
         function toFileNames(fileIdsListId: ProgramBuildInfoFileIdListId) {
             return fileNamesList![fileIdsListId - 1];
+        }
+
+        function toReadableFileInfo(fileInfo: ProgramBuildInfoFileInfo): ReadableProgramBuildInfoFileInfo {
+            const info = toBuilderStateFileInfo(fileInfo);
+            return {
+                ...info,
+                impliedFormat: info.impliedFormat && getNameOfCompilerOptionValue(info.impliedFormat, moduleOptionDeclaration.type),
+            };
         }
 
         function toMapOfReferencedSet(referenceMap: ProgramBuildInfoReferencedMap | undefined): MapLike<string[]> | undefined {
@@ -335,10 +392,10 @@ interface Symbol {
                 const { buildInfo: incrementalBuildInfo, readableBuildInfo: incrementalReadableBuildInfo } = getBuildInfoForIncrementalCorrectnessCheck(incrementalBuildText);
                 const { buildInfo: cleanBuildInfo, readableBuildInfo: cleanReadableBuildInfo } = getBuildInfoForIncrementalCorrectnessCheck(cleanBuildText);
                 verifyTextEqual(incrementalBuildInfo, cleanBuildInfo, `TsBuild info text without affectedFilesPendingEmit:: ${outputFile}::`);
-                // Verify file info sigantures
+                    // Verify file info sigantures
                 verifyMapLike(
-                    incrementalReadableBuildInfo?.program?.fileInfos,
-                    cleanReadableBuildInfo?.program?.fileInfos,
+                    incrementalReadableBuildInfo?.program?.fileInfos as ReadableProgramMultiFileEmitBuildInfo["fileInfos"],
+                    cleanReadableBuildInfo?.program?.fileInfos as ReadableProgramMultiFileEmitBuildInfo["fileInfos"],
                     (key, incrementalFileInfo, cleanFileInfo) => {
                         if (incrementalFileInfo.signature !== cleanFileInfo.signature && incrementalFileInfo.signature !== incrementalFileInfo.version) {
                             return [
@@ -350,44 +407,47 @@ interface Symbol {
                     },
                     `FileInfos:: File:: ${outputFile}`
                 );
-                // Verify exportedModulesMap
-                verifyMapLike(
-                    incrementalReadableBuildInfo?.program?.exportedModulesMap,
-                    cleanReadableBuildInfo?.program?.exportedModulesMap,
-                    (key, incrementalReferenceSet, cleanReferenceSet) => {
-                        if (!arrayIsEqualTo(incrementalReferenceSet, cleanReferenceSet) && !arrayIsEqualTo(incrementalReferenceSet, incrementalReadableBuildInfo!.program!.referencedMap![key])) {
-                            return [
-                                `Incremental Reference set is neither from dts nor files reference map for File:: ${key}::`,
-                                `Incremental:: ${JSON.stringify(incrementalReferenceSet, /*replacer*/ undefined, 2)}`,
-                                `Clean:: ${JSON.stringify(cleanReferenceSet, /*replacer*/ undefined, 2)}`,
-                                `IncrementalReferenceMap:: ${JSON.stringify(incrementalReadableBuildInfo!.program!.referencedMap![key], /*replacer*/ undefined, 2)}`,
-                                `CleanReferenceMap:: ${JSON.stringify(cleanReadableBuildInfo!.program!.referencedMap![key], /*replacer*/ undefined, 2)}`,
-                            ];
-                        }
-                    },
-                    `exportedModulesMap:: File:: ${outputFile}`
-                );
-                // Verify that incrementally pending affected file emit are in clean build since clean build can contain more files compared to incremental depending of noEmitOnError option
-                if (incrementalReadableBuildInfo?.program?.affectedFilesPendingEmit) {
-                    if (cleanReadableBuildInfo?.program?.affectedFilesPendingEmit === undefined) {
-                        addBaseline(
-                            `Incremental build contains affectedFilesPendingEmit, clean build does not have it: ${outputFile}::`,
-                            `Incremental buildInfoText:: ${incrementalBuildText}`,
-                            `Clean buildInfoText:: ${cleanBuildText}`
-                        );
-                    }
-                    let expectedIndex = 0;
-                    incrementalReadableBuildInfo.program.affectedFilesPendingEmit.forEach(([actualFile]) => {
-                        expectedIndex = findIndex(cleanReadableBuildInfo!.program!.affectedFilesPendingEmit!, ([expectedFile]) => actualFile === expectedFile, expectedIndex);
-                        if (expectedIndex === -1) {
+                if (!isReadableProgramBundleEmitBuildInfo(incrementalReadableBuildInfo?.program)) {
+                    Debug.assert(!isReadableProgramBundleEmitBuildInfo(cleanReadableBuildInfo?.program));
+                    // Verify exportedModulesMap
+                    verifyMapLike(
+                        incrementalReadableBuildInfo?.program?.exportedModulesMap,
+                        cleanReadableBuildInfo?.program?.exportedModulesMap,
+                        (key, incrementalReferenceSet, cleanReferenceSet) => {
+                            if (!arrayIsEqualTo(incrementalReferenceSet, cleanReferenceSet) && !arrayIsEqualTo(incrementalReferenceSet, (incrementalReadableBuildInfo!.program! as ReadableProgramMultiFileEmitBuildInfo).referencedMap![key])) {
+                                return [
+                                    `Incremental Reference set is neither from dts nor files reference map for File:: ${key}::`,
+                                    `Incremental:: ${JSON.stringify(incrementalReferenceSet, /*replacer*/ undefined, 2)}`,
+                                    `Clean:: ${JSON.stringify(cleanReferenceSet, /*replacer*/ undefined, 2)}`,
+                                    `IncrementalReferenceMap:: ${JSON.stringify((incrementalReadableBuildInfo!.program! as ReadableProgramMultiFileEmitBuildInfo).referencedMap![key], /*replacer*/ undefined, 2)}`,
+                                    `CleanReferenceMap:: ${JSON.stringify((cleanReadableBuildInfo!.program! as ReadableProgramMultiFileEmitBuildInfo).referencedMap![key], /*replacer*/ undefined, 2)}`,
+                                ];
+                            }
+                        },
+                        `exportedModulesMap:: File:: ${outputFile}`
+                    );
+                    // Verify that incrementally pending affected file emit are in clean build since clean build can contain more files compared to incremental depending of noEmitOnError option
+                    if (incrementalReadableBuildInfo?.program?.affectedFilesPendingEmit) {
+                        if (cleanReadableBuildInfo?.program?.affectedFilesPendingEmit === undefined) {
                             addBaseline(
-                                `Incremental build contains ${actualFile} file as pending emit, clean build does not have it: ${outputFile}::`,
+                                `Incremental build contains affectedFilesPendingEmit, clean build does not have it: ${outputFile}::`,
                                 `Incremental buildInfoText:: ${incrementalBuildText}`,
                                 `Clean buildInfoText:: ${cleanBuildText}`
                             );
                         }
-                        expectedIndex++;
-                    });
+                        let expectedIndex = 0;
+                        incrementalReadableBuildInfo.program.affectedFilesPendingEmit.forEach(([actualFile]) => {
+                            expectedIndex = findIndex((cleanReadableBuildInfo!.program! as ReadableProgramMultiFileEmitBuildInfo).affectedFilesPendingEmit!, ([expectedFile]) => actualFile === expectedFile, expectedIndex);
+                            if (expectedIndex === -1) {
+                                addBaseline(
+                                    `Incremental build contains ${actualFile} file as pending emit, clean build does not have it: ${outputFile}::`,
+                                    `Incremental buildInfoText:: ${incrementalBuildText}`,
+                                    `Clean buildInfoText:: ${cleanBuildText}`
+                                );
+                            }
+                            expectedIndex++;
+                        });
+                    }
                 }
             }
         }
@@ -462,12 +522,13 @@ interface Symbol {
     } {
         if (!text) return { buildInfo: text };
         const readableBuildInfo = JSON.parse(text) as ReadableBuildInfo;
-        let sanitizedFileInfos: MapLike<BuilderState.FileInfo> | undefined;
+        let sanitizedFileInfos: MapLike<ReadableProgramBuildInfoFileInfo | string> | undefined;
         if (readableBuildInfo.program?.fileInfos) {
             sanitizedFileInfos = {};
             for (const id in readableBuildInfo.program.fileInfos) {
                 if (hasProperty(readableBuildInfo.program.fileInfos, id)) {
-                    sanitizedFileInfos[id] = { ...readableBuildInfo.program.fileInfos[id], signature: undefined };
+                    const info = readableBuildInfo.program.fileInfos[id];
+                    sanitizedFileInfos[id] = isString(info) ? info : { ...info, signature: undefined };
                 }
             }
         }
@@ -483,6 +544,7 @@ interface Symbol {
                     options: { ...readableBuildInfo.program.options, noEmit: undefined },
                     exportedModulesMap: undefined,
                     affectedFilesPendingEmit: undefined,
+                    dtsChangeTime: readableBuildInfo.program.dtsChangeTime ? "FakeTime" : undefined,
                 },
                 size: undefined, // Size doesnt need to be equal
             },  /*replacer*/ undefined, 2),
