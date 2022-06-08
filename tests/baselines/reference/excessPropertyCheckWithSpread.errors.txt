@@ -1,10 +1,10 @@
-tests/cases/compiler/excessPropertyCheckWithSpread.ts(1,25): error TS2797: Renaming a property in destructuring assignment is only allowed in a function or constructor implementation.
+tests/cases/compiler/excessPropertyCheckWithSpread.ts(1,25): error TS2842: Variable 'number' is not used. Did you mean to write a type annotation for whole object?
 
 
 ==== tests/cases/compiler/excessPropertyCheckWithSpread.ts (1 errors) ====
     declare function f({ a: number }): void
                             ~~~~~~
-!!! error TS2797: Renaming a property in destructuring assignment is only allowed in a function or constructor implementation.
+!!! error TS2842: Variable 'number' is not used. Did you mean to write a type annotation for whole object?
     interface I {
         readonly n: number;
     }

@@ -1,5 +1,5 @@
-tests/cases/conformance/es6/destructuring/destructuringInFunctionType.ts(12,18): error TS2797: Renaming a property in destructuring assignment is only allowed in a function or constructor implementation.
-tests/cases/conformance/es6/destructuring/destructuringInFunctionType.ts(12,28): error TS2797: Renaming a property in destructuring assignment is only allowed in a function or constructor implementation.
+tests/cases/conformance/es6/destructuring/destructuringInFunctionType.ts(12,18): error TS2842: Variable 'b' is not used. Did you mean to write a type annotation for whole object?
+tests/cases/conformance/es6/destructuring/destructuringInFunctionType.ts(12,28): error TS2842: Variable 'a' is not used. Did you mean to write a type annotation for whole object?
 
 
 ==== tests/cases/conformance/es6/destructuring/destructuringInFunctionType.ts (2 errors) ====
@@ -16,9 +16,9 @@ tests/cases/conformance/es6/destructuring/destructuringInFunctionType.ts(12,28):
     type T3 = ([{ a: b }, { b: a }]);
     type F3 = ([{ a: b }, { b: a }]) => void;
                      ~
-!!! error TS2797: Renaming a property in destructuring assignment is only allowed in a function or constructor implementation.
+!!! error TS2842: Variable 'b' is not used. Did you mean to write a type annotation for whole object?
                                ~
-!!! error TS2797: Renaming a property in destructuring assignment is only allowed in a function or constructor implementation.
+!!! error TS2842: Variable 'a' is not used. Did you mean to write a type annotation for whole object?
     
     type T4 = ([{ a: [b, c] }]);
     type F4 = ([{ a: [b, c] }]) => void;

@@ -1,4 +1,4 @@
-tests/cases/conformance/jsx/file.tsx(17,39): error TS2797: Renaming a property in destructuring assignment is only allowed in a function or constructor implementation.
+tests/cases/conformance/jsx/file.tsx(17,39): error TS2842: Variable 'string' is not used. Did you mean to write a type annotation for whole object?
 
 
 ==== tests/cases/conformance/jsx/file.tsx (1 errors) ====
@@ -20,7 +20,7 @@ tests/cases/conformance/jsx/file.tsx(17,39): error TS2797: Renaming a property i
     
     declare function TestingOneThing({y1: string}): JSX.Element;
                                           ~~~~~~
-!!! error TS2797: Renaming a property in destructuring assignment is only allowed in a function or constructor implementation.
+!!! error TS2842: Variable 'string' is not used. Did you mean to write a type annotation for whole object?
     declare function TestingOneThing(j: {"extra-data": string, yy?: string}): JSX.Element;
     declare function TestingOneThing(n: {yy: number, direction?: number}): JSX.Element;
     declare function TestingOneThing(n: {yy: string, name: string}): JSX.Element;
