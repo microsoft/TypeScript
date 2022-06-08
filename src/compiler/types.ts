@@ -6768,7 +6768,7 @@ namespace ts {
         readonly resolvedTypeReferenceDirective: ResolvedTypeReferenceDirective | undefined;
         readonly failedLookupLocations: string[];
         /*@internal*/ readonly affectingLocations: string[];
-        /* @internal */ readonly resolutionDiagnostics: Diagnostic[]
+        /* @internal */ resolutionDiagnostics: Diagnostic[];
     }
 
     /* @internal */

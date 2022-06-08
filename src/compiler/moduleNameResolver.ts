@@ -86,7 +86,14 @@ namespace ts {
         return { fileName: resolved.path, packageId: resolved.packageId };
     }
 
-    function createResolvedModuleWithFailedLookupLocations(resolved: Resolved | undefined, isExternalLibraryImport: boolean | undefined, failedLookupLocations: string[], affectingLocations: string[], diagnostics: Diagnostic[], resultFromCache: ResolvedModuleWithFailedLookupLocations | undefined): ResolvedModuleWithFailedLookupLocations {
+    function createResolvedModuleWithFailedLookupLocations(
+        resolved: Resolved | undefined,
+        isExternalLibraryImport: boolean | undefined,
+        failedLookupLocations: string[],
+        affectingLocations: string[],
+        diagnostics: Diagnostic[],
+        resultFromCache: ResolvedModuleWithFailedLookupLocations | undefined
+    ): ResolvedModuleWithFailedLookupLocations {
         if (resultFromCache) {
             resultFromCache.failedLookupLocations.push(...failedLookupLocations);
             resultFromCache.affectingLocations.push(...affectingLocations);
@@ -2578,8 +2585,7 @@ namespace ts {
             host,
             traceEnabled,
             failedLookupLocations,
-            affectingLocations,
-            packageJsonInfoCache: cache,
+            affectingLocations, packageJsonInfoCache: cache,
             features: NodeResolutionFeatures.None,
             conditions: [],
             requestContainingDirectory: containingDirectory,
@@ -2652,7 +2658,7 @@ namespace ts {
             features: NodeResolutionFeatures.None,
             conditions: [],
             requestContainingDirectory: undefined,
-            reportDiagnostic: diag => void diagnostics.push(diag)
+            reportDiagnostic: diag => void diagnostics.push(diag),
         };
         const resolved = loadModuleFromImmediateNodeModulesDirectory(Extensions.DtsOnly, moduleName, globalCache, state, /*typesScopeOnly*/ false, /*cache*/ undefined, /*redirectedReference*/ undefined);
         return createResolvedModuleWithFailedLookupLocations(
