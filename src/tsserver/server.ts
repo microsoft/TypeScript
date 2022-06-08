@@ -28,7 +28,7 @@ namespace ts.server {
         cancellationToken: ServerCancellationToken;
         serverMode: LanguageServiceMode | undefined;
         unknownServerMode?: string;
-        startSession: (option: StartSessionOptions, logger: Logger, cancellationToken: ServerCancellationToken, fs: ServerHost) => void;
+        startSession: (option: StartSessionOptions, logger: Logger, cancellationToken: ServerCancellationToken, fs: FileServerHost | undefined) => void;
     }
     function start({ args, logger, cancellationToken, serverMode, unknownServerMode, startSession: startServer }: StartInput, platform: string) {
         const syntaxOnly = hasArgument("--syntaxOnly");
@@ -58,17 +58,11 @@ namespace ts.server {
         console.warn = (...args) => logger.msg(args.length === 1 ? args[0] : args.join(", "), Msg.Err);
         console.error = (...args) => logger.msg(args.length === 1 ? args[0] : args.join(", "), Msg.Err);
 
-        let fshost;
-        if (vfs) {
-            fshost = new VirtualFS.VirtualServerHost({
-                useCaseSensitiveFileNames: sys.useCaseSensitiveFileNames,
-                executingFilePath: directorySeparator, // Use same executingFilePath as webserver
-                newLine: sys.newLine,
-            });
-        }
-        else {
-            fshost = sys as ServerHost;
-        }
+        const fshost = vfs ? new VirtualFS.VirtualServerHost({
+            useCaseSensitiveFileNames: sys.useCaseSensitiveFileNames,
+            executingFilePath: directorySeparator, // Use same executingFilePath as webserver
+            newLine: sys.newLine,
+        }) : undefined;
         startServer(
             {
                 globalPlugins: findArgumentStringArray("--globalPlugins"),

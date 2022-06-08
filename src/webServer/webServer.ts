@@ -178,7 +178,7 @@ namespace ts.server {
         serverMode: SessionOptions["serverMode"];
     }
     export class WorkerSession extends Session<{}> {
-        constructor(host: ServerHost, fshost: FileServerHost, private webHost: HostWithWriteMessage, options: StartSessionOptions, logger: Logger, cancellationToken: ServerCancellationToken, hrtime: SessionOptions["hrtime"]) {
+        constructor(host: ServerHost, fshost: FileServerHost | undefined, private webHost: HostWithWriteMessage, options: StartSessionOptions, logger: Logger, cancellationToken: ServerCancellationToken, hrtime: SessionOptions["hrtime"]) {
             super({
                 host,
                 fshost,

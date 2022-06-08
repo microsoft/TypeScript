@@ -6985,7 +6985,16 @@ declare namespace ts.server {
         trace?(s: string): void;
         require?(initialPath: string, moduleName: string): RequireResult;
     }
-    type FileServerHost = Pick<ServerHost, "readFile" | "writeFile" | "fileExists" | "directoryExists" | "getFileSize" | "getModifiedTime" | "getDirectories" | "getCurrentDirectory" | "getExecutingFilePath" | "realpath" | "resolvePath" | "createDirectory" | "setModifiedTime" | "deleteFile" | "readDirectory" | "watchFile" | "watchDirectory" | "useCaseSensitiveFileNames">;
+    type FileServerHost = Pick<ServerHost, "readFile" | "writeFile" | "fileExists" | "directoryExists" | "getFileSize" | "getModifiedTime" | "getDirectories" | "getCurrentDirectory" | "getExecutingFilePath" | "realpath" | "resolvePath" | "createDirectory" | "setModifiedTime" | "deleteFile" | "readDirectory" | "watchFile" | "watchDirectory" | "useCaseSensitiveFileNames"> & {
+        ensureFileOrFolder(fileOrDirectoryOrSymLink: {
+            path: string;
+        } & ({
+            content: string;
+            fileSize?: number;
+        } | {} | {
+            symLink: string;
+        }), ignoreWatchInvokedWithTriggerAsFileCreate?: boolean, ignoreParentWatch?: boolean): void;
+    };
 }
 declare namespace ts.server {
     enum LogLevel {
@@ -9917,7 +9926,6 @@ declare namespace ts.server {
     function isDynamicFileName(fileName: NormalizedPath): boolean;
     class ScriptInfo {
         private readonly host;
-        private readonly fshost;
         readonly fileName: NormalizedPath;
         readonly scriptKind: ScriptKind;
         readonly hasMixedContent: boolean;
@@ -9929,7 +9937,7 @@ declare namespace ts.server {
         private formatSettings;
         private preferences;
         private textStorage;
-        constructor(host: ServerHost, fshost: FileServerHost, fileName: NormalizedPath, scriptKind: ScriptKind, hasMixedContent: boolean, path: Path, initialVersion?: ScriptInfoVersion);
+        constructor(host: ServerHost, fileName: NormalizedPath, scriptKind: ScriptKind, hasMixedContent: boolean, path: Path, initialVersion?: ScriptInfoVersion);
         isScriptOpen(): boolean;
         open(newText: string): void;
         close(fileExists?: boolean): void;
@@ -9993,7 +10001,6 @@ declare namespace ts.server {
         languageService: LanguageService;
         languageServiceHost: LanguageServiceHost;
         serverHost: ServerHost;
-        fsHost: FileServerHost;
         session?: Session<unknown>;
         config: any;
     }
@@ -10058,7 +10065,7 @@ declare namespace ts.server {
         private readonly cancellationToken;
         isNonTsProject(): boolean;
         isJsOnlyProject(): boolean;
-        static resolveModule(moduleName: string, initialDir: string, host: ServerHost, fshost: FileServerHost, log: (message: string) => void, logErrors?: (message: string) => void): {} | undefined;
+        static resolveModule(moduleName: string, initialDir: string, host: ServerHost, log: (message: string) => void, logErrors?: (message: string) => void): {} | undefined;
         isKnownTypesPackageName(name: string): boolean;
         installPackage(options: InstallPackageOptions): Promise<ApplyCodeActionCommandResult>;
         private get typingsCache();
@@ -10444,7 +10451,6 @@ declare namespace ts.server {
         readonly currentDirectory: NormalizedPath;
         readonly toCanonicalFileName: (f: string) => string;
         readonly host: ServerHost;
-        readonly fshost: FileServerHost;
         readonly logger: Logger;
         readonly cancellationToken: HostCancellationToken;
         readonly useSingleInferredProject: boolean;
@@ -10689,7 +10695,6 @@ declare namespace ts.server {
         private suppressDiagnosticEvents?;
         private eventHandler;
         private readonly noGetErrOnBackgroundUpdate?;
-        private fshost;
         constructor(opts: SessionOptions);
         private sendRequestCompletedEvent;
         private addPerformanceData;

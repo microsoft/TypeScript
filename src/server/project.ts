@@ -85,7 +85,6 @@ namespace ts.server {
         languageService: LanguageService;
         languageServiceHost: LanguageServiceHost;
         serverHost: ServerHost;
-        fsHost: FileServerHost;
         session?: Session<unknown>;
         config: any;
     }
@@ -234,8 +233,8 @@ namespace ts.server {
             return hasOneOrMoreJsAndNoTsFiles(this);
         }
 
-        public static resolveModule(moduleName: string, initialDir: string, host: ServerHost, fshost: FileServerHost, log: (message: string) => void, logErrors?: (message: string) => void): {} | undefined {
-            const resolvedPath = normalizeSlashes(fshost.resolvePath(combinePaths(initialDir, "node_modules")));
+        public static resolveModule(moduleName: string, initialDir: string, host: ServerHost, log: (message: string) => void, logErrors?: (message: string) => void): {} | undefined {
+            const resolvedPath = normalizeSlashes(host.resolvePath(combinePaths(initialDir, "node_modules")));
             log(`Loading ${moduleName} from ${initialDir} (resolved to ${resolvedPath})`);
             const result = host.require!(resolvedPath, moduleName); // TODO: GH#18217
             if (result.error) {
@@ -323,7 +322,7 @@ namespace ts.server {
             else if (host.trace) {
                 this.trace = s => host.trace!(s);
             }
-            this.realpath = maybeBind(this.projectService.fshost, this.projectService.fshost.realpath);
+            this.realpath = maybeBind(this.projectService.host, this.projectService.host.realpath);
 
             // Use the current directory as resolution root only if the project created using current directory string
             this.resolutionCache = createResolutionCache(
@@ -455,7 +454,7 @@ namespace ts.server {
         }
 
         useCaseSensitiveFileNames() {
-            return this.projectService.fshost.useCaseSensitiveFileNames;
+            return this.projectService.host.useCaseSensitiveFileNames;
         }
 
         readDirectory(path: string, extensions?: readonly string[], exclude?: readonly string[], include?: readonly string[], depth?: number): string[] {
@@ -463,11 +462,11 @@ namespace ts.server {
         }
 
         readFile(fileName: string): string | undefined {
-            return this.projectService.fshost.readFile(fileName);
+            return this.projectService.host.readFile(fileName);
         }
 
         writeFile(fileName: string, content: string): void {
-            return this.projectService.fshost.writeFile(fileName, content);
+            return this.projectService.host.writeFile(fileName, content);
         }
 
         fileExists(file: string): boolean {
@@ -1608,7 +1607,7 @@ namespace ts.server {
                 (errorLogs || (errorLogs = [])).push(message);
             };
             const resolvedModule = firstDefined(searchPaths, searchPath =>
-                Project.resolveModule(pluginConfigEntry.name, searchPath, this.projectService.host, this.projectService.fshost, log, logError) as PluginModuleFactory | undefined);
+                Project.resolveModule(pluginConfigEntry.name, searchPath, this.projectService.host, log, logError) as PluginModuleFactory | undefined);
             if (resolvedModule) {
                 const configurationOverride = pluginConfigOverrides && pluginConfigOverrides.get(pluginConfigEntry.name);
                 if (configurationOverride) {
@@ -1638,7 +1637,6 @@ namespace ts.server {
                     languageService: this.languageService,
                     languageServiceHost: this,
                     serverHost: this.projectService.host,
-                    fsHost: this.projectService.fshost,
                     session: this.projectService.session
                 };
 
@@ -1729,23 +1727,23 @@ namespace ts.server {
                 return {
                     fileExists: this.program.fileExists,
                     directoryExists: this.program.directoryExists,
-                    realpath: this.program.realpath || this.projectService.fshost.realpath?.bind(this.projectService.fshost),
+                    realpath: this.program.realpath || this.projectService.host.realpath?.bind(this.projectService.host),
                     getCurrentDirectory: this.getCurrentDirectory.bind(this),
-                    readFile: this.projectService.fshost.readFile.bind(this.projectService.fshost),
-                    getDirectories: this.projectService.fshost.getDirectories.bind(this.projectService.fshost),
+                    readFile: this.projectService.host.readFile.bind(this.projectService.host),
+                    getDirectories: this.projectService.host.getDirectories.bind(this.projectService.host),
                     trace: this.projectService.host.trace?.bind(this.projectService.host),
                     useCaseSensitiveFileNames: this.program.useCaseSensitiveFileNames(),
                 };
             }
             return {
-                fileExists: this.projectService.fshost.fileExists.bind(this.projectService.fshost),
-                directoryExists: this.projectService.fshost.directoryExists.bind(this.projectService.fshost),
-                realpath: this.projectService.fshost.realpath?.bind(this.projectService.fshost),
-                getCurrentDirectory: this.projectService.fshost.getCurrentDirectory.bind(this.projectService.fshost),
-                readFile: this.projectService.fshost.readFile.bind(this.projectService.fshost),
-                getDirectories: this.projectService.fshost.getDirectories.bind(this.projectService.fshost),
+                fileExists: this.projectService.host.fileExists.bind(this.projectService.host),
+                directoryExists: this.projectService.host.directoryExists.bind(this.projectService.host),
+                realpath: this.projectService.host.realpath?.bind(this.projectService.host),
+                getCurrentDirectory: this.projectService.host.getCurrentDirectory.bind(this.projectService.host),
+                readFile: this.projectService.host.readFile.bind(this.projectService.host),
+                getDirectories: this.projectService.host.getDirectories.bind(this.projectService.host),
                 trace: this.projectService.host.trace?.bind(this.projectService.host),
-                useCaseSensitiveFileNames: this.projectService.fshost.useCaseSensitiveFileNames,
+                useCaseSensitiveFileNames: this.projectService.host.useCaseSensitiveFileNames,
             };
         }
 
@@ -1931,7 +1929,7 @@ namespace ts.server {
                 compilerOptions,
                 /*compileOnSaveEnabled*/ false,
                 watchOptions,
-                projectService.fshost,
+                projectService.host,
                 currentDirectory);
             this.typeAcquisition = typeAcquisition;
             this.projectRootPath = projectRootPath && projectService.toCanonicalFileName(projectRootPath);
@@ -1998,7 +1996,7 @@ namespace ts.server {
                 compilerOptions,
                 /*compileOnSaveEnabled*/ false,
                 /*watchOptions*/ undefined,
-                projectService.fshost,
+                projectService.host,
                 /*currentDirectory*/ undefined);
         }
 
@@ -2185,7 +2183,7 @@ namespace ts.server {
                 compilerOptions,
                 /*compileOnSaveEnabled*/ false,
                 hostProject.getWatchOptions(),
-                hostProject.projectService.fshost,
+                hostProject.projectService.host,
                 hostProject.currentDirectory);
 
             this.rootFileNames = initialRootNames;
@@ -2363,7 +2361,7 @@ namespace ts.server {
             // Ensure the config file existience info is cached
             let configFileExistenceInfo = this.projectService.configFileExistenceInfoCache.get(canonicalConfigFilePath);
             if (!configFileExistenceInfo) {
-                this.projectService.configFileExistenceInfoCache.set(canonicalConfigFilePath, configFileExistenceInfo = { exists: this.projectService.fshost.fileExists(configFileName) });
+                this.projectService.configFileExistenceInfoCache.set(canonicalConfigFilePath, configFileExistenceInfo = { exists: this.projectService.host.fileExists(configFileName) });
             }
             // Ensure we have upto date parsed command line
             this.projectService.ensureParsedConfigUptoDate(configFileName, canonicalConfigFilePath, configFileExistenceInfo, this);
@@ -2616,7 +2614,7 @@ namespace ts.server {
                 compilerOptions,
                 compileOnSaveEnabled,
                 watchOptions,
-                projectService.fshost,
+                projectService.host,
                 getDirectoryPath(projectFilePath || normalizeSlashes(externalProjectName)));
             this.enableGlobalPlugins(this.getCompilerOptions(), pluginConfigOverrides);
         }

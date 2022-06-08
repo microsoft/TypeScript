@@ -1,7 +1,7 @@
 namespace ts.projectSystem {
     describe("unittests:: tsserver:: webServer", () => {
         class TestWorkerSession extends server.WorkerSession {
-            constructor(host: server.ServerHost, fshost: server.FileServerHost, webHost: server.HostWithWriteMessage, options: Partial<server.StartSessionOptions>, logger: server.Logger) {
+            constructor(host: server.ServerHost, fshost: server.FileServerHost | undefined, webHost: server.HostWithWriteMessage, options: Partial<server.StartSessionOptions>, logger: server.Logger) {
                 super(
                     host,
                     fshost,
@@ -37,12 +37,12 @@ namespace ts.projectSystem {
                 writeMessage: s => messages.push(s),
             };
             const webSys = server.createWebSystem(webHost, emptyArray, () => host.getExecutingFilePath());
-            let fshost = webSys;
             let serverMode = LanguageServiceMode.PartialSemantic;
+            let fshost: VirtualFS.VirtualServerHost | undefined;
             if (isVfs) {
+                serverMode = LanguageServiceMode.Semantic;
                 fshost = VirtualFS.createVirtualServerHost({ executingFilePath: "/a/lib/tsc.js" });
                 (fshost as VirtualFS.VirtualServerHost).ensureFileOrFolder(libFile);
-                serverMode = LanguageServiceMode.Semantic;
             }
             const logger = logLevel !== undefined ? new server.MainProcessLogger(logLevel, webHost) : nullLogger();
             const session = new TestWorkerSession(webSys, fshost, webHost, { serverMode }, logger);

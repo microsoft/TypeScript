@@ -782,11 +782,9 @@ namespace ts.server {
         private suppressDiagnosticEvents?: boolean;
         private eventHandler: ProjectServiceEventHandler | undefined;
         private readonly noGetErrOnBackgroundUpdate?: boolean;
-        private fshost: FileServerHost;
 
         constructor(opts: SessionOptions) {
-            this.host = opts.host;
-            this.fshost = opts.fshost || this.host;
+            this.host = getFileSystemHost(opts.host, opts.fshost);
             this.cancellationToken = opts.cancellationToken;
             this.typingsInstaller = opts.typingsInstaller;
             this.byteLength = opts.byteLength;
@@ -2205,7 +2203,7 @@ namespace ts.server {
                 return args.richResponse ? { emitSkipped: true, diagnostics: [] } : false;
             }
             const scriptInfo = project.getScriptInfo(file)!;
-            const { emitSkipped, diagnostics } = project.emitFile(scriptInfo, (path, data, writeByteOrderMark) => this.fshost.writeFile(path, data, writeByteOrderMark));
+            const { emitSkipped, diagnostics } = project.emitFile(scriptInfo, (path, data, writeByteOrderMark) => this.host.writeFile(path, data, writeByteOrderMark));
             return args.richResponse ?
                 {
                     emitSkipped,
@@ -2905,7 +2903,7 @@ namespace ts.server {
         }
 
         getCanonicalFileName(fileName: string) {
-            const name = this.fshost.useCaseSensitiveFileNames ? fileName : toFileNameLowerCase(fileName);
+            const name = this.host.useCaseSensitiveFileNames ? fileName : toFileNameLowerCase(fileName);
             return normalizePath(name);
         }
 

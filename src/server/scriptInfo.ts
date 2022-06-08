@@ -46,7 +46,7 @@ namespace ts.server {
          */
         private pendingReloadFromDisk = false;
 
-        constructor(private readonly host: FileServerHost, private readonly info: ScriptInfo, initialVersion?: ScriptInfoVersion) {
+        constructor(private readonly host: ServerHost, private readonly info: ScriptInfo, initialVersion?: ScriptInfoVersion) {
             this.version = initialVersion || { svc: 0, text: 0 };
         }
 
@@ -330,7 +330,6 @@ namespace ts.server {
 
         constructor(
             private readonly host: ServerHost,
-            private readonly fshost: FileServerHost,
             readonly fileName: NormalizedPath,
             readonly scriptKind: ScriptKind,
             public readonly hasMixedContent: boolean,
@@ -338,7 +337,7 @@ namespace ts.server {
             initialVersion?: ScriptInfoVersion) {
             this.isDynamic = isDynamicFileName(fileName);
 
-            this.textStorage = new TextStorage(fshost, this, initialVersion);
+            this.textStorage = new TextStorage(host, this, initialVersion);
             if (hasMixedContent || this.isDynamic) {
                 this.textStorage.reload("");
                 this.realpath = this.path;
@@ -396,10 +395,10 @@ namespace ts.server {
             if (this.realpath === undefined) {
                 // Default is just the path
                 this.realpath = this.path;
-                if (this.fshost.realpath) {
+                if (this.host.realpath) {
                     Debug.assert(!!this.containingProjects.length);
                     const project = this.containingProjects[0];
-                    const realpath = this.fshost.realpath(this.path);
+                    const realpath = this.host.realpath(this.path);
                     if (realpath) {
                         this.realpath = project.toPath(realpath);
                         // If it is different from this.path, add to the map
@@ -577,7 +576,7 @@ namespace ts.server {
         }
 
         saveTo(fileName: string) {
-            this.fshost.writeFile(fileName, getSnapshotText(this.textStorage.getSnapshot()));
+            this.host.writeFile(fileName, getSnapshotText(this.textStorage.getSnapshot()));
         }
 
         /*@internal*/

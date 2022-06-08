@@ -358,6 +358,67 @@ namespace ts.server {
         }
     }
 
+    /*@internal*/
+    export function getFileSystemHost(host: ServerHost, fshost: FileServerHost | undefined): ServerHost {
+        return !fshost ? host
+            : {
+                // FileServerHost
+                readFile: fshost.readFile.bind(fshost),
+                writeFile: fshost.writeFile.bind(fshost),
+                fileExists: fshost.fileExists.bind(fshost),
+                directoryExists: fshost.directoryExists.bind(fshost),
+                getFileSize: fshost.getFileSize?.bind(fshost),
+                getModifiedTime: fshost.getModifiedTime?.bind(fshost),
+                getDirectories: fshost.getDirectories.bind(fshost),
+                getCurrentDirectory: fshost.getCurrentDirectory.bind(fshost),
+                getExecutingFilePath: fshost.getExecutingFilePath.bind(fshost),
+                realpath: fshost.realpath?.bind(fshost),
+                resolvePath: fshost.resolvePath.bind(fshost),
+                createDirectory: fshost.createDirectory.bind(fshost),
+                setModifiedTime: fshost.setModifiedTime?.bind(fshost),
+                deleteFile: fshost.deleteFile?.bind(fshost),
+                readDirectory: fshost.readDirectory.bind(fshost),
+                watchFile: fshost.watchFile.bind(fshost),
+                watchDirectory: fshost.watchDirectory.bind(fshost),
+                useCaseSensitiveFileNames: fshost.useCaseSensitiveFileNames,
+                // ServerHost
+                setTimeout: host.setTimeout.bind(host),
+                clearTimeout: host.clearTimeout.bind(host),
+                setImmediate: host.setImmediate.bind(host),
+                clearImmediate: host.clearImmediate.bind(host),
+                gc: host.gc?.bind(host),
+                trace: host.trace?.bind(host),
+                require: host.require?.bind(host),
+                // Sys
+                args: host.args,
+                newLine: host.newLine,
+                write: host.write.bind(host),
+                writeOutputIsTTY: host.writeOutputIsTTY?.bind(host),
+                getWidthOfTerminal: host.getWidthOfTerminal?.bind(host),
+                createHash: host.createHash?.bind(host),
+                createSHA256Hash: host.createSHA256Hash?.bind(host),
+                getMemoryUsage: host.getMemoryUsage?.bind(host),
+                exit: host.exit.bind(host),
+                enableCPUProfiler: host.enableCPUProfiler?.bind(host),
+                disableCPUProfiler: host.disableCPUProfiler?.bind(host),
+                cpuProfilingEnabled: host.cpuProfilingEnabled?.bind(host),
+                getEnvironmentVariable: host.getEnvironmentVariable.bind(host),
+                tryEnableSourceMapsForHost: host.tryEnableSourceMapsForHost?.bind(host),
+                debugMode: host.debugMode,
+                clearScreen: host.clearScreen?.bind(host),
+                setBlocking: host.setBlocking?.bind(host),
+                base64decode: host.base64decode?.bind(host),
+                base64encode: host.base64encode?.bind(host),
+                bufferFrom: host.bufferFrom?.bind(host),
+                defaultWatchFileKind: host.defaultWatchFileKind?.bind(host),
+                now: host.now?.bind(host),
+                disableUseFileVersionAsSignature: host.disableUseFileVersionAsSignature,
+                storeFilesChangingSignatureDuringEmit: host.storeFilesChangingSignatureDuringEmit,
+                // VirtualFS
+                ensureFileOrFolder: fshost.ensureFileOrFolder.bind(fshost),
+            } as any;
+    }
+
     const noopConfigFileWatcher: FileWatcher = { close: noop };
 
     /*@internal*/
@@ -761,7 +822,6 @@ namespace ts.server {
         readonly toCanonicalFileName: (f: string) => string;
 
         public readonly host: ServerHost;
-        public readonly fshost: FileServerHost;
         public readonly logger: Logger;
         public readonly cancellationToken: HostCancellationToken;
         public readonly useSingleInferredProject: boolean;
@@ -807,8 +867,7 @@ namespace ts.server {
         private performanceEventHandler?: PerformanceEventHandler;
 
         constructor(opts: ProjectServiceOptions) {
-            this.host = opts.host;
-            this.fshost = opts.fshost || this.host;
+            this.host = getFileSystemHost(opts.host, opts.fshost);
             this.logger = opts.logger;
             this.cancellationToken = opts.cancellationToken;
             this.useSingleInferredProject = opts.useSingleInferredProject;
@@ -836,11 +895,11 @@ namespace ts.server {
                 this.syntaxOnly = false;
             }
 
-            if (this.fshost.realpath) {
+            if (this.host.realpath) {
                 this.realpathToScriptInfos = createMultiMap();
             }
-            this.currentDirectory = toNormalizedPath(this.fshost.getCurrentDirectory());
-            this.toCanonicalFileName = createGetCanonicalFileName(this.fshost.useCaseSensitiveFileNames);
+            this.currentDirectory = toNormalizedPath(this.host.getCurrentDirectory());
+            this.toCanonicalFileName = createGetCanonicalFileName(this.host.useCaseSensitiveFileNames);
             this.globalCacheLocationDirectoryPath = this.typingsInstaller.globalTypingsCacheLocation
                 ? ensureTrailingDirectorySeparator(this.toPath(this.typingsInstaller.globalTypingsCacheLocation))
                 : undefined;
@@ -864,7 +923,7 @@ namespace ts.server {
                 extraFileExtensions: [],
             };
 
-            this.documentRegistry = createDocumentRegistryInternal(this.fshost.useCaseSensitiveFileNames, this.currentDirectory, this);
+            this.documentRegistry = createDocumentRegistryInternal(this.host.useCaseSensitiveFileNames, this.currentDirectory, this);
             const watchLogLevel = this.logger.hasLevel(LogLevel.verbose) ? WatchLogLevel.Verbose :
                 this.logger.loggingEnabled() ? WatchLogLevel.TriggerOnly : WatchLogLevel.None;
             const log: (s: string) => void = watchLogLevel !== WatchLogLevel.None ? (s => this.logger.info(s)) : noop;
@@ -874,7 +933,7 @@ namespace ts.server {
                     watchFile: returnNoopFileWatcher,
                     watchDirectory: returnNoopFileWatcher,
                 } :
-                getWatchFactory(this.fshost, watchLogLevel, log, getDetailWatchInfo);
+                getWatchFactory(this.host, watchLogLevel, log, getDetailWatchInfo);
         }
 
         toPath(fileName: string) {
@@ -883,12 +942,12 @@ namespace ts.server {
 
         /*@internal*/
         getExecutingFilePath() {
-            return this.getNormalizedAbsolutePath(this.fshost.getExecutingFilePath());
+            return this.getNormalizedAbsolutePath(this.host.getExecutingFilePath());
         }
 
         /*@internal*/
         getNormalizedAbsolutePath(fileName: string) {
-            return getNormalizedAbsolutePath(fileName, this.fshost.getCurrentDirectory());
+            return getNormalizedAbsolutePath(fileName, this.host.getCurrentDirectory());
         }
 
         /*@internal*/
@@ -927,7 +986,7 @@ namespace ts.server {
 
         private loadTypesMap() {
             try {
-                const fileContent = this.fshost.readFile(this.typesMapLocation!); // TODO: GH#18217
+                const fileContent = this.host.readFile(this.typesMapLocation!); // TODO: GH#18217
                 if (fileContent === undefined) {
                     this.logger.info(`Provided types map file "${this.typesMapLocation}" doesn't exist`);
                     return;
@@ -1309,7 +1368,7 @@ namespace ts.server {
                     const fileOrDirectoryPath = this.toPath(fileOrDirectory);
                     const fsResult = config.cachedDirectoryStructureHost.addOrDeleteFileOrDirectory(fileOrDirectory, fileOrDirectoryPath);
                     if (getBaseFileName(fileOrDirectoryPath) === "package.json" && !isInsideNodeModules(fileOrDirectoryPath) &&
-                        (fsResult && fsResult.fileExists || !fsResult && this.fshost.fileExists(fileOrDirectoryPath))
+                        (fsResult && fsResult.fileExists || !fsResult && this.host.fileExists(fileOrDirectoryPath))
                     ) {
                         this.logger.info(`Config: ${configFileName} Detected new package.json: ${fileOrDirectory}`);
                         this.onAddPackageJson(fileOrDirectoryPath);
@@ -1325,7 +1384,7 @@ namespace ts.server {
                         currentDirectory: this.currentDirectory,
                         options: config.parsedCommandLine!.options,
                         program: configuredProjectForConfig?.getCurrentProgram() || config.parsedCommandLine!.fileNames,
-                        useCaseSensitiveFileNames: this.fshost.useCaseSensitiveFileNames,
+                        useCaseSensitiveFileNames: this.host.useCaseSensitiveFileNames,
                         writeLog: s => this.logger.info(s),
                         toPath: s => this.toPath(s)
                     })) return;
@@ -1554,7 +1613,7 @@ namespace ts.server {
             // Closing file should trigger re-reading the file content from disk. This is
             // because the user may chose to discard the buffer content before saving
             // to the disk, and the server's version of the file can be out of sync.
-            const fileExists = info.isDynamic ? false : this.fshost.fileExists(info.fileName);
+            const fileExists = info.isDynamic ? false : this.host.fileExists(info.fileName);
             info.close(fileExists);
             this.stopWatchingConfigFilesForClosedScriptInfo(info);
 
@@ -1656,7 +1715,7 @@ namespace ts.server {
             // Or the whole chain of config files for the roots of the inferred projects
 
             // Cache the host value of file exists and add the info to map of open files impacted by this config file
-            const exists = this.fshost.fileExists(configFileName);
+            const exists = this.host.fileExists(configFileName);
             let openFilesImpactedByConfigFile: ESMap<Path, boolean> | undefined;
             if (isOpenScriptInfo(info)) {
                 (openFilesImpactedByConfigFile ||= new Map()).set(info.path, false);
@@ -1786,7 +1845,7 @@ namespace ts.server {
                 let configFileExistenceInfo = this.configFileExistenceInfoCache.get(canonicalConfigFilePath);
                 if (!configFileExistenceInfo) {
                     // Create the cache
-                    configFileExistenceInfo = { exists: this.fshost.fileExists(configFileName) };
+                    configFileExistenceInfo = { exists: this.host.fileExists(configFileName) };
                     this.configFileExistenceInfoCache.set(canonicalConfigFilePath, configFileExistenceInfo);
                 }
 
@@ -1843,7 +1902,7 @@ namespace ts.server {
             if (scriptInfo.isDynamic) return undefined;
 
             let searchPath = asNormalizedPath(getDirectoryPath(info.fileName));
-            const isSearchPathInProjectRoot = () => containsPath(projectRootPath!, searchPath, this.currentDirectory, !this.fshost.useCaseSensitiveFileNames);
+            const isSearchPathInProjectRoot = () => containsPath(projectRootPath!, searchPath, this.currentDirectory, !this.host.useCaseSensitiveFileNames);
 
             // If projectRootPath doesn't contain info.path, then do normal search for config file
             const anySearchPathOk = !projectRootPath || !isSearchPathInProjectRoot();
@@ -1958,7 +2017,7 @@ namespace ts.server {
 
         /** Get a filename if the language service exceeds the maximum allowed program size; otherwise returns undefined. */
         private getFilenameForExceededTotalSizeLimitForNonTsFiles<T>(name: string, options: CompilerOptions | undefined, fileNames: T[], propertyReader: FilePropertyReader<T>): string | undefined {
-            if (options && options.disableSizeLimit || !this.fshost.getFileSize) {
+            if (options && options.disableSizeLimit || !this.host.getFileSize) {
                 return;
             }
 
@@ -1974,12 +2033,12 @@ namespace ts.server {
                     continue;
                 }
 
-                totalNonTsFileSize += this.fshost.getFileSize(fileName);
+                totalNonTsFileSize += this.host.getFileSize(fileName);
 
                 if (totalNonTsFileSize > maxProgramSizeForNonTsFiles || totalNonTsFileSize > availableSpace) {
                     const top5LargestFiles = fileNames.map(f => propertyReader.getFileName(f))
                         .filter(name => !hasTSFileExtension(name))
-                        .map(name => ({ name, size: this.fshost.getFileSize!(name) }))
+                        .map(name => ({ name, size: this.host.getFileSize!(name) }))
                         .sort((a, b) => b.size - a.size)
                         .slice(0, 5);
                     this.logger.info(`Non TS file size exceeded limit (${totalNonTsFileSize}). Largest files: ${top5LargestFiles.map(file => `${file.name}:${file.size}`).join(", ")}`);
@@ -2082,7 +2141,7 @@ namespace ts.server {
             }
             if (!configFileExistenceInfo.config) {
                 configFileExistenceInfo.config = {
-                    cachedDirectoryStructureHost: createCachedDirectoryStructureHost(this.fshost, this.fshost.getCurrentDirectory(), this.fshost.useCaseSensitiveFileNames)!,
+                    cachedDirectoryStructureHost: createCachedDirectoryStructureHost(this.host, this.host.getCurrentDirectory(), this.host.useCaseSensitiveFileNames)!,
                     projects: new Map(),
                     reloadLevel: ConfigFileProgramReloadLevel.Full
                 };
@@ -2183,10 +2242,10 @@ namespace ts.server {
 
             // Parse the config file and ensure its cached
             const cachedDirectoryStructureHost = configFileExistenceInfo.config?.cachedDirectoryStructureHost ||
-                createCachedDirectoryStructureHost(this.fshost, this.fshost.getCurrentDirectory(), this.fshost.useCaseSensitiveFileNames)!;
+                createCachedDirectoryStructureHost(this.host, this.host.getCurrentDirectory(), this.host.useCaseSensitiveFileNames)!;
 
             // Read updated contents from disk
-            const configFileContent = tryReadFile(configFilename, fileName => this.fshost.readFile(fileName));
+            const configFileContent = tryReadFile(configFilename, fileName => this.host.readFile(fileName));
             const configFile = parseJsonText(configFilename, isString(configFileContent) ? configFileContent : "") as TsConfigSourceFile;
             const configFileErrors = configFile.parseDiagnostics as Diagnostic[];
             if (!isString(configFileContent)) configFileErrors.push(configFileContent);
@@ -2485,7 +2544,7 @@ namespace ts.server {
                 // ignore single inferred projects (handled elsewhere)
                 if (!project.projectRootPath) continue;
                 // ignore inferred projects that don't contain the root's path
-                if (!containsPath(project.projectRootPath, info.path, this.fshost.getCurrentDirectory(), !this.fshost.useCaseSensitiveFileNames)) continue;
+                if (!containsPath(project.projectRootPath, info.path, this.host.getCurrentDirectory(), !this.host.useCaseSensitiveFileNames)) continue;
                 // ignore inferred projects that are higher up in the project root.
                 // TODO(rbuckton): Should we add the file as a root to these as well?
                 if (bestMatch && bestMatch.projectRootPath!.length > project.projectRootPath.length) continue;
@@ -2630,7 +2689,7 @@ namespace ts.server {
                 (!this.globalCacheLocationDirectoryPath ||
                     !startsWith(info.path, this.globalCacheLocationDirectoryPath))) {
                 const indexOfNodeModules = info.path.indexOf("/node_modules/");
-                if (!this.fshost.getModifiedTime || indexOfNodeModules === -1) {
+                if (!this.host.getModifiedTime || indexOfNodeModules === -1) {
                     info.fileWatcher = this.watchFactory.watchFile(
                         info.fileName,
                         (_fileName, eventKind) => this.onSourceFileChanged(info, eventKind),
@@ -2728,7 +2787,7 @@ namespace ts.server {
         }
 
         private getModifiedTime(info: ScriptInfo) {
-            return (this.fshost.getModifiedTime!(info.path) || missingFileModifiedTime).getTime();
+            return (this.host.getModifiedTime!(info.path) || missingFileModifiedTime).getTime();
         }
 
         private refreshScriptInfo(info: ScriptInfo) {
@@ -2791,10 +2850,10 @@ namespace ts.server {
                 Debug.assert(!isRootedDiskPath(fileName) || this.currentDirectory === currentDirectory || !this.openFilesWithNonRootedDiskPath.has(this.toCanonicalFileName(fileName)), "", () => `${JSON.stringify({ fileName, currentDirectory, hostCurrentDirectory: this.currentDirectory, openKeys: arrayFrom(this.openFilesWithNonRootedDiskPath.keys()) })}\nOpen script files with non rooted disk path opened with current directory context cannot have same canonical names`);
                 Debug.assert(!isDynamic || this.currentDirectory === currentDirectory || this.useInferredProjectPerProjectRoot, "", () => `${JSON.stringify({ fileName, currentDirectory, hostCurrentDirectory: this.currentDirectory, openKeys: arrayFrom(this.openFilesWithNonRootedDiskPath.keys()) })}\nDynamic files must always be opened with service's current directory or service should support inferred project per projectRootPath.`);
                 // If the file is not opened by client and the file doesnot exist on the disk, return
-                if (!openedByClient && !isDynamic && !(hostToQueryFileExistsOn || this.fshost).fileExists(fileName)) {
+                if (!openedByClient && !isDynamic && !(hostToQueryFileExistsOn || this.host).fileExists(fileName)) {
                     return;
                 }
-                info = new ScriptInfo(this.host, this.fshost, fileName, scriptKind!, !!hasMixedContent, path, this.filenameToScriptInfoVersion.get(path)); // TODO: GH#18217
+                info = new ScriptInfo(this.host, fileName, scriptKind!, !!hasMixedContent, path, this.filenameToScriptInfoVersion.get(path)); // TODO: GH#18217
                 this.filenameToScriptInfo.set(info.path, info);
                 this.filenameToScriptInfoVersion.delete(info.path);
                 if (!openedByClient) {
@@ -2832,7 +2891,7 @@ namespace ts.server {
         /*@internal*/
         getDocumentPositionMapper(project: Project, generatedFileName: string, sourceFileName?: string): DocumentPositionMapper | undefined {
             // Since declaration info and map file watches arent updating project's directory structure host (which can cache file structure) use host
-            const declarationInfo = this.getOrCreateScriptInfoNotOpenedByClient(generatedFileName, project.currentDirectory, this.fshost);
+            const declarationInfo = this.getOrCreateScriptInfoNotOpenedByClient(generatedFileName, project.currentDirectory, this.host);
             if (!declarationInfo) {
                 if (sourceFileName) {
                     // Project contains source file and it generates the generated file name
@@ -2869,7 +2928,7 @@ namespace ts.server {
             let mapFileNameFromDeclarationInfo: string | undefined;
 
             let readMapFile: ReadMapFile | undefined = (mapFileName, mapFileNameFromDts) => {
-                const mapInfo = this.getOrCreateScriptInfoNotOpenedByClient(mapFileName, project.currentDirectory, this.fshost);
+                const mapInfo = this.getOrCreateScriptInfoNotOpenedByClient(mapFileName, project.currentDirectory, this.host);
                 if (!mapInfo) {
                     mapFileNameFromDeclarationInfo = mapFileNameFromDts;
                     return undefined;
@@ -2948,7 +3007,7 @@ namespace ts.server {
             }
 
             // Need to look for other files.
-            const info = this.getOrCreateScriptInfoNotOpenedByClient(fileName, (project || this).currentDirectory, project ? project.directoryStructureHost : this.fshost);
+            const info = this.getOrCreateScriptInfoNotOpenedByClient(fileName, (project || this).currentDirectory, project ? project.directoryStructureHost : this.host);
             if (!info) return undefined;
 
             // Attach as source
@@ -3069,7 +3128,7 @@ namespace ts.server {
                 if (this.openFiles.has(info.path)) return; // Skip open files
                 if (!info.fileWatcher) return; // not watched file
                 // Handle as if file is changed or deleted
-                this.onSourceFileChanged(info, this.fshost.fileExists(info.fileName) ? FileWatcherEventKind.Changed : FileWatcherEventKind.Deleted);
+                this.onSourceFileChanged(info, this.host.fileExists(info.fileName) ? FileWatcherEventKind.Changed : FileWatcherEventKind.Deleted);
             });
             // Cancel all project updates since we will be updating them now
             this.pendingProjectUpdates.forEach((_project, projectName) => {
@@ -3242,7 +3301,7 @@ namespace ts.server {
 
             const { fileName } = originalLocation;
             const scriptInfo = this.getScriptInfo(fileName);
-            if (!scriptInfo && !this.fshost.fileExists(fileName)) return undefined;
+            if (!scriptInfo && !this.host.fileExists(fileName)) return undefined;
 
             const originalFileInfo: OriginalFileInfo = { fileName: toNormalizedPath(fileName), path: this.toPath(fileName) };
             const configFileName = this.getConfigFileNameForFile(originalFileInfo);
@@ -3314,7 +3373,7 @@ namespace ts.server {
 
         /** @internal */
         fileExists(fileName: NormalizedPath): boolean {
-            return !!this.getScriptInfoForNormalizedPath(fileName) || this.fshost.fileExists(fileName);
+            return !!this.getScriptInfoForNormalizedPath(fileName) || this.host.fileExists(fileName);
         }
 
         private findExternalProjectContainingOpenScriptInfo(info: ScriptInfo): ExternalProject | undefined {
@@ -3696,15 +3755,17 @@ namespace ts.server {
 
         /* @internal */
         updateFileSystem(updatedFiles: protocol.FileSystemRequestArgs[] | undefined, deletedFiles?: string[]) {
-            Debug.assert(this.fshost instanceof VirtualFS.VirtualServerHost);
+            const fshost = this.host as unknown as FileServerHost;
             if (updatedFiles) {
+                Debug.assert(fshost.ensureFileOrFolder)
                 for (const { file, fileContent } of updatedFiles) {
-                    this.fshost.ensureFileOrFolder({ path: file, content: fileContent });
+                    fshost.ensureFileOrFolder({ path: file, content: fileContent });
                 }
             }
             if (deletedFiles) {
+                Debug.assert(fshost.deleteFile)
                 for (const file of deletedFiles) {
-                    this.fshost.deleteFile(file, /*deleteEmptyParentFolders*/ true);
+                    fshost.deleteFile(file, /*deleteEmptyParentFolders*/ true);
                 }
             }
         }
@@ -3970,7 +4031,7 @@ namespace ts.server {
             for (const file of proj.rootFiles) {
                 const normalized = toNormalizedPath(file.fileName);
                 if (getBaseConfigFileName(normalized)) {
-                    if (this.serverMode === LanguageServiceMode.Semantic && this.fshost.fileExists(normalized)) {
+                    if (this.serverMode === LanguageServiceMode.Semantic && this.host.fileExists(normalized)) {
                         (tsConfigFiles || (tsConfigFiles = [])).push(normalized);
                     }
                 }
@@ -4125,7 +4186,7 @@ namespace ts.server {
                     case Ternary.True: return directory;
                     case Ternary.False: return undefined;
                     case Ternary.Maybe:
-                        return this.fshost.fileExists(combinePaths(directory, "package.json"))
+                        return this.host.fileExists(combinePaths(directory, "package.json"))
                             ? directory
                             : undefined;
                 }
