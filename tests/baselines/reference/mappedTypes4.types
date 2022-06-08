@@ -30,14 +30,14 @@ function boxify<T>(obj: T): Boxified<T> {
 >obj : (T & null) | (T & object)
 
             result[k] = { value: obj[k] };
->result[k] = { value: obj[k] } : { value: NonNullable<T & object>[Extract<keyof T, string>]; }
+>result[k] = { value: obj[k] } : { value: (T & object)[Extract<keyof T, string>]; }
 >result[k] : Boxified<T>[Extract<keyof T, string>]
 >result : Boxified<T>
 >k : Extract<keyof T, string>
->{ value: obj[k] } : { value: NonNullable<T & object>[Extract<keyof T, string>]; }
->value : NonNullable<T & object>[Extract<keyof T, string>]
->obj[k] : NonNullable<T & object>[Extract<keyof T, string>]
->obj : NonNullable<T & object>
+>{ value: obj[k] } : { value: (T & object)[Extract<keyof T, string>]; }
+>value : (T & object)[Extract<keyof T, string>]
+>obj[k] : (T & object)[Extract<keyof T, string>]
+>obj : T & object
 >k : Extract<keyof T, string>
         }
         return result;

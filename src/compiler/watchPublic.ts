@@ -3,17 +3,26 @@ namespace ts {
         useCaseSensitiveFileNames(): boolean;
         getCurrentDirectory(): string;
         readFile(fileName: string): string | undefined;
+        /*@internal*/
+        getBuildInfo?(fileName: string, configFilePath: string | undefined): BuildInfo | undefined;
     }
     export function readBuilderProgram(compilerOptions: CompilerOptions, host: ReadBuildProgramHost) {
-        if (outFile(compilerOptions)) return undefined;
         const buildInfoPath = getTsBuildInfoEmitOutputFilePath(compilerOptions);
         if (!buildInfoPath) return undefined;
-        const content = host.readFile(buildInfoPath);
-        if (!content) return undefined;
-        const buildInfo = getBuildInfo(content);
+        let buildInfo;
+        if (host.getBuildInfo) {
+            // host provides buildinfo, get it from there. This allows host to cache it
+            buildInfo = host.getBuildInfo(buildInfoPath, compilerOptions.configFilePath);
+            if (!buildInfo) return undefined;
+        }
+        else {
+            const content = host.readFile(buildInfoPath);
+            if (!content) return undefined;
+            buildInfo = getBuildInfo(content);
+        }
         if (buildInfo.version !== version) return undefined;
         if (!buildInfo.program) return undefined;
-        return createBuildProgramUsingProgramBuildInfo(buildInfo.program, buildInfoPath, host);
+        return createBuilderProgramUsingProgramBuildInfo(buildInfo.program, buildInfoPath, host);
     }
 
     export function createIncrementalCompilerHost(options: CompilerOptions, system = sys): CompilerHost {
@@ -21,6 +30,7 @@ namespace ts {
         host.createHash = maybeBind(system, system.createHash);
         host.disableUseFileVersionAsSignature = system.disableUseFileVersionAsSignature;
         host.storeFilesChangingSignatureDuringEmit = system.storeFilesChangingSignatureDuringEmit;
+        host.now = maybeBind(system, system.now);
         setGetSourceFileAsHashVersioned(host, system);
         changeCompilerHostLikeToUseCache(host, fileName => toPath(fileName, host.getCurrentDirectory(), host.getCanonicalFileName));
         return host;
@@ -116,6 +126,7 @@ namespace ts {
         // For testing
         disableUseFileVersionAsSignature?: boolean;
         storeFilesChangingSignatureDuringEmit?: boolean;
+        now?(): Date;
     }
 
     export interface WatchCompilerHost<T extends BuilderProgram> extends ProgramHost<T>, WatchHost {
