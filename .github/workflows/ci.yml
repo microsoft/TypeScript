@@ -16,7 +16,11 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [14.x, 16.x, 18.x]
+        # Test the latest version of Node.js plus the last two LTS versions.
+        node-version:
+          - "*"
+          - lts/*
+          - lts/-1
 
     steps:
     - uses: actions/checkout@v3
@@ -26,6 +30,7 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node-version }}
+        check-latest: true
     - name: Remove existing TypeScript
       run: |
         npm uninstall typescript --no-save
@@ -47,4 +52,3 @@ jobs:
 
     - name: Validate the browser can import TypeScript
       run: gulp test-browser-integration
-

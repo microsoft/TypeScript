@@ -640,7 +640,7 @@ function f2(x: unknown): string | undefined {
 >undefined : undefined
 >typeof x !== 'string' : boolean
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
->x : unknown
+>x : {} | null
 >'string' : "string"
 
     throw new Error();

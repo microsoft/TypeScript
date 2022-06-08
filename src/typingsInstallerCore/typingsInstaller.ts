@@ -172,7 +172,8 @@ namespace ts.server.typingsInstaller {
                 this.packageNameToTypingLocation,
                 req.typeAcquisition,
                 req.unresolvedImports,
-                this.typesRegistry);
+                this.typesRegistry,
+                req.compilerOptions);
 
             if (this.log.isEnabled()) {
                 this.log.writeLine(`Finished typings discovery: ${JSON.stringify(discoverTypingsResult)}`);

@@ -373,7 +373,9 @@ namespace ts {
                 return;
             }
             const version = ts.version; // Extracted into a const so the form is stable between namespace and module
-            writeFile(host, emitterDiagnostics, buildInfoPath, getBuildInfoText({ bundle, program, version }), /*writeByteOrderMark*/ false);
+            const buildInfo: BuildInfo = { bundle, program, version };
+            // Pass buildinfo as additional data to avoid having to reparse
+            writeFile(host, emitterDiagnostics, buildInfoPath, getBuildInfoText(buildInfo), /*writeByteOrderMark*/ false, /*sourceFiles*/ undefined, { buildInfo });
         }
 
         function emitJsFileOrBundle(
@@ -599,6 +601,7 @@ namespace ts {
                 if (sourceMapFilePath) {
                     sourceMap = sourceMapGenerator.toString();
                     if (!forceDtsEmit) writeFile(host, emitterDiagnostics, sourceMapFilePath, sourceMap, /*writeByteOrderMark*/ false, sourceFiles);
+                    if (printer.bundleFileInfo) printer.bundleFileInfo.mapHash = BuilderState.computeSignature(sourceMap, maybeBind(host, host.createHash));
                 }
             }
             else {
@@ -606,6 +609,7 @@ namespace ts {
             }
 
             // Write the output file
+            const text = writer.getText();
             writeFile(
                 host,
                 emitterDiagnostics,
@@ -618,6 +622,9 @@ namespace ts {
                     exportedModulesFromDeclarationEmit: sourceFile?.exportedModulesFromDeclarationEmit,
                 }
             );
+            // We store the hash of the text written in the buildinfo to ensure that text of the referenced d.ts file is same as whats in the buildinfo
+            // This is needed because incremental can be toggled between two runs and we might use stale file text to do text manipulation in prepend mode
+            if (printer.bundleFileInfo) printer.bundleFileInfo.hash = BuilderState.computeSignature(text, maybeBind(host, host.createHash));
             if (forceDtsEmit) {
                 // Store the result
                 const key = getCacheDtsEmitResultKey(sourceFileOrBundle, compilerOptions);
@@ -774,6 +781,9 @@ namespace ts {
         getCanonicalFileName(fileName: string): string;
         useCaseSensitiveFileNames(): boolean;
         getNewLine(): string;
+        createHash?(data: string): string;
+        now?(): Date;
+        getBuildInfo?(fileName: string, configFilePath: string | undefined): BuildInfo | undefined;
     }
 
     function createSourceFilesFromBundleBuildInfo(bundle: BundleBuildInfo, buildInfoDirectory: string, host: EmitUsingBuildInfoHost): readonly SourceFile[] {
@@ -810,23 +820,40 @@ namespace ts {
         getCommandLine: (ref: ProjectReference) => ParsedCommandLine | undefined,
         customTransformers?: CustomTransformers
     ): EmitUsingBuildInfoResult {
+        const createHash = maybeBind(host, host.createHash);
         const { buildInfoPath, jsFilePath, sourceMapFilePath, declarationFilePath, declarationMapPath } = getOutputPathsForBundle(config.options, /*forceDtsPaths*/ false);
-        const buildInfoText = host.readFile(Debug.checkDefined(buildInfoPath));
-        if (!buildInfoText) return buildInfoPath!;
+        let buildInfo: BuildInfo;
+        if (host.getBuildInfo) {
+            // If host directly provides buildinfo we can get it directly. This allows host to cache the buildinfo
+            const hostBuildInfo = host.getBuildInfo(buildInfoPath!, config.options.configFilePath);
+            if (!hostBuildInfo) return buildInfoPath!;
+            buildInfo = hostBuildInfo;
+        }
+        else {
+            const buildInfoText = host.readFile(buildInfoPath!);
+            if (!buildInfoText) return buildInfoPath!;
+            buildInfo = getBuildInfo(buildInfoText);
+        }
+        if (!buildInfo.bundle || !buildInfo.bundle.js || (declarationFilePath && !buildInfo.bundle.dts)) return buildInfoPath!;
+
         const jsFileText = host.readFile(Debug.checkDefined(jsFilePath));
         if (!jsFileText) return jsFilePath!;
+        // If the jsFileText is not same has what it was created with, tsbuildinfo is stale so dont use it
+        if (BuilderState.computeSignature(jsFileText, createHash) !== buildInfo.bundle.js.hash) return jsFilePath!;
         const sourceMapText = sourceMapFilePath && host.readFile(sourceMapFilePath);
         // error if no source map or for now if inline sourcemap
         if ((sourceMapFilePath && !sourceMapText) || config.options.inlineSourceMap) return sourceMapFilePath || "inline sourcemap decoding";
+        if (sourceMapFilePath && BuilderState.computeSignature(sourceMapText!, createHash) !== buildInfo.bundle.js.mapHash) return sourceMapFilePath;
+
         // read declaration text
         const declarationText = declarationFilePath && host.readFile(declarationFilePath);
         if (declarationFilePath && !declarationText) return declarationFilePath;
+        if (declarationFilePath && BuilderState.computeSignature(declarationText!, createHash) !== buildInfo.bundle.dts!.hash) return declarationFilePath;
         const declarationMapText = declarationMapPath && host.readFile(declarationMapPath);
         // error if no source map or for now if inline sourcemap
         if ((declarationMapPath && !declarationMapText) || config.options.inlineSourceMap) return declarationMapPath || "inline sourcemap decoding";
+        if (declarationMapPath && BuilderState.computeSignature(declarationMapText!, createHash) !== buildInfo.bundle.dts!.mapHash) return declarationMapPath;
 
-        const buildInfo = getBuildInfo(buildInfoText);
-        if (!buildInfo.bundle || !buildInfo.bundle.js || (declarationText && !buildInfo.bundle.dts)) return buildInfoPath!;
         const buildInfoDirectory = getDirectoryPath(getNormalizedAbsolutePath(buildInfoPath!, host.getCurrentDirectory()));
         const ownPrependInput = createInputFiles(
             jsFileText,
@@ -844,6 +871,8 @@ namespace ts {
         const outputFiles: OutputFile[] = [];
         const prependNodes = createPrependNodes(config.projectReferences, getCommandLine, f => host.readFile(f));
         const sourceFilesForJsEmit = createSourceFilesFromBundleBuildInfo(buildInfo.bundle, buildInfoDirectory, host);
+        let changedDtsText: string | undefined;
+        let changedDtsData: WriteFileCallbackData | undefined;
         const emitHost: EmitHost = {
             getPrependNodes: memoize(() => [...prependNodes, ownPrependInput]),
             getCanonicalFileName: host.getCanonicalFileName,
@@ -859,7 +888,7 @@ namespace ts {
             getResolvedProjectReferenceToRedirect: returnUndefined,
             getProjectReferenceRedirect: returnUndefined,
             isSourceOfProjectReferenceRedirect: returnFalse,
-            writeFile: (name, text, writeByteOrderMark) => {
+            writeFile: (name, text, writeByteOrderMark, _onError, _sourceFiles, data) => {
                 switch (name) {
                     case jsFilePath:
                         if (jsFileText === text) return;
@@ -868,8 +897,13 @@ namespace ts {
                         if (sourceMapText === text) return;
                         break;
                     case buildInfoPath:
-                        const newBuildInfo = getBuildInfo(text);
+                        const newBuildInfo = data!.buildInfo!;
                         newBuildInfo.program = buildInfo.program;
+                        if (newBuildInfo.program && changedDtsText !== undefined && config.options.composite) {
+                            // Update the output signature
+                            (newBuildInfo.program as ProgramBundleEmitBuildInfo).outSignature = BuilderState.computeSignature(changedDtsText, createHash, changedDtsData);
+                            newBuildInfo.program.dtsChangeTime = getCurrentTime(host).getTime();
+                        }
                         // Update sourceFileInfo
                         const { js, dts, sourceFiles } = buildInfo.bundle!;
                         newBuildInfo.bundle!.js!.sources = js!.sources;
@@ -877,10 +911,12 @@ namespace ts {
                             newBuildInfo.bundle!.dts!.sources = dts.sources;
                         }
                         newBuildInfo.bundle!.sourceFiles = sourceFiles;
-                        outputFiles.push({ name, text: getBuildInfoText(newBuildInfo), writeByteOrderMark });
+                        outputFiles.push({ name, text: getBuildInfoText(newBuildInfo), writeByteOrderMark, buildInfo: newBuildInfo });
                         return;
                     case declarationFilePath:
                         if (declarationText === text) return;
+                        changedDtsText = text;
+                        changedDtsData = data;
                         break;
                     case declarationMapPath:
                         if (declarationMapText === text) return;
@@ -898,6 +934,7 @@ namespace ts {
             getSourceFileFromReference: returnUndefined,
             redirectTargetsMap: createMultiMap(),
             getFileIncludeReasons: notImplemented,
+            createHash,
             getDtsEmitResultCache: () => new Map(),
         };
         emitFiles(

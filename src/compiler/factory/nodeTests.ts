@@ -597,6 +597,10 @@ namespace ts {
         return node.kind === SyntaxKind.ImportClause;
     }
 
+    export function isImportTypeAssertionContainer(node: Node): node is ImportTypeAssertionContainer {
+        return node.kind === SyntaxKind.ImportTypeAssertionContainer;
+    }
+
     export function isAssertClause(node: Node): node is AssertClause {
         return node.kind === SyntaxKind.AssertClause;
     }

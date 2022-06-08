@@ -1280,7 +1280,8 @@ namespace ts {
                     info.packageNameToTypingLocation,
                     info.typeAcquisition,
                     info.unresolvedImports,
-                    info.typesRegistry);
+                    info.typesRegistry,
+                    emptyOptions);
             });
         }
     }
