@@ -73,13 +73,13 @@ Output::
     * src/lib/tsconfig.json
     * src/app/tsconfig.json
 
-[[90m12:00:07 AM[0m] Project 'src/lib/tsconfig.json' is out of date because output file 'src/lib/module.js' does not exist
+[[90m12:00:07 AM[0m] Project 'src/lib/tsconfig.json' is out of date because output file 'src/lib/module.tsbuildinfo' does not exist
 
 [[90m12:00:08 AM[0m] Building project '/src/lib/tsconfig.json'...
 
-[[90m12:00:16 AM[0m] Project 'src/app/tsconfig.json' is out of date because output file 'src/app/module.js' does not exist
+[[90m12:00:18 AM[0m] Project 'src/app/tsconfig.json' is out of date because output file 'src/app/module.tsbuildinfo' does not exist
 
-[[90m12:00:17 AM[0m] Building project '/src/app/tsconfig.json'...
+[[90m12:00:19 AM[0m] Building project '/src/app/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 
@@ -470,7 +470,7 @@ sourceFile:file4.ts
 >>>//# sourceMappingURL=module.js.map
 
 //// [/src/app/module.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./file3.ts","./file4.ts"],"js":{"sections":[{"pos":0,"end":459,"kind":"prepend","data":"../lib/module.js","texts":[{"pos":0,"end":459,"kind":"text"}]},{"pos":459,"end":685,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":171,"kind":"prepend","data":"../lib/module.d.ts","texts":[{"pos":0,"end":171,"kind":"text"}]},{"pos":171,"end":253,"kind":"text"}]}},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./file3.ts","./file4.ts"],"js":{"sections":[{"pos":0,"end":459,"kind":"prepend","data":"../lib/module.js","texts":[{"pos":0,"end":459,"kind":"text"}]},{"pos":459,"end":685,"kind":"text"}],"mapHash":"5108062215-{\"version\":3,\"file\":\"module.js\",\"sourceRoot\":\"\",\"sources\":[\"../lib/file0.ts\",\"../lib/file1.ts\",\"../lib/file2.ts\",\"../lib/global.ts\",\"file3.ts\",\"file4.ts\"],\"names\":[],\"mappings\":\"AAAA,IAAM,MAAM,GAAG,EAAE,CAAC;;;;;ICAL,QAAA,CAAC,GAAG,EAAE,CAAC;;;;;;ICAP,QAAA,CAAC,GAAG,EAAE,CAAC;;ACApB,IAAM,WAAW,GAAG,EAAE,CAAC;;;;;ICAV,QAAA,CAAC,GAAG,EAAE,CAAC;;ACApB,IAAM,KAAK,GAAG,EAAE,CAAC\"}","hash":"-13733503289-var myGlob = 20;\r\ndefine(\"file1\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n    exports.x = void 0;\r\n    exports.x = 10;\r\n});\r\ndefine(\"file2\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n    exports.y = void 0;\r\n    exports.y = 20;\r\n});\r\nvar globalConst = 10;\r\ndefine(\"file3\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n    exports.z = void 0;\r\n    exports.z = 30;\r\n});\r\nvar myVar = 30;\r\n//# sourceMappingURL=module.js.map"},"dts":{"sections":[{"pos":0,"end":171,"kind":"prepend","data":"../lib/module.d.ts","texts":[{"pos":0,"end":171,"kind":"text"}]},{"pos":171,"end":253,"kind":"text"}],"mapHash":"-41254439122-{\"version\":3,\"file\":\"module.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../lib/file0.ts\",\"../lib/file1.ts\",\"../lib/file2.ts\",\"../lib/global.ts\",\"file3.ts\",\"file4.ts\"],\"names\":[],\"mappings\":\"AAAA,QAAA,MAAM,MAAM,KAAK,CAAC;;ICAlB,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;;ICApB,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;ACApB,QAAA,MAAM,WAAW,KAAK,CAAC;;ICAvB,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;ACApB,QAAA,MAAM,KAAK,KAAK,CAAC\"}","hash":"-2339330908-declare const myGlob = 20;\r\ndeclare module \"file1\" {\r\n    export const x = 10;\r\n}\r\ndeclare module \"file2\" {\r\n    export const y = 20;\r\n}\r\ndeclare const globalConst = 10;\r\ndeclare module \"file3\" {\r\n    export const z = 30;\r\n}\r\ndeclare const myVar = 30;\r\n//# sourceMappingURL=module.d.ts.map"}},"program":{"fileNames":["./file3.ts","./file4.ts"],"fileInfos":["-2588783191-export const z = 30;\r\nimport { x } from \"file1\";","1463681686-const myVar = 30;"],"options":{"composite":true,"outFile":"./module.js"},"outSignature":"10242181693-declare const myGlob = 20;\r\ndeclare module \"file1\" {\r\n    export const x = 10;\r\n}\r\ndeclare module \"file2\" {\r\n    export const y = 20;\r\n}\r\ndeclare const globalConst = 10;\r\ndeclare module \"file3\" {\r\n    export const z = 30;\r\n}\r\ndeclare const myVar = 30;\r\n","dtsChangeTime":20000},"version":"FakeTSVersion"}
 
 //// [/src/app/module.tsbuildinfo.baseline.txt]
 ======================================================================
@@ -557,7 +557,9 @@ declare const myVar = 30;
           "end": 685,
           "kind": "text"
         }
-      ]
+      ],
+      "hash": "-13733503289-var myGlob = 20;\r\ndefine(\"file1\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n    exports.x = void 0;\r\n    exports.x = 10;\r\n});\r\ndefine(\"file2\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n    exports.y = void 0;\r\n    exports.y = 20;\r\n});\r\nvar globalConst = 10;\r\ndefine(\"file3\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n    exports.z = void 0;\r\n    exports.z = 30;\r\n});\r\nvar myVar = 30;\r\n//# sourceMappingURL=module.js.map",
+      "mapHash": "5108062215-{\"version\":3,\"file\":\"module.js\",\"sourceRoot\":\"\",\"sources\":[\"../lib/file0.ts\",\"../lib/file1.ts\",\"../lib/file2.ts\",\"../lib/global.ts\",\"file3.ts\",\"file4.ts\"],\"names\":[],\"mappings\":\"AAAA,IAAM,MAAM,GAAG,EAAE,CAAC;;;;;ICAL,QAAA,CAAC,GAAG,EAAE,CAAC;;;;;;ICAP,QAAA,CAAC,GAAG,EAAE,CAAC;;ACApB,IAAM,WAAW,GAAG,EAAE,CAAC;;;;;ICAV,QAAA,CAAC,GAAG,EAAE,CAAC;;ACApB,IAAM,KAAK,GAAG,EAAE,CAAC\"}"
     },
     "dts": {
       "sections": [
@@ -579,11 +581,29 @@ declare const myVar = 30;
           "end": 253,
           "kind": "text"
         }
-      ]
+      ],
+      "hash": "-2339330908-declare const myGlob = 20;\r\ndeclare module \"file1\" {\r\n    export const x = 10;\r\n}\r\ndeclare module \"file2\" {\r\n    export const y = 20;\r\n}\r\ndeclare const globalConst = 10;\r\ndeclare module \"file3\" {\r\n    export const z = 30;\r\n}\r\ndeclare const myVar = 30;\r\n//# sourceMappingURL=module.d.ts.map",
+      "mapHash": "-41254439122-{\"version\":3,\"file\":\"module.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../lib/file0.ts\",\"../lib/file1.ts\",\"../lib/file2.ts\",\"../lib/global.ts\",\"file3.ts\",\"file4.ts\"],\"names\":[],\"mappings\":\"AAAA,QAAA,MAAM,MAAM,KAAK,CAAC;;ICAlB,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;;ICApB,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;ACApB,QAAA,MAAM,WAAW,KAAK,CAAC;;ICAvB,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;ACApB,QAAA,MAAM,KAAK,KAAK,CAAC\"}"
     }
   },
+  "program": {
+    "fileNames": [
+      "./file3.ts",
+      "./file4.ts"
+    ],
+    "fileInfos": {
+      "./file3.ts": "-2588783191-export const z = 30;\r\nimport { x } from \"file1\";",
+      "./file4.ts": "1463681686-const myVar = 30;"
+    },
+    "options": {
+      "composite": true,
+      "outFile": "./module.js"
+    },
+    "outSignature": "10242181693-declare const myGlob = 20;\r\ndeclare module \"file1\" {\r\n    export const x = 10;\r\n}\r\ndeclare module \"file2\" {\r\n    export const y = 20;\r\n}\r\ndeclare const globalConst = 10;\r\ndeclare module \"file3\" {\r\n    export const z = 30;\r\n}\r\ndeclare const myVar = 30;\r\n",
+    "dtsChangeTime": 20000
+  },
   "version": "FakeTSVersion",
-  "size": 438
+  "size": 3018
 }
 
 //// [/src/lib/module.d.ts]
@@ -854,7 +874,7 @@ sourceFile:global.ts
 >>>//# sourceMappingURL=module.js.map
 
 //// [/src/lib/module.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./file0.ts","./file1.ts","./file2.ts","./global.ts"],"js":{"sections":[{"pos":0,"end":459,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":171,"kind":"text"}]}},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./file0.ts","./file1.ts","./file2.ts","./global.ts"],"js":{"sections":[{"pos":0,"end":459,"kind":"text"}],"mapHash":"15919942799-{\"version\":3,\"file\":\"module.js\",\"sourceRoot\":\"\",\"sources\":[\"file0.ts\",\"file1.ts\",\"file2.ts\",\"global.ts\"],\"names\":[],\"mappings\":\"AAAA,IAAM,MAAM,GAAG,EAAE,CAAC;;;;;ICAL,QAAA,CAAC,GAAG,EAAE,CAAC;;;;;;ICAP,QAAA,CAAC,GAAG,EAAE,CAAC;;ACApB,IAAM,WAAW,GAAG,EAAE,CAAC\"}","hash":"10339383505-var myGlob = 20;\r\ndefine(\"file1\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n    exports.x = void 0;\r\n    exports.x = 10;\r\n});\r\ndefine(\"file2\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n    exports.y = void 0;\r\n    exports.y = 20;\r\n});\r\nvar globalConst = 10;\r\n//# sourceMappingURL=module.js.map"},"dts":{"sections":[{"pos":0,"end":171,"kind":"text"}],"mapHash":"-14214505027-{\"version\":3,\"file\":\"module.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"file0.ts\",\"file1.ts\",\"file2.ts\",\"global.ts\"],\"names\":[],\"mappings\":\"AAAA,QAAA,MAAM,MAAM,KAAK,CAAC;;ICAlB,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;;ICApB,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;ACApB,QAAA,MAAM,WAAW,KAAK,CAAC\"}","hash":"10884851940-declare const myGlob = 20;\r\ndeclare module \"file1\" {\r\n    export const x = 10;\r\n}\r\ndeclare module \"file2\" {\r\n    export const y = 20;\r\n}\r\ndeclare const globalConst = 10;\r\n//# sourceMappingURL=module.d.ts.map"}},"program":{"fileNames":["./file0.ts","./file1.ts","./file2.ts","./global.ts"],"fileInfos":["3587416848-const myGlob = 20;","-10726455937-export const x = 10;","-13729954175-export const y = 20;","1028229885-const globalConst = 10;"],"options":{"composite":true,"outFile":"./module.js"},"outSignature":"15835278973-declare const myGlob = 20;\r\ndeclare module \"file1\" {\r\n    export const x = 10;\r\n}\r\ndeclare module \"file2\" {\r\n    export const y = 20;\r\n}\r\ndeclare const globalConst = 10;\r\n","dtsChangeTime":9000},"version":"FakeTSVersion"}
 
 //// [/src/lib/module.tsbuildinfo.baseline.txt]
 ======================================================================
@@ -909,7 +929,9 @@ declare const globalConst = 10;
           "end": 459,
           "kind": "text"
         }
-      ]
+      ],
+      "hash": "10339383505-var myGlob = 20;\r\ndefine(\"file1\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n    exports.x = void 0;\r\n    exports.x = 10;\r\n});\r\ndefine(\"file2\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n    exports.y = void 0;\r\n    exports.y = 20;\r\n});\r\nvar globalConst = 10;\r\n//# sourceMappingURL=module.js.map",
+      "mapHash": "15919942799-{\"version\":3,\"file\":\"module.js\",\"sourceRoot\":\"\",\"sources\":[\"file0.ts\",\"file1.ts\",\"file2.ts\",\"global.ts\"],\"names\":[],\"mappings\":\"AAAA,IAAM,MAAM,GAAG,EAAE,CAAC;;;;;ICAL,QAAA,CAAC,GAAG,EAAE,CAAC;;;;;;ICAP,QAAA,CAAC,GAAG,EAAE,CAAC;;ACApB,IAAM,WAAW,GAAG,EAAE,CAAC\"}"
     },
     "dts": {
       "sections": [
@@ -918,11 +940,33 @@ declare const globalConst = 10;
           "end": 171,
           "kind": "text"
         }
-      ]
+      ],
+      "hash": "10884851940-declare const myGlob = 20;\r\ndeclare module \"file1\" {\r\n    export const x = 10;\r\n}\r\ndeclare module \"file2\" {\r\n    export const y = 20;\r\n}\r\ndeclare const globalConst = 10;\r\n//# sourceMappingURL=module.d.ts.map",
+      "mapHash": "-14214505027-{\"version\":3,\"file\":\"module.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"file0.ts\",\"file1.ts\",\"file2.ts\",\"global.ts\"],\"names\":[],\"mappings\":\"AAAA,QAAA,MAAM,MAAM,KAAK,CAAC;;ICAlB,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;;ICApB,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;ACApB,QAAA,MAAM,WAAW,KAAK,CAAC\"}"
     }
   },
+  "program": {
+    "fileNames": [
+      "./file0.ts",
+      "./file1.ts",
+      "./file2.ts",
+      "./global.ts"
+    ],
+    "fileInfos": {
+      "./file0.ts": "3587416848-const myGlob = 20;",
+      "./file1.ts": "-10726455937-export const x = 10;",
+      "./file2.ts": "-13729954175-export const y = 20;",
+      "./global.ts": "1028229885-const globalConst = 10;"
+    },
+    "options": {
+      "composite": true,
+      "outFile": "./module.js"
+    },
+    "outSignature": "15835278973-declare const myGlob = 20;\r\ndeclare module \"file1\" {\r\n    export const x = 10;\r\n}\r\ndeclare module \"file2\" {\r\n    export const y = 20;\r\n}\r\ndeclare const globalConst = 10;\r\n",
+    "dtsChangeTime": 9000
+  },
   "version": "FakeTSVersion",
-  "size": 245
+  "size": 2217
 }
 
 
@@ -936,25 +980,21 @@ export const x = 10;console.log(x);
 
 Output::
 /lib/tsc --b /src/app --verbose
-[[90m12:00:30 AM[0m] Projects in this build: 
+[[90m12:00:34 AM[0m] Projects in this build: 
     * src/lib/tsconfig.json
     * src/app/tsconfig.json
 
-[[90m12:00:31 AM[0m] Project 'src/lib/tsconfig.json' is out of date because oldest output 'src/lib/module.js' is older than newest input 'src/lib/file1.ts'
+[[90m12:00:35 AM[0m] Project 'src/lib/tsconfig.json' is out of date because output 'src/lib/module.tsbuildinfo' is older than input 'src/lib/file1.ts'
 
-[[90m12:00:32 AM[0m] Building project '/src/lib/tsconfig.json'...
+[[90m12:00:36 AM[0m] Building project '/src/lib/tsconfig.json'...
 
-[[90m12:00:40 AM[0m] Project 'src/app/tsconfig.json' is out of date because output of its dependency 'src/lib' has changed
+[[90m12:00:45 AM[0m] Project 'src/app/tsconfig.json' is out of date because output of its dependency 'src/lib' has changed
 
-[[90m12:00:41 AM[0m] Updating output of project '/src/app/tsconfig.json'...
-
-[[90m12:00:46 AM[0m] Updating unchanged output timestamps of project '/src/app/tsconfig.json'...
+[[90m12:00:46 AM[0m] Updating output of project '/src/app/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 
 
-//// [/src/app/module.d.ts] file changed its modified time
-//// [/src/app/module.d.ts.map] file changed its modified time
 //// [/src/app/module.js]
 var myGlob = 20;
 define("file1", ["require", "exports"], function (require, exports) {
@@ -1182,7 +1222,7 @@ sourceFile:file4.ts
 >>>//# sourceMappingURL=module.js.map
 
 //// [/src/app/module.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./file3.ts","./file4.ts"],"js":{"sections":[{"pos":0,"end":488,"kind":"prepend","data":"../lib/module.js","texts":[{"pos":0,"end":488,"kind":"text"}]},{"pos":488,"end":714,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":171,"kind":"prepend","data":"../lib/module.d.ts","texts":[{"pos":0,"end":171,"kind":"text"}]},{"pos":171,"end":253,"kind":"text"}]}},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./file3.ts","./file4.ts"],"js":{"sections":[{"pos":0,"end":488,"kind":"prepend","data":"../lib/module.js","texts":[{"pos":0,"end":488,"kind":"text"}]},{"pos":488,"end":714,"kind":"text"}],"mapHash":"-3706363920-{\"version\":3,\"file\":\"module.js\",\"sourceRoot\":\"\",\"sources\":[\"../lib/file0.ts\",\"../lib/file1.ts\",\"../lib/file2.ts\",\"../lib/global.ts\",\"file3.ts\",\"file4.ts\"],\"names\":[],\"mappings\":\"AAAA,IAAM,MAAM,GAAG,EAAE,CAAC;;;;;ICAL,QAAA,CAAC,GAAG,EAAE,CAAC;IAAA,OAAO,CAAC,GAAG,CAAC,SAAC,CAAC,CAAC;;;;;;ICAtB,QAAA,CAAC,GAAG,EAAE,CAAC;;ACApB,IAAM,WAAW,GAAG,EAAE,CAAC;;;;;ICAV,QAAA,CAAC,GAAG,EAAE,CAAC;;ACApB,IAAM,KAAK,GAAG,EAAE,CAAC\"}","hash":"-22321753400-var myGlob = 20;\r\ndefine(\"file1\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n    exports.x = void 0;\r\n    exports.x = 10;\r\n    console.log(exports.x);\r\n});\r\ndefine(\"file2\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n    exports.y = void 0;\r\n    exports.y = 20;\r\n});\r\nvar globalConst = 10;\r\ndefine(\"file3\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n    exports.z = void 0;\r\n    exports.z = 30;\r\n});\r\nvar myVar = 30;\r\n//# sourceMappingURL=module.js.map"},"dts":{"sections":[{"pos":0,"end":171,"kind":"prepend","data":"../lib/module.d.ts","texts":[{"pos":0,"end":171,"kind":"text"}]},{"pos":171,"end":253,"kind":"text"}],"mapHash":"-41254439122-{\"version\":3,\"file\":\"module.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../lib/file0.ts\",\"../lib/file1.ts\",\"../lib/file2.ts\",\"../lib/global.ts\",\"file3.ts\",\"file4.ts\"],\"names\":[],\"mappings\":\"AAAA,QAAA,MAAM,MAAM,KAAK,CAAC;;ICAlB,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;;ICApB,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;ACApB,QAAA,MAAM,WAAW,KAAK,CAAC;;ICAvB,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;ACApB,QAAA,MAAM,KAAK,KAAK,CAAC\"}","hash":"-2339330908-declare const myGlob = 20;\r\ndeclare module \"file1\" {\r\n    export const x = 10;\r\n}\r\ndeclare module \"file2\" {\r\n    export const y = 20;\r\n}\r\ndeclare const globalConst = 10;\r\ndeclare module \"file3\" {\r\n    export const z = 30;\r\n}\r\ndeclare const myVar = 30;\r\n//# sourceMappingURL=module.d.ts.map"}},"program":{"fileNames":["./file3.ts","./file4.ts"],"fileInfos":["-2588783191-export const z = 30;\r\nimport { x } from \"file1\";","1463681686-const myVar = 30;"],"options":{"composite":true,"outFile":"./module.js"},"outSignature":"10242181693-declare const myGlob = 20;\r\ndeclare module \"file1\" {\r\n    export const x = 10;\r\n}\r\ndeclare module \"file2\" {\r\n    export const y = 20;\r\n}\r\ndeclare const globalConst = 10;\r\ndeclare module \"file3\" {\r\n    export const z = 30;\r\n}\r\ndeclare const myVar = 30;\r\n","dtsChangeTime":20000},"version":"FakeTSVersion"}
 
 //// [/src/app/module.tsbuildinfo.baseline.txt]
 ======================================================================
@@ -1270,7 +1310,9 @@ declare const myVar = 30;
           "end": 714,
           "kind": "text"
         }
-      ]
+      ],
+      "hash": "-22321753400-var myGlob = 20;\r\ndefine(\"file1\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n    exports.x = void 0;\r\n    exports.x = 10;\r\n    console.log(exports.x);\r\n});\r\ndefine(\"file2\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n    exports.y = void 0;\r\n    exports.y = 20;\r\n});\r\nvar globalConst = 10;\r\ndefine(\"file3\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n    exports.z = void 0;\r\n    exports.z = 30;\r\n});\r\nvar myVar = 30;\r\n//# sourceMappingURL=module.js.map",
+      "mapHash": "-3706363920-{\"version\":3,\"file\":\"module.js\",\"sourceRoot\":\"\",\"sources\":[\"../lib/file0.ts\",\"../lib/file1.ts\",\"../lib/file2.ts\",\"../lib/global.ts\",\"file3.ts\",\"file4.ts\"],\"names\":[],\"mappings\":\"AAAA,IAAM,MAAM,GAAG,EAAE,CAAC;;;;;ICAL,QAAA,CAAC,GAAG,EAAE,CAAC;IAAA,OAAO,CAAC,GAAG,CAAC,SAAC,CAAC,CAAC;;;;;;ICAtB,QAAA,CAAC,GAAG,EAAE,CAAC;;ACApB,IAAM,WAAW,GAAG,EAAE,CAAC;;;;;ICAV,QAAA,CAAC,GAAG,EAAE,CAAC;;ACApB,IAAM,KAAK,GAAG,EAAE,CAAC\"}"
     },
     "dts": {
       "sections": [
@@ -1292,11 +1334,29 @@ declare const myVar = 30;
           "end": 253,
           "kind": "text"
         }
-      ]
+      ],
+      "hash": "-2339330908-declare const myGlob = 20;\r\ndeclare module \"file1\" {\r\n    export const x = 10;\r\n}\r\ndeclare module \"file2\" {\r\n    export const y = 20;\r\n}\r\ndeclare const globalConst = 10;\r\ndeclare module \"file3\" {\r\n    export const z = 30;\r\n}\r\ndeclare const myVar = 30;\r\n//# sourceMappingURL=module.d.ts.map",
+      "mapHash": "-41254439122-{\"version\":3,\"file\":\"module.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../lib/file0.ts\",\"../lib/file1.ts\",\"../lib/file2.ts\",\"../lib/global.ts\",\"file3.ts\",\"file4.ts\"],\"names\":[],\"mappings\":\"AAAA,QAAA,MAAM,MAAM,KAAK,CAAC;;ICAlB,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;;ICApB,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;ACApB,QAAA,MAAM,WAAW,KAAK,CAAC;;ICAvB,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;ACApB,QAAA,MAAM,KAAK,KAAK,CAAC\"}"
     }
   },
+  "program": {
+    "fileNames": [
+      "./file3.ts",
+      "./file4.ts"
+    ],
+    "fileInfos": {
+      "./file3.ts": "-2588783191-export const z = 30;\r\nimport { x } from \"file1\";",
+      "./file4.ts": "1463681686-const myVar = 30;"
+    },
+    "options": {
+      "composite": true,
+      "outFile": "./module.js"
+    },
+    "outSignature": "10242181693-declare const myGlob = 20;\r\ndeclare module \"file1\" {\r\n    export const x = 10;\r\n}\r\ndeclare module \"file2\" {\r\n    export const y = 20;\r\n}\r\ndeclare const globalConst = 10;\r\ndeclare module \"file3\" {\r\n    export const z = 30;\r\n}\r\ndeclare const myVar = 30;\r\n",
+    "dtsChangeTime": 20000
+  },
   "version": "FakeTSVersion",
-  "size": 438
+  "size": 3091
 }
 
 //// [/src/lib/module.d.ts] file written with same contents
@@ -1468,7 +1528,7 @@ sourceFile:global.ts
 >>>//# sourceMappingURL=module.js.map
 
 //// [/src/lib/module.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./file0.ts","./file1.ts","./file2.ts","./global.ts"],"js":{"sections":[{"pos":0,"end":488,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":171,"kind":"text"}]}},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./file0.ts","./file1.ts","./file2.ts","./global.ts"],"js":{"sections":[{"pos":0,"end":488,"kind":"text"}],"mapHash":"32224580248-{\"version\":3,\"file\":\"module.js\",\"sourceRoot\":\"\",\"sources\":[\"file0.ts\",\"file1.ts\",\"file2.ts\",\"global.ts\"],\"names\":[],\"mappings\":\"AAAA,IAAM,MAAM,GAAG,EAAE,CAAC;;;;;ICAL,QAAA,CAAC,GAAG,EAAE,CAAC;IAAA,OAAO,CAAC,GAAG,CAAC,SAAC,CAAC,CAAC;;;;;;ICAtB,QAAA,CAAC,GAAG,EAAE,CAAC;;ACApB,IAAM,WAAW,GAAG,EAAE,CAAC\"}","hash":"-12742173550-var myGlob = 20;\r\ndefine(\"file1\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n    exports.x = void 0;\r\n    exports.x = 10;\r\n    console.log(exports.x);\r\n});\r\ndefine(\"file2\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n    exports.y = void 0;\r\n    exports.y = 20;\r\n});\r\nvar globalConst = 10;\r\n//# sourceMappingURL=module.js.map"},"dts":{"sections":[{"pos":0,"end":171,"kind":"text"}],"mapHash":"-14214505027-{\"version\":3,\"file\":\"module.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"file0.ts\",\"file1.ts\",\"file2.ts\",\"global.ts\"],\"names\":[],\"mappings\":\"AAAA,QAAA,MAAM,MAAM,KAAK,CAAC;;ICAlB,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;;ICApB,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;ACApB,QAAA,MAAM,WAAW,KAAK,CAAC\"}","hash":"10884851940-declare const myGlob = 20;\r\ndeclare module \"file1\" {\r\n    export const x = 10;\r\n}\r\ndeclare module \"file2\" {\r\n    export const y = 20;\r\n}\r\ndeclare const globalConst = 10;\r\n//# sourceMappingURL=module.d.ts.map"}},"program":{"fileNames":["./file0.ts","./file1.ts","./file2.ts","./global.ts"],"fileInfos":["3587416848-const myGlob = 20;","-4405159098-export const x = 10;console.log(x);","-13729954175-export const y = 20;","1028229885-const globalConst = 10;"],"options":{"composite":true,"outFile":"./module.js"},"outSignature":"15835278973-declare const myGlob = 20;\r\ndeclare module \"file1\" {\r\n    export const x = 10;\r\n}\r\ndeclare module \"file2\" {\r\n    export const y = 20;\r\n}\r\ndeclare const globalConst = 10;\r\n","dtsChangeTime":9000},"version":"FakeTSVersion"}
 
 //// [/src/lib/module.tsbuildinfo.baseline.txt]
 ======================================================================
@@ -1524,7 +1584,9 @@ declare const globalConst = 10;
           "end": 488,
           "kind": "text"
         }
-      ]
+      ],
+      "hash": "-12742173550-var myGlob = 20;\r\ndefine(\"file1\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n    exports.x = void 0;\r\n    exports.x = 10;\r\n    console.log(exports.x);\r\n});\r\ndefine(\"file2\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n    exports.y = void 0;\r\n    exports.y = 20;\r\n});\r\nvar globalConst = 10;\r\n//# sourceMappingURL=module.js.map",
+      "mapHash": "32224580248-{\"version\":3,\"file\":\"module.js\",\"sourceRoot\":\"\",\"sources\":[\"file0.ts\",\"file1.ts\",\"file2.ts\",\"global.ts\"],\"names\":[],\"mappings\":\"AAAA,IAAM,MAAM,GAAG,EAAE,CAAC;;;;;ICAL,QAAA,CAAC,GAAG,EAAE,CAAC;IAAA,OAAO,CAAC,GAAG,CAAC,SAAC,CAAC,CAAC;;;;;;ICAtB,QAAA,CAAC,GAAG,EAAE,CAAC;;ACApB,IAAM,WAAW,GAAG,EAAE,CAAC\"}"
     },
     "dts": {
       "sections": [
@@ -1533,10 +1595,32 @@ declare const globalConst = 10;
           "end": 171,
           "kind": "text"
         }
-      ]
+      ],
+      "hash": "10884851940-declare const myGlob = 20;\r\ndeclare module \"file1\" {\r\n    export const x = 10;\r\n}\r\ndeclare module \"file2\" {\r\n    export const y = 20;\r\n}\r\ndeclare const globalConst = 10;\r\n//# sourceMappingURL=module.d.ts.map",
+      "mapHash": "-14214505027-{\"version\":3,\"file\":\"module.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"file0.ts\",\"file1.ts\",\"file2.ts\",\"global.ts\"],\"names\":[],\"mappings\":\"AAAA,QAAA,MAAM,MAAM,KAAK,CAAC;;ICAlB,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;;ICApB,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;ACApB,QAAA,MAAM,WAAW,KAAK,CAAC\"}"
     }
   },
+  "program": {
+    "fileNames": [
+      "./file0.ts",
+      "./file1.ts",
+      "./file2.ts",
+      "./global.ts"
+    ],
+    "fileInfos": {
+      "./file0.ts": "3587416848-const myGlob = 20;",
+      "./file1.ts": "-4405159098-export const x = 10;console.log(x);",
+      "./file2.ts": "-13729954175-export const y = 20;",
+      "./global.ts": "1028229885-const globalConst = 10;"
+    },
+    "options": {
+      "composite": true,
+      "outFile": "./module.js"
+    },
+    "outSignature": "15835278973-declare const myGlob = 20;\r\ndeclare module \"file1\" {\r\n    export const x = 10;\r\n}\r\ndeclare module \"file2\" {\r\n    export const y = 20;\r\n}\r\ndeclare const globalConst = 10;\r\n",
+    "dtsChangeTime": 9000
+  },
   "version": "FakeTSVersion",
-  "size": 245
+  "size": 2304
 }
 

@@ -33,7 +33,7 @@ export class Data {
 }
 
 //// [/user/username/projects/myproject/tsconfig.json]
-{"files":["app.ts"],"compilerOptions":{"baseUrl":".","assumeChangesOnlyAffectDirectDependencies":true}}
+{"files":["app.ts"],"compilerOptions":{"baseUrl":"."}}
 
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -49,7 +49,7 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
-/a/lib/tsc.js --w
+/a/lib/tsc.js --w --assumeChangesOnlyAffectDirectDependencies
 Output::
 >> Screen clear
 [[90m12:00:37 AM[0m] Starting compilation in watch mode...
@@ -59,7 +59,7 @@ Output::
 
 
 Program root files: ["/user/username/projects/myproject/app.ts"]
-Program options: {"baseUrl":"/user/username/projects/myproject","assumeChangesOnlyAffectDirectDependencies":true,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program options: {"baseUrl":"/user/username/projects/myproject","watch":true,"assumeChangesOnlyAffectDirectDependencies":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -236,7 +236,7 @@ Output::
 
 
 Program root files: ["/user/username/projects/myproject/app.ts"]
-Program options: {"baseUrl":"/user/username/projects/myproject","assumeChangesOnlyAffectDirectDependencies":true,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program options: {"baseUrl":"/user/username/projects/myproject","watch":true,"assumeChangesOnlyAffectDirectDependencies":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
@@ -320,7 +320,7 @@ Output::
 
 
 Program root files: ["/user/username/projects/myproject/app.ts"]
-Program options: {"baseUrl":"/user/username/projects/myproject","assumeChangesOnlyAffectDirectDependencies":true,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program options: {"baseUrl":"/user/username/projects/myproject","watch":true,"assumeChangesOnlyAffectDirectDependencies":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
@@ -392,7 +392,7 @@ Output::
 
 
 Program root files: ["/user/username/projects/myproject/app.ts"]
-Program options: {"baseUrl":"/user/username/projects/myproject","assumeChangesOnlyAffectDirectDependencies":true,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program options: {"baseUrl":"/user/username/projects/myproject","watch":true,"assumeChangesOnlyAffectDirectDependencies":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts

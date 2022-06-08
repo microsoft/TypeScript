@@ -152,7 +152,7 @@ Output::
     * src/zoo/tsconfig.json
     * src/tsconfig.json
 
-[[90m12:00:08 AM[0m] Project 'src/core/tsconfig.json' is out of date because output file 'src/lib/core/utilities.js' does not exist
+[[90m12:00:08 AM[0m] Project 'src/core/tsconfig.json' is out of date because output file 'src/lib/core/tsconfig.tsbuildinfo' does not exist
 
 [[90m12:00:09 AM[0m] Building project '/src/core/tsconfig.json'...
 
@@ -207,13 +207,13 @@ Output::
     [7m [0m [96m                   ~~~[0m
     File is included via import here.
 
-[[90m12:00:14 AM[0m] Project 'src/animals/tsconfig.json' can't be built because its dependency 'src/core' has errors
+[[90m12:00:15 AM[0m] Project 'src/animals/tsconfig.json' can't be built because its dependency 'src/core' has errors
 
-[[90m12:00:15 AM[0m] Skipping build of project '/src/animals/tsconfig.json' because its dependency '/src/core' has errors
+[[90m12:00:16 AM[0m] Skipping build of project '/src/animals/tsconfig.json' because its dependency '/src/core' has errors
 
-[[90m12:00:16 AM[0m] Project 'src/zoo/tsconfig.json' can't be built because its dependency 'src/animals' was not built
+[[90m12:00:17 AM[0m] Project 'src/zoo/tsconfig.json' can't be built because its dependency 'src/animals' was not built
 
-[[90m12:00:17 AM[0m] Skipping build of project '/src/zoo/tsconfig.json' because its dependency '/src/animals' was not built
+[[90m12:00:18 AM[0m] Skipping build of project '/src/zoo/tsconfig.json' because its dependency '/src/animals' was not built
 
 
 Found 7 errors.
@@ -222,7 +222,7 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
 
 //// [/src/lib/core/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../lib/lib.d.ts","../../animals/animal.ts","../../animals/dog.ts","../../animals/index.ts","../../core/utilities.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-14984181202-export type Size = \"small\" | \"medium\" | \"large\";\r\nexport default interface Animal {\r\n    size: Size;\r\n}\r\n","-10991948013-import Animal from '.';\r\nimport { makeRandomName } from '../core/utilities';\r\n\r\nexport interface Dog extends Animal {\r\n    woof(): void;\r\n    name: string;\r\n}\r\n\r\nexport function createDog(): Dog {\r\n    return ({\r\n        size: \"medium\",\r\n        woof: function(this: Dog) {\r\n            console.log(`${this.name} says \"Woof\"!`);\r\n        },\r\n        name: makeRandomName()\r\n    });\r\n}\r\n\r\n","-5382672599-import Animal from './animal';\r\n\r\nexport default Animal;\r\nimport { createDog, Dog } from './dog';\r\nexport { createDog, Dog };\r\n","-15713992787-import * as A from '../animals';\n\r\nexport function makeRandomName() {\r\n    return \"Bob!?! \";\r\n}\r\n\r\nexport function lastElementOf<T>(arr: T[]): T | undefined {\r\n    if (arr.length === 0) return undefined;\r\n    return arr[arr.length - 1];\r\n}\r\n\r\n"],"options":{"composite":true,"declaration":true,"module":1,"noFallthroughCasesInSwitch":true,"noImplicitReturns":true,"noUnusedLocals":true,"noUnusedParameters":true,"outDir":"./","rootDir":"../../core","strict":true,"target":1},"fileIdsList":[[4,5],[2,3],[4]],"referencedMap":[[3,1],[4,2],[5,3]],"exportedModulesMap":[[3,1],[4,2],[5,3]],"semanticDiagnosticsPerFile":[1,2,3,4,[5,[{"file":"../../core/utilities.ts","start":0,"length":32,"messageText":"'A' is declared but its value is never read.","category":1,"code":6133,"reportsUnnecessary":true}]]],"affectedFilesPendingEmit":[[2,1],[3,1],[4,1],[5,1]]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../lib/lib.d.ts","../../animals/animal.ts","../../animals/dog.ts","../../animals/index.ts","../../core/utilities.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-14984181202-export type Size = \"small\" | \"medium\" | \"large\";\r\nexport default interface Animal {\r\n    size: Size;\r\n}\r\n","-10991948013-import Animal from '.';\r\nimport { makeRandomName } from '../core/utilities';\r\n\r\nexport interface Dog extends Animal {\r\n    woof(): void;\r\n    name: string;\r\n}\r\n\r\nexport function createDog(): Dog {\r\n    return ({\r\n        size: \"medium\",\r\n        woof: function(this: Dog) {\r\n            console.log(`${this.name} says \"Woof\"!`);\r\n        },\r\n        name: makeRandomName()\r\n    });\r\n}\r\n\r\n","-5382672599-import Animal from './animal';\r\n\r\nexport default Animal;\r\nimport { createDog, Dog } from './dog';\r\nexport { createDog, Dog };\r\n","-15713992787-import * as A from '../animals';\n\r\nexport function makeRandomName() {\r\n    return \"Bob!?! \";\r\n}\r\n\r\nexport function lastElementOf<T>(arr: T[]): T | undefined {\r\n    if (arr.length === 0) return undefined;\r\n    return arr[arr.length - 1];\r\n}\r\n\r\n"],"options":{"composite":true,"declaration":true,"module":1,"noFallthroughCasesInSwitch":true,"noImplicitReturns":true,"noUnusedLocals":true,"noUnusedParameters":true,"outDir":"./","rootDir":"../../core","strict":true,"target":1},"fileIdsList":[[4,5],[2,3],[4]],"referencedMap":[[3,1],[4,2],[5,3]],"exportedModulesMap":[[3,1],[4,2],[5,3]],"semanticDiagnosticsPerFile":[1,2,3,4,[5,[{"file":"../../core/utilities.ts","start":0,"length":32,"messageText":"'A' is declared but its value is never read.","category":1,"code":6133,"reportsUnnecessary":true}]]],"affectedFilesPendingEmit":[[2,1],[3,1],[4,1],[5,1]],"emitSignatures":[2,3,4,5]},"version":"FakeTSVersion"}
 
 //// [/src/lib/core/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -346,9 +346,15 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
         "../../core/utilities.ts",
         "Full"
       ]
+    ],
+    "emitSignatures": [
+      "../../animals/animal.ts",
+      "../../animals/dog.ts",
+      "../../animals/index.ts",
+      "../../core/utilities.ts"
     ]
   },
   "version": "FakeTSVersion",
-  "size": 2287
+  "size": 2314
 }
 

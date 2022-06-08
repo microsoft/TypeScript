@@ -880,10 +880,15 @@ namespace ts.projectSystem {
             checkProjectActualFiles(p, [app.path, cacacheDTS.path, jsconfig.path]);
         });
 
-        it("configured projects discover from node_modules", () => {
-            const app = {
-                path: "/app.js",
-                content: ""
+        function testConfiguredProjectNodeModules({ jsconfigContent, appJsContent, jQueryJsInProjectBeforeInstall, jQueryDtsInProjectAfterInstall }: {
+            jsconfigContent?: object,
+            appJsContent?: string,
+            jQueryJsInProjectBeforeInstall?: boolean,
+            jQueryDtsInProjectAfterInstall?: boolean,
+        } = {}) {
+        const app = {
+            path: "/app.js",
+                content: appJsContent || ""
             };
             const pkgJson = {
                 path: "/package.json",
@@ -895,7 +900,7 @@ namespace ts.projectSystem {
             };
             const jsconfig = {
                 path: "/jsconfig.json",
-                content: JSON.stringify({})
+                content: JSON.stringify(jsconfigContent || {})
             };
             // Should only accept direct dependencies.
             const commander = {
@@ -943,13 +948,49 @@ namespace ts.projectSystem {
 
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
             const p = configuredProjectAt(projectService, 0);
-            checkProjectActualFiles(p, [app.path, jsconfig.path]);
+            const filesBeforeInstall = jQueryJsInProjectBeforeInstall ? [app.path, jquery.path, jsconfig.path] : [app.path, jsconfig.path];
+            checkProjectActualFiles(p, filesBeforeInstall);
 
-            installer.installAll(/*expectedCount*/ 1);
+            installer.installAll(jQueryDtsInProjectAfterInstall ? 1 : 0);
 
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
-            host.checkTimeoutQueueLengthAndRun(2);
-            checkProjectActualFiles(p, [app.path, jqueryDTS.path, jsconfig.path]);
+            host.checkTimeoutQueueLengthAndRun(jQueryDtsInProjectAfterInstall ? 2 : 0);
+            checkProjectActualFiles(p, jQueryDtsInProjectAfterInstall ? [app.path, jqueryDTS.path, jsconfig.path] : filesBeforeInstall);
+        }
+
+        it("configured projects discover from node_modules", () => {
+            testConfiguredProjectNodeModules({
+                jQueryJsInProjectBeforeInstall: false,
+                jQueryDtsInProjectAfterInstall: true,
+            });
+        });
+
+        it("configured projects discover from node_modules - empty types", () => {
+            // Explicit types prevent automatic inclusion from package.json listing
+            testConfiguredProjectNodeModules({
+                jsconfigContent: { compilerOptions: { types: [] } },
+                jQueryJsInProjectBeforeInstall: false,
+                jQueryDtsInProjectAfterInstall: false,
+            });
+        });
+
+        it("configured projects discover from node_modules - explicit types", () => {
+            // A type reference directive will not resolve to the global typings cache
+            testConfiguredProjectNodeModules({
+                jsconfigContent: { compilerOptions: { types: ["jquery"] } },
+                jQueryJsInProjectBeforeInstall: false,
+                jQueryDtsInProjectAfterInstall: false
+            });
+        });
+
+        it("configured projects discover from node_modules - empty types but has import", () => {
+            // However, explicit types will not prevent unresolved imports from pulling in typings
+            testConfiguredProjectNodeModules({
+                jsconfigContent: { compilerOptions: { types: [] } },
+                appJsContent: `import "jquery";`,
+                jQueryJsInProjectBeforeInstall: true,
+                jQueryDtsInProjectAfterInstall: true,
+            });
         });
 
         it("configured projects discover from bower_components", () => {
@@ -1496,7 +1537,7 @@ namespace ts.projectSystem {
 
             const host = createServerHost([app, jquery, chroma]);
             const logger = trackingLogger();
-            const result = JsTyping.discoverTypings(host, logger.log, [app.path, jquery.path, chroma.path], getDirectoryPath(app.path as Path), safeList, emptyMap, { enable: true }, emptyArray, emptyMap);
+            const result = JsTyping.discoverTypings(host, logger.log, [app.path, jquery.path, chroma.path], getDirectoryPath(app.path as Path), safeList, emptyMap, { enable: true }, emptyArray, emptyMap, emptyOptions);
             const finish = logger.finish();
             assert.deepEqual(finish, [
                 'Inferred typings from file names: ["jquery","chroma-js"]',
@@ -1516,7 +1557,7 @@ namespace ts.projectSystem {
 
             for (const name of JsTyping.nodeCoreModuleList) {
                 const logger = trackingLogger();
-                const result = JsTyping.discoverTypings(host, logger.log, [f.path], getDirectoryPath(f.path as Path), emptySafeList, cache, { enable: true }, [name, "somename"], emptyMap);
+                const result = JsTyping.discoverTypings(host, logger.log, [f.path], getDirectoryPath(f.path as Path), emptySafeList, cache, { enable: true }, [name, "somename"], emptyMap, emptyOptions);
                 assert.deepEqual(logger.finish(), [
                     'Inferred typings from unresolved imports: ["node","somename"]',
                     'Result: {"cachedTypingPaths":[],"newTypingNames":["node","somename"],"filesToWatch":["/a/b/bower_components","/a/b/node_modules"]}',
@@ -1538,7 +1579,7 @@ namespace ts.projectSystem {
             const cache = new Map(getEntries<JsTyping.CachedTyping>({ node: { typingLocation: node.path, version: new Version("1.3.0") } }));
             const registry = createTypesRegistry("node");
             const logger = trackingLogger();
-            const result = JsTyping.discoverTypings(host, logger.log, [f.path], getDirectoryPath(f.path as Path), emptySafeList, cache, { enable: true }, ["fs", "bar"], registry);
+            const result = JsTyping.discoverTypings(host, logger.log, [f.path], getDirectoryPath(f.path as Path), emptySafeList, cache, { enable: true }, ["fs", "bar"], registry, emptyOptions);
             assert.deepEqual(logger.finish(), [
                 'Inferred typings from unresolved imports: ["node","bar"]',
                 'Result: {"cachedTypingPaths":["/a/b/node.d.ts"],"newTypingNames":["bar"],"filesToWatch":["/a/b/bower_components","/a/b/node_modules"]}',
@@ -1559,7 +1600,7 @@ namespace ts.projectSystem {
             const host = createServerHost([f, node]);
             const cache = new Map(getEntries<JsTyping.CachedTyping>({ node: { typingLocation: node.path, version: new Version("1.3.0") } }));
             const logger = trackingLogger();
-            const result = JsTyping.discoverTypings(host, logger.log, [f.path], getDirectoryPath(f.path as Path), emptySafeList, cache, { enable: true }, ["fs", "bar"], emptyMap);
+            const result = JsTyping.discoverTypings(host, logger.log, [f.path], getDirectoryPath(f.path as Path), emptySafeList, cache, { enable: true }, ["fs", "bar"], emptyMap, emptyOptions);
             assert.deepEqual(logger.finish(), [
                 'Inferred typings from unresolved imports: ["node","bar"]',
                 'Result: {"cachedTypingPaths":[],"newTypingNames":["node","bar"],"filesToWatch":["/a/b/bower_components","/a/b/node_modules"]}',
@@ -1584,7 +1625,7 @@ namespace ts.projectSystem {
             const host = createServerHost([app, a, b]);
             const cache = new Map<string, JsTyping.CachedTyping>();
             const logger = trackingLogger();
-            const result = JsTyping.discoverTypings(host, logger.log, [app.path], getDirectoryPath(app.path as Path), emptySafeList, cache, { enable: true }, /*unresolvedImports*/ [], emptyMap);
+            const result = JsTyping.discoverTypings(host, logger.log, [app.path], getDirectoryPath(app.path as Path), emptySafeList, cache, { enable: true }, /*unresolvedImports*/ [], emptyMap, emptyOptions);
             assert.deepEqual(logger.finish(), [
                 'Searching for typing names in /node_modules; all files: ["/node_modules/a/package.json"]',
                 '    Found package names: ["a"]',
@@ -1610,7 +1651,7 @@ namespace ts.projectSystem {
             const host = createServerHost([app, a]);
             const cache = new Map<string, JsTyping.CachedTyping>();
             const logger = trackingLogger();
-            const result = JsTyping.discoverTypings(host, logger.log, [app.path], getDirectoryPath(app.path as Path), emptySafeList, cache, { enable: true }, /*unresolvedImports*/ [], emptyMap);
+            const result = JsTyping.discoverTypings(host, logger.log, [app.path], getDirectoryPath(app.path as Path), emptySafeList, cache, { enable: true }, /*unresolvedImports*/ [], emptyMap, emptyOptions);
             assert.deepEqual(logger.finish(), [
                 'Searching for typing names in /node_modules; all files: ["/node_modules/@a/b/package.json"]',
                 '    Found package names: ["@a/b"]',
@@ -1644,7 +1685,7 @@ namespace ts.projectSystem {
             }));
             const registry = createTypesRegistry("node", "commander");
             const logger = trackingLogger();
-            const result = JsTyping.discoverTypings(host, logger.log, [app.path], getDirectoryPath(app.path as Path), emptySafeList, cache, { enable: true }, ["http", "commander"], registry);
+            const result = JsTyping.discoverTypings(host, logger.log, [app.path], getDirectoryPath(app.path as Path), emptySafeList, cache, { enable: true }, ["http", "commander"], registry, emptyOptions);
             assert.deepEqual(logger.finish(), [
                 'Inferred typings from unresolved imports: ["node","commander"]',
                 'Result: {"cachedTypingPaths":["/a/cache/node_modules/@types/node/index.d.ts"],"newTypingNames":["commander"],"filesToWatch":["/a/bower_components","/a/node_modules"]}',
@@ -1670,7 +1711,7 @@ namespace ts.projectSystem {
             const registry = createTypesRegistry("node");
             registry.delete(`ts${versionMajorMinor}`);
             const logger = trackingLogger();
-            const result = JsTyping.discoverTypings(host, logger.log, [app.path], getDirectoryPath(app.path as Path), emptySafeList, cache, { enable: true }, ["http"], registry);
+            const result = JsTyping.discoverTypings(host, logger.log, [app.path], getDirectoryPath(app.path as Path), emptySafeList, cache, { enable: true }, ["http"], registry, emptyOptions);
             assert.deepEqual(logger.finish(), [
                 'Inferred typings from unresolved imports: ["node"]',
                 'Result: {"cachedTypingPaths":[],"newTypingNames":["node"],"filesToWatch":["/a/bower_components","/a/node_modules"]}',
@@ -1702,7 +1743,7 @@ namespace ts.projectSystem {
             const registry = createTypesRegistry("node", "commander");
             registry.get("node")![`ts${versionMajorMinor}`] = "1.3.0-next.1";
             const logger = trackingLogger();
-            const result = JsTyping.discoverTypings(host, logger.log, [app.path], getDirectoryPath(app.path as Path), emptySafeList, cache, { enable: true }, ["http", "commander"], registry);
+            const result = JsTyping.discoverTypings(host, logger.log, [app.path], getDirectoryPath(app.path as Path), emptySafeList, cache, { enable: true }, ["http", "commander"], registry, emptyOptions);
             assert.deepEqual(logger.finish(), [
                 'Inferred typings from unresolved imports: ["node","commander"]',
                 'Result: {"cachedTypingPaths":[],"newTypingNames":["node","commander"],"filesToWatch":["/a/bower_components","/a/node_modules"]}',

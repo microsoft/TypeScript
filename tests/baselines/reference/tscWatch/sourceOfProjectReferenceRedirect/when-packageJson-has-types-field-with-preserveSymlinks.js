@@ -41,7 +41,7 @@ Output::
 >> Screen clear
 [[90m12:00:43 AM[0m] Starting compilation in watch mode...
 
-[[90m12:00:53 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:00:54 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -84,9 +84,7 @@ WatchedFiles::
 /user/username/projects/myproject/packages/node_modules:
   {"fileName":"/user/username/projects/myproject/packages/node_modules","pollingInterval":500}
 /user/username/projects/myproject/packages/b/package.json:
-  {"fileName":"/user/username/projects/myproject/packages/b/package.json","pollingInterval":250}
-/user/username/projects/myproject/packages/b/lib/bar/package.json:
-  {"fileName":"/user/username/projects/myproject/packages/b/lib/bar/package.json","pollingInterval":250}
+  {"fileName":"/user/username/projects/myproject/packages/B/package.json","pollingInterval":250}
 /user/username/projects/myproject/packages/a/node_modules/@types:
   {"fileName":"/user/username/projects/myproject/packages/A/node_modules/@types","pollingInterval":500}
 /user/username/projects/myproject/packages/node_modules/@types:
@@ -121,7 +119,7 @@ export {};
 
 
 //// [/user/username/projects/myproject/packages/A/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../../a/lib/lib.d.ts","../b/src/index.ts","../b/src/bar.ts","./src/index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"4646078106-export function foo() { }","1045484683-export function bar() { }",{"version":"3563314629-import { foo } from 'b';\nimport { bar } from 'b/lib/bar';\nfoo();\nbar();\n","signature":"-3531856636-export {};\n"}],"options":{"composite":true,"outDir":"./lib","rootDir":"./src"},"fileIdsList":[[2,3]],"referencedMap":[[4,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,4,3,2]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../../a/lib/lib.d.ts","../b/src/index.ts","../b/src/bar.ts","./src/index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"4646078106-export function foo() { }","1045484683-export function bar() { }",{"version":"3563314629-import { foo } from 'b';\nimport { bar } from 'b/lib/bar';\nfoo();\nbar();\n","signature":"-3531856636-export {};\n"}],"options":{"composite":true,"outDir":"./lib","rootDir":"./src"},"fileIdsList":[[2,3]],"referencedMap":[[4,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,4,3,2],"dtsChangeTime":51000},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/packages/A/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -174,9 +172,10 @@ export {};
       "./src/index.ts",
       "../b/src/bar.ts",
       "../b/src/index.ts"
-    ]
+    ],
+    "dtsChangeTime": 51000
   },
   "version": "FakeTSVersion",
-  "size": 948
+  "size": 970
 }
 

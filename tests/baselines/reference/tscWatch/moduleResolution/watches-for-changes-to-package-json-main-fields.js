@@ -212,28 +212,28 @@ WatchedFiles::
   {"fileName":"/user/username/projects/myproject/packages/pkg1/index.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
   {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-/user/username/projects/myproject/packages/pkg2/package.json:
-  {"fileName":"/user/username/projects/myproject/packages/pkg2/package.json","pollingInterval":250}
-/user/username/projects/myproject/packages/pkg2/build/other.d.ts:
-  {"fileName":"/user/username/projects/myproject/packages/pkg2/build/other.d.ts","pollingInterval":250}
 /user/username/projects/myproject/packages/pkg1/node_modules:
   {"fileName":"/user/username/projects/myproject/packages/pkg1/node_modules","pollingInterval":500}
 /user/username/projects/myproject/packages/node_modules:
   {"fileName":"/user/username/projects/myproject/packages/node_modules","pollingInterval":500}
+/user/username/projects/myproject/packages/pkg2/package.json:
+  {"fileName":"/user/username/projects/myproject/packages/pkg2/package.json","pollingInterval":250}
 /user/username/projects/myproject/packages/pkg1/node_modules/@types:
   {"fileName":"/user/username/projects/myproject/packages/pkg1/node_modules/@types","pollingInterval":500}
 /user/username/projects/myproject/packages/node_modules/@types:
   {"fileName":"/user/username/projects/myproject/packages/node_modules/@types","pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types:
   {"fileName":"/user/username/projects/myproject/node_modules/@types","pollingInterval":500}
+/user/username/projects/myproject/packages/pkg2/build/other.d.ts:
+  {"fileName":"/user/username/projects/myproject/packages/pkg2/build/other.d.ts","pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
-/user/username/projects/myproject/packages/pkg1:
-  {"directoryName":"/user/username/projects/myproject/packages/pkg1"}
 /user/username/projects/myproject/node_modules:
   {"directoryName":"/user/username/projects/myproject/node_modules"}
+/user/username/projects/myproject/packages/pkg1:
+  {"directoryName":"/user/username/projects/myproject/packages/pkg1"}
 
 exitCode:: ExitStatus.undefined
 
@@ -248,7 +248,7 @@ Input::
 
 Output::
 >> Screen clear
-[[90m12:01:01 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:02 AM[0m] File change detected. Starting incremental compilation...
 
 ======== Resolving module 'pkg2' from '/user/username/projects/myproject/packages/pkg1/index.ts'. ========
 Module resolution kind is not specified, using 'NodeJs'.
@@ -285,7 +285,7 @@ File '/user/username/projects/myproject/packages/pkg2/build/const.ts' does not e
 File '/user/username/projects/myproject/packages/pkg2/build/const.tsx' does not exist.
 File '/user/username/projects/myproject/packages/pkg2/build/const.d.ts' exist - use it as a name resolution result.
 ======== Module name './const.js' was successfully resolved to '/user/username/projects/myproject/packages/pkg2/build/const.d.ts'. ========
-[[90m12:01:05 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:06 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -315,32 +315,32 @@ WatchedFiles::
   {"fileName":"/user/username/projects/myproject/packages/pkg1/index.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
   {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-/user/username/projects/myproject/packages/pkg2/package.json:
-  {"fileName":"/user/username/projects/myproject/packages/pkg2/package.json","pollingInterval":250}
-/user/username/projects/myproject/packages/pkg2/build/index.d.ts:
-  {"fileName":"/user/username/projects/myproject/packages/pkg2/build/index.d.ts","pollingInterval":250}
-/user/username/projects/myproject/packages/pkg2/build/const.d.ts:
-  {"fileName":"/user/username/projects/myproject/packages/pkg2/build/const.d.ts","pollingInterval":250}
 /user/username/projects/myproject/packages/pkg1/node_modules:
   {"fileName":"/user/username/projects/myproject/packages/pkg1/node_modules","pollingInterval":500}
 /user/username/projects/myproject/packages/node_modules:
   {"fileName":"/user/username/projects/myproject/packages/node_modules","pollingInterval":500}
+/user/username/projects/myproject/packages/pkg2/package.json:
+  {"fileName":"/user/username/projects/myproject/packages/pkg2/package.json","pollingInterval":250}
 /user/username/projects/myproject/packages/pkg1/node_modules/@types:
   {"fileName":"/user/username/projects/myproject/packages/pkg1/node_modules/@types","pollingInterval":500}
 /user/username/projects/myproject/packages/node_modules/@types:
   {"fileName":"/user/username/projects/myproject/packages/node_modules/@types","pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types:
   {"fileName":"/user/username/projects/myproject/node_modules/@types","pollingInterval":500}
+/user/username/projects/myproject/packages/pkg2/build/index.d.ts:
+  {"fileName":"/user/username/projects/myproject/packages/pkg2/build/index.d.ts","pollingInterval":250}
+/user/username/projects/myproject/packages/pkg2/build/const.d.ts:
+  {"fileName":"/user/username/projects/myproject/packages/pkg2/build/const.d.ts","pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
+/user/username/projects/myproject/node_modules:
+  {"directoryName":"/user/username/projects/myproject/node_modules"}
 /user/username/projects/myproject/packages/pkg1:
   {"directoryName":"/user/username/projects/myproject/packages/pkg1"}
 /user/username/projects/myproject/packages/pkg2:
   {"directoryName":"/user/username/projects/myproject/packages/pkg2"}
-/user/username/projects/myproject/node_modules:
-  {"directoryName":"/user/username/projects/myproject/node_modules"}
 
 exitCode:: ExitStatus.undefined
 

@@ -651,6 +651,10 @@
         "category": "Error",
         "code": 1208
     },
+    "Invalid optional chain from new expression. Did you mean to call '{0}()'?": {
+        "category": "Error",
+        "code": 1209
+    },
     "Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of '{0}'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.": {
         "category": "Error",
         "code": 1210
@@ -1436,7 +1440,7 @@
         "category": "Error",
         "code": 1451
     },
-    "Resolution modes are only supported when `moduleResolution` is `node16` or `nodenext`.": {
+    "'resolution-mode' assertions are only supported when `moduleResolution` is `node16` or `nodenext`.": {
         "category": "Error",
         "code": 1452
     },
@@ -1525,6 +1529,10 @@
     "The 'type' modifier cannot be used on a named export when 'export type' is used on its export statement.": {
         "category": "Error",
         "code": 2207
+    },
+    "This type parameter probably needs an `extends object` constraint.": {
+        "category": "Error",
+        "code": 2208
     },
 
     "The project root is ambiguous, but is required to resolve export map entry '{0}' in file '{1}'. Supply the `rootDir` compiler option to disambiguate.": {
@@ -3471,6 +3479,14 @@
         "category": "Error",
         "code": 2839
     },
+    "An interface cannot extend a primitive type like '{0}'; an interface can only extend named types and classes": {
+        "category": "Error",
+        "code": 2840
+    },
+    "The type of this expression cannot be named without a 'resolution-mode' assertion, which is an unstable feature. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.": {
+        "category": "Error",
+        "code": 2841
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
@@ -3900,7 +3916,7 @@
         "category": "Error",
         "code": 4124
     },
-    "Resolution mode assertions are unstable. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.": {
+    "'resolution-mode' assertions are unstable. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.": {
         "category": "Error",
         "code": 4125
     },
@@ -5124,11 +5140,11 @@
         "category": "Error",
         "code": 6310
     },
-    "Project '{0}' is out of date because oldest output '{1}' is older than newest input '{2}'": {
+    "Project '{0}' is out of date because output '{1}' is older than input '{2}'": {
         "category": "Message",
         "code": 6350
     },
-    "Project '{0}' is up to date because newest input '{1}' is older than oldest output '{2}'": {
+    "Project '{0}' is up to date because newest input '{1}' is older than output '{2}'": {
         "category": "Message",
         "code": 6351
     },
@@ -5305,6 +5321,14 @@
     "Reusing resolution of type reference directive '{0}' from '{1}' found in cache from location '{2}', it was not resolved.": {
         "category": "Message",
         "code": 6398
+    },
+    "Project '{0}' is out of date because buildinfo file '{1}' indicates that some of the changes were not emitted": {
+        "category": "Message",
+        "code": 6399
+    },
+    "Project '{0}' is up to date but needs to update timestamps of output files that are older than input files": {
+        "category": "Message",
+        "code": 6400
     },
 
     "The expected type comes from property '{0}' which is declared here on type '{1}'": {

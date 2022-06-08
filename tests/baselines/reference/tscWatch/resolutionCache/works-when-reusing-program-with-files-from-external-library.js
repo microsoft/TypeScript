@@ -70,8 +70,6 @@ WatchedFiles::
   {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
 /a/b/projects/myproject/src/node_modules:
   {"fileName":"/a/b/projects/myProject/src/node_modules","pollingInterval":500}
-/a/b/projects/myproject/node_modules/module1/package.json:
-  {"fileName":"/a/b/projects/myproject/node_modules/module1/package.json","pollingInterval":250}
 /a/b/projects/myproject/src/node_modules/@types:
   {"fileName":"/a/b/projects/myProject/src/node_modules/@types","pollingInterval":500}
 /a/b/projects/myproject/node_modules/@types:

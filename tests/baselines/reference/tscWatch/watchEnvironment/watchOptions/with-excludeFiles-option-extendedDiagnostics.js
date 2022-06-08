@@ -49,7 +49,6 @@ ExcludeWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modul
 FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 250 {"excludeFiles":["/user/username/projects/myproject/node_modules/*"]} Source file
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 1 {"excludeFiles":["/user/username/projects/myproject/node_modules/*"]} Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 1 {"excludeFiles":["/user/username/projects/myproject/node_modules/*"]} Failed Lookup Locations
-ExcludeWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/bar/package.json 2000 {"excludeFiles":["/user/username/projects/myproject/node_modules/*"]} package.json file
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 {"excludeFiles":["/user/username/projects/myproject/node_modules/*"]} Type roots
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 {"excludeFiles":["/user/username/projects/myproject/node_modules/*"]} Type roots
 DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/main.js :: WatchInfo: /user/username/projects/myproject/src 1 {"excludeFiles":["/user/username/projects/myproject/node_modules/*"]} Failed Lookup Locations

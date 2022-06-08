@@ -141,17 +141,17 @@ Output::
     * src/second/tsconfig.json
     * src/third/tsconfig.json
 
-[[90m12:00:09 AM[0m] Project 'src/first/tsconfig.json' is out of date because output file 'src/first/bin/first-output.js' does not exist
+[[90m12:00:09 AM[0m] Project 'src/first/tsconfig.json' is out of date because output file 'src/first/bin/first-output.tsbuildinfo' does not exist
 
 [[90m12:00:10 AM[0m] Building project '/src/first/tsconfig.json'...
 
-[[90m12:00:19 AM[0m] Project 'src/second/tsconfig.json' is out of date because output file 'src/2/second-output.js' does not exist
+[[90m12:00:21 AM[0m] Project 'src/second/tsconfig.json' is out of date because output file 'src/2/second-output.tsbuildinfo' does not exist
 
-[[90m12:00:20 AM[0m] Building project '/src/second/tsconfig.json'...
+[[90m12:00:22 AM[0m] Building project '/src/second/tsconfig.json'...
 
-[[90m12:00:29 AM[0m] Project 'src/third/tsconfig.json' is out of date because output file 'src/third/thirdjs/output/third-output.js' does not exist
+[[90m12:00:33 AM[0m] Project 'src/third/tsconfig.json' is out of date because output file 'src/third/thirdjs/output/third-output.tsbuildinfo' does not exist
 
-[[90m12:00:30 AM[0m] Building project '/src/third/tsconfig.json'...
+[[90m12:00:34 AM[0m] Building project '/src/third/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 
@@ -596,7 +596,7 @@ sourceFile:../second/second_part2.ts
 >>>//# sourceMappingURL=second-output.js.map
 
 //// [/src/2/second-output.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"../second","sourceFiles":["../second/second_part1.ts","../second/second_part2.ts"],"js":{"sections":[{"pos":0,"end":336,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":49,"kind":"reference","data":"../second/tripleRef.d.ts"},{"pos":51,"end":205,"kind":"text"}]}},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"../second","sourceFiles":["../second/second_part1.ts","../second/second_part2.ts"],"js":{"sections":[{"pos":0,"end":336,"kind":"text"}],"mapHash":"6635165462-{\"version\":3,\"file\":\"second-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../second/second_part1.ts\",\"../second/second_part2.ts\"],\"names\":[],\"mappings\":\"AACA,IAAM,iBAAiB,GAAG,IAAI,kBAAkB,EAAE,CAAC;AAKnD,IAAU,CAAC,CAMV;AAND,WAAU,CAAC;IACP,SAAS,CAAC;QACN,OAAO,CAAC,GAAG,CAAC,SAAS,CAAC,CAAC;IAC3B,CAAC;IAED,CAAC,EAAE,CAAC;AACR,CAAC,EANS,CAAC,KAAD,CAAC,QAMV;ACZD;IAAA;IAIA,CAAC;IAHG,uBAAW,GAAX;QACI,OAAO,CAAC,GAAG,CAAC,oBAAoB,CAAC,CAAC;IACtC,CAAC;IACL,QAAC;AAAD,CAAC,AAJD,IAIC\"}","hash":"22409784724-var second_part1Const = new secondsecond_part1();\r\nvar N;\r\n(function (N) {\r\n    function f() {\r\n        console.log('testing');\r\n    }\r\n    f();\r\n})(N || (N = {}));\r\nvar C = (function () {\r\n    function C() {\r\n    }\r\n    C.prototype.doSomething = function () {\r\n        console.log(\"something got done\");\r\n    };\r\n    return C;\r\n}());\r\n//# sourceMappingURL=second-output.js.map"},"dts":{"sections":[{"pos":0,"end":49,"kind":"reference","data":"../second/tripleRef.d.ts"},{"pos":51,"end":205,"kind":"text"}],"mapHash":"-3800548159-{\"version\":3,\"file\":\"second-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../second/second_part1.ts\",\"../second/second_part2.ts\"],\"names\":[],\"mappings\":\";AACA,QAAA,MAAM,iBAAiB,oBAA2B,CAAC;AACnD,kBAAU,CAAC,CAAC;CAEX;AAED,kBAAU,CAAC,CAAC;CAMX;ACZD,cAAM,CAAC;IACH,WAAW;CAGd\"}","hash":"7138999361-/// <reference path=\"../second/tripleRef.d.ts\" />\r\ndeclare const second_part1Const: secondsecond_part1;\r\ndeclare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\n//# sourceMappingURL=second-output.d.ts.map"}},"program":{"fileNames":["../second/second_part1.ts","../second/second_part2.ts","../second/tripleref.d.ts"],"fileInfos":["-823890693-///<reference path=\"./tripleRef.d.ts\"/>\nconst second_part1Const = new secondsecond_part1();\nnamespace N {\r\n    // Comment text\r\n}\r\n\r\nnamespace N {\r\n    function f() {\r\n        console.log('testing');\r\n    }\r\n\r\n    f();\r\n}\r\n","9339262372-class C {\r\n    doSomething() {\r\n        console.log(\"something got done\");\r\n    }\r\n}\r\n","-742713438-declare class secondsecond_part1 { }"],"options":{"composite":true,"outFile":"./second-output.js"},"outSignature":"-1874117338-/// <reference path=\"../second/tripleRef.d.ts\" />\r\ndeclare const second_part1Const: secondsecond_part1;\r\ndeclare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\n","dtsChangeTime":23000},"version":"FakeTSVersion"}
 
 //// [/src/2/second-output.tsbuildinfo.baseline.txt]
 ======================================================================
@@ -654,7 +654,9 @@ declare class C {
           "end": 336,
           "kind": "text"
         }
-      ]
+      ],
+      "hash": "22409784724-var second_part1Const = new secondsecond_part1();\r\nvar N;\r\n(function (N) {\r\n    function f() {\r\n        console.log('testing');\r\n    }\r\n    f();\r\n})(N || (N = {}));\r\nvar C = (function () {\r\n    function C() {\r\n    }\r\n    C.prototype.doSomething = function () {\r\n        console.log(\"something got done\");\r\n    };\r\n    return C;\r\n}());\r\n//# sourceMappingURL=second-output.js.map",
+      "mapHash": "6635165462-{\"version\":3,\"file\":\"second-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../second/second_part1.ts\",\"../second/second_part2.ts\"],\"names\":[],\"mappings\":\"AACA,IAAM,iBAAiB,GAAG,IAAI,kBAAkB,EAAE,CAAC;AAKnD,IAAU,CAAC,CAMV;AAND,WAAU,CAAC;IACP,SAAS,CAAC;QACN,OAAO,CAAC,GAAG,CAAC,SAAS,CAAC,CAAC;IAC3B,CAAC;IAED,CAAC,EAAE,CAAC;AACR,CAAC,EANS,CAAC,KAAD,CAAC,QAMV;ACZD;IAAA;IAIA,CAAC;IAHG,uBAAW,GAAX;QACI,OAAO,CAAC,GAAG,CAAC,oBAAoB,CAAC,CAAC;IACtC,CAAC;IACL,QAAC;AAAD,CAAC,AAJD,IAIC\"}"
     },
     "dts": {
       "sections": [
@@ -669,11 +671,31 @@ declare class C {
           "end": 205,
           "kind": "text"
         }
-      ]
+      ],
+      "hash": "7138999361-/// <reference path=\"../second/tripleRef.d.ts\" />\r\ndeclare const second_part1Const: secondsecond_part1;\r\ndeclare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\n//# sourceMappingURL=second-output.d.ts.map",
+      "mapHash": "-3800548159-{\"version\":3,\"file\":\"second-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../second/second_part1.ts\",\"../second/second_part2.ts\"],\"names\":[],\"mappings\":\";AACA,QAAA,MAAM,iBAAiB,oBAA2B,CAAC;AACnD,kBAAU,CAAC,CAAC;CAEX;AAED,kBAAU,CAAC,CAAC;CAMX;ACZD,cAAM,CAAC;IACH,WAAW;CAGd\"}"
     }
   },
+  "program": {
+    "fileNames": [
+      "../second/second_part1.ts",
+      "../second/second_part2.ts",
+      "../second/tripleref.d.ts"
+    ],
+    "fileInfos": {
+      "../second/second_part1.ts": "-823890693-///<reference path=\"./tripleRef.d.ts\"/>\nconst second_part1Const = new secondsecond_part1();\nnamespace N {\r\n    // Comment text\r\n}\r\n\r\nnamespace N {\r\n    function f() {\r\n        console.log('testing');\r\n    }\r\n\r\n    f();\r\n}\r\n",
+      "../second/second_part2.ts": "9339262372-class C {\r\n    doSomething() {\r\n        console.log(\"something got done\");\r\n    }\r\n}\r\n",
+      "../second/tripleref.d.ts": "-742713438-declare class secondsecond_part1 { }"
+    },
+    "options": {
+      "composite": true,
+      "outFile": "./second-output.js"
+    },
+    "outSignature": "-1874117338-/// <reference path=\"../second/tripleRef.d.ts\" />\r\ndeclare const second_part1Const: secondsecond_part1;\r\ndeclare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\n",
+    "dtsChangeTime": 23000
+  },
   "version": "FakeTSVersion",
-  "size": 328
+  "size": 2762
 }
 
 //// [/src/first/bin/first-output.d.ts]
@@ -977,7 +999,7 @@ sourceFile:../first_part3.ts
 >>>//# sourceMappingURL=first-output.js.map
 
 //// [/src/first/bin/first-output.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"..","sourceFiles":["../first_PART1.ts","../first_part2.ts","../first_part3.ts"],"js":{"sections":[{"pos":0,"end":110,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":157,"kind":"text"}]}},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"..","sourceFiles":["../first_PART1.ts","../first_part2.ts","../first_part3.ts"],"js":{"sections":[{"pos":0,"end":110,"kind":"text"}],"mapHash":"-22423542495-{\"version\":3,\"file\":\"first-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../first_PART1.ts\",\"../first_part2.ts\",\"../first_part3.ts\"],\"names\":[],\"mappings\":\"AAIA,IAAM,CAAC,GAAG,cAAc,CAAC;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;ACVf,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC\"}","hash":"-3712641672-var s = \"Hello, world\";\r\nconsole.log(s);\r\nconsole.log(f());\r\nfunction f() {\r\n    return \"JS does hoists\";\r\n}\r\n//# sourceMappingURL=first-output.js.map"},"dts":{"sections":[{"pos":0,"end":157,"kind":"text"}],"mapHash":"28957120071-{\"version\":3,\"file\":\"first-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../first_PART1.ts\",\"../first_part2.ts\",\"../first_part3.ts\"],\"names\":[],\"mappings\":\"AAAA,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;AERD,iBAAS,CAAC,WAET\"}","hash":"-23350520794-interface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\n//# sourceMappingURL=first-output.d.ts.map"}},"program":{"fileNames":["../first_part1.ts","../first_part2.ts","../first_part3.ts"],"fileInfos":["-17207381411-interface TheFirst {\r\n    none: any;\r\n}\r\n\r\nconst s = \"Hello, world\";\r\n\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\n\r\nconsole.log(s);\r\n","4973778178-console.log(f());\r\n","6202806249-function f() {\r\n    return \"JS does hoists\";\r\n}"],"options":{"composite":true,"outFile":"./first-output.js"},"outSignature":"-16746818465-interface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\n","dtsChangeTime":11000},"version":"FakeTSVersion"}
 
 //// [/src/first/bin/first-output.tsbuildinfo.baseline.txt]
 ======================================================================
@@ -1023,7 +1045,9 @@ declare function f(): string;
           "end": 110,
           "kind": "text"
         }
-      ]
+      ],
+      "hash": "-3712641672-var s = \"Hello, world\";\r\nconsole.log(s);\r\nconsole.log(f());\r\nfunction f() {\r\n    return \"JS does hoists\";\r\n}\r\n//# sourceMappingURL=first-output.js.map",
+      "mapHash": "-22423542495-{\"version\":3,\"file\":\"first-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../first_PART1.ts\",\"../first_part2.ts\",\"../first_part3.ts\"],\"names\":[],\"mappings\":\"AAIA,IAAM,CAAC,GAAG,cAAc,CAAC;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;ACVf,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC\"}"
     },
     "dts": {
       "sections": [
@@ -1032,11 +1056,31 @@ declare function f(): string;
           "end": 157,
           "kind": "text"
         }
-      ]
+      ],
+      "hash": "-23350520794-interface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\n//# sourceMappingURL=first-output.d.ts.map",
+      "mapHash": "28957120071-{\"version\":3,\"file\":\"first-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../first_PART1.ts\",\"../first_part2.ts\",\"../first_part3.ts\"],\"names\":[],\"mappings\":\"AAAA,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;AERD,iBAAS,CAAC,WAET\"}"
     }
   },
+  "program": {
+    "fileNames": [
+      "../first_part1.ts",
+      "../first_part2.ts",
+      "../first_part3.ts"
+    ],
+    "fileInfos": {
+      "../first_part1.ts": "-17207381411-interface TheFirst {\r\n    none: any;\r\n}\r\n\r\nconst s = \"Hello, world\";\r\n\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\n\r\nconsole.log(s);\r\n",
+      "../first_part2.ts": "4973778178-console.log(f());\r\n",
+      "../first_part3.ts": "6202806249-function f() {\r\n    return \"JS does hoists\";\r\n}"
+    },
+    "options": {
+      "composite": true,
+      "outFile": "./first-output.js"
+    },
+    "outSignature": "-16746818465-interface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\n",
+    "dtsChangeTime": 11000
+  },
   "version": "FakeTSVersion",
-  "size": 252
+  "size": 2063
 }
 
 //// [/src/third/thirdjs/output/third-output.d.ts]
@@ -1830,7 +1874,7 @@ sourceFile:../../third_part1.ts
 >>>//# sourceMappingURL=third-output.js.map
 
 //// [/src/third/thirdjs/output/third-output.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"../..","sourceFiles":["../../third_part1.ts"],"js":{"sections":[{"pos":0,"end":110,"kind":"prepend","data":"../../../first/bin/first-output.js","texts":[{"pos":0,"end":110,"kind":"text"}]},{"pos":110,"end":446,"kind":"prepend","data":"../../../2/second-output.js","texts":[{"pos":110,"end":446,"kind":"text"}]},{"pos":446,"end":482,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":55,"kind":"reference","data":"../../../second/tripleRef.d.ts"},{"pos":57,"end":214,"kind":"prepend","data":"../../../first/bin/first-output.d.ts","texts":[{"pos":57,"end":214,"kind":"text"}]},{"pos":214,"end":368,"kind":"prepend","data":"../../../2/second-output.d.ts","texts":[{"pos":214,"end":368,"kind":"text"}]},{"pos":368,"end":387,"kind":"text"}]}},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"../..","sourceFiles":["../../third_part1.ts"],"js":{"sections":[{"pos":0,"end":110,"kind":"prepend","data":"../../../first/bin/first-output.js","texts":[{"pos":0,"end":110,"kind":"text"}]},{"pos":110,"end":446,"kind":"prepend","data":"../../../2/second-output.js","texts":[{"pos":110,"end":446,"kind":"text"}]},{"pos":446,"end":482,"kind":"text"}],"mapHash":"-13380196693-{\"version\":3,\"file\":\"third-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../../../first/first_PART1.ts\",\"../../../first/first_part2.ts\",\"../../../first/first_part3.ts\",\"../../../second/second_part1.ts\",\"../../../second/second_part2.ts\",\"../../third_part1.ts\"],\"names\":[],\"mappings\":\"AAIA,IAAM,CAAC,GAAG,cAAc,CAAC;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;ACVf,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC;ACDD,IAAM,iBAAiB,GAAG,IAAI,kBAAkB,EAAE,CAAC;AAKnD,IAAU,CAAC,CAMV;AAND,WAAU,CAAC;IACP,SAAS,CAAC;QACN,OAAO,CAAC,GAAG,CAAC,SAAS,CAAC,CAAC;IAC3B,CAAC;IAED,CAAC,EAAE,CAAC;AACR,CAAC,EANS,CAAC,KAAD,CAAC,QAMV;ACZD;IAAA;IAIA,CAAC;IAHG,uBAAW,GAAX;QACI,OAAO,CAAC,GAAG,CAAC,oBAAoB,CAAC,CAAC;IACtC,CAAC;IACL,QAAC;AAAD,CAAC,AAJD,IAIC;ACJD,IAAI,CAAC,GAAG,IAAI,CAAC,EAAE,CAAC;AAChB,CAAC,CAAC,WAAW,EAAE,CAAC\"}","hash":"-17051659575-var s = \"Hello, world\";\r\nconsole.log(s);\r\nconsole.log(f());\r\nfunction f() {\r\n    return \"JS does hoists\";\r\n}\r\nvar second_part1Const = new secondsecond_part1();\r\nvar N;\r\n(function (N) {\r\n    function f() {\r\n        console.log('testing');\r\n    }\r\n    f();\r\n})(N || (N = {}));\r\nvar C = (function () {\r\n    function C() {\r\n    }\r\n    C.prototype.doSomething = function () {\r\n        console.log(\"something got done\");\r\n    };\r\n    return C;\r\n}());\r\nvar c = new C();\r\nc.doSomething();\r\n//# sourceMappingURL=third-output.js.map"},"dts":{"sections":[{"pos":0,"end":55,"kind":"reference","data":"../../../second/tripleRef.d.ts"},{"pos":57,"end":214,"kind":"prepend","data":"../../../first/bin/first-output.d.ts","texts":[{"pos":57,"end":214,"kind":"text"}]},{"pos":214,"end":368,"kind":"prepend","data":"../../../2/second-output.d.ts","texts":[{"pos":214,"end":368,"kind":"text"}]},{"pos":368,"end":387,"kind":"text"}],"mapHash":"-6747558023-{\"version\":3,\"file\":\"third-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../../../first/first_PART1.ts\",\"../../../first/first_part3.ts\",\"../../../second/second_part1.ts\",\"../../../second/second_part2.ts\",\"../../third_part1.ts\"],\"names\":[],\"mappings\":\";AAAA,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;ACRD,iBAAS,CAAC,WAET;ACDD,QAAA,MAAM,iBAAiB,oBAA2B,CAAC;AACnD,kBAAU,CAAC,CAAC;CAEX;AAED,kBAAU,CAAC,CAAC;CAMX;ACZD,cAAM,CAAC;IACH,WAAW;CAGd;ACJD,QAAA,IAAI,CAAC,GAAU,CAAC\"}","hash":"-73127873189-/// <reference path=\"../../../second/tripleRef.d.ts\" />\r\ninterface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\ndeclare const second_part1Const: secondsecond_part1;\r\ndeclare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\ndeclare var c: C;\r\n//# sourceMappingURL=third-output.d.ts.map"}},"program":{"fileNames":["../../third_part1.ts"],"fileInfos":["10470273651-var c = new C();\r\nc.doSomething();\r\n"],"options":{"composite":true,"outFile":"./third-output.js"},"outSignature":"-67627878175-/// <reference path=\"../../../second/tripleRef.d.ts\" />\r\ninterface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\ndeclare const second_part1Const: secondsecond_part1;\r\ndeclare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\ndeclare var c: C;\r\n","dtsChangeTime":35000},"version":"FakeTSVersion"}
 
 //// [/src/third/thirdjs/output/third-output.tsbuildinfo.baseline.txt]
 ======================================================================
@@ -1950,7 +1994,9 @@ declare var c: C;
           "end": 482,
           "kind": "text"
         }
-      ]
+      ],
+      "hash": "-17051659575-var s = \"Hello, world\";\r\nconsole.log(s);\r\nconsole.log(f());\r\nfunction f() {\r\n    return \"JS does hoists\";\r\n}\r\nvar second_part1Const = new secondsecond_part1();\r\nvar N;\r\n(function (N) {\r\n    function f() {\r\n        console.log('testing');\r\n    }\r\n    f();\r\n})(N || (N = {}));\r\nvar C = (function () {\r\n    function C() {\r\n    }\r\n    C.prototype.doSomething = function () {\r\n        console.log(\"something got done\");\r\n    };\r\n    return C;\r\n}());\r\nvar c = new C();\r\nc.doSomething();\r\n//# sourceMappingURL=third-output.js.map",
+      "mapHash": "-13380196693-{\"version\":3,\"file\":\"third-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../../../first/first_PART1.ts\",\"../../../first/first_part2.ts\",\"../../../first/first_part3.ts\",\"../../../second/second_part1.ts\",\"../../../second/second_part2.ts\",\"../../third_part1.ts\"],\"names\":[],\"mappings\":\"AAIA,IAAM,CAAC,GAAG,cAAc,CAAC;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;ACVf,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC;ACDD,IAAM,iBAAiB,GAAG,IAAI,kBAAkB,EAAE,CAAC;AAKnD,IAAU,CAAC,CAMV;AAND,WAAU,CAAC;IACP,SAAS,CAAC;QACN,OAAO,CAAC,GAAG,CAAC,SAAS,CAAC,CAAC;IAC3B,CAAC;IAED,CAAC,EAAE,CAAC;AACR,CAAC,EANS,CAAC,KAAD,CAAC,QAMV;ACZD;IAAA;IAIA,CAAC;IAHG,uBAAW,GAAX;QACI,OAAO,CAAC,GAAG,CAAC,oBAAoB,CAAC,CAAC;IACtC,CAAC;IACL,QAAC;AAAD,CAAC,AAJD,IAIC;ACJD,IAAI,CAAC,GAAG,IAAI,CAAC,EAAE,CAAC;AAChB,CAAC,CAAC,WAAW,EAAE,CAAC\"}"
     },
     "dts": {
       "sections": [
@@ -1991,11 +2037,27 @@ declare var c: C;
           "end": 387,
           "kind": "text"
         }
-      ]
+      ],
+      "hash": "-73127873189-/// <reference path=\"../../../second/tripleRef.d.ts\" />\r\ninterface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\ndeclare const second_part1Const: secondsecond_part1;\r\ndeclare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\ndeclare var c: C;\r\n//# sourceMappingURL=third-output.d.ts.map",
+      "mapHash": "-6747558023-{\"version\":3,\"file\":\"third-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../../../first/first_PART1.ts\",\"../../../first/first_part3.ts\",\"../../../second/second_part1.ts\",\"../../../second/second_part2.ts\",\"../../third_part1.ts\"],\"names\":[],\"mappings\":\";AAAA,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;ACRD,iBAAS,CAAC,WAET;ACDD,QAAA,MAAM,iBAAiB,oBAA2B,CAAC;AACnD,kBAAU,CAAC,CAAC;CAEX;AAED,kBAAU,CAAC,CAAC;CAMX;ACZD,cAAM,CAAC;IACH,WAAW;CAGd;ACJD,QAAA,IAAI,CAAC,GAAU,CAAC\"}"
     }
   },
+  "program": {
+    "fileNames": [
+      "../../third_part1.ts"
+    ],
+    "fileInfos": {
+      "../../third_part1.ts": "10470273651-var c = new C();\r\nc.doSomething();\r\n"
+    },
+    "options": {
+      "composite": true,
+      "outFile": "./third-output.js"
+    },
+    "outSignature": "-67627878175-/// <reference path=\"../../../second/tripleRef.d.ts\" />\r\ninterface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\ndeclare const second_part1Const: secondsecond_part1;\r\ndeclare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\ndeclare var c: C;\r\n",
+    "dtsChangeTime": 35000
+  },
   "version": "FakeTSVersion",
-  "size": 800
+  "size": 4032
 }
 
 
@@ -2020,22 +2082,20 @@ console.log(s);
 
 Output::
 /lib/tsc --b /src/third --verbose
-[[90m12:00:47 AM[0m] Projects in this build: 
+[[90m12:00:53 AM[0m] Projects in this build: 
     * src/first/tsconfig.json
     * src/second/tsconfig.json
     * src/third/tsconfig.json
 
-[[90m12:00:48 AM[0m] Project 'src/first/tsconfig.json' is out of date because oldest output 'src/first/bin/first-output.js' is older than newest input 'src/first/first_PART1.ts'
+[[90m12:00:54 AM[0m] Project 'src/first/tsconfig.json' is out of date because output 'src/first/bin/first-output.tsbuildinfo' is older than input 'src/first/first_PART1.ts'
 
-[[90m12:00:49 AM[0m] Building project '/src/first/tsconfig.json'...
+[[90m12:00:55 AM[0m] Building project '/src/first/tsconfig.json'...
 
-[[90m12:00:57 AM[0m] Project 'src/second/tsconfig.json' is up to date because newest input 'src/second/second_part1.ts' is older than oldest output 'src/2/second-output.js.map'
+[[90m12:01:04 AM[0m] Project 'src/second/tsconfig.json' is up to date because newest input 'src/second/second_part1.ts' is older than output 'src/2/second-output.tsbuildinfo'
 
-[[90m12:00:58 AM[0m] Project 'src/third/tsconfig.json' is out of date because output of its dependency 'src/first' has changed
+[[90m12:01:05 AM[0m] Project 'src/third/tsconfig.json' is out of date because output of its dependency 'src/first' has changed
 
-[[90m12:00:59 AM[0m] Updating output of project '/src/third/tsconfig.json'...
-
-[[90m12:01:04 AM[0m] Updating unchanged output timestamps of project '/src/third/tsconfig.json'...
+[[90m12:01:06 AM[0m] Updating output of project '/src/third/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 
@@ -2229,7 +2289,7 @@ sourceFile:../first_part3.ts
 >>>//# sourceMappingURL=first-output.js.map
 
 //// [/src/first/bin/first-output.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"..","sourceFiles":["../first_PART1.ts","../first_part2.ts","../first_part3.ts"],"js":{"sections":[{"pos":0,"end":127,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":157,"kind":"text"}]}},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"..","sourceFiles":["../first_PART1.ts","../first_part2.ts","../first_part3.ts"],"js":{"sections":[{"pos":0,"end":127,"kind":"text"}],"mapHash":"-2702861355-{\"version\":3,\"file\":\"first-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../first_PART1.ts\",\"../first_part2.ts\",\"../first_part3.ts\"],\"names\":[],\"mappings\":\"AAIA,IAAM,CAAC,GAAG,cAAc,CAAC;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;AACf,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;ACXf,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC\"}","hash":"18946534449-var s = \"Hello, world\";\r\nconsole.log(s);\r\nconsole.log(s);\r\nconsole.log(f());\r\nfunction f() {\r\n    return \"JS does hoists\";\r\n}\r\n//# sourceMappingURL=first-output.js.map"},"dts":{"sections":[{"pos":0,"end":157,"kind":"text"}],"mapHash":"28957120071-{\"version\":3,\"file\":\"first-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../first_PART1.ts\",\"../first_part2.ts\",\"../first_part3.ts\"],\"names\":[],\"mappings\":\"AAAA,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;AERD,iBAAS,CAAC,WAET\"}","hash":"-23350520794-interface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\n//# sourceMappingURL=first-output.d.ts.map"}},"program":{"fileNames":["../first_part1.ts","../first_part2.ts","../first_part3.ts"],"fileInfos":["-16950965473-interface TheFirst {\r\n    none: any;\r\n}\r\n\r\nconst s = \"Hello, world\";\r\n\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\n\r\nconsole.log(s);\r\nconsole.log(s);","4973778178-console.log(f());\r\n","6202806249-function f() {\r\n    return \"JS does hoists\";\r\n}"],"options":{"composite":true,"outFile":"./first-output.js"},"outSignature":"-16746818465-interface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\n","dtsChangeTime":11000},"version":"FakeTSVersion"}
 
 //// [/src/first/bin/first-output.tsbuildinfo.baseline.txt]
 ======================================================================
@@ -2276,7 +2336,9 @@ declare function f(): string;
           "end": 127,
           "kind": "text"
         }
-      ]
+      ],
+      "hash": "18946534449-var s = \"Hello, world\";\r\nconsole.log(s);\r\nconsole.log(s);\r\nconsole.log(f());\r\nfunction f() {\r\n    return \"JS does hoists\";\r\n}\r\n//# sourceMappingURL=first-output.js.map",
+      "mapHash": "-2702861355-{\"version\":3,\"file\":\"first-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../first_PART1.ts\",\"../first_part2.ts\",\"../first_part3.ts\"],\"names\":[],\"mappings\":\"AAIA,IAAM,CAAC,GAAG,cAAc,CAAC;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;AACf,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;ACXf,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC\"}"
     },
     "dts": {
       "sections": [
@@ -2285,15 +2347,33 @@ declare function f(): string;
           "end": 157,
           "kind": "text"
         }
-      ]
+      ],
+      "hash": "-23350520794-interface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\n//# sourceMappingURL=first-output.d.ts.map",
+      "mapHash": "28957120071-{\"version\":3,\"file\":\"first-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../first_PART1.ts\",\"../first_part2.ts\",\"../first_part3.ts\"],\"names\":[],\"mappings\":\"AAAA,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;AERD,iBAAS,CAAC,WAET\"}"
     }
   },
+  "program": {
+    "fileNames": [
+      "../first_part1.ts",
+      "../first_part2.ts",
+      "../first_part3.ts"
+    ],
+    "fileInfos": {
+      "../first_part1.ts": "-16950965473-interface TheFirst {\r\n    none: any;\r\n}\r\n\r\nconst s = \"Hello, world\";\r\n\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\n\r\nconsole.log(s);\r\nconsole.log(s);",
+      "../first_part2.ts": "4973778178-console.log(f());\r\n",
+      "../first_part3.ts": "6202806249-function f() {\r\n    return \"JS does hoists\";\r\n}"
+    },
+    "options": {
+      "composite": true,
+      "outFile": "./first-output.js"
+    },
+    "outSignature": "-16746818465-interface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\n",
+    "dtsChangeTime": 11000
+  },
   "version": "FakeTSVersion",
-  "size": 252
+  "size": 2136
 }
 
-//// [/src/third/thirdjs/output/third-output.d.ts] file changed its modified time
-//// [/src/third/thirdjs/output/third-output.d.ts.map] file changed its modified time
 //// [/src/third/thirdjs/output/third-output.js]
 var s = "Hello, world";
 console.log(s);
@@ -2824,7 +2904,7 @@ sourceFile:../../third_part1.ts
 >>>//# sourceMappingURL=third-output.js.map
 
 //// [/src/third/thirdjs/output/third-output.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"../..","sourceFiles":["../../third_part1.ts"],"js":{"sections":[{"pos":0,"end":127,"kind":"prepend","data":"../../../first/bin/first-output.js","texts":[{"pos":0,"end":127,"kind":"text"}]},{"pos":127,"end":463,"kind":"prepend","data":"../../../2/second-output.js","texts":[{"pos":127,"end":463,"kind":"text"}]},{"pos":463,"end":499,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":55,"kind":"reference","data":"../../../second/tripleRef.d.ts"},{"pos":57,"end":214,"kind":"prepend","data":"../../../first/bin/first-output.d.ts","texts":[{"pos":57,"end":214,"kind":"text"}]},{"pos":214,"end":368,"kind":"prepend","data":"../../../2/second-output.d.ts","texts":[{"pos":214,"end":368,"kind":"text"}]},{"pos":368,"end":387,"kind":"text"}]}},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"../..","sourceFiles":["../../third_part1.ts"],"js":{"sections":[{"pos":0,"end":127,"kind":"prepend","data":"../../../first/bin/first-output.js","texts":[{"pos":0,"end":127,"kind":"text"}]},{"pos":127,"end":463,"kind":"prepend","data":"../../../2/second-output.js","texts":[{"pos":127,"end":463,"kind":"text"}]},{"pos":463,"end":499,"kind":"text"}],"mapHash":"29274327775-{\"version\":3,\"file\":\"third-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../../../first/first_PART1.ts\",\"../../../first/first_part2.ts\",\"../../../first/first_part3.ts\",\"../../../second/second_part1.ts\",\"../../../second/second_part2.ts\",\"../../third_part1.ts\"],\"names\":[],\"mappings\":\"AAIA,IAAM,CAAC,GAAG,cAAc,CAAC;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;AACf,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;ACXf,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC;ACDD,IAAM,iBAAiB,GAAG,IAAI,kBAAkB,EAAE,CAAC;AAKnD,IAAU,CAAC,CAMV;AAND,WAAU,CAAC;IACP,SAAS,CAAC;QACN,OAAO,CAAC,GAAG,CAAC,SAAS,CAAC,CAAC;IAC3B,CAAC;IAED,CAAC,EAAE,CAAC;AACR,CAAC,EANS,CAAC,KAAD,CAAC,QAMV;ACZD;IAAA;IAIA,CAAC;IAHG,uBAAW,GAAX;QACI,OAAO,CAAC,GAAG,CAAC,oBAAoB,CAAC,CAAC;IACtC,CAAC;IACL,QAAC;AAAD,CAAC,AAJD,IAIC;ACJD,IAAI,CAAC,GAAG,IAAI,CAAC,EAAE,CAAC;AAChB,CAAC,CAAC,WAAW,EAAE,CAAC\"}","hash":"45460290562-var s = \"Hello, world\";\r\nconsole.log(s);\r\nconsole.log(s);\r\nconsole.log(f());\r\nfunction f() {\r\n    return \"JS does hoists\";\r\n}\r\nvar second_part1Const = new secondsecond_part1();\r\nvar N;\r\n(function (N) {\r\n    function f() {\r\n        console.log('testing');\r\n    }\r\n    f();\r\n})(N || (N = {}));\r\nvar C = (function () {\r\n    function C() {\r\n    }\r\n    C.prototype.doSomething = function () {\r\n        console.log(\"something got done\");\r\n    };\r\n    return C;\r\n}());\r\nvar c = new C();\r\nc.doSomething();\r\n//# sourceMappingURL=third-output.js.map"},"dts":{"sections":[{"pos":0,"end":55,"kind":"reference","data":"../../../second/tripleRef.d.ts"},{"pos":57,"end":214,"kind":"prepend","data":"../../../first/bin/first-output.d.ts","texts":[{"pos":57,"end":214,"kind":"text"}]},{"pos":214,"end":368,"kind":"prepend","data":"../../../2/second-output.d.ts","texts":[{"pos":214,"end":368,"kind":"text"}]},{"pos":368,"end":387,"kind":"text"}],"mapHash":"-6747558023-{\"version\":3,\"file\":\"third-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../../../first/first_PART1.ts\",\"../../../first/first_part3.ts\",\"../../../second/second_part1.ts\",\"../../../second/second_part2.ts\",\"../../third_part1.ts\"],\"names\":[],\"mappings\":\";AAAA,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;ACRD,iBAAS,CAAC,WAET;ACDD,QAAA,MAAM,iBAAiB,oBAA2B,CAAC;AACnD,kBAAU,CAAC,CAAC;CAEX;AAED,kBAAU,CAAC,CAAC;CAMX;ACZD,cAAM,CAAC;IACH,WAAW;CAGd;ACJD,QAAA,IAAI,CAAC,GAAU,CAAC\"}","hash":"-73127873189-/// <reference path=\"../../../second/tripleRef.d.ts\" />\r\ninterface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\ndeclare const second_part1Const: secondsecond_part1;\r\ndeclare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\ndeclare var c: C;\r\n//# sourceMappingURL=third-output.d.ts.map"}},"program":{"fileNames":["../../third_part1.ts"],"fileInfos":["10470273651-var c = new C();\r\nc.doSomething();\r\n"],"options":{"composite":true,"outFile":"./third-output.js"},"outSignature":"-67627878175-/// <reference path=\"../../../second/tripleRef.d.ts\" />\r\ninterface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\ndeclare const second_part1Const: secondsecond_part1;\r\ndeclare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\ndeclare var c: C;\r\n","dtsChangeTime":35000},"version":"FakeTSVersion"}
 
 //// [/src/third/thirdjs/output/third-output.tsbuildinfo.baseline.txt]
 ======================================================================
@@ -2945,7 +3025,9 @@ declare var c: C;
           "end": 499,
           "kind": "text"
         }
-      ]
+      ],
+      "hash": "45460290562-var s = \"Hello, world\";\r\nconsole.log(s);\r\nconsole.log(s);\r\nconsole.log(f());\r\nfunction f() {\r\n    return \"JS does hoists\";\r\n}\r\nvar second_part1Const = new secondsecond_part1();\r\nvar N;\r\n(function (N) {\r\n    function f() {\r\n        console.log('testing');\r\n    }\r\n    f();\r\n})(N || (N = {}));\r\nvar C = (function () {\r\n    function C() {\r\n    }\r\n    C.prototype.doSomething = function () {\r\n        console.log(\"something got done\");\r\n    };\r\n    return C;\r\n}());\r\nvar c = new C();\r\nc.doSomething();\r\n//# sourceMappingURL=third-output.js.map",
+      "mapHash": "29274327775-{\"version\":3,\"file\":\"third-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../../../first/first_PART1.ts\",\"../../../first/first_part2.ts\",\"../../../first/first_part3.ts\",\"../../../second/second_part1.ts\",\"../../../second/second_part2.ts\",\"../../third_part1.ts\"],\"names\":[],\"mappings\":\"AAIA,IAAM,CAAC,GAAG,cAAc,CAAC;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;AACf,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;ACXf,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC;ACDD,IAAM,iBAAiB,GAAG,IAAI,kBAAkB,EAAE,CAAC;AAKnD,IAAU,CAAC,CAMV;AAND,WAAU,CAAC;IACP,SAAS,CAAC;QACN,OAAO,CAAC,GAAG,CAAC,SAAS,CAAC,CAAC;IAC3B,CAAC;IAED,CAAC,EAAE,CAAC;AACR,CAAC,EANS,CAAC,KAAD,CAAC,QAMV;ACZD;IAAA;IAIA,CAAC;IAHG,uBAAW,GAAX;QACI,OAAO,CAAC,GAAG,CAAC,oBAAoB,CAAC,CAAC;IACtC,CAAC;IACL,QAAC;AAAD,CAAC,AAJD,IAIC;ACJD,IAAI,CAAC,GAAG,IAAI,CAAC,EAAE,CAAC;AAChB,CAAC,CAAC,WAAW,EAAE,CAAC\"}"
     },
     "dts": {
       "sections": [
@@ -2986,10 +3068,26 @@ declare var c: C;
           "end": 387,
           "kind": "text"
         }
-      ]
+      ],
+      "hash": "-73127873189-/// <reference path=\"../../../second/tripleRef.d.ts\" />\r\ninterface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\ndeclare const second_part1Const: secondsecond_part1;\r\ndeclare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\ndeclare var c: C;\r\n//# sourceMappingURL=third-output.d.ts.map",
+      "mapHash": "-6747558023-{\"version\":3,\"file\":\"third-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../../../first/first_PART1.ts\",\"../../../first/first_part3.ts\",\"../../../second/second_part1.ts\",\"../../../second/second_part2.ts\",\"../../third_part1.ts\"],\"names\":[],\"mappings\":\";AAAA,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;ACRD,iBAAS,CAAC,WAET;ACDD,QAAA,MAAM,iBAAiB,oBAA2B,CAAC;AACnD,kBAAU,CAAC,CAAC;CAEX;AAED,kBAAU,CAAC,CAAC;CAMX;ACZD,cAAM,CAAC;IACH,WAAW;CAGd;ACJD,QAAA,IAAI,CAAC,GAAU,CAAC\"}"
     }
   },
+  "program": {
+    "fileNames": [
+      "../../third_part1.ts"
+    ],
+    "fileInfos": {
+      "../../third_part1.ts": "10470273651-var c = new C();\r\nc.doSomething();\r\n"
+    },
+    "options": {
+      "composite": true,
+      "outFile": "./third-output.js"
+    },
+    "outSignature": "-67627878175-/// <reference path=\"../../../second/tripleRef.d.ts\" />\r\ninterface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\ndeclare const second_part1Const: secondsecond_part1;\r\ndeclare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\ndeclare var c: C;\r\n",
+    "dtsChangeTime": 35000
+  },
   "version": "FakeTSVersion",
-  "size": 800
+  "size": 4089
 }
 

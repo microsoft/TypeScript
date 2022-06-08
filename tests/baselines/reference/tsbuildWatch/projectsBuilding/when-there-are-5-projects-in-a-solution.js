@@ -59,27 +59,27 @@ Output::
     * pkg4/tsconfig.json
     * tsconfig.json
 
-[[90m12:00:51 AM[0m] Project 'pkg0/tsconfig.json' is out of date because output file 'pkg0/index.js' does not exist
+[[90m12:00:51 AM[0m] Project 'pkg0/tsconfig.json' is out of date because output file 'pkg0/tsconfig.tsbuildinfo' does not exist
 
 [[90m12:00:52 AM[0m] Building project '/user/username/projects/myproject/pkg0/tsconfig.json'...
 
-[[90m12:01:01 AM[0m] Project 'pkg1/tsconfig.json' is out of date because output file 'pkg1/index.js' does not exist
+[[90m12:01:03 AM[0m] Project 'pkg1/tsconfig.json' is out of date because output file 'pkg1/tsconfig.tsbuildinfo' does not exist
 
-[[90m12:01:02 AM[0m] Building project '/user/username/projects/myproject/pkg1/tsconfig.json'...
+[[90m12:01:04 AM[0m] Building project '/user/username/projects/myproject/pkg1/tsconfig.json'...
 
-[[90m12:01:11 AM[0m] Project 'pkg2/tsconfig.json' is out of date because output file 'pkg2/index.js' does not exist
+[[90m12:01:15 AM[0m] Project 'pkg2/tsconfig.json' is out of date because output file 'pkg2/tsconfig.tsbuildinfo' does not exist
 
-[[90m12:01:12 AM[0m] Building project '/user/username/projects/myproject/pkg2/tsconfig.json'...
+[[90m12:01:16 AM[0m] Building project '/user/username/projects/myproject/pkg2/tsconfig.json'...
 
-[[90m12:01:21 AM[0m] Project 'pkg3/tsconfig.json' is out of date because output file 'pkg3/index.js' does not exist
+[[90m12:01:27 AM[0m] Project 'pkg3/tsconfig.json' is out of date because output file 'pkg3/tsconfig.tsbuildinfo' does not exist
 
-[[90m12:01:22 AM[0m] Building project '/user/username/projects/myproject/pkg3/tsconfig.json'...
+[[90m12:01:28 AM[0m] Building project '/user/username/projects/myproject/pkg3/tsconfig.json'...
 
-[[90m12:01:31 AM[0m] Project 'pkg4/tsconfig.json' is out of date because output file 'pkg4/index.js' does not exist
+[[90m12:01:39 AM[0m] Project 'pkg4/tsconfig.json' is out of date because output file 'pkg4/tsconfig.tsbuildinfo' does not exist
 
-[[90m12:01:32 AM[0m] Building project '/user/username/projects/myproject/pkg4/tsconfig.json'...
+[[90m12:01:40 AM[0m] Building project '/user/username/projects/myproject/pkg4/tsconfig.json'...
 
-[[90m12:01:41 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:51 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -210,7 +210,7 @@ export declare const pkg0 = 0;
 
 
 //// [/user/username/projects/myproject/pkg0/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-10197922616-export const pkg0 = 0;","signature":"-4821832606-export declare const pkg0 = 0;\n"}],"options":{"composite":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-10197922616-export const pkg0 = 0;","signature":"-4821832606-export declare const pkg0 = 0;\n"}],"options":{"composite":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2],"dtsChangeTime":53000},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/pkg0/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -238,10 +238,11 @@ export declare const pkg0 = 0;
     "semanticDiagnosticsPerFile": [
       "../../../../../a/lib/lib.d.ts",
       "./index.ts"
-    ]
+    ],
+    "dtsChangeTime": 53000
   },
   "version": "FakeTSVersion",
-  "size": 727
+  "size": 749
 }
 
 //// [/user/username/projects/myproject/pkg1/index.js]
@@ -256,7 +257,7 @@ export declare const pkg1 = 1;
 
 
 //// [/user/username/projects/myproject/pkg1/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-10158787190-export const pkg1 = 1;","signature":"-3530363548-export declare const pkg1 = 1;\n"}],"options":{"composite":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-10158787190-export const pkg1 = 1;","signature":"-3530363548-export declare const pkg1 = 1;\n"}],"options":{"composite":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2],"dtsChangeTime":65000},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/pkg1/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -284,10 +285,11 @@ export declare const pkg1 = 1;
     "semanticDiagnosticsPerFile": [
       "../../../../../a/lib/lib.d.ts",
       "./index.ts"
-    ]
+    ],
+    "dtsChangeTime": 65000
   },
   "version": "FakeTSVersion",
-  "size": 727
+  "size": 749
 }
 
 //// [/user/username/projects/myproject/pkg2/index.js]
@@ -302,7 +304,7 @@ export declare const pkg2 = 2;
 
 
 //// [/user/username/projects/myproject/pkg2/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-14414619060-export const pkg2 = 2;","signature":"-6533861786-export declare const pkg2 = 2;\n"}],"options":{"composite":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-14414619060-export const pkg2 = 2;","signature":"-6533861786-export declare const pkg2 = 2;\n"}],"options":{"composite":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2],"dtsChangeTime":77000},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/pkg2/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -330,10 +332,11 @@ export declare const pkg2 = 2;
     "semanticDiagnosticsPerFile": [
       "../../../../../a/lib/lib.d.ts",
       "./index.ts"
-    ]
+    ],
+    "dtsChangeTime": 77000
   },
   "version": "FakeTSVersion",
-  "size": 727
+  "size": 749
 }
 
 //// [/user/username/projects/myproject/pkg3/index.js]
@@ -348,7 +351,7 @@ export declare const pkg3 = 3;
 
 
 //// [/user/username/projects/myproject/pkg3/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-14375483634-export const pkg3 = 3;","signature":"-5242392728-export declare const pkg3 = 3;\n"}],"options":{"composite":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-14375483634-export const pkg3 = 3;","signature":"-5242392728-export declare const pkg3 = 3;\n"}],"options":{"composite":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2],"dtsChangeTime":89000},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/pkg3/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -376,10 +379,11 @@ export declare const pkg3 = 3;
     "semanticDiagnosticsPerFile": [
       "../../../../../a/lib/lib.d.ts",
       "./index.ts"
-    ]
+    ],
+    "dtsChangeTime": 89000
   },
   "version": "FakeTSVersion",
-  "size": 727
+  "size": 749
 }
 
 //// [/user/username/projects/myproject/pkg4/index.js]
@@ -394,7 +398,7 @@ export declare const pkg4 = 4;
 
 
 //// [/user/username/projects/myproject/pkg4/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-14336348208-export const pkg4 = 4;","signature":"-3950923670-export declare const pkg4 = 4;\n"}],"options":{"composite":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-14336348208-export const pkg4 = 4;","signature":"-3950923670-export declare const pkg4 = 4;\n"}],"options":{"composite":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2],"dtsChangeTime":101000},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/pkg4/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -422,10 +426,11 @@ export declare const pkg4 = 4;
     "semanticDiagnosticsPerFile": [
       "../../../../../a/lib/lib.d.ts",
       "./index.ts"
-    ]
+    ],
+    "dtsChangeTime": 101000
   },
   "version": "FakeTSVersion",
-  "size": 727
+  "size": 750
 }
 
 
@@ -438,29 +443,29 @@ export const pkg0 = 0;const someConst2 = 10;
 
 Output::
 >> Screen clear
-[[90m12:01:44 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:54 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:45 AM[0m] Project 'pkg0/tsconfig.json' is out of date because oldest output 'pkg0/index.js' is older than newest input 'pkg0/index.ts'
+[[90m12:01:55 AM[0m] Project 'pkg0/tsconfig.json' is out of date because output 'pkg0/tsconfig.tsbuildinfo' is older than input 'pkg0/index.ts'
 
-[[90m12:01:46 AM[0m] Building project '/user/username/projects/myproject/pkg0/tsconfig.json'...
+[[90m12:01:56 AM[0m] Building project '/user/username/projects/myproject/pkg0/tsconfig.json'...
 
-[[90m12:01:59 AM[0m] Project 'pkg1/tsconfig.json' is up to date with .d.ts files from its dependencies
+[[90m12:02:10 AM[0m] Project 'pkg1/tsconfig.json' is up to date with .d.ts files from its dependencies
 
-[[90m12:02:01 AM[0m] Updating output timestamps of project '/user/username/projects/myproject/pkg1/tsconfig.json'...
+[[90m12:02:11 AM[0m] Updating output timestamps of project '/user/username/projects/myproject/pkg1/tsconfig.json'...
 
-[[90m12:02:02 AM[0m] Project 'pkg2/tsconfig.json' is up to date with .d.ts files from its dependencies
+[[90m12:02:13 AM[0m] Project 'pkg2/tsconfig.json' is up to date with .d.ts files from its dependencies
 
-[[90m12:02:04 AM[0m] Updating output timestamps of project '/user/username/projects/myproject/pkg2/tsconfig.json'...
+[[90m12:02:14 AM[0m] Updating output timestamps of project '/user/username/projects/myproject/pkg2/tsconfig.json'...
 
-[[90m12:02:05 AM[0m] Project 'pkg3/tsconfig.json' is up to date with .d.ts files from its dependencies
+[[90m12:02:16 AM[0m] Project 'pkg3/tsconfig.json' is up to date with .d.ts files from its dependencies
 
-[[90m12:02:07 AM[0m] Updating output timestamps of project '/user/username/projects/myproject/pkg3/tsconfig.json'...
+[[90m12:02:17 AM[0m] Updating output timestamps of project '/user/username/projects/myproject/pkg3/tsconfig.json'...
 
-[[90m12:02:08 AM[0m] Project 'pkg4/tsconfig.json' is up to date with .d.ts files from its dependencies
+[[90m12:02:19 AM[0m] Project 'pkg4/tsconfig.json' is up to date with .d.ts files from its dependencies
 
-[[90m12:02:10 AM[0m] Updating output timestamps of project '/user/username/projects/myproject/pkg4/tsconfig.json'...
+[[90m12:02:20 AM[0m] Updating output timestamps of project '/user/username/projects/myproject/pkg4/tsconfig.json'...
 
-[[90m12:02:11 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:02:22 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -527,7 +532,7 @@ var someConst2 = 10;
 
 //// [/user/username/projects/myproject/pkg0/index.d.ts] file written with same contents
 //// [/user/username/projects/myproject/pkg0/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-7839887915-export const pkg0 = 0;const someConst2 = 10;","signature":"-4821832606-export declare const pkg0 = 0;\n"}],"options":{"composite":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-7839887915-export const pkg0 = 0;const someConst2 = 10;","signature":"-4821832606-export declare const pkg0 = 0;\n"}],"options":{"composite":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2],"dtsChangeTime":53000},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/pkg0/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -555,23 +560,16 @@ var someConst2 = 10;
     "semanticDiagnosticsPerFile": [
       "../../../../../a/lib/lib.d.ts",
       "./index.ts"
-    ]
+    ],
+    "dtsChangeTime": 53000
   },
   "version": "FakeTSVersion",
-  "size": 748
+  "size": 770
 }
 
-//// [/user/username/projects/myproject/pkg1/index.js] file changed its modified time
-//// [/user/username/projects/myproject/pkg1/index.d.ts] file changed its modified time
 //// [/user/username/projects/myproject/pkg1/tsconfig.tsbuildinfo] file changed its modified time
-//// [/user/username/projects/myproject/pkg2/index.js] file changed its modified time
-//// [/user/username/projects/myproject/pkg2/index.d.ts] file changed its modified time
 //// [/user/username/projects/myproject/pkg2/tsconfig.tsbuildinfo] file changed its modified time
-//// [/user/username/projects/myproject/pkg3/index.js] file changed its modified time
-//// [/user/username/projects/myproject/pkg3/index.d.ts] file changed its modified time
 //// [/user/username/projects/myproject/pkg3/tsconfig.tsbuildinfo] file changed its modified time
-//// [/user/username/projects/myproject/pkg4/index.js] file changed its modified time
-//// [/user/username/projects/myproject/pkg4/index.d.ts] file changed its modified time
 //// [/user/username/projects/myproject/pkg4/tsconfig.tsbuildinfo] file changed its modified time
 
 Change:: No change
@@ -630,11 +628,11 @@ export const pkg0 = 0;const someConst2 = 10;export const someConst = 10;
 
 Output::
 >> Screen clear
-[[90m12:02:14 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:02:25 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:02:15 AM[0m] Project 'pkg0/tsconfig.json' is out of date because oldest output 'pkg0/index.js' is older than newest input 'pkg0/index.ts'
+[[90m12:02:26 AM[0m] Project 'pkg0/tsconfig.json' is out of date because output 'pkg0/tsconfig.tsbuildinfo' is older than input 'pkg0/index.ts'
 
-[[90m12:02:16 AM[0m] Building project '/user/username/projects/myproject/pkg0/tsconfig.json'...
+[[90m12:02:27 AM[0m] Building project '/user/username/projects/myproject/pkg0/tsconfig.json'...
 
 
 
@@ -706,7 +704,7 @@ export declare const someConst = 10;
 
 
 //// [/user/username/projects/myproject/pkg0/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"1748855762-export const pkg0 = 0;const someConst2 = 10;export const someConst = 10;","signature":"-6216230055-export declare const pkg0 = 0;\nexport declare const someConst = 10;\n"}],"options":{"composite":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"1748855762-export const pkg0 = 0;const someConst2 = 10;export const someConst = 10;","signature":"-6216230055-export declare const pkg0 = 0;\nexport declare const someConst = 10;\n"}],"options":{"composite":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2],"dtsChangeTime":148500},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/pkg0/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -734,10 +732,11 @@ export declare const someConst = 10;
     "semanticDiagnosticsPerFile": [
       "../../../../../a/lib/lib.d.ts",
       "./index.ts"
-    ]
+    ],
+    "dtsChangeTime": 148500
   },
   "version": "FakeTSVersion",
-  "size": 813
+  "size": 836
 }
 
 
@@ -746,31 +745,31 @@ Change:: build pkg1,pkg2,pkg3,pkg4
 Input::
 
 Output::
-[[90m12:02:29 AM[0m] Project 'pkg1/tsconfig.json' is out of date because oldest output 'pkg1/index.js' is older than newest input 'pkg0/tsconfig.json'
+[[90m12:02:42 AM[0m] Project 'pkg1/tsconfig.json' is out of date because output 'pkg1/index.js' is older than input 'pkg0/tsconfig.json'
 
-[[90m12:02:30 AM[0m] Building project '/user/username/projects/myproject/pkg1/tsconfig.json'...
+[[90m12:02:43 AM[0m] Building project '/user/username/projects/myproject/pkg1/tsconfig.json'...
 
-[[90m12:02:32 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg1/tsconfig.json'...
+[[90m12:02:44 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg1/tsconfig.json'...
 
-[[90m12:02:33 AM[0m] Project 'pkg2/tsconfig.json' is out of date because oldest output 'pkg2/index.js' is older than newest input 'pkg0/tsconfig.json'
+[[90m12:02:46 AM[0m] Project 'pkg2/tsconfig.json' is out of date because output 'pkg2/index.js' is older than input 'pkg0/tsconfig.json'
 
-[[90m12:02:34 AM[0m] Building project '/user/username/projects/myproject/pkg2/tsconfig.json'...
+[[90m12:02:47 AM[0m] Building project '/user/username/projects/myproject/pkg2/tsconfig.json'...
 
-[[90m12:02:36 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg2/tsconfig.json'...
+[[90m12:02:48 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg2/tsconfig.json'...
 
-[[90m12:02:37 AM[0m] Project 'pkg3/tsconfig.json' is out of date because oldest output 'pkg3/index.js' is older than newest input 'pkg0/tsconfig.json'
+[[90m12:02:50 AM[0m] Project 'pkg3/tsconfig.json' is out of date because output 'pkg3/index.js' is older than input 'pkg0/tsconfig.json'
 
-[[90m12:02:38 AM[0m] Building project '/user/username/projects/myproject/pkg3/tsconfig.json'...
+[[90m12:02:51 AM[0m] Building project '/user/username/projects/myproject/pkg3/tsconfig.json'...
 
-[[90m12:02:40 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg3/tsconfig.json'...
+[[90m12:02:52 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg3/tsconfig.json'...
 
-[[90m12:02:41 AM[0m] Project 'pkg4/tsconfig.json' is out of date because oldest output 'pkg4/index.js' is older than newest input 'pkg0/tsconfig.json'
+[[90m12:02:54 AM[0m] Project 'pkg4/tsconfig.json' is out of date because output 'pkg4/index.js' is older than input 'pkg0/tsconfig.json'
 
-[[90m12:02:42 AM[0m] Building project '/user/username/projects/myproject/pkg4/tsconfig.json'...
+[[90m12:02:55 AM[0m] Building project '/user/username/projects/myproject/pkg4/tsconfig.json'...
 
-[[90m12:02:44 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg4/tsconfig.json'...
+[[90m12:02:56 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg4/tsconfig.json'...
 
-[[90m12:02:45 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:02:58 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -858,17 +857,9 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
-//// [/user/username/projects/myproject/pkg1/index.js] file changed its modified time
-//// [/user/username/projects/myproject/pkg1/index.d.ts] file changed its modified time
 //// [/user/username/projects/myproject/pkg1/tsconfig.tsbuildinfo] file changed its modified time
-//// [/user/username/projects/myproject/pkg2/index.js] file changed its modified time
-//// [/user/username/projects/myproject/pkg2/index.d.ts] file changed its modified time
 //// [/user/username/projects/myproject/pkg2/tsconfig.tsbuildinfo] file changed its modified time
-//// [/user/username/projects/myproject/pkg3/index.js] file changed its modified time
-//// [/user/username/projects/myproject/pkg3/index.d.ts] file changed its modified time
 //// [/user/username/projects/myproject/pkg3/tsconfig.tsbuildinfo] file changed its modified time
-//// [/user/username/projects/myproject/pkg4/index.js] file changed its modified time
-//// [/user/username/projects/myproject/pkg4/index.d.ts] file changed its modified time
 //// [/user/username/projects/myproject/pkg4/tsconfig.tsbuildinfo] file changed its modified time
 
 Change:: No change

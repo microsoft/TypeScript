@@ -33,7 +33,7 @@ namespace ts {
         Deleted
     }
 
-    export type FileWatcherCallback = (fileName: string, eventKind: FileWatcherEventKind) => void;
+    export type FileWatcherCallback = (fileName: string, eventKind: FileWatcherEventKind, modifiedTime?: Date) => void;
     export type DirectoryWatcherCallback = (fileName: string) => void;
     /*@internal*/
     export interface WatchedFile {
@@ -364,7 +364,7 @@ namespace ts {
             const watcher = fsWatch(
                 dirName,
                 FileSystemEntryKind.Directory,
-                (_eventName: string, relativeFileName) => {
+                (_eventName: string, relativeFileName, modifiedTime) => {
                     // When files are deleted from disk, the triggered "rename" event would have a relativefileName of "undefined"
                     if (!isString(relativeFileName)) return;
                     const fileName = getNormalizedAbsolutePath(relativeFileName, dirName);
@@ -372,7 +372,7 @@ namespace ts {
                     const callbacks = fileName && fileWatcherCallbacks.get(toCanonicalName(fileName));
                     if (callbacks) {
                         for (const fileCallback of callbacks) {
-                            fileCallback(fileName, FileWatcherEventKind.Changed);
+                            fileCallback(fileName, FileWatcherEventKind.Changed, modifiedTime);
                         }
                     }
                 },
@@ -446,9 +446,9 @@ namespace ts {
                 cache.set(path, {
                     watcher: watchFile(
                         fileName,
-                        (fileName, eventKind) => forEach(
+                        (fileName, eventKind, modifiedTime) => forEach(
                             callbacksCache.get(path),
-                            cb => cb(fileName, eventKind)
+                            cb => cb(fileName, eventKind, modifiedTime)
                         ),
                         pollingInterval,
                         options
@@ -480,7 +480,8 @@ namespace ts {
         const newTime = modifiedTime.getTime();
         if (oldTime !== newTime) {
             watchedFile.mtime = modifiedTime;
-            watchedFile.callback(watchedFile.fileName, getFileWatcherEventKind(oldTime, newTime));
+            // Pass modified times so tsc --build can use it
+            watchedFile.callback(watchedFile.fileName, getFileWatcherEventKind(oldTime, newTime), modifiedTime);
             return true;
         }
 
@@ -776,7 +777,7 @@ namespace ts {
     }
 
     /*@internal*/
-    export type FsWatchCallback = (eventName: "rename" | "change", relativeFileName: string | undefined) => void;
+    export type FsWatchCallback = (eventName: "rename" | "change", relativeFileName: string | undefined, modifiedTime?: Date) => void;
     /*@internal*/
     export type FsWatch = (fileOrDirectory: string, entryKind: FileSystemEntryKind, callback: FsWatchCallback, recursive: boolean, fallbackPollingInterval: PollingInterval, fallbackOptions: WatchOptions | undefined) => FileWatcher;
     /*@internal*/
@@ -793,21 +794,23 @@ namespace ts {
 
     /*@internal*/
     export function createFileWatcherCallback(callback: FsWatchCallback): FileWatcherCallback {
-        return (_fileName, eventKind) => callback(eventKind === FileWatcherEventKind.Changed ? "change" : "rename", "");
+        return (_fileName, eventKind, modifiedTime) => callback(eventKind === FileWatcherEventKind.Changed ? "change" : "rename", "", modifiedTime);
     }
 
     function createFsWatchCallbackForFileWatcherCallback(
         fileName: string,
         callback: FileWatcherCallback,
-        fileSystemEntryExists: FileSystemEntryExists
+        getModifiedTime: NonNullable<System["getModifiedTime"]>
     ): FsWatchCallback {
-        return eventName => {
+        return (eventName, _relativeFileName, modifiedTime) => {
             if (eventName === "rename") {
-                callback(fileName, fileSystemEntryExists(fileName, FileSystemEntryKind.File) ? FileWatcherEventKind.Created : FileWatcherEventKind.Deleted);
+                // Check time stamps rather than file system entry checks
+                modifiedTime ||= getModifiedTime(fileName) || missingFileModifiedTime;
+                callback(fileName, modifiedTime !== missingFileModifiedTime ? FileWatcherEventKind.Created : FileWatcherEventKind.Deleted, modifiedTime);
             }
             else {
                 // Change
-                callback(fileName, FileWatcherEventKind.Changed);
+                callback(fileName, FileWatcherEventKind.Changed, modifiedTime);
             }
         };
     }
@@ -919,7 +922,7 @@ namespace ts {
                     return fsWatch(
                         fileName,
                         FileSystemEntryKind.File,
-                        createFsWatchCallbackForFileWatcherCallback(fileName, callback, fileSystemEntryExists),
+                        createFsWatchCallbackForFileWatcherCallback(fileName, callback, getModifiedTime),
                         /*recursive*/ false,
                         pollingInterval,
                         getFallbackOptions(options)
@@ -1141,19 +1144,23 @@ namespace ts {
 
             function callbackChangingToMissingFileSystemEntry(event: "rename" | "change", relativeName: string | undefined) {
                 if (relativeName && endsWith(relativeName, "~")) relativeName = relativeName.slice(0, relativeName.length - 1);
-                callback(event, relativeName);
                 // because relativeName is not guaranteed to be correct we need to check on each rename with few combinations
                 // Eg on ubuntu while watching app/node_modules the relativeName is "node_modules" which is neither relative nor full path
                 if (event === "rename" &&
                     (!relativeName ||
                         relativeName === lastDirectoryPart ||
                         endsWith(relativeName, lastDirectoryPartWithDirectorySeparator!))) {
+                    const modifiedTime = getModifiedTime(fileOrDirectory) || missingFileModifiedTime;
+                    callback(event, relativeName, modifiedTime);
                     if (inodeWatching) {
-                        updateWatcher(!fileSystemEntryExists(fileOrDirectory, entryKind) ? watchMissingFileSystemEntry : watchPresentFileSystemEntry);
+                        updateWatcher(modifiedTime === missingFileModifiedTime ? watchMissingFileSystemEntry : watchPresentFileSystemEntry);
                     }
-                    else if (!fileSystemEntryExists(fileOrDirectory, entryKind)) {
+                    else if (modifiedTime === missingFileModifiedTime) {
                         updateWatcher(watchMissingFileSystemEntry);
                     }
+                }
+                else {
+                    callback(event, relativeName);
                 }
             }
 
@@ -1177,13 +1184,16 @@ namespace ts {
             function watchMissingFileSystemEntry(): FileWatcher {
                 return watchFile(
                     fileOrDirectory,
-                    (_fileName, eventKind) => {
-                        if (eventKind === FileWatcherEventKind.Created && fileSystemEntryExists(fileOrDirectory, entryKind)) {
-                            callback("rename", "");
-                            // Call the callback for current file or directory
-                            // For now it could be callback for the inner directory creation,
-                            // but just return current directory, better than current no-op
-                            updateWatcher(watchPresentFileSystemEntry);
+                    (_fileName, eventKind, modifiedTime) => {
+                        if (eventKind === FileWatcherEventKind.Created) {
+                            modifiedTime ||= getModifiedTime(fileOrDirectory) || missingFileModifiedTime;
+                            if (modifiedTime !== missingFileModifiedTime) {
+                                callback("rename", "", modifiedTime);
+                                // Call the callback for current file or directory
+                                // For now it could be callback for the inner directory creation,
+                                // but just return current directory, better than current no-op
+                                updateWatcher(watchPresentFileSystemEntry);
+                            }
                         }
                     },
                     fallbackPollingInterval,
@@ -1674,7 +1684,7 @@ namespace ts {
                     close: () => _fs.unwatchFile(fileName, fileChanged)
                 };
 
-                function fileChanged(curr: any, prev: any) {
+                function fileChanged(curr: import("fs").Stats, prev: import("fs").Stats) {
                     // previous event kind check is to ensure we recongnize the file as previously also missing when it is restored or renamed twice (that is it disappears and reappears)
                     // In such case, prevTime returned is same as prev time of event when file was deleted as per node documentation
                     const isPreviouslyDeleted = +prev.mtime === 0 || eventKind === FileWatcherEventKind.Deleted;
@@ -1696,7 +1706,7 @@ namespace ts {
                         // File changed
                         eventKind = FileWatcherEventKind.Changed;
                     }
-                    callback(fileName, eventKind);
+                    callback(fileName, eventKind, curr.mtime);
                 }
             }
 
@@ -1875,11 +1885,18 @@ namespace ts {
             }
 
             function getModifiedTime(path: string) {
+                // Since the error thrown by fs.statSync isn't used, we can avoid collecting a stack trace to improve
+                // the CPU time performance.
+                const originalStackTraceLimit = Error.stackTraceLimit;
+                Error.stackTraceLimit = 0;
                 try {
                     return statSync(path)?.mtime;
                 }
                 catch (e) {
                     return undefined;
+                }
+                finally {
+                    Error.stackTraceLimit = originalStackTraceLimit;
                 }
             }
 

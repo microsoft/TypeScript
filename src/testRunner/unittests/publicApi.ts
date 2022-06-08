@@ -131,6 +131,30 @@ describe("unittests:: Public APIs:: getTypeAtLocation", () => {
         assert.equal(type.flags, ts.TypeFlags.Any);
     });
 
+    it("works on ExpressionWithTypeArguments", () => {
+        const content = `
+            function fn<T>(value: T) {
+                return { value };
+            }
+            const foo = fn<string>;
+        `;
+        const host = new fakes.CompilerHost(vfs.createFromFileSystem(
+            Harness.IO,
+            /*ignoreCase*/ true,
+            { documents: [new documents.TextDocument("/file.ts", content)], cwd: "/" }));
+
+        const program = ts.createProgram({
+            host,
+            rootNames: ["/file.ts"],
+            options: { noLib: true }
+        });
+
+        const checker = program.getTypeChecker();
+        const file = program.getSourceFile("/file.ts")!;
+        const [declaration] = (ts.findLast(file.statements, ts.isVariableStatement) as ts.VariableStatement).declarationList.declarations;
+        assert.equal(checker.getTypeAtLocation(declaration.initializer!).flags, ts.TypeFlags.Object);
+    });
+
     it("returns an errorType for VariableDeclaration with BindingPattern name", () => {
         const content = "const foo = [1];\n" + "const [a] = foo;";
 
