@@ -1026,6 +1026,11 @@ namespace ts {
         const potentialNewTargetCollisions: Node[] = [];
         const potentialWeakMapSetCollisions: Node[] = [];
         const potentialReflectCollisions: Node[] = [];
+        const potentialAlwaysCheckedUnusedTypes: {
+            node: Node;
+            name: BindingName;
+            diagnostic: DiagnosticMessage;
+         }[] = [];
         const awaitedTypeStack: number[] = [];
 
         const diagnostics = createDiagnosticCollection();
@@ -37915,11 +37920,21 @@ namespace ts {
             }
 
             if (isBindingElement(node)) {
-                if (node.propertyName && isIdentifier(node.propertyName) && isIdentifier(node.name) && isParameterDeclaration(node) && nodeIsMissing((getContainingFunction(node) as FunctionLikeDeclaration).body)) {
+                if (
+                  node.propertyName &&
+                  isIdentifier(node.propertyName) &&
+                  isIdentifier(node.name) &&
+                  isParameterDeclaration(node) &&
+                  nodeIsMissing((getContainingFunction(node) as FunctionLikeDeclaration).body)) {
                     // type F = ({a: string}) => void;
                     //               ^^^^^^
-                    // variable renaming in function type notation is confusing, so forbid it
-                    error(node.name, Diagnostics.Renaming_a_property_in_destructuring_assignment_is_only_allowed_in_a_function_or_constructor_implementation);
+                    // variable renaming in function type notation is confusing,
+                    // so we forbid it even if noUnusedLocals is not enabled
+                    potentialAlwaysCheckedUnusedTypes.push({
+                        node,
+                        name: node.name,
+                        diagnostic: Diagnostics.Renaming_a_property_in_destructuring_assignment_is_only_allowed_in_a_function_or_constructor_implementation
+                    });
                     return;
                 }
 
@@ -41766,6 +41781,7 @@ namespace ts {
                 clear(potentialNewTargetCollisions);
                 clear(potentialWeakMapSetCollisions);
                 clear(potentialReflectCollisions);
+                clear(potentialAlwaysCheckedUnusedTypes);
 
                 forEach(node.statements, checkSourceElement);
                 checkSourceElement(node.endOfFileToken);
@@ -41784,6 +41800,13 @@ namespace ts {
                                 diagnostics.add(diag);
                             }
                         });
+                    }
+                    if (!node.isDeclarationFile && potentialAlwaysCheckedUnusedTypes.length) {
+                        for (const { node, name, diagnostic } of potentialAlwaysCheckedUnusedTypes) {
+                            if (!(getSymbolOfNode(node)?.isReferenced! & SymbolFlags.Type)) {
+                                error(name, diagnostic);
+                            }
+                        }
                     }
                 });
 
