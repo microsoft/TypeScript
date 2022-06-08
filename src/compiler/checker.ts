@@ -144,17 +144,6 @@ namespace ts {
         AndFactsMask = All & ~OrFactsMask,
     }
 
-    const typeofEQFacts: ReadonlyESMap<string, TypeFacts> = new Map(getEntries({
-        string: TypeFacts.TypeofEQString,
-        number: TypeFacts.TypeofEQNumber,
-        bigint: TypeFacts.TypeofEQBigInt,
-        boolean: TypeFacts.TypeofEQBoolean,
-        symbol: TypeFacts.TypeofEQSymbol,
-        undefined: TypeFacts.EQUndefined,
-        object: TypeFacts.TypeofEQObject,
-        function: TypeFacts.TypeofEQFunction
-    }));
-
     const typeofNEFacts: ReadonlyESMap<string, TypeFacts> = new Map(getEntries({
         string: TypeFacts.TypeofNEString,
         number: TypeFacts.TypeofNENumber,
@@ -1031,14 +1020,6 @@ namespace ts {
         const diagnostics = createDiagnosticCollection();
         const suggestionDiagnostics = createDiagnosticCollection();
 
-        const typeofTypesByName: ReadonlyESMap<string, Type> = new Map(getEntries({
-            string: stringType,
-            number: numberType,
-            bigint: bigintType,
-            boolean: booleanType,
-            symbol: esSymbolType,
-            undefined: undefinedType
-        }));
         const typeofType = createTypeofType();
 
         let _jsxNamespace: __String;
@@ -4181,7 +4162,7 @@ namespace ts {
         }
 
         function createTypeofType() {
-            return getUnionType(arrayFrom(typeofEQFacts.keys(), getStringLiteralType));
+            return getUnionType(arrayFrom(typeofNEFacts.keys(), getStringLiteralType));
         }
 
         function createTypeParameter(symbol?: Symbol) {
@@ -23821,21 +23802,16 @@ namespace ts {
             return links.switchTypes;
         }
 
-        // Get the types from all cases in a switch on `typeof`. An
-        // `undefined` element denotes an explicit `default` clause.
-        function getSwitchClauseTypeOfWitnesses(switchStatement: SwitchStatement, retainDefault: false): string[];
-        function getSwitchClauseTypeOfWitnesses(switchStatement: SwitchStatement, retainDefault: boolean): (string | undefined)[];
-        function getSwitchClauseTypeOfWitnesses(switchStatement: SwitchStatement, retainDefault: boolean): (string | undefined)[] {
+        // Get the type names from all cases in a switch on `typeof`. The default clause and/or duplicate type names are
+        // represented as undefined. Return undefined if one or more case clause expressions are not string literals.
+        function getSwitchClauseTypeOfWitnesses(switchStatement: SwitchStatement): (string | undefined)[] | undefined {
+            if (some(switchStatement.caseBlock.clauses, clause => clause.kind === SyntaxKind.CaseClause && !isStringLiteralLike(clause.expression))) {
+                return undefined;
+            }
             const witnesses: (string | undefined)[] = [];
             for (const clause of switchStatement.caseBlock.clauses) {
-                if (clause.kind === SyntaxKind.CaseClause) {
-                    if (isStringLiteralLike(clause.expression)) {
-                        witnesses.push(clause.expression.text);
-                        continue;
-                    }
-                    return emptyArray;
-                }
-                if (retainDefault) witnesses.push(/*explicitDefaultStatement*/ undefined);
+                const text = clause.kind === SyntaxKind.CaseClause ? (clause.expression as StringLiteralLike).text : undefined;
+                witnesses.push(text && !contains(witnesses, text) ? text : undefined);
             }
             return witnesses;
         }
@@ -25093,14 +25069,9 @@ namespace ts {
                     }
                     return type;
                 }
-                if (type.flags & TypeFlags.Any && literal.text === "function") {
-                    return type;
-                }
-                const facts = assumeTrue ?
-                    typeofEQFacts.get(literal.text) || TypeFacts.TypeofEQHostObject :
-                    typeofNEFacts.get(literal.text) || TypeFacts.TypeofNEHostObject;
-                const impliedType = getImpliedTypeFromTypeofGuard(type, literal.text);
-                return getTypeWithFacts(assumeTrue && impliedType ? narrowTypeByImpliedType(type, impliedType) : type, facts);
+                return assumeTrue ?
+                    narrowTypeByTypeName(type, literal.text) :
+                    getTypeWithFacts(type, typeofNEFacts.get(literal.text) || TypeFacts.TypeofNEHostObject);
             }
 
             function narrowTypeBySwitchOptionalChainContainment(type: Type, switchStatement: SwitchStatement, clauseStart: number, clauseEnd: number, clauseCheck: (type: Type) => boolean) {
@@ -25151,104 +25122,53 @@ namespace ts {
                 return caseType.flags & TypeFlags.Never ? defaultType : getUnionType([caseType, defaultType]);
             }
 
-            function getImpliedTypeFromTypeofGuard(type: Type, text: string) {
-                switch (text) {
-                    case "object":
-                        return type.flags & TypeFlags.Any ? type : getUnionType([nullType, nonPrimitiveType]);
-                    case "function":
-                        return type.flags & TypeFlags.Any ? type : globalFunctionType;
-                    default:
-                        return typeofTypesByName.get(text);
+            function narrowTypeByTypeName(type: Type, typeName: string) {
+                switch (typeName) {
+                    case "string": return narrowTypeByTypeFacts(type, stringType, TypeFacts.TypeofEQString);
+                    case "number": return narrowTypeByTypeFacts(type, numberType, TypeFacts.TypeofEQNumber);
+                    case "bigint": return narrowTypeByTypeFacts(type, bigintType, TypeFacts.TypeofEQBigInt);
+                    case "boolean": return narrowTypeByTypeFacts(type, booleanType, TypeFacts.TypeofEQBoolean);
+                    case "symbol": return narrowTypeByTypeFacts(type, esSymbolType, TypeFacts.TypeofEQSymbol);
+                    case "object": return type.flags & TypeFlags.Any ? type : getUnionType([narrowTypeByTypeFacts(type, nonPrimitiveType, TypeFacts.TypeofEQObject), narrowTypeByTypeFacts(type, nullType, TypeFacts.EQNull)]);
+                    case "function": return type.flags & TypeFlags.Any ? type : narrowTypeByTypeFacts(type, globalFunctionType, TypeFacts.TypeofEQFunction);
+                    case "undefined": return narrowTypeByTypeFacts(type, undefinedType, TypeFacts.EQUndefined);
                 }
+                return narrowTypeByTypeFacts(type, nonPrimitiveType, TypeFacts.TypeofEQHostObject);
             }
 
-            // When narrowing a union type by a `typeof` guard using type-facts alone, constituent types that are
-            // super-types of the implied guard will be retained in the final type: this is because type-facts only
-            // filter. Instead, we would like to replace those union constituents with the more precise type implied by
-            // the guard. For example: narrowing `{} | undefined` by `"boolean"` should produce the type `boolean`, not
-            // the filtered type `{}`. For this reason we narrow constituents of the union individually, in addition to
-            // filtering by type-facts.
-            function narrowTypeByImpliedType(type: Type, candidate: Type) {
-                if (type.flags & TypeFlags.AnyOrUnknown) {
-                    return candidate;
-                }
-                return mapType(type, t => {
-                    if (isTypeRelatedTo(t, candidate, strictSubtypeRelation)) {
-                        return t;
-                    }
-                    return mapType(candidate, c => {
-                        if (!areTypesComparable(t, c)) {
-                            return neverType;
-                        }
-                        if (c.flags & TypeFlags.Primitive && t.flags & TypeFlags.Object && !isEmptyAnonymousObjectType(t)) {
-                            return isTypeSubtypeOf(c, t) ? c : neverType;
-                        }
-                        if (c === globalFunctionType && isTypeSubtypeOf(c, t)) {
-                            return c;
-                        }
-                        return getIntersectionType([t, c]);
-                    });
-                });
+            function narrowTypeByTypeFacts(type: Type, impliedType: Type, facts: TypeFacts) {
+                return mapType(type, t =>
+                    // We first check if a constituent is a subtype of the implied type. If so, we either keep or eliminate
+                    // the constituent based on its type facts. We use the strict subtype relation because it treats `object`
+                    // as a subtype of `{}`, and we need the type facts check because function types are subtypes of `object`,
+                    // but are classified as "function" according to `typeof`.
+                    isTypeRelatedTo(t, impliedType, strictSubtypeRelation) ? getTypeFacts(t) & facts ? t : neverType :
+                    // We next check if the consituent is a supertype of the implied type. If so, we substitute the implied
+                    // type. This handles top types like `unknown` and `{}`, and supertypes like `{ toString(): string }`.
+                    isTypeSubtypeOf(impliedType, t) ? impliedType :
+                    // Neither the constituent nor the implied type is a subtype of the other, however their domains may still
+                    // overlap. For example, an unconstrained type parameter and type `string`. If the type facts indicate
+                    // possible overlap, we form an intersection. Otherwise, we eliminate the constituent.
+                    getTypeFacts(t) & facts ? getIntersectionType([t, impliedType]) :
+                    neverType);
             }
 
             function narrowBySwitchOnTypeOf(type: Type, switchStatement: SwitchStatement, clauseStart: number, clauseEnd: number): Type {
-                const switchWitnesses = getSwitchClauseTypeOfWitnesses(switchStatement, /*retainDefault*/ true);
-                if (!switchWitnesses.length) {
+                const witnesses = getSwitchClauseTypeOfWitnesses(switchStatement);
+                if (!witnesses) {
                     return type;
                 }
-                //  Equal start and end denotes implicit fallthrough; undefined marks explicit default clause
-                const defaultCaseLocation = findIndex(switchWitnesses, elem => elem === undefined);
-                const hasDefaultClause = clauseStart === clauseEnd || (defaultCaseLocation >= clauseStart && defaultCaseLocation < clauseEnd);
-                let clauseWitnesses: string[];
-                let switchFacts: TypeFacts;
-                if (defaultCaseLocation > -1) {
-                    // We no longer need the undefined denoting an explicit default case. Remove the undefined and
-                    // fix-up clauseStart and clauseEnd.  This means that we don't have to worry about undefined in the
-                    // witness array.
-                    const witnesses = switchWitnesses.filter(witness => witness !== undefined) as string[];
-                    // The adjusted clause start and end after removing the `default` statement.
-                    const fixedClauseStart = defaultCaseLocation < clauseStart ? clauseStart - 1 : clauseStart;
-                    const fixedClauseEnd = defaultCaseLocation < clauseEnd ? clauseEnd - 1 : clauseEnd;
-                    clauseWitnesses = witnesses.slice(fixedClauseStart, fixedClauseEnd);
-                    switchFacts = getFactsFromTypeofSwitch(fixedClauseStart, fixedClauseEnd, witnesses, hasDefaultClause);
-                }
-                else {
-                    clauseWitnesses = switchWitnesses.slice(clauseStart, clauseEnd) as string[];
-                    switchFacts = getFactsFromTypeofSwitch(clauseStart, clauseEnd, switchWitnesses as string[], hasDefaultClause);
-                }
+                // Equal start and end denotes implicit fallthrough; undefined marks explicit default clause.
+                const defaultIndex = findIndex(switchStatement.caseBlock.clauses, clause => clause.kind === SyntaxKind.DefaultClause);
+                const hasDefaultClause = clauseStart === clauseEnd || (defaultIndex >= clauseStart && defaultIndex < clauseEnd);
                 if (hasDefaultClause) {
-                    return filterType(type, t => (getTypeFacts(t) & switchFacts) === switchFacts);
+                    // In the default clause we filter constituents down to those that are not-equal to all handled cases.
+                    const notEqualFacts = getNotEqualFactsFromTypeofSwitch(clauseStart, clauseEnd, witnesses);
+                    return filterType(type, t => (getTypeFacts(t) & notEqualFacts) === notEqualFacts);
                 }
-                /*
-                  The implied type is the raw type suggested by a
-                  value being caught in this clause.
-
-                  When the clause contains a default case we ignore
-                  the implied type and try to narrow using any facts
-                  we can learn: see `switchFacts`.
-
-                  Example:
-                  switch (typeof x) {
-                      case 'number':
-                      case 'string': break;
-                      default: break;
-                      case 'number':
-                      case 'boolean': break
-                  }
-
-                  In the first clause (case `number` and `string`) the
-                  implied type is number | string.
-
-                  In the default clause we de not compute an implied type.
-
-                  In the third clause (case `number` and `boolean`)
-                  the naive implied type is number | boolean, however
-                  we use the type facts to narrow the implied type to
-                  boolean. We know that number cannot be selected
-                  because it is caught in the first clause.
-                */
-                const impliedType = getTypeWithFacts(getUnionType(clauseWitnesses.map(text => getImpliedTypeFromTypeofGuard(type, text) || type)), switchFacts);
-                return getTypeWithFacts(narrowTypeByImpliedType(type, impliedType), switchFacts);
+                // In the non-default cause we create a union of the type narrowed by each of the listed cases.
+                const clauseWitnesses = witnesses.slice(clauseStart, clauseEnd);
+                return getUnionType(map(clauseWitnesses, text => text ? narrowTypeByTypeName(type, text) : neverType));
             }
 
             function isMatchingConstructorReference(expr: Expression) {
@@ -32810,45 +32730,12 @@ namespace ts {
                 : Diagnostics.Type_of_yield_operand_in_an_async_generator_must_either_be_a_valid_promise_or_must_not_contain_a_callable_then_member);
         }
 
-        /**
-         * Collect the TypeFacts learned from a typeof switch with
-         * total clauses `witnesses`, and the active clause ranging
-         * from `start` to `end`. Parameter `hasDefault` denotes
-         * whether the active clause contains a default clause.
-         */
-        function getFactsFromTypeofSwitch(start: number, end: number, witnesses: string[], hasDefault: boolean): TypeFacts {
+        // Return the combined not-equal type facts for all cases except those between the start and end indices.
+        function getNotEqualFactsFromTypeofSwitch(start: number, end: number, witnesses: (string | undefined)[]): TypeFacts {
             let facts: TypeFacts = TypeFacts.None;
-            // When in the default we only collect inequality facts
-            // because default is 'in theory' a set of infinite
-            // equalities.
-            if (hasDefault) {
-                // Value is not equal to any types after the active clause.
-                for (let i = end; i < witnesses.length; i++) {
-                    facts |= typeofNEFacts.get(witnesses[i]) || TypeFacts.TypeofNEHostObject;
-                }
-                // Remove inequalities for types that appear in the
-                // active clause because they appear before other
-                // types collected so far.
-                for (let i = start; i < end; i++) {
-                    facts &= ~(typeofNEFacts.get(witnesses[i]) || 0);
-                }
-                // Add inequalities for types before the active clause unconditionally.
-                for (let i = 0; i < start; i++) {
-                    facts |= typeofNEFacts.get(witnesses[i]) || TypeFacts.TypeofNEHostObject;
-                }
-            }
-            // When in an active clause without default the set of
-            // equalities is finite.
-            else {
-                // Add equalities for all types in the active clause.
-                for (let i = start; i < end; i++) {
-                    facts |= typeofEQFacts.get(witnesses[i]) || TypeFacts.TypeofEQHostObject;
-                }
-                // Remove equalities for types that appear before the
-                // active clause.
-                for (let i = 0; i < start; i++) {
-                    facts &= ~(typeofEQFacts.get(witnesses[i]) || 0);
-                }
+            for (let i = 0; i < witnesses.length; i++) {
+                const witness = i < start || i >= end ? witnesses[i] : undefined;
+                facts |= witness !== undefined ? typeofNEFacts.get(witness) || TypeFacts.TypeofNEHostObject : 0;
             }
             return facts;
         }
@@ -32860,16 +32747,19 @@ namespace ts {
 
         function computeExhaustiveSwitchStatement(node: SwitchStatement): boolean {
             if (node.expression.kind === SyntaxKind.TypeOfExpression) {
-                const operandType = getTypeOfExpression((node.expression as TypeOfExpression).expression);
-                const witnesses = getSwitchClauseTypeOfWitnesses(node, /*retainDefault*/ false);
-                // notEqualFacts states that the type of the switched value is not equal to every type in the switch.
-                const notEqualFacts = getFactsFromTypeofSwitch(0, 0, witnesses, /*hasDefault*/ true);
-                const type = getBaseConstraintOfType(operandType) || operandType;
-                // Take any/unknown as a special condition. Or maybe we could change `type` to a union containing all primitive types.
-                if (type.flags & TypeFlags.AnyOrUnknown) {
+                const witnesses = getSwitchClauseTypeOfWitnesses(node);
+                if (!witnesses) {
+                    return false;
+                }
+                const operandConstraint = getBaseConstraintOrType(getTypeOfExpression((node.expression as TypeOfExpression).expression));
+                // Get the not-equal flags for all handled cases.
+                const notEqualFacts = getNotEqualFactsFromTypeofSwitch(0, 0, witnesses);
+                if (operandConstraint.flags & TypeFlags.AnyOrUnknown) {
+                    // We special case the top types to be exhaustive when all cases are handled.
                     return (TypeFacts.AllTypeofNE & notEqualFacts) === TypeFacts.AllTypeofNE;
                 }
-                return !!(filterType(type, t => (getTypeFacts(t) & notEqualFacts) === notEqualFacts).flags & TypeFlags.Never);
+                // A missing not-equal flag indicates that the type wasn't handled by some case.
+                return !someType(operandConstraint, t => (getTypeFacts(t) & notEqualFacts) === notEqualFacts);
             }
             const type = getTypeOfExpression(node.expression);
             if (!isLiteralType(type)) {
