@@ -1,6 +1,6 @@
 === tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts ===
 type F = ({a: string}) => void;
->F : F
+>F : ({ a }: { a: any; }) => void
 >a : any
 >string : any
 
