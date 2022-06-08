@@ -1037,7 +1037,7 @@ namespace ts {
 
         function reportStatisticalValue(s: Statistic, aggregate: boolean) {
             statistics.push(s);
-            if (aggregate) buildPerformance.addStatistics(s);
+            if (aggregate) buildPerformance.addStatistics({ ...s, name: `Aggregate ${s.name}` });
         }
 
         function reportMemoryStatistic(name: string, memoryUsed: number) {

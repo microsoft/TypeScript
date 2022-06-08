@@ -1955,7 +1955,7 @@ namespace ts {
         buildPerformance.mark("beforeBuild");
         const result = buildWorker(state, project, cancellationToken, writeFile, getCustomTransformers, onlyReferences);
         buildPerformance.mark("afterBuild");
-        buildPerformance.measure("Total", "beforeBuild", "afterBuild");
+        buildPerformance.measure("Build", "beforeBuild", "afterBuild");
         return result;
     }
 
@@ -1992,7 +1992,7 @@ namespace ts {
         buildPerformance.mark("beforeClean");
         const result = cleanWorker(state, project, onlyReferences);
         buildPerformance.mark("afterClean");
-        buildPerformance.measure("Total", "beforeClean", "afterClean");
+        buildPerformance.measure("Clean", "beforeClean", "afterClean");
         return result;
     }
 
@@ -2076,7 +2076,7 @@ namespace ts {
         buildPerformance.mark("beforeBuild");
         const buildOrder = buildNextInvalidatedProjectWorker(state, changeDetected);
         buildPerformance.mark("afterBuild");
-        buildPerformance.measure("Total", "beforeBuild", "afterBuild");
+        buildPerformance.measure("Build", "beforeBuild", "afterBuild");
         if (buildOrder) reportErrorSummary(state, buildOrder);
     }
 
