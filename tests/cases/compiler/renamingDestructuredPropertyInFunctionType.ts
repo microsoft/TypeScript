@@ -2,7 +2,7 @@
 // @declaration: true
 // GH#37454, GH#41044
 
-type O = { a: string; b: number; c: number; };
+type O = { a?: string; b: number; c: number; };
 type F1 = (arg: number) => any; // OK
 type F2 = ({ a: string }: O) => any; // Error
 type F3 = ({ a: string, b, c }: O) => any; // Error
@@ -46,6 +46,8 @@ const obj1 = {
 const obj2 = {
   method({ a: string }: O): typeof string { return string; }
 };
+function f6({ a: string = "" }: O) { }
+const f7 = ({ a: string = "", b, c }: O) => { };
 
 // In below case `string` should be kept because it is used
-function f6({ a: string }: O): typeof string { return "a"; }
+function f8({ a: string = "" }: O): typeof string { return "a"; }

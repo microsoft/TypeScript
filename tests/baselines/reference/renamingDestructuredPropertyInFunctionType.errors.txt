@@ -16,7 +16,7 @@ tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(32,13): error
 ==== tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts (13 errors) ====
     // GH#37454, GH#41044
     
-    type O = { a: string; b: number; c: number; };
+    type O = { a?: string; b: number; c: number; };
     type F1 = (arg: number) => any; // OK
     type F2 = ({ a: string }: O) => any; // Error
                     ~~~~~~
@@ -86,6 +86,8 @@ tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(32,13): error
     const obj2 = {
       method({ a: string }: O): typeof string { return string; }
     };
+    function f6({ a: string = "" }: O) { }
+    const f7 = ({ a: string = "", b, c }: O) => { };
     
     // In below case `string` should be kept because it is used
-    function f6({ a: string }: O): typeof string { return "a"; }
+    function f8({ a: string = "" }: O): typeof string { return "a"; }

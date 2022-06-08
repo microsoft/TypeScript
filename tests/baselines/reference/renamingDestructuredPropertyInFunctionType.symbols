@@ -1,14 +1,14 @@
 === tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts ===
 // GH#37454, GH#41044
 
-type O = { a: string; b: number; c: number; };
+type O = { a?: string; b: number; c: number; };
 >O : Symbol(O, Decl(renamingDestructuredPropertyInFunctionType.ts, 0, 0))
 >a : Symbol(a, Decl(renamingDestructuredPropertyInFunctionType.ts, 2, 10))
->b : Symbol(b, Decl(renamingDestructuredPropertyInFunctionType.ts, 2, 21))
->c : Symbol(c, Decl(renamingDestructuredPropertyInFunctionType.ts, 2, 32))
+>b : Symbol(b, Decl(renamingDestructuredPropertyInFunctionType.ts, 2, 22))
+>c : Symbol(c, Decl(renamingDestructuredPropertyInFunctionType.ts, 2, 33))
 
 type F1 = (arg: number) => any; // OK
->F1 : Symbol(F1, Decl(renamingDestructuredPropertyInFunctionType.ts, 2, 46))
+>F1 : Symbol(F1, Decl(renamingDestructuredPropertyInFunctionType.ts, 2, 47))
 >arg : Symbol(arg, Decl(renamingDestructuredPropertyInFunctionType.ts, 3, 11))
 
 type F2 = ({ a: string }: O) => any; // Error
@@ -212,12 +212,25 @@ const obj2 = {
 >string : Symbol(string, Decl(renamingDestructuredPropertyInFunctionType.ts, 44, 10))
 
 };
-
-// In below case `string` should be kept because it is used
-function f6({ a: string }: O): typeof string { return "a"; }
+function f6({ a: string = "" }: O) { }
 >f6 : Symbol(f6, Decl(renamingDestructuredPropertyInFunctionType.ts, 45, 2))
 >a : Symbol(a, Decl(renamingDestructuredPropertyInFunctionType.ts, 2, 10))
->string : Symbol(string, Decl(renamingDestructuredPropertyInFunctionType.ts, 48, 13))
+>string : Symbol(string, Decl(renamingDestructuredPropertyInFunctionType.ts, 46, 13))
 >O : Symbol(O, Decl(renamingDestructuredPropertyInFunctionType.ts, 0, 0))
->string : Symbol(string, Decl(renamingDestructuredPropertyInFunctionType.ts, 48, 13))
+
+const f7 = ({ a: string = "", b, c }: O) => { };
+>f7 : Symbol(f7, Decl(renamingDestructuredPropertyInFunctionType.ts, 47, 5))
+>a : Symbol(a, Decl(renamingDestructuredPropertyInFunctionType.ts, 2, 10))
+>string : Symbol(string, Decl(renamingDestructuredPropertyInFunctionType.ts, 47, 13))
+>b : Symbol(b, Decl(renamingDestructuredPropertyInFunctionType.ts, 47, 29))
+>c : Symbol(c, Decl(renamingDestructuredPropertyInFunctionType.ts, 47, 32))
+>O : Symbol(O, Decl(renamingDestructuredPropertyInFunctionType.ts, 0, 0))
+
+// In below case `string` should be kept because it is used
+function f8({ a: string = "" }: O): typeof string { return "a"; }
+>f8 : Symbol(f8, Decl(renamingDestructuredPropertyInFunctionType.ts, 47, 48))
+>a : Symbol(a, Decl(renamingDestructuredPropertyInFunctionType.ts, 2, 10))
+>string : Symbol(string, Decl(renamingDestructuredPropertyInFunctionType.ts, 50, 13))
+>O : Symbol(O, Decl(renamingDestructuredPropertyInFunctionType.ts, 0, 0))
+>string : Symbol(string, Decl(renamingDestructuredPropertyInFunctionType.ts, 50, 13))
 

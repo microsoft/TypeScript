@@ -1,7 +1,7 @@
 //// [renamingDestructuredPropertyInFunctionType.ts]
 // GH#37454, GH#41044
 
-type O = { a: string; b: number; c: number; };
+type O = { a?: string; b: number; c: number; };
 type F1 = (arg: number) => any; // OK
 type F2 = ({ a: string }: O) => any; // Error
 type F3 = ({ a: string, b, c }: O) => any; // Error
@@ -45,9 +45,11 @@ const obj1 = {
 const obj2 = {
   method({ a: string }: O): typeof string { return string; }
 };
+function f6({ a: string = "" }: O) { }
+const f7 = ({ a: string = "", b, c }: O) => { };
 
 // In below case `string` should be kept because it is used
-function f6({ a: string }: O): typeof string { return "a"; }
+function f8({ a: string = "" }: O): typeof string { return "a"; }
 
 //// [renamingDestructuredPropertyInFunctionType.js]
 // GH#37454, GH#41044
@@ -63,13 +65,15 @@ const obj1 = {
 const obj2 = {
     method({ a: string }) { return string; }
 };
+function f6({ a: string = "" }) { }
+const f7 = ({ a: string = "", b, c }) => { };
 // In below case `string` should be kept because it is used
-function f6({ a: string }) { return "a"; }
+function f8({ a: string = "" }) { return "a"; }
 
 
 //// [renamingDestructuredPropertyInFunctionType.d.ts]
 declare type O = {
-    a: string;
+    a?: string;
     b: number;
     c: number;
 };
@@ -122,14 +126,16 @@ interface I {
     }): any;
 }
 declare function f1({ a }: O): void;
-declare const f2: ({ a: string }: O) => void;
-declare const f3: ({ a: string, b, c }: O) => void;
-declare const f4: ({ a: string }: O) => string;
-declare const f5: ({ a: string, b, c }: O) => string;
+declare const f2: ({ a }: O) => void;
+declare const f3: ({ a, b, c }: O) => void;
+declare const f4: ({ a }: O) => string;
+declare const f5: ({ a, b, c }: O) => string;
 declare const obj1: {
-    method({ a: string }: O): void;
+    method({ a }: O): void;
 };
 declare const obj2: {
-    method({ a: string }: O): string;
+    method({ a }: O): string;
 };
-declare function f6({ a: string }: O): typeof string;
+declare function f6({ a }: O): void;
+declare const f7: ({ a, b, c }: O) => void;
+declare function f8({ a: string }: O): typeof string;
