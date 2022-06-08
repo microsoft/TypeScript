@@ -37,6 +37,11 @@ namespace ts.Rename {
             return getRenameInfoError(Diagnostics.You_cannot_rename_elements_that_are_defined_in_the_standard_TypeScript_library);
         }
 
+        // >> Disallow rename for elements that are defined in `/node_modules/*`.
+        if (declarations.some(declaration => isDefinedInExternalLibrary(program, declaration))) {
+            return getRenameInfoError(Diagnostics.You_cannot_rename_elements_that_are_defined_in_the_standard_TypeScript_library); // >> TODO: new diagnostic?
+        }
+
         // Cannot rename `default` as in `import { default as foo } from "./someModule";
         if (isIdentifier(node) && node.originalKeywordKind === SyntaxKind.DefaultKeyword && symbol.parent && symbol.parent.flags & SymbolFlags.Module) {
             return undefined;
@@ -58,6 +63,11 @@ namespace ts.Rename {
     function isDefinedInLibraryFile(program: Program, declaration: Node) {
         const sourceFile = declaration.getSourceFile();
         return program.isSourceFileDefaultLibrary(sourceFile) && fileExtensionIs(sourceFile.fileName, Extension.Dts);
+    }
+
+    function isDefinedInExternalLibrary(program: Program, declaration: Node) {
+        const sourceFile = declaration.getSourceFile();
+        return program.isSourceFileFromExternalLibrary(sourceFile);
     }
 
     function getRenameInfoForModule(node: StringLiteralLike, sourceFile: SourceFile, moduleSymbol: Symbol): RenameInfo | undefined {

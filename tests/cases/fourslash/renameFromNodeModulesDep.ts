@@ -1,9 +1,11 @@
 /// <reference path="fourslash.ts" />
 
 // @Filename: /index.ts
-////import { Foo } from "foo";
+////import { /*ok*/[|Foo|] } from "foo";
 ////declare const f: Foo;
-////f./**/bar;
+////f./*notOk*/bar;
+// @Filename: /tsconfig.json
+//// { }
 // @Filename: /node_modules/foo/package.json
 //// { "types": "index.d.ts" }
 // @Filename: /node_modules/foo/index.d.ts
@@ -11,4 +13,7 @@
 ////    bar: string;
 ////}
 
-verify.baselineRename("", {});
+goTo.marker("ok");
+verify.renameInfoSucceeded();
+goTo.marker("notOk");
+verify.renameInfoFailed();
