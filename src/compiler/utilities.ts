@@ -6475,6 +6475,10 @@ namespace ts {
         return optionsHaveChanges(oldOptions, newOptions, affectsEmitOptionDeclarations);
     }
 
+    export function compilerOptionsAffectDeclarationPath(newOptions: CompilerOptions, oldOptions: CompilerOptions): boolean {
+        return optionsHaveChanges(oldOptions, newOptions, affectsDeclarationPathOptionDeclarations);
+    }
+
     export function getCompilerOptionValue(options: CompilerOptions, option: CommandLineOption): unknown {
         return option.strictFlag ? getStrictOptionValue(options, option.name as StrictOptionName) : options[option.name];
     }

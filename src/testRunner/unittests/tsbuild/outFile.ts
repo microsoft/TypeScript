@@ -171,6 +171,22 @@ namespace ts {
             ]
         });
 
+        verifyTscWithEdits({
+            scenario: "outFile",
+            subScenario: "when input file text does not change but its modified time changes",
+            fs: () => outFileFs,
+            commandLineArgs: ["--b", "/src/third", "--verbose"],
+            edits: [
+                {
+                    subScenario: "upstream project changes without changing file text",
+                    modifyFs: fs => {
+                        const time = new Date(fs.time());
+                        fs.utimesSync("/src/first/first_PART1.ts", time, time);
+                    },
+                },
+            ]
+        });
+
         verifyTscCompileLike(testTscCompileLike, {
             scenario: "outFile",
             subScenario: "builds till project specified",

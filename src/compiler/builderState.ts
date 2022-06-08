@@ -10,25 +10,6 @@ namespace ts {
             outputFiles.push({ name: fileName, writeByteOrderMark, text });
         }
     }
-
-    export interface ReusableBuilderState {
-        /**
-         * Information of the file eg. its version, signature etc
-         */
-        fileInfos: ReadonlyESMap<Path, BuilderState.FileInfo>;
-        /**
-         * Contains the map of ReferencedSet=Referenced files of the file if module emit is enabled
-         * Otherwise undefined
-         * Thus non undefined value indicates, module emit
-         */
-        readonly referencedMap?: BuilderState.ReadonlyManyToManyPathMap | undefined;
-        /**
-         * Contains the map of exported modules ReferencedSet=exported module files from the file if module emit is enabled
-         * Otherwise undefined
-         */
-        readonly exportedModulesMap?: BuilderState.ReadonlyManyToManyPathMap | undefined;
-    }
-
     export interface BuilderState {
         /**
          * Information of the file eg. its version, signature etc
@@ -39,26 +20,34 @@ namespace ts {
          * Otherwise undefined
          * Thus non undefined value indicates, module emit
          */
-        readonly referencedMap: BuilderState.ReadonlyManyToManyPathMap | undefined;
+        readonly referencedMap?: BuilderState.ReadonlyManyToManyPathMap | undefined;
         /**
          * Contains the map of exported modules ReferencedSet=exported module files from the file if module emit is enabled
          * Otherwise undefined
          *
          * This is equivalent to referencedMap, but for the emitted .d.ts file.
          */
-        readonly exportedModulesMap: BuilderState.ManyToManyPathMap | undefined;
+        readonly exportedModulesMap?: BuilderState.ManyToManyPathMap | undefined;
 
         /**
          * true if file version is used as signature
          * This helps in delaying the calculation of the d.ts hash as version for the file till reasonable time
          */
-        useFileVersionAsSignature: boolean;
+        useFileVersionAsSignature?: boolean;
         /**
          * Map of files that have already called update signature.
          * That means hence forth these files are assumed to have
          * no change in their signature for this version of the program
          */
-        hasCalledUpdateShapeSignature: Set<Path>;
+        hasCalledUpdateShapeSignature?: Set<Path>;
+        /**
+         * Stores signatures before before the update till affected file is commited
+         */
+        oldSignatures?: ESMap<Path, string | false>;
+        /**
+         * Stores exportedModulesMap before the update till affected file is commited
+         */
+        oldExportedModulesMap?: ESMap<Path, ReadonlySet<Path> | false>;
         /**
          * Cache of all files excluding default library file for the current program
          */
@@ -68,7 +57,6 @@ namespace ts {
          */
         allFileNames?: readonly string[];
     }
-
     export namespace BuilderState {
         /**
          * Information about the source file: Its version and optional signature from last emit
@@ -77,42 +65,27 @@ namespace ts {
             readonly version: string;
             signature: string | undefined;
             affectsGlobalScope: true | undefined;
-            impliedFormat: number | undefined;
+            impliedFormat: SourceFile["impliedNodeFormat"];
         }
 
         export interface ReadonlyManyToManyPathMap {
-            clone(): ManyToManyPathMap;
-            forEach(action: (v: ReadonlySet<Path>, k: Path) => void): void;
             getKeys(v: Path): ReadonlySet<Path> | undefined;
             getValues(k: Path): ReadonlySet<Path> | undefined;
-            hasKey(k: Path): boolean;
             keys(): Iterator<Path>;
-
-            /**
-             * The set of arguments to {@link deleteKeys} which have not subsequently
-             * been arguments to {@link set}.  Note that a key does not have to have
-             * ever been in the map to appear in this set.
-             */
-            deletedKeys(): ReadonlySet<Path> | undefined;
         }
 
         export interface ManyToManyPathMap extends ReadonlyManyToManyPathMap {
             deleteKey(k: Path): boolean;
             set(k: Path, v: ReadonlySet<Path>): void;
-            clear(): void;
         }
 
         export function createManyToManyPathMap(): ManyToManyPathMap {
             function create(forward: ESMap<Path, ReadonlySet<Path>>, reverse: ESMap<Path, Set<Path>>, deleted: Set<Path> | undefined): ManyToManyPathMap {
                 const map: ManyToManyPathMap = {
-                    clone: () => create(new Map(forward), new Map(reverse), deleted && new Set(deleted)),
-                    forEach: fn => forward.forEach(fn),
                     getKeys: v => reverse.get(v),
                     getValues: k => forward.get(k),
-                    hasKey: k => forward.has(k),
                     keys: () => forward.keys(),
 
-                    deletedKeys: () => deleted,
                     deleteKey: k => {
                         (deleted ||= new Set<Path>()).add(k);
 
@@ -145,11 +118,6 @@ namespace ts {
 
                         return map;
                     },
-                    clear: () => {
-                        forward.clear();
-                        reverse.clear();
-                        deleted?.clear();
-                    }
                 };
 
                 return map;
@@ -287,18 +255,17 @@ namespace ts {
         /**
          * Returns true if oldState is reusable, that is the emitKind = module/non module has not changed
          */
-        export function canReuseOldState(newReferencedMap: ReadonlyManyToManyPathMap | undefined, oldState: Readonly<ReusableBuilderState> | undefined) {
+        export function canReuseOldState(newReferencedMap: ReadonlyManyToManyPathMap | undefined, oldState: BuilderState | undefined) {
             return oldState && !oldState.referencedMap === !newReferencedMap;
         }
 
         /**
          * Creates the state of file references and signature for the new program from oldState if it is safe
          */
-        export function create(newProgram: Program, getCanonicalFileName: GetCanonicalFileName, oldState?: Readonly<ReusableBuilderState>, disableUseFileVersionAsSignature?: boolean): BuilderState {
+        export function create(newProgram: Program, getCanonicalFileName: GetCanonicalFileName, oldState?: Readonly<BuilderState>, disableUseFileVersionAsSignature?: boolean): BuilderState {
             const fileInfos = new Map<Path, FileInfo>();
             const referencedMap = newProgram.getCompilerOptions().module !== ModuleKind.None ? createManyToManyPathMap() : undefined;
             const exportedModulesMap = referencedMap ? createManyToManyPathMap() : undefined;
-            const hasCalledUpdateShapeSignature = new Set<Path>();
             const useOldState = canReuseOldState(referencedMap, oldState);
 
             // Ensure source files have parent pointers set
@@ -307,7 +274,10 @@ namespace ts {
             // Create the reference map, and set the file infos
             for (const sourceFile of newProgram.getSourceFiles()) {
                 const version = Debug.checkDefined(sourceFile.version, "Program intended to be used with Builder should have source files with versions set");
-                const oldInfo = useOldState ? oldState!.fileInfos.get(sourceFile.resolvedPath) : undefined;
+                const oldUncommittedSignature = useOldState ? oldState!.oldSignatures?.get(sourceFile.resolvedPath) : undefined;
+                const signature = oldUncommittedSignature === undefined ?
+                    useOldState ? oldState!.fileInfos.get(sourceFile.resolvedPath)?.signature : undefined :
+                    oldUncommittedSignature || undefined;
                 if (referencedMap) {
                     const newReferences = getReferencedFiles(newProgram, sourceFile, getCanonicalFileName);
                     if (newReferences) {
@@ -315,20 +285,27 @@ namespace ts {
                     }
                     // Copy old visible to outside files map
                     if (useOldState) {
-                        const exportedModules = oldState!.exportedModulesMap!.getValues(sourceFile.resolvedPath);
+                        const oldUncommittedExportedModules = oldState!.oldExportedModulesMap?.get(sourceFile.resolvedPath);
+                        const exportedModules = oldUncommittedExportedModules === undefined ?
+                            oldState!.exportedModulesMap!.getValues(sourceFile.resolvedPath) :
+                            oldUncommittedExportedModules || undefined;
                         if (exportedModules) {
                             exportedModulesMap!.set(sourceFile.resolvedPath, exportedModules);
                         }
                     }
                 }
-                fileInfos.set(sourceFile.resolvedPath, { version, signature: oldInfo && oldInfo.signature, affectsGlobalScope: isFileAffectingGlobalScope(sourceFile) || undefined, impliedFormat: sourceFile.impliedNodeFormat });
+                fileInfos.set(sourceFile.resolvedPath, {
+                    version,
+                    signature,
+                    affectsGlobalScope: isFileAffectingGlobalScope(sourceFile) || undefined,
+                    impliedFormat: sourceFile.impliedNodeFormat
+                });
             }
 
             return {
                 fileInfos,
                 referencedMap,
                 exportedModulesMap,
-                hasCalledUpdateShapeSignature,
                 useFileVersionAsSignature: !disableUseFileVersionAsSignature && !useOldState
             };
         }
@@ -342,73 +319,41 @@ namespace ts {
         }
 
         /**
-         * Creates a clone of the state
-         */
-        export function clone(state: Readonly<BuilderState>): BuilderState {
-            // Dont need to backup allFiles info since its cache anyway
-            return {
-                fileInfos: new Map(state.fileInfos),
-                referencedMap: state.referencedMap?.clone(),
-                exportedModulesMap: state.exportedModulesMap?.clone(),
-                hasCalledUpdateShapeSignature: new Set(state.hasCalledUpdateShapeSignature),
-                useFileVersionAsSignature: state.useFileVersionAsSignature,
-            };
-        }
-
-        /**
          * Gets the files affected by the path from the program
          */
-        export function getFilesAffectedBy(state: BuilderState, programOfThisState: Program, path: Path, cancellationToken: CancellationToken | undefined, computeHash: ComputeHash, cacheToUpdateSignature?: ESMap<Path, string>, exportedModulesMapCache?: ManyToManyPathMap): readonly SourceFile[] {
-            // Since the operation could be cancelled, the signatures are always stored in the cache
-            // They will be committed once it is safe to use them
-            // eg when calling this api from tsserver, if there is no cancellation of the operation
-            // In the other cases the affected files signatures are committed only after the iteration through the result is complete
-            const signatureCache = cacheToUpdateSignature || new Map();
+        export function getFilesAffectedBy(state: BuilderState, programOfThisState: Program, path: Path, cancellationToken: CancellationToken | undefined, computeHash: ComputeHash): readonly SourceFile[] {
+            const result = getFilesAffectedByWithOldState(state, programOfThisState, path, cancellationToken, computeHash);
+            state.oldSignatures?.clear();
+            state.oldExportedModulesMap?.clear();
+            return result;
+        }
+
+        export function getFilesAffectedByWithOldState(state: BuilderState, programOfThisState: Program, path: Path, cancellationToken: CancellationToken | undefined, computeHash: ComputeHash): readonly SourceFile[] {
             const sourceFile = programOfThisState.getSourceFileByPath(path);
             if (!sourceFile) {
                 return emptyArray;
             }
 
-            if (!updateShapeSignature(state, programOfThisState, sourceFile, signatureCache, cancellationToken, computeHash, exportedModulesMapCache)) {
+            if (!updateShapeSignature(state, programOfThisState, sourceFile, cancellationToken, computeHash)) {
                 return [sourceFile];
             }
 
-            const result = (state.referencedMap ? getFilesAffectedByUpdatedShapeWhenModuleEmit : getFilesAffectedByUpdatedShapeWhenNonModuleEmit)(state, programOfThisState, sourceFile, signatureCache, cancellationToken, computeHash, exportedModulesMapCache);
-            if (!cacheToUpdateSignature) {
-                // Commit all the signatures in the signature cache
-                updateSignaturesFromCache(state, signatureCache);
-            }
-            return result;
-        }
-
-        /**
-         * Updates the signatures from the cache into state's fileinfo signatures
-         * This should be called whenever it is safe to commit the state of the builder
-         */
-        export function updateSignaturesFromCache(state: BuilderState, signatureCache: ESMap<Path, string>) {
-            signatureCache.forEach((signature, path) => updateSignatureOfFile(state, signature, path));
+            return (state.referencedMap ? getFilesAffectedByUpdatedShapeWhenModuleEmit : getFilesAffectedByUpdatedShapeWhenNonModuleEmit)(state, programOfThisState, sourceFile, cancellationToken, computeHash);
         }
 
         export function updateSignatureOfFile(state: BuilderState, signature: string | undefined, path: Path) {
             state.fileInfos.get(path)!.signature = signature;
-            state.hasCalledUpdateShapeSignature.add(path);
+            (state.hasCalledUpdateShapeSignature ||= new Set()).add(path);
         }
 
         /**
          * Returns if the shape of the signature has changed since last emit
          */
-        export function updateShapeSignature(state: Readonly<BuilderState>, programOfThisState: Program, sourceFile: SourceFile, cacheToUpdateSignature: ESMap<Path, string>, cancellationToken: CancellationToken | undefined, computeHash: ComputeHash, exportedModulesMapCache?: ManyToManyPathMap, useFileVersionAsSignature: boolean = state.useFileVersionAsSignature) {
-            Debug.assert(!!sourceFile);
-            Debug.assert(!exportedModulesMapCache || !!state.exportedModulesMap, "Compute visible to outside map only if visibleToOutsideReferencedMap present in the state");
-
+        export function updateShapeSignature(state: BuilderState, programOfThisState: Program, sourceFile: SourceFile, cancellationToken: CancellationToken | undefined, computeHash: ComputeHash, useFileVersionAsSignature = state.useFileVersionAsSignature) {
             // If we have cached the result for this file, that means hence forth we should assume file shape is uptodate
-            if (state.hasCalledUpdateShapeSignature.has(sourceFile.resolvedPath) || cacheToUpdateSignature.has(sourceFile.resolvedPath)) {
-                return false;
-            }
+            if (state.hasCalledUpdateShapeSignature?.has(sourceFile.resolvedPath)) return false;
 
-            const info = state.fileInfos.get(sourceFile.resolvedPath);
-            if (!info) return Debug.fail();
-
+            const info = state.fileInfos.get(sourceFile.resolvedPath)!;
             const prevSignature = info.signature;
             let latestSignature: string | undefined;
             if (!sourceFile.isDeclarationFile && !useFileVersionAsSignature) {
@@ -423,46 +368,55 @@ namespace ts {
                 const firstDts = firstOrUndefined(emitOutput.outputFiles);
                 if (firstDts) {
                     Debug.assert(isDeclarationFileName(firstDts.name), "File extension for signature expected to be dts", () => `Found: ${getAnyExtensionFromPath(firstDts.name)} for ${firstDts.name}:: All output files: ${JSON.stringify(emitOutput.outputFiles.map(f => f.name))}`);
-                    latestSignature = (computeHash || generateDjb2Hash)(firstDts.text);
-                    if (exportedModulesMapCache && latestSignature !== prevSignature) {
-                        updateExportedModules(sourceFile, emitOutput.exportedModulesFromDeclarationEmit, exportedModulesMapCache);
+                    latestSignature = computeSignature(firstDts.text, computeHash);
+                    if (latestSignature !== prevSignature) {
+                        updateExportedModules(state, sourceFile, emitOutput.exportedModulesFromDeclarationEmit);
                     }
                 }
             }
             // Default is to use file version as signature
             if (latestSignature === undefined) {
                 latestSignature = sourceFile.version;
-                if (exportedModulesMapCache && latestSignature !== prevSignature) {
+                if (state.exportedModulesMap && latestSignature !== prevSignature) {
+                    (state.oldExportedModulesMap ||= new Map()).set(sourceFile.resolvedPath, state.exportedModulesMap.getValues(sourceFile.resolvedPath) || false);
                     // All the references in this file are exported
                     const references = state.referencedMap ? state.referencedMap.getValues(sourceFile.resolvedPath) : undefined;
                     if (references) {
-                        exportedModulesMapCache.set(sourceFile.resolvedPath, references);
+                        state.exportedModulesMap.set(sourceFile.resolvedPath, references);
                     }
                     else {
-                        exportedModulesMapCache.deleteKey(sourceFile.resolvedPath);
+                        state.exportedModulesMap.deleteKey(sourceFile.resolvedPath);
                     }
                 }
             }
-            cacheToUpdateSignature.set(sourceFile.resolvedPath, latestSignature);
+            (state.oldSignatures ||= new Map()).set(sourceFile.resolvedPath, prevSignature || false);
+            (state.hasCalledUpdateShapeSignature ||= new Set()).add(sourceFile.resolvedPath);
+            info.signature = latestSignature;
             return latestSignature !== prevSignature;
+        }
+
+        export function computeSignature(text: string, computeHash: ComputeHash | undefined) {
+            return (computeHash || generateDjb2Hash)(text);
         }
 
         /**
          * Coverts the declaration emit result into exported modules map
          */
-        export function updateExportedModules(sourceFile: SourceFile, exportedModulesFromDeclarationEmit: ExportedModulesFromDeclarationEmit | undefined, exportedModulesMapCache: ManyToManyPathMap) {
+        export function updateExportedModules(state: BuilderState, sourceFile: SourceFile, exportedModulesFromDeclarationEmit: ExportedModulesFromDeclarationEmit | undefined) {
+            if (!state.exportedModulesMap) return;
+            (state.oldExportedModulesMap ||= new Map()).set(sourceFile.resolvedPath, state.exportedModulesMap.getValues(sourceFile.resolvedPath) || false);
             if (!exportedModulesFromDeclarationEmit) {
-                exportedModulesMapCache.deleteKey(sourceFile.resolvedPath);
+                state.exportedModulesMap.deleteKey(sourceFile.resolvedPath);
                 return;
             }
 
             let exportedModules: Set<Path> | undefined;
             exportedModulesFromDeclarationEmit.forEach(symbol => addExportedModule(getReferencedFilesFromImportedModuleSymbol(symbol)));
             if (exportedModules) {
-                exportedModulesMapCache.set(sourceFile.resolvedPath, exportedModules);
+                state.exportedModulesMap.set(sourceFile.resolvedPath, exportedModules);
             }
             else {
-                exportedModulesMapCache.deleteKey(sourceFile.resolvedPath);
+                state.exportedModulesMap.deleteKey(sourceFile.resolvedPath);
             }
 
             function addExportedModule(exportedModulePaths: Path[] | undefined) {
@@ -472,18 +426,6 @@ namespace ts {
                     }
                     exportedModulePaths.forEach(path => exportedModules!.add(path));
                 }
-            }
-        }
-
-        /**
-         * Updates the exported modules from cache into state's exported modules map
-         * This should be called whenever it is safe to commit the state of the builder
-         */
-        export function updateExportedFilesMapFromCache(state: BuilderState, exportedModulesMapCache: ManyToManyPathMap | undefined) {
-            if (exportedModulesMapCache) {
-                Debug.assert(!!state.exportedModulesMap);
-                exportedModulesMapCache.deletedKeys()?.forEach(path => state.exportedModulesMap!.deleteKey(path));
-                exportedModulesMapCache.forEach((exportedModules, path) => state.exportedModulesMap!.set(path, exportedModules));
             }
         }
 
@@ -614,7 +556,7 @@ namespace ts {
         /**
          * When program emits modular code, gets the files affected by the sourceFile whose shape has changed
          */
-        function getFilesAffectedByUpdatedShapeWhenModuleEmit(state: BuilderState, programOfThisState: Program, sourceFileWithUpdatedShape: SourceFile, cacheToUpdateSignature: ESMap<Path, string>, cancellationToken: CancellationToken | undefined, computeHash: ComputeHash, exportedModulesMapCache: ManyToManyPathMap | undefined) {
+        function getFilesAffectedByUpdatedShapeWhenModuleEmit(state: BuilderState, programOfThisState: Program, sourceFileWithUpdatedShape: SourceFile, cancellationToken: CancellationToken | undefined, computeHash: ComputeHash) {
             if (isFileAffectingGlobalScope(sourceFileWithUpdatedShape)) {
                 return getAllFilesExcludingDefaultLibraryFile(state, programOfThisState, sourceFileWithUpdatedShape);
             }
@@ -637,7 +579,7 @@ namespace ts {
                 if (!seenFileNamesMap.has(currentPath)) {
                     const currentSourceFile = programOfThisState.getSourceFileByPath(currentPath)!;
                     seenFileNamesMap.set(currentPath, currentSourceFile);
-                    if (currentSourceFile && updateShapeSignature(state, programOfThisState, currentSourceFile, cacheToUpdateSignature, cancellationToken, computeHash, exportedModulesMapCache)) {
+                    if (currentSourceFile && updateShapeSignature(state, programOfThisState, currentSourceFile, cancellationToken, computeHash)) {
                         queue.push(...getReferencedByPaths(state, currentSourceFile.resolvedPath));
                     }
                 }

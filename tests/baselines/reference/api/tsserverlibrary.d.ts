@@ -4140,7 +4140,7 @@ declare namespace ts {
         Changed = 1,
         Deleted = 2
     }
-    export type FileWatcherCallback = (fileName: string, eventKind: FileWatcherEventKind) => void;
+    export type FileWatcherCallback = (fileName: string, eventKind: FileWatcherEventKind, modifiedTime?: Date) => void;
     export type DirectoryWatcherCallback = (fileName: string) => void;
     export interface System {
         args: string[];

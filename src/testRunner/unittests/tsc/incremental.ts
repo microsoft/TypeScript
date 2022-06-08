@@ -123,6 +123,11 @@ const a: string = 10;`, "utf-8"),
             verifyNoEmitChanges({ composite: true });
 
             function verifyNoEmitChanges(compilerOptions: CompilerOptions) {
+                const discrepancyExplanation = () => [
+                    ...noChangeWithExportsDiscrepancyRun.discrepancyExplanation!(),
+                    "Clean build will not have dtsChangeTime as there was no emit and emitSignatures as undefined for files",
+                    "Incremental will store the past dtsChangeTime and emitSignatures",
+                ];
                 const discrepancyIfNoDtsEmit = getEmitDeclarations(compilerOptions) ?
                     undefined :
                     noChangeWithExportsDiscrepancyRun.discrepancyExplanation;
@@ -130,7 +135,11 @@ const a: string = 10;`, "utf-8"),
                     ...noChangeRun,
                     subScenario: "No Change run with noEmit",
                     commandLineArgs: ["--p", "src/project", "--noEmit"],
-                    discrepancyExplanation: discrepancyIfNoDtsEmit,
+                    discrepancyExplanation: compilerOptions.composite ?
+                        discrepancyExplanation :
+                        !compilerOptions.declaration ?
+                            noChangeWithExportsDiscrepancyRun.discrepancyExplanation :
+                            undefined,
                 };
                 const noChangeRunWithEmit: TestTscEdit = {
                     ...noChangeRun,
@@ -157,12 +166,16 @@ const a: string = 10;`, "utf-8"),
                             subScenario: "Introduce error but still noEmit",
                             commandLineArgs: ["--p", "src/project", "--noEmit"],
                             modifyFs: fs => replaceText(fs, "/src/project/src/class.ts", "prop", "prop1"),
-                            discrepancyExplanation: getEmitDeclarations(compilerOptions) ? noChangeWithExportsDiscrepancyRun.discrepancyExplanation : undefined,
+                            discrepancyExplanation: compilerOptions.composite ?
+                                discrepancyExplanation :
+                                compilerOptions.declaration ?
+                                    noChangeWithExportsDiscrepancyRun.discrepancyExplanation :
+                                    undefined,
                         },
                         {
                             subScenario: "Fix error and emit",
                             modifyFs: fs => replaceText(fs, "/src/project/src/class.ts", "prop1", "prop"),
-                            discrepancyExplanation: discrepancyIfNoDtsEmit
+                            discrepancyExplanation: discrepancyIfNoDtsEmit,
                         },
                         noChangeRunWithEmit,
                         noChangeRunWithNoEmit,
@@ -171,7 +184,7 @@ const a: string = 10;`, "utf-8"),
                         {
                             subScenario: "Introduce error and emit",
                             modifyFs: fs => replaceText(fs, "/src/project/src/class.ts", "prop", "prop1"),
-                            discrepancyExplanation: discrepancyIfNoDtsEmit
+                            discrepancyExplanation: discrepancyIfNoDtsEmit,
                         },
                         noChangeRunWithEmit,
                         noChangeRunWithNoEmit,
@@ -181,7 +194,9 @@ const a: string = 10;`, "utf-8"),
                             subScenario: "Fix error and no emit",
                             commandLineArgs: ["--p", "src/project", "--noEmit"],
                             modifyFs: fs => replaceText(fs, "/src/project/src/class.ts", "prop1", "prop"),
-                            discrepancyExplanation: noChangeWithExportsDiscrepancyRun.discrepancyExplanation,
+                            discrepancyExplanation: compilerOptions.composite ?
+                                discrepancyExplanation :
+                                noChangeWithExportsDiscrepancyRun.discrepancyExplanation,
                         },
                         noChangeRunWithEmit,
                         noChangeRunWithNoEmit,
@@ -205,7 +220,9 @@ const a: string = 10;`, "utf-8"),
                         {
                             subScenario: "Fix error and no emit",
                             modifyFs: fs => replaceText(fs, "/src/project/src/class.ts", "prop1", "prop"),
-                            discrepancyExplanation: noChangeWithExportsDiscrepancyRun.discrepancyExplanation
+                            discrepancyExplanation: compilerOptions.composite ?
+                                discrepancyExplanation :
+                                noChangeWithExportsDiscrepancyRun.discrepancyExplanation,
                         },
                         noChangeRunWithEmit,
                     ],
