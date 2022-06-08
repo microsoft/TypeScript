@@ -1,4 +1,6 @@
 //// [renamingDestructuredPropertyInFunctionType.ts]
+// GH#37454, GH#41044
+
 type O = { a: string; b: number; c: number; };
 type F1 = (arg: number) => any; // OK
 type F2 = ({ a: string }: O) => any; // Error
@@ -31,7 +33,38 @@ interface I {
   new ({ a: string }): any; // Error
 }
 
+// Below are OK but renaming should be removed from declaration emit
+function f1({ a: string }: O) { }
+const f2 = function({ a: string }: O) { };
+const f3 = ({ a: string, b, c }: O) => { };
+const f4 = function({ a: string }: O): typeof string { return string; };
+const f5 = ({ a: string, b, c }: O): typeof string => '';
+const obj1 = {
+  method({ a: string }: O) { }
+};
+const obj2 = {
+  method({ a: string }: O): typeof string { return string; }
+};
+
+// In below case `string` should be kept because it is used
+function f6({ a: string }: O): typeof string { return "a"; }
+
 //// [renamingDestructuredPropertyInFunctionType.js]
+// GH#37454, GH#41044
+// Below are OK but renaming should be removed from declaration emit
+function f1({ a: string }) { }
+const f2 = function ({ a: string }) { };
+const f3 = ({ a: string, b, c }) => { };
+const f4 = function ({ a: string }) { return string; };
+const f5 = ({ a: string, b, c }) => '';
+const obj1 = {
+    method({ a: string }) { }
+};
+const obj2 = {
+    method({ a: string }) { return string; }
+};
+// In below case `string` should be kept because it is used
+function f6({ a: string }) { return "a"; }
 
 
 //// [renamingDestructuredPropertyInFunctionType.d.ts]
@@ -88,3 +121,15 @@ interface I {
         a: any;
     }): any;
 }
+declare function f1({ a }: O): void;
+declare const f2: ({ a: string }: O) => void;
+declare const f3: ({ a: string, b, c }: O) => void;
+declare const f4: ({ a: string }: O) => string;
+declare const f5: ({ a: string, b, c }: O) => string;
+declare const obj1: {
+    method({ a: string }: O): void;
+};
+declare const obj2: {
+    method({ a: string }: O): string;
+};
+declare function f6({ a: string }: O): typeof string;

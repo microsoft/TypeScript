@@ -1,19 +1,21 @@
-tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(3,17): error TS2842: Variable 'string' is not used. Did you mean to write a type annotation for whole object?
-tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(4,17): error TS2842: Variable 'string' is not used. Did you mean to write a type annotation for whole object?
 tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(5,17): error TS2842: Variable 'string' is not used. Did you mean to write a type annotation for whole object?
 tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(6,17): error TS2842: Variable 'string' is not used. Did you mean to write a type annotation for whole object?
+tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(7,17): error TS2842: Variable 'string' is not used. Did you mean to write a type annotation for whole object?
 tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(8,17): error TS2842: Variable 'string' is not used. Did you mean to write a type annotation for whole object?
-tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(13,17): error TS2842: Variable 'string' is not used. Did you mean to write a type annotation for whole object?
-tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(14,17): error TS2842: Variable 'string' is not used. Did you mean to write a type annotation for whole object?
+tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(10,17): error TS2842: Variable 'string' is not used. Did you mean to write a type annotation for whole object?
 tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(15,17): error TS2842: Variable 'string' is not used. Did you mean to write a type annotation for whole object?
 tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(16,17): error TS2842: Variable 'string' is not used. Did you mean to write a type annotation for whole object?
+tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(17,17): error TS2842: Variable 'string' is not used. Did you mean to write a type annotation for whole object?
 tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(18,17): error TS2842: Variable 'string' is not used. Did you mean to write a type annotation for whole object?
-tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(24,16): error TS2842: Variable 'string' is not used. Did you mean to write a type annotation for whole object?
-tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(27,9): error TS2842: Variable 'string' is not used. Did you mean to write a type annotation for whole object?
-tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(30,13): error TS2842: Variable 'string' is not used. Did you mean to write a type annotation for whole object?
+tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(20,17): error TS2842: Variable 'string' is not used. Did you mean to write a type annotation for whole object?
+tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(26,16): error TS2842: Variable 'string' is not used. Did you mean to write a type annotation for whole object?
+tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(29,9): error TS2842: Variable 'string' is not used. Did you mean to write a type annotation for whole object?
+tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(32,13): error TS2842: Variable 'string' is not used. Did you mean to write a type annotation for whole object?
 
 
 ==== tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts (13 errors) ====
+    // GH#37454, GH#41044
+    
     type O = { a: string; b: number; c: number; };
     type F1 = (arg: number) => any; // OK
     type F2 = ({ a: string }: O) => any; // Error
@@ -71,3 +73,19 @@ tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(30,13): error
                 ~~~~~~
 !!! error TS2842: Variable 'string' is not used. Did you mean to write a type annotation for whole object?
     }
+    
+    // Below are OK but renaming should be removed from declaration emit
+    function f1({ a: string }: O) { }
+    const f2 = function({ a: string }: O) { };
+    const f3 = ({ a: string, b, c }: O) => { };
+    const f4 = function({ a: string }: O): typeof string { return string; };
+    const f5 = ({ a: string, b, c }: O): typeof string => '';
+    const obj1 = {
+      method({ a: string }: O) { }
+    };
+    const obj2 = {
+      method({ a: string }: O): typeof string { return string; }
+    };
+    
+    // In below case `string` should be kept because it is used
+    function f6({ a: string }: O): typeof string { return "a"; }

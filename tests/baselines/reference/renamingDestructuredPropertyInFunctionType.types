@@ -1,4 +1,6 @@
 === tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts ===
+// GH#37454, GH#41044
+
 type O = { a: string; b: number; c: number; };
 >O : { a: string; b: number; c: number; }
 >a : string
@@ -139,3 +141,73 @@ interface I {
 >a : any
 >string : any
 }
+
+// Below are OK but renaming should be removed from declaration emit
+function f1({ a: string }: O) { }
+>f1 : ({ a: string }: O) => void
+>a : any
+>string : string
+
+const f2 = function({ a: string }: O) { };
+>f2 : ({ a: string }: O) => void
+>function({ a: string }: O) { } : ({ a: string }: O) => void
+>a : any
+>string : string
+
+const f3 = ({ a: string, b, c }: O) => { };
+>f3 : ({ a: string, b, c }: O) => void
+>({ a: string, b, c }: O) => { } : ({ a: string, b, c }: O) => void
+>a : any
+>string : string
+>b : number
+>c : number
+
+const f4 = function({ a: string }: O): typeof string { return string; };
+>f4 : ({ a: string }: O) => string
+>function({ a: string }: O): typeof string { return string; } : ({ a: string }: O) => string
+>a : any
+>string : string
+>string : string
+>string : string
+
+const f5 = ({ a: string, b, c }: O): typeof string => '';
+>f5 : ({ a: string, b, c }: O) => string
+>({ a: string, b, c }: O): typeof string => '' : ({ a: string, b, c }: O) => string
+>a : any
+>string : string
+>b : number
+>c : number
+>string : string
+>'' : ""
+
+const obj1 = {
+>obj1 : { method({ a: string }: O): void; }
+>{  method({ a: string }: O) { }} : { method({ a: string }: O): void; }
+
+  method({ a: string }: O) { }
+>method : ({ a: string }: O) => void
+>a : any
+>string : string
+
+};
+const obj2 = {
+>obj2 : { method({ a: string }: O): string; }
+>{  method({ a: string }: O): typeof string { return string; }} : { method({ a: string }: O): string; }
+
+  method({ a: string }: O): typeof string { return string; }
+>method : ({ a: string }: O) => string
+>a : any
+>string : string
+>string : string
+>string : string
+
+};
+
+// In below case `string` should be kept because it is used
+function f6({ a: string }: O): typeof string { return "a"; }
+>f6 : ({ a: string }: O) => typeof string
+>a : any
+>string : string
+>string : string
+>"a" : "a"
+
