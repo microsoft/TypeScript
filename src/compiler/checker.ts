@@ -1028,7 +1028,7 @@ namespace ts {
         const potentialReflectCollisions: Node[] = [];
         const potentialAlwaysCheckedUnusedTypes: {
             node: Node;
-            name: BindingName;
+            name: Identifier;
             diagnostic: DiagnosticMessage;
          }[] = [];
         const awaitedTypeStack: number[] = [];
@@ -37579,6 +37579,14 @@ namespace ts {
             });
         }
 
+        function checkPotentialAlwaysCheckedUnusedTypes() {
+            for (const { node, name, diagnostic } of potentialAlwaysCheckedUnusedTypes) {
+                if (!(getSymbolOfNode(node)?.isReferenced! & SymbolFlags.Type)) {
+                    error(name, diagnostic, declarationNameToString(name));
+                }
+            }
+        }
+
         function bindingNameText(name: BindingName): string {
             switch (name.kind) {
                 case SyntaxKind.Identifier:
@@ -37933,7 +37941,7 @@ namespace ts {
                     potentialAlwaysCheckedUnusedTypes.push({
                         node,
                         name: node.name,
-                        diagnostic: Diagnostics.Renaming_a_property_in_destructuring_assignment_is_only_allowed_in_a_function_or_constructor_implementation
+                        diagnostic: Diagnostics.Variable_0_is_not_used_Did_you_mean_to_write_a_type_annotation_for_whole_object
                     });
                     return;
                 }
@@ -41801,12 +41809,8 @@ namespace ts {
                             }
                         });
                     }
-                    if (!node.isDeclarationFile && potentialAlwaysCheckedUnusedTypes.length) {
-                        for (const { node, name, diagnostic } of potentialAlwaysCheckedUnusedTypes) {
-                            if (!(getSymbolOfNode(node)?.isReferenced! & SymbolFlags.Type)) {
-                                error(name, diagnostic);
-                            }
-                        }
+                    if (!node.isDeclarationFile) {
+                        checkPotentialAlwaysCheckedUnusedTypes();
                     }
                 });
 

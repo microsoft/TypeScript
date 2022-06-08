@@ -1,16 +1,16 @@
-tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(3,17): error TS2842: Renaming a property in destructuring assignment is only allowed in a function or constructor implementation.
-tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(4,17): error TS2842: Renaming a property in destructuring assignment is only allowed in a function or constructor implementation.
-tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(5,17): error TS2842: Renaming a property in destructuring assignment is only allowed in a function or constructor implementation.
-tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(6,17): error TS2842: Renaming a property in destructuring assignment is only allowed in a function or constructor implementation.
-tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(8,17): error TS2842: Renaming a property in destructuring assignment is only allowed in a function or constructor implementation.
-tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(13,17): error TS2842: Renaming a property in destructuring assignment is only allowed in a function or constructor implementation.
-tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(14,17): error TS2842: Renaming a property in destructuring assignment is only allowed in a function or constructor implementation.
-tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(15,17): error TS2842: Renaming a property in destructuring assignment is only allowed in a function or constructor implementation.
-tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(16,17): error TS2842: Renaming a property in destructuring assignment is only allowed in a function or constructor implementation.
-tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(18,17): error TS2842: Renaming a property in destructuring assignment is only allowed in a function or constructor implementation.
-tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(24,16): error TS2842: Renaming a property in destructuring assignment is only allowed in a function or constructor implementation.
-tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(27,9): error TS2842: Renaming a property in destructuring assignment is only allowed in a function or constructor implementation.
-tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(30,13): error TS2842: Renaming a property in destructuring assignment is only allowed in a function or constructor implementation.
+tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(3,17): error TS2842: Variable 'string' is not used. Did you mean to write a type annotation for whole object?
+tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(4,17): error TS2842: Variable 'string' is not used. Did you mean to write a type annotation for whole object?
+tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(5,17): error TS2842: Variable 'string' is not used. Did you mean to write a type annotation for whole object?
+tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(6,17): error TS2842: Variable 'string' is not used. Did you mean to write a type annotation for whole object?
+tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(8,17): error TS2842: Variable 'string' is not used. Did you mean to write a type annotation for whole object?
+tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(13,17): error TS2842: Variable 'string' is not used. Did you mean to write a type annotation for whole object?
+tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(14,17): error TS2842: Variable 'string' is not used. Did you mean to write a type annotation for whole object?
+tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(15,17): error TS2842: Variable 'string' is not used. Did you mean to write a type annotation for whole object?
+tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(16,17): error TS2842: Variable 'string' is not used. Did you mean to write a type annotation for whole object?
+tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(18,17): error TS2842: Variable 'string' is not used. Did you mean to write a type annotation for whole object?
+tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(24,16): error TS2842: Variable 'string' is not used. Did you mean to write a type annotation for whole object?
+tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(27,9): error TS2842: Variable 'string' is not used. Did you mean to write a type annotation for whole object?
+tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(30,13): error TS2842: Variable 'string' is not used. Did you mean to write a type annotation for whole object?
 
 
 ==== tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts (13 errors) ====
@@ -18,40 +18,40 @@ tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(30,13): error
     type F1 = (arg: number) => any; // OK
     type F2 = ({ a: string }: O) => any; // Error
                     ~~~~~~
-!!! error TS2842: Renaming a property in destructuring assignment is only allowed in a function or constructor implementation.
+!!! error TS2842: Variable 'string' is not used. Did you mean to write a type annotation for whole object?
     type F3 = ({ a: string, b, c }: O) => any; // Error
                     ~~~~~~
-!!! error TS2842: Renaming a property in destructuring assignment is only allowed in a function or constructor implementation.
+!!! error TS2842: Variable 'string' is not used. Did you mean to write a type annotation for whole object?
     type F4 = ({ a: string }: O) => any; // Error
                     ~~~~~~
-!!! error TS2842: Renaming a property in destructuring assignment is only allowed in a function or constructor implementation.
+!!! error TS2842: Variable 'string' is not used. Did you mean to write a type annotation for whole object?
     type F5 = ({ a: string, b, c }: O) => any; // Error
                     ~~~~~~
-!!! error TS2842: Renaming a property in destructuring assignment is only allowed in a function or constructor implementation.
+!!! error TS2842: Variable 'string' is not used. Did you mean to write a type annotation for whole object?
     type F6 = ({ a: string }) => typeof string; // OK
     type F7 = ({ a: string, b: number }) => typeof number; // Error
                     ~~~~~~
-!!! error TS2842: Renaming a property in destructuring assignment is only allowed in a function or constructor implementation.
+!!! error TS2842: Variable 'string' is not used. Did you mean to write a type annotation for whole object?
     type F8 = ({ a, b: number }) => typeof number; // OK
     type F9 = ([a, b, c]) => void; // Error
     
     type G1 = (arg: number) => any; // OK
     type G2 = ({ a: string }: O) => any; // Error
                     ~~~~~~
-!!! error TS2842: Renaming a property in destructuring assignment is only allowed in a function or constructor implementation.
+!!! error TS2842: Variable 'string' is not used. Did you mean to write a type annotation for whole object?
     type G3 = ({ a: string, b, c }: O) => any; // Error
                     ~~~~~~
-!!! error TS2842: Renaming a property in destructuring assignment is only allowed in a function or constructor implementation.
+!!! error TS2842: Variable 'string' is not used. Did you mean to write a type annotation for whole object?
     type G4 = ({ a: string }: O) => any; // Error
                     ~~~~~~
-!!! error TS2842: Renaming a property in destructuring assignment is only allowed in a function or constructor implementation.
+!!! error TS2842: Variable 'string' is not used. Did you mean to write a type annotation for whole object?
     type G5 = ({ a: string, b, c }: O) => any; // Error
                     ~~~~~~
-!!! error TS2842: Renaming a property in destructuring assignment is only allowed in a function or constructor implementation.
+!!! error TS2842: Variable 'string' is not used. Did you mean to write a type annotation for whole object?
     type G6 = ({ a: string }) => typeof string; // OK
     type G7 = ({ a: string, b: number }) => typeof number; // Error
                     ~~~~~~
-!!! error TS2842: Renaming a property in destructuring assignment is only allowed in a function or constructor implementation.
+!!! error TS2842: Variable 'string' is not used. Did you mean to write a type annotation for whole object?
     type G8 = ({ a, b: number }) => typeof number; // OK
     type G9 = ([a, b, c]) => void; // Error
     
@@ -59,15 +59,15 @@ tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(30,13): error
       method1(arg: number): any; // OK
       method2({ a: string }): any; // Error
                    ~~~~~~
-!!! error TS2842: Renaming a property in destructuring assignment is only allowed in a function or constructor implementation.
+!!! error TS2842: Variable 'string' is not used. Did you mean to write a type annotation for whole object?
     
       (arg: number): any; // OK
       ({ a: string }): any; // Error
             ~~~~~~
-!!! error TS2842: Renaming a property in destructuring assignment is only allowed in a function or constructor implementation.
+!!! error TS2842: Variable 'string' is not used. Did you mean to write a type annotation for whole object?
     
       new (arg: number): any; // OK
       new ({ a: string }): any; // Error
                 ~~~~~~
-!!! error TS2842: Renaming a property in destructuring assignment is only allowed in a function or constructor implementation.
+!!! error TS2842: Variable 'string' is not used. Did you mean to write a type annotation for whole object?
     }

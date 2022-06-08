@@ -3487,7 +3487,7 @@
         "category": "Error",
         "code": 2841
     },
-    "Renaming a property in destructuring assignment is only allowed in a function or constructor implementation.": {
+    "Variable '{0}' is not used. Did you mean to write a type annotation for whole object?": {
         "category": "Error",
         "code": 2842
     }, 
