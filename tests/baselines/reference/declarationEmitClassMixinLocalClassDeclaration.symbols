@@ -1,0 +1,67 @@
+=== tests/cases/compiler/declarationEmitClassMixinLocalClassDeclaration.ts ===
+export type AnyFunction<Result = any> = (...input: any[]) => Result
+>AnyFunction : Symbol(AnyFunction, Decl(declarationEmitClassMixinLocalClassDeclaration.ts, 0, 0))
+>Result : Symbol(Result, Decl(declarationEmitClassMixinLocalClassDeclaration.ts, 0, 24))
+>input : Symbol(input, Decl(declarationEmitClassMixinLocalClassDeclaration.ts, 0, 41))
+>Result : Symbol(Result, Decl(declarationEmitClassMixinLocalClassDeclaration.ts, 0, 24))
+
+export type AnyConstructor<Instance extends object = object, Static extends object = object> =
+>AnyConstructor : Symbol(AnyConstructor, Decl(declarationEmitClassMixinLocalClassDeclaration.ts, 0, 67))
+>Instance : Symbol(Instance, Decl(declarationEmitClassMixinLocalClassDeclaration.ts, 2, 27))
+>Static : Symbol(Static, Decl(declarationEmitClassMixinLocalClassDeclaration.ts, 2, 60))
+
+    (new (...input: any[]) => Instance) & Static
+>input : Symbol(input, Decl(declarationEmitClassMixinLocalClassDeclaration.ts, 3, 10))
+>Instance : Symbol(Instance, Decl(declarationEmitClassMixinLocalClassDeclaration.ts, 2, 27))
+>Static : Symbol(Static, Decl(declarationEmitClassMixinLocalClassDeclaration.ts, 2, 60))
+
+
+type MixinHelperFunc = <A extends AnyConstructor, T>(required: [A], arg: T) => T extends AnyFunction<infer M> ? M : never
+>MixinHelperFunc : Symbol(MixinHelperFunc, Decl(declarationEmitClassMixinLocalClassDeclaration.ts, 3, 48))
+>A : Symbol(A, Decl(declarationEmitClassMixinLocalClassDeclaration.ts, 6, 24))
+>AnyConstructor : Symbol(AnyConstructor, Decl(declarationEmitClassMixinLocalClassDeclaration.ts, 0, 67))
+>T : Symbol(T, Decl(declarationEmitClassMixinLocalClassDeclaration.ts, 6, 49))
+>required : Symbol(required, Decl(declarationEmitClassMixinLocalClassDeclaration.ts, 6, 53))
+>A : Symbol(A, Decl(declarationEmitClassMixinLocalClassDeclaration.ts, 6, 24))
+>arg : Symbol(arg, Decl(declarationEmitClassMixinLocalClassDeclaration.ts, 6, 67))
+>T : Symbol(T, Decl(declarationEmitClassMixinLocalClassDeclaration.ts, 6, 49))
+>T : Symbol(T, Decl(declarationEmitClassMixinLocalClassDeclaration.ts, 6, 49))
+>AnyFunction : Symbol(AnyFunction, Decl(declarationEmitClassMixinLocalClassDeclaration.ts, 0, 0))
+>M : Symbol(M, Decl(declarationEmitClassMixinLocalClassDeclaration.ts, 6, 106))
+>M : Symbol(M, Decl(declarationEmitClassMixinLocalClassDeclaration.ts, 6, 106))
+
+
+export const Mixin: MixinHelperFunc = null as any
+>Mixin : Symbol(Mixin, Decl(declarationEmitClassMixinLocalClassDeclaration.ts, 9, 12))
+>MixinHelperFunc : Symbol(MixinHelperFunc, Decl(declarationEmitClassMixinLocalClassDeclaration.ts, 3, 48))
+
+
+export class Base {}
+>Base : Symbol(Base, Decl(declarationEmitClassMixinLocalClassDeclaration.ts, 9, 49))
+
+
+export class XmlElement2 extends Mixin(
+>XmlElement2 : Symbol(XmlElement2, Decl(declarationEmitClassMixinLocalClassDeclaration.ts, 12, 20))
+>Mixin : Symbol(Mixin, Decl(declarationEmitClassMixinLocalClassDeclaration.ts, 9, 12))
+
+    [Base],
+>Base : Symbol(Base, Decl(declarationEmitClassMixinLocalClassDeclaration.ts, 9, 49))
+
+    (base: AnyConstructor<Base, typeof Base>) => {
+>base : Symbol(base, Decl(declarationEmitClassMixinLocalClassDeclaration.ts, 17, 5))
+>AnyConstructor : Symbol(AnyConstructor, Decl(declarationEmitClassMixinLocalClassDeclaration.ts, 0, 67))
+>Base : Symbol(Base, Decl(declarationEmitClassMixinLocalClassDeclaration.ts, 9, 49))
+>Base : Symbol(Base, Decl(declarationEmitClassMixinLocalClassDeclaration.ts, 9, 49))
+
+        class XmlElement2 extends base {
+>XmlElement2 : Symbol(XmlElement2, Decl(declarationEmitClassMixinLocalClassDeclaration.ts, 17, 50))
+>base : Symbol(base, Decl(declarationEmitClassMixinLocalClassDeclaration.ts, 17, 5))
+
+            num: number = 0
+>num : Symbol(XmlElement2.num, Decl(declarationEmitClassMixinLocalClassDeclaration.ts, 18, 40))
+        }
+        return XmlElement2;
+>XmlElement2 : Symbol(XmlElement2, Decl(declarationEmitClassMixinLocalClassDeclaration.ts, 17, 50))
+
+    }) { }
+
