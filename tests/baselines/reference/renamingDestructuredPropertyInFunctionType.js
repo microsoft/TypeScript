@@ -45,14 +45,14 @@ declare type F2 = ({ a }: O) => any;
 declare type F3 = ({ a, b, c }: O) => any;
 declare type F4 = ({ a }: O) => any;
 declare type F5 = ({ a, b, c }: O) => any;
-declare type F6 = ({ a }: {
+declare type F6 = ({ a: string }: {
     a: any;
 }) => typeof string;
-declare type F7 = ({ a, b }: {
+declare type F7 = ({ a, b: number }: {
     a: any;
     b: any;
 }) => typeof number;
-declare type F8 = ({ a, b }: {
+declare type F8 = ({ a, b: number }: {
     a: any;
     b: any;
 }) => typeof number;
@@ -62,14 +62,14 @@ declare type G2 = ({ a }: O) => any;
 declare type G3 = ({ a, b, c }: O) => any;
 declare type G4 = ({ a }: O) => any;
 declare type G5 = ({ a, b, c }: O) => any;
-declare type G6 = ({ a }: {
+declare type G6 = ({ a: string }: {
     a: any;
 }) => typeof string;
-declare type G7 = ({ a, b }: {
+declare type G7 = ({ a, b: number }: {
     a: any;
     b: any;
 }) => typeof number;
-declare type G8 = ({ a, b }: {
+declare type G8 = ({ a, b: number }: {
     a: any;
     b: any;
 }) => typeof number;
