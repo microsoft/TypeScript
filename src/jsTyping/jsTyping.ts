@@ -108,12 +108,14 @@ namespace ts.JsTyping {
 
     /**
      * @param host is the object providing I/O related operations.
+     * @param log an optional function to output the log
      * @param fileNames are the file names that belong to the same project
      * @param projectRootPath is the path to the project root directory
-     * @param safeListPath is the path used to retrieve the safe list
+     * @param safeList is the map which can convert file name to library name
      * @param packageNameToTypingLocation is the map of package names to their cached typing locations and installed versions
      * @param typeAcquisition is used to customize the typing acquisition process
-     * @param compilerOptions are used as a source for typing inference
+     * @param unresolvedImports is the list of unresolved module ids from imports
+     * @param typesRegistry a map of available typings in npm to maps of TS versions to their latest supported versions
      */
     export function discoverTypings(
         host: TypingResolutionHost,

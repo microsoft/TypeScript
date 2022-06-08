@@ -242,7 +242,7 @@ namespace ts.moduleSpecifiers {
         // Module specifier priority:
         //   1. "Bare package specifiers" (e.g. "@foo/bar") resulting from a path through node_modules to a package.json's "types" entry
         //   2. Specifiers generated using "paths" from tsconfig
-        //   3. Non-relative specfiers resulting from a path through node_modules (e.g. "@foo/bar/path/to/file")
+        //   3. Non-relative specifiers resulting from a path through node_modules (e.g. "@foo/bar/path/to/file")
         //   4. Relative paths
         let nodeModulesSpecifiers: string[] | undefined;
         let pathsSpecifiers: string[] | undefined;

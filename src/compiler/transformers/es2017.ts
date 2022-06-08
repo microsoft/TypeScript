@@ -597,7 +597,7 @@ namespace ts {
          *
          * @param hint A hint as to the intended usage of the node.
          * @param node The node to emit.
-         * @param emit A callback used to emit the node in the printer.
+         * @param emitCallback A callback used to emit the node in the printer.
          */
         function onEmitNode(hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void): void {
             // If we need to support substitutions for `super` in an async method,

@@ -729,6 +729,7 @@ namespace ts {
 
     /**
      * Deduplicates an unsorted array.
+     * @param array An array to be checked.
      * @param equalityComparer An `EqualityComparer` used to determine if two values are duplicates.
      * @param comparer An optional `Comparer` used to sort entries before comparison, though the
      * result will remain in the original order in `array`.
@@ -1313,6 +1314,7 @@ namespace ts {
      *
      * @param left A map-like whose properties should be compared.
      * @param right A map-like whose properties should be compared.
+     * @param equalityComparer A function that compares two values for equality.
      */
     export function equalOwnProperties<T>(left: MapLike<T> | undefined, right: MapLike<T> | undefined, equalityComparer: EqualityComparer<T> = equateValues) {
         if (left === right) return true;

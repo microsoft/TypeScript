@@ -68,6 +68,8 @@ namespace ts {
          * @param operand The operand for the BinaryExpression.
          * @param isLeftSideOfBinary A value indicating whether the operand is the left side of the
          *                           BinaryExpression.
+         * @param leftOperand The left operand if {@link operand} is the right side of the
+         *                    BinaryExpression and {@link isLeftSideOfBinary} is false
          */
         function binaryOperandNeedsParentheses(binaryOperator: SyntaxKind, operand: Expression, isLeftSideOfBinary: boolean, leftOperand: Expression | undefined) {
             // If the operand has lower precedence, then it needs to be parenthesized to preserve the
@@ -100,13 +102,9 @@ namespace ts {
                 case Comparison.LessThan:
                     // If the operand is the right side of a right-associative binary operation
                     // and is a yield expression, then we do not need parentheses.
-                    if (!isLeftSideOfBinary
+                    return !(!isLeftSideOfBinary
                         && binaryOperatorAssociativity === Associativity.Right
-                        && operand.kind === SyntaxKind.YieldExpression) {
-                        return false;
-                    }
-
-                    return true;
+                        && operand.kind === SyntaxKind.YieldExpression);
 
                 case Comparison.GreaterThan:
                     return false;
@@ -225,7 +223,8 @@ namespace ts {
          * @param operand The operand for the BinaryExpression.
          * @param isLeftSideOfBinary A value indicating whether the operand is the left side of the
          *                           BinaryExpression.
-         */
+         * @param leftOperand The left operand if {@link operand} is the right side of the
+         *                    BinaryExpression and {@link isLeftSideOfBinary} is false         */
         function parenthesizeBinaryOperand(binaryOperator: SyntaxKind, operand: Expression, isLeftSideOfBinary: boolean, leftOperand?: Expression) {
             const skipped = skipPartiallyEmittedExpressions(operand);
 
@@ -333,17 +332,17 @@ namespace ts {
                 return expression as LeftHandSideExpression;
             }
 
-            // TODO(rbuckton): Verifiy whether `setTextRange` is needed.
+            // TODO(rbuckton): Verify whether `setTextRange` is needed.
             return setTextRange(factory.createParenthesizedExpression(expression), expression);
         }
 
         function parenthesizeOperandOfPostfixUnary(operand: Expression): LeftHandSideExpression {
-            // TODO(rbuckton): Verifiy whether `setTextRange` is needed.
+            // TODO(rbuckton): Verify whether `setTextRange` is needed.
             return isLeftHandSideExpression(operand) ? operand : setTextRange(factory.createParenthesizedExpression(operand), operand);
         }
 
         function parenthesizeOperandOfPrefixUnary(operand: Expression): UnaryExpression {
-            // TODO(rbuckton): Verifiy whether `setTextRange` is needed.
+            // TODO(rbuckton): Verify whether `setTextRange` is needed.
             return isUnaryExpression(operand) ? operand : setTextRange(factory.createParenthesizedExpression(operand), operand);
         }
 
@@ -356,7 +355,7 @@ namespace ts {
             const emittedExpression = skipPartiallyEmittedExpressions(expression);
             const expressionPrecedence = getExpressionPrecedence(emittedExpression);
             const commaPrecedence = getOperatorPrecedence(SyntaxKind.BinaryExpression, SyntaxKind.CommaToken);
-            // TODO(rbuckton): Verifiy whether `setTextRange` is needed.
+            // TODO(rbuckton): Verify whether `setTextRange` is needed.
             return expressionPrecedence > commaPrecedence ? expression : setTextRange(factory.createParenthesizedExpression(expression), expression);
         }
 
@@ -366,7 +365,7 @@ namespace ts {
                 const callee = emittedExpression.expression;
                 const kind = skipPartiallyEmittedExpressions(callee).kind;
                 if (kind === SyntaxKind.FunctionExpression || kind === SyntaxKind.ArrowFunction) {
-                    // TODO(rbuckton): Verifiy whether `setTextRange` is needed.
+                    // TODO(rbuckton): Verify whether `setTextRange` is needed.
                     const updated = factory.updateCallExpression(
                         emittedExpression,
                         setTextRange(factory.createParenthesizedExpression(callee), callee),
@@ -379,7 +378,7 @@ namespace ts {
 
             const leftmostExpressionKind = getLeftmostExpression(emittedExpression, /*stopAtCallExpressions*/ false).kind;
             if (leftmostExpressionKind === SyntaxKind.ObjectLiteralExpression || leftmostExpressionKind === SyntaxKind.FunctionExpression) {
-                // TODO(rbuckton): Verifiy whether `setTextRange` is needed.
+                // TODO(rbuckton): Verify whether `setTextRange` is needed.
                 return setTextRange(factory.createParenthesizedExpression(expression), expression);
             }
 
@@ -390,7 +389,7 @@ namespace ts {
         function parenthesizeConciseBodyOfArrowFunction(body: ConciseBody): ConciseBody;
         function parenthesizeConciseBodyOfArrowFunction(body: ConciseBody): ConciseBody {
             if (!isBlock(body) && (isCommaSequence(body) || getLeftmostExpression(body, /*stopAtCallExpressions*/ false).kind === SyntaxKind.ObjectLiteralExpression)) {
-                // TODO(rbuckton): Verifiy whether `setTextRange` is needed.
+                // TODO(rbuckton): Verify whether `setTextRange` is needed.
                 return setTextRange(factory.createParenthesizedExpression(body), body);
             }
 
