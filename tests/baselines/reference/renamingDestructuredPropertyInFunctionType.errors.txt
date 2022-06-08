@@ -1,10 +1,91 @@
-tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(1,15): error TS2842: Renaming a property in destructuring assignment is only allowed in a function or constructor implementation.
+tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(3,17): error TS2842: Renaming a property in destructuring assignment is only allowed in a function or constructor implementation.
+tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(4,17): error TS2842: Renaming a property in destructuring assignment is only allowed in a function or constructor implementation.
+tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(5,17): error TS2842: Renaming a property in destructuring assignment is only allowed in a function or constructor implementation.
+tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(6,17): error TS2842: Renaming a property in destructuring assignment is only allowed in a function or constructor implementation.
+tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(7,17): error TS2842: Renaming a property in destructuring assignment is only allowed in a function or constructor implementation.
+tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(8,17): error TS2842: Renaming a property in destructuring assignment is only allowed in a function or constructor implementation.
+tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(8,28): error TS2842: Renaming a property in destructuring assignment is only allowed in a function or constructor implementation.
+tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(9,20): error TS2842: Renaming a property in destructuring assignment is only allowed in a function or constructor implementation.
+tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(13,17): error TS2842: Renaming a property in destructuring assignment is only allowed in a function or constructor implementation.
+tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(14,17): error TS2842: Renaming a property in destructuring assignment is only allowed in a function or constructor implementation.
+tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(15,17): error TS2842: Renaming a property in destructuring assignment is only allowed in a function or constructor implementation.
+tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(16,17): error TS2842: Renaming a property in destructuring assignment is only allowed in a function or constructor implementation.
+tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(17,17): error TS2842: Renaming a property in destructuring assignment is only allowed in a function or constructor implementation.
+tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(18,17): error TS2842: Renaming a property in destructuring assignment is only allowed in a function or constructor implementation.
+tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(18,28): error TS2842: Renaming a property in destructuring assignment is only allowed in a function or constructor implementation.
+tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(19,20): error TS2842: Renaming a property in destructuring assignment is only allowed in a function or constructor implementation.
+tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(24,16): error TS2842: Renaming a property in destructuring assignment is only allowed in a function or constructor implementation.
+tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(27,9): error TS2842: Renaming a property in destructuring assignment is only allowed in a function or constructor implementation.
+tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(30,13): error TS2842: Renaming a property in destructuring assignment is only allowed in a function or constructor implementation.
 
 
-==== tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts (1 errors) ====
-    type F = ({a: string}) => void;
-                  ~~~~~~
+==== tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts (19 errors) ====
+    type O = { a: string; b: number; c: number; };
+    type F1 = (arg: number) => any; // OK
+    type F2 = ({ a: string }: O) => any; // Error
+                    ~~~~~~
+!!! error TS2842: Renaming a property in destructuring assignment is only allowed in a function or constructor implementation.
+    type F3 = ({ a: string, b, c }: O) => any; // Error
+                    ~~~~~~
+!!! error TS2842: Renaming a property in destructuring assignment is only allowed in a function or constructor implementation.
+    type F4 = ({ a: string }: O) => any; // Error
+                    ~~~~~~
+!!! error TS2842: Renaming a property in destructuring assignment is only allowed in a function or constructor implementation.
+    type F5 = ({ a: string, b, c }: O) => any; // Error
+                    ~~~~~~
+!!! error TS2842: Renaming a property in destructuring assignment is only allowed in a function or constructor implementation.
+    type F6 = ({ a: string }) => typeof string; // OK
+                    ~~~~~~
+!!! error TS2842: Renaming a property in destructuring assignment is only allowed in a function or constructor implementation.
+    type F7 = ({ a: string, b: number }) => typeof number; // Error
+                    ~~~~~~
+!!! error TS2842: Renaming a property in destructuring assignment is only allowed in a function or constructor implementation.
+                               ~~~~~~
+!!! error TS2842: Renaming a property in destructuring assignment is only allowed in a function or constructor implementation.
+    type F8 = ({ a, b: number }) => typeof number; // OK
+                       ~~~~~~
+!!! error TS2842: Renaming a property in destructuring assignment is only allowed in a function or constructor implementation.
+    type F9 = ([a, b, c]) => void; // Error
+    
+    type G1 = (arg: number) => any; // OK
+    type G2 = ({ a: string }: O) => any; // Error
+                    ~~~~~~
+!!! error TS2842: Renaming a property in destructuring assignment is only allowed in a function or constructor implementation.
+    type G3 = ({ a: string, b, c }: O) => any; // Error
+                    ~~~~~~
+!!! error TS2842: Renaming a property in destructuring assignment is only allowed in a function or constructor implementation.
+    type G4 = ({ a: string }: O) => any; // Error
+                    ~~~~~~
+!!! error TS2842: Renaming a property in destructuring assignment is only allowed in a function or constructor implementation.
+    type G5 = ({ a: string, b, c }: O) => any; // Error
+                    ~~~~~~
+!!! error TS2842: Renaming a property in destructuring assignment is only allowed in a function or constructor implementation.
+    type G6 = ({ a: string }) => typeof string; // OK
+                    ~~~~~~
+!!! error TS2842: Renaming a property in destructuring assignment is only allowed in a function or constructor implementation.
+    type G7 = ({ a: string, b: number }) => typeof number; // Error
+                    ~~~~~~
+!!! error TS2842: Renaming a property in destructuring assignment is only allowed in a function or constructor implementation.
+                               ~~~~~~
+!!! error TS2842: Renaming a property in destructuring assignment is only allowed in a function or constructor implementation.
+    type G8 = ({ a, b: number }) => typeof number; // OK
+                       ~~~~~~
+!!! error TS2842: Renaming a property in destructuring assignment is only allowed in a function or constructor implementation.
+    type G9 = ([a, b, c]) => void; // Error
+    
+    interface I {
+      method1(arg: number): any; // OK
+      method2({ a: string }): any; // Error
+                   ~~~~~~
 !!! error TS2842: Renaming a property in destructuring assignment is only allowed in a function or constructor implementation.
     
-    const f = ({a: string}) => string;
+      (arg: number): any; // OK
+      ({ a: string }): any; // Error
+            ~~~~~~
+!!! error TS2842: Renaming a property in destructuring assignment is only allowed in a function or constructor implementation.
     
+      new (arg: number): any; // OK
+      new ({ a: string }): any; // Error
+                ~~~~~~
+!!! error TS2842: Renaming a property in destructuring assignment is only allowed in a function or constructor implementation.
+    }

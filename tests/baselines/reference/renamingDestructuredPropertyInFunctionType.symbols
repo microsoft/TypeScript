@@ -1,12 +1,151 @@
 === tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts ===
-type F = ({a: string}) => void;
->F : Symbol(F, Decl(renamingDestructuredPropertyInFunctionType.ts, 0, 0))
->a : Symbol(a)
->string : Symbol(string, Decl(renamingDestructuredPropertyInFunctionType.ts, 0, 11))
+type O = { a: string; b: number; c: number; };
+>O : Symbol(O, Decl(renamingDestructuredPropertyInFunctionType.ts, 0, 0))
+>a : Symbol(a, Decl(renamingDestructuredPropertyInFunctionType.ts, 0, 10))
+>b : Symbol(b, Decl(renamingDestructuredPropertyInFunctionType.ts, 0, 21))
+>c : Symbol(c, Decl(renamingDestructuredPropertyInFunctionType.ts, 0, 32))
 
-const f = ({a: string}) => string;
->f : Symbol(f, Decl(renamingDestructuredPropertyInFunctionType.ts, 2, 5))
->a : Symbol(a)
->string : Symbol(string, Decl(renamingDestructuredPropertyInFunctionType.ts, 2, 12))
->string : Symbol(string, Decl(renamingDestructuredPropertyInFunctionType.ts, 2, 12))
+type F1 = (arg: number) => any; // OK
+>F1 : Symbol(F1, Decl(renamingDestructuredPropertyInFunctionType.ts, 0, 46))
+>arg : Symbol(arg, Decl(renamingDestructuredPropertyInFunctionType.ts, 1, 11))
 
+type F2 = ({ a: string }: O) => any; // Error
+>F2 : Symbol(F2, Decl(renamingDestructuredPropertyInFunctionType.ts, 1, 31))
+>a : Symbol(a, Decl(renamingDestructuredPropertyInFunctionType.ts, 0, 10))
+>string : Symbol(string, Decl(renamingDestructuredPropertyInFunctionType.ts, 2, 12))
+>O : Symbol(O, Decl(renamingDestructuredPropertyInFunctionType.ts, 0, 0))
+
+type F3 = ({ a: string, b, c }: O) => any; // Error
+>F3 : Symbol(F3, Decl(renamingDestructuredPropertyInFunctionType.ts, 2, 36))
+>a : Symbol(a, Decl(renamingDestructuredPropertyInFunctionType.ts, 0, 10))
+>string : Symbol(string, Decl(renamingDestructuredPropertyInFunctionType.ts, 3, 12))
+>b : Symbol(b, Decl(renamingDestructuredPropertyInFunctionType.ts, 3, 23))
+>c : Symbol(c, Decl(renamingDestructuredPropertyInFunctionType.ts, 3, 26))
+>O : Symbol(O, Decl(renamingDestructuredPropertyInFunctionType.ts, 0, 0))
+
+type F4 = ({ a: string }: O) => any; // Error
+>F4 : Symbol(F4, Decl(renamingDestructuredPropertyInFunctionType.ts, 3, 42))
+>a : Symbol(a, Decl(renamingDestructuredPropertyInFunctionType.ts, 0, 10))
+>string : Symbol(string, Decl(renamingDestructuredPropertyInFunctionType.ts, 4, 12))
+>O : Symbol(O, Decl(renamingDestructuredPropertyInFunctionType.ts, 0, 0))
+
+type F5 = ({ a: string, b, c }: O) => any; // Error
+>F5 : Symbol(F5, Decl(renamingDestructuredPropertyInFunctionType.ts, 4, 36))
+>a : Symbol(a, Decl(renamingDestructuredPropertyInFunctionType.ts, 0, 10))
+>string : Symbol(string, Decl(renamingDestructuredPropertyInFunctionType.ts, 5, 12))
+>b : Symbol(b, Decl(renamingDestructuredPropertyInFunctionType.ts, 5, 23))
+>c : Symbol(c, Decl(renamingDestructuredPropertyInFunctionType.ts, 5, 26))
+>O : Symbol(O, Decl(renamingDestructuredPropertyInFunctionType.ts, 0, 0))
+
+type F6 = ({ a: string }) => typeof string; // OK
+>F6 : Symbol(F6, Decl(renamingDestructuredPropertyInFunctionType.ts, 5, 42))
+>a : Symbol(a)
+>string : Symbol(string, Decl(renamingDestructuredPropertyInFunctionType.ts, 6, 12))
+>string : Symbol(string, Decl(renamingDestructuredPropertyInFunctionType.ts, 6, 12))
+
+type F7 = ({ a: string, b: number }) => typeof number; // Error
+>F7 : Symbol(F7, Decl(renamingDestructuredPropertyInFunctionType.ts, 6, 43))
+>a : Symbol(a)
+>string : Symbol(string, Decl(renamingDestructuredPropertyInFunctionType.ts, 7, 12))
+>b : Symbol(b)
+>number : Symbol(number, Decl(renamingDestructuredPropertyInFunctionType.ts, 7, 23))
+>number : Symbol(number, Decl(renamingDestructuredPropertyInFunctionType.ts, 7, 23))
+
+type F8 = ({ a, b: number }) => typeof number; // OK
+>F8 : Symbol(F8, Decl(renamingDestructuredPropertyInFunctionType.ts, 7, 54))
+>a : Symbol(a, Decl(renamingDestructuredPropertyInFunctionType.ts, 8, 12))
+>b : Symbol(b)
+>number : Symbol(number, Decl(renamingDestructuredPropertyInFunctionType.ts, 8, 15))
+>number : Symbol(number, Decl(renamingDestructuredPropertyInFunctionType.ts, 8, 15))
+
+type F9 = ([a, b, c]) => void; // Error
+>F9 : Symbol(F9, Decl(renamingDestructuredPropertyInFunctionType.ts, 8, 46))
+>a : Symbol(a, Decl(renamingDestructuredPropertyInFunctionType.ts, 9, 12))
+>b : Symbol(b, Decl(renamingDestructuredPropertyInFunctionType.ts, 9, 14))
+>c : Symbol(c, Decl(renamingDestructuredPropertyInFunctionType.ts, 9, 17))
+
+type G1 = (arg: number) => any; // OK
+>G1 : Symbol(G1, Decl(renamingDestructuredPropertyInFunctionType.ts, 9, 30))
+>arg : Symbol(arg, Decl(renamingDestructuredPropertyInFunctionType.ts, 11, 11))
+
+type G2 = ({ a: string }: O) => any; // Error
+>G2 : Symbol(G2, Decl(renamingDestructuredPropertyInFunctionType.ts, 11, 31))
+>a : Symbol(a, Decl(renamingDestructuredPropertyInFunctionType.ts, 0, 10))
+>string : Symbol(string, Decl(renamingDestructuredPropertyInFunctionType.ts, 12, 12))
+>O : Symbol(O, Decl(renamingDestructuredPropertyInFunctionType.ts, 0, 0))
+
+type G3 = ({ a: string, b, c }: O) => any; // Error
+>G3 : Symbol(G3, Decl(renamingDestructuredPropertyInFunctionType.ts, 12, 36))
+>a : Symbol(a, Decl(renamingDestructuredPropertyInFunctionType.ts, 0, 10))
+>string : Symbol(string, Decl(renamingDestructuredPropertyInFunctionType.ts, 13, 12))
+>b : Symbol(b, Decl(renamingDestructuredPropertyInFunctionType.ts, 13, 23))
+>c : Symbol(c, Decl(renamingDestructuredPropertyInFunctionType.ts, 13, 26))
+>O : Symbol(O, Decl(renamingDestructuredPropertyInFunctionType.ts, 0, 0))
+
+type G4 = ({ a: string }: O) => any; // Error
+>G4 : Symbol(G4, Decl(renamingDestructuredPropertyInFunctionType.ts, 13, 42))
+>a : Symbol(a, Decl(renamingDestructuredPropertyInFunctionType.ts, 0, 10))
+>string : Symbol(string, Decl(renamingDestructuredPropertyInFunctionType.ts, 14, 12))
+>O : Symbol(O, Decl(renamingDestructuredPropertyInFunctionType.ts, 0, 0))
+
+type G5 = ({ a: string, b, c }: O) => any; // Error
+>G5 : Symbol(G5, Decl(renamingDestructuredPropertyInFunctionType.ts, 14, 36))
+>a : Symbol(a, Decl(renamingDestructuredPropertyInFunctionType.ts, 0, 10))
+>string : Symbol(string, Decl(renamingDestructuredPropertyInFunctionType.ts, 15, 12))
+>b : Symbol(b, Decl(renamingDestructuredPropertyInFunctionType.ts, 15, 23))
+>c : Symbol(c, Decl(renamingDestructuredPropertyInFunctionType.ts, 15, 26))
+>O : Symbol(O, Decl(renamingDestructuredPropertyInFunctionType.ts, 0, 0))
+
+type G6 = ({ a: string }) => typeof string; // OK
+>G6 : Symbol(G6, Decl(renamingDestructuredPropertyInFunctionType.ts, 15, 42))
+>a : Symbol(a)
+>string : Symbol(string, Decl(renamingDestructuredPropertyInFunctionType.ts, 16, 12))
+>string : Symbol(string, Decl(renamingDestructuredPropertyInFunctionType.ts, 16, 12))
+
+type G7 = ({ a: string, b: number }) => typeof number; // Error
+>G7 : Symbol(G7, Decl(renamingDestructuredPropertyInFunctionType.ts, 16, 43))
+>a : Symbol(a)
+>string : Symbol(string, Decl(renamingDestructuredPropertyInFunctionType.ts, 17, 12))
+>b : Symbol(b)
+>number : Symbol(number, Decl(renamingDestructuredPropertyInFunctionType.ts, 17, 23))
+>number : Symbol(number, Decl(renamingDestructuredPropertyInFunctionType.ts, 17, 23))
+
+type G8 = ({ a, b: number }) => typeof number; // OK
+>G8 : Symbol(G8, Decl(renamingDestructuredPropertyInFunctionType.ts, 17, 54))
+>a : Symbol(a, Decl(renamingDestructuredPropertyInFunctionType.ts, 18, 12))
+>b : Symbol(b)
+>number : Symbol(number, Decl(renamingDestructuredPropertyInFunctionType.ts, 18, 15))
+>number : Symbol(number, Decl(renamingDestructuredPropertyInFunctionType.ts, 18, 15))
+
+type G9 = ([a, b, c]) => void; // Error
+>G9 : Symbol(G9, Decl(renamingDestructuredPropertyInFunctionType.ts, 18, 46))
+>a : Symbol(a, Decl(renamingDestructuredPropertyInFunctionType.ts, 19, 12))
+>b : Symbol(b, Decl(renamingDestructuredPropertyInFunctionType.ts, 19, 14))
+>c : Symbol(c, Decl(renamingDestructuredPropertyInFunctionType.ts, 19, 17))
+
+interface I {
+>I : Symbol(I, Decl(renamingDestructuredPropertyInFunctionType.ts, 19, 30))
+
+  method1(arg: number): any; // OK
+>method1 : Symbol(I.method1, Decl(renamingDestructuredPropertyInFunctionType.ts, 21, 13))
+>arg : Symbol(arg, Decl(renamingDestructuredPropertyInFunctionType.ts, 22, 10))
+
+  method2({ a: string }): any; // Error
+>method2 : Symbol(I.method2, Decl(renamingDestructuredPropertyInFunctionType.ts, 22, 28))
+>a : Symbol(a)
+>string : Symbol(string, Decl(renamingDestructuredPropertyInFunctionType.ts, 23, 11))
+
+  (arg: number): any; // OK
+>arg : Symbol(arg, Decl(renamingDestructuredPropertyInFunctionType.ts, 25, 3))
+
+  ({ a: string }): any; // Error
+>a : Symbol(a)
+>string : Symbol(string, Decl(renamingDestructuredPropertyInFunctionType.ts, 26, 4))
+
+  new (arg: number): any; // OK
+>arg : Symbol(arg, Decl(renamingDestructuredPropertyInFunctionType.ts, 28, 7))
+
+  new ({ a: string }): any; // Error
+>a : Symbol(a)
+>string : Symbol(string, Decl(renamingDestructuredPropertyInFunctionType.ts, 29, 8))
+}
