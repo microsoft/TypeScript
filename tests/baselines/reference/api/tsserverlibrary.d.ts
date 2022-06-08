@@ -6985,7 +6985,8 @@ declare namespace ts.server {
         trace?(s: string): void;
         require?(initialPath: string, moduleName: string): RequireResult;
     }
-    type FileServerHost = Pick<ServerHost, "readFile" | "writeFile" | "fileExists" | "directoryExists" | "getFileSize" | "getModifiedTime" | "getDirectories" | "getCurrentDirectory" | "getExecutingFilePath" | "realpath" | "resolvePath" | "createDirectory" | "setModifiedTime" | "deleteFile" | "readDirectory" | "watchFile" | "watchDirectory" | "useCaseSensitiveFileNames"> & {
+    type FileServerHost = Pick<ServerHost, "readFile" | "writeFile" | "fileExists" | "directoryExists" | "getFileSize" | "getModifiedTime" | "getDirectories" | "getCurrentDirectory" | "getExecutingFilePath" | "realpath" | "resolvePath" | "createDirectory" | "setModifiedTime" | "readDirectory" | "watchFile" | "watchDirectory" | "useCaseSensitiveFileNames"> & {
+        deleteFile(path: string, deleteEmptyParentFolders?: boolean): void;
         ensureFileOrFolder(fileOrDirectoryOrSymLink: {
             path: string;
         } & ({

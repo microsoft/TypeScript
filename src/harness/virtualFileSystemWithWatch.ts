@@ -281,7 +281,7 @@ interface Array<T> { length: number; [n: number]: T; }`
 
     export const timeIncrements = 1000;
 
-    export class TestServerHost extends VirtualServerBaseHost implements server.ServerHost {
+    export class TestServerHost extends VirtualServerHost implements server.ServerHost {
         private readonly output: string[] = [];
         private time = timeIncrements;
         private timeoutCallbacks = new Callbacks(this);
@@ -289,7 +289,6 @@ interface Array<T> { length: number; [n: number]: T; }`
         readonly screenClears: number[] = [];
         private readonly environmentVariables?: ESMap<string, string>;
         public require: ((initialPath: string, moduleName: string) => RequireResult) | undefined;
-        private readonly runWithoutRecursiveWatches?: boolean;
         runWithFallbackPolling: boolean;
         public defaultWatchFileKind?: () => WatchFileKind | undefined;
 
@@ -299,42 +298,14 @@ interface Array<T> { length: number; [n: number]: T; }`
             options: TestServerHostCreationParameters = {}) {
             super({
                 ...options,
-                executingFilePath: options.executingFilePath || getExecutingFilePathFromLibFile()
-            });
-            const { environmentVariables, runWithoutRecursiveWatches, runWithFallbackPolling } = options;
+                executingFilePath: options.executingFilePath || getExecutingFilePathFromLibFile(),
+            },
+            options,
+            () => this.defaultWatchFileKind?.());
+            const { environmentVariables, runWithFallbackPolling } = options;
             fileOrFolderOrSymLinkList = fileOrFolderOrSymLinkList.concat(withSafeList ? safeList : []);
-            const tscWatchFile = environmentVariables && environmentVariables.get("TSC_WATCHFILE");
-            const tscWatchDirectory = environmentVariables && environmentVariables.get("TSC_WATCHDIRECTORY");
-            this.runWithoutRecursiveWatches = runWithoutRecursiveWatches;
             this.runWithFallbackPolling = !!runWithFallbackPolling;
             this.environmentVariables = environmentVariables;
-            const { watchFile, watchDirectory } = createSystemWatchFunctions({
-                // We dont have polling watch file
-                // it is essentially fsWatch but lets get that separate from fsWatch and
-                // into watchedFiles for easier testing
-                pollingWatchFile: tscWatchFile === Tsc_WatchFile.SingleFileWatcherPerName ?
-                    createSingleFileWatcherPerName(
-                        this.watchFileWorker.bind(this),
-                        this.useCaseSensitiveFileNames
-                    ) :
-                    this.watchFileWorker.bind(this),
-                getModifiedTime: this.getModifiedTime.bind(this),
-                setTimeout: this.setTimeout.bind(this),
-                clearTimeout: this.clearTimeout.bind(this),
-                fsWatch: this.fsWatch.bind(this),
-                fileExists: this.fileExists.bind(this),
-                useCaseSensitiveFileNames: this.useCaseSensitiveFileNames,
-                getCurrentDirectory: this.getCurrentDirectory.bind(this),
-                fsSupportsRecursiveFsWatch: tscWatchDirectory ? false : !this.runWithoutRecursiveWatches,
-                directoryExists: this.directoryExists.bind(this),
-                getAccessibleSortedChildDirectories: path => this.getDirectories(path),
-                realpath: this.realpath.bind(this),
-                tscWatchFile: tscWatchFile,
-                tscWatchDirectory: tscWatchDirectory,
-                defaultWatchFileKind: () => this.defaultWatchFileKind?.(),
-            });
-            this.watchFile = watchFile;
-            this.watchDirectory = watchDirectory;
             this.reloadFS(fileOrFolderOrSymLinkList);
         }
 

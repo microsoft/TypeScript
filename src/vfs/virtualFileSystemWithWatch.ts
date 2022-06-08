@@ -122,7 +122,7 @@ namespace ts.VirtualFS {
      *
      * also implements {server.ServerHost} but that would create a circular dependency
      */
-    export abstract class VirtualServerBaseHost implements FormatDiagnosticsHost, ModuleResolutionHost {
+    export class VirtualServerHost implements FormatDiagnosticsHost, ModuleResolutionHost {
         args: string[] = [];
 
         protected fs: ESMap<Path, FSEntry> = new Map();
@@ -144,7 +144,9 @@ namespace ts.VirtualFS {
         constructor({
             useCaseSensitiveFileNames, executingFilePath, currentDirectory,
             newLine, windowsStyleRoot
-        }: VirtualServerHostCreationParameters) {
+        }: VirtualServerHostCreationParameters,
+                    testOptions?: { environmentVariables?: ESMap<string, string>; runWithoutRecursiveWatches?: boolean; },
+                    defaultWatchFileKind?: (() => WatchFileKind | undefined)) {
             this.useCaseSensitiveFileNames = !!useCaseSensitiveFileNames;
             this.newLine = newLine || "\n";
             this.windowsStyleRoot = windowsStyleRoot;
@@ -153,6 +155,36 @@ namespace ts.VirtualFS {
             this.toPath = s => toPath(s, currentDirectory, this.getCanonicalFileName);
             this.executingFilePath = this.getHostSpecificPath(executingFilePath);
             this.currentDirectory = this.getHostSpecificPath(currentDirectory);
+            const { environmentVariables, runWithoutRecursiveWatches } = testOptions || {};
+            const tscWatchFile = environmentVariables && environmentVariables.get("TSC_WATCHFILE");
+            const tscWatchDirectory = environmentVariables && environmentVariables.get("TSC_WATCHDIRECTORY");
+            const { watchFile, watchDirectory } = createSystemWatchFunctions({
+                // We dont have polling watch file
+                // it is essentially fsWatch but lets get that separate from fsWatch and
+                // into watchedFiles for easier testing
+                pollingWatchFile: tscWatchFile === Tsc_WatchFile.SingleFileWatcherPerName ?
+                    createSingleFileWatcherPerName(
+                        this.watchFileWorker.bind(this),
+                        this.useCaseSensitiveFileNames
+                    ) :
+                    this.watchFileWorker.bind(this),
+                getModifiedTime: this.getModifiedTime.bind(this),
+                setTimeout: this.setTimeout.bind(this),
+                clearTimeout: this.clearTimeout.bind(this),
+                fsWatch: this.fsWatch.bind(this),
+                fileExists: this.fileExists.bind(this),
+                useCaseSensitiveFileNames: this.useCaseSensitiveFileNames,
+                getCurrentDirectory: this.getCurrentDirectory.bind(this),
+                fsSupportsRecursiveFsWatch: tscWatchDirectory ? false : !runWithoutRecursiveWatches,
+                directoryExists: this.directoryExists.bind(this),
+                getAccessibleSortedChildDirectories: path => this.getDirectories(path),
+                realpath: this.realpath.bind(this),
+                defaultWatchFileKind: defaultWatchFileKind ?? (() => undefined),
+                tscWatchFile,
+                tscWatchDirectory,
+            });
+            this.watchFile = watchFile;
+            this.watchDirectory = watchDirectory;
         }
 
         getNewLine() {
@@ -618,34 +650,6 @@ namespace ts.VirtualFS {
                 }
             });
             baseline.push("");
-        }
-    }
-
-    export class VirtualServerHost extends VirtualServerBaseHost {
-        constructor(options: VirtualServerHostCreationParameters) {
-            super(options);
-            const { watchFile, watchDirectory } = createSystemWatchFunctions({
-                // We dont have polling watch file
-                // it is essentially fsWatch but lets get that separate from fsWatch and
-                // into watchedFiles for easier testing
-                pollingWatchFile: this.watchFileWorker.bind(this),
-                getModifiedTime: this.getModifiedTime.bind(this),
-                setTimeout: this.setTimeout.bind(this),
-                clearTimeout: this.clearTimeout.bind(this),
-                fsWatch: this.fsWatch.bind(this),
-                fileExists: this.fileExists.bind(this),
-                useCaseSensitiveFileNames: this.useCaseSensitiveFileNames,
-                getCurrentDirectory: this.getCurrentDirectory.bind(this),
-                fsSupportsRecursiveFsWatch: true,
-                directoryExists: this.directoryExists.bind(this),
-                getAccessibleSortedChildDirectories: path => this.getDirectories(path),
-                realpath: this.realpath.bind(this),
-                tscWatchFile: undefined,
-                tscWatchDirectory: undefined,
-                defaultWatchFileKind: () => undefined,
-            });
-            this.watchFile = watchFile;
-            this.watchDirectory = watchDirectory;
         }
     }
 
