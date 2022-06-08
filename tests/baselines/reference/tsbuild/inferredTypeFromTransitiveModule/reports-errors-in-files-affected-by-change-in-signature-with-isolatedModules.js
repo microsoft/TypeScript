@@ -414,7 +414,7 @@ Output::
 [[90m12:00:31 AM[0m] Projects in this build: 
     * src/tsconfig.json
 
-[[90m12:00:32 AM[0m] Project 'src/tsconfig.json' is out of date because buildinfo file 'src/obj/tsconfig.tsbuildinfo' indicates that some of the changes are not emitted
+[[90m12:00:32 AM[0m] Project 'src/tsconfig.json' is out of date because buildinfo file 'src/obj/tsconfig.tsbuildinfo' indicates that some of the changes were not emitted
 
 [[90m12:00:33 AM[0m] Building project '/src/tsconfig.json'...
 
@@ -679,7 +679,7 @@ Output::
 [[90m12:00:49 AM[0m] Projects in this build: 
     * src/tsconfig.json
 
-[[90m12:00:50 AM[0m] Project 'src/tsconfig.json' is out of date because buildinfo file 'src/obj/tsconfig.tsbuildinfo' indicates that some of the changes are not emitted
+[[90m12:00:50 AM[0m] Project 'src/tsconfig.json' is out of date because buildinfo file 'src/obj/tsconfig.tsbuildinfo' indicates that some of the changes were not emitted
 
 [[90m12:00:51 AM[0m] Building project '/src/tsconfig.json'...
 

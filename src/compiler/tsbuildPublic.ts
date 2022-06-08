@@ -946,7 +946,7 @@ namespace ts {
             Debug.assertIsDefined(program);
             Debug.assert(step === BuildStep.Emit);
             // Before emitting lets backup state, so we can revert it back if there are declaration errors to handle emit and declaration errors correctly
-            program.backupEmitState();
+            const saved = program.saveEmitState();
             let declDiagnostics: Diagnostic[] | undefined;
             const reportDeclarationDiagnostics = (d: Diagnostic) => (declDiagnostics || (declDiagnostics = [])).push(d);
             const outputFiles: OutputFile[] = [];
@@ -962,7 +962,7 @@ namespace ts {
             );
             // Don't emit .d.ts if there are decl file errors
             if (declDiagnostics) {
-                program.restoreEmitState();
+                program.restoreEmitState(saved);
                 ({ buildResult, step } = buildErrors(
                     state,
                     projectPath,
@@ -1558,7 +1558,7 @@ namespace ts {
         // Check buildinfo first
         const { host } = state;
         const buildInfoPath = getTsBuildInfoEmitOutputFilePath(project.options);
-        let oldestOutputFileName = "(none)";
+        let oldestOutputFileName: string | undefined;
         let oldestOutputFileTime = maximumDate;
         let buildInfoTime: Date | undefined;
         let buildInfoProgram: ProgramBuildInfo | undefined;
@@ -1610,7 +1610,8 @@ namespace ts {
         // Check input files
         let newestInputFileName: string = undefined!;
         let newestInputFileTime = minimumDate;
-        let pseudoInputUptodate = false;
+        /** True if input file has changed timestamp but text is not changed, we can then do only timestamp updates on output to make it look up-to-date later */
+        let pseudoInputUpToDate = false;
         // Get timestamps of input files
         for (const inputFile of project.fileNames) {
             const inputTime = getModifiedTime(state, inputFile);
@@ -1631,7 +1632,7 @@ namespace ts {
                     version = buildInfoVersionMap.get(toPath(state, inputFile));
                     const text = version ? state.readFileWithCache(inputFile) : undefined;
                     currentVersion = text && (host.createHash || generateDjb2Hash)(text);
-                    if (version && version === currentVersion) pseudoInputUptodate = true;
+                    if (version && version === currentVersion) pseudoInputUpToDate = true;
                 }
 
                 if (!version || version !== currentVersion) {
@@ -1671,20 +1672,20 @@ namespace ts {
                     };
                 }
 
+                // If an output is older than the newest input, we can stop checking
+                if (outputTime < newestInputFileTime) {
+                    return {
+                        type: UpToDateStatusType.OutOfDateWithSelf,
+                        outOfDateOutputFileName: output,
+                        newerInputFileName: newestInputFileName
+                    };
+                }
+
                 // No need to get newestDeclarationFileContentChangedTime since thats needed only for composite projects
                 // And composite projects are the only ones that can be referenced
                 if (outputTime < oldestOutputFileTime) {
                     oldestOutputFileTime = outputTime;
                     oldestOutputFileName = output;
-                }
-
-                // If an output is older than the newest input, we can stop checking
-                if (outputTime < newestInputFileTime) {
-                    return {
-                        type: UpToDateStatusType.OutOfDateWithSelf,
-                        outOfDateOutputFileName: oldestOutputFileName,
-                        newerInputFileName: newestInputFileName
-                    };
                 }
             }
         }
@@ -1693,6 +1694,7 @@ namespace ts {
         const buildInfoCacheEntry = state.buildInfoCache.get(resolvedPath);
         seenRefs?.add(resolvedPath);
 
+        /** Inputs are up-to-date, just need either timestamp update or bundle prepend manipulation to make it look up-to-date */
         let pseudoUpToDate = false;
         let usesPrepend = false;
         let upstreamChangedProject: string | undefined;
@@ -1733,24 +1735,24 @@ namespace ts {
         }
 
         // Check tsconfig time
-        const configStatus = checkConfigFileUpToDateStatus(state, project.options.configFilePath!, oldestOutputFileTime, oldestOutputFileName);
+        const configStatus = checkConfigFileUpToDateStatus(state, project.options.configFilePath!, oldestOutputFileTime, oldestOutputFileName!);
         if (configStatus) return configStatus;
 
         // Check extended config time
-        const extendedConfigStatus = forEach(project.options.configFile!.extendedSourceFiles || emptyArray, configFile => checkConfigFileUpToDateStatus(state, configFile, oldestOutputFileTime, oldestOutputFileName));
+        const extendedConfigStatus = forEach(project.options.configFile!.extendedSourceFiles || emptyArray, configFile => checkConfigFileUpToDateStatus(state, configFile, oldestOutputFileTime, oldestOutputFileName!));
         if (extendedConfigStatus) return extendedConfigStatus;
 
         // Check package file time
         const dependentPackageFileStatus = forEach(
             state.lastCachedPackageJsonLookups.get(resolvedPath) || emptyArray,
-            ([path]) => checkConfigFileUpToDateStatus(state, path, oldestOutputFileTime, oldestOutputFileName)
+            ([path]) => checkConfigFileUpToDateStatus(state, path, oldestOutputFileTime, oldestOutputFileName!)
         );
         if (dependentPackageFileStatus) return dependentPackageFileStatus;
 
         if (usesPrepend && pseudoUpToDate) {
             return {
                 type: UpToDateStatusType.OutOfDateWithPrepend,
-                outOfDateOutputFileName: oldestOutputFileName,
+                outOfDateOutputFileName: oldestOutputFileName!,
                 newerProjectName: upstreamChangedProject!
             };
         }
@@ -1759,13 +1761,13 @@ namespace ts {
         return {
             type: pseudoUpToDate ?
                 UpToDateStatusType.UpToDateWithUpstreamTypes :
-                pseudoInputUptodate ?
+                pseudoInputUpToDate ?
                     UpToDateStatusType.UpToDateWithInputFileText :
                     UpToDateStatusType.UpToDate,
             newestDeclarationFileContentChangedTime,
             newestInputFileTime,
             newestInputFileName,
-            oldestOutputFileName
+            oldestOutputFileName: oldestOutputFileName!
         };
     }
 
@@ -2338,7 +2340,7 @@ namespace ts {
             case UpToDateStatusType.OutOfDateBuildInfo:
                 return reportStatus(
                     state,
-                    Diagnostics.Project_0_is_out_of_date_because_buildinfo_file_1_indicates_that_some_of_the_changes_are_not_emitted,
+                    Diagnostics.Project_0_is_out_of_date_because_buildinfo_file_1_indicates_that_some_of_the_changes_were_not_emitted,
                     relName(state, configFileName),
                     relName(state, status.buildInfoFile)
                 );
@@ -2370,7 +2372,7 @@ namespace ts {
             case UpToDateStatusType.UpToDateWithInputFileText:
                 return reportStatus(
                     state,
-                    Diagnostics.Project_0_is_up_to_date_but_needs_update_to_timestamps_of_output_files_that_are_older_than_input_files,
+                    Diagnostics.Project_0_is_up_to_date_but_needs_to_update_timestamps_of_output_files_that_are_older_than_input_files,
                     relName(state, configFileName)
                 );
             case UpToDateStatusType.UpstreamOutOfDate:

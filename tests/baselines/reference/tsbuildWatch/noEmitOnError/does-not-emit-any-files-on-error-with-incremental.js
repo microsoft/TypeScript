@@ -154,7 +154,7 @@ Output::
 >> Screen clear
 [[90m12:00:47 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:00:48 AM[0m] Project 'tsconfig.json' is out of date because buildinfo file 'dev-build/tsconfig.tsbuildinfo' indicates that some of the changes are not emitted
+[[90m12:00:48 AM[0m] Project 'tsconfig.json' is out of date because buildinfo file 'dev-build/tsconfig.tsbuildinfo' indicates that some of the changes were not emitted
 
 [[90m12:00:49 AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
 
@@ -213,7 +213,7 @@ Output::
 >> Screen clear
 [[90m12:00:54 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:00:55 AM[0m] Project 'tsconfig.json' is out of date because buildinfo file 'dev-build/tsconfig.tsbuildinfo' indicates that some of the changes are not emitted
+[[90m12:00:55 AM[0m] Project 'tsconfig.json' is out of date because buildinfo file 'dev-build/tsconfig.tsbuildinfo' indicates that some of the changes were not emitted
 
 [[90m12:00:56 AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
 
@@ -480,7 +480,7 @@ Output::
 >> Screen clear
 [[90m12:01:37 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:38 AM[0m] Project 'tsconfig.json' is out of date because buildinfo file 'dev-build/tsconfig.tsbuildinfo' indicates that some of the changes are not emitted
+[[90m12:01:38 AM[0m] Project 'tsconfig.json' is out of date because buildinfo file 'dev-build/tsconfig.tsbuildinfo' indicates that some of the changes were not emitted
 
 [[90m12:01:39 AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
 
@@ -537,7 +537,7 @@ Output::
 >> Screen clear
 [[90m12:01:44 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:45 AM[0m] Project 'tsconfig.json' is out of date because buildinfo file 'dev-build/tsconfig.tsbuildinfo' indicates that some of the changes are not emitted
+[[90m12:01:45 AM[0m] Project 'tsconfig.json' is out of date because buildinfo file 'dev-build/tsconfig.tsbuildinfo' indicates that some of the changes were not emitted
 
 [[90m12:01:46 AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
 
@@ -651,7 +651,7 @@ Output::
 >> Screen clear
 [[90m12:02:01 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:02:02 AM[0m] Project 'tsconfig.json' is up to date but needs update to timestamps of output files that are older than input files
+[[90m12:02:02 AM[0m] Project 'tsconfig.json' is up to date but needs to update timestamps of output files that are older than input files
 
 [[90m12:02:03 AM[0m] Updating output timestamps of project '/user/username/projects/noEmitOnError/tsconfig.json'...
 

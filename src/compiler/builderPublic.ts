@@ -39,9 +39,9 @@ namespace ts {
         /*@internal*/
         getState(): ReusableBuilderProgramState;
         /*@internal*/
-        backupEmitState(): void;
+        saveEmitState(): SavedBuildProgramEmitState;
         /*@internal*/
-        restoreEmitState(): void;
+        restoreEmitState(saved: SavedBuildProgramEmitState): void;
         /**
          * Returns current program
          */

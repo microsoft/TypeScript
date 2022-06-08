@@ -5322,11 +5322,11 @@
         "category": "Message",
         "code": 6398
     },
-    "Project '{0}' is out of date because buildinfo file '{1}' indicates that some of the changes are not emitted": {
+    "Project '{0}' is out of date because buildinfo file '{1}' indicates that some of the changes were not emitted": {
         "category": "Message",
         "code": 6399
     },
-    "Project '{0}' is up to date but needs update to timestamps of output files that are older than input files": {
+    "Project '{0}' is up to date but needs to update timestamps of output files that are older than input files": {
         "category": "Message",
         "code": 6400
     },

@@ -133,7 +133,7 @@ namespace ts {
         filesChangingSignature?: Set<Path>;
     }
 
-    type BackupEmitState = Pick<BuilderProgramState,
+    export type SavedBuildProgramEmitState = Pick<BuilderProgramState,
         "affectedFilesPendingEmit" |
         "affectedFilesPendingEmitIndex" |
         "affectedFilesPendingEmitKind" |
@@ -289,7 +289,7 @@ namespace ts {
         state.program = undefined;
     }
 
-    function backupEmitBuilderProgramState(state: Readonly<BuilderProgramState>): BackupEmitState {
+    function backupBuilderProgramEmitState(state: Readonly<BuilderProgramState>): SavedBuildProgramEmitState {
         const outFilePath = outFile(state.compilerOptions);
         // Only in --out changeFileSet is kept around till emit
         Debug.assert(!state.changedFilesSet.size || outFilePath);
@@ -307,17 +307,17 @@ namespace ts {
         };
     }
 
-    function restoreEmitBuilderProgramState(state: BuilderProgramState, backupEmitState: BackupEmitState) {
-        state.affectedFilesPendingEmit = backupEmitState.affectedFilesPendingEmit;
-        state.affectedFilesPendingEmitKind = backupEmitState.affectedFilesPendingEmitKind;
-        state.affectedFilesPendingEmitIndex = backupEmitState.affectedFilesPendingEmitIndex;
-        state.seenEmittedFiles = backupEmitState.seenEmittedFiles;
-        state.programEmitComplete = backupEmitState.programEmitComplete;
-        state.emitSignatures = backupEmitState.emitSignatures;
-        state.outSignature = backupEmitState.outSignature;
-        state.dtsChangeTime = backupEmitState.dtsChangeTime;
-        state.hasChangedEmitSignature = backupEmitState.hasChangedEmitSignature;
-        if (backupEmitState.changedFilesSet) state.changedFilesSet = backupEmitState.changedFilesSet;
+    function restoreBuilderProgramEmitState(state: BuilderProgramState, savedEmitState: SavedBuildProgramEmitState) {
+        state.affectedFilesPendingEmit = savedEmitState.affectedFilesPendingEmit;
+        state.affectedFilesPendingEmitKind = savedEmitState.affectedFilesPendingEmitKind;
+        state.affectedFilesPendingEmitIndex = savedEmitState.affectedFilesPendingEmitIndex;
+        state.seenEmittedFiles = savedEmitState.seenEmittedFiles;
+        state.programEmitComplete = savedEmitState.programEmitComplete;
+        state.emitSignatures = savedEmitState.emitSignatures;
+        state.outSignature = savedEmitState.outSignature;
+        state.dtsChangeTime = savedEmitState.dtsChangeTime;
+        state.hasChangedEmitSignature = savedEmitState.hasChangedEmitSignature;
+        if (savedEmitState.changedFilesSet) state.changedFilesSet = savedEmitState.changedFilesSet;
     }
 
     /**
@@ -738,7 +738,6 @@ namespace ts {
         signature: string | false | undefined;
     };
     /**
-     * Signature if different from file's signature
      * [fileId, signature] if different from file's signature
      * fileId if file wasnt emitted
      */
@@ -934,6 +933,9 @@ namespace ts {
             return fileIdListId;
         }
 
+        /**
+         * @param optionKey key of CommandLineOption to use to determine if the option should be serialized in tsbuildinfo
+         */
         function convertToProgramBuildInfoCompilerOptions(options: CompilerOptions, optionKey: "affectsBundleEmitBuildInfo" | "affectsMultiFileEmitBuildInfo") {
             let result: CompilerOptions | undefined;
             const { optionsNameMap } = getOptionsNameMap();
@@ -1060,7 +1062,6 @@ namespace ts {
          */
         const computeHash = maybeBind(host, host.createHash);
         const state = createBuilderProgramState(newProgram, getCanonicalFileName, oldState, host.disableUseFileVersionAsSignature);
-        let backupEmitState: BackupEmitState | undefined;
         newProgram.getProgramBuildInfo = () => getProgramBuildInfo(state, getCanonicalFileName, host);
 
         // To ensure that we arent storing any references to old program or new program without state
@@ -1071,21 +1072,12 @@ namespace ts {
         const getState = () => state;
         const builderProgram = createRedirectedBuilderProgram(getState, configFileParsingDiagnostics);
         builderProgram.getState = getState;
-        builderProgram.backupEmitState = () => {
-            Debug.assert(backupEmitState === undefined);
-            backupEmitState = backupEmitBuilderProgramState(state);
-        };
-        builderProgram.restoreEmitState = () => {
-            restoreEmitBuilderProgramState(state, Debug.checkDefined(backupEmitState));
-            backupEmitState = undefined;
-        };
+        builderProgram.saveEmitState = () => backupBuilderProgramEmitState(state);
+        builderProgram.restoreEmitState = (saved) => restoreBuilderProgramEmitState(state, saved);
         builderProgram.getAllDependencies = sourceFile => BuilderState.getAllDependencies(state, Debug.checkDefined(state.program), sourceFile);
         builderProgram.getSemanticDiagnostics = getSemanticDiagnostics;
         builderProgram.emit = emit;
-        builderProgram.releaseProgram = () => {
-            releaseCache(state);
-            backupEmitState = undefined;
-        };
+        builderProgram.releaseProgram = () => releaseCache(state);
 
         if (kind === BuilderProgramKind.SemanticDiagnosticsBuilderProgram) {
             (builderProgram as SemanticDiagnosticsBuilderProgram).getSemanticDiagnosticsOfNextAffectedFile = getSemanticDiagnosticsOfNextAffectedFile;
@@ -1438,7 +1430,7 @@ namespace ts {
 
         return {
             getState: () => state,
-            backupEmitState: noop,
+            saveEmitState: noop as BuilderProgram["saveEmitState"],
             restoreEmitState: noop,
             getProgram: notImplemented,
             getProgramOrUndefined: returnUndefined,
@@ -1509,7 +1501,7 @@ namespace ts {
     export function createRedirectedBuilderProgram(getState: () => { program?: Program | undefined; compilerOptions: CompilerOptions; }, configFileParsingDiagnostics: readonly Diagnostic[]): BuilderProgram {
         return {
             getState: notImplemented,
-            backupEmitState: noop,
+            saveEmitState: noop as BuilderProgram["saveEmitState"],
             restoreEmitState: noop,
             getProgram,
             getProgramOrUndefined: () => getState().program,

@@ -274,10 +274,10 @@ namespace ts {
             // Create the reference map, and set the file infos
             for (const sourceFile of newProgram.getSourceFiles()) {
                 const version = Debug.checkDefined(sourceFile.version, "Program intended to be used with Builder should have source files with versions set");
-                const oldUncommitedSignature = useOldState ? oldState!.oldSignatures?.get(sourceFile.resolvedPath) : undefined;
-                const signature = oldUncommitedSignature === undefined ?
+                const oldUncommittedSignature = useOldState ? oldState!.oldSignatures?.get(sourceFile.resolvedPath) : undefined;
+                const signature = oldUncommittedSignature === undefined ?
                     useOldState ? oldState!.fileInfos.get(sourceFile.resolvedPath)?.signature : undefined :
-                    oldUncommitedSignature || undefined;
+                    oldUncommittedSignature || undefined;
                 if (referencedMap) {
                     const newReferences = getReferencedFiles(newProgram, sourceFile, getCanonicalFileName);
                     if (newReferences) {
@@ -285,10 +285,10 @@ namespace ts {
                     }
                     // Copy old visible to outside files map
                     if (useOldState) {
-                        const oldUncommitedExportedModules = oldState!.oldExportedModulesMap?.get(sourceFile.resolvedPath);
-                        const exportedModules = oldUncommitedExportedModules === undefined ?
+                        const oldUncommittedExportedModules = oldState!.oldExportedModulesMap?.get(sourceFile.resolvedPath);
+                        const exportedModules = oldUncommittedExportedModules === undefined ?
                             oldState!.exportedModulesMap!.getValues(sourceFile.resolvedPath) :
-                            oldUncommitedExportedModules || undefined;
+                            oldUncommittedExportedModules || undefined;
                         if (exportedModules) {
                             exportedModulesMap!.set(sourceFile.resolvedPath, exportedModules);
                         }

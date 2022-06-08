@@ -627,7 +627,7 @@ Output::
     * src/second/tsconfig.json
     * src/third/tsconfig.json
 
-[[90m12:00:47 AM[0m] Project 'src/first/tsconfig.json' is up to date but needs update to timestamps of output files that are older than input files
+[[90m12:00:47 AM[0m] Project 'src/first/tsconfig.json' is up to date but needs to update timestamps of output files that are older than input files
 
 [[90m12:00:48 AM[0m] Updating output timestamps of project '/src/first/tsconfig.json'...
 
