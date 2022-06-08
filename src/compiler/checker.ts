@@ -5002,6 +5002,9 @@ namespace ts {
                 if (!inTypeAlias && type.aliasSymbol && (context.flags & NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope || isTypeSymbolAccessible(type.aliasSymbol, context.enclosingDeclaration))) {
                     const typeArgumentNodes = mapToTypeNodes(type.aliasTypeArguments, context);
                     if (isReservedMemberName(type.aliasSymbol.escapedName) && !(type.aliasSymbol.flags & SymbolFlags.Class)) return factory.createTypeReferenceNode(factory.createIdentifier(""), typeArgumentNodes);
+                    if (length(typeArgumentNodes) === 1 && type.aliasSymbol === globalArrayType.symbol) {
+                        return factory.createArrayTypeNode(typeArgumentNodes![0]);
+                    }
                     return symbolToTypeNode(type.aliasSymbol, context, SymbolFlags.Type, typeArgumentNodes);
                 }
 
@@ -9357,6 +9360,17 @@ namespace ts {
                     exportedType.callSignatures,
                     exportedType.constructSignatures,
                     exportedType.indexInfos);
+                if (initialSize === members.size) {
+                    if (type.aliasSymbol) {
+                        result.aliasSymbol = type.aliasSymbol;
+                        result.aliasTypeArguments = type.aliasTypeArguments;
+                    }
+                    if (getObjectFlags(type) & ObjectFlags.Reference) {
+                        result.aliasSymbol = (type as TypeReference).symbol;
+                        const args = getTypeArguments(type as TypeReference);
+                        result.aliasTypeArguments = length(args) ? args : undefined;
+                    }
+                }
                 result.objectFlags |= (getObjectFlags(type) & ObjectFlags.JSLiteral); // Propagate JSLiteral flag
                 if (result.symbol && result.symbol.flags & SymbolFlags.Class && type === getDeclaredTypeOfClassOrInterface(result.symbol)) {
                     result.objectFlags |= ObjectFlags.IsClassInstanceClone; // Propagate the knowledge that this type is equivalent to the symbol's class instance type
