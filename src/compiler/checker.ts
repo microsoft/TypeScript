@@ -37578,7 +37578,7 @@ namespace ts {
         function checkPotentialUncheckedRenamedBindingElementsInTypes() {
             for (const node of potentialUnusedRenamedBindingElementsInTypes) {
                 if (!(getSymbolOfNode(node)?.isReferenced! & SymbolFlags.Type)) {
-                    error(node.name, Diagnostics.Variable_0_is_not_used_Did_you_mean_to_write_a_type_annotation_for_whole_object, declarationNameToString(node.name));
+                    error(node.name, Diagnostics._0_is_an_unused_renaming_of_1_Did_you_intend_to_use_it_as_a_type_annotation, declarationNameToString(node.name), declarationNameToString(node.propertyName));
                 }
             }
         }

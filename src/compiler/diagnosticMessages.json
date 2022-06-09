@@ -3487,7 +3487,7 @@
         "category": "Error",
         "code": 2841
     },
-    "Variable '{0}' is not used. Did you mean to write a type annotation for whole object?": {
+    "'{0}' is an unused renaming of '{1}'. Did you intend to use it as a type annotation?": {
         "category": "Error",
         "code": 2842
     }, 
