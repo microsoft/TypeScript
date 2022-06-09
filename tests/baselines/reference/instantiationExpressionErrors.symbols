@@ -21,15 +21,13 @@ const a2 = f.g<number>;  // () => number
 
 const a3 = f<number>.g;  // <U>() => U
 >a3 : Symbol(a3, Decl(instantiationExpressionErrors.ts, 6, 5))
->f<number>.g : Symbol(g, Decl(instantiationExpressionErrors.ts, 0, 26))
 >f : Symbol(f, Decl(instantiationExpressionErrors.ts, 0, 11))
->g : Symbol(g, Decl(instantiationExpressionErrors.ts, 0, 26))
+>g : Symbol(g, Decl(instantiationExpressionErrors.ts, 6, 21))
 
 const a4 = f<number>.g<number>;  // () => number
 >a4 : Symbol(a4, Decl(instantiationExpressionErrors.ts, 7, 5))
->f<number>.g : Symbol(g, Decl(instantiationExpressionErrors.ts, 0, 26))
 >f : Symbol(f, Decl(instantiationExpressionErrors.ts, 0, 11))
->g : Symbol(g, Decl(instantiationExpressionErrors.ts, 0, 26))
+>g : Symbol(g, Decl(instantiationExpressionErrors.ts, 7, 21))
 
 const a5 = f['g']<number>;  // () => number
 >a5 : Symbol(a5, Decl(instantiationExpressionErrors.ts, 8, 5))

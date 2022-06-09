@@ -23,12 +23,10 @@ declare const a: typeof A | undefined;
 >A : Symbol(A, Decl(optionalChainWithInstantiationExpression1.ts, 0, 0))
 
 a?.b<c>.d;
->a?.b<c>.d : Symbol(A.b.d, Decl(optionalChainWithInstantiationExpression1.ts, 1, 23))
 >a?.b : Symbol(A.b, Decl(optionalChainWithInstantiationExpression1.ts, 0, 21))
 >a : Symbol(a, Decl(optionalChainWithInstantiationExpression1.ts, 9, 13))
 >b : Symbol(A.b, Decl(optionalChainWithInstantiationExpression1.ts, 0, 21))
 >c : Symbol(c, Decl(optionalChainWithInstantiationExpression1.ts, 5, 1))
->d : Symbol(A.b.d, Decl(optionalChainWithInstantiationExpression1.ts, 1, 23))
 
 a?.b.d
 >a?.b.d : Symbol(A.b.d, Decl(optionalChainWithInstantiationExpression1.ts, 1, 23))

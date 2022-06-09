@@ -16,5 +16,6 @@ a?.b.d
 
 
 //// [optionalChainWithInstantiationExpression1.js]
-(a === null || a === void 0 ? void 0 : a.b).d;
+(a === null || a === void 0 ? void 0 : a.b);
+d;
 a === null || a === void 0 ? void 0 : a.b.d;

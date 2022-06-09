@@ -53,8 +53,9 @@ var _a, _b;
 // Type arguments in member expressions
 var a1 = (f); // { (): number; g<U>(): U; }
 var a2 = (f.g); // () => number
-var a3 = f.g; // <U>() => U
-var a4 = (f.g); // () => number
+var a3 = (f), g; // <U>() => U
+var a4 = (f), g;
+; // () => number
 var a5 = (f['g']); // () => number
 // `[` is an expression starter and cannot immediately follow a type argument list
 var a6 = f < number > ['g']; // Error
@@ -90,8 +91,14 @@ declare const a1: {
     g<U>(): U;
 };
 declare const a2: () => number;
-declare const a3: <U>() => U;
-declare const a4: () => number;
+declare const a3: {
+    (): number;
+    g<U>(): U;
+}, g: any;
+declare const a4: {
+    (): number;
+    g<U>(): U;
+}, g: any;
 declare const a5: () => number;
 declare const a6: boolean;
 declare const a7: <U>() => U;

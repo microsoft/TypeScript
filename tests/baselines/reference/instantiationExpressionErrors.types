@@ -18,19 +18,18 @@ const a2 = f.g<number>;  // () => number
 >g : <U>() => U
 
 const a3 = f<number>.g;  // <U>() => U
->a3 : <U>() => U
->f<number>.g : <U>() => U
+>a3 : { (): number; g<U>(): U; }
 >f<number> : { (): number; g<U>(): U; }
 >f : { <T>(): T; g<U>(): U; }
->g : <U>() => U
+>g : any
 
 const a4 = f<number>.g<number>;  // () => number
->a4 : () => number
->f<number>.g<number> : () => number
->f<number>.g : <U>() => U
+>a4 : { (): number; g<U>(): U; }
 >f<number> : { (): number; g<U>(): U; }
 >f : { <T>(): T; g<U>(): U; }
->g : <U>() => U
+>g : any
+><number> : number
+> : any
 
 const a5 = f['g']<number>;  // () => number
 >a5 : () => number

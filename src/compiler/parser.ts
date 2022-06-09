@@ -5605,6 +5605,10 @@ namespace ts {
                 }
 
                 if (isPropertyAccess) {
+                    // TODO: issue a better error?
+                    if (expression.kind === SyntaxKind.ExpressionWithTypeArguments) {
+                        return expression as MemberExpression;
+                    }
                     expression = parsePropertyAccessExpressionRest(pos, expression, questionDotToken);
                     continue;
                 }
