@@ -1026,11 +1026,7 @@ namespace ts {
         const potentialNewTargetCollisions: Node[] = [];
         const potentialWeakMapSetCollisions: Node[] = [];
         const potentialReflectCollisions: Node[] = [];
-        const potentialAlwaysCheckedUnusedTypes: {
-            node: Node;
-            name: Identifier;
-            diagnostic: DiagnosticMessage;
-         }[] = [];
+        const potentialUnusedRenamedBindingElementsInTypes: BindingElement[] = [];
         const awaitedTypeStack: number[] = [];
 
         const diagnostics = createDiagnosticCollection();
@@ -37579,10 +37575,10 @@ namespace ts {
             });
         }
 
-        function checkPotentialAlwaysCheckedUnusedTypes() {
-            for (const { node, name, diagnostic } of potentialAlwaysCheckedUnusedTypes) {
+        function checkPotentialUncheckedRenamedBindingElementsInTypes() {
+            for (const node of potentialUnusedRenamedBindingElementsInTypes) {
                 if (!(getSymbolOfNode(node)?.isReferenced! & SymbolFlags.Type)) {
-                    error(name, diagnostic, declarationNameToString(name));
+                    error(node.name, Diagnostics.Variable_0_is_not_used_Did_you_mean_to_write_a_type_annotation_for_whole_object, declarationNameToString(node.name));
                 }
             }
         }
@@ -37938,11 +37934,7 @@ namespace ts {
                     //               ^^^^^^
                     // variable renaming in function type notation is confusing,
                     // so we forbid it even if noUnusedLocals is not enabled
-                    potentialAlwaysCheckedUnusedTypes.push({
-                        node,
-                        name: node.name,
-                        diagnostic: Diagnostics.Variable_0_is_not_used_Did_you_mean_to_write_a_type_annotation_for_whole_object
-                    });
+                    potentialUnusedRenamedBindingElementsInTypes.push(node);
                     return;
                 }
 
@@ -41789,7 +41781,7 @@ namespace ts {
                 clear(potentialNewTargetCollisions);
                 clear(potentialWeakMapSetCollisions);
                 clear(potentialReflectCollisions);
-                clear(potentialAlwaysCheckedUnusedTypes);
+                clear(potentialUnusedRenamedBindingElementsInTypes);
 
                 forEach(node.statements, checkSourceElement);
                 checkSourceElement(node.endOfFileToken);
@@ -41810,7 +41802,7 @@ namespace ts {
                         });
                     }
                     if (!node.isDeclarationFile) {
-                        checkPotentialAlwaysCheckedUnusedTypes();
+                        checkPotentialUncheckedRenamedBindingElementsInTypes();
                     }
                 });
 
