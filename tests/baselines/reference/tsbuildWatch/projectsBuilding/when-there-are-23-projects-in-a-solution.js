@@ -726,51 +726,51 @@ FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/myproject/pkg0:
-  {"directoryName":"/user/username/projects/myproject/pkg0","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg0"}
 /user/username/projects/myproject/pkg1:
-  {"directoryName":"/user/username/projects/myproject/pkg1","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg1"}
 /user/username/projects/myproject/pkg2:
-  {"directoryName":"/user/username/projects/myproject/pkg2","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg2"}
 /user/username/projects/myproject/pkg3:
-  {"directoryName":"/user/username/projects/myproject/pkg3","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg3"}
 /user/username/projects/myproject/pkg4:
-  {"directoryName":"/user/username/projects/myproject/pkg4","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg4"}
 /user/username/projects/myproject/pkg5:
-  {"directoryName":"/user/username/projects/myproject/pkg5","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg5"}
 /user/username/projects/myproject/pkg6:
-  {"directoryName":"/user/username/projects/myproject/pkg6","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg6"}
 /user/username/projects/myproject/pkg7:
-  {"directoryName":"/user/username/projects/myproject/pkg7","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg7"}
 /user/username/projects/myproject/pkg8:
-  {"directoryName":"/user/username/projects/myproject/pkg8","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg8"}
 /user/username/projects/myproject/pkg9:
-  {"directoryName":"/user/username/projects/myproject/pkg9","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg9"}
 /user/username/projects/myproject/pkg10:
-  {"directoryName":"/user/username/projects/myproject/pkg10","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg10"}
 /user/username/projects/myproject/pkg11:
-  {"directoryName":"/user/username/projects/myproject/pkg11","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg11"}
 /user/username/projects/myproject/pkg12:
-  {"directoryName":"/user/username/projects/myproject/pkg12","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg12"}
 /user/username/projects/myproject/pkg13:
-  {"directoryName":"/user/username/projects/myproject/pkg13","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg13"}
 /user/username/projects/myproject/pkg14:
-  {"directoryName":"/user/username/projects/myproject/pkg14","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg14"}
 /user/username/projects/myproject/pkg15:
-  {"directoryName":"/user/username/projects/myproject/pkg15","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg15"}
 /user/username/projects/myproject/pkg16:
-  {"directoryName":"/user/username/projects/myproject/pkg16","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg16"}
 /user/username/projects/myproject/pkg17:
-  {"directoryName":"/user/username/projects/myproject/pkg17","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg17"}
 /user/username/projects/myproject/pkg18:
-  {"directoryName":"/user/username/projects/myproject/pkg18","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg18"}
 /user/username/projects/myproject/pkg19:
-  {"directoryName":"/user/username/projects/myproject/pkg19","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg19"}
 /user/username/projects/myproject/pkg20:
-  {"directoryName":"/user/username/projects/myproject/pkg20","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg20"}
 /user/username/projects/myproject/pkg21:
-  {"directoryName":"/user/username/projects/myproject/pkg21","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg21"}
 /user/username/projects/myproject/pkg22:
-  {"directoryName":"/user/username/projects/myproject/pkg22","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg22"}
 
 exitCode:: ExitStatus.undefined
 
@@ -2076,51 +2076,51 @@ FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/myproject/pkg0:
-  {"directoryName":"/user/username/projects/myproject/pkg0","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg0"}
 /user/username/projects/myproject/pkg1:
-  {"directoryName":"/user/username/projects/myproject/pkg1","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg1"}
 /user/username/projects/myproject/pkg2:
-  {"directoryName":"/user/username/projects/myproject/pkg2","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg2"}
 /user/username/projects/myproject/pkg3:
-  {"directoryName":"/user/username/projects/myproject/pkg3","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg3"}
 /user/username/projects/myproject/pkg4:
-  {"directoryName":"/user/username/projects/myproject/pkg4","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg4"}
 /user/username/projects/myproject/pkg5:
-  {"directoryName":"/user/username/projects/myproject/pkg5","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg5"}
 /user/username/projects/myproject/pkg6:
-  {"directoryName":"/user/username/projects/myproject/pkg6","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg6"}
 /user/username/projects/myproject/pkg7:
-  {"directoryName":"/user/username/projects/myproject/pkg7","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg7"}
 /user/username/projects/myproject/pkg8:
-  {"directoryName":"/user/username/projects/myproject/pkg8","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg8"}
 /user/username/projects/myproject/pkg9:
-  {"directoryName":"/user/username/projects/myproject/pkg9","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg9"}
 /user/username/projects/myproject/pkg10:
-  {"directoryName":"/user/username/projects/myproject/pkg10","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg10"}
 /user/username/projects/myproject/pkg11:
-  {"directoryName":"/user/username/projects/myproject/pkg11","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg11"}
 /user/username/projects/myproject/pkg12:
-  {"directoryName":"/user/username/projects/myproject/pkg12","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg12"}
 /user/username/projects/myproject/pkg13:
-  {"directoryName":"/user/username/projects/myproject/pkg13","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg13"}
 /user/username/projects/myproject/pkg14:
-  {"directoryName":"/user/username/projects/myproject/pkg14","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg14"}
 /user/username/projects/myproject/pkg15:
-  {"directoryName":"/user/username/projects/myproject/pkg15","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg15"}
 /user/username/projects/myproject/pkg16:
-  {"directoryName":"/user/username/projects/myproject/pkg16","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg16"}
 /user/username/projects/myproject/pkg17:
-  {"directoryName":"/user/username/projects/myproject/pkg17","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg17"}
 /user/username/projects/myproject/pkg18:
-  {"directoryName":"/user/username/projects/myproject/pkg18","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg18"}
 /user/username/projects/myproject/pkg19:
-  {"directoryName":"/user/username/projects/myproject/pkg19","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg19"}
 /user/username/projects/myproject/pkg20:
-  {"directoryName":"/user/username/projects/myproject/pkg20","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg20"}
 /user/username/projects/myproject/pkg21:
-  {"directoryName":"/user/username/projects/myproject/pkg21","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg21"}
 /user/username/projects/myproject/pkg22:
-  {"directoryName":"/user/username/projects/myproject/pkg22","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg22"}
 
 exitCode:: ExitStatus.undefined
 
@@ -2298,51 +2298,51 @@ FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/myproject/pkg0:
-  {"directoryName":"/user/username/projects/myproject/pkg0","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg0"}
 /user/username/projects/myproject/pkg1:
-  {"directoryName":"/user/username/projects/myproject/pkg1","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg1"}
 /user/username/projects/myproject/pkg2:
-  {"directoryName":"/user/username/projects/myproject/pkg2","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg2"}
 /user/username/projects/myproject/pkg3:
-  {"directoryName":"/user/username/projects/myproject/pkg3","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg3"}
 /user/username/projects/myproject/pkg4:
-  {"directoryName":"/user/username/projects/myproject/pkg4","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg4"}
 /user/username/projects/myproject/pkg5:
-  {"directoryName":"/user/username/projects/myproject/pkg5","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg5"}
 /user/username/projects/myproject/pkg6:
-  {"directoryName":"/user/username/projects/myproject/pkg6","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg6"}
 /user/username/projects/myproject/pkg7:
-  {"directoryName":"/user/username/projects/myproject/pkg7","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg7"}
 /user/username/projects/myproject/pkg8:
-  {"directoryName":"/user/username/projects/myproject/pkg8","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg8"}
 /user/username/projects/myproject/pkg9:
-  {"directoryName":"/user/username/projects/myproject/pkg9","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg9"}
 /user/username/projects/myproject/pkg10:
-  {"directoryName":"/user/username/projects/myproject/pkg10","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg10"}
 /user/username/projects/myproject/pkg11:
-  {"directoryName":"/user/username/projects/myproject/pkg11","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg11"}
 /user/username/projects/myproject/pkg12:
-  {"directoryName":"/user/username/projects/myproject/pkg12","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg12"}
 /user/username/projects/myproject/pkg13:
-  {"directoryName":"/user/username/projects/myproject/pkg13","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg13"}
 /user/username/projects/myproject/pkg14:
-  {"directoryName":"/user/username/projects/myproject/pkg14","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg14"}
 /user/username/projects/myproject/pkg15:
-  {"directoryName":"/user/username/projects/myproject/pkg15","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg15"}
 /user/username/projects/myproject/pkg16:
-  {"directoryName":"/user/username/projects/myproject/pkg16","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg16"}
 /user/username/projects/myproject/pkg17:
-  {"directoryName":"/user/username/projects/myproject/pkg17","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg17"}
 /user/username/projects/myproject/pkg18:
-  {"directoryName":"/user/username/projects/myproject/pkg18","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg18"}
 /user/username/projects/myproject/pkg19:
-  {"directoryName":"/user/username/projects/myproject/pkg19","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg19"}
 /user/username/projects/myproject/pkg20:
-  {"directoryName":"/user/username/projects/myproject/pkg20","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg20"}
 /user/username/projects/myproject/pkg21:
-  {"directoryName":"/user/username/projects/myproject/pkg21","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg21"}
 /user/username/projects/myproject/pkg22:
-  {"directoryName":"/user/username/projects/myproject/pkg22","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg22"}
 
 exitCode:: ExitStatus.undefined
 
@@ -2477,51 +2477,51 @@ FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/myproject/pkg0:
-  {"directoryName":"/user/username/projects/myproject/pkg0","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg0"}
 /user/username/projects/myproject/pkg1:
-  {"directoryName":"/user/username/projects/myproject/pkg1","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg1"}
 /user/username/projects/myproject/pkg2:
-  {"directoryName":"/user/username/projects/myproject/pkg2","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg2"}
 /user/username/projects/myproject/pkg3:
-  {"directoryName":"/user/username/projects/myproject/pkg3","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg3"}
 /user/username/projects/myproject/pkg4:
-  {"directoryName":"/user/username/projects/myproject/pkg4","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg4"}
 /user/username/projects/myproject/pkg5:
-  {"directoryName":"/user/username/projects/myproject/pkg5","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg5"}
 /user/username/projects/myproject/pkg6:
-  {"directoryName":"/user/username/projects/myproject/pkg6","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg6"}
 /user/username/projects/myproject/pkg7:
-  {"directoryName":"/user/username/projects/myproject/pkg7","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg7"}
 /user/username/projects/myproject/pkg8:
-  {"directoryName":"/user/username/projects/myproject/pkg8","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg8"}
 /user/username/projects/myproject/pkg9:
-  {"directoryName":"/user/username/projects/myproject/pkg9","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg9"}
 /user/username/projects/myproject/pkg10:
-  {"directoryName":"/user/username/projects/myproject/pkg10","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg10"}
 /user/username/projects/myproject/pkg11:
-  {"directoryName":"/user/username/projects/myproject/pkg11","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg11"}
 /user/username/projects/myproject/pkg12:
-  {"directoryName":"/user/username/projects/myproject/pkg12","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg12"}
 /user/username/projects/myproject/pkg13:
-  {"directoryName":"/user/username/projects/myproject/pkg13","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg13"}
 /user/username/projects/myproject/pkg14:
-  {"directoryName":"/user/username/projects/myproject/pkg14","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg14"}
 /user/username/projects/myproject/pkg15:
-  {"directoryName":"/user/username/projects/myproject/pkg15","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg15"}
 /user/username/projects/myproject/pkg16:
-  {"directoryName":"/user/username/projects/myproject/pkg16","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg16"}
 /user/username/projects/myproject/pkg17:
-  {"directoryName":"/user/username/projects/myproject/pkg17","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg17"}
 /user/username/projects/myproject/pkg18:
-  {"directoryName":"/user/username/projects/myproject/pkg18","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg18"}
 /user/username/projects/myproject/pkg19:
-  {"directoryName":"/user/username/projects/myproject/pkg19","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg19"}
 /user/username/projects/myproject/pkg20:
-  {"directoryName":"/user/username/projects/myproject/pkg20","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg20"}
 /user/username/projects/myproject/pkg21:
-  {"directoryName":"/user/username/projects/myproject/pkg21","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg21"}
 /user/username/projects/myproject/pkg22:
-  {"directoryName":"/user/username/projects/myproject/pkg22","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg22"}
 
 exitCode:: ExitStatus.undefined
 
@@ -2768,51 +2768,51 @@ FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/myproject/pkg0:
-  {"directoryName":"/user/username/projects/myproject/pkg0","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg0"}
 /user/username/projects/myproject/pkg1:
-  {"directoryName":"/user/username/projects/myproject/pkg1","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg1"}
 /user/username/projects/myproject/pkg2:
-  {"directoryName":"/user/username/projects/myproject/pkg2","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg2"}
 /user/username/projects/myproject/pkg3:
-  {"directoryName":"/user/username/projects/myproject/pkg3","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg3"}
 /user/username/projects/myproject/pkg4:
-  {"directoryName":"/user/username/projects/myproject/pkg4","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg4"}
 /user/username/projects/myproject/pkg5:
-  {"directoryName":"/user/username/projects/myproject/pkg5","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg5"}
 /user/username/projects/myproject/pkg6:
-  {"directoryName":"/user/username/projects/myproject/pkg6","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg6"}
 /user/username/projects/myproject/pkg7:
-  {"directoryName":"/user/username/projects/myproject/pkg7","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg7"}
 /user/username/projects/myproject/pkg8:
-  {"directoryName":"/user/username/projects/myproject/pkg8","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg8"}
 /user/username/projects/myproject/pkg9:
-  {"directoryName":"/user/username/projects/myproject/pkg9","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg9"}
 /user/username/projects/myproject/pkg10:
-  {"directoryName":"/user/username/projects/myproject/pkg10","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg10"}
 /user/username/projects/myproject/pkg11:
-  {"directoryName":"/user/username/projects/myproject/pkg11","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg11"}
 /user/username/projects/myproject/pkg12:
-  {"directoryName":"/user/username/projects/myproject/pkg12","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg12"}
 /user/username/projects/myproject/pkg13:
-  {"directoryName":"/user/username/projects/myproject/pkg13","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg13"}
 /user/username/projects/myproject/pkg14:
-  {"directoryName":"/user/username/projects/myproject/pkg14","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg14"}
 /user/username/projects/myproject/pkg15:
-  {"directoryName":"/user/username/projects/myproject/pkg15","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg15"}
 /user/username/projects/myproject/pkg16:
-  {"directoryName":"/user/username/projects/myproject/pkg16","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg16"}
 /user/username/projects/myproject/pkg17:
-  {"directoryName":"/user/username/projects/myproject/pkg17","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg17"}
 /user/username/projects/myproject/pkg18:
-  {"directoryName":"/user/username/projects/myproject/pkg18","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg18"}
 /user/username/projects/myproject/pkg19:
-  {"directoryName":"/user/username/projects/myproject/pkg19","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg19"}
 /user/username/projects/myproject/pkg20:
-  {"directoryName":"/user/username/projects/myproject/pkg20","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg20"}
 /user/username/projects/myproject/pkg21:
-  {"directoryName":"/user/username/projects/myproject/pkg21","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg21"}
 /user/username/projects/myproject/pkg22:
-  {"directoryName":"/user/username/projects/myproject/pkg22","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg22"}
 
 exitCode:: ExitStatus.undefined
 
@@ -3014,51 +3014,51 @@ FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/myproject/pkg0:
-  {"directoryName":"/user/username/projects/myproject/pkg0","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg0"}
 /user/username/projects/myproject/pkg1:
-  {"directoryName":"/user/username/projects/myproject/pkg1","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg1"}
 /user/username/projects/myproject/pkg2:
-  {"directoryName":"/user/username/projects/myproject/pkg2","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg2"}
 /user/username/projects/myproject/pkg3:
-  {"directoryName":"/user/username/projects/myproject/pkg3","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg3"}
 /user/username/projects/myproject/pkg4:
-  {"directoryName":"/user/username/projects/myproject/pkg4","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg4"}
 /user/username/projects/myproject/pkg5:
-  {"directoryName":"/user/username/projects/myproject/pkg5","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg5"}
 /user/username/projects/myproject/pkg6:
-  {"directoryName":"/user/username/projects/myproject/pkg6","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg6"}
 /user/username/projects/myproject/pkg7:
-  {"directoryName":"/user/username/projects/myproject/pkg7","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg7"}
 /user/username/projects/myproject/pkg8:
-  {"directoryName":"/user/username/projects/myproject/pkg8","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg8"}
 /user/username/projects/myproject/pkg9:
-  {"directoryName":"/user/username/projects/myproject/pkg9","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg9"}
 /user/username/projects/myproject/pkg10:
-  {"directoryName":"/user/username/projects/myproject/pkg10","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg10"}
 /user/username/projects/myproject/pkg11:
-  {"directoryName":"/user/username/projects/myproject/pkg11","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg11"}
 /user/username/projects/myproject/pkg12:
-  {"directoryName":"/user/username/projects/myproject/pkg12","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg12"}
 /user/username/projects/myproject/pkg13:
-  {"directoryName":"/user/username/projects/myproject/pkg13","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg13"}
 /user/username/projects/myproject/pkg14:
-  {"directoryName":"/user/username/projects/myproject/pkg14","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg14"}
 /user/username/projects/myproject/pkg15:
-  {"directoryName":"/user/username/projects/myproject/pkg15","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg15"}
 /user/username/projects/myproject/pkg16:
-  {"directoryName":"/user/username/projects/myproject/pkg16","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg16"}
 /user/username/projects/myproject/pkg17:
-  {"directoryName":"/user/username/projects/myproject/pkg17","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg17"}
 /user/username/projects/myproject/pkg18:
-  {"directoryName":"/user/username/projects/myproject/pkg18","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg18"}
 /user/username/projects/myproject/pkg19:
-  {"directoryName":"/user/username/projects/myproject/pkg19","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg19"}
 /user/username/projects/myproject/pkg20:
-  {"directoryName":"/user/username/projects/myproject/pkg20","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg20"}
 /user/username/projects/myproject/pkg21:
-  {"directoryName":"/user/username/projects/myproject/pkg21","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg21"}
 /user/username/projects/myproject/pkg22:
-  {"directoryName":"/user/username/projects/myproject/pkg22","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg22"}
 
 exitCode:: ExitStatus.undefined
 
@@ -3260,51 +3260,51 @@ FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/myproject/pkg0:
-  {"directoryName":"/user/username/projects/myproject/pkg0","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg0"}
 /user/username/projects/myproject/pkg1:
-  {"directoryName":"/user/username/projects/myproject/pkg1","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg1"}
 /user/username/projects/myproject/pkg2:
-  {"directoryName":"/user/username/projects/myproject/pkg2","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg2"}
 /user/username/projects/myproject/pkg3:
-  {"directoryName":"/user/username/projects/myproject/pkg3","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg3"}
 /user/username/projects/myproject/pkg4:
-  {"directoryName":"/user/username/projects/myproject/pkg4","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg4"}
 /user/username/projects/myproject/pkg5:
-  {"directoryName":"/user/username/projects/myproject/pkg5","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg5"}
 /user/username/projects/myproject/pkg6:
-  {"directoryName":"/user/username/projects/myproject/pkg6","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg6"}
 /user/username/projects/myproject/pkg7:
-  {"directoryName":"/user/username/projects/myproject/pkg7","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg7"}
 /user/username/projects/myproject/pkg8:
-  {"directoryName":"/user/username/projects/myproject/pkg8","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg8"}
 /user/username/projects/myproject/pkg9:
-  {"directoryName":"/user/username/projects/myproject/pkg9","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg9"}
 /user/username/projects/myproject/pkg10:
-  {"directoryName":"/user/username/projects/myproject/pkg10","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg10"}
 /user/username/projects/myproject/pkg11:
-  {"directoryName":"/user/username/projects/myproject/pkg11","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg11"}
 /user/username/projects/myproject/pkg12:
-  {"directoryName":"/user/username/projects/myproject/pkg12","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg12"}
 /user/username/projects/myproject/pkg13:
-  {"directoryName":"/user/username/projects/myproject/pkg13","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg13"}
 /user/username/projects/myproject/pkg14:
-  {"directoryName":"/user/username/projects/myproject/pkg14","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg14"}
 /user/username/projects/myproject/pkg15:
-  {"directoryName":"/user/username/projects/myproject/pkg15","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg15"}
 /user/username/projects/myproject/pkg16:
-  {"directoryName":"/user/username/projects/myproject/pkg16","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg16"}
 /user/username/projects/myproject/pkg17:
-  {"directoryName":"/user/username/projects/myproject/pkg17","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg17"}
 /user/username/projects/myproject/pkg18:
-  {"directoryName":"/user/username/projects/myproject/pkg18","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg18"}
 /user/username/projects/myproject/pkg19:
-  {"directoryName":"/user/username/projects/myproject/pkg19","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg19"}
 /user/username/projects/myproject/pkg20:
-  {"directoryName":"/user/username/projects/myproject/pkg20","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg20"}
 /user/username/projects/myproject/pkg21:
-  {"directoryName":"/user/username/projects/myproject/pkg21","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg21"}
 /user/username/projects/myproject/pkg22:
-  {"directoryName":"/user/username/projects/myproject/pkg22","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg22"}
 
 exitCode:: ExitStatus.undefined
 
@@ -3506,51 +3506,51 @@ FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/myproject/pkg0:
-  {"directoryName":"/user/username/projects/myproject/pkg0","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg0"}
 /user/username/projects/myproject/pkg1:
-  {"directoryName":"/user/username/projects/myproject/pkg1","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg1"}
 /user/username/projects/myproject/pkg2:
-  {"directoryName":"/user/username/projects/myproject/pkg2","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg2"}
 /user/username/projects/myproject/pkg3:
-  {"directoryName":"/user/username/projects/myproject/pkg3","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg3"}
 /user/username/projects/myproject/pkg4:
-  {"directoryName":"/user/username/projects/myproject/pkg4","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg4"}
 /user/username/projects/myproject/pkg5:
-  {"directoryName":"/user/username/projects/myproject/pkg5","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg5"}
 /user/username/projects/myproject/pkg6:
-  {"directoryName":"/user/username/projects/myproject/pkg6","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg6"}
 /user/username/projects/myproject/pkg7:
-  {"directoryName":"/user/username/projects/myproject/pkg7","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg7"}
 /user/username/projects/myproject/pkg8:
-  {"directoryName":"/user/username/projects/myproject/pkg8","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg8"}
 /user/username/projects/myproject/pkg9:
-  {"directoryName":"/user/username/projects/myproject/pkg9","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg9"}
 /user/username/projects/myproject/pkg10:
-  {"directoryName":"/user/username/projects/myproject/pkg10","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg10"}
 /user/username/projects/myproject/pkg11:
-  {"directoryName":"/user/username/projects/myproject/pkg11","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg11"}
 /user/username/projects/myproject/pkg12:
-  {"directoryName":"/user/username/projects/myproject/pkg12","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg12"}
 /user/username/projects/myproject/pkg13:
-  {"directoryName":"/user/username/projects/myproject/pkg13","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg13"}
 /user/username/projects/myproject/pkg14:
-  {"directoryName":"/user/username/projects/myproject/pkg14","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg14"}
 /user/username/projects/myproject/pkg15:
-  {"directoryName":"/user/username/projects/myproject/pkg15","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg15"}
 /user/username/projects/myproject/pkg16:
-  {"directoryName":"/user/username/projects/myproject/pkg16","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg16"}
 /user/username/projects/myproject/pkg17:
-  {"directoryName":"/user/username/projects/myproject/pkg17","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg17"}
 /user/username/projects/myproject/pkg18:
-  {"directoryName":"/user/username/projects/myproject/pkg18","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg18"}
 /user/username/projects/myproject/pkg19:
-  {"directoryName":"/user/username/projects/myproject/pkg19","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg19"}
 /user/username/projects/myproject/pkg20:
-  {"directoryName":"/user/username/projects/myproject/pkg20","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg20"}
 /user/username/projects/myproject/pkg21:
-  {"directoryName":"/user/username/projects/myproject/pkg21","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg21"}
 /user/username/projects/myproject/pkg22:
-  {"directoryName":"/user/username/projects/myproject/pkg22","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg22"}
 
 exitCode:: ExitStatus.undefined
 
@@ -3703,51 +3703,51 @@ FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/myproject/pkg0:
-  {"directoryName":"/user/username/projects/myproject/pkg0","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg0"}
 /user/username/projects/myproject/pkg1:
-  {"directoryName":"/user/username/projects/myproject/pkg1","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg1"}
 /user/username/projects/myproject/pkg2:
-  {"directoryName":"/user/username/projects/myproject/pkg2","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg2"}
 /user/username/projects/myproject/pkg3:
-  {"directoryName":"/user/username/projects/myproject/pkg3","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg3"}
 /user/username/projects/myproject/pkg4:
-  {"directoryName":"/user/username/projects/myproject/pkg4","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg4"}
 /user/username/projects/myproject/pkg5:
-  {"directoryName":"/user/username/projects/myproject/pkg5","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg5"}
 /user/username/projects/myproject/pkg6:
-  {"directoryName":"/user/username/projects/myproject/pkg6","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg6"}
 /user/username/projects/myproject/pkg7:
-  {"directoryName":"/user/username/projects/myproject/pkg7","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg7"}
 /user/username/projects/myproject/pkg8:
-  {"directoryName":"/user/username/projects/myproject/pkg8","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg8"}
 /user/username/projects/myproject/pkg9:
-  {"directoryName":"/user/username/projects/myproject/pkg9","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg9"}
 /user/username/projects/myproject/pkg10:
-  {"directoryName":"/user/username/projects/myproject/pkg10","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg10"}
 /user/username/projects/myproject/pkg11:
-  {"directoryName":"/user/username/projects/myproject/pkg11","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg11"}
 /user/username/projects/myproject/pkg12:
-  {"directoryName":"/user/username/projects/myproject/pkg12","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg12"}
 /user/username/projects/myproject/pkg13:
-  {"directoryName":"/user/username/projects/myproject/pkg13","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg13"}
 /user/username/projects/myproject/pkg14:
-  {"directoryName":"/user/username/projects/myproject/pkg14","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg14"}
 /user/username/projects/myproject/pkg15:
-  {"directoryName":"/user/username/projects/myproject/pkg15","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg15"}
 /user/username/projects/myproject/pkg16:
-  {"directoryName":"/user/username/projects/myproject/pkg16","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg16"}
 /user/username/projects/myproject/pkg17:
-  {"directoryName":"/user/username/projects/myproject/pkg17","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg17"}
 /user/username/projects/myproject/pkg18:
-  {"directoryName":"/user/username/projects/myproject/pkg18","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg18"}
 /user/username/projects/myproject/pkg19:
-  {"directoryName":"/user/username/projects/myproject/pkg19","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg19"}
 /user/username/projects/myproject/pkg20:
-  {"directoryName":"/user/username/projects/myproject/pkg20","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg20"}
 /user/username/projects/myproject/pkg21:
-  {"directoryName":"/user/username/projects/myproject/pkg21","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg21"}
 /user/username/projects/myproject/pkg22:
-  {"directoryName":"/user/username/projects/myproject/pkg22","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg22"}
 
 exitCode:: ExitStatus.undefined
 
@@ -3860,51 +3860,51 @@ FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/myproject/pkg0:
-  {"directoryName":"/user/username/projects/myproject/pkg0","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg0"}
 /user/username/projects/myproject/pkg1:
-  {"directoryName":"/user/username/projects/myproject/pkg1","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg1"}
 /user/username/projects/myproject/pkg2:
-  {"directoryName":"/user/username/projects/myproject/pkg2","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg2"}
 /user/username/projects/myproject/pkg3:
-  {"directoryName":"/user/username/projects/myproject/pkg3","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg3"}
 /user/username/projects/myproject/pkg4:
-  {"directoryName":"/user/username/projects/myproject/pkg4","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg4"}
 /user/username/projects/myproject/pkg5:
-  {"directoryName":"/user/username/projects/myproject/pkg5","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg5"}
 /user/username/projects/myproject/pkg6:
-  {"directoryName":"/user/username/projects/myproject/pkg6","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg6"}
 /user/username/projects/myproject/pkg7:
-  {"directoryName":"/user/username/projects/myproject/pkg7","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg7"}
 /user/username/projects/myproject/pkg8:
-  {"directoryName":"/user/username/projects/myproject/pkg8","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg8"}
 /user/username/projects/myproject/pkg9:
-  {"directoryName":"/user/username/projects/myproject/pkg9","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg9"}
 /user/username/projects/myproject/pkg10:
-  {"directoryName":"/user/username/projects/myproject/pkg10","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg10"}
 /user/username/projects/myproject/pkg11:
-  {"directoryName":"/user/username/projects/myproject/pkg11","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg11"}
 /user/username/projects/myproject/pkg12:
-  {"directoryName":"/user/username/projects/myproject/pkg12","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg12"}
 /user/username/projects/myproject/pkg13:
-  {"directoryName":"/user/username/projects/myproject/pkg13","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg13"}
 /user/username/projects/myproject/pkg14:
-  {"directoryName":"/user/username/projects/myproject/pkg14","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg14"}
 /user/username/projects/myproject/pkg15:
-  {"directoryName":"/user/username/projects/myproject/pkg15","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg15"}
 /user/username/projects/myproject/pkg16:
-  {"directoryName":"/user/username/projects/myproject/pkg16","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg16"}
 /user/username/projects/myproject/pkg17:
-  {"directoryName":"/user/username/projects/myproject/pkg17","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg17"}
 /user/username/projects/myproject/pkg18:
-  {"directoryName":"/user/username/projects/myproject/pkg18","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg18"}
 /user/username/projects/myproject/pkg19:
-  {"directoryName":"/user/username/projects/myproject/pkg19","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg19"}
 /user/username/projects/myproject/pkg20:
-  {"directoryName":"/user/username/projects/myproject/pkg20","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg20"}
 /user/username/projects/myproject/pkg21:
-  {"directoryName":"/user/username/projects/myproject/pkg21","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg21"}
 /user/username/projects/myproject/pkg22:
-  {"directoryName":"/user/username/projects/myproject/pkg22","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg22"}
 
 exitCode:: ExitStatus.undefined
 
@@ -4039,51 +4039,51 @@ FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/myproject/pkg0:
-  {"directoryName":"/user/username/projects/myproject/pkg0","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg0"}
 /user/username/projects/myproject/pkg1:
-  {"directoryName":"/user/username/projects/myproject/pkg1","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg1"}
 /user/username/projects/myproject/pkg2:
-  {"directoryName":"/user/username/projects/myproject/pkg2","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg2"}
 /user/username/projects/myproject/pkg3:
-  {"directoryName":"/user/username/projects/myproject/pkg3","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg3"}
 /user/username/projects/myproject/pkg4:
-  {"directoryName":"/user/username/projects/myproject/pkg4","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg4"}
 /user/username/projects/myproject/pkg5:
-  {"directoryName":"/user/username/projects/myproject/pkg5","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg5"}
 /user/username/projects/myproject/pkg6:
-  {"directoryName":"/user/username/projects/myproject/pkg6","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg6"}
 /user/username/projects/myproject/pkg7:
-  {"directoryName":"/user/username/projects/myproject/pkg7","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg7"}
 /user/username/projects/myproject/pkg8:
-  {"directoryName":"/user/username/projects/myproject/pkg8","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg8"}
 /user/username/projects/myproject/pkg9:
-  {"directoryName":"/user/username/projects/myproject/pkg9","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg9"}
 /user/username/projects/myproject/pkg10:
-  {"directoryName":"/user/username/projects/myproject/pkg10","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg10"}
 /user/username/projects/myproject/pkg11:
-  {"directoryName":"/user/username/projects/myproject/pkg11","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg11"}
 /user/username/projects/myproject/pkg12:
-  {"directoryName":"/user/username/projects/myproject/pkg12","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg12"}
 /user/username/projects/myproject/pkg13:
-  {"directoryName":"/user/username/projects/myproject/pkg13","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg13"}
 /user/username/projects/myproject/pkg14:
-  {"directoryName":"/user/username/projects/myproject/pkg14","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg14"}
 /user/username/projects/myproject/pkg15:
-  {"directoryName":"/user/username/projects/myproject/pkg15","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg15"}
 /user/username/projects/myproject/pkg16:
-  {"directoryName":"/user/username/projects/myproject/pkg16","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg16"}
 /user/username/projects/myproject/pkg17:
-  {"directoryName":"/user/username/projects/myproject/pkg17","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg17"}
 /user/username/projects/myproject/pkg18:
-  {"directoryName":"/user/username/projects/myproject/pkg18","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg18"}
 /user/username/projects/myproject/pkg19:
-  {"directoryName":"/user/username/projects/myproject/pkg19","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg19"}
 /user/username/projects/myproject/pkg20:
-  {"directoryName":"/user/username/projects/myproject/pkg20","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg20"}
 /user/username/projects/myproject/pkg21:
-  {"directoryName":"/user/username/projects/myproject/pkg21","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg21"}
 /user/username/projects/myproject/pkg22:
-  {"directoryName":"/user/username/projects/myproject/pkg22","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg22"}
 
 exitCode:: ExitStatus.undefined
 
@@ -4332,51 +4332,51 @@ FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/myproject/pkg0:
-  {"directoryName":"/user/username/projects/myproject/pkg0","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg0"}
 /user/username/projects/myproject/pkg1:
-  {"directoryName":"/user/username/projects/myproject/pkg1","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg1"}
 /user/username/projects/myproject/pkg2:
-  {"directoryName":"/user/username/projects/myproject/pkg2","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg2"}
 /user/username/projects/myproject/pkg3:
-  {"directoryName":"/user/username/projects/myproject/pkg3","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg3"}
 /user/username/projects/myproject/pkg4:
-  {"directoryName":"/user/username/projects/myproject/pkg4","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg4"}
 /user/username/projects/myproject/pkg5:
-  {"directoryName":"/user/username/projects/myproject/pkg5","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg5"}
 /user/username/projects/myproject/pkg6:
-  {"directoryName":"/user/username/projects/myproject/pkg6","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg6"}
 /user/username/projects/myproject/pkg7:
-  {"directoryName":"/user/username/projects/myproject/pkg7","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg7"}
 /user/username/projects/myproject/pkg8:
-  {"directoryName":"/user/username/projects/myproject/pkg8","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg8"}
 /user/username/projects/myproject/pkg9:
-  {"directoryName":"/user/username/projects/myproject/pkg9","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg9"}
 /user/username/projects/myproject/pkg10:
-  {"directoryName":"/user/username/projects/myproject/pkg10","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg10"}
 /user/username/projects/myproject/pkg11:
-  {"directoryName":"/user/username/projects/myproject/pkg11","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg11"}
 /user/username/projects/myproject/pkg12:
-  {"directoryName":"/user/username/projects/myproject/pkg12","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg12"}
 /user/username/projects/myproject/pkg13:
-  {"directoryName":"/user/username/projects/myproject/pkg13","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg13"}
 /user/username/projects/myproject/pkg14:
-  {"directoryName":"/user/username/projects/myproject/pkg14","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg14"}
 /user/username/projects/myproject/pkg15:
-  {"directoryName":"/user/username/projects/myproject/pkg15","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg15"}
 /user/username/projects/myproject/pkg16:
-  {"directoryName":"/user/username/projects/myproject/pkg16","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg16"}
 /user/username/projects/myproject/pkg17:
-  {"directoryName":"/user/username/projects/myproject/pkg17","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg17"}
 /user/username/projects/myproject/pkg18:
-  {"directoryName":"/user/username/projects/myproject/pkg18","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg18"}
 /user/username/projects/myproject/pkg19:
-  {"directoryName":"/user/username/projects/myproject/pkg19","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg19"}
 /user/username/projects/myproject/pkg20:
-  {"directoryName":"/user/username/projects/myproject/pkg20","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg20"}
 /user/username/projects/myproject/pkg21:
-  {"directoryName":"/user/username/projects/myproject/pkg21","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg21"}
 /user/username/projects/myproject/pkg22:
-  {"directoryName":"/user/username/projects/myproject/pkg22","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg22"}
 
 exitCode:: ExitStatus.undefined
 
@@ -4578,51 +4578,51 @@ FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/myproject/pkg0:
-  {"directoryName":"/user/username/projects/myproject/pkg0","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg0"}
 /user/username/projects/myproject/pkg1:
-  {"directoryName":"/user/username/projects/myproject/pkg1","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg1"}
 /user/username/projects/myproject/pkg2:
-  {"directoryName":"/user/username/projects/myproject/pkg2","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg2"}
 /user/username/projects/myproject/pkg3:
-  {"directoryName":"/user/username/projects/myproject/pkg3","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg3"}
 /user/username/projects/myproject/pkg4:
-  {"directoryName":"/user/username/projects/myproject/pkg4","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg4"}
 /user/username/projects/myproject/pkg5:
-  {"directoryName":"/user/username/projects/myproject/pkg5","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg5"}
 /user/username/projects/myproject/pkg6:
-  {"directoryName":"/user/username/projects/myproject/pkg6","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg6"}
 /user/username/projects/myproject/pkg7:
-  {"directoryName":"/user/username/projects/myproject/pkg7","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg7"}
 /user/username/projects/myproject/pkg8:
-  {"directoryName":"/user/username/projects/myproject/pkg8","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg8"}
 /user/username/projects/myproject/pkg9:
-  {"directoryName":"/user/username/projects/myproject/pkg9","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg9"}
 /user/username/projects/myproject/pkg10:
-  {"directoryName":"/user/username/projects/myproject/pkg10","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg10"}
 /user/username/projects/myproject/pkg11:
-  {"directoryName":"/user/username/projects/myproject/pkg11","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg11"}
 /user/username/projects/myproject/pkg12:
-  {"directoryName":"/user/username/projects/myproject/pkg12","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg12"}
 /user/username/projects/myproject/pkg13:
-  {"directoryName":"/user/username/projects/myproject/pkg13","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg13"}
 /user/username/projects/myproject/pkg14:
-  {"directoryName":"/user/username/projects/myproject/pkg14","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg14"}
 /user/username/projects/myproject/pkg15:
-  {"directoryName":"/user/username/projects/myproject/pkg15","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg15"}
 /user/username/projects/myproject/pkg16:
-  {"directoryName":"/user/username/projects/myproject/pkg16","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg16"}
 /user/username/projects/myproject/pkg17:
-  {"directoryName":"/user/username/projects/myproject/pkg17","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg17"}
 /user/username/projects/myproject/pkg18:
-  {"directoryName":"/user/username/projects/myproject/pkg18","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg18"}
 /user/username/projects/myproject/pkg19:
-  {"directoryName":"/user/username/projects/myproject/pkg19","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg19"}
 /user/username/projects/myproject/pkg20:
-  {"directoryName":"/user/username/projects/myproject/pkg20","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg20"}
 /user/username/projects/myproject/pkg21:
-  {"directoryName":"/user/username/projects/myproject/pkg21","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg21"}
 /user/username/projects/myproject/pkg22:
-  {"directoryName":"/user/username/projects/myproject/pkg22","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg22"}
 
 exitCode:: ExitStatus.undefined
 
@@ -4802,51 +4802,51 @@ FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/myproject/pkg0:
-  {"directoryName":"/user/username/projects/myproject/pkg0","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg0"}
 /user/username/projects/myproject/pkg1:
-  {"directoryName":"/user/username/projects/myproject/pkg1","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg1"}
 /user/username/projects/myproject/pkg2:
-  {"directoryName":"/user/username/projects/myproject/pkg2","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg2"}
 /user/username/projects/myproject/pkg3:
-  {"directoryName":"/user/username/projects/myproject/pkg3","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg3"}
 /user/username/projects/myproject/pkg4:
-  {"directoryName":"/user/username/projects/myproject/pkg4","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg4"}
 /user/username/projects/myproject/pkg5:
-  {"directoryName":"/user/username/projects/myproject/pkg5","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg5"}
 /user/username/projects/myproject/pkg6:
-  {"directoryName":"/user/username/projects/myproject/pkg6","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg6"}
 /user/username/projects/myproject/pkg7:
-  {"directoryName":"/user/username/projects/myproject/pkg7","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg7"}
 /user/username/projects/myproject/pkg8:
-  {"directoryName":"/user/username/projects/myproject/pkg8","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg8"}
 /user/username/projects/myproject/pkg9:
-  {"directoryName":"/user/username/projects/myproject/pkg9","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg9"}
 /user/username/projects/myproject/pkg10:
-  {"directoryName":"/user/username/projects/myproject/pkg10","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg10"}
 /user/username/projects/myproject/pkg11:
-  {"directoryName":"/user/username/projects/myproject/pkg11","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg11"}
 /user/username/projects/myproject/pkg12:
-  {"directoryName":"/user/username/projects/myproject/pkg12","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg12"}
 /user/username/projects/myproject/pkg13:
-  {"directoryName":"/user/username/projects/myproject/pkg13","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg13"}
 /user/username/projects/myproject/pkg14:
-  {"directoryName":"/user/username/projects/myproject/pkg14","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg14"}
 /user/username/projects/myproject/pkg15:
-  {"directoryName":"/user/username/projects/myproject/pkg15","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg15"}
 /user/username/projects/myproject/pkg16:
-  {"directoryName":"/user/username/projects/myproject/pkg16","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg16"}
 /user/username/projects/myproject/pkg17:
-  {"directoryName":"/user/username/projects/myproject/pkg17","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg17"}
 /user/username/projects/myproject/pkg18:
-  {"directoryName":"/user/username/projects/myproject/pkg18","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg18"}
 /user/username/projects/myproject/pkg19:
-  {"directoryName":"/user/username/projects/myproject/pkg19","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg19"}
 /user/username/projects/myproject/pkg20:
-  {"directoryName":"/user/username/projects/myproject/pkg20","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg20"}
 /user/username/projects/myproject/pkg21:
-  {"directoryName":"/user/username/projects/myproject/pkg21","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg21"}
 /user/username/projects/myproject/pkg22:
-  {"directoryName":"/user/username/projects/myproject/pkg22","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg22"}
 
 exitCode:: ExitStatus.undefined
 
@@ -5101,51 +5101,51 @@ FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/myproject/pkg0:
-  {"directoryName":"/user/username/projects/myproject/pkg0","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg0"}
 /user/username/projects/myproject/pkg1:
-  {"directoryName":"/user/username/projects/myproject/pkg1","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg1"}
 /user/username/projects/myproject/pkg2:
-  {"directoryName":"/user/username/projects/myproject/pkg2","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg2"}
 /user/username/projects/myproject/pkg3:
-  {"directoryName":"/user/username/projects/myproject/pkg3","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg3"}
 /user/username/projects/myproject/pkg4:
-  {"directoryName":"/user/username/projects/myproject/pkg4","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg4"}
 /user/username/projects/myproject/pkg5:
-  {"directoryName":"/user/username/projects/myproject/pkg5","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg5"}
 /user/username/projects/myproject/pkg6:
-  {"directoryName":"/user/username/projects/myproject/pkg6","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg6"}
 /user/username/projects/myproject/pkg7:
-  {"directoryName":"/user/username/projects/myproject/pkg7","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg7"}
 /user/username/projects/myproject/pkg8:
-  {"directoryName":"/user/username/projects/myproject/pkg8","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg8"}
 /user/username/projects/myproject/pkg9:
-  {"directoryName":"/user/username/projects/myproject/pkg9","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg9"}
 /user/username/projects/myproject/pkg10:
-  {"directoryName":"/user/username/projects/myproject/pkg10","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg10"}
 /user/username/projects/myproject/pkg11:
-  {"directoryName":"/user/username/projects/myproject/pkg11","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg11"}
 /user/username/projects/myproject/pkg12:
-  {"directoryName":"/user/username/projects/myproject/pkg12","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg12"}
 /user/username/projects/myproject/pkg13:
-  {"directoryName":"/user/username/projects/myproject/pkg13","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg13"}
 /user/username/projects/myproject/pkg14:
-  {"directoryName":"/user/username/projects/myproject/pkg14","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg14"}
 /user/username/projects/myproject/pkg15:
-  {"directoryName":"/user/username/projects/myproject/pkg15","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg15"}
 /user/username/projects/myproject/pkg16:
-  {"directoryName":"/user/username/projects/myproject/pkg16","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg16"}
 /user/username/projects/myproject/pkg17:
-  {"directoryName":"/user/username/projects/myproject/pkg17","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg17"}
 /user/username/projects/myproject/pkg18:
-  {"directoryName":"/user/username/projects/myproject/pkg18","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg18"}
 /user/username/projects/myproject/pkg19:
-  {"directoryName":"/user/username/projects/myproject/pkg19","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg19"}
 /user/username/projects/myproject/pkg20:
-  {"directoryName":"/user/username/projects/myproject/pkg20","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg20"}
 /user/username/projects/myproject/pkg21:
-  {"directoryName":"/user/username/projects/myproject/pkg21","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg21"}
 /user/username/projects/myproject/pkg22:
-  {"directoryName":"/user/username/projects/myproject/pkg22","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg22"}
 
 exitCode:: ExitStatus.undefined
 
@@ -5285,51 +5285,51 @@ FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/myproject/pkg0:
-  {"directoryName":"/user/username/projects/myproject/pkg0","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg0"}
 /user/username/projects/myproject/pkg1:
-  {"directoryName":"/user/username/projects/myproject/pkg1","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg1"}
 /user/username/projects/myproject/pkg2:
-  {"directoryName":"/user/username/projects/myproject/pkg2","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg2"}
 /user/username/projects/myproject/pkg3:
-  {"directoryName":"/user/username/projects/myproject/pkg3","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg3"}
 /user/username/projects/myproject/pkg4:
-  {"directoryName":"/user/username/projects/myproject/pkg4","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg4"}
 /user/username/projects/myproject/pkg5:
-  {"directoryName":"/user/username/projects/myproject/pkg5","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg5"}
 /user/username/projects/myproject/pkg6:
-  {"directoryName":"/user/username/projects/myproject/pkg6","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg6"}
 /user/username/projects/myproject/pkg7:
-  {"directoryName":"/user/username/projects/myproject/pkg7","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg7"}
 /user/username/projects/myproject/pkg8:
-  {"directoryName":"/user/username/projects/myproject/pkg8","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg8"}
 /user/username/projects/myproject/pkg9:
-  {"directoryName":"/user/username/projects/myproject/pkg9","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg9"}
 /user/username/projects/myproject/pkg10:
-  {"directoryName":"/user/username/projects/myproject/pkg10","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg10"}
 /user/username/projects/myproject/pkg11:
-  {"directoryName":"/user/username/projects/myproject/pkg11","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg11"}
 /user/username/projects/myproject/pkg12:
-  {"directoryName":"/user/username/projects/myproject/pkg12","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg12"}
 /user/username/projects/myproject/pkg13:
-  {"directoryName":"/user/username/projects/myproject/pkg13","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg13"}
 /user/username/projects/myproject/pkg14:
-  {"directoryName":"/user/username/projects/myproject/pkg14","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg14"}
 /user/username/projects/myproject/pkg15:
-  {"directoryName":"/user/username/projects/myproject/pkg15","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg15"}
 /user/username/projects/myproject/pkg16:
-  {"directoryName":"/user/username/projects/myproject/pkg16","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg16"}
 /user/username/projects/myproject/pkg17:
-  {"directoryName":"/user/username/projects/myproject/pkg17","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg17"}
 /user/username/projects/myproject/pkg18:
-  {"directoryName":"/user/username/projects/myproject/pkg18","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg18"}
 /user/username/projects/myproject/pkg19:
-  {"directoryName":"/user/username/projects/myproject/pkg19","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg19"}
 /user/username/projects/myproject/pkg20:
-  {"directoryName":"/user/username/projects/myproject/pkg20","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg20"}
 /user/username/projects/myproject/pkg21:
-  {"directoryName":"/user/username/projects/myproject/pkg21","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg21"}
 /user/username/projects/myproject/pkg22:
-  {"directoryName":"/user/username/projects/myproject/pkg22","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg22"}
 
 exitCode:: ExitStatus.undefined
 
@@ -5581,51 +5581,51 @@ FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/myproject/pkg0:
-  {"directoryName":"/user/username/projects/myproject/pkg0","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg0"}
 /user/username/projects/myproject/pkg1:
-  {"directoryName":"/user/username/projects/myproject/pkg1","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg1"}
 /user/username/projects/myproject/pkg2:
-  {"directoryName":"/user/username/projects/myproject/pkg2","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg2"}
 /user/username/projects/myproject/pkg3:
-  {"directoryName":"/user/username/projects/myproject/pkg3","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg3"}
 /user/username/projects/myproject/pkg4:
-  {"directoryName":"/user/username/projects/myproject/pkg4","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg4"}
 /user/username/projects/myproject/pkg5:
-  {"directoryName":"/user/username/projects/myproject/pkg5","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg5"}
 /user/username/projects/myproject/pkg6:
-  {"directoryName":"/user/username/projects/myproject/pkg6","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg6"}
 /user/username/projects/myproject/pkg7:
-  {"directoryName":"/user/username/projects/myproject/pkg7","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg7"}
 /user/username/projects/myproject/pkg8:
-  {"directoryName":"/user/username/projects/myproject/pkg8","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg8"}
 /user/username/projects/myproject/pkg9:
-  {"directoryName":"/user/username/projects/myproject/pkg9","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg9"}
 /user/username/projects/myproject/pkg10:
-  {"directoryName":"/user/username/projects/myproject/pkg10","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg10"}
 /user/username/projects/myproject/pkg11:
-  {"directoryName":"/user/username/projects/myproject/pkg11","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg11"}
 /user/username/projects/myproject/pkg12:
-  {"directoryName":"/user/username/projects/myproject/pkg12","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg12"}
 /user/username/projects/myproject/pkg13:
-  {"directoryName":"/user/username/projects/myproject/pkg13","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg13"}
 /user/username/projects/myproject/pkg14:
-  {"directoryName":"/user/username/projects/myproject/pkg14","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg14"}
 /user/username/projects/myproject/pkg15:
-  {"directoryName":"/user/username/projects/myproject/pkg15","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg15"}
 /user/username/projects/myproject/pkg16:
-  {"directoryName":"/user/username/projects/myproject/pkg16","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg16"}
 /user/username/projects/myproject/pkg17:
-  {"directoryName":"/user/username/projects/myproject/pkg17","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg17"}
 /user/username/projects/myproject/pkg18:
-  {"directoryName":"/user/username/projects/myproject/pkg18","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg18"}
 /user/username/projects/myproject/pkg19:
-  {"directoryName":"/user/username/projects/myproject/pkg19","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg19"}
 /user/username/projects/myproject/pkg20:
-  {"directoryName":"/user/username/projects/myproject/pkg20","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg20"}
 /user/username/projects/myproject/pkg21:
-  {"directoryName":"/user/username/projects/myproject/pkg21","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg21"}
 /user/username/projects/myproject/pkg22:
-  {"directoryName":"/user/username/projects/myproject/pkg22","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg22"}
 
 exitCode:: ExitStatus.undefined
 
@@ -5827,51 +5827,51 @@ FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/myproject/pkg0:
-  {"directoryName":"/user/username/projects/myproject/pkg0","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg0"}
 /user/username/projects/myproject/pkg1:
-  {"directoryName":"/user/username/projects/myproject/pkg1","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg1"}
 /user/username/projects/myproject/pkg2:
-  {"directoryName":"/user/username/projects/myproject/pkg2","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg2"}
 /user/username/projects/myproject/pkg3:
-  {"directoryName":"/user/username/projects/myproject/pkg3","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg3"}
 /user/username/projects/myproject/pkg4:
-  {"directoryName":"/user/username/projects/myproject/pkg4","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg4"}
 /user/username/projects/myproject/pkg5:
-  {"directoryName":"/user/username/projects/myproject/pkg5","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg5"}
 /user/username/projects/myproject/pkg6:
-  {"directoryName":"/user/username/projects/myproject/pkg6","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg6"}
 /user/username/projects/myproject/pkg7:
-  {"directoryName":"/user/username/projects/myproject/pkg7","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg7"}
 /user/username/projects/myproject/pkg8:
-  {"directoryName":"/user/username/projects/myproject/pkg8","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg8"}
 /user/username/projects/myproject/pkg9:
-  {"directoryName":"/user/username/projects/myproject/pkg9","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg9"}
 /user/username/projects/myproject/pkg10:
-  {"directoryName":"/user/username/projects/myproject/pkg10","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg10"}
 /user/username/projects/myproject/pkg11:
-  {"directoryName":"/user/username/projects/myproject/pkg11","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg11"}
 /user/username/projects/myproject/pkg12:
-  {"directoryName":"/user/username/projects/myproject/pkg12","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg12"}
 /user/username/projects/myproject/pkg13:
-  {"directoryName":"/user/username/projects/myproject/pkg13","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg13"}
 /user/username/projects/myproject/pkg14:
-  {"directoryName":"/user/username/projects/myproject/pkg14","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg14"}
 /user/username/projects/myproject/pkg15:
-  {"directoryName":"/user/username/projects/myproject/pkg15","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg15"}
 /user/username/projects/myproject/pkg16:
-  {"directoryName":"/user/username/projects/myproject/pkg16","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg16"}
 /user/username/projects/myproject/pkg17:
-  {"directoryName":"/user/username/projects/myproject/pkg17","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg17"}
 /user/username/projects/myproject/pkg18:
-  {"directoryName":"/user/username/projects/myproject/pkg18","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg18"}
 /user/username/projects/myproject/pkg19:
-  {"directoryName":"/user/username/projects/myproject/pkg19","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg19"}
 /user/username/projects/myproject/pkg20:
-  {"directoryName":"/user/username/projects/myproject/pkg20","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg20"}
 /user/username/projects/myproject/pkg21:
-  {"directoryName":"/user/username/projects/myproject/pkg21","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg21"}
 /user/username/projects/myproject/pkg22:
-  {"directoryName":"/user/username/projects/myproject/pkg22","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg22"}
 
 exitCode:: ExitStatus.undefined
 
@@ -6073,51 +6073,51 @@ FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/myproject/pkg0:
-  {"directoryName":"/user/username/projects/myproject/pkg0","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg0"}
 /user/username/projects/myproject/pkg1:
-  {"directoryName":"/user/username/projects/myproject/pkg1","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg1"}
 /user/username/projects/myproject/pkg2:
-  {"directoryName":"/user/username/projects/myproject/pkg2","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg2"}
 /user/username/projects/myproject/pkg3:
-  {"directoryName":"/user/username/projects/myproject/pkg3","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg3"}
 /user/username/projects/myproject/pkg4:
-  {"directoryName":"/user/username/projects/myproject/pkg4","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg4"}
 /user/username/projects/myproject/pkg5:
-  {"directoryName":"/user/username/projects/myproject/pkg5","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg5"}
 /user/username/projects/myproject/pkg6:
-  {"directoryName":"/user/username/projects/myproject/pkg6","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg6"}
 /user/username/projects/myproject/pkg7:
-  {"directoryName":"/user/username/projects/myproject/pkg7","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg7"}
 /user/username/projects/myproject/pkg8:
-  {"directoryName":"/user/username/projects/myproject/pkg8","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg8"}
 /user/username/projects/myproject/pkg9:
-  {"directoryName":"/user/username/projects/myproject/pkg9","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg9"}
 /user/username/projects/myproject/pkg10:
-  {"directoryName":"/user/username/projects/myproject/pkg10","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg10"}
 /user/username/projects/myproject/pkg11:
-  {"directoryName":"/user/username/projects/myproject/pkg11","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg11"}
 /user/username/projects/myproject/pkg12:
-  {"directoryName":"/user/username/projects/myproject/pkg12","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg12"}
 /user/username/projects/myproject/pkg13:
-  {"directoryName":"/user/username/projects/myproject/pkg13","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg13"}
 /user/username/projects/myproject/pkg14:
-  {"directoryName":"/user/username/projects/myproject/pkg14","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg14"}
 /user/username/projects/myproject/pkg15:
-  {"directoryName":"/user/username/projects/myproject/pkg15","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg15"}
 /user/username/projects/myproject/pkg16:
-  {"directoryName":"/user/username/projects/myproject/pkg16","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg16"}
 /user/username/projects/myproject/pkg17:
-  {"directoryName":"/user/username/projects/myproject/pkg17","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg17"}
 /user/username/projects/myproject/pkg18:
-  {"directoryName":"/user/username/projects/myproject/pkg18","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg18"}
 /user/username/projects/myproject/pkg19:
-  {"directoryName":"/user/username/projects/myproject/pkg19","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg19"}
 /user/username/projects/myproject/pkg20:
-  {"directoryName":"/user/username/projects/myproject/pkg20","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg20"}
 /user/username/projects/myproject/pkg21:
-  {"directoryName":"/user/username/projects/myproject/pkg21","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg21"}
 /user/username/projects/myproject/pkg22:
-  {"directoryName":"/user/username/projects/myproject/pkg22","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg22"}
 
 exitCode:: ExitStatus.undefined
 
@@ -6319,51 +6319,51 @@ FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/myproject/pkg0:
-  {"directoryName":"/user/username/projects/myproject/pkg0","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg0"}
 /user/username/projects/myproject/pkg1:
-  {"directoryName":"/user/username/projects/myproject/pkg1","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg1"}
 /user/username/projects/myproject/pkg2:
-  {"directoryName":"/user/username/projects/myproject/pkg2","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg2"}
 /user/username/projects/myproject/pkg3:
-  {"directoryName":"/user/username/projects/myproject/pkg3","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg3"}
 /user/username/projects/myproject/pkg4:
-  {"directoryName":"/user/username/projects/myproject/pkg4","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg4"}
 /user/username/projects/myproject/pkg5:
-  {"directoryName":"/user/username/projects/myproject/pkg5","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg5"}
 /user/username/projects/myproject/pkg6:
-  {"directoryName":"/user/username/projects/myproject/pkg6","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg6"}
 /user/username/projects/myproject/pkg7:
-  {"directoryName":"/user/username/projects/myproject/pkg7","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg7"}
 /user/username/projects/myproject/pkg8:
-  {"directoryName":"/user/username/projects/myproject/pkg8","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg8"}
 /user/username/projects/myproject/pkg9:
-  {"directoryName":"/user/username/projects/myproject/pkg9","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg9"}
 /user/username/projects/myproject/pkg10:
-  {"directoryName":"/user/username/projects/myproject/pkg10","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg10"}
 /user/username/projects/myproject/pkg11:
-  {"directoryName":"/user/username/projects/myproject/pkg11","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg11"}
 /user/username/projects/myproject/pkg12:
-  {"directoryName":"/user/username/projects/myproject/pkg12","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg12"}
 /user/username/projects/myproject/pkg13:
-  {"directoryName":"/user/username/projects/myproject/pkg13","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg13"}
 /user/username/projects/myproject/pkg14:
-  {"directoryName":"/user/username/projects/myproject/pkg14","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg14"}
 /user/username/projects/myproject/pkg15:
-  {"directoryName":"/user/username/projects/myproject/pkg15","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg15"}
 /user/username/projects/myproject/pkg16:
-  {"directoryName":"/user/username/projects/myproject/pkg16","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg16"}
 /user/username/projects/myproject/pkg17:
-  {"directoryName":"/user/username/projects/myproject/pkg17","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg17"}
 /user/username/projects/myproject/pkg18:
-  {"directoryName":"/user/username/projects/myproject/pkg18","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg18"}
 /user/username/projects/myproject/pkg19:
-  {"directoryName":"/user/username/projects/myproject/pkg19","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg19"}
 /user/username/projects/myproject/pkg20:
-  {"directoryName":"/user/username/projects/myproject/pkg20","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg20"}
 /user/username/projects/myproject/pkg21:
-  {"directoryName":"/user/username/projects/myproject/pkg21","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg21"}
 /user/username/projects/myproject/pkg22:
-  {"directoryName":"/user/username/projects/myproject/pkg22","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg22"}
 
 exitCode:: ExitStatus.undefined
 
@@ -6516,51 +6516,51 @@ FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/myproject/pkg0:
-  {"directoryName":"/user/username/projects/myproject/pkg0","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg0"}
 /user/username/projects/myproject/pkg1:
-  {"directoryName":"/user/username/projects/myproject/pkg1","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg1"}
 /user/username/projects/myproject/pkg2:
-  {"directoryName":"/user/username/projects/myproject/pkg2","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg2"}
 /user/username/projects/myproject/pkg3:
-  {"directoryName":"/user/username/projects/myproject/pkg3","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg3"}
 /user/username/projects/myproject/pkg4:
-  {"directoryName":"/user/username/projects/myproject/pkg4","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg4"}
 /user/username/projects/myproject/pkg5:
-  {"directoryName":"/user/username/projects/myproject/pkg5","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg5"}
 /user/username/projects/myproject/pkg6:
-  {"directoryName":"/user/username/projects/myproject/pkg6","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg6"}
 /user/username/projects/myproject/pkg7:
-  {"directoryName":"/user/username/projects/myproject/pkg7","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg7"}
 /user/username/projects/myproject/pkg8:
-  {"directoryName":"/user/username/projects/myproject/pkg8","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg8"}
 /user/username/projects/myproject/pkg9:
-  {"directoryName":"/user/username/projects/myproject/pkg9","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg9"}
 /user/username/projects/myproject/pkg10:
-  {"directoryName":"/user/username/projects/myproject/pkg10","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg10"}
 /user/username/projects/myproject/pkg11:
-  {"directoryName":"/user/username/projects/myproject/pkg11","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg11"}
 /user/username/projects/myproject/pkg12:
-  {"directoryName":"/user/username/projects/myproject/pkg12","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg12"}
 /user/username/projects/myproject/pkg13:
-  {"directoryName":"/user/username/projects/myproject/pkg13","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg13"}
 /user/username/projects/myproject/pkg14:
-  {"directoryName":"/user/username/projects/myproject/pkg14","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg14"}
 /user/username/projects/myproject/pkg15:
-  {"directoryName":"/user/username/projects/myproject/pkg15","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg15"}
 /user/username/projects/myproject/pkg16:
-  {"directoryName":"/user/username/projects/myproject/pkg16","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg16"}
 /user/username/projects/myproject/pkg17:
-  {"directoryName":"/user/username/projects/myproject/pkg17","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg17"}
 /user/username/projects/myproject/pkg18:
-  {"directoryName":"/user/username/projects/myproject/pkg18","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg18"}
 /user/username/projects/myproject/pkg19:
-  {"directoryName":"/user/username/projects/myproject/pkg19","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg19"}
 /user/username/projects/myproject/pkg20:
-  {"directoryName":"/user/username/projects/myproject/pkg20","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg20"}
 /user/username/projects/myproject/pkg21:
-  {"directoryName":"/user/username/projects/myproject/pkg21","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg21"}
 /user/username/projects/myproject/pkg22:
-  {"directoryName":"/user/username/projects/myproject/pkg22","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg22"}
 
 exitCode:: ExitStatus.undefined
 
@@ -6673,51 +6673,51 @@ FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/myproject/pkg0:
-  {"directoryName":"/user/username/projects/myproject/pkg0","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg0"}
 /user/username/projects/myproject/pkg1:
-  {"directoryName":"/user/username/projects/myproject/pkg1","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg1"}
 /user/username/projects/myproject/pkg2:
-  {"directoryName":"/user/username/projects/myproject/pkg2","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg2"}
 /user/username/projects/myproject/pkg3:
-  {"directoryName":"/user/username/projects/myproject/pkg3","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg3"}
 /user/username/projects/myproject/pkg4:
-  {"directoryName":"/user/username/projects/myproject/pkg4","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg4"}
 /user/username/projects/myproject/pkg5:
-  {"directoryName":"/user/username/projects/myproject/pkg5","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg5"}
 /user/username/projects/myproject/pkg6:
-  {"directoryName":"/user/username/projects/myproject/pkg6","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg6"}
 /user/username/projects/myproject/pkg7:
-  {"directoryName":"/user/username/projects/myproject/pkg7","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg7"}
 /user/username/projects/myproject/pkg8:
-  {"directoryName":"/user/username/projects/myproject/pkg8","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg8"}
 /user/username/projects/myproject/pkg9:
-  {"directoryName":"/user/username/projects/myproject/pkg9","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg9"}
 /user/username/projects/myproject/pkg10:
-  {"directoryName":"/user/username/projects/myproject/pkg10","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg10"}
 /user/username/projects/myproject/pkg11:
-  {"directoryName":"/user/username/projects/myproject/pkg11","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg11"}
 /user/username/projects/myproject/pkg12:
-  {"directoryName":"/user/username/projects/myproject/pkg12","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg12"}
 /user/username/projects/myproject/pkg13:
-  {"directoryName":"/user/username/projects/myproject/pkg13","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg13"}
 /user/username/projects/myproject/pkg14:
-  {"directoryName":"/user/username/projects/myproject/pkg14","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg14"}
 /user/username/projects/myproject/pkg15:
-  {"directoryName":"/user/username/projects/myproject/pkg15","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg15"}
 /user/username/projects/myproject/pkg16:
-  {"directoryName":"/user/username/projects/myproject/pkg16","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg16"}
 /user/username/projects/myproject/pkg17:
-  {"directoryName":"/user/username/projects/myproject/pkg17","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg17"}
 /user/username/projects/myproject/pkg18:
-  {"directoryName":"/user/username/projects/myproject/pkg18","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg18"}
 /user/username/projects/myproject/pkg19:
-  {"directoryName":"/user/username/projects/myproject/pkg19","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg19"}
 /user/username/projects/myproject/pkg20:
-  {"directoryName":"/user/username/projects/myproject/pkg20","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg20"}
 /user/username/projects/myproject/pkg21:
-  {"directoryName":"/user/username/projects/myproject/pkg21","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg21"}
 /user/username/projects/myproject/pkg22:
-  {"directoryName":"/user/username/projects/myproject/pkg22","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/pkg22"}
 
 exitCode:: ExitStatus.undefined
 

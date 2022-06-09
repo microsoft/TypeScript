@@ -7,10 +7,6 @@ namespace ts.tscWatch {
     export import libFile = TestFSWithWatch.libFile;
     export import createWatchedSystem = TestFSWithWatch.createWatchedSystem;
     export import checkArray = TestFSWithWatch.checkArray;
-    export import checkWatchedFiles = TestFSWithWatch.checkWatchedFiles;
-    export import checkWatchedFilesDetailed = TestFSWithWatch.checkWatchedFilesDetailed;
-    export import checkWatchedDirectories = TestFSWithWatch.checkWatchedDirectories;
-    export import checkWatchedDirectoriesDetailed = TestFSWithWatch.checkWatchedDirectoriesDetailed;
     export import checkOutputContains = TestFSWithWatch.checkOutputContains;
     export import checkOutputDoesNotContain = TestFSWithWatch.checkOutputDoesNotContain;
 
@@ -436,7 +432,7 @@ namespace ts.tscWatch {
         return sys;
     }
 
-    export function createSystemWithSolutionBuild(solutionRoots: readonly string[], files: readonly TestFSWithWatch.FileOrFolderOrSymLink[], params?: TestFSWithWatch.TestServerHostCreationParameters) {
+    export function createSystemWithSolutionBuild(solutionRoots: readonly string[], files: TestFSWithWatch.FileOrFolderOrSymLinkMap | readonly TestFSWithWatch.FileOrFolderOrSymLink[], params?: TestFSWithWatch.TestServerHostCreationParameters) {
         return solutionBuildWithBaseline(createWatchedSystem(files, params), solutionRoots);
     }
 }

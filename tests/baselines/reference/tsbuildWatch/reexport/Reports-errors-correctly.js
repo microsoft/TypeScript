@@ -145,9 +145,9 @@ FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/reexport/src/pure:
-  {"directoryName":"/user/username/projects/reexport/src/pure","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/reexport/src/pure"}
 /user/username/projects/reexport/src/main:
-  {"directoryName":"/user/username/projects/reexport/src/main","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/reexport/src/main"}
 
 exitCode:: ExitStatus.undefined
 
@@ -345,9 +345,9 @@ FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/reexport/src/pure:
-  {"directoryName":"/user/username/projects/reexport/src/pure","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/reexport/src/pure"}
 /user/username/projects/reexport/src/main:
-  {"directoryName":"/user/username/projects/reexport/src/main","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/reexport/src/main"}
 
 exitCode:: ExitStatus.undefined
 
@@ -503,9 +503,9 @@ FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/reexport/src/pure:
-  {"directoryName":"/user/username/projects/reexport/src/pure","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/reexport/src/pure"}
 /user/username/projects/reexport/src/main:
-  {"directoryName":"/user/username/projects/reexport/src/main","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/reexport/src/main"}
 
 exitCode:: ExitStatus.undefined
 

@@ -87,20 +87,20 @@ WatchedFiles::
   {"fileName":"/user/username/projects/myproject/projects/project2/class2.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
   {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+/user/username/projects/myproject/projects/project2/node_modules/@types:
+  {"fileName":"/user/username/projects/myproject/projects/project2/node_modules/@types","pollingInterval":500}
+/user/username/projects/myproject/projects/node_modules/@types:
+  {"fileName":"/user/username/projects/myproject/projects/node_modules/@types","pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"fileName":"/user/username/projects/myproject/node_modules/@types","pollingInterval":500}
 
 FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/myproject/projects/project1:
-  {"directoryName":"/user/username/projects/myproject/projects/project1","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/projects/project2/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/projects/project2/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/projects/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/projects/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/projects/project1"}
 /user/username/projects/myproject/projects/project2:
-  {"directoryName":"/user/username/projects/myproject/projects/project2","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/projects/project2"}
 
 exitCode:: ExitStatus.undefined
 
@@ -217,6 +217,12 @@ WatchedFiles::
   {"fileName":"/user/username/projects/myproject/projects/project2/class2.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
   {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+/user/username/projects/myproject/projects/project2/node_modules/@types:
+  {"fileName":"/user/username/projects/myproject/projects/project2/node_modules/@types","pollingInterval":500}
+/user/username/projects/myproject/projects/node_modules/@types:
+  {"fileName":"/user/username/projects/myproject/projects/node_modules/@types","pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"fileName":"/user/username/projects/myproject/node_modules/@types","pollingInterval":500}
 /user/username/projects/myproject/projects/project1/class3.d.ts:
   {"fileName":"/user/username/projects/myproject/projects/project1/class3.d.ts","pollingInterval":250}
 
@@ -224,15 +230,9 @@ FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/myproject/projects/project1:
-  {"directoryName":"/user/username/projects/myproject/projects/project1","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/projects/project2/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/projects/project2/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/projects/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/projects/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/projects/project1"}
 /user/username/projects/myproject/projects/project2:
-  {"directoryName":"/user/username/projects/myproject/projects/project2","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/projects/project2"}
 
 exitCode:: ExitStatus.undefined
 
@@ -295,6 +295,12 @@ WatchedFiles::
   {"fileName":"/user/username/projects/myproject/projects/project2/class2.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
   {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+/user/username/projects/myproject/projects/project2/node_modules/@types:
+  {"fileName":"/user/username/projects/myproject/projects/project2/node_modules/@types","pollingInterval":500}
+/user/username/projects/myproject/projects/node_modules/@types:
+  {"fileName":"/user/username/projects/myproject/projects/node_modules/@types","pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"fileName":"/user/username/projects/myproject/node_modules/@types","pollingInterval":500}
 /user/username/projects/myproject/projects/project1/class3.d.ts:
   {"fileName":"/user/username/projects/myproject/projects/project1/class3.d.ts","pollingInterval":250}
 
@@ -302,15 +308,9 @@ FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/myproject/projects/project1:
-  {"directoryName":"/user/username/projects/myproject/projects/project1","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/projects/project2/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/projects/project2/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/projects/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/projects/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/projects/project1"}
 /user/username/projects/myproject/projects/project2:
-  {"directoryName":"/user/username/projects/myproject/projects/project2","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/projects/project2"}
 
 exitCode:: ExitStatus.undefined
 
@@ -394,6 +394,12 @@ WatchedFiles::
   {"fileName":"/user/username/projects/myproject/projects/project2/class2.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
   {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+/user/username/projects/myproject/projects/project2/node_modules/@types:
+  {"fileName":"/user/username/projects/myproject/projects/project2/node_modules/@types","pollingInterval":500}
+/user/username/projects/myproject/projects/node_modules/@types:
+  {"fileName":"/user/username/projects/myproject/projects/node_modules/@types","pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"fileName":"/user/username/projects/myproject/node_modules/@types","pollingInterval":500}
 /user/username/projects/myproject/projects/project1/class3.d.ts:
   {"fileName":"/user/username/projects/myproject/projects/project1/class3.d.ts","pollingInterval":250}
 
@@ -401,15 +407,9 @@ FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/myproject/projects/project1:
-  {"directoryName":"/user/username/projects/myproject/projects/project1","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/projects/project2/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/projects/project2/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/projects/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/projects/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/projects/project1"}
 /user/username/projects/myproject/projects/project2:
-  {"directoryName":"/user/username/projects/myproject/projects/project2","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/projects/project2"}
 
 exitCode:: ExitStatus.undefined
 
@@ -475,6 +475,12 @@ WatchedFiles::
   {"fileName":"/user/username/projects/myproject/projects/project2/class2.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
   {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+/user/username/projects/myproject/projects/project2/node_modules/@types:
+  {"fileName":"/user/username/projects/myproject/projects/project2/node_modules/@types","pollingInterval":500}
+/user/username/projects/myproject/projects/node_modules/@types:
+  {"fileName":"/user/username/projects/myproject/projects/node_modules/@types","pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"fileName":"/user/username/projects/myproject/node_modules/@types","pollingInterval":500}
 /user/username/projects/myproject/projects/project1/class3.d.ts:
   {"fileName":"/user/username/projects/myproject/projects/project1/class3.d.ts","pollingInterval":250}
 
@@ -482,15 +488,9 @@ FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/myproject/projects/project1:
-  {"directoryName":"/user/username/projects/myproject/projects/project1","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/projects/project2/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/projects/project2/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/projects/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/projects/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/projects/project1"}
 /user/username/projects/myproject/projects/project2:
-  {"directoryName":"/user/username/projects/myproject/projects/project2","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/projects/project2"}
 
 exitCode:: ExitStatus.undefined
 
@@ -596,6 +596,12 @@ WatchedFiles::
   {"fileName":"/user/username/projects/myproject/projects/project2/class2.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
   {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+/user/username/projects/myproject/projects/project2/node_modules/@types:
+  {"fileName":"/user/username/projects/myproject/projects/project2/node_modules/@types","pollingInterval":500}
+/user/username/projects/myproject/projects/node_modules/@types:
+  {"fileName":"/user/username/projects/myproject/projects/node_modules/@types","pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"fileName":"/user/username/projects/myproject/node_modules/@types","pollingInterval":500}
 /user/username/projects/myproject/projects/project1/class3.d.ts:
   {"fileName":"/user/username/projects/myproject/projects/project1/class3.d.ts","pollingInterval":250}
 
@@ -603,15 +609,9 @@ FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/myproject/projects/project1:
-  {"directoryName":"/user/username/projects/myproject/projects/project1","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/projects/project2/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/projects/project2/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/projects/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/projects/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/projects/project1"}
 /user/username/projects/myproject/projects/project2:
-  {"directoryName":"/user/username/projects/myproject/projects/project2","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/projects/project2"}
 
 exitCode:: ExitStatus.undefined
 

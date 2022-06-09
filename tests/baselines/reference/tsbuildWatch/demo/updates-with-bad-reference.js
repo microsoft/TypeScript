@@ -273,11 +273,11 @@ FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/demo/core:
-  {"directoryName":"/user/username/projects/demo/core","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/demo/core"}
 /user/username/projects/demo/animals:
-  {"directoryName":"/user/username/projects/demo/animals","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/demo/animals"}
 /user/username/projects/demo/zoo:
-  {"directoryName":"/user/username/projects/demo/zoo","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/demo/zoo"}
 
 exitCode:: ExitStatus.undefined
 
@@ -549,11 +549,11 @@ FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/demo/core:
-  {"directoryName":"/user/username/projects/demo/core","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/demo/core"}
 /user/username/projects/demo/animals:
-  {"directoryName":"/user/username/projects/demo/animals","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/demo/animals"}
 /user/username/projects/demo/zoo:
-  {"directoryName":"/user/username/projects/demo/zoo","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/demo/zoo"}
 
 exitCode:: ExitStatus.undefined
 
