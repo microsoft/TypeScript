@@ -37926,7 +37926,6 @@ namespace ts {
             if (isBindingElement(node)) {
                 if (
                   node.propertyName &&
-                  isIdentifier(node.propertyName) &&
                   isIdentifier(node.name) &&
                   isParameterDeclaration(node) &&
                   nodeIsMissing((getContainingFunction(node) as FunctionLikeDeclaration).body)) {
