@@ -596,6 +596,7 @@ namespace ts {
             readDirectory: maybeBind(host, host.readDirectory),
             disableUseFileVersionAsSignature: host.disableUseFileVersionAsSignature,
             storeFilesChangingSignatureDuringEmit: host.storeFilesChangingSignatureDuringEmit,
+            now: maybeBind(host, host.now),
         };
 
         function writeFile(fileName: string, text: string, writeByteOrderMark: boolean, onError: (message: string) => void) {
@@ -661,6 +662,7 @@ namespace ts {
             createProgram: createProgram || createEmitAndSemanticDiagnosticsBuilderProgram as any as CreateProgram<T>,
             disableUseFileVersionAsSignature: system.disableUseFileVersionAsSignature,
             storeFilesChangingSignatureDuringEmit: system.storeFilesChangingSignatureDuringEmit,
+            now: maybeBind(system, system.now),
         };
     }
 

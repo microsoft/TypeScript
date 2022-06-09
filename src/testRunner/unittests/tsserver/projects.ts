@@ -861,31 +861,30 @@ namespace ts.projectSystem {
                 content: `<html><script language="javascript">var x = 1;</></html>`
             };
             const host = createServerHost([file1]);
-            const projectService = createProjectService(host);
+            const projectService = createProjectService(host, { logger: createLoggerWithInMemoryLogs() });
             const projectFileName = "projectFileName";
             projectService.openExternalProject({ projectFileName, options: {}, rootFiles: [{ fileName: file1.path, scriptKind: ScriptKind.JS, hasMixedContent: true }] });
 
-            checkNumberOfProjects(projectService, { externalProjects: 1 });
-            checkWatchedFiles(host, [libFile.path]); // watching the "missing" lib file
 
             const project = projectService.externalProjects[0];
 
             const scriptInfo = project.getScriptInfo(file1.path)!;
             const snap = scriptInfo.getSnapshot();
             const actualText = getSnapshotText(snap);
-            assert.equal(actualText, "", `expected content to be empty string, got "${actualText}"`);
+            projectService.logger.info(`Text of${file1.path}: ${actualText}`);
 
             projectService.openClientFile(file1.path, `var x = 1;`);
             project.updateGraph();
 
             const quickInfo = project.getLanguageService().getQuickInfoAtPosition(file1.path, 4)!;
-            assert.equal(quickInfo.kind, ScriptElementKind.variableElement);
+            projectService.logger.info(`QuickInfo : ${quickInfo.kind}`);
 
             projectService.closeClientFile(file1.path);
 
             const scriptInfo2 = project.getScriptInfo(file1.path)!;
             const actualText2 = getSnapshotText(scriptInfo2.getSnapshot());
-            assert.equal(actualText2, "", `expected content to be empty string, got "${actualText2}"`);
+            projectService.logger.info(`Text of${file1.path}: ${actualText2}`);
+            baselineTsserverLogs("projects", "files with mixed content are handled correctly", projectService);
         });
 
         it("syntax tree cache handles changes in project settings", () => {

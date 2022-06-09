@@ -162,17 +162,17 @@ Output::
     * src/second/tsconfig.json
     * src/third/tsconfig.json
 
-[[90m12:00:10 AM[0m] Project 'src/first/tsconfig.json' is out of date because output file 'src/first/bin/first-output.js' does not exist
+[[90m12:00:10 AM[0m] Project 'src/first/tsconfig.json' is out of date because output file 'src/first/bin/first-output.tsbuildinfo' does not exist
 
 [[90m12:00:11 AM[0m] Building project '/src/first/tsconfig.json'...
 
-[[90m12:00:20 AM[0m] Project 'src/second/tsconfig.json' is out of date because output file 'src/2/second-output.js' does not exist
+[[90m12:00:22 AM[0m] Project 'src/second/tsconfig.json' is out of date because output file 'src/2/second-output.tsbuildinfo' does not exist
 
-[[90m12:00:21 AM[0m] Building project '/src/second/tsconfig.json'...
+[[90m12:00:23 AM[0m] Building project '/src/second/tsconfig.json'...
 
-[[90m12:00:30 AM[0m] Project 'src/third/tsconfig.json' is out of date because output file 'src/third/thirdjs/output/third-output.js' does not exist
+[[90m12:00:34 AM[0m] Project 'src/third/tsconfig.json' is out of date because output file 'src/third/thirdjs/output/third-output.tsbuildinfo' does not exist
 
-[[90m12:00:31 AM[0m] Building project '/src/third/tsconfig.json'...
+[[90m12:00:35 AM[0m] Building project '/src/third/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 readFiles:: {
@@ -2500,7 +2500,7 @@ sourceFile:../second/second_part2.ts
 >>>//# sourceMappingURL=second-output.js.map
 
 //// [/src/2/second-output.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"../second","sourceFiles":["../second/second_part1.ts","../second/second_part2.ts"],"js":{"sections":[{"pos":0,"end":3053,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":77,"kind":"text"},{"pos":77,"end":182,"kind":"internal"},{"pos":184,"end":216,"kind":"text"},{"pos":216,"end":608,"kind":"internal"},{"pos":610,"end":613,"kind":"text"},{"pos":613,"end":1026,"kind":"internal"},{"pos":1028,"end":1076,"kind":"text"}]}},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"../second","sourceFiles":["../second/second_part1.ts","../second/second_part2.ts"],"js":{"sections":[{"pos":0,"end":3053,"kind":"text"}],"mapHash":"47594977138-{\"version\":3,\"file\":\"second-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../second/second_part1.ts\",\"../second/second_part2.ts\"],\"names\":[],\"mappings\":\"AAIA,IAAU,CAAC,CAMV;AAND,WAAU,CAAC;IACP,SAAS,CAAC;QACN,OAAO,CAAC,GAAG,CAAC,SAAS,CAAC,CAAC;IAC3B,CAAC;IAED,CAAC,EAAE,CAAC;AACR,CAAC,EANS,CAAC,KAAD,CAAC,QAMV;AAED;IACkB;IAAgB,CAAC;IAEjB,wBAAM,GAAN,cAAW,CAAC;IACZ,sBAAI,sBAAC;aAAL,cAAU,OAAO,EAAE,CAAC,CAAC,CAAC;aACtB,UAAM,GAAW,IAAI,CAAC;;;OADA;IAExC,cAAC;AAAD,CAAC,AAND,IAMC;AACD,IAAU,OAAO,CAShB;AATD,WAAU,OAAO;IACC;QAAA;QAAiB,CAAC;QAAD,QAAC;IAAD,CAAC,AAAlB,IAAkB;IAAL,SAAC,IAAI,CAAA;IAClB,SAAgB,GAAG,KAAI,CAAC;IAAR,WAAG,MAAK,CAAA;IACxB,IAAiB,aAAa,CAAsB;IAApD,WAAiB,aAAa;QAAG;YAAA;YAAgB,CAAC;YAAD,QAAC;QAAD,CAAC,AAAjB,IAAiB;QAAJ,eAAC,IAAG,CAAA;IAAC,CAAC,EAAnC,aAAa,GAAb,qBAAa,KAAb,qBAAa,QAAsB;IACpD,IAAiB,SAAS,CAAwC;IAAlE,WAAiB,SAAS;QAAC,IAAA,SAAS,CAA8B;QAAvC,WAAA,SAAS;YAAG;gBAAA;gBAAwB,CAAC;gBAAD,gBAAC;YAAD,CAAC,AAAzB,IAAyB;YAAZ,mBAAS,YAAG,CAAA;QAAC,CAAC,EAAvC,SAAS,GAAT,mBAAS,KAAT,mBAAS,QAA8B;IAAD,CAAC,EAAjD,SAAS,GAAT,iBAAS,KAAT,iBAAS,QAAwC;IACpD,kBAAU,GAAG,aAAa,CAAC,CAAC,CAAC;IAE9B,qBAAa,GAAG,EAAE,CAAC;IAChC,IAAY,YAAwB;IAApC,WAAY,YAAY;QAAG,yCAAC,CAAA;QAAE,yCAAC,CAAA;QAAE,yCAAC,CAAA;IAAC,CAAC,EAAxB,YAAY,GAAZ,oBAAY,KAAZ,oBAAY,QAAY;AACtD,CAAC,EATS,OAAO,KAAP,OAAO,QAShB;AACa;IAAA;IAAiB,CAAC;IAAD,gBAAC;AAAD,CAAC,AAAlB,IAAkB;AAClB,SAAS,WAAW,KAAI,CAAC;AACzB,IAAU,iBAAiB,CAA8B;AAAzD,WAAU,iBAAiB;IAAG;QAAA;QAAwB,CAAC;QAAD,gBAAC;IAAD,CAAC,AAAzB,IAAyB;IAAZ,2BAAS,YAAG,CAAA;AAAC,CAAC,EAA/C,iBAAiB,KAAjB,iBAAiB,QAA8B;AACzD,IAAU,aAAa,CAAwC;AAA/D,WAAU,aAAa;IAAC,IAAA,SAAS,CAA8B;IAAvC,WAAA,SAAS;QAAG;YAAA;YAAwB,CAAC;YAAD,gBAAC;QAAD,CAAC,AAAzB,IAAyB;QAAZ,mBAAS,YAAG,CAAA;IAAC,CAAC,EAAvC,SAAS,GAAT,uBAAS,KAAT,uBAAS,QAA8B;AAAD,CAAC,EAArD,aAAa,KAAb,aAAa,QAAwC;AAC/D,IAAO,cAAc,GAAG,iBAAiB,CAAC,SAAS,CAAC;AAEpD,IAAM,aAAa,GAAG,EAAE,CAAC;AACzB,IAAK,YAAwB;AAA7B,WAAK,YAAY;IAAG,yCAAC,CAAA;IAAE,yCAAC,CAAA;IAAE,yCAAC,CAAA;AAAC,CAAC,EAAxB,YAAY,KAAZ,YAAY,QAAY;ACpC3C;IAAA;IAIA,CAAC;IAHG,uBAAW,GAAX;QACI,OAAO,CAAC,GAAG,CAAC,oBAAoB,CAAC,CAAC;IACtC,CAAC;IACL,QAAC;AAAD,CAAC,AAJD,IAIC\"}","hash":"-8314017635-var N;\r\n(function (N) {\r\n    function f() {\r\n        console.log('testing');\r\n    }\r\n    f();\r\n})(N || (N = {}));\r\nvar normalC = (function () {\r\n    function normalC() {\r\n    }\r\n    normalC.prototype.method = function () { };\r\n    Object.defineProperty(normalC.prototype, \"c\", {\r\n        get: function () { return 10; },\r\n        set: function (val) { },\r\n        enumerable: false,\r\n        configurable: true\r\n    });\r\n    return normalC;\r\n}());\r\nvar normalN;\r\n(function (normalN) {\r\n    var C = (function () {\r\n        function C() {\r\n        }\r\n        return C;\r\n    }());\r\n    normalN.C = C;\r\n    function foo() { }\r\n    normalN.foo = foo;\r\n    var someNamespace;\r\n    (function (someNamespace) {\r\n        var C = (function () {\r\n            function C() {\r\n            }\r\n            return C;\r\n        }());\r\n        someNamespace.C = C;\r\n    })(someNamespace = normalN.someNamespace || (normalN.someNamespace = {}));\r\n    var someOther;\r\n    (function (someOther) {\r\n        var something;\r\n        (function (something) {\r\n            var someClass = (function () {\r\n                function someClass() {\r\n                }\r\n                return someClass;\r\n            }());\r\n            something.someClass = someClass;\r\n        })(something = someOther.something || (someOther.something = {}));\r\n    })(someOther = normalN.someOther || (normalN.someOther = {}));\r\n    normalN.someImport = someNamespace.C;\r\n    normalN.internalConst = 10;\r\n    var internalEnum;\r\n    (function (internalEnum) {\r\n        internalEnum[internalEnum[\"a\"] = 0] = \"a\";\r\n        internalEnum[internalEnum[\"b\"] = 1] = \"b\";\r\n        internalEnum[internalEnum[\"c\"] = 2] = \"c\";\r\n    })(internalEnum = normalN.internalEnum || (normalN.internalEnum = {}));\r\n})(normalN || (normalN = {}));\r\nvar internalC = (function () {\r\n    function internalC() {\r\n    }\r\n    return internalC;\r\n}());\r\nfunction internalfoo() { }\r\nvar internalNamespace;\r\n(function (internalNamespace) {\r\n    var someClass = (function () {\r\n        function someClass() {\r\n        }\r\n        return someClass;\r\n    }());\r\n    internalNamespace.someClass = someClass;\r\n})(internalNamespace || (internalNamespace = {}));\r\nvar internalOther;\r\n(function (internalOther) {\r\n    var something;\r\n    (function (something) {\r\n        var someClass = (function () {\r\n            function someClass() {\r\n            }\r\n            return someClass;\r\n        }());\r\n        something.someClass = someClass;\r\n    })(something = internalOther.something || (internalOther.something = {}));\r\n})(internalOther || (internalOther = {}));\r\nvar internalImport = internalNamespace.someClass;\r\nvar internalConst = 10;\r\nvar internalEnum;\r\n(function (internalEnum) {\r\n    internalEnum[internalEnum[\"a\"] = 0] = \"a\";\r\n    internalEnum[internalEnum[\"b\"] = 1] = \"b\";\r\n    internalEnum[internalEnum[\"c\"] = 2] = \"c\";\r\n})(internalEnum || (internalEnum = {}));\r\nvar C = (function () {\r\n    function C() {\r\n    }\r\n    C.prototype.doSomething = function () {\r\n        console.log(\"something got done\");\r\n    };\r\n    return C;\r\n}());\r\n//# sourceMappingURL=second-output.js.map"},"dts":{"sections":[{"pos":0,"end":77,"kind":"text"},{"pos":77,"end":182,"kind":"internal"},{"pos":184,"end":216,"kind":"text"},{"pos":216,"end":608,"kind":"internal"},{"pos":610,"end":613,"kind":"text"},{"pos":613,"end":1026,"kind":"internal"},{"pos":1028,"end":1076,"kind":"text"}],"mapHash":"-21406246021-{\"version\":3,\"file\":\"second-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../second/second_part1.ts\",\"../second/second_part2.ts\"],\"names\":[],\"mappings\":\"AAAA,kBAAU,CAAC,CAAC;CAEX;AAED,kBAAU,CAAC,CAAC;CAMX;AAED,cAAM,OAAO;;IAEK,IAAI,EAAE,MAAM,CAAC;IACb,MAAM;IACN,IAAI,CAAC,IACM,MAAM,CADK;IACtB,IAAI,CAAC,CAAC,KAAK,MAAM,EAAK;CACvC;AACD,kBAAU,OAAO,CAAC;IACA,MAAa,CAAC;KAAI;IAClB,SAAgB,GAAG,SAAK;IACxB,UAAiB,aAAa,CAAC;QAAE,MAAa,CAAC;SAAG;KAAE;IACpD,UAAiB,SAAS,CAAC,SAAS,CAAC;QAAE,MAAa,SAAS;SAAG;KAAE;IAClE,MAAM,QAAQ,UAAU,GAAG,aAAa,CAAC,CAAC,CAAC;IAC3C,KAAY,YAAY,GAAG,SAAS,CAAC;IAC9B,MAAM,aAAa,KAAK,CAAC;IAChC,KAAY,YAAY;QAAG,CAAC,IAAA;QAAE,CAAC,IAAA;QAAE,CAAC,IAAA;KAAE;CACrD;AACa,cAAM,SAAS;CAAG;AAClB,iBAAS,WAAW,SAAK;AACzB,kBAAU,iBAAiB,CAAC;IAAE,MAAa,SAAS;KAAG;CAAE;AACzD,kBAAU,aAAa,CAAC,SAAS,CAAC;IAAE,MAAa,SAAS;KAAG;CAAE;AAC/D,OAAO,cAAc,GAAG,iBAAiB,CAAC,SAAS,CAAC;AACpD,aAAK,YAAY,GAAG,SAAS,CAAC;AAC9B,QAAA,MAAM,aAAa,KAAK,CAAC;AACzB,aAAK,YAAY;IAAG,CAAC,IAAA;IAAE,CAAC,IAAA;IAAE,CAAC,IAAA;CAAE;ACpC3C,cAAM,CAAC;IACH,WAAW;CAGd\"}","hash":"-9468064165-declare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare class normalC {\r\n    constructor();\r\n    prop: string;\r\n    method(): void;\r\n    get c(): number;\r\n    set c(val: number);\r\n}\r\ndeclare namespace normalN {\r\n    class C {\r\n    }\r\n    function foo(): void;\r\n    namespace someNamespace {\r\n        class C {\r\n        }\r\n    }\r\n    namespace someOther.something {\r\n        class someClass {\r\n        }\r\n    }\r\n    export import someImport = someNamespace.C;\r\n    type internalType = internalC;\r\n    const internalConst = 10;\r\n    enum internalEnum {\r\n        a = 0,\r\n        b = 1,\r\n        c = 2\r\n    }\r\n}\r\ndeclare class internalC {\r\n}\r\ndeclare function internalfoo(): void;\r\ndeclare namespace internalNamespace {\r\n    class someClass {\r\n    }\r\n}\r\ndeclare namespace internalOther.something {\r\n    class someClass {\r\n    }\r\n}\r\nimport internalImport = internalNamespace.someClass;\r\ndeclare type internalType = internalC;\r\ndeclare const internalConst = 10;\r\ndeclare enum internalEnum {\r\n    a = 0,\r\n    b = 1,\r\n    c = 2\r\n}\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\n//# sourceMappingURL=second-output.d.ts.map"}},"program":{"fileNames":["../second/second_part1.ts","../second/second_part2.ts"],"fileInfos":["13528403307-namespace N {\r\n    // Comment text\r\n}\r\n\r\nnamespace N {\r\n    function f() {\r\n        console.log('testing');\r\n    }\r\n\r\n    f();\r\n}\r\n\nclass normalC {\n    /*@internal*/ constructor() { }\n    /*@internal*/ prop: string;\n    /*@internal*/ method() { }\n    /*@internal*/ get c() { return 10; }\n    /*@internal*/ set c(val: number) { }\n}\nnamespace normalN {\n    /*@internal*/ export class C { }\n    /*@internal*/ export function foo() {}\n    /*@internal*/ export namespace someNamespace { export class C {} }\n    /*@internal*/ export namespace someOther.something { export class someClass {} }\n    /*@internal*/ export import someImport = someNamespace.C;\n    /*@internal*/ export type internalType = internalC;\n    /*@internal*/ export const internalConst = 10;\n    /*@internal*/ export enum internalEnum { a, b, c }\n}\n/*@internal*/ class internalC {}\n/*@internal*/ function internalfoo() {}\n/*@internal*/ namespace internalNamespace { export class someClass {} }\n/*@internal*/ namespace internalOther.something { export class someClass {} }\n/*@internal*/ import internalImport = internalNamespace.someClass;\n/*@internal*/ type internalType = internalC;\n/*@internal*/ const internalConst = 10;\n/*@internal*/ enum internalEnum { a, b, c }","9339262372-class C {\r\n    doSomething() {\r\n        console.log(\"something got done\");\r\n    }\r\n}\r\n"],"options":{"composite":true,"outFile":"./second-output.js"},"outSignature":"-20504865920-declare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare class normalC {\r\n    constructor();\r\n    prop: string;\r\n    method(): void;\r\n    get c(): number;\r\n    set c(val: number);\r\n}\r\ndeclare namespace normalN {\r\n    class C {\r\n    }\r\n    function foo(): void;\r\n    namespace someNamespace {\r\n        class C {\r\n        }\r\n    }\r\n    namespace someOther.something {\r\n        class someClass {\r\n        }\r\n    }\r\n    export import someImport = someNamespace.C;\r\n    type internalType = internalC;\r\n    const internalConst = 10;\r\n    enum internalEnum {\r\n        a = 0,\r\n        b = 1,\r\n        c = 2\r\n    }\r\n}\r\ndeclare class internalC {\r\n}\r\ndeclare function internalfoo(): void;\r\ndeclare namespace internalNamespace {\r\n    class someClass {\r\n    }\r\n}\r\ndeclare namespace internalOther.something {\r\n    class someClass {\r\n    }\r\n}\r\nimport internalImport = internalNamespace.someClass;\r\ndeclare type internalType = internalC;\r\ndeclare const internalConst = 10;\r\ndeclare enum internalEnum {\r\n    a = 0,\r\n    b = 1,\r\n    c = 2\r\n}\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\n","dtsChangeTime":24000},"version":"FakeTSVersion"}
 
 //// [/src/2/second-output.tsbuildinfo.baseline.txt]
 ======================================================================
@@ -2702,7 +2702,9 @@ declare class C {
           "end": 3053,
           "kind": "text"
         }
-      ]
+      ],
+      "hash": "-8314017635-var N;\r\n(function (N) {\r\n    function f() {\r\n        console.log('testing');\r\n    }\r\n    f();\r\n})(N || (N = {}));\r\nvar normalC = (function () {\r\n    function normalC() {\r\n    }\r\n    normalC.prototype.method = function () { };\r\n    Object.defineProperty(normalC.prototype, \"c\", {\r\n        get: function () { return 10; },\r\n        set: function (val) { },\r\n        enumerable: false,\r\n        configurable: true\r\n    });\r\n    return normalC;\r\n}());\r\nvar normalN;\r\n(function (normalN) {\r\n    var C = (function () {\r\n        function C() {\r\n        }\r\n        return C;\r\n    }());\r\n    normalN.C = C;\r\n    function foo() { }\r\n    normalN.foo = foo;\r\n    var someNamespace;\r\n    (function (someNamespace) {\r\n        var C = (function () {\r\n            function C() {\r\n            }\r\n            return C;\r\n        }());\r\n        someNamespace.C = C;\r\n    })(someNamespace = normalN.someNamespace || (normalN.someNamespace = {}));\r\n    var someOther;\r\n    (function (someOther) {\r\n        var something;\r\n        (function (something) {\r\n            var someClass = (function () {\r\n                function someClass() {\r\n                }\r\n                return someClass;\r\n            }());\r\n            something.someClass = someClass;\r\n        })(something = someOther.something || (someOther.something = {}));\r\n    })(someOther = normalN.someOther || (normalN.someOther = {}));\r\n    normalN.someImport = someNamespace.C;\r\n    normalN.internalConst = 10;\r\n    var internalEnum;\r\n    (function (internalEnum) {\r\n        internalEnum[internalEnum[\"a\"] = 0] = \"a\";\r\n        internalEnum[internalEnum[\"b\"] = 1] = \"b\";\r\n        internalEnum[internalEnum[\"c\"] = 2] = \"c\";\r\n    })(internalEnum = normalN.internalEnum || (normalN.internalEnum = {}));\r\n})(normalN || (normalN = {}));\r\nvar internalC = (function () {\r\n    function internalC() {\r\n    }\r\n    return internalC;\r\n}());\r\nfunction internalfoo() { }\r\nvar internalNamespace;\r\n(function (internalNamespace) {\r\n    var someClass = (function () {\r\n        function someClass() {\r\n        }\r\n        return someClass;\r\n    }());\r\n    internalNamespace.someClass = someClass;\r\n})(internalNamespace || (internalNamespace = {}));\r\nvar internalOther;\r\n(function (internalOther) {\r\n    var something;\r\n    (function (something) {\r\n        var someClass = (function () {\r\n            function someClass() {\r\n            }\r\n            return someClass;\r\n        }());\r\n        something.someClass = someClass;\r\n    })(something = internalOther.something || (internalOther.something = {}));\r\n})(internalOther || (internalOther = {}));\r\nvar internalImport = internalNamespace.someClass;\r\nvar internalConst = 10;\r\nvar internalEnum;\r\n(function (internalEnum) {\r\n    internalEnum[internalEnum[\"a\"] = 0] = \"a\";\r\n    internalEnum[internalEnum[\"b\"] = 1] = \"b\";\r\n    internalEnum[internalEnum[\"c\"] = 2] = \"c\";\r\n})(internalEnum || (internalEnum = {}));\r\nvar C = (function () {\r\n    function C() {\r\n    }\r\n    C.prototype.doSomething = function () {\r\n        console.log(\"something got done\");\r\n    };\r\n    return C;\r\n}());\r\n//# sourceMappingURL=second-output.js.map",
+      "mapHash": "47594977138-{\"version\":3,\"file\":\"second-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../second/second_part1.ts\",\"../second/second_part2.ts\"],\"names\":[],\"mappings\":\"AAIA,IAAU,CAAC,CAMV;AAND,WAAU,CAAC;IACP,SAAS,CAAC;QACN,OAAO,CAAC,GAAG,CAAC,SAAS,CAAC,CAAC;IAC3B,CAAC;IAED,CAAC,EAAE,CAAC;AACR,CAAC,EANS,CAAC,KAAD,CAAC,QAMV;AAED;IACkB;IAAgB,CAAC;IAEjB,wBAAM,GAAN,cAAW,CAAC;IACZ,sBAAI,sBAAC;aAAL,cAAU,OAAO,EAAE,CAAC,CAAC,CAAC;aACtB,UAAM,GAAW,IAAI,CAAC;;;OADA;IAExC,cAAC;AAAD,CAAC,AAND,IAMC;AACD,IAAU,OAAO,CAShB;AATD,WAAU,OAAO;IACC;QAAA;QAAiB,CAAC;QAAD,QAAC;IAAD,CAAC,AAAlB,IAAkB;IAAL,SAAC,IAAI,CAAA;IAClB,SAAgB,GAAG,KAAI,CAAC;IAAR,WAAG,MAAK,CAAA;IACxB,IAAiB,aAAa,CAAsB;IAApD,WAAiB,aAAa;QAAG;YAAA;YAAgB,CAAC;YAAD,QAAC;QAAD,CAAC,AAAjB,IAAiB;QAAJ,eAAC,IAAG,CAAA;IAAC,CAAC,EAAnC,aAAa,GAAb,qBAAa,KAAb,qBAAa,QAAsB;IACpD,IAAiB,SAAS,CAAwC;IAAlE,WAAiB,SAAS;QAAC,IAAA,SAAS,CAA8B;QAAvC,WAAA,SAAS;YAAG;gBAAA;gBAAwB,CAAC;gBAAD,gBAAC;YAAD,CAAC,AAAzB,IAAyB;YAAZ,mBAAS,YAAG,CAAA;QAAC,CAAC,EAAvC,SAAS,GAAT,mBAAS,KAAT,mBAAS,QAA8B;IAAD,CAAC,EAAjD,SAAS,GAAT,iBAAS,KAAT,iBAAS,QAAwC;IACpD,kBAAU,GAAG,aAAa,CAAC,CAAC,CAAC;IAE9B,qBAAa,GAAG,EAAE,CAAC;IAChC,IAAY,YAAwB;IAApC,WAAY,YAAY;QAAG,yCAAC,CAAA;QAAE,yCAAC,CAAA;QAAE,yCAAC,CAAA;IAAC,CAAC,EAAxB,YAAY,GAAZ,oBAAY,KAAZ,oBAAY,QAAY;AACtD,CAAC,EATS,OAAO,KAAP,OAAO,QAShB;AACa;IAAA;IAAiB,CAAC;IAAD,gBAAC;AAAD,CAAC,AAAlB,IAAkB;AAClB,SAAS,WAAW,KAAI,CAAC;AACzB,IAAU,iBAAiB,CAA8B;AAAzD,WAAU,iBAAiB;IAAG;QAAA;QAAwB,CAAC;QAAD,gBAAC;IAAD,CAAC,AAAzB,IAAyB;IAAZ,2BAAS,YAAG,CAAA;AAAC,CAAC,EAA/C,iBAAiB,KAAjB,iBAAiB,QAA8B;AACzD,IAAU,aAAa,CAAwC;AAA/D,WAAU,aAAa;IAAC,IAAA,SAAS,CAA8B;IAAvC,WAAA,SAAS;QAAG;YAAA;YAAwB,CAAC;YAAD,gBAAC;QAAD,CAAC,AAAzB,IAAyB;QAAZ,mBAAS,YAAG,CAAA;IAAC,CAAC,EAAvC,SAAS,GAAT,uBAAS,KAAT,uBAAS,QAA8B;AAAD,CAAC,EAArD,aAAa,KAAb,aAAa,QAAwC;AAC/D,IAAO,cAAc,GAAG,iBAAiB,CAAC,SAAS,CAAC;AAEpD,IAAM,aAAa,GAAG,EAAE,CAAC;AACzB,IAAK,YAAwB;AAA7B,WAAK,YAAY;IAAG,yCAAC,CAAA;IAAE,yCAAC,CAAA;IAAE,yCAAC,CAAA;AAAC,CAAC,EAAxB,YAAY,KAAZ,YAAY,QAAY;ACpC3C;IAAA;IAIA,CAAC;IAHG,uBAAW,GAAX;QACI,OAAO,CAAC,GAAG,CAAC,oBAAoB,CAAC,CAAC;IACtC,CAAC;IACL,QAAC;AAAD,CAAC,AAJD,IAIC\"}"
     },
     "dts": {
       "sections": [
@@ -2741,11 +2743,29 @@ declare class C {
           "end": 1076,
           "kind": "text"
         }
-      ]
+      ],
+      "hash": "-9468064165-declare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare class normalC {\r\n    constructor();\r\n    prop: string;\r\n    method(): void;\r\n    get c(): number;\r\n    set c(val: number);\r\n}\r\ndeclare namespace normalN {\r\n    class C {\r\n    }\r\n    function foo(): void;\r\n    namespace someNamespace {\r\n        class C {\r\n        }\r\n    }\r\n    namespace someOther.something {\r\n        class someClass {\r\n        }\r\n    }\r\n    export import someImport = someNamespace.C;\r\n    type internalType = internalC;\r\n    const internalConst = 10;\r\n    enum internalEnum {\r\n        a = 0,\r\n        b = 1,\r\n        c = 2\r\n    }\r\n}\r\ndeclare class internalC {\r\n}\r\ndeclare function internalfoo(): void;\r\ndeclare namespace internalNamespace {\r\n    class someClass {\r\n    }\r\n}\r\ndeclare namespace internalOther.something {\r\n    class someClass {\r\n    }\r\n}\r\nimport internalImport = internalNamespace.someClass;\r\ndeclare type internalType = internalC;\r\ndeclare const internalConst = 10;\r\ndeclare enum internalEnum {\r\n    a = 0,\r\n    b = 1,\r\n    c = 2\r\n}\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\n//# sourceMappingURL=second-output.d.ts.map",
+      "mapHash": "-21406246021-{\"version\":3,\"file\":\"second-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../second/second_part1.ts\",\"../second/second_part2.ts\"],\"names\":[],\"mappings\":\"AAAA,kBAAU,CAAC,CAAC;CAEX;AAED,kBAAU,CAAC,CAAC;CAMX;AAED,cAAM,OAAO;;IAEK,IAAI,EAAE,MAAM,CAAC;IACb,MAAM;IACN,IAAI,CAAC,IACM,MAAM,CADK;IACtB,IAAI,CAAC,CAAC,KAAK,MAAM,EAAK;CACvC;AACD,kBAAU,OAAO,CAAC;IACA,MAAa,CAAC;KAAI;IAClB,SAAgB,GAAG,SAAK;IACxB,UAAiB,aAAa,CAAC;QAAE,MAAa,CAAC;SAAG;KAAE;IACpD,UAAiB,SAAS,CAAC,SAAS,CAAC;QAAE,MAAa,SAAS;SAAG;KAAE;IAClE,MAAM,QAAQ,UAAU,GAAG,aAAa,CAAC,CAAC,CAAC;IAC3C,KAAY,YAAY,GAAG,SAAS,CAAC;IAC9B,MAAM,aAAa,KAAK,CAAC;IAChC,KAAY,YAAY;QAAG,CAAC,IAAA;QAAE,CAAC,IAAA;QAAE,CAAC,IAAA;KAAE;CACrD;AACa,cAAM,SAAS;CAAG;AAClB,iBAAS,WAAW,SAAK;AACzB,kBAAU,iBAAiB,CAAC;IAAE,MAAa,SAAS;KAAG;CAAE;AACzD,kBAAU,aAAa,CAAC,SAAS,CAAC;IAAE,MAAa,SAAS;KAAG;CAAE;AAC/D,OAAO,cAAc,GAAG,iBAAiB,CAAC,SAAS,CAAC;AACpD,aAAK,YAAY,GAAG,SAAS,CAAC;AAC9B,QAAA,MAAM,aAAa,KAAK,CAAC;AACzB,aAAK,YAAY;IAAG,CAAC,IAAA;IAAE,CAAC,IAAA;IAAE,CAAC,IAAA;CAAE;ACpC3C,cAAM,CAAC;IACH,WAAW;CAGd\"}"
     }
   },
+  "program": {
+    "fileNames": [
+      "../second/second_part1.ts",
+      "../second/second_part2.ts"
+    ],
+    "fileInfos": {
+      "../second/second_part1.ts": "13528403307-namespace N {\r\n    // Comment text\r\n}\r\n\r\nnamespace N {\r\n    function f() {\r\n        console.log('testing');\r\n    }\r\n\r\n    f();\r\n}\r\n\nclass normalC {\n    /*@internal*/ constructor() { }\n    /*@internal*/ prop: string;\n    /*@internal*/ method() { }\n    /*@internal*/ get c() { return 10; }\n    /*@internal*/ set c(val: number) { }\n}\nnamespace normalN {\n    /*@internal*/ export class C { }\n    /*@internal*/ export function foo() {}\n    /*@internal*/ export namespace someNamespace { export class C {} }\n    /*@internal*/ export namespace someOther.something { export class someClass {} }\n    /*@internal*/ export import someImport = someNamespace.C;\n    /*@internal*/ export type internalType = internalC;\n    /*@internal*/ export const internalConst = 10;\n    /*@internal*/ export enum internalEnum { a, b, c }\n}\n/*@internal*/ class internalC {}\n/*@internal*/ function internalfoo() {}\n/*@internal*/ namespace internalNamespace { export class someClass {} }\n/*@internal*/ namespace internalOther.something { export class someClass {} }\n/*@internal*/ import internalImport = internalNamespace.someClass;\n/*@internal*/ type internalType = internalC;\n/*@internal*/ const internalConst = 10;\n/*@internal*/ enum internalEnum { a, b, c }",
+      "../second/second_part2.ts": "9339262372-class C {\r\n    doSomething() {\r\n        console.log(\"something got done\");\r\n    }\r\n}\r\n"
+    },
+    "options": {
+      "composite": true,
+      "outFile": "./second-output.js"
+    },
+    "outSignature": "-20504865920-declare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare class normalC {\r\n    constructor();\r\n    prop: string;\r\n    method(): void;\r\n    get c(): number;\r\n    set c(val: number);\r\n}\r\ndeclare namespace normalN {\r\n    class C {\r\n    }\r\n    function foo(): void;\r\n    namespace someNamespace {\r\n        class C {\r\n        }\r\n    }\r\n    namespace someOther.something {\r\n        class someClass {\r\n        }\r\n    }\r\n    export import someImport = someNamespace.C;\r\n    type internalType = internalC;\r\n    const internalConst = 10;\r\n    enum internalEnum {\r\n        a = 0,\r\n        b = 1,\r\n        c = 2\r\n    }\r\n}\r\ndeclare class internalC {\r\n}\r\ndeclare function internalfoo(): void;\r\ndeclare namespace internalNamespace {\r\n    class someClass {\r\n    }\r\n}\r\ndeclare namespace internalOther.something {\r\n    class someClass {\r\n    }\r\n}\r\nimport internalImport = internalNamespace.someClass;\r\ndeclare type internalType = internalC;\r\ndeclare const internalConst = 10;\r\ndeclare enum internalEnum {\r\n    a = 0,\r\n    b = 1,\r\n    c = 2\r\n}\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\n",
+    "dtsChangeTime": 24000
+  },
   "version": "FakeTSVersion",
-  "size": 485
+  "size": 11048
 }
 
 //// [/src/first/bin/first-output.d.ts]
@@ -3049,7 +3069,7 @@ sourceFile:../first_part3.ts
 >>>//# sourceMappingURL=first-output.js.map
 
 //// [/src/first/bin/first-output.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"..","sourceFiles":["../first_PART1.ts","../first_part2.ts","../first_part3.ts"],"js":{"sections":[{"pos":0,"end":110,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":39,"kind":"internal"},{"pos":41,"end":157,"kind":"text"}]}},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"..","sourceFiles":["../first_PART1.ts","../first_part2.ts","../first_part3.ts"],"js":{"sections":[{"pos":0,"end":110,"kind":"text"}],"mapHash":"-22423542495-{\"version\":3,\"file\":\"first-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../first_PART1.ts\",\"../first_part2.ts\",\"../first_part3.ts\"],\"names\":[],\"mappings\":\"AAIA,IAAM,CAAC,GAAG,cAAc,CAAC;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;ACVf,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC\"}","hash":"-3712641672-var s = \"Hello, world\";\r\nconsole.log(s);\r\nconsole.log(f());\r\nfunction f() {\r\n    return \"JS does hoists\";\r\n}\r\n//# sourceMappingURL=first-output.js.map"},"dts":{"sections":[{"pos":0,"end":39,"kind":"internal"},{"pos":41,"end":157,"kind":"text"}],"mapHash":"36580418620-{\"version\":3,\"file\":\"first-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../first_PART1.ts\",\"../first_part2.ts\",\"../first_part3.ts\"],\"names\":[],\"mappings\":\"AAAc,UAAU,QAAQ;IAC5B,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;AERD,iBAAS,CAAC,WAET\"}","hash":"-23350520794-interface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\n//# sourceMappingURL=first-output.d.ts.map"}},"program":{"fileNames":["../first_part1.ts","../first_part2.ts","../first_part3.ts"],"fileInfos":["-7635519924-/*@internal*/ interface TheFirst {\r\n    none: any;\r\n}\r\n\r\nconst s = \"Hello, world\";\r\n\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\n\r\nconsole.log(s);\r\n","4973778178-console.log(f());\r\n","6202806249-function f() {\r\n    return \"JS does hoists\";\r\n}"],"options":{"composite":true,"outFile":"./first-output.js"},"outSignature":"-16746818465-interface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\n","dtsChangeTime":12000},"version":"FakeTSVersion"}
 
 //// [/src/first/bin/first-output.tsbuildinfo.baseline.txt]
 ======================================================================
@@ -3097,7 +3117,9 @@ declare function f(): string;
           "end": 110,
           "kind": "text"
         }
-      ]
+      ],
+      "hash": "-3712641672-var s = \"Hello, world\";\r\nconsole.log(s);\r\nconsole.log(f());\r\nfunction f() {\r\n    return \"JS does hoists\";\r\n}\r\n//# sourceMappingURL=first-output.js.map",
+      "mapHash": "-22423542495-{\"version\":3,\"file\":\"first-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../first_PART1.ts\",\"../first_part2.ts\",\"../first_part3.ts\"],\"names\":[],\"mappings\":\"AAIA,IAAM,CAAC,GAAG,cAAc,CAAC;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;ACVf,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC\"}"
     },
     "dts": {
       "sections": [
@@ -3111,11 +3133,31 @@ declare function f(): string;
           "end": 157,
           "kind": "text"
         }
-      ]
+      ],
+      "hash": "-23350520794-interface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\n//# sourceMappingURL=first-output.d.ts.map",
+      "mapHash": "36580418620-{\"version\":3,\"file\":\"first-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../first_PART1.ts\",\"../first_part2.ts\",\"../first_part3.ts\"],\"names\":[],\"mappings\":\"AAAc,UAAU,QAAQ;IAC5B,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;AERD,iBAAS,CAAC,WAET\"}"
     }
   },
+  "program": {
+    "fileNames": [
+      "../first_part1.ts",
+      "../first_part2.ts",
+      "../first_part3.ts"
+    ],
+    "fileInfos": {
+      "../first_part1.ts": "-7635519924-/*@internal*/ interface TheFirst {\r\n    none: any;\r\n}\r\n\r\nconst s = \"Hello, world\";\r\n\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\n\r\nconsole.log(s);\r\n",
+      "../first_part2.ts": "4973778178-console.log(f());\r\n",
+      "../first_part3.ts": "6202806249-function f() {\r\n    return \"JS does hoists\";\r\n}"
+    },
+    "options": {
+      "composite": true,
+      "outFile": "./first-output.js"
+    },
+    "outSignature": "-16746818465-interface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\n",
+    "dtsChangeTime": 12000
+  },
   "version": "FakeTSVersion",
-  "size": 290
+  "size": 2115
 }
 
 //// [/src/third/thirdjs/output/third-output.d.ts]
@@ -5155,7 +5197,7 @@ sourceFile:../../third_part1.ts
 >>>//# sourceMappingURL=third-output.js.map
 
 //// [/src/third/thirdjs/output/third-output.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"../..","sourceFiles":["../../third_part1.ts"],"js":{"sections":[{"pos":0,"end":110,"kind":"prepend","data":"../../../first/bin/first-output.js","texts":[{"pos":0,"end":110,"kind":"text"}]},{"pos":110,"end":3163,"kind":"prepend","data":"../../../2/second-output.js","texts":[{"pos":110,"end":3163,"kind":"text"}]},{"pos":3163,"end":3199,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":116,"kind":"prepend","data":"../../../first/bin/first-output.d.ts","texts":[{"pos":0,"end":116,"kind":"text"}]},{"pos":116,"end":276,"kind":"prepend","data":"../../../2/second-output.d.ts","texts":[{"pos":116,"end":276,"kind":"text"}]},{"pos":276,"end":295,"kind":"text"}]}},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"../..","sourceFiles":["../../third_part1.ts"],"js":{"sections":[{"pos":0,"end":110,"kind":"prepend","data":"../../../first/bin/first-output.js","texts":[{"pos":0,"end":110,"kind":"text"}]},{"pos":110,"end":3163,"kind":"prepend","data":"../../../2/second-output.js","texts":[{"pos":110,"end":3163,"kind":"text"}]},{"pos":3163,"end":3199,"kind":"text"}],"mapHash":"-8086338046-{\"version\":3,\"file\":\"third-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../../../first/first_PART1.ts\",\"../../../first/first_part2.ts\",\"../../../first/first_part3.ts\",\"../../../second/second_part1.ts\",\"../../../second/second_part2.ts\",\"../../third_part1.ts\"],\"names\":[],\"mappings\":\"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\"}","hash":"154908145202-var s = \"Hello, world\";\r\nconsole.log(s);\r\nconsole.log(f());\r\nfunction f() {\r\n    return \"JS does hoists\";\r\n}\r\nvar N;\r\n(function (N) {\r\n    function f() {\r\n        console.log('testing');\r\n    }\r\n    f();\r\n})(N || (N = {}));\r\nvar normalC = (function () {\r\n    function normalC() {\r\n    }\r\n    normalC.prototype.method = function () { };\r\n    Object.defineProperty(normalC.prototype, \"c\", {\r\n        get: function () { return 10; },\r\n        set: function (val) { },\r\n        enumerable: false,\r\n        configurable: true\r\n    });\r\n    return normalC;\r\n}());\r\nvar normalN;\r\n(function (normalN) {\r\n    var C = (function () {\r\n        function C() {\r\n        }\r\n        return C;\r\n    }());\r\n    normalN.C = C;\r\n    function foo() { }\r\n    normalN.foo = foo;\r\n    var someNamespace;\r\n    (function (someNamespace) {\r\n        var C = (function () {\r\n            function C() {\r\n            }\r\n            return C;\r\n        }());\r\n        someNamespace.C = C;\r\n    })(someNamespace = normalN.someNamespace || (normalN.someNamespace = {}));\r\n    var someOther;\r\n    (function (someOther) {\r\n        var something;\r\n        (function (something) {\r\n            var someClass = (function () {\r\n                function someClass() {\r\n                }\r\n                return someClass;\r\n            }());\r\n            something.someClass = someClass;\r\n        })(something = someOther.something || (someOther.something = {}));\r\n    })(someOther = normalN.someOther || (normalN.someOther = {}));\r\n    normalN.someImport = someNamespace.C;\r\n    normalN.internalConst = 10;\r\n    var internalEnum;\r\n    (function (internalEnum) {\r\n        internalEnum[internalEnum[\"a\"] = 0] = \"a\";\r\n        internalEnum[internalEnum[\"b\"] = 1] = \"b\";\r\n        internalEnum[internalEnum[\"c\"] = 2] = \"c\";\r\n    })(internalEnum = normalN.internalEnum || (normalN.internalEnum = {}));\r\n})(normalN || (normalN = {}));\r\nvar internalC = (function () {\r\n    function internalC() {\r\n    }\r\n    return internalC;\r\n}());\r\nfunction internalfoo() { }\r\nvar internalNamespace;\r\n(function (internalNamespace) {\r\n    var someClass = (function () {\r\n        function someClass() {\r\n        }\r\n        return someClass;\r\n    }());\r\n    internalNamespace.someClass = someClass;\r\n})(internalNamespace || (internalNamespace = {}));\r\nvar internalOther;\r\n(function (internalOther) {\r\n    var something;\r\n    (function (something) {\r\n        var someClass = (function () {\r\n            function someClass() {\r\n            }\r\n            return someClass;\r\n        }());\r\n        something.someClass = someClass;\r\n    })(something = internalOther.something || (internalOther.something = {}));\r\n})(internalOther || (internalOther = {}));\r\nvar internalImport = internalNamespace.someClass;\r\nvar internalConst = 10;\r\nvar internalEnum;\r\n(function (internalEnum) {\r\n    internalEnum[internalEnum[\"a\"] = 0] = \"a\";\r\n    internalEnum[internalEnum[\"b\"] = 1] = \"b\";\r\n    internalEnum[internalEnum[\"c\"] = 2] = \"c\";\r\n})(internalEnum || (internalEnum = {}));\r\nvar C = (function () {\r\n    function C() {\r\n    }\r\n    C.prototype.doSomething = function () {\r\n        console.log(\"something got done\");\r\n    };\r\n    return C;\r\n}());\r\nvar c = new C();\r\nc.doSomething();\r\n//# sourceMappingURL=third-output.js.map"},"dts":{"sections":[{"pos":0,"end":116,"kind":"prepend","data":"../../../first/bin/first-output.d.ts","texts":[{"pos":0,"end":116,"kind":"text"}]},{"pos":116,"end":276,"kind":"prepend","data":"../../../2/second-output.d.ts","texts":[{"pos":116,"end":276,"kind":"text"}]},{"pos":276,"end":295,"kind":"text"}],"mapHash":"16014976674-{\"version\":3,\"file\":\"third-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../../../first/first_PART1.ts\",\"../../../first/first_part3.ts\",\"../../../second/second_part1.ts\",\"../../../second/second_part2.ts\",\"../../third_part1.ts\"],\"names\":[],\"mappings\":\"AAIA,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;ACRD,iBAAS,CAAC,WAET;ACFD,kBAAU,CAAC,CAAC;CAEX;AAED,kBAAU,CAAC,CAAC;CAMX;AAED,cAAM,OAAO;CAMZ;AACD,kBAAU,OAAO,CAAC;CASjB;AC5BD,cAAM,CAAC;IACH,WAAW;CAGd;ACJD,QAAA,IAAI,CAAC,GAAU,CAAC\"}","hash":"12393711795-declare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\ndeclare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare class normalC {\r\n}\r\ndeclare namespace normalN {\r\n}\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\ndeclare var c: C;\r\n//# sourceMappingURL=third-output.d.ts.map"}},"program":{"fileNames":["../../third_part1.ts"],"fileInfos":["10470273651-var c = new C();\r\nc.doSomething();\r\n"],"options":{"composite":true,"outFile":"./third-output.js"},"outSignature":"20880580153-declare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\ndeclare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare class normalC {\r\n}\r\ndeclare namespace normalN {\r\n}\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\ndeclare var c: C;\r\n","dtsChangeTime":36000},"version":"FakeTSVersion"}
 
 //// [/src/third/thirdjs/output/third-output.tsbuildinfo.baseline.txt]
 ======================================================================
@@ -5358,7 +5400,9 @@ declare var c: C;
           "end": 3199,
           "kind": "text"
         }
-      ]
+      ],
+      "hash": "154908145202-var s = \"Hello, world\";\r\nconsole.log(s);\r\nconsole.log(f());\r\nfunction f() {\r\n    return \"JS does hoists\";\r\n}\r\nvar N;\r\n(function (N) {\r\n    function f() {\r\n        console.log('testing');\r\n    }\r\n    f();\r\n})(N || (N = {}));\r\nvar normalC = (function () {\r\n    function normalC() {\r\n    }\r\n    normalC.prototype.method = function () { };\r\n    Object.defineProperty(normalC.prototype, \"c\", {\r\n        get: function () { return 10; },\r\n        set: function (val) { },\r\n        enumerable: false,\r\n        configurable: true\r\n    });\r\n    return normalC;\r\n}());\r\nvar normalN;\r\n(function (normalN) {\r\n    var C = (function () {\r\n        function C() {\r\n        }\r\n        return C;\r\n    }());\r\n    normalN.C = C;\r\n    function foo() { }\r\n    normalN.foo = foo;\r\n    var someNamespace;\r\n    (function (someNamespace) {\r\n        var C = (function () {\r\n            function C() {\r\n            }\r\n            return C;\r\n        }());\r\n        someNamespace.C = C;\r\n    })(someNamespace = normalN.someNamespace || (normalN.someNamespace = {}));\r\n    var someOther;\r\n    (function (someOther) {\r\n        var something;\r\n        (function (something) {\r\n            var someClass = (function () {\r\n                function someClass() {\r\n                }\r\n                return someClass;\r\n            }());\r\n            something.someClass = someClass;\r\n        })(something = someOther.something || (someOther.something = {}));\r\n    })(someOther = normalN.someOther || (normalN.someOther = {}));\r\n    normalN.someImport = someNamespace.C;\r\n    normalN.internalConst = 10;\r\n    var internalEnum;\r\n    (function (internalEnum) {\r\n        internalEnum[internalEnum[\"a\"] = 0] = \"a\";\r\n        internalEnum[internalEnum[\"b\"] = 1] = \"b\";\r\n        internalEnum[internalEnum[\"c\"] = 2] = \"c\";\r\n    })(internalEnum = normalN.internalEnum || (normalN.internalEnum = {}));\r\n})(normalN || (normalN = {}));\r\nvar internalC = (function () {\r\n    function internalC() {\r\n    }\r\n    return internalC;\r\n}());\r\nfunction internalfoo() { }\r\nvar internalNamespace;\r\n(function (internalNamespace) {\r\n    var someClass = (function () {\r\n        function someClass() {\r\n        }\r\n        return someClass;\r\n    }());\r\n    internalNamespace.someClass = someClass;\r\n})(internalNamespace || (internalNamespace = {}));\r\nvar internalOther;\r\n(function (internalOther) {\r\n    var something;\r\n    (function (something) {\r\n        var someClass = (function () {\r\n            function someClass() {\r\n            }\r\n            return someClass;\r\n        }());\r\n        something.someClass = someClass;\r\n    })(something = internalOther.something || (internalOther.something = {}));\r\n})(internalOther || (internalOther = {}));\r\nvar internalImport = internalNamespace.someClass;\r\nvar internalConst = 10;\r\nvar internalEnum;\r\n(function (internalEnum) {\r\n    internalEnum[internalEnum[\"a\"] = 0] = \"a\";\r\n    internalEnum[internalEnum[\"b\"] = 1] = \"b\";\r\n    internalEnum[internalEnum[\"c\"] = 2] = \"c\";\r\n})(internalEnum || (internalEnum = {}));\r\nvar C = (function () {\r\n    function C() {\r\n    }\r\n    C.prototype.doSomething = function () {\r\n        console.log(\"something got done\");\r\n    };\r\n    return C;\r\n}());\r\nvar c = new C();\r\nc.doSomething();\r\n//# sourceMappingURL=third-output.js.map",
+      "mapHash": "-8086338046-{\"version\":3,\"file\":\"third-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../../../first/first_PART1.ts\",\"../../../first/first_part2.ts\",\"../../../first/first_part3.ts\",\"../../../second/second_part1.ts\",\"../../../second/second_part2.ts\",\"../../third_part1.ts\"],\"names\":[],\"mappings\":\"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\"}"
     },
     "dts": {
       "sections": [
@@ -5393,11 +5437,27 @@ declare var c: C;
           "end": 295,
           "kind": "text"
         }
-      ]
+      ],
+      "hash": "12393711795-declare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\ndeclare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare class normalC {\r\n}\r\ndeclare namespace normalN {\r\n}\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\ndeclare var c: C;\r\n//# sourceMappingURL=third-output.d.ts.map",
+      "mapHash": "16014976674-{\"version\":3,\"file\":\"third-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../../../first/first_PART1.ts\",\"../../../first/first_part3.ts\",\"../../../second/second_part1.ts\",\"../../../second/second_part2.ts\",\"../../third_part1.ts\"],\"names\":[],\"mappings\":\"AAIA,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;ACRD,iBAAS,CAAC,WAET;ACFD,kBAAU,CAAC,CAAC;CAEX;AAED,kBAAU,CAAC,CAAC;CAMX;AAED,cAAM,OAAO;CAMZ;AACD,kBAAU,OAAO,CAAC;CASjB;AC5BD,cAAM,CAAC;IACH,WAAW;CAGd;ACJD,QAAA,IAAI,CAAC,GAAU,CAAC\"}"
     }
   },
+  "program": {
+    "fileNames": [
+      "../../third_part1.ts"
+    ],
+    "fileInfos": {
+      "../../third_part1.ts": "10470273651-var c = new C();\r\nc.doSomething();\r\n"
+    },
+    "options": {
+      "composite": true,
+      "outFile": "./third-output.js"
+    },
+    "outSignature": "20880580153-declare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\ndeclare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare class normalC {\r\n}\r\ndeclare namespace normalN {\r\n}\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\ndeclare var c: C;\r\n",
+    "dtsChangeTime": 36000
+  },
   "version": "FakeTSVersion",
-  "size": 724
+  "size": 8232
 }
 
 
@@ -5422,41 +5482,41 @@ console.log(s);
 
 Output::
 /lib/tsc --b /src/third --verbose
-[[90m12:00:48 AM[0m] Projects in this build: 
+[[90m12:00:54 AM[0m] Projects in this build: 
     * src/first/tsconfig.json
     * src/second/tsconfig.json
     * src/third/tsconfig.json
 
-[[90m12:00:49 AM[0m] Project 'src/first/tsconfig.json' is out of date because oldest output 'src/first/bin/first-output.js' is older than newest input 'src/first/first_PART1.ts'
+[[90m12:00:55 AM[0m] Project 'src/first/tsconfig.json' is out of date because output 'src/first/bin/first-output.tsbuildinfo' is older than input 'src/first/first_PART1.ts'
 
-[[90m12:00:50 AM[0m] Building project '/src/first/tsconfig.json'...
+[[90m12:00:56 AM[0m] Building project '/src/first/tsconfig.json'...
 
-[[90m12:00:58 AM[0m] Project 'src/second/tsconfig.json' is up to date because newest input 'src/second/second_part1.ts' is older than oldest output 'src/2/second-output.js.map'
+[[90m12:01:06 AM[0m] Project 'src/second/tsconfig.json' is up to date because newest input 'src/second/second_part1.ts' is older than output 'src/2/second-output.tsbuildinfo'
 
-[[90m12:00:59 AM[0m] Project 'src/third/tsconfig.json' is out of date because oldest output 'src/third/thirdjs/output/third-output.js.map' is older than newest input 'src/first'
+[[90m12:01:07 AM[0m] Project 'src/third/tsconfig.json' is out of date because output 'src/third/thirdjs/output/third-output.tsbuildinfo' is older than input 'src/first'
 
-[[90m12:01:00 AM[0m] Building project '/src/third/tsconfig.json'...
+[[90m12:01:08 AM[0m] Building project '/src/third/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 readFiles:: {
  "/src/third/tsconfig.json": 1,
  "/src/first/tsconfig.json": 1,
  "/src/second/tsconfig.json": 1,
+ "/src/first/bin/first-output.tsbuildinfo": 2,
  "/src/first/first_PART1.ts": 1,
  "/src/first/first_part2.ts": 1,
  "/src/first/first_part3.ts": 1,
- "/src/first/bin/first-output.d.ts": 2,
  "/src/2/second-output.tsbuildinfo": 1,
+ "/src/third/thirdjs/output/third-output.tsbuildinfo": 1,
+ "/src/first/bin/first-output.d.ts": 1,
  "/src/2/second-output.d.ts": 1,
  "/src/third/third_part1.ts": 1,
- "/src/first/bin/first-output.tsbuildinfo": 1,
  "/src/first/bin/first-output.js": 1,
  "/src/2/second-output.js": 1,
  "/src/first/bin/first-output.js.map": 1,
  "/src/2/second-output.js.map": 1,
  "/src/first/bin/first-output.d.ts.map": 1,
- "/src/2/second-output.d.ts.map": 1,
- "/src/third/thirdjs/output/third-output.d.ts": 1
+ "/src/2/second-output.d.ts.map": 1
 } 
 
 //// [/src/first/bin/first-output.d.ts]
@@ -5760,7 +5820,7 @@ sourceFile:../first_part3.ts
 >>>//# sourceMappingURL=first-output.js.map
 
 //// [/src/first/bin/first-output.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"..","sourceFiles":["../first_PART1.ts","../first_part2.ts","../first_part3.ts"],"js":{"sections":[{"pos":0,"end":109,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":39,"kind":"internal"},{"pos":41,"end":156,"kind":"text"}]}},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"..","sourceFiles":["../first_PART1.ts","../first_part2.ts","../first_part3.ts"],"js":{"sections":[{"pos":0,"end":109,"kind":"text"}],"mapHash":"-23743024037-{\"version\":3,\"file\":\"first-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../first_PART1.ts\",\"../first_part2.ts\",\"../first_part3.ts\"],\"names\":[],\"mappings\":\"AAIA,IAAM,CAAC,GAAG,aAAa,CAAC;AAMxB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;ACVf,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC\"}","hash":"-17751605528-var s = \"Hola, world\";\r\nconsole.log(s);\r\nconsole.log(f());\r\nfunction f() {\r\n    return \"JS does hoists\";\r\n}\r\n//# sourceMappingURL=first-output.js.map"},"dts":{"sections":[{"pos":0,"end":39,"kind":"internal"},{"pos":41,"end":156,"kind":"text"}],"mapHash":"26096235382-{\"version\":3,\"file\":\"first-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../first_PART1.ts\",\"../first_part2.ts\",\"../first_part3.ts\"],\"names\":[],\"mappings\":\"AAAc,UAAU,QAAQ;IAC5B,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,gBAAgB,CAAC;AAExB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;AERD,iBAAS,CAAC,WAET\"}","hash":"-15939443882-interface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hola, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\n//# sourceMappingURL=first-output.d.ts.map"}},"program":{"fileNames":["../first_part1.ts","../first_part2.ts","../first_part3.ts"],"fileInfos":["-12716948804-/*@internal*/ interface TheFirst {\r\n    none: any;\r\n}\r\n\r\nconst s = \"Hola, world\";\r\n\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\n\r\nconsole.log(s);\r\n","4973778178-console.log(f());\r\n","6202806249-function f() {\r\n    return \"JS does hoists\";\r\n}"],"options":{"composite":true,"outFile":"./first-output.js"},"outSignature":"-11343140977-interface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hola, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\n","dtsChangeTime":57000},"version":"FakeTSVersion"}
 
 //// [/src/first/bin/first-output.tsbuildinfo.baseline.txt]
 ======================================================================
@@ -5808,7 +5868,9 @@ declare function f(): string;
           "end": 109,
           "kind": "text"
         }
-      ]
+      ],
+      "hash": "-17751605528-var s = \"Hola, world\";\r\nconsole.log(s);\r\nconsole.log(f());\r\nfunction f() {\r\n    return \"JS does hoists\";\r\n}\r\n//# sourceMappingURL=first-output.js.map",
+      "mapHash": "-23743024037-{\"version\":3,\"file\":\"first-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../first_PART1.ts\",\"../first_part2.ts\",\"../first_part3.ts\"],\"names\":[],\"mappings\":\"AAIA,IAAM,CAAC,GAAG,aAAa,CAAC;AAMxB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;ACVf,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC\"}"
     },
     "dts": {
       "sections": [
@@ -5822,11 +5884,31 @@ declare function f(): string;
           "end": 156,
           "kind": "text"
         }
-      ]
+      ],
+      "hash": "-15939443882-interface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hola, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\n//# sourceMappingURL=first-output.d.ts.map",
+      "mapHash": "26096235382-{\"version\":3,\"file\":\"first-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../first_PART1.ts\",\"../first_part2.ts\",\"../first_part3.ts\"],\"names\":[],\"mappings\":\"AAAc,UAAU,QAAQ;IAC5B,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,gBAAgB,CAAC;AAExB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;AERD,iBAAS,CAAC,WAET\"}"
     }
   },
+  "program": {
+    "fileNames": [
+      "../first_part1.ts",
+      "../first_part2.ts",
+      "../first_part3.ts"
+    ],
+    "fileInfos": {
+      "../first_part1.ts": "-12716948804-/*@internal*/ interface TheFirst {\r\n    none: any;\r\n}\r\n\r\nconst s = \"Hola, world\";\r\n\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\n\r\nconsole.log(s);\r\n",
+      "../first_part2.ts": "4973778178-console.log(f());\r\n",
+      "../first_part3.ts": "6202806249-function f() {\r\n    return \"JS does hoists\";\r\n}"
+    },
+    "options": {
+      "composite": true,
+      "outFile": "./first-output.js"
+    },
+    "outSignature": "-11343140977-interface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hola, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\n",
+    "dtsChangeTime": 57000
+  },
   "version": "FakeTSVersion",
-  "size": 290
+  "size": 2113
 }
 
 //// [/src/third/thirdjs/output/third-output.d.ts]
@@ -7866,7 +7948,7 @@ sourceFile:../../third_part1.ts
 >>>//# sourceMappingURL=third-output.js.map
 
 //// [/src/third/thirdjs/output/third-output.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"../..","sourceFiles":["../../third_part1.ts"],"js":{"sections":[{"pos":0,"end":109,"kind":"prepend","data":"../../../first/bin/first-output.js","texts":[{"pos":0,"end":109,"kind":"text"}]},{"pos":109,"end":3162,"kind":"prepend","data":"../../../2/second-output.js","texts":[{"pos":109,"end":3162,"kind":"text"}]},{"pos":3162,"end":3198,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":115,"kind":"prepend","data":"../../../first/bin/first-output.d.ts","texts":[{"pos":0,"end":115,"kind":"text"}]},{"pos":115,"end":275,"kind":"prepend","data":"../../../2/second-output.d.ts","texts":[{"pos":115,"end":275,"kind":"text"}]},{"pos":275,"end":294,"kind":"text"}]}},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"../..","sourceFiles":["../../third_part1.ts"],"js":{"sections":[{"pos":0,"end":109,"kind":"prepend","data":"../../../first/bin/first-output.js","texts":[{"pos":0,"end":109,"kind":"text"}]},{"pos":109,"end":3162,"kind":"prepend","data":"../../../2/second-output.js","texts":[{"pos":109,"end":3162,"kind":"text"}]},{"pos":3162,"end":3198,"kind":"text"}],"mapHash":"175025764412-{\"version\":3,\"file\":\"third-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../../../first/first_PART1.ts\",\"../../../first/first_part2.ts\",\"../../../first/first_part3.ts\",\"../../../second/second_part1.ts\",\"../../../second/second_part2.ts\",\"../../third_part1.ts\"],\"names\":[],\"mappings\":\"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\"}","hash":"-77350621790-var s = \"Hola, world\";\r\nconsole.log(s);\r\nconsole.log(f());\r\nfunction f() {\r\n    return \"JS does hoists\";\r\n}\r\nvar N;\r\n(function (N) {\r\n    function f() {\r\n        console.log('testing');\r\n    }\r\n    f();\r\n})(N || (N = {}));\r\nvar normalC = (function () {\r\n    function normalC() {\r\n    }\r\n    normalC.prototype.method = function () { };\r\n    Object.defineProperty(normalC.prototype, \"c\", {\r\n        get: function () { return 10; },\r\n        set: function (val) { },\r\n        enumerable: false,\r\n        configurable: true\r\n    });\r\n    return normalC;\r\n}());\r\nvar normalN;\r\n(function (normalN) {\r\n    var C = (function () {\r\n        function C() {\r\n        }\r\n        return C;\r\n    }());\r\n    normalN.C = C;\r\n    function foo() { }\r\n    normalN.foo = foo;\r\n    var someNamespace;\r\n    (function (someNamespace) {\r\n        var C = (function () {\r\n            function C() {\r\n            }\r\n            return C;\r\n        }());\r\n        someNamespace.C = C;\r\n    })(someNamespace = normalN.someNamespace || (normalN.someNamespace = {}));\r\n    var someOther;\r\n    (function (someOther) {\r\n        var something;\r\n        (function (something) {\r\n            var someClass = (function () {\r\n                function someClass() {\r\n                }\r\n                return someClass;\r\n            }());\r\n            something.someClass = someClass;\r\n        })(something = someOther.something || (someOther.something = {}));\r\n    })(someOther = normalN.someOther || (normalN.someOther = {}));\r\n    normalN.someImport = someNamespace.C;\r\n    normalN.internalConst = 10;\r\n    var internalEnum;\r\n    (function (internalEnum) {\r\n        internalEnum[internalEnum[\"a\"] = 0] = \"a\";\r\n        internalEnum[internalEnum[\"b\"] = 1] = \"b\";\r\n        internalEnum[internalEnum[\"c\"] = 2] = \"c\";\r\n    })(internalEnum = normalN.internalEnum || (normalN.internalEnum = {}));\r\n})(normalN || (normalN = {}));\r\nvar internalC = (function () {\r\n    function internalC() {\r\n    }\r\n    return internalC;\r\n}());\r\nfunction internalfoo() { }\r\nvar internalNamespace;\r\n(function (internalNamespace) {\r\n    var someClass = (function () {\r\n        function someClass() {\r\n        }\r\n        return someClass;\r\n    }());\r\n    internalNamespace.someClass = someClass;\r\n})(internalNamespace || (internalNamespace = {}));\r\nvar internalOther;\r\n(function (internalOther) {\r\n    var something;\r\n    (function (something) {\r\n        var someClass = (function () {\r\n            function someClass() {\r\n            }\r\n            return someClass;\r\n        }());\r\n        something.someClass = someClass;\r\n    })(something = internalOther.something || (internalOther.something = {}));\r\n})(internalOther || (internalOther = {}));\r\nvar internalImport = internalNamespace.someClass;\r\nvar internalConst = 10;\r\nvar internalEnum;\r\n(function (internalEnum) {\r\n    internalEnum[internalEnum[\"a\"] = 0] = \"a\";\r\n    internalEnum[internalEnum[\"b\"] = 1] = \"b\";\r\n    internalEnum[internalEnum[\"c\"] = 2] = \"c\";\r\n})(internalEnum || (internalEnum = {}));\r\nvar C = (function () {\r\n    function C() {\r\n    }\r\n    C.prototype.doSomething = function () {\r\n        console.log(\"something got done\");\r\n    };\r\n    return C;\r\n}());\r\nvar c = new C();\r\nc.doSomething();\r\n//# sourceMappingURL=third-output.js.map"},"dts":{"sections":[{"pos":0,"end":115,"kind":"prepend","data":"../../../first/bin/first-output.d.ts","texts":[{"pos":0,"end":115,"kind":"text"}]},{"pos":115,"end":275,"kind":"prepend","data":"../../../2/second-output.d.ts","texts":[{"pos":115,"end":275,"kind":"text"}]},{"pos":275,"end":294,"kind":"text"}],"mapHash":"-7558054436-{\"version\":3,\"file\":\"third-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../../../first/first_PART1.ts\",\"../../../first/first_part3.ts\",\"../../../second/second_part1.ts\",\"../../../second/second_part2.ts\",\"../../third_part1.ts\"],\"names\":[],\"mappings\":\"AAIA,QAAA,MAAM,CAAC,gBAAgB,CAAC;AAExB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;ACRD,iBAAS,CAAC,WAET;ACFD,kBAAU,CAAC,CAAC;CAEX;AAED,kBAAU,CAAC,CAAC;CAMX;AAED,cAAM,OAAO;CAMZ;AACD,kBAAU,OAAO,CAAC;CASjB;AC5BD,cAAM,CAAC;IACH,WAAW;CAGd;ACJD,QAAA,IAAI,CAAC,GAAU,CAAC\"}","hash":"-3056724381-declare const s = \"Hola, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\ndeclare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare class normalC {\r\n}\r\ndeclare namespace normalN {\r\n}\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\ndeclare var c: C;\r\n//# sourceMappingURL=third-output.d.ts.map"}},"program":{"fileNames":["../../third_part1.ts"],"fileInfos":["10470273651-var c = new C();\r\nc.doSomething();\r\n"],"options":{"composite":true,"outFile":"./third-output.js"},"outSignature":"16720646121-declare const s = \"Hola, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\ndeclare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare class normalC {\r\n}\r\ndeclare namespace normalN {\r\n}\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\ndeclare var c: C;\r\n","dtsChangeTime":69000},"version":"FakeTSVersion"}
 
 //// [/src/third/thirdjs/output/third-output.tsbuildinfo.baseline.txt]
 ======================================================================
@@ -8069,7 +8151,9 @@ declare var c: C;
           "end": 3198,
           "kind": "text"
         }
-      ]
+      ],
+      "hash": "-77350621790-var s = \"Hola, world\";\r\nconsole.log(s);\r\nconsole.log(f());\r\nfunction f() {\r\n    return \"JS does hoists\";\r\n}\r\nvar N;\r\n(function (N) {\r\n    function f() {\r\n        console.log('testing');\r\n    }\r\n    f();\r\n})(N || (N = {}));\r\nvar normalC = (function () {\r\n    function normalC() {\r\n    }\r\n    normalC.prototype.method = function () { };\r\n    Object.defineProperty(normalC.prototype, \"c\", {\r\n        get: function () { return 10; },\r\n        set: function (val) { },\r\n        enumerable: false,\r\n        configurable: true\r\n    });\r\n    return normalC;\r\n}());\r\nvar normalN;\r\n(function (normalN) {\r\n    var C = (function () {\r\n        function C() {\r\n        }\r\n        return C;\r\n    }());\r\n    normalN.C = C;\r\n    function foo() { }\r\n    normalN.foo = foo;\r\n    var someNamespace;\r\n    (function (someNamespace) {\r\n        var C = (function () {\r\n            function C() {\r\n            }\r\n            return C;\r\n        }());\r\n        someNamespace.C = C;\r\n    })(someNamespace = normalN.someNamespace || (normalN.someNamespace = {}));\r\n    var someOther;\r\n    (function (someOther) {\r\n        var something;\r\n        (function (something) {\r\n            var someClass = (function () {\r\n                function someClass() {\r\n                }\r\n                return someClass;\r\n            }());\r\n            something.someClass = someClass;\r\n        })(something = someOther.something || (someOther.something = {}));\r\n    })(someOther = normalN.someOther || (normalN.someOther = {}));\r\n    normalN.someImport = someNamespace.C;\r\n    normalN.internalConst = 10;\r\n    var internalEnum;\r\n    (function (internalEnum) {\r\n        internalEnum[internalEnum[\"a\"] = 0] = \"a\";\r\n        internalEnum[internalEnum[\"b\"] = 1] = \"b\";\r\n        internalEnum[internalEnum[\"c\"] = 2] = \"c\";\r\n    })(internalEnum = normalN.internalEnum || (normalN.internalEnum = {}));\r\n})(normalN || (normalN = {}));\r\nvar internalC = (function () {\r\n    function internalC() {\r\n    }\r\n    return internalC;\r\n}());\r\nfunction internalfoo() { }\r\nvar internalNamespace;\r\n(function (internalNamespace) {\r\n    var someClass = (function () {\r\n        function someClass() {\r\n        }\r\n        return someClass;\r\n    }());\r\n    internalNamespace.someClass = someClass;\r\n})(internalNamespace || (internalNamespace = {}));\r\nvar internalOther;\r\n(function (internalOther) {\r\n    var something;\r\n    (function (something) {\r\n        var someClass = (function () {\r\n            function someClass() {\r\n            }\r\n            return someClass;\r\n        }());\r\n        something.someClass = someClass;\r\n    })(something = internalOther.something || (internalOther.something = {}));\r\n})(internalOther || (internalOther = {}));\r\nvar internalImport = internalNamespace.someClass;\r\nvar internalConst = 10;\r\nvar internalEnum;\r\n(function (internalEnum) {\r\n    internalEnum[internalEnum[\"a\"] = 0] = \"a\";\r\n    internalEnum[internalEnum[\"b\"] = 1] = \"b\";\r\n    internalEnum[internalEnum[\"c\"] = 2] = \"c\";\r\n})(internalEnum || (internalEnum = {}));\r\nvar C = (function () {\r\n    function C() {\r\n    }\r\n    C.prototype.doSomething = function () {\r\n        console.log(\"something got done\");\r\n    };\r\n    return C;\r\n}());\r\nvar c = new C();\r\nc.doSomething();\r\n//# sourceMappingURL=third-output.js.map",
+      "mapHash": "175025764412-{\"version\":3,\"file\":\"third-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../../../first/first_PART1.ts\",\"../../../first/first_part2.ts\",\"../../../first/first_part3.ts\",\"../../../second/second_part1.ts\",\"../../../second/second_part2.ts\",\"../../third_part1.ts\"],\"names\":[],\"mappings\":\"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\"}"
     },
     "dts": {
       "sections": [
@@ -8104,11 +8188,27 @@ declare var c: C;
           "end": 294,
           "kind": "text"
         }
-      ]
+      ],
+      "hash": "-3056724381-declare const s = \"Hola, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\ndeclare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare class normalC {\r\n}\r\ndeclare namespace normalN {\r\n}\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\ndeclare var c: C;\r\n//# sourceMappingURL=third-output.d.ts.map",
+      "mapHash": "-7558054436-{\"version\":3,\"file\":\"third-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../../../first/first_PART1.ts\",\"../../../first/first_part3.ts\",\"../../../second/second_part1.ts\",\"../../../second/second_part2.ts\",\"../../third_part1.ts\"],\"names\":[],\"mappings\":\"AAIA,QAAA,MAAM,CAAC,gBAAgB,CAAC;AAExB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;ACRD,iBAAS,CAAC,WAET;ACFD,kBAAU,CAAC,CAAC;CAEX;AAED,kBAAU,CAAC,CAAC;CAMX;AAED,cAAM,OAAO;CAMZ;AACD,kBAAU,OAAO,CAAC;CASjB;AC5BD,cAAM,CAAC;IACH,WAAW;CAGd;ACJD,QAAA,IAAI,CAAC,GAAU,CAAC\"}"
     }
   },
+  "program": {
+    "fileNames": [
+      "../../third_part1.ts"
+    ],
+    "fileInfos": {
+      "../../third_part1.ts": "10470273651-var c = new C();\r\nc.doSomething();\r\n"
+    },
+    "options": {
+      "composite": true,
+      "outFile": "./third-output.js"
+    },
+    "outSignature": "16720646121-declare const s = \"Hola, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\ndeclare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare class normalC {\r\n}\r\ndeclare namespace normalN {\r\n}\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\ndeclare var c: C;\r\n",
+    "dtsChangeTime": 69000
+  },
   "version": "FakeTSVersion",
-  "size": 724
+  "size": 8230
 }
 
 
@@ -8133,43 +8233,41 @@ console.log(s);
 
 Output::
 /lib/tsc --b /src/third --verbose
-[[90m12:01:13 AM[0m] Projects in this build: 
+[[90m12:01:23 AM[0m] Projects in this build: 
     * src/first/tsconfig.json
     * src/second/tsconfig.json
     * src/third/tsconfig.json
 
-[[90m12:01:14 AM[0m] Project 'src/first/tsconfig.json' is out of date because oldest output 'src/first/bin/first-output.js' is older than newest input 'src/first/first_PART1.ts'
+[[90m12:01:24 AM[0m] Project 'src/first/tsconfig.json' is out of date because output 'src/first/bin/first-output.tsbuildinfo' is older than input 'src/first/first_PART1.ts'
 
-[[90m12:01:15 AM[0m] Building project '/src/first/tsconfig.json'...
+[[90m12:01:25 AM[0m] Building project '/src/first/tsconfig.json'...
 
-[[90m12:01:23 AM[0m] Project 'src/second/tsconfig.json' is up to date because newest input 'src/second/second_part1.ts' is older than oldest output 'src/2/second-output.js.map'
+[[90m12:01:34 AM[0m] Project 'src/second/tsconfig.json' is up to date because newest input 'src/second/second_part1.ts' is older than output 'src/2/second-output.tsbuildinfo'
 
-[[90m12:01:24 AM[0m] Project 'src/third/tsconfig.json' is out of date because output of its dependency 'src/first' has changed
+[[90m12:01:35 AM[0m] Project 'src/third/tsconfig.json' is out of date because output of its dependency 'src/first' has changed
 
-[[90m12:01:25 AM[0m] Updating output of project '/src/third/tsconfig.json'...
-
-[[90m12:01:30 AM[0m] Updating unchanged output timestamps of project '/src/third/tsconfig.json'...
+[[90m12:01:36 AM[0m] Updating output of project '/src/third/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 readFiles:: {
  "/src/third/tsconfig.json": 1,
  "/src/first/tsconfig.json": 1,
  "/src/second/tsconfig.json": 1,
+ "/src/first/bin/first-output.tsbuildinfo": 2,
  "/src/first/first_PART1.ts": 1,
  "/src/first/first_part2.ts": 1,
  "/src/first/first_part3.ts": 1,
- "/src/first/bin/first-output.d.ts": 1,
  "/src/2/second-output.tsbuildinfo": 1,
  "/src/third/thirdjs/output/third-output.tsbuildinfo": 1,
  "/src/third/thirdjs/output/third-output.js": 1,
  "/src/third/thirdjs/output/third-output.js.map": 1,
  "/src/third/thirdjs/output/third-output.d.ts": 1,
  "/src/third/thirdjs/output/third-output.d.ts.map": 1,
- "/src/first/bin/first-output.tsbuildinfo": 1,
  "/src/first/bin/first-output.js": 1,
  "/src/2/second-output.js": 1,
  "/src/first/bin/first-output.js.map": 1,
  "/src/2/second-output.js.map": 1,
+ "/src/first/bin/first-output.d.ts": 1,
  "/src/2/second-output.d.ts": 1,
  "/src/first/bin/first-output.d.ts.map": 1,
  "/src/2/second-output.d.ts.map": 1
@@ -8364,7 +8462,7 @@ sourceFile:../first_part3.ts
 >>>//# sourceMappingURL=first-output.js.map
 
 //// [/src/first/bin/first-output.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"..","sourceFiles":["../first_PART1.ts","../first_part2.ts","../first_part3.ts"],"js":{"sections":[{"pos":0,"end":126,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":39,"kind":"internal"},{"pos":41,"end":156,"kind":"text"}]}},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"..","sourceFiles":["../first_PART1.ts","../first_part2.ts","../first_part3.ts"],"js":{"sections":[{"pos":0,"end":126,"kind":"text"}],"mapHash":"-32659542769-{\"version\":3,\"file\":\"first-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../first_PART1.ts\",\"../first_part2.ts\",\"../first_part3.ts\"],\"names\":[],\"mappings\":\"AAIA,IAAM,CAAC,GAAG,aAAa,CAAC;AAMxB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;AACf,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;ACXf,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC\"}","hash":"8404444065-var s = \"Hola, world\";\r\nconsole.log(s);\r\nconsole.log(s);\r\nconsole.log(f());\r\nfunction f() {\r\n    return \"JS does hoists\";\r\n}\r\n//# sourceMappingURL=first-output.js.map"},"dts":{"sections":[{"pos":0,"end":39,"kind":"internal"},{"pos":41,"end":156,"kind":"text"}],"mapHash":"26096235382-{\"version\":3,\"file\":\"first-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../first_PART1.ts\",\"../first_part2.ts\",\"../first_part3.ts\"],\"names\":[],\"mappings\":\"AAAc,UAAU,QAAQ;IAC5B,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,gBAAgB,CAAC;AAExB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;AERD,iBAAS,CAAC,WAET\"}","hash":"-15939443882-interface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hola, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\n//# sourceMappingURL=first-output.d.ts.map"}},"program":{"fileNames":["../first_part1.ts","../first_part2.ts","../first_part3.ts"],"fileInfos":["-9838630498-/*@internal*/ interface TheFirst {\r\n    none: any;\r\n}\r\n\r\nconst s = \"Hola, world\";\r\n\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\n\r\nconsole.log(s);\r\nconsole.log(s);","4973778178-console.log(f());\r\n","6202806249-function f() {\r\n    return \"JS does hoists\";\r\n}"],"options":{"composite":true,"outFile":"./first-output.js"},"outSignature":"-11343140977-interface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hola, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\n","dtsChangeTime":57000},"version":"FakeTSVersion"}
 
 //// [/src/first/bin/first-output.tsbuildinfo.baseline.txt]
 ======================================================================
@@ -8413,7 +8511,9 @@ declare function f(): string;
           "end": 126,
           "kind": "text"
         }
-      ]
+      ],
+      "hash": "8404444065-var s = \"Hola, world\";\r\nconsole.log(s);\r\nconsole.log(s);\r\nconsole.log(f());\r\nfunction f() {\r\n    return \"JS does hoists\";\r\n}\r\n//# sourceMappingURL=first-output.js.map",
+      "mapHash": "-32659542769-{\"version\":3,\"file\":\"first-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../first_PART1.ts\",\"../first_part2.ts\",\"../first_part3.ts\"],\"names\":[],\"mappings\":\"AAIA,IAAM,CAAC,GAAG,aAAa,CAAC;AAMxB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;AACf,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;ACXf,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC\"}"
     },
     "dts": {
       "sections": [
@@ -8427,15 +8527,33 @@ declare function f(): string;
           "end": 156,
           "kind": "text"
         }
-      ]
+      ],
+      "hash": "-15939443882-interface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hola, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\n//# sourceMappingURL=first-output.d.ts.map",
+      "mapHash": "26096235382-{\"version\":3,\"file\":\"first-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../first_PART1.ts\",\"../first_part2.ts\",\"../first_part3.ts\"],\"names\":[],\"mappings\":\"AAAc,UAAU,QAAQ;IAC5B,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,gBAAgB,CAAC;AAExB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;AERD,iBAAS,CAAC,WAET\"}"
     }
   },
+  "program": {
+    "fileNames": [
+      "../first_part1.ts",
+      "../first_part2.ts",
+      "../first_part3.ts"
+    ],
+    "fileInfos": {
+      "../first_part1.ts": "-9838630498-/*@internal*/ interface TheFirst {\r\n    none: any;\r\n}\r\n\r\nconst s = \"Hola, world\";\r\n\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\n\r\nconsole.log(s);\r\nconsole.log(s);",
+      "../first_part2.ts": "4973778178-console.log(f());\r\n",
+      "../first_part3.ts": "6202806249-function f() {\r\n    return \"JS does hoists\";\r\n}"
+    },
+    "options": {
+      "composite": true,
+      "outFile": "./first-output.js"
+    },
+    "outSignature": "-11343140977-interface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hola, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\n",
+    "dtsChangeTime": 57000
+  },
   "version": "FakeTSVersion",
-  "size": 290
+  "size": 2184
 }
 
-//// [/src/third/thirdjs/output/third-output.d.ts] file changed its modified time
-//// [/src/third/thirdjs/output/third-output.d.ts.map] file changed its modified time
 //// [/src/third/thirdjs/output/third-output.js]
 var s = "Hola, world";
 console.log(s);
@@ -10216,7 +10334,7 @@ sourceFile:../../third_part1.ts
 >>>//# sourceMappingURL=third-output.js.map
 
 //// [/src/third/thirdjs/output/third-output.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"../..","sourceFiles":["../../third_part1.ts"],"js":{"sections":[{"pos":0,"end":126,"kind":"prepend","data":"../../../first/bin/first-output.js","texts":[{"pos":0,"end":126,"kind":"text"}]},{"pos":126,"end":3179,"kind":"prepend","data":"../../../2/second-output.js","texts":[{"pos":126,"end":3179,"kind":"text"}]},{"pos":3179,"end":3215,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":115,"kind":"prepend","data":"../../../first/bin/first-output.d.ts","texts":[{"pos":0,"end":115,"kind":"text"}]},{"pos":115,"end":275,"kind":"prepend","data":"../../../2/second-output.d.ts","texts":[{"pos":115,"end":275,"kind":"text"}]},{"pos":275,"end":294,"kind":"text"}]}},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"../..","sourceFiles":["../../third_part1.ts"],"js":{"sections":[{"pos":0,"end":126,"kind":"prepend","data":"../../../first/bin/first-output.js","texts":[{"pos":0,"end":126,"kind":"text"}]},{"pos":126,"end":3179,"kind":"prepend","data":"../../../2/second-output.js","texts":[{"pos":126,"end":3179,"kind":"text"}]},{"pos":3179,"end":3215,"kind":"text"}],"mapHash":"-121698117904-{\"version\":3,\"file\":\"third-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../../../first/first_PART1.ts\",\"../../../first/first_part2.ts\",\"../../../first/first_part3.ts\",\"../../../second/second_part1.ts\",\"../../../second/second_part2.ts\",\"../../third_part1.ts\"],\"names\":[],\"mappings\":\"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\"}","hash":"12439878523-var s = \"Hola, world\";\r\nconsole.log(s);\r\nconsole.log(s);\r\nconsole.log(f());\r\nfunction f() {\r\n    return \"JS does hoists\";\r\n}\r\nvar N;\r\n(function (N) {\r\n    function f() {\r\n        console.log('testing');\r\n    }\r\n    f();\r\n})(N || (N = {}));\r\nvar normalC = (function () {\r\n    function normalC() {\r\n    }\r\n    normalC.prototype.method = function () { };\r\n    Object.defineProperty(normalC.prototype, \"c\", {\r\n        get: function () { return 10; },\r\n        set: function (val) { },\r\n        enumerable: false,\r\n        configurable: true\r\n    });\r\n    return normalC;\r\n}());\r\nvar normalN;\r\n(function (normalN) {\r\n    var C = (function () {\r\n        function C() {\r\n        }\r\n        return C;\r\n    }());\r\n    normalN.C = C;\r\n    function foo() { }\r\n    normalN.foo = foo;\r\n    var someNamespace;\r\n    (function (someNamespace) {\r\n        var C = (function () {\r\n            function C() {\r\n            }\r\n            return C;\r\n        }());\r\n        someNamespace.C = C;\r\n    })(someNamespace = normalN.someNamespace || (normalN.someNamespace = {}));\r\n    var someOther;\r\n    (function (someOther) {\r\n        var something;\r\n        (function (something) {\r\n            var someClass = (function () {\r\n                function someClass() {\r\n                }\r\n                return someClass;\r\n            }());\r\n            something.someClass = someClass;\r\n        })(something = someOther.something || (someOther.something = {}));\r\n    })(someOther = normalN.someOther || (normalN.someOther = {}));\r\n    normalN.someImport = someNamespace.C;\r\n    normalN.internalConst = 10;\r\n    var internalEnum;\r\n    (function (internalEnum) {\r\n        internalEnum[internalEnum[\"a\"] = 0] = \"a\";\r\n        internalEnum[internalEnum[\"b\"] = 1] = \"b\";\r\n        internalEnum[internalEnum[\"c\"] = 2] = \"c\";\r\n    })(internalEnum = normalN.internalEnum || (normalN.internalEnum = {}));\r\n})(normalN || (normalN = {}));\r\nvar internalC = (function () {\r\n    function internalC() {\r\n    }\r\n    return internalC;\r\n}());\r\nfunction internalfoo() { }\r\nvar internalNamespace;\r\n(function (internalNamespace) {\r\n    var someClass = (function () {\r\n        function someClass() {\r\n        }\r\n        return someClass;\r\n    }());\r\n    internalNamespace.someClass = someClass;\r\n})(internalNamespace || (internalNamespace = {}));\r\nvar internalOther;\r\n(function (internalOther) {\r\n    var something;\r\n    (function (something) {\r\n        var someClass = (function () {\r\n            function someClass() {\r\n            }\r\n            return someClass;\r\n        }());\r\n        something.someClass = someClass;\r\n    })(something = internalOther.something || (internalOther.something = {}));\r\n})(internalOther || (internalOther = {}));\r\nvar internalImport = internalNamespace.someClass;\r\nvar internalConst = 10;\r\nvar internalEnum;\r\n(function (internalEnum) {\r\n    internalEnum[internalEnum[\"a\"] = 0] = \"a\";\r\n    internalEnum[internalEnum[\"b\"] = 1] = \"b\";\r\n    internalEnum[internalEnum[\"c\"] = 2] = \"c\";\r\n})(internalEnum || (internalEnum = {}));\r\nvar C = (function () {\r\n    function C() {\r\n    }\r\n    C.prototype.doSomething = function () {\r\n        console.log(\"something got done\");\r\n    };\r\n    return C;\r\n}());\r\nvar c = new C();\r\nc.doSomething();\r\n//# sourceMappingURL=third-output.js.map"},"dts":{"sections":[{"pos":0,"end":115,"kind":"prepend","data":"../../../first/bin/first-output.d.ts","texts":[{"pos":0,"end":115,"kind":"text"}]},{"pos":115,"end":275,"kind":"prepend","data":"../../../2/second-output.d.ts","texts":[{"pos":115,"end":275,"kind":"text"}]},{"pos":275,"end":294,"kind":"text"}],"mapHash":"-7558054436-{\"version\":3,\"file\":\"third-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../../../first/first_PART1.ts\",\"../../../first/first_part3.ts\",\"../../../second/second_part1.ts\",\"../../../second/second_part2.ts\",\"../../third_part1.ts\"],\"names\":[],\"mappings\":\"AAIA,QAAA,MAAM,CAAC,gBAAgB,CAAC;AAExB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;ACRD,iBAAS,CAAC,WAET;ACFD,kBAAU,CAAC,CAAC;CAEX;AAED,kBAAU,CAAC,CAAC;CAMX;AAED,cAAM,OAAO;CAMZ;AACD,kBAAU,OAAO,CAAC;CASjB;AC5BD,cAAM,CAAC;IACH,WAAW;CAGd;ACJD,QAAA,IAAI,CAAC,GAAU,CAAC\"}","hash":"-3056724381-declare const s = \"Hola, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\ndeclare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare class normalC {\r\n}\r\ndeclare namespace normalN {\r\n}\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\ndeclare var c: C;\r\n//# sourceMappingURL=third-output.d.ts.map"}},"program":{"fileNames":["../../third_part1.ts"],"fileInfos":["10470273651-var c = new C();\r\nc.doSomething();\r\n"],"options":{"composite":true,"outFile":"./third-output.js"},"outSignature":"16720646121-declare const s = \"Hola, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\ndeclare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare class normalC {\r\n}\r\ndeclare namespace normalN {\r\n}\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\ndeclare var c: C;\r\n","dtsChangeTime":69000},"version":"FakeTSVersion"}
 
 //// [/src/third/thirdjs/output/third-output.tsbuildinfo.baseline.txt]
 ======================================================================
@@ -10420,7 +10538,9 @@ declare var c: C;
           "end": 3215,
           "kind": "text"
         }
-      ]
+      ],
+      "hash": "12439878523-var s = \"Hola, world\";\r\nconsole.log(s);\r\nconsole.log(s);\r\nconsole.log(f());\r\nfunction f() {\r\n    return \"JS does hoists\";\r\n}\r\nvar N;\r\n(function (N) {\r\n    function f() {\r\n        console.log('testing');\r\n    }\r\n    f();\r\n})(N || (N = {}));\r\nvar normalC = (function () {\r\n    function normalC() {\r\n    }\r\n    normalC.prototype.method = function () { };\r\n    Object.defineProperty(normalC.prototype, \"c\", {\r\n        get: function () { return 10; },\r\n        set: function (val) { },\r\n        enumerable: false,\r\n        configurable: true\r\n    });\r\n    return normalC;\r\n}());\r\nvar normalN;\r\n(function (normalN) {\r\n    var C = (function () {\r\n        function C() {\r\n        }\r\n        return C;\r\n    }());\r\n    normalN.C = C;\r\n    function foo() { }\r\n    normalN.foo = foo;\r\n    var someNamespace;\r\n    (function (someNamespace) {\r\n        var C = (function () {\r\n            function C() {\r\n            }\r\n            return C;\r\n        }());\r\n        someNamespace.C = C;\r\n    })(someNamespace = normalN.someNamespace || (normalN.someNamespace = {}));\r\n    var someOther;\r\n    (function (someOther) {\r\n        var something;\r\n        (function (something) {\r\n            var someClass = (function () {\r\n                function someClass() {\r\n                }\r\n                return someClass;\r\n            }());\r\n            something.someClass = someClass;\r\n        })(something = someOther.something || (someOther.something = {}));\r\n    })(someOther = normalN.someOther || (normalN.someOther = {}));\r\n    normalN.someImport = someNamespace.C;\r\n    normalN.internalConst = 10;\r\n    var internalEnum;\r\n    (function (internalEnum) {\r\n        internalEnum[internalEnum[\"a\"] = 0] = \"a\";\r\n        internalEnum[internalEnum[\"b\"] = 1] = \"b\";\r\n        internalEnum[internalEnum[\"c\"] = 2] = \"c\";\r\n    })(internalEnum = normalN.internalEnum || (normalN.internalEnum = {}));\r\n})(normalN || (normalN = {}));\r\nvar internalC = (function () {\r\n    function internalC() {\r\n    }\r\n    return internalC;\r\n}());\r\nfunction internalfoo() { }\r\nvar internalNamespace;\r\n(function (internalNamespace) {\r\n    var someClass = (function () {\r\n        function someClass() {\r\n        }\r\n        return someClass;\r\n    }());\r\n    internalNamespace.someClass = someClass;\r\n})(internalNamespace || (internalNamespace = {}));\r\nvar internalOther;\r\n(function (internalOther) {\r\n    var something;\r\n    (function (something) {\r\n        var someClass = (function () {\r\n            function someClass() {\r\n            }\r\n            return someClass;\r\n        }());\r\n        something.someClass = someClass;\r\n    })(something = internalOther.something || (internalOther.something = {}));\r\n})(internalOther || (internalOther = {}));\r\nvar internalImport = internalNamespace.someClass;\r\nvar internalConst = 10;\r\nvar internalEnum;\r\n(function (internalEnum) {\r\n    internalEnum[internalEnum[\"a\"] = 0] = \"a\";\r\n    internalEnum[internalEnum[\"b\"] = 1] = \"b\";\r\n    internalEnum[internalEnum[\"c\"] = 2] = \"c\";\r\n})(internalEnum || (internalEnum = {}));\r\nvar C = (function () {\r\n    function C() {\r\n    }\r\n    C.prototype.doSomething = function () {\r\n        console.log(\"something got done\");\r\n    };\r\n    return C;\r\n}());\r\nvar c = new C();\r\nc.doSomething();\r\n//# sourceMappingURL=third-output.js.map",
+      "mapHash": "-121698117904-{\"version\":3,\"file\":\"third-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../../../first/first_PART1.ts\",\"../../../first/first_part2.ts\",\"../../../first/first_part3.ts\",\"../../../second/second_part1.ts\",\"../../../second/second_part2.ts\",\"../../third_part1.ts\"],\"names\":[],\"mappings\":\"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\"}"
     },
     "dts": {
       "sections": [
@@ -10455,11 +10575,27 @@ declare var c: C;
           "end": 294,
           "kind": "text"
         }
-      ]
+      ],
+      "hash": "-3056724381-declare const s = \"Hola, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\ndeclare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare class normalC {\r\n}\r\ndeclare namespace normalN {\r\n}\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\ndeclare var c: C;\r\n//# sourceMappingURL=third-output.d.ts.map",
+      "mapHash": "-7558054436-{\"version\":3,\"file\":\"third-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../../../first/first_PART1.ts\",\"../../../first/first_part3.ts\",\"../../../second/second_part1.ts\",\"../../../second/second_part2.ts\",\"../../third_part1.ts\"],\"names\":[],\"mappings\":\"AAIA,QAAA,MAAM,CAAC,gBAAgB,CAAC;AAExB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;ACRD,iBAAS,CAAC,WAET;ACFD,kBAAU,CAAC,CAAC;CAEX;AAED,kBAAU,CAAC,CAAC;CAMX;AAED,cAAM,OAAO;CAMZ;AACD,kBAAU,OAAO,CAAC;CASjB;AC5BD,cAAM,CAAC;IACH,WAAW;CAGd;ACJD,QAAA,IAAI,CAAC,GAAU,CAAC\"}"
     }
   },
+  "program": {
+    "fileNames": [
+      "../../third_part1.ts"
+    ],
+    "fileInfos": {
+      "../../third_part1.ts": "10470273651-var c = new C();\r\nc.doSomething();\r\n"
+    },
+    "options": {
+      "composite": true,
+      "outFile": "./third-output.js"
+    },
+    "outSignature": "16720646121-declare const s = \"Hola, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\ndeclare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare class normalC {\r\n}\r\ndeclare namespace normalN {\r\n}\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\ndeclare var c: C;\r\n",
+    "dtsChangeTime": 69000
+  },
   "version": "FakeTSVersion",
-  "size": 724
+  "size": 8289
 }
 
 
@@ -10484,43 +10620,41 @@ console.log(s);
 
 Output::
 /lib/tsc --b /src/third --verbose
-[[90m12:01:39 AM[0m] Projects in this build: 
+[[90m12:01:47 AM[0m] Projects in this build: 
     * src/first/tsconfig.json
     * src/second/tsconfig.json
     * src/third/tsconfig.json
 
-[[90m12:01:40 AM[0m] Project 'src/first/tsconfig.json' is out of date because oldest output 'src/first/bin/first-output.js' is older than newest input 'src/first/first_PART1.ts'
+[[90m12:01:48 AM[0m] Project 'src/first/tsconfig.json' is out of date because output 'src/first/bin/first-output.tsbuildinfo' is older than input 'src/first/first_PART1.ts'
 
-[[90m12:01:41 AM[0m] Building project '/src/first/tsconfig.json'...
+[[90m12:01:49 AM[0m] Building project '/src/first/tsconfig.json'...
 
-[[90m12:01:49 AM[0m] Project 'src/second/tsconfig.json' is up to date because newest input 'src/second/second_part1.ts' is older than oldest output 'src/2/second-output.js.map'
+[[90m12:01:58 AM[0m] Project 'src/second/tsconfig.json' is up to date because newest input 'src/second/second_part1.ts' is older than output 'src/2/second-output.tsbuildinfo'
 
-[[90m12:01:50 AM[0m] Project 'src/third/tsconfig.json' is out of date because output of its dependency 'src/first' has changed
+[[90m12:01:59 AM[0m] Project 'src/third/tsconfig.json' is out of date because output of its dependency 'src/first' has changed
 
-[[90m12:01:51 AM[0m] Updating output of project '/src/third/tsconfig.json'...
-
-[[90m12:01:56 AM[0m] Updating unchanged output timestamps of project '/src/third/tsconfig.json'...
+[[90m12:02:00 AM[0m] Updating output of project '/src/third/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 readFiles:: {
  "/src/third/tsconfig.json": 1,
  "/src/first/tsconfig.json": 1,
  "/src/second/tsconfig.json": 1,
+ "/src/first/bin/first-output.tsbuildinfo": 2,
  "/src/first/first_PART1.ts": 1,
  "/src/first/first_part2.ts": 1,
  "/src/first/first_part3.ts": 1,
- "/src/first/bin/first-output.d.ts": 1,
  "/src/2/second-output.tsbuildinfo": 1,
  "/src/third/thirdjs/output/third-output.tsbuildinfo": 1,
  "/src/third/thirdjs/output/third-output.js": 1,
  "/src/third/thirdjs/output/third-output.js.map": 1,
  "/src/third/thirdjs/output/third-output.d.ts": 1,
  "/src/third/thirdjs/output/third-output.d.ts.map": 1,
- "/src/first/bin/first-output.tsbuildinfo": 1,
  "/src/first/bin/first-output.js": 1,
  "/src/2/second-output.js": 1,
  "/src/first/bin/first-output.js.map": 1,
  "/src/2/second-output.js.map": 1,
+ "/src/first/bin/first-output.d.ts": 1,
  "/src/2/second-output.d.ts": 1,
  "/src/first/bin/first-output.d.ts.map": 1,
  "/src/2/second-output.d.ts.map": 1
@@ -10835,7 +10969,7 @@ sourceFile:../first_part3.ts
 >>>//# sourceMappingURL=first-output.js.map
 
 //// [/src/first/bin/first-output.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"..","sourceFiles":["../first_PART1.ts","../first_part2.ts","../first_part3.ts"],"js":{"sections":[{"pos":0,"end":126,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":156,"kind":"text"}]}},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"..","sourceFiles":["../first_PART1.ts","../first_part2.ts","../first_part3.ts"],"js":{"sections":[{"pos":0,"end":126,"kind":"text"}],"mapHash":"-32659542769-{\"version\":3,\"file\":\"first-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../first_PART1.ts\",\"../first_part2.ts\",\"../first_part3.ts\"],\"names\":[],\"mappings\":\"AAIA,IAAM,CAAC,GAAG,aAAa,CAAC;AAMxB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;AACf,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;ACXf,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC\"}","hash":"8404444065-var s = \"Hola, world\";\r\nconsole.log(s);\r\nconsole.log(s);\r\nconsole.log(f());\r\nfunction f() {\r\n    return \"JS does hoists\";\r\n}\r\n//# sourceMappingURL=first-output.js.map"},"dts":{"sections":[{"pos":0,"end":156,"kind":"text"}],"mapHash":"31357838721-{\"version\":3,\"file\":\"first-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../first_PART1.ts\",\"../first_part2.ts\",\"../first_part3.ts\"],\"names\":[],\"mappings\":\"AAAA,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,gBAAgB,CAAC;AAExB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;AERD,iBAAS,CAAC,WAET\"}","hash":"-15939443882-interface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hola, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\n//# sourceMappingURL=first-output.d.ts.map"}},"program":{"fileNames":["../first_part1.ts","../first_part2.ts","../first_part3.ts"],"fileInfos":["3570577263-interface TheFirst {\r\n    none: any;\r\n}\r\n\r\nconst s = \"Hola, world\";\r\n\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\n\r\nconsole.log(s);\r\nconsole.log(s);","4973778178-console.log(f());\r\n","6202806249-function f() {\r\n    return \"JS does hoists\";\r\n}"],"options":{"composite":true,"outFile":"./first-output.js"},"outSignature":"-11343140977-interface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hola, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\n","dtsChangeTime":57000},"version":"FakeTSVersion"}
 
 //// [/src/first/bin/first-output.tsbuildinfo.baseline.txt]
 ======================================================================
@@ -10882,7 +11016,9 @@ declare function f(): string;
           "end": 126,
           "kind": "text"
         }
-      ]
+      ],
+      "hash": "8404444065-var s = \"Hola, world\";\r\nconsole.log(s);\r\nconsole.log(s);\r\nconsole.log(f());\r\nfunction f() {\r\n    return \"JS does hoists\";\r\n}\r\n//# sourceMappingURL=first-output.js.map",
+      "mapHash": "-32659542769-{\"version\":3,\"file\":\"first-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../first_PART1.ts\",\"../first_part2.ts\",\"../first_part3.ts\"],\"names\":[],\"mappings\":\"AAIA,IAAM,CAAC,GAAG,aAAa,CAAC;AAMxB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;AACf,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;ACXf,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC\"}"
     },
     "dts": {
       "sections": [
@@ -10891,11 +11027,31 @@ declare function f(): string;
           "end": 156,
           "kind": "text"
         }
-      ]
+      ],
+      "hash": "-15939443882-interface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hola, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\n//# sourceMappingURL=first-output.d.ts.map",
+      "mapHash": "31357838721-{\"version\":3,\"file\":\"first-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../first_PART1.ts\",\"../first_part2.ts\",\"../first_part3.ts\"],\"names\":[],\"mappings\":\"AAAA,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,gBAAgB,CAAC;AAExB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;AERD,iBAAS,CAAC,WAET\"}"
     }
   },
+  "program": {
+    "fileNames": [
+      "../first_part1.ts",
+      "../first_part2.ts",
+      "../first_part3.ts"
+    ],
+    "fileInfos": {
+      "../first_part1.ts": "3570577263-interface TheFirst {\r\n    none: any;\r\n}\r\n\r\nconst s = \"Hola, world\";\r\n\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\n\r\nconsole.log(s);\r\nconsole.log(s);",
+      "../first_part2.ts": "4973778178-console.log(f());\r\n",
+      "../first_part3.ts": "6202806249-function f() {\r\n    return \"JS does hoists\";\r\n}"
+    },
+    "options": {
+      "composite": true,
+      "outFile": "./first-output.js"
+    },
+    "outSignature": "-11343140977-interface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hola, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\n",
+    "dtsChangeTime": 57000
+  },
   "version": "FakeTSVersion",
-  "size": 252
+  "size": 2130
 }
 
 //// [/src/third/thirdjs/output/third-output.d.ts]
@@ -11221,10 +11377,8 @@ sourceFile:../../third_part1.ts
 ---
 >>>//# sourceMappingURL=third-output.d.ts.map
 
-//// [/src/third/thirdjs/output/third-output.js] file changed its modified time
-//// [/src/third/thirdjs/output/third-output.js.map] file changed its modified time
 //// [/src/third/thirdjs/output/third-output.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"../..","sourceFiles":["../../third_part1.ts"],"js":{"sections":[{"pos":0,"end":126,"kind":"prepend","data":"../../../first/bin/first-output.js","texts":[{"pos":0,"end":126,"kind":"text"}]},{"pos":126,"end":3179,"kind":"prepend","data":"../../../2/second-output.js","texts":[{"pos":126,"end":3179,"kind":"text"}]},{"pos":3179,"end":3215,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":156,"kind":"prepend","data":"../../../first/bin/first-output.d.ts","texts":[{"pos":0,"end":156,"kind":"text"}]},{"pos":156,"end":316,"kind":"prepend","data":"../../../2/second-output.d.ts","texts":[{"pos":156,"end":316,"kind":"text"}]},{"pos":316,"end":335,"kind":"text"}]}},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"../..","sourceFiles":["../../third_part1.ts"],"js":{"sections":[{"pos":0,"end":126,"kind":"prepend","data":"../../../first/bin/first-output.js","texts":[{"pos":0,"end":126,"kind":"text"}]},{"pos":126,"end":3179,"kind":"prepend","data":"../../../2/second-output.js","texts":[{"pos":126,"end":3179,"kind":"text"}]},{"pos":3179,"end":3215,"kind":"text"}],"mapHash":"-121698117904-{\"version\":3,\"file\":\"third-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../../../first/first_PART1.ts\",\"../../../first/first_part2.ts\",\"../../../first/first_part3.ts\",\"../../../second/second_part1.ts\",\"../../../second/second_part2.ts\",\"../../third_part1.ts\"],\"names\":[],\"mappings\":\"AAIA,IAAM,CAAC,GAAG,aAAa,CAAC;AAMxB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;AACf,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;ACXf,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC;ACED,IAAU,CAAC,CAMV;AAND,WAAU,CAAC;IACP,SAAS,CAAC;QACN,OAAO,CAAC,GAAG,CAAC,SAAS,CAAC,CAAC;IAC3B,CAAC;IAED,CAAC,EAAE,CAAC;AACR,CAAC,EANS,CAAC,KAAD,CAAC,QAMV;AAED;IACkB;IAAgB,CAAC;IAEjB,wBAAM,GAAN,cAAW,CAAC;IACZ,sBAAI,sBAAC;aAAL,cAAU,OAAO,EAAE,CAAC,CAAC,CAAC;aACtB,UAAM,GAAW,IAAI,CAAC;;;OADA;IAExC,cAAC;AAAD,CAAC,AAND,IAMC;AACD,IAAU,OAAO,CAShB;AATD,WAAU,OAAO;IACC;QAAA;QAAiB,CAAC;QAAD,QAAC;IAAD,CAAC,AAAlB,IAAkB;IAAL,SAAC,IAAI,CAAA;IAClB,SAAgB,GAAG,KAAI,CAAC;IAAR,WAAG,MAAK,CAAA;IACxB,IAAiB,aAAa,CAAsB;IAApD,WAAiB,aAAa;QAAG;YAAA;YAAgB,CAAC;YAAD,QAAC;QAAD,CAAC,AAAjB,IAAiB;QAAJ,eAAC,IAAG,CAAA;IAAC,CAAC,EAAnC,aAAa,GAAb,qBAAa,KAAb,qBAAa,QAAsB;IACpD,IAAiB,SAAS,CAAwC;IAAlE,WAAiB,SAAS;QAAC,IAAA,SAAS,CAA8B;QAAvC,WAAA,SAAS;YAAG;gBAAA;gBAAwB,CAAC;gBAAD,gBAAC;YAAD,CAAC,AAAzB,IAAyB;YAAZ,mBAAS,YAAG,CAAA;QAAC,CAAC,EAAvC,SAAS,GAAT,mBAAS,KAAT,mBAAS,QAA8B;IAAD,CAAC,EAAjD,SAAS,GAAT,iBAAS,KAAT,iBAAS,QAAwC;IACpD,kBAAU,GAAG,aAAa,CAAC,CAAC,CAAC;IAE9B,qBAAa,GAAG,EAAE,CAAC;IAChC,IAAY,YAAwB;IAApC,WAAY,YAAY;QAAG,yCAAC,CAAA;QAAE,yCAAC,CAAA;QAAE,yCAAC,CAAA;IAAC,CAAC,EAAxB,YAAY,GAAZ,oBAAY,KAAZ,oBAAY,QAAY;AACtD,CAAC,EATS,OAAO,KAAP,OAAO,QAShB;AACa;IAAA;IAAiB,CAAC;IAAD,gBAAC;AAAD,CAAC,AAAlB,IAAkB;AAClB,SAAS,WAAW,KAAI,CAAC;AACzB,IAAU,iBAAiB,CAA8B;AAAzD,WAAU,iBAAiB;IAAG;QAAA;QAAwB,CAAC;QAAD,gBAAC;IAAD,CAAC,AAAzB,IAAyB;IAAZ,2BAAS,YAAG,CAAA;AAAC,CAAC,EAA/C,iBAAiB,KAAjB,iBAAiB,QAA8B;AACzD,IAAU,aAAa,CAAwC;AAA/D,WAAU,aAAa;IAAC,IAAA,SAAS,CAA8B;IAAvC,WAAA,SAAS;QAAG;YAAA;YAAwB,CAAC;YAAD,gBAAC;QAAD,CAAC,AAAzB,IAAyB;QAAZ,mBAAS,YAAG,CAAA;IAAC,CAAC,EAAvC,SAAS,GAAT,uBAAS,KAAT,uBAAS,QAA8B;AAAD,CAAC,EAArD,aAAa,KAAb,aAAa,QAAwC;AAC/D,IAAO,cAAc,GAAG,iBAAiB,CAAC,SAAS,CAAC;AAEpD,IAAM,aAAa,GAAG,EAAE,CAAC;AACzB,IAAK,YAAwB;AAA7B,WAAK,YAAY;IAAG,yCAAC,CAAA;IAAE,yCAAC,CAAA;IAAE,yCAAC,CAAA;AAAC,CAAC,EAAxB,YAAY,KAAZ,YAAY,QAAY;ACpC3C;IAAA;IAIA,CAAC;IAHG,uBAAW,GAAX;QACI,OAAO,CAAC,GAAG,CAAC,oBAAoB,CAAC,CAAC;IACtC,CAAC;IACL,QAAC;AAAD,CAAC,AAJD,IAIC;ACJD,IAAI,CAAC,GAAG,IAAI,CAAC,EAAE,CAAC;AAChB,CAAC,CAAC,WAAW,EAAE,CAAC\"}","hash":"12439878523-var s = \"Hola, world\";\r\nconsole.log(s);\r\nconsole.log(s);\r\nconsole.log(f());\r\nfunction f() {\r\n    return \"JS does hoists\";\r\n}\r\nvar N;\r\n(function (N) {\r\n    function f() {\r\n        console.log('testing');\r\n    }\r\n    f();\r\n})(N || (N = {}));\r\nvar normalC = (function () {\r\n    function normalC() {\r\n    }\r\n    normalC.prototype.method = function () { };\r\n    Object.defineProperty(normalC.prototype, \"c\", {\r\n        get: function () { return 10; },\r\n        set: function (val) { },\r\n        enumerable: false,\r\n        configurable: true\r\n    });\r\n    return normalC;\r\n}());\r\nvar normalN;\r\n(function (normalN) {\r\n    var C = (function () {\r\n        function C() {\r\n        }\r\n        return C;\r\n    }());\r\n    normalN.C = C;\r\n    function foo() { }\r\n    normalN.foo = foo;\r\n    var someNamespace;\r\n    (function (someNamespace) {\r\n        var C = (function () {\r\n            function C() {\r\n            }\r\n            return C;\r\n        }());\r\n        someNamespace.C = C;\r\n    })(someNamespace = normalN.someNamespace || (normalN.someNamespace = {}));\r\n    var someOther;\r\n    (function (someOther) {\r\n        var something;\r\n        (function (something) {\r\n            var someClass = (function () {\r\n                function someClass() {\r\n                }\r\n                return someClass;\r\n            }());\r\n            something.someClass = someClass;\r\n        })(something = someOther.something || (someOther.something = {}));\r\n    })(someOther = normalN.someOther || (normalN.someOther = {}));\r\n    normalN.someImport = someNamespace.C;\r\n    normalN.internalConst = 10;\r\n    var internalEnum;\r\n    (function (internalEnum) {\r\n        internalEnum[internalEnum[\"a\"] = 0] = \"a\";\r\n        internalEnum[internalEnum[\"b\"] = 1] = \"b\";\r\n        internalEnum[internalEnum[\"c\"] = 2] = \"c\";\r\n    })(internalEnum = normalN.internalEnum || (normalN.internalEnum = {}));\r\n})(normalN || (normalN = {}));\r\nvar internalC = (function () {\r\n    function internalC() {\r\n    }\r\n    return internalC;\r\n}());\r\nfunction internalfoo() { }\r\nvar internalNamespace;\r\n(function (internalNamespace) {\r\n    var someClass = (function () {\r\n        function someClass() {\r\n        }\r\n        return someClass;\r\n    }());\r\n    internalNamespace.someClass = someClass;\r\n})(internalNamespace || (internalNamespace = {}));\r\nvar internalOther;\r\n(function (internalOther) {\r\n    var something;\r\n    (function (something) {\r\n        var someClass = (function () {\r\n            function someClass() {\r\n            }\r\n            return someClass;\r\n        }());\r\n        something.someClass = someClass;\r\n    })(something = internalOther.something || (internalOther.something = {}));\r\n})(internalOther || (internalOther = {}));\r\nvar internalImport = internalNamespace.someClass;\r\nvar internalConst = 10;\r\nvar internalEnum;\r\n(function (internalEnum) {\r\n    internalEnum[internalEnum[\"a\"] = 0] = \"a\";\r\n    internalEnum[internalEnum[\"b\"] = 1] = \"b\";\r\n    internalEnum[internalEnum[\"c\"] = 2] = \"c\";\r\n})(internalEnum || (internalEnum = {}));\r\nvar C = (function () {\r\n    function C() {\r\n    }\r\n    C.prototype.doSomething = function () {\r\n        console.log(\"something got done\");\r\n    };\r\n    return C;\r\n}());\r\nvar c = new C();\r\nc.doSomething();\r\n//# sourceMappingURL=third-output.js.map"},"dts":{"sections":[{"pos":0,"end":156,"kind":"prepend","data":"../../../first/bin/first-output.d.ts","texts":[{"pos":0,"end":156,"kind":"text"}]},{"pos":156,"end":316,"kind":"prepend","data":"../../../2/second-output.d.ts","texts":[{"pos":156,"end":316,"kind":"text"}]},{"pos":316,"end":335,"kind":"text"}],"mapHash":"12830271258-{\"version\":3,\"file\":\"third-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../../../first/first_PART1.ts\",\"../../../first/first_part3.ts\",\"../../../second/second_part1.ts\",\"../../../second/second_part2.ts\",\"../../third_part1.ts\"],\"names\":[],\"mappings\":\"AAAA,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,gBAAgB,CAAC;AAExB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;ACRD,iBAAS,CAAC,WAET;ACFD,kBAAU,CAAC,CAAC;CAEX;AAED,kBAAU,CAAC,CAAC;CAMX;AAED,cAAM,OAAO;CAMZ;AACD,kBAAU,OAAO,CAAC;CASjB;AC5BD,cAAM,CAAC;IACH,WAAW;CAGd;ACJD,QAAA,IAAI,CAAC,GAAU,CAAC\"}","hash":"-24269849145-interface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hola, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\ndeclare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare class normalC {\r\n}\r\ndeclare namespace normalN {\r\n}\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\ndeclare var c: C;\r\n//# sourceMappingURL=third-output.d.ts.map"}},"program":{"fileNames":["../../third_part1.ts"],"fileInfos":["10470273651-var c = new C();\r\nc.doSomething();\r\n"],"options":{"composite":true,"outFile":"./third-output.js"},"outSignature":"-15507760563-interface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hola, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\ndeclare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare class normalC {\r\n}\r\ndeclare namespace normalN {\r\n}\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\ndeclare var c: C;\r\n","dtsChangeTime":121000},"version":"FakeTSVersion"}
 
 //// [/src/third/thirdjs/output/third-output.tsbuildinfo.baseline.txt]
 ======================================================================
@@ -11431,7 +11585,9 @@ declare var c: C;
           "end": 3215,
           "kind": "text"
         }
-      ]
+      ],
+      "hash": "12439878523-var s = \"Hola, world\";\r\nconsole.log(s);\r\nconsole.log(s);\r\nconsole.log(f());\r\nfunction f() {\r\n    return \"JS does hoists\";\r\n}\r\nvar N;\r\n(function (N) {\r\n    function f() {\r\n        console.log('testing');\r\n    }\r\n    f();\r\n})(N || (N = {}));\r\nvar normalC = (function () {\r\n    function normalC() {\r\n    }\r\n    normalC.prototype.method = function () { };\r\n    Object.defineProperty(normalC.prototype, \"c\", {\r\n        get: function () { return 10; },\r\n        set: function (val) { },\r\n        enumerable: false,\r\n        configurable: true\r\n    });\r\n    return normalC;\r\n}());\r\nvar normalN;\r\n(function (normalN) {\r\n    var C = (function () {\r\n        function C() {\r\n        }\r\n        return C;\r\n    }());\r\n    normalN.C = C;\r\n    function foo() { }\r\n    normalN.foo = foo;\r\n    var someNamespace;\r\n    (function (someNamespace) {\r\n        var C = (function () {\r\n            function C() {\r\n            }\r\n            return C;\r\n        }());\r\n        someNamespace.C = C;\r\n    })(someNamespace = normalN.someNamespace || (normalN.someNamespace = {}));\r\n    var someOther;\r\n    (function (someOther) {\r\n        var something;\r\n        (function (something) {\r\n            var someClass = (function () {\r\n                function someClass() {\r\n                }\r\n                return someClass;\r\n            }());\r\n            something.someClass = someClass;\r\n        })(something = someOther.something || (someOther.something = {}));\r\n    })(someOther = normalN.someOther || (normalN.someOther = {}));\r\n    normalN.someImport = someNamespace.C;\r\n    normalN.internalConst = 10;\r\n    var internalEnum;\r\n    (function (internalEnum) {\r\n        internalEnum[internalEnum[\"a\"] = 0] = \"a\";\r\n        internalEnum[internalEnum[\"b\"] = 1] = \"b\";\r\n        internalEnum[internalEnum[\"c\"] = 2] = \"c\";\r\n    })(internalEnum = normalN.internalEnum || (normalN.internalEnum = {}));\r\n})(normalN || (normalN = {}));\r\nvar internalC = (function () {\r\n    function internalC() {\r\n    }\r\n    return internalC;\r\n}());\r\nfunction internalfoo() { }\r\nvar internalNamespace;\r\n(function (internalNamespace) {\r\n    var someClass = (function () {\r\n        function someClass() {\r\n        }\r\n        return someClass;\r\n    }());\r\n    internalNamespace.someClass = someClass;\r\n})(internalNamespace || (internalNamespace = {}));\r\nvar internalOther;\r\n(function (internalOther) {\r\n    var something;\r\n    (function (something) {\r\n        var someClass = (function () {\r\n            function someClass() {\r\n            }\r\n            return someClass;\r\n        }());\r\n        something.someClass = someClass;\r\n    })(something = internalOther.something || (internalOther.something = {}));\r\n})(internalOther || (internalOther = {}));\r\nvar internalImport = internalNamespace.someClass;\r\nvar internalConst = 10;\r\nvar internalEnum;\r\n(function (internalEnum) {\r\n    internalEnum[internalEnum[\"a\"] = 0] = \"a\";\r\n    internalEnum[internalEnum[\"b\"] = 1] = \"b\";\r\n    internalEnum[internalEnum[\"c\"] = 2] = \"c\";\r\n})(internalEnum || (internalEnum = {}));\r\nvar C = (function () {\r\n    function C() {\r\n    }\r\n    C.prototype.doSomething = function () {\r\n        console.log(\"something got done\");\r\n    };\r\n    return C;\r\n}());\r\nvar c = new C();\r\nc.doSomething();\r\n//# sourceMappingURL=third-output.js.map",
+      "mapHash": "-121698117904-{\"version\":3,\"file\":\"third-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../../../first/first_PART1.ts\",\"../../../first/first_part2.ts\",\"../../../first/first_part3.ts\",\"../../../second/second_part1.ts\",\"../../../second/second_part2.ts\",\"../../third_part1.ts\"],\"names\":[],\"mappings\":\"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\"}"
     },
     "dts": {
       "sections": [
@@ -11466,10 +11622,26 @@ declare var c: C;
           "end": 335,
           "kind": "text"
         }
-      ]
+      ],
+      "hash": "-24269849145-interface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hola, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\ndeclare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare class normalC {\r\n}\r\ndeclare namespace normalN {\r\n}\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\ndeclare var c: C;\r\n//# sourceMappingURL=third-output.d.ts.map",
+      "mapHash": "12830271258-{\"version\":3,\"file\":\"third-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../../../first/first_PART1.ts\",\"../../../first/first_part3.ts\",\"../../../second/second_part1.ts\",\"../../../second/second_part2.ts\",\"../../third_part1.ts\"],\"names\":[],\"mappings\":\"AAAA,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,gBAAgB,CAAC;AAExB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;ACRD,iBAAS,CAAC,WAET;ACFD,kBAAU,CAAC,CAAC;CAEX;AAED,kBAAU,CAAC,CAAC;CAMX;AAED,cAAM,OAAO;CAMZ;AACD,kBAAU,OAAO,CAAC;CASjB;AC5BD,cAAM,CAAC;IACH,WAAW;CAGd;ACJD,QAAA,IAAI,CAAC,GAAU,CAAC\"}"
     }
   },
+  "program": {
+    "fileNames": [
+      "../../third_part1.ts"
+    ],
+    "fileInfos": {
+      "../../third_part1.ts": "10470273651-var c = new C();\r\nc.doSomething();\r\n"
+    },
+    "options": {
+      "composite": true,
+      "outFile": "./third-output.js"
+    },
+    "outSignature": "-15507760563-interface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hola, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\ndeclare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare class normalC {\r\n}\r\ndeclare namespace normalN {\r\n}\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\ndeclare var c: C;\r\n",
+    "dtsChangeTime": 121000
+  },
   "version": "FakeTSVersion",
-  "size": 724
+  "size": 8431
 }
 
