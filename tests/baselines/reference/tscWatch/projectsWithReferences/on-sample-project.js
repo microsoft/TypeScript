@@ -423,18 +423,18 @@ WatchedFiles::
   {"fileName":"/user/username/projects/sample1/core/anotherModule.d.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
   {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+/user/username/projects/sample1/tests/node_modules/@types:
+  {"fileName":"/user/username/projects/sample1/tests/node_modules/@types","pollingInterval":500}
+/user/username/projects/sample1/node_modules/@types:
+  {"fileName":"/user/username/projects/sample1/node_modules/@types","pollingInterval":500}
 
 FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/sample1/core:
-  {"directoryName":"/user/username/projects/sample1/core","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/sample1/core"}
 /user/username/projects/sample1/logic:
-  {"directoryName":"/user/username/projects/sample1/logic","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/sample1/tests/node_modules/@types:
-  {"directoryName":"/user/username/projects/sample1/tests/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/sample1/node_modules/@types:
-  {"directoryName":"/user/username/projects/sample1/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/sample1/logic"}
 
 exitCode:: ExitStatus.undefined
 
@@ -598,18 +598,18 @@ WatchedFiles::
   {"fileName":"/user/username/projects/sample1/core/anotherModule.d.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
   {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+/user/username/projects/sample1/tests/node_modules/@types:
+  {"fileName":"/user/username/projects/sample1/tests/node_modules/@types","pollingInterval":500}
+/user/username/projects/sample1/node_modules/@types:
+  {"fileName":"/user/username/projects/sample1/node_modules/@types","pollingInterval":500}
 
 FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/sample1/core:
-  {"directoryName":"/user/username/projects/sample1/core","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/sample1/core"}
 /user/username/projects/sample1/logic:
-  {"directoryName":"/user/username/projects/sample1/logic","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/sample1/tests/node_modules/@types:
-  {"directoryName":"/user/username/projects/sample1/tests/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/sample1/node_modules/@types:
-  {"directoryName":"/user/username/projects/sample1/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/sample1/logic"}
 
 exitCode:: ExitStatus.undefined
 
@@ -785,18 +785,18 @@ WatchedFiles::
   {"fileName":"/user/username/projects/sample1/core/anotherModule.d.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
   {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+/user/username/projects/sample1/tests/node_modules/@types:
+  {"fileName":"/user/username/projects/sample1/tests/node_modules/@types","pollingInterval":500}
+/user/username/projects/sample1/node_modules/@types:
+  {"fileName":"/user/username/projects/sample1/node_modules/@types","pollingInterval":500}
 
 FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/sample1/core:
-  {"directoryName":"/user/username/projects/sample1/core","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/sample1/core"}
 /user/username/projects/sample1/logic:
-  {"directoryName":"/user/username/projects/sample1/logic","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/sample1/tests/node_modules/@types:
-  {"directoryName":"/user/username/projects/sample1/tests/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/sample1/node_modules/@types:
-  {"directoryName":"/user/username/projects/sample1/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/sample1/logic"}
 
 exitCode:: ExitStatus.undefined
 
@@ -1044,6 +1044,10 @@ WatchedFiles::
   {"fileName":"/user/username/projects/sample1/core/anotherModule.d.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
   {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+/user/username/projects/sample1/tests/node_modules/@types:
+  {"fileName":"/user/username/projects/sample1/tests/node_modules/@types","pollingInterval":500}
+/user/username/projects/sample1/node_modules/@types:
+  {"fileName":"/user/username/projects/sample1/node_modules/@types","pollingInterval":500}
 /user/username/projects/sample1/logic/decls/index.d.ts:
   {"fileName":"/user/username/projects/sample1/logic/decls/index.d.ts","pollingInterval":250}
 
@@ -1051,13 +1055,9 @@ FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/sample1/core:
-  {"directoryName":"/user/username/projects/sample1/core","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/sample1/core"}
 /user/username/projects/sample1/logic:
-  {"directoryName":"/user/username/projects/sample1/logic","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/sample1/tests/node_modules/@types:
-  {"directoryName":"/user/username/projects/sample1/tests/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/sample1/node_modules/@types:
-  {"directoryName":"/user/username/projects/sample1/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/sample1/logic"}
 
 exitCode:: ExitStatus.undefined
 

@@ -6743,6 +6743,8 @@ namespace ts {
         /* @internal */
         readonly failedLookupLocations: string[];
         /* @internal */
+        readonly affectingLocations: string[];
+        /* @internal */
         readonly resolutionDiagnostics: Diagnostic[]
     }
 
@@ -6765,8 +6767,8 @@ namespace ts {
     export interface ResolvedTypeReferenceDirectiveWithFailedLookupLocations {
         readonly resolvedTypeReferenceDirective: ResolvedTypeReferenceDirective | undefined;
         readonly failedLookupLocations: string[];
-        /* @internal */
-        resolutionDiagnostics: Diagnostic[]
+        /*@internal*/ readonly affectingLocations: string[];
+        /* @internal */ resolutionDiagnostics: Diagnostic[];
     }
 
     /* @internal */

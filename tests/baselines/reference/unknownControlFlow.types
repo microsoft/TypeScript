@@ -410,7 +410,7 @@ function f31<T>(x: T) {
 >"object" : "object"
 
         x;  // T & object | T & null
->x : (T & null) | (T & object)
+>x : (T & object) | (T & null)
     }
     if (x && typeof x === "object") {
 >x && typeof x === "object" : boolean
@@ -424,12 +424,12 @@ function f31<T>(x: T) {
 >x : T & object
     }
     if (typeof x === "object" && x) {
->typeof x === "object" && x : false | (T & null) | (T & object)
+>typeof x === "object" && x : false | (T & object) | (T & null)
 >typeof x === "object" : boolean
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >x : T
 >"object" : "object"
->x : (T & null) | (T & object)
+>x : (T & object) | (T & null)
 
         x;  // T & object
 >x : T & object
@@ -650,9 +650,9 @@ function deepEquals<T>(a: T, b: T): boolean {
 >b : T
 >'object' : "object"
 >!a : boolean
->a : (T & null) | (T & object)
+>a : (T & object) | (T & null)
 >!b : boolean
->b : (T & null) | (T & object)
+>b : (T & object) | (T & null)
 
         return false;
 >false : false

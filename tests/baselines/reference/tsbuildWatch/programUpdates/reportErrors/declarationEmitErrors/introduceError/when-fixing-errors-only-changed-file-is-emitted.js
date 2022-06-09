@@ -64,7 +64,7 @@ FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/solution/app:
-  {"directoryName":"/user/username/projects/solution/app","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/solution/app"}
 
 exitCode:: ExitStatus.undefined
 
@@ -197,7 +197,7 @@ FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/solution/app:
-  {"directoryName":"/user/username/projects/solution/app","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/solution/app"}
 
 exitCode:: ExitStatus.undefined
 
@@ -232,7 +232,7 @@ FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/solution/app:
-  {"directoryName":"/user/username/projects/solution/app","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/solution/app"}
 
 exitCode:: ExitStatus.undefined
 

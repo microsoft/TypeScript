@@ -101,9 +101,9 @@ FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/myproject/shared:
-  {"directoryName":"/user/username/projects/myproject/shared","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/shared"}
 /user/username/projects/myproject/webpack:
-  {"directoryName":"/user/username/projects/myproject/webpack","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/webpack"}
 
 exitCode:: ExitStatus.undefined
 
@@ -327,9 +327,9 @@ FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/myproject/shared:
-  {"directoryName":"/user/username/projects/myproject/shared","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/shared"}
 /user/username/projects/myproject/webpack:
-  {"directoryName":"/user/username/projects/myproject/webpack","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/webpack"}
 
 exitCode:: ExitStatus.undefined
 
