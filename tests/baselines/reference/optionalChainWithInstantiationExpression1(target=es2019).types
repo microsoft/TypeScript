@@ -1,4 +1,4 @@
-=== tests/cases/compiler/optionalChainWithInstantiationExpression.ts ===
+=== tests/cases/compiler/optionalChainWithInstantiationExpression1.ts ===
 declare namespace A {
 >A : typeof A
 
@@ -22,6 +22,7 @@ declare const a: typeof A | undefined;
 
 a?.b<c>.d;
 >a?.b<c>.d : number
+>a?.b<c> : { new (x: unknown): A.b<unknown>; prototype: A.b<any>; d: number; }
 >a?.b : typeof A.b
 >a : typeof A
 >b : typeof A.b

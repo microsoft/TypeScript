@@ -1,4 +1,4 @@
-//// [optionalChainWithInstantiationExpression.ts]
+//// [optionalChainWithInstantiationExpression1.ts]
 declare namespace A {
     export class b<T> {
         static d: number;
@@ -15,6 +15,6 @@ a?.b<c>.d;
 a?.b.d
 
 
-//// [optionalChainWithInstantiationExpression.js]
+//// [optionalChainWithInstantiationExpression1.js]
 (a === null || a === void 0 ? void 0 : a.b).d;
 a === null || a === void 0 ? void 0 : a.b.d;
