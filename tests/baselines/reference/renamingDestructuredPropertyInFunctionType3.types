@@ -1,0 +1,27 @@
+=== tests/cases/compiler/renamingDestructuredPropertyInFunctionType3.ts ===
+const sym = Symbol();
+>sym : unique symbol
+>Symbol() : unique symbol
+>Symbol : SymbolConstructor
+
+type F14 = ({ [sym]: string }) => void; // Error
+>F14 : ({ [sym]: string }: { "__@sym@420": any; }) => void
+>sym : unique symbol
+>string : any
+
+type G14 = new ({ [sym]: string }) => void; // Error
+>G14 : new ({ [sym]: string }: { "__@sym@420": any; }) => void
+>sym : unique symbol
+>string : any
+
+const f13 =  ({ [sym]: string }) => { };
+>f13 : ({ [sym]: string }: { "__@sym@420": any; }) => void
+>({ [sym]: string }) => { } : ({ [sym]: string }: { "__@sym@420": any; }) => void
+>sym : unique symbol
+>string : any
+
+function f14 ({ [sym]: string }) { };
+>f14 : ({ [sym]: string }: { "__@sym@420": any; }) => void
+>sym : unique symbol
+>string : any
+

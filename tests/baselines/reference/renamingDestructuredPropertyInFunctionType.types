@@ -1,11 +1,6 @@
 === tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts ===
 // GH#37454, GH#41044
 
-const sym = Symbol();
->sym : unique symbol
->Symbol() : unique symbol
->Symbol : SymbolConstructor
-
 type O = { a?: string; b: number; c: number; };
 >O : { a?: string; b: number; c: number; }
 >a : string
@@ -85,8 +80,6 @@ type F13 = ({ [2]: string }) => void; // Error
 >2 : 2
 >string : any
 
-// type F14 = ({ [sym]: string }) => void; // Error
-
 type G1 = new (arg: number) => any; // OK
 >G1 : new (arg: number) => any
 >arg : number
@@ -159,8 +152,6 @@ type G13 = new ({ [2]: string }) => void; // Error
 >G13 : new ({ [2]: string }: { 2: any; }) => void
 >2 : 2
 >string : any
-
-// type G14 = new ({ [sym]: string }) => void; // Error
 
 interface I {
   method1(arg: number): any; // OK
@@ -282,11 +273,9 @@ const f11 =  ({ [2]: string }) => { };
 >2 : 2
 >string : any
 
-// const f12 =  ({ [sym]: string }) => { };
-
 // In below case `string` should be kept because it is used
-function f13({ a: string = "" }: O): typeof string { return "a"; }
->f13 : ({ a }: O) => typeof string
+function f12({ a: string = "" }: O): typeof string { return "a"; }
+>f12 : ({ a }: O) => typeof string
 >a : any
 >string : string
 >"" : ""

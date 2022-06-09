@@ -1,8 +1,6 @@
 //// [renamingDestructuredPropertyInFunctionType.ts]
 // GH#37454, GH#41044
 
-const sym = Symbol();
-
 type O = { a?: string; b: number; c: number; };
 type F1 = (arg: number) => any; // OK
 type F2 = ({ a: string }: O) => any; // Error
@@ -17,7 +15,6 @@ type F10 = ({ "a": string }) => void; // Error
 type F11 = ({ 2: string }) => void; // Error
 type F12 = ({ ["a"]: string }: O) => void; // Error
 type F13 = ({ [2]: string }) => void; // Error
-// type F14 = ({ [sym]: string }) => void; // Error
 
 type G1 = new (arg: number) => any; // OK
 type G2 = new ({ a: string }: O) => any; // Error
@@ -32,7 +29,6 @@ type G10 = new ({ "a": string }) => void; // Error
 type G11 = new ({ 2: string }) => void; // Error
 type G12 = new ({ ["a"]: string }: O) => void; // Error
 type G13 = new ({ [2]: string }) => void; // Error
-// type G14 = new ({ [sym]: string }) => void; // Error
 
 interface I {
   method1(arg: number): any; // OK
@@ -63,14 +59,12 @@ const f8 = ({ "a": string }: O) => { };
 function f9 ({ 2: string }) { };
 function f10 ({ ["a"]: string }: O) { };
 const f11 =  ({ [2]: string }) => { };
-// const f12 =  ({ [sym]: string }) => { };
 
 // In below case `string` should be kept because it is used
-function f13({ a: string = "" }: O): typeof string { return "a"; }
+function f12({ a: string = "" }: O): typeof string { return "a"; }
 
 //// [renamingDestructuredPropertyInFunctionType.js]
 // GH#37454, GH#41044
-const sym = Symbol();
 // Below are OK but renaming should be removed from declaration emit
 function f1({ a: string }) { }
 const f2 = function ({ a: string }) { };
@@ -91,13 +85,11 @@ function f9({ 2: string }) { }
 function f10({ ["a"]: string }) { }
 ;
 const f11 = ({ [2]: string }) => { };
-// const f12 =  ({ [sym]: string }) => { };
 // In below case `string` should be kept because it is used
-function f13({ a: string = "" }) { return "a"; }
+function f12({ a: string = "" }) { return "a"; }
 
 
 //// [renamingDestructuredPropertyInFunctionType.d.ts]
-declare const sym: unique symbol;
 declare type O = {
     a?: string;
     b: number;
@@ -192,4 +184,4 @@ declare function f10({ ["a"]: string }: O): void;
 declare const f11: ({ [2]: string }: {
     2: any;
 }) => void;
-declare function f13({ a: string }: O): typeof string;
+declare function f12({ a: string }: O): typeof string;
