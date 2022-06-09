@@ -5,23 +5,23 @@ const sym = Symbol();
 >Symbol : SymbolConstructor
 
 type F14 = ({ [sym]: string }) => void; // Error
->F14 : ({ [sym]: string }: { "__@sym@420": any; }) => void
+>F14 : ({ [sym]: string }: { "__@sym@6": any; }) => void
 >sym : unique symbol
 >string : any
 
 type G14 = new ({ [sym]: string }) => void; // Error
->G14 : new ({ [sym]: string }: { "__@sym@420": any; }) => void
+>G14 : new ({ [sym]: string }: { "__@sym@6": any; }) => void
 >sym : unique symbol
 >string : any
 
 const f13 =  ({ [sym]: string }) => { };
->f13 : ({ [sym]: string }: { "__@sym@420": any; }) => void
->({ [sym]: string }) => { } : ({ [sym]: string }: { "__@sym@420": any; }) => void
+>f13 : ({ [sym]: string }: { "__@sym@6": any; }) => void
+>({ [sym]: string }) => { } : ({ [sym]: string }: { "__@sym@6": any; }) => void
 >sym : unique symbol
 >string : any
 
 function f14 ({ [sym]: string }) { };
->f14 : ({ [sym]: string }: { "__@sym@420": any; }) => void
+>f14 : ({ [sym]: string }: { "__@sym@6": any; }) => void
 >sym : unique symbol
 >string : any
 
