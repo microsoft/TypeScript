@@ -3865,6 +3865,7 @@ namespace ts {
 
     export interface WriteFileCallbackData {
         /*@internal*/ sourceMapUrlPos?: number;
+        /*@internal*/ buildInfo?: BuildInfo;
     }
     export type WriteFileCallback = (
         fileName: string,
@@ -4749,6 +4750,14 @@ namespace ts {
         secondAccessor: AccessorDeclaration | undefined;
         getAccessor: GetAccessorDeclaration | undefined;
         setAccessor: SetAccessorDeclaration | undefined;
+    }
+
+    /* @internal */
+    export interface AllDecorators {
+        decorators: NodeArray<Decorator> | undefined;
+        parameters?: readonly (readonly Decorator[] | undefined)[];
+        getDecorators?: NodeArray<Decorator> | undefined;
+        setDecorators?: NodeArray<Decorator> | undefined;
     }
 
     /** Indicates how to serialize the name for a TypeReferenceNode when emitting decorator metadata */
@@ -6434,6 +6443,9 @@ namespace ts {
         affectsSemanticDiagnostics?: true;                      // true if option affects semantic diagnostics
         affectsEmit?: true;                                     // true if the options affects emit
         affectsProgramStructure?: true;                         // true if program should be reconstructed from root files if option changes and does not affect module resolution as affectsModuleResolution indirectly means program needs to reconstructed
+        affectsDeclarationPath?: true;                          // true if the options affects declaration file path computed
+        affectsMultiFileEmitBuildInfo?: true;                   // true if this options should be emitted in buildInfo without --out
+        affectsBundleEmitBuildInfo?: true;                      // true if this options should be emitted in buildInfo with --out
         transpileOptionValue?: boolean | undefined;             // If set this means that the option should be set to this value when transpiling
         extraValidation?: (value: CompilerOptionsValue) => [DiagnosticMessage, ...string[]] | undefined; // Additional validation to be performed for the value to be valid
     }
@@ -6731,6 +6743,8 @@ namespace ts {
         /* @internal */
         readonly failedLookupLocations: string[];
         /* @internal */
+        readonly affectingLocations: string[];
+        /* @internal */
         readonly resolutionDiagnostics: Diagnostic[]
     }
 
@@ -6753,8 +6767,8 @@ namespace ts {
     export interface ResolvedTypeReferenceDirectiveWithFailedLookupLocations {
         readonly resolvedTypeReferenceDirective: ResolvedTypeReferenceDirective | undefined;
         readonly failedLookupLocations: string[];
-        /* @internal */
-        resolutionDiagnostics: Diagnostic[]
+        /*@internal*/ readonly affectingLocations: string[];
+        /* @internal */ resolutionDiagnostics: Diagnostic[];
     }
 
     /* @internal */
@@ -6807,6 +6821,7 @@ namespace ts {
         // For testing:
         /*@internal*/ disableUseFileVersionAsSignature?: boolean;
         /*@internal*/ storeFilesChangingSignatureDuringEmit?: boolean;
+        /*@internal*/ now?(): Date;
     }
 
     /** true if --out otherwise source file name */
@@ -6841,21 +6856,22 @@ namespace ts {
 
         // Markers
         // - Flags used to indicate that a subtree contains a specific transformation.
-        ContainsTypeScriptClassSyntax = 1 << 12, // Decorators, Property Initializers, Parameter Property Initializers
-        ContainsLexicalThis = 1 << 13,
-        ContainsRestOrSpread = 1 << 14,
-        ContainsObjectRestOrSpread = 1 << 15,
-        ContainsComputedPropertyName = 1 << 16,
-        ContainsBlockScopedBinding = 1 << 17,
-        ContainsBindingPattern = 1 << 18,
-        ContainsYield = 1 << 19,
-        ContainsAwait = 1 << 20,
-        ContainsHoistedDeclarationOrCompletion = 1 << 21,
-        ContainsDynamicImport = 1 << 22,
-        ContainsClassFields = 1 << 23,
-        ContainsPossibleTopLevelAwait = 1 << 24,
-        ContainsLexicalSuper = 1 << 25,
-        ContainsUpdateExpressionForIdentifier = 1 << 26,
+        ContainsTypeScriptClassSyntax = 1 << 13, // Property Initializers, Parameter Property Initializers
+        ContainsLexicalThis = 1 << 14,
+        ContainsRestOrSpread = 1 << 15,
+        ContainsObjectRestOrSpread = 1 << 16,
+        ContainsComputedPropertyName = 1 << 17,
+        ContainsBlockScopedBinding = 1 << 18,
+        ContainsBindingPattern = 1 << 19,
+        ContainsYield = 1 << 20,
+        ContainsAwait = 1 << 21,
+        ContainsHoistedDeclarationOrCompletion = 1 << 22,
+        ContainsDynamicImport = 1 << 23,
+        ContainsClassFields = 1 << 24,
+        ContainsDecorators = 1 << 25,
+        ContainsPossibleTopLevelAwait = 1 << 26,
+        ContainsLexicalSuper = 1 << 27,
+        ContainsUpdateExpressionForIdentifier = 1 << 28,
         // Please leave this as 1 << 29.
         // It is the maximum bit we can set before we outgrow the size of a v8 small integer (SMI) on an x86 system.
         // It is a good reminder of how much room we have left
@@ -7109,6 +7125,7 @@ namespace ts {
         getProgramBuildInfo(): ProgramBuildInfo | undefined;
         getSourceFileFromReference: Program["getSourceFileFromReference"];
         readonly redirectTargetsMap: RedirectTargetsMap;
+        createHash?(data: string): string;
     }
 
     /* @internal */
@@ -8256,6 +8273,8 @@ namespace ts {
     /*@internal*/
     export interface BundleFileInfo {
         sections: BundleFileSection[];
+        hash?: string;
+        mapHash?: string;
         sources?: SourceFileInfo;
     }
 
@@ -8524,6 +8543,7 @@ namespace ts {
         trackExternalModuleSymbolOfImportTypeNode?(symbol: Symbol): void;
         reportNonlocalAugmentation?(containingFile: SourceFile, parentSymbol: Symbol, augmentingSymbol: Symbol): void;
         reportNonSerializableProperty?(propertyName: string): void;
+        reportImportTypeNodeResolutionModeOverride?(): void;
     }
 
     export interface TextSpan {

@@ -198,14 +198,14 @@ sourceFile:sourceMapValidationDecorators.ts
   >    private 
 2 >    fn
 3 >                        
-4 >                           private fn(
+4 >                           fn(
   >                                 @ParameterDecorator1 
   >                                 @ParameterDecorator2(70) 
   >                                 
 5 >                                     x: number
 1->Emitted(21, 5) Source(35, 13) + SourceIndex(0)
 2 >Emitted(21, 25) Source(35, 15) + SourceIndex(0)
-3 >Emitted(21, 28) Source(35, 5) + SourceIndex(0)
+3 >Emitted(21, 28) Source(35, 13) + SourceIndex(0)
 4 >Emitted(21, 38) Source(38, 7) + SourceIndex(0)
 5 >Emitted(21, 39) Source(38, 16) + SourceIndex(0)
 ---
@@ -417,8 +417,8 @@ sourceFile:sourceMapValidationDecorators.ts
   >
   >    @PropertyDecorator1
   >    @PropertyDecorator2(50)
-  >    
-1 >Emitted(39, 5) Source(29, 5) + SourceIndex(0)
+  >    private 
+1 >Emitted(39, 5) Source(29, 13) + SourceIndex(0)
 ---
 >>>        PropertyDecorator1,
 1->^^^^^^^^
@@ -463,8 +463,8 @@ sourceFile:sourceMapValidationDecorators.ts
   >    @PropertyDecorator2(60)
   >    private static x1: number = 10;
   >    
-  >    
-1 >Emitted(43, 5) Source(35, 5) + SourceIndex(0)
+  >    private 
+1 >Emitted(43, 5) Source(35, 13) + SourceIndex(0)
 ---
 >>>        __param(0, ParameterDecorator1),
 1->^^^^^^^^
@@ -472,7 +472,7 @@ sourceFile:sourceMapValidationDecorators.ts
 3 >                   ^^^^^^^^^^^^^^^^^^^
 4 >                                      ^
 5 >                                       ^^^^^->
-1->private fn(
+1->fn(
   >      @
 2 >        
 3 >                   ParameterDecorator1
@@ -607,7 +607,7 @@ sourceFile:sourceMapValidationDecorators.ts
 1 >^^^^
 2 >    ^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
-1 >Emitted(53, 5) Source(33, 5) + SourceIndex(0)
+1 >Emitted(53, 5) Source(33, 20) + SourceIndex(0)
 ---
 >>>        PropertyDecorator1,
 1->^^^^^^^^

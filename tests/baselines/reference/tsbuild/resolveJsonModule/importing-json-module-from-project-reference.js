@@ -84,9 +84,9 @@ lib/lib.d.ts
   Default library for target 'es5'
 src/strings/foo.json
   Matched by include pattern 'foo.json' in 'src/strings/tsconfig.json'
-[[90m12:00:11 AM[0m] Project 'src/main/tsconfig.json' is out of date because output file 'src/main/index.js' does not exist
+[[90m12:00:12 AM[0m] Project 'src/main/tsconfig.json' is out of date because output file 'src/main/tsconfig.tsbuildinfo' does not exist
 
-[[90m12:00:12 AM[0m] Building project '/src/main/tsconfig.json'...
+[[90m12:00:13 AM[0m] Building project '/src/main/tsconfig.json'...
 
 lib/lib.d.ts
   Default library for target 'es5'
@@ -109,7 +109,7 @@ console.log(foo_json_1.foo);
 
 
 //// [/src/main/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../lib/lib.d.ts","../strings/foo.json","./index.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"4395333385-{\n    \"foo\": \"bar baz\"\n}",{"version":"-4651661680-import { foo } from '../strings/foo.json';\n\nconsole.log(foo);","signature":"-4882119183-export {};\r\n"}],"options":{"composite":true,"esModuleInterop":true,"module":1,"rootDir":"..","strict":true,"target":1},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,3,2]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../lib/lib.d.ts","../strings/foo.json","./index.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"4395333385-{\n    \"foo\": \"bar baz\"\n}",{"version":"-4651661680-import { foo } from '../strings/foo.json';\n\nconsole.log(foo);","signature":"-4882119183-export {};\r\n"}],"options":{"composite":true,"esModuleInterop":true,"module":1,"rootDir":"..","strict":true,"target":1},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,3,2],"dtsChangeTime":14000},"version":"FakeTSVersion"}
 
 //// [/src/main/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -157,10 +157,11 @@ console.log(foo_json_1.foo);
       "../../lib/lib.d.ts",
       "./index.ts",
       "../strings/foo.json"
-    ]
+    ],
+    "dtsChangeTime": 14000
   },
   "version": "FakeTSVersion",
-  "size": 985
+  "size": 1007
 }
 
 //// [/src/strings/tsconfig.tsbuildinfo]
@@ -211,14 +212,14 @@ Input::
 
 Output::
 /lib/tsc --b src/tsconfig.json --verbose --explainFiles
-[[90m12:00:17 AM[0m] Projects in this build: 
+[[90m12:00:20 AM[0m] Projects in this build: 
     * src/strings/tsconfig.json
     * src/main/tsconfig.json
     * src/tsconfig.json
 
-[[90m12:00:18 AM[0m] Project 'src/strings/tsconfig.json' is up to date because newest input 'src/strings/foo.json' is older than oldest output 'src/strings/tsconfig.tsbuildinfo'
+[[90m12:00:21 AM[0m] Project 'src/strings/tsconfig.json' is up to date because newest input 'src/strings/foo.json' is older than output 'src/strings/tsconfig.tsbuildinfo'
 
-[[90m12:00:19 AM[0m] Project 'src/main/tsconfig.json' is up to date because newest input 'src/main/index.ts' is older than oldest output 'src/main/index.js'
+[[90m12:00:22 AM[0m] Project 'src/main/tsconfig.json' is up to date because newest input 'src/main/index.ts' is older than output 'src/main/tsconfig.tsbuildinfo'
 
 exitCode:: ExitStatus.Success
 

@@ -2016,6 +2016,8 @@ namespace ts {
             case SyntaxKind.AwaitExpression:
             case SyntaxKind.MetaProperty:
                 return true;
+            case SyntaxKind.ExpressionWithTypeArguments:
+                return !isHeritageClause(node.parent);
             case SyntaxKind.QualifiedName:
                 while (node.parent.kind === SyntaxKind.QualifiedName) {
                     node = node.parent;
@@ -3007,6 +3009,11 @@ namespace ts {
             node = node.parent;
         }
         return [child, node];
+    }
+
+    export function skipTypeParentheses(node: TypeNode): TypeNode {
+        while (isParenthesizedTypeNode(node)) node = node.type;
+        return node;
     }
 
     export function skipParentheses(node: Expression, excludeJSDocTypeAssertions?: boolean): Expression;
@@ -5415,7 +5422,7 @@ namespace ts {
      * Moves the start position of a range past any decorators.
      */
     export function moveRangePastDecorators(node: Node): TextRange {
-        return node.decorators && node.decorators.length > 0
+        return node.decorators && !positionIsSynthesized(node.decorators.end)
             ? moveRangePos(node, node.decorators.end)
             : node;
     }
@@ -5424,7 +5431,7 @@ namespace ts {
      * Moves the start position of a range past any decorators or modifiers.
      */
     export function moveRangePastModifiers(node: Node): TextRange {
-        return node.modifiers && node.modifiers.length > 0
+        return node.modifiers && !positionIsSynthesized(node.modifiers.end)
             ? moveRangePos(node, node.modifiers.end)
             : moveRangePastDecorators(node);
     }
@@ -6466,6 +6473,10 @@ namespace ts {
 
     export function compilerOptionsAffectEmit(newOptions: CompilerOptions, oldOptions: CompilerOptions): boolean {
         return optionsHaveChanges(oldOptions, newOptions, affectsEmitOptionDeclarations);
+    }
+
+    export function compilerOptionsAffectDeclarationPath(newOptions: CompilerOptions, oldOptions: CompilerOptions): boolean {
+        return optionsHaveChanges(oldOptions, newOptions, affectsDeclarationPathOptionDeclarations);
     }
 
     export function getCompilerOptionValue(options: CompilerOptions, option: CommandLineOption): unknown {

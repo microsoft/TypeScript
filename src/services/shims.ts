@@ -1180,7 +1180,8 @@ namespace ts {
 
                 return {
                     resolvedFileName,
-                    failedLookupLocations: result.failedLookupLocations
+                    failedLookupLocations: result.failedLookupLocations,
+                    affectingLocations: result.affectingLocations,
                 };
             });
         }
@@ -1280,7 +1281,8 @@ namespace ts {
                     info.packageNameToTypingLocation,
                     info.typeAcquisition,
                     info.unresolvedImports,
-                    info.typesRegistry);
+                    info.typesRegistry,
+                    emptyOptions);
             });
         }
     }

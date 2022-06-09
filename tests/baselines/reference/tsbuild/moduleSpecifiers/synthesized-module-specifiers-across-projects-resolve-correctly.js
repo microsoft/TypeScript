@@ -130,13 +130,13 @@ Output::
     * src/src-types/tsconfig.json
     * src/src-dogs/tsconfig.json
 
-[[90m12:00:25 AM[0m] Project 'src/src-types/tsconfig.json' is out of date because output file 'src/src-types/dogconfig.js' does not exist
+[[90m12:00:25 AM[0m] Project 'src/src-types/tsconfig.json' is out of date because output file 'src/src-types/tsconfig.tsbuildinfo' does not exist
 
 [[90m12:00:26 AM[0m] Building project '/src/src-types/tsconfig.json'...
 
-[[90m12:00:33 AM[0m] Project 'src/src-dogs/tsconfig.json' is out of date because output file 'src/src-dogs/dog.js' does not exist
+[[90m12:00:35 AM[0m] Project 'src/src-dogs/tsconfig.json' is out of date because output file 'src/src-dogs/tsconfig.tsbuildinfo' does not exist
 
-[[90m12:00:34 AM[0m] Building project '/src/src-dogs/tsconfig.json'...
+[[90m12:00:36 AM[0m] Building project '/src/src-dogs/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 
@@ -203,7 +203,7 @@ export class LassieDog extends Dog {
 
 
 //// [/src/src-dogs/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../lib/lib.es2022.full.d.ts","../src-types/dogconfig.d.ts","../src-types/index.d.ts","./dogconfig.ts","./dog.ts","./lassie/lassieconfig.ts","./lassie/lassiedog.ts","./index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-2632060142-export interface DogConfig {\r\n    name: string;\r\n}\r\n","impliedFormat":99},{"version":"-5608794531-export * from './dogconfig.js';\r\n","impliedFormat":99},{"version":"1966273863-import { DogConfig } from 'src-types';\n\nexport const DOG_CONFIG: DogConfig = {\n    name: 'Default dog',\n};\n","signature":"17588480778-import { DogConfig } from 'src-types';\r\nexport declare const DOG_CONFIG: DogConfig;\r\n","impliedFormat":99},{"version":"6091345804-import { DogConfig } from 'src-types';\nimport { DOG_CONFIG } from './dogconfig.js';\n\nexport abstract class Dog {\n\n    public static getCapabilities(): DogConfig {\n        return DOG_CONFIG;\n    }\n}\n","signature":"22128633249-import { DogConfig } from 'src-types';\r\nexport declare abstract class Dog {\r\n    static getCapabilities(): DogConfig;\r\n}\r\n","impliedFormat":99},{"version":"4440579024-import { DogConfig } from 'src-types';\n\nexport const LASSIE_CONFIG: DogConfig = { name: 'Lassie' };\n","signature":"8131483665-import { DogConfig } from 'src-types';\r\nexport declare const LASSIE_CONFIG: DogConfig;\r\n","impliedFormat":99},{"version":"-32303727812-import { Dog } from '../dog.js';\nimport { LASSIE_CONFIG } from './lassieconfig.js';\n\nexport class LassieDog extends Dog {\n    protected static getDogConfig = () => LASSIE_CONFIG;\n}\n","signature":"-20244062422-import { Dog } from '../dog.js';\r\nexport declare class LassieDog extends Dog {\r\n    protected static getDogConfig: () => import(\"../index.js\").DogConfig;\r\n}\r\n","impliedFormat":99},{"version":"-15974991320-export * from 'src-types';\nexport * from './lassie/lassiedog.js';\n","signature":"-16783836862-export * from 'src-types';\r\nexport * from './lassie/lassiedog.js';\r\n","impliedFormat":99}],"options":{"composite":true,"declaration":true,"module":100},"fileIdsList":[[3,4],[3],[3,7],[5,6],[2],[5,8]],"referencedMap":[[5,1],[4,2],[8,3],[6,2],[7,4],[3,5]],"exportedModulesMap":[[5,2],[4,2],[8,3],[6,2],[7,6],[3,5]],"semanticDiagnosticsPerFile":[1,5,4,8,6,7,2,3]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../lib/lib.es2022.full.d.ts","../src-types/dogconfig.d.ts","../src-types/index.d.ts","./dogconfig.ts","./dog.ts","./lassie/lassieconfig.ts","./lassie/lassiedog.ts","./index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-2632060142-export interface DogConfig {\r\n    name: string;\r\n}\r\n","impliedFormat":99},{"version":"-5608794531-export * from './dogconfig.js';\r\n","impliedFormat":99},{"version":"1966273863-import { DogConfig } from 'src-types';\n\nexport const DOG_CONFIG: DogConfig = {\n    name: 'Default dog',\n};\n","signature":"17588480778-import { DogConfig } from 'src-types';\r\nexport declare const DOG_CONFIG: DogConfig;\r\n","impliedFormat":99},{"version":"6091345804-import { DogConfig } from 'src-types';\nimport { DOG_CONFIG } from './dogconfig.js';\n\nexport abstract class Dog {\n\n    public static getCapabilities(): DogConfig {\n        return DOG_CONFIG;\n    }\n}\n","signature":"22128633249-import { DogConfig } from 'src-types';\r\nexport declare abstract class Dog {\r\n    static getCapabilities(): DogConfig;\r\n}\r\n","impliedFormat":99},{"version":"4440579024-import { DogConfig } from 'src-types';\n\nexport const LASSIE_CONFIG: DogConfig = { name: 'Lassie' };\n","signature":"8131483665-import { DogConfig } from 'src-types';\r\nexport declare const LASSIE_CONFIG: DogConfig;\r\n","impliedFormat":99},{"version":"-32303727812-import { Dog } from '../dog.js';\nimport { LASSIE_CONFIG } from './lassieconfig.js';\n\nexport class LassieDog extends Dog {\n    protected static getDogConfig = () => LASSIE_CONFIG;\n}\n","signature":"-20244062422-import { Dog } from '../dog.js';\r\nexport declare class LassieDog extends Dog {\r\n    protected static getDogConfig: () => import(\"../index.js\").DogConfig;\r\n}\r\n","impliedFormat":99},{"version":"-15974991320-export * from 'src-types';\nexport * from './lassie/lassiedog.js';\n","signature":"-16783836862-export * from 'src-types';\r\nexport * from './lassie/lassiedog.js';\r\n","impliedFormat":99}],"options":{"composite":true,"declaration":true,"module":100},"fileIdsList":[[3,4],[3],[3,7],[5,6],[2],[5,8]],"referencedMap":[[5,1],[4,2],[8,3],[6,2],[7,4],[3,5]],"exportedModulesMap":[[5,2],[4,2],[8,3],[6,2],[7,6],[3,5]],"semanticDiagnosticsPerFile":[1,5,4,8,6,7,2,3],"dtsChangeTime":37000},"version":"FakeTSVersion"}
 
 //// [/src/src-dogs/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -247,42 +247,42 @@ export class LassieDog extends Dog {
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true,
-        "impliedFormat": 1
+        "impliedFormat": "commonjs"
       },
       "../src-types/dogconfig.d.ts": {
         "version": "-2632060142-export interface DogConfig {\r\n    name: string;\r\n}\r\n",
         "signature": "-2632060142-export interface DogConfig {\r\n    name: string;\r\n}\r\n",
-        "impliedFormat": 99
+        "impliedFormat": "esnext"
       },
       "../src-types/index.d.ts": {
         "version": "-5608794531-export * from './dogconfig.js';\r\n",
         "signature": "-5608794531-export * from './dogconfig.js';\r\n",
-        "impliedFormat": 99
+        "impliedFormat": "esnext"
       },
       "./dogconfig.ts": {
         "version": "1966273863-import { DogConfig } from 'src-types';\n\nexport const DOG_CONFIG: DogConfig = {\n    name: 'Default dog',\n};\n",
         "signature": "17588480778-import { DogConfig } from 'src-types';\r\nexport declare const DOG_CONFIG: DogConfig;\r\n",
-        "impliedFormat": 99
+        "impliedFormat": "esnext"
       },
       "./dog.ts": {
         "version": "6091345804-import { DogConfig } from 'src-types';\nimport { DOG_CONFIG } from './dogconfig.js';\n\nexport abstract class Dog {\n\n    public static getCapabilities(): DogConfig {\n        return DOG_CONFIG;\n    }\n}\n",
         "signature": "22128633249-import { DogConfig } from 'src-types';\r\nexport declare abstract class Dog {\r\n    static getCapabilities(): DogConfig;\r\n}\r\n",
-        "impliedFormat": 99
+        "impliedFormat": "esnext"
       },
       "./lassie/lassieconfig.ts": {
         "version": "4440579024-import { DogConfig } from 'src-types';\n\nexport const LASSIE_CONFIG: DogConfig = { name: 'Lassie' };\n",
         "signature": "8131483665-import { DogConfig } from 'src-types';\r\nexport declare const LASSIE_CONFIG: DogConfig;\r\n",
-        "impliedFormat": 99
+        "impliedFormat": "esnext"
       },
       "./lassie/lassiedog.ts": {
         "version": "-32303727812-import { Dog } from '../dog.js';\nimport { LASSIE_CONFIG } from './lassieconfig.js';\n\nexport class LassieDog extends Dog {\n    protected static getDogConfig = () => LASSIE_CONFIG;\n}\n",
         "signature": "-20244062422-import { Dog } from '../dog.js';\r\nexport declare class LassieDog extends Dog {\r\n    protected static getDogConfig: () => import(\"../index.js\").DogConfig;\r\n}\r\n",
-        "impliedFormat": 99
+        "impliedFormat": "esnext"
       },
       "./index.ts": {
         "version": "-15974991320-export * from 'src-types';\nexport * from './lassie/lassiedog.js';\n",
         "signature": "-16783836862-export * from 'src-types';\r\nexport * from './lassie/lassiedog.js';\r\n",
-        "impliedFormat": 99
+        "impliedFormat": "esnext"
       }
     },
     "options": {
@@ -344,10 +344,11 @@ export class LassieDog extends Dog {
       "./lassie/lassiedog.ts",
       "../src-types/dogconfig.d.ts",
       "../src-types/index.d.ts"
-    ]
+    ],
+    "dtsChangeTime": 37000
   },
   "version": "FakeTSVersion",
-  "size": 2712
+  "size": 2734
 }
 
 //// [/src/src-types/dogconfig.d.ts]
@@ -369,7 +370,7 @@ export * from './dogconfig.js';
 
 
 //// [/src/src-types/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../lib/lib.es2022.full.d.ts","./dogconfig.ts","./index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-5575793279-export interface DogConfig {\n    name: string;\n}","signature":"-2632060142-export interface DogConfig {\r\n    name: string;\r\n}\r\n","impliedFormat":99},{"version":"-6189272282-export * from './dogconfig.js';","signature":"-5608794531-export * from './dogconfig.js';\r\n","impliedFormat":99}],"options":{"composite":true,"declaration":true,"module":100},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[[3,1]],"semanticDiagnosticsPerFile":[1,2,3]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../lib/lib.es2022.full.d.ts","./dogconfig.ts","./index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-5575793279-export interface DogConfig {\n    name: string;\n}","signature":"-2632060142-export interface DogConfig {\r\n    name: string;\r\n}\r\n","impliedFormat":99},{"version":"-6189272282-export * from './dogconfig.js';","signature":"-5608794531-export * from './dogconfig.js';\r\n","impliedFormat":99}],"options":{"composite":true,"declaration":true,"module":100},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[[3,1]],"semanticDiagnosticsPerFile":[1,2,3],"dtsChangeTime":27000},"version":"FakeTSVersion"}
 
 //// [/src/src-types/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -389,17 +390,17 @@ export * from './dogconfig.js';
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true,
-        "impliedFormat": 1
+        "impliedFormat": "commonjs"
       },
       "./dogconfig.ts": {
         "version": "-5575793279-export interface DogConfig {\n    name: string;\n}",
         "signature": "-2632060142-export interface DogConfig {\r\n    name: string;\r\n}\r\n",
-        "impliedFormat": 99
+        "impliedFormat": "esnext"
       },
       "./index.ts": {
         "version": "-6189272282-export * from './dogconfig.js';",
         "signature": "-5608794531-export * from './dogconfig.js';\r\n",
-        "impliedFormat": 99
+        "impliedFormat": "esnext"
       }
     },
     "options": {
@@ -421,9 +422,10 @@ export * from './dogconfig.js';
       "../../lib/lib.es2022.full.d.ts",
       "./dogconfig.ts",
       "./index.ts"
-    ]
+    ],
+    "dtsChangeTime": 27000
   },
   "version": "FakeTSVersion",
-  "size": 1038
+  "size": 1060
 }
 
