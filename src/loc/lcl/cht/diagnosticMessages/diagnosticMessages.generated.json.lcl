@@ -2112,6 +2112,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";An_interface_cannot_extend_a_primitive_type_like_0_an_interface_can_only_extend_named_types_and_clas_2840" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[An interface cannot extend a primitive type like '{0}'; an interface can only extend named types and classes]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[介面無法延伸基本類型，例如 '{0}'；介面只能延伸命名類型和類別]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";An_interface_property_cannot_have_an_initializer_1246" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[An interface property cannot have an initializer.]]></Val>
@@ -7815,6 +7824,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Invalid_optional_chain_from_new_expression_Did_you_mean_to_call_0_1209" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Invalid optional chain from new expression. Did you mean to call '{0}()'?]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[新運算式的選擇性鏈結無效。您想要呼叫 '{0}()' 嗎?]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Invalid_reference_directive_syntax_1084" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Invalid 'reference' directive syntax.]]></Val>
@@ -11142,24 +11160,6 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Resolution_mode_assertions_are_unstable_Use_nightly_TypeScript_to_silence_this_error_Try_updating_wi_4125" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Resolution mode assertions are unstable. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[解析模式宣告不穩定。使用夜間 TypeScript 將此錯誤設為靜音。請嘗試使用 'npm install -D typescript@next' 更新。]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";Resolution_modes_are_only_supported_when_moduleResolution_is_node16_or_nodenext_1452" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Resolution modes are only supported when `moduleResolution` is `node16` or `nodenext`.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[只有當 'moduleResolution' 為 'node16' 或 'nodenext' 時，才支援解析模式。]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";Resolve_keyof_to_string_valued_property_names_only_no_numbers_or_symbols_6195" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Resolve 'keyof' to string valued property names only (no numbers or symbols).]]></Val>
@@ -13412,6 +13412,15 @@
           <Val><![CDATA[The type of a function declaration must match the function's signature.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[函式宣告的類型必須與函式的簽章相符。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";The_type_of_this_expression_cannot_be_named_without_a_resolution_mode_assertion_which_is_an_unstable_2841" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[The type of this expression cannot be named without a 'resolution-mode' assertion, which is an unstable feature. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[沒有 'resolution-mode' 判斷提示，就無法命名此運算式的類型，這是不穩定的功能。請使用夜間 TypeScript 將此錯誤設為靜音。請嘗試使用 'npm install -D typescript@next' 更新。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -16598,6 +16607,24 @@
           <Val><![CDATA['require' call may be converted to an import.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA['require' 呼叫可能會轉換為匯入。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";resolution_mode_assertions_are_only_supported_when_moduleResolution_is_node16_or_nodenext_1452" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['resolution-mode' assertions are only supported when `moduleResolution` is `node16` or `nodenext`.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[只有當 'moduleResolution' 為 'node16' 或 'nodenext' 時，才支援 'resolution-mode' 判斷提示。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";resolution_mode_assertions_are_unstable_Use_nightly_TypeScript_to_silence_this_error_Try_updating_wi_4125" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['resolution-mode' assertions are unstable. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['resolution-mode' 判斷提示不穩定。使用夜間 TypeScript 將此錯誤設為靜音。請嘗試使用 'npm install -D typescript@next' 更新。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
