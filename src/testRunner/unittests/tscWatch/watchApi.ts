@@ -210,7 +210,7 @@ namespace ts.tscWatch {
         ) {
             const { cb, getPrograms } = commandLineCallbacks(sys);
             baseline.push(`tsc --w${optionsToExtend?.noEmit ? " --noEmit" : ""}`);
-            const oldSnap = sys.snap();
+            const oldSnap = VirtualFS.snap(sys);
             const host = createWatchCompilerHostOfConfigFileForBaseline<T>({
                 configFileName: config.path,
                 optionsToExtend,
@@ -385,7 +385,7 @@ namespace ts.tscWatch {
             applyChange(sys, baseline, sys => sys.writeFile(mainFile.path, "export const x = 10;"), "Fix error");
 
             const { cb, getPrograms } = commandLineCallbacks(sys);
-            const oldSnap = sys.snap();
+            const oldSnap = VirtualFS.snap(sys);
             const reportDiagnostic = createDiagnosticReporter(sys, /*pretty*/ true);
             const reportWatchStatus = createWatchStatusReporter(sys, /*pretty*/ true);
             const host = createWatchCompilerHostOfConfigFile({

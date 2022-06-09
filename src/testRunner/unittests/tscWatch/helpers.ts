@@ -129,7 +129,7 @@ namespace ts.tscWatch {
         timeouts: sys => sys.checkTimeoutQueueLength(0),
     };
 
-    export type SystemSnap = ReturnType<WatchedSystem["snap"]>;
+    export type SystemSnap = ReturnType<typeof VirtualFS.snap>;
     function tscWatchCompile(input: TscWatchCompile) {
         it("tsc-watch:: Generates files matching the baseline", () => {
             const { sys, baseline, oldSnap } = createBaseline(input.sys());
@@ -178,9 +178,9 @@ namespace ts.tscWatch {
         const sys = VirtualFS.changeToHostTrackingWrittenFiles(initialSys);
         const baseline: string[] = [];
         baseline.push("Input::");
-        sys.diff(baseline);
+        VirtualFS.diff(sys, baseline);
         const { cb, getPrograms } = commandLineCallbacks(sys);
-        return { sys, baseline, oldSnap: sys.snap(), cb, getPrograms };
+        return { sys, baseline, oldSnap: VirtualFS.snap(sys), cb, getPrograms };
     }
 
     export function createSolutionBuilderWithWatchHostForBaseline(sys: WatchedSystem, cb: ExecuteCommandLineCallbacks) {
@@ -238,12 +238,12 @@ namespace ts.tscWatch {
     }
 
     export function applyChange(sys: BaselineBase["sys"], baseline: BaselineBase["baseline"], change: TscWatchCompileChange["change"], caption?: TscWatchCompileChange["caption"]) {
-        const oldSnap = sys.snap();
+        const oldSnap = VirtualFS.snap(sys);
         baseline.push(`Change::${caption ? " " + caption : ""}`, "");
         change(sys);
         baseline.push("Input::");
-        sys.diff(baseline, oldSnap);
-        return sys.snap();
+        VirtualFS.diff(sys, baseline, oldSnap);
+        return VirtualFS.snap(sys);
     }
 
     export interface RunWatchBaseline<T extends BuilderProgram> extends BaselineBase, TscWatchCompileBase<T> {
@@ -302,7 +302,7 @@ namespace ts.tscWatch {
         const programs = baselinePrograms(baseline, getPrograms, oldPrograms, baselineDependencies);
         sys.serializeWatches(baseline);
         baseline.push(`exitCode:: ExitStatus.${ExitStatus[sys.exitCode as ExitStatus]}`, "");
-        sys.diff(baseline, oldSnap);
+        VirtualFS.diff(sys, baseline, oldSnap);
         sys.writtenFiles.forEach((value, key) => {
             assert.equal(value, 1, `Expected to write file ${key} only once`);
         });

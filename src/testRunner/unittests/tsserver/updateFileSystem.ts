@@ -41,13 +41,13 @@ ${file.fileContent}`;
         }
         function baselineFileSystem(scenario: string, subScenario: string, requests: [string, Partial<protocol.Request>][], host: VirtualFS.VirtualServerHost, session: TestSession) {
             const history: string[] = [];
-            let prev = host.snap();
+            let prev = VirtualFS.snap(host);
             for (const [name, request] of requests) {
                 session.executeCommandSeq(request);
                 history.push("");
                 history.push("#### " + name);
-                host.diff(history, prev);
-                prev = host.snap();
+                VirtualFS.diff(host, history, prev);
+                prev = VirtualFS.snap(host);
             }
             Harness.Baseline.runBaseline(`tsserver/${scenario}/${subScenario.split(" ").join("-")}.txt`, history.join("\r\n"));
             baselineTsserverLogs(scenario, subScenario, session);

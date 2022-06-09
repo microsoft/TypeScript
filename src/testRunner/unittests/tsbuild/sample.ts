@@ -234,7 +234,7 @@ namespace ts {
                 const testsConfig = getTsBuildProjectFile("tests", "tsconfig.json");
                 const testsIndex = getTsBuildProjectFile("tests", "index.ts");
                 const baseline: string[] = [];
-                let oldSnap: ReturnType<VirtualFS.TestServerHost["snap"]> | undefined;
+                let oldSnap: ReturnType<typeof VirtualFS.snap> | undefined;
                 const system = VirtualFS.changeToHostTrackingWrittenFiles(
                     fakes.patchHostForBuildInfoReadWrite(
                         tscWatch.createWatchedSystem([
@@ -265,9 +265,9 @@ namespace ts {
 
                 function baselineState() {
                     system.serializeOutput(baseline);
-                    system.diff(baseline, oldSnap);
+                    VirtualFS.diff(system, baseline, oldSnap);
                     system.writtenFiles.clear();
-                    oldSnap = system.snap();
+                    oldSnap = VirtualFS.snap(system);
                 }
             });
 
@@ -305,7 +305,7 @@ namespace ts {
                 const testsConfig = getTsBuildProjectFile("tests", "tsconfig.json");
                 const testsIndex = getTsBuildProjectFile("tests", "index.ts");
                 const baseline: string[] = [];
-                let oldSnap: ReturnType<VirtualFS.TestServerHost["snap"]> | undefined;
+                let oldSnap: ReturnType<typeof VirtualFS.snap> | undefined;
                 const system = VirtualFS.changeToHostTrackingWrittenFiles(
                     fakes.patchHostForBuildInfoReadWrite(
                         tscWatch.createWatchedSystem([
@@ -349,9 +349,9 @@ namespace ts {
                 function baselineState(heading: string) {
                     baseline.push(heading);
                     system.serializeOutput(baseline);
-                    system.diff(baseline, oldSnap);
+                    VirtualFS.diff(system, baseline, oldSnap);
                     system.writtenFiles.clear();
-                    oldSnap = system.snap();
+                    oldSnap = VirtualFS.snap(system);
                 }
             });
         });

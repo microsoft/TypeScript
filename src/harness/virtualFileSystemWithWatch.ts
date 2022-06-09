@@ -588,6 +588,98 @@ interface Array<T> { length: number; [n: number]: T; }`
         }
     }
 
+    export function snap(fshost: VirtualFS.VirtualServerHost): ESMap<Path, FSEntry> {
+        const result = new Map<Path, FSEntry>();
+        fshost.fs.forEach((value, key) => {
+            const cloneValue = clone(value);
+            if (isFsFolder(cloneValue)) {
+                cloneValue.entries = cloneValue.entries.map(clone) as SortedArray<FSEntry>;
+            }
+            result.set(key, cloneValue);
+        });
+
+        return result;
+    }
+
+    export function diff(fshost: VirtualFS.VirtualServerHost, baseline: string[], base: ESMap<string, FSEntry> = new Map()) {
+        fshost.fs.forEach(newFsEntry => {
+            diffFsEntry(baseline, base.get(newFsEntry.path), newFsEntry, fshost.writtenFiles);
+        });
+        base.forEach(oldFsEntry => {
+            const newFsEntry = fshost.fs.get(oldFsEntry.path);
+            if (!newFsEntry) {
+                diffFsEntry(baseline, oldFsEntry, newFsEntry, fshost.writtenFiles);
+            }
+        });
+        baseline.push("");
+    }
+
+    function diffFsFile(baseline: string[], fsEntry: FsFile) {
+        baseline.push(`//// [${fsEntry.fullPath}]\r\n${fsEntry.content}`, "");
+    }
+
+    function diffFsSymLink(baseline: string[], fsEntry: FsSymLink) {
+        baseline.push(`//// [${fsEntry.fullPath}] symlink(${fsEntry.symLink})`);
+    }
+
+    function diffFsEntry(baseline: string[], oldFsEntry: FSEntry | undefined, newFsEntry: FSEntry | undefined, writtenFiles: ESMap<string, any> | undefined): void {
+        const file = newFsEntry && newFsEntry.fullPath;
+        if (isFsFile(oldFsEntry)) {
+            if (isFsFile(newFsEntry)) {
+                if (oldFsEntry.content !== newFsEntry.content) {
+                    diffFsFile(baseline, newFsEntry);
+                }
+                else if (oldFsEntry.modifiedTime !== newFsEntry.modifiedTime) {
+                    if (oldFsEntry.fullPath !== newFsEntry.fullPath) {
+                        baseline.push(`//// [${file}] file was renamed from file ${oldFsEntry.fullPath}`);
+                    }
+                    else if (writtenFiles && !writtenFiles.has(newFsEntry.path)) {
+                        baseline.push(`//// [${file}] file changed its modified time`);
+                    }
+                    else {
+                        baseline.push(`//// [${file}] file written with same contents`);
+                    }
+                }
+            }
+            else {
+                baseline.push(`//// [${oldFsEntry.fullPath}] deleted`);
+                if (isFsSymLink(newFsEntry)) {
+                    diffFsSymLink(baseline, newFsEntry);
+                }
+            }
+        }
+        else if (isFsSymLink(oldFsEntry)) {
+            if (isFsSymLink(newFsEntry)) {
+                if (oldFsEntry.symLink !== newFsEntry.symLink) {
+                    diffFsSymLink(baseline, newFsEntry);
+                }
+                else if (oldFsEntry.modifiedTime !== newFsEntry.modifiedTime) {
+                    if (oldFsEntry.fullPath !== newFsEntry.fullPath) {
+                        baseline.push(`//// [${file}] symlink was renamed from symlink ${oldFsEntry.fullPath}`);
+                    }
+                    else if (writtenFiles && !writtenFiles.has(newFsEntry.path)) {
+                        baseline.push(`//// [${file}] symlink changed its modified time`);
+                    }
+                    else {
+                        baseline.push(`//// [${file}] symlink written with same link`);
+                    }
+                }
+            }
+            else {
+                baseline.push(`//// [${oldFsEntry.fullPath}] deleted symlink`);
+                if (isFsFile(newFsEntry)) {
+                    diffFsFile(baseline, newFsEntry);
+                }
+            }
+        }
+        else if (isFsFile(newFsEntry)) {
+            diffFsFile(baseline, newFsEntry);
+        }
+        else if (isFsSymLink(newFsEntry)) {
+            diffFsSymLink(baseline, newFsEntry);
+        }
+    }
+
     function serializeTestFsWatcher({ directoryName, fallbackPollingInterval, fallbackOptions }: VirtualFsWatcher) {
         return {
             directoryName,
