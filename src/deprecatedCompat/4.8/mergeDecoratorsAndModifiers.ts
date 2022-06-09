@@ -273,9 +273,9 @@ namespace ts {
 
     }
 
-    const MUST_MERGE: DeprecationOptions = { since: "4.8", warnAfter: "4.9", message: "Decorators have been combined with modifiers. Callers should switch to an overload without a 'decorators' parameter." };
-    const DISALLOW_DECORATORS: DeprecationOptions = { since: "4.8", warnAfter: "4.9", message: `Decorators are no longer supported for this function. Callers should switch to an overload without a 'decorators' parameter.` };
-    const DISALLOW_DECORATORS_AND_MODIFIERS: DeprecationOptions = { since: "4.8", warnAfter: "4.9", message: `Decorators and modifiers are no longer supported for this function. Callers should switch to an overload without the 'decorators' or 'modifiers' parameters.` };
+    const MUST_MERGE: DeprecationOptions = { since: "4.8", warnAfter: "4.9.0-0", message: "Decorators have been combined with modifiers. Callers should switch to an overload without a 'decorators' parameter." };
+    const DISALLOW_DECORATORS: DeprecationOptions = { since: "4.8", warnAfter: "4.9.0-0", message: `Decorators are no longer supported for this function. Callers should switch to an overload without a 'decorators' parameter.` };
+    const DISALLOW_DECORATORS_AND_MODIFIERS: DeprecationOptions = { since: "4.8", warnAfter: "4.9.0-0", message: `Decorators and modifiers are no longer supported for this function. Callers should switch to an overload without the 'decorators' or 'modifiers' parameters.` };
 
     function patchNodeFactory(factory: NodeFactory) {
         const {
