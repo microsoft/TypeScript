@@ -1,20 +1,22 @@
-tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(5,17): error TS2842: Variable 'string' is not used. Did you mean to write a type annotation for whole object?
-tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(6,17): error TS2842: Variable 'string' is not used. Did you mean to write a type annotation for whole object?
 tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(7,17): error TS2842: Variable 'string' is not used. Did you mean to write a type annotation for whole object?
 tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(8,17): error TS2842: Variable 'string' is not used. Did you mean to write a type annotation for whole object?
+tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(9,17): error TS2842: Variable 'string' is not used. Did you mean to write a type annotation for whole object?
 tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(10,17): error TS2842: Variable 'string' is not used. Did you mean to write a type annotation for whole object?
-tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(15,17): error TS2842: Variable 'string' is not used. Did you mean to write a type annotation for whole object?
-tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(16,17): error TS2842: Variable 'string' is not used. Did you mean to write a type annotation for whole object?
-tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(17,17): error TS2842: Variable 'string' is not used. Did you mean to write a type annotation for whole object?
-tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(18,17): error TS2842: Variable 'string' is not used. Did you mean to write a type annotation for whole object?
-tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(20,17): error TS2842: Variable 'string' is not used. Did you mean to write a type annotation for whole object?
-tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(26,16): error TS2842: Variable 'string' is not used. Did you mean to write a type annotation for whole object?
-tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(29,9): error TS2842: Variable 'string' is not used. Did you mean to write a type annotation for whole object?
-tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(32,13): error TS2842: Variable 'string' is not used. Did you mean to write a type annotation for whole object?
+tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(12,17): error TS2842: Variable 'string' is not used. Did you mean to write a type annotation for whole object?
+tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(22,21): error TS2842: Variable 'string' is not used. Did you mean to write a type annotation for whole object?
+tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(23,21): error TS2842: Variable 'string' is not used. Did you mean to write a type annotation for whole object?
+tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(24,21): error TS2842: Variable 'string' is not used. Did you mean to write a type annotation for whole object?
+tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(25,21): error TS2842: Variable 'string' is not used. Did you mean to write a type annotation for whole object?
+tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(27,21): error TS2842: Variable 'string' is not used. Did you mean to write a type annotation for whole object?
+tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(38,16): error TS2842: Variable 'string' is not used. Did you mean to write a type annotation for whole object?
+tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(41,9): error TS2842: Variable 'string' is not used. Did you mean to write a type annotation for whole object?
+tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(44,13): error TS2842: Variable 'string' is not used. Did you mean to write a type annotation for whole object?
 
 
 ==== tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts (13 errors) ====
     // GH#37454, GH#41044
+    
+    const sym = Symbol();
     
     type O = { a?: string; b: number; c: number; };
     type F1 = (arg: number) => any; // OK
@@ -36,26 +38,36 @@ tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(32,13): error
 !!! error TS2842: Variable 'string' is not used. Did you mean to write a type annotation for whole object?
     type F8 = ({ a, b: number }) => typeof number; // OK
     type F9 = ([a, b, c]) => void; // Error
+    type F10 = ({ "a": string }) => void; // Error
+    type F11 = ({ 2: string }) => void; // Error
+    type F12 = ({ ["a"]: string }: O) => void; // Error
+    type F13 = ({ [2]: string }) => void; // Error
+    // type F14 = ({ [sym]: string }) => void; // Error
     
-    type G1 = (arg: number) => any; // OK
-    type G2 = ({ a: string }: O) => any; // Error
-                    ~~~~~~
+    type G1 = new (arg: number) => any; // OK
+    type G2 = new ({ a: string }: O) => any; // Error
+                        ~~~~~~
 !!! error TS2842: Variable 'string' is not used. Did you mean to write a type annotation for whole object?
-    type G3 = ({ a: string, b, c }: O) => any; // Error
-                    ~~~~~~
+    type G3 = new ({ a: string, b, c }: O) => any; // Error
+                        ~~~~~~
 !!! error TS2842: Variable 'string' is not used. Did you mean to write a type annotation for whole object?
-    type G4 = ({ a: string }: O) => any; // Error
-                    ~~~~~~
+    type G4 = new ({ a: string }: O) => any; // Error
+                        ~~~~~~
 !!! error TS2842: Variable 'string' is not used. Did you mean to write a type annotation for whole object?
-    type G5 = ({ a: string, b, c }: O) => any; // Error
-                    ~~~~~~
+    type G5 = new ({ a: string, b, c }: O) => any; // Error
+                        ~~~~~~
 !!! error TS2842: Variable 'string' is not used. Did you mean to write a type annotation for whole object?
-    type G6 = ({ a: string }) => typeof string; // OK
-    type G7 = ({ a: string, b: number }) => typeof number; // Error
-                    ~~~~~~
+    type G6 = new ({ a: string }) => typeof string; // OK
+    type G7 = new ({ a: string, b: number }) => typeof number; // Error
+                        ~~~~~~
 !!! error TS2842: Variable 'string' is not used. Did you mean to write a type annotation for whole object?
-    type G8 = ({ a, b: number }) => typeof number; // OK
-    type G9 = ([a, b, c]) => void; // Error
+    type G8 = new ({ a, b: number }) => typeof number; // OK
+    type G9 = new ([a, b, c]) => void; // Error
+    type G10 = new ({ "a": string }) => void; // Error
+    type G11 = new ({ 2: string }) => void; // Error
+    type G12 = new ({ ["a"]: string }: O) => void; // Error
+    type G13 = new ({ [2]: string }) => void; // Error
+    // type G14 = new ({ [sym]: string }) => void; // Error
     
     interface I {
       method1(arg: number): any; // OK
@@ -88,6 +100,11 @@ tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(32,13): error
     };
     function f6({ a: string = "" }: O) { }
     const f7 = ({ a: string = "", b, c }: O) => { };
+    const f8 = ({ "a": string }: O) => { };
+    function f9 ({ 2: string }) { };
+    function f10 ({ ["a"]: string }: O) { };
+    const f11 =  ({ [2]: string }) => { };
+    // const f12 =  ({ [sym]: string }) => { };
     
     // In below case `string` should be kept because it is used
-    function f8({ a: string = "" }: O): typeof string { return "a"; }
+    function f13({ a: string = "" }: O): typeof string { return "a"; }
