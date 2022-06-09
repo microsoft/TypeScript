@@ -5,9 +5,7 @@ namespace ts {
     }
 
     export function createSourceMapGenerator(host: EmitHost, file: string, sourceRoot: string, sourcesDirectoryPath: string, generatorOptions: SourceMapGeneratorOptions): SourceMapGenerator {
-        const { enter, exit } = generatorOptions.extendedDiagnostics
-            ? performance.createTimer("Source Map", "beforeSourcemap", "afterSourcemap")
-            : performance.nullTimer;
+        const { enter, exit } = performance.createTimerIf(!!generatorOptions.extendedDiagnostics, "Source Map", "beforeSourcemap", "afterSourcemap");
 
         // Current source map file and its index in the sources list
         const rawSources: string[] = [];
