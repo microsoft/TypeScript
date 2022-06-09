@@ -51,6 +51,9 @@ Open files:
 DirectoryWatcher:: Triggered with /user/username/rootfolder/otherfolder/a/b/node_modules :: WatchInfo: /user/username/rootfolder/otherfolder/a/b/node_modules 1 undefined Project: /user/username/rootfolder/otherfolder/a/b/tsconfig.json WatchType: Failed Lookup Locations
 Scheduled: /user/username/rootfolder/otherfolder/a/b/tsconfig.jsonFailedLookupInvalidation
 Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/rootfolder/otherfolder/a/b/node_modules :: WatchInfo: /user/username/rootfolder/otherfolder/a/b/node_modules 1 undefined Project: /user/username/rootfolder/otherfolder/a/b/tsconfig.json WatchType: Failed Lookup Locations
+DirectoryWatcher:: Triggered with /user/username/rootfolder/otherfolder/a/b/node_modules :: WatchInfo: /user/username/rootfolder/otherfolder/a/b/node_modules 1 undefined Project: /user/username/rootfolder/otherfolder/a/b/tsconfig.json WatchType: Failed Lookup Locations
+Scheduled: /user/username/rootfolder/otherfolder/a/b/tsconfig.jsonFailedLookupInvalidation, Cancelled earlier one
+Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/rootfolder/otherfolder/a/b/node_modules :: WatchInfo: /user/username/rootfolder/otherfolder/a/b/node_modules 1 undefined Project: /user/username/rootfolder/otherfolder/a/b/tsconfig.json WatchType: Failed Lookup Locations
 DirectoryWatcher:: Triggered with /user/username/rootfolder/otherfolder/a/b/node_modules :: WatchInfo: /user/username/rootfolder/otherfolder/a/b 1 undefined Config: /user/username/rootfolder/otherfolder/a/b/tsconfig.json WatchType: Wild card directory
 Scheduled: /user/username/rootfolder/otherfolder/a/b/tsconfig.json
 Scheduled: *ensureProjectForOpenFiles*
@@ -239,6 +242,11 @@ DirectoryWatcher:: Triggered with /user/username/rootfolder/otherfolder/a/b/node
 Scheduled: /user/username/rootfolder/otherfolder/a/b/tsconfig.json, Cancelled earlier one
 Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/rootfolder/otherfolder/a/b/node_modules/symbol-observable :: WatchInfo: /user/username/rootfolder/otherfolder/a/b 1 undefined Config: /user/username/rootfolder/otherfolder/a/b/tsconfig.json WatchType: Wild card directory
+DirectoryWatcher:: Triggered with /user/username/rootfolder/otherfolder/a/b/node_modules/@types :: WatchInfo: /user/username/rootfolder/otherfolder/a/b/node_modules/@types 1 undefined Project: /user/username/rootfolder/otherfolder/a/b/tsconfig.json WatchType: Type roots
+Scheduled: /user/username/rootfolder/otherfolder/a/b/tsconfig.json, Cancelled earlier one
+Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
+Scheduled: /user/username/rootfolder/otherfolder/a/b/tsconfig.jsonFailedLookupInvalidation, Cancelled earlier one
+Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/rootfolder/otherfolder/a/b/node_modules/@types :: WatchInfo: /user/username/rootfolder/otherfolder/a/b/node_modules/@types 1 undefined Project: /user/username/rootfolder/otherfolder/a/b/tsconfig.json WatchType: Type roots
 DirectoryWatcher:: Triggered with /user/username/rootfolder/otherfolder/a/b/node_modules/@types :: WatchInfo: /user/username/rootfolder/otherfolder/a/b/node_modules/@types 1 undefined Project: /user/username/rootfolder/otherfolder/a/b/tsconfig.json WatchType: Type roots
 Scheduled: /user/username/rootfolder/otherfolder/a/b/tsconfig.json, Cancelled earlier one
 Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one

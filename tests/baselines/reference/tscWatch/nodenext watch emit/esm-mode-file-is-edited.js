@@ -63,14 +63,14 @@ WatchedFiles::
   {"fileName":"/project/src/index.ts","pollingInterval":250}
 /a/lib/lib.es2020.full.d.ts:
   {"fileName":"/a/lib/lib.es2020.full.d.ts","pollingInterval":250}
+/project/node_modules/@types:
+  {"fileName":"/project/node_modules/@types","pollingInterval":500}
 
 FsWatches::
 
 FsWatchesRecursive::
-/project/node_modules/@types:
-  {"directoryName":"/project/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /project:
-  {"directoryName":"/project","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/project"}
 
 exitCode:: ExitStatus.undefined
 
@@ -119,14 +119,14 @@ WatchedFiles::
   {"fileName":"/project/src/index.ts","pollingInterval":250}
 /a/lib/lib.es2020.full.d.ts:
   {"fileName":"/a/lib/lib.es2020.full.d.ts","pollingInterval":250}
+/project/node_modules/@types:
+  {"fileName":"/project/node_modules/@types","pollingInterval":500}
 
 FsWatches::
 
 FsWatchesRecursive::
-/project/node_modules/@types:
-  {"directoryName":"/project/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /project:
-  {"directoryName":"/project","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/project"}
 
 exitCode:: ExitStatus.undefined
 

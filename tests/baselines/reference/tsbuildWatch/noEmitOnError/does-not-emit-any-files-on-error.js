@@ -89,7 +89,7 @@ FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/noemitonerror:
-  {"directoryName":"/user/username/projects/noemitonerror","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/noemitonerror"}
 
 exitCode:: ExitStatus.undefined
 
@@ -145,7 +145,7 @@ FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/noemitonerror:
-  {"directoryName":"/user/username/projects/noemitonerror","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/noemitonerror"}
 
 exitCode:: ExitStatus.undefined
 
@@ -209,7 +209,7 @@ FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/noemitonerror:
-  {"directoryName":"/user/username/projects/noemitonerror","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/noemitonerror"}
 
 exitCode:: ExitStatus.undefined
 
@@ -289,7 +289,7 @@ FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/noemitonerror:
-  {"directoryName":"/user/username/projects/noemitonerror","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/noemitonerror"}
 
 exitCode:: ExitStatus.undefined
 
@@ -345,7 +345,7 @@ FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/noemitonerror:
-  {"directoryName":"/user/username/projects/noemitonerror","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/noemitonerror"}
 
 exitCode:: ExitStatus.undefined
 
@@ -403,7 +403,7 @@ FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/noemitonerror:
-  {"directoryName":"/user/username/projects/noemitonerror","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/noemitonerror"}
 
 exitCode:: ExitStatus.undefined
 
@@ -464,7 +464,7 @@ FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/noemitonerror:
-  {"directoryName":"/user/username/projects/noemitonerror","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/noemitonerror"}
 
 exitCode:: ExitStatus.undefined
 

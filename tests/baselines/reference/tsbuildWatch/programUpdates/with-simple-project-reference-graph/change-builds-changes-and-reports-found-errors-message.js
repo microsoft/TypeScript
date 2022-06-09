@@ -200,9 +200,9 @@ FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/sample1/core:
-  {"directoryName":"/user/username/projects/sample1/core","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/sample1/core"}
 /user/username/projects/sample1/logic:
-  {"directoryName":"/user/username/projects/sample1/logic","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/sample1/logic"}
 
 exitCode:: ExitStatus.undefined
 
@@ -533,9 +533,9 @@ FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/sample1/core:
-  {"directoryName":"/user/username/projects/sample1/core","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/sample1/core"}
 /user/username/projects/sample1/logic:
-  {"directoryName":"/user/username/projects/sample1/logic","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/sample1/logic"}
 
 exitCode:: ExitStatus.undefined
 
@@ -683,9 +683,9 @@ FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/sample1/core:
-  {"directoryName":"/user/username/projects/sample1/core","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/sample1/core"}
 /user/username/projects/sample1/logic:
-  {"directoryName":"/user/username/projects/sample1/logic","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/sample1/logic"}
 
 exitCode:: ExitStatus.undefined
 
@@ -902,9 +902,9 @@ FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/sample1/core:
-  {"directoryName":"/user/username/projects/sample1/core","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/sample1/core"}
 /user/username/projects/sample1/logic:
-  {"directoryName":"/user/username/projects/sample1/logic","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/sample1/logic"}
 
 exitCode:: ExitStatus.undefined
 
@@ -1044,9 +1044,9 @@ FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/sample1/core:
-  {"directoryName":"/user/username/projects/sample1/core","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/sample1/core"}
 /user/username/projects/sample1/logic:
-  {"directoryName":"/user/username/projects/sample1/logic","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/sample1/logic"}
 
 exitCode:: ExitStatus.undefined
 
@@ -1265,9 +1265,9 @@ FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/sample1/core:
-  {"directoryName":"/user/username/projects/sample1/core","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/sample1/core"}
 /user/username/projects/sample1/logic:
-  {"directoryName":"/user/username/projects/sample1/logic","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/sample1/logic"}
 
 exitCode:: ExitStatus.undefined
 
@@ -1423,9 +1423,9 @@ FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/sample1/core:
-  {"directoryName":"/user/username/projects/sample1/core","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/sample1/core"}
 /user/username/projects/sample1/logic:
-  {"directoryName":"/user/username/projects/sample1/logic","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/sample1/logic"}
 
 exitCode:: ExitStatus.undefined
 

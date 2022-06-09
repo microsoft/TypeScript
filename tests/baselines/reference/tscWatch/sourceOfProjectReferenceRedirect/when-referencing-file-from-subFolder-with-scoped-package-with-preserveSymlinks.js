@@ -79,29 +79,29 @@ WatchedFiles::
   {"fileName":"/user/username/projects/myproject/packages/B/src/bar/foo.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
   {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+/user/username/projects/myproject/packages/a/node_modules:
+  {"fileName":"/user/username/projects/myproject/packages/A/node_modules","pollingInterval":500}
+/user/username/projects/myproject/packages/node_modules:
+  {"fileName":"/user/username/projects/myproject/packages/node_modules","pollingInterval":500}
 /user/username/projects/myproject/packages/b/package.json:
   {"fileName":"/user/username/projects/myproject/packages/B/package.json","pollingInterval":250}
+/user/username/projects/myproject/packages/a/node_modules/@types:
+  {"fileName":"/user/username/projects/myproject/packages/A/node_modules/@types","pollingInterval":500}
+/user/username/projects/myproject/packages/node_modules/@types:
+  {"fileName":"/user/username/projects/myproject/packages/node_modules/@types","pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"fileName":"/user/username/projects/myproject/node_modules/@types","pollingInterval":500}
 
 FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/myproject/packages/b/src:
-  {"directoryName":"/user/username/projects/myproject/packages/b/src","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/packages/b/src"}
 /user/username/projects/myproject/packages/a/src:
-  {"directoryName":"/user/username/projects/myproject/packages/A/src","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-  {"directoryName":"/user/username/projects/myproject/packages/a/src","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/packages/a/node_modules:
-  {"directoryName":"/user/username/projects/myproject/packages/A/node_modules","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/packages/node_modules:
-  {"directoryName":"/user/username/projects/myproject/packages/node_modules","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/packages/A/src"}
+  {"directoryName":"/user/username/projects/myproject/packages/a/src"}
 /user/username/projects/myproject/node_modules:
-  {"directoryName":"/user/username/projects/myproject/node_modules","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/packages/a/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/packages/A/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/packages/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/packages/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/node_modules"}
 
 exitCode:: ExitStatus.undefined
 
