@@ -5733,10 +5733,10 @@ namespace ts {
                 case SyntaxKind.TemplateHead:                   // foo<T> `...${100}...`
                     return true;
                 // A type argument list followed by `<` never makes sense, and a type argument list followed
-                // by `>` is ambiguous with a (re-scanned) `>>` operator, so we disqualify both.
+                // by `>` is ambiguous with a (re-scanned) `>>` operator, so we disqualify both. Also, in
+                // this context, `+` and `-` are unary operators, not binary operators.
                 case SyntaxKind.LessThanToken:
                 case SyntaxKind.GreaterThanToken:
-                // In this context, `+` and `-` are unary operators, not binary operators.
                 case SyntaxKind.PlusToken:
                 case SyntaxKind.MinusToken:
                     return false;
