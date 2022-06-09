@@ -4,24 +4,27 @@ const sym = Symbol();
 >Symbol() : unique symbol
 >Symbol : SymbolConstructor
 
-type F14 = ({ [sym]: string }) => void; // Error
->F14 : ({ [sym]: string }: { "__@sym@6": any; }) => void
->sym : unique symbol
->string : any
+type O = Record<symbol, unknown>
+>O : { [x: symbol]: unknown; }
 
-type G14 = new ({ [sym]: string }) => void; // Error
->G14 : new ({ [sym]: string }: { "__@sym@6": any; }) => void
+type F14 = ({ [sym]: string }: O) => void; // Error
+>F14 : ({ [sym]: string }: O) => void
 >sym : unique symbol
->string : any
+>string : unknown
 
-const f13 =  ({ [sym]: string }) => { };
->f13 : ({ [sym]: string }: { "__@sym@6": any; }) => void
->({ [sym]: string }) => { } : ({ [sym]: string }: { "__@sym@6": any; }) => void
+type G14 = new ({ [sym]: string }: O) => void; // Error
+>G14 : new ({ [sym]: string }: O) => void
 >sym : unique symbol
->string : any
+>string : unknown
 
-function f14 ({ [sym]: string }) { };
->f14 : ({ [sym]: string }: { "__@sym@6": any; }) => void
+const f13 =  ({ [sym]: string }: O) => { };
+>f13 : ({ [sym]: string }: O) => void
+>({ [sym]: string }: O) => { } : ({ [sym]: string }: O) => void
 >sym : unique symbol
->string : any
+>string : unknown
+
+function f14 ({ [sym]: string }: O) { };
+>f14 : ({ [sym]: string }: O) => void
+>sym : unique symbol
+>string : unknown
 
