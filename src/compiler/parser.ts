@@ -5732,20 +5732,18 @@ namespace ts {
                 case SyntaxKind.NoSubstitutionTemplateLiteral:  // foo<T> `...`
                 case SyntaxKind.TemplateHead:                   // foo<T> `...${100}...`
                     return true;
-                // Technically strict mode reserved words are valid identifiers in non-strict mode, and can thus
-                // start an expression. However, when they follow a type argument list and are immediately
-                // preceded by a line break, we don't consider them expression starters.
-                // This supports a semicolon-less style for code like the following:
-                //
-                //   let specialFoo = foo<string>
-                //   let value = ...
-                //
-                case SyntaxKind.InterfaceKeyword:
-                case SyntaxKind.LetKeyword:
-                    return scanner.hasPrecedingLineBreak();
+                // A type argument list followed by `<` never makes sense, and a type argument list followed
+                // by `>` is ambiguous with a (re-scanned) `>>` operator, so we disqualify both.
+                case SyntaxKind.LessThanToken:
+                case SyntaxKind.GreaterThanToken:
+                // In this context, `+` and `-` are unary operators, not binary operators.
+                case SyntaxKind.PlusToken:
+                case SyntaxKind.MinusToken:
+                    return false;
             }
-            // Consider something a type argument list only if the following token can't start an expression.
-            return !isStartOfExpression();
+            // We favor the type argument list interpretation when it is immediately followed by
+            // a line break, a binary operator, or something that can't start an expression.
+            return scanner.hasPrecedingLineBreak() || isBinaryOperator() || !isStartOfExpression();
         }
 
         function parsePrimaryExpression(): PrimaryExpression {
