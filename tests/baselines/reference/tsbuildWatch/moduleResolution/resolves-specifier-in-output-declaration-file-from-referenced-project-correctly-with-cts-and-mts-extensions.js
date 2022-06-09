@@ -170,9 +170,9 @@ FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/myproject/packages/pkg2:
-  {"directoryName":"/user/username/projects/myproject/packages/pkg2","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/packages/pkg2"}
 /user/username/projects/myproject/packages/pkg1:
-  {"directoryName":"/user/username/projects/myproject/packages/pkg1","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/packages/pkg1"}
 
 exitCode:: ExitStatus.undefined
 
@@ -367,9 +367,9 @@ FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/myproject/packages/pkg2:
-  {"directoryName":"/user/username/projects/myproject/packages/pkg2","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/packages/pkg2"}
 /user/username/projects/myproject/packages/pkg1:
-  {"directoryName":"/user/username/projects/myproject/packages/pkg1","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/packages/pkg1"}
 
 exitCode:: ExitStatus.undefined
 
@@ -472,9 +472,9 @@ FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/myproject/packages/pkg2:
-  {"directoryName":"/user/username/projects/myproject/packages/pkg2","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/packages/pkg2"}
 /user/username/projects/myproject/packages/pkg1:
-  {"directoryName":"/user/username/projects/myproject/packages/pkg1","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/packages/pkg1"}
 
 exitCode:: ExitStatus.undefined
 
@@ -589,9 +589,9 @@ FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/myproject/packages/pkg2:
-  {"directoryName":"/user/username/projects/myproject/packages/pkg2","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/packages/pkg2"}
 /user/username/projects/myproject/packages/pkg1:
-  {"directoryName":"/user/username/projects/myproject/packages/pkg1","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/packages/pkg1"}
 
 exitCode:: ExitStatus.undefined
 
@@ -735,9 +735,9 @@ FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/myproject/packages/pkg2:
-  {"directoryName":"/user/username/projects/myproject/packages/pkg2","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/packages/pkg2"}
 /user/username/projects/myproject/packages/pkg1:
-  {"directoryName":"/user/username/projects/myproject/packages/pkg1","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/packages/pkg1"}
 
 exitCode:: ExitStatus.undefined
 

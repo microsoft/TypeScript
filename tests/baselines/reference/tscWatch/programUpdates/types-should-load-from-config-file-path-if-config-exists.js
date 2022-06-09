@@ -63,9 +63,9 @@ FsWatches::
 
 FsWatchesRecursive::
 /a/b/node_modules:
-  {"directoryName":"/a/b/node_modules","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/a/b/node_modules"}
 /a/b:
-  {"directoryName":"/a/b","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/a/b"}
 
 exitCode:: ExitStatus.undefined
 

@@ -1,8 +1,4 @@
 namespace ts.projectSystem {
-    function getNumberOfWatchesInvokedForRecursiveWatches(recursiveWatchedDirs: string[], file: string) {
-        return countWhere(recursiveWatchedDirs, dir => file.length > dir.length && startsWith(file, dir) && file[dir.length] === directorySeparator);
-    }
-
     describe("unittests:: tsserver:: CachingFileSystemInformation:: tsserverProjectSystem CachingFileSystemInformation", () => {
         enum CalledMapsWithSingleArg {
             fileExists = "fileExists",
@@ -15,7 +11,7 @@ namespace ts.projectSystem {
         }
         type CalledMaps = CalledMapsWithSingleArg | CalledMapsWithFiveArgs;
         type CalledWithFiveArgs = [readonly string[], readonly string[], readonly string[], number];
-        function createCallsTrackingHost(host: TestServerHost) {
+        function createLoggerTrackingHostCalls(host: TestServerHost) {
             const calledMaps: Record<CalledMapsWithSingleArg, MultiMap<string, true>> & Record<CalledMapsWithFiveArgs, MultiMap<string, CalledWithFiveArgs>> = {
                 fileExists: setCallsTrackingWithSingleArgFn(CalledMapsWithSingleArg.fileExists),
                 directoryExists: setCallsTrackingWithSingleArgFn(CalledMapsWithSingleArg.directoryExists),
@@ -24,15 +20,7 @@ namespace ts.projectSystem {
                 readDirectory: setCallsTrackingWithFiveArgFn(CalledMapsWithFiveArgs.readDirectory)
             };
 
-            return {
-                verifyNoCall,
-                verifyCalledOnEachEntryNTimes,
-                verifyCalledOnEachEntry,
-                verifyNoHostCalls,
-                verifyNoHostCallsExceptFileExistsOnce,
-                verifyCalledOn,
-                clear
-            };
+            return logCacheAndClear;
 
             function setCallsTrackingWithSingleArgFn(prop: CalledMapsWithSingleArg) {
                 const calledMap = createMultiMap<true>();
@@ -54,49 +42,25 @@ namespace ts.projectSystem {
                 return calledMap;
             }
 
-            function verifyCalledOn(callback: CalledMaps, name: string) {
-                const calledMap = calledMaps[callback];
-                const result = calledMap.get(name);
-                assert.isTrue(result && !!result.length, `${callback} should be called with name: ${name}: ${arrayFrom(calledMap.keys())}`);
+            function logCacheEntry(logger: Logger, callback: CalledMaps) {
+                const result = arrayFrom<[string, (true | CalledWithFiveArgs)[]], { key: string, count: number }>(calledMaps[callback].entries(), ([key, arr]) => ({ key, count: arr.length }));
+                logger.info(`${callback}:: ${JSON.stringify(result)}`);
+                calledMaps[callback].clear();
             }
 
-            function verifyNoCall(callback: CalledMaps) {
-                const calledMap = calledMaps[callback];
-                assert.equal(calledMap.size, 0, `${callback} shouldn't be called: ${arrayFrom(calledMap.keys())}`);
+            function logCacheAndClear(logger: Logger) {
+                logCacheEntry(logger, CalledMapsWithSingleArg.fileExists);
+                logCacheEntry(logger, CalledMapsWithSingleArg.directoryExists);
+                logCacheEntry(logger, CalledMapsWithSingleArg.getDirectories);
+                logCacheEntry(logger, CalledMapsWithSingleArg.readFile);
+                logCacheEntry(logger, CalledMapsWithFiveArgs.readDirectory);
             }
+        }
 
-            function verifyCalledOnEachEntry(callback: CalledMaps, expectedKeys: ESMap<string, number>) {
-                TestFSWithWatch.checkMap<true | CalledWithFiveArgs>(callback, calledMaps[callback], expectedKeys);
-            }
-
-            function verifyCalledOnEachEntryNTimes(callback: CalledMaps, expectedKeys: readonly string[], nTimes: number) {
-                TestFSWithWatch.checkMap<true | CalledWithFiveArgs>(callback, calledMaps[callback], expectedKeys, nTimes);
-            }
-
-            function verifyNoHostCalls() {
-                iterateOnCalledMaps(key => verifyNoCall(key));
-            }
-
-            function verifyNoHostCallsExceptFileExistsOnce(expectedKeys: readonly string[]) {
-                verifyCalledOnEachEntryNTimes(CalledMapsWithSingleArg.fileExists, expectedKeys, 1);
-                verifyNoCall(CalledMapsWithSingleArg.directoryExists);
-                verifyNoCall(CalledMapsWithSingleArg.getDirectories);
-                verifyNoCall(CalledMapsWithSingleArg.readFile);
-                verifyNoCall(CalledMapsWithFiveArgs.readDirectory);
-            }
-
-            function clear() {
-                iterateOnCalledMaps(key => calledMaps[key].clear());
-            }
-
-            function iterateOnCalledMaps(cb: (key: CalledMaps) => void) {
-                for (const key in CalledMapsWithSingleArg) {
-                    cb(key as CalledMapsWithSingleArg);
-                }
-                for (const key in CalledMapsWithFiveArgs) {
-                    cb(key as CalledMapsWithFiveArgs);
-                }
-            }
+        function logSemanticDiagnostics(projectService: server.ProjectService, project: server.Project, file: File) {
+            const diags = project.getLanguageService().getSemanticDiagnostics(file.path);
+            projectService.logger.info(`getSemanticDiagnostics:: ${file.path}:: ${diags.length}`);
+            diags.forEach(d => projectService.logger.info(formatDiagnostic(d, project)));
         }
 
         it("works using legacy resolution logic", () => {
@@ -112,107 +76,49 @@ namespace ts.projectSystem {
             };
 
             const host = createServerHost([root, imported]);
-            const projectService = createProjectService(host);
+            const projectService = createProjectService(host, { logger: createLoggerWithInMemoryLogs() });
             projectService.setCompilerOptionsForInferredProjects({ module: ModuleKind.AMD, noLib: true });
             projectService.openClientFile(root.path);
-            checkNumberOfProjects(projectService, { inferredProjects: 1 });
             const project = projectService.inferredProjects[0];
             const rootScriptInfo = project.getRootScriptInfos()[0];
             assert.equal(rootScriptInfo.fileName, root.path);
 
             // ensure that imported file was found
-            verifyImportedDiagnostics();
+            logSemanticDiagnostics(projectService, project, imported);
 
-            const callsTrackingHost = createCallsTrackingHost(host);
+            const logCacheAndClear = createLoggerTrackingHostCalls(host);
 
             // trigger synchronization to make sure that import will be fetched from the cache
             // ensure file has correct number of errors after edit
             editContent(`import {x} from "f1";
                  var x: string = 1;`);
-            verifyImportedDiagnostics();
-            callsTrackingHost.verifyNoHostCalls();
+            logSemanticDiagnostics(projectService, project, imported);
+            logCacheAndClear(projectService.logger);
 
             // trigger synchronization to make sure that the host will try to find 'f2' module on disk
             editContent(`import {x} from "f2"`);
             try {
                 // trigger synchronization to make sure that the host will try to find 'f2' module on disk
-                verifyImportedDiagnostics();
-                assert.isTrue(false, `should not find file '${imported.path}'`);
+                logSemanticDiagnostics(projectService, project, imported);
             }
             catch (e) {
-                assert.isTrue(e.message.indexOf(`Could not find source file: '${imported.path}'.`) === 0, `Actual: ${e.message}`);
+                projectService.logger.info(e.message);
             }
-            const f2Lookups = getLocationsForModuleLookup("f2");
-            callsTrackingHost.verifyCalledOnEachEntryNTimes(CalledMapsWithSingleArg.fileExists, f2Lookups, 1);
-            const f2DirLookups = getLocationsForDirectoryLookup();
-            callsTrackingHost.verifyCalledOnEachEntry(CalledMapsWithSingleArg.directoryExists, f2DirLookups);
-            callsTrackingHost.verifyNoCall(CalledMapsWithSingleArg.getDirectories);
-            callsTrackingHost.verifyNoCall(CalledMapsWithSingleArg.readFile);
-            callsTrackingHost.verifyNoCall(CalledMapsWithFiveArgs.readDirectory);
+            logCacheAndClear(projectService.logger);
 
             editContent(`import {x} from "f1"`);
-            verifyImportedDiagnostics();
-            const f1Lookups = f2Lookups.map(s => s.replace("f2", "f1"));
-            f1Lookups.length = f1Lookups.indexOf(imported.path) + 1;
-            const f1DirLookups = ["/c/d", "/c", ...mapCombinedPathsInAncestor(getDirectoryPath(root.path), nodeModulesAtTypes, returnTrue)];
-            vertifyF1Lookups();
+            logSemanticDiagnostics(projectService, project, imported);
+            logCacheAndClear(projectService.logger);
 
             // setting compiler options discards module resolution cache
-            callsTrackingHost.clear();
             projectService.setCompilerOptionsForInferredProjects({ module: ModuleKind.AMD, noLib: true, target: ScriptTarget.ES5 });
-            verifyImportedDiagnostics();
-            vertifyF1Lookups();
-
-            function vertifyF1Lookups() {
-                callsTrackingHost.verifyCalledOnEachEntryNTimes(CalledMapsWithSingleArg.fileExists, f1Lookups, 1);
-                callsTrackingHost.verifyCalledOnEachEntryNTimes(CalledMapsWithSingleArg.directoryExists, f1DirLookups, 1);
-                callsTrackingHost.verifyNoCall(CalledMapsWithSingleArg.getDirectories);
-                callsTrackingHost.verifyNoCall(CalledMapsWithSingleArg.readFile);
-                callsTrackingHost.verifyNoCall(CalledMapsWithFiveArgs.readDirectory);
-            }
+            logSemanticDiagnostics(projectService, project, imported);
+            logCacheAndClear(projectService.logger);
+            baselineTsserverLogs("cachingFileSystemInformation", "works using legacy resolution logic", projectService);
 
             function editContent(newContent: string) {
-                callsTrackingHost.clear();
                 rootScriptInfo.editContent(0, rootContent.length, newContent);
                 rootContent = newContent;
-            }
-
-            function verifyImportedDiagnostics() {
-                const diags = project.getLanguageService().getSemanticDiagnostics(imported.path);
-                assert.equal(diags.length, 1);
-                const diag = diags[0];
-                assert.equal(diag.code, Diagnostics.Cannot_find_name_0.code);
-                assert.equal(flattenDiagnosticMessageText(diag.messageText, "\n"), "Cannot find name 'foo'.");
-            }
-
-            function getLocationsForModuleLookup(module: string) {
-                const locations: string[] = [];
-                forEachAncestorDirectory(getDirectoryPath(root.path), ancestor => {
-                    locations.push(
-                        combinePaths(ancestor, `${module}.ts`),
-                        combinePaths(ancestor, `${module}.tsx`),
-                        combinePaths(ancestor, `${module}.d.ts`)
-                    );
-                });
-                forEachAncestorDirectory(getDirectoryPath(root.path), ancestor => {
-                    locations.push(
-                        combinePaths(ancestor, `${module}.js`),
-                        combinePaths(ancestor, `${module}.jsx`)
-                    );
-                });
-                return locations;
-            }
-
-            function getLocationsForDirectoryLookup() {
-                const result = new Map<string, number>();
-                forEachAncestorDirectory(getDirectoryPath(root.path), ancestor => {
-                    // To resolve modules
-                    result.set(ancestor, 2);
-                    // for type roots
-                    result.set(combinePaths(ancestor, nodeModules), 1);
-                    result.set(combinePaths(ancestor, nodeModulesAtTypes), 1);
-                });
-                return result;
             }
         });
 
@@ -228,29 +134,22 @@ namespace ts.projectSystem {
             };
 
             const host = createServerHost([root]);
-            const projectService = createProjectService(host);
+            const projectService = createProjectService(host, { logger: createLoggerWithInMemoryLogs() });
             projectService.setCompilerOptionsForInferredProjects({ module: ModuleKind.AMD, noLib: true });
-            const callsTrackingHost = createCallsTrackingHost(host);
+            const logCacheAndClear = createLoggerTrackingHostCalls(host);
             projectService.openClientFile(root.path);
-            checkNumberOfProjects(projectService, { inferredProjects: 1 });
             const project = projectService.inferredProjects[0];
             const rootScriptInfo = project.getRootScriptInfos()[0];
             assert.equal(rootScriptInfo.fileName, root.path);
 
-            let diags = project.getLanguageService().getSemanticDiagnostics(root.path);
-            assert.equal(diags.length, 1);
-            const diag = diags[0];
-            assert.equal(diag.code, Diagnostics.Cannot_find_module_0_Did_you_mean_to_set_the_moduleResolution_option_to_node_or_to_add_aliases_to_the_paths_option.code);
-            assert.equal(flattenDiagnosticMessageText(diag.messageText, "\n"), "Cannot find module 'bar'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?");
-            callsTrackingHost.verifyCalledOn(CalledMapsWithSingleArg.fileExists, imported.path);
+            logSemanticDiagnostics(projectService, project, root);
+            logCacheAndClear(projectService.logger);
 
-
-            callsTrackingHost.clear();
             host.writeFile(imported.path, imported.content);
             host.runQueuedTimeoutCallbacks();
-            diags = project.getLanguageService().getSemanticDiagnostics(root.path);
-            assert.equal(diags.length, 0);
-            callsTrackingHost.verifyCalledOn(CalledMapsWithSingleArg.fileExists, imported.path);
+            logSemanticDiagnostics(projectService, project, root);
+            logCacheAndClear(projectService.logger);
+            baselineTsserverLogs("cachingFileSystemInformation", "loads missing files from disk", projectService);
         });
 
         it("when calling goto definition of module", () => {
@@ -296,17 +195,9 @@ namespace ts.projectSystem {
             };
             const projectFiles = [clientFile, anotherModuleFile, moduleFile, tsconfigFile];
             const host = createServerHost(projectFiles);
-            const session = createSession(host);
-            const projectService = session.getProjectService();
-            const { configFileName } = projectService.openClientFile(clientFile.path);
-
-            assert.isDefined(configFileName, `should find config`);
-            checkNumberOfConfiguredProjects(projectService, 1);
-
-            const project = projectService.configuredProjects.get(tsconfigFile.path)!;
-            checkProjectActualFiles(project, map(projectFiles, f => f.path));
-
-            const callsTrackingHost = createCallsTrackingHost(host);
+            const session = createSession(host, { logger: createLoggerWithInMemoryLogs() });
+            openFilesForSession([clientFile], session);
+            const logCacheAndClear = createLoggerTrackingHostCalls(host);
 
             // Get definitions shouldnt make host requests
             const getDefinitionRequest = makeSessionRequest<protocol.FileLocationRequestArgs>(protocol.CommandTypes.Definition, {
@@ -315,137 +206,90 @@ namespace ts.projectSystem {
                 line: undefined!, // TODO: GH#18217
                 offset: undefined! // TODO: GH#18217
             });
-            const response = session.executeCommand(getDefinitionRequest).response as server.protocol.FileSpan[];
-            assert.equal(response[0].file, moduleFile.path, "Should go to definition of vessel: response: " + JSON.stringify(response));
-            callsTrackingHost.verifyNoHostCalls();
+            session.executeCommand(getDefinitionRequest);
+            logCacheAndClear(session.logger);
 
             // Open the file should call only file exists on module directory and use cached value for parental directory
-            const { configFileName: config2 } = projectService.openClientFile(moduleFile.path);
-            assert.equal(config2, configFileName);
-            callsTrackingHost.verifyNoHostCallsExceptFileExistsOnce(["/a/b/models/tsconfig.json", "/a/b/models/jsconfig.json"]);
+            openFilesForSession([moduleFile], session);
+            logCacheAndClear(session.logger);
 
-            checkNumberOfConfiguredProjects(projectService, 1);
-            assert.strictEqual(projectService.configuredProjects.get(tsconfigFile.path), project);
+            baselineTsserverLogs("cachingFileSystemInformation", "when calling goto definition of module", session);
         });
 
         describe("WatchDirectories for config file with", () => {
             function verifyWatchDirectoriesCaseSensitivity(useCaseSensitiveFileNames: boolean) {
-                const frontendDir = "/Users/someuser/work/applications/frontend";
-                const toCanonical: (s: string) => Path = useCaseSensitiveFileNames ? s => s as Path : s => s.toLowerCase() as Path;
-                const canonicalFrontendDir = toCanonical(frontendDir);
-                const file1: File = {
-                    path: `${frontendDir}/src/app/utils/Analytic.ts`,
-                    content: "export class SomeClass { };"
-                };
-                const file2: File = {
-                    path: `${frontendDir}/src/app/redux/configureStore.ts`,
-                    content: "export class configureStore { }"
-                };
-                const file3: File = {
-                    path: `${frontendDir}/src/app/utils/Cookie.ts`,
-                    content: "export class Cookie { }"
-                };
-                const es2016LibFile: File = {
-                    path: "/a/lib/lib.es2016.full.d.ts",
-                    content: libFile.content
-                };
-                const typeRoots = ["types", "node_modules/@types"];
-                const types = ["node", "jest"];
-                const tsconfigFile: File = {
-                    path: `${frontendDir}/tsconfig.json`,
-                    content: JSON.stringify({
-                        compilerOptions: {
-                            strict: true,
-                            strictNullChecks: true,
-                            target: "es2016",
-                            module: "commonjs",
-                            moduleResolution: "node",
-                            sourceMap: true,
-                            noEmitOnError: true,
-                            experimentalDecorators: true,
-                            emitDecoratorMetadata: true,
-                            types,
-                            noUnusedLocals: true,
-                            outDir: "./compiled",
-                            typeRoots,
-                            baseUrl: ".",
-                            paths: {
-                                "*": [
-                                    "types/*"
-                                ]
-                            }
-                        },
-                        include: [
-                            "src/**/*"
-                        ],
-                        exclude: [
-                            "node_modules",
-                            "compiled"
-                        ]
-                    })
-                };
-                const projectFiles = [file1, file2, es2016LibFile, tsconfigFile];
-                const host = createServerHost(projectFiles, { useCaseSensitiveFileNames });
-                const projectService = createProjectService(host);
-                const canonicalConfigPath = toCanonical(tsconfigFile.path);
-                const { configFileName } = projectService.openClientFile(file1.path);
-                assert.equal(configFileName, tsconfigFile.path as server.NormalizedPath, `should find config`);
-                checkNumberOfConfiguredProjects(projectService, 1);
-                const watchingRecursiveDirectories = [`${canonicalFrontendDir}/src`, `${canonicalFrontendDir}/types`, `${canonicalFrontendDir}/node_modules`].concat(getNodeModuleDirectories(getDirectoryPath(canonicalFrontendDir)));
+                it(`watchDirectories for config file with case ${useCaseSensitiveFileNames ? "" : "in"}sensitive file system`, () => {
+                    const frontendDir = "/Users/someuser/work/applications/frontend";
+                    const file1: File = {
+                        path: `${frontendDir}/src/app/utils/Analytic.ts`,
+                        content: "export class SomeClass { };"
+                    };
+                    const file2: File = {
+                        path: `${frontendDir}/src/app/redux/configureStore.ts`,
+                        content: "export class configureStore { }"
+                    };
+                    const file3: File = {
+                        path: `${frontendDir}/src/app/utils/Cookie.ts`,
+                        content: "export class Cookie { }"
+                    };
+                    const es2016LibFile: File = {
+                        path: "/a/lib/lib.es2016.full.d.ts",
+                        content: libFile.content
+                    };
+                    const typeRoots = ["types", "node_modules/@types"];
+                    const types = ["node", "jest"];
+                    const tsconfigFile: File = {
+                        path: `${frontendDir}/tsconfig.json`,
+                        content: JSON.stringify({
+                            compilerOptions: {
+                                strict: true,
+                                strictNullChecks: true,
+                                target: "es2016",
+                                module: "commonjs",
+                                moduleResolution: "node",
+                                sourceMap: true,
+                                noEmitOnError: true,
+                                experimentalDecorators: true,
+                                emitDecoratorMetadata: true,
+                                types,
+                                noUnusedLocals: true,
+                                outDir: "./compiled",
+                                typeRoots,
+                                baseUrl: ".",
+                                paths: {
+                                    "*": [
+                                        "types/*"
+                                    ]
+                                }
+                            },
+                            include: [
+                                "src/**/*"
+                            ],
+                            exclude: [
+                                "node_modules",
+                                "compiled"
+                            ]
+                        })
+                    };
+                    const projectFiles = [file1, file2, es2016LibFile, tsconfigFile];
+                    const host = createServerHost(projectFiles, { useCaseSensitiveFileNames });
+                    const projectService = createProjectService(host, { logger: createLoggerWithInMemoryLogs() });
+                    projectService.openClientFile(file1.path);
 
-                const project = projectService.configuredProjects.get(canonicalConfigPath)!;
-                verifyProjectAndWatchedDirectories();
+                    const logCacheAndClear = createLoggerTrackingHostCalls(host);
 
-                const callsTrackingHost = createCallsTrackingHost(host);
+                    // Create file cookie.ts
+                    host.writeFile(file3.path, file3.content);
+                    host.runQueuedTimeoutCallbacks();
+                    logCacheAndClear(projectService.logger);
 
-                // Create file cookie.ts
-                projectFiles.push(file3);
-                host.writeFile(file3.path, file3.content);
-                host.runQueuedTimeoutCallbacks();
-
-                const canonicalFile3Path = useCaseSensitiveFileNames ? file3.path : file3.path.toLocaleLowerCase();
-                const numberOfTimesWatchInvoked = getNumberOfWatchesInvokedForRecursiveWatches(watchingRecursiveDirectories, canonicalFile3Path);
-                callsTrackingHost.verifyCalledOnEachEntryNTimes(CalledMapsWithSingleArg.fileExists, [canonicalFile3Path], numberOfTimesWatchInvoked);
-                callsTrackingHost.verifyCalledOnEachEntryNTimes(CalledMapsWithSingleArg.directoryExists, [canonicalFile3Path], numberOfTimesWatchInvoked);
-                callsTrackingHost.verifyNoCall(CalledMapsWithSingleArg.getDirectories);
-                callsTrackingHost.verifyCalledOnEachEntryNTimes(CalledMapsWithSingleArg.readFile, [file3.path], 1);
-                callsTrackingHost.verifyNoCall(CalledMapsWithFiveArgs.readDirectory);
-
-                checkNumberOfConfiguredProjects(projectService, 1);
-                assert.strictEqual(projectService.configuredProjects.get(canonicalConfigPath), project);
-                verifyProjectAndWatchedDirectories();
-
-                callsTrackingHost.clear();
-
-                const { configFileName: configFile2 } = projectService.openClientFile(file3.path);
-                assert.equal(configFile2, configFileName);
-
-                checkNumberOfConfiguredProjects(projectService, 1);
-                assert.strictEqual(projectService.configuredProjects.get(canonicalConfigPath), project);
-                verifyProjectAndWatchedDirectories();
-                callsTrackingHost.verifyNoHostCalls();
-
-                function getFilePathIfNotOpen(f: File) {
-                    const path = toCanonical(f.path);
-                    const info = projectService.getScriptInfoForPath(toCanonical(f.path));
-                    return info && info.isScriptOpen() ? undefined : path;
-                }
-
-                function verifyProjectAndWatchedDirectories() {
-                    checkProjectActualFiles(project, map(projectFiles, f => f.path));
-                    checkWatchedFiles(host, mapDefined(projectFiles, getFilePathIfNotOpen));
-                    checkWatchedDirectories(host, watchingRecursiveDirectories, /*recursive*/ true);
-                    checkWatchedDirectories(host, [], /*recursive*/ false);
-                }
+                    projectService.openClientFile(file3.path);
+                    logCacheAndClear(projectService.logger);
+                    baselineTsserverLogs("cachingFileSystemInformation", `watchDirectories for config file with case ${useCaseSensitiveFileNames ? "" : "in"}sensitive file system`, projectService);
+                });
             }
-
-            it("case insensitive file system", () => {
-                verifyWatchDirectoriesCaseSensitivity(/*useCaseSensitiveFileNames*/ false);
-            });
-
-            it("case sensitive file system", () => {
-                verifyWatchDirectoriesCaseSensitivity(/*useCaseSensitiveFileNames*/ true);
-            });
+            verifyWatchDirectoriesCaseSensitivity(/*useCaseSensitiveFileNames*/ false);
+            verifyWatchDirectoriesCaseSensitivity(/*useCaseSensitiveFileNames*/ true);
         });
 
         describe("Subfolder invalidations correctly include parent folder failed lookup locations", () => {
@@ -538,15 +382,10 @@ namespace ts.projectSystem {
 }
 `
                 });
-                const appFolder = getDirectoryPath(app.path);
-                const projectFiles = [app, libFile, tsconfigJson];
-                const otherFiles = [packageJson];
-                const host = createServerHost(projectFiles.concat(otherFiles));
+                const host = createServerHost([app, libFile, tsconfigJson, packageJson]);
                 const projectService = createProjectService(host, { logger: createLoggerWithInMemoryLogs() });
                 projectService.setHostConfiguration({ preferences: { includePackageJsonAutoImports: "off" } });
-                const { configFileName } = projectService.openClientFile(app.path);
-                assert.equal(configFileName, tsconfigJson.path as server.NormalizedPath, `should find config`); // TODO: GH#18217
-                const recursiveWatchedDirectories: string[] = [`${appFolder}`, `${appFolder}/node_modules`].concat(getNodeModuleDirectories(getDirectoryPath(appFolder)));
+                projectService.openClientFile(app.path);
 
                 let npmInstallComplete = false;
 
@@ -625,10 +464,6 @@ namespace ts.projectSystem {
                 });
 
                 host.deleteFolder(root + "/a/b/node_modules/.staging", /*recursive*/ true);
-                const lodashIndexPath = root + "/a/b/node_modules/@types/lodash/index.d.ts";
-                projectFiles.push(find(filesAndFoldersToAdd, f => f.path === lodashIndexPath)!);
-                // we would now not have failed lookup in the parent of appFolder since lodash is available
-                recursiveWatchedDirectories.length = 2;
                 // npm installation complete, timeout after reload fs
                 npmInstallComplete = true;
                 verifyAfterPartialOrCompleteNpmInstall(2);
@@ -660,7 +495,6 @@ namespace ts.projectSystem {
             it("timeouts occur inbetween installation", () => {
                 verifyNpmInstall(/*timeoutDuringPartialInstallation*/ true);
             });
-
             it("timeout occurs after installation", () => {
                 verifyNpmInstall(/*timeoutDuringPartialInstallation*/ false);
             });
