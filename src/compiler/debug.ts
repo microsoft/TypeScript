@@ -301,19 +301,19 @@ namespace ts {
                 return members.length > 0 && members[0][0] === 0 ? members[0][1] : "0";
             }
             if (isFlags) {
-                let result = "";
+                const result: string[] = [];
                 let remainingFlags = value;
                 for (const [enumValue, enumName] of members) {
                     if (enumValue > value) {
                         break;
                     }
                     if (enumValue !== 0 && enumValue & value) {
-                        result = `${result}${result ? "|" : ""}${enumName}`;
+                        result.push(enumName);
                         remainingFlags &= ~enumValue;
                     }
                 }
                 if (remainingFlags === 0) {
-                    return result;
+                    return result.join("|");
                 }
             }
             else {
@@ -326,7 +326,17 @@ namespace ts {
             return value.toString();
         }
 
+        const enumMemberCache = new Map<any, SortedReadonlyArray<[number, string]>>();
+
         function getEnumMembers(enumObject: any) {
+            // Assuming enum objects do not change at runtime, we can cache the enum members list
+            // to reuse later. This saves us from reconstructing this each and every time we call
+            // a formatting function (which can be expensive for large enums like SyntaxKind).
+            const existing = enumMemberCache.get(enumObject);
+            if (existing) {
+                return existing;
+            }
+
             const result: [number, string][] = [];
             for (const name in enumObject) {
                 const value = enumObject[name];
@@ -335,7 +345,9 @@ namespace ts {
                 }
             }
 
-            return stableSort<[number, string]>(result, (x, y) => compareValues(x[0], y[0]));
+            const sorted = stableSort<[number, string]>(result, (x, y) => compareValues(x[0], y[0]));
+            enumMemberCache.set(enumObject, sorted);
+            return sorted;
         }
 
         export function formatSyntaxKind(kind: SyntaxKind | undefined): string {
