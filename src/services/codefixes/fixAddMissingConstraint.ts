@@ -11,6 +11,7 @@ namespace ts.codefix {
         Diagnostics.Argument_of_type_0_is_not_assignable_to_parameter_of_type_1_with_exactOptionalPropertyTypes_Colon_true_Consider_adding_undefined_to_the_types_of_the_target_s_properties.code,
         Diagnostics.Property_0_is_incompatible_with_index_signature.code,
         Diagnostics.Property_0_in_type_1_is_not_assignable_to_type_2.code,
+        Diagnostics.Type_0_does_not_satisfy_the_constraint_1.code,
     ];
     registerCodeFix({
         errorCodes,
