@@ -1,12 +1,21 @@
 {
     "extends": "../tsconfig-base",
     "compilerOptions": {
-        "outFile": "../../built/local/deprecatedCompat.js"
+        "outFile": "../../built/local/deprecatedCompat.js",
+        "experimentalDecorators": true
     },
     "references": [
         { "path": "../compiler" }
     ],
     "files": [
-        "deprecations.ts"
+        "deprecations.ts",
+        "4.0/nodeFactoryTopLevelExports.ts",
+        "4.0/renamedNodeTests.ts",
+        "4.0/renamedMapInterfaces.ts",
+        "4.2/renamedNodeTests.ts",
+        "4.2/abstractConstructorTypes.ts",
+        "4.6/importTypeAssertions.ts",
+        "4.7/typeParameterModifiers.ts",
+        "4.8/mergeDecoratorsAndModifiers.ts"
     ]
 }

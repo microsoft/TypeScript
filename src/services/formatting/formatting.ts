@@ -417,7 +417,7 @@ namespace ts.formatting {
         if (formattingScanner.isOnToken()) {
             const startLine = sourceFile.getLineAndCharacterOfPosition(enclosingNode.getStart(sourceFile)).line;
             let undecoratedStartLine = startLine;
-            if (enclosingNode.decorators) {
+            if (hasDecorators(enclosingNode)) {
                 undecoratedStartLine = sourceFile.getLineAndCharacterOfPosition(getNonDecoratorTokenPosOfNode(enclosingNode, sourceFile)).line;
             }
 
@@ -539,9 +539,11 @@ namespace ts.formatting {
         }
 
         function getFirstNonDecoratorTokenOfNode(node: Node) {
-            if (node.modifiers && node.modifiers.length) {
-                return node.modifiers[0].kind;
+            if (canHaveModifiers(node)) {
+                const modifier = find(node.modifiers, isModifier, findIndex(node.modifiers, isDecorator));
+                if (modifier) return modifier.kind;
             }
+
             switch (node.kind) {
                 case SyntaxKind.ClassDeclaration: return SyntaxKind.ClassKeyword;
                 case SyntaxKind.InterfaceDeclaration: return SyntaxKind.InterfaceKeyword;
@@ -630,7 +632,7 @@ namespace ts.formatting {
                 // if token line equals to the line of containing node (this is a first token in the node) - use node indentation
                 return nodeStartLine !== line
                     // if this token is the first token following the list of decorators, we do not need to indent
-                    && !(node.decorators && kind === getFirstNonDecoratorTokenOfNode(node));
+                    && !(hasDecorators(node) && kind === getFirstNonDecoratorTokenOfNode(node));
             }
 
             function getDelta(child: TextRangeWithKind) {
@@ -699,7 +701,7 @@ namespace ts.formatting {
                 const childStartLine = sourceFile.getLineAndCharacterOfPosition(childStartPos).line;
 
                 let undecoratedChildStartLine = childStartLine;
-                if (child.decorators) {
+                if (hasDecorators(child)) {
                     undecoratedChildStartLine = sourceFile.getLineAndCharacterOfPosition(getNonDecoratorTokenPosOfNode(child, sourceFile)).line;
                 }
 

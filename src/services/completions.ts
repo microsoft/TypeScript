@@ -1064,7 +1064,7 @@ namespace ts.Completions {
             span = createTextSpanFromNode(contextToken);
         }
         if (isPropertyDeclaration(contextToken.parent)) {
-            modifiers |= modifiersToFlags(contextToken.parent.modifiers);
+            modifiers |= modifiersToFlags(contextToken.parent.modifiers) & ModifierFlags.Modifier;
             span = createTextSpanFromNode(contextToken.parent);
         }
         return { modifiers, span };
@@ -1194,7 +1194,6 @@ namespace ts.Completions {
 
                 const parameters = typeNode.parameters.map(typedParam =>
                     factory.createParameterDeclaration(
-                        /*decorators*/ undefined,
                         /*modifiers*/ undefined,
                         typedParam.dotDotDotToken,
                         typedParam.name,
@@ -1203,7 +1202,6 @@ namespace ts.Completions {
                         typedParam.initializer,
                     ));
                 return factory.createMethodDeclaration(
-                    /*decorators*/ undefined,
                     /*modifiers*/ undefined,
                     /*asteriskToken*/ undefined,
                     name,

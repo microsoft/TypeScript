@@ -1661,8 +1661,6 @@ namespace ts {
                 //   - `BindingElement: BindingPattern Initializer?`
                 // - https://tc39.es/ecma262/#sec-runtime-semantics-keyedbindinginitialization
                 //   - `BindingElement: BindingPattern Initializer?`
-                bindEach(node.decorators);
-                bindEach(node.modifiers);
                 bind(node.dotDotDotToken);
                 bind(node.propertyName);
                 bind(node.initializer);
@@ -2794,7 +2792,7 @@ namespace ts {
         }
 
         function bindNamespaceExportDeclaration(node: NamespaceExportDeclaration) {
-            if (node.modifiers && node.modifiers.length) {
+            if (some(node.modifiers)) {
                 file.bindDiagnostics.push(createDiagnosticForNode(node, Diagnostics.Modifiers_cannot_appear_here));
             }
             const diag = !isSourceFile(node.parent) ? Diagnostics.Global_module_exports_may_only_appear_at_top_level
