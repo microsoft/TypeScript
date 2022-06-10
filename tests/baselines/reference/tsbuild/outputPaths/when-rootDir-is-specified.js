@@ -52,7 +52,7 @@ Output::
 [[90m12:00:14 AM[0m] Projects in this build: 
     * src/tsconfig.json
 
-[[90m12:00:15 AM[0m] Project 'src/tsconfig.json' is up to date because newest input 'src/src/index.ts' is older than oldest output 'src/dist/index.js'
+[[90m12:00:15 AM[0m] Project 'src/tsconfig.json' is up to date because newest input 'src/src/index.ts' is older than output 'src/dist/index.js'
 
 exitCode:: ExitStatus.Success
 

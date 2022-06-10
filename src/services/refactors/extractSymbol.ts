@@ -887,7 +887,6 @@ namespace ts.refactor.extractSymbol {
             }
 
             const paramDecl = factory.createParameterDeclaration(
-                /*decorators*/ undefined,
                 /*modifiers*/ undefined,
                 /*dotDotDotToken*/ undefined,
                 /*name*/ name,
@@ -938,7 +937,6 @@ namespace ts.refactor.extractSymbol {
                 modifiers.push(factory.createModifier(SyntaxKind.AsyncKeyword));
             }
             newFunction = factory.createMethodDeclaration(
-                /*decorators*/ undefined,
                 modifiers.length ? modifiers : undefined,
                 range.facts & RangeFacts.IsGenerator ? factory.createToken(SyntaxKind.AsteriskToken) : undefined,
                 functionName,
@@ -953,7 +951,6 @@ namespace ts.refactor.extractSymbol {
             if (callThis) {
                 parameters.unshift(
                     factory.createParameterDeclaration(
-                        /*decorators*/ undefined,
                         /*modifiers*/ undefined,
                         /*dotDotDotToken*/ undefined,
                         /*name*/ "this",
@@ -968,7 +965,6 @@ namespace ts.refactor.extractSymbol {
                 );
             }
             newFunction = factory.createFunctionDeclaration(
-                /*decorators*/ undefined,
                 range.facts & RangeFacts.IsAsyncFunction ? [factory.createToken(SyntaxKind.AsyncKeyword)] : undefined,
                 range.facts & RangeFacts.IsGenerator ? factory.createToken(SyntaxKind.AsteriskToken) : undefined,
                 functionName,
@@ -1212,7 +1208,6 @@ namespace ts.refactor.extractSymbol {
             modifiers.push(factory.createModifier(SyntaxKind.ReadonlyKeyword));
 
             const newVariable = factory.createPropertyDeclaration(
-                /*decorators*/ undefined,
                 modifiers,
                 localNameText,
                 /*questionToken*/ undefined,
@@ -1324,7 +1319,7 @@ namespace ts.refactor.extractSymbol {
                     if (paramType === checker.getAnyType()) hasAny = true;
 
                     parameters.push(factory.updateParameterDeclaration(p,
-                        p.decorators, p.modifiers, p.dotDotDotToken,
+                        p.modifiers, p.dotDotDotToken,
                         p.name, p.questionToken, p.type || checker.typeToTypeNode(paramType, scope, NodeBuilderFlags.NoTruncation), p.initializer));
                 }
             }
@@ -1334,7 +1329,7 @@ namespace ts.refactor.extractSymbol {
             if (hasAny) return { variableType, initializer };
             variableType = undefined;
             if (isArrowFunction(initializer)) {
-                initializer = factory.updateArrowFunction(initializer, node.modifiers, initializer.typeParameters,
+                initializer = factory.updateArrowFunction(initializer, canHaveModifiers(node) ? getModifiers(node) : undefined, initializer.typeParameters,
                     parameters,
                     initializer.type || checker.typeToTypeNode(functionSignature.getReturnType(), scope, NodeBuilderFlags.NoTruncation),
                     initializer.equalsGreaterThanToken,
@@ -1348,7 +1343,6 @@ namespace ts.refactor.extractSymbol {
                     if ((!firstParameter || (isIdentifier(firstParameter.name) && firstParameter.name.escapedText !== "this"))) {
                         const thisType = checker.getTypeOfSymbolAtLocation(functionSignature.thisParameter, node);
                         parameters.splice(0, 0, factory.createParameterDeclaration(
-                            /* decorators */ undefined,
                             /* modifiers */ undefined,
                             /* dotDotDotToken */ undefined,
                             "this",
@@ -1357,7 +1351,7 @@ namespace ts.refactor.extractSymbol {
                         ));
                     }
                 }
-                initializer = factory.updateFunctionExpression(initializer, node.modifiers, initializer.asteriskToken,
+                initializer = factory.updateFunctionExpression(initializer, canHaveModifiers(node) ? getModifiers(node) : undefined, initializer.asteriskToken,
                     initializer.name, initializer.typeParameters,
                     parameters,
                     initializer.type || checker.typeToTypeNode(functionSignature.getReturnType(), scope, NodeBuilderFlags.NoTruncation),

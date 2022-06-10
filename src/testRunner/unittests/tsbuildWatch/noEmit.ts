@@ -6,11 +6,10 @@ namespace ts.tscWatch {
             commandLineArgs: ["-b", "-w", "-verbose"],
             sys: () => createWatchedSystem(
                 [
-                    libFile,
+                    { path: libFile.path, content: libContent },
                     { path: `${projectRoot}/a.js`, content: "" },
                     { path: `${projectRoot}/b.ts`, content: "" },
                     { path: `${projectRoot}/tsconfig.json`, content: JSON.stringify({ compilerOptions: { allowJs: true, noEmit: true } }) },
-                    { path: libFile.path, content: libContent }
                 ],
                 { currentDirectory: projectRoot }
             ),

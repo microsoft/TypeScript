@@ -260,3 +260,12 @@ function deepEquals<T>(a: T, b: T): boolean {
     }
     return true;
 }
+
+// Repro from #49386
+
+function foo<T>(x: T | null) {
+    let y = x;
+    if (y !== null) {
+        y;
+    }
+}
