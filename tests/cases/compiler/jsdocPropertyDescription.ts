@@ -1,9 +1,4 @@
-interface Example {
-    /** Something generic */
-    [p: string]: any;
-    /** Something specific */
-    property: number;
-}
+import { Example } from "./jsdocPropertyDescription1";
 
 function example(e: Example) {
     console.log(e.property); // works, shows type and description on hover
