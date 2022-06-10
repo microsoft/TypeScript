@@ -57,7 +57,6 @@ tests/cases/compiler/recursiveConditionalTypes.ts(169,5): error TS2322: Type 'nu
         ta = tx;  // Error
         ~~
 !!! error TS2322: Type 'T' is not assignable to type '__Awaited<T>'.
-!!! related TS2208 tests/cases/compiler/recursiveConditionalTypes.ts:18:14: This type parameter might need an `extends __Awaited<T>` constraint.
         tx = ta;  // Error
         ~~
 !!! error TS2322: Type '__Awaited<T>' is not assignable to type 'T'.

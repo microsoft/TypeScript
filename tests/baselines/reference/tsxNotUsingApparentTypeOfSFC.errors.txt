@@ -46,7 +46,6 @@ tests/cases/compiler/tsxNotUsingApparentTypeOfSFC.tsx(18,14): error TS2769: No o
 !!! error TS2322: Type 'P' is not assignable to type 'IntrinsicAttributes & P'.
 !!! error TS2322:   Type 'P' is not assignable to type 'IntrinsicAttributes'.
 !!! related TS2208 tests/cases/compiler/tsxNotUsingApparentTypeOfSFC.tsx:5:15: This type parameter might need an `extends JSX.IntrinsicAttributes` constraint.
-!!! related TS2208 tests/cases/compiler/tsxNotUsingApparentTypeOfSFC.tsx:5:15: This type parameter might need an `extends JSX.IntrinsicAttributes & P` constraint.
         let q = <MyComponent {...wrappedProps} /> // should work
                  ~~~~~~~~~~~
 !!! error TS2769: No overload matches this call.
