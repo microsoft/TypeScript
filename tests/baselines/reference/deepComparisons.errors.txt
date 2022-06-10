@@ -17,6 +17,7 @@ tests/cases/compiler/deepComparisons.ts(4,9): error TS2322: Type 'T[K1][K2]' is 
         let v1: Extract<T, string> = 0 as any as T;  // Error
             ~~
 !!! error TS2322: Type 'T' is not assignable to type 'Extract<T, string>'.
+!!! related TS2208 tests/cases/compiler/deepComparisons.ts:1:13: This type parameter might need an `extends Extract<T, string>` constraint.
         let v2: Extract<T[K1], string> = 0 as any as T[K1];  // Error
             ~~
 !!! error TS2322: Type 'T[K1]' is not assignable to type 'Extract<T[K1], string>'.

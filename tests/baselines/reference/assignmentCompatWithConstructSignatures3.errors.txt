@@ -114,6 +114,7 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
 !!! error TS2322: Type 'new (x: number) => number[]' is not assignable to type 'new <T>(x: T) => T[]'.
 !!! error TS2322:   Types of parameters 'x' and 'x' are incompatible.
 !!! error TS2322:     Type 'T' is not assignable to type 'number'.
+!!! related TS2208 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures3.ts:45:13: This type parameter might need an `extends number` constraint.
     var b2: new <T>(x: T) => string[]; 
     a2 = b2; // ok 
     b2 = a2; // ok
@@ -121,6 +122,7 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
 !!! error TS2322: Type 'new (x: number) => string[]' is not assignable to type 'new <T>(x: T) => string[]'.
 !!! error TS2322:   Types of parameters 'x' and 'x' are incompatible.
 !!! error TS2322:     Type 'T' is not assignable to type 'number'.
+!!! related TS2208 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures3.ts:48:14: This type parameter might need an `extends number` constraint.
     var b3: new <T>(x: T) => T; 
     a3 = b3; // ok
     b3 = a3; // ok
@@ -128,6 +130,7 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
 !!! error TS2322: Type 'new (x: number) => void' is not assignable to type 'new <T>(x: T) => T'.
 !!! error TS2322:   Types of parameters 'x' and 'x' are incompatible.
 !!! error TS2322:     Type 'T' is not assignable to type 'number'.
+!!! related TS2208 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures3.ts:51:14: This type parameter might need an `extends number` constraint.
     var b4: new <T, U>(x: T, y: U) => T; 
     a4 = b4; // ok
     b4 = a4; // ok
@@ -135,6 +138,7 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
 !!! error TS2322: Type 'new (x: string, y: number) => string' is not assignable to type 'new <T, U>(x: T, y: U) => T'.
 !!! error TS2322:   Types of parameters 'x' and 'x' are incompatible.
 !!! error TS2322:     Type 'T' is not assignable to type 'string'.
+!!! related TS2208 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures3.ts:54:14: This type parameter might need an `extends string` constraint.
     var b5: new <T, U>(x: (arg: T) => U) => T; 
     a5 = b5; // ok
     b5 = a5; // ok
@@ -227,6 +231,7 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
 !!! error TS2322:     Type '{ a: T; b: T; }' is not assignable to type '{ a: string; b: number; }'.
 !!! error TS2322:       Types of property 'a' are incompatible.
 !!! error TS2322:         Type 'T' is not assignable to type 'string'.
+!!! related TS2208 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures3.ts:84:15: This type parameter might need an `extends string` constraint.
     var b15: new <T>(x: T) => T[]; 
     a15 = b15; // ok
     b15 = a15; // ok

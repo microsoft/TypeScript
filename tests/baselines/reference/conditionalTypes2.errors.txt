@@ -55,6 +55,7 @@ tests/cases/conformance/types/conditional/conditionalTypes2.ts(75,12): error TS2
 !!! error TS2322: Type 'Covariant<A>' is not assignable to type 'Covariant<B>'.
 !!! error TS2322:   Type 'A' is not assignable to type 'B'.
 !!! error TS2322:     'B' could be instantiated with an arbitrary type which could be unrelated to 'A'.
+!!! related TS2208 tests/cases/conformance/types/conditional/conditionalTypes2.ts:13:13: This type parameter might need an `extends B` constraint.
     }
     
     function f2<A, B extends A>(a: Contravariant<A>, b: Contravariant<B>) {
@@ -63,6 +64,7 @@ tests/cases/conformance/types/conditional/conditionalTypes2.ts(75,12): error TS2
 !!! error TS2322: Type 'Contravariant<B>' is not assignable to type 'Contravariant<A>'.
 !!! error TS2322:   Type 'A' is not assignable to type 'B'.
 !!! error TS2322:     'B' could be instantiated with an arbitrary type which could be unrelated to 'A'.
+!!! related TS2208 tests/cases/conformance/types/conditional/conditionalTypes2.ts:18:13: This type parameter might need an `extends B` constraint.
         b = a;
     }
     
@@ -82,6 +84,7 @@ tests/cases/conformance/types/conditional/conditionalTypes2.ts(75,12): error TS2
 !!! error TS2322:                     Type 'keyof B' is not assignable to type 'number | "toString" | "charAt" | "charCodeAt" | "concat" | "indexOf" | "lastIndexOf" | "localeCompare" | "match" | "replace" | "search" | "slice" | "split" | "substring" | "toLowerCase" | "toLocaleLowerCase" | "toUpperCase" | "toLocaleUpperCase" | "trim" | "length" | "substr" | "valueOf"'.
 !!! error TS2322:                       Type 'string | number | symbol' is not assignable to type 'number | "toString" | "charAt" | "charCodeAt" | "concat" | "indexOf" | "lastIndexOf" | "localeCompare" | "match" | "replace" | "search" | "slice" | "split" | "substring" | "toLowerCase" | "toLocaleLowerCase" | "toUpperCase" | "toLocaleUpperCase" | "trim" | "length" | "substr" | "valueOf"'.
 !!! error TS2322:                         Type 'string' is not assignable to type 'number | "toString" | "charAt" | "charCodeAt" | "concat" | "indexOf" | "lastIndexOf" | "localeCompare" | "match" | "replace" | "search" | "slice" | "split" | "substring" | "toLowerCase" | "toLocaleLowerCase" | "toUpperCase" | "toLocaleUpperCase" | "trim" | "length" | "substr" | "valueOf"'.
+!!! related TS2208 tests/cases/conformance/types/conditional/conditionalTypes2.ts:23:13: This type parameter might need an `extends A extends string ? keyof A : A` constraint.
         b = a;  // Error
         ~
 !!! error TS2322: Type 'Invariant<A>' is not assignable to type 'Invariant<B>'.
@@ -91,6 +94,8 @@ tests/cases/conformance/types/conditional/conditionalTypes2.ts(75,12): error TS2
 !!! error TS2322:         Type 'A' is not assignable to type 'B extends string ? keyof B : B'.
 !!! error TS2322:           Type 'A' is not assignable to type 'B'.
 !!! error TS2322:             'B' could be instantiated with an arbitrary type which could be unrelated to 'A'.
+!!! related TS2208 tests/cases/conformance/types/conditional/conditionalTypes2.ts:23:13: This type parameter might need an `extends B` constraint.
+!!! related TS2208 tests/cases/conformance/types/conditional/conditionalTypes2.ts:23:13: This type parameter might need an `extends B extends string ? keyof B : B` constraint.
     }
     
     // Extract<T, Function> is a T that is known to be a Function
