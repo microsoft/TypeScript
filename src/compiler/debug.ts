@@ -350,7 +350,6 @@ namespace ts {
             return sorted;
         }
 
-
         export function formatSyntaxKind(kind: SyntaxKind | undefined): string {
             return formatEnum(kind, (ts as any).SyntaxKind, /*isFlags*/ false);
         }
