@@ -301,19 +301,19 @@ namespace ts {
                 return members.length > 0 && members[0][0] === 0 ? members[0][1] : "0";
             }
             if (isFlags) {
-                let result = "";
+                const result: string[] = [];
                 let remainingFlags = value;
                 for (const [enumValue, enumName] of members) {
                     if (enumValue > value) {
                         break;
                     }
                     if (enumValue !== 0 && enumValue & value) {
-                        result = `${result}${result ? "|" : ""}${enumName}`;
+                        result.push(enumName);
                         remainingFlags &= ~enumValue;
                     }
                 }
                 if (remainingFlags === 0) {
-                    return result;
+                    return result.join("|");
                 }
             }
             else {
