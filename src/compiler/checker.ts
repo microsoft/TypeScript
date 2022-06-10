@@ -21464,9 +21464,8 @@ namespace ts {
                     && !(type.symbol.flags & SymbolFlags.Class)
                     && !typeHasCallOrConstructSignatures(type)
                 ) || !!(
-                    objectFlags
-                    && objectFlags & ObjectFlags.ObjectRestType
-                ) || !!(getObjectFlags(type) & ObjectFlags.ReverseMapped && isObjectTypeWithInferableIndex((type as ReverseMappedType).source));
+                    objectFlags & ObjectFlags.ObjectRestType
+                ) || !!(objectFlags & ObjectFlags.ReverseMapped && isObjectTypeWithInferableIndex((type as ReverseMappedType).source));
         }
 
         function createSymbolWithType(source: Symbol, type: Type | undefined) {
