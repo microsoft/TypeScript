@@ -1,3 +1,4 @@
+/* @internal */
 namespace ts {
     // enable deprecation logging
     declare const console: any;
