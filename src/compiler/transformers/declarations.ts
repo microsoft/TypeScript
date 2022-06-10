@@ -817,7 +817,7 @@ namespace ts {
             while (length(lateMarkedStatements)) {
                 const i = lateMarkedStatements!.shift()!;
                 if (!isLateVisibilityPaintedStatement(i)) {
-                    return Debug.fail(`Late replaced statement was found which is not handled by the declaration transformer!: ${(ts as any).SyntaxKind ? (ts as any).SyntaxKind[(i as any).kind] : (i as any).kind}`);
+                    return Debug.fail(`Late replaced statement was found which is not handled by the declaration transformer!: ${Debug.formatSyntaxKind((i as Node).kind)}`);
                 }
                 const priorNeedsDeclare = needsDeclare;
                 needsDeclare = i.parent && isSourceFile(i.parent) && !(isExternalModule(i.parent) && isBundledEmit);
@@ -1067,7 +1067,7 @@ namespace ts {
                             input.isTypeOf
                         ));
                     }
-                    default: Debug.assertNever(input, `Attempted to process unhandled node kind: ${(ts as any).SyntaxKind[(input as any).kind]}`);
+                    default: Debug.assertNever(input, `Attempted to process unhandled node kind: ${Debug.formatSyntaxKind((input as Node).kind)}`);
                 }
             }
 
@@ -1481,7 +1481,7 @@ namespace ts {
                 }
             }
             // Anything left unhandled is an error, so this should be unreachable
-            return Debug.assertNever(input, `Unhandled top-level node in declaration emit: ${(ts as any).SyntaxKind[(input as any).kind]}`);
+            return Debug.assertNever(input, `Unhandled top-level node in declaration emit: ${Debug.formatSyntaxKind((input as Node).kind)}`);
 
             function cleanup<T extends Node>(node: T | undefined): T | undefined {
                 if (isEnclosingDeclaration(input)) {
