@@ -25284,6 +25284,55 @@ namespace ts {
                         }
                     }
                 }
+                if (type && type!==anyType && isPropertyAccessExpression(callExpression.expression)){
+                    // if (myDebug){
+                    //     consoleLog(`narrowTypeByCallExpression[dbg,in]: ==== `);
+                    // }
+                    const tmpSymbol = getSymbolOfNameOrPropertyAccessExpression(callExpression.expression);
+                    const declaration = tmpSymbol ? tmpSymbol.declarations? tmpSymbol.declarations[0] : undefined : undefined;
+                    const funcNode = declaration && (declaration as any).type
+                        && (declaration as any).type.kind === SyntaxKind.FunctionType
+                        ? (declaration as any).type as FunctionDeclaration : undefined;
+                    const funcRtnType = funcNode?.type ? getTypeOfNode(funcNode.type) : undefined;
+                    if (funcRtnType) {
+                        const antecedentResultFalse = narrowType(type, callExpression.expression, /* assumeTrue */ false);
+                        const antecedentResultTrue = narrowType(type, callExpression.expression, /* assumeTrue */ true);
+                        let hasFalsyType = false;
+                        let hasTruthyType = false;
+                        let hasDualType = false;
+
+                        // The meaning of falsy/truthy should change when the the call is the left child of a parent nullish coalescing operator `??`
+                        const nullishCoalescingOp = isBinaryExpression(callExpression.parent) && callExpression.parent.operatorToken.kind===SyntaxKind.QuestionQuestionToken;
+                        let typeOut: Type | undefined;
+                        forEachType(funcRtnType, (t=>{
+                            if (nullishCoalescingOp){
+                                if (t===nullType || t===undefinedType) hasFalsyType = true;
+                                else hasTruthyType = true;
+                            }
+                            else {
+                            if (t===nullType || t===undefinedType || t===falseType || (t.flags & TypeFlags.Literal && !(t as LiteralType).value)) {
+                                hasFalsyType = true;
+                            }
+                            else if (t.flags & TypeFlags.Object || t===trueType || (t.flags & TypeFlags.Literal && !!(t as LiteralType).value)) {
+                                hasTruthyType = true;
+                            }
+                            else hasDualType = true;
+                            }
+                        }));
+                        if (assumeTrue===false){
+                            const union: Type[] = [antecedentResultFalse];
+                            if (hasFalsyType||hasDualType) union.push(antecedentResultTrue);
+                            typeOut = getUnionType(union, UnionReduction.Literal);
+                        }
+                        else {
+                            if (hasTruthyType||hasDualType) typeOut=antecedentResultTrue;
+                        }
+                        if (typeOut) {
+                            type = typeOut;
+                        }
+                    }
+                    // if (myDebug) consoleLog(`narrowTypeByCallExpression[dbg,out]: ====`);
+                }
                 return type;
             }
 

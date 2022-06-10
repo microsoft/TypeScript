@@ -1,0 +1,71 @@
+=== tests/cases/conformance/controlFlow/controlFlowAliasFunc2b.ts ===
+declare type X2Foo = Readonly<{ kind: "foo", xfoo: string, bug: () => number[] }> ;
+>X2Foo : Symbol(X2Foo, Decl(controlFlowAliasFunc2b.ts, 0, 0))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>kind : Symbol(kind, Decl(controlFlowAliasFunc2b.ts, 0, 31))
+>xfoo : Symbol(xfoo, Decl(controlFlowAliasFunc2b.ts, 0, 44))
+>bug : Symbol(bug, Decl(controlFlowAliasFunc2b.ts, 0, 58))
+
+declare type X2Bar = Readonly<{ kind: "bar", xbar: number, bug: () => number[] }> ; 
+>X2Bar : Symbol(X2Bar, Decl(controlFlowAliasFunc2b.ts, 0, 83))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>kind : Symbol(kind, Decl(controlFlowAliasFunc2b.ts, 1, 31))
+>xbar : Symbol(xbar, Decl(controlFlowAliasFunc2b.ts, 1, 44))
+>bug : Symbol(bug, Decl(controlFlowAliasFunc2b.ts, 1, 58))
+
+declare type X2Baz = Readonly<{ kind: "baz", xbaz: boolean, bug: () => number[] }>;
+>X2Baz : Symbol(X2Baz, Decl(controlFlowAliasFunc2b.ts, 1, 83))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>kind : Symbol(kind, Decl(controlFlowAliasFunc2b.ts, 2, 31))
+>xbaz : Symbol(xbaz, Decl(controlFlowAliasFunc2b.ts, 2, 44))
+>bug : Symbol(bug, Decl(controlFlowAliasFunc2b.ts, 2, 59))
+
+declare type X2 = | X2Foo | X2Bar | X2Baz ;
+>X2 : Symbol(X2, Decl(controlFlowAliasFunc2b.ts, 2, 83))
+>X2Foo : Symbol(X2Foo, Decl(controlFlowAliasFunc2b.ts, 0, 0))
+>X2Bar : Symbol(X2Bar, Decl(controlFlowAliasFunc2b.ts, 0, 83))
+>X2Baz : Symbol(X2Baz, Decl(controlFlowAliasFunc2b.ts, 1, 83))
+
+declare const obj2: undefined | X2;
+>obj2 : Symbol(obj2, Decl(controlFlowAliasFunc2b.ts, 5, 13))
+>X2 : Symbol(X2, Decl(controlFlowAliasFunc2b.ts, 2, 83))
+
+declare const ubool:()=>boolean;
+>ubool : Symbol(ubool, Decl(controlFlowAliasFunc2b.ts, 6, 13))
+{
+    const isFoo = obj2 && obj2.kind === "foo";
+>isFoo : Symbol(isFoo, Decl(controlFlowAliasFunc2b.ts, 8, 9))
+>obj2 : Symbol(obj2, Decl(controlFlowAliasFunc2b.ts, 5, 13))
+>obj2.kind : Symbol(kind, Decl(controlFlowAliasFunc2b.ts, 0, 31), Decl(controlFlowAliasFunc2b.ts, 1, 31), Decl(controlFlowAliasFunc2b.ts, 2, 31))
+>obj2 : Symbol(obj2, Decl(controlFlowAliasFunc2b.ts, 5, 13))
+>kind : Symbol(kind, Decl(controlFlowAliasFunc2b.ts, 0, 31), Decl(controlFlowAliasFunc2b.ts, 1, 31), Decl(controlFlowAliasFunc2b.ts, 2, 31))
+
+    const isBug = obj2?.bug();
+>isBug : Symbol(isBug, Decl(controlFlowAliasFunc2b.ts, 9, 9))
+>obj2?.bug : Symbol(bug, Decl(controlFlowAliasFunc2b.ts, 0, 58), Decl(controlFlowAliasFunc2b.ts, 1, 58), Decl(controlFlowAliasFunc2b.ts, 2, 59))
+>obj2 : Symbol(obj2, Decl(controlFlowAliasFunc2b.ts, 5, 13))
+>bug : Symbol(bug, Decl(controlFlowAliasFunc2b.ts, 0, 58), Decl(controlFlowAliasFunc2b.ts, 1, 58), Decl(controlFlowAliasFunc2b.ts, 2, 59))
+
+    while (ubool()) {
+>ubool : Symbol(ubool, Decl(controlFlowAliasFunc2b.ts, 6, 13))
+
+        if (isFoo) {
+>isFoo : Symbol(isFoo, Decl(controlFlowAliasFunc2b.ts, 8, 9))
+
+            const s = obj2.xfoo;
+>s : Symbol(s, Decl(controlFlowAliasFunc2b.ts, 12, 17))
+>obj2.xfoo : Symbol(xfoo, Decl(controlFlowAliasFunc2b.ts, 0, 44))
+>obj2 : Symbol(obj2, Decl(controlFlowAliasFunc2b.ts, 5, 13))
+>xfoo : Symbol(xfoo, Decl(controlFlowAliasFunc2b.ts, 0, 44))
+
+        } else if (isBug) {
+>isBug : Symbol(isBug, Decl(controlFlowAliasFunc2b.ts, 9, 9))
+
+            const t = obj2.bug();
+>t : Symbol(t, Decl(controlFlowAliasFunc2b.ts, 14, 17))
+>obj2.bug : Symbol(bug, Decl(controlFlowAliasFunc2b.ts, 0, 58), Decl(controlFlowAliasFunc2b.ts, 1, 58), Decl(controlFlowAliasFunc2b.ts, 2, 59))
+>obj2 : Symbol(obj2, Decl(controlFlowAliasFunc2b.ts, 5, 13))
+>bug : Symbol(bug, Decl(controlFlowAliasFunc2b.ts, 0, 58), Decl(controlFlowAliasFunc2b.ts, 1, 58), Decl(controlFlowAliasFunc2b.ts, 2, 59))
+        }
+    }
+}

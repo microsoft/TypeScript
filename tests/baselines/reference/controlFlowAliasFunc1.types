@@ -1,0 +1,24 @@
+=== tests/cases/conformance/controlFlow/controlFlowAliasFunc1.ts ===
+declare type Foo = { foo: ()=> number[] }; 
+>Foo : { foo: () => number[]; }
+>foo : () => number[]
+
+declare const obj: undefined | Foo;
+>obj : Foo | undefined
+
+const isFoo = obj?.foo();
+>isFoo : number[] | undefined
+>obj?.foo() : number[] | undefined
+>obj?.foo : (() => number[]) | undefined
+>obj : Foo | undefined
+>foo : (() => number[]) | undefined
+
+if (isFoo){
+>isFoo : number[] | undefined
+
+    obj.foo();
+>obj.foo() : number[]
+>obj.foo : () => number[]
+>obj : Foo
+>foo : () => number[]
+}

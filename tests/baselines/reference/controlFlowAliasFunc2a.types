@@ -1,0 +1,62 @@
+=== tests/cases/conformance/controlFlow/controlFlowAliasFunc2a.ts ===
+declare type X1Foo = Readonly<{ kind: "foo", foo: string, bug: () => number[] }> ;
+>X1Foo : Readonly<{ kind: "foo"; foo: string; bug: () => number[]; }>
+>kind : "foo"
+>foo : string
+>bug : () => number[]
+
+declare type X1Bar = Readonly<{ kind: "bar", bar: number, bug: () => number[] }> ; 
+>X1Bar : Readonly<{ kind: "bar"; bar: number; bug: () => number[]; }>
+>kind : "bar"
+>bar : number
+>bug : () => number[]
+
+declare type X1Baz = Readonly<{ kind: "baz", baz: boolean, bug: () => number[] }>;
+>X1Baz : Readonly<{ kind: "baz"; baz: boolean; bug: () => number[]; }>
+>kind : "baz"
+>baz : boolean
+>bug : () => number[]
+
+declare type X1 = | X1Foo | X1Bar | X1Baz ; 
+>X1 : Readonly<{ kind: "foo"; foo: string; bug: () => number[]; }> | Readonly<{ kind: "bar"; bar: number; bug: () => number[]; }> | Readonly<{ kind: "baz"; baz: boolean; bug: () => number[]; }>
+
+declare const obj: undefined | X1;
+>obj : X1 | undefined
+
+declare const ubool:()=>boolean;
+>ubool : () => boolean
+{
+    const isBug = obj?.bug();
+>isBug : number[] | undefined
+>obj?.bug() : number[] | undefined
+>obj?.bug : (() => number[]) | (() => number[]) | (() => number[]) | undefined
+>obj : X1 | undefined
+>bug : (() => number[]) | (() => number[]) | (() => number[]) | undefined
+
+    while (ubool()) { 
+>ubool() : boolean
+>ubool : () => boolean
+
+        if (!obj || obj.kind!=="foo") {
+>!obj || obj.kind!=="foo" : boolean
+>!obj : boolean
+>obj : X1 | undefined
+>obj.kind!=="foo" : boolean
+>obj.kind : "foo" | "bar" | "baz"
+>obj : X1
+>kind : "foo" | "bar" | "baz"
+>"foo" : "foo"
+
+            if (isBug) {
+>isBug : number[] | undefined
+
+                const t = obj.bug;  // `t` and `obj.bug` are correctly typed, but `obj` is "possibly unedfined"
+>t : (() => number[]) | (() => number[])
+>obj.bug : (() => number[]) | (() => number[])
+>obj : Readonly<{ kind: "bar"; bar: number; bug: () => number[]; }> | Readonly<{ kind: "baz"; baz: boolean; bug: () => number[]; }>
+>bug : (() => number[]) | (() => number[])
+            }
+        }
+    }
+}
+

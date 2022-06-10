@@ -1,0 +1,70 @@
+=== tests/cases/conformance/controlFlow/controlFlowAliasFunc2b.ts ===
+declare type X2Foo = Readonly<{ kind: "foo", xfoo: string, bug: () => number[] }> ;
+>X2Foo : Readonly<{ kind: "foo"; xfoo: string; bug: () => number[]; }>
+>kind : "foo"
+>xfoo : string
+>bug : () => number[]
+
+declare type X2Bar = Readonly<{ kind: "bar", xbar: number, bug: () => number[] }> ; 
+>X2Bar : Readonly<{ kind: "bar"; xbar: number; bug: () => number[]; }>
+>kind : "bar"
+>xbar : number
+>bug : () => number[]
+
+declare type X2Baz = Readonly<{ kind: "baz", xbaz: boolean, bug: () => number[] }>;
+>X2Baz : Readonly<{ kind: "baz"; xbaz: boolean; bug: () => number[]; }>
+>kind : "baz"
+>xbaz : boolean
+>bug : () => number[]
+
+declare type X2 = | X2Foo | X2Bar | X2Baz ;
+>X2 : Readonly<{ kind: "foo"; xfoo: string; bug: () => number[]; }> | Readonly<{ kind: "bar"; xbar: number; bug: () => number[]; }> | Readonly<{ kind: "baz"; xbaz: boolean; bug: () => number[]; }>
+
+declare const obj2: undefined | X2;
+>obj2 : X2 | undefined
+
+declare const ubool:()=>boolean;
+>ubool : () => boolean
+{
+    const isFoo = obj2 && obj2.kind === "foo";
+>isFoo : boolean | undefined
+>obj2 && obj2.kind === "foo" : boolean | undefined
+>obj2 : X2 | undefined
+>obj2.kind === "foo" : boolean
+>obj2.kind : "foo" | "bar" | "baz"
+>obj2 : X2
+>kind : "foo" | "bar" | "baz"
+>"foo" : "foo"
+
+    const isBug = obj2?.bug();
+>isBug : number[] | undefined
+>obj2?.bug() : number[] | undefined
+>obj2?.bug : (() => number[]) | (() => number[]) | (() => number[]) | undefined
+>obj2 : X2 | undefined
+>bug : (() => number[]) | (() => number[]) | (() => number[]) | undefined
+
+    while (ubool()) {
+>ubool() : boolean
+>ubool : () => boolean
+
+        if (isFoo) {
+>isFoo : boolean | undefined
+
+            const s = obj2.xfoo;
+>s : string
+>obj2.xfoo : string
+>obj2 : Readonly<{ kind: "foo"; xfoo: string; bug: () => number[]; }>
+>xfoo : string
+
+        } else if (isBug) {
+>isBug : number[] | undefined
+
+            const t = obj2.bug();
+>t : number[]
+>obj2.bug() : number[]
+>obj2.bug : (() => number[]) | (() => number[]) | (() => number[])
+>obj2 : X2
+>bug : (() => number[]) | (() => number[]) | (() => number[])
+        }
+    }
+}
