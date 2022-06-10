@@ -5783,9 +5783,18 @@ namespace ts {
                 case SyntaxKind.NoSubstitutionTemplateLiteral:  // foo<T> `...`
                 case SyntaxKind.TemplateHead:                   // foo<T> `...${100}...`
                     return true;
+                // A type argument list followed by `<` never makes sense, and a type argument list followed
+                // by `>` is ambiguous with a (re-scanned) `>>` operator, so we disqualify both. Also, in
+                // this context, `+` and `-` are unary operators, not binary operators.
+                case SyntaxKind.LessThanToken:
+                case SyntaxKind.GreaterThanToken:
+                case SyntaxKind.PlusToken:
+                case SyntaxKind.MinusToken:
+                    return false;
             }
-            // Consider something a type argument list only if the following token can't start an expression.
-            return !isStartOfExpression();
+            // We favor the type argument list interpretation when it is immediately followed by
+            // a line break, a binary operator, or something that can't start an expression.
+            return scanner.hasPrecedingLineBreak() || isBinaryOperator() || !isStartOfExpression();
         }
 
         function parsePrimaryExpression(): PrimaryExpression {
