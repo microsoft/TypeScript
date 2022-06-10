@@ -379,8 +379,9 @@ namespace ts {
         JSDocFunctionType,
         JSDocVariadicType,
         JSDocNamepathType, // https://jsdoc.app/about-namepaths.html
+        JSDoc,
         /** @deprecated Use SyntaxKind.JSDoc */
-        JSDocComment,
+        JSDocComment = JSDoc,
         JSDocText,
         JSDocTypeLiteral,
         JSDocSignature,
@@ -457,7 +458,6 @@ namespace ts {
         LastJSDocTagNode = JSDocPropertyTag,
         /* @internal */ FirstContextualKeyword = AbstractKeyword,
         /* @internal */ LastContextualKeyword = OfKeyword,
-        JSDoc = JSDocComment,
     }
 
     export type TriviaSyntaxKind =

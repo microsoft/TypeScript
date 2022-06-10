@@ -64,7 +64,7 @@
                                 }
                             },
                             "name": {
-                                "kind": "FirstNode",
+                                "kind": "QualifiedName",
                                 "pos": 50,
                                 "end": 53,
                                 "modifierFlagsCache": 0,
