@@ -326,7 +326,17 @@ namespace ts {
             return value.toString();
         }
 
+        const enumMemberCache = new Map<any, SortedReadonlyArray<[number, string]>>();
+
         function getEnumMembers(enumObject: any) {
+            // Assuming enum objects do not change at runtime, we can cache the enum members list
+            // to reuse later. This saves us from reconstructing this each and every time we call
+            // a formatting function (which can be expensive for large enums like SyntaxKind).
+            const existing = enumMemberCache.get(enumObject);
+            if (existing) {
+                return existing;
+            }
+
             const result: [number, string][] = [];
             for (const name in enumObject) {
                 const value = enumObject[name];
@@ -335,8 +345,11 @@ namespace ts {
                 }
             }
 
-            return stableSort<[number, string]>(result, (x, y) => compareValues(x[0], y[0]));
+            const sorted = stableSort<[number, string]>(result, (x, y) => compareValues(x[0], y[0]));
+            enumMemberCache.set(enumObject, sorted);
+            return sorted;
         }
+
 
         export function formatSyntaxKind(kind: SyntaxKind | undefined): string {
             return formatEnum(kind, (ts as any).SyntaxKind, /*isFlags*/ false);
