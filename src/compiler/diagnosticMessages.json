@@ -1547,6 +1547,10 @@
         "category": "Message",
         "code": 2211
     },
+    "Add `extends` constraint to all type parameters": {
+        "category": "Message",
+        "code": 2212
+    },
 
     "Duplicate identifier '{0}'.": {
         "category": "Error",

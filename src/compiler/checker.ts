@@ -18793,9 +18793,9 @@ namespace ts {
                 }
                 reportRelationError(headMessage, source, target);
                 if (source.flags & TypeFlags.TypeParameter && source.symbol?.declarations?.[0] && !getConstraintOfType(source as TypeVariable)) {
-                    const syntheticparam = cloneTypeParameter(source as TypeParameter);
-                    syntheticparam.constraint = instantiateType(target, makeUnaryTypeMapper(source, syntheticparam));
-                    if (hasNonCircularBaseConstraint(syntheticparam)) {
+                    const syntheticParam = cloneTypeParameter(source as TypeParameter);
+                    syntheticParam.constraint = instantiateType(target, makeUnaryTypeMapper(source, syntheticParam));
+                    if (hasNonCircularBaseConstraint(syntheticParam)) {
                         const targetConstraintString = typeToString(target, source.symbol.declarations[0]);
                         associateRelatedInfo(createDiagnosticForNode(source.symbol.declarations[0], Diagnostics.This_type_parameter_might_need_an_extends_0_constraint, targetConstraintString));
                     }

@@ -22,7 +22,7 @@ namespace ts.codefix {
                 return;
             }
             const changes = textChanges.ChangeTracker.with(context, t => addMissingConstraint(t, related));
-            return [createCodeFixAction(fixId, changes, Diagnostics.Add_extends_constraint, fixId, Diagnostics.Add_missing_new_operator_to_all_calls)];
+            return [createCodeFixAction(fixId, changes, Diagnostics.Add_extends_constraint, fixId, Diagnostics.Add_extends_constraint_to_all_type_parameters)];
         },
         fixIds: [fixId],
         getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => {
@@ -33,11 +33,9 @@ namespace ts.codefix {
     });
 
     function getDiagnosticRelatedInfo(program: Program, sourceFile: SourceFile, span: TextSpan) {
-        const diags = program.getSemanticDiagnostics(sourceFile).filter(diag => diag.start === span.start && diag.length === span.length);
-        if (!length(diags)) return;
-        const diag = diags[0];
-        if (!diag.relatedInformation) return;
-        const related = filter(diag.relatedInformation, related => related.code === Diagnostics.This_type_parameter_might_need_an_extends_0_constraint.code)[0];
+        const diag = find(program.getSemanticDiagnostics(sourceFile), diag => diag.start === span.start && diag.length === span.length);
+        if (!diag || !diag.relatedInformation) return;
+        const related = find(diag.relatedInformation, related => related.code === Diagnostics.This_type_parameter_might_need_an_extends_0_constraint.code);
         if (!related) return;
         return related;
     }
