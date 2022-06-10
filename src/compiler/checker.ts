@@ -37585,7 +37585,7 @@ namespace ts {
                         // entire parameter does not have type annotation, suggest adding an annotation
                         addRelatedInfo(
                             diagnostic,
-                            createFileDiagnostic(getSourceFileOfNode(wrappingDeclaration), wrappingDeclaration.end - 1, 1,Diagnostics.We_can_only_write_a_type_for_0_by_adding_a_type_for_the_entire_parameter_here, declarationNameToString(wrappingDeclaration.name))
+                            createFileDiagnostic(getSourceFileOfNode(wrappingDeclaration), wrappingDeclaration.end - 1, 1, Diagnostics.We_can_only_write_a_type_for_0_by_adding_a_type_for_the_entire_parameter_here, declarationNameToString(node.propertyName))
                         );
                     }
                     diagnostics.add(diagnostic);
