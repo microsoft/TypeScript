@@ -11,11 +11,7 @@ type F5 = ({ a: string, b, c }: O) => any; // Error
 type F6 = ({ a: string }) => typeof string; // OK
 type F7 = ({ a: string, b: number }) => typeof number; // Error
 type F8 = ({ a, b: number }) => typeof number; // OK
-type F9 = ([a, b, c]) => void; // Error
-type F10 = ({ "a": string }) => void; // Error
-type F11 = ({ 2: string }) => void; // Error
-type F12 = ({ ["a"]: string }: O) => void; // Error
-type F13 = ({ [2]: string }) => void; // Error
+type F9 = ([a, b, c]) => void; // OK
 
 type G1 = new (arg: number) => any; // OK
 type G2 = new ({ a: string }: O) => any; // Error
@@ -25,7 +21,14 @@ type G5 = new ({ a: string, b, c }: O) => any; // Error
 type G6 = new ({ a: string }) => typeof string; // OK
 type G7 = new ({ a: string, b: number }) => typeof number; // Error
 type G8 = new ({ a, b: number }) => typeof number; // OK
-type G9 = new ([a, b, c]) => void; // Error
+type G9 = new ([a, b, c]) => void; // OK
+
+// Below are Error but renaming is retained in declaration emit,
+// since elinding it would leave invalid syntax.
+type F10 = ({ "a": string }) => void; // Error
+type F11 = ({ 2: string }) => void; // Error
+type F12 = ({ ["a"]: string }: O) => void; // Error
+type F13 = ({ [2]: string }) => void; // Error
 type G10 = new ({ "a": string }) => void; // Error
 type G11 = new ({ 2: string }) => void; // Error
 type G12 = new ({ ["a"]: string }: O) => void; // Error
