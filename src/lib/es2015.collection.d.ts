@@ -1,10 +1,25 @@
 interface Map<K, V> {
+    /**
+     * removes all elements from a Map object.
+     */
     clear(): void;
+    /**
+     * removes the specified element from the Map object by key.
+     * @param key The key of the element to remove from the Map object.
+     * @returns true if an element in the Map object existed and has been removed, or false if the element does not exist.
+     */
     delete(key: K): boolean;
+    /**
+     * executes a provided function once per each key/value pair in the Map object, in insertion order.
+     * @callback callbackfn   Function to execute for each entry in the map. It takes the following arguments:
+     */
     forEach(callbackfn: (value: V, key: K, map: Map<K, V>) => void, thisArg?: any): void;
     get(key: K): V | undefined;
     has(key: K): boolean;
     set(key: K, value: V): this;
+    /**
+     * returns an integer representing how many entries the Map object has
+     */
     readonly size: number;
 }
 
@@ -41,6 +56,9 @@ interface Set<T> {
     delete(value: T): boolean;
     forEach(callbackfn: (value: T, value2: T, set: Set<T>) => void, thisArg?: any): void;
     has(value: T): boolean;
+    /**
+     * returns an integer representing how many entries the Set object has
+     */
     readonly size: number;
 }
 
