@@ -2,11 +2,11 @@ namespace ts {
     /** The version of the language service API */
     export const servicesVersion = "0.8";
 
-    function createNode<TKind extends SyntaxKind>(kind: TKind, pos: number, end: number, parent: Node): NodeObject | TokenObject<TKind> | IdentifierObject | PrivateIdentifierObject {
+    function createNode<TKind extends SyntaxKind>(kind: TKind, pos: number, end: number, parent: Node): NodeObject | TokenObject<TokenSyntaxKind> | IdentifierObject | PrivateIdentifierObject {
         const node = isNodeKind(kind) ? new NodeObject(kind, pos, end) :
             kind === SyntaxKind.Identifier ? new IdentifierObject(SyntaxKind.Identifier, pos, end) :
                 kind === SyntaxKind.PrivateIdentifier ? new PrivateIdentifierObject(SyntaxKind.PrivateIdentifier, pos, end) :
-                    new TokenObject(kind, pos, end);
+                isTokenKind(kind) ? new TokenObject(kind, pos, end) : Debug.fail("Could not create Node by kind.");
         node.parent = parent;
         node.flags = parent.flags & NodeFlags.ContextFlags;
         return node;
@@ -385,7 +385,7 @@ namespace ts {
         }
     }
 
-    class TokenObject<TKind extends SyntaxKind> extends TokenOrIdentifierObject implements Token<TKind> {
+    class TokenObject<TKind extends TokenSyntaxKind> extends TokenOrIdentifierObject implements Token<TKind> {
         public kind: TKind;
 
         constructor(kind: TKind, pos: number, end: number) {

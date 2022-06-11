@@ -1874,8 +1874,8 @@ namespace ts {
             return false;
         }
 
-        function parseOptionalToken<TKind extends SyntaxKind>(t: TKind): Token<TKind>;
-        function parseOptionalToken(t: SyntaxKind): Node | undefined {
+        function parseOptionalToken<TKind extends TokenSyntaxKind>(t: TKind): Token<TKind>;
+        function parseOptionalToken(t: TokenSyntaxKind): Node | undefined {
             if (token() === t) {
                 return parseTokenNode();
             }
@@ -1890,8 +1890,8 @@ namespace ts {
             return undefined;
         }
 
-        function parseExpectedToken<TKind extends SyntaxKind>(t: TKind, diagnosticMessage?: DiagnosticMessage, arg0?: any): Token<TKind>;
-        function parseExpectedToken(t: SyntaxKind, diagnosticMessage?: DiagnosticMessage, arg0?: any): Node {
+        function parseExpectedToken<TKind extends TokenSyntaxKind>(t: TKind, diagnosticMessage?: DiagnosticMessage, arg0?: any): Token<TKind>;
+        function parseExpectedToken(t: TokenSyntaxKind, diagnosticMessage?: DiagnosticMessage, arg0?: any): Node {
             return parseOptionalToken(t) ||
                 createMissingNode(t, /*reportAtCurrentPosition*/ false, diagnosticMessage || Diagnostics._0_expected, arg0 || tokenToString(t));
         }
@@ -1906,6 +1906,7 @@ namespace ts {
             const pos = getNodePos();
             const kind = token();
             nextToken();
+            Debug.assert(isTokenKind(kind));
             return finishNode(factory.createToken(kind), pos) as T;
         }
 
@@ -1913,6 +1914,7 @@ namespace ts {
             const pos = getNodePos();
             const kind = token();
             nextTokenJSDoc();
+            Debug.assert(isTokenKind(kind));
             return finishNode(factory.createToken(kind), pos) as T;
         }
 
@@ -1983,7 +1985,7 @@ namespace ts {
                 kind === SyntaxKind.NumericLiteral ? factory.createNumericLiteral("", /*numericLiteralFlags*/ undefined) :
                 kind === SyntaxKind.StringLiteral ? factory.createStringLiteral("", /*isSingleQuote*/ undefined) :
                 kind === SyntaxKind.MissingDeclaration ? factory.createMissingDeclaration() :
-                factory.createToken(kind);
+                isTokenKind(kind) ? factory.createToken(kind) : Debug.fail("unkonwn kind to create missing node");
             return finishNode(result, pos) as T;
         }
 

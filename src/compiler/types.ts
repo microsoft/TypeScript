@@ -543,6 +543,9 @@ namespace ts {
         | SyntaxKind.GreaterThanGreaterThanGreaterThanEqualsToken
         | SyntaxKind.AmpersandEqualsToken
         | SyntaxKind.BarEqualsToken
+        | SyntaxKind.BarBarEqualsToken
+        | SyntaxKind.AmpersandAmpersandEqualsToken
+        | SyntaxKind.QuestionQuestionEqualsToken
         | SyntaxKind.CaretEqualsToken
         ;
 
@@ -1099,8 +1102,7 @@ namespace ts {
         /* @internal */ transformFlags: TransformFlags;   // Flags for transforms, possibly undefined
     }
 
-    // TODO(rbuckton): Constraint 'TKind' to 'TokenSyntaxKind'
-    export interface Token<TKind extends SyntaxKind> extends Node {
+    export interface Token<TKind extends TokenSyntaxKind> extends Node {
         readonly kind: TKind;
     }
 
@@ -7440,7 +7442,7 @@ namespace ts {
         createToken<TKind extends ModifierSyntaxKind>(token: TKind): ModifierToken<TKind>;
         createToken<TKind extends KeywordSyntaxKind>(token: TKind): KeywordToken<TKind>;
         createToken<TKind extends SyntaxKind.Unknown | SyntaxKind.EndOfFileToken>(token: TKind): Token<TKind>;
-        /*@internal*/ createToken<TKind extends SyntaxKind>(token: TKind): Token<TKind>;
+        /*@internal*/ createToken<TKind extends TokenSyntaxKind>(token: TKind): Token<TKind>;
 
         //
         // Reserved words

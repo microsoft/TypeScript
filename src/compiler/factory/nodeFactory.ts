@@ -951,13 +951,13 @@ namespace ts {
         function createToken<TKind extends ModifierSyntaxKind>(token: TKind): ModifierToken<TKind>;
         function createToken<TKind extends KeywordSyntaxKind>(token: TKind): KeywordToken<TKind>;
         function createToken<TKind extends SyntaxKind.Unknown | SyntaxKind.EndOfFileToken>(token: TKind): Token<TKind>;
-        function createToken<TKind extends SyntaxKind>(token: TKind): Token<TKind>;
+        function createToken<TKind extends TokenSyntaxKind>(token: TKind): Token<TKind>;
         function createToken<TKind extends SyntaxKind>(token: TKind) {
-            Debug.assert(token >= SyntaxKind.FirstToken && token <= SyntaxKind.LastToken, "Invalid token");
+            Debug.assert(isTokenKind(token), "Invalid token");
             Debug.assert(token <= SyntaxKind.FirstTemplateToken || token >= SyntaxKind.LastTemplateToken, "Invalid token. Use 'createTemplateLiteralLikeNode' to create template literals.");
             Debug.assert(token <= SyntaxKind.FirstLiteralToken || token >= SyntaxKind.LastLiteralToken, "Invalid token. Use 'createLiteralLikeNode' to create literals.");
             Debug.assert(token !== SyntaxKind.Identifier, "Invalid token. Use 'createIdentifier' to create identifiers");
-            const node = createBaseToken<Token<TKind>>(token);
+            const node = createBaseToken<Token<TokenSyntaxKind>>(token);
             let transformFlags = TransformFlags.None;
             switch (token) {
                 case SyntaxKind.AsyncKeyword:
@@ -6269,7 +6269,7 @@ namespace ts {
                 value;
         }
 
-        function asToken<TKind extends SyntaxKind>(value: TKind | Token<TKind>): Token<TKind> {
+        function asToken<TKind extends TokenSyntaxKind>(value: TKind | Token<TKind>): Token<TKind> {
             return typeof value === "number" ? createToken(value) : value;
         }
 

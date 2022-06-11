@@ -1098,7 +1098,7 @@ namespace ts {
      * For example, this is true for an IfKeyword but not for an IfStatement.
      * Literals are considered tokens, except TemplateLiteral, but does include TemplateHead/Middle/Tail.
      */
-    export function isTokenKind(kind: SyntaxKind): boolean {
+    export function isTokenKind(kind: SyntaxKind): kind is TokenSyntaxKind {
         return kind >= SyntaxKind.FirstToken && kind <= SyntaxKind.LastToken;
     }
 

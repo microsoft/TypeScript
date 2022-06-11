@@ -454,11 +454,11 @@ namespace ts.textChanges {
             this.insertNodeAt(sourceFile, getAdjustedStartPosition(sourceFile, before, options), newNode, this.getOptionsForInsertNodeBefore(before, newNode, blankLineBetween));
         }
 
-        public insertModifierAt(sourceFile: SourceFile, pos: number, modifier: SyntaxKind, options: InsertNodeOptions = {}): void {
+        public insertModifierAt(sourceFile: SourceFile, pos: number, modifier: TokenSyntaxKind, options: InsertNodeOptions = {}): void {
             this.insertNodeAt(sourceFile, pos, factory.createToken(modifier), options);
         }
 
-        public insertModifierBefore(sourceFile: SourceFile, modifier: SyntaxKind, before: Node): void {
+        public insertModifierBefore(sourceFile: SourceFile, modifier: TokenSyntaxKind, before: Node): void {
             return this.insertModifierAt(sourceFile, before.getStart(sourceFile), modifier, { suffix: " " });
         }
 

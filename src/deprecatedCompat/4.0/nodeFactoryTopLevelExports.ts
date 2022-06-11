@@ -916,7 +916,7 @@ namespace ts {
     export const updateNamespaceExport = Debug.deprecate(factory.updateNamespaceExport, factoryDeprecation);
 
     /** @deprecated Use `factory.createToken` or the factory supplied by your transformation context instead. */
-    export const createToken = Debug.deprecate(function createToken<TKind extends SyntaxKind>(kind: TKind): Token<TKind> {
+    export const createToken = Debug.deprecate(function createToken<TKind extends TokenSyntaxKind>(kind: TKind): Token<TKind> {
         return factory.createToken(kind);
     }, factoryDeprecation);
 
