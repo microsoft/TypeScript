@@ -89,7 +89,7 @@ out/index.d.ts(14,39): error TS2304: Cannot find name 'class'.
 out/index.d.ts(15,38): error TS2304: Cannot find name 'bool'.
 out/index.d.ts(16,37): error TS2304: Cannot find name 'int'.
 out/index.d.ts(17,39): error TS2304: Cannot find name 'float'.
-out/index.d.ts(18,41): error TS2304: Cannot find name 'integer'.
+out/index.d.ts(18,41): error TS2552: Cannot find name 'integer'. Did you mean 'Integer'?
 
 
 ==== ./out/index.d.ts (5 errors) ====
@@ -120,6 +120,6 @@ out/index.d.ts(18,41): error TS2304: Cannot find name 'integer'.
 !!! error TS2304: Cannot find name 'float'.
     /** @type {integer} */ declare const p: integer;
                                             ~~~~~~~
-!!! error TS2304: Cannot find name 'integer'.
+!!! error TS2552: Cannot find name 'integer'. Did you mean 'Integer'?
     /** @type {event} */ declare const q: Event | undefined;
     

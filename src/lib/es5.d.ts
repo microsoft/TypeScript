@@ -1607,6 +1607,31 @@ type Capitalize<S extends string> = intrinsic;
 type Uncapitalize<S extends string> = intrinsic;
 
 /**
+ * Convert number literal type to integer
+ */
+type Integer<N extends number> = intrinsic;
+
+/**
+ * Add two literal numbers
+ */
+type Add<M extends number, N extends number> = intrinsic;
+
+/**
+ * Subtract two literal numbers
+ */
+type Subtract<M extends number, N extends number> = intrinsic;
+
+/**
+ * Multiply two literal numbers
+ */
+type Multiply<M extends number, N extends number> = intrinsic;
+
+/**
+ * Divide two literal numbers
+ */
+type Divide<M extends number, N extends number> = intrinsic;
+
+/**
  * Marker for contextual 'this' type
  */
 interface ThisType<T> { }

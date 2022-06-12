@@ -352,12 +352,12 @@ type NTuple<N extends number, Tup extends unknown[] = []> =
 
     Tup['length'] extends N ? Tup : NTuple<N, [...Tup, unknown]>;
 
-type Add<A extends number, B extends number> =
->Add : Add<A, B>
+type AddTuples<A extends number, B extends number> =
+>AddTuples : AddTuples<A, B>
 
     [...NTuple<A>, ...NTuple<B>]['length'];
 
-let five: Add<2, 3>;
+let five: AddTuples<2, 3>;
 >five : 5
 
 // Repro from #46316

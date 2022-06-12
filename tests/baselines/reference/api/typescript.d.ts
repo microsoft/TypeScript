@@ -2642,12 +2642,13 @@ declare namespace ts {
         NonPrimitive = 67108864,
         TemplateLiteral = 134217728,
         StringMapping = 268435456,
+        Calculation = 536870912,
         Literal = 2944,
         Unit = 109440,
         StringOrNumberLiteral = 384,
         PossiblyFalsy = 117724,
         StringLike = 402653316,
-        NumberLike = 296,
+        NumberLike = 536871208,
         BigIntLike = 2112,
         BooleanLike = 528,
         EnumLike = 1056,
@@ -2657,10 +2658,10 @@ declare namespace ts {
         StructuredType = 3670016,
         TypeVariable = 8650752,
         InstantiableNonPrimitive = 58982400,
-        InstantiablePrimitive = 406847488,
-        Instantiable = 465829888,
-        StructuredOrInstantiable = 469499904,
-        Narrowable = 536624127,
+        InstantiablePrimitive = 943718400,
+        Instantiable = 1002700800,
+        StructuredOrInstantiable = 1006370816,
+        Narrowable = 1073495039,
     }
     export type DestructuringPattern = BindingPattern | ObjectLiteralExpression | ArrayLiteralExpression;
     export interface Type {
@@ -2820,6 +2821,10 @@ declare namespace ts {
     export interface StringMappingType extends InstantiableType {
         symbol: Symbol;
         type: Type;
+    }
+    export interface CalculationType extends InstantiableType {
+        symbol: Symbol;
+        types: [Type] | [Type, Type];
     }
     export interface SubstitutionType extends InstantiableType {
         objectFlags: ObjectFlags;

@@ -146,10 +146,10 @@ type TP2 = ParseManyWhitespace2<" foo">;
 type NTuple<N extends number, Tup extends unknown[] = []> =
     Tup['length'] extends N ? Tup : NTuple<N, [...Tup, unknown]>;
 
-type Add<A extends number, B extends number> =
+type AddTuples<A extends number, B extends number> =
     [...NTuple<A>, ...NTuple<B>]['length'];
 
-let five: Add<2, 3>;
+let five: AddTuples<2, 3>;
 
 // Repro from #46316
 

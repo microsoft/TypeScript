@@ -5360,6 +5360,7 @@ namespace ts {
         NonPrimitive    = 1 << 26,  // intrinsic object type
         TemplateLiteral = 1 << 27,  // Template literal type
         StringMapping   = 1 << 28,  // Uppercase/Lowercase type
+        Calculation     = 1 << 29,  // Math type
 
         /* @internal */
         AnyOrUnknown = Any | Unknown,
@@ -5378,7 +5379,7 @@ namespace ts {
         /* @internal */
         Primitive = String | Number | BigInt | Boolean | Enum | EnumLiteral | ESSymbol | Void | Undefined | Null | Literal | UniqueESSymbol,
         StringLike = String | StringLiteral | TemplateLiteral | StringMapping,
-        NumberLike = Number | NumberLiteral | Enum,
+        NumberLike = Number | NumberLiteral | Enum | Calculation,
         BigIntLike = BigInt | BigIntLiteral,
         BooleanLike = Boolean | BooleanLiteral,
         EnumLike = Enum | EnumLiteral,
@@ -5392,7 +5393,7 @@ namespace ts {
         StructuredType = Object | Union | Intersection,
         TypeVariable = TypeParameter | IndexedAccess,
         InstantiableNonPrimitive = TypeVariable | Conditional | Substitution,
-        InstantiablePrimitive = Index | TemplateLiteral | StringMapping,
+        InstantiablePrimitive = Index | TemplateLiteral | StringMapping | Calculation,
         Instantiable = InstantiableNonPrimitive | InstantiablePrimitive,
         StructuredOrInstantiable = StructuredType | Instantiable,
         /* @internal */
@@ -5919,6 +5920,11 @@ namespace ts {
     export interface StringMappingType extends InstantiableType {
         symbol: Symbol;
         type: Type;
+    }
+
+    export interface CalculationType extends InstantiableType {
+        symbol: Symbol;
+        types: [Type] | [Type, Type];
     }
 
     // Type parameter substitution (TypeFlags.Substitution)

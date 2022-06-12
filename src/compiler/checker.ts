@@ -261,14 +261,24 @@ namespace ts {
         Uppercase,
         Lowercase,
         Capitalize,
-        Uncapitalize
+        Uncapitalize,
+        Integer,
+        Add,
+        Subtract,
+        Multiply,
+        Divide,
     }
 
     const intrinsicTypeKinds: ReadonlyESMap<string, IntrinsicTypeKind> = new Map(getEntries({
         Uppercase: IntrinsicTypeKind.Uppercase,
         Lowercase: IntrinsicTypeKind.Lowercase,
         Capitalize: IntrinsicTypeKind.Capitalize,
-        Uncapitalize: IntrinsicTypeKind.Uncapitalize
+        Uncapitalize: IntrinsicTypeKind.Uncapitalize,
+        Integer: IntrinsicTypeKind.Integer,
+        Add: IntrinsicTypeKind.Add,
+        Subtract: IntrinsicTypeKind.Subtract,
+        Multiply: IntrinsicTypeKind.Multiply,
+        Divide: IntrinsicTypeKind.Divide
     }));
 
     function SymbolLinks(this: SymbolLinks) {
@@ -772,6 +782,7 @@ namespace ts {
         const indexedAccessTypes = new Map<string, IndexedAccessType>();
         const templateLiteralTypes = new Map<string, TemplateLiteralType>();
         const stringMappingTypes = new Map<string, StringMappingType>();
+        const calculationTypes = new Map<string, CalculationType>();
         const substitutionTypes = new Map<string, SubstitutionType>();
         const subtypeReductionCache = new Map<string, Type[]>();
         const evolvingArrayTypes: EvolvingArrayType[] = [];
@@ -5091,6 +5102,9 @@ namespace ts {
                 if (type.flags & TypeFlags.StringMapping) {
                     const typeNode = typeToTypeNodeHelper((type as StringMappingType).type, context);
                     return symbolToTypeNode((type as StringMappingType).symbol, context, SymbolFlags.Type, [typeNode]);
+                }
+                if (type.flags & TypeFlags.Calculation) {
+                    return symbolToTypeNode((type as CalculationType).symbol, context, SymbolFlags.Type, (type as CalculationType).types.map(type => typeToTypeNodeHelper(type, context)));
                 }
                 if (type.flags & TypeFlags.IndexedAccess) {
                     const objectTypeNode = typeToTypeNodeHelper((type as IndexedAccessType).objectType, context);
@@ -12057,7 +12071,7 @@ namespace ts {
         }
 
         function getBaseConstraintOfType(type: Type): Type | undefined {
-            if (type.flags & (TypeFlags.InstantiableNonPrimitive | TypeFlags.UnionOrIntersection | TypeFlags.TemplateLiteral | TypeFlags.StringMapping)) {
+            if (type.flags & (TypeFlags.InstantiableNonPrimitive | TypeFlags.UnionOrIntersection | TypeFlags.TemplateLiteral | TypeFlags.StringMapping | TypeFlags.Calculation)) {
                 const constraint = getResolvedBaseConstraint(type as InstantiableType | UnionOrIntersectionType);
                 return constraint !== noConstraintType && constraint !== circularConstraintType ? constraint : undefined;
             }
@@ -12168,7 +12182,16 @@ namespace ts {
                 }
                 if (t.flags & TypeFlags.StringMapping) {
                     const constraint = getBaseConstraint((t as StringMappingType).type);
-                    return constraint ? getStringMappingType((t as StringMappingType).symbol, constraint) : stringType;
+                    return constraint ? getIntrinsicMappingType((t as StringMappingType).symbol, constraint) : stringType;
+                }
+                if (t.flags & TypeFlags.Calculation) {
+                    const types = (t as CalculationType).types;
+                    const constraints = mapDefined(types, getBaseConstraint);
+                    return constraints.length === types.length
+                        ? constraints.length === 1
+                            ? getIntrinsicMappingType((t as CalculationType).symbol, constraints[0])
+                            : getIntrinsicMappingType2((t as CalculationType).symbol, constraints[0], constraints[1])
+                        : numberType;
                 }
                 if (t.flags & TypeFlags.IndexedAccess) {
                     if (isMappedTypeGenericIndexedAccess(t)) {
@@ -13545,8 +13568,13 @@ namespace ts {
 
         function getTypeAliasInstantiation(symbol: Symbol, typeArguments: readonly Type[] | undefined, aliasSymbol?: Symbol, aliasTypeArguments?: readonly Type[]): Type {
             const type = getDeclaredTypeOfSymbol(symbol);
-            if (type === intrinsicMarkerType && intrinsicTypeKinds.has(symbol.escapedName as string) && typeArguments && typeArguments.length === 1) {
-                return getStringMappingType(symbol, typeArguments[0]);
+            if (type === intrinsicMarkerType && intrinsicTypeKinds.has(symbol.escapedName as string) && typeArguments) {
+                if (typeArguments.length === 1) {
+                    return getIntrinsicMappingType(symbol, typeArguments[0]);
+                }
+                if (typeArguments.length === 2) {
+                    return getIntrinsicMappingType2(symbol, typeArguments[0], typeArguments[1]);
+                }
             }
             const links = getSymbolLinks(symbol);
             const typeParameters = links.typeParameters!;
@@ -14561,7 +14589,7 @@ namespace ts {
                 const flags = t.flags;
                 const remove =
                     flags & (TypeFlags.StringLiteral | TypeFlags.TemplateLiteral | TypeFlags.StringMapping) && includes & TypeFlags.String ||
-                    flags & TypeFlags.NumberLiteral && includes & TypeFlags.Number ||
+                    flags & (TypeFlags.NumberLiteral | TypeFlags.Calculation) && includes & TypeFlags.Number ||
                     flags & TypeFlags.BigIntLiteral && includes & TypeFlags.BigInt ||
                     flags & TypeFlags.UniqueESSymbol && includes & TypeFlags.ESSymbol ||
                     reduceVoidUndefined && flags & TypeFlags.Undefined && includes & TypeFlags.Void ||
@@ -15174,6 +15202,7 @@ namespace ts {
                     type.flags & TypeFlags.IndexedAccess ? isDistributive((type as IndexedAccessType).objectType) && isDistributive((type as IndexedAccessType).indexType) :
                     type.flags & TypeFlags.Substitution ? isDistributive((type as SubstitutionType).substitute) :
                     type.flags & TypeFlags.StringMapping ? isDistributive((type as StringMappingType).type) :
+                    type.flags & TypeFlags.Calculation ? isDistributive((type as CalculationType).types[0]) || ((type as CalculationType).types.length === 2 && isDistributive((type as CalculationType).types[1]!)) :
                     false;
             }
         }
@@ -15365,11 +15394,27 @@ namespace ts {
             return type;
         }
 
-        function getStringMappingType(symbol: Symbol, type: Type): Type {
-            return type.flags & (TypeFlags.Union | TypeFlags.Never) ? mapType(type, t => getStringMappingType(symbol, t)) :
-                isGenericIndexType(type) ? getStringMappingTypeForGenericType(symbol, type) :
+        function getIntrinsicMappingType(symbol: Symbol, type: Type): Type {
+            return type.flags & (TypeFlags.Union | TypeFlags.Never) ? mapType(type, t => getIntrinsicMappingType(symbol, t)) :
+                isGenericIndexType(type) ?
+                    (getBaseConstraintOfType(type)?.flags ?? 0) & TypeFlags.StringLike ? getStringMappingTypeForGenericType(symbol, type) :
+                    getCalculationTypeForGenericType(symbol, [type]) :
                 type.flags & TypeFlags.StringLiteral ? getStringLiteralType(applyStringMapping(symbol, (type as StringLiteralType).value)) :
+                type.flags & TypeFlags.NumberLiteral ? applyNumberMapping(symbol, type as NumberLiteralType) :
                 type;
+        }
+
+        // Currently the only 2-type intrinsics are Calculation types (i.e. numeric)
+        function getIntrinsicMappingType2(symbol: Symbol, type1: Type, type2: Type): Type {
+            return type1.flags & (TypeFlags.Union | TypeFlags.Never) ? mapType(type1, t => getIntrinsicMappingType2(symbol, t, type2)) :
+                isGenericIndexType(type1) || isGenericIndexType(type2) ? getCalculationTypeForGenericType(symbol, [type1, type2]) :
+                type2.flags & (TypeFlags.Union | TypeFlags.Never) ? mapType(type2, t => getIntrinsicMappingType2(symbol, type1, t)) :
+                // handle division by zero
+                intrinsicTypeKinds.get(symbol.escapedName as string) === IntrinsicTypeKind.Divide && type2.flags & TypeFlags.NumberLiteral && (type2 as NumberLiteralType).value === 0 ? neverType :
+                type1.flags & TypeFlags.NumberLiteral ?
+                    type2.flags & TypeFlags.NumberLiteral ? applyNumberMapping2(symbol, type1 as NumberLiteralType, type2 as NumberLiteralType) :
+                    type2 :
+                type1;
         }
 
         function applyStringMapping(symbol: Symbol, str: string) {
@@ -15380,6 +15425,23 @@ namespace ts {
                 case IntrinsicTypeKind.Uncapitalize: return str.charAt(0).toLowerCase() + str.slice(1);
             }
             return str;
+        }
+
+        function applyNumberMapping(symbol: Symbol, n: NumberLiteralType): Type {
+            switch (intrinsicTypeKinds.get(symbol.escapedName as string)) {
+                case IntrinsicTypeKind.Integer: return getNumberLiteralType(Math.floor(n.value));
+            }
+            return n;
+        }
+
+        function applyNumberMapping2(symbol: Symbol, a: NumberLiteralType, b: NumberLiteralType): Type {
+            switch (intrinsicTypeKinds.get(symbol.escapedName as string)) {
+                case IntrinsicTypeKind.Add: return getNumberLiteralType(a.value + b.value);
+                case IntrinsicTypeKind.Subtract: return getNumberLiteralType(a.value - b.value);
+                case IntrinsicTypeKind.Multiply: return getNumberLiteralType(a.value * b.value);
+                case IntrinsicTypeKind.Divide: return getNumberLiteralType(a.value / b.value);
+            }
+            return a;
         }
 
         function getStringMappingTypeForGenericType(symbol: Symbol, type: Type): Type {
@@ -15395,6 +15457,22 @@ namespace ts {
             const result = createType(TypeFlags.StringMapping) as StringMappingType;
             result.symbol = symbol;
             result.type = type;
+            return result;
+        }
+
+        function getCalculationTypeForGenericType(symbol: Symbol, types: [Type] | [Type, Type]): Type {
+            const id = `${getSymbolId(symbol)},${types.map(getTypeId).join(",")}`;
+            let result = calculationTypes.get(id);
+            if (!result) {
+                calculationTypes.set(id, result = createCalculationType(symbol, types));
+            }
+            return result;
+        }
+
+        function createCalculationType(symbol: Symbol, types: [Type] | [Type, Type]) {
+            const result = createType(TypeFlags.Calculation) as CalculationType;
+            result.symbol = symbol;
+            result.types = types;
             return result;
         }
 
@@ -15673,7 +15751,7 @@ namespace ts {
                 return (type as SubstitutionType).objectFlags & ObjectFlags.IsGenericType;
             }
             return (type.flags & TypeFlags.InstantiableNonPrimitive || isGenericMappedType(type) || isGenericTupleType(type) ? ObjectFlags.IsGenericObjectType : 0) |
-                (type.flags & (TypeFlags.InstantiableNonPrimitive | TypeFlags.Index | TypeFlags.TemplateLiteral | TypeFlags.StringMapping) && !isPatternLiteralType(type) ? ObjectFlags.IsGenericIndexType : 0);
+                (type.flags & (TypeFlags.InstantiableNonPrimitive | TypeFlags.Index | TypeFlags.TemplateLiteral | TypeFlags.StringMapping | TypeFlags.Calculation) && !isPatternLiteralType(type) ? ObjectFlags.IsGenericIndexType : 0);
         }
 
         function getSimplifiedType(type: Type, writing: boolean): Type {
@@ -17183,7 +17261,14 @@ namespace ts {
                 return getTemplateLiteralType((type as TemplateLiteralType).texts, instantiateTypes((type as TemplateLiteralType).types, mapper));
             }
             if (flags & TypeFlags.StringMapping) {
-                return getStringMappingType((type as StringMappingType).symbol, instantiateType((type as StringMappingType).type, mapper));
+                return getIntrinsicMappingType((type as StringMappingType).symbol, instantiateType((type as StringMappingType).type, mapper));
+            }
+            if (flags & TypeFlags.Calculation) {
+                const calculation = type as CalculationType;
+                if (calculation.types.length === 1) {
+                    return getIntrinsicMappingType(calculation.symbol, instantiateType(calculation.types[0], mapper));
+                }
+                return getIntrinsicMappingType2(calculation.symbol, instantiateType(calculation.types[0], mapper), instantiateType(calculation.types[1], mapper));
             }
             if (flags & TypeFlags.IndexedAccess) {
                 const newAliasSymbol = aliasSymbol || type.aliasSymbol;
@@ -19637,6 +19722,27 @@ namespace ts {
                         }
                     }
                 }
+                else if (sourceFlags & TypeFlags.Calculation) {
+                    const s = source as CalculationType;
+                    if (targetFlags & TypeFlags.Calculation && s.symbol === (target as CalculationType).symbol) {
+                        const t = target as CalculationType;
+                        if (result = isRelatedTo(s.types[0], t.types[0], RecursionFlags.Both, reportErrors)) {
+                            resetErrorInfo(saveErrorInfo);
+                            return result;
+                        }
+                        if (s.types.length === 2 && t.types.length === 2 && (result = isRelatedTo(s.types[1], t.types[1], RecursionFlags.Both, reportErrors))) {
+                            resetErrorInfo(saveErrorInfo);
+                            return result;
+                        }
+                    }
+                    else {
+                        const constraint = getBaseConstraintOfType(source);
+                        if (constraint && (result = isRelatedTo(constraint, target, RecursionFlags.Source, reportErrors))) {
+                            resetErrorInfo(saveErrorInfo);
+                            return result;
+                        }
+                    }
+                }
                 else if (sourceFlags & TypeFlags.StringMapping) {
                     if (targetFlags & TypeFlags.StringMapping && (source as StringMappingType).symbol === (target as StringMappingType).symbol) {
                         if (result = isRelatedTo((source as StringMappingType).type, (target as StringMappingType).type, RecursionFlags.Both, reportErrors)) {
@@ -21246,7 +21352,7 @@ namespace ts {
         function getBaseTypeOfLiteralType(type: Type): Type {
             return type.flags & TypeFlags.EnumLiteral ? getBaseTypeOfEnumLiteralType(type as LiteralType) :
                 type.flags & (TypeFlags.StringLiteral | TypeFlags.TemplateLiteral | TypeFlags.StringMapping) ? stringType :
-                type.flags & TypeFlags.NumberLiteral ? numberType :
+                type.flags & (TypeFlags.NumberLiteral | TypeFlags.Calculation) ? numberType :
                 type.flags & TypeFlags.BigIntLiteral ? bigintType :
                 type.flags & TypeFlags.BooleanLiteral ? booleanType :
                 type.flags & TypeFlags.Union ? mapType(type as UnionType, getBaseTypeOfLiteralType) :
@@ -22430,6 +22536,16 @@ namespace ts {
                         inferFromTypes((source as StringMappingType).type, (target as StringMappingType).type);
                     }
                 }
+                else if (source.flags & TypeFlags.Calculation && target.flags & TypeFlags.Calculation) {
+                    const sourceCalculation = source as CalculationType;
+                    const targetCalculation = target as CalculationType;
+                    if (sourceCalculation.symbol === targetCalculation.symbol) {
+                        inferFromTypes(sourceCalculation.types[0], targetCalculation.types[0]);
+                        if (sourceCalculation.types.length === 2 && targetCalculation.types.length === 2) {
+                            inferFromTypes(sourceCalculation.types[1], targetCalculation.types[1]);
+                        }
+                    }
+                }
                 else if (source.flags & TypeFlags.Substitution) {
                     inferFromTypes((source as SubstitutionType).baseType, target);
                     const oldPriority = priority;
@@ -22966,7 +23082,7 @@ namespace ts {
 
         function hasPrimitiveConstraint(type: TypeParameter): boolean {
             const constraint = getConstraintOfTypeParameter(type);
-            return !!constraint && maybeTypeOfKind(constraint.flags & TypeFlags.Conditional ? getDefaultConstraintOfConditionalType(constraint as ConditionalType) : constraint, TypeFlags.Primitive | TypeFlags.Index | TypeFlags.TemplateLiteral | TypeFlags.StringMapping);
+            return !!constraint && maybeTypeOfKind(constraint.flags & TypeFlags.Conditional ? getDefaultConstraintOfConditionalType(constraint as ConditionalType) : constraint, TypeFlags.Primitive | TypeFlags.Index | TypeFlags.TemplateLiteral | TypeFlags.StringMapping | TypeFlags.Calculation);
         }
 
         function isObjectLiteralType(type: Type) {
@@ -23911,11 +24027,11 @@ namespace ts {
         // types we don't actually care about.
         function replacePrimitivesWithLiterals(typeWithPrimitives: Type, typeWithLiterals: Type) {
             if (maybeTypeOfKind(typeWithPrimitives, TypeFlags.String | TypeFlags.TemplateLiteral | TypeFlags.Number | TypeFlags.BigInt) &&
-                maybeTypeOfKind(typeWithLiterals, TypeFlags.StringLiteral | TypeFlags.TemplateLiteral | TypeFlags.StringMapping | TypeFlags.NumberLiteral | TypeFlags.BigIntLiteral)) {
+                maybeTypeOfKind(typeWithLiterals, TypeFlags.StringLiteral | TypeFlags.TemplateLiteral | TypeFlags.StringMapping | TypeFlags.Calculation | TypeFlags.NumberLiteral | TypeFlags.BigIntLiteral)) {
                 return mapType(typeWithPrimitives, t =>
                     t.flags & TypeFlags.String ? extractTypesOfKind(typeWithLiterals, TypeFlags.String | TypeFlags.StringLiteral | TypeFlags.TemplateLiteral | TypeFlags.StringMapping) :
                     isPatternLiteralType(t) && !maybeTypeOfKind(typeWithLiterals, TypeFlags.String | TypeFlags.TemplateLiteral | TypeFlags.StringMapping) ? extractTypesOfKind(typeWithLiterals, TypeFlags.StringLiteral) :
-                    t.flags & TypeFlags.Number ? extractTypesOfKind(typeWithLiterals, TypeFlags.Number | TypeFlags.NumberLiteral) :
+                    t.flags & TypeFlags.Number ? extractTypesOfKind(typeWithLiterals, TypeFlags.Number | TypeFlags.NumberLiteral | TypeFlags.Calculation) :
                     t.flags & TypeFlags.BigInt ? extractTypesOfKind(typeWithLiterals, TypeFlags.BigInt | TypeFlags.BigIntLiteral) : t);
             }
             return typeWithPrimitives;
@@ -30054,7 +30170,7 @@ namespace ts {
                 else {
                     const contextualType = getIndexedAccessType(restType, getNumberLiteralType(i - index), AccessFlags.Contextual);
                     const argType = checkExpressionWithContextualType(arg, contextualType, context, checkMode);
-                    const hasPrimitiveContextualType = maybeTypeOfKind(contextualType, TypeFlags.Primitive | TypeFlags.Index | TypeFlags.TemplateLiteral | TypeFlags.StringMapping);
+                    const hasPrimitiveContextualType = maybeTypeOfKind(contextualType, TypeFlags.Primitive | TypeFlags.Index | TypeFlags.TemplateLiteral | TypeFlags.StringMapping | TypeFlags.Calculation);
                     types.push(hasPrimitiveContextualType ? getRegularTypeOfLiteralType(argType) : getWidenedLiteralType(argType));
                     flags.push(ElementFlags.Required);
                 }
@@ -34490,7 +34606,7 @@ namespace ts {
                 // If the contextual type is a literal of a particular primitive type, we consider this a
                 // literal context for all literals of that primitive type.
                 return !!(contextualType.flags & (TypeFlags.StringLiteral | TypeFlags.Index | TypeFlags.TemplateLiteral | TypeFlags.StringMapping) && maybeTypeOfKind(candidateType, TypeFlags.StringLiteral) ||
-                    contextualType.flags & TypeFlags.NumberLiteral && maybeTypeOfKind(candidateType, TypeFlags.NumberLiteral) ||
+                    contextualType.flags & (TypeFlags.NumberLiteral | TypeFlags.Calculation) && maybeTypeOfKind(candidateType, TypeFlags.NumberLiteral) ||
                     contextualType.flags & TypeFlags.BigIntLiteral && maybeTypeOfKind(candidateType, TypeFlags.BigIntLiteral) ||
                     contextualType.flags & TypeFlags.BooleanLiteral && maybeTypeOfKind(candidateType, TypeFlags.BooleanLiteral) ||
                     contextualType.flags & TypeFlags.UniqueESSymbol && maybeTypeOfKind(candidateType, TypeFlags.UniqueESSymbol));
@@ -40220,7 +40336,7 @@ namespace ts {
             checkExportsOnMergedDeclarations(node);
             checkTypeParameters(node.typeParameters);
             if (node.type.kind === SyntaxKind.IntrinsicKeyword) {
-                if (!intrinsicTypeKinds.has(node.name.escapedText as string) || length(node.typeParameters) !== 1) {
+                if (!intrinsicTypeKinds.has(node.name.escapedText as string) || !(length(node.typeParameters) === 1 || length(node.typeParameters) === 2)) {
                     error(node.type, Diagnostics.The_intrinsic_keyword_can_only_be_used_to_declare_compiler_provided_intrinsic_types);
                 }
             }

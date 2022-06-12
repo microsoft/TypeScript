@@ -194,3 +194,422 @@ function foo4<U extends string>(x: Uppercase<U>) {
 >x : Symbol(x, Decl(intrinsicTypes.ts, 51, 32))
 }
 
+type TI1 = Integer<3.5>;  // 3
+>TI1 : Symbol(TI1, Decl(intrinsicTypes.ts, 53, 1))
+>Integer : Symbol(Integer, Decl(lib.es5.d.ts, --, --))
+
+type TI2 = Integer<2.5 | 3.4>;  // 2 | 3
+>TI2 : Symbol(TI2, Decl(intrinsicTypes.ts, 55, 24))
+>Integer : Symbol(Integer, Decl(lib.es5.d.ts, --, --))
+
+type TI3 = Integer<number>;  // number
+>TI3 : Symbol(TI3, Decl(intrinsicTypes.ts, 56, 30))
+>Integer : Symbol(Integer, Decl(lib.es5.d.ts, --, --))
+
+type TI4 = Integer<any>;  // any
+>TI4 : Symbol(TI4, Decl(intrinsicTypes.ts, 57, 27))
+>Integer : Symbol(Integer, Decl(lib.es5.d.ts, --, --))
+
+type TI5 = Integer<never>;  // never
+>TI5 : Symbol(TI5, Decl(intrinsicTypes.ts, 58, 24))
+>Integer : Symbol(Integer, Decl(lib.es5.d.ts, --, --))
+
+type TI6 = Integer<'42'>;  // Error
+>TI6 : Symbol(TI6, Decl(intrinsicTypes.ts, 59, 26))
+>Integer : Symbol(Integer, Decl(lib.es5.d.ts, --, --))
+
+type TA1 = Add<4, 2>;  // 6
+>TA1 : Symbol(TA1, Decl(intrinsicTypes.ts, 60, 25))
+>Add : Symbol(Add, Decl(lib.es5.d.ts, --, --))
+
+type TA2L = Add<4 | 5, 2>;  // 6 | 7
+>TA2L : Symbol(TA2L, Decl(intrinsicTypes.ts, 62, 21))
+>Add : Symbol(Add, Decl(lib.es5.d.ts, --, --))
+
+type TA2R = Add<4, 2 | 3>;  // 6 | 7
+>TA2R : Symbol(TA2R, Decl(intrinsicTypes.ts, 63, 26))
+>Add : Symbol(Add, Decl(lib.es5.d.ts, --, --))
+
+type TA2LR = Add<4 | 5, 2 | 3>;  // 6 | 7 | 8
+>TA2LR : Symbol(TA2LR, Decl(intrinsicTypes.ts, 64, 26))
+>Add : Symbol(Add, Decl(lib.es5.d.ts, --, --))
+
+type TA3L = Add<number, 2>;  // number
+>TA3L : Symbol(TA3L, Decl(intrinsicTypes.ts, 65, 31))
+>Add : Symbol(Add, Decl(lib.es5.d.ts, --, --))
+
+type TA3R = Add<4, number>;  // number
+>TA3R : Symbol(TA3R, Decl(intrinsicTypes.ts, 66, 27))
+>Add : Symbol(Add, Decl(lib.es5.d.ts, --, --))
+
+type TA3LR = Add<number, number>;  // number
+>TA3LR : Symbol(TA3LR, Decl(intrinsicTypes.ts, 67, 27))
+>Add : Symbol(Add, Decl(lib.es5.d.ts, --, --))
+
+type TA4L = Add<any, 2>;  // any
+>TA4L : Symbol(TA4L, Decl(intrinsicTypes.ts, 68, 33))
+>Add : Symbol(Add, Decl(lib.es5.d.ts, --, --))
+
+type TA4R = Add<4, any>;  // any
+>TA4R : Symbol(TA4R, Decl(intrinsicTypes.ts, 69, 24))
+>Add : Symbol(Add, Decl(lib.es5.d.ts, --, --))
+
+type TA4LR = Add<any, any>;  // any
+>TA4LR : Symbol(TA4LR, Decl(intrinsicTypes.ts, 70, 24))
+>Add : Symbol(Add, Decl(lib.es5.d.ts, --, --))
+
+type TA5L = Add<never, 2>;  // never
+>TA5L : Symbol(TA5L, Decl(intrinsicTypes.ts, 71, 27))
+>Add : Symbol(Add, Decl(lib.es5.d.ts, --, --))
+
+type TA5R = Add<4, never>;  // never
+>TA5R : Symbol(TA5R, Decl(intrinsicTypes.ts, 72, 26))
+>Add : Symbol(Add, Decl(lib.es5.d.ts, --, --))
+
+type TA5LR = Add<never, never>;  // never
+>TA5LR : Symbol(TA5LR, Decl(intrinsicTypes.ts, 73, 26))
+>Add : Symbol(Add, Decl(lib.es5.d.ts, --, --))
+
+type TA6L = Add<'4', 2>;  // Error
+>TA6L : Symbol(TA6L, Decl(intrinsicTypes.ts, 74, 31))
+>Add : Symbol(Add, Decl(lib.es5.d.ts, --, --))
+
+type TA6R = Add<4, '2'>;  // Error
+>TA6R : Symbol(TA6R, Decl(intrinsicTypes.ts, 75, 24))
+>Add : Symbol(Add, Decl(lib.es5.d.ts, --, --))
+
+type TA6LR = Add<'4', '2'>;  // Error
+>TA6LR : Symbol(TA6LR, Decl(intrinsicTypes.ts, 76, 24))
+>Add : Symbol(Add, Decl(lib.es5.d.ts, --, --))
+
+type TS1 = Subtract<4, 2>;  // 2
+>TS1 : Symbol(TS1, Decl(intrinsicTypes.ts, 77, 27))
+>Subtract : Symbol(Subtract, Decl(lib.es5.d.ts, --, --))
+
+type TS2L = Subtract<4 | 5, 2>;  // 2 | 3
+>TS2L : Symbol(TS2L, Decl(intrinsicTypes.ts, 79, 26))
+>Subtract : Symbol(Subtract, Decl(lib.es5.d.ts, --, --))
+
+type TS2R = Subtract<4, 2 | 3>;  // 2 | 1
+>TS2R : Symbol(TS2R, Decl(intrinsicTypes.ts, 80, 31))
+>Subtract : Symbol(Subtract, Decl(lib.es5.d.ts, --, --))
+
+type TS2LR = Subtract<4 | 5, 2 | 3>;  // 2 | 1 | 3
+>TS2LR : Symbol(TS2LR, Decl(intrinsicTypes.ts, 81, 31))
+>Subtract : Symbol(Subtract, Decl(lib.es5.d.ts, --, --))
+
+type TS3L = Subtract<number, 2>;  // number
+>TS3L : Symbol(TS3L, Decl(intrinsicTypes.ts, 82, 36))
+>Subtract : Symbol(Subtract, Decl(lib.es5.d.ts, --, --))
+
+type TS3R = Subtract<4, number>;  // number
+>TS3R : Symbol(TS3R, Decl(intrinsicTypes.ts, 83, 32))
+>Subtract : Symbol(Subtract, Decl(lib.es5.d.ts, --, --))
+
+type TS3LR = Subtract<number, number>;  // number
+>TS3LR : Symbol(TS3LR, Decl(intrinsicTypes.ts, 84, 32))
+>Subtract : Symbol(Subtract, Decl(lib.es5.d.ts, --, --))
+
+type TS4L = Subtract<any, 2>;  // any
+>TS4L : Symbol(TS4L, Decl(intrinsicTypes.ts, 85, 38))
+>Subtract : Symbol(Subtract, Decl(lib.es5.d.ts, --, --))
+
+type TS4R = Subtract<4, any>;  // any
+>TS4R : Symbol(TS4R, Decl(intrinsicTypes.ts, 86, 29))
+>Subtract : Symbol(Subtract, Decl(lib.es5.d.ts, --, --))
+
+type TS4LR = Subtract<any, any>;  // any
+>TS4LR : Symbol(TS4LR, Decl(intrinsicTypes.ts, 87, 29))
+>Subtract : Symbol(Subtract, Decl(lib.es5.d.ts, --, --))
+
+type TS5L = Subtract<never, 2>;  // never
+>TS5L : Symbol(TS5L, Decl(intrinsicTypes.ts, 88, 32))
+>Subtract : Symbol(Subtract, Decl(lib.es5.d.ts, --, --))
+
+type TS5R = Subtract<4, never>;  // never
+>TS5R : Symbol(TS5R, Decl(intrinsicTypes.ts, 89, 31))
+>Subtract : Symbol(Subtract, Decl(lib.es5.d.ts, --, --))
+
+type TS5LR = Subtract<never, never>;  // never
+>TS5LR : Symbol(TS5LR, Decl(intrinsicTypes.ts, 90, 31))
+>Subtract : Symbol(Subtract, Decl(lib.es5.d.ts, --, --))
+
+type TS6L = Subtract<'4', 2>;  // Error
+>TS6L : Symbol(TS6L, Decl(intrinsicTypes.ts, 91, 36))
+>Subtract : Symbol(Subtract, Decl(lib.es5.d.ts, --, --))
+
+type TS6R = Subtract<4, '2'>;  // Error
+>TS6R : Symbol(TS6R, Decl(intrinsicTypes.ts, 92, 29))
+>Subtract : Symbol(Subtract, Decl(lib.es5.d.ts, --, --))
+
+type TS6LR = Subtract<'4', '2'>;  // Error
+>TS6LR : Symbol(TS6LR, Decl(intrinsicTypes.ts, 93, 29))
+>Subtract : Symbol(Subtract, Decl(lib.es5.d.ts, --, --))
+
+type TM1 = Multiply<4, 2>;  // 8
+>TM1 : Symbol(TM1, Decl(intrinsicTypes.ts, 94, 32))
+>Multiply : Symbol(Multiply, Decl(lib.es5.d.ts, --, --))
+
+type TM2L = Multiply<4 | 5, 2>;  // 8 | 10
+>TM2L : Symbol(TM2L, Decl(intrinsicTypes.ts, 96, 26))
+>Multiply : Symbol(Multiply, Decl(lib.es5.d.ts, --, --))
+
+type TM2R = Multiply<4, 2 | 3>;  // 8 | 12
+>TM2R : Symbol(TM2R, Decl(intrinsicTypes.ts, 97, 31))
+>Multiply : Symbol(Multiply, Decl(lib.es5.d.ts, --, --))
+
+type TM2LR = Multiply<4 | 5, 2 | 3>;  // 8 | 12 | 10 | 15
+>TM2LR : Symbol(TM2LR, Decl(intrinsicTypes.ts, 98, 31))
+>Multiply : Symbol(Multiply, Decl(lib.es5.d.ts, --, --))
+
+type TM3L = Multiply<number, 2>;  // number
+>TM3L : Symbol(TM3L, Decl(intrinsicTypes.ts, 99, 36))
+>Multiply : Symbol(Multiply, Decl(lib.es5.d.ts, --, --))
+
+type TM3R = Multiply<4, number>;  // number
+>TM3R : Symbol(TM3R, Decl(intrinsicTypes.ts, 100, 32))
+>Multiply : Symbol(Multiply, Decl(lib.es5.d.ts, --, --))
+
+type TM3LR = Multiply<number, number>;  // number
+>TM3LR : Symbol(TM3LR, Decl(intrinsicTypes.ts, 101, 32))
+>Multiply : Symbol(Multiply, Decl(lib.es5.d.ts, --, --))
+
+type TM4L = Multiply<any, 2>;  // any
+>TM4L : Symbol(TM4L, Decl(intrinsicTypes.ts, 102, 38))
+>Multiply : Symbol(Multiply, Decl(lib.es5.d.ts, --, --))
+
+type TM4R = Multiply<4, any>;  // any
+>TM4R : Symbol(TM4R, Decl(intrinsicTypes.ts, 103, 29))
+>Multiply : Symbol(Multiply, Decl(lib.es5.d.ts, --, --))
+
+type TM4LR = Multiply<any, any>;  // any
+>TM4LR : Symbol(TM4LR, Decl(intrinsicTypes.ts, 104, 29))
+>Multiply : Symbol(Multiply, Decl(lib.es5.d.ts, --, --))
+
+type TM5L = Multiply<never, 2>;  // never
+>TM5L : Symbol(TM5L, Decl(intrinsicTypes.ts, 105, 32))
+>Multiply : Symbol(Multiply, Decl(lib.es5.d.ts, --, --))
+
+type TM5R = Multiply<4, never>;  // never
+>TM5R : Symbol(TM5R, Decl(intrinsicTypes.ts, 106, 31))
+>Multiply : Symbol(Multiply, Decl(lib.es5.d.ts, --, --))
+
+type TM5LR = Multiply<never, never>;  // never
+>TM5LR : Symbol(TM5LR, Decl(intrinsicTypes.ts, 107, 31))
+>Multiply : Symbol(Multiply, Decl(lib.es5.d.ts, --, --))
+
+type TM6L = Multiply<'4', 2>;  // Error
+>TM6L : Symbol(TM6L, Decl(intrinsicTypes.ts, 108, 36))
+>Multiply : Symbol(Multiply, Decl(lib.es5.d.ts, --, --))
+
+type TM6R = Multiply<4, '2'>;  // Error
+>TM6R : Symbol(TM6R, Decl(intrinsicTypes.ts, 109, 29))
+>Multiply : Symbol(Multiply, Decl(lib.es5.d.ts, --, --))
+
+type TM6LR = Multiply<'4', '2'>;  // Error
+>TM6LR : Symbol(TM6LR, Decl(intrinsicTypes.ts, 110, 29))
+>Multiply : Symbol(Multiply, Decl(lib.es5.d.ts, --, --))
+
+type TD1 = Divide<4, 2>;  // 2
+>TD1 : Symbol(TD1, Decl(intrinsicTypes.ts, 111, 32))
+>Divide : Symbol(Divide, Decl(lib.es5.d.ts, --, --))
+
+type TD2L = Divide<4 | 5, 2>;  // 2 | 2.5
+>TD2L : Symbol(TD2L, Decl(intrinsicTypes.ts, 113, 24))
+>Divide : Symbol(Divide, Decl(lib.es5.d.ts, --, --))
+
+type TD2R = Divide<4, 2 | 4>;  // 2 | 1
+>TD2R : Symbol(TD2R, Decl(intrinsicTypes.ts, 114, 29))
+>Divide : Symbol(Divide, Decl(lib.es5.d.ts, --, --))
+
+type TD2LR = Divide<4 | 5, 2 | 4>;  // 2 | 1 | 2.5 | 1.25
+>TD2LR : Symbol(TD2LR, Decl(intrinsicTypes.ts, 115, 29))
+>Divide : Symbol(Divide, Decl(lib.es5.d.ts, --, --))
+
+type TD3L = Divide<number, 2>;  // number
+>TD3L : Symbol(TD3L, Decl(intrinsicTypes.ts, 116, 34))
+>Divide : Symbol(Divide, Decl(lib.es5.d.ts, --, --))
+
+type TD3R = Divide<4, number>;  // number
+>TD3R : Symbol(TD3R, Decl(intrinsicTypes.ts, 117, 30))
+>Divide : Symbol(Divide, Decl(lib.es5.d.ts, --, --))
+
+type TD3LR = Divide<number, number>;  // number
+>TD3LR : Symbol(TD3LR, Decl(intrinsicTypes.ts, 118, 30))
+>Divide : Symbol(Divide, Decl(lib.es5.d.ts, --, --))
+
+type TD4L = Divide<any, 2>;  // any
+>TD4L : Symbol(TD4L, Decl(intrinsicTypes.ts, 119, 36))
+>Divide : Symbol(Divide, Decl(lib.es5.d.ts, --, --))
+
+type TD4R = Divide<4, any>;  // any
+>TD4R : Symbol(TD4R, Decl(intrinsicTypes.ts, 120, 27))
+>Divide : Symbol(Divide, Decl(lib.es5.d.ts, --, --))
+
+type TD4LR = Divide<any, any>;  // any
+>TD4LR : Symbol(TD4LR, Decl(intrinsicTypes.ts, 121, 27))
+>Divide : Symbol(Divide, Decl(lib.es5.d.ts, --, --))
+
+type TD5L = Divide<never, 2>;  // never
+>TD5L : Symbol(TD5L, Decl(intrinsicTypes.ts, 122, 30))
+>Divide : Symbol(Divide, Decl(lib.es5.d.ts, --, --))
+
+type TD5R = Divide<4, never>;  // never
+>TD5R : Symbol(TD5R, Decl(intrinsicTypes.ts, 123, 29))
+>Divide : Symbol(Divide, Decl(lib.es5.d.ts, --, --))
+
+type TD5LR = Divide<never, never>;  // never
+>TD5LR : Symbol(TD5LR, Decl(intrinsicTypes.ts, 124, 29))
+>Divide : Symbol(Divide, Decl(lib.es5.d.ts, --, --))
+
+type TD6L = Divide<'4', 2>;  // Error
+>TD6L : Symbol(TD6L, Decl(intrinsicTypes.ts, 125, 34))
+>Divide : Symbol(Divide, Decl(lib.es5.d.ts, --, --))
+
+type TD6R = Divide<4, '2'>;  // Error
+>TD6R : Symbol(TD6R, Decl(intrinsicTypes.ts, 126, 27))
+>Divide : Symbol(Divide, Decl(lib.es5.d.ts, --, --))
+
+type TD6LR = Divide<'4', '2'>;  // Error
+>TD6LR : Symbol(TD6LR, Decl(intrinsicTypes.ts, 127, 27))
+>Divide : Symbol(Divide, Decl(lib.es5.d.ts, --, --))
+
+type TD7 = Divide<1, 0>; // never
+>TD7 : Symbol(TD7, Decl(intrinsicTypes.ts, 128, 30))
+>Divide : Symbol(Divide, Decl(lib.es5.d.ts, --, --))
+
+type TIX1<S extends number> = Integer<S>;
+>TIX1 : Symbol(TIX1, Decl(intrinsicTypes.ts, 129, 24))
+>S : Symbol(S, Decl(intrinsicTypes.ts, 131, 10))
+>Integer : Symbol(Integer, Decl(lib.es5.d.ts, --, --))
+>S : Symbol(S, Decl(intrinsicTypes.ts, 131, 10))
+
+type TIX2 = TIX1<4.2>;  // 4
+>TIX2 : Symbol(TIX2, Decl(intrinsicTypes.ts, 131, 41))
+>TIX1 : Symbol(TIX1, Decl(intrinsicTypes.ts, 129, 24))
+
+type TAX1<M extends number, N extends number> = Add<M, N>;
+>TAX1 : Symbol(TAX1, Decl(intrinsicTypes.ts, 132, 22))
+>M : Symbol(M, Decl(intrinsicTypes.ts, 133, 10))
+>N : Symbol(N, Decl(intrinsicTypes.ts, 133, 27))
+>Add : Symbol(Add, Decl(lib.es5.d.ts, --, --))
+>M : Symbol(M, Decl(intrinsicTypes.ts, 133, 10))
+>N : Symbol(N, Decl(intrinsicTypes.ts, 133, 27))
+
+type TAX2 = TAX1<4, 2>;  // 6
+>TAX2 : Symbol(TAX2, Decl(intrinsicTypes.ts, 133, 58))
+>TAX1 : Symbol(TAX1, Decl(intrinsicTypes.ts, 132, 22))
+
+type TSX1<M extends number, N extends number> = Subtract<M, N>;
+>TSX1 : Symbol(TSX1, Decl(intrinsicTypes.ts, 134, 23))
+>M : Symbol(M, Decl(intrinsicTypes.ts, 135, 10))
+>N : Symbol(N, Decl(intrinsicTypes.ts, 135, 27))
+>Subtract : Symbol(Subtract, Decl(lib.es5.d.ts, --, --))
+>M : Symbol(M, Decl(intrinsicTypes.ts, 135, 10))
+>N : Symbol(N, Decl(intrinsicTypes.ts, 135, 27))
+
+type TSX2 = TSX1<4, 2>;  // 6
+>TSX2 : Symbol(TSX2, Decl(intrinsicTypes.ts, 135, 63))
+>TSX1 : Symbol(TSX1, Decl(intrinsicTypes.ts, 134, 23))
+
+type TMX1<M extends number, N extends number> = Multiply<M, N>;
+>TMX1 : Symbol(TMX1, Decl(intrinsicTypes.ts, 136, 23))
+>M : Symbol(M, Decl(intrinsicTypes.ts, 137, 10))
+>N : Symbol(N, Decl(intrinsicTypes.ts, 137, 27))
+>Multiply : Symbol(Multiply, Decl(lib.es5.d.ts, --, --))
+>M : Symbol(M, Decl(intrinsicTypes.ts, 137, 10))
+>N : Symbol(N, Decl(intrinsicTypes.ts, 137, 27))
+
+type TMX2 = TMX1<4, 2>;  // 8
+>TMX2 : Symbol(TMX2, Decl(intrinsicTypes.ts, 137, 63))
+>TMX1 : Symbol(TMX1, Decl(intrinsicTypes.ts, 136, 23))
+
+type TDX1<M extends number, N extends number> = Divide<M, N>;
+>TDX1 : Symbol(TDX1, Decl(intrinsicTypes.ts, 138, 23))
+>M : Symbol(M, Decl(intrinsicTypes.ts, 139, 10))
+>N : Symbol(N, Decl(intrinsicTypes.ts, 139, 27))
+>Divide : Symbol(Divide, Decl(lib.es5.d.ts, --, --))
+>M : Symbol(M, Decl(intrinsicTypes.ts, 139, 10))
+>N : Symbol(N, Decl(intrinsicTypes.ts, 139, 27))
+
+type TDX2 = TDX1<4, 2>;  // 2
+>TDX2 : Symbol(TDX2, Decl(intrinsicTypes.ts, 139, 61))
+>TDX1 : Symbol(TDX1, Decl(intrinsicTypes.ts, 138, 23))
+
+type TAMX = Add<2, Multiply<5, 8>>  // 42
+>TAMX : Symbol(TAMX, Decl(intrinsicTypes.ts, 140, 23))
+>Add : Symbol(Add, Decl(lib.es5.d.ts, --, --))
+>Multiply : Symbol(Multiply, Decl(lib.es5.d.ts, --, --))
+
+function foo5<T extends number, U extends T>(s: number, x: Add<T, U>, y: Multiply<T, U>) {
+>foo5 : Symbol(foo5, Decl(intrinsicTypes.ts, 141, 34))
+>T : Symbol(T, Decl(intrinsicTypes.ts, 143, 14))
+>U : Symbol(U, Decl(intrinsicTypes.ts, 143, 31))
+>T : Symbol(T, Decl(intrinsicTypes.ts, 143, 14))
+>s : Symbol(s, Decl(intrinsicTypes.ts, 143, 45))
+>x : Symbol(x, Decl(intrinsicTypes.ts, 143, 55))
+>Add : Symbol(Add, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(intrinsicTypes.ts, 143, 14))
+>U : Symbol(U, Decl(intrinsicTypes.ts, 143, 31))
+>y : Symbol(y, Decl(intrinsicTypes.ts, 143, 69))
+>Multiply : Symbol(Multiply, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(intrinsicTypes.ts, 143, 14))
+>U : Symbol(U, Decl(intrinsicTypes.ts, 143, 31))
+
+    s = x;
+>s : Symbol(s, Decl(intrinsicTypes.ts, 143, 45))
+>x : Symbol(x, Decl(intrinsicTypes.ts, 143, 55))
+
+    s = y;
+>s : Symbol(s, Decl(intrinsicTypes.ts, 143, 45))
+>y : Symbol(y, Decl(intrinsicTypes.ts, 143, 69))
+
+    x = s;  // Error
+>x : Symbol(x, Decl(intrinsicTypes.ts, 143, 55))
+>s : Symbol(s, Decl(intrinsicTypes.ts, 143, 45))
+
+    x = y;  // Error
+>x : Symbol(x, Decl(intrinsicTypes.ts, 143, 55))
+>y : Symbol(y, Decl(intrinsicTypes.ts, 143, 69))
+
+    y = s;  // Error
+>y : Symbol(y, Decl(intrinsicTypes.ts, 143, 69))
+>s : Symbol(s, Decl(intrinsicTypes.ts, 143, 45))
+
+    y = x;  // Error
+>y : Symbol(y, Decl(intrinsicTypes.ts, 143, 69))
+>x : Symbol(x, Decl(intrinsicTypes.ts, 143, 55))
+}
+
+function foo6<T extends 0 | 1>(x: Add<T, 3>) {
+>foo6 : Symbol(foo6, Decl(intrinsicTypes.ts, 150, 1))
+>T : Symbol(T, Decl(intrinsicTypes.ts, 152, 14))
+>x : Symbol(x, Decl(intrinsicTypes.ts, 152, 31))
+>Add : Symbol(Add, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(intrinsicTypes.ts, 152, 14))
+
+    let s: 3 | 4 = x;
+>s : Symbol(s, Decl(intrinsicTypes.ts, 153, 7))
+>x : Symbol(x, Decl(intrinsicTypes.ts, 152, 31))
+}
+
+declare function foo7<T extends number>(x: Integer<T>): T;
+>foo7 : Symbol(foo7, Decl(intrinsicTypes.ts, 154, 1))
+>T : Symbol(T, Decl(intrinsicTypes.ts, 156, 22))
+>x : Symbol(x, Decl(intrinsicTypes.ts, 156, 40))
+>Integer : Symbol(Integer, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(intrinsicTypes.ts, 156, 22))
+>T : Symbol(T, Decl(intrinsicTypes.ts, 156, 22))
+
+function foo8<U extends number>(x: Integer<U>) {
+>foo8 : Symbol(foo8, Decl(intrinsicTypes.ts, 156, 58))
+>U : Symbol(U, Decl(intrinsicTypes.ts, 158, 14))
+>x : Symbol(x, Decl(intrinsicTypes.ts, 158, 32))
+>Integer : Symbol(Integer, Decl(lib.es5.d.ts, --, --))
+>U : Symbol(U, Decl(intrinsicTypes.ts, 158, 14))
+
+    return foo7(x);
+>foo7 : Symbol(foo7, Decl(intrinsicTypes.ts, 154, 1))
+>x : Symbol(x, Decl(intrinsicTypes.ts, 158, 32))
+}
+
