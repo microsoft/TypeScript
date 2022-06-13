@@ -8,16 +8,6 @@ x ? y => ({ y }) : z => ({ z })
 
 
 //// [fileJs.js]
-x ? function (y) { return function (_a) {
-    var y = _a.y;
-    return ({ z: z });
-}; }
-    :
-; // Legal JS
+x ? function (y) { return ({ y: y }); } : function (z) { return ({ z: z }); }; // Legal JS
 //// [fileTs.js]
-x ? function (y) { return function (_a) {
-    var y = _a.y;
-    return ({ z: z });
-}; }
-    :
-;
+x ? function (y) { return ({ y: y }); } : function (z) { return ({ z: z }); };

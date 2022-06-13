@@ -8,10 +8,6 @@ a ? (b) : c => (d) : e => f
 
 
 //// [fileJs.js]
-a ? (b) => (d) => f
-    :
-; // Not legal JS; "Unexpected token ':'" at last colon
+a ? (b) => (d) : e => f; // Not legal JS; "Unexpected token ':'" at last colon
 //// [fileTs.js]
-a ? (b) => (d) => f
-    :
-;
+a ? (b) => (d) : e => f;

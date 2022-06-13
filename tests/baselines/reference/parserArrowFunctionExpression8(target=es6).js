@@ -8,10 +8,6 @@ x ? y => ({ y }) : z => ({ z })
 
 
 //// [fileJs.js]
-x ? y => ({ y }) => ({ z })
-    :
-; // Legal JS
+x ? y => ({ y }) : z => ({ z }); // Legal JS
 //// [fileTs.js]
-x ? y => ({ y }) => ({ z })
-    :
-;
+x ? y => ({ y }) : z => ({ z });

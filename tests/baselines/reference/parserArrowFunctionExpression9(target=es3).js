@@ -8,10 +8,6 @@ b ? (c) : d => e
 
 
 //// [fileJs.js]
-b ? function (c) { return e; }
-    :
-; // Legal JS
+b ? (c) : function (d) { return e; }; // Legal JS
 //// [fileTs.js]
-b ? function (c) { return e; }
-    :
-;
+b ? (c) : function (d) { return e; };
