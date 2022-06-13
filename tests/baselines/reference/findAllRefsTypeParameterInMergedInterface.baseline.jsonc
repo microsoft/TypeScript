@@ -180,8 +180,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/findAllRefsTypeParameterInMergedInterface.ts",
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -189,8 +188,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/findAllRefsTypeParameterInMergedInterface.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -198,8 +196,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/findAllRefsTypeParameterInMergedInterface.ts",
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -207,8 +204,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/findAllRefsTypeParameterInMergedInterface.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }
@@ -396,8 +392,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/findAllRefsTypeParameterInMergedInterface.ts",
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -405,8 +400,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/findAllRefsTypeParameterInMergedInterface.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -414,8 +408,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/findAllRefsTypeParameterInMergedInterface.ts",
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -423,8 +416,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/findAllRefsTypeParameterInMergedInterface.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }

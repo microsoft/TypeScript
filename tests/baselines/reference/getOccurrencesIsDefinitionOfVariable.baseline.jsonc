@@ -483,8 +483,7 @@
           "start": 0,
           "length": 10
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -492,8 +491,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -501,8 +499,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -510,8 +507,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -519,8 +515,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -528,8 +523,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -537,8 +531,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -546,8 +539,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -555,8 +547,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -564,8 +555,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -573,8 +563,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -582,8 +571,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -591,8 +579,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -600,8 +587,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -609,8 +595,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       }
     ]
   }
@@ -689,8 +674,7 @@
           "start": 0,
           "length": 10
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -698,8 +682,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -707,8 +690,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -716,8 +698,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -725,8 +706,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -734,8 +714,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -743,8 +722,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -752,8 +730,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -761,8 +738,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -770,8 +746,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -779,8 +754,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -788,8 +762,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -797,8 +770,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -806,8 +778,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -815,8 +786,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       }
     ]
   }
@@ -895,8 +865,7 @@
           "start": 0,
           "length": 10
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -904,8 +873,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -913,8 +881,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -922,8 +889,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -931,8 +897,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -940,8 +905,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -949,8 +913,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -958,8 +921,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -967,8 +929,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -976,8 +937,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -985,8 +945,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -994,8 +953,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -1003,8 +961,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -1012,8 +969,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -1021,8 +977,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       }
     ]
   }
@@ -1101,8 +1056,7 @@
           "start": 0,
           "length": 10
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -1110,8 +1064,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -1119,8 +1072,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -1128,8 +1080,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -1137,8 +1088,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -1146,8 +1096,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -1155,8 +1104,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -1164,8 +1112,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -1173,8 +1120,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -1182,8 +1128,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -1191,8 +1136,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -1200,8 +1144,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -1209,8 +1152,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -1218,8 +1160,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -1227,8 +1168,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       }
     ]
   }
@@ -1307,8 +1247,7 @@
           "start": 0,
           "length": 10
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -1316,8 +1255,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -1325,8 +1263,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -1334,8 +1271,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -1343,8 +1279,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -1352,8 +1287,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -1361,8 +1295,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -1370,8 +1303,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -1379,8 +1311,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -1388,8 +1319,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -1397,8 +1327,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -1406,8 +1335,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -1415,8 +1343,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -1424,8 +1351,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -1433,8 +1359,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       }
     ]
   }
@@ -1513,8 +1438,7 @@
           "start": 0,
           "length": 10
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -1522,8 +1446,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -1531,8 +1454,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -1540,8 +1462,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -1549,8 +1470,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -1558,8 +1478,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -1567,8 +1486,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -1576,8 +1494,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -1585,8 +1502,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -1594,8 +1510,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -1603,8 +1518,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -1612,8 +1526,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -1621,8 +1534,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -1630,8 +1542,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -1639,8 +1550,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       }
     ]
   }
@@ -1719,8 +1629,7 @@
           "start": 0,
           "length": 10
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -1728,8 +1637,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -1737,8 +1645,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -1746,8 +1653,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -1755,8 +1661,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -1764,8 +1669,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -1773,8 +1677,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -1782,8 +1685,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -1791,8 +1693,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -1800,8 +1701,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -1809,8 +1709,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -1818,8 +1717,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -1827,8 +1725,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -1836,8 +1733,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -1845,8 +1741,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       }
     ]
   }
@@ -1925,8 +1820,7 @@
           "start": 0,
           "length": 10
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -1934,8 +1828,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -1943,8 +1836,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -1952,8 +1844,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -1961,8 +1852,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -1970,8 +1860,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -1979,8 +1868,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -1988,8 +1876,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -1997,8 +1884,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -2006,8 +1892,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -2015,8 +1900,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -2024,8 +1908,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -2033,8 +1916,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -2042,8 +1924,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -2051,8 +1932,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       }
     ]
   }
@@ -2131,8 +2011,7 @@
           "start": 0,
           "length": 10
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -2140,8 +2019,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -2149,8 +2027,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -2158,8 +2035,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -2167,8 +2043,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -2176,8 +2051,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -2185,8 +2059,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -2194,8 +2067,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -2203,8 +2075,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -2212,8 +2083,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -2221,8 +2091,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -2230,8 +2099,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -2239,8 +2107,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -2248,8 +2115,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -2257,8 +2123,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       }
     ]
   }
@@ -2337,8 +2202,7 @@
           "start": 0,
           "length": 10
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -2346,8 +2210,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -2355,8 +2218,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -2364,8 +2226,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -2373,8 +2234,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -2382,8 +2242,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -2391,8 +2250,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -2400,8 +2258,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -2409,8 +2266,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -2418,8 +2274,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -2427,8 +2282,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -2436,8 +2290,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -2445,8 +2298,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -2454,8 +2306,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -2463,8 +2314,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       }
     ]
   }
@@ -2543,8 +2393,7 @@
           "start": 0,
           "length": 10
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -2552,8 +2401,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -2561,8 +2409,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -2570,8 +2417,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -2579,8 +2425,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -2588,8 +2433,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -2597,8 +2441,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -2606,8 +2449,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -2615,8 +2457,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -2624,8 +2465,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -2633,8 +2473,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -2642,8 +2481,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -2651,8 +2489,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -2660,8 +2497,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -2669,8 +2505,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       }
     ]
   }
@@ -2749,8 +2584,7 @@
           "start": 0,
           "length": 10
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -2758,8 +2592,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -2767,8 +2600,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -2776,8 +2608,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -2785,8 +2616,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -2794,8 +2624,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -2803,8 +2632,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -2812,8 +2640,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -2821,8 +2648,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -2830,8 +2656,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -2839,8 +2664,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -2848,8 +2672,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -2857,8 +2680,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -2866,8 +2688,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -2875,8 +2696,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       }
     ]
   }
@@ -2955,8 +2775,7 @@
           "start": 0,
           "length": 10
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -2964,8 +2783,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -2973,8 +2791,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -2982,8 +2799,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -2991,8 +2807,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -3000,8 +2815,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -3009,8 +2823,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -3018,8 +2831,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -3027,8 +2839,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -3036,8 +2847,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -3045,8 +2855,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -3054,8 +2863,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -3063,8 +2871,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -3072,8 +2879,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -3081,8 +2887,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       }
     ]
   }
@@ -3161,8 +2966,7 @@
           "start": 0,
           "length": 10
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -3170,8 +2974,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -3179,8 +2982,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -3188,8 +2990,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -3197,8 +2998,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -3206,8 +3006,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -3215,8 +3014,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -3224,8 +3022,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -3233,8 +3030,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -3242,8 +3038,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -3251,8 +3046,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -3260,8 +3054,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -3269,8 +3062,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -3278,8 +3070,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -3287,8 +3078,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       }
     ]
   }

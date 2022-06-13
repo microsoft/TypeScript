@@ -37,29 +37,10 @@ verify.completions({
             sortText: completion.SortText.SortBelow(
                 completion.SortText.ObjectLiteralProperty(completion.SortText.LocationPriority, "foo")),
             source: completion.CompletionSource.ObjectLiteralMethodSnippet,
-            insertText: "foo(f: IFoo): void {\n},",
-            hasAction: true,
+            insertText: "foo(f) {\n},",
             labelDetails: {
-                detail: "(f: IFoo): void",
+                detail: "(f)",
             },
         },
     ],
-});
-
-verify.applyCodeActionFromCompletion("a", {
-    preferences: {
-        includeCompletionsWithInsertText: true,
-        includeCompletionsWithSnippetText: false,
-        includeCompletionsWithObjectLiteralMethodSnippets: true,
-        useLabelDetailsInCompletionEntries: true,
-    },
-    name: "foo",
-    source: completion.CompletionSource.ObjectLiteralMethodSnippet,
-    description: "Includes imports of types referenced by 'foo'",
-    newFileContent:
-`import { IFoo } from "./a";
-import { IBar } from "./b";
-const obj: IBar = {
-    
-}`
 });

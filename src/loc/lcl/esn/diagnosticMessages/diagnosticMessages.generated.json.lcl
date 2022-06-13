@@ -1524,6 +1524,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";All_declarations_of_0_must_have_identical_constraints_2838" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[All declarations of '{0}' must have identical constraints.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Todas las declaraciones de "{0}" deben tener delimitaciones idénticas.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";All_declarations_of_0_must_have_identical_modifiers_2687" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[All declarations of '{0}' must have identical modifiers.]]></Val>
@@ -2111,6 +2120,15 @@
           <Val><![CDATA[An interface can only extend an object type or intersection of object types with statically known members.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Una interfaz solo puede extender un tipo de objeto o una intersección de tipos de objeto con miembros conocidos estáticamente.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";An_interface_cannot_extend_a_primitive_type_like_0_an_interface_can_only_extend_named_types_and_clas_2840" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[An interface cannot extend a primitive type like '{0}'; an interface can only extend named types and classes]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Una interfaz no puede extender un tipo primitivo como "{0}"; una interfaz solo puede extender tipos y clases con nombre]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3518,6 +3536,24 @@
           <Val><![CDATA[Class '{0}' used before its declaration.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Se ha usado la clase "{0}" antes de declararla.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Class_constructor_may_not_be_a_generator_1360" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Class constructor may not be a generator.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[El constructor de clase no puede ser un generador.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Class_constructor_may_not_be_an_accessor_1341" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Class constructor may not be an accessor.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[El constructor de clase no puede ser un descriptor de acceso.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5352,18 +5388,6 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Dynamic_import_cannot_have_type_arguments_1326" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Dynamic import cannot have type arguments.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[La importación dinámica no puede tener argumentos de tipo.]]></Val>
-          </Tgt>
-          <Prev Cat="Text">
-            <Val><![CDATA[Dynamic import cannot have type arguments]]></Val>
-          </Prev>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";Dynamic_import_s_specifier_must_be_of_type_string_but_here_has_type_0_7036" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Dynamic import's specifier must be of type 'string', but here has type '{0}'.]]></Val>
@@ -5375,10 +5399,13 @@
       </Item>
       <Item ItemId=";Dynamic_imports_are_only_supported_when_the_module_flag_is_set_to_es2020_es2022_esnext_commonjs_amd__1323" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Dynamic imports are only supported when the '--module' flag is set to 'es2020', 'es2022', 'esnext', 'commonjs', 'amd', 'system', 'umd', 'node12', or 'nodenext'.]]></Val>
+          <Val><![CDATA[Dynamic imports are only supported when the '--module' flag is set to 'es2020', 'es2022', 'esnext', 'commonjs', 'amd', 'system', 'umd', 'node16', or 'nodenext'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Las importaciones dinámicas solo se admiten cuando la marca "--módulo" está establecida en "es2020", "es2022", "esnext", "commonjs", "amd", "system", "umd", "node12" o "nodenext".]]></Val>
+            <Val><![CDATA[Las importaciones dinámicas solo se admiten cuando la marca "--módulo" está establecida en "es2020", "es2022", "esnext", "commonjs", "amd", "system", "umd", "node16" o "nodenext".]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Dynamic imports are only supported when the '--module' flag is set to 'es2020', 'es2022', 'esnext', 'commonjs', 'amd', 'system', 'umd', 'node12', or 'nodenext'.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -5391,11 +5418,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Dynamic_imports_only_support_a_second_argument_when_the_module_option_is_set_to_esnext_or_nodenext_1324" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Dynamic_imports_only_support_a_second_argument_when_the_module_option_is_set_to_esnext_node16_or_nod_1324" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Dynamic imports only support a second argument when the '--module' option is set to 'esnext' or 'nodenext'.]]></Val>
+          <Val><![CDATA[Dynamic imports only support a second argument when the '--module' option is set to 'esnext', 'node16', or 'nodenext'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Las importaciones dinámicas solo admiten un segundo argumento cuando la opción "--module" está establecida en "esnext" o "nodenext".]]></Val>
+            <Val><![CDATA[Las importaciones dinámicas solo admiten un segundo argumento cuando la opción "--module" está establecida en "esnext", "node16" o "nodenext".]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5996,6 +6023,15 @@
           <Val><![CDATA[Expected {0} type arguments; provide these with an '@extends' tag.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Se esperaban argumentos de tipo {0}; proporciónelos con una etiqueta "@extends".]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Expected_1_argument_but_got_0_new_Promise_needs_a_JSDoc_hint_to_produce_a_resolve_that_can_be_called_2810" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Expected 1 argument, but got 0. 'new Promise()' needs a JSDoc hint to produce a 'resolve' that can be called without arguments.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Se esperaba 1 argumento, pero se obtuvo 0. "new Promise()" necesita una pista de JSDoc para producir un "resolve" que pueda llamarse sin argumentos.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7800,6 +7836,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Invalid_optional_chain_from_new_expression_Did_you_mean_to_call_0_1209" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Invalid optional chain from new expression. Did you mean to call '{0}()'?]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Cadena opcional no válida de la nueva expresión. ¿Quería llamar a "{0}()"?]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Invalid_reference_directive_syntax_1084" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Invalid 'reference' directive syntax.]]></Val>
@@ -7967,15 +8012,6 @@
           <Val><![CDATA[JSDoc types may be moved to TypeScript types.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Los tipos de JSDoc pueden moverse a tipos de TypeScript.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";JSON_imports_are_experimental_in_ES_module_mode_imports_7062" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[JSON imports are experimental in ES module mode imports.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Las importaciones de JSON son experimentales en las importaciones del modo de módulo ES.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8333,6 +8369,15 @@
           <Val><![CDATA[Mapped object type implicitly has an 'any' template type.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[El tipo de objeto asignado tiene implícitamente un tipo de plantilla "any".]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Matched_by_default_include_pattern_Asterisk_Asterisk_Slash_Asterisk_1457" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Matched by default include pattern '**/*']]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[La coincidencia de forma predeterminada incluye el patrón '**/*']]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10068,6 +10113,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Project_0_is_out_of_date_because_buildinfo_file_1_indicates_that_some_of_the_changes_were_not_emitte_6399" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Project '{0}' is out of date because buildinfo file '{1}' indicates that some of the changes were not emitted]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[El proyecto "{0}" no está actualizado porque el archivo buildinfo "{1}" indica que algunos de los cambios no se emitieron]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Project_0_is_out_of_date_because_its_dependency_1_is_out_of_date_6353" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Project '{0}' is out of date because its dependency '{1}' is out of date]]></Val>
@@ -10077,11 +10131,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Project_0_is_out_of_date_because_oldest_output_1_is_older_than_newest_input_2_6350" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Project_0_is_out_of_date_because_output_1_is_older_than_input_2_6350" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Project '{0}' is out of date because oldest output '{1}' is older than newest input '{2}']]></Val>
+          <Val><![CDATA[Project '{0}' is out of date because output '{1}' is older than input '{2}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[El proyecto "{0}" está obsoleto porque la salida más antigua "{1}" es anterior a la entrada más reciente "{2}"]]></Val>
+            <Val><![CDATA[El proyecto "{0}" está obsoleto porque la salida "{1}" es anterior a la entrada "{2}"]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10122,11 +10176,20 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2_6351" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Project_0_is_up_to_date_because_newest_input_1_is_older_than_output_2_6351" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Project '{0}' is up to date because newest input '{1}' is older than oldest output '{2}']]></Val>
+          <Val><![CDATA[Project '{0}' is up to date because newest input '{1}' is older than output '{2}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[El proyecto "{0}" está actualizado porque la entrada más reciente "{1}" es anterior a la salida más antigua "{2}"]]></Val>
+            <Val><![CDATA[El proyecto "{0}" está actualizado porque la entrada más reciente "{1}" es anterior a la salida "{2}"]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Project_0_is_up_to_date_but_needs_to_update_timestamps_of_output_files_that_are_older_than_input_fil_6400" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Project '{0}' is up to date but needs to update timestamps of output files that are older than input files]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[El proyecto "{0}" está actualizado, pero debe actualizar las marcas de tiempo de los archivos de salida anteriores a los archivos de entrada]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10763,19 +10826,25 @@
       </Item>
       <Item ItemId=";Relative_import_paths_need_explicit_file_extensions_in_EcmaScript_imports_when_moduleResolution_is_n_2834" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Relative import paths need explicit file extensions in EcmaScript imports when '--moduleResolution' is 'node12' or 'nodenext'. Consider adding an extension to the import path.]]></Val>
+          <Val><![CDATA[Relative import paths need explicit file extensions in EcmaScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Las rutas de acceso de importación relativas necesitan extensiones de archivo explícitas en las importaciones EcmaScript cuando "--moduleResolution" es "node12" o "nodenext". Considere la posibilidad de agregar una extensión a la ruta de acceso de importación.]]></Val>
+            <Val><![CDATA[Las rutas de acceso de importación relativas necesitan extensiones de archivo explícitas en las importaciones EcmaScript cuando "--moduleResolution" es "node16" o "nodenext". Considere la posibilidad de agregar una extensión a la ruta de acceso de importación.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Relative import paths need explicit file extensions in EcmaScript imports when '--moduleResolution' is 'node12' or 'nodenext'. Consider adding an extension to the import path.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Relative_import_paths_need_explicit_file_extensions_in_EcmaScript_imports_when_moduleResolution_is_n_2835" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Relative import paths need explicit file extensions in EcmaScript imports when '--moduleResolution' is 'node12' or 'nodenext'. Did you mean '{0}'?]]></Val>
+          <Val><![CDATA[Relative import paths need explicit file extensions in EcmaScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean '{0}'?]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Las rutas de acceso de importación relativas necesitan extensiones de archivo explícitas en las importaciones EcmaScript cuando "--moduleResolution" es "node12" o "nodenext". ¿Quería decir "{0}"?]]></Val>
+            <Val><![CDATA[Las rutas de acceso de importación relativas necesitan extensiones de archivo explícitas en las importaciones EcmaScript cuando "--moduleResolution" es "node16" o "nodenext". ¿Quería decir "{0}"?]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Relative import paths need explicit file extensions in EcmaScript imports when '--moduleResolution' is 'node12' or 'nodenext'. Did you mean '{0}'?]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -11117,15 +11186,6 @@
           <Val><![CDATA[Resolution for type reference directive '{0}' was found in cache from location '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[La resolución de la directiva de referencia de tipo "{0}" se encontró en la memoria caché de la ubicación "{1}".]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";Resolution_modes_are_only_supported_when_moduleResolution_is_node12_or_nodenext_1452" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Resolution modes are only supported when `moduleResolution` is `node12` or `nodenext`.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Los modos de resolución solo se admiten cuando "moduleResolution" es "node12" o "nodenext".]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -12702,6 +12762,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";The_current_file_is_a_CommonJS_module_and_cannot_use_await_at_the_top_level_1309" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[The current file is a CommonJS module and cannot use 'await' at the top level.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[El archivo actual es un módulo CommonJS y no puede usar "await" en el nivel superior.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";The_current_host_does_not_support_the_0_option_5001" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[The current host does not support the '{0}' option.]]></Val>
@@ -12833,10 +12902,13 @@
       </Item>
       <Item ItemId=";The_import_meta_meta_property_is_only_allowed_when_the_module_option_is_es2020_es2022_esnext_system__1343" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'es2022', 'esnext', 'system', 'node12', or 'nodenext'.]]></Val>
+          <Val><![CDATA[The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'es2022', 'esnext', 'system', 'node16', or 'nodenext'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[La metapropiedad "import.meta" solo se permite cuando la opción "--módulo" es "es2020", "es2022", "esnext", "system", "node12" o "nodenext".]]></Val>
+            <Val><![CDATA[La metapropiedad "import.meta" solo se permite cuando la opción "--módulo" es "es2020", "es2022", "esnext", "system", "node16" o "nodenext".]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'es2022', 'esnext', 'system', 'node12', or 'nodenext'.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -13146,6 +13218,24 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";The_project_root_is_ambiguous_but_is_required_to_resolve_export_map_entry_0_in_file_1_Supply_the_roo_2209" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[The project root is ambiguous, but is required to resolve export map entry '{0}' in file '{1}'. Supply the `rootDir` compiler option to disambiguate.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[La raíz del proyecto es ambigua, pero es necesaria para resolver la entrada de asignación de exportación "{0}" en el archivo "{1}". Proporcione la opción del compilador "rootDir" para eliminar la ambigüedad.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";The_project_root_is_ambiguous_but_is_required_to_resolve_import_map_entry_0_in_file_1_Supply_the_roo_2210" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[The project root is ambiguous, but is required to resolve import map entry '{0}' in file '{1}'. Supply the `rootDir` compiler option to disambiguate.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[La raíz del proyecto es ambigua, pero es necesaria para resolver la entrada de asignación de importación "{0}" en el archivo "{1}". Proporcione la opción del compilador "rootDir" para eliminar la ambigüedad.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";The_property_0_cannot_be_accessed_on_type_1_within_this_class_because_it_is_shadowed_by_another_priv_18014" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[The property '{0}' cannot be accessed on type '{1}' within this class because it is shadowed by another private identifier with the same spelling.]]></Val>
@@ -13356,6 +13446,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";The_type_of_this_expression_cannot_be_named_without_a_resolution_mode_assertion_which_is_an_unstable_2841" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[The type of this expression cannot be named without a 'resolution-mode' assertion, which is an unstable feature. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[No se puede nombrar el tipo de esta expresión sin una aserción "modo de resolución", que es una característica inestable. Use TypeScript nocturno para silenciar este error. Intente actualizar con "npm install -D typescript@next".]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";The_type_of_this_node_cannot_be_serialized_because_its_property_0_cannot_be_serialized_4118" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[The type of this node cannot be serialized because its property '{0}' cannot be serialized.]]></Val>
@@ -13442,6 +13541,15 @@
           <Val><![CDATA[This JSX tag's '{0}' prop expects type '{1}' which requires multiple children, but only a single child was provided.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[La propiedad "{0}" de esta etiqueta de JSX espera el tipo "{1}", que requiere varios elementos secundarios, pero solo se ha proporcionado un elemento secundario.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";This_condition_will_always_return_0_since_JavaScript_compares_objects_by_reference_not_value_2839" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[This condition will always return '{0}' since JavaScript compares objects by reference, not value.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Esta condición siempre devolverá "{0}", ya que JavaScript compara objetos por referencia, no por valor.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -13743,11 +13851,20 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Top_level_await_expressions_are_only_allowed_when_the_module_option_is_set_to_es2022_esnext_system_o_1378" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";This_use_of_import_is_invalid_import_calls_can_be_written_but_they_must_have_parentheses_and_cannot__1326" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Top-level 'await' expressions are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', or 'nodenext', and the 'target' option is set to 'es2017' or higher.]]></Val>
+          <Val><![CDATA[This use of 'import' is invalid. 'import()' calls can be written, but they must have parentheses and cannot have type arguments.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Las expresiones "await" de nivel superior solo se permiten cuando la opción "módulo" está establecida en "es2022", "esnext", "system" o "nodenext", y la opción "destino" está establecida en "es2017" o superior.]]></Val>
+            <Val><![CDATA[Este uso de "import" no es válido. Se pueden escribir llamadas "import()", pero deben tener paréntesis y no pueden tener argumentos de tipo.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Top_level_await_expressions_are_only_allowed_when_the_module_option_is_set_to_es2022_esnext_system_n_1378" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Top-level 'await' expressions are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', or 'nodenext', and the 'target' option is set to 'es2017' or higher.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Las expresiones "await" de nivel superior solo se permiten cuando la opción "módulo" está establecida en "es2022", "esnext", "system", "node16" o "nodenext", y la opción "destino" está establecida en "es2017" o superior.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -13761,11 +13878,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Top_level_for_await_loops_are_only_allowed_when_the_module_option_is_set_to_es2022_esnext_system_or__1432" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Top_level_for_await_loops_are_only_allowed_when_the_module_option_is_set_to_es2022_esnext_system_nod_1432" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Top-level 'for await' loops are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', or 'nodenext', and the 'target' option is set to 'es2017' or higher.]]></Val>
+          <Val><![CDATA[Top-level 'for await' loops are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', or 'nodenext', and the 'target' option is set to 'es2017' or higher.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Los bucles "for await" de nivel superior solo se permiten cuando la opción "módulo" está establecida en "es2022", "esnext", "system" o "nodenext", y la opción "destino" está establecida en "es2017" o superior.]]></Val>
+            <Val><![CDATA[Los bucles "for await" de nivel superior solo se permiten cuando la opción "módulo" está establecida en "es2022", "esnext", "system", "node16" o "nodenext", y la opción "destino" está establecida en "es2017" o superior.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -13976,15 +14093,6 @@
           <Val><![CDATA[Type '{0}' is not an array type or a string type.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA['{0}' no es un tipo de matriz o un tipo de cadena.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";Type_0_is_not_an_array_type_or_a_string_type_Use_compiler_option_downlevelIteration_to_allow_iterati_2569" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Type '{0}' is not an array type or a string type. Use compiler option '--downlevelIteration' to allow iterating of iterators.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA["{0}" no es un tipo de matriz o de cadena. Use la opción del compilador "--downlevelIteration" para permitir la iteración de los iteradores.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -15105,6 +15213,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Variance_annotations_are_only_supported_in_type_aliases_for_object_function_constructor_and_mapped_t_2637" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Variance annotations are only supported in type aliases for object, function, constructor, and mapped types.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Las anotaciones de varianza solo se admiten en alias de tipo para los tipos objeto, función, constructor y asignado.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Version_0_6029" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Version {0}]]></Val>
@@ -15947,10 +16064,13 @@
       </Item>
       <Item ItemId=";auto_Colon_Treat_files_with_imports_exports_import_meta_jsx_with_jsx_Colon_react_jsx_or_esm_format_w_1476" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA["auto": Treat files with imports, exports, import.meta, jsx (with jsx: react-jsx), or esm format (with module: node12+) as modules.]]></Val>
+          <Val><![CDATA["auto": Treat files with imports, exports, import.meta, jsx (with jsx: react-jsx), or esm format (with module: node16+) as modules.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA["auto": trate los archivos con importaciones, exportaciones, import.meta, jsx (con jsx: react-jsx) o formato esm (con módulo: node12+) como módulos.]]></Val>
+            <Val><![CDATA["auto": trate los archivos con importaciones, exportaciones, import.meta, jsx (con jsx: react-jsx) o formato esm (con el módulo: node16+) como módulos.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA["auto": Treat files with imports, exports, import.meta, jsx (with jsx: react-jsx), or esm format (with module: node12+) as modules.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -16377,6 +16497,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";or_JSX_element_expected_1145" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['{' or JSX element expected.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Se esperaba "{" o un elemento JSX.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";or_expected_1144" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA['{' or ';' expected.]]></Val>
@@ -16508,6 +16637,24 @@
           <Val><![CDATA['require' call may be converted to an import.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[La llamada a "require" puede convertirse en una importación.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";resolution_mode_assertions_are_only_supported_when_moduleResolution_is_node16_or_nodenext_1452" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['resolution-mode' assertions are only supported when `moduleResolution` is `node16` or `nodenext`.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Las aserciones "modo de resolución" solo se admiten cuando "moduleResolution" es "node16" o "nodenext".]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";resolution_mode_assertions_are_unstable_Use_nightly_TypeScript_to_silence_this_error_Try_updating_wi_4125" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['resolution-mode' assertions are unstable. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Las aserciones "modo de resolución" son inestables. Use TypeScript nocturno para silenciar este error. Intente actualizar con "npm install -D typescript@next".]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

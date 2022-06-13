@@ -122,7 +122,9 @@ async function runConsoleTests(runJs, defaultReporter, runInParallel, watchMode,
 
     try {
         setNodeEnvToDevelopment();
-        const { exitCode } = await exec("node", args, { cancelToken });
+        const { exitCode } = await exec(process.execPath, args, {
+            cancelToken,
+        });
         if (exitCode !== 0) {
             errorStatus = exitCode;
             error = new Error(`Process exited with status code ${errorStatus}.`);

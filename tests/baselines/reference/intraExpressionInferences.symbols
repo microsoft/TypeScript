@@ -264,119 +264,140 @@ test({
     }
 });
 
+test({
+>test : Symbol(test, Decl(intraExpressionInferences.ts, 79, 2))
+
+    a: () => 0,
+>a : Symbol(a, Decl(intraExpressionInferences.ts, 91, 6))
+
+    b: (a) => a,
+>b : Symbol(b, Decl(intraExpressionInferences.ts, 92, 15))
+>a : Symbol(a, Decl(intraExpressionInferences.ts, 93, 8))
+>a : Symbol(a, Decl(intraExpressionInferences.ts, 93, 8))
+
+    c: (b) => {
+>c : Symbol(c, Decl(intraExpressionInferences.ts, 93, 16))
+>b : Symbol(b, Decl(intraExpressionInferences.ts, 94, 8))
+
+        const x: number = b;
+>x : Symbol(x, Decl(intraExpressionInferences.ts, 95, 13))
+>b : Symbol(b, Decl(intraExpressionInferences.ts, 94, 8))
+    }
+});
+
 // Repro from #41712
 
 class Wrapper<T = any> {
->Wrapper : Symbol(Wrapper, Decl(intraExpressionInferences.ts, 89, 3))
->T : Symbol(T, Decl(intraExpressionInferences.ts, 93, 14))
+>Wrapper : Symbol(Wrapper, Decl(intraExpressionInferences.ts, 97, 3))
+>T : Symbol(T, Decl(intraExpressionInferences.ts, 101, 14))
 
     public value?: T;
->value : Symbol(Wrapper.value, Decl(intraExpressionInferences.ts, 93, 24))
->T : Symbol(T, Decl(intraExpressionInferences.ts, 93, 14))
+>value : Symbol(Wrapper.value, Decl(intraExpressionInferences.ts, 101, 24))
+>T : Symbol(T, Decl(intraExpressionInferences.ts, 101, 14))
 }
 
 type WrappedMap = Record<string, Wrapper>;
->WrappedMap : Symbol(WrappedMap, Decl(intraExpressionInferences.ts, 95, 1))
+>WrappedMap : Symbol(WrappedMap, Decl(intraExpressionInferences.ts, 103, 1))
 >Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
->Wrapper : Symbol(Wrapper, Decl(intraExpressionInferences.ts, 89, 3))
+>Wrapper : Symbol(Wrapper, Decl(intraExpressionInferences.ts, 97, 3))
 
 type Unwrap<D extends WrappedMap> = {
->Unwrap : Symbol(Unwrap, Decl(intraExpressionInferences.ts, 97, 42))
->D : Symbol(D, Decl(intraExpressionInferences.ts, 98, 12))
->WrappedMap : Symbol(WrappedMap, Decl(intraExpressionInferences.ts, 95, 1))
+>Unwrap : Symbol(Unwrap, Decl(intraExpressionInferences.ts, 105, 42))
+>D : Symbol(D, Decl(intraExpressionInferences.ts, 106, 12))
+>WrappedMap : Symbol(WrappedMap, Decl(intraExpressionInferences.ts, 103, 1))
 
     [K in keyof D]: D[K] extends Wrapper<infer T> ? T : never;
->K : Symbol(K, Decl(intraExpressionInferences.ts, 99, 5))
->D : Symbol(D, Decl(intraExpressionInferences.ts, 98, 12))
->D : Symbol(D, Decl(intraExpressionInferences.ts, 98, 12))
->K : Symbol(K, Decl(intraExpressionInferences.ts, 99, 5))
->Wrapper : Symbol(Wrapper, Decl(intraExpressionInferences.ts, 89, 3))
->T : Symbol(T, Decl(intraExpressionInferences.ts, 99, 46))
->T : Symbol(T, Decl(intraExpressionInferences.ts, 99, 46))
+>K : Symbol(K, Decl(intraExpressionInferences.ts, 107, 5))
+>D : Symbol(D, Decl(intraExpressionInferences.ts, 106, 12))
+>D : Symbol(D, Decl(intraExpressionInferences.ts, 106, 12))
+>K : Symbol(K, Decl(intraExpressionInferences.ts, 107, 5))
+>Wrapper : Symbol(Wrapper, Decl(intraExpressionInferences.ts, 97, 3))
+>T : Symbol(T, Decl(intraExpressionInferences.ts, 107, 46))
+>T : Symbol(T, Decl(intraExpressionInferences.ts, 107, 46))
 
 };
 
 type MappingComponent<I extends WrappedMap, O extends WrappedMap> = {
->MappingComponent : Symbol(MappingComponent, Decl(intraExpressionInferences.ts, 100, 2))
->I : Symbol(I, Decl(intraExpressionInferences.ts, 102, 22))
->WrappedMap : Symbol(WrappedMap, Decl(intraExpressionInferences.ts, 95, 1))
->O : Symbol(O, Decl(intraExpressionInferences.ts, 102, 43))
->WrappedMap : Symbol(WrappedMap, Decl(intraExpressionInferences.ts, 95, 1))
+>MappingComponent : Symbol(MappingComponent, Decl(intraExpressionInferences.ts, 108, 2))
+>I : Symbol(I, Decl(intraExpressionInferences.ts, 110, 22))
+>WrappedMap : Symbol(WrappedMap, Decl(intraExpressionInferences.ts, 103, 1))
+>O : Symbol(O, Decl(intraExpressionInferences.ts, 110, 43))
+>WrappedMap : Symbol(WrappedMap, Decl(intraExpressionInferences.ts, 103, 1))
 
     setup(): { inputs: I; outputs: O };
->setup : Symbol(setup, Decl(intraExpressionInferences.ts, 102, 69))
->inputs : Symbol(inputs, Decl(intraExpressionInferences.ts, 103, 14))
->I : Symbol(I, Decl(intraExpressionInferences.ts, 102, 22))
->outputs : Symbol(outputs, Decl(intraExpressionInferences.ts, 103, 25))
->O : Symbol(O, Decl(intraExpressionInferences.ts, 102, 43))
+>setup : Symbol(setup, Decl(intraExpressionInferences.ts, 110, 69))
+>inputs : Symbol(inputs, Decl(intraExpressionInferences.ts, 111, 14))
+>I : Symbol(I, Decl(intraExpressionInferences.ts, 110, 22))
+>outputs : Symbol(outputs, Decl(intraExpressionInferences.ts, 111, 25))
+>O : Symbol(O, Decl(intraExpressionInferences.ts, 110, 43))
 
     map?: (inputs: Unwrap<I>) => Unwrap<O>;
->map : Symbol(map, Decl(intraExpressionInferences.ts, 103, 39))
->inputs : Symbol(inputs, Decl(intraExpressionInferences.ts, 104, 11))
->Unwrap : Symbol(Unwrap, Decl(intraExpressionInferences.ts, 97, 42))
->I : Symbol(I, Decl(intraExpressionInferences.ts, 102, 22))
->Unwrap : Symbol(Unwrap, Decl(intraExpressionInferences.ts, 97, 42))
->O : Symbol(O, Decl(intraExpressionInferences.ts, 102, 43))
+>map : Symbol(map, Decl(intraExpressionInferences.ts, 111, 39))
+>inputs : Symbol(inputs, Decl(intraExpressionInferences.ts, 112, 11))
+>Unwrap : Symbol(Unwrap, Decl(intraExpressionInferences.ts, 105, 42))
+>I : Symbol(I, Decl(intraExpressionInferences.ts, 110, 22))
+>Unwrap : Symbol(Unwrap, Decl(intraExpressionInferences.ts, 105, 42))
+>O : Symbol(O, Decl(intraExpressionInferences.ts, 110, 43))
 
 };
 
 declare function createMappingComponent<I extends WrappedMap, O extends WrappedMap>(def: MappingComponent<I, O>): void;
->createMappingComponent : Symbol(createMappingComponent, Decl(intraExpressionInferences.ts, 105, 2))
->I : Symbol(I, Decl(intraExpressionInferences.ts, 107, 40))
->WrappedMap : Symbol(WrappedMap, Decl(intraExpressionInferences.ts, 95, 1))
->O : Symbol(O, Decl(intraExpressionInferences.ts, 107, 61))
->WrappedMap : Symbol(WrappedMap, Decl(intraExpressionInferences.ts, 95, 1))
->def : Symbol(def, Decl(intraExpressionInferences.ts, 107, 84))
->MappingComponent : Symbol(MappingComponent, Decl(intraExpressionInferences.ts, 100, 2))
->I : Symbol(I, Decl(intraExpressionInferences.ts, 107, 40))
->O : Symbol(O, Decl(intraExpressionInferences.ts, 107, 61))
+>createMappingComponent : Symbol(createMappingComponent, Decl(intraExpressionInferences.ts, 113, 2))
+>I : Symbol(I, Decl(intraExpressionInferences.ts, 115, 40))
+>WrappedMap : Symbol(WrappedMap, Decl(intraExpressionInferences.ts, 103, 1))
+>O : Symbol(O, Decl(intraExpressionInferences.ts, 115, 61))
+>WrappedMap : Symbol(WrappedMap, Decl(intraExpressionInferences.ts, 103, 1))
+>def : Symbol(def, Decl(intraExpressionInferences.ts, 115, 84))
+>MappingComponent : Symbol(MappingComponent, Decl(intraExpressionInferences.ts, 108, 2))
+>I : Symbol(I, Decl(intraExpressionInferences.ts, 115, 40))
+>O : Symbol(O, Decl(intraExpressionInferences.ts, 115, 61))
 
 createMappingComponent({
->createMappingComponent : Symbol(createMappingComponent, Decl(intraExpressionInferences.ts, 105, 2))
+>createMappingComponent : Symbol(createMappingComponent, Decl(intraExpressionInferences.ts, 113, 2))
 
     setup() {
->setup : Symbol(setup, Decl(intraExpressionInferences.ts, 109, 24))
+>setup : Symbol(setup, Decl(intraExpressionInferences.ts, 117, 24))
 
         return {
             inputs: {
->inputs : Symbol(inputs, Decl(intraExpressionInferences.ts, 111, 16))
+>inputs : Symbol(inputs, Decl(intraExpressionInferences.ts, 119, 16))
 
                 num: new Wrapper<number>(),
->num : Symbol(num, Decl(intraExpressionInferences.ts, 112, 21))
->Wrapper : Symbol(Wrapper, Decl(intraExpressionInferences.ts, 89, 3))
+>num : Symbol(num, Decl(intraExpressionInferences.ts, 120, 21))
+>Wrapper : Symbol(Wrapper, Decl(intraExpressionInferences.ts, 97, 3))
 
                 str: new Wrapper<string>()
->str : Symbol(str, Decl(intraExpressionInferences.ts, 113, 43))
->Wrapper : Symbol(Wrapper, Decl(intraExpressionInferences.ts, 89, 3))
+>str : Symbol(str, Decl(intraExpressionInferences.ts, 121, 43))
+>Wrapper : Symbol(Wrapper, Decl(intraExpressionInferences.ts, 97, 3))
 
             },
             outputs: {
->outputs : Symbol(outputs, Decl(intraExpressionInferences.ts, 115, 14))
+>outputs : Symbol(outputs, Decl(intraExpressionInferences.ts, 123, 14))
 
                 bool: new Wrapper<boolean>(),
->bool : Symbol(bool, Decl(intraExpressionInferences.ts, 116, 22))
->Wrapper : Symbol(Wrapper, Decl(intraExpressionInferences.ts, 89, 3))
+>bool : Symbol(bool, Decl(intraExpressionInferences.ts, 124, 22))
+>Wrapper : Symbol(Wrapper, Decl(intraExpressionInferences.ts, 97, 3))
 
                 str: new Wrapper<string>()
->str : Symbol(str, Decl(intraExpressionInferences.ts, 117, 45))
->Wrapper : Symbol(Wrapper, Decl(intraExpressionInferences.ts, 89, 3))
+>str : Symbol(str, Decl(intraExpressionInferences.ts, 125, 45))
+>Wrapper : Symbol(Wrapper, Decl(intraExpressionInferences.ts, 97, 3))
             }
         };
     },
     map(inputs) {
->map : Symbol(map, Decl(intraExpressionInferences.ts, 121, 6))
->inputs : Symbol(inputs, Decl(intraExpressionInferences.ts, 122, 8))
+>map : Symbol(map, Decl(intraExpressionInferences.ts, 129, 6))
+>inputs : Symbol(inputs, Decl(intraExpressionInferences.ts, 130, 8))
 
         return {
             bool: inputs.nonexistent,
->bool : Symbol(bool, Decl(intraExpressionInferences.ts, 123, 16))
->inputs : Symbol(inputs, Decl(intraExpressionInferences.ts, 122, 8))
+>bool : Symbol(bool, Decl(intraExpressionInferences.ts, 131, 16))
+>inputs : Symbol(inputs, Decl(intraExpressionInferences.ts, 130, 8))
 
             str: inputs.num,  // Causes error
->str : Symbol(str, Decl(intraExpressionInferences.ts, 124, 37))
->inputs.num : Symbol(num, Decl(intraExpressionInferences.ts, 112, 21))
->inputs : Symbol(inputs, Decl(intraExpressionInferences.ts, 122, 8))
->num : Symbol(num, Decl(intraExpressionInferences.ts, 112, 21))
+>str : Symbol(str, Decl(intraExpressionInferences.ts, 132, 37))
+>inputs.num : Symbol(num, Decl(intraExpressionInferences.ts, 120, 21))
+>inputs : Symbol(inputs, Decl(intraExpressionInferences.ts, 130, 8))
+>num : Symbol(num, Decl(intraExpressionInferences.ts, 120, 21))
         }
     }
 });
@@ -384,177 +405,224 @@ createMappingComponent({
 // Repro from #48279
 
 function simplified<T>(props: { generator: () => T, receiver: (t: T) => any }) {}
->simplified : Symbol(simplified, Decl(intraExpressionInferences.ts, 128, 3))
->T : Symbol(T, Decl(intraExpressionInferences.ts, 132, 20))
->props : Symbol(props, Decl(intraExpressionInferences.ts, 132, 23))
->generator : Symbol(generator, Decl(intraExpressionInferences.ts, 132, 31))
->T : Symbol(T, Decl(intraExpressionInferences.ts, 132, 20))
->receiver : Symbol(receiver, Decl(intraExpressionInferences.ts, 132, 51))
->t : Symbol(t, Decl(intraExpressionInferences.ts, 132, 63))
->T : Symbol(T, Decl(intraExpressionInferences.ts, 132, 20))
+>simplified : Symbol(simplified, Decl(intraExpressionInferences.ts, 136, 3))
+>T : Symbol(T, Decl(intraExpressionInferences.ts, 140, 20))
+>props : Symbol(props, Decl(intraExpressionInferences.ts, 140, 23))
+>generator : Symbol(generator, Decl(intraExpressionInferences.ts, 140, 31))
+>T : Symbol(T, Decl(intraExpressionInferences.ts, 140, 20))
+>receiver : Symbol(receiver, Decl(intraExpressionInferences.ts, 140, 51))
+>t : Symbol(t, Decl(intraExpressionInferences.ts, 140, 63))
+>T : Symbol(T, Decl(intraExpressionInferences.ts, 140, 20))
 
 function whatIWant<T>(props: { generator: (bob: any) => T, receiver: (t: T) => any }) {}
->whatIWant : Symbol(whatIWant, Decl(intraExpressionInferences.ts, 132, 81))
->T : Symbol(T, Decl(intraExpressionInferences.ts, 134, 19))
->props : Symbol(props, Decl(intraExpressionInferences.ts, 134, 22))
->generator : Symbol(generator, Decl(intraExpressionInferences.ts, 134, 30))
->bob : Symbol(bob, Decl(intraExpressionInferences.ts, 134, 43))
->T : Symbol(T, Decl(intraExpressionInferences.ts, 134, 19))
->receiver : Symbol(receiver, Decl(intraExpressionInferences.ts, 134, 58))
->t : Symbol(t, Decl(intraExpressionInferences.ts, 134, 70))
->T : Symbol(T, Decl(intraExpressionInferences.ts, 134, 19))
+>whatIWant : Symbol(whatIWant, Decl(intraExpressionInferences.ts, 140, 81))
+>T : Symbol(T, Decl(intraExpressionInferences.ts, 142, 19))
+>props : Symbol(props, Decl(intraExpressionInferences.ts, 142, 22))
+>generator : Symbol(generator, Decl(intraExpressionInferences.ts, 142, 30))
+>bob : Symbol(bob, Decl(intraExpressionInferences.ts, 142, 43))
+>T : Symbol(T, Decl(intraExpressionInferences.ts, 142, 19))
+>receiver : Symbol(receiver, Decl(intraExpressionInferences.ts, 142, 58))
+>t : Symbol(t, Decl(intraExpressionInferences.ts, 142, 70))
+>T : Symbol(T, Decl(intraExpressionInferences.ts, 142, 19))
 
 function nonObject<T>(generator: (bob: any) => T, receiver: (t: T) => any) {}
->nonObject : Symbol(nonObject, Decl(intraExpressionInferences.ts, 134, 88))
->T : Symbol(T, Decl(intraExpressionInferences.ts, 136, 19))
->generator : Symbol(generator, Decl(intraExpressionInferences.ts, 136, 22))
->bob : Symbol(bob, Decl(intraExpressionInferences.ts, 136, 34))
->T : Symbol(T, Decl(intraExpressionInferences.ts, 136, 19))
->receiver : Symbol(receiver, Decl(intraExpressionInferences.ts, 136, 49))
->t : Symbol(t, Decl(intraExpressionInferences.ts, 136, 61))
->T : Symbol(T, Decl(intraExpressionInferences.ts, 136, 19))
+>nonObject : Symbol(nonObject, Decl(intraExpressionInferences.ts, 142, 88))
+>T : Symbol(T, Decl(intraExpressionInferences.ts, 144, 19))
+>generator : Symbol(generator, Decl(intraExpressionInferences.ts, 144, 22))
+>bob : Symbol(bob, Decl(intraExpressionInferences.ts, 144, 34))
+>T : Symbol(T, Decl(intraExpressionInferences.ts, 144, 19))
+>receiver : Symbol(receiver, Decl(intraExpressionInferences.ts, 144, 49))
+>t : Symbol(t, Decl(intraExpressionInferences.ts, 144, 61))
+>T : Symbol(T, Decl(intraExpressionInferences.ts, 144, 19))
 
 simplified({ generator: () => 123, receiver: (t) => console.log(t + 2) })
->simplified : Symbol(simplified, Decl(intraExpressionInferences.ts, 128, 3))
->generator : Symbol(generator, Decl(intraExpressionInferences.ts, 138, 12))
->receiver : Symbol(receiver, Decl(intraExpressionInferences.ts, 138, 34))
->t : Symbol(t, Decl(intraExpressionInferences.ts, 138, 46))
+>simplified : Symbol(simplified, Decl(intraExpressionInferences.ts, 136, 3))
+>generator : Symbol(generator, Decl(intraExpressionInferences.ts, 146, 12))
+>receiver : Symbol(receiver, Decl(intraExpressionInferences.ts, 146, 34))
+>t : Symbol(t, Decl(intraExpressionInferences.ts, 146, 46))
 >console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
 >log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
->t : Symbol(t, Decl(intraExpressionInferences.ts, 138, 46))
+>t : Symbol(t, Decl(intraExpressionInferences.ts, 146, 46))
 
 whatIWant({ generator: (bob) => bob ? 1 : 2, receiver: (t) => console.log(t + 2) })
->whatIWant : Symbol(whatIWant, Decl(intraExpressionInferences.ts, 132, 81))
->generator : Symbol(generator, Decl(intraExpressionInferences.ts, 139, 11))
->bob : Symbol(bob, Decl(intraExpressionInferences.ts, 139, 24))
->bob : Symbol(bob, Decl(intraExpressionInferences.ts, 139, 24))
->receiver : Symbol(receiver, Decl(intraExpressionInferences.ts, 139, 44))
->t : Symbol(t, Decl(intraExpressionInferences.ts, 139, 56))
+>whatIWant : Symbol(whatIWant, Decl(intraExpressionInferences.ts, 140, 81))
+>generator : Symbol(generator, Decl(intraExpressionInferences.ts, 147, 11))
+>bob : Symbol(bob, Decl(intraExpressionInferences.ts, 147, 24))
+>bob : Symbol(bob, Decl(intraExpressionInferences.ts, 147, 24))
+>receiver : Symbol(receiver, Decl(intraExpressionInferences.ts, 147, 44))
+>t : Symbol(t, Decl(intraExpressionInferences.ts, 147, 56))
 >console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
 >log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
->t : Symbol(t, Decl(intraExpressionInferences.ts, 139, 56))
+>t : Symbol(t, Decl(intraExpressionInferences.ts, 147, 56))
 
 nonObject((bob) => bob ? 1 : 2, (t) => console.log(t + 2))
->nonObject : Symbol(nonObject, Decl(intraExpressionInferences.ts, 134, 88))
->bob : Symbol(bob, Decl(intraExpressionInferences.ts, 140, 11))
->bob : Symbol(bob, Decl(intraExpressionInferences.ts, 140, 11))
->t : Symbol(t, Decl(intraExpressionInferences.ts, 140, 33))
+>nonObject : Symbol(nonObject, Decl(intraExpressionInferences.ts, 142, 88))
+>bob : Symbol(bob, Decl(intraExpressionInferences.ts, 148, 11))
+>bob : Symbol(bob, Decl(intraExpressionInferences.ts, 148, 11))
+>t : Symbol(t, Decl(intraExpressionInferences.ts, 148, 33))
 >console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
 >log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
->t : Symbol(t, Decl(intraExpressionInferences.ts, 140, 33))
+>t : Symbol(t, Decl(intraExpressionInferences.ts, 148, 33))
 
 // Repro from #48466
 
 interface Opts<TParams, TDone, TMapped> {
->Opts : Symbol(Opts, Decl(intraExpressionInferences.ts, 140, 58))
->TParams : Symbol(TParams, Decl(intraExpressionInferences.ts, 144, 15))
->TDone : Symbol(TDone, Decl(intraExpressionInferences.ts, 144, 23))
->TMapped : Symbol(TMapped, Decl(intraExpressionInferences.ts, 144, 30))
+>Opts : Symbol(Opts, Decl(intraExpressionInferences.ts, 148, 58))
+>TParams : Symbol(TParams, Decl(intraExpressionInferences.ts, 152, 15))
+>TDone : Symbol(TDone, Decl(intraExpressionInferences.ts, 152, 23))
+>TMapped : Symbol(TMapped, Decl(intraExpressionInferences.ts, 152, 30))
 
     fetch: (params: TParams, foo: number) => TDone,
->fetch : Symbol(Opts.fetch, Decl(intraExpressionInferences.ts, 144, 41))
->params : Symbol(params, Decl(intraExpressionInferences.ts, 145, 12))
->TParams : Symbol(TParams, Decl(intraExpressionInferences.ts, 144, 15))
->foo : Symbol(foo, Decl(intraExpressionInferences.ts, 145, 28))
->TDone : Symbol(TDone, Decl(intraExpressionInferences.ts, 144, 23))
+>fetch : Symbol(Opts.fetch, Decl(intraExpressionInferences.ts, 152, 41))
+>params : Symbol(params, Decl(intraExpressionInferences.ts, 153, 12))
+>TParams : Symbol(TParams, Decl(intraExpressionInferences.ts, 152, 15))
+>foo : Symbol(foo, Decl(intraExpressionInferences.ts, 153, 28))
+>TDone : Symbol(TDone, Decl(intraExpressionInferences.ts, 152, 23))
 
     map: (data: TDone) => TMapped
->map : Symbol(Opts.map, Decl(intraExpressionInferences.ts, 145, 51))
->data : Symbol(data, Decl(intraExpressionInferences.ts, 146, 10))
->TDone : Symbol(TDone, Decl(intraExpressionInferences.ts, 144, 23))
->TMapped : Symbol(TMapped, Decl(intraExpressionInferences.ts, 144, 30))
+>map : Symbol(Opts.map, Decl(intraExpressionInferences.ts, 153, 51))
+>data : Symbol(data, Decl(intraExpressionInferences.ts, 154, 10))
+>TDone : Symbol(TDone, Decl(intraExpressionInferences.ts, 152, 23))
+>TMapped : Symbol(TMapped, Decl(intraExpressionInferences.ts, 152, 30))
 }
 
 function example<TParams, TDone, TMapped>(options: Opts<TParams, TDone, TMapped>) {
->example : Symbol(example, Decl(intraExpressionInferences.ts, 147, 1))
->TParams : Symbol(TParams, Decl(intraExpressionInferences.ts, 149, 17))
->TDone : Symbol(TDone, Decl(intraExpressionInferences.ts, 149, 25))
->TMapped : Symbol(TMapped, Decl(intraExpressionInferences.ts, 149, 32))
->options : Symbol(options, Decl(intraExpressionInferences.ts, 149, 42))
->Opts : Symbol(Opts, Decl(intraExpressionInferences.ts, 140, 58))
->TParams : Symbol(TParams, Decl(intraExpressionInferences.ts, 149, 17))
->TDone : Symbol(TDone, Decl(intraExpressionInferences.ts, 149, 25))
->TMapped : Symbol(TMapped, Decl(intraExpressionInferences.ts, 149, 32))
+>example : Symbol(example, Decl(intraExpressionInferences.ts, 155, 1))
+>TParams : Symbol(TParams, Decl(intraExpressionInferences.ts, 157, 17))
+>TDone : Symbol(TDone, Decl(intraExpressionInferences.ts, 157, 25))
+>TMapped : Symbol(TMapped, Decl(intraExpressionInferences.ts, 157, 32))
+>options : Symbol(options, Decl(intraExpressionInferences.ts, 157, 42))
+>Opts : Symbol(Opts, Decl(intraExpressionInferences.ts, 148, 58))
+>TParams : Symbol(TParams, Decl(intraExpressionInferences.ts, 157, 17))
+>TDone : Symbol(TDone, Decl(intraExpressionInferences.ts, 157, 25))
+>TMapped : Symbol(TMapped, Decl(intraExpressionInferences.ts, 157, 32))
 
     return (params: TParams) => {
->params : Symbol(params, Decl(intraExpressionInferences.ts, 150, 12))
->TParams : Symbol(TParams, Decl(intraExpressionInferences.ts, 149, 17))
+>params : Symbol(params, Decl(intraExpressionInferences.ts, 158, 12))
+>TParams : Symbol(TParams, Decl(intraExpressionInferences.ts, 157, 17))
 
         const data = options.fetch(params, 123)
->data : Symbol(data, Decl(intraExpressionInferences.ts, 151, 13))
->options.fetch : Symbol(Opts.fetch, Decl(intraExpressionInferences.ts, 144, 41))
->options : Symbol(options, Decl(intraExpressionInferences.ts, 149, 42))
->fetch : Symbol(Opts.fetch, Decl(intraExpressionInferences.ts, 144, 41))
->params : Symbol(params, Decl(intraExpressionInferences.ts, 150, 12))
+>data : Symbol(data, Decl(intraExpressionInferences.ts, 159, 13))
+>options.fetch : Symbol(Opts.fetch, Decl(intraExpressionInferences.ts, 152, 41))
+>options : Symbol(options, Decl(intraExpressionInferences.ts, 157, 42))
+>fetch : Symbol(Opts.fetch, Decl(intraExpressionInferences.ts, 152, 41))
+>params : Symbol(params, Decl(intraExpressionInferences.ts, 158, 12))
 
         return options.map(data)
->options.map : Symbol(Opts.map, Decl(intraExpressionInferences.ts, 145, 51))
->options : Symbol(options, Decl(intraExpressionInferences.ts, 149, 42))
->map : Symbol(Opts.map, Decl(intraExpressionInferences.ts, 145, 51))
->data : Symbol(data, Decl(intraExpressionInferences.ts, 151, 13))
+>options.map : Symbol(Opts.map, Decl(intraExpressionInferences.ts, 153, 51))
+>options : Symbol(options, Decl(intraExpressionInferences.ts, 157, 42))
+>map : Symbol(Opts.map, Decl(intraExpressionInferences.ts, 153, 51))
+>data : Symbol(data, Decl(intraExpressionInferences.ts, 159, 13))
     }
 }
 
 interface Params {
->Params : Symbol(Params, Decl(intraExpressionInferences.ts, 154, 1))
+>Params : Symbol(Params, Decl(intraExpressionInferences.ts, 162, 1))
 
     one: number
->one : Symbol(Params.one, Decl(intraExpressionInferences.ts, 156, 18))
+>one : Symbol(Params.one, Decl(intraExpressionInferences.ts, 164, 18))
 
     two: string
->two : Symbol(Params.two, Decl(intraExpressionInferences.ts, 157, 15))
+>two : Symbol(Params.two, Decl(intraExpressionInferences.ts, 165, 15))
 }
 
 example({
->example : Symbol(example, Decl(intraExpressionInferences.ts, 147, 1))
+>example : Symbol(example, Decl(intraExpressionInferences.ts, 155, 1))
 
     fetch: (params: Params) => 123,
->fetch : Symbol(fetch, Decl(intraExpressionInferences.ts, 161, 9))
->params : Symbol(params, Decl(intraExpressionInferences.ts, 162, 12))
->Params : Symbol(Params, Decl(intraExpressionInferences.ts, 154, 1))
+>fetch : Symbol(fetch, Decl(intraExpressionInferences.ts, 169, 9))
+>params : Symbol(params, Decl(intraExpressionInferences.ts, 170, 12))
+>Params : Symbol(Params, Decl(intraExpressionInferences.ts, 162, 1))
 
     map: (number) => String(number)
->map : Symbol(map, Decl(intraExpressionInferences.ts, 162, 35))
->number : Symbol(number, Decl(intraExpressionInferences.ts, 163, 10))
+>map : Symbol(map, Decl(intraExpressionInferences.ts, 170, 35))
+>number : Symbol(number, Decl(intraExpressionInferences.ts, 171, 10))
 >String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->number : Symbol(number, Decl(intraExpressionInferences.ts, 163, 10))
+>number : Symbol(number, Decl(intraExpressionInferences.ts, 171, 10))
 
 });
 
 example({
->example : Symbol(example, Decl(intraExpressionInferences.ts, 147, 1))
+>example : Symbol(example, Decl(intraExpressionInferences.ts, 155, 1))
 
     fetch: (params: Params, foo: number) => 123,
->fetch : Symbol(fetch, Decl(intraExpressionInferences.ts, 166, 9))
->params : Symbol(params, Decl(intraExpressionInferences.ts, 167, 12))
->Params : Symbol(Params, Decl(intraExpressionInferences.ts, 154, 1))
->foo : Symbol(foo, Decl(intraExpressionInferences.ts, 167, 27))
+>fetch : Symbol(fetch, Decl(intraExpressionInferences.ts, 174, 9))
+>params : Symbol(params, Decl(intraExpressionInferences.ts, 175, 12))
+>Params : Symbol(Params, Decl(intraExpressionInferences.ts, 162, 1))
+>foo : Symbol(foo, Decl(intraExpressionInferences.ts, 175, 27))
 
     map: (number) => String(number)
->map : Symbol(map, Decl(intraExpressionInferences.ts, 167, 48))
->number : Symbol(number, Decl(intraExpressionInferences.ts, 168, 10))
+>map : Symbol(map, Decl(intraExpressionInferences.ts, 175, 48))
+>number : Symbol(number, Decl(intraExpressionInferences.ts, 176, 10))
 >String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->number : Symbol(number, Decl(intraExpressionInferences.ts, 168, 10))
+>number : Symbol(number, Decl(intraExpressionInferences.ts, 176, 10))
 
 });
 
 example({
->example : Symbol(example, Decl(intraExpressionInferences.ts, 147, 1))
+>example : Symbol(example, Decl(intraExpressionInferences.ts, 155, 1))
 
     fetch: (params: Params, foo) => 123,
->fetch : Symbol(fetch, Decl(intraExpressionInferences.ts, 171, 9))
->params : Symbol(params, Decl(intraExpressionInferences.ts, 172, 12))
->Params : Symbol(Params, Decl(intraExpressionInferences.ts, 154, 1))
->foo : Symbol(foo, Decl(intraExpressionInferences.ts, 172, 27))
+>fetch : Symbol(fetch, Decl(intraExpressionInferences.ts, 179, 9))
+>params : Symbol(params, Decl(intraExpressionInferences.ts, 180, 12))
+>Params : Symbol(Params, Decl(intraExpressionInferences.ts, 162, 1))
+>foo : Symbol(foo, Decl(intraExpressionInferences.ts, 180, 27))
 
     map: (number) => String(number)
->map : Symbol(map, Decl(intraExpressionInferences.ts, 172, 40))
->number : Symbol(number, Decl(intraExpressionInferences.ts, 173, 10))
+>map : Symbol(map, Decl(intraExpressionInferences.ts, 180, 40))
+>number : Symbol(number, Decl(intraExpressionInferences.ts, 181, 10))
 >String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->number : Symbol(number, Decl(intraExpressionInferences.ts, 173, 10))
+>number : Symbol(number, Decl(intraExpressionInferences.ts, 181, 10))
 
 });
+
+// Repro from #45255
+
+declare const branch:
+>branch : Symbol(branch, Decl(intraExpressionInferences.ts, 186, 13))
+
+  <T, U extends T>(_: { test: T, if: (t: T) => t is U, then: (u: U) => void }) => void
+>T : Symbol(T, Decl(intraExpressionInferences.ts, 187, 3))
+>U : Symbol(U, Decl(intraExpressionInferences.ts, 187, 5))
+>T : Symbol(T, Decl(intraExpressionInferences.ts, 187, 3))
+>_ : Symbol(_, Decl(intraExpressionInferences.ts, 187, 19))
+>test : Symbol(test, Decl(intraExpressionInferences.ts, 187, 23))
+>T : Symbol(T, Decl(intraExpressionInferences.ts, 187, 3))
+>if : Symbol(if, Decl(intraExpressionInferences.ts, 187, 32))
+>t : Symbol(t, Decl(intraExpressionInferences.ts, 187, 38))
+>T : Symbol(T, Decl(intraExpressionInferences.ts, 187, 3))
+>t : Symbol(t, Decl(intraExpressionInferences.ts, 187, 38))
+>U : Symbol(U, Decl(intraExpressionInferences.ts, 187, 5))
+>then : Symbol(then, Decl(intraExpressionInferences.ts, 187, 54))
+>u : Symbol(u, Decl(intraExpressionInferences.ts, 187, 62))
+>U : Symbol(U, Decl(intraExpressionInferences.ts, 187, 5))
+
+declare const x: "a" | "b"
+>x : Symbol(x, Decl(intraExpressionInferences.ts, 189, 13))
+
+branch({
+>branch : Symbol(branch, Decl(intraExpressionInferences.ts, 186, 13))
+
+  test: x,
+>test : Symbol(test, Decl(intraExpressionInferences.ts, 191, 8))
+>x : Symbol(x, Decl(intraExpressionInferences.ts, 189, 13))
+
+  if: (t): t is "a" => t === "a",
+>if : Symbol(if, Decl(intraExpressionInferences.ts, 192, 10))
+>t : Symbol(t, Decl(intraExpressionInferences.ts, 193, 7))
+>t : Symbol(t, Decl(intraExpressionInferences.ts, 193, 7))
+>t : Symbol(t, Decl(intraExpressionInferences.ts, 193, 7))
+
+  then: u => {
+>then : Symbol(then, Decl(intraExpressionInferences.ts, 193, 33))
+>u : Symbol(u, Decl(intraExpressionInferences.ts, 194, 7))
+
+    let test1: "a" = u
+>test1 : Symbol(test1, Decl(intraExpressionInferences.ts, 195, 7))
+>u : Symbol(u, Decl(intraExpressionInferences.ts, 194, 7))
+  }
+})
 

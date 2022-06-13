@@ -22,7 +22,7 @@ const a1: ValueOrArray<number> = [1, [2, 3], [4, [5, [6, 7]]]];
 >7 : 7
 
 type HypertextNode = string | [string, { [key: string]: unknown }, ...HypertextNode[]];
->HypertextNode : HypertextNode
+>HypertextNode : string | [string, { [key: string]: unknown; }, ...HypertextNode[]]
 >key : string
 
 const hypertextNode: HypertextNode =
@@ -54,7 +54,7 @@ const hypertextNode: HypertextNode =
     ];
 
 type Json = string | number | boolean | null | Json[] | { [key: string]: Json };
->Json : Json
+>Json : string | number | boolean | Json[] | { [key: string]: Json; } | null
 >null : null
 >key : string
 
@@ -89,13 +89,13 @@ interface Box<T> { value: T };
 >value : T
 
 type T1 = Box<T1>;
->T1 : T1
+>T1 : Box<T1>
 
 type T2 = Box<Box<T2>>;
->T2 : T2
+>T2 : Box<Box<T2>>
 
 type T3 = Box<Box<Box<T3>>>;
->T3 : T3
+>T3 : Box<Box<Box<T3>>>
 
 function f1(t1: T1, t2: T2, t3: T3) {
 >f1 : (t1: T1, t2: T2, t3: T3) => void
@@ -135,7 +135,7 @@ function f1(t1: T1, t2: T2, t3: T3) {
 }
 
 type Box1 = Box<Box1> | number;
->Box1 : Box1
+>Box1 : number | Box<Box1>
 
 const b10: Box1 = 42;
 >b10 : Box1
@@ -158,7 +158,7 @@ const b12: Box1 = { value: { value: { value: 42 }}};
 >42 : 42
 
 type Box2 = Box<Box2 | number>;
->Box2 : Box2
+>Box2 : Box<number | Box2>
 
 const b20: Box2 = 42;  // Error
 >b20 : Box2
@@ -344,19 +344,19 @@ flat2([1, ['a']]);  // Error
 >'a' : "a"
 
 type T10 = T10[];
->T10 : T10
+>T10 : T10[]
 
 type T11 = readonly T11[];
->T11 : T11
+>T11 : readonly T11[]
 
 type T12 = (T12)[];
->T12 : T12
+>T12 : T12[]
 
 type T13 = T13[] | string;
->T13 : T13
+>T13 : string | T13[]
 
 type T14 = T14[] & { x: string };
->T14 : T14
+>T14 : T14[] & { x: string; }
 >x : string
 
 type T15<X> = X extends string ? T15<X>[] : never;
@@ -403,7 +403,7 @@ let x2 = foo2(ra2);  // Boom!
 // Repro from #33617 (errors are expected)
 
 type Tree = [HTMLHeadingElement, Tree][];
->Tree : Tree
+>Tree : [HTMLHeadingElement, Tree][]
 
 function parse(node: Tree, index: number[] = []): HTMLUListElement {
 >parse : (node: Tree, index?: number[]) => HTMLUListElement

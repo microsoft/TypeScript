@@ -265,6 +265,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(704,34): error T
 tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(710,69): error TS2304: Cannot find name 'NodeType'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(710,93): error TS2304: Cannot find name 'FuncDecl'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(710,136): error TS2304: Cannot find name 'FuncDecl'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(722,17): error TS2839: This condition will always return 'true' since JavaScript compares objects by reference, not value.
 tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(724,22): error TS2304: Cannot find name 'hasFlag'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(724,83): error TS2304: Cannot find name 'FncFlags'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(729,44): error TS2304: Cannot find name 'SymbolKind'.
@@ -303,7 +304,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(827,34): error T
 tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(828,13): error TS2304: Cannot find name 'popTypeCollectionScope'.
 
 
-==== tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts (303 errors) ====
+==== tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts (304 errors) ====
     // Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
     // See LICENSE.txt in the project root for complete license information.
     
@@ -1562,6 +1563,8 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(828,13): error T
                     fgSym.type &&
                     fgSym.type.construct &&
                     fgSym.type.construct.signatures != [] &&
+                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2839: This condition will always return 'true' since JavaScript compares objects by reference, not value.
                     (fgSym.type.construct.signatures[0].declAST == null ||
                         !hasFlag(fgSym.type.construct.signatures[0].declAST.fncFlags, FncFlags.Ambient)) &&
                          ~~~~~~~

@@ -20,6 +20,16 @@ namespace ts {
          */
         /*@internal*/
         disableUseFileVersionAsSignature?: boolean;
+        /**
+         * Store the list of files that update signature during the emit
+         */
+        /*@internal*/
+        storeFilesChangingSignatureDuringEmit?: boolean;
+        /**
+         * Gets the current time
+         */
+        /*@internal*/
+        now?(): Date;
     }
 
     /**
@@ -29,9 +39,9 @@ namespace ts {
         /*@internal*/
         getState(): ReusableBuilderProgramState;
         /*@internal*/
-        backupState(): void;
+        saveEmitState(): SavedBuildProgramEmitState;
         /*@internal*/
-        restoreState(): void;
+        restoreEmitState(saved: SavedBuildProgramEmitState): void;
         /**
          * Returns current program
          */

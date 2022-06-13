@@ -257,8 +257,7 @@
           "start": 24,
           "length": 21
         },
-        "isWriteAccess": false,
-        "isDefinition": true
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -266,8 +265,7 @@
           "length": 11
         },
         "fileName": "/tests/cases/fourslash/referencesForPropertiesOfGenericType.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -275,8 +273,7 @@
           "length": 11
         },
         "fileName": "/tests/cases/fourslash/referencesForPropertiesOfGenericType.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }
@@ -399,8 +396,7 @@
           "start": 24,
           "length": 21
         },
-        "isWriteAccess": false,
-        "isDefinition": true
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -408,8 +404,7 @@
           "length": 11
         },
         "fileName": "/tests/cases/fourslash/referencesForPropertiesOfGenericType.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -417,8 +412,7 @@
           "length": 11
         },
         "fileName": "/tests/cases/fourslash/referencesForPropertiesOfGenericType.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }

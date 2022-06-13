@@ -282,8 +282,7 @@
           "start": 12,
           "length": 8
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -291,8 +290,7 @@
           "length": 2
         },
         "fileName": "/tests/cases/fourslash/expression.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }

@@ -14,7 +14,7 @@ declare class B {
 }
 
 function test(required1: () => boolean, required2: () => boolean, b: boolean, optional?: () => boolean) {
->test : (required1: () => boolean, required2: () => boolean, b: boolean, optional?: (() => boolean) | undefined) => void
+>test : (required1: () => boolean, required2: () => boolean, b: boolean, optional?: () => boolean) => void
 >required1 : () => boolean
 >required2 : () => boolean
 >b : boolean

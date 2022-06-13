@@ -146,8 +146,7 @@
           "start": 10,
           "length": 5
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -155,8 +154,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfNumberNamedProperty.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }

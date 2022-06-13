@@ -279,8 +279,7 @@
           "start": 0,
           "length": 28
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -288,8 +287,7 @@
           "length": 4
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfFunction.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }

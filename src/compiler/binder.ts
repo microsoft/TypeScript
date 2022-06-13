@@ -391,7 +391,7 @@ namespace ts {
                 case SyntaxKind.Parameter:
                     // Parameters with names are handled at the top of this function.  Parameters
                     // without names can only come from JSDocFunctionTypes.
-                    Debug.assert(node.parent.kind === SyntaxKind.JSDocFunctionType, "Impossible parameter parent kind", () => `parent is: ${(ts as any).SyntaxKind ? (ts as any).SyntaxKind[node.parent.kind] : node.parent.kind}, expected JSDocFunctionType`);
+                    Debug.assert(node.parent.kind === SyntaxKind.JSDocFunctionType, "Impossible parameter parent kind", () => `parent is: ${Debug.formatSyntaxKind(node.parent.kind)}, expected JSDocFunctionType`);
                     const functionType = node.parent as JSDocFunctionType;
                     const index = functionType.parameters.indexOf(node as ParameterDeclaration);
                     return "arg" + index as __String;
@@ -1661,8 +1661,6 @@ namespace ts {
                 //   - `BindingElement: BindingPattern Initializer?`
                 // - https://tc39.es/ecma262/#sec-runtime-semantics-keyedbindinginitialization
                 //   - `BindingElement: BindingPattern Initializer?`
-                bindEach(node.decorators);
-                bindEach(node.modifiers);
                 bind(node.dotDotDotToken);
                 bind(node.propertyName);
                 bind(node.initializer);
@@ -1818,6 +1816,7 @@ namespace ts {
                 case SyntaxKind.ModuleDeclaration:
                 case SyntaxKind.TypeAliasDeclaration:
                 case SyntaxKind.MappedType:
+                case SyntaxKind.IndexSignature:
                     return ContainerFlags.IsContainer | ContainerFlags.HasLocals;
 
                 case SyntaxKind.SourceFile:
@@ -1838,7 +1837,6 @@ namespace ts {
                 case SyntaxKind.JSDocFunctionType:
                 case SyntaxKind.FunctionType:
                 case SyntaxKind.ConstructSignature:
-                case SyntaxKind.IndexSignature:
                 case SyntaxKind.ConstructorType:
                 case SyntaxKind.ClassStaticBlockDeclaration:
                     return ContainerFlags.IsContainer | ContainerFlags.IsControlFlowContainer | ContainerFlags.HasLocals | ContainerFlags.IsFunctionLike;
@@ -2794,7 +2792,7 @@ namespace ts {
         }
 
         function bindNamespaceExportDeclaration(node: NamespaceExportDeclaration) {
-            if (node.modifiers && node.modifiers.length) {
+            if (some(node.modifiers)) {
                 file.bindDiagnostics.push(createDiagnosticForNode(node, Diagnostics.Modifiers_cannot_appear_here));
             }
             const diag = !isSourceFile(node.parent) ? Diagnostics.Global_module_exports_may_only_appear_at_top_level
@@ -2834,12 +2832,14 @@ namespace ts {
         }
 
         function setCommonJsModuleIndicator(node: Node) {
-            if (file.externalModuleIndicator) {
+            if (file.externalModuleIndicator && file.externalModuleIndicator !== true) {
                 return false;
             }
             if (!file.commonJsModuleIndicator) {
                 file.commonJsModuleIndicator = node;
-                bindSourceFileAsExternalModule();
+                if (!file.externalModuleIndicator) {
+                    bindSourceFileAsExternalModule();
+                }
             }
             return true;
         }
@@ -3291,7 +3291,12 @@ namespace ts {
             }
 
             if (!isBindingPattern(node.name)) {
-                if (isInJSFile(node) && isVariableDeclarationInitializedToBareOrAccessedRequire(node) && !getJSDocTypeTag(node) && !(getCombinedModifierFlags(node) & ModifierFlags.Export)) {
+                const possibleVariableDecl = node.kind === SyntaxKind.VariableDeclaration ? node : node.parent.parent;
+                if (isInJSFile(node) &&
+                    isVariableDeclarationInitializedToBareOrAccessedRequire(possibleVariableDecl) &&
+                    !getJSDocTypeTag(node) &&
+                    !(getCombinedModifierFlags(node) & ModifierFlags.Export)
+                ) {
                     declareSymbolAndAddToSymbolTable(node as Declaration, SymbolFlags.Alias, SymbolFlags.AliasExcludes);
                 }
                 else if (isBlockOrCatchScoped(node)) {

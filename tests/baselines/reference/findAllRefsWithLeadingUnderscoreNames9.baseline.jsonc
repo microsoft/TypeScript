@@ -73,8 +73,7 @@
           "start": 1,
           "length": 35
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -82,8 +81,7 @@
           "length": 6
         },
         "fileName": "/tests/cases/fourslash/findAllRefsWithLeadingUnderscoreNames9.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }
@@ -255,8 +253,7 @@
           "start": 1,
           "length": 35
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -264,8 +261,7 @@
           "length": 6
         },
         "fileName": "/tests/cases/fourslash/findAllRefsWithLeadingUnderscoreNames9.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }

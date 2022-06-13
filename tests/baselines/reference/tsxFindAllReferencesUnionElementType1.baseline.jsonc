@@ -826,8 +826,7 @@ undefined
           "start": 278,
           "length": 27
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -839,8 +838,7 @@ undefined
           "start": 306,
           "length": 22
         },
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }

@@ -184,7 +184,7 @@ namespace ts {
     ): ToImport | undefined {
         if (importedModuleSymbol) {
             // `find` should succeed because we checked for ambient modules before calling this function.
-            const oldFileName = find(importedModuleSymbol.declarations!, isSourceFile)!.fileName;
+            const oldFileName = find(importedModuleSymbol.declarations, isSourceFile)!.fileName;
             const newFileName = oldToNew(oldFileName);
             return newFileName === undefined ? { newFileName: oldFileName, updated: false } : { newFileName, updated: true };
         }

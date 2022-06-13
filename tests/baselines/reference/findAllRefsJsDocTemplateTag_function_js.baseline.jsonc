@@ -112,8 +112,7 @@
           "length": 1
         },
         "fileName": "/a.js",
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -121,8 +120,7 @@
           "length": 1
         },
         "fileName": "/a.js",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }

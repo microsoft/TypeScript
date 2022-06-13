@@ -11,6 +11,7 @@ jobs:
 
     # CodeQL runs on ubuntu-latest and windows-latest
     runs-on: ubuntu-latest
+    if: github.repository == 'microsoft/TypeScript'
 
     steps:
     - name: Checkout repository

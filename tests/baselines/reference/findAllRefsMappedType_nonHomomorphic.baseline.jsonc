@@ -58,8 +58,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/findAllRefsMappedType_nonHomomorphic.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -67,8 +66,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/findAllRefsMappedType_nonHomomorphic.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }
@@ -134,8 +132,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/findAllRefsMappedType_nonHomomorphic.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -143,8 +140,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/findAllRefsMappedType_nonHomomorphic.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }

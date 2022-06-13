@@ -5,6 +5,7 @@ namespace ts.server {
         Configured,
         External,
         AutoImportProvider,
+        Auxiliary,
     }
 
     /* @internal */
@@ -32,7 +33,7 @@ namespace ts.server {
                     result.jsxSize! += fileSize;
                     break;
                 case ScriptKind.TS:
-                    if (fileExtensionIs(info.fileName, Extension.Dts)) {
+                    if (isDeclarationFileName(info.fileName)) {
                         result.dts += 1;
                         result.dtsSize! += fileSize;
                     }
@@ -71,7 +72,7 @@ namespace ts.server {
 
     /* @internal */
     export function hasNoTypeScriptSource(fileNames: string[]): boolean {
-        return !fileNames.some(fileName => (fileExtensionIs(fileName, Extension.Ts) && !fileExtensionIs(fileName, Extension.Dts)) || fileExtensionIs(fileName, Extension.Tsx));
+        return !fileNames.some(fileName => (fileExtensionIs(fileName, Extension.Ts) && !isDeclarationFileName(fileName)) || fileExtensionIs(fileName, Extension.Tsx));
     }
 
     /* @internal */
@@ -208,6 +209,9 @@ namespace ts.server {
 
         /*@internal*/
         private packageJsonsForAutoImport: Set<string> | undefined;
+
+        /*@internal*/
+        private noDtsResolutionProject?: AuxiliaryProject | undefined;
 
         /*@internal*/
         getResolvedProjectReferenceToRedirect(_fileName: string): ResolvedProjectReference | undefined {
@@ -519,6 +523,18 @@ namespace ts.server {
         }
 
         /*@internal*/
+        watchAffectingFileLocation(file: string, cb: FileWatcherCallback) {
+            return this.projectService.watchFactory.watchFile(
+                file,
+                cb,
+                PollingInterval.High,
+                this.projectService.getWatchOptions(this),
+                WatchType.PackageJson,
+                this
+            );
+        }
+
+        /*@internal*/
         clearInvalidateResolutionOfFailedLookupTimer() {
             return this.projectService.throttledOperations.cancel(`${this.getProjectName()}FailedLookupInvalidation`);
         }
@@ -686,7 +702,7 @@ namespace ts.server {
 
                 // Update the signature
                 if (this.builderState && getEmitDeclarations(this.compilerOptions)) {
-                    const dtsFiles = outputFiles.filter(f => fileExtensionIs(f.name, Extension.Dts));
+                    const dtsFiles = outputFiles.filter(f => isDeclarationFileName(f.name));
                     if (dtsFiles.length === 1) {
                         const sourceFile = this.program!.getSourceFile(scriptInfo.fileName)!;
                         const signature = this.projectService.host.createHash ?
@@ -811,6 +827,10 @@ namespace ts.server {
                 this.autoImportProviderHost.close();
             }
             this.autoImportProviderHost = undefined;
+            if (this.noDtsResolutionProject) {
+                this.noDtsResolutionProject.close();
+            }
+            this.noDtsResolutionProject = undefined;
 
             // signal language service to release source files acquired from document registry
             this.languageService.dispose();
@@ -1406,6 +1426,7 @@ namespace ts.server {
                 const oldOptions = this.compilerOptions;
                 this.compilerOptions = compilerOptions;
                 this.setInternalCompilerOptionsForEmittingJsFiles();
+                this.noDtsResolutionProject?.setCompilerOptions(this.getCompilerOptionsForNoDtsResolutionProject());
                 if (changesAffectModuleResolution(oldOptions, compilerOptions)) {
                     // reset cached unresolved imports if changes in compiler options affected module resolution
                     this.cachedUnresolvedImportsPerFile.clear();
@@ -1780,6 +1801,54 @@ namespace ts.server {
         getIncompleteCompletionsCache() {
             return this.projectService.getIncompleteCompletionsCache();
         }
+
+        /*@internal*/
+        getNoDtsResolutionProject(rootFileNames: readonly string[]): Project {
+            Debug.assert(this.projectService.serverMode === LanguageServiceMode.Semantic);
+            if (!this.noDtsResolutionProject) {
+                this.noDtsResolutionProject = new AuxiliaryProject(this.projectService, this.documentRegistry, this.getCompilerOptionsForNoDtsResolutionProject());
+            }
+
+            enumerateInsertsAndDeletes<NormalizedPath, NormalizedPath>(
+                rootFileNames.map(toNormalizedPath),
+                this.noDtsResolutionProject.getRootFiles(),
+                getStringComparer(!this.useCaseSensitiveFileNames()),
+                pathToAdd => {
+                    const info = this.projectService.getOrCreateScriptInfoNotOpenedByClient(
+                        pathToAdd,
+                        this.currentDirectory,
+                        this.noDtsResolutionProject!.directoryStructureHost);
+                    if (info) {
+                        this.noDtsResolutionProject!.addRoot(info, pathToAdd);
+                    }
+                },
+                pathToRemove => {
+                    // It may be preferable to remove roots only once project grows to a certain size?
+                    const info = this.noDtsResolutionProject!.getScriptInfo(pathToRemove);
+                    if (info) {
+                        this.noDtsResolutionProject!.removeRoot(info);
+                    }
+                },
+            );
+
+            return this.noDtsResolutionProject;
+        }
+
+        /*@internal*/
+        private getCompilerOptionsForNoDtsResolutionProject() {
+            return {
+                ...this.getCompilerOptions(),
+                noDtsResolution: true,
+                allowJs: true,
+                maxNodeModuleJsDepth: 3,
+                diagnostics: false,
+                skipLibCheck: true,
+                sourceMap: false,
+                types: ts.emptyArray,
+                lib: ts.emptyArray,
+                noLib: true,
+            };
+        }
     }
 
     function getUnresolvedImports(program: Program, cachedUnresolvedImportsPerFile: ESMap<Path, readonly string[]>): SortedReadonlyArray<string> {
@@ -1917,6 +1986,32 @@ namespace ts.server {
                 include: ts.emptyArray,
                 exclude: ts.emptyArray
             };
+        }
+    }
+
+    class AuxiliaryProject extends Project {
+        constructor(projectService: ProjectService, documentRegistry: DocumentRegistry, compilerOptions: CompilerOptions) {
+            super(projectService.newAuxiliaryProjectName(),
+                ProjectKind.Auxiliary,
+                projectService,
+                documentRegistry,
+                /*hasExplicitListOfFiles*/ false,
+                /*lastFileExceededProgramSize*/ undefined,
+                compilerOptions,
+                /*compileOnSaveEnabled*/ false,
+                /*watchOptions*/ undefined,
+                projectService.host,
+                /*currentDirectory*/ undefined);
+        }
+
+        isOrphan(): boolean {
+            return true;
+        }
+
+        /*@internal*/
+        scheduleInvalidateResolutionsOfFailedLookupLocations(): void {
+            // Invalidation will happen on-demand as part of updateGraph
+            return;
         }
     }
 
@@ -2127,6 +2222,12 @@ namespace ts.server {
                 this.hostProject.clearCachedExportInfoMap();
             }
             return hasSameSetOfFiles;
+        }
+
+        /*@internal*/
+        scheduleInvalidateResolutionsOfFailedLookupLocations(): void {
+            // Invalidation will happen on-demand as part of updateGraph
+            return;
         }
 
         hasRoots() {

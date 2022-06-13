@@ -205,8 +205,7 @@
           "start": 14,
           "length": 10
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -214,8 +213,7 @@
           "length": 4
         },
         "fileName": "/tests/cases/fourslash/findAllRefsPrivateNameProperties.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -223,8 +221,7 @@
           "length": 4
         },
         "fileName": "/tests/cases/fourslash/findAllRefsPrivateNameProperties.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }
@@ -321,8 +318,7 @@
           "start": 14,
           "length": 10
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -330,8 +326,7 @@
           "length": 4
         },
         "fileName": "/tests/cases/fourslash/findAllRefsPrivateNameProperties.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -339,8 +334,7 @@
           "length": 4
         },
         "fileName": "/tests/cases/fourslash/findAllRefsPrivateNameProperties.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }
@@ -544,8 +538,7 @@
           "start": 201,
           "length": 13
         },
-        "isWriteAccess": false,
-        "isDefinition": true
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -553,8 +546,7 @@
           "length": 4
         },
         "fileName": "/tests/cases/fourslash/findAllRefsPrivateNameProperties.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       }
     ]
   }

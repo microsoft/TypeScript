@@ -815,8 +815,7 @@
           "start": 0,
           "length": 36
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -828,8 +827,7 @@
           "start": 37,
           "length": 36
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -841,8 +839,7 @@
           "start": 74,
           "length": 78
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -850,8 +847,7 @@
           "length": 7
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfInterfaceClassMerge.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -859,8 +855,7 @@
           "length": 7
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfInterfaceClassMerge.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }
@@ -939,8 +934,7 @@
           "start": 0,
           "length": 36
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -952,8 +946,7 @@
           "start": 37,
           "length": 36
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -965,8 +958,7 @@
           "start": 74,
           "length": 78
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -974,8 +966,7 @@
           "length": 7
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfInterfaceClassMerge.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -983,8 +974,7 @@
           "length": 7
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfInterfaceClassMerge.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }

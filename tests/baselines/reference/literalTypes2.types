@@ -756,7 +756,7 @@ function append<T>(a: T[], x: T): T[] {
 }
 
 type Bit = 0 | 1;
->Bit : Bit
+>Bit : 0 | 1
 
 let aa = makeArray<Bit>(0);
 >aa : Bit[]

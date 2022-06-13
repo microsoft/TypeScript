@@ -12,7 +12,7 @@ let [hello, brave, newish, world] = ["Hello", "Brave", "New", "World"];
 >"World" : "World"
 
 type RexOrRaptor = "t-rex" | "raptor"
->RexOrRaptor : RexOrRaptor
+>RexOrRaptor : "t-rex" | "raptor"
 
 let [im, a, dinosaur]: ["I'm", "a", RexOrRaptor] = ['I\'m', 'a', 't-rex'];
 >im : "I'm"

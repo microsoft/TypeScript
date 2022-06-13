@@ -68,8 +68,7 @@
           "length": 4
         },
         "fileName": "/tests/cases/fourslash/findAllRefsThisKeyword.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }
@@ -247,8 +246,7 @@
           "length": 4
         },
         "fileName": "/tests/cases/fourslash/findAllRefsThisKeyword.ts",
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -256,8 +254,7 @@
           "length": 4
         },
         "fileName": "/tests/cases/fourslash/findAllRefsThisKeyword.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }
@@ -435,8 +432,7 @@
           "length": 4
         },
         "fileName": "/tests/cases/fourslash/findAllRefsThisKeyword.ts",
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -444,8 +440,7 @@
           "length": 4
         },
         "fileName": "/tests/cases/fourslash/findAllRefsThisKeyword.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }
@@ -521,8 +516,7 @@
           "length": 4
         },
         "fileName": "/tests/cases/fourslash/findAllRefsThisKeyword.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -530,8 +524,7 @@
           "length": 4
         },
         "fileName": "/tests/cases/fourslash/findAllRefsThisKeyword.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }
@@ -607,8 +600,7 @@
           "length": 4
         },
         "fileName": "/tests/cases/fourslash/findAllRefsThisKeyword.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -616,8 +608,7 @@
           "length": 4
         },
         "fileName": "/tests/cases/fourslash/findAllRefsThisKeyword.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }
@@ -685,8 +676,7 @@
           "length": 4
         },
         "fileName": "/tests/cases/fourslash/findAllRefsThisKeyword.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -694,8 +684,7 @@
           "length": 4
         },
         "fileName": "/tests/cases/fourslash/findAllRefsThisKeyword.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }
@@ -763,8 +752,7 @@
           "length": 4
         },
         "fileName": "/tests/cases/fourslash/findAllRefsThisKeyword.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -772,8 +760,7 @@
           "length": 4
         },
         "fileName": "/tests/cases/fourslash/findAllRefsThisKeyword.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }
@@ -967,8 +954,7 @@
           "start": 341,
           "length": 7
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -976,8 +962,7 @@
           "length": 4
         },
         "fileName": "/tests/cases/fourslash/findAllRefsThisKeyword.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }

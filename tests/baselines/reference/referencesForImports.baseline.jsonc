@@ -267,8 +267,7 @@
           "start": 76,
           "length": 29
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -276,8 +275,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/referencesForImports.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }

@@ -33,8 +33,7 @@
           "start": 0,
           "length": 48
         },
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }

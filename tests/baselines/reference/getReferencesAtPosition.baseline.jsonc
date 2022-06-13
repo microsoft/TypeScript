@@ -333,8 +333,7 @@
           "start": 51,
           "length": 42
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -342,8 +341,7 @@
           "length": 5
         },
         "fileName": "/tests/cases/fourslash/shims/findAllRefsOnDefinition.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }
