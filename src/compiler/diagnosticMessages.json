@@ -5140,11 +5140,11 @@
         "category": "Error",
         "code": 6310
     },
-    "Project '{0}' is out of date because oldest output '{1}' is older than newest input '{2}'": {
+    "Project '{0}' is out of date because output '{1}' is older than input '{2}'": {
         "category": "Message",
         "code": 6350
     },
-    "Project '{0}' is up to date because newest input '{1}' is older than oldest output '{2}'": {
+    "Project '{0}' is up to date because newest input '{1}' is older than output '{2}'": {
         "category": "Message",
         "code": 6351
     },
@@ -5321,6 +5321,14 @@
     "Reusing resolution of type reference directive '{0}' from '{1}' found in cache from location '{2}', it was not resolved.": {
         "category": "Message",
         "code": 6398
+    },
+    "Project '{0}' is out of date because buildinfo file '{1}' indicates that some of the changes were not emitted": {
+        "category": "Message",
+        "code": 6399
+    },
+    "Project '{0}' is up to date but needs to update timestamps of output files that are older than input files": {
+        "category": "Message",
+        "code": 6400
     },
 
     "The expected type comes from property '{0}' which is declared here on type '{1}'": {

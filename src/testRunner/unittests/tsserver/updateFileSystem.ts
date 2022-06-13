@@ -114,8 +114,7 @@ ${file.fileContent}`;
                     assert.fail("The watcher for /host/b/app.ts should not be called at all. Called with " + relativeFileName);
                 },
                 directoryName: "/host/b",
-                fallbackOptions: {},
-                fallbackPollingInterval: PollingInterval.Medium,
+                inode: undefined,
             });
 
             const scenario = "updateFileSystem";

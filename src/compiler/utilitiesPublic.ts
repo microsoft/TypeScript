@@ -645,6 +645,18 @@ namespace ts {
         }
     }
 
+    export function getDecorators(node: HasDecorators): readonly Decorator[] | undefined {
+        if (hasDecorators(node)) {
+            return filter(node.modifiers, isDecorator);
+        }
+    }
+
+    export function getModifiers(node: HasModifiers): readonly Modifier[] | undefined {
+        if (hasSyntacticModifier(node, ModifierFlags.Modifier)) {
+            return filter(node.modifiers, isModifier);
+        }
+    }
+
     function getJSDocParameterTagsWorker(param: ParameterDeclaration, noCache?: boolean): readonly JSDocParameterTag[] {
         if (param.name) {
             if (isIdentifier(param.name)) {
@@ -930,6 +942,9 @@ namespace ts {
             return flatMap(node.parent.tags, tag => isJSDocTemplateTag(tag) ? tag.typeParameters : undefined);
         }
         if (node.typeParameters) {
+            return node.typeParameters;
+        }
+        if (canHaveIllegalTypeParameters(node) && node.typeParameters) {
             return node.typeParameters;
         }
         if (isInJSFile(node)) {
@@ -1341,6 +1356,10 @@ namespace ts {
     }
 
     // Type members
+
+    export function isModifierLike(node: Node): node is ModifierLike {
+        return isModifier(node) || isDecorator(node);
+    }
 
     export function isTypeElement(node: Node): node is TypeElement {
         const kind = node.kind;
@@ -1978,7 +1997,6 @@ namespace ts {
             case SyntaxKind.VariableDeclaration:
             case SyntaxKind.Parameter:
             case SyntaxKind.BindingElement:
-            case SyntaxKind.PropertySignature:
             case SyntaxKind.PropertyDeclaration:
             case SyntaxKind.PropertyAssignment:
             case SyntaxKind.EnumMember:

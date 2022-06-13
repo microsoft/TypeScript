@@ -58,22 +58,14 @@ namespace ts {
         return getPathFromPathComponents(commonPathComponents);
     }
 
-    interface OutputFingerprint {
-        hash: string;
-        byteOrderMark: boolean;
-        mtime: Date;
-    }
-
     export function createCompilerHost(options: CompilerOptions, setParentNodes?: boolean): CompilerHost {
         return createCompilerHostWorker(options, setParentNodes);
     }
 
     /*@internal*/
-    // TODO(shkamat): update this after reworking ts build API
     export function createCompilerHostWorker(options: CompilerOptions, setParentNodes?: boolean, system = sys): CompilerHost {
         const existingDirectories = new Map<string, boolean>();
         const getCanonicalFileName = createGetCanonicalFileName(system.useCaseSensitiveFileNames);
-        const computeHash = maybeBind(system, system.createHash) || generateDjb2Hash;
         function getSourceFile(fileName: string, languageVersionOrOptions: ScriptTarget | CreateSourceFileOptions, onError?: (message: string) => void): SourceFile | undefined {
             let text: string | undefined;
             try {
@@ -113,7 +105,7 @@ namespace ts {
                     fileName,
                     data,
                     writeByteOrderMark,
-                    (path, data, writeByteOrderMark) => writeFileWorker(path, data, writeByteOrderMark),
+                    (path, data, writeByteOrderMark) => system.writeFile(path, data, writeByteOrderMark),
                     path => (compilerHost.createDirectory || system.createDirectory)(path),
                     path => directoryExists(path));
 
@@ -125,42 +117,6 @@ namespace ts {
                     onError(e.message);
                 }
             }
-        }
-
-        let outputFingerprints: ESMap<string, OutputFingerprint>;
-        function writeFileWorker(fileName: string, data: string, writeByteOrderMark: boolean) {
-            if (!isWatchSet(options) || !system.getModifiedTime) {
-                system.writeFile(fileName, data, writeByteOrderMark);
-                return;
-            }
-
-            if (!outputFingerprints) {
-                outputFingerprints = new Map<string, OutputFingerprint>();
-            }
-
-            const hash = computeHash(data);
-            const mtimeBefore = system.getModifiedTime(fileName);
-
-            if (mtimeBefore) {
-                const fingerprint = outputFingerprints.get(fileName);
-                // If output has not been changed, and the file has no external modification
-                if (fingerprint &&
-                    fingerprint.byteOrderMark === writeByteOrderMark &&
-                    fingerprint.hash === hash &&
-                    fingerprint.mtime.getTime() === mtimeBefore.getTime()) {
-                    return;
-                }
-            }
-
-            system.writeFile(fileName, data, writeByteOrderMark);
-
-            const mtimeAfter = system.getModifiedTime(fileName) || missingFileModifiedTime;
-
-            outputFingerprints.set(fileName, {
-                hash,
-                byteOrderMark: writeByteOrderMark,
-                mtime: mtimeAfter
-            });
         }
 
         function getDefaultLibLocation(): string {
@@ -1973,6 +1929,7 @@ namespace ts {
                 getSourceFileFromReference: (file, ref) => program.getSourceFileFromReference(file, ref),
                 redirectTargetsMap,
                 getFileIncludeReasons: program.getFileIncludeReasons,
+                createHash: maybeBind(host, host.createHash),
             };
         }
 
@@ -2402,7 +2359,7 @@ namespace ts {
                 }
 
                 function walkArray(nodes: NodeArray<Node>, parent: Node) {
-                    if (parent.decorators === nodes && !options.experimentalDecorators) {
+                    if (canHaveModifiers(parent) && parent.modifiers === nodes && some(nodes, isDecorator) && !options.experimentalDecorators) {
                         diagnostics.push(createDiagnosticForNode(parent, Diagnostics.Experimental_support_for_decorators_is_a_feature_that_is_subject_to_change_in_a_future_release_Set_the_experimentalDecorators_option_in_your_tsconfig_or_jsconfig_to_remove_this_warning));
                     }
 
@@ -2425,16 +2382,16 @@ namespace ts {
 
                         case SyntaxKind.VariableStatement:
                             // Check modifiers
-                            if (nodes === parent.modifiers) {
-                                checkModifiers(parent.modifiers, parent.kind === SyntaxKind.VariableStatement);
+                            if (nodes === (parent as VariableStatement).modifiers) {
+                                checkModifiers((parent as VariableStatement).modifiers!, parent.kind === SyntaxKind.VariableStatement);
                                 return "skip";
                             }
                             break;
                         case SyntaxKind.PropertyDeclaration:
                             // Check modifiers of property declaration
                             if (nodes === (parent as PropertyDeclaration).modifiers) {
-                                for (const modifier of nodes as NodeArray<Modifier>) {
-                                    if (modifier.kind !== SyntaxKind.StaticKeyword) {
+                                for (const modifier of nodes as NodeArray<ModifierLike>) {
+                                    if (isModifier(modifier) && modifier.kind !== SyntaxKind.StaticKeyword) {
                                         diagnostics.push(createDiagnosticForNode(modifier, Diagnostics.The_0_modifier_can_only_be_used_in_TypeScript_files, tokenToString(modifier.kind)));
                                     }
                                 }
@@ -2443,7 +2400,7 @@ namespace ts {
                             break;
                         case SyntaxKind.Parameter:
                             // Check modifiers of parameter declaration
-                            if (nodes === (parent as ParameterDeclaration).modifiers) {
+                            if (nodes === (parent as ParameterDeclaration).modifiers && some(nodes, isModifier)) {
                                 diagnostics.push(createDiagnosticForNodeArray(nodes, Diagnostics.Parameter_modifiers_can_only_be_used_in_TypeScript_files));
                                 return "skip";
                             }
@@ -2463,7 +2420,7 @@ namespace ts {
                     }
                 }
 
-                function checkModifiers(modifiers: NodeArray<Modifier>, isConstValid: boolean) {
+                function checkModifiers(modifiers: NodeArray<ModifierLike>, isConstValid: boolean) {
                     for (const modifier of modifiers) {
                         switch (modifier.kind) {
                             case SyntaxKind.ConstKeyword:
@@ -2585,7 +2542,7 @@ namespace ts {
 
         function createSyntheticImport(text: string, file: SourceFile) {
             const externalHelpersModuleReference = factory.createStringLiteral(text);
-            const importDecl = factory.createImportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, /*importClause*/ undefined, externalHelpersModuleReference, /*assertClause*/ undefined);
+            const importDecl = factory.createImportDeclaration(/*modifiers*/ undefined, /*importClause*/ undefined, externalHelpersModuleReference, /*assertClause*/ undefined);
             addEmitFlags(importDecl, EmitFlags.NeverApplyImportHelper);
             setParent(externalHelpersModuleReference, importDecl);
             setParent(importDecl, file);

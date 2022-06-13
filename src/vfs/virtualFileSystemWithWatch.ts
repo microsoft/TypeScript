@@ -26,6 +26,9 @@ namespace ts.VirtualFS {
     }
 
     export type FileOrFolderOrSymLink = File | Folder | SymLink;
+    export interface FileOrFolderOrSymLinkMap {
+        [path: string]: string | Omit<FileOrFolderOrSymLink, "path">;
+    }
     export function isFile(fileOrFolderOrSymLink: FileOrFolderOrSymLink): fileOrFolderOrSymLink is File {
         return isString((fileOrFolderOrSymLink as File).content);
     }
@@ -92,17 +95,22 @@ namespace ts.VirtualFS {
     export interface VirtualFsWatcher {
         cb: FsWatchCallback;
         directoryName: string;
-        fallbackPollingInterval: PollingInterval;
-        fallbackOptions: WatchOptions | undefined;
+        inode: number | undefined;
     }
 
-    export interface ReloadWatchInvokeOptions {
+    export interface WatchInvokeOptions {
         /** Invokes the directory watcher for the parent instead of the file changed */
         invokeDirectoryWatcherInsteadOfFileChanged: boolean;
         /** When new file is created, do not invoke watches for it */
         ignoreWatchInvokedWithTriggerAsFileCreate: boolean;
         /** Invoke the file delete, followed by create instead of file changed */
         invokeFileDeleteCreateAsPartInsteadOfChange: boolean;
+        /** Dont invoke delete watches */
+        ignoreDelete: boolean;
+        /** Skip inode check on file or folder create*/
+        skipInodeCheckOnCreate: boolean;
+        /** When invoking rename event on fs watch, send event with file name suffixed with tilde */
+        useTildeAsSuffixInRenameEventFileName: boolean;
     }
 
     export enum Tsc_WatchFile {
@@ -140,12 +148,13 @@ namespace ts.VirtualFS {
         public storeFilesChangingSignatureDuringEmit = true;
         watchFile!: HostWatchFile;
         watchDirectory!: HostWatchDirectory;
+        protected inodeWatching: boolean | undefined;
 
         constructor({
             useCaseSensitiveFileNames, executingFilePath, currentDirectory,
             newLine, windowsStyleRoot
         }: VirtualServerHostCreationParameters,
-                    testOptions?: { environmentVariables?: ESMap<string, string>; runWithoutRecursiveWatches?: boolean; },
+                    testOptions?: { environmentVariables?: ESMap<string, string>; runWithoutRecursiveWatches?: boolean; inodeWatching?: boolean },
                     defaultWatchFileKind?: (() => WatchFileKind | undefined)) {
             this.useCaseSensitiveFileNames = !!useCaseSensitiveFileNames;
             this.newLine = newLine || "\n";
@@ -155,7 +164,7 @@ namespace ts.VirtualFS {
             this.toPath = s => toPath(s, currentDirectory, this.getCanonicalFileName);
             this.executingFilePath = this.getHostSpecificPath(executingFilePath);
             this.currentDirectory = this.getHostSpecificPath(currentDirectory);
-            const { environmentVariables, runWithoutRecursiveWatches } = testOptions || {};
+            const { environmentVariables, runWithoutRecursiveWatches, inodeWatching } = testOptions || {};
             const tscWatchFile = environmentVariables && environmentVariables.get("TSC_WATCHFILE");
             const tscWatchDirectory = environmentVariables && environmentVariables.get("TSC_WATCHDIRECTORY");
             const { watchFile, watchDirectory } = createSystemWatchFunctions({
@@ -171,17 +180,18 @@ namespace ts.VirtualFS {
                 getModifiedTime: this.getModifiedTime.bind(this),
                 setTimeout: this.setTimeout.bind(this),
                 clearTimeout: this.clearTimeout.bind(this),
-                fsWatch: this.fsWatch.bind(this),
-                fileExists: this.fileExists.bind(this),
+                fsWatchWorker: this.fsWatchWorker.bind(this),
+                fileSystemEntryExists: this.fileSystemEntryExists.bind(this),
                 useCaseSensitiveFileNames: this.useCaseSensitiveFileNames,
                 getCurrentDirectory: this.getCurrentDirectory.bind(this),
                 fsSupportsRecursiveFsWatch: tscWatchDirectory ? false : !runWithoutRecursiveWatches,
-                directoryExists: this.directoryExists.bind(this),
                 getAccessibleSortedChildDirectories: path => this.getDirectories(path),
                 realpath: this.realpath.bind(this),
                 defaultWatchFileKind: defaultWatchFileKind ?? (() => undefined),
                 tscWatchFile,
                 tscWatchDirectory,
+                inodeWatching: !!inodeWatching,
+                sysLog: s => this.write(s + this.newLine),
             });
             this.watchFile = watchFile;
             this.watchDirectory = watchDirectory;
@@ -210,7 +220,7 @@ namespace ts.VirtualFS {
             return new Date();
         }
 
-        modifyFile(filePath: string, content: string, options?: Partial<ReloadWatchInvokeOptions>) {
+        modifyFile(filePath: string, content: string, options?: Partial<WatchInvokeOptions>) {
             const path = this.toFullPath(filePath);
             const currentEntry = this.fs.get(path);
             if (!currentEntry || !isFsFile(currentEntry)) {
@@ -218,8 +228,8 @@ namespace ts.VirtualFS {
             }
 
             if (options && options.invokeFileDeleteCreateAsPartInsteadOfChange) {
-                this.removeFileOrFolder(currentEntry, /*isRemoveableLeafFolder*/ false);
-                this.ensureFileOrFolder({ path: filePath, content });
+                this.removeFileOrFolder(currentEntry, /*isRenaming*/ false, options);
+                this.ensureFileOrFolder({ path: filePath, content }, /*ignoreWatchInvokedWithTriggerAsFileCreate*/ undefined, /*ignoreParentWatch*/ undefined, options);
             }
             else {
                 currentEntry.content = content;
@@ -227,17 +237,17 @@ namespace ts.VirtualFS {
                 this.fs.get(getDirectoryPath(currentEntry.path))!.modifiedTime = this.now();
                 if (options && options.invokeDirectoryWatcherInsteadOfFileChanged) {
                     const directoryFullPath = getDirectoryPath(currentEntry.fullPath);
-                    this.invokeFileWatcher(directoryFullPath, FileWatcherEventKind.Changed, /*useFileNameInCallback*/ true);
-                    this.invokeFsWatchesCallbacks(directoryFullPath, "rename", currentEntry.fullPath);
-                    this.invokeRecursiveFsWatches(directoryFullPath, "rename", currentEntry.fullPath);
+                    this.invokeFileWatcher(directoryFullPath, FileWatcherEventKind.Changed, currentEntry.modifiedTime, /*useFileNameInCallback*/ true);
+                    this.invokeFsWatchesCallbacks(directoryFullPath, "rename", currentEntry.modifiedTime, currentEntry.fullPath, options.useTildeAsSuffixInRenameEventFileName);
+                    this.invokeRecursiveFsWatches(directoryFullPath, "rename", currentEntry.modifiedTime, currentEntry.fullPath, options.useTildeAsSuffixInRenameEventFileName);
                 }
                 else {
-                    this.invokeFileAndFsWatches(currentEntry.fullPath, FileWatcherEventKind.Changed);
+                    this.invokeFileAndFsWatches(currentEntry.fullPath, FileWatcherEventKind.Changed, currentEntry.modifiedTime, options?.useTildeAsSuffixInRenameEventFileName);
                 }
             }
         }
 
-        ensureFileOrFolder(fileOrDirectoryOrSymLink: FileOrFolderOrSymLink, ignoreWatchInvokedWithTriggerAsFileCreate?: boolean, ignoreParentWatch?: boolean) {
+        ensureFileOrFolder(fileOrDirectoryOrSymLink: FileOrFolderOrSymLink, ignoreWatchInvokedWithTriggerAsFileCreate?: boolean, ignoreParentWatch?: boolean, options?: Partial<WatchInvokeOptions>) {
             if (isFile(fileOrDirectoryOrSymLink)) {
                 const file = this.toFsFile(fileOrDirectoryOrSymLink);
                 // file may already exist when updating existing type declaration file
@@ -245,24 +255,28 @@ namespace ts.VirtualFS {
                     this.modifyFile(file.path, file.content);
                 }
                 else {
-                    const baseFolder = this.ensureFolder(getDirectoryPath(file.fullPath), ignoreParentWatch);
-                    this.addFileOrFolderInFolder(baseFolder, file, ignoreWatchInvokedWithTriggerAsFileCreate);
+                    const baseFolder = this.ensureFolder(getDirectoryPath(file.fullPath), ignoreParentWatch, options);
+                    this.addFileOrFolderInFolder(baseFolder, file, ignoreWatchInvokedWithTriggerAsFileCreate, options);
                 }
             }
             else if (isSymLink(fileOrDirectoryOrSymLink)) {
                 const symLink = this.toFsSymLink(fileOrDirectoryOrSymLink);
                 Debug.assert(!this.fs.get(symLink.path));
-                const baseFolder = this.ensureFolder(getDirectoryPath(symLink.fullPath), ignoreParentWatch);
-                this.addFileOrFolderInFolder(baseFolder, symLink, ignoreWatchInvokedWithTriggerAsFileCreate);
+                const baseFolder = this.ensureFolder(getDirectoryPath(symLink.fullPath), ignoreParentWatch, options);
+                this.addFileOrFolderInFolder(baseFolder, symLink, ignoreWatchInvokedWithTriggerAsFileCreate, options);
             }
             else {
                 const fullPath = getNormalizedAbsolutePath(fileOrDirectoryOrSymLink.path, this.currentDirectory);
-                this.ensureFolder(getDirectoryPath(fullPath), ignoreParentWatch);
-                this.ensureFolder(fullPath, ignoreWatchInvokedWithTriggerAsFileCreate);
+                this.ensureFolder(getDirectoryPath(fullPath), ignoreParentWatch, options);
+                this.ensureFolder(fullPath, ignoreWatchInvokedWithTriggerAsFileCreate, options);
             }
         }
 
-        private ensureFolder(fullPath: string, ignoreWatch: boolean | undefined): FsFolder {
+        protected setInode(_path: Path) { }
+        getInode(_path: Path): number | undefined { return undefined; }
+        protected deleteInode(_path: Path) { }
+
+        private ensureFolder(fullPath: string, ignoreWatch: boolean | undefined, options: Partial<WatchInvokeOptions> | undefined): FsFolder {
             const path = this.toPath(fullPath);
             let folder = this.fs.get(path) as FsFolder;
             if (!folder) {
@@ -270,34 +284,39 @@ namespace ts.VirtualFS {
                 const baseFullPath = getDirectoryPath(fullPath);
                 if (fullPath !== baseFullPath) {
                     // Add folder in the base folder
-                    const baseFolder = this.ensureFolder(baseFullPath, ignoreWatch);
-                    this.addFileOrFolderInFolder(baseFolder, folder, ignoreWatch);
+                    const baseFolder = this.ensureFolder(baseFullPath, ignoreWatch, options);
+                    this.addFileOrFolderInFolder(baseFolder, folder, ignoreWatch, options);
                 }
                 else {
                     // root folder
                     Debug.assert(this.fs.size === 0 || !!this.windowsStyleRoot);
                     this.fs.set(path, folder);
+                    this.setInode(path); // TODO: Only in derived~~~probably need to make this polymorphic version with empty base impl
                 }
             }
             Debug.assert(isFsFolder(folder));
             return folder;
         }
 
-        protected addFileOrFolderInFolder(folder: FsFolder, fileOrDirectory: FsFile | FsFolder | FsSymLink, ignoreWatch?: boolean) {
+        protected addFileOrFolderInFolder(folder: FsFolder, fileOrDirectory: FsFile | FsFolder | FsSymLink, ignoreWatch?: boolean, options?: Partial<WatchInvokeOptions>) {
             if (!this.fs.has(fileOrDirectory.path)) {
                 insertSorted(folder.entries, fileOrDirectory, (a, b) => compareStringsCaseSensitive(getBaseFileName(a.path), getBaseFileName(b.path)));
             }
             folder.modifiedTime = this.now();
             this.fs.set(fileOrDirectory.path, fileOrDirectory);
+            this.setInode(fileOrDirectory.path);
 
             if (ignoreWatch) {
                 return;
             }
-            this.invokeFileAndFsWatches(fileOrDirectory.fullPath, FileWatcherEventKind.Created);
-            this.invokeFileAndFsWatches(folder.fullPath, FileWatcherEventKind.Changed);
+            const inodeWatching = this.inodeWatching; // x_x
+            if (options?.skipInodeCheckOnCreate) this.inodeWatching = false;
+            this.invokeFileAndFsWatches(fileOrDirectory.fullPath, FileWatcherEventKind.Created, fileOrDirectory.modifiedTime, options?.useTildeAsSuffixInRenameEventFileName);
+            this.invokeFileAndFsWatches(folder.fullPath, FileWatcherEventKind.Changed, folder.modifiedTime, options?.useTildeAsSuffixInRenameEventFileName);
+            this.inodeWatching = inodeWatching;
         }
 
-        protected removeFileOrFolder(fileOrDirectory: FsFile | FsFolder | FsSymLink, isRemovableLeafFolder: boolean, isRenaming = false) {
+        protected removeFileOrFolder(fileOrDirectory: FsFile | FsFolder | FsSymLink, isRenaming?: boolean, options?: Partial<WatchInvokeOptions>) {
             const basePath = getDirectoryPath(fileOrDirectory.path);
             const baseFolder = this.fs.get(basePath) as FsFolder;
             if (basePath !== fileOrDirectory.path) {
@@ -310,20 +329,17 @@ namespace ts.VirtualFS {
             if (isFsFolder(fileOrDirectory)) {
                 Debug.assert(fileOrDirectory.entries.length === 0 || isRenaming);
             }
-            this.invokeFileAndFsWatches(fileOrDirectory.fullPath, FileWatcherEventKind.Deleted);
-            this.invokeFileAndFsWatches(baseFolder.fullPath, FileWatcherEventKind.Changed);
-            if (basePath !== fileOrDirectory.path &&
-                baseFolder.entries.length === 0 &&
-                isRemovableLeafFolder) {
-                this.removeFileOrFolder(baseFolder, isRemovableLeafFolder);
-            }
+            if (!options?.ignoreDelete) this.invokeFileAndFsWatches(fileOrDirectory.fullPath, FileWatcherEventKind.Deleted, /*modifiedTime*/ undefined, options?.useTildeAsSuffixInRenameEventFileName);
+            this.deleteInode(fileOrDirectory.path);
+            if (!options?.ignoreDelete) this.invokeFileAndFsWatches(baseFolder.fullPath, FileWatcherEventKind.Changed, baseFolder.modifiedTime, options?.useTildeAsSuffixInRenameEventFileName);
         }
 
-        deleteFile(filePath: string, deleteEmptyParentFolders = false) {
+        // TODO: Need to restore the deleteEmptyParentFolders capability for updateFileSystem in editorServices
+        deleteFile(filePath: string/*, deleteEmptyParentFolders = false*/) {
             const path = this.toFullPath(filePath);
             const currentEntry = this.fs.get(path) as FsFile;
             Debug.assert(isFsFile(currentEntry));
-            this.removeFileOrFolder(currentEntry, deleteEmptyParentFolders);
+            this.removeFileOrFolder(currentEntry);
         }
 
         protected watchFileWorker(fileName: string, cb: FileWatcherCallback, pollingInterval: PollingInterval) {
@@ -334,62 +350,65 @@ namespace ts.VirtualFS {
             );
         }
 
-        protected fsWatch(
+        protected fsWatchWorker(
             fileOrDirectory: string,
-            _entryKind: FileSystemEntryKind,
-            cb: FsWatchCallback,
             recursive: boolean,
-            fallbackPollingInterval: PollingInterval,
-            fallbackOptions: WatchOptions | undefined): FileWatcher {
+            cb: FsWatchCallback): FileWatcher {
             return createWatcher(
                 recursive ? this.fsWatchesRecursive : this.fsWatches,
                 this.toFullPath(fileOrDirectory),
                 {
                     directoryName: fileOrDirectory,
                     cb,
-                    fallbackPollingInterval,
-                    fallbackOptions
+                    inode: undefined,
                 }
             );
         }
 
-        invokeFileWatcher(fileFullPath: string, eventKind: FileWatcherEventKind, useFileNameInCallback?: boolean) {
-            invokeWatcherCallbacks(this.watchedFiles.get(this.toPath(fileFullPath)), ({ cb, fileName }) => cb(useFileNameInCallback ? fileName : fileFullPath, eventKind));
+        invokeFileWatcher(fileFullPath: string, eventKind: FileWatcherEventKind, modifiedTime?: Date, useFileNameInCallback?: boolean) {
+            invokeWatcherCallbacks(this.watchedFiles.get(this.toPath(fileFullPath)), ({ cb, fileName }) => cb(useFileNameInCallback ? fileName : fileFullPath, eventKind, modifiedTime));
         }
 
-        private fsWatchCallback(map: MultiMap<Path, VirtualFsWatcher>, fullPath: string, eventName: "rename" | "change", entryFullPath?: string) {
-            invokeWatcherCallbacks(map.get(this.toPath(fullPath)), ({ cb }) => cb(eventName, entryFullPath ? this.getRelativePathToDirectory(fullPath, entryFullPath) : ""));
+        private fsWatchCallback(map: MultiMap<Path, VirtualFsWatcher>, fullPath: string, eventName: "rename" | "change", modifiedTime: Date | undefined, entryFullPath: string | undefined, useTildeSuffix: boolean | undefined) {
+            const path = this.toPath(fullPath);
+            const currentInode = this.getInode(path);
+            invokeWatcherCallbacks(map.get(path), ({ cb, inode }) => {
+                if (this.inodeWatching && inode !== undefined && inode !== currentInode) return;
+                let relativeFileName = (entryFullPath ? this.getRelativePathToDirectory(fullPath, entryFullPath) : "");
+                if (useTildeSuffix) relativeFileName = (relativeFileName ? relativeFileName : getBaseFileName(fullPath)) + "~";
+                cb(eventName, relativeFileName, modifiedTime);
+            });
         }
 
-        invokeFsWatchesCallbacks(fullPath: string, eventName: "rename" | "change", entryFullPath?: string) {
-            this.fsWatchCallback(this.fsWatches, fullPath, eventName, entryFullPath);
+        invokeFsWatchesCallbacks(fullPath: string, eventName: "rename" | "change", modifiedTime?: Date, entryFullPath?: string, useTildeSuffix?: boolean) {
+            this.fsWatchCallback(this.fsWatches, fullPath, eventName, modifiedTime, entryFullPath, useTildeSuffix);
         }
 
-        invokeFsWatchesRecursiveCallbacks(fullPath: string, eventName: "rename" | "change", entryFullPath?: string) {
-            this.fsWatchCallback(this.fsWatchesRecursive, fullPath, eventName, entryFullPath);
+        invokeFsWatchesRecursiveCallbacks(fullPath: string, eventName: "rename" | "change", modifiedTime?: Date, entryFullPath?: string, useTildeSuffix?: boolean) {
+            this.fsWatchCallback(this.fsWatchesRecursive, fullPath, eventName, modifiedTime, entryFullPath, useTildeSuffix);
         }
 
         private getRelativePathToDirectory(directoryFullPath: string, fileFullPath: string) {
             return getRelativePathToDirectoryOrUrl(directoryFullPath, fileFullPath, this.currentDirectory, this.getCanonicalFileName, /*isAbsolutePathAnUrl*/ false);
         }
 
-        private invokeRecursiveFsWatches(fullPath: string, eventName: "rename" | "change", entryFullPath?: string) {
-            this.invokeFsWatchesRecursiveCallbacks(fullPath, eventName, entryFullPath);
+        private invokeRecursiveFsWatches(fullPath: string, eventName: "rename" | "change", modifiedTime?: Date, entryFullPath?: string, useTildeSuffix?: boolean) {
+            this.invokeFsWatchesRecursiveCallbacks(fullPath, eventName, modifiedTime, entryFullPath, useTildeSuffix);
             const basePath = getDirectoryPath(fullPath);
             if (this.getCanonicalFileName(fullPath) !== this.getCanonicalFileName(basePath)) {
-                this.invokeRecursiveFsWatches(basePath, eventName, entryFullPath || fullPath);
+                this.invokeRecursiveFsWatches(basePath, eventName, modifiedTime, entryFullPath || fullPath, useTildeSuffix);
             }
         }
 
-        protected invokeFsWatches(fullPath: string, eventName: "rename" | "change") {
-            this.invokeFsWatchesCallbacks(fullPath, eventName);
-            this.invokeFsWatchesCallbacks(getDirectoryPath(fullPath), eventName, fullPath);
-            this.invokeRecursiveFsWatches(fullPath, eventName);
+        protected invokeFsWatches(fullPath: string, eventName: "rename" | "change", modifiedTime: Date | undefined, useTildeSuffix: boolean | undefined) {
+            this.invokeFsWatchesCallbacks(fullPath, eventName, modifiedTime, fullPath, useTildeSuffix);
+            this.invokeFsWatchesCallbacks(getDirectoryPath(fullPath), eventName, modifiedTime, fullPath, useTildeSuffix);
+            this.invokeRecursiveFsWatches(fullPath, eventName, modifiedTime, /*entryFullPath*/ undefined, useTildeSuffix);
         }
 
-        protected invokeFileAndFsWatches(fileOrFolderFullPath: string, eventKind: FileWatcherEventKind) {
-            this.invokeFileWatcher(fileOrFolderFullPath, eventKind);
-            this.invokeFsWatches(fileOrFolderFullPath, eventKind === FileWatcherEventKind.Changed ? "change" : "rename");
+        protected invokeFileAndFsWatches(fileOrFolderFullPath: string, eventKind: FileWatcherEventKind, modifiedTime?: Date, useTildeSuffix?: boolean) {
+            this.invokeFileWatcher(fileOrFolderFullPath, eventKind, modifiedTime);
+            this.invokeFsWatches(fileOrFolderFullPath, eventKind === FileWatcherEventKind.Changed ? "change" : "rename", modifiedTime, useTildeSuffix);
         }
 
         private toFsEntry(path: string): FSEntryBase {
@@ -458,6 +477,10 @@ namespace ts.VirtualFS {
             return this.getRealFsEntry(isFsFolder, path, fsEntry);
         }
 
+        fileSystemEntryExists(s: string, entryKind: FileSystemEntryKind) {
+            return entryKind === FileSystemEntryKind.File ? this.fileExists(s) : this.directoryExists(s);
+        }
+
         fileExists(s: string) {
             const path = this.toFullPath(s);
             return !!this.getRealFile(path);
@@ -474,7 +497,7 @@ namespace ts.VirtualFS {
             const fsEntry = this.fs.get(path);
             if (fsEntry) {
                 fsEntry.modifiedTime = date;
-                this.invokeFileAndFsWatches(fsEntry.fullPath, FileWatcherEventKind.Changed);
+                this.invokeFileAndFsWatches(fsEntry.fullPath, FileWatcherEventKind.Changed, fsEntry.modifiedTime);
             }
         }
 
@@ -547,14 +570,14 @@ namespace ts.VirtualFS {
             throw new Error("clearImmediate Not implemented in virtual filesystem host.");
         }
 
-        createDirectory(directoryName: string, recursive?: boolean): void {
+        createDirectory(directoryName: string, recursive?: boolean, options?: Partial<WatchInvokeOptions>): void {
             const folder = this.toFsFolder(directoryName);
 
             const base = getDirectoryPath(folder.path);
             if (recursive && base !== directoryName && !this.getRealFolder(base)) {
                 if (base === "/") {
                     // create / if not present, then continue
-                    this.ensureFolder("/", /*ignoreWatch*/ false);
+                    this.ensureFolder("/", /*ignoreWatch*/ false, options);
                 }
                 else {
                     this.createDirectory(base, recursive);

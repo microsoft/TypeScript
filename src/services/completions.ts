@@ -184,8 +184,8 @@ namespace ts.Completions {
     function resolvingModuleSpecifiers<TReturn>(
         logPrefix: string,
         host: LanguageServiceHost,
+        resolver: codefix.ImportSpecifierResolver,
         program: Program,
-        sourceFile: SourceFile,
         position: number,
         preferences: UserPreferences,
         isForImportStatementCompletion: boolean,
@@ -193,7 +193,6 @@ namespace ts.Completions {
         cb: (context: ModuleSpecifierResolutioContext) => TReturn,
     ): TReturn {
         const start = timestamp();
-        const packageJsonImportFilter = createPackageJsonImportFilter(sourceFile, preferences, host);
         // Under `--moduleResolution nodenext`, we have to resolve module specifiers up front, because
         // package.json exports can mean we *can't* resolve a module specifier (that doesn't include a
         // relative path into node_modules), and we want to filter those completions out entirely.
@@ -221,7 +220,7 @@ namespace ts.Completions {
 
         function tryResolve(exportInfo: readonly SymbolExportInfo[], symbolName: string, isFromAmbientModule: boolean): ModuleSpecifierResolutionResult {
             if (isFromAmbientModule) {
-                const result = codefix.getModuleSpecifierForBestExportInfo(exportInfo, symbolName, position, isValidTypeOnlyUseSite, sourceFile, program, host, preferences);
+                const result = resolver.getModuleSpecifierForBestExportInfo(exportInfo, symbolName, position, isValidTypeOnlyUseSite);
                 if (result) {
                     ambientCount++;
                 }
@@ -230,7 +229,7 @@ namespace ts.Completions {
             const shouldResolveModuleSpecifier = needsFullResolution || preferences.allowIncompleteCompletions && resolvedCount < moduleSpecifierResolutionLimit;
             const shouldGetModuleSpecifierFromCache = !shouldResolveModuleSpecifier && preferences.allowIncompleteCompletions && cacheAttemptCount < moduleSpecifierResolutionCacheAttemptLimit;
             const result = (shouldResolveModuleSpecifier || shouldGetModuleSpecifierFromCache)
-                ? codefix.getModuleSpecifierForBestExportInfo(exportInfo, symbolName, position, isValidTypeOnlyUseSite, sourceFile, program, host, preferences, packageJsonImportFilter, shouldGetModuleSpecifierFromCache)
+                ? resolver.getModuleSpecifierForBestExportInfo(exportInfo, symbolName, position, isValidTypeOnlyUseSite, shouldGetModuleSpecifierFromCache)
                 : undefined;
 
             if (!shouldResolveModuleSpecifier && !shouldGetModuleSpecifierFromCache || shouldGetModuleSpecifierFromCache && !result) {
@@ -371,8 +370,8 @@ namespace ts.Completions {
         const newEntries = resolvingModuleSpecifiers(
             "continuePreviousIncompleteResponse",
             host,
+            codefix.createImportSpecifierResolver(file, program, host, preferences),
             program,
-            file,
             location.getStart(),
             preferences,
             /*isForImportStatementCompletion*/ false,
@@ -1065,7 +1064,7 @@ namespace ts.Completions {
             span = createTextSpanFromNode(contextToken);
         }
         if (isPropertyDeclaration(contextToken.parent)) {
-            modifiers |= modifiersToFlags(contextToken.parent.modifiers);
+            modifiers |= modifiersToFlags(contextToken.parent.modifiers) & ModifierFlags.Modifier;
             span = createTextSpanFromNode(contextToken.parent);
         }
         return { modifiers, span };
@@ -1195,7 +1194,6 @@ namespace ts.Completions {
 
                 const parameters = typeNode.parameters.map(typedParam =>
                     factory.createParameterDeclaration(
-                        /*decorators*/ undefined,
                         /*modifiers*/ undefined,
                         typedParam.dotDotDotToken,
                         typedParam.name,
@@ -1204,7 +1202,6 @@ namespace ts.Completions {
                         typedParam.initializer,
                     ));
                 return factory.createMethodDeclaration(
-                    /*decorators*/ undefined,
                     /*modifiers*/ undefined,
                     /*asteriskToken*/ undefined,
                     name,
@@ -2206,6 +2203,7 @@ namespace ts.Completions {
         let hasUnresolvedAutoImports = false;
         // This also gets mutated in nested-functions after the return
         let symbols: Symbol[] = [];
+        let importSpecifierResolver: codefix.ImportSpecifierResolver | undefined;
         const symbolToOriginInfoMap: SymbolOriginInfoMap = [];
         const symbolToSortTextMap: SymbolSortTextMap = [];
         const seenPropertySymbols = new Map<SymbolId, true>();
@@ -2448,14 +2446,14 @@ namespace ts.Completions {
                     }
                     else {
                         const fileName = isExternalModuleNameRelative(stripQuotes(moduleSymbol.name)) ? getSourceFileOfModule(moduleSymbol)?.fileName : undefined;
-                        const { moduleSpecifier } = codefix.getModuleSpecifierForBestExportInfo([{
+                        const { moduleSpecifier } = (importSpecifierResolver ||= codefix.createImportSpecifierResolver(sourceFile, program, host, preferences)).getModuleSpecifierForBestExportInfo([{
                             exportKind: ExportKind.Named,
                             moduleFileName: fileName,
                             isFromPackageJson: false,
                             moduleSymbol,
                             symbol: firstAccessibleSymbol,
                             targetFlags: skipAlias(firstAccessibleSymbol, typeChecker).flags,
-                        }], firstAccessibleSymbol.name, position, isValidTypeOnlyAliasUseSite(location), sourceFile, program, host, preferences) || {};
+                        }], firstAccessibleSymbol.name, position, isValidTypeOnlyAliasUseSite(location)) || {};
 
                         if (moduleSpecifier) {
                             const origin: SymbolOriginInfoResolvedExport = {
@@ -2733,8 +2731,8 @@ namespace ts.Completions {
             resolvingModuleSpecifiers(
                 "collectAutoImports",
                 host,
+                importSpecifierResolver ||= codefix.createImportSpecifierResolver(sourceFile, program, host, preferences),
                 program,
-                sourceFile,
                 position,
                 preferences,
                 !!importCompletionNode,

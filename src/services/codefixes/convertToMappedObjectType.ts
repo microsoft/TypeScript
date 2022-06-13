@@ -35,7 +35,7 @@ namespace ts.codefix {
     }
 
     function createTypeAliasFromInterface(declaration: FixableDeclaration, type: TypeNode): TypeAliasDeclaration {
-        return factory.createTypeAliasDeclaration(declaration.decorators, declaration.modifiers, declaration.name, declaration.typeParameters, type);
+        return factory.createTypeAliasDeclaration(declaration.modifiers, declaration.name, declaration.typeParameters, type);
     }
 
     function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, { indexSignature, container }: Info): void {

@@ -16,7 +16,8 @@
         { "path": "../jsTyping" },
         { "path": "../server" },
         { "path": "../typingsInstallerCore" },
-        { "path": "../vfs" }
+        { "path": "../vfs" },
+        { "path": "../deprecatedCompat" },
     ],
 
     "files": [

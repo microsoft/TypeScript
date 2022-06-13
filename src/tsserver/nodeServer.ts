@@ -180,6 +180,20 @@ namespace ts.server {
         const originalWatchDirectory: ServerHost["watchDirectory"] = sys.watchDirectory.bind(sys);
         const logger = createLogger();
 
+        // enable deprecation logging
+        Debug.loggingHost = {
+            log(level, s) {
+                switch (level) {
+                    case ts.LogLevel.Error:
+                    case ts.LogLevel.Warning:
+                        return logger.msg(s, Msg.Err);
+                    case ts.LogLevel.Info:
+                    case ts.LogLevel.Verbose:
+                        return logger.msg(s, Msg.Info);
+                }
+            }
+        };
+
         const pending: Buffer[] = [];
         let canWrite = true;
 

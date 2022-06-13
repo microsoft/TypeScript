@@ -129,38 +129,17 @@ namespace ts.projectSystem {
                 }
             })();
 
-            const projectService = createProjectService(host, { useSingleInferredProject: true, typingsInstaller: installer });
+            const projectService = createProjectService(host, {
+                useSingleInferredProject: true,
+                typingsInstaller: installer,
+                logger: createLoggerWithInMemoryLogs(),
+            });
             projectService.setHostConfiguration({ preferences: { includePackageJsonAutoImports: "off" } });
             projectService.openClientFile(file1.path);
 
-            checkNumberOfProjects(projectService, { configuredProjects: 1 });
-            const p = configuredProjectAt(projectService, 0);
-            checkProjectActualFiles(p, [file1.path, tsconfig.path]);
-
-            const expectedWatchedFiles = new Map<string, number>();
-            expectedWatchedFiles.set(tsconfig.path, 1); // tsserver
-            expectedWatchedFiles.set(libFile.path, 1); // tsserver
-            expectedWatchedFiles.set(packageJson.path, 1); // typing installer
-            checkWatchedFilesDetailed(host, expectedWatchedFiles);
-
-            checkWatchedDirectories(host, emptyArray, /*recursive*/ false);
-
-            const expectedWatchedDirectoriesRecursive = new Map<string, number>();
-            expectedWatchedDirectoriesRecursive.set("/a/b", 1); // wild card
-            expectedWatchedDirectoriesRecursive.set("/a/b/node_modules/@types", 1); // type root watch
-            expectedWatchedDirectoriesRecursive.set("/a/b/node_modules", 1); // TypingInstaller
-            expectedWatchedDirectoriesRecursive.set("/a/b/bower_components", 1); // TypingInstaller
-            checkWatchedDirectoriesDetailed(host, expectedWatchedDirectoriesRecursive, /*recursive*/ true);
-
             installer.installAll(/*expectedCount*/ 1);
-
-            checkNumberOfProjects(projectService, { configuredProjects: 1 });
             host.checkTimeoutQueueLengthAndRun(2);
-            checkProjectActualFiles(p, [file1.path, jquery.path, tsconfig.path]);
-            // should not watch jquery
-            checkWatchedFilesDetailed(host, expectedWatchedFiles);
-            checkWatchedDirectories(host, emptyArray, /*recursive*/ false);
-            checkWatchedDirectoriesDetailed(host, expectedWatchedDirectoriesRecursive, /*recursive*/ true);
+            baselineTsserverLogs("typingsInstaller", "configured projects", projectService);
         });
 
         it("inferred project (typings installed)", () => {
@@ -1047,28 +1026,17 @@ namespace ts.projectSystem {
                 }
             })();
 
-            const projectService = createProjectService(host, { useSingleInferredProject: true, typingsInstaller: installer });
+            const projectService = createProjectService(host, {
+                useSingleInferredProject: true,
+                typingsInstaller: installer,
+                logger: createLoggerWithInMemoryLogs(),
+            });
             projectService.openClientFile(app.path);
-
-            checkNumberOfProjects(projectService, { configuredProjects: 1 });
-            const p = configuredProjectAt(projectService, 0);
-            checkProjectActualFiles(p, [app.path, jsconfig.path]);
-
-            const watchedFilesExpected = new Map<string, number>();
-            watchedFilesExpected.set(jsconfig.path, 1); // project files
-            watchedFilesExpected.set(libFile.path, 1); // project files
-            watchedFilesExpected.set(combinePaths(installer.globalTypingsCacheLocation, "package.json"), 1);
-            checkWatchedFilesDetailed(host, watchedFilesExpected);
-
-            checkWatchedDirectories(host, emptyArray, /*recursive*/ false);
-
-            checkWatchedDirectoriesDetailed(host, ["/", "/node_modules", "/bower_components"], 1, /*recursive*/ true);
 
             installer.installAll(/*expectedCount*/ 1);
 
-            checkNumberOfProjects(projectService, { configuredProjects: 1 });
             host.checkTimeoutQueueLengthAndRun(2);
-            checkProjectActualFiles(p, [app.path, jqueryDTS.path, jsconfig.path]);
+            baselineTsserverLogs("typingsInstaller", "configured projects discover from bower_components", projectService);
         });
 
         it("configured projects discover from bower.json", () => {
@@ -1234,30 +1202,18 @@ namespace ts.projectSystem {
                     executeCommand(this, host, installedTypings, typingFiles, cb);
                 }
             })();
-            const service = createProjectService(host, { typingsInstaller: installer });
+            const service = createProjectService(host, {
+                typingsInstaller: installer,
+                logger: createLoggerWithInMemoryLogs(),
+            });
             service.openClientFile(file.path);
-
-            checkWatchedFiles(host, [...getConfigFilesToWatch(getDirectoryPath(file.path)), "/a/lib/lib.d.ts"]);
-            checkWatchedDirectories(host, [], /*recursive*/ false);
-            // Does not include cachePath because that is handled by typingsInstaller
-            checkWatchedDirectories(host, [
-                `${tscWatch.projects}/node_modules`,
-                `${tscWatch.projects}/a/node_modules`,
-                `${tscWatch.projects}/a/b/node_modules`,
-                `${tscWatch.projects}/a/node_modules/@types`,
-                `${tscWatch.projects}/a/b/node_modules/@types`,
-                `${tscWatch.projects}/a/b/bower_components`
-            ], /*recursive*/ true);
-
-            service.checkNumberOfProjects({ inferredProjects: 1 });
-            checkProjectActualFiles(service.inferredProjects[0], [file.path, commanderJS.path]);
 
             installer.installAll(/*expectedCount*/1);
             for (const name of typeNames) {
                 assert.isTrue(host.fileExists(typePath(name)), `typings for '${name}' should be created`);
             }
             host.checkTimeoutQueueLengthAndRun(2);
-            checkProjectActualFiles(service.inferredProjects[0], [file.path, ...typeNames.map(typePath)]);
+            baselineTsserverLogs("typingsInstaller", "redo resolutions pointing to js on typing install", service);
         });
 
         it("should pick typing names from non-relative unresolved imports", () => {

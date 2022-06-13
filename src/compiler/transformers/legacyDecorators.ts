@@ -31,6 +31,10 @@ namespace ts {
             return visited;
         }
 
+        function modifierVisitor(node: Node): VisitResult<Node> {
+            return isDecorator(node) ? undefined : node;
+        }
+
         function visitor(node: Node): VisitResult<Node> {
             if (!(node.transformFlags & TransformFlags.ContainsDecorators)) {
                 return node;
@@ -52,8 +56,6 @@ namespace ts {
                     return visitSetAccessorDeclaration(node as SetAccessorDeclaration);
                 case SyntaxKind.GetAccessor:
                     return visitGetAccessorDeclaration(node as GetAccessorDeclaration);
-                case SyntaxKind.ClassStaticBlockDeclaration:
-                    return visitClassStaticBlockDeclaration(node as ClassStaticBlockDeclaration);
                 case SyntaxKind.PropertyDeclaration:
                     return visitPropertyDeclaration(node as PropertyDeclaration);
                 case SyntaxKind.Parameter:
@@ -66,7 +68,7 @@ namespace ts {
         function visitClassDeclaration(node: ClassDeclaration): VisitResult<Statement> {
             if (!(classOrConstructorParameterIsDecorated(node) || childIsDecorated(node))) return visitEachChild(node, visitor, context);
 
-            const classStatement = some(node.decorators) ?
+            const classStatement = hasDecorators(node) ?
                 createClassDeclarationHeadWithDecorators(node, node.name) :
                 createClassDeclarationHeadWithoutDecorators(node, node.name);
 
@@ -99,8 +101,7 @@ namespace ts {
 
             return factory.updateClassDeclaration(
                 node,
-                elideNodes(factory, node.decorators),
-                node.modifiers,
+                visitNodes(node.modifiers, modifierVisitor, isModifier),
                 name,
                 /*typeParameters*/ undefined,
                 visitNodes(node.heritageClauses, visitor, isHeritageClause),
@@ -213,7 +214,7 @@ namespace ts {
             //  }
             const heritageClauses = visitNodes(node.heritageClauses, visitor, isHeritageClause);
             const members = visitNodes(node.members, visitor, isClassElement);
-            const classExpression = factory.createClassExpression(/*decorators*/ undefined, /*modifiers*/ undefined, name, /*typeParameters*/ undefined, heritageClauses, members);
+            const classExpression = factory.createClassExpression(/*modifiers*/ undefined, name, /*typeParameters*/ undefined, heritageClauses, members);
             setOriginalNode(classExpression, node);
             setTextRange(classExpression, location);
 
@@ -240,8 +241,7 @@ namespace ts {
             // Legacy decorators were not supported on class expressions
             return factory.updateClassExpression(
                 node,
-                elideNodes(factory, node.decorators),
-                node.modifiers,
+                visitNodes(node.modifiers, modifierVisitor, isModifier),
                 node.name,
                 /*typeParameters*/ undefined,
                 visitNodes(node.heritageClauses, visitor, isHeritageClause),
@@ -252,8 +252,7 @@ namespace ts {
         function visitConstructorDeclaration(node: ConstructorDeclaration) {
             return factory.updateConstructorDeclaration(
                 node,
-                /*decorators*/ undefined,
-                node.modifiers,
+                visitNodes(node.modifiers, modifierVisitor, isModifier),
                 visitNodes(node.parameters, visitor, isParameterDeclaration),
                 visitNode(node.body, visitor, isBlock));
         }
@@ -271,8 +270,7 @@ namespace ts {
         function visitMethodDeclaration(node: MethodDeclaration) {
             return finishClassElement(factory.updateMethodDeclaration(
                 node,
-                elideNodes(factory, node.decorators),
-                node.modifiers,
+                visitNodes(node.modifiers, modifierVisitor, isModifier),
                 node.asteriskToken,
                 visitNode(node.name, visitor, isPropertyName),
                 /*questionToken*/ undefined,
@@ -286,8 +284,7 @@ namespace ts {
         function visitGetAccessorDeclaration(node: GetAccessorDeclaration) {
             return finishClassElement(factory.updateGetAccessorDeclaration(
                 node,
-                elideNodes(factory, node.decorators),
-                node.modifiers,
+                visitNodes(node.modifiers, modifierVisitor, isModifier),
                 visitNode(node.name, visitor, isPropertyName),
                 visitNodes(node.parameters, visitor, isParameterDeclaration),
                 /*type*/ undefined,
@@ -298,21 +295,11 @@ namespace ts {
         function visitSetAccessorDeclaration(node: SetAccessorDeclaration) {
             return finishClassElement(factory.updateSetAccessorDeclaration(
                 node,
-                elideNodes(factory, node.decorators),
-                node.modifiers,
+                visitNodes(node.modifiers, modifierVisitor, isModifier),
                 visitNode(node.name, visitor, isPropertyName),
                 visitNodes(node.parameters, visitor, isParameterDeclaration),
                 visitNode(node.body, visitor, isBlock)
             ), node);
-        }
-
-        function visitClassStaticBlockDeclaration(node: ClassStaticBlockDeclaration) {
-            return factory.updateClassStaticBlockDeclaration(
-                node,
-                /*decorators*/ undefined,
-                node.modifiers,
-                visitNode(node.body, visitor, isBlock)
-            );
         }
 
         function visitPropertyDeclaration(node: PropertyDeclaration) {
@@ -322,8 +309,7 @@ namespace ts {
 
             return finishClassElement(factory.updatePropertyDeclaration(
                 node,
-                elideNodes(factory, node.decorators),
-                node.modifiers,
+                visitNodes(node.modifiers, modifierVisitor, isModifier),
                 visitNode(node.name, visitor, isPropertyName),
                 /*questionOrExclamationToken*/ undefined,
                 /*type*/ undefined,
@@ -334,8 +320,7 @@ namespace ts {
         function visitParameterDeclaration(node: ParameterDeclaration) {
             const updated = factory.updateParameterDeclaration(
                 node,
-                elideNodes(factory, node.decorators),
-                /*modifiers*/ undefined,
+                elideNodes(factory, node.modifiers),
                 node.dotDotDotToken,
                 visitNode(node.name, visitor, isBindingName),
                 /*questionToken*/ undefined,

@@ -27,7 +27,7 @@ function boxify<T>(obj: T): Boxified<T> {
 
         for (let k in obj) {
 >k : Extract<keyof T, string>
->obj : (T & null) | (T & object)
+>obj : (T & object) | (T & null)
 
             result[k] = { value: obj[k] };
 >result[k] = { value: obj[k] } : { value: (T & object)[Extract<keyof T, string>]; }

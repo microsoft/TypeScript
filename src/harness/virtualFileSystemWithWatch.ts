@@ -14,18 +14,6 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }`
     };
 
-    export const safeList = {
-        path: "/safeList.json" as Path,
-        content: JSON.stringify({
-            commander: "commander",
-            express: "express",
-            jquery: "jquery",
-            lodash: "lodash",
-            moment: "moment",
-            chroma: "chroma-js"
-        })
-    };
-
     function getExecutingFilePathFromLibFile(): string {
         return combinePaths(getDirectoryPath(libFile.path), "tsc.js");
     }
@@ -39,7 +27,9 @@ interface Array<T> { length: number; [n: number]: T; }`
         environmentVariables?: ESMap<string, string>;
         runWithoutRecursiveWatches?: boolean;
         runWithFallbackPolling?: boolean;
+        // TODO: Not sure withSafeList is still needed
         withSafeList?: boolean;
+        inodeWatching?: boolean;
     }
 
     export function createVirtualServerHost(params: VirtualServerHostCreationParameters): VirtualServerHost {
@@ -49,12 +39,12 @@ interface Array<T> { length: number; [n: number]: T; }`
         return host;
     }
 
-    export function createWatchedSystem(fileOrFolderList: readonly FileOrFolderOrSymLink[], params?: TestServerHostCreationParameters): TestServerHost {
-        return new TestServerHost(/*withSafelist*/ false, fileOrFolderList, params);
+    export function createWatchedSystem(fileOrFolderList: FileOrFolderOrSymLinkMap | readonly FileOrFolderOrSymLink[], params?: TestServerHostCreationParameters): TestServerHost {
+        return new TestServerHost(fileOrFolderList, params);
     }
 
-    export function createServerHost(fileOrFolderList: readonly FileOrFolderOrSymLink[], params?: TestServerHostCreationParameters): TestServerHost {
-        const host = new TestServerHost(/*withSafelist*/ true, fileOrFolderList, params);
+    export function createServerHost(fileOrFolderList: FileOrFolderOrSymLinkMap | readonly FileOrFolderOrSymLink[], params?: TestServerHostCreationParameters): TestServerHost {
+        const host = new TestServerHost(fileOrFolderList, params);
         // Just like sys, patch the host to use writeFile
         patchWriteFileEnsuringDirectory(host);
         return host;
@@ -195,70 +185,6 @@ interface Array<T> { length: number; [n: number]: T; }`
         checkMap(caption, arrayToMap(actual, identity), expected, /*eachKeyCount*/ undefined);
     }
 
-    export function checkWatchedFiles(host: TestServerHost, expectedFiles: readonly string[], additionalInfo?: string) {
-        checkMap(`watchedFiles:: ${additionalInfo || ""}::`, host.watchedFiles, expectedFiles, /*eachKeyCount*/ undefined);
-    }
-
-    export interface WatchFileDetails {
-        fileName: string;
-        pollingInterval: PollingInterval;
-    }
-    export function checkWatchedFilesDetailed(host: TestServerHost, expectedFiles: ReadonlyESMap<string, number>, expectedDetails?: ESMap<string, WatchFileDetails[]>): void;
-    export function checkWatchedFilesDetailed(host: TestServerHost, expectedFiles: readonly string[], eachFileWatchCount: number, expectedDetails?: ESMap<string, WatchFileDetails[]>): void;
-    export function checkWatchedFilesDetailed(host: TestServerHost, expectedFiles: ReadonlyESMap<string, number> | readonly string[], eachFileWatchCountOrExpectedDetails?: number | ESMap<string, WatchFileDetails[]>, expectedDetails?: ESMap<string, WatchFileDetails[]>) {
-        if (!isNumber(eachFileWatchCountOrExpectedDetails)) expectedDetails = eachFileWatchCountOrExpectedDetails;
-        if (isArray(expectedFiles)) {
-            checkMap(
-                "watchedFiles",
-                host.watchedFiles,
-                expectedFiles,
-                eachFileWatchCountOrExpectedDetails as number,
-                [expectedDetails, ({ fileName, pollingInterval }) => ({ fileName, pollingInterval })]
-            );
-        }
-        else {
-            checkMap(
-                "watchedFiles",
-                host.watchedFiles,
-                expectedFiles,
-                [expectedDetails, ({ fileName, pollingInterval }) => ({ fileName, pollingInterval })]
-            );
-        }
-    }
-
-    export function checkWatchedDirectories(host: TestServerHost, expectedDirectories: string[], recursive: boolean) {
-        checkMap(`watchedDirectories${recursive ? " recursive" : ""}`, recursive ? host.fsWatchesRecursive : host.fsWatches, expectedDirectories, /*eachKeyCount*/ undefined);
-    }
-
-    export interface WatchDirectoryDetails {
-        directoryName: string;
-        fallbackPollingInterval: PollingInterval;
-        fallbackOptions: WatchOptions | undefined;
-    }
-    export function checkWatchedDirectoriesDetailed(host: TestServerHost, expectedDirectories: ReadonlyESMap<string, number>, recursive: boolean, expectedDetails?: ESMap<string, WatchDirectoryDetails[]>): void;
-    export function checkWatchedDirectoriesDetailed(host: TestServerHost, expectedDirectories: readonly string[], eachDirectoryWatchCount: number, recursive: boolean, expectedDetails?: ESMap<string, WatchDirectoryDetails[]>): void;
-    export function checkWatchedDirectoriesDetailed(host: TestServerHost, expectedDirectories: ReadonlyESMap<string, number> | readonly string[], recursiveOrEachDirectoryWatchCount: boolean | number, recursiveOrExpectedDetails?: boolean | ESMap<string, WatchDirectoryDetails[]>, expectedDetails?: ESMap<string, WatchDirectoryDetails[]>) {
-        if (typeof recursiveOrExpectedDetails !== "boolean") expectedDetails = recursiveOrExpectedDetails;
-        if (isArray(expectedDirectories)) {
-            checkMap(
-                `fsWatches${recursiveOrExpectedDetails ? " recursive" : ""}`,
-                recursiveOrExpectedDetails as boolean ? host.fsWatchesRecursive : host.fsWatches,
-                expectedDirectories,
-                recursiveOrEachDirectoryWatchCount as number,
-                [expectedDetails, ({ directoryName, fallbackPollingInterval, fallbackOptions }) => ({ directoryName, fallbackPollingInterval, fallbackOptions })]
-            );
-        }
-        else {
-            recursiveOrExpectedDetails = recursiveOrEachDirectoryWatchCount as boolean;
-            checkMap(
-                `fsWatches${recursiveOrExpectedDetails ? " recursive" : ""}`,
-                recursiveOrExpectedDetails ? host.fsWatchesRecursive : host.fsWatches,
-                expectedDirectories,
-                [expectedDetails, ({ directoryName, fallbackPollingInterval, fallbackOptions }) => ({ directoryName, fallbackPollingInterval, fallbackOptions })]
-            );
-        }
-    }
-
     export function checkOutputContains(host: TestServerHost, expected: readonly string[]) {
         const mapExpected = new Set(expected);
         const mapSeen = new Set<string>();
@@ -291,10 +217,10 @@ interface Array<T> { length: number; [n: number]: T; }`
         public require: ((initialPath: string, moduleName: string) => RequireResult) | undefined;
         runWithFallbackPolling: boolean;
         public defaultWatchFileKind?: () => WatchFileKind | undefined;
+        private readonly inodes?: ESMap<Path, number>;
 
         constructor(
-            public withSafeList: boolean,
-            fileOrFolderOrSymLinkList: readonly FileOrFolderOrSymLink[],
+            fileOrFolderOrSymLinkList: FileOrFolderOrSymLinkMap | readonly FileOrFolderOrSymLink[],
             options: TestServerHostCreationParameters = {}) {
             super({
                 ...options,
@@ -302,11 +228,25 @@ interface Array<T> { length: number; [n: number]: T; }`
             },
             options,
             () => this.defaultWatchFileKind?.());
-            const { environmentVariables, runWithFallbackPolling } = options;
-            fileOrFolderOrSymLinkList = fileOrFolderOrSymLinkList.concat(withSafeList ? safeList : []);
+            const { environmentVariables, runWithFallbackPolling, inodeWatching } = options;
             this.runWithFallbackPolling = !!runWithFallbackPolling;
             this.environmentVariables = environmentVariables;
+            if (inodeWatching) {
+                this.inodeWatching = true;
+                this.inodes = new Map();
+            }
             this.reloadFS(fileOrFolderOrSymLinkList);
+        }
+
+        private nextInode = 0;
+        protected override setInode(path: Path) {
+            if (this.inodes) this.inodes.set(path, this.nextInode++);
+        }
+        override getInode(path: Path): number | undefined {
+            if (this.inodes) return this.inodes.get(path)
+        }
+        protected override deleteInode(path: Path) {
+            if (this.inodes) this.inodes.delete(path);
         }
 
         // Output is pretty
@@ -327,47 +267,26 @@ interface Array<T> { length: number; [n: number]: T; }`
             this.time = time;
         }
 
-        private reloadFS(fileOrFolderOrSymLinkList: readonly FileOrFolderOrSymLink[], options?: Partial<ReloadWatchInvokeOptions>) {
+        private reloadFS(fileOrFolderOrSymLinkList: FileOrFolderOrSymLinkMap | readonly FileOrFolderOrSymLink[]) {
             Debug.assert(this.fs.size === 0);
-            const filesOrFoldersToLoad: readonly FileOrFolderOrSymLink[] = !this.windowsStyleRoot ? fileOrFolderOrSymLinkList :
-                fileOrFolderOrSymLinkList.map<FileOrFolderOrSymLink>(f => {
-                    const result = clone(f);
-                    result.path = this.getHostSpecificPath(f.path);
-                    return result;
-                });
-            for (const fileOrDirectory of filesOrFoldersToLoad) {
-                const path = this.toFullPath(fileOrDirectory.path);
-                // If its a change
-                const currentEntry = this.fs.get(path);
-                if (currentEntry) {
-                    if (isFsFile(currentEntry)) {
-                        if (isFile(fileOrDirectory)) {
-                            // Update file
-                            if (currentEntry.content !== fileOrDirectory.content) {
-                                this.modifyFile(fileOrDirectory.path, fileOrDirectory.content, options);
-                            }
+            if (isArray(fileOrFolderOrSymLinkList)) {
+                fileOrFolderOrSymLinkList.forEach(f => this.ensureFileOrFolder(!this.windowsStyleRoot ?
+                    f :
+                    { ...f, path: this.getHostSpecificPath(f.path) }
+                ));
+            }
+            else {
+                for (const key in fileOrFolderOrSymLinkList) {
+                    if (hasProperty(fileOrFolderOrSymLinkList, key)) {
+                        const path = this.getHostSpecificPath(key);
+                        const value = fileOrFolderOrSymLinkList[key];
+                        if (isString(value)) {
+                            this.ensureFileOrFolder({ path, content: value });
                         }
                         else {
-                            // TODO: Changing from file => folder/Symlink
+                            this.ensureFileOrFolder({ path, ...value });
                         }
                     }
-                    else if (isFsSymLink(currentEntry)) {
-                        // TODO: update symlinks
-                    }
-                    else {
-                        // Folder
-                        if (isFile(fileOrDirectory)) {
-                            // TODO: Changing from folder => file
-                        }
-                        else {
-                            // Folder update: Nothing to do.
-                            currentEntry.modifiedTime = this.now();
-                            this.invokeFsWatches(currentEntry.fullPath, "change");
-                        }
-                    }
-                }
-                else {
-                    this.ensureFileOrFolder(fileOrDirectory, options && options.ignoreWatchInvokedWithTriggerAsFileCreate);
                 }
             }
         }
@@ -379,7 +298,7 @@ interface Array<T> { length: number; [n: number]: T; }`
             Debug.assert(!!file);
 
             // Only remove the file
-            this.removeFileOrFolder(file, /*isRemoveableLeafFolder*/ false, /*isRenaming*/ true);
+            this.removeFileOrFolder(file, /*isRenaming*/ true);
 
             // Add updated folder with new folder name
             const newFullPath = getNormalizedAbsolutePath(newFileName, this.currentDirectory);
@@ -399,7 +318,7 @@ interface Array<T> { length: number; [n: number]: T; }`
             Debug.assert(!!folder);
 
             // Only remove the folder
-            this.removeFileOrFolder(folder, /*isRemoveableLeafFolder*/ false, /*isRenaming*/ true);
+            this.removeFileOrFolder(folder, /*isRenaming*/ true);
 
             // Add updated folder with new folder name
             const newFullPath = getNormalizedAbsolutePath(newFolderName, this.currentDirectory);
@@ -426,6 +345,7 @@ interface Array<T> { length: number; [n: number]: T; }`
                     newFolder.entries.push(entry);
                 }
                 this.fs.set(entry.path, entry);
+                this.setInode(entry.path);
                 this.invokeFileAndFsWatches(entry.fullPath, FileWatcherEventKind.Created);
                 if (isFsFolder(entry)) {
                     this.renameFolderEntries(entry, entry);
@@ -444,37 +364,33 @@ interface Array<T> { length: number; [n: number]: T; }`
                         this.deleteFolder(fsEntry.fullPath, recursive);
                     }
                     else {
-                        this.removeFileOrFolder(fsEntry, /*isRemoveableLeafFolder*/ false);
+                        this.removeFileOrFolder(fsEntry);
                     }
                 });
             }
-            this.removeFileOrFolder(currentEntry, /*isRemoveableLeafFolder*/ false);
+            this.removeFileOrFolder(currentEntry);
         }
 
-        protected override fsWatch(
+        protected override fsWatchWorker(
             fileOrDirectory: string,
-            _entryKind: FileSystemEntryKind,
-            cb: FsWatchCallback,
             recursive: boolean,
-            fallbackPollingInterval: PollingInterval,
-            fallbackOptions: WatchOptions | undefined): FileWatcher {
-            return this.runWithFallbackPolling ?
-                this.watchFile(
-                    fileOrDirectory,
-                    createFileWatcherCallback(cb),
-                    fallbackPollingInterval,
-                    fallbackOptions
-                ) :
-                createWatcher(
-                    recursive ? this.fsWatchesRecursive : this.fsWatches,
-                    this.toFullPath(fileOrDirectory),
-                    {
-                        directoryName: fileOrDirectory,
-                        cb,
-                        fallbackPollingInterval,
-                        fallbackOptions
-                    }
-                );
+            cb: FsWatchCallback,
+        ) {
+            if (this.runWithFallbackPolling) throw new Error("Need to use fallback polling instead of file system native watching");
+            const path = this.toFullPath(fileOrDirectory);
+            // Error if the path does not exist
+            if (this.inodeWatching && !this.inodes?.has(path)) throw new Error();
+            const result = createWatcher(
+                recursive ? this.fsWatchesRecursive : this.fsWatches,
+                path,
+                {
+                    directoryName: fileOrDirectory,
+                    cb,
+                    inode: this.inodes?.get(path)
+                }
+            ) as FsWatchWorkerWatcher;
+            result.on = noop;
+            return result;
         }
 
         createHash(s: string): string {
@@ -539,11 +455,11 @@ interface Array<T> { length: number; [n: number]: T; }`
             this.immediateCallbacks.unregister(timeoutId);
         }
 
-        prependFile(path: string, content: string, options?: Partial<ReloadWatchInvokeOptions>): void {
+        prependFile(path: string, content: string, options?: Partial<WatchInvokeOptions>): void {
             this.modifyFile(path, content + this.readFile(path), options);
         }
 
-        appendFile(path: string, content: string, options?: Partial<ReloadWatchInvokeOptions>): void {
+        appendFile(path: string, content: string, options?: Partial<WatchInvokeOptions>): void {
             this.modifyFile(path, this.readFile(path) + content, options);
         }
 
@@ -574,13 +490,14 @@ interface Array<T> { length: number; [n: number]: T; }`
             this.clearOutput();
         }
 
-        serializeWatches(baseline: string[]) {
+        serializeWatches(baseline: string[] = []) {
             serializeMultiMap(baseline, "WatchedFiles", this.watchedFiles, ({ fileName, pollingInterval }) => ({ fileName, pollingInterval }));
             baseline.push("");
             serializeMultiMap(baseline, "FsWatches", this.fsWatches, serializeTestFsWatcher);
             baseline.push("");
             serializeMultiMap(baseline, "FsWatchesRecursive", this.fsWatchesRecursive, serializeTestFsWatcher);
             baseline.push("");
+            return baseline;
         }
 
         override getEnvironmentVariable(name: string) {
@@ -601,101 +518,90 @@ interface Array<T> { length: number; [n: number]: T; }`
         return result;
     }
 
-    export function diff(fshost: VirtualFS.VirtualServerHost, baseline: string[], base: ESMap<string, FSEntry> = new Map()) {
-        fshost.fs.forEach(newFsEntry => {
-            diffFsEntry(baseline, base.get(newFsEntry.path), newFsEntry, fshost.writtenFiles);
+    export function diff(fshost: VirtualFS.VirtualServerHost, baseline: string[], base: ESMap<Path, FSEntry> = new Map()) {
+        fshost.fs.forEach((newFsEntry, path) => {
+            diffFsEntry(baseline, base.get(path), newFsEntry, fshost.getInode(path), fshost.writtenFiles);
         });
-        base.forEach(oldFsEntry => {
-            const newFsEntry = fshost.fs.get(oldFsEntry.path);
+        base.forEach((oldFsEntry, path) => {
+            const newFsEntry = fshost.fs.get(path);
             if (!newFsEntry) {
-                diffFsEntry(baseline, oldFsEntry, newFsEntry, fshost.writtenFiles);
+                diffFsEntry(baseline, oldFsEntry, newFsEntry, fshost.getInode(path), fshost.writtenFiles);
             }
         });
         baseline.push("");
     }
 
-    function diffFsFile(baseline: string[], fsEntry: FsFile) {
-        baseline.push(`//// [${fsEntry.fullPath}]\r\n${fsEntry.content}`, "");
+    function diffFsFile(baseline: string[], fsEntry: FsFile, newInode: number | undefined) {
+        baseline.push(`//// [${fsEntry.fullPath}]${inodeString(newInode)}\r\n${fsEntry.content}`, "");
     }
-
-    function diffFsSymLink(baseline: string[], fsEntry: FsSymLink) {
-        baseline.push(`//// [${fsEntry.fullPath}] symlink(${fsEntry.symLink})`);
+    function diffFsSymLink(baseline: string[], fsEntry: FsSymLink, newInode: number | undefined) {
+        baseline.push(`//// [${fsEntry.fullPath}] symlink(${fsEntry.symLink})${inodeString(newInode)}`);
     }
-
-    function diffFsEntry(baseline: string[], oldFsEntry: FSEntry | undefined, newFsEntry: FSEntry | undefined, writtenFiles: ESMap<string, any> | undefined): void {
+    function inodeString(inode: number | undefined) {
+        return inode !== undefined ? ` Inode:: ${inode}` : "";
+    }
+    function diffFsEntry(baseline: string[], oldFsEntry: FSEntry | undefined, newFsEntry: FSEntry | undefined, newInode: number | undefined, writtenFiles: ESMap<string, any> | undefined): void {
         const file = newFsEntry && newFsEntry.fullPath;
         if (isFsFile(oldFsEntry)) {
             if (isFsFile(newFsEntry)) {
                 if (oldFsEntry.content !== newFsEntry.content) {
-                    diffFsFile(baseline, newFsEntry);
+                    diffFsFile(baseline, newFsEntry, newInode);
                 }
                 else if (oldFsEntry.modifiedTime !== newFsEntry.modifiedTime) {
                     if (oldFsEntry.fullPath !== newFsEntry.fullPath) {
-                        baseline.push(`//// [${file}] file was renamed from file ${oldFsEntry.fullPath}`);
+                        baseline.push(`//// [${file}] file was renamed from file ${oldFsEntry.fullPath}${inodeString(newInode)}`);
                     }
                     else if (writtenFiles && !writtenFiles.has(newFsEntry.path)) {
-                        baseline.push(`//// [${file}] file changed its modified time`);
+                        baseline.push(`//// [${file}] file changed its modified time${inodeString(newInode)}`);
                     }
                     else {
-                        baseline.push(`//// [${file}] file written with same contents`);
+                        baseline.push(`//// [${file}] file written with same contents${inodeString(newInode)}`);
                     }
                 }
             }
             else {
                 baseline.push(`//// [${oldFsEntry.fullPath}] deleted`);
                 if (isFsSymLink(newFsEntry)) {
-                    diffFsSymLink(baseline, newFsEntry);
+                    diffFsSymLink(baseline, newFsEntry, newInode);
                 }
             }
         }
         else if (isFsSymLink(oldFsEntry)) {
             if (isFsSymLink(newFsEntry)) {
                 if (oldFsEntry.symLink !== newFsEntry.symLink) {
-                    diffFsSymLink(baseline, newFsEntry);
+                    diffFsSymLink(baseline, newFsEntry, newInode);
                 }
                 else if (oldFsEntry.modifiedTime !== newFsEntry.modifiedTime) {
                     if (oldFsEntry.fullPath !== newFsEntry.fullPath) {
-                        baseline.push(`//// [${file}] symlink was renamed from symlink ${oldFsEntry.fullPath}`);
+                        baseline.push(`//// [${file}] symlink was renamed from symlink ${oldFsEntry.fullPath}${inodeString(newInode)}`);
                     }
                     else if (writtenFiles && !writtenFiles.has(newFsEntry.path)) {
-                        baseline.push(`//// [${file}] symlink changed its modified time`);
+                        baseline.push(`//// [${file}] symlink changed its modified time${inodeString(newInode)}`);
                     }
                     else {
-                        baseline.push(`//// [${file}] symlink written with same link`);
+                        baseline.push(`//// [${file}] symlink written with same link${inodeString(newInode)}`);
                     }
                 }
             }
             else {
                 baseline.push(`//// [${oldFsEntry.fullPath}] deleted symlink`);
                 if (isFsFile(newFsEntry)) {
-                    diffFsFile(baseline, newFsEntry);
+                    diffFsFile(baseline, newFsEntry, newInode);
                 }
             }
         }
         else if (isFsFile(newFsEntry)) {
-            diffFsFile(baseline, newFsEntry);
+            diffFsFile(baseline, newFsEntry, newInode);
         }
         else if (isFsSymLink(newFsEntry)) {
-            diffFsSymLink(baseline, newFsEntry);
+            diffFsSymLink(baseline, newFsEntry, newInode);
         }
     }
 
-    function serializeTestFsWatcher({ directoryName, fallbackPollingInterval, fallbackOptions }: VirtualFsWatcher) {
+    function serializeTestFsWatcher({ directoryName, inode }: VirtualFsWatcher) {
         return {
             directoryName,
-            fallbackPollingInterval,
-            fallbackOptions: serializeWatchOptions(fallbackOptions)
-        };
-    }
-
-    function serializeWatchOptions(fallbackOptions: WatchOptions | undefined) {
-        if (!fallbackOptions) return undefined;
-        const { watchFile, watchDirectory, fallbackPolling, ...rest } = fallbackOptions;
-        return {
-            watchFile: watchFile !== undefined ? WatchFileKind[watchFile] : undefined,
-            watchDirectory: watchDirectory !== undefined ? WatchDirectoryKind[watchDirectory] : undefined,
-            fallbackPolling: fallbackPolling !== undefined ? PollingWatchKind[fallbackPolling] : undefined,
-            ...rest
+            inode,
         };
     }
 

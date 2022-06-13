@@ -59,7 +59,6 @@ DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/src 1 undefi
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/src 1 undefined Failed Lookup Locations
 DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules 1 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules 1 undefined Failed Lookup Locations
-FileWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules/reala/package.json 2000 undefined package.json file
 DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules/@types 1 undefined Type roots
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules/@types 1 undefined Type roots
 [[90m12:00:48 AM[0m] Found 0 errors. Watching for file changes.
@@ -95,26 +94,24 @@ WatchedFiles::
   {"fileName":"/home/user/projects/myproject/node_modules/reala/index.d.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
   {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-/home/user/projects/myproject/node_modules/reala/package.json:
-  {"fileName":"/home/user/projects/myproject/node_modules/reala/package.json","pollingInterval":250}
+/home/user/projects/myproject/node_modules/@types:
+  {"fileName":"/home/user/projects/myproject/node_modules/@types","pollingInterval":500}
 
 FsWatches::
 /home/user/projects/myproject/src:
-  {"directoryName":"/home/user/projects/myproject/src","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/home/user/projects/myproject/src"}
 /home/user/projects/myproject/node_modules:
-  {"directoryName":"/home/user/projects/myproject/node_modules","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/home/user/projects/myproject/node_modules"}
 /home/user/projects/myproject/node_modules/reala:
-  {"directoryName":"/home/user/projects/myproject/node_modules/reala","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/home/user/projects/myproject/node_modules/reala"}
 /home/user/projects/myproject/node_modules/reala/node_modules:
-  {"directoryName":"/home/user/projects/myproject/node_modules/reala/node_modules","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/home/user/projects/myproject/node_modules/reala/node_modules"}
 /home/user/projects/myproject/node_modules/realb:
-  {"directoryName":"/home/user/projects/myproject/node_modules/realb","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/home/user/projects/myproject/node_modules/realb"}
 /home/user/projects/myproject/node_modules/realb/node_modules:
-  {"directoryName":"/home/user/projects/myproject/node_modules/realb/node_modules","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/home/user/projects/myproject/node_modules/@types:
-  {"directoryName":"/home/user/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/home/user/projects/myproject/node_modules/realb/node_modules"}
 /home/user/projects/myproject:
-  {"directoryName":"/home/user/projects/myproject","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/home/user/projects/myproject"}
 
 FsWatchesRecursive::
 

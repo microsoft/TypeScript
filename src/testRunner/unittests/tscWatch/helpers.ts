@@ -7,10 +7,6 @@ namespace ts.tscWatch {
     export import libFile = VirtualFS.libFile;
     export import createWatchedSystem = VirtualFS.createWatchedSystem;
     export import checkArray = VirtualFS.checkArray;
-    export import checkWatchedFiles = VirtualFS.checkWatchedFiles;
-    export import checkWatchedFilesDetailed = VirtualFS.checkWatchedFilesDetailed;
-    export import checkWatchedDirectories = VirtualFS.checkWatchedDirectories;
-    export import checkWatchedDirectoriesDetailed = VirtualFS.checkWatchedDirectoriesDetailed;
     export import checkOutputContains = VirtualFS.checkOutputContains;
     export import checkOutputDoesNotContain = VirtualFS.checkOutputDoesNotContain;
 
@@ -341,7 +337,7 @@ namespace ts.tscWatch {
             if (state.semanticDiagnosticsPerFile?.size) {
                 baseline.push("Semantic diagnostics in builder refreshed for::");
                 for (const file of program.getSourceFiles()) {
-                    if (!state.semanticDiagnosticsFromOldState || !state.semanticDiagnosticsFromOldState.has(file.resolvedPath)) {
+                    if (!internalState.semanticDiagnosticsFromOldState || !internalState.semanticDiagnosticsFromOldState.has(file.resolvedPath)) {
                         baseline.push(file.fileName);
                     }
                 }
@@ -436,7 +432,7 @@ namespace ts.tscWatch {
         return sys;
     }
 
-    export function createSystemWithSolutionBuild(solutionRoots: readonly string[], files: readonly VirtualFS.FileOrFolderOrSymLink[], params?: VirtualFS.TestServerHostCreationParameters) {
+    export function createSystemWithSolutionBuild(solutionRoots: readonly string[], files: VirtualFS.FileOrFolderOrSymLinkMap | readonly VirtualFS.FileOrFolderOrSymLink[], params?: VirtualFS.TestServerHostCreationParameters) {
         return solutionBuildWithBaseline(createWatchedSystem(files, params), solutionRoots);
     }
 }

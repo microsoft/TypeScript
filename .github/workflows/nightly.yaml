@@ -16,6 +16,9 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - uses: actions/setup-node@v3
+      with:
+        # Use NODE_AUTH_TOKEN environment variable to authenticate to this registry.
+        registry-url: https://registry.npmjs.org/
     - name: Setup and publish nightly
       run: |
         npm whoami
@@ -26,4 +29,4 @@ jobs:
         gulp clean
         npm publish --tag next
       env:
-        NPM_TOKEN: ${{secrets.npm_token}}
+        NODE_AUTH_TOKEN: ${{secrets.npm_token}}

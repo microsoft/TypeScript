@@ -6,11 +6,15 @@ tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpr
 tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts(19,24): error TS2635: Type '{ (): number; g<U>(): U; }' has no signatures for which the type argument list is applicable.
 tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts(23,23): error TS1005: '(' expected.
 tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts(26,24): error TS2558: Expected 0 type arguments, but got 1.
-tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts(31,2): error TS2554: Expected 0 arguments, but got 1.
-tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts(35,12): error TS2365: Operator '<' cannot be applied to types '{ <T>(): T; g<U>(): U; }' and 'boolean'.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts(39,2): error TS2554: Expected 0 arguments, but got 1.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts(43,12): error TS2365: Operator '<' cannot be applied to types '{ <T>(): T; g<U>(): U; }' and 'boolean'.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts(44,12): error TS2365: Operator '<' cannot be applied to types '{ <T>(): T; g<U>(): U; }' and 'boolean'.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts(44,12): error TS2365: Operator '>' cannot be applied to types 'boolean' and 'number'.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts(45,12): error TS2365: Operator '<' cannot be applied to types '{ <T>(): T; g<U>(): U; }' and 'boolean'.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts(45,12): error TS2365: Operator '>' cannot be applied to types 'boolean' and 'number'.
 
 
-==== tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts (10 errors) ====
+==== tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts (14 errors) ====
     declare let f: { <T>(): T, g<U>(): U };
     
     // Type arguments in member expressions
@@ -54,6 +58,14 @@ tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpr
                            ~~~~~~
 !!! error TS2558: Expected 0 type arguments, but got 1.
     
+    // Instantiation expression and binary operators
+    
+    declare let g: (<T>(x: T) => T) | undefined;
+    
+    const c1 = g<string> || ((x: string) => x);
+    const c2 = g<string> ?? ((x: string) => x);
+    const c3 = g<string> && ((x: string) => x);
+    
     // Parsed as function call, even though this differs from JavaScript
     
     const x1 = f<true>
@@ -61,20 +73,71 @@ tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpr
      ~~~~
 !!! error TS2554: Expected 0 arguments, but got 1.
     
-    // Parsed as relational expression
+    // Parsed as relational expressions
+    
+    const r1 = f < true > true;
+               ~~~~~~~~
+!!! error TS2365: Operator '<' cannot be applied to types '{ <T>(): T; g<U>(): U; }' and 'boolean'.
+    const r2 = f < true > +1;
+               ~~~~~~~~
+!!! error TS2365: Operator '<' cannot be applied to types '{ <T>(): T; g<U>(): U; }' and 'boolean'.
+               ~~~~~~~~~~~~~
+!!! error TS2365: Operator '>' cannot be applied to types 'boolean' and 'number'.
+    const r3 = f < true > -1;
+               ~~~~~~~~
+!!! error TS2365: Operator '<' cannot be applied to types '{ <T>(): T; g<U>(): U; }' and 'boolean'.
+               ~~~~~~~~~~~~~
+!!! error TS2365: Operator '>' cannot be applied to types 'boolean' and 'number'.
+    
+    // All of the following are parsed as instantiation expressions
     
     const x2 = f<true>
-               ~~~~~~
-!!! error TS2365: Operator '<' cannot be applied to types '{ <T>(): T; g<U>(): U; }' and 'boolean'.
     true;
-    
-    // Parsed as instantiation expression
     
     const x3 = f<true>;
     true;
     
-    // Parsed as instantiation expression
-    
     const x4 = f<true>
     if (true) {}
+    
+    const x5 = f<true>
+    let yy = 0;
+    
+    const x6 = f<true>
+    interface I {}
+    
+    let x10 = f<true>
+    this.bar()
+    
+    let x11 = f<true>
+    function bar() {}
+    
+    let x12 = f<true>
+    class C {}
+    
+    let x13 = f<true>
+    bar()
+    
+    let x14 = f<true>
+    void bar()
+    
+    class C1 {
+        static specialFoo = f<string>
+        static bar = 123
+    }
+    
+    class C2 {
+        public specialFoo = f<string>
+        public bar = 123
+    }
+    
+    class C3 {
+        private specialFoo = f<string>
+        private bar = 123
+    }
+    
+    class C4 {
+        protected specialFoo = f<string>
+        protected bar = 123
+    }
     

@@ -23,6 +23,7 @@
         { "path": "../webServer", "prepend": true },
         { "path": "../typingsInstallerCore", "prepend": true },
         { "path": "../vfs", "prepend": true },
+        { "path": "../deprecatedCompat", "prepend": true },
         { "path": "../harness", "prepend": true },
         { "path": "../loggedIO", "prepend": true }
     ],
@@ -151,6 +152,7 @@
         "unittests/tsbuildWatch/publicApi.ts",
         "unittests/tsbuildWatch/reexport.ts",
         "unittests/tsbuildWatch/watchEnvironment.ts",
+        "unittests/tsc/cancellationToken.ts",
         "unittests/tsc/composite.ts",
         "unittests/tsc/declarationEmit.ts",
         "unittests/tsc/incremental.ts",
@@ -164,6 +166,7 @@
         "unittests/tscWatch/emitAndErrorUpdates.ts",
         "unittests/tscWatch/forceConsistentCasingInFileNames.ts",
         "unittests/tscWatch/incremental.ts",
+        "unittests/tscWatch/moduleResolution.ts",
         "unittests/tscWatch/programUpdates.ts",
         "unittests/tscWatch/projectsWithReferences.ts",
         "unittests/tscWatch/resolutionCache.ts",

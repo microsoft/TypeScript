@@ -28,22 +28,73 @@ const b2 = f?.<number>();
 const b3 = f<number>?.();
 const b4 = f<number>?.<number>();  // Error, expected no type arguments
 
+// Instantiation expression and binary operators
+
+declare let g: (<T>(x: T) => T) | undefined;
+
+const c1 = g<string> || ((x: string) => x);
+const c2 = g<string> ?? ((x: string) => x);
+const c3 = g<string> && ((x: string) => x);
+
 // Parsed as function call, even though this differs from JavaScript
 
 const x1 = f<true>
 (true);
 
-// Parsed as relational expression
+// Parsed as relational expressions
+
+const r1 = f < true > true;
+const r2 = f < true > +1;
+const r3 = f < true > -1;
+
+// All of the following are parsed as instantiation expressions
 
 const x2 = f<true>
 true;
 
-// Parsed as instantiation expression
-
 const x3 = f<true>;
 true;
 
-// Parsed as instantiation expression
-
 const x4 = f<true>
 if (true) {}
+
+const x5 = f<true>
+let yy = 0;
+
+const x6 = f<true>
+interface I {}
+
+let x10 = f<true>
+this.bar()
+
+let x11 = f<true>
+function bar() {}
+
+let x12 = f<true>
+class C {}
+
+let x13 = f<true>
+bar()
+
+let x14 = f<true>
+void bar()
+
+class C1 {
+    static specialFoo = f<string>
+    static bar = 123
+}
+
+class C2 {
+    public specialFoo = f<string>
+    public bar = 123
+}
+
+class C3 {
+    private specialFoo = f<string>
+    private bar = 123
+}
+
+class C4 {
+    protected specialFoo = f<string>
+    protected bar = 123
+}

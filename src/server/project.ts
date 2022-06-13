@@ -523,6 +523,18 @@ namespace ts.server {
         }
 
         /*@internal*/
+        watchAffectingFileLocation(file: string, cb: FileWatcherCallback) {
+            return this.projectService.watchFactory.watchFile(
+                file,
+                cb,
+                PollingInterval.High,
+                this.projectService.getWatchOptions(this),
+                WatchType.PackageJson,
+                this
+            );
+        }
+
+        /*@internal*/
         clearInvalidateResolutionOfFailedLookupTimer() {
             return this.projectService.throttledOperations.cancel(`${this.getProjectName()}FailedLookupInvalidation`);
         }
