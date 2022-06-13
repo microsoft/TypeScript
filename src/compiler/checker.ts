@@ -4664,6 +4664,9 @@ namespace ts {
             if (symbol && symbol.flags & SymbolFlags.TypeParameter && meaning & SymbolFlags.Type) {
                 return { accessibility: SymbolAccessibility.Accessible };
             }
+            if (!symbol && isThisIdentifier(firstIdentifier) && isSymbolAccessible(getSymbolOfNode(getThisContainer(firstIdentifier, /*includeArrowFunctions*/ false)), firstIdentifier, meaning, /*computeAliases*/ false).accessibility === SymbolAccessibility.Accessible) {
+                return { accessibility: SymbolAccessibility.Accessible };
+            }
 
             // Verify if the symbol is accessible
             return (symbol && hasVisibleDeclarations(symbol, /*shouldComputeAliasToMakeVisible*/ true)) || {
