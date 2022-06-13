@@ -1,0 +1,23 @@
+//// [tests/cases/conformance/parser/ecmascript5/ArrowFunctionExpressions/parserArrowFunctionExpression8.ts] ////
+
+//// [fileJs.js]
+x ? y => ({ y }) : z => ({ z }) // Legal JS
+
+//// [fileTs.ts]
+x ? y => ({ y }) : z => ({ z })
+
+
+//// [fileJs.js]
+x ? function (y) { return function (_a) {
+    var y = _a.y;
+    return ({ z: z });
+}; }
+    :
+; // Legal JS
+//// [fileTs.js]
+x ? function (y) { return function (_a) {
+    var y = _a.y;
+    return ({ z: z });
+}; }
+    :
+;

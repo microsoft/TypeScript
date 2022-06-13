@@ -1,0 +1,26 @@
+=== tests/cases/conformance/parser/ecmascript5/ArrowFunctionExpressions/fileJs.js ===
+a ? b ? c : (d) : e => f // Legal JS
+>a ? b ? c : (d) : e => f : any
+>a : any
+>b ? c : (d) : e => f : any
+>b : any
+>c : any
+>(d) : e => f : (d: any) => e
+>d : any
+>f : any
+
+> : any
+
+=== tests/cases/conformance/parser/ecmascript5/ArrowFunctionExpressions/fileTs.ts ===
+a ? b ? c : (d) : e => f
+>a ? b ? c : (d) : e => f : any
+>a : any
+>b ? c : (d) : e => f : any
+>b : any
+>c : any
+>(d) : e => f : (d: any) => e
+>d : any
+>f : any
+
+> : any
+

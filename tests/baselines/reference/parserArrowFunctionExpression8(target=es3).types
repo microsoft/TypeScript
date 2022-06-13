@@ -1,0 +1,28 @@
+=== tests/cases/conformance/parser/ecmascript5/ArrowFunctionExpressions/fileJs.js ===
+x ? y => ({ y }) : z => ({ z }) // Legal JS
+>x ? y => ({ y }) : z => ({ z }) : any
+>x : any
+>y => ({ y }) : z => ({ z }) : (y: any) => ({ y }: { y: any; }) => z
+>y : any
+>({ y }) : z => ({ z }) : ({ y }: { y: any; }) => z
+>y : any
+>({ z }) : { z: any; }
+>{ z } : { z: any; }
+>z : any
+
+> : any
+
+=== tests/cases/conformance/parser/ecmascript5/ArrowFunctionExpressions/fileTs.ts ===
+x ? y => ({ y }) : z => ({ z })
+>x ? y => ({ y }) : z => ({ z }) : any
+>x : any
+>y => ({ y }) : z => ({ z }) : (y: any) => ({ y }: { y: any; }) => z
+>y : any
+>({ y }) : z => ({ z }) : ({ y }: { y: any; }) => z
+>y : any
+>({ z }) : { z: any; }
+>{ z } : { z: any; }
+>z : any
+
+> : any
+

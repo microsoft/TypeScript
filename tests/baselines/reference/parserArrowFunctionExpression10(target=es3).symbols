@@ -1,0 +1,14 @@
+=== tests/cases/conformance/parser/ecmascript5/ArrowFunctionExpressions/fileJs.js ===
+a ? (b) : c => (d) : e => f // Not legal JS; "Unexpected token ':'" at last colon
+>b : Symbol(b, Decl(fileJs.js, 0, 5))
+>c : Symbol(c)
+>d : Symbol(d, Decl(fileJs.js, 0, 16))
+>e : Symbol(e)
+
+=== tests/cases/conformance/parser/ecmascript5/ArrowFunctionExpressions/fileTs.ts ===
+a ? (b) : c => (d) : e => f
+>b : Symbol(b, Decl(fileTs.ts, 0, 5))
+>c : Symbol(c)
+>d : Symbol(d, Decl(fileTs.ts, 0, 16))
+>e : Symbol(e)
+
