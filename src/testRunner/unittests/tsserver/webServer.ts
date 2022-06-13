@@ -198,14 +198,12 @@ namespace ts.projectSystem {
             });
 
             it("plugins evaluation in correct order even if imports resolve out of order", async () => {
-                let resolvePluginA!: () => void;
-                let resolvePluginB!: () => void;
-                const pluginAPromise = new Promise<void>(_resolve => resolvePluginA = _resolve);
-                const pluginBPromise = new Promise<void>(_resolve => resolvePluginB = _resolve);
+                const pluginADeferred = Utils.defer();
+                const pluginBDeferred = Utils.defer();
                 const log: string[] = [];
                 const importServicePlugin = async (_root: string, moduleName: string): Promise<server.ModuleImportResult> => {
                     log.push(`request import ${moduleName}`);
-                    const promise = moduleName === "plugin-a" ? pluginAPromise : pluginBPromise;
+                    const promise = moduleName === "plugin-a" ? pluginADeferred.promise : pluginBDeferred.promise;
                     await promise;
                     log.push(`fulfill import ${moduleName}`);
                     return {
@@ -226,8 +224,8 @@ namespace ts.projectSystem {
                 await Promise.resolve();
 
                 // resolve imports out of order
-                resolvePluginB();
-                resolvePluginA();
+                pluginBDeferred.resolve();
+                pluginADeferred.resolve();
 
                 // wait for load to complete
                 await projectService.waitForPendingPlugins();
@@ -259,6 +257,95 @@ namespace ts.projectSystem {
                 await projectService.waitForPendingPlugins();
 
                 expect(getMessages()).to.deep.equal([{
+                    seq: 0,
+                    type: "event",
+                    event: "projectsUpdatedInBackground",
+                    body: {
+                        openFiles: ["^memfs:/foo.ts"]
+                    }
+                }]);
+            });
+
+            it("adds external files", async () => {
+                const pluginAShouldLoad = Utils.defer();
+                const pluginAExternalFilesRequested = Utils.defer();
+
+                const importServicePlugin = async (_root: string, _moduleName: string): Promise<server.ModuleImportResult> => {
+                    // wait until the initial external files are requested from the project service.
+                    await pluginAShouldLoad.promise;
+
+                    return {
+                        module: (() => ({
+                            create: info => info.languageService,
+                            getExternalFiles: () => {
+                                // signal that external files have been requested by the project service.
+                                pluginAExternalFilesRequested.resolve();
+                                return ["external.txt"];
+                            }
+                        })) as server.PluginModuleFactory,
+                        error: undefined
+                    };
+                };
+
+                const { session } = setup(/*logLevel*/ undefined, { globalPlugins: ["plugin-a"] }, importServicePlugin);
+                const projectService = session.getProjectService();
+
+                session.executeCommand({ seq: 1, type: "request", command: protocol.CommandTypes.Open, arguments: { file: "^memfs:/foo.ts", content: "" } });
+
+                const project = projectService.inferredProjects[0];
+
+                // get the external files we know about before plugins are loaded
+                const initialExternalFiles = project.getExternalFiles();
+
+                // we've ready the initial set of external files, allow the plugin to continue loading.
+                pluginAShouldLoad.resolve();
+
+                // wait for plugins
+                await projectService.waitForPendingPlugins();
+
+                // wait for the plugin's external files to be requested
+                await pluginAExternalFilesRequested.promise;
+
+                // get the external files we know aobut after plugins are loaded
+                const pluginExternalFiles = project.getExternalFiles();
+
+                expect(initialExternalFiles).to.deep.equal([]);
+                expect(pluginExternalFiles).to.deep.equal(["external.txt"]);
+            });
+
+            it("project is closed before plugins are loaded", async () => {
+                const pluginALoaded = Utils.defer();
+                const projectClosed = Utils.defer();
+                const importServicePlugin = async (_root: string, _moduleName: string): Promise<server.ModuleImportResult> => {
+                    // mark that the plugin has started loading
+                    pluginALoaded.resolve();
+
+                    // wait until after a project close has been requested to continue
+                    await projectClosed.promise;
+                    return {
+                        module: (() => ({ create: info => info.languageService })) as server.PluginModuleFactory,
+                        error: undefined
+                    };
+                };
+
+                const { session, getMessages } = setup(/*logLevel*/ undefined, { globalPlugins: ["plugin-a"] }, importServicePlugin);
+                const projectService = session.getProjectService();
+
+                session.executeCommand({ seq: 1, type: "request", command: protocol.CommandTypes.Open, arguments: { file: "^memfs:/foo.ts", content: "" } });
+
+                // wait for the plugin to start loading
+                await pluginALoaded.promise;
+
+                // close the project
+                session.executeCommand({ seq: 2, type: "request", command: protocol.CommandTypes.Close, arguments: { file: "^memfs:/foo.ts" } });
+
+                // continue loading the plugin
+                projectClosed.resolve();
+
+                await projectService.waitForPendingPlugins();
+
+                // the project was closed before plugins were ready. no project update should have been requested
+                expect(getMessages()).not.to.deep.equal([{
                     seq: 0,
                     type: "event",
                     event: "projectsUpdatedInBackground",
