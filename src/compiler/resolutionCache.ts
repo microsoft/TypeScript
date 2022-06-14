@@ -709,8 +709,9 @@ namespace ts {
 
         function watchAffectingLocationsOfResolution(resolution: ResolutionWithFailedLookupLocations, addToResolutionsWithOnlyAffectingLocations: boolean) {
             Debug.assert(!!resolution.refCount);
-            if (addToResolutionsWithOnlyAffectingLocations) resolutionsWithOnlyAffectingLocations.push(resolution);
             const { affectingLocations } = resolution;
+            if (!affectingLocations.length) return;
+            if (addToResolutionsWithOnlyAffectingLocations) resolutionsWithOnlyAffectingLocations.push(resolution);
             // Watch package json
             for (const affectingLocation of affectingLocations) {
                 createFileWatcherOfAffectingLocation(affectingLocation);
