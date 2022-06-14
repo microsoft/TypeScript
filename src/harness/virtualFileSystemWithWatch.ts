@@ -113,6 +113,12 @@ interface Array<T> { length: number; [n: number]: T; }`
                 delete this.map[key];
             }
         }
+
+        serialize(baseline: string[]) {
+            for (const id in this.map) {
+                baseline.push(`${id} at time ${this.map[id].time} in ${this.map[id].ms} ms: ${this.map[id].args[1]}`)
+            }
+        }
     }
 
     type TimeOutCallback = (...args: any[]) => void;
@@ -243,7 +249,7 @@ interface Array<T> { length: number; [n: number]: T; }`
             if (this.inodes) this.inodes.set(path, this.nextInode++);
         }
         override getInode(path: Path): number | undefined {
-            if (this.inodes) return this.inodes.get(path)
+            if (this.inodes) return this.inodes.get(path);
         }
         protected override deleteInode(path: Path) {
             if (this.inodes) this.inodes.delete(path);
@@ -414,6 +420,10 @@ interface Array<T> { length: number; [n: number]: T; }`
             this.timeoutCallbacks.unregister(timeoutId);
         }
 
+        serializeTimeout(baseline: string[]) {
+            this.timeoutCallbacks.serialize(baseline)
+        }
+
         clearScreen(): void {
             this.screenClears.push(this.output.length);
         }
@@ -490,14 +500,11 @@ interface Array<T> { length: number; [n: number]: T; }`
             this.clearOutput();
         }
 
-        serializeWatches(baseline: string[] = []) {
-            serializeMultiMap(baseline, "WatchedFiles", this.watchedFiles, ({ fileName, pollingInterval }) => ({ fileName, pollingInterval }));
-            baseline.push("");
-            serializeMultiMap(baseline, "FsWatches", this.fsWatches, serializeTestFsWatcher);
-            baseline.push("");
-            serializeMultiMap(baseline, "FsWatchesRecursive", this.fsWatchesRecursive, serializeTestFsWatcher);
-            baseline.push("");
-            return baseline;
+        readonly exitMessage = "System Exit";
+        exitCode: number | undefined;
+        exit(exitCode?: number) {
+            this.exitCode = exitCode;
+            throw new Error(this.exitMessage);
         }
 
         override getEnvironmentVariable(name: string) {
@@ -505,7 +512,7 @@ interface Array<T> { length: number; [n: number]: T; }`
         }
     }
 
-    export function snap(fshost: VirtualFS.VirtualServerHost): ESMap<Path, FSEntry> {
+    export function snap(fshost: VirtualServerHost): ESMap<Path, FSEntry> {
         const result = new Map<Path, FSEntry>();
         fshost.fs.forEach((value, key) => {
             const cloneValue = clone(value);
@@ -518,7 +525,7 @@ interface Array<T> { length: number; [n: number]: T; }`
         return result;
     }
 
-    export function diff(fshost: VirtualFS.VirtualServerHost, baseline: string[], base: ESMap<Path, FSEntry> = new Map()) {
+    export function diff(fshost: VirtualServerHost, baseline: string[], base: ESMap<Path, FSEntry> = new Map()) {
         fshost.fs.forEach((newFsEntry, path) => {
             diffFsEntry(baseline, base.get(path), newFsEntry, fshost.getInode(path), fshost.writtenFiles);
         });
@@ -596,23 +603,6 @@ interface Array<T> { length: number; [n: number]: T; }`
         else if (isFsSymLink(newFsEntry)) {
             diffFsSymLink(baseline, newFsEntry, newInode);
         }
-    }
-
-    function serializeTestFsWatcher({ directoryName, inode }: VirtualFsWatcher) {
-        return {
-            directoryName,
-            inode,
-        };
-    }
-
-    function serializeMultiMap<T, U>(baseline: string[], caption: string, multiMap: MultiMap<string, T>, valueMapper: (value: T) => U) {
-        baseline.push(`${caption}::`);
-        multiMap.forEach((values, key) => {
-            baseline.push(`${key}:`);
-            for (const value of values) {
-                baseline.push(`  ${JSON.stringify(valueMapper(value))}`);
-            }
-        });
     }
 
     function baselineOutputs(baseline: string[], output: readonly string[], start: number, end = output.length) {

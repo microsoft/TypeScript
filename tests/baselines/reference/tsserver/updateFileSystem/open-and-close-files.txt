@@ -30,13 +30,17 @@ interface Array<T> { length: number; [n: number]: T; }
 
 
 
+
 #### Opening app.ts
+
 
 
 #### Opening file3.ts
 
 
+
 #### non-delete
+
 
 
 #### change app.ts content
@@ -45,8 +49,77 @@ import { xyz } from './file3'; let y = xyz
 
 
 
+
+#### ensure /host/app.ts exists
+
+//// [/host/b/app.ts]
+console.log("hello")
+
+
+
+#### modify /host/app.ts
+
+//// [/host/b/app.ts]
+console.log('goodbye')
+
+
+
+#### ensure /fshost/file4.ts exists
+//// [/fshost/b/file4.ts]
+console.log('file4 exists')
+
+
+
+1 at time 12000 in 250 ms: /fshost/b/tsconfig.json
+2 at time 12000 in 2500 ms: *ensureProjectForOpenFiles*
+
+#### modify /fshost/file4
+//// [/fshost/b/file4.ts]
+console.log('file4 modified')
+
+
+
+1 at time 12000 in 250 ms: /fshost/b/tsconfig.json
+2 at time 12000 in 2500 ms: *ensureProjectForOpenFiles*
+
 #### delete
 //// [/fshost/b/commonFile1.ts] deleted
 
 
+5 at time 12000 in 250 ms: /fshost/b/tsconfig.json
+6 at time 12000 in 2500 ms: *ensureProjectForOpenFiles*
+
 #### close
+
+
+5 at time 12000 in 250 ms: /fshost/b/tsconfig.json
+6 at time 12000 in 2500 ms: *ensureProjectForOpenFiles*
+### fshost watches
+WatchedFiles::
+/fshost/b/tsconfig.json:
+  {"fileName":"/fshost/b/tsconfig.json","pollingInterval":250}
+/fshost/b:
+  {"fileName":"/fshost/b","pollingInterval":500}
+/fshost/b/commonfile2.ts:
+  {"fileName":"/fshost/b/commonFile2.ts","pollingInterval":250}
+/fshost/lib.d.ts:
+  {"fileName":"/fshost/lib.d.ts","pollingInterval":250}
+/fshost/b/node_modules/@types:
+  {"fileName":"/fshost/b/node_modules/@types","pollingInterval":500}
+/fshost/b/app.ts:
+  {"fileName":"/fshost/b/app.ts","pollingInterval":250}
+
+FsWatches::
+/host/b/app.ts:
+  {"directoryName":"/host/b"}
+
+FsWatchesRecursive::
+/fshost/b:
+  {"directoryName":"/fshost/b"}
+
+### host watches
+WatchedFiles::
+
+FsWatches::
+
+FsWatchesRecursive::

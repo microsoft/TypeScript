@@ -636,18 +636,39 @@ namespace ts.VirtualFS {
             return fsEntry?.fullPath || realFullPath;
         }
 
-        readonly exitMessage = "System Exit";
-        exitCode: number | undefined;
         readonly resolvePath = (s: string) => s;
         readonly getExecutingFilePath = () => this.executingFilePath;
         readonly getCurrentDirectory = () => this.currentDirectory;
-        exit(exitCode?: number) {
-            this.exitCode = exitCode;
-            throw new Error(this.exitMessage);
+
+        serializeWatches(baseline: string[] = []) {
+            serializeMultiMap(baseline, "WatchedFiles", this.watchedFiles, ({ fileName, pollingInterval }) => ({ fileName, pollingInterval }));
+            baseline.push("");
+            serializeMultiMap(baseline, "FsWatches", this.fsWatches, serializeTestFsWatcher);
+            baseline.push("");
+            serializeMultiMap(baseline, "FsWatchesRecursive", this.fsWatchesRecursive, serializeTestFsWatcher);
+            baseline.push("");
+            return baseline;
         }
 
         getEnvironmentVariable(_name: string) {
             return "";
         }
+    }
+
+    function serializeTestFsWatcher({ directoryName, inode }: VirtualFsWatcher) {
+        return {
+            directoryName,
+            inode,
+        };
+    }
+
+    function serializeMultiMap<T, U>(baseline: string[], caption: string, multiMap: MultiMap<string, T>, valueMapper: (value: T) => U) {
+        baseline.push(`${caption}::`);
+        multiMap.forEach((values, key) => {
+            baseline.push(`${key}:`);
+            for (const value of values) {
+                baseline.push(`  ${JSON.stringify(valueMapper(value))}`);
+            }
+        });
     }
 }

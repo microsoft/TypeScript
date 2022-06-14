@@ -22,42 +22,46 @@ namespace ts.projectSystem {
         };
         const lib: protocol.FileSystemRequestArgs = {
         file: "/fshost/lib/lib.d.ts",
-        fileContent: `/// <reference no-default-lib="true"/>
-interface Boolean {}
-interface Function {}
-interface CallableFunction {}
-interface NewableFunction {}
-interface IArguments {}
-interface Number { toExponential: any; }
-interface Object {}
-interface RegExp {}
-interface String { charAt: any; }
-interface Array<T> { length: number; [n: number]: T; }`
-    };
+            fileContent: libFile.content
+        };
 
         function fileContentWithComment(file: protocol.FileSystemRequestArgs) {
             return `// some copy right notice
 ${file.fileContent}`;
         }
-        function baselineFileSystem(scenario: string, subScenario: string, requests: [string, Partial<protocol.Request>][], host: VirtualFS.VirtualServerHost, session: TestSession) {
+        function baselineFileSystem(scenario: string, subScenario: string, requests: [string, (() => void) | Partial<protocol.Request>][], host: TestServerHost, fshost: VirtualFS.VirtualServerHost, session: TestSession) {
             const history: string[] = [];
-            let prev = VirtualFS.snap(host);
+
+            let prev = VirtualFS.snap(fshost);
+            let prev2 = VirtualFS.snap(host);
             for (const [name, request] of requests) {
-                session.executeCommandSeq(request);
+                if (typeof request === "function") {
+                    request();
+                }
+                else {
+                    session.executeCommandSeq(request);
+                }
                 history.push("");
                 history.push("#### " + name);
-                VirtualFS.diff(host, history, prev);
-                prev = VirtualFS.snap(host);
+                VirtualFS.diff(fshost, history, prev);
+                prev = VirtualFS.snap(fshost);
+                VirtualFS.diff(host, history, prev2);
+                prev2 = VirtualFS.snap(host);
+                host.serializeTimeout(history)
             }
+            history.push("### fshost watches")
+            fshost.serializeWatches(history)
+            history.push("### host watches")
+            host.serializeWatches(history)
             Harness.Baseline.runBaseline(`tsserver/${scenario}/${subScenario.split(" ").join("-")}.txt`, history.join("\r\n"));
             baselineTsserverLogs(scenario, subScenario, session);
         }
 
         it("with updateFileSystem request", () => {
-            const host = VirtualFS.createVirtualServerHost({ executingFilePath: "/host/tsc.js" });
+            const host = VirtualFS.createServerHost({ executingFilePath: "/host/tsc.js" });
             const fshost = VirtualFS.createVirtualServerHost({ executingFilePath: "/fshost/tsc.js" });
             const session = createSession(host, { fshost, logger: createLoggerWithInMemoryLogs(), canUseEvents: true });
-            const requests: [string, Partial<protocol.Request>][] = [
+            const requests: [string, (() => void) | Partial<protocol.Request>][] = [
                 ["Initial updateFileSystem", {
                     command: protocol.CommandTypes.UpdateFileSystem,
                     arguments:{
@@ -96,6 +100,22 @@ ${file.fileContent}`;
                         deleted: [],
                     },
                 }],
+                ["ensure /host/app.ts exists", () => host.ensureFileOrFolder({
+                    path: "/host/b/app.ts",
+                    content: 'console.log("hello")'
+                })],
+                ["modify /host/app.ts", () => host.modifyFile(
+                    "/host/b/app.ts",
+                    "console.log('goodbye')"
+                )],
+                ["ensure /fshost/file4.ts exists", () => fshost.ensureFileOrFolder({
+                    path:"/fshost/b/file4.ts",
+                    content: "console.log('file4 exists')",
+                })],
+                ["modify /fshost/file4", () => fshost.modifyFile(
+                    "/fshost/b/file4.ts",
+                    "console.log('file4 modified')"
+                )],
                 ["delete", {
                     command: protocol.CommandTypes.UpdateFileSystem,
                     arguments:{
@@ -119,17 +139,7 @@ ${file.fileContent}`;
 
             const scenario = "updateFileSystem";
             const subScenario = "open and close files";
-            baselineFileSystem(scenario, subScenario, requests, fshost, session);
-
-            host.ensureFileOrFolder({
-                path: "/host/b/app.ts",
-                content: 'console.log("hello")'
-            });
-            host.modifyFile("/host/b/app.ts", "console.log('goodbye')");
-            assert.isFalse(host.fileExists("/fshost/b/app.ts"), "host fileExists /fshost/b/app.ts");
-            assert.isTrue(fshost.fileExists("/fshost/b/app.ts"), "fshost fileExists /fshost/b/app.ts");
-            assert.isTrue(host.fileExists("/host/b/app.ts"), "host fileExists /host/b/app.ts");
-            assert.isFalse(fshost.fileExists("/host/b/app.ts"), "fshost fileExists /host/b/app.ts");
+            baselineFileSystem(scenario, subScenario, requests, host, fshost, session);
         });
     });
 }

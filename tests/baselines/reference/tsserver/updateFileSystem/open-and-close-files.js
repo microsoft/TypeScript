@@ -52,6 +52,8 @@ Project '/fshost/b/tsconfig.json' (Configured)
 event:
     {"seq":0,"type":"event","event":"projectLoadingFinish","body":{"projectName":"/fshost/b/tsconfig.json"}}
 event:
+    {"seq":0,"type":"event","event":"telemetry","body":{"telemetryEventName":"projectInfo","payload":{"projectId":"bea14cc795bf8fe7209e389c09ff1c7f1d8288597401b8616cd5edcd3f073d77","fileStats":{"js":0,"jsSize":0,"jsx":0,"jsxSize":0,"ts":4,"tsSize":79,"tsx":0,"tsxSize":0,"dts":0,"dtsSize":0,"deferred":0,"deferredSize":0},"compilerOptions":{},"typeAcquisition":{"enable":false,"include":false,"exclude":false},"extends":false,"files":false,"include":false,"exclude":false,"compileOnSave":false,"configFileName":"tsconfig.json","projectType":"configured","languageServiceEnabled":true,"version":"FakeVersion"}}}
+event:
     {"seq":0,"type":"event","event":"configFileDiag","body":{"triggerFile":"/fshost/b/app.ts","configFile":"/fshost/b/tsconfig.json","diagnostics":[{"text":"File '/fshost/lib.d.ts' not found.\n  The file is in the program because:\n    Default library for target 'es3'","code":6053,"category":"error"},{"text":"Cannot find global type 'Array'.","code":2318,"category":"error"},{"text":"Cannot find global type 'Boolean'.","code":2318,"category":"error"},{"text":"Cannot find global type 'Function'.","code":2318,"category":"error"},{"text":"Cannot find global type 'IArguments'.","code":2318,"category":"error"},{"text":"Cannot find global type 'Number'.","code":2318,"category":"error"},{"text":"Cannot find global type 'Object'.","code":2318,"category":"error"},{"text":"Cannot find global type 'RegExp'.","code":2318,"category":"error"},{"text":"Cannot find global type 'String'.","code":2318,"category":"error"}]}}
 Project '/fshost/b/tsconfig.json' (Configured)
 	Files (4)
@@ -82,15 +84,19 @@ request:{"command":"updateFileSystem","arguments":{"fileSystem":"memfs","files":
 response:{"response":true,"responseRequired":true}
 request:{"command":"updateFileSystem","arguments":{"fileSystem":"memfs","files":[{"file":"/fshost/b/app.ts","fileContent":"import { xyz } from './file3'; let y = xyz"}],"deleted":[]},"seq":5,"type":"request"}
 response:{"response":true,"responseRequired":true}
+DirectoryWatcher:: Triggered with /fshost/b/file4.ts :: WatchInfo: /fshost/b 1 undefined Config: /fshost/b/tsconfig.json WatchType: Wild card directory
+Scheduled: /fshost/b/tsconfig.json
+Scheduled: *ensureProjectForOpenFiles*
+Elapsed:: *ms DirectoryWatcher:: Triggered with /fshost/b/file4.ts :: WatchInfo: /fshost/b 1 undefined Config: /fshost/b/tsconfig.json WatchType: Wild card directory
 request:{"command":"updateFileSystem","arguments":{"fileSystem":"memfs","files":[],"deleted":["/fshost/b/commonFile1.ts"]},"seq":6,"type":"request"}
 FileWatcher:: Triggered with /fshost/b/commonFile1.ts 2:: WatchInfo: /fshost/b/commonFile1.ts 500 undefined WatchType: Closed Script info
 FileWatcher:: Close:: WatchInfo: /fshost/b/commonFile1.ts 500 undefined WatchType: Closed Script info
-Scheduled: /fshost/b/tsconfig.json
-Scheduled: *ensureProjectForOpenFiles*
+Scheduled: /fshost/b/tsconfig.json, Cancelled earlier one
+Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Elapsed:: *ms FileWatcher:: Triggered with /fshost/b/commonFile1.ts 2:: WatchInfo: /fshost/b/commonFile1.ts 500 undefined WatchType: Closed Script info
 DirectoryWatcher:: Triggered with /fshost/b/commonFile1.ts :: WatchInfo: /fshost/b 1 undefined Config: /fshost/b/tsconfig.json WatchType: Wild card directory
-Scheduled: /fshost/b/tsconfig.json
-Scheduled: *ensureProjectForOpenFiles*
+Scheduled: /fshost/b/tsconfig.json, Cancelled earlier one
+Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Elapsed:: *ms DirectoryWatcher:: Triggered with /fshost/b/commonFile1.ts :: WatchInfo: /fshost/b 1 undefined Config: /fshost/b/tsconfig.json WatchType: Wild card directory
 response:{"response":true,"responseRequired":true}
 request:{"command":"close","arguments":{"file":"/fshost/b/app.ts"},"seq":7,"type":"request"}

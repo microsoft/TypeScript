@@ -327,7 +327,7 @@ interface Symbol {
         originalReadCall?: System["readFile"],
     ) {
         const buildInfoPath = getTsBuildInfoEmitOutputFilePath(options);
-        if (!buildInfoPath || !sys.writtenFiles!.has(toPathWithSystem(sys, buildInfoPath))) return;
+        if (!buildInfoPath || !sys.writtenFiles.has(toPathWithSystem(sys, buildInfoPath))) return;
         if (!sys.fileExists(buildInfoPath)) return;
 
         const buildInfo = getBuildInfo((originalReadCall || sys.readFile).call(sys, buildInfoPath, "utf8")!);

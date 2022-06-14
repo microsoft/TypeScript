@@ -416,7 +416,7 @@ namespace ts.server {
                 storeFilesChangingSignatureDuringEmit: host.storeFilesChangingSignatureDuringEmit,
                 // VirtualFS
                 ensureFileOrFolder: fshost.ensureFileOrFolder.bind(fshost),
-            } as any;
+            } as ServerHost;
     }
 
     const noopConfigFileWatcher: FileWatcher = { close: noop };
@@ -3757,13 +3757,13 @@ namespace ts.server {
         updateFileSystem(updatedFiles: protocol.FileSystemRequestArgs[] | undefined, deletedFiles?: string[]) {
             const fshost = this.host as unknown as FileServerHost;
             if (updatedFiles) {
-                Debug.assert(fshost.ensureFileOrFolder)
+                Debug.assert(fshost.ensureFileOrFolder);
                 for (const { file, fileContent } of updatedFiles) {
                     fshost.ensureFileOrFolder({ path: file, content: fileContent });
                 }
             }
             if (deletedFiles) {
-                Debug.assert(fshost.deleteFile)
+                Debug.assert(fshost.deleteFile);
                 for (const file of deletedFiles) {
                     fshost.deleteFile(file, /*deleteEmptyParentFolders*/ true);
                 }
