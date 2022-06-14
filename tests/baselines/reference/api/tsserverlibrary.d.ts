@@ -7001,17 +7001,7 @@ declare namespace ts.server {
         trace?(s: string): void;
         require?(initialPath: string, moduleName: string): RequireResult;
     }
-    type FileServerHost = Pick<ServerHost, "readFile" | "writeFile" | "fileExists" | "directoryExists" | "getFileSize" | "getModifiedTime" | "getDirectories" | "getCurrentDirectory" | "getExecutingFilePath" | "realpath" | "resolvePath" | "createDirectory" | "setModifiedTime" | "readDirectory" | "watchFile" | "watchDirectory" | "useCaseSensitiveFileNames"> & {
-        deleteFile(path: string, deleteEmptyParentFolders?: boolean): void;
-        ensureFileOrFolder(fileOrDirectoryOrSymLink: {
-            path: string;
-        } & ({
-            content: string;
-            fileSize?: number;
-        } | {} | {
-            symLink: string;
-        }), ignoreWatchInvokedWithTriggerAsFileCreate?: boolean, ignoreParentWatch?: boolean): void;
-    };
+    type FileServerHost = Pick<ServerHost, "readFile" | "writeFile" | "fileExists" | "directoryExists" | "getFileSize" | "getModifiedTime" | "getDirectories" | "getCurrentDirectory" | "getExecutingFilePath" | "realpath" | "resolvePath" | "createDirectory" | "setModifiedTime" | "readDirectory" | "watchFile" | "watchDirectory" | "useCaseSensitiveFileNames">;
 }
 declare namespace ts.server {
     enum LogLevel {
@@ -10468,6 +10458,7 @@ declare namespace ts.server {
         readonly currentDirectory: NormalizedPath;
         readonly toCanonicalFileName: (f: string) => string;
         readonly host: ServerHost;
+        private readonly fshost;
         readonly logger: Logger;
         readonly cancellationToken: HostCancellationToken;
         readonly useSingleInferredProject: boolean;

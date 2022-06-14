@@ -228,7 +228,7 @@ namespace ts.VirtualFS {
             }
 
             if (options && options.invokeFileDeleteCreateAsPartInsteadOfChange) {
-                this.removeFileOrFolder(currentEntry, /*isRenaming*/ false, options);
+                this.removeFileOrFolder(currentEntry, /*isRemovableLeafFolder*/ false, /*isRenaming*/ false, options);
                 this.ensureFileOrFolder({ path: filePath, content }, /*ignoreWatchInvokedWithTriggerAsFileCreate*/ undefined, /*ignoreParentWatch*/ undefined, options);
             }
             else {
@@ -316,7 +316,7 @@ namespace ts.VirtualFS {
             this.inodeWatching = inodeWatching;
         }
 
-        protected removeFileOrFolder(fileOrDirectory: FsFile | FsFolder | FsSymLink, isRenaming?: boolean, options?: Partial<WatchInvokeOptions>) {
+        protected removeFileOrFolder(fileOrDirectory: FsFile | FsFolder | FsSymLink, isRemovableLeafFolder: boolean, isRenaming?: boolean, options?: Partial<WatchInvokeOptions>) {
             const basePath = getDirectoryPath(fileOrDirectory.path);
             const baseFolder = this.fs.get(basePath) as FsFolder;
             if (basePath !== fileOrDirectory.path) {
@@ -332,14 +332,18 @@ namespace ts.VirtualFS {
             if (!options?.ignoreDelete) this.invokeFileAndFsWatches(fileOrDirectory.fullPath, FileWatcherEventKind.Deleted, /*modifiedTime*/ undefined, options?.useTildeAsSuffixInRenameEventFileName);
             this.deleteInode(fileOrDirectory.path);
             if (!options?.ignoreDelete) this.invokeFileAndFsWatches(baseFolder.fullPath, FileWatcherEventKind.Changed, baseFolder.modifiedTime, options?.useTildeAsSuffixInRenameEventFileName);
+            if (basePath !== fileOrDirectory.path
+                && baseFolder.entries.length === 0
+                && isRemovableLeafFolder) {
+                this.removeFileOrFolder(baseFolder, isRemovableLeafFolder, isRenaming, options);
+            }
         }
 
-        // TODO: Need to restore the deleteEmptyParentFolders capability for updateFileSystem in editorServices
-        deleteFile(filePath: string/*, deleteEmptyParentFolders = false*/) {
+        deleteFile(filePath: string, deleteEmptyParentFolders = false) {
             const path = this.toFullPath(filePath);
             const currentEntry = this.fs.get(path) as FsFile;
             Debug.assert(isFsFile(currentEntry));
-            this.removeFileOrFolder(currentEntry);
+            this.removeFileOrFolder(currentEntry, deleteEmptyParentFolders);
         }
 
         protected watchFileWorker(fileName: string, cb: FileWatcherCallback, pollingInterval: PollingInterval) {

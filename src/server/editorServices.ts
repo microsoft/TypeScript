@@ -376,7 +376,6 @@ namespace ts.server {
                 resolvePath: fshost.resolvePath.bind(fshost),
                 createDirectory: fshost.createDirectory.bind(fshost),
                 setModifiedTime: fshost.setModifiedTime?.bind(fshost),
-                deleteFile: fshost.deleteFile?.bind(fshost),
                 readDirectory: fshost.readDirectory.bind(fshost),
                 watchFile: fshost.watchFile.bind(fshost),
                 watchDirectory: fshost.watchDirectory.bind(fshost),
@@ -414,8 +413,6 @@ namespace ts.server {
                 now: host.now?.bind(host),
                 disableUseFileVersionAsSignature: host.disableUseFileVersionAsSignature,
                 storeFilesChangingSignatureDuringEmit: host.storeFilesChangingSignatureDuringEmit,
-                // VirtualFS
-                ensureFileOrFolder: fshost.ensureFileOrFolder.bind(fshost),
             } as ServerHost;
     }
 
@@ -822,6 +819,7 @@ namespace ts.server {
         readonly toCanonicalFileName: (f: string) => string;
 
         public readonly host: ServerHost;
+        private readonly fshost: VirtualFS.VirtualServerHost;
         public readonly logger: Logger;
         public readonly cancellationToken: HostCancellationToken;
         public readonly useSingleInferredProject: boolean;
@@ -868,6 +866,7 @@ namespace ts.server {
 
         constructor(opts: ProjectServiceOptions) {
             this.host = getFileSystemHost(opts.host, opts.fshost);
+            this.fshost = opts.fshost as VirtualFS.VirtualServerHost;
             this.logger = opts.logger;
             this.cancellationToken = opts.cancellationToken;
             this.useSingleInferredProject = opts.useSingleInferredProject;
@@ -3755,17 +3754,23 @@ namespace ts.server {
 
         /* @internal */
         updateFileSystem(updatedFiles: protocol.FileSystemRequestArgs[] | undefined, deletedFiles?: string[]) {
-            const fshost = this.host as unknown as FileServerHost;
+            if (!this.fshost) {
+                this.logger.msg("fshost not defined, skipping updateFileSystem", Msg.Err);
+            }
             if (updatedFiles) {
-                Debug.assert(fshost.ensureFileOrFolder);
+                if (!this.fshost.ensureFileOrFolder) {
+                    this.logger.msg(`fshost missing ensureFileOrFolder, skipping update of ${JSON.stringify(updatedFiles.map(({ file }) => file))}`, Msg.Err);
+                }
                 for (const { file, fileContent } of updatedFiles) {
-                    fshost.ensureFileOrFolder({ path: file, content: fileContent });
+                    this.fshost.ensureFileOrFolder({ path: file, content: fileContent });
                 }
             }
             if (deletedFiles) {
-                Debug.assert(fshost.deleteFile);
+                if (!this.fshost.deleteFile) {
+                    this.logger.msg(`fshost missing deleteFile, skipping delete of ${JSON.stringify(deletedFiles)}`, Msg.Err);
+                }
                 for (const file of deletedFiles) {
-                    fshost.deleteFile(file, /*deleteEmptyParentFolders*/ true);
+                    this.fshost.deleteFile(file, /*deleteEmptyParentFolders*/ true);
                 }
             }
         }

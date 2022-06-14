@@ -23,12 +23,5 @@ declare namespace ts.server {
         | "readFile" | "writeFile" | "fileExists" | "directoryExists" | "getFileSize" | "getModifiedTime"
         | "getDirectories" | "getCurrentDirectory" | "getExecutingFilePath" | "realpath" | "resolvePath"
         | "createDirectory" | "setModifiedTime" | "readDirectory" | "watchFile" | "watchDirectory"
-        | "useCaseSensitiveFileNames"> & {
-            deleteFile(path: string, deleteEmptyParentFolders?: boolean): void;
-            ensureFileOrFolder(
-                fileOrDirectoryOrSymLink: { path: string } & ({ content: string, fileSize?: number } | {} | { symLink: string }),
-                ignoreWatchInvokedWithTriggerAsFileCreate?: boolean,
-                ignoreParentWatch?: boolean
-            ): void
-        };
+        | "useCaseSensitiveFileNames">;
 }

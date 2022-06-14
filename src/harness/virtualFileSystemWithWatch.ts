@@ -304,7 +304,7 @@ interface Array<T> { length: number; [n: number]: T; }`
             Debug.assert(!!file);
 
             // Only remove the file
-            this.removeFileOrFolder(file, /*isRenaming*/ true);
+            this.removeFileOrFolder(file, /*isRemovableLeafFolder*/ false, /*isRenaming*/ true);
 
             // Add updated folder with new folder name
             const newFullPath = getNormalizedAbsolutePath(newFileName, this.currentDirectory);
@@ -324,7 +324,7 @@ interface Array<T> { length: number; [n: number]: T; }`
             Debug.assert(!!folder);
 
             // Only remove the folder
-            this.removeFileOrFolder(folder, /*isRenaming*/ true);
+            this.removeFileOrFolder(folder, /*isRemovableLeafFolder*/ false, /*isRenaming*/ true);
 
             // Add updated folder with new folder name
             const newFullPath = getNormalizedAbsolutePath(newFolderName, this.currentDirectory);
@@ -370,11 +370,11 @@ interface Array<T> { length: number; [n: number]: T; }`
                         this.deleteFolder(fsEntry.fullPath, recursive);
                     }
                     else {
-                        this.removeFileOrFolder(fsEntry);
+                        this.removeFileOrFolder(fsEntry, /*isRemovableLeafFolder*/ false);
                     }
                 });
             }
-            this.removeFileOrFolder(currentEntry);
+            this.removeFileOrFolder(currentEntry, /*isRemovableLeafFolder*/ false);
         }
 
         protected override fsWatchWorker(
