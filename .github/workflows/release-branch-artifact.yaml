@@ -11,10 +11,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Use node version 14
-      uses: actions/setup-node@v3
-      with:
-        node-version: 14
+    - uses: actions/setup-node@v3
     - name: Remove existing TypeScript
       run: |
         npm uninstall typescript --no-save
@@ -23,10 +20,8 @@ jobs:
       run: |
         npm ci
         npm test
-      env:
-        CI: true
     - name: Adding playwright
-      run: npm install --no-save --no-package-lock playwright    
+      run: npm install --no-save --no-package-lock playwright
     - name: Validate the browser can import TypeScript
       run: gulp test-browser-integration
     - name: LKG, clean, and pack
@@ -35,8 +30,6 @@ jobs:
         gulp clean
         npm pack ./
         mv typescript-*.tgz typescript.tgz
-      env:
-        CI: true
     - name: Upload built tarfile
       uses: actions/upload-artifact@v1
       with:

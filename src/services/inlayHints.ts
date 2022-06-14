@@ -47,7 +47,7 @@ namespace ts.InlayHints {
                 return;
             }
 
-            if (isTypeNode(node)) {
+            if (isTypeNode(node) && !isExpressionWithTypeArguments(node)) {
                 return;
             }
 

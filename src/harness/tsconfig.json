@@ -15,7 +15,8 @@
         { "path": "../services" },
         { "path": "../jsTyping" },
         { "path": "../server" },
-        { "path": "../typingsInstallerCore" }
+        { "path": "../typingsInstallerCore" },
+        { "path": "../deprecatedCompat" },
     ],
 
     "files": [

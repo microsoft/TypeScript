@@ -40,7 +40,7 @@ Output::
     * src/packages/pkg1.tsconfig.json
     * src/packages/pkg2.tsconfig.json
 
-[[90m12:00:18 AM[0m] Project 'src/packages/pkg1.tsconfig.json' is out of date because output file 'src/packages/pkg1_index.js' does not exist
+[[90m12:00:18 AM[0m] Project 'src/packages/pkg1.tsconfig.json' is out of date because output file 'src/packages/pkg1.tsconfig.tsbuildinfo' does not exist
 
 [[90m12:00:19 AM[0m] Building project '/src/packages/pkg1.tsconfig.json'...
 
@@ -50,9 +50,9 @@ File '/src/packages/typeroot1/sometype/package.json' does not exist.
 File '/src/packages/typeroot1/sometype/index.d.ts' exist - use it as a name resolution result.
 Resolving real path for '/src/packages/typeroot1/sometype/index.d.ts', result '/src/packages/typeroot1/sometype/index.d.ts'.
 ======== Type reference directive 'sometype' was successfully resolved to '/src/packages/typeroot1/sometype/index.d.ts', primary: true. ========
-[[90m12:00:24 AM[0m] Project 'src/packages/pkg2.tsconfig.json' is out of date because output file 'src/packages/pkg2_index.js' does not exist
+[[90m12:00:26 AM[0m] Project 'src/packages/pkg2.tsconfig.json' is out of date because output file 'src/packages/pkg2.tsconfig.tsbuildinfo' does not exist
 
-[[90m12:00:25 AM[0m] Building project '/src/packages/pkg2.tsconfig.json'...
+[[90m12:00:27 AM[0m] Building project '/src/packages/pkg2.tsconfig.json'...
 
 ======== Resolving type reference directive 'sometype', containing file '/src/packages/__inferred type names__.ts', root directory '/src/packages/typeroot2'. ========
 Resolving with primary search path '/src/packages/typeroot2'.
@@ -64,7 +64,7 @@ exitCode:: ExitStatus.Success
 
 
 //// [/src/packages/pkg1.tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../lib/lib.d.ts","./pkg1_index.ts","./typeroot1/sometype/index.d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-9601687719-export const theNum: TheNum = \"type1\";","signature":"-5685633868-/// <reference types=\"sometype\" />\r\nexport declare const theNum: TheNum;\r\n"},{"version":"-4557394441-declare type TheNum = \"type1\";","affectsGlobalScope":true}],"options":{"composite":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../lib/lib.d.ts","./pkg1_index.ts","./typeroot1/sometype/index.d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-9601687719-export const theNum: TheNum = \"type1\";","signature":"-5685633868-/// <reference types=\"sometype\" />\r\nexport declare const theNum: TheNum;\r\n"},{"version":"-4557394441-declare type TheNum = \"type1\";","affectsGlobalScope":true}],"options":{"composite":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3],"dtsChangeTime":20000},"version":"FakeTSVersion"}
 
 //// [/src/packages/pkg1.tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -99,10 +99,11 @@ exitCode:: ExitStatus.Success
       "../../lib/lib.d.ts",
       "./pkg1_index.ts",
       "./typeroot1/sometype/index.d.ts"
-    ]
+    ],
+    "dtsChangeTime": 20000
   },
   "version": "FakeTSVersion",
-  "size": 987
+  "size": 1009
 }
 
 //// [/src/packages/pkg1_index.d.ts]
@@ -118,7 +119,7 @@ exports.theNum = "type1";
 
 
 //// [/src/packages/pkg2.tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../lib/lib.d.ts","./pkg2_index.ts","./typeroot2/sometype/index.d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-12823281204-export const theNum: TheNum2 = \"type2\";","signature":"-7237564442-/// <reference types=\"sometype\" />\r\nexport declare const theNum: TheNum2;\r\n"},{"version":"-980425686-declare type TheNum2 = \"type2\";","affectsGlobalScope":true}],"options":{"composite":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../lib/lib.d.ts","./pkg2_index.ts","./typeroot2/sometype/index.d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-12823281204-export const theNum: TheNum2 = \"type2\";","signature":"-7237564442-/// <reference types=\"sometype\" />\r\nexport declare const theNum: TheNum2;\r\n"},{"version":"-980425686-declare type TheNum2 = \"type2\";","affectsGlobalScope":true}],"options":{"composite":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3],"dtsChangeTime":28000},"version":"FakeTSVersion"}
 
 //// [/src/packages/pkg2.tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -153,10 +154,11 @@ exports.theNum = "type1";
       "../../lib/lib.d.ts",
       "./pkg2_index.ts",
       "./typeroot2/sometype/index.d.ts"
-    ]
+    ],
+    "dtsChangeTime": 28000
   },
   "version": "FakeTSVersion",
-  "size": 990
+  "size": 1012
 }
 
 //// [/src/packages/pkg2_index.d.ts]

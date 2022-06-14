@@ -143,10 +143,11 @@ namespace ts.codefix {
         const staticModifier = find(modifiers, isStaticModifier);
         const abstractModifier = find(modifiers, isAbstractModifier);
         const accessibilityModifier = find(modifiers, m => isAccessibilityModifier(m.kind));
+        const lastDecorator = findLast(modifiers, isDecorator);
         const modifierPos = abstractModifier ? abstractModifier.end :
             staticModifier ? staticModifier.end :
             accessibilityModifier ? accessibilityModifier.end :
-            classElement.decorators ? skipTrivia(sourceFile.text, classElement.decorators.end) : classElement.getStart(sourceFile);
+            lastDecorator ? skipTrivia(sourceFile.text, lastDecorator.end) : classElement.getStart(sourceFile);
         const options = accessibilityModifier || staticModifier || abstractModifier ? { prefix: " " } : { suffix: " " };
         changeTracker.insertModifierAt(sourceFile, modifierPos, SyntaxKind.OverrideKeyword, options);
     }
@@ -157,7 +158,7 @@ namespace ts.codefix {
             changeTracker.filterJSDocTags(sourceFile, classElement, not(isJSDocOverrideTag));
             return;
         }
-        const overrideModifier = classElement.modifiers && find(classElement.modifiers, modifier => modifier.kind === SyntaxKind.OverrideKeyword);
+        const overrideModifier = find(classElement.modifiers, isOverrideModifier);
         Debug.assertIsDefined(overrideModifier);
 
         changeTracker.deleteModifier(sourceFile, overrideModifier);

@@ -75,35 +75,167 @@ const b4 = f<number>?.<number>();  // Error, expected no type arguments
 >b4 : Symbol(b4, Decl(instantiationExpressionErrors.ts, 25, 5))
 >f : Symbol(f, Decl(instantiationExpressionErrors.ts, 0, 11))
 
+// Instantiation expression and binary operators
+
+declare let g: (<T>(x: T) => T) | undefined;
+>g : Symbol(g, Decl(instantiationExpressionErrors.ts, 29, 11))
+>T : Symbol(T, Decl(instantiationExpressionErrors.ts, 29, 17))
+>x : Symbol(x, Decl(instantiationExpressionErrors.ts, 29, 20))
+>T : Symbol(T, Decl(instantiationExpressionErrors.ts, 29, 17))
+>T : Symbol(T, Decl(instantiationExpressionErrors.ts, 29, 17))
+
+const c1 = g<string> || ((x: string) => x);
+>c1 : Symbol(c1, Decl(instantiationExpressionErrors.ts, 31, 5))
+>g : Symbol(g, Decl(instantiationExpressionErrors.ts, 29, 11))
+>x : Symbol(x, Decl(instantiationExpressionErrors.ts, 31, 26))
+>x : Symbol(x, Decl(instantiationExpressionErrors.ts, 31, 26))
+
+const c2 = g<string> ?? ((x: string) => x);
+>c2 : Symbol(c2, Decl(instantiationExpressionErrors.ts, 32, 5))
+>g : Symbol(g, Decl(instantiationExpressionErrors.ts, 29, 11))
+>x : Symbol(x, Decl(instantiationExpressionErrors.ts, 32, 26))
+>x : Symbol(x, Decl(instantiationExpressionErrors.ts, 32, 26))
+
+const c3 = g<string> && ((x: string) => x);
+>c3 : Symbol(c3, Decl(instantiationExpressionErrors.ts, 33, 5))
+>g : Symbol(g, Decl(instantiationExpressionErrors.ts, 29, 11))
+>x : Symbol(x, Decl(instantiationExpressionErrors.ts, 33, 26))
+>x : Symbol(x, Decl(instantiationExpressionErrors.ts, 33, 26))
+
 // Parsed as function call, even though this differs from JavaScript
 
 const x1 = f<true>
->x1 : Symbol(x1, Decl(instantiationExpressionErrors.ts, 29, 5))
+>x1 : Symbol(x1, Decl(instantiationExpressionErrors.ts, 37, 5))
 >f : Symbol(f, Decl(instantiationExpressionErrors.ts, 0, 11))
 
 (true);
 
-// Parsed as relational expression
+// Parsed as relational expressions
+
+const r1 = f < true > true;
+>r1 : Symbol(r1, Decl(instantiationExpressionErrors.ts, 42, 5))
+>f : Symbol(f, Decl(instantiationExpressionErrors.ts, 0, 11))
+
+const r2 = f < true > +1;
+>r2 : Symbol(r2, Decl(instantiationExpressionErrors.ts, 43, 5))
+>f : Symbol(f, Decl(instantiationExpressionErrors.ts, 0, 11))
+
+const r3 = f < true > -1;
+>r3 : Symbol(r3, Decl(instantiationExpressionErrors.ts, 44, 5))
+>f : Symbol(f, Decl(instantiationExpressionErrors.ts, 0, 11))
+
+// All of the following are parsed as instantiation expressions
 
 const x2 = f<true>
->x2 : Symbol(x2, Decl(instantiationExpressionErrors.ts, 34, 5))
+>x2 : Symbol(x2, Decl(instantiationExpressionErrors.ts, 48, 5))
 >f : Symbol(f, Decl(instantiationExpressionErrors.ts, 0, 11))
 
 true;
-
-// Parsed as instantiation expression
 
 const x3 = f<true>;
->x3 : Symbol(x3, Decl(instantiationExpressionErrors.ts, 39, 5))
+>x3 : Symbol(x3, Decl(instantiationExpressionErrors.ts, 51, 5))
 >f : Symbol(f, Decl(instantiationExpressionErrors.ts, 0, 11))
 
 true;
 
-// Parsed as instantiation expression
-
 const x4 = f<true>
->x4 : Symbol(x4, Decl(instantiationExpressionErrors.ts, 44, 5))
+>x4 : Symbol(x4, Decl(instantiationExpressionErrors.ts, 54, 5))
 >f : Symbol(f, Decl(instantiationExpressionErrors.ts, 0, 11))
 
 if (true) {}
+
+const x5 = f<true>
+>x5 : Symbol(x5, Decl(instantiationExpressionErrors.ts, 57, 5))
+>f : Symbol(f, Decl(instantiationExpressionErrors.ts, 0, 11))
+
+let yy = 0;
+>yy : Symbol(yy, Decl(instantiationExpressionErrors.ts, 58, 3))
+
+const x6 = f<true>
+>x6 : Symbol(x6, Decl(instantiationExpressionErrors.ts, 60, 5))
+>f : Symbol(f, Decl(instantiationExpressionErrors.ts, 0, 11))
+
+interface I {}
+>I : Symbol(I, Decl(instantiationExpressionErrors.ts, 60, 18))
+
+let x10 = f<true>
+>x10 : Symbol(x10, Decl(instantiationExpressionErrors.ts, 63, 3))
+>f : Symbol(f, Decl(instantiationExpressionErrors.ts, 0, 11))
+
+this.bar()
+>this.bar : Symbol(bar, Decl(instantiationExpressionErrors.ts, 66, 17))
+>this : Symbol(globalThis)
+>bar : Symbol(bar, Decl(instantiationExpressionErrors.ts, 66, 17))
+
+let x11 = f<true>
+>x11 : Symbol(x11, Decl(instantiationExpressionErrors.ts, 66, 3))
+>f : Symbol(f, Decl(instantiationExpressionErrors.ts, 0, 11))
+
+function bar() {}
+>bar : Symbol(bar, Decl(instantiationExpressionErrors.ts, 66, 17))
+
+let x12 = f<true>
+>x12 : Symbol(x12, Decl(instantiationExpressionErrors.ts, 69, 3))
+>f : Symbol(f, Decl(instantiationExpressionErrors.ts, 0, 11))
+
+class C {}
+>C : Symbol(C, Decl(instantiationExpressionErrors.ts, 69, 17))
+
+let x13 = f<true>
+>x13 : Symbol(x13, Decl(instantiationExpressionErrors.ts, 72, 3))
+>f : Symbol(f, Decl(instantiationExpressionErrors.ts, 0, 11))
+
+bar()
+>bar : Symbol(bar, Decl(instantiationExpressionErrors.ts, 66, 17))
+
+let x14 = f<true>
+>x14 : Symbol(x14, Decl(instantiationExpressionErrors.ts, 75, 3))
+>f : Symbol(f, Decl(instantiationExpressionErrors.ts, 0, 11))
+
+void bar()
+>bar : Symbol(bar, Decl(instantiationExpressionErrors.ts, 66, 17))
+
+class C1 {
+>C1 : Symbol(C1, Decl(instantiationExpressionErrors.ts, 76, 10))
+
+    static specialFoo = f<string>
+>specialFoo : Symbol(C1.specialFoo, Decl(instantiationExpressionErrors.ts, 78, 10))
+>f : Symbol(f, Decl(instantiationExpressionErrors.ts, 0, 11))
+
+    static bar = 123
+>bar : Symbol(C1.bar, Decl(instantiationExpressionErrors.ts, 79, 33))
+}
+
+class C2 {
+>C2 : Symbol(C2, Decl(instantiationExpressionErrors.ts, 81, 1))
+
+    public specialFoo = f<string>
+>specialFoo : Symbol(C2.specialFoo, Decl(instantiationExpressionErrors.ts, 83, 10))
+>f : Symbol(f, Decl(instantiationExpressionErrors.ts, 0, 11))
+
+    public bar = 123
+>bar : Symbol(C2.bar, Decl(instantiationExpressionErrors.ts, 84, 33))
+}
+
+class C3 {
+>C3 : Symbol(C3, Decl(instantiationExpressionErrors.ts, 86, 1))
+
+    private specialFoo = f<string>
+>specialFoo : Symbol(C3.specialFoo, Decl(instantiationExpressionErrors.ts, 88, 10))
+>f : Symbol(f, Decl(instantiationExpressionErrors.ts, 0, 11))
+
+    private bar = 123
+>bar : Symbol(C3.bar, Decl(instantiationExpressionErrors.ts, 89, 34))
+}
+
+class C4 {
+>C4 : Symbol(C4, Decl(instantiationExpressionErrors.ts, 91, 1))
+
+    protected specialFoo = f<string>
+>specialFoo : Symbol(C4.specialFoo, Decl(instantiationExpressionErrors.ts, 93, 10))
+>f : Symbol(f, Decl(instantiationExpressionErrors.ts, 0, 11))
+
+    protected bar = 123
+>bar : Symbol(C4.bar, Decl(instantiationExpressionErrors.ts, 94, 36))
+}
 

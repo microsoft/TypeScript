@@ -99,7 +99,7 @@
                     "modifierFlagsCache": 0,
                     "transformFlags": 0,
                     "name": {
-                        "kind": "FirstNode",
+                        "kind": "QualifiedName",
                         "pos": 86,
                         "end": 97,
                         "modifierFlagsCache": 0,
@@ -194,7 +194,7 @@
                     "modifierFlagsCache": 0,
                     "transformFlags": 0,
                     "name": {
-                        "kind": "FirstNode",
+                        "kind": "QualifiedName",
                         "pos": 163,
                         "end": 181,
                         "modifierFlagsCache": 0,
@@ -273,7 +273,7 @@
                     "modifierFlagsCache": 0,
                     "transformFlags": 0,
                     "name": {
-                        "kind": "FirstNode",
+                        "kind": "QualifiedName",
                         "pos": 333,
                         "end": 338,
                         "modifierFlagsCache": 0,
