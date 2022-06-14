@@ -1,0 +1,25 @@
+=== tests/cases/compiler/a.ts ===
+export default const enum A {
+>A : A
+
+    A,
+>A : A.A
+
+    B
+>B : A.B
+}
+
+=== tests/cases/compiler/b.ts ===
+import A from "./a"
+>A : typeof A
+
+A.A;
+>A.A : A.A
+>A : typeof A
+>A : A.A
+
+A.B;
+>A.B : A.B
+>A : typeof A
+>B : A.B
+

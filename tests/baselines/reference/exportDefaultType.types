@@ -1,0 +1,11 @@
+=== tests/cases/compiler/a.ts ===
+export default type A = number;
+>A : number
+
+=== tests/cases/compiler/b.ts ===
+import A from "./a"
+>A : any
+
+let a: A;
+>a : number
+

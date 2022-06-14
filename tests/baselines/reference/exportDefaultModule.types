@@ -1,5 +1,5 @@
 === tests/cases/compiler/a.ts ===
-export default namespace A {
+export default module A {
 >A : typeof A
 
     export const Foo = 1;
@@ -10,9 +10,4 @@ export default namespace A {
 === tests/cases/compiler/b.ts ===
 import A from "./a"
 >A : typeof A
-
-A.Foo
->A.Foo : 1
->A : typeof A
->Foo : 1
 
