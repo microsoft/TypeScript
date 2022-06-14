@@ -1038,8 +1038,8 @@ namespace ts {
         return { host, newProgram, oldProgram, configFileParsingDiagnostics: configFileParsingDiagnostics || emptyArray };
     }
 
-    export function computeSignature(text: string, data: WriteFileCallbackData | undefined, computeHash: BuilderState.ComputeHash | undefined) {
-        return BuilderState.computeSignature(data?.sourceMapUrlPos !== undefined ? text.substring(0, data.sourceMapUrlPos) : text, computeHash);
+    export function computeSignature(text: string, computeHash: BuilderState.ComputeHash | undefined, data?: WriteFileCallbackData) {
+        return (computeHash || generateDjb2Hash)(data?.sourceMapUrlPos !== undefined ? text.substring(0, data.sourceMapUrlPos) : text);
     }
 
     export function createBuilderProgram(kind: BuilderProgramKind.SemanticDiagnosticsBuilderProgram, builderCreationParameters: BuilderCreationParameters): SemanticDiagnosticsBuilderProgram;
@@ -1170,7 +1170,7 @@ namespace ts {
                             const file = sourceFiles[0];
                             const info = state.fileInfos.get(file.resolvedPath)!;
                             if (info.signature === file.version) {
-                                newSignature = computeSignature(text, data, computeHash);
+                                newSignature = computeSignature(text, computeHash, data);
                                 if (newSignature !== file.version) { // Update it
                                     if (host.storeFilesChangingSignatureDuringEmit) (state.filesChangingSignature ||= new Set()).add(file.resolvedPath);
                                     if (state.exportedModulesMap) BuilderState.updateExportedModules(state, file, file.exportedModulesFromDeclarationEmit);
@@ -1195,7 +1195,7 @@ namespace ts {
                         if (state.compilerOptions.composite) {
                             const filePath = sourceFiles[0].resolvedPath;
                             const oldSignature = state.emitSignatures?.get(filePath);
-                            newSignature ||= computeSignature(text, data, computeHash);
+                            newSignature ||= computeSignature(text, computeHash, data);
                             if (newSignature !== oldSignature) {
                                 (state.emitSignatures ||= new Map()).set(filePath, newSignature);
                                 state.hasChangedEmitSignature = true;
@@ -1203,7 +1203,7 @@ namespace ts {
                         }
                     }
                     else if (state.compilerOptions.composite) {
-                        const newSignature = computeSignature(text, data, computeHash);
+                        const newSignature = computeSignature(text, computeHash, data);
                         if (newSignature !== state.outSignature) {
                             state.outSignature = newSignature;
                             state.hasChangedEmitSignature = true;

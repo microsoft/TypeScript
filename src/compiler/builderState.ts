@@ -3,8 +3,8 @@ namespace ts {
     export function getFileEmitOutput(program: Program, sourceFile: SourceFile, emitOnlyDtsFiles: boolean,
         cancellationToken?: CancellationToken, customTransformers?: CustomTransformers, forceDtsEmit?: boolean): EmitOutput {
         const outputFiles: OutputFile[] = [];
-        const { emitSkipped, diagnostics, exportedModulesFromDeclarationEmit } = program.emit(sourceFile, writeFile, cancellationToken, emitOnlyDtsFiles, customTransformers, forceDtsEmit);
-        return { outputFiles, emitSkipped, diagnostics, exportedModulesFromDeclarationEmit };
+        const { emitSkipped, diagnostics } = program.emit(sourceFile, writeFile, cancellationToken, emitOnlyDtsFiles, customTransformers, forceDtsEmit);
+        return { outputFiles, emitSkipped, diagnostics };
 
         function writeFile(fileName: string, text: string, writeByteOrderMark: boolean) {
             outputFiles.push({ name: fileName, writeByteOrderMark, text });
@@ -357,22 +357,20 @@ namespace ts {
             const prevSignature = info.signature;
             let latestSignature: string | undefined;
             if (!sourceFile.isDeclarationFile && !useFileVersionAsSignature) {
-                const emitOutput = getFileEmitOutput(
-                    programOfThisState,
+                programOfThisState.emit(
                     sourceFile,
-                    /*emitOnlyDtsFiles*/ true,
+                    (fileName, text, _writeByteOrderMark, _onError, sourceFiles, data) => {
+                        Debug.assert(isDeclarationFileName(fileName), `File extension for signature expected to be dts: Got:: ${fileName}`);
+                        latestSignature = computeSignature(text, computeHash, data);
+                        if (latestSignature !== prevSignature) {
+                            updateExportedModules(state, sourceFile, sourceFiles![0].exportedModulesFromDeclarationEmit);
+                        }
+                    },
                     cancellationToken,
+                    /*emitOnlyDtsFiles*/ true,
                     /*customTransformers*/ undefined,
                     /*forceDtsEmit*/ true
                 );
-                const firstDts = firstOrUndefined(emitOutput.outputFiles);
-                if (firstDts) {
-                    Debug.assert(isDeclarationFileName(firstDts.name), "File extension for signature expected to be dts", () => `Found: ${getAnyExtensionFromPath(firstDts.name)} for ${firstDts.name}:: All output files: ${JSON.stringify(emitOutput.outputFiles.map(f => f.name))}`);
-                    latestSignature = computeSignature(firstDts.text, computeHash);
-                    if (latestSignature !== prevSignature) {
-                        updateExportedModules(state, sourceFile, emitOutput.exportedModulesFromDeclarationEmit);
-                    }
-                }
             }
             // Default is to use file version as signature
             if (latestSignature === undefined) {
@@ -393,10 +391,6 @@ namespace ts {
             (state.hasCalledUpdateShapeSignature ||= new Set()).add(sourceFile.resolvedPath);
             info.signature = latestSignature;
             return latestSignature !== prevSignature;
-        }
-
-        export function computeSignature(text: string, computeHash: ComputeHash | undefined) {
-            return (computeHash || generateDjb2Hash)(text);
         }
 
         /**
